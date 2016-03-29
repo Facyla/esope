@@ -1988,6 +1988,141 @@ function esope_is_group_admin($user = false, $group = null, $strict = false) {
 }
 
 
+/** Used by ESOPE newsletter content form - support for templates and multiple subtypes
+ * Display content in the correct layout for embedding in Newsletter
+ *
+ * @param ElggEntity $entity the entity to embed
+ * @param array      $vars   optional variables to pass to the embed view
+ *
+ * @return bool|string
+ */
+function esope_newsletter_view_embed_content(ElggEntity $entity, $vars = array()) {
+	
+	if (!elgg_instanceof($entity)) {
+		return false;
+	}
+	
+	if (!is_array($vars)) {
+		$vars = [];
+	}
+	
+	$template = $vars['template'];
+	$vars['entity'] = $entity;
+	
+	$type = $entity->getType();
+	$subtype = $entity->getSubtype();
+	$description = $entity->description;
+	
+	$embed_content = '';
+	
+	// @TODO ESOPE : use fully new view system to provide type/subtype support
+	if (empty($template)) {
+		if (!empty($subtype) && elgg_view_exists("newsletter/embed/" . $type . "/" . $subtype)) {
+			return elgg_view("newsletter/embed/" . $type . "/" . $subtype, $vars);
+		} elseif (elgg_view_exists("newsletter/embed/" . $type . "/default")) {
+			return elgg_view("newsletter/embed/" . $type . "/default", $vars);
+		} elseif (elgg_view_exists("newsletter/embed/default")) {
+			return elgg_view("newsletter/embed/default", $vars);
+		}
+	}
+	
+	// Use selected content template
+	switch($template) {
+	
+		// Custom template : titre + tags + date + texte complet (+ lien de téléchargement ou URL)
+		case 'fullcontent':
+			// Blog and files now, but could be used by other subtypes later...
+			if ($entity->icontime) {
+				$embed_content .= elgg_view('output/img', array('src' => $entity->getIconURL('large'), 'alt' => $entity->title, 'style' => "float: left; margin: 5px;"));
+			}
+			// Title
+			$embed_content .= '<strong><a href="' . $entity->getURL() . '">' . $entity->title . '</a></strong><br />';
+			// Meta info
+			$embed_meta = '';
+			if ($entity->tags) $embed_meta .= elgg_echo('tags') . '&nbsp;: ' . implode(', ', $entity->tags) . '<br />';
+			if (!empty($embed_meta)) $embed_content .= '<small>' . $embed_meta . '</small>';
+			$embed_content .= '<br style="clear:both;" />';
+			// Full content
+			if (!empty($description)) $embed_content .= elgg_view('output/longtext', array('value' => $description));
+			// DL link (files)
+			if ($subtype == 'file') {
+				$embed_content .= '<p><a href="' . elgg_get_site_url() . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
+			}
+			// Web URL (bookmarks)
+			if ($entity->address) {
+				$embed_content .= '<div class="sharing_item_address"><p><a href="' . $entity->address . '" target="_blank">' . elgg_echo('bookmarks:visit') . '</a></p></div>';
+			}
+			// Event_calendar support : basic ; replaces regular content
+			if ($subtype == 'event_calendar') {
+				elgg_push_context('widgets');
+				$embed_content = elgg_view('object/event_calendar', array('entity' => $entity, 'full_view' => false));
+				elgg_pop_context();
+			}
+			break;
+
+		// Custom template #2 : same as 'fullcontent' + photo auteur + nb commentaires
+		case 'fullcontentauthor':
+			// Author photo
+			$author = $entity->getOwnerEntity();
+			$image = elgg_view('output/img', array('src' => $author->getIconURL('small'), 'alt' => $author->name));
+			// Title
+			$embed_content .= '<strong><a href="' . $entity->getURL() . '">' . $entity->title . '</a></strong><br />';
+			// Meta info
+			$embed_meta = '';
+			if ($entity->tags) $embed_meta .= elgg_echo('tags') . '&nbsp;: ' . implode(', ', $entity->tags) . '<br />';
+			$embed_meta .= '<em>' . elgg_echo('by') . ' ' . $author->name . ' ' . elgg_view_friendly_time($entity->time_created) . '</em><br />';
+			// Number of comments
+			$comments = $entity->countComments();
+			if ($comments > 0) $embed_meta .= elgg_echo('comments:count', array($comments)) . '<br />';
+			if (!empty($embed_meta)) $embed_content .= '<small>' . $embed_meta . '</small>';
+			$embed_content .= '<br style="clear:both;" />';
+			// Blog and files but could be used by other subtypes later...
+			if ($entity->icontime) {
+				$embed_content .= elgg_view('output/img', array('src' => $entity->getIconURL('large'), 'alt' => $entity->title));
+			}
+			// Full content
+			if (!empty($description)) $embed_content .= elgg_view('output/longtext', array('value' => $description));
+			// Download link (files)
+			if ($subtype == 'file') {
+				$embed_content .= '<p><a href="' . elgg_get_site_url() . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
+			}
+			// Web URL (bookmarks)
+			if ($entity->address) {
+				$embed_content .= '<div class="sharing_item_address"><p><a href="' . $entity->address . '" target="_blank">' . elgg_echo('bookmarks:visit') . '</a></p></div>';
+			}
+			// Event_calendar support : basic ; replaces regular content
+			if ($subtype == 'event_calendar') {
+				elgg_push_context('widgets');
+				$embed_content = elgg_view('object/event_calendar', array('entity' => $entity, 'full_view' => false));
+				elgg_pop_context();
+			}
+			// Compose final view
+			$embed_content = '<div style="float: left; margin: 5px;">' . $image . '</div>' . $embed_content;
+			break;
+
+		// Default template of newsletter plugin
+		case 'default':
+			$embed_content .= "<strong>" . $entity->title . "</strong><br />";
+			if ($entity->icontime) {
+				$description = elgg_view("output/img", array("src" => $entity->getIconURL("large"), "alt" => $entity->title, "style" => "float: left; margin: 5px;")) . $description;
+			}
+			
+			$embed_content .= elgg_view("output/longtext", array("value" => $description));
+			break;
+		
+		default:
+	
+	}
+	
+	$embed_content = '<div>' . '[' . $allowed_subtypes[$subtype] . '] <strong>' . $entity->title . '</strong> ' . elgg_get_excerpt($description) . '</div>' . '<div class="newsletter-embed-item-content">' . $embed_content . '<br style="clear:both;" /></div>';
+
+	// Return item content
+	return $embed_content;
+	
+	return false;
+}
+
+
 
 
 

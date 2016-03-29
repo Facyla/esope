@@ -62,3 +62,12 @@ echo '</fieldset>';
 
 
 
+echo '<fieldset>';
+	echo '<legend>Pied de page</legend>';
+	echo '<p><label>Footer gauche : Impulsé par... ' . elgg_view('input/plaintext', array('name' => 'params[footer_left]', 'value' => $vars['entity']->footer_left)) . '</label></p>';
+	echo '<p><label>Footer droit : Soutenu par... ' . elgg_view('input/plaintext', array('name' => 'params[footer_right]', 'value' => $vars['entity']->footer_right)) . '</label></p>';
+echo '</fieldset>';
+
+
+
+

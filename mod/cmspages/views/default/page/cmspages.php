@@ -36,7 +36,8 @@ if (elgg_is_logged_in()) $loggedin_class = 'elgg-loggedin';
 
 // render content before head so that JavaScript and CSS can be loaded. See #4032
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
-$header = elgg_view('adf_platform/adf_header', $vars);
+$header = elgg_view('page/elements/topbar', $vars);
+$header = elgg_view('page/elements/header', $vars);
 $body = elgg_view('page/elements/body', $vars);
 $footer = elgg_view('page/elements/footer', $vars);
 

@@ -1,5 +1,5 @@
 <?php
-
+// @TODO : update to use new JS structure
 ?>
 //<script>
 elgg.provide("elgg.newsletter");

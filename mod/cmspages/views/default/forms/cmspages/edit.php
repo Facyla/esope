@@ -341,7 +341,7 @@ $help_content .= '</div>';
 $editor_content = '<fieldset>';
 	$editor_content .= '<legend>' . elgg_echo('cmspages:fieldset:editor') . '</legend>';
 	$hide = ($content_type != 'module') ? '' : 'hidden';
-	$editor_content = '<div class="cmspages-field cmspages-field- cmspages-field-rawhtml cmspages-field-template ' . $hide . '">';
+	$editor_content .= '<div class="cmspages-field cmspages-field- cmspages-field-rawhtml cmspages-field-template ' . $hide . '">';
 		// Contenu du bloc / de la page
 		if (in_array($content_type, array('rawhtml'))) {
 			$editor_content .= '<label for="cmspage_content">' . elgg_echo('cmspages:content:rawhtml') . "</label>" . elgg_view('input/plaintext', array('name' => 'cmspage_content', 'value' => $description));
@@ -459,7 +459,7 @@ if ($cmspage) {
 	
 	// Boutons de suppression et d'enregistrement
 	// Delete link
-	$delete_button = '<span class="cmspages-mode-full cmspages-delete">' . elgg_view('output/confirmlink', array(
+	$delete_button = '<span class="cmspages-mode-full cmspages-delete">' . elgg_view('output/url', array(
 			'href' => elgg_get_site_url() . 'action/cmspages/delete?guid=' . $cmspage->guid,
 			'text' => '<i class="fa fa-trash"></i>&nbsp;' . elgg_echo('cmspages:delete'),
 			//'title' => elgg_echo('cmspages:delete:details'),
@@ -503,13 +503,13 @@ $content .= $editor_content;
 $content .= $module_content;
 $content .= $jscss_content;
 $content .= $rel_content;
-$content .= $delete_button;
-$content .= $submit_button;
-
 
 
 // Use a 2 column layout for better readability
 $content = $info_content . '<div style="float:right; width:30%;">' . $sidebar . '</div><div style="float:left; width:66%;">' . $content . '</div><div class="clearfloat"></div>';
+
+$content .= $delete_button;
+$content .= $submit_button;
 
 /* AFFICHAGE DU CONTENU DE LA PAGE */
 // Display the form - Affichage du formulaire

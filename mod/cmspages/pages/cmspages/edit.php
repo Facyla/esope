@@ -10,7 +10,7 @@
 */
 
 gatekeeper();
-global $CONFIG;
+$site = elgg_get_site_entity();
 
 // Facyla : this tool is for admins but also webmasters and authors, so use custom access rights
 // OK if custom rights match, or use default behaviour
@@ -34,7 +34,7 @@ if (empty($pagetype)) {
 $cmspage = cmspages_get_entity($pagetype);
 
 // Set owner to site, for all "global" cmspages
-elgg_set_page_owner_guid($CONFIG->site->guid);
+elgg_set_page_owner_guid($site->guid);
 elgg_set_context('cmspages_admin');
 elgg_push_context('admin');
 
@@ -66,5 +66,7 @@ $content .= elgg_view('forms/cmspages/edit', array('pagetype' => $pagetype, 'ent
 
 $page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
 
-echo elgg_view_page($title, $page, 'cmspages');
+//echo elgg_view_page($title, $page, 'cmspages');
+echo elgg_view_page($title, $page, 'admin');
+
 
