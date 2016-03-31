@@ -12,15 +12,15 @@ $fontsurl = $url . 'mod/theme_transitions2/fonts/';
 	src: url('<?php echo $fontsurl; ?>Roboto-Regular.ttf') format('truetype');
 }
 @font-face {
-	font-family: 'Roboto'; font-weight: lighter; font-style: normal;
+	font-family: 'RobotoLight';
 	src: url('<?php echo $fontsurl; ?>Roboto-Light.ttf') format('truetype');
 }
 @font-face {
-	font-family: 'PoetsenOne'; font-weight: normal; font-style: normal;
+	font-family: 'PoetsenOne';
 	src: url('<?php echo $fontsurl; ?>PoetsenOne-Regular.ttf') format('truetype');
 }
 @font-face {
-	font-family: 'LeagueSpartan'; font-weight: bold; font-style: normal;
+	font-family: 'LeagueSpartan';
 	src: url('<?php echo $fontsurl; ?>LeagueSpartan-Bold.otf');
 }
 
