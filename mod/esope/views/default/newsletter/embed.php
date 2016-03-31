@@ -28,6 +28,7 @@ if (elgg_is_active_plugin('static')) { $allowed_subtypes['static'] = elgg_echo('
 
 
 // Embed templates
+// @TODO Move to newsletter/format
 /*
 $available_templates = array(
 	'default' => elgg_echo('newsletter:embed:template:default'),
@@ -43,6 +44,9 @@ $offset = (int) max(get_input('offset', 0), 0);
 //$limit = 6;
 $limit = (int) max(get_input("limit", 6), 0);
 $subtype_filter = get_input('subtypes', 'all');
+// Used to select various embed content templates
+$template = get_input('template', 'fullcontentauthor');
+$display = get_input('display', false);
 
 $query = get_input('q');
 $query = sanitise_string($query);
@@ -66,9 +70,6 @@ if ($subtype_filter == 'all') {
 } else {
 	$subtypes = $subtype_filter;
 }
-// Used to select various embed content templates
-$template = get_input('template', 'fullcontentauthor');
-$display = get_input('display', false);
 
 /*
 if (elgg_is_active_plugin('blog')) {
@@ -125,7 +126,7 @@ unset($options['count']);
 // Note : any new field/parameter should be added to the js/newsletter/site view
 $form_data = '';
 
-// Rendering template selection @TODO this is now handled afterwards by views...
+// Rendering template selection @TODO this is now handled in newsletter/format and js/newsletter/embed
 //$form_data .= '<p><label>' . elgg_echo('newsletter:embed:templates') . ' ' . elgg_view("input/select", array("name" => "template", "value" => $template, 'options_values' => $available_templates)) . '</label></p>';
 
 // search form
@@ -138,6 +139,10 @@ $form_data .= '<p><label>' . elgg_echo('newsletter:embed:subtype') . ' ' . elgg_
 
 // Setting that enables to hide the results at first display (useful to set the wanted rendering type first)
 $form_data .= elgg_view("input/hidden", array('name' => "display", 'value' => 'yes'));
+
+// Allow to keep setting from pagination
+$form_data .= elgg_view("input/hidden", array('name' => "limit", 'value' => $limit));
+$form_data .= elgg_view("input/hidden", array('name' => "offset", 'value' => $offset));
 
 // Submit button
 $form_data .= elgg_view('input/submit', ['value' => elgg_echo('search'), 'class' => 'elgg-button-action']);
@@ -183,7 +188,8 @@ if ($display) {
 		$show_all_value = $show_all ? 1 : 0;
 	
 		$embed_wrapper_pagination = elgg_view('navigation/pagination', [
-			'base_url' => elgg_normalize_url("newsletter/embed/{$newsletter->getGUID()}?q={$query}&show_all={$show_all_value}"),
+			//'base_url' => elgg_normalize_url("newsletter/embed/{$newsletter->getGUID()}?q={$query}&show_all={$show_all_value}"),
+			'base_url' => elgg_normalize_url("newsletter/embed/{$newsletter->getGUID()}?q={$query}&show_all={$show_all_value}&display={$display}&template={$template}&subtypes={$subtype_filter}&offset={$offset}&limit={$limit}"),
 			'offset' => $offset,
 			'limit' => $limit,
 			'count' => $count,

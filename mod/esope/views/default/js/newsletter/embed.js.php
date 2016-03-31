@@ -1,4 +1,8 @@
-<?php ?>
+<?php
+/* ESOPE : support for templates and multiple subtypes
+ * Display content in the correct layout for embedding in Newsletter
+ */
+?>
 //<script>
 
 elgg.provide("elgg.newsletter");
@@ -72,6 +76,7 @@ elgg.newsletter.embed_format_preview = function() {
 	var icon_option = $("#newsletter-embed-format-icon").val();
 	
 	
+	// Switch between embed templates
  	if (description_option === "full") {
  	 	content_description += data.description;
  	} else if (description_option === "excerpt") {
