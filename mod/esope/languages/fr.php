@@ -713,7 +713,7 @@ return array(
 	
 	// TinyMCE settings
 	'esope:tinymce:templates:plugins' => "Plugins TinyMCE",
-	'esope:tinymce:templates:plugins:details' => "Indiquez la liste des plugins TinyMCE à utiliser, sous la forme d'une liste utilisable dans la configuraiton JS. Attention : les plugins indiqués doivent être disponibles dans votre plugin TinyMCE ! En cas d'erreur, effacez la ligne pour récupérer la configuration par défaut.",
+	'esope:tinymce:templates:plugins:details' => "Indiquez la liste des plugins TinyMCE à utiliser, sous la forme d'une liste utilisable dans la configuration JS. Attention : les plugins indiqués doivent être disponibles dans votre plugin TinyMCE ! En cas d'erreur, effacez la ligne pour récupérer la configuration par défaut.",
 	'esope:tinymce:templates:advanced_buttons:details' => "Indiquez la liste des boutons de l'éditeur TinyMCE à afficher sur chacune des 3 barres d'outils, sous la forme d'une liste utilisable dans la configuration JS.<br />Attention : les boutons disponibles varient en fonction des plugins activés.<br />Ligne vide = pas de barre d'outil. Ecrivez RAZ pour récupérer la configuration par défaut.<br />Vous pouvez utiliser le signe | pour ajouter une barre de séparation.",
 	'esope:tinymce:templates:advanced_buttons1' => "Barre d'outils n°1",
 	'esope:tinymce:templates:advanced_buttons2' => "Barre d'outils n°2",
@@ -730,8 +730,27 @@ return array(
 	'esope:tinymce:extended_valid_elements' => "Liste des tags et propriétés HTML autorisés",
 	'esope:tinymce:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur TinyMCE.<br />IMPORTANT : ce réglage définit uniquement le comportement de TinyMCE, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
 	
+	// CKEditor settings
+	'esope:ckeditor:plugins' => "Plugins CKEditor",
+	'esope:ckeditor:plugins:details' => "Indiquez la liste des plugins CKEditor à utiliser, sous la forme d'une liste utilisable dans la configuration JS. Attention : les plugins indiqués doivent être disponibles dans votre plugin CKEditor ! En cas d'erreur, effacez la ligne pour récupérer la configuration par défaut.",
+	'esope:ckeditor:advanced_buttons:details' => "Indiquez la liste des boutons de l'éditeur CKEditor à afficher sur chacune des 3 barres d'outils, sous la forme d'une liste utilisable dans la configuration JS.<br />Attention : les boutons disponibles varient en fonction des plugins activés.<br />Ligne vide = pas de barre d'outil. Ecrivez RAZ pour récupérer la configuration par défaut.<br />Vous pouvez utiliser le signe | pour ajouter une barre de séparation.",
+	'esope:ckeditor:advanced_buttons1' => "Barre d'outils n°1",
+	'esope:ckeditor:advanced_buttons2' => "Barre d'outils n°2",
+	'esope:ckeditor:advanced_buttons3' => "Barre d'outils n°3",
+	'esope:ckeditor:advanced_buttons4' => "Barre d'outils n°4",
+	'esope:ckeditor:templates' => "Activer les modèles de contenu",
+	'esope:ckeditor:templates:details' => "IMPORTANT : une fois les modèles activés, veuillez ajouter le plugin \"template\" à la liste des plugins, ET ajouter \"template\" dans la barre d'outil de votre choix.",
+	'esope:ckeditor:templates:cmspages' => "Liste de modèles basés sur cmspages",
+	'esope:ckeditor:templates:cmspages:details' => "Indiquer la liste des modèles créés via cmspages : nom de la page cms et titre, un seul modèle par ligne.<br />Syntaxe pour donner un nom au modèle : nom-de-la-page-cmspage::Titre du modèle::Description du modèle",
+	'esope:ckeditor:templates:htmlfiles' => "Liste de modèles HTML",
+	'esope:ckeditor:templates:htmlfiles:details' => "Indiquer la liste des modèles HTML : URL complète et titre, un seul modèle par ligne.<br />Syntaxe pour donner un nom au modèle : URL::Titre du modèle::Description du modèle",
+	'esope:ckeditor:templates:guids' => "Liste de modèles basés sur des entités du site",
+	'esope:ckeditor:templates:guids:details' => "Indiquer la liste des GUIDs des objets utilisés comme modèles HTML : GUID et titre, un seul modèle par ligne.<br />Syntaxe pour donner un nom au modèle : GUID::Titre du modèle::Description du modèle<br />Notez que seule la description de l'objet sera utilisée pour le modèle.",
+	'esope:ckeditor:extended_valid_elements' => "Liste des tags et propriétés HTML autorisés",
+	'esope:ckeditor:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur CKEditor.<br />IMPORTANT : ce réglage définit uniquement le comportement de CKEditor, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
+	
 	// Htmlawed settings
-	'esope:htmlawed:settings:details' => "Les réglages de Htmlawed vous permetttent de définir de manière très détaillée les éléments HTML autorisés ou filtrés. Sa syntaxe étant stricte, et les effets de ses réglages affectant l'ensemble du système, puisqu'il s'applique à l'ensemble des saisies utilisateur, avant enregistrement.<br />Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">lire attentivement la Documentation</a>, et vérifier soigneusement l'impact de vos réglages avant d'utiliser sur un site en production !<br />Note : d'un point de vue utilsateur, ces réglages devraient est accordés avec ceux de TinyMCE, veuillez également les vérifier !",
+	'esope:htmlawed:settings:details' => "Les réglages de Htmlawed vous permetttent de définir de manière très détaillée les éléments HTML autorisés ou filtrés. Sa syntaxe étant stricte, et les effets de ses réglages affectant l'ensemble du système, puisqu'il s'applique à l'ensemble des saisies utilisateur, avant enregistrement.<br />Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">lire attentivement la Documentation</a>, et vérifier soigneusement l'impact de vos réglages avant d'utiliser sur un site en production !<br />Note : d'un point de vue utilsateur, ces réglages devraient est accordés avec ceux de TinyMCE ou CKEditor, veuillez également les vérifier !",
 	'esope:htmlawed:safe' => "Activer le mode sécurisé",
 	'esope:htmlawed:safe:details' => "Ce mode applique un filtrage très aggressif sur les saisies, bloquant pratiquement tout contenu riche. Veuillez lire attentivement <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.6\">la documentation du \safe mode\"</a> avant d'activer ce réglage.<br />Réglage recommandé : NON.",
 	'esope:htmlawed:elements' => "Eléments et propriétés HTML",

@@ -21,6 +21,7 @@ define(function(require) {
 				[ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
 				// source, iframe, flash, table, styles
 				// templates
+				['Templates'], 
 			],
 		/*
 		toolbarGroups: [
@@ -51,3 +52,4 @@ define(function(require) {
 		autoGrow_maxHeight: $(window).height() - 100
 	};
 });
+
