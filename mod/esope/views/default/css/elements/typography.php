@@ -52,7 +52,7 @@ $font6 = $css['font6'];
 /*
 @font-face {
 	font-family: 'gill-sans';
-	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans.otf');	
+	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans.otf');
 	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans.eot');
 	src: url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans.eot?#iefix') format('embedded-opentype'),
 		 url('<?php echo $urlfonts; ?>Gill_Sans_1/GillSans.woff') format('woff'),

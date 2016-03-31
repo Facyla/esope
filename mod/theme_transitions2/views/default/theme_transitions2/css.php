@@ -1,7 +1,28 @@
 <?php
 $url = elgg_get_site_url();
 $imgurl = $url . 'mod/theme_transitions2/graphics/';
+$fontsurl = $url . 'mod/theme_transitions2/fonts/';
 ?>
+
+
+/* Fonts used by T² */
+/*
+@font-face {
+	font-family: 'Roboto'; font-weight: normal; font-style: normal;
+	src: url('<?php echo $fontsurl; ?>Roboto-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Roboto'; font-weight: lighter; font-style: normal;
+	src: url('<?php echo $fontsurl; ?>Roboto-Light.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'PoetsenOne'; font-weight: normal; font-style: normal;
+	src: url('<?php echo $fontsurl; ?>PoetsenOne-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'LeagueSpartan'; font-weight: bold; font-style: normal;
+	src: url('<?php echo $fontsurl; ?>LeagueSpartan-Bold.otf');
+}
 
 
 /* Generic styles */
