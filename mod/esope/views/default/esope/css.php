@@ -658,6 +658,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-menu-newsletter-steps li::before { content:counter(li); counter-increment:li; display:inline-block; position:absolute; font-weight: bold; padding: 5px 5px 6px 5px; background:white; border-radius:10px; padding: 2px 6px; text-indent: 0px; margin: 4px 6px; left:0ex; }
 .elgg-sidebar .elgg-module-aside .elgg-body ul.elgg-menu-newsletter-steps li { clear:left; width:100%; text-indent:4ex; }
 */
+#newsletter-embed-list { clear: both; }
 
 
 /* Group tools homepage publication */
