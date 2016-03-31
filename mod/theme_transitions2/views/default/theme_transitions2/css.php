@@ -6,7 +6,6 @@ $fontsurl = $url . 'mod/theme_transitions2/fonts/';
 
 
 /* Fonts used by T² */
-/*
 @font-face {
 	font-family: 'Roboto'; font-weight: normal; font-style: normal;
 	src: url('<?php echo $fontsurl; ?>Roboto-Regular.ttf') format('truetype');
@@ -16,8 +15,8 @@ $fontsurl = $url . 'mod/theme_transitions2/fonts/';
 	src: url('<?php echo $fontsurl; ?>Roboto-Light.ttf') format('truetype');
 }
 @font-face {
-	font-family: 'PoetsenOne';
-	src: url('<?php echo $fontsurl; ?>PoetsenOne-Regular.ttf') format('truetype');
+	font-family: "Poetsen One";
+	src: url("<?php echo $fontsurl; ?>PoetsenOne-Regular.ttf") format("truetype");
 }
 @font-face {
 	font-family: 'LeagueSpartan';
