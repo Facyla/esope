@@ -520,11 +520,11 @@ function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params
 	
 	// this list should be coordinated with the WYSIWYG editor used (tinymce, ckeditor, etc.)
 	$allowed_styles = array(
-		'color', 'cursor', 'text-align', 'vertical-align', 'font-size',
-		'font-weight', 'font-style', 'border', 'border-top', 'background-color',
+		'color', 'cursor', 'text-align', 'vertical-align', 'font-size', 'font-family',
+		'font-weight', 'font-style', 'border', 'border-top', 'background', 'background-color', 
 		'border-bottom', 'border-left', 'border-right',
 		'margin', 'margin-top', 'margin-bottom', 'margin-left',
-		'margin-right','padding', 'float', 'text-decoration',
+		'margin-right', 'padding', 'float', 'text-decoration',
 		'height', 'width', 
 	);
 	return $allowed_styles;
