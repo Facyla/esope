@@ -660,6 +660,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 */
 #newsletter-embed-list { clear: both; }
 
+.elgg-form-alt > fieldset > .elgg-foot { clear: both; }
 
 /* Group tools homepage publication */
 #group-tool-tabs { margin-bottom:2ex; }

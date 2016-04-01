@@ -5,6 +5,20 @@ $url = elgg_get_site_url();
 $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
 
+// Get values from old TinyMCE plugin
+$tinymce_settings = array('plugins', 'advanced_buttons1', 'advanced_buttons3', 'advanced_buttons3', 'advanced_buttons4', 'enable_templates', 'templates_cmspages', 'templates_htmlfiles', 'templates_guids', 'extended_valid_elements');
+foreach ($tinymce_settings as $setting) {
+	if (!isset($vars['entity']->$setting)) { $vars['entity']->$setting = elgg_get_plugin_setting($setting, 'tinymce'); }
+}
+
+
+// Correct old JS settings structure if needed (, replaced by space)
+if (strpos($vars['entity']->plugins, ',')) { $vars['entity']->plugins = str_replace(',', ' ', $vars['entity']->plugins); }
+if (strpos($vars['entity']->advanced_buttons1, ',')) { $vars['entity']->advanced_buttons1 = str_replace(',', ' ', $vars['entity']->advanced_buttons1); }
+if (strpos($vars['entity']->advanced_buttons2, ',')) { $vars['entity']->advanced_buttons2 = str_replace(',', ' ', $vars['entity']->advanced_buttons2); }
+if (strpos($vars['entity']->advanced_buttons3, ',')) { $vars['entity']->advanced_buttons3 = str_replace(',', ' ', $vars['entity']->advanced_buttons3); }
+if (strpos($vars['entity']->advanced_buttons4, ',')) { $vars['entity']->advanced_buttons4 = str_replace(',', ' ', $vars['entity']->advanced_buttons4); }
+
 
 // Define defaults and allow resetting the config
 if (empty($vars['entity']->plugins)) $vars['entity']->plugins = 'lists spellchecker autosave fullscreen paste table template style inlinepopups contextmenu searchreplace emotions';
@@ -15,14 +29,6 @@ if (!isset($vars['entity']->advanced_buttons3) || ($vars['entity']->advanced_but
 if (!isset($vars['entity']->advanced_buttons4) || ($vars['entity']->advanced_buttons4 == "RAZ")) $vars['entity']->advanced_buttons4 = '';
 
 if (empty($vars['entity']->extended_valid_elements)) $vars['entity']->extended_valid_elements = "a[name|href|target|title|onclick|class],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|style],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],embed[src|type|wmode|width|height|allowfullscreen|allowscriptaccess],object[classid|clsid|codebase|width|height|data|type|id],style[lang|media|title|type],iframe[src|width|height|style],param[name|value],video[src|preload|autoplay|mediagroup|loop|muted|controls|poster|width|height],audio[src|preload|autoplay|mediagroup|loop|muted|controls],source[src|type|media],track[kind|src|srclang|label|default]";
-
-// Correct old JS settings structure if needed (, replaced by space)
-if (strpos($vars['entity']->plugins, ',')) { $vars['entity']->plugins = str_replace(',', ' ', $vars['entity']->plugins); }
-
-if (strpos($vars['entity']->advanced_buttons1, ',')) { $vars['entity']->advanced_buttons1 = str_replace(',', ' ', $vars['entity']->advanced_buttons1); }
-if (strpos($vars['entity']->advanced_buttons2, ',')) { $vars['entity']->advanced_buttons2 = str_replace(',', ' ', $vars['entity']->advanced_buttons2); }
-if (strpos($vars['entity']->advanced_buttons3, ',')) { $vars['entity']->advanced_buttons3 = str_replace(',', ' ', $vars['entity']->advanced_buttons3); }
-if (strpos($vars['entity']->advanced_buttons4, ',')) { $vars['entity']->advanced_buttons4 = str_replace(',', ' ', $vars['entity']->advanced_buttons4); }
 
 ?>
 

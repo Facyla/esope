@@ -5,11 +5,11 @@ if (empty($plugins)) $plugins = "lists,spellchecker,autosave,fullscreen,paste,ta
 
 // Toobars
 $advanced_buttons1 = strip_tags(elgg_get_plugin_setting('advanced_buttons1', 'tinymce'));
-if (empty($advanced_buttons1)) $advanced_buttons1 = "removeformat,formatselect,bold,italic,underline,strikethrough,forecolor,link,unlink,blockquote,sub,sup,hr,fullscreen";
+if (empty($advanced_buttons1)) $advanced_buttons1 = "removeformat formatselect bold italic underline strikethrough forecolor link unlink blockquote sub sup hr fullscreen";
 $advanced_buttons2 = strip_tags(elgg_get_plugin_setting('advanced_buttons2', 'tinymce'));
-if (empty($advanced_buttons2)) $advanced_buttons2 = "visualaid,|,code,|,pastetext,pasteword,emotions,|,search,replace,|,bullist,numlist,indent,outdent,|,justifyleft,justifycenter,justifyright,justifyfull";
+if (empty($advanced_buttons2)) $advanced_buttons2 = "visualaid | code | pastetext pasteword emotions | search replace | bullist numlist indent outdent | justifyleft justifycenter justifyright justifyfull";
 $advanced_buttons3 = strip_tags(elgg_get_plugin_setting('advanced_buttons3', 'tinymce'));
-if (empty($advanced_buttons3)) $advanced_buttons3 = "image,|,tablecontrols,|,undo,redo,|,spellchecker";
+if (empty($advanced_buttons3)) $advanced_buttons3 = "image | tablecontrols | undo redo | spellchecker";
 $advanced_buttons4 = strip_tags(elgg_get_plugin_setting('advanced_buttons4', 'tinymce'));
 
 // Templates

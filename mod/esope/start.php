@@ -1459,36 +1459,57 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 	$templates = explode('\n', $templates);
 	$js_templates = '';
 	foreach ($templates as $template) {
+		$title = $description = $url = $content = false;
 		$template = trim($template);
 		if (!empty($template)) {
 			$template = explode('::', $template);
-			$source = trim($template[0]);
+			$source = trim($template[0]); // Can be a cmspages pagetype, GUID or real URL
+			// Title and description are set in plugins settings
 			$title = trim($template[1]);
 			$description = trim($template[2]);
+			
 			switch($type) {
 				case 'cmspage':
-					$source = elgg_get_site_url() . 'p/' . $source . '?embed=true';
+					$url = elgg_get_site_url() . 'p/' . $source . '?embed=true';
+					// @TODO : load entity and load title and description if missing ?
+					if (empty($title)) { $title = $source; }
+					if (empty($description)) { $description = $description; }
 					break;
+				
 				case 'guid':
 					if ($ent = get_entity($source)) {
 						// @TODO : provide a REST URL access to an entity description (with access rights)
 						// Best we can get now would be exported JSON
 						// Export description only : export/default/1073/attr/description/
-						$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
-						if (empty($title)) $title = $ent->title;
-						else if (empty($description)) $description = $ent->title;
-					} else $source = false;
+						//$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
+						$content = $ent->description;
+						if (empty($title)) { $title = $ent->title; }
+						else if (empty($description)) { $description = $ent->title; }
+					}
 					break;
+				
+				// Note : external URLs will work lesser as it is often considered as XSS or forbidden by distant site...
 				case 'url':
 				default:
-					$source = trim($template[0]);
+					$url = trim($template[0]);
 			}
-			// Allow some failsafe behaviour
-			if (empty($source)) continue;
-			if (empty($title)) $title = $source;
-			if (empty($description)) $description = $title;
-			// Add config line to templates config
-			$js_templates .= '{ title : "' . $title . '", src : "' . $source . '", description : "' . $description . '" }, ' . "\n";
+			
+			// Check that we have valid templates before adding them
+			if (empty($url) && empty($content)) { continue; }
+			
+			// Ensure there is a title and description
+			if (empty($title)) {
+				if (!empty($url)) { $title = $url; } else if (!empty($description)) { $title = $description; } else { $title = elgg_get_excerpt($content); }
+			}
+			if (empty($description)) { $description = $title; }
+			
+			// Compose config line for templates JS config
+			// Note : json_encode() automatically adds surrounding double-quotes
+			if (!empty($url)) {
+				$js_templates .= '{ title : ' . json_encode($title) . ', description : ' . json_encode($description) . ', url : ' . json_encode($url) . ' }, ' . "\n";
+			} else if (!empty($content)) {
+				$js_templates .= '{ title : ' . json_encode($title) . ', description : ' . json_encode($description) . ', content : ' . json_encode($content) . ' }, ' . "\n";
+			}
 		}
 	}
 	return $js_templates;
