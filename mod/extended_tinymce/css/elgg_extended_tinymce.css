@@ -1,0 +1,19 @@
+/* CSS for Extended TinyMCE content iframe */
+body {
+	color: #333;
+	font: 80%/1.4 "Lucida Grande",Verdana,sans-serif;
+	font-size: 12px;
+	scrollbar-3dlight-color:#f0f0ee;
+	scrollbar-arrow-color:#676662;
+	scrollbar-base-color:#f0f0ee;
+	scrollbar-darkshadow-color:#ddd;
+	scrollbar-face-color:#e0e0dd;scrollbar-highlight-color:#f0f0ee;
+	scrollbar-shadow-color:#f0f0ee;
+	scrollbar-track-color:#f5f5f5
+}
+
+td,th {
+	color: #333;
+	font: 80%/1.4 "Lucida Grande",Verdana,sans-serif;
+	font-size: 12px;
+}
