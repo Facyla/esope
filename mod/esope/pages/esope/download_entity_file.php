@@ -7,8 +7,6 @@
  * @link http://items.fr/
  */
 
-global $CONFIG;
-
 $entity_guid = get_input('guid');
 $metadata = get_input('metadata', 'file');
 $inline = get_input("inline", false);

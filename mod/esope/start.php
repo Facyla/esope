@@ -93,10 +93,13 @@ function esope_init() {
 	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
-	elgg_register_simplecache_view('js/esope_theme');
+	elgg_register_simplecache_view('js/esope/theme');
 	$theme_js = elgg_get_simplecache_url('js', 'esope_theme');
 	elgg_register_js('esope.theme', $theme_js, 'head');
 	elgg_load_js('esope.theme');
+	
+	// Used by wysiwyg editors templates
+	elgg_register_simplecache_view('js/esope/ckeditor_templates');
 	
 	// Update jQuery UI to 1.11.2, with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
@@ -1470,10 +1473,10 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			
 			switch($type) {
 				case 'cmspage':
-					$url = elgg_get_site_url() . 'p/' . $source . '?embed=true';
+					$url = elgg_get_site_url() . 'p/' . $source . '?embed=true&noedit=true';
 					// @TODO : load entity and load title and description if missing ?
 					if (empty($title)) { $title = $source; }
-					if (empty($description)) { $description = $description; }
+					//if (empty($description)) { $description = $title; }
 					break;
 				
 				case 'guid':
@@ -1506,14 +1509,81 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			// Compose config line for templates JS config
 			// Note : json_encode() automatically adds surrounding double-quotes
 			if (!empty($url)) {
-				$js_templates .= '{ title : ' . json_encode($title) . ', description : ' . json_encode($description) . ', url : ' . json_encode($url) . ' }, ' . "\n";
+				$js_templates .= '{ title: ' . json_encode($title) . ', description: ' . json_encode($description) . ', url: ' . json_encode($url) . ' }, ' . "\n";
 			} else if (!empty($content)) {
-				$js_templates .= '{ title : ' . json_encode($title) . ', description : ' . json_encode($description) . ', content : ' . json_encode($content) . ' }, ' . "\n";
+				$js_templates .= '{ title: ' . json_encode($title) . ', description: ' . json_encode($description) . ', content: ' . json_encode($content) . ' }, ' . "\n";
 			}
 		}
 	}
 	return $js_templates;
 }
+
+
+/* Prepare JS string that can be used by the template config of CKEditor
+ * $templates : string usually set in plugins settings, formatted as : source::title::description
+ * $source : can be an URL to the HTML template file, or cmspage, or object GUID
+ */
+function esope_ckeditor_prepare_templates($templates, $type = 'url') {
+	$templates = preg_replace('/\r\n|\n|\r/', '\n', $templates);
+	$templates = explode('\n', $templates);
+	$js_templates = '';
+	foreach ($templates as $template) {
+		$title = $description = $url = $content = false;
+		$template = trim($template);
+		if (!empty($template)) {
+			$template = explode('::', $template);
+			$source = trim($template[0]); // Can be a cmspages pagetype, GUID or real URL
+			// Title and description are set in plugins settings
+			$title = trim($template[1]);
+			$description = trim($template[2]);
+			
+			switch($type) {
+				case 'cmspage':
+					//$content = file_get_contents(elgg_get_site_url() . 'p/' . $source . '?embed=true&noedit=true');
+					if ($ent = cmspages_get_entity($source)) {
+						$content = $ent->description;
+						if (empty($title)) { $title = $ent->title; }
+						//if (empty($description)) { $description = $title; }
+					}
+					break;
+				
+				case 'guid':
+					if ($ent = get_entity($source)) {
+						// @TODO : provide a REST URL access to an entity description (with access rights)
+						// Best we can get now would be exported JSON
+						// Export description only : export/default/1073/attr/description/
+						//$source = elgg_get_site_url() . 'export/default/' . $source . '/attr/description/';
+						$content = $ent->description;
+						if (empty($title)) { $title = $ent->title; }
+						if (empty($description)) { $description = $ent->title; }
+					}
+					break;
+				
+				// Note : external URLs will work lesser as it is often considered as XSS or forbidden by distant site...
+				case 'url':
+				default:
+					$content = file_get_contents($template[0]);
+			}
+			
+			// Check that we have valid templates before adding them
+			if (empty($content)) { continue; }
+			
+			// Ensure there is a title and description
+			if (empty($title)) {
+				if (!empty($description)) { $title = $description; } else { $title = elgg_get_excerpt($content); }
+			}
+			if (empty($description)) { $description = $title; }
+			
+			// Compose config line for templates JS config
+			// Note : json_encode() automatically adds surrounding double-quotes
+			if (!empty($content)) {
+				$js_templates .= '{ title: ' . json_encode($title) . ', image: "", description: ' . json_encode($description) . ', html: ' . json_encode($content) . ' }, ' . "\n";
+			}
+		}
+	}
+	return $js_templates;
+}
+
 
 
 /* Return a list of valid users from a string

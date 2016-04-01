@@ -35,6 +35,17 @@ function esope_page_handler($page) {
 			if (isset($page[2])) set_input('lower_ts', $page[2]);
 			include "$base/forum_refresh.php";
 			break;
+		
+		// Used to provide JSON config or HTML templates for wysiwyg editors
+		// Note : prefered cached JS view
+		/*
+		case 'templates':
+			if (isset($page[1])) set_input('mode', $page[1]); // config or html
+			if (isset($page[2])) set_input('editor', $page[2]); // if config, the used editor
+			include "$base/templates.php";
+			break;
+		*/
+		
 		default:
 	}
 	return true;

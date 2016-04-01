@@ -1,9 +1,8 @@
 <?php
 /* ESOPE : needed to empty original file js/elgg/ckeditor/init.js to use PHP in this JS view
  */
-// ESOPE @TODO import changes from tinymce version
+// ESOPE @TODO see if we should import other changes from tinymce plugin enhancements
 
-error_log("TEST CKEditor");
 ?>
 //<script>
 
@@ -58,7 +57,30 @@ define(function(require) {
 		disableNativeTableHandles: false,
 		//removeDialogTabs: 'image:advanced;image:Link;link:advanced;link:target',
 		removeDialogTabs: '',
-		autoGrow_maxHeight: $(window).height() - 100
+		autoGrow_maxHeight: $(window).height() - 100,
+		
+		// ESOPE : templates support
+		// See http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html#.templates
+		// Do not remove current editor content
+		templates_replaceContent: false,
+		
+		// The templates definition set to use. It accepts a list of names separated by comma. It must match definitions loaded with the templates_files setting
+		// Default : 'default'
+		// Eg.: templates: 'my_templates',
+		templates: 'esope_custom_templates',
+		
+		// Define custom templates files - The list of templates definition files to load
+		// Default: templates_files: [ 'plugins/templates/templates/default.js' ] 
+		/* Eg.: templates_files: [
+			'/editor_templates/site_default.js',
+			'http://www.example.com/user_templates.js
+		],
+		*/
+		// http://localhost/esope_1.12/mod/ckeditor/vendors/ckeditor/plugins/templates/templates/default.js
+		//templates_files: [ '<?php echo elgg_get_site_url(); ?>mod/esope/views/default/js/elgg/ckeditor/esope_custom_templates.js.php' ],
+		//templates_files: [ '<?php echo elgg_get_site_url(); ?>esope/templates/config/ckeditor' ],
+		templates_files: [ '<?php echo elgg_get_simplecache_url('js', 'esope/ckeditor_templates'); ?>' ],
+		
 	};
 });
 
