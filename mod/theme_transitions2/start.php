@@ -522,7 +522,7 @@ function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params
 	$allowed_styles = array(
 		'color', 'cursor', 'text-align', 'vertical-align', 'font-size', 'font-family',
 		'font-weight', 'font-style', 'border', 'border-top', 'background', 'background-color', 
-		'border-bottom', 'border-left', 'border-right',
+		'border-bottom', 'border-left', 'border-right', 'border-radius',
 		'margin', 'margin-top', 'margin-bottom', 'margin-left',
 		'margin-right', 'padding', 'float', 'text-decoration',
 		'height', 'width', 'line-height', 
