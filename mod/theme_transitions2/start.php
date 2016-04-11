@@ -525,7 +525,7 @@ function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params
 		'border-bottom', 'border-left', 'border-right', 'border-radius',
 		'margin', 'margin-top', 'margin-bottom', 'margin-left',
 		'margin-right', 'padding', 'float', 'text-decoration',
-		'height', 'width', 'line-height', 
+		'height', 'width', 'line-height', 'min-width', 'min-height',
 	);
 	return $allowed_styles;
 }
