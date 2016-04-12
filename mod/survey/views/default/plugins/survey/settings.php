@@ -54,54 +54,54 @@ if (!$survey_results_export) { $survey_results_export = 'yes'; }
 
 $body .= '<fieldset><legend>' . elgg_echo('survey:settings:notifications') . '</legend>';
 	$body .= '<p><label>' . elgg_echo('survey:settings:send_notification:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[send_notification]', 'value' => $survey_send_notification, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[send_notification]', 'value' => $survey_send_notification, 'options_values' => $yn_opts));
 	$body .= '</label><br />' . elgg_echo('survey:settings:send_notification:details');
 	$body .= '</p>';
 
 	$body .= '<p><label>' . elgg_echo('survey:settings:create_in_river:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[create_in_river]', 'value' => $survey_create_in_river, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[create_in_river]', 'value' => $survey_create_in_river, 'options_values' => $yn_opts));
 	$body .= '</label></p>';
 
 	$body .= '<p><label>' . elgg_echo('survey:settings:response_in_river:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[response_in_river]', 'value' => $survey_response_in_river, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[response_in_river]', 'value' => $survey_response_in_river, 'options_values' => $yn_opts));
 	$body .= '</label></p>';
 
 	$body .= '<p><label>' . elgg_echo('survey:settings:show_active_only') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[show_active_only]', 'value' => $survey_show_active_only, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[show_active_only]', 'value' => $survey_show_active_only, 'options_values' => $yn_opts));
 	$body .= '</label></p>';
 $body .= '</fieldset>';
 
 
 $body .= '<fieldset><legend>' . elgg_echo('survey:settings:access') . '</legend>';
- 	$body .= '<p><label>' . elgg_echo('survey:settings:group:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[group_survey]', 'value' => $survey_group_survey, 'options_values' => $group_options));
+	$body .= '<p><label>' . elgg_echo('survey:settings:group:title') . ' ';
+	$body .= elgg_view('input/select', array('name' => 'params[group_survey]', 'value' => $survey_group_survey, 'options_values' => $group_options));
 	$body .= '</label></p>';
 
 	$body .= '<p><label>' . elgg_echo('survey:settings:group_access:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[group_access]', 'value' => $survey_group_access, 'options_values' => $survey_group_access_options));
+	$body .= elgg_view('input/select', array('name' => 'params[group_access]', 'value' => $survey_group_access, 'options_values' => $survey_group_access_options));
 	$body .= '</label></p>';
 
 	$body .= '<p><label>' . elgg_echo('survey:settings:site_access:title') . '</label>';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[site_access]', 'value' => $survey_site_access, 'options_values' => $survey_site_access_options));
+	$body .= elgg_view('input/select', array('name' => 'params[site_access]', 'value' => $survey_site_access, 'options_values' => $survey_site_access_options));
 	$body .= '</label></p>';
 	
 	$body .= '<p><label>' . elgg_echo('survey:settings:front_page:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[front_page]', 'value' => $survey_front_page, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[front_page]', 'value' => $survey_front_page, 'options_values' => $yn_opts));
 	$body .= '</label><br />' . elgg_echo('survey:settings:front_page:details') . '</p>';
 	
 	$body .= '<p><label>' . elgg_echo('survey:settings:results_export') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[results_export]', 'value' => $survey_results_export, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[results_export]', 'value' => $survey_results_export, 'options_values' => $yn_opts));
 	$body .= '</label></p>';
 $body .= '</fieldset>';
 
 
 $body .= '<fieldset><legend>' . elgg_echo('survey:settings:options') . '</legend>';
 	$body .= '<p><label>' . elgg_echo('survey:settings:allow_close_date:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[allow_close_date]', 'value' => $allow_close_date, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[allow_close_date]', 'value' => $allow_close_date, 'options_values' => $yn_opts));
 	$body .= '</label><br />' . elgg_echo('survey:settings:allow_close_date:details') . '</p>';
 
 	$body .= '<p><label>' . elgg_echo('survey:settings:allow_open_survey:title') . ' ';
-	$body .= elgg_view('input/pulldown', array('name' => 'params[allow_open_survey]', 'value' => $allow_open_survey, 'options_values' => $yn_opts));
+	$body .= elgg_view('input/select', array('name' => 'params[allow_open_survey]', 'value' => $allow_open_survey, 'options_values' => $yn_opts));
 	$body .= '</label><br />' . elgg_echo('survey:settings:allow_open_survey:details') . '</p>';
 $body .= '</fieldset>';
 

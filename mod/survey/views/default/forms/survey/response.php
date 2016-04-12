@@ -20,8 +20,9 @@ foreach($questions as $question) {
 	switch($question->input_type) {
 		case 'dropdown':
 		case 'pulldown':
+		case 'select':
 			$input_params['options_values'] = survey_get_question_choices_array($question);
-			$response_input .= elgg_view('input/pulldown', $input_params);
+			$response_input .= elgg_view('input/select', $input_params);
 			break;
 		
 		case 'multiselect':

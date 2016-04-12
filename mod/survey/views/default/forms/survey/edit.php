@@ -25,32 +25,18 @@ $access_id = $vars['fd']['access_id'];
 
 // @TODO Possibilité de réordonner les questions "display_order"
 
-?>
 
 
-<div>
-	<label><?php echo elgg_echo('survey:title'); ?> 
-	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?></label>
-</div>
+echo '<div><label>' . elgg_echo('survey:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $title)) . '</label></div>';
 
-<div>
-	<label for="survey_description"><?php echo elgg_echo('survey:description'); ?></label> 
-	<?php echo elgg_view('input/longtext', array('name' => 'description', 'id' => 'survey_description', 'value' => $description)); ?>
-</div>
+echo '<div><label for="survey_description">' . elgg_echo('survey:description') . '</label> ' . elgg_view('input/longtext', array('name' => 'description', 'id' => 'survey_description', 'value' => $description)) . '</div>';
 
-<div>
-	<label><?php echo elgg_echo('tags'); ?> 
-	<?php echo  elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)); ?></label>
-</div>
+echo '<div><label>' . elgg_echo('tags') . ' ' . elgg_view('input/tags', array('name' => 'tags', 'value' => $tags)) . '</label></div>';
 
-<?php if ($allow_close_date == 'yes') { ?>
-	<div>
-		<label><?php echo elgg_echo('survey:close_date'); ?> 
-		<?php echo  elgg_view('input/date', array('name' => 'close_date', 'timestamp' => true, 'value' => $close_date)); ?></label>
-	</div>
-<?php } ?>
+if ($allow_close_date == 'yes') {
+	echo '<div><label>' . elgg_echo('survey:close_date') . ' ' . elgg_view('input/date', array('name' => 'close_date', 'timestamp' => true, 'value' => $close_date)) . '</label></div>';
+}
 
-<?php
 if($allow_open_survey == 'yes') {
 	$open_survey_input = '<p><label>';
 	if ($vars['fd']['open_survey']) {
@@ -76,36 +62,20 @@ if (elgg_is_admin_logged_in() && ($survey_front_page == 'yes')) {
 echo '<div><p><label>' . $front_page_input . '</label></p></div>';
 
 $yn_options = array(elgg_echo('survey:settings:yes') => 'yes', elgg_echo('survey:settings:no') => 'no');
-echo '<div><label>' . elgg_echo('survey:comments_on') . '</label>';
-echo elgg_view('input/radio', array('name' => 'params[comments_on]', 'value' => $comments_on, 'options' => $yn_options));
-echo '</div>';
+echo '<div><label>' . elgg_echo('survey:comments_on') . '</label>' . elgg_view('input/radio', array('name' => 'params[comments_on]', 'value' => $comments_on, 'options' => $yn_options)) . '</div>';
 
-?>
+echo '<div><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)) . '</label></div>';
 
-<div>
-	<label><?php echo elgg_echo('access'); ?>
-	<?php echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id)); ?></label>
-</div>
-<br />
+echo '<br />';
 
-<div>
-	<span style=float:right;"><a href="javascript:void(0);" onclick="$('.survey-input-question-details').toggle();"><?php echo elgg_echo('survey:question:toggle:details'); ?></a></span>
-	<h3><?php echo elgg_echo('survey:questions'); ?></h3>
-	<p><em><?php echo elgg_echo('survey:questions:reorder'); ?></em></p>
-	<?php echo elgg_view('survey/input/questions', array('survey' => $survey)); ?>
-</div>
-<br />
-
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#survey-questions").sortable({ // initialisation de Sortable sur le container parent
-		placeholder: 'survey-sort-highlight', // classe du placeholder ajouté lors du déplacement
-	});
-});
-</script>
+echo '<div>
+	<span style=float:right;"><a href="javascript:void(0);" onclick="$(\'.survey-input-question-details\').toggle();">' . elgg_echo('survey:question:toggle:details') . '</a></span>
+	<h3>' . elgg_echo('survey:questions') . '</h3>
+	<p><em>' . elgg_echo('survey:questions:reorder') . '</em></p>'
+	. elgg_view('survey/input/questions', array('survey' => $survey)) 
+	. '</div><br />';
 
 
-<?php
 $entity_hidden = '';
 if (isset($vars['entity'])) {
 	$entity_hidden = elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
@@ -123,6 +93,14 @@ $submit_input .= ' '.elgg_view('input/button', array('name' => 'cancel', 'id' =>
 	echo $submit_input;
 	?>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#survey-questions").sortable({ // initialisation de Sortable sur le container parent
+		placeholder: 'survey-sort-highlight', // classe du placeholder ajouté lors du déplacement
+	});
+});
+</script>
 
 <script type="text/javascript">
 $('#survey_edit_cancel').click(

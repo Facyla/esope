@@ -58,15 +58,13 @@ $survey->annotate("response", time(), $survey->access_id);
 // Add to river
 $survey_response_in_river = elgg_get_plugin_setting('response_in_river', 'survey');
 if ($survey_response_in_river == 'yes') {
-	add_to_river('river/object/survey/response', 'response' , $user->guid, $survey->guid);
-	/* Elgg 1.10
+	//add_to_river('river/object/survey/response', 'response' , $user->guid, $survey->guid);
 	elgg_create_river_item(array(
 		'view' => 'river/object/survey/response',
 		'action_type' => 'response',
 		'subject_guid' => $user->guid,
 		'object_guid' => $survey->guid,
 	));
-	*/
 }
 
 if (get_input('callback')) {

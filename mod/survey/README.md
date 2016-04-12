@@ -1,19 +1,21 @@
-Survey plugin for Elgg 1.8
+Survey plugin for Elgg 1.12
 ==========================
 
 This plugin is forked from Poll plugin 1.10.2.
-Some of the implementation ideas come from knowledge_database plugin from Facyla, completed by Evan Winslow proposal at https://github.com/Elgg/Elgg/issues/6808
+Some of the implementation ideas also come from knowledge_database plugin from Facyla, with insights from Evan Winslow proposal at https://github.com/Elgg/Elgg/issues/6808
 
-This plugin has a different aim than "poll", and is not backward-compatible. In fact, both plugin can be enabled together to provide polls and surveys.
-Survey plugin wants to provide survey features such as :
+This plugin has a different aim than "poll", and is not backward-compatible. In fact, both plugin can be enabled and used at the same time to provide simple polls and more complex surveys.
+
+Survey plugin provides survey features such as:
  - multiple questions,
  - extended set of available question types (notation, free text, multiple choices, etc.)
  - nice results views, and results filtering, per question and per responder
-It is rather intended to admins and optionally group admins.
+ - CSV results export
+It is intended to admins and optionally group admins rather than to simple members.
 
 
 
-## Poll readme
+## For reference : Parent plugin Poll readme
 Poll plugin for Elgg 1.10
 Latest Version: 1.10.2
 Released: 2015-02-15

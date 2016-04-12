@@ -45,9 +45,9 @@ $question_content .= '<p class="question_title_' . $i . '"><label>' . elgg_echo(
 // Group all other input elements to we can hide them on-demand
 $question_content .= '<div class="survey-input-question-details">';
 	
-	$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/pulldown', array('name' => "question_required[]", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey-input-question-required')) . '</label></p>';
+	$question_content .= '<p class="question_required_' . $i . '" style="float:right;"><label>' . elgg_echo('survey:question:required') . ' ' . elgg_view('input/select', array('name' => "question_required[]", 'value' => $required, 'options_values' => $yes_no_opt, 'class' => 'survey-input-question-required')) . '</label></p>';
 
-	$question_content .= '<p class="question_input_type_' . $i . '"><label>' . elgg_echo('survey:question:input_type') . ' ' . elgg_view('input/pulldown', array('name' => "question_input_type[]", 'value' => $input_type, 'options_values' => $question_types_opt, 'class' => 'survey-input-question-input-type', 'data-id' => $i)) . '</label>';
+	$question_content .= '<p class="question_input_type_' . $i . '"><label>' . elgg_echo('survey:question:input_type') . ' ' . elgg_view('input/select', array('name' => "question_input_type[]", 'value' => $input_type, 'options_values' => $question_types_opt, 'class' => 'survey-input-question-input-type', 'data-id' => $i)) . '</label>';
 	// Add some help for each input type
 	$question_content .= elgg_view('survey/input/question_type_help', array('input_type' => $input_type));
 	$question_content .= '</p>';
@@ -58,7 +58,7 @@ $question_content .= '<div class="survey-input-question-details">';
 
 	// Hide conditionnal elements
 	if (!in_array($input_type, array('dropdown', 'pulldown', 'rating'))) { $hide = 'display:none;'; } else { $hide = ''; }
-	$question_content .= '<p class="question_empty_value_' . $i . '" style="' . $hide . '"><label>' . elgg_echo('survey:question:empty_value') . ' ' . elgg_view('input/pulldown', array('name' => "question_empty_value[]", 'value' => $empty_value, 'options_values' => $no_yes_opt, 'class' => 'survey-input-question-empty-value')) . '</label></p>';
+	$question_content .= '<p class="question_empty_value_' . $i . '" style="' . $hide . '"><label>' . elgg_echo('survey:question:empty_value') . ' ' . elgg_view('input/select', array('name' => "question_empty_value[]", 'value' => $empty_value, 'options_values' => $no_yes_opt, 'class' => 'survey-input-question-empty-value')) . '</label></p>';
 
 	// @TODO later : allow to define questions dependencies : based on non-empty, or specific value(s) ?
 	//$question_content .= '<p><label>Dépendances ' . elgg_view('input/text', array('name' => "question_dependency[]", 'value' => $question->dependency, 'class' => 'survey-input-question-dependency')) . '</label></p>';

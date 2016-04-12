@@ -3,22 +3,29 @@
 	<name>Survey</name>
 	<id>survey</id>
 	<author>Florian DANIEL aka Facyla (survey fork), iionly (for Elgg 1.8 and newer), Juho Jaakkola, Kevin Jardine, John Mellberg and Dr Sanu P Moideen (Team Webgalli)</author>
-	<version>1.8.20.1</version>
-	<category>communication</category>
-	<description>Survey plugin for site-wide and group-specific surveys.</description>
+	<version>1.12.0</version>
+	<description>Enable this plugin if you wish to use multi-questions surveys site-wide and in groups.</description>
 	<website>https://github.com/Facyla</website>
-	<copyright>(C) Florian DANIEL, iionly, Juho Jaakkola, Kevin Jardine, John Mellberg and Dr Sanu P Moideen</copyright>
+	<copyright>(C) Florian DANIEL aka Facyla, iionly, Juho Jaakkola, Kevin Jardine, John Mellberg and Dr Sanu P Moideen</copyright>
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.12</version>
 	</requires>
+	<category>communication</category>
+	<category>admin</category>
+	<category>content</category>
 	
-	<suggests><type>plugin</type><name>elgg_dataviz</name></suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>elgg_dataviz</name>
+	</suggests>
 	
 </plugin_manifest>
 
 <!--
+1.12.0 : 20150312 - updated to Elgg 1.12
+
 1.8.20.1 : 20150312 - rewritten survey plugin
  - multiple questions per survey
  - question types : text, longtext, pulldown, checkboxes, multiselect, rating, date

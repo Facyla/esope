@@ -78,7 +78,7 @@ $survey_site_access = elgg_get_plugin_setting('site_access', 'survey');
 if ($survey_site_access == 'admins' && !$user->isAdmin()) {
 	$container = get_entity($container_guid);
 	// Regular users are allowed to create surveys only inside groups
-	if (!$container instanceof ElggGroup) {
+	if (!elgg_instanceof($container, 'group')) {
 		register_error(elgg_echo('survey:can_not_create'));
 		elgg_clear_sticky_form('survey');
 		forward('survey/all');
@@ -91,7 +91,7 @@ if ($guid) {
 	// editing an existing survey
 	$survey = get_entity($guid);
 
-	if (!$survey instanceof Survey) {
+	if (!elgg_instanceof($survey, 'object', 'survey')) {
 		register_error(elgg_echo('survey:notfound'));
 		forward(REFERER);
 	}
@@ -103,6 +103,7 @@ if ($guid) {
 
 	// Success message
 	$message = elgg_echo("survey:edited");
+	
 } else {
 	$new = true;
 	// Initialise a new Survey
@@ -143,15 +144,13 @@ elgg_clear_sticky_form('survey');
 if ($new) {
 	$survey_create_in_river = elgg_get_plugin_setting('create_in_river', 'survey');
 	if ($survey_create_in_river == 'yes') {
-		add_to_river('river/object/survey/create', 'create' , $user->guid, $survey->guid);
-		/* Elgg 1.10
+		//add_to_river('river/object/survey/create', 'create' , $user->guid, $survey->guid);
 		elgg_create_river_item(array(
 			'view' => 'river/object/survey/create',
 			'action_type' => 'create',
 			'subject_guid' => $user->guid,
 			'object_guid' => $survey->guid,
 		));
-		*/
 	}
 }
 
