@@ -3,10 +3,10 @@ $users = find_active_users(array('seconds' => 600, 'limit' => 10, 'count' => fal
 $group = elgg_get_page_owner_entity();
 if ($users) {
 	foreach ($users as $ent) {
-		if ($group->isMember($ent)) $online_groupmembers[] = $ent;
+		if ($group->isMember($ent)) { $online_groupmembers[] = $ent->guid; }
 	}
 	$count = sizeof($online_groupmembers);
-	$body = elgg_list_entities(array('entities' => $online_groupmembers, 'count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
+	$body = elgg_list_entities(array('guids' => $online_groupmembers, 'count' => $count, 'limit' => $count, 'list_type' => 'gallery', 'gallery_class' => 'elgg-gallery-users'));
 }
 
 if (elgg_is_active_plugin('group_chat')) {
