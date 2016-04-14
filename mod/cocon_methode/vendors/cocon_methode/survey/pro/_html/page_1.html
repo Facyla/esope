@@ -242,6 +242,87 @@
 
 <script type="text/javascript">
 	
+	$(document).ready(function(){
+		
+		// Events sur les combobox des matières
+		$('#matiere1').change(function(){
+			if($('#matiere1').val() != '-1'){
+				activeMatiere(1, true);
+			}else{
+				activeMatiere(1, false);
+				activeMatiere(2, false);
+				activeMatiere(3, false);
+			}
+		});
+		
+		$('#matiere2').change(function(){
+			if($('#matiere2').val() != '-1'){
+				activeMatiere(2, true);
+			}else{
+				activeMatiere(2, false);
+				activeMatiere(3, false);
+			}
+		});
+		
+		$('#matiere3').change(function(){
+			if($('#matiere3').val() != '-1'){
+				activeMatiere(3, true);
+			}else{
+				activeMatiere(3, false);
+			}
+		});
+		
+		$('#matiere4').change(function(){
+			if($('#matiere4').val() != '-1'){
+				activeMatiere(4, true);
+			}else{
+				activeMatiere(4, false);
+			}
+		});		
+	});
+	
+	/**
+		Active / Désative les combobox des matières
+	*/
+	function activeMatiere(mid, _active, _reset){
+		if(_reset == undefined){
+			_reset = true;
+		}
+		
+		if(_active){
+			if($('#niveau' + mid).is(":disabled")){
+				$("#niveau" + mid).removeAttr("disabled");
+				if(_reset){
+					$("#niveau" + mid).val('-1');
+				}
+			}
+			
+			if(mid < 4){
+				if($('#matiere' + (mid + 1)).is(":disabled")){
+					$("#matiere" + (mid + 1)).removeAttr("disabled");	
+					if(_reset){
+						$("#matiere" + (mid + 1)).val('-1');
+					}
+				}
+			}
+
+		}else{
+			$("#niveau" + mid).prop("disabled", "disabled");	
+			if(_reset){
+				$("#niveau" + mid).val('-1');
+			}
+			
+			if(mid < 4){
+				$("#niveau" + (mid + 1)).prop("disabled", "disabled");					
+				$("#matiere" + (mid + 1)).prop("disabled", "disabled");					
+				if(_reset){
+					$("#niveau" + (mid + 1)).val('-1');
+					$("#matiere" + (mid + 1)).val('-1');
+				}
+			}
+		}
+	}
+	
 	function loadQuestion(){
 		$("#nom").val(survey.quest_1.nom);
 		$("#prenom").val(survey.quest_1.prenom);

@@ -631,7 +631,8 @@ function validateSurvey(_validate, _callback){
 		// Teste si il y a des erreurs dans les réponses
 		if(page_error != ""){
 			// Il y a des réponses oubliées, on envoi à la page pour complèter
-			alert("Merci de prendre le temps de répondre à toutes les questions.");
+			//alert("Merci de prendre le temps de répondre à toutes les questions.");
+			alert("Merci de prendre le temps de répondre à toutes les questions. " + page_error);
 			_page = parseInt(page_error);
 			loadPage();
 			
