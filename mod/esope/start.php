@@ -189,24 +189,25 @@ function esope_init() {
 	
 	// Page d'accueil
 	/*
+	*/
 	if (elgg_is_logged_in()) {
 		// Remplacement page d'accueil par tableau de bord personnel
 		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
-		$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
-		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+		//$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
+		//if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+		elgg_register_plugin_hook_handler('index','system','esope_index');
 	} else {
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
 		//$site = elgg_get_site_entity();
 		//if (elgg_instanceof($site, 'site') && $site->checkWalledGarden()) {
 		if (elgg_get_config('walled_garden')) {
-			// NOTE : In walled garden mode, the walled garden page layout is used, not index hook
+			// NOTE : In walled garden mode, the walled garden page layout is used, not the index hook
 		} else {
 			// PARAM : Désactivé si 'no', ou activé avec paramètre de config
 			$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'esope');
 			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_public_index'); }
 		}
 	}
-	*/
 	
 	// Modification du menu des membres
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'esope_user_hover_menu');
@@ -561,6 +562,10 @@ function esope_pagesetup(){
 				$CONFIG->breadcrumbs[] = array('title' => elgg_echo($context), 'link' => $url . $context);
 			}
 		}
+		// Remove any HTML in breadcrumb title (and especially FA icons)
+		foreach ($CONFIG->breadcrumbs as $k => $v) {
+			$CONFIG->breadcrumbs[$k]['title'] = strip_tags($CONFIG->breadcrumbs[$k]['title']);
+		}
 	}
 	
 	return true;
@@ -896,10 +901,29 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return false;
 	}
 
+	/* Returns metadata name for a specific profile type (false if not found) */
+	function esope_get_profiletype_name($profiletype_guid) {
+		$profiletype = get_entity($profiletype_guid);
+		if (elgg_instanceof($profiletype, 'object')) {
+			return strtolower($profiletype->metadata_name);
+		}
+		return false;
+	}
+	
+	/* Returns translated label for a specific profile type (false if not found) */
+	function esope_get_profiletype_label($profiletype_guid) {
+		$profiletype = get_entity($profiletype_guid);
+		if (elgg_instanceof($profiletype, 'object', CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE)) {
+			if (!empty($profiletype->metadata_label)) return $profiletype->metadata_label;
+			else return elgg_echo('profile:types:' . $profiletype);
+		}
+		return false;
+	}
 	/* Returns all profile types as $profiletype_guid => $profiletype_name
 	 * Can also return translated name (for use in a dropdown input)
+	 * And also use metadata name as key (only when using translated name)
 	 */
-	function esope_get_profiletypes($use_translation = false) {
+	function esope_get_profiletypes($use_translation = false, $use_meta_key = false) {
 		$profile_types_options = array(
 				"type" => "object", "subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 				"owner_guid" => elgg_get_site_entity()->getGUID(), "limit" => false,
@@ -908,7 +932,17 @@ if (elgg_is_active_plugin('profile_manager')) {
 			foreach($custom_profile_types as $type) {
 				$profile_type = strtolower($type->metadata_name);
 				if ($use_translation) {
-					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $profile_type);
+					//$profiletypes[$type->guid] = elgg_echo('profile:types:' . $profile_type);
+					if (!empty($type->metadata_label)) {
+						$profile_type_name = $type->metadata_label;
+					} else {
+						$profile_type_name = elgg_echo('profile:types:' . $profile_type);
+					}
+					if ($use_meta_key) {
+						$profiletypes[$profile_type] = $profile_type_name;
+					} else {
+						$profiletypes[$type->guid] = $profile_type_name;
+					}
 				} else {
 					$profiletypes[$type->guid] = $profile_type;
 				}
@@ -969,11 +1003,12 @@ if (elgg_is_active_plugin('profile_manager')) {
 	   - 
 	 */
 	function esope_make_search_field_from_profile_field($params) {
-		$metadata = $params['metadata'];
-		if (empty($metadata)) return false;
+		$metadata = trim($params['metadata']);
+		if (empty($metadata)) { return false; }
 		$empty = elgg_extract('empty', $params, true);
 		$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
 		$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+		$auto_options = elgg_extract('auto-options', $params, false);
 		$search_field = '';
 		
 		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_profile_field', 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
@@ -981,20 +1016,62 @@ if (elgg_is_active_plugin('profile_manager')) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
 			$valtype = $field->metadata_type;
-			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) $valtype = 'text';
-			// Multiple option become select or radio
-			if ($options) {
+			// Failsafe to auto-discover options if none found ? - but would convert any text field to dropdown (not good)
+			//if (empty($options)) { $options = esope_get_meta_values($metadata); }
+			// Auto-discover valid values from existing metadata
+			if ($auto_options) {
+				$options = esope_get_meta_values($metadata);
 				$valtype = 'dropdown';
-				if ($empty) { $options['empty option'] = ''; }
-				$options = array_reverse($options);
+			}
+			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) { $valtype = 'text'; }
+			// Multiple options become select (if radio, should also invert keys and values)
+			if ($options) {
+				$valtype = 'select';
+				//if ($empty) { $options['empty option'] = ''; }
+				//$options = array_reverse($options);
+				// Add (always) empty entry at the beginning of the array
+				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
+		} else {
+			// Metadata is not defined through profile_manager : use regular field instead
+			if ($auto_options) {
+				$search_field .= esope_make_dropdown_from_metadata($params);
+			} else {
+				$search_field .= '<input type="text" name="' . $name . '" value="' . $value . '" />';
+			}
 		}
 		return $search_field;
 	}
 	
 }
 
+/* Return a selector for a given metadata
+ * That's for use in a multi-criteria search form
+ * Params :
+   - metadata : meta name
+   - name : field name
+   - value : set a specific value
+   - empty : add empty value in options
+   - 
+ */
+function esope_make_dropdown_from_metadata($params) {
+	$metadata = trim($params['metadata']);
+	if (empty($metadata)) { return false; }
+	$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+	$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
+	$empty = elgg_extract('empty', $params, true);
+	$search_field = '';
+	
+	// Auto-discover valid values from existing metadata
+	$options = esope_get_meta_values($metadata);
+	
+	// Add empty entry at the beginning of the array
+	//if ($empty) $options = array('empty option' => '') + $options;
+	if ($empty) $options = array_merge(array('empty option' => ''), $options);
+	
+	return elgg_view("input/dropdown", array('name' => $name, 'options' => $options, 'value' => $value));
+}
 /* Returns the wanted value based on both params and inputs
  * If $params is set (to whatever except false, but including ), it will be used
  * If not set, we'll use GET inputs
@@ -1144,8 +1221,9 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	
 	// Perform search results count
 	$search_params['count'] = true;
+	if ($debug) { echo '<pre>' . print_r($search_params, true) . '</pre>'; }
 	$return_count = elgg_get_entities_from_metadata($search_params);
-	if ($count) return $return_count;
+	if ($count) { return $return_count; }
 	
 	if ($return_count > $max_results) {
 		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
@@ -1243,19 +1321,23 @@ function esope_get_subpages($parent) {
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 	$content = '';
 	$subpages = esope_get_subpages($parent);
-	if ($subpages) foreach ($subpages as $subpage) {
-		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
-		else if ($internal_link == 'url') $href = $subpage->getURL();
-		else $href = false;
-		if ($full_view) {
-			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
-			echo elgg_view("output/longtext", array("value" => $subpage->description));
-			echo '<p style="page-break-after:always;"></p>';
-			echo esope_list_subpages($subpage, $internal_link, $full_view);
-		} else {
-			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
-			$content .= esope_list_subpages($subpage, $internal_link);
-			$content .= '</li>';
+	if ($subpages) {
+		// Alphabetic sort
+		usort($subpages, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+		foreach ($subpages as $subpage) {
+			if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
+			else if ($internal_link == 'url') $href = $subpage->getURL();
+			else $href = false;
+			if ($full_view) {
+				echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
+				echo elgg_view("output/longtext", array("value" => $subpage->description));
+				echo '<p style="page-break-after:always;"></p>';
+				echo esope_list_subpages($subpage, $internal_link, $full_view);
+			} else {
+				$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
+				$content .= esope_list_subpages($subpage, $internal_link);
+				$content .= '</li>';
+			}
 		}
 	}
 	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';
@@ -1473,6 +1555,8 @@ function esope_tinymce_prepare_templates($templates, $type = 'url') {
 			
 			switch($type) {
 				case 'cmspage':
+					// Cmspages always respect friendly title formatting
+					$source = elgg_get_friendly_title($source);
 					$url = elgg_get_site_url() . 'p/' . $source . '?embed=true&noedit=true';
 					// @TODO : load entity and load title and description if missing ?
 					if (empty($title)) { $title = $source; }
@@ -1626,13 +1710,18 @@ function esope_get_log_distinct_values($column) {
 }
 
 
-// Return distinct metadata values for a given metadata name
-// @TODO : we could get it more quickly with a direct SQL query
-function esope_get_meta_values($meta_name) {
+/* Return distinct metadata values for a given metadata name
+ * Quickest method uses a direct SQL query
+ * Also default sort alphabetically
+ */
+function esope_get_meta_values($meta_name, $sort = true) {
 	$dbprefix = elgg_get_config('dbprefix');
 	$query = "SELECT DISTINCT ms.string FROM `" . $dbprefix . "metadata` as md 
 		JOIN `" . $dbprefix . "metastrings` as ms ON md.value_id = ms.id 
-		WHERE md.name_id = (SELECT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
+		WHERE md.name_id IN (SELECT DISTINCT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name')";
+	if ($sort) { $query .= ' ORDER BY ms.string ASC;'; }
+	$query .= ';';
+		//WHERE md.name_id = (SELECT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
 	$rows = get_data($query);
 	foreach ($rows as $row) { $results[] = $row->string; }
 	return $results;
@@ -1703,13 +1792,23 @@ function esope_filter_entity_guid_by_metadata(array $values, array $md_filter) {
 
 /* Renvoie un array d'emails, de GUID, etc. à partir d'un textarea ou d'un input text
  * e.g. 123, email;test \n hello => array('123', 'email', 'test', 'hello')
+ * string $input
+ * string|array('string') $separators (\n will always be a separator)
+ * Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, etc.
  * Return : Tableau filtré, ou false
  */
-function esope_get_input_array($input = false) {
+function esope_get_input_array($input = false, $separators = array("\n", "\r", "\t", ",", ";", "|")) {
 	if ($input) {
 		// Séparateurs acceptés : retours à la ligne, virgules, points-virgules, pipe, 
-		$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
-		$input = explode("\n", $input);
+		//$input = str_replace(array("\n", "\r", "\t", ",", ";", "|"), "\n", $input);
+		//$input = explode("\n", $input);
+		if (is_array($separators)) {
+			$main_sep = array_shift($separators);
+			$input = str_replace($separators, $main_sep, $input);
+			$input = explode($main_sep, $input);
+		} else {
+			$input = explode($separators, $input);
+		}
 		// Suppression des espaces
 		$input = array_map('trim', $input);
 		// Suppression des doublons
@@ -1721,6 +1820,54 @@ function esope_get_input_array($input = false) {
 }
 
 
+/* Ajoute des valeurs dans un array de metadata (sans doublon)
+ * $entity : the source/target entity
+ * $meta : metadata to be updated
+ * $add : value(s) to be added
+ */
+function esope_add_to_meta_array($entity, $meta = '', $add = array()) {
+	if (!($entity instanceof ElggEntity) || empty($meta) || empty($add)) { return false; }
+	$values = $entity->{$meta};
+	// Make it an array, even empty
+	if (!is_array($values)) {
+		if (!empty($values)) $values = array($values);
+		else $values = array();
+	}
+	// Allow multiple values to be added in one pass
+	if (!is_array($add)) $add = array($add);
+	foreach ($add as $new_value) {
+		if (!in_array($new_value, $values)) { $values[] = $new_value; }
+	}
+	// Ensure unique values
+	$values = array_unique($values);
+	// Update entity
+	if ($entity->{$meta} = $values) { return true; }
+	return false;
+}
+
+/* Retire des valeurs d'un array de metadata (sans doublon)
+ * $entity : the source/target entity
+ * $meta : metadata to be updated
+ * $remove : value(s) to be removed
+ */
+function esope_remove_from_meta_array($entity, $meta = '', $remove = array()) {
+	if (!($entity instanceof ElggEntity) || empty($meta) || empty($remove)) { return false; }
+	$values = $entity->{$meta};
+	// Make it an array, even empty
+	if (!is_array($values)) {
+		if (!empty($values)) { $values = array($values); } else { $values = array(); }
+	}
+	// Allow multiple values to be removed in one pass
+	if (!is_array($remove)) $remove = array($remove);
+	foreach ($values as $key => $value) {
+		if (in_array($value, $remove)) { unset($values[$key]); }
+	}
+	// Ensure unique values
+	$values = array_unique($values);
+	// Update entity
+	if ($entity->{$meta} = $values) { return true; }
+	return false;
+}
 /* Build options suitable array from settings
  * Allowed separators are *only* one option per line, or | separator (we want to accept commas and other into fields)
  * Accepts key::value and list of keys
@@ -1734,7 +1881,7 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
 	$options = explode("\n", $options);
 	$options_values = array();
 	if ($addempty) $options_values[''] = "";
-	foreach($options as $option) {
+	if (is_array($options)) foreach($options as $option) {
 		$option = trim($option);
 		if (!empty($option)) {
 			if (strpos($option, '::')) {
@@ -1764,8 +1911,12 @@ function esope_build_options_string($options, $prefix = 'option') {
 /* Build multi-level array from string syntax
  * $input : the settings string
  * $separators : separators definition for each level (arrays allowed for each level)
+ * Note : by default this will build a key => value(s) array, but will not eg. parse CSV-like format
+ * $nokeys : do not use key:value mode, so it will split on 2nd separator level instead of trying to find keys
+ *   Eg. will produce [] => "Some content" instead of "Some content" => true
+ *   This allows CSV parsing, eg
  */
-function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ',')) {
+function esope_get_input_recursive_array($input, $separators = array(array("|", "\r", "\t"), '::', ','), $nokeys = false) {
 	$return_array = array();
 	$input = trim($input);
 	
@@ -1782,6 +1933,28 @@ function esope_get_input_recursive_array($input, $separators = array(array("|", 
 		
 		if ($separators[1]) {
 			// Potential sublevel
+			// No key mode : check if 2nd level separator is used, otherwise add to array
+			if ($nokeys) {
+				$new_separators = array_slice($separators, 1);
+				
+				// check for sub-level config
+				if (is_array($separators[1])) {
+					foreach ($separators[1] as $sep) {
+						$pos = strpos($option, $sep);
+						if ($pos !== false) break;
+					}
+				} else {
+					$sep = $separators[1];
+					$pos = strpos($option, $sep);
+				}
+				// If we have a sub-level, get nested array
+				if ($pos !== false) {
+					$return_array[] = esope_get_input_recursive_array($option, $new_separators, $nokeys);
+				} else {
+					$return_array[] = $option;
+				}
+				
+			} else {
 			$new_separators = array_slice($separators, 2);
 			
 			// check for sub-level config
@@ -1799,14 +1972,17 @@ function esope_get_input_recursive_array($input, $separators = array(array("|", 
 			if ($pos !== false) {
 				$key = trim(substr($option, 0, $pos));
 				$value = substr($option, $pos + strlen($sep));
-				$return_array[$key] = esope_get_input_recursive_array($value, $new_separators);
+					$return_array[$key] = esope_get_input_recursive_array($value, $new_separators, $nokeys);
 			} else {
 				$return_array[$option] = true;
 			}
+			}
 		} else {
 			// No sublevel : add option
-			// Note : we need to have value set because we're looking for rights with in_array (which looks for values, bot keys)
-			$return_array[$option] = true;
+			// Note : if using keys, we need to have value set because we're looking for rights with in_array
+			// (which looks for values, not keys)
+			if ($nokeys) $return_array[] = $option;
+			else $return_array[$option] = true;
 		}
 	}
 	return $return_array;
