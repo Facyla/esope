@@ -1064,7 +1064,8 @@ function esope_make_dropdown_from_metadata($params) {
 	$options = esope_get_meta_values($metadata);
 	
 	// Add empty entry at the beginning of the array
-	if ($empty) $options = array('empty option' => '') + $options;
+	//if ($empty) $options = array('empty option' => '') + $options;
+	if ($empty) $options = array_merge(array('empty option' => ''), $options);
 	
 	return elgg_view("input/dropdown", array('name' => $name, 'options' => $options, 'value' => $value));
 }

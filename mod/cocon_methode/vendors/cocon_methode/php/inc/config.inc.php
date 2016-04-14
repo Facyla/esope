@@ -3,6 +3,7 @@
  * Liste des variables pr&eacute;-d&eacute;finies
  */
 
+// Impose le chargement d'Elgg : on ne doit pas pouvoir accéder au Kit sans cela
 require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))))) . '/engine/start.php';
 // Return information only to loggedin users
 if (!elgg_is_logged_in()) { exit; }
@@ -26,7 +27,7 @@ if($_server == 'local'){
 	define('SGDB_USER', 'root');// Utilisateur de connexion au serveur de base de donn&eacute;es
 	define('SGDB_PASSWORD', '');// Mot de passe de connexion au serveur de base de donn&eacute;es
 	define('SGDB_DATABASE', 'pwccocon');// Nom de la base de donn&eacute;es &agrave; utiliser
-	define('EMAIL_SENDER', 'Equipe CoCon<equipe@concon.fr>'); // Expéditeur de message email
+	define('EMAIL_SENDER', 'Equipe CoCon<equipe@cocon.fr>'); // Expéditeur de message email
 }
 
 if($_server == 'prod'){
@@ -157,21 +158,6 @@ function getEnseignantsInfos($gid){
 				'user_email' => $ent->email,
 			);
 	}
-	
-	/** POUR TEST : Devra être renseigné par Florian est récupérant les données depuis la base CoCon.
-	$infos = array(
-		array(
-			'user_id' => 'user_id',
-			'user_name' => 'User Name',
-			'user_email' => 'user_email@domain.tld'
-		),
-		array(
-			'user_id' => 'user2_id',
-			'user_name' => 'User2 Name',
-			'user_email' => 'user2_email@domain.tld'
-		),
-	);
-	*/
 	
 	return $infos;
 }

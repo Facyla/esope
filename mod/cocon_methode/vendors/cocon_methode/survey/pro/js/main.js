@@ -411,7 +411,9 @@ function validateSurvey(_validate, _callback){
 		
 		// Vérification des réponses
 		page_error = "";
+		page_error_list = "";
 		if(survey.etat != 2){
+			
 			// Questions 1 à 6
 			if(survey.quest_1.nom == '' ||
 				survey.quest_1.prenom == '' ||
@@ -421,7 +423,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_5 == '0' ||
 				survey.quest_6 == '0'
 			){
-					page_error = 1;
+				page_error = 1;
+				page_error_list += " " + page_error;
 			}
 
 			// Questions 7 à 8
@@ -448,7 +451,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_8.l10 == undefined ||
 				survey.quest_8.l11 == undefined
 			){
-				page_error = 2;
+				if (page_error == "") page_error = 2;
+				page_error_list += " " + page_error;
 			}
 
 			// Questions 9 à 10
@@ -461,14 +465,16 @@ function validateSurvey(_validate, _callback){
 				survey.quest_10.l3 == undefined ||
 				survey.quest_10.l4 == undefined 
 			){
-				page_error = 3;
+				if (page_error == "") page_error = 3;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 11
 			if(survey.quest_11.l1 == undefined ||
 				survey.quest_11.l2 == undefined
 			){
-				page_error = 4;
+				if (page_error == "") page_error = 4;
+				page_error_list += " " + page_error;
 			}
 
 			// Questions 12 à 13
@@ -476,7 +482,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_12.l2 == undefined ||
 				survey.quest_13.l1 == undefined
 			){
-				page_error = 5;
+				if (page_error == "") page_error = 5;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 14
@@ -484,7 +491,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_14.l2 == undefined ||
 				survey.quest_14.l3 == undefined
 			){
-				page_error = 6;
+				if (page_error == "") page_error = 6;
+				page_error_list += " " + page_error;
 			}
 
 			// Questions 15 à 16
@@ -493,7 +501,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_16.l1 == undefined ||
 				survey.quest_16.l2 == undefined
 			){
-				page_error = 7;
+				if (page_error == "") page_error = 7;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 17
@@ -503,28 +512,32 @@ function validateSurvey(_validate, _callback){
 				survey.quest_17.l2 == undefined ||
 				survey.quest_17.l3 == undefined
 			){
-				page_error = 8;
+				if (page_error == "") page_error = 8;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 18
 			if(survey.quest_18.l1 == undefined ||
 				survey.quest_18.l2 == undefined
 			){
-				page_error = 9;
+				if (page_error == "") page_error = 9;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 19
 			if(survey.quest_19.l1 == undefined ||
 				survey.quest_19.l2 == undefined
 			){
-				page_error = 10;
+				if (page_error == "") page_error = 10;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 20
 			if(survey.quest_20.l1 == undefined ||
 				survey.quest_20.l2 == undefined
 			){
-				page_error = 11;
+				if (page_error == "") page_error = 11;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 21
@@ -535,14 +548,16 @@ function validateSurvey(_validate, _callback){
 				survey.quest_21.l5 == undefined ||
 				survey.quest_21.l6 == undefined
 			){
-				page_error = 12;
+				if (page_error == "") page_error = 12;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 22
 			if(survey.quest_22.l1 == undefined ||
 				survey.quest_22.l2 == undefined
 			){
-				page_error = 13;
+				if (page_error == "") page_error = 13;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 23
@@ -551,7 +566,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_23.l3 == undefined ||
 				survey.quest_23.l4 == undefined
 			){
-				page_error = 14;
+				if (page_error == "") page_error = 14;
+				page_error_list += " " + page_error;
 			}
 			
 			// Questions 24 à 25
@@ -563,14 +579,16 @@ function validateSurvey(_validate, _callback){
 				survey.quest_24.l7 == undefined ||
 				survey.quest_25.l1 == undefined			
 			){
-				page_error = 15;
+				if (page_error == "") page_error = 15;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 26
 			if(survey.quest_26.l1 == undefined ||
 				survey.quest_26.l2 == undefined
 			){
-				page_error = 16;
+				if (page_error == "") page_error = 16;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 27
@@ -580,7 +598,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_27.l4 == undefined ||
 				survey.quest_27.l5 == undefined
 			){
-				page_error = 17;
+				if (page_error == "") page_error = 17;
+				page_error_list += " " + page_error;
 			}
 			
 			// Question 28
@@ -588,7 +607,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_28.l2 == undefined ||
 				survey.quest_28.l3 == undefined
 			){
-				page_error = 18;
+				if (page_error == "") page_error = 18;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 29
@@ -596,7 +616,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_29.l2 == undefined ||
 				survey.quest_29.l3 == undefined
 			){
-				page_error = 19;
+				if (page_error == "") page_error = 19;
+				page_error_list += " " + page_error;
 			}
 			
 			// Questions 30 à 31
@@ -606,7 +627,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_31.l1 == undefined ||
 				survey.quest_31.l2 == undefined
 			){
-				page_error = 20;
+				if (page_error == "") page_error = 20;
+				page_error_list += " " + page_error;
 			}
 
 			// Question 32
@@ -623,7 +645,8 @@ function validateSurvey(_validate, _callback){
 				survey.quest_32.l11 == undefined ||
 				survey.quest_32.l12 == undefined
 			){
-				page_error = 21;
+				if (page_error == "") page_error = 21;
+				page_error_list += " " + page_error;
 			}
 		}
 		
@@ -632,7 +655,8 @@ function validateSurvey(_validate, _callback){
 		if(page_error != ""){
 			// Il y a des réponses oubliées, on envoi à la page pour complèter
 			//alert("Merci de prendre le temps de répondre à toutes les questions.");
-			alert("Merci de prendre le temps de répondre à toutes les questions. " + page_error);
+			alert("Merci de prendre le temps de répondre à toutes les questions. Il reste des questions sans réponses sur les pages" + page_error_list);
+			// Redirects to first non-answered page
 			_page = parseInt(page_error);
 			loadPage();
 			

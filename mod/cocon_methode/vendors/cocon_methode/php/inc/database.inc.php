@@ -1,6 +1,9 @@
 <?php
 require_once 'config.inc.php';
 
+// @TODO : sometimes, and especially when using php/envoyerEmail, constants are not loaded, which breaks the whole process
+// Note : it seems that including the Elgg engine at the entry point (and not only in config.inc.php) corrects that issue
+
 /**
  * Ouvre une connexion &agrave; la base de donn&eacute;es selon le type
  * @return resource
@@ -52,10 +55,11 @@ function closeDB($conn){
 	if(TYPE_SGDB == 'ODBC'){
 		odbc_close($conn);
 	}
-	return true;	
+	return true;
 }
 
 function executeQuery($conn, $sql){
+	//error_log("MYSQL : " . TYPE_SGDB . "/ $sql / " . print_r($conn, true)); // debug
 	if(!is_String($sql) || $sql == ''){
 		trace('executeQuery(\''.$conn.'\', \''.$sql.'\') : l\'argument $sql n\'est pas de type String ou est une chaine vide.');
 		return false;
