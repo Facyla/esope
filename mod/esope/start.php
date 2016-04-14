@@ -188,15 +188,16 @@ function esope_init() {
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
 	// Page d'accueil
-	/*
-	*/
 	if (elgg_is_logged_in()) {
+		/* Settings are now handled in hook itself
 		// Remplacement page d'accueil par tableau de bord personnel
 		// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
-		//$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
-		//if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+		$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
+		if ($replace_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_index'); }
+		*/
 		elgg_register_plugin_hook_handler('index','system','esope_index');
 	} else {
+		/* Settings are now handled in hook itself
 		// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
 		//$site = elgg_get_site_entity();
 		//if (elgg_instanceof($site, 'site') && $site->checkWalledGarden()) {
@@ -207,6 +208,8 @@ function esope_init() {
 			$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'esope');
 			if ($replace_public_home != 'no') { elgg_register_plugin_hook_handler('index','system','esope_public_index'); }
 		}
+		*/
+		elgg_register_plugin_hook_handler('index','system','esope_public_index');
 	}
 	
 	// Modification du menu des membres

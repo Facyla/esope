@@ -34,7 +34,6 @@ function esope_index() {
 	// Remplacement page d'accueil par tableau de bord personnel
 	// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
 	$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
-	error_log("INDEX : $replace_home");
 	if ($replace_home != 'no') {
 		// Remplace l'index par un tableau de bord légèrement modifié
 		include(elgg_get_plugins_path() . 'esope/pages/esope/homepage.php');
