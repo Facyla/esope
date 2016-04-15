@@ -177,6 +177,7 @@ return array(
     'Elgg\\I18n\\ArrayMessageBundle' => $baseDir . '/engine/classes/Elgg/I18n/ArrayMessageBundle.php',
     'Elgg\\I18n\\InvalidLocaleException' => $baseDir . '/engine/classes/Elgg/I18n/InvalidLocaleException.php',
     'Elgg\\I18n\\Locale' => $baseDir . '/engine/classes/Elgg/I18n/Locale.php',
+    'Elgg\\I18n\\Message' => $baseDir . '/engine/classes/Elgg/I18n/Message.php',
     'Elgg\\I18n\\MessageBundle' => $baseDir . '/engine/classes/Elgg/I18n/MessageBundle.php',
     'Elgg\\I18n\\MessageTemplate' => $baseDir . '/engine/classes/Elgg/I18n/MessageTemplate.php',
     'Elgg\\I18n\\MessageTranslator' => $baseDir . '/engine/classes/Elgg/I18n/MessageTranslator.php',
