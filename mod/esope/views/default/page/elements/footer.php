@@ -21,8 +21,10 @@ if (empty($footer)) {
 
 	// Get translated menu, only if exists
 	$lang = get_language();
-	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
-	if ($lang_menu) $menu = $menu . '-' . $lang;
+	if (elgg_is_active_plugin('elgg_menus')) {
+		$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+		if ($lang_menu) { $menu = $menu . '-' . $lang; }
+	}
 
 	$footer = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
 }
