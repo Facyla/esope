@@ -474,6 +474,9 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 #profile_manager_profile_edit_tabs { clear:left; }
 
+.elgg-menu-item-postbymail { display:none; }
+
+
 
 
 @media (max-width:980px) {

@@ -35,10 +35,6 @@
 	</requires>
 	<requires>
 		<type>plugin</type>
-		<name>messages</name>
-	</requires>
-	<requires>
-		<type>plugin</type>
 		<name>notifications</name>
 	</requires>
 	<requires>
@@ -70,6 +66,10 @@
 	</conflicts>
 	
 	
+	<suggests>
+		<type>plugin</type>
+		<name>messages</name>
+	</suggests>
 	<suggests>
 		<type>plugin</type>
 		<name>profile_manager</name>
