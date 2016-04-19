@@ -212,6 +212,19 @@ return array(
 	'esope:widget:user_activity:description' => 'Display the latest user activities',
 	'esope:widget:site_activity:title' => 'Recent activity',
 	'esope:widget:site_activity:description' => 'Display the most recent activities across the site (river)',
+	// @TODO plus de widgets...
+	/*
+	'<i class="fa fa-users"></i> Activité du groupe',
+	'<i class="fa fa-"></i> Recherche configurée',
+	'<i class="fa fa-"></i> Texte libre',
+	'<i class="fa fa-user"></i> Amis',
+	'<i class="fa fa-"></i> Microblog',
+	'<i class="fa fa-folder-o"></i> Dossiers',
+	'<i class="fa fa-"></i> Site web externe (iframe)',
+	'<i class="fa fa-"></i> Nuage de tags',
+	'<i class="fa fa-envelope"></i> Messages non lus',
+	'<i class="fa fa-user"></i> Mon profil',
+	*/
 	
 	'accessibility:sidebar:title' => "Secondary menu",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -1007,8 +1020,8 @@ return array(
 	'osm_maps:widget:title' => "<i class=\"fa fa-map-marker fa-fw\"></i> Map", // ou : globe ?
 	'esope:widget:searchresults' => "<i class=\"fa fa-search fa-fw\"></i> Tag search",
 	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Free text (HTML)",
-	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
-	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
+	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
+	'friends' => "<i class=\"fa fa-user fa-fw\"></i> My Friends",
 	
 	'dashboard:widget:group:noselect' => "No group selected",
 	
