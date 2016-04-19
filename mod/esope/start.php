@@ -94,7 +94,7 @@ function esope_init() {
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
 	elgg_register_simplecache_view('js/esope/theme');
-	$theme_js = elgg_get_simplecache_url('js', 'esope_theme');
+	$theme_js = elgg_get_simplecache_url('js', 'esope/theme');
 	elgg_register_js('esope.theme', $theme_js, 'head');
 	elgg_load_js('esope.theme');
 	
