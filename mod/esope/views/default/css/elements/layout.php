@@ -27,7 +27,7 @@ $color11 = $css['color11']; // #333333
 $color12 = $css['color12']; // #DEDEDE
 
 $fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
-if ($fixedwidth != 'yes') { $fixedwidth = false; } else { $fixedwidth = true; }
+if ($fixedwidth == 'yes') { $fixedwidth = true; } else { $fixedwidth = false; }
 
 // Main width (on desktop screen)
 $main_width = "990px";
