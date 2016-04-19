@@ -38,6 +38,8 @@ if ($fixedwidth) {
 	$sidebar_width = "width:210px;";
 	$sidebar_alt_width = "width:160px;";
 } else {
+	//$main_width = "990px";
+	$main_maxwidth = "90%";
 	$content_width = "width:70%; min-width:717px;";
 	$sidebar_width = "width:24%; min-width:210px; padding:1.5%; margin:0;";
 	$sidebar_alt_width = "width:18%; min-width:160px; padding:1.5%; margin:0;";;
