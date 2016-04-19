@@ -39,7 +39,7 @@ if ($fixedwidth) {
 	$sidebar_alt_width = "width:160px;";
 } else {
 	//$main_width = "990px";
-	$main_maxwidth = "90%";
+	$main_maxwidth = "100%";
 	$content_width = "width:70%; min-width:717px;";
 	$sidebar_width = "width:24%; min-width:210px; padding:1.5%; margin:0;";
 	$sidebar_alt_width = "width:18%; min-width:160px; padding:1.5%; margin:0;";;
@@ -221,6 +221,16 @@ if ($fixedwidth) {
 
 <?php if (!$fixedwidth) { ?>
 
+@media (min-width:1225px) {
+	.elgg-page-default .elgg-page-header > .elgg-inner, 
+	.elgg-page-default .elgg-page-body > .elgg-inner, 
+	.elgg-page-default .elgg-page-footer > .elgg-inner, 
+	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+		max-width: 70%;
+	}
+}
+
+
 @media (max-width:1225px) {
 	
 }
@@ -232,11 +242,16 @@ if ($fixedwidth) {
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
 	
-	<?php if ($fixedwidth) { ?>
-		.elgg-layout-one-sidebar .elgg-main { min-width:initial;  }
-		.elgg-sidebar { min-width:initial; }
-		.elgg-sidebar-alt { min-width:initial; }
-	<?php } ?>
+	/*
+	.elgg-page-default .elgg-page-header > .elgg-inner, 
+	.elgg-page-default .elgg-page-body > .elgg-inner, 
+	.elgg-page-default .elgg-page-footer > .elgg-inner, 
+	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+		width: 90%;
+		min-width: <?php echo $main_width; ?>;
+	}
+	*/
+	
 }
 
 
@@ -262,6 +277,15 @@ if ($fixedwidth) {
 	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
 	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }
 	
+}
+
+
+<?php } else { ?>
+
+@media (max-width:1020px) {
+		.elgg-layout-one-sidebar .elgg-main { min-width:initial;  }
+		.elgg-sidebar { min-width:initial; }
+		.elgg-sidebar-alt { min-width:initial; }
 }
 
 
