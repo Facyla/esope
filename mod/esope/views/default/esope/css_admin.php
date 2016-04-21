@@ -37,9 +37,10 @@ textarea, .elgg-input-rawtext { width:100%; }
 #esope-settings input { max-width:40%; }
 #esope-settings label { font-size:90%; }
 
-.ui-accordion-header { padding: 0.2em; border: 1px solid grey; border-radius: 3px; margin: 0.5em 0 0 0; opacity: 0.5; color:#333; }
-.ui-accordion-header.ui-accordion-header-active { margin-bottom: 0; border-radius: 3px 3px 0 0; opacity: 1; }
-.ui-accordion-content { padding: 0.2em 0.5em; border: 1px solid grey; border-top: 0; border-radius: 0 0 3px 3px; }
+.ui-accordion-header { padding: 0.2em; border: 1px solid #CCC; border-radius: 3px; margin: 0.5em 0 0 0; color:#666; background-color: #EEE; font-weight: normal; }
+.ui-accordion-header:hover, .ui-accordion-header:focus, .ui-accordion-header:active { color:#333; }
+.ui-accordion-header.ui-accordion-header-active { margin-bottom: 0; border-radius: 3px 3px 0 0; background-color:#FFF; color:#333; }
+.ui-accordion-content { padding: 0.2em 0.5em; border: 1px solid #CCC; border-top: 0; border-radius: 0 0 3px 3px; }
 
 .elgg-menu-widget > li { top:initial; }
 

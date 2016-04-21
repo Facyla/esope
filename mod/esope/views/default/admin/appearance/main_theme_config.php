@@ -1,5 +1,4 @@
 <?php
-global $CONFIG;
-system_message(elgg_echo('esope:configredirect'));
-forward($CONFIG->url . 'admin/plugin_settings/esope');
+//system_message(elgg_echo('esope:configredirect'));
+forward(elgg_get_site_url() . 'admin/plugin_settings/esope');
 

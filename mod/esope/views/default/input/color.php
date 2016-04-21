@@ -1,32 +1,37 @@
 <?php
-/*
-// From : Lorea - https://gitorious.org/lorea/microthemes
-elgg_load_css('elgg.input.colorpicker');
-elgg_load_js('elgg.input.colorpicker');
+// Note : this version uses vendors/colorpicker : full featured but requires some rewriting to fit AMD
+
+/* This should be always loaded (start.php)
+elgg_require_js('jquery.ui');
+elgg_load_css('jquery.ui');
+elgg_load_css('jquery.ui.theme');
 */
 
 elgg_load_css('jquery.colorpicker');
-elgg_load_js('jquery.colorpicker');
-elgg_load_js('jquery.colorpicker-i18n');
-elgg_load_js('jquery.colorpicker-pantone');
-elgg_load_js('jquery.colorpicker-rgbslider');
-elgg_load_js('jquery.colorpicker-memory');
-elgg_load_js('jquery.colorpicker-cmyk');
-elgg_load_js('jquery.colorpicker-cmyk-percentage');
+elgg_require_js('jquery.colorpicker');
+elgg_require_js('jquery.colorpicker-i18n');
+elgg_require_js('jquery.colorpicker-pantone');
+elgg_require_js('jquery.colorpicker-crayola');
+elgg_require_js('jquery.colorpicker-ral-classic');
+elgg_require_js('jquery.colorpicker-x11');
+elgg_require_js('jquery.colorpicker-rgbslider');
+elgg_require_js('jquery.colorpicker-memory');
+elgg_require_js('jquery.colorpicker-swatchesswitcher');
+elgg_require_js('jquery.colorpicker-cmyk');
+elgg_require_js('jquery.colorpicker-cmyk-percentage');
 
 
-$vars['class'] = $vars['class'] ? " elgg-color-picker" : "elgg-color-picker";
+$vars['class'] .= $vars['class'] ? " elgg-color-picker" : "elgg-color-picker";
 
 $id = esope_unique_id('');
-if (empty($vars['id'])) $vars['id'] = "elgg-colorpicker-$id";
-else $vars['id'] = $vars['id'] . " elgg-colorpicker-$id";
+if (empty($vars['id'])) { $vars['id'] = "elgg-colorpicker-$id"; } else { $vars['id'] = $vars['id'] . " elgg-colorpicker-$id"; }
 
 echo elgg_view('input/text', $vars);
 echo '<span id="elgg-colorpicker-' . $id . '-formats"></span>';
-
 ?>
+
 <script>
-$(function() {
+require(["jquery.colorpicker"], function() {
 	$('#elgg-colorpicker-<?php echo $id; ?>').colorpicker({
 		alpha:          true,
 		//colorFormat: 'RGBA',

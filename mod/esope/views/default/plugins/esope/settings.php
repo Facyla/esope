@@ -7,7 +7,7 @@
 
 $url = elgg_get_site_url();
 $plugin = $vars['entity'];
-$settings_version = '1.11';
+$settings_version = '1.12';
 
 
 // Define dropdown options

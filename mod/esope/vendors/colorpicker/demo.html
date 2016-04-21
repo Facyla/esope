@@ -17,8 +17,12 @@
 		<link href="jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
 		<script src="i18n/jquery.ui.colorpicker-nl.js"></script>
 		<script src="swatches/jquery.ui.colorpicker-pantone.js"></script>
+		<script src="swatches/jquery.ui.colorpicker-crayola.js"></script>
+		<script src="swatches/jquery.ui.colorpicker-ral-classic.js"></script>
+		<script src="swatches/jquery.ui.colorpicker-x11.js"></script>
 		<script src="parts/jquery.ui.colorpicker-rgbslider.js"></script>
 		<script src="parts/jquery.ui.colorpicker-memory.js"></script>
+		<script src="parts/jquery.ui.colorpicker-swatchesswitcher.js"></script>		
 		<script src="parsers/jquery.ui.colorpicker-cmyk-parser.js"></script>
 		<script src="parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js"></script>
 
@@ -56,6 +60,8 @@
 			  <li><a href="#tab-okonenter">Close on enter</a></li>
 			  <li><a href="#tab-128">128-pixel map and bar</a></li>
 			  <li><a href="#tab-customcolor">Custom color format</a></li>
+			  <li><a href="#tab-position">Centered in window</a></li>
+			  <li><a href="#tab-disable">Disable/enable</a></li>
 			</ul>
 
 			<div id="tab-input">
@@ -165,6 +171,9 @@
 											},
 							select:			function(event, color) {
 												addToEventLog('Select', color.formatted);
+											},
+							stop:			function(event, color) {
+												addToEventLog('Stop', color.formatted);
 											},
 							close:			function(event, color) {
 												addToEventLog('Close', color.formatted + ' r:' + color.rgb.r + ' g:' + color.rgb.g + ' b:' + color.rgb.b + ' a:' + color.a);
@@ -420,19 +429,23 @@
 				Demonstrates how to extend the set of parts with plugins.<br/>
 				<ol>
 					<li>RGB Slider - Individual RGB sliders</li>
-					<li>Memory - store and retrieve colors with cookies</li>
+					<li>Memory - Store and retrieve colors with cookies</li>
+					<li>Swatches Switcher - Switch between different sets of swatches</li>
 				</ol>
 				<input type="text" class="cp-plugins" value="#18b7af"/>
 
 				<script>
 					$(function() {
 						$('.cp-plugins').colorpicker({
-							parts:	['header', 'preview', 'hex', 'rgbslider', 'memory', 'footer'],
+							parts:	['header', 'preview', 'hex', 'rgbslider', 'memory', 'swatches', 'swatchesswitcher', 'footer'],
 							layout: {
-								preview:	[0, 0, 1, 1],
-								hex:		[1, 0, 1, 1],
-								rgbslider:	[0, 1, 2, 1],
-								memory:		[0, 2, 2, 1]
+								preview:			[0, 0, 1, 1],
+								hex:				[1, 0, 1, 1],
+								rgbslider:			[0, 1, 2, 1],
+								memory:				[0, 2, 2, 1],
+								
+								swatchesswitcher:	[2, 0, 1, 1],
+								swatches:			[2, 1, 1, 2]
 							}
 						});
 					});
@@ -536,6 +549,69 @@
 					});
 				</script>
 			</div>
+			
+			<div id="tab-position">
+				<h2>Centered using position option</h2>
+				<input type="text" class="cp-position"/>
+
+				<script>
+					$(function() {
+						$('.cp-position').colorpicker({
+							position: {
+								my: 'center',
+								at: 'center',
+								of: window
+							},
+							modal: true
+						});
+					});
+				</script>
+			</div>
+
+			<div id="tab-disable">
+				<h2>Disable/enable</h2>
+				<label for="toggle-cp-disable">Enabled: <input type="checkbox" id="toggle-cp-disable"/></label>
+				<br/>
+				Disabled by default:
+				<input type="text" class="cp-disable" value="186aa7" disabled="disabled"/>
+				<br/>
+				Disabled using option:
+				<input type="text" class="cp-disable-option" value="186aa7"/>
+				<br/>
+				<span class="cp-disable-option" style="display: inline-block; vertical-align: top;"></span>
+
+				<script>
+					$(function() {
+						$('.cp-disable').colorpicker({
+							showOn: 'both',
+							buttonColorize: true
+						});
+
+						$('.cp-disable-option').colorpicker({
+							parts: 'full',
+//							parts:	['header', 'preview', 'hex', 'rgbslider', 'memory', 'swatches', 'swatchesswitcher', 'footer'],
+//							layout: {
+//								preview:			[0, 0, 1, 1],
+//								hex:				[1, 0, 1, 1],
+//								rgbslider:			[0, 1, 2, 1],
+//								memory:				[0, 2, 2, 1],
+//								swatchesswitcher:	[2, 0, 1, 1],
+//								swatches:			[2, 1, 1, 2]
+//							},
+							showOn: 'both',
+							disabled: true,
+							buttonColorize: true,
+							alpha: true
+
+						});
+
+						$('#toggle-cp-disable').click(function() {
+							$('.cp-disable, .cp-disable-option').colorpicker($(this).is(':checked') ? 'enable' : 'disable');
+						});
+					});
+				</script>
+			</div>
+
 		</div>
     </body>
 </html>

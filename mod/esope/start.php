@@ -95,54 +95,53 @@ function esope_init() {
 	// Theme-specific JS (accessible menu)
 	elgg_register_simplecache_view('js/esope/theme');
 	$theme_js = elgg_get_simplecache_url('js', 'esope/theme');
-	elgg_register_js('esope.theme', $theme_js, 'head');
+	elgg_register_js('esope.theme', $theme_js);
 	elgg_load_js('esope.theme');
 	
 	// Used by wysiwyg editors templates
 	elgg_register_simplecache_view('js/esope/ckeditor_templates');
 	
-	// Update jQuery UI to 1.11.2, with theme smoothness by default
+	// Update jQuery UI to 1.11.4 (requires jQuery 1.6+), with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
-	/*
-	elgg_register_js('jquery.ui', 'mod/esope/vendors/jquery-ui/jquery-ui.min.js', 'head');
-	elgg_load_js('jquery.ui');
-	elgg_register_css('jquery.ui', 'mod/esope/vendors/jquery-ui/jquery-ui.min.css');
+	elgg_define_js('jquery.ui', array('src' => 'mod/esope/vendors/jquery-ui/jquery-ui.min.js', 'deps' => array('jquery')));
+	elgg_register_css('jquery.ui', 'mod/esope/vendors/jquery-ui/themes/smoothness/jquery-ui.min.css');
+	elgg_register_css('jquery.ui.theme', 'mod/esope/vendors/jquery-ui/themes/smoothness/theme.css');
+	elgg_require_js('jquery.ui');
 	elgg_load_css('jquery.ui');
-	elgg_register_css('jquery.ui.theme', 'mod/esope/vendors/jquery-ui/jquery-ui.theme.min.css');
 	elgg_load_css('jquery.ui.theme');
-	*/
 	
 	// Passe le datepicker en français
-	elgg_register_js('jquery.datepicker.fr', 'mod/esope/vendors/ui.datepicker-fr.js', 'head');
+	elgg_register_js('jquery.datepicker.fr', 'mod/esope/vendors/ui.datepicker-fr.js');
 	elgg_load_js('jquery.datepicker.fr');
 	// Webdesign : Floatable elements (.is-floatable, .floating)
 	elgg_register_js('floatable.elements', 'mod/esope/vendors/floatable-elements.js', 'footer');
 	elgg_load_js('floatable.elements');
 	// Ajout un member picker avec sélection unique pour les messages
 	// @TODO : not functional yet
-	//elgg_register_js('elgg.messagesuserpicker', 'mod/esope/vendors/ui.messagesuserpicker.js', 'head');
+	//elgg_register_js('elgg.messagesuserpicker', 'mod/esope/vendors/ui.messagesuserpicker.js');
 	
-	// register the color picker's JavaScript
-	/* Replaced by jquery colorpicker, which works and is full-featured
-	elgg_register_simplecache_view('js/input/color_picker');
-	$colorpicker_js = elgg_get_simplecache_url('js', 'input/color_picker');
-	elgg_register_js('elgg.input.colorpicker', $colorpicker_js);
-	// register the color picker's CSS
-	elgg_register_simplecache_view('css/input/color_picker');
-	$colorpicker_css = elgg_get_simplecache_url('css', 'input/color_picker');
-	elgg_register_css('elgg.input.colorpicker', $colorpicker_css);
+	/* jquery colorpicker (fully featured color picker with transparency support)
+	 * See project on https://github.com/vanderlee/colorpicker
 	*/
-	// jquery colorpicker (fully featured color picker)
 	$jquery_colorpicker_base = 'mod/esope/vendors/colorpicker/';
-	elgg_register_js('jquery.colorpicker', $jquery_colorpicker_base . 'jquery.colorpicker.js', 'head');
-	elgg_register_js('jquery.colorpicker-i18n', $jquery_colorpicker_base . 'i18n/jquery.ui.colorpicker-fr.js', 'head');
-	elgg_register_js('jquery.colorpicker-pantone', $jquery_colorpicker_base . 'swatches/jquery.ui.colorpicker-pantone.js', 'head');
-	elgg_register_js('jquery.colorpicker-rgbslider', $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-rgbslider.js', 'head');
-	elgg_register_js('jquery.colorpicker-memory', $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-memory.js', 'head');
-	elgg_register_js('jquery.colorpicker-cmyk', $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-parser.js', 'head');
-	elgg_register_js('jquery.colorpicker-cmyk-percentage', $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js', 'head');
 	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'jquery.colorpicker.css');
+	elgg_define_js('jquery.colorpicker', array('src' => $jquery_colorpicker_base . 'jquery.colorpicker.js', 'deps' => array('jquery', 'jquery.ui'), 'exports' => "colorpicker"));
+	elgg_define_js('jquery.colorpicker-i18n', array('src' => $jquery_colorpicker_base . 'i18n/jquery.ui.colorpicker-fr.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-pantone', array('src' => $jquery_colorpicker_base . 'swatches/jquery.ui.colorpicker-pantone.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-crayola', array('src' => $jquery_colorpicker_base . 'swatches/jquery.ui.colorpicker-crayola.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-ral-classic', array('src' => $jquery_colorpicker_base . 'swatches/jquery.ui.colorpicker-ral-classic.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-x11', array('src' => $jquery_colorpicker_base . 'swatches/jquery.ui.colorpicker-x11.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-rgbslider', array('src' => $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-rgbslider.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-memory', array('src' => $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-memory.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-swatchesswitcher', array('src' => $jquery_colorpicker_base . 'parts/jquery.ui.colorpicker-swatchesswitcher.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-cmyk', array('src' => $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-parser.js', 'deps' => array('jquery.colorpicker')));
+	elgg_define_js('jquery.colorpicker-cmyk-percentage', array('src' => $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js', 'deps' => array('jquery.colorpicker')));
 	
+	/* Alternate vendors/jquery-colorpicker/ : more basic and no transparency support, but nice one
+	$jquery_colorpicker_base = 'mod/esope/vendors/jquery-colorpicker/';
+	elgg_define_js('jquery.colorpicker', array('src' => $jquery_colorpicker_base . 'js/colorpicker.js', 'deps' => array('jquery'), 'exports' => "ColorPicker"));
+	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'css/colorpicker.css');
+	*/
 	
 	// New profile field types
 	if (elgg_is_active_plugin('profile_manager')) { esope_register_custom_field_types(); }
