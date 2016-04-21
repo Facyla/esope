@@ -40,7 +40,7 @@ if ($fixedwidth) {
 } else {
 	//$main_width = "990px";
 	$main_maxwidth = "100%";
-	$content_width = "width:70%; min-width:717px;";
+	$content_width = "width:70%; /* min-width:717px; */";
 	$sidebar_width = "width:24%; min-width:210px; padding:1.5%; margin:0;";
 	$sidebar_alt_width = "width:18%; min-width:160px; padding:1.5%; margin:0;";;
 }
@@ -56,6 +56,9 @@ if ($fixedwidth) {
 /* ***************************************
 	PAGE LAYOUT
 *************************************** */
+.elgg-page-walledgarden { width:100%; }
+
+
 /***** DEFAULT LAYOUT ******/
 <?php // the width is on the page rather than topbar to handle small viewports ?>
 .elgg-page-default {
@@ -271,8 +274,7 @@ if ($fixedwidth) {
 	header, #transverse, section, .elgg-page-footer, #bande { float: none; clear: both; margin:0; padding: 1ex 0; /* display: inline-block; */ max-width: 100%; }
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
-	.elgg-page-walledgarden { padding: 0; }
-	.elgg-body-walledgarden { margin: 0px auto 0px auto !important; }
+	.elgg-page-walledgarden { padding: 0; margin: 0px auto 0px auto !important; }
 	
 	.elgg-col-1of3, .elgg-col-2of3, .elgg-col-3of3 { min-width: 100%; }
 	.elgg-page .elgg-widgets { min-width: 100%; min-height: 0 !important; }

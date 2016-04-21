@@ -66,10 +66,11 @@
 	</conflicts>
 	
 	
-	<suggests>
+	<requires>
 		<type>plugin</type>
 		<name>messages</name>
-	</suggests>
+	</requires>
+	
 	<suggests>
 		<type>plugin</type>
 		<name>profile_manager</name>

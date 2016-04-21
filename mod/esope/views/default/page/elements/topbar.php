@@ -88,10 +88,12 @@ if (elgg_is_active_plugin('language_selector')) {
 		<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
 			<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>" id="esope-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
+			<?php if (elgg_is_active_plugin('messages')) { ?>
 			<li id="msg">
 				<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
 				<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
 			</li>
+			<?php } ?>
 			<li id="man">
 				<a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a>
 				<?php echo $friendrequests; ?>
