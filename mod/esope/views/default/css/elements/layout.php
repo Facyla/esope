@@ -64,17 +64,25 @@ if ($fixedwidth) {
 .elgg-page-default {
 	min-width: 800px;
 }
+
+/* Set global layout width */
+.elgg-page-default .elgg-page-header > .elgg-inner, 
+.elgg-page-default .elgg-page-body > .elgg-inner, 
+.elgg-page-default .elgg-page-footer > .elgg-inner, 
+.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+	min-width: <?php echo $main_width; ?>;
+	width: 70%;
+	max-width: 100%;
+}
+
 .elgg-page-default .elgg-page-header > .elgg-inner {
-	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 	/* height: 90px; */
 }
 .elgg-page-default .elgg-page-body > .elgg-inner {
-	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 }
 .elgg-page-default .elgg-page-footer > .elgg-inner {
-	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 	padding: 5px 0;
 	border-top: 1px solid #DEDEDE;
@@ -82,13 +90,14 @@ if ($fixedwidth) {
 
 /* BLOC DU CONTENU PRINCIPAL - MAIN CONTENT */
 #page_container {
-	width:<?php echo $main_width; ?>; margin:0px auto; background:#fff; min-height: 100%;
+	width: 100%;
+	max-width: <?php echo $main_width; ?>;
+	margin:0px auto; background:#fff; min-height: 100%;
 	-moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; box-shadow: 0 0 10px #181a2f;
 }
 
 /* Largeur de page standard */
 .elgg-page-default .elgg-page-sitemenu > .elgg-inner {
-	max-width: <?php echo $main_maxwidth; ?>;
 	margin: 0 auto;
 }
 
@@ -224,18 +233,6 @@ if ($fixedwidth) {
 
 <?php if (!$fixedwidth) { ?>
 
-@media (min-width:1225px) {
-	.elgg-page-default .elgg-page-header > .elgg-inner, 
-	.elgg-page-default .elgg-page-body > .elgg-inner, 
-	.elgg-page-default .elgg-page-footer > .elgg-inner, 
-	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
-		min-width: <?php echo $main_width; ?>;
-		width: 70%;
-		max-width: 100%;
-	}
-}
-
-
 @media (max-width:1225px) {
 	
 }
@@ -247,21 +244,18 @@ if ($fixedwidth) {
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
 	
-	/*
-	.elgg-page-default .elgg-page-header > .elgg-inner, 
-	.elgg-page-default .elgg-page-body > .elgg-inner, 
-	.elgg-page-default .elgg-page-footer > .elgg-inner, 
-	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
-		width: 90%;
-		min-width: <?php echo $main_width; ?>;
-	}
-	*/
-	
 }
 
 
 @media (max-width:980px) {
-	
+	.elgg-page-default .elgg-page-header > .elgg-inner, 
+	.elgg-page-default .elgg-page-body > .elgg-inner, 
+	.elgg-page-default .elgg-page-footer > .elgg-inner, 
+	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+		min-width: 0;
+		width: 100%;
+		max-width: 100%;
+	}
 }
 
 @media (max-width:700px) {
