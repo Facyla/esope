@@ -244,10 +244,6 @@ if ($fixedwidth) {
 	.elgg-page .elgg-layout .elgg-main { width:100%; margin: 1ex 0 2ex 0 !important; padding: 0 !important; }
 	.elgg-page .elgg-layout .elgg-sidebar { width: 100%; background:rgba(0,0,0,0.3); box-shadow: 0px 3px 3px -2px #666; margin: 1ex 0 2ex 0 !important; padding: 0 0.5em !important; }
 	
-}
-
-
-@media (max-width:980px) {
 	.elgg-page-default .elgg-page-header > .elgg-inner, 
 	.elgg-page-default .elgg-page-body > .elgg-inner, 
 	.elgg-page-default .elgg-page-footer > .elgg-inner, 
@@ -256,6 +252,12 @@ if ($fixedwidth) {
 		width: 100%;
 		max-width: 100%;
 	}
+	
+}
+
+
+@media (max-width:980px) {
+	
 }
 
 @media (max-width:700px) {
