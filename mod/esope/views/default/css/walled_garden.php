@@ -5,11 +5,13 @@
 
 $url = elgg_get_site_url();
 
+/*
 $fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
 if ($fixedwidth == 'yes') { $fixedwidth = true; } else { $fixedwidth = false; }
 
 // Main width (on desktop screen)
 $main_width = "990px";
+*/
 
 ?>
 /* <style> /**/
