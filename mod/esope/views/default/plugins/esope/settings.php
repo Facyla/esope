@@ -130,7 +130,7 @@ if (empty($plugin->color10)) { $plugin->color10 = '#999999'; }
 if (empty($plugin->color11)) { $plugin->color11 = '#333333'; }
 if (empty($plugin->color12)) { $plugin->color12 = '#DEDEDE'; }
 // Sub-menu
-if (empty($plugin->color13)) { $plugin->color13 = '#CCCCCC'; }
+if (empty($plugin->color13)) { $plugin->color13 = '#FFFFFF'; }
 // Fonts
 if (empty($plugin->font1)) { $plugin->font1 = 'Lato, sans-serif'; }
 if (empty($plugin->font2)) { $plugin->font2 = 'Lato-bold, sans-serif'; }

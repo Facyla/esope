@@ -28,7 +28,7 @@ $font5 = $css['font5'];
 $font6 = $css['font6'];
 
 $fixedwidth = elgg_get_plugin_setting('fixedwidth', 'esope');
-if ($fixedwidth != 'yes') $fixedwidth = false; else $fixedwidth = true;
+if ($fixedwidth != 'yes') { $fixedwidth = false; } else { $fixedwidth = true; }
 
 ?>
 /* <style> /**/
