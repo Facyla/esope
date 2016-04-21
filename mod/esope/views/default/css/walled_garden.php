@@ -17,17 +17,7 @@ $main_width = "990px";
 .elgg-body-walledgarden {
 	margin: 100px auto 0 auto;
 	position: relative;
-	<?php
-	if ($fixedwidth) {
-		echo "
-	width: $main_width;";
-	} else {
-		echo "
-	min-width: $main_width;
-	width: 70%;
-	max-width: 100%;";
-	}
-	?>
+	width:100%;
 }
 .elgg-module-walledgarden {
 	position: absolute;
