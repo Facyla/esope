@@ -8,6 +8,8 @@
  * @link http://id.facyla.net/
  */
 
+// @TODO Use AMD for JS scripts
+
 elgg_register_event_handler('init','system','slider_plugin_init');
 elgg_register_event_handler('pagesetup','system','slider_pagesetup');
 
@@ -95,9 +97,11 @@ function slider_url($hook, $type, $url, $params) {
  */
 function slider_get_entity_by_name($name = '') {
 	if (!empty($name)) {
+		// Check first by GUID
 		$slider = get_entity($name);
 		if (elgg_instanceof($slider, 'object', 'slider')) { return $slider; }
 		
+		// Alternate method #2 by slider name
 		$sliders = elgg_get_entities_from_metadata(array(
 				'types' => 'object', 'subtypes' => 'slider', 
 				'metadata_name_value_pairs' => array('name' => 'name', 'value' => $name), 

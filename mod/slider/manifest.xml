@@ -5,12 +5,12 @@
 	<version>0.8</version>
 	<blurb>Slider plugin : custom slides for any content</blurb>
 	<description>Activez ce plugin si vous souhaitez disposer de sliders configurables, pour les administrateurs, et éventuellement les membres. Ce slider permet d'utiliser tout type de contenu : images, mais aussi texte, HTML, vidéos, etc. 5 types de sliders fournis, certains avec thèmes : AnythingSlider, NivoSlider, FlexSlider, ResponsiveSlides et CoinSlider</description>
-	<website>http://formavia.fr/</website>
-	<copyright>Items International 2013-2015</copyright>
+	<website>http://facyla.fr/</website>
+	<copyright>Facyla 2016, Items International 2013-2015</copyright>
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.12</version>
 	</requires>
 	
 	<category>admin</category>
@@ -20,17 +20,15 @@
 	
 	<suggests>
 		<type>plugin</type>
-		<version>cmspages</version>
+		<name>cmspages</name>
 	</suggests>
-	
 	<suggests>
 		<type>plugin</type>
-		<version>shortcodes</version>
+		<name>shortcodes</name>
 	</suggests>
-	
 	<suggests>
 		<type>plugin</type>
-		<version>esope</version>
+		<name>esope</name>
 	</suggests>
 	
 	<activate_on_install>false</activate_on_install>
