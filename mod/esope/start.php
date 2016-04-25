@@ -1227,44 +1227,47 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	$return_count = elgg_get_entities_from_metadata($search_params);
 	if ($count) { return $return_count; }
 	
+	// Limit display to 
 	if ($return_count > $max_results) {
 		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
 	}
-	if ($search_params['limit'] > $max_results) $search_params['limit'] = $max_results;
+	if ($search_params['limit'] > $max_results) { $search_params['limit'] = $max_results; }
 	// Perform entities search
 	$search_params['count'] = false;
 	$entities = elgg_get_entities_from_metadata($search_params);
 	// Limit to something that can be handled
 	if (is_array($entities)) $entities = array_slice($entities, 0, $max_results);
 	
-	// Return array or listing
+	// Return array only if asked to
 	if ($params['returntype'] == 'entities') {
 		return $entities;
-	} else {
-		$search_params['full_view'] = false;
-		$search_params['pagination'] = false;
-		$search_params['list_type'] = 'list'; // gallery/list
-		elgg_push_context('search');
-		elgg_push_context('widgets');
-		$return = '';
-		if ($params['add_count']) {
-			if ($return_count > 1) {
-				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
-			} else if ($return_count > 0) {
-				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
-			} else {
-				$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
-			}
-		}
-		//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
-		$search_params['entities'] = $entities;
-		$search_params['limit'] = $max_results;
-		$search_params['offset'] = $offset;
-		$return .= elgg_list_entities($search_params);
-		if ($alert) { $return .= $alert; }
-		elgg_pop_context('widgets');
-		elgg_pop_context('search');
 	}
+	
+	// Return listing
+	$return = '';
+	if ($params['add_count']) {
+		if ($return_count > 1) {
+			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
+		} else if ($return_count > 0) {
+			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
+		} else {
+			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+		}
+	}
+	//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
+	$search_params['full_view'] = false;
+	$search_params['pagination'] = false;
+	$search_params['list_type'] = 'list'; // gallery/list
+	$search_params['entities'] = $entities;
+	$search_params['limit'] = $max_results;
+	$search_params['offset'] = $offset;
+	elgg_push_context('search');
+	elgg_push_context('widgets');
+	$return .= elgg_list_entities($search_params);
+	elgg_pop_context('widgets');
+	elgg_pop_context('search');
+	if ($alert) { $return .= $alert; }
+	
 	
 	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
 	

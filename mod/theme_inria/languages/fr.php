@@ -453,8 +453,9 @@ Afficher et commenter le nouvel article :
 	
 	
 	// Overrides Elgg 1.12
+	// @TODO : copy and translate in EN !
 	'esope:directory' => "Membres",
-	'members:label:newest' => "Date d'inscription'",
+	'members:label:newest' => "Date d'inscription",
 	
 	
 	

@@ -18,15 +18,20 @@ elgg_push_breadcrumb(elgg_echo('search'));
 // Prepare JS script for forms
 $action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = elgg_add_action_tokens_to_url($action_base . 'esearch');
+elgg_require_js('elgg/spinner');
 
 $content .= '<script type="text/javascript">
 var formdata;
 function esope_search(){
-	//$("body").addClass("esope-search-wait");
+	//var spinner = require(["elgg/spinner"]);
+	$("body").addClass("esope-search-wait");
+	//spinner.start();
+	$("#esope-search-results").html(""); // clear previous result set
 	formdata = $("#esope-search-form").serialize();
 	$.post("' . $esope_search_url . '", formdata, function(data){
 		$("#esope-search-results").html(data);
-		//$("body").removeClass("esope-search-wait");
+		$("body").removeClass("esope-search-wait");
+		//spinner.stop();
 	});
 }
 </script>';
