@@ -5,7 +5,7 @@
 
 $user = elgg_get_page_owner_entity();
 
-if (!$user) {
+if (!elgg_instanceof($user, 'user')) {
 	// no user so we quit view
 	echo elgg_echo('viewfailure', array(__FILE__));
 	return TRUE;
@@ -23,18 +23,18 @@ $profile_type = esope_get_user_profile_type($user);
 if (elgg_is_logged_in()) {
 	$own = elgg_get_logged_in_user_entity();
 	$own_profile_type = esope_get_user_profile_type($own);
-} else $own_profile_type = false;
+} else { $own_profile_type = false; }
 
 
-if ($user->guid == $own->guid) {
+if ($own_profile_type && ($user->guid == $own->guid)) {
 	$icon = '<a href="' . $vars['url'] . 'avatar/edit/' . $user->username . '" class="avatar_edit_hover">' . elgg_echo('avatar:edit') . '</a>' . $icon;
 }
 
 // Add profile type badge, if defined
-if (empty($profile_type)) $profile_type = 'external';
-if (!empty($profile_type)) $icon = '<span class="profiletype-badge"><span class="profiletype-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>' . $icon;
+if (empty($profile_type)) { $profile_type = 'external'; }
+if (!empty($profile_type)) { $icon = '<span class="profiletype-badge"><span class="profiletype-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>' . $icon; }
 // Archive banner, if account is closed
-if ($user->memberstatus == 'closed') $icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon;
+if ($user->memberstatus == 'closed') { $icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon; }
 
 // grab the actions and admin menu items from user hover
 $menu = elgg_trigger_plugin_hook('register', "menu:user_hover", array('entity' => $user), array());
@@ -45,7 +45,7 @@ $admin = elgg_extract('admin', $menu, array());
 
 // Add public setting profile link
 $public_profile_setting = '';
-if (elgg_is_logged_in() && ($user->guid == $_SESSION['user']->guid)) {
+if ($own_profile_type && ($user->guid == $own->guid)) {
 	$public_profiles = elgg_get_plugin_setting('public_profiles', 'esope');
 	if ($public_profiles == 'yes') {
 		$public_profile_setting = $user->public_profile;
@@ -171,7 +171,7 @@ if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_ty
 		}
 	}
 	if ($details_result) {
-		if ($user->guid == $own->guid) {
+		if ($own_profile_type && ($user->guid == $own->guid)) {
 			$details_result .= '<p class="update-ldap-details">' . elgg_echo('theme_inria:ldapprofile:updatelink') . '</p>';
 		}
 		$inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';
@@ -181,7 +181,7 @@ if ( ($profile_type == 'inria') && (elgg_is_admin_logged_in() || $own_profile_ty
 
 // if admin, display admin links
 $admin_links = '';
-if (elgg_is_admin_logged_in() && elgg_get_logged_in_user_guid() != elgg_get_page_owner_guid()) {
+if (elgg_is_admin_logged_in() && (elgg_get_logged_in_user_guid() != elgg_get_page_owner_guid())) {
 	$text = elgg_echo('admin:options');
 
 	$admin_links = '<ul class="profile-admin-menu-wrapper">';
