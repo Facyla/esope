@@ -1197,9 +1197,11 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	}
 
 	// Build metadata name-value pairs from input array
-	if ($metadata) foreach ($metadata as $name => $value) {
-		if (!empty($name) && !empty($value)) {
-			$metadata_name_value_pairs[] = array('name' => $name, 'value' => $value);
+	if ($metadata) {
+		foreach ($metadata as $name => $value) {
+			if (!empty($name) && !empty($value)) {
+				$metadata_name_value_pairs[] = array('name' => $name, 'value' => $value);
+			}
 		}
 	}
 
@@ -1216,10 +1218,10 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 			'sort' => $sort,
 			'order' => $order,
 		);
-	if ($joins) $search_params['joins'] = $joins;
-	if ($wheres) $search_params['wheres'] = $wheres;
-	if ($owner_guid) $search_params['owner_guids'] = $owner_guid;
-	if ($container_guid) $search_params['container_guids'] = $container_guid;
+	if ($joins) { $search_params['joins'] = $joins; }
+	if ($wheres) { $search_params['wheres'] = $wheres; }
+	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
+	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
 	
 	// Perform search results count
 	$search_params['count'] = true;
@@ -1236,7 +1238,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	$search_params['count'] = false;
 	$entities = elgg_get_entities_from_metadata($search_params);
 	// Limit to something that can be handled
-	if (is_array($entities)) $entities = array_slice($entities, 0, $max_results);
+	if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 	
 	// Return array only if asked to
 	if ($params['returntype'] == 'entities') {
@@ -1263,11 +1265,10 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	$search_params['offset'] = $offset;
 	elgg_push_context('search');
 	elgg_push_context('widgets');
-	$return .= elgg_list_entities($search_params);
+	$return .= elgg_list_entities_from_metadata($search_params);
 	elgg_pop_context('widgets');
 	elgg_pop_context('search');
 	if ($alert) { $return .= $alert; }
-	
 	
 	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
 	

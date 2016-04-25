@@ -7,6 +7,8 @@
 $hide_directory = elgg_get_plugin_setting('hide_directory', 'esope');
 if ($hide_directory == 'yes') { gatekeeper(); }
 
+//elgg_require_js('elgg/spinner'); // @TODO make spinner work...
+
 $num_members = get_number_users();
 $title = elgg_echo('members');
 
@@ -18,7 +20,6 @@ elgg_push_breadcrumb(elgg_echo('search'));
 // Prepare JS script for forms
 $action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = elgg_add_action_tokens_to_url($action_base . 'esearch');
-elgg_require_js('elgg/spinner');
 
 $content .= '<script type="text/javascript">
 var formdata;
@@ -47,7 +48,7 @@ $search_action = "javascript:esope_search();";
 // Should be an array, so clear blanks then make it an array
 $metadata_search_fields = elgg_get_plugin_setting('metadata_membersearch_fields', 'esope');
 // Default to general advanced fiilds if not set
-if (empty($metadata_search_fields)) $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'esope');
+if (empty($metadata_search_fields)) { $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'esope'); }
 if (!empty($metadata_search_fields)) {
 	$metadata_search_fields = str_replace(' ', '', $metadata_search_fields);
 	$metadata_search_fields = explode(',', $metadata_search_fields);
@@ -124,7 +125,7 @@ $search_form .= '</fieldset></form><br />';
 $content .= $search_form;
 $content .= '<div id="esope-search-results"></div>';
 
-// If any parameters is passed, perform search on page load
+// If any parameter is passed, perform search on page load
 if (!empty($_GET)) {
 	$content .= '<script type="text/javascript">
 	esope_search();
