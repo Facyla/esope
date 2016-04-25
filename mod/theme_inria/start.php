@@ -238,9 +238,11 @@ function inria_page_handler($page){
 		case "linkedin":
 			include(dirname(__FILE__) . '/pages/theme_inria/linkedin_profile_update.php');
 			break;
+		/*
 		case "invite":
 			include(dirname(__FILE__) . '/pages/theme_inria/invite_external.php');
 			break;
+		*/
 		case "animation":
 			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
 			break;

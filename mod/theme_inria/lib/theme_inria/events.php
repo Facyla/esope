@@ -44,6 +44,7 @@ function theme_inria_setup_menu() {
 	}
 	
 	// Ajout menu Invitations à rejoindre Iris
+	/*
 	if (elgg_is_logged_in()) {
 		$own = elgg_get_logged_in_user_entity();
 		//if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
@@ -58,6 +59,7 @@ function theme_inria_setup_menu() {
 			elgg_register_menu_item("page", $menu_item);
 		}
 	}
+	*/
 	
 }
 

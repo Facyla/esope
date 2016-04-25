@@ -50,6 +50,36 @@ if (!empty($metadata_search_fields)) {
 $metadata_search = '';
 
 // Build metadata search fields
+// Use PFM if available, except if forced to text, or to auto dropdown values
+$use_profile_manager = elgg_is_active_plugin('profile_manager');
+foreach ($metadata_search_fields as $metadata) {
+	// @TODO : autocomplete using existing values ? (as a text input alternative to dropdown)
+	$use_text = false;
+	$use_auto_values = false;
+	$metadata_params = explode(':', $metadata);
+	$metadata = array_shift($metadata_params);
+	$name = "metadata[$metadata]";
+	$meta_title = elgg_echo($metadata);
+	// Process special syntax parameters (text takes precedence over auto parameter)
+	if (count($metadata) > 0) {
+		if (in_array('text', $metadata_params)) { $use_text = true; } else if (in_array('auto', $metadata_params)) { $use_auto_values = true; }
+	}
+	// Use selected input field
+	if ($use_profile_manager && !$use_text && !$use_auto_values) {
+		// Use profile manager configuration - will default to text input if field is not defined
+		// Metadata options fetching will only work if those are stored somewhere
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+	} else if ($use_auto_values) {
+		// Metadata options are selected from the database
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+	} else {
+		// We'll rely on text inputs then
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst($meta_title) . '<input type="text" name="' . $name . '" /></label></div>';
+	}
+}
+
+/*
+// @TODO : allow to fetch existing values - autocomplete using existing values ? => esope_get_meta_values($meta_name)
 if (elgg_is_active_plugin('profile_manager')) {
 	// Metadata options fetching will only work if those are stored somewhere
 	foreach ($metadata_search_fields as $metadata) {
@@ -65,6 +95,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst($meta_title) . '<input type="text" name="' . $name . '" /></label></div>';
 	}
 }
+*/
 
 $profiletypes_opt = esope_get_profiletypes(true); // $guid => $title
 $profiletypes_opt[0] = '';
@@ -76,12 +107,12 @@ $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
 $search_form .= '<fieldset>';
 // Display role filter only if it has a meaning
-if (sizeof($profiletypes_opt > 2)) {
+if (sizeof($profiletypes_opt) > 2) {
 	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
 }
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:user') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset></form><br />';
 

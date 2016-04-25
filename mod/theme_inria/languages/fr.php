@@ -451,5 +451,12 @@ Afficher et commenter le nouvel article :
 	'theme_inria:homeslider:edit' => "Editer ce slider",
 	
 	
+	
+	// Overrides Elgg 1.12
+	'esope:directory' => "Membres",
+	'members:label:newest' => "Date d'inscription'",
+	
+	
+	
 );
 
