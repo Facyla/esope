@@ -32,8 +32,8 @@ $body = $vars['body'];
 unset($vars['body']);
 
 // Esope : add support for form legend
-$legend = $vars['legend'];
-if (!empty($legend)) { $body = "<legend>$legend</legend>" . $body; }
+$legend = elgg_extract('legend', $vars, '');
+if (!empty($legend)) { $legend = "<legend>$legend</legend>"; }
 unset($vars['legend']);
 
 // Generate a security header
@@ -43,4 +43,5 @@ if (!$vars['disable_security']) {
 unset($vars['disable_security']);
 unset($vars['action_name']);
 
-echo elgg_format_element('form', $vars, "<fieldset>$body</fieldset>");
+// Esope : add legend
+echo elgg_format_element('form', $vars, "<fieldset>$legend$body</fieldset>");

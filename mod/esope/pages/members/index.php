@@ -3,10 +3,12 @@
  * Members index
  *
  */
-global $CONFIG;
+
 
 $hide_directory = elgg_get_plugin_setting('hide_directory', 'esope');
-if ($hide_directory == 'yes') gatekeeper();
+if ($hide_directory == 'yes') {
+	gatekeeper();
+}
 
 $num_members = get_number_users();
 $title = elgg_echo('members');
@@ -36,7 +38,7 @@ switch ($vars['page']) {
 		$chararray = elgg_echo('friendspicker:chararray');
 		while (!empty($chararray)) {
 			$char = substr($chararray, 0, 1);
-			$content .= '<a href="' . $CONFIG->url . 'members/alpha/?letter=' . $char . '">' . $char . '</a> ';
+			$content .= '<a href="' . elgg_get_site_url() . 'members/alpha/?letter=' . $char . '">' . $char . '</a> ';
 			$chararray = substr($chararray, 1);
 		}
 		$content .= '</div>';

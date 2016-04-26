@@ -12,35 +12,32 @@ elgg_push_breadcrumb($page_owner->name, $page_owner->getURL());
 elgg_push_breadcrumb(elgg_echo('au_subgroups:subgroups'));
 
 //$content = list_subgroups($page_owner, 10);
-// ESOPE : List subgroups : filtering by grouptype added
+// ESOPE : List subgroups, sorted by grouptype (if any)
 $content = '';
-$options = array(
-		'types' => array('group'), 'limit' => $limit, 'full_view' => false, 'limit' => false, 
-		'relationship' => AU_SUBGROUPS_RELATIONSHIP, 'relationship_guid' => $page_owner->guid, 'inverse_relationship' => true,
-	);
-// Sort by title
-$options['joins'] = array("JOIN " . elgg_get_config('dbprefix') . "groups_entity g ON e.guid = g.guid");
-$options['order_by'] = "g.name ASC";
-$subgroups = elgg_get_entities_from_relationship($options);
+$subgroups = get_subgroups($page_owner, 0);
 if ($subgroups) {
 	$subgroups = esope_sort_groups_by_grouptype($subgroups);
-	if (count($subgroups) < 2) { $display_accordion = false; } else {
-		$display_accordion = true;
+	$display_grouptypes = false;
+	if (count($subgroups) > 1) {
+		$display_grouptypes = true;
+		/* No need for accordion in full page listing !
 		$content .= '<script type="text/javascript">';
 		$content .= "$(function() {
 			$('#subgroups-{$page_owner->guid}-accordion').accordion({ header: 'h3', autoHeight: false });
 		});";
 		$content .= '</script>';
+		*/
 	}
-	$content .= '<div id="subgroups-' . $page_owner->guid . '-accordion">';
+	//$content .= '<div id="subgroups-' . $page_owner->guid . '-accordion">';
+	$content .= '<div id="subgroups-' . $page_owner->guid . '">';
 	foreach ($subgroups as $grouptype => $groups) {
 		if (count($groups) > 0) {
-			if ($display_accordion) {
+			if ($display_grouptypes) {
 				$content .= '<h3>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h3>';
 			}
 			elgg_push_context('widgets');
-			//$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
-			$content .= '<div>' . elgg_list_entities(array('entities' => $groups, 'full_view' => false)) . '</div>';
+			$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			//$content .= '<div>' . elgg_list_entities(array('entities' => $groups, 'full_view' => false)) . '</div>';
 			elgg_pop_context();
 		}
 	}

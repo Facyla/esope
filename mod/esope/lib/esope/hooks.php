@@ -344,7 +344,7 @@ if (elgg_is_active_plugin('au_subgroups')) {
 	/**
 	 * re/routes some urls that go through the groups handler
 	 */
-	// Note : checking for "delete" segment
+	// Esope Note : checking for "delete" segment
 	function esope_subgroups_groups_router($hook, $type, $return, $params) {
 		AU\SubGroups\breadcrumb_override($return);
 		

@@ -74,6 +74,11 @@ function esope_init() {
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite_before', 100);
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite', 1000);
 	
+	// Use vazco captcha in a clean way (extending core view instead of replacing it)
+	if (elgg_is_active_plugin('vazco_text_captcha')) {
+		elgg_extend_view('input/captcha', 'vazco_text_captcha/captcha');
+	}
+	
 	// Add group Wire support (option)
 	// Note : also uses esope's event handler ("create", "object")
 	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
@@ -687,6 +692,7 @@ if (!function_exists('messages_get_unread')) {
 
 
 if (elgg_is_active_plugin('au_subgroups')) {
+	// List subgroups of a given group as a tree
 	function esope_list_groups_submenu($group, $level = 1, $member_only = false, $user = null) {
 		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
 		$menuitem = '';
@@ -710,21 +716,19 @@ if (elgg_is_active_plugin('au_subgroups')) {
  * Note : only 'all' mode returns an indexed array !
  */
 function esope_get_owned_groups($user_guid = false, $mode = 'all') {
-	if (!$user_guid) $user_guid = elgg_get_logged_in_user_guid();
-	if ($mode != 'operated') $owned = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user_guid, 'limit' => false));
-	if ($mode == 'owned') return $owned;
+	if (!$user_guid) { $user_guid = elgg_get_logged_in_user_guid(); }
+	if ($mode != 'operated') { $owned = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user_guid, 'limit' => false)); }
+	if ($mode == 'owned') { return $owned; }
 	if (elgg_is_active_plugin('group_operators')) {
 		$operated = elgg_get_entities_from_relationship(array('types'=>'group', 'limit'=>false, 'relationship_guid'=> $user_guid, 'relationship'=>'operator', 'inverse_relationship'=>false));
-		if ($mode == 'operated') return $operated;
+		if ($mode == 'operated') { return $operated; }
 		// Ajout avec possibilité de dédoublonnage par la clef
-		foreach ($owned as $ent) {
-			$groups[$ent->guid] = $ent;
-		}
+		foreach ($owned as $ent) { $groups[$ent->guid] = $ent; }
 		// Puis ajout dédoublonné des groupes supplémentaires
 		foreach ($operated as $ent) {
-			if (!isset($groups[$ent->guid])) $groups[$ent->guid] = $ent;
+			if (!isset($groups[$ent->guid])) { $groups[$ent->guid] = $ent; }
 		}
-	} else $groups = $owned;
+	} else { $groups = $owned; }
 	return $groups;
 }
 
@@ -759,7 +763,7 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 
 	// Set default title
 	//if (empty($title)) $title = elgg_get_site_entity()->name . ' (';
-	if (empty($title)) $title = elgg_get_site_entity()->name;
+	if (empty($title)) { $title = elgg_get_site_entity()->name; }
 	$vars['title'] = $title;
 	
 	switch ($embed_mode) {
@@ -811,14 +815,15 @@ function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'if
 function elgg_make_list_from_path($content = array()) {
 	$return = '';
 	$prev_level = 0;
-	if (is_array($content)) foreach ($content as $path => $display) {
-		$path = explode('/', $path);
-		$curr_level = count($path);
-		if ($curr_level > $prev_level) $return .= '<ul>';
-		else if ($curr_level < $prev_level) $return .= '</ul>';
-		//$return .= '<li>' . end($path) . ' : ' . $display . '</li>';
-		$return .= '<li>' . $display . '</li>';
-		$prev_level = $curr_level;
+	if (is_array($content)) {
+		foreach ($content as $path => $display) {
+			$path = explode('/', $path);
+			$curr_level = count($path);
+			if ($curr_level > $prev_level) { $return .= '<ul>'; } else if ($curr_level < $prev_level) { $return .= '</ul>'; }
+			//$return .= '<li>' . end($path) . ' : ' . $display . '</li>';
+			$return .= '<li>' . $display . '</li>';
+			$prev_level = $curr_level;
+		}
 	}
 	return $return;
 }

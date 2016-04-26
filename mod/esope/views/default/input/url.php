@@ -9,11 +9,8 @@
  * @uses $vars['class'] Additional CSS class
  */
 
-if (isset($vars['class'])) {
-	$vars['class'] = "elgg-input-url {$vars['class']}";
-} else {
-	$vars['class'] = "elgg-input-url";
-}
+$vars['class'] = (array) elgg_extract('class', $vars, []);
+$vars['class'][] = 'elgg-input-url';
 
 // Esope : auto set id for easier label
 if (isset($vars['name']) && !isset($vars['id'])) {
@@ -25,10 +22,9 @@ $defaults = array(
 	'disabled' => false,
 	'autocapitalize' => 'off',
 	'autocorrect' => 'off',
+	'type' => 'url'
 );
 
 $vars = array_merge($defaults, $vars);
 
-?>
-
-<input type="url" <?php echo elgg_format_attributes($vars); ?> />
+echo elgg_format_element('input', $vars);

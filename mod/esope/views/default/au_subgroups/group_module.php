@@ -1,4 +1,5 @@
 <?php
+// Note : module du groupe (pour la sidebar voir au_subgroups/sidebar/subgroups)
 
 namespace AU\SubGroups;
 
@@ -27,19 +28,13 @@ $all_link = '';
 
 elgg_push_context('widgets');
 //$content = list_subgroups($group, 10);
-// ESOPE : List subgroups : filtering by grouptype added
+// ESOPE : List subgroups and sort them by grouptype (if any)
 $content = '';
-$options = array(
-		'types' => array('group'), 'limit' => $limit, 'full_view' => false, 'limit' => false, 
-		'relationship' => AU_SUBGROUPS_RELATIONSHIP, 'relationship_guid' => $group->guid, 'inverse_relationship' => true,
-	);
-// Sort by title
-$options['joins'] = array("JOIN " . elgg_get_config('dbprefix') . "groups_entity g ON e.guid = g.guid");
-$options['order_by'] = "g.name ASC";
-$subgroups = elgg_get_entities_from_relationship($options);
+$subgroups = get_subgroups($group, 0);
 if ($subgroups) {
 	$subgroups = esope_sort_groups_by_grouptype($subgroups);
-	if (count($subgroups) < 2) { $display_accordion = false; } else {
+	$display_accordion = false;
+	if (count($subgroups) > 1) {
 		$display_accordion = true;
 		$content .= '<script type="text/javascript">';
 		$content .= "$(function() {
@@ -51,8 +46,8 @@ if ($subgroups) {
 	foreach ($subgroups as $grouptype => $groups) {
 		if (count($groups) > 0) {
 			$content .= '<h4>' . elgg_echo('grouptype:' . $grouptype) . ' (' . count($groups) . ')</h4>';
-			//$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
-			$content .= '<div>' . elgg_list_entities(array('entities' => $groups, 'full_view' => false)) . '</div>';
+			$content .= '<div>' . elgg_view_entity_list($groups, array('full_view' => false)) . '</div>';
+			//$content .= '<div>' . elgg_list_entities(array('entities' => $groups, 'full_view' => false)) . '</div>';
 		}
 	}
 	$content .= '</div>';
@@ -63,8 +58,8 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('au_subgroups:nogroups') . '</p>';
 }
 
-//$any_member = ($group->subgroups_members_create_enable != 'no');
 // ESOPE : require explicit authorisation
+//$any_member = ($group->subgroups_members_create_enable != 'no');
 $any_member = ($group->subgroups_members_create_enable == 'yes');
  if (($any_member && $group->isMember()) || $group->canEdit()) {
 	$new_link = elgg_view('output/url', array(

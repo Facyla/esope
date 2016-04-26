@@ -24,25 +24,32 @@ $defaults = array(
 	'disabled' => false,
 	'options' => array(),
 	'name' => '',
+	'type' => 'radio'
 );
 
 $vars = array_merge($defaults, $vars);
 
-$id = '';
-if (isset($vars['id'])) {
-	$id = "id=\"{$vars['id']}\"";
-	unset($vars['id']);
-} else if (isset($vars['name'])) {
-	// Esope : default id to name for easier label
+$options = elgg_extract('options', $vars);
+unset($vars['options']);
+
+if (empty($options)) {
+	return;
+}
+
+$id = elgg_extract('id', $vars, '');
+unset($vars['id']);
+// Esope : default id to name for easier label
+if (empty($id) && isset($vars['name'])) {
 	$id = "id=\"{$vars['name']}\"";
 }
 
-$class = "elgg-input-radios elgg-{$vars['align']}";
-if (isset($vars['class'])) {
-	$class .= " {$vars['class']}";
-	unset($vars['class']);
-}
+$list_class = (array) elgg_extract('class', $vars, []);
+$list_class[] = 'elgg-input-radios';
+$list_class[] = "elgg-{$vars['align']}";
+
+unset($vars['class']);
 unset($vars['align']);
+
 $vars['class'] = 'elgg-input-radio';
 
 if (is_array($vars['value'])) {
@@ -51,29 +58,24 @@ if (is_array($vars['value'])) {
 	$vars['value'] = array(elgg_strtolower($vars['value']));
 }
 
-$options = $vars['options'];
-unset($vars['options']);
-
 $value = $vars['value'];
 unset($vars['value']);
 
-if ($options && count($options) > 0) {
-	echo "<ul class=\"$class\" $id>";
-	foreach ($options as $label => $option) {
+$radios = '';
+foreach ($options as $label => $option) {
 
-		$vars['checked'] = in_array(elgg_strtolower($option), $value);
-		$vars['value'] = $option;
+	$vars['checked'] = in_array(elgg_strtolower($option), $value);
+	$vars['value'] = $option;
 
-		$attributes = elgg_format_attributes($vars);
-
-		// handle indexed array where label is not specified
-		// @deprecated 1.8 Remove in 1.9
-		if (is_integer($label)) {
-			elgg_deprecated_notice('$vars[\'options\'] must be an associative array in input/radio', 1.8);
-			$label = $option;
-		}
-
-		echo "<li><label><input type=\"radio\" $attributes />$label</label></li>";
+	// handle indexed array where label is not specified
+	// @deprecated 1.8 Remove in 1.9
+	if (is_integer($label)) {
+		elgg_deprecated_notice('$vars[\'options\'] must be an associative array in input/radio', 1.8);
+		$label = $option;
 	}
-	echo '</ul>';
+
+	$radio = elgg_format_element('input', $vars);
+	$radios .= "<li><label>{$radio}{$label}</label></li>";
 }
+
+echo elgg_format_element('ul', ['class' => $list_class, 'id' => $id], $radios);

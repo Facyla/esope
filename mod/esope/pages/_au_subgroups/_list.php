@@ -1,4 +1,6 @@
 <?php
+// Esope : @TODO check if still used ? should not be as it was replaced by resources/au_subgroups/ views
+// Also accordion is not very useful in this full page list
 
 $page_owner = elgg_get_page_owner_entity();
 $title = elgg_echo('au_subgroups:subgroups');
@@ -49,7 +51,7 @@ if ($subgroups) {
 }
 
 $body = elgg_view_layout('content', array(
-		'title' => $title,
+		'title' => "AAA".$title,
 		'content' => $content,
 		'filter' => false
 	));

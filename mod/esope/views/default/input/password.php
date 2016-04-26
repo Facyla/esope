@@ -11,11 +11,8 @@
  * @uses $vars['class'] Additional CSS class
  */
 
-if (isset($vars['class'])) {
-	$vars['class'] = "elgg-input-password {$vars['class']}";
-} else {
-	$vars['class'] = "elgg-input-password";
-}
+$vars['class'] = (array) elgg_extract('class', $vars, []);
+$vars['class'][] = 'elgg-input-password';
 
 // Esope : auto set id for easier label
 if (isset($vars['name']) && !isset($vars['id'])) {
@@ -27,9 +24,9 @@ $defaults = array(
 	'value' => '',
 	'autocapitalize' => 'off',
 	'autocorrect' => 'off',
+	'type' => 'password'
 );
 
-$attrs = array_merge($defaults, $vars);
-?>
+$vars = array_merge($defaults, $vars);
 
-<input type="password" <?php echo elgg_format_attributes($attrs); ?> />
+echo elgg_format_element('input', $vars);
