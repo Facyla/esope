@@ -252,11 +252,13 @@ input:focus, textarea:focus { outline:0; }
 /* Eviter les recouvrements par le menu des entités */
 .elgg-menu-entity { height:auto; text-align: center; max-width:50%; }
 ul.elgg-list li.elgg-item ul.elgg-menu { /* font-size: 0.75em; */ }
+/* Not sure why that was set but it is counter-useful !
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-one { width: 40px; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-date { width: 60px; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { width: 90px; }
-ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members a { color: <?php echo $linkcolor; ?>; }
 ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-membership { width: 50px; }
+ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { color: <?php echo $linkcolor; ?>; }
+*/
 
 .elgg-menu-item-membership {}
 .elgg-menu-item-members {}
@@ -561,6 +563,7 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 */
 .au-subgroups-result-col { width: auto; }
 .au-subgroups-search-results { float:none; width: auto; }
+.au_subgroup.au_subgroup_icon-tiny { padding: 1px 0; }
 .groups-profile-icon .au_subgroup_icon-tiny { font-size: 0.6rem; line-height: 1; padding: 1px 0; top: 0;  }
 .groups-profile-icon .au_subgroups_group_icon-large { height: auto; }
 .au_subgroups_group_icon.au_subgroups_group_icon-small span.au_subgroup { padding: 1px 0; font-size: 0.7rem; line-height: 1; }

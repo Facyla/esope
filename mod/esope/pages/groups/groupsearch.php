@@ -74,7 +74,7 @@ $content .= '<div id="esope-search-results"></div>';
 
 
 $sidebar = 	'';
-$sidebar .= elgg_view('page/elements/group_tagcloud_block');
+$sidebar .= elgg_view('groups/group_tagcloud_block');
 $sidebar .= elgg_view('groups/sidebar/featured');
 
 $params = array(

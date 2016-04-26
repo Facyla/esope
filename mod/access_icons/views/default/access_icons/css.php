@@ -22,6 +22,7 @@ $padding_left = '0';
 .access-icon-placeholder { display: inline-block; width: 18px; }
 
 .elgg-access { display: inline-block; }
+.elgg-output .elgg-access { padding-left:18px; }
 .elgg-access a { display: inline-block; margin-left: -<?php echo $padding_left; ?>; padding-left: <?php echo $padding_left; ?>; min-height: 16px; min-width:16px; text-decoration:none; }
 .elgg-access a:hover, .elgg-access a:active, .elgg-access a:focus { text-decoration:none; }
 .access-icons { float:right; font-size:0.75rem; margin-left: 15px; margin-top: 6px; }
@@ -35,16 +36,16 @@ $padding_left = '0';
 /*
 .elgg-menu-item-membership { height: 16px; width: 16px; overflow: hidden; color: transparent; }
 */
-.membership-group-open { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
-.membership-group-closed { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
+.membership-group-open { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
+.membership-group-closed { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
 
 /* Groupes ouverts et fermés (liste des contenus) */
-.elgg-access-group-open { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
-.elgg-access-group-closed { padding-left:20px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
+.elgg-access-group-open { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
+.elgg-access-group-closed { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
 .shared_collection {  }
 
 
-/* Défaut : grisé */
+/* Couleur par défaut : grisé */
 .elgg-access.elgg-access-default { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-default.png) no-repeat top left; }
 /* Public : noir et ouvert */
 .elgg-access.elgg-access-public { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-public.png) no-repeat top left; }

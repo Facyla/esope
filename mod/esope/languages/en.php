@@ -859,6 +859,13 @@ return array(
 	
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
 	'esope:access:userfield' => "Viewable by...",
+'esope:access:overridenotice' => "Note: Following the group policy, this content should be accessible only by group members.",
+	'esope:access:overridenotice:existingvalue' => "Note: Following the group policy, this content should be accessible only by group members. Please update the access level to Group Members",
+	'groups:content_access_mode' => "Access permission of new group content",
+	'groups:content_access_mode:warning' => "Warning: Changing this setting won't change the access permission of existing group content.",
+	'groups:content_access_mode:unrestricted' => "Unrestricted - Access depends on content-level settings",
+	'groups:content_access_mode:membersonly' => "Members only - New content is restricted to the Group Members",
+	'groups:acl' => "Group Members (%s)",
 	
 	'esope:group:oldactivity' => "There was no recent activity in this group since %s.",
 	'esope:group:norecentactivity' => "There was no recent activity in this group.",

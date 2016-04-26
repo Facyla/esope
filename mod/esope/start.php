@@ -716,19 +716,48 @@ if (elgg_is_active_plugin('au_subgroups')) {
  * Note : only 'all' mode returns an indexed array !
  */
 function esope_get_owned_groups($user_guid = false, $mode = 'all') {
+	// Note : ordering if not needed (and useless) because we will return entities and not a list, and it is ordered by GUID
+	//$dbprefix = elgg_get_config('dbprefix');
 	if (!$user_guid) { $user_guid = elgg_get_logged_in_user_guid(); }
-	if ($mode != 'operated') { $owned = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user_guid, 'limit' => false)); }
-	if ($mode == 'owned') { return $owned; }
+	// Owned groups only (using plugin standard method)
+	if ($mode != 'operated') {
+		$owned = elgg_get_entities(array(
+				'type' => 'group', 
+				'owner_guid' => $user_guid, 
+				//'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"),
+				//'order_by' => 'ge.name ASC',
+				'limit' => false,
+				'distinct' => false,
+			));
+		if ($mode == 'owned') { return $owned; }
+	}
+	
+	// Operated groups only
 	if (elgg_is_active_plugin('group_operators')) {
-		$operated = elgg_get_entities_from_relationship(array('types'=>'group', 'limit'=>false, 'relationship_guid'=> $user_guid, 'relationship'=>'operator', 'inverse_relationship'=>false));
+		$operated = elgg_get_entities_from_relationship(array(
+				'type'=>'group', 
+				'relationship_guid'=> $user_guid, 
+				'relationship'=>'operator', 
+				'inverse_relationship' => false,
+				//'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"),
+				//'order_by' => 'ge.name ASC',
+				'limit'=>false,
+				'distinct' => false,
+			));
 		if ($mode == 'operated') { return $operated; }
-		// Ajout avec possibilité de dédoublonnage par la clef
-		foreach ($owned as $ent) { $groups[$ent->guid] = $ent; }
-		// Puis ajout dédoublonné des groupes supplémentaires
+	}
+	
+	// Ajout et dédoublonnage par la clef / Merge owned and operated groups + remove duplicates
+	if ($owned) {
+		foreach ($owned as $ent) {
+			if (!isset($groups[$ent->guid])) { $groups[$ent->guid] = $ent; }
+		}
+	}
+	if ($operated) {
 		foreach ($operated as $ent) {
 			if (!isset($groups[$ent->guid])) { $groups[$ent->guid] = $ent; }
 		}
-	} else { $groups = $owned; }
+	}
 	return $groups;
 }
 

@@ -14,13 +14,13 @@ if (!elgg_is_logged_in()) { return; }
 $entity = elgg_extract('entity', $vars, false);
 
 // Default hide text in widgets context, except if forced
-if (elgg_in_context('widgets')) { $hide_text = true; }
-$hide_text = elgg_extract('hide_text', $vars, $hide_text);
+if (elgg_in_context('widgets')) { $no_text = true; }
+$no_text = elgg_extract('hide_text', $vars, $no_text);
 
 if (elgg_instanceof($entity)) {
 	$access_id = $entity->access_id;
 	$access_class = 'elgg-access';
-	if (!$hide_text) {
+	if (!$no_text) {
 		$access_id_string = get_readable_access_level($access_id);
 		$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($access_id_string, ENT_QUOTES, 'UTF-8', false);
 	} else {

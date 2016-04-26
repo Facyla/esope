@@ -860,6 +860,13 @@ return array(
 	
 	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
 	'esope:access:userfield' => "Visible par...",
+	'esope:access:overridenotice' => "Note : en accord avec la politique de confidentialité de ce groupe, ce contenu ne devrait être accessible qu'aux membres du groupe.",
+	'esope:access:overridenotice:existingvalue' => "Note : en accord avec la politique de confidentialité de ce groupe, ce contenu ne devrait être accessible qu'aux membres du groupe. Merci de choisir le niveau d'accès Membres du Groupe.",
+	'groups:content_access_mode' => "Niveau d'accès des nouveaux contenus",
+	'groups:content_access_mode:warning' => "Attention : la modification de ce paramètre ne changera pas le niveau d'accès des contenus déjà publiés !",
+	'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir l'accès aux nouveaux contenus",
+	'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
+	'groups:acl' => "Membres du Groupe (%s)",
 	
 	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
 	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
@@ -867,7 +874,8 @@ return array(
 	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
 	'esope:group:inactive:details:never' => "Aucune activité depuis la création du groupe",
 	'esope:group:archive' => "ARCHIVE",
-	'esope:group:inactive:details' => "Ce groupe a été archivé",
+	//'esope:group:inactive:details' => "Ce groupe a été archivé",
+	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
 	
 	
 	
@@ -884,14 +892,6 @@ return array(
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
 	
-	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
-	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
-	'esope:group:inactive' => "INACTIF",
-	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
-	
-	'esope:likes' => "Contenus appréciés",
-	
-	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
 	
 	/* Esope FA icons - generic usage */
 	// Tools

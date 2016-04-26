@@ -230,6 +230,7 @@ function esope_groups_page_handler($page) {
 
 	switch ($page[0]) {
 		case 'all':
+			// Because we want to add discussions (if setting enabled) + alpha order tab + subgroups + other tweaks
 			esope_groups_handle_all_page();
 			break;
 		case 'search':
@@ -242,7 +243,7 @@ function esope_groups_page_handler($page) {
 			esope_groups_groupsearch_page();
 			break;
 		case 'owner':
-			//groups_handle_owned_page();
+			// Because we want to get operated groups too (or choose owned or operated)
 			esope_groups_handle_owned_page();
 			break;
 		case 'member':
@@ -266,6 +267,7 @@ function esope_groups_page_handler($page) {
 			groups_handle_activity_page($page[1]);
 			break;
 		case 'members':
+			// Because au_subgroups lib has hardcoded limit
 			esope_groups_handle_members_page($page[1]);
 			break;
 		case 'invite':

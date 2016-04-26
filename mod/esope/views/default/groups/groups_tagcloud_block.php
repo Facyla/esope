@@ -1,6 +1,6 @@
 <?php
 /**
- * Display content-based tags
+ * Display groups tags cloud
  *
  * Generally used in a sidebar. Does not work with groups currently.
  *
@@ -56,5 +56,5 @@ $cloud .= elgg_view('output/url', array(
 $cloud .= '</p>';
 */
 
-
 echo elgg_view_module('aside', $title, $cloud);
+

@@ -10,6 +10,7 @@
  * @uses $vars['limit']       Number of items per page. Only used as input to pagination.
  * @uses $vars['count']       Number of items in the complete list
  * @uses $vars['base_url']    Base URL of list (optional)
+ * @uses $vars['url_fragment'] URL fragment to add to links if not present in base_url (optional)
  * @uses $vars['pagination']  Show pagination? (default: true)
  * @uses $vars['position']    Position of the pagination: before, after, or both
  * @uses $vars['full_view']   Show the full view of the items (default: false)
@@ -83,7 +84,7 @@ foreach ($items as $item) {
 		$li_attrs['id'] = "item-{$item->getType()}-{$item->id}";
 	}
 
-	// ESOPE : access_icons
+	// ESOPE : add access_icons (useless if not logged in)
 	$access = '';
 	if (elgg_is_logged_in() && elgg_instanceof($item, 'object') && elgg_in_context('widgets')) {
 		$access = '<span class="access-icons access-icons-listing">' . elgg_view('output/access', array('entity' => $item)) . '</span>';

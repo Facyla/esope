@@ -19,7 +19,7 @@ function access_icons_init() {
 	if (elgg_is_logged_in()) {
 		// Modify group menu in listing view : add classes + access level
 		// Note : no need to rewrite groups_entity_menu_setup() because we're overriding its return
-		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_groups_menu_entity_setup', 1000);
+		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_groups_menu_entity_setup', 900);
 		
 		// Ajout des accès sur la rivière
 		elgg_register_plugin_hook_handler('register', 'menu:river', 'access_icons_river_menu_setup');
@@ -29,7 +29,7 @@ function access_icons_init() {
 		 * et notamment dans les listes et widgets ()
 		 * Le hook modifie donc les menus des entités sauf dans le contexte des widgets
 		 */
-		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 1000);
+		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 900);
 	}
 	
 }
@@ -49,14 +49,14 @@ function access_icons_groups_menu_entity_setup($hook, $type, $return, $params) {
 	// Membership type
 	$membership = $entity->membership;
 	if ($membership == ACCESS_PUBLIC) {
-		$mem = elgg_echo("groups:open");
+		$mem_text = elgg_echo("groups:open");
 		$class = 'membership-group-open';
 	} else {
-		$mem = elgg_echo("groups:closed");
+		$mem_text = elgg_echo("groups:closed");
 		$class = 'membership-group-closed';
 	}
-	// Wrap membership info
-	$mem = '<span class="' . $class . '">' . $mem . '</span>';
+	// Wrap membership info : icon only (text on hover)
+	$mem = '<span class="' . $class . '" title="' . $mem_text . '"></span>';
 	$options = array(
 		'name' => 'membership',
 		'text' => $mem,
@@ -69,7 +69,7 @@ function access_icons_groups_menu_entity_setup($hook, $type, $return, $params) {
 	// Access info
 	$options = array(
 		'name' => 'access',
-		'text' => elgg_view('output/access', array('entity' => $entity, 'hide_text' => false)),
+		'text' => elgg_view('output/access', array('entity' => $entity, 'hide_text' => true)),
 		'href' => false,
 		'priority' => 10,
 		'link_class' => 'elgg-access',
