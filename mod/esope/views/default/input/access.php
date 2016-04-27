@@ -194,8 +194,8 @@ if (!in_array($vars['name'], $donotmodify_cases)) {
 	/* Note : this is done somewhere else, not sure where though (hook ?)
 	if ($restricted_content_access) {
 		// Remove unwanted access levels
-		$remove_access_levels[] = 2;
-		$remove_access_levels[] = 1;
+		$remove_access_levels[] = '2';
+		$remove_access_levels[] = '1';
 		array_unique($remove_access_levels);
 	}
 	*/

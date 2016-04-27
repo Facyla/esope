@@ -116,10 +116,10 @@ function theme_transitions2_init() {
 		elgg_register_plugin_hook_handler('allowed_styles', 'htmlawed', 'theme_transitions2_htmlawed_allowed_tags');
 	}
 	
-	// Index page
-	// Replace the default index page
+	// Index page - replaces the default index page
+	//elgg_unregister_page_handler('esope_index');
+	//elgg_unregister_page_handler('esope_public_index');
 	elgg_register_page_handler('', 'theme_transitions2_index');
-	elgg_register_plugin_hook_handler('index','system','theme_transitions2_index');
 	
 	// Override default icon sizes
 	$icon_sizes = array(
@@ -169,7 +169,7 @@ function theme_transitions2_init() {
  * 
  * @return bool Whether the page was sent.
  */
-function theme_transitions2_index() {
+function theme_transitions2_index($page) {
 	/*
 	if (elgg_is_logged_in()) {
 		if (!include_once(dirname(__FILE__) . "/pages/theme_transitions2/index.php")) { return false; }
@@ -177,9 +177,9 @@ function theme_transitions2_index() {
 		if (!include_once(dirname(__FILE__) . "/pages/theme_transitions2/index_public.php")) { return false; }
 	}
 	*/
-	if (!include_once(dirname(__FILE__) . "/pages/theme_transitions2/index.php")) { return false; }
+	if (include_once(elgg_get_plugins_path() . "theme_transitions2/pages/theme_transitions2/index.php")) { return true; }
 	
-	return true;
+	return false;
 }
 
 

@@ -20,23 +20,28 @@ function theme_template_init() {
 	// HOMEPAGE - Replace public and loggedin homepage
 	/*
 	if (elgg_is_logged_in()) {
-		elgg_unregister_plugin_hook_handler('index','system','adf_platform_index');
-		elgg_register_plugin_hook_handler('index','system','theme_template_index');
+		elgg_unregister_page_handler('esope_index');
+		elgg_register_page_handler('', 'theme_template_index');
 	} else {
 		if (!$CONFIG->walled_garden) {
-			elgg_unregister_plugin_hook_handler('index','system','adf_platform_public_index');
-			elgg_register_plugin_hook_handler('index','system','theme_template_public_index');
+			elgg_unregister_page_handler('esope_public_index');
+			elgg_register_page_handler('', 'theme_template_public_index');
 		}
 	}
 	*/
 	
 	// Get a plugin setting
+	/*
+	// Plugin settings form : plugins/theme_template/settings
 	$setting = elgg_get_plugin_setting('setting_name', 'theme_template');
+	
+	// User plugin settings form : plugins/theme_template/usersettings
 	// Get a user plugin setting (makes sense only if logged in)
 	if (elgg_is_logged_in()) {
 		$user_guid = elgg_get_logged_in_user_guid();
 		$usersetting = elgg_get_plugin_user_setting('user_plugin_setting', $user_guid, 'theme_template');
 	}
+	*/
 	
 	// Register a page handler on "theme_template/"
 	elgg_register_page_handler('theme_template', 'theme_template_page_handler');
@@ -71,13 +76,13 @@ function theme_template_function() {
 */
 
 // Theme logged in index page
-function theme_template_index(){
+function theme_template_index($page) {
 	include(elgg_get_plugins_path() . 'theme_template/pages/theme_template/loggedin_homepage.php');
 	return true;
 }
 
 // Theme public index page
-function theme_template_public_index() {
+function theme_template_public_index($page) {
 	include(elgg_get_plugins_path() . 'theme_template/pages/theme_template/public_homepage.php');
 	return true;
 }

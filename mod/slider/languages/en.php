@@ -84,5 +84,7 @@ return array(
 	'slider:cmspages:notice' => "IMPORTANT: only CMS pages of type \"Template\" can display sliders! You may need to update page type to display it.",
 	'slider:iframe:instructions' => " - with an embed code, on any other sites: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
 	
+	'slider:deleted' => "Slider deleted",	
+
 );
 

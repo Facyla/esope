@@ -1,5 +1,59 @@
 <?php
 
+
+
+// Remplace la page d'accueil selon les demandes
+// IMPORTANT : ne pas modifier le nom de cette fonction car elle est réécrite par les différents thèmes !! (implique des modifs en série)
+function esope_public_index($page) {
+	// Remplacement page d'accueil publique - ssi si pas en mode walled_garden
+	//$site = elgg_get_site_entity();
+	//if (elgg_instanceof($site, 'site') && $site->checkWalledGarden()) {
+	if (elgg_get_config('walled_garden')) {
+		// NOTE : In walled garden mode, the walled garden page layout is used, not the index hook
+		return;
+	}
+	
+	// PARAM : Désactivé si 'no', ou activé avec paramètre de config
+	$replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'esope');
+	if ($replace_public_home != 'no') {
+		switch($replace_public_home) {
+			case 'cmspages':
+				include(elgg_get_plugins_path() . 'esope/pages/esope/public_cmshomepage.php');
+				break;
+			case 'default':
+			default:
+				include(elgg_get_plugins_path() . 'esope/pages/esope/public_homepage.php');
+		}
+		return true;
+	}
+}
+
+
+// Remplace la page d'accueil connectée selon les demandes
+// IMPORTANT : ne pas modifier le nom de cette fonction car elle est réécrite par les différents thèmes !! (implique des modifs en série)
+function esope_index($page) {
+	// Remplacement page d'accueil par tableau de bord personnel
+	// PARAM : Désactivé si 'no', ou activé avec paramètre de config optionnel
+	$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
+	if ($replace_home != 'no') {
+		// Remplace l'index par un tableau de bord légèrement modifié
+		include(elgg_get_plugins_path() . 'esope/pages/esope/homepage.php');
+		return true;
+		
+		/* Pour remplacer par une page spécifique
+		$replace_home = elgg_get_plugin_setting('replace_home', 'esope');
+		if ($replace_home != 'yes') {
+			$homepage_test = @fopen(elgg_get_site_url() . $replace_home, 'r'); 
+			if ($homepage_test) {
+				fclose($$homepage_test);
+				forward(elgg_get_site_url() . $replace_home);
+			}
+		} else {}
+		*/
+	}
+}
+
+
 function esope_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'esope/pages/esope';
 	switch ($page[0]) {

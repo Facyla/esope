@@ -71,8 +71,8 @@ if (elgg_instanceof($slider, 'object', 'slider')) {
 	$slider_access = get_default_access(); // Default access level
 	$editor = 'rawtext';
 	// Use provided name if set
-	$slider_title = $guid;
-	$slider_name = $guid;
+	$slider_title = get_input('title');
+	$slider_name = get_input('name');
 	
 	//$slidercss_main = $vars['slidercss_main']; // CSS for main ul tag
 	//$slidercss_textslide = $vars['slidercss_textslide']; // CSS for li .textslide

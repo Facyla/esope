@@ -95,12 +95,12 @@ function theme_inria_init(){
 	// HOMEPAGE
 	// Remplacement de la page d'accueil
 	if (elgg_is_logged_in()) {
-		elgg_unregister_plugin_hook_handler('index','system','esope_index');
-		elgg_register_plugin_hook_handler('index','system','theme_inria_index');
+		elgg_unregister_page_handler('esope_index');
+		elgg_register_page_handler('', 'theme_inria_index');
 	} else {
 		if (!$CONFIG->walled_garden) {
-			elgg_unregister_plugin_hook_handler('index','system','esope_public_index');
-			elgg_register_plugin_hook_handler('index','system','theme_inria_public_index');
+			elgg_unregister_page_handler('esope_public_index');
+			elgg_register_page_handler('', 'theme_inria_public_index');
 		}
 	}
 	
@@ -127,6 +127,8 @@ function theme_inria_init(){
 	// Remove unwanted widgets
 	//elgg_unregister_widget_type('river_widget');
 	
+	
+	// PAGE HANDLERS
 	elgg_register_page_handler("inria", "inria_page_handler");
 	
 	// Add a "ressources" page handler for groups
@@ -214,6 +216,8 @@ function theme_inria_init(){
 	
 }
 
+// Include Inria page handlers
+require_once(dirname(__FILE__) . '/lib/theme_inria/page_handlers.php');
 // Include Inria functions
 require_once(dirname(__FILE__) . '/lib/theme_inria/functions.php');
 // Include events handlers
@@ -223,124 +227,6 @@ require_once(dirname(__FILE__) . '/lib/theme_inria/hooks.php');
 
 
 
-// New "inria/" page handler
-function inria_page_handler($page){
-	switch($page[0]){
-		case "userimage":
-			include(dirname(__FILE__) . '/pages/theme_inria/userimage.php');
-			break;
-		case "userprofile":
-			include(dirname(__FILE__) . '/pages/theme_inria/userprofile.php');
-			break;
-		case "usergroups":
-			include(dirname(__FILE__) . '/pages/theme_inria/usergroups.php');
-			break;
-		case "linkedin":
-			include(dirname(__FILE__) . '/pages/theme_inria/linkedin_profile_update.php');
-			break;
-		/*
-		case "invite":
-			include(dirname(__FILE__) . '/pages/theme_inria/invite_external.php');
-			break;
-		*/
-		case "animation":
-			include(dirname(__FILE__) . '/pages/theme_inria/admin_tools.php');
-			break;
-		case 'admin_cron':
-			if (elgg_is_admin_logged_in()) {
-				theme_inria_daily_cron('cron', 'daily', '', array('force' => 'yes'));
-			}
-			break;
-		default:
-			include(dirname(__FILE__) . '/pages/theme_inria/index.php');
-	}
-	return true;
-}
-
-// New "ressources/" page handler
-function inria_ressources_page_handler($page) {
-	//elgg_load_library('elgg:groups');
-	$base_dir = elgg_get_plugins_path() . 'theme_inria/pages/ressources';
-	$page_type = $page[0];
-	// Only valid URL model : ressources/group/GUID/all (or without 'all')
-	if (isset($page[1])) set_input('guid', $page[2]);
-	switch ($page_type) {
-		case 'group':
-			include "$base_dir/group_ressources.php";
-			break;
-		default:
-			return false;
-	}
-	return true;
-}
-
-// Override pour ajouter une explication sur la page thewire/all
-function theme_inria_thewire_page_handler($page) {
-	$base_dir = elgg_get_plugins_path() . 'thewire/pages/thewire';
-	$alt_base_dir = elgg_get_plugins_path() . 'theme_inria/pages/thewire';
-
-	if (!isset($page[0])) {
-		$page = array('all');
-	}
-
-	switch ($page[0]) {
-		case "all":
-			include "$alt_base_dir/everyone.php";
-			break;
-
-		case "friends":
-			include "$base_dir/friends.php";
-			break;
-
-		case "owner":
-			include "$base_dir/owner.php";
-			break;
-
-		case "group":
-			//if (isset($page[1])) { set_input('guid', $page[1]); }
-			include "$alt_base_dir/group.php";
-			break;
-
-		case "view":
-			if (isset($page[1])) {
-				set_input('guid', $page[1]);
-			}
-			include "$base_dir/view.php";
-			break;
-
-		case "thread":
-			if (isset($page[1])) {
-				set_input('thread_id', $page[1]);
-			}
-			include "$base_dir/thread.php";
-			break;
-
-		case "reply":
-			if (isset($page[1])) {
-				set_input('guid', $page[1]);
-			}
-			include "$base_dir/reply.php";
-			break;
-
-		case "tag":
-			if (isset($page[1])) {
-				set_input('tag', $page[1]);
-			}
-			include "$base_dir/tag.php";
-			break;
-
-		case "previous":
-			if (isset($page[1])) {
-				set_input('guid', $page[1]);
-			}
-			include "$base_dir/previous.php";
-			break;
-
-		default:
-			return false;
-	}
-	return true;
-}
 
 // Add thewire menu in group tools
 function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
@@ -360,22 +246,6 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 		}
 	}
 	return $return;
-}
-
-// Override river PH to add an info block
-function theme_inria_elgg_river_page_handler($page) {
-	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
-
-	// make a URL segment available in page handler script
-	$page_type = elgg_extract(0, $page, 'all');
-	$page_type = preg_replace('[\W]', '', $page_type);
-	if ($page_type == 'owner') {
-		$page_type = 'mine';
-	}
-	set_input('page_type', $page_type);
-
-	require_once(elgg_get_plugins_path() . "theme_inria/pages/river.php");
-	return true;
 }
 
 
