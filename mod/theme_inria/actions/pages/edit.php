@@ -34,7 +34,7 @@ if (!$input['title']) {
 
 if ($page_guid) {
 	$page = get_entity($page_guid);
-	if (!pages_is_page($page) || !$page->canEdit()) {
+	if (!elgg_instanceof($page, 'object') || !$page->canEdit()) {
 		register_error(elgg_echo('pages:cantedit'));
 		forward(REFERER);
 	}
