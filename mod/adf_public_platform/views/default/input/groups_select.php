@@ -3,8 +3,8 @@
 
 $content ='';
 $scope = $vars["scope"]; // default = all, member
-$group = elgg_extract('entity', $vars);
-if (!elgg_instanceof($group, 'group')) { $scope = 'all'; }
+$group = elgg_extract('entity', $vars); // current container group (if any)
+//if (!elgg_instanceof($group, 'group')) { $scope = 'all'; }
 $dbprefix = elgg_get_config('dbprefix');
 
 switch($scope) {

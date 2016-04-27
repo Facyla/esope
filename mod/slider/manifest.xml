@@ -20,17 +20,17 @@
 	
 	<suggests>
 		<type>plugin</type>
-		<version>cmspages</version>
+		<name>cmspages</name>
 	</suggests>
 	
 	<suggests>
 		<type>plugin</type>
-		<version>shortcodes</version>
+		<name>shortcodes</name>
 	</suggests>
 	
 	<suggests>
 		<type>plugin</type>
-		<version>adf_public_platform</version>
+		<name>adf_public_platform</name>
 	</suggests>
 	
 	<activate_on_install>false</activate_on_install>
