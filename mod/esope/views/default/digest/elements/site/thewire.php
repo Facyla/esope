@@ -5,10 +5,14 @@
 */
 
 $user = elgg_extract("user", $vars, elgg_get_logged_in_user_entity());
+$limit = (int) elgg_extract("limit", $vars, 5);
 $ts_lower = (int) elgg_extract("ts_lower", $vars);
 $ts_upper = (int) elgg_extract("ts_upper", $vars);
 
-// only show thewires that are published
+// Exclude params: self|[groups|site]
+// Note : if both 'groups' and 'site' are set, only groups exclude will be applied - otherwise this would exclude all content
+$exclude = elgg_extract("exclude", $vars, array('self'));
+
 $dbprefix = elgg_get_config("dbprefix");
 
 $thewire_options = array(
@@ -17,8 +21,18 @@ $thewire_options = array(
 	"limit" => 5,
 	"created_time_lower" => $ts_lower,
 	"created_time_upper" => $ts_upper,
-	"wheres" => "e.owner_guid != " . $user->guid, // filter own content
 );
+
+// exclude own content
+if ($user && in_array('self', $exclude)) {
+	$thewire_options['wheres'][] = "e.owner_guid != " . $user->guid;
+}
+// exclude messages published in groups
+if (in_array('groups', $exclude)) {
+	$thewire_options['wheres'][] = "e.owner_guid = e.container_guid";
+} else if (in_array('site', $exclude)) {
+	$thewire_options['wheres'][] = "e.owner_guid != e.container_guid";
+}
 
 if ($thewires = elgg_get_entities($thewire_options)){
 	$title = elgg_view("output/url", array("text" => elgg_echo("thewire"), "href" => "thewire/all" ));
