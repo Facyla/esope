@@ -44,12 +44,13 @@ if ($user_guid && $code) {
 	
 	$content .= '<header><div class="interne">';
 	$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
-	if (empty($headertitle)) $content .= '<h1 class="invisible">' . $site->name . '</h1>';
-	else $content .= '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
+	if (empty($headertitle)) {
+		$content .= '<h1 class="invisible">' . $site->name . '</h1>';
+	} else {
+		$content .= '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
+	}
 	$content .= '</div></header>';
-	$content .= '<div class="elgg-page-messages">';
-	$content .= elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
-	$content .= '</div>';
+	//$content .= '<div class="elgg-page-messages">' . $messages . '</div>';
 	$content .= '<div class="clearfloat"></div>';
 
 	$content .= '<div id="esope-homepage" class="interne">';
@@ -91,21 +92,22 @@ if (empty($content)) {
 		if (elgg_get_config('allow_registration')) {
 			$register_form = elgg_view_form('register', array(), array('friend_guid' => (int) get_input('friend_guid', 0), 'invitecode' => get_input('invitecode') ));
 		}
+		
 		$content .= '<header><div class="interne">';
 		$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
-		if (empty($headertitle)) $content .= '<h1 class="invisible">' . $site->name . '</h1>';
-		else $content .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
+		if (empty($headertitle)) {
+			$content .= '<h1 class="invisible">' . $site->name . '</h1>';
+		} else {
+			$content .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
+		}
 		$content .= '</div></header>';
-
-		$content .= '<div class="elgg-page-messages">';
-		$content .= elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
-		$content .= '</div>';
+		//$content .= '<div class="elgg-page-messages">' . $messages . '</div>';
 		$content .= '<div class="clearfloat"></div>';
 
 		$content .= '<div id="esope-homepage" class="interne">';
 			$content .= '<div id="esope-public-col1" class="home-static-container">';
 				$intro = elgg_get_plugin_setting('homeintro', 'esope');
-				if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div>';
+				if (!empty($intro)) { $content .= $intro . '<div class="clearfloat"></div>'; }
 				$content .= '<div id="esope-loginbox">';
 				$content .= '<h2>' . elgg_echo('login') . '</h2>';
 				// Connexion + mot de passe perdu

@@ -152,6 +152,7 @@
 
 .submitted-feedback .controls { float:right; }
 .submitted-feedback .controls > a, .submitted-feedback .controls > span { margin-right:8px; margin-top:2px; }
+.submitted-feedback .elgg-body { overflow: initial; }
 
 .elgg-module-group-feedback { margin-top: 10px; }
 .elgg-module-group-feedback .elgg-body { margin: 0; padding: 0; }
