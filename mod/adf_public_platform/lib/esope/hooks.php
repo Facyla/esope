@@ -624,10 +624,10 @@ function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params
 		$descr = $entity->description;
 		$owner = $entity->getOwnerEntity();
 		$container = $entity->getContainerEntity();
-		$user_wire_url = elgg_get_site_url() . 'thewire/owner/' $owner->guid;
+		$user_wire_url = elgg_get_site_url() . 'thewire/owner/' . $owner->guid;
 		$group_wire_url = false; // Group Wire URL + false if no group container
 		if (elgg_instanceof($container, 'group')) {
-			$group_wire_url = elgg_get_site_url() . 'thewire/group/' $container->guid;
+			$group_wire_url = elgg_get_site_url() . 'thewire/group/' . $container->guid;
 		}
 		// Message title
 		if ($entity->reply) {
