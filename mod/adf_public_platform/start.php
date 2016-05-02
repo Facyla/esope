@@ -160,6 +160,13 @@ function esope_init() {
 	}
 	*/
 	
+	// Liens des messages du Fil (pour pointer sur la publication et non l'accueil)
+	if (elgg_is_active_plugin('thewire')) {
+		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'thewire_notify_message');
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'esope_thewire_notify_message');
+
+	}
+	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');

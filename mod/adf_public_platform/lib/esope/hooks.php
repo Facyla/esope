@@ -611,4 +611,46 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 }
 
 
+/**
+ * Returns the notification body
+ * Esope : link to object URL directly (not main page)
+ *
+ * @return $string
+ */
+function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params) {
+	
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'thewire')) {
+		$descr = $entity->description;
+		$owner = $entity->getOwnerEntity();
+		$container = $entity->getContainerEntity();
+		// Message title
+		if ($entity->reply) {
+			// have to do this because of poor design of Elgg notification system
+			$parent_post = get_entity(get_input('parent_guid'));
+			if ($parent_post) {
+				$parent_owner = $parent_post->getOwnerEntity();
+			}
+			if (elgg_instanceof($container, 'group')) {
+				$body = sprintf(elgg_echo('thewire:notify:group:reply'), $owner->name, $parent_owner->name, $container->name);
+			} else {
+				$body = sprintf(elgg_echo('thewire:notify:reply'), $owner->name, $parent_owner->name);
+			}
+		} else {
+			if (elgg_instanceof($container, 'group')) {
+				$body = sprintf(elgg_echo('thewire:notify:group:post'), $owner->name, $container->name);
+			} else {
+				$body = sprintf(elgg_echo('thewire:notify:post'), $owner->name);
+			}
+		}
+		// Message body
+		//if (elgg_instanceof($container, 'group')) {} else {}
+		$body .= "\n\n" . $descr . "\n\n";
+		$body .= elgg_echo('thewire') . ": " . $entity->getURL();
+		return $body;
+	}
+	return $returnvalue;
+}
+
+
 

@@ -699,6 +699,8 @@ $fr = array(
 	'esope:thewire:group:placeholder' => "Votre message pour le groupe",
 	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages du Fil du groupe",
 	'esope:thewire:none' => "Aucun message pour le moment",
+	'thewire:notify:group:reply' => "%s a répondu à %s sur le Fil du groupe % :",
+	'thewire:notify:group:post' => "%s publié sur le Fil du groupe % :",
 	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
