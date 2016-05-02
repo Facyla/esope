@@ -700,6 +700,8 @@ $en = array(
 	'esope:thewire:none' => "No group message yet",
 	'thewire:notify:group:reply' => '%s responded to %s on %s\'s wire:',
 	'thewire:notify:group:post' => '%s posted on %s\'s wire:',
+	'thewire:notify:footer:group' => "Group's Wire messages:\n%s",
+	'thewire:notify:footer:user' => "%s's Wire messages:\n%s",
 	'adf_platform:settings:groups:add_publish_tools' => "Add group publications tools on group homepage",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Auto-refresh of group discussions (enable with URL parameter ?autorefresh=auto)",
 	'esope:groups:disable_widgets:public' => "Only when not logged in (public mode)",

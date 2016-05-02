@@ -624,6 +624,11 @@ function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params
 		$descr = $entity->description;
 		$owner = $entity->getOwnerEntity();
 		$container = $entity->getContainerEntity();
+		$user_wire_url = elgg_get_site_url() . 'thewire/owner/' $owner->guid;
+		$group_wire_url = false; // Group Wire URL + false if no group container
+		if (elgg_instanceof($container, 'group')) {
+			$group_wire_url = elgg_get_site_url() . 'thewire/group/' $container->guid;
+		}
 		// Message title
 		if ($entity->reply) {
 			// have to do this because of poor design of Elgg notification system
@@ -647,6 +652,12 @@ function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params
 		//if (elgg_instanceof($container, 'group')) {} else {}
 		$body .= "\n\n" . $descr . "\n\n";
 		$body .= elgg_echo('thewire') . ": " . $entity->getURL();
+		// Container Wire messages link
+		if ($group_wire_url) {
+			$body .= elgg_echo('thewire:notify:footer:group', array($group_wire_url), $language);
+		} else {
+			$body .= elgg_echo('thewire:notify:footer:user', array($user_wire_url), $language);
+		}
 		return $body;
 	}
 	return $returnvalue;
