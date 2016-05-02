@@ -727,31 +727,46 @@ function esope_thewire_prepare_notification($hook, $type, $notification, $params
 	$method = $params['method'];
 	$descr = $entity->description;
 	$container = $entity->getContainerEntity();
-
+	
+	$user_wire_url = elgg_get_site_url() . 'thewire/owner/' $owner->guid;
+	$group_wire_url = false; // Group Wire URL + false if no group container
+	if (elgg_instanceof($container, 'group')) {
+		$group_wire_url = elgg_get_site_url() . 'thewire/group/' $container->guid;
+	}
+	
+	// Message subject
 	$subject = elgg_echo('thewire:notify:subject', array($owner->name), $language);
 	if ($entity->reply) {
 		$parent = thewire_get_parent($entity->guid);
 		if ($parent) {
 			$parent_owner = $parent->getOwnerEntity();
-			if (elgg_instanceof($container, 'group')) {
+			if ($group_wire_url) {
 				$body = sprintf(elgg_echo('thewire:notify:group:reply'), array($owner->name, $parent_owner->name, $container->name), $language);
 			} else {
 				$body = elgg_echo('thewire:notify:reply', array($owner->name, $parent_owner->name), $language);
 			}
 		}
 	} else {
-		if (elgg_instanceof($container, 'group')) {
+		if ($group_wire_url) {
 			$body = sprintf(elgg_echo('thewire:notify:group:post'), array($owner->name, $container->name), $language);
 		} else {
 			$body = elgg_echo('thewire:notify:post', array($owner->name), $language);
 		}
 	}
+	
+	// Message body
 	$body .= "\n\n" . $descr . "\n\n";
 	$body .= elgg_echo('thewire:notify:footer', array($entity->getURL()), $language);
-
+	// Container Wire messages link
+	if ($group_wire_url) {
+		$body .= elgg_echo('thewire:notify:footer:group', array($group_wire_url), $language);
+	} else {
+		$body .= elgg_echo('thewire:notify:footer:user', array($user_wire_url), $language);
+	}
+	
 	$notification->subject = $subject;
 	$notification->body = $body;
-	if (elgg_instanceof($container, 'group')) {
+	if ($group_wire_url) {
 		$notification->summary = elgg_echo('thewire:notify:group:summary', array($container->name, $descr), $language);
 	} else {
 		$notification->summary = elgg_echo('thewire:notify:summary', array($descr), $language);

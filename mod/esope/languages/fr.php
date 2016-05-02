@@ -790,6 +790,8 @@ return array(
 	'thewire:notify:group:reply' => "%s a répondu à %s sur le Fil du groupe % :",
 	'thewire:notify:group:post' => "%s publié sur le Fil du groupe % :",
 	'thewire:notify:group:summary' => 'Nouveau message sur le Fil du groupe %s : %s',
+	'thewire:notify:footer:group' => "Messages du Fil du groupe :\n%s",
+	'thewire:notify:footer:user' => "Messages du Fil de %s :\n%s",
 	'esope:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
 	'esope:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",

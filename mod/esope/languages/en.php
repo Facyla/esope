@@ -789,6 +789,8 @@ return array(
 	'thewire:notify:group:reply' => '%s responded to %s on %s group\'s wire:',
 	'thewire:notify:group:post' => '%s posted on %s group\'s wire:',
 	'thewire:notify:group:summary' => 'New wire post in group %s: %s',
+	'thewire:notify:footer:group' => "Group's Wire messages:\n%s",
+	'thewire:notify:footer:user' => "%s's Wire messages:\n%s",
 	'esope:settings:groups:add_publish_tools' => "Add group publications tools on group homepage",
 	'esope:settings:groups:discussion_autorefresh' => "Auto-refresh of group discussions (enable with URL parameter ?autorefresh=auto)",
 	'esope:groups:disable_widgets:public' => "Only when not logged in (public mode)",
