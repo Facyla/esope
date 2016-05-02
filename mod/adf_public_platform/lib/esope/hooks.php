@@ -656,7 +656,7 @@ function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params
 		if ($group_wire_url) {
 			$body .= elgg_echo('thewire:notify:footer:group', array($group_wire_url), $language);
 		} else {
-			$body .= elgg_echo('thewire:notify:footer:user', array($user_wire_url), $language);
+			$body .= elgg_echo('thewire:notify:footer:user', array($owner-name, $user_wire_url), $language);
 		}
 		return $body;
 	}
