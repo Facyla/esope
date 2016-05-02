@@ -654,9 +654,9 @@ function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params
 		$body .= elgg_echo('thewire') . ": " . $entity->getURL();
 		// Container Wire messages link
 		if ($group_wire_url) {
-			$body .= elgg_echo('thewire:notify:footer:group', array($group_wire_url), $language);
+			$body .= "\n" . elgg_echo('thewire:notify:footer:group', array($group_wire_url), $language);
 		} else {
-			$body .= elgg_echo('thewire:notify:footer:user', array($owner-name, $user_wire_url), $language);
+			$body .= "\n" . elgg_echo('thewire:notify:footer:user', array($owner-name, $user_wire_url), $language);
 		}
 		return $body;
 	}
