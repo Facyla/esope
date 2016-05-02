@@ -286,6 +286,10 @@ function esope_init() {
 	// * requires to add the hook trigger to the email notification handler
 	// elgg_register_plugin_hook_handler('email', 'system', 'esope_block_email_recipients', 100);
 	
+	// The Wire notifications : add support for group containers
+	elgg_unregister_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'thewire_prepare_notification');
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'esope_thewire_prepare_notification');
+	
 	
 	
 	// NEW & REWRITTEN ACTIONS
@@ -319,7 +323,8 @@ function esope_init() {
 	elgg_register_action("admin/remove_user_email", $action_url . "admin/remove_user_email.php", "logged_in");
 	
 	
-	// NEW & REWRITTEN PAGE HANDLERS
+	/* PAGE HANDLERS */
+	// NEW & REWRITTEN
 	// Note : modification de pages de listing (non gérables par des vues)
 	// @dev : Related functions are in lib/esope/page_handlers.php
 	if (elgg_is_active_plugin('categories')) {

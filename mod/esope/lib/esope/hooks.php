@@ -708,3 +708,55 @@ function esope_block_email_recipients($hook, $type, $result, $params) {
 	return $result;
 }
 
+
+/**
+ * Prepare a notification message about a new wire post
+ * ESOPE : add support for group Wire messages
+ *
+ * @param string                          $hook         Hook name
+ * @param string                          $type         Hook type
+ * @param Elgg\Notifications\Notification $notification The notification to prepare
+ * @param array                           $params       Hook parameters
+ * @return Elgg\Notifications\Notification
+ */
+function esope_thewire_prepare_notification($hook, $type, $notification, $params) {
+	$entity = $params['event']->getObject();
+	$owner = $params['event']->getActor();
+	$recipient = $params['recipient'];
+	$language = $params['language'];
+	$method = $params['method'];
+	$descr = $entity->description;
+	$container = $entity->getContainerEntity();
+
+	$subject = elgg_echo('thewire:notify:subject', array($owner->name), $language);
+	if ($entity->reply) {
+		$parent = thewire_get_parent($entity->guid);
+		if ($parent) {
+			$parent_owner = $parent->getOwnerEntity();
+			if (elgg_instanceof($container, 'group')) {
+				$body = sprintf(elgg_echo('thewire:notify:group:reply'), array($owner->name, $parent_owner->name, $container->name), $language);
+			} else {
+				$body = elgg_echo('thewire:notify:reply', array($owner->name, $parent_owner->name), $language);
+			}
+		}
+	} else {
+		if (elgg_instanceof($container, 'group')) {
+			$body = sprintf(elgg_echo('thewire:notify:group:post'), array($owner->name, $container->name), $language);
+		} else {
+			$body = elgg_echo('thewire:notify:post', array($owner->name), $language);
+		}
+	}
+	$body .= "\n\n" . $descr . "\n\n";
+	$body .= elgg_echo('thewire:notify:footer', array($entity->getURL()), $language);
+
+	$notification->subject = $subject;
+	$notification->body = $body;
+	if (elgg_instanceof($container, 'group')) {
+		$notification->summary = elgg_echo('thewire:notify:group:summary', array($container->name, $descr), $language);
+	} else {
+		$notification->summary = elgg_echo('thewire:notify:summary', array($descr), $language);
+	}
+
+	return $notification;
+}
+
