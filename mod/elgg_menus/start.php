@@ -167,7 +167,7 @@ function elgg_menus_prepare_menu_hook($hook, $type, $return, $params) {
 
 /* Récupère la configuration d'un menu
  * $menu_name : nom du menu
- * $key : élément de configuration
+ * $key : élément de configuration spécifique du menu
  * Return : array $config / $config[$key]
  */
 function elgg_menus_get_menu_config($menu_name, $key = false) {

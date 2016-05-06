@@ -16,6 +16,36 @@
 $url = elgg_get_site_url();
 $urlicon = $url . 'mod/esope/img/theme/';
 
+
+// @TODO Use custom menus from theme settings
+if (elgg_is_active_plugin('elgg_menus')) {
+	$lang = get_language();
+	// Main navigation menu
+	$menu = elgg_get_plugin_setting('menu_navigation', 'esope');
+	// Get translated menu, if exists
+	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+	if ($lang_menu) { $menu = $menu . '-' . $lang; }
+	// Compute menu
+	if (!empty($menu)) {
+		$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+	}
+	
+	// Optional public menu : should we use the other one or not ? not sure...
+	$menu_public = elgg_get_plugin_setting('menu_navigation_public', 'esope');
+	if (empty($menu_public)) {
+		$navigation_menu_public = $navigation_menu;
+	} else {
+		// Get translated menu, if exists
+		$lang_menu = elgg_menus_get_menu_config($menu_public . '-' . $lang);
+		if ($lang_menu) { $menu_public = $menu_public . '-' . $lang; }
+		// Compute menu
+		if (!empty($menu_public)) {
+			$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+		}
+	}
+}
+
+
 $site = elgg_get_site_entity();
 $title = $site->name;
 $prev_q = get_input('q', '');
