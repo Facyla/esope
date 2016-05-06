@@ -16,8 +16,6 @@ elgg_register_event_handler('init', 'system', 'elgg_menus_init');
  * Init elgg_menus plugin.
  */
 function elgg_menus_init() {
-	global $CONFIG; // All site useful vars
-	
 	
 	elgg_extend_view('css', 'elgg_menus/css');
 	elgg_extend_view('css/admin', 'elgg_menus/css');
@@ -233,8 +231,10 @@ function elgg_menus_get_system_menus() {
 	// Registered menus at that time
 	$menus = elgg_get_config('menus');
 	// Site reserved menus : can add items, but replacing or removing items cannot be guaranteed
-	if ($menus) foreach ($menus as $name => $menu_items) {
-		if (!empty($name)) $system_menus[$name] = $name;
+	if ($menus) {
+		foreach ($menus as $name => $menu_items) {
+			if (!empty($name)) { $system_menus[$name] = $name; }
+		}
 	}
 	return $system_menus;
 }
@@ -247,32 +247,37 @@ function elgg_menus_get_custom_menus() {
 }
 
 
-/* Sélecteur des menus disponibles
- * $menu_name : menu actuellement selectionné (si nouvelle entrée)
+/* Liste des menus disponibles pour sélecteur
+ * @param string $value : ajoute une valeur (prévu pour nouvelle entrée)
+ * @param bool $empty : ajoute une entrée vide - forcé si pas de $value précisée
+ * @return Array : liste de menus prête pour input/select
  */
-function elgg_menus_menus_opts($menu_name = false) {
+function elgg_menus_menus_opts($value = '', $empty = false) {
+	$menu_opts = array();
+	
+	// Option vide si demandé ou si aucun menu n'a encore été choisi...
+	if ($empty || empty($value)) { $menu_opts[''] = ''; }
+	
 	// Registered menus at that time
 	$system_menus = elgg_menus_get_system_menus();
+	// Menus système
+	if ($system_menus) {
+		foreach ($system_menus as $name) {
+			if (!empty($name)) { $menu_opts[$name] = $name . ' &nbsp; (' . elgg_echo('elgg_menus:system') . ')'; }
+		}
+	}
 	
-	// Menus personnalisés
+	// Custom menus / menus personnalisés
 	$custom_menus = elgg_menus_get_custom_menus();
-
-	// Option vide ssi aucun menu n'a encore été choisi...
-	$menu_opts = array();
-	if (empty($menu_name)) $menu_opts[''] = '';
-	
-	// Menus du système
-	if ($system_menus) foreach ($system_menus as $name) {
-		if (!empty($name)) $menu_opts[$name] = $name . ' &nbsp; (' . elgg_echo('elgg_menus:system') . ')';
-	}
-	
 	// Liste des menus personnalisés
-	if ($custom_menus) foreach ($custom_menus as $name) {
-		if (!empty($name)) $menu_opts[$name] = $name . ' &nbsp; (' . elgg_echo('elgg_menus:custom') . ')';
+	if ($custom_menus) {
+		foreach ($custom_menus as $name) {
+			if (!empty($name)) { $menu_opts[$name] = $name . ' &nbsp; (' . elgg_echo('elgg_menus:custom') . ')'; }
+		}
 	}
 	
-	// Nouveau menu en cours de définition
-	if (!empty($menu_name) && !isset($menu_opts[$menu_name])) { $menu_opts[$menu_name] = elgg_echo('elgg_menus:new') . '&nbsp;: ' . $menu_name; }
+	// Menu sélectionné si pas déjà listé (par ex. nouveau menu en cours de définition)
+	if (!empty($value) && !isset($menu_opts[$value])) { $menu_opts[$value] = elgg_echo('elgg_menus:new') . '&nbsp;: ' . $value; }
 	
 	return $menu_opts;
 }

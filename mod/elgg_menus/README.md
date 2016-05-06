@@ -27,10 +27,10 @@ Submenus are displayed by default. To hide a specific submenu, and display it on
 	.elgg-menu-MENU_NAME .elgg-child-menu { display: none; }
 	.elgg-menu-MENU_NAME li:hover .elgg-child-menu { display: block; }
 
-### Translated menus
-The plugin will detect alternative versions of menus and use them it they exist.
+### Multilingual / translated menus
+The plugin will detect alternative versions of menus and use them if they exist.
 If the translated menu do not exist, it will default to main language 
-When using menu names in theme plugins, use the canonical menu name (without language extension).
+When using menu names in theme plugins, always use the canonical menu name (without language extension).
 
 To provide language-aware versions of menus :
 1. Edit a menu

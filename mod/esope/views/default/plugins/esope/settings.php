@@ -54,8 +54,15 @@ $invite_picker_opt = array(
 		'userpicker' => elgg_echo('esope:invite_picker:userpicker'),
 	);
 
+// Liste des menus disponibles
+if (elgg_is_active_plugin('elgg_menus')) {
+	$all_menu_opts = elgg_menus_menus_opts();
+}
 
 
+
+
+/* UPGRADES */
 // Restore previous values from Elgg 1.8 adf_public_platform plugin
 // 1.8 => 1.9 : always apply if settings_version is not set
 if (empty($plugin->settings_version)) {
@@ -80,7 +87,7 @@ if ($plugin->settings_version != $settings_version) {}
 
 
 
-// SET DEFAULT VALUES
+/* SET DEFAULT VALUES */
 
 /* Unused since new theme w/ Urbilog
 // Banner content
@@ -141,11 +148,13 @@ if (empty($plugin->font6)) { $plugin->font6 = 'Georgia, times, serif'; }
 
 // Footer background color
 //if (empty($plugin->footercolor)) { $plugin->footercolor = '#555555'; }
+
 // Additionnal CSS content - loaded at the end
 if (strlen($plugin->css) == 0) { $plugin->css = elgg_echo('esope:css:default'); }
 
 // Footer
-if (!isset($plugin->footer) || ($plugin->footer == 'RAZ')) {
+/*
+if (!isset($plugin->footer)) {
 	$plugin->footer = '<ul>
 				<li><a href="#">Charte</a></li>
 				<li><a href="#">Mentions légales</a></li>
@@ -154,6 +163,8 @@ if (!isset($plugin->footer) || ($plugin->footer == 'RAZ')) {
 			</ul>
 			<a href="#" target="_blank"><img src="' . $url . 'mod/theme_yourtheme/graphics/logo.png" alt="Logo" /></a>';
 }
+*/
+if (!isset($plugin->menu_footer)) { $plugin->menu_footer = 'footer'; }
 
 if (empty($plugin->opengroups_defaultaccess)) { $plugin->opengroups_defaultaccess = 'groupvis'; }
 if (empty($plugin->closedgroups_defaultaccess)) { $plugin->closedgroups_defaultaccess = 'group'; }
@@ -389,21 +400,31 @@ $(function() {
 			 echo elgg_echo('esope:settings:backgroundimg:help') . '<br />';
 			echo $url . elgg_view('input/text', array('name' => 'params[backgroundimg]', 'value' => $plugin->backgroundimg, 'style' => 'width:50%;')); ?>
 		</p>
-
-		<?php echo '<p><label>' . elgg_echo('esope:settings:footer') . '</label>';
-			echo elgg_view('input/longtext', array('name' => 'params[footer]', 'value' => $plugin->footer)); ?>
-		</p>
-
-		<?php echo '<p><label>' . elgg_echo('esope:settings:analytics') . '</label>';
-			echo elgg_view('input/plaintext', array('name' => 'params[analytics]', 'value' => $plugin->analytics)); ?>
-		</p>
-
-		<?php echo '<p><label>' . elgg_echo('esope:settings:publicpages') . '</label><br />'; 
+		
+		<?php
+		echo '<p><strong>' . elgg_echo('esope:settings:footer') . '</strong><br /><em>' . elgg_echo('esope:settings:footer:details') . '</em></p>';
+		if (elgg_is_active_plugin('elgg_menus')) {
+			// Sélecteur de menus
+			echo '<p><label>' . elgg_echo('esope:settings:footer:menu') . elgg_view('input/select', array('name' => 'params[menu_footer]', 'value' => $plugin->menu_footer, 'options_values' => $all_menu_opts)) . '</label></p>';
+			if (!empty($plugin->menu_footer)) { 
+				$content .= elgg_view('output/url', array(
+					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_footer)), 
+					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_footer}?embed=inner",
+					'class' => 'elgg-lightbox elgg-button elgg-button-action',
+					'style' => "margin:0;",
+				));
+			 }
+		}
+		echo '<p><label>' . elgg_echo('esope:settings:footer:content') . elgg_view('input/longtext', array('name' => 'params[footer]', 'value' => $plugin->footer)) . '</label></p>';
+		
+		echo '<p><label>' . elgg_echo('esope:settings:analytics') . elgg_view('input/plaintext', array('name' => 'params[analytics]', 'value' => $plugin->analytics)) . '</label></p>';
+		
+		echo '<p><label>' . elgg_echo('esope:settings:publicpages') . '</label><br />'; 
 			 echo elgg_echo('esope:settings:publicpages:help'); 
 			 // un nom de pages par ligne demandé (plus clair), mais on acceptera aussi séparé par virgules et point-virgule en pratique
 			echo elgg_view('input/plaintext', array('name' => 'params[publicpages]', 'value' => $plugin->publicpages));
-			?>
-		</p>
+		echo '</p>';
+		?>
 	</div>
 
 
