@@ -54,9 +54,9 @@ $invite_picker_opt = array(
 		'userpicker' => elgg_echo('esope:invite_picker:userpicker'),
 	);
 
-// Liste des menus disponibles
+// Liste des menus disponibles. Valeurs : none option => "no menu at all", empty option => "use theme default" 
 if (elgg_is_active_plugin('elgg_menus')) {
-	$all_menu_opts = elgg_menus_menus_opts();
+	$all_menu_opts = elgg_menus_menus_opts('none', true);
 }
 
 
@@ -360,6 +360,83 @@ $(function() {
 
 
 
+<!-- MENUS //-->
+	<h3><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:config:menus'); ?></h3>
+	<div>
+		<?php
+		// Topbar : set custom menus to replace theme hardcoded menu
+		// none option => "no menu at all", empty option => "use theme default" 
+		if (elgg_is_active_plugin('elgg_menus')) {
+			echo '<p><strong>' . elgg_echo('esope:settings:topbar') . '</strong><br /><em>' . elgg_echo('esope:settings:topbar:details') . '</em></p>';
+			// Sélecteur de menus
+			echo '<p><label>' . elgg_echo('esope:settings:topbar:menu') . elgg_view('input/select', array('name' => 'params[menu_topbar]', 'value' => $plugin->menu_topbar, 'options_values' => $all_menu_opts)) . '</label></p>';
+			if (!empty($plugin->menu_topbar)) {
+				$content .= elgg_view('output/url', array(
+					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_topbar)), 
+					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_topbar}?embed=inner",
+					'class' => 'elgg-lightbox elgg-button elgg-button-action',
+					'style' => "margin:0;",
+				));
+			}
+			// Menu topbar public
+			echo '<p><label>' . elgg_echo('esope:settings:topbar_public:menu') . elgg_view('input/select', array('name' => 'params[menu_topbar_public]', 'value' => $plugin->menu_topbar_public, 'options_values' => $all_menu_opts)) . '</label></p>';
+			if (!empty($plugin->menu_topbar_public)) {
+				$content .= elgg_view('output/url', array(
+					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_topbar_public)), 
+					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_topbar_public}?embed=inner",
+					'class' => 'elgg-lightbox elgg-button elgg-button-action',
+					'style' => "margin:0;",
+				));
+			}
+		}
+		
+		// Main navigation menu
+		// Navigation : set custom menus to replace theme hardcoded menu
+		// none option => "no menu at all", empty option => "use theme default" 
+		if (elgg_is_active_plugin('elgg_menus')) {
+			echo '<p><strong>' . elgg_echo('esope:settings:navigation') . '</strong><br /><em>' . elgg_echo('esope:settings:navigation:details') . '</em></p>';
+			// Sélecteur de menus
+			echo '<p><label>' . elgg_echo('esope:settings:navigation:menu') . elgg_view('input/select', array('name' => 'params[menu_navigation]', 'value' => $plugin->menu_navigation, 'options_values' => $all_menu_opts)) . '</label></p>';
+			if (!empty($plugin->menu_navigation)) {
+				$content .= elgg_view('output/url', array(
+					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_navigation)), 
+					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_navigation}?embed=inner",
+					'class' => 'elgg-lightbox elgg-button elgg-button-action',
+					'style' => "margin:0;",
+				));
+			}
+			// Menu navigation public
+			echo '<p><label>' . elgg_echo('esope:settings:navigation_public:menu') . elgg_view('input/select', array('name' => 'params[menu_navigation_public]', 'value' => $plugin->menu_navigation_public, 'options_values' => $all_menu_opts)) . '</label></p>';
+			if (!empty($plugin->menu_navigation_public)) {
+				$content .= elgg_view('output/url', array(
+					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_navigation_public)), 
+					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_navigation_public}?embed=inner",
+					'class' => 'elgg-lightbox elgg-button elgg-button-action',
+					'style' => "margin:0;",
+				));
+			}
+		}
+		
+		// Footer
+		echo '<p><strong>' . elgg_echo('esope:settings:footer') . '</strong><br /><em>' . elgg_echo('esope:settings:footer:details') . '</em></p>';
+		if (elgg_is_active_plugin('elgg_menus')) {
+			// Sélecteur de menus
+			echo '<p><label>' . elgg_echo('esope:settings:footer:menu') . elgg_view('input/select', array('name' => 'params[menu_footer]', 'value' => $plugin->menu_footer, 'options_values' => $all_menu_opts)) . '</label></p>';
+			if (!empty($plugin->menu_footer)) {
+				$content .= elgg_view('output/url', array(
+					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_footer)), 
+					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_footer}?embed=inner",
+					'class' => 'elgg-lightbox elgg-button elgg-button-action',
+					'style' => "margin:0;",
+				));
+			}
+		}
+		echo '<p><label>' . elgg_echo('esope:settings:footer:content') . elgg_view('input/longtext', array('name' => 'params[footer]', 'value' => $plugin->footer)) . '</label></p>';
+		?>
+	</div>
+
+
+
 <!-- INTERFACE //-->
 	<h3><i class="fa fa-picture-o"></i> <?php echo elgg_echo('esope:config:interface'); ?></h3>
 	<div>
@@ -402,73 +479,6 @@ $(function() {
 		</p>
 		
 		<?php
-		// Topbar : set custom menus to replace theme hardcoded menu
-		// @TODO : we have to add a none option to differenciate "use theme default" from "no menu at all"
-		if (elgg_is_active_plugin('elgg_menus')) {
-			// Sélecteur de menus
-			echo '<p><label>' . elgg_echo('esope:settings:topbar:menu') . elgg_view('input/select', array('name' => 'params[menu_topbar]', 'value' => $plugin->menu_topbar, 'options_values' => $all_menu_opts)) . '</label></p>';
-			if (!empty($plugin->menu_topbar)) {
-				$content .= elgg_view('output/url', array(
-					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_topbar)), 
-					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_topbar}?embed=inner",
-					'class' => 'elgg-lightbox elgg-button elgg-button-action',
-					'style' => "margin:0;",
-				));
-			}
-			// Menu topbar public
-			echo '<p><label>' . elgg_echo('esope:settings:topbar_public:menu') . elgg_view('input/select', array('name' => 'params[menu_topbar_public]', 'value' => $plugin->menu_topbar_public, 'options_values' => $all_menu_opts)) . '</label></p>';
-			if (!empty($plugin->menu_topbar_public)) {
-				$content .= elgg_view('output/url', array(
-					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_topbar_public)), 
-					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_topbar_public}?embed=inner",
-					'class' => 'elgg-lightbox elgg-button elgg-button-action',
-					'style' => "margin:0;",
-				));
-			}
-		}
-		
-		// Main navigation menu
-		// Navigation : set custom menus to replace theme hardcoded menu
-		// @TODO : we have to add a none option to differenciate "use theme default" from "no menu at all"
-		if (elgg_is_active_plugin('elgg_menus')) {
-			// Sélecteur de menus
-			echo '<p><label>' . elgg_echo('esope:settings:navigation:menu') . elgg_view('input/select', array('name' => 'params[menu_navigation]', 'value' => $plugin->menu_navigation, 'options_values' => $all_menu_opts)) . '</label></p>';
-			if (!empty($plugin->menu_navigation)) {
-				$content .= elgg_view('output/url', array(
-					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_navigation)), 
-					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_navigation}?embed=inner",
-					'class' => 'elgg-lightbox elgg-button elgg-button-action',
-					'style' => "margin:0;",
-				));
-			}
-			// Menu navigation public
-			echo '<p><label>' . elgg_echo('esope:settings:navigation_public:menu') . elgg_view('input/select', array('name' => 'params[menu_navigation_public]', 'value' => $plugin->menu_navigation_public, 'options_values' => $all_menu_opts)) . '</label></p>';
-			if (!empty($plugin->menu_navigation_public)) {
-				$content .= elgg_view('output/url', array(
-					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_navigation_public)), 
-					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_navigation_public}?embed=inner",
-					'class' => 'elgg-lightbox elgg-button elgg-button-action',
-					'style' => "margin:0;",
-				));
-			}
-		}
-		
-		// Footer
-		echo '<p><strong>' . elgg_echo('esope:settings:footer') . '</strong><br /><em>' . elgg_echo('esope:settings:footer:details') . '</em></p>';
-		if (elgg_is_active_plugin('elgg_menus')) {
-			// Sélecteur de menus
-			echo '<p><label>' . elgg_echo('esope:settings:footer:menu') . elgg_view('input/select', array('name' => 'params[menu_footer]', 'value' => $plugin->menu_footer, 'options_values' => $all_menu_opts)) . '</label></p>';
-			if (!empty($plugin->menu_footer)) {
-				$content .= elgg_view('output/url', array(
-					'text' => elgg_echo('elgg_menus:preview', array($plugin->menu_footer)), 
-					'href' => elgg_get_site_url() . "elgg_menus/preview/{$plugin->menu_footer}?embed=inner",
-					'class' => 'elgg-lightbox elgg-button elgg-button-action',
-					'style' => "margin:0;",
-				));
-			}
-		}
-		echo '<p><label>' . elgg_echo('esope:settings:footer:content') . elgg_view('input/longtext', array('name' => 'params[footer]', 'value' => $plugin->footer)) . '</label></p>';
-		
 		echo '<p><label>' . elgg_echo('esope:settings:analytics') . elgg_view('input/plaintext', array('name' => 'params[analytics]', 'value' => $plugin->analytics)) . '</label></p>';
 		
 		echo '<p><label>' . elgg_echo('esope:settings:publicpages') . '</label><br />'; 

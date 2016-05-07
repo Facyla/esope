@@ -7,6 +7,7 @@ return array(
 	'admin:appearance:menus' => "Gestion des menus",
 	
 	'elgg_menus:new' => "Nouveau menu",
+	'elgg_menus:none' => "Aucun menu",
 	'elgg_menus:name' => "Nom du menu",
 	'elgg_menus:name:details' => "Si vous modifiez le nom d'un menu existant, un nouveau menu sera créé avec les élements ci-dessous.",
 	'elgg_menus:section' => "Section",

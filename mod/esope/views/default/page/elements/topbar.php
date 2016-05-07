@@ -13,36 +13,51 @@ $site = elgg_get_site_entity();
 $title = $site->name;
 $prev_q = get_input('q', '');
 
-// @TODO Use custom menus from theme settings
+
+/* Use custom menus from theme settings
+ * Accepted values :
+ * empty => use hardcoded theme menu (below)
+ * 'none' => do not display menu
+ * any other value => display corresponding menu (using translations if available)
+ * 
+ * Test to display menu : $menu => false = do not use menu | 'none' = empty menu | $name = display menu $name
+ * if ($menu && ($menu != 'none')) { echo $topbar_menu; }
+ */
+$topbar_menu = false;
+$topbar_menu_public = false;
 if (elgg_is_active_plugin('elgg_menus')) {
 	$lang = get_language();
 	// Main topbar menu
 	$menu = elgg_get_plugin_setting('menu_topbar', 'esope');
-	// Get translated menu, if exists
-	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
-	if ($lang_menu) { $menu = $menu . '-' . $lang; }
-	// Compute menu
-	if (!empty($menu)) {
-		$topbar_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+	if (empty($menu)) {
+		$menu = false;
+	} else {
+		if ($menu != 'none') {
+			// Get translated menu, if exists
+			$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+			if ($lang_menu) { $menu = $menu . '-' . $lang; }
+			// Compute menu
+			$topbar_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-topbar elgg-menu-topbar-alt elgg-menu-hz', 'id' => 'menu-topbar'));
+		}
 	}
-	
-	// Optional public menu : should we use the other one or not ? not sure...
+	// Public menu
 	$menu_public = elgg_get_plugin_setting('menu_topbar_public', 'esope');
 	if (empty($menu_public)) {
-		$topbar_menu_public = $topbar_menu;
+		$menu_public = false;
 	} else {
-		// Get translated menu, if exists
-		$lang_menu = elgg_menus_get_menu_config($menu_public . '-' . $lang);
-		if ($lang_menu) { $menu_public = $menu_public . '-' . $lang; }
-		// Compute menu
-		if (!empty($menu_public)) {
-			$topbar_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+		if ($menu_public != 'none') {
+			// Get translated menu, if exists
+			$lang_menu = elgg_menus_get_menu_config($menu_public . '-' . $lang);
+			if ($lang_menu) { $menu_public = $menu_public . '-' . $lang; }
+			// Compute menu
+			$topbar_menu_public = elgg_view_menu($menu_public, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-topbar elgg-menu-topbar-alt elgg-menu-hz', 'id' => 'menu-topbar'));
 		}
 	}
 }
 
 
-if (elgg_is_logged_in()) {
+// Compute only if it will be displayed...
+if (elgg_is_logged_in() && !$menu) {
 	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
@@ -106,64 +121,86 @@ if (elgg_is_active_plugin('language_selector')) {
 	$language_selector = elgg_view('language_selector/default');
 }
 
-?>
 
-<div class="is-not-floatable">
-	<?php
-	// TOPBAR MENU : personal tools and administration
+
+// Display topbar
+echo '<div class="is-not-floatable">';
+	
+	// TOPBAR LOGGED IN MENU : personal tools and administration
 	if (elgg_is_logged_in()) {
-		?>
-		<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
-		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
-			<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>" id="esope-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
-			<?php if (elgg_is_active_plugin('messages')) { ?>
-			<li id="msg">
-				<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
-				<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
-			</li>
-			<?php } ?>
-			<li id="man">
-				<a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a>
-				<?php echo $friendrequests; ?>
-			</li>
-			<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
-					<!--
-			<li><?php echo elgg_echo('esope:myprofile'); ?></a>
-					<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
-					<li><a href="<?php echo $url . 'avatar/edit/' . $ownusername . '/edit'; ?>">Changer la photo du profil</a></li>
-			</li>
-					//-->
-			<?php if (elgg_is_admin_logged_in()) { ?>
-				<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
-			<?php } ?>
+		// Use custom menu, or theme menu
+		if ($menu) {
+			if ($menu != 'none') {
+				echo '<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> ' . elgg_echo('esope:menu:topbar') . '</div>';
+				echo $topbar_menu;
+				echo '<div class="clearfloat"></div>';
+			}
+		} else {
+			echo '<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> ' . elgg_echo('esope:menu:topbar') . '</div>';
+			?>
+			<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
+				<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>" id="esope-profil"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
+				<?php if (elgg_is_active_plugin('messages')) { ?>
+				<li id="msg">
+					<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
+					<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
+				</li>
+				<?php } ?>
+				<li id="man">
+					<a href="<?php echo $url . 'friends/' . $ownusername; ?>"><?php echo elgg_echo('friends'); ?></a>
+					<?php echo $friendrequests; ?>
+				</li>
+				<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
+						<!--
+				<li><?php echo elgg_echo('esope:myprofile'); ?></a>
+						<li><a href="<?php echo $url . 'profile/' . $ownusername . '/edit'; ?>">Compléter mon profil</a></li>
+						<li><a href="<?php echo $url . 'avatar/edit/' . $ownusername . '/edit'; ?>">Changer la photo du profil</a></li>
+				</li>
+						//-->
+				<?php if (elgg_is_admin_logged_in()) { ?>
+					<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
+				<?php } ?>
 			
+				<?php
+				$helplink = elgg_get_plugin_setting('helplink', 'esope');
+				//if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
+				if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('esope:help') . '</a></li>';
+				?>
+				<?php if ($loginas_logout) { echo $loginas_logout; } ?>
+				<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+				<?php
+				if ($language_selector) {
+					echo '<li class="language-selector">' . $language_selector . '</li>';
+				}
+				?>
+			</ul>
 			<?php
-			$helplink = elgg_get_plugin_setting('helplink', 'esope');
-			//if (empty($helplink)) $helplink = 'pages/view/182/premiers-pas';
-			if (!empty($helplink)) echo '<li id="help"><a href="' . $url . $helplink . '"><i class="fa fa-question help icon"></i>' . elgg_echo('esope:help') . '</a></li>';
-			?>
-			<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-			<li id="logout"><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out sign out icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
-			<?php
-			if ($language_selector) {
-				echo '<li class="language-selector">' . $language_selector . '</li>';
-			}
-			?>
-		</ul>
-		<?php
+			echo '<div class="clearfloat"></div>';
+		}
+		
+	// TOPBAR PUBLIC MENU
 	} else {
-		// @TODO use drop-down login without the button UI (or re-designed)
-		//echo elgg_view('core/account/login_dropdown');
-		echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">';
-			echo '<li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('esope:loginregister') . '</a></li>';
-			if ($language_selector) {
-				echo '<li class="language-selector">' . $language_selector . '</li>';
+		if ($menu_public) {
+			if ($menu_public != 'none') {
+				echo '<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> ' . elgg_echo('esope:menu:topbar') . '</div>';
+				echo $topbar_menu_public;
+				echo '<div class="clearfloat"></div>';
 			}
-		echo '</ul>';
+		} else {
+			// @TODO use drop-down login without the button UI (or re-designed)
+			//echo elgg_view('core/account/login_dropdown');
+			echo '<div class="menu-topbar-toggle"><i class="fa fa-user fa-menu"></i> ' . elgg_echo('esope:menu:topbar') . '</div>';
+			echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">';
+				echo '<li><a href="' . $url . '"><i class="fa fa-sign-in sign in icon"></i>' . elgg_echo('esope:loginregister') . '</a></li>';
+				if ($language_selector) {
+					echo '<li class="language-selector">' . $language_selector . '</li>';
+				}
+			echo '</ul>';
+			echo '<div class="clearfloat"></div>';
+		}
 	}
 	?>
 	
-	<div class="clearfloat"></div>
 	<h1>
 		<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('esope:gotohomepage'); ?>">
 			<?php echo elgg_get_plugin_setting('headertitle', 'esope'); ?>

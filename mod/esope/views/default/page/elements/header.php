@@ -3,6 +3,7 @@
  * See page/elements/topbar view for topbar content
  *
  * The main navigation menu is defined and customized here
+ * Theme settings allow to choose between theme hardcoded menu (dynamic), or a custom (but more static) menu
  *
  * Header can be broken in 2 separate blocks by breaking out the enclosing div, then re-opening a new one
  * 	<div class="elgg-page-header">
@@ -17,30 +18,44 @@ $url = elgg_get_site_url();
 $urlicon = $url . 'mod/esope/img/theme/';
 
 
-// @TODO Use custom menus from theme settings
+
+/* @TODO Use custom menus from theme settings
+ * Accepted values :
+ * empty => use hardcoded theme menu (below)
+ * 'none' => do not display menu
+ * any other value => display corresponding menu (using translations if available)
+ * 
+ * Test to display menu : $menu => false = do not use menu | 'none' = empty menu | $name = display menu $name
+ * if ($menu && ($menu != 'none')) { echo $navigation_menu; }
+ */
+$topbar_menu = false;
+$topbar_menu_public = false;
 if (elgg_is_active_plugin('elgg_menus')) {
 	$lang = get_language();
 	// Main navigation menu
 	$menu = elgg_get_plugin_setting('menu_navigation', 'esope');
-	// Get translated menu, if exists
-	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
-	if ($lang_menu) { $menu = $menu . '-' . $lang; }
-	// Compute menu
-	if (!empty($menu)) {
-		$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+	if (empty($menu)) {
+		$menu = false;
+	} else {
+		if ($menu != 'none') {
+			// Get translated menu, if exists
+			$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+			if ($lang_menu) { $menu = $menu . '-' . $lang; }
+			// Compute menu
+			$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-navigation elgg-menu-navigation-alt elgg-menu-hz'));
+		}
 	}
-	
-	// Optional public menu : should we use the other one or not ? not sure...
+	// Main navigation public menu
 	$menu_public = elgg_get_plugin_setting('menu_navigation_public', 'esope');
 	if (empty($menu_public)) {
-		$navigation_menu_public = $navigation_menu;
+		$menu_public = false;
 	} else {
-		// Get translated menu, if exists
-		$lang_menu = elgg_menus_get_menu_config($menu_public . '-' . $lang);
-		if ($lang_menu) { $menu_public = $menu_public . '-' . $lang; }
-		// Compute menu
-		if (!empty($menu_public)) {
-			$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+		if ($menu_public != 'none') {
+			// Get translated menu, if exists
+			$lang_menu = elgg_menus_get_menu_config($menu_public . '-' . $lang);
+			if ($lang_menu) { $menu_public = $menu_public . '-' . $lang; }
+			// Compute menu
+			$navigation_menu_public = elgg_view_menu($menu_public, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-navigation elgg-menu-navigation-alt elgg-menu-hz'));
 		}
 	}
 }
@@ -50,7 +65,8 @@ $site = elgg_get_site_entity();
 $title = $site->name;
 $prev_q = get_input('q', '');
 
-if (elgg_is_logged_in()) {
+// Compute only if it will be displayed...
+if (elgg_is_logged_in() && !$menu) {
 	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
@@ -59,7 +75,7 @@ if (elgg_is_logged_in()) {
 	$groups = '';
 	if (elgg_is_active_plugin('groups')) {
 		// Liste de ses groupes
-		$options = array( 'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => 99, 'order_by' => 'time_created asc');
+		$options = array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => 99, 'order_by' => 'time_created asc');
 		// Cas des sous-groupes : listing avec marqueur de sous-groupe
 		if (elgg_is_active_plugin('au_subgroups')) {
 			// Si les sous-groupes sont activés : listing des sous-groupes sous les groupes, et ordre alpha si demandé
@@ -125,12 +141,20 @@ if (elgg_is_logged_in()) {
 // MAIN NAVIGATION MENU
 if (elgg_is_logged_in()) {
 	
-	// Close enclosing divs and reopen new ones
-	//echo '	</div></div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
-	echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
-	
+	// NAVIGATION LOGGED IN MENU
+	if ($menu) {
+		if ($menu != 'none') {
+			// Close enclosing divs and reopen new ones
+			echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
+			echo '<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:navigation') . '</div>';
+			echo $navigation_menu;
+			echo '<div class="clearfloat"></div></div>';
+		}
+	} else {
+		// Close enclosing divs and reopen new ones
+		echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
+		echo '<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:navigation') . '</div>';
 		?>
-		<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
 		<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
 			<li class="home"><a href="<?php echo $url; ?>" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('esope:homepage'); ?></a>
 				<?php if (elgg_is_active_plugin('dashboard')) { ?>
@@ -169,21 +193,29 @@ if (elgg_is_logged_in()) {
 			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
 				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'event_calendar/list'; ?>"><?php echo elgg_echo('esope:event_calendar'); ?></a></li>
 			<?php } ?>
-	
+		
 		</ul>
+		
+		<?php
+		if (elgg_is_active_plugin('search')) {
+			$search_text = elgg_echo('esope:search:defaulttext');
+			echo '<form action="' . $url . 'search" method="get">';
+				echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
+				echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text));
+				echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
+			echo '</form>';
+		}
+		echo '<div class="clearfloat"></div></div>';
+	}
 	
-			<?php
-			if (elgg_is_active_plugin('search')) {
-				$search_text = elgg_echo('esope:search:defaulttext');
-				echo '<form action="' . $url . 'search" method="get">';
-					echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
-					echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'value' => $prev_q, 'placeholder' => $search_text));
-					echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
-				echo '</form>';
-			}
-			?>
-			<div class="clearfloat"></div>
-	</div>
-	<?php
+// NAVIGATION PUBLIC MENU
+} else {
+	if ($menu_public && ($menu_public != 'none')) {
+		echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
+		echo '<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:navigation') . '</div>';
+		echo $navigation_menu_public;
+		echo '<div class="clearfloat"></div></div>';
+	} else {
+	}
 }
 

@@ -248,7 +248,7 @@ function elgg_menus_get_custom_menus() {
 
 
 /* Liste des menus disponibles pour sélecteur
- * @param string $value : ajoute une valeur (prévu pour nouvelle entrée)
+ * @param string $value : ajoute une valeur (prévu pour nouvelle entrée ou valeur spéciale, par ex. 'none')
  * @param bool $empty : ajoute une entrée vide - forcé si pas de $value précisée
  * @return Array : liste de menus prête pour input/select
  */
@@ -277,7 +277,13 @@ function elgg_menus_menus_opts($value = '', $empty = false) {
 	}
 	
 	// Menu sélectionné si pas déjà listé (par ex. nouveau menu en cours de définition)
-	if (!empty($value) && !isset($menu_opts[$value])) { $menu_opts[$value] = elgg_echo('elgg_menus:new') . '&nbsp;: ' . $value; }
+	if (!empty($value) && !isset($menu_opts[$value])) {
+		if ($value == 'none') {
+			$menu_opts[$value] = elgg_echo('elgg_menus:none') . '&nbsp;: ' . $value;
+		} else {
+			$menu_opts[$value] = elgg_echo('elgg_menus:new') . '&nbsp;: ' . $value;
+		}
+	}
 	
 	return $menu_opts;
 }

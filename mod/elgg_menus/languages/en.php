@@ -7,6 +7,7 @@ return array(
 	'admin:appearance:menus' => "Custom Menus Editor",
 	
 	'elgg_menus:new' => "New menu",
+	'elgg_menus:none' => "No menu",
 	'elgg_menus:name' => "Menu name",
 	'elgg_menus:name:details' => "If you edit an existing pre-defined menu, a new menu will be created with the elements below.",
 	'elgg_menus:section' => "Section",
