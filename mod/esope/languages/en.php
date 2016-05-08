@@ -3,7 +3,11 @@
  * English strings
  */
 
-$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
+$url = elgg_get_site_url();
+$site = elgg_get_site_entity();
+$site_email = $site->email;
+
+$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . $url . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
 
 return array(
 	
@@ -268,12 +272,13 @@ return array(
 	
 	// New group
 	// @TODO This text should definitely be adapted to your own install - HTML can be used here ; 
-	// use $CONFIG->url for site install URL, $CONFIG->email for site email
+	// use $url for site install URL, $site_email for site email
 	'groups:newgroup:disclaimer' => "<blockquote><strong>Group creation rules:</strong> <em>Please refer to General User Conditions.</em></blockquote>",
 	'groups:search:regular' => "Group search",
 	'groups:regularsearch' => "Name or keyword",
 	'search:group:go' => "Find a group",
 	'members:search' => "Find a member",
+	'group_profile' => "Group profile",
 	
 	// 
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> All fields are required",
@@ -322,7 +327,7 @@ return array(
 	'esope:headertitle' => "Site title (clickable, in header)",
 	'esope:headertitle:help' => "To increase size of caracters, wrap them with span. Use span with 'minuscule' class to lowercase&nbsp;: &lt;span&gt;T&lt;/span&gt;itle.&lt;span class=\"minuscule\"&gt;en&lt;/span&gt;",
 	'esope:header:content' => "Custom header code (free HTML). Reset to initial configuration by replacing content by \"RAZ\" (in HTML mode).",
-	'esope:header:default' => '<div id="easylogo"><a href="/"><img src="' . $CONFIG->url . '/mod/esope/img/logo.gif" alt="Site logo"  /></a></div>',
+	'esope:header:default' => '<div id="easylogo"><a href="/"><img src="' . $url . '/mod/esope/img/logo.gif" alt="Site logo"  /></a></div>',
 	'esope:header:height' => "Height of header banner (use same value as header background image height - or lower)",
 	'esope:header:background' => "Background image URL (display under the top level menu)",
 	'esope:footer:color' => "Footer background color",
@@ -407,7 +412,7 @@ return array(
 	'esope:cmspages:notactivated' => "Caution : cmspages plugin not activated. Please activate or change theme settings.",
 	'esope:settings:replace_home' => "Replace default logged in homepage by a user dashboard",
 	'esope:settings:firststeps' => "Firsts steps page GUID",
-	'esope:settings:firststeps:help' => "This page will display the first month for new users. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>. Note: must be of 'page' subtype.",
+	'esope:settings:firststeps:help' => "This page will display the first month for new users. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . $url . "/pages/<strong>GUID</strong>/premiers-pas</em>. Note: must be of 'page' subtype.",
 	'esope:settings:header' => "Header content",
 	'esope:settings:header:help' => "If defined, the header defined here replaces the site title. The header will display between the top menu and the navigation menu.",
 	'esope:settings:topbar' => "Topbar menu",
@@ -661,7 +666,6 @@ return array(
 	'esope:thewire:charleft' => "left",
 	'esope:thewire:access' => "Access : ",
 	'esope:homewire:msg' => "Would you share an idea or info ?",
-	'members:search' => "Members search",
 	
 	'grouptype:default' => "Default",
 	'grouptype:thematic' => "Thematics",

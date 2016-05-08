@@ -3,7 +3,11 @@
  * French strings
  */
 
-$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . elgg_get_site_url() . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
+$url = elgg_get_site_url();
+$site = elgg_get_site_entity();
+$site_email = $site->email;
+
+$footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . $url . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
 return array(
 	
@@ -271,12 +275,13 @@ return array(
 	
 	// New group
 	// @TODO : Ce texte devrait être adapté à votre site !
-	// use elgg_get_site_url() for site install URL, $CONFIG->site->email for site email
-	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $CONFIG->site->email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . elgg_get_site_url() . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $CONFIG->site->name . " »</a></em></blockquote>",
+	// use $url for site install URL, $site_email for site email
+	'groups:newgroup:disclaimer' => "<blockquote><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:" . $site_email . "\" >se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"" . $url . "cmspages/view/charte\">règles d’utilisation et de création de contenus du réseau « " . $site->name . " »</a></em></blockquote>",
 	'groups:search:regular' => "Recherche de groupe",
 	'groups:regularsearch' => "Nom ou mot-clef",
 	'search:group:go' => "Rechercher un groupe",
 	'members:search' => "Rechercher un membre",
+	'group_profile' => "Présentation du groupe",
 	
 	// 
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
@@ -409,7 +414,7 @@ return array(
 	'esope:cmspages:notactivated' => "Attention : le plugin cmspages n'est pas activé. Veuillez l'activer ou changer les réglages du thème.",
 	'esope:settings:replace_home' => "Remplacer la page d'accueil connectée par un tableau de bord personnalisable",
 	'esope:settings:firststeps' => "GUID de la page des Premiers Pas (ou page d'aide au démarrage)",
-	'esope:settings:firststeps:help' => "Cette page s'affichera dans un bloc de la page d'accueil dépliable qui restera ouvert pendant un mois pour les nouveaux membres. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . elgg_get_site_url() . "/pages/<strong>GUID</strong>/premiers-pas</em>",
+	'esope:settings:firststeps:help' => "Cette page s'affichera dans un bloc de la page d'accueil dépliable qui restera ouvert pendant un mois pour les nouveaux membres. Le GUID de la page est le nombre indiqué dans l'adresse de la page à utiliser : <em>" . $url . "/pages/<strong>GUID</strong>/premiers-pas</em>",
 	'esope:settings:header' => "Contenu de l'entête",
 	'esope:settings:header:help' => "Si défini, l'entête défini dans ce champs remplace le titre du site. L'entête s'affiche entre le menu supérieur et le menu de navigation.",
 	'esope:settings:topbar' => "Menu supérieur",
@@ -663,7 +668,6 @@ return array(
 	'esope:thewire:charleft' => "max",
 	'esope:thewire:access' => "Accès : ",
 	'esope:homewire:msg' => "Un message ou une info à partager ?",
-	'members:search' => "Recherche de membres",
 	
 	'grouptype:default' => "Génériques",
 	'grouptype:thematic' => "Thématiques",

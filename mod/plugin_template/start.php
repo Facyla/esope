@@ -66,6 +66,7 @@ function plugin_template_init() {
 // Include page handlers, hooks and events functions
 include_once(elgg_get_plugins_path() . 'plugin_template/lib/plugin_template/hooks.php');
 include_once(elgg_get_plugins_path() . 'plugin_template/lib/plugin_template/events.php');
+include_once(elgg_get_plugins_path() . 'plugin_template/lib/plugin_template/functions.php');
 
 
 // Page handler
