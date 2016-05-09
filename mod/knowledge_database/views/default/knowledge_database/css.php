@@ -17,6 +17,7 @@
 .knowledge_database-result-meta { float: right; font-size: 12px; text-align:right; }
 .knowledge_database-result-meta .fa { font-size: 3ex; }
 
+
 /* Search form */
 #kdb-search-form fieldset { margin: 1ex 0; padding:1ex; border:1px solid; }
 #kdb-search-form legend { padding: 0 1ex; }
@@ -45,4 +46,8 @@
 .knowledge_database-edit-field input[type="text"] { width:30ex; }
 .knowledge_database-field { border:1px solid grey; border-radius: 5px; padding: 0.5ex 1ex; }
 
+
+/* Input / output rendering */
+.knowledge_database-fieldset { margin: 1rem 0; padding: 1rem; border: 1px solid #CCC; }
+.knowledge_database-fieldset legend { padding: 0 0.5rem; border: 1px solid #CCC; }
 

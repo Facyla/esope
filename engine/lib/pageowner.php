@@ -299,8 +299,6 @@ function page_owner_boot() {
 
 		elgg_set_context($context);
 	}
-	$filename = $_SERVER['SCRIPT_FILENAME'];
-	error_log("TEST 3 $context / $filename");
 }
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
