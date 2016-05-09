@@ -268,17 +268,22 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 	$fieldset_fields = array();
 	foreach($fields as $name => $field) {
 		if ($mode == "edit") {
+			// Check if we are allowed to edit this
 			if (!knowledge_database_edit_field($field, $role, $entity)) { continue; }
 			$view = 'input';
 		} else {
+			// Check if we are allowed to read this
 			if (!knowledge_database_read_field($field, $role, $entity)) { continue; }
 			$view = 'output';
 		}
 		$field_content = '';
 		
+		// Skip field display in view mode if there is no value
+		if (($mode == 'view') && $entity && empty(implode('', $entity->{$name}))) { continue; }
+		
 		// Build field params
 		$fieldset = $field['category'];
-		if (empty($fieldset)) $fieldset = 'default';
+		if (empty($fieldset)) { $fieldset = 'default'; }
 		$output_params = $field['params'];
 		$output_params['name'] = $name;
 		// Set default if not set
@@ -287,35 +292,60 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		} else {
 			$output_params['value'] = $field['default'];
 		}
-		// Add autocomplete script
-		if (($view == 'input') && ($field['type'] == 'text') && $field['params']['autocomplete']) {
-			$field_content .= elgg_view('input/add_autocomplete', array('name' => $name, 'autocomplete-data' => esope_get_meta_values($name)));
-		}
-		// Switch dropdown input to multiselect if multiple enabled
-		if (($view == 'input') && ($field['type'] == 'dropdown') && $field['params']['multiple']) {
-			$field['type'] == 'multiselect';
+		// Use correct select input
+		if (in_array($field['type'], array('dropdown', 'pulldown'))) { $field['type'] = 'select'; }
+		if ($view == 'input') {
+			// Add autocomplete script
+			if (($field['type'] == 'text') && $field['params']['autocomplete']) {
+				$field_content .= elgg_view('input/add_autocomplete', array('name' => $name, 'autocomplete-data' => esope_get_meta_values($name)));
+			}
+			// Switch select input to multiselect if multiple enabled
+			if (($field['type'] == 'select') && $field['params']['multiple'] && elgg_view_exists('input/multiselect')) {
+				$field['type'] = 'multiselect';
+			}
+			if (($field['type'] == 'select') && $entity && (sizeof($entity->{$name}) > 1)) {
+				$field['type'] = 'multiselect';
+			}
+			if ($field['type'] == 'tags') {
+				register_error("Tags view will break ! Please ask an admin to correct the Knowledge Database configuration !");
+				continue;
+			}
+		} else {
+			// View mode
+			if (in_array($field['type'], array('select', 'multiselect'))) {
+				$field['type'] = 'text';
+				if ($field['params']['options_values']) {
+					$translated_values = array();
+					foreach($entity->{$name} as $k) {
+						$translated_values[] = $field['params']['options_values'][$k];
+					}
+					$output_params['value'] = implode(', ', $translated_values);
+				} else {
+					$output_params['value'] = implode(', ', $entity->{$name});
+				}
+			}
 		}
 		
 		// Render input/output field
-		$title = $field['title'];
-		if (empty($title)) $title = elgg_echo("knowledge_database:field:$name");
-		if ($title == "knowledge_database:field:$name") $title = $name;
-		$field_content .= '<p>';
-		$field_content .= '<strong>' . $title . '&nbsp;:</strong> ';
-		if ($field['type'] == 'tags') {
-			register_error("Tags view will break ! Please ask an admin to correct the Knowledge Database configuration !");
-			continue;
-		}
-		if (elgg_view_exists("$view/{$field['type']}")) {
-			$field_content .= elgg_view("$view/{$field['type']}", $output_params);
-		} else {
+		//$field_content .= "<br />{$field['type']} / {$field['params']['multiple']} => " . implode('|', $output_params['value']);
+		if (!elgg_view_exists("$view/{$field['type']}")) {
 			register_error("View $view/{$field['type']} does not exist. Please ask an admin to correct the Knowledge Database configuration !");
 			continue;
 		}
-		$field_help = elgg_echo("knowledge_database:field:$name:details");
-		if ($field_help != "knowledge_database:field:$name:details") $field_content .= '<br /><em>' . $field_help . '</em>';
+		$title = $field['title'];
+		if (empty($title)) { $title = elgg_echo("knowledge_database:field:$name"); }
+		if ($title == "knowledge_database:field:$name") { $title = $name; }
+		$field_content .= '<p>';
+		$field_content .= '<strong>' . $title . '&nbsp;:</strong> ';
+		// Render the view
+		$field_content .= elgg_view("$view/{$field['type']}", $output_params);
+		// Add input hints
+		if ($view == 'input') {
+			$field_help = elgg_echo("knowledge_database:field:$name:details");
+			if ($field_help != "knowledge_database:field:$name:details") { $field_content .= '<br /><em>' . $field_help . '</em>'; }
+		}
 		$field_content .= '</p>';
-		// Content renderer depends on field type
+		// Content special renderer depends on field type
 		switch($field['type']) {
 			case 'file':
 				if ($entity && !empty($entity->{$name})) {

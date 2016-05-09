@@ -25,10 +25,13 @@ if ($entity) {
 	$new_metadata = get_input('new_metadata', false);
 	$new_metadata = str_replace(array("\n", "\r", "\t"), "\n", $new_metadata);
 	$new_metadata = explode("\n", $new_metadata);
+	$skip_fields = array();
 	foreach ($new_metadata as $new_field) {
 		$new_field = explode("=", $new_field);
 		$field = trim($new_field[0]);
 		$new_value = trim($new_field[1]);
+		// Store updated field to avoid errors when updating properties
+		$skip_metadata[] = $field;
 		if (!empty($field) && !empty($new_value)) {
 			// Edit only manually added values
 			if (!in_array($field, $edit_fields)) {
@@ -44,6 +47,7 @@ if ($entity) {
 				continue;
 			}
 			$entity->$field = $new_value;
+			system_message("Metadata updated : $field => $new_value");
 		}
 	}
 	
@@ -54,6 +58,9 @@ if ($entity) {
 		// Or at least not that way : use DB queries if you really need to change type, subtype or  guid...
 		if (in_array($field, $non_editable)) {
 			register_error("Non-editable field : $field");
+			continue;
+		}
+		if (in_array($field, $skip_metadata)) {
 			continue;
 		}
 		
@@ -119,7 +126,7 @@ if ($entity) {
 		
 		// Messages report
 		if ($done) system_message($field . ' updated : ' . $old_value . ' => ' . $new_value);
-		else register_error("Something went wrong while updating : $field / $new_value");
+		//else register_error("Something went wrong while updating : $field / $new_value");
 	}
 	$entity->save();
 	
