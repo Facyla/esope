@@ -257,6 +257,8 @@ Roles can be passed as a parameter to the rendering function, and can be derived
      - mode : edit or view, determines the rendering views (input/output)
      - entity : the entity these fields apply to, if any (values and workflows states)
  */
+/* @TODO : rendre certains outputs cliquables, pour renvoyer sur la recherche : http://localhost/esope_1.12/kdb?meta=value&...
+ */
 function knowledge_database_render_fields($fields = array(), $params = array()) {
 	$url = elgg_get_site_url();
 	$entity = elgg_extract('entity', $params, false);
@@ -278,8 +280,9 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		}
 		$field_content = '';
 		
+		
 		// Skip field display in view mode if there is no value
-		if (($mode == 'view') && $entity && empty(implode('', $entity->{$name}))) { continue; }
+		if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty(implode('', $entity->{$name}))))) { continue; }
 		
 		// Build field params
 		$fieldset = $field['category'];
@@ -303,9 +306,11 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 			if (($field['type'] == 'select') && $field['params']['multiple'] && elgg_view_exists('input/multiselect')) {
 				$field['type'] = 'multiselect';
 			}
+			/*
 			if (($field['type'] == 'select') && $entity && (sizeof($entity->{$name}) > 1)) {
 				$field['type'] = 'multiselect';
 			}
+			*/
 			if ($field['type'] == 'tags') {
 				register_error("Tags view will break ! Please ask an admin to correct the Knowledge Database configuration !");
 				continue;
@@ -313,21 +318,32 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		} else {
 			// View mode
 			if (in_array($field['type'], array('select', 'multiselect'))) {
+				if (!is_array($output_params['value'])) { $output_params['value'] = array($output_params['value']); }
 				$field['type'] = 'text';
 				if ($field['params']['options_values']) {
 					$translated_values = array();
-					foreach($entity->{$name} as $k) {
-						$translated_values[] = $field['params']['options_values'][$k];
+					if (is_array($entity->{$name})) {
+						foreach($entity->{$name} as $k) {
+							if (isset($field['params']['options_values'][$k])) {
+								$translated_values[] = $field['params']['options_values'][$k];
+							} else {
+								$translated_values[] = $k;
+							}
+						}
+					} else {
+						$translated_values[] = $field['params']['options_values'][$entity->{$name}];
 					}
-					$output_params['value'] = implode(', ', $translated_values);
+					$output_params['value'] = $translated_values;
 				} else {
-					$output_params['value'] = implode(', ', $entity->{$name});
+					$output_params['value'] = $entity->{$name};
 				}
+			}
+			if (is_array($output_params['value']) && in_array($field['type'], array('text', 'date'))) {
+				$output_params['value'] = implode(', ', $output_params['value']);
 			}
 		}
 		
 		// Render input/output field
-		//$field_content .= "<br />{$field['type']} / {$field['params']['multiple']} => " . implode('|', $output_params['value']);
 		if (!elgg_view_exists("$view/{$field['type']}")) {
 			register_error("View $view/{$field['type']} does not exist. Please ask an admin to correct the Knowledge Database configuration !");
 			continue;
@@ -476,6 +492,21 @@ function knowledge_database_get_kdb_fields($owner = false, $context = false) {
 	// Return fields that can be used in this context
 	return $fields;
 }
+
+function knowledge_database_get_kdb_fields_config($owner = false, $context = false) {
+	$fields = knowledge_database_get_kdb_fields($owner, $context);
+	$fields_config = array();
+	// Build full fields config array
+	if ($fields) {
+		foreach ($fields as $key) {
+			$field_config = elgg_get_plugin_setting('field_' . $key, 'knowledge_database');
+			$field_config = unserialize($field_config);
+			$fields_config[$key] = $field_config;
+		}
+	}
+	return $fields_config;
+}
+
 
 // Returns allowed KDB subtypes
 function knowledge_database_get_allowed_tools($group_guid = false) {

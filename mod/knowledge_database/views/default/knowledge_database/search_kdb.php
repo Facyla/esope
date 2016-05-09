@@ -30,7 +30,7 @@ $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
 
 // FORMULAIRE
 // Prepare JS script for forms
-$action_base = $CONFIG->url . 'action/knowledge_database/';
+$action_base = elgg_get_site_url() . 'action/knowledge_database/';
 $kdb_search_url = elgg_add_action_tokens_to_url($action_base . 'search');
 
 

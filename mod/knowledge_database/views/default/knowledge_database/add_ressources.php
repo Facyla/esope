@@ -12,7 +12,7 @@ if (elgg_is_logged_in()) {
 	if ($publish_entity = get_entity($publish_guid)) {
 		$content .= '<ul id="knowledge_database-add">';
 		foreach ($vars['tools'] as $tool) {
-			$content .= '<li><a href="' . $CONFIG->url . $tool . '/add/' . $publish_guid . '">' . elgg_echo('knowledge_database:add' . $tool) . '</a></li>';
+			$content .= '<li><a href="' . elgg_get_site_url() . $tool . '/add/' . $publish_guid . '">' . elgg_echo('knowledge_database:add' . $tool) . '</a></li>';
 		}
 		$content .= '</ul>';
 	}
