@@ -8,7 +8,7 @@ return array(
 	'search:no_query' => 'Veuillez entrer une requête de recherche.',
 	'search:search_error' => 'Erreur',
 
-	'search:more' => '+%s autres %s',
+	'search:more' => '+%s plus %s',
 
 	'search_types:tags' => 'Tags',
 

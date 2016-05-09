@@ -5,9 +5,9 @@ return array(
 	 * Menu items and titles
 	 */
 	'expages' => "Pages externes",
-	'admin:appearance:expages' => "Pages externes",
+	'admin:appearance:expages' => "Pages du site",
 	'expages:edit:viewpage' => "Voir la page sur le site",
-	'expages:about' => "À propos",
+	'expages:about' => "A propos",
 	'expages:terms' => "Mentions légales",
 	'expages:privacy' => "Informations personnelles",
 	'expages:contact' => "Contact",
@@ -17,6 +17,6 @@ return array(
 	/**
 	 * Status messages
 	 */
-	'expages:posted' => "La page externe a bien été mise à jour.",
-	'expages:error' => "Impossible d'enregistrer cette page.",
+	'expages:posted' => "Votre message de page a bien été posté.",
+	'expages:error' => "Impossible de sauver cette page.",
 );

@@ -1,3 +1,63 @@
+2016-03-06  Juho Jaakkola <juho@elgg.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.9
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/es/LC_MESSAGES/design.mo,
+  docs/locale/es/LC_MESSAGES/guides.mo, docs/locale/es/LC_MESSAGES/intro.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, languages/fr.php,
+  mod/blog/languages/fr.php, mod/developers/languages/fr.php,
+  mod/groups/languages/fr.php, mod/tagcloud/languages/ar.php,
+  mod/twitter_api/languages/nl.php: chore(i18n): update translations
+
+2016-02-22  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Amd/ViewFilter.php,
+  engine/tests/phpunit/Elgg/Amd/ViewFilterTest.php: fix(js): AMD view filter
+  handles short view names without `/`  Also renames the
+  `testIgnoresNonJsViews` test method and makes it work.
+
+2016-02-23  Steve Clay <steve@mrclay.org>
+
+  	* mod/web_services/lib/web_services.php, mod/web_services/start.php:
+  fix(web_services): reject requests for unavailable formats  Sends 400
+  responses if the format isn't likely a valid viewtype or lacks the
+  `api/output` view in that viewtype.  Fixes #9410
+
+2016-02-09  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/actions.php, engine/lib/admin.php, engine/lib/elgglib.php,
+  engine/lib/input.php: fix(http): more resources sent with explicit UTF-8
+  charset  Some of these were missed in #9349.  Fixes #9345
+
+2016-02-05  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/ActionsService.php,
+  engine/classes/Elgg/CacheHandler.php, engine/lib/elgglib.php, index.php,
+  views/json/page/default.php, views/rss/page/default.php: fix(http): make sure
+  all pages/JS/CSS sent with explicit UTF-8 charset  Fixes #9345
+
 2016-01-31  Steve Clay <steve@mrclay.org>
 
   	* CHANGELOG.md, composer.json, mod/twitter_api/languages/nl.php:
@@ -127,6 +187,19 @@
 
   	* docs/locale/de/LC_MESSAGES/tutorials.mo,
   docs/locale/it/LC_MESSAGES/about.mo, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(i18n): update translations
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.10.6
+
+  	* docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po,
+  docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
   docs/locale/it/LC_MESSAGES/index.po, docs/locale/pot/about.pot,
   docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
   docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,

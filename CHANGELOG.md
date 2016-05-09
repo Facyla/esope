@@ -1,3 +1,28 @@
+<a name="1.12.9"></a>
+### 1.12.9  (2016-03-06)
+
+#### Contributors
+
+* Steve Clay (7)
+* Ismayil Khayredinov (2)
+* Jerôme Bakker (1)
+* Juho Jaakkola (1)
+
+#### Bug Fixes
+
+* **cache:** internal Stash pool wrapper works again ([ddc254e4](https://github.com/Elgg/Elgg/commit/ddc254e40f9a30a6473f042b7fb686767447a2f0), closes [#9374](https://github.com/Elgg/Elgg/issues/9374))
+* **css:** buttons no longer get cropped in admin context ([298ae0a8](https://github.com/Elgg/Elgg/commit/298ae0a8f90ca2bc3688a3d5cf3d6205a75f14d2))
+* **groups:** correctly format the remove user from group menu item ([8fdf21f5](https://github.com/Elgg/Elgg/commit/8fdf21f5303e709593b59a75eb9e24d263ac83d5))
+* **http:**
+  * cache handler sends 304 responses more reliably ([873be892](https://github.com/Elgg/Elgg/commit/873be8921d4b8ddc2fd6caf4f5bfa8ca05a93379), closes [#9427](https://github.com/Elgg/Elgg/issues/9427))
+  * more resources sent with explicit UTF-8 charset ([036a82bd](https://github.com/Elgg/Elgg/commit/036a82bd78da47bb6963a87e5f68b1eef88d85eb), closes [#9345](https://github.com/Elgg/Elgg/issues/9345))
+  * make sure all pages/JS/CSS sent with explicit UTF-8 charset ([3dab7d10](https://github.com/Elgg/Elgg/commit/3dab7d100641f5ad3e91353106e7bfd8693d63e0), closes [#9345](https://github.com/Elgg/Elgg/issues/9345))
+* **js:** AMD view filter handles short view names without `/` ([c9ca8329](https://github.com/Elgg/Elgg/commit/c9ca83295eb9e95f57ad74983386109ee4d6ab59))
+* **search:** eliminate 6 notices in search_users_hook ([87b7011b](https://github.com/Elgg/Elgg/commit/87b7011bd843125cb9db16306478c7ccab0c6f1a))
+* **settings:** do not emit errors if form fields are not present ([9f5111c9](https://github.com/Elgg/Elgg/commit/9f5111c97f79611734a9b32317ae0e729928a941))
+* **web_services:** reject requests for unavailable formats ([04aeaf7d](https://github.com/Elgg/Elgg/commit/04aeaf7d35ec25a08f011a74bb9d1947b6ac260a), closes [#9410](https://github.com/Elgg/Elgg/issues/9410))
+
+
 <a name="1.12.8"></a>
 ### 1.12.8  (2016-01-31)
 
@@ -503,6 +528,34 @@ Elgg 2.0. ([e96f0798](https://github.com/Elgg/Elgg/commit/e96f07987b943a4c72f654
   * sidebar comments block data should be consistent with page ([f9e6efb2](https://github.com/Elgg/Elgg/commit/f9e6efb2529cc12002d3b122cf60930751225af8))
   * switch tagcloud blocks to list tags based on container_guid ([7915a668](https://github.com/Elgg/Elgg/commit/7915a668ef6de1cba4ca9f74f785d7831ba68297))
 
+<a name="1.10.6"></a>
+### 1.10.6  (2015-12-13)
+
+#### Contributors
+
+* Jerôme Bakker (5)
+* Juho Jaakkola (2)
+* Evan Winslow (2)
+* Mariano Aguero (1)
+* akudan (1)
+* Steve Clay (1)
+* Jeroen Dalsem (1)
+
+#### Bug Fixes
+
+* **views:** Sticky values now get passed into views extending register/extend ([e241e82e](https://github.com/Elgg/Elgg/commit/e241e82eef3ac57e8cffdfdad164fe49372ddfd7), closes [#8873](https://github.com/Elgg/Elgg/issues/8873))
+* **memcache:** don't store a copy of $CONFIG in file objects ([beb90891](https://github.com/Elgg/Elgg/commit/beb9089129a0a06b36200f3f8d214c7ed8f94f42)), closes [#9081](https://github.com/Elgg/Elgg/issues/9081))
+* **messageboard:** provide correct link to users messageboard (Fixes [#8170](https://github.com/Elgg/Elgg/issues/8170))
+* **notifications:** correctly use elgg_log instead of error_log (Fixes [#8039](https://github.com/Elgg/Elgg/issues/8039))
+* **i18n:**
+  * ckeditor now uses user's own language instead of the site language
+  * do not let empty translation arrays disable plugins (Fixes [#8116](https://github.com/Elgg/Elgg/issues/8116))
+
+#### Chores
+
+* **notification:** no more typehint errors when sending a notificationas an ElggGroup (Fixes [#7949](https://github.com/Elgg/Elgg/issues/7949))
+* **thewire:** improved error handling when removing a wire post (Fixes [#7003](https://github.com/Elgg/Elgg/issues/7003))
+* **core:** catch login exceptions during password change (Fixes [#7948](https://github.com/Elgg/Elgg/issues/7948))
 
 <a name="1.10.5"></a>
 ### 1.10.5  (2015-04-05)

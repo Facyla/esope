@@ -10,4 +10,5 @@ return array(
     'Symfony\\Polyfill\\Php54\\' => array($vendorDir . '/symfony/polyfill-php54'),
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Stash\\' => array($vendorDir . '/tedivm/stash/src/Stash'),
+    'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
 );

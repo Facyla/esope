@@ -20,7 +20,7 @@ return array(
 	'blog:edit' => 'Modifier l\'article de blog',
 	'blog:excerpt' => 'Extrait',
 	'blog:body' => 'Corps de l\'article',
-	'blog:save_status' => 'Dernier enregistrement:',
+	'blog:save_status' => 'Dernier enregistrement :',
 	
 	'blog:revision' => 'Révision',
 	'blog:auto_saved_revision' => 'Révision automatiquement enregistrée',
@@ -47,14 +47,14 @@ return array(
 
 	// notifications
 	'blog:notify:summary' => 'Nouvel article de blog intitulé %s',
-	'blog:notify:subject' => 'Nouvel article de blog: %s',
+	'blog:notify:subject' => 'Nouvel article de blog : %s',
 	'blog:notify:body' =>
 '
-%s a publié un nouvel article de blog: %s
+%s a publié un nouvel article de blog : %s
 
 %s
 
-Voir et commenter cet article de blog:
+Voir et commenter cet article de blog :
 %s
 ',
 

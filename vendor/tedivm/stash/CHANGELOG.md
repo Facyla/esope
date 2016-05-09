@@ -1,3 +1,46 @@
+## Stash v0.14.0 Changelog
+
+### v0.14.1
+
+* Implemented PSR-6 interfaces.
+
+* Removed `Driver::setOptions($options)` in favor of `Driver::constructor($options)`
+
+* Removed deprecated DriverList::getDrivers function.
+
+* Removed deprecated invalidation constants in the Item class.
+
+* Removed SQLite Extension support (SQLite3 is still available).
+
+* The `set` function no longer persists data.
+
+* Removed expiration time for `set` function
+
+* Added `expiresAt` and `expiresAfter` functions to the Item class.
+
+* `getExpiration` to return current datetime when no record exists.
+
+* Added `save` function to PoolInterface.
+
+* Changed `getItemIterator` to `getItems`
+
+* RuntimeException now extends from \RuntimeException
+
+* Added `isHit` function to ItemInterface.
+
+* Added the `hasItem` function to the Pool, which should mostly be avoided.
+
+* Renamed `Pool::purge` to `Pool::clear`.
+
+* Added `Pool::deleteItem` and `Pool::deleteItems`.
+
+* Removed legacy methods for defining keys- keys must be defined as strings.
+
+* Added support for "APCU" functions.
+
+* Removed sqlite2 support (sqlite3 is still supported).
+
+
 ## Stash v0.13 Changelog
 
 

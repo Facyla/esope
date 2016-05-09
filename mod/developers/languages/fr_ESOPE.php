@@ -23,9 +23,9 @@ return array(
 	'developers:help:display_errors' => "Par défaut, le fichier .htaccess d'Elgg désactive l'affichage des erreurs fatales.",
 	'developers:label:screen_log' => "Afficher le journal à l'écran",
 	'developers:help:screen_log' => "Ceci affiche les sorties de elgg_log() et de elgg_dump() ainsi que le nombre de requêtes sur la BD",
-	'developers:label:show_strings' => "Affiche les chaînes de traduction brutes",
+	'developers:label:show_strings' => "Montrer les chaînes de traduction brutes",
 	'developers:help:show_strings' => "Affiche les chaînes de traduction utilisées par elgg_echo().",
-	'developers:label:show_modules' => "Montrer les modules AMD dans la console",
+	'developers:label:show_modules' => "Montrer les modules AMD chargés dans la console",
 	'developers:help:show_modules' => "Affiche les modules chargés et les valeurs dans votre console JavaScript.",
 	'developers:label:wrap_views' => "Envelopper les Vues",
 	'developers:help:wrap_views' => "Ceci enveloppe presque toutes les vues avec des commentaires en HTML. Pratique pour identifier la vue qui génère un code HTML particulier. 
@@ -44,7 +44,7 @@ return array(
 	'developers:debug:info' => 'Information',
 	
 	// inspection
-	'developers:inspect:help' => 'Inspecter la configuration système du framework  Elgg.',
+	'developers:inspect:help' => 'Inspecter la configuration système d\'Elgg.',
 	'developers:inspect:actions' => 'Actions',
 	'developers:inspect:events' => 'Evénements',
 	'developers:inspect:menus' => 'Menus',
@@ -86,7 +86,7 @@ return array(
 	'developers:unit_tests:run' => 'Exécuter',
 
 	// status messages
-	'developers:settings:success' => 'Paramètres sauvegardés et caches vidés',
+	'developers:settings:success' => 'Paramètres enregistrés et caches vidés',
 	
 	'developers:amd' => 'AMD',
 );

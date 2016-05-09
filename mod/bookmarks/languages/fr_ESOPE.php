@@ -38,7 +38,7 @@ Voir et commenter ce signet:
 	'bookmarks:numbertodisplay' => 'Nombre de signets à afficher',
 
 	'bookmarks:shared' => "Mis en signet",
-	'bookmarks:visit' => "Visiter la ressource",
+	'bookmarks:visit' => "Voir la ressource",
 	'bookmarks:recent' => "Signets récents",
 
 	'river:create:object:bookmarks' => '%s a mis en signet %s',
@@ -64,7 +64,7 @@ Voir et commenter ce signet:
 			"Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
 
 	'bookmarks:bookmarklet:description:conclusion' =>
-			"Vous pouvez mettre en signet n'importe quelle page à tout moment en cliquant sur le bouton de votre navigateur.",
+			"Vous pouvez mettre en signet n'importe quelle page en cliquant sur le bookmarklet.",
 
 	/**
 	 * Status messages
