@@ -10,6 +10,10 @@
 
 $title = elgg_echo('plugin_template:title');
 
+elgg_push_breadcrumb(elgg_echo('plugin_template'), 'plugin_template');
+elgg_push_breadcrumb($title);
+
+
 $sidebar = "";
 
 $content = '';

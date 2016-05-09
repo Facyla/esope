@@ -20,6 +20,7 @@ function bootstrap_init() {
 	*/
 	
 	// Register JS scripts and CSS
+	// Source : http://getbootstrap.com/ & https://github.com/twbs/bootstrap/releases
 	// Note : using 4.0 alpha because there is a really bad CSS declaration in previous versions 
 	// ie: .hidden { display:none !important; }
 	// which breaks most jquery and Elgg toggles
@@ -29,6 +30,7 @@ function bootstrap_init() {
 	if (empty($bootstrap_version)) { $bootstrap_version = 'bootstrap-3.3.6'; }
 	$bootstrap_url = $vendors_url . $bootstrap_version . '/';
 	
+	/*
 	// Tether script
 	elgg_define_js('tether', array(
 		'src' => $vendors_url . 'tether/tether.min.js',
@@ -47,6 +49,7 @@ function bootstrap_init() {
 		'src' => $bootstrap_url . 'js/bootstrap.min.js',
 		'deps' => 'tether',
 	));
+	*/
 	
 	// Load JS and CSS : leave this up to the theme
 	// so we can activate the plugin without applying its styles on every page

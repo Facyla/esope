@@ -21,6 +21,12 @@ function plugin_template_init() {
 	
 	/* Some useful elements :
 	
+	// Register actions
+	// Actions should be defined in actions/plugin_template/action_name.php
+	$action_base = elgg_get_plugins_path() . 'systems_game/actions/';
+	elgg_register_action('systems_game/edit', $action_base . 'edit.php');
+	elgg_register_action('systems_game/delete', $action_base . 'delete.php');
+	
 	// Register a PHP library
 	elgg_register_library('elgg:plugin_template', elgg_get_plugins_path() . 'plugin_template/lib/plugin_template.php');
 	// Load a PHP library (can also be loaded from the page_handler or from specific views)
@@ -53,6 +59,12 @@ function plugin_template_init() {
 	
 	// Register event - see /admin/develop_tools/inspect?inspect_type=Events
 	elgg_register_event_handler('create','object','plugin_template_someevent');
+	
+	// Override icons
+	elgg_register_plugin_hook_handler("entity:icon:url", "object", "plugin_template_icon_hook");
+	
+	// override the default url to view a plugin_template object
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'plugin_template_set_url');
 	
 	*/
 	

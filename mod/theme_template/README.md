@@ -1,6 +1,6 @@
 # Theme template
 
-This plugin provides a basic template to start setting up a theme based on adf_public_platform
+This plugin provides a basic template to start setting up a theme based on esope
 
 To get started, replace all "theme_template" occurrences with your theme name, which should start by "theme_", e.g. "theme_myprojectname". You should do this both in file structure, and inside the theme plugin files content (so choose carefully).
 

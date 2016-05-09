@@ -7,7 +7,8 @@
  */
 
 /* NOTES DE DEV : 
-	- ajouter les meta manquantes via un hook lors de l'enregistrement : permet d'être générique tout en ne s'appliquant qu'aux contenus dont le container est le groupe approprié
+	- l'ajout des meta se fait via un hook lors de l'enregistrement : 
+	cela permet d'être générique tout en ne s'appliquant qu'aux contenus dont le container est le groupe approprié
 	Même principe pour le form : on extend tjs le form, mais on n'affiche les champs en plus que si c'est dans le bon groupe et que pour les outils qui y sont activés
 */
 
@@ -56,21 +57,20 @@ function knowledge_database_init() {
 
 // Page handler for custom URL
 function knowledge_database_page_handler($page) {
-	global $CONFIG;
-	$include_path = $CONFIG->pluginspath . 'knowledge_database/pages/knowledge_database/';
+	$base = elgg_get_plugins_path() . 'knowledge_database/pages/knowledge_database/';
 	if (!isset($page[0])) { $page[0] = 'index'; }
 	switch ($page[0]) {
 		case 'define_field':
 			set_input('name', $page[1]);
-			if (include($include_path . 'define_field.php')) return true;
+			if (include($base . 'define_field.php')) return true;
 			break;
 		case 'download':
 			set_input('guid', $page[1]);
 			set_input('field_name', $page[2]);
-			if (include($include_path . 'download.php')) return true;
+			if (include($base . 'download.php')) return true;
 			break;
 		case 'add':
-			if (include($include_path . 'add.php')) return true;
+			if (include($base . 'add.php')) return true;
 			break;
 		case 'public':
 		case 'search':
@@ -78,8 +78,8 @@ function knowledge_database_page_handler($page) {
 		case 'user':
 		case 'group':
 		default:
-			if ($page[1]) set_input('container_guid', $page[1]);
-			if (include($include_path . 'index.php')) return true;
+			if ($page[1]) { set_input('container_guid', $page[1]); }
+			if (include($base . 'index.php')) return true;
 	}
 	return false;
 }
@@ -149,7 +149,7 @@ function knowledge_database_object_handler_event($event, $type, $object) {
 			foreach ($meta as $name) {
 				// Check that we are allowed to edit this field
 				$config = knowledge_database_get_field_config($name);
-				if (!knowledge_database_edit_field($config, $role, $object)) continue;
+				if (!knowledge_database_edit_field($config, $role, $object)) { continue; }
 				
 				// Finally get the data and edit !
 				$value = get_input($name, false);
@@ -207,8 +207,6 @@ function knowledge_database_get_field_config($name = false) {
 
 // @TODO : add more details on fields
 function knowledge_database_define_field_config($key) {
-	global $CONFIG;
-	
 	$config = knowledge_database_get_field_config($key);
 	
 	$edit_link = '<strong>' . $key . '</strong>';
@@ -221,7 +219,7 @@ function knowledge_database_define_field_config($key) {
 			'title' => "Configure field for metadata : $key",
 			'rel' => 'nofollow', 
 			'class' => 'elgg-lightbox', 
-			'href' => $CONFIG->url  . 'kdb/define_field/' . $key,
+			'href' => elgg_get_site_url()  . 'kdb/define_field/' . $key,
 		);
 	$edit_link .= ' &nbsp; [' . $config['type'] . ']';
 	$edit_link .= ' &nbsp; ' . elgg_view('output/url', $params);
@@ -260,10 +258,11 @@ Roles can be passed as a parameter to the rendering function, and can be derived
      - entity : the entity these fields apply to, if any (values and workflows states)
  */
 function knowledge_database_render_fields($fields = array(), $params = array()) {
+	$url = elgg_get_site_url();
 	$entity = elgg_extract('entity', $params, false);
 	$role = elgg_extract('role', $params, 'public');
 	$mode = elgg_extract('mode', $params, 'edit');
-	if ($entity instanceof ElggEntity) $entity = false;
+	if (!elgg_instanceof($entity)) { $entity = false; }
 	
 	// Build rendering fields
 	$fieldset_fields = array();
@@ -323,9 +322,9 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 					$filename = explode('/', $entity->{$name});
 					$filename = end($filename);
 					if ($name == 'icon') {
-						$field_content .= '<p>Fichier joint : <a href="' . $CONFIG->url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $CONFIG->url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
+						$field_content .= '<p>Fichier joint : <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
 					} else {
-						$field_content .= '<p>Fichier joint : <a href="' . $CONFIG->url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
+						$field_content .= '<p>Fichier joint : <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
 					}
 				}
 				break;
@@ -404,33 +403,32 @@ function knowledge_database_remove_file_from_entity($entity, $input_name = 'file
 
 
 
-/* Checks if fields can be added to currently edited entity
+/* Checks if fields can be added to the currently edited entity
  * Returns false if not, array of field names if OK
  * Function relies on page owner and context, which can be set manually to force getting fields if needed
  */
 function knowledge_database_get_kdb_fields($owner = false, $context = false) {
-	if (!$owner) $owner = elgg_get_page_owner_entity();
-	if (!$context) $context = elgg_get_context();
+	if (!$owner) { $owner = elgg_get_page_owner_entity(); }
+	if (!$context) { $context = elgg_get_context(); }
 	// Note : no fields or any other where KDB doesn't apply returns false
 	$fields = false;
 	
+echo "<br />Owner $owner->guid + context $context";
+echo "<br />" . print_r(elgg_get_context_stack(), true);
 	// Enabled anywhere content is published in : site, group, user
 	if (elgg_instanceof($owner, 'group') || elgg_instanceof($owner, 'user') || elgg_instanceof($owner, 'site')) {
 		
 		// Check that we are in the right context to apply this only to wanted objects
 		// Note : we must not filter for the container here ! (not necessarly a group)
 		$kdb_tools = knowledge_database_get_allowed_tools();
+echo "<br />" . print_r($kdb_tools, true);
 		if (in_array($context, $kdb_tools)) {
 			
 			// Is site KDB enabled globally ?
-			$kdb_site = false;
-			if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') { $kdb_site = true; }
+			$kdb_site = knowledge_database_is_site_kdb_enabled();
 			
 			// Is a KDB enabled for this particular group (or entity..) ?
-			$kdb_group = false;
-			$kdb_enable_groups = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
-			$kdb_enable_groups = esope_get_input_array($kdb_enable_groups);
-			if (in_array($owner->guid, $kdb_enable_groups)) { $kdb_group = true; }
+			$kdb_group = knowledge_database_is_kdb_group($owner->guid);
 			
 			// Get used fields names
 			if ($kdb_group) {
@@ -529,6 +527,21 @@ function knowledge_database_get_group_kdb_fields($guid, $include_site = false) {
 		}
 	}
 	return esope_get_input_array($fields);
+}
+
+
+/* Tells if the site KDB is enabled */
+function knowledge_database_is_site_kdb_enabled() {
+	if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') { return true; }
+	return false;
+}
+
+/* Tells if a group is a KDB group (= explicitely set as KDB group) */
+function knowledge_database_is_kdb_group($group_guid) {
+	$groups_guids = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
+	$groups_guids = esope_get_input_array($groups_guids);
+	if (in_array($group_guid, $groups_guids)) { return true; }
+	return false;
 }
 
 

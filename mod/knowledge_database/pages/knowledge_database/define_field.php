@@ -3,7 +3,7 @@
  * Knowledge Database public fields definition
  *
  */
-global $CONFIG;
+$url = elgg_get_site_url();
 
 admin_gatekeeper();
 
@@ -43,7 +43,7 @@ if ($name) {
 	// BUILD THE FORM
 	echo '<div class="knowledge_database-edit-field">';
 	
-	$action_base = $CONFIG->url . 'action/knowledge_database/';
+	$action_base = $url . 'action/knowledge_database/';
 	$kdb_define_field_url = $action_base . 'define_field' . $action_token;
 	$kdb_define_field_url = elgg_add_action_tokens_to_url($kdb_define_field_url);
 	

@@ -4,7 +4,7 @@
  */
 
 return array(
-	'plugin_template' => "Plugin template",
+	'theme_template' => "Theme template",
 	
 );
 

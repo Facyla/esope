@@ -1117,6 +1117,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
 	return $value;
 }
 
+
 /* Esope search function : 
  * Just call echo esope_esearch() for a listing
  * Get entities with $results_ents = esope_esearch(array('returntype' => 'entities'));
@@ -1497,7 +1498,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		}
 	
 		if ($files) {
-			elgg_set_context('widgets');
+			elgg_push_context('widgets');
 			// Note : méthode qui permet de n'afficher que des <li> (sans <ul>)
 			foreach ($files as $ent) {
 				$files_content .= '<li idf="folder-file-' . $ent->guid . '" class="folder-file">' 

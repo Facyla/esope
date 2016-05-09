@@ -1,10 +1,11 @@
 <?php
 $group = elgg_get_page_owner_entity();
-$kdb_group_guid = elgg_get_plugin_setting('kdb_group', 'maghrenov_kdb');
+$is_kdb_group = knowledge_database_is_kdb_group($group->guid);
 
-if ($group->guid == $kdb_group_guid) {
+if ($is_kdb_group) {
 	// Addition for KDB group
-	echo '<br /><br />';
+	echo '<br />';
+	echo '<blockquote><strong>' . elgg_echo('knowledge_database:kdb_group') . '</strong></blockquote>';
 }
 
 
