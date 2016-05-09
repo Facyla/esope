@@ -8,7 +8,7 @@ elgg_register_event_handler('init', 'system', 'bootstrap_init'); // Init
 
 
 /**
- * Init adf_bootstrap plugin.
+ * Init bootstrap plugin.
  */
 function bootstrap_init() {
 	
