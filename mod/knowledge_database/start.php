@@ -413,15 +413,12 @@ function knowledge_database_get_kdb_fields($owner = false, $context = false) {
 	// Note : no fields or any other where KDB doesn't apply returns false
 	$fields = false;
 	
-echo "<br />Owner $owner->guid + context $context";
-echo "<br />" . print_r(elgg_get_context_stack(), true);
 	// Enabled anywhere content is published in : site, group, user
 	if (elgg_instanceof($owner, 'group') || elgg_instanceof($owner, 'user') || elgg_instanceof($owner, 'site')) {
 		
 		// Check that we are in the right context to apply this only to wanted objects
 		// Note : we must not filter for the container here ! (not necessarly a group)
 		$kdb_tools = knowledge_database_get_allowed_tools();
-echo "<br />" . print_r($kdb_tools, true);
 		if (in_array($context, $kdb_tools)) {
 			
 			// Is site KDB enabled globally ?

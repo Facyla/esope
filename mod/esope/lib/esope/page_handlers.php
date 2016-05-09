@@ -227,11 +227,11 @@ function esope_blog_page_handler($page) {
 			forward("blog/view/{$page[1]}");
 			break;
 		case 'add':
-			gatekeeper();
+			elgg_gatekeeper();
 			$params = blog_get_page_content_edit($page_type, $page[1]);
 			break;
 		case 'edit':
-			gatekeeper();
+			elgg_gatekeeper();
 			$params = blog_get_page_content_edit($page_type, $page[1], $page[2]);
 			break;
 		case 'group':
@@ -431,6 +431,7 @@ function esope_bookmarks_page_handler($page) {
 	if (!isset($page[0])) { $page[0] = 'all'; }
 	elgg_push_breadcrumb(elgg_echo('bookmarks'), 'bookmarks/all');
 
+	/*
 	// old group usernames
 	if (substr_count($page[0], 'group:')) {
 		preg_match('/group\:([0-9]+)/i', $page[0], $matches);
@@ -445,6 +446,7 @@ function esope_bookmarks_page_handler($page) {
 	if ($user) {
 		bookmarks_url_forwarder($page);
 	}
+	*/
 
 	$pages = elgg_get_plugins_path() . 'bookmarks/pages/bookmarks';
 	$custom_pages = elgg_get_plugins_path() . 'esope/pages/bookmarks';
@@ -472,18 +474,18 @@ function esope_bookmarks_page_handler($page) {
 			break;
 
 		case "add":
-			gatekeeper();
+			elgg_gatekeeper();
 			include "$pages/add.php";
 			break;
 
 		case "edit":
-			gatekeeper();
+			elgg_gatekeeper();
 			set_input('guid', $page[1]);
 			include "$pages/edit.php";
 			break;
 
 		case 'group':
-			group_gatekeeper();
+			elgg_group_gatekeeper();
 			include "$pages/owner.php";
 			break;
 

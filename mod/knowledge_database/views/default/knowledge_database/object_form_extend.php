@@ -1,11 +1,8 @@
 <?php
 
-echo "!!! KDB FIELDS INPUT HERE !!!";
-
 // Check if KDB fields apply in this context, and display them
 $fields = knowledge_database_get_kdb_fields();
 if (!$fields) { return; }
-echo "<br />FIELDS OK";
 
 // Get edited entity
 $entity = get_entity(get_input('guid'));
@@ -16,7 +13,6 @@ foreach ($fields as $key) {
 	$field_config = elgg_get_plugin_setting('field_' . $key, 'knowledge_database');
 	$field_config = unserialize($field_config);
 	$fields_config[$key] = $field_config;
-	echo "FIELD : $field<br />";
 }
 
 //echo knowledge_database_render_fields($fields_config, array('entity' => $entity, 'role' => 'user', 'mode' => 'edit'));
