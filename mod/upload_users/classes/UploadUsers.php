@@ -317,7 +317,7 @@ class UploadUsers {
 				}
 
 				if ($this->notification) {
-					$subject = elgg_echo('upload_users:email:subject', elgg_get_config('sitename'));
+					$subject = elgg_echo('upload_users:email:subject', array(elgg_get_config('sitename')));
 					$message = elgg_echo('upload_users:email:message', array($record['name'], elgg_get_config('sitename'), $record['username'], $record['password'], elgg_get_site_url()));
 					notify_user($record['guid'], elgg_get_site_entity()->guid, $subject, $message);
 				}
