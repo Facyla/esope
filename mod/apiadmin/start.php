@@ -70,7 +70,7 @@ function apiadmin_init($event, $object_type, $object = null) {
 function apiadmin_delete_key($event, $object_type, $object = null) {
 	$site = elgg_get_site_entity();
 
-	if ( ($object) && ($object->subtype === get_subtype_id('object', 'api_key')) ) {
+	if (($object) && ($object->getSubtype() == 'api_key')) {
 		// Delete secret key
 		return remove_api_user($site->guid, $object->public);
 	}
