@@ -1,5 +1,6 @@
 
 /* Edit form */
+#transitions-post-edit { word-break: break-all; }
 #transitions-post-edit select { max-width: 16em; }
 #transitions-post-edit input[name=start_date], #transitions-post-edit input[name=end_date] { min-width: 8em; }
 .transitions-characters-remaining-warning { color: red; }
@@ -78,8 +79,8 @@
 .transitions-view-sidebar .transitions-owner-block { float:right; margin: 0 0 10px 10px; max-width:100px; background: white; }
 .transitions-view-content { padding:0 30px 30px 30px; }
 .transitions-dates { background:#e2d8c3; padding:10px; display:inline-block; border-radius:5px; }
-.transitions-view-sidebar a { word-break: break-all; }
-.transitions-view-sidebar .transitions-owner-block a { word-break: break-word; }
+.transitions-view-sidebar a { word-break: break-all; display:block; }
+.transitions-view-sidebar .transitions-owner-block a { word-break: break-all; display: inline; }
 .transitions-excerpt { font-size:16px; font-weight:bold; }
 .transitions_image.float { margin: 0 1em 0.5em 0; }
 .transitions-contributed-links {  }

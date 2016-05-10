@@ -169,11 +169,12 @@ $actions .= elgg_view_module('popup', elgg_echo('transitions:share'), $share_con
 
 
 // Main content column
+// Short excerpt (140 chars)
+if (!empty($transitions->excerpt)) $body .= '<p class="transitions-excerpt">' . $transitions->excerpt . '</p>';
+// Image
 $body .= $transitions_icon;
 //$body .= '<div class="transitions_image transitions-image-master flexible-block" style="background: url(' . $transitions_icon_url . ') 50% 20%; background-size:cover; width: 558px; height: 300px; max-width: 60%;"></div>';
 $body .= '<div class="clearfloat"></div>';
-// Short excerpt (140 chars)
-if (!empty($transitions->excerpt)) $body .= '<p class="transitions-excerpt">' . $transitions->excerpt . '</p>';
 // Full description
 $body .= elgg_view('output/longtext', array('value' => $transitions->description, 'class' => 'transitions-post'));
 
