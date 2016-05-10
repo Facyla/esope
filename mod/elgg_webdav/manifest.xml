@@ -3,7 +3,7 @@
 	<name>WebDAV server</name>
 	<id>elgg_webdav</id>
 	<author>Florian DANIEL aka Facyla ~ 2015</author>
-	<version>0.3</version>
+	<version>1.12.0</version>
 	<category>file</category>
 	<category>synchronization</category>
 	<category>webdav</category>
@@ -16,22 +16,33 @@
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.11</version>
+		<version>1.12</version>
 	</requires>
 	
 	<suggests>
 		<type>plugin</type>
 		<name>esope</name>
 	</suggests>
-	
 	<suggests>
 		<type>plugin</type>
 		<name>file</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>file_tools</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>au_subgroups</name>
 	</suggests>
 	
 </plugin_manifest>
 
 <!--
+
+1.12.0 : 20160511 - Updated to Elgg 1.12 + improvements
+	- support au_subgroups (subgroups appear as special group folders)
+	- support file_tools (folders) : folders tree view + new folders (and rename) + move folders
 
 0.3 : 20151023 - Implement virtual folder + file edit
 
