@@ -27,7 +27,12 @@ Note that all WebDAV folders are also accessible through a web browser.
  * Personal file server (RW)
  * Public file server (Read-only)
  * Group file server (RW)
+   - subgroups support (if au_subgroups enabled)
+   - folders support (if file_tools enabled)
  * Members file server (RW)
+
+## KNOWN ISSUES
+ * Moving files DO NOT EXIST in WebDAV ! If you move a file or folder it will create the new files then remove the old ones => this results in Elgg Files losing all properties, metadata, annotations, etc. So it's better not to...'
 
 ## TODO
  * Implement locks system

@@ -441,10 +441,14 @@ class FolderCollection extends Sabre\DAV\Collection {
 		return $this->folder->time_updated;
 	}
 	function delete() {
+		/* VERY IMPORTANT : when moving files and folders, WebDAV deletes the old file and creates a new one, 
+		 * resulting in losing all Elgg-specific properties, metadata, annotations and relations
+		 * So we better not enable this until it's handled !!
+		 */
+		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:directory:toodangerousyet'));
 		// @TODO Important : do NOT delete folder content ? But mounted filesystem tells to do so to server (delete all files + folder recursively)
 		// file_tools behaviour is to remove the folder so subfolders and contained files ends up in root directory (or we could move to parent)
 		if ($this->folder->canEdit()) {
-error_log("GroupCollection delete : {$this->folder->guid} / {$this->folder->title}");
 			/*
 			// @TODO move children files and folders to parent folder
 			// file_tools_change_children_access($folder, $change_files = true)
@@ -570,6 +574,11 @@ class EsopeDAVFile extends Sabre\DAV\File {
 	// @TODO : allow deletion or not, and whom ?
 	// @TODO : we could also disable the file, and remove it after a certain time (enable restoring files)
 	function delete() {
+		/* VERY IMPORTANT : when moving files, WebDAV deletes the old file and creates a new one, 
+		 * resulting in losing all Elgg-specific properties, metadata, annotations and relations
+		 * So we better not enable this until it's handled !!
+		 */
+		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:directory:toodangerousyet'));
 		// Allow only owner to delete files, or anyone who has edit rights ?
 		//if (elgg_get_logged_in_user_guid()) {
 		//if ($this->entity->canEdit()) {
