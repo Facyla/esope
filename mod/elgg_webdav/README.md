@@ -32,7 +32,7 @@ Note that all WebDAV folders are also accessible through a web browser.
  * Members file server (RW)
 
 ## KNOWN ISSUES
- * Moving files DO NOT EXIST in WebDAV ! If you move a file or folder it will create the new files then remove the old ones => this results in Elgg Files losing all properties, metadata, annotations, etc. So it's better not to...'
+ * Moving files DO NOT EXIST in WebDAV ! If you move a file or folder it will create the new files then remove the old ones => this results in Elgg Files losing all properties, metadata, annotations, etc. So it's better not to allow deleting them yet...
 
 ## TODO
  * Implement locks system
