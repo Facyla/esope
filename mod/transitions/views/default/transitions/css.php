@@ -80,6 +80,7 @@
 .transitions-view-content { padding:0 30px 30px 30px; }
 .transitions-dates { background:#e2d8c3; padding:10px; display:inline-block; border-radius:5px; }
 .transitions-view-sidebar a { word-break: break-all; display:block; }
+.transitions-view-sidebar .elgg-tag a { display: inline-block; }
 .transitions-view-sidebar .transitions-owner-block a { word-break: break-all; display: inline; }
 .transitions-excerpt { font-size:16px; font-weight:bold; }
 .transitions_image.float { margin: 0 1em 0.5em 0; }
