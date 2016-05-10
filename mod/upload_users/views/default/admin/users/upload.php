@@ -13,8 +13,7 @@
  * @link http://arckinteractive.com/
  */
 elgg_load_css('upload_users.css');
-elgg_load_js('jquery.form');
-elgg_load_js('upload_users.js');
+elgg_require_js('upload_users');
 
 $guid = get_input('guid');
 $file = get_entity($guid);

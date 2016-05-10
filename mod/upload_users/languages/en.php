@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Upload users language strings
  * English
@@ -13,14 +12,14 @@
  * @link http://www.mediamaisteri.com/
  * @link http://arckinteractive.com/
  */
-$english = array(
+return array(
 	/**
 	 * Admin Interface
 	 */
 	'admin:users:upload' => 'CSV User Import',
 
 	'upload_users:error:cannot_open_file' => 'The file you are uploading does not seem to be a valid CSV, or the parsing settings you have defined are not correct',
-	
+
 	'upload_users:incomplete' => 'Incomplete imports',
 	'upload_users:upload' => 'Upload a new file',
 	'upload_users:instructions' => 'Instructions',
@@ -97,7 +96,7 @@ $english = array(
 			<dd>- exclude spaces and special characters</dd>
 		</dl>
 		</p>
-		
+
 
 		<p>Here are some examples of CSV files:</p>',
 	/**
@@ -105,6 +104,7 @@ $english = array(
 	 */
 	'upload_users:error:file_open_error' => 'Error opening file',
 	'upload_users:error:wrong_csv_format' => 'CSV file in wrong format',
+
 	/**
 	 * Email Notifications
 	 */
@@ -119,6 +119,7 @@ $english = array(
 
 	',
 	'upload_users:email:subject' => 'Your user account for %s',
+
 	/**
 	 * Miscellaneous
 	 */
@@ -161,9 +162,4 @@ $english = array(
 	'upload_users:error:empty_name' => 'Display name can not be empty',
 	'upload_users:error:invalid_guid' => 'There are no user accounts associated with this GUID',
 	'upload_users:error:update_email_username_mismatch' => 'User account can not be updated due to username and email mistmatch',
-	
-	
-
 );
-
-add_translation('en', $english);

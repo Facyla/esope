@@ -3,7 +3,7 @@
 	<name>CSV User Import</name>
 	<author>Jaakko Naakka / Mediamaisteri Group</author>
 	<author>Ismayil Khayredinov / Arck Interactive</author>
-	<version>1.8.2.2</version>
+	<version>1.8.2.3</version>
 	<category>users</category>
 	<category>administration</category>
 	<category>import</category>
@@ -15,7 +15,7 @@
 	<license>GNU General Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.9</version>
 	</requires>
 	<suggests>
 		<type>plugin</type>

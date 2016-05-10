@@ -7,13 +7,13 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @author Jaakko Naakka / Mediamaisteri Group
  * @author Ismayil Khayredinov / Arck Interactive
- * @translation Florian DANIEL aka Facyla 2015
+ * @translation Florian DANIEL aka Facyla 2015-2016
  * @copyright Mediamaisteri Group 2009
  * @copyright ArckInteractive 2013
  * @link http://www.mediamaisteri.com/
  * @link http://arckinteractive.com/
  */
-$fr = array(
+return array(
 	/**
 	 * Admin Interface
 	 */
@@ -24,8 +24,8 @@ $fr = array(
 	'upload_users:incomplete' => 'Imports incomplets',
 	'upload_users:upload' => 'Charger un nouveau fichier',
 	'upload_users:instructions' => "Mode d'emploi",
-	'upload_users:mapping' => 'Correspondance des entêtes  CSV headers avec les champs de profil',
-	'upload_users:attributes' => 'Auto-générer les attributs obligatoires',
+	'upload_users:mapping' => 'Correspondance des entêtes  CSV avec les champs de profil',
+	'upload_users:attributes' => 'Générer automatiquement les attributs obligatoires',
 	'upload_users:report' => 'Import terminé',
 
 	'upload_users:continue' => 'Suivant',
@@ -36,25 +36,25 @@ $fr = array(
 
 	'upload_users:encoding' => 'Encodage du fichier CSV',
 
-	'upload_users:delimiter' => 'Délimiteur',
+	'upload_users:delimiter' => 'Délimiteur de champs',
 	'upload_users:delimiter:comma' => 'virgule (&#44;)',
 	'upload_users:delimiter:semicolon' => 'point-virguke (&#59;)',
 	'upload_users:delimiter:colon' => 'barre verticale (&#58;)',
 
-	'upload_users:enclosure' => "Séparateur de texte",
+	'upload_users:enclosure' => "Délimiteur de texte",
 	'upload_users:enclosure:doublequote' => 'guillemet double (&#34;)',
 	'upload_users:enclosure:singlequote' => 'guillemet simple (&#39;)',
 
-	'upload_users:mapping_template' => "Sélectionner un modèle de correspondance de l'entête existant",
+	'upload_users:mapping_template' => "Sélectionner un modèle de correspondance existant",
 	'upload_users:new_template' => 'Nouveau modèle',
 
-	'upload_users:save_as_template' => "Entrer un nom pour enregistrer le modèle de correspondance de l'entête",
+	'upload_users:save_as_template' => "Entrer un nom pour sauvegarder le modèle de correspondance de l'entête",
 	'upload_users:yes' => 'Oui',
 	'upload_users:no' => 'Non',
 
-	'upload_users:setting:notification' => 'Prévenir les membres par email lorsque leur compte est créé',
+	'upload_users:setting:notification' => 'Envoyer un email aux nouveaux membres lorsque leur compte est créé',
 	'upload_users:setting:update_existing_users' => 'Mettre à jour les informations du profil si le compte existe déjà',
-	'upload_users:setting:fix_usernames' => "Corriger les identifiants si la valeur ne correspond pas aux standards d'Elgg (par ex. si il contient des caractères spéciaux), et ajouter un numéro en suffixe si cet identifiant est déjà pris",
+	'upload_users:setting:fix_usernames' => "Corriger les identifiants si la valeur ne correspond pas aux standards d'Elgg (par ex. s'il contient des caractères spéciaux), et ajouter un numéro en suffixe si cet identifiant est déjà pris",
 	'upload_users:setting:fix_passwords' => "Générer de nouveaux mots de passe si la valeur ne correspond pas aux standards d'Elgg (par ex. s'il est trop court)",
 
 	'upload_users:create_users' => 'Créer les comptes des membres',
@@ -131,7 +131,7 @@ $fr = array(
 	'upload_users:mapping:value_type' => 'Type de valeur',
 	'upload_users:mapping:value_type:text' => 'Conserver comme texte',
 	'upload_users:mapping:value_type:tags' => 'Convertir en tags',
-	'upload_users:mapping:value_type:timestamp' => 'Convertir en date',
+	'upload_users:mapping:value_type:timestamp' => 'Convertir en timestamp',
 
 	'upload_users:mapping:attribute' => 'Attribut',
 	'upload_users:mapping:components' => 'Eléments',
@@ -147,11 +147,11 @@ $fr = array(
 	'upload_users:download_sample_help' => "Télécharger un exemple de fichier CSV avec les entêtes correspondant à l'ensemble des métadonnées actuellement présentes sur le site",
 	'upload_users:download_sample' => 'Télécharger',
 
-	'upload_users:status:mapping_pending' => '[Correspondance des champs requise]',
+	'upload_users:status:mapping_pending' => '[Correspondance des champs en attente]',
 	'upload_users:status:ready_for_import' => '[Prêt à importer]',
 	'upload_users:status:imported' => '[Importé]',
 
-	'upload_users:continue:map' => 'Définir la correspondance des champs',
+	'upload_users:continue:map' => 'Définir la correspondance des entêtes',
 	'upload_users:continue:import' => 'Importer',
 	'upload_users:continue:import:warning' => "Les fichiers CSV de grande taille peuvent prendre plus de temps à importer. Veuillez ne pas rafraîchir après avoir validé l'import.",
 	'upload_users:continue:view_report' => 'Afficher le rapport',
@@ -162,7 +162,4 @@ $fr = array(
 	'upload_users:error:invalid_guid' => "Aucun compte n'est associé à ce GUID",
 	'upload_users:error:update_email_username_mismatch' => "Impossible de mettre à jour le compte à cause d'une non-correspondance entre identifiant et email",
 	
-	
 );
-
-add_translation("fr",$fr);
