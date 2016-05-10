@@ -18,8 +18,9 @@ $options = array(
 $content = elgg_list_entities($options);
 */
 
-//$content = elgg_view_entity_list('', array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
-$content = elgg_list_entities(array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+$content = elgg_view_entity_list('', array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+// @TODO : pass guids and not entities to list them...
+//$content = elgg_list_entities(array('entities' => messages_get_unread(), 'limit' => $num, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
 
 echo $content;
 
