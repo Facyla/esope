@@ -153,15 +153,26 @@ class PublicCollection extends Sabre\DAV\Collection {
 	}
 }
 
-// GROUPS folder
+// GROUPS folder + subgroups support if enabled
 class GroupsCollection extends Sabre\DAV\Collection {
 	protected $groups;
-	function __construct() {
+	function __construct($parent = false) {
 		// Note : list all groups (and not only own) because we can read them on web site
 		//$this->groups = elgg_get_logged_in_user_entity()->getGroups('', 0);
-		$groups = elgg_get_entities(array('type' => 'group', 'limit' => 0));
-		$this->groups = $groups;
+		// Note : it seems to make more sense not to list subgroups here and rather display them in the tree
+		// We could check plugin setting to behave the same as on site but this would result in 2 navigation paths
+		//if (elgg_is_active_plugin('au_subgroups') && (elgg_get_plugin_setting('display_subgroups', 'au_subgroups') != 'yes')) {
+		if (elgg_is_active_plugin('au_subgroups')) {
+			// Do not list subgroups here but make it a tree
+			$dbprefix = elgg_get_config('dbprefix');
+			$groups = elgg_get_entities(array('type' => 'group', 'limit' => 0, 'wheres' => array("NOT EXISTS ( SELECT 1 FROM {$dbprefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )")));
+			$this->groups = $groups;
+		} else {
+			$groups = elgg_get_entities(array('type' => 'group', 'limit' => 0));
+			$this->groups = $groups;
+		}
 	}
+	// List folders = groups
 	function getChildren() {
 		$result = [];
 		foreach($this->groups as $group) {
@@ -212,7 +223,7 @@ class UsersCollection extends Sabre\DAV\Collection {
 
 /* File level Collections :
  * These actually link to real files, which are handled by the Elgg File system
- * And optionally to other content types (which could be even be edited through WebDAV)
+ * And optionally to other content types (which could even be edited through WebDAV)
  *  - each file level Collection should implement Collection helper classes
  *  - it should also implement Node helper class (lastModified, delete, setName) for files
  */
@@ -225,8 +236,31 @@ class GroupCollection extends Sabre\DAV\Collection {
 	}
 	function getChildren() {
 		$result = [];
+		//Sub-groups structure inside group : seems to make more sense that not listing them in a group folder
+		//if (elgg_is_active_plugin('au_subgroups') && (elgg_get_plugin_setting('display_subgroups', 'au_subgroups') != 'yes')) {
+		if (elgg_is_active_plugin('au_subgroups')) {
+			$subgroups = AU\SubGroups\get_subgroups($this->group, 0);
+			foreach($subgroups as $subgroup) {
+				$result[] = new GroupCollection($subgroup);
+			}
+		}
+		
 		$files = elgg_get_entities(array('type' => 'object', 'subtype' => 'file', 'container_guid' => $this->group->guid, 'limit' => 0, 'distinct' => true));
 		foreach($files as $ent) { $result[] = new EsopeDAVFile($ent->guid); }
+		
+		// @TODO support folder structure inside group
+		if (elgg_is_active_plugin('file_tools')) {
+			if (file_tools_use_folder_structure()) {
+				$folders = file_tools_get_folders($this->group->guid);
+				//foreach($folders as $ent) { $result[] = new EsopeDAVFolder($this->group->guid, $ent->guid); }
+				// function file_tools_get_sub_folders($folder = false, $list = false) {
+				/*
+				$folders = elgg_get_entities(array('type' => 'object', 'subtype' => 'file', 'container_guid' => $this->group->guid, 'limit' => 0, 'distinct' => true));
+				foreach($folders as $ent) { $result[] = new EsopeDAVFolder($ent->guid); }
+				*/
+			}
+		}
+		
 		return $result;
 	}
 	function getName() { return $this->group->name; }
@@ -248,6 +282,58 @@ class GroupCollection extends Sabre\DAV\Collection {
 		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:readonly'));
 	}
 	function createDirectory($name) {
+		//if (elgg_is_logged_in() && ($this->group->isMember($own) || $this->group->canEdit())) {}
+		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:directory:notimplemented'));
+	}
+}
+
+// Folder files
+class FolderCollection extends Sabre\DAV\Collection {
+	protected $folder;
+	function __construct($folder) {
+		$this->folder = $folder;
+	}
+	function getChildren() {
+		/* Sub Folders and Files
+		$result = [];
+		$files = elgg_get_entities(array('type' => 'object', 'subtype' => 'file', 'container_guid' => $this->group->guid, 'limit' => 0, 'distinct' => true));
+		foreach($files as $ent) { $result[] = new EsopeDAVFile($ent->guid); }
+		
+		// @TODO support folder structure inside group
+		if (elgg_is_active_plugin('file_tools')) {
+			if (file_tools_use_folder_structure()) {
+				$folders = file_tools_get_folders($this->group->guid) 
+				foreach($folders as $ent) { $result[] = new EsopeDAVFolder($this->group->guid, $ent->guid); }
+				// function file_tools_get_sub_folders($folder = false, $list = false) {
+				//$folders = elgg_get_entities(array('type' => 'object', 'subtype' => 'file', 'container_guid' => $this->group->guid, 'limit' => 0, 'distinct' => true));
+				//foreach($folders as $ent) { $result[] = new EsopeDAVFolder($ent->guid); }
+			}
+		}
+		
+		return $result;
+		*/
+	}
+	function getName() { return $this->folder->name; }
+	
+	// Edit functions
+	// @TODO add relation to folder
+	function createFile($name, $data = null) {
+		$own = elgg_get_logged_in_user_entity();
+		// Only group members can create new files
+		if (elgg_is_logged_in() && ($this->group->isMember($own) || $this->group->canEdit())) {
+			// Access is set to group members
+			$file = elgg_webdav_create_file($name, $data, array('owner_guid' => $own->guid, 'container_guid' => $this->group->guid, 'access_id' => $this->group->group_acl));
+			if (elgg_instanceof($file, 'object', 'file')) {
+				// After succesful creation of the file, you may choose to return the ETag of the new file here.
+				// The returned ETag must be surrounded by double-quotes (The quotes should be part of the actual string).
+				return '"' . $file->time_updated . $file->guid . '"';
+			}
+			throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:create'));
+		}
+		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:file:readonly'));
+	}
+	function createDirectory($name) {
+		// @TODO check if allowed and create subfolder
 		//if (elgg_is_logged_in() && ($this->group->isMember($own) || $this->group->canEdit())) {}
 		throw new Sabre\DAV\Exception\Forbidden(elgg_echo('elgg_webdav:error:directory:notimplemented'));
 	}

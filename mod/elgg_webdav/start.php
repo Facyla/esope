@@ -36,6 +36,14 @@ function elgg_webdav() {
 function elgg_webdav_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'elgg_webdav/pages/elgg_webdav';
 	switch($page[0]) {
+		// NEW MAIN entry point
+		case 'virtual':
+			// GUID is mandatory to provide better security and RESTful URI
+			if (!empty($page[1])) { set_input('type', $page[1]); }
+			if (!empty($page[2])) { set_input('guid', $page[2]); }
+			if (include_once "$base/server_virtual.php") { return true; }
+			break;
+		
 		case 'endpoint':
 		case 'server':
 			if (include_once "$base/server.php") { return true; }
@@ -64,14 +72,6 @@ function elgg_webdav_page_handler($page) {
 			// GUID is mandatory to provide better security and RESTful URI
 			if (!empty($page[1])) { set_input($guid, $page[1]); }
 			if (include_once "$base/server_group.php") { return true; }
-			break;
-		
-		// NEW Main entry point
-		case 'virtual':
-			// GUID is mandatory to provide better security and RESTful URI
-			if (!empty($page[1])) { set_input('type', $page[1]); }
-			if (!empty($page[2])) { set_input('guid', $page[2]); }
-			if (include_once "$base/server_virtual.php") { return true; }
 			break;
 		
 		// Access distant WebDAV resource
