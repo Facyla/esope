@@ -55,6 +55,8 @@ return array(
 	'upload_users:setting:update_existing_users' => 'Update profile information when user account already exists',
 	'upload_users:setting:fix_usernames' => 'Fix usernames if the value does not meet Elgg standards (e.g. contains special characters), and suffix them with a number if already taken',
 	'upload_users:setting:fix_passwords' => 'Generate a new cleartext passwords, if the value does not meet Elgg standards (e.g. is too short)',
+	'upload_users:notification:custom' => "Custom message inserted within the email notification",
+	'upload_users:notification:preview' => "Preview notification message",
 
 	'upload_users:create_users' => 'Create user accounts',
 	'upload_users:success' => 'User created succesfully',
@@ -117,6 +119,7 @@ return array(
 
 		Go to address %s to login.
 
+		%s
 	',
 	'upload_users:email:subject' => 'Your user account for %s',
 

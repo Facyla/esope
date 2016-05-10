@@ -14,13 +14,13 @@
  */
 // CSV File Input
 echo '<div>';
-echo '<label>' . elgg_echo('upload_users:choose_file') . '</label>';
+echo '<label>' . elgg_echo('upload_users:choose_file') . '</label> ';
 echo elgg_view('input/file', array('name' => 'csvfile'));
 echo '</div>';
 
 // CSV Delimiter
 echo '<div>';
-echo '<label>' . elgg_echo('upload_users:delimiter') . '</label>';
+echo '<label>' . elgg_echo('upload_users:delimiter') . '</label> ';
 echo elgg_view('input/dropdown', array(
 	'options_values' => array(
 		'&#44;' => elgg_echo('upload_users:delimiter:comma'),
@@ -34,7 +34,7 @@ echo '</div>';
 
 // CSV Enclosure
 echo '<div>';
-echo '<label>' . elgg_echo('upload_users:enclosure') . '</label>';
+echo '<label>' . elgg_echo('upload_users:enclosure') . '</label> ';
 echo elgg_view('input/dropdown', array(
 	'options_values' => array(
 		'&#34;' => elgg_echo('upload_users:enclosure:doublequote'),
@@ -47,7 +47,7 @@ echo '</div>';
 
 // CSV Encoding
 echo '<div>';
-echo '<label>' . elgg_echo('upload_users:encoding') . '</label>';
+echo '<label>' . elgg_echo('upload_users:encoding') . '</label> ';
 echo elgg_view('input/dropdown', array(
 	'options' => array('UTF-8', 'ISO-8859-1', 'Windows-1252'),
 	'name' => 'encoding',
@@ -67,10 +67,10 @@ if ($saved_templates) {
 	foreach ($saved_templates as $template_name => $opts) {
 		$saved_templates_names[$template_name] = $template_name;
 	}
-	$templates = array_merge($templates, $saved_templates_names);
+	$templates = array_merge($saved_templates_names, $templates);
 }
 echo '<div>';
-echo '<label>' . elgg_echo('upload_users:mapping_template') . '</label>';
+echo '<label>' . elgg_echo('upload_users:mapping_template') . '</label> ';
 echo elgg_view('input/dropdown', array(
 	'name' => 'template',
 	'options_values' => $templates
@@ -87,10 +87,10 @@ $settings = array(
 
 foreach ($settings as $setting) {
 	echo '<div>';
-	echo '<label>' . elgg_echo("upload_users:setting:$setting") . '</label>';
+	echo '<label>' . elgg_echo("upload_users:setting:$setting") . '</label> ';
 	echo elgg_view('input/dropdown', array('options_values' => array(
-			0 => elgg_echo('upload_users:no'),
 			1 => elgg_echo('upload_users:yes'),
+			0 => elgg_echo('upload_users:no'),
 		),
 		'name' => $setting,
 	));

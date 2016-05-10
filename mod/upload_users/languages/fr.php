@@ -56,6 +56,8 @@ return array(
 	'upload_users:setting:update_existing_users' => 'Mettre à jour les informations du profil si le compte existe déjà',
 	'upload_users:setting:fix_usernames' => "Corriger les identifiants si la valeur ne correspond pas aux standards d'Elgg (par ex. s'il contient des caractères spéciaux), et ajouter un numéro en suffixe si cet identifiant est déjà pris",
 	'upload_users:setting:fix_passwords' => "Générer de nouveaux mots de passe si la valeur ne correspond pas aux standards d'Elgg (par ex. s'il est trop court)",
+	'upload_users:notification:custom' => "Message à insérer dans les emails de notification",
+	'upload_users:notification:preview' => "Prévisualisation des messages envoyés",
 
 	'upload_users:create_users' => 'Créer les comptes des membres',
 	'upload_users:success' => 'Compte créé',
@@ -117,6 +119,7 @@ return array(
 
 	Veuillez vous rendre sur %s pour vous identifier.
 
+		%s
 	",
 	'upload_users:email:subject' => "Votre compte sur %s",
 	/**

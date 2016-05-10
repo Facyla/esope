@@ -117,6 +117,8 @@ return array(
 
 		Kirjautuaksesi mene osoitteeseen:
 		%s
+
+		%s
 	',
 	'upload_users:email:subject' => '%s - Käyttäjätunnuksesi',
 	/**
