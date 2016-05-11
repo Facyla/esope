@@ -241,7 +241,8 @@ $font6 = $css['font6'];
 }
 .elgg-module-widget > .elgg-head h3 {
 	float: left;
-	padding: 4px 45px 0 20px;
+	/* padding: 4px 45px 0 20px; */
+	padding: 0.25rem 4.5rem 0.125rem 0.4rem;
 	color: #666;
 }
 .elgg-module-widget.elgg-state-draggable .elgg-widget-handle {
@@ -296,7 +297,7 @@ a.elgg-widget-collapsed:before {
 	color: <?php echo $color14; ?>;
 	float: left;
 	font-family: <?php echo $font1; ?>;
-	font-size: 1.25em;
+	font-size: 1.125rem;
 	text-transform: uppercase;
 	font-weight: normal;
 	max-width:none;
@@ -304,7 +305,7 @@ a.elgg-widget-collapsed:before {
 }
 
 /* Contenu des modules */
-.elgg-page-body div.elgg-module .elgg-head ul { float: right; margin: 0px 0.5em 0.5em 0.5em; /* position: absolute; top: 0; right: 0; */ }
+.elgg-page-body div.elgg-module .elgg-head ul { float: right; padding: 0.1rem 0.2rem 0rem 0rem; margin: 0; font-size: 1.125rem; /* margin: 0px 0.5em 0.5em 0.5em; position: absolute; top: 0; right: 0; */ }
 .elgg-page-body div.elgg-module ul li { padding-left: 0; float: none; right: initial; left: inherit; margin-left: 0em; }
 
 .elgg-page-body div.elgg-module .elgg-head ul li a { float: none; margin:0; right: initial; }
@@ -369,7 +370,9 @@ div.elgg-widgets div.elgg-body { font-size: 0.8rem; }
 .elgg-widget-instance-event_calendar p { font-size: 1.3em; }
 
 /* Boutons des widgets */
-.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin:0; padding:2px 4px; color: <?php echo $color14; ?>; }
+.elgg-menu-widget button { outline: none; border: 0; background: transparent; margin:0; /* padding:2px 4px; */ padding: 0.125rem; color: <?php echo $color14; ?>; }
+.elgg-menu-widget li a { outline: none; border: 0; background: transparent; margin:0; /* padding:2px 4px; */ padding: 0.125rem; color: <?php echo $color14; ?>; }
+
 
 /* Widgets activité des groupes */
 .elgg-page-body div.elgg-widget-instance-group_activity div.elgg-body.activites,

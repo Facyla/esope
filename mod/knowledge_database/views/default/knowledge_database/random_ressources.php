@@ -4,15 +4,19 @@
 $content = '';
 
 $max = elgg_extract('max', $vars, 3);
+$search_vars = elgg_extract('search_vars', $vars, array());
 
 // Set default allowed list
-if (empty($vars['subtypes'])) $vars['subtypes'] = knowledge_database_get_allowed_subtypes();
+$defaults = array('type' => 'object');
+$search_vars = array_merge($defaults, $search_vars);
+
+if (empty($vars['subtypes'])) { $search_vars['subtypes'] = knowledge_database_get_allowed_subtypes(); }
 
 $content = '<div class="knowledge_database-random-ressources">';
 
 // Random database ressources
 $content .= '<h3>' . elgg_echo("knowledge_database:latestressources") . '</h3>';
-$latest = elgg_get_entities($vars);
+$latest = elgg_get_entities($search_vars);
 shuffle($latest);
 $latest = array_slice($latest, 0, $max);
 foreach($latest as $ent) {

@@ -18,17 +18,17 @@ function theme_afpa_dsp_init() {
 	elgg_extend_view('css/admin', 'theme_afpa_dsp/admin_css');
 	
 	// HOMEPAGE - Replace public and loggedin homepage
-	/*
 	if (elgg_is_logged_in()) {
 		elgg_unregister_page_handler('esope_index');
 		elgg_register_page_handler('', 'theme_afpa_dsp_index');
+	/*
 	} else {
 		if (!$CONFIG->walled_garden) {
 			elgg_unregister_page_handler('esope_public_index');
 			elgg_register_page_handler('','theme_afpa_dsp_public_index');
 		}
-	}
 	*/
+	}
 	
 	// Register a page handler on "theme_afpa_dsp/"
 	elgg_register_page_handler('theme_afpa_dsp', 'theme_afpa_dsp_page_handler');
