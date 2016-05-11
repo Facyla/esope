@@ -15,7 +15,7 @@ function theme_afpa_dsp_init() {
 	
 	// Extend CSS with custom styles
 	elgg_extend_view('css', 'theme_afpa_dsp/css');
-	elgg_extend_view('css/admin', 'theme_afpa_dsp/admin_css');
+	//elgg_extend_view('css/admin', 'theme_afpa_dsp/admin_css');
 	
 	// HOMEPAGE - Replace public and loggedin homepage
 	if (elgg_is_logged_in()) {

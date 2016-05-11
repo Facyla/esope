@@ -73,7 +73,17 @@ if (elgg_is_logged_in() && !$menu) {
 	
 	// Groupes
 	$groups = '';
+	$featured_groups = '';
 	if (elgg_is_active_plugin('groups')) {
+		// Groupes en Une
+		$featured = elgg_get_entities_from_metadata(array('type' => 'group', 'metadata_name' => 'featured_group', 'metadata_value' => 'yes'));
+		foreach($featured as $group) {
+			// inscription forcée
+			if ($group->isMember()) { $group->join($own); }
+			$featured_groups .= '<li><a href="' . $group->getURL() . '">' 
+				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $group->name . '</a></li>';
+		}
+		
 		// Liste de ses groupes
 		$options = array('type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => 99, 'order_by' => 'time_created asc');
 		// Cas des sous-groupes : listing avec marqueur de sous-groupe
@@ -168,18 +178,16 @@ if (elgg_is_logged_in()) {
 			<?php /* activity : Fil d'activité du site */ ?>
 			
 			<?php if (elgg_is_active_plugin('knowledge_database')) { ?>
-				<li class="kdb"><a <?php if(elgg_in_context('knowledge_database') || (current_page_url() == $url . 'kdb')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>kdb"><?php echo elgg_echo('kdb'); ?></a></li>
+				<li class="kdb"><a <?php if(elgg_in_context('knowledge_database') || (current_page_url() == $url . 'kdb')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>kdb"><?php echo elgg_echo('theme_afpa_dsp:kdb'); ?></a></li>
 			<?php } ?>
 			
 			<?php if (elgg_is_active_plugin('groups')) { ?>
-				<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/featured"><?php echo elgg_echo('groups:featured'); ?></a>
+				<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/featured"><?php echo elgg_echo('theme_afpa_dsp:groups:featured'); ?></a>
 					<ul class="hidden">
 						<?php echo $featured_groups; ?>
 					</ul>
 				</li>
-				<?php echo $invites; ?>
-				
-				<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('groups'); ?></a>
+				<li class="groups"><a <?php if(elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group'))) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>groups/all"><?php echo elgg_echo('theme_afpa_dsp:groups'); ?></a>
 					<ul class="hidden">
 						<li><a href="<?php echo $url . 'groups/all'; ?>"><?php echo elgg_echo('esope:joinagroup'); ?></a></li>
 						<?php echo $groups; ?>
@@ -189,7 +197,7 @@ if (elgg_is_logged_in()) {
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('categories')) { ?>
-				<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('esope:categories'); ?></a>
+				<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('categories'); ?></a>
 					<ul class="hidden">
 						<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('esope:categories:all'); ?></a></li>
 						<?php echo $categories; ?>
