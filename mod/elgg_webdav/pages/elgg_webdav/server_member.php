@@ -5,10 +5,6 @@
  * @package ElggWebDAV
  */
 
-
-
-global $CONFIG;
-
 elgg_push_breadcrumb(elgg_echo('elgg_webdav'), 'webdav');
 elgg_push_breadcrumb(elgg_echo('elgg_webdav:member'), 'webdav/member');
 
@@ -26,7 +22,7 @@ if (!file_exists($public_path)) { mkdir($public_path, 0770); }
 if (!file_exists($data_path)) { mkdir($data_path, 0770); }
 if (!file_exists($locks_path)) { mkdir($locks_path, 0770); }
 // Relative endpoint URL, without domain
-$base_uri = parse_url($CONFIG->url . 'webdav/member');
+$base_uri = parse_url(elgg_get_site_url() . 'webdav/member');
 $base_uri = $base_uri['path'];
 
 
@@ -90,7 +86,7 @@ $lockPlugin = new DAV\Locks\Plugin($lockBackend);
 $server->addPlugin($lockPlugin);
 // This ensures that we get a pretty index in the browser, but it is optional.
 //$server->addPlugin(new DAV\Browser\Plugin());
-require_once('EsopeBrowserPlugin.php');
+require_once elgg_get_plugins_path() . 'elgg_webdav/classes/EsopeBrowserPlugin.php';
 $server->addPlugin(new DAV\Browser\EsopePlugin());
 
 

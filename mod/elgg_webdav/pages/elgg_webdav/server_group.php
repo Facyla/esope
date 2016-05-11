@@ -116,7 +116,7 @@ $lockPlugin = new DAV\Locks\Plugin($lockBackend);
 $server->addPlugin($lockPlugin);
 // This ensures that we get a pretty index in the browser, but it is optional.
 //$server->addPlugin(new DAV\Browser\Plugin());
-require_once('EsopeBrowserPlugin.php');
+require_once elgg_get_plugins_path() . 'elgg_webdav/classes/EsopeBrowserPlugin.php';
 $server->addPlugin(new DAV\Browser\EsopePlugin());
 
 
