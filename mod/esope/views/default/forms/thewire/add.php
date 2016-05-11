@@ -31,7 +31,7 @@ if ($post) {
 	// Niveau d'accès défini ssi pas une réponse
 	$options_values = array('2' => elgg_echo('PUBLIC'), '1' => elgg_echo('LOGGED_IN'));
 	//$access_input = elgg_view('input/groups_select', array('name' => 'group_guid', 'id' => 'group_guid'));
-	$access_input .= elgg_view('input/access', array('name' => 'access_id', 'id' => 'access_id', 'options_values' => $options_values, 'value' => 16, 'js' => ' style="max-width:50%; min-width: 10ex;"')) . '</label>';
+	$access_input .= elgg_view('input/access', array('name' => 'access_id', 'id' => 'access_id', 'options_values' => $options_values, 'value' => 1, 'js' => ' style="max-width:50%; min-width: 10ex;"')) . '</label>';
 }
 
 $count_down = "<span>$char_limit</span> $chars_left";
