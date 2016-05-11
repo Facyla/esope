@@ -130,14 +130,14 @@ if (elgg_is_active_plugin('members')) {
 }
 
 // Base de connaissances
-$kdb = '<h3>Base de connaissances</h3>Accès direct au moteur de recherche + dernières publications ? (un peu redondant avec activité récente ?)' . elgg_view('knowledge_database/random_ressources', array('max' => 6)) . '';
+$kdb = '<br /><h3>Base documentaire</h3>' . elgg_view('knowledge_database/random_ressources', array('max' => 6)) . '';
 
 
 // Veille récente
 elgg_push_context('widgets');
 $bookmarks = '<h3>Veille</h3>' . elgg_list_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 3, 'full_view' => false, 'pagination' => false)) . '';
 elgg_pop_context('widgets');
-$right_side .= '<div class="home-static">' . $bookmarks . '</div>';
+$right_side .= '<br /><div class="home-static">' . $bookmarks . '</div>';
 
 
 // Composition de la ligne
