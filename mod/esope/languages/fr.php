@@ -928,6 +928,7 @@ return array(
 	'esope:icon:group_activity' => "<i class=\"fa fa-flash fa-fw\"></i>",
 	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i>",
 	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
+	'esope:icon:comment' => "<i class=\"fa fa-comment fa-fw\"></i>",
 	// Sprites icons
 	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
 	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
