@@ -19,7 +19,7 @@ if ($tools) {
 	foreach ($tools as $k => $obj) {
 		$option_name = $obj->name;
 		$priority = elgg_get_plugin_setting("options:$option_name", 'groups');
-		if (!$priority) $priority = ($k + 1) * 10;
+		if (!$priority) { $priority = ($k + 1) * 10; }
 		$group_options[$priority] = $obj;
 	}
 	ksort($group_options);
@@ -36,17 +36,27 @@ if ($tools) {
 			$group_option_default_value = 'yes';
 		} else {
 			// Let the plugin decide by itself
-			if ($group_option->default_on) { $group_option_default_value = 'yes'; } 
-			else { $group_option_default_value = 'no'; }
+			if ($group_option->default_on) {
+				$group_option_default_value = 'yes';
+			} else {
+				$group_option_default_value = 'no';
+			}
 		}
-		$value = ($vars['entity']->$group_option_toggle_name) ? $vars['entity']->$group_option_toggle_name : $group_option_default_value;
+		if ($vars['entity']->$group_option_toggle_name) {
+			$value = $vars['entity']->$group_option_toggle_name;
+		} else {
+			$value = $group_option_default_value;
+		}
 		
-		echo elgg_format_element('div', array(), elgg_view('input/checkbox', array(
+		$checked = false;
+		if ($value === 'yes') { $checked = true; }
+		echo elgg_format_element('div', null, elgg_view('input/checkbox', array(
 			'name' => $group_option_toggle_name,
 			'value' => 'yes',
 			'default' => 'no',
-			'checked' => ($value === 'yes') ? true : false,
+			'checked' => $checked,
 			'label' => $group_option->label
 		)));
 	}
 }
+

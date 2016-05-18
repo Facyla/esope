@@ -6,11 +6,16 @@ return array (
 	'knowledge_database:homepage' => 'Knowledge Database',
 	
 	'knowledge_database:addressource' => 'Add a new ressource',
-	'knowledge_database:addfile' => 'Upload a file document',
-	'knowledge_database:addbookmark' => 'Publish a link to an online ressource',
-	'knowledge_database:addblog' => 'Publish text',
+	'knowledge_database:addfile' => '<i class="fa fa-file"></i><br />Upload a file document',
+	'knowledge_database:addbookmarks' => '<i class="fa fa-link"></i><br />Publish a link to an online ressource',
+	'knowledge_database:addblog' => '<i class="fa fa-file-text-o"></i><br />Publish text',
+	'knowledge_database:addevent_calendar' => '<i class="fa fa-calendar"></i><br />Publish an event',
+	'knowledge_database:addpages' => '<i class="fa fa-file-text-o"></i><br />Publish a page',
+	'knowledge_database:addannouncements' => '<i class="fa fa-file-text-o"></i><br />Publish an announcement',
+
 	'knowledge_database:kdbgrouperror' => "Something's wrong with the Knowledge Database group, please contact the site administrator !",
 	'knowledge_database:error:sitedisabled' => "Knowledge Database is not enabled for the whole site.",
+	'knowledge_database:contribute' => "save.",
 	'knowledge_database:contribute' => "To contribute to the Knowledge Database, please <a href=\"" . $url . "login\">login on the website</a> (you may need to register first).",
 	
 	'knowledge_database:publish:warning' => "<i class=\"fa fa-warning\"></i> When publishing content, please check that you actually have the right to publish it. You have this right if you are the author or publisher of a document, or if its license grants the right to publish it. If not, you should ask the author or publisher for its authorisation.<br />If publication is not allowed, please note that you can still publish a Web link to an online ressource instead.",
@@ -25,25 +30,56 @@ return array (
 	'knowledge_database:noresult' => "No ressource found. Try to refine your search criteria.",
 	
 	'knowledge_database:fulltextsearch' => "Title / description",
-	'knowledge_database:fulltextsearch:details' => "Searches in the document title and description (not inside the files)",
-	'knowledge_database:container_guid' => "Container (KDB group GUID)",
+	'knowledge_database:fulltextsearch:details' => "Searches in the document title and description (not inside the uploaded files)",
+	'knowledge_database:container_guid' => "Container (Knowledge Database group GUID)",
 	
 	// Settings
 	'knowledge_database:settings:global' => "Global settings",
 	'knowledge_database:settings:site' => "Site Knowledge Database settings",
+	'knowledge_database:settings:field' => "Definition of \"%s\" (%s)",
+	'knowledge_database:settings:field:edit' => "Configuration of \"%s\"",
+	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correpond à une vue input et output existante. Par ex. text, longtext, plaintext, dropdown, date...<br />
+	<strong>Category&nbsp;:</strong> facultatif, permet de regrouper les champs par groupe de champs<br />
+	<strong>Read&nbsp;:</strong> \"yes\" ou \"no\" - permet de définir si ce champ est affiché. Se référer au code source pour des définitions plus avancées, selon les rôles et l'état du workflow.<br />
+	<strong>Edit&nbsp;:</strong> permet de définir si ce champ peut être édité. Même configuration possible que pour \"read\".<br />
+	<strong>Required&nbsp;:</strong> le champ doit être renseigné pour valider le formulaire<br />
+	<strong>Multiple&nbsp;:</strong> (dropdown) le champ accepte plusieurs valeurs<br />
+	<strong>Autocomplete&nbsp;:</strong> (text) le champ propose des valeurs déjà saisies<br />
+	<strong>Default&nbsp;:</strong> valeur par défaut du champ<br />
+	<strong>Options values&nbsp;:</strong> (dropdown) liste des valeurs possibles<br />",
+	'knowledge_database:settings:fields:site' => "Liste des métadonnées pour l'ensemble du site",
+	'knowledge_database:settings:fields:group' => "Liste des métadonnées pour le groupe \"%s\"",
+	'knowledge_database:settings:fields' => "Metadata definition",
+	'knowledge_database:settings:fields:details' => "Pour définir la liste des champs, indiquez un nom de métadonnée par ligne, ou séparrez les noms par des virgules, par ex. metadata1, metadata2, etc.<br />
+		Les noms devraient être saisis en minuscule, sans espace ni accent ou signe de ponctuation, et être uniques pour éviter tout risque de conflit avec d'autres metadonnées<br />
+		<strong>Une bonne pratique vivement recommandée consiste à utiliser un prefixe, par ex.: kdb_metadata</strong>",
+	'knowledge_database:settings:fields:config' => "Vous pouvez définir ici la configuration de chacun des champs.<br />Attention : certaines modifications ne seront visibles qu'après le rechargement de la page.",
+	'knowledge_database:settings:actions:details' => "Pour définir les actions autorisées, vous pouvez utiliser :<br />
+		 \"yes\" ou \"no\" pour une définition globale<br />
+		 \"role1 | role2\" pour autoriser les rôles role1 et role2<br />
+		 \"role1 (step1, step2) | role2 (step1)\" pour autoriser les rôles role1 dans certains états du workflow.",
 	
-	'knowledge_database:settings:mode' => "Mode de fonctionnement",
-	'knowledge_database:settings:mode:site' => "Activer la base de connaissance globale (tout le site) ?",
-	'knowledge_database:settings:kdb_group' => "Associer un groupe précis à la base de connaissance du site ?",
-	'knowledge_database:settings:mode:pergroup' => "Activer la base de donnée par groupe ?",
-	'knowledge_database:settings:mode:merge' => "Ajouter les champs du site à ceux du groupe (si les 2 sont activés) ?",
-	'knowledge_database:settings:subtypes' => "Types de publications concernées",
-	'knowledge_database:settings:default' => "Par défaut",
+	'knowledge_database:settings:mode' => "Behaviour mode",
+	'knowledge_database:settings:mode:site' => "Enable the global knowledge base (for the whole site)?",
+	'knowledge_database:settings:kdb_group' => "Associate a precise group to the site knowledge base?",
+	'knowledge_database:settings:mode:pergroup' => "Enable the per-group knowledge base?",
+	'knowledge_database:settings:mode:merge' => "Add site fields to group fields (if both are enabled)?",
+	'knowledge_database:settings:mode:merge:details' => "If NO, only fields for the group will be used to publish and search content in the group's knowledge base. If YES, both site and groups fields will be used.",
+	'knowledge_database:settings:globalsearch' => "Use all fields in the global search (site + groups)?",
+	'knowledge_database:settings:globalsearch:details' => "If NO, only site fields will be used. If YES, all defined fields will be used to search the global knowledge base.",
+	'knowledge_database:settings:inputs' => "Available fields input types",
+	'knowledge_database:settings:inputs:details' => "Authorised fields input types for new knowledge base fields configuraiton. These should be the names of existing input/* views. These views have to exist in the system, and should also have a corresponding output/* view.",
+	'knowledge_database:settings:subtypes' => "Relevant content types",
+	'knowledge_database:settings:subtypes:details' => "Warning: please type contexts and not subtypes! (eg. pages and not page and page_top).",
+	'knowledge_database:settings:default' => "By default",
 	'knowledge_database:subtype' => "Content types",
 	'knowledge_database:subtype:all' => "All content types",
 	'knowledge_database:subtype:bookmarks' => "Web link",
 	'knowledge_database:subtype:file' => "Downloadable document",
 	'knowledge_database:subtype:blog' => "Article",
+	'knowledge_database:subtype:pages' => "Page",
+	'knowledge_database:subtype:evnet_calendar' => "Event",
+	'knowledge_database:subtype:announcements' => "Announcement",
 	
 	'knowledge_database:settings:keytitle' => "Options for metadata \"%s\"",
 	'knowledge_database:settings:fields:notice' => "CAUTION :<ul>

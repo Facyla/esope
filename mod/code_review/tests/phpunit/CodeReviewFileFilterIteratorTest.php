@@ -1,5 +1,7 @@
 <?php
-class CodeReviewFileFilterIteratorTest extends PHPUnit_Framework_TestCase {
+namespace CodeReview\Tests;
+
+class CodeReviewFileFilterIteratorTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * Tests normal operation
@@ -14,19 +16,19 @@ class CodeReviewFileFilterIteratorTest extends PHPUnit_Framework_TestCase {
 		foreach ($paths as $row) {
 			list($path, $skipInactive) = $row;
 
-			$config = new CodeReviewConfig(array(
+			$config = new \CodeReview\Config(array(
 				'includeDisabledPlugins' => !$skipInactive,
 			));
 
-			$baseFileInfo = new SplFileInfo($path);
-			$i = new RecursiveDirectoryIterator($path);
-			$i = new RecursiveIteratorIterator($i, RecursiveIteratorIterator::LEAVES_ONLY);
-			$i = new CodeReviewFileFilterIterator($i, $path, $config);
+			$baseFileInfo = new \SplFileInfo($path);
+			$i = new \RecursiveDirectoryIterator($path);
+			$i = new \RecursiveIteratorIterator($i, \RecursiveIteratorIterator::LEAVES_ONLY);
+			$i = new \CodeReview\FileFilterIterator($i, $path, $config);
 
 			$filesFound = array();
-			/** @var $file SplFileInfo */
+			/** @var $file \SplFileInfo */
 			foreach ($i as $file) {
-				$this->assertInstanceOf('SplFileInfo', $file);
+				$this->assertInstanceOf('\SplFileInfo', $file);
 				$this->assertNotEquals('.dummy_config', $file->getBasename());
 				$entry = substr($file->getRealPath(), strlen($path));
 				if ($entry) {
@@ -77,8 +79,9 @@ class CodeReviewFileFilterIteratorTest extends PHPUnit_Framework_TestCase {
 
 		require_once($path . 'engine/start.php');
 
-		code_review::initConfig(array(
+		\code_review::initConfig(array(
 			'path' => $path,
+			'engine_path' => $path . 'engine/',
 			'pluginspath' => $path . 'mod/',
 			'plugins_getter' => array($this, 'mocked_plugins_getter'),
 		));
@@ -91,19 +94,19 @@ class CodeReviewFileFilterIteratorTest extends PHPUnit_Framework_TestCase {
 		foreach ($paths as $row) {
 			list($path, $skipInactive) = $row;
 
-			$config = new CodeReviewConfig(array(
+			$config = new \CodeReview\Config(array(
 				'includeDisabledPlugins' => !$skipInactive,
 			));
 
-			$baseFileInfo = new SplFileInfo($path);
-			$i = new RecursiveDirectoryIterator($path);
-			$i = new RecursiveIteratorIterator($i, RecursiveIteratorIterator::LEAVES_ONLY);
-			$i = new CodeReviewFileFilterIterator($i, $path, $config);
+			$baseFileInfo = new \SplFileInfo($path);
+			$i = new \RecursiveDirectoryIterator($path);
+			$i = new \RecursiveIteratorIterator($i, \RecursiveIteratorIterator::LEAVES_ONLY);
+			$i = new \CodeReview\FileFilterIterator($i, $path, $config);
 
 			$filesFound = array();
-			/** @var $file SplFileInfo */
+			/** @var $file \SplFileInfo */
 			foreach ($i as $file) {
-				$this->assertInstanceOf('SplFileInfo', $file);
+				$this->assertInstanceOf('\SplFileInfo', $file);
 				$this->assertNotEquals('.dummy_config', $file->getBasename());
 				$entry = substr($file->getRealPath(), strlen($path));
 				if ($entry) {
@@ -141,13 +144,13 @@ class CodeReviewFileFilterIteratorTest extends PHPUnit_Framework_TestCase {
 	 * Passing not existing base dir parameter
 	 */
 	public function testNonExistingPath() {
-		$config = new CodeReviewConfig();
+		$config = new \CodeReview\Config();
 		$path = dirname(__FILE__) . '/test_files/fake_elgg/';
 		$bad_path = dirname(__FILE__) . '/test_files/non_existing_path/';
-		$i = new RecursiveDirectoryIterator($path);
-		$i = new RecursiveIteratorIterator($i, RecursiveIteratorIterator::LEAVES_ONLY);
-		$this->setExpectedException('CodeReview_IOException', "Directory $bad_path does not exists");
-		new CodeReviewFileFilterIterator($i, $bad_path, $config);
+		$i = new \RecursiveDirectoryIterator($path);
+		$i = new \RecursiveIteratorIterator($i, \RecursiveIteratorIterator::LEAVES_ONLY);
+		$this->setExpectedException('\CodeReview\IOException', "Directory $bad_path does not exists");
+		new \CodeReview\FileFilterIterator($i, $bad_path, $config);
 	}
 
 }

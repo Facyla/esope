@@ -18,11 +18,16 @@ class code_review {
 	 */
 	public static function boot() {
 		if (version_compare(elgg_get_version(true), '1.9', '<')) {
-			$autoloader = new CodeReviewAutoloader();
+			$autoloader = new \CodeReview\Autoloader();
 			$autoloader->register();
 		}
 
+		$enginePath = elgg_get_config('path') . 'engine/';
+		if (function_exists('elgg_get_engine_path')) {
+			$enginePath = elgg_get_engine_path() . '/';
+		}
 		self::initConfig(array(
+			'engine_path' => $enginePath,
 			'path' => elgg_get_config('path'),
 			'pluginspath' => elgg_get_plugins_path(),
 			'plugins_getter' => 'elgg_get_plugins',
@@ -39,7 +44,7 @@ class code_review {
 	/**
 	 * @param array $options
 	 *
-	 * @todo Move into CodeReviewConfig instead
+	 * @todo Move into \CodeReview\Config instead
 	 */
 	public static function initConfig(array $options) {
 		self::$config = $options;
@@ -103,13 +108,11 @@ class code_review {
 			'name' => 'admin/code/diagnostic/deprecated_list',
 			'href' => 'admin/code/diagnostic/deprecated_list',
 			'text' => elgg_echo('admin:code:diagnostic:deprecated_list'),
-//			'target' => '_blank',
 		));
 		$result[] = ElggMenuItem::factory(array(
 			'name' => 'admin/code/diagnostic/private_list',
 			'href' => 'admin/code/diagnostic/private_list',
 			'text' => elgg_echo('admin:code:diagnostic:private_list'),
-//			'target' => '_blank',
 		));
 		$result[] = ElggMenuItem::factory(array(
 			'name' => 'admin/code/diagnostic/functions_list',
@@ -123,31 +126,32 @@ class code_review {
 	 * @param string $subPath
 	 * @return RegexIterator
 	 */
-	public static function getPhpIterator($subPath = 'engine/') {
-		$i = new RecursiveDirectoryIterator(self::$config['path'] . $subPath, RecursiveDirectoryIterator::SKIP_DOTS);
+	public static function getPhpIterator($subPath = '/') {
+		$i = new RecursiveDirectoryIterator(self::$config['engine_path'] . $subPath, RecursiveDirectoryIterator::SKIP_DOTS);
 		$i = new RecursiveIteratorIterator($i, RecursiveIteratorIterator::LEAVES_ONLY);
 		$i = new RegexIterator($i, "/.*\.php/");
 		return $i;
 	}
 
 	public static function getVersionsList() {
-		$i = self::getPhpIterator('engine/lib/');
+		$i = self::getPhpIterator('lib/');
 		$i = new RegexIterator($i, "/deprecated-.*/");
 		
 		$vv = array();
 		
 		foreach ($i as $file) {
-			if ($file instanceof SplFileInfo) {
+			if ($file instanceof \SplFileInfo) {
 				if (preg_match('#^deprecated-([0-9\.]*)$#', $file->getBasename('.php'), $matches)) {
 					$version = $matches[1];
 				} else {
 					$version = null;
 				}
-				if ($version) {
+				if ($version !== null) {
 					$vv[] = $version;
 				}
 			}
 		}
+		usort($vv, 'version_compare');
 		return $vv;
 	}
 
@@ -182,7 +186,7 @@ class code_review {
 		return strpos($e, self::PRIVATE_TAG_PREFIX) === 0;
 	}
 
-	private static function getDeprecatedInfoFromDocBlock($deprecatedInfo) {
+	private static function getDeprecatedInfoFromDocBlock($deprecatedInfo, $maxVersion) {
 		if (strpos($deprecatedInfo, '@' . self::DEPRECATED_TAG_PREFIX) === false){
 			return false;
 		} else {
@@ -196,7 +200,7 @@ class code_review {
 			//save and strip leading version info
 			$version = null;
 			preg_match('#^\s*([0-9]+\.[0-9]+)#', $deprecatedInfo, $matches);
-			if ($matches) {
+			if (!empty($matches)) {
 				$version = $matches[1];
 			}
 			$deprecatedInfo = preg_replace('#\s*[0-9](?:\.[0-9]+){1,2}\.?\s*#', "", $deprecatedInfo);
@@ -212,23 +216,15 @@ class code_review {
 
 			$result = array(
 				'deprecated' => true,
-//				'fixinfo' => strlen($deprecatedInfo) > 0 ? $deprecatedInfo : false,
 				'fixinfoshort' => strlen($shortDeprecatedInfo) > 0 ? $shortDeprecatedInfo : false,
 			);
-			if ($version) {
+			if ($version !== null) {
+				//skip versions higher than selected
+				if ($maxVersion && version_compare($version, $maxVersion) > 0) {
+					return false;
+				}
 				$result['version'] = $version;
 			}
-			return $result;
-		}
-	}
-
-	private static function getPrivateInfoFromDocBlock($privateInfo) {
-		if (strpos($privateInfo, '@' . self::PRIVATE_TAG_PREFIX) === false){
-			return false;
-		} else {
-			$result = array(
-				'private' => true
-			);
 			return $result;
 		}
 	}
@@ -238,9 +234,9 @@ class code_review {
 	 * @return array
 	 */
 	public static function getDeprecatedFunctionsList($maxVersion = '') {
-		$i1 = self::getPhpIterator('engine/lib/');
+		$i1 = self::getPhpIterator('lib/');
 		$i1 = new RegexIterator($i1, "/deprecated-.*/");
-		$i2 = self::getPhpIterator('engine/classes/');
+		$i2 = self::getPhpIterator('classes/');
 
 		$i = new AppendIterator();
 		$i->append($i1);
@@ -249,7 +245,7 @@ class code_review {
 		$functs = array();
 		
 		foreach ($i as $file) {
-			if ($file instanceof SplFileInfo) {
+			if ($file instanceof \SplFileInfo) {
 				if (preg_match('#^deprecated-([0-9\.]*)$#', $file->getBasename('.php'), $matches)) {
 					$version = $matches[1];
 				} else {
@@ -257,25 +253,24 @@ class code_review {
 				}
 				
 				//skip versions higher than selected
-				if ($maxVersion && $version && version_compare($version, $maxVersion) > 0) {
+				if ($maxVersion && $version !== null && version_compare($version, $maxVersion) > 0) {
 					continue;
 				}
 
-				$tokens = new PhpFileParser($file->getPathname());
-				$functs = array_merge($functs, self::getDeprecatedFunctionsFromTokens($tokens, $file, $version));
+				$tokens = new \CodeReview\PhpFileParser($file->getPathname());
+				$functs = array_merge($functs, self::getDeprecatedFunctionsFromTokens($tokens, $file, $version, $maxVersion));
 			}
 		}
 		return $functs;
 	}
 
 	/**
-	 * @param string $maxVersion
 	 * @return array
 	 */
 	public static function getPrivateFunctionsList() {
-		$i1 = new DirectoryIterator(self::$config['path'] . 'engine/lib/');
+		$i1 = new DirectoryIterator(self::$config['engine_path'] . 'lib/');
 		$i1 = new RegexIterator($i1, "/.*\.php/");
-		$i2 = self::getPhpIterator('engine/classes/');
+		$i2 = self::getPhpIterator('classes/');
 
 		$i = new AppendIterator();
 		$i->append($i1);
@@ -284,8 +279,8 @@ class code_review {
 		$functs = array();
 
 		foreach ($i as $file) {
-			if ($file instanceof SplFileInfo) {
-				$tokens = new PhpFileParser($file->getPathname());
+			if ($file instanceof \SplFileInfo) {
+				$tokens = new \CodeReview\PhpFileParser($file->getPathname());
 				$functs = array_merge($functs, self::getPrivateFunctionsFromTokens($tokens, $file));
 			}
 		}
@@ -295,12 +290,13 @@ class code_review {
 	/**
 	 * Redurns deprecated functions from particular file.
 	 *
-	 * @param PhpFileParser $tokens
-	 * @param SplFileInfo   $file
+	 * @param \CodeReview\PhpFileParser $tokens
+	 * @param \SplFileInfo   $file
 	 * @param               $version
+	 * @param               $maxVersion max version to return
 	 * @return array
 	 */
-	private static function getDeprecatedFunctionsFromTokens(PhpFileParser $tokens, SplFileInfo $file, $version) {
+	private static function getDeprecatedFunctionsFromTokens(\CodeReview\PhpFileParser $tokens, \SplFileInfo $file, $version, $maxVersion) {
 		$namespace = '';
 		$className = null;
 		$functs = array();
@@ -326,20 +322,22 @@ class code_review {
 			//TODO we need to filter out closures
 
 			if ($tokens->isEqualToToken(T_FUNCTION, $key)) {
-				if ($className) {
+				if ($className !== null) {
 					$functionName = $className . '::' . $tokens[$key+2][1];
 					try {
-						$reflection = new ReflectionMethod($className, $tokens[$key+2][1]);
-					} catch (ReflectionException $e) {
-						break;
+						$reflection = new \ReflectionMethod($className, $tokens[$key+2][1]);
+					} catch (\ReflectionException $e) {
+//						var_dump($className, $functionName, $e->getMessage());
+						continue;
 					}
 
 				} else {
 					$functionName = $tokens[$key+2][1];
 					try {
-						$reflection = new ReflectionFunction($functionName);
-					} catch (ReflectionException $e) {
-						break;
+						$reflection = new \ReflectionFunction($functionName);
+					} catch (\ReflectionException $e) {
+//						var_dump($functionName, $e->getMessage());
+						continue;
 					}
 				}
 
@@ -353,15 +351,24 @@ class code_review {
 
 				$docBlock = $reflection->getDocComment();
 				if ($docBlock) {
-					$info = self::getDeprecatedInfoFromDocBlock($docBlock);
+					$info = self::getDeprecatedInfoFromDocBlock($docBlock, $maxVersion);
 					if (!$info) {
-						//skipping - not deprecated
-						continue;
+						if ($version) {
+							// no details, but we have version, so everything is deprecated here
+							$info = array(
+								'deprecated' => true,
+								'version' => $version,
+								'fixinfoshort' => false,
+							);
+						} else {
+							//skipping - not deprecated
+							continue;
+						}
 					}
 					$data = array_merge($data, $info);
 				}
 
-				$functs[strtolower($functionName)] = new CodeReview_Issues_Deprecated($data);
+				$functs[strtolower($functionName)] = new \CodeReview\Issues\DeprecatedIssue($data);
 			}
 		}
 		return $functs;
@@ -370,12 +377,12 @@ class code_review {
 	/**
 	 * Redurns deprecated functions from particular file.
 	 *
-	 * @param PhpFileParser $tokens
-	 * @param SplFileInfo   $file
+	 * @param \CodeReview\PhpFileParser $tokens
+	 * @param \SplFileInfo   $file
 	 * @param               $version
 	 * @return array
 	 */
-	private static function getPrivateFunctionsFromTokens(PhpFileParser $tokens, SplFileInfo $file) {
+	private static function getPrivateFunctionsFromTokens(\CodeReview\PhpFileParser $tokens, \SplFileInfo $file) {
 		$namespace = '';
 		$className = null;
 		$functs = array();
@@ -399,19 +406,19 @@ class code_review {
 			}
 
 			if ($tokens->isEqualToToken(T_FUNCTION, $key)) {
-				if ($className) {
+				if ($className !== null) {
 					$functionName = $className . '::' . $tokens[$key+2][1];
 					try {
-						$reflection = new ReflectionMethod($className, $tokens[$key+2][1]);
-					} catch (ReflectionException $e) {
-						break;
+						$reflection = new \ReflectionMethod($className, $tokens[$key+2][1]);
+					} catch (\ReflectionException $e) {
+						continue;
 					}
 				} else {
 					$functionName = $tokens[$key+2][1];
 					try {
-						$reflection = new ReflectionFunction($functionName);
-					} catch (ReflectionException $e) {
-						break;
+						$reflection = new \ReflectionFunction($functionName);
+					} catch (\ReflectionException $e) {
+						continue;
 					}
 				}
 
@@ -428,10 +435,10 @@ class code_review {
 						//skipping - not private
 						continue;
 					}
-					$data = new CodeReview_Issues_Private($data);
+					$data = new \CodeReview\Issues\PrivateIssue($data);
 				} else {
 					//non documented means private
-					$data = new CodeReview_Issues_NotDocumented($data);
+					$data = new \CodeReview\Issues\NotDocumentedIssue($data);
 				}
 
 				$functs[strtolower($functionName)] = $data;
@@ -450,7 +457,7 @@ class code_review {
 	 * @return array Array of directory names (not full paths)
 	 */
 	public static function getPluginDirsInDir($dir = null) {
-		if (!$dir) {
+		if ($dir === null) {
 			$dir = self::$config['pluginspath'];
 		}
 
