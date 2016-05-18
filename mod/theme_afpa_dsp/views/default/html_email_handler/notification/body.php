@@ -36,6 +36,7 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 		<div id="notification_container">
 			
 			<div id="notification_header">
+				<img style="float:left;" src="<?php echo elgg_get_site_url(); ?>mod/theme_afpa_dsp/graphics/AFPA_transparent.gif" alt="Logo AFPA"><br />
 				<?php
 					echo elgg_view("output/url", array("href" => $site_url, "text" => $site->name, "is_trusted" => true));
 				?>
