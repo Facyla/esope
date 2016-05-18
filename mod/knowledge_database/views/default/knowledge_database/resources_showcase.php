@@ -5,7 +5,7 @@ $content = '';
 
 $entities = elgg_extract('entities', $vars, 3);
 $title = elgg_extract('title', $vars, elgg_echo("knowledge_database:latestressources"));
-$class = elgg_extract('class', $vars, 'knowledge_database-ressources-showcase')
+$class = elgg_extract('class', $vars, 'knowledge_database-ressources-showcase');
 
 $content = '<div class="' . $class . '">';
 
