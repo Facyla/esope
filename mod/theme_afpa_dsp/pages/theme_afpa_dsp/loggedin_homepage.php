@@ -137,7 +137,7 @@ $kdb = '<br /><h3>Base documentaire</h3>' . elgg_view('knowledge_database/random
 //elgg_push_context('widgets');
 //$bookmarks = '<h3>Veille</h3>' . elgg_list_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 3, 'full_view' => false, 'pagination' => false)) . '';
 //elgg_pop_context('widgets');
-$bookmarks_ent = elgg_get_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 12));
+$bookmarks_ents = elgg_get_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 12));
 $bookmarks = '<h3>Veille</h3>' . elgg_view('esope/content/objects', array('entities' => $bookmarks_ents));
 $right_side .= '<br /><div class="home-static">' . $bookmarks . '</div>';
 
