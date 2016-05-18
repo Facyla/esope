@@ -20,6 +20,8 @@ if ($tools) {
 		$option_name = $obj->name;
 		$priority = elgg_get_plugin_setting("options:$option_name", 'groups');
 		if (!$priority) { $priority = ($k + 1) * 10; }
+		// Ensure no entry will be skipped because of equal priority!
+		while (isset($group_options[$priority])) { $priority++; }
 		$group_options[$priority] = $obj;
 	}
 	ksort($group_options);
