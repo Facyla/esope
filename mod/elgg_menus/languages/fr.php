@@ -14,7 +14,7 @@ return array(
 	'elgg_menus:selectedit' => "Menu à éditer",
 	'elgg_menus:edit:title' => "Edition du menu",
 	'elgg_menus:preview' => "Prévisualiser le menu \"%s\"",
-	'elgg_menus:preview:details' => "Seules les modifications déjà enregistrées seront affichées.",
+	'elgg_menus:preview:details' => "Seules les modifications enregistrées seront affichées.",
 	// Edit
 	'elgg_menus:item:edit' => "Edition",
 	'elgg_menus:edit:newitem' => "Nouvel item de menu",
@@ -75,7 +75,7 @@ return array(
 	'elgg_menus:item:contexts' => "Contexte(s)",
 	'elgg_menus:item:contexts:details' => "Les contextes dans lesquels cet item sera affiché. Pour tous, indiquer 'all'. Pour plusieurs contextes, indiquer&nbsp;: 'blog,groups,friends...'",
 	'elgg_menus:item:parent_name' => "Identifiant du parent",
-	'elgg_menus:item:parent_name:details' => "Si cet item est un sous-menu, indiquer ici l'identifiant de l'item parent. SI le parent est lui-même un sous-menu, plusieurs niveaux imbriqués seront créés.",
+	'elgg_menus:item:parent_name:details' => "Si cet item est un sous-menu, indiquer ici l'identifiant de l'item parent. Si le parent est lui-même un sous-menu, plusieurs niveaux imbriqués seront créés.",
 	'elgg_menus:item:selected' => "Sélectionné ?",
 	'elgg_menus:item:selected:details' => "Permet de marquer cet item comme sélectionné, c'est-à-dire que la classe CSS <b>elgg-state-selected</b> sera ajoutée à cet item.",
 	'elgg_menus:menu_remove' => "Items à supprimer (mode \"Fusion\")",

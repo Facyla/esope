@@ -318,9 +318,17 @@ class UploadUsers {
 
 				if ($this->notification) {
 					$subject = elgg_echo('upload_users:email:subject', array(elgg_get_config('sitename')));
-					$custom_message = elgg_get_plugin_setting('custom_message', 'upload_users');
-					if (!$custom_message) { $custom_message = ''; }
-					$message = elgg_echo('upload_users:email:message', array($record['name'], elgg_get_config('sitename'), $record['username'], $record['password'], elgg_get_site_url(), $custom_message));
+					$custom_message = elgg_get_plugin_setting('custom_message', 'upload_users', '');
+					$message = elgg_echo(
+						'upload_users:email:message', 
+						array(
+							$record['name'], 
+							elgg_get_config('sitename'), 
+							$record['username'], 
+							$record['password'], 
+							elgg_get_site_url(), 
+							$custom_message)
+					);
 					notify_user($record['guid'], elgg_get_site_entity()->guid, $subject, $message);
 				}
 			} catch (RegistrationException $e) {
