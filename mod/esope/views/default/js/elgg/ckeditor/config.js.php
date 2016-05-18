@@ -43,6 +43,7 @@ define(function(require) {
 			],
 		*/
 		//removeButtons: 'Subscript,Superscript', // To have Underline back
+		// Disable content filtering (handled by Elgg)
 		allowedContent: true,
 		baseHref: elgg.config.wwwroot,
 		//removePlugins: 'liststyle,contextmenu,tabletools,resize',
@@ -82,5 +83,10 @@ define(function(require) {
 		templates_files: [ '<?php echo elgg_get_simplecache_url('js', 'esope/ckeditor_templates'); ?>' ],
 		
 	};
+});
+
+// Allow empty HTML tags (especially useful for FA icons)
+$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+	CKEDITOR.dtd.$removeEmpty[i] = false;
 });
 

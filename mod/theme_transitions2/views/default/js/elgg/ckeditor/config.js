@@ -13,7 +13,7 @@ define(function(require) {
 				['Maximize'], 
 				'/', 
 				['Format'], 
-				['Bold', 'Italic', 'Underline', 'Strike'], 
+				['Bold', 'Italic', 'Underline', 'Strike', 'Superscript'], 
 				['Link', 'Unlink', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'], 
 				// source, iframe, flash, table, styles
 				// templates
@@ -29,7 +29,7 @@ define(function(require) {
 				{"name":"about","groups":["about"]}
 			],
 		*/
-		removeButtons: 'Subscript,Superscript', // To have Underline back
+		//removeButtons: 'Subscript,Superscript', // To have Underline back
 		allowedContent: true,
 		baseHref: elgg.config.wwwroot,
 		removePlugins: 'liststyle,contextmenu,tabletools,resize',
@@ -42,6 +42,12 @@ define(function(require) {
 		disableNativeSpellChecker: false,
 		disableNativeTableHandles: false,
 		removeDialogTabs: 'image:advanced;image:Link;link:advanced;link:target',
-		autoGrow_maxHeight: $(window).height() - 100
+		autoGrow_maxHeight: $(window).height() - 100,
 	};
 });
+
+// Allow empty HTML tags (especially useful for FA icons)
+$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+	CKEDITOR.dtd.$removeEmpty[i] = false;
+});
+
