@@ -1,7 +1,7 @@
 <?php
 /* This view provides a quick list of objects, eg. icon + title */
 
-$objects = elgg_extract('entities');
+$objects = elgg_extract('entities', $vars);
 
 $content = '';
 
