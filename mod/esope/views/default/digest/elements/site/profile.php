@@ -49,14 +49,15 @@ if (isset($digest_site_profile_body[$key])) {
 		));
 
 		$content = "<div class='digest-profile'>";
-			foreach ($newest_members as $index => $mem) {
-				$content .= '<div class="table-item">';
-				//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
-				$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></a></div><br />';
-				$content .= '<a href="' .  $mem->getURL() . '">' . $mem->name . '</a><br />';
-				$content .= $mem->briefdescription;
-				$content .= "</div>";
-			}
+		foreach ($newest_members as $index => $mem) {
+			$content .= '<div class="table-item">';
+			//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
+			$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></a></div><br />';
+			$content .= '<a href="' .  $mem->getURL() . '">' . $mem->name . '</a><br />';
+			$content .= $mem->briefdescription;
+			$content .= "</div>";
+		}
+		$content .= '<div class="clearfloat"></div>';
 		$content .= "</div>";
 	
 		// Set global var for later reuse
@@ -67,3 +68,4 @@ if (isset($digest_site_profile_body[$key])) {
 		$digest_site_profile_body[$key] = false;
 	}
 }
+

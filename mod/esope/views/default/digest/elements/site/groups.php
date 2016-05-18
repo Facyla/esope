@@ -20,7 +20,7 @@ if (!empty($new_groups)) {
 	
 	$group_items = "<div class='digest-groups'>";
 	
-	foreach($new_groups as $index => $group){
+	foreach ($new_groups as $index => $group) {
 		$group_items .= '<div class="table-item">';
 		$group_items .= elgg_view_entity_icon($group, "medium");
 		$group_items .= elgg_view("output/url", array(
@@ -31,6 +31,7 @@ if (!empty($new_groups)) {
 		$group_items .= '</div>';
 	}
 	
+	$group_items .= '<div class="clearfloat"></div>';
 	$group_items .= "</div>";
 	
 	echo elgg_view_module("digest", $title, $group_items);
