@@ -163,7 +163,7 @@ if ($thewire && $left_side && $right_side) {
 if (!empty($static)) { $body .= '<div class="clearfloat"></div>' . $static; }
 
 $body .= '<div class="clearfloat"></div>';
-$body .= '<div class="home-static-container">' . $kdb . '</div>';
+$body .= '<div class="home-static-container home-kdb">' . $kdb . '</div>';
 
 
 

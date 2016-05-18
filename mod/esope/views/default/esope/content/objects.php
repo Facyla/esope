@@ -18,7 +18,7 @@ if (is_array($objects)) {
 			if (empty($excerpt)) { $excerpt = $ent->briefdescription; }
 			if (empty($excerpt)) { $excerpt = $ent->description; }
 			// Always limit length
-			$excerpt = elgg_get_excerpt($excerpt, 140);
+			$text = elgg_get_excerpt($excerpt, 140);
 		}
 		$link = elgg_view('output/url', array(
 				'href' => $ent->getURL(),
