@@ -26,7 +26,7 @@ $language = get_current_language();
 		<div id="digest_container">
 			<div>
 				<div id="digest_header">
-					<img style="float:left; margin-right:1em; max-height:60px;" src="<?php echo elgg_get_site_url(); ?>mod/theme_afpa_dsp/graphics/AFPA_transparent.gif" alt="Logo AFPA">
+					<img style="float:left; margin-right:1em; max-height:60px;" src="<?php echo elgg_get_site_url(); ?>mod/theme_afpa_dsp/graphics/AFPA_transparent.png" alt="Logo AFPA">
 					<?php echo $vars["digest_header"]; ?>
 					<div class="clearfloat"></div>
 				</div>
