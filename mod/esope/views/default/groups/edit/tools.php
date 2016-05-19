@@ -52,7 +52,7 @@ if ($tools) {
 		
 		$checked = false;
 		if ($value === 'yes') { $checked = true; }
-		echo elgg_format_element('div', null, elgg_view('input/checkbox', array(
+		echo elgg_format_element('div', array(), elgg_view('input/checkbox', array(
 			'name' => $group_option_toggle_name,
 			'value' => 'yes',
 			'default' => 'no',
