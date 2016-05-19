@@ -348,6 +348,8 @@ return array(
 	'esope:usersettings:public_profile:public' => "Votre profil est maintenant PUBLIC.",
 	'esope:usersettings:public_profile:private' => "Votre profil est maintenant RÉSERVÉ AUX MEMBRES.",
 	'esope:members:hide_directory' => "Masquer l'annuaire des membres aux non-membres (pas d'annuaire public)",
+	'esope:members:messages_allusers' => "Permettre d'envoyer un message à tout membre du site",
+	'esope:members:messages_allusers:details' => "Par défaut chaque membre ne peut écrire qu'à ses propres contacts, à moins de passer par la page de profil de la personne. Les administrateurs ont cependant la possibilité d'écrire directement à chacun des membres du site. Ce réglage permet à tous les membres du site de contacter n'importe quel autre membre.",
 	
 	// Behaviour settings
 	'esope:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",

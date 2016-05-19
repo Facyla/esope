@@ -34,10 +34,10 @@ $recipient_drop_down = elgg_view('input/dropdown', array(
 	'options_values' => $recipients_options,
 ));
 */
-// @TODO : setting to allow writing to anyone
 // match_on : string all or array(groups|users|friends)
 $match_on = array('friends');
-if (elgg_is_admin_logged_in()) { $match_on = array('users'); }
+$messages_allusers = elgg_get_plugin_setting('messages_allusers', 'esope');
+if (elgg_is_admin_logged_in() || ($messages_allusers == 'yes')) { $match_on = array('users'); }
 
 $recipient_autocomplete = elgg_view('input/autocomplete', array(
 	'name' => 'recipient_username',

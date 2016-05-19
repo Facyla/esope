@@ -343,7 +343,8 @@ return array(
 	'esope:usersettings:public_profile:public' => "Your profile is now PUBLIC.",
 	'esope:usersettings:public_profile:private' => "Your profile is now RESTRICTED TO MEMBERS.",
 	'esope:members:hide_directory' => "Hide members directory to non-members (no public directory)",
-		
+	'esope:members:messages_allusers' => "Allow to message any site member",
+	'esope:members:messages_allusers:details' => "By default members can only send messages to their own friends, or they need to go through the full profile page. Admins however have the ability to message any site member directly. This setting allows any site member to message any other site member.",
 	
 	// Behaviour settings
 	'esope:index:url' => "Index page file URL (must be includable)",
