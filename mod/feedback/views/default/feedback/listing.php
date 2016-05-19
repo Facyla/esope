@@ -78,12 +78,12 @@ if (!empty($feedback->page)) {
 
 
 // Render view
+if (feedback_is_about_enabled()) {
+	$info .= '<div class="feedback-mood" style="float:left; max-width:40%; margin-right: 1em;"><strong>' . elgg_echo('feedback:list:about') . '&nbsp;:</strong> ' . $about_mark . '</div>';
+}
 $info .= '<div class="controls">' . $controls . '</div>';
 if (feedback_is_mood_enabled()) {
 	$info .= '<div class="feedback-mood"><strong>' . elgg_echo('feedback:list:mood') . '&nbsp;:</strong> ' . $mood_mark . '</div>';
-}
-if (feedback_is_about_enabled()) {
-	$info .= '<div class="feedback-mood" style="float:left; max-width:40%; margin-right: 1em;"><strong>' . elgg_echo('feedback:list:about') . '&nbsp;:</strong> ' . $about_mark . '</div>';
 }
 //$info .= '<div class="clearfloat"></div>';
 $info .= '<p style="display:inline-block;">';
