@@ -576,11 +576,33 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 .groups-members-count { float: right; }
 
+
 /* Anciens groupes */
 .group-oldactivity { background: rgba(255,255,0,0.8); padding: 0.5rem 0; margin: 0 0; display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:black; font-size: 1rem; }
 .group-oldactivity-tiny { background: rgba(255,255,0,0.5); font-size: 0.4rem; padding: 1px 0; margin:0; line-height: 1; }
 .group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 0; }
 .group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 3px 0; }
+
+
+/* Archive : bannière compte archivé */
+.profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
+.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
+
+/* Medium */
+.elgg-avatar-medium .profiletype-status { position: absolute; border: 1px solid transparent; width: 100px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-medium .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
+
+/* Small */
+.elgg-avatar-small .profiletype-status { position: absolute; border: 1px solid transparent; width: 40px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+
+/* Tiny */
+.elgg-avatar-tiny .profiletype-status { position: absolute; border: 1px solid transparent; width: 25px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-tiny .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.6rem; font-weight: normal; text-transform: initial; color: white; }
+
+/* Friendspicker */
+.elgg-avatar-tiny .profiletype-status { left: 0; margin: 5px 10px 5px 5px; }
+
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */
 
@@ -649,7 +671,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-menu-group-topmenu li a:hover, .elgg-menu-group-topmenu li a:active, .elgg-menu-group-topmenu li a:focus, .elgg-menu-group-topmenu li.elgg-state-selected a { text-decoration:none; opacity:1; }
 
 /* Friendspicker */
-#notificationstable td.namefield p.namefieldlink { vertical-align:30%; display:inline; }
+#notificationstable td.namefield p.namefieldlink { vertical-align:30%; display:inline-block; }
 .friends-picker { max-width:650px; width:100%; }
 .friends-picker-main-wrapper { width:100%; }
 .friends-picker-navigation { display: inline-block; }
