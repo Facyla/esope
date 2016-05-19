@@ -677,12 +677,22 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_activity') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_activity)) . '</label></p>';
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_publish_tools') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_publish_tools)) . '</label></p>';
+			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
+			echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</label></p>';
+			// Display "old group" banner
+			echo '<p><label>' . elgg_echo('esope:settings:groups:old_display') . ' ' . elgg_view('input/select', array('name' => 'params[groups_old_display]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_old_display)) . '</label></p>';
+			// Set "old group" timeframe (in seconds)
+			echo '<p><label>' . elgg_echo('esope:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
+			// Enable group archive (using ->status == 'archive' metadata)
+			echo '<p><label>' . elgg_echo('esope:settings:groups:archive') . ' ' . elgg_view('input/select', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
 			echo '<br />';
-			
+		
 			echo '<h4>' . elgg_echo('esope:config:groupinvites') . '</h4>';
 			echo '<p><label>' . elgg_echo('esope:settings:groups:inviteanyone') . ' ' . elgg_view('input/select', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $plugin->invite_anyone)) . '</label></p>';
 			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_picker') . ' ' . elgg_view('input/select', array('name' => 'params[invite_picker]', 'options_values' => $invite_picker_opt, 'value' => $plugin->invite_picker)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_picker:details') . '</em></p>';
 			echo '<p><label>' . elgg_echo('esope:settings:groups:allowregister') . ' ' . elgg_view('input/select', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $plugin->allowregister)) . '</label></p>';
+			// Metadata utilisées pour inviter dans le groupe
+			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
 			echo '<br />';
 			
 			echo '<h4>' . elgg_echo('esope:config:grouptabs') . '</h4>';
@@ -705,19 +715,6 @@ $(function() {
 		echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $plugin->metadata_groupsearch_fields)) . '</label><br /><a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
 			// Add groups tags below search (or replaces search if search tab enabled)
 			echo '<p><label>' . elgg_echo('esope:settings:groups:tags') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_tags)) . '</label></p>';
-
-			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
-			
-			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
-			echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</label></p>';
-		
-			// Display "old group" banner
-			echo '<p><label>' . elgg_echo('esope:settings:groups:old_display') . ' ' . elgg_view('input/select', array('name' => 'params[groups_old_display]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_old_display)) . '</label></p>';
-			// Set "old group" timeframe (in seconds)
-			echo '<p><label>' . elgg_echo('esope:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
-			// Enable group archive (using ->status == 'archive' metadata)
-			echo '<p><label>' . elgg_echo('esope:settings:groups:archive') . ' ' . elgg_view('input/select', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
-		
 			?>
 		</div>
 	<?php } ?>
