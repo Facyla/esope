@@ -11,20 +11,6 @@ $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><
 
 return array(
 	
-	'option:notify:email' => "Enable email (default)",
-	'option:notify:site' => "Enable site (messages)",
-	'option:notify:all' => "Enable all methods",
-	'option:notify:no' => "Disable all methods",
-	'option:empty' => "",
-	'option:none' => "(none selected)",
-	'option:groupoption' => "Group option",
-	'groups:yes' => "Enabled",
-	'groups:no' => "Disabled",
-	'group_operators:operators' => "Operator(s)",
-	
-	'profile_edit' => "Profile edition",
-	'event_calendar:view' => "View event",
-		
 	//Theme settings
 	'admin:appearance:esope' => "Theme configuration",
 	'admin:appearance:main_theme_config' => "Theme configuration",
@@ -152,29 +138,6 @@ return array(
 	'esope:groupinvite:search:invite' => "Step 2: select the members to invite or register",
 	
 	
-	// Overrides plugins translations
-	// Note : these additions are made here rather than in the original plugins so that a core update won't break them
-	'river:comment:object:announcement' => "%s has commented %s",
-	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
-	
-	'widget:toggle' => "Show/hide %s module",
-	'widget:editmodule' => "Configure %s module",
-
-	// Announcements: missing translation keys - Annonces : manque des clefs de trad
-	'announcements:summary' => "Announcement title",
-	'announcements:body' => "Announcement text",
-	'announcements:post' => "Publish announcement",
-	'announcements:edit' => "Edit announcement",
-	'announcements:delete:nopermission' => "Cannot delete announcement: you don't have the proper permissions to do that.",
-	'announcements:delete:failure' => "Cannot delete announcement.",
-	'announcements:delete:sucess' => "Announcement published",
-	'object:announcement:save:permissiondenied' => "Cannot save announcement: you don't have the proper permissions to do that.",
-	'object:announcement:save:descriptionrequired' => "Cannot save announcement: announcement text cannot be empty.",
-	'object:announcement:save:success' => "Announcement saved",
-	'item:object:category' => "Used categories",
-	'item:object:topicreply' => "Forum reply",
-	
-	
 	
 	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
@@ -299,24 +262,6 @@ return array(
 	'esope:homepage:register' => "Registration",
 	
 	'esope:access:public' => "Public (accessible to non-loggedin visitors)",
-	
-	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
-	'bookmarks:widget:description' => "Displays your bookmarks list.",
-	'bookmarks:filter' => "Bookmarks to be displayed",
-	'bookmarks:mine' => "Mine",
-	'bookmarks:mygroups' => "In my groups",
-	'pages:widget:description' => "Displays your pages.",
-	'event_calendar:widget:description' => "Displays your upcoming events.",
-	'event_calendar:num_display' => "Number of events to display",
-	'messages:widget:title' => "Unread messages",
-	'messages:widget:description' => "Displays your latest unread messages.",
-	'messages:num_display' => "Number of messages to display",
-	'messages:moremessages' => "Display all unread messages",
-	'messages:togglecontent' => "Show/hide content",
-	'messages:widget:unreadcount' => '%s unread messages',
-	'messages:widget:unreadcount:singular' => '1 unread message',
-	'messages:answer' => "Reply",
-	'messages:to' => "to",
 	
 	
 	// Layout settings
@@ -1105,6 +1050,47 @@ return array(
 	'esope:menu:sidebar' => "Menu",
 	
 	
+	
+	
+	/* TRANSLATIONS OVERRIDES */
+	/* Note : these additions are made here rather than in the original plugins so that a core update won't break them */
+	
+	'option:notify:email' => "Enable email (default)",
+	'option:notify:site' => "Enable site (messages)",
+	'option:notify:all' => "Enable all methods",
+	'option:notify:no' => "Disable all methods",
+	'option:empty' => "",
+	'option:none' => "(none selected)",
+	'option:groupoption' => "Group option",
+	'groups:yes' => "Enabled",
+	'groups:no' => "Disabled",
+	'group_operators:operators' => "Operator(s)",
+	
+	'profile_edit' => "Profile edition",
+	'event_calendar:view' => "View event",
+	
+	'river:comment:object:announcement' => "%s has commented %s",
+	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
+	
+	'widget:toggle' => "Show/hide %s module",
+	'widget:editmodule' => "Configure %s module",
+
+	// Announcements: missing translation keys - Annonces : manque des clefs de trad
+	'announcements:summary' => "Announcement title",
+	'announcements:body' => "Announcement text",
+	'announcements:post' => "Publish announcement",
+	'announcements:edit' => "Edit announcement",
+	'announcements:delete:nopermission' => "Cannot delete announcement: you don't have the proper permissions to do that.",
+	'announcements:delete:failure' => "Cannot delete announcement.",
+	'announcements:delete:sucess' => "Announcement published",
+	'object:announcement:save:permissiondenied' => "Cannot save announcement: you don't have the proper permissions to do that.",
+	'object:announcement:save:descriptionrequired' => "Cannot save announcement: announcement text cannot be empty.",
+	'object:announcement:save:success' => "Announcement saved",
+	'item:object:category' => "Used categories",
+	'item:object:topicreply' => "Forum reply",
+	
+	
+	
 	// Comment notifications
 	'generic_comment:email:body' => "A new comment was published on \"%s\" by %s:
 
@@ -1126,6 +1112,29 @@ This is an automated notification, please do not reply to this email.",
 	'logbrowser:entity_subtype' => "Entity subtype",
 	'logbrowser:object_guid' => "Entity GUID",
 	'logbrowser:event' => "Event",
+	
+	
+
+	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
+	'bookmarks:widget:description' => "Displays your bookmarks list.",
+	'bookmarks:filter' => "Bookmarks to be displayed",
+	'bookmarks:mine' => "Mine",
+	'bookmarks:mygroups' => "In my groups",
+	'pages:widget:description' => "Displays your pages.",
+	'event_calendar:widget:description' => "Displays your upcoming events.",
+	'event_calendar:num_display' => "Number of events to display",
+	'messages:widget:title' => "Unread messages",
+	'messages:widget:description' => "Displays your latest unread messages.",
+	'messages:num_display' => "Number of messages to display",
+	'messages:moremessages' => "Display all unread messages",
+	'messages:togglecontent' => "Show/hide content",
+	'messages:widget:unreadcount' => '%s unread messages',
+	'messages:widget:unreadcount:singular' => '1 unread message',
+	'messages:answer' => "Reply",
+	'messages:to' => "to",
+	
+	'thewire:reply' => "Reply",
+
 	
 );
 

@@ -11,20 +11,6 @@ $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><
 
 return array(
 	
-	'option:notify:email' => "Activer par email (par défaut)",
-	'option:notify:site' => "Activer par le site (messages)",
-	'option:notify:all' => "Activer toutes les méthodes",
-	'option:notify:no' => "Désactiver toutes les méthodes",
-	'option:empty' => "",
-	'option:none' => "(aucune sélection)",
-	'option:groupoption' => "Option du groupe",
-	'groups:yes' => "Activé",
-	'groups:no' => "Désactivé",
-	'group_operators:operators' => "Responsable(s)",
-	
-	'profile_edit' => "Edition du profil",
-	'event_calendar:view' => "Voir un événement",
-	
 	//Theme settings
 	'admin:appearance:esope' => "Configuration du thème",
 	'admin:appearance:main_theme_config' => "Configuration du thème",
@@ -152,28 +138,6 @@ return array(
 	'esope:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
 	'esope:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
 	
-	
-	// Overrides plugins translations
-	// Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions 
-	'river:comment:object:announcement' => "%s a commenté %s",
-	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
-	
-	'widget:toggle' => "Montrer/masquer le module %s",
-	'widget:editmodule' => "Configurer le module %s",
-	
-	// Announcements: missing translation keys - Annonces : manque des clefs de trad
-	'announcements:summary' => "Titre de l'annonce",
-	'announcements:body' => "Texte de l'annonce",
-	'announcements:post' => "Publier l'annonce",
-	'announcements:edit' => "Modifier l'annonce",
-	'announcements:delete:nopermission' => "Impossible de supprimer l'annonce : vous n'avez pas les permissions suffisantes",
-	'announcements:delete:failure' => "Impossible de supprimer l'annonce.",
-	'announcements:delete:sucess' => "Annonce publiée",
-	'object:announcement:save:permissiondenied' => "Impossible d'enregistrer l'annonce : vous n'avez pas les permissions suffisantes",
-	'object:announcement:save:descriptionrequired' => "Impossible d'enregistrer l'annonce : le texte de l'annonce ne peut être vide.",
-	'object:announcement:save:success' => "Annonce enregistrée",
-	'item:object:category' => "Thématiques utilisées",
-	'item:object:topicreply' => "Réponse dans un forum",
 	
 	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
@@ -303,23 +267,6 @@ return array(
 	
 	'esope:access:public' => "Public (accessible hors connexion)",
 	
-	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
-	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
-	'bookmarks:filter' => "Liens à afficher",
-	'bookmarks:mine' => "Les miens",
-	'bookmarks:mygroups' => "Dans mes groupes",
-	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
-	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
-	'event_calendar:num_display' => "Nombre d'événements à afficher",
-	'messages:widget:title' => "Messages non lus",
-	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
-	'messages:num_display' => "Nombre de messages à afficher",
-	'messages:moremessages' => "Afficher tous les messages non lus",
-	'messages:togglecontent' => "Montrer/masquer le contenu",
-	'messages:widget:unreadcount' => '%s messages non lus',
-	'messages:widget:unreadcount:singular' => '1 message non lu',
-	'messages:answer' => "Répondre",
-	'messages:to' => "à",
 	
 	
 	// Layout settings
@@ -529,7 +476,7 @@ return array(
 	'esope:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
 	
 	'esope:settings:thewire_default_access' => "Accès par défaut du Fil",
-	'esope:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglég de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
+	'esope:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglé de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
 	'esope:settings:groups:invite_picker' => "Type de sélecteur",
 	'esope:settings:groups:invite_picker:details' => "Note&nbsp;: au-delà d'un certain nombre de personnes, le sélecteur passera sur l'autocomplétion (afin d'éviter tout dépassement de mémoire).",
 	'esope:invite_picker:friendspicker' => "Sélecteur alphabétique (par défaut)",
@@ -1110,6 +1057,44 @@ return array(
 	'esope:menu:sidebar' => "Menu",
 	
 	
+	
+	/* TRANSLATIONS OVERRIDES */
+	/* Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions */ 
+	'option:notify:email' => "Activer par email (par défaut)",
+	'option:notify:site' => "Activer par le site (messages)",
+	'option:notify:all' => "Activer toutes les méthodes",
+	'option:notify:no' => "Désactiver toutes les méthodes",
+	'option:empty' => "",
+	'option:none' => "(aucune sélection)",
+	'option:groupoption' => "Option du groupe",
+	'groups:yes' => "Activé",
+	'groups:no' => "Désactivé",
+	'group_operators:operators' => "Responsable(s)",
+	
+	'profile_edit' => "Edition du profil",
+	'event_calendar:view' => "Voir un événement",
+	
+	'river:comment:object:announcement' => "%s a commenté %s",
+	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
+	
+	'widget:toggle' => "Montrer/masquer le module %s",
+	'widget:editmodule' => "Configurer le module %s",
+	
+	// Announcements: missing translation keys - Annonces : manque des clefs de trad
+	'announcements:summary' => "Titre de l'annonce",
+	'announcements:body' => "Texte de l'annonce",
+	'announcements:post' => "Publier l'annonce",
+	'announcements:edit' => "Modifier l'annonce",
+	'announcements:delete:nopermission' => "Impossible de supprimer l'annonce : vous n'avez pas les permissions suffisantes",
+	'announcements:delete:failure' => "Impossible de supprimer l'annonce.",
+	'announcements:delete:sucess' => "Annonce publiée",
+	'object:announcement:save:permissiondenied' => "Impossible d'enregistrer l'annonce : vous n'avez pas les permissions suffisantes",
+	'object:announcement:save:descriptionrequired' => "Impossible d'enregistrer l'annonce : le texte de l'annonce ne peut être vide.",
+	'object:announcement:save:success' => "Annonce enregistrée",
+	'item:object:category' => "Thématiques utilisées",
+	'item:object:topicreply' => "Réponse dans un forum",
+	
+	
 	// Comment notifications
 	'generic_comment:email:body' => "%2\$s a publié un nouveau commentaire sur \"%1\$s\" :
 
@@ -1128,6 +1113,27 @@ Il s'agit d'un message de notification automatique, merci de ne pas répondre di
 	'logbrowser:entity_subtype' => "Subtype",
 	'logbrowser:object_guid' => "GUID de l'entité",
 	'logbrowser:event' => "Evénement",
+	
+
+	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
+	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
+	'bookmarks:filter' => "Liens à afficher",
+	'bookmarks:mine' => "Les miens",
+	'bookmarks:mygroups' => "Dans mes groupes",
+	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
+	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
+	'event_calendar:num_display' => "Nombre d'événements à afficher",
+	'messages:widget:title' => "Messages non lus",
+	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
+	'messages:num_display' => "Nombre de messages à afficher",
+	'messages:moremessages' => "Afficher tous les messages non lus",
+	'messages:togglecontent' => "Montrer/masquer le contenu",
+	'messages:widget:unreadcount' => '%s messages non lus',
+	'messages:widget:unreadcount:singular' => '1 message non lu',
+	'messages:answer' => "Répondre",
+	'messages:to' => "à",
+	
+	'thewire:reply' => "Répondre",
 	
 );
 
