@@ -7,6 +7,8 @@
 
 $content = '';
 
+/* Feature removed when updating to Elgg 1.12 - not *that* useful + requires rewrite due to core changes
+// View profile as {other profile types}
 // Viewing a profile as someone else doesn't mean anything if you're not connected
 if (elgg_is_logged_in()) {
 	$own_user = elgg_get_logged_in_user_entity();
@@ -42,14 +44,12 @@ if (elgg_is_logged_in()) {
 					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:member') . '</strong><br />';
 				} else { $view_as = false; }
 				
-			/*
 			// @TODO : add if used - not yet
-			} else if ($view_as == 'contact') {
-				theme_inria_temp_logout();
-				if (theme_inria_temp_login($random_member)) {
-					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
-				}
-			*/
+#			} else if ($view_as == 'contact') {
+#				theme_inria_temp_logout();
+#				if (theme_inria_temp_login($random_member)) {
+#					$viewas_notes = '<strong>' . elgg_echo('esope:viewprofileas:contact') . '</strong><br />';
+#				}
 				
 			} else if ($view_as = get_user_by_username($view_as)) {
 				// Specific user view
@@ -70,6 +70,7 @@ if (elgg_is_logged_in()) {
 		echo '<div class="view-profile-as">' . $viewas_notes . '</div><div class="clearfloat"></div><br />';
 	}
 }
+*/
 
 // Now we "are" the new viewing user, apply profile gatekeeper
 // But don't redirect at that time, or we would also leave the user disconnected !
@@ -118,6 +119,9 @@ if (!$allowed) {
 
 }
 
+
+/*
 // Restore original user
 if ($view_as) { theme_inria_temp_login($own_user); }
+*/
 

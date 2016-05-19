@@ -4,21 +4,21 @@
  */
 
 
-// LOGIN / LOGOUT
+// Temporary LOGIN / LOGOUT to enable viewing content as someone else (only a part of a page)
+/*
 // @TODO : requires new method to work using Elgg 1.12 API - see login as for possible hints
 
 // These functions are used for temporary changing the current user 
 // This lets view one's page as someone else
 function theme_inria_temp_login($user) {
-	/*
-	$_SESSION['user'] = $user;
-	$_SESSION['guid'] = $user->guid;
-	$_SESSION['id'] = $user->guid;
-	$_SESSION['username'] = $user->username;
-	$_SESSION['name'] = $user->name;
-	$_SESSION['code'] = $user->code;
-	$_SESSION['user']->save();
-	*/
+#	$_SESSION['user'] = $user;
+#	$_SESSION['guid'] = $user->guid;
+#	$_SESSION['id'] = $user->guid;
+#	$_SESSION['username'] = $user->username;
+#	$_SESSION['name'] = $user->name;
+#	$_SESSION['code'] = $user->code;
+#	$_SESSION['user']->save();
+
 	$session = elgg_get_session();
 	$session->set('user', $user);
 	$session->set('guid', $user->guid);
@@ -40,20 +40,21 @@ function theme_inria_temp_logout() {
 	$session->remove('username');
 	$session->remove('name');
 	$session->remove('code');
-	/*
-	$_SESSION['user']->code = "";
-	$_SESSION['user']->save();
-	unset($_SESSION['user']);
-	unset($_SESSION['guid']);
-	unset($_SESSION['id']);
-	unset($_SESSION['username']);
-	unset($_SESSION['name']);
-	unset($_SESSION['code']);
-	*/
+
+#	$_SESSION['user']->code = "";
+#	$_SESSION['user']->save();
+#	unset($_SESSION['user']);
+#	unset($_SESSION['guid']);
+#	unset($_SESSION['id']);
+#	unset($_SESSION['username']);
+#	unset($_SESSION['name']);
+#	unset($_SESSION['code']);
+
 	session_destroy();
 	_elgg_session_boot(NULL, NULL, NULL);
 	return true;
 }
+*/
 
 
 // LDAP

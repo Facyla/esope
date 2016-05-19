@@ -24,8 +24,8 @@ if (elgg_get_context() == 'view') {
 $feedback = elgg_extract('entity', $vars);
 
 $about = $feedback->about; if (empty($about)) { $about = "feedback"; }
-$status = $feedback->status; if (empty($status)) $status = "open";
-$mood = $feedback->mood; if (empty($mood)) $mood = "neutral";
+$status = $feedback->status; if (empty($status)) { $status = "open"; }
+$mood = $feedback->mood; if (empty($mood)) { $mood = "neutral"; }
 $full = false;
 if ($vars['full'] === true) { $full = true; }
 
@@ -38,6 +38,7 @@ if ($full) {
 	$access_mark = elgg_view('output/access', array('entity' => $feedback, 'hide_text' => true));
 }
 
+// Actions
 $controls = '';
 $controls .= $access_mark;
 switch ($status) {
@@ -45,7 +46,7 @@ switch ($status) {
 		// Only admins can reopen feedbacks
 		if (elgg_is_admin_logged_in) {
 			//$controls .= elgg_view("output/confirmlink",array('href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'class' => 'elgg-icon elgg-icon-redo'));
-			$controls .= elgg_view("output/url",array('href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'text' => '<i class="fa fa-check-square-o"></i>', 'is_action' => true));
+			$controls .= elgg_view("output/url", array('href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'text' => '<i class="fa fa-check-square-o"></i>', 'is_action' => true));
 		} else {
 			//$controls .= '<span class="elgg-icon elgg-icon-round-checkmark" title="' . $status_mark . '"></span>';
 			$controls .= '<i class="fa fa-check-square-o" title="' . $status_mark . '"></i>&nbsp;';
@@ -56,17 +57,19 @@ switch ($status) {
 		// Only admins can close feedbacks
 		if (elgg_is_admin_logged_in()) {
 			//$controls .= elgg_view("output/confirmlink",array('href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark'));
-			$controls .= elgg_view("output/url",array('href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'text' => '<i class="fa fa-square-o"></i>', 'is_action' => true));
+			$controls .= elgg_view("output/url", array('href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'text' => '<i class="fa fa-square-o"></i>', 'is_action' => true));
 		}
 }
 // Only admins can delete feedbacks
 if (elgg_is_admin_logged_in()) {
 	//$controls .= elgg_view("output/confirmlink",array('href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'class' => 'elgg-icon elgg-icon-trash'));
-	$controls .= elgg_view("output/url",array('href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'text' => '<i class="fa fa-trash-o"></i>', 'is_action' => true));
+	$controls .= elgg_view("output/url", array('href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'text' => '<i class="fa fa-trash-o"></i>', 'is_action' => true));
 }
 
+// Classes for status-aware styles
 $class = 'feedback-mood-' . $feedback->mood . ' feedback-about-' . $feedback->about . ' feedback-status-' . $status;
 
+// Feedback subject URL
 $page = elgg_echo('feedback:page:unknown');
 if (!empty($feedback->page)) {
 	$page = $feedback->page;
@@ -75,31 +78,35 @@ if (!empty($feedback->page)) {
 
 
 // Render view
+$info .= '<div class="controls">' . $controls . '</div>';
 if (feedback_is_mood_enabled()) {
-	$info .= "<div style='float:left;width:25%'><strong>".elgg_echo('feedback:list:mood').": </strong>" . $mood_mark . "</div>";
+	$info .= '<div class="feedback-mood"><strong>' . elgg_echo('feedback:list:mood') . '&nbsp;:</strong> ' . $mood_mark . '</div>';
 }
 if (feedback_is_about_enabled()) {
-	$info .= "<div style='float:left;width:40%'><strong>".elgg_echo('feedback:list:about').": </strong>" . $about_mark . "</div>";
+	$info .= '<div class="feedback-mood" style="float:left; max-width:40%; margin-right: 1em;"><strong>' . elgg_echo('feedback:list:about') . '&nbsp;:</strong> ' . $about_mark . '</div>';
 }
-$info .= '<div class="controls">' . $controls . "</div>";
-$info .= '<div class="clearfloat"></div>';
-$info .= "<strong>".elgg_echo('feedback:list:from').": </strong>" . $feedback->id . '<span style="float:right;">' . elgg_view_friendly_time($feedback->time_created) . "</span><br />";
-$info .= "<strong>".elgg_echo('feedback:list:page').": </strong>" . $page . "<br />";
-$info .= '<br /><blockquote>' . parse_urls(nl2br($feedback->txt)) . '</blockquote>';
+//$info .= '<div class="clearfloat"></div>';
+$info .= '<p style="display:inline-block;">';
+$info .= '<strong>' . elgg_echo('feedback:list:from') . '&nbsp;:</strong> ' . $feedback->id . ' ';
+//$info .= '<span style="float:right;">' . elgg_view_friendly_time($feedback->time_created) . '</span><br />';
+$info .= elgg_view_friendly_time($feedback->time_created) . '<br />';
+$info .= '<strong>' . elgg_echo('feedback:list:page') . '&nbsp;:</strong> ' . $page;
+$info .= '</p>';
+$info .= '<blockquote>' . parse_urls(nl2br($feedback->txt)) . '</blockquote>';
 
 // Commentaires
 $comment = elgg_get_plugin_setting("comment", "feedback");
-if (elgg_in_context('admin')) $full = false;
+if (elgg_in_context('admin')) { $full = false; }
 if ($comment == 'yes') {
 	$ia = elgg_set_ignore_access(true);
 	if (!$full) {
 		$num_comments_feedback = $feedback->countComments();
 		$info .= '<div class="clearfloat"></div>';
 		$info .= '<a href="' . $feedback->getURL() . '">' . elgg_echo('feedback:viewfull') . '</a>';
-		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_'.$feedback->getGUID().'\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', array($num_comments_feedback)) . '</a>';
+		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_' . $feedback->guid . '\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', array($num_comments_feedback)) . '</a>';
 	}
 	$info .= '<div id="feedback_' . $feedback->guid . '"';
-	if (!$full) $info .= ' style="display:none;"';
+	if (!$full) { $info .= ' style="display:none;"'; }
 	$info .= '>' . elgg_view_comments($feedback) . '</div>';
 	elgg_set_ignore_access($ia);
 }

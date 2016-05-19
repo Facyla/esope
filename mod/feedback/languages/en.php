@@ -13,6 +13,17 @@
  * iionly@gmx.de
  */
 
+// Failsafe translations depending on icon availability
+if (elgg_is_active_plugin('fontawesome')) {
+	$mood_angry = '<i class="fa fa-frown-o"></i>';
+	$mood_neutral = '<i class="fa fa-meh-o"></i>';
+	$mood_happy = '<i class="fa fa-smile-o"></i>';
+} else {
+	$mood_angry = ':-(';
+	$mood_neutral = ':-|';
+	$mood_happy = ':-)';
+}
+
 return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Site Feedback',
@@ -41,20 +52,20 @@ return array(
 
 	'feedback:delete:success' => 'Feedback was deleted successfully.',
 
-	'feedback:mood:' => 'None',
-	'feedback:mood:undefined' => 'None',
-	'feedback:mood:angry' => 'Angry',
-	'feedback:mood:neutral' => 'Neutral',
-	'feedback:mood:happy' => 'Happy',
+	'feedback:mood:' => '(none)',
+	'feedback:mood:undefined' => '(undefined)',
+	'feedback:mood:angry' => $mood_angry,
+	'feedback:mood:neutral' => $mood_neutral,
+	'feedback:mood:happy' => $mood_happy,
 
-	'feedback:about:' => 'None',
-	'feedback:about:bug_report' => 'Bug Report',
-	'feedback:about:content' => 'Content',
-	'feedback:about:suggestions' => 'Suggestions',
-	'feedback:about:compliment' => 'Compliment',
+	'feedback:about:' => '(undefined)',
+	'feedback:about:bug_report' => '<i class="fa fa-exclamation-circle"></i> Bug Report',
+	'feedback:about:content' => '<i class="fa fa-exclamation-triangle"></i> Content',
+	'feedback:about:suggestions' => '<i class="fa fa-info-circle"></i> Suggestions',
+	'feedback:about:compliment' => '<i class="fa fa-thumbs-o-up"></i> Compliment',
 	'feedback:about:other' => 'Other ',
 	'feedback:about:feedback' => 'Other',
-	'feedback:about:undefined' => 'Other',
+	'feedback:about:undefined' => '(undefined)',
 
 	'feedback:list:mood' => 'Mood',
 	'feedback:list:about' => 'About',
@@ -135,7 +146,7 @@ return array(
 	// About - feedback types
 	//'feedback:about' => "of type",
 	'feedback:about' => ":",
-	'feedback:about:question' => "Question",
+	'feedback:about:question' => '<i class="fa fa-question-circle"></i> Question',
 	'feedback:access:admin' => "Admin only",
 	'feedback:access:sitemembers' => "Site members",
 	'feedback:access:group' => "Group members",

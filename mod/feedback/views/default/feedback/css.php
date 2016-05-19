@@ -144,6 +144,11 @@
 .question { color:#00F; }
 .other { color:#666; }
 
+/* listings and full view */
+.feedback-mood { float:left; max-width:25%; margin-right: 1em; }
+.feedback-about { float:left; max-width:40%; margin-right: 1em; }
+
+
 /* Feedbacks status */
 .feedback-status-open {  }
 .feedback-status-closed { border:1px solid green; border-left:3px solid green; margin-left:20px; opacity:0.8; }

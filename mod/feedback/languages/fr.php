@@ -13,6 +13,18 @@
  * iionly@gmx.de
  */
 
+// Failsafe translations depending on icon availability
+if (elgg_is_active_plugin('fontawesome')) {
+	$mood_angry = '<i class="fa fa-frown-o"></i>';
+	$mood_neutral = '<i class="fa fa-meh-o"></i>';
+	$mood_happy = '<i class="fa fa-smile-o"></i>';
+} else {
+	$mood_angry = ':-(';
+	$mood_neutral = ':-|';
+	$mood_happy = ':-)';
+}
+
+
 return array(
 	'feedback' => 'Feedbacks',
 	'admin:administer_utilities:feedback' => 'Feedbacks du site',
@@ -42,20 +54,20 @@ return array(
 
 	'feedback:delete:success' => 'Feedback supprimé.',
 
-	'feedback:mood:' => 'Aucun',
-	'feedback:mood:undefined' => 'Aucun',
-	'feedback:mood:angry' => ':-(',
-	'feedback:mood:neutral' => 'Neutre',
-	'feedback:mood:happy' => ':-)',
+	'feedback:mood:' => '(aucun)',
+	'feedback:mood:undefined' => '(non défini)',
+	'feedback:mood:angry' => $mood_angry,
+	'feedback:mood:neutral' => $mood_neutral,
+	'feedback:mood:happy' => $mood_happy,
 
-	'feedback:about:' => 'Aucun',
-	'feedback:about:bug_report' => 'Bugs',
-	'feedback:about:content' => 'Contenus',
-	'feedback:about:suggestions' => 'Suggestions',
-	'feedback:about:compliment' => 'Compliments',
-	'feedback:about:other' => 'Autres / non classés',
-	'feedback:about:feedback' => 'Non classés',
-	'feedback:about:undefined' => 'Non classés',
+	'feedback:about:' => '(non défini)',
+	'feedback:about:bug_report' => '<i class="fa fa-exclamation-circle"></i> Bugs',
+	'feedback:about:content' => '<i class="fa fa-exclamation-triangle"></i> Contenus',
+	'feedback:about:suggestions' => '<i class="fa fa-info-circle"></i> Suggestions',
+	'feedback:about:compliment' => '<i class="fa fa-thumbs-o-up"></i> Compliments',
+	'feedback:about:other' => 'Autres',
+	'feedback:about:feedback' => '(non classé)',
+	'feedback:about:undefined' => '(non défini)',
 
 	'feedback:list:mood' => 'Humeur',
 	'feedback:list:about' => 'A propos de',
@@ -136,7 +148,7 @@ return array(
 	// About - feedback types
 	//'feedback:about' => "de type",
 	'feedback:about' => ":",
-	'feedback:about:question' => "Question",
+	'feedback:about:question' => '<i class="fa fa-question-circle"></i> Question',
 	'feedback:access:admin' => "Administrateur seulement",
 	'feedback:access:sitemembers' => "Membres du site",
 	'feedback:access:group' => "Membres du groupe",
