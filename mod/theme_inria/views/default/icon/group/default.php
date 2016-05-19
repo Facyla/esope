@@ -22,13 +22,15 @@ if (!in_array($vars['size'], $sizes)) {
 $class = elgg_extract('img_class', $vars, '');
 
 $span = '';
-$parent = AU\SubGroups\get_parent_group($entity);
-if ($parent) {
-  if ($class) {
-    $class .= ' ';
-  }
-  $class .= 'au_subgroup_icon';
-  $span = '<span class="au_subgroup au_subgroup_icon-' . $vars['size'] . '">' . elgg_echo('au_subgroups:subgroup') . '</span>';
+if (elgg_is_active_plugin('au_subgroups')) {
+	$parent = AU\SubGroups\get_parent_group($entity);
+	if ($parent) {
+		if ($class) {
+		  $class .= ' ';
+		}
+		$class .= 'au_subgroup_icon';
+		$span = '<span class="au_subgroup au_subgroup_icon-' . $vars['size'] . '">' . elgg_echo('au_subgroups:subgroup') . '</span>';
+	}
 }
 
 // Inria : add old group marker
