@@ -48,12 +48,12 @@ function postbymail_prepare_notification($hook, $type, $notification, $params) {
 	// Add instructions to object notifications
 	if (elgg_instanceof($entity, 'object')) {
 		
-		// The Wire specific notice : 140 chars limit
+		// The Wire specific notice : 140 chars limit (or 250...)
 		if (elgg_instanceof($entity, 'object', 'thewire')) {
 			$message_body = elgg_echo('postbymail:thewire:charlimitnotice', array(), $language) . $message_body;
 		}
 		
-		// Comments : we need to use commented entity, not comment itself !
+		// Comments : we need to use the commented entity to reply, not the comment itself !
 		if (elgg_instanceof($entity, 'object', 'comment')) {
 			$postbymail_guid = $entity->container_guid;
 		}

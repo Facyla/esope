@@ -694,18 +694,17 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:groups:popular') . ' ' . elgg_view('input/select', array('name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $plugin->groups_popular)) . '</label></p>';
 			// Allow to add featured
 			echo '<p><label>' . elgg_echo('esope:settings:groups:featured') . ' ' . elgg_view('input/select', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_featured)) . '</label></p>';
+			// Allow to add a new friends groups tab
+			echo '<p><label>' . elgg_echo('esope:settings:groups:friends') . ' ' . elgg_view('input/select', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_friendstab)) . '</label></p>';
+			// Allow to remove discussion OR add it at page bottom
+			echo '<p><label>' . elgg_echo('esope:settings:groups:discussion') . ' ' . elgg_view('input/select', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $plugin->groups_discussion)) . '</label></p>';
 			// Allow to add a new group tab search
 			echo '<p><label>' . elgg_echo('esope:settings:groups:searchtab') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_searchtab)) . '</label></p>';
 		// Advanced group search tool (alpha version, structure changes may happen)
 		$esope_groupsearch_url = elgg_get_site_url() . 'groups/groupsearch';
 		echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $plugin->metadata_groupsearch_fields)) . '</label><br /><a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
-
-			// Allow to add a new friends groups tab
-			echo '<p><label>' . elgg_echo('esope:settings:groups:friends') . ' ' . elgg_view('input/select', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_friendstab)) . '</label></p>';
 			// Add groups tags below search (or replaces search if search tab enabled)
 			echo '<p><label>' . elgg_echo('esope:settings:groups:tags') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_tags)) . '</label></p>';
-			// Allow to remove discussion OR add it at page bottom
-			echo '<p><label>' . elgg_echo('esope:settings:groups:discussion') . ' ' . elgg_view('input/select', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $plugin->groups_discussion)) . '</label></p>';
 
 			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
 			

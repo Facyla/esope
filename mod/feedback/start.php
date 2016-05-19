@@ -66,14 +66,14 @@ function feedback_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'feedback_owner_block_menu');
 	
 	// Interception des commentaires
-	// Set core notifications system to track the creation of new comments
+	// Set core notifications system to track the creation of new comments (might also have been enabled by other plugins)
 	elgg_register_notification_event('object', 'comment', array('create'));
 	//elgg_register_event_handler('create', 'annotation', 'feedback_create_annotation_event_handler');
 	elgg_register_plugin_hook_handler("get", "subscriptions", "feedback_comment_get_subscriptions_hook");
 	
 	// @TODO : override feedback message to use our own content
 	// Note : load late to avoid content being modifed by some other plugin
-	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:comment', 'feedback_prepare_comment_notification', 900);
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:comment', 'feedback_prepare_comment_notification', 800);
 	
 	// Register actions
 	elgg_register_action('feedback/delete', elgg_get_plugins_path() . 'feedback/actions/delete.php', 'admin');
@@ -211,11 +211,11 @@ function feedback_comment_get_subscriptions_hook($hook, $type, $subscriptions, $
 		}
 		
 	}
-	
 	return $subscriptions;
 }
 
 
+// Feedback notification message replies (comments)
 function feedback_prepare_comment_notification($hook, $type, $notification, $params) {
 	$event = $params['event'];
 	$entity = $event->getObject();
@@ -238,7 +238,7 @@ function feedback_prepare_comment_notification($hook, $type, $notification, $par
 			$details = $feedback->about;
 		}
 		if (feedback_is_mood_enabled()) {
-			if (!empty($details)) $details .= ', ';
+			if (!empty($details)) { $details .= ', '; }
 			$details .= $feedback->mood;
 		}
 		if (!empty($details)) { $feedback_title .= " ($details)"; }

@@ -2,6 +2,18 @@
 
 x.x:
 
+2.0.2 (11/07/2015):
+ - potentially more reliable view counts when entity is not passed explicitly
+
+2.0.1 (10/15/2015):
+ - fix notice on plugin settings save
+
+2.0.0 (10/15/2015):
+ - Upgrade for Elgg 1.9+
+
+1.2 ():
+ - fixes php warning when foreach called on nonarray
+
 1.1 (05/30/2012):
 
 - Forces metastring creation on activation to prevent possible sql exception
