@@ -49,6 +49,7 @@ if (elgg_instanceof($entity)) {
 
 if (!isset($access_id)) { return true; }
 
+
 // Should we display the access text ?
 if (!$no_text) {
 	$access_id_string = get_readable_access_level($access_id);
@@ -56,7 +57,6 @@ if (!$no_text) {
 } else {
 	$access_id_string = '&nbsp;';
 }
-
 
 // Plus d'infos sur les niveaux d'accès
 switch($access_id) {

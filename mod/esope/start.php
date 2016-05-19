@@ -79,6 +79,11 @@ function esope_init() {
 		elgg_extend_view('input/captcha', 'vazco_text_captcha/captcha');
 	}
 	
+	
+	// Ajoute la possibilité de modifier accès et container pour TheWire
+	// Note : MUST be run very early so group notifications can happen
+	elgg_register_event_handler("create", "object", "esope_thewire_handler_event", 0);
+	
 	// Add group Wire support (option)
 	// Note : also uses esope's event handler ("create", "object")
 	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
@@ -91,6 +96,11 @@ function esope_init() {
 			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);
 		}
 	}
+	
+	// The Wire notifications : add support for group containers
+	elgg_unregister_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'thewire_prepare_notification');
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'esope_thewire_prepare_notification');
+	
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
@@ -285,10 +295,6 @@ function esope_init() {
 	// * triggers a blocking hook that enables email blocking based on any property from email sender or recipient
 	// * requires to add the hook trigger to the email notification handler
 	// elgg_register_plugin_hook_handler('email', 'system', 'esope_block_email_recipients', 100);
-	
-	// The Wire notifications : add support for group containers
-	elgg_unregister_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'thewire_prepare_notification');
-	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'esope_thewire_prepare_notification');
 	
 	
 	

@@ -102,4 +102,46 @@ function esope_login_user_event($event, $type, $user) {
 }
 
 
+/* TheWire create event handler 
+ * Changes access level of wire object
+ * Adds a container information and updates access level if wire object is published in a group
+ * Inherits parent container and access by default if post is a reply
+ */
+function esope_thewire_handler_event($event, $type, $object) {
+	if (!empty($object) && elgg_instanceof($object, "object", "thewire")) {
+		$parent_guid = get_input('parent_guid', false);
+		$access_id = get_input('access_id', false);
+		$container_guid = get_input('container_guid', false);
+		
+		// If replying to a previous post, default to parent container and access
+		if ($parent_guid) {
+			$parent_post = get_entity($parent_guid);
+			if (elgg_instanceof($parent_post, 'object', 'thewire')) {
+				if (!$access_id) { $access_id = $parent_post->access_id; }
+				if (!$container_guid) { $container_guid = $parent_post->container_guid; }
+			}
+		}
+		
+		// Define Wire container (if valid)
+		if ($container_guid) {
+			$container = get_entity($container_guid);
+			if (elgg_instanceof($container, 'group')) {
+				$object->container_guid = $container_guid;
+				$object->access_id = $container->group_acl;
+				// Update entity (may be overriden if specific access is set)
+				$object->save();
+				// @TODO Notify (force) to the group ? this should be done in another event hook (registered after this one)
+			}
+		}
+		// Change access if asked to
+		if ($access_id) {
+			$object->access_id = $access_id;
+			$object->save();
+		}
+	}
+	// Return false halts the process, true or no return is equivalent
+}
+
+
+
 
