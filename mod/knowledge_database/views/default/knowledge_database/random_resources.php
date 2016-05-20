@@ -9,7 +9,7 @@ $search_vars = elgg_extract('search_vars', $vars, array());
 $defaults = array('type' => 'object');
 $search_vars = array_merge($defaults, $search_vars);
 
-if (empty($vars['subtypes'])) { $search_vars['subtypes'] = knowledge_database_get_allowed_subtypes(); }
+if (empty($search_vars['subtypes'])) { $search_vars['subtypes'] = knowledge_database_get_allowed_subtypes(); }
 
 // Get random recent resources
 $latest = elgg_get_entities($search_vars);

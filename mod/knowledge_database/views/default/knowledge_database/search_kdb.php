@@ -22,6 +22,7 @@ foreach ($registered_subtypes as $type => $subtypes) {
 	}
 }
 */
+//$container = get_entity($container_guid);
 $tools = knowledge_database_get_allowed_tools($container_guid);
 $subtypes = knowledge_database_get_allowed_subtypes();
 $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
@@ -57,7 +58,7 @@ $search_form = '<form id="kdb-search-form" method="post" action="' . $search_act
 $search_form .= elgg_view('input/securitytoken');
 //$search_form .= elgg_view('input/hidden', array('name' => 'debug', 'value' => 'true'));
 // @TODO Limit in a container (group) only if we are in a KDB group
-if ($container_guid) $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
+if ($container_guid) { $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid)); }
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'object'));
 
 $search_form .= '<p><em><i class="fa fa-info-circle"></i> ' . elgg_echo('knowledge_database:search:details') . '</em></p>';
@@ -70,40 +71,47 @@ $search_form .= '</div>';
 $search_form .= '<div class="clearfloat"></div>';
 
 // Custom fields
-if ($fields) foreach ($fields as $name) {
-	$field_content = '';
-	$inputs[$name] = get_input($name);
+if ($fields) {
+	foreach ($fields as $name) {
+		$field_content = '';
+		$inputs[$name] = get_input($name);
 	
-	// Selectors options
-	$config = knowledge_database_get_field_config($name);
-	$selectors[$name] = $config['params']['options_values'];
-	if ($selectors[$name]) {
-		// Ajoute une option vide au début du tableau
-		//array_unshift($selectors[$name], ''); // Attention : inserts a "0" value !!
-		$selectors[$name] = array_merge(array('' => ''), $selectors[$name]);
+		// Selectors options
+		$config = knowledge_database_get_field_config($name);
+		$selectors[$name] = $config['params']['options_values'];
+		if ($selectors[$name]) {
+			// Ajoute une option vide au début du tableau
+			//array_unshift($selectors[$name], ''); // Attention : inserts a "0" value !!
+			$selectors[$name] = array_merge(array('' => ''), $selectors[$name]);
+		}
+	
+		$title = esope_get_best_translation_for_metadata($name, 'knowledge_database:metadata', $config['title']);
+	
+		// Adjust input types
+		$view = 'text';
+		//$view = $config['type'];
+		if (in_array($config['type'], array('dropdown', 'multiselect', 'select'))) {
+			$view = 'select';
+		} else if (in_array($config['type'], array('date'))) {
+			$view = 'date';
+		} else if (in_array($config['type'], array('longtext', 'plaintext', 'tags', 'email'))) {
+			$view = 'text';
+		} else if (in_array($config['type'], array('file'))) {
+			continue;
+		}
+	
+		// Build search field
+		$field_content .= '<div class="kdb-search-filter">';
+			$field_content .= '<p><label><span>' . $title . '</span> ';
+			$field_content .= elgg_view("input/$view", array('name' => "metadata[$name]", 'value' => $inputs[$name], 'options_values' => $selectors[$name]));
+			$field_content .= '</label></p>';
+		$field_content .= '</div>';
+	
+		$fieldset = $config['category'];
+		if (empty($fieldset)) { $fieldset = 'default'; }
+		// Add field to appropriate fieldset
+		$fieldset_fields[$fieldset] .= $field_content;
 	}
-	
-	$title = esope_get_best_translation_for_metadata($name, 'knowledge_database:metadata', $config['title']);
-	
-	// Adjust input types
-	$view = 'text';
-	//$view = $config['type'];
-	if (in_array($config['type'], array('dropdown', 'multiselect'))) { $view = 'dropdown'; }
-	else if (in_array($config['type'], array('date'))) { $view = 'date'; }
-	else if (in_array($config['type'], array('longtext', 'plaintext', 'tags', 'email'))) { $view = 'text'; }
-	else if (in_array($config['type'], array('file'))) { continue; }
-	
-	// Build search field
-	$field_content .= '<div class="kdb-search-filter">';
-		$field_content .= '<p><label><span>' . $title . '</span> ';
-		$field_content .= elgg_view("input/$view", array('name' => "metadata[$name]", 'value' => $inputs[$name], 'options_values' => $selectors[$name]));
-		$field_content .= '</label></p>';
-	$field_content .= '</div>';
-	
-	$fieldset = $config['category'];
-	if (empty($fieldset)) $fieldset = 'default';
-	// Add field to appropriate fieldset
-	$fieldset_fields[$fieldset] .= $field_content;
 }
 
 
@@ -132,7 +140,7 @@ $search_form .= '</form><br />';
 
 // Random resources block
 $params = array('type' => 'object', 'subtypes' => $subtypes, 'limit' => 0, 'max' => 3);
-if ($container_guid) $params['container_guid'] = $container_guid;
+if ($container_guid) { $params['container_guid'] = $container_guid; }
 $content_latest = elgg_view('knowledge_database/random_resources', $params);
 
 // Add resources block
