@@ -22,15 +22,16 @@ $params = array(
 	'inverse_relationship' => true,
 	'type' => 'user',
 	'limit' => $limit,
+	'pagination' => false,
 	'list_type' => 'gallery',
 	'gallery_class' => 'elgg-gallery-users',
-	'pagination' => false,
 );
 $body = elgg_list_entities_from_relationship($params);
 $params['count'] = true;
 $count = elgg_get_entities_from_relationship($params);
 
 $body .= "<div class='center mts'>$all_link</div>";
+$title = elgg_echo('groups:members') . '<span class="groups-members-count">[' . $count . ']</span>';
 
-echo elgg_view_module('aside', elgg_echo('groups:members') . '<span class="groups-members-count">[' . $count . ']</span>', $body, array('class' => 'group-members'));
+echo elgg_view_module('aside', $title, $body, array('class' => 'group-members'));
 
