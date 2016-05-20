@@ -126,7 +126,7 @@ if ($full) {
 	));
 	echo '<div class="full-width-pages-nav">
 		' . $toggle_link . '
-		<div id="full-width-pages-nav-content" class="hidden;">
+		<div id="full-width-pages-nav-content" class="hidden">
 			' . elgg_view('pages/top-summary', array('entity' => $page)) . '
 		</div>
 	</div>';
