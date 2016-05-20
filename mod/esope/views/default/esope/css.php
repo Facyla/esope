@@ -217,10 +217,6 @@ input:focus, textarea:focus { outline:0; }
 	*/
 }
 .elgg-page-footer li { float: left; margin-right: 1em; }
-/*
-.elgg-page-footer ul li { background: transparent url("<?php echo $url; ?>mod/esope/img/theme/puce-footer.png") left 7px no-repeat scroll; }
-.elgg-page-footer ul li:first-child { background: none; }
-*/
 .elgg-page-footer ul li a { color: #fff; font-size: 0.8rem; }
 .elgg-page-footer ul li a:hover, .elgg-page-footer ul li a:focus, .elgg-page-footer ul li a:active { color: #ddd; }
 .elgg-page-footer img { float: right; }
