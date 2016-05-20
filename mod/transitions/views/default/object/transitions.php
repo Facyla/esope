@@ -151,7 +151,7 @@ $shortlink .= '<input type="text" readonly="readonly" onClick="this.setSelection
 
 // Embed code
 //$embedcode = '<p>' . elgg_echo('transitions:embed:details') . '</p>';
-$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:310px; height:224px;" /&gt;</textarea>';
+$embedcode .= '<textarea readonly="readonly" onClick="this.setSelectionRange(0, this.value.length);">&lt;iframe src="' . elgg_get_site_url() . 'export_embed/entity?guid=' . $transitions->guid . '&viewtype=gallery&nomainlink=true" style="width:310px; height:224px;"&gt;&lt;/iframe&gt;</textarea>';
 
 // Combined module : permalink + share links + embed
 $share_content = '';
