@@ -5,7 +5,7 @@ return array(
 	'kdb' => 'Base de connaissances',
 	'knowledge_database:homepage' => 'Base de connaissances',
 	
-	'knowledge_database:addressource' => 'Ajouter une nouvelle ressource',
+	'knowledge_database:addresource' => 'Ajouter une nouvelle ressource',
 	'knowledge_database:addfile' => '<i class="fa fa-file"></i><br />Publier un fichier',
 	'knowledge_database:addbookmarks' => '<i class="fa fa-link"></i><br />Publier un lien vers une ressource web',
 	'knowledge_database:addblog' => '<i class="fa fa-file-text-o"></i><br />Publier un article',
@@ -25,7 +25,7 @@ return array(
 	'knowledge_database:search:form:title' => "Rechercher dans la base de données",
 	'knowledge_database:search:details' => "Vous pouvez rechercher dans la base de données en utilisant un seul, voire aucun critère, ou plusieurs critères à la fois. Il est recommandé de commencer par une recherche large, puis d'affiner les résultats s'il y en a trop.",
 	'knowledge_database:advsearch' => "Recherche avancée",
-	'knowledge_database:latestressources' => "Ressources au hasard",
+	'knowledge_database:latestresources' => "Ressources au hasard",
 	'knowledge_database:resultscount' => "%s ressources trouvées",
 	'knowledge_database:resultscount1' => "%s ressource trouvée",
 	'knowledge_database:noresult' => "Aucune ressource trouvée. Essayer d'utiliser moins de critères.",
@@ -39,17 +39,17 @@ return array(
 	'knowledge_database:settings:site' => "Base de connaissance du site",
 	'knowledge_database:settings:field' => "Définition de \"%s\" (%s)",
 	'knowledge_database:settings:field:edit' => "Configuration de \"%s\"",
-	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correpond à une vue input et output existante. Par ex. text, longtext, plaintext, dropdown, date...<br />
+	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correpond à une vue input et output existante. Par ex. text, longtext, plaintext, select, date...<br />
 	<strong>Category&nbsp;:</strong> facultatif, permet de regrouper les champs par groupe de champs<br />
 	<strong>Read&nbsp;:</strong> \"yes\" ou \"no\" - permet de définir si ce champ est affiché. Se référer au code source pour des définitions plus avancées, selon les rôles et l'état du workflow.<br />
 	<strong>Edit&nbsp;:</strong> permet de définir si ce champ peut être édité. Même configuration possible que pour \"read\".<br />
 	<strong>Required&nbsp;:</strong> le champ doit être renseigné pour valider le formulaire<br />
-	<strong>Multiple&nbsp;:</strong> (dropdown) le champ accepte plusieurs valeurs<br />
+	<strong>Multiple&nbsp;:</strong> (select) le champ accepte plusieurs valeurs<br />
 	<strong>Autocomplete&nbsp;:</strong> (text) le champ propose des valeurs déjà saisies<br />
 	<strong>Default&nbsp;:</strong> valeur par défaut du champ<br />
-	<strong>Options values&nbsp;:</strong> (dropdown) liste des valeurs possibles<br />",
-	'knowledge_database:settings:fields:site' => "Liste des métadonnées pour l'ensemble du site",
-	'knowledge_database:settings:fields:group' => "Liste des métadonnées pour le groupe \"%s\"",
+	<strong>Options values&nbsp;:</strong> (select) liste des valeurs possibles<br />",
+	'knowledge_database:settings:fields:site' => "Base de connaissance globale (site)",
+	'knowledge_database:settings:fields:group' => "Base de connaissance du groupe \"%s\"",
 	'knowledge_database:settings:fields' => "Définition des métadonnées",
 	'knowledge_database:settings:fields:details' => "Pour définir la liste des champs, indiquez un nom de métadonnée par ligne, ou séparrez les noms par des virgules, par ex. metadata1, metadata2, etc.<br />
 		Les noms devraient être saisis en minuscule, sans espace ni accent ou signe de ponctuation, et être uniques pour éviter tout risque de conflit avec d'autres metadonnées<br />
@@ -89,6 +89,20 @@ return array(
 		<li> - Les noms de ces métadonnées peuvent être traduits en utilisant les clefs de traduction 'knowledge_database:key:key1' => \"Nom en clair de Key 1\",</li>
 		<li> - OU vous pouvez définir directement un nom en utilisant le séparateur clef-valeur \"::\" (mais en une seule langue dans ce cas), par ex.: key1::Nom en clair de Key 1</li>
 		</ul>",
+	'knowledge_database:settings:field:metadata' => "Configurer le champ pour la métadonnée&nbsp;: %s",
+	'knowledge_database:define_field:success' => "La configuration a bien été enregistrée",
+	'knowledge_database:define_field:error' => "Erreur, impossible d'enregistrer les données. Veuillez recharger la page et réessayer.",
+	'knowledge_database:settings:field:title' => "Libellé du champ",
+	'knowledge_database:settings:field:type' => "Type de champ",
+	'knowledge_database:settings:field:category' => "Groupe de champs",
+	'knowledge_database:settings:field:read' => "Lecture",
+	'knowledge_database:settings:field:edit' => "Ecriture",
+	'knowledge_database:settings:field:required' => "Requis",
+	'knowledge_database:settings:field:multiple' => "Multiple",
+	'knowledge_database:settings:field:autocomplete' => "Autocomplétion",
+	'knowledge_database:settings:field:defaultvalue' => "Valeur par défaut",
+	'knowledge_database:settings:field:options_values' => "Valeurs disponibles",
+	'knowledge_database:settings:field:save' => "Enregistrer la configuration",
 	
 	
 	// Default config

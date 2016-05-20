@@ -13,6 +13,6 @@ $valid_types = get_valid_types_for_views_counter();
 <label>
 	<?php
 	echo elgg_echo('views_counter:select_type');
-	echo elgg_view('input/dropdown', array('name' => 'entity_type', 'options' => $valid_types, 'value' => $entity_type));
+	echo elgg_view('input/select', array('name' => 'entity_type', 'options' => $valid_types, 'value' => $entity_type));
 	?>
 </label>

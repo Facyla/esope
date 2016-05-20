@@ -1,5 +1,11 @@
 <?php
-$group = elgg_get_page_owner_entity();
+/**
+ * Adds the KDB information to the group layout
+ *
+ * @uses $vars['entity']
+ */
+
+$group = elgg_extract('entity', $vars);
 $is_kdb_group = knowledge_database_is_kdb_group($group->guid);
 
 if ($is_kdb_group) {
@@ -7,5 +13,3 @@ if ($is_kdb_group) {
 	echo '<br />';
 	echo '<blockquote><strong>' . elgg_echo('knowledge_database:kdb_group') . '</strong></blockquote>';
 }
-
-

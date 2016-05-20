@@ -130,13 +130,13 @@ $search_form .= '</form><br />';
 
 
 
-// Random ressources block
+// Random resources block
 $params = array('type' => 'object', 'subtypes' => $subtypes, 'limit' => 0, 'max' => 3);
 if ($container_guid) $params['container_guid'] = $container_guid;
-$content_latest = elgg_view('knowledge_database/random_ressources', $params);
+$content_latest = elgg_view('knowledge_database/random_resources', $params);
 
-// Add ressources block
-$content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'tools' => $tools));
+// Add resources block
+$content_add = elgg_view('knowledge_database/add_resources', array('publish_guid' => $publish_guid, 'tools' => $tools));
 
 
 

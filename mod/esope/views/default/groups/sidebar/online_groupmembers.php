@@ -2,7 +2,7 @@
 if (!elgg_is_logged_in()) { return; }
 
 // Limit : will be filtered, but do not set to high (or better use a custom direct query)
-$users = find_active_users(array('seconds' => 600, 'limit' => 20, 'count' => false));
+$users = find_active_users(array('seconds' => 600, 'limit' => 10, 'count' => false));
 
 $group = elgg_get_page_owner_entity();
 if ($users) {

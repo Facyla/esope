@@ -733,6 +733,7 @@ return array(
 	'profile:field:group_profiletypes' => 'Group types',
 	'profile:field:color' => 'Color (CSS)',
 	'profile:field:groups_select' => 'Group select',
+	'dashboard:widget:group:select' => 'Select a group',
 	'profile:field:members_select' => 'Member select',
 	'members_select:myself' => 'Myself',
 	'profile:field:percentage' => 'Percentage',

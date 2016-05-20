@@ -102,6 +102,7 @@ if (elgg_is_logged_in() && !$menu) {
 		// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
 		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());
 		$invites_count = sizeof($group_invites);
+		$invites = '';
 		if ($invites_count == 1) {
 			$invites = '<li class="elgg-menu-counter"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '">' . $invites_count . '</a></li>';
 		} else if ($invites_count > 1) {

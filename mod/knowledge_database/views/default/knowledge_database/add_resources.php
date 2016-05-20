@@ -1,9 +1,9 @@
 <?php
 // Add content block
 
-$content = '<div class="knowledge_database-add-ressources">';
+$content = '<div class="knowledge_database-add-resources">';
 
-$content .= '<h3>' . elgg_echo('knowledge_database:addressource') . '</h3>';
+$content .= '<h3>' . elgg_echo('knowledge_database:addresource') . '</h3>';
 
 if (elgg_is_logged_in()) {
 	

@@ -22,15 +22,15 @@ $default = get_input('default');
 $options_values = get_input('options_values');
 
 // Set defaults
-if (empty($type)) $type = 'text';
-if (empty($category)) $category = 'default';
-if (empty($read)) $read = 'yes';
-if (empty($edit)) $edit = 'yes';
-if (empty($required)) $required = 'no';
-if (empty($multiple)) $multiple = 'no';
-if (empty($autocomplete)) $autocomplete = 'no';
-if (empty($default)) $default = '';
-if (empty($options_values)) $options_values = '';
+if (empty($type)) { $type = 'text'; }
+if (empty($category)) { $category = 'default'; }
+if (empty($read)) { $read = 'yes'; }
+if (empty($edit)) { $edit = 'yes'; }
+if (empty($required)) { $required = 'no'; }
+if (empty($multiple)) { $multiple = 'no'; }
+if (empty($autocomplete)) { $autocomplete = 'no'; }
+if (empty($default)) { $default = ''; }
+if (empty($options_values)) { $options_values = ''; }
 
 // Transform some inputs before building config
 // Syntax : role1,role2(step1,step2, step3),role3(step1,step2)

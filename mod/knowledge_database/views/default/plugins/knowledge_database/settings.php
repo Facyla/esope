@@ -32,10 +32,10 @@ if ($all_groups) {
 $kdb_tools_opt = "blog, bookmarks, pages, file, event_calendar, announcements";
 if (!isset($vars['entity']->kdb_subtypes)) { $vars['entity']->kdb_subtypes = $kdb_tools_opt; }
 
-$kdb_inputs_opt = "text, longtext, plaintext, dropdown, multiselect, date, tags, color, email, file";
+$kdb_inputs_opt = "text, longtext, plaintext, select, multiselect, date, tags, email, file, color";
 if (!empty($vars['entity']->kdb_inputs)) { $vars['entity']->kdb_inputs = $kdb_inputs_opt; }
 
-if ($vars['entity']->site_fields == 'reset_maghrenov') {
+if ($vars['entity']->site_fields == 'reset') {
 	$vars['entity']->site_fields = 'kdb_theme | kdb_topic | kdb_country | kdb_region | kdb_type | kdb_lang | kdb_author | kdb_date';
 	// ('kdb_theme' => 'dropdown', 'kdb_topic' => 'dropdown', 'kdb_country' => 'dropdown', 'kdb_region' => 'dropdown', 'kdb_type' => 'dropdown', 'kdb_lang' => 'text', 'kdb_author' => 'text', 'kdb_date' => 'text');
 }

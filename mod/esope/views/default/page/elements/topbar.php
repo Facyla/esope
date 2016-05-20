@@ -66,6 +66,7 @@ if (elgg_is_logged_in() && !$menu) {
 	// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
 	$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
 	$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
+	$friendrequests = '';
 	if ($friendrequests_count == 1) {
 		$friendrequests = '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a>';
 	} else if ($friendrequests_count > 1) {
@@ -83,6 +84,7 @@ if (elgg_is_logged_in() && !$menu) {
 	}
 	
 	// Login_as menu link
+	$loginas_logout = '';
 	if (elgg_is_active_plugin('login_as')) {
 		$session = elgg_get_session();
 		$original_user_guid = $session->get('login_as_original_user_guid');

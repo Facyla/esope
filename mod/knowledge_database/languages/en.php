@@ -5,7 +5,7 @@ return array (
 	'kdb' => 'Knowledge Database',
 	'knowledge_database:homepage' => 'Knowledge Database',
 	
-	'knowledge_database:addressource' => 'Add a new ressource',
+	'knowledge_database:addresource' => 'Add a new ressource',
 	'knowledge_database:addfile' => '<i class="fa fa-file"></i><br />Upload a file document',
 	'knowledge_database:addbookmarks' => '<i class="fa fa-link"></i><br />Publish a link to an online ressource',
 	'knowledge_database:addblog' => '<i class="fa fa-file-text-o"></i><br />Publish text',
@@ -24,7 +24,7 @@ return array (
 	'knowledge_database:search:form:title' => "Search the Knowledge Database",
 	'knowledge_database:search:details' => "You can search the database by using one, none or many search criteria. We suggest you start wide and refine your search if there are too much results.",
 	'knowledge_database:advsearch' => "Advanced search",
-	'knowledge_database:latestressources' => "Random ressources",
+	'knowledge_database:latestresources' => "Random ressources",
 	'knowledge_database:resultscount' => "%s ressources found",
 	'knowledge_database:resultscount1' => "%s ressource found",
 	'knowledge_database:noresult' => "No ressource found. Try to refine your search criteria.",
@@ -38,17 +38,17 @@ return array (
 	'knowledge_database:settings:site' => "Site Knowledge Database settings",
 	'knowledge_database:settings:field' => "Definition of \"%s\" (%s)",
 	'knowledge_database:settings:field:edit' => "Configuration of \"%s\"",
-	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correpond à une vue input et output existante. Par ex. text, longtext, plaintext, dropdown, date...<br />
+	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correpond à une vue input et output existante. Par ex. text, longtext, plaintext, select, date...<br />
 	<strong>Category&nbsp;:</strong> facultatif, permet de regrouper les champs par groupe de champs<br />
 	<strong>Read&nbsp;:</strong> \"yes\" ou \"no\" - permet de définir si ce champ est affiché. Se référer au code source pour des définitions plus avancées, selon les rôles et l'état du workflow.<br />
 	<strong>Edit&nbsp;:</strong> permet de définir si ce champ peut être édité. Même configuration possible que pour \"read\".<br />
 	<strong>Required&nbsp;:</strong> le champ doit être renseigné pour valider le formulaire<br />
-	<strong>Multiple&nbsp;:</strong> (dropdown) le champ accepte plusieurs valeurs<br />
+	<strong>Multiple&nbsp;:</strong> (select) le champ accepte plusieurs valeurs<br />
 	<strong>Autocomplete&nbsp;:</strong> (text) le champ propose des valeurs déjà saisies<br />
 	<strong>Default&nbsp;:</strong> valeur par défaut du champ<br />
-	<strong>Options values&nbsp;:</strong> (dropdown) liste des valeurs possibles<br />",
-	'knowledge_database:settings:fields:site' => "Liste des métadonnées pour l'ensemble du site",
-	'knowledge_database:settings:fields:group' => "Liste des métadonnées pour le groupe \"%s\"",
+	<strong>Options values&nbsp;:</strong> (select) liste des valeurs possibles<br />",
+	'knowledge_database:settings:fields:site' => "Global knowledge database",
+	'knowledge_database:settings:fields:group' => "Knowledge database for group \"%s\"",
 	'knowledge_database:settings:fields' => "Metadata definition",
 	'knowledge_database:settings:fields:details' => "Pour définir la liste des champs, indiquez un nom de métadonnée par ligne, ou séparrez les noms par des virgules, par ex. metadata1, metadata2, etc.<br />
 		Les noms devraient être saisis en minuscule, sans espace ni accent ou signe de ponctuation, et être uniques pour éviter tout risque de conflit avec d'autres metadonnées<br />
@@ -78,7 +78,7 @@ return array (
 	'knowledge_database:subtype:file' => "Downloadable document",
 	'knowledge_database:subtype:blog' => "Article",
 	'knowledge_database:subtype:pages' => "Page",
-	'knowledge_database:subtype:evnet_calendar' => "Event",
+	'knowledge_database:subtype:event_calendar' => "Event",
 	'knowledge_database:subtype:announcements' => "Announcement",
 	
 	'knowledge_database:settings:keytitle' => "Options for metadata \"%s\"",
@@ -88,6 +88,20 @@ return array (
 		<li> - Option values can then be translated by using 'knowledge_database:key:key1' => \"Key 1 human readable name\",</li>
 		<li> - OR Optional key-value separator \"::\" can be used for quicker config (but single language), e.g.: key1::Key 1 human readable name</li>
 		</ul>",
+	'knowledge_database:settings:field:metadata' => "Configure field for metadata: %s",
+	'knowledge_database:define_field:success' => "Configuration successfully saved",
+	'knowledge_database:define_field:error' => "Error, could not save data. Please reload page and try again.",
+	'knowledge_database:settings:field:title' => "Field title",
+	'knowledge_database:settings:field:type' => "Field type",
+	'knowledge_database:settings:field:category' => "Fields group",
+	'knowledge_database:settings:field:read' => "Read",
+	'knowledge_database:settings:field:edit' => "Edit",
+	'knowledge_database:settings:field:required' => "Required",
+	'knowledge_database:settings:field:multiple' => "Multiple",
+	'knowledge_database:settings:field:autocomplete' => "Autocomplete",
+	'knowledge_database:settings:field:defaultvalue' => "Default value",
+	'knowledge_database:settings:field:options_values' => "Options values",
+	'knowledge_database:settings:field:save' => "Save field configuration",
 	
 	
 	// Default config

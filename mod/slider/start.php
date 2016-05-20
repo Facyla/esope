@@ -261,7 +261,7 @@ function slider_register_libraries() {
 	
 	// Register JS scripts and CSS files
 	foreach ($libraries_config as $vendor => $lib_config) {
-		foreach ($lib_config as $config) {
+		foreach ($lib_config as $name => $config) {
 			switch($config['type']) {
 				case 'js':
 					$libname = $name;

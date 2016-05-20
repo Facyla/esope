@@ -1,15 +1,15 @@
 <?php
-// Selection of random ressources
+// Selection of random resources
 
 $content = '';
 
 $entities = elgg_extract('entities', $vars, 3);
-$title = elgg_extract('title', $vars, elgg_echo("knowledge_database:latestressources"));
-$class = elgg_extract('class', $vars, 'knowledge_database-ressources-showcase');
+$title = elgg_extract('title', $vars, elgg_echo("knowledge_database:latestresources"));
+$class = elgg_extract('class', $vars, 'knowledge_database-resources-showcase');
 
 $content = '<div class="' . $class . '">';
 
-// Showcase database ressources
+// Showcase database resources
 if ($title) { $content .= '<h3>' . $title . '</h3>'; }
 
 foreach($entities as $ent) {

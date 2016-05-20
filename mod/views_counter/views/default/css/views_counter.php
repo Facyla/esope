@@ -25,20 +25,26 @@
 	margin-left: 5px;
 }
 
-.align_center {
-	text-align: center;
-}
-
 .guid_column {
-	width: 35px;
+	/* width: 35px; */
+	width: auto;
+	max-width: 20%;
+	text-align: right;
 }
 
 .title_column {
-	width: 190px;
+	/* width: 190px; */
+	width: auto;
+	text-align: left;
+	padding-left: 1em;
 }
 
 .counter_column {
-	width: 100px;
+	/* width: 100px; */
+	width: auto;
+	max-width: 20%;
+	text-align: right;
+	padding-right: 1em;
 }
 
 .id_column {
@@ -90,4 +96,21 @@
 
 .container_id_input {
 	width: 175px;
+}
+
+.views_counter_admin_page table {
+	width: 100%;
+}
+
+.views_counter_admin_page tr:hover {
+	background-color: #EEE;
+}
+
+
+@media (max-width:700px) {
+	.views_counter_left_column, .views_counter_right_column {
+		float: none;
+		width: 49%;
+		border: 0
+	}
 }

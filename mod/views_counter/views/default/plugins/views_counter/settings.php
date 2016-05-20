@@ -1,6 +1,16 @@
 <?php
 
-	namespace AU\ViewsCounter;
+namespace AU\ViewsCounter;
+
+$yn_options = array(
+	elgg_echo('views_counter:yes') => 'yes',
+	elgg_echo('views_counter:no') => 'no',
+);
+$float_options = array(
+	elgg_echo('views_counter:left') => 'float_left',
+	elgg_echo('views_counter:right') => 'float_right',
+	elgg_echo('views_counter:no_float') => 'none',
+);
 ?>
 
 <h3><?php echo elgg_echo('views_counter:add_views_counter'); ?></h3>
@@ -69,15 +79,10 @@
 
 		<h3><?php echo elgg_echo('views_counter:float_direction'); ?></h3>
 		<?php
-		$options = array(
-			elgg_echo('views_counter:left') => 'float_left',
-			elgg_echo('views_counter:right') => 'float_right',
-			elgg_echo('views_counter:no_float') => 'none',
-		);
 		echo elgg_view('input/radio', array(
 			'name' => 'params[float_direction]',
 			'value' => $vars['entity']->float_direction ? $vars['entity']->float_direction : 'right',
-			'options' => $options,
+			'options' => $float_options,
 		));
 		?>
 	</div>
@@ -85,30 +90,23 @@
 	<div class="pam">
 		<h3><?php echo elgg_echo('views_counter:display_views_counter'); ?></h3>
 		<?php
-		$options = array(
-			elgg_echo('views_counter:yes') => 'yes',
-			elgg_echo('views_counter:no') => 'no',
-		);
 		echo elgg_view('input/radio', array(
 			'name' => 'params[display_views_counter]',
 			'value' => $vars['entity']->display_views_counter ? $vars['entity']->display_views_counter : 'yes',
-			'options' => $options
+			'options' => $yn_options
 		));
 		?>
 		<br />
 
 		<h3><?php echo elgg_echo('views_counter:remove_class'); ?></h3>
 		<?php
-		$options = array(
-			elgg_echo('views_counter:yes') => 'yes',
-			elgg_echo('views_counter:no') => 'no',
-		);
 		echo elgg_view('input/radio', array(
 			'name' => 'params[remove_css_class]',
 			'value' => $vars['entity']->remove_css_class ? $vars['entity']->remove_css_class : 'no',
-			'options' => $options
+			'options' => $yn_options
 		));
 		?>
 	</div>
 	<div class="clearfloat"></div>
 </div>
+

@@ -30,8 +30,10 @@ function knowledge_database_init() {
 	elgg_extend_view('css/elgg', 'knowledge_database/css');
 	elgg_extend_view('css/admin', 'knowledge_database/css');
 	
-	// Ajout bloc spécifique dans les groupes
+	// Ajout bloc spécifique dans les groupes (informatif)
 	elgg_extend_view('groups/profile/summary', 'knowledge_database/group_extend');
+	// Ajout interface de recherche pour le groupe associé à la KDB
+	elgg_extend_view('groups/profile/summary', 'knowledge_database/group_profile_extend', 800);
 	
 	// Add extra fields to objects create/edit form (below tags)
 	elgg_extend_view('input/tags', 'knowledge_database/object_form_extend', 800);
@@ -62,15 +64,15 @@ function knowledge_database_page_handler($page) {
 	switch ($page[0]) {
 		case 'define_field':
 			set_input('name', $page[1]);
-			if (include($base . 'define_field.php')) return true;
+			if (include($base . 'define_field.php')) { return true; }
 			break;
 		case 'download':
 			set_input('guid', $page[1]);
 			set_input('field_name', $page[2]);
-			if (include($base . 'download.php')) return true;
+			if (include($base . 'download.php')) { return true; }
 			break;
 		case 'add':
-			if (include($base . 'add.php')) return true;
+			if (include($base . 'add.php')) { return true; }
 			break;
 		case 'public':
 		case 'search':
@@ -79,7 +81,7 @@ function knowledge_database_page_handler($page) {
 		case 'group':
 		default:
 			if ($page[1]) { set_input('container_guid', $page[1]); }
-			if (include($base . 'index.php')) return true;
+			if (include($base . 'index.php')) { return true; }
 	}
 	return false;
 }
@@ -99,11 +101,11 @@ function knowledge_database_get_user_role($params = array('entity' => false, 'us
 	if (elgg_instanceof($params['user'], 'user')) {
 		
 		// Real admin => admin
-		if (elgg_is_admin_logged_in()) return 'admin';
+		if (elgg_is_admin_logged_in()) { return 'admin'; }
 		
 		// If user is a group admin => admin
 		if (elgg_instanceof($params['group'], 'group')) {
-			if ($params['group']->canEdit($params['user']->guid)) return 'admin';
+			if ($params['group']->canEdit($params['user']->guid)) { return 'admin'; }
 		}
 		
 		// Content owner has some rights
@@ -212,11 +214,11 @@ function knowledge_database_define_field_config($key) {
 	$edit_link = '<strong>' . $key . '</strong>';
 	$name = $config['title'];
 	if (empty($name)) { $name = elgg_echo("knowledge_database:field:$key"); }
-	if ($name && ($name != "knowledge_database:field:$key")) $edit_link .= ' (' . $name . ')';
+	if ($name && ($name != "knowledge_database:field:$key")) { $edit_link .= ' (' . $name . ')'; }
 	
 	$params = array(
 			'text' => '<i class="fa fa-cog"></i> ' . elgg_echo('edit') . ' ' . $key, 
-			'title' => "Configure field for metadata : $key",
+			'title' => elgg_echo('knowledge_database:settings:field:metadata', array($key)),
 			'rel' => 'nofollow', 
 			'class' => 'elgg-lightbox', 
 			'href' => elgg_get_site_url()  . 'kdb/define_field/' . $key,
@@ -436,7 +438,7 @@ function knowledge_database_field_access($field_config, $action = 'read', $role 
 }
 
 
-// @TODO : make this more robust and fail-safe
+// @TODO : make this more robust and failsafe
 // Add file to an entity (using a specific folder in datastore)
 function knowledge_database_add_file_to_entity($entity, $input_name = 'file') {
 	return esope_add_file_to_entity($entity, $input_name);
@@ -530,6 +532,28 @@ function knowledge_database_get_allowed_tools($group_guid = false) {
 	
 	return $filtered_tools;
 }
+
+
+// Returns allowed KDB field types
+function knowledge_database_get_field_types() {
+	$field_types = elgg_get_plugin_setting('kdb_inputs', 'knowledge_database');
+	// @TODO auto-fill (from profile manager, or available views, or some default fields set ?)
+	if (empty($field_types)) {
+		$field_types = "text, longtext, plaintext, select, multiselect, date, tags, email, file, color";
+	}
+	$field_types = esope_get_input_array($field_types);
+	$inputs = array();
+	if ($field_types) {
+		foreach ($field_types as $field_type) {
+			if (elgg_view_exists('input/' . $field_type)) {
+				// Add to available field types list
+				$inputs[$field_type] = $field_type;
+			}
+		}
+	}
+	return $inputs;
+}
+
 
 /* Returns an array of allowed subtypes, for use in a elgg_get_ function
  * $options_values : if true prepares the array for a dropdown view, if false for get functions

@@ -14,6 +14,8 @@ if ($users) {
 }
 
 if (elgg_is_active_plugin('group_chat')) {
+	// Removed from header and integrated under online group members
+	elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
 	$body .= '<div class="clearfloat"></div><p>' . elgg_view('group_chat/groupchat_linkextend', $vars) . '</p>';
 }
 

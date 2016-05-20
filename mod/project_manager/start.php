@@ -106,8 +106,11 @@ function project_manager_init() {
 	
 	// GROUP TOOLS OPTION
 	$pm_meta = project_manager_get_user_metadata();
-	if (elgg_is_logged_in() && !empty($_SESSION['user']->{$pm_status})) {
-		add_group_tool_option('project_manager',elgg_echo('project_manager:enableproject_manager'),false);
+	if (elgg_is_logged_in()) {
+		$user = elgg_get_logged_in_user_entity();
+		if (isset($user->{$pm_meta}) && !empty($user->{$pm_meta})) {
+			add_group_tool_option('project_manager',elgg_echo('project_manager:enableproject_manager'),false);
+		}
 	}
 	add_group_tool_option('tasks', elgg_echo('groups:enabletasks'), false);
 	elgg_extend_view('groups/tool_latest', 'tasks/group_module');

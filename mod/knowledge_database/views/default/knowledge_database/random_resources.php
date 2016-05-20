@@ -1,8 +1,8 @@
 <?php
-// Selection of random ressources
+// Selection of random resources
 
 $max = elgg_extract('max', $vars, 3);
-$title = elgg_extract('title', $vars, elgg_echo("knowledge_database:latestressources"));
+$title = elgg_extract('title', $vars, elgg_echo("knowledge_database:latestresources"));
 $search_vars = elgg_extract('search_vars', $vars, array());
 
 // Set default allowed list
@@ -17,5 +17,5 @@ shuffle($latest);
 $latest = array_slice($latest, 0, $max);
 
 // Format the results
-echo elgg_view('knowledge_database/resources_showcase', array('entities' => $latest, 'title' => $title, 'class' => 'knowledge_database-random-ressources'));
+echo elgg_view('knowledge_database/resources_showcase', array('entities' => $latest, 'title' => $title, 'class' => 'knowledge_database-random-resources'));
 

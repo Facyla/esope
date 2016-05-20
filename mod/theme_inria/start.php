@@ -50,7 +50,7 @@ function theme_inria_init(){
 	
 	// Removed from header and integrated under online group members
 	// see theme_inria/views/default/groups/sidebar/online_groupmembers.php
-	elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
+	//elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
 	
 	elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
 	

@@ -79,7 +79,7 @@ if (elgg_is_logged_in() && !$menu) {
 		$featured = elgg_get_entities_from_metadata(array('type' => 'group', 'metadata_name' => 'featured_group', 'metadata_value' => 'yes'));
 		foreach($featured as $group) {
 			// inscription forcée
-			if ($group->isMember()) { $group->join($own); }
+			if (!$group->isMember()) { $group->join($own); }
 			$featured_groups .= '<li><a href="' . $group->getURL() . '">' 
 				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $group->name . '</a></li>';
 		}

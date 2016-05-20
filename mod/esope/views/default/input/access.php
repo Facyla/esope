@@ -180,6 +180,7 @@ if (!isset($vars['options_values'])) {
 // Permet de n'autoriser que certains niveaux aux membres et admins
 // Note : has to be defined after write access array
 if (!in_array($vars['name'], $donotmodify_cases)) {
+	$remove_access_levels = false;
 	// Admin and members settings
 	if (!elgg_is_admin_logged_in()) {
 		// Exclude member access levels

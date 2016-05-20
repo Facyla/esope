@@ -167,18 +167,19 @@ function elgg_menus_prepare_menu_hook($hook, $type, $return, $params) {
 
 /* Récupère la configuration d'un menu
  * $menu_name : nom du menu
- * $key : élément de configuration spécifique du menu
+ * $key : retourne un élément de configuration spécifique du menu
  * Return : array $config / $config[$key]
  */
 function elgg_menus_get_menu_config($menu_name, $key = false) {
 	$menu_config_data = elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus');
-	if (!$menu_config_data) { return false; }
-	
-	$menu_config = unserialize($menu_config_data);
-	
-	if ($key) { return $menu_config[$key]; }
-	return $menu_config;
-	
+	if ($menu_config_data) {
+		if (!empty($menu_config_data)) {
+			$menu_config = unserialize($menu_config_data);
+			if ($key) { return $menu_config[$key]; }
+			return $menu_config;
+		}
+	}
+	return false;
 }
 
 /* Récupère et prépare le menu : ajoute ou remplace ses éléments

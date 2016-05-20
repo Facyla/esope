@@ -94,7 +94,7 @@ if (elgg_instanceof($entity, 'group')) {
 // Add groups options
 if (!empty($groups)) {
 	$add_groups = false;
-	$groups_block .= "<optgroup label='" . elgg_echo("groups") . "'>\n";
+	$groups_block = "<optgroup label='" . elgg_echo("groups") . "'>\n";
 	foreach ($groups as $group) {
 		if (!elgg_instanceof($entity, 'group') || ($entity->guid != $group->guid)) {
 			$add_groups = true;

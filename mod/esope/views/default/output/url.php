@@ -47,7 +47,7 @@ if (isset($vars['text'])) {
 }
 
 // Accessibilité : "mieux vaut rien qu'identique au titre"
-if (strip_tags($text) == strip_tags($vars['title'])) {
+if (isset($vars['title']) && (strip_tags($text) == strip_tags($vars['title']))) {
   $vars['title'] = '';
 }
 
@@ -60,10 +60,20 @@ if ($url) {
 		$url = elgg_add_action_tokens_to_url($url, false);
 	}
 
-	if (!elgg_extract('is_trusted', $vars, false)) {
+	$is_trusted = elgg_extract('is_trusted', $vars);
+	if (!$is_trusted) {
+		$url = strip_tags($url);
 		if (!isset($vars['rel'])) {
+			if ($is_trusted === null) {
+				$url_host = parse_url($url, PHP_URL_HOST);
+				$site_url = elgg_get_site_url();
+				$site_url_host = parse_url($site_url, PHP_URL_HOST);
+				$is_trusted = $url_host == $site_url_host;
+			}
+			if ($is_trusted === false) {
+				// this is an external URL, which we do not want to be indexed by crawlers
 			$vars['rel'] = 'nofollow';
-			$url = strip_tags($url);
+			}
 		}
 	}
 

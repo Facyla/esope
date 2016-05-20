@@ -42,12 +42,11 @@ $left_column = '';
 $right_column = '';
 foreach ($entities as $entity) {
 	if ($left_side) {
-		$left_side = false;
 		$left_column .= elgg_view('views_counter/entity_listing_view', array('entity' => $entity));
 	} else {
-		$left_side = true;
 		$right_column .= elgg_view('views_counter/entity_listing_view', array('entity' => $entity));
 	}
+	$left_side = !$left_side;
 }
 ?>
 
@@ -55,9 +54,9 @@ foreach ($entities as $entity) {
 	<div class="views_counter_left_column">
 		<table>
 			<tr>
-				<th class="guid_column align_center"><h4><?php echo elgg_echo('views_counter:guid'); ?></h4></th>
-			<th class="title_column align_center"><h4><?php echo elgg_echo('views_counter:title_or_name'); ?></h4></th>
-			<th class="counter_column align_center"><h4><?php echo elgg_echo('views_counter:views'); ?></h4></th>
+				<th class="guid_column"><h4><?php echo elgg_echo('views_counter:guid'); ?></h4></th>
+				<th class="title_column"><h4><?php echo elgg_echo('views_counter:title_or_name'); ?></h4></th>
+				<th class="counter_column"><h4><?php echo elgg_echo('views_counter:views'); ?></h4></th>
 			</tr>
 			<?php echo $left_column; ?>
 		</table>
@@ -66,9 +65,9 @@ foreach ($entities as $entity) {
 	<div class="views_counter_right_column">
 		<table>
 			<tr>
-				<th class="guid_column align_center"><h4><?php echo elgg_echo('views_counter:guid'); ?></h4></th>
-			<th class="title_column align_center"><h4><?php echo elgg_echo('views_counter:title_or_name'); ?></h4></th>
-			<th class="counter_column align_center"><h4><?php echo elgg_echo('views_counter:views'); ?></h4></th>
+				<th class="guid_column"><h4><?php echo elgg_echo('views_counter:guid'); ?></h4></th>
+				<th class="title_column"><h4><?php echo elgg_echo('views_counter:title_or_name'); ?></h4></th>
+				<th class="counter_column"><h4><?php echo elgg_echo('views_counter:views'); ?></h4></th>
 			</tr>
 			<?php echo $right_column; ?>
 		</table>
