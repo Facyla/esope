@@ -10,11 +10,6 @@ define(function(require) {
 	var elgg = require('elgg');
 	var $ = require('jquery');
 	
-	// Allow empty HTML tags (especially useful for FA icons)
-	$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
-		CKEDITOR.dtd.$removeEmpty[i] = false;
-	});
-	
 	return {
 		// Use / for row break, - for separator
 		toolbar: [
@@ -90,4 +85,9 @@ define(function(require) {
 	};
 });
 
+	
+// Allow empty HTML tags (especially useful for FA icons)
+$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+	CKEDITOR.dtd.$removeEmpty[i] = false;
+});
 

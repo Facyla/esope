@@ -119,10 +119,12 @@ if ($full) {
 
 	// Ajout Facyla pour avoir le sommaire qqpart dans l'interface et naviguer dans les pages...
 	// Note : si on prévoit des listings en full_view, il faut ajouter une var globale pour avoir un sommaire unique
+	// @TODO pb avec le toggle ?  temporairement forcé via onclick
 	$toggle_link = elgg_view('output/url', array(
 		'text' => '<i class="fa fa-caret-down"></i> ' . elgg_echo('theme_inria:pages:summarytoggle'),
 		'href' => "#full-width-pages-nav-content",
 		'rel' => 'toggle',
+		'onclick' => '$(\'#id_element_concerné\').toggle();',
 	));
 	echo '<div class="full-width-pages-nav">
 		' . $toggle_link . '
