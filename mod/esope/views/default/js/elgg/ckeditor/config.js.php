@@ -85,9 +85,11 @@ define(function(require) {
 	};
 });
 
-	
+
 // Allow empty HTML tags (especially useful for FA icons)
-$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
-	CKEDITOR.dtd.$removeEmpty[i] = false;
+$(document).ready(function(){
+	$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+		CKEDITOR.dtd.$removeEmpty[i] = false;
+	});
 });
 
