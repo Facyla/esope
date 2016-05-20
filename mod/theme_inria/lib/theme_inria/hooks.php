@@ -471,18 +471,20 @@ function theme_inria_block_email($hook, $type, $return, $params) {
 // See also event function theme_inria_annotation_notifications_event_block
 function theme_inria_send_before_notifications_block($hook, $entity_type, $returnvalue, $params) {
 	$object = $params['event']->getObject();
-	$subtype = $object->getSubtype();
-	if (in_array($subtype, array('groupforumtopic', 'discussion_reply'))) {
-		//$block_o = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
-		//$block_r = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
-		$block = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
-		//error_log("DEBUG notif block : $subtype / $block_o / $block_r- {$object->container_guid}");
-		if ($block == 'yes') {
-			// Get blocked groups setting
-			$blocked_guids = elgg_get_plugin_setting('block_notif_forum_groups', 'theme_inria');
-			$blocked_guids = esope_get_input_array($blocked_guids);
-			$group_guid = $object->getContainerGUID();
-			if ($group_guid && is_array($blocked_guids) && in_array($group_guid, $blocked_guids)) { return true; }
+	if (elgg_instanceof($object, 'object')) {
+		$subtype = $object->getSubtype();
+		if (in_array($subtype, array('groupforumtopic', 'discussion_reply'))) {
+			//$block_o = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
+			//$block_r = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
+			$block = elgg_get_plugin_setting('block_notif_forum_groups_object', 'theme_inria');
+			//error_log("DEBUG notif block : $subtype / $block_o / $block_r- {$object->container_guid}");
+			if ($block == 'yes') {
+				// Get blocked groups setting
+				$blocked_guids = elgg_get_plugin_setting('block_notif_forum_groups', 'theme_inria');
+				$blocked_guids = esope_get_input_array($blocked_guids);
+				$group_guid = $object->getContainerGUID();
+				if ($group_guid && is_array($blocked_guids) && in_array($group_guid, $blocked_guids)) { return true; }
+			}
 		}
 	}
 	// Don't change default behaviour

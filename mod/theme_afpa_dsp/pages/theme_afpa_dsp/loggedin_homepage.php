@@ -130,18 +130,18 @@ if (elgg_is_active_plugin('members')) {
 }
 
 // Base de connaissances
-//$latest_resources = elgg_get_entities(array('type' => 'object', 'subtypes' => array('file', 'bookmarks', 'page', 'page_top', 'blog')));
-//$kdb = '<br /><h3>Base documentaire</h3>' . elgg_view('knowledge_database/resources_showcase', array('max' => 6, 'entities' => $latest_resources)) . '';
-$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/random_resources', array('max' => 6)) . '';
+$latest_resources = elgg_get_entities(array('type' => 'object', 'subtypes' => array('file', 'bookmarks', 'page', 'page_top', 'blog'), 'limit' => 3));
+$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/resources_showcase', array('entities' => $latest_resources)) . '';
+//$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/random_resources', array('max' => 6)) . '';
 
 
 // Veille récente
 //elgg_push_context('widgets');
-//$bookmarks = '<h3>Veille</h3>' . elgg_list_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 3, 'full_view' => false, 'pagination' => false)) . '';
+//$veille = '<h3>Veille</h3>' . elgg_list_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 3, 'full_view' => false, 'pagination' => false)) . '';
 //elgg_pop_context('widgets');
-$bookmarks_ents = elgg_get_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 12));
-$bookmarks = '<h3>Veille</h3>' . elgg_view('esope/content/objects', array('entities' => $bookmarks_ents));
-$right_side .= '<br /><div class="home-static">' . $bookmarks . '</div>';
+$veille_ents = elgg_get_entities(array('type' => 'object', 'subtype' => 'bookmarks', 'limit' => 10));
+$veille = '<h3>Veille</h3>' . elgg_view('esope/content/objects', array('entities' => $veille_ents));
+$right_side .= '<br /><div class="home-static">' . $veille . '</div>';
 
 
 // Composition de la ligne
