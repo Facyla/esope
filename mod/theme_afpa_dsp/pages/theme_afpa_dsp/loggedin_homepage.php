@@ -131,7 +131,7 @@ if (elgg_is_active_plugin('members')) {
 
 // Base de connaissances
 $latest_resources = elgg_get_entities(array('type' => 'object', 'subtypes' => array('file', 'bookmarks', 'page', 'page_top', 'blog'), 'limit' => 3));
-$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/resources_showcase', array('entities' => $latest_resources)) . '';
+$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/resources_showcase', array('entities' => $latest_resources, 'title' => '')) . '';
 //$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/random_resources', array('max' => 6)) . '';
 
 
