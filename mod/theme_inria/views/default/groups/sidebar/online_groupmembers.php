@@ -18,6 +18,8 @@ $options = array(
 	'wheres' => array("u.last_action >= {$time}"),
 	'order_by' => "u.last_action desc",
 	'limit' => $limit,
+	'list_type' => 'gallery',
+	'gallery_class' => 'elgg-gallery-users',
 );
 $body .= elgg_list_entities_from_relationship($options);
 
