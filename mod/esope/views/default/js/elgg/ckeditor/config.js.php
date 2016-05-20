@@ -88,8 +88,10 @@ define(function(require) {
 
 // Allow empty HTML tags (especially useful for FA icons)
 $(document).ready(function(){
-	$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
-		CKEDITOR.dtd.$removeEmpty[i] = false;
-	});
+	if (typeof CKEDITOR != "undefined") {
+		$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+			CKEDITOR.dtd.$removeEmpty[i] = false;
+		});
+	}
 });
 
