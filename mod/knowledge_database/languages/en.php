@@ -95,7 +95,7 @@ return array (
 	'knowledge_database:settings:field:type' => "Field type",
 	'knowledge_database:settings:field:category' => "Fields group",
 	'knowledge_database:settings:field:read' => "Read",
-	'knowledge_database:settings:field:edit' => "Edit",
+	'knowledge_database:settings:field:write' => "Edit",
 	'knowledge_database:settings:field:required' => "Required",
 	'knowledge_database:settings:field:multiple' => "Multiple",
 	'knowledge_database:settings:field:autocomplete' => "Autocomplete",

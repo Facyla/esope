@@ -37,7 +37,7 @@ if (!empty($vars['entity']->kdb_inputs)) { $vars['entity']->kdb_inputs = $kdb_in
 
 if ($vars['entity']->site_fields == 'reset') {
 	$vars['entity']->site_fields = 'kdb_theme | kdb_topic | kdb_country | kdb_region | kdb_type | kdb_lang | kdb_author | kdb_date';
-	// ('kdb_theme' => 'dropdown', 'kdb_topic' => 'dropdown', 'kdb_country' => 'dropdown', 'kdb_region' => 'dropdown', 'kdb_type' => 'dropdown', 'kdb_lang' => 'text', 'kdb_author' => 'text', 'kdb_date' => 'text');
+	// ('kdb_theme' => 'select', 'kdb_topic' => 'select', 'kdb_country' => 'select', 'kdb_region' => 'select', 'kdb_type' => 'select', 'kdb_lang' => 'text', 'kdb_author' => 'text', 'kdb_date' => 'text');
 }
 
 
@@ -60,19 +60,19 @@ echo '<h3>' . elgg_echo('knowledge_database:settings:global') . '</h3>';
 echo '<div>';
 	
 	// Enable site KDB
-	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:site') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[enable_site]', 'value' => $vars['entity']->enable_site, 'options_values' => $no_yes_opt)) . '</label></p>';
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:site') . ' ' . elgg_view('input/select', array( 'name' => 'params[enable_site]', 'value' => $vars['entity']->enable_site, 'options_values' => $no_yes_opt)) . '</label></p>';
 
 	// Enable per-group KDB
-	//echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:pergroup') . '&nbsp;: ' . elgg_view('input/dropdown', array( 'name' => 'params[enable_groups]', 'value' => $vars['entity']->enable_groups, 'options_values' => $no_yes_opt)) . '</label></p>';
+	//echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:pergroup') . '&nbsp;: ' . elgg_view('input/select', array( 'name' => 'params[enable_groups]', 'value' => $vars['entity']->enable_groups, 'options_values' => $no_yes_opt)) . '</label></p>';
 	//echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:pergroup') . '&nbsp;: ' . elgg_view('input/multiselect', array( 'name' => 'params[enable_groups]', 'value' => $vars['entity']->enable_groups, 'options_values' => $groups_opt)) . '</label></p>';
 	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:pergroup') . ' ' . elgg_view('input/text', array( 'name' => 'params[enable_groups]', 'value' => $vars['entity']->enable_groups)) . '</label><br /><em>' . $groups_list . '</em></p>';
 
 
 	// Enable merge (when both site + group activated)
-	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:merge') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[enable_merge]', 'value' => $vars['entity']->enable_merge, 'options_values' => $yes_no_opt)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:mode:merge:details') . '</em></p>';
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:mode:merge') . ' ' . elgg_view('input/select', array( 'name' => 'params[enable_merge]', 'value' => $vars['entity']->enable_merge, 'options_values' => $yes_no_opt)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:mode:merge:details') . '</em></p>';
 
 	// Enable global search (when both site + group activated)
-	echo '<p><label>' . elgg_echo('knowledge_database:settings:globalsearch') . ' ' . elgg_view('input/dropdown', array( 'name' => 'params[globalsearch]', 'value' => $vars['entity']->globalsearch, 'options_values' => $yes_no_opt)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:globalsearch:details') . '</em></p>';
+	echo '<p><label>' . elgg_echo('knowledge_database:settings:globalsearch') . ' ' . elgg_view('input/select', array( 'name' => 'params[globalsearch]', 'value' => $vars['entity']->globalsearch, 'options_values' => $yes_no_opt)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:globalsearch:details') . '</em></p>';
 
 	// Valid subtypes for KDB objects edit forms + search
 	echo '<p><label>' . elgg_echo('knowledge_database:settings:subtypes') . '&nbsp;: ' . elgg_view('input/text', array( 'name' => 'params[kdb_subtypes]', 'value' => $vars['entity']->kdb_subtypes)) . '</label><br /><em>' . elgg_echo('knowledge_database:settings:subtypes:details') . '</em><br /><strong>' . elgg_echo('knowledge_database:settings:default') . '&nbsp;:</strong> <em>' . $kdb_tools_opt . '</em></p>';

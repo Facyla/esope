@@ -96,7 +96,7 @@ return array(
 	'knowledge_database:settings:field:type' => "Type de champ",
 	'knowledge_database:settings:field:category' => "Groupe de champs",
 	'knowledge_database:settings:field:read' => "Lecture",
-	'knowledge_database:settings:field:edit' => "Ecriture",
+	'knowledge_database:settings:field:write' => "Ecriture",
 	'knowledge_database:settings:field:required' => "Requis",
 	'knowledge_database:settings:field:multiple' => "Multiple",
 	'knowledge_database:settings:field:autocomplete' => "Autocomplétion",

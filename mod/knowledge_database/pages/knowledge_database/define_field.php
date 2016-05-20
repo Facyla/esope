@@ -29,9 +29,13 @@ if (!isset($config['type'])) { $config['type'] = ''; }
 if (!isset($config['read'])) { $config['read'] = true; }
 if (!isset($config['edit'])) { $config['edit'] = true; }
 if (!isset($config['category'])) { $config['category'] = 'default'; }
-if (!isset($config['default'])) { $config['default'] = ''; }
-if (!isset($config['autocomplete'])) { $config['autocomplete'] = false; }
-if (!isset($config['options_values'])) { $config['options_values'] = ''; }
+if (!isset($config['params']['required'])) { $config['params']['required'] = false; }
+if (!isset($config['params']['multiple'])) { $config['params']['multiple'] = false; }
+if (!isset($config['params']['default'])) { $config['params']['default'] = ''; }
+if (!isset($config['params']['autocomplete'])) { $config['params']['autocomplete'] = false; }
+// Options : separators are "\n" or "|", optional name-value separator i "::")
+if (!isset($config['params']['options_values'])) { $config['params']['options_values'] = ''; }
+
 
 
 // Convert fields values to form-compliant values
@@ -55,23 +59,23 @@ if ($config['params']['required'] === true) { $config['params']['required'] = 'y
 if ($config['params']['multiple'] === true) { $config['params']['multiple'] = 'yes'; } else { $config['params']['multiple'] = 'no'; }
 if ($config['params']['autocomplete'] === true) { $config['params']['autocomplete'] = 'yes'; } else { $config['params']['autocomplete'] = 'no'; }
 
-if ($config['params']['options_values']) { $config['params']['options_values'] = esope_build_options_string($config['params']['options_values'], 'knowledge_database:key'); }
-
-
-// Set default options if needed and available (separators are "\n" or "|", optional name-value separator i "::")
-if (empty($config['params']['options_values'])) {
+// Format readable options list
+if ($config['params']['options_values']) {
+	$config['params']['options_values'] = esope_build_options_string($config['params']['options_values'], 'knowledge_database:key', "\n");
+} else if (!isset($config['params']['options_values'])) {
+// Init default options (defined in translation files)
 	$default_opts = elgg_echo("knowledge_database:default:$name");
 	if ($default_opts == "knowledge_database:default:$name") { $default_opts = ''; }
 	if (!empty($default_opts)) { $config['params']['options_values'] = $default_opts; }
 }
+
 
 $kdb_define_field_url = elgg_add_action_tokens_to_url($url . 'action/knowledge_database/define_field');
 
 
 // RENDER THE FIELD EDIT FORM
 echo '<div class="knowledge_database-edit-field">';
-
-
+	
 	echo '<script>
 	var formdata;
 	function kdb_define_field(){
@@ -89,8 +93,8 @@ echo '<div class="knowledge_database-edit-field">';
 		});
 	}
 	</script>';
-
-
+	
+	
 	// Render field edit form
 	echo '<form id="kdb-define-field-form" action="javascript:kdb_define_field();" method="POST">';
 		echo elgg_view('input/hidden', array('name' => 'name', 'value' => $name));
@@ -109,7 +113,7 @@ echo '<div class="knowledge_database-edit-field">';
 		
 		echo '<p>';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:read') . ' ' . elgg_view('input/text', array('name' => 'read', 'value' => $config['read'])) . '</label> &nbsp; ';
-			echo '<label>' . elgg_echo('knowledge_database:settings:field:edit') . ' ' . elgg_view('input/text', array('name' => 'edit', 'value' => $config['edit'])) . '</label>';
+			echo '<label>' . elgg_echo('knowledge_database:settings:field:write') . ' ' . elgg_view('input/text', array('name' => 'edit', 'value' => $config['edit'])) . '</label>';
 		echo '</p>';
 			
 		echo '<p>' . elgg_echo('knowledge_database:settings:actions:details') . '</p>';

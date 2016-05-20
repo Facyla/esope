@@ -1937,12 +1937,17 @@ function esope_build_options($input, $addempty = true, $prefix = 'option') {
 
 /* Reverse function of esope_build_options
  * Converts an options_values array to a setting string
+ * @param $options Build options string from array
+ * @param $options_separator enables alternate separator (eg. \n)
+ * @param $prefix : not used @TODO remove prefix from options values ?
  */
-function esope_build_options_string($options, $prefix = 'option') {
+function esope_build_options_string($options, $prefix = 'option', $options_separator = ' | ') {
 	$options_string = '';
-	if ($options) foreach ($options as $key => $value) {
-		if (!empty($options_string)) $options_string .= ' | ';
-		$options_string .= $key . '::' . $value;
+	if ($options) {
+		foreach ($options as $key => $value) {
+			if (!empty($options_string)) { $options_string .= $options_separator; }
+			$options_string .= $key . '::' . $value;
+		}
 	}
 	return $options_string;
 }
