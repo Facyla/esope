@@ -94,7 +94,7 @@ if ($homesite_index == 'yes') {
 	// Activité du site
 	elgg_push_context('widgets');
 	$db_prefix = elgg_get_config('dbprefix');
-	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false));
+	$left_side .= elgg_list_river(array('limit' => 4, 'pagination' => false, 'types' => array('object')));
 	elgg_pop_context();
 }
 // BLOC CENTRAL
@@ -130,7 +130,9 @@ if (elgg_is_active_plugin('members')) {
 }
 
 // Base de connaissances
-$kdb = '<br /><h3>Base documentaire</h3>' . elgg_view('knowledge_database/random_ressources', array('max' => 6)) . '';
+//$latest_resources = elgg_get_entities(array('type' => 'object', 'subtypes' => array('file', 'bookmarks', 'page', 'page_top', 'blog')));
+//$kdb = '<br /><h3>Base documentaire</h3>' . elgg_view('knowledge_database/resources_showcase', array('max' => 6, 'entities' => $latest_resources)) . '';
+$kdb = '<br /><h3>' . elgg_echo('theme_afpa_dsp:kdb') . '</h3>' . elgg_view('knowledge_database/random_resources', array('max' => 6)) . '';
 
 
 // Veille récente
