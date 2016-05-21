@@ -7,7 +7,7 @@ elgg_register_event_handler('init','system','theme_inria_init');
 /* Initialise the theme */
 function theme_inria_init(){
 	global $CONFIG;
-	$action_url = dirname(__FILE__) . "/actions/";
+	$action_url = elgg_get_plugins_path() . 'theme_inria/actions/';
 	
 	// HTML export action
 	elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
@@ -31,7 +31,7 @@ function theme_inria_init(){
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
 	
-	elgg_extend_view('css', 'theme_inria/css');
+	elgg_extend_view('css', 'theme_inria/css', 900);
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
