@@ -308,7 +308,6 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 
 /* Navigation des pages wiki en pleine largeur */
 .full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 0.5em; margin-bottom: 1em; padding: 0.5em; background: #efefef; }
-.inria-subpages-menu { }
 
 /* Anciens groupes */
 .inria-group-oldactivity { border:1px dotted black; background:yellow; padding:0.5rem 0;; margin: 0 0; text-align:center; font-size: 1rem; }

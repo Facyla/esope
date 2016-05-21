@@ -813,6 +813,7 @@ return array(
 	
 	'readmore' => "Read more",
 	
+	'esope:pages:subpages' => "Sub-pages",
 	'esope:pages:summary' => "Summary",
 	'esope:option:nofilter' => "(no filter)",
 	// Subtypes

@@ -817,6 +817,7 @@ return array(
 	
 	'readmore' => "Lire la suite",
 	
+	'esope:pages:subpages' => "Sous-pages",
 	'esope:pages:summary' => "Sommaire",
 	'esope:option:nofilter' => "(aucun filtre)",
 	// Subtypes

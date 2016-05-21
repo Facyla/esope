@@ -124,7 +124,7 @@ if ($full) {
 		'text' => '<i class="fa fa-caret-down"></i> ' . elgg_echo('theme_inria:pages:summarytoggle'),
 		'href' => "#full-width-pages-nav-content",
 		'rel' => 'toggle',
-		'onclick' => '$(\'#full-width-pages-nav-content\').toggle();',
+		//'onclick' => '$(\'#full-width-pages-nav-content\').toggle();',
 	));
 	echo '<div class="full-width-pages-nav">
 		' . $toggle_link . '
