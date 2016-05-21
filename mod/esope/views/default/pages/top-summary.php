@@ -6,14 +6,14 @@
  */
 
 // add the jquery treeview files for navigation
-//elgg_load_js('jquery-treeview');
-elgg_load_css('jquery-treeview');
+elgg_load_css('jquery.treeview');
 
 
 $selected_page = elgg_extract('page', $vars, false);
 if ($selected_page) {
 	$url = $selected_page->getURL();
 }
+echo "Page ok : $url";
 
 $title = elgg_echo('pages:navigation');
 
@@ -28,7 +28,7 @@ if (!$content) {
 echo $content;
 
 ?>
-<script type="text/javascript">
+<script>
 require(['jquery', 'jquery.treeview'], function($) {
 	$(function() {
 		$(".pages-nav").treeview({
