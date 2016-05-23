@@ -201,7 +201,9 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 .au_subgroups_group_icon span.au_subgroup { display: none; }
 .au_subgroup.au_subgroup_icon-tiny { font-size:0.25rem; padding:3px 0px; }
+/*
 .groups-profile .groups-profile-fields .odd, .groups-profile .groups-profile-fields .even { border: 0; }
+*/
 
 /* Flux RSS des groupes */
 .elgg-list .simplepie-list li { border-top: 1px solid #ccc; padding: 3px; padding-top: 6px; margin-bottom: 0; }

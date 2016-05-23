@@ -15,14 +15,11 @@ function access_icons_init() {
 	
 	elgg_extend_view('css', 'access_icons/css');
 	
-	// It's pointless to tell not loggedin users that what they see is public...
+	// It's pointless to tell non-loggedin users that what they see is public...
 	if (elgg_is_logged_in()) {
 		// Modify group menu in listing view : add classes + access level
 		// Note : no need to rewrite groups_entity_menu_setup() because we're overriding its return
 		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_groups_menu_entity_setup', 900);
-		
-		// Ajout des accès sur la rivière
-		elgg_register_plugin_hook_handler('register', 'menu:river', 'access_icons_river_menu_setup');
 		
 		/* Rewrite entity menu in listing view : add classes + access level
 		 * NOTE : on override page/components/list si on veut avoir l'accès sur tous types de contenus, 
@@ -30,6 +27,9 @@ function access_icons_init() {
 		 * Le hook modifie donc les menus des entités sauf dans le contexte des widgets
 		 */
 		elgg_register_plugin_hook_handler('register', 'menu:entity', 'access_icons_entity_menu_setup', 900);
+		
+		// Ajout des accès sur la rivière
+		elgg_register_plugin_hook_handler('register', 'menu:river', 'access_icons_river_menu_setup');
 	}
 	
 }
@@ -119,16 +119,33 @@ function access_icons_entity_menu_setup($hook, $type, $return, $params) {
 	// Menu is displayed directly in widgets context in page/components/list override
 	if (elgg_in_context('widgets')) { return $return; }
 	
+	$hide_text = false;
 	$handler = elgg_extract('handler', $params, false);
-	if ($handler == 'groups') { return $return; }
-	//if (($handler == 'groups') || elgg_instanceof($entity, 'group')) { return $return; }
 	
-	// access info
-	$access_info = elgg_view('output/access', array('entity' => $entity));
+	/* Skip groups
+	 * Note : access information is already shown as visibility
+	 * membership options is not an access but uses private and public access constants
+	 */
+	//if (($handler == 'groups') || elgg_instanceof($entity, 'group')) {
+	if ($handler == 'groups') {
+		//$hide_text = true;
+		return $return;
+	}
+	
+	/* Skip users
+	 * Note : user entity is always public because it is required by the system
+	 * profile visibility is not handled through entity access in that case)
+	 */
+	if (elgg_instanceof($entity, 'user')) {
+		return $return;
+	}
+	
+	// access info : hide_text true to display icon only
+	$access_info = elgg_view('output/access', array('entity' => $entity, 'hide_text' => $hide_text));
 	$class = "elgg-access";
 	$options = array(
 		'name' => 'access',
-		'text' => $access_info,
+		'text' => $access_info ,
 		'href' => false,
 		'priority' => 10,
 		'link_class' => $class, // Facyla : ajout class

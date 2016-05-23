@@ -22,10 +22,10 @@
 
 /* ESOPE override
  * Add support for access rights icons information
+ * Context : should display icons only where entity menu is hidden (only - so we avoid doubles)
  * Attention si on ajoute les accès comme ça, on peut avoir des doublons 
- * Context : should display where entity menu is hidde (only - so we avoid doubles)
- * si on le fait également via un menu : il faut choisir entre les deux 
- * approches. Celle-ci est plus générique (le menu est parfois supprimé)
+ * si on le fait également via un menu : il faut choisir entre les deux approches. 
+ * Celle-ci est plus générique (le menu est parfois supprimé, notamment dans le contexte widgets)
  */
 
 $items = $vars['items'];
