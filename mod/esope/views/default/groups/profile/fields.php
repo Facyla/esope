@@ -1,23 +1,25 @@
 <?php
 /**
  * Group profile fields
+ * Esope : allow to hide fields, and also labels
  */
 
 $group = $vars['entity'];
 
 $profile_fields = elgg_get_config('group');
 
-// Exclude some fields from being viewed
+// Esope : Exclude some fields from being viewed
 $hide_fields = elgg_get_plugin_setting('group_hide_profile_field', 'esope');
 if ($hide_fields) {
 	$hide_fields = esope_get_input_array($hide_fields);
 } else {
-	if (empty($hide_fields)) $hide_fields = array('customtab1', 'customtab2', 'customtab3', 'customtab4', 'customtab5', 'customtab6', 'customtab7', 'customtab8', 'cmisfolder', 'feed_url', 'customcss');
+	$hide_fields = array('customtab1', 'customtab2', 'customtab3', 'customtab4', 'customtab5', 'customtab6', 'customtab7', 'customtab8', 'cmisfolder', 'feed_url', 'customcss');
 }
-// Also trigger hook to allow modifying/adding to the list in a more "computed" way (should return a modified returnvalue)
-$hide_fields = elgg_trigger_plugin_hook('groups:profile:hide', 'fields', array(), $hide_fields);
+// Also trigger hook to allow modifying/adding to the list in a more "computed" way
+// Should return a modified returnvalue = array of fields names
+$hide_fields = elgg_trigger_plugin_hook('groups:profile:hide', 'fields', array('entity' => $group), $hide_fields);
 
-// Hide some labels
+// Esope : allow to hide some labels
 //$hide_labels = array('description', 'interests');
 $hide_labels = array();
 
@@ -30,14 +32,14 @@ if (is_array($profile_fields) && count($profile_fields) > 0) {
 			continue;
 		}
 		
-		// Skip excluded fields
+		// Skip other excluded fields
 		if (in_array($key, $hide_fields)) { continue; }
 		
 		$value = $group->$key;
-		if (!is_array($value)) $value = trim($value);
-		if (empty($value)) {
+		if (is_null($value)) {
 			continue;
 		}
+		if (!is_array($value)) { $value = trim($value); }
 
 		$options = array('value' => $group->$key);
 		if ($valtype == 'tags') {
