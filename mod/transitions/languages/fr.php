@@ -48,6 +48,7 @@ return array(
 	'transitions:error:revision_not_found' => "Impossible de trouver cette révision.",
 	'transitions:error:actor_not_found' => "Impossible de trouver cet acteur.",
 	'transitions:error:not_an_actor' => "Cette contribution n'est pas un acteur.",
+	'transitions:add:notloggedin' => "Pour contribuer, merci de vous identifier ou de créer un compte (= \"S'enregistrer\") si vous n'en avez pas",
 
 	// river
 	'river:create:object:transitions' => "%s a publié une contribution %s",

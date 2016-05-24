@@ -64,9 +64,13 @@ color: #297256;
 
 
 /* System messages */
+.elgg-system-messages { top: 10%; right: 5%; max-width: 90%; left: 5%; }
+.elgg-system-messages li { margin-top: 0.6em; font-size: 1.5em; padding: 1em; }
 .elgg-state-success { background-color: #32A951; }
 .elgg-state-error { background-color: #BF4E4E; }
 .elgg-state-notice { background-color: #ABD660; color: #023824; }
+
+
 
 /* Modules */
 .elgg-module-aside .elgg-head { border-bottom: 1px solid #e2d8c3; }

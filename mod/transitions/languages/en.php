@@ -48,6 +48,7 @@ return array(
 	'transitions:error:revision_not_found' => 'Cannot find this revision.',
 	'transitions:error:actor_not_found' => "Unable to fing this actor.",
 	'transitions:error:not_an_actor' => "This contribution is not an actor.",
+	'transitions:add:notloggedin' => "To contribute, please login or create an account (= \"Register\")",
 
 	// river
 	'river:create:object:transitions' => '%s published a contribution %s',

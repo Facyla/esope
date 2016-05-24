@@ -172,12 +172,18 @@ function catalogue_page_handler($page) {
 			$params = transitions_get_page_content_read($page[1]);
 			break;
 		case 'add':
-			elgg_gatekeeper();
+			if (!elgg_is_logged_in()) {
+				system_message(elgg_echo('transitions:add:notloggedin'));
+				elgg_gatekeeper();
+			}
 			if (empty($page[1])) $page[1] = elgg_get_logged_in_user_guid();
 			$params = transitions_get_page_content_edit($page_type, $page[1]);
 			break;
 		case 'edit':
-			elgg_gatekeeper();
+			if (!elgg_is_logged_in()) {
+				system_message(elgg_echo('transitions:add:notloggedin'));
+				elgg_gatekeeper();
+			}
 			$params = transitions_get_page_content_edit($page_type, $page[1], $page[2]);
 			break;
 		case 'group':
