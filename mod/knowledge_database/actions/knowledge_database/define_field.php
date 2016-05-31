@@ -20,6 +20,7 @@ $multiple = get_input('multiple');
 $autocomplete = get_input('autocomplete');
 $default = get_input('default');
 $options_values = get_input('options_values');
+$addempty = get_input('addempty');
 
 // Set defaults
 if (empty($type)) { $type = 'text'; }
@@ -31,6 +32,7 @@ if (empty($multiple)) { $multiple = 'no'; }
 if (empty($autocomplete)) { $autocomplete = 'no'; }
 if (empty($default)) { $default = ''; }
 if (empty($options_values)) { $options_values = ''; }
+if (empty($addempty)) { $addempty = 'no'; }
 
 // Transform some inputs before building config
 // Syntax : role1,role2(step1,step2, step3),role3(step1,step2)
@@ -55,10 +57,11 @@ if ($edit == 'yes') {
 if ($required == 'yes') { $required = true; } else { $required = false; }
 if ($multiple == 'yes') { $multiple = true; } else { $multiple = false; }
 if ($autocomplete == 'yes') { $autocomplete = true; } else { $autocomplete = false; }
+if ($addempty == 'yes') { $addempty = true; } else { $addempty = false; }
 
 // Syntax : key1::value1 | key2::value2
 if ($options_values) {
-	$options_values = esope_build_options($options_values, $addempty = false, 'knowledge_database:key');
+	$options_values = esope_build_options($options_values, $addempty, 'knowledge_database:key');
 }
 
 $config = array(
@@ -90,6 +93,8 @@ $config = array(
 		'multiple' => $multiple,
 		// is autocompletion enabled (applies to single text inputs)
 		'autocomplete' => $autocomplete,
+		// add empty option to input select
+		'addempty' => $addempty,
 		// Default value if none set
 		'default' => $default,
 		/* Options for dropdowns :

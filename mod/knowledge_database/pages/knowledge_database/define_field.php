@@ -58,6 +58,7 @@ if ($config['edit'] === true) {
 if ($config['params']['required'] === true) { $config['params']['required'] = 'yes'; } else { $config['params']['required'] = 'no'; }
 if ($config['params']['multiple'] === true) { $config['params']['multiple'] = 'yes'; } else { $config['params']['multiple'] = 'no'; }
 if ($config['params']['autocomplete'] === true) { $config['params']['autocomplete'] = 'yes'; } else { $config['params']['autocomplete'] = 'no'; }
+if ($config['params']['addempty'] === true) { $config['params']['addempty'] = 'yes'; } else { $config['params']['addempty'] = 'no'; }
 
 // Format readable options list
 if ($config['params']['options_values']) {
@@ -122,6 +123,7 @@ echo '<div class="knowledge_database-edit-field">';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:required') . ' ' . elgg_view('input/select', array('name' => 'required', 'value' => $config['params']['required'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:multiple') . ' ' . elgg_view('input/select', array('name' => 'multiple', 'value' => $config['params']['multiple'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:autocomplete') . ' ' . elgg_view('input/select', array('name' => 'autocomplete', 'value' => $config['params']['autocomplete'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
+			echo '<label>' . elgg_echo('knowledge_database:settings:field:addempty') . ' ' . elgg_view('input/select', array('name' => 'addempty', 'value' => $config['params']['addempty'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:defaultvalue') . ' ' . elgg_view('input/text', array('name' => 'default', 'value' => $config['params']['default'])) . '</label>';
 		echo '</p>';
 		

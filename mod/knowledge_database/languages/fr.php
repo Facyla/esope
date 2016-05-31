@@ -101,6 +101,7 @@ return array(
 	'knowledge_database:settings:field:required' => "Requis",
 	'knowledge_database:settings:field:multiple' => "Multiple",
 	'knowledge_database:settings:field:autocomplete' => "Autocomplétion",
+	'knowledge_database:settings:field:addempty' => "Option vide",
 	'knowledge_database:settings:field:defaultvalue' => "Valeur par défaut",
 	'knowledge_database:settings:field:options_values' => "Valeurs disponibles",
 	'knowledge_database:settings:field:save' => "Enregistrer la configuration",

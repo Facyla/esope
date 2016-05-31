@@ -556,7 +556,7 @@ function knowledge_database_get_field_types() {
 
 
 /* Returns an array of allowed subtypes, for use in a elgg_get_ function
- * $options_values : if true prepares the array for a dropdown view, if false for get functions
+ * $options_values : if true prepares the array for a select view, if false for get functions
  * $tools : the array of tools, as provided e.g. by knowledge_database_get_allowed_tools
  */
 function knowledge_database_get_allowed_subtypes($options_values = false, $tools = false) {
@@ -604,7 +604,7 @@ function knowledge_database_get_group_kdb_fields($guid, $include_site = false) {
 	$fields = elgg_get_plugin_setting('group_fields_' . $guid, 'knowledge_database');
 	if ($include_site) {
 		if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') {
-			if (!empty($fields)) $fields .= ', ';
+			if (!empty($fields)) { $fields .= ', '; }
 			$fields .= elgg_get_plugin_setting('site_fields', 'knowledge_database');
 		}
 	}

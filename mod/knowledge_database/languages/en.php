@@ -101,6 +101,7 @@ return array (
 	'knowledge_database:settings:field:required' => "Required",
 	'knowledge_database:settings:field:multiple' => "Multiple",
 	'knowledge_database:settings:field:autocomplete' => "Autocomplete",
+	'knowledge_database:settings:field:addempty' => "Add empty value",
 	'knowledge_database:settings:field:defaultvalue' => "Default value",
 	'knowledge_database:settings:field:options_values' => "Options values",
 	'knowledge_database:settings:field:save' => "Save field configuration",

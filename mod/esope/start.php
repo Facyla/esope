@@ -1946,7 +1946,10 @@ function esope_build_options_string($options, $prefix = 'option', $options_separ
 	if ($options) {
 		foreach ($options as $key => $value) {
 			if (!empty($options_string)) { $options_string .= $options_separator; }
-			$options_string .= $key . '::' . $value;
+			// Skip empty options (empty key and value)
+			if (!empty($key) && !empty($value)) {
+				$options_string .= $key . '::' . $value;
+			}
 		}
 	}
 	return $options_string;
