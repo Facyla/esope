@@ -11,6 +11,11 @@ if (!$slider) {
 if (!$slider) { $slider = slider_get_entity_by_name($guid); }
 if (!elgg_instanceof($slider, 'object', 'slider')) { return; }
 
+// Add entity to $vars, so other views do not have to compute it again
+$vars['entity'] = $slider;
+// No menu by default
+$add_menu = elgg_extract('add_menu', $vars, false);
+
 $slides = (array) $slider->slides;
 $slider_content = '<li>' . implode('</li><li>', $slides) . '</li>'; // Content without enclosing <ul> (we need id)
 $height = '100%';
@@ -29,7 +34,9 @@ $slider_params = array(
 
 
 // Add listing block (for menu & actions)
-echo elgg_view('object/slider', $vars);
+
+if ($add_menu) { echo elgg_view('object/slider', $vars); }
+
 /*
 if ($slider->canEdit()) {
 	echo elgg_view('output/url', array('href' => elgg_get_site_url() . "slider/edit/" . $slider->guid, 'class' => "elgg-button elgg-button-action", 'style' => "float:right;", 'text' => elgg_echo('edit')));
