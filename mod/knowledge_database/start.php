@@ -370,9 +370,9 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 					$filename = explode('/', $entity->{$name});
 					$filename = end($filename);
 					if ($name == 'icon') {
-						$field_content .= '<p>Fichier joint : <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
+						$field_content .= '<p>' . elgg_echo("knowledge_database:attachment") . '&nbsp;: <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
 					} else {
-						$field_content .= '<p>Fichier joint : <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
+						$field_content .= '<p>' . elgg_echo("knowledge_database:attachment") . '&nbsp;: <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
 					}
 				}
 				break;

@@ -104,7 +104,9 @@ echo '<div class="knowledge_database-edit-field">';
 		
 		echo '<p><blockquote>' . elgg_echo('knowledge_database:settings:field:edit:details') . '</blockquote></p>';
 		
-		echo '<p><label>' . elgg_echo('knowledge_database:settings:field:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $config['title'])) . '</label></p>';
+		echo '<p><label>' . elgg_echo('knowledge_database:settings:field:title') . '</label> ' . elgg_view('input/text', array('name' => 'title', 'value' => $config['title'])) . '</p>';
+		
+		echo '<p><label>' . elgg_echo('knowledge_database:settings:field:tooltip') . ' ' . elgg_echo('knowledge_database:settings:field:tooltip:details') . '</label></p>';
 		
 		echo '<p>';
 			//echo '<label>' . elgg_echo('knowledge_database:settings:field:type') . ' ' . elgg_view('input/text', array('name' => 'type', 'value' => $config['type'])) . '</label> &nbsp; ';
