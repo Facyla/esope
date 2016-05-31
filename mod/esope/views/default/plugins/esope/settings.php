@@ -560,7 +560,7 @@ $(function() {
 
 		<?php echo '<p><label>' . elgg_echo('esope:css') . '</label><br />'; 
 			 echo elgg_echo('esope:css:help'); 
-			 echo elgg_view('input/plaintext', array('name' => 'params[css]', 'value' => $plugin->css, 'style' => 'min-height:500px;')); ?>
+			 echo elgg_view('input/plaintext', array('name' => 'params[css]', 'value' => html_entity_decode($plugin->css), 'style' => 'min-height:500px;')); ?>
 		</p>
 		
 		<?php
