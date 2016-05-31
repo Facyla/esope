@@ -147,7 +147,7 @@ if (elgg_is_logged_in() && !$menu) {
 		
 		// Sujets du moment
 		$featured_categories = '';
-		$featured_themes = elgg_get_plugin_setting('featured_categories', 'theme_dsp_afpa');
+		$featured_themes = elgg_get_plugin_setting('featured_categories', 'theme_afpa_dsp');
 		$featured_themes = esope_get_input_array($featured_themes);
 		if ($featured_themes) {
 			sort($featured_themes); // Sort categories

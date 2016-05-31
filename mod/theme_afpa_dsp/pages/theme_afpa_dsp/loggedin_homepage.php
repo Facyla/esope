@@ -104,7 +104,7 @@ if (elgg_is_active_plugin('thewire') && ($index_wire == 'yes')) {
 	// Show/hide version
 	//$thewire .= '<h3><a style="float:right;" href="javascript:void(0);" onClick="$(\'#thewire_homeform\').toggle();">' . elgg_echo('esope:thewire:togglelink') . '</a><a href="' . elgg_get_site_url() . 'thewire/all">' . elgg_echo('esope:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
 	$thewire .= '<h3><a href="' . elgg_get_site_url() . 'thewire/all">' . elgg_echo('esope:homewire:title', array($CONFIG->sitename)) . '</a></h3>';
-	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces')) . elgg_view('input/urlshortener') . '</div>';
+	$thewire .= '<div id="thewire_homeform" style="display:block;">' . elgg_view_form('thewire/add', array('class' => 'thewire-form no-spaces', 'access_id' => 1)) . elgg_view('input/urlshortener') . '</div>';
 	elgg_push_context('widgets');
 	$thewire .= elgg_list_entities(array('type' => 'object', 'subtype' => 'thewire', 'limit' => 3, 'pagination' => false));
 	elgg_pop_context('widgets');
