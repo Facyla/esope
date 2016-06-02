@@ -315,11 +315,13 @@ $(function() {
 				<?php echo elgg_view('input/longtext', array('name' => 'params[dashboardheader]', 'value' => $plugin->dashboardheader));
 			echo '</p>';
 			// Colonne centrale
+			echo '<fieldset>';
 			if (elgg_is_active_plugin('thewire')) {
 				echo '<p><label>' . elgg_echo('esope:index_wire') . '</label>';
 					echo elgg_view('input/select', array('name' => 'params[index_wire]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_wire));
 			echo '</p>';
 			}
+			echo '</fieldset>';
 			
 			// Colonne gauche
 			echo '<fieldset>';
@@ -336,8 +338,10 @@ $(function() {
 					echo elgg_view('input/select', array('name' => 'params[index_recent_members]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_recent_members));
 				echo '</p>';
 			}
+			echo '</fieldset>';
 			// Colonne droite
 			if (elgg_is_active_plugin('groups')) {
+			echo '<fieldset>';
 				echo '<p><label>' . elgg_echo('esope:homegroup_guid') . '</label>';
 					echo elgg_view('input/groups_select', array('name' => 'params[homegroup_guid]', 'value' => $plugin->homegroup_guid, 'empty_value' => true));
 				echo '</p>';
@@ -350,8 +354,8 @@ $(function() {
 				echo '<p><label>' . elgg_echo('esope:homesite_index') . '</label>';
 					echo elgg_view('input/select', array('name' => 'params[homesite_index]', 'options_values' => $no_yes_opt, 'value' => $plugin->homesite_index));
 				echo '</p>';
-			}
 			echo '</fieldset>';
+			}
 			
 		} ?>
 	</div>
@@ -675,6 +679,10 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:groups:disable_widgets') . ' ' . elgg_view('input/select', array('name' => 'params[groups_disable_widgets]', 'options_values' => $groups_disable_widgets_opt, 'value' => $plugin->groups_disable_widgets)) . '</label></p>';
 			// Add group activity
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_activity') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_activity)) . '</label></p>';
+			// Add group Wire
+			if (elgg_is_active_plugin('thewire')) {
+				echo '<p><label>' . elgg_echo('esope:settings:groups:add_wire') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_wire]', 'options_values' => $no_yes_groupoption_opt, 'value' => $vars['entity']->groups_add_wire)) . '</label></p>';
+			}
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_publish_tools') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_publish_tools)) . '</label></p>';
 			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)

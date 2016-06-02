@@ -4,7 +4,7 @@
 $group = elgg_get_page_owner_entity();
 if (!($group->isMember() || elgg_is_admin_logged_in())) { return; }
 
-$add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+$add_wire = elgg_get_plugin_setting('groups_add_wire', 'esope');
 switch ($add_wire) {
 	case 'yes': break; 
 	case 'groupoption':

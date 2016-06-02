@@ -79,7 +79,6 @@ function esope_init() {
 		elgg_extend_view('input/captcha', 'vazco_text_captcha/captcha');
 	}
 	
-	
 	// Ajoute la possibilité de modifier accès et container pour TheWire
 	// Note : MUST be run very early so group notifications can happen
 	elgg_register_event_handler("create", "object", "esope_thewire_handler_event", 0);

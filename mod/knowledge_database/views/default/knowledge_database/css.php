@@ -7,8 +7,6 @@
 .kdb-search-main input[type="text"] { width: 30ex; }
 .kdb-search-main label { color: #2195B1; padding: 3px 6px; font-size: 1.2em; }
 
-.elgg-button.elgg-button-submit { float: right; font-size: 2ex; }
-
 .kdb-search-filter { width:50%; float:left; min-width:200px; padding: 2px 0; }
 .kdb-search-filter span { min-width: 17ex; display:inline-block;}
 .kdb-search-filter input, .kdb-search-filter select { width: 17ex; }
