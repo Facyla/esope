@@ -9,7 +9,7 @@ elgg_load_js('elgg.thewire');
 
 $parent_post = elgg_extract('post', $vars);
 $forced_access = elgg_extract('access_id', $vars, false);
-$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire');
+$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
 
 $text = elgg_echo('post');
 if ($parent_post) { $text = elgg_echo('thewire:reply'); }
