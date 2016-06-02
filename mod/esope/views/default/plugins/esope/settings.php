@@ -627,6 +627,8 @@ $(function() {
 		}
 		
 		// Add limit links to navigation
+			echo '<p><label>' . elgg_echo('esope:settings:river_hide_block') . ' ' . elgg_view('input/select', array('name' => 'params[river_hide_block]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->river_hide_block)) . '</label><br /><em>' . elgg_echo('esope:settings:river_hide_block:details') . '</em></p>';
+		
 			echo '<p><label>' . elgg_echo('esope:settings:advanced_pagination') . ' ' . elgg_view('input/select', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $plugin->advanced_pagination)) . '</label></p>';
 		?>
 		
@@ -685,6 +687,8 @@ $(function() {
 			}
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_publish_tools') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_publish_tools)) . '</label></p>';
+			// Discussion auto-refresh (using parameter ?autorefresh=auto)
+			echo '<p><label>' . elgg_echo('esope:settings:groups:discussion_autorefresh') . ' ' . elgg_view('input/select', array('name' => 'params[discussion_autorefresh]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->discussion_autorefresh)) . '</label></p>';
 			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
 			echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</label></p>';
 			// Display "old group" banner
