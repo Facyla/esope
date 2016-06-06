@@ -249,6 +249,8 @@ return array(
 	'accessibility:revert' => "Delete",
 	
 	
+	'esope:showresponses' => "Show responses",
+	'esope:showresponses:title' => "Show responses to %s",
 	'esope:moreinfoon' => "More information on %s",
 	'esope:expand' => "Expand",
 	'esope:compress' => "Compress",

@@ -10,6 +10,7 @@
  */
 
 $item = $vars['item'];
+/* @var ElggRiverItem $item */
 
 $menu = elgg_view_menu('river', array(
 	'item' => $item,
@@ -36,7 +37,15 @@ RIVER;
 return;
 }
 
-$summary = elgg_extract('summary', $vars, elgg_view('river/elements/summary', array('item' => $vars['item'])));
+$urlicon = elgg_get_site_url() . 'mod/esope/img/theme/';
+
+$summary = elgg_extract('summary', $vars);
+if ($summary === null) {
+	$summary = elgg_view('river/elements/summary', array(
+		'item' => $vars['item'],
+	));
+}
+
 if ($summary === false) {
 	$subject = $item->getSubjectEntity();
 	$summary = elgg_view('output/url', array(
@@ -47,19 +56,39 @@ if ($summary === false) {
 	));
 }
 
-$message = elgg_extract('message', $vars, false);
-if ($message !== false) {
+$message = elgg_extract('message', $vars);
+if ($message !== null) {
 	$message = "<div class=\"elgg-river-message\">$message</div>";
 }
 
-$attachments = elgg_extract('attachments', $vars, false);
-if ($attachments !== false) {
+$attachments = elgg_extract('attachments', $vars);
+if ($attachments !== null) {
 	$attachments = "<div class=\"elgg-river-attachments clearfix\">$attachments</div>";
 }
 
 $responses = elgg_view('river/elements/responses', $vars);
-if ($responses) {
-	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
+if (!empty(trim(strip_tags($responses)))) {
+	$use_hide_block = elgg_get_plugin_setting('river_hide_block', 'esope');
+	if ($use_hide_block == 'yes') {
+		$responses = elgg_view('output/url', array(
+				//'text' => '<img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('esope:showresponses') . '" />',
+				'text' => elgg_echo('esope:showresponses'),
+				'title' => elgg_echo('esope:showresponses:title', array($object->title)),
+				'href' => '#river-responses-' . $item->id,
+				'rel' => 'toggle',
+				//'class' => 'ouvrir',
+				'class' => 'esope-toggle',
+			))
+			. '<div class="elgg-river-responses hidden" id="river-responses-' . $item->id . '">' . $responses . '</div>';
+		/*
+		$responses = '<a class="ouvrir" href="javascript:void(0);" title="' . elgg_echo('esope:showresponses:title', array($object->title)) . '"><img src="' . $urlicon . 'ensavoirplus.png" alt="' . elgg_echo('esope:showresponses') . '" /></a>'
+			. '<div class="plus">'
+			. '<div class="elgg-river-responses">' . $responses . '</div>'
+			. '</div>';
+		*/
+	} else {
+		$responses = '<div class="elgg-river-responses">' . $responses . '</div>';
+	}
 }
 
 /*

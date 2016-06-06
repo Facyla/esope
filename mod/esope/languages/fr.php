@@ -253,6 +253,8 @@ return array(
 	'accessibility:revert' => "Supprimer",
 	
 	
+	'esope:showresponses' => "Afficher les réponses",
+	'esope:showresponses:title' => "Afficher les réponses à %s",
 	'esope:moreinfoon' => "Plus d'informations sur %s",
 	'esope:expand' => "Développer",
 	'esope:compress' => "Réduire",

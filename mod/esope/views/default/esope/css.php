@@ -116,14 +116,11 @@ th { font-weight:bold; background:#CCCCCC; }
 img { border: 0 none; overflow:hidden; }
 #profil img { float: right; margin-left: 10px; }
 .esope-more { float: right; font-size: 70%; line-height: 1.6; }
+.esope-toggle { background:url('<?php echo $urlicon; ?>ensavoirplus.png') no-repeat 0 50%; padding-left:24px; }
+.esope-toggle.elgg-state-active { background-image:url('<?php echo $urlicon; ?>fermer.png'); }
 
 
 /* ACCESSIBILITY */
-.invisible { position:absolute !important; left:-5000px !important; }
-.blockform > div { margin-bottom: 15px; }
-.blockform > div:last-child { margin-bottom: 0; }
-.elgg-form-alt > .blockform > .elgg-foot { border-top: 1px solid #CCC; padding: 10px 0; }
-
 .entity_title {font-weight:bold; }
 
 /* Corrections des styles du core */
@@ -133,8 +130,8 @@ input:focus, textarea:focus { outline:0; }
 .elgg-button-action:hover, .elgg-button-action:focus { outline:0; }
 
 /*
-// Tous les :hover à compléter par :focus et :active : cf. thème ADF
-// Tous les display:none des menus à modifier/remplacer par des left:-5000px puis remettre en place..
+// Tous les :hover à compléter par :focus et :active
+// Tous les display:none des menus à modifier/remplacer par des left:-5000px
 
 => fonctionne sans JS mais pas accessible au clavier
 => modifier les display:none => left:-5000px;
@@ -148,21 +145,21 @@ input:focus, textarea:focus { outline:0; }
 
 /* ESOPE : bandeau */
 .elgg-page-header {
-<?php if (!empty($headerimg)) { ?>
-	background-image: url("<?php echo $headerimg; ?>"), linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, <?php echo $color1; ?>), color-stop(0.75, <?php echo $color4; ?>));
-<?php } else { ?>
-	background-image: linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, <?php echo $color1; ?>), color-stop(0.75, <?php echo $color4; ?>));
-<?php } ?>
+	<?php if (!empty($headerimg)) {
+		echo 'background-image: url("' . $headerimg . '"), linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '))';
+	} else {
+		echo 'background-image: linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '))';
+	} ?>
 	background-position: left 30px, left top;
 	background-repeat: repeat-x, repeat;
 	background-color: <?php echo $color4; ?>;

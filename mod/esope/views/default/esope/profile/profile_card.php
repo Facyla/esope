@@ -30,7 +30,7 @@ $content_menu = elgg_view_menu('owner_block', array('entity' => $user, 'class' =
 
 
 // Get profile card fields config - if any
-$profile_card = elgg_get_plugin_setting("profile_card");
+$profile_card = elgg_get_plugin_setting("profile_card", 'esope');
 if (!empty($profile_card)) {
 	$profile_card = str_replace(array(' ', ';', '|'), ',', $profile_card);
 	$fields = explode(',', $profile_card);
@@ -50,11 +50,13 @@ if (sizeof($profiletypes_opt > 2)) {
 	$content .= '<p class="profile-type"><strong>' . elgg_echo('esope:search:members:role') . '</strong>&nbsp;: ' . $profiletypes_opt[$user->custom_profile_type] . '</p>';
 }
 
-if ($fields) foreach ($fields as $field) {
-	$field_content = $user->{$field};
-	$field_title = '<strong>' . elgg_echo('profile:'.$field) . '</strong>&nbsp;: ';
-	if (is_array($field_content)) $field_content = implode(', ', $field_content);
-	$content .= '<p>' . $field_title . $field_content . '</p>';
+if ($fields) {
+	foreach ($fields as $field) {
+		$field_content = $user->{$field};
+		$field_title = '<strong>' . elgg_echo('profile:'.$field) . '</strong>&nbsp;: ';
+		if (is_array($field_content)) { $field_content = implode(', ', $field_content); }
+		$content .= '<p>' . $field_title . $field_content . '</p>';
+	}
 }
 
 

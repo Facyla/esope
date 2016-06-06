@@ -565,6 +565,11 @@ form input#esope-search-submit-button:focus {
 }
 
 
+/* ESOPE ADDITIONS */
+.blockform > div { margin-bottom: 15px; }
+.blockform > div:last-child { margin-bottom: 0; }
+.elgg-form-alt > .blockform > .elgg-foot { border-top: 1px solid #CCC; padding: 10px 0; }
+
 
 
 <?php if (!$fixedwidth) { ?>
