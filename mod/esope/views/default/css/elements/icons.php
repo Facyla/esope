@@ -119,3 +119,5 @@ h6 > .fa {
 .elgg-state-banned {
 	opacity: 0.5;
 }
+
+
