@@ -1,16 +1,17 @@
 <?php
 
-$fonturl = elgg_get_site_url() . 'mod/theme_inria/fonts/';
-$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
+$url = elgg_get_site_url();
+$fonturl = $url . 'mod/theme_inria/fonts/';
+$imgurl = $url . 'mod/theme_inria/graphics/';
 $tools_url = $imgurl . 'inria_widget/';
 
 // Configurable elements : pass theme as $vars['theme-config-css']
 // Image de fond du header
 $headerimg = elgg_get_plugin_setting('headerimg', 'esope');
-if (!empty($headerimg)) $headerimg = elgg_get_site_url() . $headerimg;
+if (!empty($headerimg)) { $headerimg = $url . $headerimg; }
 $backgroundcolor = elgg_get_plugin_setting('backgroundcolor', 'esope');
 $backgroundimg = elgg_get_plugin_setting('backgroundimg', 'esope');
-if (!empty($backgroundimg)) $backgroundimg = elgg_get_site_url() . $backgroundimg;
+if (!empty($backgroundimg)) { $backgroundimg = $url . $backgroundimg; }
 // Couleur des titres
 $titlecolor = elgg_get_plugin_setting('titlecolor', 'esope');
 $textcolor = elgg_get_plugin_setting('textcolor', 'esope');
@@ -396,7 +397,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 .view-profile-as { border:1px dotted grey; padding:2px 6px; }
 .edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
-.linkedin-link { background: url(<?php echo elgg_get_site_url(); ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+.linkedin-link { background: url(<?php echo $url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
 
 
 /* Profils différenciés */

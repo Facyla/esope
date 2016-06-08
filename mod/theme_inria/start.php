@@ -237,7 +237,7 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 	$page_owner = elgg_get_page_owner_entity();
 	if (elgg_instanceof($page_owner, 'group')) {
 		if ($page_owner->isMember() || elgg_is_admin_logged_in()) {
-			$add_wire = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+			$add_wire = elgg_get_plugin_setting('groups_add_wire', 'esope');
 			switch ($add_wire) {
 				case 'yes': break; 
 				case 'groupoption':
@@ -245,7 +245,7 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 					break; 
 				default: return $return;
 			}
-			$title = elgg_echo('theme_inria:thewire:group:title');
+			$title = elgg_echo('esope:thewire:group:title');
 			$return[] = new ElggMenuItem('thewire_group', $title, 'thewire/group/' . $page_owner->getGUID());
 		}
 	}
