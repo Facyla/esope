@@ -74,15 +74,15 @@ function inria_ressources_page_handler($page) {
 // Override pour ajouter une explication sur la page thewire/all
 function theme_inria_thewire_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'thewire/pages/thewire/';
-	$alt_base = elgg_get_plugins_path() . 'theme_inria/pages/thewire/';
-
+	$esope_base = elgg_get_plugins_path() . 'esope/pages/thewire/';
+	$inria_base = elgg_get_plugins_path() . 'theme_inria/pages/thewire/';
 	if (!isset($page[0])) {
 		$page = array('all');
 	}
 
 	switch ($page[0]) {
 		case "all":
-			include $alt_base . "everyone.php";
+			include $inria_base . "everyone.php";
 			break;
 
 		case "friends":
@@ -95,7 +95,7 @@ function theme_inria_thewire_page_handler($page) {
 
 		case "group":
 			//if (isset($page[1])) { set_input('guid', $page[1]); }
-			include $alt_base . "group.php";
+			include $esope_base . "group.php";
 			break;
 
 		case "view":

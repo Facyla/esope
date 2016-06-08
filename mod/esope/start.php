@@ -95,6 +95,8 @@ function esope_init() {
 			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);
 		}
 	}
+	// Pour gérer le PH de thewire (ajout interface groupe) - cf. thème Inria pour reprendre la déclaration du PH
+	//elgg_register_page_handler('thewire', 'esope_thewire_page_handler');
 	
 	// The Wire notifications : add support for group containers
 	elgg_unregister_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'thewire_prepare_notification');

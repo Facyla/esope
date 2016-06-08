@@ -21,7 +21,7 @@ switch ($add_wire) {
 	default: forward(REFERER);
 }
 
-$title = elgg_echo('theme_inria:thewire:group:title', array($owner->name));
+$title = elgg_echo('esope:thewire:group:title', array($owner->name));
 
 elgg_push_breadcrumb(elgg_echo('thewire'), "thewire/all");
 elgg_push_breadcrumb($owner->name);

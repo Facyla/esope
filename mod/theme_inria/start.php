@@ -142,6 +142,7 @@ function theme_inria_init(){
 	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
 	// Override thewire PH
 	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
+	// Add tool entry to group menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_inria_thewire_group_menu');
 	// Add link to longtext menu
 	//elgg_register_plugin_hook_handler('register', 'menu:longtext', 'shortcodes_longtext_menu');	
