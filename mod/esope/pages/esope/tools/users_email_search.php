@@ -27,14 +27,15 @@ if (!empty($email)) {
 			$content .= elgg_view_image_block($icon, $text);
 		}
 	} else {
-		$content .= "<p>Aucun résultat avec l'email : $email</p>";
+		$content .= "<p>Aucun résultat</p>";
 	}
 	// Match search search
-	$content .= "<h4>Recherche par correspondance</h4>";
+	$content .= "<br /><h4>Recherche par correspondance (LIKE %%)</h4>";
 	$users = elgg_get_entities(array(
 			'type' => 'user',
 			'joins' => array("INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)"),
 			'wheres' => array("ue.email LIKE '%$email%'"),
+			'limit' => 0,
 		));
 	if ($users) {
 		foreach ($users as $ent) {
@@ -43,7 +44,7 @@ if (!empty($email)) {
 			$content .= elgg_view_image_block($icon, $text);
 		}
 	} else {
-		$content .= "<p>Aucun email contenant : $email</p>";
+		$content .= "<p>Aucun email correspondant</p>";
 	}
 }
 

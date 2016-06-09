@@ -577,6 +577,11 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 0; }
 .group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 3px 0; }
 
+.group-archive { border:1px dotted black; background:rgba(0,0,0,0.8); color:white; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
+.group-archive { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:white; }
+.group-archive-tiny { background: rgba(0,0,0,1); color:white; font-size: 6px; padding: 2px 0px; }
+.group-archive-small { background: rgba(0,0,0,1); color:white; font-size: 8px; padding: 3px 1px; }
+.group-archive-medium { background: rgba(0,0,0,1); color:white; font-size: 10px; padding: 3px 1px; }
 
 /* Statuts compte utilisateur : Archive (bannière compte archivé), Pas de mail associé au compte */
 .profiletype-status { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
@@ -586,17 +591,17 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 /* Medium */
 .elgg-avatar-medium .profiletype-status { position: absolute; border: 1px solid transparent; width: 100px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
 .elgg-avatar-medium .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
-.profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
+.elgg-avatar-medium .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
 
 /* Small */
 .elgg-avatar-small .profiletype-status { position: absolute; border: 1px solid transparent; width: 40px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
 .elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
-.profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+.elgg-avatar-small .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
 
 /* Tiny */
 .elgg-avatar-tiny .profiletype-status { position: absolute; border: 1px solid transparent; width: 25px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
 .elgg-avatar-tiny .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
-.profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.5rem; font-weight: bold; text-transform: initial; color: white; }
+.elgg-avatar-tiny .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.5rem; font-weight: bold; text-transform: initial; color: white; }
 
 /* Friendspicker */
 /* .elgg-avatar-tiny .profiletype-status { left: 0; margin: 5px 10px 5px 5px; } */
