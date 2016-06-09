@@ -52,7 +52,16 @@ if (!$allowed) {
 
 // Add profile-type marker
 if (function_exists('esope_get_user_profile_type')) {
-	$class .= ' profile-type profile-type-' . esope_get_user_profile_type($user);
+	$profile_type = esope_get_user_profile_type($user);
+	$class .= ' profile-type';
+	if (!empty($profile_type)) {
+		$class .= ' profile-type-' . $profile_type;
+	}
+}
+
+// Tell there is no email associated (same as archived ?) = cannot be contacted
+if (empty($user->email)) {
+	$class .= ' profile-no-mail';
 }
 
 $icontime = $user->icontime;
