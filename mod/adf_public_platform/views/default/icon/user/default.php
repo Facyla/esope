@@ -90,7 +90,20 @@ if (isset($vars['hover'])) {
 $spacer_url = elgg_get_site_url() . '_graphics/spacer.gif';
 
 $icon_url = elgg_format_url($user->getIconURL($size));
-$icon = elgg_view('output/img', array(
+
+$icon = '';
+// Add new markers to icon
+// Add archive banner, if account is closed
+/*
+if (in_array($user->memberstatus, array('closed', 'archive'))) {
+	$icon = '<span class="profiletype-status"><span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span></span>' . $icon;
+}
+*/
+// Add empty email marker
+if (empty($user->email)) {
+	$icon .= '<span class="profiletype-status"><span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span></span>';
+}
+$icon .= elgg_view('output/img', array(
 	'src' => $spacer_url,
 	'alt' => $name,
 	'title' => $name,
@@ -98,12 +111,6 @@ $icon = elgg_view('output/img', array(
 	'style' => "background: url($icon_url) no-repeat;",
 ));
 
-// Add archive banner, if account is closed
-/*
-if (in_array($user->memberstatus, array('closed', 'archive'))) {
-	$icon = '<span class="profiletype-status"><span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span></span>' . $icon;
-}
-*/
 $show_menu = $use_hover && (elgg_is_admin_logged_in() || !$user->isBanned());
 
 ?>
