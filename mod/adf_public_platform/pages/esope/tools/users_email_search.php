@@ -34,6 +34,7 @@ if (!empty($email)) {
 			'type' => 'user',
 			'joins' => array("INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)"),
 			'wheres' => array("ue.email LIKE '%$email%'"),
+			'limit' => 0,
 		));
 	if ($users) {
 		foreach ($users as $ent) {
