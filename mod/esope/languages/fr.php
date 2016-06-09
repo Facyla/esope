@@ -852,6 +852,9 @@ return array(
 	//'esope:group:inactive:details' => "Ce groupe a été archivé",
 	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
 	
+	'esope:status:archive' => "archivé",
+	'esope:user:nomail' => "pas de mail",
+	
 	
 	
 	/**********************/

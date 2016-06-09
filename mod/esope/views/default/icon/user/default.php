@@ -89,19 +89,24 @@ if (isset($vars['hover'])) {
 	$use_hover = $vars['hover'];
 }
 
-$icon = elgg_view('output/img', array(
-	'src' => $user->getIconURL($size),
-	'alt' => $name,
-	'title' => $name,
-	'class' => $img_class,
-));
-
+$icon = '';
+// Add new markers to icon
 // Add archive banner, if account is closed
 /*
 if (in_array($user->memberstatus, array('closed', 'archive'))) {
 	$icon = '<span class="profiletype-status"><span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span></span>' . $icon;
 }
 */
+// Add empty email marker
+if (empty($user->email)) {
+	$icon .= '<span class="profiletype-status"><span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span></span>';
+}
+$icon .= elgg_view('output/img', array(
+	'src' => $user->getIconURL($size),
+	'alt' => $name,
+	'title' => $name,
+	'class' => $img_class,
+));
 
 $show_menu = $use_hover && (elgg_is_admin_logged_in() || !$user->isBanned());
 
