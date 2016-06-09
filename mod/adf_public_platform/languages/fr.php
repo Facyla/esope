@@ -784,6 +784,8 @@ $fr = array(
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "Ce groupe a été archivé",
 	
+	'esope:status:archive' => "archivé",
+	'esope:user:nomail' => "pas de mail",
 	
 	
 	/**********************/
