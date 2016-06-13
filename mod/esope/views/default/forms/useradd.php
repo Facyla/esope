@@ -21,6 +21,10 @@ if (elgg_is_sticky_form('useradd')) {
 	}
 }
 
+if (empty($password)) {
+	$password = $password2 = generate_random_cleartext_password();
+}
+
 $admin_option = false;
 if ((elgg_get_logged_in_user_entity()->isAdmin()) && ($vars['show_admin'])) {
 	$admin_option = true;

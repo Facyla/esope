@@ -237,6 +237,10 @@ if (!empty($plugin->import_settings)) {
 
 
 
+// Lien vers les outils d'admin
+echo '<p>' . elgg_echo('esope:tools:details') . '&nbsp;: <a href="' . elgg_get_site_url() . 'esope/tools" target="_new">' . elgg_echo('esope:tools') . '</a></p>>';
+
+
 /*
 // Tests avec tabs : non finalisés // en fait c'est mieux avec des onglets en accordéon..
 $class = "esope-settings";
@@ -940,6 +944,7 @@ $(function() {
 	<br />
 	
 </div>
+
 
 <?php
 /* Tests : Pour une réduction des données de sauvegarde, une forme de compression ?
