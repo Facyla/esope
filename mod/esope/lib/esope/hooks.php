@@ -775,3 +775,84 @@ function esope_thewire_prepare_notification($hook, $type, $notification, $params
 	return $notification;
 }
 
+
+/**
+ * Get any entity that matches a query that looks like a GUID
+ * Note : we need to display this result only once, in the proper subtype
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
+ */
+function esope_search_guid_hook($hook, $type, $value, $params) {
+	static $found_entity = false;
+	static $searched_type = null;
+	static $searched_subtype = null;
+	
+	$query = sanitise_string($params['query']);
+	
+	// Is there any entity under that GUID ?
+	if ($found_entity === false) {
+		$found_entity = null;
+		if (ctype_digit($query)) {
+			$ent = get_entity($query);
+			if (elgg_instanceof($ent)) {
+				$found_entity = $ent;
+				// Also determine search type and subtype
+				$entity_type = get_input('entity_type', '');
+				if (!empty($entity_type)) { $searched_type = $entity_type; }
+				$entity_subtype = get_input('entity_subtype', '');
+				if (!empty($entity_subtype)) { $searched_subtype = $entity_subtype; }
+			}
+		}
+		error_log("Entity found : {$found_entity->getType()} / {$found_entity->getSubtype()}       $searched_type, $searched_subtype");
+	}
+	// Shortcut if no matching entity
+	if (!$found_entity) { return $value; }
+	
+	// Check triggered hook
+	$subtype = '';
+	if (strpos($type, ':') !== false) {
+		$types = explode(':', $type);
+		$type = $types[0];
+		$subtype = $types[1];
+	}
+	// Handle only regular search types
+	if (!in_array($type, array('object', 'user', 'group', 'site'))) { return $value; }
+	
+	// Exclude cases where an unproper hook is used (coherence between subtype search and search hook subtype filter)
+	if (!empty($subtype) && ($found_entity->getSubtype() != $subtype)) { return $value; }
+	if (!is_null($searched_subtype) && ($found_entity->getSubtype() != $searched_subtype)) { return $value; }
+	
+	// Return only results from the proper hook
+	if (!empty($subtype) && elgg_instanceof($found_entity, $type, $subtype)) {
+		switch($found_entity->getType()) {
+			case 'user':
+			case 'group':
+			case 'site':
+				$title = $found_entity->name;
+				break;
+			case 'object':
+			default:
+				$title = $found_entity->title;
+		}
+		$title = search_get_highlighted_relevant_substrings("$title (GUID $query)", $params['query']);
+		$found_entity->setVolatileData('search_matched_title', $title);
+		
+		// Add to previous values (never replace previous results !)
+		if ($value) {
+			$value['entities'][] = $found_entity;
+			$value['count'] = $value['count']+1;
+		} else {
+			$value = array(
+				'entities' => array($found_entity),
+				'count' => 1,
+			);
+		}
+	}
+	return $value;
+}
+
+

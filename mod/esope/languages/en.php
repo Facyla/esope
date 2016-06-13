@@ -848,7 +848,7 @@ return array(
 	'esope:group:inactive:details' => "This group was archived",
 	
 	'esope:status:archive' => "archive",
-	'esope:user:nomail' => "no mail",
+	'esope:user:nomail' => "<s>email</s>",
 	
 	
 	/**********************/

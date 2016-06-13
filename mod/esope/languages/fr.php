@@ -853,7 +853,7 @@ return array(
 	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
 	
 	'esope:status:archive' => "archivé",
-	'esope:user:nomail' => "pas de mail",
+	'esope:user:nomail' => "<s>email</s>",
 	
 	
 	
@@ -932,14 +932,14 @@ return array(
 	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
 	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
 	'item:object:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
-	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evénements",
 	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
 	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Sujets de discussion",
 	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
 	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",
-	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evénements",
 	'item:object:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedback",
 	'item:object:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Idées",
 	'item:object:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",

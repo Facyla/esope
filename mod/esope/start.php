@@ -372,6 +372,15 @@ function esope_init() {
 	
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
+	// Replace livesearch with custom endpoint
+	elgg_unregister_page_handler('livesearch', 'input_livesearch_page_handler');
+	elgg_register_page_handler('livesearch', 'esope_input_livesearch_page_handler');
+	// Add new search hooks : return corresponding GUID if query is a GUID
+	elgg_register_plugin_hook_handler('search', 'all', 'esope_search_guid_hook', 900);
+	/*
+	elgg_register_plugin_hook_handler('search', 'user', 'esope_search_guid_hook');
+	elgg_register_plugin_hook_handler('search', 'group', 'esope_search_guid_hook');
+	*/
 	
 	// Esope page handler : all tools
 	elgg_register_page_handler('esope', 'esope_page_handler');
@@ -1056,7 +1065,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 			// Auto-discover valid values from existing metadata
 			if ($auto_options) {
 				$options = esope_get_meta_values($metadata);
-				$valtype = 'dropdown';
+				$valtype = 'select';
 			}
 			if (in_array($valtype, array('longtext', 'plaintext', 'rawtext'))) { $valtype = 'text'; }
 			// Multiple options become select (if radio, should also invert keys and values)
@@ -1105,7 +1114,7 @@ function esope_make_dropdown_from_metadata($params) {
 	//if ($empty) $options = array('empty option' => '') + $options;
 	if ($empty) $options = array_merge(array('empty option' => ''), $options);
 	
-	return elgg_view("input/dropdown", array('name' => $name, 'options' => $options, 'value' => $value));
+	return elgg_view("input/select", array('name' => $name, 'options' => $options, 'value' => $value));
 }
 /* Returns the wanted value based on both params and inputs
  * If $params is set (to whatever except false, but including ), it will be used
