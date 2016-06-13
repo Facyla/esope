@@ -34,7 +34,7 @@ if ($own_profile_type && ($user->guid == $own->guid)) {
 if (empty($profile_type)) { $profile_type = 'external'; }
 if (!empty($profile_type)) { $icon = '<span class="profiletype-badge"><span class="profiletype-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>' . $icon; }
 // Archive banner, if account is closed
-if ($user->memberstatus == 'closed') { $icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon; }
+//if ($user->memberstatus == 'closed') { $icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon; }
 
 // grab the actions and admin menu items from user hover
 $menu = elgg_trigger_plugin_hook('register', "menu:user_hover", array('entity' => $user), array());

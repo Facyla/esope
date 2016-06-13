@@ -90,16 +90,20 @@ if (isset($vars['hover'])) {
 }
 
 $icon = '';
+$profiletype_status = '';
 // Add new markers to icon
 // Add archive banner, if account is closed
 /*
 if (in_array($user->memberstatus, array('closed', 'archive'))) {
-	$icon = '<span class="profiletype-status"><span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span></span>' . $icon;
+	$profiletype_status .= '<span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span>';
 }
 */
 // Add empty email marker
 if (empty($user->email)) {
-	$icon .= '<span class="profiletype-status"><span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span></span>';
+	$profiletype_status .= '<span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span>';
+}
+if (!empty($profiletype_status)) {
+	$icon .= '<span class="profiletype-status">' . $profiletype_status . '</span>';
 }
 $icon .= elgg_view('output/img', array(
 	'src' => $user->getIconURL($size),

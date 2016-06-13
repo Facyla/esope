@@ -97,11 +97,14 @@ $icon = '';
 // Add new markers to icon
 // Add archive banner, if account is closed
 if ($user->memberstatus == 'closed') {
-	$icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon;
+	$profiletype_status .= '<span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span>';
 }
 // Add empty email marker
 if (empty($user->email)) {
-	$icon .= '<span class="profiletype-status"><span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span></span>';
+	$profiletype_status .= '<span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span>';
+}
+if (!empty($profiletype_status)) {
+	$icon .= '<span class="profiletype-status">' . $profiletype_status . '</span>';
 }
 $icon .= elgg_view('output/img', array(
 	'src' => $spacer_url,
