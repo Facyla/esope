@@ -271,6 +271,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
+.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 0; }
 /* The Wire */
 .thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 .elgg-form-thewire-group-add .elgg-foot { padding: 0 0 0.5em 0; }

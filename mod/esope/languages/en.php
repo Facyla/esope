@@ -1056,6 +1056,7 @@ return array(
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
 	
+	'entity:unavailable' => "unavailable entity",
 	
 	
 	
@@ -1141,7 +1142,9 @@ This is an automated notification, please do not reply to this email.",
 	'messages:to' => "to",
 	
 	'thewire:reply' => "Reply",
-
+	
+	'search:more' => '+%s more %s',
+	
 	
 );
 

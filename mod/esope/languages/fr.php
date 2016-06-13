@@ -1065,6 +1065,8 @@ return array(
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
 	
+	'entity:unavailable' => "entité indisponible",
+	
 	
 	
 	/* TRANSLATIONS OVERRIDES */
@@ -1143,6 +1145,9 @@ Il s'agit d'un message de notification automatique, merci de ne pas répondre di
 	'messages:to' => "à",
 	
 	'thewire:reply' => "Répondre",
+	
+	'search:more' => '+%s autres %s',
+	
 	
 );
 

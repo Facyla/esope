@@ -12,18 +12,22 @@ $icon = elgg_view_entity_icon($owner, 'tiny');
 
 $container = $entity->getContainerEntity();
 
-if ($container->getType() == 'object') {
-	$title = $container->title;
+if (elgg_instanceof($container)) {
+	if ($container->getType() == 'object') {
+		$title = $container->title;
+	} else {
+		$title = $container->name;
+	}
+
+	if (!$title) {
+		$title = elgg_echo('item:' . $container->getType() . ':' . $container->getSubtype());
+	}
+
+	if (!$title) {
+		$title = elgg_echo('item:' . $container->getType());
+	}
 } else {
-	$title = $container->name;
-}
-
-if (!$title) {
-	$title = elgg_echo('item:' . $container->getType() . ':' . $container->getSubtype());
-}
-
-if (!$title) {
-	$title = elgg_echo('item:' . $container->getType());
+	$title = elgg_echo('entity:unavailable');
 }
 
 $title = elgg_echo('search:comment_on', array($title));
