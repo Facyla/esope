@@ -179,11 +179,12 @@ function esope_input_livesearch_page_handler($page) {
 	
 	// Control input value
 	$user_return = get_input('user_return', '');
+	error_log("Livesearch : user return = $user_return");
 	if (empty($user_return)) {
 		// This is from core : which special case should this handle ?
 		if (in_array('groups', $match_on)) { $user_return = 'guid'; } else { $user_return = 'username'; }
 	} else {
-	if (!in_array($user_return, array('name', 'username', 'guid'))) { $user_return = 'guid'; }
+		if (!in_array($user_return, array('name', 'username', 'guid'))) { $user_return = 'guid'; }
 	}
 
 	// grab a list of entities and send them in json.

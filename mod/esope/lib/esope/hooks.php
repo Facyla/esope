@@ -807,12 +807,12 @@ function esope_search_guid_hook($hook, $type, $value, $params) {
 				if (!empty($entity_subtype)) { $searched_subtype = $entity_subtype; }
 			}
 		}
-		error_log("Entity found : {$found_entity->getType()} / {$found_entity->getSubtype()}       $searched_type, $searched_subtype");
+		//error_log("Entity found : {$found_entity->getType()} / {$found_entity->getSubtype()}       $searched_type, $searched_subtype");
 	}
 	// Shortcut if no matching entity
 	if (!$found_entity) { return $value; }
 	
-	// Check triggered hook
+	// Check triggered hook for handled types and determine subtype
 	$subtype = '';
 	if (strpos($type, ':') !== false) {
 		$types = explode(':', $type);
@@ -823,6 +823,7 @@ function esope_search_guid_hook($hook, $type, $value, $params) {
 	if (!in_array($type, array('object', 'user', 'group', 'site'))) { return $value; }
 	
 	// Exclude cases where an unproper hook is used (coherence between subtype search and search hook subtype filter)
+	// Otherwise : duplicates when searching for object type (only)
 	if (!empty($subtype) && ($found_entity->getSubtype() != $subtype)) { return $value; }
 	if (!is_null($searched_subtype) && ($found_entity->getSubtype() != $searched_subtype)) { return $value; }
 	
