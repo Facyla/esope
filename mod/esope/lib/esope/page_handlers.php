@@ -177,11 +177,11 @@ function esope_input_livesearch_page_handler($page) {
 
 	$limit = sanitise_int(get_input('limit', $default_limit));
 	
+	// Note : it requires a custom input/autocomplete view to handle new vars
 	// Control input value
 	$user_return = get_input('user_return', '');
-	error_log("Livesearch : user return = $user_return");
 	if (empty($user_return)) {
-		// This is from core : which special case should this handle ?
+		// This is from core : keep it - but which special case should this handle ?
 		if (in_array('groups', $match_on)) { $user_return = 'guid'; } else { $user_return = 'username'; }
 	} else {
 		if (!in_array($user_return, array('name', 'username', 'guid'))) { $user_return = 'guid'; }
