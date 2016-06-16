@@ -20,8 +20,21 @@ function phpoffice_init() {
 	elgg_extend_view('css', 'phpoffice/css');
 	
 	// Register a PHP library
-	elgg_register_library('elgg:phpword', elgg_get_plugins_path() . 'phpoffice/vendors/PHPWord/src/PhpWord/Autoloader.php');
-	elgg_register_library('elgg:phppresentation', elgg_get_plugins_path() . 'phpoffice/vendors/PHPPresentation/src/PhpPresentation/Autoloader.php');
+	// Register PHPOffice libs
+	$base = elgg_get_plugins_path() . 'phpoffice/vendors/';
+	// Elgg additional functions
+	$base_lib = elgg_get_plugins_path() . 'phpoffice/lib/phpoffice/';
+	// Note : use Composer to install PHPOffice libraries and generate autoload.php file
+	elgg_register_library('phpoffice:common', $base . 'Common/vendor/autoload.php');
+	elgg_register_library('phpoffice:word', $base . 'PHPWord/vendor/autoload.php');
+	elgg_register_library('elgg:phpoffice:word', $base_lib . 'word.php');
+	elgg_register_library('phpoffice:presentation', $base . 'PHPPresentation/vendor/autoload.php');
+	elgg_register_library('elgg:phpoffice:presentation', $base_lib . 'presentation.php');
+	elgg_register_library('phpoffice:excel', $base . 'PHPExcel/vendor/autoload.php');
+	elgg_register_library('elgg:phpoffice:excel', $base_lib . 'excel.php');
+	elgg_register_library('phpoffice:project', $base . 'PHPProject/src/PhpProject/Autoloader.php');
+	elgg_register_library('elgg:phpoffice:project', $base_lib . 'project.php');
+
 	
 	/* Some useful elements :
 	
@@ -84,14 +97,14 @@ include_once(elgg_get_plugins_path() . 'phpoffice/lib/phpoffice/functions.php');
 // Loads pages located in phpoffice/pages/phpoffice/
 function phpoffice_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'phpoffice/pages/phpoffice/';
-	$samples_base = elgg_get_plugins_path() . 'phpoffice/vendors/PHPWord/samples/';
+	$word_base = elgg_get_plugins_path() . 'phpoffice/vendors/PHPWord/';
+	$presentation_base = elgg_get_plugins_path() . 'phpoffice/vendors/PHPPresentation/';
+	$excel_base = elgg_get_plugins_path() . 'phpoffice/vendors/PHPExcel/';
+	$project_base = elgg_get_plugins_path() . 'phpoffice/vendors/PHPProject/';
 	
-	// Load a PHP library (can also be loaded from the page_handler or from specific views)
-	elgg_load_library('elgg:phpoffice');
-	\PhpOffice\PhpWord\Autoloader::register();
-	
-	elgg_load_library('elgg:phppresentation');
-	\PhpOffice\PhpPresentation\Autoloader::register();
+	// Load the PHPOffice libraries (can also be loaded from the page_handler or from specific views)
+	elgg_load_library('phpoffice:common');
+	//\PhpOffice\PhpPresentation\Autoloader::register();
 	
 	switch ($page[0]) {
 		/*
@@ -100,9 +113,38 @@ function phpoffice_page_handler($page) {
 			include "$base/view.php";
 			break;
 		*/
-		case 'samples':
-			if (!include $samples_base . $page[1]) {
-				include $samples_base . 'index.php';
+		
+		case 'word':
+			elgg_load_library('phpoffice:word');
+			elgg_load_library('elgg:phpoffice:word');
+			if (empty($page[1]) || !include $word_base . 'samples/' . $page[1]) {
+			error_log("T1");
+				include $base . 'word.php';
+			}
+			break;
+		
+		case 'presentation':
+			elgg_load_library('phpoffice:presentation');
+			elgg_load_library('elgg:phpoffice:presentation');
+			if (empty($page[1]) || !include $presentation_base . 'samples/' . $page[1]) {
+				include $base . 'presentation.php';
+			}
+			break;
+		
+		case 'excel':
+			elgg_load_library('phpoffice:excel');
+			elgg_load_library('elgg:phpoffice:excel');
+			if (empty($page[1]) || !include $excel_base . 'Examples/' . $page[1]) {
+				include $base . 'excel.php';
+			}
+			break;
+		
+		case 'project':
+			elgg_load_library('phpoffice:project');
+			elgg_load_library('elgg:phpoffice:project');
+			\PhpOffice\PhpProject\Autoloader::register();
+			if (empty($page[1]) || !include $project_base . 'samples/' . $page[1]) {
+				include $base . 'project.php';
 			}
 			break;
 		
@@ -121,5 +163,40 @@ function phpoffice_function() {
 }
 */
 
+
+/* DOC : Extension MIME Type
+.doc      application/msword
+.dot      application/msword
+
+.docx     application/vnd.openxmlformats-officedocument.wordprocessingml.document
+.dotx     application/vnd.openxmlformats-officedocument.wordprocessingml.template
+.docm     application/vnd.ms-word.document.macroEnabled.12
+.dotm     application/vnd.ms-word.template.macroEnabled.12
+
+.xls      application/vnd.ms-excel
+.xlt      application/vnd.ms-excel
+.xla      application/vnd.ms-excel
+
+.xlsx     application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+.xltx     application/vnd.openxmlformats-officedocument.spreadsheetml.template
+.xlsm     application/vnd.ms-excel.sheet.macroEnabled.12
+.xltm     application/vnd.ms-excel.template.macroEnabled.12
+.xlam     application/vnd.ms-excel.addin.macroEnabled.12
+.xlsb     application/vnd.ms-excel.sheet.binary.macroEnabled.12
+
+.ppt      application/vnd.ms-powerpoint
+.pot      application/vnd.ms-powerpoint
+.pps      application/vnd.ms-powerpoint
+.ppa      application/vnd.ms-powerpoint
+
+.pptx     application/vnd.openxmlformats-officedocument.presentationml.presentation
+.potx     application/vnd.openxmlformats-officedocument.presentationml.template
+.ppsx     application/vnd.openxmlformats-officedocument.presentationml.slideshow
+.ppam     application/vnd.ms-powerpoint.addin.macroEnabled.12
+.pptm     application/vnd.ms-powerpoint.presentation.macroEnabled.12
+.potm     application/vnd.ms-powerpoint.template.macroEnabled.12
+.ppsm     application/vnd.ms-powerpoint.slideshow.macroEnabled.12
+
+*/
 
 
