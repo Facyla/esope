@@ -168,7 +168,7 @@ echo elgg_format_element('ul', ['class' => 'elgg-pagination'], $list);
 if ($advanced_pagination) {
 	echo '<ul class="elgg-pagination elgg-pagination-limit">';
 	$limits_opts = array(10, 30, 100);
-	if (!in_array($limit, $limits_opts)) $limits_opts[] = $limit;
+	if (!in_array($limit, $limits_opts)) { $limits_opts[] = $limit; }
 	sort($limits_opts);
 
 	foreach ($limits_opts as $num) {

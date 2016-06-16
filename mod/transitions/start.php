@@ -22,7 +22,7 @@ function transitions_init() {
 	elgg_register_library('elgg:transitions', elgg_get_plugins_path() . 'transitions/lib/transitions.php');
 	
 	$js = elgg_get_simplecache_url('js', 'transitions/transitions');
-	elgg_register_js('elgg.transitions', $js, 'head');
+	elgg_register_js('elgg.transitions', $js);
 	
 	// add a site navigation item
 	$item = new ElggMenuItem('transitions', elgg_echo('transitions:transitions'), 'catalogue/all');

@@ -369,6 +369,9 @@ function esope_input_livesearch_page_handler($page) {
 						$output = '<h3><a href="' . $entity->getURL() . '">' . $entity->title . '</a></h3>';
 						*/
 						$output = '<h3>' . $entity->title . '</h3>';
+						if (elgg_instanceof($entity, 'object', 'comment')) {
+							$output = '<h3>' . elgg_get_excerpt($entity->description, 100) . '</h3>';
+						}
 
 						$icon = elgg_view_entity_icon($entity, 'tiny', array(
 							'use_hover' => false,

@@ -787,19 +787,19 @@ function esope_thewire_prepare_notification($hook, $type, $notification, $params
  * @return array
  */
 function esope_search_guid_hook($hook, $type, $value, $params) {
-	static $found_entity = false;
+	static $entity = false;
 	static $searched_type = null;
 	static $searched_subtype = null;
 	
 	$query = sanitise_string($params['query']);
 	
 	// Is there any entity under that GUID ?
-	if ($found_entity === false) {
-		$found_entity = null;
+	if ($entity === false) {
+		$entity = null;
 		if (ctype_digit($query)) {
 			$ent = get_entity($query);
 			if (elgg_instanceof($ent)) {
-				$found_entity = $ent;
+				$entity = $ent;
 				// Also determine search type and subtype
 				$entity_type = get_input('entity_type', '');
 				if (!empty($entity_type)) { $searched_type = $entity_type; }
@@ -807,10 +807,10 @@ function esope_search_guid_hook($hook, $type, $value, $params) {
 				if (!empty($entity_subtype)) { $searched_subtype = $entity_subtype; }
 			}
 		}
-		//error_log("Entity found : {$found_entity->getType()} / {$found_entity->getSubtype()}       $searched_type, $searched_subtype");
+		//error_log("Entity found : {$entity->getType()} / {$entity->getSubtype()}       $searched_type, $searched_subtype");
 	}
 	// Shortcut if no matching entity
-	if (!$found_entity) { return $value; }
+	if (!$entity) { return $value; }
 	
 	// Check triggered hook for handled types and determine subtype
 	$subtype = '';
@@ -824,31 +824,31 @@ function esope_search_guid_hook($hook, $type, $value, $params) {
 	
 	// Exclude cases where an unproper hook is used (coherence between subtype search and search hook subtype filter)
 	// Otherwise : duplicates when searching for object type (only)
-	if (!empty($subtype) && ($found_entity->getSubtype() != $subtype)) { return $value; }
-	if (!is_null($searched_subtype) && ($found_entity->getSubtype() != $searched_subtype)) { return $value; }
+	if (!empty($subtype) && ($entity->getSubtype() != $subtype)) { return $value; }
+	if (!is_null($searched_subtype) && ($entity->getSubtype() != $searched_subtype)) { return $value; }
 	
 	// Return only results from the proper hook
-	if (!empty($subtype) && elgg_instanceof($found_entity, $type, $subtype)) {
-		switch($found_entity->getType()) {
+	if (!empty($subtype) && elgg_instanceof($entity, $type, $subtype)) {
+		switch($entity->getType()) {
 			case 'user':
 			case 'group':
 			case 'site':
-				$title = $found_entity->name;
+				$title = $entity->name;
 				break;
 			case 'object':
 			default:
-				$title = $found_entity->title;
+				$title = $entity->title;
 		}
 		$title = search_get_highlighted_relevant_substrings("$title (GUID $query)", $params['query']);
-		$found_entity->setVolatileData('search_matched_title', $title);
+		$entity->setVolatileData('search_matched_title', $title);
 		
 		// Add to previous values (never replace previous results !)
 		if ($value) {
-			$value['entities'][] = $found_entity;
+			$value['entities'][] = $entity;
 			$value['count'] = $value['count']+1;
 		} else {
 			$value = array(
-				'entities' => array($found_entity),
+				'entities' => array($entity),
 				'count' => 1,
 			);
 		}

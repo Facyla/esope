@@ -109,10 +109,13 @@ function esope_init() {
 	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
-	elgg_register_simplecache_view('js/esope/theme');
-	$theme_js = elgg_get_simplecache_url('js', 'esope/theme');
-	elgg_register_js('esope.theme', $theme_js);
+	//elgg_register_simplecache_view('js/esope/theme');
+	$js = elgg_get_simplecache_url('js', 'esope/theme');
+	elgg_register_js('esope.theme', $js);
 	elgg_load_js('esope.theme');
+	
+	$js = elgg_get_simplecache_url('js', 'esope/esope');
+	elgg_register_js('elgg.esope', $js);
 	
 	// Used by wysiwyg editors templates
 	elgg_register_simplecache_view('js/esope/ckeditor_templates');
