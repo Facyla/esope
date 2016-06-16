@@ -370,9 +370,9 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 					$filename = explode('/', $entity->{$name});
 					$filename = end($filename);
 					if ($name == 'icon') {
-						$field_content .= '<p>Fichier joint : <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
+						$field_content .= '<p>' . elgg_echo("knowledge_database:attachment") . '&nbsp;: <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
 					} else {
-						$field_content .= '<p>Fichier joint : <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
+						$field_content .= '<p>' . elgg_echo("knowledge_database:attachment") . '&nbsp;: <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
 					}
 				}
 				break;
@@ -556,7 +556,7 @@ function knowledge_database_get_field_types() {
 
 
 /* Returns an array of allowed subtypes, for use in a elgg_get_ function
- * $options_values : if true prepares the array for a dropdown view, if false for get functions
+ * $options_values : if true prepares the array for a select view, if false for get functions
  * $tools : the array of tools, as provided e.g. by knowledge_database_get_allowed_tools
  */
 function knowledge_database_get_allowed_subtypes($options_values = false, $tools = false) {
@@ -604,7 +604,7 @@ function knowledge_database_get_group_kdb_fields($guid, $include_site = false) {
 	$fields = elgg_get_plugin_setting('group_fields_' . $guid, 'knowledge_database');
 	if ($include_site) {
 		if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') {
-			if (!empty($fields)) $fields .= ', ';
+			if (!empty($fields)) { $fields .= ', '; }
 			$fields .= elgg_get_plugin_setting('site_fields', 'knowledge_database');
 		}
 	}

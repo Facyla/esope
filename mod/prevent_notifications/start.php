@@ -21,7 +21,7 @@ function prevent_notifications_init() {
 	 * - load at first, because we want to block the process early, if it needs to be blocked
 	 * - method: prevent enqueuing into notification queue, so we don't have to imagine complex tricks to block notification afterwards
 	 */
-	elgg_register_plugin_hook_handler('enqueue', 'notification', 'prevent_notifications_enqueue_notification');
+	elgg_register_plugin_hook_handler('enqueue', 'notification', 'prevent_notifications_enqueue_notification', 1);
 	
 	// Add new field to eligible forms
 	// This is not solid enough yet to rely on these, so keep the basic method until we find a better way

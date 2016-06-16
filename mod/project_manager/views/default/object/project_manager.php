@@ -123,7 +123,7 @@ if ($project->canEdit() || $is_manager) {
 
 
 // LISTING - Version abrégée pour listing de recherche
-if (elgg_get_context() == "search") {
+if (elgg_in_context('search')) {
 
 	//if (get_input('search_viewtype') == "gallery") {} else {}
 		$icon = '<a href="' . $project->getURL() . '"><img src="' . elgg_get_site_url() . 'mod/project_manager/graphics/mission_64.png" /></a>';
@@ -250,13 +250,13 @@ if (elgg_get_context() == "search") {
 				<h3><?php echo elgg_echo('tasks:project_tasks'); ?></h3>
 				<p><?php echo elgg_echo('tasks:project_tasks:details'); ?></p>
 				<?php
-				if ($container instanceof ElggGroup) {
+				if (elgg_instanceof($container, 'group')) {
 					$options = array(
 							'type' => 'object', 'subtype' => 'task_top', 'container_guid' => $container_guid,
 							'limit' => false, 'full_view' => false, 'pagination' => true,
 						);
 					$phases = elgg_get_entities($options);
-					foreach($phases as $phase) {
+					if ($phases) foreach($phases as $phase) {
 						echo elgg_view_entity($phase);
 					}
 					echo '<a target="_new" href="' . elgg_get_site_url() . 'tasks/add/' . $container_guid . '">&raquo;&nbsp;Ajouter une autre phase</a>';

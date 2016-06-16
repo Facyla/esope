@@ -52,7 +52,16 @@ if (!$allowed) {
 
 // Add profile-type marker
 if (function_exists('esope_get_user_profile_type')) {
-	$class .= ' profile-type profile-type-' . esope_get_user_profile_type($user);
+	$profile_type = esope_get_user_profile_type($user);
+	$class .= ' profile-type';
+	if (!empty($profile_type)) {
+		$class .= ' profile-type-' . $profile_type;
+	}
+}
+
+// Tell there is no email associated (same as archived ?) = cannot be contacted
+if (empty($user->email)) {
+	$class .= ' profile-no-mail';
 }
 
 $icontime = $user->icontime;
@@ -83,18 +92,27 @@ if (isset($vars['hover'])) {
 $spacer_url = elgg_get_site_url() . '_graphics/spacer.gif';
 
 $icon_url = elgg_format_url($user->getIconURL($size));
-$icon = elgg_view('output/img', array(
+
+$icon = '';
+// Add new markers to icon
+// Add archive banner, if account is closed
+if ($user->memberstatus == 'closed') {
+	$profiletype_status .= '<span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span>';
+}
+// Add empty email marker
+if (empty($user->email)) {
+	$profiletype_status .= '<span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span>';
+}
+if (!empty($profiletype_status)) {
+	$icon .= '<span class="profiletype-status">' . $profiletype_status . '</span>';
+}
+$icon .= elgg_view('output/img', array(
 	'src' => $spacer_url,
 	'alt' => $name,
 	'title' => $name,
 	'class' => $img_class,
 	'style' => "background: url($icon_url) no-repeat;",
 ));
-
-// Add archive banner, if account is closed
-if ($user->memberstatus == 'closed') {
-	$icon = '<span class="profiletype-status"><span class="profiletype-status-closed">' . elgg_echo('theme_inria:status:closed') . '</span></span>' . $icon;
-}
 
 $show_menu = $use_hover && (elgg_is_admin_logged_in() || !$user->isBanned());
 

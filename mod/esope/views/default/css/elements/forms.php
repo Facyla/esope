@@ -288,7 +288,15 @@ form input#esope-search-submit-button:focus {
 #advanced-search-form input { width:50ex; max-width: 70%; }
 #advanced-search-form input.elgg-button-submit { max-width: 20ex; }
 #advanced-search-form input.elgg-input-date { max-width: 12ex; }
+#advanced-search-form select { max-width: 12em; }
+.advanced-search-submit-top { float:right; }
+.advanced-search-submit-bottom { display:none; }
 
+.elgg-sidebar #advanced-search-form { border: 0; padding: 0; margin: 0; background: transparent; }
+.elgg-sidebar #advanced-search-form label::before { content: ' '; display: block; clear: both; margin-top: 0.2rem; }
+.elgg-sidebar #advanced-search-form input { width: auto; }
+.elgg-sidebar .advanced-search-submit-top { display:none; }
+.elgg-sidebar .advanced-search-submit-bottom { display:block; }
 
 
 
@@ -564,6 +572,11 @@ form input#esope-search-submit-button:focus {
 	background: #E4ECF5;
 }
 
+
+/* ESOPE ADDITIONS */
+.blockform > div { margin-bottom: 15px; }
+.blockform > div:last-child { margin-bottom: 0; }
+.elgg-form-alt > .blockform > .elgg-foot { border-top: 1px solid #CCC; padding: 10px 0; }
 
 
 

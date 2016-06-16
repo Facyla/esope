@@ -237,6 +237,7 @@ if (!empty($plugin->import_settings)) {
 
 
 
+
 /*
 // Tests avec tabs : non finalisés // en fait c'est mieux avec des onglets en accordéon..
 $class = "esope-settings";
@@ -314,12 +315,15 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:dashboardheader') . '</label>'; ?>
 				<?php echo elgg_view('input/longtext', array('name' => 'params[dashboardheader]', 'value' => $plugin->dashboardheader));
 			echo '</p>';
+			
 			// Colonne centrale
+			echo '<fieldset>';
 			if (elgg_is_active_plugin('thewire')) {
 				echo '<p><label>' . elgg_echo('esope:index_wire') . '</label>';
 					echo elgg_view('input/select', array('name' => 'params[index_wire]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_wire));
 			echo '</p>';
 			}
+			echo '</fieldset>';
 			
 			// Colonne gauche
 			echo '<fieldset>';
@@ -336,8 +340,11 @@ $(function() {
 					echo elgg_view('input/select', array('name' => 'params[index_recent_members]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_recent_members));
 				echo '</p>';
 			}
+			echo '</fieldset>';
+			
 			// Colonne droite
 			if (elgg_is_active_plugin('groups')) {
+			echo '<fieldset>';
 				echo '<p><label>' . elgg_echo('esope:homegroup_guid') . '</label>';
 					echo elgg_view('input/groups_select', array('name' => 'params[homegroup_guid]', 'value' => $plugin->homegroup_guid, 'empty_value' => true));
 				echo '</p>';
@@ -350,8 +357,8 @@ $(function() {
 				echo '<p><label>' . elgg_echo('esope:homesite_index') . '</label>';
 					echo elgg_view('input/select', array('name' => 'params[homesite_index]', 'options_values' => $no_yes_opt, 'value' => $plugin->homesite_index));
 				echo '</p>';
-			}
 			echo '</fieldset>';
+			}
 			
 		} ?>
 	</div>
@@ -498,72 +505,57 @@ $(function() {
 		echo '<p><label>(alpha) Semantic UI ' . elgg_view('input/select', array('name' => 'params[semanticui]', 'options_values' => $no_yes_opt, 'value' => $plugin->semanticui)) . '</label></p><p>Attention : despite its promising functionnalities, using Semantic UI can have unexpected effects on various jQuery elements, such as accordion and other existing JS tools. Please test carefully before using on a production site.</p>';
 		*/
 		
-		echo '<h4>' . elgg_echo('esope:fonts') . '</h4>';
-		echo '<p><em>' . elgg_echo('esope:fonts:details') . '</em></p>';
+		echo '<fieldset><legend>' . elgg_echo('esope:fonts') . '</legend>';
+			echo '<p><em>' . elgg_echo('esope:fonts:details') . '</em></p>';
+			echo '<p><label>' . elgg_echo('esope:font1') . '</label>' . elgg_view('input/text', array('name' => 'params[font1]', 'value' => $plugin->font1)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:font2') . '</label>' . elgg_view('input/text', array('name' => 'params[font2]', 'value' => $plugin->font2)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:font3') . '</label>' . elgg_view('input/text', array('name' => 'params[font3]', 'value' => $plugin->font3)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:font4') . '</label>' . elgg_view('input/text', array('name' => 'params[font4]', 'value' => $plugin->font4)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:font5') . '</label>' . elgg_view('input/text', array('name' => 'params[font5]', 'value' => $plugin->font5)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:font6') . '</label>' . elgg_view('input/text', array('name' => 'params[font6]', 'value' => $plugin->font6)) . '</p>';
+		echo '</fieldset>';
 		
-		echo '<p><label>' . elgg_echo('esope:font1') . '</label>' . elgg_view('input/text', array('name' => 'params[font1]', 'value' => $plugin->font1)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:font2') . '</label>' . elgg_view('input/text', array('name' => 'params[font2]', 'value' => $plugin->font2)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:font3') . '</label>' . elgg_view('input/text', array('name' => 'params[font3]', 'value' => $plugin->font3)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:font4') . '</label>' . elgg_view('input/text', array('name' => 'params[font4]', 'value' => $plugin->font4)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:font5') . '</label>' . elgg_view('input/text', array('name' => 'params[font5]', 'value' => $plugin->font5)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:font6') . '</label>' . elgg_view('input/text', array('name' => 'params[font6]', 'value' => $plugin->font6)); ?>
-		</p>
+		echo '<fieldset><legend>' . elgg_echo('esope:colors') . '</legend>'; 
+			echo '<p><em>' . elgg_echo('esope:colors:details') . '</em></p>'; 
+			echo '<p><label>' . elgg_echo('esope:settings:backgroundcolor') . '</label>' . elgg_view('input/color', array('name' => 'params[backgroundcolor]', 'value' => $plugin->backgroundcolor)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:title:color') . '</label>' . elgg_view('input/color', array('name' => 'params[titlecolor]', 'value' => $plugin->titlecolor)) . '</p>';
+		echo '<p><label>' . elgg_echo('esope:text:color') . '</label>' . elgg_view('input/color', array('name' => 'params[textcolor]', 'value' => $plugin->textcolor)) . '</p>';
 		
-		<?php echo '<h4>' . elgg_echo('esope:colors') . '</h4>'; 
-		echo '<p><em>' . elgg_echo('esope:colors:details') . '</em></p>'; 
-		echo '<p><label>' . elgg_echo('esope:settings:backgroundcolor') . '</label>' . elgg_view('input/color', array('name' => 'params[backgroundcolor]', 'value' => $plugin->backgroundcolor)) . '</p>'; ?>
+		echo '<p><label>' . elgg_echo('esope:link:color') . '</label>' . elgg_view('input/color', array('name' => 'params[linkcolor]', 'value' => $plugin->linkcolor)) . '</p>';
+		echo '<p><label>' . elgg_echo('esope:link:hovercolor') . '</label>' . elgg_view('input/color', array('name' => 'params[linkhovercolor]', 'value' => $plugin->linkhovercolor)) . '</p>';
 		
-		<?php echo '<p><label>' . elgg_echo('esope:title:color') . '</label>' . elgg_view('input/color', array('name' => 'params[titlecolor]', 'value' => $plugin->titlecolor)) . '</p>'; ?>
+		echo '<h4>' . elgg_echo('esope:config:styles:headerfooter') . '</h4>';
+			echo '<p><label>' . elgg_echo('esope:color1:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color1]', 'value' => $plugin->color1)) . '</p>';
+		echo '<p><label>' . elgg_echo('esope:color4:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color4]', 'value' => $plugin->color4)) . '</p>';
 		
-		<?php echo '<p><label>' . elgg_echo('esope:text:color') . '</label>' . elgg_view('input/color', array('name' => 'params[textcolor]', 'value' => $plugin->textcolor)) . '</p>'; ?>
+		echo '<h4>' . elgg_echo('esope:config:styles:groupmodules') . '</h4>';
+			echo '<p><label>' . elgg_echo('esope:color2:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color2]', 'value' => $plugin->color2)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:color3:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color3]', 'value' => $plugin->color3)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:color14:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color14]', 'value' => $plugin->color14)) . '</p>';
+			
+			echo '<h4>' . elgg_echo('esope:config:styles:buttons') . '</h4>';
+			echo '<p><label>' . elgg_echo('esope:color5:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color5]', 'value' => $plugin->color5)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:color6:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color6]', 'value' => $plugin->color6)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:color7:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color7]', 'value' => $plugin->color7)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:color8:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color8]', 'value' => $plugin->color8)) . '</p>';
+			echo '<p><label>' . elgg_echo('esope:color15:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color15]', 'value' => $plugin->color15)) . '</p>';
+			
+			/*
+			echo '<p><label>' . elgg_echo('esope:color9:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color9]', 'value' => $plugin->color9)) . '</p>';
+		echo '<p><label>' . elgg_echo('esope:color10:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color10]', 'value' => $plugin->color10)) . '</p>';
+		echo '<p><label>' . elgg_echo('esope:color11:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color11]', 'value' => $plugin->color11)) . '</p>';
+		echo '<p><label>' . elgg_echo('esope:color12:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color12]', 'value' => $plugin->color12));
+			*/
+			
+			echo '<p><label>' . elgg_echo('esope:color13:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color13]', 'value' => $plugin->color13)) . '</p>';
+		echo '</fieldset>';
 
-		<?php echo '<p><label>' . elgg_echo('esope:link:color') . '</label>' . elgg_view('input/color', array('name' => 'params[linkcolor]', 'value' => $plugin->linkcolor)) . '</p>'; ?>
-		
-		<?php echo '<p><label>' . elgg_echo('esope:link:hovercolor') . '</label>' . elgg_view('input/color', array('name' => 'params[linkhovercolor]', 'value' => $plugin->linkhovercolor)) . '</p>'; ?>
-
-		<?php echo '<h4>' . elgg_echo('esope:config:styles:headerfooter') . '</h4>';
-		echo '<p><label>' . elgg_echo('esope:color1:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color1]', 'value' => $plugin->color1)) . '</p>'; ?>
-		
-		<?php echo '<p><label>' . elgg_echo('esope:color4:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color4]', 'value' => $plugin->color4)) . '</p>'; ?>
-
-		<?php echo '<h4>' . elgg_echo('esope:config:styles:groupmodules') . '</h4>';
-		echo '<p><label>' . elgg_echo('esope:color2:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color2]', 'value' => $plugin->color2)) . '</p>';
-		echo '<p><label>' . elgg_echo('esope:color3:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color3]', 'value' => $plugin->color3)) . '</p>';
-		echo '<p><label>' . elgg_echo('esope:color14:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color14]', 'value' => $plugin->color14)) . '</p>';
-		?>
-
-		<?php echo '<h4>' . elgg_echo('esope:config:styles:buttons') . '</h4>';
-		echo '<p><label>' . elgg_echo('esope:color5:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color5]', 'value' => $plugin->color5)) . '</p>';
-		echo '<p><label>' . elgg_echo('esope:color6:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color6]', 'value' => $plugin->color6)) . '</p>';
-		echo '<p><label>' . elgg_echo('esope:color7:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color7]', 'value' => $plugin->color7)) . '</p>';
-		echo '<p><label>' . elgg_echo('esope:color8:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color8]', 'value' => $plugin->color8)) . '</p>';
-		echo '<p><label>' . elgg_echo('esope:color15:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color15]', 'value' => $plugin->color15)) . '</p>';
-		?>
-
-		<!--
-		<?php echo '<p><label>' . elgg_echo('esope:color9:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color9]', 'value' => $plugin->color9)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:color10:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color10]', 'value' => $plugin->color10)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:color11:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color11]', 'value' => $plugin->color11)); ?>
-		</p>
-		<?php echo '<p><label>' . elgg_echo('esope:color12:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color12]', 'value' => $plugin->color12)); ?>
-		</p>
-		//-->
-		<?php echo '<p><label>' . elgg_echo('esope:color13:color') . '</label>' . elgg_view('input/color', array('name' => 'params[color13]', 'value' => $plugin->color13)); ?>
-		</p>
-
-		<?php echo '<p><label>' . elgg_echo('esope:css') . '</label><br />'; 
+		echo '<p><label>' . elgg_echo('esope:css') . '</label><br />'; 
 			 echo elgg_echo('esope:css:help'); 
-			 echo elgg_view('input/plaintext', array('name' => 'params[css]', 'value' => $plugin->css, 'style' => 'min-height:500px;')); ?>
-		</p>
+			 echo elgg_view('input/plaintext', array('name' => 'params[css]', 'value' => html_entity_decode($plugin->css), 'style' => 'min-height:500px;'));
+		echo '<p>';
 		
-		<?php
+		
 		// @TODO Notifications, Digest and Newsletter default wrappers
 		if (elgg_is_active_plugin('html_email_handler')) {
 			echo '<p><label>';
@@ -590,31 +582,12 @@ $(function() {
 <!-- COMPORTEMENT //-->
 	<h3><i class="fa fa-cog"></i> <?php echo elgg_echo('esope:config:behaviour'); ?></h3>
 	<div>
-		<?php echo '<p><label>' . elgg_echo('esope:settings:redirect') . '</label><br />'; 
-			 echo $url . elgg_view('input/text', array('name' => 'params[redirect]', 'value' => $plugin->redirect, 'style' => 'width:50%;')); ?>
-		</p>
-		
-		<br />
-		<?php echo '<h4>' . elgg_echo('esope:config:toolslistings') . '</h4>'; ?>
-		<p><?php echo elgg_echo('esope:config:toolslistings:details'); ?></p>
 		<?php
-		if (elgg_is_active_plugin('blog')) {
-			echo '<p><label>' . elgg_echo('esope:settings:blog_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[blog_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->blog_user_listall)) . '</label></p>';
-		}
-		if (elgg_is_active_plugin('bookmarks')) {
-			echo '<p><label>' . elgg_echo('esope:settings:bookmarks_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[bookmarks_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->bookmarks_user_listall)) . '</label></p>';
-		}
-		/*
-		if (elgg_is_active_plugin('brainstorm')) {
-			echo '<p><label>' . elgg_echo('esope:settings:brainstorm_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[brainstorm_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->brainstorm_user_listall)) . '</label></p>';
-		}
-		*/
-		if (elgg_is_active_plugin('file')) {
-			echo '<p><label>' . elgg_echo('esope:settings:file_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[file_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->file_user_listall)) . '</label></p>';
-		}
+		echo '<p><label>' . elgg_echo('esope:settings:redirect') . '</label><br />'; 
+			echo $url . elgg_view('input/text', array('name' => 'params[redirect]', 'value' => $plugin->redirect, 'style' => 'width:50%;'));
+		echo '</p>';
+		
 		if (elgg_is_active_plugin('pages')) {
-			echo '<p><label>' . elgg_echo('esope:settings:pages_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->pages_user_listall)) . '</label></p>';
-			echo '<p><label>' . elgg_echo('esope:settings:pages_list_subpages') . ' ' . elgg_view('input/select', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $plugin->pages_list_subpages)) . '</label></p>';
 			echo '<p><label>' . elgg_echo('esope:settings:pages_reorder') . ' ' . elgg_view('input/select', array('name' => 'params[pages_reorder]', 'options_values' => $no_yes_opt, 'value' => $plugin->pages_reorder)) . '</label></p>';
 		}
 		
@@ -623,24 +596,51 @@ $(function() {
 		}
 		
 		// Add limit links to navigation
-			echo '<p><label>' . elgg_echo('esope:settings:advanced_pagination') . ' ' . elgg_view('input/select', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $plugin->advanced_pagination)) . '</label></p>';
-		?>
+		echo '<p><label>' . elgg_echo('esope:settings:river_hide_block') . ' ' . elgg_view('input/select', array('name' => 'params[river_hide_block]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->river_hide_block)) . '</label><br /><em>' . elgg_echo('esope:settings:river_hide_block:details') . '</em></p>';
 		
-		<br />
-		<?php echo '<h4>' . elgg_echo('esope:config:filters') . '</h4>'; ?>
-		<?php
-		echo '<p><label>' . elgg_echo('esope:settings:filters:friends') . ' ' . elgg_view('input/select', array('name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $plugin->disable_friends)) . '</label></p>';
-		echo '<p><label>' . elgg_echo('esope:settings:filters:mine') . ' ' . elgg_view('input/select', array('name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $plugin->disable_mine)) . '</label></p>';
-		echo '<p><label>' . elgg_echo('esope:settings:filters:all') . ' ' . elgg_view('input/select', array('name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $plugin->disable_all)) . '</label></p>';
-		echo '<br />';
+		echo '<p><label>' . elgg_echo('esope:settings:advanced_pagination') . ' ' . elgg_view('input/select', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $plugin->advanced_pagination)) . '</label></p>';
+		
 		echo '<p><label>' . elgg_echo('esope:settings:advancedsearch') . ' ' . elgg_view('input/select', array('name' => 'params[advancedsearch]', 'options_values' => $no_yes_opt, 'value' => $plugin->advancedsearch)) . '</label></p>';
+		echo '<p><label>' . elgg_echo('esope:settings:advancedsearch:sidebar') . ' ' . elgg_view('input/select', array('name' => 'params[advancedsearch_sidebar]', 'options_values' => $no_yes_opt, 'value' => $plugin->advancedsearch_sidebar)) . '</label></p>';
+		
+		
+		echo '<fieldset>';
+			echo '<legend>' . elgg_echo('esope:config:toolslistings') . '</legend>';
+			echo '<p>' . elgg_echo('esope:config:toolslistings:details') . '</p>';
+			if (elgg_is_active_plugin('blog')) {
+				echo '<p><label>' . elgg_echo('esope:settings:blog_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[blog_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->blog_user_listall)) . '</label></p>';
+			}
+			if (elgg_is_active_plugin('bookmarks')) {
+				echo '<p><label>' . elgg_echo('esope:settings:bookmarks_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[bookmarks_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->bookmarks_user_listall)) . '</label></p>';
+			}
+			/*
+			if (elgg_is_active_plugin('brainstorm')) {
+				echo '<p><label>' . elgg_echo('esope:settings:brainstorm_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[brainstorm_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->brainstorm_user_listall)) . '</label></p>';
+			}
+			*/
+			if (elgg_is_active_plugin('file')) {
+				echo '<p><label>' . elgg_echo('esope:settings:file_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[file_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->file_user_listall)) . '</label></p>';
+			}
+			if (elgg_is_active_plugin('pages')) {
+				echo '<p><label>' . elgg_echo('esope:settings:pages_user_listall') . ' ' . elgg_view('input/select', array('name' => 'params[pages_user_listall]', 'options_values' => $no_yes_opt, 'value' => $plugin->pages_user_listall)) . '</label></p>';
+				echo '<p><label>' . elgg_echo('esope:settings:pages_list_subpages') . ' ' . elgg_view('input/select', array('name' => 'params[pages_list_subpages]', 'options_values' => $pages_list_subpages_opt, 'value' => $plugin->pages_list_subpages)) . '</label></p>';
+			}
+		echo '</fieldset>';
+		
+		echo '<fieldset>';
+			echo '<legend>' . elgg_echo('esope:config:filters') . '</legend>';
+			echo '<p><label>' . elgg_echo('esope:settings:filters:friends') . ' ' . elgg_view('input/select', array('name' => 'params[disable_friends]', 'options_values' => $no_yes_opt, 'value' => $plugin->disable_friends)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:settings:filters:mine') . ' ' . elgg_view('input/select', array('name' => 'params[disable_mine]', 'options_values' => $no_yes_opt, 'value' => $plugin->disable_mine)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:settings:filters:all') . ' ' . elgg_view('input/select', array('name' => 'params[disable_all]', 'options_values' => $no_yes_opt, 'value' => $plugin->disable_all)) . '</label></p>';
+		echo '</fieldset>';
 		?>
 	</div>
 
 
 
 <!-- GROUPES //-->
-	<?php if (elgg_is_active_plugin('groups')) {
+	<?php
+	if (elgg_is_active_plugin('groups')) {
 		echo '<h3><i class="fa fa-users"></i> ' . elgg_echo('esope:config:groups') . '</h3>';
 		echo '<div>';
 			// Auto join groups at registration
@@ -675,8 +675,14 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:groups:disable_widgets') . ' ' . elgg_view('input/select', array('name' => 'params[groups_disable_widgets]', 'options_values' => $groups_disable_widgets_opt, 'value' => $plugin->groups_disable_widgets)) . '</label></p>';
 			// Add group activity
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_activity') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_activity)) . '</label></p>';
+			// Add group Wire
+			if (elgg_is_active_plugin('thewire')) {
+				echo '<p><label>' . elgg_echo('esope:settings:groups:add_wire') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_wire]', 'options_values' => $no_yes_groupoption_opt, 'value' => $vars['entity']->groups_add_wire)) . '</label></p>';
+			}
 			// Add group tools publication homepage shortcuts
 			echo '<p><label>' . elgg_echo('esope:settings:groups:add_publish_tools') . ' ' . elgg_view('input/select', array('name' => 'params[groups_add_publish_tools]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_add_publish_tools)) . '</label></p>';
+			// Discussion auto-refresh (using parameter ?autorefresh=auto)
+			echo '<p><label>' . elgg_echo('esope:settings:groups:discussion_autorefresh') . ' ' . elgg_view('input/select', array('name' => 'params[discussion_autorefresh]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->discussion_autorefresh)) . '</label></p>';
 			// Suppression de l'affichage de certains champs de profil des groupes (car utilisés pour configurer et non afficher)
 			echo '<p><label>' . elgg_echo('esope:settings:group_hide_profile_field') . ' ' . elgg_view('input/text', array('name' => 'params[group_hide_profile_field]', 'value' => $plugin->group_hide_profile_field)) . '</label></p>';
 			// Display "old group" banner
@@ -685,36 +691,36 @@ $(function() {
 			echo '<p><label>' . elgg_echo('esope:settings:groups:old_timeframe') . ' ' . elgg_view('input/text', array('name' => 'params[groups_old_timeframe]', 'value' => $vars['entity']->groups_old_timeframe)) . '</label></p>';
 			// Enable group archive (using ->status == 'archive' metadata)
 			echo '<p><label>' . elgg_echo('esope:settings:groups:archive') . ' ' . elgg_view('input/select', array('name' => 'params[groups_archive]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->groups_archive)) . '</label></p>';
-			echo '<br />';
 		
-			echo '<h4>' . elgg_echo('esope:config:groupinvites') . '</h4>';
-			echo '<p><label>' . elgg_echo('esope:settings:groups:inviteanyone') . ' ' . elgg_view('input/select', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $plugin->invite_anyone)) . '</label></p>';
-			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_picker') . ' ' . elgg_view('input/select', array('name' => 'params[invite_picker]', 'options_values' => $invite_picker_opt, 'value' => $plugin->invite_picker)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_picker:details') . '</em></p>';
-			echo '<p><label>' . elgg_echo('esope:settings:groups:allowregister') . ' ' . elgg_view('input/select', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $plugin->allowregister)) . '</label></p>';
-			// Metadata utilisées pour inviter dans le groupe
-			echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
-			echo '<br />';
+			echo '<fieldset><legend>' . elgg_echo('esope:config:groupinvites') . '</legend>';
+				echo '<p><label>' . elgg_echo('esope:settings:groups:inviteanyone') . ' ' . elgg_view('input/select', array('name' => 'params[invite_anyone]', 'options_values' => $no_yes_opt, 'value' => $plugin->invite_anyone)) . '</label></p>';
+				echo '<p><label>' . elgg_echo('esope:settings:groups:invite_picker') . ' ' . elgg_view('input/select', array('name' => 'params[invite_picker]', 'options_values' => $invite_picker_opt, 'value' => $plugin->invite_picker)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_picker:details') . '</em></p>';
+				echo '<p><label>' . elgg_echo('esope:settings:groups:allowregister') . ' ' . elgg_view('input/select', array('name' => 'params[allowregister]', 'options_values' => $no_yes_opt, 'value' => $plugin->allowregister)) . '</label></p>';
+				// Metadata utilisées pour inviter dans le groupe
+				echo '<p><label>' . elgg_echo('esope:settings:groups:invite_metadata') . elgg_view('input/text', array('name' => 'params[groups_invite_metadata]', 'value' => $plugin->groups_invite_metadata)) . '</label><br /><em>' . elgg_echo('esope:settings:groups:invite_metadata:details') . '</em></p>';
+			echo '</fieldset>';
 			
-			echo '<h4>' . elgg_echo('esope:config:grouptabs') . '</h4>';
-			// Default to alpha sort
-			echo '<p><label>' . elgg_echo('esope:settings:groups:alpha') . ' ' . elgg_view('input/select', array('name' => 'params[groups_alpha]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_alpha)) . '</label></p>';
-			// Allow to remove newest
-			echo '<p><label>' . elgg_echo('esope:settings:groups:newest') . ' ' . elgg_view('input/select', array('name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $plugin->groups_newest)) . '</label></p>';
-			// Allow to remove popular
-			echo '<p><label>' . elgg_echo('esope:settings:groups:popular') . ' ' . elgg_view('input/select', array('name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $plugin->groups_popular)) . '</label></p>';
-			// Allow to add featured
-			echo '<p><label>' . elgg_echo('esope:settings:groups:featured') . ' ' . elgg_view('input/select', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_featured)) . '</label></p>';
-			// Allow to add a new friends groups tab
-			echo '<p><label>' . elgg_echo('esope:settings:groups:friends') . ' ' . elgg_view('input/select', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_friendstab)) . '</label></p>';
-			// Allow to remove discussion OR add it at page bottom
-			echo '<p><label>' . elgg_echo('esope:settings:groups:discussion') . ' ' . elgg_view('input/select', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $plugin->groups_discussion)) . '</label></p>';
-			// Allow to add a new group tab search
-			echo '<p><label>' . elgg_echo('esope:settings:groups:searchtab') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_searchtab)) . '</label></p>';
-		// Advanced group search tool (alpha version, structure changes may happen)
-		$esope_groupsearch_url = elgg_get_site_url() . 'groups/groupsearch';
-		echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $plugin->metadata_groupsearch_fields)) . '</label><br /><a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
-			// Add groups tags below search (or replaces search if search tab enabled)
-			echo '<p><label>' . elgg_echo('esope:settings:groups:tags') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_tags)) . '</label></p>';
+			echo '<fieldset><legend>' . elgg_echo('esope:config:grouptabs') . '</legend>';
+				// Default to alpha sort
+				echo '<p><label>' . elgg_echo('esope:settings:groups:alpha') . ' ' . elgg_view('input/select', array('name' => 'params[groups_alpha]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_alpha)) . '</label></p>';
+				// Allow to remove newest
+				echo '<p><label>' . elgg_echo('esope:settings:groups:newest') . ' ' . elgg_view('input/select', array('name' => 'params[groups_newest]', 'options_values' => $yes_no_opt, 'value' => $plugin->groups_newest)) . '</label></p>';
+				// Allow to remove popular
+				echo '<p><label>' . elgg_echo('esope:settings:groups:popular') . ' ' . elgg_view('input/select', array('name' => 'params[groups_popular]', 'options_values' => $yes_no_opt, 'value' => $plugin->groups_popular)) . '</label></p>';
+				// Allow to add featured
+				echo '<p><label>' . elgg_echo('esope:settings:groups:featured') . ' ' . elgg_view('input/select', array('name' => 'params[groups_featured]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_featured)) . '</label></p>';
+				// Allow to add a new friends groups tab
+				echo '<p><label>' . elgg_echo('esope:settings:groups:friends') . ' ' . elgg_view('input/select', array('name' => 'params[groups_friendstab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_friendstab)) . '</label></p>';
+				// Allow to remove discussion OR add it at page bottom
+				echo '<p><label>' . elgg_echo('esope:settings:groups:discussion') . ' ' . elgg_view('input/select', array('name' => 'params[groups_discussion]', 'options_values' => $groups_discussion_opt, 'value' => $plugin->groups_discussion)) . '</label></p>';
+				// Allow to add a new group tab search
+				echo '<p><label>' . elgg_echo('esope:settings:groups:searchtab') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_searchtab)) . '</label></p>';
+			// Advanced group search tool (alpha version, structure changes may happen)
+			$esope_groupsearch_url = elgg_get_site_url() . 'groups/groupsearch';
+			echo '<p><label>' . elgg_echo('esope:groupsearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_groupsearch_fields]', 'value' => $plugin->metadata_groupsearch_fields)) . '</label><br /><a href="'.$esope_groupsearch_url.'" target="_new">'.$esope_groupsearch_url.'</a></p>';
+				// Add groups tags below search (or replaces search if search tab enabled)
+				echo '<p><label>' . elgg_echo('esope:settings:groups:tags') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[groups_tags]', 'options_values' => $no_yes_opt, 'value' => $plugin->groups_tags)) . '</label></p>';
+			echo '</fieldset>';
 			?>
 		</div>
 	<?php } ?>
@@ -723,72 +729,63 @@ $(function() {
 <!-- MEMBRES //-->
 	<h3><i class="fa fa-user"></i> <?php echo elgg_echo('esope:config:members'); ?></h3>
 	<div>
-		<p>
-			<label><?php echo elgg_echo('esope:home:public_profiles'); 
-			 echo elgg_view('input/select', array('name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $plugin->public_profiles)); ?>
-		</label>
-		</p>
-		<p><em><?php echo elgg_echo('esope:home:public_profiles:help'); ?></em></p>
-		<p>
-			<label><?php echo elgg_echo('esope:home:public_profiles_default'); 
-			 echo elgg_view('input/select', array('name' => 'params[public_profiles_default]', 'options_values' => $no_yes_opt, 'value' => $plugin->public_profiles_default)) . '</label>'; ?>
-		</p>
+		<?php echo '<p><label>' . elgg_echo('esope:home:public_profiles') . elgg_view('input/select', array('name' => 'params[public_profiles]', 'options_values' => $no_yes_opt, 'value' => $plugin->public_profiles)) . '</label></p>';
+		echo '<p><em>' . elgg_echo('esope:home:public_profiles:help') . '</em></p>';
+		echo '<p><label>' . elgg_echo('esope:home:public_profiles_default') . elgg_view('input/select', array('name' => 'params[public_profiles_default]', 'options_values' => $no_yes_opt, 'value' => $plugin->public_profiles_default)) . '</label></p>';
 		
-		<p>
-			<label><?php echo elgg_echo('esope:members:hide_directory'); 
-			 echo elgg_view('input/select', array('name' => 'params[hide_directory]', 'options_values' => $no_yes_opt, 'value' => $plugin->hide_directory)) . '</label>'; ?>
-		</p>
+		echo '<p><label>' . elgg_echo('esope:members:hide_directory') . elgg_view('input/select', array('name' => 'params[hide_directory]', 'options_values' => $no_yes_opt, 'value' => $plugin->hide_directory)) . '</label></p>';
 		
-		<?php
 		//Allow members to write to anyone (reserved to admins by default)
 		echo '<p><label>' . elgg_echo('esope:members:messages_allusers') . ' ' . elgg_view('input/select', array('name' => 'params[messages_allusers]', 'options_values' => $no_yes_opt, 'value' => $plugin->messages_allusers)) . '</label><br /><em>' . elgg_echo('esope:members:messages_allusers:details') . '</em></p>';
 		
-		echo '<h4>' . elgg_echo('esope:profile:settings') . '</h4>';
-		echo '<p><label>' . elgg_echo('esope:profile:add_profile_activity') . ' ' . elgg_view('input/select', array('name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->add_profile_activity)) . '</label></p>';
-		echo '<p><label>' . elgg_echo('esope:profile:remove_profile_widgets') . ' ' . elgg_view('input/select', array('name' => 'params[remove_profile_widgets]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_profile_widgets)) . '</label></p>';
-		echo '<p><label>' . elgg_echo('esope:profile:custom_profile_layout') . ' ' . elgg_view('input/select', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $plugin->custom_profile_layout)) . '</label></p>';
-		echo '<br />';
-		
-		echo '<h4>' . elgg_echo('esope:config:memberssearch') . '</h4>';
-		if (elgg_is_active_plugin('members')) {
-			// Allow to add alpha sort
-			echo '<p><label>' . elgg_echo('esope:settings:members:alpha') . ' ' . elgg_view('input/select', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_alpha)) . '</label></p>';
-			// Allow to remove newest
-			echo '<p><label>' . elgg_echo('esope:settings:members:newest') . ' ' . elgg_view('input/select', array('name' => 'params[members_newest]', 'options_values' => $yes_no_opt, 'value' => $plugin->members_newest)) . '</label></p>';
-			// Allow to remove popular
-			echo '<p><label>' . elgg_echo('esope:settings:members:popular') . ' ' . elgg_view('input/select', array('name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $plugin->members_popular)) . '</label></p>';
-			// Allow to remove online
-			echo '<p><label>' . elgg_echo('esope:settings:members:onlinetab') . ' ' . elgg_view('input/select', array('name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $plugin->members_onlinetab)) . '</label></p>';
-			// Allow to add profile types tabs
-			echo '<p><label>' . elgg_echo('esope:settings:members:profiletypes') . ' ' . elgg_view('input/select', array('name' => 'params[members_profiletypes]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_profiletypes)) . '</label></p>';
-			// Allow to add a new tab search
-			echo '<p><label>' . elgg_echo('esope:settings:members:searchtab') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_searchtab)) . '</label></p>';
-		// Advanced search tool (alpha version, structure changes may happen)
-		$esope_membersearch_url = elgg_get_site_url() . 'members/search';
-		echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $plugin->metadata_membersearch_fields)) . '</label><br /><a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
-		
-			// Replace search by main search (more efficient)
-			echo '<p><label>' . elgg_echo('esope:settings:members:onesearch') . ' ' . elgg_view('input/select', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_onesearch)) . '</label></p>';
-			// Add online members
-			echo '<p><label>' . elgg_echo('esope:settings:members:online') . ' ' . elgg_view('input/select', array('name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_online)) . '</label></p>';
-		}
-		
 		echo '<p><label>' . elgg_echo('esope:settings:remove_collections') . ' ' . elgg_view('input/select', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_collections)) . '</label></p>';
 		
-		// Suppression des menus de l'utilisateur
-		echo '<p><label>' . elgg_echo('esope:settings:removeusermenutools') . ' ' . elgg_view('input/text', array('name' => 'params[remove_user_menutools]', 'value' => $plugin->remove_user_menutools)) . '</label></p>';
+		echo '<fieldset><legend>' . elgg_echo('esope:profile:settings') . '</legend>';
+			echo '<p><label>' . elgg_echo('esope:profile:add_profile_activity') . ' ' . elgg_view('input/select', array('name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->add_profile_activity)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:profile:remove_profile_widgets') . ' ' . elgg_view('input/select', array('name' => 'params[remove_profile_widgets]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_profile_widgets)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:profile:custom_profile_layout') . ' ' . elgg_view('input/select', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $plugin->custom_profile_layout)) . '</label></p>';
+		echo '</fieldset>';
 		
-		// Suppression des outils personnels (lien de création) de l'utilisateur
-		echo '<p><label>' . elgg_echo('esope:settings:removeusertools') . ' ' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $plugin->remove_user_tools)) . '</label><br /><em>' . implode(',', $registered_objects) . '</em></p>';
-		// Note : la suppression de filtres dans les listings est un réglage général à part, 
-		// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
+		if (elgg_is_active_plugin('members')) {
+			echo '<fieldset><legend>' . elgg_echo('esope:config:memberssearch') . '</legend>';
+				// Allow to add alpha sort
+				echo '<p><label>' . elgg_echo('esope:settings:members:alpha') . ' ' . elgg_view('input/select', array('name' => 'params[members_alpha]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_alpha)) . '</label></p>';
+				// Allow to remove newest
+				echo '<p><label>' . elgg_echo('esope:settings:members:newest') . ' ' . elgg_view('input/select', array('name' => 'params[members_newest]', 'options_values' => $yes_no_opt, 'value' => $plugin->members_newest)) . '</label></p>';
+				// Allow to remove popular
+				echo '<p><label>' . elgg_echo('esope:settings:members:popular') . ' ' . elgg_view('input/select', array('name' => 'params[members_popular]', 'options_values' => $yes_no_opt, 'value' => $plugin->members_popular)) . '</label></p>';
+				// Allow to remove online
+				echo '<p><label>' . elgg_echo('esope:settings:members:onlinetab') . ' ' . elgg_view('input/select', array('name' => 'params[members_onlinetab]', 'options_values' => $yes_no_opt, 'value' => $plugin->members_onlinetab)) . '</label></p>';
+				// Allow to add profile types tabs
+				echo '<p><label>' . elgg_echo('esope:settings:members:profiletypes') . ' ' . elgg_view('input/select', array('name' => 'params[members_profiletypes]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_profiletypes)) . '</label></p>';
+				// Allow to add a new tab search
+				echo '<p><label>' . elgg_echo('esope:settings:members:searchtab') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_searchtab)) . '</label></p>';
+				// Advanced search tool (alpha version, structure changes may happen)
+				$esope_membersearch_url = elgg_get_site_url() . 'members/search';
+				echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . '<br />' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $plugin->metadata_membersearch_fields)) . '</label><br /><a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
+				// Replace search by main search (more efficient)
+				echo '<p><label>' . elgg_echo('esope:settings:members:onesearch') . ' ' . elgg_view('input/select', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_onesearch)) . '</label></p>';
+				// Add online members
+				echo '<p><label>' . elgg_echo('esope:settings:members:online') . ' ' . elgg_view('input/select', array('name' => 'params[members_online]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_online)) . '</label></p>';
+			echo '</fieldset>';
+		}
 		
-		// Suppression des niveaux d'accès pour les membres
-		echo '<p><label>' . elgg_echo('esope:settings:user_exclude_access') . ' ' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $plugin->user_exclude_access)) . '</label></p>';
+		echo '<fieldset>';
+			// Suppression des menus de l'utilisateur
+			echo '<p><label>' . elgg_echo('esope:settings:removeusermenutools') . '<br />' . elgg_view('input/text', array('name' => 'params[remove_user_menutools]', 'value' => $plugin->remove_user_menutools)) . '</label></p>';
+			// Suppression des outils personnels (lien de création) de l'utilisateur
+			echo '<p><label>' . elgg_echo('esope:settings:removeusertools') . '<br />' . elgg_view('input/text', array('name' => 'params[remove_user_tools]', 'value' => $plugin->remove_user_tools)) . '</label><br /><em>' . implode(',', $registered_objects) . '</em></p>';
+			// Note : la suppression de filtres dans les listings est un réglage général à part, 
+			// car pas forcément pertinent si on liste aussi les contenus créés dans les groupes par un membre
+		echo '</fieldset>';
 		
-		// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
-		echo '<p><label>' . elgg_echo('esope:settings:admin_exclude_access') . ' ' . elgg_view('input/text', array('name' => 'params[admin_exclude_access]', 'value' => $plugin->admin_exclude_access)) . '</label></p>';
-
+		echo '<fieldset>';
+			// Suppression des niveaux d'accès pour les membres
+			echo '<p><label>' . elgg_echo('esope:settings:user_exclude_access') . '<br />' . elgg_view('input/text', array('name' => 'params[user_exclude_access]', 'value' => $plugin->user_exclude_access)) . '</label></p>';
+			// Suppression des niveaux d'accès pour les admins (franchement déconseillé)
+			echo '<p><label>' . elgg_echo('esope:settings:admin_exclude_access') . '<br />' . elgg_view('input/text', array('name' => 'params[admin_exclude_access]', 'value' => $plugin->admin_exclude_access)) . '</label></p>';
+		echo '</fieldset>';
+		
 		?>
 	</div>
 
@@ -889,6 +886,9 @@ $(function() {
 	<h3><i class="fa fa-cogs"></i> <?php echo elgg_echo('esope:config:expert'); ?></h3>
 	<div>
 		<?php
+		// Lien vers les outils d'admin
+		echo '<p><a href="' . elgg_get_site_url() . 'esope/tools" target="_new">' . elgg_echo('esope:tools') . '</a>&nbsp;: ' . elgg_echo('esope:tools:details') . '</p>';
+		
 		// Advanced search tool (alpha version, structure changes may happen)
 		$esope_search_url = elgg_get_site_url() . 'esearch';
 		echo '<p><label>' . elgg_echo('esope:search:setting:metadata') . ' ' . elgg_view('input/text', array('name' => 'params[metadata_search_fields]', 'value' => $plugin->metadata_search_fields)) . '</label><br /><a href="'.$esope_search_url.'" target="_new">'.$esope_search_url.'</a></p>';
@@ -900,34 +900,33 @@ $(function() {
 	<!-- SAUVEGARDE ET RESTAURATION //-->
 	<h3><i class="fa fa-archive"></i> <?php echo elgg_echo('esope:config:saverestore'); ?></h3>
 	<div>
-		<p><?php echo elgg_echo('esope:config:saverestore:details'); ?></p>
-
-		<?php echo '<h4>' . elgg_echo('esope:config:import') . '</h4>'; ?>
-		<p><?php echo elgg_echo('esope:config:import:details'); ?></p>
 		<?php
-		// Saisie des données à restaurer
-		echo elgg_view('input/plaintext', array('name' => 'params[import_settings]', 'value' => $plugin->import_settings));
-		?>
-			</label>
-			<em><?php echo elgg_echo('esope:config:import:details'); ?></em>
-		</p><br />
+		echo '<p>' . elgg_echo('esope:config:saverestore:details') . '</p>';
+		
+		echo '<fieldset><legend>' . elgg_echo('esope:config:import') . '</legend>';
+			echo '<p>' . elgg_echo('esope:config:import:details') . '</p>';
+			// Saisie des données à restaurer
+			echo elgg_view('input/plaintext', array('name' => 'params[import_settings]', 'value' => $plugin->import_settings));
+			echo '<em>' . elgg_echo('esope:config:import:details') . '</em>';
+		echo '</fieldset>';
 
-		<?php echo '<h4>' . elgg_echo('esope:config:export') . '</h4>'; ?>
-		<p><?php echo elgg_echo('esope:config:export:details'); ?></p>
-		<?php
-		$plugin_settings = $plugin->getAllSettings();
-		$plugin_settings = serialize($plugin_settings);
-		$plugin_settings = mb_encode_numericentity($plugin_settings, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
-		$plugin_settings = str_replace(';&#','-',$plugin_settings);
-		$plugin_settings = htmlentities($plugin_settings, ENT_QUOTES, 'UTF-8');
-		echo '<textarea readonly="readonly" onclick="this.select()">' . $plugin_settings . '</textarea>';
+		echo '<fieldset><legend>' . elgg_echo('esope:config:export') . '</legend>';
+			echo '<p>' . elgg_echo('esope:config:export:details') . '</p>';
+			$plugin_settings = $plugin->getAllSettings();
+			$plugin_settings = serialize($plugin_settings);
+			$plugin_settings = mb_encode_numericentity($plugin_settings, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+			$plugin_settings = str_replace(';&#','-',$plugin_settings);
+			$plugin_settings = htmlentities($plugin_settings, ENT_QUOTES, 'UTF-8');
+			echo '<textarea readonly="readonly" onclick="this.select()">' . $plugin_settings . '</textarea>';
+			echo '</p>';
+		echo '</fieldset>';
 		?>
-		</p><br />
 	</div>
 	<br />
 	<br />
 	
 </div>
+
 
 <?php
 /* Tests : Pour une réduction des données de sauvegarde, une forme de compression ?

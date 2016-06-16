@@ -305,3 +305,6 @@ sub { bottom: -0.25em; }
 	height: auto;
 }
 
+
+.elgg-menu-river > li.elgg-menu-item-unlike > a, .elgg-menu-entity > li.elgg-menu-item-unlike > a { color: <?php echo $titlecolor; ?>; }
+

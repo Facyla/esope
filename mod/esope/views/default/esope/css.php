@@ -116,14 +116,11 @@ th { font-weight:bold; background:#CCCCCC; }
 img { border: 0 none; overflow:hidden; }
 #profil img { float: right; margin-left: 10px; }
 .esope-more { float: right; font-size: 70%; line-height: 1.6; }
+.esope-toggle { background:url('<?php echo $urlicon; ?>ensavoirplus.png') no-repeat 0 50%; padding-left:24px; }
+.esope-toggle.elgg-state-active { background-image:url('<?php echo $urlicon; ?>fermer.png'); }
 
 
 /* ACCESSIBILITY */
-.invisible { position:absolute !important; left:-5000px !important; }
-.blockform > div { margin-bottom: 15px; }
-.blockform > div:last-child { margin-bottom: 0; }
-.elgg-form-alt > .blockform > .elgg-foot { border-top: 1px solid #CCC; padding: 10px 0; }
-
 .entity_title {font-weight:bold; }
 
 /* Corrections des styles du core */
@@ -133,8 +130,8 @@ input:focus, textarea:focus { outline:0; }
 .elgg-button-action:hover, .elgg-button-action:focus { outline:0; }
 
 /*
-// Tous les :hover à compléter par :focus et :active : cf. thème ADF
-// Tous les display:none des menus à modifier/remplacer par des left:-5000px puis remettre en place..
+// Tous les :hover à compléter par :focus et :active
+// Tous les display:none des menus à modifier/remplacer par des left:-5000px
 
 => fonctionne sans JS mais pas accessible au clavier
 => modifier les display:none => left:-5000px;
@@ -148,21 +145,21 @@ input:focus, textarea:focus { outline:0; }
 
 /* ESOPE : bandeau */
 .elgg-page-header {
-<?php if (!empty($headerimg)) { ?>
-	background-image: url("<?php echo $headerimg; ?>"), linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: url("<?php echo $headerimg; ?>"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, <?php echo $color1; ?>), color-stop(0.75, <?php echo $color4; ?>));
-<?php } else { ?>
-	background-image: linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -o-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -moz-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -webkit-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -ms-linear-gradient(top, <?php echo $color1; ?> 25%, <?php echo $color4; ?> 75%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, <?php echo $color1; ?>), color-stop(0.75, <?php echo $color4; ?>));
-<?php } ?>
+	<?php if (!empty($headerimg)) {
+		echo 'background-image: url("' . $headerimg . '"), linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: url("' . $headerimg . '"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '))';
+	} else {
+		echo 'background-image: linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
+		echo 'background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '))';
+	} ?>
 	background-position: left 30px, left top;
 	background-repeat: repeat-x, repeat;
 	background-color: <?php echo $color4; ?>;
@@ -580,25 +577,34 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .group-oldactivity-small { background: rgba(255,255,0,0.7); font-size: 0.5rem; padding: 2px 0; }
 .group-oldactivity-medium { background: rgba(255,255,0,0.8); font-size: 0.8rem; padding: 3px 0; }
 
+.group-archive { border:1px dotted black; background:rgba(0,0,0,0.8); color:white; padding:1ex 3ex; margin: 1ex 0; text-align:center; }
+.group-archive { display:block; left:0; position: absolute; top:0; width: 100%; text-align:center; border:0; color:white; }
+.group-archive-tiny { background: rgba(0,0,0,1); color:white; font-size: 6px; padding: 2px 0px; }
+.group-archive-small { background: rgba(0,0,0,1); color:white; font-size: 8px; padding: 3px 1px; }
+.group-archive-medium { background: rgba(0,0,0,1); color:white; font-size: 10px; padding: 3px 1px; }
 
-/* Archive : bannière compte archivé */
-.profiletype-status { position: absolute; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
-.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
+/* Statuts compte utilisateur : Archive (bannière compte archivé), Pas de mail associé au compte */
+.profiletype-status { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
+.profiletype-status-closed { position: absolute; width: 200px; height: auto; line-height: 2; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
+.profiletype-status-no-mail { position: absolute; text-align: center; bottom: 0; left:0; padding: 4px 6px 0px 2px; padding: 0.15rem 0.4rem 0 0.15rem; border-radius: 0 0.5rem 0 0; background: rgba(255,0,0,0.6); font-size: 0.9rem; font-weight: bold; color: white; }
 
 /* Medium */
 .elgg-avatar-medium .profiletype-status { position: absolute; border: 1px solid transparent; width: 100px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
 .elgg-avatar-medium .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
+.elgg-avatar-medium .profiletype-status-no-mail { font-size: 0.8rem; }
 
 /* Small */
 .elgg-avatar-small .profiletype-status { position: absolute; border: 1px solid transparent; width: 40px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
 .elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+.elgg-avatar-small .profiletype-status-no-mail { width: 100%; padding: 1px 0; line-height: 1; border-radius:0; font-size: 0.6rem; font-weight: normal; }
 
 /* Tiny */
 .elgg-avatar-tiny .profiletype-status { position: absolute; border: 1px solid transparent; width: 25px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
-.elgg-avatar-tiny .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.6rem; font-weight: normal; text-transform: initial; color: white; }
+.elgg-avatar-tiny .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
+.elgg-avatar-tiny .profiletype-status-no-mail { width: 100%; padding: 1px 0; line-height: 1; border-radius:0; font-size: 0.5rem; font-weight: normal; }
 
 /* Friendspicker */
-.elgg-avatar-tiny .profiletype-status { left: 0; margin: 5px 10px 5px 5px; }
+/* .elgg-avatar-tiny .profiletype-status { left: 0; margin: 5px 10px 5px 5px; } */
 
 
 /* Various tools icons : activity, event-calendar, announcements, blog, file, discussion, brainstorm, bookmarks, pages */

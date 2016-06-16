@@ -13,6 +13,7 @@ return array(
 	'knowledge_database:addpages' => '<i class="fa fa-file-text-o"></i><br />Publier une page wiki',
 	'knowledge_database:addannouncements' => '<i class="fa fa-file-text-o"></i><br />Publier une annonce',
 	'knowledge_database:kdb_group' => "Base de connaissance du groupe",
+	'knowledge_database:attachment' => "Fichier joint",
 	
 	// Errors
 	'knowledge_database:kdbgrouperror' => "Groupe de la Knowledge Database non défini, veuillez contacter l'administrateur du site !",
@@ -47,6 +48,7 @@ return array(
 	<strong>Required&nbsp;:</strong> le champ doit être renseigné pour valider le formulaire<br />
 	<strong>Multiple&nbsp;:</strong> (select) le champ accepte plusieurs valeurs<br />
 	<strong>Autocomplete&nbsp;:</strong> (text) le champ propose des valeurs déjà saisies<br />
+	<strong>Addempty&nbsp;:</strong> (select) le selecteur propose une option vide<br />
 	<strong>Default&nbsp;:</strong> valeur par défaut du champ<br />
 	<strong>Options values&nbsp;:</strong> (select) liste des valeurs possibles<br />",
 	'knowledge_database:settings:fields:site' => "Base de connaissance globale (site)",
@@ -86,14 +88,16 @@ return array(
 	'knowledge_database:settings:keytitle' => "Options pour la métadonnée \"%s\"",
 	'knowledge_database:settings:fields:notice' => "<strong>ATTENTION, IMPORTANT :</strong><ul>
 		<li> - lorsque vous modifiez ces valeurs, ayez bien à l'esprit que tout changement de nom d'une option modifie la classification existante</li>
-		<li> - Les noms de métadonnées peuvent être séparés en en indiquant une par ligne, ou en utilisant le séparateur \"|\", par ex. key1 | key2 | etc.</li>
-		<li> - Les noms de ces métadonnées peuvent être traduits en utilisant les clefs de traduction 'knowledge_database:key:key1' => \"Nom en clair de Key 1\",</li>
+		<li> - Les noms de métadonnées peuvent être séparés en indiquant une métadonnée par ligne, ou en utilisant le séparateur \"|\", par ex. key1 | key2 | etc.</li>
+		<li> - Les noms de ces métadonnées peuvent être traduits en utilisant les clefs de traduction 'knowledge_database:key:<strong>key1</strong>' => \"Nom en clair de Key 1\",</li>
 		<li> - OU vous pouvez définir directement un nom en utilisant le séparateur clef-valeur \"::\" (mais en une seule langue dans ce cas), par ex.: key1::Nom en clair de Key 1</li>
 		</ul>",
 	'knowledge_database:settings:field:metadata' => "Configurer le champ pour la métadonnée&nbsp;: %s",
 	'knowledge_database:define_field:success' => "La configuration a bien été enregistrée",
 	'knowledge_database:define_field:error' => "Erreur, impossible d'enregistrer les données. Veuillez recharger la page et réessayer.",
 	'knowledge_database:settings:field:title' => "Libellé du champ",
+	'knowledge_database:settings:field:tooltip' => "Aide à la saisie",
+	'knowledge_database:settings:field:tooltip:details' => "Pour afficher des informations d'aide à la saisie, créez la clef de traduction&nbsp;: knowledge_database:field:<strong>key1</strong>:details",
 	'knowledge_database:settings:field:type' => "Type de champ",
 	'knowledge_database:settings:field:category' => "Groupe de champs",
 	'knowledge_database:settings:field:read' => "Lecture",
@@ -101,6 +105,7 @@ return array(
 	'knowledge_database:settings:field:required' => "Requis",
 	'knowledge_database:settings:field:multiple' => "Multiple",
 	'knowledge_database:settings:field:autocomplete' => "Autocomplétion",
+	'knowledge_database:settings:field:addempty' => "Option vide",
 	'knowledge_database:settings:field:defaultvalue' => "Valeur par défaut",
 	'knowledge_database:settings:field:options_values' => "Valeurs disponibles",
 	'knowledge_database:settings:field:save' => "Enregistrer la configuration",

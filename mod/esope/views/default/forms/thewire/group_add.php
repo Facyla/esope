@@ -33,7 +33,7 @@ echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $gro
 // Also force access to the group members
 echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
 
-$count_down = "<span>$char_limit</span>";
+$count_down = "<span>$char_limit</span> " . elgg_echo('thewire:charleft');
 $num_lines = 3;
 if ($char_limit == 0) {
 	$num_lines = 4;
@@ -41,6 +41,7 @@ if ($char_limit == 0) {
 } else if ($char_limit > 140) {
 	$num_lines = 4;
 }
+
 echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',
@@ -48,19 +49,19 @@ echo elgg_view('input/plaintext', array(
 	'rows' => $num_lines,
 	'data-max-length' => $char_limit,
 	'style' => "height:initial;",
-	'placeholder' => elgg_echo('theme_inria:thewire:group:placeholder'),
+	'placeholder' => elgg_echo('esope:thewire:group:placeholder'),
+));
+
+?>
+<div id="thewire-characters-remaining">
+	<?php echo $count_down; ?>
+</div>
+<div class="elgg-foot mts">
+<?php
+
+echo elgg_view('input/submit', array(
+	'value' => $text,
+	'id' => 'thewire-submit-button',
 ));
 ?>
-
-<div class="elgg-foot mts">
-	<span style="float:right;">
-		<span id="thewire-characters-remaining"><?php echo $count_down; ?></span>
-		<?php
-		echo elgg_view('input/submit', array(
-			'value' => $text,
-			'id' => 'thewire-submit-button',
-		));
-		?>
-	</span>
 </div>
-

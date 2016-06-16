@@ -33,6 +33,7 @@
 textarea, .elgg-input-rawtext { width:100%; }
 
 /* Interface admin */
+#esope-settings { hyphens: auto; }
 #esope-settings .miniColors-trigger { float: right; height: 3ex; width: 3ex; }
 #esope-settings input { max-width:40%; }
 #esope-settings label { font-size:90%; }

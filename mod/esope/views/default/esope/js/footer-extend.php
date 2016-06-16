@@ -1,3 +1,4 @@
+//<script>
 /* Smooth scrolling : 
  - make smooth transition when using anchors inside a page
  - mainly used for single-page layouts and inline navigation

@@ -26,6 +26,7 @@ return array(
 	'esope:config:toolslistings:details' => "Ce réglage permet de modifier le comportement par défaut des pages de listing des blogs, fichiers, etc. Par défaut seuls les publications <em>personnelles</em> du membre sont listées (pas celles dans ses groupes). Vous pouvez choisir ici de les lister toutes.",
 	'esope:config:filters' => "FILTRES",
 	'esope:settings:advancedsearch' => "Activer la recherche avancée (dans la recherche générale)",
+	'esope:settings:advancedsearch:sidebar' => "Remplacer le menu latéral par celui de la recherche avancée",
 	'esope:advancedsearch' => "Recherche avancée",
 	'search:sort:relevance' => "Pertinence",
 	'search:sort:created' => "Date de création",
@@ -35,7 +36,8 @@ return array(
 	'search:order:desc' => "Descendant (naturel)",
 	'search:order:asc' => "Ascendant (inverse)",
 	'search:field:type' => "Type",
-	'search:field:subtype' => "Sous-type",
+	//'search:field:subtype' => "Sous-type",
+	'search:field:subtype' => "Type de publication",
 	'search:field:searchtype' => "Type de recherche",
 	'search:field:container' => "Emplacement de publication",
 	'search:field:sort' => "Trier par",
@@ -51,7 +53,10 @@ return array(
 	'search:field:fulltext' => "Rechercher",
 	'search:field:owner_guid' => "Auteur",
 	'search:field:container_guid' => "Emplacement",
+	'search:field:limit' => "Résultats",
 	'search:results:no_query' => "Résultats de la recherche",
+	'search:types:all' => "Tout",
+	'search:types:entities' => "Entités",
 	'esope:search:tooshort' => "Texte à rechercher trop court (minimum %s caractères)",
 	'esope:search:tooshort:details' => "Les mots de moins de %s caractères sont ignorés lors de la recherche",
 	'item:object' => "Publications",
@@ -253,6 +258,8 @@ return array(
 	'accessibility:revert' => "Supprimer",
 	
 	
+	'esope:showresponses' => "Afficher les réponses",
+	'esope:showresponses:title' => "Afficher les réponses à %s",
 	'esope:moreinfoon' => "Plus d'informations sur %s",
 	'esope:expand' => "Développer",
 	'esope:compress' => "Réduire",
@@ -850,6 +857,9 @@ return array(
 	//'esope:group:inactive:details' => "Ce groupe a été archivé",
 	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
 	
+	'esope:status:archive' => "archivé",
+	'esope:user:nomail' => "<s>email</s>",
+	
 	
 	
 	/**********************/
@@ -927,14 +937,14 @@ return array(
 	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
 	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
 	'item:object:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
-	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evénements",
 	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
 	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Sujets de discussion",
 	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
 	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",
-	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evènements",
+	'item:object:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i> Evénements",
 	'item:object:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i> Feedback",
 	'item:object:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i> Idées",
 	'item:object:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i> Lettre d'information",
@@ -1028,6 +1038,8 @@ return array(
 	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
 	// ESOPE tools
+	'esope:tools' => "Outils d'administration d'Esope",
+	'esope:tools:details' => "Une série d'outils avancés pour réaliser des tâches d'administration peu courantes. Nécessite souvent un accès direct au code pour activer certains outils.",
 	'esope:tools:intro' => "Ces outils ne sont à utiliser que dans des cas particuliers, et nécessitent souvent un double accès administrateur et au code source pour être utilisés, du fait de leurs effets potentiels.",
 	'esope:tools:warning' => "Veuillez consulter leur code source avant de les utiliser.<br /><strong>Pour les outils critiques, veuilez effectuer un backup avant utilisation (spam, widgets, mises à jour, etc.)</strong>",
 	'esope:tools:tool:group_admins' => "Admin groupes",
@@ -1059,6 +1071,8 @@ return array(
 	'esope:menu:topbar' => "Mon compte",
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
+	
+	'entity:unavailable' => "entité indisponible",
 	
 	
 	
@@ -1138,6 +1152,9 @@ Il s'agit d'un message de notification automatique, merci de ne pas répondre di
 	'messages:to' => "à",
 	
 	'thewire:reply' => "Répondre",
+	
+	'search:more' => '+%s autres %s',
+	
 	
 );
 

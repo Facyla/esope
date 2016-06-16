@@ -13,7 +13,7 @@ switch ($add_wire) {
 	default: return;
 }
 
-echo '<div class="theme_inria-thewire-group-add">';
+echo '<div class="esope-thewire-group-add">';
 	echo '<h3><a href="' . elgg_get_site_url() . 'thewire/group/' . $group->guid . '">' . elgg_echo('theme_inria:thewire:group:title') . '</a></h3>';
 	
 	$action = elgg_get_site_url() . "action/thewire/add";

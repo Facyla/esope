@@ -26,6 +26,7 @@ return array(
 	'esope:config:toolslistings:details' => "This setting lets you define the default behaviour of tools listing pages such as blogs, files, etc. By default only <em>personal</em> publications of a member are listed (not those published in his groups). You can choose here to list them all.",
 	'esope:config:filters' => "FILTERS",
 	'esope:settings:advancedsearch' => "Enable advanced search (in general search)",
+	'esope:settings:advancedsearch:sidebar' => "Replace sidebar by advanced search menu",
 	'esope:advancedsearch' => "Advanced search",
 	'search:sort:relevance' => "Relevance",
 	'search:sort:created' => "Creation date",
@@ -35,7 +36,8 @@ return array(
 	'search:order:desc' => "Descending (natural)",
 	'search:order:asc' => "Ascending (inverse)",
 	'search:field:type' => "Type",
-	'search:field:subtype' => "Subtype",
+	//'search:field:subtype' => "Subtype",
+	'search:field:subtype' => "Content type",
 	'search:field:searchtype' => "Search type",
 	'search:field:container' => "Container",
 	'search:field:sort' => "Sort by",
@@ -51,7 +53,10 @@ return array(
 	'search:field:fulltext' => "Search",
 	'search:field:owner_guid' => "Owner",
 	'search:field:container_guid' => "Container",
+	'search:field:limit' => "Résults",
 	'search:results:no_query' => "Search results",
+	'search:types:all' => "All",
+	'search:types:entities' => "Entities",
 	'esope:search:tooshort' => "Query text too short (minimum %s characters)",
 	'esope:search:tooshort:details' => "Query words less than %s characters are ignored in search",
 	'item:object' => "Publications",
@@ -249,6 +254,8 @@ return array(
 	'accessibility:revert' => "Delete",
 	
 	
+	'esope:showresponses' => "Show responses",
+	'esope:showresponses:title' => "Show responses to %s",
 	'esope:moreinfoon' => "More information on %s",
 	'esope:expand' => "Expand",
 	'esope:compress' => "Compress",
@@ -845,6 +852,8 @@ return array(
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "This group was archived",
 	
+	'esope:status:archive' => "archive",
+	'esope:user:nomail' => "<s>email</s>",
 	
 	
 	/**********************/
@@ -1022,6 +1031,8 @@ return array(
 	'esope:unarchiveuser:error' => "User could not be un-archived",
 	
 	// ESOPE tools
+	'esope:tools' => "Esope extended admin tools",
+	'esope:tools:details' => "A set of advanced tools that can be used to perform some unusual administration tasks. Often requires a direct access to the code to enable some of these tools.",
 	'esope:tools:intro' => "These tools should be used only in some particular cases, or only once, and often require a combined code+administration action.",
 	'esope:tools:warning' => "Please read carefully the source code for each of these before enabling.<br /><strong>It is strongly advised to perform a full backup before using some of these tools (antispam, widgets, fields updates)</strong>",
 	'esope:tools:tool:group_admins' => "Group admins",
@@ -1052,6 +1063,7 @@ return array(
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
 	
+	'entity:unavailable' => "unavailable entity",
 	
 	
 	
@@ -1137,7 +1149,9 @@ This is an automated notification, please do not reply to this email.",
 	'messages:to' => "to",
 	
 	'thewire:reply' => "Reply",
-
+	
+	'search:more' => '+%s more %s',
+	
 	
 );
 

@@ -8,14 +8,15 @@
 elgg_load_js('elgg.thewire');
 
 $parent_post = elgg_extract('post', $vars);
-$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire');
+$forced_access = elgg_extract('access_id', $vars, false);
+$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
 
 $text = elgg_echo('post');
 if ($parent_post) { $text = elgg_echo('thewire:reply'); }
 //$chars_left = elgg_echo('thewire:charleft');
 $chars_left = elgg_echo('esope:thewire:charleft');
 
-// Access level : same as parent, or custom
+// Access level : same as parent, or forced, custom
 $parent_input = '';
 $access_input = '';
 if ($parent_post) {
@@ -25,6 +26,16 @@ if ($parent_post) {
 	));
 	//$access_input .= '<div>' . elgg_echo('esope:thewire:access') . elgg_view('output/access', array('entity' => $parent_post)) . '</div>';
 	$access_input .= elgg_view('output/access', array('entity' => $parent_post));
+	
+} else if ($forced_access) {
+	// Check that forced access_id is valid, and default to valid value if needed
+	if (!($collection = get_access_collection($forced_access))) {
+		$forced_access = elgg_get_plugin_setting('thewire_default_access', 'esope', get_default_access());
+		if (!($collection = get_access_collection($forced_access))) { $forced_access = get_default_access(); }
+	}
+	$access_input = elgg_view('input/hidden', array('name' => 'access_id', 'value' => $forced_access));
+	$access_input .= elgg_view('output/access', array('value' => $forced_access));
+	
 } else {
 	// Niveau d'accès défini ssi pas une réponse
 	$options_values = array('2' => elgg_echo('PUBLIC'), '1' => elgg_echo('LOGGED_IN'));

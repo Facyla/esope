@@ -114,6 +114,308 @@ function esope_esearch_page_handler($page) {
 	return true;
 }
 
+/* Esope livesearch page handler
+ * Tweak search results methods
+ * Adds ability to search for objects
+ * Format results differently
+ * Add return option : user_return = name|username|guid (default)
+ */
+/**
+ * Page handler for autocomplete endpoint.
+ *
+ * @todo split this into functions/objects, this is way too big
+ *
+ * /livesearch?q=<query>
+ *
+ * Other options include:
+ *     match_on	   string all or array(groups|users|friends|objects)
+ *     match_owner int    0/1
+ *     limit       int    default is 10
+ *     name        string default "members"
+ *
+ * @param array $page
+ * @return string JSON string is returned and then exit
+ * @access private
+ */
+function esope_input_livesearch_page_handler($page) {
+	$dbprefix = elgg_get_config('dbprefix');
+
+	// only return results to logged in users.
+	if (!$user = elgg_get_logged_in_user_entity()) {
+		exit;
+	}
+
+	if (!$q = get_input('term', get_input('q'))) {
+		exit;
+	}
+
+	$input_name = get_input('name', 'members');
+
+	$q = sanitise_string($q);
+
+	// replace mysql vars with escaped strings
+	$q = str_replace(array('_', '%'), array('\_', '\%'), $q);
+
+	$match_on = get_input('match_on', 'all');
+
+	if (!is_array($match_on)) {
+		$match_on = array($match_on);
+	}
+
+	$default_limit = elgg_get_config('default_limit');
+	
+	// all = users and groups
+	if (in_array('all', $match_on)) {
+		$match_on = array('users', 'groups', 'objects');
+		$default_limit = 3;
+	}
+
+	$owner_guid = ELGG_ENTITIES_ANY_VALUE;
+	if (get_input('match_owner', false)) {
+		$owner_guid = $user->getGUID();
+	}
+
+	$limit = sanitise_int(get_input('limit', $default_limit));
+	
+	// Note : it requires a custom input/autocomplete view to handle new vars
+	// Control input value
+	$user_return = get_input('user_return', '');
+	if (empty($user_return)) {
+		// This is from core : keep it - but which special case should this handle ?
+		if (in_array('groups', $match_on)) { $user_return = 'guid'; } else { $user_return = 'username'; }
+	} else {
+		if (!in_array($user_return, array('name', 'username', 'guid'))) { $user_return = 'guid'; }
+	}
+
+	// grab a list of entities and send them in json.
+	$results = array();
+	foreach ($match_on as $match_type) {
+		switch ($match_type) {
+			case 'users':
+				$options = array(
+					'type' => 'user',
+					'limit' => $limit,
+					'joins' => array("JOIN {$dbprefix}users_entity ue ON e.guid = ue.guid"),
+					'wheres' => array(
+						"ue.banned = 'no'",
+//						"(ue.name LIKE '$q%' OR ue.name LIKE '% $q%' OR ue.username LIKE '$q%')"
+						"(ue.name LIKE '%$q%' OR ue.username LIKE '%$q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities($options);
+				if (!empty($entities)) {
+					foreach ($entities as $entity) {
+						switch($user_return) {
+							case 'name':
+								$value = $entity->name;
+								break;
+							case 'username':
+								$value = $entity->username;
+								break;
+							default:
+								$value = $entity->guid;
+						}
+
+						$output = elgg_view_list_item($entity, array(
+							'use_hover' => false,
+							'use_link' => false,
+							'class' => 'elgg-autocomplete-item',
+							'title' => $entity->name, // Default title would be a link
+						));
+
+						$icon = elgg_view_entity_icon($entity, 'tiny', array(
+							'use_hover' => false,
+						));
+
+						$result = array(
+							'type' => 'user',
+							'name' => $entity->name,
+							'desc' => $entity->username,
+							'guid' => $entity->guid,
+							'label' => $output,
+							'value' => $value,
+							'icon' => $icon,
+							'url' => $entity->getURL(),
+							'html' => elgg_view('input/userpicker/item', array(
+								'entity' => $entity,
+								'input_name' => $input_name,
+							)),
+						);
+						$results[$entity->name . rand(1, 100)] = $result;
+					}
+				}
+				break;
+
+			case 'groups':
+				// don't return results if groups aren't enabled.
+				if (!elgg_is_active_plugin('groups')) {
+					continue;
+				}
+				
+				$options = array(
+					'type' => 'group',
+					'limit' => $limit,
+					'owner_guid' => $owner_guid,
+					'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"),
+					'wheres' => array(
+//						"(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '% $q%')"
+						"(ge.name LIKE '%$q%' OR ge.description LIKE '%$q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities($options);
+				if (!empty($entities)) {
+					foreach ($entities as $entity) {
+						$output = elgg_view_list_item($entity, array(
+							'use_hover' => false,
+							'class' => 'elgg-autocomplete-item',
+							'full_view' => false,
+							'href' => false,
+							'title' => $entity->name, // Default title would be a link
+						));
+
+						$icon = elgg_view_entity_icon($entity, 'tiny', array(
+							'use_hover' => false,
+						));
+
+						$result = array(
+							'type' => 'group',
+							'name' => $entity->name,
+							'desc' => strip_tags($entity->description),
+							'guid' => $entity->guid,
+							'label' => $output,
+							'value' => $entity->guid,
+							'icon' => $icon,
+							'url' => $entity->getURL(),
+						);
+
+						$results[$entity->name . rand(1, 100)] = $result;
+					}
+				}
+				break;
+
+			case 'friends':
+				$options = array(
+					'type' => 'user',
+					'limit' => $limit,
+					'relationship' => 'friend',
+					'relationship_guid' => $user->getGUID(),
+					'joins' => array("JOIN {$dbprefix}users_entity ue ON e.guid = ue.guid"),
+					'wheres' => array(
+						"ue.banned = 'no'",
+						"(ue.name LIKE '$q%' OR ue.name LIKE '% $q%' OR ue.username LIKE '$q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities_from_relationship($options);
+				if (!empty($entities)) {
+					foreach ($entities as $entity) {
+						
+						$output = elgg_view_list_item($entity, array(
+							'use_hover' => false,
+							'use_link' => false,
+							'class' => 'elgg-autocomplete-item',
+							'title' => $entity->name, // Default title would be a link
+						));
+
+						$icon = elgg_view_entity_icon($entity, 'tiny', array(
+							'use_hover' => false,
+						));
+
+						$result = array(
+							'type' => 'user',
+							'name' => $entity->name,
+							'desc' => $entity->username,
+							'guid' => $entity->guid,
+							'label' => $output,
+							'value' => $entity->username,
+							'icon' => $icon,
+							'url' => $entity->getURL(),
+							'html' => elgg_view('input/userpicker/item', array(
+								'entity' => $entity,
+								'input_name' => $input_name,
+							)),
+						);
+						$results[$entity->name . rand(1, 100)] = $result;
+					}
+				}
+				break;
+			
+			// ESOPE : add objects livesearch
+			case 'objects':
+				$options = array(
+					'type' => 'object',
+					'subtypes' => get_registered_entity_types('object'),
+					'limit' => $limit,
+					'owner_guid' => $owner_guid,
+					'joins' => array("JOIN {$dbprefix}objects_entity oe ON e.guid = oe.guid"),
+					'wheres' => array(
+						"(oe.title LIKE '%$q%' OR oe.description LIKE '%$q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities($options);
+				if (!empty($entities)) {
+					foreach ($entities as $entity) {
+						/*
+						$output = elgg_view_list_item($entity, array(
+							'use_hover' => false,
+							'class' => 'elgg-autocomplete-item',
+							'full_view' => false,
+							'href' => false,
+							'title' => $entity->title, // Default title would be a link
+						));
+						$output = '<h3><a href="' . $entity->getURL() . '">' . $entity->title . '</a></h3>';
+						*/
+						$output = '<h3>' . $entity->title . '</h3>';
+						if (elgg_instanceof($entity, 'object', 'comment')) {
+							$output = '<h3>' . elgg_get_excerpt($entity->description, 100) . '</h3>';
+						}
+
+						$icon = elgg_view_entity_icon($entity, 'tiny', array(
+							'use_hover' => false,
+						));
+
+						$desc = $entity->excerpt;
+						if (empty($desc)) { $desc = $entity->briefdescription; }
+						if (empty($desc)) { $desc = $entity->description; }
+						$desc = elgg_get_excerpt(strip_tags($desc));
+
+						$output = elgg_view_image_block($icon, $output);
+						// Make full output clickable
+						//$output = '<a href="' . $entity->getURL() . '">' . elgg_view_image_block($icon, $output) . '</a>';
+
+						$result = array(
+							'type' => 'object',
+							'name' => $entity->name,
+							'desc' => $desc,
+							'guid' => $entity->guid,
+							'label' => $output,
+							'value' => $entity->guid,
+							'icon' => $icon,
+							'url' => $entity->getURL(),
+						);
+
+						$results[$entity->name . rand(1, 100)] = $result;
+					}
+				}
+				break;
+
+			default:
+				header("HTTP/1.0 400 Bad Request", true);
+				echo "livesearch: unknown match_on of $match_type";
+				exit;
+				break;
+		}
+	}
+
+	ksort($results);
+	header("Content-Type: application/json;charset=utf-8");
+	echo json_encode(array_values($results));
+	exit;
+}
+
 
 
 // Esope liked content page handler

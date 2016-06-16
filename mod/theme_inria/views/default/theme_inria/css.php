@@ -1,16 +1,17 @@
 <?php
 
-$fonturl = elgg_get_site_url() . 'mod/theme_inria/fonts/';
-$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
+$url = elgg_get_site_url();
+$fonturl = $url . 'mod/theme_inria/fonts/';
+$imgurl = $url . 'mod/theme_inria/graphics/';
 $tools_url = $imgurl . 'inria_widget/';
 
 // Configurable elements : pass theme as $vars['theme-config-css']
 // Image de fond du header
 $headerimg = elgg_get_plugin_setting('headerimg', 'esope');
-if (!empty($headerimg)) $headerimg = elgg_get_site_url() . $headerimg;
+if (!empty($headerimg)) { $headerimg = $url . $headerimg; }
 $backgroundcolor = elgg_get_plugin_setting('backgroundcolor', 'esope');
 $backgroundimg = elgg_get_plugin_setting('backgroundimg', 'esope');
-if (!empty($backgroundimg)) $backgroundimg = elgg_get_site_url() . $backgroundimg;
+if (!empty($backgroundimg)) { $backgroundimg = $url . $backgroundimg; }
 // Couleur des titres
 $titlecolor = elgg_get_plugin_setting('titlecolor', 'esope');
 $textcolor = elgg_get_plugin_setting('textcolor', 'esope');
@@ -270,6 +271,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
+.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 0 !important; padding-left: 0; }
 /* The Wire */
 .thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 .elgg-form-thewire-group-add .elgg-foot { padding: 0 0 0.5em 0; }
@@ -396,7 +398,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 .view-profile-as { border:1px dotted grey; padding:2px 6px; }
 .edit-profile-linkedin { border:1px dotted grey; padding:2px 6px; }
-.linkedin-link { background: url(<?php echo elgg_get_site_url(); ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
+.linkedin-link { background: url(<?php echo $url; ?>mod/hybridauth/graphics/linkedin_long.png) no-repeat 0 0; background-size: contain; color: transparent !important; display: inline-block; height: 2ex; width: 8ex; }
 
 
 /* Profils différenciés */
@@ -409,7 +411,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 .profiletype-badge { position: absolute; width: 200px; height: 200px; border: 3px solid transparent; }
 .profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
-.profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333333; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
+.profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333333; color: white; padding: 0.15rem 0.15rem 0 0.4rem; border-radius: 0.5rem 0 0 0; font-weight: bold; z-index: 11; }
 
 
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }

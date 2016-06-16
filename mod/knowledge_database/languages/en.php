@@ -13,6 +13,7 @@ return array (
 	'knowledge_database:addpages' => '<i class="fa fa-file-text-o"></i><br />Publish a page',
 	'knowledge_database:addannouncements' => '<i class="fa fa-file-text-o"></i><br />Publish an announcement',
 	'knowledge_database:kdb_group' => "Knowledge Database Group",
+	'knowledge_database:attachment' => "Attached file",
 	
 	// Errors
 	'knowledge_database:kdbgrouperror' => "Something's wrong with the Knowledge Database group, please contact the site administrator !",
@@ -45,8 +46,9 @@ return array (
 	<strong>Read&nbsp;:</strong> \"yes\" or \"no\", or list of roles who are allowed to read this field - determines if this field will be displayed. Please refer to source code for advanced usage, depending on roles and workflow states.<br />
 	<strong>Edit&nbsp;:</strong> determines if this field can be edited. Same configuration options as for \"read\".<br />
 	<strong>Required&nbsp;:</strong> the field must be filled to validate the content edit form<br />
-	<strong>Multiple&nbsp;:</strong> (select) the field can accept several values<br />
-	<strong>Autocomplete&nbsp;:</strong> (text) the fields suggests already used values<br />
+	<strong>Multiple&nbsp;:</strong> (select) the field can accept multiple values<br />
+	<strong>Autocomplete&nbsp;:</strong> (text) the field suggests already used values<br />
+	<strong>Addempty&nbsp;:</strong> (select) the select field has an empty option<br />
 	<strong>Default&nbsp;:</strong> field default value<br />
 	<strong>Options values&nbsp;:</strong> (select) list of available options<br />",
 	'knowledge_database:settings:fields:site' => "Global knowledge database (site)",
@@ -94,6 +96,8 @@ return array (
 	'knowledge_database:define_field:success' => "Configuration successfully saved",
 	'knowledge_database:define_field:error' => "Error, could not save data. Please reload page and try again.",
 	'knowledge_database:settings:field:title' => "Field title",
+	'knowledge_database:settings:field:tooltip' => "Field help",
+	'knowledge_database:settings:field:tooltip:details' => "To display help for this field, create the translation key: knowledge_database:field:<strong>key1</strong>:details",
 	'knowledge_database:settings:field:type' => "Field type",
 	'knowledge_database:settings:field:category' => "Fields group",
 	'knowledge_database:settings:field:read' => "Read",
@@ -101,6 +105,7 @@ return array (
 	'knowledge_database:settings:field:required' => "Required",
 	'knowledge_database:settings:field:multiple' => "Multiple",
 	'knowledge_database:settings:field:autocomplete' => "Autocomplete",
+	'knowledge_database:settings:field:addempty' => "Add empty value",
 	'knowledge_database:settings:field:defaultvalue' => "Default value",
 	'knowledge_database:settings:field:options_values' => "Options values",
 	'knowledge_database:settings:field:save' => "Save field configuration",
