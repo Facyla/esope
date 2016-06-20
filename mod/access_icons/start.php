@@ -119,7 +119,6 @@ function access_icons_entity_menu_setup($hook, $type, $return, $params) {
 	// Menu is displayed directly in widgets context in page/components/list override
 	if (elgg_in_context('widgets')) { return $return; }
 	
-	$hide_text = false;
 	$handler = elgg_extract('handler', $params, false);
 	
 	/* Skip groups
@@ -139,6 +138,9 @@ function access_icons_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_instanceof($entity, 'user')) {
 		return $return;
 	}
+	
+	$hide_text = false;
+	if (elgg_in_context('listing')) { $hide_text = true; }
 	
 	// access info : hide_text true to display icon only
 	$access_info = elgg_view('output/access', array('entity' => $entity, 'hide_text' => $hide_text));

@@ -53,6 +53,7 @@ $thewire = '<h2><a href="' . $url . 'thewire/all" title="' . elgg_echo('theme_in
 //$thewire .= '<em style="float:right;">' . elgg_echo('theme_inria:thewire:details') . '</em>';
 $thewire .= elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
 //elgg_push_context('widgets');
+elgg_push_context('listing');
 // Exclusion des messages du Fil provenant des groupes
 $thewire_params = array(
 		'type' => 'object', 'subtype' => 'thewire', 
@@ -62,7 +63,8 @@ $thewire_params = array(
 		'limit' => 9, 'pagination' => false
 	);
 $thewire .= elgg_list_entities($thewire_params);
-//elgg_pop_context();
+elgg_pop_context();
+
 // Tableau de bord
 // Note : il peut être intéressant de reprendre le layout des widgets si on veut séparer les colonnes et les intégrer dans l'interface
 elgg_set_context('dashboard');

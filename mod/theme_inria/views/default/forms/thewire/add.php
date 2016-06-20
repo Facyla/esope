@@ -45,7 +45,7 @@ echo '<div class="elgg-foot mts">';
 		if (!$default_access) { $default_access = get_default_access(); }
 		// Forcé sur Membres du site
 		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $default_access));
-		echo '<div style="display:inline-block;">' . elgg_view('output/access', array('value' => $default_access)) . '</div>';
+		//echo '<div style="display:inline-block;">' . elgg_view('output/access', array('value' => $default_access)) . '</div>';
 	}
 
 	?>
