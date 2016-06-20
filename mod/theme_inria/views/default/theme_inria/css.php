@@ -413,8 +413,15 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
 .profiletype-badge-external { position: absolute; right: 0px; bottom: 0; background: #333333; color: white; padding: 0.15rem 0.15rem 0 0.4rem; border-radius: 0.5rem 0 0 0; font-weight: bold; z-index: 11; }
 
-
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
+
+#profile-details { clear: right; }
+#profile-owner-block { max-width: 100%; width: auto; }
+.profile-col-profile { float:left; width:24%; min-width:230px; }
+.profile-col-details { float:left; width:50%; min-width:230px; }
+.profile-col-activity { float:left; width:24%; }
+.profile-col-largedetails { float:left; width:74%; }
+
 
 
 /* Widgets */
@@ -473,11 +480,23 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 	.elgg-menu-topbar { position:absolute; top: 11px; right:5px; margin-left: 140px; }
 	.menu-topbar-toggle { color: white; }
 	
+	.profile-col-profile { width:40%; }
+	.profile-col-details { width:60%; }
+	.profile-col-activity { width:100%; }
+	.profile-col-profile2 { width:33%; }
+	.profile-col-largedetails { width:66%; }
+	
 }
 
 @media (max-width:700px) {
 	.elgg-menu-topbar { margin-left: 0; }
 	.footer-logo-inria { margin: 12px 0; }
+	
+	.profile-col-profile, .profile-col-details { width:46%; }
+	.profile-col-activity { width:100%; }
+	.profile-col-profile2, .profile-col-largedetails { width:100%; }
+	.profile-col-profile .profile { floatabl:none; :40%; }
+	
 }
 
 

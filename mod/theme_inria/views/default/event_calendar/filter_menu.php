@@ -8,11 +8,13 @@ if ($group_guid) {
 	$url_start = "event_calendar/list/{$vars['start_date']}/{$vars['mode']}";
 }
 
-$tabs['all'] = array(
+$tabs = array(
+	'all' => array(
 		'text' => elgg_echo('event_calendar:show_all'),
 		'href' => "$url_start/all",
 		'selected' => ($filter_context == 'all'),
 		'priority' => 200,
+	),
 );
 if (elgg_is_logged_in()) {
 	$tabs['mine'] = array(
@@ -61,24 +63,23 @@ foreach ($tabs as $name => $tab) {
 // Filtre inutile si ni mine ni friends
 // Menu is no use when not logged in (only 1 entry)
 if (elgg_is_logged_in()) {
-	$text_bit = '<li class="event-calendar-filter-menu-show-only">'.elgg_echo('event_calendar:show_only').'</li>';
+	//$text_bit = '<li class="event-calendar-filter-menu-show-only">'.elgg_echo('event_calendar:show_only').'</li>';
 
-$menu = <<<__MENU
-<ul class="elgg-menu elgg-menu-filter elgg-menu-hz elgg-menu-filter-default">
-	{$tab_rendered['open']}
-	{$tab_rendered['all']}
-	$text_bit
-	{$tab_rendered['mine']}
-	{$tab_rendered['friend']}
-</ul>
+	$menu = <<<__MENU
+	<ul class="elgg-menu elgg-menu-filter elgg-menu-hz elgg-menu-filter-default">
+		{$tab_rendered['open']}
+		{$tab_rendered['all']}
+		{$tab_rendered['mine']}
+		{$tab_rendered['friend']}
+	</ul>
 __MENU;
 
-echo $menu;
+	echo $menu;
 }
 
 $event_calendar_region_display = elgg_get_plugin_setting('region_display', 'event_calendar');
 if ($event_calendar_region_display == 'yes') {
-	elgg_load_js("elgg.event_calendar");
+	elgg_require_js('event_calendar/event_calendar');
 	$url_start .= "/$filter_context";
 	echo elgg_view('event_calendar/region_select',array('url_start'=>$url_start,'region'=>$vars['region']));
 }

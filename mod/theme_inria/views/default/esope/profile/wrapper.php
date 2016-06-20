@@ -106,12 +106,12 @@ if (!$allowed) {
 
 	echo '<div class="elgg-grid">';
 	if (elgg_is_logged_in()) {
-		echo '<div style="float:left; width:24%;">' . $profile . '</div>';
-		echo '<div style="float:left; width:50%;">' . $profile_details . '</div>';
-		echo '<div style="float:right; width:24%;">' . $activity . '</div>';
+		echo '<div class="profile-col-profile">' . $profile . '</div>';
+		echo '<div class="profile-col-details">' . $profile_details . '</div>';
+		echo '<div class="profile-col-activity float-alt">' . $activity . '</div>';
 	} else {
-		echo '<div style="float:left; width:24%;">' . $profile . '</div>';
-		echo '<div style="float:right; width:74%;">' . $profile_details . '</div>';
+		echo '<div class="profile-col-profile2 float-alt">' . $profile . '</div>';
+		echo '<div class="profile-col-largedetails float-alt">' . $profile_details . '</div>';
 	}
 	echo '<div class="clearfloat"></div>';
 	echo'</div>';
