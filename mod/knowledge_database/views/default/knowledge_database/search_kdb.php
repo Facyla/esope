@@ -42,7 +42,7 @@ function kdb_search(){
 	//$("body").addClass("esope-search-wait");
 	formdata = $("#kdb-search-form").serialize();
 	$.post("' . $kdb_search_url . '", formdata, function(data){
-		$("#esope-search-results").html(data);
+		$("#kdb-search-results").html(data);
 		//$("body").removeClass("esope-search-wait");
 	});
 }
@@ -150,7 +150,7 @@ $content_add = elgg_view('knowledge_database/add_resources', array('publish_guid
 
 // Compose final page
 $content .= $search_form;
-$content .= '<div id="esope-search-results">' . $content_latest . '</div>';
+$content .= '<div id="kdb-search-results">' . $content_latest . '</div>';
 $content .= '<div class="clearfloat"></div><br /><br />';
 $content .= $content_add;
 $content .= '<div class="clearfloat"></div><br /><br />';

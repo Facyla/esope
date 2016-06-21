@@ -656,6 +656,8 @@ return array(
 	'esope:search:morethanmax' => "Too much results, please set more filter.",
 	'esope:search:noresult' => "No result, please adjust your search criteria (filter might be too or not enough restrictive, try adding or removing some of them).",
 	'esope:search:nosearch' => "No search, please select filter(s) and hit Search.",
+	'esope:search:loadmore:next' => "Display the %s next results (%s remaining)",
+	'esope:search:loadmore:last' => "Display the %s last results",
 	
 	// View profile as someone else
 	'esope:viewprofileas:title' => "View your profile as",

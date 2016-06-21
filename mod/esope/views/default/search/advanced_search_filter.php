@@ -163,13 +163,15 @@ if (!empty($params['container_guid'])) {
 
 // Limit, sort, and order
 echo '<p>';
-$limits_opts = array(2, 10, 30, 100);
-if (!in_array($params['limit'], $limits_opts)) { $limits_opts[] = $params['limit']; }
-sort($limits_opts);
-echo '<label>' . elgg_echo('search:field:limit') . ' ' . elgg_view('input/select', array('name' => 'limit', 'value' => $params['limit'], 'options' => $limits_opts)) . '</label> &nbsp; ';
+$limit_opt = array(2, 10, 30, 100);
+if (!in_array($params['limit'], $limit_opt)) { $limit_opt[] = $params['limit']; }
+$default_limit = elgg_get_config('default_limit');
+if (!in_array($default_limit, $limit_opt)) { $limit_opt[] = $default_limit; }
+sort($limit_opt);
+//echo elgg_view('input/hidden', array('name' => 'limit', 'value' => $params['limit']));
+echo '<label>' . elgg_echo('search:field:limit') . ' ' . elgg_view('input/select', array('name' => 'limit', 'value' => $params['limit'], 'options' => $limit_opt)) . '</label> &nbsp; ';
 echo '<label>' . elgg_echo('search:field:sort') . ' ' . elgg_view('input/select', array('name' => 'sort', 'options_values' => $sort_options, 'value' => $params['sort'])) . '</label> &nbsp; ';
 echo '<label>' . elgg_echo('search:field:order') . ' ' . elgg_view('input/select', array('name' => 'order', 'options_values' => $order_options, 'value' => $params['order'])) . '</label> &nbsp; ';
-//echo elgg_view('input/hidden', array('name' => 'limit', 'value' => $params['limit']));
 echo '</p>';
 // Offset (keep hidden as we have pagination)
 echo elgg_view('input/hidden', array('name' => 'offset', 'value' => $params['offset']));

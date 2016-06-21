@@ -661,6 +661,8 @@ return array(
 	'esope:search:morethanmax' => "Trop de résultats, veuillez affiner vos critères de recherche.",
 	'esope:search:noresult' => "Aucun résultat. Soit il n'y a pas assez de critères, soit ceux-ci sont au contraire trop restrictifs.",
 	'esope:search:nosearch' => "Aucune recherche : veuillez choisir un(des) filtre(s) et cliquer sur Rechercher.",
+	'esope:search:loadmore:next' => "Afficher les %s résultats suivants (%s restants)",
+	'esope:search:loadmore:last' => "Afficher les %s derniers résultats",
 	
 	// View profile as someone else
 	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",

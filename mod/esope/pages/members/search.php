@@ -39,6 +39,8 @@ function esope_search(){
 
 // @TODO Handle and perform URL-preset query
 $q = get_input('q');
+$limit = get_input('limit', 100);
+$offset = get_input('offset', 0);
 
 
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
@@ -56,10 +58,10 @@ if (!empty($metadata_search_fields)) {
 $metadata_search = '';
 
 // Build metadata search fields
-// Use PFM if available, except if forced to text, or to auto dropdown values
+// Use PFM if available, except if forced to text, or to auto select values
 $use_profile_manager = elgg_is_active_plugin('profile_manager');
 foreach ($metadata_search_fields as $metadata) {
-	// @TODO : autocomplete using existing values ? (as a text input alternative to dropdown)
+	// @TODO : autocomplete using existing values ? (as a text input alternative to select)
 	$use_text = false;
 	$use_auto_values = false;
 	$metadata_params = explode(':', $metadata);
@@ -111,10 +113,27 @@ $profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep t
 $search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
+// Pass URL values to search form (any URL parameter has to be passed to the form because it's JS-sent)
+$search_form .= elgg_view('input/hidden', array('name' => 'limit', 'value' => $limit));
+$search_form .= elgg_view('input/hidden', array('name' => 'offset', 'value' => $offset));
+
+/* Dev and debug options
+if (false && elgg_is_admin_logged_in()) {
+	$limit_opt = array(10, 50, 100, 200, 500);
+	if (!in_array($limit, $limit_opt)) { $limit_opt[] = $limit; }
+	$default_limit = elgg_get_config('default_limit');
+	if (!in_array($default_limit, $limit_opt)) { $limit_opt[] = $default_limit; }
+	sort($limit_opt);
+	$search_form .= '<label>' . elgg_echo('search:field:limit') . ' ' . elgg_view('input/select', array('name' => 'limit', 'value' => $limit, 'options' => $limit_opt)) . '</label> &nbsp; ';
+	$search_form .= '<label>' . elgg_echo('search:field:offset') . ' ' . elgg_view('input/text', array('name' => 'offset', 'value' => $offset)) . '</label> &nbsp; ';
+	$search_form .= elgg_view('input/hidden', array('name' => 'debug', 'value' => 'yes'));
+}
+*/
+
 $search_form .= '<fieldset>';
 // Display role filter only if it has a meaning
 if (sizeof($profiletypes_opt) > 2) {
-	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
+	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
 }
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
@@ -123,10 +142,12 @@ $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg
 $search_form .= '</fieldset></form><br />';
 
 $content .= $search_form;
-$content .= '<div id="esope-search-results"></div>';
+$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
 
-// If any parameter is passed, perform search on page load
-if (!empty($_GET)) {
+// If any parameter is passed, perform search on page load (>1 because there is always a default __elgg_uri param)
+//if (!empty($_GET)) {
+if (sizeof($_GET) > 1) {
+	//echo '<pre>' . print_r($_GET, true) . '</pre>'; // debug
 	$content .= '<script type="text/javascript">
 	esope_search();
 	</script>';

@@ -1119,8 +1119,8 @@ function esope_make_dropdown_from_metadata($params) {
 	
 	return elgg_view("input/select", array('name' => $name, 'options' => $options, 'value' => $value));
 }
-/* Returns the wanted value based on both params and inputs
- * If $params is set (to whatever except false, but including ), it will be used
+/* Returns the wanted value based on both params and inputs (priority order = params > GET > default value)
+ * If $params is set (to whatever except false, but including ''), it will be used
  * If not set, we'll use GET inputs
  * If still nothing, we'll use default value
  */
@@ -1159,19 +1159,22 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
    - allow fulltext search in any metadata ? (warning !)
    - integrate (if search plugin active) search_highlight_words($words, $string)
  */
-function esope_esearch($params = array(), $defaults = array(), $max_results = 500) {
+function esope_esearch($params = array(), $defaults = array(), $max_results = 200) {
 	$debug = esope_extract('debug', $params, false);
+	$add_count = esope_extract('add_count', $params, $defaults['add_count']);
+	$hide_pagination = esope_extract('hide_pagination', $params, $defaults['hide_pagination']);
+	$hide_loadmore = esope_extract('hide_loadmore', $params, $defaults['hide_loadmore']);
 	
 	// Set defaults
 	$esearch_defaults = array(
-		'entity_type' => 'object', 
-		'entity_subtype' => null, 
-		'limit' => 0,
-		'offset' => 0,
-		'metadata_case_sensitive' => false,
-		'metadata_name_value_pairs_operator' => 'AND',
-		'count' => false,
-	);
+			'entity_type' => 'object', 
+			'entity_subtype' => null, 
+			'limit' => 0,
+			'offset' => 0,
+			'metadata_case_sensitive' => false,
+			'metadata_name_value_pairs_operator' => 'AND',
+			'count' => false,
+		);
 	if (is_array($defaults)) { $defaults = array_merge($esearch_defaults, $defaults); } else { $defaults = $esearch_defaults; }
 	
 	$q = esope_extract('q', $params, '');
@@ -1191,23 +1194,20 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
 	$count = esope_extract('count', $params, $defaults['count']);
 	
-	/*
-	$q = esope_extract('q', $params);
-	$type = esope_extract('entity_type', $params, $default['types']);
-	$subtype = esope_extract('entity_subtype', $params, $default['subtypes']);
 	
-	$owner_guid = get_input("owner_guid");
-	$container_guid = get_input("container_guid");
-	$limit = (int) get_input("limit", 0);
-	$offset = (int) get_input("offset", 0);
-	$sort = get_input("sort");
-	$order = get_input("order");
-	// Metadata search : $metadata[name]=value
-	$metadata = get_input("metadata");
-	$metadata_case_sensitive = get_input("metadata_case_sensitive", false);
-	$metadata_name_value_pairs_operator = get_input("metadata_name_value_pairs_operator", 'AND');
-	$order_by_metadata = get_input('order_by_metadata');
-	*/
+	// Build search URL query elements
+	$base_url = "?";
+	$url_fragment = '';
+	if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
+	if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
+	$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'sort', 'order');
+	foreach($search_filters as $filter) {
+		// Add valid filters to search query URL
+		if (!empty($$filter)) {
+			$url_fragment .= "&$filter={$$filter}";
+		}
+	}
+	
 	
 	$result = array();
 	if ($debug) {
@@ -1247,6 +1247,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		foreach ($metadata as $name => $value) {
 			if (!empty($name) && !empty($value)) {
 				$metadata_name_value_pairs[] = array('name' => $name, 'value' => $value);
+				$url_fragment .= "&metadata[$name]=$value"; // Add to search query URL
 			}
 		}
 	}
@@ -1264,36 +1265,56 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 			'sort' => $sort,
 			'order' => $order,
 		);
+	
 	if ($joins) { $search_params['joins'] = $joins; }
 	if ($wheres) { $search_params['wheres'] = $wheres; }
 	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
 	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
 	
-	// Perform search results count
+	
+	// PERFORM SEARCH RESULTS COUNT
+	// @TODO : use batches ?
 	$search_params['count'] = true;
 	if ($debug) { echo '<pre>' . print_r($search_params, true) . '</pre>'; }
 	$return_count = elgg_get_entities_from_metadata($search_params);
 	if ($count) { return $return_count; }
 	
-	// Limit display to 
-	if ($return_count > $max_results) {
-		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
-	}
-	if ($search_params['limit'] > $max_results) { $search_params['limit'] = $max_results; }
-	// Perform entities search
-	$search_params['count'] = false;
-	$entities = elgg_get_entities_from_metadata($search_params);
-	// Limit to something that can be handled
-	if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 	
-	// Return array only if asked to
+	// PERFORM ENTITIES SEARCH
+	$search_params['count'] = false;
+	// Limit query and display to something that can be handled (using max results limit)
+	if ($return_count > $max_results) { $alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>'; }
+	if ($search_params['limit'] > $max_results) { $search_params['limit'] = $max_results; }
+	
+	// Return results entities array if asked to
 	if ($params['returntype'] == 'entities') {
+		$entities = elgg_get_entities_from_metadata($search_params);
+		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 		return $entities;
 	}
 	
-	// Return listing
+	// Return results listing otherwise
 	$return = '';
-	if ($params['add_count']) {
+	$search_params['full_view'] = false;
+	$search_params['pagination'] = false;
+	$search_params['advanced_pagination'] = false; // Never show limit menu
+	$search_params['list_type'] = 'list'; // gallery|list
+	// Add pagination if more results than displayed (and not explicittely asked to hide it)
+	if ($hide_pagination != 'yes') {
+		if (($return_count > $search_params['limit']) || ($search_params['offset'] > 0)) {
+			$search_params['pagination'] = true;
+			$search_params['position'] = 'before';
+			$search_params['base_url'] = $base_url . $url_fragment;
+		}
+	}
+	/*
+	// Note : only guids can be passed to elgg_list_entities ; entities can be passed only to elgg_view_entity_list
+	$search_params['entities'] = $entities;
+	$search_params['limit'] = $max_results;
+	$search_params['offset'] = $offset;
+	*/
+	if ($add_count == 'yes') {
+	// "{$search_params['limit']} / $return_count"
 		if ($return_count > 1) {
 			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresults', array($return_count)) . '</span>';
 		} else if ($return_count > 0) {
@@ -1303,19 +1324,39 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 50
 		}
 	}
 	//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
-	$search_params['full_view'] = false;
-	$search_params['pagination'] = false;
-	$search_params['list_type'] = 'list'; // gallery/list
-	$search_params['entities'] = $entities;
-	$search_params['limit'] = $max_results;
-	$search_params['offset'] = $offset;
+	
 	elgg_push_context('search');
 	elgg_push_context('widgets');
 	$return .= elgg_list_entities_from_metadata($search_params);
 	elgg_pop_context('widgets');
 	elgg_pop_context('search');
-	if ($alert) { $return .= $alert; }
 	
+	// Load more link (if we haven't reached the last result)
+	$loadmore_offset = $search_params['offset'] + $search_params['limit'];
+	if (($hide_loadmore != 'no') && ($loadmore_offset < $return_count)) {
+		$target = '#esope-search-results';
+		$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes'));
+		$remaining_results = $return_count - $loadmore_offset;
+		$next_results = min($search_params['limit'], $remaining_results);
+		if ($remaining_results > $next_results) { 
+			$loadmore_text = elgg_echo('esope:search:loadmore:next', array($next_results, $remaining_results));
+		} else {
+			$loadmore_text = elgg_echo('esope:search:loadmore:last', array($next_results));
+		}
+		$return .= '<div id="esope-esearch-loadmore">';
+		$return .= elgg_view('output/url', array(
+				//'href' => $loadmore_url,
+				'href' => "javascript:void(0);",
+				'text' => $loadmore_text,
+				//'onClick' => "$.post('" . $loadmore_url . "', function(data) { $('" . $target . "').append(data); });",
+				'onClick' => "$.post('" . $loadmore_url . "', function(data) { $('#esope-esearch-loadmore').replaceWith(data); });",
+				'is_trusted' => true,
+				'is_action' => true,
+			));
+		$return .= '</div>';
+	}
+	
+	if ($alert) { $return .= $alert; }
 	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
 	
 	return $return;

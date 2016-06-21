@@ -42,8 +42,8 @@ if (isset($vars['base_url']) && $vars['base_url']) {
 }
 
 // ESOPE : improved navigation
-$advanced_pagination = elgg_get_plugin_setting('advanced_pagination', 'esope');
-if ($advanced_pagination != 'yes') { $advanced_pagination = false; }
+$advanced_pagination = elgg_extract('advanced_pagination', $vars, elgg_get_plugin_setting('advanced_pagination', 'esope'));
+if ($advanced_pagination == 'yes') { $advanced_pagination = true; } else { $advanced_pagination = false; }
 
 $num_pages = elgg_extract('num_pages', $vars, 10);
 $delta = ceil($num_pages / 2);
@@ -167,11 +167,13 @@ echo elgg_format_element('ul', ['class' => 'elgg-pagination'], $list);
 // Esope : limits selector
 if ($advanced_pagination) {
 	echo '<ul class="elgg-pagination elgg-pagination-limit">';
-	$limits_opts = array(10, 30, 100);
-	if (!in_array($limit, $limits_opts)) { $limits_opts[] = $limit; }
-	sort($limits_opts);
+	$limit_opt = array(10, 30, 100);
+	if (!in_array($limit, $limit_opt)) { $limit_opt[] = $limit; }
+	$default_limit = elgg_get_config('default_limit');
+	if (!in_array($default_limit, $limit_opt)) { $limit_opt[] = $default_limit; }
+	sort($limit_opt);
 
-	foreach ($limits_opts as $num) {
+	foreach ($limit_opt as $num) {
 		$url = elgg_http_add_url_query_elements($base_url, array('limit' => $num));
 		if ($limit == $num) {
 			echo '<li class="elgg-state-selected"><span>' . $num . '</span></li>';
