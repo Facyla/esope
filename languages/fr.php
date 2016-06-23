@@ -261,7 +261,7 @@ return array(
 	'avatar:current' => 'Image actuelle',
 	'avatar:remove' => 'Supprime votre image du profil et restaure l\'icône par défaut',
 	'avatar:crop:title' => 'Recadrage de l\'image',
-	'avatar:upload:instructions' => "Votre image du profil est affichée sur tout le site. Vous pouvez la changer quand vous le souhaitez. (Formats de fichiers acceptés: GIF, JPG ou PNG)",
+	'avatar:upload:instructions' => "Votre image du profil est affichée sur tout le site. Vous pouvez la changer quand vous le souhaitez. (Formats de fichiers acceptés: GIF, JPG ou PNG - format carré - dimensions minimum recommandées 200x200)",
 	'avatar:create:instructions' => 'Cliquez et faites glisser le carré ci-dessous selon la façon dont vous voulez que votre photo soit recadrée. Un aperçu s\'affiche sur la droite. Lorsque le résultat vous convient, cliquez sur «&nbsp;Créer l\'image du profil&nbsp;». Cette version recadrée sera utilisée sur l\'ensemble du site pour vous représenter.',
 	'avatar:upload:success' => 'L\'image du profil a bien été chargée',
 	'avatar:upload:fail' => 'Échec du chargement de l\'image du profil',

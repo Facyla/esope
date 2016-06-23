@@ -145,12 +145,10 @@ $content .= $search_form;
 $content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
 
 // If any parameter is passed, perform search on page load (>1 because there is always a default __elgg_uri param)
+//echo '<pre>' . print_r($_GET, true) . '</pre>'; // debug
 //if (!empty($_GET)) {
 if (sizeof($_GET) > 1) {
-	//echo '<pre>' . print_r($_GET, true) . '</pre>'; // debug
-	$content .= '<script type="text/javascript">
-	esope_search();
-	</script>';
+	$content .= '<script type="text/javascript">esope_search();</script>';
 }
 
 $params = array(

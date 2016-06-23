@@ -12,6 +12,11 @@ elgg_pop_breadcrumb();
 
 elgg_register_title_button();
 
+// URL-params
+$q = get_input('q');
+$limit = get_input('limit');
+$offset = get_input('offset');
+
 // Prepare JS script for forms
 $action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = elgg_add_action_tokens_to_url($action_base . 'esearch');
@@ -35,8 +40,8 @@ function esope_search(){
 $search_action = "javascript:esope_search();";
 // Should be an array, so clear blanks then make it an array
 $metadata_search_fields = elgg_get_plugin_setting('metadata_groupsearch_fields', 'esope');
-// Default to general advanced fiilds if not set
-if (empty($metadata_search_fields)) $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'esope');
+// Default to general advanced fields if not set
+if (empty($metadata_search_fields)) { $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'esope'); }
 if (!empty($metadata_search_fields)) {
 	$metadata_search_fields = str_replace(' ', '', $metadata_search_fields);
 	$metadata_search_fields = explode(',', $metadata_search_fields);
@@ -62,16 +67,23 @@ if (elgg_is_active_plugin('profile_manager')) {
 $search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'group'));
+$search_form .= elgg_view('input/hidden', array('name' => 'limit', 'value' => $limit));
+$search_form .= elgg_view('input/hidden', array('name' => 'offset', 'value' => $offset));
 $search_form .= '<fieldset>';
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . '<input type="text" name="q" value="" /></label></div>';
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . elgg_view('input/text', array('name' => 'q', 'value' => $q)) . '</label></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset></form><br />';
 
 $content .= $search_form;
 $content .= '<div id="esope-search-results"></div>';
 
+// If any parameter is passed, perform search on page load (>1 because there is always a default __elgg_uri param)
+//if (!empty($_GET)) {
+if (sizeof($_GET) > 1) {
+	$content .= '<script type="text/javascript">esope_search();</script>';
+}
 
 $sidebar = 	'';
 $sidebar .= elgg_view('groups/group_tagcloud_block');

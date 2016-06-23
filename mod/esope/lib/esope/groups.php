@@ -357,7 +357,7 @@ function esope_groups_search_page() {
 	include elgg_get_plugins_path() . 'esope/pages/search/index.php';
 }
 
-// Search into a group
+// Search groups
 function esope_groups_groupsearch_page() {
 	elgg_push_breadcrumb(elgg_echo('search'));
 	include elgg_get_plugins_path() . 'esope/pages/groups/groupsearch.php';

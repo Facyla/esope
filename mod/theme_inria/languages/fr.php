@@ -142,7 +142,7 @@ return array(
 	'entities:owner' => 'par %s',
 	'entities:footer:time' => 'Dernière mise à jour %s',
 
-	'adf_platform:directory' => 'Membres',
+	'esope:directory' => 'Membres',
 	
 	'inria:mygroups' => "Tous mes groupes",
 	'theme_inria:groups:discover' => "Groupes à découvrir",
@@ -396,17 +396,80 @@ Voici l'adresse du nouveau compte créé : %s
 	// Translation override
 	'members:searchtag' => "Chercher des membres par mot-clé",
 	'members:title:searchtag' => "Recherche de membres correspondant au mot-clé \"%s\"",
-	'search_types:tags' => "Mots-clés",
-	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/p/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
 	
-	'adf_platform:groups:allowregister' => "Forcer l'inscription dans le groupe",
-	
+	// Esope
 	'esope:fulltextsearch' => "Recherche plein texte",
+	'esope:groups:allowregister' => "Forcer l'inscription dans le groupe",
 	'esope:fulltextsearch:user' => "Recherche par nom ou prénom",
 	'esope:fulltextsearch:group' => "Recherche plein texte",
 	
+	// Main translation file
+	'profile:briefdescription' => "Fonction / Rôle", // Brève description (Profil)
+	'profile:location' => "Localisation", // Adresse
+	'profile:field:location' => "Localisation", // Adresse
+	'access:read' => "Visibilité", // Accès en lecture
+	'LOGGED_IN' => "membres Iris", // membres connectés
+	'access:friends:label' => "contacts seulement", // contacts
+	'PUBLIC' => "tout internaute", // public
 	'river:all' => "Ça bouge sur Iris ...",
+	'search_types:tags' => "Mots-clés",
+	
+	'avatar' => "Photo",
+	'avatar:noaccess' => "Vous n'êtes pas autorisé à modifier la photo de cet utilisateur",
+	'avatar:create' => 'Créer ma photo',
+	'avatar:edit' => 'Modifier ma photo',
+	'avatar:preview' => 'Prévisualisation',
+	'avatar:upload' => 'Envoyer une nouvelle photo',
+	'avatar:current' => 'Image actuelle',
+	'avatar:remove' => 'Supprime votre photo et restaure l\'icône par défaut',
+	'avatar:crop:title' => 'Outil pour recadrer votre photo',
+	'avatar:upload:instructions' => "Votre photo est affichée sur tout le site. Vous pouvez la changer quand vous le souhaitez. (Formats de fichiers acceptés: GIF, JPG ou PNG - format carré - dimensions minimum recommandées 200x200)",
+	'avatar:create:instructions' => "Agrandissez et déplacez le carré qui apparaît afin de recadrer votre photo. Un aperçu est disponible à droite de l'image. Un aperçu s'affiche sur la droite. Lorsque le résultat vous convient, cliquez sur « Créer la photo ». Cette version recadrée sera utilisée sur l'ensemble du site pour vous représenter.",
+	'avatar:upload:success' => 'La photo a bien été chargée',
+	'avatar:upload:fail' => 'Échec du chargement de la photo',
+	'avatar:resize:fail' => 'Le redimensionnement de la photo a échoué',
+	'avatar:crop:success' => 'Le recadrage de la photo a réussi',
+	'avatar:crop:fail' => 'Le recadrage de la photo a échoué',
+	'avatar:remove:success' => 'La photo a bien été supprimée',
+	'avatar:remove:fail' => 'Échec de la suppression de la photo',
+	
+	
+	// Groups
+	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/p/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
+	
+	// Thewire
 	'thewire:everyone' => "Vos actualités en 140 caractères",
+	
+	/* @TODO
+	'' => "mes groupes (membres)", // mes groupes
+	'' => "mes groupes (propriétaire ou responsable)", // les groupes que je possède
+	'' => "invitations aux groupes", // invitations du groupe
+	'' => "Insérer une image ou un fichier", // fichier importé
+	'' => "Activer/désactiver éditeur visuel", // editer le HTML
+	'' => "poster un commentaire", // commenter
+
+	'' => "Activer les "messages du groupe" (accès réservé aux membres du groupe)", // Activer le Fil (accès réservé aux membres du groupe)
+	'' => "activer le forum", // activer le module discussion du groupe
+	'' => "Activer le wiki (pages collaboratives) du groupe", // Autoriser les pages du groupe
+	'' => "Résumé", // Brève description
+	'' => "mots clés", // tags
+	'' => "signets", // liens web
+	'' => "inviter des contacts", // inviter
+	'' => "mon statut", // mon status
+	'' => "page du groupe", // wiki du groupe
+	'' => "messages pour le groupe", // Messages du Fil du groupe
+	'' => "a publié sur le fil", // a envoyé un message à microblog
+	'' => "a publié le fichier", // a téléchargé le fichier
+	'' => "Invitez des membres à participer à ce groupe", // Invitez des amis à ce groupe
+	'' => "Forcer l'inscription dans le groupe", // Inscrire dans le groupe
+	'' => "créer une sous-page dans ce wiki", // créer une sous page
+	'' => "Mots clés du groupe", // Mots-clés (Recherche sur le groupe)
+	'' => "Recherche sur le nom  et sur la description du groupe", // Recherche plein texte
+	'' => "centres d'intérêts", // Mots-clés (Recherche sur les membres - ou bien modifier champs du profil correspondant)
+	'' => "modifier ma photo", // modifier mon image
+	'' => "", // 
+	'' => "", // 
+	*/
 	
 	
 	// Blog override (blog => article)

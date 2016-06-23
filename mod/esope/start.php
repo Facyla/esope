@@ -1331,9 +1331,12 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 20
 	elgg_pop_context('widgets');
 	elgg_pop_context('search');
 	
+	// Add alerts now (more than max results, etc.)
+	if ($alert) { $return .= $alert; }
+	
 	// Load more link (if we haven't reached the last result)
 	$loadmore_offset = $search_params['offset'] + $search_params['limit'];
-	if (($hide_loadmore != 'no') && ($loadmore_offset < $return_count)) {
+	if (($hide_loadmore != 'no') && ($loadmore_offset > 0) && ($loadmore_offset < $return_count)) {
 		$target = '#esope-search-results';
 		$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes'));
 		$remaining_results = $return_count - $loadmore_offset;
@@ -1356,7 +1359,6 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 20
 		$return .= '</div>';
 	}
 	
-	if ($alert) { $return .= $alert; }
 	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
 	
 	return $return;
