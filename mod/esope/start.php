@@ -1159,7 +1159,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
    - allow fulltext search in any metadata ? (warning !)
    - integrate (if search plugin active) search_highlight_words($words, $string)
  */
-function esope_esearch($params = array(), $defaults = array(), $max_results = 200) {
+function esope_esearch($params = array(), $defaults = array(), $max_results = 10) {
 	$debug = esope_extract('debug', $params, false);
 	$add_count = esope_extract('add_count', $params, $defaults['add_count']);
 	$hide_pagination = esope_extract('hide_pagination', $params, $defaults['hide_pagination']);
@@ -1264,6 +1264,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 20
 			'offset' => $offset,
 			'sort' => $sort,
 			'order' => $order,
+			'count' => true,
 		);
 	
 	if ($joins) { $search_params['joins'] = $joins; }
@@ -1274,7 +1275,6 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 20
 	
 	// PERFORM SEARCH RESULTS COUNT
 	// @TODO : use batches ?
-	$search_params['count'] = true;
 	if ($debug) { echo '<pre>' . print_r($search_params, true) . '</pre>'; }
 	$return_count = elgg_get_entities_from_metadata($search_params);
 	if ($count) { return $return_count; }
@@ -1283,7 +1283,9 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 20
 	// PERFORM ENTITIES SEARCH
 	$search_params['count'] = false;
 	// Limit query and display to something that can be handled (using max results limit)
-	if ($return_count > $max_results) { $alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>'; }
+	if (($hide_loadmore == 'yes') && ($return_count > $max_results)) {
+		$alert = '<span class="esope-morethanmax">' . elgg_echo('esope:search:morethanmax') . '</span>';
+	}
 	if ($search_params['limit'] > $max_results) { $search_params['limit'] = $max_results; }
 	
 	// Return results entities array if asked to
@@ -1336,9 +1338,9 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 20
 	
 	// Load more link (if we haven't reached the last result)
 	$loadmore_offset = $search_params['offset'] + $search_params['limit'];
-	if (($hide_loadmore != 'no') && ($loadmore_offset > 0) && ($loadmore_offset < $return_count)) {
+	if (($hide_loadmore != 'yes') && ($loadmore_offset > 0) && ($loadmore_offset < $return_count)) {
 		$target = '#esope-search-results';
-		$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes'));
+		$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
 		$remaining_results = $return_count - $loadmore_offset;
 		$next_results = min($search_params['limit'], $remaining_results);
 		if ($remaining_results > $next_results) { 

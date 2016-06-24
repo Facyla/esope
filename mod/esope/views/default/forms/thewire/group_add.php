@@ -31,6 +31,7 @@ if ($post) {
 // Integration into groups : add container
 echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $group->guid));
 // Also force access to the group members
+// Note : for visible access select, comment here and uncomment below
 echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
 
 $count_down = "<span>$char_limit</span> " . elgg_echo('thewire:charleft');
@@ -56,6 +57,12 @@ echo elgg_view('input/plaintext', array(
 <div id="thewire-characters-remaining">
 	<?php echo $count_down; ?>
 </div>
+<?php
+/* Alternative access_id : enable to choose access level and default to group default access
+$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
+echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id));
+*/
+?>
 <div class="elgg-foot mts">
 <?php
 

@@ -632,7 +632,8 @@ return array(
 	/* ESOPE search */
 	'esope:settings:groups:searchtab' => "Multi-criteria search tab",
 	'esope:settings:groups:tags' => "Add tag cloud below search",
-	'esope:grouptools:priority' => "Group tools priority",
+	'esope:grouptools:priority' => "Group tools priority (modules)",
+	'esope:grouptools:priority:menu' => "Group tools priority (edit menu)",
 	'esope:groupoptions:priority' => "Group tools options priority (group edit form)",
 	'esope:settings:members:searchtab' => "Multi-criteria search tab",
 	'esope:search:members:role' => 'Member status',

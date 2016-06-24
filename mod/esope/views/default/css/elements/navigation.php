@@ -429,7 +429,7 @@ if ($fixedwidth != 'yes') { $fixedwidth = false; } else { $fixedwidth = true; }
 	position: absolute;
 	top: 40px; /* au lieu de 44px */
 	left: -1px;
-	z-index: 2;
+	z-index: 20;
 	box-shadow: 2px 2px 3px #333;
 	-moz-box-shadow: 2px 2px 3px #333;
 	-webkit-box-shadow: 2px 2px 3px #333;

@@ -31,7 +31,7 @@ if ($post) {
 // Integration into groups : add container
 echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $group->guid));
 // Also force access to the group members
-echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
+//echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
 
 $count_down = "<span>$char_limit</span>";
 $num_lines = 3;
@@ -53,7 +53,7 @@ echo elgg_view('input/plaintext', array(
 ?>
 
 <div class="elgg-foot mts">
-	<span style="float:right;">
+	<span style="float:right; margin-left:2em;">
 		<span id="thewire-characters-remaining"><?php echo $count_down; ?></span>
 		<?php
 		echo elgg_view('input/submit', array(
@@ -62,5 +62,9 @@ echo elgg_view('input/plaintext', array(
 		));
 		?>
 	</span>
+	<?php
+	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
+	echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id));
+	?>
 </div>
 

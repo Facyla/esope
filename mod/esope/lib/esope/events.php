@@ -110,7 +110,7 @@ function esope_login_user_event($event, $type, $user) {
 function esope_thewire_handler_event($event, $type, $object) {
 	if (!empty($object) && elgg_instanceof($object, "object", "thewire")) {
 		$parent_guid = get_input('parent_guid', false);
-		$access_id = get_input('access_id', false);
+		$access_id = get_input('access_id', ACCESS_DEFAULT);
 		$container_guid = get_input('container_guid', false);
 		
 		// If replying to a previous post, default to parent container and access
@@ -126,8 +126,9 @@ function esope_thewire_handler_event($event, $type, $object) {
 		if ($container_guid) {
 			$container = get_entity($container_guid);
 			if (elgg_instanceof($container, 'group')) {
+				if (!$access_id) { $access_id = $container->group_acl; }
 				$object->container_guid = $container_guid;
-				$object->access_id = $container->group_acl;
+				$object->access_id = $access_id;
 				// Update entity (may be overriden if specific access is set)
 				$object->save();
 				// @TODO Notify (force) to the group ? this should be done in another event hook (registered after this one)

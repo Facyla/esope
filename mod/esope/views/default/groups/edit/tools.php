@@ -15,6 +15,24 @@ if ($tools) {
 	usort($tools, create_function('$a,$b', 'return strcmp($a->label,$b->label);'));
 	// Enable alternate (custom) sort
 	// Sort options using priority settings, rather that alpha
+	
+
+/*
+$views = elgg_get_config('views');
+$tools = $views->extensions['groups/tool_latest'];
+echo '<br /><p>' . elgg_echo('esope:grouptools:priority') . '</p>';
+foreach ($tools as $priority => $view) {
+	if ($view != 'groups/tool_latest') {
+		echo '<label>' . $view . '</label>';
+		echo elgg_view('input/text', array(
+			'name' => "params[tools:$view]",
+			'value' => $priority
+		));
+	}
+}
+*/
+	
+	
 	$group_options = array();
 	foreach ($tools as $k => $obj) {
 		$option_name = $obj->name;
@@ -50,14 +68,16 @@ if ($tools) {
 			$value = $group_option_default_value;
 		}
 		
-		$checked = false;
-		if ($value === 'yes') { $checked = true; }
-		echo elgg_format_element('div', array(), elgg_view('input/checkbox', array(
+		// Esope : add help title if set
+		$attrs = array();
+		$title = elgg_echo("groups:tools:$group_option->name:details");
+		if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
+		echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
 			'name' => $group_option_toggle_name,
 			'value' => 'yes',
 			'default' => 'no',
-			'checked' => $checked,
-			'label' => $group_option->label
+			'checked' => ($value === 'yes') ? true : false,
+			'label' => $group_option->label,
 		)));
 	}
 }

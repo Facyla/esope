@@ -637,7 +637,8 @@ return array(
 	/* ESOPE search */
 	'esope:settings:groups:searchtab' => "Onglet de recherche multi-critère",
 	'esope:settings:groups:tags' => "Ajouter un nuage de tags sous la recherche",
-	'esope:grouptools:priority' => "Ordre des outils dans les groupes",
+	'esope:grouptools:priority' => "Ordre des outils dans les groupes (modules)",
+	'esope:grouptools:priority:menu' => "Ordre des outils dans les groupes (menu d'édition)",
 	'esope:groupoptions:priority' => "Ordre des options des outils des groupes (formulaire de configuration du groupe)",
 	'esope:settings:members:searchtab' => "Onglet de recherche multicritère",
 	'esope:search:members:role' => 'Statut',

@@ -247,7 +247,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; }
 .elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 0 0.5em 0; text-align: left; margin: 0; }
 
-.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; float:none; font-size: 1.2em; }
+.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; /* float:none; */ font-size: 1.2em; }
 .thewire-form #thewire-characters-remaining.thewire-characters-remaining-warning { font-weight: bold !important; color: #F00 !important; }
 /* Note : si on veut ajouter un message il faudra modifier le JS et la structure HTML...
 #thewire-characters-remaining .thewire-characters-remaining-message { display:none; }
@@ -467,7 +467,7 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 
 /* Folders (masquer réglage) */
-#file_tools_structure_management_enable, label[for="file_tools_structure_management_enable"] { display: none; }
+/* #file_tools_structure_management_enable, label[for="file_tools_structure_management_enable"] { display: none; } */
 
 #profile_manager_profile_edit_tabs { clear:left; }
 
