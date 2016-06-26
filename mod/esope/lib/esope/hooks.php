@@ -784,32 +784,6 @@ function esope_thewire_prepare_notification($hook, $type, $notification, $params
 
 /* Event_calendar enhancements */
 
-/** Prepare the message content
- * Returns a more meaningful message for events
- * Note : no-hook function because we need to be able to use it with the 
- * 
- * @param ElggObject $entity
- * @param ElggUser $to_entity
- * @param string $language
- */
-function esope_event_calendar_ics_notify_message($entity, $params) {
-	if (elgg_instanceof($entity, 'object', 'event_calendar')) {
-		if (!$params['language']) { $params['language'] = get_current_language(); }
-		$descr = $entity->description;
-		$title = $entity->title;
-		$owner = $entity->getOwnerEntity();
-		$ics_file_details = ''; // @TODO : add a message for attached files ?
-		return elgg_echo('event_calendar:ics:notification', array(
-				$owner->name,
-				$title,
-				$descr,
-				$entity->getURL(),
-				$ics_file_details,
-			), $language);
-	}
-	return false;
-}
-
 // Add .ics file attachment to email notification params
 // Note : $params == $returnvalue (see http://reference.elgg.org/1.12/notification_8php_source.html#l00627)
 function esope_event_calendar_add_attachment_params($hook, $type, $returnvalue, $params) {
@@ -834,6 +808,32 @@ function esope_event_calendar_add_attachment_params($hook, $type, $returnvalue, 
 		}
 	}
 	return $returnvalue;
+}
+
+/** Prepare the message content
+ * Returns a more meaningful message for events
+ * Note : no-hook function because we need to be able to use it with the 
+ * 
+ * @param ElggObject $entity
+ * @param ElggUser $to_entity
+ * @param string $language
+ */
+function esope_event_calendar_ics_notify_message($entity, $params) {
+	if (elgg_instanceof($entity, 'object', 'event_calendar')) {
+		if (!$params['language']) { $params['language'] = get_current_language(); }
+		$descr = $entity->description;
+		$title = $entity->title;
+		$owner = $entity->getOwnerEntity();
+		$ics_file_details = ''; // @TODO : add a message for attached files ?
+		return elgg_echo('event_calendar:ics:notification', array(
+				$owner->name,
+				$title,
+				$descr,
+				$entity->getURL(),
+				$ics_file_details,
+			), $language);
+	}
+	return false;
 }
 
 // Overrides the default notification message
