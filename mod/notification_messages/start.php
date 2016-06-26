@@ -939,7 +939,7 @@ function notification_messages_get_subscriptions_addowner($hook, $type, $subscri
 			$subscriptions[$owner_guid][] = 'email';
 		}
 	}
-	error_log("NOTIF : " . print_r($subscriptions, true));
+	//error_log("NOTIF : " . print_r($subscriptions, true));
 	
 	return $subscriptions;
 }

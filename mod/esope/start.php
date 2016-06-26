@@ -85,14 +85,13 @@ function esope_init() {
 	
 	
 	// Event_calendar notifications
-	
-	// Modifie les paramètres d'envoi pour ajouter une pièce jointe avec le fichier .ics aux notifications d'event_calendar
+	// 1. Modifie les paramètres d'envoi pour ajouter une pièce jointe avec le fichier .ics aux notifications d'event_calendar
 	elgg_register_plugin_hook_handler('email', 'system', 'esope_event_calendar_add_attachment_params', 100);
-	
-	// Modifie le message et ajoute le fichier .ics en pièce jointe - Modify message and add attachments to event notifications
+	// 2. Modifie le message pour indiquer qu'il y a le fichier .ics en pièce jointe - Modify message to tell there is an attached iCal file
 	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:event_calendar', 'esope_event_calendar_prepare_notification', 901);
 	
-	// Ajout de l'auteur aux personnes notifiées (envoi immédiat)
+	// 3. Ajout de l'auteur aux personnes notifiées : fait par notification_messages
+	// Ajout de l'auteur aux personnes notifiées (pour envoi immédiat)
 	// @TODO use new hook to add attachements to params
 	//elgg_register_event_handler('create','object', 'esope_notify_event_owner', 900);
 	//elgg_register_plugin_hook_handler('send:before', 'notifications', 'esope_event_calendar_send_before_notifications_params', 100);

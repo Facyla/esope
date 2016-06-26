@@ -231,35 +231,6 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 
 // NOTIFICATIONS
 
-/* Sends directly a message to the event owner 
- * Note : useless if using notification_messages (adds owner to recipients)
- * 
- */
-/*
-function theme_inria_notify_event_owner($event, $type, $object) {
-	if(!empty($object) && elgg_instanceof($object, "object", "event_calendar")) {
-		global $CONFIG;
-		$owner = $object->getOwnerEntity();
-		$default_subject = $CONFIG->register_objects['object']['event_calendar'] . ": " . $object->getURL();
-		$subject = elgg_trigger_plugin_hook("notify:entity:subject", 'object', array("entity" => $object, "to_entity" => $owner, "method" => 'email'), $default_subject);
-		if (empty($subject)) { $subject = $default_subject; }
-		//$message = event_calendar_ics_notify_message('notify:entity:message', 'event', '', array('entity' => $object, 'to_entity' => $owner, 'method' => 'email'));
-		$message = event_calendar_ics_notify_message($object, array('to_entity' => $owner));
-		
-		$event = null;
-			if (isset($object) && isset($event)) {
-				$event = new \Elgg\Notifications\Event($object, $params['action'], $sender);
-			}
-		$params = array('event' => , )
-		$params = elgg_trigger_plugin_hook('notify:entity:params', 'object', array("entity" => $object, "to_entity" => $owner, "method" => 'email'), null);
-error_log("TEST TI : events notif owner {$owner->username} / {$object->title}");
-		notify_user($owner->guid, $object->container_guid, $subject, $message, $params, 'email');
-	}
-}
-*/
-
-
-
 // Block sending notification in some groups' discussions (replies only)
 // Intercepts create,annotation event early and block sending messages by modifying plugins signals
 // As they are not notified by default, block plugins which notify comments, eg. comment_tracker
