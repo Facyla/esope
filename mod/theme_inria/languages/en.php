@@ -304,18 +304,6 @@ return array(
 	'theme_inria:etherpad:new' => "Create a new Pad",
 	'theme_inria:etherpad:new:help' => "This opens another window and lets you create your Pad. Once created, copy the Pad URL the, go back on this page to paste it.",
 	
-	'event_calendar:ics:notification' => "%s has created a new event :
-
-%s
-%s
-
-View event on the site :
-%s
-
-You can add directly this event to your own calendar application through the attached ICAL file. 
-%s",
-	
-	
 	
 	// Création de comptes
 	'inria_invite' => "Invite  user account",

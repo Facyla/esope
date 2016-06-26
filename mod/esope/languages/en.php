@@ -1139,8 +1139,20 @@ This is an automated notification, please do not reply to this email.",
 	'bookmarks:mine' => "Mine",
 	'bookmarks:mygroups' => "In my groups",
 	'pages:widget:description' => "Displays your pages.",
+	
 	'event_calendar:widget:description' => "Displays your upcoming events.",
 	'event_calendar:num_display' => "Number of events to display",
+	'event_calendar:ics:notification' => "%s has created a new event :
+
+%s
+%s
+
+View event on the site :
+%s
+
+You can add directly this event to your own calendar application through the attached iCal file. 
+%s",
+	
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",

@@ -156,16 +156,6 @@ function theme_inria_init(){
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
 	
 	
-	// Modify message and add attachments to event notifications
-	if (elgg_is_active_plugin('html_email_handler')) {
-		// Modify default events notification message
-		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'event_calendar_ics_notify_message');
-		// Use hook to add attachments
-		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'event_calendar_ics_notify_attachment');
-	}
-	// Interception création event pour ajouter l'auteur aux personnes notifiées
-	elgg_register_event_handler('create','object', 'theme_inria_notify_event_owner', 900);
-	
 	// Filtrage des contenus saisis
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'esope_htmlawed_filter_tags');

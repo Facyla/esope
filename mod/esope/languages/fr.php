@@ -1142,8 +1142,20 @@ Il s'agit d'un message de notification automatique, merci de ne pas répondre di
 	'bookmarks:mine' => "Les miens",
 	'bookmarks:mygroups' => "Dans mes groupes",
 	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
+	
 	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
 	'event_calendar:num_display' => "Nombre d'événements à afficher",
+	'event_calendar:ics:notification' => "%s a créé un nouvel événement :
+
+%s
+%s
+
+Afficher l'événement sur le site :
+%s
+
+Vous pouvez également ajouter directement cet événement à votre agenda via le fichier iCal ci-joint.
+%s",
+	
 	'messages:widget:title' => "Messages non lus",
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",

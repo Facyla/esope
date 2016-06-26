@@ -43,7 +43,7 @@ function prevent_notifications_init() {
 function prevent_notifications_enqueue_notification($hook, $type, $result, $params) {
 	$send_notification = get_input('send_notification', 'yes');
 	$entity = $params['object'];
-	//error_log("PREVENT QUEUE => $send_notification");
+	//error_log("PREVENT QUEUE => $send_notification => {$entity->guid} / {$entity->title}");
 	if ($send_notification == 'no') {
 		// Do not notify if explicitely asked to
 		$msg = elgg_echo('prevent_notifications:notsent');

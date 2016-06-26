@@ -83,6 +83,22 @@ function esope_init() {
 	// Note : MUST be run very early so group notifications can happen
 	elgg_register_event_handler("create", "object", "esope_thewire_handler_event", 0);
 	
+	
+	// Event_calendar notifications
+	
+	// Modifie les paramètres d'envoi pour ajouter une pièce jointe avec le fichier .ics aux notifications d'event_calendar
+	elgg_register_plugin_hook_handler('email', 'system', 'esope_event_calendar_add_attachment_params', 100);
+	
+	// Modifie le message et ajoute le fichier .ics en pièce jointe - Modify message and add attachments to event notifications
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:event_calendar', 'esope_event_calendar_prepare_notification', 901);
+	
+	// Ajout de l'auteur aux personnes notifiées (envoi immédiat)
+	// @TODO use new hook to add attachements to params
+	//elgg_register_event_handler('create','object', 'esope_notify_event_owner', 900);
+	//elgg_register_plugin_hook_handler('send:before', 'notifications', 'esope_event_calendar_send_before_notifications_params', 100);
+	
+	
+	
 	// Add group Wire support (option)
 	// Note : also uses esope's event handler ("create", "object")
 	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {

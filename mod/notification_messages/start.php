@@ -103,7 +103,7 @@ function notification_messages_init() {
 	
 	
 	/* ENABLE ATTACHMENTS */
-	// Note : attachments are now handled by html_email_handler
+	// Note : attachments are now handled by html_email_handler : use $params['attachments']
 	// register a hook to add a new hook that allows adding attachments and other params
 	// Note : enabled by default because it is required by notifications messages
 	/*
@@ -939,7 +939,7 @@ function notification_messages_get_subscriptions_addowner($hook, $type, $subscri
 			$subscriptions[$owner_guid][] = 'email';
 		}
 	}
-	//error_log("NOTIF : " . print_r($subscriptions, true));
+	error_log("NOTIF : " . print_r($subscriptions, true));
 	
 	return $subscriptions;
 }
@@ -1006,21 +1006,18 @@ function notification_messages_comments_notification_email_subject($hook, $type,
 		// another hook handler returned a non-array, let's not override it
 		return;
 	}
-
 	/** @var Elgg\Notifications\Notification */
-	$notification = elgg_extract('notification', $returnvalue['params']);
-
+	$notification = elgg_extract('notification', $params['params']);
 	if ($notification instanceof Elgg\Notifications\Notification) {
 		$object = elgg_extract('object', $notification->params);
-
 		if ($object instanceof ElggComment) {
 			$container = $object->getContainerEntity();
 			$new_subject = notification_messages_build_subject($object, $notification->params);
 			if (!empty($new_subject)) {
-				$returnvalue['subject'] = $new_subject;
+				$returnvalue['params']['notification']->subject = $new_subject;
 				//$returnvalue['subject'] = 'Re: ' . $new_subject;
 			} else {
-				$returnvalue['subject'] = 'Re: ' . $container->getDisplayName();
+				$returnvalue['params']['notification']->subject = 'Re: ' . $container->getDisplayName();
 			}
 		}
 	}

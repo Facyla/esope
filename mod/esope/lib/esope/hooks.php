@@ -664,19 +664,25 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 
 
 
+/* NOTIFICATIONS */
 
-// Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending
+// Provides a wrapper around _elgg_send_email_notification so it listens for $result and blocks sending, and also enables to pass params when sending the email
 // Note : we could also provide a blocking hook, but other plugins can register to the same hook to block notifications, so why bother...
 function esope_elgg_send_email_notification($hook, $type, $result, $params) {
 	
 	// Do not notify again if email notification already sent ?
 	if ($result === true) { return true; }
 	
+	// Trigger hook to add custom params (eg. attachments)
+	// @TODO replace by using prepare hook
+	//$params = elgg_trigger_plugin_hook('notify:entity:params', 'object', $params, $params);
+	
 	// Trigger blocking hook
 	// @TODO blocking hook should be global, otherwise better use the recipients hook to update the list
 	
 	return _elgg_send_email_notification($hook, $type, $result, $params);
 }
+
 
 
 // @TODO See http://reference.elgg.org/1.12/notification_8php_source.html#l00593 for $params
@@ -776,6 +782,80 @@ function esope_thewire_prepare_notification($hook, $type, $notification, $params
 }
 
 
+/* Event_calendar enhancements */
+
+/** Prepare the message content
+ * Returns a more meaningful message for events
+ * Note : no-hook function because we need to be able to use it with the 
+ * 
+ * @param ElggObject $entity
+ * @param ElggUser $to_entity
+ * @param string $language
+ */
+function esope_event_calendar_ics_notify_message($entity, $params) {
+	if (elgg_instanceof($entity, 'object', 'event_calendar')) {
+		if (!$params['language']) { $params['language'] = get_current_language(); }
+		$descr = $entity->description;
+		$title = $entity->title;
+		$owner = $entity->getOwnerEntity();
+		$ics_file_details = ''; // @TODO : add a message for attached files ?
+		return elgg_echo('event_calendar:ics:notification', array(
+				$owner->name,
+				$title,
+				$descr,
+				$entity->getURL(),
+				$ics_file_details,
+			), $language);
+	}
+	return false;
+}
+
+// Add .ics file attachment to email notification params
+// Note : $params == $returnvalue (see http://reference.elgg.org/1.12/notification_8php_source.html#l00627)
+function esope_event_calendar_add_attachment_params($hook, $type, $returnvalue, $params) {
+	// Another hook handler returned a non-array, let's not override it
+	if (!is_array($returnvalue)) { return; }
+	
+	// Note : ne pas utiliser la méthode ($object = elgg_extract('object', $params['params']);) :
+	// Elle semble OK en théorie mais elle ne fonctionne correctement que pour le 1er destinataire...
+	
+	/** @var Elgg\Notifications\Notification */
+	$notification = elgg_extract('notification', $params['params']);
+	if ($notification instanceof Elgg\Notifications\Notification) {
+		$object = elgg_extract('object', $notification->params);
+		//$object = elgg_extract('object', $params['params']);
+		if (elgg_instanceof($object, 'object', 'event_calendar')) {
+			$mimetype = 'text/calendar';
+			$filename = 'event.ics';
+			$file_content = elgg_view('event_calendar/attached_event_calendar', array('entity' => $object));
+			$file_content = elgg_view('event_calendar/attached_event_calendar_wrapper', array('body' => $file_content));
+			$file_content = chunk_split(base64_encode($file_content));
+			$returnvalue['params']['attachments'][] = array('mimetype' => $mimetype, 'filename' => $filename, 'content' => $file_content);
+		}
+	}
+	return $returnvalue;
+}
+
+// Overrides the default notification message
+function esope_event_calendar_prepare_notification($hook, $type, $notification, $params) {
+	$entity = $params['event']->getObject();
+	$owner = $params['event']->getActor();
+	$language = $params['language'];
+
+	// Title for the notification
+	//$notification->subject = elgg_echo('event_calendar:notify:subject', array($entity->title), $language);
+	
+	// Message body for the notification
+	$notification->body = esope_event_calendar_ics_notify_message($entity, array('to_entity' => $to_entity, 'language' => $language));
+	
+	// The summary text is used e.g. by the site_notifications plugin
+	//$notification->summary = elgg_echo('event_calendar:notify:summary', array($entity->title), $language);
+	
+	return $notification;
+}
+
+
+
 /**
  * Get any entity that matches a query that looks like a GUID
  * Note : we need to display this result only once, in the proper subtype
@@ -855,5 +935,6 @@ function esope_search_guid_hook($hook, $type, $value, $params) {
 	}
 	return $value;
 }
+
 
 
