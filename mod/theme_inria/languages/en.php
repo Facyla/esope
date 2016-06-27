@@ -400,5 +400,7 @@ Here is the new profile page : %s
 	'theme_inria:homeslider:select' => "Choose which slider to display",
 	'theme_inria:homeslider:edit' => "Edit this slider",
 	
+	'GROUP_MEMBERS' => "group members",
+	
 );
 

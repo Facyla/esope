@@ -397,6 +397,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'profile:field:location' => "Localisation", // Adresse
 	'access:read' => "Visibilité", // Accès en lecture
 	'LOGGED_IN' => "membres Iris", // membres connectés
+	'GROUP_MEMBERS' => "membres du groupe", // membres du groupe
 	'access:friends:label' => "contacts seulement", // contacts
 	'PUBLIC' => "tout internaute", // public
 	'river:all' => "Ça bouge sur Iris ...",
