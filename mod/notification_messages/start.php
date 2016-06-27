@@ -204,7 +204,8 @@ function notification_messages_build_subject($entity, $params = array()) {
 		$recipient = elgg_extract('recipient', $params);
 		$method = elgg_extract('method', $params, 'email');
 		*/
-		$language = elgg_extract('language', $params, get_current_language());
+		$language = get_current_language();
+		$language = elgg_extract('language', $params, $language);
 		
 		// Get best readable subtype
 		$subtype = $entity->getSubtype();
