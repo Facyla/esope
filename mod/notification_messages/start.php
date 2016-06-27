@@ -196,13 +196,15 @@ function notification_messages_get_subtype_setting($subtype = '') {
  * $entity : notified entity
  * $params : original hook $params
  */
-function notification_messages_build_subject($entity, $params) {
+function notification_messages_build_subject($entity, $params = array()) {
 	if (elgg_instanceof($entity)) {
 		//error_log(print_r($entity, true) . print_r($params, true));
+		/*
 		$owner = $params['event']->getActor();
-		$recipient = $params['recipient'];
-		$language = $params['language'];
-		$method = $params['method'];
+		$recipient = elgg_extract('recipient', $params);
+		$method = elgg_extract('method', $params, 'email');
+		*/
+		$language = elgg_extract('language', $params, get_current_language());
 		
 		// Get best readable subtype
 		$subtype = $entity->getSubtype();
