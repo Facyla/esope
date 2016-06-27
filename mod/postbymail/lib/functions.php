@@ -661,9 +661,19 @@ function postbymail_checkandpost($config = array()) {
 									$sender_reply = elgg_echo('postbymail:sender:error:forumonly', array($sender_reply));
 									break;
 								} else {
+									// Use new comment object structure
+									$comment = new ElggComment();
+									$comment->description = $post_body;
+									$comment->owner_guid = $member->guid;
+									$comment->container_guid = $entity->guid;
+									$comment->access_id = $entity->access_id;
+									$comment_guid = $comment->save();
+									/*
 									//if ($entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid)) {
 									$annotation = $entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid);
 									if ($annotation) {
+									*/
+									if (!empty($comment_guid)) {
 										$published = true;
 										$body .= elgg_echo("generic_comment:posted");
 										// Add to river
@@ -685,6 +695,8 @@ function postbymail_checkandpost($config = array()) {
 												$member->getURL()
 											));
 										// Trigger a hook to provide better integration with other plugins
+										// @TODO : use new hook
+										//$hook_message = elgg_trigger_plugin_hook('prepare', 'notification:create:object:comment', array('entity' => $entity, 'to_entity' => $user, 'method' => 'email'), $notification_message);
 										$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $notification_message);
 										// Failsafe backup if hook as returned empty content but not false (= stop)
 										if (!empty($hook_message) && ($hook_message !== false)) { $notification_message = $hook_message; }
