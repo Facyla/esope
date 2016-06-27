@@ -6,7 +6,6 @@ $time = elgg_extract('seconds', $vars, 600);
 $limit = elgg_extract('limit', $vars, 14);
 $group = elgg_get_page_owner_entity();
 
-elgg_push_context('widgets');
 // Get group members who where active in a specific timeframe
 // Note: when processing huge sites this is much more efficient than the other method (get active users then filter by group membership)
 $dbprefix = elgg_get_config('dbprefix');
@@ -21,9 +20,9 @@ $options = array(
 	'limit' => $limit,
 	'list_type' => 'gallery',
 	'gallery_class' => 'elgg-gallery-users',
+	'pagination' => false,
 );
 $body .= elgg_list_entities_from_relationship($options);
-elgg_pop_context('widgets');
 
 /* Avoid this method : might lead to memory overflow on big sites
 // Limit : will be filtered, but do not set to high (or better use a custom direct query)

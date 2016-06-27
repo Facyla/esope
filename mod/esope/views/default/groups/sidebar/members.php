@@ -25,6 +25,7 @@ $params = array(
 	'pagination' => false,
 	'list_type' => 'gallery',
 	'gallery_class' => 'elgg-gallery-users',
+	'pagination' => false,
 );
 $body = elgg_list_entities_from_relationship($params);
 $params['count'] = true;
