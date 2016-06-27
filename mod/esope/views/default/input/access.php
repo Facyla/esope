@@ -137,7 +137,7 @@ if (elgg_instanceof($container, 'group')) {
 				case 'groupvis': $vars['value'] = $container->access_id; break;
 				case 'members': $vars['value'] = 1; break;
 				case 'public': $vars['value'] = 2; break;
-				case 'default': /* Do not set (let original chack do it) $vars['value'] = get_default_access(); */ break;
+				case 'default': /* Do not set (let original check do it) $vars['value'] = get_default_access(); */ break;
 				default: $vars['value'] = $group_acl;
 			}
 		}

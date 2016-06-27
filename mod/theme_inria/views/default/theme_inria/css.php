@@ -284,6 +284,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-form-thewire-group-add .elgg-button-submit { margin-top: 3px; }
 .theme_inria-thewire-group-add {}
 .theme_inria-thewire-group-add h3 { margin-top: 20px; }
+.elgg-form-thewire-group-add select { max-width: 20ex; float: right; }
 
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }

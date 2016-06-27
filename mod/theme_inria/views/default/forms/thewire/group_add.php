@@ -64,7 +64,11 @@ echo elgg_view('input/plaintext', array(
 	</span>
 	<?php
 	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
-	echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id));
+	$access_opt = array(
+			$group->group_acl => get_readable_access_level($group->group_acl),
+			'1' => elgg_echo('ACCESS_LOGGED_IN')
+		);
+	echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
 	?>
 </div>
 
