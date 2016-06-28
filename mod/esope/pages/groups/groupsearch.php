@@ -49,21 +49,27 @@ if (!empty($metadata_search_fields)) {
 $metadata_search = '';
 
 // Build metadata search fields
-if (elgg_is_active_plugin('profile_manager')) {
-	// Metadata options fetching will only work if those are stored somewhere
-	if ($metadata_search_fields) foreach ($metadata_search_fields as $metadata) {
-		$name = "metadata[$metadata]";
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst(elgg_echo($metadata)) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
-	}
-} else {
-	// We'll rely on text inputs then
+// @TODO : use better translations for metadata names
+if ($metadata_search_fields) {
+	$use_profile_manager = false;
+	if (elgg_is_active_plugin('profile_manager')) { $use_profile_manager = true; }
 	foreach ($metadata_search_fields as $metadata) {
 		$name = "metadata[$metadata]";
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst(elgg_echo($metadata)) . '<input type="text" name="' . $name . '" /></label></div>';
+		$meta_title = elgg_echo("groups:$metadata");
+		if ($meta_title == "groups:$metadata") { $meta_title = elgg_echo($metadata); }
+		$meta_title = ucfirst($meta_title);
+		if (elgg_is_active_plugin('profile_manager')) {
+			// Metadata options fetching will only work if those are stored somewhere
+			$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		} else {
+			// We'll rely on text inputs then
+			$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . $meta_title . '<input type="text" name="' . $name . '" /></label></div>';
+		}
 	}
 }
 
 
+// Compose search form
 $search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'group'));
@@ -72,7 +78,7 @@ $search_form .= elgg_view('input/hidden', array('name' => 'offset', 'value' => $
 $search_form .= '<fieldset>';
 $search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch') . elgg_view('input/text', array('name' => 'q', 'value' => $q)) . '</label></div>';
+$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:group') . elgg_view('input/text', array('name' => 'q', 'value' => $q)) . '</label></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset></form><br />';
 

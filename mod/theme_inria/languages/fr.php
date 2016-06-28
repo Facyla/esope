@@ -39,7 +39,7 @@ return array(
 	'theme_inria:members:newest:tooltip' => "Cliquez sur ce lien pour voir tous les nouveaux membres inscrits sur Iris",
 	'theme_inria:messages:tooltip' => "Messagerie interne Iris",
 	'theme_inria:usersettings:tooltip' => "Paramétrez vos notifications et votre langue",
-	'theme_inria:thewire:explanations' => "Vous trouverez ici les messages du fil <strong>destinés à tous</strong> ainsi que les messages du fil de <strong>vos groupes</strong>. Chaque membre d'Iris visualise ici des informations différentes qui dépendent de ses abonnements et droits d'accès",
+	'theme_inria:thewire:explanations' => "Vous trouverez ici les messages du Fil <strong>destinés à tous</strong> ainsi que les messages du Fil de <strong>vos groupes</strong>. Chaque membre d'Iris visualise ici des informations différentes qui dépendent de ses abonnements et droits d'accès",
 	'theme_inria:activity:explanations' => "Vous trouverez ici les dernières activités dans <strong>vos groupes</strong> et dans les groupes <strong>visibles de tous</strong>. Chaque membre d'Iris visualise ici des informations qui dépendent de ses abonnements et droits d'accès",
 	
 	// Tools widgets
@@ -83,7 +83,7 @@ return array(
 	'theme_inria:membershipreq:delete' => 'Supprimer',
 
 	'theme_inria:membershiprej:default_subject' => 'Votre adhésion est refusée',
-	'theme_inria:membershiprej:default_message' => 'Désolé, mais votre inscription au groupe %s est rejetée par %s.',
+	'theme_inria:membershiprej:default_message' => 'Désolé, mais votre inscription au groupe %s a été refusée par %s.',
 	'theme_inria:membershiprej:send' => 'Envoyer',
 	'theme_inria:membershiprej:cancel' => 'Annuler',
 	'theme_inria:redirect:title' => 'Login requis',
@@ -386,10 +386,11 @@ Voici l'adresse du nouveau compte créé : %s
 	'members:title:searchtag' => "Recherche de membres correspondant au mot-clé \"%s\"",
 	
 	// Esope
-	'esope:fulltextsearch' => "Recherche plein texte",
 	'esope:groups:allowregister' => "Forcer l'inscription dans le groupe",
+	'esope:fulltextsearch' => "Recherche plein texte",
 	'esope:fulltextsearch:user' => "Recherche par nom ou prénom",
-	'esope:fulltextsearch:group' => "Recherche plein texte",
+	'groups:tags' => 'mots clés',
+	'esope:fulltextsearch:group' => "Recherche sur le nom et sur la description du groupe",
 	
 	// Main translation file
 	'profile:briefdescription' => "Fonction / Rôle", // Brève description (Profil)
@@ -427,8 +428,6 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	// Groups
 	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/p/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
-	
-	
 	'groups:enablepages' => "Activer le wiki (pages collaboratives) du groupe", // Autoriser les pages du groupe
 	'pages:newchild' => "créer une sous-page dans ce wiki", // créer une sous page
 	//'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages du groupe",
@@ -438,16 +437,26 @@ Voici l'adresse du nouveau compte créé : %s
 	//'esope:subtype:pages' => "wiki",
 	//'esope:subtype:page' => "page wiki",
 	//'esope:subtype:page_top' => "wiki",
-	
 	'groups:invite:title' => "Invitez des membres à participer à ce groupe", // Invitez des amis à ce groupe
+	'groups:owned' => "Mes groupes (propriétaire ou responsable)",
+	'groups:owned:user' => 'Les groupes dont %s est propriétaire ou responsable',
+	'groups:yours' => "Mes groupes (membres)",
+	'groups:enableforum' => 'Activer le forum du groupe',
+	
+	'ckeditor:html' => "Activer/désactiver éditeur visuel",
+	
 	'comment' => "poster un commentaire", // commenter
 	
+	'event_calendar:read_access' => 'Visibilité',
+	
+	'pages:access_id' => 'Visibilité',
+	
+	'river:create:object:file' => '%s a publié le fichier %s',
+	
 	/* @TODO
-	'' => "mes groupes (membres)", // mes groupes
+	'' => "", // mes groupes
 	'' => "mes groupes (propriétaire ou responsable)", // les groupes que je possède
 	'' => "invitations aux groupes", // invitations du groupe
-	'' => "Insérer une image ou un fichier", // fichier importé
-	'' => "Activer/désactiver éditeur visuel", // editer le HTML
 	'' => "activer le forum", // activer le module discussion du groupe
 	'' => "page du groupe", // wiki du groupe
 	'' => "a publié le fichier", // a téléchargé le fichier
@@ -561,6 +570,9 @@ Afficher et commenter le nouvel article :
 	 */
 	'thewire:settings:limit' => "Nombre maximum de caractères pour chaque message :",
 	'thewire:settings:limit:none' => "Pas de limite",
+	
+	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages pour le groupe",
+	'thewire:notify:footer:group' => "Messages pour le groupe :\n%s",
 	
 	
 	// BOOKMARKS

@@ -599,7 +599,7 @@ function esope_groups_page_handler($page) {
 			esope_groups_groupsearch_page();
 			break;
 		case 'owner':
-			// Because we want to get operated groups too (or choose owned or operated)
+			// Because we want to get operated groups too (or choose bewteen owned or operated)
 			esope_groups_handle_owned_page();
 			break;
 		case 'member':

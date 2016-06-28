@@ -145,6 +145,9 @@ return array(
 	'groups:invite' => 'Inviter',
 	'groups:invite:title' => 'Invitez des membres dans ce groupe',
 	'groups:inviteto' => "Inviter des membres à rejoindre le groupe '%s'",
+	'groups:owned' => "Mes groupes (propriétaire ou responsable)",
+	'groups:owned:user' => 'Les groupes dont %s est propriétaire ou responsable',
+	'groups:yours' => "Mes groupes (membres)",
 
 	
 	
@@ -745,6 +748,8 @@ return array(
 	'newsletter:embed:template:fullcontentauthor' => "Contenu + auteur",
 	'newsletter:embed:search' => "Rechercher une publication",
 	'newsletter:embed:subtype' => "Type de publication",
+	
+	'embed:media' => 'Insérer une image ou un fichier',
 	
 	// Nouveaux champs
 	'profile:field:plaintext' => 'Texte (sans éditeur)',

@@ -67,7 +67,9 @@ foreach ($metadata_search_fields as $metadata) {
 	$metadata_params = explode(':', $metadata);
 	$metadata = array_shift($metadata_params);
 	$name = "metadata[$metadata]";
-	$meta_title = elgg_echo($metadata);
+	$meta_title = elgg_echo("profile:$metadata");
+	if ($meta_title == "profile:$metadata") { $meta_title = elgg_echo($metadata); }
+	$meta_title = ucfirst($meta_title);
 	// Process special syntax parameters (text takes precedence over auto parameter)
 	if (count($metadata) > 0) {
 		if (in_array('text', $metadata_params)) { $use_text = true; } else if (in_array('auto', $metadata_params)) { $use_auto_values = true; }
@@ -76,13 +78,13 @@ foreach ($metadata_search_fields as $metadata) {
 	if ($use_profile_manager && !$use_text && !$use_auto_values) {
 		// Use profile manager configuration - will default to text input if field is not defined
 		// Metadata options fetching will only work if those are stored somewhere
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
 	} else if ($use_auto_values) {
 		// Metadata options are selected from the database
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . ucfirst($meta_title) . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
 	} else {
 		// We'll rely on text inputs then
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . ucfirst($meta_title) . '<input type="text" name="' . $name . '" /></label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . $meta_title . '<input type="text" name="' . $name . '" /></label></div>';
 	}
 }
 
