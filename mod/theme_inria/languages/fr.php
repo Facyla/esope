@@ -395,6 +395,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'profile:briefdescription' => "Fonction / Rôle", // Brève description (Profil)
 	'profile:location' => "Localisation", // Adresse
 	'profile:field:location' => "Localisation", // Adresse
+	'groups:briefdescription' => 'Résumé', // Brève description
+	'groups:interests' => 'Mots-clés',
 	'access:read' => "Visibilité", // Accès en lecture
 	'LOGGED_IN' => "membres Iris", // membres connectés
 	'GROUP_MEMBERS' => "membres du groupe", // membres du groupe
@@ -406,7 +408,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'avatar' => "Photo",
 	'avatar:noaccess' => "Vous n'êtes pas autorisé à modifier la photo de cet utilisateur",
 	'avatar:create' => 'Créer ma photo',
-	'avatar:edit' => 'Modifier ma photo',
+	'avatar:edit' => 'Modifier mon image',
 	'avatar:preview' => 'Prévisualisation',
 	'avatar:upload' => 'Envoyer une nouvelle photo',
 	'avatar:current' => 'Image actuelle',
@@ -426,8 +428,19 @@ Voici l'adresse du nouveau compte créé : %s
 	// Groups
 	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Extrait de la Charte :</strong> <em>toute personne ou groupe de personnes souhaitant créer un groupe - à la condition de <a href=\"mailto:iris@inria.fr\">se déclarer comme animateur de ce groupe auprès du secrétariat de la plateforme</a>, dispose de droits d’administrateur sur les accès à ce groupe et s’engage à y faire respecter les <a href=\"https://reseau-iris.inria.fr/p/charte\">règles d’utilisation et de création de contenus du réseau « Iris : Le réseau interne d'Inria »</a></em></div></blockquote>",
 	
-	// Thewire
-	'thewire:everyone' => "Vos actualités en 140 caractères",
+	
+	'groups:enablepages' => "Activer le wiki (pages collaboratives) du groupe", // Autoriser les pages du groupe
+	'pages:newchild' => "créer une sous-page dans ce wiki", // créer une sous page
+	//'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages du groupe",
+	//'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
+	//'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	//'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
+	//'esope:subtype:pages' => "wiki",
+	//'esope:subtype:page' => "page wiki",
+	//'esope:subtype:page_top' => "wiki",
+	
+	'groups:invite:title' => "Invitez des membres à participer à ce groupe", // Invitez des amis à ce groupe
+	'comment' => "poster un commentaire", // commenter
 	
 	/* @TODO
 	'' => "mes groupes (membres)", // mes groupes
@@ -435,29 +448,12 @@ Voici l'adresse du nouveau compte créé : %s
 	'' => "invitations aux groupes", // invitations du groupe
 	'' => "Insérer une image ou un fichier", // fichier importé
 	'' => "Activer/désactiver éditeur visuel", // editer le HTML
-	'' => "poster un commentaire", // commenter
-
-	'' => "Activer les "messages du groupe" (accès réservé aux membres du groupe)", // Activer le Fil (accès réservé aux membres du groupe)
 	'' => "activer le forum", // activer le module discussion du groupe
-	'' => "Activer le wiki (pages collaboratives) du groupe", // Autoriser les pages du groupe
-	'' => "Résumé", // Brève description
-	'' => "mots clés", // tags
-	'' => "signets", // liens web
-	'' => "inviter des contacts", // inviter
-	'' => "mon statut", // mon status
 	'' => "page du groupe", // wiki du groupe
-	'' => "messages pour le groupe", // Messages du Fil du groupe
-	'' => "a publié sur le fil", // a envoyé un message à microblog
 	'' => "a publié le fichier", // a téléchargé le fichier
-	'' => "Invitez des membres à participer à ce groupe", // Invitez des amis à ce groupe
-	'' => "Forcer l'inscription dans le groupe", // Inscrire dans le groupe
-	'' => "créer une sous-page dans ce wiki", // créer une sous page
 	'' => "Mots clés du groupe", // Mots-clés (Recherche sur le groupe)
 	'' => "Recherche sur le nom  et sur la description du groupe", // Recherche plein texte
 	'' => "centres d'intérêts", // Mots-clés (Recherche sur les membres - ou bien modifier champs du profil correspondant)
-	'' => "modifier ma photo", // modifier mon image
-	'' => "", // 
-	'' => "", // 
 	*/
 	
 	
@@ -504,10 +500,147 @@ Afficher et commenter le nouvel article :
 	
 	
 	
-	// Overrides Elgg 1.12
+	/* OVERRIDES ELGG 1.12 */
 	// @TODO : copy and translate in EN !
 	'esope:directory' => "Membres",
 	'members:label:newest' => "Date d'inscription",
+	
+	
+	// THE WIRE OVERRIDE
+		/**
+	 * Menu items and titles
+	 */
+	'thewire' => "Le Fil",
+	'thewire:everyone' => "Vos actualités en 140 caractères",
+	'thewire:user' => "Le Fil de %s",
+	'thewire:friends' => "Messages des contacts sur le Fil",
+	'thewire:replying' => "Répondre à %s, qui a écrit",
+	'thewire:thread' => "Flux",
+	'thewire:charleft' => "caractères restant",
+	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
+	'thewire:noposts' => "Pas encore de message sur le Fil",
+	'item:object:thewire' => "Messages du Fil",
+	'thewire:by' => 'Message sur le Fil de %s',
+	'thewire:previous:help' => "Voir le message précédent",
+	'thewire:hide:help' => "Masquer le message précédent",
+
+	/**
+	 * The wire river
+	 */
+	'river:create:object:thewire' => "%s a publié sur le Fil %s",
+	'thewire:wire' => 'le Fil',
+
+	/**
+	 * Wire widget
+	 */
+	'thewire:widget:desc' => 'Affichez vos derniers messages du Fil',
+	'thewire:num' => 'Nombre de messages à afficher',
+	'thewire:moreposts' => 'Plus de messages du Fil',
+
+	/**
+	 * Status messages
+	 */
+	'thewire:posted' => "Votre message a bien été publié sur le Fil.",
+	'thewire:deleted' => "Votre message a bien été supprimé du Fil.",
+	'thewire:blank' => "Désolé, vous devez d'abord écrire un message avant de l'envoyer.",
+	'thewire:notfound' => "Désolé, le message spécifié n'a pu être trouvé.",
+	'thewire:notsaved' => "Désolé. Nous n'avons pas pu enregistrer ce message du Fil.",
+	'thewire:notdeleted' => "Désolé, ce message n'a pu être effacé du Fil.",
+
+	/**
+	 * Notifications
+	 */
+	'thewire:notify:summary' => 'Nouveau message sur le Fil : %s',
+	'thewire:notify:subject' => "Nouveau message sur le Fil de %s",
+	'thewire:notify:reply' => '%s a répondu à %s sur le Fil :',
+	'thewire:notify:post' => '%s publié sur le Fil:',
+	'thewire:notify:footer' => "Voir et répondre:\n%s",
+
+	/**
+	 * Settings
+	 */
+	'thewire:settings:limit' => "Nombre maximum de caractères pour chaque message :",
+	'thewire:settings:limit:none' => "Pas de limite",
+	
+	
+	// BOOKMARKS
+	/**
+	 * Menu items and titles
+	 */
+	'bookmarks' => "Liens web",
+	'bookmarks:add' => "Créer un nouveau lien web",
+	'bookmarks:edit' => "Modifier le lien web",
+	'bookmarks:owner' => "Les liens web de %s",
+	'bookmarks:friends' => "Liens web des contacts",
+	'bookmarks:everyone' => "Tous les liens web du site",
+	'bookmarks:this' => "Mettre cette page en lien web",
+	'bookmarks:this:group' => "Mettre en lien web dans %s",
+	'bookmarks:bookmarklet' => "Récupérer le 'bookmarklet'",
+	'bookmarks:bookmarklet:group' => "Récupérer le 'bookmarklet' du groupe",
+	'bookmarks:inbox' => "Boîte de réception des liens web",
+	'bookmarks:with' => "Partager avec",
+	'bookmarks:new' => "Un nouveau lien web",
+	'bookmarks:address' => "Adresse de la page/ressource à ajouter à vos liens web",
+	'bookmarks:none' => "Aucun lien web",
+
+	'bookmarks:notify:summary' => 'Nouveau lien web intitulé %s',
+	'bookmarks:notify:subject' => 'Nouveau lien web : %s',
+	'bookmarks:notify:body' =>
+'%s a ajouté un nouveau lien web: %s
+
+Adresse: %s
+
+%s
+
+Voir et commenter ce lien web : 
+%s
+',
+
+	'bookmarks:delete:confirm' => "Confirmez-vous vouloir supprimer ce lien web ?",
+
+	'bookmarks:numbertodisplay' => 'Nombre de liens web à afficher',
+
+	'bookmarks:shared' => "Mis en lien web",
+	'bookmarks:visit' => "Voir la ressource",
+	'bookmarks:recent' => "Liens web récents",
+
+	'river:create:object:bookmarks' => '%s a mis en lien web %s',
+	'river:comment:object:bookmarks' => '%s a commenté le lien web %s',
+	'bookmarks:river:annotate' => "a commenté ce lien web",
+	'bookmarks:river:item' => "une page",
+
+	'item:object:bookmarks' => 'Liens web',
+
+	'bookmarks:group' => 'Liens web du groupe',
+	'bookmarks:enablebookmarks' => 'Activer les liens web du groupe',
+	'bookmarks:nogroup' => 'Ce groupe n\'a pas encore de lien web',
+	
+	/**
+	 * Widget and bookmarklet
+	 */
+	'bookmarks:widget:description' => "Ce widget affiche vos derniers liens web.",
+
+	'bookmarks:bookmarklet:description' => "Le \"bookmarklet\" vous permet de partager ce que vous trouvez sur le web avec vos contacts, vos groupes, ou pour vous-même. Pour l'utiliser, glissez simplement le bouton ci-dessous dans la barre de liens de votre navigateur.",
+
+	'bookmarks:bookmarklet:descriptionie' => "Si vous utilisez Internet Explorer, faites un clic droit sur le bouton et ajoutez-le dans vos favoris, puis dans votre barre de liens.",
+
+	'bookmarks:bookmarklet:description:conclusion' => "Vous pouvez mettre en lien web n'importe quelle page en cliquant sur le bookmarklet.",
+
+	/**
+	 * Status messages
+	 */
+
+	'bookmarks:save:success' => "Votre ressource a bien été mise en lien web.",
+	'bookmarks:delete:success' => "Votre lien web a bien été supprimé.",
+
+	/**
+	 * Error messages
+	 */
+
+	'bookmarks:save:failed' => "Votre lien web n'a pas pu être enregistré. Vérifiez que le titre et le lien sont corrects et réessayez.",
+	'bookmarks:save:invalid' => "L’adresse du lien web est invalide et ne peut donc pas être enregistrée.",
+	'bookmarks:delete:failed' => "Votre lien web n'a pas pu être supprimé. Merci de réessayer.",
+	'bookmarks:unknown_bookmark' => 'Impossible de trouver le lien web spécifié',
 	
 	
 	

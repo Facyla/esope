@@ -120,7 +120,8 @@ if ($fixedwidth) {
 	position: fixed;
 	top: 24px;
 	right: 20px;
-	max-width: 500px;
+	max-width:90%;
+	width: 500px;
 	z-index: 2000;
 }
 .elgg-system-messages li {

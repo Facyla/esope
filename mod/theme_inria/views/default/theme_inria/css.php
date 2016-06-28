@@ -76,6 +76,7 @@ $main_maxwidth = "80%";
 .elgg-page-default .elgg-page-footer > .elgg-inner, 
 .elgg-page-default .elgg-page-sitemenu > .elgg-inner {
 	max-width: <?php echo $main_maxwidth; ?>;
+	width:auto;
 }
 #page_container {
 	width:<?php echo $main_width; ?>;
@@ -247,7 +248,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; }
 .elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 0 0.5em 0; text-align: left; margin: 0; }
 
-.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; /* float:none; */ font-size: 1.2em; }
+.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; float:none; font-size: 1.2em; }
 .thewire-form #thewire-characters-remaining.thewire-characters-remaining-warning { font-weight: bold !important; color: #F00 !important; }
 /* Note : si on veut ajouter un message il faudra modifier le JS et la structure HTML...
 #thewire-characters-remaining .thewire-characters-remaining-message { display:none; }

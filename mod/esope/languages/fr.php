@@ -142,6 +142,10 @@ return array(
 	'esope:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
 	'esope:groupinvite:search:select' => "Etape 1 : faites une recherche avec les critères disponibles",
 	'esope:groupinvite:search:invite' => "Etape 2 : sélectionnez les personnes à inviter ou inscrire",
+	'groups:invite' => 'Inviter',
+	'groups:invite:title' => 'Invitez des membres dans ce groupe',
+	'groups:inviteto' => "Inviter des membres à rejoindre le groupe '%s'",
+
 	
 	
 	// Theme translation & other customizations
@@ -479,7 +483,7 @@ return array(
 	'esope:settings:filters:mine' => "Supprimer l'onglet \"Moi\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'esope:settings:filters:all' => "Supprimer l'onglet \"Tous\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'esope:settings:groups:inviteanyone' => "Permettre d'inviter tout membre dans les groupes ? (par défaut : non = contacts seulement)",
-	'esope:groups:allowregister' => "Inscrire dans le groupe",
+	'esope:groups:allowregister' => "Forcer l'inscription dans le groupe",
 	'esope:settings:groups:allowregister' => "Permettre aux responsables des groupes d'inscrire directement les membres dans le groupe, au lieu de simplement les inviter (il est toujours possible de les inviter).",
 	'esope:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'esope:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
@@ -1091,6 +1095,7 @@ return array(
 	'groups:yes' => "Activé",
 	'groups:no' => "Désactivé",
 	'group_operators:operators' => "Responsable(s)",
+	'groups:my_status' => 'Mon statut',
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",

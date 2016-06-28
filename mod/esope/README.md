@@ -70,13 +70,16 @@ INSTALLATION & CONFIGURATION :
   - plugins non testés avec ce thème (nécessitent éventuellement une intégration supplémentaire pour s'intégrer correctement) : Twitter API, OAuth API, TheWire
 
 6. Configurez les divers plugins selon vos besoins, et notamment :
-  - Inscript-Essonne : liste des domaines autorisés pour l'inscritpion de nouveaux membres (si activé)
-  - Acc'Essonne : réglages du thème, des couleurs, des bandeaux, images et autres textes configurables
+  - registration_filter : liste des noms de domaines autorisés pour l'inscription de nouveaux membres (si activé)
+  - esope : réglages du thème, des couleurs, des bandeaux, images et autres textes configurables
   - profile manager : profils membres et groupes
   - event_calendar : réglages à tester soigneusement
   - Site-wide categories : liste de thématiques du site (si activé)
   - groups, log rotate, garbage collector
 
+7. Modifications spécifiques : 
+  - Traductions : certaines traductions de plugins ont divergé ; si vous souhaitez utiliser les traductions propres à ESOPE, copiez-collez les fichiers de traduction du dossier @INSTALL dans les plugins correspondants.
+  - Images par défaut : ces fichiers font partie du core et ne sont pas modifiés dans la distribution ESOPE ; pour les utilisez, copiez les fichiers souhaitez dans la racine d'Elgg (l'arborescence d'Elgg 'est reproduite dans le dossier @INSTALL).
 
 
 
