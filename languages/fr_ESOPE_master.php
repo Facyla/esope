@@ -376,7 +376,7 @@ return array(
 	'viewtype:list' => "Liste",
 	'viewtype:gallery' => "Galerie",
 
-	'tag:search:startblurb' => "Éléments avec le(s) tag(s) \"%s\" :",
+	'tag:search:startblurb' => "Éléments avec le(s) mot-clé(s) \"%s\" :",
 
 	'user:search:startblurb' => "Membres correspondant à \"%s\" :",
 	'user:search:finishblurb' => "Pour en voir plus, cliquez ici.",
@@ -441,10 +441,10 @@ return array(
 	'user:username:notfound' => 'Identifiant %s non trouvé.',
 
 	'user:password:lost' => 'Mot de passe perdu',
-	'user:password:changereq:success' => 'Vous avez demandé un nouveau mot de passe, un email de confirmation vous a été envoyé',
+	'user:password:changereq:success' => 'Vous avez demandé un nouveau mot de passe, un courriel de confirmation vous a été envoyé',
 	'user:password:changereq:fail' => 'Impossible de demander un nouveau mot de passe.',
 
-	'user:password:text' => 'Pour générer un nouveau mot de passe, entrez votre identifiant ou votre e-mail ci-dessous, puis cliquez sur le bouton.',
+	'user:password:text' => 'Pour générer un nouveau mot de passe, entrez votre identifiant ou votre courriel ci-dessous, puis cliquez sur le bouton.',
 
 	'user:persistent' => 'Se souvenir de moi',
 
@@ -694,7 +694,7 @@ return array(
 	'admin:user:delete:yes' => "Utilisateur supprimé",
 	'admin:user:self:delete:no' => "Vous ne pouvez pas supprimer votre propre compte",
 
-	'admin:user:resetpassword:yes' => "Mot de passe réinitialisé, l'utilisateur a été notifié par e-mail.",
+	'admin:user:resetpassword:yes' => "Mot de passe réinitialisé, l'utilisateur a été notifié par courriel.",
 	'admin:user:resetpassword:no' => "Le mot de passe n'a pas pu être réinitialisé.",
 
 	'admin:user:makeadmin:yes' => "L'utilisateur est maintenant un administrateur.",
@@ -818,7 +818,7 @@ Quand il est activé, seuls les administrateurs peuvent s\'identifier et navigue
 	'enable' => "Activer",
 	'disable' => "Désactiver",
 	'request' => "Demander",
-	'complete' => "complet",
+	'complete' => "complète",
 	'open' => 'Ouvrir',
 	'close' => 'Fermer',
 	'hide' => 'Cacher',
@@ -886,7 +886,7 @@ Quand il est activé, seuls les administrateurs peuvent s\'identifier et navigue
 
 	'content' => "contenu",
 	'content:latest' => 'Dernière activité',
-	'content:latest:blurb' => 'Vous pouvez également cliquer ici pour voir les dernières publications sur le site.',
+	'content:latest:blurb' => 'Vous pouvez également cliquer ici pour voir les dernières publications du site.',
 
 	'link:text' => 'voir le lien',
 	
@@ -969,7 +969,7 @@ Un compte utilisateur a été créé pour vous sur %s. Pour vous connecter :
 Et connectez-vous avec les identifiants suivants :
  - Identifiant : %s
  - Mot de passe : %s
-Vous pouvez également vous connecter avec votre e-ail au lieu de votre identifiant.
+Vous pouvez également vous connecter avec votre courriel au lieu de votre identifiant.
 
 Après connexion, nous vous recommandons de changer votre mot de passe.
 ',
@@ -1070,10 +1070,10 @@ Après connexion, nous vous recommandons de changer votre mot de passe.
 	'installation:httpslogin:label' => "Activer les connexions via HTTPS",
 	'installation:view' => "Entrez le nom de la vue qui sera utilisée par défaut pour l'affichage du site, ou laissez vide pour la vue par défaut (en cas de doute, laissez la valeur par défaut) :",
 
-	'installation:siteemail' => "L'adresse email du site (utilisée lors de l'envoi d'emails par le système)",
+	'installation:siteemail' => "Le courriel du site (utilisé lors de l'envoi de courriels par le système)",
 	'installation:default_limit' => "Nombre d'éléments par page par défaut",
 
-	'admin:site:access:warning' => "Le niveau d'accès suggéré aux utilisateurs lorsqu'ils créent un nouveau contenu. Modifier ce réglage n'affectera que les publications créées dans le futur.",
+	'admin:site:access:warning' => "Le niveau d'accès suggéré aux utilisateurs lorsqu'ils créent un nouveau contenu. Modifier ce réglage n'a aucun effet sur l'accès au contenu existant, et n'affectera que les futures publications.",
 	'installation:allow_user_default_access:description' => "Activez ce réglage pour permettre aux utilisateurs de définir leur propre niveau d'accès par défaut, qui remplace celui défini par défaut pour le site.",
 	'installation:allow_user_default_access:label' => "Autoriser un niveau d’accès par défaut pour chaque utilisateur",
 
@@ -1099,7 +1099,7 @@ Après connexion, nous vous recommandons de changer votre mot de passe.
 	'upgrading' => 'Mise à niveau en cours...',
 	'upgrade:db' => 'Votre base de données a été mise à niveau.',
 	'upgrade:core' => 'Votre installation d\'Elgg a été mise à niveau.',
-	'upgrade:unlock' => 'Déverrouiller la mise à niveau',
+	'upgrade:unlock' => 'Débloquer la mise à niveau',
 	'upgrade:unlock:confirm' => "La base de données est verrouillée par une autre mise à niveau. Exécuter des mises à jours simultanées est dangereux. Vous devriez continuer seulement si vous savez qu'il n'y a pas d'autre mise à jour en cours d'exécution. Déverrouiller ?",
 	'upgrade:locked' => "Impossible de mettre à niveau. Une autre mise à niveau est en cours. Pour supprimer le verrouillage de la mise à jour, visitez la partie administrateur.",
 	'upgrade:unlock:success' => "Mise à niveau débloquée.",
@@ -1159,11 +1159,11 @@ Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="h
 	'email:subject' => 'Sujet',
 	'email:body' => 'Corps de l\'article',
 	
-	'email:settings' => "Paramètres e-mail",
-	'email:address:label' => "Adresse e-mail",
+	'email:settings' => "Paramètres de courriel",
+	'email:address:label' => "Courriel",
 
-	'email:save:success' => "Nouvelle adresse email enregistrée. Une vérification a été envoyée pour confirmer l'adresse.",
-	'email:save:fail' => "Votre nouvelle adresse email n'a pas pu être enregistrée.",
+	'email:save:success' => "Nouveau courriel enregistré. Une vérification a été envoyée pour confirmer l'adresse.",
+	'email:save:fail' => "Votre nouveau courriel n'a pas pu être enregistré.",
 
 	'friend:newfriend:subject' => "%s vous a ajouté comme contact !",
 	'friend:newfriend:body' => "%s vous a ajouté comme contact !
@@ -1171,7 +1171,7 @@ Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="h
 Pour voir son profil :
 %s
 
-Merci de ne pas répondre à cet email.",
+Merci de ne pas répondre à ce courriel.",
 
 	'email:changepassword:subject' => "Mot de passe modifié !",
 	'email:changepassword:body' => "Bonjour %s,
