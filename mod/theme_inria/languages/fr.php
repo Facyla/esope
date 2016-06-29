@@ -400,10 +400,10 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:briefdescription' => 'Résumé', // Brève description
 	'groups:interests' => 'Mots-clés',
 	'access:read' => "Visibilité", // Accès en lecture
-	'LOGGED_IN' => "membres Iris", // membres connectés
-	'GROUP_MEMBERS' => "membres du groupe", // membres du groupe
-	'access:friends:label' => "contacts seulement", // contacts
-	'PUBLIC' => "tout internaute", // public
+	'LOGGED_IN' => "Membres Iris", // membres connectés
+	'GROUP_MEMBERS' => "Membres du groupe", // membres du groupe
+	'access:friends:label' => "Contacts seulement", // contacts
+	'PUBLIC' => "Tout internaute", // public
 	'river:all' => "Ça bouge sur Iris ...",
 	'search_types:tags' => "Mots-clés",
 	
@@ -446,7 +446,7 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'ckeditor:html' => "Activer/désactiver éditeur visuel",
 	
-	'comment' => "poster un commentaire", // commenter
+	'comment' => "Poster un commentaire", // commenter
 	
 	'event_calendar:read_access' => 'Visibilité',
 	
