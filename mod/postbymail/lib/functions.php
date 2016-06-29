@@ -385,7 +385,7 @@ function postbymail_checkandpost($config = array()) {
 					$hash_arr = $reply_check['hash']; // Hashs (sérialisés) des publications déjà faites dans ce container
 					$report = $post_check['report'];
 					$body .= $report;
-					if ($debug) $admin_reply .= $report;
+					if ($debug) { $admin_reply .= $report; }
 					
 					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
 					global $SESSION;
@@ -1056,14 +1056,14 @@ function postbymail_checkeligible_reply($params) {
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
 		if (!empty($params['entity']->title)) {
-		$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
 		} else {
 			$report .= elgg_echo('postbymail:validobject', array($params['entity']->name));
 		}
 		
 		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
 		
-		// Container
+		// Container de l'objet à commenter : doit être valide
 		if ($container = get_entity($params['entity']->container_guid)) {
 			$report .= elgg_echo('postbymail:containerok');
 			// Membre
@@ -1097,17 +1097,17 @@ function postbymail_checkeligible_reply($params) {
 					//$mailreply_check = false;
 				} else if (elgg_instanceof($container, 'object')) {
 					// Note : les commentaires ont pour container l'objet parent
-					if ($container->canComment($params['member']->guid)) {
+					if ($container->canComment($params['member']->guid) || $params['entity']->canComment($params['member']->guid)) {
 						$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $container->title));
 					} else {
-						$report .= elgg_echo('postbymail:error:notingroup');
+						$report .= elgg_echo('postbymail:error:notingroup') . " (cannot comment object)";
 						$mailreply_check = false;
 					}
 				} else {
 					if ($params['entity']->canComment($params['member']->guid)) {
 						$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $container->name));
 					} else {
-						$report .= elgg_echo('postbymail:error:notingroup');
+						$report .= elgg_echo('postbymail:error:notingroup') . " cannot comment unknown entity type";
 						$mailreply_check = false;
 					}
 				}
