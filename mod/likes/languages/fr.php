@@ -24,11 +24,9 @@ return array(
 %2$s aime votre publication "%3$s" sur %4$s
 
 Afficher votre publication :
-
 %5$s
 
 ou voir le profil de %2$s :
-
 %6$s
 
 Merci,

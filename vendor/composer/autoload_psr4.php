@@ -8,7 +8,9 @@ $baseDir = dirname($vendorDir);
 return array(
     'Symfony\\Polyfill\\Php55\\' => array($vendorDir . '/symfony/polyfill-php55'),
     'Symfony\\Polyfill\\Php54\\' => array($vendorDir . '/symfony/polyfill-php54'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Stash\\' => array($vendorDir . '/tedivm/stash/src/Stash'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
+    'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
 );

@@ -1,3 +1,262 @@
+2016-06-13  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.11
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/es/LC_MESSAGES/about.mo, docs/locale/es/LC_MESSAGES/about.po,
+  docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, mod/messages/languages/ca.php,
+  mod/messages/languages/cmn.php, mod/messages/languages/da.php,
+  mod/messages/languages/de.php, mod/messages/languages/es.php,
+  mod/messages/languages/eu_es.php, mod/messages/languages/fi.php,
+  mod/messages/languages/fr.php, mod/messages/languages/gl.php,
+  mod/messages/languages/it.php, mod/messages/languages/ja.php,
+  mod/messages/languages/ko.php, mod/messages/languages/nl.php,
+  mod/messages/languages/pl.php, mod/messages/languages/pt_br.php,
+  mod/messages/languages/ru.php, mod/pages/languages/da.php: chore(i18n):
+  update translations
+
+2016-06-12  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.11.6
+
+2016-05-31  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/ActionsService.php, engine/classes/ElggSession.php,
+  engine/lib/actions.php, js/lib/security.js, languages/en.php,
+  views/default/js/initialize_elgg.php: security(actions): don't refresh
+  invalid CSRF tokens in the page  The refresh token process no longer blindly
+  replaces all in-page CSRF tokens, as these could have been in user content.
+  Only tokens that have been validated on the server are replaced.  We can
+  validate tokens even if the session had expired because we base the tokens
+  not on session ID, but rather a unique key stored in the session and passed
+  to the client.  On token refresh, Elgg now provides a page refresh link and
+  an appropriate message depending on whether the user was logged out or into
+  another account (e.g. via another tab).  BREAKING CHANGE: The JS function
+  `elgg.security.setToken` is now formally marked private and its parameters
+  are not backwards compatible.
+
+2016-06-08  Steve Clay <steve@mrclay.org>
+
+  	* js/lib/ui.js, mod/aalborg_theme/views/default/css/elements/components.php,
+  views/default/css/admin.php, views/default/css/elements/components.php,
+  views/default/js/admin.php: fix(ui): improves usability of anchors within
+  system messages  Anchors no longer appear blue on red/green, but instead have
+  the same color and are distinguished via underline.  Clicking an anchor in a
+  message no longer dismisses the message, though success messages still will
+  fade after 6 seconds.
+
+2016-05-31  ura soul <ura@localhost.localdomain>
+
+  	* engine/lib/metastrings.php, engine/lib/river.php: fix(river): custom joins
+  can now reference default joined tables.  When building more complex queries
+  there may be a need to reference table aliases introduced by the default
+  joins in _elgg_get_metastring_based_objects and elgg_get_river. This fix
+  ensures that the default join table aliases are available when defining
+  custom joins - which is a requirement for building effective and efficient
+  queries.  Fixes #8580
+
+2016-05-29  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json, languages/de.php, languages/en.php,
+  languages/es.php, languages/fi.php, languages/fr.php, languages/gl.php,
+  languages/it.php, languages/ja.php, languages/nl.php, languages/pl.php,
+  languages/pt_br.php, languages/ru.php, mod/twitter_api/languages/nl.php:
+  chore(release): v1.12.10  Also removes duplicate `admin:upgrades` keys and
+  properly escapes some literal `$`s in language strings.
+
+  	* docs/locale/ca/LC_MESSAGES/about.mo, docs/locale/ca/LC_MESSAGES/about.po,
+  docs/locale/ca/LC_MESSAGES/index.mo, docs/locale/ca/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/about.mo, docs/locale/de/LC_MESSAGES/about.po,
+  docs/locale/de/LC_MESSAGES/index.mo, docs/locale/de/LC_MESSAGES/index.po,
+  docs/locale/de/LC_MESSAGES/tutorials.mo,
+  docs/locale/de/LC_MESSAGES/tutorials.po, docs/locale/es/LC_MESSAGES/about.mo,
+  docs/locale/es/LC_MESSAGES/about.po, docs/locale/eu_ES/LC_MESSAGES/about.mo,
+  docs/locale/eu_ES/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/about.po, docs/locale/fr/LC_MESSAGES/index.mo,
+  docs/locale/fr/LC_MESSAGES/index.po, docs/locale/fr/LC_MESSAGES/intro.mo,
+  docs/locale/fr/LC_MESSAGES/intro.po, docs/locale/fr/LC_MESSAGES/tutorials.mo,
+  docs/locale/fr/LC_MESSAGES/tutorials.po, docs/locale/it/LC_MESSAGES/about.mo,
+  docs/locale/it/LC_MESSAGES/about.po, docs/locale/it/LC_MESSAGES/index.mo,
+  docs/locale/it/LC_MESSAGES/index.po, docs/locale/ja/LC_MESSAGES/about.mo,
+  docs/locale/ja/LC_MESSAGES/about.po, docs/locale/pl/LC_MESSAGES/about.mo,
+  docs/locale/pl/LC_MESSAGES/about.po, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/about.mo,
+  docs/locale/pt_BR/LC_MESSAGES/about.po,
+  docs/locale/pt_BR/LC_MESSAGES/index.mo,
+  docs/locale/pt_BR/LC_MESSAGES/index.po, docs/locale/ru/LC_MESSAGES/about.mo,
+  docs/locale/ru/LC_MESSAGES/about.po, install/languages/fr.php,
+  languages/fr.php, languages/ja.php, languages/nl.php,
+  mod/blog/languages/fr.php, mod/bookmarks/languages/fr.php,
+  mod/categories/languages/fr.php, mod/custom_index/languages/fr.php,
+  mod/developers/languages/es.php, mod/developers/languages/fr.php,
+  mod/developers/languages/ja.php, mod/diagnostics/languages/fr.php,
+  mod/embed/languages/fr.php, mod/externalpages/languages/fr.php,
+  mod/file/languages/da.php, mod/file/languages/de.php,
+  mod/file/languages/es.php, mod/file/languages/eu_es.php,
+  mod/file/languages/fi.php, mod/file/languages/fr.php,
+  mod/file/languages/gl.php, mod/file/languages/it.php,
+  mod/file/languages/ja.php, mod/file/languages/ko.php,
+  mod/file/languages/nl.php, mod/file/languages/pl.php,
+  mod/file/languages/pt_br.php, mod/file/languages/ru.php,
+  mod/file/languages/sr.php, mod/file/languages/zh_hans.php,
+  mod/garbagecollector/languages/fr.php, mod/groups/languages/fr.php,
+  mod/groups/languages/ja.php, mod/invitefriends/languages/fr.php,
+  mod/legacy_urls/languages/fr.php, mod/likes/languages/fr.php,
+  mod/logbrowser/languages/fr.php, mod/logrotate/languages/fr.php,
+  mod/members/languages/fr.php, mod/messageboard/languages/fr.php,
+  mod/messages/languages/da.php, mod/messages/languages/fr.php,
+  mod/notifications/languages/fr.php, mod/pages/languages/fr.php,
+  mod/reportedcontent/languages/fr.php, mod/search/languages/fr.php,
+  mod/site_notifications/languages/fr.php, mod/tagcloud/languages/ar.php,
+  mod/thewire/languages/fr.php, mod/twitter_api/languages/fr.php,
+  mod/uservalidationbyemail/languages/fr.php,
+  mod/web_services/languages/fr.php: chore(i18n): update translations
+
+2016-05-10  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Database/Annotations.php,
+  .../ElggCoreGetEntitiesFromAnnotationsTest.php: fix(annotations): fixes
+  time-based annotations searches  Fixes #9785
+
+2016-05-03  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/ElggAutoP.php, engine/lib/output.php,
+  engine/tests/ElggCoreOutputAutoPTest.php,
+  engine/tests/phpunit/ElggAutoPTest.php,
+  .../test_files/autop/begins-with-tag.exp.html,
+  .../test_files/autop/begins-with-tag.in.html,
+  .../test_files/autop/block-a.exp.norun.html,
+  .../phpunit/test_files/autop/block-a.in.norun.html,
+  .../tests/phpunit/test_files/autop/domdoc_exp.html,
+  .../tests/phpunit/test_files/autop/domdoc_in.html,
+  .../phpunit/test_files/autop/typical-post.exp.html,
+  .../phpunit/test_files/autop/typical-post.in.html,
+  .../phpunit/test_files/autop/wp-welcome.exp.html,
+  .../phpunit/test_files/autop/wp-welcome.in.html,
+  .../test_files/autop/wpautop-fails.exp.html,
+  .../phpunit/test_files/autop/wpautop-fails.in.html,
+  .../phpunit/test_files/autop/wysiwyg-test.exp.html,
+  .../phpunit/test_files/autop/wysiwyg-test.in.html,
+  .../test_files/output/autop/block-a.exp.norun.html,
+  .../test_files/output/autop/block-a.in.norun.html,
+  .../tests/test_files/output/autop/domdoc_exp.html,
+  .../tests/test_files/output/autop/domdoc_in.html,
+  .../test_files/output/autop/typical-post.exp.html,
+  .../test_files/output/autop/typical-post.in.html,
+  .../test_files/output/autop/wp-welcome.exp.html,
+  .../test_files/output/autop/wp-welcome.in.html,
+  .../test_files/output/autop/wpautop-fails.exp.html,
+  .../test_files/output/autop/wpautop-fails.in.html,
+  .../test_files/output/autop/wysiwyg-test.exp.html,
+  .../test_files/output/autop/wysiwyg-test.in.html: fix(html): autop no longer
+  ltrims next to a leading inline element  Migrates test to PHPUnit  Fixes
+  #9790
+
+2016-04-20  Steve Clay <steve@mrclay.org>
+
+  	* languages/en.php, pages/settings/tools.php,
+  views/default/admin/plugin_settings.php,
+  views/default/forms/plugins/settings/save.php, views/default/input/form.php:
+  chore(revert): Reverts pull request #9717  Revert "Merge pull request #9717
+  from hypeJunction/settings-empty-forms"
+
+  	* engine/classes/Elgg/ClassMap.php, engine/load.php: fix(autoload): fixes
+  bugs in class map saving  The autoloader class map now marks itself altered
+  only if a path is changed or set initially. This allows
+  `elgg_register_class()` to be called on every request without triggering a
+  re-save.  In 1.12, the `engine/lib` loader now properly calls the setup
+  function returned by `autoload.php`, allowing the class map to be saved. This
+  bug does not exist in 2.x.  Refs #9744
+
+2016-04-18  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* languages/en.php, pages/settings/tools.php,
+  views/default/admin/plugin_settings.php,
+  views/default/forms/plugins/settings/save.php: fix(forms): empty plugin
+  settings forms no longer wrapped in a form tag  Empty plugin settings forms
+  result in only a submit button being visible to the user. This prevents that
+  from happening  Fixes #9704
+
+2016-04-10  Steve Clay <steve@mrclay.org>
+
+  	* docs/guides/i18n.rst, js/lib/languages.js: docs(i18n): clarifies
+  limitations of elgg.echo  `elgg.echo` is not a functional equivalent of
+  `elgg_echo` due to core only sending one pre-merged language file to the
+  client.  The only useful value for the 3rd argument is the boot-time return
+  value of `elgg.get_language()`. No other language files are loaded, so, given
+  any other language, `elgg.echo` will return only the message key or possibly
+  an English translation.  Due to this, the RST docs no longer mention
+  `elgg.echo`'s 3rd argument.
+
+2016-04-11  Steve Clay <steve@mrclay.org>
+
+  	* js/lib/languages.js, js/tests/ElggLanguagesTest.js: fix(js): elgg.echo
+  recognizes empty translation strings (does not return key)
+
+2016-04-08  jdalsem <jdalsem@coldtrick.com>
+
+  	* docs/guides/cron.rst, docs/guides/index.rst: docs(cron): added an example
+  how to register a cron hook handler  fixes #7774
+
+2016-04-06  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Database/UsersTable.php,
+  engine/classes/ElggEntity.php: fix(users): mitigate race conditions when
+  deleting/disabling users  Deleting or disabling a user can be a long process,
+  during which the affected user may try to continue creating content. We now
+  temporarily ban the user during the process to prevent further actions.  Refs
+  #8099
+
+2016-04-04  Steve Clay <steve@mrclay.org>
+
+  	* mod/file/actions/file/upload.php, mod/file/thumbnail.php: fix(file):
+  better uploaded file handling and thumbnail serving  Uploaded files now
+  always have a new name with the client-given extension, even when replacing a
+  previous upload.  Thumbnail JPEG files now have the `.jpg` extension and are
+  served with the correct Content-Type. If a plugin happened to have created
+  their own non-JPEG thumbs, they'd now be served with the correct MIME
+  (instead of the original file's MIME type).  When an existing file is
+  re-uploaded by a different user, the thumbnails are now created in the
+  correct (owner's) directory.  If the file is recognized as an image, but
+  thumbnails can't be created, we no longer allow thumbs from the previous file
+  to be re-used.  Fixes #9612 Fixes #9267 Fixes #6677
+
+2016-03-27  Steve Clay <steve@mrclay.org>
+
+  	* docs/guides/i18n.rst, engine/lib/languages.php: docs(i18n): recommends an
+  English translation for all new language keys  If an English translation is
+  always available, the typical usage of `elgg_language_key_exists` becomes
+  more reliable.  Fixes #9375
+
+2016-03-25  Steve Clay <steve@mrclay.org>
+
+  	* docs/README.md, docs/contribute/code.rst, js/tests/README.md,
+  package.json: chore(tests): allow running JS tests in Chrome  Adds a couple
+  README links to docs.
+
 2016-03-06  Juho Jaakkola <juho@elgg.org>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.12.9
@@ -30,6 +289,14 @@
   mod/blog/languages/fr.php, mod/developers/languages/fr.php,
   mod/groups/languages/fr.php, mod/tagcloud/languages/ar.php,
   mod/twitter_api/languages/nl.php: chore(i18n): update translations
+
+2016-03-03  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Http/Request.php,
+  engine/tests/phpunit/Elgg/Http/RequestTest.php: fix(ajax): iframe-based
+  submissions can again be recognized as XHR requests  We were relying on this
+  behavior so we return it to 1.x behavior and add tests for this and the other
+  Request methods.  Fixes #8735
 
 2016-02-22  Steve Clay <steve@mrclay.org>
 

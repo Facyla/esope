@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4bcc78435384f9e7e8ffccf102c25396",
-    "content-hash": "801e05c4e973b19f56fa8e03a00fb080",
+    "hash": "580a06f0ab2af0c709271191a58fca41",
+    "content-hash": "9fb38151c8596ccf451a07e1bacde460",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.23",
+            "version": "v1.0.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "6213d900e92647831f7a406d5c530ea1f3d4360e"
+                "reference": "36e5b5843203d7f1cf6ffb0305a97e014387bd8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/6213d900e92647831f7a406d5c530ea1f3d4360e",
-                "reference": "6213d900e92647831f7a406d5c530ea1f3d4360e",
+                "url": "https://api.github.com/repos/composer/installers/zipball/36e5b5843203d7f1cf6ffb0305a97e014387bd8e",
+                "reference": "36e5b5843203d7f1cf6ffb0305a97e014387bd8e",
                 "shasum": ""
             },
             "require": {
@@ -40,8 +40,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Composer\\Installers\\": "src/"
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -56,12 +56,14 @@
                 }
             ],
             "description": "A multi-framework Composer library installer",
-            "homepage": "http://composer.github.com/installers/",
+            "homepage": "https://composer.github.io/installers/",
             "keywords": [
                 "Craft",
                 "Dolibarr",
                 "Hurad",
+                "ImageCMS",
                 "MODX Evo",
+                "Mautic",
                 "OXID",
                 "SMF",
                 "Thelia",
@@ -103,7 +105,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2016-01-27 12:54:22"
+            "time": "2016-04-13 19:46:30"
         },
         {
             "name": "elgg/login_as",
@@ -268,16 +270,16 @@
         },
         {
             "name": "mrclay/minify",
-            "version": "2.2.1",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrclay/minify.git",
-                "reference": "3c11ba8232a2155a1a29552aafc528be5fb0a662"
+                "reference": "f4cb31135d288f951bb0af1f23a03d4c00ba9446"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrclay/minify/zipball/3c11ba8232a2155a1a29552aafc528be5fb0a662",
-                "reference": "3c11ba8232a2155a1a29552aafc528be5fb0a662",
+                "url": "https://api.github.com/repos/mrclay/minify/zipball/f4cb31135d288f951bb0af1f23a03d4c00ba9446",
+                "reference": "f4cb31135d288f951bb0af1f23a03d4c00ba9446",
                 "shasum": ""
             },
             "require": {
@@ -309,7 +311,7 @@
             ],
             "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
             "homepage": "http://code.google.com/p/minify/",
-            "time": "2014-10-30 22:58:02"
+            "time": "2016-03-08 11:49:57"
         },
         {
             "name": "psr/cache",
@@ -363,12 +365,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c18abc6df90257ddbbe2654a98cc5cc7be804411"
+                "reference": "96f1ef760845211c8acbb15970e706db1e4b2c5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c671d3899901257a98ec4c4fd39685d14112efc7",
-                "reference": "c18abc6df90257ddbbe2654a98cc5cc7be804411",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/96f1ef760845211c8acbb15970e706db1e4b2c5e",
+                "reference": "96f1ef760845211c8acbb15970e706db1e4b2c5e",
                 "shasum": ""
             },
             "conflict": {
@@ -399,12 +401,15 @@
                 "namshi/jose": "<2.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
+                "phpmailer/phpmailer": ">=5,<5.2.14",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
+                "shopware/shopware": "<4.3.7|>=5,<5.1|>=5.1,<5.1.5",
                 "silverstripe/cms": ">=3.1,<3.1.11|>=3,<=3.0.11",
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
-                "silverstripe/framework": ">=3,<3.1|>=3.1,<3.2|>=3.2,<3.2.1",
+                "silverstripe/framework": ">=3,<3.1|>=3.1,<3.2|>=3.2,<3.3",
                 "silverstripe/userforms": "<3",
+                "simplesamlphp/simplesamlphp": "<=1.14.1",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "swiftmailer/swiftmailer": ">=4,<4.99.99|>=5,<5.2.1",
                 "symfony/dependency-injection": ">=2,<2.0.17",
@@ -414,10 +419,10 @@
                 "symfony/http-kernel": ">=2,<2.1|>=2.1,<2.2|>=2.2,<2.3|>=2.3,<2.3.29|>=2.4,<2.5|>=2.5,<2.5.12|>=2.6,<2.6.8",
                 "symfony/routing": ">=2,<2.0.19",
                 "symfony/security": ">=2.3,<2.3.37|>=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.6.13|>=2.7,<2.7.9|>=2,<2.0.25|>=2.1,<2.1.13|>=2.2,<2.2.9",
-                "symfony/security-core": ">=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.6.13|>=2.7,<2.7.9",
-                "symfony/security-http": ">=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.6.12|>=2.7,<2.7.7",
+                "symfony/security-core": ">=2.8,<2.8.6|>=3,<3.0.6|>=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.6.13|>=2.7,<2.7.9",
+                "symfony/security-http": ">=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.7|>=2.7,<2.7.13|>=2.3,<2.3.41|>=2.8,<2.8.6|>=3,<3.0.6",
                 "symfony/serializer": ">=2,<2.0.11",
-                "symfony/symfony": ">=2,<2.1|>=2.1,<2.2|>=2.2,<2.3|>=2.3,<2.3.37|>=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.6.13|>=2.7,<2.7.9",
+                "symfony/symfony": ">=2,<2.1|>=2.1,<2.2|>=2.2,<2.3|>=2.3,<2.3.41|>=2.4,<2.5|>=2.5,<2.6|>=2.6,<2.7|>=2.7,<2.7.13|>=2.8,<2.8.6|>=3,<3.0.6",
                 "symfony/translation": ">=2,<2.0.17",
                 "symfony/validator": ">=2,<2.0.24|>=2.1,<2.1.12|>=2.2,<2.2.5|>=2.3,<2.3.3",
                 "symfony/web-profiler-bundle": ">=2,<2.1|>=2.1,<2.2|>=2.2,<2.3|>=2.3,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
@@ -425,7 +430,7 @@
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.16|>=7,<7.1|>=7.1,<7.2|>=7.2,<7.3|>=7.3,<7.4|>=7.4,<7.5|>=7.5,<7.6|>=7.6,<7.6.1",
+                "typo3/cms": ">=6.2,<6.2.25|>=7,<7.1|>=7.1,<7.2|>=7.2,<7.3|>=7.3,<7.4|>=7.4,<7.5|>=7.5,<7.6|>=7.6,<7.6.8|>=8,<8.1.1",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.7|>=3,<3.0.1",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -451,7 +456,7 @@
                 "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
                 "zendframework/zendframework": ">=2,<2.4.9|>=2.5,<2.5.1",
-                "zendframework/zendframework1": ">=1,<1.11.15|>=1.12,<1.12.17",
+                "zendframework/zendframework1": ">=1,<1.11.15|>=1.12,<1.12.18",
                 "zendframework/zendopenid": ">=2,<2.0.2",
                 "zendframework/zendxml": ">=1,<1.0.1",
                 "zf-commons/zfc-user": "<1.2.2",
@@ -471,24 +476,25 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-02-14 18:50:07"
+            "time": "2016-05-25 05:33:34"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.8.3",
+            "version": "v2.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "6f4e41c41e7d352ed9adf71ff6f2ec1756490a1b"
+                "reference": "744dae663ffcfa21d8a111fb63541954199acbb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/6f4e41c41e7d352ed9adf71ff6f2ec1756490a1b",
-                "reference": "6f4e41c41e7d352ed9adf71ff6f2ec1756490a1b",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/744dae663ffcfa21d8a111fb63541954199acbb2",
+                "reference": "744dae663ffcfa21d8a111fb63541954199acbb2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9",
+                "symfony/polyfill-mbstring": "~1.1",
                 "symfony/polyfill-php54": "~1.0",
                 "symfony/polyfill-php55": "~1.0"
             },
@@ -525,20 +531,79 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-02-28 16:20:50"
+            "time": "2016-06-06 11:11:27"
         },
         {
-            "name": "symfony/polyfill-php54",
-            "version": "v1.1.0",
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/polyfill-php54.git",
-                "reference": "74663d5a2ff3c530c1bc0571500e0feec9094054"
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "dff51f72b0706335131b00a7f49606168c582594"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/74663d5a2ff3c530c1bc0571500e0feec9094054",
-                "reference": "74663d5a2ff3c530c1bc0571500e0feec9094054",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/dff51f72b0706335131b00a7f49606168c582594",
+                "reference": "dff51f72b0706335131b00a7f49606168c582594",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2016-05-18 14:26:46"
+        },
+        {
+            "name": "symfony/polyfill-php54",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php54.git",
+                "reference": "34d761992f6f2cc6092cc0e5e93f38b53ba5e4f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/34d761992f6f2cc6092cc0e5e93f38b53ba5e4f1",
+                "reference": "34d761992f6f2cc6092cc0e5e93f38b53ba5e4f1",
                 "shasum": ""
             },
             "require": {
@@ -547,7 +612,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -583,20 +648,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-01-20 09:13:37"
+            "time": "2016-05-18 14:26:46"
         },
         {
             "name": "symfony/polyfill-php55",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php55.git",
-                "reference": "b4f3f07d91702f8f926339fc4fcf81671d8c27e6"
+                "reference": "bf2ff9ad6be1a4772cb873e4eea94d70daa95c6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/b4f3f07d91702f8f926339fc4fcf81671d8c27e6",
-                "reference": "b4f3f07d91702f8f926339fc4fcf81671d8c27e6",
+                "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/bf2ff9ad6be1a4772cb873e4eea94d70daa95c6d",
+                "reference": "bf2ff9ad6be1a4772cb873e4eea94d70daa95c6d",
                 "shasum": ""
             },
             "require": {
@@ -606,7 +671,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -639,7 +704,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-01-20 09:13:37"
+            "time": "2016-05-18 14:26:46"
         },
         {
             "name": "tedivm/stash",
