@@ -1,17 +1,24 @@
-#knowledge_database-add li { float: left; width: 31%; min-height: 9em; font-size: 2ex; text-align: center; margin: 1%; padding: 0; border: 1px solid #2195B1; border-radius: 0.5rem; position: relative; }
+<?php
+$titlecolor = elgg_get_plugin_setting('titlecolor', 'esope', '#2195B1');
+//$textcolor = elgg_get_plugin_setting('textcolor', 'esope', '#2195B1');
+$linkcolor = elgg_get_plugin_setting('linkcolor', 'esope', '#2195B1');
+//$linkhovercolor = elgg_get_plugin_setting('linkhovercolor', 'esope', '#2195B1');
+?>
+
+#knowledge_database-add li { float: left; width: 31%; min-height: 5em; font-size: 2ex; text-align: center; margin: 1%; padding: 0; border: 1px solid <?php echo $linkcolor; ?>; border-radius: 0.5rem; position: relative; }
 #knowledge_database-add li .fa { font-size: 3ex; }
 #knowledge_database-add li a { text-decoration: none; display: inline-block; padding: 0.5rem; position: absolute; top: 0; bottom: 0; left: 0; right: 0; border-radius: 0.5rem; }
 
 .kdb-search-main { width:50%; float:left; min-width:300px; }
 .kdb-search-main input, .kdb-search-filter select { width: 16ex; }
 .kdb-search-main input[type="text"] { width: 30ex; }
-.kdb-search-main label { color: #2195B1; padding: 3px 6px; font-size: 1.2em; }
+.kdb-search-main label { color: <?php echo $titlecolor; ?>; padding: 3px 6px; font-size: 1.2em; }
 
 .kdb-search-filter { width:50%; float:left; min-width:200px; padding: 2px 0; }
 .kdb-search-filter span { min-width: 17ex; display:inline-block;}
 .kdb-search-filter input, .kdb-search-filter select { width: 17ex; }
 #knowledge_database-advanced-fields .kdb-search-filter input, #knowledge_database-advanced-fields .kdb-search-filter select { min-width: 10ex; max-width: 18ex; }
-.kdb-search-filter label { color: #2195B1; padding: 3px 6px; font-size: 1.2em; }
+.kdb-search-filter label { color: <?php echo $titlecolor; ?>; padding: 3px 6px; font-size: 1.2em; }
 .knowledge_database-result-meta { float: right; font-size: 12px; text-align:right; }
 .knowledge_database-result-meta .fa { font-size: 3ex; }
 
@@ -27,7 +34,7 @@
 
 .kdb-featured { width:33%; float:left; border-right: 1px solid grey; }
 .kdb-featured:last-child { border-right: 0; }
-.kdb-featured-content { height:300px; overflow:auto; padding:15px; border:0px solid #2195B1; }
+.kdb-featured-content { height:300px; overflow:auto; padding:15px; border:0px solid <?php echo $titlecolor; ?>; }
 .kdb-featured-header { padding: 0 10px 10px 10px; text-align:center; }
 .kdb-featured-header .image-block { height: 100px; margin-bottom: 1ex; }
 .kdb-featured-header .image-block img { height: 100px; width:auto; }
@@ -38,7 +45,7 @@
 .knowledge_database-selectors p { clear:both; font-size:0.8em; }
 
 
-.elgg-context-kdb h3 { border-top: 1px solid #2195b1; padding-top: 10px; margin-top: 30px; }
+.elgg-context-kdb h3 { border-top: 1px solid <?php echo $titlecolor; ?>; padding-top: 10px; margin-top: 30px; }
 
 .knowledge_database-edit-field {}
 .knowledge_database-edit-field input[type="text"] { width:30ex; }

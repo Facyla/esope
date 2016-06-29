@@ -81,46 +81,46 @@ $font6 = 'Georgia, times, serif';
 */
 
 $vars['theme-config-css'] = array(
-  'urlicon' => $url . 'mod/esope/img/theme/',
-  'headerimg' => $headerimg,
-  'backgroundcolor' => $backgroundcolor,
-  'backgroundimg' => $backgroundimg,
-  'titlecolor' => $titlecolor,
-  'linkcolor' => $linkcolor,
-  'linkhovercolor' => $linkhovercolor,
-  'textcolor' => $textcolor,
-  'color1' => $color1,
-  'color2' => $color2,
-  'color3' => $color3,
-  'color4' => $color4,
-  'color5' => $color5,
-  'color6' => $color6,
-  'color7' => $color7,
-  'color8' => $color8,
-  'color9' => $color9,
-  'color10' => $color10,
-  'color11' => $color11,
-  'color12' => $color12,
-  'color13' => $color13,
-  'color14' => $color14,
-  'color15' => $color15,
-  'footercolor' => $footercolor,
-  'font1' => $font1,
-  'font2' => $font2,
-  'font3' => $font3,
-  'font4' => $font4,
-  'font5' => $font5,
-  'font6' => $font6,
+	'urlicon' => $url . 'mod/esope/img/theme/',
+	'headerimg' => $headerimg,
+	'backgroundcolor' => $backgroundcolor,
+	'backgroundimg' => $backgroundimg,
+	'titlecolor' => $titlecolor,
+	'linkcolor' => $linkcolor,
+	'linkhovercolor' => $linkhovercolor,
+	'textcolor' => $textcolor,
+	'color1' => $color1,
+	'color2' => $color2,
+	'color3' => $color3,
+	'color4' => $color4,
+	'color5' => $color5,
+	'color6' => $color6,
+	'color7' => $color7,
+	'color8' => $color8,
+	'color9' => $color9,
+	'color10' => $color10,
+	'color11' => $color11,
+	'color12' => $color12,
+	'color13' => $color13,
+	'color14' => $color14,
+	'color15' => $color15,
+	'footercolor' => $footercolor,
+	'font1' => $font1,
+	'font2' => $font2,
+	'font3' => $font3,
+	'font4' => $font4,
+	'font5' => $font5,
+	'font6' => $font6,
 );
 /* Use in subsequent CSS views like this :
-  // Get all needed vars
-  $css = elgg_extract('theme-config-css', $vars);
-  $urlicon = $css['urlicon'];
-  $titlecolor = $css['titlecolor'];
-  $linkcolor = $css['linkcolor'];
-  $color1 = $css['color1'];
-  $color2 = $css['color2'];
-  $color3 = $css['color3'];
+	// Get all needed vars
+	$css = elgg_extract('theme-config-css', $vars);
+	$urlicon = $css['urlicon'];
+	$titlecolor = $css['titlecolor'];
+	$linkcolor = $css['linkcolor'];
+	$color1 = $css['color1'];
+	$color2 = $css['color2'];
+	$color3 = $css['color3'];
 */
 // Additional config CSS
 //$config_css = elgg_get_plugin_setting('css', 'esope');

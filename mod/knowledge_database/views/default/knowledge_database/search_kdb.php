@@ -116,18 +116,20 @@ if ($fields) {
 
 
 // Render fields into fieldsets
-foreach ($fieldset_fields as $fieldset => $fields_content) {
-	$search_form .= '<div class="clearfloat"></div>';
-	if ($fieldset == 'default') {
-		$search_form .= $fields_content;
-	} else {
-		$fieldset_title = esope_get_best_translation_for_metadata($fieldset, 'knowledge_database:fieldset');
-		$search_form .= '<fieldset class="knowledge_database-fieldset">';
-		$search_form .= '<legend>' . $fieldset_title . '</legend>';
-		$search_form .= $fields_content;
-		$search_form .= '</fieldset>';
+if ($fieldset_fields) {
+	foreach ($fieldset_fields as $fieldset => $fields_content) {
+		$search_form .= '<div class="clearfloat"></div>';
+		if ($fieldset == 'default') {
+			$search_form .= $fields_content;
+		} else {
+			$fieldset_title = esope_get_best_translation_for_metadata($fieldset, 'knowledge_database:fieldset');
+			$search_form .= '<fieldset class="knowledge_database-fieldset">';
+			$search_form .= '<legend>' . $fieldset_title . '</legend>';
+			$search_form .= $fields_content;
+			$search_form .= '</fieldset>';
+		}
+		$search_form .= '<div class="clearfloat"></div><br />';
 	}
-	$search_form .= '<div class="clearfloat"></div><br />';
 }
 
 $search_form .= '<div class="clearfloat" style="margin:0;"></div>';

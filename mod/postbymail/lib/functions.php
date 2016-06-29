@@ -175,7 +175,7 @@ function postbymail_checkandpost($config = array()) {
 				$postbymail_guid = '';
 				$sender_reply = '';
 				$admin_reply = '';
-				$group_entity = false;
+				$container = false;
 				
 				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
 				// Get the message header.
@@ -407,7 +407,7 @@ function postbymail_checkandpost($config = array()) {
 					$reply_check = postbymail_checkeligible_reply($pbm_params);
 					$mailreply_check = $reply_check['check'];
 					$member = $reply_check['member'];
-					$group_entity = $reply_check['group'];
+					$container = $reply_check['container'];
 					$hash_arr = $reply_check['hash'];
 					$report = $reply_check['report'];
 					$body .= $report;
@@ -812,9 +812,9 @@ function postbymail_checkandpost($config = array()) {
 					$body .= elgg_echo('postbymail:sender:notnotified');
 				}
 				// Notification responsable du groupe - ssi dans un groupe
-				if ($notify_groupadmin && elgg_instanceof($group_entity, 'group')) {
+				if ($notify_groupadmin && elgg_instanceof($container, 'group')) {
 					// @TODO : notifier l'admin du groupe
-					if ($groupowner = get_entity($group_entity->owner_guid)) {
+					if ($groupowner = get_entity($container->owner_guid)) {
 						if (is_email_address($groupowner->email)) {
 							mail($admin_email, $admin_subject, $admin_reply, $headers);
 						} else {
@@ -1064,36 +1064,48 @@ function postbymail_checkeligible_reply($params) {
 		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
 		
 		// Container
-		if ($group_entity = get_entity($params['entity']->container_guid)) {
+		if ($container = get_entity($params['entity']->container_guid)) {
 			$report .= elgg_echo('postbymail:containerok');
 			// Membre
 			if (elgg_instanceof($params['member'], 'user')) {
 				$report .= elgg_echo('postbymail:memberok', array($params['member']->name));
 				// Check the user is a group member, or if he is the group owner, or if he is an admin,
 				// or he can just comment because the object access level allows it
-				if (elgg_instanceof($group_entity, 'group')) {
-					$report .= elgg_echo('postbymail:groupok', array($group_entity->name));
+				if (elgg_instanceof($container, 'group')) {
+					$report .= elgg_echo('postbymail:groupok', array($container->name));
 					if (
-						($group_entity->isMember($params['member']))
-						|| ($group_entity->owner_guid == $params['member']->guid)
+						($container->isMember($params['member']))
+						|| ($container->owner_guid == $params['member']->guid)
 						|| $params['member']->admin || $params['member']->siteadmin
 						) {
-							$report .= elgg_echo('postbymail:ismember', array($params['member']->name, $group_entity->name));
+							$report .= elgg_echo('postbymail:ismember', array($params['member']->name, $container->name));
 						} else {
 							if ($params['entity']->canComment($params['member']->guid)) {
-								$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $group_entity->name));
+								$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $container->name));
 							} else {
-								$report .= elgg_echo('postbymail:error:nogroupmember', array($params['member']->name, $group_entity->name));
+								$report .= elgg_echo('postbymail:error:nogroupmember', array($params['member']->name, $container->name));
 								$mailreply_check = false;
 							}
 						}
-				} else if (elgg_instanceof($group_entity, 'user')) {
+				} else if (elgg_instanceof($container, 'user')) {
 					// Member container allowed : personnal publications + messages replies
 					//$report .= elgg_echo('postbymail:error:notingroup:user');
 					//$mailreply_check = false;
+				} else if (elgg_instanceof($container, 'site')) {
+					// Site container allowed : site-wide publications
+					//$report .= elgg_echo('postbymail:error:notingroup:site');
+					//$mailreply_check = false;
+				} else if (elgg_instanceof($container, 'object')) {
+					// Note : les commentaires ont pour container l'objet parent
+					if ($container->canComment($params['member']->guid)) {
+						$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $container->title));
+					} else {
+						$report .= elgg_echo('postbymail:error:notingroup');
+						$mailreply_check = false;
+					}
 				} else {
 					if ($params['entity']->canComment($params['member']->guid)) {
-						$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $group_entity->name));
+						$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $container->name));
 					} else {
 						$report .= elgg_echo('postbymail:error:notingroup');
 						$mailreply_check = false;
@@ -1151,7 +1163,7 @@ function postbymail_checkeligible_reply($params) {
 	}
 	//$report .= "Message headers array = " . print_r($message, true);
 	
-	return array('member' => $params['member'], 'group' => $group, 'check' => $mailreply_check, 'report' => $report, 'hash' => $hash_arr);
+	return array('member' => $params['member'], 'container' => $container, 'check' => $mailreply_check, 'report' => $report, 'hash' => $hash_arr);
 }
 
 
