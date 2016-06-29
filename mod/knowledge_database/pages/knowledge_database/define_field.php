@@ -126,7 +126,7 @@ echo '<p>' . elgg_echo('knowledge_database:settings:actions:details') . '</p>';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:required') . ' ' . elgg_view('input/dropdown', array('name' => 'required', 'value' => $config['params']['required'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:multiple') . ' ' . elgg_view('input/dropdown', array('name' => 'multiple', 'value' => $config['params']['multiple'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:autocomplete') . ' ' . elgg_view('input/dropdown', array('name' => 'autocomplete', 'value' => $config['params']['autocomplete'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
-			echo '<label>' . elgg_echo('knowledge_database:settings:field:addempty') . ' ' . elgg_view('input/select', array('name' => 'addempty', 'value' => $config['params']['addempty'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
+			echo '<label>' . elgg_echo('knowledge_database:settings:field:addempty') . ' ' . elgg_view('input/dropdown', array('name' => 'addempty', 'value' => $config['params']['addempty'], 'options_values' => $no_yes_opt)) . '</label> &nbsp; ';
 			echo '<label>' . elgg_echo('knowledge_database:settings:field:defaultvalue') . ' ' . elgg_view('input/text', array('name' => 'default', 'value' => $config['params']['default'])) . '</label>';
 		echo '</p>';
 

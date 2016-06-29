@@ -22,7 +22,7 @@ $options = array(
 	'gallery_class' => 'elgg-gallery-users',
 	'pagination' => false,
 );
-$body .= elgg_list_entities_from_relationship($options);
+$body = elgg_list_entities_from_relationship($options);
 
 /* Avoid this method : might lead to memory overflow on big sites
 $count = find_active_users(600, 10, 0, true);
