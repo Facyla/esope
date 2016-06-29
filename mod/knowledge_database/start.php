@@ -284,7 +284,7 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		$field_content = '';
 		
 		// Skip field display in view mode if there is no value
-		if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty(implode('', $entity->{$name}))))) { continue; }
+		//if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty(implode('', $entity->{$name}))))) { continue; }
 		// Build field params
 		$fieldset = $field['category'];
 		if (empty($fieldset)) { $fieldset = 'default'; }
