@@ -4,8 +4,8 @@
  * 
  * @package Elggproject_manager
  * @author Facyla - Florian DANIEL
- * @copyright ITEMS International 2014
- * @link http://items.fr/
+ * @copyright ITEMS International 2014, Facyla 2016
+ * @link http://facyla.fr/
  */
 
 $entity_guid = get_input("guid");

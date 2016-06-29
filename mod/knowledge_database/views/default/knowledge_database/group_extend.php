@@ -12,4 +12,6 @@ if ($is_kdb_group) {
 	// Addition for KDB group
 	echo '<br />';
 	echo '<blockquote><strong>' . elgg_echo('knowledge_database:kdb_group') . '</strong></blockquote>';
+	//echo elgg_view('knowledge_database/group_profile_extend', $vars);
 }
+

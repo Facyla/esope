@@ -98,13 +98,12 @@ echo '<div class="knowledge_database-edit-field">';
 	
 	// Render field edit form
 	echo '<form id="kdb-define-field-form" action="javascript:kdb_define_field();" method="POST">';
-		echo elgg_view('input/hidden', array('name' => 'name', 'value' => $name));
-		
 		echo '<h3>' . elgg_echo('knowledge_database:settings:field:edit', array($name)) . '</h3>';
+		echo elgg_view('input/hidden', array('name' => 'name', 'value' => $name));
 		
 		echo '<p><blockquote>' . elgg_echo('knowledge_database:settings:field:edit:details') . '</blockquote></p>';
 		
-		echo '<p><label>' . elgg_echo('knowledge_database:settings:field:title') . '</label> ' . elgg_view('input/text', array('name' => 'title', 'value' => $config['title'])) . '</p>';
+		echo '<p><label>' . elgg_echo('knowledge_database:settings:field:title') . ' ' . elgg_view('input/text', array('name' => 'title', 'value' => $config['title'])) . '</label></p>';
 		
 		echo '<p><label>' . elgg_echo('knowledge_database:settings:field:tooltip') . ' ' . elgg_echo('knowledge_database:settings:field:tooltip:details') . '</label></p>';
 		
@@ -141,5 +140,4 @@ echo '<div class="knowledge_database-edit-field">';
 	echo '<div id="kdb-define-field-result"></div>';
 
 echo '</div>';
-
 

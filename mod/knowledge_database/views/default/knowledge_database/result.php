@@ -56,8 +56,11 @@ if ($ent->tags) { $body .= elgg_view('output/tags', array('tags' => $ent->tags))
 $body .= '</div>';
 
 $body .= '<div class="elgg-content">';
-if ($ent->briefdescription) { $body .= '<p><em>' . elgg_get_excerpt($ent->briefdescription) . '</em></p>'; }
-else { $body .= '<p><em>' . elgg_get_excerpt($ent->description) . '</em></p>'; }
+if ($ent->briefdescription) {
+	$body .= '<p><em>' . elgg_get_excerpt($ent->briefdescription) . '</em></p>';
+} else {
+	$body .= '<p><em>' . elgg_get_excerpt($ent->description) . '</em></p>';
+}
 $body .= '</div>';
 
 // Render list element

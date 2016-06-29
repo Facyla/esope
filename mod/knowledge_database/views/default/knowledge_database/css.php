@@ -1,6 +1,6 @@
-#knowledge_database-add li { float: left; width: 29%; min-height: 7ex; font-size: 2ex; text-align: center; padding: 1%; margin: 1%; border: 1px solid #2195B1; border-radius: 10px; }
+#knowledge_database-add li { float: left; width: 31%; min-height: 9em; font-size: 2ex; text-align: center; margin: 1%; padding: 0; border: 1px solid #2195B1; border-radius: 0.5rem; position: relative; }
 #knowledge_database-add li .fa { font-size: 3ex; }
-#knowledge_database-add li a { text-decoration: none; }
+#knowledge_database-add li a { text-decoration: none; display: inline-block; padding: 0.5rem; position: absolute; top: 0; bottom: 0; left: 0; right: 0; border-radius: 0.5rem; }
 
 .kdb-search-main { width:50%; float:left; min-width:300px; }
 .kdb-search-main input, .kdb-search-filter select { width: 16ex; }

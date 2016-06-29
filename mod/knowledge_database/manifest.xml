@@ -6,7 +6,7 @@
 	<version>1.12.0</version>
 	<blurb>Knowledge Database (BETA)</blurb>
 	<description>This plugin extends objects with structured fields, so your Elgg site can be used as a Knowledge Database. This feature can be enabled for the whole site, or in specific groups, and provides a public interface for searching and accessing these documents. WARNING : this plugin is still in its early stage, and eager to evolve. Please do not use on a production site without great care !</description>
-	<website>http://items.fr/</website>
+	<website>http://facyla.fr/</website>
 	<license>GNU Public License version 2</license>
 	
 	<requires>
@@ -50,7 +50,7 @@ TODO :
 
 
 1.12.0 : 20160509 Updated to Elgg 1.12
-	- 
+	- improved metadata edition interface
 
 0.5 : 20140924 Pre-release version
 	- improved search interfaces
@@ -69,9 +69,9 @@ TODO :
 
 0.1 : 20140921 Initial version
 
-Note : this plugin is a generic version based on Maghrenov Knowledge Database plugin
+Note : this plugin is a generic version based on initial plugin Maghrenov Knowledge Database
 
-Maghrenov Knowledge Database plugin history
+Knowledge Database plugin history
 0.4 : 20140828 Pre-release version
 0.3 : 20140801 Beta version
 0.2 : 20140628 Group & objects integration

@@ -284,6 +284,11 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		
 		
 		// Skip field display in view mode if there is no value
+		/*
+		// Note : "PHP Fatal error:  Can't use function return value in write context" with old PHP version
+		$test_name = implode('', $entity->{$name});
+		if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty($test_name)))) { continue; }
+		*/
 		if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty(implode('', $entity->{$name}))))) { continue; }
 		
 		// Build field params

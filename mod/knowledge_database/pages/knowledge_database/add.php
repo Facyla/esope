@@ -3,7 +3,6 @@
  * Knowledge Database add new content page
  *
  */
-
 $url = elgg_get_site_url();
 
 $title = elgg_echo('esope:search:title');

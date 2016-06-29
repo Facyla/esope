@@ -15,7 +15,6 @@ $no_yes_opt = array_reverse($yes_no_opt, true);
 
 
 
-
 $all_groups = elgg_get_entities(array('types' => 'group', 'limit' => 0));
 $groups_opt = array();
 $groups_list = '';
@@ -28,7 +27,7 @@ if ($all_groups) {
 
 
 // Set defaults
-// Note we don't want to apply this to anithing : only some main data types that are made for structure (and not discussion)
+// Note we don't want to apply this to anything : only some main data types that are made for structure (and not discussion)
 $kdb_tools_opt = "blog, bookmarks, pages, file, event_calendar, announcements";
 if (!isset($vars['entity']->kdb_subtypes)) { $vars['entity']->kdb_subtypes = $kdb_tools_opt; }
 

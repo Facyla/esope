@@ -1,6 +1,6 @@
 <?php
 /**
- * Maghrenov Knowledge Database public index page
+ * Knowledge Database public index page
  *
  */
 
