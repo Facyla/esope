@@ -7,9 +7,10 @@
 
 
 $group = elgg_extract('entity', $vars);
-$kdb_group_guid = elgg_get_plugin_setting('kdb_group', 'knowledge_database');
 
-if ($group->guid == $kdb_group_guid) {
+$is_kdb_group = knowledge_database_is_kdb_group($group->guid);
+
+if ($is_kdb_group) {
 	echo elgg_view('knowledge_database/search_kdb', $vars);
 }
 

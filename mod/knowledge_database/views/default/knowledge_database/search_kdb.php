@@ -116,6 +116,7 @@ if ($fields) {
 
 
 // Render fields into fieldsets
+if ($fieldset_fields) {
 foreach ($fieldset_fields as $fieldset => $fields_content) {
 	$search_form .= '<div class="clearfloat"></div>';
 	if ($fieldset == 'default') {
@@ -128,6 +129,7 @@ foreach ($fieldset_fields as $fieldset => $fields_content) {
 		$search_form .= '</fieldset>';
 	}
 	$search_form .= '<div class="clearfloat"></div><br />';
+	}
 }
 
 $search_form .= '<div class="clearfloat" style="margin:0;"></div>';
