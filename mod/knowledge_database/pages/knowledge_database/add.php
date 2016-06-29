@@ -1,9 +1,9 @@
 <?php
 /**
- * Maghrenov Knowledge Database add new content page
+ * Knowledge Database add new content page
  *
  */
-global $CONFIG;
+$url = elgg_get_site_url();
 
 $title = elgg_echo('esope:search:title');
 $content = '';
@@ -23,11 +23,11 @@ if ($kdb_group_guid) {
 			</div>';
 		
 		$content .= '<h2>Add a new ressource</h2>';
-		$content .= '<ul id="maghrenov-kdb-add">';
-		$content .= '<li><a href="' . $CONFIG->url . 'file/add/' . $kdb_group_guid . '"><i class="fa fa-file"></i><br />Upload a file document</a></li>';
-		$content .= '<li><a href="' . $CONFIG->url . 'bookmarks/add/' . $kdb_group_guid . '"><i class="fa fa-link"></i><br />Publish a link to a web ressource</a></li>';
-		$content .= '<li><a href="' . $CONFIG->url . 'event_calendar/add/' . $kdb_group_guid . '"><i class="fa fa-calendar"></i><br />Announce an event in the calendar</a></li>';
-		$content .= '<li><a href="' . $CONFIG->url . 'blog/add/' . $kdb_group_guid . '"><i class="fa fa-book"></i> <i class="fa fa-code"></i> <i class="fa fa-video-camera"></i><br />Publish text or embed web content</a></li>';
+		$content .= '<ul id="knowledge_database-kdb-add">';
+		$content .= '<li><a href="' . $url . 'file/add/' . $kdb_group_guid . '"><i class="fa fa-file"></i><br />Upload a file document</a></li>';
+		$content .= '<li><a href="' . $url . 'bookmarks/add/' . $kdb_group_guid . '"><i class="fa fa-link"></i><br />Publish a link to a web ressource</a></li>';
+		$content .= '<li><a href="' . $url . 'event_calendar/add/' . $kdb_group_guid . '"><i class="fa fa-calendar"></i><br />Announce an event in the calendar</a></li>';
+		$content .= '<li><a href="' . $url . 'blog/add/' . $kdb_group_guid . '"><i class="fa fa-book"></i> <i class="fa fa-code"></i> <i class="fa fa-video-camera"></i><br />Publish text or embed web content</a></li>';
 		$content .= '</ul>';
 
 	} else  {

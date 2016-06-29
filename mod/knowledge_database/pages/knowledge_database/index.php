@@ -1,9 +1,8 @@
 <?php
 /**
- * Maghrenov Knowledge Database public index page
+ * Knowledge Database public index page
  *
  */
-global $CONFIG;
 
 $title = elgg_echo('esope:search:title');
 $content = '';

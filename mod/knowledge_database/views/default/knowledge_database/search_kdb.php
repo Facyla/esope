@@ -22,6 +22,7 @@ foreach ($registered_subtypes as $type => $subtypes) {
 	}
 }
 */
+//$container = get_entity($container_guid);
 $tools = knowledge_database_get_allowed_tools($container_guid);
 $subtypes = knowledge_database_get_allowed_subtypes();
 $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
@@ -30,7 +31,7 @@ $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
 
 // FORMULAIRE
 // Prepare JS script for forms
-$action_base = $CONFIG->url . 'action/knowledge_database/';
+$action_base = elgg_get_site_url() . 'action/knowledge_database/';
 $kdb_search_url = elgg_add_action_tokens_to_url($action_base . 'search');
 
 
@@ -57,7 +58,7 @@ $search_form = '<form id="kdb-search-form" method="post" action="' . $search_act
 $search_form .= elgg_view('input/securitytoken');
 //$search_form .= elgg_view('input/hidden', array('name' => 'debug', 'value' => 'true'));
 // @TODO Limit in a container (group) only if we are in a KDB group
-if ($container_guid) $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
+if ($container_guid) { $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid)); }
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'object'));
 
 $search_form .= '<p><em><i class="fa fa-info-circle"></i> ' . elgg_echo('knowledge_database:search:details') . '</em></p>';
@@ -70,7 +71,8 @@ $search_form .= '</div>';
 $search_form .= '<div class="clearfloat"></div>';
 
 // Custom fields
-if ($fields) foreach ($fields as $name) {
+if ($fields) {
+	foreach ($fields as $name) {
 	$field_content = '';
 	$inputs[$name] = get_input($name);
 	
@@ -88,10 +90,15 @@ if ($fields) foreach ($fields as $name) {
 	// Adjust input types
 	$view = 'text';
 	//$view = $config['type'];
-	if (in_array($config['type'], array('dropdown', 'multiselect'))) { $view = 'dropdown'; }
-	else if (in_array($config['type'], array('date'))) { $view = 'date'; }
-	else if (in_array($config['type'], array('longtext', 'plaintext', 'tags', 'email'))) { $view = 'text'; }
-	else if (in_array($config['type'], array('file'))) { continue; }
+		if (in_array($config['type'], array('dropdown', 'multiselect', 'select'))) {
+			$view = 'dropdown';
+		} else if (in_array($config['type'], array('date'))) {
+			$view = 'date';
+		} else if (in_array($config['type'], array('longtext', 'plaintext', 'tags', 'email'))) {
+			$view = 'text';
+		} else if (in_array($config['type'], array('file'))) {
+			continue;
+		}
 	
 	// Build search field
 	$field_content .= '<div class="kdb-search-filter">';
@@ -101,9 +108,10 @@ if ($fields) foreach ($fields as $name) {
 	$field_content .= '</div>';
 	
 	$fieldset = $config['category'];
-	if (empty($fieldset)) $fieldset = 'default';
+		if (empty($fieldset)) { $fieldset = 'default'; }
 	// Add field to appropriate fieldset
 	$fieldset_fields[$fieldset] .= $field_content;
+}
 }
 
 
@@ -130,19 +138,19 @@ $search_form .= '</form><br />';
 
 
 
-// Random ressources block
+// Random resources block
 $params = array('type' => 'object', 'subtypes' => $subtypes, 'limit' => 0, 'max' => 3);
-if ($container_guid) $params['container_guid'] = $container_guid;
-$content_latest = elgg_view('knowledge_database/random_ressources', $params);
+if ($container_guid) { $params['container_guid'] = $container_guid; }
+$content_latest = elgg_view('knowledge_database/random_resources', $params);
 
-// Add ressources block
-$content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'tools' => $tools));
+// Add resources block
+$content_add = elgg_view('knowledge_database/add_resources', array('publish_guid' => $publish_guid, 'tools' => $tools));
 
 
 
 // Compose final page
 $content .= $search_form;
-$content .= '<div id="esope-search-results">' . $content_latest . '</div>';
+$content .= '<div id="kdb-search-results">' . $content_latest . '</div>';
 $content .= '<div class="clearfloat"></div><br /><br />';
 $content .= $content_add;
 $content .= '<div class="clearfloat"></div><br /><br />';

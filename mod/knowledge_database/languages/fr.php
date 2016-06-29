@@ -1,21 +1,25 @@
 <?php
+$url = elgg_get_site_url();
+
 $french = array (
-	'kdb' => 'Base de connaissances',
-	'knowledge_database:homepage' => 'Base de connaissances',
+	'kdb' => 'Base de connaissance',
+	'knowledge_database:homepage' => 'Base de connaissance',
 	
-	'knowledge_database:addressource' => 'Ajouter une nouvelle ressource',
+	'knowledge_database:addresource' => 'Ajouter une nouvelle ressource',
 	'knowledge_database:addfile' => '<i class="fa fa-file"></i><br />Publier un fichier',
 	'knowledge_database:addbookmarks' => '<i class="fa fa-link"></i><br />Publier un lien vers une ressource web',
 	'knowledge_database:addblog' => '<i class="fa fa-file-text-o"></i><br />Publier un article',
 	'knowledge_database:addevent_calendar' => '<i class="fa fa-calendar"></i><br />Publier un événement',
 	'knowledge_database:addpages' => '<i class="fa fa-file-text-o"></i><br />Publier une page wiki',
 	'knowledge_database:addannouncements' => '<i class="fa fa-file-text-o"></i><br />Publier une annonce',
+	'knowledge_database:kdb_group' => "Base de connaissance du groupe",
+	'knowledge_database:attachment' => "Fichier joint",
 	
 	// Errors
 	'knowledge_database:kdbgrouperror' => "Groupe de la Knowledge Database non défini, veuillez contacter l'administrateur du site !",
 	'knowledge_database:error:sitedisabled' => "La base de connaissances du site n'est pas activée.",
 	'knowledge_database:contribute' => "enregistrer.",
-	'knowledge_database:contribute' => "Pour contribuer à la Base de connaissance, veuillez vous <a href=\"" . $CONFIG->url . "login\">identifier sur le site</a> (vous pouvez avoir besoin de vous enregistrer d'abord).",
+	'knowledge_database:contribute' => "Pour contribuer à la Base de connaissance, veuillez vous <a href=\"" . $url . "login\">identifier sur le site</a> (vous pouvez avoir besoin de vous enregistrer d'abord).",
 	
 	'knowledge_database:publish:warning' => "<i class=\"fa fa-warning\"></i> Lorsque vous publiez des ressources, veuillez vérifier que vous avez le droit de le faire. Vous avez ce droit si vous êtes auteur et éditeur du document, ou si sa license autorise la publication. Si ce n'est pas le cas vous pouvez en démander l'autorisation à l'auteur.<br />Si la publication est interdite, vous pouvez tout de même publier un Lien web vers une ressource en ligne.",
 	
@@ -23,7 +27,7 @@ $french = array (
 	'knowledge_database:search:form:title' => "Rechercher dans la base de données",
 	'knowledge_database:search:details' => "Vous pouvez rechercher dans la base de données en utilisant un seul, voire aucun critère, ou plusieurs critères à la fois. Il est recommandé de commencer par une recherche large, puis d'affiner les résultats s'il y en a trop.",
 	'knowledge_database:advsearch' => "Recherche avancée",
-	'knowledge_database:latestressources' => "Ressources au hasard",
+	'knowledge_database:latestresources' => "Ressources au hasard",
 	'knowledge_database:resultscount' => "%s ressources trouvées",
 	'knowledge_database:resultscount1' => "%s ressource trouvée",
 	'knowledge_database:noresult' => "Aucune ressource trouvée. Essayer d'utiliser moins de critères.",
@@ -37,21 +41,22 @@ $french = array (
 	'knowledge_database:settings:site' => "Base de connaissance du site",
 	'knowledge_database:settings:field' => "Définition de \"%s\" (%s)",
 	'knowledge_database:settings:field:edit' => "Configuration de \"%s\"",
-	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correpond à une vue input et output existante. Par ex. text, longtext, plaintext, dropdown, date...<br />
+	'knowledge_database:settings:field:edit:details' => "<strong>Type de champ&nbsp;:</strong> correspond à une vue input et output existante. Par ex. text, longtext, plaintext, select, date...<br />
 	<strong>Category&nbsp;:</strong> facultatif, permet de regrouper les champs par groupe de champs<br />
-	<strong>Read&nbsp;:</strong> \"yes\" ou \"no\" - permet de définir si ce champ est affiché. Se référer au code source pour des définitions plus avancées, selon les rôles et l'état du workflow.<br />
+	<strong>Read&nbsp;:</strong> \"yes\" ou \"no\", ou listes des rôles autorisés à lire le champ - permet de définir si ce champ est affiché. Se référer au code source pour des définitions plus avancées, selon les rôles et l'état du workflow.<br />
 	<strong>Edit&nbsp;:</strong> permet de définir si ce champ peut être édité. Même configuration possible que pour \"read\".<br />
 	<strong>Required&nbsp;:</strong> le champ doit être renseigné pour valider le formulaire<br />
-	<strong>Multiple&nbsp;:</strong> (dropdown) le champ accepte plusieurs valeurs<br />
+	<strong>Multiple&nbsp;:</strong> (select) le champ accepte plusieurs valeurs<br />
 	<strong>Autocomplete&nbsp;:</strong> (text) le champ propose des valeurs déjà saisies<br />
+	<strong>Addempty&nbsp;:</strong> (select) le selecteur propose une option vide<br />
 	<strong>Default&nbsp;:</strong> valeur par défaut du champ<br />
-	<strong>Options values&nbsp;:</strong> (dropdown) liste des valeurs possibles<br />",
-	'knowledge_database:settings:fields:site' => "Liste des métadonnées pour l'ensemble du site",
-	'knowledge_database:settings:fields:group' => "Liste des métadonnées pour le groupe \"%s\"",
+	<strong>Options values&nbsp;:</strong> (select) liste des valeurs possibles<br />",
+	'knowledge_database:settings:fields:site' => "Base de connaissance globale (site)",
+	'knowledge_database:settings:fields:group' => "Base de connaissance du groupe \"%s\"",
 	'knowledge_database:settings:fields' => "Définition des métadonnées",
-	'knowledge_database:settings:fields:details' => "Pour définir la liste des champs, indiquez un nom de métadonnée par ligne, ou séparrez les noms par des virgules, par ex. metadata1, metadata2, etc.<br />
-		Les noms devraient être saisis en minuscule, sans espace ni accent ou signe de ponctuation, et être uniques pour éviter tout risque de conflit avec d'autres metadonnées<br />
-		<strong>Une bonne pratique vivement recommandée consiste à utiliser un prefixe, par ex.: kdb_metadata</strong>",
+	'knowledge_database:settings:fields:details' => "Pour définir la liste des champs, indiquez un nom de métadonnée par ligne, ou séparez les noms par des virgules, par ex. metadata1, metadata2, etc.<br />
+		Les noms des métadonnées devraient être saisis en minuscule, sans espace ni accent ou signe de ponctuation, et être uniques pour éviter tout risque de conflit avec d'autres metadonnées ou plugins.<br />
+		<strong>Une bonne pratique vivement recommandée consiste à utiliser un prefixe, par ex.: <strong>kdb_</strong>metadata</strong>",
 	'knowledge_database:settings:fields:config' => "Vous pouvez définir ici la configuration de chacun des champs.<br />Attention : certaines modifications ne seront visibles qu'après le rechargement de la page.",
 	'knowledge_database:settings:actions:details' => "Pour définir les actions autorisées, vous pouvez utiliser :<br />
 		 \"yes\" ou \"no\" pour une définition globale<br />
@@ -83,10 +88,27 @@ $french = array (
 	'knowledge_database:settings:keytitle' => "Options pour la métadonnée \"%s\"",
 	'knowledge_database:settings:fields:notice' => "<strong>ATTENTION, IMPORTANT :</strong><ul>
 		<li> - lorsque vous modifiez ces valeurs, ayez bien à l'esprit que tout changement de nom d'une option modifie la classification existante</li>
-		<li> - Les noms de métadonnées peuvent être séparés en en indiquant une par ligne, ou en utilisant le séparateur \"|\", par ex. key1 | key2 | etc.</li>
-		<li> - Les noms de ces métadonnées peuvent être traduits en utilisant les clefs de traduction 'knowledge_database:key:key1' => \"Nom en clair de Key 1\",</li>
+		<li> - Les noms de métadonnées peuvent être séparés en indiquant une métadonnée par ligne, ou en utilisant le séparateur \"|\", par ex. key1 | key2 | etc.</li>
+		<li> - Les noms de ces métadonnées peuvent être traduits en utilisant les clefs de traduction 'knowledge_database:key:<strong>key1</strong>' => \"Nom en clair de Key 1\",</li>
 		<li> - OU vous pouvez définir directement un nom en utilisant le séparateur clef-valeur \"::\" (mais en une seule langue dans ce cas), par ex.: key1::Nom en clair de Key 1</li>
 		</ul>",
+	'knowledge_database:settings:field:metadata' => "Configurer le champ pour la métadonnée&nbsp;: %s",
+	'knowledge_database:define_field:success' => "La configuration a bien été enregistrée",
+	'knowledge_database:define_field:error' => "Erreur, impossible d'enregistrer les données. Veuillez recharger la page et réessayer.",
+	'knowledge_database:settings:field:title' => "Libellé du champ",
+	'knowledge_database:settings:field:tooltip' => "Aide à la saisie",
+	'knowledge_database:settings:field:tooltip:details' => "Pour afficher des informations d'aide à la saisie, créez la clef de traduction&nbsp;: knowledge_database:field:<strong>key1</strong>:details",
+	'knowledge_database:settings:field:type' => "Type de champ",
+	'knowledge_database:settings:field:category' => "Groupe de champs",
+	'knowledge_database:settings:field:read' => "Lecture",
+	'knowledge_database:settings:field:write' => "Ecriture",
+	'knowledge_database:settings:field:required' => "Requis",
+	'knowledge_database:settings:field:multiple' => "Multiple",
+	'knowledge_database:settings:field:autocomplete' => "Autocomplétion",
+	'knowledge_database:settings:field:addempty' => "Option vide",
+	'knowledge_database:settings:field:defaultvalue' => "Valeur par défaut",
+	'knowledge_database:settings:field:options_values' => "Valeurs disponibles",
+	'knowledge_database:settings:field:save' => "Enregistrer la configuration",
 	
 	
 	// Default config
@@ -113,7 +135,7 @@ $french = array (
 	'knowledge_database:default:kdb_topic' => "biogas::Biogas | biomasspower::Biomass power | coal::Coal | concentratedsolarpower::Concentrated Solar Power | demandresponse::Demand response | distributiongrid::Distribution grid | electricitygrid::Electricity Grid | energydemand::Energy Demand | energyefficiency::Energy Efficiency | energyefficiencyinbuildings::Energy Efficiency in Buildings | energyefficiencyinindustry::Energy Efficiency in Industry | energymanagement::Energy Management | energystorage::Energy Storage | energysupply::Energy Supply | forecasts::Forecasts | gas::Gas | geothermal::Geothermal | hydropower::Hydropower | marineenergy::Marine Energy | nuclearenergy::Nuclear Energy | renewableenergy::Renewable Energy | smartgrids::Smart Grids | solarpvpower::Solar PV Power | solarthermalenergy::Solar Thermal Energy | traditionalbiomass::Traditional Biomass | transmissiongrid::Transmission grid | wind::Wind",
 	'knowledge_database:default:kdb_type' => "blog::Blog article | directorycontact::Directory Contacts & experts | euregulation::EU Regulation | event::Event | goodpractice::Good practice guide | interview::Interview | news::News | press::Press article | project::Project profile | report::Report | review::Review | scientific::Scientific article | tendercall::Tender/call document | tutorial::Tutorials | whitepaper::White paper",
 	'knowledge_database:default:kdb_region' => "eu::EU | maghreb::Maghreb | mashreq::Mashreq | medregion::Mediterranean Region | mideast::Middle-East",
-	'knowledge_database:default:kdb_lang' => "en::English | fr::Français",
+	'knowledge_database:default:kdb_lang' => "en::Anglais | fr::Français",
 	'knowledge_database:default:kdb_country' => "AF::Afghanistan | AL::Albania | DZ::Algeria | AS::American Samoa | AD::Andorra | AO::Angola | AI::Anguilla | AQ::Antarctica | AG::Antigua and Barbuda | AR::Argentina | AM::Armenia | AW::Aruba | AU::Australia | AT::Austria | AZ::Azerbaijan | BS::Bahamas | BH::Bahrain | BD::Bangladesh | BB::Barbados | BY::Belarus | BE::Belgium | BZ::Belize | BJ::Benin | BM::Bermuda | BT::Bhutan | BO::Bolivia | BA::Bosnia and Herzegovina | BW::Botswana | BV::Bouvet Island | BR::Brazil | BQ::British Antarctic Territory | IO::British Indian Ocean Territory | VG::British Virgin Islands | BN::Brunei | BG::Bulgaria | BF::Burkina Faso | BI::Burundi | KH::Cambodia | CM::Cameroon | CA::Canada | CT::Canton and Enderbury Islands | CV::Cape Verde | KY::Cayman Islands | CF::Central African Republic | TD::Chad | CL::Chile | CN::China | CX::Christmas Island | CC::Cocos [Keeling] Islands | CO::Colombia | KM::Comoros | CG::Congo - Brazzaville | CD::Congo - Kinshasa | CK::Cook Islands | CR::Costa Rica | HR::Croatia | CU::Cuba | CY::Cyprus | CZ::Czech Republic | CI::Côte d’Ivoire | DK::Denmark | DJ::Djibouti | DM::Dominica | DO::Dominican Republic | NQ::Dronning Maud Land | DD::East Germany | EC::Ecuador | EG::Egypt | SV::El Salvador | GQ::Equatorial Guinea | ER::Eritrea | EE::Estonia | ET::Ethiopia | FK::Falkland Islands | FO::Faroe Islands | FJ::Fiji | FI::Finland | FR::France | GF::French Guiana | PF::French Polynesia | TF::French Southern Territories | FQ::French Southern and Antarctic Territories | GA::Gabon | GM::Gambia | GE::Georgia | DE::Germany | GH::Ghana | GI::Gibraltar | GR::Greece | GL::Greenland | GD::Grenada | GP::Guadeloupe | GU::Guam | GT::Guatemala | GG::Guernsey | GN::Guinea | GW::Guinea-Bissau | GY::Guyana | HT::Haiti | HM::Heard Island and McDonald Islands | HN::Honduras | HK::Hong Kong SAR China | HU::Hungary | IS::Iceland | IN::India | ID::Indonesia | IR::Iran | IQ::Iraq | IE::Ireland | IM::Isle of Man | IL::Israel | IT::Italy | JM::Jamaica | JP::Japan | JE::Jersey | JT::Johnston Island | JO::Jordan | KZ::Kazakhstan | KE::Kenya | KI::Kiribati | KW::Kuwait | KG::Kyrgyzstan | LA::Laos | LV::Latvia | LB::Lebanon | LS::Lesotho | LR::Liberia | LY::Libya | LI::Liechtenstein | LT::Lithuania | LU::Luxembourg | MO::Macau SAR China | MK::Macedonia | MG::Madagascar | MW::Malawi | MY::Malaysia | MV::Maldives | ML::Mali | MT::Malta | MH::Marshall Islands | MQ::Martinique | MR::Mauritania | MU::Mauritius | YT::Mayotte | FX::Metropolitan France | MX::Mexico | FM::Micronesia | MI::Midway Islands | MD::Moldova | MC::Monaco | MN::Mongolia | ME::Montenegro | MS::Montserrat | MA::Morocco | MZ::Mozambique | MM::Myanmar [Burma] | NA::Namibia | NR::Nauru | NP::Nepal | NL::Netherlands | AN::Netherlands Antilles | NT::Neutral Zone | NC::New Caledonia | NZ::New Zealand | NI::Nicaragua | NE::Niger | NG::Nigeria | NU::Niue | NF::Norfolk Island | KP::North Korea | VD::North Vietnam | MP::Northern Mariana Islands | NO::Norway | OM::Oman | PC::Pacific Islands Trust Territory | PK::Pakistan | PW::Palau | PS::Palestinian Territories | PA::Panama | PZ::Panama Canal Zone | PG::Papua New Guinea | PY::Paraguay | YD::People's Democratic Republic of Yemen | PE::Peru | PH::Philippines | PN::Pitcairn Islands | PL::Poland | PT::Portugal | PR::Puerto Rico | QA::Qatar | RO::Romania | RU::Russia | RW::Rwanda | RE::Réunion | BL::Saint Barthélemy | SH::Saint Helena | KN::Saint Kitts and Nevis | LC::Saint Lucia | MF::Saint Martin | PM::Saint Pierre and Miquelon | VC::Saint Vincent and the Grenadines | WS::Samoa | SM::San Marino | SA::Saudi Arabia | SN::Senegal | RS::Serbia | CS::Serbia and Montenegro | SC::Seychelles | SL::Sierra Leone | SG::Singapore | SK::Slovakia | SI::Slovenia | SB::Solomon Islands | SO::Somalia | ZA::South Africa | GS::South Georgia and the South Sandwich Islands | KR::South Korea | ES::Spain | LK::Sri Lanka | SD::Sudan | SR::Suriname | SJ::Svalbard and Jan Mayen | SZ::Swaziland | SE::Sweden | CH::Switzerland | SY::Syria | ST::São Tomé and Príncipe | TW::Taiwan | TJ::Tajikistan | TZ::Tanzania | TH::Thailand | TL::Timor-Leste | TG::Togo | TK::Tokelau | TO::Tonga | TT::Trinidad and Tobago | TN::Tunisia | TR::Turkey | TM::Turkmenistan | TC::Turks and Caicos Islands | TV::Tuvalu | UM::U.S. Minor Outlying Islands | PU::U.S. Miscellaneous Pacific Islands | VI::U.S. Virgin Islands | UG::Uganda | UA::Ukraine | SU::Union of Soviet Socialist Republics | AE::United Arab Emirates | GB::United Kingdom | US::United States | UY::Uruguay | UZ::Uzbekistan | VU::Vanuatu | VA::Vatican City | VE::Venezuela | VN::Vietnam | WK::Wake Island | WF::Wallis and Futuna | EH::Western Sahara | YE::Yemen | ZM::Zambia | ZW::Zimbabwe | AX::Åland Islands | ZZ::Unknown or Invalid Region",
 	
 	

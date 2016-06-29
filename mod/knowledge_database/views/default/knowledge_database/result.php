@@ -40,14 +40,14 @@ $body .= '<div class="knowledge_database-result-meta">';
 	}
 	if ($ent->kdb_type) {
 		$body .= '<br />';
-		if (!is_array($ent->kdb_type)) $body .= $ent->kdb_type;
+	if (!is_array($ent->kdb_type)) { $body .= $ent->kdb_type; }
 		else foreach ($ent->kdb_type as $type) { $body .= $kdb_types[$type] . ' '; }
 		// else foreach ($ent->kdb_type as $type) { $body .= ', ' . $ent->kdb_type; }
 	}
 $body .= '</div>';
 
 $body .= '<div class="elgg-subtext">';
-$body .= friendly_time($ent->time_created);
+$body .= elgg_view_friendly_time($ent->time_created);
 $body .= ' &nbsp; ';
 
 
@@ -56,8 +56,11 @@ if ($ent->tags) { $body .= elgg_view('output/tags', array('tags' => $ent->tags))
 $body .= '</div>';
 
 $body .= '<div class="elgg-content">';
-if ($ent->briefdescription) $body .= '<p><em>' . elgg_get_excerpt($ent->briefdescription) . '</em></p>';
-else $body .= '<p><em>' . elgg_get_excerpt($ent->description) . '</em></p>';
+if ($ent->briefdescription) {
+	$body .= '<p><em>' . elgg_get_excerpt($ent->briefdescription) . '</em></p>';
+} else {
+	$body .= '<p><em>' . elgg_get_excerpt($ent->description) . '</em></p>';
+}
 $body .= '</div>';
 
 // Render list element
