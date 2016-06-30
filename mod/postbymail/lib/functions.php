@@ -603,7 +603,7 @@ function postbymail_checkandpost($config = array()) {
 								$comment->container_guid = $entity->getGUID();
 								$comment->owner_guid = $member->getGUID();
 								$comment_guid = $comment->save();
-								if ($comment) {
+								if ($comment_guid) {
 									//set_input('group_topic_post', $post_body);
 									$published = true;
 									$body .= elgg_echo("groupspost:success");
@@ -612,14 +612,10 @@ function postbymail_checkandpost($config = array()) {
 											'view' => 'river/object/discussion_reply/create',
 											'action_type' => 'reply',
 											'subject_guid' => $member->guid,
-											'object_guid' => $entity->guid,
-											'target_guid' => $comment->guid,
+											'object_guid' => $comment_guid,
+											'target_guid' => $entity->guid,
 										));
 									// @TODO notification
-									//elgg_trigger_event('create', 'annotation', $annotation);
-									//error_log("Annotation triggered : $subtype");
-									//elgg_trigger_plugin_hook('action', 'discussion/reply/save', null, true); // breaks execution
-									//error_log("Action triggered on $subtype : discussion/reply/save");
 									/*
 									// Add notification
 									notify_user($entity->owner_guid,
