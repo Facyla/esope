@@ -116,7 +116,7 @@ function postbymail_checkandpost($config = array()) {
 	if ($notified_users) {
 		foreach($notified_users as $notified_user) {
 			$admin_ent = get_entity($notified_user);
-			if (!$admin_ent) $admin_ent = get_user_by_username($notified_user);
+			if (!$admin_ent) { $admin_ent = get_user_by_username($notified_user); }
 			if (elgg_instanceof($admin_ent, 'user')) {
 				$admin_email = $admin_ent->email;
 				$body .= "{$admin_ent->name} ($admin_email), ";
@@ -281,6 +281,7 @@ function postbymail_checkandpost($config = array()) {
 				$mailparams = explode('@', $header_to);
 				$mailparams = explode('+', $mailparams[0]);
 				$parameters = '';
+				// @TODO use config var and extract function
 				if (!empty($mailparams[1])) {
 					$mailparams = explode('&', $mailparams[1]);
 					$guid = null; $entity = null; $post_key = null; $post_subtype = null; $post_access = null; 
@@ -297,9 +298,10 @@ function postbymail_checkandpost($config = array()) {
 						switch($mailparam[0]) {
 							case 'guid':
 								$guid = (int) $mailparam[1];
-								if ($entity = get_entity($guid)) {} else {
+								if ($entity = get_entity($guid)) {
+								} else {
 									$sender_reply .= elgg_echo('postbymail:invalidguid');
-									$admin_reply .= elgg_echo('postbymail:validguid');
+									$admin_reply .= elgg_echo('postbymail:invalidguid');
 								}
 								break;
 							case 'key':
@@ -313,7 +315,16 @@ function postbymail_checkandpost($config = array()) {
 								break;
 						}
 					}
-					if (!empty($parameters)) $parameters = elgg_echo('postbymail:info:paramwrap', array($parameters));
+					if (!empty($parameters)) { $parameters = elgg_echo('postbymail:info:paramwrap', array($parameters)); }
+				}
+				
+				// For comments and replies, switch entity to root object (container)
+				if (elgg_instanceof($entity, 'object', 'comment')) {
+					$entity = $entity->getContainerEntity();
+					$admin_reply .= elgg_echo('postbymail:usecontainer:comment');
+				} else if (elgg_instanceof($entity, 'object', 'discussion_reply')) {
+					$entity = $entity->getContainerEntity();
+					$admin_reply .= elgg_echo('postbymail:usecontainer:discussion_reply');
 				}
 				
 				
@@ -581,18 +592,29 @@ function postbymail_checkandpost($config = array()) {
 						// Important pour notification_messages qui récupère cette info pour publier avec le bon auteur..
 						set_input('postbymail_editor_id', $member->guid);
 						set_input('topic_post', $post_body);
+						
 						// Publication effective : message de réussite, et ajout du hash pour noter que ce message a été publié
 						// Ajout du hash aux publications déjà faites (peu importe de matcher hash et mail, ce qui importe c'est les doublons)
 						switch($subtype) {
 							case 'groupforumtopic':
-								$annotation = $entity->annotate('group_topic_post', $post_body, $entity->access_id, $member->guid);
-								if ($annotation) {
+								$comment = new ElggDiscussionReply();
+								$comment->description = $post_body;
+								$comment->access_id = $entity->access_id;
+								$comment->container_guid = $entity->getGUID();
+								$comment->owner_guid = $member->getGUID();
+								$comment_guid = $comment->save();
+								if ($comment) {
 									//set_input('group_topic_post', $post_body);
 									$published = true;
 									$body .= elgg_echo("groupspost:success");
 									// Add to river
-									//add_to_river('river/forum/create', 'create', $member->guid, $entity->guid);
-									add_to_river('river/annotation/group_topic_post/reply', 'reply', $member->guid, $entity->guid, "", 0, $annotation);
+									elgg_create_river_item(array(
+											'view' => 'river/object/discussion_reply/create',
+											'action_type' => 'reply',
+											'subject_guid' => $member->guid,
+											'object_guid' => $entity->guid,
+											'target_guid' => $comment->guid,
+										));
 									// @TODO notification
 									//elgg_trigger_event('create', 'annotation', $annotation);
 									//error_log("Annotation triggered : $subtype");
@@ -661,24 +683,23 @@ function postbymail_checkandpost($config = array()) {
 									$sender_reply = elgg_echo('postbymail:sender:error:forumonly', array($sender_reply));
 									break;
 								} else {
-									// Use new comment object structure
 									$comment = new ElggComment();
 									$comment->description = $post_body;
 									$comment->owner_guid = $member->guid;
 									$comment->container_guid = $entity->guid;
 									$comment->access_id = $entity->access_id;
 									$comment_guid = $comment->save();
-									/*
-									//if ($entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid)) {
-									$annotation = $entity->annotate('generic_comment', $post_body, $entity->access_id, $member->guid);
-									if ($annotation) {
-									*/
 									if (!empty($comment_guid)) {
 										$published = true;
 										$body .= elgg_echo("generic_comment:posted");
 										// Add to river
-										//add_to_river('annotation/annotate','comment',$member->guid,$entity->guid); // @TODO update to latest structure
-										add_to_river('river/annotation/generic_comment/create', 'comment', $member->guid, $entity->guid, "", 0, $annotation);
+										elgg_create_river_item(array(
+											'view' => 'river/object/comment/create',
+											'action_type' => 'comment',
+											'subject_guid' => $member->guid,
+											'object_guid' => $comment_guid,
+											'target_guid' => $entity->guid,
+										));
 										// @Owner notification OK (usually happens in action), but here we need to notify the author too
 										// @TODO Check subscribed users notifications
 										$notification_subject = elgg_echo('generic_comment:email:subject');
@@ -814,11 +835,15 @@ function postbymail_checkandpost($config = array()) {
 				// Notification responsable du groupe - ssi dans un groupe
 				if ($notify_groupadmin && elgg_instanceof($container, 'group')) {
 					// @TODO : notifier l'admin du groupe
-					if ($groupowner = get_entity($container->owner_guid)) {
-						if (is_email_address($groupowner->email)) {
-							mail($admin_email, $admin_subject, $admin_reply, $headers);
+					if ($groupowner = $container->getOwnerEntity()) {
+						//if (is_email_address($groupowner->email)) {
+						// Ne pas faire confiance aux fonctions de validation des emails qui refusent des emails valides
+						if (!empty($groupowner->email)) {
+							// @TODO : n'utiliser que des fonctions Elgg (mais risque de ne pas être en HTML, à vérifier)
+							mail($groupowner->email, $admin_subject, $admin_reply, $headers);
+							//notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
 						} else {
-							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
+							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'site');
 						}
 					}
 				}
@@ -1055,6 +1080,10 @@ function postbymail_checkeligible_reply($params) {
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
+		/* Debug
+		$report .= "<br />Sous-type : " . $params['entity']->getSubtype() . " => " . $params['entity']->getDisplayName() . "<br />";
+		$report .= "<br /><pre>" . print_r($params['entity'], true) . "</pre><br />";
+		*/
 		if (!empty($params['entity']->title)) {
 			$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
 		} else {
@@ -1064,7 +1093,7 @@ function postbymail_checkeligible_reply($params) {
 		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
 		
 		// Container de l'objet à commenter : doit être valide
-		if ($container = get_entity($params['entity']->container_guid)) {
+		if ($container = $params['entity']->getContainerEntity()) {
 			$report .= elgg_echo('postbymail:containerok');
 			// Membre
 			if (elgg_instanceof($params['member'], 'user')) {

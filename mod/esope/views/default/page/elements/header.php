@@ -28,35 +28,24 @@ $urlicon = $url . 'mod/esope/img/theme/';
  * Test to display menu : $menu => false = do not use menu | 'none' = empty menu | $name = display menu $name
  * if ($menu && ($menu != 'none')) { echo $navigation_menu; }
  */
-$topbar_menu = false;
-$topbar_menu_public = false;
+$navigation_menu = false;
 if (elgg_is_active_plugin('elgg_menus')) {
 	$lang = get_language();
-	// Main navigation menu
-	$menu = elgg_get_plugin_setting('menu_navigation', 'esope');
-	if (empty($menu)) {
-		$menu = false;
+	if (elgg_is_logged_in()) {
+		// Main navigation logged in menu
+		$menu = elgg_get_plugin_setting('menu_navigation', 'esope');
 	} else {
-		if ($menu != 'none') {
-			// Get translated menu, if exists
-			$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
-			if ($lang_menu) { $menu = $menu . '-' . $lang; }
-			// Compute menu
-			$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-navigation elgg-menu-navigation-alt elgg-menu-hz'));
-		}
+		// Main navigation public menu
+		$menu = elgg_get_plugin_setting('menu_navigation_public', 'esope');
 	}
-	// Main navigation public menu
-	$menu_public = elgg_get_plugin_setting('menu_navigation_public', 'esope');
-	if (empty($menu_public)) {
-		$menu_public = false;
+	if (!empty($menu) && ($menu != 'none')) {
+		// Get translated menu, if exists
+		$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
+		if ($lang_menu) { $menu = $menu . '-' . $lang; }
+		// Compute menu content
+		$navigation_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-navigation elgg-menu-navigation-alt elgg-menu-hz'));
 	} else {
-		if ($menu_public != 'none') {
-			// Get translated menu, if exists
-			$lang_menu = elgg_menus_get_menu_config($menu_public . '-' . $lang);
-			if ($lang_menu) { $menu_public = $menu_public . '-' . $lang; }
-			// Compute menu
-			$navigation_menu_public = elgg_view_menu($menu_public, array('sort_by' => 'priority', 'class' => 'elgg-menu elgg-menu-navigation elgg-menu-navigation-alt elgg-menu-hz'));
-		}
+		$menu = false;
 	}
 }
 
@@ -144,7 +133,7 @@ if (elgg_is_logged_in()) {
 	
 	// NAVIGATION LOGGED IN MENU
 	if ($menu) {
-		if ($menu != 'none') {
+		if ($navigation_menu) {
 			// Close enclosing divs and reopen new ones
 			echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
 			echo '<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:navigation') . '</div>';
@@ -211,12 +200,13 @@ if (elgg_is_logged_in()) {
 	
 // NAVIGATION PUBLIC MENU
 } else {
-	if ($menu_public && ($menu_public != 'none')) {
-		echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
-		echo '<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:navigation') . '</div>';
-		echo $navigation_menu_public;
-		echo '<div class="clearfloat"></div></div>';
-	} else {
+	if ($menu) {
+		if ($navigation_menu) {
+			echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
+			echo '<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> ' . elgg_echo('esope:menu:navigation') . '</div>';
+			echo $navigation_menu;
+			echo '<div class="clearfloat"></div></div>';
+		}
 	}
 }
 

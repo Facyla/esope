@@ -21,7 +21,7 @@ $value = $vars['entity']->{$name};
 if ($vars['multiple']) {
 	$selector = elgg_view('input/multiselect', array('name' => $name, 'value' => $value, 'options_values' => $meta_values, 'style' => "max-width:20ex;"));
 } else {
-	$selector = elgg_view('input/dropdown', array('name' => $name, 'value' => $value, 'options_values' => $meta_values, 'style' => "max-width:20ex;"));
+	$selector = elgg_view('input/select', array('name' => $name, 'value' => $value, 'options_values' => $meta_values, 'style' => "max-width:20ex;"));
 }
 
 echo '<label>' . ucfirst(elgg_echo("knowledge_database:metadata:$metadata")) . ' ' . $selector . '</label>';

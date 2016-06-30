@@ -36,6 +36,8 @@ if (!isset($config['params']['autocomplete'])) { $config['params']['autocomplete
 // Options : separators are "\n" or "|", optional name-value separator i "::")
 if (!isset($config['params']['options_values'])) { $config['params']['options_values'] = ''; }
 
+// Update config to new input view
+if ($config['type'] == 'dropdown') { $config['type'] = 'select'; }
 
 
 // Convert fields values to form-compliant values

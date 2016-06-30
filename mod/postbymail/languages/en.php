@@ -140,6 +140,8 @@ return array(
 	'postbymail:processingmsgnumber' => "<hr /><h3>Processing message number %s (ID: %s)</h3><br />",
 	'postbymail:validguid' => "<b>Valid GUID</b><br /><br />",
 	'postbymail:invalidguid' => "<b style=\"color:red;\"Invalid GUID</b><br /><br />",
+	'postbymail:usecontainer:comment' => "Reply to a comment: using container object",
+	'postbymail:usecontainer:discussion_reply' => "Reply to a forum reply: using container object",
 	
 	/* Informations issues du mail */
 	'postbymail:info:postfullmail' => "<strong>Full publication address:</strong> %s<br />",
