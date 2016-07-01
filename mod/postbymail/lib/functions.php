@@ -299,6 +299,7 @@ function postbymail_checkandpost($config = array()) {
 							case 'guid':
 								$guid = (int) $mailparam[1];
 								if ($entity = get_entity($guid)) {
+									$admin_reply .= elgg_echo('postbymail:validguid');
 								} else {
 									$sender_reply .= elgg_echo('postbymail:invalidguid');
 									$admin_reply .= elgg_echo('postbymail:invalidguid');
@@ -657,12 +658,12 @@ function postbymail_checkandpost($config = array()) {
 								if ($thewire_guid) {
 									$thewire = get_entity($thewire_guid);
 									// Support group wire
+									// Note : Container is set by esope event, but handle it even if not set
 									$thewire->container_guid = $entity->container_guid;
 									$thewire->save();
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
-									// Send response to original poster if not already registered to receive notification
-									thewire_send_response_notification($thewire_guid, $entity->guid, $member);
+									// @TODO still required ? Send response to original poster if not already registered to receive notification
 								}
 								break;
 							case 'blog':
