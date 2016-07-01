@@ -652,7 +652,7 @@ function postbymail_checkandpost($config = array()) {
 								break;
 							case 'thewire':
 								// River OK + Notification OK
-								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
+								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas) et notif par email
 								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
 									$thewire = get_entity($thewire_guid);

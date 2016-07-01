@@ -537,8 +537,8 @@ Afficher et commenter le nouvel article :
 	/**
 	 * The wire river
 	 */
-	'river:create:object:thewire' => "%s a publié sur le Fil %s",
-	'thewire:wire' => 'le Fil',
+	'river:create:object:thewire' => "%s a publié sur %s",
+	'thewire:wire' => 'le fil',
 
 	/**
 	 * Wire widget

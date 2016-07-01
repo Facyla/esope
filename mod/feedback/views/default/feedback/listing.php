@@ -73,7 +73,7 @@ $class = 'feedback-mood-' . $feedback->mood . ' feedback-about-' . $feedback->ab
 $page = elgg_echo('feedback:page:unknown');
 if (!empty($feedback->page)) {
 	$page = $feedback->page;
-	$page = "<a href='" . $page . "'>" . $page . "</a>";
+	$page = '<a href="' . $page . '" target="_blank">' . $page . '</a>';
 }
 
 
