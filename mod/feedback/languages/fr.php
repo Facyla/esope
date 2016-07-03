@@ -18,10 +18,16 @@ if (elgg_is_active_plugin('fontawesome')) {
 	$mood_angry = '<i class="fa fa-frown-o"></i>';
 	$mood_neutral = '<i class="fa fa-meh-o"></i>';
 	$mood_happy = '<i class="fa fa-smile-o"></i>';
+	$close = '<i class="fa fa-square-o"></i>';
+	$open = '<i class="fa fa-check-square-o"></i>';
+	$delete = '<i class="fa fa-trash"></i>';
 } else {
 	$mood_angry = ':-(';
 	$mood_neutral = ':-|';
 	$mood_happy = ':-)';
+	$close = 'clore';
+	$open = 'rouvrir';
+	$delete = 'supprimer';
 }
 
 
@@ -117,12 +123,15 @@ return array(
 	'feedback:status:total' => "",
 	'feedback:list:status:open' => "Ouvert",
 	'feedback:list:status:closed' => "Résolu",
+	'feedback:close' => $close,
 	'feedback:closeconfirm' => "Marquer comme résolu ? Un feedback résolu est considéré comme traité et alimente la base de connaissances. Confirmer ?",
 	'feedback:close:success' => "Feedback marqué comme résolu / déjà traité.",
 	'feedback:close:error' => "Impossible de marquer ce feedback comme résolu",
+	'feedback:reopen' => $open,
 	'feedback:reopenconfirm' => "Ce feedback est considéré comme déjà résolu. Souhaitez-vous le rouvrir ?",
 	'feedback:reopen:success' => "Feedback marqué comme en cours / non résolu.",
 	'feedback:reopen:error' => "Impossible de rouvrir ce feedback",
+	'feedback:delete' => $delete,
 	
 	// Feedbacks menu
 	'feedback:menu:total' => "%s feedbacks",

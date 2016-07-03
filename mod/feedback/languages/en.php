@@ -18,10 +18,16 @@ if (elgg_is_active_plugin('fontawesome')) {
 	$mood_angry = '<i class="fa fa-frown-o"></i>';
 	$mood_neutral = '<i class="fa fa-meh-o"></i>';
 	$mood_happy = '<i class="fa fa-smile-o"></i>';
+	$close = '<i class="fa fa-square-o"></i>';
+	$open = '<i class="fa fa-check-square-o"></i>';
+	$delete = '<i class="fa fa-trash"></i>';
 } else {
 	$mood_angry = ':-(';
 	$mood_neutral = ':-|';
 	$mood_happy = ':-)';
+	$close = 'close';
+	$open = 'open';
+	$delete = 'delete';
 }
 
 return array(
@@ -115,12 +121,15 @@ return array(
 	'feedback:status:total' => "",
 	'feedback:list:status:open' => "Open",
 	'feedback:list:status:closed' => "Closed",
+	'feedback:close' => $close,
 	'feedback:closeconfirm' => "A closed feedback is considered as solved, confirm closing feedback ?",
 	'feedback:close:success' => "Feedback marked as closed.",
 	'feedback:close:error' => "Unable to close this feedback",
+	'feedback:reopen' => $open,
 	'feedback:reopenconfirm' => "This feedback is marked as closed. Do you want to mark it as active and confirm re-opening ?",
 	'feedback:reopen:success' => "Feedback marked as open.",
 	'feedback:reopen:error' => "Unable to re-open this feedback",
+	'feedback:delete' => $delete,
 	
 	// Feedbacks menu
 	'feedback:menu:total' => "%s feedbacks",
