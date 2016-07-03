@@ -6,6 +6,7 @@ $container_guid = elgg_extract('container_guid', $vars, false);
 $publish_guid = elgg_extract('publish_guid', $vars, false);
 
 $page_owner = elgg_get_page_owner_entity();
+// @TODO : shouldn't we allow to access whole content ? or ot in this context ?
 if (elgg_instanceof($page_owner, 'group')) {
 	if (!$container_guid) { $container_guid = elgg_get_page_owner_guid(); }
 	if (!$publish_guid) { $publish_guid = elgg_get_page_owner_guid(); }
@@ -63,6 +64,7 @@ $search_form = '<form id="kdb-search-form" method="post" action="' . $search_act
 $search_form .= elgg_view('input/securitytoken');
 //$search_form .= elgg_view('input/hidden', array('name' => 'debug', 'value' => 'true'));
 // @TODO Limit in a container (group) only if we are in a KDB group
+// @TODO Allow to choose to search in group (default), or whole site
 if ($container_guid) { $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid)); }
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'object'));
 

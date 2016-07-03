@@ -3,11 +3,10 @@
 
 $max = elgg_extract('max', $vars, 3);
 $title = elgg_extract('title', $vars, elgg_echo("knowledge_database:latestresources"));
-$search_vars = elgg_extract('search_vars', $vars, array());
 
 // Set default allowed list
 $defaults = array('type' => 'object');
-$search_vars = array_merge($defaults, $search_vars);
+$search_vars = array_merge($defaults, $vars);
 
 if (empty($search_vars['subtypes'])) { $search_vars['subtypes'] = knowledge_database_get_allowed_subtypes(); }
 
