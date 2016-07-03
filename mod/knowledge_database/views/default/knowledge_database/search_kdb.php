@@ -3,8 +3,13 @@
 
 $fields = elgg_extract('fields', $vars);
 $container_guid = elgg_extract('container_guid', $vars, false);
-$publish_guid = elgg_extract('publish_guid', $vars);
+$publish_guid = elgg_extract('publish_guid', $vars, false);
 
+$page_owner = elgg_get_page_owner_entity();
+if (elgg_instanceof($page_owner, 'group')) {
+	if (!$container_guid) { $container_guid = elgg_get_page_owner_guid(); }
+	if (!$publish_guid) { $publish_guid = elgg_get_page_owner_guid(); }
+}
 
 // Search vars
 $search_q = get_input('q');
