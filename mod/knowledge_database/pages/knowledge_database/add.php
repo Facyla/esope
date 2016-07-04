@@ -17,7 +17,7 @@ if ($kdb_group_guid) {
 	$kdb_group = get_entity($kdb_group_guid);
 	if (elgg_instanceof($kdb_group, 'group')) {
 		$title = $kdb_group->name;
-		$content .= '<div style="border:1px solid #2195B1; margin:10px; padding:10px;">
+		$content .= '<div class="kdb-group-add">
 			<p><em>' . $kdb_group->briefdescription . '</em</p>
 			<p>' . $kdb_group->description . '</p>
 			</div>';

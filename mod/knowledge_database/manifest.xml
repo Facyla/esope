@@ -46,6 +46,8 @@ TODO :
  - Improve search interfaces
  - Add info block to entities (in full mode at least)
 
+0.6.1 : 20160704 Backport from plugin 1.12.1 version from Elgg 1.12 to Elgg 1.8
+
 0.6 : 20160629 Backport from plugin 1.12.0 version from Elgg 1.12 to Elgg 1.8
 
 0.5 : 20140924 Pre-release version
