@@ -12,11 +12,13 @@ $linkcolor = elgg_get_plugin_setting('linkcolor', 'esope', '#2195B1');
 /* Group KDB */
 .kdb-group-intro { border:1px solid #2195B1; margin:10px; padding:10px; }
 .kdb-maingroup-intro { border:1px solid #2195B1; margin:10px; padding:10px; }
+.kdb-group-add { border:1px solid #2195B1; margin:10px; padding:10px; }
+
 
 /* Search interface */
-.kdb-search-main { width:50%; float:left; min-width:300px; }
-.kdb-search-main input, .kdb-search-filter select { width: 16ex; }
-.kdb-search-main input[type="text"] { width: 30ex; }
+.kdb-search-main { /* width:50%; float:left; */ min-width:300px; }
+.kdb-search-main input, .kdb-search-filter select { width: 16ex; max-width:60%; }
+.kdb-search-main input[type="text"] { width: 30ex; max-width:60%; }
 .kdb-search-main label { color: <?php echo $titlecolor; ?>; padding: 3px 6px; font-size: 1.2em; }
 
 .kdb-search-filter { width:50%; float:left; min-width:200px; padding: 2px 0; }
@@ -27,6 +29,7 @@ $linkcolor = elgg_get_plugin_setting('linkcolor', 'esope', '#2195B1');
 
 /* Search form */
 #kdb-search-form fieldset { margin: 1ex 0; padding:1ex; border:1px solid; }
+#kdb-search-form fieldset.kdb-search-fields { border: 1px solid <?php echo $titlecolor; ?>; padding: 1ex 2ex; background: #f5f5f5; margin-top:1ex; }
 #kdb-search-form legend { padding: 0 1ex; }
 
 /* Search results */
@@ -60,10 +63,11 @@ $linkcolor = elgg_get_plugin_setting('linkcolor', 'esope', '#2195B1');
 .knowledge_database-edit-field {}
 .knowledge_database-edit-field input[type="text"] { width:30ex; }
 .knowledge_database-field { border:1px solid grey; border-radius: 5px; padding: 0.5ex 1ex; }
+.kdb-field-file { max-width:50%; }
 
 
 /* Input / output rendering */
-.knowledge_database-fieldset { margin: 1rem 0; padding: 1rem; border: 1px solid #CCC; }
-.knowledge_database-fieldset legend { padding: 0 0.5rem; border: 1px solid #CCC; }
+.knowledge_database-fieldset { margin: 1rem 0; padding: 1rem; border: 1px solid <?php echo $titlecolor; ?>; }
+.knowledge_database-fieldset legend { padding: 0 0.5rem; border: 1px solid <?php echo $titlecolor; ?>; }
 
 

@@ -79,7 +79,7 @@ $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value'
 
 $search_form .= '<p><em><i class="fa fa-info-circle"></i> ' . elgg_echo('knowledge_database:search:details') . '</em></p>';
 // Main search
-$search_form .= '<fieldset style="border: 1px solid #2195B1; padding: 1ex 2ex; background: #f5f5f5; margin-top:1ex;">';
+$search_form .= '<fieldset class="kdb-search-fields">';
 //$search_form .= '<legend>' . elgg_echo("knowledge_database:search:form:title") . '</legend>';
 $search_form .= '<div class="kdb-search-main">';
 $search_form .= '<p><label><i class="fa fa-eye"></i> ' . elgg_echo('knowledge_database:fulltextsearch') . ' <input type="text" name="q" value="' . $search_q . '" /></label><br />' . elgg_echo('knowledge_database:fulltextsearch:details') . '<em></em></p>';
@@ -148,7 +148,7 @@ if ($fieldset_fields) {
 	}
 }
 
-$search_form .= '<div class="clearfloat" style="margin:0;"></div>';
+$search_form .= '<div class="clearfloat"></div>';
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset>';
 $search_form .= '</form><br />';

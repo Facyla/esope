@@ -3,7 +3,7 @@
 	<name>Knowledge Database</name>
 	<id>knowledge_database</id>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>1.12.0</version>
+	<version>1.12.1</version>
 	<blurb>Knowledge Database (BETA)</blurb>
 	<description>This plugin extends objects with structured fields, so your Elgg site can be used as a Knowledge Database. This feature can be enabled for the whole site, or in specific groups, and provides a public interface for searching and accessing these documents. WARNING : this plugin is still in its early stage, and eager to evolve. Please do not use on a production site without great care !</description>
 	<website>http://facyla.fr/</website>
@@ -48,6 +48,10 @@ TODO :
  - Improve search interfaces
  - Add info block to entities (in full mode at least)
 
+
+1.12.1 : 20160704
+	- better group integration
+	- various debugs
 
 1.12.0 : 20160509 Updated to Elgg 1.12
 	- improved metadata edition interface
