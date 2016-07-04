@@ -224,7 +224,12 @@ if (elgg_is_logged_in()) {
 		$search_text = elgg_echo('esope:search:defaulttext');
 		echo '<form action="' . $url . 'search" method="get">';
 			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
-			echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'user_return' => 'name', 'value' => $prev_q, 'placeholder' => $search_text));
+			$livesearch = elgg_get_plugin_setting('livesearch', 'esope');
+			if ($livesearch != 'no') {
+				echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'user_return' => 'name', 'value' => $prev_q, 'placeholder' => $search_text));
+			} else {
+				echo elgg_view('input/text', array('name' => 'q', 'id' => 'esope-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
+			}
 			echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
 		echo '</form>';
 		}
