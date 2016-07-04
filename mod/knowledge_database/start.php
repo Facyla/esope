@@ -57,7 +57,7 @@ function knowledge_database_init() {
 
 
 
-// Page handler for custom URL
+// Page handler for Knowledge Database
 function knowledge_database_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'knowledge_database/pages/knowledge_database/';
 	if (!isset($page[0])) { $page[0] = 'index'; }
@@ -74,13 +74,13 @@ function knowledge_database_page_handler($page) {
 		case 'add':
 			if (include($base . 'add.php')) { return true; }
 			break;
+		case 'user':
+		case 'group':
+			if (!empty($page[1])) { set_input('container_guid', $page[1]); } else { forward('kdb'); }
 		case 'public':
 		case 'search':
 		case 'index':
-		case 'user':
-		case 'group':
 		default:
-			if ($page[1]) { set_input('container_guid', $page[1]); }
 			if (include($base . 'index.php')) { return true; }
 	}
 	return false;
@@ -598,7 +598,7 @@ function knowledge_database_get_site_kdb_fields() {
 }
 
 // Returns fields for a specific group
-// Optionnaly adds site fields
+// Optionally adds site fields
 function knowledge_database_get_group_kdb_fields($guid, $include_site = false) {
 	$fields = elgg_get_plugin_setting('group_fields_' . $guid, 'knowledge_database');
 	if ($include_site) {

@@ -5,11 +5,19 @@ $fields = elgg_extract('fields', $vars);
 $container_guid = elgg_extract('container_guid', $vars, false);
 $publish_guid = elgg_extract('publish_guid', $vars, false);
 
+// Limit search and results to specific container and define where to publish new content
 $page_owner = elgg_get_page_owner_entity();
 // @TODO : shouldn't we allow to access whole content ? or ot in this context ?
 if (elgg_instanceof($page_owner, 'group')) {
 	if (!$container_guid) { $container_guid = elgg_get_page_owner_guid(); }
 	if (!$publish_guid) { $publish_guid = elgg_get_page_owner_guid(); }
+}
+// Define search fields
+if (!$fields) {
+	// Check merge setting
+	$enable_merge = elgg_get_plugin_setting('enable_merge', 'knowledge_database');
+	if ($enable_merge == 'yes') { $enable_merge = true; } else { $enable_merge = false; }
+	$fields = knowledge_database_get_group_kdb_fields($container_guid, $enable_merge);
 }
 
 // Search vars
@@ -140,7 +148,7 @@ foreach ($fieldset_fields as $fieldset => $fields_content) {
 }
 
 $search_form .= '<div class="clearfloat" style="margin:0;"></div>';
-$search_form .= '<input type="submit" class="elgg-button elgg-button-submit fa fa-search" value="' . elgg_echo('search') . '" />';
+$search_form .= '<input type="submit" class="elgg-button elgg-button-submit" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset>';
 $search_form .= '</form><br />';
 
