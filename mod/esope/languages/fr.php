@@ -25,6 +25,7 @@ return array(
 	'esope:config:toolslistings' => "PAGES DE LISTING DES OUTILS",
 	'esope:config:toolslistings:details' => "Ce réglage permet de modifier le comportement par défaut des pages de listing des blogs, fichiers, etc. Par défaut seuls les publications <em>personnelles</em> du membre sont listées (pas celles dans ses groupes). Vous pouvez choisir ici de les lister toutes.",
 	'esope:config:filters' => "FILTRES",
+	'esope:settings:livesearch' => "Activer l'autocomplétion dans la recherche du menu"
 	'esope:settings:advancedsearch' => "Activer la recherche avancée (dans la recherche générale)",
 	'esope:settings:advancedsearch:sidebar' => "Remplacer le menu latéral par celui de la recherche avancée",
 	'esope:advancedsearch' => "Recherche avancée",

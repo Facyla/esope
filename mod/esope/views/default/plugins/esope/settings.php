@@ -600,6 +600,9 @@ $(function() {
 		
 		echo '<p><label>' . elgg_echo('esope:settings:advanced_pagination') . ' ' . elgg_view('input/select', array('name' => 'params[advanced_pagination]', 'options_values' => $no_yes_opt, 'value' => $plugin->advanced_pagination)) . '</label></p>';
 		
+		// Enable/disable livesearch in main menu
+		echo '<p><label>' . elgg_echo('esope:settings:livesearch') . ' ' . elgg_view('input/select', array('name' => 'params[livesearch]', 'options_values' => $yes_no_opt, 'value' => $plugin->livesearch)) . '</label></p>';
+		
 		echo '<p><label>' . elgg_echo('esope:settings:advancedsearch') . ' ' . elgg_view('input/select', array('name' => 'params[advancedsearch]', 'options_values' => $no_yes_opt, 'value' => $plugin->advancedsearch)) . '</label></p>';
 		echo '<p><label>' . elgg_echo('esope:settings:advancedsearch:sidebar') . ' ' . elgg_view('input/select', array('name' => 'params[advancedsearch_sidebar]', 'options_values' => $no_yes_opt, 'value' => $plugin->advancedsearch_sidebar)) . '</label></p>';
 		
