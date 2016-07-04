@@ -25,7 +25,7 @@ return array(
 	'esope:config:toolslistings' => "TOOLS LISTING PAGES",
 	'esope:config:toolslistings:details' => "This setting lets you define the default behaviour of tools listing pages such as blogs, files, etc. By default only <em>personal</em> publications of a member are listed (not those published in his groups). You can choose here to list them all.",
 	'esope:config:filters' => "FILTERS",
-	'esope:settings:livesearch' => "Enable main menu livesearch (autocomplete)"
+	'esope:settings:livesearch' => "Enable main menu livesearch (autocomplete)",
 	'esope:settings:advancedsearch' => "Enable advanced search (in general search)",
 	'esope:settings:advancedsearch:sidebar' => "Replace sidebar by advanced search menu",
 	'esope:advancedsearch' => "Advanced search",
