@@ -56,7 +56,7 @@ function kdb_search(){
 	//$("body").addClass("esope-search-wait");
 	formdata = $("#kdb-search-form").serialize();
 	$.post("' . $kdb_search_url . '", formdata, function(data){
-		$("#esope-search-results").html(data);
+		$("#kdb-search-results").html(data);
 		//$("body").removeClass("esope-search-wait");
 	});
 }
