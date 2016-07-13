@@ -425,6 +425,11 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .profile-col-largedetails { float:left; width:74%; }
 
 
+/* Réduction de la hauteur pour embed des fichiers */
+.elgg-form-embed .cke_contents { height: 100px !important; }
+.elgg-form-embed #prevent_notification { display: none; }
+.elgg-form-embed.elgg-form-file-upload .elgg-input-plaintext { height: 100px; }
+
 
 /* Widgets */
 section div.module div.activites .elgg-widget-content .widget-title-details.group-widget a { color: <?php echo $titlecolor; ?> !important; }
