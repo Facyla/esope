@@ -656,6 +656,13 @@ Voir et commenter ce lien web :
 	'bookmarks:unknown_bookmark' => 'Impossible de trouver le lien web spécifié',
 	
 	
+	/* PAGES */
+	'esope:widget:page:title' => '<i class="fa fa-pencil-square-o"></i> Pages wiki',
+	'pages:widget:description' => "Affiche la liste de vos pages wiki.",
+	'esope:widget:page:title' => '<i class="fa fa-pencil-square-o fa-fw"></i> Pages wiki',
+
+	
+	
 	
 );
 
