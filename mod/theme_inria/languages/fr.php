@@ -624,7 +624,7 @@ Voir et commenter ce lien web :
 
 	'item:object:bookmarks' => 'Liens web',
 
-	'bookmarks:group' => 'Liens web du groupe',
+	'bookmarks:group' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
 	'bookmarks:enablebookmarks' => 'Activer les liens web du groupe',
 	'bookmarks:nogroup' => 'Ce groupe n\'a pas encore de lien web',
 	

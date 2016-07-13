@@ -146,7 +146,7 @@ elgg_add_shortcode('video','video_sc');
 
 
 /**
- * Diaporama
+ * Diaporama : shortcode avec liste d'images
  * [diaporama width="600px" height="500px" images="URL1, URL2"]
  */
 function diaporama_function($atts, $content='') {
