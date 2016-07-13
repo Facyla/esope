@@ -73,6 +73,8 @@ function esope_init() {
 	// Requires to be placed at the end of the form, because we will end the form and start a new one...
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite_before', 100);
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite', 1000);
+	// New group disclaimer
+	elgg_extend_view('groups/edit/profile', 'forms/groups/edit_disclaimer', 0);
 	
 	// Use vazco captcha in a clean way (extending core view instead of replacing it)
 	if (elgg_is_active_plugin('vazco_text_captcha')) {
