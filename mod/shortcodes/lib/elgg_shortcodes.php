@@ -157,6 +157,8 @@ function diaporama_function($atts, $content='') {
 			'images' => '',
 		), $atts));
 	$li_style = '';
+	$width = str_replace('"', '', $width);
+	$height = str_replace('"', '', $height);
 	//$li_style = "width:$width !important; height:$height !important;";
 	if (!empty($images)) {
 		// Mode 1 : use images="URL1, URL2" attribute => works if content is not pre-parsed (eg URL are not converted to links)
@@ -207,7 +209,11 @@ function diaporama_function($atts, $content='') {
 		}
 	}
 	// Use images if available, full HTML content otherwise
-	if ($images) foreach ($images as $url) { $slider_content .= '<li style="'.$li_style.'"><img src="' . trim($url) . '" /></li>'; }
+	if ($images) {
+		foreach ($images as $url) {
+			$slider_content .= '<li style="' . $li_style . '"><img src="' . trim($url) . '" /></li>';
+		}
+	}
 	$slider_params = array(
 		// Param vars
 		// Complete content - except the first-level <ul> tag (we could use an array instead..)
@@ -222,7 +228,7 @@ function diaporama_function($atts, $content='') {
 		// CSS for li .textslide
 		'slidercss_textslide' => '.diaporama .anythingControls li { list-style-type: none; }',
 	);
-	$content = '<div class="diaporama" style="width:'.$width.'; height:'.$height.';">' . elgg_view('slider/slider', $slider_params) . '</div>';
+	$content = '<div class="diaporama" style="width:' . $width . '; height:' . $height . ';">' . elgg_view('slider/slider', $slider_params) . '</div>';
 	return $content;
 }
 elgg_add_shortcode('diaporama', 'diaporama_function');

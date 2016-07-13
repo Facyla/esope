@@ -168,7 +168,7 @@ function slider_page_handler($page) {
 
 
 
-// Foncitons à exécuter après le chargement de tous les plugins
+// Fonctions à exécuter après le chargement de tous les plugins
 function slider_pagesetup() {
 	
 	// Add slider shortcode for easier embedding of sliders
