@@ -102,7 +102,7 @@ if ($guid) {
 	echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $guid));
 }
 
-// @TODO : preset to no notification in embed context
+// Note : select defaults to no notification in embed context
 if (!$vars['entity']) {
 	echo elgg_view('prevent_notifications/prevent_form_extend', array());
 }
