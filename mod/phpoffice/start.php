@@ -117,7 +117,9 @@ function phpoffice_page_handler($page) {
 		case 'word':
 			elgg_load_library('phpoffice:word');
 			elgg_load_library('elgg:phpoffice:word');
-			if (empty($page[1]) || !include $word_base . 'samples/' . $page[1]) {
+			if (($page[1] == 'samples') && (include $base . 'word_' . $page[2] . '.php')) {
+				// OK
+			} else if (empty($page[1]) || !include $word_base . 'samples/' . $page[1]) {
 			error_log("T1");
 				include $base . 'word.php';
 			}

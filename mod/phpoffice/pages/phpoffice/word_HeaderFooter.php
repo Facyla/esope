@@ -41,6 +41,7 @@ $content = '';
 $export = get_input('export', false);
 $format = get_input('format', 'docx');
 if (!in_array($format, $writers)) { $format = 'docx'; }
+
 // File generation input data
 $html = '<h1>Adding element via HTML</h1>';
 $html .= '<p>Some well formed HTML snippet needs to be used</p>';
@@ -60,10 +61,66 @@ if ($export == 'yes') {
 	$filename = 'sample'; // the write function handles the filepath and extension
 	$file = $file_path . $filename . '.' . $format; // Export requires a full file path
 	
+	// New Word document
+	$content .= date('H:i:s') . '  Create new PhpWord object' . EOL;
+
 	$phpWord = new \PhpOffice\PhpWord\PhpWord();
 
+	// New portrait section
 	$section = $phpWord->addSection();
-	\PhpOffice\PhpWord\Shared\Html::addHtml($section, $text_content);
+
+	// Add first page header
+	$header = $section->addHeader();
+	$header->firstPage();
+	$table = $header->addTable();
+	$table->addRow();
+	$cell = $table->addCell(4500);
+	$textrun = $cell->addTextRun();
+	$textrun->addText(htmlspecialchars('This is the header with '));
+	$textrun->addLink('http://google.com', htmlspecialchars('link to Google'));
+	$table->addCell(4500)->addImage(
+		  elgg_get_plugins_path() . 'phpoffice/graphics/phpword.png',
+		  array('width' => 80, 'height' => 80, 'align' => 'right')
+	);
+
+	// Add header for all other pages
+	$subsequent = $section->addHeader();
+	$subsequent->addText(htmlspecialchars('Subsequent pages in Section 1 will Have this!'));
+	$subsequent->addImage(elgg_get_plugins_path() . 'phpoffice/graphics/phpword.png', array('width' => 80, 'height' => 80));
+
+	// Add footer
+	$footer = $section->addFooter();
+	$footer->addPreserveText(htmlspecialchars('Page {PAGE} of {NUMPAGES}.'), null, array('align' => 'center'));
+	$footer->addLink('http://google.com', htmlspecialchars('Direct Google'));
+
+	// Write some text
+	$section->addTextBreak();
+	$section->addText(htmlspecialchars('Some text...'));
+
+	// Create a second page
+	$section->addPageBreak();
+
+	// Write some text
+	$section->addTextBreak();
+	$section->addText(htmlspecialchars('Some text...'));
+
+	// Create a third page
+	$section->addPageBreak();
+
+	// Write some text
+	$section->addTextBreak();
+	$section->addText(htmlspecialchars('Some text...'));
+
+	// New portrait section
+	$section2 = $phpWord->addSection();
+
+	$sec2Header = $section2->addHeader();
+	$sec2Header->addText(htmlspecialchars('All pages in Section 2 will Have this!'));
+
+	// Write some text
+	$section2->addTextBreak();
+	$section2->addText(htmlspecialchars('Some text...'));
+	
 	
 	// @TODO check existing generated file and updates
 	// @TODO should also mark the Elgg object with a lastgenerated timestamp (for each format) to avoid generating new files if content has not changed
@@ -111,17 +168,6 @@ if ($export == 'yes') {
 	$content .= '</form>';
 }
 
-
-
-$content .= '<h3>Samples (not working but useful code examples)</h3>';
-
-$samples = array('Sample_01_SimpleText.php', 'Sample_02_TabStops.php', 'Sample_03_Sections.php', 'Sample_04_Textrun.php', 'Sample_05_Multicolumn.php', 'Sample_06_Footnote.php', 'Sample_07_TemplateCloneRow.php', 'Sample_08_ParagraphPagination.php', 'Sample_09_Tables.php', 'Sample_10_EastAsianFontStyle.php', 'Sample_11_ReadWord2007.php', 'Sample_11_ReadWord97.php', 'Sample_12_HeaderFooter.php', 'Sample_13_Images.php', 'Sample_14_ListItem.php', 'Sample_15_Link.php', 'Sample_16_Object.php', 'Sample_17_TitleTOC.php', 'Sample_18_Watermark.php', 'Sample_19_TextBreak.php', 'Sample_20_BGColor.php', 'Sample_21_TableRowRules.php', 'Sample_22_CheckBox.php', 'Sample_23_TemplateBlock.php', 'Sample_24_ReadODText.php', 'Sample_25_TextBox.php', 'Sample_26_Html.php', 'Sample_27_Field.php', 'Sample_28_ReadRTF.php', 'Sample_29_Line.php', 'Sample_30_ReadHTML.php', 'Sample_31_Shape.php', 'Sample_32_Chart.php', 'Sample_33_FormField.php', 'Sample_34_SDT.php', 'Sample_35_InternalLink.php', 'Sample_36_RTL.php', 'Sample_Footer.php', 'Sample_Header.php');
-
-$content .= '<ul>';
-foreach($samples as $sample) {
-	$content .= '<li><a href="' . elgg_get_site_url() . 'phpoffice/word/' . $sample . '">' . $sample . '</a></li>';
-}
-$content .= '</ul>';
 
 
 // Use inner layout (one_sidebar, one_column, content, etc.)
