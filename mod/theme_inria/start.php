@@ -64,6 +64,8 @@ function theme_inria_init(){
 	
 	// Supprimer le suivi de l'activité (car toujours activé sur home du groupe)
 	remove_group_tool_option('activity');
+	// Supression option de gestion des dossiers (totalement inutile car dossiers désactivés)
+	remove_group_tool_option('file_tools_structure_management');
 	
 	// Add CMIS folder option
 	//add_group_tool_option('cmis_folder', elgg_echo('theme_inria:group_option:cmisfolder'), false);

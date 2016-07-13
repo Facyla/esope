@@ -7,6 +7,7 @@
 
 elgg_load_js('elgg.thewire');
 
+
 $parent_post = elgg_extract('post', $vars);
 $forced_access = elgg_extract('access_id', $vars, false);
 $char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
@@ -67,7 +68,7 @@ if ($char_limit == 0) {
 //echo '<div class="home-static-container" style="width:83%; float:left;">';
 //	echo elgg_echo('esope:homewire:msg');
 //	echo elgg_view('input/plaintext', array(
-$parent_post_input = elgg_view('input/plaintext', array(
+$post_input = elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',
 		'id' => 'thewire-textarea',
@@ -86,7 +87,7 @@ $submit_button = elgg_view('input/submit', array(
 // Render view
 echo elgg_echo('esope:homewire:msg');
 echo <<<HTML
-$parent_post_input
+$post_input
 <div id="thewire-characters-remaining">
 	$count_down
 </div>
