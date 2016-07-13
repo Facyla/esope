@@ -157,8 +157,9 @@ function diaporama_function($atts, $content='') {
 			'images' => '',
 		), $atts));
 	$li_style = '';
-	$width = str_replace('"', '', $width);
-	$height = str_replace('"', '', $height);
+	// Better to decode as quotes might be encoded and break generated HTML
+	$width = str_replace('"', '', html_entity_decode($width));
+	$height = str_replace('"', '', html_entity_decode($height));
 	//$li_style = "width:$width !important; height:$height !important;";
 	if (!empty($images)) {
 		// Mode 1 : use images="URL1, URL2" attribute => works if content is not pre-parsed (eg URL are not converted to links)
