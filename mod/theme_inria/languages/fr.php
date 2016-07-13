@@ -660,6 +660,14 @@ Voir et commenter ce lien web :
 	'esope:widget:page:title' => '<i class="fa fa-pencil-square-o"></i> Pages wiki',
 	'pages:widget:description' => "Affiche la liste de vos pages wiki.",
 	'esope:widget:page:title' => '<i class="fa fa-pencil-square-o fa-fw"></i> Pages wiki',
+	'esope:settings:widget:pages' => "Activer le widget Pages wiki",
+	'esope:subtype:pages' => "pages wiki",
+	'esope:subtype:page' => "page wiki",
+	'esope:subtype:page_top' => "page wiki (accueil)",
+	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
+	'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
+	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
+	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki (accueil)",
 
 	
 	
