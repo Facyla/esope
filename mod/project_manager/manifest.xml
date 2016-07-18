@@ -14,6 +14,11 @@
 		<version>1.12</version>
 	</requires>
 
+	<conflicts>
+		<type>plugin</type>
+		<name>tasks</name>
+	</conflicts>
+
 	<screenshot>
 		<description>An example screenshot</description>
 		<path>graphics/screenshot.png</path>
