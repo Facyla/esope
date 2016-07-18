@@ -8,6 +8,7 @@
  * @link http://items.fr/
  */
 
+/* @TODO : separate tasks from this plugin - as it it maintained by FxNion */
 
 // Make sure project_manager_init is called on initialisation
 elgg_register_event_handler('init','system','project_manager_init');

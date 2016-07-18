@@ -117,8 +117,8 @@ function phpoffice_page_handler($page) {
 		case 'word':
 			elgg_load_library('phpoffice:word');
 			elgg_load_library('elgg:phpoffice:word');
-			if (($page[1] == 'samples') && (include $base . 'word_' . $page[2] . '.php')) {
-				// OK
+			if (($page[1] == 'samples') && (include $base . 'word/' . $page[2] . '.php')) {
+				// Samples are in pages/phpoffice/word
 			} else if (empty($page[1]) || !include $word_base . 'samples/' . $page[1]) {
 			error_log("T1");
 				include $base . 'word.php';
@@ -128,7 +128,9 @@ function phpoffice_page_handler($page) {
 		case 'presentation':
 			elgg_load_library('phpoffice:presentation');
 			elgg_load_library('elgg:phpoffice:presentation');
-			if (empty($page[1]) || !include $presentation_base . 'samples/' . $page[1]) {
+			if (($page[1] == 'samples') && (include $base . 'presentation/' . $page[2] . '.php')) {
+				// Samples are in pages/phpoffice/presentation
+			} else if (empty($page[1]) || !include $presentation_base . 'samples/' . $page[1]) {
 				include $base . 'presentation.php';
 			}
 			break;
@@ -136,7 +138,9 @@ function phpoffice_page_handler($page) {
 		case 'excel':
 			elgg_load_library('phpoffice:excel');
 			elgg_load_library('elgg:phpoffice:excel');
-			if (empty($page[1]) || !include $excel_base . 'Examples/' . $page[1]) {
+			if (($page[1] == 'samples') && (include $base . 'excel/' . $page[2] . '.php')) {
+				// Samples are in pages/phpoffice/word
+			} else if (empty($page[1]) || !include $excel_base . 'Examples/' . $page[1]) {
 				include $base . 'excel.php';
 			}
 			break;
@@ -145,7 +149,9 @@ function phpoffice_page_handler($page) {
 			elgg_load_library('phpoffice:project');
 			elgg_load_library('elgg:phpoffice:project');
 			\PhpOffice\PhpProject\Autoloader::register();
-			if (empty($page[1]) || !include $project_base . 'samples/' . $page[1]) {
+			if (($page[1] == 'samples') && (include $base . 'project/' . $page[2] . '.php')) {
+				// Samples are in pages/phpoffice/word
+			} else if (empty($page[1]) || !include $project_base . 'samples/' . $page[1]) {
 				include $base . 'project.php';
 			}
 			break;

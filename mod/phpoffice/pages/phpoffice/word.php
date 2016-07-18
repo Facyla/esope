@@ -113,6 +113,15 @@ if ($export == 'yes') {
 
 
 
+$content .= '<h3>Elgg samples (working code examples)</h3>';
+$samples = array('HeaderFooter');
+$content .= '<ul>';
+foreach($samples as $sample) {
+	$content .= '<li><a href="' . elgg_get_site_url() . 'phpoffice/word/samples/' . $sample . '">' . $sample . '</a></li>';
+}
+$content .= '</ul>';
+
+
 $content .= '<h3>Samples (not working but useful code examples)</h3>';
 
 $samples = array('Sample_01_SimpleText.php', 'Sample_02_TabStops.php', 'Sample_03_Sections.php', 'Sample_04_Textrun.php', 'Sample_05_Multicolumn.php', 'Sample_06_Footnote.php', 'Sample_07_TemplateCloneRow.php', 'Sample_08_ParagraphPagination.php', 'Sample_09_Tables.php', 'Sample_10_EastAsianFontStyle.php', 'Sample_11_ReadWord2007.php', 'Sample_11_ReadWord97.php', 'Sample_12_HeaderFooter.php', 'Sample_13_Images.php', 'Sample_14_ListItem.php', 'Sample_15_Link.php', 'Sample_16_Object.php', 'Sample_17_TitleTOC.php', 'Sample_18_Watermark.php', 'Sample_19_TextBreak.php', 'Sample_20_BGColor.php', 'Sample_21_TableRowRules.php', 'Sample_22_CheckBox.php', 'Sample_23_TemplateBlock.php', 'Sample_24_ReadODText.php', 'Sample_25_TextBox.php', 'Sample_26_Html.php', 'Sample_27_Field.php', 'Sample_28_ReadRTF.php', 'Sample_29_Line.php', 'Sample_30_ReadHTML.php', 'Sample_31_Shape.php', 'Sample_32_Chart.php', 'Sample_33_FormField.php', 'Sample_34_SDT.php', 'Sample_35_InternalLink.php', 'Sample_36_RTL.php', 'Sample_Footer.php', 'Sample_Header.php');
