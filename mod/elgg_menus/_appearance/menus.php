@@ -60,7 +60,7 @@ if ($menu_name) {
 	$menu_remove = $menu_config['remove'];
 	$menu_class = $menu_config['class'];
 	$menu_sort_by = $menu_config['sort_by'];
-	if (empty($menu_sort_by)) { $menu_sort_by = 'priority'; }
+	if (empty($menu_sort_by)) $menu_sort_by = 'priority';
 	if (!isset($sort_by_opts[$menu_sort_by])) {
 		$menu_sort_by_callback = $menu_sort_by;
 		$menu_sort_by = 'callback';
@@ -81,12 +81,10 @@ if ($menu_name) {
 
 // MAIN FORMS : SELECT, ADD, EDIT, REMOVE
 
-$content .= '<fieldset>';
-
 // SELECT existing menu form
 $content .= '<form id="menu-editor-form-select" method="GET">';
 //$content .= '<a href="?new_menu=yes" style="float:right;" class="elgg-button elgg-button-action">Créer un nouveau menu</a>';
-$content .= '<label>' . elgg_echo('elgg_menus:selectedit') . ' ' . elgg_view('input/select', array('name' => 'menu_name', 'options_values' => $menu_opts, 'value' => $menu_name)) . '</label>';
+$content .= '<label>' . elgg_echo('elgg_menus:selectedit') . ' ' . elgg_view('input/pulldown', array('name' => 'menu_name', 'options_values' => $menu_opts, 'value' => $menu_name)) . '</label>';
 $content .= elgg_view('input/submit', array('value' => elgg_echo('elgg_menus:menu:select'), 'style' => 'float:none;'));
 $content .= '</form>';
 
@@ -110,7 +108,7 @@ $content .= '<div id="elgg-menus-backups" class="hidden">';
 	$import_form .= '<form action="' . $action_url . '?menus_action=import" enctype="multipart/form-data" method="POST">';
 	$import_form .= elgg_view('input/securitytoken');
 	$import_form .= '<label>' . elgg_echo('elgg_menus:import:backup_file') . elgg_view('input/file', array('name' => 'backup_file')) . '</label>';
-	$import_form .= '<br />';
+	$import_form .= ' &nbsp; ';
 	$import_form .= '<label>' . elgg_echo('elgg_menus:import:filter') . elgg_view('input/text', array('name' => 'menu_name', 'value' => $menu_name, 'style' => 'width:20ex;')) . '</label><br /><em>' . elgg_echo('elgg_menus:import:filter:details') . '</em>';
 	$import_form .= elgg_view('input/hidden', array('name' => 'menus_action', 'value' => 'import'));
 	/// Display submit button
@@ -130,10 +128,8 @@ $content .= '<div id="elgg-menus-backups" class="hidden">';
 	}
 	$content .= '<div class="clearfloat"></div>';
 	
-$content .= '</div>';
-
-$content .= '</fieldset>';
-$content .= '<br /><hr />';
+$content .= '</div></fieldset>';
+$content .= '<hr />';
 
 
 
@@ -181,9 +177,9 @@ if ($menu_name) {
 	
 		$content .= '<div style="float:right; width:46%; margin:0;">';
 			// Sort by : use select + alternate text function
-			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/select', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'options_values' => $sort_by_opts, 'style' => "max-width:20ex;")) . '<br />' . elgg_view('input/text', array('name' => 'menu_sort_by_callback', 'value' => $menu_sort_by_callback, 'placeholder' => elgg_echo('elgg_menus:sortby:customcallback:placeholder'))) . '</label></p>';
+			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_sort_by')) . '<p><label>' . elgg_echo('elgg_menus:menu_sort_by') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_sort_by', 'value' => $menu_sort_by, 'options_values' => $sort_by_opts, 'style' => "max-width:12ex;")) . ' ' . elgg_view('input/text', array('name' => 'menu_sort_by_callback', 'value' => $menu_sort_by_callback, 'style' => "max-width:12ex;", 'placeholder' => elgg_echo('elgg_menus:sortby:customcallback:placeholder'))) . '</label></p>';
 			// Show section header
-			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_show_section_headers')) . '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . ' ' . elgg_view('input/select', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label></p>';
+			$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_show_section_headers')) . '<p><label>' . elgg_echo('elgg_menus:menu_show_section_headers') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_show_section_headers', 'value' => $menu_show_section_headers, 'options_values' => $ny_opt)) . '</label></p>';
 		$content .= '</div>';
 		$content .= '<div class="clearfloat"></div>';
 	$content .= '</fieldset>';
@@ -192,7 +188,7 @@ if ($menu_name) {
 	/* Structured menu edit (section group + tree + order) */
 	$content .= '<fieldset><legend>' . elgg_echo('elgg_menus:fieldset:menu_items') . '</legend>';
 		// Type de comportement : replace/merge (default merge for reserved/unset menus)
-		$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'mode')) . '<p><label>' . elgg_echo('elgg_menus:mode') . ' ' . elgg_view('input/select', array('name' => 'menu_mode', 'value' => $menu_mode, 'options_values' => $menu_mode_opt)) . '</label></p>';
+		$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'mode')) . '<p><label>' . elgg_echo('elgg_menus:mode') . ' ' . elgg_view('input/dropdown', array('name' => 'menu_mode', 'value' => $menu_mode, 'options_values' => $menu_mode_opt)) . '</label></p>';
 		// Items à supprimer (mode merge)
 		$content .= elgg_view('elgg_menus/help_popup', array('style' => "float:left;", 'key' => 'menu_remove')) . '<p><label>' . elgg_echo('elgg_menus:menu_remove') . ' ' . elgg_view('input/text', array('name' => 'menu_remove', 'value' => $menu_remove, 'style' => "max-width:60ex;")) . '</label></p>';
 		
@@ -216,7 +212,7 @@ if ($menu_name) {
 				$content .= '<fieldset class="elgg-menus-section" data-section="' . $section_name . '"><legend>' . elgg_echo('elgg_menus:section') . '&nbsp;: ' . $section_name . '</legend>';
 					$content .= '<div class="menu-editor-items">';
 					foreach ($section_items as $menu_item) {
-						if (!($menu_item instanceof ElggMenuItem)) { continue; }
+						if (!($menu_item instanceof ElggMenuItem)) continue;
 						$content .= elgg_view('elgg_menus/input/menu_item', array('menu_item' => $menu_item));
 					}
 					$content .= '</div>';
@@ -250,7 +246,7 @@ if ($menu_name) {
 		$content .= elgg_view('input/button', array(
 				'id' => 'menu-editor-add-item',
 				'value' => elgg_echo('elgg_menus:edit:newitem'),
-				'class' => 'elgg-button-action',
+				'class' => 'elgg-button elgg-button-action',
 			));
 		$content .= '</div>';
 		
@@ -264,7 +260,7 @@ if ($menu_name) {
 		$content .= elgg_view('input/button', array(
 				'id' => 'menu-editor-add-section',
 				'value' => elgg_echo('elgg_menus:edit:newsection'),
-				'class' => 'elgg-button-action',
+				'class' => 'elgg-button elgg-button-action',
 			));
 		$content .= '</div>';
 		
