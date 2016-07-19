@@ -212,14 +212,18 @@ function esope_init() {
 		elgg_unregister_plugin_hook_handler('validate', 'input', 'htmlawed_filter_tags');
 		elgg_register_plugin_hook_handler('validate', 'input', 'esope_htmlawed_filter_tags', 1);
 	}
+	/*
 	if (elgg_is_active_plugin('threads')) {
 		// Pour n'afficher "Répondre" que pour les objets (et non tous types d'entités)
 		elgg_unregister_plugin_hook_handler('register', 'menu:entity', 'threads_topic_menu_setup');
 		elgg_register_plugin_hook_handler('register', 'menu:entity', 'esope_threads_topic_menu_setup');
+		// On enlève aussi les liens commentaires de la rivière
+		//elgg_unregister_plugin_hook_handler('register', 'menu:river', 'threads_add_to_river_menu');
 	}
-	// On enlève aussi les liens commentaires de la rivière
-	//elgg_unregister_plugin_hook_handler('register', 'menu:river', 'threads_add_to_river_menu');
-	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'elgg_river_menu_setup');
+	*/
+	// Suppression des boutons de commentaire de la rivière ?
+	//elgg_unregister_plugin_hook_handler('register', 'menu:river', '_elgg_river_menu_setup');
+	// Discussion toggle reply does not work (no comment/reply form)
 	elgg_unregister_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 	
 	// Page d'accueil
