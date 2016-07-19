@@ -37,11 +37,11 @@ if (empty($options)) {
 }
 
 $id = elgg_extract('id', $vars, '');
-unset($vars['id']);
 // Esope : default id to name for easier label
 if (empty($id) && isset($vars['name'])) {
-	$id = "id=\"{$vars['name']}\"";
+	$id = $vars['name'];
 }
+unset($vars['id']);
 
 $list_class = (array) elgg_extract('class', $vars, []);
 $list_class[] = 'elgg-input-radios';

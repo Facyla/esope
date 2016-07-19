@@ -25,6 +25,7 @@ function cmspages_init() {
 	// Register entity type for search
 	if (elgg_get_plugin_setting('register_object', 'cmspages') != 'no') {
 		elgg_register_entity_type('object', 'cmspage');
+		elgg_register_plugin_hook_handler('search', 'object:cmspage', 'cmspages_search_hook');
 	}
 	
 	// Register a URL handler for CMS pages
@@ -1198,14 +1199,75 @@ if (!elgg_is_active_plugin('esope')) {
 
 function cmspages_run_upgrades($event, $type, $details) {
 	$cmspages_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'cmspages');
+	if (empty($cmspages_upgrade_version)) { $cmspages_upgrade_version = '0'; }
 
-	if (!$cmspages_upgrade_version != '1.11') {
+	//if (!$cmspages_upgrade_version != '1.11') {
+	if (version_compare($cmspages_upgrade_version, '1.11') < 0) {
 		 // When upgrading, check if the ElggCMSPage class has been registered as this
 		 // was added in Elgg 1.11
 		if (!update_subtype('object', 'cmspage', 'ElggCMSPage')) {
 			add_subtype('object', 'cmspage', 'ElggCMSPage');
 		}
-
 		elgg_set_plugin_setting('upgrade_version', '1.11', 'cmspages');
 	}
+	
+	if (version_compare($cmspages_upgrade_version, '1.12') < 0) {
+		// Perform some upgrade tasks...
+		//elgg_set_plugin_setting('upgrade_version', '1.12', 'cmspages');
+	}
+	
 }
+
+
+/**
+ * Get objects that match the search parameters.
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
+ */
+// Return matched title
+// @TODO : also perform search on metadata (pagetype)
+function cmspages_search_hook($hook, $type, $value, $params) {
+	$db_prefix = elgg_get_config('dbprefix');
+
+	$join = "JOIN {$db_prefix}objects_entity oe ON e.guid = oe.guid";
+	$params['joins'] = array($join);
+	$fields = array('title', 'description');
+	
+	$where = search_get_where_sql('oe', $fields, $params);
+	
+	$params['wheres'] = array($where);
+	$params['count'] = TRUE;
+	$count = elgg_get_entities($params);
+	
+	// no need to continue if nothing here.
+	if (!$count) {
+		return array('entities' => array(), 'count' => $count);
+	}
+	
+	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'oe', $params['sort'], $params['order']);
+	$params['preload_owners'] = true;
+	$entities = elgg_get_entities($params);
+
+	// add the volatile data for why these entities have been returned.
+	foreach ($entities as $entity) {
+		$title = search_get_highlighted_relevant_substrings($entity->pagetype, $params['query']);
+		if (empty($title)) { $title = search_get_highlighted_relevant_substrings($entity->pagetitle, $params['query']); }
+		if (empty($title)) { $title = search_get_highlighted_relevant_substrings($entity->title, $params['query']); }
+		$entity->setVolatileData('search_matched_title', $title);
+
+		$desc = search_get_highlighted_relevant_substrings($entity->description, $params['query']);
+		$entity->setVolatileData('search_matched_description', $desc);
+	}
+
+	return array(
+		'entities' => $entities,
+		'count' => $count,
+	);
+}
+
+

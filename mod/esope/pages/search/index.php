@@ -32,6 +32,9 @@ $entity_subtype = get_input('entity_subtype', ELGG_ENTITIES_ANY_VALUE);
 if (empty($entity_type)) { $entity_type = ELGG_ENTITIES_ANY_VALUE; }
 if (empty($entity_subtype)) { $entity_subtype = ELGG_ENTITIES_ANY_VALUE; }
 
+// Cannot search for "all" if type selected
+if (!empty($entity_type)) { $search_type = 'entities'; }
+
 
 $friends = get_input('friends', ELGG_ENTITIES_ANY_VALUE);
 

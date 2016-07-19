@@ -17,8 +17,8 @@ elgg.esope.init = function() {
 
 // Auto-set search_type if type selected
 elgg.esope.advsearch_search_type = function(event) {
-	var searchtype = $("select[name='search_type']").val();
-	var type = $("select[name='entity_type']").val();
+	var searchtype = $("#advanced-search-form select[name='search_type']").val();
+	var type = $("#advanced-search-form select[name='entity_type']").val();
 	if (searchtype == 'all') {
 		$("#advanced-search-form select[name='entity_type']").val('');
 		$("#advanced-search-form select[name='entity_subtype']").val('');
@@ -29,8 +29,8 @@ elgg.esope.advsearch_search_type = function(event) {
 // Auto-set search_type if type selected
 // If entity_type is set to any non empty value, search_type cannot be 'all' (tags can be kept)
 elgg.esope.advsearch_entity_type = function(event) {
-	var type = $("select[name='entity_type']").val();
-	var searchtype = $("select[name='search_type']").val();
+	var searchtype = $("#advanced-search-form select[name='search_type']").val();
+	var type = $("#advanced-search-form select[name='entity_type']").val();
 	if ((type != '') && (searchtype == 'all')) {
 		$("#advanced-search-form select[name='search_type']").val('entities');
 	}
@@ -43,9 +43,9 @@ elgg.esope.advsearch_entity_type = function(event) {
 
 // Auto-set search_type and type if non-empty subtype selected
 elgg.esope.advsearch_entity_subtype = function(event) {
-	var subtype = $("#advanced-search-form select[name='entity_subtype']").val();
 	var searchtype = $("#advanced-search-form select[name='search_type']").val();
 	var type = $("#advanced-search-form select[name='entity_type']").val();
+	var subtype = $("#advanced-search-form select[name='entity_subtype']").val();
 	if (subtype != '') {
 		if (searchtype == 'all') {
 			$("#advanced-search-form select[name='search_type']").val('entities');

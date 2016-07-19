@@ -60,7 +60,6 @@ return array(
 	'search:types:entities' => "Entités",
 	'esope:search:tooshort' => "Texte à rechercher trop court (minimum %s caractères)",
 	'esope:search:tooshort:details' => "Les mots de moins de %s caractères sont ignorés lors de la recherche",
-	'item:object' => "Publications",
 	'esope:config:widgets' => "CHOIX DES WIDGETS",
 	'esope:settings:removeusermenutools' => "(expert) Supprime des menus de l'owner block des membres.<br />Utiliser l'id du lien, par ex: blog,liked_content,photos (SANS espace)",
 	'esope:settings:removeusertools' => "(expert) Supprime des liens de création des contenus personnels (hors groupe)).<br />Utiliser le nom interne, par ex: blog,bookmark (SANS espace)",
@@ -938,10 +937,15 @@ return array(
 	
 	/* Main objects and search menus */
 	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groupes",
+	'item:group:icon' => '<i class="fa fa-users fa-fw" title="Groupes"></i>',
 	'item:user' => "<i class=\"fa fa-user fa-fw\"></i> Membres",
+	'item:user:icon' => '<i class="fa fa-user fa-fw" title="Membres"></i>',
 	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Publications",
+	'item:object:icon' => '<i class="fa fa-pencil fa-fw" title="Publications"></i>',
 	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Commentaires",
+	'search_types:comments:icon' => '<i class="fa fa-comments fa-fw" title="Commentaires"></i>',
 	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	'search_types:tags:icon' => '<i class="fa fa-tags fa-fw" title="Tags"></i>',
 	'esope:search:filtered' => " (%s)",
 	'esope:search:unfiltered' => " (tout)",
 	//'all' => "",

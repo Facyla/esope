@@ -60,7 +60,6 @@ return array(
 	'search:types:entities' => "Entities",
 	'esope:search:tooshort' => "Query text too short (minimum %s characters)",
 	'esope:search:tooshort:details' => "Query words less than %s characters are ignored in search",
-	'item:object' => "Publications",
 	'esope:config:widgets' => "ENABLED WIDGETS",
 	'esope:settings:removeusermenutools' => "(expert) Remove user menu items.<br />Use link id, eg.: blog,liked_content,photos (NO spacing)",
 	'esope:settings:removeusertools' => "(expert) Remove user content creation button.<br />Use registered entity subtypes, eg.: blog,bookmark (NO spacing)",
@@ -920,10 +919,15 @@ return array(
 	
 	/* Main objects and search menus */
 	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groups",
+	'item:group:icon' => '<i class="fa fa-users fa-fw" title="Groups"></i>',
 	'item:user' => "<i class=\"fa fa-user fa-fw\"></i> Users",
+	'item:user:icon' => '<i class="fa fa-user fa-fw" title="Users"></i>',
 	'item:object' => "<i class=\"fa fa-pencil fa-fw\"></i> Objects",
+	'item:object:icon' => '<i class="fa fa-pencil fa-fw" title="Objects"></i>',
 	'search_types:comments' => "<i class=\"fa fa-comments fa-fw\"></i> Comments",
+	'search_types:comments:icon' => '<i class="fa fa-comments fa-fw" title="Comments"></i>',
 	'search_types:tags' => "<i class=\"fa fa-tags fa-fw\"></i> Tags",
+	'search_types:tags:icon' => '<i class="fa fa-tags fa-fw" title="Tags"></i>',
 	'esope:search:filtered' => " (%s)",
 	'esope:search:unfiltered' => " (all)",
 	//'all' => "",

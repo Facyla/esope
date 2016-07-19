@@ -133,6 +133,7 @@ if (elgg_is_logged_in()) {
 			<?php if (elgg_is_active_plugin('groups')) { ?>
 			<li class="groups"><a <?php if( (current_page_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
 				<ul class="hidden">
+					<li><a href="<?php echo $url . 'groups/groupsearch'; ?>"><?php echo elgg_echo('search:group:go'); ?></a></li>
 					<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
 					<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
 					<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
@@ -157,6 +158,7 @@ if (elgg_is_logged_in()) {
 			<?php if (elgg_is_active_plugin('members')) { ?>
 				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:members'); ?> <i class="fa fa-caret-down"></i></a>
 					<ul class="hidden">
+						<li><a href="<?php echo $url . 'members/search/'; ?>"><?php echo elgg_echo('members:search'); ?></a></li>
 						<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>?limit=30"><?php echo elgg_echo('theme_inria:friends'); ?></a></li>
 						<li><a href="<?php echo $url . 'collections/owner/' . $ownusername; ?>"><?php echo elgg_echo('theme_inria:friends:collections'); ?></a></li>
 						<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
@@ -222,6 +224,11 @@ if (elgg_is_logged_in()) {
 		<?php
 		if (elgg_is_active_plugin('search')) {
 		$search_text = elgg_echo('esope:search:defaulttext');
+		// Select search type (filter)
+		//$search_opt = array('' => elgg_echo('all'), 'object' => elgg_echo('item:object'), 'group' => elgg_echo('item:group'), 'user' => elgg_echo('item:user')); // options_values
+		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
+		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:group:icon') => 'group', elgg_echo('item:user:icon') => 'user'); // options
+		$search_entity_type = get_input('entity_type', '');
 		echo '<form action="' . $url . 'search" method="get">';
 			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
 			$livesearch = elgg_get_plugin_setting('livesearch', 'esope');
@@ -231,6 +238,8 @@ if (elgg_is_logged_in()) {
 				echo elgg_view('input/text', array('name' => 'q', 'id' => 'esope-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
 			}
 			echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
+			echo '<br />';
+			echo elgg_view('input/radio', array('name' => 'entity_type', 'options' => $search_opt, 'value' => $search_entity_type, 'align' => 'horizontal'));
 		echo '</form>';
 		}
 

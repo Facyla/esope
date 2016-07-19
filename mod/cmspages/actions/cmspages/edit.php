@@ -134,7 +134,8 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 
 // Edition de l'objet existant ou nouvellement créé
 $cmspage->pagetype = $pagetype; // Allow to update pagetype
-$cmspage->pagetitle = $cmspage_title;
+$cmspage->pagetitle = $cmspage_title; // @todo remove after running some upgrade to transfer to ->title
+$cmspage->title = $cmspage_title;
 $cmspage->description = $description;
 $cmspage->access_id = $access;
 $cmspage->password = $password;
