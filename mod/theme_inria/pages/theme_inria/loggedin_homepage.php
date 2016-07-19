@@ -123,7 +123,7 @@ elgg_pop_breadcrumb();
 
 // Note : sidebar is not used, as the whole layout is defined on content $body
 //$params = array('content' => $body, 'sidebar' => $sidebar, 'filter' => false);
-$params = array('content' => $body);
+$params = array('content' => $body, 'title' => false);
 $body = elgg_view_layout('one_column', $params);
 
 echo elgg_view_page($title, $body);
