@@ -52,10 +52,12 @@ if (!$allowed) {
 }
 
 // Add profile-type marker
-$profile_type = esope_get_user_profile_type($user);
-$class .= ' profile-type';
-if (!empty($profile_type)) {
-	$class .= ' profile-type-' . $profile_type;
+if (elgg_is_active_plugin('profile_manager')) {
+	$profile_type = esope_get_user_profile_type($user);
+	$class .= ' profile-type';
+	if (!empty($profile_type)) {
+		$class .= ' profile-type-' . $profile_type;
+	}
 }
 
 // Tell there is no email associated (same as archived ?) = cannot be contacted

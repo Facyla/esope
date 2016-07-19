@@ -457,7 +457,7 @@ function esope_pagesetup(){
 			print_r($CONFIG->menus['title']);
 			*/
 			$remove_user_tools = explode(',', $remove_user_tools);
-			if (in_array($context, $remove_user_tools)) elgg_unregister_menu_item('title', 'add');
+			if (in_array($context, $remove_user_tools)) { elgg_unregister_menu_item('title', 'add'); }
 		}
 		
 		// Helps finding quickly the good name for existing menus...
