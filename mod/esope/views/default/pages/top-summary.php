@@ -13,7 +13,7 @@ $selected_page = elgg_extract('page', $vars, false);
 if ($selected_page) {
 	$url = $selected_page->getURL();
 }
-echo "Page ok : $url";
+//echo "Page ok : $url";
 
 $title = elgg_echo('pages:navigation');
 
