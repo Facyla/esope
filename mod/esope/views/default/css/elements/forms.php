@@ -231,7 +231,8 @@ input.button {
 	-o-box-shadow: 0 0 2px #999999 inset;
 	-moz-box-shadow: 0 0 2px #999999 inset;
 	-webkit-box-shadow: 0 0 2px #999999 inset;
-	height: 27px;
+	/* height: 27px; */
+	height: auto;
 	margin: 6px 0;
 }
 form input#esope-search-input {
