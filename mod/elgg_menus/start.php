@@ -94,6 +94,10 @@ function elgg_menus_register_menu_hook($hook, $type, $return, $params) {
 	// Filter : 'menu-$menu_name'
 	$menu_name = substr($type, 5);
 	$menu_config = elgg_menus_get_menu_config($menu_name);
+	
+	// Do not process if no custom menu setting
+	if (!$menu_config) { return $return; }
+	
 	global $CONFIG;
 	
 	switch($menu_config['mode']) {
@@ -172,12 +176,10 @@ function elgg_menus_prepare_menu_hook($hook, $type, $return, $params) {
  */
 function elgg_menus_get_menu_config($menu_name, $key = false) {
 	$menu_config_data = elgg_get_plugin_setting("menu-$menu_name", 'elgg_menus');
-	if ($menu_config_data) {
-		if (!empty($menu_config_data)) {
-			$menu_config = unserialize($menu_config_data);
-			if ($key) { return $menu_config[$key]; }
-			return $menu_config;
-		}
+	if (!empty($menu_config_data)) {
+		$menu_config = unserialize($menu_config_data);
+		if ($key) { return $menu_config[$key]; }
+		return $menu_config;
 	}
 	return false;
 }
