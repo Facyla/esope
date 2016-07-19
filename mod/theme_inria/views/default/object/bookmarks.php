@@ -4,6 +4,7 @@
  *
  * @package ElggBookmarks
  */
+// Inria : add container + open in new window
 
 $full = elgg_extract('full_view', $vars, FALSE);
 $bookmark = elgg_extract('entity', $vars, FALSE);
@@ -126,7 +127,7 @@ HTML;
 	
 	$params = array(
 		'entity' => $bookmark,
-		//'metadata' => $metadata,
+		'metadata' => $metadata,
 		'subtitle' => $subtitle,
 		'content' => $content,
 	);
