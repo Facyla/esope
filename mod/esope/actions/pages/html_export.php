@@ -1,18 +1,18 @@
 <?php
-global $CONFIG;
+$site = elgg_get_site_entity();
 $guid = get_input("guid");
 $export_subpages = get_input("subpages", 'yes');
-if ($export_subpages != 'yes') $export_subpages = false;
+if ($export_subpages != 'yes') { $export_subpages = false; }
 $export_allpages = get_input("allpages", 'no');
-if ($export_allpages != 'yes') $export_allpages = false;
+if ($export_allpages != 'yes') { $export_allpages = false; }
 
 $debug = false;
-if ($debug) global $debug_ts;
-if ($debug) $debug_ts = microtime(TRUE);
+if ($debug) { global $debug_ts; }
+if ($debug) { $debug_ts = microtime(TRUE); }
 
 // @TODO : this is much too long - requires reviewing
 
-if ($debug) error_log("Test export HTML");
+if ($debug) { error_log("Test export HTML"); }
 
 $page = get_entity($guid);
 if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'object', 'page')) {
@@ -37,7 +37,7 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 			$toppages[] = $page;
 		}
 		// ..et on change le nom en rapport
-		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
+		$filename = elgg_get_friendly_title($site->name) . '_' . elgg_get_friendly_title($container->name) . '_' . date("YmdHis", time());
 		
 		// Envoi du fichier - dès que possible
 		header("Content-type: text/html; charset=utf-8");  
@@ -83,7 +83,7 @@ if (elgg_instanceof($page, 'object', 'page_top') || elgg_instanceof($page, 'obje
 		
 	} else {
 		// Sinon export de la page courante seulement
-		$filename = elgg_get_friendly_title($CONFIG->site->name) . '_' . elgg_get_friendly_title($page->title) . '_' . date("YmdHis", time());
+		$filename = elgg_get_friendly_title($site->name) . '_' . elgg_get_friendly_title($page->title) . '_' . date("YmdHis", time());
 		$content .= '<h3>' . elgg_view("output/url", array("text" => $page->title, "href" => false, "name" => "page_" . $page->guid)) . '</h3>' . elgg_view("output/longtext", array("value" => $page->description)) . '<p style="page-break-after:always;"></p>';
 		
 		// Envoi du fichier

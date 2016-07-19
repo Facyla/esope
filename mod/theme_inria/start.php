@@ -10,7 +10,7 @@ function theme_inria_init(){
 	$action_url = elgg_get_plugins_path() . 'theme_inria/actions/';
 	
 	// HTML export action
-	elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
+	//elgg_register_action("pages/html_export", $action_url . "pages/html_export.php", "public");
 	// Inria members user add
 	elgg_register_action("inria_useradd", $action_url . "inria_useradd.php", "logged_in");
 	// Inria members admin tools
