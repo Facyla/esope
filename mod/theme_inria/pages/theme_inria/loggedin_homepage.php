@@ -111,8 +111,7 @@ $body .= '<div style="width:40%; float:left;" class="home-static-container">
 	<div class="clearfloat"></div>';
 
 // Tableau de bord personnalisable
-$body .= '<h2 class="hidden">' . elgg_echo('theme_inria:home:widgets') . '</h2>
-	' . $widget_body;
+$body .= '<h2 class="hidden">' . elgg_echo('theme_inria:home:widgets') . '</h2>' . $widget_body;
 
 
 // Fil d'Ariane

@@ -227,7 +227,7 @@ if (elgg_is_logged_in()) {
 		// Select search type (filter)
 		//$search_opt = array('' => elgg_echo('all'), 'object' => elgg_echo('item:object'), 'group' => elgg_echo('item:group'), 'user' => elgg_echo('item:user')); // options_values
 		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
-		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:group:icon') => 'group', elgg_echo('item:user:icon') => 'user'); // options
+		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
 		$search_entity_type = get_input('entity_type', '');
 		echo '<form action="' . $url . 'search" method="get">';
 			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
