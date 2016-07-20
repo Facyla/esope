@@ -30,8 +30,7 @@ define(function(require) {
 				'/', 
 				// styles
 				['Format'], 
-				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
-				['TextColor', 'BGColor'], 
+				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'TextColor', 'BGColor'], 
 				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
 				['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 			],

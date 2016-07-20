@@ -43,6 +43,9 @@ function inria_page_handler($page) {
 		case "animation":
 			include($base . 'admin_tools.php');
 			break;
+		case "share_url_generator":
+			include($base . 'share_url_generator.php');
+			break;
 		case 'admin_cron':
 			if (elgg_is_admin_logged_in()) {
 				theme_inria_daily_cron('cron', 'daily', '', array('force' => 'yes'));
