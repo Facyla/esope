@@ -51,14 +51,16 @@ if (!$allowed) {
 }
 
 // Add profile-type marker
+if (elgg_is_active_plugin('profile_manager')) {
 $profile_type = esope_get_user_profile_type($user);
 $class .= ' profile-type';
 if (!empty($profile_type)) {
 	$class .= ' profile-type-' . $profile_type;
 }
+}
 
 // Tell there is no email associated (same as archived ?) = cannot be contacted
-if (empty($user->email)) {
+if (elgg_is_logged_in() && empty($user->email)) {
 	$class .= ' profile-no-mail';
 }
 
@@ -100,7 +102,7 @@ if (in_array($user->memberstatus, array('closed', 'archive'))) {
 }
 */
 // Add empty email marker
-if (empty($user->email)) {
+if (elgg_is_logged_in() && empty($user->email)) {
 	$icon .= '<span class="profiletype-status"><span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span></span>';
 }
 $icon .= elgg_view('output/img', array(
