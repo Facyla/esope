@@ -124,7 +124,6 @@ $search_form .= elgg_view('input/hidden', array('name' => 'offset', 'value' => $
 if ($metadata_search_filter) {
 	foreach ($metadata_search_filter as $meta_filter) {
 		$meta_filter = explode('=', $meta_filter);
-		$search_form .= "Filtre : " . $meta_filter[0] . ' ' . $meta_filter[1] .'<br />';
 		if (!empty($meta_filter[0]) && !empty($meta_filter[1])) {
 			$search_form .= elgg_view('input/hidden', array('name' => "metadata[{$meta_filter[0]}]", 'value' => $meta_filter[1]));
 		}

@@ -1162,13 +1162,14 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
  * Just call echo esope_esearch() for a listing
  * Get entities with $results_ents = esope_esearch(array('returntype' => 'entities'));
  * Basic use with few config will use GET inputs as parameters
- * $params :
+ * $params : search config, can be overrided by POST/GET params
  	- q : full search query
  	- entity_type : site | object | user | group
  	- entity_subtype : usually an object subtype
  	- owner_guid : owner of entity
  	- container_guid : container of entity
  	- metadata : list of metadata and values
+ 	- merge_params : additional custom search params (will be added to the search parameters)
    Note that search can be parametered both directly (params), or with URL. Params will override URL queries.
    Important : $params are NOT defaults, these are filters = if set to anything (except false), it will override GET inputs
  * $defaults : sets the defaults for any input value
@@ -1285,7 +1286,6 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 			'offset' => $offset,
 			'sort' => $sort,
 			'order' => $order,
-			'count' => true,
 		);
 	
 	if ($joins) { $search_params['joins'] = $joins; }
@@ -1293,10 +1293,21 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
 	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
 	
+	// Add additional search params (not from URL) - eg. JOIN and WHERE clauses, additional metadata filters, etc.
+	if ($params['merge_params']) {
+		if (is_array($params['merge_params'])) {
+			$search_params = array_merge_recursive($search_params, $params['merge_params']);
+		}
+	}
+	
+
+	
 	
 	// PERFORM SEARCH RESULTS COUNT
 	// @TODO : use batches ?
 	if ($debug) { echo '<pre>' . print_r($search_params, true) . '</pre>'; }
+	// Force count first (we need it to limit results)
+	$search_params['count'] = true;
 	$return_count = elgg_get_entities_from_metadata($search_params);
 	if ($count) { return $return_count; }
 	
