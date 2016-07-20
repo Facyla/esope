@@ -31,6 +31,9 @@ function theme_inria_init(){
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
 	
+	// Use custom members search
+	elgg_register_action("theme_inria/membersearch", $action_url . "theme_inria/membersearch.php");
+	
 	elgg_extend_view('css', 'theme_inria/css', 900);
 	elgg_extend_view('css/admin', 'theme_inria/admin_css');
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');

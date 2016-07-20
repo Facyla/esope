@@ -643,6 +643,8 @@ return array(
 	'esope:search:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced search",
 	'esope:membersearch:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced members search",
 	'esope:membersearch:setting:metadata:details' => "Enter a comma-separated list of the metadata you wish to add to advanced members search<br />Optional parameters are also supported: add <b>:text</b> to force text input, or <b>:auto</b> to force automatic dropdown values. Note that \"auto\" parameter is not recommended if there too many different values set for a given metadata, eg. > 300, as it will search the database for these values first). If both parameters are set, \"text\" will take precedence over \"auto\".",
+	'esope:membersearch:setting:metadata_filter' => "Enter hidden filter metadata",
+	'esope:membersearch:setting:metadata_filter:details' => "Enter a comma-separated list of metadata and values you wish to add to member search. These filters will not be shown to the users, but will be used to filter the results. Eg.: memberstatus=closed, is_active=yes",
 	'esope:groupsearch:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced groups search",
 	'esope:search:details' => "Use multiple criteria to find what you're looking for",
 	'esope:fulltextsearch' => "Fulltext search",

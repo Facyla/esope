@@ -23,6 +23,7 @@ $sidebar = '';
 // Composition de la page
 $content .= '<div id="twitter-url-generator" class="">';
 $content .= "<p>Cette page vous permet de générer des liens de partage sur Twitter.</p>";
+$content .= '<div class="clearfloat"></div><br />';
 
 
 // Compose share link
@@ -58,13 +59,15 @@ $content .= '<p><label>Hashtags (sans le #), ex. tag1, tag2 ' . elgg_view('input
 $content .= '<p><label>Titre du lien ' . elgg_view('input/text', array('name' => 'title', 'value' => $share_title, 'placeholder' => "Texte de l'infobulle affichée au survol du lien")) . '</label></p>';
 $content .= '<p><label>Via (nom du compte sans le @) ' . elgg_view('input/text', array('name' => 'via', 'value' => $share_via)) . '</label></p>';
 $content .= '<p><label>Texte du lien de partage ' . elgg_view('input/text', array('name' => 'label', 'value' => $share_label)) . '</label></p>';
-$content .= '<p>' . elgg_view('input/submit', array('text' => 'Créer le lien de partage')) . '</p>';
+$content .= '<p>' . elgg_view('input/submit', array('value' => 'Créer le lien de partage')) . '</p>';
 $content .= '</form>';
+$content .= '<div class="clearfloat"></div><br />';
 
 
 $content .= '<h3>Lien de partage</h3>';
 $content .= '<p>Lien généré&nbsp;: ' . $share_link . '</p>';
 $content .= 'Code à copier-coller&nbsp;: <textarea readonly>' . htmlentities($share_link) . '</textarea>';
+$content .= '<div class="clearfloat"></div><br />';
 
 
 

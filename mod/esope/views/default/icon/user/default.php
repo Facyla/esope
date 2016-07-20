@@ -61,7 +61,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 }
 
 // Tell there is no email associated (same as archived ?) = cannot be contacted
-if (empty($user->email)) {
+if (elgg_is_logged_in() && empty($user->email)) {
 	$class .= ' profile-no-mail';
 }
 
@@ -101,7 +101,7 @@ if (in_array($user->memberstatus, array('closed', 'archive'))) {
 }
 */
 // Add empty email marker
-if (empty($user->email)) {
+if (elgg_is_logged_in() && empty($user->email)) {
 	$profiletype_status .= '<span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span>';
 }
 if (!empty($profiletype_status)) {

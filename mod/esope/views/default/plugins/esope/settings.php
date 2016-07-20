@@ -764,8 +764,10 @@ $(function() {
 				// Allow to add a new tab search
 				echo '<p><label>' . elgg_echo('esope:settings:members:searchtab') . ' (ALPHA) ' . elgg_view('input/select', array('name' => 'params[members_searchtab]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_searchtab)) . '</label></p>';
 				// Advanced search tool (alpha version, structure changes may happen)
+				echo '<p><strong><a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></strong></p>';
 				$esope_membersearch_url = elgg_get_site_url() . 'members/search';
-				echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . '<br />' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $plugin->metadata_membersearch_fields)) . '</label><br /><a href="'.$esope_membersearch_url.'" target="_new">'.$esope_membersearch_url.'</a></p>';
+				echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata') . '<br />' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_fields]', 'value' => $plugin->metadata_membersearch_fields)) . '</label><br /><em>' . elgg_echo('esope:membersearch:setting:metadata:details') . '</em></p>';
+				echo '<p><label>' . elgg_echo('esope:membersearch:setting:metadata_filter') . '<br />' . elgg_view('input/text', array('name' => 'params[metadata_membersearch_filter]', 'value' => $plugin->metadata_membersearch_filter)) . '</label><br /><em>' . elgg_echo('esope:membersearch:setting:metadata_filter:details') . '</em></p>';
 				// Replace search by main search (more efficient)
 				echo '<p><label>' . elgg_echo('esope:settings:members:onesearch') . ' ' . elgg_view('input/select', array('name' => 'params[members_onesearch]', 'options_values' => $no_yes_opt, 'value' => $plugin->members_onesearch)) . '</label></p>';
 				// Add online members
