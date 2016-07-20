@@ -13,23 +13,27 @@ define(function(require) {
 	return {
 		// Use / for row break, - for separator
 		toolbar: [
+				// templates
+				['Templates'], 
 				['RemoveFormat'], 
 				['Paste', 'PasteFromWord'], 
 				['Undo', 'Redo'], 
 				['Blockquote'], 
 				['Link', 'Unlink'], 
-				['Image', 'Table', 'Iframe'], 
+				// source, iframe, flash, table
+				['Image'], 
+				['Iframe'], 
+				['Table'], 
 				['Source'], 
 				['Scayt'], 
 				['Maximize'], 
 				'/', 
+				// styles
 				['Format'], 
 				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
+				['TextColor', 'BGColor'], 
 				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
-				[ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
-				// source, iframe, flash, table, styles
-				// templates
-				['Templates'], 
+				['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 			],
 		/*
 		toolbarGroups: [
@@ -48,7 +52,7 @@ define(function(require) {
 		baseHref: elgg.config.wwwroot,
 		//removePlugins: 'liststyle,contextmenu,tabletools,resize',
 		removePlugins: '',
-		extraPlugins: 'blockimagepaste',
+		extraPlugins: 'blockimagepaste,colorbutton,colordialog', //colorbutton,colordialog
 		defaultLanguage: 'en',
 		language: elgg.get_language(),
 		skin: 'moono',
