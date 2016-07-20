@@ -2527,6 +2527,16 @@ function esope_newsletter_view_embed_content(ElggEntity $entity, $vars = array()
 }
 
 
+// Wrapper around the core function so we can use hooks to adjust results
+// Eg. remove archived account (that are not disabled)
+function esope_get_number_users($show_deactivated = false) {
+	$return = elgg_trigger_plugin_hook('members', 'count', array('show_deactivated' => false), false);
+	if (!$return) { $return = get_number_users(); }
+	return $return;
+}
+
+
+
 
 
 

@@ -9,7 +9,7 @@ if ($hide_directory == 'yes') { gatekeeper(); }
 
 //elgg_require_js('elgg/spinner'); // @TODO make spinner work...
 
-$num_members = get_number_users();
+$num_members = esope_get_number_users();
 $title = elgg_echo('members');
 
 $content = elgg_view('esope/users/search', $vars);

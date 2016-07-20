@@ -10,7 +10,7 @@ if ($hide_directory == 'yes') {
 	gatekeeper();
 }
 
-$num_members = get_number_users();
+$num_members = esope_get_number_users();
 $title = elgg_echo('members');
 
 $options = array('type' => 'user', 'full_view' => false);

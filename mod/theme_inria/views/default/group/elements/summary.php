@@ -95,7 +95,16 @@ if ($entity->canEdit()) {
 <?php
 // Number of members
 //echo '<p>' . elgg_echo('groups:members') . ' : ' . $entity->getMembers(0, 0, TRUE) . '<br /><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall">' . elgg_echo('groups:members:more') . '</a></p>';
-$nb_members = $entity->getMembers(array('count' => true));
+//$nb_members = $entity->getMembers(array('count' => true));
+// Inria : count only accounts that are not closed
+$nb_members_wheres[] = "NOT EXISTS (
+    SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
+    WHERE md.entity_guid = e.guid
+        AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+        AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
+$nb_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
+
+
 if ($nb_members > 1) {
 	echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $nb_members . ' ' . elgg_echo('groups:members') . '</a></p>';
 } else {

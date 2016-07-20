@@ -12,14 +12,11 @@ $merge_params = array();
  * $merge_params['metadata_name_value_pairs'][] = array('name' => 'memberstatus', 'value' => 'closed', 'operand' => '!=');
  * 
  * Note : to find entities that do not have a specific metadata value, use a custom where clause
- * $dbprefix = elgg_get_config('dbprefix');
- * $name_metastring_id = elgg_get_metastring_id('memberstatus');
- * $value_metastring_id = elgg_get_metastring_id('closed');
  * $merge_params['wheres'][] = "NOT EXISTS (
- *     SELECT 1 FROM {$dbprefix}metadata md
+ *     SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
  *     WHERE md.entity_guid = e.guid
- *         AND md.name_id = $name_metastring_id
- *         AND md.value_id = $value_metastring_id)";
+ *         AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+ *         AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
  * 
  * echo esope_esearch(array('debug' => true, 'merge_params' => $merge_params), array('add_count' => 'yes'));
  * 

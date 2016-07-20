@@ -473,16 +473,86 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 		foreach(inria_get_profile_ldap_fields() as $field) { $user->{$field} = null; }
 	}
 	// Skip not-enabled accounts
-	if (!$user->isEnabled()) return;
+	if (!$user->isEnabled()) { return; }
 	// Skip banned accounts
-	if ($user->isbanned()) return;
+	if ($user->isbanned()) { return; }
 	// Skip archived accounts
-	if ($user->memberstatus == 'closed') return;
+	if ($user->memberstatus == 'closed') { return; }
 	
 	//$debug_1 = microtime(TRUE);
 	//error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
 	
 }
+
+
+// Modify the way we count users (exclude archived users from count)
+function theme_inria_members_count_hook($hook, $entity_type, $returnvalue, $params) {
+	global $CONFIG;
+	$access = "";
+	if (!$show_deactivated) {
+		$access = "and " . _elgg_get_access_where_sql(array('table_alias' => 'e'));
+	}
+	
+	// Inria : do not count members where memberstatus= closed
+	$dbprefix = elgg_get_config('dbprefix');
+	$name_metastring_id = elgg_get_metastring_id('memberstatus');
+	$value_metastring_id = elgg_get_metastring_id('closed');
+	$where = "and NOT EXISTS (
+		  SELECT 1 FROM {$dbprefix}metadata md
+		  WHERE md.entity_guid = e.guid
+		      AND md.name_id = $name_metastring_id
+		      AND md.value_id = $value_metastring_id)";
+	
+	$query = "SELECT count(*) as count 
+		from {$CONFIG->dbprefix}entities e 
+		where e.type='user' 
+		$where 
+		$access";
+	
+	$result = get_data_row($query);
+	
+	if ($result) { return $result->count; }
+	return false;
+}
+
+
+// Members count in group listing menu
+function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
+	if (elgg_in_context('widgets')) {
+		return $return;
+	}
+
+	/* @var ElggGroup $entity */
+	$entity = $params['entity'];
+	$handler = elgg_extract('handler', $params, false);
+	if ($handler != 'groups') {
+		return $return;
+	}
+
+	// Replace members count if set
+	foreach ($return as $index => $item) {
+		if ($item->getName() == 'members') {
+			unset($return[$index]);
+			// number of members
+			$nb_members_wheres[] = "NOT EXISTS (
+				SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
+				WHERE md.entity_guid = e.guid
+				    AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+				    AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
+			$num_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
+			$members_string = elgg_echo('groups:member');
+			$options = array(
+				'name' => 'members',
+				'text' => $num_members . ' ' . $members_string,
+				'href' => false,
+				'priority' => 200,
+			);
+			$return[] = ElggMenuItem::factory($options);
+		}
+	}
+	return $return;
+}
+
 
 
 
