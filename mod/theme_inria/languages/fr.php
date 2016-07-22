@@ -252,7 +252,7 @@ return array(
 	'theme_inria:groupmembership:open' => "Libre",
 	'theme_inria:groupmembership:open:details' => "L'adhésion à ce groupe est libre.",
 	'theme_inria:groupmembership:closed' => "Restreint",
-	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les repsonsables du groupe.",
+	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les responsables du groupe.",
 	
 	'theme_inria:groups:presentation' => "Présentation",
 	'theme_inria:groups:blog' => "Articles",

@@ -14,8 +14,13 @@ if (elgg_get_plugin_setting('groups_add_activity', 'esope') == 'yes') {
 	$db_prefix = elgg_get_config('dbprefix');
 	$activity = elgg_list_river(array(
 		'pagination' => true,
-		'joins' => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
-		'wheres' => array("(e1.container_guid = $group->guid)"),
+		'joins' => array(
+			"JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid",
+			"LEFT JOIN {$db_prefix}entities e2 ON e2.guid = rv.target_guid",
+		),
+		'wheres' => array(
+			"(e1.container_guid = $group->guid OR e2.container_guid = $group->guid)",
+		),
 	));
 	elgg_pop_context();
 	if (!$activity) { $activity = '<p>' . elgg_echo('groups:activity:none') . '</p>'; }
