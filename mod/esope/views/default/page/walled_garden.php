@@ -122,28 +122,24 @@ if (empty($content)) {
 		$content .= '<div class="clearfloat"></div>';
 		
 		// Compose page content
-		if ($register_form) {
+		$col1 = $col2 = false;
+		if (!empty($register_form)) {
 			$col1 = $intro . $login_form;
 			$col2 = $register_form;
 		} else if (!empty($intro)) {
 			$col1 = $intro;
 			$col2 = $login_form;
-		} else if (!empty($intro)) {
+		} else {
 			$col1 = $login_form;
 		}
 		
 		$content .= '<div id="esope-homepage" class="interne">';
 			if ($col1 && $col2) {
-				$content .= '<div id="esope-public-col1" class="home-static-container">';
-					$content .= $col1;
-				$content .= '</div>';
-				$content .= '<div id="esope-public-col2" class="home-static-container">';
-					$content .= $col2;
-				$content .= '</div>';
+				$content .= '<div id="esope-public-col1" class="home-static-container">' . $col1 . '</div>';
+				$content .= '<div id="esope-public-col2" class="home-static-container">' . $col2 . '</div>';
 			} else {
 				$content .= $col1;
 			}
-			
 			$content .= '<div class="clearfloat"></div>';
 		$content .= '</div>';
 		
