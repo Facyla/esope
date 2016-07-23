@@ -19,7 +19,7 @@
 		?>
 	</label>
 </div>
-<?php echo elgg_view('input/captcha'); ?>
 <div class="elgg-foot">
+	<?php echo elgg_view('input/captcha'); ?>
 	<?php echo elgg_view('input/submit', array('value' => elgg_echo('accessibility:requestnewpassword'))); ?>
 </div>
