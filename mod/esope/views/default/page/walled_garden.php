@@ -86,7 +86,7 @@ if (empty($content)) {
 		
 		// Formulaire de renvoi du mot de passe
 		$lostpassword_form = '<div id="esope-lostpassword" class="hidden">';
-			$lostpassword_form = '<h2>' . elgg_echo('accessibility:requestnewpassword') . '</h2>';
+			$lostpassword_form .= '<h2>' . elgg_echo('accessibility:requestnewpassword') . '</h2>';
 			$lostpassword_form .= elgg_view_form('user/requestnewpassword');
 		$lostpassword_form .= '</div>';
 		
