@@ -690,6 +690,8 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .group-archive-small { background: rgba(0,0,0,1); color:white; font-size: 8px; padding: 3px 1px; }
 .group-archive-medium { background: rgba(0,0,0,1); color:white; font-size: 10px; padding: 3px 1px; }
 
+.elgg-avatar > .elgg-icon-hover-menu { z-index: 100; } /* Display menu toggler over statuses */
+
 /* Statuts compte utilisateur : Archive (bannière compte archivé), Pas de mail associé au compte */
 .profiletype-status { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
 .profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
