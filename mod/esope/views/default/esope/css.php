@@ -359,6 +359,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { color: <?php 
 
 #esope-homepage input[type='submit'],
 .esope-lostpassword-link { margin-left:160px; }
+.esope-lostpassword-toggle { font-weight:bold; }
 #esope-homepage .elgg-form-register input[type='submit'] { margin-left:150px; }
 
 #esope-homepage .esope-lostpassword-link { position:relative; top:-16px; margin-left:168px; }
