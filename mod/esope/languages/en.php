@@ -1079,6 +1079,7 @@ return array(
 	
 	/* TRANSLATIONS OVERRIDES */
 	/* Note : these additions are made here rather than in the original plugins so that a core update won't break them */
+	'user:password:lost' => 'Lost password?',
 	
 	'option:notify:email' => "Enable email (default)",
 	'option:notify:site' => "Enable site (messages)",

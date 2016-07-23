@@ -1097,6 +1097,8 @@ return array(
 	
 	/* TRANSLATIONS OVERRIDES */
 	/* Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions */ 
+	'user:password:lost' => 'Mot de passe perdu ?',
+	
 	'option:notify:email' => "Activer par email (par défaut)",
 	'option:notify:site' => "Activer par le site (messages)",
 	'option:notify:all' => "Activer toutes les méthodes",
