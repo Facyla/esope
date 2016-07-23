@@ -134,12 +134,14 @@ if (empty($content)) {
 		}
 		
 		$content .= '<div id="esope-homepage" class="interne">';
-			if ($col1 && $col2) {
+			//if ($col1 && $col2) {
 				$content .= '<div id="esope-public-col1" class="home-static-container">' . $col1 . '</div>';
 				$content .= '<div id="esope-public-col2" class="home-static-container">' . $col2 . '</div>';
+			/*
 			} else {
 				$content .= $col1;
 			}
+			*/
 			$content .= '<div class="clearfloat"></div>';
 		$content .= '</div>';
 		
