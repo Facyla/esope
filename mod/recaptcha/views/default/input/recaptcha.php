@@ -1,6 +1,13 @@
 <?php
+// reCAPTCHA input field
 
-$site_key = elgg_get_plugin_setting('publickey', 'recaptcha');
+$publickey = elgg_extract('publickey', $vars);
+if (empty($publickey)) {
+	$publickey = elgg_get_plugin_setting('publickey', 'recaptcha');
+}
 
-echo '<div class="g-recaptcha" data-sitekey="' . $site_key . '"></div>';
+// Do not block if no public key set by the admin
+if (!empty($publickey)) {
+	echo '<div class="g-recaptcha" data-sitekey="' . $publickey . '"></div>';
+}
 
