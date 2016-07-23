@@ -80,19 +80,36 @@ if (empty($content)) {
 	} else if ($replace_public_home == 'original') {
 		// Default Elgg content
 		$content = $vars["body"];
+		
 	} else {
 		// ESOPE theme page
+		
 		// Formulaire de renvoi du mot de passe
-		$lostpassword_form = '<div id="esope-lostpassword" style="display:none;">';
-		//$lostpassword_form = '<h2>' . elgg_echo('user:password:lost') . '</h2>';
-		$lostpassword_form .= elgg_view_form('user/requestnewpassword');
+		$lostpassword_form = '<div id="esope-lostpassword" class="hidden">';
+			//$lostpassword_form = '<h2>' . elgg_echo('user:password:lost') . '</h2>';
+			$lostpassword_form .= elgg_view_form('user/requestnewpassword');
 		$lostpassword_form .= '</div>';
-
+		
+		// Login form
+		$login_form = '<div id="esope-loginbox">';
+			$login_form .= '<h2>' . elgg_echo('login') . '</h2>';
+			// Connexion + mot de passe perdu
+			$login_form .= elgg_view_form('login');
+			$login_form .= $lostpassword_form;
+			$login_form .= '<div class="clearfloat"></div>';
+		$login_form .= '</div>';
+		
 		// Formulaire d'inscription
+		$register_form = false;
 		if (elgg_get_config('allow_registration')) {
 			$register_form = elgg_view_form('register', array(), array('friend_guid' => (int) get_input('friend_guid', 0), 'invitecode' => get_input('invitecode') ));
 		}
 		
+		// Intro block
+		$intro = elgg_get_plugin_setting('homeintro', 'esope');
+		if (!empty($intro)) { $intro .= '<div class="clearfloat"></div>'; }
+		
+		// Header block
 		$content .= '<header><div class="interne">';
 		$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
 		if (empty($headertitle)) {
@@ -103,27 +120,26 @@ if (empty($content)) {
 		$content .= '</div></header>';
 		//$content .= '<div class="elgg-page-messages">' . $messages . '</div>';
 		$content .= '<div class="clearfloat"></div>';
-
+		
+		// Compose page content
+		if ($register_form) {
+			$col1 = $intro . $login_form;
+			$col2 = $register_form;
+		} else {
+			$col1 = $intro;
+			$col2 = $login_form;
+		}
+		
 		$content .= '<div id="esope-homepage" class="interne">';
 			$content .= '<div id="esope-public-col1" class="home-static-container">';
-				$intro = elgg_get_plugin_setting('homeintro', 'esope');
-				if (!empty($intro)) { $content .= $intro . '<div class="clearfloat"></div>'; }
-				$content .= '<div id="esope-loginbox">';
-				$content .= '<h2>' . elgg_echo('login') . '</h2>';
-				// Connexion + mot de passe perdu
-				$content .= elgg_view_form('login');
-				$content .= $lostpassword_form;
-				$content .= '<div class="clearfloat"></div>';
-				$content .= '</div>';
+				$content .= $col1;
 			$content .= '</div>';
-
 			$content .= '<div id="esope-public-col2" class="home-static-container">';
-				// Création nouveau compte
-				if (elgg_get_config('allow_registration')) { $content .= $register_form; }
+				$content .= $col2;
 			$content .= '</div>';
-	
+			
+			$content .= '<div class="clearfloat"></div>';
 		$content .= '</div>';
-		$content .= '<div class="clearfloat"></div>';
 		
 		// Footer
 		$content .= '<div class="elgg-page-footer"><div class="elgg-inner">';

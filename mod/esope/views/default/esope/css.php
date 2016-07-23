@@ -329,19 +329,19 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { color: <?php 
 #esope-public-col2 { float:right; width:44%; }
 
 /* PAGE D'ACCUEIL PUBLIQUE */
-#esope-homepage {  }
-.home-intro { margin-bottom:3em; }
-.home-calendar { margin-bottom:3em; }
-.home-groups { margin-bottom:3em; }
+#esope-homepage { margin-bottom: 1rem; }
+.home-intro { margin-bottom:3rem; }
+.home-calendar { margin-bottom:3rem; }
+.home-groups { margin-bottom:3rem; }
 .home-group-item { float:left; clear:left; padding-bottom:16px; width:100%; }
-#esope-login { border:1px solid #CCCCCC; padding:1em; margin-bottom:3em; background:#F6F6F6; }
-#esope-register { margin-bottom:3em; }
-#esope-homepage p { font-size:14px; margin-top:0; margin-bottom:8px; }
+#esope-login { border:1px solid #CCCCCC; padding:1rem; margin-bottom:3rem; background:#F6F6F6; }
+#esope-register { margin-bottom:3rem; }
+#esope-homepage p { font-size:1rem; margin-top:0; margin-bottom:8px; }
 #esope-homepage a, #esope-homepage a:visited { color:<?php echo $linkcolor; ?>; }
 #esope-homepage a:hover, #esope-homepage a:active, #esope-homepage a:focus { color:<?php echo $linkhovercolor; ?>; }
 #esope-homepage .elgg-form { background:transparent; }
-#esope-homepage h2 { font-size:20px; font-weight:normal; }
-#esope-homepage .elgg-form-register { font-size:13px; margin-top:0; margin-bottom:8px; }
+#esope-homepage h2 { font-size:1.5rem; font-weight:normal; }
+#esope-homepage .elgg-form-register { font-size:1rem; margin-top:0; margin-bottom:8px; }
 
 #esope-homepage label { width:130px; float:left; margin:0 30px 16px 0; clear:both; text-align:right; }
 #esope-homepage .elgg-foot label { width:auto; float:none; clear:both; }
@@ -779,9 +779,9 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	.timeline-event, .home-timeline .timeline-event { width: 100%; }
 	
 	/* Public Home */
-	#adf-homepage #adf-public-col1, #adf-homepage #adf-public-col2 { float: none; width: 100%; }
-	#adf-public-col2 { padding-top: 3ex; clear: both; }
-	#adf-homepage input[type='text'], #adf-homepage input[type='password'], #adf-homepage select { min-width: 0; }
+	#esope-homepage #adf-public-col1, #esope-homepage #esope-public-col2 { float: none; width: 100%; }
+	#esope-public-col2 { padding-top: 3ex; clear: both; }
+	#esope-homepage input[type='text'], #esope-homepage input[type='password'], #esope-homepage select { min-width: 0; }
 	
 	/* Footer */
 	#site-footer { margin-bottom: 1ex; padding-bottom: 1ex; }
