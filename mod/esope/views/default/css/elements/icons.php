@@ -67,6 +67,7 @@ h6 > .fa {
 	text-shadow: 0px 2px 1px #000;
 	margin: 0;
 	cursor: pointer;
+	z-index: 100; /* Esope : z-index over statuses */
 }
 
 .elgg-ajax-loader {
