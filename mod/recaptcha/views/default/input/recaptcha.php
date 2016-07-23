@@ -8,6 +8,6 @@ if (empty($publickey)) {
 
 // Do not block if no public key set by the admin
 if (!empty($publickey)) {
-	echo '<div class="g-recaptcha" data-sitekey="' . $publickey . '"></div>';
+	echo '<div><div class="g-recaptcha" data-sitekey="' . $publickey . '"></div></div>';
 }
 
