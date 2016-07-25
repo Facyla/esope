@@ -142,6 +142,10 @@ if ($full) {
 	// Liste des sous-pages
 	echo elgg_view('pages/sub-pages', array('entity' => $page));
 	
+	// Edit button
+	echo elgg_view_title(elgg_echo('pages:edit'));
+	echo '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '">' . elgg_echo('pages:edit') . '</a></p>';
+	
 } else {
 	// brief view
 
@@ -158,3 +162,4 @@ if ($full) {
 
 	echo elgg_view_image_block($page_icon, $list_body);
 }
+

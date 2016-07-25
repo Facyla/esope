@@ -17,7 +17,7 @@ return array(
 	'groups:enablepages' => "Activer les pages wiki (pages collaboratives) du groupe",
 
 	'pages:new' => "Une nouvelle page",
-	'pages:edit' => "Editer cette page",
+	'pages:edit' => "Modifier cette page",
 	'pages:delete' => "Effacer cette page",
 	'pages:history' => "Historique",
 	'pages:view' => "Voir la page",
@@ -100,7 +100,7 @@ Voir et commenter cette page:
 	 * Submenu items
 	 */
 	'pages:label:view' => "Afficher la page",
-	'pages:label:edit' => "Editer la page du wiki",
+	'pages:label:edit' => "Modifier la page wiki",
 	'pages:label:history' => "Historique de la page wiki",
 
 	/**
