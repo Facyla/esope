@@ -145,7 +145,7 @@ if ($full) {
 	// Edit button
 	if ($page->canEdit()) {
 		echo '<div class="clearfloat"></div><br /><br />';
-		echo '<h3>' . elgg_echo('pages:edit')) . '</h3>';
+		echo '<h3>' . elgg_echo('pages:edit') . '</h3>';
 		echo '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('edit') . '</a></p>';
 	}
 	
