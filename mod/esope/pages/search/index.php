@@ -17,6 +17,8 @@ $search_type = get_input('search_type', 'all');
 // XSS protection is more important that searching for HTML.
 $query = stripslashes(get_input('q', get_input('tag', '')));
 
+$display_query = _elgg_get_display_query($query);
+
 // Min words : is that relevant ?
 global $CONFIG;
 $min_chars = $CONFIG->search_info['min_chars'];
@@ -36,7 +38,14 @@ if (empty($entity_subtype)) { $entity_subtype = ELGG_ENTITIES_ANY_VALUE; }
 if (!empty($entity_type)) { $search_type = 'entities'; }
 
 
-$friends = get_input('friends', ELGG_ENTITIES_ANY_VALUE);
+$owner_guid = get_input('owner_guid', ELGG_ENTITIES_ANY_VALUE);
+$owner_username = get_input('owner_username', false);
+if ($owner_username) {
+	$owner = get_user_by_username($owner_username);
+	if (elgg_instanceof($owner, 'user')) {
+		$owner_guid = $owner->guid;
+	}
+}
 
 $container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
 // Display results in appropriate layout for groups
@@ -49,15 +58,7 @@ if (!empty($container_guid)) {
 	}
 }
 
-$owner_guid = get_input('owner_guid', ELGG_ENTITIES_ANY_VALUE);
-$owner_username = get_input('owner_username', false);
-if ($owner_username) {
-	$owner = get_user_by_username($owner_username);
-	if (elgg_instanceof($owner, 'user')) {
-		$owner_guid = $owner->guid;
-	}
-}
-
+$friends = get_input('friends', ELGG_ENTITIES_ANY_VALUE);
 
 // @todo - create function for sanitization of strings for display in 1.8
 // encode <,>,&, quotes and characters above 127
@@ -98,7 +99,9 @@ switch ($sort) {
 
 // Order
 $order = get_input('order', 'desc');
-if (!in_array($order, array('asc', 'desc'))) { $order = 'desc'; }
+if ($order != 'asc' && $order != 'desc') {
+	$order = 'desc';
+}
 
 // Dates filtering
 $created_time_lower = get_input('created_time_lower', null);
@@ -185,6 +188,7 @@ if (($advancedsearch != 'yes') || (($advancedsearch == 'yes') && ($advancedsearc
 			'search_type' => 'entities',
 			'friends' => $friends
 		);
+	
 	// Add filter params
 	$search_params = array_merge($search_params, $filter_params);
 	foreach ($types as $type => $subtypes) {
@@ -201,6 +205,8 @@ if (($advancedsearch != 'yes') || (($advancedsearch == 'yes') && ($advancedsearc
 		// Subtype filters
 		// @todo when using index table, can include result counts on each of these.
 		if (is_array($subtypes) && count($subtypes)) {
+			$subtypes = array_unique($subtypes);
+		echo '<pre>' . print_r($subtypes, true). '</pre>';
 			foreach ($subtypes as $subtype) {
 				$label = "item:$type:$subtype";
 				$current_params['entity_subtype'] = $subtype;
@@ -209,6 +215,21 @@ if (($advancedsearch != 'yes') || (($advancedsearch == 'yes') && ($advancedsearc
 				$menu_item = new ElggMenuItem($label, " &nbsp; &nbsp; " . elgg_echo($label), $url);
 				elgg_register_menu_item('page', $menu_item);
 			}
+		} else {
+			$label = "item:$type";
+
+			$data = htmlspecialchars(http_build_query(array(
+				'q' => $query,
+				'entity_type' => $type,
+				'owner_guid' => $owner_guid,
+				'search_type' => 'entities',
+				'friends' => $friends
+			)));
+
+			$url = elgg_get_site_url() . "search?$data";
+
+			$menu_item = new ElggMenuItem($label, elgg_echo($label), $url);
+			elgg_register_menu_item('page', $menu_item);
 		}
 	}
 
@@ -233,7 +254,7 @@ if (($advancedsearch != 'yes') || (($advancedsearch == 'yes') && ($advancedsearc
 
 
 // SEARCH - start the actual search
-// Note : we allow empty query searches - enable to query using other filters
+// Esope note : we allow empty query searches - enable to query using other filters
 $results_html = '';
 
 // check that we have an actual query
@@ -250,7 +271,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 	// if still NULL or '' or empty(array()) no results found. (== don't show??)
 	foreach ($types as $type => $subtypes) {
 		if (($search_type == 'entities') && ($entity_type != $type)) { continue; }
-		
+		$subtypes = array_unique($subtypes);
 		if (is_array($subtypes) && count($subtypes)) {
 			foreach ($subtypes as $subtype) {
 				// no need to search if we're not interested in these results
