@@ -133,6 +133,7 @@ $params = array(
 //	'tag_type' => $tag_type,
 //	'friends' => $friends
 	'pagination' => $pagination,
+	'advanced_pagination' => false, // Useless, as we display a limit select in form
 //	'owner_guid' => $owner_guid,
 //	'container_guid' => $container_guid,
 	// Add date filtering

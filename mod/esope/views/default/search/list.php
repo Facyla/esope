@@ -47,6 +47,7 @@ if (array_key_exists('pagination', $vars['params']) && $vars['params']['paginati
 		'offset' => $vars['params']['offset'],
 		'count' => $vars['results']['count'],
 		'limit' => $vars['params']['limit'],
+		'advanced_pagination' => $vars['params']['advanced_pagination'],
 	));
 	$show_more = false;
 } else {
@@ -55,7 +56,7 @@ if (array_key_exists('pagination', $vars['params']) && $vars['params']['paginati
 	$show_more = $more_items > 0;
 }
 // No need to add link to more results if we already have paginated results
-if ($vars['params']['pagination']) { $more = 0; }
+if ($vars['params']['pagination']) { $show_more = false; }
 
 // figure out what we're dealing with.
 $type_str = NULL;
@@ -92,6 +93,9 @@ if ($show_more) {
 	$more_link = '';
 }
 
+// Esope : add count to title
+$type_str .= " ({$vars['results']['count']})";
+
 $body = elgg_view_title($type_str, array(
 	'class' => 'search-heading-category',
 ));
@@ -99,21 +103,21 @@ $body = elgg_view_title($type_str, array(
 $list_body = '';
 $view_params = $vars['params'];
 	foreach ($entities as $entity) {
-	$view_params['type'] = $entity->getType();
-	$view_params['subtype'] = $entity->getSubtype();
+		$view_params['type'] = $entity->getType();
+		$view_params['subtype'] = $entity->getSubtype();
 	
-	$view = search_get_search_view($view_params, 'entity');
-	if (empty($view)) {
-		continue;
-	}
-		$id = "elgg-{$entity->getType()}-{$entity->getGUID()}";
-	$list_body .= "<li id=\"$id\" class=\"elgg-item\">";
-	$list_body .= elgg_view($view, array(
-			'entity' => $entity,
-		'params' => $view_params,
-			'results' => $vars['results']
-		));
-	$list_body .= '</li>';
+		$view = search_get_search_view($view_params, 'entity');
+		if (empty($view)) {
+			continue;
+		}
+			$id = "elgg-{$entity->getType()}-{$entity->getGUID()}";
+		$list_body .= "<li id=\"$id\" class=\"elgg-item\">";
+		$list_body .= elgg_view($view, array(
+				'entity' => $entity,
+				'params' => $view_params,
+				'results' => $vars['results']
+			));
+		$list_body .= '</li>';
 	}
 if (!empty($list_body)) {
 	$body .= '<ul class="elgg-list search-list">';
