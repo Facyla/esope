@@ -31,14 +31,6 @@ $site = elgg_get_site_entity();
 $title = $site->name;
 $replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'esope');
 
-// Use original layout if password reset
-$user_guid = get_input('u', false);
-$code = get_input('c', false);
-if ($user_guid && $code) {
-	$replace_public_home = 'original');
-}
-
-
 // Display default page content if no special content has been set before
 if ($replace_public_home == 'original') {
 	// Default Elgg content
