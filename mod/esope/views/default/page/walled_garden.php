@@ -92,26 +92,26 @@ if ($replace_public_home == 'original') {
 // It can replace the default homepage content eg. for password change
 	$col1 = $col2 = false;
 	if (!empty($vars["body"])) {
-		$col1 = $vars["body"];
+		// Use single column, full-size
+		$col1 = $vars["body"] . '<div class="clearfloat"></div>';
 	} else if (!empty($register_form)) {
-		$col1 = $intro . $login_form;
-		$col2 = $register_form;
+		$col1 = $intro . $login_form . '<div class="clearfloat"></div>';
+		$col2 = $register_form . '<div class="clearfloat"></div>';
 	} else if (!empty($intro)) {
-		$col1 = $intro;
-		$col2 = $login_form;
+		$col1 = $intro . '<div class="clearfloat"></div>';
+		$col2 = $login_form . '<div class="clearfloat"></div>';
 	} else {
-		$col1 = $login_form;
+		$col1 = $login_form . '<div class="clearfloat"></div>';
+		$col2 = '<div class="clearfloat"></div>';
 	}
 	
 	$content .= '<div id="esope-homepage" class="interne">';
-		//if ($col1 && $col2) {
+		if ($col1 && $col2) {
 			$content .= '<div id="esope-public-col1" class="home-static-container">' . $col1 . '</div>';
 			$content .= '<div id="esope-public-col2" class="home-static-container">' . $col2 . '</div>';
-		/*
 		} else {
 			$content .= $col1;
 		}
-		*/
 		$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
 	
