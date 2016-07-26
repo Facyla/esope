@@ -168,7 +168,7 @@ input:focus, textarea:focus { outline:0; }
 /* Couleur texte normal pour les header dans le contenu de la page */
 .elgg-page-header, .elgg-page-body .intro { color: <?php echo $textcolor; ?>; }
 
-
+.elgg-module-walledgarden { position: relative; }
 
 
 /* Pour tous les éléments du menu : .elgg-menu-owner-block .elgg-menu-item-NOM_SUBTYPE */

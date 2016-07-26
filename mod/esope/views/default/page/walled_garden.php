@@ -93,16 +93,16 @@ if ($replace_public_home == 'original') {
 	$col1 = $col2 = false;
 	if (!empty($vars["body"])) {
 		// Use single column, full-size
-		$col1 = $vars["body"] . '<div class="clearfloat"></div>';
+		$col1 = $vars["body"];
 	} else if (!empty($register_form)) {
-		$col1 = $intro . $login_form . '<div class="clearfloat"></div>';
-		$col2 = $register_form . '<div class="clearfloat"></div>';
+		$col1 = $intro . $login_form;
+		$col2 = $register_form;
 	} else if (!empty($intro)) {
-		$col1 = $intro . '<div class="clearfloat"></div>';
-		$col2 = $login_form . '<div class="clearfloat"></div>';
+		$col1 = $intro;
+		$col2 = $login_form;
 	} else {
-		$col1 = $login_form . '<div class="clearfloat"></div>';
-		$col2 = '<div class="clearfloat"></div>';
+		$col1 = $login_form;
+		$col2 = ' ';
 	}
 	
 	$content .= '<div id="esope-homepage" class="interne">';
