@@ -206,7 +206,6 @@ if (($advancedsearch != 'yes') || (($advancedsearch == 'yes') && ($advancedsearc
 		// @todo when using index table, can include result counts on each of these.
 		if (is_array($subtypes) && count($subtypes)) {
 			$subtypes = array_unique($subtypes);
-		echo '<pre>' . print_r($subtypes, true). '</pre>';
 			foreach ($subtypes as $subtype) {
 				$label = "item:$type:$subtype";
 				$current_params['entity_subtype'] = $subtype;

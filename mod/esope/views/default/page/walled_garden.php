@@ -31,126 +31,102 @@ $site = elgg_get_site_entity();
 $title = $site->name;
 $replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'esope');
 
-// Display reset password form if asked to
+// Use original layout if password reset
 $user_guid = get_input('u', false);
 $code = get_input('c', false);
 if ($user_guid && $code) {
-	$user = get_entity($user_guid);
-	if (!$user instanceof ElggUser) {
-		register_error(elgg_echo('user:passwordreset:unknown_user'));
-		forward();
-	}
-	$params = array('guid' => $user_guid, 'code' => $code);
+	$replace_public_home = 'original');
+}
+
+
+// Display default page content if no special content has been set before
+if ($replace_public_home == 'original') {
+	// Default Elgg content
+	$content = $vars["body"];
 	
+} else if ($replace_public_home == 'cmspages') {
+	if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('esope:cmspages:notactivated')); }
+	define('cmspage', true);
+	$pagetype = 'homepage-public';
+	// Ajout des feuilles de style personnalisées
+	//if (!empty($cmspage->css)) $content .= "\n<style>" . $cmspage->css . "</style>\n";
+	// Ajout des JS personnalisés
+	//if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
+
+	$content .= '<div id="' . $pagetype . '">' . elgg_view('cmspages/view', array('pagetype' => $pagetype)) . '</div>';
+	
+} else {
+	// ESOPE theme page
+	
+	// Formulaire de renvoi du mot de passe
+	$lostpassword_form = '<div id="esope-lostpassword" class="hidden">';
+		$lostpassword_form .= '<h2>' . elgg_echo('accessibility:requestnewpassword') . '</h2>';
+		$lostpassword_form .= elgg_view_form('user/requestnewpassword');
+	$lostpassword_form .= '</div>';
+	
+	// Login form
+	$login_form = '<div id="esope-loginbox">';
+		$login_form .= '<h2>' . elgg_echo('login') . '</h2>';
+		// Connexion + mot de passe perdu
+		$login_form .= elgg_view_form('login');
+		$login_form .= $lostpassword_form;
+		$login_form .= '<div class="clearfloat"></div>';
+	$login_form .= '</div>';
+	
+	// Formulaire d'inscription
+	$register_form = false;
+	if (elgg_get_config('allow_registration')) {
+		$register_form = elgg_view_form('register', array(), array('friend_guid' => (int) get_input('friend_guid', 0), 'invitecode' => get_input('invitecode') ));
+	}
+	
+	// Intro block
+	$intro = elgg_get_plugin_setting('homeintro', 'esope');
+	if (!empty($intro)) { $intro .= '<div class="clearfloat"></div>'; }
+	
+	// Header block
 	$content .= '<header><div class="interne">';
 	$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
 	if (empty($headertitle)) {
 		$content .= '<h1 class="invisible">' . $site->name . '</h1>';
 	} else {
-		$content .= '<h1><a href="' . $url . '" title="Aller sur la page d\'accueil">' . $headertitle . '</a></h1>';
+		$content .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
 	}
 	$content .= '</div></header>';
 	//$content .= '<div class="elgg-page-messages">' . $messages . '</div>';
 	$content .= '<div class="clearfloat"></div>';
-
-	$content .= '<div id="esope-homepage" class="interne">';
-	$content .= '<div id="esope-loginbox">';
-	$content .= elgg_view_form('user/passwordreset', array('class' => 'elgg-form-account'), $params);
-	$content .= '<div class="clearfloat"></div>';
-	$content .= '</div>';
-	$content .= '</div>';
-
-	$content .= elgg_view('page/elements/footer');
-}
-
-
-// Display default page content if no special content has been set before
-if (empty($content)) {
-	if ($replace_public_home == 'cmspages') {
-		if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('esope:cmspages:notactivated')); }
-		define('cmspage', true);
-		$pagetype = 'homepage-public';
-		// Ajout des feuilles de style personnalisées
-		//if (!empty($cmspage->css)) $content .= "\n<style>" . $cmspage->css . "</style>\n";
-		// Ajout des JS personnalisés
-		//if (!empty($cmspage->js)) $content .= "\n<script type=\"text/javascript\">" . $cmspage->js . "</script>\n";
 	
-		$content .= '<div id="' . $pagetype . '">' . elgg_view('cmspages/view', array('pagetype' => $pagetype)) . '</div>';
-		
-	} else if ($replace_public_home == 'original') {
-		// Default Elgg content
-		$content = $vars["body"];
-		
+	// Compose page content
+// Note : enable content loading using the normal Elgg way
+// It can replace the default homepage content eg. for password change
+	$col1 = $col2 = false;
+	if (!empty($vars["body"])) {
+		$col1 = $vars["body"];
+	} else if (!empty($register_form)) {
+		$col1 = $intro . $login_form;
+		$col2 = $register_form;
+	} else if (!empty($intro)) {
+		$col1 = $intro;
+		$col2 = $login_form;
 	} else {
-		// ESOPE theme page
-		
-		// Formulaire de renvoi du mot de passe
-		$lostpassword_form = '<div id="esope-lostpassword" class="hidden">';
-			$lostpassword_form .= '<h2>' . elgg_echo('accessibility:requestnewpassword') . '</h2>';
-			$lostpassword_form .= elgg_view_form('user/requestnewpassword');
-		$lostpassword_form .= '</div>';
-		
-		// Login form
-		$login_form = '<div id="esope-loginbox">';
-			$login_form .= '<h2>' . elgg_echo('login') . '</h2>';
-			// Connexion + mot de passe perdu
-			$login_form .= elgg_view_form('login');
-			$login_form .= $lostpassword_form;
-			$login_form .= '<div class="clearfloat"></div>';
-		$login_form .= '</div>';
-		
-		// Formulaire d'inscription
-		$register_form = false;
-		if (elgg_get_config('allow_registration')) {
-			$register_form = elgg_view_form('register', array(), array('friend_guid' => (int) get_input('friend_guid', 0), 'invitecode' => get_input('invitecode') ));
-		}
-		
-		// Intro block
-		$intro = elgg_get_plugin_setting('homeintro', 'esope');
-		if (!empty($intro)) { $intro .= '<div class="clearfloat"></div>'; }
-		
-		// Header block
-		$content .= '<header><div class="interne">';
-		$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
-		if (empty($headertitle)) {
-			$content .= '<h1 class="invisible">' . $site->name . '</h1>';
-		} else {
-			$content .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
-		}
-		$content .= '</div></header>';
-		//$content .= '<div class="elgg-page-messages">' . $messages . '</div>';
-		$content .= '<div class="clearfloat"></div>';
-		
-		// Compose page content
-		$col1 = $col2 = false;
-		if (!empty($register_form)) {
-			$col1 = $intro . $login_form;
-			$col2 = $register_form;
-		} else if (!empty($intro)) {
-			$col1 = $intro;
-			$col2 = $login_form;
-		} else {
-			$col1 = $login_form;
-		}
-		
-		$content .= '<div id="esope-homepage" class="interne">';
-			//if ($col1 && $col2) {
-				$content .= '<div id="esope-public-col1" class="home-static-container">' . $col1 . '</div>';
-				$content .= '<div id="esope-public-col2" class="home-static-container">' . $col2 . '</div>';
-			/*
-			} else {
-				$content .= $col1;
-			}
-			*/
-			$content .= '<div class="clearfloat"></div>';
-		$content .= '</div>';
-		
-		// Footer
-		$content .= '<div class="elgg-page-footer"><div class="elgg-inner">';
-			$content .= elgg_view('page/elements/footer');
-		$content .= '</div></div>';
+		$col1 = $login_form;
 	}
-
+	
+	$content .= '<div id="esope-homepage" class="interne">';
+		//if ($col1 && $col2) {
+			$content .= '<div id="esope-public-col1" class="home-static-container">' . $col1 . '</div>';
+			$content .= '<div id="esope-public-col2" class="home-static-container">' . $col2 . '</div>';
+		/*
+		} else {
+			$content .= $col1;
+		}
+		*/
+		$content .= '<div class="clearfloat"></div>';
+	$content .= '</div>';
+	
+	// Footer
+	$content .= '<div class="elgg-page-footer"><div class="elgg-inner">';
+		$content .= elgg_view('page/elements/footer');
+	$content .= '</div></div>';
 }
 
 
