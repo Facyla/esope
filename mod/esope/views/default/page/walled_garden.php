@@ -75,23 +75,29 @@ if ($replace_public_home == 'original') {
 	$intro = elgg_get_plugin_setting('homeintro', 'esope');
 	if (!empty($intro)) { $intro .= '<div class="clearfloat"></div>'; }
 	
+	
 	// Header block
-	$content .= '<header><div class="interne">';
+	/* Use custom header instead ?
+	$header = '';
+	$header .= '<header><div class="interne">';
 	$headertitle = elgg_get_plugin_setting('headertitle', 'esope');
 	if (empty($headertitle)) {
-		$content .= '<h1 class="invisible">' . $site->name . '</h1>';
+		$header .= '<h1 class="invisible">' . $site->name . '</h1>';
 	} else {
-		$content .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
+		$header .= '<h1><a href="' . $url . '" title="' . elgg_echo('esope:gotohomepage') . '">' . $headertitle . '</a></h1>';
 	}
-	$content .= '</div></header>';
-	//$content .= '<div class="elgg-page-messages">' . $messages . '</div>';
-	$content .= '<div class="clearfloat"></div>';
+	$header .= '</div></header>';
+	//$header .= '<div class="elgg-page-messages">' . $messages . '</div>';
+	$header .= '<div class="clearfloat"></div>';
+	*/
+	$header = elgg_view('page/elements/header', $vars);
+	$content .= $header;
 	
 	// Compose page content
 // Note : enable content loading using the normal Elgg way
 // It can replace the default homepage content eg. for password change
 	$col1 = $col2 = false;
-	if (!empty($vars["body"])) {
+	if (!empty($vars["body"]) && !empty($_GET)) {
 		// Use single column, full-size
 		$col1 = $vars["body"];
 	} else if (!empty($register_form)) {
@@ -140,3 +146,4 @@ $body .= $inline_js;
 $head = elgg_view('page/elements/head', $vars['head']);
 
 echo elgg_view("page/elements/html", array("head" => $head, "body" => $body));
+

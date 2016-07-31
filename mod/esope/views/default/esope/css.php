@@ -382,7 +382,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
 #widget_profile_completeness_progress_bar { background: #090; }
 #profile_manager_profile_edit_tabs .elgg-module-info { min-width: auto; margin: 0 0 0px 3px; padding: 0; }
-
+.profile-manager-simple-access-control { clear: left; }
 
 
 /* FORMULAIRES - FORMS */

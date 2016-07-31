@@ -51,7 +51,7 @@ $username = elgg_extract('username', $vars, get_input('u'));
 	<?php
 	// @TODO : handle menu through menu hooks rather than manually
 	
-// Toogler may only exist on homepage (this view is in a form, so can't insert a toggler here)
+// Toogler may only exist on homepage (this view neing in a form, we can't insert a toggler here)
 	if ((current_page_url() == elgg_get_site_url()) || (current_page_url() == elgg_get_site_url() . 'forgotpassword')) {
 		echo '<a href="javascript:void(0);" onclick="$(\'#esope-lostpassword\').toggle(); $(\'#lostpassword_username\').val($(\'#login_username\').val());$(this).hide();" class="esope-lostpassword-toggle">' . elgg_echo('user:password:lost') . '</a> &nbsp; ';
 	} else {
