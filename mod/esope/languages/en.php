@@ -339,7 +339,7 @@ return array(
 	'esope:home:public_profiles' => "Allow user to define profile visibility ? No = always public ; Yes = per-user choice",
 	'esope:home:public_profiles:help' => "This settings lets site members decide whether they want to make their profil visible from the internet, without logging into the site. By default, their profile will be restricted to site mùembers, until they explicitely set their profile as public. If this setting is disabled, profiles will be public.<br />Note : in \"intranet\" mode, no page is visible from the internet, including profile pages, so this setting has no effect.",
 	'esope:home:public_profiles_default' => "Use Opt-out mode instead?",
-	'esope:home:public_profiles_default:help' => "In Opt-out mode, profiles will remain public until the user chooses to make them only viisble to members",
+	'esope:home:public_profiles_default:help' => "In Opt-out mode, profiles will remain public until the user chooses to make them only visible to members",
 		'esope:noprofile' => "Unknown or private profile.",
 	'esope:usersettings:public_profiles:title' => "Choose my profile visibility",
 	'esope:usersettings:public_profile' => "Set my profile as public",
@@ -676,6 +676,7 @@ return array(
 	
 	'esope:filesize:units' => "BKMGTP",
 	'esope:embed:file:download' => "open",
+	'esope:untitled' => "(untitled)",
 	
 	'esope:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
 	'esope:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",

@@ -185,6 +185,7 @@ input:focus, textarea:focus { outline:0; }
 
 
 .elgg-form.thewire-form { background: transparent; }
+.esope-thewire-group-add { clear:both; }
 .static, .home-static { background:white; box-shadow:3px 3px 5px 0px #666; padding: 0.2% 0.4%; }
 .static-container, .home-static-container {}
 
