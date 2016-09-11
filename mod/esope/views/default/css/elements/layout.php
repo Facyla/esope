@@ -53,6 +53,8 @@ if ($fixedwidth) {
 /* ESOPE Layout */
 /****************/
 
+.interne { width: <?php echo $main_width; ?>; max-width: <?php echo $main_maxwidth; ?>; position: relative; margin: 0 auto; }
+
 /* ***************************************
 	PAGE LAYOUT
 *************************************** */
