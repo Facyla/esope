@@ -1963,7 +1963,7 @@ function esope_add_to_meta_array($entity, $meta = '', $add = array()) {
 		else $values = array();
 	}
 	// Allow multiple values to be added in one pass
-	if (!is_array($add)) $add = array($add);
+	if (!is_array($add)) { $add = array($add); }
 	foreach ($add as $new_value) {
 		if (!in_array($new_value, $values)) { $values[] = $new_value; }
 	}
@@ -2535,6 +2535,32 @@ function esope_get_number_users($show_deactivated = false) {
 	return $return;
 }
 
+
+// Get user membership requests to groups
+function esope_groups_get_user_membership_requests($user_guid, $return_guids = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
+
+	$defaults = array(
+		'relationship' => 'membership_request',
+		'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => 0,
+	);
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+
+	elgg_set_ignore_access($ia);
+
+	if ($return_guids) {
+		$guids = array();
+		foreach ($groups as $group) {
+			$guids[] = $group->getGUID();
+		}
+		return $guids;
+	}
+
+	return $groups;
+}
 
 
 

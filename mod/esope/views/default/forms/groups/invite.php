@@ -63,7 +63,7 @@ if ($users_count > 0) {
 	
 	// Allow direct registration
 	if ($allowregister == 'yes') {
-		echo ' <p><label>' . elgg_echo('esope:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array('name' => 'group_register', 'options_values' => array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') ))) . '</p>';
+		echo ' <p><label>' . elgg_echo('esope:groups:allowregister') . '</label> ' . elgg_view('input/select', array('name' => 'group_register', 'options_values' => array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')))) . '</p>';
 	}
 	
 	echo '<div class="elgg-foot">';
