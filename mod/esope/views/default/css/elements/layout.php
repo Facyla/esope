@@ -67,6 +67,9 @@ if ($fixedwidth) {
 
 /* Set global layout width */
 .elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
+.elgg-page-walledgarden .elgg-page-body > .elgg-inner, 
+.elgg-page-walledgarden .elgg-page-footer > .elgg-inner, 
+.elgg-page-walledgarden .elgg-page-sitemenu > .elgg-inner, 
 .elgg-page-default .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-body > .elgg-inner, 
 .elgg-page-default .elgg-page-footer > .elgg-inner, 
@@ -81,9 +84,11 @@ if ($fixedwidth) {
 	margin: 0 auto;
 	/* height: 90px; */
 }
+.elgg-page-walledgarden .elgg-page-body > .elgg-inner, 
 .elgg-page-default .elgg-page-body > .elgg-inner {
 	margin: 0 auto;
 }
+.elgg-page-walledgarden .elgg-page-footer > .elgg-inner, 
 .elgg-page-default .elgg-page-footer > .elgg-inner {
 	margin: 0 auto;
 	padding: 5px 0;
