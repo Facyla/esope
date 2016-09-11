@@ -66,6 +66,7 @@ if ($fixedwidth) {
 }
 
 /* Set global layout width */
+.elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-body > .elgg-inner, 
 .elgg-page-default .elgg-page-footer > .elgg-inner, 
@@ -75,6 +76,7 @@ if ($fixedwidth) {
 	max-width: 100%;
 }
 
+.elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-header > .elgg-inner {
 	margin: 0 auto;
 	/* height: 90px; */
