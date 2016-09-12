@@ -85,11 +85,9 @@ $head = elgg_view('page/elements/head', $vars['head']);
 $params = array(
 	'head' => $head,
 	'body' => $body,
-	/*
 	'body_attrs' => array(
-		'class' => $class, // Esope : add loggedin class
+		'class' => $class, // Esope : add public/loggedin class to body tag
 	),
-	*/
 );
 
 if (isset($vars['body_attrs'])) {

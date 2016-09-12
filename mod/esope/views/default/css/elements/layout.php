@@ -227,7 +227,7 @@ if ($fixedwidth) {
 /***** PAGE FOOTER ******/
 .elgg-page-footer {
 	color: #999;
-	padding: 0 10px;
+	padding: 0 1em;
 	position: relative;
 }
 .elgg-page-footer {
@@ -250,10 +250,15 @@ if ($fixedwidth) {
 }
 
 @media (max-width:1020px) {
-	.interne, 
-	.elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
-	.elgg-page-default .elgg-page-header > .elgg-inner, 
-	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
+.interne, 
+.elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
+.elgg-page-walledgarden .elgg-page-body > .elgg-inner, 
+.elgg-page-walledgarden .elgg-page-footer > .elgg-inner, 
+.elgg-page-walledgarden .elgg-page-sitemenu > .elgg-inner, 
+.elgg-page-default .elgg-page-header > .elgg-inner, 
+.elgg-page-default .elgg-page-body > .elgg-inner, 
+.elgg-page-default .elgg-page-footer > .elgg-inner, 
+.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
 		min-width: 200px;
 		width: 98%;
 		max-width: 100%;
