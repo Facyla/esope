@@ -53,8 +53,6 @@ if ($fixedwidth) {
 /* ESOPE Layout */
 /****************/
 
-.interne { width: <?php echo $main_width; ?>; max-width: <?php echo $main_maxwidth; ?>; position: relative; margin: 0 auto; }
-
 /* ***************************************
 	PAGE LAYOUT
 *************************************** */
@@ -67,7 +65,10 @@ if ($fixedwidth) {
 	min-width: 800px;
 }
 
+.interne { position: relative; }
+
 /* Set global layout width */
+.interne, 
 .elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
 .elgg-page-walledgarden .elgg-page-body > .elgg-inner, 
 .elgg-page-walledgarden .elgg-page-footer > .elgg-inner, 
@@ -81,6 +82,7 @@ if ($fixedwidth) {
 	max-width: 100%;
 }
 
+.interne, 
 .elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-header > .elgg-inner {
 	margin: 0 auto;
@@ -248,6 +250,8 @@ if ($fixedwidth) {
 }
 
 @media (max-width:1020px) {
+	.interne, 
+	.elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
 	.elgg-page-default .elgg-page-header > .elgg-inner, 
 	.elgg-page-default .elgg-page-sitemenu > .elgg-inner {
 		min-width: 200px;
@@ -274,6 +278,8 @@ if ($fixedwidth) {
 
 @media (max-width:700px) {
 	
+	.interne, 
+	.elgg-page-walledgarden .elgg-page-header > .elgg-inner, 
 	.elgg-page-default .elgg-page-header > .elgg-inner { padding: 0 0.5%; }
 	.elgg-page-default #transverse > .elgg-inner { padding: 0 0.5%; }
 	
