@@ -125,7 +125,7 @@ function esope_init() {
 	//elgg_extend_view('page/elements/footer', 'esope/loader');
 	
 	// Ajout analytics
-	elgg_extend_view('page/elements/footer', 'footer/analytics');
+	elgg_extend_view('page/elements/footer', 'page/elements/analytics');
 	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
