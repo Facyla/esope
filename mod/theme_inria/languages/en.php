@@ -402,5 +402,7 @@ Here is the new profile page : %s
 	
 	'GROUP_MEMBERS' => "group members",
 	
+	'esope:members:title' => "%s (%s active members)",
+	
 );
 

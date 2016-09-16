@@ -514,6 +514,7 @@ Afficher et commenter le nouvel article :
 	// @TODO : copy and translate in EN !
 	'esope:directory' => "Membres",
 	'members:label:newest' => "Date d'inscription",
+	'esope:members:title' => "%s (%s membres actifs)",
 	
 	
 	// THE WIRE OVERRIDE

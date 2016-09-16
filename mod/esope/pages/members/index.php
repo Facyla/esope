@@ -29,9 +29,9 @@ switch ($vars['page']) {
 	
 	case 'alpha':
 		// Alphabetic sort
-		$db_prefix = elgg_get_config('dbprefix');
+		$dbprefix = elgg_get_config('dbprefix');
 		$firstletter = get_input('letter', false);
-		$options['joins'] = array("JOIN {$db_prefix}users_entity ue USING(guid)");
+		$options['joins'] = array("JOIN {$dbprefix}users_entity ue USING(guid)");
 		$options['order_by'] = 'ue.name ASC';
 		$options['wheres'] = "UPPER(ue.name) LIKE UPPER('$firstletter%')";
 		$content = '<div class="esope-alpha-char">';
@@ -60,7 +60,7 @@ switch ($vars['page']) {
 $params = array(
 	'content' => $content,
 	'sidebar' => elgg_view('members/sidebar'),
-	'title' => $title . " ($num_members)",
+	'title' => elgg_echo('esope:members:title', array($title, $num_members)),
 	'filter_override' => elgg_view('members/nav', array('selected' => $vars['page'])),
 );
 

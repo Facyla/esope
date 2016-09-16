@@ -487,7 +487,6 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 
 // Modify the way we count users (exclude archived users from count)
 function theme_inria_members_count_hook($hook, $entity_type, $returnvalue, $params) {
-	global $CONFIG;
 	$access = "";
 	if (!$show_deactivated) {
 		$access = "and " . _elgg_get_access_where_sql(array('table_alias' => 'e'));
@@ -498,13 +497,13 @@ function theme_inria_members_count_hook($hook, $entity_type, $returnvalue, $para
 	$name_metastring_id = elgg_get_metastring_id('memberstatus');
 	$value_metastring_id = elgg_get_metastring_id('closed');
 	$where = "and NOT EXISTS (
-		  SELECT 1 FROM {$dbprefix}metadata md
-		  WHERE md.entity_guid = e.guid
-		      AND md.name_id = $name_metastring_id
-		      AND md.value_id = $value_metastring_id)";
+		SELECT 1 FROM {$dbprefix}metadata md
+		WHERE md.entity_guid = e.guid
+			AND md.name_id = $name_metastring_id
+			AND md.value_id = $value_metastring_id)";
 	
 	$query = "SELECT count(*) as count 
-		from {$CONFIG->dbprefix}entities e 
+		from {$dbprefix}entities e 
 		where e.type='user' 
 		$where 
 		$access";
@@ -537,8 +536,8 @@ function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
 			$nb_members_wheres[] = "NOT EXISTS (
 				SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
 				WHERE md.entity_guid = e.guid
-				    AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
-				    AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
+					AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+					AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
 			$num_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
 			$members_string = elgg_echo('groups:member');
 			$options = array(

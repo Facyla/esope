@@ -164,6 +164,7 @@ return array(
 	'search:label' => "Search",
 	'esope:groupicon' => "group icon",
 	'esope:categories:all' => "Categories news",
+	'esope:members:title' => "%s (%s)",
 	'esope:members:online' => "Online members",
 	'esope:members:newest' => "Newest members",
 	'esope:groups:featured' => "Featured groups",

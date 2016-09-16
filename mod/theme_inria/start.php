@@ -119,7 +119,6 @@ function theme_inria_init(){
 	
 	// Enable modifying members count algo
 	elgg_register_plugin_hook_handler('members', 'count', 'theme_inria_members_count_hook');
-	
 	// Members count in group listing menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_groups_entity_menu_setup', 900);
 	

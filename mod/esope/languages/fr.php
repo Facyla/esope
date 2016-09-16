@@ -171,6 +171,7 @@ return array(
 	'search:label' => "Rechercher",
 	'esope:groupicon' => "icône du groupe",
 	'esope:categories:all' => "Actualité des thématiques",
+	'esope:members:title' => "%s (%s)",
 	'esope:members:online' => "Membres connectés",
 	'esope:members:newest' => "Derniers inscrits",
 	'esope:groups:featured' => "Groupes à la Une",
