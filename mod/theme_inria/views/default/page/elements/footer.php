@@ -1,6 +1,6 @@
 <?php
 /**
- * Elgg footer
+ * Displays custom footer
  * 3 modes : 
  * - custom HTML footer,
  * - default menu
@@ -11,23 +11,38 @@
  *
  */
 
-$url = elgg_get_site_url();
-$imgurl = $url . 'mod/theme_inria/graphics/';
+$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 
 // Display default footer if no specific footer set in theme settings
 $footer = elgg_get_plugin_setting('footer', 'esope');
-if (empty($footer)) {
-	// Esope : custom, multilingual menu
+// Footer menu
+$menu = '';
+// Esope : custom, multilingual menu
+if (elgg_is_active_plugin('elgg_menus')) {
 	$menu = elgg_get_plugin_setting('menu_footer', 'esope');
 	if (empty($menu)) { $menu = 'footer'; }
-
 	// Get translated menu, only if exists
 	$lang = get_language();
 	$lang_menu = elgg_menus_get_menu_config($menu . '-' . $lang);
-	if ($lang_menu) $menu = $menu . '-' . $lang;
-
-	$footer = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+	if ($lang_menu) { $menu = $menu . '-' . $lang; }
 }
+// Default to footer menu if no menu nor custom HTML set
+if (empty($footer) && empty($menu)) { $menu = 'footer'; }
+
+// Compute menu
+if (!empty($menu)) {
+	$footer_menu = elgg_view_menu($menu, array('sort_by' => 'priority', 'class' => 'elgg-menu-hz'));
+}
+
+// Use menu in custom HTML
+if (!empty($footer) && !empty($footer_menu)) {
+	$footer = str_replace('{menu}', $footer_menu, $footer);
+}
+// Or display menu only if no custom HTML set
+if (empty($footer) && !empty($footer_menu)) {
+	$footer = $footer_menu;
+}
+
 ?>
 
 <div class="footer-inria">

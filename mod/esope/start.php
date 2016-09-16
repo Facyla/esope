@@ -124,6 +124,9 @@ function esope_init() {
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
 	//elgg_extend_view('page/elements/footer', 'esope/loader');
 	
+	// Ajout analytics
+	elgg_extend_view('page/elements/footer', 'footer/analytics');
+	
 	// JS SCRIPTS
 	// Theme-specific JS (accessible menu)
 	//elgg_register_simplecache_view('js/esope/theme');

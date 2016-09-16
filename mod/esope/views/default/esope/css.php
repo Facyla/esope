@@ -767,7 +767,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 	.elgg-button { font-size: large; }
 	
 	/* Common tools */
-	.elgg-page #groupchat-sitelink { position:initial; display: inline-block; border: 0; border-radius: 0; margin: 0; padding: 1ex; border: 0; width:100%; }
+	.elgg-page #groupchat-sitelink { position:initial; display: inline-block; border: 0; border-radius: 0; margin: 0; padding: 3%; border: 0; width:92%; }
 	.twitter-timeline { width: 100% !important; }
 	
 	/* Groups */
