@@ -157,7 +157,7 @@ $content .= '<div class="transitions-index-search">';
 	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
 	
 	// Add limiting clause
-	$search_options['wheres'][] = "e.guid IN (" . implode(',',$guids) . ")";
+	$search_options['wheres'][] = "e.guid IN (" . $guids_in . ")";
 	//$search_options['guids'] = $guids;
 
 	//$mem = memory_get_usage(); $mem = round($mem/1000000); error_log("MEM USED 1 : $mem MB");
