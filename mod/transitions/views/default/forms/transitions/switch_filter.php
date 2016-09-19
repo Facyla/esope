@@ -13,6 +13,6 @@ $filter_opt = array(
 		//'enriched' => elgg_echo('transitions:filter:enriched'),
 	);
 
-echo elgg_view('input/select', array('name' => "filter", 'options_values' => $filter_opt));
+echo elgg_view('input/select', array('name' => "filter", 'options_values' => $filter_opt, 'value' => $filter));
 
 

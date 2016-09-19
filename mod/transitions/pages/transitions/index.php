@@ -23,8 +23,8 @@ if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_htm
 elgg_register_title_button();
 
 $query = get_input('q', '');
-$filter = get_input('filter', '');
 $limit = get_input('limit', 12);
+$filter = get_input('filter', '');
 if (!in_array($filter, array('recent', 'featured', 'read', 'comments', 'contributions'))) { $filter = 'recent'; }
 $category = get_input('category', '');
 if ($category == 'all') $category = '';
@@ -151,25 +151,13 @@ $content .= '<div class="transitions-index-search">';
 	//$meta_ids = transitions_get_metastrings_ids();
 	
 	// Search options
-	$search_options = array('limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions");
+	$search_options = array('limit' => $limit);
 	
 	// Add limiting clause
 	$search_options['wheres'][] = "e.guid IN (" . $guids_in . ")";
 	//$search_options['guids'] = $guids;
 	
 	// Main search parameters
-	if (!empty($category)) {
-		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
-	}
-	if (($category == 'actor') && !empty($actor_type)) {
-		$search_options['metadata_name_value_pairs'][] = array('name' => 'actor_type', 'value' => $actor_type);
-	}
-	if (!empty($lang)) {
-		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => $lang);
-	}
-	if (!empty($status)) {
-		$search_options['metadata_name_value_pairs'][] = array('name' => 'status', 'value' => $status);
-	}
 	if (!empty($query)) {
 		$db_prefix = elgg_get_config('dbprefix');
 		$s_query = addslashes($query);
@@ -188,14 +176,23 @@ $content .= '<div class="transitions-index-search">';
 		
 		$search_options['wheres'][] = "((oe.title LIKE '%$s_query%') OR (oe.description LIKE '%$s_query%') OR $md_where)";
 	}
-	
+	// Metadata parameters (will be used afterwards)
+	if (!empty($category)) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
+	}
+	if (($category == 'actor') && !empty($actor_type)) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'actor_type', 'value' => $actor_type);
+	}
+	if (!empty($lang)) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'lang', 'value' => $lang);
+	}
+	if (!empty($status)) {
+		$search_options['metadata_name_value_pairs'][] = array('name' => 'status', 'value' => $status);
+	}
 	// Apply filters
 	switch($filter) {
 		case 'featured':
-			$search_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'featured');
-			break;
-		case 'background':
-			$search_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => 'background');
+			$search_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => $filter);
 			break;
 		case 'read';
 			$search_options['metadata_name_value_pairs'][] = array('name' => 'views_count', 'value' => '0', 'operand' => '>');
@@ -261,7 +258,13 @@ $content .= '<div class="transitions-index-search">';
 			$result_guids = transitions_filter_entity_guid_by_metadata($result_guids, $md_filter);
 		}
 	}
-	$catalogue = elgg_list_entities(array('guids' => $result_guids));
+	
+	// Final search params
+	$list_options = array('guids' => $result_guids, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions");
+	if ($filter == 'read') {
+		$list_options['order_by_metadata'] = array('name' => 'views_count', 'direction' => 'DESC', 'as' => 'integer');
+	}
+	$catalogue = elgg_list_entities_from_metadata($list_options);
 	$count = count($result_guids);
 	
 	//transitions_filter_entity_guid_by_metadata(array $values, array $md_filter) {
