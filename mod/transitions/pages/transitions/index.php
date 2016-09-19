@@ -14,6 +14,7 @@ $autofeed = FALSE;
 $content = '';
 $title = elgg_echo('transitions:index');
 $sidebar = '';
+$debug_ts = microtime(true);
 
 $is_html_viewtype = true;
 if ((elgg_get_viewtype() == 'rss') || (elgg_get_viewtype() == 'ical')) { $is_html_viewtype = false; }
@@ -128,7 +129,7 @@ $content .= '<div class="transitions-index-search">';
 			$("option[value=\'\']").attr("disabled", "disabled");
 		});
 		function transitions_toggle_search_fields(val) {
-			//var val = $("select[name=\'category\']").val();
+			var val = $("select[name=\'category\']").val();
 			// Reinit special fields
 			$(".transitions-actortype").addClass(\'hidden\');
 			if (val == "actor") {
@@ -142,28 +143,21 @@ $content .= '<div class="transitions-index-search">';
 
 
 	// SEARCH
-	// List all transitions entities first
-	$guids_in = elgg_load_system_cache('transitions_all_entities');
-	if (!$guids_in) {
-		$all_transitions = elgg_get_entities(array('types' => 'object', 'subtype' => 'transitions', 'limit' => false));
-		foreach ($all_transitions as $ent) {
-			$guids[] = $ent->guid;
-		}
-		$guids_in = implode(',', $guids);
-		elgg_save_system_cache('transitions_all_entities', $guids_in);
-	}
+	// Get all transitions entities first (GUID1,GUID2, etc.)
+	$guids_in = transitions_get_guids_clause();
+	
+	// Preload metastrings ids
+	// @TODO use for more direct SQL search
+	//$meta_ids = transitions_get_metastrings_ids();
 	
 	// Search options
-	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
+	$search_options = array('limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions");
 	
 	// Add limiting clause
 	$search_options['wheres'][] = "e.guid IN (" . $guids_in . ")";
 	//$search_options['guids'] = $guids;
-
-	//$mem = memory_get_usage(); $mem = round($mem/1000000); error_log("MEM USED 1 : $mem MB");
-	//error_log("Test : T1 = " . round((microtime(TRUE)-$debug_ts), 4));
-
-
+	
+	// Main search parameters
 	if (!empty($category)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
 	}
@@ -180,7 +174,8 @@ $content .= '<div class="transitions-index-search">';
 		$db_prefix = elgg_get_config('dbprefix');
 		$s_query = addslashes($query);
 		// Add custom metadata search
-		$search_metadata = array('title', 'excerpt', 'description', 'tags', 'tags_contributed');
+		//$search_metadata = array('title', 'excerpt', 'description', 'tags', 'tags_contributed');
+		$search_metadata = array('excerpt', 'tags', 'tags_contributed');
 		$clauses = _elgg_entities_get_metastrings_options('metadata', array('metadata_names' => $search_metadata));
 		$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$s_query%')";
 		$search_options['joins'] = $clauses['joins'];
@@ -192,10 +187,8 @@ $content .= '<div class="transitions-index-search">';
 		$search_options['joins'][] = "JOIN {$db_prefix}metastrings msv ON n_table.value_id = msv.id";
 		
 		$search_options['wheres'][] = "((oe.title LIKE '%$s_query%') OR (oe.description LIKE '%$s_query%') OR $md_where)";
-	
 	}
-
-	//echo '<pre>' . print_r($search_options, true) . '</pre>'; // debug
+	
 	// Apply filters
 	switch($filter) {
 		case 'featured':
@@ -212,6 +205,8 @@ $content .= '<div class="transitions-index-search">';
 		default:
 			$search_options['order_by'] = "time_created desc";
 	}
+	
+	//echo '<pre>' . print_r($search_options, true) . '</pre>'; // debug
 	
 	/* @TODO : gérer les doublons liés aux traductions, si possible via une clause where spécifique
 	 * 
@@ -244,8 +239,12 @@ $content .= '<div class="transitions-index-search">';
 	// Perform search
 	// Use relations to filter duplicates at DB level ?
 	// Relationship function wraps also metadata and basic getters
-	$count = elgg_get_entities_from_relationship($search_options);
 	$catalogue = elgg_list_entities_from_relationship($search_options);
+	$search_options['count'] = true;
+	$count = elgg_get_entities_from_relationship($search_options);
+
+	//$mem = memory_get_usage(); $mem = round($mem/1000000); error_log("MEM USED 1 : $mem MB");
+	error_log("Test : T1 = " . round((microtime(TRUE)-$debug_ts), 4));
 
 
 	// Search RSS feed

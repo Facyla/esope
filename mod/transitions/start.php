@@ -105,6 +105,11 @@ function transitions_init() {
 	// Note : event is triggered after multilingual hook has finished (so we can rely on the added metadata)
 	elgg_register_event_handler("translate:after", "object", "transitions_after_create_handler_event");
 	
+	// Save list of all transitions entities in system cache after every create/update/delete
+	elgg_register_event_handler('create', 'object', 'transitions_update_event_listener', 800);
+	elgg_register_event_handler('update:after', 'object', 'transitions_update_event_listener', 800);
+	elgg_register_event_handler('delete', 'object', 'transitions_update_event_listener', 800);
+	
 }
 
 
@@ -539,5 +544,51 @@ function transitions_after_create_handler_event($event, $type, $entity) {
 		$entity->icontime = time();
 	}
 }
+
+
+// Saves a list of all transitions GUIDs list in system cache after every change
+function transitions_update_event_listener($event, $object_type, $object) {
+	if (elgg_instanceof($object, 'object', 'transitions')) {
+		$all_transitions = elgg_get_entities(array('types' => 'object', 'subtype' => 'transitions', 'limit' => false));
+		foreach ($all_transitions as $ent) {
+			$guids[] = $ent->guid;
+		}
+		$guids_in = implode(',', $guids);
+		elgg_save_system_cache('transitions_all_entities', $guids_in);
+		//error_log("Transitions system cache updated");
+	}
+}
+
+// Get all transitions GUID from cache, or regenerate cache if needed
+function transitions_get_guids_clause($return_array = false) {
+	$guids_in = elgg_load_system_cache('transitions_all_entities');
+	if (!$guids_in) {
+		$all_transitions = elgg_get_entities(array('types' => 'object', 'subtype' => 'transitions', 'limit' => false));
+		foreach ($all_transitions as $ent) {
+			$guids[] = $ent->guid;
+		}
+		$guids_in = implode(',', $guids);
+		elgg_save_system_cache('transitions_all_entities', $guids_in);
+	}
+	// Return array or clause for mysql IN clause
+	if ($return_array) {
+		if ($guids) { return $guids; }
+		return explode(',', $guids_in);
+	}
+	return $guids_in;
+}
+
+
+// Preload metastrings ids for quicker search
+function transitions_get_metastrings_ids() {
+	$meta_names = array('excerpt', 'tags', 'tags_contributed', 'category', 'actor_type', 'lang', 'status', 'featured', 'views_count');
+	foreach($meta_names as $name) {
+		$meta_ids[$name] = elgg_get_metastring_id($name);
+	}
+	return $meta_ids;
+}
+
+
+
 
 
