@@ -590,5 +590,41 @@ function transitions_get_metastrings_ids() {
 
 
 
+/* Filter values by metadata query iterations
+ * $values : list of GUIDs
+ * $md_filter : metdata array, as in metadata_name_value_pairs
+ */
+function transitions_filter_entity_guid_by_metadata(array $values, array $md_filter) {
+	$values = implode(', ', $values);
+	if (empty($values)) { return false; }
+	$dbprefix = elgg_get_config('dbprefix');
+	$select = "SELECT DISTINCT md.entity_guid FROM {$dbprefix}metadata as md ";
+	$join .= "JOIN {$dbprefix}metastrings as msn ON md.name_id=msn.id ";
+	$join .= "JOIN {$dbprefix}metastrings as msv ON md.value_id=msv.id ";
+	switch($md_filter['operand']) {
+		case '=':
+		case '':
+			$where = "msn.string = '{$md_filter['name']}' AND msv.string = '{$md_filter['value']}'";
+			break;
+		case 'LIKE':
+			$where = "msn.string = '{$md_filter['name']}' AND msv.string {$md_filter['operand']} '{$md_filter['value']}'";
+			break;
+		default:
+			$where = "msn.string = '{$md_filter['name']}' AND msv.string {$md_filter['operand']} {$md_filter['value']}";
+	}
+	//$search_results .= 'Filter MD query : <pre>' . $query . '</pre>';
+	
+	$results = get_data("$select $join WHERE $where AND md.entity_guid IN ($values);");
+	if ($results) {
+		$guids = array();
+		foreach ($results as $row) { $guids[] = $row->entity_guid; }
+		return $guids;
+	}
+	return false;
+}
+
+
+
+
 
 

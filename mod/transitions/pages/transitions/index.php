@@ -236,12 +236,36 @@ $content .= '<div class="transitions-index-search">';
 	// @TODO handle multilingual duplicates and content available in single language (other than current)
 	
 	
+	// Use MD filters afterwards (to avoid too many JOINs)
+	$metadata_filters = $search_options['metadata_name_value_pairs'];
+	unset($search_options['metadata_name_value_pairs']);
+	
 	// Perform search
 	// Use relations to filter duplicates at DB level ?
 	// Relationship function wraps also metadata and basic getters
-	$catalogue = elgg_list_entities_from_relationship($search_options);
-	$search_options['count'] = true;
-	$count = elgg_get_entities_from_relationship($search_options);
+	//$catalogue = elgg_list_entities_from_relationship($search_options);
+	$entities = elgg_get_entities_from_relationship($search_options);
+	//$search_options['count'] = true;
+	//$count = elgg_get_entities_from_relationship($search_options);
+	
+	
+	// Post query metadata filters
+	foreach($entities as $ent) { $result_guids[] = $ent->guid; }
+		// 3. Get filtered results (apply filters on result entities)
+	// Don't even bother to build filters if no entity matches at this step
+	if (!empty($result_guids) && $metadata_filters) {
+		foreach($metadata_filters as $md_filter) {
+			// Stop adding filters if we don't have any result
+			if (empty($result_guids)) { break; }
+			// Apply metadata filter
+			$result_guids = transitions_filter_entity_guid_by_metadata($result_guids, $md_filter);
+		}
+	}
+	$catalogue = elgg_list_entities(array('guids' => $result_guids));
+	$count = count($result_guids);
+	
+	//transitions_filter_entity_guid_by_metadata(array $values, array $md_filter) {
+	
 
 	//$mem = memory_get_usage(); $mem = round($mem/1000000); error_log("MEM USED 1 : $mem MB");
 	error_log("Test : T1 = " . round((microtime(TRUE)-$debug_ts), 4));
