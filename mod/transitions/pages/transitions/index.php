@@ -141,8 +141,28 @@ $content .= '<div class="transitions-index-search">';
 	$content .= '<div class="clearfloat"></div>';
 
 
+	// SEARCH
+	// List all transitions entities first
+	$guids_in = elgg_load_system_cache('transitions_all_entities');
+	if (!$guids_in) {
+		$all_transitions = elgg_get_entities(array('types' => 'object', 'subtype' => 'transitions', 'limit' => false));
+		foreach ($all_transitions as $ent) {
+			$guids[] = $ent->guid;
+		}
+		$guids_in = implode(',', $guids);
+		elgg_save_system_cache('transitions_all_entities', $guids_in);
+	}
+	
 	// Search options
 	$search_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions", 'count' => true);
+	
+	// Add limiting clause
+	$search_options['wheres'][] = "e.guid IN (" . implode(',',$guids) . ")";
+	//$search_options['guids'] = $guids;
+
+	//$mem = memory_get_usage(); $mem = round($mem/1000000); error_log("MEM USED 1 : $mem MB");
+	//error_log("Test : T1 = " . round((microtime(TRUE)-$debug_ts), 4));
+
 
 	if (!empty($category)) {
 		$search_options['metadata_name_value_pairs'][] = array('name' => 'category', 'value' => $category);
@@ -219,28 +239,14 @@ $content .= '<div class="transitions-index-search">';
 	*/
 
 	// @TODO handle multilingual duplicates and content available in single language (other than current)
-	// 
+	
 	
 	// Perform search
-	if (isset($search_options['metadata_name_value_pairs'])) {
-		/*
-		$count = elgg_get_entities_from_metadata($search_options);
-		$catalogue = elgg_list_entities_from_metadata($search_options);
-		*/
-		$count = elgg_get_entities_from_relationship($search_options);
-		$catalogue = elgg_list_entities_from_relationship($search_options);
-	} else {
-		/*
-		$count = elgg_get_entities($search_options);
-		$catalogue = elgg_list_entities($search_options);
-		*/
-		$count = elgg_get_entities_from_relationship($search_options);
-		$catalogue = elgg_list_entities_from_relationship($search_options);
-	}
-	// @TODO use relations to filter duplicates at DB level ?
+	// Use relations to filter duplicates at DB level ?
 	// Relationship function wraps also metadata and basic getters
-	//$count = elgg_get_entities_from_relationship($search_options);
-	//$catalogue = elgg_list_entities_from_relationship($search_options);
+	$count = elgg_get_entities_from_relationship($search_options);
+	$catalogue = elgg_list_entities_from_relationship($search_options);
+
 
 	// Search RSS feed
 	$rss_url = current_page_url();
