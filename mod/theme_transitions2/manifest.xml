@@ -15,11 +15,6 @@
 		<version>1.12</version>
 	</requires>
 	
-	<conflicts>
-		<type>plugin</type>
-		<name>esope</name>
-	</conflicts>
-	
 	<requires>
 		<type>plugin</type>
 		<name>aalborg_theme</name>

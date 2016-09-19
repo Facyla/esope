@@ -48,6 +48,7 @@ Mot de passe : %s
 	'theme_transitions:registerwithfing' => "Pour créer un compte à partir de votre compte Réseau Fing, connectez-vous en utilisant vos identifiants de connexion Réseau Fing.",
 	'theme_transitions:login:loggedinwithfing' => "Connexion réussie avec votre compte Réseau Fing.",
 	'theme_transitions2:news' => "Actus",
+	'theme_transitions2:news:rss' => "Fil RSS",
 	'theme_transitions2:news:title' => "Actus",
 	'theme_transitions2:challenge' => "Défis",
 	'theme_transitions2:challenge:title' => "Défis",

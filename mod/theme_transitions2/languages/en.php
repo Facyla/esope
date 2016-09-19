@@ -49,6 +49,7 @@ Password: %s
 	'theme_transitions:login:loggedinwithfing' => "Login successful with your Réseau Fing account.",
 	'theme_transitions2:news' => "News",
 	'theme_transitions2:news:title' => "News",
+	'theme_transitions2:news:rss' => "RSS feed",
 	'theme_transitions2:challenge' => "Challenges",
 	'theme_transitions2:challenge:title' => "Challenges",
 	

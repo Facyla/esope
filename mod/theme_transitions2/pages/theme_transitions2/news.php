@@ -28,6 +28,7 @@ $list_options = array('types' => 'object', 'subtypes' => 'transitions', 'limit' 
 
 // HTML vs RSS/ICAL content
 if ($is_html_viewtype) {
+	$content .= '<a href="' . current_page_url() . '?view=rss" class="float-alt"><i class="fa fa-rss"></i>&nbsp;' . elgg_echo('theme_transitions2:news:rss') . '</a>';
 	$content .= '<h2>' . elgg_echo('theme_transitions2:news:title') . '</h2>';
 	$content .= '<div class="transitions-news">';
 }
