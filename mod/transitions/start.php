@@ -580,8 +580,10 @@ function transitions_get_guids_clause($return_array = false) {
 
 
 // Preload metastrings ids for quicker search
-function transitions_get_metastrings_ids() {
-	$meta_names = array('excerpt', 'tags', 'tags_contributed', 'category', 'actor_type', 'lang', 'status', 'featured', 'views_count');
+function transitions_get_metastrings_ids($meta_names = false) {
+	if (!$meta_names) {
+		$meta_names = array('excerpt', 'tags', 'tags_contributed', 'category', 'actor_type', 'lang', 'status', 'featured', 'views_count');
+	}
 	foreach($meta_names as $name) {
 		$meta_ids[$name] = elgg_get_metastring_id($name);
 	}

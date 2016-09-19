@@ -151,7 +151,7 @@ $content .= '<div class="transitions-index-search">';
 	//$meta_ids = transitions_get_metastrings_ids();
 	
 	// Search options
-	$search_options = array('limit' => $limit);
+	$search_options = array('limit' => false);
 	
 	// Add limiting clause
 	$search_options['wheres'][] = "e.guid IN (" . $guids_in . ")";
@@ -164,15 +164,23 @@ $content .= '<div class="transitions-index-search">';
 		// Add custom metadata search
 		//$search_metadata = array('title', 'excerpt', 'description', 'tags', 'tags_contributed');
 		$search_metadata = array('excerpt', 'tags', 'tags_contributed');
+		/*
 		$clauses = _elgg_entities_get_metastrings_options('metadata', array('metadata_names' => $search_metadata));
 		$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$s_query%')";
 		$search_options['joins'] = $clauses['joins'];
-	
+		*/
+		
 		// Add title and description search
 		$search_options['joins'][] = "JOIN {$db_prefix}objects_entity oe ON e.guid = oe.guid";
 	
 		$search_options['joins'][] = "JOIN {$db_prefix}metadata md on e.guid = md.entity_guid";
-		$search_options['joins'][] = "JOIN {$db_prefix}metastrings msv ON n_table.value_id = msv.id";
+		$search_options['joins'][] = "JOIN {$db_prefix}metastrings msv ON md.value_id = msv.id";
+		
+		// Custom meta search clause (more efficient)
+		$meta_ids = transitions_get_metastrings_ids($search_metadata);
+		foreach ($meta_ids as $k => $v) { $meta_ids_in[] = $v; }
+		$meta_ids_in = implode(',', $meta_ids_in);
+		$md_where = "(md.name_id IN ($meta_ids_in) AND msv.string LIKE '%$s_query%')";
 		
 		$search_options['wheres'][] = "((oe.title LIKE '%$s_query%') OR (oe.description LIKE '%$s_query%') OR $md_where)";
 	}
@@ -192,6 +200,7 @@ $content .= '<div class="transitions-index-search">';
 	// Apply filters
 	switch($filter) {
 		case 'featured':
+		case 'background':
 			$search_options['metadata_name_value_pairs'][] = array('name' => 'featured', 'value' => $filter);
 			break;
 		case 'read';
@@ -253,25 +262,30 @@ $content .= '<div class="transitions-index-search">';
 	if (!empty($result_guids) && $metadata_filters) {
 		foreach($metadata_filters as $md_filter) {
 			// Stop adding filters if we don't have any result
-			if (empty($result_guids)) { break; }
+			if (!$result_guids || empty($result_guids)) { break; }
 			// Apply metadata filter
 			$result_guids = transitions_filter_entity_guid_by_metadata($result_guids, $md_filter);
 		}
 	}
 	
 	// Final search params
-	$list_options = array('guids' => $result_guids, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions");
+	$list_options = array('guids' => $result_guids, 'limit' => $limit, 'list_type' => 'gallery', 'item_class' => 'transitions-item', 'list_class' => "elgg-gallery-transitions");
 	if ($filter == 'read') {
 		$list_options['order_by_metadata'] = array('name' => 'views_count', 'direction' => 'DESC', 'as' => 'integer');
 	}
-	$catalogue = elgg_list_entities_from_metadata($list_options);
-	$count = count($result_guids);
+	// Attention : lorsqu'on affiche une liste selon les GUIDs, toujours être certain qu'on en a au moins 1, sinon liste toutes les entités
+	$count = 0;
+	if ($result_guids) {
+		$count = sizeof($result_guids);
+		if (isset($list_options['order_by_metadata'])) {
+			$catalogue = elgg_list_entities_from_metadata($list_options);
+		} else {
+			$catalogue = elgg_list_entities($list_options);
+		}
+	}
 	
-	//transitions_filter_entity_guid_by_metadata(array $values, array $md_filter) {
-	
-
 	//$mem = memory_get_usage(); $mem = round($mem/1000000); error_log("MEM USED 1 : $mem MB");
-	error_log("Test : T1 = " . round((microtime(TRUE)-$debug_ts), 4));
+	//error_log("Test : T1 = " . round((microtime(TRUE)-$debug_ts), 4));
 
 
 	// Search RSS feed
