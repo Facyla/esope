@@ -107,6 +107,12 @@ body { background:#EBE7DF; font-family:Lato; }
 
 
 
+
+/* Register / login */
+.transitions2-register-subtitle { color: #003923; font-size: 30px; margin-top: -15px; padding-bottom: 20px; }
+
+
+
 /* Contributions - Recherche homepage */
 .elgg-page-body-search { background:#E2D8C3; padding: 30px 0; text-align:center; }
 #transitions-search-home input { font-size:20px; color: #666; border: 0; border-radius: 0; margin:0; }

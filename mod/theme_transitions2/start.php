@@ -35,7 +35,8 @@ function theme_transitions2_init() {
 	// Add login with RSFing
 	// @TODO add some checks and plugin conf
 	elgg_extend_view('forms/login', 'theme_transitions2/fing_login');
-	elgg_extend_view('forms/register', 'theme_transitions2/fing_register', 100);
+	elgg_extend_view('forms/register', 'theme_transitions2/fing_register', 10);
+	elgg_extend_view('forms/register', 'theme_transitions2/after_hybridauth_register', 101);
 	// Register the authentication handler
 	register_pam_handler('theme_transitions2_auth_handler_authenticate', 'sufficient', 'user');
 	
