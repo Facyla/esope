@@ -144,6 +144,8 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-menu-topbar > li > a:hover, .elgg-menu-topbar > li > a:active, .elgg-menu-topbar > li > a:focus { color: #333; }
 .elgg-menu-topbar > li > a.elgg-topbar-avatar { padding-top: 2px; }
 .messages-new { background-color: #ABD660; position:initial; line-height:16px; box-shadow: none; min-width: 14px; height: 14px; display: inline-block; margin-left: 2px; }
+.language-selector a img { opacity: 0.4; }
+
 
 
 /* Header */
