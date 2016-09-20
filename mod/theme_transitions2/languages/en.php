@@ -1,4 +1,6 @@
 <?php
+$url = elgg_get_site_url();
+
 return array(
 	'theme_transitions2' => 'Transitions²',
 	'theme_transitions2:transitions:count' => "%s contributions",
@@ -44,8 +46,8 @@ Password: %s
 	// API
 	'theme_transitions:login:usernamedontmatch' => "An account already exists with the same email but another username, please contact an administrator to ask to update your username: %s should become %s",
 	'theme_transitions:login:newaccount' => "Login with your Réseau Fing account successful: an account has been successfully created.",
-	'theme_transitions:loginwithfing' => "To login with you Réseau Fing account: use the same credentials to login on this site.",
-	'theme_transitions:registerwithfing' => "To create a new account from your Réseau Fing account, login here with your Réseau Fing credentials.",
+	'theme_transitions:loginwithfing' => "You can login with you Réseau Fing account by using your usual credentials on this site.",
+	'theme_transitions:registerwithfing' => "If you already have a Réseau Fing account, please use your credentials on the <a href=\"{$url}login\">login page</a>.",
 	'theme_transitions:login:loggedinwithfing' => "Login successful with your Réseau Fing account.",
 	'theme_transitions2:news' => "News",
 	'theme_transitions2:news:title' => "News",

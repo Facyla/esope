@@ -235,7 +235,7 @@ if (elgg_in_context("listing") || ($list_type != 'gallery')) {
 					//echo elgg_view_image_block($owner_icon, $list_body);
 
 					// Contenu "texte"
-					echo '<div class="elgg-content">' . $excerpt . '</div>';
+					echo '<div class="elgg-content"><strong>' . $excerpt . '<strong></div>';
 				
 					// Stats et actions possibles : commenter, liker, ajouter une métadonnée/relation
 					echo '<div class="transitions-gallery-actions">';
