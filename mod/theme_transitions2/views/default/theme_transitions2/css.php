@@ -109,7 +109,7 @@ body { background:#EBE7DF; font-family:Lato; }
 
 
 /* Register / login */
-.transitions2-register-subtitle { color: #003923; font-size: 30px; margin-top: -15px; padding-bottom: 20px; }
+.transitions2-register-subtitle { color: #003923; font-size: 30px; margin-top: -30px; padding-bottom: 20px; }
 
 
 
