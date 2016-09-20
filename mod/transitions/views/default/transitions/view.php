@@ -316,6 +316,21 @@ if ($transitions->category == 'project') {
 		$body .= '<div class="transitions-view-content">' . elgg_view_module('featured', elgg_echo('transitions:related_actors'), $related_actors) . '</div>';
 	}
 }
+// Related projects => full-width
+if ($transitions->category == 'actor') {
+	$related_projects = elgg_list_entities_from_relationship(array(
+			'relationship' => 'partner_of',
+			'relationship_guid' => $transitions->guid,
+			'inverse_relationship' => false,
+			'type' => 'object',
+			'limit' => 0,
+			'list_type' => 'gallery',
+			'gallery_class' => '',
+		));
+	if (!empty($related_projects)) {
+		$body .= '<div class="transitions-view-content">' . elgg_view_module('featured', elgg_echo('transitions:related_projects'), $related_projects) . '</div>';
+	}
+}
 if ($transitions->category == 'challenge') {
 	$related_content = elgg_list_entities_from_relationship(array(
 			'relationship' => 'related_content',
