@@ -53,7 +53,7 @@ function notification_messages_init() {
 	// Register *earlier* to same hook and update (has to run before core and html_email_handler hook, which are default priority)
 	elgg_register_plugin_hook_handler('email', 'system', 'notification_messages_comments_notification_email_subject', 100);
 	// Remove system default comment subject handler (because it is loaded right before email sending hook)
-	//elgg_unregister_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
+	elgg_unregister_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
 	
 	
 	// Add owner to notification subscribers
