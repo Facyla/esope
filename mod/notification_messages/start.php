@@ -127,6 +127,21 @@ function notification_messages_init() {
 	}
 	*/
 	
+	// Replace comment action if asked to
+	$generic_comment = elgg_get_plugin_setting('generic_comment', 'notification_messages');
+	switch ($generic_comment) {
+		case 'allow':
+			$action_path = elgg_get_plugins_path() . 'notification_messages/actions/';
+			elgg_unregister_action('comment/save');
+			elgg_register_action('comment/save', $action_path . 'comments/save.php');
+			break;
+		case 'deny':
+			elgg_unregister_action('comment/save');
+			break;
+		default:
+			// do not change anything
+	}
+	
 }
 
 

@@ -66,16 +66,16 @@ if ($comment_guid) {
 		forward(REFERER);
 	}
 
-	// Notify if poster wasn't owner
-	$notify = false;
-	if ($entity->owner_guid != $user->guid) {
-		$notify = true;
+	// Always notify owner if poster is not owner, use setting otherwise
+	$notify_owner = false;
+	if ($user->guid != $entity->owner_guid) {
+		$notify_owner = true;
 	} else {
 		// Also notify owner if it is set so
-		$notify = notification_messages_notify_owner();
+		$notify_owner = notification_messages_notify_owner();
 	}
 
-	if ($notify) {
+	if ($notify_owner) {
 		$owner = $entity->getOwnerEntity();
 
 		// Build more explicit subject

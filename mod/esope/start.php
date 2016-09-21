@@ -327,34 +327,34 @@ function esope_init() {
 	
 	
 	// NEW & REWRITTEN ACTIONS
-	$action_url = elgg_get_plugins_path() . 'esope/actions/';
+	$action_path = elgg_get_plugins_path() . 'esope/actions/';
 	// Modification de l'invitation de contacts dans les groupes (réglage : contacts ou tous)
 	// Permet notamment de forcer l'inscription
 	if (elgg_is_active_plugin('groups')) {
 		elgg_unregister_action('groups/invite');
-		elgg_register_action("groups/invite", $action_url . 'groups/membership/invite.php');
+		elgg_register_action("groups/invite", $action_path . 'groups/membership/invite.php');
 	}
 	// Replace bookmarks action (allow access level change when using alternate container)
 	if (elgg_is_active_plugin('bookmarks')) {
 		elgg_unregister_action('bookmarks/save');
-		elgg_register_action("bookmarks/save", $action_url . 'bookmarks/save.php');
+		elgg_register_action("bookmarks/save", $action_path . 'bookmarks/save.php');
 	}
 	// ESOPE search endpoint
-	elgg_register_action("esope/esearch", $action_url . 'esope/esearch.php');
+	elgg_register_action("esope/esearch", $action_path . 'esope/esearch.php');
 	// Manually reset login failure counter
-	elgg_register_action("admin/reset_login_failures", $action_url . 'admin/reset_login_failures.php');
+	elgg_register_action("admin/reset_login_failures", $action_path . 'admin/reset_login_failures.php');
 	
 	// HTML export action
-	elgg_register_action("pages/html_export", $action_url . 'pages/html_export.php', 'public');
+	elgg_register_action("pages/html_export", $action_path . 'pages/html_export.php', 'public');
 	
 	// Modified to make pages top_level / sub-pages
 	$pages_reorder = elgg_get_plugin_setting('pages_reorder', 'esope');
 	if ($pages_reorder == 'yes') {
-		elgg_register_action("pages/edit", $action_url . 'pages/edit.php');
+		elgg_register_action("pages/edit", $action_path . 'pages/edit.php');
 	}
 	
 	// Allow to remove completely an email address for a user
-	elgg_register_action("admin/remove_user_email", $action_url . "admin/remove_user_email.php", "logged_in");
+	elgg_register_action("admin/remove_user_email", $action_path . "admin/remove_user_email.php", "logged_in");
 	
 	
 	/* PAGE HANDLERS */
