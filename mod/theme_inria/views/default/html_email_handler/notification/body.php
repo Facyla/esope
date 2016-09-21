@@ -36,10 +36,6 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 	
 		<div id="notification_container">
 			<div id="notification_header">
-				<?php 
-					$text = '<img src="' . $site_url . 'mod/theme_inria/graphics/logo_iris_inria.png" alt="' . $site->name . '">';
-					echo elgg_view("output/url", array("href" => $site_url, "text" => $text));
-				?>
 			</div>
 			<div id="notification_wrapper">
 				<?php
@@ -54,7 +50,6 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 			</div>
 			
 			<div id="notification_footer">
-				
 				<?php 
 					if (!empty($recipient) && ($recipient instanceof ElggUser)) {
 						$settings_url = $site_url . "settings/user/" . $recipient->username;
@@ -66,6 +61,10 @@ $notification_link = elgg_echo("html_email_handler:notification:footer:settings"
 				?>
 				<div class="clearfloat"></div>
 			</div>
+			<?php 
+				$text = '<img src="' . $site_url . 'mod/theme_inria/graphics/logo_iris_inria.png" alt="' . $site->name . '">';
+				echo elgg_view("output/url", array("href" => $site_url, "text" => $text));
+			?>
 		</div>
 	</body>
 </html>

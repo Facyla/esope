@@ -381,6 +381,10 @@ Voici l'adresse du nouveau compte créé : %s
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
 	
+	'theme_inria:clicktotweet' => "Cliquer pour tweeter <i class=\"fa fa-twitter\"></i>",
+	
+	
+	
 	
 	// Translation override
 	'members:searchtag' => "Chercher des membres par mot-clé",

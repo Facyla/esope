@@ -34,13 +34,16 @@ a { color: <?php echo $linkcolor; ?>; }
 a:hover, a:active, a:focus { color: <?php echo $linkhovercolor; ?>; }
 
 #notification_container {
-	padding: 20px 0;
+	padding: 0px 0 20px 0;
 	width: 600px;
 	margin: 0 auto;
 }
 #notification_header {
 	text-align: right;
-	padding: 0 0 10px;
+	/* padding: 0 0 10px; */
+	padding: 0;
+	height: 3px;
+	background: #6D2D4F;
 }
 #notification_header a {
 	text-decoration: none;
@@ -53,18 +56,18 @@ a:hover, a:active, a:focus { color: <?php echo $linkhovercolor; ?>; }
 	padding: 10px;
 }
 #notification_wrapper h2 {
-	margin: 5px 0 5px 10px;
+	margin: 5px 0 0px 10px;
 	color: #6D2D4F;
 	font-size: 1.35em;
 	line-height: 1.2em;
 }
 #notification_content {
 	background: #FFFFFF;
-	padding: 10px;
+	padding: 0px 10px 10px 10px;
 }
 #notification_footer {
 	background: #FFFFFF;
-	margin: 10px 0 0;
+	margin: 0 0 0 0;
 	padding: 10px;
 	text-align: right;
 }

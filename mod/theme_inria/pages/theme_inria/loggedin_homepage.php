@@ -42,6 +42,7 @@ $site_activity .= elgg_list_river(array(
 		'action_types' => $action_types, 
 		// This is for subtype filtering only, can be removed if no filtering
 		"joins" => array("INNER JOIN " . $dbprefix . "entities AS e ON rv.object_guid = e.guid"),
+		// @TODO n'enlever que les messages du Fil hors groupe (lister guid des groupes avant)
 		"wheres" => array("e.subtype != " . $thewire_subtype_id), // filter some subtypes
 		'limit' => 6, 
 		'pagination' => false, 

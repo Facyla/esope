@@ -34,14 +34,33 @@ $upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
 $max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
 
 $upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_upload)));
+
+$is_embed = false;
+if (elgg_in_context('embed')) { $is_embed = true; }
 ?>
 <div class="mbm elgg-text-help">
 	<?php echo $upload_limit; ?>
 </div>
-<div>
-	<label><?php echo $file_label; ?></label><br />
-	<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
-</div>
+<?php
+if ($is_embed) {
+	?>
+	<div class="home-static-container" style="width:42%; margin-right:3%; display:inline-block;">
+		<label><?php echo $file_label; ?></label><br />
+		<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
+	</div>
+	<?php
+	echo '<div class="home-static-container" style="width:30%; margin-right:3%; display:inline-block;"><label>' . elgg_echo('access') . '</label><br />' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'entity' => get_entity($guid), 'entity_type' => 'object', 'entity_subtype' => 'file')) . '</div>';
+	echo '<div class="home-static-container" style="width:20%; display:inline-block;">' . elgg_view('input/submit', array('value' => $submit_label)) . '</div>';
+} else {
+	?>
+	<div>
+		<label><?php echo $file_label; ?></label><br />
+		<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
+	</div>
+	<?php
+}
+?>
+
 <div>
 	<label><?php echo elgg_echo('title'); ?></label><br />
 	<?php echo elgg_view('input/text', array('name' => 'title', 'value' => $title)); ?>
@@ -49,7 +68,7 @@ $upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_uplo
 <div>
 	<label><?php echo elgg_echo('description'); ?></label>
 	<?php
-	if (elgg_get_context() == 'embed') {
+	if ($is_embed) {
 		echo elgg_view('input/plaintext', array('name' => 'description', 'value' => $desc));
 	} else {
 		echo elgg_view('input/longtext', array('name' => 'description', 'value' => $desc));
@@ -88,32 +107,34 @@ if ($categories) {
 	echo $categories;
 }
 
+if (!$is_embed) {
+	?>
+	<div>
+		<label><?php echo elgg_echo('access'); ?></label><br />
+		<?php echo elgg_view('input/access', array(
+			'name' => 'access_id',
+			'value' => $access_id,
+			'entity' => get_entity($guid),
+			'entity_type' => 'object',
+			'entity_subtype' => 'file',
+		)); ?>
+	</div>
+	<?php
+}
 ?>
-<div>
-	<label><?php echo elgg_echo('access'); ?></label><br />
-	<?php echo elgg_view('input/access', array(
-		'name' => 'access_id',
-		'value' => $access_id,
-		'entity' => get_entity($guid),
-		'entity_type' => 'object',
-		'entity_subtype' => 'file',
-	)); ?>
-</div>
+
 <div class="elgg-foot">
-<?php
+	<?php
+	echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
+	if ($guid) {
+		echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $guid));
+	}
 
-echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
+	// Note : select defaults to no notification in embed context
+	if (!$vars['entity'] || $is_embed) {
+		echo elgg_view('prevent_notifications/prevent_form_extend', array());
+	}
 
-if ($guid) {
-	echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $guid));
-}
-
-// Note : select defaults to no notification in embed context
-if (!$vars['entity']) {
-	echo elgg_view('prevent_notifications/prevent_form_extend', array());
-}
-
-echo elgg_view('input/submit', array('value' => $submit_label));
-
-?>
+	echo elgg_view('input/submit', array('value' => $submit_label));
+	?>
 </div>

@@ -79,9 +79,9 @@ if ($comment_guid) {
 		$owner = $entity->getOwnerEntity();
 
 		// Build more explicit subject
-		$default_subject = elgg_echo('generic_comment:email:subject', array(), $owner->language);
-		$subject = notification_messages_build_subject($entity);
-		if (empty($subject)) { $subject = $default_subject; }
+		$subject = elgg_echo('generic_comment:email:subject', array(), $owner->language);
+		$new_subject = notification_messages_build_subject($entity, array('language' => $owner->language));
+		if (!empty($new_subject)) { $subject = $new_subject; }
 
 		// Build message content (no change compared to core action)
 		$message = elgg_echo('generic_comment:email:body', array(
@@ -93,7 +93,8 @@ if ($comment_guid) {
 				$user->getURL()
 			), $owner->language);
 		// Trigger a hook to enable integration with other plugins
-		$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+		//$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+		$hook_message = notification_messages_build_body($entity, array('language' => $user->language))
 		// Failsafe backup if hook as returned empty content but not false (= stop)
 		if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 

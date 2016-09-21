@@ -377,6 +377,8 @@ Here is the new profile page : %s
 	// Groups invites
 	'userpicker:only_friends' => "Display friends only",
 	
+	'theme_inria:clicktotweet' => "Click to tweet <i class=\"fa fa-twitter\"></i>",
+	
 	
 	
 	

@@ -44,6 +44,11 @@ function notification_messages_init() {
 		}
 	}
 	
+	// Ensure comments that pass through overrided comment action and comment_tracker get the right subject and message (as these use a different hook)
+	// Note : should not be necessary as comment_tracker functions and comment action modified to use directly right message
+	//elgg_register_plugin_hook_handler('notify:annotation:message', 'comment', 'notification_messages_prepare_notification', 900);
+	
+	
 	// @TODO Handle properly comment subjects
 	// Register *earlier* to same hook and update (has to run before core and html_email_handler hook, which are default priority)
 	elgg_register_plugin_hook_handler('email', 'system', 'notification_messages_comments_notification_email_subject', 100);
@@ -287,7 +292,7 @@ function notification_messages_build_summary($entity, $params) {
 }
 
 
-// @TODO Notification message content
+// Notification message content
 function notification_messages_build_body($entity, $params) {
 	if (elgg_instanceof($entity)) {
 		
@@ -299,10 +304,11 @@ function notification_messages_build_body($entity, $params) {
 		// Get best readable subtype
 		$msg_subtype = notification_messages_readable_subtype($subtype);
 		
-		$owner = $params['event']->getActor();
-		$recipient = $params['recipient'];
+		//$owner = $params['event']->getActor();
+		$owner = $entity->getOwnerEntity();
+		//$recipient = $params['recipient']; // unused
 		$language = $params['language'];
-		$method = $params['method'];
+		//$method = $params['method']; // unused
 		
 		// Filtered tags for email notifications (text mostly)
 		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
@@ -337,26 +343,24 @@ function notification_messages_build_body($entity, $params) {
 				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
 				$descr .= strip_tags($entity->description, $allowed_tags);
-				if (!empty($reply_descr)) { $descr = elgg_echo('notification_messages:body:inreplyto', array($descr, $reply_descr)); }
+				if (!empty($reply_descr)) { $descr = elgg_echo('notification_messages:body:inreplyto', array($descr, $reply_descr), $language); }
 				$title = '<strong>' . $entity->title . '</strong>';
-				$owner = $entity->getOwnerEntity();
 				$body = elgg_echo('blog:notify:body', array(
 						$owner->name,
 						$title,
 						$descr,
 						$entity->getURL()
-					));
+					), $language);
 				break;
 				
 			default:
-				$owner = $entity->getOwnerEntity();
 				$container = $entity->getContainerEntity();
 				if (elgg_instanceof($container, "user") || elgg_instanceof($container, "group") || elgg_instanceof($container, "site")) { $msg_container = $container->name; }
 				
 				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
 				$descr .= strip_tags($entity->description, $allowed_tags);
-				if (!empty($reply_descr)) { $descr = elgg_echo('notification_messages:body:inreplyto', array($descr, $reply_descr)); }
+				if (!empty($reply_descr)) { $descr = elgg_echo('notification_messages:body:inreplyto', array($descr, $reply_descr), $language); }
 				$title = $entity->title;
 				if (empty($title)) { $title = $entity->name; }
 				$title = '<strong>' . $title . '</strong>';
@@ -367,14 +371,14 @@ function notification_messages_build_body($entity, $params) {
 							$msg_container, 
 							$descr,
 							$entity->getURL()
-						));
+						), $language);
 				} else {
 					$body = elgg_echo('notification_messages:objects:body:nocontainer', array(
 							$owner->name,
 							$title,
 							$descr,
 							$entity->getURL()
-						));
+						), $language);
 				}
 		}
 		
@@ -868,7 +872,8 @@ if (elgg_is_active_plugin('comment_tracker')) {
 						// ESOPE : Custom message content : keep the one from comment_tracker (which is nice)
 						// @TODO : normalize message here with custom improved content...
 						// Trigger a hook to provide better integration with other plugins
-						$new_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+						//$new_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+						$new_message = notification_messages_build_body($entity, array('language' => $user->language));
 						// Failsafe backup if hook as returned empty content but not false (= stop)
 						if (!empty($new_message)) { $message = $new_message; }
 						
