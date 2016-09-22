@@ -406,5 +406,8 @@ Here is the new profile page : %s
 	
 	'esope:members:title' => "%s (%s active members)",
 	
+	'groups:members' => "active members",
+	
+	
 );
 
