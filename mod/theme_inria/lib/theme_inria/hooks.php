@@ -541,9 +541,11 @@ function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
 			$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
 			$all_members = $entity->getMembers(array('count' => true));
 			//$members_string = elgg_echo('groups:member');
+			$members_string = $all_members . ' ' . elgg_echo('groups:member');
+			if ($all_members != $active_members) { $members_string = elgg_echo('theme_inria:groups:entity_menu', array($active_members, $all_members)); }
 			$options = array(
 				'name' => 'members',
-				'text' => elgg_echo('theme_inria:groups:entity_menu', array($active_members, $all_members)),
+				'text' => $members_string,
 				'href' => false,
 				'priority' => 200,
 			);
