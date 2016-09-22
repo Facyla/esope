@@ -55,6 +55,7 @@ function theme_fing_init(){
 	elgg_register_page_handler("qntransitions", "qntransitions_page_handler");
 	elgg_register_page_handler("futureduc", "futureduc_page_handler");
 	elgg_register_page_handler("softplace", "softplace_page_handler");
+	elgg_register_page_handler("questions-numeriques", "questionsnumeriques_page_handler");
 	
 	
 	// Remplacement du modèle d'event_calendar
@@ -208,6 +209,11 @@ function futureduc_page_handler($page){
 }
 function softplace_page_handler($page){
 	$forward = elgg_get_site_url() . 'groups/profile/161884/softplace';
+	header("Location: {$forward}");
+	exit;
+}
+function questionsnumeriques_page_handler($page){
+	$forward = elgg_get_site_url() . 'groups/profile/40689/questions-numeriques';
 	header("Location: {$forward}");
 	exit;
 }
