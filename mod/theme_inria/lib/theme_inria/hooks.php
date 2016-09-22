@@ -538,11 +538,12 @@ function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
 				WHERE md.entity_guid = e.guid
 					AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
 					AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
-			$num_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
-			$members_string = elgg_echo('groups:member');
+			$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
+			$all_members = $entity->getMembers(array('count' => true));
+			//$members_string = elgg_echo('groups:member');
 			$options = array(
 				'name' => 'members',
-				'text' => $num_members . ' ' . $members_string,
+				'text' => elgg_echo('theme_inria:groups:entity_menu', array($active_members, $all_members)),
 				'href' => false,
 				'priority' => 200,
 			);

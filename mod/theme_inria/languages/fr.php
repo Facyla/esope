@@ -383,6 +383,8 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	'theme_inria:clicktotweet' => "Cliquer pour tweeter <i class=\"fa fa-twitter\"></i>",
 	
+	'theme_inria:groups:entity_menu' => "%s membres (%s actifs)",
+	
 	
 	
 	

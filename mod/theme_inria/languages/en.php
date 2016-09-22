@@ -379,6 +379,7 @@ Here is the new profile page : %s
 	
 	'theme_inria:clicktotweet' => "Click to tweet <i class=\"fa fa-twitter\"></i>",
 	
+	'theme_inria:groups:entity_menu' => "%s members (%s active)",
 	
 	
 	
