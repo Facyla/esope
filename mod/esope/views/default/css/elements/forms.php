@@ -84,6 +84,7 @@ textarea {
 
 .elgg-input-access {
 	margin:5px 0 0 0;
+	max-width: 100%;
 }
 
 input[type="checkbox"],

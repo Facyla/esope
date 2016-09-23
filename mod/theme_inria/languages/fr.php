@@ -449,7 +449,9 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:owned:user' => 'Les groupes dont %s est propriétaire ou responsable',
 	'groups:yours' => "Mes groupes (membres)",
 	'groups:enableforum' => 'Activer le forum du groupe',
-	'groups:members' => "membres actifs", // membres du groupe
+	'groups:members' => "membres", // membres du groupe
+	'groups:members:active' => "membres actifs",
+	'groups:member:active' => "membre actif",
 	
 	'ckeditor:html' => "Activer/désactiver éditeur visuel",
 	

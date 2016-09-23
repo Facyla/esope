@@ -114,6 +114,10 @@ if (elgg_in_context('widgets')) {
 $group_string = '';
 $object = $item->getObjectEntity();
 $container = $object->getContainerEntity();
+// Esope : always tell the container group (of the commented object)
+if (elgg_instanceof($object, 'object', 'comment')) {
+	$container = $container->getContainerEntity();
+}
 if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_guid()) {
 	$group_link = elgg_view('output/url', array(
 		'href' => $container->getURL(),

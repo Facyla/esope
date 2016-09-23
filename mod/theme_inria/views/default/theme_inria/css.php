@@ -482,7 +482,7 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 /* Twitter intent link generator */
 .inria-twitter-intent { border: 1px solid #DDD; padding: 1rem 2rem; display: inline-block; border-radius: 0rem; margin: 1rem; }
-.inria-twitter-intent a { font-size: 1.4rem; font-weight: 200; color: #DDD; text-decoration: none; }
+.inria-twitter-intent a { font-size: 1.4rem; font-weight: 200; color: #BBB; text-decoration: none; }
 .inria-twitter-intent a:hover, .inria-twitter-intent a:active, .inria-twitter-intent a:focus { color: #999; }
 .inria-twitter-intent a.inria-twitter-intent-click { font-size:0.8rem; font-weight:bold; color:#999; float:right; text-transform: uppercase; margin-top: 0.5rem; }
 .inria-twitter-intent a.inria-twitter-intent-click:hover, .inria-twitter-intent a.inria-twitter-intent-click:focus, .inria-twitter-intent a.inria-twitter-intent-click:active { color:#666; }
