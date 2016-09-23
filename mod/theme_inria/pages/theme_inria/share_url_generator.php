@@ -38,7 +38,7 @@ $share_text = get_input('text', '');
 
 // Build share link
 $share_label = $share_text;
-if (!empty($share_url)) { $share_label .= ' ' . $share_url; }
+if (!empty($share_url)) { $share_label .= ' ' . str_replace(array('http://', 'https://'), '', $share_url); }
 if (!empty($share_tags)) { $share_label .= ' #' . implode(' #', (array)$share_tags); }
 if (!empty($share_via)) { $share_label .= ' via @' . implode(' @', (array)$share_via); }
 
