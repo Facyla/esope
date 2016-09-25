@@ -384,6 +384,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:clicktotweet' => "Cliquer pour tweeter <i class=\"fa fa-twitter\"></i>",
 	
 	'theme_inria:groups:entity_menu' => "%s membres (%s actifs)",
+	'theme_inria:groups:entity_menu:singular' => "%s membres (%s actif)",
+	'theme_inria:groups:entity_menu:none' => "%s membre (%s actif)",
 	
 	
 	
@@ -524,6 +526,7 @@ Afficher et commenter le nouvel article :
 	'esope:directory' => "Membres",
 	'members:label:newest' => "Date d'inscription",
 	'esope:members:title' => "%s (%s membres actifs)",
+	'esope:members:title:singular' => "%s (%s membre actif)",
 	
 	
 	// THE WIRE OVERRIDE

@@ -380,6 +380,8 @@ Here is the new profile page : %s
 	'theme_inria:clicktotweet' => "Click to tweet <i class=\"fa fa-twitter\"></i>",
 	
 	'theme_inria:groups:entity_menu' => "%s members (%s active)",
+	'theme_inria:groups:entity_menu:singular' => "%s members (%s active)",
+	'theme_inria:groups:entity_menu:none' => "%s member (%s active)",
 	
 	
 	
@@ -406,6 +408,7 @@ Here is the new profile page : %s
 	'GROUP_MEMBERS' => "group members",
 	
 	'esope:members:title' => "%s (%s active members)",
+	'esope:members:title:singular' => "%s (%s active member)",
 	
 	'groups:members' => "members",
 	'groups:members:active' => "active members",
