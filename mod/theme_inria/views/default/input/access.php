@@ -81,6 +81,7 @@ if (!$params['container_guid'] && $container) {
 /* Esope: this feature is unclear and even misleading to users due to translation strings
  * It doesn't default the value, nor limit the available access levels...
  */
+// Inria : restricted access => always force to same level as group
 $restricted_content_access = false;
 // should we tell users that public/logged-in access levels will be ignored?
 if (($container instanceof ElggGroup)
@@ -89,9 +90,11 @@ if (($container instanceof ElggGroup)
 	&& !($entity instanceof ElggGroup)) {
 	$show_override_notice = true;
 	$restricted_content_access = true;
+	$vars['options_values'] = array($container->access_id => get_readable_access_level($container->access_id));
 } else {
 	$show_override_notice = false;
 }
+
 
 /* Esope main access tweaks
  * - set some defaults in various contexts
@@ -140,7 +143,7 @@ if (elgg_instanceof($container, 'group')) {
 				case 'default': /* Do not set (let original check do it) $vars['value'] = get_default_access(); */ break;
 				default: $vars['value'] = $group_acl;
 			}
-			// Add default value to available options if needed
+			// Add default to available options if needed
 			if (!isset($vars['options_values'][$vars['value']])) { $vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']); }
 		}
 	}

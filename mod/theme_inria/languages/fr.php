@@ -454,6 +454,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:members' => "membres", // membres du groupe
 	'groups:members:active' => "membres actifs",
 	'groups:member:active' => "membre actif",
+	'groups:content_access_mode:membersonly' => "Restreint - Les nouveaux contenus ont le même niveau d'accès que le groupe",
 	
 	'ckeditor:html' => "Activer/désactiver éditeur visuel",
 	
