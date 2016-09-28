@@ -324,6 +324,10 @@ function esope_init() {
 	// * requires to add the hook trigger to the email notification handler
 	// elgg_register_plugin_hook_handler('email', 'system', 'esope_block_email_recipients', 100);
 	
+	// @TODO ? Update page owner or change layout when viewing content that is contained in a non-accessible container ?
+	// Note : this should be handled by elgg_group_gatekeeper function
+	//elgg_register_plugin_hook_handler('layout', 'page', 'esope_layout_hook');
+	
 	
 	
 	// NEW & REWRITTEN ACTIONS

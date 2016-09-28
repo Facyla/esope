@@ -28,9 +28,9 @@ if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 // navigation defaults to breadcrumbs
 $nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
 
-// Change layout for groups
+// Change layout for groups - but only show if group can be seen
 $owner = elgg_get_page_owner_entity();
-if (elgg_instanceof($owner, 'group')) {
+if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 	$topmenu = elgg_view('group/topmenu', array('entity' => $owner));
 }
 ?>
@@ -38,7 +38,7 @@ if (elgg_instanceof($owner, 'group')) {
 <div class="<?php echo $class; ?>">
 	
 	<?php
-	// Inria : shown nav and topmenu together here, and not above
+	// Inria : show nav and topmenu together here, and not above
 	if ($topmenu) {
 		echo $nav . '<br >';
 		echo $topmenu;

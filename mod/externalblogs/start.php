@@ -136,7 +136,7 @@ function externalblogs_public_pages($hook, $type, $return_value, $params) {
 				if ($article->access_id == 2) {
 					// On autorise l'URL complète, mais aussi courte (permalien)
 					$return_value[] = $eblog->blogname . '/' . $article->guid; // Permalien
-					$return_value[] = $eblog->blogname . '/' . $article->guid . '/' . friendly_title($article->title);
+					$return_value[] = $eblog->blogname . '/' . $article->guid . '/' . elgg_get_friendly_title($article->title);
 				}
 			}
 		}

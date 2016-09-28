@@ -20,11 +20,11 @@
  	- serviceUrl2
  */
 
-$no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );
+$no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
 
 // Default required settings
-if (empty($vars['entity']->cas_port)) $vars['entity']->cas_port = 443;
-if (empty($vars['entity']->cas_context)) $vars['entity']->cas_context = '/cas';
+if (empty($vars['entity']->cas_port)) { $vars['entity']->cas_port = 443; }
+if (empty($vars['entity']->cas_context)) { $vars['entity']->cas_context = '/cas'; }
 ?>
 <p>
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
@@ -43,16 +43,16 @@ if (empty($vars['entity']->cas_context)) $vars['entity']->cas_context = '/cas';
 		<input type="text" name="params[ca_cert_path]" value="<?php echo $vars['entity']->ca_cert_path;?>" /><br/>
 		
 		<label><?php echo elgg_echo('elgg_cas:settings:autologin'); ?></label><br/>
-		<?php echo elgg_view('input/dropdown', array('name' => 'params[autologin]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->autologin )); ?><br/>
+		<?php echo elgg_view('input/select', array('name' => 'params[autologin]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->autologin )); ?><br/>
 		
 		<label><?php echo elgg_echo('elgg_cas:settings:casregister'); ?></label><br/>
-		<?php echo elgg_view('input/dropdown', array('name' => 'params[casregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->casregister )); ?><br/>
+		<?php echo elgg_view('input/select', array('name' => 'params[casregister]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->casregister )); ?><br/>
 		
 		<label><?php echo elgg_echo('elgg_cas:settings:enable_webservice'); ?></label><br/>
-		<?php echo elgg_view('input/dropdown', array('name' => 'params[enable_ws_auth]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->enable_ws_auth )); ?><br/>
+		<?php echo elgg_view('input/select', array('name' => 'params[enable_ws_auth]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->enable_ws_auth )); ?><br/>
 		
 		<label><?php echo elgg_echo('elgg_cas:settings:cas_library'); ?></label><br/>
-		<?php echo elgg_view('input/dropdown', array('name' => 'params[cas_library]', 'options_values' => array('1.3.2' => 'CAS-1.3.2', '1.3.3' => 'CAS-1.3.3'), 'value' => $vars['entity']->cas_library)); ?><br/>
+		<?php echo elgg_view('input/select', array('name' => 'params[cas_library]', 'options_values' => array('1.3.2' => 'phpCAS-1.3.2', '1.3.3' => 'CAS-1.3.3', '1.3.4' => 'CAS-1.3.4'), 'value' => $vars['entity']->cas_library)); ?><br/>
 		
 	</fieldset>
 </p>

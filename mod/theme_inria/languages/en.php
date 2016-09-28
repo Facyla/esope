@@ -413,7 +413,7 @@ Here is the new profile page : %s
 	'groups:members' => "members",
 	'groups:members:active' => "active members",
 	'groups:member:active' => "active member",
-	'groups:content_access_mode:membersonly' => "Restricted - New content will have the same access level as the group",
+	'groups:content_access_mode:membersonly' => "Same as group - New content will have the same access level as the group",
 	
 	
 );

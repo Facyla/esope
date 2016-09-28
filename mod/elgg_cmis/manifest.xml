@@ -2,7 +2,7 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>CMIS - Inria Partage (Alfresco)</name>
 	<author>Florian Daniel ~ 2013-2016</author>
-	<version>1.12.0</version>
+	<version>1.12.1</version>
 	<blurb>CMIS plugin</blurb>
 	<description>CMIS Interface. Mainly build for Alfresco. Please read manifest comments for more info.</description>
 	<website>https://partage.inria.fr/</website>
@@ -28,8 +28,16 @@
 </plugin_manifest>
 
 <!--
+
+Used library : phpclient - Apache Chemistry (Incubating) PHP CMIS Client Library
+  * https://chemistry.apache.org/php/phpclient.html
+  * https://github.com/apache/chemistry-phpclient
+Alternate library : https://github.com/dkd/php-cmis-client
+
+
 WARNING : this version was designed mainly for Inria Partage Alfresco install, with the idea of being sufficiently generic to be used on other CMIS endpoints, but this plugin will probably require some tweaks on other CMIS repositories. Plugin content and structure might also evolve. If you plan to use and develop on this base, please contact the author to synchronize evolutions...
 
+1.12.1 : 20160928 - Started plugin refactoring
 
 1.12.0 : 20160319 - Update to Elgg 1.12
 

@@ -82,22 +82,18 @@ switch($access_id) {
 		break;
 	default :
 		$acl = get_access_collection($access_id);
-		if ($collection_owner = get_entity($acl->owner_guid)) {
-			if (elgg_instanceof($collection_owner, 'group')) {
-				$help_details = elgg_echo('access_icons:group:details');
-				$access_class .= ' elgg-access-group';
-			} else if (elgg_instanceof($collection_owner, 'user')) {
-				$help_details = elgg_echo('access_icons:collection:details');
-				$access_class .= ' elgg-access-collection';
-			} else {
-				$help_details = elgg_echo('access_icons:other:details');
-				$access_class .= ' elgg-access-other';
-				error_log("Access output/access : undefined type access"); // Note : dans ce cas il faut pouvoir ajouter la prise en charge...
-			}
+		$collection_owner = get_entity($acl->owner_guid);
+		if (elgg_instanceof($collection_owner, 'group')) {
+			$help_details = elgg_echo('access_icons:group:details');
+			$access_class .= ' elgg-access-group';
+		} else if (elgg_instanceof($collection_owner, 'user')) {
+			$help_details = elgg_echo('access_icons:collection:details');
+			$access_class .= ' elgg-access-collection';
 		} else {
+			// Container inconnu, typiquement car pas d'accès suffisant
 			$help_details = elgg_echo('access_icons:other:details');
 			$access_class .= ' elgg-access-other';
-			error_log("Access output/access : type acces non defini. Aucun owner ACL."); // Note : dans ce cas il faut pouvoir ajouter la prise en charge...
+			//error_log("Access output/access : undefined type access. Container cannot be accessed to.");
 		}
 }
 

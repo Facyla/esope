@@ -938,3 +938,23 @@ function esope_search_guid_hook($hook, $type, $value, $params) {
 
 
 
+// Cas particulier si contenu public dans groupe privé : changement de layout ?
+/*
+function esope_layout_hook($hook, $type, $value, $params) {
+	$page_owner = elgg_get_page_owner_entity();
+	if (elgg_instanceof($page_owner, 'group') && !has_access_to_entity($page_owner)) {
+		// Remove group page owner
+		elgg_set_page_owner_guid(1);
+		// Update breadcrumbs
+		global $CONFIG;
+		foreach ($CONFIG->breadcrumbs as $k => $breadcrumb) {
+			if (strpos($breadcrumb['link'], 'groups/') !== false) { unset($CONFIG->breadcrumbs[$k]); }
+		}
+		$value = 'one_column';
+	}
+	return $value;
+}
+*/
+
+
+

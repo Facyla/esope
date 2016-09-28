@@ -24,7 +24,19 @@ if (empty($vars['entity']->cmis_atom_url)) $vars['entity']->cmis_atom_url = 'cmi
 	<input type="text" name="params[cmis_atom_url]" value="<?php echo $vars['entity']->cmis_atom_url;?>" /></label></p>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:debugmode'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[debugmode]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debugmode )); ?></label></p>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[debugmode]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debugmode )); ?></label></p>
+	
+</fieldset>
+<br />
+
+<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
+	<legend>Settings required to use CMIS as a file backend</legend>
+	
+	<p><label for="params[cmis_username]"><?php echo elgg_echo('elgg_cmis:cmis_login');?> 
+	<input type="text" name="params[cmis_username]" value="<?php echo $vars['entity']->cmis_username;?>" /></label></p>
+	
+	<p><label for="params[cmis_password]"><?php echo elgg_echo('elgg_cmis:cmis_password');?> 
+	<input type="text" name="params[cmis_password]" value="<?php echo $vars['entity']->cmis_password;?>" /></label></p>
 	
 </fieldset>
 <br />
@@ -33,19 +45,19 @@ if (empty($vars['entity']->cmis_atom_url)) $vars['entity']->cmis_atom_url = 'cmi
 	<legend><?php echo elgg_echo('elgg_cmis:widgets'); ?></legend>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:widget:cmis_mine'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_mine )); ?></label></p>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[widget_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_mine )); ?></label></p>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:widget:cmis'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_cmis]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_cmis )); ?></label></p>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[widget_cmis]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_cmis )); ?></label></p>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:widget:cmis_folder'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_folder]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_folder )); ?></label></p>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[widget_folder]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_folder )); ?></label></p>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:widget:cmis_search'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_search]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_search )); ?></label></p>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[widget_search]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_search )); ?></label></p>
 	
 	<p><label><?php echo elgg_echo('elgg_cmis:widget:cmis_insearch'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[widget_insearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_insearch )); ?></label></p>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[widget_insearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_insearch )); ?></label></p>
 	
 </fieldset>
 

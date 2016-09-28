@@ -1,5 +1,4 @@
 <?php
-global $CONFIG;
 $title = elgg_echo('elgg_cmis:title');
 $content = '';
 
@@ -23,7 +22,9 @@ if (!empty($repo_password)) {
 	$repo_password = esope_vernam_crypt($repo_password, $key);
 }
 $repo_debug = elgg_get_plugin_setting('debugmode', 'elgg_cmis', 'no');
-if ($repo_debug == 'yes') $repo_debug = true; else $repo_debug = false;
+$repo_debug = false;
+if ($repo_debug == 'yes') { $repo_debug = true; }
+
 
 
 // Variables utiles
@@ -44,7 +45,7 @@ $recursive = get_input('recursive', 'false');
 if ($repo_debug) $content .= "URL : $repo_url<br />Identifiant : $repo_username<br />Mot de passe : $repo_password<br />";
 
 if (empty($repo_url) || empty($repo_username) || empty($repo_password)) {
-	echo 'WARNING : required parameters are missing - please <a href="' . $CONFIG->url . 'settings/plugins/' . $own->username . '" target="_new">update your user CMIS plugin settings</a>';
+	echo 'WARNING : required parameters are missing - please <a href="' . elgg_get_site_url() . 'settings/plugins/' . $own->username . '" target="_new">update your user CMIS plugin settings</a>';
 	exit;
 }
 
