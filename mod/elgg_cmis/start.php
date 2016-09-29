@@ -18,7 +18,9 @@ function elgg_cmis_init(){
 	
 	//elgg_load_js('lightbox');
 	//elgg_load_css('lightbox');
-
+	
+	// Main CMIS library
+	elgg_register_library('elgg:elgg_cmis:chemistry', elgg_get_plugins_path() . 'elgg_cmis/vendors/cmis/lib/cmis_repository_wrapper.php');
 	// Custom CMIS functions
 	elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis.php');
 	
@@ -68,7 +70,12 @@ function elgg_cmis_page_handler($page) {
 		
 		// This is for development
 		case 'test':
+			elgg_load_library('elgg:elgg_cmis:chemistry');
 			elgg_load_library('elgg:elgg_cmis');
+			if (isset($page[1])) { set_input('query', $page[1]); }
+			if (isset($page[2])) { set_input('type', $page[2]); }
+			if (isset($page[3])) { set_input('filter', $page[3]); }
+			if (isset($page[4])) { set_input('filter_value', $page[4]); }
 			if (!include_once "$base/cmis_global.php") { return false; }
 			break;
 		

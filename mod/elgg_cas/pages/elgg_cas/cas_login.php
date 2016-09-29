@@ -2,7 +2,7 @@
 $title = elgg_echo('elgg_cas:title');
 $content = '';
 
-// Allow to forward to asked URL after successful login, or last forwward if not explicitely set
+// Allow to forward to asked URL after successful login, or last forward if not explicitely set
 $forward = get_input('forward', $_SESSION['last_forward_from']);
 
 elgg_load_library('elgg:elgg_cas');
@@ -14,6 +14,7 @@ if (!$cas_client_loaded) {
 	// Uncomment to enable debugging
 	//phpCAS::setDebug();
 	
+	// @TODO enable harcoded file settings too
 	//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
 	$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas');
 	$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);

@@ -22,8 +22,7 @@ if (!empty($repo_password)) {
 	$repo_password = esope_vernam_crypt($repo_password, $key);
 }
 $repo_debug = elgg_get_plugin_setting('debugmode', 'elgg_cmis', 'no');
-$repo_debug = false;
-if ($repo_debug == 'yes') { $repo_debug = true; }
+if ($repo_debug == 'yes') { $repo_debug = true; } else { $repo_debug = false; }
 
 
 
