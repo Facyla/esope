@@ -682,6 +682,7 @@ return array(
 	'esope:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
 	'esope:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
 	'esope:subgroups:tryjoiningparent' => "Trying to join parent groups to allow joining %s",
+	'esope:subgroups:access:parent' => "Parent group level %2\$s [%1\$s]",
 	
 	'esope:input:nogroup' => "No group selected",
 	'esope:input:donotchange' => "Do not change (%s)",

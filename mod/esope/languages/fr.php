@@ -694,6 +694,7 @@ return array(
 	'esope:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
 	'esope:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
 	'esope:subgroups:tryjoiningparent' => "Tentative d'inscription dans les groupes parents pour vous inscrire à %s",
+	'esope:subgroups:access:parent' => "Groupe parent niveau %2\$s [%1\$s]",
 	
 	'esope:input:nogroup' => "Aucun groupe",
 	'esope:input:donotchange' => "Ne pas changer (%s)",
@@ -862,7 +863,7 @@ return array(
 	'groups:content_access_mode:warning' => "Attention : la modification de ce paramètre ne changera pas le niveau d'accès des contenus déjà publiés !",
 	'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir l'accès aux nouveaux contenus",
 	'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
-	'groups:acl' => "Membres du Groupe (%s)",
+	'groups:acl' => "Membres du groupe [%s]",
 	
 	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
 	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",

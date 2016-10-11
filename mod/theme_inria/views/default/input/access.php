@@ -100,19 +100,27 @@ $params['value'] = $vars['value'];
 if (!isset($vars['options_values']) && $no_current_value) {
 	$vars['options_values'] = get_write_access_array(0, 0, false, $params);
 }
-
-
 /* Esope: the default feature is unclear and even misleading to users due to improper translation
  * It doesn't default the value, nor limit the available access levels...
  */
+// Inria : restricted access => DO NOT force to same level as group, only default
+// Eg. use case when a private group publishes a public newsletter...
 $restricted_content_access = false;
 // should we tell users that public/logged-in access levels will be ignored?
 if (($container instanceof ElggGroup)
 	&& $container->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY
 	&& !elgg_in_context('group-edit')
 	&& !($entity instanceof ElggGroup)) {
+	$show_override_notice = true;
 	$restricted_content_access = true;
+	// Inria : always add container access level
+	$vars['options_values'][$container->access_id] = get_readable_access_level($container->access_id);
+	// Inria : always set default access to container access level
+	if ($no_current_value) { $vars['value'] = $container->access_id; }
+} else {
+	$show_override_notice = false;
 }
+
 
 /* Esope main access tweaks
  * - set some defaults in various contexts
@@ -124,9 +132,8 @@ if (($container instanceof ElggGroup)
 if (isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { unset($vars['options_values'][2]); }
 */
 
-/* Même en mode Walled Garden, on veut pouvoir autoriser quelques pages et fichiers publics
+// Inria : Même dans les groupes en accès restreints ou en mode Walled Garden, on veut pouvoir autoriser quelques pages et fichiers publics
 if (!isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { $vars['options_values'][2] = elgg_echo('esope:access:public'); }
-*/
 
 /* Auto-update current public value to loggedin / MAJ auto accès Public => Membres
 // @TODO auto-update is not something we want to do (use scripting instead if required)
@@ -178,6 +185,7 @@ if (elgg_instanceof($container, 'group')) {
 			$parent_level++;
 		}
 	}
+	
 }
 
 
