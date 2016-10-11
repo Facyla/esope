@@ -1,3 +1,36 @@
+<a name="1.12.13"></a>
+### 1.12.13  (2016-10-02)
+
+#### Contributors
+
+* Jerôme Bakker (3)
+* Steve Clay (2)
+* Sébastien Lemay (1)
+
+#### Bug Fixes
+
+* **core:** page owner entity only returns users/groups user can see ([0d333100](https://github.com/Elgg/Elgg/commit/0d33310031024aa8940f9d3bbe5cdd80f2a4da57))
+* **docs:** Fixed link to 'our supporters page' ([fe144644](https://github.com/Elgg/Elgg/commit/fe144644faa84f9849604abfd4c34efb2df0d165))
+* **notifications:** only prefetch subscribers for ElggEntities ([65be05c5](https://github.com/Elgg/Elgg/commit/65be05c567692694e052ae4711450b7c19f2d571))
+* **profile:** use correct default access for profile fields ([63a01b6f](https://github.com/Elgg/Elgg/commit/63a01b6f8c9314ddae5819e8194938c988871a60))
+
+
+<a name="1.12.12"></a>
+### 1.12.12  (2016-08-05)
+
+#### Contributors
+
+* Steve Clay (11)
+* Ismayil Khayredinov (2)
+
+#### Bug Fixes
+
+* **blog:** pass entity to the object/elements/full ([134c5b83](https://github.com/Elgg/Elgg/commit/134c5b837c476f36ff52ecbe4e1e5b213833df31))
+* **groups:** unfeaturing a group no longer leaves useless metadata ([2f3cf28a](https://github.com/Elgg/Elgg/commit/2f3cf28ac0d879fa13a874e99227faad6ef5bb4c))
+* **logging:** make clearer exception numbers are timestamps ([9c70596e](https://github.com/Elgg/Elgg/commit/9c70596e591198a72a713218ecdaf780f33539c2), closes [#9924](https://github.com/Elgg/Elgg/issues/9924))
+* **plugins:** now checks plugin instances before parsing priorities ([26d21f88](https://github.com/Elgg/Elgg/commit/26d21f886c809517890e8264ee4a6181293cad50))
+
+
 <a name="1.12.11"></a>
 ### 1.12.11  (2016-06-13)
 

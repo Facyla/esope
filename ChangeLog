@@ -1,3 +1,108 @@
+2016-10-02  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(release): v1.12.13
+
+2016-09-28  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Forms/StickyForms.php, engine/lib/input.php:
+  security(forms): passwords no longer stored with sticky form data  Also makes
+  clearer the documentation for the sticky functions.
+
+2016-08-29  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Database/AccessCollections.php,
+  engine/tests/ElggCoreAccessSQLTest.php: chore(tests): test entity
+  accessibility in the notifications flow  Adds tests to verify that entities
+  with ACCESS_LOGGED_IN and ACCESS_PUBLIC are treated as accessible with
+  ignored access
+
+2016-09-06  iionly <iionly@gmx.de>
+
+  	* mod/bookmarks/actions/bookmarks/save.php, mod/bookmarks/languages/en.php,
+  mod/bookmarks/lib/bookmarks.php, mod/bookmarks/start.php,
+  mod/bookmarks/views/default/forms/bookmarks/save.php: chore(bookmarks):
+  Removal of unused 'shares' code and unused language strings from bookmarks
+
+2016-09-06  Steve Clay <steve@mrclay.org>
+
+  	* mod/pages/actions/pages/delete.php, mod/pages/actions/pages/edit.php,
+  mod/pages/lib/pages.php: fix(pages): operations keep track of more than 10
+  child pages  Sets `0` limit on queries for child queries, converts to
+  batches, some small refactoring for clarity.
+
+2016-08-29  Steve Clay <steve@mrclay.org>
+
+  	* mod/htmlawed/vendors/htmLawed/htmLawed.php,
+  mod/htmlawed/vendors/htmLawed/htmLawedTest.php,
+  mod/htmlawed/vendors/htmLawed/htmLawed_README.htm,
+  mod/htmlawed/vendors/htmLawed/htmLawed_README.txt,
+  .../vendors/htmLawed/htmLawed_TESTCASE.txt: security(htmlawed): upgrades
+  htmLawed to latest, currently 1.1.22  Fixes #10126
+
+2016-08-17  Steve Clay <steve@mrclay.org>
+
+  	* COPYRIGHT.txt, LICENSE.txt: docs(license): clarifies dual licensing in
+  LICENSE.txt
+
+2016-08-05  Steve Clay <steve@mrclay.org>
+
+  	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(release): v1.12.12
+
+2016-07-21  Steve Clay <steve@mrclay.org>
+
+  	* .scripts/languages.php, .scripts/release.php: chore(project): separate
+  i18n updates from releases  Language updates are super slow and ruin the DX
+  of cutting releases. Also, pairing them with releases puts a large amount of
+  pressure on core devs to rubber stamp language changes without any public
+  review.  This allows language files (code, not docs) to be updated
+  independently of releases. The follow up to this would be to update the docs
+  in 2.x to recommend running the language intake separately and sending in
+  standard pull requests independently of releases.
+
+2016-06-10  Steve Clay <steve@mrclay.org>
+
+  	* docs/guides/routing.rst, engine/lib/elgglib.php: chore(routing): reject
+  requests for unknown walled garden views  Existing code passed arbitrary
+  input (URL segment) into HTML attributes. Although URL segments are now HTML
+  escaped, we should not invite risk or present bad examples to devs.
+
+2016-07-18  Steve Clay <steve@mrclay.org>
+
+  	* js/tests/ElggSpinnerTest.js, views/default/js/elgg/spinner.js:
+  chore(tests): eliminates setTimeout race in ElggSpinnerTest  Even though the
+  class should be added at 20ms, with a wait of 100ms tests were still failing.
+  Apparently there's no way to reliably test that a timeout of a particular
+  period is used, so now the module fires a test event, allowing the test to
+  directly listen instead of guessing how long to wait. This still at least
+  tests that there is *some* delay.
+
+2016-07-08  Steve Clay <steve@mrclay.org>
+
+  	* mod/web_services/lib/api_user.php, mod/web_services/lib/tokens.php:
+  security(web_services): increase entropy of API keys
+
+2016-06-11  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Http/Request.php,
+  engine/tests/phpunit/Elgg/Http/RequestTest.php: security(routing): HTML
+  escapes URL segments  Just in case a developer unwisely injects URL content
+  directly into HTML, we escape `&"'<>` with HTML entities.
+
+2016-07-02  Steve Clay <steve@mrclay.org>
+
+  	* engine/lib/elgglib.php, views/failsafe/messages/exceptions/exception.php:
+  fix(logging): make clearer exception numbers are timestamps  Fixes #9924
+
 2016-06-13  Steve Clay <steve@mrclay.org>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.12.11

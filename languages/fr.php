@@ -1,4 +1,8 @@
 <?php
+/* Cette version du fichier de langue remplace le fichier fr.php fourni en standard avec Elgg à chaque mise à jour du core
+ * Cette version se justifie par de nombreuses traductions qui ne sont pas homogènes dans la version originale
+ */
+
 return array(
 /**
  * Sites
@@ -79,7 +83,7 @@ return array(
 	'ElggPlugin:Dependencies:PhpVersion' => 'Version de PHP',
 	'ElggPlugin:Dependencies:PhpExtension' => 'Extension PHP : %s',
 	'ElggPlugin:Dependencies:PhpIni' => 'Paramètre PHP ini : %s',
-	'ElggPlugin:Dependencies:Plugin' => 'Plugin : %s',
+	'ElggPlugin:Dependencies:Plugin' => 'Plugin: %s',
 	'ElggPlugin:Dependencies:Priority:After' => 'Après %s',
 	'ElggPlugin:Dependencies:Priority:Before' => 'Avant %s',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s n\'est pas installé',
@@ -489,7 +493,7 @@ return array(
 	'admin:users:admins' => 'Administrateurs',
 	'admin:users:add' => 'Créer un utilisateur',
 	'admin:users:description' => "Ce panneau d'administration vous permet de contrôler les paramètres des utilisateurs de votre site. Choisissez une option ci-dessous pour commencer.",
-	'admin:users:adduser:label' => "Cliquez ici pour ajouter un nouvel utilisateur...",
+	'admin:users:adduser:label' => "Cliquez ici pour ajouter un nouvel utilisateur ...",
 	'admin:users:opt:linktext' => "Configurer les utilisateurs...",
 	'admin:users:opt:description' => "Configurer les utilisateurs et les informations des comptes.",
 	'admin:users:find' => 'Trouver',
@@ -538,12 +542,12 @@ return array(
 
 	'admin:widget:admin_welcome:admin_overview' =>
 "La navigation dans la zone d'administration se fait à l'aide du menu de droite. Il est organisé en trois parties :
-<dl>
+	<dl>
 	<dt>Administrer</dt><dd>Les tâches de tous les jours comme suivre le contenu signalé, vérifier qui est en ligne, et afficher des statistiques.</dd>
 	<dt>Configurer</dt><dd>Les tâches occasionnelles comme la définition du nom du site ou l'activation d'un plugin.</dd>
 	<dt>Développer</dt><dd>Pour les développeurs qui créent des plugins ou conçoivent des thèmes. (Nécessite le plugin developer.)</dd>
-</dl>
-",
+	</dl>
+	",
 
 	// argh, this is ugly
 	'admin:widget:admin_welcome:outro' => '<br />Pensez à consulter les ressources disponibles via les liens de bas de page, et merci d\'utiliser Elgg !',
@@ -1066,7 +1070,7 @@ Après connexion, nous vous recommandons de changer votre mot de passe.
 	'installation:httpslogin:label' => "Activer les connexions via HTTPS",
 	'installation:view' => "Entrez le nom de la vue qui sera utilisée par défaut pour l'affichage du site, ou laissez vide pour la vue par défaut (en cas de doute, laissez la valeur par défaut) :",
 
-	'installation:siteemail' => "L'adresse de courriel du site (utilisée lors de l'envoi de courriels par le système)",
+	'installation:siteemail' => "Le courriel du site (utilisé lors de l'envoi de courriels par le système)",
 	'installation:default_limit' => "Nombre d'éléments par page par défaut",
 
 	'admin:site:access:warning' => "Le niveau d'accès suggéré aux utilisateurs lorsqu'ils créent un nouveau contenu. Modifier ce réglage n'a aucun effet sur l'accès au contenu existant, et n'affectera que les futures publications.",
@@ -1101,9 +1105,9 @@ Après connexion, nous vous recommandons de changer votre mot de passe.
 	'upgrade:unlock:success' => "Mise à niveau débloquée.",
 	'upgrade:unable_to_upgrade' => 'Impossible de mettre à niveau.',
 	'upgrade:unable_to_upgrade_info' =>
-		'Cette installation ne peut pas être mise à jour, car des fichiers de l\'ancienne version ont été détectées dans le noyau d\'Elgg. Ces fichiers sont obsolètes et doivent être supprimés pour qu\'Elgg fonctionne correctement. Si vous n\'avez pas modifié les fichiers du noyau d\'Elgg, vous pouvez simplement supprimer le répertoire noyau et le remplacer par celui de la dernière version d\'Elgg téléchargée  depuis <a href="http://elgg.org> elgg.org" </a>. <br /> <br />
+		'Cette installation ne peut pas être mise à jour, car des fichiers de l\'ancienne version ont été détectées dans le noyau d\'Elgg. Ces fichiers sont obsolètes et doivent être supprimés pour qu\'Elgg fonctionne correctement. Si vous n\'avez pas modifié les fichiers du noyau d\'Elgg, vous pouvez simplement supprimer le répertoire noyau et le remplacer par celui de la dernière version d\'Elgg téléchargée  depuis <a href="http://elgg.org> elgg.org" </ a>. <br /> <br />
 
-Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">Documentation sur la mise à niveau d\'Elgg</a>. Si vous avez besoin d\'aide, veuillez poser votre question dans les <a href="http://community.elgg.org/pg/groups/discussion/"> Forums d\'aide technique communautaires</a>.',
+Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">Documentation sur la mise à niveau d\'Elgg</ a>. Si vous avez besoin d\'aide, veuillez poser votre question dans les <a href="http://community.elgg.org/pg/groups/discussion/"> Forums d\'aide technique communautaires</ a>.',
 
 	'update:twitter_api:deactivated' => 'Le plugin Twitter API (précédemment Twitter Service) a été désactivé lors de la mise à niveau. Veuillez l\'activer manuellement si nécessaire.',
 	'update:oauth_api:deactivated' => 'Le plugin OAuth API (précédemment OAuth Lib) a été désactivé lors de la mise à niveau. Veuillez l\'activer manuellement si nécessaire.',
@@ -1228,6 +1232,7 @@ Sinon ignorez cet e-mail.
 
 	'generic_comment:email:subject' => 'Vous avez un nouveau commentaire !',
 	'generic_comment:email:body' => "Vous avez un nouveau commentaire de %2\$s sur votre publication \"%1\$s\" :
+
 
 %s
 
