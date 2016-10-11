@@ -78,10 +78,11 @@ if (!$params['container_guid'] && $container) {
 	$params['container_guid'] = $container->guid;
 }
 
-/* Esope: this feature is unclear and even misleading to users due to translation strings
+/* Esope: the default feature is unclear and even misleading to users due to improper translation
  * It doesn't default the value, nor limit the available access levels...
  */
-// Inria : restricted access => always force to same level as group
+// Inria : restricted access => DO NOT always force to same level as group, only default
+// Eg. use case when a private group publishes a public newsletter...
 $restricted_content_access = false;
 // should we tell users that public/logged-in access levels will be ignored?
 if (($container instanceof ElggGroup)
@@ -90,7 +91,10 @@ if (($container instanceof ElggGroup)
 	&& !($entity instanceof ElggGroup)) {
 	$show_override_notice = true;
 	$restricted_content_access = true;
-	$vars['options_values'] = array($container->access_id => get_readable_access_level($container->access_id));
+	// Inria : always add container access level
+	$vars['options_values'][$container->access_id] = get_readable_access_level($container->access_id);
+	// Inria : always set default access to container access level
+	if ($no_current_valu) { $vars['value' = $container->access_id; }
 } else {
 	$show_override_notice = false;
 }
