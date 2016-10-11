@@ -52,7 +52,7 @@ function elgg_cas_init() {
 	// Autologin attempt
 	if (!elgg_is_logged_in()) {
 		$autologin = elgg_get_plugin_setting('autologin', 'elgg_cas', false);
-		if ($autologin == 'yes')) {
+		if ($autologin == 'yes') {
 			elgg_register_event_handler("pagesetup", "system", "elgg_cas_autologin");
 		}
 	}

@@ -4,7 +4,7 @@
 	<author>Florian Daniel ~ 2013-2016</author>
 	<version>1.12.1</version>
 	<blurb>CAS authentication</blurb>
-	<description>Interfaçage avec CAS comme source d'authtification</description>
+	<description>Interfaçage avec CAS comme source d'authentification</description>
 	<website>https://cas.inria.fr/</website>
 	<copyright>Florian DANIEL aka Facyla</copyright>
 	<license>GNU Public License version 2</license>
