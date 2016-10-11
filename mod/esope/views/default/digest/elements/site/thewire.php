@@ -18,7 +18,7 @@ $dbprefix = elgg_get_config("dbprefix");
 $thewire_options = array(
 	"type" => "object",
 	"subtype" => "thewire",
-	"limit" => 5,
+	"limit" => $limit,
 	"created_time_lower" => $ts_lower,
 	"created_time_upper" => $ts_upper,
 );
@@ -35,7 +35,11 @@ if (in_array('groups', $exclude)) {
 }
 
 if ($thewires = elgg_get_entities($thewire_options)){
-	$title = elgg_view("output/url", array("text" => elgg_echo("thewire"), "href" => "thewire/all" ));
+	$title = elgg_view("output/url", array(
+		"text" => elgg_echo("thewire"),
+		"href" => "thewire/all",
+		"is_trusted" => true
+	));
 	
 	$latest_thewires = "";
 	
@@ -44,7 +48,9 @@ if ($thewires = elgg_get_entities($thewire_options)){
 		
 		$latest_thewires .= "<div class='digest-blog'>";
 		$owner = $thewire->getOwnerEntity();
-		if ($owner) $latest_thewires .= "<a href='" . $thewire_url. "'><img src='". $owner->getIconURL("small") . "' style='border-radius: 5px; padding: 0; margin: 0 5px 0 0;' /></a>";
+		if ($owner) {
+			$latest_thewires .= "<a href='" . $thewire_url. "'><img src='". $owner->getIconURL("small") . "' style='border-radius: 5px; padding: 0; margin: 0 5px 0 0;' /></a>";
+		}
 		$latest_thewires .= "<span>";
 		$latest_thewires .= "<a href='" . $thewire_url. "'>&laquo;&nbsp;" . $thewire->description . "&nbsp;&raquo;</a>";
 		$latest_thewires .= "</span>";

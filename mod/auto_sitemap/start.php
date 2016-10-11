@@ -1,8 +1,7 @@
 <?php
 /* ######################################################
- *  Ramón Iglesias
- *  monchomail@gmail.com 
- *  12-08-2012
+ *  Ramón Iglesias / ura soul
+ *  www.ureka.org
  * ###################################################### */
 
 elgg_register_event_handler('init', 'system', 'auto_sitemap_init');
@@ -11,31 +10,23 @@ elgg_register_event_handler('init', 'system', 'auto_sitemap_init');
 global $relevantEntities;
 $relevantEntities = Array('user' , 'group' , 'blog' ,'file' , 'event');	
 
-
-/* =============================================================== */
 function auto_sitemap_init() {
-	
-	// Registro el controlador
+	// register page handler
 	elgg_register_page_handler('auto_sitemap','auto_sitemap_page_handler');
 
 }
 
-/* =============================================================== */
 function auto_sitemap_page_handler($page) {
-
-	$esquema = elgg_get_plugin_setting('esquema');
-	if ( empty( $esquema )){
-		$esquema = 'sitemap_org_0_9';
+	$schema = elgg_get_plugin_setting('schema');
+	if ( empty( $schema )){
+		$schema = 'sitemap_org_0_9';
 	}
 	
 	// incluir o no los estilos
 	$flagXsl = elgg_get_plugin_setting('use_xsl');
 	
 	switch ($page[0]) {
-		
-		// ------------------------------------------------------------------------------------
 		case 'index':		
-
 			// custom URLs
 			$sitemaps[] = 'custom' ;
 
@@ -54,15 +45,12 @@ function auto_sitemap_page_handler($page) {
 			if ( !empty($otherActiveEntities)){
 				$sitemaps[] = 'other' ;
 			}
-
 			// Pinto el sitemap (indice) 
-			echo elgg_view('auto_sitemap/' . $esquema . "/sitemapindex", array('sitemaps' => $sitemaps,'flagXsl'=> $flagXsl));
+			echo elgg_view('auto_sitemap/' . $schema . "/sitemapindex", array('sitemaps' => $sitemaps,'flagXsl'=> $flagXsl));
 			
 			return true;
-			
 		break;
 
-		// ------------------------------------------------------------------------------------
 		case 'custom':		
 			
 			$tipos = Array( 'always' , 'hourly' , 'daily' ,'weekly' , 'monthly', 'yearly', 'never');					
@@ -74,7 +62,7 @@ function auto_sitemap_page_handler($page) {
 				return false;
 								
 			}else{
-				echo elgg_view('auto_sitemap/' . $esquema . "/0_9_scheme", array('urls' => $urls,'flagXsl'=> $flagXsl));				
+				echo elgg_view('auto_sitemap/' . $schema . "/0_9_scheme", array('urls' => $urls,'flagXsl'=> $flagXsl));				
 				return true;
 												
 			}
@@ -82,7 +70,6 @@ function auto_sitemap_page_handler($page) {
 			
 		break;
 		
-		// ------------------------------------------------------------------------------------		
 		case 'user':		
 		case 'group':		
 		case 'blog':		
@@ -91,49 +78,40 @@ function auto_sitemap_page_handler($page) {
 				
 			$urls = auto_sitemap_getEntityUrls( $page[0] );			
 
-			// if this entity is not active in settigs sitemap doesnt exists
+			// if this entity is not active in settings, then sitemap doesn't exist
 			if ( ! elgg_get_plugin_setting($page[0] . '_url') ){				
 				return false;
 								
 			}else{
-				echo elgg_view('auto_sitemap/' . $esquema . "/0_9_scheme", array('urls' => $urls,'flagXsl'=> $flagXsl));				
+				echo elgg_view('auto_sitemap/' . $schema . "/0_9_scheme", array('urls' => $urls,'flagXsl'=> $flagXsl));				
 				return true;
 												
 			}			
 			
 		break;
 		
-		// ------------------------------------------------------------------------------------				
 		case 'other':	
 			
 			$otherActiveEntities = array_filter(explode(',' , elgg_get_plugin_setting('other_urls_types')));
 			
 			$urls = auto_sitemap_getOtherEntityUrls( $otherActiveEntities );	
 
-			// if no other entities selected in settings, sitemap doesnt exists
+			// if no other entities selected in settings, sitemap doesn't exist
 			if ( empty($urls) ){				
 				return false;
-								
 			}else{
-				echo elgg_view('auto_sitemap/' . $esquema . "/0_9_scheme", array('urls' => $urls,'flagXsl'=> $flagXsl));				
+				echo elgg_view('auto_sitemap/' . $schema . "/0_9_scheme", array('urls' => $urls,'flagXsl'=> $flagXsl));				
 				return true;
-												
 			}
 			
 		break;			
 		
-		// ------------------------------------------------------------------------------------		
 		default:
 			return false;
 		break;
 	}
 }
 
-
-
-
-
-/* =============================================================== */
 function auto_sitemap_getCustomUrls( $tipos ){
 	
 	// get main url
@@ -171,7 +149,6 @@ function auto_sitemap_getCustomUrls( $tipos ){
 	return $urls;
 }
 
-/* =============================================================== */
 function auto_sitemap_getEntityUrls( $tipo ){
 	
 	switch ($tipo) {
@@ -205,7 +182,7 @@ function auto_sitemap_getEntityUrls( $tipo ){
 	}
 	
 	$options['limit'] = $max_urls;
-			
+        $options['wheres'] = array('e.access_id = 2');			
 	$entradas = elgg_get_entities($options);
 			
 	foreach ($entradas as $value) {
@@ -225,7 +202,6 @@ function auto_sitemap_getEntityUrls( $tipo ){
 }
 
 
-/* =============================================================== */
 function auto_sitemap_getOtherEntityUrls( $entities ){
 	
 	foreach ($entities as $entity) {
@@ -263,7 +239,6 @@ function auto_sitemap_getOtherEntityUrls( $entities ){
 }
 
 
-/* =============================================================== */
 function xml_plugin_get_otherEntityTypes() {
 	$valid_types = array();
 	$entity_stats = get_entity_statistics();
@@ -284,8 +259,6 @@ function xml_plugin_get_otherEntityTypes() {
 	return $valid_types;
 }
 
-
-/* =============================================================== */
 function auto_sitemap_comparar($x,$y){
 	if ( $x['lastmod'] == $y['lastmod'] )
 		return 0;
@@ -294,6 +267,3 @@ function auto_sitemap_comparar($x,$y){
 	else
 		return 1;
 }
-
-
-?>

@@ -28,6 +28,8 @@ function theme_inria_init(){
 	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
 	
 	// Rewrite file upload action to avoid river entries for file images
+	/* @TODO : use modified version from elgg_cmis once it is ready !
+	*/
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
 	

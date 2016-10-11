@@ -78,7 +78,7 @@ if (!$params['container_guid'] && $container) {
 	$params['container_guid'] = $container->guid;
 }
 
-/* Esope: this feature is unclear and even misleading to users due to translation strings
+/* Esope: the default feature is unclear and even misleading to users due to improper translation
  * It doesn't default the value, nor limit the available access levels...
  */
 $restricted_content_access = false;
@@ -140,7 +140,7 @@ if (elgg_instanceof($container, 'group')) {
 				case 'default': /* Do not set (let original check do it) $vars['value'] = get_default_access(); */ break;
 				default: $vars['value'] = $group_acl;
 			}
-			// Add default value to available options if needed
+			// Add default to available options if needed
 			if (!isset($vars['options_values'][$vars['value']])) { $vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']); }
 		}
 	}
@@ -249,7 +249,7 @@ if ($show_override_notice) {
 }
 
 // Esope : display imposed access level if only one option (instead of showing a select), and only if it is actually a content access level
-if ((sizeof($vars['options_values']) > 1) || !in_array($vars['name'], $content_cases)) {
+if ((sizeof($vars['options_values']) > 1) || (is_array($content_cases) && !in_array($vars['name'], $content_cases))) {
 	echo elgg_view('input/select', $vars);
 } else {
 	// Only 1 option, so display access and hide select

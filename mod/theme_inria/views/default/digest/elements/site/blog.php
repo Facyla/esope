@@ -1,4 +1,5 @@
 <?php
+// Inria : hide blog
 return;
 
 	/**
@@ -30,25 +31,42 @@ return;
 		)
 	);
 
-	if($blogs = elgg_get_entities($blog_options)){
-		$title = elgg_view("output/url", array("text" => elgg_echo("blog:blogs"), "href" => "blog/all" ));
+$blogs = elgg_get_entities($blog_options);
+if (!empty($blogs)) {
+	$title = elgg_view("output/url", array(
+		"text" => elgg_echo("blog:blogs"),
+		"href" => "blog/all",
+	"is_trusted" => true
+	));
+	
+	$latest_blogs = "";
+	
+	foreach($blogs as $blog){
+		$blog_url = $blog->getURL();
 		
-		$latest_blogs = "";
-		
-		foreach($blogs as $blog){
-			$blog_url = $blog->getURL();
-			
-			$latest_blogs .= "<div class='digest-blog'>";
-			if($blog->icontime){
-				$latest_blogs .= "<a href='" . $blog_url. "'><img src='". $blog->getIconURL("medium") . "' /></a>";
-			}
-			$latest_blogs .= "<span>";
-			$latest_blogs .= "<h4><a href='" . $blog_url. "'>" . $blog->title . "</a></h4>";
-			$latest_blogs .= elgg_get_excerpt($blog->description);
-			$latest_blogs .= "</span>";
-			$latest_blogs .= "</div>";
+		$latest_blogs .= "<div class='digest-blog'>";
+		if ($blog->icontime) {
+			$icon = elgg_view("output/img", array(
+				"src" => $blog->getIconURL("medium")
+			));
+			$latest_blogs .= elgg_view("output/url", array(
+				"text" => $icon,
+				"href" => $blog_url,
+				"is_trusted" => true
+			));
 		}
-		
-		echo elgg_view_module("digest", $title, $latest_blogs);
+		$latest_blogs .= "<span>";
+		$latest_blogs .= "<h4>";
+		$latest_blogs .= elgg_view("output/url", array(
+			"text" => $blog->title,
+			"href" => $blog_url,
+			"is_trusted" => true
+		));
+		$latest_blogs .= "</h4>";
+		$latest_blogs .= elgg_get_excerpt($blog->description);
+		$latest_blogs .= "</span>";
+		$latest_blogs .= "</div>";
 	}
 	
+	echo elgg_view_module("digest", $title, $latest_blogs);
+}

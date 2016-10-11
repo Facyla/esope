@@ -1,5 +1,14 @@
 <?php
+error_log("CMIS : backend mode - file upload");
+elgg_load_library('elgg:elgg_cmis');
+
 // Inria : do not add river entry for images
+/* CMIS : upload to CMIS repository
+ * @TODO : handle deletion
+ * @TODO : create folder structure
+ * @TODO : 
+ * @TODO : 
+ */
 
 /**
  * Elgg file uploader/edit action
@@ -82,6 +91,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$prefix = "file/";
 
+	// @TODO CMIS : remove previous file (or will simple update add to history ?)
 	// if previous file, delete it
 	if (!$new_file) {
 		$filename = $file->getFilenameOnFilestore();
@@ -90,6 +100,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		}
 	}
 	
+	
+	// @TODO CMIS : remove previous file (or will simple update add to history ?)
 	$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
 
 	$file->setFilename($prefix . $filestorename);
@@ -102,8 +114,14 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	// Open the file to guarantee the directory exists
 	$file->open("write");
 	$file->close();
+	// Elgg filestore method
 	move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
-
+	// CMIS method
+	$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
+	$file->cmis_id = $return->id;
+	
+	
+	// @TODO CMIS : create thumbnails ? (or should CMIS handle only non-images files ?)
 	$guid = $file->save();
 
 	$thumb = new ElggFile();
@@ -154,6 +172,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$jpg_filename = pathinfo($filestorename, PATHINFO_FILENAME) . '.jpg';
 
+	// Generate image thumbnails
 	if ($guid && $file->simpletype == "image") {
 		$file->icontime = time();
 

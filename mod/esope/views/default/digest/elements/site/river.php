@@ -9,12 +9,6 @@ $ts_lower = (int) elgg_extract("ts_lower", $vars);
 $ts_upper = (int) elgg_extract("ts_upper", $vars);
 $subtypes = (array) elgg_extract("subtypes", $vars, false);
 
-// Only for subtype filtering
-if ($subtypes) {
-	$subtype_id = get_subtype_id('object', 'thewire');
-	$dbprefix = elgg_get_config("dbprefix");
-}
-
 $river_options = array(
 	"relationship" => "friend",
 	"relationship_guid" => $user->getGUID(),
@@ -27,8 +21,15 @@ $river_options = array(
 
 // This is for subtype filtering only, useless if no filtering
 if ($subtypes) {
+	$subtype_ids = array();
+	$dbprefix = elgg_get_config("dbprefix");
+	foreach ($subtypes as $subtype) {
+		$subtype_ids[] = get_subtype_id('object', 'thewire');
+	}
+	$subtype_ids = implode(',', $subtype_ids);
 	$river_options['joins'] = array("INNER JOIN " . $dbprefix . "entities AS e ON rv.object_guid = e.guid");
-	$river_options['wheres'] = array("e.subtype != " . $subtype_id); // filter some subtypes
+	// Exclude some subtypes
+	$river_options['wheres'] = array("e.subtype NOT IN (" . $subtype_ids . ")");
 }
 
 
@@ -38,7 +39,7 @@ if (!empty($river_items)) {
 	$title = elgg_view("output/url", array(
 		"text" => elgg_echo("river:friends"),
 		"href" => "activity/friends/" . $user->username,
-		"is_trusted" => true,
+		"is_trusted" => true
 	));
 
 	echo elgg_view_module("digest", $title, $river_items);

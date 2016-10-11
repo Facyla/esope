@@ -6,6 +6,7 @@
 return array(
 	'elgg_cmis:title' => "CMIS Interface",
 	
+	// Main settings
 	'elgg_cmis:cmis_url' => "Alfresco CMIS base URL (ending with alfresco/)",
 	'elgg_cmis:user_cmis_url' => "Custom CMIS base URL",
 	'elgg_cmis:cmis_soap_url' => "Alfresco CMIS SOAP service (part after alfresco/), eg. cmisws",
@@ -17,6 +18,14 @@ return array(
 	'elgg_cmis:noresult' => "No result",
 	'elgg_cmis:noconf' => "Not configured",
 	'elgg_cmis:invalidurl' => "Invalid URL",
+	'elgg_cmis:settings:usercmis' => "Enable User mode",
+	'elgg_cmis:settings:usercmis:details' => "Members use their own CMIS credentials to use CMIS",
+	'elgg_cmis:settings:usercmis:legend' => "Specific settings for user mode",
+	'elgg_cmis:settings:backend' => "Enable Backend mode",
+	'elgg_cmis:settings:backend:details' => "CMIS is used as a file storage backend by Elgg. Elgg uses the same credentials for the whole site, and determines access in the usual Elgg way.",
+	'elgg_cmis:settings:backend:legend' => "Specific settings for backend mode",
+	'elgg_cmis:settings:filestore_path' => "Filestore path on CMIS server (eg. /Applications/elgg/)",
+	
 	
 	// Object types
 	'elgg_cmis:document' => "Document",
@@ -29,6 +38,7 @@ return array(
 	'elgg_cmis:icon:foldertype:cmis:folder' => '<i class="folder icon fa fa-folder"></i>',
 	'elgg_cmis:icon:foldertype:F:st:site' => '<i class="sitemap icon fa fa-sitemap"></i>',
 	'elgg_cmis:icon:unknowtype' => '<i class="sitemap icon fa fa-sitemap"></i>',
+	
 	// Actions
 	'elgg_cmis:action:openfolder' => 'Open folder',
 	'elgg_cmis:action:view' => 'View',
@@ -68,6 +78,7 @@ Your password will be encrypted.",
 	'elgg_cmis:nopassword' => "Password not set.",
 	'elgg_cmis:changepassword' => "Your password has been successfully saved (and encrypted).<br />If you wish to update it, please fill then save your new credentials below.<br />To remove your password, please type \"RAZ\" as password: this will remove all your Partage credentials in Iris.",
 	'elgg_cmis:deletedpassword' => "Your password has been successfully deleted.",
+	
 	
 );
 

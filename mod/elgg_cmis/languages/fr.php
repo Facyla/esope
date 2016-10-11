@@ -6,6 +6,7 @@
 return array(
 	'elgg_cmis:title' => "Interface CMIS",
 	
+	// Main settings
 	'elgg_cmis:cmis_url' => "Base de l'URL CMIS Alfresco (se terminant par alfresco/)",
 	'elgg_cmis:user_cmis_url' => "Base de l'URL CMIS",
 	'elgg_cmis:cmis_soap_url' => "Service Alfresco CMIS SOAP (partie après alfresco/), par ex: cmisws",
@@ -17,6 +18,14 @@ return array(
 	'elgg_cmis:noresult' => "Aucun résultat",
 	'elgg_cmis:noconf' => "Module non configuré",
 	'elgg_cmis:invalidurl' => "URL invalide",
+	'elgg_cmis:settings:usercmis' => "Activer le mode Utilisateur",
+	'elgg_cmis:settings:usercmis:details' => "Les membres accèdent à CMIS avec leur propre accès. Cela nécessite qu'ils renseignent leur mot de passe dans leurs paramètres personnels - celui-ci est crypté cependant ce n'est pas idéal du point de vue sécurité.",
+	'elgg_cmis:settings:usercmis:legend' => "Paramètres spécifiques pour le mode Utilisateur",
+	'elgg_cmis:settings:backend' => "Activer le mode Backend",
+	'elgg_cmis:settings:backend:details' => "CMIS est utilisé comme backend pourle stockage des fichiers de Elgg. Dans ce cas le site dispose d'un accès unique pour tous les fichiers, Elgg se chargeant de gérer les droits d'accès sur ces fichiers.",
+	'elgg_cmis:settings:backend:legend' => "Paramètres spécifiques pour le mode Backend",
+	'elgg_cmis:settings:filestore_path' => "Chemin où seront stockés les fichiers sur le serveur CMIS (par ex. /Applications/elgg/)",
+	
 	
 	// Object types
 	'elgg_cmis:document' => "Document",

@@ -45,6 +45,15 @@ function elgg_cmis_init(){
 	elgg_register_page_handler('cmis', 'elgg_cmis_page_handler');
 	elgg_register_page_handler('cmisembed', 'elgg_cmisembed_page_handler');
 	
+	
+	$action_url = elgg_get_plugins_path() . 'elgg_cmis/actions/';
+	if (elgg_get_plugin_setting('backend', 'elgg_cmis') == 'yes') {
+		// If Backend mode enabled, override default action
+		elgg_unregister_action('file/upload');
+		elgg_register_action("file/upload", $action_url . "file/upload.php");
+	}
+	
+	
 }
 
 

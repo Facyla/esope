@@ -18,7 +18,10 @@ if(!isset($digest_site_profile_body)){
 if(isset($digest_site_profile_body[$key])){
 	// return from memory
 	if(!empty($digest_site_profile_body[$key])){
-		$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members" ));
+		$title = elgg_view("output/url", array(
+			"text" => elgg_echo("theme_inria:digest:members"),
+			"href" => "members"
+		));
 		echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
 	}		
 } else {
@@ -35,8 +38,13 @@ if(isset($digest_site_profile_body[$key])){
 			"wheres" => array("(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")")
 	);
 	
-	if($newest_members = elgg_get_entities_from_relationship($member_options)){
-		$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members" ));
+	$newest_members = elgg_get_entities_from_relationship($member_options);
+	if (!empty($newest_members)) {
+		$title = elgg_view("output/url", array(
+			"text" => elgg_echo("theme_inria:digest:members"),
+			"href" => "members",
+			"is_trusted" => true
+		));
 	
 		$content = "<div class='digest-profile'>";
 	
@@ -48,11 +56,13 @@ if(isset($digest_site_profile_body[$key])){
 			$content .= "</div>";
 		}
 		
+		$content .= '<div class="clearfloat"></div>';
 		$content .= "</div>";
 	
 		// Set global var for later reuse
 		$digest_site_profile_body[$key] = $content;
-		echo elgg_view_module("digest", $title , $content);
+		// View module if not empty
+		echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
 	} else {
 		$digest_site_profile_body[$key] = false;
 	}
