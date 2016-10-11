@@ -256,7 +256,7 @@ if ($show_override_notice) {
 }
 
 // Esope : display imposed access level if only one option (instead of showing a select), and only if it is actually a content access level
-if ((sizeof($vars['options_values']) > 1) || !in_array($vars['name'], $content_cases)) {
+if ((sizeof($vars['options_values']) > 1) || (is_array($content_cases) && !in_array($vars['name'], $content_cases))) {
 	echo elgg_view('input/select', $vars);
 } else {
 	// Only 1 option, so display access and hide select
