@@ -384,6 +384,7 @@ function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 
 
 // Intercept sending to provide a blocking hook for plugins which handle email control through eg. roles or status
+// @TODO Digest doesn't use that hook, requires another method (eg. private setting digest_1 = none to block site digest)
 function theme_inria_block_email($hook, $type, $return, $params) {
 	$recipient = get_user_by_email($params['to']);
 	if (is_array($recipient)) { $recipient = $recipient[0]; }

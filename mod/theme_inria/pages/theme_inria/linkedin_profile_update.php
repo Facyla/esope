@@ -66,13 +66,15 @@ try{
 			$industry = $user_profile->industry;
 			$headline = $user_profile->headline;
 			$status = $user_profile->{'current-status'}; //current-status-timestamp could be useful, as it may be quite old...
+			
 			// Skills
 			$skills = array();
-			foreach ($user_profile->skills->skill as $skill) { $skills[] = $skill->skill->name; }
+			if ($user_profile->skills->skill) foreach ($user_profile->skills->skill as $skill) { $skills[] = $skill->skill->name; }
 			$skills = implode(', ', $skills);
+			
 			// Positions
 			$positions = '';
-			foreach ($user_profile->positions->position as $position) {
+			if ($user_profile->positions->position) foreach ($user_profile->positions->position as $position) {
 				if ($position->{'is-current'} == 'false') continue; // Skip previous positions
 				$start_date = $position->{'start-date'}->year;
 				if (!empty($position->{'start-date'}->month)) $start_date = $position->{'start-date'}->month . '/' . $start_date;
@@ -93,9 +95,10 @@ try{
 				$positions .= '</p>';
 				if (!empty($position->summary)) $positions .= '<p>' . $position->summary . '</p>';
 			}
+			
 			// Education
 			$educations = '';
-			foreach ($user_profile->educations->education as $education) {
+			if ($user_profile->educations->education) foreach ($user_profile->educations->education as $education) {
 				$start_date = $education->{'start-date'}->year;
 				if (!empty($education->{'start-date'}->month)) $start_date = $education->{'start-date'}->month . '/' . $start_date;
 				$end_date = $education->{'end-date'}->year;

@@ -11,7 +11,7 @@ function recommendations_sorter($a, $b){
 }
 
 
-/** Recommends people - based on mutual friends and common groups
+/** Recommends people - based on mutual friends, common interests and shared groups
  *
  * Returns array of people containing entity, users (friends), groups (shared) and priority
  * @param ElggUser $user
