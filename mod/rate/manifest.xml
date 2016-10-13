@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>rate</name>
+	<id>rate</id>
+	<author>Team Webgalli</author>
+	<version>1.1</version>
+	<category>Team Webgalli</category>
+	<category>content</category>
+	<description>Allow 5 star rating on entities.</description>
+	<website>http://www.webgalli.com/</website>
+	<copyright>(c) Team Webgalli</copyright>
+	<license>GNU General Public License version 2</license>
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8</version>
+	</requires>
+</plugin_manifest>

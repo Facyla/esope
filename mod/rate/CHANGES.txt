@@ -1,0 +1,16 @@
+= Version history =
+
+1.1 (2015-08-23):
+
+- Updated for Elgg 1.10
+- Fixed layout issues
+
+1.0 (2013-05-05):
+
+- Rewrited for Elgg 1.8
+- Ajax rating
+- Cleaned up the code
+
+0.1 (2008-12-06):
+
+- Initial release
