@@ -89,16 +89,15 @@ return array(
 	'feedback:settings:usernames' => "You can enter up to 5 users who should receive notifications if new feedback has been given. Enter the usernames in the following: ",
 
 	'feedback:email:subject' => '[Feedback] %s',
-	'feedback:email:body' => "%s has made a feedback: \"%s\" 
+	'feedback:email:body' => "New feedback from %1\$s about page %5\$s: \"%2\$s\"
 	
-	%s
+	%3\$s
 	
-	View online: %s
+	View online: %4\$s
 	",
 
 
-	// Added by Facyla
-	
+	// Groups
 	'feedback:group' => "Feedbacks",
 	'feedback:option:grouptool' => "Leave choice to each group admin(s)",
 	'feedback:enablefeedback' => "Enable feedback in this group",

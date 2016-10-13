@@ -67,11 +67,17 @@ return array(
 	'feedback:settings:usernames' => "Du kannst bis zu 5 Mitglieder benennen, die benachrichtigt werden sollen, wenn neues Feedback eingereicht wurd. Gebe im folgenden deren Benutzernamen ein: ",
 
 	'feedback:email:subject' => 'Feedback von %s',
-	'feedback:email:body' => '%s',
-
-
-	// Added by Facyla - To be translated
+	'feedback:email:body' => "Neues feedback von %1\$s über %5\$s: \"%2\$s\"
 	
+	%3\$s
+	
+	Feedback URL: %4\$s
+	",
+
+
+	// To be translated
+	
+	// Groups
 	'feedback:group' => "Feedbacks",
 	'feedback:option:grouptool' => "Leave choice to each group admin(s)",
 	'feedback:enablefeedback' => "Enable feedback in this group",

@@ -91,16 +91,15 @@ return array(
 	'feedback:settings:usernames' => "Vous pouvez définir jusqu'à 5 membres qui recevront des notifications à chaque nouveau feedback. Saisissez leurs identifiants ci-dessous : ",
 
 	'feedback:email:subject' => '[Feedback] %s',
-	'feedback:email:body' => "%s a fait un feedback : \"%s\" 
+	'feedback:email:body' => "%1\$s a fait un feedback sur la page %5\$s : \"%2\$s\"
 	
-	%s
+	%3\$s
 	
-	Voir en ligne : %s
+	Voir en ligne : %4\$s
 	",
 	
 	
-	// Added by Facyla
-	
+	// Groups
 	'feedback:group' => "Feedbacks",
 	'feedback:option:grouptool' => "Laisser le choix au responsable de chaque groupe",
 	'feedback:enablefeedback' => "Activer le feedback dans ce groupe",

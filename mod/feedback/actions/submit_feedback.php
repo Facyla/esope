@@ -121,7 +121,7 @@ for ($idx=1; $idx<=5; $idx++) {
 if (count($user_guids) > 0) {
 	$subject = elgg_echo('feedback:email:subject', array($feedback_title));
 	foreach ($user_guids as $user_guid => $user) {
-		$message = elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback_url));
+		$message = elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_txt, $feedback_url, $feedback->page));
 		// Trigger a hook to enable integration with other plugins
 		$hook_message = elgg_trigger_plugin_hook('notify:entity:message', 'object', array('entity' => $feedback, 'to_entity' => $user), $message);
 		// Failsafe backup if hook as returned empty content but not false (= stop)
