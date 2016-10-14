@@ -12,23 +12,35 @@
 
 elgg_register_event_handler('init', 'system', 'rate_init');
 
-function rate_init(){
+function rate_init() {
 	elgg_extend_view('js/elgg', 'rate/js');
+	
+	// Rate actions
 	$action_path = dirname(__FILE__)."/actions/rate";
 	elgg_register_action("rate/rate", "$action_path/rate.php");
 	elgg_register_action("rate/rate_wire", "$action_path/rate_wire.php");
-	$subtypes = array(	'blog',
-						'bookmarks',
-						'file',
-						'page',
-						'page_top',
-						'thewire');
-	foreach($subtypes as $subtype){
-		elgg_extend_view("object/$subtype", "rate/rate");
-	}	
+	
+	// Extend usual objects views
+	$subtypes_default = 'blog, bookmarks, file, page, page_top, thewire';
+	$subtypes = elgg_get_plugin_setting('object_subtypes', 'rate', $subtypes_default);
+	$subtypes = explode(',', $subtypes);
+	$subtypes = array_map('trim', $subtypes);
+	$subtypes = array_unique($subtypes);
+	$subtypes = array_filter($subtypes);
+	foreach($subtypes as $subtype) { elgg_extend_view("object/$subtype", "rate/rate"); }
+	
+	// Extend custom views
+	$extend_views = elgg_get_plugin_setting('extend_views', 'rate');
+	$extend_views = explode(',', $extend_views);
+	$extend_views = array_map('trim', $extend_views);
+	$extend_views = array_unique($extend_views);
+	$extend_views = array_filter($extend_views);
+	foreach($extend_views as $view) { elgg_extend_view($view, "rate/rate"); }
 }
 
-function rate_is_allowed_to_rate($entity = null){
+
+// Checks if entity has already been rated by user
+function rate_is_allowed_to_rate($entity = null) {
 	if (elgg_is_logged_in() && $entity){
 		if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'rated', $entity->guid)) {
 			return false;
@@ -39,9 +51,10 @@ function rate_is_allowed_to_rate($entity = null){
 	}
 }
 
-function rate_show_rating($entity = null){
+// Display rating form or results
+function rate_show_rating($entity = null) {
 	if($entity){
 		return elgg_view_form('rate/rate', array() ,array('entity' => $entity));
-	} 
-}	
-?>
+	}
+}
+
