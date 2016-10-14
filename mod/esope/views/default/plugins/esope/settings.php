@@ -744,8 +744,9 @@ $(function() {
 		echo '<p><label>' . elgg_echo('esope:settings:remove_collections') . ' ' . elgg_view('input/select', array('name' => 'params[remove_collections]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_collections)) . '</label></p>';
 		
 		echo '<fieldset><legend>' . elgg_echo('esope:profile:settings') . '</legend>';
-			echo '<p><label>' . elgg_echo('esope:profile:add_profile_activity') . ' ' . elgg_view('input/select', array('name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->add_profile_activity)) . '</label></p>';
 			echo '<p><label>' . elgg_echo('esope:profile:remove_profile_widgets') . ' ' . elgg_view('input/select', array('name' => 'params[remove_profile_widgets]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_profile_widgets)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:profile:add_profile_activity') . ' ' . elgg_view('input/select', array('name' => 'params[add_profile_activity]', 'options_values' => $no_yes_opt, 'value' => $plugin->add_profile_activity)) . '</label></p>';
+			echo '<p><label>' . elgg_echo('esope:profile:add_profile_comments') . ' ' . elgg_view('input/select', array('name' => 'params[add_profile_comments]', 'options_values' => $no_yes_opt, 'value' => $plugin->add_profile_comments)) . '</label></p>';
 			echo '<p><label>' . elgg_echo('esope:profile:custom_profile_layout') . ' ' . elgg_view('input/select', array('name' => 'params[custom_profile_layout]', 'options_values' => $no_yes_opt, 'value' => $plugin->custom_profile_layout)) . '</label></p>';
 		echo '</fieldset>';
 		

@@ -810,12 +810,14 @@ function esope_bookmarks_page_handler($page) {
  * @param array $page Array of URL segments passed by the page handling mechanism
  * @return bool
  */
+// @TODO use views instead
 function esope_profile_page_handler($page) {
 	
 	// Add some custom settings
 	$remove_profile_widgets = elgg_get_plugin_setting('remove_profile_widgets', 'esope');
 	$add_profile_activity = elgg_get_plugin_setting('add_profile_activity', 'esope');
 	$custom_profile_layout = elgg_get_plugin_setting('custom_profile_layout', 'esope');
+	$add_comments = elgg_get_plugin_setting('add_profile_comments', 'esope');
 	
 	if (isset($page[0])) {
 		$username = $page[0];
@@ -842,28 +844,32 @@ function esope_profile_page_handler($page) {
 	}
 
 	// main profile page
-	
 	// Theme settings : Custom profile layout ? (default: no)
 	if ($custom_profile_layout == 'yes') {
 		
 		$content = elgg_view('esope/profile/wrapper');
 		
 	} else {
-		// Classic layout + some theme options
-		$content = elgg_view('profile/wrapper');
 		
 		// Theme settings : Remove widgets ? (default: no)
 		if ($remove_profile_widgets != 'yes') {
 			$params = array('content' => $content, 'num_columns' => 3);
 			$content = elgg_view_layout('widgets', $params);
+		} else {
+			// Classic layout + some theme options
+			$content = elgg_view('profile/wrapper');
 		}
 		
 		// Theme settings : Add activity feed ? (default: no)
 		if ($add_profile_activity == 'yes') {
 			$db_prefix = elgg_get_config('dbprefix');
-			$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 20, 'pagination' => true));
+			$activity = elgg_view('user/elements/activity', array('entity' => $user));
 			$content .= '<div class="profile-activity-river">' . $activity . '</div>';
 		}
+	}
+	
+	if ($add_comments == 'yes') {
+		$content .= elgg_view('user/elements/comments', array('entity' => $user));
 	}
 	
 	$body = elgg_view_layout('one_column', array('content' => $content));

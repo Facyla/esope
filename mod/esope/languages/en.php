@@ -414,6 +414,7 @@ return array(
 	'esope:profile:add_profile_activity' => "Add activity feed",
 	'esope:profile:remove_profile_widgets' => "Disable profile widgets",
 	'esope:profile:custom_profile_layout' => "Use a custom layout",
+	'esope:profile:add_profile_comments' => "Add comments",
 	
 	
 	// Widget settings
@@ -1077,6 +1078,8 @@ return array(
 	'esope:menu:sidebar' => "Menu",
 	
 	'entity:unavailable' => "unavailable entity",
+	
+	'river:comment:user:default' => "%s has commented %s",
 	
 	
 	

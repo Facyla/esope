@@ -426,6 +426,7 @@ return array(
 	'esope:profile:add_profile_activity' => "Ajouter le flux d'activité",
 	'esope:profile:remove_profile_widgets' => "Supprimer les widgets du profil",
 	'esope:profile:custom_profile_layout' => "Utiliser un layout personnalisé",
+	'esope:profile:add_profile_comments' => "Ajouter le système de commentaires",
 	
 	
 	// Widget settings
@@ -1095,6 +1096,8 @@ return array(
 	'esope:menu:sidebar' => "Menu",
 	
 	'entity:unavailable' => "entité indisponible",
+	
+	'river:comment:user:default' => "%s a commenté %s",
 	
 	
 	
