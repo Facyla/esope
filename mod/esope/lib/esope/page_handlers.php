@@ -851,13 +851,13 @@ function esope_profile_page_handler($page) {
 		
 	} else {
 		
+		// Classic layout + some theme options
+		$content = elgg_view('profile/wrapper');
+		
 		// Theme settings : Remove widgets ? (default: no)
 		if ($remove_profile_widgets != 'yes') {
 			$params = array('content' => $content, 'num_columns' => 3);
 			$content = elgg_view_layout('widgets', $params);
-		} else {
-			// Classic layout + some theme options
-			$content = elgg_view('profile/wrapper');
 		}
 		
 		// Theme settings : Add activity feed ? (default: no)
