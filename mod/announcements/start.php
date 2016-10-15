@@ -35,7 +35,7 @@ function announcements_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:page', 'announcements_page_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'announcements_owner_block_menu');
 	
-	// Modify recipients depending on options
+	// Modify recipients depending on plugin settings
 	elgg_register_plugin_hook_handler('get', 'subscriptions', 'announcements_get_subscriptions');
 	
 }

@@ -16,7 +16,7 @@ $title = $announcement->title;
 elgg_push_breadcrumb($title);
 
 $content = elgg_view_entity($announcement, true);
-$can_comment = elgg_get_plugin_setting('enable_comments', 'announcements', 'yes');
+$can_comment = elgg_get_plugin_setting('can_comment', 'announcements', 'yes');
 if ($can_comment == 'yes') {
 	$content .= elgg_view_comments($announcement);
 }
