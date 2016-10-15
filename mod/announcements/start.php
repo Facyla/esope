@@ -202,7 +202,9 @@ function announcements_get_subscriptions($hook, $type, $subscriptions, $params) 
 			$method = array('email');
 			$group_members = $group->getMembers(array('limit' => false));
 			foreach ($group_members as $ent) {
-				$group_subscriptions[$ent->guid] = $method;
+				if (!$ent->isBanned()) {
+					$group_subscriptions[$ent->guid] = $method;
+				}
 			}
 			return $group_subscriptions;
 		}
