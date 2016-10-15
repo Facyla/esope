@@ -13,7 +13,7 @@ $announcement = new ElggAnnouncement($guid);
 
 // Note Facyla : editing should be true if there is a guid
 $editing = false;
-if ($guid) $editing = true;
+if ($guid) { $editing = true; }
 $creating = !$editing;
 
 $container = get_entity($container_guid);
@@ -41,10 +41,19 @@ $announcement->description = $description;
 $announcement->access_id = $access_id;
 
 if ($announcement->save()) {
-	add_to_river('object/announcement/create', 'create', elgg_get_logged_in_user_guid(), $announcement->guid);
+	if ($creating) {
+		//add_to_river('object/announcement/create', 'create', elgg_get_logged_in_user_guid(), $announcement->guid);
+		elgg_create_river_item(array(
+				'view' => 'river/object/announcement/create',
+				'action_type' => 'create',
+				'subject_guid' => elgg_get_logged_in_user_guid(),
+				'object_guid' => $announcement->guid,
+			));
+	}
 	system_message(elgg_echo('object:announcement:save:success'));
 	forward("/announcements/view/$announcement->guid");
 } else {
-	register_error("Error: we could not save the announcement.  You probably do not have the correct permissions");
+	register_error(elgg_echo('announcements:error:cannotsave'));
 	forward(REFERER);
 }
+

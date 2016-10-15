@@ -5,19 +5,14 @@
  * @package ElggAnnouncements
  */
 
-$username = get_input('username', elgg_get_logged_in_user_entity()->username);
-$page_owner = get_user_by_username($username);
-if (!elgg_instanceof($page_owner, 'user')) {
-	register_error(elgg_echo('announcements:error:invaliduser'));
-	forward('announcements/all');
-}
+$page_owner = elgg_get_page_owner_entity();
 
 elgg_push_breadcrumb($page_owner->name);
 
 $content .= elgg_list_entities(array(
 	'type' => 'object',
 	'subtype' => 'announcement',
-	'owner_guid' => $page_owner->guid,
+	'container_guid' => $page_owner->guid,
 	'full_view' => false,
 	'view_toggle_type' => false
 ));

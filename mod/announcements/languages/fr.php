@@ -16,7 +16,19 @@ return array(
 	'announcement' => 'Annonces', 
 	'item:object:announcement' => 'Annonces',
 	'announcement:write' => "Faire une annonce à tous les membres",
-
+	
+	/**
+		* Settings
+		*/
+	'announcements:settings:group_recipients' => "Destinataires des annonces des groupes",
+	'announcements:group_recipients:default' => "Par défaut (paramètres des membres)",
+	'announcements:group_recipients:email_members' => "Email à tous les membres du groupe",
+	'announcements:settings:hide_groupmodule' => "Masquer le module du groupe",
+	'announcements:hide_groupmodule:no' => "Non (par défaut)",
+	'announcements:hide_groupmodule:nonadmin' => "Non-admins (visible seulement des admins du groupe)",
+	'announcements:hide_groupmodule:yes' => "Oui (n'apparaît pas dans les modules des groupes)",
+	'announcements:settings:can_comment' => "Permettre de commenter les annonces",
+	
 	/**
 	 * Plugin-specific
 	 */
@@ -36,7 +48,8 @@ return array(
 	'announcements:edit' => "Modifier une annonce",
 	'announcements:new' => 'Nouvelle annonce', 
 	'announcement:new' => 'Nouvelle annonce', 
-
+	'announcements:everyone' => "Toutes les annonces",
+	
 	/**
 	 * Actions
 	 */
@@ -48,6 +61,11 @@ return array(
 
 	'river:object:announcement:create' => 'a fait une annonce',
 	'river:commented:object:announcement' => 'une annonce',
+	
+	// Errors
+	'announcements:error:cannotsave' => "Erreur : impossible de créer l'annonce. Vous n'avez probablement pas les droits suffisants pour cela.",
+	'announcements:error:invaliduser' => "Identifiant du membre invalide. Redirection vers toutes les annonces.",
+	
 	/**
 	 * API
 	 */

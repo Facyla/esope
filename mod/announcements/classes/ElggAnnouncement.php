@@ -6,3 +6,4 @@ class ElggAnnouncement extends ElggObject {
 		$this->attributes['subtype'] = 'announcement';
 	}
 }
+

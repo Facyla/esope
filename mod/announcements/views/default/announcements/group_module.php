@@ -5,8 +5,16 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->announcements_enable == "no") {
+if ($group->announcements_enable != "no") {
 	return true;
+}
+
+// Option : show or hide module, or only non-admins
+$hide_groupmodule = elgg_get_plugin_setting('hide_groupmodule', 'announcements', 'no');
+if ($hide_groupmodule == 'yes') {
+	return;
+} else if (($hide_groupmodule == 'nonadmin') && !$group->canEdit()) {
+	return;
 }
 
 $all_link = elgg_view('output/url', array(

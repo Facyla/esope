@@ -35,6 +35,9 @@ function announcements_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:page', 'announcements_page_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'announcements_owner_block_menu');
 	
+	// Modify recipients depending on options
+	elgg_register_plugin_hook_handler('get', 'subscriptions', 'announcements_get_subscriptions');
+	
 }
 
 
@@ -81,9 +84,15 @@ function announcements_page_handler($page) {
 			set_input('guid', $page[1]);
 			require_once "$pages_dir/edit.php";
 			break;
-		// @TODO case owner et friends
-		case 'group':
+		case 'friends':
+			require_once "$pages_dir/friends.php";
+			break;
+		case 'owner':
+			set_input('username', $page[1]);
 			require_once "$pages_dir/owner.php";
+			break;
+		case 'group':
+			require_once "$pages_dir/group.php";
 			break;
 		case 'inbox':
 			elgg_push_context('messages');
@@ -165,5 +174,41 @@ function announcements_prepare_notification($hook, $type, $notification, $params
 
 	return $notification;
 }
+
+
+/**
+ * Get subscriptions for group notifications
+ *
+ * @param string $hook          'get'
+ * @param string $type          'subscriptions'
+ * @param array  $subscriptions Array containing subscriptions in the form
+ *                       <user guid> => array('email', 'site', etc.)
+ * @param array  $params        Hook parameters
+ * @return array
+ */
+function announcements_get_subscriptions($hook, $type, $subscriptions, $params) {
+	$object = $params['event']->getObject();
+
+	if (!elgg_instanceof($object, 'object', 'announcement')) {
+		return $subscriptions;
+	}
+	
+	// Force to all group members
+	$group_recipients = elgg_get_plugin_setting('group_recipients', 'announcements', 'default');
+	if ($group_recipients == 'email_members') {
+		$group = $object->getContainerEntity();
+		if (elgg_instanceof($group, 'group')) {
+			$group_subscriptions = array();
+			$method = array('email');
+			$group_members = $group->getMembers(array('limit' => false));
+			foreach ($group_members as $ent) {
+				$group_subscriptions[$ent->guid] = $method;
+			}
+			return $group_subscriptions;
+		}
+	}
+	return $subscriptions;
+}
+
 
 

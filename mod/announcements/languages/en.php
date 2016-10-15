@@ -16,7 +16,19 @@ return array(
 	'announcement' => 'Announcement', 
 	'item:object:announcement' => 'Announcements',
 	'announcement:write' => "Send a message to all members",
-
+	
+	/**
+		* Settings
+		*/
+	'announcements:settings:group_recipients' => "Group announcements recipients",
+	'announcements:group_recipients:default' => "Default (user settings)",
+	'announcements:group_recipients:email_members' => "Force email to all group members",
+	'announcements:settings:hide_groupmodule' => "Hide group module",
+	'announcements:hide_groupmodule:no' => "No (default)",
+	'announcements:hide_groupmodule:nonadmin' => "Non-admins (appears only for group admins)",
+	'announcements:hide_groupmodule:yes' => "Yes (does not appear on group modules)",
+	'announcements:settings:can_comment' => "Enable user comments on announcements",
+	
 	/**
 	 * Plugin-specific
 	 */
@@ -35,6 +47,7 @@ return array(
 	'announcements:subject' => '%s Announcement: %s',
 	'announcements:new' => 'New Announcement', 
 	'announcement:new' => 'New Announcement', 
+	'announcements:everyone' => "All les announcements",
 
 	/**
 	 * Actions
@@ -47,6 +60,11 @@ return array(
 
 	'river:object:announcement:create' => 'posted an announcement',
 	'river:commented:object:announcement' => 'an announcement',
+	
+	
+	// Errors
+	'announcements:error:cannotsave' => "Error: we could not save the announcement.  You probably do not have the correct permissions",
+	'announcements:error:invaliduser' => "Invalid username. Redrecting to all announcements page.",
 	
 	/**
 	 * API
