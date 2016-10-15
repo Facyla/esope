@@ -59,7 +59,9 @@ return array(
 	'announcements:post:failure:blankbody' => 'Announcement body is required.',
 
 	'river:object:announcement:create' => 'posted an announcement',
-	'river:commented:object:announcement' => 'an announcement',
+	'river:create:object:announcement' => 'New announcement',
+	'river:commented:object:announcement' => '%s has made an announcement %s',
+	'announcements:river:togroup' => "to the members of %s",
 	
 	
 	// Errors

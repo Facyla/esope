@@ -38,6 +38,9 @@ function announcements_init() {
 	// Modify recipients depending on plugin settings
 	elgg_register_plugin_hook_handler('get', 'subscriptions', 'announcements_get_subscriptions');
 	
+	// Remove comment link in river menu if disabled
+	elgg_register_plugin_hook_handler('prepare', 'menu:river', 'announcements_prepare_menu_river_hook');
+	
 }
 
 
@@ -211,6 +214,28 @@ function announcements_get_subscriptions($hook, $type, $subscriptions, $params) 
 	}
 	return $subscriptions;
 }
+
+
+/* Remove "comments" river menu entry if disabled (globally)
+ * @TODO also implement entity-specific can_comment feature (in object class) ?
+ */
+function announcements_prepare_menu_river_hook($hook, $type, $return, $params) {
+	$entity = $params['item']->getObjectEntity();
+	if (!elgg_instanceof($entity, 'object', 'announcement')) { return $return; }
+	$can_comment = elgg_get_plugin_setting('can_comment', 'announcements');
+	if ($can_comment == 'no') {
+		foreach($return as $i => $menu_block) {
+			foreach($menu_block as $k => $element) {
+				if ($element->getName() == 'comment') {
+					unset($return[$i][$k]);
+				}
+			}
+		}
+	}
+	return $return;
+}
+
+
 
 
 

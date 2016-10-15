@@ -60,7 +60,9 @@ return array(
 	'announcements:post:failure:blankbody' => "Le contenu de l'annonce est nécessaire.",
 
 	'river:object:announcement:create' => 'a fait une annonce',
+	'river:create:object:announcement' => '%s a fait une annonce %s',
 	'river:commented:object:announcement' => 'une annonce',
+	'announcements:river:togroup' => "aux membres de %s",
 	
 	// Errors
 	'announcements:error:cannotsave' => "Erreur : impossible de créer l'annonce. Vous n'avez probablement pas les droits suffisants pour cela.",
