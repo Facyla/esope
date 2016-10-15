@@ -21,4 +21,5 @@ for($h=0;$h<24;$h++) {
 	}
 }
 
-echo elgg_view('input/dropdown',array('name'=>$vars['name'],'value'=>$time,'options_values'=>$dates));
+echo elgg_view('input/select', array('name' => $vars['name'], 'value' => $time, 'options_values' => $dates));
+

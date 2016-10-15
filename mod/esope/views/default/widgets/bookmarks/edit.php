@@ -15,7 +15,7 @@ $params = array(
 	'value' => $vars['entity']->num_display,
 	'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 );
-$dropdown = elgg_view('input/dropdown', $params);
+$select = elgg_view('input/select', $params);
 
 // Filter
 $filter_params = array(
@@ -28,14 +28,14 @@ $filter_params = array(
 		'all' => elgg_echo('bookmarks:everyone'), 
 	),
 );
-$filter_dropdown = elgg_view('input/dropdown', $filter_params);
+$filter_select = elgg_view('input/select', $filter_params);
 
 ?>
 <p>
-	<label><?php echo elgg_echo('bookmarks:numbertodisplay'); ?> <?php echo $dropdown; ?></label>
+	<label><?php echo elgg_echo('bookmarks:numbertodisplay'); ?> <?php echo $select; ?></label>
 </p>
 
 <p>
-	<label><?php echo elgg_echo('bookmarks:filter'); ?> <?php echo $filter_dropdown; ?></label>
+	<label><?php echo elgg_echo('bookmarks:filter'); ?> <?php echo $filter_select; ?></label>
 </p>
 

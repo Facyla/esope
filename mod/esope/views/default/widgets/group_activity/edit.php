@@ -20,11 +20,11 @@ $params = array(
 	'value' => $vars['entity']->group_guid,
 	'options_values' => $mygroups,
 );
-$group_dropdown = elgg_view('input/dropdown', $params);
+$group_select = elgg_view('input/select', $params);
 ?>
 <div>
 	<label for="group_guid_<?php echo $widget_id; ?>"><?php echo elgg_echo('dashboard:widget:group:select'); ?>:
-	<?php echo $group_dropdown; ?>
+	<?php echo $group_select; ?>
 </div>
 <?php
 
@@ -39,11 +39,11 @@ $params = array(
 	'value' => $vars['entity']->num_display,
 	'options' => array(5, 8, 10, 12, 15, 20),
 );
-$num_dropdown = elgg_view('input/dropdown', $params);
+$num_select = elgg_view('input/select', $params);
 
 ?>
 <div>
 	<label for="num_display_<?php echo $widget_id; ?>"><?php echo elgg_echo('widget:numbertodisplay'); ?>:</label>
-	<?php echo $num_dropdown; ?>
+	<?php echo $num_select; ?>
 </div>
 

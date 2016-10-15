@@ -39,4 +39,4 @@ if (rate_is_allowed_to_rate($vars['entity'])){
 	echo $form_body;	
 }
 
-?>
+

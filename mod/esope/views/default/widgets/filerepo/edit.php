@@ -20,10 +20,10 @@ $params = array(
 	'value' => $vars['entity']->num_display,
 	'options' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20),
 );
-$dropdown = elgg_view('input/dropdown', $params);
+$select = elgg_view('input/select', $params);
 
 ?>
 <div>
 	<label for="num_display_<?php echo $widget_id; ?>"><?php echo elgg_echo('file:num_files'); ?>:</label>
-	<?php echo $dropdown; ?>
+	<?php echo $select; ?>
 </div>

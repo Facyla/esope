@@ -51,12 +51,12 @@ if(!empty($cats)){
 	if ($types) {
 		$types_description = "";
 			
-			$dropdown_options = array();
-			$dropdown_options[""] = elgg_echo("profile_manager:profile:edit:custom_profile_type:default");
+			$select_options = array();
+			$select_options[""] = elgg_echo("profile_manager:profile:edit:custom_profile_type:default");
 			
 			foreach($types as $type){
 				
-				$dropdown_options[$type->getGUID()] = $type->getTitle();
+				$select_options[$type->getGUID()] = $type->getTitle();
 				
 				// preparing descriptions of profile types
 				$description = $type->getDescription();
@@ -71,9 +71,9 @@ if(!empty($cats)){
 			
 			echo "<div>";
 			echo "<label for=\"custom_profile_type\">" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
-			echo elgg_view("input/dropdown", array("name" => "custom_profile_type",
+			echo elgg_view("input/select", array("name" => "custom_profile_type",
 													"id" => "custom_profile_type",
-													"options_values" => $dropdown_options,
+													"options_values" => $select_options,
 													"onchange" => "elgg.profile_manager.change_profile_type();",
 													"value" => $vars['entity']->custom_profile_type));
 			echo elgg_view('input/hidden', array('name' => 'accesslevel[custom_profile_type]', 'value' => ACCESS_PUBLIC)); 
@@ -196,8 +196,8 @@ if(!empty($cats)){
 			$field_result .= "<span class='hidden' id='text_more_info_" . $metadata_name . "'>" . $hint . "</span>";
 			}
 			
-			if($valtype == "dropdown"){
-				// add div around dropdown to let it act as a block level element
+			if($valtype == "select"){
+				// add div around select to let it act as a block level element
 				$field_result .= "<div>";
 			}
 			
@@ -214,7 +214,7 @@ if(!empty($cats)){
 
 		$field_result .= elgg_view("input/" . $valtype, $field_options);
 			
-			if($valtype == "dropdown"){
+			if($valtype == "select"){
 				$field_result .= "</div>";
 			}
 			

@@ -48,4 +48,4 @@ $defaults = array(
 
 $vars = array_merge($defaults, $vars);
 
-echo elgg_view('input/dropdown', $vars);
+echo elgg_view('input/select', $vars);

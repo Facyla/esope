@@ -120,7 +120,7 @@ if ($admin_option) {
 		
 			echo "<div>";
 			echo "<label>" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label><br />";
-			echo elgg_view("input/dropdown", array("name" => "custom_profile_fields[custom_profile_type]", "options_values" => $options));
+			echo elgg_view("input/select", array("name" => "custom_profile_fields[custom_profile_type]", "options_values" => $options));
 			echo "</div>";
 		}
 	

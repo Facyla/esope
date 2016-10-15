@@ -24,7 +24,7 @@ $url_textbox = elgg_view('input/text', array(
 ));
 
 $num_items_label = elgg_echo('simplepie:num_items');
-$num_items_select = elgg_view('input/dropdown', array(
+$num_items_select = elgg_view('input/select', array(
 	'name' => 'params[num_items]',
 	'value' => $vars['entity']->num_items,
 	'options' => array(3, 5, 8, 10, 12, 15, 20),

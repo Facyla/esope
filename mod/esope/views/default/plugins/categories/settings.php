@@ -5,6 +5,11 @@
  * @package ElggCategories
  */
 
+if (!elgg_is_active_plugin('categories')) {
+	register_error('Please enable plugin first.');
+	forward('admin/plugins#categories');
+}
+
 // Get site categories
 $site = elgg_get_site_entity();
 $categories = $site->categories;

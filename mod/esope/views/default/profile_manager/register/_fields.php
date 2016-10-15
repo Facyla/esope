@@ -71,7 +71,7 @@
 			$types_result = "<div>";
 			$types_result .= "<label>" . elgg_echo("profile_manager:profile:edit:custom_profile_type:label") . "</label>";
 			//$types_result .= "<br />";
-			$types_result .= elgg_view("input/dropdown", array(
+			$types_result .= elgg_view("input/select", array(
 											"name" => "custom_profile_fields_custom_profile_type",
 											"id" => "custom_profile_fields_custom_profile_type",
 											"options_values" => $types_options_values,

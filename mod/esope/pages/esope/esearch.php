@@ -74,9 +74,9 @@ $search_form = '<form id="esope-search-form" method="post" action="' . $search_a
 	' . elgg_view('input/securitytoken') . '
 	<fieldset>
 	<p><label>' . elgg_echo('esope:fulltextsearch') . ' <input type="text" name="q" value="" /></label></p>
-	<p><label>' . elgg_echo('esope:search:type') . ' ' . elgg_view('input/dropdown', array('name' => 'entity_type', 'value' => '', 'options_values' => $types_opt)) . '</label></p>
-	<p><label>' . elgg_echo('esope:search:profile_type') . ' ' . elgg_view('input/dropdown', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></p>
-	<p><label>' . elgg_echo('esope:search:subtype') . ' ' . elgg_view('input/dropdown', array('name' => 'entity_subtype', 'value' => '', 'options' => $subtypes_opt)) . '</label></p>
+	<p><label>' . elgg_echo('esope:search:type') . ' ' . elgg_view('input/select', array('name' => 'entity_type', 'value' => '', 'options_values' => $types_opt)) . '</label></p>
+	<p><label>' . elgg_echo('esope:search:profile_type') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></p>
+	<p><label>' . elgg_echo('esope:search:subtype') . ' ' . elgg_view('input/select', array('name' => 'entity_subtype', 'value' => '', 'options' => $subtypes_opt)) . '</label></p>
 	' . $metadata_search . '
 	<div class="clearfloat"></div>
 	<input type="submit" class="elgg-button elgg-button-submit" value="' . elgg_echo('search') . '" />

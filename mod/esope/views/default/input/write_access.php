@@ -48,4 +48,4 @@ if (!isset($vars['value']) || ($vars['value'] == '-1')) {
 if ($vars['value'] == ACCESS_PUBLIC) { $vars['value'] = ACCESS_LOGGED_IN; }
 
 
-echo elgg_view('input/dropdown', $vars);
+echo elgg_view('input/select', $vars);

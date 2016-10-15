@@ -58,10 +58,10 @@ $form .= '<div class="elgg-grid">';
 	$form .= '</div>';
 	
 	$form .= '<div class="elgg-col elgg-col-1of2">';
-		$form .= '<p><label>' . elgg_echo('logbrowser:entity_type') . ' ' . elgg_view('input/dropdown', array('name' => 'entity_type', 'value' => $entity_type, 'options_values' => $entity_type_opt)) . '</label></p>';
-		$form .= '<p><label>' . elgg_echo('logbrowser:entity_subtype') . ' ' . elgg_view('input/dropdown', array('name' => 'entity_subtype', 'value' => $entity_subtype, 'options_values' => $entity_subtype_opt)) . '</label></p>';
+		$form .= '<p><label>' . elgg_echo('logbrowser:entity_type') . ' ' . elgg_view('input/select', array('name' => 'entity_type', 'value' => $entity_type, 'options_values' => $entity_type_opt)) . '</label></p>';
+		$form .= '<p><label>' . elgg_echo('logbrowser:entity_subtype') . ' ' . elgg_view('input/select', array('name' => 'entity_subtype', 'value' => $entity_subtype, 'options_values' => $entity_subtype_opt)) . '</label></p>';
 		$form .= '<p><label>' . elgg_echo('logbrowser:object_guid') . ' ' . elgg_view('input/text', array('name' => 'object_guid', 'value' => $object_guid, 'style' => 'max-width:10ex')) . '</label></p>';
-		$form .= '<p><label>' . elgg_echo('logbrowser:event') . ' ' . elgg_view('input/dropdown', array('name' => 'event', 'value' => $event, 'options_values' => $event_opt)) . '</label></p>';
+		$form .= '<p><label>' . elgg_echo('logbrowser:event') . ' ' . elgg_view('input/select', array('name' => 'event', 'value' => $event, 'options_values' => $event_opt)) . '</label></p>';
 	$form .= '</div>';
 	
 $form .= '</div>';

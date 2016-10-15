@@ -72,7 +72,7 @@ if(elgg_view_exists("input/user_autocomplete")){
 		
 		echo "<div>";
 		echo elgg_echo("esope:widgets:searchresults:owner_guids") . "<br />";
-		echo elgg_view("input/dropdown", array("name" => "params[owner_guids]", "options_values" => $options_values, "value" => $widget->owner_guids));
+		echo elgg_view("input/select", array("name" => "params[owner_guids]", "options_values" => $options_values, "value" => $widget->owner_guids));
 		echo "</div>";
 	}
 }
@@ -80,7 +80,7 @@ if(elgg_view_exists("input/user_autocomplete")){
 if($widget->context == "groups"){
 	echo "<div>";
 	echo elgg_echo("esope:widgets:searchresults:group_only") . "<br />";
-	echo elgg_view("input/dropdown", array("name" => "params[group_only]", "options_values" => array("yes" => elgg_echo("option:yes"), "no" => elgg_echo("option:no")), "value" => $widget->group_only));
+	echo elgg_view("input/select", array("name" => "params[group_only]", "options_values" => array("yes" => elgg_echo("option:yes"), "no" => elgg_echo("option:no")), "value" => $widget->group_only));
 	echo "</div>";
 }
 
@@ -93,7 +93,7 @@ if($widget->context == "groups"){
 
 <p>
 	<label><?php echo elgg_echo("esope:widgets:searchresults:entities"); ?> 
-	<?php echo elgg_view("input/dropdown", array("name" => "params[content_type]", "options_values" => $content_options_values, "value" => $content_type)); ?></label>
+	<?php echo elgg_view("input/select", array("name" => "params[content_type]", "options_values" => $content_options_values, "value" => $content_type)); ?></label>
 </p>
 
 <p>
@@ -103,7 +103,7 @@ if($widget->context == "groups"){
 
 <p>
 	<label><?php echo elgg_echo("esope:widgets:searchresults:tags_option"); ?> 
-	<?php echo elgg_view("input/dropdown", array("name" => "params[tags_option]", "options_values" => $tags_options_values, "value" => $tags_option)); ?></label>
+	<?php echo elgg_view("input/select", array("name" => "params[tags_option]", "options_values" => $tags_options_values, "value" => $tags_option)); ?></label>
 </p>
 
 <?php if (elgg_view_exists("input/user_autocomplete")) { ?>
@@ -121,7 +121,7 @@ if($widget->context == "groups"){
 
 <p>
 	<label><?php echo elgg_echo("esope:widgets:searchresults:display_option"); ?> 
-	<?php echo elgg_view("input/dropdown", array("name" => "params[display_option]", "options_values" => $display_option_options_values, "value" => $widget->display_option)); ?></label>
+	<?php echo elgg_view("input/select", array("name" => "params[display_option]", "options_values" => $display_option_options_values, "value" => $widget->display_option)); ?></label>
 </p>
 
 <p>

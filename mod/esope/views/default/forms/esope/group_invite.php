@@ -128,7 +128,7 @@ if (!empty($query)) {
 		// Invitation ou inscription ?
 		$allowregister = elgg_get_plugin_setting('allowregister', 'esope');
 		if ($allowregister == 'yes') {
-			$content .= ' <p><label>' . elgg_echo('esope:groups:allowregister') . '</label> ' . elgg_view('input/dropdown', array('name' => 'group_register', 'options_values' => array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')))) . '</p>';
+			$content .= ' <p><label>' . elgg_echo('esope:groups:allowregister') . '</label> ' . elgg_view('input/select', array('name' => 'group_register', 'options_values' => array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')))) . '</p>';
 		}
 		$content .= '<div class="elgg-foot">';
 		$content .= elgg_view('input/hidden', array('name' => 'forward_url', 'value' => $forward_url));

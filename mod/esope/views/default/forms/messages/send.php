@@ -28,7 +28,7 @@ if (!array_key_exists($recipient_guid, $recipients_options)) {
 }
 
 // This is fine only for a limited number of users (up to a few hundreds)
-$recipient_drop_down = elgg_view('input/dropdown', array(
+$recipient_select = elgg_view('input/select', array(
 	'name' => 'recipient_guid',
 	'value' => $recipient_guid,
 	'options_values' => $recipients_options,
@@ -49,7 +49,7 @@ $recipient_autocomplete = elgg_view('input/autocomplete', array(
 <div>
 <?php /*
 	<label for="recipient_guid"><?php echo elgg_echo("messages:to"); ?>: </label>
-	<?php echo $recipient_drop_down; ?>
+	<?php echo $recipient_select; ?>
 */ ?>
 	<label for="recipient_username"><?php echo elgg_echo("email:to"); ?>: </label>
 	<?php echo $recipient_autocomplete; ?>

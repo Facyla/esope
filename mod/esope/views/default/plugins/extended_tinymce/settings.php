@@ -1,7 +1,7 @@
 <?php
 $url = elgg_get_site_url();
 
-// Define dropdown options
+// Define select options
 $yes_no_opt = array('yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no'));
 $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
 
@@ -54,7 +54,7 @@ if (empty($vars['entity']->extended_valid_elements)) $vars['entity']->extended_v
 
 
 <p><label><?php echo elgg_echo('esope:tinymce:templates'); ?> 
-	<?php echo elgg_view('input/dropdown', array( 'name' => 'params[enable_templates]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->enable_templates )); ?></label>
+	<?php echo elgg_view('input/select', array( 'name' => 'params[enable_templates]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->enable_templates )); ?></label>
 </p>
 
 <p><em><?php echo elgg_echo('esope:tinymce:templates:cmspages:details'); ?></p>
