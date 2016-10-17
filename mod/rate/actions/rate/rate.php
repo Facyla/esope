@@ -38,11 +38,13 @@
 		register_error(elgg_echo('rate:error'));
 	}
 	
-	// @TODO add comment (but should it be tied to the annotation ?)
+	/* @TODO add comment ? (and should it be tied to the annotation ?)
+	 * 
 	$rate_comment = elgg_get_plugin_setting('rate_comment', 'rate');
 	if ($rate_comment == 'yes') {
-	
+		// Regular comment ?
 	}
+	*/
 	
 	if($isAjax){
 		echo rate_show_rating($entity);
