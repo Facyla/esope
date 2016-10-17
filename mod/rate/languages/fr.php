@@ -26,12 +26,25 @@ return array(
 	'rate:3' => "3 - Plutôt bon",
 	'rate:4' => "4 - Très bon",
 	'rate:5' => "5 - Excellent",
+	/*
+	'rate:0' => '0<i class="fa fa-star"></i>',
+	'rate:1' => '1<i class="fa fa-star"></i>',
+	'rate:2' => '2<i class="fa fa-star"></i>',
+	'rate:3' => '3<i class="fa fa-star"></i>',
+	'rate:4' => '4<i class="fa fa-star"></i>',
+	'rate:5' => '5<i class="fa fa-star"></i>',
+	*/
 	
 	// Settings
 	'rate:settings:object_subtypes' => "Types d'objets",
 	'rate:settings:object_subtypes:details' => "Lister les types d'objets (subtypes) auxquels ajouter le système de notation. Séparer les vues par des virgules, par ex.:",
 	'rate:settings:extend_views' => "Vues auxquelles ajouter la notation",
 	'rate:settings:extend_views:details' => "Autres vues à étendre avec le système de notation. Il est cependant conseillé d'étendre ou de surcharger les vues concernées via un plugin de thème. Séparer les vues par des virgules.",
+	'rate:settings:self_rate' => "Permettre de se noter soi-même",
+	'rate:settings:self_rate:details' => "Activez cette option pour permettre aux membres du site de se donner une note à eux-même.",
+	'rate:settings:rate_comment' => "Ajouter un commentaire",
+	'rate:settings:rate_comment:details' => "Ajoutez un commentaire avec votre note.",
+	
 	
 );
 

@@ -33,10 +33,12 @@ if (rate_is_allowed_to_rate($vars['entity'])){
 	$form_body .= "<div class='mbs'>";
 	$form_body .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $vars['entity']->getGUID()));
 	$form_body .= elgg_view('input/rate', array('name' => 'rate', 'options' => $options));
+	// @TODO add text evaluation ?
+	//$form_body .= elgg_view('input/plaintext', array('name' => 'description'));
 	$form_body .= "</div>";
 	$form_body .= elgg_view('input/submit', array('value' => elgg_echo("rate:rateit")));
 	$form_body .= "</div>";
-	echo $form_body;	
+	echo $form_body;
 }
 
 

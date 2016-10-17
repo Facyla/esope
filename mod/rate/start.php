@@ -41,20 +41,21 @@ function rate_init() {
 
 // Checks if entity has already been rated by user
 function rate_is_allowed_to_rate($entity = null) {
-	if (elgg_is_logged_in() && $entity){
-		if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'rated', $entity->guid)) {
-			return false;
-		}
-		return true;
-	} else {
+	if (!elgg_is_logged_in() || !$entity) { return false; }
+	if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'rated', $entity->guid)) {
 		return false;
 	}
+	$self_rate = elgg_get_plugin_setting('self_rate', 'rate');
+	if (($self_rate != 'yes') && ($entity->guid == elgg_get_logged_in_user_guid())) {
+		return false;
+	}
+	return true;
 }
 
 // Display rating form or results
 function rate_show_rating($entity = null) {
-	if($entity){
-		return elgg_view_form('rate/rate', array() ,array('entity' => $entity));
+	if (elgg_instanceof($entity)) {
+		return elgg_view_form('rate/rate', array(), array('entity' => $entity));
 	}
 }
 

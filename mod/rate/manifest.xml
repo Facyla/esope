@@ -23,10 +23,15 @@
 </plugin_manifest>
 
 <!--
+ROADMAP :
+ - better form rendering
+ - ajax rating ?
+
 1.12.0 : 
- - aAdd setting for auto-extended object subtypes
+ - Add setting for auto-extended object subtypes
  - Add setting to extend any custom view
  - French translation
+ - Add setting for self-rating
 
 //-->
 
