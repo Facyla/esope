@@ -925,23 +925,24 @@ if (elgg_is_active_plugin('profile_manager')) {
 	 * L'interdiction prend le dessus sur l'autorisation
 	 * forward par défaut, return true/false possible
 	 * admin bypass
+	 * custom error message
 	 */
-	function esope_profile_type_gatekeeper($allowed = array(), $forbidden= array(), $user = false, $forward = true, $admin_bypass = true) {
-		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+	function esope_profile_type_gatekeeper($allowed = array(), $forbidden= array(), $user = false, $forward = true, $admin_bypass = true, $error_msg = 'noaccess') {
+		if (!elgg_instanceof($user, 'user')) { $user = elgg_get_logged_in_user_entity(); }
 		$profile_type = esope_get_user_profile_type($user);
-		if ($admin_bypass && $user->isAdmin()) return true;
-		if (!is_array($allowed)) $allowed = array($allowed);
-		if (!is_array($forbidden)) $forbidden = array($forbidden);
-		if (in_array($profile_type, $allowed) && !in_array($profile_type, $forbidden)) return true;
-		register_error(elgg_echo('noaccess'));
-		if ($forward) forward();
+		if ($admin_bypass && $user->isAdmin()) { return true; }
+		if (!is_array($allowed)) { $allowed = array($allowed); }
+		if (!is_array($forbidden)) { $forbidden = array($forbidden); }
+		if (in_array($profile_type, $allowed) && !in_array($profile_type, $forbidden)) { return true; }
+		register_error(elgg_echo($error_msg));
+		if ($forward) { forward(); }
 		return false;
 	}
 	
 	/* Renvoie le nom du profil en clair, ou false si aucun trouvé/valide */
 	function esope_get_user_profile_type($user = false) {
 		$ia = elgg_set_ignore_access(true);
-		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+		if (!elgg_instanceof($user, 'user')) { $user = elgg_get_logged_in_user_entity(); }
 		$profile_type = false;
 		// Type de profil
 		if ($profile_type_guid = $user->custom_profile_type) {
@@ -955,7 +956,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 	
 	function esope_set_user_profile_type($user = false, $profiletype = '') {
 		$ia = elgg_set_ignore_access(true);
-		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
+		if (!elgg_instanceof($user, 'user')) { $user = elgg_get_logged_in_user_entity(); }
 		$profiletype_guid = null;
 		if (!empty($profiletype)) {
 			$profiletype_guid = esope_get_profiletype_guid($profiletype);
@@ -989,8 +990,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 	function esope_get_profiletype_label($profiletype_guid) {
 		$profiletype = get_entity($profiletype_guid);
 		if (elgg_instanceof($profiletype, 'object', CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE)) {
-			if (!empty($profiletype->metadata_label)) return $profiletype->metadata_label;
-			else return elgg_echo('profile:types:' . $profiletype);
+			if (!empty($profiletype->metadata_label)) {
+				return $profiletype->metadata_label;
+			} else {
+				return elgg_echo('profile:types:' . $profiletype);
+			}
 		}
 		return false;
 	}

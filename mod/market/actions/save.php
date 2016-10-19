@@ -14,6 +14,7 @@ $error = FALSE;
 $error_forward_url = REFERER;
 $user = elgg_get_logged_in_user_entity();
 
+
 // edit or create a new entity
 $guid = get_input('guid');
 
@@ -30,6 +31,14 @@ if ($guid) {
 	$post->subtype = 'market';
 	$new_post = true;
 }
+
+
+// Premium feature : regular users can still edit existing offers, but cannot create new ones
+$forward = $new_post; // do not forward if existing offer
+$error_msg = 'theme_barterbusiness:alert:notpremium';
+if ($forward) { $error_msg = 'theme_barterbusiness:error:notpremium'; }
+esope_profile_type_gatekeeper(array('premium'), array(), $user, $forward, true, $error_msg);
+
 
 $values = array(
 	'title' => '',

@@ -8,6 +8,7 @@
  * See hook triggering code for reference on $result handling and passed $params
  */
 
+/*
 function plugin_template_somehook($hook, $type, $result, $params) {
 	// Extract some data from $params
 	//$entity = elgg_extract("entity", $params);
@@ -17,6 +18,7 @@ function plugin_template_somehook($hook, $type, $result, $params) {
 	
 	return $result;
 }
+*/
 
 
 /**

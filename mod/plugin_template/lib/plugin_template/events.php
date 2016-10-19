@@ -8,6 +8,8 @@
  * See event triggering code for details
  */
 
+
+/*
 function plugin_template_someevent($event, $type, $entity) {
 	
 	// @TODO : Perform some tests and actions
@@ -15,6 +17,6 @@ function plugin_template_someevent($event, $type, $entity) {
 	
 	return null;
 }
-
+*/
 
 
