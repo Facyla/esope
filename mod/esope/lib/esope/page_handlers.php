@@ -632,7 +632,7 @@ function esope_groups_page_handler($page) {
 			groups_handle_activity_page($page[1]);
 			break;
 		case 'members':
-			// Because au_subgroups lib has hardcoded limit
+			// ESOPE: use custom function because au_subgroups lib has hardcoded limit + add invite button for group admins
 			esope_groups_handle_members_page($page[1]);
 			break;
 		case 'invite':

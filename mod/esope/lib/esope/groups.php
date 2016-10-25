@@ -324,6 +324,18 @@ function esope_groups_handle_members_page($guid) {
 
 	elgg_group_gatekeeper();
 
+	// ESOPE: Add members invite button
+	//groups_register_profile_buttons($group); // add all group actions buttons
+	if ($group->canEdit()) {
+		elgg_register_menu_item('title', array(
+				'name' => 'groups:invite',
+				'href' => elgg_get_site_url() . 'groups/invite/' . $group->guid,
+				'text' => elgg_echo('groups:invite'),
+				'link_class' => 'elgg-button elgg-button-action',
+			));
+	}
+
+
 	$title = elgg_echo('groups:members:title', array($group->name));
 
 	elgg_push_breadcrumb($group->name, $group->getURL());
