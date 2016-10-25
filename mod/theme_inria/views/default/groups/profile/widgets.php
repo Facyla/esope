@@ -35,7 +35,7 @@ if (elgg_is_active_plugin('simplepie')) {
 // Add group activity
 $all_link = elgg_view('output/url', array('href' => "groups/activity/$group->guid", 'text' => elgg_echo('groups:activity'), 'is_trusted' => true));
 
-elgg_push_context('widgets');
+//elgg_push_context('widgets'); // uncomment to hide likes
 $db_prefix = elgg_get_config('dbprefix');
 $limit = get_input('limit', 10);
 $offset = get_input('offset', 0);
@@ -49,7 +49,7 @@ $activity = elgg_list_river(array(
 		"(e1.container_guid = $group->guid OR e2.container_guid = $group->guid)",
 	),
 ));
-elgg_pop_context();
+//elgg_pop_context();
 
 if (!$activity) { $activity = '<p>' . elgg_echo('groups:activity:none') . '</p>'; }
 
