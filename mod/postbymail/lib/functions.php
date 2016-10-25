@@ -168,7 +168,7 @@ function postbymail_checkandpost($config = array()) {
 			// + prévenir l'expéditeur (dans tous les cas) 
 			// + prévenir un admin (idem ?)
 			foreach ($unreadmessages as $i => $uid) {
-				error_log("Processing email $i : message uid = $uid");
+				if ($debug) { error_log("POSTBYMAIL: Processing email $i : message uid = $uid"); }
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation des élements variables pour chaque message, afin de traiter chaque publication indépendament
@@ -184,7 +184,7 @@ function postbymail_checkandpost($config = array()) {
 				// Ensure we had no error checking email
 				// Note : we have to check this before we mark the message as read
 				if (!$header) {
-					error_log("Error processing email, keep going to avoid further errors. We will process it later.");
+					error_log("POSTBYMAIL: Error processing email, keep going to avoid further errors. We will process it later.");
 					continue;
 				}
 				
@@ -636,8 +636,8 @@ function postbymail_checkandpost($config = array()) {
 								break;
 							case 'messages':
 								/*
-								error_log("DEBUG messages post : from = {$entity->fromId}, to = {$entity->toId}");
-								error_log("DEBUG messages reply : from = {$member->guid}, to = {$entity->fromId}");
+								error_log("DEBUG POSTBYMAIL messages post : from = {$entity->fromId}, to = {$entity->toId}");
+								error_log("DEBUG POSTBYMAIL messages reply : from = {$member->guid}, to = {$entity->fromId}");
 								*/
 								// Post the message + add to sent message (need it once)
 								if (elgg_is_active_plugin('notification_messages')) {
@@ -1175,7 +1175,7 @@ function postbymail_checkeligible_reply($params) {
 	$email_header_autosubmitted = $params['email_headers']['auto-submitted'];
 	$email_header_returnpath = $params['email_headers']['return-path'];
 	$email_header_from = $params['email_headers']['from'];
-	//error_log("Headers : $email_header_autosubmitted / $email_header_returnpath / $email_header_from / " . print_r($params['email_headers'], true));
+	//error_log("POSTBYMAIL: Headers : $email_header_autosubmitted / $email_header_returnpath / $email_header_from / " . print_r($params['email_headers'], true));
 	if (!empty($email_header_autosubmitted) && ($email_header_autosubmitted != 'no')) {
 		// Header signalant explicitement une réponse automatique => on ne publie pas !
 		$report .= elgg_echo('postbymail:error:automatic_reply');
@@ -1460,13 +1460,13 @@ function postbymail_checkboxes($server, $protocol, $mailbox) {
 		$status = @imap_status($mailbox, "{".$server.$protocol."}$mailbox_name", SA_ALL);
 		if (!$status) {
 			echo "Ajout du dossier \"$mailbox_name\" :<br />";
-			error_log("Ajout du dossier \"$mailbox_name\"");
+			error_log("POSTBYMAIL: Ajout du dossier \"$mailbox_name\"");
 			if (@imap_createmailbox($mailbox, "{".$server.$protocol."}$mailbox_name")) {
 				echo "Ajout du dossier \"$mailbox_name\" OK<br />";
-				error_log("Ajout du dossier \"$mailbox_name\" OK");
+				error_log("POSTBYMAIL: Ajout du dossier \"$mailbox_name\" OK");
 			} else {
 				echo "<b>Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement</b>";
-				error_log("Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement");
+				error_log("POSTBYMAIL: Ajout du dossier \"$mailbox_name\" impossible : veuillez le faire manuellement");
 			}
 		}
 	}
