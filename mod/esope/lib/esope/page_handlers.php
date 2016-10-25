@@ -497,10 +497,9 @@ function esope_pages_page_handler($page) {
 	return true;
 }
 
+// Enable to list all owner blogs (including those published in groups)
 function esope_blog_page_handler($page) {
 	elgg_load_library('elgg:blog');
-	// forward to correct URL for blog pages pre-1.8
-	blog_url_forwarder($page);
 	// push all blogs breadcrumb
 	elgg_push_breadcrumb(elgg_echo('blog:blogs'), "blog/all");
 
@@ -509,25 +508,33 @@ function esope_blog_page_handler($page) {
 	switch ($page_type) {
 		case 'owner':
 			$user = get_user_by_username($page[1]);
+			if (!$user) { forward('', '404'); }
 			$use_owner = elgg_get_plugin_setting('blog_user_listall', 'esope');
-			if (($use_owner == 'yes') && elgg_instanceof($user, 'user')) $params = blog_get_page_content_list($user->guid, true);
-			else $params = blog_get_page_content_list($user->guid);
+			if (($use_owner == 'yes') && elgg_instanceof($user, 'user')) {
+				$params = blog_get_page_content_list($user->guid, true);
+			} else {
+				$params = blog_get_page_content_list($user->guid);
+			}
 			break;
 		case 'friends':
 			$user = get_user_by_username($page[1]);
+			if (!$user) { forward('', '404'); }
 			$params = blog_get_page_content_friends($user->guid);
 			break;
 		case 'archive':
 			$user = get_user_by_username($page[1]);
+			if (!$user) { forward('', '404'); }
 			$params = blog_get_page_content_archive($user->guid, $page[2], $page[3]);
 			break;
 		case 'view':
 			$params = blog_get_page_content_read($page[1]);
 			break;
+		/*
 		case 'read': // Elgg 1.7 compatibility
 			register_error(elgg_echo("changebookmark"));
 			forward("blog/view/{$page[1]}");
 			break;
+		*/
 		case 'add':
 			elgg_gatekeeper();
 			$params = blog_get_page_content_edit($page_type, $page[1]);
@@ -537,7 +544,9 @@ function esope_blog_page_handler($page) {
 			$params = blog_get_page_content_edit($page_type, $page[1], $page[2]);
 			break;
 		case 'group':
-			if ($page[2] == 'all') {
+			$group = get_entity($page[1]);
+			if (!elgg_instanceof($group, 'group')) { forward('', '404'); }
+			if (!isset($page[2]) || $page[2] == 'all') {
 				$params = blog_get_page_content_list($page[1]);
 			} else {
 				$params = blog_get_page_content_archive($page[1], $page[3], $page[4]);
