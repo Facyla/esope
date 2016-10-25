@@ -335,7 +335,6 @@ function esope_groups_handle_members_page($guid) {
 			));
 	}
 
-
 	$title = elgg_echo('groups:members:title', array($group->name));
 
 	elgg_push_breadcrumb($group->name, $group->getURL());

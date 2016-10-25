@@ -1149,7 +1149,13 @@ function esope_make_dropdown_from_metadata($params) {
 	
 	// Add empty entry at the beginning of the array
 	//if ($empty) $options = array('empty option' => '') + $options;
-	if ($empty) $options = array_merge(array('empty option' => ''), $options);
+	if ($empty) {
+		if (is_array($options)) {
+			$options = array_merge(array('empty option' => ''), $options);
+		} else {
+			$options = array('empty option' => '');
+		}
+	}
 	
 	return elgg_view("input/select", array('name' => $name, 'options' => $options, 'value' => $value));
 }
@@ -1166,7 +1172,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
 	// If there is neither $params not input, use default (but don't if anything was set, event empty !)
 	if ($value === false) { $value = $default; }
 	// Sanitise string
-	if ($sanitise && is_string($value)) $value = sanitise_string($value);
+	if ($sanitise && is_string($value)) { $value = sanitise_string($value); }
 	return $value;
 }
 
