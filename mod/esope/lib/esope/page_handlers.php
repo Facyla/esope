@@ -941,3 +941,34 @@ function esope_messages_page_handler($page) {
 	return true;
 }
 
+
+// Replaces Digest page handler so we can use a custom test page ?
+// Disabled because produces an empty digest
+/*
+function esope_digest_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'digest/';
+	$alt_base = elgg_get_plugins_path() . 'esope/pages/digest/';
+	switch ($page[0]) {
+		case "test":
+			include($alt_base . "test.php");
+			break;
+		case "show":
+			include($base . "pages/show.php");
+			break;
+		case "unsubscribe":
+			include($base . "procedures/unsubscribe.php");
+			break;
+		case "user":
+		default:
+			if (!empty($page[1])) {
+				set_input("username", $page[1]);
+			}
+			include($base . "pages/usersettings.php");
+			break;
+	}
+	return true;
+}
+*/
+
+
+

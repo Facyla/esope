@@ -9,6 +9,8 @@
 
 $subject = $vars['item']->getSubjectEntity();
 
+if (!elgg_instanceof($subject)) { return; }
+
 if (elgg_in_context('digest') || elgg_in_context('cron')) {
 	echo '<div class="elgg-avatar elgg-avatar-small"><a href="' .  $subject->getURL() . '"><img src="' . $subject->getIconUrl('small') .  '" /></a></div>';
 } else {

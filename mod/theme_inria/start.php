@@ -86,9 +86,10 @@ function theme_inria_init(){
 	// Export HTML des pages wiki (dans le menu de la page - cf. object/page_top pour chaque entité)
 	//elgg_extend_view('page/elements/owner_block', 'theme_inria/html_export_extend', 200);
 	
-	// Add all groups excerpt to digest
+	// Add elements to site digest
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
-	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	//elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600); // already extended by esope
+	
 	
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)

@@ -402,6 +402,11 @@ function esope_init() {
 	// Pour les messages
 	elgg_unregister_page_handler('messages', 'messages_page_handler');
 	elgg_register_page_handler('messages', 'esope_messages_page_handler');
+	// Digest : params pour page de test - disabled because produces an empty digest
+	/*
+	elgg_unregister_page_handler('digest', 'digest_page_handler');
+	elgg_register_page_handler('digest', 'esope_digest_page_handler');
+	*/
 	
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');

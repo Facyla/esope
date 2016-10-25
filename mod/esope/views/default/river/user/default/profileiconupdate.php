@@ -5,6 +5,8 @@
 
 $subject = $vars['item']->getSubjectEntity();
 
+if (!elgg_instanceof($subject)) { return; }
+
 $subject_link = elgg_view('output/url', array(
 	'href' => $subject->getURL(),
 	'text' => $subject->name,
