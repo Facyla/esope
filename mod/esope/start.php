@@ -33,6 +33,8 @@ function esope_init() {
 		elgg_register_css('fontawesome', 'mod/esope/vendors/font-awesome/css/font-awesome.min.css');
 		elgg_load_css('fontawesome');
 	}
+	// Media print pour newsletter : pas besoin d'extension car géré directement en overridant page/layouts/newsletter
+	//elgg_extend_view('newsletter/view/css','css/newsletter_print');
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
