@@ -35,6 +35,11 @@ function esope_init() {
 	}
 	// Media print pour newsletter : pas besoin d'extension car géré directement en overridant page/layouts/newsletter
 	//elgg_extend_view('newsletter/view/css','css/newsletter_print');
+	/* Solution pour CSS boutons : charger directement les CSS dans newsletter/buttons
+	 * car on n'utilise pas le layout et donc les CSS ne peuvent pas être chargées via elgg_load_css()
+	elgg_register_simplecache_view("css/newsletter/buttons.css");
+	elgg_register_css("newsletter_buttons", elgg_get_simplecache_url("css", "newsletter/buttons.css"));
+	*/
 	
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
