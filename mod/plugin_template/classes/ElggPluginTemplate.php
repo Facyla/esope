@@ -6,9 +6,17 @@
  * @property string $excerpt     An excerpt of the plugin_template post used when displaying the post
  */
 class ElggPluginTemplate extends ElggObject {
-
+	
+	// Constants
+	//const SUBTYPE = "plugin_template";
+	
+	// Cached vars
+	//private $some_cached_var = array();
+	// In functions : if ($this->responses_by_question) { return; } else { /* compute it */ }
+	
+	
 	/**
-	 * Set subtype to plugin_template.
+	 * Set subtype
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
