@@ -24,8 +24,10 @@ if (!$success) {
 }
 
 
+$disposition = get_input('inline', '');
+
 header("Content-type: application/octet-stream");
-if (!empty(get_input('inline'))) {
+if (!empty($disposition)) {
 	header("Content-Disposition: inline; filename=$filename");
 } else {
 	header("Content-Disposition: attachment; filename=$filename");
