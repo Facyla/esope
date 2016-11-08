@@ -25,7 +25,11 @@ if (!$success) {
 
 
 header("Content-type: application/octet-stream");
-header("Content-Disposition: attachment; filename=$filename");
+if (!empty(get_input('inline'))) {
+	header("Content-Disposition: inline; filename=$filename");
+} else {
+	header("Content-Disposition: attachment; filename=$filename");
+}
 header("Expires: " . date("r", time() + 864000));
 header("Pragma: public");
 header("Cache-Control: public");
