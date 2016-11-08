@@ -24,10 +24,13 @@ if (!$success) {
 }
 
 
-$disposition = get_input('inline', '');
+$disposition = get_input('inline', false);
+$mime = $filehandler->detectMimeType();
+if (empty($mime)) { $mime = 'application/octet-stream'; }
+
 
 header("Content-type: application/octet-stream");
-if (!empty($disposition)) {
+if ($disposition) {
 	header("Content-Disposition: inline; filename=$filename");
 } else {
 	header("Content-Disposition: attachment; filename=$filename");
