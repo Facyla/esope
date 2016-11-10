@@ -916,12 +916,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 /* Arborescence : taille de plus en plus petite */
 .treeview { font-size:16px; }
 .treeview li { font-size:0.95em; }
-.treeview li.elgg-state-selected a.selected {
-	color:white;
-	background-color:<?php echo $linkcolor; ?>;
-	font-weight: bold;
-	padding: 2px 7px;
-}
+.treeview li.elgg-state-selected a.selected { color:white; background-color:<?php echo $linkcolor; ?>; font-weight: bold; padding: 2px 7px; }
+.elgg-page-body div.elgg-module ul.treeview li { padding: 3px 0pt 3px 16px; }
 
 
 #file_tools_list_tree_container { max-width: 100%; padding:0; }

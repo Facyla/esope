@@ -130,5 +130,5 @@ $french = array(
 	'rssimport:date:format' => 'j/m/Y à H:i',
 	
 );
-add_translation("fr",$french);4
+add_translation("fr",$french);
 
