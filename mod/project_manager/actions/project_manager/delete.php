@@ -11,10 +11,12 @@ if (!elgg_is_logged_in()) { forward(); }
 $own = elgg_get_logged_in_user_entity();
 
 // Ajouter un admin_gatekeeper une fois que les droits d'édition auront été implémentés
-if ($own->role != 'internal') forward(); // Basic ACL
+if (($own->role != 'internal') && !elgg_is_admin_logged_in()) {
+	register_error(elgg_echo('project_manager:delete:error:adminonly'));
+	forward(); // Basic ACL
+}
 if (!elgg_is_admin_logged_in()) {
-	$msg = elgg_echo('project_manager:delete:error:adminonly')
-	register_error($msg);
+	register_error(elgg_echo('project_manager:delete:error:adminonly'));
 	forward();
 }
 

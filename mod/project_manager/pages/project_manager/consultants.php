@@ -106,13 +106,13 @@ foreach ($all_members as $ent) {
 		$edit_firstname = elgg_view('input/text', array('value' => $ent->firstname, 'js' => 'style="max-width:12ex;" onChange="project_manager_update_consultants('.$ent->guid.', \'firstname\', this.value);"'));
 		$edit_name = '<br />' . elgg_echo('project_manager:consultants:lastname') . '&nbsp;: ' . $edit_lastname . '<br />' . elgg_echo('project_manager:consultants:name') . '&nbsp;: ' . $edit_firstname;
 	} else $edit_name = '';
-	$edit_status = elgg_view('input/dropdown', array('value' => $ent-->{$pm_meta}, 'options_values' => array('' => elgg_echo('project_manager:status_meta:'), "salarie" => elgg_echo('project_manager:status_meta:salarie'), "non-salarie" => elgg_echo('project_manager:status_meta:non-salarie')), 'js' => 'style="max-width:13ex;" onChange="project_manager_update_consultants('.$ent->guid.', \'' . $pm_meta . '\', this.value);"'));
+	$edit_status = elgg_view('input/dropdown', array('value' => $ent->{$pm_meta}, 'options_values' => array('' => elgg_echo('project_manager:status_meta:'), "salarie" => elgg_echo('project_manager:status_meta:salarie'), "non-salarie" => elgg_echo('project_manager:status_meta:non-salarie')), 'js' => 'style="max-width:13ex;" onChange="project_manager_update_consultants('.$ent->guid.', \'' . $pm_meta . '\', this.value);"'));
 	$edit_yearly_global_cost = elgg_view('input/text', array('value' => $ent->yearly_global_cost, 'js' => 'style="width:10ex;" onChange="project_manager_update_consultants('.$ent->guid.', \'yearly_global_cost\', this.value);"'));
 	$edit_yearly_variable_part = elgg_view('input/text', array('value' => $ent->yearly_variable_part, 'js' => 'style="width:10ex;" onChange="project_manager_update_consultants('.$ent->guid.', \'yearly_variable_part\', this.value);"'));
 	$edit_daily_cost = elgg_view('input/text', array('value' => $ent->daily_cost, 'js' => 'style="max-width:10ex;" onChange="project_manager_update_consultants('.$ent->guid.', \'daily_cost\', this.value);"'));
 	if ($ent->isBanned()) {
 		// Non concerné
-	} else if ($ent-->{$pm_meta} == 'salarie') {
+	} else if ($ent->{$pm_meta} == 'salarie') {
 		$content_salarie .= '<tr>';
 		$monthly = $ent->yearly_global_cost / 12;
 		$monthly_cost = ($monthly * $coef_salarial) + ($ent->yearly_variable_part * $coef_pv / 12);
@@ -128,7 +128,7 @@ foreach ($all_members as $ent) {
 			$content_salarie .= '<td>' . time_tracker_monthly_time(date('Y'), $num, null, $ent->guid, true, true, true) . '</td>';
 		}
 		$content_salarie .= '</tr>';
-	} else if ($ent-->{$pm_meta} == 'non-salarie') {
+	} else if ($ent->{$pm_meta} == 'non-salarie') {
 		$content_non_salarie .= '<tr>';
 		$content_non_salarie .= '<td scope="row">' . $ent->name . $edit_name . '</td>';
 		$content_non_salarie .= '<td>' . $edit_status . '</td>';

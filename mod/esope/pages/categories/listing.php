@@ -5,24 +5,23 @@
  * @package ElggCategories
  */
 
-global $CONFIG;
 $limit = get_input("limit", 10);
 $offset = get_input("offset", 0);
 $category = get_input("category");
 $owner_guid = get_input("owner_guid", ELGG_ENTITIES_ANY_VALUE);
 $subtype = get_input("subtype", ELGG_ENTITIES_ANY_VALUE);
 $type = get_input("type", 'object');
-$site = $CONFIG->site;
+$site = elgg_get_site_entity();
 
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb(elgg_echo('categories'));
 if (empty($category)) {
-  $title = elgg_echo('esope:categories:all', array($category));
-  elgg_push_breadcrumb(elgg_echo('esope:categories:all'));
+	$title = elgg_echo('esope:categories:all', array($category));
+	elgg_push_breadcrumb(elgg_echo('esope:categories:all'));
 } else {
-  elgg_push_breadcrumb(elgg_echo('esope:categories:all'));
-  elgg_push_breadcrumb(elgg_echo($category));
-  $title = elgg_echo('categories:results', array($category));
+	elgg_push_breadcrumb(elgg_echo('esope:categories:all'));
+	elgg_push_breadcrumb(elgg_echo($category));
+	$title = elgg_echo('categories:results', array($category));
 }
 
 
@@ -64,17 +63,17 @@ foreach ($themes as $k => $theme) {
 $sidebar = '<h2>' . elgg_echo('esope:categories') . '</h2>';
 $sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
 if (empty($category)) {
-  $sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories">' . elgg_echo('esope:categories:all') . '</a></li>';
+	$sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories">' . elgg_echo('esope:categories:all') . '</a></li>';
 } else {
-  $sidebar .= '<li><a href="' . $url . 'categories">' . elgg_echo('esope:categories:all') . '</a></li>';
+	$sidebar .= '<li><a href="' . $url . 'categories">' . elgg_echo('esope:categories:all') . '</a></li>';
 }
 foreach ($themes as $theme => $theme_label) {
-  //$is_current = str_replace(' ', '+', $theme);
-  if ($theme == $category) {
+	//$is_current = str_replace(' ', '+', $theme);
+	if ($theme == $category) {
 		$sidebar .= '<li class="elgg-state-selected"><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
-  } else {
+	} else {
 		$sidebar .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
-  }
+	}
 }
 $sidebar .= '</ul>';
 
@@ -90,3 +89,4 @@ $body = elgg_view_layout('content', array(
 ));
 
 echo elgg_view_page($title, $body);
+
