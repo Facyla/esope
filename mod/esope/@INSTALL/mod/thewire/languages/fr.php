@@ -8,13 +8,13 @@ return array(
 	'thewire:everyone' => "Tous les messages du Fil",
 	'thewire:user' => "Le Fil de %s",
 	'thewire:friends' => "Messages des contacts sur le Fil",
-	'thewire:replying' => "Répondre à %s, qui a écrit",
-	'thewire:thread' => "Flux",
-	'thewire:charleft' => "caractères restant",
-	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
-	'thewire:noposts' => "Pas encore de message sur le Fil",
+	'thewire:replying' => "Répondre à %s (@%s), qui a écrit",
+	'thewire:thread' => "Conversation",
+	'thewire:charleft' => "caractères",
+	'thewire:tags' => "Messages du Fil avec le tag \"%s\"",
+	'thewire:noposts' => "Il n'y a pas encore de message sur le Fil",
 	'item:object:thewire' => "Messages du Fil",
-	'thewire:by' => 'Message sur le Fil de %s',
+	'thewire:by' => 'Message du Fil de %s',
 	'thewire:previous:help' => "Voir le message précédent",
 	'thewire:hide:help' => "Masquer le message précédent",
 
@@ -27,7 +27,7 @@ return array(
 	/**
 	 * Wire widget
 	 */
-	'thewire:widget:desc' => 'Affichez vos derniers messages du Fil',
+	'thewire:widget:desc' => 'Affiche vos derniers messages du Fil',
 	'thewire:num' => 'Nombre de messages à afficher',
 	'thewire:moreposts' => 'Plus de messages du Fil',
 
@@ -36,10 +36,10 @@ return array(
 	 */
 	'thewire:posted' => "Votre message a bien été publié sur le Fil.",
 	'thewire:deleted' => "Votre message a bien été supprimé du Fil.",
-	'thewire:blank' => "Désolé, vous devez d'abord écrire un message avant de l'envoyer.",
+	'thewire:blank' => "Désolé, vous devez d'abord écrire un message avant de pouvoir le publier.",
 	'thewire:notfound' => "Désolé, le message spécifié n'a pu être trouvé.",
-	'thewire:notsaved' => "Désolé. Nous n'avons pas pu enregistrer ce message du Fil.",
-	'thewire:notdeleted' => "Désolé, ce message n'a pu être effacé du Fil.",
+	'thewire:notsaved' => "Désolé. Impossible d'enregistrer ce message du Fil.",
+	'thewire:notdeleted' => "Désolé, ce message du Fil n'a pas pu être supprimé.",
 
 	/**
 	 * Notifications
@@ -47,8 +47,8 @@ return array(
 	'thewire:notify:summary' => 'Nouveau message sur le Fil : %s',
 	'thewire:notify:subject' => "Nouveau message sur le Fil de %s",
 	'thewire:notify:reply' => '%s a répondu à %s sur le Fil :',
-	'thewire:notify:post' => '%s publié sur le Fil:',
-	'thewire:notify:footer' => "Voir et répondre:\n%s",
+	'thewire:notify:post' => '%s a publié sur le Fil :',
+	'thewire:notify:footer' => "Voir et répondre: \n%s",
 
 	/**
 	 * Settings

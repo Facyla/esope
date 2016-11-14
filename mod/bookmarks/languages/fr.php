@@ -25,7 +25,7 @@ return array(
 	'bookmarks:notify:body' =>
 '%s a ajouté un nouveau lien web: %s
 
-Adresse: %s
+Adresse : %s
 
 %s
 

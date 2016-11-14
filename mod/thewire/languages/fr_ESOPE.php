@@ -48,7 +48,7 @@ return array(
 	'thewire:notify:subject' => "Nouveau message sur le Fil de %s",
 	'thewire:notify:reply' => '%s a répondu à %s sur le Fil :',
 	'thewire:notify:post' => '%s a publié sur le Fil :',
-	'thewire:notify:footer' => "Voir et répondre: \n%s",
+	'thewire:notify:footer' => "Voir et répondre:\n%s",
 
 	/**
 	 * Settings

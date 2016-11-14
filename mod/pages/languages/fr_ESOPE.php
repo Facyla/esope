@@ -18,12 +18,12 @@ return array(
 
 	'pages:new' => "Une nouvelle page",
 	'pages:edit' => "Modifier cette page",
-	'pages:delete' => "Effacer cette page",
+	'pages:delete' => "Supprimer cette page",
 	'pages:history' => "Historique",
 	'pages:view' => "Voir la page",
 	'pages:revision' => "Révision",
 	'pages:current_revision' => "Révision actuelle",
-	'pages:revert' => "Revenir",
+	'pages:revert' => "Rétablir",
 
 	'pages:navigation' => "Navigation",
 
@@ -72,7 +72,7 @@ Voir et commenter cette page:
 	'pages:cantedit' => 'Vous ne pouvez pas modifier cette page wik',
 	'pages:saved' => 'Page wiki enregistrée',
 	'pages:notsaved' => 'La page wiki n\'a pas pu être enregistrée',
-	'pages:error:no_title' => 'Vous devez spécifier un titre pour cette page wiki.',
+	'pages:error:no_title' => 'Vous devez donner un titre à cette page wiki.',
 	'pages:delete:success' => 'Votre page wiki a bien été supprimée.',
 	'pages:delete:failure' => 'Votre page wiki n\'a pas pu être supprimée.',
 	'pages:revision:delete:success' => 'La version de la page wiki a bien été supprimée.',
@@ -99,7 +99,7 @@ Voir et commenter cette page:
 	/**
 	 * Submenu items
 	 */
-	'pages:label:view' => "Afficher la page",
+	'pages:label:view' => "Voir la page",
 	'pages:label:edit' => "Modifier la page wiki",
 	'pages:label:history' => "Historique de la page wiki",
 

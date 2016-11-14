@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4
+class ComposerStaticInit89f62757e59282e3bfbb8f760c484bff
 {
     public static $files = array (
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
@@ -529,11 +529,11 @@ class ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit37b2a58666f9c58081d9e1c0c9f10ab4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit89f62757e59282e3bfbb8f760c484bff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit89f62757e59282e3bfbb8f760c484bff::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit89f62757e59282e3bfbb8f760c484bff::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit89f62757e59282e3bfbb8f760c484bff::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit89f62757e59282e3bfbb8f760c484bff::$classMap;
 
         }, null, ClassLoader::class);
     }

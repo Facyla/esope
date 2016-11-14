@@ -1,3 +1,27 @@
+2016-11-08  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+
+  	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(release): v1.12.14
+
+2016-10-06  Steve Clay <steve@mrclay.org>
+
+  	* engine/classes/Elgg/Database/RelationshipsTable.php,
+  engine/classes/ElggRelationship.php, engine/tests/ElggRelationshipTest.php:
+  fix(relationships): ElggRelationship::save returns the ID  This fix also
+  makes sure a relationship object that's saved twice doesn't result in a
+  `delete_relationship(true)` call.  Fixes #10373
+
+2016-10-05  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* docs/guides/page-owner.rst, engine/lib/pageowner.php: fix(core):
+  elgg_get_page_owner_entity will return ElggEntity  The user still needs to
+  have access to the entity, but the entity isn't limited to users or groups 
+  fixes #10361
+
 2016-10-02  Steve Clay <steve@mrclay.org>
 
   	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,

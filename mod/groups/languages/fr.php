@@ -236,7 +236,7 @@ Afficher la discussion et y répondre :
 	'groups:invite:remove:check' => 'Confirmez-vous vouloir supprimer cette invitation ?',
 	'groups:invite:body' => "Bonjour %s,
 
-%s vous a invité(e) à rejoindre le groupe '%s'. Cliquez sur le lien ci-dessous pour confirmer :
+%s vous a invité(e) à rejoindre le groupe \"%s\". Cliquez sur le lien ci-dessous pour confirmer :
 
 %s",
 

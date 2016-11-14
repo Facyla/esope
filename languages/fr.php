@@ -2,7 +2,6 @@
 /* Cette version du fichier de langue remplace le fichier fr.php fourni en standard avec Elgg à chaque mise à jour du core
  * Cette version se justifie par de nombreuses traductions qui ne sont pas homogènes dans la version originale
  */
-
 return array(
 /**
  * Sites
@@ -67,7 +66,7 @@ return array(
 	'ElggPlugin:Exception:CannotRegisterLanguages' => 'Impossible d\'enregistrer les fichiers de langues pour le plugin %s (GUID : %s) sur %s. Vérifiez les autorisations !',
 	'ElggPlugin:Exception:NoID' => 'Aucun ID pour le plugin de GUID %s !',
 	'PluginException:NoPluginName' => "Le nom du plugin n'a pas pu être trouvé",
-	'PluginException:ParserError' => 'Erreur d\e syntaxe  dans le fichier manifest.xml avec la version %s de l\'API dans le plugin %s.',
+	'PluginException:ParserError' => 'Erreur de syntaxe  dans le fichier manifest.xml avec la version %s de l\'API dans le plugin %s.',
 	'PluginException:NoAvailableParser' => 'Impossible de trouver un analyseur syntaxique du fichier manifest.xml pour l\'API version %s dans le plugin %s.',
 	'PluginException:ParserErrorMissingRequiredAttribute' => "L'attribut requis \"%s\" est manquant dans le fichier manifest.xml pour le plugin %s.",
 	'ElggPlugin:InvalidAndDeactivated' => '%s est un plugin invalide et a été désactivé.',
@@ -83,7 +82,7 @@ return array(
 	'ElggPlugin:Dependencies:PhpVersion' => 'Version de PHP',
 	'ElggPlugin:Dependencies:PhpExtension' => 'Extension PHP : %s',
 	'ElggPlugin:Dependencies:PhpIni' => 'Paramètre PHP ini : %s',
-	'ElggPlugin:Dependencies:Plugin' => 'Plugin: %s',
+	'ElggPlugin:Dependencies:Plugin' => 'Plugin : %s',
 	'ElggPlugin:Dependencies:Priority:After' => 'Après %s',
 	'ElggPlugin:Dependencies:Priority:Before' => 'Avant %s',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s n\'est pas installé',
@@ -120,7 +119,7 @@ return array(
 	'error:400:title' => 'Mauvaise requête',
 	'error:400:content' => 'Désolé, la requête est invalide ou incomplète.',
 	'error:403:title' => 'Interdit',
-	'error:403:content' => "Désolé. Vous n'avez pas l'autorisation d'accdéder à cette page.",
+	'error:403:content' => 'Désolé, vous n\'avez pas la permission de consulter la page demandée.',
 	'error:404:title' => 'Page non trouvée',
 	'error:404:content' => 'Désolé. Nous n\'arrivons pas à trouver la page que vous demandez.',
 
@@ -491,9 +490,9 @@ return array(
 	'admin:users:online' => 'Actuellement en ligne',
 	'admin:users:newest' => 'Nouveaux',
 	'admin:users:admins' => 'Administrateurs',
-	'admin:users:add' => 'Créer un utilisateur',
+	'admin:users:add' => 'Ajouter un utilisateur',
 	'admin:users:description' => "Ce panneau d'administration vous permet de contrôler les paramètres des utilisateurs de votre site. Choisissez une option ci-dessous pour commencer.",
-	'admin:users:adduser:label' => "Cliquez ici pour ajouter un nouvel utilisateur ...",
+	'admin:users:adduser:label' => "Cliquez ici pour ajouter un nouvel utilisateur...",
 	'admin:users:opt:linktext' => "Configurer les utilisateurs...",
 	'admin:users:opt:description' => "Configurer les utilisateurs et les informations des comptes.",
 	'admin:users:find' => 'Trouver',
@@ -542,12 +541,12 @@ return array(
 
 	'admin:widget:admin_welcome:admin_overview' =>
 "La navigation dans la zone d'administration se fait à l'aide du menu de droite. Il est organisé en trois parties :
-	<dl>
+<dl>
 	<dt>Administrer</dt><dd>Les tâches de tous les jours comme suivre le contenu signalé, vérifier qui est en ligne, et afficher des statistiques.</dd>
 	<dt>Configurer</dt><dd>Les tâches occasionnelles comme la définition du nom du site ou l'activation d'un plugin.</dd>
 	<dt>Développer</dt><dd>Pour les développeurs qui créent des plugins ou conçoivent des thèmes. (Nécessite le plugin developer.)</dd>
-	</dl>
-	",
+</dl>
+",
 
 	// argh, this is ugly
 	'admin:widget:admin_welcome:outro' => '<br />Pensez à consulter les ressources disponibles via les liens de bas de page, et merci d\'utiliser Elgg !',
@@ -629,7 +628,7 @@ return array(
 
 	'admin:plugins:warning:elgg_version_unknown' => 'Ce plugin utilise un ancien fichier manifest.xml et ne précise pas de version d\'Elgg compatible. Il ne fonctionnera probablement pas !',
 	'admin:plugins:warning:unmet_dependencies' => 'Ce plugin a des dépendances non satisfaites et ne peut pas être activé. Vérifiez les dépendances dans la partie "Plus d\'informations".',
-	'admin:plugins:warning:invalid' => '%s n\'est pas un plugin d\'Elgg valide. Vérifiez <a href="http://docs.elgg.org/Invalid_Plugin">la documentation d\'Elgg</a> les conseils de dépannage.',
+	'admin:plugins:warning:invalid' => '%s n\'est pas un plugin d\'Elgg valide. Vérifiez <a href="http://learn.elgg.org/en/stable/appendix/faqs.html?highlight=invalid#plugin-cannot-start-and-has-been-deactivated-or-this-plugin-is-invalid">la documentation d\'Elgg</a> les conseils de dépannage.',
 	'admin:plugins:warning:invalid:check_docs' => 'Vérifiez <a href="http://learn.elgg.org/fr/stable/appendix/faqs.html">la documentation d\'Elgg</a> pour des astuces de débogage. Vous pouvez également consulter <a href="http://learn.elgg.org/en/stable/appendix/faqs.html">version anglophone</a>, qui peut être plus complète / récente.',
 	'admin:plugins:cannot_activate' => 'Activation impossible',
 
@@ -656,7 +655,7 @@ return array(
 	'admin:plugins:dependencies:comment' => 'Commentaire',
 
 	'admin:statistics:description' => "Ceci est un aperçu des statistiques du site. Si vous avez besoin de statistiques plus détaillées, une version professionnelle d'administration est disponible.",
-	'admin:statistics:opt:description' => "Afficher les statistiques sur les utilisateurs et les objets du site.",
+	'admin:statistics:opt:description' => "Afficher les informations statistiques sur les utilisateurs et les objets du site.",
 	'admin:statistics:opt:linktext' => "Voir les statistiques...",
 	'admin:statistics:label:basic' => "Statistiques de base du site",
 	'admin:statistics:label:numentities' => "Entités sur le site",
@@ -690,8 +689,8 @@ return array(
 	'admin:user:self:ban:no' => "Vous ne pouvez pas vous bannir vous-même",
 	'admin:user:unban:no' => "Cet utilisateur ne peut pas être réintégré",
 	'admin:user:unban:yes' => "Utilisateur réintégré.",
-	'admin:user:delete:no' => "Cet utilisateur ne peut pas être supprimé",
-	'admin:user:delete:yes' => "Utilisateur supprimé",
+	'admin:user:delete:no' => "Ce compte utilisateur ne peut pas être supprimé",
+	'admin:user:delete:yes' => "Compte utilisateur supprimé",
 	'admin:user:self:delete:no' => "Vous ne pouvez pas supprimer votre propre compte",
 
 	'admin:user:resetpassword:yes' => "Mot de passe réinitialisé, l'utilisateur a été notifié par courriel.",
@@ -706,7 +705,7 @@ return array(
 
 	'admin:appearance:menu_items' => 'Éléments du menu',
 	'admin:menu_items:configure' => 'Configurer les éléments du menu principal',
-	'admin:menu_items:description' => 'Sélectionnez les éléments de menu que vous voulez afficher en liens directs. Les éléments de menu inutilisés seront ajoutés sous l\'entrée « Plus » à la fin du menu.',
+	'admin:menu_items:description' => 'Sélectionnez les éléments de menu que vous voulez afficher en liens vedette. Les éléments de menu inutilisés seront ajoutés sous l\'entrée « Plus » à la fin du menu.',
 	'admin:menu_items:hide_toolbar_entries' => 'Supprimer les liens dans le menu des outils ?',
 	'admin:menu_items:saved' => 'Les éléments de menu ont bien été enregistrés.',
 	'admin:add_menu_item' => 'Ajouter un élément de menu personnalisé',
@@ -752,8 +751,8 @@ Quand il est activé, seuls les administrateurs peuvent s\'identifier et navigue
 	'usersettings:statistics:label:numentities' => "Vos contenus",
 
 	'usersettings:statistics:yourdetails' => "Vos informations",
-	'usersettings:statistics:label:name' => "Votre nom",
-	'usersettings:statistics:label:email' => "E-mail",
+	'usersettings:statistics:label:name' => "Votre nom complet",
+	'usersettings:statistics:label:email' => "Email",
 	'usersettings:statistics:label:membersince' => "Membre depuis",
 	'usersettings:statistics:label:lastlogin' => "Dernière connexion",
 
@@ -782,7 +781,7 @@ Quand il est activé, seuls les administrateurs peuvent s\'identifier et navigue
 
 	'icon:size' => "Taille d'icône",
 	'icon:size:topbar' => "Topbar (minuscule)",
-	'icon:size:tiny' => "Tout petit",
+	'icon:size:tiny' => "Minuscule",
 	'icon:size:small' => "Petit",
 	'icon:size:medium' => "Moyen",
 	'icon:size:large' => "Grand",
@@ -969,7 +968,7 @@ Un compte utilisateur a été créé pour vous sur %s. Pour vous connecter :
 Et connectez-vous avec les identifiants suivants :
  - Identifiant : %s
  - Mot de passe : %s
-Vous pouvez également vous connecter avec votre courriel au lieu de votre identifiant.
+Vous pouvez également vous identifier avec votre courriel à la place de votre identifiant.
 
 Après connexion, nous vous recommandons de changer votre mot de passe.
 ',
@@ -1105,9 +1104,9 @@ Après connexion, nous vous recommandons de changer votre mot de passe.
 	'upgrade:unlock:success' => "Mise à niveau débloquée.",
 	'upgrade:unable_to_upgrade' => 'Impossible de mettre à niveau.',
 	'upgrade:unable_to_upgrade_info' =>
-		'Cette installation ne peut pas être mise à jour, car des fichiers de l\'ancienne version ont été détectées dans le noyau d\'Elgg. Ces fichiers sont obsolètes et doivent être supprimés pour qu\'Elgg fonctionne correctement. Si vous n\'avez pas modifié les fichiers du noyau d\'Elgg, vous pouvez simplement supprimer le répertoire noyau et le remplacer par celui de la dernière version d\'Elgg téléchargée  depuis <a href="http://elgg.org> elgg.org" </ a>. <br /> <br />
+		'Cette installation ne peut pas être mise à jour, car des fichiers de l\'ancienne version ont été détectées dans le noyau d\'Elgg. Ces fichiers sont obsolètes et doivent être supprimés pour qu\'Elgg fonctionne correctement. Si vous n\'avez pas modifié les fichiers du noyau d\'Elgg, vous pouvez simplement supprimer le répertoire noyau et le remplacer par celui de la dernière version d\'Elgg téléchargée  depuis <a href="http://elgg.org> elgg.org" </a>. <br /> <br />
 
-Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">Documentation sur la mise à niveau d\'Elgg</ a>. Si vous avez besoin d\'aide, veuillez poser votre question dans les <a href="http://community.elgg.org/pg/groups/discussion/"> Forums d\'aide technique communautaires</ a>.',
+Si vous avez besoin d\'instructions détaillées, veuillez visiter la <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">Documentation sur la mise à niveau d\'Elgg</a>. Si vous avez besoin d\'aide, veuillez poser votre question dans les <a href="http://community.elgg.org/pg/groups/discussion/"> Forums d\'aide technique communautaires</a>.',
 
 	'update:twitter_api:deactivated' => 'Le plugin Twitter API (précédemment Twitter Service) a été désactivé lors de la mise à niveau. Veuillez l\'activer manuellement si nécessaire.',
 	'update:oauth_api:deactivated' => 'Le plugin OAuth API (précédemment OAuth Lib) a été désactivé lors de la mise à niveau. Veuillez l\'activer manuellement si nécessaire.',
@@ -1212,7 +1211,7 @@ Sinon ignorez cet e-mail.
 
 	'river:comment:object:default' => '%s a commenté %s',
 
-	'generic_comments:add' => "Laisser un commentaire",
+	'generic_comments:add' => "Ajouter un commentaire",
 	'generic_comments:edit' => "Modifier le commentaire",
 	'generic_comments:post' => "Publier un commentaire",
 	'generic_comments:text' => "Commentaire",
@@ -1232,7 +1231,6 @@ Sinon ignorez cet e-mail.
 
 	'generic_comment:email:subject' => 'Vous avez un nouveau commentaire !',
 	'generic_comment:email:body' => "Vous avez un nouveau commentaire de %2\$s sur votre publication \"%1\$s\" :
-
 
 %s
 
@@ -1256,16 +1254,16 @@ Merci de ne pas répondre à cet e-mail.",
 	'entity:delete:success' => 'L\'entité %s a été supprimée',
 	'entity:delete:fail' => 'L\'entité %s n\'a pas pu être supprimée',
 	
-	'entity:can_delete:invaliduser' => 'Impossible de vérifier ->canDelete() pour l\'utilisateur de user_guid [%s] car l\'utilisateur n\'existe pas.',
+	'entity:can_delete:invaliduser' => 'Impossible de vérifier ->canDelete() pour l\'utilisateur avec le GUID [%s] car l\'utilisateur n\'existe pas.',
 
 /**
  * Action gatekeeper
  */
 
-	'actiongatekeeper:missingfields' => 'Votre session de connexion n\'est plus valide : session ou jetons de sécurité __token ou __ts manquants. Veuillez recharger la page pour continuer',
+	'actiongatekeeper:missingfields' => 'Votre session de connexion n\'est plus valide, ou les jetons de sécurité __token ou __ts sont manquants. Veuillez recharger la page pour continuer',
 	'actiongatekeeper:tokeninvalid' => "La page que vous utilisiez a expiré. Veuillez réessayer.",
 	'actiongatekeeper:timeerror' => 'La page que vous utilisiez a expiré. Veuillez la recharger et réessayer.',
-	'actiongatekeeper:pluginprevents' => 'Désolé. Un plugin a empêché ce formulaire d\'être envoyé',
+	'actiongatekeeper:pluginprevents' => 'Désolé. Un plugin a bloqué l\'envoi de ce formulaire',
 	'actiongatekeeper:uploadexceeded' => 'La taille du ou des fichier(s) dépasse la limite définie par l\'administrateur du site',
 	'actiongatekeeper:crosssitelogin' => "Désolé, il n'est pas permis de se connecter depuis un autre nom de domaine. Veuillez réessayer.",
 
