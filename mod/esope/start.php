@@ -830,6 +830,9 @@ function esope_sort_groups_by_grouptype($groups) {
 
 
 /* Renders a page content into a suitable page for iframe or lightbox use
+ * $params = array('title' => '', 'content' => '', 'mode' => '', 'headers' => '')
+ * with the following parameters
+ * OR use several paramters (old way) :
  * $content = HTML content
  * $title = title override
  * $embed_mode = 
@@ -838,9 +841,18 @@ function esope_sort_groups_by_grouptype($groups) {
  		- regular = elgg regular way
  * $headers = extend header (CSS, JS, META, etc.) - ONLY in iframe mode !
  */
-function elgg_render_embed_content($content = '', $title = '', $embed_mode = 'iframe', $headers) {
+function elgg_render_embed_content($params = '', $title = '', $embed_mode = 'iframe', $headers = '') {
 	$lang = get_language();
-
+	
+	if (is_array($params)) {
+		$title = $params['title'];
+		$content = $params['content'];
+		$embed_mode = $params['mode'];
+		$headers = $params['headers'];
+	} else {
+		$content = $params;
+	}
+	
 	// Set default title
 	//if (empty($title)) $title = elgg_get_site_entity()->name . ' (';
 	if (empty($title)) { $title = elgg_get_site_entity()->name; }

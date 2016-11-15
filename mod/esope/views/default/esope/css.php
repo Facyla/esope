@@ -117,6 +117,10 @@ img { border: 0 none; overflow:hidden; }
 .esope-more { float: right; font-size: 70%; line-height: 1.6; }
 .esope-toggle { background:url('<?php echo $urlicon; ?>ensavoirplus.png') no-repeat 0 50%; padding-left:24px; }
 .esope-toggle.elgg-state-active { background-image:url('<?php echo $urlicon; ?>fermer.png'); }
+a.esope-popup-toggle { padding: 0.2em 0.6em; background: <?php echo $titlecolor; ?>; color: white; display: inline-block; font-size: 1.0rem; }
+a.esope-popup-toggle:hover, .esope-popup-toggle:active, .esope-popup-toggle:active { color: white; }
+a.esope-lightbox-toggle { padding: 0.2em 0.6em; background: <?php echo $titlecolor; ?>; color: white; display: inline-block; font-size: 1.0rem; }
+a.esope-lightbox-toggle:hover, .esope-popup-toggle:active, .esope-popup-toggle:active { color: white; }
 
 
 /* ACCESSIBILITY */
