@@ -97,7 +97,9 @@ $params['value'] = $vars['value'];
 
 // don't call get_write_access_array() unless we need it
 // Esope : do not set access list if any value has been passed (= it is forced)
-if (!isset($vars['options_values']) && $no_current_value) {
+//if (!isset($vars['options_values']) && $no_current_value) {
+// Note : not loading write access when value is set blocks editing access level afterwards
+if (!isset($vars['options_values'])) {
 	$vars['options_values'] = get_write_access_array(0, 0, false, $params);
 }
 
