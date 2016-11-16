@@ -29,10 +29,14 @@
 
 <!--
 
-Used library : phpclient - Apache Chemistry (Incubating) PHP CMIS Client Library
-  * https://chemistry.apache.org/php/phpclient.html
-  * https://github.com/apache/chemistry-phpclient
-Alternate library : https://github.com/dkd/php-cmis-client
+Included libraries :
+ - Apache Chemistry PHP Client (Incubating) PHP CMIS Client Library
+   * Old reference library, but lacks features
+   * https://chemistry.apache.org/php/phpclient.html
+   * https://github.com/apache/chemistry-phpclient
+ - DKD PHP CMIS Client :
+   * Better maintained library, with more features including versionning
+   * https://github.com/dkd/php-cmis-client
 
 
 WARNING : this version was designed mainly for Inria Partage Alfresco install, with the idea of being sufficiently generic to be used on other CMIS endpoints, but this plugin will probably require some tweaks on other CMIS repositories. Plugin content and structure might also evolve. If you plan to use and develop on this base, please contact the author to synchronize evolutions...

@@ -1,0 +1,38 @@
+{
+    "name": "dkd/php-cmis",
+    "version": "1.0.0",
+    "type": "library",
+    "description": "PHP CMIS client library based on CMIS 1.1",
+    "keywords": ["cmis"],
+    "homepage": "https://phabricator.dkd.de/diffusion/PHPCMIS/",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Sascha Egerer",
+            "email": "sascha.egerer@dkd.de",
+            "homepage": "http://www.dkd.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "dkd/enumeration": "~0.1",
+        "dkd/php-populate": "~1.0",
+        "guzzlehttp/guzzle": "~5.0",
+        "guzzlehttp/streams": "~3.0",
+        "league/url": "~3.2",
+        "doctrine/cache": "~1.4"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "~2.2",
+        "phpunit/phpunit": "~4.3",
+        "phpdocumentor/phpdocumentor": "~2.8",
+        "satooshi/php-coveralls": "~0.6",
+        "phpmd/phpmd" : "~2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dkd\\PhpCmis\\": "src/"
+        }
+    }
+}
