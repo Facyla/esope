@@ -19,9 +19,13 @@ function recaptcha_init() {
 	
 	elgg_extend_view('css', 'recaptcha/css');
 	elgg_extend_view('input/captcha', 'input/recaptcha');
+	elgg_extend_view('page/elements/head', 'recaptcha/head');
 	
 	// Register JS script (async defer) - use with : elgg_load_js('recaptcha');
 	elgg_register_js('google:recaptcha', 'https://www.google.com/recaptcha/api.js', 'footer');
+	// Multiple : must use explicit call for multiple reCAPTCHA rendering
+	// Note : seems not to work because & is converted to &amp; somewhere when loading JS scripts...
+	//elgg_register_js('google:recaptcha', 'https://www.google.com/recaptcha/api.js?onload=ReCaptchaCallback&render=explicit', 'footer');
 	
 	if (!elgg_is_logged_in()) {
 		elgg_load_js('google:recaptcha');
@@ -58,7 +62,7 @@ function recaptcha_verify($response = '', $secret = '') {
 	
 	// Do not block authentication if no secret key is set, but send an alert
 	if (empty($secret)) {
-		register_error("Cannot verify reCAPTCHA because keys are missing. Please ask administrator to configure the reCAPTCHA plugin.");
+		register_error(elgg_echo('recaptcha:error:missingkeys'));
 		return true;
 	}
 	
@@ -76,10 +80,10 @@ function recaptcha_verify($response = '', $secret = '') {
 	}
 	
 	$error_codes = array(
-		'missing-input-secret' => "The secret parameter is missing.",
-		'invalid-input-secret' => "The secret parameter is invalid or malformed.",
-		'missing-input-response' => "The response parameter is missing.",
-		'invalid-input-response' => "The response parameter is invalid or malformed.",
+		'missing-input-secret' => elgg_echo('recaptcha:error:missingsecret'),
+		'invalid-input-secret' => elgg_echo('recaptcha:error:invalidsecret'),
+		'missing-input-response' => elgg_echo('recaptcha:error:missingresponse'),
+		'invalid-input-response' => elgg_echo('recaptcha:error:invalidresponse'),
 	);
 	foreach($obj_response->{'error-codes'} as $error) {
 		register_error($error_codes[$error]);
@@ -87,5 +91,6 @@ function recaptcha_verify($response = '', $secret = '') {
 
 	return false;
 }
+
 
 
