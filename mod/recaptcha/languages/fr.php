@@ -10,6 +10,12 @@ return array(
 	'recaptcha:settings:secretkey' => "Clé secrète",
 	'recaptcha:settings:secretkey:details' => "Utilisez cette clé pour toute communication entre votre site et Google. Veillez à ne pas la divulguer, car il s'agit d'une clé secrète.",
 	'recaptcha:settings:createapikey' => "Créer une clé d'API",
+	'recaptcha:settings:theme' => "Thème",
+	'recaptcha:settings:theme:details' => "L'aspect visuel du recaptcha : clair ou sombre ('light' | 'dark')",
+	'recaptcha:settings:size' => "Taille",
+	'recaptcha:settings:size:details' => "La taille du recaptcha ('normal' | 'compact')",
+	'recaptcha:settings:type' => "Type",
+	'recaptcha:settings:type:details' => "Le type de défi à résoudre ('image' | 'audio')",
 	
 	// Errors
 	'recaptcha:error:missingkeys' => "Impossible de vérifier reCAPTCHA car les clefs sont manquantes. Veuillez demander à l'administrateur de configurer le plugin reCAPTCHA.",

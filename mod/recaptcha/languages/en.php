@@ -10,6 +10,12 @@ return array(
 	'recaptcha:settings:secretkey' => "Secret key",
 	'recaptcha:settings:secretkey:details' => "Use this key for all communication between your site and Google. Make sure not to disclose it, as it is a secret key.",
 	'recaptcha:settings:createapikey' => "Create API key",
+	'recaptcha:settings:theme' => "Theme",
+	'recaptcha:settings:theme:details' => "The visual design of the recaptcha ('light' | 'dark')",
+	'recaptcha:settings:size' => "Size",
+	'recaptcha:settings:size:details' => "The size of the recaptcha ('normal' | 'compact')",
+	'recaptcha:settings:type' => "Type",
+	'recaptcha:settings:type:details' => "Type of challenge to perform ('image' | 'audio')",
 	
 	// Errors
 	'recaptcha:error:missingkeys' => "Cannot verify reCAPTCHA because keys are missing. Please ask administrator to configure the reCAPTCHA plugin.",

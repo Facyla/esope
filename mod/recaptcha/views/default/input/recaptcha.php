@@ -6,7 +6,7 @@ if (empty($publickey)) {
 	$publickey = elgg_get_plugin_setting('publickey', 'recaptcha');
 }
 
-/* Parameters : due to the (cloning) method used for multiple reCAPTCHAS on same page, 
+/* Other optional parameters : due to the (cloning) method used for multiple reCAPTCHAS on same page, 
  * all reCAPTCHA will have the same parameters as the first one
  * So better set these params site-wide
  * theme: The visual design of the recaptcha ('light' | 'dark')
@@ -14,11 +14,11 @@ if (empty($publickey)) {
  * type: Type of challenge to perform ('image' | 'audio')
  */
 $theme = elgg_extract('theme', $vars);
-if (empty($theme)) { elgg_get_plugin_setting('theme', 'recaptcha'); }
+if (empty($theme)) { $theme = elgg_get_plugin_setting('theme', 'recaptcha'); }
 $size = elgg_extract('size', $vars);
-size
+if (empty($size)) { $size = elgg_get_plugin_setting('size', 'recaptcha'); }
 $type = elgg_extract('type', $vars);
-if (empty($type)) { elgg_get_plugin_setting('type', 'recaptcha'); }
+if (empty($type)) { $type = elgg_get_plugin_setting('type', 'recaptcha'); }
 
 
 // Multiple reCAPTCHA support : requires using id
@@ -31,7 +31,8 @@ if (function_exists('esope_unique_id')) {
 	$id = 'g-recaptcha-' . $recaptcha_count;
 }
 
-// Do not block (by generating an invalid reCAPTCHA) if no public key set by the admin
+// Render reCAPTCHA
+// Note : Do not block (by generating an invalid reCAPTCHA) if no public key set by the admin
 if (!empty($publickey)) {
 	echo '<div class="g-recaptcha" id="' . $id . '"';
 	echo ' data-sitekey="' . $publickey . '"';
