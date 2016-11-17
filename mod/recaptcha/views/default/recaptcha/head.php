@@ -1,17 +1,17 @@
 <?php
 $publickey = elgg_get_plugin_setting('publickey', 'recaptcha');
-?>
 
-<script type="text/javascript">
-<?php
-/* Regular method : would work if we could pass parameters to JS defered scripts
+// Following JS method do NOT work because when we register and load JS script & is converted to &amp; which breaks passing parameters :-(
+// So using a cloning method instead
+
+/* JS Regular method : would work if we could pass parameters to JS defered scripts
 var ReCaptchaCallback = function() {
 	$(".g-recaptcha").each(function(index) {
 		grecaptcha.render('g-recaptcha-' + (index+1), {'sitekey' : '<?php echo $publickey; ?>'});
 	});
 };
 */
-/*
+/* Alternative method
 var ReCaptchaCallback = function(){
 	$('.g-recaptcha').each(function(index, el) {
 		grecaptcha.render(el, {'sitekey' : '<?php echo $publickey; ?>'});
@@ -19,6 +19,8 @@ var ReCaptchaCallback = function(){
 };
 */
 ?>
+
+<script type="text/javascript">
 // Cloning method : must occur after all page is loaded, so cannot use $(document).ready(function() {}));
 $(window).load(function() {
 	$(".g-recaptcha").each(function(index) {
