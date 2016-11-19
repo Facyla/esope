@@ -19,7 +19,7 @@ if ($members_popular != 'no') $tabs['popular'] = array('title' => elgg_echo('mem
 // List profile types
 if ($members_profiletypes == 'yes') {
 	$profiletypes = esope_get_profiletypes();
-	foreach ($profiletypes as $id => $profiletype) {
+	if ($profiletypes) foreach ($profiletypes as $id => $profiletype) {
 		$tabs[$profiletype] = array('title' => elgg_echo('profile:types:' . $profiletype), 'url' => "members/$profiletype", 'selected' => $vars['selected'] == $profiletype);
 	}
 }
