@@ -747,14 +747,14 @@ function esope_thewire_prepare_notification($hook, $type, $notification, $params
 		if ($parent) {
 			$parent_owner = $parent->getOwnerEntity();
 			if ($group_wire_url) {
-				$body = sprintf(elgg_echo('thewire:notify:group:reply'), array($owner->name, $parent_owner->name, $container->name), $language);
+				$body = elgg_echo('thewire:notify:group:reply', array($owner->name, $parent_owner->name, $container->name), $language);
 			} else {
 				$body = elgg_echo('thewire:notify:reply', array($owner->name, $parent_owner->name), $language);
 			}
 		}
 	} else {
 		if ($group_wire_url) {
-			$body = sprintf(elgg_echo('thewire:notify:group:post'), array($owner->name, $container->name), $language);
+			$body = elgg_echo('thewire:notify:group:post', array($owner->name, $container->name), $language);
 		} else {
 			$body = elgg_echo('thewire:notify:post', array($owner->name), $language);
 		}

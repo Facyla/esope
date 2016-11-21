@@ -680,7 +680,7 @@ function esope_group_leave($event, $object_type, $relationship) {
 	global $NOTIFICATION_HANDLERS;
 	if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
 		// loop through all notification types
-		foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+		if ($NOTIFICATION_HANDLERS) foreach($NOTIFICATION_HANDLERS as $method => $foo) {
 			remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
 		}
 	}

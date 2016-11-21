@@ -74,7 +74,7 @@ $display_query = htmlspecialchars($display_query, ENT_QUOTES, 'UTF-8', false);
 
 // check that we have an actual query
 if (!$query) {
-	$title = sprintf(elgg_echo('search:results'), "\"$display_query\"");
+	$title = elgg_echo('search:results', array("\"$display_query\""));
 	$body  = '<strong>' . elgg_echo('search:search_error') . '</strong>';
 	$body .= elgg_echo('search:no_query');
 	echo $body;

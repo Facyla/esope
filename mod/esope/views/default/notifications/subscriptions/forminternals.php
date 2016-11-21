@@ -3,7 +3,8 @@
  * Hacked up friends picker that needs to be replaced
  *
  * @uses $vars['user'] ElggUser
- * Facyla accessibility patches : add 2 titles in links (based on 1.8.16)
+* 
+ * ESOPE: accessibility patches - add 2 titles in links (based on 1.8.16)
  */
 
 /* @var ElggUser $user */
@@ -242,7 +243,7 @@ END;
 ?>
 
 <tr>
-	<td class="namefield" title="<?php echo sprintf(elgg_echo('link:userprofile'), $friend->name); ?>">
+	<td class="namefield" title="<?php echo elgg_echo('link:userprofile', $friend->name); ?>">
 		<a href="<?php echo $friend->getURL(); ?>">
 <?php
 			echo elgg_view_entity_icon($friend, 'tiny', array('use_hover' => false));

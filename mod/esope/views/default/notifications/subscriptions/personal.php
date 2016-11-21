@@ -1,7 +1,8 @@
 <?php
 /**
  * @uses $vars['user'] ElggUser
- * Facyla accessibility patch : add 1 title in link (based on 1.8.16)
+* 
+ * ESOPE: accessibility patch - add 1 title in link (based on 1.8.16)
  */
 
 /* @var ElggUser $user */
