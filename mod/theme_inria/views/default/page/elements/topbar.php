@@ -103,7 +103,7 @@ if (elgg_is_active_plugin('language_selector')) {
 					<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
 				</li>
 				<li id="notifications">
-					<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>"><i class="fa fa-info-circle"></i><?php /* echo elgg_view_icon('info') . elgg_echo('site_notifications:topbar'); */ ?></a>
+					<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>"><i class="fa fa-info-circle"></i><?php echo elgg_echo('site_notifications:topbar'); /* echo elgg_view_icon('info') . elgg_echo('site_notifications:topbar'); */ ?></a>
 					<?php if ($new_notifications_counter) { echo $new_notifications_counter; } ?>
 				</li>
 				<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
