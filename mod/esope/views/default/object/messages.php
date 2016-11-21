@@ -15,7 +15,10 @@ if (!$message) {
 
 if ($message->toId == elgg_get_page_owner_guid()) {
 	// received
-	$user = get_user($message->fromId);
+	//$user = get_user($message->fromId);
+	// ESOPE : can actually be a group, or even site	
+	$user = get_entity($message->fromId);
+
 	if ($user) {
 		$icon = elgg_view_entity_icon($user, 'tiny');
 		$user_link = elgg_view('output/url', array(
@@ -81,8 +84,7 @@ if ($full) {
 	echo elgg_view('output/longtext', array('value' => $message->description));
 } else {
 	
-	$body .= '<div class="clearfloat"></div>';
-	$body .= elgg_view("output/longtext", array("value" => elgg_get_excerpt($message->description), "class" => "elgg-subtext"));
+	$body .= elgg_view("output/longtext", array("value" => elgg_get_excerpt($message->description), "class" => "elgg-subtext clearfloat"));
 	
 	if ($bulk_actions) {
 		$checkbox = elgg_view('input/checkbox', array(

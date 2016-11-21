@@ -37,6 +37,8 @@ function postbymail_prepare_notification($hook, $type, $notification, $params) {
 	$recipient = $params['recipient'];
 	$language = $params['language'];
 	$method = $params['method'];
+	// Apply only to emails
+	if ($method != 'email') { return $notification; }
 	
 	$message_body = $notification->body;
 	$postbymail_guid = $entity->guid;

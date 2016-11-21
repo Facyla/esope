@@ -5,8 +5,7 @@
  * @package ElggMessages
 */
 
-gatekeeper();
-global $CONFIG;
+elgg_gatekeeper();
 
 $page_owner = elgg_get_page_owner_entity();
 
@@ -34,15 +33,17 @@ if ($unread) {
 	$count_unread_messages = messages_get_unread($page_owner->guid, $limit, true);
 	$unread_messages = messages_get_unread($page_owner->guid, $limit);
 	//$list = elgg_view_entity_list($unread_messages, array('list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset));
-	$list = elgg_list_entities(array('entities' => $unread_messages, 'list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset));
+	$list = elgg_list_entities(array('entities' => $unread_messages, 'list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset, 'preload_owners' => true, 'bulk_actions' => true));
 } else {
 	$list = elgg_list_entities_from_metadata(array(
 		'type' => 'object',
 		'subtype' => 'messages',
 		'metadata_name' => 'toId',
-		'metadata_value' => $page_owner->guid,
-		'owner_guid' => $page_owner->guid,
+		'metadata_value' => elgg_get_page_owner_guid(),
+		'owner_guid' => elgg_get_page_owner_guid(),
 		'full_view' => false,
+		'preload_owners' => true,
+		'bulk_actions' => true
 	));
 }
 
@@ -53,7 +54,7 @@ $body_vars = array(
 
 $content = '<p>';
 if ($unread) {
-	$content .= '<a href="' . $CONFIG->url . 'messages/inbox/' . $page_owner->username . '">' . elgg_echo('esope:messages:allinbox') . '</a> &nbsp; <strong>' . elgg_echo('esope:messages:unreadonly') . '</strong>';
+	$content .= '<a href="' . elgg_get_site_url() . 'messages/inbox/' . $page_owner->username . '">' . elgg_echo('esope:messages:allinbox') . '</a> &nbsp; <strong>' . elgg_echo('esope:messages:unreadonly') . '</strong>';
 } else {
 	$content .= '<strong>' . elgg_echo('esope:messages:allinbox') . '</strong> &nbsp; <a href="?unread=true">' . elgg_echo('esope:messages:unreadonly') . '</a>';
 }
