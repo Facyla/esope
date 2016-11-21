@@ -86,7 +86,7 @@ if (elgg_is_logged_in() && !$menu) {
 		$site_notifications_count = elgg_get_entities_from_metadata(array(
 					'type' => 'object',
 					'subtype' => 'site_notification',
-					'owner_guid' => $page_own->guid,
+					'owner_guid' => $own->guid,
 					'metadata_name' => 'read',
 					'metadata_value' => false,
 					'count' => true,
