@@ -30,10 +30,14 @@ if ($unread) {
 	// We need to set limit and offset because we must use this direct function
 	$limit = get_input('limit', 10);
 	$offset = get_input('offset', 0);
-	$count_unread_messages = messages_get_unread($page_owner->guid, $limit, true);
-	$unread_messages = messages_get_unread($page_owner->guid, $limit);
+	$count_unread_messages = messages_get_unread($page_owner->guid, $limit, 0, true);
+	$unread_messages = messages_get_unread($page_owner->guid, $limit, $offset);
 	//$list = elgg_view_entity_list($unread_messages, array('list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset));
-	$list = elgg_list_entities(array('entities' => $unread_messages, 'list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset, 'preload_owners' => true, 'bulk_actions' => true));
+	if ($count_unread_messages > 0) {
+		$guids = array();
+		foreach($unread_messages as $ent) { $guids[] = $ent->guid; }
+		$list = elgg_list_entities(array('guids' => $guids, 'list_type_toggle' => false, 'pagination' => true, 'full_view' => false, 'count' => $count_unread_messages, 'limit' => $limit, 'offset' => $offset, 'preload_owners' => true, 'bulk_actions' => true));
+	}
 } else {
 	$list = elgg_list_entities_from_metadata(array(
 		'type' => 'object',
