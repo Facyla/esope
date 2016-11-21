@@ -671,7 +671,10 @@ function esope_search_groups_hook($hook, $type, $value, $params) {
 function esope_elgg_send_email_notification($hook, $type, $result, $params) {
 	
 	// Do not notify again if email notification already sent ?
-	if ($result === true) { return true; }
+	if ($result === true) {
+		//error_log("DEBUG ESOPE elgg_send_email_notification : already sent");
+		return true;
+	}
 	
 	// Trigger hook to add custom params (eg. attachments)
 	// @TODO replace by using prepare hook

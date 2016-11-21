@@ -37,7 +37,7 @@ function postbymail_prepare_notification($hook, $type, $notification, $params) {
 	$recipient = $params['recipient'];
 	$language = $params['language'];
 	$method = $params['method'];
-	// Apply only to emails
+	// Apply only to emails (skip other methods)
 	if ($method != 'email') { return $notification; }
 	
 	$message_body = $notification->body;
@@ -90,7 +90,7 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 	$annotation = $params['annotation'];
 	//$to_entity = $params['to_entity'];
 	//$method = $params['method'];
-	//error_log("DEBUG POSTBYMAIL : $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
+	//error_log("DEBUG POSTBYMAIL : $method $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
 	
 	// Add instructions to object notifications
 	if (elgg_instanceof($entity, 'object')) {
