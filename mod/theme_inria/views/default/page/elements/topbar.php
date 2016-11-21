@@ -31,6 +31,19 @@ if (elgg_is_logged_in()) {
 			$new_messages_counter = '<a class="elgg-menu-counter" href="' . $url . 'messages/inbox/' . $ownusername . '" title="' . $tooltip . '">' . $text . '</a>';
 		}
 	}
+	if (elgg_is_active_plugin('site_notifications')) {
+		$site_notifications_count = elgg_get_entities_from_metadata(array(
+					'type' => 'object',
+					'subtype' => 'site_notification',
+					'owner_guid' => $page_own->guid,
+					'metadata_name' => 'read',
+					'metadata_value' => false,
+					'count' => true,
+				));
+		$tooltip = '';
+		$text = "$site_notifications_count";
+		$new_notifications_counter = '<a class="elgg-menu-counter" href="' . $url . 'site_notifications/view/' . $ownusername . '" title="' . $tooltip . '">' . $text . '</a>';
+	}
 	
 	// Login_as menu link
 	if (elgg_is_active_plugin('login_as')) {
@@ -88,6 +101,10 @@ if (elgg_is_active_plugin('language_selector')) {
 				<li id="msg">
 					<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:messages:tooltip'); ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
 					<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
+				</li>
+				<li id="notifications">
+					<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>"><i class="fa fa-info-circle"></i><?php /* echo elgg_view_icon('info') . elgg_echo('site_notifications:topbar'); */ ?></a>
+					<?php if ($new_notifications_counter) { echo $new_notifications_counter; } ?>
 				</li>
 				<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
 				<?php if (elgg_is_admin_logged_in()) { ?>
