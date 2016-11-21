@@ -57,6 +57,9 @@ function ldap_auth_handler_authenticate($credentials = array()) {
 		throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
 	}
 	
+	// Have index defined to avoid warnings
+	if (!isset($credentials['username'])) { $credentials['username'] = false; }
+	if (!isset($credentials['password'])) { $credentials['password'] = false; }
 	// Perform the authentication
 	elgg_load_library("elgg:ldap_auth");
 	return ldap_auth_login($credentials['username'], $credentials['password']);
