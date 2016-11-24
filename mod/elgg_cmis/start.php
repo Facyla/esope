@@ -19,11 +19,7 @@ function elgg_cmis_init(){
 	//elgg_load_js('lightbox');
 	//elgg_load_css('lightbox');
 	
-	// CMIS libraries
-	elgg_register_library('elgg:elgg_cmis:chemistry', elgg_get_plugins_path() . 'elgg_cmis/vendors/chemistry-phpclient/lib/cmis_repository_wrapper.php');
-	elgg_register_library('elgg:elgg_cmis:dkd', elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/lib/cmis_repository_wrapper.php');
-	// Custom CMIS functions
-	elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis.php');
+	// CMIS libraries : as we want to switch between 2 libraries, we will register and load through own functions instead
 	
 	// CMIS widgets - add only if enabled
 	if (elgg_get_plugin_setting('widget_mine', 'elgg_cmis') == 'yes') {
@@ -43,11 +39,13 @@ function elgg_cmis_init(){
 	}
 	
 	// CMIS page handler
+	// @TODO use 1 PH - that's enough !
 	elgg_register_page_handler('cmis', 'elgg_cmis_page_handler');
 	elgg_register_page_handler('cmisembed', 'elgg_cmisembed_page_handler');
 	
 	
-	$action_url = elgg_get_plugins_path() . 'elgg_cmis/actions/';
+	// Actions
+	$action_url = elgg_get_plugins_path() . 'elgg_cmis/actions/' . elgg_cmis_vendor() . '/';
 	if (elgg_get_plugin_setting('backend', 'elgg_cmis') == 'yes') {
 		// If Backend mode enabled, override default action
 		elgg_unregister_action('file/upload');
@@ -58,13 +56,47 @@ function elgg_cmis_init(){
 }
 
 
+/** Returns selected library */
+function elgg_cmis_vendor() {
+	$vendors = array('php-cmis-client', 'chemistry-phpclient');
+	$vendor = elgg_get_plugin_setting('vendor', 'elgg_cmis');
+	// Note : Apache Chemistry is default library (for BC reasons)
+	if (!in_array($vendor, $vendors)) { $vendor = 'chemistry-phpclient'; }
+	return $vendor;
+}
+
+/** Register and load chosen library
+ * @return : path base for page handler includes
+ */
+function elgg_cmis_libraries() {
+	$vendor = elgg_cmis_vendor();
+	
+	if ($vendor == 'php-cmis-client') {
+		elgg_register_library('elgg:elgg_cmis:vendor', elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/vendor/autoload.php');
+		elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis_php-cmis-client.php');
+		$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis/php-cmis-client';
+	} else {
+		elgg_register_library('elgg:elgg_cmis:vendor', elgg_get_plugins_path() . 'elgg_cmis/vendors/chemistry-phpclient/lib/cmis_repository_wrapper.php');
+		elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis_chemistry-phpclient.php');
+		$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis/chemistry-phpclient';
+	}
+	
+	// Load selected libraries
+	elgg_load_library('elgg:elgg_cmis:vendor');
+	elgg_load_library('elgg:elgg_cmis');
+	
+	return $base;
+}
+
+
 // Page handler
 function elgg_cmis_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis';
+	
+	$base = elgg_cmis_libraries();
+	
 	switch($page[0]) {
 		// Main CMIS repository (used with personal credentials)
 		case 'repo':
-			elgg_load_library('elgg:elgg_cmis');
 			/* URL : repo/query/type/filter/value
 			query : list, view
 			type : folder, document, site
@@ -75,43 +107,50 @@ function elgg_cmis_page_handler($page) {
 			if (isset($page[2])) { set_input('type', $page[2]); }
 			if (isset($page[3])) { set_input('filter', $page[3]); }
 			if (isset($page[4])) { set_input('filter_value', $page[4]); }
-			if (!include_once "$base/cmis_repo.php") { return false; }
+			if (include_once "$base/cmis_repo.php") { return true; }
 			break;
 		
 		// This is for development
+		// Site file repository backend
 		case 'test':
-			elgg_load_library('elgg:elgg_cmis:chemistry');
-			elgg_load_library('elgg:elgg_cmis');
 			if (isset($page[1])) { set_input('query', $page[1]); }
 			if (isset($page[2])) { set_input('type', $page[2]); }
 			if (isset($page[3])) { set_input('filter', $page[3]); }
 			if (isset($page[4])) { set_input('filter_value', $page[4]); }
-			if (!include_once "$base/cmis_global.php") { return false; }
+			if (include_once "$base/cmis_global.php") { return true; }
 			break;
 		
 		/*
 		case 'atom':
-			if (!include_once "$base/cmis_atom.php") return false;
+			if (include_once "$base/cmis_atom.php") { return true; }
 			break;
 		*/
 		
 		case 'soap':
-			if (!include_once "$base/cmis_soap.php") { return false; }
+			if ($page[1] == 'embed') {
+				if (include_once "$base/index_soap.php") { return true; }
+			} else {
+				if (include_once "$base/cmis_soap.php") { return true; }
+			}
 			break;
 		
-		// @TODO default should provide an information page - just like WebDAV plugin
+		case 'embed':
+			if (include_once "$base/embed_soap.php") { return true; }
+			break;
+		
+		// Provide an information / index page
 		default:
-			if (!include_once "$base/index_soap.php") { return false; }
+			if (include_once "$base/index.php") { return true; }
 	}
-	return true;
+	return false;
 }
 
 
-
+// Page handler to provide embeddable frames
 function elgg_cmisembed_page_handler($page) {
-	$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis';
-	if (!include_once "$base/embed_soap.php") { return false; }
-	return true;
+	$base = elgg_cmis_libraries();
+	if (include_once "$base/embed_soap.php") { return true; }
+	return false;
 }
 
 

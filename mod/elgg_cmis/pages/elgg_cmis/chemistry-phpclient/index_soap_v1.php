@@ -1,10 +1,9 @@
 <?php
-$title = elgg_echo('elgg_cmis:title');
+$title = elgg_echo('elgg_cmis:soap:title');
 $content = '';
 
-//$cmis_soap_url = $CONFIG->url . 'cmis/soap?action=login';
-$cmis_soap_url = $CONFIG->url . 'cmis?action=login';
-$cmis_lib_path = elgg_get_plugins_path() . 'elgg_cmis/vendors/cmis/soap/';
+$cmis_soap_url = elgg_get_site_url() . 'cmis?action=login';
+$cmis_lib_path = elgg_get_plugins_path() . 'elgg_cmis/vendors/chemistry-phpclient/soap/';
 
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file

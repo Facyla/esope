@@ -7,10 +7,24 @@ return array(
 	'elgg_cmis:title' => "Interface CMIS",
 	
 	// Main settings
-	'elgg_cmis:cmis_url' => "Base de l'URL CMIS Alfresco (se terminant par alfresco/)",
+	'elgg_cmis:settings:vendor' => "Bibliothèque CMIS",
+	'elgg_cmis:settings:vendor:details' => "Apache Chemistry CMIS PHP Client is the most known PHP CMIS library. However it lacks some features that the other library has implemented, such as versionning.<br />PHP CMIS Client is a port of OpenCMIS (Java) to PHP. Interfaces are mostly the same so most OpenCMIS examples should be also usable for this PHP CMIS Library.",
+	'elgg_cmis:settings:usercmis' => "Activer le mode Utilisateur",
+	'elgg_cmis:settings:usercmis:details' => "Les membres accèdent à CMIS avec leur propre accès. Cela nécessite qu'ils renseignent leur mot de passe dans leurs paramètres personnels - celui-ci est crypté cependant ce n'est pas idéal du point de vue sécurité.",
+	'elgg_cmis:settings:usercmis:legend' => "Paramètres spécifiques pour le mode Utilisateur",
+	'elgg_cmis:settings:backend' => "Activer le mode Backend",
+	'elgg_cmis:settings:backend:details' => "CMIS est utilisé comme backend pourle stockage des fichiers de Elgg. Dans ce cas le site dispose d'un accès unique pour tous les fichiers, Elgg se chargeant de gérer les droits d'accès sur ces fichiers.",
+	'elgg_cmis:settings:backend:legend' => "Paramètres spécifiques pour le mode Backend",
+	'elgg_cmis:settings:filestore_path' => "Chemin des fichiers sur le serveur",
+'elgg_cmis:settings:filestore_path:details' => "Le chemin absolu de la racine pour le stockage des fichiers sur le serveur CMIS. L'utilisateur configuré doit avoir tous les droits d'édition sur ce répertoire. Par ex.&nbsp;: /Applications/elgg/",
+	
+	'elgg_cmis:cmis_url' => "Base de l'URL CMIS",
+	'elgg_cmis:cmis_url:details' => "URL complète avec un slash final. Par ex. pour Alfresco, cette URL se termine par&nbsp;: alfresco/",
 	'elgg_cmis:user_cmis_url' => "Base de l'URL CMIS",
-	'elgg_cmis:cmis_soap_url' => "Service Alfresco CMIS SOAP (partie après alfresco/), par ex: cmisws",
-	'elgg_cmis:cmis_atom_url' => "Service Alfresco CMIS ATOMPUB (partie après alfresco/), par ex: cmsiatom",
+	'elgg_cmis:cmis_soap_url' => "Service CMIS SOAP",
+	'elgg_cmis:cmis_soap_url:details' => "Fragment d'URL pour SOAP, sans slash final. Par ex. pour Alfresco&nbsp;: cmisws",
+	'elgg_cmis:cmis_atom_url' => "Service CMIS ATOMPUB",
+	'elgg_cmis:cmis_atom_url:details' => "Fragment d'URL pour ATOMPUB, sans slash final. Par ex. pour Alfresco&nbsp;: cmsiatom",
 	'elgg_cmis:cmis_login' => "Identifiant",
 	'elgg_cmis:cmis_password' => "Mot de passe",
 	'elgg_cmis:debugmode' => "Activer le mode debug",
@@ -18,13 +32,6 @@ return array(
 	'elgg_cmis:noresult' => "Aucun résultat",
 	'elgg_cmis:noconf' => "Module non configuré",
 	'elgg_cmis:invalidurl' => "URL invalide",
-	'elgg_cmis:settings:usercmis' => "Activer le mode Utilisateur",
-	'elgg_cmis:settings:usercmis:details' => "Les membres accèdent à CMIS avec leur propre accès. Cela nécessite qu'ils renseignent leur mot de passe dans leurs paramètres personnels - celui-ci est crypté cependant ce n'est pas idéal du point de vue sécurité.",
-	'elgg_cmis:settings:usercmis:legend' => "Paramètres spécifiques pour le mode Utilisateur",
-	'elgg_cmis:settings:backend' => "Activer le mode Backend",
-	'elgg_cmis:settings:backend:details' => "CMIS est utilisé comme backend pourle stockage des fichiers de Elgg. Dans ce cas le site dispose d'un accès unique pour tous les fichiers, Elgg se chargeant de gérer les droits d'accès sur ces fichiers.",
-	'elgg_cmis:settings:backend:legend' => "Paramètres spécifiques pour le mode Backend",
-	'elgg_cmis:settings:filestore_path' => "Chemin où seront stockés les fichiers sur le serveur CMIS (par ex. /Applications/elgg/)",
 	
 	
 	// Object types

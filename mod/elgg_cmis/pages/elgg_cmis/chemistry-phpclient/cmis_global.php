@@ -12,11 +12,6 @@ $content = '';
 $own_guid = elgg_get_logged_in_user_guid();
 $own = elgg_get_logged_in_user_entity();
 
-//require_once elgg_get_plugins_path() . 'elgg_cmis/vendors/cmis/lib/cmis_repository_wrapper.php';
-elgg_load_library('elgg:elgg_cmis:chemistry');
-elgg_load_library('elgg:elgg_cmis');
-//elgg_load_library('elgg:elgg_cmis_repo_wrapper');
-//require_once elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis/config.php';
 
 $cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
 $atom_url = elgg_get_plugin_setting('cmis_atom_url', 'elgg_cmis');

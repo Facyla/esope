@@ -1,13 +1,12 @@
 <?php
-global $CONFIG;
 $title = elgg_echo('elgg_cmis:title');
 $content = '';
 
-$own_guid = elgg_get_logged_in_user_guid();
 $own = elgg_get_logged_in_user_entity();
+$own_guid = elgg_get_logged_in_user_guid();
 
-require_once elgg_get_plugins_path() . 'elgg_cmis/vendors/cmis/atom/cmis-lib.php';
-//elgg_load_library('elgg:elgg_cmis_repo_wrapper');
+require_once elgg_get_plugins_path() . 'elgg_cmis/vendors/chemistry-phpclient/atom/cmis-lib.php';
+
 
 
 $cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
@@ -27,7 +26,7 @@ if ($repo_debug == 'yes') $repo_debug = true; else $repo_debug = false;
 if ($repo_debug) $content .= "URL : $repo_url<br />Identifiant : $repo_username<br />Mot de passe : $repo_password<br />";
 
 if (empty($repo_url) || empty($repo_username) || empty($repo_password)) {
-	echo 'WARNING : required parameters are missing - please <a href="' . $CONFIG->url . 'settings/plugins/' . $own->username . '" target="_new">update your user CMIS plugin settings</a>';
+	echo 'WARNING : required parameters are missing - please <a href="' . elgg_get_site_url() . 'settings/plugins/' . $own->username . '" target="_new">update your user CMIS plugin settings</a>';
 	exit;
 }
 

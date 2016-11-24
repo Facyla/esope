@@ -7,58 +7,65 @@
  * Enable widgets
  */
 
-$no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
+$plugin = $vars['entity'];
+$ny_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
+$vendors_opt = array('chemistry-phpclient' => 'CMIS PHP Client (Apache Chemistry)', 'php-cmis-client' => 'PHP CMIS Client (dkd)');
 
 // Default required settings
-//if (empty($vars['entity']->cmis_url)) $vars['entity']->cmis_url = '';
-if (empty($vars['entity']->cmis_soap_url)) { $vars['entity']->cmis_soap_url = 'cmisws/RepositoryService'; }
-if (empty($vars['entity']->cmis_atom_url)) { $vars['entity']->cmis_atom_url = 'cmisatom'; }
-?>
+//if (empty($plugin->cmis_url)) $plugin->cmis_url = '';
+if (empty($plugin->cmis_soap_url)) { $plugin->cmis_soap_url = 'cmisws/RepositoryService'; }
+if (empty($plugin->cmis_atom_url)) { $plugin->cmis_atom_url = 'cmisatom'; }
 
-<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
-	<legend><?php echo elgg_echo('elgg_cmis:title');?></legend>
-	
-	<p><label for="params[cmis_url]"><?php echo elgg_echo('elgg_cmis:cmis_url');?> 
-	<input type="text" name="params[cmis_url]" value="<?php echo $vars['entity']->cmis_url . '" /></label></p>'; ?>
-	
-	<p><label for="params[cmis_soap_url]"><?php echo elgg_echo('elgg_cmis:cmis_soap_url');?> 
-	<input type="text" name="params[cmis_soap_url]" value="<?php echo $vars['entity']->cmis_soap_url . '" /></label></p>'; ?>
-	
-	<p><label for="params[cmis_atom_url]"><?php echo elgg_echo('elgg_cmis:cmis_atom_url');?> 
-	<input type="text" name="params[cmis_atom_url]" value="<?php echo $vars['entity']->cmis_atom_url . '" /></label></p>'; ?>
-	
-	<?php echo '<p><label>' . elgg_echo('elgg_cmis:settings:usercmis') . elgg_view('input/select', array( 'name' => 'params[usercmis]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->usercmis)) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:usercmis:details') . '</em></p>';
-	
-	echo '<p><label>' . elgg_echo('elgg_cmis:settings:backend') . elgg_view('input/select', array( 'name' => 'params[backend]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->backend)) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:backend:details') . '</em></p>';
-	?>
-	
-	<?php echo '<p><label>' . elgg_echo('elgg_cmis:debugmode');
-	echo elgg_view('input/select', array( 'name' => 'params[debugmode]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->debugmode)) . '</label></p>'; ?>
-	
-</fieldset>
-<br />
 
-<?php
-// Backend specific settings
-if ($vars['entity']->backend == 'yes') {
-	?>
-	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
-		<legend><?php echo elgg_echo('elgg_cmis:settings:backend:legend'); ?></legend>
-		<?php
-		echo '<p><label for="params[cmis_username]">' . elgg_echo('elgg_cmis:cmis_login') . elgg_view('input/text', array('name' => 'params[cmis_username]', 'value' => $vars['entity']->cmis_username)) . '</label></p>';
-		
-		echo '<p><label for="params[cmis_password]">' . elgg_echo('elgg_cmis:cmis_password') . elgg_view('input/text', array('name' => 'params[cmis_password]', 'value' => $vars['entity']->cmis_password)) . '</label></p>'; 
-		
-		echo '<p><label for="params[filestore_path]">' . elgg_echo('elgg_cmis:settings:filestore_path') . elgg_view('input/text', array('name' => 'params[filestore_path]', 'value' => $vars['entity']->filestore_path)) . '</label></p>';
-		?>
-	</fieldset>
-	<br />
-	<?php
+
+// Select vendor library
+echo '<p><label>' . elgg_echo('elgg_cmis:settings:vendor') . elgg_view('input/select', array('name' => 'params[vendor]', 'options_values' => $vendors_opt, 'value' => $plugin->vendor)) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:vendor:details') . '</em></p>';
+
+// Enable site mode (requires only site settings)
+echo '<p><label>' . elgg_echo('elgg_cmis:settings:backend') . elgg_view('input/select', array('name' => 'params[backend]', 'options_values' => $ny_opt, 'value' => $plugin->backend)) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:backend:details') . '</em></p>';
+
+// Enable user mode (site settings + additional use of user settings for credentials)
+echo '<p><label>' . elgg_echo('elgg_cmis:settings:usercmis') . elgg_view('input/select', array('name' => 'params[usercmis]', 'options_values' => $ny_opt, 'value' => $plugin->usercmis)) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:usercmis:details') . '</em></p>';
+
+// @TODO enable also an object mode (where config is stored in object) ?
+
+echo '<p><label>' . elgg_echo('elgg_cmis:debugmode');
+echo elgg_view('input/select', array('name' => 'params[debugmode]', 'options_values' => $ny_opt, 'value' => $plugin->debugmode)) . '</label></p>';
+
+
+
+// Site settings OR default user settings
+if (($plugin->backend == 'yes') || $plugin->usercmis == 'yes') {
+	echo '<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">';
+		echo '<legend>' . elgg_echo('elgg_cmis:title') . '</legend>';
+	
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_url') . elgg_view('input/text', array('name' => 'params[cmis_url]', 'value' => $plugin->cmis_url)) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_url:details') . '</em></p>';
+	
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_soap_url') . elgg_view('input/text', array('name' => 'params[cmis_soap_url]', 'value' => $plugin->cmis_soap_url, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_soap_url:details') . '</em></p>';
+	
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_atom_url') . elgg_view('input/text', array('name' => 'params[cmis_atom_url]', 'value' => $plugin->cmis_atom_url, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_atom_url:details') . '</em></p>';
+	
+	echo '</fieldset><br />';
 }
 
 
-// User mode specific settings
-if ($vars['entity']->usercmis == 'yes') {
+// Backend specific settings
+if ($plugin->backend == 'yes') {
+	echo '<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">';
+		echo '<legend>' . elgg_echo('elgg_cmis:settings:backend:legend') . '</legend>';
+		
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_login') . elgg_view('input/text', array('name' => 'params[cmis_username]', 'value' => $plugin->cmis_username, 'style ' => 'max-width:12em;')) . '</label></p>';
+		
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_password') . elgg_view('input/text', array('name' => 'params[cmis_password]', 'value' => $plugin->cmis_password, 'style ' => 'max-width:12em;')) . '</label></p>'; 
+		
+		echo '<p><label>' . elgg_echo('elgg_cmis:settings:filestore_path') . elgg_view('input/text', array('name' => 'params[filestore_path]', 'value' => $plugin->filestore_path, 'style ' => 'max-width:20em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:filestore_path:details') . '</em></p>';
+		
+		echo '</fieldset><br />';
+}
+
+
+// User mode specific settings - Enabled widgets
+if ($plugin->usercmis == 'yes') {
 	?>
 	<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">
 		<legend><?php echo elgg_echo('elgg_cmis:settings:usercmis:legend'); ?></legend>
@@ -66,19 +73,19 @@ if ($vars['entity']->usercmis == 'yes') {
 	
 		<?php
 		echo '<p><label>' . elgg_echo('elgg_cmis:widget:cmis_mine');
-		echo elgg_view('input/select', array( 'name' => 'params[widget_mine]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_mine )) . '</label></p>';
+		echo elgg_view('input/select', array('name' => 'params[widget_mine]', 'options_values' => $ny_opt, 'value' => $plugin->widget_mine )) . '</label></p>';
 
 		echo '<p><label>' . elgg_echo('elgg_cmis:widget:cmis');
-		echo elgg_view('input/select', array( 'name' => 'params[widget_cmis]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_cmis )) . '</label></p>';
+		echo elgg_view('input/select', array('name' => 'params[widget_cmis]', 'options_values' => $ny_opt, 'value' => $plugin->widget_cmis )) . '</label></p>';
 
 		echo '<p><label>' . elgg_echo('elgg_cmis:widget:cmis_folder');
-		echo elgg_view('input/select', array( 'name' => 'params[widget_folder]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_folder )) . '</label></p>';
+		echo elgg_view('input/select', array('name' => 'params[widget_folder]', 'options_values' => $ny_opt, 'value' => $plugin->widget_folder )) . '</label></p>';
 
 		echo '<p><label>' . elgg_echo('elgg_cmis:widget:cmis_search');
-		echo elgg_view('input/select', array( 'name' => 'params[widget_search]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_search )) . '</label></p>';
+		echo elgg_view('input/select', array('name' => 'params[widget_search]', 'options_values' => $ny_opt, 'value' => $plugin->widget_search )) . '</label></p>';
 
 		echo '<p><label>' . elgg_echo('elgg_cmis:widget:cmis_insearch');
-		echo elgg_view('input/select', array( 'name' => 'params[widget_insearch]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->widget_insearch )) . '</label></p>';
+		echo elgg_view('input/select', array('name' => 'params[widget_insearch]', 'options_values' => $ny_opt, 'value' => $plugin->widget_insearch )) . '</label></p>';
 		?>
 	
 	</fieldset>

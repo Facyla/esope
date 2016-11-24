@@ -1,7 +1,8 @@
 <?php
-//$cmis_soap_url = $CONFIG->url . 'cmis/soap?action=login';
-$cmis_soap_url = $CONFIG->url . 'cmisembed?action=login';
-$cmis_lib_path = elgg_get_plugins_path() . 'elgg_cmis/vendors/cmis/soap/';
+// Displays an embeddable SOAP view (without layout)
+
+$cmis_soap_url = elgg_get_site_url() . 'cmisembed?action=login';
+$cmis_lib_path = elgg_get_plugins_path() . 'elgg_cmis/vendors/chemistry-phpclient/soap/';
 
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
