@@ -12,29 +12,23 @@ $content = '';
 $own_guid = elgg_get_logged_in_user_guid();
 $own = elgg_get_logged_in_user_entity();
 
+$base_path = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/Applications SI/iris/");
 
-// URLs
-$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
-$atom_url = elgg_get_plugin_setting('cmis_atom_url', 'elgg_cmis');
-$repo_url = $cmis_url . $atom_url;
-$cmis_service_url = $cmis_url . 'service/cmis/index.html';
-$cmis_browser_url = $cmis_url . 'api/-default-/public/cmis/versions/1.1/browser';
-// Credentials
-$repo_username = elgg_get_plugin_setting('cmis_username', 'elgg_cmis');
-$repo_password = elgg_get_plugin_setting('cmis_password', 'elgg_cmis');
 // Debug mode
 $repo_debug = elgg_get_plugin_setting('debugmode', 'elgg_cmis', 'no');
 if ($repo_debug == 'yes') { $repo_debug = true; } else { $repo_debug = false; }
 $repo_debug = get_input('debug', $repo_debug);  // Enable manual override
-$repo_folder = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/Applications SI/iris/");
+
 
 // dkd uses constants by default
+/*
 date_default_timezone_set('Europe/Berlin');       // Set the default timezone
 define('CMIS_BROWSER_URL', $cmis_url . 'api/-default-/public/cmis/versions/1.1/browser');
 define('CMIS_BROWSER_USER', $repo_username);
 define('CMIS_BROWSER_PASSWORD', $repo_password);
 // if empty the first repository will be used
 define('CMIS_REPOSITORY_ID', null);
+*/
 
 //$new_repo_folder = get_input('new_folder', '');
 
@@ -52,12 +46,11 @@ $recursive = get_input('recursive', 'false');
 //elgg_load_css('lightbox');
 
 
-if ($repo_debug) { $content .= "URL : $repo_url<br />Endpoint URL : $cmis_browser_url<br />Base Folder : $repo_folder<br />Identifiant : $repo_username<br />Mot de passe : $repo_password<br />"; }
-
-if (empty($repo_url) || empty($repo_username) || empty($repo_password)) {
-	echo 'WARNING : required parameters are missing - please <a href="' . elgg_get_site_url() . 'settings/plugins/' . $own->username . '" target="_new">update your CMIS plugin settings</a>';
-	exit;
+if ($repo_debug) {
+	//$content .= "<p>URL : $repo_url<br />Endpoint URL : $cmis_browser_url<br />Base Folder : $base_path<br />Identifiant : $repo_username<br />Mot de passe : $repo_password</p>";
+	$content .= "<p>Base Folder : $base_path</p>";
 }
+
 
 
 
@@ -106,265 +99,258 @@ in_tree(d, 'workspace://SpacesStore/f91de5f4-629b-4a07-9729-78f860c3deaa') AND
 
 */
 
-// Avant tout appel, on devrait tester si l'URL est valide/active, et indiquer un pb d'inaccessibilité ou interruption de service
-$is_valid_repo = @fopen($cmis_url, 'r');
-if ($is_valid_repo) {
-} else {
-	echo "URL CMIS erronnée, ou service indisponible";
+
+// Edit tests sets
+$tests_content = '';
+
+$tests = array(
+		'list_repo' => (get_input('list_repo') == 'yes') ? true : false,
+		'list_root' => (get_input('list_root') == 'yes') ? true : false,
+		'list_folder' => (get_input('list_folder') == 'yes') ? true : false,
+		'create_folder' => (get_input('create_folder') == 'yes') ? true : false,
+		'create_file' => (get_input('create_file') == 'yes') ? true : false,
+		'update_file' => (get_input('update_file') == 'yes') ? true : false,
+		'version_file' => (get_input('version_file') == 'yes') ? true : false,
+		'move_file' => (get_input('move_file') == 'yes') ? true : false,
+		'delete_file' => (get_input('delete_file') == 'yes') ? true : false,
+		'delete_folder' => (get_input('delete_folder') == 'yes') ? true : false,
+	);
+//$tests_content .= '<pre>' . print_r($tests, true) . '</pre>'; 
+
+$tests_content .= '<h3>Tests CMIS</h3>';
+$tests_content .= '<div class="home-static-container float", style="width:45%;">';
+	$tests_content .= '<form action="' . elgg_get_site_url() . 'cmis/test" method="POST">
+			<label>' . elgg_view('input/checkbox', array('name' => 'list_repo', 'value' => 'yes', 'checked' => $tests['list_repo'])) . 'List repo</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'list_root', 'value' => 'yes', 'checked' => $tests['list_root'])) . 'List root</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'list_folder', 'value' => 'yes', 'checked' => $tests['list_folder'])) . 'List folder</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'create_folder', 'value' => 'yes', 'checked' => $tests['create_folder'])) . 'Create folder</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'create_file', 'value' => 'yes', 'checked' => $tests['create_file'])) . 'Create file</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'update_file', 'value' => 'yes', 'checked' => $tests['update_file'])) . 'Update file</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'version_file', 'value' => 'yes', 'checked' => $tests['version_file'])) . 'Version file</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'move_file', 'value' => 'yes', 'checked' => $tests['move_file'])) . 'Move file</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'delete_file', 'value' => 'yes', 'checked' => $tests['delete_file'])) . 'Delete file</label></br />
+			<label>' . elgg_view('input/checkbox', array('name' => 'delete_folder', 'value' => 'yes', 'checked' => $tests['delete_folder'])) . 'Delete folder</label></br />
+			<p>' . elgg_view('input/submit', array('value' => "Run tests")) . '</p>
+		</form>';
+$tests_content .= '</div>';
+$tests_content .= '<div class="home-static-container float-alt", style="width:45%;">';
+
+
+
+
+// Get CMIS client session
+$session = elgg_cmis_get_session();
+
+if (!$session) {
+	$content .= 'WARNING : required parameters are missing, or service is unavailable - please <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>';
+	$content = $tests_content . '<hr />' . $content;
+	// Display content
+	if (!empty($content)) {
+		if ($embed_mode == 'elgg') {
+			$content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
+		}
+		elgg_render_embed_content($content, $title, $embed_mode, $headers);
+	}
 	exit;
 }
 
-// Edit tests sets
-$tests = array(
-		'list_root' => true,
-		'list_folder' => true,
-		'create_folder' => true,
-		'create_file' => true,
-		'update_file' => true,
-		'version_file' => false,
-		'move_file' => true,
-		'delete_file' => false,
-		'delete_folder' => false,
-	);
-
-$tests_content = '';
-$tests_content .= '<h3>Tests CMIS</h3>';
-
-
-
-// Apache Chemistry CMIS library @TODO adapt to dkd library
-
-// CMIS Service session factory
-$httpInvoker = new \GuzzleHttp\Client(array(
-			'defaults' => array('auth' => array($repo_username, $repo_password))
-		));
-$parameters = array(
-	\Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
-	\Dkd\PhpCmis\SessionParameter::BROWSER_URL => $cmis_browser_url,
-	\Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
-	\Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker
-);
-$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
-
-
-// List repositories
-$content .= '<h3>Repositories</h3>';
-$repositories = $sessionFactory->getRepositories($parameters);
-foreach($repositories as $repository) {
-	$content .= "<strong>" . $repository->getName() . "</strong> &nbsp; ID: " . $repository->getId() . ' &nbsp; Root folder ID ' . $repository->getRootFolderId() . '<br />';
-	//$content .= '<pre>' . print_r($repository, true) . '</pre><hr />';
-}
-
-
-// Select repository - If no repository id is defined use the first repository
-if (CMIS_REPOSITORY_ID === null) {
-	$repositories = $sessionFactory->getRepositories($parameters);
-	$parameters[\Dkd\PhpCmis\SessionParameter::REPOSITORY_ID] = $repositories[0]->getId();
-} else {
-	$parameters[\Dkd\PhpCmis\SessionParameter::REPOSITORY_ID] = CMIS_REPOSITORY_ID;
-}
-
-// Create client session
-$session = $sessionFactory->createSession($parameters);
-
 // Get the root folder of the repository
-$rootFolder = $session->getRootFolder();
+//$rootFolder = $session->getRootFolder();
+$rootFolder = elgg_cmis_get_folder('/', false);
 
 // Get (navigate to) folder
-$folder = $session->getObjectByPath($repo_folder);
+//$folder = $session->getObjectByPath($base_path);
+$folder = elgg_cmis_get_folder($base_path, false);
 
 
-// List files and folders in a repository
+
+// OK - List repositories
+if ($tests['list_repo']) {
+	$content .= '<h3>List repositories</h3>';
+	$temp = elgg_cmis_list_repositories();
+	if (empty($temp)) { $tests_content .= 'List repositories : <strong style="color:darkred;">FAILED</strong><br />'; } else { $tests_content .= 'List repositories : <strong style="color:darkgreen;">OK</strong><br />'; }
+	$content .= $temp;
+} else { $tests_content .= 'List repositories : <em>not tested</em><br />'; }
+
+// OK - List files and folders in a repository
 if ($tests['list_root']) {
-	$content .= '<h3>List files and folders in repository (root folder)</h3>';
-	$content .= '+ [ROOT FOLDER]: ' . $rootFolder->getName() . "<br />";
-	$temp = elgg_cmis_printFolderContent($rootFolder, '-', 1);
-	if (empty($temp)) { $tests_content .= 'List root content : FAILED<br />'; } else { $tests_content .= 'List root content : OK<br />'; }
+	$content .= '<h3>List root repository content (files and folders)</h3>';
+	$temp = elgg_cmis_list_folder_content($rootFolder, 1, false);
+	if (empty($temp)) { $tests_content .= 'List root content : <strong style="color:darkred;">FAILED</strong><br />'; } else { $tests_content .= 'List root content : <strong style="color:darkgreen;">OK</strong><br />'; }
 	$content .= $temp;
-}
+} else { $tests_content .= 'List root content : <em>not tested</em><br />'; }
 
-
-// List files in arbitrary folder
+// OK - List files in arbitrary folder
 if ($tests['list_folder']) {
-	$content .= '<h3>List files and folders in ' . $folder->getName() . '</h3>';
-	$content .= '+ [ROOT FOLDER]: ' . $folder->getName() . "<br />";
-	$temp = elgg_cmis_printFolderContent($folder, '-', 1);
-	if (empty($temp)) { $tests_content .= 'List folder content : FAILED<br />'; } else { $tests_content .= 'List folder content : OK<br />'; }
+	$content .= '<h3>List folder content (files and folders)</h3>';
+	$temp = elgg_cmis_list_folder_content($folder, 1, false);
+	if (empty($temp)) { $tests_content .= 'List folder content : <strong style="color:darkred;">FAILED</strong><br />'; } else { $tests_content .= 'List folder content : <strong style="color:darkgreen;">OK</strong><br />'; }
 	$content .= $temp;
-}
+} else { $tests_content .= 'List folder content : <em>not tested</em><br />'; }
 
 
-// Create new folder in arbitrary folder
+// Create or get new folder in arbitrary folder
 if ($tests['create_folder']) {
 	$content .= '<h3>Create new folder</h3>';
-	$repo_new_folder = "Nouveau dossier";
-	$properties = array(
-			\Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'cmis:folder',
-			\Dkd\PhpCmis\PropertyIds::NAME => $repo_new_folder
-		);
-	try {
-		//$new_folder = $session->createFolder($properties, $session->createObjectId($session->getRepositoryInfo()->getRootFolderId()));
-		$new_folder = $session->createFolder($properties, $session->createObjectId($folder->getId()));
-		$content .= "Folder has been created. Folder Id: " . $new_folder->getId() . "<br />";
-		$tests_content .= 'Create folder : OK<br />';
-	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
-		$content .= "ERROR : " . $e->getMessage() . "<br />" . "Try to get folder by path!<br />";
-		$tests_content .= 'Create folder : FAILED<br />';
-		$new_folder = $session->getObjectByPath($repo_folder . $properties[\Dkd\PhpCmis\PropertyIds::NAME] . '/');
-		$content .= 'Get existing folder : ' . $new_folder->getId() . '<br />';
+	//$new_folder = elgg_cmis_create_folder($folder, "Nouveau dossier");
+	$new_folder = elgg_cmis_get_folder($base_path . 'Nouveau dossier', true);
+	if ($new_folder) {
+		$content .= "Folder exists or has  been created. Id: " . $new_folder->getId() . "<br />";
+		$tests_content .= 'Create folder : <strong style="color:darkgreen;">OK</strong><br />';
+	} else {
+		$content .= "ERROR : folder could not be created and does not exist<br />";
+		$tests_content .= 'Create folder : <strong style="color:darkred;">FAILED</strong><br />';
 	}
-}
-
+} else { $tests_content .= 'Create folder : <em>not tested</em><br />'; }
 
 // Create file in arbitrary folder
 if ($tests['create_file']) {
 	$content .= '<h3>Create new file</h3>';
-	$repo_new_file = "Nouveau_fichier.txt";
-	//$repo_new_file_content = "THIS IS A NEW DOCUMENT"; // raw data won't pass'
+	//$new_file_content = "THIS IS A NEW DOCUMENT"; // raw data won't pass'
 	// Content should be a stream (unless we can pass something else)
-	$repo_new_file_content = \GuzzleHttp\Stream\Stream::factory(fopen(elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/README.md', 'r'));
-	$repo_new_file_mime = "text/plain";
-	$properties = array(
-			\Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'cmis:document',
-			\Dkd\PhpCmis\PropertyIds::NAME => $repo_new_file
-		);
-	try {
-		$new_file = $session->createDocument(
-				$properties,
-				$session->createObjectId($folder->getId()),
-				$repo_new_file_content
-			);
+	$new_file_content = \GuzzleHttp\Stream\Stream::factory(fopen(elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/README.md', 'r'));
+	// @TODO Load file from Elgg datastore
+	// @TODO Load file from string content
+	// @TODO Load file from upload
+	// Note : do not try to create new version for testing purposes
+	$new_file = elgg_cmis_create_document($folder->getPath(), "Nouveau_fichier.txt", $new_file_content, false);
+	if ($new_file) {
 		$content .= "File created. Id: " . $new_file->getId() . "<br />";
-		$tests_content .= 'Create file : OK<br />';
-	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
-		$content .= "ERROR : " . $e->getMessage() . "<br />";
-		$tests_content .= 'Create file : FAILED<br />';
-		$new_file = $session->getObjectByPath($repo_folder . $properties[\Dkd\PhpCmis\PropertyIds::NAME]);
-		$content .= 'Get existing file : ' . $new_file->getId() . '<br />';
+		$tests_content .= 'Create file : <strong style="color:darkgreen;">OK</strong><br />';
+	} else {
+		$new_file = elgg_cmis_get_document($base_path . "Nouveau_fichier.txt");
+		if ($new_file) {
+			$content .= "File already exists. Id: " . $new_file->getId() . "<br />";
+			$tests_content .= 'Create file : <strong style="color:darkgreen;">OK</strong> (from previous test)<br />';
+		} else {
+			$tests_content .= 'Create file : <strong style="color:darkred;">FAILED</strong><br />';
+			$content .= "ERROR : file could not be created and does not exist<br />";
+		}
 	}
-}
+} else { $tests_content .= 'Create file : <em>not tested</em><br />'; }
 
 
 // Edit file properties
 if ($tests['update_file']) {
 	$content .= '<h3>Update file</h3>';
-	if ($new_file !== null) {
-		$new_file = $session->getObject($new_file);
-		$properties = array(\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'Updated on ' . time());
-		$new_file->updateProperties($properties, true);
+	$properties = array(\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'Updated on ' . time());
+	$new_file = elgg_cmis_update_document($new_file, $properties);
+	if ($new_file) {
 		$content .= "File updated, the property " . \Dkd\PhpCmis\PropertyIds::DESCRIPTION . " should now has the value '" . $properties[\Dkd\PhpCmis\PropertyIds::DESCRIPTION]. "<br />";
-		$tests_content .= 'Update file : OK<br />';
+		$tests_content .= 'Update file : <strong style="color:darkgreen;">OK</strong><br />';
 	} else {
 		$content .= "ERROR : No file, could not be updated !<br />";
-		$tests_content .= 'Update file : FAILED<br />';
+		$tests_content .= 'Update file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
-}
+} else { $tests_content .= 'Update file : <em>not tested</em><br />'; }
 
-
+// Create new version of file / document
 if ($tests['version_file']) {
 	$content .= '<h3>TODO Version file</h3>';
-	$new_file = $session->getObject($new_file);
-	// Checkout
-	try {
-		$checkedOutDocumentId = $new_file->getVersionSeriesCheckedOutId();
-		if ($checkedOutDocumentId) {
-			$content .= "[*] Document is already checked out - resuming working copy<br />";
-			$checkedOutDocumentId = $session->createObjectId($checkedOutDocumentId);
-		} else {
-			$content .= "[*] Checking out document to private working copy (PWC)... ";
-			$checkedOutDocumentId = $new_file->checkOut();
-			$content .= "done!<br />";
-		}
-		$content .= "[*] Versioned ID before: " . $new_file->getId() . "<br />";
-		$content .= "[*] Versioned ID during checkout: ". $checkedOutDocumentId . "<br />";
-		// Checkin
-		$content .= "[*] Checking in with updated properties (";
-		if ($major) {
-			$content .= 'major';
-		} else {
-			$content .= 'minor - to make a major revision pass a "1" - one - as argument to the example script';
-		}
-		$content .= ")<br />";
-		$checkedInDocumentId = $session->getObject($checkedOutDocumentId)->checkIn(
-				$major,
-				array(
-					\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'New description'
-				),
-				$stream,
-				'Checked out/in by system'
-			);
-		$content .= "[*] Versioned ID after: " . $checkedInDocumentId->getId() . "<br /><br />";
+	$new_file_content = \GuzzleHttp\Stream\Stream::factory(fopen(elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/README.md', 'r'));
+	$new_file = elgg_cmis_version_document($folder->getPath() . "/Nouveau_fichier.txt", rand(0,1), $new_file_content, array());
+	//$new_file = elgg_cmis_create_document($folder->getPath(), "Nouveau_fichier.txt", $new_file_content, true);
+	if ($new_file) {
 		// Versions
-		$content .= "The following versions of $repo_new_file are now stored in the repository:<br />";
+		$content .= "The following versions of " . $new_file->getName() . " are now stored in the repository:<br />";
 		foreach ($new_file->getAllVersions() as $version) {
 			$content .= "  * " . $version->getVersionLabel() . ' ';
-			$content .= $version->isLatestVersion() ? 'LATEST' : '';
-			$content .= $version->isLatestMajorVersion() ? 'LATEST MAJOR' : '';
+			$content .= $version->isLatestVersion() ? ' LATEST' : '';
+			$content .= $version->isLatestMajorVersion() ? ' MAJOR VERSION' : '';
 			$content .= "<br />";
 		}
 		$content .= "<br />";
-	} catch (\Dkd\PhpCmis\Exception\CmisVersioningException $e) {
-		$content .= "ERROR : " . $e->getMessage() . "<br />";
+		$tests_content .= 'Version file : <strong style="color:darkgreen;">OK</strong><br />';
+	} else {
+		$tests_content .= 'Version file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
-	
-	
-	
-	
-	
-}
+} else { $tests_content .= "Version file : <em>not tested</em><br />"; }
 
-
-// Move file to fnew older
+// Move file to new folder
 if ($tests['move_file']) {
 	$content .= '<h3>Move file</h3>';
-	$folderId = $folder->getId();
-	$new_folderId = $new_folder->getId();
-	try {
-		$new_file->move($folder, $new_folder);
+	if (!$new_file) { $new_file = elgg_cmis_get_document($base_path . "Nouveau_fichier.txt", true); }
+	$new_file = elgg_cmis_move_document($new_file, $base_path, $base_path . "Nouveau dossier");
+	if ($new_file) {
 		$content .= "File has been moved. Id: " . $new_file->getId() . "<br />";
-		$tests_content .= 'Move file : OK<br />';
-	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
+		$tests_content .= 'Move file : <strong style="color:darkgreen;">OK</strong><br />';
+	} else {
 		$content .= "ERROR : " . $e->getMessage() . "<br />";
-		$tests_content .= 'Move file : FAILED<br />';
+		$tests_content .= 'Move file : <strong style="color:darkred;">FAILED</strong><br />';
+	}
+} else { $tests_content .= 'Move file : <em>not tested</em><br />'; }
+
+
+
+// Download file content
+/*
+if ($tests['send_file']) {
+		$content .= '<h3>Create new file</h3>';
+	$file = get_entity(4759);
+	if (elgg_instanceof($file, 'object', 'file')) {
+		//$content .= print_r($file, true);
+		$serve_file = $client->getObject($file->cmis_id);
+		//$serve_file = $client->getObjectByPath($base_path . '1475181161bacasable.jpg');
+		//$content .= '<hr /><pre>' . print_r($serve_file, true) . '</pre>';
+		$file_content = $client->getContentStream($serve_file->id);
+		//$content .= '<hr />RAW CONTENT = ' . $file_content . '</pre>';
+	
+		$mime = $file->getMimeType();
+		if (!$mime) {
+			$mime = "application/octet-stream";
+		}
+
+		$filename = $file->originalfilename;
+
+		// fix for IE https issue
+		header("Pragma: public");
+
+		header("Content-type: $mime");
+		header("Content-Disposition: attachment; filename=\"$filename\"");
+		header("Content-Length: {$file->getSize()}");
+
+		while (ob_get_level()) {
+				ob_end_clean();
+		}
+		flush();
+		readfile($file->getFilenameOnFilestore());
+		exit;
 	}
 }
+*/
+
+
 
 
 // Delete file
 if ($tests['delete_file']) {
 	$content .= '<h3>Delete file</h3>';
-	if ($new_file !== null) {
-		/** @var FolderInterface $folder */
-		$new_file = $session->getObject($new_file);
-		$new_file->delete(true);
+	if (elgg_cmis_delete_folder($new_file)) {
 		$content .= "File has been deleted.<br />";
-		$tests_content .= 'Delete file : OK<br />';
+		$tests_content .= 'Delete file : <strong style="color:darkgreen;">OK</strong><br />';
 	} else {
 		$content .= "ERROR : no file, could not be deleted !<br />";
-		$tests_content .= 'Delete file : FAILED<br />';
+		$tests_content .= 'Delete file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
-}
+} else { $tests_content .= 'Delete file : <em>not tested</em><br />'; }
 
 
 // Delete folder
 if ($tests['delete_folder']) {
 	$content .= '<h3>Delete folder</h3>';
 	if (!$new_folder) {
-		$new_folder = $session->getObjectByPath($repo_folder. $repo_new_folder . '/');
+		$new_folder = $session->getObjectByPath($base_path. $repo_new_folder . '/');
 		$content .= "WARNING : No valid new folder, getting existing one if any<br />";
 		$tests_content .= 'Delete folder : WARNING => ';
 	}
-	if ($new_folder !== null) {
-		/** @var FolderInterface $folder */
-		$new_folder = $session->getObject($new_folder);
-		$new_folder->delete(true);
+	if (elgg_cmis_delete_folder($new_folder)) {
 		$content .= "Folder deleted<br />";
-		$tests_content .= 'Delete folder : OK<br />';
+		$tests_content .= 'Delete folder : <strong style="color:darkgreen;">OK</strong><br />';
 	} else {
 		$content .= "ERROR : No folder, could not be deleted !<br />";
-		$tests_content .= 'Delete folder : FAILED<br />';
+		$tests_content .= 'Delete folder : <strong style="color:darkred;">FAILED</strong><br />';
 	}
-}
+} else { $tests_content .= 'Delete folder : <em>not tested</em><br />'; }
 
 
 
@@ -374,40 +360,6 @@ if ($tests['delete_folder']) {
 /*
 checkedout = $client->checkOut($obj->id);
 $client->checkIn($checkedout->id);
-*/
-
-// Send file content - OK
-/*
-$file = get_entity(4759);
-if (elgg_instanceof($file, 'object', 'file')) {
-	//$content .= print_r($file, true);
-	$serve_file = $client->getObject($file->cmis_id);
-	//$serve_file = $client->getObjectByPath($repo_folder . '1475181161bacasable.jpg');
-	//$content .= '<hr /><pre>' . print_r($serve_file, true) . '</pre>';
-	$file_content = $client->getContentStream($serve_file->id);
-	//$content .= '<hr />RAW CONTENT = ' . $file_content . '</pre>';
-	
-	$mime = $file->getMimeType();
-	if (!$mime) {
-		$mime = "application/octet-stream";
-	}
-
-	$filename = $file->originalfilename;
-
-	// fix for IE https issue
-	header("Pragma: public");
-
-	header("Content-type: $mime");
-	header("Content-Disposition: attachment; filename=\"$filename\"");
-	header("Content-Length: {$file->getSize()}");
-
-	while (ob_get_level()) {
-		  ob_end_clean();
-	}
-	flush();
-	readfile($file->getFilenameOnFilestore());
-	exit;
-}
 */
 
 
@@ -536,6 +488,8 @@ if ($repo_debug) {
 
 
 // DEBUG
+$tests_content .= '</div>';
+$tests_content .= '<div class="clearfloat"></div>';
 $content = $tests_content . '<hr />' . $content;
 
 // Display content
