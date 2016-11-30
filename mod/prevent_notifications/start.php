@@ -40,18 +40,23 @@ function prevent_notifications_init() {
 }
 
 
-function prevent_notifications_enqueue_notification($hook, $type, $result, $params) {
+/* Prevents sending a notification
+* @return bool $notify : enqueue event (to send a notification through next cron)
+ */
+function prevent_notifications_enqueue_notification($hook, $type, $notify, $params) {
 	$send_notification = get_input('send_notification', 'yes');
 	$entity = $params['object'];
-	//error_log("PREVENT QUEUE => $send_notification => {$entity->guid} / {$entity->title}");
+	//error_log("ADD TO QUEUE => $send_notification => {$entity->guid} / {$entity->title}");
 	if ($send_notification == 'no') {
-		// Do not notify if explicitely asked to
-		$msg = elgg_echo('prevent_notifications:notsent');
-		system_message($msg);
+		// Do not notify only if explicitely asked to block
+		if (!elgg_in_context('cron')) {
+			$msg = elgg_echo('prevent_notifications:notsent');
+			system_message($msg);
+		}
 		return false;
 	}
 	// Don't change default behaviour
-	return $result;
+	return $notify;
 }
 
 
