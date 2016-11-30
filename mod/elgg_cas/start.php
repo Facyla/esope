@@ -102,8 +102,44 @@ function elgg_cas_logout_handler($event, $object_type, $object) {
 }
 
 
+// Load CAS client and check authentication
+// Return true if authenticated
+function elgg_cas_check_authentication($debug = false) {
+	static $cas_client_loaded = false;
+	if ($debug) { echo "CAS active<br />"; }
+	
+	if (!$cas_client_loaded) {
+		elgg_load_library('elgg:elgg_cas');
+		// CAS config
+		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
+		$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
+		$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
+		$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
+		$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
+		if (empty($cas_host) || empty($cas_port) || empty($cas_context)) { return false; }
+	
+		phpCAS::setDebug();
+		phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+		if (!empty($cas_server_ca_cert_path)) {
+			phpCAS::setCasServerCACert($cas_server_ca_cert_path);
+		} else {
+			phpCAS::setNoCasServerValidation();
+		}
+		$cas_client_loaded = true;
+	}
+	
+	if (phpCAS::checkAuthentication()) {
+		if ($debug) { echo "AUTH OK<br />"; }
+		return true;
+	}
+	return false;
+}
+
+
+// Automatically log in currently logged in CAS user
 function elgg_cas_autologin() {
 	if ((elgg_get_viewtype() == 'default') && (current_page_url() == elgg_get_site_url())) {
+		/*
 		// CAS autologin
 		elgg_load_library('elgg:elgg_cas');
 		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
@@ -130,7 +166,38 @@ function elgg_cas_autologin() {
 				include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
 			}
 		}
+		*/
+		$checkAuth = elgg_cas_check_authentication();
+		if ($checkAuth) {
+			system_message(elgg_echo('elgg_cas:casdetected'));
+			$cas_login_included = true;
+			include_once elgg_get_plugins_path() . 'elgg_cas/pages/elgg_cas/cas_login.php';
+		}
 	}
+}
+
+/** Login client from CAS authentication
+ * @return false|ElggUser
+ */
+function elgg_cas_login($debug = false) {
+	static $user = false;
+	if (!elgg_instanceof($user, 'user')) {
+		$checkAuth = elgg_cas_check_authentication($debug);
+		if ($checkAuth) {
+			$username = phpCAS::getUser();
+			if ($debug) { echo "Username : $username<br />"; }
+			$user = get_user_by_username($username);
+			// Need to log in user so access levels apply
+			if (elgg_instanceof($user, 'user')) {
+				if (!$user->isBanned()) {
+					if ($debug) { echo "User not banned<br />"; }
+					login($user);
+					return $user;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 

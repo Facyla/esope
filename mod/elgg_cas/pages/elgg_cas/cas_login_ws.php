@@ -7,6 +7,8 @@ if ($enable_ws_auth != 'yes') {
 	forward();
 };
 
+$guid = get_input('guid', false);
+
 // Mobile auth support : new functions for temp data caching + some changes in the auth process
 function elgg_cas_register_guid($guid, $token, $username) {
 	$cache = elgg_get_system_cache();
@@ -32,11 +34,11 @@ function elgg_cas_get_guid_username($guid) {
 
 
 if (isset($_GET['read'])) {
-	$token = elgg_cas_get_guid_token($_GET['guid']);
-	$username = elgg_cas_get_guid_username($_GET['guid']);
+	$token = elgg_cas_get_guid_token($guid);
+	$username = elgg_cas_get_guid_username($guid);
 	die($token . ',' . $username);
 } else if (isset($_GET['remove'])) {
-	elgg_cas_remove_guid($_GET['guid']);
+	elgg_cas_remove_guid($guid);
 	die('OK');
 }
 
@@ -47,6 +49,10 @@ $content = '';
 // Allow to forward to asked URL after successful login, or last forwward if not explicitely set
 $forward = get_input('forward', $_SESSION['last_forward_from']);
 
+
+
+$client_loaded = elgg_cas_load_client();
+/*
 global $cas_client_loaded;
 
 elgg_load_library('elgg:elgg_cas');
@@ -55,8 +61,6 @@ $cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas');
 $cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
 $cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
 $cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas');
-
-
 
 // Use CAS functions only if we have enough parameters
 //if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {}
@@ -76,6 +80,7 @@ if (!$cas_client_loaded) {
 		phpCAS::setNoCasServerValidation();
 	}
 }
+*/
 
 
 // logout if desired
@@ -83,13 +88,12 @@ if (isset($_REQUEST['logout'])) {
 	phpCAS::logout();
 }
 
-
 if (elgg_is_logged_in()) {
 	// Si on est déjà identifié sans CAS, inutile de se re-logguer
 	$logged = elgg_get_logged_in_user_entity();
 	if (phpCAS::isAuthenticated()) {
 		$elgg_username = phpCAS::getUser();
-		elgg_cas_register_guid($_GET['guid'], create_user_token($elgg_username), $elgg_username);
+		elgg_cas_register_guid($guid, create_user_token($elgg_username), $elgg_username);
 		header('Location: iris://login');
 
 		$user = get_user_by_username($elgg_username);
@@ -124,7 +128,7 @@ $content .= '<p>' . elgg_echo('elgg_cas:login:validcas') . '</p>';
 
 // Récupération du compte associé, s'il existe
 $user = get_user_by_username($elgg_username);
-elgg_cas_register_guid($_GET['guid'], create_user_token($elgg_username), $elgg_username);
+elgg_cas_register_guid($guid, create_user_token($elgg_username), $elgg_username);
 
 // Si on est identifié avec un autre compte avant de passer par CAS, on prévient et on arrête la procédure
 if (elgg_is_logged_in()) {
@@ -153,11 +157,12 @@ if (elgg_instanceof($user, 'user')) {
 			$content .= '<p>' . elgg_echo('elgg_cas:login:success') . '</p>';
 		} else { $content .= elgg_echo('elgg_cas:loginfailed'); }
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
+	
 } else {
-	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
-	error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
+	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
+	error_log("No Elgg account yet for CAS login : $elgg_username");
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
 		if ($casregister == 'yes') {
@@ -181,7 +186,10 @@ if (elgg_instanceof($user, 'user')) {
 	}
 }
 
-$content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
 // Pas de rendu dans la page en cas d'inclusion du script (autologin)
-if (!$cas_login_included) echo elgg_view_page($title, $content);
+if (!$cas_login_included) {
+	$content = elgg_view_layout('one_column', array('content' => $content, 'sidebar' => false));
+	echo elgg_view_page($title, $content);
+}
+
 

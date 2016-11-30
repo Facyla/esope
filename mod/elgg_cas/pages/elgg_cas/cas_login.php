@@ -9,6 +9,8 @@ elgg_load_library('elgg:elgg_cas');
 
 
 // Initialize phpCAS
+$client_loaded = elgg_cas_load_client();
+/*
 global $cas_client_loaded;
 if (!$cas_client_loaded) {
 	// Uncomment to enable debugging
@@ -34,6 +36,7 @@ if (!$cas_client_loaded) {
 	}
 	$cas_client_loaded = true;
 }
+*/
 
 
 // logout from CAS if asked to
