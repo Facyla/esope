@@ -14,12 +14,12 @@ $type = get_input("type", 'object');
 $site = elgg_get_site_entity();
 
 elgg_pop_breadcrumb();
-elgg_push_breadcrumb(elgg_echo('categories'));
+elgg_push_breadcrumb(elgg_echo('categories'), 'categories');
 if (empty($category)) {
-	$title = elgg_echo('esope:categories:all', array($category));
+	$title = elgg_echo('esope:categories:all');
 	elgg_push_breadcrumb(elgg_echo('esope:categories:all'));
 } else {
-	elgg_push_breadcrumb(elgg_echo('esope:categories:all'));
+	elgg_push_breadcrumb(elgg_echo('esope:categories:all'), 'categories');
 	elgg_push_breadcrumb(elgg_echo($category));
 	$title = elgg_echo('categories:results', array($category));
 }

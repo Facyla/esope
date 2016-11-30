@@ -2652,6 +2652,35 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 }
 
 
+/** Debug helper
+* Une fonction permettant rapidement de donner le microtime, la mémoire, et la différence avec les valeurs précédentes, à chaque appel
+ */
+function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
+	static $last_ts = false;
+	static $last_mem = false;
+	
+	if (!$last_ts) { $last_ts = microtime(TRUE); }
+	if (!$last_mem) { $last_mem = memory_get_usage(); }
+
+	$ts = microtime(TRUE);
+	$delta_ts = $ts - $last_ts;
+
+	$mem = memory_get_usage();
+	$delta_mem = round(($mem - $last_mem)/1000000, 2);
+	if ($delta_mem > 0) { $delta_mem = "+$delta_mem"; }
+	
+	$return = "$prefix at $ts : MEM = " . round($mem/1000000) . "($delta_mem) / Delta TS = " . round($delta_ts, 4);
+
+echo $return;
+	if ($error_log) {
+		error_log($return);
+//		return true;
+	} else {
+//		return $return;
+	}
+}
+
+
 
 
 

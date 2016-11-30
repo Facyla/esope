@@ -166,7 +166,7 @@ form.elgg-form-groups-find input {
 /* New integrated in-group search */
 .elgg-sidebar .elgg-form.elgg-form-groups-search { border: 0; background: white; padding: 0; margin-bottom: 20px; width:100%; }
 .elgg-form.elgg-form-groups-search #q { height:24px; width:84%; border:0; margin:0; }
-.groups-search-submit-button { height:24px; width:auto; border:1px solid grey; vertical-align: top; border:0; background-color:#ccc; padding:5px 7px 5px 8px; }
+.groups-search-submit-button { height:24px; width:auto; border:1px solid grey; vertical-align: top; border:0; background:#ccc; padding:5px 7px 5px 8px; }
 .groups-search-submit-button:hover, .groups-search-submit-button:active, .groups-search-submit-button:focus { background-color:#999; }
 
 
