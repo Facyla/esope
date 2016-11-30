@@ -2664,19 +2664,21 @@ function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 
 	$ts = microtime(TRUE);
 	$delta_ts = $ts - $last_ts;
+	$last_ts = $ts;
 
 	$mem = memory_get_usage();
 	$delta_mem = round(($mem - $last_mem)/1000000, 2);
 	if ($delta_mem > 0) { $delta_mem = "+$delta_mem"; }
+	$last_mem = $mem;
 	
-	$return = "$prefix at $ts : MEM = " . round($mem/1000000) . "($delta_mem) / Delta TS = " . round($delta_ts, 4);
+	$return = "$prefix at $ts : MEM = " . round($mem/1000000) . " MB ($delta_mem MB) / Delta TS = " . round($delta_ts, 4) . " s ";
 
 echo $return;
 	if ($error_log) {
 		error_log($return);
-//		return true;
+		return true;
 	} else {
-//		return $return;
+		return $return;
 	}
 }
 
