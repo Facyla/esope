@@ -36,33 +36,6 @@ if (elgg_is_logged_in()) {
 		//elgg_cas_autologin(); // Forwards to home if not logged in
 		// CAS login
 		$own = elgg_cas_login();
-		/*
-		elgg_load_library('elgg:elgg_cas');
-		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-		$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
-		$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
-		$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
-		$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
-		if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {
-			global $cas_client_loaded;
-			if (!$cas_client_loaded) {
-				phpCAS::setDebug();
-				phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-				$cas_client_loaded = true;
-				if (!empty($cas_server_ca_cert_path)) {
-					phpCAS::setCasServerCACert($cas_server_ca_cert_path);
-				} else {
-					phpCAS::setNoCasServerValidation();
-				}
-			}
-			if (phpCAS::checkAuthentication()) {
-				$elgg_username = phpCAS::getUser();
-				$own = get_user_by_username($elgg_username);
-				// Need to log in user so access levels apply
-				if (elgg_instanceof($own, 'user')) login($own);
-			}
-		}
-		*/
 	}
 }
 

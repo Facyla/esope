@@ -21,7 +21,7 @@ function elgg_cas_init() {
 	// Extend login form
 	elgg_extend_view('forms/login', 'elgg_cas/login_extend', 300);
 	
-	// Add CAS library (default to version 1.3.3)
+	// Add CAS library (default to version 1.3.4)
 	/* Note : when used with openssl 0.9.8k, please choose lib 1.3.2 and apply patch (see README)
 	 * The patch is already made in 1.3.2, in CAS/Request/ CurlRequest and CurlMultiRequest
 	 * Since SSL3 security issues, you may want to update it to (requires testing) :
@@ -32,11 +32,11 @@ function elgg_cas_init() {
 		case '1.3.2':
 			elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/vendors/phpCAS-1.3.2/CAS.php');
 			break;
-		case '1.3.4':
-			elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/vendors/phpCAS-1.3.4/CAS.php');
+		case '1.3.3':
+			elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/vendors/phpCAS-1.3.3/CAS.php');
 			break;
 		default:
-			elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/vendors/phpCAS-1.3.3/CAS.php');
+			elgg_register_library('elgg:elgg_cas', elgg_get_plugins_path() . 'elgg_cas/vendors/phpCAS-1.3.4/CAS.php');
 	}
 	
 	// CAS page handler

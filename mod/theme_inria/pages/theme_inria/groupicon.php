@@ -11,7 +11,7 @@ $group_guid = get_input('group_guid');
 
 /* @var ElggGroup $group */
 $group = get_entity($group_guid);
-if (!($group instanceof ElggGroup)) {
+if (!elgg_instanceof($group, 'group')) {
 	header("HTTP/1.1 404 Not Found");
 	exit;
 }

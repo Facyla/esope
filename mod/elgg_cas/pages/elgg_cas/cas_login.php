@@ -5,38 +5,9 @@ $content = '';
 // Allow to forward to asked URL after successful login, or last forward if not explicitely set
 $forward = get_input('forward', $_SESSION['last_forward_from']);
 
-elgg_load_library('elgg:elgg_cas');
 
-
-// Initialize phpCAS
+// Initialise phpCAS
 $client_loaded = elgg_cas_load_client();
-/*
-global $cas_client_loaded;
-if (!$cas_client_loaded) {
-	// Uncomment to enable debugging
-	//phpCAS::setDebug();
-	
-	// @TODO enable harcoded file settings too
-	//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
-	$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas');
-	$cas_port = (int) elgg_get_plugin_setting('cas_port', 'elgg_cas', 443);
-	$cas_context = elgg_get_plugin_setting('cas_context', 'elgg_cas', '/cas');
-	$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas');
-	
-	// Use CAS functions only if we have enough parameters
-	//if (!empty($cas_host) && !empty($cas_port) && !empty($cas_context)) {}
-	phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-	// For production use set the CA certificate that is the issuer of the cert
-	// For quick testing you can disable SSL validation of the CAS server.
-	// Certificat : le plus flexible = activé ssi configuré
-	if (!empty($cas_server_ca_cert_path)) {
-		phpCAS::setCasServerCACert($cas_server_ca_cert_path);
-	} else {
-		phpCAS::setNoCasServerValidation();
-	}
-	$cas_client_loaded = true;
-}
-*/
 
 
 // logout from CAS if asked to
