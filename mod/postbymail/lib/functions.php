@@ -60,7 +60,7 @@ function postbymail_checkandpost($config = array()) {
 	
 	// Debug mode
 	$debug = elgg_get_plugin_setting('debug', 'postbymail');
-	if ($debug == 'no') { $debug = false; } else { $debug = true; }
+	if ($debug == 'yes') { $debug = true; } else { $debug = false; }
 	
 	// Attachements : risky and not implemented
 	$use_attachments = false;
@@ -428,7 +428,11 @@ function postbymail_checkandpost($config = array()) {
 					
 					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
 					global $SESSION;
-					if (elgg_instanceof($member, 'user')) { $SESSION['user'] = $member; }
+					if (elgg_instanceof($member, 'user')) {
+						$SESSION['user'] = $member;
+						// Note : old method no longer works, using new way
+						_elgg_services()->session->setLoggedInUser($member);
+					}
 				}
 				
 				
@@ -897,7 +901,8 @@ function postbymail_checkandpost($config = array()) {
 					}
 				}
 				
-				
+				// Clear any remaining session data
+				_elgg_services()->session->invalidate();
 			} // END foreach - MESSAGES LOOP
 			
 			
