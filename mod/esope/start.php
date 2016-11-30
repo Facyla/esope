@@ -2680,7 +2680,16 @@ echo $return;
 	}
 }
 
-
+// Callback function for usort
+function esope_annotation_likes_cmp($a, $b) {
+	if (elgg_is_active_plugin('likes')) {
+		$a = likes_count($a);
+		$b = likes_count($b);
+		if ($a > $b) { return 1; }
+		if ($a < $b) { return -1; }
+	}
+	return 0;
+}
 
 
 
