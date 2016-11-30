@@ -77,18 +77,19 @@ if (elgg_is_logged_in()) {
 			}
 		}
 		*/
-		$imgurl = $own->getIconURL($size);
+		if (elgg_instanceof($own, 'user')) {
+			$imgurl = $own->getIconURL($size);
+		}
 		if ($debug) echo "User img url : $imgurl<br />";
 	}
 }
 
 // URL or embed ?
-if (!empty($imgurl)) {
-	if ($embed) {
-		echo '<img src="' . $imgurl . '" />';
-	} else {
-		echo $imgurl;
-	}
+if ($embed) {
+	echo '<img src="' . $imgurl . '" />';
+} else {
+	echo $imgurl;
 }
+
 
 
