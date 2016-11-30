@@ -103,8 +103,8 @@ function elgg_cas_logout_handler($event, $object_type, $object) {
 
 
 // Load CAS client and check authentication
-// Return true if authenticated
-function elgg_cas_check_authentication($debug = false) {
+// Return true if client is loaded
+function elgg_cas_load_client($debug = false) {
 	static $cas_client_loaded = false;
 	if ($debug) { echo "CAS active<br />"; }
 	
@@ -128,11 +128,23 @@ function elgg_cas_check_authentication($debug = false) {
 		$cas_client_loaded = true;
 	}
 	
-	if (phpCAS::checkAuthentication()) {
-		if ($debug) { echo "AUTH OK<br />"; }
-		return true;
+	return $cas_client_loaded;
+}
+
+// Load CAS client and check authentication
+// Return true if authenticated
+function elgg_cas_check_authentication($debug = false) {
+	static $is_cas_authenticated = false;
+	if ($debug) { echo "CAS active<br />"; }
+	
+	if (elgg_cas_load_client($debug)) {
+		if (phpCAS::checkAuthentication()) {
+			$is_cas_authenticated = true;
+			if ($debug) { echo "AUTH OK<br />"; }
+		}
 	}
-	return false;
+	
+	return $is_cas_authenticated;
 }
 
 
