@@ -35,6 +35,8 @@ if (elgg_is_logged_in()) {
 	//if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
 	if ($debug) echo "Not logged in<br />";
 	if (elgg_is_active_plugin('elgg_cas')) {
+		$own = elgg_cas_login($debug);
+		/*
 		//elgg_cas_autologin(); // Forwards to home if not logged in
 		// CAS login
 		if ($debug) echo "CAS active<br />";
@@ -74,13 +76,19 @@ if (elgg_is_logged_in()) {
 				}
 			}
 		}
+		*/
+		$imgurl = $own->getIconURL($size);
+		if ($debug) echo "User img url : $imgurl<br />";
 	}
 }
 
 // URL or embed ?
-if ($embed) {
-	echo '<img src="' . $imgurl . '" />';
-} else {
-	echo $imgurl;
+if (!empty($imgurl)) {
+	if ($embed) {
+		echo '<img src="' . $imgurl . '" />';
+	} else {
+		echo $imgurl;
+	}
 }
+
 

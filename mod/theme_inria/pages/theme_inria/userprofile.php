@@ -35,6 +35,8 @@ if (elgg_is_logged_in()) {
 	if (elgg_is_active_plugin('elgg_cas') && function_exists('elgg_cas_autologin')) {
 		//elgg_cas_autologin(); // Forwards to home if not logged in
 		// CAS login
+		$own = elgg_cas_login();
+		/*
 		elgg_load_library('elgg:elgg_cas');
 		//require_once elgg_get_plugins_path() . 'elgg_cas/lib/elgg_cas/config.php';
 		$cas_host = elgg_get_plugin_setting('cas_host', 'elgg_cas', '');
@@ -60,6 +62,7 @@ if (elgg_is_logged_in()) {
 				if (elgg_instanceof($own, 'user')) login($own);
 			}
 		}
+		*/
 	}
 }
 
