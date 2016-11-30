@@ -41,8 +41,12 @@ function postbymail_init() {
 	// Add reply block to email
 	//elgg_register_plugin_hook_handler("email", "system", "postbymail_email_hook");
 	
-	// Ajout du bloc de réponse au contenu à tous les messages de notification
-	// Update notification body for new content
+	/* Ajout du bloc de réponse au contenu à tous les messages de notification
+	 * Update notification body for new content
+	 * Note : we enable regular (create) and specific hook (publish) in all cases, 
+	 * because at worst it would be called twice and produce the same result, 
+	 * but this will avoid having to maintain the list here in case some plugin change called hook
+	 */
 	$subtypes = elgg_get_plugin_setting('reply_object_subtypes', 'postbymail');
 	$subtypes = explode(',', $subtypes);
 	// Add discussion replies if discussion is in the list
@@ -58,44 +62,27 @@ function postbymail_init() {
 		}
 	}
 	
-	
-	
-	
-	/*
-	$subtypes = elgg_get_plugin_setting('object_subtypes', 'notification_messages');
-	$subtypes = explode(',', $subtypes);
-	// Add discussion replies if discussion is in the list
-	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
-	if ($subtypes) {
-		foreach ($subtypes as $subtype) {
-			// Note : we enable regular (create) and specific hook (publish) in all cases, because at worst it would be called twice and produce the same result, 
-			// Regular hook
-			// but this will avoid having to maintain the list here in case some plugin change called hook
-			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'notification_messages_prepare_notification', 900);
-			// Some subtypes use a specific hook
-			// @TODO : always register both hooks, just in case ?
-			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
-				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'notification_messages_prepare_notification', 900);
-			}
-		}
-	}
-	*/
-	
+
+	// Add reply block to email message content
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'postbymail_add_to_notify_message_hook', 1000);
+	
+	// @TODO remove deprecated now uses regular hook
 	elgg_register_plugin_hook_handler('notify:entity:message', 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
 	// Ajout du lien ajouté pour les réponses dans forum
 	// Note debug : en mode CLI (advanced_notifications) il n'y a aucune entrée dans error_log !
 	//  => mettre les infos de debug directement dans le mail envoyé pour avoir des infos sur ce qui se passe
+	// @TODO remove deprecated now uses regular hook
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'group_topic_post', 'postbymail_add_to_notify_message_hook', 1000);
+	
+	// Ajout pour les messages directs
+	// @TODO remove deprecated now uses regular hook
+	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
 	
 	// @TODO : Ajout pour tous les commentaires
 	// @TODO vérifier qu'on a bien les infos pour répondre correctement
 	// Apparemment GUID de la réponse et non de l'objet commenté
 	//elgg_register_plugin_hook_handler("notify:annotation:message", 'all', 'postbymail_add_to_notify_message_hook', 1000);
 	elgg_register_plugin_hook_handler("notify:annotation:message", 'comment', 'postbymail_add_to_notify_message_hook', 1000);
-	
-	// Ajout pour les messages
-	elgg_register_plugin_hook_handler("notify:message:message", 'message', 'postbymail_add_to_notify_message_hook', 1000);
 	
 	
 	// Replace sender email by postbymail reply email - NOT RECOMMENDED !

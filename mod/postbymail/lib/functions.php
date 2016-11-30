@@ -584,6 +584,7 @@ function postbymail_checkandpost($config = array()) {
 				/*************************************/
 				/* PUBLICATION DU MESSAGE DE REPONSE */
 				/*************************************/
+				/* Le message de réponse est soit un commentaire, soit une réponse à un message de forum */
 				if ($mailreply && $mailreply_check) {
 					$body .= elgg_echo('postbymail:info:usefulcontent', array($post_body));
 					$sent = false;
@@ -598,13 +599,13 @@ function postbymail_checkandpost($config = array()) {
 						// Ajout du hash aux publications déjà faites (peu importe de matcher hash et mail, ce qui importe c'est les doublons)
 						switch($subtype) {
 							case 'groupforumtopic':
-								$comment = new ElggDiscussionReply();
-								$comment->description = $post_body;
-								$comment->access_id = $entity->access_id;
-								$comment->container_guid = $entity->getGUID();
-								$comment->owner_guid = $member->getGUID();
-								$comment_guid = $comment->save();
-								if ($comment_guid) {
+								$reply = new ElggDiscussionReply();
+								$reply->description = $post_body;
+								$reply->access_id = $entity->access_id;
+								$reply->container_guid = $entity->getGUID();
+								$reply->owner_guid = $member->getGUID();
+								$reply_guid = $reply->save();
+								if ($reply_guid) {
 									//set_input('group_topic_post', $post_body);
 									$published = true;
 									$body .= elgg_echo("groupspost:success");
@@ -613,7 +614,7 @@ function postbymail_checkandpost($config = array()) {
 											'view' => 'river/object/discussion_reply/create',
 											'action_type' => 'reply',
 											'subject_guid' => $member->guid,
-											'object_guid' => $comment_guid,
+											'object_guid' => $reply_guid,
 											'target_guid' => $entity->guid,
 										));
 									// @TODO notification
@@ -654,7 +655,7 @@ function postbymail_checkandpost($config = array()) {
 							case 'thewire':
 								// River OK + Notification OK
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas) et notif par email
-								// Thewire takes pure text only
+								// Thewire takes raw text only
 								$post_body = strip_tags($post_body);
 								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
