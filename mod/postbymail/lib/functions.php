@@ -207,7 +207,7 @@ function postbymail_checkandpost($config = array()) {
 				// if () { continue; }
 				
 				// Marqueurs selon motifs de ne pas notifier
-				$member = false; $post_body = false;
+				$actor = false; $post_body = false;
 				$published = false; $sender_reply = ''; $admin_reply = '';
 				
 				
@@ -263,7 +263,7 @@ function postbymail_checkandpost($config = array()) {
 				/******************/
 				$sendermail = postbymail_extract_email($message->headers['from']);
 				$realsendermail = postbymail_extract_email($message->headers['sender']);
-				$member = postbymail_find_sender($message->headers);
+				$actor = postbymail_find_sender($message->headers);
 				
 				
 				/**********************************/
@@ -338,7 +338,7 @@ function postbymail_checkandpost($config = array()) {
 				
 				// Infos pour l'expéditeur
 				$sender_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
-				$sender_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
+				$sender_reply .= elgg_echo('postbymail:info:publicationmember', array($actor->name));
 				$sender_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
 				$sender_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
 				$sender_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
@@ -353,7 +353,7 @@ function postbymail_checkandpost($config = array()) {
 				
 				// Infos pour l'admin
 				$admin_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
-				$admin_reply .= elgg_echo('postbymail:info:publicationmember', array($member->name));
+				$admin_reply .= elgg_echo('postbymail:info:publicationmember', array($actor->name));
 				$admin_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
 				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($inbox_name));
 				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
@@ -382,12 +382,12 @@ function postbymail_checkandpost($config = array()) {
 				// We need : a posting "key" (unically associated to the container group or user), and a "subtype" parameter.
 				// Sender should be identified when possible, but the post is sent by the group or user itself if email can't be found.
 				// @TODO Use normalized array for easier vars passing
-				$pbm_params = array('post_key' => $post_key, 'member' => $member, 'post_subtype' => $post_subtype, 'post_access' => $post_access, 'hash' => $hash, 'entity' => $entity, 'post_body' => $post_body, 'email_headers' => $message->headers);
+				$pbm_params = array('post_key' => $post_key, 'member' => $actor, 'post_subtype' => $post_subtype, 'post_access' => $post_access, 'hash' => $hash, 'entity' => $entity, 'post_body' => $post_body, 'email_headers' => $message->headers);
 				
 				if ($mailpost && !empty($post_key)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
 					// @TODO pass and retrieve arrays to avoid settings unique vars..
-					//$post_check = postbymail_checkeligible_post($post_key, $member, $post_subtype, $post_access, $hash);
+					//$post_check = postbymail_checkeligible_post($post_key, $actor, $post_subtype, $post_access, $hash);
 					$post_check = postbymail_checkeligible_post($pbm_params);
 					$mailpost_check = $post_check['check']; // Ok pour publier ?
 					$post_owner = $post_check['member']; // Auteur effectif du post
@@ -415,10 +415,10 @@ function postbymail_checkandpost($config = array()) {
 				if ($mailreply && !empty($guid)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
 					// @TODO pass and retrieve arrays to avoid settings unique vars..
-					//$reply_check = postbymail_checkeligible_reply($entity, $member, $post_body, $message->headers, $hash);
+					//$reply_check = postbymail_checkeligible_reply($entity, $actor, $post_body, $message->headers, $hash);
 					$reply_check = postbymail_checkeligible_reply($pbm_params);
 					$mailreply_check = $reply_check['check'];
-					$member = $reply_check['member'];
+					$actor = $reply_check['member'];
 					$container = $reply_check['container'];
 					$hash_arr = $reply_check['hash'];
 					$report = $reply_check['report'];
@@ -428,10 +428,10 @@ function postbymail_checkandpost($config = array()) {
 					
 					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
 					global $SESSION;
-					if (elgg_instanceof($member, 'user')) {
-						$SESSION['user'] = $member;
+					if (elgg_instanceof($actor, 'user')) {
+						$SESSION['user'] = $actor;
 						// Note : old method no longer works, using new way
-						_elgg_services()->session->setLoggedInUser($member);
+						_elgg_services()->session->setLoggedInUser($actor);
 					}
 				}
 				
@@ -596,7 +596,7 @@ function postbymail_checkandpost($config = array()) {
 					if ($subtype = $entity->getSubtype()) {
 						$admin_reply .= "Subtype = $subtype<br />";
 						// Important pour notification_messages qui récupère cette info pour publier avec le bon auteur..
-						set_input('postbymail_editor_id', $member->guid);
+						set_input('postbymail_editor_id', $actor->guid);
 						set_input('topic_post', $post_body);
 						
 						// Publication effective : message de réussite, et ajout du hash pour noter que ce message a été publié
@@ -607,7 +607,7 @@ function postbymail_checkandpost($config = array()) {
 								$reply->description = $post_body;
 								$reply->access_id = $entity->access_id;
 								$reply->container_guid = $entity->getGUID();
-								$reply->owner_guid = $member->getGUID();
+								$reply->owner_guid = $actor->getGUID();
 								$reply_guid = $reply->save();
 								if ($reply_guid) {
 									//set_input('group_topic_post', $post_body);
@@ -617,7 +617,7 @@ function postbymail_checkandpost($config = array()) {
 									elgg_create_river_item(array(
 											'view' => 'river/object/discussion_reply/create',
 											'action_type' => 'reply',
-											'subject_guid' => $member->guid,
+											'subject_guid' => $actor->guid,
 											'object_guid' => $reply_guid,
 											'target_guid' => $entity->guid,
 										));
@@ -625,15 +625,15 @@ function postbymail_checkandpost($config = array()) {
 									/*
 									// Add notification
 									notify_user($entity->owner_guid,
-										$member->guid,
+										$actor->guid,
 										elgg_echo('generic_comment:email:subject'),
 										elgg_echo('generic_comment:email:body', array(
 											$entity->title,
-											$member->name,
+											$actor->name,
 											$post_body,
 											$entity->getURL(),
-											$member->name,
-											$member->getURL()
+											$actor->name,
+											$actor->getURL()
 										))
 									);
 									*/
@@ -642,13 +642,13 @@ function postbymail_checkandpost($config = array()) {
 							case 'messages':
 								/*
 								error_log("DEBUG POSTBYMAIL messages post : from = {$entity->fromId}, to = {$entity->toId}");
-								error_log("DEBUG POSTBYMAIL messages reply : from = {$member->guid}, to = {$entity->fromId}");
+								error_log("DEBUG POSTBYMAIL messages reply : from = {$actor->guid}, to = {$entity->fromId}");
 								*/
 								// Post the message + add to sent message (need it once)
 								if (elgg_is_active_plugin('notification_messages')) {
-									$result = notification_messages_send($entity->title,$post_body, $entity->fromId, $member->guid, $entity->guid, true, true);
+									$result = notification_messages_send($entity->title,$post_body, $entity->fromId, $actor->guid, $entity->guid, true, true);
 								} else {
-									$result = messages_send($entity->title,$post_body, $entity->fromId, $member->guid, $entity->guid, true, true);
+									$result = messages_send($entity->title,$post_body, $entity->fromId, $actor->guid, $entity->guid, true, true);
 								}
 								if ($result) {
 									set_input('generic_comment', $post_body);
@@ -661,7 +661,7 @@ function postbymail_checkandpost($config = array()) {
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas) et notif par email
 								// Thewire takes raw text only
 								$post_body = strip_tags($post_body);
-								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
+								$thewire_guid = thewire_save_post($post_body, $actor->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
 									$thewire = get_entity($thewire_guid);
 									// Support group wire
@@ -689,7 +689,7 @@ function postbymail_checkandpost($config = array()) {
 								} else {
 									$comment = new ElggComment();
 									$comment->description = $post_body;
-									$comment->owner_guid = $member->guid;
+									$comment->owner_guid = $actor->guid;
 									$comment->container_guid = $entity->guid;
 									$comment->access_id = $entity->access_id;
 									$comment_guid = $comment->save();
@@ -700,7 +700,7 @@ function postbymail_checkandpost($config = array()) {
 										elgg_create_river_item(array(
 											'view' => 'river/object/comment/create',
 											'action_type' => 'comment',
-											'subject_guid' => $member->guid,
+											'subject_guid' => $actor->guid,
 											'object_guid' => $comment_guid,
 											'target_guid' => $entity->guid,
 										));
@@ -713,11 +713,11 @@ function postbymail_checkandpost($config = array()) {
 										}
 										$notification_message = elgg_echo('generic_comment:email:body', array(
 												$entity->title,
-												$member->name,
+												$actor->name,
 												$post_body,
 												$entity->getURL(),
-												$member->name,
-												$member->getURL()
+												$actor->name,
+												$actor->getURL()
 											));
 										// Trigger a hook to provide better integration with other plugins
 										// @TODO : use new hook
@@ -726,14 +726,14 @@ function postbymail_checkandpost($config = array()) {
 										// Failsafe backup if hook as returned empty content but not false (= stop)
 										if (!empty($hook_message) && ($hook_message !== false)) { $notification_message = $hook_message; }
 										// Notify owner
-										notify_user($entity->owner_guid, $member->guid, $notification_subject, $notification_message);
+										notify_user($entity->owner_guid, $actor->guid, $notification_subject, $notification_message);
 										// Auto-subscribe comment author if comment tracker is enabled
 										if (elgg_is_active_plugin('comment_tracker')) {
-											$autosubscribe = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $member->guid, 'comment_tracker');
-											if (!comment_tracker_is_unsubscribed($member, $entity) && $autosubscribe != 'no') {
+											$autosubscribe = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $actor->guid, 'comment_tracker');
+											if (!comment_tracker_is_unsubscribed($actor, $entity) && $autosubscribe != 'no') {
 												// don't subscribe the owner of the entity
-												if ($entity->owner_guid != $member->guid) {
-													comment_tracker_subscribe($member->guid, $entity->guid);
+												if ($entity->owner_guid != $actor->guid) {
+													comment_tracker_subscribe($actor->guid, $entity->guid);
 												}
 											}
 										}
@@ -819,9 +819,9 @@ function postbymail_checkandpost($config = array()) {
 					$sender_subject = elgg_echo('postbymail:sender:notpublished');
 					$sender_reply = elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
 					$sender_reply = elgg_echo('postbymail:sender:debuginfo', array($sender_subject, $report, $sender_reply));
-					if (elgg_instanceof($member, 'user') && is_email_address($member->email)) {
+					if (elgg_instanceof($actor, 'user') && is_email_address($actor->email)) {
 						// Si c'est le membre, on le prévient (en cas d'usurpation d'identité d'une adresse elternative)
-						mail($member->email, $sender_subject, $sender_reply, $headers);
+						mail($actor->email, $sender_subject, $sender_reply, $headers);
 					} else if (is_email_address($sendermail)) {
 						// Sinon on prend de préférence l'adresse email annoncée
 						mail($sendermail, $sender_subject, $sender_reply, $headers);
@@ -856,7 +856,7 @@ function postbymail_checkandpost($config = array()) {
 					if ($published) {
 						$admin_subject = elgg_echo('postbymail:adminsubject:newpublication');
 						// Pas besoin de conserver les messages de débuggage => on réécrit le contenu du message
-						$admin_reply = elgg_echo('postbymail:adminmessage:newpublication', array($member->name, $member->email, $entity->getURL(), $entity->title, $entity->getSubtype(), $post_body, $entity->getURL()));
+						$admin_reply = elgg_echo('postbymail:adminmessage:newpublication', array($actor->name, $actor->email, $entity->getURL(), $entity->title, $entity->getSubtype(), $post_body, $entity->getURL()));
 					} else {
 						// En cas d'erreur on intègre tous les messages de débogage
 						$admin_subject = elgg_echo('postbymail:admin:notpublished');
