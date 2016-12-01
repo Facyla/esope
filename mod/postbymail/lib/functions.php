@@ -33,6 +33,18 @@ if (!class_exists('Mail_mimeDecode')) {
  */
 //function postbymail_checkandpost($server = false, $protocol = '', $inbox_name = '', $username = false, $password = false, $markSeen = false, $bodyMaxLength = 65536, $separator = '', $mimeParams = array()) {
 function postbymail_checkandpost($config = array()) {
+	global $postbymail_actor_message;
+	global $postbymail_admin_message;
+	global $postbymail_guid;
+	global $postbymail_body;
+	
+	// Debug mode
+	$debug = elgg_get_plugin_setting('debug', 'postbymail');
+	if ($debug == 'yes') { $debug = true; } else { $debug = false; }
+	
+	// Attachements : risky and not implemented
+	$use_attachments = false;
+	
 	// Extract config vars
 	$server = elgg_extract('server', $config, false);
 	$protocol = elgg_extract('protocol', $config, '');
@@ -49,25 +61,12 @@ function postbymail_checkandpost($config = array()) {
 		return elgg_echo('postbymail:settings:error:missingrequired');
 	}
 	
-	global $sender_reply;
-	global $admin_reply;
-	global $postbymail_guid;
-	
 	$site = elgg_get_site_entity();
 	$site_name = $site->name;
 	
 	$ia = elgg_set_ignore_access(true);
 	
-	// Debug mode
-	$debug = elgg_get_plugin_setting('debug', 'postbymail');
-	if ($debug == 'yes') { $debug = true; } else { $debug = false; }
-	
-	// Attachements : risky and not implemented
-	$use_attachments = false;
-	
-	// @TODO : vérifier si on doit faire un check has_access_to_entity => normalement plus besoin en 1.8
-	
-	$body = '';
+	$postbymail_body = '';
 	$pub_counter = 0;
 	
 	
@@ -108,43 +107,29 @@ function postbymail_checkandpost($config = array()) {
 	if (in_array('success', $notify_scope)) { $notify_admin_success = true; } else { $notify_admin_success = false; }
 	if (in_array('groupadmin', $notify_scope)) { $notify_groupadmin = true; } else { $notify_groupadmin = false; }
 	
-	// Liste des admins à notifier + construction tableau pour faciliter les envois
-	$admin_notifications = array();
-	$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
-	$body .= elgg_echo('postbymail:notifiedadminslist', array($notifylist));
-	$notified_users = explode(',', trim($notifylist));
-	if ($notified_users) {
-		foreach($notified_users as $notified_user) {
-			$admin_ent = get_entity($notified_user);
-			if (!$admin_ent) { $admin_ent = get_user_by_username($notified_user); }
-			if (elgg_instanceof($admin_ent, 'user')) {
-				$admin_email = $admin_ent->email;
-				$body .= "{$admin_ent->name} ($admin_email), ";
-				$admin_notifications[$admin_ent->guid] = $admin_email;
-			}
-		}
-	}
-	$body .= "<hr />";
+	// Construction tableau des admins à notifier
+	$admin_notifications = postbymail_admin_notifications();
+	$postbymail_body .= "<hr />";
 	
 	
 	// CONNEXION AU SERVEUR IMAP ET TRAITEMENT DES EMAILS
 	$mailbox = imap_open('{'.$server.$protocol.'}'.$inbox_name, $username, $password);
 	if (!$mailbox) {
 		// Connection error (bad config)
-		$body .= elgg_echo('postbymail:badpluginconfig');
+		$postbymail_body .= elgg_echo('postbymail:badpluginconfig');
 		$imap_errors = imap_errors();
-		$body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$inbox_name, $username, PASSWORD);</p>";
-		$body .= "IMAP errors : <pre>" . print_r($imap_errors, true) . '</pre>';
+		$postbymail_body .= "<p>REQUEST = imap_open('{".$server.$protocol."}$inbox_name, $username, PASSWORD);</p>";
+		$postbymail_body .= "IMAP errors : <pre>" . print_r($imap_errors, true) . '</pre>';
 		$imap_alerts = imap_alerts();
-		$body .= "IMAP alerts : <pre>" . print_r($imap_alerts, true) . '</pre>';
+		$postbymail_body .= "IMAP alerts : <pre>" . print_r($imap_alerts, true) . '</pre>';
 	} else {
-		$body .= elgg_echo('postbymail:connectionok');
+		$postbymail_body .= elgg_echo('postbymail:connectionok');
 		
 		// Création des dossiers s'ils n'existent pas
 		postbymail_checkboxes($server, $protocol, $mailbox);
 		$purge = false;
 		
-		// See if the mailbox contains any messages.
+		// See if the mailbox contains any messages
 		// On récupère les messages non lus seulement.. - nbx autres paramètres
 		//$allmsgCount = imap_num_msg($mailbox); // Compte tous les messages de la boîte
 		//if ($unreadmessages = imap_sort($mailbox, SORTARRIVAL, 0, null, 'UNSEEN')) {
@@ -159,25 +144,26 @@ function postbymail_checkandpost($config = array()) {
 		 * imap_mail_move : CP_UID
 		 * imap_setflag_full : ST_UID
 		 */
-		if ($unreadmessages = imap_search($mailbox,'UNSEEN', SE_UID)) {
-			$body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
+		$unreadmessages = imap_search($mailbox,'UNSEEN', SE_UID);
+		if ($unreadmessages) {
+			$postbymail_body .= elgg_echo('postbymail:newmessagesfound', array(sizeof($unreadmessages)));
 			
-			// Loop through the messages.
-			// Pour chaque message à traiter : on vérifie d'abord quelques pré-requis (messages systèmes)
-			// Puis on vérifie les paramètres et on poste si tout est OK
-			// + prévenir l'expéditeur (dans tous les cas) 
-			// + prévenir un admin (idem ?)
+			/** Loop through the messages.
+			 * Pour chaque message à traiter : on vérifie d'abord quelques pré-requis (messages systèmes)
+			 * Puis on vérifie les paramètres et on poste si tout est OK
+			 * Et on prévient l'expéditeur et/ou les admins selon les cas
+			 */
 			foreach ($unreadmessages as $i => $uid) {
 				if ($debug) { error_log("POSTBYMAIL: Processing email $i : message uid = $uid"); }
 				// @TODO : imap_body(): Bad message number error => process only 1 message per cron ?
 				
 				// Réinitialisation des élements variables pour chaque message, afin de traiter chaque publication indépendament
-				$postbymail_guid = '';
-				$sender_reply = '';
-				$admin_reply = '';
+				$postbymail_guid = false;
+				$postbymail_actor_message = '';
+				$postbymail_admin_message = '';
 				$container = false;
 				
-				$body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
+				$postbymail_body .= elgg_echo('postbymail:processingmsgnumber', array(($i + 1), $uid));
 				// Get the message header.
 				$header = imap_fetchheader($mailbox, $uid, FT_UID | FT_PREFETCHTEXT);
 				
@@ -189,9 +175,14 @@ function postbymail_checkandpost($config = array()) {
 				}
 				
 				// Set the message as read if told to
-				if ($markSeen) { $msgbody = imap_body($mailbox, $uid, FT_UID); } else { $msgbody = imap_body($mailbox, $uid, FT_UID | FT_PEEK); }
-				// @TODO : hack temporaire pour les cas où les hooks et events bloquent l'exécution des actions post-traitement du message
-				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
+				if ($markSeen) {
+					$msgbody = imap_body($mailbox, $uid, FT_UID);
+				} else {
+					$msgbody = imap_body($mailbox, $uid, FT_UID | FT_PEEK);
+				}
+				/* Marquage comme "Lu", pour les cas où les hooks et events bloquent l'exécution des actions post-traitement du message
+				 * Que le message soit publié ou pas il est considéré comme traité, donc sauf re-marquage comme non lu, on ne le traitera plus
+				 */
 				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
 				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
 				// Send the header and body through mimeDecode.
@@ -201,24 +192,25 @@ function postbymail_checkandpost($config = array()) {
 				// Some mail servers and clients use special messages for holding mailbox data; ignore that message if it exists.
 				if ($message->headers['subject'] == "DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA") { continue; }
 				
-				// A partir d'ici on a un message "traitable" et on peut notifier expéditeur et admin
+				// Note : A partir d'ici on a un message "traitable" et on peut notifier expéditeur et admin
 				
-				// @TODO : si le flag \\Answered est présent, on saute direct au suivant (traité et publié) !
+				// @TODO ? : si le flag \\Answered est présent, on saute direct au suivant (traité et publié) !
 				// if () { continue; }
 				
 				// Marqueurs selon motifs de ne pas notifier
-				$actor = false; $post_body = false;
-				$published = false; $sender_reply = ''; $admin_reply = '';
+				$actor = false;
+				$post_body = false;
+				$published = false;
+				$postbymail_actor_message = '';
+				$postbymail_admin_message = '';
 				
 				
 				/****************************/
 				/*   EXTRACT POST CONTENT   */
 				/****************************/
-				// Extract the message body from email content, in html or text if not available
+				// Extract the message body from email content in HTML, or text if not available
 				// Extraction function also ensures its encoded into UTF-8
 				$msgbody = postbymail_extract_body($message, true);
-				// On utilise la version texte si la version html (par défaut) ne renvoie rien
-				if (empty($msgbody)) { $msgbody = postbymail_extract_body($message, false); }
 				
 				// Format the message to get the required data and content
 				if ($msgbody) {
@@ -249,13 +241,13 @@ function postbymail_checkandpost($config = array()) {
 				/*   EXTRACT ATTACHMENTS   */
 				/***************************/
 				// Does the message have an attachment?
-				// @TODO ça pourra servir à publier lesdites pièces jointes
+				// @TODO ? ça pourra servir à publier lesdites pièces jointes
 				// Note : très discutable à cause des signatures et autres icônes embarquées..
 				if ($use_attachments) {
 					// Lecture de tout le message pour identification des pièces jointes
-					$content = postbymail_extract_content($message);
-					$full_msgbody = count($message->parts) . ' : ' . $content['body'];
-					$attachment = $content['attachment'];
+					$message_content = postbymail_extract_content($message);
+					$full_msgbody = count($message->parts) . ' : ' . $message_content['body'];
+					$attachment = $message_content['attachment'];
 				}
 				
 				/******************/
@@ -299,10 +291,10 @@ function postbymail_checkandpost($config = array()) {
 							case 'guid':
 								$guid = (int) $mailparam[1];
 								if ($entity = get_entity($guid)) {
-									$admin_reply .= elgg_echo('postbymail:validguid');
+									$postbymail_admin_message .= elgg_echo('postbymail:validguid');
 								} else {
-									$sender_reply .= elgg_echo('postbymail:invalidguid');
-									$admin_reply .= elgg_echo('postbymail:invalidguid');
+									$postbymail_actor_message .= elgg_echo('postbymail:invalidguid');
+									$postbymail_admin_message .= elgg_echo('postbymail:invalidguid');
 								}
 								break;
 							case 'key':
@@ -319,13 +311,13 @@ function postbymail_checkandpost($config = array()) {
 					if (!empty($parameters)) { $parameters = elgg_echo('postbymail:info:paramwrap', array($parameters)); }
 				}
 				
-				// For comments and replies, switch entity to root object (container)
+				// Original entity : for comments and replies, switch entity to root object (container)
 				if (elgg_instanceof($entity, 'object', 'comment')) {
 					$entity = $entity->getContainerEntity();
-					$admin_reply .= elgg_echo('postbymail:usecontainer:comment');
+					$postbymail_admin_message .= elgg_echo('postbymail:usecontainer:comment');
 				} else if (elgg_instanceof($entity, 'object', 'discussion_reply')) {
 					$entity = $entity->getContainerEntity();
-					$admin_reply .= elgg_echo('postbymail:usecontainer:discussion_reply');
+					$postbymail_admin_message .= elgg_echo('postbymail:usecontainer:discussion_reply');
 				}
 				
 				
@@ -333,41 +325,41 @@ function postbymail_checkandpost($config = array()) {
 				/*   NOTIFICATION CONTENT   */
 				/****************************/
 				// Informations sur le contenu du message
-				$body .= elgg_echo('postbymail:info:parameters', array($parameters));
-				$body .= '<br class="clearfloat" /><hr />';
+				$postbymail_body .= elgg_echo('postbymail:info:parameters', array($parameters));
+				$postbymail_body .= '<br class="clearfloat" /><hr />';
 				
 				// Infos pour l'expéditeur
-				$sender_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
-				$sender_reply .= elgg_echo('postbymail:info:publicationmember', array($actor->name));
-				$sender_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
-				$sender_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
-				$sender_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
-				$sender_reply .= elgg_echo('postbymail:info:hash', array($hash));
-				if ($use_attachments) { $sender_reply .= elgg_echo('postbymail:info:attachment', array($attachment)); }
-				//$sender_reply .= elgg_echo('postbymail:info:parameters', array($parameters));
+				$postbymail_actor_message .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
+				$postbymail_actor_message .= elgg_echo('postbymail:info:publicationmember', array($actor->name));
+				$postbymail_actor_message .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
+				$postbymail_actor_message .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
+				$postbymail_actor_message .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
+				$postbymail_actor_message .= elgg_echo('postbymail:info:hash', array($hash));
+				if ($use_attachments) { $postbymail_actor_message .= elgg_echo('postbymail:info:attachment', array($attachment)); }
+				//$postbymail_actor_message .= elgg_echo('postbymail:info:parameters', array($parameters));
 				if ($entity) {
-					$sender_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
+					$postbymail_actor_message .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
 				} else {
-					$sender_reply .= elgg_echo('postbymail:info:badguid');
+					$postbymail_actor_message .= elgg_echo('postbymail:info:badguid');
 				}
 				
 				// Infos pour l'admin
-				$admin_reply .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
-				$admin_reply .= elgg_echo('postbymail:info:publicationmember', array($actor->name));
-				$admin_reply .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
-				$admin_reply .= elgg_echo('postbymail:info:mailbox', array($inbox_name));
-				$admin_reply .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
-				$admin_reply .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
-				$admin_reply .= elgg_echo('postbymail:info:hash', array($hash));
-				if ($use_attachments) { $admin_reply .= elgg_echo('postbymail:info:attachment', array($attachment)); }
-				$admin_reply .= $parameters;
+				$postbymail_admin_message .= elgg_echo('postbymail:info:emails', array($sendermail, $realsendermail));
+				$postbymail_admin_message .= elgg_echo('postbymail:info:publicationmember', array($actor->name));
+				$postbymail_admin_message .= elgg_echo('postbymail:info:postfullmail', array(htmlentities($message->headers['to'])));
+				$postbymail_admin_message .= elgg_echo('postbymail:info:mailbox', array($inbox_name));
+				$postbymail_admin_message .= elgg_echo('postbymail:info:mailtitle', array($message->headers['subject']));
+				$postbymail_admin_message .= elgg_echo('postbymail:info:maildate', array(postbymail_dateToCustomFormat($message->headers['date'])));
+				$postbymail_admin_message .= elgg_echo('postbymail:info:hash', array($hash));
+				if ($use_attachments) { $postbymail_admin_message .= elgg_echo('postbymail:info:attachment', array($attachment)); }
+				$postbymail_admin_message .= $parameters;
 				if ($entity) {
-					$admin_reply .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
+					$postbymail_admin_message .= elgg_echo('postbymail:info:objectok', array($entity->getURL(), $entity->title, htmlentities($guid)));
 				} else {
-					$admin_reply .= elgg_echo('postbymail:info:badguid');
+					$postbymail_admin_message .= elgg_echo('postbymail:info:badguid');
 				}
 				
-				$body .= "<br class=\"clearfloat\" /><br />";
+				$postbymail_body .= "<br class=\"clearfloat\" /><br />";
 				
 				
 				/************************************/
@@ -394,15 +386,19 @@ function postbymail_checkandpost($config = array()) {
 					$post_container = $post_check['container']; // Emplacement de publication
 					$post_access = $post_check['access']; // Niveau d'accès de la publication
 					$post_subtype = $post_check['subtype']; // Type de publication
-					$hash_arr = $reply_check['hash']; // Hashs (sérialisés) des publications déjà faites dans ce container
+					$mail_post_hash = $reply_check['hash']; // Hashs (sérialisés) des publications déjà faites dans ce container
 					$report = $post_check['report'];
-					$body .= $report;
-					if ($debug) { $admin_reply .= $report; }
+					$postbymail_body .= $report;
+					if ($debug) { $postbymail_admin_message .= $report; }
 					
-					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
-					global $SESSION;
-					if (elgg_instanceof($post_owner, 'user')) { $SESSION['user'] = $post_owner; }
-					//$sender_reply .= $report;
+					// Log in actor user so functions relyong on default logged in user will work as expected
+					$session = elgg_get_session();
+					if (elgg_instanceof($post_owner, 'user')) {
+						// Use direct call rather than login/logout functions to avoid hooks
+						// login($user, false);
+						$session->setLoggedInUser($post_owner);
+					}
+					//$postbymail_actor_message .= $report;
 				}
 				// Désactivation de l'autre fonction si la publication par clef est valide
 				if ($mailpost_check === true) { $mailreply = false; }
@@ -414,24 +410,24 @@ function postbymail_checkandpost($config = array()) {
 				// Si les réponses par mail sont activées, on vérifie qu'on a les paramètres requis
 				if ($mailreply && !empty($guid)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					// @TODO pass and retrieve arrays to avoid settings unique vars..
+					// Pass and retrieve arrays to avoid settings unique vars..
 					//$reply_check = postbymail_checkeligible_reply($entity, $actor, $post_body, $message->headers, $hash);
 					$reply_check = postbymail_checkeligible_reply($pbm_params);
 					$mailreply_check = $reply_check['check'];
 					$actor = $reply_check['member'];
 					$container = $reply_check['container'];
-					$hash_arr = $reply_check['hash'];
+					$mail_post_hash = $reply_check['hash'];
 					$report = $reply_check['report'];
-					$body .= $report;
-					//$admin_reply .= $report;
-					//$sender_reply .= $report;
+					$postbymail_body .= $report;
+					//$postbymail_admin_message .= $report;
+					//$postbymail_actor_message .= $report;
 					
-					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
-					global $SESSION;
+					// Log in actor user so functions relyong on default logged in user will work as expected
+					$session = elgg_get_session();
 					if (elgg_instanceof($actor, 'user')) {
-						$SESSION['user'] = $actor;
-						// Note : old method no longer works, using new way
-						_elgg_services()->session->setLoggedInUser($actor);
+						// Use direct call rather than login/logout functions to avoid hooks
+						// login($user, false);
+						$session->setLoggedInUser($actor);
 					}
 				}
 				
@@ -439,12 +435,15 @@ function postbymail_checkandpost($config = array()) {
 				/*******************************/
 				/* PUBLICATION NOUVEAU CONTENU */
 				/*******************************/
+				$notify_sender = false;
+				$notify_admin = false;
+				
 				if ($mailpost && $mailpost_check) {
 					// @TODO : add setting to define which subtypes are eligible
-					$admin_reply .= "Subtype = $post_subtype<br />";
+					$postbymail_admin_message .= "Subtype = $post_subtype<br />";
 					switch($post_subtype) {
 						case 'bookmarks':
-							$new_post = new ElggObject;
+							$new_post = new ElggObject();
 							$new_post->subtype = "bookmarks";
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
@@ -455,11 +454,11 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->tags = $post_tagarray;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							break;
 						case 'blog':
-							$new_post = new ElggObject;
+							$new_post = new ElggBlog();
 							$new_post->subtype = "blog";
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
@@ -472,11 +471,11 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->tags = $post_tagarray;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							break;
 						case 'groupforumtopic':
-							$new_post = new ElggObject;
+							$new_post = new ElggObject();
 							$new_post->subtype = "groupforumtopic";
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
@@ -486,11 +485,11 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->tags = $post_tagarray;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							break;
 						case 'page':
-							$new_post = new ElggObject;
+							$new_post = new ElggObject();
 							$new_post->subtype = "page";
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
@@ -503,11 +502,11 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->tags = $post_tagarray;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							break;
 						case 'page_top':
-							$new_post = new ElggObject;
+							$new_post = new ElggObject();
 							$new_post->subtype = "page_top";
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
@@ -519,18 +518,18 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->tags = $post_tagarray;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							break;
 						case 'thewire':
-							$new_post = new ElggObject;
+							$new_post = new ElggObject();
 							$new_post->subtype = "thewire";
 							$new_post->owner_guid = $post_owner->guid;
 							// Support group wire
 							if (elgg_instanceof($post_container, 'group') || elgg_instanceof($post_container, 'user')) {
 								$new_post->container_guid = $post_container->guid;
 							} else {
-							$new_post->container_guid = $post_owner->guid;
+								$new_post->container_guid = $post_owner->guid;
 							}
 							//$new_post->title = $message->headers['subject'];
 							// @TODO add reply to
@@ -539,12 +538,12 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->access_id = $post_access;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							break;
 						default:
 							/*
-							$new_post = new ElggObject;
+							$new_post = new ElggObject();
 							$new_post->subtype = "blog";
 							$new_post->owner_guid = $post_owner->guid;
 							$new_post->container_guid = $post_container->guid;
@@ -557,7 +556,7 @@ function postbymail_checkandpost($config = array()) {
 							$new_post->tags = $post_tagarray;
 							if ($new_post->save()) {
 								$published = true;
-								$body .= elgg_echo("postbymail:newpost:posted");
+								$postbymail_body .= elgg_echo("postbymail:newpost:posted");
 							}
 							*/
 					}
@@ -566,11 +565,11 @@ function postbymail_checkandpost($config = array()) {
 						// A ce stade on peut marquer le message
 						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
 						if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
-						$body .= elgg_echo('postbymail:published');
-						// @todo : Enregistrement du hash dans le container pour éviter un message exactement identique de la même personne..
-						// @todo voir si le même message est publié à une autre date ça pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
-						$hash_arr[] = $hash;
-						$post_container->mail_post_hash = serialize($hash_arr);
+						$postbymail_body .= elgg_echo('postbymail:published');
+						// Enregistrement du hash dans le container pour éviter un message exactement identique de la même personne..
+						// @TODO voir si le même message est publié à une autre date ça pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
+						$mail_post_hash[] = $hash;
+						$post_container->mail_post_hash = serialize($mail_post_hash);
 					} else {
 						// A ce stade on peut marquer le message
 						// Si le message a été traité, on le range dans un dossier
@@ -578,11 +577,11 @@ function postbymail_checkandpost($config = array()) {
 						// Gestion des erreurs de publication inconnues
 						// La publication n'a pas pu être faite alors qu'elle était a priori valide : à vérifier par un admin
 						$notify_admin = true;
-						$admin_reply = elgg_echo('postbymail:error:lastminutedebug', array($admin_reply));
+						$postbymail_admin_message = elgg_echo('postbymail:error:lastminutedebug', array($postbymail_admin_message));
 					}
 					
 				}
-				$body .= '<div class="clearfloat"></div>';
+				$postbymail_body .= '<div class="clearfloat"></div>';
 				
 				
 				/*************************************/
@@ -590,11 +589,11 @@ function postbymail_checkandpost($config = array()) {
 				/*************************************/
 				/* Le message de réponse est soit un commentaire, soit une réponse à un message de forum */
 				if ($mailreply && $mailreply_check) {
-					$body .= elgg_echo('postbymail:info:usefulcontent', array($post_body));
+					$postbymail_body .= elgg_echo('postbymail:info:usefulcontent', array($post_body));
 					$sent = false;
 					// Vérification du subtype, pour utiliser le bon type de publication
 					if ($subtype = $entity->getSubtype()) {
-						$admin_reply .= "Subtype = $subtype<br />";
+						$postbymail_admin_message .= "Subtype = $subtype<br />";
 						// Important pour notification_messages qui récupère cette info pour publier avec le bon auteur..
 						set_input('postbymail_editor_id', $actor->guid);
 						set_input('topic_post', $post_body);
@@ -612,7 +611,7 @@ function postbymail_checkandpost($config = array()) {
 								if ($reply_guid) {
 									//set_input('group_topic_post', $post_body);
 									$published = true;
-									$body .= elgg_echo("groupspost:success");
+									$postbymail_body .= elgg_echo("groupspost:success");
 									// Add to river
 									elgg_create_river_item(array(
 											'view' => 'river/object/discussion_reply/create',
@@ -653,7 +652,7 @@ function postbymail_checkandpost($config = array()) {
 								if ($result) {
 									set_input('generic_comment', $post_body);
 									$published = true;
-									$body .= elgg_echo("postbymail:mailreply:success");
+									$postbymail_body .= elgg_echo("postbymail:mailreply:success");
 								}
 								break;
 							case 'thewire':
@@ -669,7 +668,7 @@ function postbymail_checkandpost($config = array()) {
 									$thewire->container_guid = $entity->container_guid;
 									$thewire->save();
 									$published = true;
-									$body .= elgg_echo("postbymail:mailreply:success");
+									$postbymail_body .= elgg_echo("postbymail:mailreply:success");
 									// @TODO still required ? Send response to original poster if not already registered to receive notification
 								}
 								break;
@@ -683,8 +682,8 @@ function postbymail_checkandpost($config = array()) {
 								//set_input('topic_post', $post_body);
 								// Les commentaires sont acceptés en fonctions des paramétrages aussi
 								if ($forumonly) {
-									$admin_reply .= elgg_echo('postbymail:admin:error:forumonly');
-									$sender_reply = elgg_echo('postbymail:sender:error:forumonly', array($sender_reply));
+									$postbymail_admin_message .= elgg_echo('postbymail:admin:error:forumonly');
+									$postbymail_actor_message = elgg_echo('postbymail:sender:error:forumonly', array($postbymail_actor_message));
 									break;
 								} else {
 									$comment = new ElggComment();
@@ -695,7 +694,7 @@ function postbymail_checkandpost($config = array()) {
 									$comment_guid = $comment->save();
 									if (!empty($comment_guid)) {
 										$published = true;
-										$body .= elgg_echo("generic_comment:posted");
+										$postbymail_body .= elgg_echo("generic_comment:posted");
 										// Add to river
 										elgg_create_river_item(array(
 											'view' => 'river/object/comment/create',
@@ -743,38 +742,37 @@ function postbymail_checkandpost($config = array()) {
 						}
 					} else {
 						// Subtype invalide
-						$admin_reply .= elgg_echo('postbymail:admin:error:invalidsubtype');
-						$sender_reply .= elgg_echo('postbymail:sender:error:invalidsubtype');
+						$postbymail_admin_message .= elgg_echo('postbymail:admin:error:invalidsubtype');
+						$postbymail_actor_message .= elgg_echo('postbymail:sender:error:invalidsubtype');
 					}
 					
 					// Gestion des erreurs de publication lorsque a priori tout était bon
+					// A ce stade on peut déplacer le message
+					// Si le message a été traité, on le range dans un dossier
 					if ($published) {
 						$pub_counter++;
-						// A ce stade on peut marquer le message
 						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
 						if (@imap_mail_move($mailbox, $uid, "Published", CP_UID)) { $purge = true; }
-						$body .= elgg_echo('postbymail:published');
+						$postbymail_body .= elgg_echo('postbymail:published');
 						// Enregistrement du hash dans l'objet pour éviter un message exactement identique de la même personne..
 						// @TODO décider si le même message publié à une autre date pose pb ou pas - par exemple des réponse courtes type "oui", "ok"
-						$hash_arr[] = $hash;
-						$entity->mail_post_hash = serialize($hash_arr);
+						$mail_post_hash[] = $hash;
+						$entity->mail_post_hash = serialize($mail_post_hash);
 					} else {
-						// A ce stade on peut marquer le message
-						// Si le message a été traité, on le range dans un dossier
 						if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 						// Gestion des erreurs de publication inconnues
 						// Le commentaire n'a pas pu être publié alors qu'il était a priori valide : à vérifier par un admin
 						$notify_admin = true;
-						$admin_reply = elgg_echo('postbymail:error:lastminutedebug', array($admin_reply));
+						$postbymail_admin_message = elgg_echo('postbymail:error:lastminutedebug', array($postbymail_admin_message));
 					}
 				}
-				$body .= '<div class="clearfloat"></div>';
+				$postbymail_body .= '<div class="clearfloat"></div>';
 				
 				if (!$published) {
 					// Pas publiable
-					$admin_reply .= elgg_echo('postbymail:admin:reportmessage:error', array($cutat, $post_body, $msgbody));
-					$sender_reply .= elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
-					$body .= '<div class="clearfloat"></div>';
+					$postbymail_admin_message .= elgg_echo('postbymail:admin:reportmessage:error', array($cutat, $post_body, $msgbody));
+					$postbymail_actor_message .= elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
+					$postbymail_body .= '<div class="clearfloat"></div>';
 				}
 				
 				
@@ -782,29 +780,22 @@ function postbymail_checkandpost($config = array()) {
 				/*********************/
 				/*   NOTIFICATIONS   */
 				/*********************/
-				
 				// NOTIFICATIONS - notify anyone who should be after it's posted (or not)
-				$notify_sender = false;
-				$notify_admin = false;
 				
 				// 1. Check notification conditions first
 				if ($published) {
 					// Auteur : pas besoin de notification pour un message accepté
-					// Admin : l'admin doit être prévenu pour pouvoir modérer
+					// Admin : l'admin doit pouvoir être prévenu pour modérer
 					if ($notify_admin_success) { $notify_admin = true; }
 				} else {
-					// NOTIFICATIONS AUTEUR
-					$sender_reply = elgg_echo('postbymail:sendermessage:error', array($sender_reply));
-					// On notifie dans tous les cas d'échec ? a priori oui..
+					// Auteur
+					// On notifie l'auteur dans tous les cas d'échec ? a priori oui..
 					$notify_sender = true;
-					// NOTIFICATIONS ADMIN
-					if ($notify_sender) {
-						// @TODO à voir si on prévient quand même l'admin 
-						// quand l'auteur est informé et qu'on explique pourquoi avec les infos fournies
-						if ($notify_admin_error) { $notify_admin = true; }
-					} else {
-						// L'admin a besoin d'intervenir pour gérer du spam (blacklist) 
-						// ou aider des membres qui ont besoin d'aide et ne sont pas prévenus
+					$postbymail_actor_message = elgg_echo('postbymail:sendermessage:error', array($postbymail_actor_message));
+					// Admins : prévenus si demandé, OU si personne d'autre ne va être prévenu de l'échec de la publication
+					// Pas toujours utile quand l'auteur est informé et qu'on explique pourquoi avec les infos fournies
+					// Mais l'admin a besoin d'intervenir pour gérer du spam (blacklist) ou aider des membres qui ne sont pas prévenus
+					if (!$notify_sender || ($notify_sender && $notify_admin_error)) {
 						$notify_admin = true;
 					}
 				}
@@ -817,25 +808,26 @@ function postbymail_checkandpost($config = array()) {
 				// Notification de l'auteur de la réponse/publication
 				if ($notify_sender) {
 					$sender_subject = elgg_echo('postbymail:sender:notpublished');
-					$sender_reply = elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
-					$sender_reply = elgg_echo('postbymail:sender:debuginfo', array($sender_subject, $report, $sender_reply));
+					$postbymail_actor_message = elgg_echo('postbymail:sender:reportmessage:error', array($post_body));
+					$postbymail_actor_message = elgg_echo('postbymail:sender:debuginfo', array($sender_subject, $report, $postbymail_actor_message));
 					if (elgg_instanceof($actor, 'user') && is_email_address($actor->email)) {
 						// Si c'est le membre, on le prévient (en cas d'usurpation d'identité d'une adresse elternative)
-						mail($actor->email, $sender_subject, $sender_reply, $headers);
+						mail($actor->email, $sender_subject, $postbymail_actor_message, $headers);
 					} else if (is_email_address($sendermail)) {
 						// Sinon on prend de préférence l'adresse email annoncée
-						mail($sendermail, $sender_subject, $sender_reply, $headers);
+						mail($sendermail, $sender_subject, $postbymail_actor_message, $headers);
 					} else if (is_email_address($realsendermail)) {
 						// En dernier recours celle réellement utilisée
-						mail($realsendermail, $sender_subject, $sender_reply, $headers);
+						mail($realsendermail, $sender_subject, $postbymail_actor_message, $headers);
 					} else {
 						// et si on ne peut pas le prévenir, on prévient l'admin !
 						$notify_admin = true;
 					}
-					$body .= elgg_echo('postbymail:sender:notified');
+					$postbymail_body .= elgg_echo('postbymail:sender:notified');
 				} else {
-					$body .= elgg_echo('postbymail:sender:notnotified');
+					$postbymail_body .= elgg_echo('postbymail:sender:notnotified');
 				}
+				
 				// Notification responsable du groupe - ssi dans un groupe
 				if ($notify_groupadmin && elgg_instanceof($container, 'group')) {
 					// @TODO : notifier l'admin du groupe
@@ -844,48 +836,49 @@ function postbymail_checkandpost($config = array()) {
 						// Ne pas faire confiance aux fonctions de validation des emails qui refusent des emails valides
 						if (!empty($groupowner->email)) {
 							// @TODO : n'utiliser que des fonctions Elgg (mais risque de ne pas être en HTML, à vérifier)
-							mail($groupowner->email, $admin_subject, $admin_reply, $headers);
-							//notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
+							mail($groupowner->email, $admin_subject, $postbymail_admin_message, $headers);
+							//notify_user($groupowner->guid, $site->guid, $admin_subject, $postbymail_admin_message, NULL, 'email');
 						} else {
-							notify_user($groupowner->guid, $site->guid, $admin_subject, $admin_reply, NULL, 'site');
+							notify_user($groupowner->guid, $site->guid, $admin_subject, $postbymail_admin_message, NULL, 'site');
 						}
 					}
 				}
+				
 				// Notification des admins configurés
 				if ($notify_admin) {
 					if ($published) {
 						$admin_subject = elgg_echo('postbymail:adminsubject:newpublication');
 						// Pas besoin de conserver les messages de débuggage => on réécrit le contenu du message
-						$admin_reply = elgg_echo('postbymail:adminmessage:newpublication', array($actor->name, $actor->email, $entity->getURL(), $entity->title, $entity->getSubtype(), $post_body, $entity->getURL()));
+						$postbymail_admin_message = elgg_echo('postbymail:adminmessage:newpublication', array($actor->name, $actor->email, $entity->getURL(), $entity->title, $entity->getSubtype(), $post_body, $entity->getURL()));
 					} else {
 						// En cas d'erreur on intègre tous les messages de débogage
 						$admin_subject = elgg_echo('postbymail:admin:notpublished');
-						$admin_reply = elgg_echo('postbymail:adminmessage:success', array($admin_reply));
-						$admin_reply = elgg_echo('postbymail:admin:debuginfo', array($admin_subject, $report, $admin_reply));
+						$postbymail_admin_message = elgg_echo('postbymail:adminmessage:success', array($postbymail_admin_message));
+						$postbymail_admin_message = elgg_echo('postbymail:admin:debuginfo', array($admin_subject, $report, $postbymail_admin_message));
 					}
 					$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
 					if ($admin_notifications) {
 						foreach($admin_notifications as $admin_guid => $admin_email) {
 							// Envoi par mail HTML de préférence (mais expéditeur à améliorer)
-							if (!mail($admin_email, $admin_subject, $admin_reply, $headers)) {
+							if (!mail($admin_email, $admin_subject, $postbymail_admin_message, $headers)) {
 								// En cas d'échec, on passe par les moyens habituels (mais en texte brut)
-								notify_user($admin_guid, $site->guid, $admin_subject, $admin_reply, NULL, 'email');
+								notify_user($admin_guid, $site->guid, $admin_subject, $postbymail_admin_message, NULL, 'email');
 							}
 						}
 					}
-					$body .= elgg_echo('postbymail:admin:notified');
+					$postbymail_body .= elgg_echo('postbymail:admin:notified');
 				} else {
-					$body .= elgg_echo('postbymail:admin:notnotified');
+					$postbymail_body .= elgg_echo('postbymail:admin:notnotified');
 				}
 				// Affichage des notifications envoyées, pour la page de contrôle admin
-				$body .= elgg_echo('postbymail:report:notificationmessages', array($sender_reply, $admin_reply));
+				$postbymail_body .= elgg_echo('postbymail:report:notificationmessages', array($postbymail_actor_message, $postbymail_admin_message));
 				
 				
 				
 				/**********************************/
 				/*   IMAP : MARQUAGE DU MESSAGE   */
 				/**********************************/
-				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
+				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : on ne le traitera plus
 				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
 				//imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID); // => déplacé en haut de boucle pour éviter les multi-publications (en cas d'interruption de l'exécution avant marquage et déplacement du message)
 				// Si le message est publié, on le marque en plus comme traité et on le range dans un dossier
@@ -896,18 +889,18 @@ function postbymail_checkandpost($config = array()) {
 					// Si le message a été traité, on le range dans un dossier
 					if (@imap_mail_move($mailbox, $uid, "Errors", CP_UID)) { $purge = true; }
 					if ($notify_sender || $notify_admin) {
-						// Si le message fait l'objet d'une notification, on le marque en plus comme traité
+						// Si le message fait l'objet d'une notification, on le marque en plus comme répondu
 						imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
 					}
 				}
 				
 				// Clear any remaining session data
-				_elgg_services()->session->invalidate();
+				$session->invalidate();
 			} // END foreach - MESSAGES LOOP
 			
 			
 		} else {
-			$body .= elgg_echo('postbymail:nonewmail');
+			$postbymail_body .= elgg_echo('postbymail:nonewmail');
 		} // END unread messages check - $unreadmessages
 		
 		
@@ -924,15 +917,15 @@ function postbymail_checkandpost($config = array()) {
 	
 	// Publication results
 	if ($pub_counter > 0) {
-		$body .= elgg_echo('postbymail:numpublished', array($pub_counter));
+		$postbymail_body .= elgg_echo('postbymail:numpublished', array($pub_counter));
 	} else {
-		$body .= elgg_echo('postbymail:nonepublished');
+		$postbymail_body .= elgg_echo('postbymail:nonepublished');
 	}
 	
 	// Rétablissement des droits originaux
 	elgg_set_ignore_access($ia);
 	
-	return $body;
+	return $postbymail_body;
 }
 
 
@@ -950,8 +943,8 @@ function postbymail_checkandpost($config = array()) {
 		=> in both cases, sender should be identified when it's possible, but the post is sent by the group or user itself if email can't be found.
  */
 function postbymail_checkeligible_post($params = array()) {
-	global $sender_reply;
-	global $admin_reply;
+	global $postbymail_actor_message;
+	global $postbymail_admin_message;
 	
 	$defaults = array('key' => false, 'member' => false, 'subtype' => 'blog', 'access' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
@@ -1061,14 +1054,14 @@ function postbymail_checkeligible_post($params = array()) {
 	// (donc pas l'auteur, mais plutôt le lieu de publication)
 	// Principe : on ne publie un message qu'une seule fois, sinon a priori c'est un autre message (ou l'original a été effacé)
 	if ($params['hash'] && isset($container->mail_post_hash)) {
-		$hash_arr = unserialize($container->mail_post_hash);
-		if (in_array($params['hash'], $hash_arr)) {
+		$mail_post_hash = unserialize($container->mail_post_hash);
+		if (in_array($params['hash'], $mail_post_hash)) {
 			$report .= elgg_echo('postbymail:error:alreadypublished');
 			$mailreply_check = false;
 		}
 	}
 	
-	return array('member' => $params['member'], 'container' => $container, 'access' => $params['access'], 'subtype' => $params['subtype'], 'check' => $mailpost_check, 'report' => $report, 'hash' => $hash_arr);
+	return array('member' => $params['member'], 'container' => $container, 'access' => $params['access'], 'subtype' => $params['subtype'], 'check' => $mailpost_check, 'report' => $report, 'hash' => $mail_post_hash);
 }
 
 
@@ -1076,8 +1069,8 @@ function postbymail_checkeligible_post($params = array()) {
  * $checkhash	 false, or publication hash to use hash check (hashed message will be ignored and not published)
 */
 function postbymail_checkeligible_reply($params) {
-	global $sender_reply;
-	global $admin_reply;
+	global $postbymail_actor_message;
+	global $postbymail_admin_message;
 	
 	$defaults = array('entity' => false, 'member' => false, 'post_body' => false, 'email_headers' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
@@ -1167,8 +1160,8 @@ function postbymail_checkeligible_reply($params) {
 	// Vérification supplémentaire des doublons via le hash stocké dans l'entité commentée
 	// on ne publie un message qu'une seule fois, sinon a priori c'est un autre message (ou l'original a été effacé)...
 	if ($params['hash'] && isset($params['entity']->mail_post_hash)) {
-		$hash_arr = unserialize($params['entity']->mail_post_hash);
-		if (in_array($params['hash'], $hash_arr)) {
+		$mail_post_hash = unserialize($params['entity']->mail_post_hash);
+		if (in_array($params['hash'], $mail_post_hash)) {
 			$report .= elgg_echo('postbymail:error:alreadypublished');
 			$mailreply_check = false;
 		}
@@ -1197,7 +1190,7 @@ function postbymail_checkeligible_reply($params) {
 	}
 	//$report .= "Message headers array = " . print_r($message, true);
 	
-	return array('member' => $params['member'], 'container' => $container, 'check' => $mailreply_check, 'report' => $report, 'hash' => $hash_arr);
+	return array('member' => $params['member'], 'container' => $container, 'check' => $mailreply_check, 'report' => $report, 'hash' => $mail_post_hash);
 }
 
 
@@ -1250,12 +1243,12 @@ function postbymail_extract_content($mailparts, $html = true) {
 }
 
 
-/*
- * Mail body extraction function : extracts message content, in html or text format, and ensure it's encoded as UTF-8
+/** Mail body extraction function
+ * Extracts message content, in HTML or text format, and ensure it's encoded as UTF-8
  * Note : Encoding is explicit in headers, so should get it from there first, rather than using auto-detect
- * $mailparts	 the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
- * $html	 boolean	 get only HTML content (or text after converting line breaks, if no HTML available)
- * returns : message body value, in UTF-8
+ * @param $mailparts : the message content, as provided by $message = Mail_mimeDecode::decode($mimeParams);
+ * @param bool $html : get only HTML content (or text after converting line breaks, if no HTML available)
+ * @return : message body value, in UTF-8
 */
 function postbymail_extract_body($mailparts, $html = true) {
 	$charset = $mailparts->ctype_parameters['charset'];
@@ -1290,6 +1283,10 @@ function postbymail_extract_body($mailparts, $html = true) {
 		
 		default: // Other cases = image, audio, video, application
 	}
+	
+	// Si la version HTML (par défaut) ne renvoie rien, on essaie avec la version texte
+	if (empty($msgbody) && $html) { $msgbody = postbymail_extract_body($mailparts, false); }
+	
 	// Return result
 	return $msgbody;
 }
@@ -1306,39 +1303,42 @@ function postbymail_extract_body($mailparts, $html = true) {
  *   sont utilisés pour des caractères plus "utiles". L'utilisation de ces caractères invalides bloque le 
  *   fonctionnement des fonctions de traitement de PHP, notamment htmlentities, utilisé ici pour détecter cette 
  *   utilisation et utiliser le traitement approprié.
+ * @param $text : string to convert
+ * @param $charset : source charset, if know (will autodetect otherwise)
 */
-function postbymail_convert_to_utf8($body = '', $charset = '') {
-	if (empty($body)) { return ''; }
+function postbymail_convert_to_utf8($text = '', $charset = '') {
+	if (empty($text)) { return ''; }
 	// Auto-detect charset, if needed
-	if (empty($charset)) { $charset = mb_detect_encoding($body, mb_detect_order(), true); }
-	//if (empty($charset)) { $charset = mb_detect_encoding($body); }
+	if (empty($charset)) { $charset = mb_detect_encoding($text, mb_detect_order(), true); }
+	//if (empty($charset)) { $charset = mb_detect_encoding($text); }
 	// Normalise charset name
 	$charset = strtolower($charset);
 	// Convert encoding if needed
 	switch($charset) {
 		case 'utf-8':
-			$return = $body;
+			$converted_text = $text;
 			break;
 		case 'iso-8859-1':
-			$return = utf8_encode($body);
+			$converted_text = utf8_encode($text);
 			break;
 		default:
 			// Additional test for better handling of erroneous encoding
-			if (mb_strlen(htmlentities($body, ENT_QUOTES, "UTF-8")) == 0) {
+			if (mb_strlen(htmlentities($text, ENT_QUOTES, "UTF-8")) == 0) {
 				// Cas envoi en Windows-1252 (logiciels anciens ou mal configurés, certains webmails, etc.)
-				$return = mb_convert_encoding($body, "UTF-8");
+				$converted_text = mb_convert_encoding($text, "UTF-8");
 			} else {
-				$return = mb_convert_encoding($body, "UTF-8", $charset);
+				$converted_text = mb_convert_encoding($text, "UTF-8", $charset);
 			}
 	}
 	// Failsafe checks (should never happen)
-	if (empty($return)) {
-		$return = mb_convert_encoding($body, "UTF-8", $charset);
+	if (empty($converted_text)) {
+		$converted_text = mb_convert_encoding($text, "UTF-8", $charset);
 	}
-	if (empty($return)) {
-		$return = $body;
+	// Ensure we never return an empty converted text
+	if (empty($converted_text)) {
+		$converted_text = $text;
 	}
-	return $return;
+	return $converted_text;
 }
 
 
@@ -1349,18 +1349,18 @@ function postbymail_extract_email($email_header) {
 		$email = explode('<', $email_header);
 		$email = explode('>', $email[1]);
 		$email = $email[0];
-	} else $email = $email_header;
+	} else { $email = $email_header; }
 	return $email;
 }
 
 
-/* Find a valid member from email headers
+/* Find a valid actor user from email headers
  * Expéditeur = le premier compte valide trouvé, d'abord en regardant parmi les adresses email des comptes Elgg
  * Puis via les adresses email alternatives
  */
 function postbymail_find_sender($email_headers) {
-	global $sender_reply;
-	global $admin_reply;
+	global $postbymail_actor_message;
+	global $postbymail_admin_message;
 	$dbprefix = elgg_get_config('dbprefix');
 	
 	// Check "official" email From
@@ -1415,7 +1415,7 @@ function postbymail_find_sender($email_headers) {
 
 
 /* Render a readable date
- * $date	 timestamp
+ * @param $date : timestamp
  */
 function postbymail_dateToCustomFormat($date) {
 	$time = strtotime($date);
@@ -1431,7 +1431,7 @@ function postbymail_dateToCustomFormat($date) {
 
 
 /* Render a readable filesize
- * $size	 size in bits
+ * @param $size : size in bits
  */
 function postbymail_translateSize($size) {
 	$units = array("octets", "Ko", "Mo", "Go", "To");
@@ -1507,5 +1507,27 @@ function postbymail_service_notification_headers() {
 	
 	return $headers;
 }
+
+// Liste des admins à notifier + construction tableau pour faciliter les envois
+function postbymail_admin_notifications() {
+	global $postbymail_body;
+	$admin_notifications = array();
+	$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
+	$postbymail_body .= elgg_echo('postbymail:notifiedadminslist', array($notifylist));
+	$notified_users = explode(',', trim($notifylist));
+	if ($notified_users) {
+		foreach($notified_users as $notified_user) {
+			$admin_ent = get_entity($notified_user);
+			if (!$admin_ent) { $admin_ent = get_user_by_username($notified_user); }
+			if (elgg_instanceof($admin_ent, 'user')) {
+				$admin_email = $admin_ent->email;
+				$postbymail_body .= "{$admin_ent->name} ($admin_email), ";
+				$admin_notifications[$admin_ent->guid] = $admin_email;
+			}
+		}
+	}
+	return $admin_notifications;
+}
+
 
 
