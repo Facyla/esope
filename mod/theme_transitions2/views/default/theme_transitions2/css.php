@@ -132,7 +132,7 @@ body { background:#EBE7DF; font-family:Lato; }
 .elgg-comments .elgg-list { padding: 30px 30px 20px 30px; }
 .elgg-comments .elgg-list > li { border:0; border-bottom: 1px solid #e2d8c3; margin-bottom: 20px; padding: 0; }
 
-.agirlocal-puce { background: url('<?php echo $url; ?>file/download/1021') no-repeat left 50%; background-size: 1.5em; }
+.agirlocal-puce { background: url('<?php echo $url; ?>file/download/1021') no-repeat top left; background-size: 1.5em; text-indent:1.8em; margin-left: 2em; }
 
 
 
