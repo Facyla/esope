@@ -483,8 +483,8 @@ function theme_transitions2_set_usersettings() {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	if ($user && ($public_profile || $block_messages)) {
-		if ($public_profile) $user->setPrivateSetting ('public_profile', $public_profile);
-		if ($block_messages) $user->setPrivateSetting ('block_messages', $block_messages);
+		if ($public_profile) { $user->setPrivateSetting ('public_profile', $public_profile); }
+		if ($block_messages) { $user->setPrivateSetting ('block_messages', $block_messages); }
 		return true;
 	}
 	return false;
@@ -526,7 +526,8 @@ function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params
 		'border-bottom', 'border-left', 'border-right', 'border-radius',
 		'margin', 'margin-top', 'margin-bottom', 'margin-left',
 		'margin-right', 'padding', 'float', 'text-decoration',
-		'height', 'width', 'line-height', 'min-width', 'min-height',
+		'display', 'height', 'width', 'line-height', 'min-width', 'min-height',
+		'flex', 'flex-direction', 'flex-wrap', 'flex-flow', 'justify-content', 'align-items', 
 	);
 	return $allowed_styles;
 }
