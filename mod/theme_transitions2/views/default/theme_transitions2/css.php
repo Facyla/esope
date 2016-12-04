@@ -45,6 +45,7 @@ blockquote { background: #e2d8c3; color:#666; border:none; }
 .flexible-block { float:left; }
 .t2-flex { display:flex; flex-direction:row; }
 .t2-flex-alt { display:flex; flex-direction:column; }
+.t2-flex-item { background: #FFF; padding: 2em; border-radius: 10px; margin: 0 1em 1em; flex: 1; }
 
 
 /* Boutons */
