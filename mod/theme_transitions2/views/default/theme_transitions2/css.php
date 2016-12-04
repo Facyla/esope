@@ -43,6 +43,9 @@ textarea { min-height:30px; }
 blockquote { background: #e2d8c3; color:#666; border:none; }
 
 .flexible-block { float:left; }
+.t2-flex { display:flex; flex-direction:row; }
+.t2-flex-alt { display:flex; flex-direction:column; }
+
 
 /* Boutons */
 .elgg-button { font-family: FontAwesome, Lato; }
@@ -293,6 +296,10 @@ body { background:#EBE7DF; font-family:Lato; }
 
 @media (max-width: 600px) {
 	.flexible-block { float:none !important; margin:0 auto; width:auto !important; }
+	
+	.t2-flex { flex-direction:column; }
+	.t2-flex-alt {  }
+	
 }
 
 
