@@ -582,7 +582,8 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			if (sizeof($owner_guids) > 0) $params['owner_guids'] = $owner_guids;
 			if (sizeof($container_guids) > 0) $params['container_guids'] = $container_guids;
 			// Get the entities
-			$ents = elgg_get_entities($params);
+			//$ents = elgg_get_entities($params);
+			$ents = elgg_get_entities_from_relationship($params);
 			
 			// Rendu groupe et membre
 			if (in_array($module_config['type'], array('group', 'user'))) {
