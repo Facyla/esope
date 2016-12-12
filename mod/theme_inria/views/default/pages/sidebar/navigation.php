@@ -11,8 +11,7 @@ $guid = get_input('guid', false);
 if ($guid) { return; }
 
 // add the jquery treeview files for navigation
-elgg_load_js('jquery-treeview');
-elgg_load_css('jquery-treeview');
+elgg_load_css('jquery.treeview');
 
 $selected_page = elgg_extract('page', $vars, false);
 if ($selected_page) {
@@ -30,20 +29,19 @@ if (!$content) {
 
 echo elgg_view_module('aside', $title, $content);
 
-?><?php //@todo JS 1.8: no ?>
-<script type="text/javascript">
-$(document).ready(function() {
+?>
+<script>
+require(['jquery', 'jquery.treeview'], function($) {
+	$(function() {
 	$(".pages-nav").treeview({
 		persist: "location",
 		collapsed: true,
 		unique: true
 	});
 
-	<?php
-	if ($selected_page) {
+<?php if ($selected_page) { ?>
 		// if on a history page, we need to manually select the correct menu item
 		// code taken from the jquery.treeview library
-		?>
 		var current = $(".pages-nav a[href='<?php echo $url; ?>']");
 		var items = current.addClass("selected").parents("ul, li").add( current.next() ).show();
 		var CLASSES = $.treeview.classes;
@@ -53,9 +51,8 @@ $(document).ready(function() {
 				.find(">.hitarea")
 					.swapClass( CLASSES.collapsableHitarea, CLASSES.expandableHitarea )
 					.swapClass( CLASSES.lastCollapsableHitarea, CLASSES.lastExpandableHitarea );
-		<?php
-	}
-	?>
+<?php } ?>
+});
 });
 </script>
 
