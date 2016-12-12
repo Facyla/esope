@@ -831,6 +831,8 @@ return array(
 	
 	'esope:pages:subpages' => "Sub-pages",
 	'esope:pages:summary' => "Summary",
+	'esope:pages:parent' => "Parent page: ",
+	'esope:pages:parents' => "Parent pages: ",
 	'esope:option:nofilter' => "(no filter)",
 	// Subtypes
 	'esope:subtype:pages' => "wiki",

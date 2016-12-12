@@ -21,6 +21,29 @@ $data = [
 	'data-description' => $entity->description,
 	'data-url' => $entity->getURL(),
 ];
+// Add full path for pages
+if (elgg_instanceof($entity, 'object', 'page')) {
+	if ($entity->parent_guid) {
+		$parents = array();
+		$parent = get_entity($entity->parent_guid);
+		while ($parent) {
+			$parents[] = $parent;
+			$parent = get_entity($parent->parent_guid);
+		}
+		$path_title = '';
+		foreach($parents as $parent) {
+			if (!empty($path_title)) { $path_title .= ' > '; }
+			$path_title .= $parent->title;
+		}
+		if (sizeof($parents) > 1) {
+			$path_title = elgg_echo('esope:pages:parents') . $path_title;
+		} else {
+			$path_title = elgg_echo('esope:pages:parent') . $path_title;
+		}
+		$data['title'] = $path_title;
+	}
+}
+
 
 // excerpt support
 $excerpt = $entity->excerpt;
@@ -77,11 +100,11 @@ switch($template) {
 		$embed_content .= '<strong><a href="' . $entity->getURL() . '">' . $entity->title . '</a></strong><br />';
 		// Meta info
 		$embed_meta = '';
-		if ($entity->tags) $embed_meta .= elgg_echo('tags') . '&nbsp;: ' . implode(', ', $entity->tags) . '<br />';
-		if (!empty($embed_meta)) $embed_content .= '<small>' . $embed_meta . '</small>';
+		if ($entity->tags) { $embed_meta .= elgg_echo('tags') . '&nbsp;: ' . implode(', ', $entity->tags) . '<br />'; }
+		if (!empty($embed_meta)) { $embed_content .= '<small>' . $embed_meta . '</small>'; }
 		$embed_content .= '<br style="clear:both;" />';
 		// Full content
-		if (!empty($description)) $embed_content .= elgg_view('output/longtext', array('value' => $description));
+		if (!empty($description)) { $embed_content .= elgg_view('output/longtext', array('value' => $description)); }
 		// DL link (files)
 		if ($subtype == 'file') {
 			$embed_content .= '<p><a href="' . elgg_get_site_url() . 'file/download/' . $entity->guid . '" target="_blank">' . elgg_echo("file:download") . '</a></p>';
