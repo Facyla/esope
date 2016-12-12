@@ -18,7 +18,9 @@
  * - systematically strip HTML tags from text-only version.
  * 
  * CHANGES :
- * 1. Systematically strip tags from text version => in 
+ * 1. Always add a text version
+ * 2. Systematically strip tags from text version
+ * 3. Add user settings for prefered version(s) ?
  */
 
 

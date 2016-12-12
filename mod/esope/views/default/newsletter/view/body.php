@@ -65,9 +65,19 @@ if (PHP_SAPI !== 'cli') {
 		$email = get_input('e');
 		if ($email) {
 			$replacements['{newsletter_url}'] = $replacements['{newsletter_url}'] . '?e=' . $email;
-			$replacements['{unsublink}'] = newsletter_generate_unsubscribe_link($entity->getContainerEntity(), $email);
+			// ESOPE: avoid warning if container entity not accessible
+			if (elgg_instanceof($container_entity)) {
+				$replacements['{unsublink}'] = newsletter_generate_unsubscribe_link($container_entity, $email);
+			} else {
+				$replacements['{unsublink}'] = false;
+			}
 		} else {
-			$replacements['{unsublink}'] = newsletter_generate_unsubscribe_link($entity->getContainerEntity(), '');
+			// ESOPE: avoid warning if container entity not accessible
+			if (elgg_instanceof($container_entity)) {
+				$replacements['{unsublink}'] = newsletter_generate_unsubscribe_link($container_entity, '');
+			} else {
+				$replacements['{unsublink}'] = false;
+			}
 		}
 	}
 }
