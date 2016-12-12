@@ -1,7 +1,7 @@
 
 /* Newsletter PRINT styles */
 /* Use @media if using inline mode */
-/* @media print { */
+@media print {
 
 	
 	html *, body * { min-height:0 !important; }
@@ -23,6 +23,6 @@
 	#newsletter_header { background: white; border: 0; }
 	#newsletter_online, #newsletter_container { width: 100%; }
 
-/* } */
+}
 
 
