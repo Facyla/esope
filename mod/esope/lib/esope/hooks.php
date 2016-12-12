@@ -96,7 +96,7 @@ function esope_htmlawed_filter_tags($hook, $type, $result, $params) {
 	if ($safe == 'yes') $safe = true; else $safe = false;
 	$elements = elgg_get_plugin_setting('elements', 'htmlawed');
 	$deny_attribute = elgg_get_plugin_setting('deny_attribute', 'htmlawed');
-	if ($deny_attribute === false) $deny_attribute = 'on*';
+	if ($deny_attribute === false) { $deny_attribute = 'on*'; }
 	
 	// seems to handle about everything we need.
 	$htmlawed_config = array();
@@ -106,7 +106,7 @@ function esope_htmlawed_filter_tags($hook, $type, $result, $params) {
 	 * Ou avec filtre : "* -script"	 => bloque <script> seulement
 	 * DOC : http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3
 	 */
-	if (!empty($elements)) $htmlawed_config['elements'] = $elements;
+	if (!empty($elements)) { $htmlawed_config['elements'] = $elements; }
 	
 	// true est trop radical, à moins de lister toutes les balises autorisées ci-dessus
 	// DOC : http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.6
@@ -958,6 +958,39 @@ function esope_layout_hook($hook, $type, $value, $params) {
 	return $value;
 }
 */
+
+
+// Overrides function email
+// Replacement function is defined in lib/esope/htmlt_email_handler.php
+function esope_html_email_handler_emailHandler($hook, $type, $return_value, $params) {
+	static $plugin_setting;
+	
+	if (!isset($plugin_setting)) {
+		$plugin_setting = false;
+	
+		// do we need to handle sending of mails?
+		if (elgg_get_plugin_setting('notifications', 'html_email_handler') === 'yes') {
+			$plugin_setting = true;
+		}
+	}
+	
+	if (!$plugin_setting) {
+		return ;
+	}
+	
+	// if someone else handled sending they should return true|false
+	if (empty($return_value) || !is_array($return_value)) {
+		return;
+	}
+	
+	$additional_params = elgg_extract('params', $return_value);
+	if (is_array($additional_params)) {
+		$return_value = array_merge($return_value, $additional_params);
+	}
+	
+	return esope_html_email_handler_send_email($return_value);
+}
+
 
 
 

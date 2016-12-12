@@ -412,6 +412,13 @@ function esope_init() {
 	elgg_unregister_page_handler('digest', 'digest_page_handler');
 	elgg_register_page_handler('digest', 'esope_digest_page_handler');
 	*/
+	// Override email sending function to address https://github.com/ColdTrick/html_email_handler/issues/36
+	if (elgg_is_active_plugin('html_email_handler')) {
+		elgg_register_library('elgg:html_email_handler', elgg_get_plugins_path() . 'esope/lib/esope/html_email_handler.php');
+		elgg_load_library('elgg:html_email_handler');
+		elgg_unregister_plugin_hook_handler('email', 'system', '\ColdTrick\HTMLEmailHandler\Email::emailHandler');
+		elgg_register_plugin_hook_handler('email', 'system', 'esope_html_email_handler_emailHandler');
+	}
 	
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
@@ -2671,9 +2678,9 @@ function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 	if ($delta_mem > 0) { $delta_mem = "+$delta_mem"; }
 	$last_mem = $mem;
 	
-	$return = "$prefix at $ts : MEM = " . round($mem/1000000) . " MB ($delta_mem MB) / Delta TS = " . round($delta_ts, 4) . " s ";
+	$return = "$ts $prefix : $delta_mem MB " . round($delta_ts, 4) . " s  &nbsp; " . round($mem/1000000) . " MB";
 
-echo $return;
+echo $return . '<br />';
 	if ($error_log) {
 		error_log($return);
 		return true;
