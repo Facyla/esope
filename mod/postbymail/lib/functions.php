@@ -160,6 +160,11 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				
 				// Set the message as read if told to
 				if ($markSeen) { $msgbody = imap_body($mailbox, $uid, FT_UID); } else { $msgbody = imap_body($mailbox, $uid, FT_UID | FT_PEEK); }
+				// @TODO : hack temporaire pour les cas où les hooks et events bloquent l'exécution des actions post-traitement du message
+				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
+				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
+				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
+
 				// Send the header and body through mimeDecode.
 				$mimeParams['input'] = $header.$msgbody;
 				$message = Mail_mimeDecode::decode($mimeParams);
@@ -340,7 +345,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				
 				if ($mailpost && !empty($post_key)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					// @TODO pass an retrieve arrays to avoid settings unique vars..
+					// @TODO pass and retrieve arrays to avoid settings unique vars..
 					//$post_check = postbymail_checkeligible_post($post_key, $member, $post_subtype, $post_access, $hash);
 					$post_check = postbymail_checkeligible_post($pbm_params);
 					$mailpost_check = $post_check['check']; // Ok pour publier ?
@@ -352,6 +357,10 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 					$report = $post_check['report'];
 					$body .= $report;
 					if ($debug) $admin_reply .= $report;
+					
+					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
+					global $SESSION;
+					if (elgg_instanceof($post_owner, 'user')) { $SESSION['user'] = $post_owner; }
 					//$sender_reply .= $report;
 				}
 				// Désactivation de l'autre fonction si la publication par clef est valide
@@ -364,7 +373,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				// Si les réponses par mail sont activées, on vérifie qu'on a les paramètres requis
 				if ($mailreply && !empty($guid)) {
 					// string or false	false, ou $hash publication pour vérifier si déjà publié via le hash (et supprimé par exemple, ou si on a remis les messages comme non lus..)
-					// @TODO pass an retrieve arrays to avoid settings unique vars..
+					// @TODO pass and retrieve arrays to avoid settings unique vars..
 					//$reply_check = postbymail_checkeligible_reply($entity, $member, $post_body, $message->headers, $hash);
 					$reply_check = postbymail_checkeligible_reply($pbm_params);
 					$mailreply_check = $reply_check['check'];
@@ -375,6 +384,10 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 					$body .= $report;
 					//$admin_reply .= $report;
 					//$sender_reply .= $report;
+					
+					// Set $SESSION['user'] so that plugins that are not build for CRON tasks still work...
+					global $SESSION;
+					if (elgg_instanceof($member, 'user')) { $SESSION['user'] = $member; }
 				}
 				
 				
@@ -468,7 +481,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							$new_post = new ElggObject;
 							$new_post->subtype = "thewire";
 							$new_post->owner_guid = $post_owner->guid;
-							$new_post->container_guid = $post_owner->guid;
+							// Support group wire
+							if (elgg_instanceof($post_container, 'group') || elgg_instanceof($post_container, 'user')) {
+								$new_post->container_guid = $post_container->guid;
+							} else {
+								$new_post->container_guid = $post_owner->guid;
+							}
 							//$new_post->title = $message->headers['subject'];
 							// @TODO add reply to
 							//$new_post->wire_thread
@@ -588,8 +606,12 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 							case 'thewire':
 								// River OK + Notification OK
 								// Nouvelle publication en réponse à la première(parent = $entity dans ce cas)
-								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'site');
+								$thewire_guid = thewire_save_post($post_body, $member->guid, $entity->access_id, $entity->guid, 'email');
 								if ($thewire_guid) {
+									$thewire = get_entity($thewire_guid);
+									// Support group wire
+									$thewire->container_guid = $entity->container_guid;
+									$thewire->save();
 									$published = true;
 									$body .= elgg_echo("postbymail:mailreply:success");
 									// Send response to original poster if not already registered to receive notification
@@ -795,7 +817,7 @@ function postbymail_checkandpost($server, $protocol, $inbox_name, $username, $pa
 				/**********************************/
 				// Que le message soit publié ou pas il est traité, donc on le marque comme lu : sauf re-marquage comme non lu, on ne le traitera plus
 				//imap_setflag_full($mailbox, $uid, "\\Seen \\Deleted", ST_UID);	 Marquage comme lu, Params : Seen, Answered, Flagged (= urgent), Deleted (sera effacé), Draft, Recent
-				imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID);
+				//imap_setflag_full($mailbox, $uid, "\\Seen", ST_UID); // => déplacé en haut de boucle pour éviter les multi-publications (en cas d'interruption de l'exécution avant marquage et déplacement du message)
 				// Si le message est publié, on le marque en plus comme traité et on le range dans un dossier
 				if ($published) {
 					imap_setflag_full($mailbox, $uid, "\\Answered", ST_UID);
@@ -992,31 +1014,49 @@ function postbymail_checkeligible_reply($params) {
 	// Vérifications préliminaires - au moindre problème, on annule la publication
 	$mailreply_check = true;
 	if ($params['entity'] && elgg_instanceof($params['entity'], 'object')) {
-		$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+		if (!empty($params['entity']->title)) {
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->title));
+		} else {
+			$report .= elgg_echo('postbymail:validobject', array($params['entity']->name));
+		}
+		
+		// @TODO : replace all by $params['entity']->canComment($params['member']->guid);
+		
 		// Container
 		if ($group_entity = get_entity($params['entity']->container_guid)) {
 			$report .= elgg_echo('postbymail:containerok');
 			// Membre
 			if (elgg_instanceof($params['member'], 'user')) {
 				$report .= elgg_echo('postbymail:memberok', array($params['member']->name));
-				// Check the user is a group member, or if he is the group owner, or if he is an admin
+				// Check the user is a group member, or if he is the group owner, or if he is an admin,
+				// or he can just comment because the object access level allows it
 				if (elgg_instanceof($group_entity, 'group')) {
 					$report .= elgg_echo('postbymail:groupok', array($group_entity->name));
-					if (($group_entity->isMember($params['member']))
+					if (
+						($group_entity->isMember($params['member']))
 						|| ($group_entity->owner_guid == $params['member']->guid)
-						|| $params['member']->admin || $params['member']->siteadmin ) {
+						|| $params['member']->admin || $params['member']->siteadmin
+						) {
 							$report .= elgg_echo('postbymail:ismember', array($params['member']->name, $group_entity->name));
 						} else {
-							$report .= elgg_echo('postbymail:error:nogroupmember', array($params['member']->name, $group_entity->name));
-							$mailreply_check = false;
+							if ($params['entity']->canComment($params['member']->guid)) {
+								$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $group_entity->name));
+							} else {
+								$report .= elgg_echo('postbymail:error:nogroupmember', array($params['member']->name, $group_entity->name));
+								$mailreply_check = false;
+							}
 						}
 				} else if (elgg_instanceof($group_entity, 'user')) {
 					// Member container allowed : personnal publications + messages replies
 					//$report .= elgg_echo('postbymail:error:notingroup:user');
 					//$mailreply_check = false;
 				} else {
-					$report .= elgg_echo('postbymail:error:notingroup');
-					$mailreply_check = false;
+					if ($params['entity']->canComment($params['member']->guid)) {
+						$report .= elgg_echo('postbymail:canedit', array($params['member']->name, $group_entity->name));
+					} else {
+						$report .= elgg_echo('postbymail:error:notingroup');
+						$mailreply_check = false;
+					}
 				}
 			} else {
 				$report .= elgg_echo('postbymail:error:nomember');

@@ -12,8 +12,8 @@ $guid = (int) get_input('guid');
 
 gatekeeper();
 if ($slider = get_entity($guid)) {
-	if ($slider->canEdit()) {
-		if ($slider->getSubtype() == "slider") {
+	if (elgg_instanceof($slider, 'object', 'slider')) {
+		if ($slider->canEdit()) {
 			if ($slider->delete()) {
 				system_message(elgg_echo("slider:deleted"));
 			} else {
@@ -22,8 +22,8 @@ if ($slider = get_entity($guid)) {
 		} else {
 			register_error(elgg_echo("slider:delete:fail"));
 		}
-	} else register_error(elgg_echo("slider:delete:fail"));
-} else register_error(elgg_echo("slider:delete:fail"));
+	} else { register_error(elgg_echo("slider:delete:fail")); }
+} else { register_error(elgg_echo("slider:delete:fail")); }
 
 forward("slider");
 

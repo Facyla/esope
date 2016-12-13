@@ -8,8 +8,6 @@
  * @link http://items.fr/
  */
 
-global $CONFIG;
-
 $entity_guid = get_input("guid");
 if ($entity_guid) {
 	$entity = get_entity($entity_guid);

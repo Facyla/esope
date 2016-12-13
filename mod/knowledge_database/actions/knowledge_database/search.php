@@ -12,9 +12,13 @@ $results = esope_esearch(array('add_count' => true, 'returntype' => 'entities', 
 // Count results
 $count = sizeof($results);
 echo '<p><strong><span class="esope-results-count">';
-if ($count == 1) echo elgg_echo('knowledge_database:resultscount1', array($count));
-else if ($count > 1) echo elgg_echo('knowledge_database:resultscount', array($count));
-else echo elgg_echo('knowledge_database:noresult');
+if ($count > 1) {
+	echo elgg_echo('knowledge_database:resultscount', array($count));
+} else if ($count == 1) {
+	echo elgg_echo('knowledge_database:resultscount1', array($count));
+} else {
+	echo elgg_echo('knowledge_database:noresult');
+}
 echo '</span></strong></p>';
 
 // Display results

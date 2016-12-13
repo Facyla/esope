@@ -1,5 +1,4 @@
 <?php
-global $CONFIG;
 
 if (!elgg_is_active_plugin('hybridauth')) {
 	register_error("Hybridauth must be activated and configured first !");
@@ -31,10 +30,10 @@ $config = dirname(dirname(dirname(dirname(__FILE__)))) . '/hybridauth/hybridauth
 // Try authentication
 try{
 	// hybridauth EP
-	$hybridauth = new Hybrid_Auth( $config );
+	$hybridauth = new Hybrid_Auth($config);
 
 	// automatically try to login with Linkedin
-	$linkedin = $hybridauth->authenticate( "LinkedIn" );
+	$linkedin = $hybridauth->authenticate("LinkedIn");
 
 	// (bool) check if the user is connected to linkedin before getting user profile, posting stuffs, etc..
 	$is_user_logged_in = $linkedin->isUserConnected();
@@ -162,9 +161,9 @@ try{
 			}
 			// Import report
 			if (!empty($form_report)) {
-				$str_editprofile = '<a href="' . $CONFIG->url . 'profile/' . $own->username . '/edit">' . elgg_echo('hybridauth:linkedin:editprofile'). '</a>';
-				$str_editavatar = '<a href="' . $CONFIG->url . 'avatar/edit/' . $own->username . '">' . elgg_echo('hybridauth:linkedin:editavatar'). '</a>';
-				$str_viewprofile = '<a href="' . $CONFIG->url . 'profile/' . $own->username . '">' . elgg_echo('hybridauth:linkedin:viewprofile'). '</a>';
+				$str_editprofile = '<a href="' . elgg_get_site_url() . 'profile/' . $own->username . '/edit">' . elgg_echo('hybridauth:linkedin:editprofile'). '</a>';
+				$str_editavatar = '<a href="' . elgg_get_site_url() . 'avatar/edit/' . $own->username . '">' . elgg_echo('hybridauth:linkedin:editavatar'). '</a>';
+				$str_viewprofile = '<a href="' . elgg_get_site_url() . 'profile/' . $own->username . '">' . elgg_echo('hybridauth:linkedin:viewprofile'). '</a>';
 				$content .= '<div class="linkedin-import-report"><strong>' . elgg_echo('hybridauth:linkedin:import:done') . '</strong><br />' . $form_report . '<br />';
 				$content .= '<p>' . elgg_echo('hybridauth:linkedin:import:after', array($str_editprofile, $str_editavatar, $str_viewprofile)) . '</p>';
 				$content .= '</div><div class="clearfloat"></div>';

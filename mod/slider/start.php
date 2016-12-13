@@ -51,6 +51,7 @@ function slider_plugin_init() {
 	// Register actions
 	$actions_path = elgg_get_plugins_path() . 'slider/actions/slider/';
 	elgg_register_action("slider/edit", $actions_path . 'edit.php');
+	elgg_register_action("slider/clone", $actions_path . 'clone.php');
 	elgg_register_action("slider/delete", $actions_path . 'delete.php');
 	
 		// register the JavaScript (autoloaded in 1.10)
@@ -76,6 +77,11 @@ function slider_url($slider) {
  */
 function slider_get_entity_by_name($name = '') {
 	if (!empty($name)) {
+		// Check first by GUID
+		$slider = get_entity($name);
+		if (elgg_instanceof($slider, 'object', 'slider')) { return $slider; }
+		
+		// Alternate method #2 by slider name
 		$sliders = elgg_get_entities_from_metadata(array(
 				'types' => 'object', 'subtypes' => 'slider', 
 				'metadata_name_value_pairs' => array('name' => 'name', 'value' => $name), 

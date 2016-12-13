@@ -38,6 +38,11 @@
 		</div>
 	</div>
 	
+	<div>
+		<label><?php echo elgg_echo('tags'); ?></label>
+		<?php echo elgg_view('input/tags', array('name' => 'tags', 'value' => ' ')); ?>
+	</div>
+	
 	<?php if(file_tools_use_folder_structure()){ ?>
 	<div>
 		<label><?php echo elgg_echo("file_tools:forms:edit:parent"); ?><br />
@@ -46,7 +51,13 @@
 		?>
 		</label>
 	</div>
-	<?php }?>
+	<?php }
+	
+	$categories = elgg_view('input/categories', $vars);
+	if ($categories) {
+		echo $categories;
+	}
+	?>
 	
 	<div>
 		<label>

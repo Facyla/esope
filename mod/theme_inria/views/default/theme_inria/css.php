@@ -94,8 +94,8 @@ $module_bg_color = '#F8F4F5';
 
 /* Slider */
 /* Limit slides content size */
-.iris-news { height: 200px; overflow:hidden; }
-.iris-news #slider1 img { max-height: 200px !important; }
+.iris-news { height: auto; overflow:hidden; }
+.iris-news #slider1 img { max-height: 300px !important; }
 /* Slider styles */
 .anythingSlider li.panel { display:none; }
 .anythingSlider li.panel.activePage { display:block; }
@@ -210,10 +210,22 @@ footer.footer-inria {
 .elgg-context-dashboard > .elgg-main { padding: 0; }
 .home-news { /* background:#efefef; */ padding:0.5em 1em; margin-bottom:1em; }
 .elgg-context-dashboard .elgg-form-thewire-add { width: 100%; }
-.elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; }
-.elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 5%; text-align: center; margin: 0; }
+.elgg-context-dashboard .elgg-form-thewire-add #thewire-characters-remaining { float:none; margin: 22px 0 0 0; font-size: 1.2em; }
+.elgg-context-dashboard .elgg-form-thewire-add .elgg-foot { padding: 0 0 0.5em 0; text-align: left; margin: 0; }
 
-.home-box { margin-bottom: 30px; background: <?php echo $module_bg_color; ?>; padding: 0.8em 10px; border-radius: 5px; }
+.thewire-form #thewire-characters-remaining { font-weight: normal !important; color: #999 !important; float:none; font-size: 1.2em; }
+.thewire-form #thewire-characters-remaining.thewire-characters-remaining-warning { font-weight: bold !important; color: #F00 !important; }
+/* Note : si on veut ajouter un message il faudra modifier le JS et la structure HTML...
+#thewire-characters-remaining .thewire-characters-remaining-message { display:none; }
+#thewire-characters-remaining.thewire-characters-remaining-warning .thewire-characters-remaining-message { display:inline; }
+*/
+#thewire-characters-remaining span { margin: 3px 12px 0 0; float:none; font-size: 1.2em; }
+#thewire-textarea { font-size: 1.2em; height:4em; }
+.home-wire #thewire-textarea { margin-top: 0; }
+.home-wire .thewire-form { padding: 0; }
+.home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
+
+.home-box { margin-bottom: 1em; background: <?php echo $module_bg_color; ?>; padding: 0.5em 0.5em; border-radius: 5px; }
 .home-box h3:first-child, .home-box h3:first-child a { font-size:14px; font-family:<?php echo $font2; ?>; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 .home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:22px; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
@@ -226,8 +238,24 @@ footer.footer-inria {
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
 
+/* The Wire */
+.thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
+.elgg-form-thewire-group-add .elgg-foot { padding: 0 0 0.5em 0; }
+/*
+.elgg-form-thewire-group-add #thewire-textarea { width: 80%; float: left; height: 3em; margin-top: 0; }
+*/
+.elgg-form-thewire-group-add #thewire-textarea { height: 4em; padding: 1px 3px; }
+.elgg-form-thewire-group-add #thewire-characters-remaining span { margin: 0 12px 0 0; float:none; font-size: 1.2em; }
+.thewire-remaining-message { color: red; }
+.elgg-form-thewire-group-add .elgg-button-submit { margin-top: 3px; }
+.theme_inria-thewire-group-add {}
+.theme_inria-thewire-group-add h3 { margin-top: 20px; }
+
+
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
+.river-inria-info { margin: 24px auto 12px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
+
 
 
 /* Widgets */

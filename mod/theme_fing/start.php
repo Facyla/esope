@@ -53,6 +53,9 @@ function theme_fing_init(){
 	// Page handlers
 	elgg_register_page_handler("fing", "fing_page_handler");
 	elgg_register_page_handler("qntransitions", "qntransitions_page_handler");
+	elgg_register_page_handler("futureduc", "futureduc_page_handler");
+	elgg_register_page_handler("softplace", "softplace_page_handler");
+	elgg_register_page_handler("questions-numeriques", "questionsnumeriques_page_handler");
 	
 	
 	// Remplacement du modèle d'event_calendar
@@ -97,18 +100,31 @@ function theme_fing_init(){
 
 	*/
 	
+	// Enable remote login + retrieve some profile fields
+	// API token mandatory (but not user token, as we authenticate directly through this API)
+	expose_function(
+		"fing.external.auth",
+		"fing_external_auth",
+		array(
+			'username' => array ('type' => 'string'),
+			'password' => array ('type' => 'string'),
+		),
+		elgg_echo('fing.external.auth'),
+		'POST',
+		true,
+		false
+	);
+	
 }
 
 
 // Theme Fing index
 function theme_fing_index(){
-	global $CONFIG;
 	include(dirname(__FILE__) . '/pages/theme_fing/loggedin_homepage.php');
 	return true;
 }
 
 function theme_fing_public_index() {
-	global $CONFIG;
 	include(dirname(__FILE__) . '/pages/theme_fing/public_homepage.php');
 	return true;
 }
@@ -169,6 +185,9 @@ function fing_page_handler($page){
 			set_input('theme', $page[0]);
 			include(dirname(__FILE__) . '/pages/theme_fing/groups.php');
 			break;
+		case 'auth':
+			include(dirname(__FILE__) . '/pages/theme_fing/authentication.php');
+			break;
 		default:
 			include(dirname(__FILE__) . '/pages/theme_fing/index.php');
 	}
@@ -181,6 +200,24 @@ function qntransitions_page_handler($page){
 	include(dirname(__FILE__) . '/pages/theme_fing/qntransitions.php');
 	return true;
 }
+
+// Raccourcis éditoriaux
+function futureduc_page_handler($page){
+	$forward = elgg_get_site_url() . 'groups/profile/162252/futureduc';
+	header("Location: {$forward}");
+	exit;
+}
+function softplace_page_handler($page){
+	$forward = elgg_get_site_url() . 'groups/profile/161884/softplace';
+	header("Location: {$forward}");
+	exit;
+}
+function questionsnumeriques_page_handler($page){
+	$forward = elgg_get_site_url() . 'groups/profile/40689/questions-numeriques';
+	header("Location: {$forward}");
+	exit;
+}
+
 
 
 /**
@@ -336,5 +373,52 @@ function theme_fing_htmlawed_filter_tags($hook, $type, $result, $params) {
 	return $result;
 }
 */
+
+
+
+/**
+ * The auth.gettoken API.
+ * This API call lets a user log in, returning an authentication token which can be used
+ * to authenticate a user for a period of time. It is passed in future calls as the parameter
+ * auth_token.
+ *
+ * @param string $username Username
+ * @param string $password Clear text password
+ *
+ * @return string Token string or exception
+ * @throws SecurityException
+ * @access private
+ */
+function fing_external_auth($username, $password) {
+	// check if username is an email address
+	if (is_email_address($username)) {
+		$users = get_user_by_email($username);
+			
+		// check if we have a unique user
+		if (is_array($users) && (count($users) == 1)) {
+			$username = $users[0]->username;
+		}
+	}
+	
+	// validate username and password
+	if (true === elgg_authenticate($username, $password)) {
+		$user = get_user_by_username($username);
+		if (elgg_instanceof($user, 'user')) {
+			$token = create_user_token($username);
+			$result = array(
+					'token' => $token,
+					'username' => $username,
+					'email' => $user->email,
+					'name' => $user->name,
+					'organisation' => $user->organisation,
+					'description' => $user->description,
+					'interests' => $user->interests,
+				);
+			return serialize($result);
+		}
+	}
+
+	throw new SecurityException(elgg_echo('SecurityException:authenticationfailed'));
+}
 
 

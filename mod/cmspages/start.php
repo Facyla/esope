@@ -497,10 +497,22 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			$full_view = $module_config['full_view'];
 			$type = $module_config['type'];
 			$subtype = $module_config['subtype'];
-			$limit = $module_config['limit']; if (!isset($limit)) $limit = 5;
-			$sort = $module_config['sort']; if (!isset($sort)) $sort = "time_created desc";
+			$limit = $module_config['limit'];
+			if (!isset($limit)) $limit = 5;
+			$sort = $module_config['sort'];
+			if (!isset($sort)) $sort = "time_created desc";
+			$guids = $module_config['guids'];
 			$owner_guids = $module_config['owner_guids'];
 			$container_guids = $module_config['container_guids'];
+			//Extract multiple values
+			$fields_multiple = array('guids', 'owner_guids', 'container_guids');
+			foreach($fields_multiple as $field) {
+				if (strpos($$field, ',')) {
+					$$field = explode(',', $$field);
+					$$field = array_filter($$field);
+					$$field = array_unique($$field);
+				}
+			}
 			// We need arrays as params
 			//$type = explode(',', $type);
 			//$subtype = explode(',', $subtype);
@@ -510,10 +522,11 @@ function cmspages_compose_module($module_name, $module_config = false) {
 			if (!$subtype) $subtype = '';
 			//$ents = elgg_get_entities(array('type_subtype_pairs' => array($type => $subtype), 'limit' => $limit, 'order_by' => $sort));
 			$params = array('types' => $type, 'subtypes' => $subtype, 'limit' => $limit, 'order' => $sort);
+			if (sizeof($guids) > 0) $params['guids'] = $guids;
 			if (sizeof($owner_guids) > 0) $params['owner_guids'] = $owner_guids;
 			if (sizeof($container_guids) > 0) $params['container_guids'] = $container_guids;
 			// Get the entities
-			$ents = elgg_get_entities($params);
+			$ents = elgg_get_entities_from_relationship($params);
 			
 			// Rendu groupe et membre
 			if (in_array($module_config['type'], array('group', 'user'))) {
@@ -554,8 +567,12 @@ function cmspages_compose_module($module_name, $module_config = false) {
 		case 'entity':
 			// Affichage d'une entité : celle-ci doit exister
 			// champs ou template au choix ? autres paramètres ?
-			$return .= '<h3>' . elgg_echo('cmspages:chosenentity') . '</h3>';
-			if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) $return .= $ent->guid . ' : ' . $ent->title . $ent->name . '<br />' . $ent->description;
+			//$return .= '<h3>' . elgg_echo('cmspages:chosenentity') . '</h3>';
+			//if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) $return .= $ent->guid . ' : ' . $ent->title . $ent->name . '<br />' . $ent->description;
+			//$return .= elgg_echo('cmspages:chosenentity') . '</h3>';
+			if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) {
+				$return .= '<h3>' . $ent->title . $ent->name . '</h3><div class="elgg-output">' . $ent->description . '</div>';
+			}
 			break;
 			
 		case 'view':
@@ -586,7 +603,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
  *        + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
  *   - 'embed' : can be passed to change some rendering elements based on read embed
  *   - 'add_edit_link' : allow non-defined pages rendering (and edit links)
- *        Removes admin links (useful for 'inner' and 'iframe' embed mode, required for tinymce templates)
+ *   - 'noedit' : Removes admin links (useful for 'inner' and 'iframe' embed mode, required for tinymce templates)
  * STEPS :
  * 1. Check validity, access, contexts (can we display that page ?)
  * 2. Render cmspage "own" content
@@ -614,6 +631,9 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	if ($params['noedit'] == 'true') $add_edit_link = false;
 	if (!empty($params['embed'])) $embed = $params['embed'];
 	if (!isset($params['recursion'])) $params['recursion'] = array();
+	$read_more = false;
+	if (isset($vars['read_more'])) $read_more = $vars['read_more'];
+
 	
 	
 	/* 1. Check validity, access, contexts (can we display that page ?) */
@@ -652,7 +672,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 			}
 			if ($exit) {
 				if ($mode != 'view') {
-					register_error('cmspages:wrongcontext');
+					register_error(elgg_echo('cmspages:wrongcontext'));
 					//forward(REFERER);
 				}
 				return;
@@ -665,7 +685,7 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$content = '';
 	// Contexte spécifique
 	elgg_push_context('cmspages');
-	elgg_push_context('cmspages:pagetype:' . $pagetype);
+	elgg_push_context('cmspages-pagetype-' . $pagetype);
 	
 	// Start composing content
 	if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
@@ -745,23 +765,32 @@ function cmspages_view($cmspage, $params = array(), $vars = array()) {
 	$edit_link = '';
 	if ($add_edit_link && $is_editor) {
 		$edit_level = count($params['recursion']);
-		$edit_link = '<i class="fa fa-edit"></i>';
+		$edit_icon = '<i class="fa fa-edit"></i>';
+		$edit_title = elgg_echo('cmspages:editlink', array($pagetype));
 		if ($edit_level > 0) {
-			$edit_link = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
-			$edit_title = elgg_echo('cmspages:nestedlevel', array($edit_level));
+			$edit_icon = '<i class="fa fa-edit">(' . $edit_level . ')</i>';
+			$edit_title .= ' - ' . elgg_echo('cmspages:nestedlevel', array($edit_level));
 		}
 		if ($cmspage) {
-			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></a>';
+			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:edit', array($pagetype)) . '</kbd></span>';
 		} else {
-			$edit_link .= '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
-			$edit_link .= '<a class="cmspages-admin-link cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></a>';
+			$edit_details = '<blockquote class="notexist">' . elgg_echo('cmspages:notexist:create') . '</blockquote>';
+			$edit_link .= '<span class="cmspages-admin-link"><kbd>' . elgg_echo('cmspages:createnew', array($pagetype)) . '</kbd></span>';
 		}
+		$edit_link = '<a class="cmspages-admin-block cmspages-edit-level-' . $edit_level . '" href="' . elgg_get_site_url() . 'cmspages/edit/' . $pagetype . '" title="' . $edit_title . '"> ' . $edit_link . $edit_icon . '</a>' . $edit_details;
 	}
+	
+	// If asked for "Read more" button, apply it to the whole content (but before the wrapper)
+	if ($read_more && $cmspage) {
+		$content = elgg_get_excerpt($content, $read_more);
+		$content .= '<p><a href="' . $cmspage->getURL() . '" class="elgg-button elgg-button-action elgg-button-esope">' . elgg_echo('cmspages:readmore') . '</a></p>';
+	}
+	
 	
 	/* 4. Wrap into container (.cmspages-output) */
 	// Add enclosing span for custom styles + optional editable class and edit link
 	if ($add_edit_link && $is_editor) {
-		$content = '<span class="cmspages-output cmspages-editable">' . $content . $edit_link . '</span>';
+		$content = '<span class="cmspages-output cmspages-editable">' . $edit_link . $content . '</span>';
 	} else {
 		$content = '<span class="cmspages-output">' . $content . '</span>';
 	}

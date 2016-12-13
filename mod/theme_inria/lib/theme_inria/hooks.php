@@ -7,14 +7,12 @@
 
 // Theme inria logged in index page
 function theme_inria_index(){
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/loggedin_homepage.php');
 	return true;
 }
 
 // Theme inria public index page
 function theme_inria_public_index() {
-	global $CONFIG;
 	include(elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/public_homepage.php');
 	return true;
 }
@@ -76,8 +74,7 @@ function theme_inria_user_hover_menu($hook, $type, $return, $params) {
 
 /* Modification des Boutons des widgets */
 function theme_inria_widget_menu_setup($hook, $type, $return, $params) {
-	global $CONFIG;
-	$urlicon = $CONFIG->url . 'mod/theme_inria/graphics/';
+	$urlicon = elgg_get_site_url() . 'mod/theme_inria/graphics/';
 	
 	$widget = $params['entity'];
 	$show_edit = elgg_extract('show_edit', $params, true);
@@ -506,32 +503,45 @@ function theme_inria_object_notifications_block($hook, $entity_type, $returnvalu
 
 /* Cron (daily) tasks
  * Perfom some checks and cleanup
+ * Note : registered as hourly, but runs only at a specific hour (this is to avoid overlap with other cron)
  */
 function theme_inria_daily_cron($hook, $entity_type, $returnvalue, $params) {
 	elgg_set_context('cron');
 	
-	// Avoid any time limit while processing
-	set_time_limit(0);
-	access_show_hidden_entities(true);
-	$ia = elgg_set_ignore_access(true);
+	// Run only once per day, at 4 AM (in this hour at least)
+	// Also allow forced run (for admins)
+	// This avoids running at the same time as another cron, which would block it (if it doesn't have time limit settings, etc.)
+	$cron_hour = 4;
+	$current_hour = date('H');
+	if (($cron_hour == $current_hour) || ($params['force'] == 'yes')) {
+		
+		// Avoid any time limit while processing
+		set_time_limit(0);
+		access_show_hidden_entities(true);
+		$ia = elgg_set_ignore_access(true);
+		
+		// LDAP accounts check : check LDAP validity
+		if (elgg_is_active_plugin('ldap_auth')) {
+			error_log("CRON : LDAP start " . date('Ymd H:i:s'));
+			$debug_0 = microtime(TRUE);
+			$users_options = array('types' => 'user', 'limit' => 0);
+			$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_cron_ldap_check', 10);
+			$debug_1 = microtime(TRUE);
+			error_log("CRON : LDAP end " . date('Ymd H:i:s') . " => " . round($debug_1-$debug_0, 4) . " secondes");
+			echo '<p>' . elgg_echo('theme_inria:cron:ldap:done') . '</p>';
+		}
 	
-	// LDAP accounts check : check LDAP validity
-	if (elgg_is_active_plugin('ldap_auth')) {
-		error_log("CRON : LDAP start " . date('Ymd H:i:s'));
-		$debug_0 = microtime(TRUE);
-		$users_options = array('types' => 'user', 'limit' => 0);
-		$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_cron_ldap_check', 10);
-		$debug_1 = microtime(TRUE);
-		error_log("CRON : LDAP end " . date('Ymd H:i:s') . " => " . round($debug_1-$debug_0, 4) . " secondes");
-		echo '<p>' . elgg_echo('theme_inria:cron:ldap:done') . '</p>';
+		elgg_set_ignore_access($ia);
+		echo '<p>' . elgg_echo('theme_inria:cron:done') . '</p>';
 	}
-	
-	elgg_set_ignore_access($ia);
-	echo '<p>' . elgg_echo('theme_inria:cron:done') . '</p>';
 }
 
 // CRON : LDAP user check
 function theme_inria_cron_ldap_check($user, $getter, $options) {
+	//$debug_0 = microtime(TRUE);
+	// Check LDAP data
+	inria_check_and_update_user_status('login', 'user', $user);
+	
 	// Process all and any users, BUT only clear some metadata when account is not Inria (valid LDAP)
 	if (!$user->isEnabled() || $user->isbanned() || ($user->memberstatus == 'closed')) {
 		// Clean up Inria fields for any non-active Inria accounts
@@ -545,9 +555,6 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 	if ($user->memberstatus == 'closed') return;
 	
 	
-	//$debug_0 = microtime(TRUE);
-	// Check LDAP data
-	inria_check_and_update_user_status('login', 'user', $user);
 	//$debug_1 = microtime(TRUE);
 	//error_log("  - {$user->guid} : {$user->name} => " . round($debug_1-$debug_0, 4));
 	

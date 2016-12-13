@@ -91,6 +91,8 @@ if (elgg_instanceof($cmspage, 'object', 'cmspage')) {
 	$footer = $cmspage->footer; // Use a custom footer ?
 	$css = $cmspage->css;
 	$js = $cmspage->js;
+	// Add current access level if it has been set to non-core levels
+	if (!isset($access_opt[$access])) { $access_opt[$access] = get_readable_access_level($access); }
 } else {
 	// New page : set only default access
 	$title = $newpage_title; // Set it from pagetype only at creation, never later (would override title)

@@ -1,5 +1,5 @@
 <?php
-	include "../../inc/survey/pro/report.inc.php";
+	include_once "../../inc/survey/pro/report.inc.php";
 	
 	$cid = '';
 	$gid = '';

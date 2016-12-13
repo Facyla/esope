@@ -2,7 +2,7 @@
 require_once(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . '/engine/start.php';
 
 	//session_start();
-	include "ziplib/zip.lib.php";
+	include_once "ziplib/zip.lib.php";
 
 	if(!isset($_SESSION['check_id'])){
 		header("HTTP/1.0 403 Permission refused");

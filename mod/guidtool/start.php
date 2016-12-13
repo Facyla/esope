@@ -12,15 +12,13 @@
 /**
  * Initialise the tool and set menus.
  */
-function guidtool_init()
-{
-	global $CONFIG;
+function guidtool_init() {
 	
 	// Register a page handler, so we can have nice URLs
 	elgg_register_page_handler('guidtool','guidtool_page_handler');
 	
 	// Register some actions
-	$action_path = $CONFIG->pluginspath . 'guidtool/actions/guidtool/';
+	$action_path = elgg_get_plugins_path() . 'guidtool/actions/guidtool/';
 	elgg_register_action("guidtool/delete", $action_path . 'delete.php', 'admin');
 	elgg_register_action("guidtool/edit", $action_path . 'edit.php', 'admin');
 	
@@ -30,11 +28,9 @@ function guidtool_init()
  * Post init gumph.
  */
 function guidtool_page_setup() {
-	global $CONFIG;
-	
 	if ((elgg_is_admin_logged_in()) && (elgg_get_context()=='admin')) {
-		elgg_register_menu_item('admin', array('name' => 'guidtool:browse', 'href' => $CONFIG->wwwroot."guidtool/", 'text' => elgg_echo('guidtool:browse')));
-		elgg_register_menu_item('admin', array('name' => 'guidtool:import', 'href' => $CONFIG->wwwroot."guidtool/import/", 'text' => elgg_echo('guidtool:import')));
+		elgg_register_menu_item('admin', array('name' => 'guidtool:browse', 'href' => elgg_get_site_url() . "guidtool/", 'text' => elgg_echo('guidtool:browse')));
+		elgg_register_menu_item('admin', array('name' => 'guidtool:import', 'href' => elgg_get_site_url() . "guidtool/import/", 'text' => elgg_echo('guidtool:import')));
 	}
 }
 
@@ -44,8 +40,7 @@ function guidtool_page_setup() {
  * @param array $page Array of page elements, forwarded by the page handling mechanism
  */
 function guidtool_page_handler($page) {
-	global $CONFIG;
-	$base = $CONFIG->pluginspath . 'guidtool/pages/guidtool/';
+	$base = elgg_get_plugins_path() . 'guidtool/pages/guidtool/';
 	
 	if (isset($page[0])) {
 		switch ($page[0]) {
@@ -53,9 +48,9 @@ function guidtool_page_handler($page) {
 			case 'view' :
 				if ((isset($page[1]) && (!empty($page[1])))) {
 					set_input('entity_guid', $page[1]);
-					elgg_register_menu_item('page', array('name' => 'guidtool:view', 'href' => $CONFIG->url . "guidtool/view/{$page[1]}/", 'text' => 'View GUID&nbsp;: '.$page[1]));
-					elgg_register_menu_item('page', array('name' => 'guidtool:export', 'href' => $CONFIG->url . "guidtool/export/{$page[1]}/", 'text' => elgg_echo('guidbrowser:export')));
-					elgg_register_menu_item('page', array('name' => 'guidtool:edit', 'href' => $CONFIG->url . "guidtool/edit/{$page[1]}/", 'text' => 'Edit GUID&nbsp;: '.$page[1]));
+					elgg_register_menu_item('page', array('name' => 'guidtool:view', 'href' => elgg_get_site_url() . "guidtool/view/{$page[1]}/", 'text' => 'View GUID&nbsp;: '.$page[1]));
+					elgg_register_menu_item('page', array('name' => 'guidtool:export', 'href' => elgg_get_site_url() . "guidtool/export/{$page[1]}/", 'text' => elgg_echo('guidbrowser:export')));
+					elgg_register_menu_item('page', array('name' => 'guidtool:edit', 'href' => elgg_get_site_url() . "guidtool/edit/{$page[1]}/", 'text' => 'Edit GUID&nbsp;: '.$page[1]));
 					include($base . 'view.php');
 				} else include($base . 'index.php'); 
 				break;
@@ -63,9 +58,9 @@ function guidtool_page_handler($page) {
 			case 'edit' :
 				if ((isset($page[1]) && (!empty($page[1])))) {
 					set_input('entity_guid', $page[1]);
-					elgg_register_menu_item('page', array('name' => 'guidtool:view', 'href' => $CONFIG->url . "guidtool/view/{$page[1]}/", 'text' => 'View GUID&nbsp;: '.$page[1]));
-					elgg_register_menu_item('page', array('name' => 'guidtool:export', 'href' => $CONFIG->url . "guidtool/export/{$page[1]}/", 'text' => elgg_echo('guidbrowser:export')));
-					elgg_register_menu_item('page', array('name' => 'guidtool:edit', 'href' => $CONFIG->url . "guidtool/edit/{$page[1]}/", 'text' => 'Edit GUID&nbsp;: '.$page[1]));
+					elgg_register_menu_item('page', array('name' => 'guidtool:view', 'href' => elgg_get_site_url() . "guidtool/view/{$page[1]}/", 'text' => 'View GUID&nbsp;: '.$page[1]));
+					elgg_register_menu_item('page', array('name' => 'guidtool:export', 'href' => elgg_get_site_url() . "guidtool/export/{$page[1]}/", 'text' => elgg_echo('guidbrowser:export')));
+					elgg_register_menu_item('page', array('name' => 'guidtool:edit', 'href' => elgg_get_site_url() . "guidtool/edit/{$page[1]}/", 'text' => 'Edit GUID&nbsp;: '.$page[1]));
 					include($base . 'edit.php');
 				} else include($base . 'index.php'); 
 				break;
@@ -78,7 +73,7 @@ function guidtool_page_handler($page) {
 						set_input('format', $page[2]); 
 						include($base . 'export.php');
 					} else {
-						set_input('forward_url', $CONFIG->url . "guidtool/export/$page[1]/"); 
+						set_input('forward_url', elgg_get_site_url() . "guidtool/export/$page[1]/"); 
 						include($base . 'format_picker.php');
 					}
 				} else include($base . 'index.php'); 
@@ -90,7 +85,7 @@ function guidtool_page_handler($page) {
 					set_input('format', $page[1]);
 					include($base . 'import.php');
 				} else {
-					set_input('forward_url', $CONFIG->url . "guidtool/import/");
+					set_input('forward_url', elgg_get_site_url() . "guidtool/import/");
 					include($base . 'format_picker.php');
 				} 
 				break;

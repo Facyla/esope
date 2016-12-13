@@ -6,7 +6,7 @@
  * 
  * This plugin allows users to reply by email to a forum thread, or to any publication in an Elgg site, or even post new content
  *
- * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionanally within code) for instructions
+ * This plugin is meant to be integrated within your notification system, please read carefully the documentation (in README and optionnally within code) for instructions
  * 
 */
 
@@ -197,9 +197,15 @@ function postbymail_add_to_notify_message_hook($hook, $entity_type, $returnvalue
 	//error_log("DEBUG POSTBYMAIL : $postbymail_guid / $entity->guid || $hook, $entity_type, $returnvalue, " . print_r($params, true));
 	
 	if (elgg_instanceof($entity, 'object')) {
+		// The Wire specific notice : 140 chars limit
+		if (elgg_instanceof($entity, 'object', 'thewire')) {
+			$returnvalue = elgg_echo('postbymail:thewire:charlimitnotice') . $returnvalue;
+		}
+		
 		// Note : all new content and comments use this, and also the messages
 		if (empty($postbymail_guid)) { $postbymail_guid = $entity->guid; }
 		$returnvalue = postbymail_add_to_message($returnvalue);
+		
 		
 	} else if ($annotation instanceof ElggAnnotation) {
 		// Only forum replies should use this

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Multilingual [alpha]</name>
+	<author>Florian DANIEL aka Facyla</author>
+	<version>0.2</version>
+	<blurb>Multilingual support [alpha]</blurb>
+	<description>You can use this plugin to provide alternate language versions of entities. [alpha version - feature may evolve]</description>
+	<website>http://id.facyla.net/</website>
+	<copyright>Florian DANIEL aka Facyla 2015</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<category>content</category>
+	
+	<screenshot>
+		<description>An example post (in french)</description>
+		<path>graphics/screenshots/1_Original_post.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Add new English translation</description>
+		<path>graphics/screenshots/2_Translating_to_english.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Translation created, ready to edit</description>
+		<path>graphics/screenshots/3_Translation_created_ready_to_edit.png</path>
+	</screenshot>
+	<screenshot>
+		<description>English version edition</description>
+		<path>graphics/screenshots/4_Translation_edition.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Post in english version</description>
+		<path>graphics/screenshots/5_Translated_version.png</path>
+	</screenshot>
+
+	<activate_on_install>false</activate_on_install>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.8.14</version>
+	</requires>
+	
+</plugin_manifest>
+
+<!--
+COMMENTS - HISTORY
+
+0.2 : 20150626 - First working version
+ - support for multilingual content
+ - object entity menu + icons and CSS
+ - page handler for page versions editing
+ - main "switcher" display view (to select the chosen version of the entity)
+ - access through unique URL + lang parameter
+ - plugin settings (main and availables languages)
+ - plugins from language_selector (Coldtrick)
+ - redirect to proper URL (for translations)
+ - add settings to define eligible object subtypes
+
+0.1 : 20150624 - Initial release
+ - plugin structure
+
+
+//-->
+

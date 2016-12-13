@@ -1,4 +1,5 @@
 <?php
+$debug = false;
 
 // Check if CAS web service is activated
 $enable_ws_auth = elgg_get_plugin_setting('enable_ws_auth', 'elgg_cas');
@@ -6,6 +7,9 @@ if ($enable_ws_auth != 'yes') {
 	register_error("CAS auth for webservices is not enabled. Please contact an admin.");
 	forward();
 };
+
+$register = get_input('register');
+if ($register == 'yes') { $register = true; } else { $register = false; }
 
 // Mobile auth support : new functions for temp data caching + some changes in the auth process
 function elgg_cas_register_guid($guid, $token, $username) {
@@ -155,12 +159,12 @@ if (elgg_instanceof($user, 'user')) {
 	} else { $content .= elgg_echo('elgg_cas:user:banned'); }
 } else {
 	//$content .= '<p>' . elgg_echo('elgg_cas:noaccountyet') . '</p>';
-	error_log("No Elgg account yet for CAS login : $elgg_username");
+	if ($debug) error_log("No Elgg account yet for CAS login : $elgg_username");
 	// No existing account : CAS registration if enabled
 	// Si le compte n'existe pas encore : création
 	if (elgg_is_active_plugin('ldap_auth')) {
 		$casregister = elgg_get_plugin_setting('casregister', 'elgg_cas', false);
-		if ($casregister == 'yes') {
+		if (($casregister == 'auto') || (($casregister == 'yes') && $register)) {
 			elgg_load_library("elgg:ldap_auth");
 			if (ldap_auth_is_active($elgg_username)) {
 				$elgg_password = generate_random_cleartext_password();
@@ -172,6 +176,8 @@ if (elgg_instanceof($user, 'user')) {
 			} else {
 				error_log("Not active account");
 			}
+		} else if (($casregister == 'yes') && !$register) {
+			$content .= '<a href="?register=yes" class="elgg-button elgg-button-action">' . elgg_echo('elgg_cas:user:clicktoregister') . '</a>';
 		} else {
 			$content .= elgg_echo('elgg_cas:user:notexist');
 		}

@@ -1,21 +1,11 @@
 <?php
-// @TODO : Add KDB info to object rendering
-
 // Check if KDB fields apply in this context, and display them
-$fields = knowledge_database_get_kdb_fields();
-if (!$fields) return;
+$fields_config = knowledge_database_get_kdb_fields_config();
+if (!$fields_config) { return; }
 
-// Get edited entity
+// Get rendered entity
 $entity = $vars['entity'];
 
-
-$fields_config = array();
-// Build full fields config array
-foreach ($fields as $key) {
-	$field_config = elgg_get_plugin_setting('field_' . $key, 'knowledge_database');
-	$field_config = unserialize($field_config);
-	$fields_config[$key] = $field_config;
-}
 
 //echo knowledge_database_render_fields($fields_config, array('entity' => $entity, 'role' => 'user', 'mode' => 'edit'));
 echo knowledge_database_render_fields($fields_config, array('entity' => $entity, 'mode' => 'view'));

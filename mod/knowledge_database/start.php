@@ -7,7 +7,8 @@
  */
 
 /* NOTES DE DEV : 
-	- ajouter les meta manquantes via un hook lors de l'enregistrement : permet d'être générique tout en ne s'appliquant qu'aux contenus dont le container est le groupe approprié
+	- l'ajout des meta se fait via un hook lors de l'enregistrement : 
+	cela permet d'être générique tout en ne s'appliquant qu'aux contenus dont le container est le groupe approprié
 	Même principe pour le form : on extend tjs le form, mais on n'affiche les champs en plus que si c'est dans le bon groupe et que pour les outils qui y sont activés
 */
 
@@ -29,8 +30,10 @@ function knowledge_database_init() {
 	elgg_extend_view('css/elgg', 'knowledge_database/css');
 	elgg_extend_view('css/admin', 'knowledge_database/css');
 	
-	// Ajout bloc spécifique dans les groupes
+	// Ajout bloc spécifique dans les groupes (informatif)
 	elgg_extend_view('groups/profile/summary', 'knowledge_database/group_extend');
+	// Ajout interface de recherche pour le groupe associé à la KDB
+	elgg_extend_view('groups/profile/summary', 'knowledge_database/group_profile_extend', 800);
 	
 	// Add extra fields to objects create/edit form (below tags)
 	elgg_extend_view('input/tags', 'knowledge_database/object_form_extend', 800);
@@ -54,32 +57,31 @@ function knowledge_database_init() {
 
 
 
-// Page handler for custom URL
+// Page handler for Knowledge Database
 function knowledge_database_page_handler($page) {
-	global $CONFIG;
-	$include_path = $CONFIG->pluginspath . 'knowledge_database/pages/knowledge_database/';
+	$base = elgg_get_plugins_path() . 'knowledge_database/pages/knowledge_database/';
 	if (!isset($page[0])) { $page[0] = 'index'; }
 	switch ($page[0]) {
 		case 'define_field':
 			set_input('name', $page[1]);
-			if (include($include_path . 'define_field.php')) return true;
+			if (include($base . 'define_field.php')) { return true; }
 			break;
 		case 'download':
 			set_input('guid', $page[1]);
 			set_input('field_name', $page[2]);
-			if (include($include_path . 'download.php')) return true;
+			if (include($base . 'download.php')) { return true; }
 			break;
 		case 'add':
-			if (include($include_path . 'add.php')) return true;
+			if (include($base . 'add.php')) { return true; }
 			break;
+		case 'user':
+		case 'group':
+			if (!empty($page[1])) { set_input('container_guid', $page[1]); } else { forward('kdb'); }
 		case 'public':
 		case 'search':
 		case 'index':
-		case 'user':
-		case 'group':
 		default:
-			if ($page[1]) set_input('container_guid', $page[1]);
-			if (include($include_path . 'index.php')) return true;
+			if (include($base . 'index.php')) { return true; }
 	}
 	return false;
 }
@@ -99,11 +101,11 @@ function knowledge_database_get_user_role($params = array('entity' => false, 'us
 	if (elgg_instanceof($params['user'], 'user')) {
 		
 		// Real admin => admin
-		if (elgg_is_admin_logged_in()) return 'admin';
+		if (elgg_is_admin_logged_in()) { return 'admin'; }
 		
 		// If user is a group admin => admin
 		if (elgg_instanceof($params['group'], 'group')) {
-			if ($params['group']->canEdit($params['user']->guid)) return 'admin';
+			if ($params['group']->canEdit($params['user']->guid)) { return 'admin'; }
 		}
 		
 		// Content owner has some rights
@@ -149,7 +151,7 @@ function knowledge_database_object_handler_event($event, $type, $object) {
 			foreach ($meta as $name) {
 				// Check that we are allowed to edit this field
 				$config = knowledge_database_get_field_config($name);
-				if (!knowledge_database_edit_field($config, $role, $object)) continue;
+				if (!knowledge_database_edit_field($config, $role, $object)) { continue; }
 				
 				// Finally get the data and edit !
 				$value = get_input($name, false);
@@ -207,21 +209,20 @@ function knowledge_database_get_field_config($name = false) {
 
 // @TODO : add more details on fields
 function knowledge_database_define_field_config($key) {
-	global $CONFIG;
 	
 	$config = knowledge_database_get_field_config($key);
 	
 	$edit_link = '<strong>' . $key . '</strong>';
 	$name = $config['title'];
 	if (empty($name)) { $name = elgg_echo("knowledge_database:field:$key"); }
-	if ($name && ($name != "knowledge_database:field:$key")) $edit_link .= ' (' . $name . ')';
+	if ($name && ($name != "knowledge_database:field:$key")) { $edit_link .= ' (' . $name . ')'; }
 	
 	$params = array(
 			'text' => '<i class="fa fa-cog"></i> ' . elgg_echo('edit') . ' ' . $key, 
-			'title' => "Configure field for metadata : $key",
+			'title' => elgg_echo('knowledge_database:settings:field:metadata', array($key)),
 			'rel' => 'nofollow', 
 			'class' => 'elgg-lightbox', 
-			'href' => $CONFIG->url  . 'kdb/define_field/' . $key,
+			'href' => elgg_get_site_url()  . 'kdb/define_field/' . $key,
 		);
 	$edit_link .= ' &nbsp; [' . $config['type'] . ']';
 	$edit_link .= ' &nbsp; ' . elgg_view('output/url', $params);
@@ -259,27 +260,38 @@ Roles can be passed as a parameter to the rendering function, and can be derived
      - mode : edit or view, determines the rendering views (input/output)
      - entity : the entity these fields apply to, if any (values and workflows states)
  */
+/* @TODO : rendre certains outputs cliquables, pour renvoyer sur la recherche : http://localhost/esope_1.12/kdb?meta=value&...
+ */
 function knowledge_database_render_fields($fields = array(), $params = array()) {
+	$url = elgg_get_site_url();
 	$entity = elgg_extract('entity', $params, false);
 	$role = elgg_extract('role', $params, 'public');
 	$mode = elgg_extract('mode', $params, 'edit');
-	if ($entity instanceof ElggEntity) $entity = false;
+	if (!elgg_instanceof($entity)) { $entity = false; }
 	
 	// Build rendering fields
 	$fieldset_fields = array();
 	foreach($fields as $name => $field) {
 		if ($mode == "edit") {
+			// Check if we are allowed to edit this
 			if (!knowledge_database_edit_field($field, $role, $entity)) { continue; }
 			$view = 'input';
 		} else {
+			// Check if we are allowed to read this
 			if (!knowledge_database_read_field($field, $role, $entity)) { continue; }
 			$view = 'output';
 		}
 		$field_content = '';
 		
+		// Skip field display in view mode if there is no value
+		// Note : "PHP Fatal error:  Can't use function return value in write context" with old PHP version
+		$test_name = implode('', $entity->{$name});
+		if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty($test_name)))) { continue; }
+		//if (($mode == 'view') && $entity && (empty($entity->{$name}) || (is_array($entity->{$name}) && empty(implode('', $entity->{$name}))))) { continue; }
+
 		// Build field params
 		$fieldset = $field['category'];
-		if (empty($fieldset)) $fieldset = 'default';
+		if (empty($fieldset)) { $fieldset = 'default'; }
 		$output_params = $field['params'];
 		$output_params['name'] = $name;
 		// Set default if not set
@@ -288,44 +300,83 @@ function knowledge_database_render_fields($fields = array(), $params = array()) 
 		} else {
 			$output_params['value'] = $field['default'];
 		}
-		// Add autocomplete script
-		if (($view == 'input') && ($field['type'] == 'text') && $field['params']['autocomplete']) {
-			$field_content .= elgg_view('input/add_autocomplete', array('name' => $name, 'autocomplete-data' => esope_get_meta_values($name)));
-		}
-		// Switch dropdown input to multiselect if multiple enabled
-		if (($view == 'input') && ($field['type'] == 'dropdown') && $field['params']['multiple']) {
-			$field['type'] == 'multiselect';
+		// Use correct select input
+		if (in_array($field['type'], array('dropdown', 'pulldown', 'select'))) { $field['type'] = 'dropdown'; }
+		if ($view == 'input') {
+			// Add autocomplete script
+			if (($field['type'] == 'text') && $field['params']['autocomplete']) {
+				$field_content .= elgg_view('input/add_autocomplete', array('name' => $name, 'autocomplete-data' => esope_get_meta_values($name)));
+			}
+			// Switch dropdown input to multiselect if multiple enabled
+			if (($field['type'] == 'dropdown') && $field['params']['multiple'] && elgg_view_exists('input/multiselect')) {
+				$field['type'] = 'multiselect';
+			}
+		
+			/*
+			if (($field['type'] == 'select') && $entity && (sizeof($entity->{$name}) > 1)) {
+				$field['type'] = 'multiselect';
+			}
+			*/
+			if ($field['type'] == 'tags') {
+				register_error("Tags view will break ! Please ask an admin to correct the Knowledge Database configuration !");
+				continue;
+			}
+		} else {
+			// View mode
+			if (in_array($field['type'], array('select', 'multiselect'))) {
+				if (!is_array($output_params['value'])) { $output_params['value'] = array($output_params['value']); }
+				$field['type'] = 'text';
+				if ($field['params']['options_values']) {
+					$translated_values = array();
+					if (is_array($entity->{$name})) {
+						foreach($entity->{$name} as $k) {
+							if (isset($field['params']['options_values'][$k])) {
+								$translated_values[] = $field['params']['options_values'][$k];
+							} else {
+								$translated_values[] = $k;
+							}
+						}
+					} else {
+						$translated_values[] = $field['params']['options_values'][$entity->{$name}];
+					}
+					$output_params['value'] = $translated_values;
+				} else {
+					$output_params['value'] = $entity->{$name};
+				}
+			}
+			if (is_array($output_params['value']) && in_array($field['type'], array('text', 'date'))) {
+				$output_params['value'] = implode(', ', $output_params['value']);
+			}
 		}
 		
 		// Render input/output field
-		$title = $field['title'];
-		if (empty($title)) $title = elgg_echo("knowledge_database:field:$name");
-		if ($title == "knowledge_database:field:$name") $title = $name;
-		$field_content .= '<p>';
-		$field_content .= '<strong>' . $title . '&nbsp;:</strong> ';
-		if ($field['type'] == 'tags') {
-			register_error("Tags view will break ! Please ask an admin to correct the Knowledge Database configuration !");
-			continue;
-		}
-		if (elgg_view_exists("$view/{$field['type']}")) {
-			$field_content .= elgg_view("$view/{$field['type']}", $output_params);
-		} else {
+		if (!elgg_view_exists("$view/{$field['type']}")) {
 			register_error("View $view/{$field['type']} does not exist. Please ask an admin to correct the Knowledge Database configuration !");
 			continue;
 		}
+		$title = $field['title'];
+		if (empty($title)) { $title = elgg_echo("knowledge_database:field:$name"); }
+		if ($title == "knowledge_database:field:$name") { $title = $name; }
+		$field_content .= '<p>';
+		$field_content .= '<strong>' . $title . '&nbsp;:</strong> ';
+		// Render the view
+		$field_content .= elgg_view("$view/{$field['type']}", $output_params);
+		// Add input hints
+		if ($view == 'input') {
 		$field_help = elgg_echo("knowledge_database:field:$name:details");
-		if ($field_help != "knowledge_database:field:$name:details") $field_content .= '<br /><em>' . $field_help . '</em>';
+			if ($field_help != "knowledge_database:field:$name:details") { $field_content .= '<br /><em>' . $field_help . '</em>'; }
+		}
 		$field_content .= '</p>';
-		// Content renderer depends on field type
+		// Content special renderer depends on field type
 		switch($field['type']) {
 			case 'file':
 				if ($entity && !empty($entity->{$name})) {
 					$filename = explode('/', $entity->{$name});
 					$filename = end($filename);
 					if ($name == 'icon') {
-						$field_content .= '<p>Fichier joint : <a href="' . $CONFIG->url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $CONFIG->url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" style="max-width:50%;" /></a></p>';
+						$field_content .= '<p>' . elgg_echo("knowledge_database:attachment") . '&nbsp;: <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank"><img src="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '?inline=true" class="kdb-field-file" /></a></p>';
 					} else {
-						$field_content .= '<p>Fichier joint : <a href="' . $CONFIG->url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
+						$field_content .= '<p>' . elgg_echo("knowledge_database:attachment") . '&nbsp;: <a href="' . $url . 'knowledge_database/download/' . $entity->guid . '/' . $name . '" target="_blank">Télécharger le fichier &laquo;&nbsp;' . $filename . '&nbsp;&raquo;</a></p>';
 					}
 				}
 				break;
@@ -391,7 +442,7 @@ function knowledge_database_field_access($field_config, $action = 'read', $role 
 }
 
 
-// @TODO : make this more robust and fail-safe
+// @TODO : make this more robust and failsafe
 // Add file to an entity (using a specific folder in datastore)
 function knowledge_database_add_file_to_entity($entity, $input_name = 'file') {
 	return esope_add_file_to_entity($entity, $input_name);
@@ -404,13 +455,13 @@ function knowledge_database_remove_file_from_entity($entity, $input_name = 'file
 
 
 
-/* Checks if fields can be added to currently edited entity
+/* Checks if fields can be added to the currently edited entity
  * Returns false if not, array of field names if OK
  * Function relies on page owner and context, which can be set manually to force getting fields if needed
  */
 function knowledge_database_get_kdb_fields($owner = false, $context = false) {
-	if (!$owner) $owner = elgg_get_page_owner_entity();
-	if (!$context) $context = elgg_get_context();
+	if (!$owner) { $owner = elgg_get_page_owner_entity(); }
+	if (!$context) { $context = elgg_get_context(); }
 	// Note : no fields or any other where KDB doesn't apply returns false
 	$fields = false;
 	
@@ -423,14 +474,10 @@ function knowledge_database_get_kdb_fields($owner = false, $context = false) {
 		if (in_array($context, $kdb_tools)) {
 			
 			// Is site KDB enabled globally ?
-			$kdb_site = false;
-			if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') { $kdb_site = true; }
+			$kdb_site = knowledge_database_is_site_kdb_enabled();
 			
 			// Is a KDB enabled for this particular group (or entity..) ?
-			$kdb_group = false;
-			$kdb_enable_groups = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
-			$kdb_enable_groups = esope_get_input_array($kdb_enable_groups);
-			if (in_array($owner->guid, $kdb_enable_groups)) { $kdb_group = true; }
+			$kdb_group = knowledge_database_is_kdb_group($owner->guid);
 			
 			// Get used fields names
 			if ($kdb_group) {
@@ -450,6 +497,19 @@ function knowledge_database_get_kdb_fields($owner = false, $context = false) {
 	}
 	// Return fields that can be used in this context
 	return $fields;
+}
+function knowledge_database_get_kdb_fields_config($owner = false, $context = false) {
+	$fields = knowledge_database_get_kdb_fields($owner, $context);
+	$fields_config = array();
+	// Build full fields config array
+	if ($fields) {
+		foreach ($fields as $key) {
+			$field_config = elgg_get_plugin_setting('field_' . $key, 'knowledge_database');
+			$field_config = unserialize($field_config);
+			$fields_config[$key] = $field_config;
+		}
+	}
+	return $fields_config;
 }
 
 // Returns allowed KDB subtypes
@@ -474,9 +534,28 @@ function knowledge_database_get_allowed_tools($group_guid = false) {
 	
 	return $filtered_tools;
 }
+// Returns allowed KDB field types
+function knowledge_database_get_field_types() {
+	$field_types = elgg_get_plugin_setting('kdb_inputs', 'knowledge_database');
+	// @TODO auto-fill (from profile manager, or available views, or some default fields set ?)
+	if (empty($field_types)) {
+		$field_types = "text, longtext, plaintext, select, multiselect, date, tags, email, file, color";
+	}
+	$field_types = esope_get_input_array($field_types);
+	$inputs = array();
+	if ($field_types) {
+		foreach ($field_types as $field_type) {
+			if (elgg_view_exists('input/' . $field_type)) {
+				// Add to available field types list
+				$inputs[$field_type] = $field_type;
+			}
+		}
+	}
+	return $inputs;
+}
 
 /* Returns an array of allowed subtypes, for use in a elgg_get_ function
- * $options_values : if true prepares the array for a dropdown view, if false for get functions
+ * $options_values : if true prepares the array for a select view, if false for get functions
  * $tools : the array of tools, as provided e.g. by knowledge_database_get_allowed_tools
  */
 function knowledge_database_get_allowed_subtypes($options_values = false, $tools = false) {
@@ -519,16 +598,31 @@ function knowledge_database_get_site_kdb_fields() {
 }
 
 // Returns fields for a specific group
-// Optionnaly adds site fields
+// Optionally adds site fields
 function knowledge_database_get_group_kdb_fields($guid, $include_site = false) {
 	$fields = elgg_get_plugin_setting('group_fields_' . $guid, 'knowledge_database');
 	if ($include_site) {
 		if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') {
-			if (!empty($fields)) $fields .= ', ';
+			if (!empty($fields)) { $fields .= ', '; }
 			$fields .= elgg_get_plugin_setting('site_fields', 'knowledge_database');
 		}
 	}
 	return esope_get_input_array($fields);
+}
+
+
+/* Tells if the site KDB is enabled */
+function knowledge_database_is_site_kdb_enabled() {
+	if (elgg_get_plugin_setting('enable_site', 'knowledge_database') == 'yes') { return true; }
+	return false;
+}
+
+/* Tells if a group is a KDB group (= explicitely set as KDB group) */
+function knowledge_database_is_kdb_group($group_guid) {
+	$groups_guids = elgg_get_plugin_setting('enable_groups', 'knowledge_database');
+	$groups_guids = esope_get_input_array($groups_guids);
+	if (in_array($group_guid, $groups_guids)) { return true; }
+	return false;
 }
 
 

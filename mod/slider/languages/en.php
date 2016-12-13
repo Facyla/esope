@@ -22,6 +22,18 @@ $en = array(
 	'slider:settings:slider_access:details' => "By default, the access to the slider editing tool is reserved to administrators. You can also allow site members to use it by choosing \"Yes\"",
 	'slider:option:yes' => "Yes",
 	'slider:option:no' => "No",
+	'slider:settings:enable_cloning' => "Enable slider cloning",
+	'slider:settings:enable_cloning:details' => "If yes, allows any user who can edit a slider to duplicate it and create a new slider",
+	
+	'slider:strapline' => 'Last update on %s by %s',
+	'slider:edit_mode' => "Edit mode",
+	'slider:edit_mode:basic' => "Simple",
+	'slider:edit_mode:full' => "Advanced",
+	'slider:clone' => "Clone",
+	'slider:edit:clone' => "Duplicate this slider",
+	'slider:clone:details' => "You can create a new slider with the same content as this one.",
+	'slider:cloned' => "Slider duplicated",
+	'slider:clone:error' => "Error while duplicating the slider",
 	
 	
 'slider:showinstructions' => "Display instructions",
@@ -61,6 +73,7 @@ $en = array(
 	'slider:editor:no' => "No (can be enabled on-demand)",
 	'slider:error:multiple' => "Multiple sliders found for this name, cannot determine which to display.",
 	'slider:error:alreadyexists' => "A slider already exists with this name, please choose antoher one.",
+	'slider:nocontent' => "No content yet.",
 	
 	
 	'slider:shortcode:slider' => "Slider (already defined)",
@@ -70,6 +83,7 @@ $en = array(
 	'slider:cmspages:instructions:shortcode' => " - with a template short, alternatively, into a template CMSPage: <strong>{{[slider id=\"%s\"]}}</strong>",
 	'slider:cmspages:notice' => "IMPORTANT: only CMS pages of type \"Template\" can display sliders! You may need to update page type to display it.",
 	'slider:iframe:instructions' => " - with an embed code, on any other sites: <strong>&lt;iframe src=\"" . elgg_get_site_url() . "slider/view/%s?embed=full\"&gt;&lt;/iframe&gt;</strong>",
+	'slider:deleted' => "Slider deleted",	
 	
 );
 

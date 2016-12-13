@@ -21,24 +21,48 @@ if (!in_array($size, array('topbar', 'tiny', 'small', 'medium', 'large', 'master
 	$size = 'medium';
 }
 
-$class = "elgg-avatar elgg-avatar-$size";
-if (isset($vars['class'])) {
-	$class = "$class {$vars['class']}";
-}
-
-$use_link = elgg_extract('use_link', $vars, true);
-
 if (!($user instanceof ElggUser)) {
-	return true;
-}
-
-// Add profile-type marker
-if (function_exists('esope_get_user_profile_type')) {
-	$class .= ' profile-type profile-type-' . esope_get_user_profile_type($user);
+	return;
 }
 
 $name = htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8', false);
 $username = $user->username;
+
+$class = "elgg-avatar elgg-avatar-$size";
+if (isset($vars['class'])) {
+	$class = "$class {$vars['class']}";
+}
+if ($user->isBanned()) {
+	$class .= ' elgg-state-banned';
+	$banned_text = elgg_echo('banned');
+	$name .= " ($banned_text)";
+}
+
+$use_link = elgg_extract('use_link', $vars, true);
+
+// Don't display user icon if public profile is disabled
+$allowed = esope_user_profile_gatekeeper($user, false);
+if (!$allowed) {
+	$icon_url = elgg_get_site_url() . "_graphics/icons/default/$size.png";
+	$spacer_url = elgg_get_site_url() . '_graphics/spacer.gif';
+	$icon = '<div class="'.$class.'"><a>' . elgg_view('output/img', array('src' => $spacer_url, 'style' => "background: url($icon_url) no-repeat;")) . '</a></div>';
+	echo $icon;
+	return;
+}
+
+// Add profile-type marker
+if (elgg_is_active_plugin('profile_manager')) {
+$profile_type = esope_get_user_profile_type($user);
+$class .= ' profile-type';
+if (!empty($profile_type)) {
+	$class .= ' profile-type-' . $profile_type;
+}
+}
+
+// Tell there is no email associated (same as archived ?) = cannot be contacted
+if (elgg_is_logged_in() && empty($user->email)) {
+	$class .= ' profile-no-mail';
+}
 
 $icontime = $user->icontime;
 if (!$icontime) {
@@ -68,7 +92,20 @@ if (isset($vars['hover'])) {
 $spacer_url = elgg_get_site_url() . '_graphics/spacer.gif';
 
 $icon_url = elgg_format_url($user->getIconURL($size));
-$icon = elgg_view('output/img', array(
+
+$icon = '';
+// Add new markers to icon
+// Add archive banner, if account is closed
+/*
+if (in_array($user->memberstatus, array('closed', 'archive'))) {
+	$icon = '<span class="profiletype-status"><span class="profiletype-status-archive">' . elgg_echo('esope:status:archive') . '</span></span>' . $icon;
+}
+*/
+// Add empty email marker
+if (elgg_is_logged_in() && empty($user->email)) {
+	$icon .= '<span class="profiletype-status"><span class="profiletype-status-no-mail">' . elgg_echo('esope:user:nomail') . '</span></span>';
+}
+$icon .= elgg_view('output/img', array(
 	'src' => $spacer_url,
 	'alt' => $name,
 	'title' => $name,
@@ -94,12 +131,14 @@ if ($show_menu) {
 
 if ($use_link) {
 	$class = elgg_extract('link_class', $vars, '');
+	$target = elgg_extract('target', $vars, '');
 	$url = elgg_extract('href', $vars, $user->getURL());
 	echo elgg_view('output/url', array(
 		'href' => $url,
 		'text' => $icon,
 		'is_trusted' => true,
 		'class' => $class,
+		'target' => $target,
 	));
 } else {
 	echo "<a>$icon</a>";

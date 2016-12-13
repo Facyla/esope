@@ -90,11 +90,7 @@ if (is_array($recent_pins)) {
 		if ($ent_for_icon instanceof ElggEntity) { $icon = $ent_for_icon->getIcon("small"); }
 	
 		// Sous forme de vignettes avec extrait
-		if (elgg_is_logged_in()) {
-			$home_pins .= '<div class="home_pin search_listing" title="' . $ent->title . '">';
-		} else {
-			$home_pins .= '<div class="home_pin_public search_listing" title="' . $ent->title . '">';
-		}
+		$home_pins .= '<div class="home_pin_public search_listing" title="' . $ent->title . '">';
 		$home_pins .= '<div class="home_pin_content">';
 		$entitle = elgg_get_excerpt($ent->title, 60);
 		$home_pins .= '<a href="' . $ent->getURL() . '"><img src="'.$icon.'" class="groupthumb" style="float:left; margin-right:5px; width:40px; height:40px;" /><strong>' . $entitle . '</strong></a><br />';
@@ -119,34 +115,8 @@ $focus = elgg_view('cmspages/view',array('pagetype'=>"accueil-haut-milieu"));
 // COMPOSE PAGE CONTENT
 //$content .= elgg_view('cmspages/view',array('pagetype'=>"accueil-entete"));
 
-// COLONNE 1 : accueil gauche, agenda des groupes, groupes à la Une, nouveaux membres
-$content .= '<div style="width:28%; float:left;"><div style="padding:1ex;">';
-		$intro = elgg_view('cmspages/view',array('pagetype'=>"accueil-haut-gauche"));
-		if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div><br />';
-	
-		// Liste des groupes avec icônes
-		$content .= '<div>';
-			$content .= '<h2>Participer à nos Travaux</h2>';
-			$groups = elgg_get_entities_from_metadata(array('types' => 'group', 'limit' => 0, 'metadata_name_value_pairs' => array('name' => 'featured_group', 'value' => 'yes')));
-			if ($groups) {
-				shuffle($groups);
-				foreach ($groups as $group) {
-					$content .= '<a href="' . $group->getURL() . '">';
-					$content .= '<h3>' . $group->name . '</h3>';
-					$content .= '<div style="float:left; clear:left; padding-bottom:16px; width:100%;">';
-					$content .= '<img src="' . $group->getIconURL('small') . '" style="float:left; margin:0 6px 4px 0;"/>';
-					$content .= '<p style="font-size:11px;">' . $group->publicdescription . '</p>';
-					$content .= '</div>';
-					$content .= '</a>';
-				}
-			}
-		$content .= '</div>';
-		
-$content .= '</div></div>';
-
-
 // COLONNE PRINCIPALE : intro, focus, pins, activité ?
-$content .= '<div style="width:70%; float:right;"><div style="padding:1ex;">';
+$content .= '<div style="width:70%; float:right;" class="home-static-container"><div style="padding:1ex;">';
 		$intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
 		if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div>';
 		
@@ -170,6 +140,33 @@ $content .= '<div style="width:70%; float:right;"><div style="padding:1ex;">';
 		$content .= '<br />';
 		
 $content .= '</div></div>';
+
+
+// COLONNE 1 : accueil gauche, agenda des groupes, groupes à la Une, nouveaux membres
+$content .= '<div style="width:28%; float:left;" class="home-static-container"><div style="padding:1ex;">';
+		$intro = elgg_view('cmspages/view',array('pagetype'=>"accueil-haut-gauche"));
+		if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div><br />';
+	
+		// Liste des groupes avec icônes
+		$content .= '<div>';
+			$content .= '<h2>Participer à nos Travaux</h2>';
+			$groups = elgg_get_entities_from_metadata(array('types' => 'group', 'limit' => 0, 'metadata_name_value_pairs' => array('name' => 'featured_group', 'value' => 'yes')));
+			if ($groups) {
+				shuffle($groups);
+				foreach ($groups as $group) {
+					$content .= '<a href="' . $group->getURL() . '">';
+					$content .= '<h3>' . $group->name . '</h3>';
+					$content .= '<div style="float:left; clear:left; padding-bottom:16px; width:100%;">';
+					$content .= '<img src="' . $group->getIconURL('small') . '" style="float:left; margin:0 6px 4px 0;"/>';
+					$content .= '<p style="font-size:11px;">' . $group->publicdescription . '</p>';
+					$content .= '</div>';
+					$content .= '</a>';
+				}
+			}
+		$content .= '</div>';
+		
+$content .= '</div></div>';
+
 
 // Evénements : : agenda sous forme de timeline
 if (elgg_is_active_plugin('event_calendar')) {

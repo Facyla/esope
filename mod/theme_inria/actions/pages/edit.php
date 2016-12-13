@@ -34,8 +34,8 @@ if (!$input['title']) {
 
 if ($page_guid) {
 	$page = get_entity($page_guid);
-	if (!$page || !$page->canEdit()) {
-		register_error(elgg_echo('pages:error:no_save'));
+	if (!elgg_instanceof($page, 'object') || !$page->canEdit()) {
+		register_error(elgg_echo('pages:cantedit'));
 		forward(REFERER);
 	}
 	$new_page = false;
@@ -106,17 +106,15 @@ if ($parent_guid && $parent_guid != $page_guid) {
 
 if ($page->save()) {
 	
-	$dbprefix = $CONFIG->dbprefix;
+	$dbprefix = elgg_get_config('dbprefix');
 	$page_top_subtype_id = get_subtype_id('object', 'page_top');
 	$page_subtype_id = get_subtype_id('object', 'page');
 
-	// Inria : change subtype if we remove parent, or add a parent
-	// @TODO : we need to consider 2 cases :
+	// Esope : change subtype if we remove parent, or add a parent
+	// Note : we need to consider 2 cases :
 	// 1. Former page has no parent anymore (empty or top) and becomes a page_top
 	if (($page->getSubtype() == 'page') && (empty($parent_guid) || ($parent_guid == 'top')) ) {
 		$result = update_data("UPDATE {$dbprefix}entities set subtype='$page_top_subtype_id' WHERE guid=$page->guid");
-		/*
-		*/
 	}
 	// 2. former page_top now has a parent_guid and need to become a page
 	if (($page->getSubtype() == 'page_top') && (!empty($page->parent_guid) && ($parent_guid != 'top'))) {

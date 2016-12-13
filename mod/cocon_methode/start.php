@@ -27,8 +27,8 @@ function cocon_methode_init(){
 	// Set secret for Methode app actionsMay be updated afterwards, if cycle of group changed
 		$gid = cocon_methode_get_user_group();
 		$cid = getCurrentCycleID($gid);
-		$_SESSION['check_id'] = md5($gid.'_'.$cid);
-		//error_log("Check ID : {$_SESSION['check_id']} = $gid - $cid => " . md5($gid.'_'.$cid));
+		//error_log("Cocon Kit START : $gid / $cid => " . md5($gid.'_'.$cid)); // debug
+		if ($gid && $cid) $_SESSION['check_id'] = md5($gid.'_'.$cid);
 	}
 	
 }
@@ -68,11 +68,38 @@ function cocon_methode_get_user_group($user_guid = false) {
 		$msg = elgg_echo('cocon_methode:group:created');
 		system_message($msg);
 		//error_log("COCON : group for {$user->cocon_etablissement} did not exist. Created as {$group->guid}.");
+	} else {
+		// @TODO update group data ?  not essential, as it is not used, but todo if contact email or address is displayed and/or used
+		
 	}
 	
 	// Join group if not member yet
 	if (elgg_instanceof($group, 'group') && !$group->isMember($user)) {
 		groups_join_group($group, $user);
+		
+		// Add notification
+		$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'adf_public_platform');
+		if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
+			switch($groupjoin_enablenotif) {
+				case 'site':
+					add_entity_relationship($user->guid, 'notifysite', $group->guid);
+					break;
+				case 'all':
+					foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+						add_entity_relationship($user->guid, "notify{$method}", $group->guid);
+					}
+					break;
+				case 'email':
+				default:
+					add_entity_relationship($user->guid, 'notifyemail', $group->guid);
+			}
+		} else if ($groupjoin_enablenotif == 'no') {
+			// loop through all notification types
+			foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+				remove_entity_relationship($user->guid, "notify{$method}", $group->guid);
+			}
+		}
+		
 		// add_user_to_access_collection($user->guid, $acl); // Force access collection
 		$msg = elgg_echo('cocon_methode:group:joined', array($group->name));
 		system_message($msg);
@@ -112,20 +139,24 @@ function cocon_methode_get_user_group($user_guid = false) {
 			break;
 		case "1":
 			// Equipe : simple membre
+			/*
 			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				remove_entity_relationship($user->guid, 'operator', $group->guid);
 				$msg = elgg_echo('cocon_methode:group:nomoreadmin', array($group->name));
 				system_message($msg);
 			}
+			*/
 			break;
 		case "2":
 		default:
 			// Autre : simple membre aussi ? ou rien du tout ?
+			/*
 			if (check_entity_relationship($user->guid, 'operator', $group->guid)) {
 				remove_entity_relationship($user->guid, 'operator', $group->guid);
 				$msg = elgg_echo('cocon_methode:group:nomoreadmin', array($group->name));
 				system_message($msg);
 			}
+			*/
 	}
 	
 	/*

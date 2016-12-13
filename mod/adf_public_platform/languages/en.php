@@ -13,6 +13,7 @@ $en = array(
 	'option:notify:no' => "Disable all methods",
 	'option:empty' => "",
 	'option:none' => "(none selected)",
+	'option:groupoption' => "Group option",
 	
 	'profile_edit' => "Profile edition",
 	'event_calendar:view' => "View event",
@@ -54,10 +55,20 @@ $en = array(
 	'search:field:modifiedtimelower' => "Modification date (min)",
 	'search:field:modifiedtimeupper' => "Modification date (max)",
 	'search:field:fulltext' => "Search",
+	'search:field:owner_guid' => "Owner",
+	'search:field:container_guid' => "Container",
+	'search:results:no_query' => "Search results",
+	'esope:search:tooshort' => "Query text too short (minimum %s characters)",
+	'esope:search:tooshort:details' => "Query words less than %s characters are ignored in search",
 	'adf_platform:config:widgets' => "ENABLED WIDGETS",
-	'adf_platform:settings:removeusermenutools' => "(expert) Remove user menu items.<br />Use link id, eg.: blog,liked_content,photos (NO spacing)",
-	'adf_platform:settings:removeusertools' => "(expert) Remove user content creation button.<br />Use registered entity subtypes, eg.: blog,bookmark (NO spacing)",
+	'adf_platform:settings:removeusermenutools' => "(expert) Remove user menu items",
+	'adf_platform:settings:removeusermenutools:details' => "Use link id, eg.: blog,liked_content,photos (NO spacing)",
+	'adf_platform:settings:removeusertools' => "(expert) Remove user content creation button",
+	'adf_platform:settings:removeusertools:details' => "Use registered entity subtypes, eg.: blog,bookmark (NO spacing)",
 	'adf_platform:settings:group_hide_profile_field' => "(expert) List groups fields metadata names that you want to hide in group profile page.",
+	'adf_platform:settings:groups:old_display' => "Displays a banner indicating that a group has not had recent activity",
+	'adf_platform:settings:groups:old_timeframe' => "Define the inactivity time frame before displaying the banner (in seconds, defaults to 6 months)",
+	'adf_platform:settings:groups:archive' => "Enables groups archive banner (to mark a group as archived, the 'status' metadata should be set to 'archive').",
 	'adf_platform:settings:user_exclude_access' => "(expert) Removes chosen access levels for members. Use the access_ids, eg. -2,0,1,2 (no space)",
 	'adf_platform:settings:admin_exclude_access' => "(expert) Removes chosen access levels for admins (take care !). Use the access_ids, eg. -2,0,1,2 (no space)",
 	'adf_platform:config:groupinvites' => "GROUP INVITES",
@@ -169,6 +180,7 @@ $en = array(
 	'adf_platform:members:online' => "Online members",
 	'adf_platform:members:newest' => "Newest members",
 	'adf_platform:groups:featured' => "Featured groups",
+	'esope:categories:tree:explanation' => "You can use tree categories: prepend your category with the name of the parent category, separated by \"/\", eg.: Resources/Learning/Online videos,",
 	
 	
 	'accessibility:sidebar:title' => "Secondary menu",
@@ -360,7 +372,11 @@ $en = array(
 	'adf_platform:settings:pages_list_subpages:group' => "Groups only (not recommended)",
 	'adf_platform:settings:pages_list_subpages:all' => "All",
 	'adf_platform:settings:pages_reorder' => "Allow pages reordering",
+	'adf_platform:settings:river_hide_block' => "Use show/hide block in river modules",
+	'adf_platform:settings:river_hide_block:details' => "If yes, some information of the river (attachments and responses) will be displayed into a toggable block, when the river is displayed in a widget or on a group homepage. If not, this information will be always visible.",
 	'adf_platform:settings:advanced_pagination' => "Advanced pagination (limits links)",
+	'adf_platform:settings:thewire_default_access' => "Default Wire access",
+	'adf_platform:settings:thewire_default_access:details' => "Wire access can be set to use default access (\"default\"), or use a specific value (eg. a specific group access collection). Usual values are \"2\" = public and \"1\" = members only.",
 	'adf_platform:advanced_pagination:perpage' => "per page",
 	'adf_platform:advanced_pagination:last' => "%s (last)",
 	'river:select:all:nofilter' => "All (no activity filter)",
@@ -587,10 +603,13 @@ $en = array(
 	'members:label:search' => "Search",
 	'esope:search:title' => "Advanced search",
 	'esope:search:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced search",
-	'esope:membersearch:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced members search",
+	'esope:membersearch:setting:metadata' => "Advanced member search metadata",
+	'esope:membersearch:setting:metadata:details' => "Enter a comma-separated list of the metadata you wish to add to advanced members search<br />Optional parameters are also supported: add <b>:text</b> to force text input, or <b>:auto</b> to force automatic dropdown values. Note that \"auto\" parameter is not recommended if there too many different values set for a given metadata, eg. > 300, as it will search the database for these values first). If both parameters are set, \"text\" will take precedence over \"auto\".",
 	'esope:groupsearch:setting:metadata' => "Enter a comma-separated list of the metadata you wish to add to advanced groups search",
 	'esope:search:details' => "Use multiple criteria to find what you're looking for",
 	'esope:fulltextsearch' => "Fulltext search",
+	'esope:fulltextsearch:user' => "User fulltext search",
+	'esope:fulltextsearch:group' => "Group fulltext search",
 	'esope:search:type' => "Search type",
 	'esope:search:subtype' => "Object subtype",
 	'esope:search:profile_type' => "Profile type",
@@ -674,6 +693,15 @@ $en = array(
 	'adf_platform:settings:groups:topmenu:help' => "This menu lets you add up to 8 custom tabs, by adding customtab1 to customtab8 to groups (easiest is to use profile_manager groups fields config).",
 	'adf_platform:settings:groups:disable_widgets' => "Remove tools widgets on group home",
 	'adf_platform:settings:groups:add_activity' => "Add group activity on group home",
+	'adf_platform:settings:groups:add_wire' => "Add Wire form on group home",
+	'esope:groups:enablethewire' => "Enable the Wire (access restricted to group members)",
+	'esope:thewire:group:placeholder' => "Votre message pour le groupe",
+	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Group Wire messages",
+	'esope:thewire:none' => "No group message yet",
+	'thewire:notify:group:reply' => '%s responded to %s on %s\'s wire:',
+	'thewire:notify:group:post' => '%s posted on %s\'s wire:',
+	'thewire:notify:footer:group' => "Group's Wire messages:\n%s",
+	'thewire:notify:footer:user' => "%s's Wire messages:\n%s",
 	'adf_platform:settings:groups:add_publish_tools' => "Add group publications tools on group homepage",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Auto-refresh of group discussions (enable with URL parameter ?autorefresh=auto)",
 	'esope:groups:disable_widgets:public' => "Only when not logged in (public mode)",
@@ -731,6 +759,9 @@ $en = array(
 	
 	'readmore' => "Read more",
 	
+	'esope:pages:summary' => "Summary",
+	'esope:option:nofilter' => "(no filter)",
+	
 	// Subtypes
 	'esope:subtype:pages' => "wiki",
 	'esope:subtype:page' => "wiki page",
@@ -752,6 +783,8 @@ $en = array(
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "This group was archived",
 	
+	'esope:status:archive' => "archive",
+	'esope:user:nomail' => "no mail",
 	
 	
 	/**********************/
@@ -973,6 +1006,14 @@ To view %s's profile, click here:
 
 This is an automated notification, please do not reply to this email.",
 	
+	// Logbrowser
+	'logbrowser:user_guid' => "or user GUID",
+	'logbrowser:entity_type' => "Entity type",
+	'logbrowser:entity_subtype' => "Entity subtype",
+	'logbrowser:object_guid' => "Entity GUID",
+	'logbrowser:event' => "Event",
+	
 );
 
 add_translation('en', $en);
+

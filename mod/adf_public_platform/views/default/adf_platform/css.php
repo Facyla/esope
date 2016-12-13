@@ -98,6 +98,23 @@ html {
 }
 */
 
+html { -webkit-font-smoothing: antialiased; }
+
+/* Sub and sup CSS style - from https://gist.github.com/unruthless/413930 */
+sub, sup {
+  /* Specified in % so that the sup/sup is the right size relative to the surrounding text */
+  font-size: 75%;
+  /* Zero out the line-height so that it doesn't interfere with the positioning that follows */
+  line-height: 0;
+  /* Where the magic happens: makes all browsers position the sup/sup properly, relative to the surrounding text */
+  position: relative;
+  /* Note that if you're using Eric Meyer's reset.css, this is already set and you can remove this rule */
+  vertical-align: baseline;
+}
+/* Move the superscripted text up */
+sup { top: -0.5em; }
+/* Move the subscripted text down, but only half as far down as the superscript moved up */
+sub { bottom: -0.25em; }
 
 /* ELEMENTS ET CLASSES DE BASE - BASIC CLASSES AND ELEMENTS */
 pre, code { word-break:break-all; }
@@ -392,7 +409,9 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 #adf-homepage .register-fullwidth label { width:auto; }
 #profile_manager_register_left { width:100%; }
 .profile_manager_register_input_container { display:inline-block; }
+#profile_manager_profile_edit_tabs { clear: both; }
 .custom_profile_type_description { float: left; margin-left: 1ex; }
+#widget_profile_completeness_progress_bar { background: #090; }
 
 /* FORMULAIRES - FORMS */
 /* Aide event_calendar form */
@@ -671,6 +690,27 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .group-archive-small { background: rgba(0,0,0,1); color:white; font-size: 8px; padding: 3px 1px; }
 .group-archive-medium { background: rgba(0,0,0,1); color:white; font-size: 10px; padding: 3px 1px; }
 
+.elgg-avatar > .elgg-icon-hover-menu { z-index: 100; } /* Display menu toggler over statuses */
+
+/* Statuts compte utilisateur : Archive (bannière compte archivé), Pas de mail associé au compte */
+.profiletype-status { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
+.profiletype-status-closed { position: absolute; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
+.profiletype-status-no-mail { position: absolute; bottom: 0; left:0; width: 200px; height: 80px; line-height: 60px; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
+
+/* Medium */
+.elgg-avatar-medium .profiletype-status { position: absolute; border: 1px solid transparent; width: 100px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-medium .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
+.elgg-avatar-medium .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 1rem; font-weight: bold; text-transform: uppercase; color: white; }
+
+/* Small */
+.elgg-avatar-small .profiletype-status { position: absolute; border: 1px solid transparent; width: 40px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+.elgg-avatar-small .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+
+/* Tiny */
+.elgg-avatar-tiny .profiletype-status { position: absolute; border: 1px solid transparent; width: 25px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-tiny .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
+.elgg-avatar-tiny .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.5rem; font-weight: bold; text-transform: initial; color: white; }
 
 
 /* Generic useful classes */

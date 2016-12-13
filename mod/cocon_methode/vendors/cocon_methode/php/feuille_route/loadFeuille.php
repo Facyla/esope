@@ -1,8 +1,8 @@
 <?php
 require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))))) . '/engine/start.php';
 	
-	//include "../inc/config.inc.php";
-	//include "../inc/database.inc.php";
+	//include_once "../inc/config.inc.php";
+	//include_once "../inc/database.inc.php";
 
 	/**
 		Type de retour : JSON / UTF-8

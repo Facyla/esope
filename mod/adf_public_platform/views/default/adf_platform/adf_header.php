@@ -9,7 +9,7 @@ $title = $site->name;
 $prev_q = get_input('q', '');
 
 if (elgg_is_logged_in()) {
-	$own = $_SESSION['user'];
+	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
 	
@@ -62,8 +62,24 @@ if (elgg_is_logged_in()) {
 	if (elgg_is_active_plugin('categories')) {
 		$categories = '';
 		$themes = $site->categories;
+		/*
 		if ($themes) foreach ($themes as $theme) {
 			$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
+		}
+		*/
+		if ($themes) {
+			sort($themes); // Sort categories
+			foreach ($themes as $theme) {
+				// Add tree categories support
+				$theme_label = $theme;
+				if (strpos($theme, '/') !== false) {
+					$theme_a = explode('/', $theme);
+					$theme_label = '';
+					for ($i = 1; $i < count($theme_a); $i++) { $theme_label .= "-"; }
+					$theme_label .= ' ' . end($theme_a);
+				}
+				$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
+			}
 		}
 	}
 	

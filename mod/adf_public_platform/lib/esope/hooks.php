@@ -76,10 +76,10 @@ function adf_platform_route($hook, $type, $return, $params) {
 	
 	/* Valeurs de retour :
 	 * return false; // Interrompt la gestion des handlers
-	 * return $params; // Laisse le fonctionnement habituel se poursuivre
+	 * return $return; // Laisse le fonctionnement habituel se poursuivre
 	*/
 	// Par défaut on ne fait rien du tout
-	return $params;
+	return $return;
 }
 
 function adf_platform_public_profile_hook($hook, $type, $return, $params){
@@ -570,5 +570,98 @@ function esope_user_hover_menu($hook, $type, $return, $params) {
 	}
 	return $return;
 }
+
+
+// Add the regular group search method to main search
+function esope_search_groups_hook($hook, $type, $value, $params) {
+	$q = sanitise_string($params['query']);
+	$dbprefix = elgg_get_config('dbprefix');
+	$limit = sanitise_int(get_input('limit', 10));
+	
+	$params = array(
+			'types' => 'group',
+			'joins' => array("JOIN {$dbprefix}groups_entity as ge ON e.guid = ge.guid"),
+			'wheres' => array("(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '%$q%')"),
+			'count' => true,
+		);
+	$count = elgg_get_entities($params);
+	
+	// no need to continue if nothing here.
+	if (!$count) {
+		return array('entities' => array(), 'count' => $count);
+	}
+	
+	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'ge', $params['sort'], $params['order']);
+	$entities = elgg_get_entities($params);
+	
+	// add the volatile data for why these entities have been returned.
+	foreach ($entities as $entity) {
+		$name = search_get_highlighted_relevant_substrings($entity->name, $q);
+		$entity->setVolatileData('search_matched_title', $name);
+
+		$description = search_get_highlighted_relevant_substrings($entity->description, $q);
+		$entity->setVolatileData('search_matched_description', $description);
+	}
+	
+	return array(
+		'entities' => $entities,
+		'count' => $count,
+	);
+}
+
+
+/**
+ * Returns the notification body
+ * Esope : link to object URL directly (not main page)
+ *
+ * @return $string
+ */
+function esope_thewire_notify_message($hook, $entity_type, $returnvalue, $params) {
+	
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'thewire')) {
+		$descr = $entity->description;
+		$owner = $entity->getOwnerEntity();
+		$container = $entity->getContainerEntity();
+		$user_wire_url = elgg_get_site_url() . 'thewire/owner/' . $owner->guid;
+		$group_wire_url = false; // Group Wire URL + false if no group container
+		if (elgg_instanceof($container, 'group')) {
+			$group_wire_url = elgg_get_site_url() . 'thewire/group/' . $container->guid;
+		}
+		// Message title
+		if ($entity->reply) {
+			// have to do this because of poor design of Elgg notification system
+			$parent_post = get_entity(get_input('parent_guid'));
+			if ($parent_post) {
+				$parent_owner = $parent_post->getOwnerEntity();
+			}
+			if (elgg_instanceof($container, 'group')) {
+				$body = sprintf(elgg_echo('thewire:notify:group:reply'), $owner->name, $parent_owner->name, $container->name);
+			} else {
+				$body = sprintf(elgg_echo('thewire:notify:reply'), $owner->name, $parent_owner->name);
+			}
+		} else {
+			if (elgg_instanceof($container, 'group')) {
+				$body = sprintf(elgg_echo('thewire:notify:group:post'), $owner->name, $container->name);
+			} else {
+				$body = sprintf(elgg_echo('thewire:notify:post'), $owner->name);
+			}
+		}
+		// Message body
+		//if (elgg_instanceof($container, 'group')) {} else {}
+		$body .= "\n\n" . $descr . "\n\n";
+		$body .= elgg_echo('thewire') . ": " . $entity->getURL();
+		// Container Wire messages link
+		if ($group_wire_url) {
+			$body .= "\n" . elgg_echo('thewire:notify:footer:group', array($group_wire_url), $language);
+		} else {
+			$body .= "\n" . elgg_echo('thewire:notify:footer:user', array($owner-name, $user_wire_url), $language);
+		}
+		return $body;
+	}
+	return $returnvalue;
+}
+
 
 

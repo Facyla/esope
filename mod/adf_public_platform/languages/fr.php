@@ -15,6 +15,7 @@ $fr = array(
 	'option:notify:no' => "Désactiver toutes les méthodes",
 	'option:empty' => "",
 	'option:none' => "(aucune sélection)",
+	'option:groupoption' => "Option du groupe",
 	
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",
@@ -56,10 +57,20 @@ $fr = array(
 	'search:field:modifiedtimelower' => "Date de modification (mini) ",
 	'search:field:modifiedtimeupper' => "Date de modification (maxi) ",
 	'search:field:fulltext' => "Rechercher",
+	'search:field:owner_guid' => "Auteur",
+	'search:field:container_guid' => "Emplacement",
+	'search:results:no_query' => "Résultats de la recherche",
+	'esope:search:tooshort' => "Texte à rechercher trop court (minimum %s caractères)",
+	'esope:search:tooshort:details' => "Les mots de moins de %s caractères sont ignorés lors de la recherche",
 	'adf_platform:config:widgets' => "CHOIX DES WIDGETS",
-	'adf_platform:settings:removeusermenutools' => "(expert) Supprime des menus de l'owner block des membres.<br />Utiliser l'id du lien, par ex: blog,liked_content,photos (SANS espace)",
-	'adf_platform:settings:removeusertools' => "(expert) Supprime des liens de création des contenus personnels (hors groupe)).<br />Utiliser le nom interne, par ex: blog,bookmark (SANS espace)",
+	'adf_platform:settings:removeusermenutools' => "(expert) Supprime des menus de l'owner block des membres",
+	'adf_platform:settings:removeusermenutools:details' => "Utiliser l'id du lien, par ex: blog,liked_content,photos (SANS espace)",
+	'adf_platform:settings:removeusertools' => "(expert) Supprime des liens de création des contenus personnels (hors groupe)",
+	'adf_platform:settings:removeusertools:details' => "Utiliser le nom interne, par ex: blog,bookmark (SANS espace)",
 	'adf_platform:settings:group_hide_profile_field' => "(expert) Liste des noms des champs des groupes à masquer dans la page d'accueil du groupe.",
+	'adf_platform:settings:groups:old_display' => "Afficher une bannière indiquant l'absence d'activité du groupe",
+	'adf_platform:settings:groups:old_timeframe' => "Permet de définir la durée d'inactivité à partir de laquelle la bannière est affichée (en secondes, par défaut 6 mois).",
+	'adf_platform:settings:groups:archive' => "Permettre d'archiver les groupes (pour cela une métadonnée 'status' doit avoir la valeur 'archive').",
 	'adf_platform:settings:user_exclude_access' => "(expert) Supprime les niveaux d'accès des membres. Indiquer les id, par ex: -2,0,1,2 (sans espace)",
 	'adf_platform:settings:admin_exclude_access' => "(expert) Supprime les niveaux d'accès des admins (attention !). Indiquer les id, par ex: -2,0,1,2 (sans espace)",
 	'adf_platform:config:groupinvites' => "INVITATIONS DANS LES GROUPES",
@@ -169,6 +180,7 @@ $fr = array(
 	'adf_platform:members:online' => "Membres connectés",
 	'adf_platform:members:newest' => "Derniers inscrits",
 	'adf_platform:groups:featured' => "Groupes à la Une",
+	'esope:categories:tree:explanation' => "Vous pouvez utiliser des sous-catégories : pour cela, indiquez le nom de la catégorie parente, puis \"/\" et le nom de votre catégorie, par ex.: Ressources/Supports de formation/Vidéos,",
 	
 	'accessibility:sidebar:title' => "Menu secondaire",
 	//'breadcrumb' => "Fil d'Ariane",
@@ -359,6 +371,10 @@ $fr = array(
 	'adf_platform:settings:pages_list_subpages:group' => "Groupes seulement (non recommandé)",
 	'adf_platform:settings:pages_list_subpages:all' => "Toujours",
 	'adf_platform:settings:pages_reorder' => "Permettre de réorganiser les pages",
+	'adf_platform:settings:river_hide_block' => "Utiliser les blocs dépliables dans la rivière",
+	'adf_platform:settings:river_hide_block:details' => "Si oui, les informations complémentaires de la rivière (pièces jointes et réponses) seront affichées dans un bloc dépliable, lorsque la rivière est affichée dans un widget et sur l'accueil des groupes. Si non, ces informations seront toujours visibles.",
+	'adf_platform:settings:thewire_default_access' => "Accès par défaut du Fil",
+	'adf_platform:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglég de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
 	'adf_platform:settings:advanced_pagination' => "Pagination avancée (choix du nombre de résultats)",
 	'adf_platform:advanced_pagination:perpage' => "par page",
 	'adf_platform:advanced_pagination:last' => "%s&nbsp;(dernière)", // "%s (dernière)"
@@ -589,10 +605,13 @@ $fr = array(
 	'esope:label:search' => "Recherche",
 	'esope:search:title' => "Recherche avancée",
 	'esope:search:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère (meta1, meta2, etc.)",
-	'esope:membersearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de membres (meta1, meta2, etc.)",
+	'esope:membersearch:setting:metadata' => "Champs de la recherche avancée de membres",
+	'esope:membersearch:setting:metadata:details' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de membres (meta1, meta2, etc.)<br />Paramètres optionnels : ajoutez <b>:text</b> pour forcer un champ texte, ou <b>:auto</b> pour forcer une liste déroulante avec les valeurs existantes. Notez que le paramètre \"auto\" n'est pas recommandé s'il y a trop de valeurs distinctes pour le champ, par ex. plus de 300, car cela va d'abord interroger la base de données pour déterminer la liste des valeurs. Si les 2 paramètres sont définis, \"text\" prendra le dessus sur \"auto\".",
 	'esope:groupsearch:setting:metadata' => "Saisissez une liste de metadata à utiliser pour la recherche multi-critère de groupes (meta1, meta2, etc.)",
 	'esope:search:details' => "Utiliser plusieurs critères pour affiner votre recherche",
 	'esope:fulltextsearch' => "Recherche plein texte",
+	'esope:fulltextsearch:user' => "Recherche plein texte",
+	'esope:fulltextsearch:group' => "Recherche plein texte",
 	'esope:search:type' => "Type de recherche",
 	'esope:search:subtype' => "Type de publication",
 	'esope:search:profile_type' => "Type de profil",
@@ -675,6 +694,15 @@ $fr = array(
 	'adf_platform:settings:groups:topmenu:help' => "Ce menu permet de configurer jusqu'à 8 onglets, en ajoutant des propriétés customtab1 à customtab8 aux groupes (via la config de profile_manager).",
 	'adf_platform:settings:groups:disable_widgets' => "Supprimer les widgets de l'accueil du groupe",
 	'adf_platform:settings:groups:add_activity' => "Ajouter l'activité du groupe sur l'accueil du groupe",
+	'adf_platform:settings:groups:add_wire' => "Ajouter le Fil sur l'accueil du groupe",
+	'esope:groups:enablethewire' => "Activer le Fil (accès réservé aux membres du groupe)",
+	'esope:thewire:group:placeholder' => "Votre message pour le groupe",
+	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages du Fil du groupe",
+	'esope:thewire:none' => "Aucun message pour le moment",
+	'thewire:notify:group:reply' => "%s a répondu à %s sur le Fil du groupe % :",
+	'thewire:notify:group:post' => "%s publié sur le Fil du groupe % :",
+	'thewire:notify:footer:group' => "Messages du Fil du groupe :\n%s",
+	'thewire:notify:footer:user' => "Messages du Fil de %s :\n%s",
 	'adf_platform:settings:groups:add_publish_tools' => "Ajouter des outils de publication rapide sur l'accueil du groupe",
 	'adf_platform:settings:groups:discussion_autorefresh' => "Rafraîchissement automatique des discussions des groupes",
 	'esope:groups:disable_widgets:public' => "Seulement si déconnecté (mode public)",
@@ -732,6 +760,9 @@ $fr = array(
 	
 	'readmore' => "Lire la suite",
 	
+	'esope:pages:summary' => "Sommaire",
+	'esope:option:nofilter' => "(aucun filtre)",
+	
 	// Subtypes
 	'esope:subtype:pages' => "wiki",
 	'esope:subtype:page' => "page wiki",
@@ -753,6 +784,8 @@ $fr = array(
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "Ce groupe a été archivé",
 	
+	'esope:status:archive' => "archivé",
+	'esope:user:nomail' => "pas de mail",
 	
 	
 	/**********************/
@@ -972,7 +1005,14 @@ Pour voir le profil de %5\$s : %6\$s
 Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
 ",
 	
+	// Logbrowser
+	'logbrowser:user_guid' => "ou GUID de l'utilisateur",
+	'logbrowser:entity_type' => "Type d'entité",
+	'logbrowser:entity_subtype' => "Subtype",
+	'logbrowser:object_guid' => "GUID de l'entité",
+	'logbrowser:event' => "Evénement",
 	
 );
 
 add_translation('fr', $fr);
+

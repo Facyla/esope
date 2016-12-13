@@ -3,8 +3,22 @@
 
 $fields = elgg_extract('fields', $vars);
 $container_guid = elgg_extract('container_guid', $vars, false);
-$publish_guid = elgg_extract('publish_guid', $vars);
+$publish_guid = elgg_extract('publish_guid', $vars, false);
 
+// Limit search and results to specific container and define where to publish new content
+$page_owner = elgg_get_page_owner_entity();
+// @TODO : shouldn't we allow to access whole content ? or ot in this context ?
+if (elgg_instanceof($page_owner, 'group')) {
+	if (!$container_guid) { $container_guid = elgg_get_page_owner_guid(); }
+	if (!$publish_guid) { $publish_guid = elgg_get_page_owner_guid(); }
+}
+// Define search fields
+if (!$fields) {
+	// Check merge setting
+	$enable_merge = elgg_get_plugin_setting('enable_merge', 'knowledge_database');
+	if ($enable_merge == 'yes') { $enable_merge = true; } else { $enable_merge = false; }
+	$fields = knowledge_database_get_group_kdb_fields($container_guid, $enable_merge);
+}
 
 // Search vars
 $search_q = get_input('q');
@@ -22,6 +36,7 @@ foreach ($registered_subtypes as $type => $subtypes) {
 	}
 }
 */
+//$container = get_entity($container_guid);
 $tools = knowledge_database_get_allowed_tools($container_guid);
 $subtypes = knowledge_database_get_allowed_subtypes();
 $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
@@ -30,7 +45,7 @@ $subtypes_opt = knowledge_database_get_allowed_subtypes(true, $tools);
 
 // FORMULAIRE
 // Prepare JS script for forms
-$action_base = $CONFIG->url . 'action/knowledge_database/';
+$action_base = elgg_get_site_url() . 'action/knowledge_database/';
 $kdb_search_url = elgg_add_action_tokens_to_url($action_base . 'search');
 
 
@@ -41,7 +56,7 @@ function kdb_search(){
 	//$("body").addClass("esope-search-wait");
 	formdata = $("#kdb-search-form").serialize();
 	$.post("' . $kdb_search_url . '", formdata, function(data){
-		$("#esope-search-results").html(data);
+		$("#kdb-search-results").html(data);
 		//$("body").removeClass("esope-search-wait");
 	});
 }
@@ -57,12 +72,13 @@ $search_form = '<form id="kdb-search-form" method="post" action="' . $search_act
 $search_form .= elgg_view('input/securitytoken');
 //$search_form .= elgg_view('input/hidden', array('name' => 'debug', 'value' => 'true'));
 // @TODO Limit in a container (group) only if we are in a KDB group
-if ($container_guid) $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid));
+// @TODO Allow to choose to search in group (default), or whole site
+if ($container_guid) { $search_form .= elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $container_guid)); }
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'object'));
 
 $search_form .= '<p><em><i class="fa fa-info-circle"></i> ' . elgg_echo('knowledge_database:search:details') . '</em></p>';
 // Main search
-$search_form .= '<fieldset style="border: 1px solid #2195B1; padding: 1ex 2ex; background: #f5f5f5; margin-top:1ex;">';
+$search_form .= '<fieldset class="kdb-search-fields">';
 //$search_form .= '<legend>' . elgg_echo("knowledge_database:search:form:title") . '</legend>';
 $search_form .= '<div class="kdb-search-main">';
 $search_form .= '<p><label><i class="fa fa-eye"></i> ' . elgg_echo('knowledge_database:fulltextsearch') . ' <input type="text" name="q" value="' . $search_q . '" /></label><br />' . elgg_echo('knowledge_database:fulltextsearch:details') . '<em></em></p>';
@@ -70,7 +86,8 @@ $search_form .= '</div>';
 $search_form .= '<div class="clearfloat"></div>';
 
 // Custom fields
-if ($fields) foreach ($fields as $name) {
+if ($fields) {
+	foreach ($fields as $name) {
 	$field_content = '';
 	$inputs[$name] = get_input($name);
 	
@@ -88,10 +105,15 @@ if ($fields) foreach ($fields as $name) {
 	// Adjust input types
 	$view = 'text';
 	//$view = $config['type'];
-	if (in_array($config['type'], array('dropdown', 'multiselect'))) { $view = 'dropdown'; }
-	else if (in_array($config['type'], array('date'))) { $view = 'date'; }
-	else if (in_array($config['type'], array('longtext', 'plaintext', 'tags', 'email'))) { $view = 'text'; }
-	else if (in_array($config['type'], array('file'))) { continue; }
+		if (in_array($config['type'], array('dropdown', 'multiselect', 'select'))) {
+			$view = 'dropdown';
+		} else if (in_array($config['type'], array('date'))) {
+			$view = 'date';
+		} else if (in_array($config['type'], array('longtext', 'plaintext', 'tags', 'email'))) {
+			$view = 'text';
+		} else if (in_array($config['type'], array('file'))) {
+			continue;
+		}
 	
 	// Build search field
 	$field_content .= '<div class="kdb-search-filter">';
@@ -101,13 +123,15 @@ if ($fields) foreach ($fields as $name) {
 	$field_content .= '</div>';
 	
 	$fieldset = $config['category'];
-	if (empty($fieldset)) $fieldset = 'default';
+		if (empty($fieldset)) { $fieldset = 'default'; }
 	// Add field to appropriate fieldset
 	$fieldset_fields[$fieldset] .= $field_content;
+}
 }
 
 
 // Render fields into fieldsets
+if ($fieldset_fields) {
 foreach ($fieldset_fields as $fieldset => $fields_content) {
 	$search_form .= '<div class="clearfloat"></div>';
 	if ($fieldset == 'default') {
@@ -120,29 +144,30 @@ foreach ($fieldset_fields as $fieldset => $fields_content) {
 		$search_form .= '</fieldset>';
 	}
 	$search_form .= '<div class="clearfloat"></div><br />';
+	}
 }
 
-$search_form .= '<div class="clearfloat" style="margin:0;"></div>';
-$search_form .= '<input type="submit" class="elgg-button elgg-button-submit fa fa-search" value="' . elgg_echo('search') . '" />';
+$search_form .= '<div class="clearfloat"></div>';
+$search_form .= '<input type="submit" class="elgg-button elgg-button-submit" value="' . elgg_echo('search') . '" />';
 $search_form .= '</fieldset>';
 $search_form .= '</form><br />';
 
 
 
 
-// Random ressources block
+// Random resources block
 $params = array('type' => 'object', 'subtypes' => $subtypes, 'limit' => 0, 'max' => 3);
-if ($container_guid) $params['container_guid'] = $container_guid;
-$content_latest = elgg_view('knowledge_database/random_ressources', $params);
+if ($container_guid) { $params['container_guid'] = $container_guid; }
+$content_latest = elgg_view('knowledge_database/random_resources', $params);
 
-// Add ressources block
-$content_add = elgg_view('knowledge_database/add_ressources', array('publish_guid' => $publish_guid, 'tools' => $tools));
+// Add resources block
+$content_add = elgg_view('knowledge_database/add_resources', array('publish_guid' => $publish_guid, 'tools' => $tools));
 
 
 
 // Compose final page
 $content .= $search_form;
-$content .= '<div id="esope-search-results">' . $content_latest . '</div>';
+$content .= '<div id="kdb-search-results">' . $content_latest . '</div>';
 $content .= '<div class="clearfloat"></div><br /><br />';
 $content .= $content_add;
 $content .= '<div class="clearfloat"></div><br /><br />';

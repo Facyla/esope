@@ -11,8 +11,6 @@ elgg_register_event_handler('init', 'system', 'notification_messages_init'); // 
  * Init adf_notification_messages plugin.
  */
 function notification_messages_init() {
-	global $CONFIG;
-	
 	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
 	if ($messages_send != 'no') {
 		$action_path = elgg_get_plugins_path() . 'notification_messages/actions/messages';
@@ -70,8 +68,8 @@ function notification_messages_init() {
 	// Comment tracker : generates a duplicate message with a different subject and content 
 	// (because it does not use subject + message hooks)
 	if (elgg_is_active_plugin('comment_tracker')) {
-		elgg_unregister_event_handler('create', 'annotation','comment_tracker_notifications');
-		elgg_register_event_handler('create', 'annotation','notification_messages_comment_tracker_notifications');
+		elgg_unregister_event_handler('create', 'annotation', 'comment_tracker_notifications');
+		elgg_register_event_handler('create', 'annotation', 'notification_messages_comment_tracker_notifications');
 	}
 	
 }
@@ -268,9 +266,11 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 		$object_subtype = '__BLANK__';
 	}
 
+	//error_log("NOTIFICATION MESSAGES : debug for event $event => object {$object->guid} ($object_type,$object_subtype) / CONTAINER = {$object->container_guid}"); // debug
 	if (isset($CONFIG->register_objects[$object_type][$object_subtype])) {
 		$subject = $CONFIG->register_objects[$object_type][$object_subtype];
 		$string = $subject . ": " . $object->getURL();
+		$notify_owner = notification_messages_notify_owner();
 
 		// Get users interested in content from this person and notify them
 		// (Person defined by container_guid so we can also subscribe to groups if we want)
@@ -288,10 +288,9 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
 			if ($interested_users && is_array($interested_users)) {
 				foreach ($interested_users as $user) {
 					if ($user instanceof ElggUser && !$user->isBanned()) {
-						$notify_owner = notification_messages_notify_owner();
 						// Do not rely on logged in user but on object owner and current notified user
 						//if (($user->guid != $SESSION['user']->guid) && has_access_to_entity($object, $user) && $object->access_id != ACCESS_PRIVATE) {
-						if (($notify_owner || ($user->guid != $object->owner_guid)) && has_access_to_entity($object, $user) && $object->access_id != ACCESS_PRIVATE) {
+						if (($notify_owner || ($user->guid != $object->owner_guid)) && has_access_to_entity($object, $user) && ($object->access_id != ACCESS_PRIVATE)) {
 							// Message content
 							$body = elgg_trigger_plugin_hook('notify:entity:message', $object->getType(), array(
 									'entity' => $object,
@@ -342,7 +341,7 @@ function notification_messages_object_notifications_hook($hook, $entity_type, $r
  * @param bool $add_to_sent If true (default), will add a message to the sender's 'sent' tray
  * @return bool
  */
-// Note : change is avoid to strip tags in sent message when html_email_handler is used
+// Note : change is : avoid to strip tags in sent message when html_email_handler is used
 function notification_messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
 	// @todo remove globals
 	global $messagesendflag;
@@ -355,7 +354,7 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 	// If $sender_guid == 0, set to current user
 	if ($sender_guid == 0) {
 		$sender_guid = (int) elgg_get_logged_in_user_guid();
-		error_log("No sender GUID $sender_guid => block ?");
+		error_log("NOTIFICATION MESSAGES : no sender GUID set, default to logged in user $sender_guid => block ?");
 	}
 
 	// Initialise 2 new ElggObject
@@ -506,18 +505,20 @@ if (elgg_is_active_plugin('comment_tracker')) {
 		//if ($type == 'annotation' && elgg_is_logged_in()) {
 		if ($type == 'annotation') {
 			if ($annotation->name == "generic_comment" || $annotation->name == "group_topic_post") {
-				$user = get_user($annotation->owner_guid);
+				//$user = get_user($annotation->owner_guid);
+				$user = $annotation->getOwnerEntity();
 				
 				// ESOPE : subscribe first so we can notify if self-notification is enabled
 				// subscribe the commenter to the thread if they haven't specifically unsubscribed
 				//$user = get_user($annotation->owner_guid);
-				$entity = get_entity($annotation->entity_guid);
+				//$entity = get_entity($annotation->entity_guid);
+				$entity = $annotation->getEntity();
 			
 				$autosubscribe = elgg_get_plugin_user_setting('comment_tracker_autosubscribe', $user->guid, 'comment_tracker');
 			
 				if (!comment_tracker_is_unsubscribed($user, $entity) && $autosubscribe != 'no') {
 					// don't subscribe the owner of the entity
-					if ($entity->owner_guid != $user->guid) {
+					if ($entity && ($entity->owner_guid != $user->guid)) {
 							comment_tracker_subscribe($user->guid, $entity->guid);
 					}
 				}
@@ -541,7 +542,10 @@ if (elgg_is_active_plugin('comment_tracker')) {
 	
 		if ($entity instanceof ElggObject) {
 		
-			$container = get_entity($entity->container_guid);
+			//$container = get_entity($entity->container_guid);
+			$container = $entity->getContainerEntity();
+			$group_lang = '';
+			if (elgg_instanceof($container, 'group')) { $group_lang = 'group:'; }
 			if ($entity->getSubtype() == 'groupforumtopic') {
 				$subject = elgg_echo('comment:notify:subject:groupforumtopic', array(
 					$ann_user->name,
@@ -577,16 +581,8 @@ if (elgg_is_active_plugin('comment_tracker')) {
 				}
 			}
 			
-		
-			$entity_link = elgg_view('output/url', array(
-				'url' => $entity->getUrl(),
-				'text' => $entity->title,
-			));
-		
-			$commenter_link = elgg_view('output/url', array(
-				'url' => $ann_user->getUrl(),
-				'text' => $ann_user->name,
-			));
+			$entity_link = '<a href="' . $entity->getURL() . '">' . $entity->title . '</a>';
+			$commenter_link = '<a href="' . $ann_user->getURL() . '">' . $ann_user->name . '</a>';
 		
 			$options = array(
 				'relationship' => COMMENT_TRACKER_RELATIONSHIP,
@@ -595,9 +591,28 @@ if (elgg_is_active_plugin('comment_tracker')) {
 				'types' => 'user',
 				'limit' => 0
 			);
-		
-			$users = elgg_get_entities_from_relationship($options);
+			
+			// ESOPE : Custom message subject
+			$new_subject = notification_messages_build_subject($entity);
+			if (!empty($new_subject)) { $subject = $new_subject; }
+			
+			
 			$notify_owner = notification_messages_notify_owner();
+			$users = elgg_get_entities_from_relationship($options);
+			// ESOPE @TODO use a batch ?
+			/*
+			$options['batch_params'] = array(
+					'notify_owner' => $notify_owner,
+					'subject' => $subject,
+					'entity_link' => $entity_link,
+					'commenter_link' => $commenter_link,
+					'group_lang' => $group_lang,
+					'ann_user' => $ann_user,
+					'annotation' => $annotation,
+					'entity' => $entity,
+				);
+			$batch = new ElggBatch('elgg_get_entities_from_relationship', $options, 'notification_messages_comment_tracker_notify_batch', 10);
+			*/
 		
 			$result = array();
 			foreach ($users as $user) {
@@ -611,6 +626,7 @@ if (elgg_is_active_plugin('comment_tracker')) {
 					if ($user->guid == $entity->owner_guid) { continue; }
 				
 					$notify_settings_link = elgg_get_site_url() . "notifications/personal/{$user->username}";
+					$notify_unsubscribe_link = '';
 				
 					// Results for a user are...
 					$result[$user->guid] = array();
@@ -632,7 +648,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 									$annotation->value,
 									$entity->getUrl(),
 									$notify_settings_link,
-									$notify_unsubscribe_link
 								));
 								break;
 							case 'email':
@@ -645,7 +660,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 									$entity->getUrl(),
 									$CONFIG->sitename,
 									$notify_settings_link,
-									$notify_unsubscribe_link
 								));
 								if (empty($group_lang)) {
 									$from = $CONFIG->site;
@@ -662,10 +676,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 					
 						// ESOPE : avoid NOTICE logging
 						//elgg_log("Sending message to {$user->guid} using $method");
-						
-						// ESOPE : Custom message subject
-						$new_subject = notification_messages_build_subject($entity);
-						if (!empty($new_subject)) { $subject = $new_subject; }
 						
 						// ESOPE : Custom message content : keep the one from comment_tracker (which is nice)
 						// @TODO : normalize message here with custom improved content...
@@ -695,6 +705,101 @@ if (elgg_is_active_plugin('comment_tracker')) {
 		return false;
 	}
 	
+	// ESOPE : notification batch to avoid oom when used within cron
+	function notification_messages_comment_tracker_notify_batch($user, $getter, $options) {
+		global $CONFIG;
+		global $NOTIFICATION_HANDLERS;
+		
+		$notify_owner = $options['batch_params']['notify_owner'];
+		$subject = $options['batch_params']['subject'];
+		$entity_link = $options['batch_params']['entity_link'];
+		$commenter_link = $options['batch_params']['commenter_link'];
+		$group_lang = $options['batch_params']['group_lang'];
+		$ann_user = $options['batch_params']['ann_user'];
+		$annotation = $options['batch_params']['annotation'];
+		$entity = $options['batch_params']['entity'];
+		
+		// Make sure user is real
+		// ESOPE : check if we should notify the comment author or not
+		//if (elgg_instanceof($user, 'user') && ($user->guid != $ann_user->guid)) {
+		
+		// Do not notify the author of comment if set to not notify self
+		if (!$notify_owner && ($user->guid == $ann_user->guid)) { continue; }
+		
+		// Do not notify the owner of the entity being commented on ?  because always notified before (in comment action)
+		if ($user->guid == $entity->owner_guid) { continue; }
+	
+		$notify_settings_link = elgg_get_site_url() . "notifications/personal/{$user->username}";
+	
+		// Results for a user are...
+		$result[$user->guid] = array();
+	
+		foreach ($NOTIFICATION_HANDLERS as $method => $details)	{
+			if (check_entity_relationship($user->guid, 'block_comment_notify'.$method, $CONFIG->site_guid))	{
+				continue;
+			}
+		
+			$from = $ann_user;
+			switch ($method) {
+				case 'sms':
+				case 'site':
+				case 'web':
+					$message = elgg_echo("comment:notify:{$group_lang}body:web", array(
+						$user->name,
+						$entity_link,
+						$commenter_link,
+						$annotation->value,
+						$entity->getUrl(),
+						$notify_settings_link,
+					));
+					break;
+				case 'email':
+				default:
+					$message = elgg_echo("comment:notify:{$group_lang}body:email:text", array(
+						$user->name,
+						$entity_link,
+						$commenter_link,
+						$annotation->value,
+						$entity->getUrl(),
+						$CONFIG->sitename,
+						$notify_settings_link,
+					));
+					if (empty($group_lang)) {
+						$from = $CONFIG->site;
+					}
+					break;
+			}
+		
+			// Extract method details from list
+			$handler = $details->handler;
+		
+			if ((!$NOTIFICATION_HANDLERS[$method]) || (!$handler)) {
+				error_log(sprintf(elgg_echo('NotificationException:NoHandlerFound'), $method));
+			}
+		
+			// ESOPE : Custom message content : keep the one from comment_tracker (which is nice)
+			// @TODO : normalize message here with custom improved content...
+			// Trigger a hook to provide better integration with other plugins
+			$new_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
+			// Failsafe backup if hook as returned empty content but not false (= stop)
+			if (!empty($new_message)) { $message = $new_message; }
+			
+
+			// Trigger handler and retrieve result.
+			try {
+				$result[$user->guid][$method] = $handler(
+					$from , 	// From entity
+					$user, 		// To entity
+					$subject,	// The subject
+					$message, 	// Message
+					$params		// Params
+				);
+			} catch (Exception $e) {
+				error_log($e->getMessage());
+			}
+		}
+	}
+	
 }
 
 
@@ -716,5 +821,6 @@ function notification_messages_notify_owner() {
 	
 	return $notify;
 }
+
 
 

@@ -70,17 +70,19 @@ pre, code { word-break:break-all; }
 #cmspages-settings .elgg-menu-cmspages-categories > .elgg-child-menu { position: absolute; }
 
 
+/* Edit link on editable block hover */
+.cmspages-admin-block { float:right; margin: 0 0 3px 6px; }
+.cmspages-editable { /* padding:5px; */ display:inline-block; width: 100%; }
+.cmspages-editable:hover { /* border: 2px dashed; padding:3px; */ background: rgba(220,220,255,0.3); display: inline-block; }
+.cmspages-editable .fa.fa-edit { color: black; text-shadow: -1px 1px 0px white; }
+
 /* Admin edit link */
 .cmspages-admin-notexist {  }
 .cmspages-admin-link { font-size:small; background:white; border: 1px solid; text-decoration:none; padding: 1ex 2ex; box-shadow: 2px 2px 3px 0 rgba(0,0,0,0.5); position:relative; z-index: 10001; /* border-radius: 2ex; */ }
-.cmspages-admin-link:hover { text-decoration:none; }
-
-/* Edit link on editable block hover */
 .cmspages-admin-link { display: none; }
-*:hover > .cmspages-admin-link { display: inline-block; }
-.cmspages-editable:hover { border: 2px dashed; padding: 0.5ex; background: rgba(220,220,255,0.3); display: block; }
+.cmspages-admin-link:hover { text-decoration:none; }
+*:hover > .cmspages-admin-link { display: inline-block; margin-right: 10px; }
 *:hover > .cmspages-admin-link a {  }
-.cmspages-editable .fa.fa-edit { color: black; text-shadow: -1px 1px 0px white; }
 
 
 

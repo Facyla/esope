@@ -36,10 +36,10 @@ if ($vars['custom_types_list']) foreach ($vars['custom_types_list'] as $searchty
 
 
 // Convert time to timestamp if needed
-if (strpos('-', $vars['created_time_lower'])) { $vars['created_time_lower'] = strtotime($vars['created_time_lower']); }
-if (strpos('-', $vars['created_time_upper'])) { $vars['created_time_upper'] = strtotime($vars['created_time_upper']); }
-if (strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_lower'] = strtotime($vars['modified_time_lower']); }
-if (strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_upper'] = strtotime($vars['modified_time_upper']); }
+if (!empty($vars['created_time_lower']) && strpos('-', $vars['created_time_lower'])) { $vars['created_time_lower'] = strtotime($vars['created_time_lower']); }
+if (!empty($vars['created_time_upper']) && strpos('-', $vars['created_time_upper'])) { $vars['created_time_upper'] = strtotime($vars['created_time_upper']); }
+if (!empty($vars['modified_time_lower']) && strpos('-', $vars['modified_time_lower'])) { $vars['modified_time_lower'] = strtotime($vars['modified_time_lower']); }
+if (!empty($vars['modified_time_upper']) && strpos('-', $vars['modified_time_upper'])) { $vars['modified_time_upper'] = strtotime($vars['modified_time_upper']); }
 
 
 /*

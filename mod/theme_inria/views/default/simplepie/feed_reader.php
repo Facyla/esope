@@ -20,6 +20,14 @@ if ($feed_url) {
 	}
 	
 	$feed = new SimplePie($feed_url, $cache_location);
+	/*
+	$feed = new SimplePie();
+	$feed->set_feed_url($feed_url);
+	$feed->set_cache_location($cache_location);
+	$feed->set_cache_duration(1800);
+	$feed->init();
+	$feed->handle_content_type();
+	*/
 	
 	// doubles timeout if going through a proxy
 	//$feed->set_timeout(20);

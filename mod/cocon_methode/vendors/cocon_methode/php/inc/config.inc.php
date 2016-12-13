@@ -3,6 +3,7 @@
  * Liste des variables pr&eacute;-d&eacute;finies
  */
 
+// Impose le chargement d'Elgg : on ne doit pas pouvoir accéder au Kit sans cela
 require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))))) . '/engine/start.php';
 // Return information only to loggedin users
 if (!elgg_is_logged_in()) { exit; }
@@ -26,7 +27,7 @@ if($_server == 'local'){
 	define('SGDB_USER', 'root');// Utilisateur de connexion au serveur de base de donn&eacute;es
 	define('SGDB_PASSWORD', '');// Mot de passe de connexion au serveur de base de donn&eacute;es
 	define('SGDB_DATABASE', 'pwccocon');// Nom de la base de donn&eacute;es &agrave; utiliser
-	define('EMAIL_SENDER', 'Equipe CoCon<equipe@concon.fr>'); // Expéditeur de message email
+	define('EMAIL_SENDER', 'Equipe CoCon<equipe@cocon.fr>'); // Expéditeur de message email
 }
 
 if($_server == 'prod'){
@@ -82,6 +83,7 @@ function getConfiguration($gid){
 	$cocon_url = elgg_get_site_url();
 	$cocon_url = rtrim($cocon_url, '/');
 	$methode_url = $cocon_url . '/mod/cocon_methode/vendors/cocon_methode';
+	$user = elgg_get_logged_in_user_entity();
 	
 	$config = array(
 		"error" => false,
@@ -119,17 +121,18 @@ function getConfiguration($gid){
 	$config['user_role'] = 0;
 	*/
 	// Intégration Cocon Méthode
-	$own = elgg_get_logged_in_user_entity();
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
-	if (!$group->isMember($own->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
+	if (!$group->isMember($user->guid)) { register_error("Vous n'êtes pas membre du groupe {$group->name}"); }
 	$config['group_name'] = $group->name;
 	$config['user_id'] = $user->guid;
 	$config['user_name'] = $user->name;
 	$config['user_role'] = cocon_methode_get_user_role($user); // 0 = principal/direction, 1 = équipe, 2 = autre
 	
 	// Update token
-	$_SESSION['check_id'] = md5($gid.'_'.$config['cycle_id']);
+	$_SESSION['check_id'] = md5($gid.'_'.$cid);
+	//error_log("Cocon Kit config.inc : Check ID : {$_SESSION['check_id']} = $gid - $cid"); // debug
+
 	
 	//error_log("Kit Methode Cocon : ROLE {$user->name} : {$config['user_role']}");
 	
@@ -146,7 +149,7 @@ function getEnseignantsInfos($gid){
 	$group = get_entity($gid);
 	if (!elgg_instanceof($group, 'group')) { register_error("Groupe invalide"); forward(); }
 	
-	$members = $group->getMembers();
+	$members = $group->getMembers(0);
 	$infos = array();
 	foreach($members as $ent) {
 		$infos[] = array(
@@ -155,21 +158,6 @@ function getEnseignantsInfos($gid){
 				'user_email' => $ent->email,
 			);
 	}
-	
-	/** POUR TEST : Devra être renseigné par Florian est récupérant les données depuis la base CoCon.
-	$infos = array(
-		array(
-			'user_id' => 'user_id',
-			'user_name' => 'User Name',
-			'user_email' => 'user_email@domain.tld'
-		),
-		array(
-			'user_id' => 'user2_id',
-			'user_name' => 'User2 Name',
-			'user_email' => 'user2_email@domain.tld'
-		),
-	);
-	*/
 	
 	return $infos;
 }

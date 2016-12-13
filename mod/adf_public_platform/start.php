@@ -60,6 +60,19 @@ function esope_init() {
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite_before', 100);
 	elgg_extend_view('forms/groups/invite', 'forms/esope/group_invite', 1000);
 	
+	// Add group Wire support (option)
+	// Note : also uses esope's event handler ("create", "object")
+	if (elgg_is_active_plugin('groups') && elgg_is_active_plugin('thewire')) {
+		if (elgg_is_logged_in()) {
+			//elgg_extend_view('groups/tool_latest', 'thewire/thewire_group_module');
+			elgg_extend_view('groups/profile/widgets', 'thewire/extend_group_thewire', 100);
+		}
+		$enable_thewire_group = elgg_get_plugin_setting('groups_add_wire', 'adf_public_platform');
+		if ($enable_thewire_group == 'groupoption') {
+			add_group_tool_option('thewire', elgg_echo('esope:groups:enablethewire'), false);
+		}
+	}
+	
 	
 	// Ajout interface de chargement
 	// Important : plutôt charger la vue lorsqu'elle est utile, car permet de la pré-définir comme active
@@ -130,6 +143,29 @@ function esope_init() {
 	elgg_register_plugin_hook_handler('register', 'user', 'esope_create_user_hook');
 	// Gestion des actions post-login
 	elgg_register_event_handler('login','user','esope_login_user_action', 800);
+	
+	// Ajoute la possibilité de modifier accès et container pour TheWire
+	// Note : MUST be run very early so group notifications can happen
+	elgg_register_event_handler("create", "object", "esope_thewire_handler_event", 0);
+	
+	
+	// Modify message and add attachments to event notifications
+	// @TODO à implémenter avec réglage
+	/*
+	if (elgg_is_active_plugin('event_calendar') && elgg_is_active_plugin('html_email_handler')) {
+		// Modify default events notification message
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'esope_event_calendar_ics_notify_message');
+		// Use hook to add attachments
+		elgg_register_plugin_hook_handler('notify:entity:params', 'object', 'esope__calendar_ics_notify_attachment');
+	}
+	*/
+	
+	// Liens des messages du Fil (pour pointer sur la publication et non l'accueil)
+	if (elgg_is_active_plugin('thewire')) {
+		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'thewire_notify_message');
+		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'esope_thewire_notify_message');
+
+	}
 	
 	// Pour changer la manière de filtrer les tags
 	if (elgg_is_active_plugin('htmlawed')) {
@@ -299,6 +335,10 @@ function esope_init() {
 	// Pour sélectionner "Tous" dans la recherche
 	elgg_unregister_page_handler('search', 'search_page_handler');
 	elgg_register_page_handler('search', 'adf_platform_search_page_handler');
+	// Enable finer group search (like %$query% on name and username)
+	if (elgg_is_active_plugin('search')) {
+		elgg_register_plugin_hook_handler('search', 'group', 'esope_search_groups_hook');
+	}
 	// Pour permettre à tout éditeur valable de la page d'y ajouter une sous-page
 	elgg_unregister_page_handler('pages', 'pages_page_handler');
 	elgg_register_page_handler('pages', 'adf_platform_pages_page_handler');
@@ -362,6 +402,7 @@ function esope_init() {
 // Include hooks & page_handlers functions (lightens this file)
 require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
 require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
+require_once(dirname(__FILE__) . '/lib/esope/events.php');
 
 
 
@@ -542,25 +583,6 @@ function adf_platform_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 */
 
 
-/*
- * Forwards to internal referrer, if set
- * Otherwise redirects to home after login
-*/
-function adf_platform_login_handler($event, $object_type, $object) {
-	global $CONFIG;
-	// Si on vient d'une page particulière, retour à cette page
-	$back_to_last = $_SESSION['last_forward_from'];
-	if(!empty($back_to_last)) {
-		//register_error("Redirection vers $back_to_last");
-		forward($back_to_last);
-	}
-	// Sinon, pour aller sur la page indiquée à la connexion (accueil par défaut)
-	$loginredirect = elgg_get_plugin_setting('redirect', 'adf_public_platform');
-	// On vérifie que l'URL est bien valide - Attention car on n'a plus rien si URL erronée !
-	if (!empty($loginredirect)) { forward(elgg_get_site_url() . $loginredirect); }
-	forward();
-}
-
 // Redirection après login
 function adf_platform_public_forward_login_hook($hook_name, $reason, $location, $parameters) {
 	if (!elgg_is_logged_in()) {
@@ -586,64 +608,6 @@ function adf_platform_forward_hook($hook_name, $reason, $location, $parameters) 
 		}
 	}
 	return null;
-}
-
-/* Performs some actions after registration */
-function adf_platform_register_handler($event, $object_type, $object) {
-	global $CONFIG;
-	// Groupe principal (à partir du GUID de ce groupe)
-	$homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'adf_public_platform');
-	$homegroup_autojoin = elgg_get_plugin_setting('homegroup_autojoin', 'adf_public_platform');
-	if (elgg_is_active_plugin('groups') && !empty($homegroup_guid) && ($homegroup = get_entity($homegroup_guid)) && in_array($homegroup_autojoin, array('yes', 'force'))) {
-		$user = elgg_get_logged_in_user_entity();
-		// Si pas déjà fait, on l'inscrit
-		if (!$homegroup->isMember($user)) { $homegroup->join($user); }
-	}
-}
-
-
-
-// Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
-function adf_public_platform_group_join($event, $object_type, $relationship) {
-	if (elgg_is_logged_in()) {
-		if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
-			global $NOTIFICATION_HANDLERS;
-			$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'adf_public_platform');
-			if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
-				switch($groupjoin_enablenotif) {
-					case 'site':
-						add_entity_relationship($relationship->guid_one, 'notifysite', $relationship->guid_two);
-						break;
-					case 'all':
-						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-							add_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-						}
-						break;
-					case 'email':
-					default:
-						add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
-				}
-			} else if ($groupjoin_enablenotif == 'no') {
-				// loop through all notification types
-				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-					remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-				}
-			}
-		}
-	}
-	return true;
-}
-
-// Retire les notifications lorsqu'on quitte un groupe
-function adf_public_platform_group_leave($event, $object_type, $relationship) {
-	global $NOTIFICATION_HANDLERS;
-	if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
-		// loop through all notification types
-		foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-			remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
-		}
-	}
-	return true;
 }
 
 
@@ -714,14 +678,18 @@ if (elgg_is_active_plugin('au_subgroups')) {
 		if ($member_only && !$user) { $user = elgg_get_logged_in_user_entity(); }
 		$menuitem = '';
 		$class = "subgroup subgroup-$level";
-		$children = au_subgroups_get_subgroups($group, 0);
+		$display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
+		if ($display_alphabetically != 'no') {
+			$children = au_subgroups_get_subgroups($group, 0, true);
+		} else {
+			$children = au_subgroups_get_subgroups($group, 0, false);
+		}
 		if (!$children) { return ''; }
 		foreach ($children as $child) {
-			if ($member_only) {
-				if (!$child->isMember($user)) { continue; }
+			if ($child->isMember($user) || !$member_only) {
+				$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $child->name . '</a></li>';
+				$menuitem .= adf_platform_list_groups_submenu($child, $level + 1, $member_only, $user);
 			}
-			$menuitem .= '<li class="' . $class . '"><a href="' . $child->getURL() . '">' . '<img src="' . $child->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $child->name) . ' (' . elgg_echo('adf_platform:groupicon') . '" />' . $child->name . '</a></li>';
-			$menuitem .= adf_platform_list_groups_submenu($child, $level + 1);
 		}
 		return $menuitem;
 	}
@@ -904,6 +872,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 	
 	/* Renvoie le nom du profil en clair, ou false si aucun trouvé/valide */
 	function esope_get_user_profile_type($user = false) {
+		$ia = elgg_set_ignore_access(true);
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profile_type = false;
 		// Type de profil
@@ -912,16 +881,21 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$profile_type = strtolower($type->metadata_name);
 			}
 		}
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	
 	function esope_set_user_profile_type($user = false, $profiletype = '') {
+		$ia = elgg_set_ignore_access(true);
 		if (!elgg_instanceof($user, 'user')) $user = elgg_get_logged_in_user_entity();
 		$profiletype_guid = null;
 		if (!empty($profiletype)) {
 			$profiletype_guid = esope_get_profiletype_guid($profiletype);
 		}
-		$user->custom_profile_type = $profiletype_guid;
+		// Manually set the profile type to control the access_id (must not be -1)
+		//$user->custom_profile_type = $profiletype_guid;
+		create_metadata($user->guid, 'custom_profile_type', $profiletype_guid, 'text', $user->guid, 2, false);
+		elgg_set_ignore_access($ia);
 		return $profile_type;
 	}
 	
@@ -933,11 +907,31 @@ if (elgg_is_active_plugin('profile_manager')) {
 		}
 		return false;
 	}
+	
+	/* Returns metadata name for a specific profile type (false if not found) */
+	function esope_get_profiletype_name($profiletype_guid) {
+		$profiletype = get_entity($profiletype_guid);
+		if (elgg_instanceof($profiletype, 'object')) {
+			return strtolower($profiletype->metadata_name);
+		}
+		return false;
+	}
+	
+	/* Returns translated label for a specific profile type (false if not found) */
+	function esope_get_profiletype_label($profiletype_guid) {
+		$profiletype = get_entity($profiletype_guid);
+		if (elgg_instanceof($profiletype, 'object', CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE)) {
+			if (!empty($profiletype->metadata_label)) return $profiletype->metadata_label;
+			else return elgg_echo('profile:types:' . $profiletype);
+		}
+		return false;
+	}
 
 	/* Returns all profile types as $profiletype_guid => $profiletype_name
 	 * Can also return translated name (for use in a dropdown input)
+	 * And also use metadata name as key (only when using translated name)
 	 */
-	function esope_get_profiletypes($use_translation = false) {
+	function esope_get_profiletypes($use_translation = false, $use_meta_key = false) {
 		$profile_types_options = array(
 				"type" => "object", "subtype" => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
 				"owner_guid" => elgg_get_site_entity()->getGUID(), "limit" => false,
@@ -946,7 +940,13 @@ if (elgg_is_active_plugin('profile_manager')) {
 			foreach($custom_profile_types as $type) {
 				$profile_type = strtolower($type->metadata_name);
 				if ($use_translation) {
-					$profiletypes[$type->guid] = elgg_echo('profile:types:' . $profile_type);
+					if (!empty($type->metadata_label)) $profile_type_name = $type->metadata_label;
+					else $profile_type_name = elgg_echo('profile:types:' . $profile_type);
+					if ($use_meta_key) {
+						$profiletypes[$profile_type] = $profile_type_name;
+					} else {
+						$profiletypes[$type->guid] = $profile_type_name;
+					}
 				} else {
 					$profiletypes[$type->guid] = $profile_type;
 				}
@@ -1035,10 +1035,46 @@ if (elgg_is_active_plugin('profile_manager')) {
 				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
+		} else {
+			// Metadata is not defined through profile_manager : use regular field instead
+			if ($auto_options) {
+				$search_field .= esope_make_dropdown_from_metadata($params);
+			} else {
+				$search_field .= '<input type="text" name="' . $name . '" value="' . $value . '" />';
+			}
+			
 		}
 		return $search_field;
 	}
 	
+}
+
+
+/* Return a selector for a given metadata
+ * That's for use in a multi-criteria search form
+ * Params :
+   - metadata : meta name
+   - name : field name
+   - value : set a specific value
+   - empty : add empty value in options
+   - 
+ */
+function esope_make_dropdown_from_metadata($params) {
+	$metadata = trim($params['metadata']);
+	if (empty($metadata)) { return false; }
+	$name = elgg_extract('name', $params, $metadata); // Defaults to metadata name
+	$value = elgg_extract('value', $params, get_input($metadata, false)); // Auto-select current value
+	$empty = elgg_extract('empty', $params, true);
+	$search_field = '';
+	
+	// Auto-discover valid values from existing metadata
+	$options = esope_get_meta_values($metadata);
+	
+	// Add empty entry at the beginning of the array
+	//if ($empty) $options = array('empty option' => '') + $options;
+	if ($empty) $options = array_merge(array('empty option' => ''), $options);
+	
+	return elgg_view("input/dropdown", array('name' => $name, 'options' => $options, 'value' => $value));
 }
 
 /* Returns the wanted value based on both params and inputs
@@ -1283,19 +1319,23 @@ function esope_get_subpages($parent) {
 function esope_list_subpages($parent, $internal_link = false, $full_view = false) {
 	$content = '';
 	$subpages = esope_get_subpages($parent);
-	if ($subpages) foreach ($subpages as $subpage) {
-		if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
-		else if ($internal_link == 'url') $href = $subpage->getURL();
-		else $href = false;
-		if ($full_view) {
-			echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
-			echo elgg_view("output/longtext", array("value" => $subpage->description));
-			echo '<p style="page-break-after:always;"></p>';
-			echo esope_list_subpages($subpage, $internal_link, $full_view);
-		} else {
-			$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
-			$content .= esope_list_subpages($subpage, $internal_link);
-			$content .= '</li>';
+	if ($subpages) {
+		// Alphabetic sort
+		usort($subpages, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+		foreach ($subpages as $subpage) {
+			if ($internal_link == 'internal') $href = '#page_' . $subpage->guid;
+			else if ($internal_link == 'url') $href = $subpage->getURL();
+			else $href = false;
+			if ($full_view) {
+				echo '<h3>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, 'name' => 'page_' . $subpage->guid)) . '</h3>';
+				echo elgg_view("output/longtext", array("value" => $subpage->description));
+				echo '<p style="page-break-after:always;"></p>';
+				echo esope_list_subpages($subpage, $internal_link, $full_view);
+			} else {
+				$content .= '<li>' . elgg_view('output/url', array('href' => $href, 'text' => $subpage->title, ));
+				$content .= esope_list_subpages($subpage, $internal_link);
+				$content .= '</li>';
+			}
 		}
 	}
 	if (!$full_view && !empty($content)) $content = '<ul>' . $content . '</ul>';
@@ -1559,6 +1599,28 @@ function esope_get_users_from_setting($setting) {
 		}
 	}
 	return $users;
+}
+
+
+// Return distinct log values for a specific column
+// This is used for log browser filtering dropdowns
+function esope_get_log_distinct_values($column) {
+	//$log_columns = array('object_id', 'object_class', 'object_type', 'object_subtype', 'event', 'performed_by_guid', 'owner_guid', 'access_id', 'enabled', 'ip_address');
+	// Limit distinct values search to columns where values are in limited number
+	$log_columns = array('object_class', 'object_type', 'object_subtype', 'event', 'access_id', 'enabled');
+	if (empty($column) || !in_array($column, $log_columns)) { return false; }
+	// Always add an empty value (no filter)
+	$results = array('' => elgg_echo('esope:option:nofilter'));
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT DISTINCT $column FROM `" . $dbprefix . "system_log`;";
+	$rows = get_data($query);
+	foreach ($rows as $row) {
+		// Ensure unique values
+		if (!empty($row->$column) && !isset($results[$row->$column])) {
+			$results[$row->$column] = $row->$column;
+		}
+	}
+	return $results;
 }
 
 
@@ -1893,48 +1955,6 @@ function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
 }
 
 
-// Perform some post-login actions (join groups, etc.)
-function esope_login_user_action($event, $type, $user) {
-	if (elgg_instanceof($user, "user")) {
-		if (!$user->isBanned()) {
-			// Try to join groups asked at registration
-			if ($user->join_groups) {
-				foreach($user->join_groups as $group_guid) {
-					if ($group = get_entity($group_guid)) {
-						// Process only groups that haven't been joined yet
-						if (!$group->isMember($user)) {
-							if (!$group->join($user)) {
-								// Handle subgroups cases
-								if (elgg_is_active_plugin('au_subgroups')) {
-									system_message(elgg_echo('esope:subgroups:tryjoiningparent', array($group->name)));
-									while ($parent = au_subgroups_get_parent_group($group)) {
-										//  Join only if parent group is public membership or if we have a join pending
-										if (!$parent->isMember($user) && ($parent->isPublicMembership() || in_array($parent->guid, $user->join_groups))) {
-											// Join group, or add to join list
-											if (!$parent->join($user)) { $join_children[] = $parent->guid; }
-										}
-									}
-									// Start joining from upper parents if needed
-									if ($join_children) {
-										$join_children = array_reverse($join_children);
-										foreach($join_children as $children) { $children->join($user); }
-									}
-									// Try to join group again
-									if ($group->join($user)) {}
-								}
-							}
-						}
-					}
-				}
-				// Update waiting list
-				$user->join_groups = null;
-			}
-		}
-	}
-	return null;
-}
-
-
 /* Returns an array with images extracted from a text field
  * string $html : the HTML input content
  * bool $full_tag : return full <img /> tag, or only src if false
@@ -2186,6 +2206,47 @@ function esope_build_menu($a, $b) {
 function esope_admin_tools_list() {
 	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats');
 	return $tools;
+}
+
+
+/* Determines if the user is a group administrator (=> has admin rights on any group)
+ * $user : the user to be checked
+ * $group : optional group
+ * $strict : if true and group_operators enabled, ensures the user is the group owner only 
+ *           (not a co-admin or even not an global admin)
+ */
+function esope_is_group_admin($user = false, $group = null, $strict = false) {
+	if (!elgg_instanceof($user, 'user')) {
+		if (!elgg_is_logged_in()) return false;
+		$user = elgg_get_logged_in_user_entity();
+	}
+	
+	// Checks only for a given group
+	if (elgg_instanceof($group, 'group')) {
+		if ($group->canEdit()) {
+			if (!$strict) { return true; }
+			if ($group->owner_guid == $user->guid) { return true; }
+		}
+		return false;
+	}
+	
+	// Owned group check : always validates this function test
+	$owned_groups = elgg_get_entities(array('type' => 'group', 'owner_guid' => $user->guid));
+	if ($owned_groups) { return true; }
+	// Strict check : any other method is not valid, so leave now (even not global admin)
+	if ($strict) { return false; }
+	
+	// Admin bypass
+	if ($user->isAdmin()) { return true; }
+	
+	// Now also check group operators
+	if (elgg_is_active_plugin('group_operators')) {
+		$operator_of = elgg_get_entities_from_relationship(array('types'=>'group', 'relationship_guid'=>$user->guid, 'relationship'=>'operator', 'inverse_relationship'=>false));
+		if ($operator_of) { return true; }
+	}
+	
+	// None passed : definitely not a group admin...
+	return false;
 }
 
 

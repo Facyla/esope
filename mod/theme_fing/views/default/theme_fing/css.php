@@ -7,13 +7,14 @@ $imgurl = elgg_get_site_url() . 'mod/theme_fing/graphics/';
 $fonturl = elgg_get_site_url() . 'mod/theme_fing/fonts/';
 $font_neris = $fonturl . 'neris/';
 $font_lettergothic = $fonturl . 'LetterGothicStd/';
+$font_sourcesanspro = $fonturl . 'SourceSansPro/';
 ?>
 
 /* Replace main icons sprite */
 .elgg-icon { background-image: url(<?php echo $imgurl; ?>elgg_sprites_fing.png); }
 
 
-/* Add some fonts */
+/* Add some (open) fonts */
 
 /* NERIS FONT */
 @font-face {
@@ -86,6 +87,29 @@ $font_lettergothic = $fonturl . 'LetterGothicStd/';
 	font-family: 'LetterGothic'; font-weight:bold; font-style: italic;
 	src: url('<?php echo $font_lettergothic; ?>LetterGothicStd-BoldSlanted.otf') format("opentype");
 }
+
+/* SOURCE SANS PRO */
+@font-face {
+	font-family: 'Source Sans Pro'; font-weight:normal;
+	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Regular.otf') format("opentype");
+}
+@font-face {
+	font-family: 'Source Sans Pro'; font-weight:bold;
+	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Bold.otf') format("opentype");
+}
+@font-face {
+	font-family: 'Source Sans Pro'; font-weight:300;
+	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Light.otf') format("opentype");
+}
+@font-face {
+	font-family: 'Source Sans Pro'; font-weight:900;
+	src: url('<?php echo $font_sourcesanspro; ?>SourceSansPro-Black.otf') format("opentype");
+}
+
+/* Custom font classes, for use in special pages */
+.font-neris, .font-neris * { font-family:"neris", sans-serif; }
+.font-lettergothic, .font-lettergothic * { font-family:"LetterGothic", serif; }
+.font-sourcesanspro, .font-sourcesanspro * { font-family:"Source Sans Pro", sans-serif; }
 
 
 body { border-top: 1px solid #333333; }

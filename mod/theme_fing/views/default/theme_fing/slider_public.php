@@ -27,11 +27,12 @@ foreach ($articles as $ent) {
 	$image = '<img src="' . $image_url . '" style="height:250px; width:auto !important;" />';
 	$text = $ent->excerpt;
 	if (empty($text)) $text = $ent->briefdescription;
-	$text .= $ent->description;
+	if (empty($text)) $text = elgg_get_excerpt($ent->description, 200);
+	$text =  htmlspecialchars(html_entity_decode(strip_tags($text)));
 	$excerpt = elgg_get_excerpt($text, 200);
 	$slidercontent .= '<li>';
 	$slidercontent .= '<div class=""><table style="width: 100%;" style="border:0;"><tbody><tr>';
-	$slidercontent .= '<td style="width:60%; text-align: center;">' . $image . '</td>';
+	$slidercontent .= '<td style="width:60%; max-width:60%; text-align: center;">' . $image . '</td>';
 	$slidercontent .= '<td style="width:40%;"><div class="textSlide"><h3><a href="' . $ent->getURL() . '">' . $title . '</a></h3><div style="font-size: 16px;">' . $excerpt . '</div></div></td>';
 	$slidercontent .= '</tr></table></div></li>';
 }

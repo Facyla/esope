@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<meta content="IE=Edge" http-equiv="X-UA-Compatible">
+	<title>Coll&egrave;ges connect&eacute;s</title>
+	<meta http-equiv="pragma" content="no-cache" />
+    <meta name="expires" content="tue, 01 Jun 2010 19:45:00 GMT" />
+	<link rel="stylesheet" media="all" type="text/css" href="css/global.css" />
+	<link rel="stylesheet" media="all" type="text/css" href="css/font-awesome.min.css" />
+	<script type="text/javascript" src="js/jquery/jquery-1.7.2.js"></script>
+	<script type="text/javascript" type="text/javascript" src="js/utils/utils.js"></script>
+	<script type="text/javascript" src="js/utils/querystring.js"></script>
+	<script type="text/javascript" src="js/utils/ajax_delegate.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+	<link rel="shortcut icon" type="image/png" href="css/images/favicon.png" />
+</head>
+<body>
+	<div id="content" class="content">
+		<section>
+			<div class="interne interne-content">
+				<table class="app_table" style="background-color:#ffffff;width:100%">
+					<tr>
+						<td colspan="3" class="app_content" id="app_content"></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<table width="100%">
+								<tr>
+									<td class="app_menu" width="33%" id="btnPrev" onclick="javascript:prevPage();">Précédent</td>
+									<td class="app_menu" width="33%" id="btnSave" onclick="javascript:enregistreBilan();">Enregistrer</td>
+									<td class="app_menu" width="33%" id="btnNext" onclick="javascript:nextPage();">Suivant</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<div id="app_loader">
+					<div></div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>

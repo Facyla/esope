@@ -1,6 +1,6 @@
 <?php
 /**
-* Ssend a message action
+* Send a message action
 * 
 * @package ElggMessages
 */
@@ -8,6 +8,8 @@
 $subject = strip_tags(get_input('subject'));
 $body = get_input('body');
 $recipient_guid = get_input('recipient_guid');
+$sender_guid =  get_input('sender_guid', false);
+if (!$sender_guid) { $sender_guid = elgg_get_logged_in_user_guid(); }
 
 elgg_make_sticky_form('messages');
 
@@ -32,7 +34,7 @@ if (!$body || !$subject) {
 
 // Otherwise, 'send' the message 
 //$result = messages_send($subject, $body, $recipient_guid, 0, $reply);
-$result = notification_messages_send($subject, $body, $recipient_guid, 0, $reply);
+$result = notification_messages_send($subject, $body, $recipient_guid, $sender_guid, $reply);
 
 // Save 'send' the message
 if (!$result) {
@@ -41,7 +43,8 @@ if (!$result) {
 }
 
 elgg_clear_sticky_form('messages');
-	
+
 system_message(elgg_echo("messages:posted"));
 
 forward('messages/inbox/' . elgg_get_logged_in_user_entity()->username);
+

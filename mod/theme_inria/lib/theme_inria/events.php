@@ -83,6 +83,7 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 	// Note : return true to avoid blocking access if we are not in the right context
 	if (!(($event == 'login') && ($object_type == 'user') && elgg_instanceof($user, 'user'))) { return true; }
 	
+	$ia = elgg_set_ignore_access(true);
 	$debug = false;
 	if ($debug) error_log("Inria : profile update : $event, $object_type, " . $user->guid);
 	if ($debug) error_log("Account update : before = {$user->membertype} / {$user->memberstatus} / {$user->memberreason}");
@@ -167,6 +168,18 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 		$external_profiletype_guid = esope_get_profiletype_guid('external');
 		
 		// MAJ du type de compte et de profil
+		// @TODO : use create_metadata to ensure profile type is readable by anyone
+		/* See http://reference.elgg.org/1.8/engine_2lib_2metadata_8php.html#ad896cf3bd1e5347f5ced1876e8311af2
+		create_metadata 	(
+		  	$entity_guid,
+		  	$name,
+		  	$value,
+		  	$value_type = '',
+		  	$owner_guid = 0,
+		  	$access_id = ACCESS_PRIVATE,
+		  	$allow_multiple = false 
+			)
+		*/
 		if ($is_inria) {
 			if ($user->membertype != 'inria') { $user->membertype = 'inria'; }
 			if ($profiletype_guid != $inria_profiletype_guid) { $user->custom_profile_type = $inria_profiletype_guid; }
@@ -192,6 +205,8 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			esope_set_user_profile_type($user, 'external');
 		}
 	}
+	
+	elgg_set_ignore_access($ia);
 	
 	// Block access for closed accounts
 	// Verrouillage à l'entrée si le compte est inactif (= archivé mais pas désactivé !!)
@@ -226,7 +241,7 @@ function theme_inria_notify_event_owner($event, $type, $object) {
 // Block sending notification in some groups' discussions (replies only)
 // Intercepts create,annotation event early and block sending messages by modifying plugins signals
 // As they are not notified by default, block plugins which notify comments, eg. comment_tracker
-// See also hook fucntion theme_inria_object_notifications_block
+// See also hook function theme_inria_object_notifications_block
 function theme_inria_annotation_notifications_event_block($event, $type, $annotation) {
 	if (($type == 'annotation') && ($annotation->name == "group_topic_post")) {
 		$block = elgg_get_plugin_setting('block_notif_forum_groups_replies', 'theme_inria');
@@ -235,18 +250,21 @@ function theme_inria_annotation_notifications_event_block($event, $type, $annota
 			$entity = $annotation->getEntity();
 			$blocked_guids = elgg_get_plugin_setting('block_notif_forum_groups', 'theme_inria');
 			$blocked_guids = esope_get_input_array($blocked_guids);
-			$group_guid = $entity->getContainerGUID();
+			$group_guid = $entity->container_guid;
 			if ($group_guid && is_array($blocked_guids) && in_array($group_guid, $blocked_guids)) { 
 				error_log("  => A BLOQUER #22");
-				$user_guid = elgg_get_logged_in_user_guid();
+				//$user_guid = elgg_get_logged_in_user_guid();
+				// Use rather a CRON an WS safe
+				$user_guid = $annotation->owner_guid;
 				if (elgg_is_active_plugin('comment_tracker')) {
-					comment_tracker_unsubscribe($user_guid, $entity->guid);
+					$result = comment_tracker_unsubscribe($user_guid, $entity->guid);
 					error_log("  => ABO auto desactive");
 				}
 			}
 		}
 	}
 }
+
 
 
 

@@ -1,5 +1,25 @@
 = Version history =
 
+7.7 (2014-02-20):
+
+- added: plugin setting to limit number of times a group name and description can be changed
+- added: option to export user group membership when exporting users
+- added: location field added to the group profile field types
+- changed: CSV export delimiters changed to semi colon #11
+- fixed: use ElggBatch for export to mitigate OOM errors #17
+- fixed: live validation not working in walled garden #37
+- fixed: profile type not correctly selected on ajax loaded register form
+- fixed: ajax loaded register form breaks when using multiselect in register form #36
+- fixed: ajax loaded register form does not support live validation
+- fixed: multiselect not validated on submit of register form #35
+
+7.6.1 (2013-08-28):
+
+- fixed: about me field uses custom field name as label
+- fixed: auto suggested usernames no longer contains invalid characters
+- fixed: input multiselect correctly encodes options
+- fixed: incorrect listing of categories on admin configuration page if more than 10 are created
+
 7.6 (2013-05-06):
 
 - added: admin option to show hints on default account fields on register form

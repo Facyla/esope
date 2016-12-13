@@ -1,6 +1,15 @@
 <?php
-	$plugin_graphics_folder = elgg_get_site_url() . "mod/profile_manager/graphics/"; 
+$plugin_graphics_folder = elgg_get_site_url() . "mod/profile_manager/graphics/";
 ?>
+
+.elgg-page-body .elgg-inner .profile-manager-profile-completeness {
+	margin-top: 10px;
+}
+
+.profile-manager-profile-completeness {
+	text-align: center;
+}
+
 /* widgets */
 #widget_profile_completeness_container {
 	border: 1px solid #AAAAAA;
@@ -119,6 +128,11 @@ li.custom_fields_edit_profile_category {
 .elgg-icon.profile_manager_validate_icon_invalid {
 	background-position: 0 -252px;
 	display: inline-block;
+}
+
+/* register form */
+.elgg-form-register .mandatory > label:after {
+	content: "*";
 }
 
 /* registration field */
