@@ -16,7 +16,7 @@ $head .= elgg_format_element('title', [], $entity->title);
 
 $body = elgg_format_element('style', ['type' => 'text/css'], elgg_view('newsletter/view/css', $vars));
 // ESOPE : add print CSS
-$body .= elgg_format_element('style', ['type' => 'text/css', 'media' => 'print'], elgg_view('css/newsletter_print', $vars));
+$body .= elgg_format_element('style', ['type' => 'text/css', 'media' => 'print'], elgg_view('css/newsletter/print.css', $vars));
 
 $body .= elgg_view('newsletter/view/body', $vars);
 
