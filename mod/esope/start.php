@@ -44,6 +44,9 @@ function esope_init() {
 	// Nouvelles vues
 	elgg_extend_view('groups/sidebar/members','groups/sidebar/online_groupmembers');
 	
+	// Move group digest settings after groups edit screen
+	elgg_unextend_view("groups/edit", "digest/groupsettings/form");
+	elgg_extend_view("groups/edit", "digest/groupsettings/form", 500);
 	// Tweak Digest content : unextend sections to be removed + extend with wanted sections (and chosen priority)
 	// See mod/digest/README.txt for details
 	// Add all groups excerpt to digest
@@ -412,13 +415,17 @@ function esope_init() {
 	elgg_unregister_page_handler('digest', 'digest_page_handler');
 	elgg_register_page_handler('digest', 'esope_digest_page_handler');
 	*/
+	
+	// @TODO remove once PR accepted
 	// Override email sending function to address https://github.com/ColdTrick/html_email_handler/issues/36
+	/*
 	if (elgg_is_active_plugin('html_email_handler')) {
 		elgg_register_library('elgg:html_email_handler', elgg_get_plugins_path() . 'esope/lib/esope/html_email_handler.php');
 		elgg_load_library('elgg:html_email_handler');
 		elgg_unregister_plugin_hook_handler('email', 'system', '\ColdTrick\HTMLEmailHandler\Email::emailHandler');
 		elgg_register_plugin_hook_handler('email', 'system', 'esope_html_email_handler_emailHandler');
 	}
+	*/
 	
 	// Esope custom search - @TODO currently alpha version
 	elgg_register_page_handler('esearch', 'esope_esearch_page_handler');
