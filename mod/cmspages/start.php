@@ -624,8 +624,12 @@ function cmspages_compose_module($module_name, $module_config = false) {
 		case 'entity':
 			// Affichage d'une entité : celle-ci doit exister
 			// champs ou template au choix ? autres paramètres ?
-			$return .= '<h3>' . elgg_echo('cmspages:chosenentity') . '</h3>';
-			if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) $return .= $ent->guid . ' : ' . $ent->title . $ent->name . '<br />' . $ent->description;
+			//$return .= '<h3>' . elgg_echo('cmspages:chosenentity') . '</h3>';
+			//if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) $return .= $ent->guid . ' : ' . $ent->title . $ent->name . '<br />' . $ent->description;
+			//$return .= elgg_echo('cmspages:chosenentity') . '</h3>';
+			if ($module_config['guid'] && ($ent = get_entity($module_config['guid']))) {
+				$return .= '<h3>' . $ent->title . $ent->name . '</h3><div class="elgg-output">' . $ent->description . '</div>';
+			}
 			break;
 			
 		case 'view':
