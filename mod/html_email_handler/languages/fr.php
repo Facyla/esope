@@ -6,7 +6,7 @@ return array(
 	'html_email_handler:theme_preview:menu' => "Notification HTML",
 	
 	// settings
-	'html_email_handler:settings:notifications:description' => "Lorsque vous activez cette option, toutes les notifications envoyées aux membres du site seront au format HTML.",
+	'html_email_handler:settings:notifications:description' => "Lorsque vous activez cette option, toutes les notifications envoyées aux membres du site seront au format HTML (au lieu de texte brut). Une version alternative en texte brut est également envoyée.",
 	'html_email_handler:settings:notifications' => "Utiliser comme gestionnaire d'email de notification par défaut",
 	'html_email_handler:settings:notifications:subtext' => "Ceci va envoyer tous les mails sortant au format HTML",
 	'html_email_handler:settings:limit_subject' => "Limiter la longueur maximale du sujet des emails",
