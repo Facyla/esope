@@ -34,6 +34,9 @@ $upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
 $max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
 
 $upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_upload)));
+
+$is_embed = false;
+if (elgg_in_context('embed')) { $is_embed = true; }
 ?>
 <div class="mbm elgg-text-help">
 	<?php echo $upload_limit; ?>
@@ -103,7 +106,7 @@ if ($guid) {
 }
 
 // Note : select defaults to no notification in embed context
-if (!$vars['entity']) {
+if (!$vars['entity'] || $is_embed) {
 	echo elgg_view('prevent_notifications/prevent_form_extend', array());
 }
 

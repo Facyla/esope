@@ -7,16 +7,25 @@
 
 // Adds prevent_notification form field
 // Add tags and category support
+// Note: synced with file_tools release 2.0
 
 $page_owner = elgg_get_page_owner_entity();
 $container_guid = $page_owner->getGUID();
 $site_url = elgg_get_site_url();
 
-// load CSS and JS
+if (elgg_instanceof($page_owner, "group", null, "ElggGroup")) {
+	$return_url = $site_url . "file/group/" . $page_owner->getGUID() . "/all";
+} else {
+	$return_url = $site_url . "file/owner/" . $page_owner->username;
+}
+
+// load JS
+elgg_load_js("jquery.uploadify");
 elgg_load_css("jquery.uploadify");
-elgg_require_js("jquery.uploadify");
-elgg_require_js('file_tools/uploadify');
 ?>
+<script type="text/javascript">
+	var file_tools_uploadify_return_url = "<?php echo $return_url; ?>";
+</script>
 
 <fieldset>
 	<div>
