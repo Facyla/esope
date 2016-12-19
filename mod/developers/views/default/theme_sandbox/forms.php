@@ -30,6 +30,16 @@ $ipsum = elgg_view('developers/ipsum');
 			'label' => 'Radio input (.elgg-input-radios):',
 		));
 
+		echo elgg_view_input('checkbox', array(
+			'name' => 'f4s',
+			'id' => 'f4s',
+			'value' => 1,
+			'default' => false,
+			'required' => true,
+			'label' => 'a (.elgg-input-checkbox)',
+			'help' => 'Single checkbox .elgg-input-checkbox wrapped in .elgg-input-single-checkbox',
+		));
+
 		echo elgg_view_input('checkboxes', array(
 			'name' => 'f4',
 			'id' => 'f4',
@@ -43,8 +53,15 @@ $ipsum = elgg_view('developers/ipsum');
 		echo elgg_view_input('select', array(
 			'name' => 'f5',
 			'id' => 'f5',
-			'options' => array('option 1', 'option 2'),
-			'label' => 'Select input (dropdown) (.elgg-input-dropdown):',
+			'options' => array(
+				'option 1', 
+				'option 2',
+				[
+		            'text' => 'disabled',
+		            'disabled' => true,
+		        ],
+			),
+			'label' => 'Select input (dropdown) (.elgg-input-dropdown) with a disabled option:',
 		));
 
 		echo elgg_view_input('select', array(
