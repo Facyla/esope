@@ -428,11 +428,12 @@ $DEFAULT_FILE_STORE = null;
  * Return the default filestore.
  *
  * @return \ElggFilestore
+ * @deprecated Will be removed in 3.0
  */
 function get_default_filestore() {
-	global $DEFAULT_FILE_STORE;
+	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated.', '2.1');
 
-	return $DEFAULT_FILE_STORE;
+	return $GLOBALS['DEFAULT_FILE_STORE'];
 }
 
 /**
@@ -441,12 +442,12 @@ function get_default_filestore() {
  * @param \ElggFilestore $filestore An \ElggFilestore object.
  *
  * @return true
+ * @deprecated Will be removed in 3.0
  */
 function set_default_filestore(\ElggFilestore $filestore) {
-	global $DEFAULT_FILE_STORE;
+	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated.', '2.1');
 
-	$DEFAULT_FILE_STORE = $filestore;
-
+	$GLOBALS['DEFAULT_FILE_STORE'] = $filestore;
 	return true;
 }
 
@@ -475,7 +476,7 @@ function _elgg_filestore_init() {
 
 	// Now register a default filestore
 	if (isset($CONFIG->dataroot)) {
-		set_default_filestore(new \ElggDiskFilestore($CONFIG->dataroot));
+		$GLOBALS['DEFAULT_FILE_STORE'] = new \ElggDiskFilestore($CONFIG->dataroot);
 	}
 
 	// Fix MIME type detection for Microsoft zipped formats
@@ -502,31 +503,9 @@ function _elgg_filestore_init() {
 function _elgg_filestore_detect_mimetype($hook, $type, $mime_type, $params) {
 
 	$original_filename = elgg_extract('original_filename', $params);
+	$ext = pathinfo($original_filename, PATHINFO_EXTENSION);
 
-	$info = pathinfo($original_filename);
-
-	// hack for Microsoft zipped formats
-	$office_formats = array('docx', 'xlsx', 'pptx');
-	if ($mime_type == "application/zip" && in_array($info['extension'], $office_formats)) {
-		switch ($info['extension']) {
-			case 'docx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-				break;
-			case 'xlsx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-				break;
-			case 'pptx':
-				$mime_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-				break;
-		}
-	}
-
-	// check for bad ppt detection
-	if ($mime_type == "application/vnd.ms-office" && $info['extension'] == "ppt") {
-		$mime_type = "application/vnd.ms-powerpoint";
-	}
-
-	return $mime_type;
+	return (new \Elgg\Filesystem\MimeTypeDetector())->fixDetectionErrors($mime_type, $ext);
 }
 
 /**
@@ -580,6 +559,45 @@ function _elgg_filestore_test($hook, $type, $value) {
 	$value[] = "{$CONFIG->path}engine/tests/ElggCoreFilestoreTest.php";
 	return $value;
 }
+
+
+/**
+ * Returns file's download URL
+ *
+ * @param \ElggFile $file       File object or entity
+ * @param bool      $use_cookie Limit URL validity to current session only
+ * @param string    $expires    URL expiration, as a string suitable for strtotime()
+ * @return string
+ */
+function elgg_get_download_url(\ElggFile $file, $use_cookie = true, $expires = '+2 hours') {
+	$file_svc = new Elgg\FileService\File();
+	$file_svc->setFile($file);
+	$file_svc->setExpires($expires);
+	$file_svc->setDisposition('attachment');
+	$file_svc->bindSession($use_cookie);
+	return $file_svc->getURL();
+}
+
+/**
+ * Returns file's URL for inline display
+ * Suitable for displaying cacheable resources, such as user avatars
+ *
+ * @param \ElggFile $file       File object or entity
+ * @param bool      $use_cookie Limit URL validity to current session only
+ * @param string    $expires    URL expiration, as a string suitable for strtotime()
+ * @return string
+ */
+function elgg_get_inline_url(\ElggFile $file, $use_cookie = false, $expires = false) {
+	$file_svc = new Elgg\FileService\File();
+	$file_svc->setFile($file);
+	if ($expires) {
+		$file_svc->setExpires($expires);
+	}
+	$file_svc->setDisposition('inline');
+	$file_svc->bindSession($use_cookie);
+	return $file_svc->getURL();
+}
+
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', '_elgg_filestore_init', 100);

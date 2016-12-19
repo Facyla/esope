@@ -9,6 +9,24 @@ See the administrator guides for :doc:`how to upgrade a live site </admin/upgrad
    :local:
    :depth: 2
 
+From 2.0 to 2.1
+===============
+
+Deprecated APIs
+---------------
+
+ * ``ElggFile::setFilestore``
+ * ``get_default_filestore``
+ * ``set_default_filestore``
+ * ``elgg_get_config('siteemail')``: Use ``elgg_get_site_entity()->email``
+ * URLs starting with ``/css/`` and ``/js/``: ``Use elgg_get_simplecache_url()``
+ * ``elgg.ui.widgets`` JavaScript object is deprecated by ``elgg/widgets`` AMD module
+
+Added ``elgg/widgets`` module
+-----------------------------
+
+If your plugin code calls ``elgg.ui.widgets.init()``, instead use the :doc:`elgg/widgets module <javascript>`.
+
 From 1.x to 2.0
 ===============
 

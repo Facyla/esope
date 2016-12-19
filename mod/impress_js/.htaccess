@@ -1,5 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine On
-RewriteRule ^(.*)\/impress\/edit\/(.*)$ $1\/mod\/impress_js\/vendors\/Strut\/$2?%{QUERY_STRING}
-
-

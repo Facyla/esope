@@ -1,4 +1,0 @@
-A patch has been made in start.php so that it reuses previously declared public pages.
-
-Patch submitted to https://github.com/thomasyung/GDocs-File-Previewer/issues/1
-

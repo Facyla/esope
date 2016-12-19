@@ -132,6 +132,15 @@ $CONFIG->dbprefix = '{{dbprefix}}';
 //$CONFIG->dataroot = "";
 //$CONFIG->simplecache_enabled = true;
 
+/**
+ * Enable the boot cache
+ *
+ * Elgg can store most non-user-specific boot up data in a cache. If you want to
+ * enable this, uncomment the next line to set it to 10. Although Elgg has a built-
+ * in invalidation strategy for this cache, you should consider a small TTL to
+ * minimize the damage if the cache should grow stale.
+ */
+//$CONFIG->boot_cache_ttl = 10;
 
 /**
  * Cookie configuration
@@ -216,3 +225,20 @@ $CONFIG->min_password_length = 6;
  * @global string $CONFIG->exception_include
  */
 $CONFIG->exception_include = '';
+
+/**
+ * To enable profiling, uncomment the following lines, and replace __some_secret__ with a
+ * secret key. When enabled, profiling data will show in the JS console.
+ */
+//if (isset($_REQUEST['__some_secret__'])) {
+//
+//	// send profiling data to the JS console?
+//	$CONFIG->enable_profiling = true;
+//
+//	// profile all queries? A page with a ton of queries could eat up memory.
+//	$CONFIG->profiling_sql = false;
+//
+//	// in the list, don't include times that don't contribute at least this much to the
+//	// total time captured. .1% by default
+//	$CONFIG->profiling_minimum_percentage = .1;
+//}

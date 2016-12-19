@@ -67,10 +67,11 @@ class Application {
 		 *
 		 * @global float
 		 */
-		global $START_MICROTIME;
-		if (!isset($START_MICROTIME)) {
-			$START_MICROTIME = microtime(true);
+		if (!isset($GLOBALS['START_MICROTIME'])) {
+			$GLOBALS['START_MICROTIME'] = microtime(true);
 		}
+
+		$services->timer->begin([]);
 
 		/**
 		 * This was introduced in 2.0 in order to remove all internal non-API state from $CONFIG. This will
@@ -79,9 +80,8 @@ class Application {
 		 *
 		 * @access private
 		 */
-		global $_ELGG;
-		if (!isset($_ELGG)) {
-			$_ELGG = new \stdClass();
+		if (!isset($GLOBALS['_ELGG'])) {
+			$GLOBALS['_ELGG'] = new \stdClass();
 		}
 
 		$this->engine_dir = __DIR__ . '/../..';
@@ -171,6 +171,7 @@ class Application {
 			'deprecated-1.10.php',
 			'deprecated-1.11.php',
 			'deprecated-1.12.php',
+			'deprecated-2.1.php',
 		);
 
 		// isolate global scope
@@ -186,13 +187,13 @@ class Application {
 					$setups[$file] = $setup;
 				}
 			}
-	
+
 			// store instance to be returned by elgg()
 			self::$_instance = $this;
 
 			// set up autoloading and DIC
 			_elgg_services($this->services);
-	
+
 			$events = $this->services->events;
 			$hooks = $this->services->hooks;
 
@@ -205,7 +206,7 @@ class Application {
 
 	/**
 	 * Replacement for loading engine/start.php
-	 * 
+	 *
 	 * @return self
 	 */
 	public static function start() {
@@ -213,7 +214,7 @@ class Application {
 		$app->bootCore();
 		return $app;
 	}
-	
+
 	/**
 	 * Bootstrap the Elgg engine, loads plugins, and calls initial system events
 	 *
@@ -228,8 +229,12 @@ class Application {
 	 * @return void
 	 */
 	public function bootCore() {
-		
+
 		$config = $this->services->config;
+
+		if ($config->getVolatile('Elgg\Application_phpunit')) {
+			throw new \RuntimeException('Unit tests should not call ' . __METHOD__);
+		}
 
 		if ($config->getVolatile('boot_complete')) {
 			return;
@@ -254,12 +259,13 @@ class Application {
 		// Load the plugins that are active
 		$this->services->plugins->load();
 
-		if (Directory\Local::root()->getPath() != self::elggDir()->getPath()) {
+		$root = Directory\Local::root();
+		if ($root->getPath() != self::elggDir()->getPath()) {
 			// Elgg is installed as a composer dep, so try to treat the root directory
 			// as a custom plugin that is always loaded last and can't be disabled...
 			if (!elgg_get_config('system_cache_loaded')) {
 				// configure view locations for the custom plugin (not Elgg core)
-				$viewsFile = Directory\Local::root()->getFile('views.php');
+				$viewsFile = $root->getFile('views.php');
 				if ($viewsFile->exists()) {
 					$viewsSpec = $viewsFile->includeFile();
 					if (is_array($viewsSpec)) {
@@ -268,17 +274,20 @@ class Application {
 				}
 
 				// find views for the custom plugin (not Elgg core)
-				_elgg_services()->views->registerPluginViews(Directory\Local::root()->getPath());
+				_elgg_services()->views->registerPluginViews($root->getPath());
 			}
-			
+
 			if (!elgg_get_config('i18n_loaded_from_cache')) {
-				_elgg_services()->translator->registerPluginTranslations(Directory\Local::root()->getPath());
+				_elgg_services()->translator->registerPluginTranslations($root->getPath());
 			}
-			
+
 			// This is root directory start.php, not elgg/engine/start.php
-			@include_once Directory\Local::root()->getPath("start.php");
+			$root_start = $root->getPath("start.php");
+			if (is_file($root_start)) {
+				require $root_start;
+			}
 		}
-		
+
 
 		// @todo move loading plugins into a single boot function that replaces 'boot', 'system' event
 		// and then move this code in there.
@@ -287,6 +296,8 @@ class Application {
 		if (!elgg_is_registered_viewtype($viewtype)) {
 			elgg_set_viewtype('default');
 		}
+
+		$this->allowPathRewrite();
 
 		// @todo deprecate as plugins can use 'init', 'system' event
 		$events->trigger('plugins_boot', 'system');
@@ -313,7 +324,7 @@ class Application {
 		$this->loadSettings();
 		return $this->services->db;
 	}
-	
+
 	/**
 	 * Get an undefined property
 	 *
@@ -327,11 +338,11 @@ class Application {
 		}
 		trigger_error("Undefined property: " . __CLASS__ . ":\${$name}");
 	}
-	
+
 	/**
 	 * Creates a new, trivial instance of Elgg\Application and set it as the singleton instance.
 	 * If the singleton is already set, it's returned.
-	 * 
+	 *
 	 * @return self
 	 */
 	private static function create() {
@@ -344,22 +355,22 @@ class Application {
 					_elgg_shutdown_hook();
 				}
 			});
-		
+
 			self::$_instance = new self(new Di\ServiceProvider(new Config()));
 		}
 
 		return self::$_instance;
 	}
-	
+
 	/**
 	 * Elgg's front controller. Handles basically all incoming URL requests.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function index() {
 		self::create()->run();
 	}
-	
+
 	/**
 	 * Routes the request, booting core if not yet booted
 	 *
@@ -383,6 +394,16 @@ class Application {
 
 		if (0 === strpos($path, '/cache/')) {
 			(new Application\CacheHandler($this, $this->services->config, $_SERVER))->handleRequest($path);
+			return true;
+		}
+
+		if (0 === strpos($path, '/serve-file/')) {
+			$this->services->serveFileHandler->getResponse($this->services->request)->send();
+			return true;
+		}
+
+		if (0 === strpos($path, '/download-file/')) {
+			(new Application\DownloadFileHandler($this))->getResponse($this->services->request)->send();
 			return true;
 		}
 
@@ -433,20 +454,20 @@ class Application {
 		$app->services->config->set('dataroot', $dataroot);
 		return $dataroot;
 	}
-	
+
 	/**
 	 * Returns a directory that points to the root of Elgg, but not necessarily
 	 * the install root. See `self::root()` for that.
-	 * 
+	 *
 	 * @return Directory
 	 */
 	public static function elggDir() /*: Directory*/ {
 		return Directory\Local::fromPath(realpath(__DIR__ . '/../../..'));
 	}
-	
+
 	/**
 	 * Renders a web UI for installing Elgg.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function install() {
@@ -455,7 +476,7 @@ class Application {
 		$step = get_input('step', 'welcome');
 		$installer->run($step);
 	}
-	
+
 	/**
 	 * Elgg upgrade script.
 	 *
@@ -467,31 +488,31 @@ class Application {
 	 *
 	 * The URL to forward to after upgrades are complete can be specified by setting $_GET['forward']
 	 * to a relative URL.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function upgrade() {
 		// we want to know if an error occurs
 		ini_set('display_errors', 1);
-		
+
 		define('UPGRADING', 'upgrading');
-		
+
 		self::start();
-		
+
 		$site_url = elgg_get_config('url');
 		$site_host = parse_url($site_url, PHP_URL_HOST) . '/';
-		
+
 		// turn any full in-site URLs into absolute paths
 		$forward_url = get_input('forward', '/admin', false);
 		$forward_url = str_replace(array($site_url, $site_host), '/', $forward_url);
-		
+
 		if (strpos($forward_url, '/') !== 0) {
 			$forward_url = '/' . $forward_url;
 		}
-		
+
 		if (get_input('upgrade') == 'upgrade') {
-		
-			$upgrader = new \Elgg\UpgradeService();
+
+			$upgrader = _elgg_services()->upgrades;
 			$result = $upgrader->run();
 			if ($result['failure'] == true) {
 				register_error($result['reason']);
@@ -514,7 +535,7 @@ class Application {
 					echo $msg;
 					exit;
 				}
-				
+
 				// note: translation may not be available until after upgrade
 				$msg = elgg_echo("installation:htaccess:needs_upgrade");
 				if ($msg === "installation:htaccess:needs_upgrade") {
@@ -524,18 +545,18 @@ class Application {
 				echo $msg;
 				exit;
 			}
-		
+
 			$vars = array(
 				'forward' => $forward_url
 			);
-		
+
 			// reset cache to have latest translations available during upgrade
 			elgg_reset_system_cache();
-			
+
 			echo elgg_view_page(elgg_echo('upgrading'), '', 'upgrade', $vars);
 			exit;
 		}
-		
+
 		forward($forward_url);
 	}
 
@@ -557,5 +578,21 @@ class Application {
 		$_GET[self::GET_PATH_KEY] = '/' . trim($_GET[self::GET_PATH_KEY], '/');
 
 		return $_GET[self::GET_PATH_KEY];
+	}
+
+	/**
+	 * Allow plugins to rewrite the path.
+	 *
+	 * @return void
+	 */
+	private function allowPathRewrite() {
+		$request = $this->services->request;
+		$new = $this->services->router->allowRewrite($request);
+		if ($new === $request) {
+			return;
+		}
+
+		$this->services->setValue('request', $new);
+		_elgg_set_initial_context($new);
 	}
 }

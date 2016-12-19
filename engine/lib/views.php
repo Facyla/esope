@@ -415,6 +415,11 @@ function elgg_unextend_view($view, $view_extension) {
  * @since  1.8
  */
 function elgg_view_page($title, $body, $page_shell = 'default', $vars = array()) {
+	$timer = _elgg_services()->timer;
+	if (!$timer->hasEnded(['build page'])) {
+		$timer->end(['build page']);
+	}
+	$timer->begin([__FUNCTION__]);
 
 	$params = array();
 	$params['identifier'] = _elgg_services()->request->getFirstUrlSegment();
@@ -456,7 +461,10 @@ function elgg_view_page($title, $body, $page_shell = 'default', $vars = array())
 	$vars['page_shell'] = $page_shell;
 
 	// Allow plugins to modify the output
-	return elgg_trigger_plugin_hook('output', 'page', $vars, $output);
+	$output = elgg_trigger_plugin_hook('output', 'page', $vars, $output);
+
+	$timer->end([__FUNCTION__]);
+	return $output;
 }
 
 /**
@@ -575,8 +583,7 @@ function _elgg_views_prepare_head($title) {
 	);
 
 	// RSS feed link
-	global $autofeed;
-	if (isset($autofeed) && $autofeed == true) {
+	if (_elgg_has_rss_link()) {
 		$url = current_page_url();
 		if (substr_count($url,'?')) {
 			$url .= "&view=rss";
@@ -627,6 +634,11 @@ function _elgg_views_prepare_head($title) {
  * @return string The layout
  */
 function elgg_view_layout($layout_name, $vars = array()) {
+	$timer = _elgg_services()->timer;
+	if (!$timer->hasEnded(['build page'])) {
+		$timer->end(['build page']);
+	}
+	$timer->begin([__FUNCTION__]);
 
 	$params = array();
 	$params['identifier'] = _elgg_services()->request->getFirstUrlSegment();
@@ -646,7 +658,10 @@ function elgg_view_layout($layout_name, $vars = array()) {
 		$output = elgg_view("page/layouts/default", $params);
 	}
 
-	return elgg_trigger_plugin_hook('output:after', 'layout', $params, $output);
+	$output = elgg_trigger_plugin_hook('output:after', 'layout', $params, $output);
+
+	$timer->end([__FUNCTION__]);
+	return $output;
 }
 
 /**
@@ -789,8 +804,7 @@ function elgg_view_entity(\ElggEntity $entity, array $vars = array(), $bypass = 
 		return false;
 	}
 
-	global $autofeed;
-	$autofeed = true;
+	elgg_register_rss_link();
 
 	$defaults = array(
 		'full_view' => true,
@@ -898,8 +912,7 @@ function elgg_view_entity_icon(\ElggEntity $entity, $size = 'medium', $vars = ar
  * @return string/false Rendered annotation
  */
 function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = array(), $bypass = false, $debug = false) {
-	global $autofeed;
-	$autofeed = true;
+	elgg_register_rss_link();
 
 	$defaults = array(
 		'full_view' => true,
@@ -950,6 +963,9 @@ function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = array()
  *      'item_class'       CSS class applied to the list items
  *      'item_view'        Alternative view to render list items
  *      'pagination'       Display pagination?
+ *      'base_url'         Base URL of list (optional)
+ *      'url_fragment'     URL fragment to add to links if not present in base_url (optional)
+ *      'position'         Position of the pagination: before, after, or both
  *      'list_type'        List type: 'list' (default), 'gallery'
  *      'list_type_toggle' Display the list type toggle?
  *      'no_results'       Message to display if no results (string|Closure)
@@ -1272,6 +1288,60 @@ function elgg_view_form($action, $form_vars = array(), $body_vars = array()) {
 }
 
 /**
+ * Renders a form field
+ *
+ * @param string $input_type Input type, used to generate an input view ("input/$input_type")
+ * @param array  $vars       Fields and input vars.
+ *                           Field vars contain both field and input params. 'label', 'help',
+ *                           and 'field_class' params will not be passed on to the input view.
+ *                           Others, including 'required' and 'id', will be available to the
+ *                           input view. Both 'label' and 'help' params accept HTML, and
+ *                           will be printed unescaped within their wrapper element.
+ * @return string
+ */
+function elgg_view_input($input_type, array $vars = array()) {
+
+	if (!elgg_view_exists("input/$input_type")) {
+		return '';
+	}
+
+	if ($input_type == 'hidden') {
+		return elgg_view("input/$input_type", $vars);
+	}
+
+	$id = elgg_extract('id', $vars);
+	if (!$id) {
+		$id = "elgg-field-" . base_convert(mt_rand(), 10, 36);
+		$vars['id'] = $id;
+	}
+
+	$vars['input_type'] = $input_type;
+
+	$label = elgg_view('elements/forms/label', $vars);
+	unset($vars['label']);
+
+	$help = elgg_view('elements/forms/help', $vars);
+	unset($vars['help']);
+
+	$required = elgg_extract('required', $vars);
+
+	$field_class = (array) elgg_extract('field_class', $vars, array());
+	unset($vars['field_class']);
+
+	$input = elgg_view("elements/forms/input", $vars);
+
+	return elgg_view('elements/forms/field', array(
+		'label' => $label,
+		'help' => $help,
+		'required' => $required,
+		'id' => $id,
+		'input' => $input,
+		'class' => $field_class,
+		'input_type' => $input_type,
+	));
+}
+
+/**
  * Create a tagcloud for viewing
  *
  * @see elgg_get_tags
@@ -1370,6 +1440,38 @@ function elgg_view_icon($name, $vars = array()) {
 }
 
 /**
+ * Include the RSS icon link and link element in the head
+ *
+ * @return void
+ */
+function elgg_register_rss_link() {
+	_elgg_services()->config->set('_elgg_autofeed', true);
+}
+
+/**
+ * Remove the RSS icon link and link element from the head
+ *
+ * @return void
+ */
+function elgg_unregister_rss_link() {
+	_elgg_services()->config->set('_elgg_autofeed', false);
+}
+
+/**
+ * Should the RSS view of this URL be linked to?
+ *
+ * @return bool
+ * @access private
+ */
+function _elgg_has_rss_link() {
+	if (isset($GLOBALS['autofeed']) && is_bool($GLOBALS['autofeed'])) {
+		elgg_deprecated_notice('Do not set the global $autofeed. Use elgg_register_rss_link()', '2.1');
+		return $GLOBALS['autofeed'];
+	}
+	return (bool)_elgg_services()->config->getVolatile('_elgg_autofeed');
+}
+
+/**
  * Displays a user's access collections, using the core/friends/collections view
  *
  * @param int $owner_guid The GUID of the owning user
@@ -1464,14 +1566,13 @@ function _elgg_views_amd($hook, $type, $content, $params) {
 }
 
 /**
- * Add the rss link to the extras when if needed
+ * Add the RSS link to the extras when if needed
  *
  * @return void
  * @access private
  */
 function elgg_views_add_rss_link() {
-	global $autofeed;
-	if (isset($autofeed) && $autofeed == true) {
+	if (_elgg_has_rss_link()) {
 		$url = current_page_url();
 		if (substr_count($url, '?')) {
 			$url .= "&view=rss";
@@ -1498,6 +1599,53 @@ function _elgg_views_send_header_x_frame_options() {
 	header('X-Frame-Options: SAMEORIGIN');
 }
 
+/**
+ * Is there a chance a plugin is altering this view?
+ *
+ * @note Must be called after the [init, system] event, ideally as late as possible.
+ *
+ * @note Always returns true if the view's location is set in /engine/views.php. Elgg does not keep
+ *       track of the defaults for those locations.
+ *
+ * @param string $view               View name. E.g. "elgg/init.js"
+ * @param string $path_from_viewtype File path relative to the viewtype directory. E.g. "elgg/init.js.php"
+ * @param string $viewtype           View type
+ *
+ * @return bool
+ * @access private
+ */
+function _elgg_view_may_be_altered($view, $path_from_viewtype, $viewtype = '') {
+	if (!$viewtype) {
+		$viewtype = elgg_get_viewtype();
+	}
+
+	$views = _elgg_services()->views;
+
+	if (count($views->getViewList($view)) > 1) {
+		// view was extended
+		return true;
+	}
+
+	$hooks = _elgg_services()->hooks;
+
+	if ($hooks->hasHandler('view', $view) || $hooks->hasHandler('view_vars', $view)) {
+		// altered via hook
+		return true;
+	}
+
+	// check location
+	$root = dirname(dirname(__DIR__));
+	$expected_path = "$root/views/$viewtype/" . ltrim($path_from_viewtype, '/\\');
+
+	$view_path = $views->findViewFile($view, $viewtype);
+
+	if (DIRECTORY_SEPARATOR === '\\') {
+		$expected_path = strtr($expected_path, "/", "\\");
+		$view_path = strtr($view_path, "/", "\\");
+	}
+
+	return ($expected_path !== $view_path);
+}
 
 /**
  * Initialize viewtypes on system boot event
@@ -1547,6 +1695,10 @@ function elgg_views_boot() {
 
 	elgg_register_css('elgg', elgg_get_simplecache_url('elgg.css'));
 	elgg_load_css('elgg');
+
+	elgg_register_simplecache_view('elgg/init.js');
+	elgg_require_js('elgg/init');
+	elgg_require_js('elgg/ready');
 
 	// optional stuff
 	elgg_register_js('lightbox', elgg_get_simplecache_url('lightbox.js'));

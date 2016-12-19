@@ -222,6 +222,18 @@ function elgg_require_js($name) {
 	_elgg_services()->amdConfig->addDependency($name);
 }
 
+/**
+ * Cancel a request to load an AMD module onto the page.
+ *
+ * @note The elgg, jquery, and jquery-ui modules cannot be cancelled.
+ *
+ * @param string $name The AMD module name.
+ * @return void
+ * @since 2.1.0
+ */
+function elgg_unrequire_js($name) {
+	_elgg_services()->amdConfig->removeDependency($name);
+}
 
 /**
  * Get the JavaScript URLs that are loaded
@@ -850,7 +862,7 @@ function elgg_get_ordered_event_handlers($event, $type) {
  */
 function _elgg_php_exception_handler($exception) {
 	$timestamp = time();
-	error_log("Exception #$timestamp: $exception");
+	error_log("Exception at time $timestamp: $exception");
 
 	// Wipe any existing output buffer
 	ob_end_clean();
@@ -906,8 +918,8 @@ function _elgg_php_exception_handler($exception) {
 		$timestamp = time();
 		$message = $e->getMessage();
 		http_response_code(500);
-		echo "Fatal error in exception handler. Check log for Exception #$timestamp";
-		error_log("Exception #$timestamp : fatal error in exception handler : $message");
+		echo "Fatal error in exception handler. Check log for Exception at time $timestamp";
+		error_log("Exception at time $timestamp : fatal error in exception handler : $message");
 	}
 }
 
@@ -933,7 +945,6 @@ function _elgg_php_exception_handler($exception) {
  * @return true
  * @throws Exception
  * @access private
- * @todo Replace error_log calls with elgg_log calls.
  */
 function _elgg_php_error_handler($errno, $errmsg, $filename, $linenum, $vars) {
 
@@ -950,7 +961,9 @@ function _elgg_php_error_handler($errno, $errmsg, $filename, $linenum, $vars) {
 
 	switch ($errno) {
 		case E_USER_ERROR:
-			error_log("PHP ERROR: $error");
+			if (!elgg_log("PHP: $error", 'ERROR')) {
+				error_log("PHP ERROR: $error");
+			}
 			register_error("ERROR: $error");
 
 			// Since this is a fatal error, we want to stop any further execution but do so gracefully.
@@ -962,7 +975,7 @@ function _elgg_php_error_handler($errno, $errmsg, $filename, $linenum, $vars) {
 		case E_RECOVERABLE_ERROR: // (e.g. type hint violation)
 			
 			// check if the error wasn't suppressed by the error control operator (@)
-			if (error_reporting()) {
+			if (error_reporting() && !elgg_log("PHP: $error", 'WARNING')) {
 				error_log("PHP WARNING: $error");
 			}
 			break;
@@ -970,7 +983,9 @@ function _elgg_php_error_handler($errno, $errmsg, $filename, $linenum, $vars) {
 		default:
 			global $CONFIG;
 			if (isset($CONFIG->debug) && $CONFIG->debug === 'NOTICE') {
-				error_log("PHP NOTICE: $error");
+				if (!elgg_log("PHP (errno $errno): $error", 'NOTICE')) {
+					error_log("PHP NOTICE: $error");
+				}
 			}
 	}
 
@@ -1476,13 +1491,11 @@ function _elgg_normalize_plural_options_array($options, $singulars) {
  * @access private
  */
 function _elgg_shutdown_hook() {
-	global $START_MICROTIME;
-
 	try {
 		_elgg_services()->logger->setDisplay(false);
 		elgg_trigger_event('shutdown', 'system');
 
-		$time = (float)(microtime(true) - $START_MICROTIME);
+		$time = (float)(microtime(true) - $GLOBALS['START_MICROTIME']);
 		$uri = _elgg_services()->request->server->get('REQUEST_URI', 'CLI');
 		// demoted to NOTICE from DEBUG so javascript is not corrupted
 		elgg_log("Page {$uri} generated in $time seconds", 'INFO');
@@ -1543,7 +1556,16 @@ function _elgg_ajax_page_handler($segments) {
 		}
 
 		$allowed_views = $GLOBALS['_ELGG']->allowed_ajax_views;
-		if (!array_key_exists($view, $allowed_views)) {
+		$ajax_api = _elgg_services()->ajax;
+
+		// cacheable views are always allowed
+		if (!array_key_exists($view, $allowed_views) && !_elgg_services()->views->isCacheableView($view)) {
+			if ($ajax_api->isReady()) {
+				$ajax_api->respondWithError("Ajax view '$view' was not registered");
+				return true;
+			}
+
+			// legacy XHR behavior
 			header('HTTP/1.1 403 Forbidden');
 			exit;
 		}
@@ -1558,22 +1580,36 @@ function _elgg_ajax_page_handler($segments) {
 			$vars['entity'] = get_entity($vars['guid']);
 		}
 
+		$content_type = '';
 		if ($segments[0] === 'view') {
+			$output = elgg_view($view, $vars);
+			$ajax_hook_type = "view:$view";
+
 			// Try to guess the mime-type
 			switch ($segments[1]) {
 				case "js":
-					header("Content-Type: text/javascript;charset=utf-8");
+					$content_type = 'text/javascript';
 					break;
 				case "css":
-					header("Content-Type: text/css;charset=utf-8");
+					$content_type = 'text/css';
 					break;
 			}
-
-			echo elgg_view($view, $vars);
 		} else {
 			$action = implode('/', array_slice($segments, 1));
-			echo elgg_view_form($action, array(), $vars);
+			$output = elgg_view_form($action, array(), $vars);
+			$ajax_hook_type = "form:$action";
 		}
+
+		if ($ajax_api->isReady()) {
+			$ajax_api->respondFromOutput($output, $ajax_hook_type);
+			return true;
+		}
+
+		// legacy XHR behavior
+		if ($content_type) {
+			header("Content-Type: $content_type;charset=utf-8");
+		}
+		echo $output;
 		return true;
 	}
 
@@ -1632,6 +1668,7 @@ function _elgg_favicon_page_handler($segments) {
  *
  * @return bool
  * @access private
+ * @deprecated 2.1 Use elgg_get_simplecache_url()
  */
 function _elgg_cacheable_view_page_handler($page, $type) {
 
@@ -1665,6 +1702,10 @@ function _elgg_cacheable_view_page_handler($page, $type) {
 		if (!elgg_view_exists($view)) {
 			return false;
 		}
+
+		$msg = 'URLs starting with /js/ and /css/ are deprecated. Use elgg_get_simplecache_url().';
+		elgg_deprecated_notice($msg, '2.1');
+
 		$return = elgg_view($view);
 
 		header("Content-type: $content_type;charset=utf-8");
@@ -1828,6 +1869,9 @@ function _elgg_walled_garden_index() {
  */
 function _elgg_walled_garden_ajax_handler($page) {
 	$view = $page[0];
+	if (!elgg_view_exists("core/walled_garden/$view")) {
+		return false;
+	}
 	$params = array(
 		'content' => elgg_view("core/walled_garden/$view"),
 		'class' => 'elgg-walledgarden-single hidden',
@@ -1881,43 +1925,6 @@ function _elgg_walled_garden_remove_public_access($hook, $type, $accesses) {
 }
 
 /**
- * Boots the engine
- *
- * 1. sets error handlers
- * 2. connects to database
- * 3. verifies the installation succeeded
- * 4. loads application configuration
- * 5. loads i18n data
- * 6. loads cached autoloader state
- * 7. loads site configuration
- *
- * @access private
- */
-function _elgg_engine_boot() {
-	// Register the error handlers
-	set_error_handler('_elgg_php_error_handler');
-	set_exception_handler('_elgg_php_exception_handler');
-
-	$db = _elgg_services()->db;
-
-	// we inject the logger here to allow use of DB without loading core
-	$db->setLogger(_elgg_services()->logger);
-
-	$db->setupConnections();
-	$db->assertInstalled();
-
-	_elgg_load_application_config();
-
-	_elgg_load_site_config();
-
-	_elgg_session_boot();
-
-	_elgg_services()->systemCache->loadAll();
-
-	_elgg_services()->translator->loadTranslations();
-}
-
-/**
  * Elgg's main init.
  *
  * Handles core actions for comments, the JS pagehandler, and the shutdown function.
@@ -1927,8 +1934,7 @@ function _elgg_engine_boot() {
  * @access private
  */
 function _elgg_init() {
-	global $CONFIG;
-
+	elgg_register_action('entity/delete');
 	elgg_register_action('comment/save');
 	elgg_register_action('comment/delete');
 
@@ -1953,6 +1959,13 @@ function _elgg_init() {
 
 		return $result;
 	});
+
+	if (_elgg_services()->config->getVolatile('enable_profiling')) {
+		/**
+		 * @see \Elgg\Profiler::handlePageOutput
+		 */
+		elgg_register_plugin_hook_handler('output', 'page', [\Elgg\Profiler::class, 'handlePageOutput'], 999);
+	}
 }
 
 /**
@@ -2029,9 +2042,15 @@ define('REFERRER', -1);
 define('REFERER', -1);
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$events->registerHandler('init', 'system', '_elgg_init');
-	$events->registerHandler('boot', 'system', '_elgg_engine_boot', 1);
-	$hooks->registerHandler('unit_test', 'system', '_elgg_api_test');
+	$events->registerHandler('boot', 'system', function () {
+		_elgg_services()->boot->boot();
+	}, 1);
+	$events->registerHandler('cache:flush', 'system', function () {
+		_elgg_services()->boot->invalidateCache();
+	});
 
+	$events->registerHandler('init', 'system', '_elgg_init');
 	$events->registerHandler('init', 'system', '_elgg_walled_garden_init', 1000);
+
+	$hooks->registerHandler('unit_test', 'system', '_elgg_api_test');
 };

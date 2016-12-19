@@ -1,5 +1,0 @@
-Few changes to make plugin more compatible : 
- - changed every <? PHP start tags to <?php and eventually add echo and terminating ; : forms/backup-tool/schedule-settings.php, forms/backup-tool/backup-options.php
- - added french language file
-
-

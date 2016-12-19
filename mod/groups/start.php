@@ -110,6 +110,9 @@ function groups_init() {
 	// allow to be liked
 	elgg_register_plugin_hook_handler('likes:is_likable', 'group:', 'Elgg\Values::getTrue');
 
+	// prepare profile buttons to be registered in the title menu
+	elgg_register_plugin_hook_handler('profile_buttons', 'group', 'groups_prepare_profile_buttons');
+
 	// Help core resolve page owner guids from group routes
 	// Registered with an earlier priority to be called before default_page_owner_handler()
 	elgg_register_plugin_hook_handler('page_owner', 'system', 'groups_default_page_owner_handler', 400);
@@ -819,10 +822,65 @@ function groups_members_menu_setup($hook, $type, $menu, $params) {
 }
 
 /**
+ * Returns menu items to be registered in the title menu of the group profile
+ *
+ * @param string         $hook   "profile_buttons"
+ * @param string         $type   "group"
+ * @param ElggMenuItem[] $items  Buttons
+ * @param array          $params Hook params
+ * @return ElggMenuItem[]
+ */
+function groups_prepare_profile_buttons($hook, $type, $items, $params) {
+
+	$group = elgg_extract('entity', $params);
+	if (!$group instanceof ElggGroup) {
+		return;
+	}
+
+	$actions = [];
+
+	if ($group->canEdit()) {
+		// group owners can edit the group and invite new members
+		$actions['groups:edit'] = "groups/edit/{$group->guid}";
+		$actions['groups:invite'] = "groups/invite/{$group->guid}";
+	}
+
+	$user = elgg_get_logged_in_user_entity();
+	if ($user && $group->isMember($user)) {
+		if ($group->owner_guid != $user->guid) {
+			// a member can leave a group if he/she doesn't own it
+			$actions['groups:leave'] = "action/groups/leave?group_guid={$group->guid}";
+		}
+	} else if ($user) {
+		$url = "action/groups/join?group_guid={$group->guid}";
+		if ($group->isPublicMembership() || $group->canEdit()) {
+			// admins can always join
+			// non-admins can join if membership is public
+			$actions['groups:join'] = $url;
+		} else {
+			// request membership
+			$actions['groups:joinrequest'] = $url;
+		}
+	}
+
+	foreach ($actions as $action => $url) {
+		$items[] = ElggMenuItem::factory(array(
+			'name' => $action,
+			'href' => elgg_normalize_url($url),
+			'text' => elgg_echo($action),
+			'is_action' => 0 === strpos($url, 'action'),
+			'link_class' => 'elgg-button elgg-button-action',
+		));
+	}
+
+	return $items;
+}
+
+/**
  * Helper handler to correctly resolve page owners on group routes
  *
  * @see default_page_owner_handler()
- * 
+ *
  * @param string $hook   "page_owner"
  * @param string $type   "system"
  * @param int    $return Page owner guid
@@ -841,7 +899,7 @@ function groups_default_page_owner_handler($hook, $type, $return, $params) {
 	if ($identifier !== 'groups') {
 		return;
 	}
-	
+
 	$page = array_shift($segments);
 
 	switch ($page) {
@@ -852,7 +910,7 @@ function groups_default_page_owner_handler($hook, $type, $return, $params) {
 				$guid = elgg_get_logged_in_user_guid();
 			}
 			return $guid;
-			
+
 		case 'edit':
 		case 'profile' :
 		case 'activity' :
