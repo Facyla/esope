@@ -8,7 +8,7 @@
  */
 
 $current_user = elgg_get_logged_in_user_entity();
-$username = get_input('username');
+$username = elgg_extract('username', $vars);
 $user = get_user_by_username($username);
 if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
 	forward();
@@ -20,9 +20,6 @@ if (!isset($user) || !($user instanceof ElggUser)) {
 }
 
 elgg_set_page_owner_guid($user->guid);
-
-// Set the context to settings
-elgg_set_context('settings');
 
 $title = elgg_echo('notifications:subscriptions:changesettings');
 

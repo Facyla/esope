@@ -26,6 +26,8 @@ function _elgg_comments_init() {
 	elgg_register_page_handler('comment', '_elgg_comments_page_handler');
 
 	elgg_register_ajax_view('core/ajax/edit_comment');
+
+	elgg_register_plugin_hook_handler('likes:is_likable', 'object:comment', 'Elgg\Values::getTrue');
 }
 
 /**
@@ -41,8 +43,9 @@ function _elgg_comments_page_handler($segments) {
 	switch ($page) {
 
 		case 'edit':
-			set_input('guid', elgg_extract(1, $segments));
-			echo elgg_view_resource('comments/edit');
+			echo elgg_view_resource('comments/edit', [
+				'guid' => elgg_extract(1, $segments),
+			]);
 			return true;
 			break;
 
@@ -213,6 +216,7 @@ function _elgg_comments_container_permissions_override($hook, $type, $return, $p
  * @param array   $params Array of parameters (entity, user)
  *
  * @return boolean Whether the given user is allowed to edit the given comment.
+ * @access private
  */
 function _elgg_comments_permissions_override($hook, $type, $return, $params) {
 	$entity = $params['entity'];
@@ -239,15 +243,20 @@ function _elgg_comments_permissions_override($hook, $type, $return, $params) {
  * @param array  $returnvalue Current mail parameters
  * @param array  $params      Original mail parameters
  * @return array $returnvalue Modified mail parameters
+ * @access private
  */
 function _elgg_comments_notification_email_subject($hook, $type, $returnvalue, $params) {
-	if (!is_array($returnvalue)) {
+	if (!is_array($returnvalue) || !is_array($returnvalue['params'])) {
 		// another hook handler returned a non-array, let's not override it
 		return;
 	}
 
+	if (empty($returnvalue['params']['notification'])) {
+		return;
+	}
+	
 	/** @var Elgg\Notifications\Notification */
-	$notification = elgg_extract('notification', $returnvalue['params']);
+	$notification = $returnvalue['params']['notification'];
 
 	if ($notification instanceof Elgg\Notifications\Notification) {
 		$object = elgg_extract('object', $notification->params);

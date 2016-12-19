@@ -1,11 +1,11 @@
 <?php
 
 return array(
-	'discussion' => 'Discussion',
+	'discussion' => 'Discussions',
 	'discussion:add' => 'Add discussion topic',
-	'discussion:latest' => 'Latest discussion',
-	'discussion:group' => 'Group discussion',
-	'discussion:none' => 'No discussion',
+	'discussion:latest' => 'Latest discussions',
+	'discussion:group' => 'Group discussions',
+	'discussion:none' => 'No discussions',
 	'discussion:reply:title' => 'Reply by %s',
 	'discussion:new' => "Add discussion post",
 	'discussion:updated' => "Last reply by %s %s",
@@ -48,9 +48,7 @@ return array(
 	'discussion:topic:notify:summary' => 'New discussion topic called %s',
 	'discussion:topic:notify:subject' => 'New discussion topic: %s',
 	'discussion:topic:notify:body' =>
-'%s added a new discussion topic to %s:
-
-Title: %s
+'%s added a new discussion topic "%s":
 
 %s
 
@@ -61,7 +59,7 @@ View and reply to the discussion topic:
 	'discussion:reply:notify:summary' => 'New reply in topic: %s',
 	'discussion:reply:notify:subject' => 'New reply in topic: %s',
 	'discussion:reply:notify:body' =>
-'%s replied to the discussion topic %s:
+'%s replied to the discussion topic "%s":
 
 %s
 
@@ -72,7 +70,7 @@ View and reply to the discussion:
 	'item:object:discussion' => "Discussion topics",
 	'item:object:discussion_reply' => "Discussion replies",
 
-	'groups:enableforum' => 'Enable group discussion',
+	'groups:enableforum' => 'Enable group discussions',
 
 	'reply:this' => 'Reply to this',
 

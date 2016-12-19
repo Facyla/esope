@@ -193,7 +193,11 @@ Permission hooks
 
 **container_permissions_check, <entity_type>**
 	Return boolean for if the user ``$params['user']`` can use the entity ``$params['container']``
-	as a container for an entity of <entity_type> and subtype ``$params['subtype']``.
+	as a container for an entity of ``<entity_type>`` and subtype ``$params['subtype']``.
+
+	In the rare case where an entity is created with neither the ``container_guid`` nor the ``owner_guid``
+	matching the logged in user, this hook is called *twice*, and in the first call ``$params['container']``
+	will be the *owner*, not the entity's real container.
 
 **permissions_check, <entity_type>**
 	Return boolean for if the user ``$params['user']`` can edit the entity ``$params['entity']``.
@@ -212,9 +216,15 @@ Permission hooks
 **permissions_check:comment, <entity_type>**
 	Return boolean for if the user ``$params['user']`` can comment on the entity ``$params['entity']``.
 
-**permissions_check:annotate**
-	Return boolean for if the user ``$params['user']`` can create an annotation with the name
-	``$params['annotation']`` on the entity ``$params['entity']``.
+**permissions_check:annotate:<annotation_name>, <entity_type>**
+	Return boolean for if the user ``$params['user']`` can create an annotation ``<annotation_name>`` on the
+	entity ``$params['entity']``. If logged in, the default is true.
+
+	.. note:: This is called before the more general ``permissions_check:annotate`` hook, and its return value is that hook's initial value.
+
+**permissions_check:annotate, <entity_type>**
+	Return boolean for if the user ``$params['user']`` can create an annotation ``$params['annotation_name']``
+	on the entity ``$params['entity']``. if logged in, the default is true.
 
 	.. warning:: This is functions differently than the ``permissions_check:metadata`` hook by passing the annotation name instead of the metadata object.
 
@@ -437,10 +447,6 @@ Other
 		'widget_context' => $widget_context
 	)
 
-**rest, init**
-	Triggered by the web services rest handler. Plugins can set up their own authentication
-	handlers, then return true to prevent the default handlers from being registered.
-
 **public_pages, walled_garden**
 	Filter the URLs that are can be seen by logged out users if Walled Garden is
 	enabled. ``$value`` is an array of regex strings that will allow access if matched.
@@ -480,6 +486,15 @@ HTMLawed
 
 **config, htmlawed**
 	Filter the HTMLawed config array.
+
+Likes
+-----
+
+**likes:is_likable, <type>:<subtype>**
+    This is called to set the default permissions for whether to display/allow likes on an entity of type
+    ``<type>`` and subtype ``<subtype>``.
+
+    .. note:: The callback ``'Elgg\Values::getTrue'`` is a useful handler for this hook.
 
 Members
 -------
@@ -530,3 +545,13 @@ Search
 **search_types, get_queries**
     Before a search this filters the types queried. This can be used to reorder
     the display of search results.
+
+Web Services
+------------
+
+**rest, init**
+	Triggered by the web services rest handler. Plugins can set up their own authentication
+	handlers, then return ``true`` to prevent the default handlers from being registered.
+
+**rest:output, <method_name>**
+	Filter the result (and subsequently the output) of the API method

@@ -29,19 +29,23 @@ function developers_process_settings() {
 	ini_set('display_errors', (int)!empty($settings['display_errors']));
 
 	if (!empty($settings['screen_log'])) {
-		$cache = new ElggLogCache();
-		elgg_set_config('log_cache', $cache);
-		elgg_register_plugin_hook_handler('debug', 'log', array($cache, 'insertDump'));
-		elgg_register_plugin_hook_handler('view_vars', 'page/elements/html', function($hook, $type, $vars, $params) {
-			$vars['body'] .= elgg_view('developers/log');
-			return $vars;
-		});
+		// don't show in action/simplecache
+		$path = substr(current_page_url(), strlen(elgg_get_site_url()));
+		if (!preg_match('~^(cache|action)/~', $path)) {
+			$cache = new ElggLogCache();
+			elgg_set_config('log_cache', $cache);
+			elgg_register_plugin_hook_handler('debug', 'log', array($cache, 'insertDump'));
+			elgg_register_plugin_hook_handler('view_vars', 'page/elements/html', function($hook, $type, $vars, $params) {
+				$vars['body'] .= elgg_view('developers/log');
+				return $vars;
+			});
+		}
 	}
 
 	if (!empty($settings['show_strings'])) {
-		// first and last in case a plugin registers a translation in an init method
-		elgg_register_event_handler('init', 'system', 'developers_clear_strings', 1000);
-		elgg_register_event_handler('init', 'system', 'developers_clear_strings', 1);
+		// Beginning and end to make sure both early-rendered and late-loaded translations get included
+		elgg_register_event_handler('init', 'system', 'developers_decorate_all_translations', 1);
+		elgg_register_event_handler('init', 'system', 'developers_decorate_all_translations', 1000);
 	}
 
 	if (!empty($settings['show_modules'])) {
@@ -103,10 +107,39 @@ function developers_setup_menu() {
 }
 
 /**
+ * Adds debug info to all translatable strings.
+ */
+function developers_decorate_all_translations() {
+	$language = get_current_language();
+	_developers_decorate_translations($language);
+	_developers_decorate_translations('en');
+}
+
+/**
+ * Appends " ($key)" to all strings for the given language.
+ *
+ * This function checks if the suffix has already been added so it is idempotent
+ *
+ * @param string $language Language code like "en"
+ */
+function _developers_decorate_translations($language) {
+	foreach ($GLOBALS['_ELGG']->translations[$language] as $key => &$value) {
+		$needle = " ($key)";
+		
+		// if $value doesn't already end with " ($key)", append it
+		if (substr($value, -strlen($needle)) !== $needle) {
+			$value .= $needle;
+		}
+	}
+}
+
+/**
  * Clear all the strings so the raw descriptor strings are displayed
+ *
+ * @deprecated Superceded by developers_decorate_all_translations
  */
 function developers_clear_strings() {
-	$language = get_language();
+	$language = get_current_language();
 	$GLOBALS['_ELGG']->translations[$language] = array();
 	$GLOBALS['_ELGG']->translations['en'] = array();
 }
@@ -127,7 +160,7 @@ function developers_wrap_views($hook, $type, $result, $params) {
 		return;
 	}
 
-	$excluded_bases = array('input', 'output', 'embed', 'icon', 'json', 'xml');
+	$excluded_bases = array('resources', 'input', 'output', 'embed', 'icon', 'json', 'xml');
 
 	$excluded_views = array(
 		'page/default',
@@ -215,9 +248,10 @@ function developers_theme_sandbox_controller($page) {
 	if (!isset($page[0])) {
 		forward('theme_sandbox/intro');
 	}
-	set_input('page', $page[0]);
 
-	echo elgg_view_resource('theme_sandbox');
+	echo elgg_view_resource('theme_sandbox', [
+		'page' => $page[0],
+	]);
 	return true;
 }
 

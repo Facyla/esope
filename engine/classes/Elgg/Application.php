@@ -258,6 +258,16 @@ class Application {
 			// Elgg is installed as a composer dep, so try to treat the root directory
 			// as a custom plugin that is always loaded last and can't be disabled...
 			if (!elgg_get_config('system_cache_loaded')) {
+				// configure view locations for the custom plugin (not Elgg core)
+				$viewsFile = Directory\Local::root()->getFile('views.php');
+				if ($viewsFile->exists()) {
+					$viewsSpec = $viewsFile->includeFile();
+					if (is_array($viewsSpec)) {
+						_elgg_services()->views->mergeViewsSpec($viewsSpec);
+					}
+				}
+
+				// find views for the custom plugin (not Elgg core)
 				_elgg_services()->views->registerPluginViews(Directory\Local::root()->getPath());
 			}
 			
@@ -319,12 +329,26 @@ class Application {
 	}
 	
 	/**
-	 * Creates a new, trivial instance of Elgg\Application. 
+	 * Creates a new, trivial instance of Elgg\Application and set it as the singleton instance.
+	 * If the singleton is already set, it's returned.
 	 * 
 	 * @return self
 	 */
 	private static function create() {
-		return new self(new Di\ServiceProvider(new Config()));
+		if (self::$_instance === null) {
+			// we need to register for shutdown before Symfony registers the
+			// session_write_close() function. https://github.com/Elgg/Elgg/issues/9243
+			register_shutdown_function(function () {
+				// There are cases where we may exit before this function is defined
+				if (function_exists('_elgg_shutdown_hook')) {
+					_elgg_shutdown_hook();
+				}
+			});
+		
+			self::$_instance = new self(new Di\ServiceProvider(new Config()));
+		}
+
+		return self::$_instance;
 	}
 	
 	/**
@@ -369,7 +393,7 @@ class Application {
 
 		if (php_sapi_name() === 'cli-server') {
 			// The CLI server routes ALL requests here (even existing files), so we have to check for these.
-			if ($path !== '/' && self::installDir()->isFile($path)) {
+			if ($path !== '/' && Directory\Local::root()->isFile($path)) {
 				// serve the requested resource as-is.
 				return false;
 			}
@@ -377,9 +401,37 @@ class Application {
 
 		$this->bootCore();
 
+		// TODO use formal Response object instead
+		header("Content-Type: text/html;charset=utf-8");
+
 		if (!$this->services->router->route($this->services->request)) {
 			forward('', '404');
 		}
+	}
+
+	/**
+	 * Determine the Elgg data directory with trailing slash, save it to config, and return it
+	 *
+	 * @todo Consider a better place for this logic? We need it before boot
+	 *
+	 * @return string
+	 * @throws \InstallationException
+	 */
+	public static function getDataPath() {
+		$app = self::create();
+		$app->services->config->loadSettingsFile();
+
+		if ($GLOBALS['_ELGG']->dataroot_in_settings) {
+			return $app->services->config->getVolatile('dataroot');
+		}
+
+		$dataroot = $app->services->datalist->get('dataroot');
+		if (!$dataroot) {
+			throw new \InstallationException('The datalists table lacks a value for "dataroot".');
+		}
+		$dataroot = rtrim($dataroot, '/\\') . DIRECTORY_SEPARATOR;
+		$app->services->config->set('dataroot', $dataroot);
+		return $dataroot;
 	}
 	
 	/**

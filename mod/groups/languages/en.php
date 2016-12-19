@@ -29,8 +29,8 @@ return array(
 	'groups:my_status' => 'My status',
 	'groups:my_status:group_owner' => 'You own this group',
 	'groups:my_status:group_member' => 'You are in this group',
-	'groups:subscribed' => 'Group notifications on',
-	'groups:unsubscribed' => 'Group notifications off',
+	'groups:subscribed' => 'Group notifications are on',
+	'groups:unsubscribed' => 'Group notifications are off',
 
 	'groups:members:title' => 'Members of %s',
 	'groups:members:more' => "View all members",
@@ -122,7 +122,6 @@ return array(
 
 	'admin:groups' => 'Groups',
 
-	'groups:latestdiscussion' => 'Latest discussion',
 	'groups:privategroup' => 'This group is closed. Requesting membership.',
 	'groups:notitle' => 'Groups must have a title',
 	'groups:cantjoin' => 'Can not join group',

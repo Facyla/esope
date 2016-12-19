@@ -2,7 +2,11 @@
 
 elgg_gatekeeper();
 
-$guid = get_input('guid');
+$guid = elgg_extract('guid', $vars);
+
+elgg_entity_gatekeeper($guid);
+elgg_group_gatekeeper(true, $guid);
+
 $container = get_entity($guid);
 
 // Make sure user has permissions to add a topic to container
@@ -13,7 +17,7 @@ if (!$container->canWriteToContainer(0, 'object', 'discussion')) {
 
 $title = elgg_echo('discussion:addtopic');
 
-elgg_push_breadcrumb($group->name, "discussion/owner/$group->guid");
+elgg_push_breadcrumb($container->getDisplayName(), "discussion/owner/{$container->guid}");
 elgg_push_breadcrumb($title);
 
 $body_vars = discussion_prepare_form_vars();

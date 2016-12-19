@@ -39,8 +39,9 @@ return array(
 	'actionnotfound' => "%s のアクションファイルが見つかりませんでした。",
 	'actionloggedout' => "ログアウトのままですと、アクションを実行できません。",
 	'actionunauthorized' => 'あなたの権限では、このアクションを実行することはできません。',
-	
+
 	'ajax:error' => 'AJAXコールを実行中に予期せぬエラーが起こりました。おそらく、サーバへの接続が切断されたからかもしれません。',
+	'ajax:not_is_xhr' => 'AJAX views には直接アクセスはできません',
 
 	'PluginException:MisconfiguredPlugin' => "%s (guid: %s) は、設定に間違いのあるプラグインですので、起動不可となっています。 原因に当たっては、Elgg wiki (http://learn.elgg.org/) を参考にしてください。 ",
 	'PluginException:CannotStart' => '%s (guid: %s) は起動できず停止状態のままです。理由: %s',
@@ -56,10 +57,9 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:InvalidId' => 'マニフェストのIDに一致させるには、このプラグインのディレクトリの名前を "%s" に変えなければいけません。',
 	'ElggPluginPackage:InvalidPlugin:InvalidDependency' => 'マニフェストに記述されている依存関係のタイプ "%s" が正しくありません。',
 	'ElggPluginPackage:InvalidPlugin:InvalidProvides' => 'マニフェストに記述されているプロバイドのタイプ "%s" が正しくありません。',
-	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'プラグイン %3$s で依存関係のタイプ %2$s の "%1$s" が正しくありません。依存関係が循環しています。',
+	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'プラグイン %3$s で依存関係のタイプ %2$s の 「%1$s」 が正しくありません。依存関係が循環しています。',
 	'ElggPlugin:Exception:CannotIncludeFile' => '%s (プラグイン %s (guid: %s))が %s に含まれていません。パーミッションを調べてください！',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'プラグイン %s (guid: %s)のViewディレクトリを %s で開くことができません。パーミッションを調べてください！',
-	'ElggPlugin:Exception:CannotRegisterLanguages' => 'プラグイン %s (guid: %s)の言語ファイルを%sに登録できません。パーミッションを調べてください！',
 	'ElggPlugin:Exception:NoID' => 'プラグイン guid %s のIDがありません！',
 	'PluginException:NoPluginName' => "プラグイン名を見つけることができませんでした。",
 	'PluginException:ParserError' => 'API(var. %s)でプラグイン %s のマニフェストを解析するときにエラーが発生しました)。',
@@ -83,7 +83,7 @@ return array(
 	'ElggPlugin:Dependencies:Priority:Before' => '%s の前',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s は、インストールされていません',
 	'ElggPlugin:Dependencies:Suggests:Unsatisfied' => 'ありません',
-	
+
 	'ElggPlugin:Dependencies:ActiveDependent' => '%s と依存関係にある他のプラグインが存在します。 このプラグインを無効にする前に、次のプラグインを先に無効にしなければなりません。: %s',
 
 	'ElggMenuBuilder:Trees:NoParents' => '親リンクの無いメニュー項目があります',
@@ -99,11 +99,13 @@ return array(
 	'LoginException:ChangePasswordFailure' => '現在ご使用になられているパスワードのチェックに失敗しました。',
 	'LoginException:Unknown' => '不明なエラーがおこりましたので、ログインできませんでした。',
 
+	'UserFetchFailureException' => 'user_guid[%s] のユーザが存在しないため、パーミッションのチェックができません。',
+
 	'deprecatedfunction' => '警告: このコードは廃止された時代遅れの関数「 %s 」を使用しており、このバージョンのElggとは互換性がありません。',
 
 	'pageownerunavailable' => '警告： ページオーナー %d を許可できません。',
 	'viewfailure' => 'View %s において内部エラーが発生しました。',
-	'view:missing_param' => "View %2$s で必要なパラメータ「 %1$s 」がありません。",
+	'view:missing_param' => "View %2\$s で必要なパラメータ「 %1\$s 」がありません。",
 	'changebookmark' => 'このページに対するあなたのブックマークを変更してください。',
 	'noaccess' => 'あなたが閲覧しようとしているコンテントはすでに削除されてしまっているか、あるいはあなたに閲覧する権限がないかどちらかです。',
 	'error:missing_data' => 'あなたのリクエストにおいていくつかデータの欠損がありました。',
@@ -112,8 +114,12 @@ return array(
 
 	'error:default:title' => 'アレッ？',
 	'error:default:content' => 'アレッ？何かがおかしいです。',
+	'error:400:title' => 'リクエストが変です',
+	'error:400:content' => '申し訳ありません。そのリクエストは正しくないか不完全です。',
+	'error:403:title' => '禁止',
+	'error:403:content' => '申し訳ありません。要求されたページへのアクセスが許可されていません。',
 	'error:404:title' => 'ページが見つかりませんでした',
-	'error:404:content' => '申し訳あrません。ご要望のページを見つけることができませんでした',
+	'error:404:content' => '申し訳ありません。ご要望のページを見つけることができませんでした',
 
 	'upload:error:ini_size' => 'アップロードしようとされているファイルは、サイズが大きすぎるようです。',
 	'upload:error:form_size' => 'アップロードしようとされているファイルは、サイズが大きすぎるようです。',
@@ -471,6 +477,9 @@ return array(
 	'admin:cron:period' => 'Cron の間隔',
 	'admin:cron:friendly' => '最後に完了した時間',
 	'admin:cron:date' => '日付と時間',
+	'admin:cron:msg' => 'Message',
+	'admin:cron:started' => 'Cron jobs for "%s" started at %s',
+	'admin:cron:complete' => 'Cron jobs for "%s" completed at %s',
 
 	'admin:appearance' => '見た目',
 	'admin:administer_utilities' => 'ユーティリティ',
@@ -598,11 +607,17 @@ return array(
 	'admin:plugins:description' => "この管理パネルでは、インストールしたツールの管理や構築設定を行います。",
 	'admin:plugins:opt:linktext' => "ツールの設定...",
 	'admin:plugins:opt:description' => "インストールされたツールを構築するための各種設定をします",
+	'admin:plugins:label:id' => "ID",
+	'admin:plugins:label:name' => "名前",
 	'admin:plugins:label:author' => "開発者",
 	'admin:plugins:label:copyright' => "コピーライト",
 	'admin:plugins:label:categories' => 'カテゴリ',
 	'admin:plugins:label:licence' => "ライセンス",
 	'admin:plugins:label:website' => "URL",
+	'admin:plugins:label:info' => "Info",
+	'admin:plugins:label:files' => "ファイル",
+	'admin:plugins:label:resources' => "リソース",
+	'admin:plugins:label:screenshots' => "スクリーンショット",
 	'admin:plugins:label:repository' => "Code",
 	'admin:plugins:label:bugtracker' => "問題を報告する",
 	'admin:plugins:label:donate' => "寄付する",
@@ -617,11 +632,12 @@ return array(
 	'admin:plugins:label:contributors:description' => '説明',
 	'admin:plugins:label:dependencies' => '依存関係',
 
-	'admin:plugins:warning:elgg_version_unknown' => 'このプラグインは、旧のマニフェストファイルを使用していますので互換性のあるElggバージョンを記載していません。おそらく、うまく作動しないでしょう。',
 	'admin:plugins:warning:unmet_dependencies' => 'このプラグインは依存関係が不適切なので起動できません。詳細情報で依存関係をチェックしてください。',
 	'admin:plugins:warning:invalid' => 'このプラグインは正しくありません: %s',
 	'admin:plugins:warning:invalid:check_docs' => '問題解決のヒントは、 <a href="http://learn.elgg.org/en/stable/appendix/faqs.html">the Elgg documentation</a> にあるかもしれません。',
 	'admin:plugins:cannot_activate' => '起動できません',
+	'admin:plugins:already:active' => '選択されたプラグインは、すでに起動しています。',
+	'admin:plugins:already:inactive' => '選択されたプラグインはすでに停止しています。',
 
 	'admin:plugins:set_priority:yes' => "%s を並べ直しました。",
 	'admin:plugins:set_priority:no' => "%s を並べ直せませんでした。",
@@ -709,6 +725,7 @@ return array(
 	'admin:robots.txt:instructions' => "このサイトの robots.txt ファイルを編集します。",
 	'admin:robots.txt:plugins' => "プラグインは編集結果を robots.txt ファイルに追加しています。",
 	'admin:robots.txt:subdir' => "Elggがサブディレクトリにインストールされているため、The robots.txt tool は機能しないでしょう。",
+	'admin:robots.txt:physical' => "robots.txt ファイルが存在しますので、 robots.txt tool は機能しないでしょう。",
 
 	'admin:maintenance_mode:default_message' => '申し訳ありません。このサイトは現在メンテナンス中で接続出来ません。',
 	'admin:maintenance_mode:instructions' => 'サイトのアップグレードやサイトに大きな変更をするときに、メンテナンス・モードをご利用ください。
@@ -722,7 +739,7 @@ return array(
 /**
  * User settings
  */
-		
+
 	'usersettings:description' => "ユーザセッティングパネルを使うと、ユーザマネージメントからプラグインの振る舞い方まで、あなたの個人的な設定の全てを管理することができます。開始するには、以下のオプションを選択してください。",
 
 	'usersettings:statistics' => "あなたの統計情報",
@@ -749,7 +766,7 @@ return array(
 /**
  * Activity river
  */
-		
+
 	'river:all' => '全アクティビティ',
 	'river:mine' => 'My アクティビティ',
 	'river:owner' => '%s さんのアクティビティ',
@@ -776,7 +793,7 @@ return array(
 	'icon:size:medium' => "Medium",
 	'icon:size:large' => "Large",
 	'icon:size:master' => "Extra Large",
-		
+
 /**
  * Generic action words
  */
@@ -861,11 +878,11 @@ return array(
 
 	'active' => 'アクティブ',
 	'total' => '総数',
-	
+
 	'ok' => 'OK',
 	'any' => 'Any',
 	'error' => 'エラー',
-	
+
 	'other' => 'その他',
 	'options' => 'オプション',
 	'advanced' => '詳細設定',
@@ -878,7 +895,7 @@ return array(
 	'content:latest:blurb' => 'もしくは、ここをクリックしてサイト全体での新しい記事を見る',
 
 	'link:text' => 'リンク一覧',
-	
+
 /**
  * Generic questions
  */
@@ -906,7 +923,7 @@ return array(
 	'sort:popular' => '人気順',
 	'sort:alpha' => 'アルファベット順',
 	'sort:priority' => '優先度順',
-		
+
 /**
  * Generic data words
  */
@@ -931,7 +948,7 @@ return array(
 /**
  * Entity actions
  */
-		
+
 	'edit:this' => 'これを編集',
 	'delete:this' => 'これを削除',
 	'comment:this' => 'コメントをつける',
@@ -974,7 +991,7 @@ return array(
 /**
  * Import / export
  */
-		
+
 	'importsuccess' => "データのインポートに成功しました。",
 	'importfail' => "OpenDDデータのインポートに失敗しました。",
 
@@ -990,7 +1007,7 @@ return array(
 	'friendlytime:days' => "%s 日前",
 	'friendlytime:days:singular' => "昨日",
 	'friendlytime:date_format' => 'Y年m月d日@ H:i',
-	
+
 	'friendlytime:future:minutes' => "%s分で",
 	'friendlytime:future:minutes:singular' => "1分で",
 	'friendlytime:future:hours' => "%s時間で",
@@ -1010,6 +1027,19 @@ return array(
 	'date:month:10' => '10月 %s',
 	'date:month:11' => '11月 %s',
 	'date:month:12' => '12月 %s',
+	
+	'date:month:short:01' => '1月%s日',
+	'date:month:short:02' => '2月%s日',
+	'date:month:short:03' => '3月%s日',
+	'date:month:short:04' => '4月%s日',
+	'date:month:short:05' => '5月%s日',
+	'date:month:short:06' => '6月%s日',
+	'date:month:short:07' => '7月%s日',
+	'date:month:short:08' => '8月%s日',
+	'date:month:short:09' => '9月%s日',
+	'date:month:short:10' => '10月%s日',
+	'date:month:short:11' => '11月%s日',
+	'date:month:short:12' => '12月%s日',
 
 	'date:weekday:0' => 'Sunday',
 	'date:weekday:1' => 'Monday',
@@ -1018,7 +1048,15 @@ return array(
 	'date:weekday:4' => 'Thursday',
 	'date:weekday:5' => 'Friday',
 	'date:weekday:6' => 'Saturday',
-	
+
+	'date:weekday:short:0' => '日',
+	'date:weekday:short:1' => '月',
+	'date:weekday:short:2' => '火',
+	'date:weekday:short:3' => '水',
+	'date:weekday:short:4' => '木',
+	'date:weekday:short:5' => '金',
+	'date:weekday:short:6' => '土',
+
 	'interval:minute' => '毎分',
 	'interval:fiveminute' => '5分毎',
 	'interval:fifteenmin' => '15分毎',
@@ -1056,8 +1094,6 @@ return array(
 	'installation:walled_garden:description' => '非会員がサイトの内容を閲覧できないようにする（ただし、ログインページや登録ページのようなパブリックなWebページを除く）。',
 	'installation:walled_garden:label' => 'ページをログインユーザ限定にする',
 
-	'installation:httpslogin' => "HTTPS接続越しにユーザをログインさせることができるようにします。ただし、WebサーバがHTTPS接続に対応していないといけません。",
-	'installation:httpslogin:label' => "HTTPSログインを可能にする",
 	'installation:view' => "あなたのサイトのデフォルトで使用するviewを入力してください。デフォルトviewを使用する場合は、空欄のままにしておいてください。(よくわからない場合は、そのままにしておいてください)",
 
 	'installation:siteemail' => "サイトの電子メールアドレス（システムメールを送信するときに使用します）:",
@@ -1070,13 +1106,18 @@ return array(
 	'installation:simplecache:description' => "このsimple cacheは、CSSやJavaScriptなどの静的コンテントをキャッシュすることによって、サイトのパフォーマンスを改善させます。",
 	'installation:simplecache:label' => "Simple cache を使う(推奨)",
 
+	'installation:cache_symlink:description' => "The symbolic link to the simple cache directory allows the server to serve static views bypassing the engine, which considerably improves performance and reduces the server load",
+	'installation:cache_symlink:label' => "Use symbolic link to simple cache directory (recommended)",
+	'installation:cache_symlink:warning' => "Symbolic link has been established. If, for some reason, you want to remove the link, delete the symbolic link directory from your server",
+	'installation:cache_symlink:error' => "Due to your server configuration the symbolic link can not be established automatically. Please refer to the documentation and establish the symbolic link manually.",
+
 	'installation:minify:description' => "Simple cache は JavaScripte と CSS ファイルを圧縮することでパフォーマンスも改善することができます。（simple cacheを「有効」にする必要があります。）",
 	'installation:minify_js:label' => "JavaScript を圧縮（推奨）",
 	'installation:minify_css:label' => "CSS を圧縮（推奨）",
 
 	'installation:htaccess:needs_upgrade' => ".htaccess をアップデートしてください。そうすることにより、path が GET のパラメタ __elgg_uri にインジェクトされます。( install/config/htaccess.dist ファイルを参考にしてください。)",
 	'installation:htaccess:localhost:connectionfailed' => "Elggはrewriteルールのプロパティをテストするために自分自身に接続することはできません。curlが動作することとlocalhostへの接続を妨げるようなIPの制限設定が無いかどうかを確認してください。",
-	
+
 	'installation:systemcache:description' => "ステムキャッシュはデータをファイルにキャッシュすることでElggの読み込み時間を少なくします。",
 	'installation:systemcache:label' => "システムキャッシュを使う(推奨)",
 
@@ -1087,7 +1128,6 @@ return array(
 	'admin:legend:debug' => 'デバッグとログ',
 
 	'upgrading' => 'アップグレード中...',
-	'upgrade:db' => 'データベースをアップグレードしました。',
 	'upgrade:core' => 'Elggをアップグレードしました。',
 	'upgrade:unlock' => 'アプグレードのロックを解除する',
 	'upgrade:unlock:confirm' => "もうひとつアップグレードがありますのでデータベースをロックします。複数のアップグレードを同時に実行するのは危険です。他のアップグレードがないことをご確認の上作業を継続してください。ロックを解除しますか？",
@@ -1126,7 +1166,7 @@ return array(
 	// Strings specific for the comments upgrade
 	'admin:upgrades:comments' => 'コメントのアップグレード',
 	'upgrade:comment:create_failed' => 'Comment id %s を entity に変換するのに失敗しました。',
-	'admin:upgrades:commentaccess' => 'コメント・アクセスのアップデート',
+	'admin:upgrades:commentaccess' => 'コメント・アクセスのアップグレード',
 
 	// Strings specific for the datadir upgrade
 	'admin:upgrades:datadirs' => 'データディレクトリのアップグレード',
@@ -1145,12 +1185,12 @@ return array(
 /**
  * Emails
  */
-		
+
 	'email:from' => 'From',
 	'email:to' => 'To',
 	'email:subject' => 'Subject',
 	'email:body' => 'Body',
-	
+
 	'email:settings' => "Eメール設定",
 	'email:address:label' => "Eメールアドレス",
 
@@ -1242,13 +1282,19 @@ return array(
 /**
  * Entities
  */
-	
+
 	'byline' => 'By %s',
+	'byline:ingroup' => '%sグループ内',
 	'entity:default:strapline' => '作成 %s by %s',
 	'entity:default:missingsupport:popup' => 'この情報を正確に表示できません。利用していたプラグインがうまく動作していないか、アンインストールされた可能性があります。',
 
-	'entity:delete:success' => 'エンティティ「 %s 」を削除しました。',
-	'entity:delete:fail' => 'エンティティ「 %s 」を削除できませんでした。',
+	'entity:delete:item' => '項目',
+	'entity:delete:item_not_found' => '項目が見つかりませんでした。',
+	'entity:delete:permission_denied' => 'あなたには、この項目を削除する権限がありません。',
+	'entity:delete:success' => '%s は削除されました。',
+	'entity:delete:fail' => '%s は削除できませんでした。',
+
+	'entity:can_delete:invaliduser' => 'ユーザが存在しませんので、user_guid[%s] に対して canDelete() をチェックできません。 ',
 
 /**
  * Action gatekeeper
@@ -1320,6 +1366,7 @@ return array(
 	"es" => "Spanish",
 	"et" => "Estonian",
 	"eu" => "Basque",
+	"eu_es" => "Basque (Spain)",
 	"fa" => "Persian",
 	"fi" => "Finnish",
 	"fj" => "Fiji",
@@ -1384,11 +1431,12 @@ return array(
 	"pl" => "Polish",
 	"ps" => "Pashto / Pushto",
 	"pt" => "Portuguese",
-	"pt_br" => 'ブラジルポルトガル語',
+	"pt_br" => "Portuguese (Brazil)",
 	"qu" => "Quechua",
 	"rm" => "Rhaeto-Romance",
 	"rn" => "Kirundi",
 	"ro" => "Romanian",
+	"ro_ro" => "Romanian (Romania)",
 	"ru" => "Russian",
 	"rw" => "Kinyarwanda",
 	"sa" => "Sanskrit",
@@ -1403,6 +1451,7 @@ return array(
 	"so" => "Somali",
 	"sq" => "Albanian",
 	"sr" => "Serbian",
+	"sr_latin" => "Serbian (Latin)",
 	"ss" => "Siswati",
 	"st" => "Sesotho",
 	"su" => "Sundanese",
@@ -1434,5 +1483,9 @@ return array(
 	"yo" => "Yoruba",
 	"za" => "Zuang",
 	"zh" => "Chinese",
+	"zh_hans" => "Chinese Simplified",
 	"zu" => "Zulu",
+
+	"field:required" => '必須です',
+
 );

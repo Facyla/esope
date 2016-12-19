@@ -11,6 +11,11 @@ $tabs = array(
 		'href' => 'groups/all?filter=newest',
 		'priority' => 200,
 	),
+	'alpha' => array(
+		'text' => elgg_echo('sort:alpha'),
+		'href' => 'groups/all?filter=alpha',
+		'priority' => 250,
+	),
 	'popular' => array(
 		'text' => elgg_echo('sort:popular'),
 		'href' => 'groups/all?filter=popular',
@@ -23,9 +28,9 @@ $tabs = array(
 	),
 );
 
-if (elgg_is_active_plugin('discussion')) {
+if (elgg_is_active_plugin('discussions')) {
 	$tabs['discussion'] = array(
-		'text' => elgg_echo('groups:latestdiscussion'),
+		'text' => elgg_echo('discussion:latest'),
 		'href' => 'groups/all?filter=discussion',
 		'priority' => 500,
 	);

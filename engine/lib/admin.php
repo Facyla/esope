@@ -17,9 +17,7 @@
  * System messages (success and error messages) are used in both the main site
  * and the admin area. There is a special presistent message for the admin area
  * called an admin notice. It should be used when a plugin requires an
- * administrator to take an action. An example is the categories plugin
- * requesting that the administrator set site categories after the plugin has
- * been activated. @see elgg_add_admin_notice()
+ * administrator to take an action. @see elgg_add_admin_notice()
  *
  *
  * @package Elgg.Core
@@ -343,9 +341,21 @@ function _elgg_admin_init() {
 	elgg_register_event_handler('create', 'object', '_elgg_create_notice_of_pending_upgrade');
 
 	elgg_register_page_handler('admin', '_elgg_admin_page_handler');
-	elgg_register_page_handler('admin_plugin_screenshot', '_elgg_admin_plugin_screenshot_page_handler');
 	elgg_register_page_handler('admin_plugin_text_file', '_elgg_admin_markdown_page_handler');
 	elgg_register_page_handler('robots.txt', '_elgg_robots_page_handler');
+}
+
+/**
+ * Setup after plugins are initialized
+ *
+ * @access private
+ * @return void
+ */
+function _elgg_admin_ready() {
+	// if a plugin has extended the deprecated admin.js view, register it for simplecache loading.
+	if (elgg_view_exists('admin.js')) {
+		elgg_register_simplecache_view('admin.js');
+	}
 }
 
 /**
@@ -508,6 +518,14 @@ function _elgg_admin_page_handler($page) {
 
 	elgg_unregister_css('elgg');
 	elgg_require_js('elgg/admin');
+
+	// if a plugin has extended the deprecated admin.js view, add it to the page
+	if (elgg_view_exists('admin.js')) {
+		elgg_deprecated_notice("The view admin.js (AKA js/admin) is deprecated", "2.0");
+		elgg_register_js('elgg.deprecated.admin', elgg_get_simplecache_url('admin.js'));
+		elgg_load_js('elgg.deprecated.admin');
+	}
+
 	elgg_load_js('jquery.jeditable');
 
 	// default to dashboard
@@ -556,28 +574,6 @@ function _elgg_admin_page_handler($page) {
 }
 
 /**
- * Serves up screenshots for plugins from
- * admin_plugin_screenshot/<plugin_id>/<size>/<ss_name>.<ext>
- *
- * @param array $pages The pages array
- * @return bool
- * @access private
- */
-function _elgg_admin_plugin_screenshot_page_handler($pages) {
-	set_input('plugin_id', elgg_extract(0, $pages));
-	set_input('size', elgg_extract(1, $pages, 'thumbnail'));
-
-	// the rest of the string is the filename
-	$filename_parts = array_slice($pages, 2);
-	$filename = implode('/', $filename_parts);
-	$filename = sanitise_filepath($filename, false);
-	set_input('filename', $filename);
-
-	echo elgg_view_resource('admin/plugin_screenshot.img');
-	return true;
-}
-
-/**
  * Formats and serves out markdown files from plugins.
  *
  * URLs in format like admin_plugin_text_file/<plugin_id>/filename.ext
@@ -594,12 +590,12 @@ function _elgg_admin_plugin_screenshot_page_handler($pages) {
  * @access private
  */
 function _elgg_admin_markdown_page_handler($pages) {
-	set_input('plugin_id', elgg_extract(0, $pages));
-	set_input('filename', elgg_extract(1, $pages));
-	
 	elgg_set_context('admin');
 
-	echo elgg_view_resource('admin/plugin_text_file');
+	echo elgg_view_resource('admin/plugin_text_file', [
+		'plugin_id' => elgg_extract(0, $pages),
+		'filename' => elgg_extract(1, $pages),
+	]);
 	return true;
 }
 
@@ -742,4 +738,5 @@ function _elgg_add_admin_widgets($event, $type, $user) {
 
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', '_elgg_admin_init');
+	$events->registerHandler('ready', 'system', '_elgg_admin_ready');
 };

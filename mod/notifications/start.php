@@ -20,16 +20,18 @@ function notifications_plugin_init() {
 	elgg_unextend_view('forms/account/settings', 'core/settings/account/notifications');
 
 	// update notifications based on relationships changing
-	elgg_register_event_handler('delete', 'member', 'notifications_relationship_remove');
-	elgg_register_event_handler('delete', 'friend', 'notifications_relationship_remove');
+	elgg_register_event_handler('delete', 'relationship', 'notifications_relationship_remove');
 
 	// update notifications when new friend or access collection membership
-	elgg_register_event_handler('create', 'friend', 'notifications_update_friend_notify');
+	elgg_register_event_handler('create', 'relationship', 'notifications_update_friend_notify');
 	elgg_register_plugin_hook_handler('access:collections:add_user', 'collection', 'notifications_update_collection_notify');
 
 	$actions_base = __DIR__ . '/actions';
 	elgg_register_action("notificationsettings/save", "$actions_base/save.php");
 	elgg_register_action("notificationsettings/groupsave", "$actions_base/groupsave.php");
+
+	// register unit tests
+	elgg_register_plugin_hook_handler('unit_test', 'system', 'notifications_register_tests');
 }
 
 /**
@@ -41,6 +43,10 @@ function notifications_plugin_init() {
 function notifications_page_handler($page) {
 
 	elgg_gatekeeper();
+
+	// Set the context to settings
+	elgg_set_context('settings');
+
 	$current_user = elgg_get_logged_in_user_entity();
 
 	// default to personal notifications
@@ -51,15 +57,15 @@ function notifications_page_handler($page) {
 		forward("notifications/{$page[0]}/{$current_user->username}");
 	}
 
-	set_input('username', $page[1]);
+	$vars['username'] = $page[1];
 
 	// note: $user passed in
 	switch ($page[0]) {
 		case 'group':
-			echo elgg_view_resource('notifications/groups');
+			echo elgg_view_resource('notifications/groups', $vars);
 			break;
 		case 'personal':
-			echo elgg_view_resource('notifications/index');
+			echo elgg_view_resource('notifications/index', $vars);
 			break;
 		default:
 			return false;
@@ -102,19 +108,20 @@ function notifications_plugin_pagesetup() {
 /**
  * Update notifications when a relationship is deleted
  *
- * @param string $event
- * @param string $object_type
- * @param object $relationship
+ * @param string            $event        "delete"
+ * @param string            $object_type  "relationship"
+ * @param \ElggRelationship $relationship Relationship obj
+ * @return void
  */
 function notifications_relationship_remove($event, $object_type, $relationship) {
-	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
-
-	$user_guid = $relationship->guid_one;
-	$object_guid = $relationship->guid_two;
-
-	// loop through all notification types
-	foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-		remove_entity_relationship($user_guid, "notify{$method}", $object_guid);
+	
+	if (!in_array($relationship->relationship, ['member', 'friend'])) {
+		return;
+	}
+	
+	$methods = array_keys(_elgg_services()->notifications->getMethodsAsDeprecatedGlobal());
+	foreach($methods as $method) {
+		elgg_remove_subscription($relationship->guid_one, $method, $relationship->guid_two);
 	}
 }
 
@@ -126,6 +133,12 @@ function notifications_relationship_remove($event, $object_type, $relationship) 
  * @param object $relationship
  */
 function notifications_update_friend_notify($event, $object_type, $relationship) {
+	// The handler gets triggered regardless of which relationship was
+	// created, so proceed only if dealing with a 'friend' relationship.
+	if ($relationship->relationship != 'friend') {
+		return true;
+	}
+
 	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
 
 	$user_guid = $relationship->guid_one;
@@ -200,4 +213,17 @@ function notifications_update_collection_notify($event, $object_type, $returnval
 			}
 		}
 	}
+}
+
+/**
+ * Register unit tests
+ * 
+ * @param string   $hook  "unit_test"
+ * @param string   $type  "system"
+ * @param string[] $tests Tests
+ * @return string[]
+ */
+function notifications_register_tests($hook, $type, $tests) {
+	$tests[] = __DIR__ . '/tests/ElggNotificationsPluginUnitTest.php';
+	return $tests;
 }

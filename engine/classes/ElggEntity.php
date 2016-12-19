@@ -1092,7 +1092,9 @@ abstract class ElggEntity extends \ElggData implements
 			}
 		} else {
 			$user = _elgg_services()->session->getLoggedInUser();
-			$user_guid = $user->guid;
+			if ($user) {
+				$user_guid = $user->guid;
+			}
 		}
 
 		$return = null;
@@ -1150,8 +1152,8 @@ abstract class ElggEntity extends \ElggData implements
 	/**
 	 * Can a user annotate an entity?
 	 *
-	 * @tip Can be overridden by registering for the permissions_check:annotate,
-	 * <entity type> plugin hook.
+	 * @tip Can be overridden by registering for the plugin hook [permissions_check:annotate:<name>,
+	 * <entity type>] or [permissions_check:annotate, <entity type>]. The hooks are called in that order.
 	 *
 	 * @tip If you want logged out users to annotate an object, do not call
 	 * canAnnotate(). It's easier than using the plugin hook.
@@ -1172,12 +1174,19 @@ abstract class ElggEntity extends \ElggData implements
 			$return = false;
 		}
 
+		$hooks = _elgg_services()->hooks;
+
 		$params = array(
 			'entity' => $this,
 			'user' => $user,
 			'annotation_name' => $annotation_name,
 		);
-		return _elgg_services()->hooks->trigger('permissions_check:annotate', $this->type, $params, $return);
+		if ($annotation_name !== '') {
+			$return = $hooks->trigger("permissions_check:annotate:$annotation_name", $this->type, $params, $return);
+		}
+		$return = $hooks->trigger('permissions_check:annotate', $this->type, $params, $return);
+
+		return $return;
 	}
 
 	/**
@@ -1510,6 +1519,7 @@ abstract class ElggEntity extends \ElggData implements
 		$container_guid = $this->attributes['container_guid'];
 		if ($container_guid == 0) {
 			$container_guid = $owner_guid;
+			$this->attributes['container_guid'] = $container_guid;
 		}
 		$container_guid = (int)$container_guid;
 
@@ -1517,18 +1527,42 @@ abstract class ElggEntity extends \ElggData implements
 			throw new \InvalidParameterException('ACCESS_DEFAULT is not a valid access level. See its documentation in elgglib.h');
 		}
 
-		$owner = $this->getOwnerEntity();
-		if ($owner && !$owner->canWriteToContainer(0, $type, $subtype)) {
-			return false;
-		}
-		
-		if ($owner_guid != $container_guid) {
-			$container = $this->getContainerEntity();
-			if ($container && !$container->canWriteToContainer(0, $type, $subtype)) {
+		$user_guid = elgg_get_logged_in_user_guid();
+
+		// If given an owner, verify it can be loaded
+		if ($owner_guid) {
+			$owner = $this->getOwnerEntity();
+			if (!$owner) {
+				_elgg_services()->logger->error("User $user_guid tried to create a ($type, $subtype), but the given"
+					. " owner $owner_guid could not be loaded.");
+				return false;
+			}
+
+			// If different owner than logged in, verify can write to container.
+
+			if ($user_guid != $owner_guid && !$owner->canWriteToContainer(0, $type, $subtype)) {
+				_elgg_services()->logger->error("User $user_guid tried to create a ($type, $subtype) with owner"
+					. " $owner_guid, but the user wasn't permitted to write to the owner's container.");
 				return false;
 			}
 		}
-		
+
+		// If given a container, verify it can be loaded and that the current user can write to it
+		if ($container_guid) {
+			$container = $this->getContainerEntity();
+			if (!$container) {
+				_elgg_services()->logger->error("User $user_guid tried to create a ($type, $subtype), but the given"
+					. " container $container_guid could not be loaded.");
+				return false;
+			}
+
+			if (!$container->canWriteToContainer(0, $type, $subtype)) {
+				_elgg_services()->logger->error("User $user_guid tried to create a ($type, $subtype), but was not"
+					. " permitted to write to container $container_guid.");
+				return false;
+			}
+		}
+
 		$result = $this->getDatabase()->insertData("INSERT into {$CONFIG->dbprefix}entities
 			(type, subtype, owner_guid, site_guid, container_guid,
 				access_id, time_created, time_updated, last_action)
@@ -1769,6 +1803,14 @@ abstract class ElggEntity extends \ElggData implements
 			return false;
 		}
 
+		if ($this instanceof ElggUser && $this->banned === 'no') {
+			// temporarily ban to prevent using the site during disable
+			_elgg_services()->usersTable->markBanned($this->guid, true);
+			$unban_after = true;
+		} else {
+			$unban_after = false;
+		}
+
 		_elgg_invalidate_cache_for_entity($this->guid);
 		
 		if ($reason) {
@@ -1782,15 +1824,21 @@ abstract class ElggEntity extends \ElggData implements
 			$hidden = access_get_show_hidden_status();
 			access_show_hidden_entities(true);
 			$ia = elgg_set_ignore_access(true);
-			
-			$sub_entities = $this->getDatabase()->getData("SELECT * FROM {$CONFIG->dbprefix}entities
+
+			$query = "
+				SELECT *
+				FROM {$CONFIG->dbprefix}entities
 				WHERE (
-				container_guid = $guid
-				OR owner_guid = $guid
-				OR site_guid = $guid
-				) AND enabled='yes'", 'entity_row_to_elggstar');
+					container_guid = $guid
+					OR owner_guid = $guid
+					OR site_guid = $guid
+				) 
+				AND enabled = 'yes'
+			";
+			$sub_entities = $this->getDatabase()->getData($query, 'entity_row_to_elggstar');
 
 			if ($sub_entities) {
+				/* @var ElggEntity[] $sub_entities */
 				foreach ($sub_entities as $e) {
 					add_entity_relationship($e->guid, 'disabled_with', $this->guid);
 					$e->disable($reason);
@@ -1804,9 +1852,15 @@ abstract class ElggEntity extends \ElggData implements
 		$this->disableMetadata();
 		$this->disableAnnotations();
 
-		$res = $this->getDatabase()->updateData("UPDATE {$CONFIG->dbprefix}entities
+		$res = $this->getDatabase()->updateData("
+			UPDATE {$CONFIG->dbprefix}entities
 			SET enabled = 'no'
-			WHERE guid = $guid");
+			WHERE guid = $guid
+		");
+
+		if ($unban_after) {
+			_elgg_services()->usersTable->markBanned($this->guid, false);
+		}
 
 		if ($res) {
 			$this->attributes['enabled'] = 'no';
@@ -1924,7 +1978,12 @@ abstract class ElggEntity extends \ElggData implements
 		if (!_elgg_services()->events->trigger('delete', $this->type, $this)) {
 			return false;
 		}
-		
+
+		if ($this instanceof ElggUser) {
+			// ban to prevent using the site during delete
+			_elgg_services()->usersTable->markBanned($this->guid, true);
+		}
+
 		_elgg_invalidate_cache_for_entity($guid);
 		
 		// If memcache is available then delete this entry from the cache
@@ -1986,29 +2045,19 @@ abstract class ElggEntity extends \ElggData implements
 		elgg_delete_river(array('target_guid' => $guid));
 		remove_all_private_settings($guid);
 
-		$res = $this->getDatabase()->deleteData("DELETE FROM {$CONFIG->dbprefix}entities WHERE guid = $guid");
-		if ($res) {
-			$sub_table = "";
+		$res = $this->getDatabase()->deleteData("
+			DELETE FROM {$CONFIG->dbprefix}entities
+			WHERE guid = $guid
+		");
 
-			// Where appropriate delete the sub table
-			switch ($this->type) {
-				case 'object' :
-					$sub_table = $CONFIG->dbprefix . 'objects_entity';
-					break;
-				case 'user' :
-					$sub_table = $CONFIG->dbprefix . 'users_entity';
-					break;
-				case 'group' :
-					$sub_table = $CONFIG->dbprefix . 'groups_entity';
-					break;
-				case 'site' :
-					$sub_table = $CONFIG->dbprefix . 'sites_entity';
-					break;
-			}
+		if ($res && in_array($this->type, ['object', 'user', 'group', 'site'])) {
+			// delete from secondary table
+			$sub_table = "{$CONFIG->dbprefix}{$this->type}s_entity";
 
-			if ($sub_table) {
-				$this->getDatabase()->deleteData("DELETE FROM $sub_table WHERE guid = $guid");
-			}
+			$this->getDatabase()->deleteData("
+				DELETE FROM $sub_table
+				WHERE guid = $guid
+			");
 		}
 		
 		_elgg_clear_entity_files($this);

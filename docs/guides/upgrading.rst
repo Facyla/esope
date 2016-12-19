@@ -33,8 +33,8 @@ That means an Elgg site can look something like this:
       ...
 
 ``elgg_get_root_path`` and ``$CONFIG->path`` will return the path to the application
-root directory (the one containing ``settings.php``), which is not necessarily the
-same as Elgg core's root directory (which in this case is ``vendor/elgg/elgg/``).
+root directory, which is not necessarily the same as Elgg core's root directory (which
+in this case is ``vendor/elgg/elgg/``).
 
 Do not attempt to access the core Elgg from your plugin directly, since you cannot
 rely on its location on the filesystem.
@@ -199,6 +199,7 @@ We dropped support for and/or removed the following views:
  * input/datepicker (Use input/date instead)
  * input/pulldown (Use input/select instead)
  * invitefriends/formitems
+ * js/admin (Use AMD and ``elgg_require_js`` instead of extending JS views)
  * js/initialise_elgg (Use AMD and ``elgg_require_js`` instead of extending JS views)
  * members/nav
  * metatags (Use the 'head', 'page' plugin hook instead)
@@ -302,13 +303,22 @@ Comments plugin hook
 
 Plugins can now return an empty string from ``'comments',$entity_type`` hook in order to override the default comments component view. To force the default comments component, your plugin must return ``false``. If you were using empty strings to force the default comments view, you need to update your hook handlers to return ``false``.
 
-Creating a relationship triggers only one event
------------------------------------------------
+Container permissions hook
+--------------------------
 
-Entity relationship creation no longer fires the legacy "create" event using the relationship name as the type. E.g. Listening for the ``"create", "member"`` event will no longer capture group membership additions. Use the ``"create", "relationship"`` event.
+The behavior of the ``container_permissions_check`` hook has changed when an entity is being created: Before 2.0, the hook would be called twice if the entity's container was not the owner. On the first call, the entity's owner would be passed in as ``$params['container']``, which could confuse handlers.
+
+In 2.0, when an entity is created in a container like a group, if the owner is the same as the logged in user (almost always the case), this first check is bypassed. So the ``container_permissions_check`` hook will almost always be called once with ``$params['container']`` being the correct container of the entity.
+
+Creating or deleting a relationship triggers only one event
+-----------------------------------------------------------
+
+The "create" and "delete" relationship events are now only fired once, with ``"relationship"`` as the object type.
+
+E.g. Listening for the ``"create", "member"`` or ``"delete", "member"`` event(s) will no longer capture group membership additions/removals. Use the ``"create", "relationship"`` or ``"delete", "relationship"`` events.
 
 Discussion feature has been pulled from groups into its own plugin
--------------------------------------------------------------------
+------------------------------------------------------------------
 
 The ``object, groupforumtopic`` subtype has been replaced with the
 ``object, discussion`` subtype. If your plugin is using or altering
@@ -360,6 +370,28 @@ priority. Some of these handlers will most likely be called in a different order
 
 Elgg no longer provides this endpoint for exposing resource data.
 
+Icons migrated to Font Awesome
+------------------------------
+
+Elgg's sprites and most of the CSS classes beginning with ``elgg-icon-``
+`have been removed <https://github.com/Elgg/Elgg/pull/8578/files#diff-b3912b37ca7bd6c53a2968ccb6c22a94L22>`_.
+
+Usage of ``elgg_view_icon()`` is backward compatible, but static HTML using the ``elgg-icon``
+classes will have to be updated to the new markup.
+
+Increase of z-index value in elgg-menu-site class
+-------------------------------------------------
+
+The value of z-index in the elgg-menu-site class has been increased from 1 to 50 to allow for page elements
+in the content area to use the z-index property without the "More" site menu's dropdown being displayed
+behind these elements. If your plugin/theme overrides the elgg-menu-site class or views/default/elements/navigation.css
+please adjust the z-index value in your modified CSS file accordingly.
+
+input/autocomplete view
+-----------------------
+
+Plugins that override the ``input/autocomplete`` view will need to include the source URL in the ``data-source`` attribute of the input element, require the new ``elgg/autocomplete`` AMD module, and call its ``init`` method. The 1.x javascript library ``elgg.autocomplete`` is no longer used.
+
 Introduced third-party library for sending email
 ------------------------------------------------
 
@@ -377,10 +409,45 @@ The following views received ``label`` elements around some of the input fields.
 - views/default/forms/admin/plugins/sort.php
 - views/default/forms/login.php
 
+Plugin Aalborg Theme
+--------------------
+
+The view ``page/elements/navbar`` now uses a Font Awesome icon for the mobile menu selector instead of an image. The ``bars.png`` image and supporting CSS for the 1.12 rendering has been removed, so update your theme accordingly.
+
+Plugin Likes
+------------
+
+Objects are no longer likable by default. To support liking, you can register a handler to permit the annotation,
+or more simply register for the hook ``["likes:is_likable", "<type>:<subtype>"]`` and return true. E.g.
+
+.. code:: php
+
+    elgg_register_plugin_hook_handler('likes:is_likable', 'object:mysubtype', 'Elgg\Values::getTrue');
+
+Just as before, the ``permissions_check:annotate`` hook is still called and may be used to override default behavior.
+
 Plugin Messages
 ---------------
 
+If you've removed or replaced the handler function ``messages_notifier`` to hide/alter the inbox icon, you'll instead need to do the
+same for the topbar menu handler ``messages_register_topbar``. ``messages_notifier`` is no longer used to add the menu link.
+
 Messages will no longer get the metadata 'msg' for newly created messages. This means you can not rely on that metadata to exist.
+
+Plugin Blog
+-----------
+
+The blog pages showing 'Mine' or 'Friends' listings of blogs have been changed to list all the blogs owned by the users (including those created in groups).
+
+Plugin Bookmarks
+----------------
+
+The bookmark pages showing 'Mine' or 'Friends' listings of bookmarks have been changed to list all the bookmarks owned by the users (including those created in groups).
+
+Plugin File
+-----------
+
+The file pages showing 'Mine' or 'Friends' listings of files have been changed to list all the files owned by the users (including those created in groups).
 
 Removed Classes
 ---------------
@@ -413,6 +480,8 @@ Also note that plugins should not be accessing the global ``$CONFIG`` variable e
 Removed Functions
 -----------------
 
+ - ``blog_get_page_content_friends`` 
+ - ``blog_get_page_content_read`` 
  - ``count_unread_messages()``
  - ``delete_entities()``
  - ``delete_object_entity()``
@@ -507,7 +576,11 @@ Removed Actions
 
  - ``widgets/upgrade``
 
+Removed Views
+-------------
 
+ - ``forms/admin/plugins/change_state``
+ 
 Removed View Variables
 ----------------------
 
@@ -535,6 +608,20 @@ Specifying View via Properties
 The metadata ``$entity->view`` no longer specifies the view used to render in ``elgg_view_entity()``.
 
 Similarly the property ``$annotation->view`` no longer has an effect within ``elgg_view_annotation()``.
+
+Viewtype is static after the initial ``elgg_get_viewtype()`` call
+-----------------------------------------------------------------
+
+``elgg_set_viewtype()`` must be used to set the viewtype at runtime. Although Elgg still checks the
+``view`` input and ``$CONFIG->view`` initially, this is only done once per request.
+
+
+Deprecations
+------------
+
+It's deprecated to read or write to metadata keys starting with ``filestore::`` on ``ElggFile`` objects. In Elgg 3.0 this metadata will be deleted if it points to the current data root path, so few file objects will have it. Plugins should only use ``ElggFile::setFilestore`` if files need to be stored in a custom location.
+
+.. note:: This is not the only deprecation in Elgg 2.0. Plugin developers should watch their site error logs.
 
 From 1.10 to 1.11
 =================

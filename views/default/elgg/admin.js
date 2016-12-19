@@ -7,13 +7,16 @@ define(function(require) {
 	var $ = require('jquery');
 	var ui = require('jquery-ui');
 	var elgg = require('elgg');
+	var spinner = require('elgg/spinner');
 
 	function init () {
 		// system messages do not fade in admin area, instead slide up when clicked
 		$('.elgg-system-messages li').stop(true);
 		$(document).off('click', '.elgg-system-messages li');
-		$(document).on('click', '.elgg-system-messages li', function() {
-			$(this).stop().slideUp('medium');
+		$(document).on('click', '.elgg-system-messages li', function(e) {
+			if (!$(e.target).is('a')) {
+				$(this).stop().slideUp('medium');
+			}
 		});
 
 		// draggable plugin reordering
@@ -60,9 +63,52 @@ define(function(require) {
 		
 		// plugin details selection
 		$(document).on('click', '.elgg-plugin-details-container > ul a', showPluginDetails);
-		
+
+		$(document).on('click', '.elgg-plugins-toggle', toggleAllPlugins);
+
 		// plugin screenshots
 		$(document).on('mouseenter', '.elgg-plugin-details-screenshots .elgg-plugin-screenshot', showPluginScreenshot);
+	}
+
+	/**
+	 * Active or deactivate all the visible plugins
+	 *
+	 * @param {Event} e click event
+	 * @return void
+	 */
+	function toggleAllPlugins(e) {
+		e.preventDefault();
+
+		if (!confirm(elgg.echo('question:areyousure'))) {
+			return;
+		}
+
+		var guids = [],
+			state = $(this).data('desiredState'),
+			find_state = state == 'active' ? 'inactive' : 'active';
+
+		$('.elgg-plugin.elgg-state-' + find_state + ':visible').each(function () {
+			var guid = $(this).data('guid');
+			if (guid) {
+				guids.push(guid);
+			}
+		});
+
+		if (!guids.length) {
+			elgg.register_error(elgg.echo('admin:plugins:already:' + state));
+			return;
+		}
+
+		spinner.start();
+
+		// We create a regular form and submit it. This is the simplest way to send the
+		// data, have the page refreshed, and make sure error messages are still shown on
+		// the new page. Using ajax leads to complexity because Elgg wants to send the error
+		// messages back to the client.
+		var $form = $('<form method="post" />');
+		$form.prop('action', elgg.security.addToken(this.href));
+		$form.append('<input type="hidden" name="guids" value="' + guids.join(',') + '" />');
+		$form.trigger('submit');
 	}
 
 	/**

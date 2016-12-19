@@ -23,6 +23,21 @@ available on your site. This will also be covered.
    :local:
    :depth: 2
 
+Security
+--------
+
+It is crucial that the web services are consumed via secure protocols. Do not
+enable web services if your site is not served via HTTPs. This is especially
+important if you allow API key only authentication.
+
+If you are using third-party tools that expose API methods, make sure to carry
+out a thorough security audit. You may want to make sure that API authentication
+is required for ALL methods, even if they require user authentication. Methods that
+do not require API authentication can be easily abused to spam your site.
+
+Ensure that the validity of API keys is limited and provide mechanisms for your
+API clients to renew their keys.
+
 Exposing methods
 ----------------
 
@@ -43,36 +58,84 @@ API framework:
 
 .. code:: php
 
-    elgg_ws_expose_function("test.echo", 
-                    "my_echo", 
-                     array("string" => array('type' => 'string')),
-                     'A testing method which echos back a string',
-                     'GET',
-                     false,
-                     false
-                    );
+	elgg_ws_expose_function(
+		"test.echo",
+		"my_echo",
+		[
+			"string" => [
+				'type' => 'string',
+			]
+		],
+		'A testing method which echos back a string',
+		'GET',
+		false,
+		false
+	);
 
 If you add this code to a plugin and then go to
-http://yoursite.com/services/api/rest/xml/?method=system.api.list, you
+http://yoursite.com/services/api/rest/json/?method=system.api.list, you
 should now see your test.echo method listed as an API call. Further, to
 test the exposed method from a web browser, you could hit the url:
-http://yoursite.com/services/api/rest/xml/?method=test.echo&string=testing
-and you should see xml data like this:
+http://yoursite.com/services/api/rest/json/?method=test.echo&string=testing
+and you should see JSON data like this:
 
-.. code:: xml
+.. code:: json
 
-    <elgg>
-        <status>0</status>
-        <result>testing</result>
-    </elgg>
+    {"status":0,"result":"testing"}
+
+Plugins can filter the output of individual API methods by registering a handler
+for ``'rest:output',$method`` plugin hook.
 
 Response formats
 ~~~~~~~~~~~~~~~~
 
-The web services API framework provides three different response formats
-by default: xml, json, and serialized php. You can request the different
-formats for substituting “json” or “php” for “xml” in the above URLs.
+JSON is the default format, however XML and serialized PHP can be fetched by enabling the ``data_views``
+plugin and substituting ``xml`` or ``php`` in place of ``json`` in the above URLs.
+
 You can also add additional response formats by defining new viewtypes.
+
+Parameters
+~~~~~~~~~~
+
+Parameters expected by each method should be listed as an associative array, where the key represents the parameter name, and the value contains an array with ``type``, ``default`` and ``required`` fields.
+
+Values submitted with the API request for each parameter should match the declared type. API will throw on exception if validation fails.
+
+Recognized parameter types are:	
+
+ - ``integer`` (or ``int``)
+ - ``boolean`` (or ``bool``)
+ - ``string``
+ - ``float``
+ - ``array``
+
+Unrecognized types will throw an API exception.
+
+You can use additional fields to describe your parameter, e.g. ``description``.
+
+.. code:: php
+
+	elgg_ws_expose_function(
+		'test.greet',
+		'my_greeting',
+		[
+			'name' => [
+				'type' => 'string',
+				'required' => true,
+				'description' => 'Name of the person to be greeted by the API',
+			],
+			'greeting' => [
+				'type' => 'string',
+				'required' => false,
+				'default' => 'Hello',
+				'description' => 'Greeting to be used, e.g. "Good day" or "Hi"',
+			],
+		],
+		'A testing method which greets the user with a custom greeting',
+		'GET',
+		false,
+		false
+	);
 
 API authentication
 ------------------
@@ -114,15 +177,20 @@ parameter:
 
 .. code:: php
 
-    elgg_ws_expose_function("users.active", 
-                    "count_active_users", 
-                     array("minutes" => array('type' => 'int',
-                                              'required' => false)),
-                     'Number of users who have used the site in the past x minutes',
-                     'GET',
-                     true,
-                     false
-                    );
+	elgg_ws_expose_function(
+		"users.active",
+		"count_active_users",
+		[
+			"minutes" => [
+				'type' => 'int',
+				'required' => false,
+			],
+		],
+		'Number of users who have used the site in the past x minutes',
+		'GET',
+		true,
+		false
+	);
 
 This function is now available and if you check ``system.api.list``, you
 will see that it requires API authentication. If you hit the method with
@@ -192,14 +260,19 @@ GET HTTP requests.
 
 .. code:: php
 
-    elgg_ws_expose_function("thewire.post", 
-                    "my_post_to_wire", 
-                     array("text" => array('type' => 'string')),
-                     'Post to the wire. 140 characters or less',
-                     'POST',
-                     true,
-                     true
-                    );
+	elgg_ws_expose_function(
+		"thewire.post",
+		"my_post_to_wire",
+		[
+			"text" => [
+				'type' => 'string',
+			],
+		],
+		'Post to the wire. 140 characters or less',
+		'POST',
+		true,
+		true
+	);
 
 Please note that you will not be able to test this using a web browser
 as you did with the other methods. You need to write some client code to

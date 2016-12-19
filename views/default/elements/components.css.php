@@ -134,6 +134,10 @@
 .elgg-state-notice {
 	background-color: #4690D6;
 }
+.elgg-message a {
+	color: inherit;
+	text-decoration: underline;
+}
 
 /* ***************************************
 	River
@@ -248,7 +252,8 @@
 }
 
 /* Comment highlighting that automatically fades away */
-.elgg-comments .elgg-state-highlight {
+.elgg-comments .elgg-state-highlight,
+.elgg-river-comments .elgg-state-highlight {
 	-webkit-animation: comment-highlight 5s; /* Chrome, Safari, Opera */
 	animation: comment-highlight 5s;
 }

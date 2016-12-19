@@ -356,6 +356,12 @@ class ElggInstaller {
 				'value' => 'elgg_',
 				'required' => TRUE,
 				),
+			'timezone' => array(
+				'type' => 'dropdown',
+				'value' => 'UTC',
+				'options' => \DateTimeZone::listIdentifiers(),
+				'required' => TRUE
+			)
 		);
 
 		if ($this->checkSettingsFile()) {
@@ -830,6 +836,7 @@ class ElggInstaller {
 				$this->CONFIG->site_id = $this->CONFIG->site_guid;
 				$this->CONFIG->site = get_entity($this->CONFIG->site_guid);
 				$this->CONFIG->dataroot = _elgg_services()->datalist->get('dataroot');
+				_elgg_configure_cookies($this->CONFIG);
 				_elgg_session_boot();
 			}
 
@@ -956,14 +963,22 @@ class ElggInstaller {
 	 * @return bool
 	 */
 	protected function isInstallDirWritable(&$report) {
-		
+		$root = Directory\Local::root()->getPath();
+		$abs_path = \Elgg\Application::elggDir()->getPath('elgg-config');
 
-		$writable = is_writable(Directory\Local::root()->getPath());
+		if (0 === strpos($abs_path, $root)) {
+			$relative_path = substr($abs_path, strlen($root));
+		} else {
+			$relative_path = $abs_path;
+		}
+		$relative_path = rtrim($relative_path, '/\\');
+
+		$writable = is_writable(Directory\Local::root()->getPath('elgg-config'));
 		if (!$writable) {
 			$report['settings'] = array(
 				array(
 					'severity' => 'failure',
-					'message' => _elgg_services()->translator->translate('install:check:installdir'),
+					'message' => _elgg_services()->translator->translate('install:check:installdir', [$relative_path]),
 				)
 			);
 			return FALSE;
@@ -1004,7 +1019,7 @@ class ElggInstaller {
 	 * @return string
 	 */
 	private function getSettingsPath() {
-		return Directory\Local::root()->getPath("settings.php");
+		return Directory\Local::root()->getPath("elgg-config/settings.php");
 	}
 
 	/**
@@ -1049,7 +1064,7 @@ class ElggInstaller {
 	protected function checkPhpExtensions(&$phpReport) {
 		$extensions = get_loaded_extensions();
 		$requiredExtensions = array(
-			'mysql',
+			'pdo_mysql',
 			'json',
 			'xml',
 			'gd',
@@ -1262,7 +1277,7 @@ class ElggInstaller {
 	 * @return bool
 	 */
 	protected function createSettingsFile($params) {
-		$template = \Elgg\Application::elggDir()->getContents("engine/settings.example.php");
+		$template = \Elgg\Application::elggDir()->getContents("elgg-config/settings.example.php");
 		if (!$template) {
 			register_error(_elgg_services()->translator->translate('install:error:readsettingsphp'));
 			return FALSE;

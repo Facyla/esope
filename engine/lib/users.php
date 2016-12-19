@@ -460,21 +460,27 @@ function user_avatar_hook($hook, $entity_type, $returnvalue, $params) {
  * @access private
  */
 function elgg_user_hover_menu($hook, $type, $return, $params) {
-	$user = $params['entity'];
+	$user = elgg_extract('entity', $params);
 	/* @var \ElggUser $user */
 
-	if (elgg_is_logged_in()) {
-		if (elgg_get_logged_in_user_guid() == $user->guid) {
-			$url = "profile/$user->username/edit";
-			$item = new \ElggMenuItem('profile:edit', elgg_echo('profile:edit'), $url);
-			$item->setSection('action');
-			$return[] = $item;
+	if (!$user instanceof \ElggUser) {
+		return;
+	}
 
-			$url = "avatar/edit/$user->username";
-			$item = new \ElggMenuItem('avatar:edit', elgg_echo('avatar:edit'), $url);
-			$item->setSection('action');
-			$return[] = $item;
-		}
+	if (!elgg_is_logged_in()) {
+		return;
+	}
+	
+	if (elgg_get_logged_in_user_guid() == $user->guid) {
+		$url = "profile/$user->username/edit";
+		$item = new \ElggMenuItem('profile:edit', elgg_echo('profile:edit'), $url);
+		$item->setSection('action');
+		$return[] = $item;
+
+		$url = "avatar/edit/$user->username";
+		$item = new \ElggMenuItem('avatar:edit', elgg_echo('avatar:edit'), $url);
+		$item->setSection('action');
+		$return[] = $item;
 	}
 
 	// prevent admins from banning or deleting themselves
@@ -638,29 +644,27 @@ function elgg_profile_fields_setup() {
  * Avatar page handler
  *
  * /avatar/edit/<username>
- * /avatar/view/<username>/<size>/<icontime>
+ * /avatar/view/<username>/<size>
  *
  * @param array $page
  * @return bool
  * @access private
  */
 function elgg_avatar_page_handler($page) {
-	global $CONFIG;
-
-	$user = get_user_by_username($page[1]);
+	$user = get_user_by_username(elgg_extract(1, $page));
 	if ($user) {
 		elgg_set_page_owner_guid($user->getGUID());
 	}
 
 	if ($page[0] == 'edit') {
 		echo elgg_view_resource("avatar/edit");
-		return true;
 	} else {
-		set_input('size', $page[2]);
-		echo elgg_view_resource("avatar/view");
-		return true;
+		echo elgg_view_resource("avatar/view", [
+			'size' => elgg_extract(2, $page),
+		]);
 	}
-	return false;
+
+	return true;
 }
 
 /**
@@ -671,8 +675,6 @@ function elgg_avatar_page_handler($page) {
  * @access private
  */
 function elgg_profile_page_handler($page) {
-	global $CONFIG;
-
 	$user = get_user_by_username($page[0]);
 	elgg_set_page_owner_guid($user->guid);
 

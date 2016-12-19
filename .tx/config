@@ -25,12 +25,6 @@ source_file = mod/bookmarks/languages/en.php
 source_lang = en
 type = PHP_ARRAY
 
-[elgg-core-2.categories]
-file_filter = mod/categories/languages/<lang>.php
-source_file = mod/categories/languages/en.php
-source_lang = en
-type = PHP_ARRAY
-
 [elgg-core-2.ckeditor]
 file_filter = mod/ckeditor/languages/<lang>.php
 source_file = mod/ckeditor/languages/en.php
@@ -52,6 +46,12 @@ type = PHP_ARRAY
 [elgg-core-2.diagnostics]
 file_filter = mod/diagnostics/languages/<lang>.php
 source_file = mod/diagnostics/languages/en.php
+source_lang = en
+type = PHP_ARRAY
+
+[elgg-core-2.discussions]
+file_filter = mod/discussions/languages/<lang>.php
+source_file = mod/discussions/languages/en.php
 source_lang = en
 type = PHP_ARRAY
 

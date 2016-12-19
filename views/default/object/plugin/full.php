@@ -111,7 +111,7 @@ if ($active) {
 	$options['class'] = 'elgg-button elgg-button-cancel';
 	$options['text'] = elgg_echo('admin:plugins:deactivate');
 	if (!$can_activate) {
-		$classes[] = 'elgg-state-active elgg-state-cannot-activate';
+		$classes[] = 'elgg-state-cannot-activate';
 	}
 } else if ($can_activate) {
 	$classes[] = 'elgg-state-inactive';
@@ -173,8 +173,14 @@ if (elgg_view_exists($settings_view_old) || elgg_view_exists($settings_view_new)
 	$settings_link = "<a class='elgg-plugin-settings' href='$link' title='" . elgg_echo('settings') . "'>" . elgg_view_icon("settings-alt") . "</a>";
 }
 
+$attrs = [
+	'class' => $classes,
+	'id' => $css_id,
+	'data-guid' => $plugin->guid,
+];
+
 ?>
-<div class="<?php echo implode(' ', $classes); ?>" id="<?php echo $css_id; ?>">
+<div <?= elgg_format_attributes($attrs) ?>>
 	<div class="elgg-image-block">
 		<div class="elgg-image">
 			<div>

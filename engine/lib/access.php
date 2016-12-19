@@ -154,7 +154,6 @@ $ENTITY_SHOW_HIDDEN_OVERRIDE = false;
  *
  * @param bool $show_hidden Show disabled entities.
  * @return bool
- * @access private
  */
 function access_show_hidden_entities($show_hidden) {
 	global $ENTITY_SHOW_HIDDEN_OVERRIDE;
@@ -167,7 +166,6 @@ function access_show_hidden_entities($show_hidden) {
  * Return current status of showing disabled entities.
  *
  * @return bool
- * @access private
  */
 function access_get_show_hidden_status() {
 	global $ENTITY_SHOW_HIDDEN_OVERRIDE;
@@ -409,14 +407,14 @@ function get_user_access_collections($owner_guid, $site_guid = 0) {
 /**
  * Get all of members of an access collection
  *
- * @param int  $collection The collection's ID
- * @param bool $idonly     If set to true, will only return the members' GUIDs (default: false)
+ * @param int  $collection_id The collection's ID
+ * @param bool $guids_only    If set to true, will only return the members' GUIDs (default: false)
  *
  * @return ElggUser[]|int[]|false guids or entities if successful, false if not
  * @see add_user_to_access_collection()
  */
-function get_members_of_access_collection($collection, $idonly = false) {
-	return _elgg_services()->accessCollections->getMembers($collection, $idonly);
+function get_members_of_access_collection($collection_id, $guids_only = false) {
+	return _elgg_services()->accessCollections->getMembers($collection_id, $guids_only);
 }
 
 /**

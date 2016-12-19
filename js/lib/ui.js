@@ -8,9 +8,11 @@ elgg.ui.init = function () {
 	// add user hover menus
 	elgg.ui.initHoverMenu();
 
-	//if the user clicks a system message, make it disappear
-	$(document).on('click', '.elgg-system-messages li', function() {
-		$(this).stop().fadeOut('fast');
+	// if the user clicks a system message (not a link inside one), make it disappear
+	$(document).on('click', '.elgg-system-messages li', function(e) {
+		if (!$(e.target).is('a')) {
+			$(this).stop().fadeOut('fast');
+		}
 	});
 
 	$('.elgg-system-messages li').animate({opacity: 0.9}, 6000);
@@ -45,8 +47,8 @@ elgg.ui.init = function () {
  * Use rel="toggle" on the toggler element
  * Set the href to target the item you want to toggle (<a rel="toggle" href="#id-of-target">)
  * or use data-toggle-selector="your_jquery_selector" to have an advanced selection method
- * 
- * By default elements perform a slideToggle. 
+ *
+ * By default elements perform a slideToggle.
  * If you want a normal toggle (hide/show) you can add data-toggle-slide="0" on the elements to prevent a slide.
  *
  * @param {Object} event
@@ -56,7 +58,7 @@ elgg.ui.toggles = function(event) {
 	event.preventDefault();
 	var $this = $(this),
 		target = $this.data().toggleSelector;
-	
+
 	if (!target) {
 		// @todo we can switch to elgg.getSelectorFromUrlFragment() in 1.x if
 		// we also extend it to support href=".some-class"
@@ -124,7 +126,7 @@ elgg.ui.popupOpen = function(event) {
 	// hide if already open
 	if ($target.is(':visible')) {
 		$target.fadeOut();
-		$('body').die('click', elgg.ui.popupClose);
+		$(document).off('click', elgg.ui.popupClose);
 		return;
 	}
 
@@ -171,7 +173,7 @@ elgg.ui.popupClose = function(event) {
 			}
 		});
 
-		$('body').die('click', elgg.ui.popClose);
+		$(document).off('click', elgg.ui.popupClose);
 	}
 };
 
@@ -352,18 +354,12 @@ elgg.ui.initDatePicker = function() {
 		return;
 	}
 
-	if (elgg.get_language() == 'en') {
-		loadDatePicker();
-	} else {
-		// load language first
-		elgg.get({
-			url: elgg.config.wwwroot + 'vendor/bower-asset/jquery-ui/ui/minified/i18n/datepicker-'+ elgg.get_language() +'.min.js',
-			dataType: "script",
-			cache: true,
-			success: loadDatePicker,
-			error: loadDatePicker // english language is already loaded.
-		});
+	// require language module if necessary
+	var deps = [];
+	if (elgg.get_language() != 'en') {
+		deps.push('jquery-ui/i18n/datepicker-'+ elgg.get_language() + '.min');
 	}
+	require(deps, loadDatePicker);
 };
 
 /**
@@ -374,8 +370,10 @@ elgg.ui.initDatePicker = function() {
  * name is remove_friend, you should call this function with "remove-friend" instead.
  */
 elgg.ui.registerTogglableMenuItems = function(menuItemNameA, menuItemNameB) {
+
 	// Handles clicking the first button.
-	$(document).on('click', '.elgg-menu-item-' + menuItemNameA + ' a', function() {
+	$(document).off('click.togglable', '.elgg-menu-item-' + menuItemNameA + ' a')
+			.on('click.togglable', '.elgg-menu-item-' + menuItemNameA + ' a', function() {
 		var $menu = $(this).closest('.elgg-menu');
 
 		// Be optimistic about success
@@ -400,7 +398,8 @@ elgg.ui.registerTogglableMenuItems = function(menuItemNameA, menuItemNameB) {
 	});
 
 	// Handles clicking the second button
-	$(document).on('click', '.elgg-menu-item-' + menuItemNameB + ' a', function() {
+	$(document).off('click.togglable', '.elgg-menu-item-' + menuItemNameB + ' a')
+			.on('click.togglable', '.elgg-menu-item-' + menuItemNameB + ' a', function() {
 		var $menu = $(this).closest('.elgg-menu');
 
 		// Be optimistic about success
@@ -459,7 +458,7 @@ elgg.ui.initAccessInputs = function () {
 			updateMembersonlyNote();
 			$select.change(updateMembersonlyNote);
 		}
-                
+
 		if (commentCount) {
 			$select.change(function(e) {
 				if ($(this).val() != originalValue) {

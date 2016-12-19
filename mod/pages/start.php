@@ -90,6 +90,13 @@ function pages_init() {
 
 	// register ecml views to parse
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'pages_ecml_views_hook');
+
+	// allow to be liked
+	elgg_register_plugin_hook_handler('likes:is_likable', 'object:page', 'Elgg\Values::getTrue');
+	elgg_register_plugin_hook_handler('likes:is_likable', 'object:page_top', 'Elgg\Values::getTrue');
+	
+	// prevent public write access
+	elgg_register_plugin_hook_handler('view_vars', 'input/access', 'pages_write_access_vars');
 }
 
 /**
@@ -129,27 +136,32 @@ function pages_page_handler($page) {
 			echo elgg_view_resource('pages/friends');
 			break;
 		case 'view':
-			set_input('guid', $page[1]);
-			echo elgg_view_resource('pages/view');
+			echo elgg_view_resource('pages/view', [
+				'guid' => $page[1],
+			]);
 			break;
 		case 'add':
-			set_input('guid', $page[1]);
-			echo elgg_view_resource('pages/new');
+			echo elgg_view_resource('pages/new', [
+				'guid' => $page[1],
+			]);
 			break;
 		case 'edit':
-			set_input('guid', $page[1]);
-			echo elgg_view_resource('pages/edit');
+			echo elgg_view_resource('pages/edit', [
+				'guid' => $page[1],
+			]);
 			break;
 		case 'group':
 			echo elgg_view_resource('pages/owner');
 			break;
 		case 'history':
-			set_input('guid', $page[1]);
-			echo elgg_view_resource('pages/history');
+			echo elgg_view_resource('pages/history', [
+				'guid' => $page[1],
+			]);
 			break;
 		case 'revision':
-			set_input('id', $page[1]);
-			echo elgg_view_resource('pages/revision');
+			echo elgg_view_resource('pages/revision', [
+				'id' => $page[1],
+			]);
 			break;
 		case 'all':
 			echo elgg_view_resource('pages/world');
@@ -424,4 +436,40 @@ function pages_write_access_options_hook($hook, $type, $return_value, $params) {
 		unset($return_value[ACCESS_PUBLIC]);
 		return $return_value;
 	}
+}
+
+
+/**
+ * Called on view_vars, input/access hook
+ * Prevent ACCESS_PUBLIC from ending up as a write access option
+ * 
+ * @param string $hook
+ * @param string $type
+ * @param array $return
+ * @param array $params
+ * @return array
+ */
+function pages_write_access_vars($hook, $type, $return, $params) {
+	
+	if ($return['name'] != 'write_access_id') {
+		return $return;
+	}
+	
+	if ($return['purpose'] != 'write') {
+		return $return;
+	}
+	
+	if ($return['value'] != ACCESS_PUBLIC && $return['value'] != ACCESS_DEFAULT) {
+		return $return;
+	}
+	
+	$default_access = get_default_access();
+	
+	if ($return['value'] == ACCESS_PUBLIC || $default_access == ACCESS_PUBLIC) {
+		// is the value public, or default which resolves to public?
+		// if so we'll set it to logged in, the next most permissible write access level
+		$return['value'] = ACCESS_LOGGED_IN;
+	}
+	
+	return $return;
 }

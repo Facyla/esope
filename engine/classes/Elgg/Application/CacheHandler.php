@@ -36,6 +36,14 @@ class CacheHandler {
 		'otf' => "application/font-otf",
 	];
 
+	public static $utf8_content_types = [
+		"text/css",
+		"text/html",
+		"application/javascript",
+		"image/svg+xml",
+		"text/xml",
+	];
+
 	/** @var Application */
 	private $application;
 
@@ -76,12 +84,16 @@ class CacheHandler {
 		$view = $request['view'];
 		$viewtype = $request['viewtype'];
 
-		$contentType = $this->getContentType($view);
-		if (empty($contentType)) {
+		$content_type = $this->getContentType($view);
+		if (empty($content_type)) {
 			$this->send403("Asset must have a valid file extension");
 		}
 
-		header("Content-Type: $contentType", true);
+		if (in_array($content_type, self::$utf8_content_types)) {
+			header("Content-Type: $content_type;charset=utf-8");
+		} else {
+			header("Content-Type: $content_type");
+		}
 
 		// this may/may not have to connect to the DB
 		$this->setupSimplecache();
@@ -91,7 +103,7 @@ class CacheHandler {
 
 			$this->application->bootCore();
 
-			if (!\_elgg_is_view_cacheable($view)) {
+			if (!$this->isCacheableView($view)) {
 				$this->send403("Requested view is not an asset");
 			} else {
 				$content = $this->renderView($view, $viewtype);
@@ -119,7 +131,7 @@ class CacheHandler {
 		$this->application->bootCore();
 
 		elgg_set_viewtype($viewtype);
-		if (!\_elgg_is_view_cacheable($view)) {
+		if (!$this->isCacheableView($view)) {
 			$this->send403("Requested view is not an asset");
 		}
 
@@ -175,6 +187,20 @@ class CacheHandler {
 			'viewtype' => $matches[2],
 			'view' => $matches[3],
 		);
+	}
+
+	/**
+	 * Is the view cacheable. Language views are handled specially.
+	 *
+	 * @param string $view View name
+	 *
+	 * @return bool
+	 */
+	protected function isCacheableView($view) {
+		if (preg_match('~^languages/(.*)\.js$~', $view, $m)) {
+			return in_array($m[1],  _elgg_services()->translator->getAllLanguageCodes());
+		}
+		return _elgg_services()->views->isCacheableView($view);
 	}
 
 	/**
@@ -254,9 +280,13 @@ class CacheHandler {
 	 * @return void
 	 */
 	protected function handle304($etag) {
-		// If is the same ETag, content didn't change.
-		if (isset($this->server_vars['HTTP_IF_NONE_MATCH'])
-			&& trim($this->server_vars['HTTP_IF_NONE_MATCH']) === $etag) {
+		if (!isset($this->server_vars['HTTP_IF_NONE_MATCH'])) {
+			return;
+		}
+
+		// strip -gzip for #9427
+		$if_none_match = str_replace('-gzip', '', trim($this->server_vars['HTTP_IF_NONE_MATCH']));
+		if ($if_none_match === $etag) {
 			header("HTTP/1.1 304 Not Modified");
 			exit;
 		}
@@ -326,7 +356,7 @@ class CacheHandler {
 	}
 
 	/**
-	 * Render a view for caching
+	 * Render a view for caching. Language views are handled specially.
 	 *
 	 * @param string $view     The view name
 	 * @param string $viewtype The viewtype
@@ -334,6 +364,13 @@ class CacheHandler {
 	 */
 	protected function renderView($view, $viewtype) {
 		elgg_set_viewtype($viewtype);
+
+		if ($viewtype === 'default' && preg_match("#^languages/(.*?)\\.js$#", $view, $matches)) {
+			$view = "languages.js";
+			$vars = ['language' => $matches[1]];
+		} else {
+			$vars = [];
+		}
 
 		if (!elgg_view_exists($view)) {
 			$this->send403();
@@ -350,7 +387,7 @@ class CacheHandler {
 		// the trigger correctly when the first view is actually being output.
 		$GLOBALS['_ELGG']->pagesetupdone = true;
 
-		return elgg_view($view);
+		return elgg_view($view, $vars);
 	}
 
 	/**

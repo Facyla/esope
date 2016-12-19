@@ -65,6 +65,11 @@ class ViewsService {
 	 * @var SystemCache|null This is set if the views are configured via cache
 	 */
 	private $cache;
+
+	/**
+	 * @var bool
+	 */
+	private $allow_delay_pagesetup = true;
 	
 	/**
 	 * Constructor
@@ -92,9 +97,9 @@ class ViewsService {
 	
 	/**
 	 * Takes a view name and returns the canonical name for that view.
-	 * 
+	 *
 	 * @param string $alias The possibly non-canonical view name.
-	 * 
+	 *
 	 * @return string The canonical view name.
 	 */
 	public function canonicalizeViewName(/*string*/ $alias) /*: string*/ {
@@ -184,7 +189,7 @@ class ViewsService {
 	 * @param string $view     Name of the view
 	 * @param string $location Full path to the view file
 	 * @param string $viewtype The viewtype to register this under
-	 * 
+	 *
 	 * @access private
 	 */
 	public function setViewDir($view, $location, $viewtype = '') {
@@ -275,11 +280,7 @@ class ViewsService {
 
 		$view_orig = $view;
 
-		// Trigger the pagesetup event
-		if (!isset($GLOBALS['_ELGG']->pagesetupdone) && !empty($this->CONFIG->boot_complete)) {
-			$GLOBALS['_ELGG']->pagesetupdone = true;
-			_elgg_services()->events->trigger('pagesetup', 'system');
-		}
+		$this->handlePageSetup($view);
 
 		// Set up any extensions to the requested view
 		if (isset($this->views->extensions[$view])) {
@@ -329,8 +330,37 @@ class ViewsService {
 	}
 
 	/**
+	 * Trigger the system "pagesetup" event just before the 1st view rendering, or the 2nd if the 1st
+	 * view starts with "resources/".
+	 *
+	 * We delay the pagesetup event if the first view is a resource view in order to allow plugins to
+	 * move all page-specific logic like context setting into a resource view with more confidence
+	 * that that state will be available in their pagesetup event handlers. See the commit message for
+	 * more BG info.
+	 *
+	 * @param string $view View about to be rendered
+	 * @return void
+	 */
+	private function handlePageSetup($view) {
+		if (isset($GLOBALS['_ELGG']->pagesetupdone) || empty($this->CONFIG->boot_complete)) {
+			return;
+		}
+
+		// only first rendering gets an opportunity to delay
+		$allow_delay = $this->allow_delay_pagesetup;
+		$this->allow_delay_pagesetup = false;
+
+		if ($allow_delay && (0 === strpos($view, 'resources/'))) {
+			return;
+		}
+
+		$GLOBALS['_ELGG']->pagesetupdone = true;
+		_elgg_services()->events->trigger('pagesetup', 'system');
+	}
+
+	/**
 	 * Includes view PHP or static file
-	 * 
+	 *
 	 * @param string $view                 The view name
 	 * @param array  $vars                 Variables passed to view
 	 * @param string $viewtype             The viewtype
@@ -551,6 +581,22 @@ class ViewsService {
 	}
 
 	/**
+	 * List all views in a viewtype
+	 *
+	 * @param string $viewtype Viewtype
+	 *
+	 * @return string[]
+	 *
+	 * @access private
+	 */
+	public function listViews($viewtype = 'default') {
+		if (empty($this->locations[$viewtype])) {
+			return [];
+		}
+		return array_keys($this->locations[$viewtype]);
+	}
+
+	/**
 	 * Get inspector data
 	 *
 	 * @return array
@@ -571,6 +617,7 @@ class ViewsService {
 			'locations' => $this->locations,
 			'overrides' => $overrides,
 			'extensions' => $this->views->extensions,
+			'simplecache' => $this->views->simplecache,
 		];
 	}
 
@@ -625,10 +672,11 @@ class ViewsService {
 	 */
 	private function setViewLocation($view, $viewtype, $path) {
 		$view = $this->canonicalizeViewName($view);
-		
-		if (isset($this->locations[$viewtype][$view])) {
+		$path = strtr($path, '\\', '/');
+
+		if (isset($this->locations[$viewtype][$view]) && $path !== $this->locations[$viewtype][$view]) {
 			$this->overrides[$viewtype][$view][] = $this->locations[$viewtype][$view];
 		}
-		$this->locations[$viewtype][$view] = strtr($path, '\\', '/');
+		$this->locations[$viewtype][$view] = $path;
 	}
 }

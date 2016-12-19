@@ -1,13 +1,10 @@
 <?php
 
-$guid = get_input('guid');
-elgg_set_page_owner_guid($guid);
+$guid = elgg_extract('guid', $vars);
 
 // turn this into a core function
 global $autofeed;
 $autofeed = true;
-
-elgg_push_context('group_profile');
 
 elgg_entity_gatekeeper($guid, 'group');
 

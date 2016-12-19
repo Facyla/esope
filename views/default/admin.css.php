@@ -254,6 +254,10 @@ a.elgg-maintenance-mode-warning {
 	background-color: #EAF8E8;
 	border: 1px solid #AADEA2;
 }
+.elgg-message a {
+	color: inherit;
+	text-decoration: underline;
+}
 
 .elgg-admin-notices p {
 	color: #3B8BC9;
@@ -288,7 +292,7 @@ a.elgg-maintenance-mode-warning {
 	width: 210px;
 	float: right;
 	margin-left: 30px;
-	
+
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -480,7 +484,7 @@ input {
 	color: #666;
 	border-radius: 5px;
 	margin: 0;
-	
+
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -525,6 +529,7 @@ select {
 }
 
 .elgg-button {
+	display: inline-block;
 	font-size: 100%;
 	text-decoration: none;
 	border-radius: 3px;
@@ -532,7 +537,7 @@ select {
 	padding: 6px 12px;
 	margin-bottom: 5px;
 	cursor: pointer;
-	
+
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -578,13 +583,6 @@ select {
 
 .elgg-form-settings {
 	max-width: 800px;
-}
-.content-header-options > form {
-	float: left;
-	margin-right: 10px;
-}
-.content-header-options form .mtm {
-	margin-top: 0;
 }
 
 /* **************************************
@@ -687,6 +685,16 @@ select {
 .ui-autocomplete a.ui-state-hover {
 	background-color: #eee;
 	display: block;
+}
+.ui-helper-hidden-accessible {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
 }
 
 /* ***************************************
@@ -1303,6 +1311,7 @@ a.elgg-widget-collapsed:before {
 .elgg-icon {
 	color: #aaa;
 	font-size: 16px;
+	line-height: 1em;
 	width: 16px;
 	height: 16px;
 	margin: 0 2px;
@@ -1355,17 +1364,17 @@ h6 > .elgg-icon {
 .elgg-avatar-tiny > a > img {
 	width: 25px;
 	height: 25px;
-	
+
 	/* remove the border-radius if you don't want rounded avatars in supported browsers */
 	border-radius: 3px;
-	
+
 	background-clip:  border;
 	background-size: 25px;
 }
 .elgg-avatar-small > a > img {
 	width: 40px;
 	height: 40px;
-	
+
 	/* remove the border-radius if you don't want rounded avatars in supported browsers */
 	border-radius: 5px;
 	background-clip:  border;
@@ -1608,7 +1617,7 @@ ul.elgg-plugin-resources, ul.elgg-plugin-resources > li {
 	margin-bottom: 5px;
 }
 
-.elgg-subtext a {
+.elgg-subtext time {
 	color: #666;
 }
 

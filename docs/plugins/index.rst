@@ -21,7 +21,6 @@ The following plugins are also bundled with Elgg, but are not (yet) documented
 
 - aalborg_theme
 - bookmarks
-- categories
 - ckeditor
 - custom_index
 - developers
@@ -43,4 +42,3 @@ The following plugins are also bundled with Elgg, but are not (yet) documented
 - twitter_api
 - uservalidationbyemail
 - web_services
-- zaudio

@@ -23,11 +23,16 @@ return array(
 	'developers:help:screen_log' => "Anzeige der Ausgabe von elgg_log() und elgg_dump() und Anzeige der Anzahl der durchgeführten Datenbankabfragen.",
 	'developers:label:show_strings' => "Sprach-Strings im Rohformat anzeigen",
 	'developers:help:show_strings' => "Diese Einstellung legt fest, ob die von elgg_echo() verwendeten Sprach-Strings angezeigt werden.",
+	'developers:label:show_modules' => "Geladene AMD-Module in der JavaScript-Konsole anzeigen",
+	'developers:help:show_modules' => "Zeigt Informationen zu den auf der aktuellen Seite geladenen AMD-Modulen in der JavaScript-Konsole des Browsers an.",
 	'developers:label:wrap_views' => "Views einkapseln",
 	'developers:help:wrap_views' => "Diese Einstellung aktiviert die Einkapselung fast aller Views in HTML-Kommentare. Dies kann hilfreich sein, um den erzeugten HTML-Code einer View zuzuordnen.
 Diese Option kann die Ausgabe von nicht-HTML-Views mit Standard-Viewtype stören. Siehe developers_wrap_views() für weitere Informationen.",
 	'developers:label:log_events' => "Events und Plugin Hooks protokollieren",
 	'developers:help:log_events' => "Einträge für Events und Plugin Hooks ins Log schreiben. Warnung: es gibt sehr viele davon bei jedem Seitenaufruf.",
+	'developers:label:show_gear' => "Verwende %s außerhalb des Admin-Backends",
+	'developers:help:show_gear' => "Ein (nur für Admins sichtbares) Icon in der unteren rechten Ecke des Viewports, mit dessen Hilfe Zugriff auf Entwicklungseinstellungen und -links möglich ist.",
+	'developers:label:submit' => "Speichern und Caches zurücksetzen",
 
 	'developers:debug:off' => 'Aus',
 	'developers:debug:error' => 'Fehler',
@@ -44,7 +49,8 @@ Diese Option kann die Ausgabe von nicht-HTML-Views mit Standard-Viewtype stören
 	'developers:inspect:priority' => 'Priorität',
 	'developers:inspect:simplecache' => 'Simple-Cache',
 	'developers:inspect:views' => 'Views',
-	'developers:inspect:views:all_filtered' => "<b>Zu beachten!</b> Die gesamte View-Ausgabe wird durch diese Plugin-Hooks gefiltert:",
+	'developers:inspect:views:all_filtered' => "<b>Beachte!</b> Alle Eingaben/Ausgaben von Views werden durch folgende Plugin-Hooks gefiltert:",
+	'developers:inspect:views:input_filtered' => "(Eingaben gefiltert durch Plugin-Hook: %s)",
 	'developers:inspect:views:filtered' => "(gefiltert durch Plugin-Hook: %s)",
 	'developers:inspect:widgets' => 'Widgets',
 	'developers:inspect:webservices' => 'Webservices',
@@ -53,8 +59,11 @@ Diese Option kann die Ausgabe von nicht-HTML-Views mit Standard-Viewtype stören
 	'developers:inspect:file_location' => 'Dateipfad relativ zum Elgg-Root-Verzeichnis',
 
 	// event logging
+	'developers:request_stats' => "Abfragen-Statistik (Shutdown-Event nicht berücksichtigt)",
 	'developers:event_log_msg' => "%s: '%s, %s' in %s",
-	'developers:log_queries' => "%s Datenbankabfragen (Shutdown-Event nicht berücksichtigt)",
+	'developers:log_queries' => "Datenbankabfragen: %s",
+	'developers:boot_cache_rebuilt' => "Der Boot-Cache wurde für diese Abfrage neu erzeugt.",
+	'developers:elapsed_time' => "Benötigte Zeit (s)",
 
 	// theme sandbox
 	'theme_sandbox:intro' => 'Einführung',
@@ -70,7 +79,7 @@ Diese Option kann die Ausgabe von nicht-HTML-Views mit Standard-Viewtype stören
 	'theme_sandbox:navigation' => 'Navigation',
 	'theme_sandbox:typography' => 'Typographie',
 
-	'theme_sandbox:icons:blurb' => 'Verwende <em>elgg_view_icon($name)</em> oder die Klasse elgg-icon-$name zur Ausgabe von Icons.',
+	'theme_sandbox:icons:blurb' => 'Verwende <em>elgg_view_icon($name)</em> zur Ausgabe von Icons.',
 
 	// unit tests
 	'developers:unit_tests:description' => 'Elgg enthält Modultests und Integrationstests, um mögliche Fehler in seinen Klassen und Funktionen zu finden.',
@@ -78,5 +87,7 @@ Diese Option kann die Ausgabe von nicht-HTML-Views mit Standard-Viewtype stören
 	'developers:unit_tests:run' => 'Ausführen',
 
 	// status messages
-	'developers:settings:success' => 'Einstellungen gespeichert',
+	'developers:settings:success' => 'Einstellungen gespeichert und Caches zurückgesetzt.',
+
+	'developers:amd' => 'AMD',
 );

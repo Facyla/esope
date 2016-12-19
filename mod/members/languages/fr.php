@@ -7,5 +7,6 @@ return array(
 	'members:title:newest' => 'Nouveaux membres',
 	'members:title:popular' => 'Membres les plus populaires',
 	'members:title:online' => 'Membres en ligne',
-	'members:list:popular:none' => 'Aucun membre n\'a d\'amis.',
+	'members:title:alpha' => 'Tous les membres',
+	'members:list:popular:none' => 'Aucun membre n\'a de contact.',
 );

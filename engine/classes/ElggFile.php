@@ -50,6 +50,26 @@ class ElggFile extends \ElggObject {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function getMetadata($name) {
+		if (0 === strpos($name, 'filestore::')) {
+			elgg_deprecated_notice("Do not access the ElggFile filestore metadata directly. Use setFilestore().", '2.0');
+		}
+		return parent::getMetadata($name);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function setMetadata($name, $value, $value_type = '', $multiple = false, $owner_guid = 0, $access_id = null) {
+		if (0 === strpos($name, 'filestore::')) {
+			elgg_deprecated_notice("Do not access the ElggFile filestore metadata directly. Use setFilestore().", '2.0');
+		}
+		return parent::setMetadata($name, $value, $value_type, $multiple, $owner_guid, $access_id);
+	}
+
+	/**
 	 * Set the filename of this file.
 	 *
 	 * @param string $name The filename.
@@ -123,6 +143,8 @@ class ElggFile extends \ElggObject {
 	/**
 	 * Detects mime types based on filename or actual file.
 	 *
+	 * @note This method can be called both dynamically and statically
+	 *
 	 * @param mixed $file    The full path of the file to check. For uploaded files, use tmp_name.
 	 * @param mixed $default A default. Useful to pass what the browser thinks it is.
 	 * @since 1.7.12
@@ -131,12 +153,13 @@ class ElggFile extends \ElggObject {
 	 * @todo Move this out into a utility class
 	 */
 	public function detectMimeType($file = null, $default = null) {
-		if (!$file) {
-			if (isset($this) && $this->filename) {
-				$file = $this->filename;
-			} else {
-				return false;
-			}
+		$class = __CLASS__;
+		if (!$file && isset($this) && $this instanceof $class) {
+			$file = $this->getFilenameOnFilestore();
+		}
+
+		if (!is_readable($file)) {
+			return false;
 		}
 
 		$mime = $default;
@@ -154,9 +177,10 @@ class ElggFile extends \ElggObject {
 			$mime = mime_content_type($file);
 		}
 
+		$original_filename = isset($this) && $this instanceof $class ? $this->originalfilename : basename($file);
 		$params = array(
 			'filename' => $file,
-			'original_filename' => $file->originalfilename, // @see file upload action
+			'original_filename' => $original_filename, // @see file upload action
 			'default' => $default,
 		);
 		return _elgg_services()->hooks->trigger('mime_type', 'file', $params, $mime);
@@ -438,12 +462,38 @@ class ElggFile extends \ElggObject {
 		// Save datastore metadata
 		$params = $this->filestore->getParameters();
 		foreach ($params as $k => $v) {
-			$this->setMetadata("filestore::$k", $v);
+			parent::setMetadata("filestore::$k", $v);
 		}
 
 		// Now make a note of the filestore class
-		$this->setMetadata("filestore::filestore", get_class($this->filestore));
+		parent::setMetadata("filestore::filestore", get_class($this->filestore));
 
 		return true;
+	}
+
+	/**
+	 * Get property names to serialize.
+	 *
+	 * @return string[]
+	 */
+	public function __sleep() {
+		return array_diff(array_keys(get_object_vars($this)), array(
+			// Don't persist filestore, which contains CONFIG
+			// https://github.com/Elgg/Elgg/issues/9081#issuecomment-152859856
+			'filestore',
+
+			// a resource
+			'handle',
+		));
+	}
+
+	/**
+	 * Reestablish filestore property
+	 *
+	 * @return void
+	 * @throws ClassNotFoundException
+	 */
+	public function __wakeup() {
+		$this->getFilestore();
 	}
 }

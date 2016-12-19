@@ -76,6 +76,9 @@ function groups_init() {
 	// invitation request actions
 	elgg_register_plugin_hook_handler('register', 'menu:invitationrequest', 'groups_invitationrequest_menu_setup');
 
+	// group members tabs
+	elgg_register_plugin_hook_handler('register', 'menu:groups_members', 'groups_members_menu_setup');
+
 	//extend some views
 	elgg_extend_view('elgg.css', 'groups/css');
 	elgg_extend_view('elgg.js', 'groups/js');
@@ -103,6 +106,13 @@ function groups_init() {
 
 	// Add tests
 	elgg_register_plugin_hook_handler('unit_test', 'system', 'groups_test');
+
+	// allow to be liked
+	elgg_register_plugin_hook_handler('likes:is_likable', 'group:', 'Elgg\Values::getTrue');
+
+	// Help core resolve page owner guids from group routes
+	// Registered with an earlier priority to be called before default_page_owner_handler()
+	elgg_register_plugin_hook_handler('page_owner', 'system', 'groups_default_page_owner_handler', 400);
 }
 
 /**
@@ -237,6 +247,7 @@ function groups_page_handler($page) {
 
 	elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
 
+	$vars = [];
 	switch ($page[0]) {
 		case 'add':
 		case 'all':
@@ -246,17 +257,33 @@ function groups_page_handler($page) {
 			break;
 		case 'invitations':
 		case 'member':
-			set_input('username', $page[1]);
-			echo elgg_view_resource("groups/{$page[0]}");
+			echo elgg_view_resource("groups/{$page[0]}", [
+				'username' => $page[1],
+			]);
 			break;
+		case 'members':
+			$vars['sort'] = elgg_extract('2', $page, 'alpha');
+			$vars['guid'] = elgg_extract('1', $page);
+			if (elgg_view_exists("resources/groups/members/{$vars['sort']}")) {
+				echo elgg_view_resource("groups/members/{$vars['sort']}", $vars);
+			} else {
+				echo elgg_view_resource('groups/members', $vars);
+			}
+			break;
+		case 'profile':
+			// Page owner and context need to be set before elgg_view() is
+			// called so they'll be available in the [pagesetup, system] event
+			// that is used for registering items for the sidebar menu.
+			// @see groups_setup_sidebar_menus()
+			elgg_push_context('group_profile');
+			elgg_set_page_owner_guid($page[1]);
 		case 'activity':
 		case 'edit':
 		case 'invite':
-		case 'members':
-		case 'profile':
 		case 'requests':
-			set_input('guid', $page[1]);
-			echo elgg_view_resource("groups/{$page[0]}");
+			echo elgg_view_resource("groups/{$page[0]}", [
+				'guid' => $page[1],
+			]);
 			break;
 		default:
 			return false;
@@ -438,18 +465,13 @@ function groups_user_entity_menu_setup($hook, $type, $return, $params) {
 
 		// Add remove link if we can edit the group, and if we're not trying to remove the group owner
 		if ($group->canEdit() && $group->getOwnerGUID() != $entity->guid) {
-			$remove = elgg_view('output/url', array(
+			$return[] = ElggMenuItem::factory([
+				'name' => 'removeuser',
 				'href' => "action/groups/remove?user_guid={$entity->guid}&group_guid={$group->guid}",
 				'text' => elgg_echo('groups:removeuser'),
 				'confirm' => true,
-			));
-
-			$options = array(
-				'name' => 'removeuser',
-				'text' => $remove,
 				'priority' => 999,
-			);
-			$return[] = ElggMenuItem::factory($options);
+			]);
 		}
 	}
 
@@ -760,4 +782,102 @@ function groups_invitationrequest_menu_setup($hook, $type, $menu, $params) {
 	));
 
 	return $menu;
+}
+
+/**
+ * Setup group members tabs
+ *
+ * @param string         $hook   "register"
+ * @param string         $type   "menu:groups_members"
+ * @param ElggMenuItem[] $menu   Menu items
+ * @param array          $params Hook params
+ *
+ * @return void|ElggMenuItem[]
+ */
+function groups_members_menu_setup($hook, $type, $menu, $params) {
+
+	$entity = elgg_extract('entity', $params);
+	if (empty($entity) || !($entity instanceof ElggGroup)) {
+		return;
+	}
+
+	$menu[] = ElggMenuItem::factory([
+		'name' => 'alpha',
+		'text' => elgg_echo('sort:alpha'),
+		'href' => "groups/members/{$entity->getGUID()}",
+		'priority' => 100
+	]);
+
+	$menu[] = ElggMenuItem::factory([
+		'name' => 'newest',
+		'text' => elgg_echo('sort:newest'),
+		'href' => "groups/members/{$entity->getGUID()}/newest",
+		'priority' => 200
+	]);
+
+	return $menu;
+}
+
+/**
+ * Helper handler to correctly resolve page owners on group routes
+ *
+ * @see default_page_owner_handler()
+ * 
+ * @param string $hook   "page_owner"
+ * @param string $type   "system"
+ * @param int    $return Page owner guid
+ * @param array  $params Hook params
+ * @return int|void
+ */
+function groups_default_page_owner_handler($hook, $type, $return, $params) {
+
+	if ($return) {
+		return;
+	}
+
+	$segments = _elgg_services()->request->getUrlSegments();
+	$identifier = array_shift($segments);
+
+	if ($identifier !== 'groups') {
+		return;
+	}
+	
+	$page = array_shift($segments);
+
+	switch ($page) {
+
+		case 'add' :
+			$guid = array_shift($segments);
+			if (!$guid) {
+				$guid = elgg_get_logged_in_user_guid();
+			}
+			return $guid;
+			
+		case 'edit':
+		case 'profile' :
+		case 'activity' :
+		case 'invite' :
+		case 'requests' :
+		case 'members' :
+		case 'profile' :
+			$guid = array_shift($segments);
+			if (!$guid) {
+				return;
+			}
+			return $guid;
+
+		case 'member' :
+		case 'owner' :
+		case 'invitations':
+			$username = array_shift($segments);
+			if ($username) {
+				$user = get_user_by_username($username);
+			} else {
+				$user = elgg_get_logged_in_user_entity();
+			}
+			if (!$user) {
+				return;
+			}
+			return $user->guid;
+	}
 }

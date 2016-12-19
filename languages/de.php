@@ -39,8 +39,9 @@ return array(
 	'actionnotfound' => "Die Datei für die Ausführung der Aktion %s wurde nicht gefunden.",
 	'actionloggedout' => "Entschuldigung, Du kannst diese Aktion nicht ausführen während Du nicht angemeldet bist.",
 	'actionunauthorized' => 'Du bist nicht authorisiert, diese Aktion auszuführen',
-	
+
 	'ajax:error' => 'Bei der Durchführung des AJAX-Aufrufs ist ein Fehler aufgetreten. Vielleicht ist die Verbindung zum Server verloren gegangen.',
+	'ajax:not_is_xhr' => 'Ein direkter Aufruf von Ajax-Views ist nicht erlaubt.',
 
 	'PluginException:MisconfiguredPlugin' => "%s (GUID: %s) ist ein falsch konfiguriertes Plugin. Es wurde deaktiviert. Im Elgg-Wiki sind einige mögliche Ursachen für das Problem beschrieben (http://learn.elgg.org/).",
 	'PluginException:CannotStart' => '%s (GUID: %s) kann nicht gestartet werden und wurde deaktiviert. Ursache: %s.',
@@ -59,7 +60,6 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'Nicht auflösbare %s-Abhängigkeit "%s" im Plugin %s. Plugins können nicht mit etwas in Konflikt stehen oder etwas voraussetzen, das sie selbst bereitstellen!',
 	'ElggPlugin:Exception:CannotIncludeFile' => 'Einbindung von %s für Plugin %s (GUID: %s) an %s gescheitert.',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'Öffnen des Views-Verzeichnis für Plugin %s (GUID: %s) an %s gescheitert.',
-	'ElggPlugin:Exception:CannotRegisterLanguages' => 'Einbinden der Sprachen für Plugin %s (GUID: %s) an %s gescheitert.',
 	'ElggPlugin:Exception:NoID' => 'Keine ID für Plugin-GUID %s!',
 	'PluginException:NoPluginName' => "Der Name des Plugins kann nicht ermittelt werden.",
 	'PluginException:ParserError' => 'Das Parsen der Manifest-Datei mit API-Version %s des Plugins %s ist fehlgeschlagen.',
@@ -83,7 +83,7 @@ return array(
 	'ElggPlugin:Dependencies:Priority:Before' => 'Vor %s',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s ist nicht installiert.',
 	'ElggPlugin:Dependencies:Suggests:Unsatisfied' => 'Fehlt',
-	
+
 	'ElggPlugin:Dependencies:ActiveDependent' => 'Es sind aktive Plugins vorhanden, die die Verfügbarkeit von %s voraussetzen. Bevor Du es deaktivieren kannst, mußt Du erst folgende Plugins deaktivieren: %s',
 
 	'ElggMenuBuilder:Trees:NoParents' => 'Menueinträge gefunden, bei denen der übergeordnete und auf sie verweisende Menueintrag nicht vorhanden ist.',
@@ -99,6 +99,8 @@ return array(
 	'LoginException:ChangePasswordFailure' => 'Die Überprüfung des derzeitigen Passworts ist fehlgeschlagen.',
 	'LoginException:Unknown' => 'Die Anmeldung ist aus unbekannter Ursache fehlgeschlagen.',
 
+	'UserFetchFailureException' => 'Die Überprüfung der Zugriffsrechte des Benutzers mit der Benutzer-GUID [%s] ist fehlgeschlagen, da dieser Benutzer nicht existiert.',
+
 	'deprecatedfunction' => 'Warnung: Dieser Code verwendet die veraltete Funktion \'%s\' und ist mit dieser Version von Elgg nicht kompatibel.',
 
 	'pageownerunavailable' => 'Warnung: Der Seiten-Eigentümer %d ist nicht erreichbar!',
@@ -112,6 +114,10 @@ return array(
 
 	'error:default:title' => 'Hoppla...',
 	'error:default:content' => 'Hoppla...irgendetwas ist schiefgegangen.',
+	'error:400:title' => 'Ungültige Anfrage.',
+	'error:400:content' => 'Entschuldigung. Die Anfrage ist ungültig oder unvollständig.',
+	'error:403:title' => 'Unzureichende Zugriffsberechtigung',
+	'error:403:content' => 'Entschuldigung. Du hast keine Zugriffsberechtigung für die angeforderte Seite.',
 	'error:404:title' => 'Seite nicht gefunden',
 	'error:404:content' => 'Entschuldigung. Die gewünschte Seite konnte nicht gefunden werden.',
 
@@ -471,6 +477,9 @@ return array(
 	'admin:cron:period' => 'Cron-Zeitintervall',
 	'admin:cron:friendly' => 'Zuletzt abgeschlossen',
 	'admin:cron:date' => 'Datum und Zeit',
+	'admin:cron:msg' => 'Statusausgaben',
+	'admin:cron:started' => 'Cronjobs für "%s" gestarted am %s',
+	'admin:cron:complete' => 'Cronjobs für "%s" abgeschlossen am %s',
 
 	'admin:appearance' => 'Design',
 	'admin:administer_utilities' => 'Werkzeuge',
@@ -600,11 +609,17 @@ return array(
 	'admin:plugins:description' => "Hier kannst Du die auf Deiner Community-Seite installierten Tools (Plugins) verwalten und hast Zugriff auf die von ihnen angebotenen Konfigurationsoptionen.",
 	'admin:plugins:opt:linktext' => "Tools konfigurieren...",
 	'admin:plugins:opt:description' => "Konfigurieren der installierten Tools der Community-Seite.",
+	'admin:plugins:label:id' => "ID",
+	'admin:plugins:label:name' => "Name",
 	'admin:plugins:label:author' => "Author",
 	'admin:plugins:label:copyright' => "Copyright",
 	'admin:plugins:label:categories' => 'Kategorien',
 	'admin:plugins:label:licence' => "Lizenz",
 	'admin:plugins:label:website' => "URL",
+	'admin:plugins:label:info' => "Info",
+	'admin:plugins:label:files' => "Dateien",
+	'admin:plugins:label:resources' => "Ressourcen",
+	'admin:plugins:label:screenshots' => " Bildschirmphotos",
 	'admin:plugins:label:repository' => "Code",
 	'admin:plugins:label:bugtracker' => "Problem melden",
 	'admin:plugins:label:donate' => "Spenden",
@@ -619,11 +634,12 @@ return array(
 	'admin:plugins:label:contributors:description' => 'Beschreibung',
 	'admin:plugins:label:dependencies' => 'Abhängigkeiten',
 
-	'admin:plugins:warning:elgg_version_unknown' => 'Dieses Plugin verwendet eine veraltete Manifest-Datei und es gibt keine Informationen bezüglich den kompatiblen Elgg-Versionen. Es wird wahrscheinlich nicht funktionieren!',
 	'admin:plugins:warning:unmet_dependencies' => 'Dieses Plugin hat unerfüllte Abhängigkeiten und kann deshalb nicht aktiviert werden. Prüfe die Abhängigkeiten für weitere Informationen.',
 	'admin:plugins:warning:invalid' => 'Dieses Plugin ist nicht standardkonform: %s.',
 	'admin:plugins:warning:invalid:check_docs' => 'Bitte schau in der <a href="http://learn.elgg.org/en/stable/appendix/faqs.html">Elgg-Dokumentation</a> nach, um weitere Hinweise zur Problemlösung zu erhalten.',
 	'admin:plugins:cannot_activate' => 'Aktivierung nicht möglich.',
+	'admin:plugins:already:active' => 'Das ausgewählte Plugin bzw. die ausgewählten Plugins sind bereits aktiviert.',
+	'admin:plugins:already:inactive' => 'Das ausgewählte Plugin bzw. die ausgewählten Plugins sind bereits deaktiviert.',
 
 	'admin:plugins:set_priority:yes' => "%s neu angeordnet.",
 	'admin:plugins:set_priority:no' => "%s kann nicht neu angeordnet werden.",
@@ -712,6 +728,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 	'admin:robots.txt:instructions' => "Bearbeite im Folgenden die robots.txt-Datei dieser Seite:",
 	'admin:robots.txt:plugins' => "Plugins fügen das Folgende zur robots.txt-Datei hinzu:",
 	'admin:robots.txt:subdir' => "Die robots.txt-Datei für diese Community-Seite kann nicht bearbeitet werden, da Elgg in einem Unterverzeichnis installiert ist.",
+	'admin:robots.txt:physical' => "Die Konfiguration des Inhalts der robots.txt-Datei ist nicht möglich, da auf dem Server bereits eine robots.txt-Datei vorhanden ist.",
 
 	'admin:maintenance_mode:default_message' => 'Diese Community-Seite ist aufgrund von Wartungsarbeiten derzeit nicht verfügbar.',
 	'admin:maintenance_mode:instructions' => 'Der Wartungs-Modus sollte während einer Aktualisierung der Community-Seite oder anderen größeren Änderungen an der Seite aktiviert werden.
@@ -725,7 +742,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 /**
  * User settings
  */
-		
+
 	'usersettings:description' => "Hier kannst Du alle Deine persönlichen Einstellungen vornehmen, beispielsweise Einstellungen der Benutzeraccounts order Konfiguration von Plugins.",
 
 	'usersettings:statistics' => "Deine persönliche Statistik",
@@ -752,7 +769,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 /**
  * Activity river
  */
-		
+
 	'river:all' => 'Alle Aktivitäten',
 	'river:mine' => 'Meine Aktivitäten',
 	'river:owner' => 'Aktivitäten von %s',
@@ -779,7 +796,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 	'icon:size:medium' => "Mittelgroß",
 	'icon:size:large' => "Groß",
 	'icon:size:master' => "Sehr groß",
-		
+
 /**
  * Generic action words
  */
@@ -864,11 +881,11 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 
 	'active' => 'Aktiv',
 	'total' => 'Gesamt',
-	
+
 	'ok' => 'OK',
 	'any' => 'Irgendeine',
 	'error' => 'Fehler',
-	
+
 	'other' => 'Andere',
 	'options' => 'Optionen',
 	'advanced' => 'Erweiterte',
@@ -881,7 +898,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 	'content:latest:blurb' => 'Oder hier klicken, um die neuesten Beiträge dieser Community-Seite zu sehen.',
 
 	'link:text' => 'Link besuchen',
-	
+
 /**
  * Generic questions
  */
@@ -909,7 +926,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 	'sort:popular' => 'Beliebt',
 	'sort:alpha' => 'Alphabetisch',
 	'sort:priority' => 'Priorität',
-		
+
 /**
  * Generic data words
  */
@@ -934,7 +951,7 @@ Diese Änderungen werden nur neu erstellte Benutzeraccounts auf Deiner Community
 /**
  * Entity actions
  */
-		
+
 	'edit:this' => 'Bearbeiten',
 	'delete:this' => 'Löschen',
 	'comment:this' => 'Kommentieren',
@@ -977,7 +994,7 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 /**
  * Import / export
  */
-		
+
 	'importsuccess' => "Das Importieren der Daten war erfolgreich",
 	'importfail' => "Das Importieren der OpenDD-Daten ist fehlgeschlagen.",
 
@@ -993,7 +1010,7 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 	'friendlytime:days' => "vor %s Tagen",
 	'friendlytime:days:singular' => "gestern",
 	'friendlytime:date_format' => 'j F Y @ g:ia',
-	
+
 	'friendlytime:future:minutes' => "in %s Minuten",
 	'friendlytime:future:minutes:singular' => "in einer Minute",
 	'friendlytime:future:hours' => "in %s Stunden",
@@ -1001,18 +1018,31 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 	'friendlytime:future:days' => "in %s Tagen",
 	'friendlytime:future:days:singular' => "morgen",
 
-	'date:month:01' => '%s Januar',
-	'date:month:02' => '%s Februar',
-	'date:month:03' => '%s März',
-	'date:month:04' => '%s April',
-	'date:month:05' => '%s Mai',
-	'date:month:06' => '%s Juni',
-	'date:month:07' => '%s Juli',
-	'date:month:08' => '%s August',
-	'date:month:09' => '%s September',
-	'date:month:10' => '%s Oktober',
-	'date:month:11' => '%s November',
-	'date:month:12' => '%s Dezember',
+	'date:month:01' => 'Januar %s',
+	'date:month:02' => 'Februar %s',
+	'date:month:03' => 'März %s',
+	'date:month:04' => 'April %s',
+	'date:month:05' => 'Mai %s',
+	'date:month:06' => 'Juni %s',
+	'date:month:07' => 'Juli %s',
+	'date:month:08' => 'August %s',
+	'date:month:09' => 'September %s',
+	'date:month:10' => 'Oktober %s',
+	'date:month:11' => 'November %s',
+	'date:month:12' => 'Dezember %s',
+	
+	'date:month:short:01' => 'Jan %s',
+	'date:month:short:02' => 'Feb %s',
+	'date:month:short:03' => 'Mrz %s',
+	'date:month:short:04' => 'Apr %s',
+	'date:month:short:05' => 'Mai %s',
+	'date:month:short:06' => 'Jun %s',
+	'date:month:short:07' => 'Jul %s',
+	'date:month:short:08' => 'Aug %s',
+	'date:month:short:09' => 'Sep %s',
+	'date:month:short:10' => 'Okt %s',
+	'date:month:short:11' => 'Nov %s',
+	'date:month:short:12' => 'Dez %s',
 
 	'date:weekday:0' => 'Sonntag',
 	'date:weekday:1' => 'Montag',
@@ -1021,7 +1051,15 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 	'date:weekday:4' => 'Donnerstag',
 	'date:weekday:5' => 'Freitag',
 	'date:weekday:6' => 'Samstag',
-	
+
+	'date:weekday:short:0' => 'So',
+	'date:weekday:short:1' => 'Mo',
+	'date:weekday:short:2' => 'Di',
+	'date:weekday:short:3' => 'Mi',
+	'date:weekday:short:4' => 'Do',
+	'date:weekday:short:5' => 'Fr',
+	'date:weekday:short:6' => 'Sa',
+
 	'interval:minute' => 'Jede Minute',
 	'interval:fiveminute' => 'Alle fünf Minuten',
 	'interval:fifteenmin' => 'Alle 15 Minuten',
@@ -1059,8 +1097,6 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 	'installation:walled_garden:description' => 'Aktiviere diese Option, um Nicht-Mitgliedern Deiner Community-Seite den Zugriff auf die Seite zu verwehren mit Ausnahme der Webseiten, die als "public" konfiguriert sind (beispielsweise die Login- und Registrierungsseiten).',
 	'installation:walled_garden:label' => 'Zugriff auf angemeldete Benutzer beschränken',
 
-	'installation:httpslogin' => "Aktivieren, um den Benutzern die Anmeldung via HTTPS zu ermöglichen. Dafür ist es notwendig, dass Dein Server das https-Protokoll unterstützt.",
-	'installation:httpslogin:label' => "HTTPS-Anmeldungen zulassen",
 	'installation:view' => "Gebe den Ansichtsmodus an, der für Deine Community-Seite verwendet werden soll. Wenn Du nicht sicher bist was Du eingeben sollst, lass das Textfeld leer oder verwende \"default\", um den Standardmodus zu verwenden:",
 
 	'installation:siteemail' => "Email-Adresse Deiner Community-Seite (wird vom System verwendet, um Benachrichtigungen zu versenden)",
@@ -1073,13 +1109,18 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 	'installation:simplecache:description' => "Simple-Cache verbessert die Systemleistung durch Caching von statischen Seiteninhalten inklusive einiger CSS- und JavaScript-Dateien.",
 	'installation:simplecache:label' => "Simple-Cache aktivieren (empfohlen)",
 
+	'installation:cache_symlink:description' => "The symbolic link to the simple cache directory allows the server to serve static views bypassing the engine, which considerably improves performance and reduces the server load",
+	'installation:cache_symlink:label' => "Use symbolic link to simple cache directory (recommended)",
+	'installation:cache_symlink:warning' => "Symbolic link has been established. If, for some reason, you want to remove the link, delete the symbolic link directory from your server",
+	'installation:cache_symlink:error' => "Due to your server configuration the symbolic link can not be established automatically. Please refer to the documentation and establish the symbolic link manually.",
+
 	'installation:minify:description' => "Der Simple-Cache kann die Performance auch zusätzlich noch durch Komprimierung der CSS- und JavaScript-Dateien verbessern. (Voraussetzung ist, das der Simple-Cache aktiviert ist.)",
 	'installation:minify_js:label' => "JavaScript-Dateien komprimieren (empfohlen)",
 	'installation:minify_css:label' => "CSS-Dateien komprimieren (empfohlen)",
 
 	'installation:htaccess:needs_upgrade' => "Du mußt die .htaccess-Datei auf Deinem Server aktualisieren bzw. anpassen, damit der Pfad in den GET-Parameter __elgg_uri eingebunden wird (Du kannst die Datei install/config/htaccess.dist als Vorlage für Deine .htacess-Datei verwenden).",
 	'installation:htaccess:localhost:connectionfailed' => "Elgg war es nicht möglich, eine Verbindung zu sich selbst aufzubauen, um die Rewrite-Regeln zu testen. Stelle sicher, dass curl auf dem Server installiert ist und korrekt funktioniert. Es dürfen auch keine IP Adressen-Beschränkungen vorhanden sein, die möglicherweise Verbindungen auf localhost selbst unterbinden.",
-	
+
 	'installation:systemcache:description' => "Der Systemcache veringert die Ladezeit von Elgg, indem einige häufig notwendige Daten in Dateien vorgehalten werden.",
 	'installation:systemcache:label' => "Systemcache aktivieren (empfohlen)",
 
@@ -1090,7 +1131,6 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 	'admin:legend:debug' => 'Debuggen und Protokollieren',
 
 	'upgrading' => 'Aktualisieren...',
-	'upgrade:db' => 'Deine Datenbank wurde aktualisiert.',
 	'upgrade:core' => 'Deine Elgg-Installation wurde aktualisiert.',
 	'upgrade:unlock' => 'Upgrade entsperren',
 	'upgrade:unlock:confirm' => "Die Datenbank ist durch einen anderen Upgrade-Prozess gesperrt. Gleichzeitig ausgeführte Upgrade-Prozesse sind gefährlich. Du solltest nur dann weitermachen, wenn Du sicher bist, dass momentan wirklich kein anderer Upgrade-Prozess ausgeführt wird. Entsperren?",
@@ -1154,12 +1194,12 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.
 /**
  * Emails
  */
-		
+
 	'email:from' => 'Von',
 	'email:to' => 'An',
 	'email:subject' => 'Betreff',
 	'email:body' => 'Email-Text',
-	
+
 	'email:settings' => "Email",
 	'email:address:label' => "Email-Adresse",
 
@@ -1253,13 +1293,19 @@ Du kannst auf diese Email NICHT antworten.",
 /**
  * Entities
  */
-	
+
 	'byline' => 'Von %s',
+	'byline:ingroup' => 'in der Gruppe %s',
 	'entity:default:strapline' => '%s erzeugt von %s',
 	'entity:default:missingsupport:popup' => 'Diese Entität kann nicht richtig angezeigt werden. Dies kann daran liegen, dass dafür ein Plugin benötigt wird, das nicht mehr installiert ist.',
 
-	'entity:delete:success' => 'Die Entität %s wurde gelöscht',
-	'entity:delete:fail' => 'Die Entität %s konnte nicht gelöscht werden',
+	'entity:delete:item' => 'Eintrag',
+	'entity:delete:item_not_found' => 'Dieser Eintrag konnte nicht gefunden werden.',
+	'entity:delete:permission_denied' => 'Du hast keine ausreichende Berechtigung, um diesen Eintrag zu löschen.',
+	'entity:delete:success' => '%s wurde gelöscht.',
+	'entity:delete:fail' => 'Das Löschen von %s ist fehlgeschlagen.',
+
+	'entity:can_delete:invaliduser' => 'Ein Aufruf der canDelete()-Funktion für den Benutzer mit der Benutzer-GUID [%s] ist nicht möglich, da dieser Benutzer nicht existiert.',
 
 /**
  * Action gatekeeper
@@ -1331,6 +1377,7 @@ Du kannst auf diese Email NICHT antworten.",
 	"es" => "Spanisch",
 	"et" => "Estnisch",
 	"eu" => "Baskisch",
+	"eu_es" => "Baskisch (Spanien)",
 	"fa" => "Persisch",
 	"fi" => "Finnisch",
 	"fj" => "Fidschi",
@@ -1395,11 +1442,12 @@ Du kannst auf diese Email NICHT antworten.",
 	"pl" => "Polnisch",
 	"ps" => "Paschtunisch",
 	"pt" => "Portugiesisch",
-	"pt_br" => 'Portugiesisch (Brasilianisch)',
+	"pt_br" => "Portugiesisch (Brasilien)",
 	"qu" => "Quechua",
 	"rm" => "Rätoromanisch",
 	"rn" => "Kirundi",
 	"ro" => "Rumänisch",
+	"ro_ro" => "Rumänisch (Rumänien)",
 	"ru" => "Russisch",
 	"rw" => "Kinyarwanda",
 	"sa" => "Sanskrit",
@@ -1414,6 +1462,7 @@ Du kannst auf diese Email NICHT antworten.",
 	"so" => "Somali",
 	"sq" => "Albanisch",
 	"sr" => "Serbisch",
+	"sr_latin" => "Serbisch (Lateinisches Alphabet)",
 	"ss" => "Siswati",
 	"st" => "Sesotho",
 	"su" => "Sudanesisch",
@@ -1445,5 +1494,9 @@ Du kannst auf diese Email NICHT antworten.",
 	"yo" => "Yoruba",
 	"za" => "Zuang",
 	"zh" => "Chinesisch",
+	"zh_hans" => "Chinesisch (Kurzzeichen)",
 	"zu" => "Zulu",
+
+	"field:required" => 'Erforderlich',
+
 );

@@ -89,11 +89,24 @@ function elgg_set_viewtype($viewtype = "") {
  * @see elgg_set_viewtype()
  */
 function elgg_get_viewtype() {
-	global $CURRENT_SYSTEM_VIEWTYPE, $CONFIG;
+	global $CURRENT_SYSTEM_VIEWTYPE;
 
-	if ($CURRENT_SYSTEM_VIEWTYPE != "") {
-		return $CURRENT_SYSTEM_VIEWTYPE;
+	if (empty($CURRENT_SYSTEM_VIEWTYPE)) {
+		$CURRENT_SYSTEM_VIEWTYPE = _elgg_get_initial_viewtype();
 	}
+
+	return $CURRENT_SYSTEM_VIEWTYPE;
+}
+
+/**
+ * Get the initial viewtype
+ *
+ * @return string
+ * @access private
+ * @since 2.0.0
+ */
+function _elgg_get_initial_viewtype() {
+	global $CONFIG;
 
 	$viewtype = get_input('view', '', false);
 	if (_elgg_is_valid_viewtype($viewtype)) {
@@ -237,18 +250,6 @@ function elgg_register_external_view($view, $cacheable = false) {
 }
 
 /**
- * Check whether a view is registered as cacheable.
- *
- * @param string $view The name of the view.
- * @return boolean
- * @access private
- * @since 1.9.0
- */
-function _elgg_is_view_cacheable($view) {
-	return _elgg_services()->views->isCacheableView($view);
-}
-
-/**
  * Unregister a view for ajax calls
  *
  * @param string $view The view name
@@ -294,6 +295,19 @@ function elgg_set_view_location($view, $location, $viewtype = '') {
  */
 function elgg_view_exists($view, $viewtype = '', $recurse = true) {
 	return _elgg_services()->views->viewExists($view, $viewtype, $recurse);
+}
+
+/**
+ * List all views in a viewtype
+ *
+ * @param string $viewtype Viewtype
+ *
+ * @return string[]
+ *
+ * @since 2.0
+ */
+function elgg_list_views($viewtype = 'default') {
+	return _elgg_services()->views->listViews($viewtype);
 }
 
 /**
@@ -941,7 +955,6 @@ function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = array()
  *      'no_results'       Message to display if no results (string|Closure)
  *
  * @return string The rendered list of entities
- * @access private
  */
 function elgg_view_entity_list($entities, array $vars = array()) {
 	$offset = (int)get_input('offset', 0);
@@ -1495,28 +1508,36 @@ function _elgg_views_send_header_x_frame_options() {
  * @elgg_event_handler boot system
  */
 function elgg_views_boot() {
-	if (!elgg_get_config('system_cache_loaded')) {
-		_elgg_services()->views->registerPluginViews(realpath(__DIR__ . '/../../'));
-	}
-	
 	global $CONFIG;
 
 	if (!elgg_get_config('system_cache_loaded')) {
+		// Core view files in /views
 		_elgg_services()->views->registerPluginViews(realpath(__DIR__ . '/../../'));
+
+		// Core view definitions in /engine/views.php
+		$file = dirname(__DIR__) . '/views.php';
+		if (is_file($file)) {
+			$spec = (include $file);
+			if (is_array($spec)) {
+				_elgg_services()->views->mergeViewsSpec($spec);
+			}
+		}
 	}
 
 	// on every page
-	elgg_register_js('elgg.require_config', elgg_get_simplecache_url('elgg/require_config.js'), 'head');
-	elgg_load_js('elgg.require_config');
 
-	elgg_register_js('require', elgg_get_simplecache_url('require.js'), 'head');
-	elgg_load_js('require');
-
+	// jQuery and UI must come before require. See #9024
 	elgg_register_js('jquery', elgg_get_simplecache_url('jquery.js'), 'head');
 	elgg_load_js('jquery');
 
 	elgg_register_js('jquery-ui', elgg_get_simplecache_url('jquery-ui.js'), 'head');
 	elgg_load_js('jquery-ui');
+
+	elgg_register_js('elgg.require_config', elgg_get_simplecache_url('elgg/require_config.js'), 'head');
+	elgg_load_js('elgg.require_config');
+
+	elgg_register_js('require', elgg_get_simplecache_url('require.js'), 'head');
+	elgg_load_js('require');
 
 	elgg_register_js('elgg', elgg_get_simplecache_url('elgg.js'), 'head');
 	elgg_load_js('elgg');
@@ -1531,8 +1552,9 @@ function elgg_views_boot() {
 	elgg_register_js('lightbox', elgg_get_simplecache_url('lightbox.js'));
 	elgg_register_css('lightbox', elgg_get_simplecache_url('lightbox/elgg-colorbox-theme/colorbox.css'));
 
-	elgg_register_js('elgg.autocomplete', elgg_get_simplecache_url('elgg/ui.autocomplete.js'));
-	elgg_register_js('jquery.ui.autocomplete.html', elgg_get_simplecache_url('jquery.ui.autocomplete.html.js'));
+	// just provides warning to use elgg/autocomplete AMD
+	elgg_register_js('elgg.autocomplete', elgg_normalize_url('js/lib/ui.autocomplete.js'));
+
 	elgg_define_js('jquery.ui.autocomplete.html', [
 		'deps' => ['jquery-ui'],
 	]);
@@ -1559,16 +1581,6 @@ function elgg_views_boot() {
 	foreach ($viewtype_dirs as $viewtype) {
 		if (_elgg_is_valid_viewtype($viewtype) && is_dir($view_path . $viewtype)) {
 			elgg_register_viewtype($viewtype);
-		}
-	}
-
-	// Declared views. Unlike plugins, Elgg's root views/ is never scanned, so Elgg cannot override
-	// these view traditional view files.
-	$file = dirname(dirname(__DIR__)) . '/views.php';
-	if (is_file($file)) {
-		$spec = (include $file);
-		if (is_array($spec)) {
-			_elgg_services()->views->mergeViewsSpec($spec);
 		}
 	}
 

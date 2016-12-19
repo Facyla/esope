@@ -40,6 +40,14 @@ Basic instructions
 From 1.x to 2.0
 ===============
 
+Removed plugins
+---------------
+
+The following plugins are no longer bundled with Elgg core:
+
+ * categories (https://github.com/elgg/categories)
+ * zaudio (https://github.com/elgg/zaudio)
+
 IE-specific workarounds have been dropped
 -----------------------------------------
 
@@ -56,8 +64,13 @@ script. You **must** remove these rewrite rules from your webserver config (e.g.
 
 Also remove the rules for paths like ``export/*``; these endpoints have been removed.
 
+Settings location
+-----------------
+
+After upgrading, move your ``settings.php`` file from ``engine/`` to ``elgg-config/``.
+
 From 1.10 to 1.11
-========================
+=================
 
 Breaking changes
 ----------------

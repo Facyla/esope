@@ -186,12 +186,7 @@ class ActionsService {
 		$session_id = _elgg_services()->session->getId();
 	
 		if (($token) && ($ts) && ($session_id)) {
-			// generate token, check with input and forward if invalid
-			$required_token = $this->generateActionToken($ts);
-	
-			// Validate token
-			$token_matches = _elgg_services()->crypto->areEqual($token, $required_token);
-			if ($token_matches) {
+			if ($this->validateTokenOwnership($token, $ts)) {
 				if ($this->validateTokenTimestamp($ts)) {
 					// We have already got this far, so unless anything
 					// else says something to the contrary we assume we're ok
@@ -299,20 +294,43 @@ class ActionsService {
 
 		forward(REFERER, 'csrf');
 	}
-	
+
 	/**
-	 * @see generate_action_token
+	 * Was the given token generated for the session defined by session_token?
+	 *
+	 * @param string $token         CSRF token
+	 * @param int    $timestamp     Unix time
+	 * @param string $session_token Session-specific token
+	 *
+	 * @return bool
 	 * @access private
 	 */
-	public function generateActionToken($timestamp) {
-		$session_id = _elgg_services()->session->getId();
-		if (!$session_id) {
-			return false;
+	public function validateTokenOwnership($token, $timestamp, $session_token = '') {
+		$required_token = $this->generateActionToken($timestamp, $session_token);
+
+		return _elgg_services()->crypto->areEqual($token, $required_token);
+	}
+	
+	/**
+	 * Generate a token from a session token (specifying the user), the timestamp, and the site key.
+	 *
+	 * @see generate_action_token
+	 *
+	 * @param int    $timestamp     Unix timestamp
+	 * @param string $session_token Session-specific token
+	 *
+	 * @return string
+	 * @access private
+	 */
+	public function generateActionToken($timestamp, $session_token = '') {
+		if (!$session_token) {
+			$session_token = elgg_get_session()->get('__elgg_session');
+			if (!$session_token) {
+				return false;
+			}
 		}
 
-		$session_token = _elgg_services()->session->get('__elgg_session');
-
-		return _elgg_services()->crypto->getHmac([(int)$timestamp, $session_id, $session_token], 'md5')
+		return _elgg_services()->crypto->getHmac([(int)$timestamp, $session_token], 'md5')
 			->getToken();
 	}
 	
@@ -363,6 +381,23 @@ class ActionsService {
 				$params['status'] = -1;
 			}
 
+			if ($reason == 'walled_garden') {
+				$reason = '403';
+			}
+			$httpCodes = array(
+				'400' => 'Bad Request',
+				'401' => 'Unauthorized',
+				'403' => 'Forbidden',
+				'404' => 'Not Found',
+				'407' => 'Proxy Authentication Required',
+				'500' => 'Internal Server Error',
+				'503' => 'Service Unavailable',
+			);
+
+			if (isset($httpCodes[$reason])) {
+				header("HTTP/1.1 $reason {$httpCodes[$reason]}", true);
+			}
+
 			$context = array('action' => $this->currentAction);
 			$params = _elgg_services()->hooks->trigger('output', 'ajax', $context, $params);
 	
@@ -372,9 +407,9 @@ class ActionsService {
 			// however some browsers will not accept the JSON MIME type.
 			$http_accept = _elgg_services()->request->server->get('HTTP_ACCEPT');
 			if (stripos($http_accept, 'application/json') === false) {
-				header("Content-type: text/plain");
+				header("Content-type: text/plain;charset=utf-8");
 			} else {
-				header("Content-type: application/json");
+				header("Content-type: application/json;charset=utf-8");
 			}
 	
 			echo json_encode($params);

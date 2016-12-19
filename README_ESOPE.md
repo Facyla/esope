@@ -8,10 +8,16 @@ Suite à ses évolutions, elle permet également de proposer des réseaux public
 
 
 ## Quelle version choisir ?
-* esope_1.8 : RECOMMANDEE POUR LA PRODUCTION
-* esope_1.9 : branche intermédiaire - partiellement fonctionnelle
-* esope_1.10 : branche intermédiaire - non fonctionnelle
-* esope_1.11 : DEVELOPPEMENT - prochaine version majeure d'ESOPE
+* esope_1.8 : branche de production - version LTS
+* esope_1.9 : branche intermédiaire - mises à jour seulement
+* esope_1.10 : branche intermédiaire - mises à jour seulement
+* esope_1.11 : branche intermédiaire - mises à jour seulement
+* esope_1.12 : branche de production - version LTS
+* esope_2.0 : branche intermédiaire - mises à jour seulement
+* esope_2.1 : branche intermédiaire - mises à jour seulement
+* esope_2.2 : branche intermédiaire - mises à jour seulement
+* esope_2.3 : branche de production - future version LTS
+
 
 
 ## A propos d'Elgg

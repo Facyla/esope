@@ -61,6 +61,10 @@ function discussion_init() {
 
 	// allow ecml in discussion
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'discussion_ecml_views_hook');
+
+	// allow to be liked
+	elgg_register_plugin_hook_handler('likes:is_likable', 'object:discussion', 'Elgg\Values::getTrue');
+	elgg_register_plugin_hook_handler('likes:is_likable', 'object:discussion_reply', 'Elgg\Values::getTrue');
 }
 
 /**
@@ -78,8 +82,6 @@ function discussion_init() {
  */
 function discussion_page_handler($page) {
 
-	elgg_load_library('elgg:discussion');
-
 	if (!isset($page[0])) {
 		$page[0] = 'all';
 	}
@@ -91,18 +93,26 @@ function discussion_page_handler($page) {
 			echo elgg_view_resource('discussion/all');
 			break;
 		case 'owner':
-			set_input('owner_guid', elgg_extract(1, $page));
-			echo elgg_view_resource('discussion/owner');
+			echo elgg_view_resource('discussion/owner', [
+				'guid' => elgg_extract(1, $page),
+			]);
+			break;
+		case 'group':
+			echo elgg_view_resource('discussion/group', [
+				'guid' => elgg_extract(1, $page),
+			]);
 			break;
 		case 'add':
-			set_input('guid', elgg_extract(1, $page));
-			echo elgg_view_resource('discussion/add');
+			echo elgg_view_resource('discussion/add', [
+				'guid' => elgg_extract(1, $page),
+			]);
 			break;
 		case 'reply':
 			switch (elgg_extract(1, $page)) {
 				case 'edit':
-					set_input('guid', elgg_extract(2, $page));
-					echo elgg_view_resource('discussion/reply/edit');
+					echo elgg_view_resource('discussion/reply/edit', [
+						'guid' => elgg_extract(2, $page),
+					]);
 					break;
 				case 'view':
 					discussion_redirect_to_reply(elgg_extract(2, $page), elgg_extract(3, $page));
@@ -112,12 +122,14 @@ function discussion_page_handler($page) {
 			}
 			break;
 		case 'edit':
-			set_input('guid', elgg_extract(1, $page));
-			echo elgg_view_resource('discussion/edit');
+			echo elgg_view_resource('discussion/edit', [
+				'guid' => elgg_extract(1, $page),
+			]);
 			break;
 		case 'view':
-			set_input('guid', elgg_extract(1, $page));
-			echo elgg_view_resource('discussion/view');
+			echo elgg_view_resource('discussion/view', [
+				'guid' => elgg_extract(1, $page),
+			]);
 			break;
 		default:
 			return false;
@@ -243,7 +255,7 @@ function discussion_comment_override($hook, $type, $return, $params) {
 function discussion_owner_block_menu($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'group')) {
 		if ($params['entity']->forum_enable != "no") {
-			$url = "discussion/owner/{$params['entity']->guid}";
+			$url = "discussion/group/{$params['entity']->guid}";
 			$item = new ElggMenuItem('discussion', elgg_echo('discussion:group'), $url);
 			$return[] = $item;
 		}
@@ -576,4 +588,43 @@ function discussion_search_discussion($hook, $type, $value, $params) {
 
 	// trigger the 'normal' object search as it can handle the added options
 	return elgg_trigger_plugin_hook('search', 'object', $params, array());
+}
+
+/**
+ * Prepare discussion topic form variables
+ *
+ * @param ElggObject $topic Topic object if editing
+ * @return array
+ */
+function discussion_prepare_form_vars($topic = NULL) {
+	// input names => defaults
+	$values = array(
+		'title' => '',
+		'description' => '',
+		'status' => '',
+		'access_id' => ACCESS_DEFAULT,
+		'tags' => '',
+		'container_guid' => elgg_get_page_owner_guid(),
+		'guid' => null,
+		'topic' => $topic,
+	);
+
+	if ($topic) {
+		foreach (array_keys($values) as $field) {
+			if (isset($topic->$field)) {
+				$values[$field] = $topic->$field;
+			}
+		}
+	}
+
+	if (elgg_is_sticky_form('topic')) {
+		$sticky_values = elgg_get_sticky_values('topic');
+		foreach ($sticky_values as $key => $value) {
+			$values[$key] = $value;
+		}
+	}
+
+	elgg_clear_sticky_form('topic');
+
+	return $values;
 }

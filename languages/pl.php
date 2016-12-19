@@ -40,6 +40,9 @@ return array(
 	'actionloggedout' => "Przepraszamy, nie możesz wykonać tej akcji będąc wylogowany.",
 	'actionunauthorized' => 'Nie masz uprawnień do wykonania tej akcji.',
 
+	'ajax:error' => 'Unexpected error while performing an AJAX call. Maybe the connection to the server is lost.',
+	'ajax:not_is_xhr' => 'You cannot access AJAX views directly',
+
 	'PluginException:MisconfiguredPlugin' => "%s (guid: %s) to źle skonfigurowany plugin i został wyłączony. Proszę sprawdzić możliwe przyczyny na wiki (http://docs.elgg.org/wiki/).",
 	'PluginException:CannotStart' => '%s (guid: %s) nie mógł wystartować i został wyłączony. Przyczyna: %s',
 	'PluginException:InvalidID' => "%s jest niepoprawnym identyfikatorem rozszerzenia.",
@@ -57,7 +60,6 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'Wykryto niepoprawną %s zależność "%s" w rozszerzeniu %s. Rozszerzenie nie może konfliktować ze sobą lub wymagać zależności, którą sam zapewnia.',
 	'ElggPlugin:Exception:CannotIncludeFile' => 'Nie można wczytać %s dla rozszerzenia %s (guid: %s) w %s.',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'Nie można otworzyć katalogu widoków rozszerzenia %s (guid: %s) w %s.',
-	'ElggPlugin:Exception:CannotRegisterLanguages' => 'Nie można zarejestrować tłumaczeń dla rozszerzenia %s (guid: %s) w %s.',
 	'ElggPlugin:Exception:NoID' => 'Brak identyfikatora rozszerzenia guid %s!',
 	'PluginException:NoPluginName' => "Nie można znaleźć nazwy rozszerzenia.",
 	'PluginException:ParserError' => 'Błąd w trakcie parsowania manifestu dla wersji API %s w rozszerzeniu %s.',
@@ -81,9 +83,12 @@ return array(
 	'ElggPlugin:Dependencies:Priority:Before' => 'Powyżej %s',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s jest niezainstalowany',
 	'ElggPlugin:Dependencies:Suggests:Unsatisfied' => 'Brak',
-	
+
 	'ElggPlugin:Dependencies:ActiveDependent' => 'Inne rozszerzenia korzystają z %s jako zależności. Aby go wyłączyć, musisz najpierw wyłączyć następujące rozszerzenia: %s',
 
+	'ElggMenuBuilder:Trees:NoParents' => 'Menu items found without parents to link them to',
+	'ElggMenuBuilder:Trees:OrphanedChild' => 'Menu item [%s] found with a missing parent[%s]',
+	'ElggMenuBuilder:Trees:DuplicateChild' => 'Duplicate registration found for menu item [%s]',
 
 	'RegistrationException:EmptyPassword' => 'Hasło nie może być puste',
 	'RegistrationException:PasswordMismatch' => 'Hasła muszą być jednakowe',
@@ -93,6 +98,8 @@ return array(
 	'LoginException:AccountLocked' => 'Twoje konto zostało zablokowane z powodu zbyt wielu nieudanych prób logowania.',
 	'LoginException:ChangePasswordFailure' => 'Nie powiodła się weryfikacja obecnego hasła.',
 	'LoginException:Unknown' => 'Nie można się zalogować z powodu nieznanego błędu.',
+
+	'UserFetchFailureException' => 'Cannot check permission for user_guid [%s] as the user does not exist.',
 
 	'deprecatedfunction' => 'Uwaga: Ten kod używa zdeprecjonowanej funkcji \'%s\' i nie jest kompatybilny z tą wersją Elgg.',
 
@@ -107,6 +114,10 @@ return array(
 
 	'error:default:title' => 'Ojoj...',
 	'error:default:content' => 'Kurza twarz... coś poszło nie tak',
+	'error:400:title' => 'Bad request',
+	'error:400:content' => 'Sorry. The request is invalid or incomplete.',
+	'error:403:title' => 'Forbidden',
+	'error:403:content' => 'Sorry. You are not allowed to access the requested page.',
 	'error:404:title' => 'Nie znaleziono strony',
 	'error:404:content' => 'Przepraszamy. Nie można znaleźć wskazanej strony.',
 
@@ -148,6 +159,8 @@ return array(
 	'access:read' => "Uprawnienia odczytu",
 	'access:write' => "Uprawnienia zapisu",
 	'access:admin_only' => "Tylko administratorzy",
+	'access:missing_name' => "Missing access level name",
+	'access:comments:change' => "This discussion is currently visible to a limited audience. Be thoughtful about who you share it with.",
 
 /**
  * Dashboard and widgets
@@ -158,6 +171,7 @@ return array(
 
 	'widgets:add' => 'Dodaj gadżety',
 	'widgets:add:description' => "Kliknij na dowolnym przycisku poniżej, aby dodać gadżet do tej strony.",
+	'widgets:panel:close' => "Close widgets panel",
 	'widgets:position:fixed' => '(Stała pozycja na stronie)',
 	'widget:unavailable' => 'Już dodałeś ten gadżet.',
 	'widget:numbertodisplay' => 'Ilość elementów do wyświetlenia',
@@ -448,6 +462,7 @@ return array(
 	'admin:configuration:success' => "Twoje ustawienia zostały zapisane.",
 	'admin:configuration:fail' => "Twoje ustawienie nie zostały zapisane.",
 	'admin:configuration:dataroot:relative_path' => 'Nie można ustawić "%s" jako dataroot, ponieważ nie jest to ścieżka bezwzględna.',
+	'admin:configuration:default_limit' => 'The number of items per page must be at least 1.',
 
 	'admin:unknown_section' => 'Niepoprawna sekcja panelu administracyjnego.',
 
@@ -512,6 +527,8 @@ return array(
 	'admin:widget:banned_users:help' => 'Wyświetla zbanowanych użytkowników',
 	'admin:widget:content_stats' => 'Statystyki treści',
 	'admin:widget:content_stats:help' => 'Śledź treści tworzone przez twoich użytkowników',
+	'admin:widget:cron_status' => 'Cron status',
+	'admin:widget:cron_status:help' => 'Shows the status of the last time cron jobs finished',
 	'widget:content_stats:type' => 'Rodzaj treści',
 	'widget:content_stats:number' => 'Ilość',
 
@@ -587,11 +604,17 @@ return array(
 	'admin:plugins:description' => "Ten panel pozwala kontrolować i konfigurować narzędzia zainstalowane w twoim serwisie.",
 	'admin:plugins:opt:linktext' => "Konfiguracja narzędzi...",
 	'admin:plugins:opt:description' => "Konfigurowanie narzędzi zainstalowanych w serwisie. ",
+	'admin:plugins:label:id' => "ID",
+	'admin:plugins:label:name' => "Name",
 	'admin:plugins:label:author' => "Autor",
 	'admin:plugins:label:copyright' => "Copyright",
 	'admin:plugins:label:categories' => 'Kategorie',
 	'admin:plugins:label:licence' => "Licencja",
 	'admin:plugins:label:website' => "Adres",
+	'admin:plugins:label:info' => "Info",
+	'admin:plugins:label:files' => "Files",
+	'admin:plugins:label:resources' => "Resources",
+	'admin:plugins:label:screenshots' => "Screenshots",
 	'admin:plugins:label:repository' => "Kod",
 	'admin:plugins:label:bugtracker' => "Zgłoś problem",
 	'admin:plugins:label:donate' => "Wesprzyj",
@@ -606,7 +629,6 @@ return array(
 	'admin:plugins:label:contributors:description' => 'Opis',
 	'admin:plugins:label:dependencies' => 'Zależności',
 
-	'admin:plugins:warning:elgg_version_unknown' => 'To rozszerzenie używa starszego manifestu i nie specyfikuje kompatybilnej wersji Elgg. Prawdopodobnie nie będzie działać!',
 	'admin:plugins:warning:unmet_dependencies' => 'To rozszerzenie ma brakujące zależności i nie może być włączone. Sprawdź wymagane zależności w \'więcej informacji\'.',
 	'admin:plugins:warning:invalid' => 'To rozszerzenie jest niepoprawne: %s',
 	'admin:plugins:warning:invalid:check_docs' => 'Sprawdź <a href="http://docs.elgg.org/Invalid_Plugin">dokumentację Elgg</a> w poszukiwaniu wskazówek.',
@@ -698,6 +720,7 @@ return array(
 	'admin:robots.txt:instructions' => "Edytuj poniżej plik robots.txt dla tej strony",
 	'admin:robots.txt:plugins' => "Rozszerzenia dodają poniższą treść do pliku robots.txt",
 	'admin:robots.txt:subdir' => "Plik robots.txt nie zadziała, ponieważ Elgg jest zainstalowany w podkatalogu",
+	'admin:robots.txt:physical' => "The robots.txt tool will not work because a physical robots.txt is present",
 
 	'admin:maintenance_mode:default_message' => 'Ta strona jest w trakcie prac konserwacyjnych',
 	'admin:maintenance_mode:instructions' => 'Tryb konserwacyjny powinien być używany przy aktualizacjach i innych dużych zmianach na stronie.⏎
@@ -711,7 +734,7 @@ return array(
 /**
  * User settings
  */
-		
+
 	'usersettings:description' => "Panel ustawień użytkownika pozwala na kontrolę wszystkich ustawień osobistych oraz zachowania rozszerzeń. Wybierz opcję poniżej, aby rozpocząć.",
 
 	'usersettings:statistics' => "Twoje statystyki",
@@ -738,13 +761,14 @@ return array(
 /**
  * Activity river
  */
-		
+
 	'river:all' => 'Cała aktywność',
 	'river:mine' => 'Moja aktywność',
 	'river:owner' => 'Aktywność użytkownika %s',
 	'river:friends' => 'Aktywność znajomych',
 	'river:select' => 'Pokaż %s',
 	'river:comments:more' => '+%u więcej',
+	'river:comments:all' => 'View all %u comments',
 	'river:generic_comment' => 'skomentował %s %s',
 
 	'friends:widget:description' => "Wyświetla niektórych twoich znajomych.",
@@ -764,7 +788,7 @@ return array(
 	'icon:size:medium' => "Średni",
 	'icon:size:large' => "Duży",
 	'icon:size:master' => "Bardzo duży",
-		
+
 /**
  * Generic action words
  */
@@ -849,11 +873,11 @@ return array(
 
 	'active' => 'Aktywny',
 	'total' => 'Razem',
-	
+
 	'ok' => 'OK',
 	'any' => 'Dowolny',
 	'error' => 'Błąd',
-	
+
 	'other' => 'Inne',
 	'options' => 'Opcje',
 	'advanced' => 'Zaawansowane',
@@ -866,7 +890,7 @@ return array(
 	'content:latest:blurb' => 'Alternatywnie, kliknij tutaj aby wyświetlić ostatnią treść z całej witryny.',
 
 	'link:text' => 'pokaż link',
-	
+
 /**
  * Generic questions
  */
@@ -894,7 +918,7 @@ return array(
 	'sort:popular' => 'Najpopularniejsze',
 	'sort:alpha' => 'Alfabetycznie',
 	'sort:priority' => 'Priorytet',
-		
+
 /**
  * Generic data words
  */
@@ -902,7 +926,6 @@ return array(
 	'title' => "Tytuł",
 	'description' => "Opis",
 	'tags' => "Tagi",
-	'spotlight' => "Wyróżnienie",
 	'all' => "Wszyscy",
 	'mine' => "Moje",
 
@@ -913,7 +936,6 @@ return array(
 	'relationships' => "Relacje",
 	'metadata' => "Metadane",
 	'tagcloud' => "Chmura tagów",
-	'tagcloud:allsitetags' => "Wszystkie tagi",
 
 	'on' => 'Włączony',
 	'off' => 'Wyłączony',
@@ -921,7 +943,7 @@ return array(
 /**
  * Entity actions
  */
-		
+
 	'edit:this' => 'Edytuj to',
 	'delete:this' => 'Usuń to',
 	'comment:this' => 'Skomentuj to',
@@ -964,7 +986,7 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 /**
  * Import / export
  */
-		
+
 	'importsuccess' => "Dane zostały pomyślnie zaimportowane",
 	'importfail' => "OpenDD import danych nieudany.",
 
@@ -980,7 +1002,7 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 	'friendlytime:days' => "%s dni temu",
 	'friendlytime:days:singular' => "wczoraj",
 	'friendlytime:date_format' => 'Y-m-d H:i:s',
-	
+
 	'friendlytime:future:minutes' => "za %s minut",
 	'friendlytime:future:minutes:singular' => "za minutę",
 	'friendlytime:future:hours' => "za %s godzin",
@@ -1000,6 +1022,19 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 	'date:month:10' => 'Październik %s',
 	'date:month:11' => 'Listopad %s',
 	'date:month:12' => 'Grudzień %s',
+	
+	'date:month:short:01' => 'Jan %s',
+	'date:month:short:02' => 'Feb %s',
+	'date:month:short:03' => 'Mar %s',
+	'date:month:short:04' => 'Apr %s',
+	'date:month:short:05' => 'May %s',
+	'date:month:short:06' => 'Jun %s',
+	'date:month:short:07' => 'Jul %s',
+	'date:month:short:08' => 'Aug %s',
+	'date:month:short:09' => 'Sep %s',
+	'date:month:short:10' => 'Oct %s',
+	'date:month:short:11' => 'Nov %s',
+	'date:month:short:12' => 'Dec %s',
 
 	'date:weekday:0' => 'Niedziela',
 	'date:weekday:1' => 'Poniedziałek',
@@ -1008,7 +1043,15 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 	'date:weekday:4' => 'Czwartek',
 	'date:weekday:5' => 'Piątek',
 	'date:weekday:6' => 'Sobota',
-	
+
+	'date:weekday:short:0' => 'Sun',
+	'date:weekday:short:1' => 'Mon',
+	'date:weekday:short:2' => 'Tue',
+	'date:weekday:short:3' => 'Wed',
+	'date:weekday:short:4' => 'Thu',
+	'date:weekday:short:5' => 'Fri',
+	'date:weekday:short:6' => 'Sat',
+
 	'interval:minute' => 'Co minutę',
 	'interval:fiveminute' => 'Co pięć minut',
 	'interval:fifteenmin' => 'Co kwadrans',
@@ -1046,11 +1089,10 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 	'installation:walled_garden:description' => 'Włącz tryb prywatnej sieci dla swojej strony. To uniemożliwi niezalogowanym użytkownikom, na wyświetlanie jakichkolwiek stron, poza wyraźnie wskazanymi jako publiczne.',
 	'installation:walled_garden:label' => 'Pozwól na przeglądanie stron tylko zalogowanym użytkownikom',
 
-	'installation:httpslogin' => "Włącz aby użytkownicy logowali się przy użyciu HTTPS. Musisz mieć włączone https na serwerze, aby ta opcja zadziałała.",
-	'installation:httpslogin:label' => "Włącz logowanie przez HTTPS",
 	'installation:view' => "Wprowadź widok, który będzie domyślnie używany przez twoją stronę lub pozostaw wartość domyślną (w razie wątpliwości, pozostaw wartość domyślną):",
 
 	'installation:siteemail' => "Adres e-mail strony (używany do wysyłania systemowych e-mail)",
+	'installation:default_limit' => "Default number of items per page",
 
 	'admin:site:access:warning' => "Modyfikacja ustawienia poziomu dostępu, wpływa wyłącznie na treści tworzone w przyszłości.",
 	'installation:allow_user_default_access:description' => "Jeśli zaznaczone, indywidualni użytkownicy będą mogli ustawić własny, domyślny poziom dostępu nadpisujący systemowy domyślny poziom dostępu.",
@@ -1065,17 +1107,17 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 
 	'installation:htaccess:needs_upgrade' => "Musisz zaktualizować swój plik .htaccess aby ścieżka byłą przekazywana jako parametr GET o nazwie __elgg_uri (możesz użyć htaccess_dist jako prykładu).",
 	'installation:htaccess:localhost:connectionfailed' => "Elgg nie mógł się połączyć z serwerem w celu przetestowania reguł przepisywania. Sprawdź czy curl działa poprawnie oraz czy nie ma ograniczeń na twój adres IP, które wzbraniały by połączeń do localhost.",
-	
+
 	'installation:systemcache:description' => "Systemowa pamięć podręczna zmniejsza czas ładowania rdzenia Elgg, poprzez zapisywanie danych do plików.",
 	'installation:systemcache:label' => "Użyj systemowej pamięci podręcznej (zalecane)",
 
+	'admin:legend:system' => 'System',
 	'admin:legend:caching' => 'Pamieć podręczna',
 	'admin:legend:content_access' => 'Dostęp do treści',
 	'admin:legend:site_access' => 'Poziom dostępu na stronie',
 	'admin:legend:debug' => 'Odpluskwianie i logowanie',
 
 	'upgrading' => 'Aktualizacja',
-	'upgrade:db' => 'Twoja baza danych została zaktualizowana.',
 	'upgrade:core' => 'Twoja instalacja elgg została zaktualizowana',
 	'upgrade:unlock' => 'Odblokuj aktualizację',
 	'upgrade:unlock:confirm' => "Baza danych jest zablokowana z powodu przebiegającej aktualizacji. Wykonywanie aktualizacji równolegle jest niebezpieczne. Powinieneś kontynuować tylko jeśli jesteś pewien, że nie jest uruchomiona żadna aktualizacja. Odblokować?",
@@ -1090,17 +1132,10 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 	'upgrade:site_secret_warning:moderate' => "Zalecamy ponowne utworzenie sekretnego klucza strony dla poprawy bezpieczeństwa strony. Zobacz Konfiguracja &gt; Ustawienia &gt; Zaawansowane",
 	'upgrade:site_secret_warning:weak' => "Zdecydowanie zalecamy ponowne utworzenie sekretnego klucza strony dla poprawy bezpieczeństwa strony. Zobacz Konfiguracja &gt; Ustawienia &gt; Zaawansowane",
 
-	'ElggUpgrade:error:url_invalid' => 'Niepoprawna wartość jako URL.',
-	'ElggUpgrade:error:url_not_unique' => 'URLe aktualizacji muszą być unikatowe.',
-	'ElggUpgrade:error:title_required' => 'Obiekty ElggUpgrade muszą posiadać tytuł.',
-	'ElggUpgrade:error:description_required' => 'Obiekty ElggUpgrade muszą posiadać opis.',
-	'ElggUpgrade:error:upgrade_url_required' => 'Obiekty ElggUpgrade muszą posiadać adres URL aktualizacji.',
-
 	'deprecated:function' => '%s() została zdeprecjonowana na rzecz %s()',
 
 	'admin:pending_upgrades' => 'Ta strona ma oczekujące aktualizacje, które wymagają Twojej interwencji.',
 	'admin:view_upgrades' => 'Przeglądaj oczekujące aktualizacje.',
- 	'admin:upgrades' => 'Aktualizacje',
 	'item:object:elgg_upgrade' => 'Aktualizacje strony',
 	'admin:upgrades:none' => 'Twoja instalacja Elgg jest aktualna!',
 
@@ -1116,6 +1151,7 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 	// Strings specific for the comments upgrade
 	'admin:upgrades:comments' => 'Aktualizacja komentarzy',
 	'upgrade:comment:create_failed' => 'Nie udało się skonwertować komentarza o id %s do entity.',
+	'admin:upgrades:commentaccess' => 'Comments Access Upgrade',
 
 	// Strings specific for the datadir upgrade
 	'admin:upgrades:datadirs' => 'Aktualizacja katalogu danych',
@@ -1134,12 +1170,12 @@ Jak już się zalogujesz, gorąco polecamy zmianę hasła.
 /**
  * Emails
  */
-		
+
 	'email:from' => 'Nadawca',
 	'email:to' => 'Adresat',
 	'email:subject' => 'Tytuł',
 	'email:body' => 'Treść',
-	
+
 	'email:settings' => "Ustawienia e-mail",
 	'email:address:label' => "Twój adres e-mail",
 
@@ -1203,6 +1239,7 @@ Jeśli to byłeś Ty, kliknij odnośnik poniżej. W przeciwnym wypadku zignoruj 
 	'generic_comment:deleted' => "Twój komentarz został skasowany.",
 	'generic_comment:blank' => "Przepraszamy: musisz coś wpisać przed zapisaniem.",
 	'generic_comment:notfound' => "Przepraszamy: nie można znaleźć określonej pozycji.",
+	'generic_comment:notfound_fallback' => "Sorry, we could not find the specified comment, but we've forwarded you to the page where it was left.",
 	'generic_comment:notdeleted' => "Sorry: nie można skasować tego komentarza.",
 	'generic_comment:failure' => "Wystąpił nieoczekiwany błąd podczas dodawania komentarza.",
 	'generic_comment:none' => 'Brak komentarzy',
@@ -1230,13 +1267,16 @@ Nie możesz odpowiedzieć na ten e-mail.",
 /**
  * Entities
  */
-	
+
 	'byline' => 'Przez %s',
+	'byline:ingroup' => 'in the group %s',
 	'entity:default:strapline' => 'Stworzone %s przez %s',
 	'entity:default:missingsupport:popup' => 'Przedmiot ten nie może zostać wyświetlony poprawnie. Może to być spowodowane brakiem uprzednio zainstalowanego rozszerzenia.',
 
 	'entity:delete:success' => 'Element %s został skasowany',
 	'entity:delete:fail' => 'Element %s nie został skasowany',
+
+	'entity:can_delete:invaliduser' => 'Cannot check canDelete() for user_guid [%s] as the user does not exist.',
 
 /**
  * Action gatekeeper
@@ -1260,7 +1300,6 @@ Nie możesz odpowiedzieć na ten e-mail.",
  */
 
 	'tag_names:tags' => 'Tagi',
-	'tags:site_cloud' => 'Chmura tagów strony',
 
 /**
  * Javascript
@@ -1276,7 +1315,7 @@ Nie możesz odpowiedzieć na ten e-mail.",
 	'elgg:powered' => "Dostarczone przez Elgg",
 
 /**
- * Languages according to ISO 639-1
+ * Languages according to ISO 639-1 (with a couple of exceptions)
  */
 
 	"aa" => "Afar",
@@ -1296,6 +1335,7 @@ Nie możesz odpowiedzieć na ten e-mail.",
 	"bo" => "Tibetan",
 	"br" => "Breton",
 	"ca" => "Catalan",
+	"cmn" => "Mandarin Chinese", // ISO 639-3
 	"co" => "Corsican",
 	"cs" => "Czech",
 	"cy" => "Welsh",
@@ -1372,6 +1412,7 @@ Nie możesz odpowiedzieć na ten e-mail.",
 	"pl" => "Polski",
 	"ps" => "Pashto / Pushto",
 	"pt" => "Portuguese",
+	"pt_br" => 'Brazilian Portuguese',
 	"qu" => "Quechua",
 	"rm" => "Rhaeto-Romance",
 	"rn" => "Kirundi",
@@ -1422,4 +1463,7 @@ Nie możesz odpowiedzieć na ten e-mail.",
 	"za" => "Zuang",
 	"zh" => "Chinese",
 	"zu" => "Zulu",
+
+	"field:required" => 'Required',
+
 );

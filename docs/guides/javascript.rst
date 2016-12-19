@@ -17,7 +17,7 @@ For example, to include jQuery, you could run the following Composer commands:
 
 .. code-block:: shell
 
-    composer global require fxp/composer-asset-plugin:~1.0
+    composer global require fxp/composer-asset-plugin:~1.1.1
     composer require bower-asset/jquery:~2.0
 
 .. note::
@@ -109,7 +109,7 @@ create the view file ``views/default/myplugin/settings.js.php`` (note the double
 
     <?php
 
-    $settings = elgg_get_plugin_by_id('myplugin')->getAllSettings();
+    $settings = elgg_get_plugin_from_id('myplugin')->getAllSettings();
     $settings = [
         'foo' => elgg_extract('foo', $settings),
         'bar' => elgg_extract('bar', $settings),
@@ -190,6 +190,8 @@ Some things to note
    global objects. Use modules.
 #. Return the value of the module instead of adding to a global variable.
 #. Static (.js,.css,etc.) files are automatically minified and cached by Elgg's simplecache system.
+#. The configuration is also cached in simplecache, and should not rely on user-specific values
+   like ``get_language()``.
 
 
 Migrating JS from Elgg 1.8 to AMD / 1.9

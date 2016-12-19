@@ -39,8 +39,9 @@ return array(
 	'actionnotfound' => "El log de acciones para %s no se ha encontrado",
 	'actionloggedout' => "Lo sentimos, no puede realizar esta acci&oacute;n sin identificarse",
 	'actionunauthorized' => 'Usted no posee los permisos necesarios para realizar esta acci&oacute;n',
-	
+
 	'ajax:error' => 'Ha habido un error inesperado en la llamada AJAX. Puede que la conexión con el servidor se haya perdido.',
+	'ajax:not_is_xhr' => 'No puedes acceder a las vista AJAX directamente',
 
 	'PluginException:MisconfiguredPlugin' => "%s (guid: %s) plugin mal configurado. Se ha desactivado. Por favor, consulta la wiki de Elgg para ver las posibles causas (http://learn.elgg.org/).",
 	'PluginException:CannotStart' => '%s (guid: %s) no puede iniciarse. Motivo: %s',
@@ -59,7 +60,6 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'Dependencia %s inv&aacute;lida "%s" en plugin %s. Los plugins no pueden entrar en conlicto con otros requeridos!',
 	'ElggPlugin:Exception:CannotIncludeFile' => 'No puede incluirse %s para el plugin %s (guid: %s) en %s. Verifique los permisos!',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'No puede cargarse el directorio "views" para el plugin %s (guid: %s) en %s. Verifique los permisos!',
-	'ElggPlugin:Exception:CannotRegisterLanguages' => 'No pueden registrarse lenguajes para el plugin %s (guid: %s) en %s.  Verifique los permisos!',
 	'ElggPlugin:Exception:NoID' => 'No se encontr&oacute; el ID para el plugin con guid %s!',
 	'PluginException:NoPluginName' => "No se pudo encontrar el nombre del plugin",
 	'PluginException:ParserError' => 'Error procesando el manifiesto con versi&oacute;n de API %s en plugin %s',
@@ -83,7 +83,7 @@ return array(
 	'ElggPlugin:Dependencies:Priority:Before' => 'Antes %s',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s no instalado',
 	'ElggPlugin:Dependencies:Suggests:Unsatisfied' => 'Faltante',
-	
+
 	'ElggPlugin:Dependencies:ActiveDependent' => 'Hay otros complementos que tienen a «%s» como dependencia. Debes desactivar los siguientes complementos primero para poder desactivar este: %s',
 
 	'ElggMenuBuilder:Trees:NoParents' => 'Hay elementos de menú que no están enlazados a ningún elemento padre',
@@ -99,6 +99,8 @@ return array(
 	'LoginException:ChangePasswordFailure' => 'Fall&oacute; el cambio de contrase&ntilde;a. revisa la antigua y nueva contrase&ntilde;a.',
 	'LoginException:Unknown' => 'We could not log you in due to an unknown error.',
 
+	'UserFetchFailureException' => 'No se pueden revisar los permisos para el user_guid [%s] porque el usuario no existe.',
+
 	'deprecatedfunction' => 'Precauci&oacute;n: Este c&oacute;digo utiliza la funci&oacute;n obsoleta \'%s\' que no es compatible con esta versi&oacute;n de Elgg',
 
 	'pageownerunavailable' => 'Precauci&oacute;n: El administrador de p&aacute;gina %d no se encuentra accesible!',
@@ -112,6 +114,10 @@ return array(
 
 	'error:default:title' => 'Error...',
 	'error:default:content' => 'Oops... Algo salió mal',
+	'error:400:title' => 'Petición incorrecta',
+	'error:400:content' => 'Lo sentimos. La petición no es válida o está incompleta.',
+	'error:403:title' => 'Prohibido',
+	'error:403:content' => 'Lo sentimos. No tienes permiso para acceder a la página solicitada.',
 	'error:404:title' => 'Página no encontrada',
 	'error:404:content' => 'Lo sentimos. No pudimos encontrar la página solicitada',
 
@@ -471,6 +477,9 @@ return array(
 	'admin:cron:period' => 'Periodo Cron',
 	'admin:cron:friendly' => 'Ultimo completado',
 	'admin:cron:date' => 'Fecha y hora',
+	'admin:cron:msg' => 'Message',
+	'admin:cron:started' => 'Cron jobs for "%s" started at %s',
+	'admin:cron:complete' => 'Cron jobs for "%s" completed at %s',
 
 	'admin:appearance' => 'Apariencia',
 	'admin:administer_utilities' => 'Utilities',
@@ -593,11 +602,17 @@ return array(
 	'admin:plugins:description' => "Este panel le permite controlar y configurar las herramientas instaladas en su sitio",
 	'admin:plugins:opt:linktext' => "Configurar herramientas..",
 	'admin:plugins:opt:description' => "Configurar las herramientas instaladas en el sitio. ",
+	'admin:plugins:label:id' => "ID",
+	'admin:plugins:label:name' => "Nombre",
 	'admin:plugins:label:author' => "Autor",
 	'admin:plugins:label:copyright' => "Copyright",
 	'admin:plugins:label:categories' => 'Categor&iacute;as',
 	'admin:plugins:label:licence' => "Licencia",
 	'admin:plugins:label:website' => "URL",
+	'admin:plugins:label:info' => "Información",
+	'admin:plugins:label:files' => "Archivos",
+	'admin:plugins:label:resources' => "Recursos",
+	'admin:plugins:label:screenshots' => "Capturas de pantalla",
 	'admin:plugins:label:repository' => "Code",
 	'admin:plugins:label:bugtracker' => "Report issue",
 	'admin:plugins:label:donate' => "Donate",
@@ -612,11 +627,12 @@ return array(
 	'admin:plugins:label:contributors:description' => 'Descripci&oacute;n completa',
 	'admin:plugins:label:dependencies' => 'Dependencias',
 
-	'admin:plugins:warning:elgg_version_unknown' => 'Este plugin utiliza un archivo de manifiesto obsoleto y no especifica una versi&oacute;n de Elgg compatibla. Es muy probable que no funcione!',
 	'admin:plugins:warning:unmet_dependencies' => 'Este plugin tiene dependencias desconocidas y no se activar&aacute;. Consulte las dependencias debajo de mas informaci&oacute;n',
 	'admin:plugins:warning:invalid' => '%s no es un plugin Elgg v&aacute;lido. Visite <a href="http://docs.elgg.org/Invalid_Plugin">la Documentaci&oacute;n Elgg</a> para consejos de soluci&oacute;n de problemas',
 	'admin:plugins:warning:invalid:check_docs' => 'Mira <a href="http://learn.elgg.org/en/stable/appendix/faqs.html">la documentación de Elgg</a> donde encontrarás consejos de resolución de problemas.',
 	'admin:plugins:cannot_activate' => 'no se puede activar',
+	'admin:plugins:already:active' => 'Los plugins seleccionados ya están activos.',
+	'admin:plugins:already:inactive' => 'Los plugins seleccionados ya no están activos',
 
 	'admin:plugins:set_priority:yes' => "Reordenar %s",
 	'admin:plugins:set_priority:no' => "No se puede reordenar %s",
@@ -704,6 +720,7 @@ return array(
 	'admin:robots.txt:instructions' => "Editar el robots.txt de este sitio a continuación",
 	'admin:robots.txt:plugins' => "Plugins estan agregando lo siguiente al archivo robots.txt",
 	'admin:robots.txt:subdir' => "La herramienta de robots.txt no funcionara por que Elgg esta instalado en un sub-directorio",
+	'admin:robots.txt:physical' => "La herramienta robots.txt no funcionará porque hay una archivo físico robots.txt",
 
 	'admin:maintenance_mode:default_message' => 'El sitio no está disponible por mantenimiento',
 	'admin:maintenance_mode:instructions' => 'El Modo de Mantenimiento solo debe ser usado para actualizaciones y otros cambios de importancia en el sitio.
@@ -717,7 +734,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 /**
  * User settings
  */
-		
+
 	'usersettings:description' => "El panel de configuraci&oacute;n permite parametrizar sus preferencias personales, desde la administraci&oacute;n de usuarios al comportamiento de los plugins. Seleccione una opci&oacute;n debajo para comenzar",
 
 	'usersettings:statistics' => "Sus estad&iacute;sticas",
@@ -744,7 +761,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 /**
  * Activity river
  */
-		
+
 	'river:all' => 'Actividad de toda la red',
 	'river:mine' => 'Mi Actividad',
 	'river:owner' => 'Actividad de %s',
@@ -771,7 +788,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'icon:size:medium' => "Mediano",
 	'icon:size:large' => "Grande",
 	'icon:size:master' => "Extra Grande",
-		
+
 /**
  * Generic action words
  */
@@ -839,7 +856,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'bottom' => 'Ultimo',
 	'right' => 'Derecha',
 	'left' => 'Izquierda',
-	'back' => 'Back',
+	'back' => 'Atrás',
 
 	'invite' => "Invitar",
 
@@ -856,11 +873,11 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 
 	'active' => 'Activo',
 	'total' => 'Total',
-	
+
 	'ok' => 'OK',
 	'any' => 'Cualquiera',
 	'error' => 'Error',
-	
+
 	'other' => 'Otro',
 	'options' => 'Opciones',
 	'advanced' => 'Avanzado',
@@ -873,7 +890,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'content:latest:blurb' => 'Alternativamente, click aqu&iacute; para ver el &uacute;ltimo contenido en toda la red',
 
 	'link:text' => 'ver link',
-	
+
 /**
  * Generic questions
  */
@@ -901,7 +918,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'sort:popular' => 'Popular',
 	'sort:alpha' => 'Alfab&eacute;tico',
 	'sort:priority' => 'Prioridad',
-		
+
 /**
  * Generic data words
  */
@@ -926,7 +943,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 /**
  * Entity actions
  */
-		
+
 	'edit:this' => 'Editar',
 	'delete:this' => 'Eliminar',
 	'comment:this' => 'Comentar',
@@ -969,7 +986,7 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 /**
  * Import / export
  */
-		
+
 	'importsuccess' => "Importaci&oacute;n exitosa",
 	'importfail' => "Error al importar datos de OpenDD",
 
@@ -985,7 +1002,7 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'friendlytime:days' => "hace %s d&iacute;as",
 	'friendlytime:days:singular' => "ayer",
 	'friendlytime:date_format' => 'j F Y @ g:ia',
-	
+
 	'friendlytime:future:minutes' => "en %s minutos",
 	'friendlytime:future:minutes:singular' => "en un minuto",
 	'friendlytime:future:hours' => "en %s horas",
@@ -1005,6 +1022,19 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'date:month:10' => 'Octubre %s',
 	'date:month:11' => 'Noviembre %s',
 	'date:month:12' => 'Diciembre %s',
+	
+	'date:month:short:01' => 'Ene %s',
+	'date:month:short:02' => 'Feb %s',
+	'date:month:short:03' => 'Mar %s',
+	'date:month:short:04' => 'Abr %s',
+	'date:month:short:05' => 'May %s',
+	'date:month:short:06' => 'Jun %s',
+	'date:month:short:07' => 'Jul %s',
+	'date:month:short:08' => 'Ago %s',
+	'date:month:short:09' => 'Sep %s',
+	'date:month:short:10' => 'Oct %s',
+	'date:month:short:11' => 'Nov %s',
+	'date:month:short:12' => 'Dic %s',
 
 	'date:weekday:0' => 'Domingo',
 	'date:weekday:1' => 'Lunes',
@@ -1013,7 +1043,15 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'date:weekday:4' => 'Jueves',
 	'date:weekday:5' => 'Viernes',
 	'date:weekday:6' => 'Sábado',
-	
+
+	'date:weekday:short:0' => 'Dom',
+	'date:weekday:short:1' => 'Lun',
+	'date:weekday:short:2' => 'Mar',
+	'date:weekday:short:3' => 'Mie',
+	'date:weekday:short:4' => 'Jue',
+	'date:weekday:short:5' => 'Vie',
+	'date:weekday:short:6' => 'Sab',
+
 	'interval:minute' => 'Cada minuto',
 	'interval:fiveminute' => 'Cada cinco minutos',
 	'interval:fifteenmin' => 'Cada quince minutos',
@@ -1051,8 +1089,6 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'installation:walled_garden:description' => 'Habilitar al sitio para ejecutarse como una red privada. Esto impedir&aacute; a usuarios no registrados visualizar cualquier p&aacute;gina del sitio, exceptuando las establecidas como p&uacute;blicas',
 	'installation:walled_garden:label' => 'Restringir p&aacute;ginas a usuarios registrados',
 
-	'installation:httpslogin' => "Habilitar esta opci&oacute;n para que los usuarios se autentiquen mediante HTTPS. Necesitar&aacute; habilitar HTTPS en el server tambi&eacute;n para que esto funcione",
-	'installation:httpslogin:label' => "Habilitar autenticaci&oacute;n HTTPS",
 	'installation:view' => "Ingrese la vista que se visualizar&aacute; por defecto en el sitio o deje esto en blanco para la vista por defecto (si tiene dudas, d&eacute;jelo por defecto):",
 
 	'installation:siteemail' => "Direcci&oacute;n de Email del sitio (utilizada para enviar mails desde el sistema):",
@@ -1065,13 +1101,18 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'installation:simplecache:description' => "La cache simple aumenta el rentimiento almacenando contenido est&aacute;tico, como hojas CSS y archivos JavaScript. Normalmente se desea esto activado",
 	'installation:simplecache:label' => "Utilizar cache simple (recomendado)",
 
+	'installation:cache_symlink:description' => "The symbolic link to the simple cache directory allows the server to serve static views bypassing the engine, which considerably improves performance and reduces the server load",
+	'installation:cache_symlink:label' => "Use symbolic link to simple cache directory (recommended)",
+	'installation:cache_symlink:warning' => "Symbolic link has been established. If, for some reason, you want to remove the link, delete the symbolic link directory from your server",
+	'installation:cache_symlink:error' => "Due to your server configuration the symbolic link can not be established automatically. Please refer to the documentation and establish the symbolic link manually.",
+
 	'installation:minify:description' => "El simple cache puede también mejorar el rendimiento por que comprime los archivos JavaScript y CSS. (Requiere que simple cache este habilitado.)",
 	'installation:minify_js:label' => "Comprimir JavaScript (recomendado)",
 	'installation:minify_css:label' => "Comprimir CSS (recomendado)",
 
 	'installation:htaccess:needs_upgrade' => "Debe actualizar el archivo .htaccess para que la ruta se inyecte en el parámetro GET __elgg_uri (puede usar install/config/htaccess.dist como guía)",
 	'installation:htaccess:localhost:connectionfailed' => "Elgg no puede conectarse a sí mismo para poner a prueba las reglas de substitución. Asegúrese de que «curl» está funcionando, y de que no existen restricciones por dirección IP que impidan las conexiones locales al propio servidor (localhost).",
-	
+
 	'installation:systemcache:description' => "The system cache decreases the loading time of the Elgg engine by caching data to files.",
 	'installation:systemcache:label' => "Use system cache (recommended)",
 
@@ -1082,7 +1123,6 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'admin:legend:debug' => 'Depuración y registro',
 
 	'upgrading' => 'Actualizando..',
-	'upgrade:db' => 'La base de datos ha sido actualizada',
 	'upgrade:core' => 'La instalaci&oacute;n de Elgg ha sido actualizada',
 	'upgrade:unlock' => 'Unlock upgrade',
 	'upgrade:unlock:confirm' => "The database is locked for another upgrade. Running concurrent upgrades is dangerous. You should only continue if you know there is not another upgrade running. Unlock?",
@@ -1141,12 +1181,12 @@ Si el error se repite, busque la causa en el registro de errores del servidor. P
 /**
  * Emails
  */
-		
+
 	'email:from' => 'De',
 	'email:to' => 'Para',
 	'email:subject' => 'Asunto',
 	'email:body' => 'Cuerpo',
-	
+
 	'email:settings' => "Configuraci&oacute;n de Email",
 	'email:address:label' => "Direcci&oacute;n de Email",
 
@@ -1238,13 +1278,19 @@ Por favor no responda a este correo",
 /**
  * Entities
  */
-	
+
 	'byline' => 'Por %s',
+	'byline:ingroup' => 'en el grupo %s',
 	'entity:default:strapline' => 'Creado %s por %s',
 	'entity:default:missingsupport:popup' => 'Esta entidad no puede mostrarse correctamente. Esto puede deberse a que el soporte provisto por un plugin ya no se encuentra instalado',
 
-	'entity:delete:success' => 'La entidad %s ha sido eliminada',
-	'entity:delete:fail' => 'La entidad %s no pudo ser eliminada',
+	'entity:delete:item' => 'Item',
+	'entity:delete:item_not_found' => 'Item not found.',
+	'entity:delete:permission_denied' => 'You do not have permissions to delete this item.',
+	'entity:delete:success' => '%s has been deleted.',
+	'entity:delete:fail' => '%s could not be deleted.',
+
+	'entity:can_delete:invaliduser' => 'Cannot check canDelete() for user_guid [%s] as the user does not exist.',
 
 /**
  * Action gatekeeper
@@ -1316,6 +1362,7 @@ Por favor no responda a este correo",
 	"es" => "Espa&ntilde;ol",
 	"et" => "Estonian",
 	"eu" => "Basque",
+	"eu_es" => "Basque (Spain)",
 	"fa" => "Persian",
 	"fi" => "Finnish",
 	"fj" => "Fiji",
@@ -1380,11 +1427,12 @@ Por favor no responda a este correo",
 	"pl" => "Polish",
 	"ps" => "Pashto / Pushto",
 	"pt" => "Portuguese",
-	"pt_br" => 'Portugués Brasileño',
+	"pt_br" => "Portuguese (Brazil)",
 	"qu" => "Quechua",
 	"rm" => "Rhaeto-Romance",
 	"rn" => "Kirundi",
 	"ro" => "Romanian",
+	"ro_ro" => "Romanian (Romania)",
 	"ru" => "Russian",
 	"rw" => "Kinyarwanda",
 	"sa" => "Sanskrit",
@@ -1399,6 +1447,7 @@ Por favor no responda a este correo",
 	"so" => "Somali",
 	"sq" => "Albanian",
 	"sr" => "Serbian",
+	"sr_latin" => "Serbian (Latin)",
 	"ss" => "Siswati",
 	"st" => "Sesotho",
 	"su" => "Sundanese",
@@ -1430,5 +1479,9 @@ Por favor no responda a este correo",
 	"yo" => "Yoruba",
 	"za" => "Zuang",
 	"zh" => "Chinese",
+	"zh_hans" => "Chinese Simplified",
 	"zu" => "Zulu",
+
+	"field:required" => 'Required',
+
 );

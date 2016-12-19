@@ -7,7 +7,7 @@
 $user = elgg_get_page_owner_entity();
 
 // Get the size
-$size = strtolower(get_input('size'));
+$size = strtolower(elgg_extract('size', $vars));
 if (!in_array($size, array('master', 'large', 'medium', 'small', 'tiny', 'topbar'))) {
 	$size = 'medium';
 }
@@ -37,9 +37,8 @@ try {
 	elgg_log("Unable to get avatar for user with GUID $user_guid", 'ERROR');
 }
 
-
 if (!$success) {
-	forward(elgg_get_simplecache_url("icons/default/$size.png"));
+	forward(elgg_get_simplecache_url("icons/user/default{$size}.gif"));
 }
 
 header("Content-type: image/jpeg", true);
