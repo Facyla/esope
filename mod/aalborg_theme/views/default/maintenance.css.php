@@ -157,6 +157,7 @@ input, textarea {
 input[type=email]:focus,
 input[type=password]:focus,
 input[type=text]:focus,
+input[type=number]:focus,
 input[type=url]:focus,
 textarea:focus {
 	border: solid 1px #C2C2C2;
@@ -171,6 +172,9 @@ input[type="radio"] {
 	padding: 0;
 	border: none;
 	width: auto;
+}
+input[type="number"] {
+	-moz-appearance: textfield;
 }
 .elgg-input-checkboxes.elgg-horizontal li,
 .elgg-input-radios.elgg-horizontal li {

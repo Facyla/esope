@@ -5,6 +5,8 @@
 ?>
 //<script>
 
+elgg.deprecated_notice('likes.js is deprecated. Use the "elgg/likes" AMD module', 2.3);
+
 /**
  * Repositions the likes popup
  *

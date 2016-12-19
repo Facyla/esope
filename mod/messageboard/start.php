@@ -11,8 +11,9 @@
  * MessageBoard initialisation
  */
 function messageboard_init() {
-	// js
-	elgg_extend_view('elgg.js', 'messageboard/js');
+	// inline module
+	elgg_extend_view('elgg.js', 'elgg/messageboard.js');
+	elgg_require_js('elgg/messageboard');
 
 	// css
 	elgg_extend_view('elgg.css', 'messageboard/css');
@@ -114,7 +115,11 @@ function messageboard_add($poster, $owner, $message, $access_id = ACCESS_PUBLIC)
 			$poster->getURL()
 		), $owner->language);
 
-		notify_user($owner->guid, $poster->guid, $subject, $body);
+		$params = [
+			'action' => 'create',
+			'object' => elgg_get_annotation_from_id($result_id),
+		];
+		notify_user($owner->guid, $poster->guid, $subject, $body, $params);
 	}
 
 	return $result_id;

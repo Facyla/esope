@@ -96,6 +96,7 @@ if ($full) {
 	$params = array(
 		'entity' => $page,
 		'metadata' => $metadata,
+		'title' => false,
 		'subtitle' => $subtitle,
 	);
 	$params = $params + $vars;
@@ -103,7 +104,6 @@ if ($full) {
 
 	echo elgg_view('object/elements/full', array(
 		'entity' => $page,
-		'title' => false,
 		'icon' => $page_icon,
 		'summary' => $summary,
 		'body' => $body,
@@ -119,9 +119,9 @@ if ($full) {
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
 		'content' => $excerpt,
+		'icon' => $page_icon,
 	);
 	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
+	echo elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($page_icon, $list_body);
 }

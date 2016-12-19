@@ -5,7 +5,7 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "elgg/elgg": "2.2.3"
+    "elgg/elgg": "2.3.0-rc.1"
   },
   "require-dev": {
     "srokap/code_review": "^1.0.5",
