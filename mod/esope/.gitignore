@@ -1,0 +1,6 @@
+/.gitignore
+
+# Dossier fonts interdit : sous licence
+fonts/Gill_Sans_1/
+fonts/ITC_Avant_Garde_Gothic_Std_1/
+

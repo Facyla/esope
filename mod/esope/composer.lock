@@ -1,0 +1,526 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "d560bdd4ea7edc7af4aca6e1fa7ef4c7",
+    "content-hash": "ad9781cde4b9cfd2991a24bc37077955",
+    "packages": [
+        {
+            "name": "bower-asset/jquery",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jquery/jquery-dist.git",
+                "reference": "f66fe4270f5556c5a42daae1290a39cf1df2eff2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/f66fe4270f5556c5a42daae1290a39cf1df2eff2",
+                "reference": "f66fe4270f5556c5a42daae1290a39cf1df2eff2",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "dist/jquery.js",
+                "bower-asset-ignore": [
+                    "package.json"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "keywords": [
+                "browser",
+                "javascript",
+                "jquery",
+                "library"
+            ],
+            "time": "2016-09-26 14:54:58"
+        },
+        {
+            "name": "bower-asset/jquery.serializeJSON",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marioizquierdo/jquery.serializeJSON.git",
+                "reference": "2f462314f40b1cb88b7b5293e4816ae87fad1ede"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marioizquierdo/jquery.serializeJSON/zipball/2f462314f40b1cb88b7b5293e4816ae87fad1ede",
+                "reference": "2f462314f40b1cb88b7b5293e4816ae87fad1ede",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": "*"
+            },
+            "require-dev": {
+                "bower-asset/jasmine": "2.0.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "jquery.serializejson.js",
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "node_modules",
+                    "bower_components",
+                    "test",
+                    "tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "jQuery or Zepto plugin to serialize a form into a JavaScript Object, using the same format as the default Ruby on Rails request params",
+            "keywords": [
+                "form",
+                "helper",
+                "jquery",
+                "json",
+                "serialize"
+            ]
+        },
+        {
+            "name": "bower-asset/jstree",
+            "version": "3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vakata/jstree.git",
+                "reference": "9770c6711f0a155ec494f635aaf0add9b3cfb45c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vakata/jstree/zipball/9770c6711f0a155ec494f635aaf0add9b3cfb45c",
+                "reference": "9770c6711f0a155ec494f635aaf0add9b3cfb45c",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.9.1"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "./dist/jstree.js",
+                    "./dist/themes/default/style.css"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "docs",
+                    "demo",
+                    "libs",
+                    "node_modules",
+                    "test",
+                    "libs",
+                    "jstree.jquery.json",
+                    "gruntfile.js",
+                    "package.json",
+                    "bower.json",
+                    "component.json",
+                    "LICENCE-MIT",
+                    "README.md"
+                ]
+            },
+            "keywords": [
+                "jstree",
+                "tree",
+                "ui"
+            ]
+        },
+        {
+            "name": "coldtrick/advanced_statistics",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/advanced_statistics.git",
+                "reference": "5e53bcf3bde104a9eae51710fcdc634ff00d7678"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/advanced_statistics/zipball/5e53bcf3bde104a9eae51710fcdc634ff00d7678",
+                "reference": "5e53bcf3bde104a9eae51710fcdc634ff00d7678",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "conflict": {
+                "elgg/elgg": "<2.0"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Show more statistics about you Elgg installation",
+            "keywords": [
+                "elgg",
+                "plugin",
+                "statistics",
+                "stats"
+            ],
+            "time": "2016-12-12 09:41:52"
+        },
+        {
+            "name": "coldtrick/digest",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/digest.git",
+                "reference": "bfb044f2ad2b26bbd53e3e0356f9253ac178807f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/digest/zipball/bfb044f2ad2b26bbd53e3e0356f9253ac178807f",
+                "reference": "bfb044f2ad2b26bbd53e3e0356f9253ac178807f",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "require-dev": {
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Sends out a digest mail for site and group activity",
+            "keywords": [
+                "elgg",
+                "email",
+                "notification",
+                "plugin"
+            ],
+            "time": "2015-12-17 08:33:55"
+        },
+        {
+            "name": "coldtrick/file_tools",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/file_tools.git",
+                "reference": "4c39cb47644f2ad351d7c820c5dff875566ae42d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/file_tools/zipball/4c39cb47644f2ad351d7c820c5dff875566ae42d",
+                "reference": "4c39cb47644f2ad351d7c820c5dff875566ae42d",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery.serializejson": "~2.7.2",
+                "bower-asset/jstree": "~3.3.3",
+                "composer/installers": "^1.0.8"
+            },
+            "conflict": {
+                "elgg/elgg": "<2.2"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Extend the functionality of the core file plugin",
+            "keywords": [
+                "elgg",
+                "plugin",
+                "tools"
+            ],
+            "time": "2016-12-08 14:01:05"
+        },
+        {
+            "name": "coldtrick/html_email_handler",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/html_email_handler.git",
+                "reference": "1ecb04a4ea0865767574858d86e26fe883edc94d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/html_email_handler/zipball/1ecb04a4ea0865767574858d86e26fe883edc94d",
+                "reference": "1ecb04a4ea0865767574858d86e26fe883edc94d",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8",
+                "pelago/emogrifier": "^0.1"
+            },
+            "conflict": {
+                "elgg/elgg": "<2.0"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Allows to send out full HTML mails / notifications",
+            "keywords": [
+                "elgg",
+                "email",
+                "notification",
+                "plugin"
+            ],
+            "time": "2016-10-07 08:44:51"
+        },
+        {
+            "name": "coldtrick/newsletter",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/newsletter.git",
+                "reference": "78dd346626484214c0802ebee6d4b896373b521c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/newsletter/zipball/78dd346626484214c0802ebee6d4b896373b521c",
+                "reference": "78dd346626484214c0802ebee6d4b896373b521c",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8",
+                "ext-json": "*",
+                "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Allows the creation and management of a newsletter to site/group members",
+            "homepage": "https://community.elgg.org/plugins/1564847",
+            "keywords": [
+                "communication",
+                "elgg",
+                "plugin",
+                "tools"
+            ],
+            "time": "2016-10-27 15:12:38"
+        },
+        {
+            "name": "coldtrick/profile_manager",
+            "version": "v11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/profile_manager.git",
+                "reference": "7d91a0a944effcf88e079e9739cbd9463a35ab09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/profile_manager/zipball/7d91a0a944effcf88e079e9739cbd9463a35ab09",
+                "reference": "7d91a0a944effcf88e079e9739cbd9463a35ab09",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Improved management of user and group profile fields",
+            "keywords": [
+                "elgg",
+                "groups",
+                "plugin",
+                "profile"
+            ],
+            "time": "2016-09-01 10:01:49"
+        },
+        {
+            "name": "composer/installers",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "d78064c68299743e0161004f2de3a0204e33b804"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d78064c68299743e0161004f2de3a0204e33b804",
+                "reference": "d78064c68299743e0161004f2de3a0204e33b804",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0"
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.0.*@dev",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Hurad",
+                "ImageCMS",
+                "MODX Evo",
+                "Mautic",
+                "OXID",
+                "Plentymarkets",
+                "RadPHP",
+                "SMF",
+                "Thelia",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "joomla",
+                "kohana",
+                "laravel",
+                "lithium",
+                "magento",
+                "mako",
+                "mediawiki",
+                "modulework",
+                "moodle",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "puppet",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "symfony",
+                "typo3",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "time": "2016-08-13 20:53:52"
+        },
+        {
+            "name": "pelago/emogrifier",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jjriv/emogrifier.git",
+                "reference": "ed72bcd6a3c7014862ff86d026193667a172fedf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jjriv/emogrifier/zipball/ed72bcd6a3c7014862ff86d026193667a172fedf",
+                "reference": "ed72bcd6a3c7014862ff86d026193667a172fedf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6.0",
+                "squizlabs/php_codesniffer": "~2.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pelago\\": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Reeve",
+                    "email": "jreeve@pelagodesign.com"
+                },
+                {
+                    "name": "Cameron Brooks"
+                },
+                {
+                    "name": "Jaime Prado"
+                },
+                {
+                    "name": "Oliver Klee",
+                    "email": "typo3-coding@oliverklee.de"
+                },
+                {
+                    "name": "Roman Ožana",
+                    "email": "ozana@omdesign.cz"
+                }
+            ],
+            "description": "Converts CSS styles into inline style attributes in your HTML code",
+            "homepage": "http://www.pelagodesign.com/sidecar/emogrifier/",
+            "time": "2015-05-15 11:37:51"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -1,0 +1,41 @@
+{
+    "name": "facyla/esope",
+    "type": "elgg-plugin",
+    "repository": "Facyla/esope",
+    "description": "Main Elgg plugin for ESOPE distribution - handles theme base and improvements",
+    "homepage": "http://facyla.fr",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Florian DANIEL aka Facyla",
+            "email": "i.daniel.florian@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "keywords": [
+        "elgg", "plugin", "admin", "theme"
+    ],
+    "require": {
+        "composer/installers": "~1.0",
+        
+        "ColdTrick/advanced_statistics": "*",
+        "ColdTrick/digest": "*",
+        "ColdTrick/file_tools": "*",
+        "ColdTrick/html_email_handler": "*",
+        "ColdTrick/newsletter": "*",
+        "ColdTrick/profile_manager": "^11"
+    },
+    "extra": {
+        "installer-name": "esope",
+        "installer-paths": {
+            "../advanced_statistics": ["coldtrick/advanced_statistics"],
+            "../digest": ["coldtrick/digest"],
+            "../file_tools": ["coldtrick/file_tools"],
+            "../html_email_handler": ["coldtrick/html_email_handler"],
+            "../newsletter": ["coldtrick/newsletter"],
+            "../profile_manager": ["coldtrick/profile_manager"]
+        }
+    }
+}
+
+
