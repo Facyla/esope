@@ -23,7 +23,9 @@
         "ColdTrick/file_tools": "*",
         "ColdTrick/html_email_handler": "*",
         "ColdTrick/newsletter": "*",
-        "ColdTrick/profile_manager": "^11"
+        "ColdTrick/profile_manager": "^11",
+        
+        "Srokap/code_review": "^11"
     },
     "extra": {
         "installer-name": "esope",
@@ -33,7 +35,8 @@
             "../file_tools": ["coldtrick/file_tools"],
             "../html_email_handler": ["coldtrick/html_email_handler"],
             "../newsletter": ["coldtrick/newsletter"],
-            "../profile_manager": ["coldtrick/profile_manager"]
+            "../profile_manager": ["coldtrick/profile_manager"],
+            "../code_review": ["srokap/code_review"]
         }
     }
 }

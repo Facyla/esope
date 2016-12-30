@@ -213,10 +213,12 @@ function esope_init() {
 	
 	// Gestion des notifications par mail lors de l'entrée dans un groupe
 	// @TODO use create,relationship instead
-	elgg_register_event_handler('create','member','esope_group_join', 800);
+	//elgg_register_event_handler('create','member','esope_group_join', 800);
+	elgg_register_event_handler('join', 'group', 'esope_group_join', 800);
 	// Suppression des notifications lorsqu'on quitte le groupe
 	// @TODO use delete,relationship instead
-	elgg_register_event_handler('delete','member','esope_group_leave', 800);
+	//elgg_register_event_handler('delete','member','esope_group_leave', 800);
+	elgg_register_event_handler('leave', 'group', 'esope_group_leave', 800);
 	
 	// Gestion des actions post-inscription
 	elgg_register_plugin_hook_handler('register', 'user', 'esope_register_user_hook');
