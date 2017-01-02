@@ -5,6 +5,7 @@
  * @package Elggexternalblogs
  */
 global $CONFIG;
+$url = elgg_get_site_url();
 $CONFIG->walled_garden = false;
 
 //elgg_set_context('externalblogs');
@@ -29,7 +30,7 @@ $request_uri = full_url();
 $request_uri = explode('?', $request_uri);
 $request_url = $request_uri[0];
 $request_params = $request_uri[1];
-$request_url = explode($CONFIG->url, $request_url);
+$request_url = explode($url, $request_url);
 $request_url = explode('/', $request_url[1]);
 // Données utiles : blog, article/rubrique/recherche, titre article/tag/critère
 $blogname = $request_url[0];
@@ -41,7 +42,7 @@ $url_param_2 = urldecode($request_url[2]);
 // Récupération du blog demandé + son URL
 $externalblogs = elgg_get_entities_from_metadata(array('metadata_name_value_pairs' => array('name' => 'blogname', 'value' => $blogname)));
 $externalblog = $externalblogs[0];
-$blog_base_url = $CONFIG->url . $externalblog->blogname;
+$blog_base_url = $url . $externalblog->blogname;
 
 
 // CONTRÔLE D'ACCÈS
@@ -60,10 +61,10 @@ if (!empty($externalblog->password)) {
 		//if (logout())
 		system_message('externalblog:sessiondestroyed');
 	}
-	$passhash = md5($CONFIG->url . $externalblog->password);
+	$passhash = md5($url . $externalblog->password);
 	if ($_SESSION['externalblog'][$externalblog->guid]['passhash'] !== $passhash) {
 		$input_password = get_input('password', false);
-		$hash_input_password = md5($CONFIG->url . $input_password);
+		$hash_input_password = md5($url . $input_password);
 		if ($input_password && ($hash_input_password == $passhash)) {
 			$_SESSION['externalblog'][$externalblog->guid]['passhash'] = $passhash;
 		} else {
@@ -133,7 +134,7 @@ foreach ($article_index as $y => $year_index) {
 */
 // Index des archives par date
 $dates_summary = '';
-$archives_url = $CONFIG->url . $blogname . '/archives/';
+$archives_url = $url . $blogname . '/archives/';
 //$dates_summary .= print_r($dates_index, true);
 foreach ($dates_index as $y => $year_index) {
 	$dates_summary .= '<strong><a href="' . $archives_url . $y .'" title="Afficher tous les articles de ' . $y . '">' . $y . '</a></strong>';
@@ -186,7 +187,7 @@ if (empty($url_param_1)) {
 			//if (in_array($ent->guid, $articles))
 		}
 		*/
-		$title = '<a href="' . $CONFIG->url . $externalblog->blogname . '">' . $externalblog->title . '</a> : rubrique &laquo;&nbsp;'.$url_param_2.'&nbsp;&raquo;';
+		$title = '<a href="' . $url . $externalblog->blogname . '">' . $externalblog->title . '</a> : rubrique &laquo;&nbsp;'.$url_param_2.'&nbsp;&raquo;';
 		
 	} else if (in_array($url_param_1, array('galerie', 'gallery'))) {
 		// Si listing = recherche
@@ -196,7 +197,7 @@ if (empty($url_param_1)) {
 			$articles_count = elgg_get_entities_from_metadata(array('metadata_name_value_pairs' => array('name' => 'tags', 'value' => $url_param_2), 'types' => 'object', 'count' => true, 'order_by_metadata' => $ordering));
 			$articles = elgg_get_entities_from_metadata(array('metadata_name_value_pairs' => array('name' => 'tags', 'value' => $url_param_2), 'types' => 'object', 'limit' => $articles_count, 'order_by_metadata' => $ordering));
 		}
-		$title = '<a href="' . $CONFIG->url . $externalblog->blogname . '">' . $externalblog->title . '</a> : recherche &laquo;&nbsp;'.$url_param_2.'&nbsp;&raquo;';
+		$title = '<a href="' . $url . $externalblog->blogname . '">' . $externalblog->title . '</a> : recherche &laquo;&nbsp;'.$url_param_2.'&nbsp;&raquo;';
 		
 	} else if (in_array($url_param_1, array('search', 'tag', 'listing'))) {
 		// Si listing = recherche
@@ -208,7 +209,7 @@ if (empty($url_param_1)) {
 			// @TODO : filtrer les résultats correspondant au site externes
 			// @TODO : au passage, faire un autre hook pour ne considérer que les publications du blog visualisé
 		}
-		$title = '<a href="' . $CONFIG->url . $externalblog->blogname . '">' . $externalblog->title . '</a> : recherche &laquo;&nbsp;'.$url_param_2.'&nbsp;&raquo;';
+		$title = '<a href="' . $url . $externalblog->blogname . '">' . $externalblog->title . '</a> : recherche &laquo;&nbsp;'.$url_param_2.'&nbsp;&raquo;';
 		
 	} else if (in_array($url_param_1, array('page'))) {
 		// Si page CMS = layout spécial
@@ -256,7 +257,7 @@ if (empty($url_param_1)) {
 		$externalblog_context = "externalblog_fullview";
 		// Article choisi en pleine page
 		$article = get_entity($url_param_1);
-		$title = '<a href="' . $CONFIG->url . $externalblog->blogname . '">' . $externalblog->title . '</a> : ' . $article->title;
+		$title = '<a href="' . $url . $externalblog->blogname . '">' . $externalblog->title . '</a> : ' . $article->title;
 		$articles = array($article);
 	}
 }
@@ -297,7 +298,7 @@ foreach ($articles as $article) {
 	$displayed_index++;
 	
 	// Article URL
-	$article_url = $CONFIG->url . $blogname . '/' . $article->guid . '/' . friendly_title($article->title);
+	$article_url = $url . $blogname . '/' . $article->guid . '/' . friendly_title($article->title);
 	// Dates
 	$article_dates = explode('-', $article->publication_startdate);
 	$publication_dates = '<div style="font-size:80%;">';
@@ -339,7 +340,7 @@ foreach ($articles as $article) {
 		$content .= '<div class="separator"></div>';
 	}
 	
-	if (elgg_is_admin_logged_in()) $content .= '<a href="' . $CONFIG->url . 'blog/edit/' . $article->guid . '">[&nbsp;Modifier&nbsp;]</a>';
+	if (elgg_is_admin_logged_in()) $content .= '<a href="' . $url . 'blog/edit/' . $article->guid . '">[&nbsp;Modifier&nbsp;]</a>';
 	
 }
 $content .= $pagination;

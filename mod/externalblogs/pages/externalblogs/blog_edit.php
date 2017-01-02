@@ -4,7 +4,6 @@
  *
  * @package Elggexternalblogs
  */
-global $CONFIG;
 
 elgg_pop_breadcrumb();
 elgg_push_breadcrumb(elgg_echo('externalblogs'));
@@ -20,18 +19,18 @@ $container_guid = get_input('container_guid', false);
 
 // Check who can edit this ?
 if (elgg_is_logged_in()) {
-  if ($entity && $entity->canEdit()) {
-    $title = elgg_echo('externalblogs:blog:edit');
-    $content = elgg_view('externalblogs/forms/edit', array('entity' => $entity));
-  } else if ($container_guid) {
-    $title = elgg_echo('externalblogs:blog:new');
-    $content = elgg_view('externalblogs/forms/edit', array('container_guid' => $container_guid));
-  } else {
-    register_error('No editing rights on this blog');
-    forward($CONFIG->url . 'externalblog');
-  }
+	if (elgg_instanceof($entity, 'object', 'externalblog') && $entity->canEdit()) {
+		$title = elgg_echo('externalblogs:blog:edit');
+		$content = elgg_view('externalblogs/forms/edit', array('entity' => $entity));
+	} else if ($container_guid) {
+		$title = elgg_echo('externalblogs:blog:new');
+		$content = elgg_view('externalblogs/forms/edit', array('container_guid' => $container_guid));
+	} else {
+		register_error('No editing rights on this blog');
+		forward(elgg_get_site_url() . 'externalblog');
+}
 } else {
-  forward($CONFIG->url . 'externalblog');
+	forward(elgg_get_site_url() . 'externalblog');
 }
 
 

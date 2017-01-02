@@ -36,7 +36,7 @@ if (!$entity) { register_error(elgg_echo("externalblogs:entitynotfound")); forwa
 
 // We also need a valid externalblog
 $externalblog = get_entity($externalblog_guid);
-if (!$externalblog_guid) { register_error(elgg_echo("externalblogs:notfound")); forward(REFERER); }
+if (!elgg_instanceof($externablog, 'object', 'externablog')) { register_error(elgg_echo("externalblogs:notfound")); forward(REFERER); }
 
 // limit externalblogs through a plugin hook (to prevent unwanted publication for example)
 // plugins should register the error message to explain why externalblogging isn't allowed
@@ -51,18 +51,18 @@ $user = elgg_get_logged_in_user_entity();
 
 // Changement d'action selon les paramètres passés : unselect
 if ($unselect) {
-  if (already_attached($externalblog->guid, $entity->guid)) {
-    remove_attachment($externalblog->guid, $entity->guid);
-  } else {
-    register_error(elgg_echo("externalblogs:notblogged")); forward(REFERER);
-  }
+	if (already_attached($externalblog->guid, $entity->guid)) {
+		remove_attachment($externalblog->guid, $entity->guid);
+	} else {
+		register_error(elgg_echo("externalblogs:notblogged")); forward(REFERER);
+	}
 } else {
-  if (!already_attached($externalblog->guid, $entity->guid)) {
-    $ok = make_attachment($externalblog->guid, $entity->guid);
-  } else {
-    register_error(elgg_echo("externalblogs:alreadyblogged")); forward(REFERER);
-  }
-  if (!$ok) { register_error(elgg_echo("externalblogs:failure")); forward(REFERER); }
+	if (!already_attached($externalblog->guid, $entity->guid)) {
+		$ok = make_attachment($externalblog->guid, $entity->guid);
+	} else {
+		register_error(elgg_echo("externalblogs:alreadyblogged")); forward(REFERER);
+	}
+	if (!$ok) { register_error(elgg_echo("externalblogs:failure")); forward(REFERER); }
 }
 
 

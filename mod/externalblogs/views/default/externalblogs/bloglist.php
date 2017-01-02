@@ -1,6 +1,6 @@
 <?php
 /**
- * Count of who has externalbloged something
+ * Count of who has externalblogged something
  *
  *  @uses $vars['entity']
  */
@@ -8,7 +8,7 @@
 
 $list = '';
 $num_of_externalblogs = externalblogs_count($vars['entity']);
-$guid = $vars['entity']->getGUID();
+$guid = $vars['entity']->guid;
 
 if ($num_of_externalblogs) {
 	// display the number of externalblogs

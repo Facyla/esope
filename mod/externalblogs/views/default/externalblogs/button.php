@@ -1,6 +1,6 @@
 <?php
 if (!isset($vars['entity'])) { return true; }
-$guid = $vars['entity']->getGUID();
+$guid = $vars['entity']->guid;
 
 if (elgg_is_logged_in() && $vars['entity']->canAnnotate(0, 'externalblog')) {
 	/* @todo 2 versions selon qu'on a déjà publié ou non dans un blog externe
@@ -42,7 +42,11 @@ if (elgg_is_logged_in() && $vars['entity']->canAnnotate(0, 'externalblog')) {
 	$list .= "<div class='elgg-module elgg-module-popup elgg-externalblogs hidden clearfix' id='externalblogs-$guid'>";
 	if (is_array($externalblogs)) {
 		foreach ($externalblogs as $externalblog) {
-			if (isset($listed_externablog) && in_array($externalblog->guid, $listed_externablog)) { continue; } else { $listed_externablog[] = $externalblog->guid; }
+			if (isset($listed_externablog) && in_array($externalblog->guid, $listed_externablog)) {
+				continue;
+			} else {
+				$listed_externablog[] = $externalblog->guid;
+			}
 			//if (already_attached($externalblog->guid, $guid)) {
 			if (check_entity_relationship($externalblog->guid, "attached", $guid)) {
 				// Déjà bloggé : on peut retirer de ce blog

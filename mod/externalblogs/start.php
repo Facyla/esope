@@ -54,8 +54,8 @@ function externalblogs_init() {
 	$externalblogs_count = elgg_get_entities(array('types' => 'object', 'subtypes' => 'externalblog', 'count' => true));
 	//$externalblogs = elgg_get_entities(array('subtypes' => 'externalblog', 'limit' => $externalblogs_count));
 	$externalblogs = elgg_get_entities(array('types' => 'object', 'subtypes' => 'externalblog', 'limit' => $externalblogs_count));
-	// @todo voir si fonction pour les récupérer ? ou dans $CONFIG ?
-	$reserved_handlers = array('admin', 'view', 'entity', 'action', 'blog', 'bookmarks', 'pages', 'cmspage');
+	// @TODO : hook pour récupérer les PH déjà réservés ?
+	$reserved_handlers = array('admin', 'view', 'entity', 'action', 'login', 'register', 'export', 'blog', 'bookmarks', 'pages', 'p', 's');
 	if (is_array($externalblogs))
 	foreach ($externalblogs as $externablog) {
 		if (in_array($externablog->blogname, $reserved_handlers)) {
@@ -113,7 +113,6 @@ function externalblogs_blog_page_handler($page) {
 
 // Permet l'accès aux pages des blogs en mode "walled garden"
 function externalblogs_public_pages($hook, $type, $return_value, $params) {
-	global $CONFIG;
 	$return_value[] = 'externalblog'; // Index des blogs externes
 	elgg_set_ignore_access(true);
 	$externalblogs_count = elgg_get_entities(array('subtypes' => 'externalblog', 'count' => true));
@@ -318,7 +317,7 @@ function externalblogs_canedit_permission_check($hook, $entity_type, $returnvalu
 		// Can edit : owner + other blog admins, container admins, admins
 		if ( ($userguid == $params['entity']->owner_guid) || in_array($userguid, $blogadmins) 
 		|| (($container = get_entity($params['entity']->container_guid)) && $container->canEdit($userguid))
-		|| is_admin_logged_in()
+		|| elgg_is_admin_logged_in()
 		) {
 			return true;
 		}

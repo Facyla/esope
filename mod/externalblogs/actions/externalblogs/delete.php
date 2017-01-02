@@ -3,14 +3,13 @@
  * Elgg delete externalblog action
  *
  */
-global $CONFIG;
 
 $guid = (int) get_input('guid');
 $externalblog = get_entity($guid);
-if ($externalblog && $externalblog->canEdit()) {
+if (elgg_instanceof($externalblog, 'object', 'externablog') && $externalblog->canEdit()) {
 	$externalblog->delete();
 	system_message(elgg_echo("externalblog:deleted"));
-  forward($CONFIG->url . 'externalblog');
+	forward(elgg_get_site_url() . 'externalblog');
 }
 
 register_error(elgg_echo("externalblog:notdeleted"));

@@ -1,12 +1,17 @@
 <?php
-$french = array(
+return array(
 	'externalblog' => "Blog",
 	'externalblogs' => "Blogs externes",
 	'externalblogs:all' => "Tous les blogs externes",
 	'externalblogs:none' => "Aucun blog externe pour le moment.",
 	'externalblogs:edit' => "Modifier le blog externe",
+	'externalblogs:administer' => "&rarr;&nbsp;Administrer %s",
 	'externalblogs:blog' => "Blog externe",
+	'externalblogs:mine' => "Mes blogs (admin)",
+	'externalblogs:mine:author' => "Mes blogs (auteur)",
+	'externalblogs:others' => "Les autres blogs",
 	'externalblog:passwordprotected' => "Veuillez saisir le mot de passe pour accéder à ce blog",
+	
 	// Modules
 	'externalblogs:module:none' => "Aucun module pour le moment",
 	'externalblogs:bloginfos' => "Configuration du blog",
@@ -22,6 +27,7 @@ $french = array(
 	'externalblogs:zones:cmspages' => "Pages CMS",
 	'externalblogs:zones:css' => "CSS du blog",
 	
+	
 	// Actions
 	'externalblog:add' => "Créer un blog externe",
 	'externalblog:externalblogthis' => "Publier dans un blog externe",
@@ -36,8 +42,5 @@ $french = array(
 	'externalblogs:notdeleted' => "Blog externe non supprimé",
 	
 	
-	
 );
-
-add_translation("fr", $french);
 

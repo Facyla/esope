@@ -2,7 +2,7 @@
 /**
  * Button area for showing the add widgets panel
  */
-$context = $vars['context'];
+$context = elgg_extract('context', $vars);
 ?>
 <div class="elgg-widget-add-control">
 <?php

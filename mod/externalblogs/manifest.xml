@@ -2,11 +2,11 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Blogs externes</name>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>0.3</version>
+	<version>1.12.0</version>
 	<blurb>Blogs externes depuis un intranet</blurb>
 	<description>Vous devriez activer ce plugin si vous avez besoin de créer des "blogs externes" avec une interface propre. Un blog externe permet de publier des articles, y compris depuis un intranet, sur la base de critères de sélection précis (liste de type de contenu, d'auteurs, de groupes, de tags), et dans un template entièrement configurable.</description>
 	<website>http://sfprojex.net/</website>
-	<copyright>(C) Facyla 2012-2016</copyright>
+	<copyright>(C) Facyla 2012-2017</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<requires>
@@ -39,6 +39,8 @@
   - externalise some scripts in views
   - use functions for certain controls (access..)
   - generalise translation strings
+
+1.12.0 : 20170102 - upgrade to Elgg 1.12
 
 0.3.1 : 20130219 - ajout rubrique et listing
 0.3 : 20121026 - multiple authors, password protection, more complete sidebars

@@ -3,7 +3,6 @@
  * Elgg edit externablog action
  *
  */
-global $CONFIG;
 
 $guid = (int) get_input('guid', false);
 $access_id = (int) get_input('access_id', 2);
@@ -51,10 +50,17 @@ if (!$externalblog) {
 	if ($owner_guid) $externalblog->owner_guid = $owner_guid;
 	else $externalblog->owner_guid = elgg_get_logged_in_user_guid();
 }
+
+if (!elgg_instanceof($externalblog, 'object', 'externablog')) {
+	register_error('externablog:invalidentity');
+	forward(REFERER);
+}
+
+
 // editable metadata
 $externalblog->access_id = $access_id;
 if ($owner_guid) $externalblog->owner_guid = $owner_guid;
-$externalblog->container_guid = $CONFIG->site->guid;
+$externalblog->container_guid = elgg_get_site_entity()->guid;
 $externalblog->blogadmin_guids = $blogadmin_guids;
 $externalblog->author_guids = $author_guids;
 $externalblog->title = $title;
@@ -83,6 +89,6 @@ $externalblog->save();
 system_message(elgg_echo("externalblog:edited"));
 
 // Forward
-//forward($CONFIG->url . 'externalblog');
-forward($CONFIG->url . 'externalblog/edit/' . $externalblog->guid);
+//forward(elgg_get_site_url() . 'externalblog');
+forward(elgg_get_site_url() . 'externalblog/edit/' . $externalblog->guid);
 

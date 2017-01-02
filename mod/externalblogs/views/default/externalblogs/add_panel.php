@@ -7,8 +7,8 @@
  * @uses $vars['exact_match'] Only use widgets that match the context
  */
 
-$widgets = $vars['widgets'];
-$context = $vars['context'];
+$widgets = elgg_extract('widgets', $vars);
+$context = elgg_extract('context', $vars);
 $exact = elgg_extract('exact_match', $vars, false);
 
 $widget_types = elgg_get_widget_types($context, $exact);
@@ -27,7 +27,7 @@ foreach ($widgets as $column_widgets) {
 		<?php echo elgg_echo('widgets:add:description'); ?>
 	</p>
 	<ul>
-<?php
+		<?php
 		foreach ($widget_types as $handler => $widget_type) {
 			$id = "elgg-widget-type-$handler";
 			// check if widget added and only one instance allowed
@@ -47,13 +47,14 @@ foreach ($widgets as $column_widgets) {
 
 			echo "<li title=\"$tooltip\" id=\"$id\" class=\"$class\">$widget_type->name</li>";
 		}
-?>
+		?>
 	</ul>
-<?php
+	<?php
 	$params = array(
 		'name' => 'widget_context',
 		'value' => $context
 	);
 	echo elgg_view('input/hidden', $params);
-?>
+	?>
 </div>
+
