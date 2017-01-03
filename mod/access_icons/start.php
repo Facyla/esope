@@ -169,7 +169,7 @@ function access_icons_get_readable_access_level($access_id) {
 			if (elgg_instanceof($collection_owner, 'site')) {
 				$user_guid = elgg_get_logged_in_user_guid();
 				if ($user_guid && check_entity_relationship($user_guid, "member_of_site", $collection->owner_guid)) {
-					$acl_name = elgg_echo($acl->name);
+					$acl_name = elgg_echo($collection->name);
 				}
 			}
 		}
