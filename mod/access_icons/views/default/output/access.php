@@ -52,7 +52,7 @@ if (!isset($access_id)) { return true; }
 
 // Should we display the access text ?
 if (!$hide_text) {
-	$access_id_string = get_readable_access_level($access_id);
+	$access_id_string = access_icons_get_readable_access_level($access_id);
 	$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($access_id_string, ENT_QUOTES, 'UTF-8', false);
 } else {
 	$access_id_string = '&nbsp;';

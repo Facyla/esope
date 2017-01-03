@@ -27,6 +27,8 @@ if (elgg_is_active_plugin('profile_manager')) {
 	echo '<h3>' . elgg_echo('access_collections:collections:profiletypes') . '</h3>';
 	// Always force again to 'no' (enable once for immediate modifications)
 	echo '<p><label>' . elgg_echo('access_collections:delete:enable') . elgg_view('input/select', array('name' => 'params[allow_delete]', 'value' => 'no', 'options_values' => $ny_opt)) . '</label></p>';
+	echo '<p><em>' . elgg_echo('access_collections:delete:enable:details') . '</em></p>';
+	
 	echo '<h4>' . elgg_echo('access_collections:profiletypes') . '</h4>';
 	echo '<p>' . elgg_echo('access_collections:profiletypes:select') . '</p>';
 	

@@ -22,3 +22,10 @@ They can also be defined based on user properties, metadata and/or relationships
  * For profiletype based ACL, add new keys to your theme : profiletype:[profile_type_name]
 
 
+
+## Developper notes : 
+ * Limitation : only collections owners can see the name of the collections ; this applies to all custom ACLs - see http://reference.elgg.org/1.12/AccessCollections_8php_source.html#l00808
+
+
+
+

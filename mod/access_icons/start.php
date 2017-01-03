@@ -158,4 +158,20 @@ function access_icons_entity_menu_setup($hook, $type, $return, $params) {
 }
 
 
+// Display names of collections that are owned by sites user is member of (custom site-wide colelctions)
+function access_icons_get_readable_access_level($access_id) {
+	$acl_name = get_readable_access_level($access_id);
+	if ($acl_name == elgg_echo('access:limited:label')) {
+		$collection = get_access_collection($access_id);
+		// Only name of collections owned by the site can be disclosed
+		if ($collection) {
+			$collection_owner = get_entity($collection->owner_guid);
+			if (elgg_instanceof($collection_owner, 'site') && $collection_owner->isMember()) {
+				$acl_name = elgg_echo($acl->name);
+			}
+		}
+	}
+	return $acl_name;
+}
+
 

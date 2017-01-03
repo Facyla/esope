@@ -22,22 +22,22 @@
 		<version>1.12</version>
 	</requires>
 	
-	<!--
 	<requires>
 		<type>plugin</type>
 		<name>esope</name>
 	</requires>
 	
+	<!--
 	<conflicts>
 		<type>plugin</type>
 		<name>threads</name>
 	</conflicts>
+	//-->
 	
 	<suggests>
 		<type>plugin</type>
-		<name>file</name>
+		<name>access_icons</name>
 	</suggests>
-	//-->
 	
 	<activate_on_install>false</activate_on_install>
 	
