@@ -17,43 +17,64 @@ $ny_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')
 // Set default value
 //if (!isset($vars['entity']->setting_name)) { $vars['entity']->setting_name = 'default'; }
 
+if ($vars['entity']->allow_delete == 'yes') { $allow_deletion = true; } else { $allow_deletion = false; }
+
 
 echo '<div class="elgg-output">';
 
 // View existing profile types and create collections for them
 if (elgg_is_active_plugin('profile_manager')) {
-	echo '<h3>Custom profile types collections</h3>';
-	echo '<h4>Custom profile types</h4>';
-	echo '<p>Select which custom types should have their own access collection</p>';
+	echo '<h3>' . elgg_echo('access_collections:collections:profiletypes') . '</h3>';
+	// Always force again to 'no' (enable once for immediate modifications)
+	echo '<p><label>' . elgg_echo('access_collections:delete:enable') . elgg_view('input/select', array('name' => 'params[allow_delete]', 'value' => 'no', 'options_values' => $ny_opt)) . '</label></p>';
+	echo '<h4>' . elgg_echo('access_collections:profiletypes') . '</h4>';
+	echo '<p>' . elgg_echo('access_collections:profiletypes:select') . '</p>';
+	
+	// Display current profiletypes and corresponding collections
 	$profiletypes_opt = esope_get_profiletypes(true);
-	//echo '<p><label>' . elgg_view('input/checkboxes', array('name' => 'params[profiletypes]', 'value' => $vars['entity']->profiletypes, 'options' => $profiletypes_opt)) . '</label></p>';
-	// Display current profiletypes and correpsonding collections
 	$custom_profile_types = esope_get_profiletypes();
 	if ($custom_profile_types) {
 		echo '<ul>';
 		foreach($custom_profile_types as $guid => $custom_profile_type_name) {
-			echo '<p>';
-			echo '<label>' . $custom_profile_type_name . ' (' . $guid . ')' . elgg_view('input/select', array('name' => 'params[profiletype_'.$guid.']', 'value' => $vars['entity']->{'profiletype_'.$guid}, 'options_values' => $ny_opt)) . '</label> &nbsp; ';
 			// Get existing collection based by name
 			$collection = access_collections_get_collection_by_name('profiletype:'.$custom_profile_type_name);
+			if ($vars['entity']->{'profiletype_'.$guid} == 'yes') {
+				echo '<li class="enabled">';
+			} else {
+				if ($collection) {
+					echo '<li class="existing">';
+				} else {
+					echo '<li class="disabled">';
+				}
+			}
+			// Display information and select
+			echo '<label>' . $custom_profile_type_name . ' (' . $guid . ')' . elgg_view('input/select', array('name' => 'params[profiletype_'.$guid.']', 'value' => $vars['entity']->{'profiletype_'.$guid}, 'options_values' => $ny_opt)) . '</label> &nbsp; ';
 			// Update corresponding collections (create or remove)
 			if ($vars['entity']->{'profiletype_'.$guid} == 'yes') {
 				if (!$collection) {
 					// Create collection
 					$new_collection_id = access_collections_profile_type_acl($guid);
 					$collection = get_access_collection($new_collection_id);
-					echo 'creating ';
+					system_message(elgg_echo('access_collections:acl:created'));
 				}
-				echo 'ACL = ' . $collection->name . ' (' . $collection->id . ')';
 			} else {
 				if ($collection) {
-					delete_access_collection($collection->id);
-					echo ' existing ACL removed</li>';
+					// Add some protection to avoid accidental ACL removal
+					if ($allow_deletion) {
+						delete_access_collection($collection->id);
+						$colelction = false;
+						system_message(elgg_echo('access_collections:acl:removed'));
+					} else {
+						echo elgg_echo('access_collections:acl:delete:locked');
+					}
 				} else {
-					echo 'no ACL';
+					echo elgg_echo('access_collections:noacl');
 				}
 			}
-			echo '</p>';
+			if ($collection) {
+				echo '<br />' . elgg_echo('access_collections:acl', array($collection->name, $collection->id));
+			}
+			echo '</li>';
 		}
 		echo '</ul>';
 	}
@@ -62,17 +83,20 @@ if (elgg_is_active_plugin('profile_manager')) {
 
 
 // Admin custom collections
-echo '<h3>Admin-defined collections</h3>';
+echo '<h3>' . elgg_echo('access_collections:collections:admin') . '</h3>';
+echo '<p>' . elgg_echo('access_collections:upcomingfeature') . '</p>';
 echo '<div class="clearfloat"></div><br />';
 
 
-echo '<h3>Create new collection</h3>';
+echo '<h3>' . elgg_echo('access_collections:collection:new') . '</h3>';
+echo '<p>' . elgg_echo('access_collections:upcomingfeature') . '</p>';
+/* Create special collection
 $criteria = array('metadata_name_value_pairs' => array('name' => 'custom_profile_type', 'value' => '724'));
 $new_collection_id = access_collections_custom_acl($criteria);
-echo '<p>New collection id : ' . $new_collection_id . '</p>';
+echo '<p>' . elgg_echo('access_collections:collection:newid', array($new_collection_id)) . '</p>';
 
 // View special collection members
-echo '<p>New collection members :</p>';
+echo '<p>' . elgg_echo('access_collections:collection:newmembers') . '&nbsp;:</p>';
 $new_collection = get_access_collection($new_collection_id);
 $members = get_members_of_access_collection($new_collection_id, false);
 if ($members) {
@@ -82,6 +106,7 @@ if ($members) {
 	}
 	echo '</ul>';
 }
+*/
 echo '<div class="clearfloat"></div><br />';
 
 

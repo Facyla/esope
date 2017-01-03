@@ -378,6 +378,11 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:cron:ldap:done' => "CRON quotidien Inria LDAP...OK",
 	'theme_inria:cron:done' => "CRON quotidien Inria...OK",
 	
+	// New ACLs
+	'profiletype:inria' => "Inria seulement",
+	
+	
+	
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
 	

@@ -383,6 +383,8 @@ Here is the new profile page : %s
 	'theme_inria:groups:entity_menu:singular' => "%s members (%s active)",
 	'theme_inria:groups:entity_menu:none' => "%s member (%s active)",
 	
+	// New ACLs
+	'profiletype:inria' => "Inria seulement",
 	
 	
 	// Translation override
