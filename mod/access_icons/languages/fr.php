@@ -66,22 +66,25 @@ return array(
 	'access_icons:private:details' => "PRIVÉE : elle n'est accessible par son auteur, ou par un administrateur (du site ou du groupe dans lequel elle est publiée).",
 	
 	// Members access level (1)
-	'access_icons:members:details' => "RÉSERVÉE AUX MEMBRES DU SITE : c'est-à-dire que tous les membres du site peuvent y accéder (ils doivent pour cela être connectés).",
+	'access_icons:members:details' => "RÉSERVÉ AUX MEMBRES DU SITE : c'est-à-dire que tous les membres du site peuvent y accéder (ils doivent pour cela être connectés).",
 	
 	// Public access level (2)
 	'access_icons:public:details' => "PUBLIQUE : toute personne disposant du lien vers cette page peut y accéder sans avoir besoin de s'identifier sur le site (elle peut donc être indexée par les moteurs de recherche).",
 	
 	// Friends access level (-2)
-	'access_icons:friends:details' => "RÉSERVÉE AUX CONTACS DE L'AUTEUR : seuls les contacts de l'auteur peuvent y accéder.",
+	'access_icons:friends:details' => "RÉSERVÉ AUX CONTACS DE L'AUTEUR : seuls les contacts de l'auteur peuvent y accéder.",
 	
 	// Group access level (>2, owned by a group)
-	'access_icons:group:details' => "RÉSERVÉE AUX MEMBRES DU GROUPE : seuls les membres de ce groupe peuvent y accéder.",
+	'access_icons:group:details' => "RÉSERVÉ AUX MEMBRES DU GROUPE : seuls les membres de ce groupe peuvent y accéder.",
+	
+	// Site access level (>2, owned by a site)
+	'access_icons:site:details' => "RÉSERVÉ À UNE LISTE D'ACCÈS SPÉCIALE : seuls les membres de cette liste d'accès spéciale peuvent y accéder.",
 	
 	// Collection access level (>2, owned by a user)
-	'access_icons:collection:details' => "RÉSERVÉE A UNE LISTE : seuls les membres d'une liste de contacts de l'auteur peuvent y accéder.",
+	'access_icons:collection:details' => "RÉSERVÉ A UNE LISTE : seuls les membres d'une liste de contacts de l'auteur peuvent y accéder.",
 	
 	// Other / unkwnown access level (>2, owned none or other entity)
-	'access_icons:other:details' => "RÉSERVÉE A CERTAINS MEMBRES : seuls certains membres et/ou types de membres peuvent y accéder.",
+	'access_icons:other:details' => "RÉSERVÉ A CERTAINS MEMBRES : seuls certains membres et/ou types de membres peuvent y accéder.",
 	
 	// Access levels
 	'access:-2' => 'Contacts',

@@ -77,6 +77,9 @@ return array(
 	// Group access level (>2, owned by a group)
 	'access_icons:group:details' => "RESTRICTED TO GROUP MEMBERS : only the members of the group can read it.",
 	
+	// Site access level (>2, owned by a site)
+	'access_icons:site:details' => "RESTRICTED TO A SPECIAL ACCESS LIST : only the members of that custom access list can read it.",
+	
 	// Collection access level (>2, owned by a user)
 	'access_icons:collection:details' => "RESTRICTED TO A CUSTOM ACCESS LIST : only the members of a custom access list of the owner can access it.",
 	

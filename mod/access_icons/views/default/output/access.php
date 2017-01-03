@@ -90,6 +90,9 @@ switch($access_id) {
 		} else if (elgg_instanceof($collection_owner, 'user')) {
 			$help_details = elgg_echo('access_icons:collection:details');
 			$access_class .= ' elgg-access-collection';
+		} else if (elgg_instanceof($collection_owner, 'site')) {
+			$help_details = elgg_echo('access_icons:site:details');
+			$access_class .= ' elgg-access-site';
 		} else {
 			// Container inconnu, typiquement car pas d'accès suffisant
 			$help_details = elgg_echo('access_icons:other:details');
