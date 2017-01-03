@@ -235,7 +235,7 @@ function access_collections_add_read_acl($hook, $type, $access_array, $params) {
 	foreach($collections as $collection) {
 		// @TODO Check if member is owner or member of collection ?
 		// Avoid duplicates
-		$custom_collections[$user_guid][] = $collection->name;
+		$custom_collections[$user_guid][] = elgg_echo($collection->name);
 	}
 	*/
 	
@@ -278,7 +278,7 @@ function access_collections_add_write_acl($hook, $type, $access_array, $params) 
 			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
 			$result = get_data_row($query);
 			if ($result) {
-				$custom_collections[$user_guid][$collection->id] = $collection->name;
+				$custom_collections[$user_guid][$collection->id] = elgg_echo($collection->name);
 			}
 		}
 	}
@@ -290,7 +290,7 @@ function access_collections_add_write_acl($hook, $type, $access_array, $params) 
 	
 	foreach($collections as $collection) {
 		// @TODO Check if member is owner or member of collection ?
-		$custom_collections[$user_guid][$collection->id] = $collection->name;
+		$custom_collections[$user_guid][$collection->id] = elgg_echo($collection->name);
 	}
 	*/
 	
