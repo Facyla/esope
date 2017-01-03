@@ -32,6 +32,7 @@ $padding_left = '0';
 
 .elgg-menu-item-access { /* margin-top: -8px; */ }
 
+
 /* Listing des groupes : groupes ouverts et fermés (membership) */
 /*
 .elgg-menu-item-membership { height: 16px; width: 16px; overflow: hidden; color: transparent; }
@@ -39,24 +40,34 @@ $padding_left = '0';
 .membership-group-open { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
 .membership-group-closed { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
 
+
 /* Groupes ouverts et fermés (liste des contenus) */
 .elgg-access-group-open { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-open.png) no-repeat left 50%; }
 .elgg-access-group-closed { min-height:16px; padding-left:18px; background: transparent url(<?php echo $urlicon; ?>access-closed.png) no-repeat left 50%; }
 .shared_collection {  }
 
 
+
 /* Couleur par défaut : grisé */
 .elgg-access.elgg-access-default { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-default.png) no-repeat top left; }
+
 /* Public : noir et ouvert */
 .elgg-access.elgg-access-public { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-public.png) no-repeat top left; }
+
 /* Membres : vert et fermé */
 .elgg-access.elgg-access-members { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-members.png) no-repeat top left; }
+/* Site = accès spéciaux génériques */
+.elgg-access.elgg-access-site { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-site.png) no-repeat top left; }
+
 /* Groupe : bleu et fermé */
 .elgg-access.elgg-access-group { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-group.png) no-repeat top left; }
+
 /* Contacts : orange et fermé */
 .elgg-access.elgg-access-friends { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-friends.png) no-repeat top left; }
+
 /* Liste de contacts : jaune et fermé */
 .elgg-access.elgg-access-collection { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-collection.png) no-repeat top left; }
+
 /* Privé : rouge et fermé */
 .elgg-access.elgg-access-private { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-private.png) no-repeat top left; }
 /* Brouillon : idem privé car le contenu est forcément privé */
