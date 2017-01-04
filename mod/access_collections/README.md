@@ -23,8 +23,9 @@ They can also be defined based on user properties, metadata and/or relationships
 
 
 
-## Developper notes : 
- * Limitation : only collections owners can see the name of the collections ; this applies to all custom ACLs - see http://reference.elgg.org/1.12/AccessCollections_8php_source.html#l00808
+## Developper notes and limitations : 
+ * Only collections owners can see the name of the collections ; this applies to all custom ACLs - see http://reference.elgg.org/1.12/AccessCollections_8php_source.html#l00808   This issue is handled by plugin access_icons.
+ * Currently only collections based on metadata can have their members updated when metadata change. Developpers should register custom hooks to intercept any king of events that has an effect on collections members (properties, metadata, relationships).
 
 
 

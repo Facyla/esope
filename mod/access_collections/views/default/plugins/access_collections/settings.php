@@ -55,7 +55,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 			if ($vars['entity']->{'profiletype_'.$guid} == 'yes') {
 				if (!$collection) {
 					// Create collection
-					$new_collection_id = access_collections_profile_type_acl($guid);
+					$new_collection_id = access_collections_create_profile_type_acl($guid);
 					$collection = get_access_collection($new_collection_id);
 					system_message(elgg_echo('access_collections:acl:created'));
 				}
@@ -94,7 +94,7 @@ echo '<h3>' . elgg_echo('access_collections:collection:new') . '</h3>';
 echo '<p>' . elgg_echo('access_collections:upcomingfeature') . '</p>';
 /* Create special collection
 $criteria = array('metadata_name_value_pairs' => array('name' => 'custom_profile_type', 'value' => '724'));
-$new_collection_id = access_collections_custom_acl($criteria);
+$new_collection_id = access_collections_create_custom_acl($criteria);
 echo '<p>' . elgg_echo('access_collections:collection:newid', array($new_collection_id)) . '</p>';
 
 // View special collection members
