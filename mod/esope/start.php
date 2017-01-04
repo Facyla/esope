@@ -1006,11 +1006,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return $profile_type;
 	}
 	
-	/* Returns guid for a specific profile type (false if not found) */
-	function esope_get_profiletype_guid($profiletype) {
+	/* Returns guid for a specific profile type name (false if not found) */
+	function esope_get_profiletype_guid($profiletype_name) {
 		$profile_types = esope_get_profiletypes();
 		if ($profile_types) foreach ($profile_types as $guid => $name) {
-			if ($name == $profiletype) { return $guid; }
+			if ($name == $profiletype_name) { return $guid; }
 		}
 		return false;
 	}
@@ -1036,7 +1036,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 		}
 		return false;
 	}
-	/* Returns all profile types as $profiletype_guid => $profiletype_name
+	/* Returns all profile types as array of $profiletype_guid => $profiletype_name
 	 * Can also return translated name (for use in a dropdown input)
 	 * And also use metadata name as key (only when using translated name)
 	 */
