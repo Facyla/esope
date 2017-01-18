@@ -177,5 +177,6 @@ echo elgg_view('css', $vars);
 // ESOPE : CSS complémentaire configurable
 $config_css = elgg_get_plugin_setting('css', 'esope');
 if (!empty($config_css)) {
-	echo "\n<style>" . html_entity_decode($config_css) . "</style>\n";
+	echo "\n" . html_entity_decode($config_css) . "\n";
 }
+
