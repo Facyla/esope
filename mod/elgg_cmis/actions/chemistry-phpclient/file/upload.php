@@ -1,14 +1,25 @@
 <?php
-error_log("CMIS : backend mode - file upload");
-elgg_load_library('elgg:elgg_cmis');
 
-// Inria : do not add river entry for images
+// Check that all conditions are met to use CMIS
+$use_cmis = true;
+
+// Load libraries (and get base page handler include path)
+$vendor = elgg_cmis_vendor();
+$base = elgg_cmis_libraries();
+
+if (!elgg_cmis_is_valid_repo()) { $use_cmis = false; }
+if (!elgg_cmis_get_session()) { $use_cmis = false; }
+
 /* CMIS : upload to CMIS repository
  * @TODO : handle deletion
  * @TODO : create folder structure
  * @TODO : 
  * @TODO : 
  */
+
+// CMIS config
+$base_path = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/");
+
 
 /**
  * Elgg file uploader/edit action
@@ -91,7 +102,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$prefix = "file/";
 
-	// @TODO CMIS : remove previous file (or will simple update add to history ?)
+	// @TODO CMIS : handle new version instead of removing file
 	// if previous file, delete it
 	if (!$new_file) {
 		$filename = $file->getFilenameOnFilestore();
@@ -100,8 +111,6 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		}
 	}
 	
-	
-	// @TODO CMIS : remove previous file (or will simple update add to history ?)
 	$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
 
 	$file->setFilename($prefix . $filestorename);
@@ -111,14 +120,26 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	$file->setMimeType($mime_type);
 	$file->simpletype = elgg_get_file_simple_type($mime_type);
 
-	// Open the file to guarantee the directory exists
-	$file->open("write");
-	$file->close();
-	// Elgg filestore method
-	move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
-	// CMIS method
-	$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
-	$file->cmis_id = $return->id;
+	// Try using filestore first, if unavailable use Elgg method
+	// Note : unless thumbnails support is implemented, avoid storing images on CMIS filestore
+	//if ($use_cmis) {
+	if ($use_cmis && $file->simpletype != "image") {
+		// CMIS method
+		// elgg_cmis_create_document($path, $name = '', $content = null, $version = false, $params = array())
+		$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
+		if ($return) {
+			$file->cmis_id = $return->id;
+			$file->cmis_path = $file->getFilenameOnFilestore() . $filestorename;
+		}
+	}
+	
+	// Cannot use CMIS or CMIS upload failed: use Elgg filestore method
+	if (!$use_cmis || !$return) {
+		// Open the file to guarantee the directory exists
+		$file->open("write");
+		$file->close();
+		move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
+	}
 	
 	
 	// @TODO CMIS : create thumbnails ? (or should CMIS handle only non-images files ?)
@@ -161,6 +182,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		foreach ($sizes as $size => $data) {
 			$filename = $file->{$data['metadata_name']};
 			if ($filename !== null) {
+				// @TODO CMIS : remove thumbnails to CMIS filestore
 				$thumb->setFilename($filename);
 				$thumb->delete();
 				unset($file->{$data['metadata_name']});
@@ -172,7 +194,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$jpg_filename = pathinfo($filestorename, PATHINFO_FILENAME) . '.jpg';
 
-	// Generate image thumbnails
+	// @TODO CMIS Generate image thumbnails
 	if ($guid && $file->simpletype == "image") {
 		$file->icontime = time();
 
@@ -184,6 +206,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				break;
 			}
 
+			// @TODO CMIS : upload thumbnails to CMIS filestore
 			$filename = "{$prefix}{$data['filename_prefix']}{$jpg_filename}";
 			$thumb->setFilename($filename);
 			$thumb->open("write");
@@ -208,15 +231,12 @@ if ($new_file) {
 	if ($guid) {
 		$message = elgg_echo("file:saved");
 		system_message($message);
-		// Inria : do not add river entry for images
-		if ($file->simpletype != "image") {
-			elgg_create_river_item(array(
-				'view' => 'river/object/file/create',
-				'action_type' => 'create',
-				'subject_guid' => elgg_get_logged_in_user_guid(),
-				'object_guid' => $file->guid,
-			));
-		}
+		elgg_create_river_item(array(
+			'view' => 'river/object/file/create',
+			'action_type' => 'create',
+			'subject_guid' => elgg_get_logged_in_user_guid(),
+			'object_guid' => $file->guid,
+		));
 	} else {
 		// failed to save file object - nothing we can do about this
 		$error = elgg_echo("file:uploadfailed");

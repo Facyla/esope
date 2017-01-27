@@ -110,13 +110,13 @@ function elgg_cmis_list_objects($objs = false, $debug = false) {
 
 
 
-/* Envoi d'un fichier sur le repository
- * $file : file content
- * $name : file name
- * $path : relative path where file should be stored
- * $mime : MIME type
+/** Get client session (and create it if needed)
+ * @return $session
  */
-function elgg_cmis_upload_file($file, $name, $path, $mime) {
+function elgg_cmis_get_session() {
+	static $client = false;
+	if ($client) { return $client; }
+	
 	elgg_load_library('elgg:elgg_cmis:chemistry');
 	
 	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
@@ -128,14 +128,28 @@ function elgg_cmis_upload_file($file, $name, $path, $mime) {
 	$repo_folder = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/Applications SI/iris/");
 	
 	// Avant tout appel, on devrait tester si l'URL est valide/active, et indiquer un pb d'inaccessibilité ou interruption de service
-	$is_valid_repo = @fopen($cmis_service_url, 'r');
-	if (!$is_valid_repo) {
+	if (!elgg_cmis_is_valid_repo()) {
 		register_error("URL CMIS erronnée, ou service indisponible");
 		return false;
 	}
 	
 	// Start CMIS Service client
 	$client = new CMISService($repo_url, $repo_username, $repo_password);
+	if ($client) { return $client; }
+	
+	return false;
+}
+
+
+/* Envoi d'un fichier sur le repository
+ * $file_content : file content
+ * $name : file name
+ * $path : relative path where file should be stored
+ * $mime : MIME type
+ */
+function elgg_cmis_upload_file($file_content, $name, $path, $mime) {
+	// Start CMIS Service client
+	$client = elgg_cmis_get_session();
 	
 	// Get (navigate to) folder
 	$myfolder = $client->getObjectByPath($repo_folder);
@@ -143,11 +157,9 @@ function elgg_cmis_upload_file($file, $name, $path, $mime) {
 	// @TODO create subfolders if needed
 	
 	// Create new file
-	$obs = $client->createDocument($myfolder->id, $name, array(), $file, $mime);
+	$obs = $client->createDocument($myfolder->id, $name, array(), $file_content, $mime);
 	
 	return $obs;
 }
-
-
 
 

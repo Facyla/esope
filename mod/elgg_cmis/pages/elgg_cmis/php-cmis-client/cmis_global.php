@@ -143,7 +143,7 @@ $session = elgg_cmis_get_session();
 
 if (!$session) {
 	$content .= 'WARNING : required parameters are missing, or service is unavailable - please <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>';
-	$content = $tests_content . '<hr />' . $content;
+	$content = $tests_content . '<div class="clearfloat"></div><hr />' . $content;
 	// Display content
 	if (!empty($content)) {
 		if ($embed_mode == 'elgg') {
@@ -162,38 +162,52 @@ $rootFolder = elgg_cmis_get_folder('/', false);
 //$folder = $session->getObjectByPath($base_path);
 $folder = elgg_cmis_get_folder($base_path, false);
 
+// Reusable test vars
+$new_file_name = 'Nouveau_fichier.txt';
+$new_folder_name = 'Nouveau dossier';
+//$new_file_content = "THIS IS A NEW DOCUMENT"; // raw data won't pass
+// Content should be a stream (unless we can pass something else)
+$new_file_content = \GuzzleHttp\Stream\Stream::factory(fopen(elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/README.md', 'r'));
+$new_file_content2 = \GuzzleHttp\Stream\Stream::factory("Some text or other string data");
 
 
 // OK - List repositories
 if ($tests['list_repo']) {
+	esope_dev_profiling("list_repo");
 	$content .= '<h3>List repositories</h3>';
 	$temp = elgg_cmis_list_repositories();
 	if (empty($temp)) { $tests_content .= 'List repositories : <strong style="color:darkred;">FAILED</strong><br />'; } else { $tests_content .= 'List repositories : <strong style="color:darkgreen;">OK</strong><br />'; }
 	$content .= $temp;
+	esope_dev_profiling("list_repo");
 } else { $tests_content .= 'List repositories : <em>not tested</em><br />'; }
 
 // OK - List files and folders in a repository
 if ($tests['list_root']) {
+	esope_dev_profiling("list_root");
 	$content .= '<h3>List root repository content (files and folders)</h3>';
 	$temp = elgg_cmis_list_folder_content($rootFolder, 1, false);
 	if (empty($temp)) { $tests_content .= 'List root content : <strong style="color:darkred;">FAILED</strong><br />'; } else { $tests_content .= 'List root content : <strong style="color:darkgreen;">OK</strong><br />'; }
 	$content .= $temp;
+	esope_dev_profiling("list_root");
 } else { $tests_content .= 'List root content : <em>not tested</em><br />'; }
 
 // OK - List files in arbitrary folder
 if ($tests['list_folder']) {
+	esope_dev_profiling("list_folder");
 	$content .= '<h3>List folder content (files and folders)</h3>';
 	$temp = elgg_cmis_list_folder_content($folder, 1, false);
 	if (empty($temp)) { $tests_content .= 'List folder content : <strong style="color:darkred;">FAILED</strong><br />'; } else { $tests_content .= 'List folder content : <strong style="color:darkgreen;">OK</strong><br />'; }
 	$content .= $temp;
+	esope_dev_profiling("list_folder");
 } else { $tests_content .= 'List folder content : <em>not tested</em><br />'; }
 
 
 // Create or get new folder in arbitrary folder
 if ($tests['create_folder']) {
+	esope_dev_profiling("create_folder");
 	$content .= '<h3>Create new folder</h3>';
-	//$new_folder = elgg_cmis_create_folder($folder, "Nouveau dossier");
-	$new_folder = elgg_cmis_get_folder($base_path . 'Nouveau dossier', true);
+	//$new_folder = elgg_cmis_create_folder($folder, $new_folder_name);
+	$new_folder = elgg_cmis_get_folder($base_path . $new_folder_name, true);
 	if ($new_folder) {
 		$content .= "Folder exists or has  been created. Id: " . $new_folder->getId() . "<br />";
 		$tests_content .= 'Create folder : <strong style="color:darkgreen;">OK</strong><br />';
@@ -201,24 +215,25 @@ if ($tests['create_folder']) {
 		$content .= "ERROR : folder could not be created and does not exist<br />";
 		$tests_content .= 'Create folder : <strong style="color:darkred;">FAILED</strong><br />';
 	}
+	esope_dev_profiling("create_folder");
 } else { $tests_content .= 'Create folder : <em>not tested</em><br />'; }
 
 // Create file in arbitrary folder
 if ($tests['create_file']) {
+	esope_dev_profiling("create_file");
 	$content .= '<h3>Create new file</h3>';
-	//$new_file_content = "THIS IS A NEW DOCUMENT"; // raw data won't pass'
+	//$new_file_content = "THIS IS A NEW DOCUMENT"; // raw data won't pass
 	// Content should be a stream (unless we can pass something else)
-	$new_file_content = \GuzzleHttp\Stream\Stream::factory(fopen(elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/README.md', 'r'));
 	// @TODO Load file from Elgg datastore
 	// @TODO Load file from string content
 	// @TODO Load file from upload
 	// Note : do not try to create new version for testing purposes
-	$new_file = elgg_cmis_create_document($folder->getPath(), "Nouveau_fichier.txt", $new_file_content, false);
+	$new_file = elgg_cmis_create_document($folder->getPath(), $new_file_name, $new_file_content, false);
 	if ($new_file) {
 		$content .= "File created. Id: " . $new_file->getId() . "<br />";
 		$tests_content .= 'Create file : <strong style="color:darkgreen;">OK</strong><br />';
 	} else {
-		$new_file = elgg_cmis_get_document($base_path . "Nouveau_fichier.txt");
+		$new_file = elgg_cmis_get_document($base_path . $new_file_name);
 		if ($new_file) {
 			$content .= "File already exists. Id: " . $new_file->getId() . "<br />";
 			$tests_content .= 'Create file : <strong style="color:darkgreen;">OK</strong> (from previous test)<br />';
@@ -227,11 +242,13 @@ if ($tests['create_file']) {
 			$content .= "ERROR : file could not be created and does not exist<br />";
 		}
 	}
+	esope_dev_profiling("create_file");
 } else { $tests_content .= 'Create file : <em>not tested</em><br />'; }
 
 
 // Edit file properties
 if ($tests['update_file']) {
+	esope_dev_profiling("update_file");
 	$content .= '<h3>Update file</h3>';
 	$properties = array(\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'Updated on ' . time());
 	$new_file = elgg_cmis_update_document($new_file, $properties);
@@ -242,14 +259,15 @@ if ($tests['update_file']) {
 		$content .= "ERROR : No file, could not be updated !<br />";
 		$tests_content .= 'Update file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
+	esope_dev_profiling("update_file");
 } else { $tests_content .= 'Update file : <em>not tested</em><br />'; }
 
 // Create new version of file / document
 if ($tests['version_file']) {
-	$content .= '<h3>TODO Version file</h3>';
-	$new_file_content = \GuzzleHttp\Stream\Stream::factory(fopen(elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/README.md', 'r'));
-	$new_file = elgg_cmis_version_document($folder->getPath() . "/Nouveau_fichier.txt", rand(0,1), $new_file_content, array());
-	//$new_file = elgg_cmis_create_document($folder->getPath(), "Nouveau_fichier.txt", $new_file_content, true);
+	esope_dev_profiling("version_file");
+	$content .= '<h3>Version file</h3>';
+	$new_file = elgg_cmis_version_document($folder->getPath() . "/$new_file_name", rand(0,1), $new_file_content2, array());
+	//$new_file = elgg_cmis_create_document($folder->getPath(), "$new_file_name", $new_file_content2, true);
 	if ($new_file) {
 		// Versions
 		$content .= "The following versions of " . $new_file->getName() . " are now stored in the repository:<br />";
@@ -264,13 +282,15 @@ if ($tests['version_file']) {
 	} else {
 		$tests_content .= 'Version file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
+	esope_dev_profiling("version_file");
 } else { $tests_content .= "Version file : <em>not tested</em><br />"; }
 
 // Move file to new folder
 if ($tests['move_file']) {
+	esope_dev_profiling("move_file");
 	$content .= '<h3>Move file</h3>';
-	if (!$new_file) { $new_file = elgg_cmis_get_document($base_path . "Nouveau_fichier.txt", true); }
-	$new_file = elgg_cmis_move_document($new_file, $base_path, $base_path . "Nouveau dossier");
+	if (!$new_file) { $new_file = elgg_cmis_get_document($base_path . $new_file_name, true); }
+	$new_file = elgg_cmis_move_document($new_file, $base_path, $base_path . $new_folder_name);
 	if ($new_file) {
 		$content .= "File has been moved. Id: " . $new_file->getId() . "<br />";
 		$tests_content .= 'Move file : <strong style="color:darkgreen;">OK</strong><br />';
@@ -278,6 +298,7 @@ if ($tests['move_file']) {
 		$content .= "ERROR : " . $e->getMessage() . "<br />";
 		$tests_content .= 'Move file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
+	esope_dev_profiling("move_file");
 } else { $tests_content .= 'Move file : <em>not tested</em><br />'; }
 
 
@@ -324,70 +345,59 @@ if ($tests['send_file']) {
 
 // Delete file
 if ($tests['delete_file']) {
+	esope_dev_profiling("delete_file");
 	$content .= '<h3>Delete file</h3>';
-	if (elgg_cmis_delete_folder($new_file)) {
-		$content .= "File has been deleted.<br />";
+	// Remove all created test files
+	$new_file = elgg_cmis_get_document($base_path . $new_file_name);
+	if ($new_file && elgg_cmis_delete_document($new_file)) {
+		$content .= "$base_path$new_file_name has been deleted.<br />";
 		$tests_content .= 'Delete file : <strong style="color:darkgreen;">OK</strong><br />';
 	} else {
-		$content .= "ERROR : no file, could not be deleted !<br />";
-		$tests_content .= 'Delete file : <strong style="color:darkred;">FAILED</strong><br />';
+		$content .= "ERROR : no file or could not be deleted !<br />";
+		$tests_content .= 'Delete new file : <strong style="color:darkred;">FAILED</strong><br />';
 	}
-} else { $tests_content .= 'Delete file : <em>not tested</em><br />'; }
+	// Removed moved file
+	$new_file = elgg_cmis_get_document($base_path . $new_folder_name . '/' . $new_file_name);
+	if ($new_file && elgg_cmis_delete_document($new_file)) {
+		$content .= "$base_path$new_folder_name$new_file_name has been deleted.<br />";
+		$tests_content .= 'Delete file : <strong style="color:darkgreen;">OK</strong><br />';
+	} else {
+		$content .= "ERROR : no file or could not be deleted !<br />";
+		$tests_content .= 'Delete moved file : <strong style="color:darkred;">FAILED</strong><br />';
+	}
+	esope_dev_profiling("delete_file");
+} else { $tests_content .= 'Delete moved file : <em>not tested</em><br />'; }
 
 
 // Delete folder
 if ($tests['delete_folder']) {
+	esope_dev_profiling("delete_folder");
 	$content .= '<h3>Delete folder</h3>';
 	if (!$new_folder) {
 		$new_folder = $session->getObjectByPath($base_path. $repo_new_folder . '/');
 		$content .= "WARNING : No valid new folder, getting existing one if any<br />";
 		$tests_content .= 'Delete folder : WARNING => ';
 	}
-	if (elgg_cmis_delete_folder($new_folder)) {
+	// @TODO test if content inside folder
+	
+	if (elgg_cmis_delete_folder($new_folder, true)) {
 		$content .= "Folder deleted<br />";
 		$tests_content .= 'Delete folder : <strong style="color:darkgreen;">OK</strong><br />';
 	} else {
 		$content .= "ERROR : No folder, could not be deleted !<br />";
 		$tests_content .= 'Delete folder : <strong style="color:darkred;">FAILED</strong><br />';
 	}
+	esope_dev_profiling("delete_folder");
 } else { $tests_content .= 'Delete folder : <em>not tested</em><br />'; }
 
 
 
 
 
-// Checkin / checkout et versionning : pas avec ce client PHP (possible avec la lib de DKD)
-/*
-checkedout = $client->checkOut($obj->id);
-$client->checkIn($checkedout->id);
-*/
-
 
 // Arbitrary query
 // $objs = $client->query("select * from cmis:folder");
 
-
-// List folder content
-/*
-$objs = $client->getChildren($myfolder->id);
-if ($repo_debug) {
-	$content .= '<br />' . "Folder Children Objects<br />:<br />===========================================<br />";
-	print_r($objs);
-	$content .= '<br />' . "<br />===========================================<br /><br />";
-}
-foreach ($objs->objectList as $obj) {
-	if ($obj->properties['cmis:baseTypeId'] == "cmis:document") {
-		$content .= '<br />' . "Document: " . $obj->properties['cmis:name'] . "<br />";
-	} elseif ($obj->properties['cmis:baseTypeId'] == "cmis:folder") {
-		$content .= '<br />' . "Folder: " . $obj->properties['cmis:name'] . "<br />";
-	} else {
-		$content .= '<br />' . "Unknown Object Type: " . $obj->properties['cmis:name'] . "<br />";
-	}
-}
-
-$content .= elgg_cmis_list_objects_backend($objs);
-
-*/
 $content .= '<div class="clearfloat"></div><br />';
 
 
@@ -490,7 +500,7 @@ if ($repo_debug) {
 // DEBUG
 $tests_content .= '</div>';
 $tests_content .= '<div class="clearfloat"></div>';
-$content = $tests_content . '<hr />' . $content;
+$content = $tests_content . '<div class="clearfloat"></div><hr />' . $content;
 
 // Display content
 if (!empty($content)) {

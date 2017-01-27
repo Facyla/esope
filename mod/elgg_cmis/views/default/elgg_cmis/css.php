@@ -19,3 +19,8 @@
 .elgg-cmis-main iframe { height: 100%; width: 100%; }
 
 
+
+.elgg-cmis-file-info { border: 1px inset #ccc; margin: 0.5rem 0; padding: 0.5rem; }
+
+
+

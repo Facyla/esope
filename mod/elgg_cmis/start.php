@@ -16,6 +16,9 @@ function elgg_cmis_init(){
 	elgg_register_js('elgg_cmis:dialog', '/mod/elgg_cmis/vendors/cmis/soap/include/dialog.js', 'head');
 	elgg_load_js('elgg_cmis:dialog');
 	
+	// Add CMIS info to files
+	elgg_extend_view('object/file', 'elgg_cmis/extend_file');
+	
 	//elgg_load_js('lightbox');
 	//elgg_load_css('lightbox');
 	
@@ -50,6 +53,9 @@ function elgg_cmis_init(){
 		// If Backend mode enabled, override default action
 		elgg_unregister_action('file/upload');
 		elgg_register_action("file/upload", $action_url . "file/upload.php");
+		
+		// Also override file/download page handler to handle several filestores
+		elgg_register_plugin_hook_handler('route', 'file', 'elgg_cmis_file_download_handler');
 	}
 	
 	
@@ -154,6 +160,19 @@ function elgg_cmisembed_page_handler($page) {
 }
 
 
+// Page handler to provide file download using several filestores
+function elgg_cmis_file_download_handler($hook, $type, $returnvalue, $params) {
+	$segments = elgg_extract('segments', $returnvalue, array());
+
+	if (isset($segments[0]) && $segments[0] === 'download') {
+		set_input('guid', $segments[1]);
+		include_once elgg_get_plugins_path() . 'elgg_cmis/pages/file/download.php';
+		// Return false means "stop rendering, we've handled this request"
+		return false;
+	}
+}
+
+
 // Adds the required function for password encryption, in case the main plugin is not activated
 /*
 if (!elgg_is_active_plugin('esope') && !function_exists('esope_vernam_crypt')) {
@@ -170,6 +189,38 @@ if (!elgg_is_active_plugin('esope') && !function_exists('esope_vernam_crypt')) {
 	}
 }
 */
+
+
+// Tests if there is a valid CMIS repository (basic test)
+function elgg_cmis_is_valid_repo() {
+	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
+	$is_valid_repo = @fopen($cmis_url, 'r');
+	if ($is_valid_repo) { return true; }
+	return false;
+}
+
+
+// Checks if file exists in Elgg filestore
+function elgg_cmis_file_exists_in_elgg_filestore($file) {
+	if (!empty($file->getFilenameOnFilestore())) {
+		if (file_exists($file->getFilenameOnFilestore())) { return true; }
+	}
+	return false;
+}
+
+// Checks if file exists in CMIS filestore
+function elgg_cmis_file_exists_in_cmis_filestore($file) {
+	if (!empty($file->cmis_id)) {
+		$vendor = elgg_cmis_vendor();
+		$base = elgg_cmis_libraries();
+		if (elgg_cmis_is_valid_repo() && elgg_cmis_get_session()) {
+			$cmis_file = elgg_cmis_get_document_by_id($file->cmis_id);
+			if ($cmis_file) { return $cmis_file; }
+		}
+		register_error("Cannot use CMIS repository : unavailable or invalid settings.");
+	}
+	return false;
+}
 
 
 

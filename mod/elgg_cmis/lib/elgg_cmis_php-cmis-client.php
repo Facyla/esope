@@ -21,8 +21,15 @@ function elgg_cmis_get_session_parameters() {
 	$password = elgg_get_plugin_setting('cmis_password', 'elgg_cmis');
 	
 	// Avant tout appel, on devrait tester si l'URL est valide/active, et indiquer un pb d'inaccessibilité ou interruption de service
-	$is_valid_repo = @fopen($cmis_url, 'r');
-	if (!$is_valid_repo || empty($cmis_url) || empty($username) || empty($password)) { return false; }
+	if (empty($cmis_url) || empty($username) || empty($password)) {
+		register_error('WARNING : required parameters are missing, or CMIS service is unavailable - please <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
+		return false;
+	}
+	// Check that we have a valid repository
+	if (!elgg_cmis_is_valid_repo()) {
+		register_error('WARNING : CMIS service is unavailable - please <a href="' . $cmis_url . '">check URL ' . $cmis_url . '</a> manually or <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
+		return false;
+	}
 	
 	// Build parameters
 	$httpInvoker = new \GuzzleHttp\Client(array('defaults' => array('auth' => array($username, $password))));
@@ -54,6 +61,7 @@ function elgg_cmis_get_session() {
 	
 	// Get sessionFactory parameters (and respository if not set)
 	$parameters = elgg_cmis_get_session_parameters();
+	if (!$parameters) { return false; }
 	
 	// CMIS Service session factory
 	$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
@@ -96,7 +104,7 @@ function elgg_cmis_get_folder($path, $create_path = false) {
 		}
 		if ($folder) { return $folder; }
 	} catch (Exception $e) {
-		echo "elgg_cmis_get_folder $path  : " . $e->getMessage() . "<br />";
+		echo "elgg_cmis_get_folder $path  : " . $e->getMessage() . "<br />"; // debug
 		//echo print_r($e, true);
 	}
 	
@@ -119,14 +127,19 @@ function elgg_cmis_get_folder($path, $create_path = false) {
 }
 
 /** Get a document object
+ * Optionally creates the file and the full tree
  * @param $path : the wanted document path, from root, eg. /some/path/to/document
  * @param $create_path : create full path if not exists
  * @return : $folder object or false
  */
 function elgg_cmis_get_document($path, $create_document = false, $params = null) {
 	$session = elgg_cmis_get_session();
-	$document = $session->getObjectByPath($path);
-	if ($document) { return $document; }
+	try {
+		$document = $session->getObjectByPath($path);
+		if ($document) { return $document; }
+	} catch (Exception $e) {
+		error_log("CMIS exception elgg_cmis_get_document : " . $e->getMessage());
+	}
 	
 	// Not exists ? create full path from root to new folder
 	if ($create_document) {
@@ -151,11 +164,29 @@ function elgg_cmis_get_document($path, $create_document = false, $params = null)
 function elgg_cmis_list_folder_content($folder, $levels = 1, $max = false) {
 	$content = elgg_cmis_printFolderContent($folder, '-', $levels, $max);
 	if (!empty($content)) {
-		return '<p><em>Listing ' . $folder->getName() . ' on ' . $levels . ' tree levels (max ' . $max . ' items per folder)</em></p>' 
-			. $content;
+		return '<p><em>Listing ' . $folder->getName() . ' on ' . $levels . ' tree levels (max ' . $max . ' items per folder)</em></p>' . $content;
 	}
 	return false;
 }
+
+// Get a document by its CMIS id
+function elgg_cmis_get_document_by_id($id = '') {
+	if (!empty($id)) {
+		$session = elgg_cmis_get_session();
+		$id = $session->createObjectId($id);
+		try {
+			$document = $session->getObject($id);
+			//getContentStream
+			//getLatestDocumentVersion($document)
+			//getObject
+			if ($document) { return $document; }
+		} catch (Exception $e) {
+			error_log("CMIS exception in elgg_cmis_get_document_by_id : " . $e->getMessage());
+		}
+	}
+	return false;
+}
+
 
 /** Create new folder (if not exists)
  * @param $folder : a parent folder grabbed by $session->createObjectId($folder->getId());
@@ -186,10 +217,19 @@ function elgg_cmis_create_folder($path, $name = '') {
  * @param $params : document or new version params
  * @return : new folder object, or existing folder object
  */
-function elgg_cmis_create_document($path, $name = '', $content = null, $version = false, $params = array()) {
+function elgg_cmis_create_document($path = '', $name = '', $content = null, $version = false, $params = array()) {
 	$session = elgg_cmis_get_session();
-	$folder = elgg_cmis_get_folder($path);
-	$mime = "text/plain";
+	// Create prent path if needed
+	$folder = elgg_cmis_get_folder($path, true);
+	/*
+	$paths = explode('/', $path);
+	$paths = array_filter($paths); // remove empty values and keep folder names
+	$title = array_pop($paths);
+	$parent_path = '/' . implode('/', $paths) . '/';
+	$folder = elgg_cmis_get_folder($parent_path, true);
+	*/
+
+	$mime_type = elgg_extract('mime_type', $params, "text/plain");
 	$properties = array(
 			\Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'cmis:document',
 			\Dkd\PhpCmis\PropertyIds::NAME => $name
@@ -200,6 +240,7 @@ function elgg_cmis_create_document($path, $name = '', $content = null, $version 
 				$session->createObjectId($folder->getId()),
 				$content
 			);
+		//$document->setMimeType($mime_type);
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
 		// Create a new version
 		if ($version) {
@@ -268,9 +309,9 @@ function elgg_cmis_version_document($path, $major = false, $stream = false, $par
 }
 
 /** Move file / document to new folder
- * @param $document : a folder grabbed by $session->getRootFolder(); or $session->getObjectByPath($path);
- * @param $folder : a folder grabbed by $session->getRootFolder(); or $session->getObjectByPath($path);
- * @param $new_folder : a folder grabbed by $session->getRootFolder(); or $session->getObjectByPath($path);
+ * @param $document : a document grabbed by $session->getObjectByPath($path);
+ * @param $folder : a folder path (/some/path/to/folder/)
+ * @param $new_folder : a folder path (idem)
  * @return : false|new document object
  */
 function elgg_cmis_move_document($document, $path, $new_path) {
@@ -289,11 +330,17 @@ function elgg_cmis_move_document($document, $path, $new_path) {
 /** Delete a file / document
  * @param $document : a document
  */
-function elgg_cmis_delete_document($document) {
+function elgg_cmis_delete_document($document, $all_versions = true) {
 	$session = elgg_cmis_get_session();
+	$document = $session->getObject($document);
 	if ($document !== null) {
 		$document = $session->getObject($document);
-		if ($folder->delete(true)) { return true; }
+		try {
+			//$document->delete($all_versions);
+			$session->delete($document, $all_versions);
+			return true;
+		} catch (Exeption $e) {
+		}
 	}
 	return false;
 }
@@ -307,10 +354,15 @@ function elgg_cmis_delete_folder($folder, $recursive = false) {
 	if ($folder !== null) {
 		/** @var FolderInterface $folder */
 		$folder = $session->getObject($folder);
-		if ($folder->delete(true)) { return true; }
+		if ($recursive) {
+			if ($folder->deleteTree(true)) { return true; }
+		} else {
+			if ($folder->delete(true)) { return true; }
+		}
 	}
 	return false;
 }
+
 
 
 
@@ -458,47 +510,6 @@ function elgg_cmis_list_objects($objs = false, $debug = false) {
 	$return .= elgg_make_list_from_path($folder_data);
 	return $return;
 }
-
-
-
-/* Envoi d'un fichier sur le repository
- * $document : file content
- * $name : file name
- * $path : relative path where file should be stored
- * $mime : MIME type
- */
-function elgg_cmis_upload_file($document, $name, $path, $mime) {
-	elgg_load_library('elgg:elgg_cmis:chemistry');
-	
-	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
-	$atom_url = elgg_get_plugin_setting('cmis_atom_url', 'elgg_cmis');
-	$repo_url = $cmis_url . $atom_url;
-	$cmis_service_url = $cmis_url . 'service/cmis/index.html';
-	$repo_username = elgg_get_plugin_setting('cmis_username', 'elgg_cmis');
-	$repo_password = elgg_get_plugin_setting('cmis_password', 'elgg_cmis');
-	$repo_folder = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/Applications SI/iris/");
-	
-	// Avant tout appel, on devrait tester si l'URL est valide/active, et indiquer un pb d'inaccessibilité ou interruption de service
-	$is_valid_repo = @fopen($cmis_service_url, 'r');
-	if (!$is_valid_repo) {
-		register_error("URL CMIS erronnée, ou service indisponible");
-		return false;
-	}
-	
-	// Start CMIS Service client
-	$client = new CMISService($repo_url, $repo_username, $repo_password);
-	
-	// Get (navigate to) folder
-	$myfolder = $client->getObjectByPath($repo_folder);
-	
-	// @TODO create subfolders if needed
-	
-	// Create new file
-	$obs = $client->createDocument($myfolder->id, $name, array(), $document, $mime);
-	
-	return $obs;
-}
-
 
 
 
