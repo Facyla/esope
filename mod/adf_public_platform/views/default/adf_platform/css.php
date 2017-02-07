@@ -501,8 +501,7 @@ section div.module header ul li a { float: left; margin-left: 6px; margin:0; rig
 
 section div.module div.activites { background-color: #fff; float: left; padding-top: 5px; width: 300px; }
 section div.module div.activites h3 { margin: 5px 7px; font-size: 1.1em; color: #333333; float: left; font-size: 1em; }
-section div.module div.activites ul li { padding-bottom: 1px; }
-section div.module div.activites ul li img { margin: 0 5px 0 7px; }
+section div.module div.activites ul li { padding-bottom: 1px; margin: 0px 4px 1px 0; }
 section div.module div.activites ul li div span { color: #666; font-style: italic; }
 
 /* Widgets activité des groupes */
@@ -704,7 +703,7 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 /* Small */
 .elgg-avatar-small .profiletype-status { position: absolute; border: 1px solid transparent; width: 40px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
-.elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white; }
+.elgg-avatar-small .profiletype-status-closed { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white !important; }
 .elgg-avatar-small .profiletype-status-no-mail { position: absolute; width: 100%; height: auto; line-height: 1; margin: 0; text-align: center; background: rgba(255,0,0,0.6); font-size: 0.7rem; font-weight: bold; text-transform: initial; color: white !important; }
 
 /* Tiny */
