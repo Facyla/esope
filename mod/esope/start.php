@@ -2672,6 +2672,7 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 	static $last_ts = false;
 	static $last_mem = false;
+	static $last_num = 0;
 	
 	if (!$last_ts) { $last_ts = microtime(TRUE); }
 	if (!$last_mem) { $last_mem = memory_get_usage(); }
@@ -2685,9 +2686,11 @@ function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 	if ($delta_mem > 0) { $delta_mem = "+$delta_mem"; }
 	$last_mem = $mem;
 	
-	$return = "$ts $prefix : $delta_mem MB " . round($delta_ts, 4) . " s  &nbsp; " . round($mem/1000000) . " MB";
-
-echo $return . '<br />';
+	$return = "$ts $prefix $last_num : $delta_mem MB " . round($delta_ts, 4) . " s  --> " . round($mem/1000000) . " MB";
+	//echo $return . '<br />';
+	
+	$last_num++;
+	
 	if ($error_log) {
 		error_log($return);
 		return true;

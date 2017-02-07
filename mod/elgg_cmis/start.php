@@ -193,6 +193,9 @@ if (!elgg_is_active_plugin('esope') && !function_exists('esope_vernam_crypt')) {
 
 // Tests if there is a valid CMIS repository (basic test)
 function elgg_cmis_is_valid_repo() {
+	static $is_valid_repo = null;
+	if (!is_null($is_valid_repo)) { return $is_valid_repo; }
+	
 	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
 	// Note : use context to limit timeout to a short ping (also the timeout is doubled)
 	$context = stream_context_create(array(

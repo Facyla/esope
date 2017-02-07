@@ -1,6 +1,9 @@
 <?php
-
-// @TODO handle versionning - which means not using ts in filestore when updating a document
+/* CMIS : upload to CMIS repository
+ * @TODO : set up version-safe folder structure - this means not using ts nor filename-dependent path in filestore
+ * @TODO : add versionning
+ * Inria : do not add river entry for images
+ */
 
 // Check that all conditions are met to use CMIS
 $use_cmis = true;
@@ -13,17 +16,8 @@ if ($use_cmis) {
 	$vendor = elgg_cmis_vendor();
 	$base = elgg_cmis_libraries();
 	
-	if (!elgg_cmis_is_valid_repo()) { $use_cmis = false; }
-	if (!elgg_cmis_get_session()) { $use_cmis = false; }
+	if (!elgg_cmis_is_valid_repo() || !elgg_cmis_get_session()) { $use_cmis = false; }
 	
-	// Inria : do not add river entry for images
-	/* CMIS : upload to CMIS repository
-	 * @TODO : handle deletion
-	 * @TODO : create folder structure
-	 * @TODO : 
-	 * @TODO : 
-	 */
-
 	// CMIS config
 	$base_path = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/");
 }
@@ -111,7 +105,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	// @TODO CMIS : handle new version instead of removing file
 	// if previous file, delete it
-	if (!$new_file) {// CMIS : keep original file name (for versionning)
+	if (!$new_file) {
+		// CMIS : keep original file name (for versionning)
 		$file_name = substr($file->getFilename(), strlen($prefix));
 		$filename = $file->getFilenameOnFilestore();
 		if (file_exists($filename)) {
@@ -128,24 +123,45 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	$file->setMimeType($mime_type);
 	$file->simpletype = elgg_get_file_simple_type($mime_type);
 
-	// Try using filestore first, if unavailable use Elgg method
+	// Try using CMIS filestore first, if unavailable fallback to Elgg method
+	// Note : unless thumbnails support is implemented, avoid storing images on CMIS filestore
 	// Inria : do not store images on CMIS filestore
-	// @TODO Keep versions of a document into the same store ?
-	//if ($use_cmis && (($file->simpletype != "image") || ($new_file))) {
-	if ($use_cmis && ($file->simpletype != "image")) {
-		// CMIS method
+	// @TODO Keep versions of a document into the same store ? (even if file type changed)
+	if ($use_cmis && $file->simpletype != "image") {
+		// Save first file object to database, because we need the GUID to forge the CMIS filepath (has to be unique and should not change)
+		$guid = $file->save();
+
+		// CMIS method (dkd PHP CMIS Client)
 		if ($vendor == 'php-cmis-client') {
+			// Relative path in CMIS filestore (similar to Elgg filestore structure)
 			$file_path = new \Elgg\EntityDirLocator($file->owner_guid);
 			$file_path = $base_path . $file_path . 'file/';
-			//$file_name = $filestorename;
-			// Use existing file if already stored
-			// @TODO : versionning still not working yet because of file name changes
-			if ($new_file) { $file_name = $file->getFilename(); }
+			// File name on filestore should never change, but file name, content and type can change afterwards
+			// So use a content-agnostic naming, so we can reuse existing file if already stored
+			if ($new_file) {
+				$filestorename = $guid . '_' . time(); // do we need ts ?
+				$file_name = $filestorename;
+			} else {
+				// Get old file name
+				$cmis_path = explode('/', $file->cmis_path);
+				$file_name = array_pop($cmis_path);
+				// Note : if owner changes, file path will change so we should move CMIS file first
+				$old_file_path = implode('/', $cmis_path);
+			}
 			$file_content = file_get_contents($_FILES['upload']['tmp_name']);
 			$file_content = \GuzzleHttp\Stream\Stream::factory($file_content);
-			$file_version = true; // create new version
+			// Create new version for file
+			$file_version = true;
 			$file_params = array('mime_type' => $mime_type);
-			$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+			if ($new_file || ($file_path == $old_file_path)) {
+				$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+			} else {
+				// Move first to new path
+				$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
+				$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
+				// Then update version
+				$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+			}
 			if ($return) {
 				$file->cmis_id = $return->getId();
 				$file->cmis_path = $file_path . $file_name;
@@ -160,22 +176,27 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		}
 	}
 	
-	// Cannot use CMIS or CMIS upload failed: use Elgg filestore method
+	// Use Elgg filestore if not using CMIS, or if CMIS upload failed
 	if (!$use_cmis || !$return) {
 		// Open the file to guarantee the directory exists
 		$file->open("write");
 		$file->close();
 		move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
-		// Should we clean old CMIS metadata ?
+		// Should we clean old CMIS metadata ? (no longer valid, but can be useful for revisions)
 		/*
 		if (!empty($file->cmis_id)) { $file->cmis_id = false; }
 		if (!empty($file->cmis_path)) { $file->cmis_path = false; }
 		*/
+
+		// @TODO CMIS : create thumbnails ? (or should CMIS handle only non-images files ?)
+		
+		// Save file object to database
+		$guid = $file->save();
 	}
 
-	// @TODO CMIS : create thumbnails ? (or should CMIS handle only non-images files ?)
-	$guid = $file->save();
-
+	// Note on thumbnails: while CMIS is not used for image files (yet), a given image file can become a document and then change filestore between Elgg and CMIS
+	// So removing old thumbnails can happen even if current file is stored in CMIS filestore
+	// Also even images that would be stored in CMIS should have its thumbnails in Elgg filestore (at least until we support storing images on CMIS)	
 	$thumb = new ElggFile();
 	$thumb->owner_guid = $file->owner_guid;
 
@@ -203,17 +224,16 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		],
 	];
 
+	// Remove old thumbs
 	$remove_thumbs = function () use ($file, $sizes, $thumb) {
-		if (!$file->guid) {
-			return;
-		}
+		if (!$file->guid) { return; }
 
 		unset($file->icontime);
 
 		foreach ($sizes as $size => $data) {
 			$filename = $file->{$data['metadata_name']};
 			if ($filename !== null) {
-				// @TODO CMIS : remove thumbnails to CMIS filestore
+				// @TODO CMIS : remove thumbnails from CMIS filestore
 				$thumb->setFilename($filename);
 				$thumb->delete();
 				unset($file->{$data['metadata_name']});
@@ -225,11 +245,12 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$jpg_filename = pathinfo($filestorename, PATHINFO_FILENAME) . '.jpg';
 
-	// @TODO CMIS Generate image thumbnails
+	// @TODO CMIS Generate image thumbnails ?
 	if ($guid && $file->simpletype == "image") {
 		$file->icontime = time();
 
 		foreach ($sizes as $size => $data) {
+			// @TODO enable to get image from both Elgg and CMIS filestore
 			$image_bytes = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), $data['w'], $data['h'], $data['square']);
 			if (!$image_bytes) {
 				// bail and remove any thumbs
