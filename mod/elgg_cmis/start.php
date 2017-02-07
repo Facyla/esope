@@ -192,11 +192,29 @@ if (!elgg_is_active_plugin('esope') && !function_exists('esope_vernam_crypt')) {
 
 
 // Tests if there is a valid CMIS repository (basic test)
-function elgg_cmis_is_valid_repo() {
+function elgg_cmis_is_valid_repo($cmis_url = false) {
 	static $is_valid_repo = null;
 	if (!is_null($is_valid_repo)) { return $is_valid_repo; }
 	
-	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
+	if (!$cmis_url) { $cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis'); }
+	
+	if (function_exists(esope_is_valid_url)) {
+		return esope_is_valid_url($cmis_url);
+	}
+	
+	// Socket method should be fastest
+	
+	// Curl method is very close
+	$ch = curl_init($cmis_url);
+	curl_setopt($ch, CURLOPT_NOBODY, true);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1); // timeout in seconds
+	curl_exec($ch);
+	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	if (in_array($http_code, array(200, 302, 304))) { return true; }
+	
+	/* fopen method
 	// Note : use context to limit timeout to a short ping (also the timeout is doubled)
 	$context = stream_context_create(array(
 			'http'=>array('timeout' => 2.0)
@@ -208,6 +226,8 @@ function elgg_cmis_is_valid_repo() {
 	} else {
 		//error_log("CMIS repo not available");
 	}
+	*/
+	
 	return false;
 }
 

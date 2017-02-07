@@ -2711,4 +2711,55 @@ function esope_annotation_likes_cmp($a, $b) {
 }
 
 
+/* Checks if a given page exists
+ * $url : full URL to be checked
+ * $return_http_code : return HTTP code instead of boolean
+ * $timeout : max timeout, in seconds
+ * @return boolean OR HTTP return code
+ */
+function esope_is_valid_url($url = false, $return_http_code = false, $timeout = 1) {
+	static $checked_urls = array();
+	if (isset($checked_urls[$url])) {
+		if ($return_http_code) { return $checked_urls[$url]; }
+		return $checked_urls[$url];
+	}
+	
+	if (empty($url)) { return false; }
+	
+	// Socket method should be fastest
+	
+	// Curl method is very close
+	$ch = curl_init($cmis_url);
+	curl_setopt($ch, CURLOPT_NOBODY, true);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout); // timeout in seconds
+	curl_exec($ch);
+	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	
+	// Save result (HTTP code so we can use it afterwards)
+	$checked_urls[$url] = $http_code;
+	if ($return_http_code) { return $http_code; }
+	if (in_array($http_code, array(200, 302, 304))) { return true; }
+	
+	/* fopen method
+	// Note : use context to limit timeout to a short ping (also the timeout is doubled)
+	$context = stream_context_create(array(
+			'http'=>array('timeout' => $timeout)
+		));
+	$is_valid_url = @fopen($url, 'r', false, $context);
+	if ($is_valid_url) {
+		$checked_urls[$url] = true;
+		//$info = stream_get_meta_data($is_valid_repo);
+		return true;
+	} else {
+		$checked_urls[$url] = false;
+	}
+	*/
+	
+	return false;
+}
+
+
+
 
