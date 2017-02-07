@@ -26,31 +26,36 @@ if (!elgg_cmis_get_session()) { $use_cmis = false; }
 
 
 echo '<div class="elgg-cmis-file-info">';
-echo "<p>CMIS and filestore information&nbsp;:";
+echo "<p><strong>CMIS and filestore information&nbsp;:</strong><br />";
 
+echo "<u>Metadata&nbsp;:</u><br />";
 echo 'MIME type : ' . $file->getMimeType() . '<br />';
 echo 'File simpletype : ' . $file->simpletype . '<br />';
 echo 'File size : ' . $file->getSize() . '<br />';
-	echo "CMIS ID : " . $file->cmis_id . '<br />';
-	echo "CMIS path : " . $file->cmis_path . '<br />';
+echo "CMIS ID : " . $file->cmis_id . '<br />';
+echo "CMIS path : " . $file->cmis_path . '<br />';
+echo '</p>';
 
+echo "<u>Filestore&nbsp;:</u><br />";
 //if ($use_cmis && ($file->simpletype != "image")) {
 if ($file->simpletype != "image") {
-	echo "<p>File should be stored in CMIS repository</p>";
+	echo "File should be stored in CMIS repository<br />";
 	//$cmis_file = elgg_cmis_file_exists_in_cmis_filestore($file);
 	if ($cmis_file) {
-		echo "<p>File is stored in CMIS repository</p>";
+		echo "File is stored in CMIS repository<br />";
 	} else {
-		echo "<p>File is NOT stored in CMIS repository</p>";
+		echo "File is NOT stored in CMIS repository<br />";
 	}
 } else {
-	echo "<p>File should be stored in Elgg filestore</p>";
+	echo "File should be stored in Elgg filestore<br />";
 }
 
 if (!$cmis_file) {
 	$filestore_name = $file->getFilenameOnFilestore();
 	if ($filestorename) {
-		echo "<p>File is stored in Elgg repository</p>";
+		echo "File is stored in Elgg repository<br />";
+	} else {
+		echo "File is NOT stored in Elgg repository<br />";
 	}
 }
 echo '</p>';

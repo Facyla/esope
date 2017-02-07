@@ -194,8 +194,17 @@ if (!elgg_is_active_plugin('esope') && !function_exists('esope_vernam_crypt')) {
 // Tests if there is a valid CMIS repository (basic test)
 function elgg_cmis_is_valid_repo() {
 	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
-	$is_valid_repo = @fopen($cmis_url, 'r');
-	if ($is_valid_repo) { return true; }
+	// Note : use context to limit timeout to a short ping (also the timeout is doubled)
+	$context = stream_context_create(array(
+			'http'=>array('timeout' => 2.0)
+		));
+	$is_valid_repo = @fopen($cmis_url, 'r', false, $context);
+	if ($is_valid_repo) {
+		//$info = stream_get_meta_data($is_valid_repo);
+		return true;
+	} else {
+		//error_log("CMIS repo not available");
+	}
 	return false;
 }
 
@@ -213,9 +222,19 @@ function elgg_cmis_file_exists_in_cmis_filestore($file) {
 	if (!empty($file->cmis_id)) {
 		$vendor = elgg_cmis_vendor();
 		$base = elgg_cmis_libraries();
-		if (elgg_cmis_is_valid_repo() && elgg_cmis_get_session()) {
-			$cmis_file = elgg_cmis_get_document_by_id($file->cmis_id);
-			if ($cmis_file) { return $cmis_file; }
+		if (elgg_cmis_is_valid_repo()) {
+			if (elgg_cmis_get_session()) {
+				$cmis_file = elgg_cmis_get_document_by_id($file->cmis_id);
+				if ($cmis_file) {
+					return $cmis_file;
+				} else {
+					register_error("Cannot get CMIS document : cannot get session. Please check plugin settings.");
+				}
+			} else {
+				register_error("Cannot use CMIS repository : cannot get session. Please check plugin settings.");
+			}
+		} else {
+			register_error("Cannot use CMIS repository : CMIS server not available or invalid settings.");
 		}
 		register_error("Cannot use CMIS repository : unavailable or invalid settings.");
 	}

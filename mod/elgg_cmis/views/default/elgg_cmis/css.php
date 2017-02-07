@@ -20,7 +20,7 @@
 
 
 
-.elgg-cmis-file-info { border: 1px inset #ccc; margin: 0.5rem 0; padding: 0.5rem; }
+.elgg-cmis-file-info { border: 1px solid #ccc; background:#FAFAFA; margin: 0.5rem 0; padding: 0.5rem; }
 
 
 
