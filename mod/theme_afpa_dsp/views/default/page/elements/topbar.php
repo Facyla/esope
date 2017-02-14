@@ -66,10 +66,11 @@ if (elgg_is_logged_in() && !$menu) {
 	// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
 	$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
 	$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
+	$friendrequests = '';
 	if ($friendrequests_count == 1) {
-		$friendrequests = '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a>';
+		$friendrequests .= '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a>';
 	} else if ($friendrequests_count > 1) {
-		$friendrequests = '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a>';
+		$friendrequests .= '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a>';
 	}
 	
 	// Messages non lus

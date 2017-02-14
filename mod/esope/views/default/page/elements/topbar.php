@@ -68,9 +68,9 @@ if (elgg_is_logged_in() && !$menu) {
 	$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
 	$friendrequests = '';
 	if ($friendrequests_count == 1) {
-		$friendrequests = '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a>';
+		$friendrequests .= '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a>';
 	} else if ($friendrequests_count > 1) {
-		$friendrequests = '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a>';
+		$friendrequests .= '<a class="elgg-menu-counter" href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a>';
 	}
 	
 	// Messages non lus
