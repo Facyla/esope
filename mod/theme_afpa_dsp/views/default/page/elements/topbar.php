@@ -91,9 +91,11 @@ if (elgg_is_logged_in() && !$menu) {
 					'metadata_value' => false,
 					'count' => true,
 				));
-		$tooltip = '';
-		$text = "$site_notifications_count";
-		$new_notifications_counter = '<a class="elgg-menu-counter" href="' . $url . 'site_notifications/view/' . $ownusername . '" title="' . $tooltip . '">' . $text . '</a>';
+		if ($site_notifications_count > 0) {
+			$tooltip = '';
+			$text = "$site_notifications_count";
+			$new_notifications_counter = '<a class="elgg-menu-counter" href="' . $url . 'site_notifications/view/' . $ownusername . '" title="' . $tooltip . '">' . $text . '</a>';
+		}
 	}
 	
 	// Login_as menu link
