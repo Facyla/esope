@@ -99,10 +99,9 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	$prefix = "file/";
 
 	// @TODO CMIS : handle new version instead of removing file
-	// if previous file, delete it
+	// if previous file in Elgg filestore, delete it
 	if (!$new_file) {
 		// CMIS : keep original file name (for versionning)
-		//$file_name = $file->getFilename();
 		$file_name = substr($file->getFilename(), strlen($prefix));
 		$filename = $file->getFilenameOnFilestore();
 		if (file_exists($filename)) {
@@ -148,26 +147,42 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			// Create new version for file
 			$file_version = true;
 			$file_params = array('mime_type' => $mime_type);
-			if ($new_file || ($file_path == $old_file_path)) {
-				$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
-			} else {
-				// Move first to new path
-				$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
-				$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
-				// Then update version
-				$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
-			}
-			if ($return) {
-				$file->cmis_id = $return->getId();
-				$file->cmis_path = $file_path . $file_name;
+			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
+			try{
+				if ($new_file || ($file_path == $old_file_path)) {
+					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+				} else {
+					// Move first to new path
+					$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
+					$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
+					// Then update version
+					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+				}
+				if ($return) {
+					$file->cmis_id = $return->getId();
+					$file->cmis_path = $file_path . $file_name;
+				}
+			} catch(Exception $e){
+				//error_log(print_r($e->message, true));
+				register_error(print_r($e->message, true));
 			}
 		} else {
-			// elgg_cmis_create_document($path, $name = '', $content = null, $version = false, $params = array())
-			$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
-			if ($return) {
-				$file->cmis_id = $return->id;
-				$file->cmis_path = $file->getFilenameOnFilestore() . $filestorename;
+			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
+			try{
+				//elgg_cmis_create_document($path, $name = '', $content = null, $version = false, $params = array());
+				$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
+				if ($return) {
+					$file->cmis_id = $return->id;
+					$file->cmis_path = $file->getFilenameOnFilestore() . $filestorename;
+				}
+			} catch(Exception $e){
+				//error_log(print_r($e->message, true));
+				register_error(print_r($e->message, true));
 			}
+		}
+		// Warn if CMIS filestore could not be used
+		if (!$return) {
+			system_message("Could not use CMIS filestore, falling back to Elgg filestore.");
 		}
 	}
 	

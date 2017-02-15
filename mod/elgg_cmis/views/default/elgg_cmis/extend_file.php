@@ -35,7 +35,7 @@ if ($debug == 'yes') {
 	}
 
 	$content .= '<p>';
-	$content .= '<u>' . elgg_echo('elgg_cmis:file:metadata') . 'Metadata&nbsp;:</u><br />';
+	$content .= '<u>' . elgg_echo('elgg_cmis:file:metadata') . '&nbsp;:</u><br />';
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:mimetype', array($file->getMimeType()));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:simpletype', array($file->simpletype));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:size', array($file->getSize()));
