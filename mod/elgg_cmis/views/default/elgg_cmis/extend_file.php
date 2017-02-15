@@ -80,19 +80,21 @@ if ($use_cmis) {
 		$versions = $cmis_file->getAllVersions();
 		if (sizeof($versions) > 0) {
 			$content .= '<p><strong>' . elgg_echo('elgg_cmis:versions') . '</strong></p>';
+			$content .= '<div class="elgg-output">';
 			$content .= '<ul>';
 			foreach($versions as $version) {
-				$content .= '<li>' . $version->getVersionLabel();
-				$content .= ' <em>' . $version->getCheckinComment() . '</em>';
+				$content .= '<li><strong>' . $version->getVersionLabel();
 				if ($version->isLatestVersion()) { $content .= ' ' . elgg_echo('elgg_cmis:version:latest'); }
 				if ($version->isLatestMajorVersion()) { $content .= ' ' . elgg_echo('elgg_cmis:version:latestmajor'); }
-				$content .= ' CMIS ID ' . $version->getId() . '';
-				//$content .= $version->getLastModificationDate() . ' / ';
-				//$content .= $version->getCreationDate() . ' / ';
+				$content .= '</strong';
+				$content .= ' &nbsp; created on ' . $version->getCreationDate()->format('Y/m/d H:i');
+				$content .= ' &nbsp; <em>' . $version->getCheckinComment() . '</em>';
+				$content .= '<br /><small>CMIS ID ' . $version->getId() . '</small>';
 				$content .= '</li>';
 			}
 			//$content .= '<pre>' . print_r($version, true) . '</pre>';
 			$content .= '</ul>';
+			$content .= '</div>';
 		}
 	}
 }
