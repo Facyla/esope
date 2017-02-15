@@ -15,7 +15,8 @@ function elgg_cmis_get_session_parameters() {
 	
 	// URLs
 	$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
-	$url = $cmis_url . 'api/-default-/public/cmis/versions/1.1/browser';
+	$cmis_browser_binding = elgg_get_plugin_setting('cmis_1_1_browser_binding', 'elgg_cmis');
+	$url = $cmis_url . $cmis_browser_binding;
 	// Credentials
 	$username = elgg_get_plugin_setting('cmis_username', 'elgg_cmis');
 	$password = elgg_get_plugin_setting('cmis_password', 'elgg_cmis');

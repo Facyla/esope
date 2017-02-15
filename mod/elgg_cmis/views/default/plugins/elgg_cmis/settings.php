@@ -9,12 +9,16 @@
 
 $plugin = $vars['entity'];
 $ny_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
-$vendors_opt = array('chemistry-phpclient' => 'CMIS PHP Client (Apache Chemistry)', 'php-cmis-client' => 'PHP CMIS Client (dkd)');
+$vendors_opt = array('php-cmis-client' => 'PHP CMIS Client (dkd)', 'chemistry-phpclient' => 'CMIS PHP Client (Apache Chemistry)');
 
 // Default required settings
 //if (empty($plugin->cmis_url)) $plugin->cmis_url = '';
 if (empty($plugin->cmis_soap_url)) { $plugin->cmis_soap_url = 'cmisws/RepositoryService'; }
 if (empty($plugin->cmis_atom_url)) { $plugin->cmis_atom_url = 'cmisatom'; }
+if (empty($plugin->cmis_1_0_atompub)) { $plugin->cmis_1_0_atompub = 'api/-default-/public/cmis/versions/1.0/atom'; }
+if (empty($plugin->cmis_1_0_wsdl)) { $plugin->cmis_1_0_wsdl = 'cmisws/cmis?wsdl'; }
+if (empty($plugin->cmis_1_1_atompub)) { $plugin->cmis_1_1_atompub = 'api/-default-/public/cmis/versions/1.1/atom'; }
+if (empty($plugin->cmis_1_1_browser_binding)) { $plugin->cmis_1_1_browser_binding = 'api/-default-/public/cmis/versions/1.1/browser'; }
 
 
 
@@ -39,17 +43,33 @@ if (($plugin->backend == 'yes') || $plugin->usercmis == 'yes') {
 	echo '<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">';
 		echo '<legend>' . elgg_echo('elgg_cmis:title') . '</legend>';
 	
-		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_url') . elgg_view('input/text', array('name' => 'params[cmis_url]', 'value' => $plugin->cmis_url)) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_url:details') . '</em></p>';
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_url') . elgg_view('input/text', array('name' => 'params[cmis_url]', 'value' => $plugin->cmis_url, 'style ' => 'max-width:30em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_url:details') . '</em></p>';
+		
+		// Old settings (for Chemistry lib / user mode only)
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_soap_url') . elgg_view('input/text', array('name' => 'params[cmis_soap_url]', 'value' => $plugin->cmis_soap_url, 'style ' => 'max-width:30em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_soap_url:details') . '</em></p>';
 	
-		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_soap_url') . elgg_view('input/text', array('name' => 'params[cmis_soap_url]', 'value' => $plugin->cmis_soap_url, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_soap_url:details') . '</em></p>';
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_atom_url') . elgg_view('input/text', array('name' => 'params[cmis_atom_url]', 'value' => $plugin->cmis_atom_url, 'style ' => 'max-width:30em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_atom_url:details') . '</em></p>';
+		
+		// Standard Alfresco endpoints
+		/* Not used (yet)
+		// CMIS 1.0 AtomPub Service Document - eg. api/-default-/public/cmis/versions/1.0/atom
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_1_0_atompub') . elgg_view('input/text', array('name' => 'params[cmis_1_0_atompub]', 'value' => $plugin->cmis_1_0_atompub, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_1_0_atompub:details') . '</em></p>';
 	
-		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_atom_url') . elgg_view('input/text', array('name' => 'params[cmis_atom_url]', 'value' => $plugin->cmis_atom_url, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_atom_url:details') . '</em></p>';
+		// CMIS 1.0 Web Services WSDL Document - eg. cmisws/cmis?wsdl
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_1_0_wsdl') . elgg_view('input/text', array('name' => 'params[cmis_1_0_wsdl]', 'value' => $plugin->cmis_1_0_wsdl, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_1_0_wsdl:details') . '</em></p>';
+	
+		// CMIS 1.1 AtomPub Service Document - eg api/-default-/public/cmis/versions/1.1/atom
+		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_1_1_atompub') . elgg_view('input/text', array('name' => 'params[cmis_1_1_atompub]', 'value' => $plugin->cmis_1_1_atompub, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_1_1_atompub:details') . '</em></p>';
+		*/
+		
+		// CMIS 1.1 Browser Binding URL - api/-default-/public/cmis/versions/1.1/browser
+echo '<p><label>' . elgg_echo('elgg_cmis:cmis_1_1_browser_binding') . elgg_view('input/text', array('name' => 'params[cmis_1_1_browser_binding]', 'value' => $plugin->cmis_1_1_browser_binding, 'style ' => 'max-width:12em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:cmis_1_1_browser_binding:details') . '</em></p>';
 	
 	echo '</fieldset><br />';
 }
 
 
-// Backend specific settings
+// Backend mode specific settings
 if ($plugin->backend == 'yes') {
 	echo '<fieldset style="border: 1px solid; padding: 15px; margin: 0 10px 0 10px">';
 		echo '<legend>' . elgg_echo('elgg_cmis:settings:backend:legend') . '</legend>';
