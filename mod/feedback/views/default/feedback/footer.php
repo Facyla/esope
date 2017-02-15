@@ -243,7 +243,7 @@ function FeedBack_Send() {
 		type: "POST",
 		// only use captcha when logged out
 		<?php if (!elgg_is_logged_in() && function_exists("captcha_generate_token")) { ?>
-			data: "captcha_input="+captcha_input+"&captcha_token="+captcha_token+"&page="+page+"&mood="+mood+"&about="+about+"&id="+id+"&txt="+txt+"&access_id="+access_id,,
+			data: "captcha_input="+captcha_input+"&captcha_token="+captcha_token+"&page="+page+"&mood="+mood+"&about="+about+"&id="+id+"&txt="+txt+"&access_id="+access_id,
 		<?php } else { ?>
 			data: "page="+page+"&mood="+mood+"&about="+about+"&id="+id+"&txt="+txt+"&access_id="+access_id,
 		<?php } ?>
