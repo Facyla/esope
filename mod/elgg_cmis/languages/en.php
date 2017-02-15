@@ -80,6 +80,31 @@ Your password will be encrypted.",
 	'elgg_cmis:deletedpassword' => "Your password has been successfully deleted.",
 	
 	
+	// File versions
+	'elgg_cmis:versions' => "Versions&nbsp;:",
+	'elgg_cmis:version:latest' => "Latest version",
+	'elgg_cmis:version:latestmajor' => "Latest major version",
+	
+	// File details
+	'elgg_cmis:file:details' => "CMIS and filestore information&nbsp;:",
+	'elgg_cmis:server:notavailable' => "CMIS server is available and ready for use",
+	'elgg_cmis:server:notavailable' => "CMIS server is not available or cannot be used",
+	'elgg_cmis:file:metadata' => "Metadata&nbsp;:",
+	'elgg_cmis:file:mimetype' => "MIME type&nbsp;: %s",
+	'elgg_cmis:file:simpletype' => "File simpletype&nbsp;: %s",
+	'elgg_cmis:file:size' => "File size&nbsp;: %s",
+	'elgg_cmis:file:cmisid' => "CMIS ID&nbsp;: %s",
+	'elgg_cmis:file:cmispath' => "CMIS path&nbsp;: %s",
+	'elgg_cmis:file:filestorename' => "Elgg filestore name&nbsp;: %s",
+	'elgg_cmis:filestore' => "Filestore&nbsp;:",
+	'elgg_cmis:filestore:cmis' => "File should be stored in CMIS repository",
+	'elgg_cmis:filestore:cmis:stored' => "File is stored in CMIS repository",
+	'elgg_cmis:filestore:cmis:notstored' => "File is NOT stored in CMIS repository",
+	'elgg_cmis:filestore:elgg' => "File should be stored in Elgg filestore",
+	'elgg_cmis:filestore:elgg:stored' => "File is stored in Elgg repository",
+	'elgg_cmis:filestore:elgg:notstored' => "File is NOT stored in Elgg repository",
+	
+	
 );
 
 

@@ -86,6 +86,32 @@ Votre mot de passe sera crypté.",
 	'elgg_cmis:changepassword' => "Votre mot de passe est bien enregistré (et crypté).<br />Si vous souhaitez le changer, veuillez saisir et enregistrer votre nouveau mot de passe ci-dessous.<br />Pour le supprimer totalement, saisissez \"RAZ\" comme mot de passe : cela réinitialisera vos informations d'authentification.",
 	'elgg_cmis:deletedpassword' => "Votre mot de passe a bien été supprimé.",
 	
+	
+	// File versions
+	'elgg_cmis:versions' => "Versions&nbsp;:",
+	'elgg_cmis:version:latest' => "Latest version",
+	'elgg_cmis:version:latestmajor' => "Latest major version",
+	
+	// File details
+	'elgg_cmis:file:details' => "Informations sur CMIS et le Filestore utilisé&nbsp;:",
+	'elgg_cmis:server:notavailable' => "Le serveur CMIS est opérationnel",
+	'elgg_cmis:server:notavailable' => "Le serveur CMIS n'est pas opérationnel",
+	'elgg_cmis:file:metadata' => "Métadonnées&nbsp;:",
+	'elgg_cmis:file:mimetype' => "Type MIME&nbsp;: %s",
+	'elgg_cmis:file:simpletype' => "Type de fichier&nbsp;: %s",
+	'elgg_cmis:file:size' => "Poids du file&nbsp;: %s",
+	'elgg_cmis:file:cmisid' => "ID CMIS&nbsp;: %s",
+	'elgg_cmis:file:cmispath' => "Chemin CMIS&nbsp;: %s",
+	'elgg_cmis:file:filestorename' => "Nom dans le filestore d'Elgg&nbsp;: %s",
+	'elgg_cmis:filestore' => "Filestore&nbsp;:",
+	'elgg_cmis:filestore:cmis' => "Le fichier devrait être stocké dans le répertoire CMIS",
+	'elgg_cmis:filestore:cmis:stored' => "Le fichier est stocké dans le répertoire CMIS",
+	'elgg_cmis:filestore:cmis:notstored' => "Le fichier n'est pas stocké dans le répertoire CMIS",
+	'elgg_cmis:filestore:elgg' => "Le fichier devrait être stocké dans le filestore d'Elgg",
+	'elgg_cmis:filestore:elgg:stored' => "Le fichier est stocké dans le filestore d'Elgg",
+	'elgg_cmis:filestore:elgg:notstored' => "Le fichier n'est pas stocké dans le filestore d'Elgg",
+	
+	
 );
 
 
