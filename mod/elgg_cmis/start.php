@@ -198,7 +198,7 @@ function elgg_cmis_is_valid_repo($cmis_url = false) {
 	
 	if (!$cmis_url) { $cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis'); }
 	
-	if (function_exists(esope_is_valid_url)) {
+	if (function_exists('esope_is_valid_url')) {
 		return esope_is_valid_url($cmis_url);
 	}
 	

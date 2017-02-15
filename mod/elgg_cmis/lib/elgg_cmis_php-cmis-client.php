@@ -23,12 +23,12 @@ function elgg_cmis_get_session_parameters() {
 	
 	// Avant tout appel, on devrait tester si l'URL est valide/active, et indiquer un pb d'inaccessibilité ou interruption de service
 	if (empty($cmis_url) || empty($username) || empty($password)) {
-		register_error('WARNING : required parameters are missing, or CMIS service is unavailable - please <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
+		register_error('WARNING : required parameters are missing, or CMIS service is unavailable at ' . $cmis_url . '- please <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
 		return false;
 	}
 	// Check that we have a valid repository
 	if (!elgg_cmis_is_valid_repo($url)) {
-		register_error('WARNING : CMIS service is unavailable - please <a href="' . $cmis_url . '">check URL ' . $cmis_url . '</a> manually or <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
+		register_error('WARNING : CMIS service is unavailable - please <a href="' . $url . '">check URL ' . $url . '</a> manually or <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
 		return false;
 	}
 	
