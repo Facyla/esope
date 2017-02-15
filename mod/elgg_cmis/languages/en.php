@@ -91,7 +91,7 @@ Your password will be encrypted.",
 	
 	// File details
 	'elgg_cmis:file:details' => "CMIS and filestore information&nbsp;:",
-	'elgg_cmis:server:notavailable' => "CMIS server is available and ready for use",
+	'elgg_cmis:server:available' => "CMIS server is available and ready for use",
 	'elgg_cmis:server:notavailable' => "CMIS server is not available or cannot be used",
 	'elgg_cmis:file:metadata' => "Metadata&nbsp;:",
 	'elgg_cmis:file:mimetype' => "MIME type&nbsp;: %s",

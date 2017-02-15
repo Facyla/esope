@@ -102,7 +102,7 @@ Votre mot de passe sera crypté.",
 	
 	// File details
 	'elgg_cmis:file:details' => "Informations sur CMIS et le Filestore utilisé&nbsp;:",
-	'elgg_cmis:server:notavailable' => "Le serveur CMIS est opérationnel",
+	'elgg_cmis:server:available' => "Le serveur CMIS est opérationnel",
 	'elgg_cmis:server:notavailable' => "Le serveur CMIS n'est pas opérationnel",
 	'elgg_cmis:file:metadata' => "Métadonnées&nbsp;:",
 	'elgg_cmis:file:mimetype' => "Type MIME&nbsp;: %s",
