@@ -2729,7 +2729,7 @@ function esope_is_valid_url($url = false, $return_http_code = false, $timeout = 
 	// Socket method should be fastest
 	
 	// Curl method is very close
-	$ch = curl_init($cmis_url);
+	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_NOBODY, true);
 	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout); // timeout in seconds

@@ -27,7 +27,7 @@ function elgg_cmis_get_session_parameters() {
 		return false;
 	}
 	// Check that we have a valid repository
-	if (!elgg_cmis_is_valid_repo($url)) {
+	if (!elgg_cmis_is_valid_repo($cmis_url)) {
 		register_error('WARNING : CMIS service is unavailable - please <a href="' . $url . '">check URL ' . $url . '</a> manually or <a href="' . elgg_get_site_url() . 'admin/plugin_settings/elgg_cmis" target="_new">update CMIS settings</a>');
 		return false;
 	}
