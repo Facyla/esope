@@ -251,13 +251,17 @@ if ($tests['update_file']) {
 	esope_dev_profiling("update_file");
 	$content .= '<h3>Update file</h3>';
 	$properties = array(\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'Updated on ' . time());
-	$new_file = elgg_cmis_update_document($new_file, $properties);
-	if ($new_file) {
-		$content .= "File updated, the property " . \Dkd\PhpCmis\PropertyIds::DESCRIPTION . " should now has the value '" . $properties[\Dkd\PhpCmis\PropertyIds::DESCRIPTION]. "<br />";
-		$tests_content .= 'Update file : <strong style="color:darkgreen;">OK</strong><br />';
-	} else {
-		$content .= "ERROR : No file, could not be updated !<br />";
-		$tests_content .= 'Update file : <strong style="color:darkred;">FAILED</strong><br />';
+	try {
+		$new_file = elgg_cmis_update_document($new_file, $properties);
+		if ($new_file) {
+			$content .= "File updated, the property " . \Dkd\PhpCmis\PropertyIds::DESCRIPTION . " should now has the value '" . $properties[\Dkd\PhpCmis\PropertyIds::DESCRIPTION]. "<br />";
+			$tests_content .= 'Update file : <strong style="color:darkgreen;">OK</strong><br />';
+		} else {
+			$content .= "ERROR : No file, could not be updated !<br />";
+			$tests_content .= 'Update file : <strong style="color:darkred;">FAILED</strong><br />';
+		}
+	} catch(Exception $e) {
+		$content .= "ERROR : " . $e->message . '<br />';
 	}
 	esope_dev_profiling("update_file");
 } else { $tests_content .= 'Update file : <em>not tested</em><br />'; }

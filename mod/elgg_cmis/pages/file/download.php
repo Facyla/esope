@@ -44,13 +44,14 @@ if ($use_cmis && ($file->simpletype != "image")) {
 	$cmis_file = elgg_cmis_file_exists_in_cmis_filestore($file);
 	// Provide content from CMIS repository
 	if ($cmis_file) {
-		header("Pragma: public");
-		header("Content-type: $mime");
-		header("Content-Disposition: attachment; filename=\"$filename\"");
-		header("Content-Length: {$file->getSize()}");
 		$session = elgg_cmis_get_session();
 		$cmis_file = $session->getObject($cmis_file);
 		$content_stream = $session->getContentStream($cmis_file);
+		
+		header("Pragma: public");
+		header("Content-type: $mime");
+		header("Content-Disposition: attachment; filename=\"$filename\"");
+		header("Content-Length: {strlen($content_stream)}");
 		//echo "Size : " . strlen($content_stream) . '<br />';
 		//echo "Elgg size : " . $file->getSize() . '<br />';
 		echo $content_stream;

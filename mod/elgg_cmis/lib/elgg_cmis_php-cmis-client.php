@@ -130,7 +130,7 @@ function elgg_cmis_get_folder($path, $create_path = false) {
 /** Get a document object
  * Optionally creates the file and the full tree
  * @param $path : the wanted document path, from root, eg. /some/path/to/document
- * @param $create_path : create full path if not exists
+ * @param $create_document : create document if not exists
  * @return : $folder object or false
  */
 function elgg_cmis_get_document($path, $create_document = false, $params = null) {

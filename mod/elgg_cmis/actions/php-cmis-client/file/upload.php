@@ -140,7 +140,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				$cmis_path = explode('/', $file->cmis_path);
 				$file_name = array_pop($cmis_path);
 				// Note : if owner changes, file path will change so we should move CMIS file first
-				$old_file_path = implode('/', $cmis_path);
+				$old_file_path = implode('/', $cmis_path) . '/';
 			}
 			$file_content = file_get_contents($_FILES['upload']['tmp_name']);
 			$file_content = \GuzzleHttp\Stream\Stream::factory($file_content);
@@ -153,6 +153,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 				} else {
 					// Move first to new path
+					error_log("$file_name, $old_file_path, $file_path");
 					$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
 					$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
 					// Then update version

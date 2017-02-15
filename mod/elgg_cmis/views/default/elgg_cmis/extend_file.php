@@ -82,11 +82,16 @@ if ($use_cmis) {
 			$content .= '<p><strong>' . elgg_echo('elgg_cmis:versions') . '</strong></p>';
 			$content .= '<ul>';
 			foreach($versions as $version) {
-				$content .= '<li>' . $version->getVersionLabel() . ' ';
-				if ($version->isLatestVersion()) { $content .= elgg_echo('elgg_cmis:version:latest'); }
-				if ($version->isLatestMajorVersion()) { $content .= elgg_echo('elgg_cmis:version:latestmajor'); }
+				$content .= '<li>' . $version->getVersionLabel();
+				$content .= ' <em>' . $version->getCheckinComment() . '</em>';
+				if ($version->isLatestVersion()) { $content .= ' ' . elgg_echo('elgg_cmis:version:latest'); }
+				if ($version->isLatestMajorVersion()) { $content .= ' ' . elgg_echo('elgg_cmis:version:latestmajor'); }
+				$content .= ' CMIS ID ' . $version->getId() . '';
+				//$content .= $version->getLastModificationDate() . ' / ';
+				//$content .= $version->getCreationDate() . ' / ';
 				$content .= '</li>';
 			}
+			//$content .= '<pre>' . print_r($version, true) . '</pre>';
 			$content .= '</ul>';
 		}
 	}
