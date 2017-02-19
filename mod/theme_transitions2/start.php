@@ -114,7 +114,7 @@ function theme_transitions2_init() {
 	// Pour changer la manière de filtrer les tags HTMLawed
 	if (elgg_is_active_plugin('htmlawed')) {
 		elgg_register_plugin_hook_handler('config', 'htmlawed', 'theme_transitions2_htmlawed_filter_tags');
-		elgg_register_plugin_hook_handler('allowed_styles', 'htmlawed', 'theme_transitions2_htmlawed_allowed_tags');
+		elgg_register_plugin_hook_handler('allowed_styles', 'htmlawed', 'theme_transitions2_htmlawed_allowed_styles');
 	}
 	
 	// Index page - replaces the default index page
@@ -515,7 +515,7 @@ function theme_transitions2_htmlawed_filter_tags($hook, $type, $return, $params)
 }
 
 
-function theme_transitions2_htmlawed_allowed_tags($hook, $type, $return, $params) {
+function theme_transitions2_htmlawed_allowed_styles($hook, $type, $return, $params) {
 	// Filtered tag element
 	$tag = $params['tag'];
 	
