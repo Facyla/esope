@@ -889,10 +889,10 @@ function postbymail_checkeligible_post($params = array()) {
 	$mailpost_check = true;
 	
 	// KEY CHECK : doit exister et correspondre à celle d'un user ou d'un group
-	if (!empty($params['key'])) {
+	if (!empty($params['post_key'])) {
 		// pour connaître le container autorisé, on coupe sur le 1er "k" et on prend ce qui précède comme GUID
-		$kpos = mb_strpos($params['key'], 'k');
-		if ($kpos) $container_guid = mb_substr($params['key'], 0, $kpos);
+		$kpos = mb_strpos($params['post_key'], 'k');
+		if ($kpos) $container_guid = mb_substr($params['post_key'], 0, $kpos);
 		
 		// Vérification du container
 		if ($container_guid && ($container = get_entity($container_guid))) {
@@ -911,12 +911,12 @@ function postbymail_checkeligible_post($params = array()) {
 			}
 			
 			// Vérification de la clef (doit être identique pour cet user ou ce group)
-			if (!empty($container->pubkey) && ($container->pubkey == $params['key'])) {
+			if (!empty($container->pubkey) && ($container->pubkey == $params['post_key'])) {
 				// Ok pour la clef : existe et valide
 				$report .= elgg_echo('postbymail:validkey');
 			} else {
 				// Clef invalide ou inexistante
-				$report .= elgg_echo('postbymail:error:invalidkey') . ' : ' . $params['key'];
+				$report .= elgg_echo('postbymail:error:invalidkey') . ' : ' . $params['post_key'];
 				$mailpost_check = false;
 			}
 		} else {
@@ -929,53 +929,53 @@ function postbymail_checkeligible_post($params = array()) {
 		$report .= elgg_echo('postbymail:error:emptykey');
 		$mailpost_check = false;
 	}
-	$report .= elgg_echo('postbymail:key') . ' : ' . $params['key'];
+	$report .= elgg_echo('postbymail:key') . ' : ' . $params['post_key'];
 	
 	// SUBTYPE CHECK : on vérifie qu'il existe, sinon on en définit un par défaut
 	// Subtype par défaut : blog
-	if (empty($params['subtype'])) { $params['subtype'] = 'blog'; }
+	if (empty($params['post_subtype'])) { $params['post_subtype'] = 'blog'; }
 	// On vérifie que le subtype est bien valide, et qu'il est activé pour ce conteneur, si c'est un groupe
 	// @TODO attention aux cas particulier où le nom diffère...
 	if (elgg_instanceof($container, 'group')) {
-		if ($container->{$params['subtype'] . '_enable'} == 'yes') {
-			$report .= "Subtype {$params['subtype']} enabled in " . $container->name;
+		if ($container->{$params['post_subtype'] . '_enable'} == 'yes') {
+			$report .= "Subtype {$params['post_subtype']} enabled in " . $container->name;
 		} else {
-			$report .= "Subtype {$params['subtype']} NOT enabled in " . $container->name;
+			$report .= "Subtype {$params['post_subtype']} NOT enabled in " . $container->name;
 			$mailpost_check = false;
 		}
 	} else {
-		if (!elgg_is_active_plugin($subtype)) {
-			$report .= "Plugin {$params['subtype']} NOT active";
+		if (!elgg_is_active_plugin($params['post_subtype'])) {
+			$report .= "Plugin {$params['post_subtype']} NOT active";
 			$mailpost_check = false;
 		}
 	}
-	$report .= elgg_echo('postbymail:subtype') . ' : ' . $params['subtype'];
+	$report .= elgg_echo('postbymail:subtype') . ' : ' . $params['post_subtype'];
 	
 	// ACCESS INFO : soit défini, soit par défaut si c'est un ElggUser ou ElggSite, soit réservé au groupe si c'est un ElggGroup
 	// SI accès défini, on vérifie qu'il est valide
-	if ($params['access'] !== false) {
+	if ($params['post_access'] !== false) {
 		// @todo vérifier que l'access id est bien valide, pas valide => empty
-		if (($params['access'] >= -2) && ($params['access'] <= 2)) {
+		if (($params['post_access'] >= -2) && ($params['post_access'] <= 2)) {
 			// OK ça existe en standard
 		} else {
-			$acl = get_access_collection($params['access']);
+			$acl = get_access_collection($params['post_access']);
 			if (empty($acl->owner_guid)) {
-				$report .= "Access id {$params['access']} NOT valid";
+				$report .= "Access id {$params['post_access']} NOT valid";
 				// Invalid : use default value
-				$params['access'] = false;
+				$params['post_access'] = false;
 			}
 		}
 	}
 	// Use default access if not correctly defined
-	if (($params['access'] === false) || (strlen($params['access']) == 0) || ($params['access'] === '')) {
+	if (($params['post_access'] === false) || (strlen($params['post_access']) == 0) || ($params['post_access'] === '')) {
 		// Privé pour un membre, limité aux membres du groupe pour un groupe
 		if (elgg_instanceof($container, 'user') || elgg_instanceof($container, 'site')) {
-			$params['access'] = get_default_access();
+			$params['post_access'] = get_default_access();
 		} else if (elgg_instanceof($container, 'group')) {
-			$params['access'] = $container->group_acl;
+			$params['post_access'] = $container->group_acl;
 		}
 	}
-	$report .= elgg_echo('postbymail:access', array($params['access']));
+	$report .= elgg_echo('postbymail:access', array($params['post_access']));
 	
 	// MEMBER CHECK : soit celui identifié si c'est bien un ElggUser, sinon l'ElggUser ou l'ElggGroup qui sert de container
 	if (elgg_instanceof($params['member'], 'user')) {
@@ -997,7 +997,7 @@ function postbymail_checkeligible_post($params = array()) {
 		}
 	}
 	
-	return array('member' => $params['member'], 'container' => $container, 'access' => $params['access'], 'subtype' => $params['subtype'], 'check' => $mailpost_check, 'report' => $report, 'hash' => $hash_arr);
+	return array('member' => $params['member'], 'container' => $container, 'access' => $params['post_access'], 'subtype' => $params['post_subtype'], 'check' => $mailpost_check, 'report' => $report, 'hash' => $hash_arr);
 }
 
 
