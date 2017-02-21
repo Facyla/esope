@@ -882,7 +882,7 @@ function postbymail_checkeligible_post($params = array()) {
 	global $sender_reply;
 	global $admin_reply;
 	
-	$defaults = array('key' => false, 'member' => false, 'subtype' => 'blog', 'access' => false, 'hash' => false);
+	$defaults = array('post_key' => false, 'member' => false, 'post_subtype' => 'blog', 'post_access' => false, 'hash' => false);
 	$params = array_merge($defaults, $params);
 	
 	// Vérifications préliminaires - au moindre problème, on annule la publication
