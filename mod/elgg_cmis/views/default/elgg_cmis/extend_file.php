@@ -36,6 +36,7 @@ if ($debug == 'yes') {
 
 	$content .= '<p>';
 	$content .= '<u>' . elgg_echo('elgg_cmis:file:metadata') . '&nbsp;:</u><br />';
+	$content .= '<br />' . elgg_echo('elgg_cmis:file:filename', array($file->originalfilename));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:mimetype', array($file->getMimeType()));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:simpletype', array($file->simpletype));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:size', array($file->getSize()));
@@ -90,6 +91,7 @@ if ($use_cmis) {
 				$content .= ' &nbsp; created on ' . $version->getCreationDate()->format('Y/m/d H:i');
 				$content .= ' &nbsp; <em>' . $version->getCheckinComment() . '</em>';
 				$content .= '<br /><small>CMIS ID ' . $version->getId() . '</small>';
+				$content .= '<br /><small><a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '?version=' . $version->getVersionLabel() . '">Download this version</a></small>';
 				$content .= '</li>';
 			}
 			//$content .= '<pre>' . print_r($version, true) . '</pre>';

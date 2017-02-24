@@ -247,12 +247,22 @@ function elgg_cmis_file_exists_in_cmis_filestore($file) {
 		$base = elgg_cmis_libraries();
 		if (elgg_cmis_is_valid_repo()) {
 			if (elgg_cmis_get_session()) {
+				// Use path
+				$cmis_file = elgg_cmis_get_document_by_path($file->cmis_path);
+				if ($cmis_file) { return $cmis_file; }
+				/* Note : one method should be enough, the most robust are either by versio-less id or by path
+				// Use version-less id (get latest version)
+				$cmis_id = explode(';', $file->cmis_id);
+				$cmis_file = elgg_cmis_get_document_by_id($cmis_id[0]);
+				if ($cmis_file) { return $cmis_file; }
+				
+				// Use direct id
 				$cmis_file = elgg_cmis_get_document_by_id($file->cmis_id);
-				if ($cmis_file) {
-					return $cmis_file;
-				} else {
-					register_error("Cannot get CMIS document : cannot get session. Please check plugin settings.");
-				}
+				if ($cmis_file) { return $cmis_file; }
+				*/
+				
+				// Failed...
+				register_error("Cannot get CMIS document : cannot get session. Please check plugin settings.");
 			} else {
 				register_error("Cannot use CMIS repository : cannot get session. Please check plugin settings.");
 			}

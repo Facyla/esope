@@ -188,6 +188,20 @@ function elgg_cmis_get_document_by_id($id = '') {
 	return false;
 }
 
+// Get a document by its CMIS path
+function elgg_cmis_get_document_by_path($path = '') {
+	if (!empty($path)) {
+		$session = elgg_cmis_get_session();
+		try {
+			$document = $session->getObjectByPath($path);
+			if ($document) { return $document; }
+		} catch (Exception $e) {
+			error_log("CMIS exception in elgg_cmis_get_document_by_path : " . $e->getMessage());
+		}
+	}
+	return false;
+}
+
 
 /** Create new folder (if not exists)
  * @param $folder : a parent folder grabbed by $session->createObjectId($folder->getId());
@@ -290,7 +304,7 @@ function elgg_cmis_version_document($path, $major = false, $stream = false, $par
 		//echo "[*] Versioned ID before: " . $document->getId() . "<br />";
 		//echo "[*] Versioned ID during checkout: ". $checkedOutDocumentId . "<br />";
 		
-		// Checkin
+		// Checkin new version
 		$checkedInDocumentId = $session->getObject($checkedOutDocumentId)->checkIn(
 				$major,
 				array(
@@ -306,7 +320,8 @@ function elgg_cmis_version_document($path, $major = false, $stream = false, $par
 		return false;
 	}
 	
-	return $document;
+	//return $document; // old ID
+	return $checkedInDocumentId; // New document (updated ID)
 }
 
 /** Move file / document to new folder

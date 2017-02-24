@@ -125,8 +125,9 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		// Save first file object to database, because we need the GUID to forge the CMIS filepath (has to be unique and should not change)
 		$guid = $file->save();
 		
-		// CMIS method (dkd PHP CMIS Client)
+		// CMIS method
 		if ($vendor == 'php-cmis-client') {
+			// dkd PHP CMIS Client
 			// Relative path in CMIS filestore (similar to Elgg filestore structure)
 			$file_path = new \Elgg\EntityDirLocator($file->owner_guid);
 			$file_path = $base_path . $file_path . 'file/';
@@ -162,12 +163,15 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				if ($return) {
 					$file->cmis_id = $return->getId();
 					$file->cmis_path = $file_path . $file_name;
+					//error_log("CMIS upload : {$file->guid} / {$file->cmis_id} {$file->cmis_path}");
 				}
 			} catch(Exception $e){
 				//error_log(print_r($e->message, true));
 				register_error(print_r($e->message, true));
 			}
+			
 		} else {
+			// Apache Chemistry library
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
 			try{
 				//elgg_cmis_create_document($path, $name = '', $content = null, $version = false, $params = array());

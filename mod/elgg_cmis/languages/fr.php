@@ -97,8 +97,9 @@ Votre mot de passe sera crypté.",
 	
 	// File versions
 	'elgg_cmis:versions' => "Versions&nbsp;:",
-	'elgg_cmis:version:latest' => "Latest version",
-	'elgg_cmis:version:latestmajor' => "Latest major version",
+	'elgg_cmis:version:latest' => "Dernière version",
+	'elgg_cmis:version:latestmajor' => "Dernière version majeure",
+	'elgg_cmis:version:notexists' => "La version %s n'existe pas (dernière %s)",
 	
 	// File details
 	'elgg_cmis:file:details' => "Informations sur CMIS et le Filestore utilisé&nbsp;:",
@@ -110,6 +111,7 @@ Votre mot de passe sera crypté.",
 	'elgg_cmis:file:size' => "Poids du fichier&nbsp;: %s",
 	'elgg_cmis:file:cmisid' => "ID CMIS&nbsp;: %s",
 	'elgg_cmis:file:cmispath' => "Chemin CMIS&nbsp;: %s",
+	'elgg_cmis:file:filename' => "Nom d'origine du fichier&nbsp;: %s",
 	'elgg_cmis:file:filestorename' => "Nom dans le filestore d'Elgg&nbsp;: %s",
 	'elgg_cmis:filestore' => "Filestore&nbsp;:",
 	'elgg_cmis:filestore:cmis' => "Le fichier devrait être stocké dans le répertoire CMIS",
