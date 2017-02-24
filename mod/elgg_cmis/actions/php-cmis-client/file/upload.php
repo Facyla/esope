@@ -153,7 +153,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 				} else {
 					// Move first to new path
-					error_log("$file_name, $old_file_path, $file_path");
+					//error_log("$file_name, $old_file_path, $file_path"); // debug
 					$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
 					$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
 					// Then update version
