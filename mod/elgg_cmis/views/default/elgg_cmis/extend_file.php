@@ -78,6 +78,8 @@ if ($debug == 'yes') {
 if ($use_cmis) {
 	$cmis_file = elgg_cmis_file_exists_in_cmis_filestore($file);
 	if ($cmis_file) {
+		$date_format = elgg_echo('elgg_cmis:version:dateformat');
+		if ($date_format == '') { $date_format = 'Y/m/d H:i:s'; }
 		$versions = $cmis_file->getAllVersions();
 		if (sizeof($versions) > 0) {
 			$content .= '<p><strong>' . elgg_echo('elgg_cmis:versions') . '</strong></p>';
@@ -85,13 +87,13 @@ if ($use_cmis) {
 			$content .= '<ul>';
 			foreach($versions as $version) {
 				$content .= '<li><strong>' . $version->getVersionLabel();
-				if ($version->isLatestVersion()) { $content .= ' ' . elgg_echo('elgg_cmis:version:latest'); }
-				if ($version->isLatestMajorVersion()) { $content .= ' ' . elgg_echo('elgg_cmis:version:latestmajor'); }
-				$content .= '</strong';
-				$content .= ' &nbsp; created on ' . $version->getCreationDate()->format('Y/m/d H:i');
-				$content .= ' &nbsp; <em>' . $version->getCheckinComment() . '</em>';
-				$content .= '<br /><small>CMIS ID ' . $version->getId() . '</small>';
-				$content .= '<br /><small><a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '?version=' . $version->getVersionLabel() . '">Download this version</a></small>';
+				if ($version->isLatestMajorVersion()) { $content .= ' - ' . elgg_echo('elgg_cmis:version:latestmajor'); }
+				else if ($version->isLatestVersion()) { $content .= ' - ' . elgg_echo('elgg_cmis:version:latest'); }
+				$content .= '</strong> &nbsp; <em>(';
+				if (!empty($version->getCheckinComment())) { $content .= $version->getCheckinComment() . ' - '; }
+				$content .= '<small>' . elgg_echo('elgg_cmis:version:createdon', array($version->getCreationDate()->format($date_format))) . '</small>';
+				$content .= '</em>)';
+				$content .= ' &nbsp; <a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '?version=' . $version->getVersionLabel() . '" title="CMIS ID ' . $version->getId() . '">' . elgg_echo('elgg_cmis:file:download') . '</a> &nbsp; <small>';
 				$content .= '</li>';
 			}
 			//$content .= '<pre>' . print_r($version, true) . '</pre>';
