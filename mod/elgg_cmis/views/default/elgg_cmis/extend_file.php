@@ -10,15 +10,11 @@ if (!$file) { return; }
 if (!$full) { return; }
 
 // Check that all conditions are met to use CMIS ?   But leads to a failure if CAS server is down or not accessible for some reason
-$use_cmis = true;
+$use_cmis = false;
 // Load libraries (and get base page handler include path)
 $vendor = elgg_cmis_vendor();
 $base = elgg_cmis_libraries();
-if (!elgg_cmis_is_valid_repo()) {
-	$use_cmis = false;
-} else if (!elgg_cmis_get_session()) {
-	$use_cmis = false;
-}
+if (elgg_cmis_is_valid_repo() && elgg_cmis_get_session()) { $use_cmis = true; }
 
 $content = '';
 
@@ -104,5 +100,7 @@ if ($use_cmis) {
 }
 
 
-echo '<div class="elgg-cmis-file-info">' . $content . '</div>';
+if (!empty($content)) {
+	echo '<div class="elgg-cmis-file-info">' . $content . '</div>';
+}
 
