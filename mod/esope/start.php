@@ -2686,7 +2686,7 @@ function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 	if ($delta_mem > 0) { $delta_mem = "+$delta_mem"; }
 	$last_mem = $mem;
 	
-	$return = "$ts $prefix $last_num : $delta_mem MB " . round($delta_ts, 4) . " s  --> " . round($mem/1000000) . " MB";
+	$return = "\n$ts $prefix $last_num : $delta_mem MB " . round($delta_ts, 4) . " s  --> " . round($mem/1000000) . " MB";
 	//echo $return . '<br />';
 	
 	$last_num++;

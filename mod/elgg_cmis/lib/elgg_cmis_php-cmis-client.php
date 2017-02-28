@@ -234,8 +234,9 @@ function elgg_cmis_create_folder($path, $name = '') {
  */
 function elgg_cmis_create_document($path = '', $name = '', $content = null, $version = false, $params = array()) {
 	$session = elgg_cmis_get_session();
-	// Create prent path if needed
+	// Create parent path if needed
 	$folder = elgg_cmis_get_folder($path, true);
+	$major = false;
 	/*
 	$paths = explode('/', $path);
 	$paths = array_filter($paths); // remove empty values and keep folder names
@@ -257,7 +258,7 @@ function elgg_cmis_create_document($path = '', $name = '', $content = null, $ver
 			);
 		//$document->setMimeType($mime_type);
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
-		// Create a new version
+		// If unable to create document and version allowed, create a new version
 		if ($version) {
 			$document = elgg_cmis_version_document($folder->getPath() . '/' . $name, $major, $content, $params);
 		}
@@ -287,7 +288,7 @@ function elgg_cmis_update_document($document, $properties = array()) {
  * @param $stream : new content
  * @param $params : new document version parameters
  */
-function elgg_cmis_version_document($path, $major = false, $stream = false, $params = array()) {
+function elgg_cmis_version_document($path, $major = true, $stream = false, $params = array()) {
 	$session = elgg_cmis_get_session();
 	$document = elgg_cmis_get_document($path);
 	$document = $session->getObject($document);

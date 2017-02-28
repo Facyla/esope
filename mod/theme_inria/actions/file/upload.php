@@ -156,15 +156,20 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			$file_params = array('mime_type' => $mime_type);
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
 			try{
-				if ($new_file || ($file_path == $old_file_path)) {
+				if ($new_file) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+				} else if ($file_path == $old_file_path) {
+					// Create new version of document
+					//$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				} else {
-					// Move first to new path
+					// Path has changed in filestore : move first to new path, then create new version
 					//error_log("$file_name, $old_file_path, $file_path"); // debug
 					$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
 					$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
 					// Then update version
-					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+					//$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
+					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				}
 				if ($return) {
 					$file->cmis_id = $return->getId();
