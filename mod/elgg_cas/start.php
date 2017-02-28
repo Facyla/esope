@@ -92,13 +92,18 @@ function elgg_cas_page_handler_ws($page) {
 }
 
 
+// Intercept lgout and disconnect from CAS
 function elgg_cas_logout_handler($event, $object_type, $object) {
+	// Skip logout if run programmatically (eg. from CLI or cron)
+	if (elgg_in_context('cron') || (php_sapi_name() == 'cli')) { return; }
+	
 	$user = elgg_get_logged_in_user_entity();
-	if ($user->is_cas_logged) {
+	if (elgg_instanceof($user, 'user') && $user->is_cas_logged) {
 		// Unset CAS login marker - we might use another way another time..
 		$user->is_cas_logged = false;
 		forward(elgg_get_site_url() . 'cas_auth/?logout');
-	} else return;
+	}
+	return;
 }
 
 
