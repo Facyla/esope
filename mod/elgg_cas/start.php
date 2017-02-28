@@ -47,7 +47,7 @@ function elgg_cas_init() {
 	}
 	
 	// Redirection pour déconnexion CAS après la fin du logout
-	elgg_register_event_handler('logout','user','elgg_cas_logout_handler');
+	elgg_register_event_handler('logout:after','user','elgg_cas_logout_handler');
 	
 	// Autologin attempt
 	if (!elgg_is_logged_in()) {
