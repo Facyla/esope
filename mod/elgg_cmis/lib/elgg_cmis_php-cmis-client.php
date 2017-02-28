@@ -230,7 +230,7 @@ function elgg_cmis_create_folder($path, $name = '') {
  * @param $content : content stream
  * @param $version : create a new version if exists ?
  * @param $params : document or new version params
- * @return : new folder object, or existing folder object
+ * @return : new document object, or new document version object
  */
 function elgg_cmis_create_document($path = '', $name = '', $content = null, $version = false, $params = array()) {
 	$session = elgg_cmis_get_session();
@@ -251,6 +251,7 @@ function elgg_cmis_create_document($path = '', $name = '', $content = null, $ver
 			\Dkd\PhpCmis\PropertyIds::NAME => $name
 		);
 	try {
+		//error_log(" - creating new document");
 		$document = $session->createDocument(
 				$properties,
 				$session->createObjectId($folder->getId()),
@@ -258,7 +259,8 @@ function elgg_cmis_create_document($path = '', $name = '', $content = null, $ver
 			);
 		//$document->setMimeType($mime_type);
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
-		// If unable to create document and version allowed, create a new version
+		// If unable to create document and versionning is allowed, create a new version
+		//error_log(" - failed creating new document - creating new version");
 		if ($version) {
 			$document = elgg_cmis_version_document($folder->getPath() . '/' . $name, $major, $content, $params);
 		}

@@ -82,6 +82,10 @@ if ($use_cmis) {
 			$content .= '<div class="elgg-output">';
 			$content .= '<ul>';
 			foreach($versions as $version) {
+				// @TODO 2 versions are created when uploading a new document
+				// Skip first version
+				if (($version->getCheckinComment() == "Initial Version") && (sizeof($versions) > 1)) { continue; }
+				
 				$content .= '<li><strong>' . $version->getVersionLabel();
 				if ($version->isLatestMajorVersion()) { $content .= ' - ' . elgg_echo('elgg_cmis:version:latestmajor'); }
 				else if ($version->isLatestVersion()) { $content .= ' - ' . elgg_echo('elgg_cmis:version:latest'); }

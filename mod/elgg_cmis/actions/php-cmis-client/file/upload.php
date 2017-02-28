@@ -98,7 +98,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$prefix = "file/";
 
-	// @TODO CMIS : handle new version instead of removing file
+	// CMIS : handle new version instead of removing file
 	// if previous file in Elgg filestore, delete it
 	if (!$new_file) {
 		// CMIS : keep original file name (for versionning)
