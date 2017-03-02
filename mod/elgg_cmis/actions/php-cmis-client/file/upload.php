@@ -141,6 +141,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				$cmis_path = explode('/', $file->cmis_path);
 				$file_name = array_pop($cmis_path);
 				// Note : if owner changes, file path will change so we should move CMIS file first
+				// However, owner is not supposed to change
 				$old_file_path = implode('/', $cmis_path) . '/';
 			}
 			$file_content = file_get_contents($_FILES['upload']['tmp_name']);
@@ -172,7 +173,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				}
 			} catch(Exception $e){
 				//error_log(print_r($e->message, true));
-				register_error(print_r($e->message, true));
+				register_error(print_r($e->getMessage(), true));
 			}
 			
 		} else {

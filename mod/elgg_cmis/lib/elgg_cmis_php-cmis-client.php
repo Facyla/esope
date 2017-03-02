@@ -105,7 +105,7 @@ function elgg_cmis_get_folder($path, $create_path = false) {
 		}
 		if ($folder) { return $folder; }
 	} catch (Exception $e) {
-		echo "elgg_cmis_get_folder $path  : " . $e->getMessage() . "<br />"; // debug
+		echo "CMIS get folder $path failed : " . $e->getMessage() . "<br />"; // debug
 		//echo print_r($e, true);
 	}
 	
@@ -221,6 +221,7 @@ function elgg_cmis_create_folder($path, $name = '') {
 		$new_folder = $session->createFolder($properties, $folder);
 		return $new_folder;
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
+		error_log("CMIS create folder failed : " . $e->getMessage());
 	}
 	return false;
 }
@@ -319,6 +320,7 @@ function elgg_cmis_version_document($path, $major = true, $stream = false, $para
 		//echo "[*] Versioned ID after: " . $checkedInDocumentId->getId() . "<br /><br />";
 		
 	} catch (\Dkd\PhpCmis\Exception\CmisVersioningException $e) {
+		error_log("CMIS version document failed : " . $e->getMessage());
 		//$content .= "ERROR : " . $e->getMessage() . "<br />";
 		return false;
 	}
@@ -342,6 +344,7 @@ function elgg_cmis_move_document($document, $path, $new_path) {
 		$document->move($folder, $new_folder);
 		return $document;
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
+		error_log("CMIS move document failed : " . $e->getMessage());
 	}
 	return false;
 }
@@ -358,7 +361,8 @@ function elgg_cmis_delete_document($document, $all_versions = true) {
 			//$document->delete($all_versions);
 			$session->delete($document, $all_versions);
 			return true;
-		} catch (Exeption $e) {
+		} catch (Exception $e) {
+		error_log("CMIS delete document failed : " . $e->getMessage());
 		}
 	}
 	return false;
