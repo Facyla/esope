@@ -136,13 +136,14 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			if ($new_file) {
 				$filestorename = $guid . '_' . time(); // do we need ts ?
 				$file_name = $filestorename;
-			} else {
-				// Get old file name
-				$cmis_path = explode('/', $file->cmis_path);
-				$file_name = array_pop($cmis_path);
-				// Note : if owner changes, file path will change so we should move CMIS file first
-				// However, owner is not supposed to change
-				$old_file_path = implode('/', $cmis_path) . '/';
+			} else if (!empty($file->cmis_path)) {
+				// Get old file name on CMIS filestore
+					$cmis_path = explode('/', $file->cmis_path);
+					$file_name = array_pop($cmis_path);
+					// If owner changes, file path will change so we should move CMIS file first
+					// Note: however, owner is not supposed to change
+					$old_file_path = implode('/', $cmis_path) . '/';
+				}
 			}
 			$file_content = file_get_contents($_FILES['upload']['tmp_name']);
 			$file_content = \GuzzleHttp\Stream\Stream::factory($file_content);
@@ -151,7 +152,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			$file_params = array('mime_type' => $mime_type);
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
 			try{
-				if ($new_file) {
+				if ($new_file || empty($file->cmis_path)) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 				} else if ($file_path == $old_file_path) {
 					// Create new version of document
@@ -166,14 +167,14 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 					//$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				}
-				if ($return) {
-					$file->cmis_id = $return->getId();
-					$file->cmis_path = $file_path . $file_name;
-					//error_log("CMIS upload : {$file->guid} / {$file->cmis_id} {$file->cmis_path}");
-				}
 			} catch(Exception $e){
 				//error_log(print_r($e->message, true));
 				register_error(print_r($e->getMessage(), true));
+			}
+			if ($return) {
+				$file->cmis_id = $return->getId();
+				$file->cmis_path = $file_path . $file_name;
+				//error_log("CMIS upload : {$file->guid} / {$file->cmis_id} {$file->cmis_path}");
 			}
 			
 		} else {

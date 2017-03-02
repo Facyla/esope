@@ -142,13 +142,12 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			if ($new_file) {
 				$filestorename = $guid . '_' . time(); // do we need ts ?
 				$file_name = $filestorename;
-			} else {
+			} else if (!empty($file->cmis_path)) {
 				// Get old file name on CMIS filestore
-				if (!empty($file->cmis_path)) {
 					$cmis_path = explode('/', $file->cmis_path);
 					$file_name = array_pop($cmis_path);
-					// Note : if owner changes, file path will change so we should move CMIS file first
-					// However, owner is not supposed to change
+					// If owner changes, file path will change so we should move CMIS file first
+					// Note: however, owner is not supposed to change
 					$old_file_path = implode('/', $cmis_path) . '/';
 				}
 			}
@@ -158,7 +157,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			$file_version = true;
 			$file_params = array('mime_type' => $mime_type);
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
-//			try{
+			try{
 				if ($new_file || empty($file->cmis_path)) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 				} else if ($file_path == $old_file_path) {
@@ -167,17 +166,17 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				} else {
 					// Path has changed in filestore : move first to new path, then create new version
-					error_log("$file_name, $old_file_path, $file_path"); // debug
+					//error_log("$file_name, $old_file_path, $file_path"); // debug
 					$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
 					$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
 					// Then update version
 					//$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				}
-//			} catch(Exception $e){
-//				//error_log(print_r($e->message, true));
-//				register_error(print_r($e->getMessage(), true));
-//			}
+			} catch(Exception $e){
+				//error_log(print_r($e->message, true));
+				register_error(print_r($e->getMessage(), true));
+			}
 			if ($return) {
 				$file->cmis_id = $return->getId();
 				$file->cmis_path = $file_path . $file_name;

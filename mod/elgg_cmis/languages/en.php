@@ -114,6 +114,7 @@ Your password will be encrypted.",
 	'elgg_cmis:filestore:elgg' => "File should be stored in Elgg filestore",
 	'elgg_cmis:filestore:elgg:stored' => "File is stored in Elgg repository",
 	'elgg_cmis:filestore:elgg:notstored' => "File is NOT stored in Elgg repository",
+	'elgg_cmis:filestore:elgg:fallback' => "Could not use CMIS filestore, falling back to Elgg filestore.",
 	
 	
 );

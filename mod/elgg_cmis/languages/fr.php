@@ -126,6 +126,7 @@ Votre mot de passe sera crypté.",
 	'elgg_cmis:filestore:elgg' => "Le fichier devrait être stocké dans le filestore d'Elgg",
 	'elgg_cmis:filestore:elgg:stored' => "Le fichier est stocké dans le filestore d'Elgg",
 	'elgg_cmis:filestore:elgg:notstored' => "Le fichier n'est pas stocké dans le filestore d'Elgg",
+	'elgg_cmis:filestore:elgg:fallback' => "Erreur du filestore CMIS, stockage sur la plateforme.",
 	
 	
 );
