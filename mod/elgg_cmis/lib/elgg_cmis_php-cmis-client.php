@@ -204,7 +204,7 @@ function elgg_cmis_get_document_by_path($path = '') {
 
 
 /** Create new folder (if not exists)
- * @param $folder : a parent folder grabbed by $session->createObjectId($folder->getId());
+ * @param $path : full new folder path
  * @param $name : new folder name
  * @return : new folder object, or existing folder object
  */
@@ -335,10 +335,10 @@ function elgg_cmis_version_document($path, $major = true, $stream = false, $para
  */
 function elgg_cmis_move_document($document, $path, $new_path) {
 	$folder = elgg_cmis_get_folder($path);
-	$new_folder = elgg_cmis_get_folder($new_path);
-	$folderId = $folder->getId();
-	$new_folderId = $new_folder->getId();
+	$new_folder = elgg_cmis_get_folder($new_path, true); // we may need to create the folder if owner changed
 	try {
+		$folderId = $folder->getId();
+		$new_folderId = $new_folder->getId();
 		$document->move($folder, $new_folder);
 		return $document;
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
