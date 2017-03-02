@@ -200,7 +200,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 		}
 		// Warn if CMIS filestore could not be used
 		if (!$return) {
-			system_message("Could not use CMIS filestore, falling back to Elgg filestore.");
+			system_message(elgg_echo('elgg_cmis:filestore:elgg:fallback'));
 		}
 	}
 	
