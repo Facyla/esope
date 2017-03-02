@@ -156,7 +156,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			$file_version = true;
 			$file_params = array('mime_type' => $mime_type);
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
-			try{
+//			try{
 				if ($new_file) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 				} else if ($file_path == $old_file_path) {
@@ -165,21 +165,21 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				} else {
 					// Path has changed in filestore : move first to new path, then create new version
-					//error_log("$file_name, $old_file_path, $file_path"); // debug
+					error_log("$file_name, $old_file_path, $file_path"); // debug
 					$old_file = elgg_cmis_get_document($old_file_path . $file_name, true);
 					$moved_file = elgg_cmis_move_document($old_file, $old_file_path, $file_path);
 					// Then update version
 					//$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				}
-				if ($return) {
-					$file->cmis_id = $return->getId();
-					$file->cmis_path = $file_path . $file_name;
-					//error_log("CMIS upload : {$file->guid} / {$file->cmis_id} {$file->cmis_path}");
-				}
-			} catch(Exception $e){
-				//error_log(print_r($e->message, true));
-				register_error(print_r($e->getMessage(), true));
+//			} catch(Exception $e){
+//				//error_log(print_r($e->message, true));
+//				register_error(print_r($e->getMessage(), true));
+//			}
+			if ($return) {
+				$file->cmis_id = $return->getId();
+				$file->cmis_path = $file_path . $file_name;
+				//error_log("CMIS upload : {$file->guid} / {$file->cmis_id} {$file->cmis_path}");
 			}
 			
 		} else {
