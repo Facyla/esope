@@ -138,13 +138,13 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				$file_name = $filestorename;
 			} else if (!empty($file->cmis_path)) {
 				// Get old file name on CMIS filestore
-					$cmis_path = explode('/', $file->cmis_path);
-					$file_name = array_pop($cmis_path);
-					// If owner changes, file path will change so we should move CMIS file first
-					// Note: however, owner is not supposed to change
-					$old_file_path = implode('/', $cmis_path) . '/';
-				}
+				$cmis_path = explode('/', $file->cmis_path);
+				$file_name = array_pop($cmis_path);
+				// If owner changes, file path will change so we should move CMIS file first
+				// Note: however, owner is not supposed to change
+				$old_file_path = implode('/', $cmis_path) . '/';
 			}
+			
 			$file_content = file_get_contents($_FILES['upload']['tmp_name']);
 			$file_content = \GuzzleHttp\Stream\Stream::factory($file_content);
 			// Create new version for file

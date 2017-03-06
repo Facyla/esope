@@ -137,6 +137,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			// Relative path in CMIS filestore (similar to Elgg filestore structure)
 			$file_path = new \Elgg\EntityDirLocator($file->owner_guid);
 			$file_path = $base_path . $file_path . 'file/';
+			
 			// File name on filestore should never change, but file name, content and type can change afterwards
 			// So use a content-agnostic naming, so we can reuse existing file if already stored
 			if ($new_file) {
@@ -144,13 +145,13 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				$file_name = $filestorename;
 			} else if (!empty($file->cmis_path)) {
 				// Get old file name on CMIS filestore
-					$cmis_path = explode('/', $file->cmis_path);
-					$file_name = array_pop($cmis_path);
-					// If owner changes, file path will change so we should move CMIS file first
-					// Note: however, owner is not supposed to change
-					$old_file_path = implode('/', $cmis_path) . '/';
-				}
+				$cmis_path = explode('/', $file->cmis_path);
+				$file_name = array_pop($cmis_path);
+				// If owner changes, file path will change so we should move CMIS file first
+				// Note: however, owner is not supposed to change
+				$old_file_path = implode('/', $cmis_path) . '/';
 			}
+			
 			$file_content = file_get_contents($_FILES['upload']['tmp_name']);
 			$file_content = \GuzzleHttp\Stream\Stream::factory($file_content);
 			// Create new version for file
@@ -188,11 +189,11 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
 			try{
 				//elgg_cmis_create_document($path, $name = '', $content = null, $version = false, $params = array());
-			$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
-			if ($return) {
-				$file->cmis_id = $return->id;
-				$file->cmis_path = $file->getFilenameOnFilestore() . $filestorename;
-			}
+				$return = elgg_cmis_upload_file($file->getFilenameOnFilestore(), $filestorename, '', $mime_type);
+				if ($return) {
+					$file->cmis_id = $return->id;
+					$file->cmis_path = $file->getFilenameOnFilestore() . $filestorename;
+				}
 			} catch(Exception $e){
 				//error_log(print_r($e->message, true));
 				register_error(print_r($e->message, true));
