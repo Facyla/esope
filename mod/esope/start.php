@@ -1711,6 +1711,7 @@ function esope_user_profile_gatekeeper($user = false, $forward = true) {
 
 // Credits goes to rommel http://www.php.net/manual/fr/function.filesize.php
 function esope_human_filesize($filepath, $decimals = 2) {
+	if (!file_exists($filepath)) { return false; }
 	$bytes = filesize($filepath);
 	//$sz = elgg_echo('esope:filesize:units'); // Can be used for translations
 	$sz = 'BKMGTP';
