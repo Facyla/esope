@@ -150,29 +150,30 @@ function esope_init() {
 	// Used by wysiwyg editors templates
 	elgg_register_simplecache_view('js/esope/ckeditor_templates');
 	
+	$vendors_base = 'mod/esope/vendors/';
 	// Update jQuery UI to 1.11.4 (requires jQuery 1.6+), with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
-	elgg_define_js('jquery.ui', array('src' => 'mod/esope/vendors/jquery-ui/jquery-ui.min.js', 'deps' => array('jquery')));
-	elgg_register_css('jquery.ui', 'mod/esope/vendors/jquery-ui/themes/smoothness/jquery-ui.min.css');
-	elgg_register_css('jquery.ui.theme', 'mod/esope/vendors/jquery-ui/themes/smoothness/theme.css');
+	elgg_define_js('jquery.ui', array('src' => $vendors_base . 'jquery-ui/jquery-ui.min.js', 'deps' => array('jquery')));
+	elgg_register_css('jquery.ui', $vendors_base . 'jquery-ui/themes/smoothness/jquery-ui.min.css');
+	elgg_register_css('jquery.ui.theme', $vendors_base . 'jquery-ui/themes/smoothness/theme.css');
 	elgg_require_js('jquery.ui');
 	elgg_load_css('jquery.ui');
 	elgg_load_css('jquery.ui.theme');
 	
 	// Passe le datepicker en français
-	elgg_register_js('jquery.datepicker.fr', 'mod/esope/vendors/ui.datepicker-fr.js');
+	elgg_register_js('jquery.datepicker.fr', $vendors_base . 'ui.datepicker-fr.js');
 	elgg_load_js('jquery.datepicker.fr');
 	// Webdesign : Floatable elements (.is-floatable, .floating)
-	elgg_register_js('floatable.elements', 'mod/esope/vendors/floatable-elements.js', 'footer');
+	elgg_register_js('floatable.elements', $vendors_base . 'floatable-elements.js', 'footer');
 	elgg_load_js('floatable.elements');
 	// Ajout un member picker avec sélection unique pour les messages
 	// @TODO : not functional yet
-	//elgg_register_js('elgg.messagesuserpicker', 'mod/esope/vendors/ui.messagesuserpicker.js');
+	//elgg_register_js('elgg.messagesuserpicker', $vendors_base . 'ui.messagesuserpicker.js');
 	
 	/* jquery colorpicker (fully featured color picker with transparency support)
 	 * See project on https://github.com/vanderlee/colorpicker
 	*/
-	$jquery_colorpicker_base = 'mod/esope/vendors/colorpicker/';
+	$jquery_colorpicker_base = $vendors_base . 'colorpicker/';
 	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'jquery.colorpicker.css');
 	elgg_define_js('jquery.colorpicker', array('src' => $jquery_colorpicker_base . 'jquery.colorpicker.js', 'deps' => array('jquery', 'jquery.ui'), 'exports' => "colorpicker"));
 	elgg_define_js('jquery.colorpicker-i18n', array('src' => $jquery_colorpicker_base . 'i18n/jquery.ui.colorpicker-fr.js', 'deps' => array('jquery.colorpicker')));
@@ -186,8 +187,16 @@ function esope_init() {
 	elgg_define_js('jquery.colorpicker-cmyk', array('src' => $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-parser.js', 'deps' => array('jquery.colorpicker')));
 	elgg_define_js('jquery.colorpicker-cmyk-percentage', array('src' => $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js', 'deps' => array('jquery.colorpicker')));
 	
+	// Provides a stext comparison function (port of PHP similar_text)
+	elgg_define_js('similar_text', [
+			'src' => $vendors_base . 'similar_text.js',
+			'deps' => ['jquery'],
+			'exports' => 'similar_text',
+	]);
+	
+	
 	/* Alternate vendors/jquery-colorpicker/ : more basic and no transparency support, but nice one
-	$jquery_colorpicker_base = 'mod/esope/vendors/jquery-colorpicker/';
+	$jquery_colorpicker_base = $vendors_base . 'jquery-colorpicker/';
 	elgg_define_js('jquery.colorpicker', array('src' => $jquery_colorpicker_base . 'js/colorpicker.js', 'deps' => array('jquery'), 'exports' => "ColorPicker"));
 	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'css/colorpicker.css');
 	*/
@@ -1205,7 +1214,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
 	$value = elgg_extract($key, $params, false, true);
 	// Try get_input only if nothing was set in params
 	if ($value === false) { $value = get_input($key, false); }
-	// If there is neither $params not input, use default (but don't if anything was set, event empty !)
+	// If there is neither $params not input, use default (but don't if anything was set, even empty !)
 	if ($value === false) { $value = $default; }
 	// Sanitise string
 	if ($sanitise && is_string($value)) { $value = sanitise_string($value); }
@@ -1225,18 +1234,22 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
  	- container_guid : container of entity
  	- metadata : list of metadata and values
  	- merge_params : additional custom search params (will be added to the search parameters)
+ 	- returntype : default returns a listing, 'entities' return an array of entities, callback uses callback to process returns
+ 	- callback : callback function used to display the results (requires to set returntype => 'callback')
+ 	- no_result : message to display if no result found
    Note that search can be parametered both directly (params), or with URL. Params will override URL queries.
    Important : $params are NOT defaults, these are filters = if set to anything (except false), it will override GET inputs
  * $defaults : sets the defaults for any input value
- * max_results : let's override the max number of displayed results. 
+ * *max_results : let's override the max number of displayed results. 
    Note that a pagination should be implemented by any plugin using this function
  * TODO :
    - fulltext search in tags
    - fulltext search in comments
    - allow fulltext search in any metadata ? (warning !)
    - integrate (if search plugin active) search_highlight_words($words, $string)
+   - add callback function for results listing
  */
-function esope_esearch($params = array(), $defaults = array(), $max_results = 10) {
+function esope_esearch($params = array(), $defaults = array(), $max_results = 10, $callback = false) {
 	$debug = esope_extract('debug', $params, false);
 	$add_count = esope_extract('add_count', $params, $defaults['add_count']);
 	$hide_pagination = esope_extract('hide_pagination', $params, $defaults['hide_pagination']);
@@ -1270,18 +1283,22 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$metadata_name_value_pairs_operator = esope_extract('metadata_name_value_pairs_operator', $params, $defaults['metadata_name_value_pairs_operator']);
 	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
 	$count = esope_extract('count', $params, $defaults['count']);
+	$no_result = elgg_echo('esope:search:noresult');
+	if (isset($params['no_result'])) { $no_result = $params['no_result']; }
 	
 	
-	// Build search URL query elements
-	$base_url = "?";
-	$url_fragment = '';
-	if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
-	if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
-	$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'sort', 'order');
-	foreach($search_filters as $filter) {
-		// Add valid filters to search query URL
-		if (!empty($$filter)) {
-			$url_fragment .= "&$filter={$$filter}";
+	// Build search URL query elements (for load more link)
+	if ($hide_pagination != 'yes') {
+		$base_url = "?";
+		$url_fragment = '';
+		if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
+		if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
+		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'sort', 'order');
+		foreach($search_filters as $filter) {
+			// Add valid filters to search query URL
+			if (!empty($$filter)) {
+				$url_fragment .= "&$filter={$$filter}";
+			}
 		}
 	}
 	
@@ -1320,7 +1337,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	}
 
 	// Build metadata name-value pairs from input array
-	if ($metadata) {
+	if ($metadata && ($hide_pagination != 'yes')) {
 		foreach ($metadata as $name => $value) {
 			if (!empty($name) && !empty($value)) {
 				$metadata_name_value_pairs[] = array('name' => $name, 'value' => $value);
@@ -1355,7 +1372,6 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		}
 	}
 	
-
 	
 	
 	// PERFORM SEARCH RESULTS COUNT
@@ -1378,8 +1394,22 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	// Return results entities array if asked to
 	if ($params['returntype'] == 'entities') {
 		$entities = elgg_get_entities_from_metadata($search_params);
+		//$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
 		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 		return $entities;
+	}
+	
+	// Return results through callback if asked to
+	if ($params['returntype'] == 'callback') {
+		if (!is_callable($params['callback'])) {
+			register_error("Callback function does not exist");
+			return false;
+		}
+		//$entities = elgg_get_entities_from_metadata($search_params);
+		$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
+		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
+		$params['q'] = $q;
+		return call_user_func($params['callback'], array('entities' => $entities, 'count' => $return_count, 'params' => $params, 'search_params' => $search_params));
 	}
 	
 	// Return results listing otherwise
@@ -1409,7 +1439,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		} else if ($return_count > 0) {
 			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
 		} else {
-			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+			$return .= '<span class="esope-results-count">' . $no_result . '</span>';
 		}
 	}
 	//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
@@ -1417,6 +1447,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	elgg_push_context('search');
 	elgg_push_context('widgets');
 	$return .= elgg_list_entities_from_metadata($search_params);
+	//$batch = new ElggBatch('elgg_list_entities_from_metadata', $search_params);
+	//$return .= '<pre>'.print_r($batch).'</pre>';
 	elgg_pop_context('widgets');
 	elgg_pop_context('search');
 	
@@ -1448,7 +1480,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		$return .= '</div>';
 	}
 	
-	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
+	if (empty($return)) { $return = '<span class="esope-noresult">' . $no_result . '</span>'; }
 	
 	return $return;
 }
@@ -1921,6 +1953,25 @@ function esope_get_meta_values($meta_name, $sort = true) {
 	}
 	return $meta_opt;
 	*/
+}
+
+
+/* Return distinct metadata values for a given metadata name
+ * Quickest method uses a direct SQL query
+ * Also default sort alphabetically
+ */
+function esope_get_object_title_values($subtype, $sort = true) {
+	$subtype_id = get_subtype_id('object', $subtype);
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT DISTINCT title FROM `" . $dbprefix . "objects_entity` as o 
+		JOIN `" . $dbprefix . "entities` as e ON e.guid = o.guid 
+		WHERE o.guid IN (SELECT guid FROM `" . $dbprefix . "entities` WHERE subtype = '$subtype_id')";
+	if ($sort) { $query .= ' ORDER BY o.title ASC;'; }
+	$query .= ';';
+		//WHERE md.name_id = (SELECT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
+	$rows = get_data($query);
+	foreach ($rows as $row) { $results[] = $row->title; }
+	return $results;
 }
 
 // http://reference.elgg.org/1.8/engine_2lib_2metadata_8php.html#a1614d620ec0b0d0b9531c68070ffb33c
