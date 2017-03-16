@@ -13,8 +13,6 @@ function elgg_cmis_init(){
 	
 	// CSS et JS
 	elgg_extend_view('css/elgg', 'elgg_cmis/css');
-	elgg_register_js('elgg_cmis:dialog', '/mod/elgg_cmis/vendors/cmis/soap/include/dialog.js', 'head');
-	elgg_load_js('elgg_cmis:dialog');
 	
 	// Add CMIS info to files
 	elgg_extend_view('object/file', 'elgg_cmis/extend_file');
@@ -78,14 +76,20 @@ function elgg_cmis_libraries() {
 	$vendor = elgg_cmis_vendor();
 	
 	if ($vendor == 'php-cmis-client') {
+		$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis/php-cmis-client';
+		
 		elgg_register_library('elgg:elgg_cmis:vendor', elgg_get_plugins_path() . 'elgg_cmis/vendors/php-cmis-client/vendor/autoload.php');
 		elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis_php-cmis-client.php');
-		$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis/php-cmis-client';
+		
 	} else {
+		$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis/chemistry-phpclient';
+		
 		elgg_register_library('elgg:elgg_cmis:vendor', elgg_get_plugins_path() . 'elgg_cmis/vendors/chemistry-phpclient/lib/cmis_repository_wrapper.php');
 		elgg_register_library('elgg:elgg_cmis', elgg_get_plugins_path() . 'elgg_cmis/lib/elgg_cmis_chemistry-phpclient.php');
-		$base = elgg_get_plugins_path() . 'elgg_cmis/pages/elgg_cmis/chemistry-phpclient';
-	}
+		
+		elgg_register_js('elgg_cmis:dialog', '/mod/elgg_cmis/vendors/cmis/soap/include/dialog.js', 'head');
+		elgg_load_js('elgg_cmis:dialog');
+		}
 	
 	// Load selected libraries
 	elgg_load_library('elgg:elgg_cmis:vendor');

@@ -1,7 +1,7 @@
 <?php
 /* CMIS : upload to CMIS repository
- * @TODO : set up version-safe folder structure - this means not using ts nor filename-dependent path in filestore
- * @TODO : add versionning
+ *
+ * Note : this file is used both for single and multiple upload
  */
 
 
