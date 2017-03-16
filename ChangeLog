@@ -1,3 +1,7 @@
+2017-01-26  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* CHANGELOG.md, composer.json: chore(release): v1.12.15
+
 2016-11-08  Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
 
   	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,
