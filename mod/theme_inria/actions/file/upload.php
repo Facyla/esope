@@ -20,7 +20,8 @@ if ($use_cmis) {
 	
 	// CMIS config
 	$base_path = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/");
-}
+$always_use_elggfilestore = elgg_get_plugin_setting('always_use_elggfilestore', 'elgg_cmis', true);
+if ($always_use_elggfilestore != 'no') { $always_use_elggfilestore = true; } else { $always_use_elggfilestore = false; }
 
 /**
  * Elgg file uploader/edit action
@@ -122,6 +123,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	$file->setMimeType($mime_type);
 	$file->simpletype = elgg_get_file_simple_type($mime_type);
+	// Latest used filestore
+	$latest_filestore = array();
 
 	// Try using CMIS filestore first, if unavailable fallback to Elgg method
 	// Note : unless thumbnails support is implemented, avoid storing images on CMIS filestore
@@ -181,6 +184,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			if ($return) {
 				$file->cmis_id = $return->getId();
 				$file->cmis_path = $file_path . $file_name;
+				$latest_filestore[] = 'cmis';
 				//error_log("CMIS upload : {$file->guid} / {$file->cmis_id} {$file->cmis_path}");
 			}
 			
@@ -193,6 +197,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 				if ($return) {
 					$file->cmis_id = $return->id;
 					$file->cmis_path = $file->getFilenameOnFilestore() . $filestorename;
+					$latest_filestore[] = 'cmis';
 				}
 			} catch(Exception $e){
 				//error_log(print_r($e->message, true));
@@ -206,23 +211,25 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	}
 	
 	// Use Elgg filestore if not using CMIS, or if CMIS upload failed
-	if (!$use_cmis || !$return) {
+	// Or if we want to store file both on CMIS an Elgg
+	if (!$use_cmis || !$return || $always_use_elggfilestore) {
 		// Open the file to guarantee the directory exists
 		$file->open("write");
 		$file->close();
-		move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore());
-		// Should we clean old CMIS metadata ? (no longer valid, but can be useful for revisions)
-		/*
-		if (!empty($file->cmis_id)) { $file->cmis_id = false; }
-		if (!empty($file->cmis_path)) { $file->cmis_path = false; }
-		*/
-
-		// @TODO CMIS : create thumbnails ? (or should CMIS handle only non-images files ?)
+		if (move_uploaded_file($_FILES['upload']['tmp_name'], $file->getFilenameOnFilestore())) {
+			$latest_filestore[] = 'elgg';
+		}
 		
 		// Save file object to database
 		$guid = $file->save();
 	}
 
+	// Store latest used filestore(s)
+	$file->latest_filestore = $latest_filestore;
+	
+	
+	
+	// THUMBNAILS
 	// Note on thumbnails: while CMIS is not used for image files (yet), a given image file can become a document and then change filestore between Elgg and CMIS
 	// So removing old thumbnails can happen even if current file is stored in CMIS filestore
 	// Also even images that would be stored in CMIS should have its thumbnails in Elgg filestore (at least until we support storing images on CMIS)	

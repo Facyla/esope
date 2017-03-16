@@ -196,7 +196,12 @@ function elgg_cmis_is_valid_repo($cmis_url = false) {
 	static $is_valid_repo = null;
 	if (!is_null($is_valid_repo)) { return $is_valid_repo; }
 	
-	if (!$cmis_url) { $cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis'); }
+	if (!$cmis_url) {
+		// Use browser binding because base URL can be valid and API in read-only mode and not responding (error 401)
+		$cmis_url = elgg_get_plugin_setting('cmis_url', 'elgg_cmis');
+		$cmis_browser_binding = elgg_get_plugin_setting('cmis_1_1_browser_binding', 'elgg_cmis');
+		//$cmis_url = $cmis_url . $cmis_browser_binding;
+	}
 	
 	if (function_exists('esope_is_valid_url')) {
 		return esope_is_valid_url($cmis_url);

@@ -38,6 +38,7 @@ if ($debug == 'yes') {
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:size', array($file->getSize()));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:cmisid', array($file->cmis_id));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:cmispath', array($file->cmis_path));
+	$content .= '<br />' . elgg_echo('elgg_cmis:file:latest_filestore', array(implode(', ', (array)$file->latest_filestore)));
 	$content .= '<br />' . elgg_echo('elgg_cmis:file:filestorename', array($file->getFilenameOnFilestore()));
 	$content .= '</p>';
 

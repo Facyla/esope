@@ -17,6 +17,7 @@ return array(
 	'elgg_cmis:settings:backend:legend' => "Paramètres spécifiques pour le mode Backend",
 	'elgg_cmis:settings:filestore_path' => "Chemin des fichiers sur le serveur",
 'elgg_cmis:settings:filestore_path:details' => "Le chemin absolu de la racine pour le stockage des fichiers sur le serveur CMIS. L'utilisateur configuré doit avoir tous les droits d'édition sur ce répertoire. Par ex.&nbsp;: /Applications/elgg/",
+	'elgg_cmis:settings:always_use_elggfilestore' => "Conserver également la dernière version dans Elgg Filestore",
 	
 	'elgg_cmis:cmis_url' => "Base de l'URL CMIS",
 	'elgg_cmis:cmis_url:details' => "URL complète avec un slash final. Par ex. pour Alfresco, cette URL se termine par&nbsp;: alfresco/",
@@ -117,6 +118,7 @@ Votre mot de passe sera crypté.",
 	'elgg_cmis:file:cmispath' => "Chemin CMIS&nbsp;: %s",
 	'elgg_cmis:file:filename' => "Nom d'origine du fichier&nbsp;: %s",
 	'elgg_cmis:file:filestorename' => "Nom dans le filestore d'Elgg&nbsp;: %s",
+	'elgg_cmis:file:latest_filestore' => "Dernière version du fichier stockée dans&nbsp;: %s",
 	'elgg_cmis:file:download' => "<i class=\"fa fa-download\"></i>&nbsp;Télécharger",
 	
 	'elgg_cmis:filestore' => "Filestore&nbsp;:",

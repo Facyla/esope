@@ -9,6 +9,7 @@
 
 $plugin = $vars['entity'];
 $ny_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes'));
+$yn_opt = array_reverse($ny_opt);
 $vendors_opt = array('php-cmis-client' => 'PHP CMIS Client (dkd)', 'chemistry-phpclient' => 'CMIS PHP Client (Apache Chemistry)');
 
 // Default required settings
@@ -33,8 +34,8 @@ echo '<p><label>' . elgg_echo('elgg_cmis:settings:usercmis') . elgg_view('input/
 
 // @TODO enable also an object mode (where config is stored in object) ?
 
-echo '<p><label>' . elgg_echo('elgg_cmis:debugmode');
-echo elgg_view('input/select', array('name' => 'params[debugmode]', 'options_values' => $ny_opt, 'value' => $plugin->debugmode)) . '</label></p>';
+// Debug mode
+echo '<p><label>' . elgg_echo('elgg_cmis:debugmode') . elgg_view('input/select', array('name' => 'params[debugmode]', 'options_values' => $ny_opt, 'value' => $plugin->debugmode)) . '</label></p>';
 
 
 
@@ -79,6 +80,8 @@ if ($plugin->backend == 'yes') {
 		echo '<p><label>' . elgg_echo('elgg_cmis:cmis_password') . elgg_view('input/text', array('name' => 'params[cmis_password]', 'value' => $plugin->cmis_password, 'style ' => 'max-width:12em;')) . '</label></p>'; 
 		
 		echo '<p><label>' . elgg_echo('elgg_cmis:settings:filestore_path') . elgg_view('input/text', array('name' => 'params[filestore_path]', 'value' => $plugin->filestore_path, 'style ' => 'max-width:20em;')) . '</label><br /><em>' . elgg_echo('elgg_cmis:settings:filestore_path:details') . '</em></p>';
+		
+		echo '<p><label>' . elgg_echo('elgg_cmis:settings:always_use_elggfilestore') . elgg_view('input/select', array('name' => 'params[always_use_elggfilestore]', 'options_values' => $yn_opt, 'value' => $plugin->always_use_elggfilestore)) . '</label></p>';
 		
 		echo '</fieldset><br />';
 }

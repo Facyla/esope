@@ -44,9 +44,14 @@ function elgg_cmis_get_session_parameters() {
 	// Add selected repository, or auto-select the first repository
 	$repository_id = elgg_get_plugin_setting('repository_id', 'elgg_cmis');
 	if (empty($repository_id)) {
-		$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
-		$repositories = $sessionFactory->getRepositories($parameters);
-		$repository_id = $repositories[0]->getId();
+		try {
+			$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
+			$repositories = $sessionFactory->getRepositories($parameters);
+			$repository_id = $repositories[0]->getId();
+		} catch(Exception $e) {
+			error_log("CMIS get_session_parameters failed : " . $e->getMessage()); // debug
+			return false;
+		}
 	}
 	$parameters[\Dkd\PhpCmis\SessionParameter::REPOSITORY_ID] = $repository_id;
 	
@@ -105,7 +110,7 @@ function elgg_cmis_get_folder($path, $create_path = false) {
 		}
 		if ($folder) { return $folder; }
 	} catch (Exception $e) {
-		echo "CMIS get folder $path failed : " . $e->getMessage() . "<br />"; // debug
+		error_log("CMIS get folder $path failed : " . $e->getMessage()); // debug
 		//echo print_r($e, true);
 	}
 	
@@ -362,7 +367,7 @@ function elgg_cmis_delete_document($document, $all_versions = true) {
 			$session->delete($document, $all_versions);
 			return true;
 		} catch (Exception $e) {
-		error_log("CMIS delete document failed : " . $e->getMessage());
+			error_log("CMIS delete document failed : " . $e->getMessage());
 		}
 	}
 	return false;

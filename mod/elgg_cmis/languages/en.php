@@ -29,6 +29,7 @@ return array(
 	'elgg_cmis:settings:backend:details' => "CMIS is used as a file storage backend by Elgg. Elgg uses the same credentials for the whole site, and determines access in the usual Elgg way.",
 	'elgg_cmis:settings:backend:legend' => "Specific settings for backend mode",
 	'elgg_cmis:settings:filestore_path' => "Filestore path on CMIS server (eg. /Applications/elgg/)",
+	'elgg_cmis:settings:always_use_elggfilestore' => "Also store latest file version on Elgg Filestore",
 	
 	
 	// Object types
@@ -105,6 +106,7 @@ Your password will be encrypted.",
 	'elgg_cmis:file:cmispath' => "CMIS path&nbsp;: %s",
 	'elgg_cmis:file:filename' => "Original file name&nbsp;: %s",
 	'elgg_cmis:file:filestorename' => "Elgg filestore name&nbsp;: %s",
+	'elgg_cmis:file:latest_filestore' => "Latest file version stored in&nbsp;: %s",
 	'elgg_cmis:file:download' => "<i class=\"fa fa-download\"></i>&nbsp;Download",
 	
 	'elgg_cmis:filestore' => "Filestore&nbsp;:",
