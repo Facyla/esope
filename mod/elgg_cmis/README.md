@@ -17,4 +17,4 @@ DKD PHP CMIS Client : most recent and complete library. Required for "Backend mo
 Some metadata are added to files that are stored in CMIS in "Backend mode" :
  * string cmis_id : CMIS ID on CMIS filestore
  * string cmis_filepath : relative file path on CMIS filestore
- * array latest_filestore : which filestore has the latest file version, accepted values are: elgg|cmis
+ * array latest_filestore : filestore(s) with the latest file version, accepted values are: elgg|cmis

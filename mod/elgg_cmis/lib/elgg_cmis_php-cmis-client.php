@@ -49,7 +49,7 @@ function elgg_cmis_get_session_parameters() {
 			$repositories = $sessionFactory->getRepositories($parameters);
 			$repository_id = $repositories[0]->getId();
 		} catch(Exception $e) {
-			error_log("CMIS get_session_parameters failed : " . $e->getMessage()); // debug
+			error_log("CMIS get_session_parameters failed : " . strip_tags($e->getMessage())); // debug
 			return false;
 		}
 	}
@@ -110,7 +110,7 @@ function elgg_cmis_get_folder($path, $create_path = false) {
 		}
 		if ($folder) { return $folder; }
 	} catch (Exception $e) {
-		error_log("CMIS get folder $path failed : " . $e->getMessage()); // debug
+		error_log("CMIS get folder $path failed : " . strip_tags($e->getMessage())); // debug
 		//echo print_r($e, true);
 	}
 	
@@ -144,7 +144,7 @@ function elgg_cmis_get_document($path, $create_document = false, $params = null)
 		$document = $session->getObjectByPath($path);
 		if ($document) { return $document; }
 	} catch (Exception $e) {
-		error_log("CMIS exception elgg_cmis_get_document : " . $e->getMessage());
+		error_log("CMIS exception elgg_cmis_get_document : " . strip_tags($e->getMessage()));
 	}
 	
 	// Not exists ? create full path from root to new folder
@@ -187,7 +187,7 @@ function elgg_cmis_get_document_by_id($id = '') {
 			//getObject
 			if ($document) { return $document; }
 		} catch (Exception $e) {
-			error_log("CMIS exception in elgg_cmis_get_document_by_id : " . $e->getMessage());
+			error_log("CMIS exception in elgg_cmis_get_document_by_id : " . strip_tags($e->getMessage()));
 		}
 	}
 	return false;
@@ -201,7 +201,7 @@ function elgg_cmis_get_document_by_path($path = '') {
 			$document = $session->getObjectByPath($path);
 			if ($document) { return $document; }
 		} catch (Exception $e) {
-			error_log("CMIS exception in elgg_cmis_get_document_by_path : " . $e->getMessage());
+			error_log("CMIS exception in elgg_cmis_get_document_by_path : " . strip_tags($e->getMessage()));
 		}
 	}
 	return false;
@@ -226,7 +226,7 @@ function elgg_cmis_create_folder($path, $name = '') {
 		$new_folder = $session->createFolder($properties, $folder);
 		return $new_folder;
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
-		error_log("CMIS create folder failed : " . $e->getMessage());
+		error_log("CMIS create folder failed : " . strip_tags($e->getMessage()));
 	}
 	return false;
 }
@@ -325,8 +325,8 @@ function elgg_cmis_version_document($path, $major = true, $stream = false, $para
 		//echo "[*] Versioned ID after: " . $checkedInDocumentId->getId() . "<br /><br />";
 		
 	} catch (\Dkd\PhpCmis\Exception\CmisVersioningException $e) {
-		error_log("CMIS version document failed : " . $e->getMessage());
-		//$content .= "ERROR : " . $e->getMessage() . "<br />";
+		error_log("CMIS version document failed : " . strip_tags($e->getMessage()));
+		//$content .= "ERROR : " . strip_tags($e->getMessage()) . "<br />";
 		return false;
 	}
 	
@@ -349,7 +349,7 @@ function elgg_cmis_move_document($document, $path, $new_path) {
 		$document->move($folder, $new_folder);
 		return $document;
 	} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
-		error_log("CMIS move document failed : " . $e->getMessage());
+		error_log("CMIS move document failed : " . strip_tags($e->getMessage()));
 	}
 	return false;
 }
@@ -367,7 +367,7 @@ function elgg_cmis_delete_document($document, $all_versions = true) {
 			$session->delete($document, $all_versions);
 			return true;
 		} catch (Exception $e) {
-			error_log("CMIS delete document failed : " . $e->getMessage());
+			error_log("CMIS delete document failed : " . strip_tags($e->getMessage()));
 		}
 	}
 	return false;
