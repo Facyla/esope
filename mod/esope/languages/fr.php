@@ -1112,6 +1112,8 @@ return array(
 	'esope:tools:tool:users_stats:details' => "Quelques statistiques sur les utilisateurs. Nombre de groupes pour le moment.",
 	'esope:tools:tool:group_publication_stats' => "Statistiques de publications dans les groupes",
 	'esope:tools:tool:group_publication_stats:details' => "Quelques statistiques sur les publications dans un groupe, par membre et par type de publication.",
+	'esope:tools:tool:update_subtype' => "Mise à jour des subtypes",
+	'esope:tools:tool:update_subtype:details' => "Permet de mettre à jour un sous-type d'entité pour ajouter ou enlever une classe.",
 	
 	// Menus
 	'esope:menu:topbar' => "Mon compte",

@@ -2454,7 +2454,7 @@ function esope_ts_to_ical($ts = 0, $tzone = 0.0) {
 
 // Returns a list of admin tools (used in esope/tools)
 function esope_admin_tools_list() {
-	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats');
+	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats', 'update_subtype');
 	return $tools;
 }
 

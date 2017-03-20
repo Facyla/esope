@@ -1094,6 +1094,8 @@ return array(
 	'esope:tools:tool:users_stats:details' => "Some stats about users. Not much currently besides groups count.",
 	'esope:tools:tool:group_publication_stats' => "Group publications stats",
 	'esope:tools:tool:group_publication_stats:details' => "Some stats about publications in a group, per member and per publication subtype.",
+	'esope:tools:tool:update_subtype' => "Subtype update",
+	'esope:tools:tool:update_subtype:details' => "Use this if there are subtypes with invalid classes, or if you need to update a specific subtype to add a class.",
 	
 	// Menus
 	'esope:menu:topbar' => "My account",
