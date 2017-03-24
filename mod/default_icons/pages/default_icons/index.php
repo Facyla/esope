@@ -56,7 +56,7 @@ if (($action == 'render') && !empty($algorithm) && !empty($seed)) {
 			$image->filterize(TRUE);
 			
 			// Requires a base image : unique or set of up to 65k images
-			$image->setImage(elgg_get_plugins_path().'default_icons/graphics/white.png');
+			$image->setImage(elgg_get_plugins_path().'default_icons/graphics/chalk.jpg');
 			//$image->useImagePool(elgg_get_plugins_path().'default_icons/vendors/tiborsaas/Ideinticon/imagepool' );
 			
 			// Display on the output
