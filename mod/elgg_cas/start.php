@@ -197,8 +197,8 @@ function elgg_cas_autologin() {
  * @return false|ElggUser
  */
 function elgg_cas_login($debug = false) {
-	static $user = false;
-	if (!elgg_instanceof($user, 'user')) {
+	static $logged_user = false;
+	if (!elgg_instanceof($logged_user, 'user')) {
 		$checkAuth = elgg_cas_check_authentication($debug);
 		if ($checkAuth) {
 			$username = phpCAS::getUser();
@@ -208,6 +208,7 @@ function elgg_cas_login($debug = false) {
 			if (elgg_instanceof($user, 'user')) {
 				if (!$user->isBanned()) {
 					if ($debug) { echo "User not banned<br />"; }
+					$logged_user = $user; // store user logged by CAS
 					login($user);
 					return $user;
 				}
