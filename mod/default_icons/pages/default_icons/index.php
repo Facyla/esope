@@ -111,7 +111,9 @@ if (!empty($background)) $img_base_url .= "&background=$background";
 if (!empty($mono)) $img_base_url .= "&mono=$mono";
 $img_base_url .= "&algorithm=";
 $icon_sizes = elgg_get_config('icon_sizes');
+$content .= '<table><tr>';
 foreach($algorithm_opt as $algo_name => $algo_label) {
+	$content .= '<td>';
 	$content .= '<p>';
 	$content .= $algo_label . '&nbsp;:<br />';
 	
@@ -119,18 +121,20 @@ foreach($algorithm_opt as $algo_name => $algo_label) {
 		if (empty($size['w']) || ($size['w'] > 200)) continue;
 		$img_url = $img_base_url . "$algo_name&width={$size['w']}";
 		$content .= elgg_view('output/img', array(
-				'src' => $img_url, 'alt' =>"$seed - $algo_label",
+				'src' => $img_url, 'alt' =>"$seed - $algo_label", 'title' =>"$seed - $algo_label {$size['w']}",
 				'style' => "border:2px solid black;",
 			));
 		$content .= ' &nbsp; ';
 		$content .= elgg_view('output/img', array(
-				'src' => $img_url, 'alt' =>"$seed - $algo_label",
+				'src' => $img_url, 'alt' =>"$seed - $algo_label", 'title' =>"$seed - $algo_label {$size['w']}",
 				'style' => "border:2px solid black; border-radius:{$size['w']}px;",
 			));
 		$content .= " {$size['w']}px<br />";
 	}
 	$content .= '</p>';
+	$content .= '</td>';
 }
+$content .= '</tr></table>';
 
 // Use inner layout (one_sidebar, one_column, content, etc.)
 $body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));

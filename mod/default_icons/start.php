@@ -26,9 +26,9 @@ function default_icons_init() {
 	// Register PHP libraries
 	//elgg_register_library('sebsauvage:vizhash', elgg_get_plugins_path() . 'default_icons/vendor/sebsauvage/vizhash/vizhash_gd.php');
 	// Better packaged as classes
-	elgg_register_library('splitbrain:php-ringicon', elgg_get_plugins_path() . 'default_icons/vendor/splitbrain/php-ringicon/src/RingIcon.php');
 	elgg_register_library('exorithm:unique_image', elgg_get_plugins_path() . 'default_icons/classes/ExorithmUniqueImage.php');
 	elgg_register_library('sebsauvage:vizhash', elgg_get_plugins_path() . 'default_icons/classes/SebsauvageVizHash.php');
+	elgg_register_library('splitbrain:php-ringicon', elgg_get_plugins_path() . 'default_icons/vendors/splitbrain/RingIcon.php');
 	elgg_register_library('tiborsaas:ideinticon', elgg_get_plugins_path() . 'default_icons/vendors/tiborsaas/Ideinticon/identicon.class.php');
 	
 	// Load a PHP library (can also be loaded from the page_handler or from specific views)
