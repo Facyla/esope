@@ -1,0 +1,21 @@
+{
+    "name": "facyla/default_icons",
+    "description": "Plugin that replaces default entity icons by generated ones",
+    "type": "elgg-plugin",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Florian DANIEL aka Facyla",
+            "email": "i.daniel.florian@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "splitbrain/php-ringicon": "*",
+        "sebsauvage/vizhash": "*",
+        "sametmax/vizhash": "*",
+        "mattt/chroma-hash": "*",
+        "wyantb/HashMask": "*",
+        "tiborsaas/Ideinticon": "*"
+    }
+}

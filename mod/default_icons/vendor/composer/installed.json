@@ -1,0 +1,75 @@
+[
+    {
+        "name": "sebsauvage/vizhash",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Facyla/VizHash.git",
+            "reference": "c9bde091ed2edd5a310a53aa5d985278c2111aa8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Facyla/VizHash/zipball/c9bde091ed2edd5a310a53aa5d985278c2111aa8",
+            "reference": "c9bde091ed2edd5a310a53aa5d985278c2111aa8",
+            "shasum": ""
+        },
+        "time": "2017-03-21 16:45:06",
+        "type": "library",
+        "installation-source": "source",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Zlib"
+        ],
+        "authors": [
+            {
+                "name": "https://github.com/sebsauvage/VizHash"
+            }
+        ],
+        "description": "MD5 and SHA1 are common hashing function, which produce a binary or hex string. A visual hash works the same, but produces an image."
+    },
+    {
+        "name": "splitbrain/php-ringicon",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/splitbrain/php-ringicon.git",
+            "reference": "8ef1c63b952e6cef1df3ffc141089609ae99570f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/splitbrain/php-ringicon/zipball/8ef1c63b952e6cef1df3ffc141089609ae99570f",
+            "reference": "8ef1c63b952e6cef1df3ffc141089609ae99570f",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gd": "*",
+            "php": ">=5.3.0"
+        },
+        "time": "2016-04-18 21:53:58",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "splitbrain\\RingIcon\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Andreas Gohr",
+                "email": "andi@splitbrain.org"
+            }
+        ],
+        "description": "A indenticon/glyphicon like avatar generator",
+        "keywords": [
+            "avatar",
+            "glyphicon",
+            "identicon"
+        ]
+    }
+]
