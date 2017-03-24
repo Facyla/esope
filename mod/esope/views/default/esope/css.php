@@ -608,6 +608,11 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .elgg-avatar-tiny .profiletype-status-closed { position: absolute; left:0; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
 .elgg-avatar-tiny .profiletype-status-no-mail { width: 100%; padding: 1px 0; line-height: 1; border-radius:0; font-size: 0.5rem; font-weight: normal; }
 
+/* Topbar - too small to display anything */
+.elgg-avatar-topbar .profiletype-status { display:none; position: absolute; border: 1px solid transparent; width: 16px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-topbar .profiletype-status-closed { position: absolute; left:0; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
+.elgg-avatar-topbar .profiletype-status-no-mail { width: 100%; padding: 1px 0; line-height: 1; border-radius:0; font-size: 0.5rem; font-weight: normal; }
+
 /* Friendspicker */
 /* .elgg-avatar-tiny .profiletype-status { left: 0; margin: 5px 10px 5px 5px; } */
 

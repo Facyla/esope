@@ -36,6 +36,10 @@ function default_icons_init() {
 	//elgg_load_library('splitbrain:php-ringicon');
 	
 	
+	// Hooks so we can override default icons
+	//elgg_register_plugin_hook_handler();
+	
+	
 	/* Some useful elements :
 	
 	// Register actions
@@ -107,7 +111,8 @@ function default_icons_page_handler($page) {
 			include "$base/view.php";
 			break;
 		*/
-		case 'icon':
+		// Display icon based on URL parameters
+		case 'icon': set_input('action', 'render');
 		default:
 			if (!empty($page[1])) { set_input('seed', $page[1]); }
 			// This will not remain
