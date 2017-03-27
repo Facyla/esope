@@ -9,7 +9,7 @@ There are visual hashes, meaning that they provide a recognizable shape/pattern 
 
 ## Usage
 
-Main usage is replacing default elgg entities icons with these visual hashes, based on entity GUID - which ensures theunicity on a given site.
+Main usage is replacing default elgg entities icons with these visual hashes, based on entity GUID - which ensures the unicity on a given site.
 Added username, custom user-controlled data or hash of custom data enables having different avatars if some data changes.
 Can also be used to provide feedback on password match, email integrity, etc.
 

@@ -88,7 +88,7 @@ if (($action == 'render') && !empty($algorithm) && !empty($seed)) {
 
 // Generation form
 
-$algorithm_opt = ['ringicon' => "RingIcon", 'vizhash' => "VizHash", 'unique_image' => "Exorithm Unique image", 'ideinticon' => "Ideinticon"];
+$algorithm_opt = default_icons_get_algorithms();
 $num_opt = ['2' => '2', '3' => '3', '4' => '4', '5' => '5'];
 $ny_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
 
