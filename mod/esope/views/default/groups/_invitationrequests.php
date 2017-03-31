@@ -30,11 +30,12 @@ if (!empty($vars['invitations']) && is_array($vars['invitations'])) {
 				'text' => elgg_echo('accept'),
 				'title' => elgg_echo('accept') . ' ' . $group->name,
 				'class' => 'elgg-button elgg-button-submit',
+				'confirm' => true,
 				'is_trusted' => true,
 			));
 
 			$url = "action/groups/killinvitation?user_guid={$user->getGUID()}&group_guid={$group->getGUID()}";
-			$delete_button = elgg_view('output/confirmlink', array(
+			$delete_button = elgg_view('output/url', array(
 					'href' => $url,
 					'confirm' => elgg_echo('groups:invite:remove:check'),
 					'text' => elgg_echo('decline'),

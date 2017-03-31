@@ -65,6 +65,19 @@ function elgg_dataviz(){
 		'deps' => array(''),
 	));
 	
+	// AnyChart
+	elgg_define_js('elgg.dataviz.anychart', array(
+		'src' => $vendors_url . 'anychart/AnyChart/anychart-bundle.min.js',
+	));
+	elgg_define_js('elgg.dataviz.graphicsjs', array(
+		'src' => $vendors_url . 'anychart/GraphicsJS/graphics.min.js',
+	));
+	/*
+	elgg_define_js('google.closure', array(
+		'src' => $vendors_url . 'google/closure-library/',
+	));
+	*/
+	
 	// jquery data tables plugin
 	//elgg_register_js('jquery.datatables', $vendors_url . 'jquery_datatables/media/js/jquery.dataTables.min.js', 'head');
 	elgg_define_js('jquery.datatables', array(

@@ -29,29 +29,14 @@
 		<name>gd</name>
 	</requires>
 	
-	<!--
-	<requires>
-		<type>plugin</type>
-		<name>esope</name>
-	</requires>
-	
-	<conflicts>
-		<type>plugin</type>
-		<name>threads</name>
-	</conflicts>
-	
-	<suggests>
-		<type>plugin</type>
-		<name>file</name>
-	</suggests>
-	//-->
-	
 	<activate_on_install>false</activate_on_install>
 	
 </plugin_manifest>
 
 <!--
 COMMENTS - HISTORY
+
+@TODO Add caching (in entity file store) - or even store as a regular icon ?
 
 0.1 : 20170321 - Initial release
  - plugin structure

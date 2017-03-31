@@ -20,8 +20,11 @@ if ($use_cmis) {
 	
 	// CMIS config
 	$base_path = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/");
-$always_use_elggfilestore = elgg_get_plugin_setting('always_use_elggfilestore', 'elgg_cmis', true);
-if ($always_use_elggfilestore != 'no') { $always_use_elggfilestore = true; } else { $always_use_elggfilestore = false; }
+	// Should we also store in Elgg filestore (double storage for latest version)
+	$always_use_elggfilestore = elgg_get_plugin_setting('always_use_elggfilestore', 'elgg_cmis', true);
+	if ($always_use_elggfilestore != 'no') { $always_use_elggfilestore = true; } else { $always_use_elggfilestore = false; }
+}
+
 
 /**
  * Elgg file uploader/edit action
@@ -125,7 +128,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	$file->simpletype = elgg_get_file_simple_type($mime_type);
 	// Latest used filestore
 	$latest_filestore = array();
-
+	
+	
 	// Try using CMIS filestore first, if unavailable fallback to Elgg method
 	// Note : unless thumbnails support is implemented, avoid storing images on CMIS filestore
 	// Inria : do not store images on CMIS filestore

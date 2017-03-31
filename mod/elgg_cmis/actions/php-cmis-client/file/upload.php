@@ -16,6 +16,7 @@ if (!elgg_cmis_is_valid_repo() || !elgg_cmis_get_session()) { $use_cmis = false;
 
 // CMIS config
 $base_path = elgg_get_plugin_setting('filestore_path', 'elgg_cmis', "/");
+// Should we also store in Elgg filestore (double storage for latest version)
 $always_use_elggfilestore = elgg_get_plugin_setting('always_use_elggfilestore', 'elgg_cmis', true);
 if ($always_use_elggfilestore != 'no') { $always_use_elggfilestore = true; } else { $always_use_elggfilestore = false; }
 

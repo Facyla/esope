@@ -10,6 +10,7 @@ This plugin adds visualisation libraries to Esope https://github.com/Facyla/esop
  - Crossfilter
  - DataTables (jQuery plugin)
  - Raphaël (SVG)
+ - AnyChart (also CDN : https://cdn.anychart.com/js/latest/anychart-bundle.min.js)
 
 See also DataWrapper, which is an interesting, but standalone app (not included)
 
