@@ -14,8 +14,8 @@ return array(
 	'recaptcha:settings:theme:details' => "L'aspect visuel du recaptcha : clair ou sombre ('light' | 'dark')",
 	'recaptcha:settings:size' => "Taille",
 	'recaptcha:settings:size:details' => "La taille du recaptcha ('normal' | 'compact')",
-	'recaptcha:settings:type' => "Type",
-	'recaptcha:settings:type:details' => "Le type de défi à résoudre ('image' | 'audio')",
+	'recaptcha:settings:challenge_type' => "Type",
+	'recaptcha:settings:challenge_type:details' => "Le type de défi à résoudre ('image' | 'audio')",
 	
 	// Errors
 	'recaptcha:error:missingkeys' => "Impossible de vérifier reCAPTCHA car les clefs sont manquantes. Veuillez demander à l'administrateur de configurer le plugin reCAPTCHA.",

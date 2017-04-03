@@ -11,14 +11,14 @@ if (empty($publickey)) {
  * So better set these params site-wide
  * theme: The visual design of the recaptcha ('light' | 'dark')
  * size: The size of the recaptcha ('normal' | 'compact')
- * type: Type of challenge to perform ('image' | 'audio')
+ * challenge_type: Type of challenge to perform ('image' | 'audio')
  */
 $theme = elgg_extract('theme', $vars);
 if (empty($theme)) { $theme = elgg_get_plugin_setting('theme', 'recaptcha'); }
 $size = elgg_extract('size', $vars);
 if (empty($size)) { $size = elgg_get_plugin_setting('size', 'recaptcha'); }
-$type = elgg_extract('type', $vars);
-if (empty($type)) { $type = elgg_get_plugin_setting('type', 'recaptcha'); }
+$challenge_type = elgg_extract('challenge_type', $vars);
+if (empty($challenge_type)) { $challenge_type = elgg_get_plugin_setting('challenge_type', 'recaptcha'); }
 
 
 // Multiple reCAPTCHA support : requires using id
@@ -38,7 +38,7 @@ if (!empty($publickey)) {
 	echo ' data-sitekey="' . $publickey . '"';
 	if ($theme) { echo ' data-theme="' . $theme . '"'; }
 	if ($size) { echo ' data-size="' . $size . '"'; }
-	if ($type) { echo ' data-type="' . $type . '"'; }
+	if ($challenge_type) { echo ' data-type="' . $type . '"'; }
 	echo '></div>';
 	// Support no JS
 	// Note : this requires to enable low security mode in reCAPTCHA settings

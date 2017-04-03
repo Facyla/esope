@@ -16,7 +16,7 @@ echo '<p><label>' . elgg_echo('recaptcha:settings:theme'). ' ' . elgg_view('inpu
 // Size : light|dark
 echo '<p><label>' . elgg_echo('recaptcha:settings:size'). ' ' . elgg_view('input/text', array('name' => 'params[size]', 'value' => $vars['entity']->size)) . '</label><br /><em>' . elgg_echo('recaptcha:settings:size:details'). '</em></p>';
 
-// Type : light|dark
-echo '<p><label>' . elgg_echo('recaptcha:settings:type'). ' ' . elgg_view('input/text', array('name' => 'params[type]', 'value' => $vars['entity']->type)) . '</label><br /><em>' . elgg_echo('recaptcha:settings:type:details'). '</em></p>';
+// Challenge type : image|audio
+echo '<p><label>' . elgg_echo('recaptcha:settings:challenge_type'). ' ' . elgg_view('input/text', array('name' => 'params[challenge_type]', 'value' => $vars['entity']->challenge_type)) . '</label><br /><em>' . elgg_echo('recaptcha:settings:challenge_type:details'). '</em></p>';
 
 
