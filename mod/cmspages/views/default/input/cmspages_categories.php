@@ -91,7 +91,7 @@ if (count($categories) > 0) {
 	echo "<ul class=\"$class\" $id><li>";
 	
 	$parents = array(); // dernier parent pour chaque niveau de l'arborescence
-	foreach ($categories as $key => $category) {
+	if ($categories) foreach ($categories as $key => $category) {
 		// Niveau dans l'arborescence
 		$level = 0;
 		while($category[0] == '-') {
