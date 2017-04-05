@@ -127,7 +127,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	// Note : unless thumbnails support is implemented, avoid storing images on CMIS filestore
 	if ($use_cmis && $file->simpletype != "image") {
 		// Save first file object to database, because we need the GUID to forge the CMIS filepath (has to be unique and should not change)
-		$guid = $file->save();
+		$file->save();
+		$guid = $file->guid;
 		
 		// CMIS method
 		if ($vendor == 'php-cmis-client') {
@@ -138,7 +139,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			// File name on filestore should never change, but file name, content and type can change afterwards
 			// So use a content-agnostic naming, so we can reuse existing file if already stored
 			if ($new_file) {
-				$filestorename = $guid . '_' . time(); // do we need ts ?
+				//$filestorename = $guid . '_' . time(); // do we need ts ?
+				$filestorename = $guid;
 				$file_name = $filestorename;
 			} else if (!empty($file->cmis_path)) {
 				// Get old file name on CMIS filestore
