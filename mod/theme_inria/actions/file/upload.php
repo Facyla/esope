@@ -150,7 +150,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			// So use a content-agnostic naming, so we can reuse existing file if already stored
 			if ($new_file) {
 				//$filestorename = $guid . '_' . time(); // do we need ts ?
-				$filestorename = $guid;
+				$filestorename = "$guid"; // Important : must be a string
 				$file_name = $filestorename;
 			} else if (!empty($file->cmis_path)) {
 				// Get old file name on CMIS filestore
@@ -184,7 +184,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 					$return = elgg_cmis_version_document($file_path . $file_name, true, $file_content, $file_params);
 				}
 			} catch(Exception $e){
-				//error_log(print_r($e->message, true));
+				//error_log(print_r($e->getMessage(), true));
 				register_error(print_r($e->getMessage(), true));
 			}
 			if ($return) {
