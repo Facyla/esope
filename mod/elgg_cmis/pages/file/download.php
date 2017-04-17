@@ -47,7 +47,7 @@ if ($use_cmis && ($file->simpletype != "image")) {
 		$cmis_id = explode(';', $file->cmis_id);
 		$cmis_id = $cmis_id[0];
 		$latest_version = $cmis_file->getVersionLabel();
-		echo $latest_version .' / '. $cmis_id .' / '. $version;
+		//echo $latest_version .' / '. $cmis_id .' / '. $version;
 		// Should we return a specific version instead of latest ?
 		if (!empty($version) && !in_array($version, array($latest_version, 'latest'))) {
 			$cmis_file = elgg_cmis_get_document_by_id($cmis_id.';'.$version); // Get a specific version
