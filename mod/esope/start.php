@@ -218,9 +218,12 @@ function esope_init() {
 	elgg_register_plugin_hook_handler('format', 'friendly:time','esope_friendly_time_hook');
 	
 	// Gestion des notifications par mail lors de l'entrée dans un groupe
-	elgg_register_event_handler('create','member','esope_group_join', 800);
+	// @TODO join,group and leave,group
+	//elgg_register_event_handler('create','member','esope_group_join', 800);
+	elgg_register_event_handler('join','group','esope_group_join', 800);
 	// Suppression des notifications lorsqu'on quitte le groupe
-	elgg_register_event_handler('delete','member','esope_group_leave', 800);
+	//elgg_register_event_handler('delete','member','esope_group_leave', 800);
+	elgg_register_event_handler('leave','group','esope_group_leave', 800);
 	
 	// Gestion des actions post-inscription
 	elgg_register_plugin_hook_handler('register', 'user', 'esope_register_user_hook');
@@ -668,43 +671,47 @@ function esope_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 
 
 // Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
-function esope_group_join($event, $object_type, $relationship) {
-	if (elgg_is_logged_in()) {
-		if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
+function esope_group_join($event, $object_type, $object) {
+	$group = $object['group'];
+	$user = $object['user'];
+	//if (elgg_is_logged_in()) {
+	//	if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
 			global $NOTIFICATION_HANDLERS;
 			$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'esope');
 			if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
 				switch($groupjoin_enablenotif) {
 					case 'site':
-						add_entity_relationship($relationship->guid_one, 'notifysite', $relationship->guid_two);
+						add_entity_relationship($user->guid, 'notifysite', $group->guid);
 						break;
 					case 'all':
 						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-							add_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+							add_entity_relationship($user->guid, "notify{$method}", $group->guid);
 						}
 						break;
 					case 'email':
 					default:
-						add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+						add_entity_relationship($user->guid, 'notifyemail', $group->guid);
 				}
 			} else if ($groupjoin_enablenotif == 'no') {
 				// loop through all notification types
 				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-					remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+					remove_entity_relationship($user->guid, "notify{$method}", $group->guid);
 				}
 			}
-		}
-	}
+	//	}
+	//}
 	return true;
 }
 
 // Retire les notifications lorsqu'on quitte un groupe
-function esope_group_leave($event, $object_type, $relationship) {
+function esope_group_leave($event, $object_type, $object) {
+	$group = $object['group'];
+	$user = $object['user'];
 	global $NOTIFICATION_HANDLERS;
 	if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
 		// loop through all notification types
 		if ($NOTIFICATION_HANDLERS) foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-			remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+			remove_entity_relationship($user->guid, "notify{$method}", $group->guid);
 		}
 	}
 	return true;
@@ -2327,9 +2334,19 @@ function esope_extract_first_image($html, $full_tag = true) {
 
 
 
-// @TODO : make this more robust and fail-safe
-// Add file to an entity (using a specific folder in datastore)
-function esope_add_file_to_entity($entity, $input_name = 'file', $plugin_prefix = 'knownledge_database') {
+/* Add files lined to entities
+ * @TODO : make this more robust and fail-safe
+ * @TODO Use standard file structure (use Locator)
+ * @TODO Optionally use relations if files are not owned by entity
+ * Add file to an entity, using a specific folder in datastore : DATA/$plugin_prefix/$input_name/$filename
+ * @TODO : use more sustainable structure, ie. DATA/{ElggDirLocator}/{prefix}/{meta_name}/$filename
+ * $entity : entity the file should be attached to (ie owner entity) - can be any entity type
+ * $input_name : name of input field in upload form
+ * $plugin_prefix : name of input field in upload form
+ * 
+ * Note : get file with esope_get_file_from_entity()
+ */
+function esope_add_file_to_entity($entity, $input_name = 'file', $plugin_prefix = 'knowledge_database') {
 	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
 		/*
 		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
@@ -2418,6 +2435,26 @@ function esope_remove_file_from_entity($entity, $input_name = 'file') {
 		}
 	}
 	return false;
+}
+
+/* Serve the file */
+function esope_get_file_from_entity($entity, $input_name = 'file', $plugin_prefix = 'knowledge_database') {
+	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
+		$file_path = $entity->{$input_name};
+		$filesize = filesize($file_path);
+		$filename = explode('/', $file_path);
+		$filename = end($filename);
+		$mime = mime_content_type($file_path);
+		if (empty($mime)) { $mime = "application/octet-stream"; }
+		header("Pragma: public"); // fix for IE https issue
+		header("Content-type: $mime");
+		header("Content-Disposition: attachment; filename=\"$filename\"");
+		header("Content-Length: $filesize}");
+		while (ob_get_level()) { ob_end_clean(); }
+		flush();
+		readfile($file_path);
+		exit;
+	}
 }
 
 

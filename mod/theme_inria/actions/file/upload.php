@@ -25,6 +25,7 @@ if ($use_cmis) {
 	if ($always_use_elggfilestore != 'no') { $always_use_elggfilestore = true; } else { $always_use_elggfilestore = false; }
 }
 
+error_log("CMIS : using action");
 
 /**
  * Elgg file uploader/edit action
