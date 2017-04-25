@@ -75,11 +75,11 @@ elgg_pop_context();
 // Activité et Fil
 $body .= '<div style="display:flex; flex-direction:row; flex-wrap: wrap;">
 		<div style="flex:1; padding: 0 2em; max-width: 420px; margin: 0 auto;" class="home-static-container">
-			<h2>' . elgg_echo('theme_inria:news') . '</h2><div class="home-box home-wire">' . $thewire . '</div>
+			<h2>' . elgg_echo('theme_inria:topbar:news') . '</h2><div class="home-box home-wire">' . $thewire . '</div>
 		</div>
 		<div style="flex:1; padding: 0 2em; max-width: 420px; margin: 0 auto;" class="home-static-container">
-			<h2>' . elgg_echo('theme_inria:groups') . '</h2><div class="home-box">' . elgg_view('theme_inria/newest_groups') . elgg_view('theme_inria/featured_groups') . '</div>
-			<h2>' . elgg_echo('theme_inria:activity') . '</h2><div class="home-box home-activity">' . $site_activity . '</div></div>
+			<h2>' . elgg_echo('theme_inria:topbar:groups') . '</h2><div class="home-box">' . elgg_view('theme_inria/newest_groups') . elgg_view('theme_inria/featured_groups') . '</div>
+			<h2>' . elgg_echo('river:all') . '</h2><div class="home-box home-activity">' . $site_activity . '</div></div>
 		</div>
 	</div>
 	<div class="clearfloat"></div>';

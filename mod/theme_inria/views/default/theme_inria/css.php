@@ -52,6 +52,13 @@ $font4 = elgg_get_plugin_setting('font4', 'esope');
 $font5 = elgg_get_plugin_setting('font5', 'esope');
 $font6 = elgg_get_plugin_setting('font6', 'esope');
 
+$font1 = "Inria Serif";
+$font2 = "Inria Sans";
+//$font3 = elgg_get_plugin_setting('font3', 'esope');
+//$font4 = elgg_get_plugin_setting('font4', 'esope');
+//$font5 = elgg_get_plugin_setting('font5', 'esope');
+//$font6 = elgg_get_plugin_setting('font6', 'esope');
+
 
 $module_title_color = $titlecolor;
 $module_bg_color = $color2;
@@ -495,7 +502,7 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 #iris-page { display:flex; flex-direction:row; margin-top: 80px; }
 #iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: #3C4458; padding-top: 2em; }
 #iris-navigation ul.elgg-menu-navigation li, #iris-navigation ul.elgg-menu-navigation li:first-child { border:0; float: none; }
-#iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1em 0; text-indent: 2em; text-transform:uppercase; color: rgba(255,255,255,0.5); font-family: <?php echo $font2; ?>; font-size: 0.95rem; margin: 0.5em 0; }
+#iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1em 0; text-indent: 2em; text-transform:uppercase; color: rgba(255,255,255,0.5); font-family: "Inria Sans", sans-serif; font-size: 0.95rem; margin: 0.5em 0; }
 #iris-navigation ul.elgg-menu-navigation li a.active, #iris-navigation ul.elgg-menu-navigation li a.elgg-state-selected, #iris-navigation ul.elgg-menu-navigation li a:hover, #iris-navigation ul.elgg-menu-navigation li a:focus, #iris-navigation ul.elgg-menu-navigation li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
 #iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
 #iris-navigation ul.elgg-menu-navigation li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
@@ -503,9 +510,9 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 #iris-navigation ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5em 0.75em; }
 
 #iris-body { padding-top: 2em; background: #EEE; }
-#iris-body h2 { margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family: serif; }
+#iris-body h2 { margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
 .elgg-main { background: transparent; }
-.home-box { /* padding: 0 3em; min-width:20rem; max-width: 90%; margin: 0 auto 3em auto;*/ padding:0; margin:0 0 3em 0; width:initial; }
+.home-box { /* padding: 0 3em; min-width:20rem; max-width: 90%; margin: 0 auto 3em auto;*/ padding:0; margin:0 0 3em 0; border: 1px solid #CCC; padding: 1em; border-radius: 0; }
 
 #iris-footer { flex:0; /* margin-top: auto; */ }
 #iris-footer li a { color:rgba(255,255,255,0.5); width: 100%; text-indent: 2em; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.85rem; }

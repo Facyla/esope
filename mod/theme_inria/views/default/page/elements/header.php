@@ -81,31 +81,6 @@ if (elgg_is_logged_in()) {
 		}
 	}
 	
-	// Liste des catégories (thématiques du site)
-	if (elgg_is_active_plugin('categories')) {
-		$categories = '';
-		$themes = $site->categories;
-		/*
-		if ($themes) foreach ($themes as $theme) {
-			$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
-		}
-		*/
-		if ($themes) {
-			sort($themes); // Sort categories
-			foreach ($themes as $theme) {
-				// Add tree categories support
-				$theme_label = $theme;
-				if (strpos($theme, '/') !== false) {
-					$theme_a = explode('/', $theme);
-					$theme_label = '';
-					for ($i = 1; $i < count($theme_a); $i++) { $theme_label .= "-"; }
-					$theme_label .= ' ' . end($theme_a);
-				}
-				$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
-			}
-		}
-	}
-	
 }
 
 
@@ -143,26 +118,13 @@ if (elgg_is_logged_in()) {
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('members')) { ?>
-				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:members'); ?> <i class="fa fa-caret-down"></i></a>
-					<ul class="hidden">
-						<li><a href="<?php echo $url . 'members/search/'; ?>"><?php echo elgg_echo('members:search'); ?></a></li>
-						<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>?limit=30"><?php echo elgg_echo('theme_inria:friends'); ?></a></li>
-						<li><a href="<?php echo $url . 'collections/owner/' . $ownusername; ?>"><?php echo elgg_echo('theme_inria:friends:collections'); ?></a></li>
-						<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
-						<?php echo $friendrequests_li; ?>
-						<?php
-						if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
-							//echo '<li><a href="' . $url . 'inria/invite">' . elgg_echo('inria_invite') . '</a></li>';
-						}
-					// echo '<li><a href="' . elgg_get_site_url() . 'invite">' . elgg_echo("theme_inria:topbar:invite") . '</a></li>';
-						?>
-					</ul>
+				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:members'); ?></a>
 				</li>
 				<?php echo $friendrequests; ?>
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:event_calendar'); ?> <i class="fa fa-caret-down"></i></a></li>
+				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:event_calendar'); ?></a></li>
 			<?php } ?>
 		</ul>
 	<?php

@@ -16,8 +16,8 @@ return array(
 	'theme_inria:topbar:explorer' => "Explorer",
 	'theme_inria:topbar:home' => "Accueil",
 	'theme_inria:topbar:news' => "Actualités",
-	'theme_inria:topbar:groups' => "Les&nbsp;groupes",
-	'theme_inria:topbar:members' => "Les&nbsp;membres",
+	'theme_inria:topbar:groups' => "Groupes",
+	'theme_inria:topbar:members' => "Membres",
 	'theme_inria:topbar:activity' => "Les&nbsp;activités",
 	'theme_inria:topbar:pages' => "Les&nbsp;pages",
 	'theme_inria:topbar:action' => "Agir",
@@ -439,7 +439,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'GROUP_MEMBERS' => "Membres du groupe", // membres du groupe
 	'access:friends:label' => "Contacts seulement", // contacts
 	'PUBLIC' => "Tout internaute", // public
-	'river:all' => "Ça bouge sur Iris ...",
+	'river:all' => "Ça bouge sur Iris",
 	'search_types:tags' => "Mots-clés",
 	
 	'avatar' => "Photo",

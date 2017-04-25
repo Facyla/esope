@@ -7,6 +7,13 @@ elgg_register_event_handler('init','system','theme_inria_init');
 /* Initialise the theme */
 function theme_inria_init(){
 	global $CONFIG;
+	
+	$css_url = elgg_get_plugins_path() . 'theme_inria/fonts/';
+	elgg_register_css('inria-sans', $css_url.'InriaSans/Web/fonts.css');
+	elgg_register_css('inria-serif', $css_url.'InriaSerif/Web/fonts.css');
+	elgg_load_css('inria-sans');
+	elgg_load_css('inria-serif');
+	
 	$action_url = elgg_get_plugins_path() . 'theme_inria/actions/';
 	
 	// HTML export action
