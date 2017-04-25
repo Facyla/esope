@@ -86,21 +86,42 @@ if (elgg_is_active_plugin('language_selector')) {
 }
 ?>
 
-<div class="is-not-floatable">
+<div class="iris-logo">
 	<h1>
 		<a href="<?php echo $url; ?>" title="<?php echo elgg_echo('esope:gotohomepage'); ?>">
 			<img src="<?php echo $urlimg; ?>logo-iris.png" alt="Réseau Iris" />
 		</a>
 	</h1>
-	<img src="<?php echo $urlimg; ?>bulles-header.png" />
+</div>
+
+<div class="iris-topbar-menu">
 	<?php
+	if (elgg_is_active_plugin('search')) {
+		$search_text = elgg_echo('esope:search:defaulttext');
+		// Select search type (filter)
+		//$search_opt = array('' => elgg_echo('all'), 'object' => elgg_echo('item:object'), 'group' => elgg_echo('item:group'), 'user' => elgg_echo('item:user')); // options_values
+		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
+		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
+		$search_entity_type = get_input('entity_type', '');
+		echo '<form action="' . $url . 'search" method="get" id="iris-search">';
+			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
+			$livesearch = elgg_get_plugin_setting('livesearch', 'esope');
+			if ($livesearch != 'no') {
+				echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'user_return' => 'name', 'value' => $prev_q, 'placeholder' => $search_text));
+			} else {
+				echo elgg_view('input/text', array('name' => 'q', 'id' => 'esope-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
+			}
+			echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
+			echo '<br />';
+			echo elgg_view('input/radio', array('name' => 'entity_type', 'options' => $search_opt, 'value' => $search_entity_type, 'align' => 'horizontal'));
+		echo '</form>';
+	}
+	
 	// TOPBAR MENU : personal tools and administration
 	if (elgg_is_logged_in()) {
 		?>
 		<div class="menu-topbar-toggle"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
-				<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a></li>
-				<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 				<li id="msg">
 					<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:messages:tooltip'); ?>"><i class="fa fa-envelope-o mail outline icon"></i><?php echo elgg_echo('messages'); ?></a>
 					<?php if ($new_messages_counter) { echo $new_messages_counter; } ?>
@@ -109,12 +130,17 @@ if (elgg_is_active_plugin('language_selector')) {
 					<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>"><i class="fa fa-info-circle"></i><?php echo elgg_echo('site_notifications:topbar'); /* echo elgg_view_icon('info') . elgg_echo('site_notifications:topbar'); */ ?></a>
 					<?php if ($new_notifications_counter) { echo $new_notifications_counter; } ?>
 				</li>
-				<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
-				<?php if (elgg_is_admin_logged_in()) { ?>
-					<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
-				<?php } ?>
-				<li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><i class="fa fa-question-circle help icon"></i><?php echo elgg_echo('esope:help'); ?></a></li>
-				<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off power-off icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+				<?php if ($loginas_logout) { echo $loginas_logout; } ?>
+				<li id="user"><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><img src="<?php echo $own->getIconURL('topbar'); ?>" alt="<?php echo $own->name; ?>" /> <?php echo $own->name; ?></a>
+					<ul class="hidden">
+						<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog setting icon"></i><?php echo elgg_echo('esope:usersettings'); ?></a></li>
+						<?php if (elgg_is_admin_logged_in()) { ?>
+							<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs settings icon"></i><?php echo elgg_echo('admin'); ?></a></li>
+						<?php } ?>
+						<li><a href="<?php echo $url . 'groups/profile/8551/aide'; ?>"><i class="fa fa-question-circle help icon"></i><?php echo elgg_echo('esope:help'); ?></a></li>
+						<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-power-off power-off icon"></i>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+					</ul>
+				</li>
 			</ul>
 		<?php
 	} else {
@@ -129,8 +155,5 @@ if (elgg_is_active_plugin('language_selector')) {
 		}
 	}
 	?>
-	
-	<div class="clearfloat"></div>
-
 </div>
 

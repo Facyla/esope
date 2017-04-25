@@ -47,8 +47,8 @@ $site_activity .= elgg_list_river(array(
 		//"wheres" => array("e.subtype != " . $thewire_subtype_id), // filter some subtypes
 		// exclude thewire objects, except those in groups
 		"wheres" => array("(e.subtype != " . $thewire_subtype_id . ") OR (e.container_guid IN ($all_groups_guid_sql))"),
-		'limit' => 6, 
-		'pagination' => false, 
+		'limit' => 5, 
+		'pagination' => true, 
 ));
 elgg_pop_context();
 
@@ -64,58 +64,28 @@ $thewire_params = array(
 		// This is for container filtering only, can be removed if no filtering
 		"joins" => array("INNER JOIN " . $dbprefix . "entities AS ce ON e.container_guid = ce.guid"),
 		"wheres" => array("ce.type != 'group'"), // avoid messages where container is a group
-		'limit' => 9, 'pagination' => false
+		'limit' => 7, 'pagination' => true
 	);
 $thewire .= elgg_list_entities($thewire_params);
 elgg_pop_context();
 
-// Tableau de bord
-// Note : il peut être intéressant de reprendre le layout des widgets si on veut séparer les colonnes et les intégrer dans l'interface
-elgg_set_context('dashboard');
-elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
-// Pour afficher un bloc sur 2 colonnes, on utilise la partie content
-$params = array( 'content' => '', 'num_columns' => 3, 'show_access' => false);
-$widget_body = elgg_view_layout('widgets', $params);
 
 
 // Composition de la page
-// Slider et barre latérale droite : groupes et membres
-$body = '
-	<div style="width:76%; float:left;" class="home-static-container">
-		<div style="padding: 0 26px 26px 13px;">
-		
-			<div style="width:100%;" class="iris-news">'
-				//. '<h2 class="hidden">' . elgg_echo('theme_inria:home:edito') . '</h2>' . $intro . '<div class="clearfloat"></div>'
-				. $slider . '
-			</div>
-	
-		</div>
-	</div>
-	
-	<div style="width:22%; float:right;" class="home-static-container">
-		<h2 class="hidden">' . elgg_echo('theme_inria:home:information') . '</h2>
-		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/featured_groups') . '</div>
-		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/users/online', array('limit' => 30)) . '</div>
-		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/users/newest') . '</div>
-		<div class="clearfloat"></div>
-		<div class="home-box">' . elgg_view('theme_inria/newest_groups') . '</div>
-	</div>
-	<div class="clearfloat"></div>';
-	
 // Activité et Fil
-$body .= '<div style="width:40%; float:left;" class="home-static-container">
-		<div class="home-box home-activity">' . $site_activity . '</div>
-	</div>
-	<div style="width:57%; float:right;" class="home-static-container">
-		<div class="home-box home-wire">' . $thewire . '</div>
+$body .= '<div style="display:flex; flex-direction:row; flex-wrap: wrap;">
+		<div style="flex:1; padding: 0 2em; max-width: 420px; margin: 0 auto;" class="home-static-container">
+			<h2>' . elgg_echo('theme_inria:news') . '</h2><div class="home-box home-wire">' . $thewire . '</div>
+		</div>
+		<div style="flex:1; padding: 0 2em; max-width: 420px; margin: 0 auto;" class="home-static-container">
+			<h2>' . elgg_echo('theme_inria:groups') . '</h2><div class="home-box">' . elgg_view('theme_inria/newest_groups') . elgg_view('theme_inria/featured_groups') . '</div>
+			<h2>' . elgg_echo('theme_inria:activity') . '</h2><div class="home-box home-activity">' . $site_activity . '</div></div>
+		</div>
 	</div>
 	<div class="clearfloat"></div>';
 
 // Tableau de bord personnalisable
-$body .= '<h2 class="hidden">' . elgg_echo('theme_inria:home:widgets') . '</h2>' . $widget_body;
+//$body .= '<h2 class="hidden">' . elgg_echo('theme_inria:home:widgets') . '</h2>' . $widget_body;
 
 
 // Fil d'Ariane

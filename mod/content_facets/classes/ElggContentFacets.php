@@ -171,7 +171,7 @@ class ElggContentFacets {
 		$this->emails = array();
 		if (sizeof($this->links) > 0) {
 			foreach($this->links as $k => $link) {
-				//error_log("LINK = ".print_r($link, true));
+				if (is_array($link)) error_log("LINK = ".print_r($link, true));
 				if (strpos($link, 'mailto:') === 0) {
 					$link = substr($link, 7);
 				}

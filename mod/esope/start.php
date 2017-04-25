@@ -2851,4 +2851,63 @@ function esope_is_valid_url($url = false, $return_http_code = false, $timeout = 
 
 
 
+/* Enables a plugin, and its required dependencies
+ * Recursive enable
+ * @TODO still under conception phase - params might evolve
+ * Perform this after latest plugin enabled :
+ *   elgg_regenerate_simplecache();
+ *   elgg_reset_system_cache();
+ */
+function esope_enable_plugin($name, $enable_deps = true, $simulate = true) {
+	$plugin = elgg_get_plugin_from_id($name);
+	$return = false;
+	if ($plugin->isValid()) {
+		$requires = $plugin->getManifest()->getRequires();
+	
+		if ($simulate) $return .= '<strong>' . $name . '</strong>&nbsp;: ';
+		//if ($simulate) $return .= ' => <pre>' . print_r($requires, true) . '</pre>';
+	
+		if ($simulate) $return .= '<ul>';
+		if ($requires) {
+			if ($simulate) {
+				$return .= '<li>Requires plugins&nbsp;:';
+				$return .= '<ul>';
+			}
+			foreach($requires as $require) {
+				if ($require['type'] != 'plugin') { continue; }
+				if ($simulate) {
+					$return .= '<li>';
+					//$return .= $require['name'] . '&nbsp;: ';
+					$return .= esope_enable_plugin($require['name'], $enable_deps);
+					$return .= '<li>';
+				}
+			}
+			if ($simulate) $return .= '</ul>';
+		}
+		if ($simulate) $return .= '</li>';
+		if (!$plugin->isActive()) {
+			if ($simulate) $return .= '<li>is not active</li>';
+			if ($plugin->canActivate()) {
+				$return .= '<li>can be activated</li>';
+			} else {
+				if ($simulate) $return .= '<li>can NOT be activated</li>';
+				else return false;
+			}
+			if ($plugin->activate()) {
+				if ($simulate) $return .= 'activated !';
+				else return true;
+			}
+		} else {
+			if ($simulate) $return .= '<li>is already active</li>';
+			else return true;
+		}
+		if ($simulate) $return .= '</ul>';
+	}
+	
+	if ($simulate) return $return;
+	return false;
+}
+
+
+
 
