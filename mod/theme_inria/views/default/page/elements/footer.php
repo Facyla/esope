@@ -43,6 +43,20 @@ if (empty($footer) && !empty($footer_menu)) {
 	$footer = $footer_menu;
 }
 
+
+// Inria static override (=> move to site settings)
+$lang_select = elgg_view('language_selector/default', $vars);
+$footer = <<<FOOTER
+<ul>
+	<li><a href="https://intranet.inria.fr/">Intranet</a></li>
+	<li><a href="https://reseau-iris.inria.fr/groups/profile/8551/aide">Aide</a></li>
+	<li><a href="https://reseau-iris.inria.fr/p/a-propos">A propos</a></li>
+	<li><a href="https://reseau-iris.inria.fr/p/mentions-legale">Mentions légales</a></li>
+	<li><a href="https://reseau-iris.inria.fr/p/charte-dutilisation">Charte d'utilisation</a></li>
+	<li><a href="https://reseau-iris.inria.fr/p/contact">Contact</a></li>
+	<li>$lang_select</li>
+</ul>
+FOOTER;
 ?>
 
 <div class="footer-inria">

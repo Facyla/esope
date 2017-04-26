@@ -8,12 +8,6 @@ elgg_register_event_handler('init','system','theme_inria_init');
 function theme_inria_init(){
 	global $CONFIG;
 	
-	$css_url = elgg_get_plugins_path() . 'theme_inria/fonts/';
-	elgg_register_css('inria-sans', $css_url.'InriaSans/Web/fonts.css');
-	elgg_register_css('inria-serif', $css_url.'InriaSerif/Web/fonts.css');
-	elgg_load_css('inria-sans');
-	elgg_load_css('inria-serif');
-	
 	$action_url = elgg_get_plugins_path() . 'theme_inria/actions/';
 	
 	// HTML export action
@@ -43,8 +37,16 @@ function theme_inria_init(){
 	// Use custom members search
 	elgg_register_action("theme_inria/membersearch", $action_url . "theme_inria/membersearch.php");
 	
-	elgg_extend_view('css', 'theme_inria/css', 900);
-	elgg_extend_view('css/admin', 'theme_inria/admin_css');
+	
+	// CSS - Inria custom styles
+	$css_url = elgg_get_plugins_path() . 'theme_inria/fonts/';
+	elgg_register_css('inria-sans', $css_url.'InriaSans/Web/fonts.css');
+	elgg_register_css('inria-serif', $css_url.'InriaSerif/Web/fonts.css');
+	elgg_load_css('inria-sans');
+	elgg_load_css('inria-serif');
+	
+	elgg_extend_view('css', 'theme_inria/css', 1000);
+	elgg_extend_view('css/admin', 'theme_inria/admin_css', 1000);
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	

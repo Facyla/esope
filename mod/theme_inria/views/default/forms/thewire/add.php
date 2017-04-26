@@ -10,6 +10,7 @@ elgg_load_js('elgg.thewire');
 $parent_post = elgg_extract('post', $vars);
 $forced_access = elgg_extract('access_id', $vars, false);
 $char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
+$own = elgg_get_logged_in_user_entity();
 
 $text = elgg_echo('post');
 if ($parent_post) { $text = elgg_echo('thewire:reply'); }
@@ -51,6 +52,8 @@ if ($char_limit == 0) {
 	$num_lines = 4;
 }
 
+$user_img = '<img src="' . $own->getIconUrl(array('size' => 'small')) . '" alt="' . $own->name . '" />';
+
 $post_input = elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',
@@ -69,6 +72,7 @@ $submit_button = elgg_view('input/submit', array(
 ));
 
 echo <<<HTML
+$user_img
 $post_input
 <div class="elgg-foot mts">
 	$access_input

@@ -144,8 +144,8 @@ return array(
 
 	'esope:directory' => 'Membres',
 	
-	'inria:mygroups' => "Tous mes groupes",
-	'theme_inria:groups:discover' => "Groupes à découvrir",
+	'theme_inria:mygroups' => "Mes groupes",
+	'theme_inria:groups:discover' => "Les groupes à découvrir",
 	'inria:mygroups:title' => "Mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",

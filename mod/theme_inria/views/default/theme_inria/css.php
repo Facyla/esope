@@ -52,12 +52,18 @@ $font4 = elgg_get_plugin_setting('font4', 'esope');
 $font5 = elgg_get_plugin_setting('font5', 'esope');
 $font6 = elgg_get_plugin_setting('font6', 'esope');
 
-$font1 = "Inria Serif";
-$font2 = "Inria Sans";
-//$font3 = elgg_get_plugin_setting('font3', 'esope');
-//$font4 = elgg_get_plugin_setting('font4', 'esope');
-//$font5 = elgg_get_plugin_setting('font5', 'esope');
-//$font6 = elgg_get_plugin_setting('font6', 'esope');
+
+
+// Iris v2 fonts override
+// Codes couleurs
+$iris_blue = "#1488CA";
+$iris_sidegrey = "#3C4458";
+$iris_topgrey = "#454C5F";
+$iris_textgrey = "rgba(255,255,255,0.5)";
+$iris_texttopgrey = "#384257";
+
+$titlecolor = $iris_blue;
+
 
 
 $module_title_color = $titlecolor;
@@ -257,8 +263,6 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-wire .thewire-form { padding: 0; }
 .home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
 
-.home-box { margin-bottom: 1em; background: <?php echo $module_bg_color; ?>; padding: 0.5em 0.5em; border-radius: 5px; }
-.home-box h3:first-child, .home-box h3:first-child a { font-size:0.875rem; font-family:<?php echo $font2; ?>; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 .home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:1.375rem; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
@@ -486,36 +490,75 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 .inria-twitter-intent a.inria-twitter-intent-click .fa-twitter { color: #5BD; }
 
 
+
+
+
 /* NEW IRIS DESIGN v2 */
 #iris-topbar { position:fixed; top:0; left:0; right:0; height:80px; z-index: 500; display: flex; flex-direction: row; }
-.iris-logo { flex: 0 0 auto; width: 204px; height:80px; background: #454C5F; }
-.iris-logo img { height: 40px; margin: 20px 66px; }
+.iris-logo { flex: 0 0 auto; width: 204px; height:80px; background: <?php echo $iris_topgrey; ?>; }
+.iris-logo a { display: inline-block; }
+.iris-logo img { height: 42px; margin: 19px 64px; }
 .iris-topbar-menu { flex: 1 0 auto; background:white; }
 .elgg-menu-topbar {  }
+#iris-search { width: auto; float: left; padding: 12px 24px; }
 .elgg-menu-topbar-alt li { margin: 0 0 0 0; }
-.elgg-menu-topbar li a { font-size:1rem; font-weight:normal; color: #384257; text-shadow: none; padding: 1em; margin: 1em }
-.elgg-menu-topbar > li > ul { position: relative; padding-top: 0px; left: 2em; top: -1em; width: 204px; margin: 0; background: white; margin:0; }
-.elgg-menu-topbar-alt ul li a { background: white; }
+.elgg-menu-topbar li a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; text-shadow: none; padding: 1em; margin: 1rem 0 0 0; }
+.elgg-menu-topbar li a .fa { font-size: 1.2em; }
+.elgg-menu-topbar > li > ul { position: relative; padding-top: 0px; left: 2em; top: -1em; width: 204px; margin: 0; background: white; }
+.elgg-menu-topbar-alt li ul > li > a { background: white; margin:0; width: 100%; text-indent: 0.5em; padding:1rem 0; font-size: 0.875rem; }
 .elgg-menu-topbar #user img { float: left; margin-right: 6px; }
-#iris-search { width: auto; float: left; }
 
 #iris-page { display:flex; flex-direction:row; margin-top: 80px; }
-#iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: #3C4458; padding-top: 2em; }
+#iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: <?php echo $iris_sidegrey; ?>; padding-top: 2em; }
+.elgg-menu-navigation { z-index:2; background: <?php echo $iris_sidegrey; ?>; }
 #iris-navigation ul.elgg-menu-navigation li, #iris-navigation ul.elgg-menu-navigation li:first-child { border:0; float: none; }
-#iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1em 0; text-indent: 2em; text-transform:uppercase; color: rgba(255,255,255,0.5); font-family: "Inria Sans", sans-serif; font-size: 0.95rem; margin: 0.5em 0; }
-#iris-navigation ul.elgg-menu-navigation li a.active, #iris-navigation ul.elgg-menu-navigation li a.elgg-state-selected, #iris-navigation ul.elgg-menu-navigation li a:hover, #iris-navigation ul.elgg-menu-navigation li a:focus, #iris-navigation ul.elgg-menu-navigation li a:active { background-color: <?php echo $module_bg_color; ?>; color:#6D2D4F; }
-#iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { background: <?php echo $module_bg_color; ?>; color: #6D2D4F; }
-#iris-navigation ul.elgg-menu-navigation li ul { background: <?php echo $module_bg_color; ?>; top: 36px; left: 0px; box-shadow:none; }
-#iris-navigation ul.elgg-menu-navigation li ul li { background: <?php echo $module_bg_color; ?>; }
-#iris-navigation ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5em 0.75em; }
+#iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1rem 0; text-indent: 1rem; text-transform:uppercase; text-decoration: none; color: <?php echo $iris_textgrey; ?>; font-family: "Inria Sans", sans-serif; font-size: 0.95rem; margin: 0 0 0.5em 0; }
+#iris-navigation ul.elgg-menu-navigation li a.active, #iris-navigation ul.elgg-menu-navigation li a.elgg-state-selected, #iris-navigation ul.elgg-menu-navigation li a:hover, #iris-navigation ul.elgg-menu-navigation li a:focus, #iris-navigation ul.elgg-menu-navigation li a:active { color: white; }
+#iris-navigation ul.elgg-menu-navigation li ul { background: transparent; margin-top: -1em; left: 0px; box-shadow:none; }
+#iris-navigation ul.elgg-menu-navigation li ul li { background: transparent; }
+#iris-navigation ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5em 0.75em; color: <?php echo $iris_textgrey; ?>; width: 100%; display: inline-block; padding: 0.3rem 0; margin: 0; text-indent: 2rem; }
+#iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { color: white; }
+
 
 #iris-body { padding-top: 2em; background: #EEE; }
 #iris-body h2 { margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
 .elgg-main { background: transparent; }
-.home-box { /* padding: 0 3em; min-width:20rem; max-width: 90%; margin: 0 auto 3em auto;*/ padding:0; margin:0 0 3em 0; border: 1px solid #CCC; padding: 1em; border-radius: 0; }
 
-#iris-footer { flex:0; /* margin-top: auto; */ }
-#iris-footer li a { color:rgba(255,255,255,0.5); width: 100%; text-indent: 2em; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.85rem; }
+#iris-footer { flex:0; /* margin-top: auto; */ position: absolute; bottom: 0; width: 204px; }
+.footer-inria { padding:1rem 2rem; }
+#iris-footer li a { color:<?php echo $iris_textgrey; ?>; width: 100%; text-indent: 0rem; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.85rem; }
+#iris-footer .language_selector { display: inline-block; position: initial; width:100%; }
+#iris-footer .language_selector a { display: inline; }
+
+/* Accueil */
+.iris-home-group { display: inline-block; margin: 0 0.6rem 0.3rem 0; }
+.iris-home-group-category { float:left; width: 5rem; height: 8rem;  border: 1px solid <?php echo $iris_blue; ?>; padding: 0.5rem 0.2rem; box-sizing: border-box;margin: 0 0.5rem 0.3rem 0; text-align: center; color:<?php echo $iris_blue; ?>; font-weight:bold; font-size:0.8rem; }
+.iris-home-group-category img { width: 3em; height: 3em; margin: 1.5em 0 1em 0; }
+.iris-home-group-category a { text-decoration:none; }
+
+.iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; }
+.iris-col { flex:1; padding: 0 2em; max-width: 475px; margin: 0 auto; }
+
+
+/* Styles génériques */
+.view-all { color: <?php echo $iris_blue; ?>; font-size: 1rem; font-family: <?php echo $font2; ?>; font-variant: small-caps; font-weight:bold; }
+
+.elgg-pagination { text-align: right; }
+.elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
+
+.iris-box { background: <?php echo $module_bg_color; ?>; min-width:10rem; margin:0 auto 1em auto; border: 1px solid #CCC; padding: 1em; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.iris-box h3, .iris-box h3 a { font-size:1rem; font-family:<?php echo $font2; ?>; font-weight:bold; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
+
+.iris-box.home-wire img { border-radius: 100px; margin: 0.5em 0; width: 54px; }
+.iris-box.home-wire textarea { width: 80%; height:3em; }
+.iris-box.home-wire textarea::placeholder { color: #D3D3D3; }
+.thewire-form #thewire-characters-remaining { display: inline-block; font-size: 1em; float: none; margin-right: 1em; }
+#thewire-characters-remaining span { margin: 0; float: none; font-size: 1em; }
+.home-wire .thewire-form .elgg-button-submit { display: inline-block; float: none; }
+.elgg-menu.elgg-menu-entity { float: none; text-align: right; margin: 1em 0 0 0; max-width: none; }
+
+.elgg-subtext { font-size: 1.1rem; font-style: normal; color: <?php echo $iris_texttopgrey; ?>; }
+.elgg-subtext time { font-size: 0.75rem; text-transform: uppercase; margin-left: 1em; }
 
 
 

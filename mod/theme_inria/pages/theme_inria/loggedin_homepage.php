@@ -8,28 +8,33 @@ $own = elgg_get_logged_in_user_entity();
 inria_check_and_update_user_status('login:before', 'user', $own);
 
 
-// Slider
-/*
-$slider_params = array('width' => '100%', 'height' => '300px');
-$slider = elgg_view('slider/slider', $slider_params);
-*/
-$slider_guid = elgg_get_plugin_setting('home_slider', 'theme_inria');
-$slider = '';
-if (elgg_is_admin_logged_in()) {
-	$slider .= '<p><i class="fa fa-cogs"></i> &nbsp; ';
-	$slider .= '<a href="' . $url . 'admin/plugin_settings/theme_inria" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:homeslider:select') . ' (' . $slider_guid . ')</a> &nbsp; ';
-	if (!empty($slider_guid)) {
-		$slider .= '<a href="' . $url . 'slider/edit/' . $slider_guid . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:homeslider:edit') . '</a>';
-	}
-	$slider .= '</p>';
-}
-$slider .= elgg_view('slider/view', array('guid' => $slider_guid));
+// Actualités - Le Fil
+$thewire = '<h2>' . elgg_echo('theme_inria:topbar:news') . '<a href="' . $url . 'thewire/all" title="' . elgg_echo('theme_inria:thewire:tooltip') . '" class="float-alt view-all">&#9654; tout voir</a></h2>';
+$thewire .= '<div class="iris-box home-wire">';
+$thewire .= elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
+$thewire  .= '<div class="clearfloat"></div>';
+$thewire .= '</div>';
+$thewire .= '<div class="iris-box home-wire">';
+elgg_push_context('listing');
+// Exclusion des messages du Fil provenant des groupes
+$thewire_params = array(
+		'type' => 'object', 'subtype' => 'thewire', 
+		// This is for container filtering only, can be removed if no filtering
+		//"joins" => array("INNER JOIN " . $dbprefix . "entities AS ce ON e.container_guid = ce.guid"),
+		//"wheres" => array("ce.type != 'group'"), // avoid messages where container is a group
+		'limit' => 7, 'pagination' => true
+	);
+$thewire .= elgg_list_entities($thewire_params);
+elgg_pop_context();
+$thewire .= '<div class="clearfloat"></div>';
+$thewire .= '</div>';
 
 
 
-// Activité du site
+// Ca bouge sur iris - Activité du site
 // Only for subtype filtering
-$site_activity = '<h2><a href="' . $url . 'activity" title="' . elgg_echo('theme_inria:site:activity:tooltip') . '">' . elgg_echo('theme_inria:site:activity') . '<span style="float:right;">&#9654;</span></a></h2>';
+$site_activity = '<h2>' . elgg_echo('theme_inria:site:activity') . '<a href="' . $url . 'activity" title="' . elgg_echo('theme_inria:site:activity:tooltip') . '" class="float-alt view-all">&#9654; tout voir</a></h2>';
+$site_activity .= '<div class="iris-box home-activity">';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 //$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
 // Content only
@@ -51,35 +56,29 @@ $site_activity .= elgg_list_river(array(
 		'pagination' => true, 
 ));
 elgg_pop_context();
-
-// Le Fil
-$thewire = '<h2><a href="' . $url . 'thewire/all" title="' . elgg_echo('theme_inria:thewire:tooltip') . '">' . elgg_echo('theme_inria:thewire:title') . '<span style="float:right;">&#9654;</span></a></h2>';
-//$thewire .= '<em style="float:right;">' . elgg_echo('theme_inria:thewire:details') . '</em>';
-$thewire .= elgg_view_form('thewire/add', array('class' => 'thewire-form')) . elgg_view('input/urlshortener');
-//elgg_push_context('widgets');
-elgg_push_context('listing');
-// Exclusion des messages du Fil provenant des groupes
-$thewire_params = array(
-		'type' => 'object', 'subtype' => 'thewire', 
-		// This is for container filtering only, can be removed if no filtering
-		"joins" => array("INNER JOIN " . $dbprefix . "entities AS ce ON e.container_guid = ce.guid"),
-		"wheres" => array("ce.type != 'group'"), // avoid messages where container is a group
-		'limit' => 7, 'pagination' => true
-	);
-$thewire .= elgg_list_entities($thewire_params);
-elgg_pop_context();
+$site_activity  .= '<div class="clearfloat"></div>';
+$site_activity .= '</div>';
 
 
+
+$groups = '';
+$groups .= '<h2>' . elgg_echo('theme_inria:topbar:groups') . '<a href="' . $url . 'groups/all" class="float-alt view-all">&#9654; tout voir</a></h2>';
+$groups .= '<div class="iris-box">';
+$groups .= elgg_view('theme_inria/my_groups');
+$groups .= '<div class="clearfloat"></div>';
+$groups .= '<br /><br />';
+$groups .= elgg_view('theme_inria/discover_groups');
+$groups .= '<div class="clearfloat"></div>';
+$groups .= '</div>';
 
 // Composition de la page
-// Activité et Fil
-$body .= '<div style="display:flex; flex-direction:row; flex-wrap: wrap;">
-		<div style="flex:1; padding: 0 2em; max-width: 420px; margin: 0 auto;" class="home-static-container">
-			<h2>' . elgg_echo('theme_inria:topbar:news') . '</h2><div class="home-box home-wire">' . $thewire . '</div>
+$body .= '<div class="iris-cols">
+		<div class="home-static-container iris-col">
+			' . $thewire . '
 		</div>
-		<div style="flex:1; padding: 0 2em; max-width: 420px; margin: 0 auto;" class="home-static-container">
-			<h2>' . elgg_echo('theme_inria:topbar:groups') . '</h2><div class="home-box">' . elgg_view('theme_inria/newest_groups') . elgg_view('theme_inria/featured_groups') . '</div>
-			<h2>' . elgg_echo('river:all') . '</h2><div class="home-box home-activity">' . $site_activity . '</div></div>
+		<div class="home-static-container iris-col">
+			' . $groups . '
+			' . $site_activity . '
 		</div>
 	</div>
 	<div class="clearfloat"></div>';

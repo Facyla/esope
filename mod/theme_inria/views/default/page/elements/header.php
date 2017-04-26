@@ -68,17 +68,6 @@ if (elgg_is_logged_in()) {
 		} else {
 			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
 		}
-		
-		// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
-		$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
-		$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
-		$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . elgg_echo('theme_inria:friendsinvites') . '</a></li>';
-
-		if ($friendrequests_count == 1) {
-			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a></li>';
-		} else if ($friendrequests_count > 1) {
-			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a></li>';
-		}
 	}
 	
 }
@@ -90,7 +79,7 @@ if (elgg_is_logged_in()) {
 		?>
 		<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
 		<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
-			<li class="home"><a href="javascript:void(0);" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-caret-down"></i></a>
+			<li class="home"><a href="javascript:void(0);" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><i class="fa fa-file-text-o"></i> &nbsp; <?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">
 					<?php if (elgg_is_active_plugin('dashboard')) { ?>
 						<li class="home"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('river:all'); ?></a></li>
@@ -102,29 +91,23 @@ if (elgg_is_logged_in()) {
 			<?php /* activity : Fil d'activité du site */ ?>
 
 			<?php if (elgg_is_active_plugin('groups')) { ?>
-			<li class="groups"><a <?php if( (current_page_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
+			<li class="groups"><a <?php if( (current_page_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><i class="fa fa-comments-o"></i> &nbsp; <?php echo elgg_echo('groups'); ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">
-					<li><a href="<?php echo $url . 'groups/groupsearch'; ?>"><?php echo elgg_echo('search:group:go'); ?></a></li>
-					<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
-					<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
 					<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
-					<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
-					<?php echo $groupinvites; ?>
+					<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
+					<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
 					<li><a href="<?php echo elgg_get_site_url() . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('groups:add'); ?></a></li>
-					<?php //echo $groups; ?>
 				</ul>
 			</li>
-			<?php echo $invites; ?>
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('members')) { ?>
-				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:members'); ?></a>
+				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><i class="fa fa-user-circle-o"></i> &nbsp; <?php echo elgg_echo('theme_inria:members'); ?></a>
 				</li>
-				<?php echo $friendrequests; ?>
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:event_calendar'); ?></a></li>
+				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><i class="fa fa-calendar"></i> &nbsp; <?php echo elgg_echo('theme_inria:event_calendar'); ?></a></li>
 			<?php } ?>
 		</ul>
 	<?php
