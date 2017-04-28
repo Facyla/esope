@@ -48,6 +48,7 @@ if (elgg_is_logged_in()) {
 		if ($site_notifications_count > 0) {
 			$notifications_count += $site_notifications_count;
 			$notifications_text .= elgg_echo("theme_inria:site_notifications:unreadcount", array($site_notifications_count));
+			$site_notifications_mark .= '<span class="iris-new" title="' . $site_notifications_text . '">' . $site_notifications_count . '</span>';
 		}
 	}
 	
@@ -68,12 +69,12 @@ if (elgg_is_logged_in()) {
 	$friendrequests_options = array("type" => "user", "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true, "count" => true);
 	$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
 	if ($friendrequests_count > 0) {
-		$site_notifications_text .= elgg_echo("theme_inria:friendrequests:unreadcount", array($friendrequests_count));
-		$site_notifications_mark .= '<span class="iris-new" title="' . $site_notifications_text . '">' . $friendrequests_count . '</span>';
+		$friendrequests_text .= elgg_echo("theme_inria:friendrequests:unreadcount", array($friendrequests_count));
+		$friendrequests_mark .= '<span class="iris-new" title="' . $friendrequests_text . '">' . $friendrequests_count . '</span>';
 		
 		$notifications_count += $friendrequests_count;
 		if (!empty($notifications_text)) { $notifications_text .= ', '; }
-		$notifications_text .= $site_notifications_text;
+		$notifications_text .= $friendrequests_text;
 	}
 	/*
 	if ($friendrequests_count == 1) {
@@ -127,35 +128,86 @@ if (elgg_is_active_plugin('language_selector')) {
 		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
 		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
 		$search_entity_type = get_input('entity_type', '');
-		echo '<form action="' . $url . 'search" method="get" id="iris-search">';
-			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
-			$livesearch = elgg_get_plugin_setting('livesearch', 'esope');
-			if ($livesearch != 'no') {
-				echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'user_return' => 'name', 'value' => $prev_q, 'placeholder' => $search_text));
-			} else {
-				echo elgg_view('input/text', array('name' => 'q', 'id' => 'esope-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
-			}
-			echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
-			echo '<br />';
-			echo elgg_view('input/radio', array('name' => 'entity_type', 'options' => $search_opt, 'value' => $search_entity_type, 'align' => 'horizontal'));
+		echo '<form action="' . $url . 'search" method="get" id="iris-topbar-search" class="iris-topbar-item">';
+			echo '<button type="submit" id="iris-topbar-search-submit" title="' . elgg_echo('esope:search') . '"><i class="fa fa-search"></i></button>';
+echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text . '</label>';
+			echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-topbar-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
+			//echo '<noscript><input type="image" id="iris-topbar-search-submit" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" /></noscript>';
 		echo '</form>';
 	}
 	
 	// TOPBAR MENU : personal tools and administration
 	if (elgg_is_logged_in()) {
 		?>
-		<div class="menu-topbar-toggle"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
-		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt" id="menu-topbar">
-			<li id="msg">
-				<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><i class="fa fa-envelope-o"></i><?php echo $messages_mark; ?></a></li>
-			<li id="notifications">
-				<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>" title="<?php echo elgg_echo('site_notifications:topbar'); ?>"><i class="fa fa-bell-o"></i><?php echo $notifications_mark; ?></a>
-					<ul class="hidden">
-						Notifications &nbsp; Demandes de contact &nbsp; Invitations aux groupes
-					</ul>
-				</li>
-			<?php if ($loginas_logout) { echo $loginas_logout; } ?>
-			<li id="user"><a href="javascript:void(0);"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?> <i class="fa fa-angle-down"></i></a>
+		<div id="msg" class="iris-topbar-item">
+			<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><i class="fa fa-envelope-o"></i><?php echo $messages_mark; ?></a>
+		</div>
+		
+		<div id="notifications" class="iris-topbar-item">
+			<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>" title="<?php echo elgg_echo('site_notifications:topbar'); ?>"><i class="fa fa-bell-o"></i><?php echo $notifications_mark; ?></a>
+			<div class="notifications-panel hidden">
+				<div class="tabs">
+					<?php
+					$tab = 'site'; // friends | groups
+					$class = ''; if ($tab == 'site') { $class = 'elgg-state-selected'; }
+					echo elgg_view('output/url', array(
+							'text' => 'Notifications'.$site_notifications_mark, 
+							'href' => '#iris-topbar-notifications-site',
+							'class' => $class
+						));
+					$class = ''; if ($tab == 'groups') { $class = 'elgg-state-selected'; }
+					echo elgg_view('output/url', array(
+							'text' => 'Demandes de contact'.$friendrequests_mark, 
+							'href' => '#iris-topbar-notifications-friends',
+							'class' => $class
+						));
+					$class = ''; if ($tab == 'friends') { $class = 'elgg-state-selected'; }
+					echo elgg_view('output/url', array(
+							'text' => 'Invitations aux groupes'.$groupinvites_mark, 
+							'href' => '#iris-topbar-notifications-groups',
+							'class' => $class
+						));
+					?>
+				</div>
+				
+				<?php
+				if (($tab == 'site')) {
+					echo '<div id="iris-topbar-notifications-site" class="iris-topbar-notifications-tab">';
+				} else {
+					echo '<div id="iris-topbar-notifications-site" class="iris-topbar-notifications-tab hidden">';
+				}
+				echo elgg_list_entities_from_metadata(array(
+						'type' => 'object', 'subtype' => 'site_notification',
+						'owner_guid' => $page_owner->guid, 'full_view' => false,
+						'metadata_name' => 'read', 'metadata_value' => false,
+					));
+				echo '</div>';
+				
+				if (($tab == 'friends')) {
+					echo '<div id="iris-topbar-notifications-friends" class="iris-topbar-notifications-tab">';
+				} else {
+					echo '<div id="iris-topbar-notifications-friends" class="iris-topbar-notifications-tab hidden">';
+				}
+				echo elgg_view('friend_request/sent', $vars);
+				echo elgg_view('friend_request/received', $vars);
+				echo '</div>';
+				
+				if (($tab == 'groups')) {
+					echo '<div id="iris-topbar-notifications-groups" class="hidden iris-topbar-notifications-tab">';
+				} else {
+					echo '<div id="iris-topbar-notifications-groups" class="iris-topbar-notifications-tab hidden">';
+				}
+				echo elgg_view('groups/invitationrequests', $vars);
+				echo '</div>';
+				?>
+			</div>
+		</div>
+			
+		<?php if ($loginas_logout) { echo $loginas_logout; } ?>
+		
+		<div class="menu-topbar-toggle" class="iris-topbar-item"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt iris-topbar-item" id="menu-topbar">
+			<li id="user"><a href="javascript:void(0);"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?></a>
 				<ul class="hidden">
 					<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><i class="fa fa-user-o"></i>&nbsp;<?php echo elgg_echo('theme_inria:topbar:profil'); ?></a>
 					<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog"></i>&nbsp;<?php echo elgg_echo('esope:usersettings'); ?></a></li>
@@ -166,6 +218,7 @@ if (elgg_is_active_plugin('language_selector')) {
 				</ul>
 			</li>
 		</ul>
+		
 		<?php
 	} else {
 		// Bouton de connexion partout sauf sur la home

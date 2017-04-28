@@ -164,6 +164,11 @@ function theme_inria_init(){
 	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
 	// Override thewire PH
 	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
+	// Override activity PH
+	elgg_register_page_handler('members', 'theme_inria_members_page_handler');
+	// Override profile page
+	elgg_register_page_handler('profile', 'theme_inria_profile_page_handler');
+	
 	// Add tool entry to group menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_inria_thewire_group_menu');
 	// Add link to longtext menu
@@ -276,6 +281,85 @@ function inria_get_profile_ldap_fields() {
 			'inria_phone', // Téléphone
 		);
 	return $ldap_fields;
+}
+
+
+/**
+ * Profile page handler
+ *
+ * @param array $page Array of URL segments passed by the page handling mechanism
+ * @return bool
+ */
+// @TODO use views instead
+function theme_inria_profile_page_handler($page) {
+	
+	// Add some custom settings
+	$remove_profile_widgets = elgg_get_plugin_setting('remove_profile_widgets', 'esope');
+	$add_profile_activity = elgg_get_plugin_setting('add_profile_activity', 'esope');
+	$custom_profile_layout = elgg_get_plugin_setting('custom_profile_layout', 'esope');
+	$add_comments = elgg_get_plugin_setting('add_profile_comments', 'esope');
+	// Iris v2
+	$remove_profile_widgets = 'yes';
+	$add_profile_activity = 'no';
+	$custom_profile_layout = 'no';
+	$add_comments = 'no';
+	
+	if (isset($page[0])) {
+		$username = $page[0];
+		$user = get_user_by_username($username);
+		elgg_set_page_owner_guid($user->guid);
+	} elseif (elgg_is_logged_in()) {
+		forward(elgg_get_logged_in_user_entity()->getURL());
+	}
+
+	// short circuit if invalid or banned username
+	if (!$user || ($user->isBanned() && !elgg_is_admin_logged_in())) {
+		register_error(elgg_echo('profile:notfound'));
+		forward();
+	}
+
+	$action = NULL;
+	if (isset($page[1])) { $action = $page[1]; }
+
+	if ($action == 'edit') {
+		// use the core profile edit page
+		$base_dir = elgg_get_root_path();
+		require "{$base_dir}pages/profile/edit.php";
+		return true;
+	}
+
+	// main profile page
+	// Theme settings : Custom profile layout ? (default: no)
+	if ($custom_profile_layout == 'yes') {
+		
+		$content = elgg_view('esope/profile/wrapper');
+		
+	} else {
+		
+		// Classic layout + some theme options
+		$content = elgg_view('profile/wrapper');
+		
+		// Theme settings : Remove widgets ? (default: no)
+		if ($remove_profile_widgets != 'yes') {
+			$params = array('content' => $content, 'num_columns' => 3);
+			$content = elgg_view_layout('widgets', $params);
+		}
+		
+		// Theme settings : Add activity feed ? (default: no)
+		if ($add_profile_activity == 'yes') {
+			$db_prefix = elgg_get_config('dbprefix');
+			$activity = elgg_view('user/elements/activity', array('entity' => $user));
+			$content .= '<div class="profile-activity-river">' . $activity . '</div>';
+		}
+	}
+	
+	if ($add_comments == 'yes') {
+		$content .= elgg_view('user/elements/comments', array('entity' => $user));
+	}
+	
+	$body = elgg_view_layout('one_column', array('content' => $content));
+	echo elgg_view_page($user->name, $body);
+	return true;
 }
 
 

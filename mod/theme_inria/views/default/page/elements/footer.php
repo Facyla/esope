@@ -11,7 +11,8 @@
  *
  */
 
-$imgurl = elgg_get_site_url() . 'mod/theme_inria/graphics/';
+$url = elgg_get_site_url();
+$imgurl = $url . 'mod/theme_inria/graphics/';
 
 // Display default footer if no specific footer set in theme settings
 $footer = elgg_get_plugin_setting('footer', 'esope');
@@ -48,12 +49,12 @@ if (empty($footer) && !empty($footer_menu)) {
 $lang_select = elgg_view('language_selector/default', $vars);
 $footer = <<<FOOTER
 <ul>
-	<li><a href="https://intranet.inria.fr/">Intranet</a></li>
-	<li><a href="https://reseau-iris.inria.fr/groups/profile/8551/aide">Aide</a></li>
-	<li><a href="https://reseau-iris.inria.fr/p/a-propos">A propos</a></li>
-	<li><a href="https://reseau-iris.inria.fr/p/mentions-legale">Mentions légales</a></li>
-	<li><a href="https://reseau-iris.inria.fr/p/charte-dutilisation">Charte d'utilisation</a></li>
-	<li><a href="https://reseau-iris.inria.fr/p/contact">Contact</a></li>
+	<li><a href="https://intranet.inria.fr/" class="inria-intranet"><i class="fa fa-external-link"></i>&nbsp;Intranet</a></li>
+	<li><a href="{$url}groups/profile/8551/aide">Aide</a></li>
+	<li><a href="{$url}p/a-propos">A propos</a></li>
+	<li><a href="{$url}p/mentions-legale">Mentions légales</a></li>
+	<li><a href="{$url}p/charte-dutilisation">Charte d'utilisation</a></li>
+	<li><a href="{$url}p/contact">Contact</a></li>
 	<li>$lang_select</li>
 </ul>
 FOOTER;

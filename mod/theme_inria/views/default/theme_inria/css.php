@@ -494,19 +494,41 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 
 /* NEW IRIS DESIGN v2 */
+
+/* TOPBAR */
 #iris-topbar { position:fixed; top:0; left:0; right:0; height:80px; z-index: 500; display: flex; flex-direction: row; }
+
 .iris-logo { flex: 0 0 auto; width: 204px; height:80px; background: <?php echo $iris_topgrey; ?>; }
 .iris-logo a { display: inline-block; }
 .iris-logo img { height: 42px; margin: 19px 64px; }
-.iris-topbar-menu { flex: 1 0 auto; background:white; }
-.elgg-menu-topbar {  }
-#iris-search { width: auto; float: left; padding: 12px 24px; }
-.elgg-menu-topbar-alt li { margin: 0 0 0 0; }
-.elgg-menu-topbar li a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; text-shadow: none; padding: 1em; margin: 1rem 0 0 0; }
-.elgg-menu-topbar li a .fa { font-size: 1.2em; }
-.elgg-menu-topbar > li > ul { position: relative; padding-top: 0px; left: 2em; top: -1em; width: 204px; margin: 0; background: white; }
-.elgg-menu-topbar-alt li ul > li > a { background: white; margin:0; width: 100%; text-indent: 0.5em; padding:1rem 0; font-size: 0.875rem; }
-.elgg-menu-topbar #user img { float: left; margin-right: 6px; }
+
+.iris-topbar-menu { flex: 1 0 auto; background:white; display: flex; }
+#iris-topbar-search { flex: 1; font-size: 1.2rem; padding-left: 3.5rem; }
+#iris-topbar-search button { border: 0; background: none; }
+input#iris-topbar-search-input { width: auto; }
+.iris-topbar-item { flex:0 0 auto; padding:1rem 0; position: relative; }
+.iris-topbar-item:last-of-type { padding:1rem 1rem 1rem 0; }
+.iris-topbar-item a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; padding: 1rem; display:inline-block; }
+.iris-topbar-item.elgg-menu-topbar li a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; text-shadow: none; margin: 0 0 0 0; display:inline-block; }
+.iris-topbar-item.elgg-menu-topbar > li > a { padding:0; line-height: 2.5rem; }
+.iris-topbar-item.elgg-menu-topbar > li > a > img { height: 2.5rem; }
+.iris-topbar-item a .fa { font-size: 1.2em; }
+.iris-topbar-item.elgg-menu-topbar ul { position: relative; padding-top: 0px; left: 0; top: 0; width: 204px; margin: 0; background: white; }
+.iris-topbar-item.elgg-menu-topbar-alt ul li { margin:0; }
+.iris-topbar-item.elgg-menu-topbar  ul > li > a { background: white; margin:0; width: 100%; text-indent: 0.5em; padding:1rem 0; font-size: 0.875rem; }
+.iris-topbar-item #user img { float: left; margin-right: 6px; }
+
+.iris-new { position: relative; bottom: 0.8rem; right: 0; width: 8px; height: 8px; background: red; border-radius: 8px; display: inline-block; font-size: 6px; color:red; text-align: center; vertical-align: middle; line-height: 8px; }
+
+#notifications .notifications-panel { display:hidden; position: absolute; top: 4rem; right: 0; width: 520px; z-index: 2; background: white; padding: 1rem 0; box-shadow: 0 0 4px 0; }
+#notifications:hover .notifications-panel { display: block; }
+#notifications .notifications-panel .tabs a { font-size: 0.9rem; background: white; margin: 0 0 0 1rem; padding: 0.5rem 0; color: #384257; opacity:0.3; border-bottom: 4px transparent; }
+#notifications .notifications-panel .tabs a.elgg-state-selected { opacity:1; border-bottom: 4px solid; }
+.iris-topbar-notifications-tab { min-height: 100px; padding: 1rem; max-height: 80vh; overflow: auto; }
+.iris-topbar-item .iris-topbar-notifications-tab a { padding: 0; font-weight: initial; font-size: 0.9rem; }
+
+
+
 
 #iris-page { display:flex; flex-direction:row; margin-top: 80px; }
 #iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: <?php echo $iris_sidegrey; ?>; padding-top: 2em; }
@@ -520,15 +542,19 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 #iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { color: white; }
 
 
-#iris-body { padding-top: 2em; background: #EEE; }
+#iris-body { background: #F1F1F1; }
+#iris-body .elgg-main { /* padding-top: 2em; */ padding:0; }
 #iris-body h2 { margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
+#iris-body .iris-box h2 { font-size: 1.75rem; }
 .elgg-main { background: transparent; }
 
 #iris-footer { flex:0; /* margin-top: auto; */ position: absolute; bottom: 0; width: 204px; }
 .footer-inria { padding:1rem 2rem; }
-#iris-footer li a { color:<?php echo $iris_textgrey; ?>; width: 100%; text-indent: 0rem; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.85rem; }
+#iris-footer li a { color:<?php echo $iris_textgrey; ?>; width: 100%; text-indent: 0rem; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.94rem; }
 #iris-footer .language_selector { display: inline-block; position: initial; width:100%; }
 #iris-footer .language_selector a { display: inline; }
+#iris-footer li a.inria-intranet { color:#95C11F; }
+
 
 /* Accueil */
 .iris-home-group { display: inline-block; margin: 0 0.6rem 0.3rem 0; }
@@ -540,11 +566,32 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 .iris-col { flex:1; padding: 0 2em; max-width: 475px; margin: 0 auto; }
 
 
+/* Profile */
+.iris-profile-header { position: relative; background: #243546; height:15rem; }
+.iris-profile-icon { position: relative; top: 4rem; left: 3rem; width: 13rem; height: 13rem; z-index: 2; border-radius: 13rem; display:flex; }
+.iris-profile-title { position: absolute; top: 5rem; left: 20rem; color: white; }
+#iris-body .iris-profile-title h2 { color: white; font-size:2.5rem; padding:0; margin-bottom: 0.75rem; }
+.iris-profile-info { background: white; font-size:0.75rem; color: #969696; margin-bottom: 1rem; padding: 1rem 1rem 1rem 20rem; text-transform: uppercase; font-weight: bold; display:flex; }
+.iris-profile-info a {  }
+.iris-profile-info-field { flex: 1 0 auto; width: 9rem; }
+.iris-profile-info-field strong { color: #384257; text-transform: initial; display: inline-block; padding-top: 0.5rem; font-size: 0.94rem; }
+.iris-profile-editavatar { display:none; margin: auto; font-size: 0.94rem; text-align: center; color: white; }
+.iris-profile-editavatar:hover { text-decoration:none; }
+.iris-profile-editavatar .fa { font-size: 2.5rem; }
+.iris-profile-icon:hover .iris-profile-editavatar { display: inline-block; }
+.iris-profile-addfriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
+.iris-profile-addfriend { right: 0rem; top: 1rem; background: #1488CA; }
+.iris-profile-sendmessage { right: -1.5rem; top: 4.5rem; background: #384257; }
+
+
 /* Styles génériques */
+.elgg-breadcrumbs { display: none; }
 .view-all { color: <?php echo $iris_blue; ?>; font-size: 1rem; font-family: <?php echo $font2; ?>; font-variant: small-caps; font-weight:bold; }
+.view-all:hover {text-decoration:none; }
 
 .elgg-pagination { text-align: right; }
 .elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
+.iris-topbar-item .iris-topbar-notifications-tab .elgg-pagination a { font-size: 1rem; padding: 0.5rem 1rem; }
 
 .iris-box { background: <?php echo $module_bg_color; ?>; min-width:10rem; margin:0 auto 1em auto; border: 1px solid #CCC; padding: 1em; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .iris-box h3, .iris-box h3 a { font-size:1rem; font-family:<?php echo $font2; ?>; font-weight:bold; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
@@ -559,6 +606,16 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 .elgg-subtext { font-size: 1.1rem; font-style: normal; color: <?php echo $iris_texttopgrey; ?>; }
 .elgg-subtext time { font-size: 0.75rem; text-transform: uppercase; margin-left: 1em; }
+
+/* Pages de recherche : membres, groupes, publications */
+.iris-search { display:flex;flex-direction:column; }
+.iris-search-header { flex:1; width:100%; background-color: rgba(56,66,87,0.3); height:300px; position: relative; }
+.iris-search-image { width:210px; height:210px; position: relative; top: 45px; left: 45px; background:#384257; z-index:3; color: white; font-size: 80px; padding: 65px; box-sizing: border-box; }
+.iris-search-quickform { position: absolute; top: 100px; left: 300px; }
+.iris-search-menu { z-index:2; background:white; width:100%; height: 60px; position: absolute; bottom: 0; padding-left: 300px; }
+.iris-search-menu a { color: grey; font-size: 1rem; font-weight: bold; padding: 1rem; display: inline-block; }
+.iris-search-sidebar { float:left; }
+
 
 
 

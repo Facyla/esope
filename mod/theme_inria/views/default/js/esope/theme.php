@@ -148,4 +148,20 @@ $(document).ready(function() {
 });
 
 
+/**
+ * Topbar tab switcher (Iris v2)
+ */
+$(document).ready(function() {
+	$('#notifications .notifications-panel .tabs a').on('click', function(){
+		// Select tab
+		$('#notifications .notifications-panel .tabs a').removeClass('elgg-state-selected');
+		$(this).addClass('elgg-state-selected');
+		// Display block
+		$('.iris-topbar-notifications-tab').hide();
+		var display_div = $(this).attr('href');
+		$(display_div).show();
+	});
+});
+
+
 

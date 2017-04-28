@@ -160,3 +160,21 @@ function theme_inria_elgg_river_page_handler($page) {
 }
 
 
+// New "ressources/" page handler
+function theme_inria_members_page_handler($page) {
+	//elgg_load_library('elgg:groups');
+	$base = elgg_get_plugins_path() . 'theme_inria/pages/';
+	$page_type = $page[0];
+	//if (isset($page[1])) set_input('guid', $page[2]);
+	/*
+	switch ($page_type) {
+		default:
+			include $base . 'members.php';
+			return false;
+	}
+	*/
+	include $base . 'members.php';
+	return true;
+}
+
+
