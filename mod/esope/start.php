@@ -166,6 +166,10 @@ function esope_init() {
 	// Webdesign : Floatable elements (.is-floatable, .floating)
 	elgg_register_js('floatable.elements', $vendors_base . 'floatable-elements.js', 'footer');
 	elgg_load_js('floatable.elements');
+	// @TODO Transform input as tags
+	//elgg_register_js('taggle.js', $vendors_base . 'taggle/taggle.min.js', 'footer');
+	//elgg_load_js('taggle.js');
+	//elgg_define_js('taggle.js', array('src' => $vendors_base . 'taggle/taggle.min.js', 'deps' => array('jquery')));
 	// Ajout un member picker avec sélection unique pour les messages
 	// @TODO : not functional yet
 	//elgg_register_js('elgg.messagesuserpicker', $vendors_base . 'ui.messagesuserpicker.js');
@@ -1144,7 +1148,10 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$auto_options = elgg_extract('auto-options', $params, false);
 		$search_field = '';
 		
-		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_profile_field', 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
+		$subtype = 'custom_profile_field';
+		if ($params['type'] == 'group') { $subtype = 'custom_group_field'; }
+		
+		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => $subtype, 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
 		if ($field_a) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
@@ -1237,6 +1244,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
  	- q : full search query
  	- entity_type : site | object | user | group
  	- entity_subtype : usually an object subtype
+ 	- friends_only : (bool) get only friends
  	- owner_guid : owner of entity
  	- container_guid : container of entity
  	- metadata : list of metadata and values
@@ -1266,8 +1274,10 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$esearch_defaults = array(
 			'entity_type' => 'object', 
 			'entity_subtype' => null, 
+			'friends_only' => false, 
 			'limit' => 0,
 			'offset' => 0,
+			'order_by' => 'desc',
 			'metadata_case_sensitive' => false,
 			'metadata_name_value_pairs_operator' => 'AND',
 			'count' => false,
@@ -1278,12 +1288,14 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	// Note : we use entity_type and entity_subtype for consistency with regular search
 	$type = esope_extract('entity_type', $params, $defaults['entity_type']);
 	$subtype = esope_extract('entity_subtype', $params, $defaults['entity_subtype']);
+	$friends_only = esope_extract('friends_only', $params, $defaults['friends_only']);
+	// @TODO support friends from another user than logged in ? eg. if user_guid set ?
+	if (($friends_only == 'yes') && elgg_is_logged_in()) { $friends_only = true; } else { $friends_only = false; }
 	$owner_guid = esope_extract('owner_guid', $params, $defaults['owner_guid']);
 	$container_guid = esope_extract('container_guid', $params, $defaults['container_guid']);
 	$limit = (int) esope_extract('limit', $params, $defaults['limit']);
 	$offset = (int) esope_extract('offset', $params, $defaults['offset']);
-	$sort = esope_extract('sort', $params, $defaults['sort']);
-	$order = esope_extract('order', $params, $defaults['order']);
+	$order_by = esope_extract('order_by', $params, $defaults['order_by']);
 	// Metadata search : $metadata[name]=value
 	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
 	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
@@ -1294,13 +1306,76 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	if (isset($params['no_result'])) { $no_result = $params['no_result']; }
 	
 	
+	// Control strictly order_by clause
+	switch($order_by) {
+		case 'alpha':
+			//usort($subpages, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+			switch($type) {
+				case 'user':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)";
+					$order_by_clause = 'ue.name asc';
+					break;
+				case 'group':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "groups_entity ge USING(guid)";
+					$order_by_clause = 'ge.name asc';
+					break;
+				case 'site':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "sites_entity se USING(guid)";
+					$order_by_clause = 'se.name asc';
+					break;
+				case 'object':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "objects_entity oe USING(guid)";
+					$order_by_clause = 'oe.title asc';
+					break;
+				default:
+					//should not happen
+					$order_by_clause = 'e.guid asc';
+			}
+			break;
+		case 'popular':
+			switch($type) {
+				case 'user':
+					$relationship = 'friend';
+					$selects[] = "COUNT(e.guid) as total";
+					$order_by_clause = 'total desc';
+					$group_by = 'r.guid_two';
+					break;
+				case 'group':
+					$relationship = 'member';
+					$selects[] = "COUNT(e.guid) as total";
+					$order_by_clause = 'total desc';
+					$group_by = 'r.guid_two';
+					break;
+				case 'site':
+					$relationship = 'member';
+					$selects[] = "COUNT(e.guid) as total";
+					$order_by_clause = 'total desc';
+					$group_by = 'r.guid_two';
+					break;
+				case 'object':
+					// @TODO num likes ? or views ?
+					break;
+				default:
+			}
+			break;
+		case 'time_created asc':
+		case 'asc':
+			$order_by_clause = 'e.time_created asc';
+			break;
+		case 'time_created desc':
+		case 'desc':
+		default:
+			$order_by_clause = 'e.time_created desc';
+	}
+	
 	// Build search URL query elements (for load more link)
 	if ($hide_pagination != 'yes') {
 		$base_url = "?";
 		$url_fragment = '';
 		if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
 		if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
-		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'sort', 'order');
+		if ($friends_only) { $url_fragment .= "&friends_only=yes"; }
+		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'order_by');
 		foreach($search_filters as $filter) {
 			// Add valid filters to search query URL
 			if (!empty($$filter)) {
@@ -1312,8 +1387,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	
 	$result = array();
 	if ($debug) {
-		echo "Search : q=$q type=" . print_r($type, true) . " subtype=" . print_r($subtype, true) . '<br />';
-		echo "Search : owner=$owner_guid / container=$container_guid limit=$limit offset=$offset sort=$sort order=$order<br />";
+		echo "Search : q=$q type=" . print_r($type, true) . " subtype=" . print_r($subtype, true) . " friends_only=" . print_r($friends_only, true) . '<br />';
+		echo "Search : owner=$owner_guid / container=$container_guid limit=$limit offset=$offset order_by=$order_by<br />";
 		echo "Metadata : " . print_r($metadata, true) . "<br />";
 	}
 	// show hidden (unvalidated) users
@@ -1363,14 +1438,23 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 			'order_by_metadata' => $order_by_metadata,
 			'limit' => $limit,
 			'offset' => $offset,
-			'sort' => $sort,
-			'order' => $order,
+			'order_by' => $order_by_clause,
+			'group_by' => $group_by,
 		);
 	
+	if ($selects) { $search_params['selects'] = $selects; }
 	if ($joins) { $search_params['joins'] = $joins; }
 	if ($wheres) { $search_params['wheres'] = $wheres; }
+	if ($relationship) { $search_params['relationship'] = $relationship; }
+	if ($relationship_guid) { $search_params['relationship_guid'] = $relationship_guid; }
 	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
 	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
+	// Note : Friends only filter disables popular user count sort
+	if (($type == 'user') && $friends_only) {
+		$search_params['relationship'] = 'friend';
+		$search_params['relationship_guid'] = elgg_get_logged_in_user_guid();
+	}
+
 	
 	// Add additional search params (not from URL) - eg. JOIN and WHERE clauses, additional metadata filters, etc.
 	if ($params['merge_params']) {
@@ -1386,7 +1470,18 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	if ($debug) { echo '<pre>' . print_r($search_params, true) . '</pre>'; }
 	// Force count first (we need it to limit results)
 	$search_params['count'] = true;
-	$return_count = elgg_get_entities_from_metadata($search_params);
+	$return_count = elgg_get_entities_from_relationship($search_params);
+	/*
+	if (isset($search_params['metadata_names']) || isset($search_params['metadata_name_value_pairs'])) {
+		if (isset($search_params['relationship'])) {
+			$return_count = elgg_get_entities_from_relationship($search_params);
+		} else {
+			$return_count = elgg_get_entities_from_metadata($search_params);
+		}
+	} else {
+		$return_count = elgg_get_entities($search_params);
+	}
+	*/
 	if ($count) { return $return_count; }
 	
 	
@@ -1400,7 +1495,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	
 	// Return results entities array if asked to
 	if ($params['returntype'] == 'entities') {
-		$entities = elgg_get_entities_from_metadata($search_params);
+		//$entities = elgg_get_entities_from_metadata($search_params);
+		$entities = elgg_get_entities_from_relationship($search_params);
 		//$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
 		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 		return $entities;
@@ -1413,7 +1509,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 			return false;
 		}
 		//$entities = elgg_get_entities_from_metadata($search_params);
-		$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
+		//$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
+		$entities = new ElggBatch('elgg_get_entities_from_relationship', $search_params);
 		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 		$params['q'] = $q;
 		return call_user_func($params['callback'], array('entities' => $entities, 'count' => $return_count, 'params' => $params, 'search_params' => $search_params));
@@ -1449,14 +1546,21 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 			$return .= '<span class="esope-results-count">' . $no_result . '</span>';
 		}
 	}
-	//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
+	
+	// Add order and sort
+	/*
+	if ($add_order == 'yes') {
+		$return .= '<span class="esope-results-order">' . '' . '</span>';
+	}
+	*/
 	
 	elgg_push_context('search');
-	elgg_push_context('widgets');
-	$return .= elgg_list_entities_from_metadata($search_params);
+	//elgg_push_context('widgets');
+	//$return .= elgg_list_entities_from_metadata($search_params);
+	$return .= elgg_list_entities_from_relationship($search_params);
 	//$batch = new ElggBatch('elgg_list_entities_from_metadata', $search_params);
 	//$return .= '<pre>'.print_r($batch).'</pre>';
-	elgg_pop_context('widgets');
+	//elgg_pop_context('widgets');
 	elgg_pop_context('search');
 	
 	// Add alerts now (more than max results, etc.)
@@ -2846,6 +2950,65 @@ function esope_is_valid_url($url = false, $return_http_code = false, $timeout = 
 	}
 	*/
 	
+	return false;
+}
+
+
+
+/* Enables a plugin, and its required dependencies
+ * Recursive enable
+ * @TODO still under conception phase - params might evolve
+ * Perform this after latest plugin enabled :
+ *   elgg_regenerate_simplecache();
+ *   elgg_reset_system_cache();
+ */
+function esope_enable_plugin($name, $enable_deps = true, $simulate = true) {
+	$plugin = elgg_get_plugin_from_id($name);
+	$return = false;
+	if ($plugin->isValid()) {
+		$requires = $plugin->getManifest()->getRequires();
+	
+		if ($simulate) $return .= '<strong>' . $name . '</strong>&nbsp;: ';
+		//if ($simulate) $return .= ' => <pre>' . print_r($requires, true) . '</pre>';
+	
+		if ($simulate) $return .= '<ul>';
+		if ($requires) {
+			if ($simulate) {
+				$return .= '<li>Requires plugins&nbsp;:';
+				$return .= '<ul>';
+			}
+			foreach($requires as $require) {
+				if ($require['type'] != 'plugin') { continue; }
+				if ($simulate) {
+					$return .= '<li>';
+					//$return .= $require['name'] . '&nbsp;: ';
+					$return .= esope_enable_plugin($require['name'], $enable_deps);
+					$return .= '<li>';
+				}
+			}
+			if ($simulate) $return .= '</ul>';
+		}
+		if ($simulate) $return .= '</li>';
+		if (!$plugin->isActive()) {
+			if ($simulate) $return .= '<li>is not active</li>';
+			if ($plugin->canActivate()) {
+				$return .= '<li>can be activated</li>';
+			} else {
+				if ($simulate) $return .= '<li>can NOT be activated</li>';
+				else return false;
+			}
+			if ($plugin->activate()) {
+				if ($simulate) $return .= 'activated !';
+				else return true;
+			}
+		} else {
+			if ($simulate) $return .= '<li>is already active</li>';
+			else return true;
+		}
+		if ($simulate) $return .= '</ul>';
+	}
+	
+	if ($simulate) return $return;
 	return false;
 }
 
