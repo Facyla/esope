@@ -177,4 +177,120 @@ function theme_inria_members_page_handler($page) {
 	return true;
 }
 
+// New "ressources/" page handler
+function theme_inria_search_page_handler($page) {
+	//elgg_load_library('elgg:groups');
+	$base = elgg_get_plugins_path() . 'theme_inria/pages/';
+	$page_type = $page[0];
+	//if (isset($page[1])) set_input('guid', $page[2]);
+	include $base . 'search.php';
+	return true;
+}
+
+
+function theme_inria_groups_page_handler($page) {
+	elgg_load_library('elgg:groups');
+	elgg_load_library('elgg:esope:groups');
+
+	elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
+	$esope_base = elgg_get_plugins_path() . 'esope/pages/';
+	$iris_base = elgg_get_plugins_path() . 'theme_inria/pages/';
+
+	switch ($page[0]) {
+		/*
+		case 'all':
+			// Because we want to add discussions (if setting enabled) + alpha order tab + subgroups + other tweaks
+			esope_groups_handle_all_page();
+			break;
+		*/
+		/*
+		case 'groupsearch':
+			if (!empty($page[1])) set_input('q', $page[1]);
+			esope_groups_groupsearch_page();
+			break;
+		*/
+		// Internal group search = regulr search in group interface/context
+		case 'search':
+			if (!empty($page[1])) {
+				set_input('container_guid', $page[1]);
+				if (!empty($page[2])) { set_input('q', $page[2]); }
+				esope_groups_search_page();
+			} else {
+				// No group set : use group search instead
+				include $iris_base . 'groups.php';;
+			}
+			break;
+		case 'owner':
+			// Because we want to get operated groups too (or choose between owned or operated)
+			esope_groups_handle_owned_page();
+			break;
+		case 'member':
+			set_input('username', $page[1]);
+			groups_handle_mine_page();
+			break;
+		case 'invitations':
+			set_input('username', $page[1]);
+			groups_handle_invitations_page();
+			break;
+		case 'add':
+			groups_handle_edit_page('add');
+			break;
+		case 'edit':
+			groups_handle_edit_page('edit', $page[1]);
+			break;
+		case 'profile':
+			groups_handle_profile_page($page[1]);
+			break;
+		case 'activity':
+			groups_handle_activity_page($page[1]);
+			break;
+		case 'members':
+			// ESOPE: use custom function because au_subgroups lib has hardcoded limit + add invite button for group admins
+			esope_groups_handle_members_page($page[1]);
+			break;
+		case 'invite':
+			groups_handle_invite_page($page[1]);
+			break;
+		case 'requests':
+			groups_handle_requests_page($page[1]);
+			break;
+		case 'subgroups':
+			// AU subgroups will add the breacrumb so avoid duplicating
+			elgg_pop_breadcrumb();
+			switch ($page[1]) {
+				case 'add':
+					set_input('au_subgroup', true);
+					set_input('au_subgroup_parent_guid', $page[2]);
+					elgg_set_page_owner_guid($page[2]);
+					echo elgg_view('resources/au_subgroups/add');
+					return true;
+					break;
+				case 'list':
+					elgg_set_page_owner_guid($page[2]);
+					echo elgg_view('resources/au_subgroups/list');
+					break;
+				case 'delete':
+					elgg_set_page_owner_guid($page[2]);
+					echo elgg_view('resources/au_subgroups/delete');
+					break;
+				case 'openclosed':
+					set_input('filter', $page[2]);
+					echo elgg_view('resources/au_subgroups/openclosed');
+					return true;
+					break;
+			}
+			break;
+		case 'all':
+		case 'groupsearch':
+			if (!empty($page[1])) { set_input('q', $page[1]); }
+			include $iris_base . 'groups.php';
+			break;
+		default:
+			if (!empty($page[0])) { set_input('q', $page[0]); }
+			include $iris_base . 'groups.php';
+	}
+	return true;
+}
+
+
 

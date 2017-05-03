@@ -1,11 +1,11 @@
 <?php
 /**
- * Elgg bookmarks plugin everyone page
+ * Elgg groups plugin everyone page
  *
  * @package ElggBookmarks
  */
 
-elgg_set_context('members');
+elgg_set_context('groups');
 elgg_push_context('search');
 
 /*
@@ -25,18 +25,19 @@ if ($hide_directory == 'yes') { gatekeeper(); }
 
 //elgg_require_js('elgg/spinner'); // @TODO make spinner work...
 
-$sidebar .= elgg_view('esope/users/search', $vars);
+$sidebar .= elgg_view('esope/groups/search', $vars);
 
 
 $content .= '<div class="iris-search-sort">';
-	$num_members = esope_get_number_users();
-	$content .= '<span class="iris-search-count">' . $num_members . ' ' . elgg_echo('members') . '</span>';
+	$num_groups = elgg_get_entities(array('type' => 'group', 'count' => true));
+	$content .= '<span class="iris-search-count">' . $num_groups . ' ' . elgg_echo('groups') . '</span>';
 	$order_opt = array(
 			'alpha' => "Ordre alphabétique",
-			'desc' => "Membres les + récents",
-			'asc' => "Membres les + anciens",
+			'desc' => "Groupes les + récents",
+			'asc' => "Groupes les + anciens",
+			'popular' => "Avec le plus de membres",
 		);
-	$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_members_search_order', 'options_values' => $order_opt)) . '</span>';
+	$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_groups_search_order', 'options_values' => $order_opt)) . '</span>';
 $content .= '</div>';
 
 $content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';

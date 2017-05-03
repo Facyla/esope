@@ -117,6 +117,51 @@ function theme_inria_select_tab($hook, $type, $items, $vars) {
 	return $items;
 }
 
+// Add direct message to user listing view
+function theme_inria_user_menu_setup($hook, $type, $items, $vars) {
+	if (!elgg_instanceof($vars['entity'], 'user')) { return $items; }
+	// Update some existing menu items
+	foreach ($items as $k => $item) {
+		if ($item->getName() == 'friend_request') {
+			$item->setTooltip($item->getText());
+			$item->setText('<i class="fa fa-user-plus"></i>');
+			$item->setWeight(601);
+		}
+		if ($item->getName() == 'add_friend') {
+			$item->setTooltip($item->getText());
+			$item->setText('<i class="fa fa-user-plus"></i>');
+			$item->setWeight(601);
+		}
+		if ($item->getName() == 'remove_friend') {
+			$item->setTooltip($item->getText());
+			$item->setText('<i class="fa fa-user-times"></i>');
+			$item->setWeight(601);
+		}
+	}
+	// Add send message
+	$items[] = ElggMenuItem::factory(array(
+			'name' => 'message',
+			'text' => '<i class="fa fa-envelope-o"></i>',
+			'title' => elgg_echo('messages:sendmessage'),
+			'href' => elgg_get_site_url() . 'messages/compose?send_to=' . $vars['entity']->guid,
+			'link_class' => 'iris-user-message',
+			'priority' => 603,
+		));
+	// Add send message
+	if (elgg_is_logged_in() && $vars['entity']->isFriend()) {
+		$items[] = ElggMenuItem::factory(array(
+				'name' => 'is-friend',
+				'text' => '<i class="fa fa-user"></i>',
+				'title' => elgg_echo('friend'),
+				'href' => "javascript:void(0);",
+				'link_class' => 'iris-user-is-friend',
+				'priority' => 602,
+			));
+	}
+	return $items;
+}
+
+
 
 // HTMLAWED AND INPUT FILTERING
 

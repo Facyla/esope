@@ -46,6 +46,11 @@ if ($tags === '') {
 if ($title_link) {
 	echo "<h3>$title_link</h3>";
 }
+
+if (elgg_instanceof($entity, 'user')) {
+	if ($metadata) { echo $metadata; }
+}
+
 echo "<div class=\"elgg-subtext\">$subtitle</div>";
 echo $tags;
 
@@ -55,8 +60,7 @@ if ($content) {
 	echo "<div class=\"elgg-content\">$content</div>";
 }
 
-if ($metadata) {
-	echo $metadata;
+if (!elgg_instanceof($entity, 'user')) {
+	if ($metadata) { echo $metadata; }
 }
-
 

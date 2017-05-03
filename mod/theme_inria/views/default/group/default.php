@@ -7,7 +7,13 @@
 
 $group = $vars['entity'];
 
-$icon = elgg_view_entity_icon($group, 'tiny');
+//$icon = elgg_view_entity_icon($group, 'tiny');
+// Iris : bigger images
+if (elgg_in_context('search')) { $size = 'large'; }
+
+//$icon = elgg_view_entity_icon($entity, $size, $vars);
+$icon = '<a href="' . $group->getURL() . '"><img src="' . $group->getIconUrl(array('size' => $size)) . '" alt="' . $group->name . '"></a>';
+
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $group,

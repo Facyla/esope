@@ -1,6 +1,6 @@
 <?php
 /**
- * Members search
+ * Groups search
  * Inria : use custom action so we can add some filters
  *
  */
@@ -9,7 +9,7 @@ $content = '';
 
 // Prepare JS script for forms
 $action_base = elgg_get_site_url() . 'action/theme_inria/';
-$esope_search_url = elgg_add_action_tokens_to_url($action_base . 'membersearch');
+$esope_search_url = elgg_add_action_tokens_to_url($action_base . 'groupsearch');
 
 $content .= '<script type="text/javascript">
 var formdata;
@@ -39,16 +39,19 @@ $order_by = get_input('order_by', 'alpha');
 
 $search_action = "javascript:esope_search();";
 // Should be an array, so clear blanks then make it an array
-$metadata_search_fields = elgg_get_plugin_setting('metadata_membersearch_fields', 'esope');
+$metadata_search_fields = elgg_get_plugin_setting('metadata_groupsearch_fields', 'esope');
 // Default to general advanced fields if not set
 if (empty($metadata_search_fields)) { $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'esope'); }
 if (!empty($metadata_search_fields)) {
 	$metadata_search_fields = str_replace(' ', '', $metadata_search_fields);
 	$metadata_search_fields = explode(',', $metadata_search_fields);
 }
+// Iris override
+$metadata_search_fields = array('community', 'group_location', 'interests');
+
 
 // Preset hidden filters
-$metadata_search_filter = elgg_get_plugin_setting('metadata_membersearch_filter', 'esope');
+$metadata_search_filter = elgg_get_plugin_setting('metadata_groupsearch_filter', 'esope');
 // Default to general search filters if not set
 if (empty($metadata_search_filter)) { $metadata_search_filter = elgg_get_plugin_setting('metadata_search_filter', 'esope'); }
 if (!empty($metadata_search_filter)) {
@@ -69,8 +72,8 @@ foreach ($metadata_search_fields as $metadata) {
 	$metadata_params = explode(':', $metadata);
 	$metadata = array_shift($metadata_params);
 	$name = "metadata[$metadata]";
-	$meta_title = elgg_echo("profile:$metadata");
-	if ($meta_title == "profile:$metadata") { $meta_title = elgg_echo($metadata); }
+	$meta_title = elgg_echo("groups:profile:$metadata");
+	if ($meta_title == "groups:profile:$metadata") { $meta_title = elgg_echo($metadata); }
 	$meta_title = ucfirst($meta_title);
 	// Process special syntax parameters (text takes precedence over auto parameter)
 	if (count($metadata) > 0) {
@@ -80,7 +83,7 @@ foreach ($metadata_search_fields as $metadata) {
 	if ($use_profile_manager && !$use_text && !$use_auto_values) {
 		// Use profile manager configuration - will default to text input if field is not defined
 		// Metadata options fetching will only work if those are stored somewhere
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label><div class="clearfloat"></div></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name, 'type' => 'group')) . '</label><div class="clearfloat"></div></div>';
 	} else if ($use_auto_values) {
 		// Metadata options are selected from the database
 		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label><div class="clearfloat"></div></div>';
@@ -109,20 +112,29 @@ if (elgg_is_active_plugin('profile_manager')) {
 }
 */
 
-$profiletypes_opt = esope_get_profiletypes(true); // $guid => $title
-$profiletypes_opt[0] = '';
-$profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep the keys here !
 
 
 $search_form = '';
 $search_form .= '<form id="esope-search-form" method="post" action="' . $search_action . '">';
 $search_form .= '<h3>' . "Filtres avancés" . '</h3>';
 $search_form .= elgg_view('input/securitytoken');
-$search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
+$search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'group'));
 // Pass URL values to search form (any URL parameter has to be passed to the form because it's JS-sent)
 $search_form .= elgg_view('input/hidden', array('name' => 'limit', 'value' => $limit));
 $search_form .= elgg_view('input/hidden', array('name' => 'offset', 'value' => $offset));
 $search_form .= elgg_view('input/hidden', array('name' => 'order_by', 'value' => $order_by));
+
+
+// Group search type
+$search_types = array(
+		'mine' => "Mes groupes",
+		'all' => "Tous les groupes",
+		'operator' => "Mes groupes (admin)",
+	);
+$search_form .= '<div class="esope-search-metadata esope-search-metadata-select">';
+$search_form .= '<label>' . "Type" . elgg_view('input/select', array('name' => "group_search_type", 'value' => get_input('group_search_type'), 'options_values' => $search_types)) . '</label>';
+$search_form .= '<div class="clearfloat"></div>';
+$search_form .= '</div>';
 
 
 // Use preset hidden filters
@@ -148,20 +160,9 @@ if (false && elgg_is_admin_logged_in()) {
 }
 */
 
-$search_form .= '<div class="iris-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:user') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
-
-// Display role filter only if it has a meaning
-if (sizeof($profiletypes_opt) > 2) {
-	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label><div class="clearfloat"></div></div>';
-}
+$search_form .= '<div class="iris-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:group') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
 
 $search_form .= $metadata_search;
-
-$search_form .= '<div class="esope-search-metadata">';
-$friends_only = false;
-// matchon : groups|users|friends
-$search_form .= elgg_view('input/checkbox', array('name' => 'friends_only', 'value' => 'yes', 'default' => '', 'checked' => $friends_only, 'label' => "Afficher seulement mes contacts"));
-$search_form .= '</div>';
 
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
 $search_form .= '</form>';

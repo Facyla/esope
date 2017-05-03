@@ -4,7 +4,14 @@
  * @uses $vars['entity'] The user entity
  */
 
+$own = elgg_get_logged_in_user_entity();
 $user = elgg_get_page_owner_entity();
+$own_profile_type = esope_get_user_profile_type($own);
+$user_profile_type = esope_get_user_profile_type($user);
+
+$show_inria_fields = false;
+if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($user_profile_type == 'inria'))) { $show_inria_fields = true; }
+
 $about = "";
 if ($user->isBanned()) {
 	$about .= "<p class='profile-banned-user'>";
@@ -12,23 +19,13 @@ if ($user->isBanned()) {
 	$about .= "</p>";
 } else {
 	if ($user->description) {
-		$about .= "<p class='profile-aboutme-title'><b>" . elgg_echo("profile:aboutme") . "</b></p>";
 		$about .= "<div class='profile-aboutme-contents'>";
 		$about .= elgg_view('output/longtext', array('value' => $user->description, 'class' => 'mtn'));
 		$about .= "</div>";
 	}
 }
 
-echo '<div id="profile-details" class="elgg-body pll">';
-
 //echo elgg_view("profile/status", array("entity" => $user));
-
-$description_position = elgg_get_plugin_setting("description_position", "profile_manager");
-$show_profile_type_on_profile = elgg_get_plugin_setting("show_profile_type_on_profile", "profile_manager");
-
-if($description_position == "top"){
-	echo $about;
-}
 
 $categorized_fields = profile_manager_get_categorized_fields($user);
 $cats = $categorized_fields['categories'];
@@ -36,128 +33,85 @@ $fields = $categorized_fields['fields'];
 
 $details_result = "";
 
-if($show_profile_type_on_profile != "no"){
-	if($profile_type_guid = $user->custom_profile_type){
-		if(($profile_type = get_entity($profile_type_guid)) && ($profile_type instanceof ProfileManagerCustomProfileType)){
-			$details_result .= "<div class='even'><b>" . elgg_echo("profile_manager:user_details:profile_type") . "</b>: " . $profile_type->getTitle() . " </div>";
+// Iris v2 : force some fields at first
+$iris_skip_fields = array('briefdescription', 'description', 'phone', 'mobile', 'website', 'location', 'room', 'interests', 'skills');
+
+
+$details_result .= '<div class="iris-profile-field">';
+	$details_result .= '<h4>' . "Présentation" . '</h4>';
+	$details_result .= $about;
+	//$details_result .= elgg_view("output/longtext", array("value" =>  $user->description));
+
+	if ($show_inria_fields) {
+		if (!empty($user->inria_phone)) {
+			echo '<div class="iris-profile-info-field"><i class="fa fa-phone"></i>&nbsp;' . implode(', ', $user->inria_phone) . '</div>';
+		}
+		if (!empty($user->email)) {
+			echo '<div class="iris-profile-info-field"><i class="fa fa-envelope"></i>&nbsp;' . elgg_view("output/email", array("value" =>  $user->email)) . '</div>';
 		}
 	}
-}
-
-if(count($cats) > 0){
-			
-	// only show category headers if more than 1 category available
-	if(count($cats) > 1){
-		$show_header = true;
-	} else {
-		$show_header = false;
+	
+	if (!empty($user->phone) || !empty($user->mobile)) {
+		$details_result .= '<p>';
+		if (!empty($user->phone)) { $details_result .= '<i class="fa fa-phone"></i>&nbsp; ' . $user->phone; }
+		if (!empty($user->mobile)) { $details_result .= '<i class="fa fa-mobile"></i>&nbsp; ' . $user->mobile; }
+		$details_result .= '</p>';
 	}
 	
+	if (!empty($user->website)) { $details_result .= '<p><i class="fa fa-globe"></i><i class="fa icon-globe"></i><i class="icon-globe"></i>&nbsp; ' . $user->website . '</p>'; }
+	
+	if (!empty($user->location) || !empty($user->room)) {
+		$details_result .= '<p>';
+		if (!empty($user->location)) { $details_result .= '<i class="fa fa-map-marker"></i>&nbsp;' . $user->location; }
+		if (!empty($user->room)) { $details_result .= '<i class="fa fa-map-pin"></i>&nbsp;' . $user->room; }
+		$details_result .= '</p>';
+	}
+
+$details_result .= "</div>\n";
+
+$details_result .= '<div class="iris-profile-field">';
+	$details_result .= '<h4>' . "Compétences & Centres d'intérêts" . '</h4>';
+	$user_tags = array_merge((array)$user->skills, (array)$user->interests);
+	$details_result .= elgg_view("output/tags", array("value" => $user_tags));
+$details_result .= "</div>\n";
+
+
+if(count($cats) > 0){
 	foreach($cats as $cat_guid => $cat){
-		$cat_title = "";
-		$field_result = "";
-		$even_odd = "even";
-		
 		// Skip Inria category fields (LDAP data)
 		if (($cat instanceof ProfileManagerCustomFieldCategory) && ($cat->metadata_name == 'inria')) { continue; }
 		
-		if($show_header){
-			// make nice title
-			if($cat_guid == -1){
-				$title = elgg_echo("profile_manager:categories:list:system");
-			} elseif($cat_guid == 0){
-				if(!empty($cat)){
-					$title = $cat;
-				} else {
-					$title = elgg_echo("profile_manager:categories:list:default");
-				}
-			} elseif($cat instanceof ProfileManagerCustomFieldCategory) {
-				$title = $cat->getTitle();
-			} else {
-				$title = $cat;
-			}
-			
-			$params = array(
-				'text' => ' ',
-				'href' => "#",
-				'class' => 'elgg-widget-collapse-button',
-				'rel' => 'toggle',
-			);
-			$collapse_link = elgg_view('output/url', $params);
-			
-			$cat_title = "<h3>" . $title . "</h3>\n";
-		}
-		
 		foreach($fields[$cat_guid] as $field){
-			
 			$metadata_name = $field->metadata_name;
+			if (in_array($metadata_name, $iris_skip_fields)) { continue; }
 			
-			if($metadata_name != "description"){
-				// give correct class
-				if($even_odd != "even"){
-					$even_odd = "even";
-				} else {
-					$even_odd = "odd";
-				}
-				
-				// make nice title
-				$title = $field->getTitle();
-				
-				// get user value
-				$value = $user->$metadata_name;
-				
-				// adjust output type
-				if($field->output_as_tags == "yes"){
-					$output_type = "tags";
-					if(!is_array($value)){
-						$value = string_to_tag_array($value);
-					}
-				} else {
-					$output_type = $field->metadata_type;
-				}
-				
-				if($field->metadata_type == "url"){
-					$target = "_blank";
-					// validate urls
-					if (!preg_match('~^https?\://~i', $value)) {
-						$value = "http://$value";
-					}
-				} else {
-					$target = null;
-				}
-				
-				// build result
-				$field_result .= "<div class='" . $even_odd . "'>";
-				$field_result .= "<b>" . $title . "</b>:&nbsp;";
-				$field_result .= elgg_view("output/" . $output_type, array("value" =>  $value, "target" => $target));
-				$field_result .= "</div>\n";
+			// make nice title
+			$title = $field->getTitle();
+			// get user value
+			$value = $user->$metadata_name;
+			
+			// adjust output type
+			$output_type = $field->metadata_type;
+			if($field->output_as_tags == "yes"){
+				$output_type = "tags";
+				if(!is_array($value)){ $value = string_to_tag_array($value); }
 			}
-		}
-		
-		if(!empty($field_result)){
-			$details_result .= $cat_title;
-			$details_result .= "<div>" . $field_result . "</div>";	
+			
+			$target = null;
+			if($field->metadata_type == "url"){
+				$target = "_blank";
+				// validate urls
+				if (!preg_match('~^https?\://~i', $value)) { $value = "http://$value"; }
+			}
+			
+			// build result
+			$details_result .= '<div class="iris-profile-field">';
+			$details_result .= '<h4>' . $title . '</h4>';
+			$details_result .= elgg_view("output/" . $output_type, array("value" =>  $value, "target" => $target));
+			$details_result .= "</div>\n";
 		}
 	}
 }
 
-if(!empty($details_result)){
-	echo "<div id='custom_fields_userdetails'>" . $details_result . "</div>";
-	if(elgg_get_plugin_setting("display_categories", "profile_manager") == "accordion"){
-		?>
-		<script type="text/javascript">
-			$('#custom_fields_userdetails').accordion({
-				header: 'h3',
-				autoHeight: true,
-				heightStyle: 'content',
-			});
-		</script>
-		<?php 
-	}
-}
+echo $details_result;
 
-if($description_position != "top"){
-	echo $about;
-}
-
-echo '</div>';

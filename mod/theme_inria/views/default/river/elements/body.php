@@ -39,17 +39,20 @@ if ($summary === false) {
 }
 
 $message = elgg_extract('message', $vars);
-if ($message !== null) {
+//if ($message !== null) {
+if (!empty($message)) {
 	$message = "<div class=\"elgg-river-message\">$message</div>";
 }
 
 $attachments = elgg_extract('attachments', $vars);
-if ($attachments !== null) {
+//if ($attachments !== null) {
+if (!empty($attachments)) {
 	$attachments = "<div class=\"elgg-river-attachments clearfix\">$attachments</div>";
 }
 
 $responses = elgg_view('river/elements/responses', $vars);
-if ($responses) {
+//if ($responses) {
+if (!empty($responses)) {
 	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
 }
 
@@ -62,11 +65,12 @@ if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_g
 		'text' => $container->name,
 		'is_trusted' => true,
 	));
-	$group_string = elgg_echo('river:ingroup', array($group_link));
+	$group_string = ' ' . elgg_echo('river:ingroup', array($group_link));
 }
 
 echo <<<RIVER
-<div class="elgg-river-summary">$summary $group_string <span class="elgg-river-timestamp">$timestamp</span></div>
+<span class="elgg-river-timestamp">$timestamp</span>
+<div class="elgg-river-summary">$summary$group_string</div>
 $message
 $attachments
 $responses

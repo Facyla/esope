@@ -12,7 +12,8 @@ $urlimg = $url . 'mod/theme_inria/graphics/';
 
 $site = elgg_get_site_entity();
 $title = $site->name;
-$prev_q = get_input('q', '');
+//$prev_q = get_input('q', '');
+$prev_q = ''; // Iris v2 switch to search page where there is an alternate input field
 
 $lang = get_language();
 

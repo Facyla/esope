@@ -163,5 +163,77 @@ $(document).ready(function() {
 	});
 });
 
+/* Iris members search : sync external input fields sync with main advanced search form
+ * Intercepts topbar search form and replace it with main advanced form, if exists
+ * topbar search term
+ * results order and sort
+ * limit
+ */
+$(document).ready(function() {
+	// Replace topbar form by main search form
+	$("#iris-topbar-search").on("submit", function(e){
+		// If advanced search exists, block form and use advanced form instead
+		if ($("#esope-search-form").length) {
+			e.preventDefault();  //prevent form from submitting
+			$('#esope-search-form').submit();
+		}
+	});
+	// Replace header form by main search form
+	$("#iris-search-quickform").on("submit", function(e){
+		// If advanced search exists, block form and use advanced form instead
+		if ($("#esope-search-form").length) {
+			e.preventDefault();  //prevent form from submitting
+			$('#esope-search-form').submit();
+		}
+	});
+	
+	// Sync search fields
+	// Topbar search input
+	$('#iris-topbar-search input[name="q"]').on('change paste keyup', function(e) {
+		$('.iris-search-fulltext input[name="q"]').val($(this).val());
+	});
+	// Iris search header input
+	$('#iris-search-header-input').on('change paste keyup', function() {
+		$('.iris-search-fulltext input[name="q"]').val($(this).val());
+	});
+	// Members order
+	$('.iris-search-sort select[name="iris_members_search_order"]').on('change', function(e) {
+		if ($("#esope-search-form").length) {
+			$('#esope-search-form input[name="order_by"]').val(this.value);
+			e.preventDefault();  //prevent form from submitting
+			$('#esope-search-form').submit();
+		}
+	});
+	// Groups order
+	$('.iris-search-sort select[name="iris_groups_search_order"]').on('change', function(e) {
+		if ($("#esope-search-form").length) {
+			$('#esope-search-form input[name="order_by"]').val(this.value);
+			e.preventDefault();  //prevent form from submitting
+			$('#esope-search-form').submit();
+		}
+	});
+	/*
+	// Limit ?
+	$('.iris-search-sort select[name="iris_members_search_limit"]').on('change', function(e) {
+		if ($("#esope-search-form").length) {
+			$('#esope-search-form #limit').val(this.value);
+			e.preventDefault();  //prevent form from submitting
+			$('#esope-search-form').submit();
+		}
+	});
+	*/
+});
+
+
+
+/* Use Taggle input for main search input
+ * @TODO use something else, jquery plugin...
+ */
+//$(document).ready(function() {
+/*
+require(['taggle.js'], function($) {
+	new Taggle('iris-search-header-input');
+});
+*/
 
 

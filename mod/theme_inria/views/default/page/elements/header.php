@@ -107,7 +107,7 @@ if (elgg_is_logged_in()) {
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><i class="fa fa-calendar"></i> &nbsp; <?php echo elgg_echo('theme_inria:event_calendar'); ?></a></li>
+				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url; ?>event_calendar/list/"><i class="fa fa-calendar"></i> &nbsp; <?php echo elgg_echo('theme_inria:event_calendar'); ?></a></li>
 			<?php } ?>
 		</ul>
 	<?php

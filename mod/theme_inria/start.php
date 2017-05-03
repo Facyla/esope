@@ -34,12 +34,14 @@ function theme_inria_init(){
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
 	
-	// Use custom members search
+	// Use custom searches
+	//elgg_register_action("theme_inria/search", $action_url . "theme_inria/search.php");
 	elgg_register_action("theme_inria/membersearch", $action_url . "theme_inria/membersearch.php");
+	elgg_register_action("theme_inria/groupsearch", $action_url . "theme_inria/groupsearch.php");
 	
 	
 	// CSS - Inria custom styles
-	$css_url = elgg_get_plugins_path() . 'theme_inria/fonts/';
+	$css_url = elgg_get_site_url() . 'mod/theme_inria/fonts/';
 	elgg_register_css('inria-sans', $css_url.'InriaSans/Web/fonts.css');
 	elgg_register_css('inria-serif', $css_url.'InriaSerif/Web/fonts.css');
 	elgg_load_css('inria-sans');
@@ -164,8 +166,10 @@ function theme_inria_init(){
 	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
 	// Override thewire PH
 	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
-	// Override activity PH
+	// Override search PH
+	//elgg_register_page_handler('search', 'theme_inria_search_page_handler');
 	elgg_register_page_handler('members', 'theme_inria_members_page_handler');
+	elgg_register_page_handler('groups', 'theme_inria_groups_page_handler');
 	// Override profile page
 	elgg_register_page_handler('profile', 'theme_inria_profile_page_handler');
 	
@@ -182,6 +186,8 @@ function theme_inria_init(){
 	// Add Etherpad (and iframes) embed
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
 	
+	// Add message to user listing view
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_user_menu_setup');
 	
 	// Filtrage des contenus saisis
 	if (elgg_is_active_plugin('htmlawed')) {

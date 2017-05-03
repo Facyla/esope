@@ -56,45 +56,27 @@ if ($topmenu) {
 		<div class="iris-search-image"><i class="fa fa-search"></i></div>
 		<div class="iris-search-quickform">
 			<h2>Recherche</h2>
-			<?php if (!empty($q)) { echo '<span class="iris-search-q-results">Résultats pour "' . $q . '"</span>'; } ?>
+			<?php if (!empty($q)) { echo 'Résultats pour "' . $q . '"'; } ?>
 			<?php
 			//echo elgg_view_form('search', $vars);
-			
-			$search_entity_type = '';
-			if (elgg_in_context('groups')) {
-				$search_entity_type = 'group';
-			} else if (elgg_in_context('members')) {
-				$search_entity_type = 'user';
-			} else if (elgg_in_context('objects')) {
-				$search_entity_type = 'object';
-			}
-			
-			// Main search term field - jQuerysynced with advanced search form input field
-			echo '<form id="iris-search-quickform">';
-				echo '<label for="iris-search-header-input" class="invisible">' . $search_text . '</label>';
-				echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-search-header-input', 'value' => $q, 'placeholder' => $search_text));
-				//echo '<noscript><input type="image" id="iris-topbar-search-submit" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" /></noscript>';
-				echo '<input type="reset" value="X">';
-				echo '<noscript><button type="submit" id="iris-search-header-submit" title="' . elgg_echo('esope:search') . '"><i class="fa fa-search"></i></button></noscript>';
-			echo '</form>';
 			?>
 		</div>
 		<div class="iris-search-menu">
 			<?php
-			if ($search_entity_type == 'group') {
-				echo '<a href="' . elgg_get_site_url() . 'groups" class="elgg-state-selected">' . elgg_echo('groups') . '</a>';
+			if (elgg_in_context('groups')) {
+				echo '<a href="' . elgg_get_site_url() . 'groups" class="elgg-state-selected">Groupes</a>';
 			} else {
-				echo '<a href="' . elgg_get_site_url() . 'groups" class="">' . elgg_echo('groups') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'groups" class="">Groupes</a>';
 			}
-			if ($search_entity_type == 'user') {
-				echo '<a href="' . elgg_get_site_url() . 'members" class="elgg-state-selected">' . elgg_echo('members') . '</a>';
+			if (elgg_in_context('members')) {
+				echo '<a href="' . elgg_get_site_url() . 'members" class="elgg-state-selected">Membres</a>';
 			} else {
-				echo '<a href="' . elgg_get_site_url() . 'members" class="">' . elgg_echo('members') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'groups" class="">Groupes</a>';
 			}
-			if ($search_entity_type == 'object') {
-				echo '<a href="' . elgg_get_site_url() . 'search" class="elgg-state-selected">objects</a>';
+			if (elgg_in_context('objects')) {
+				echo '<a href="' . elgg_get_site_url() . 'search" class="elgg-state-selected">Publications</a>';
 			} else {
-				echo '<a href="' . elgg_get_site_url() . 'search" class="">' . elgg_echo('objects') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'groups" class="">Groupes</a>';
 			}
 			?>
 		</div>
