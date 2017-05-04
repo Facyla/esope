@@ -127,9 +127,11 @@ $search_form .= elgg_view('input/hidden', array('name' => 'order_by', 'value' =>
 
 // Group search type
 $search_types = array(
-		'mine' => "Mes groupes",
 		'all' => "Tous les groupes",
-		'operator' => "Mes groupes (admin)",
+		'featured' => "Groupe en Une",
+		'member' => "Mes groupes",
+		'operator' => "Mes groupes (responsable)",
+		'owner' => "Mes groupes (propriétaire)",
 	);
 $search_form .= '<div class="esope-search-metadata esope-search-metadata-select">';
 $search_form .= '<label>' . "Type" . elgg_view('input/select', array('name' => "group_search_type", 'value' => get_input('group_search_type'), 'options_values' => $search_types)) . '</label>';

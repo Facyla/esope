@@ -211,23 +211,28 @@ function theme_inria_groups_page_handler($page) {
 		*/
 		// Internal group search = regulr search in group interface/context
 		case 'search':
-			if (!empty($page[1])) {
-				set_input('container_guid', $page[1]);
-				if (!empty($page[2])) { set_input('q', $page[2]); }
-				esope_groups_search_page();
-			} else {
-				// No group set : use group search instead
-				include $iris_base . 'groups.php';;
-			}
+			// No group set : use group search instead
+			if (empty($page[1])) { forward('groups'); }
+			set_input('container_guid', $page[1]);
+			if (!empty($page[2])) { set_input('q', $page[2]); }
+			esope_groups_search_page();
 			break;
-		case 'owner':
-			// Because we want to get operated groups too (or choose between owned or operated)
-			esope_groups_handle_owned_page();
-			break;
+		
+		case 'owner': forward('groups?filter=owner'); break;
+		// Iris note : cannot view other user groups anymore (now in profile)
+		
 		case 'member':
-			set_input('username', $page[1]);
-			groups_handle_mine_page();
+			//forward('groups?filter=member');
+			set_input('filter', 'member');
+			include $iris_base . 'groups.php';
 			break;
+		
+		case 'discover':
+			if (!empty($page[1])) { forward('groups?community=' . $page[1]); }
+			set_input('filter', 'discover');
+			include $iris_base . 'groups.php';
+			break;
+		
 		case 'invitations':
 			set_input('username', $page[1]);
 			groups_handle_invitations_page();
@@ -280,6 +285,7 @@ function theme_inria_groups_page_handler($page) {
 					break;
 			}
 			break;
+		
 		case 'all':
 		case 'groupsearch':
 			if (!empty($page[1])) { set_input('q', $page[1]); }

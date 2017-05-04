@@ -26,50 +26,6 @@ if (elgg_is_logged_in()) {
 	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
-	
-	// Groupes
-	$groups = '';
-	if (elgg_is_active_plugin('groups')) {
-		// Liste de ses groupes
-		$options = array( 'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => 99, 'order_by' => 'time_created asc');
-		// Cas des sous-groupes : listing avec marqueur de sous-groupe
-		if (elgg_is_active_plugin('au_subgroups')) {
-			// Si les sous-groupes sont activés : listing des sous-groupes sous les groupes, et ordre alpha si demandé
-			$display_subgroups = elgg_get_plugin_setting('display_subgroups', 'au_subgroups');
-			$display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
-			$db_prefix = elgg_get_config('dbprefix');
-			// Don't list subgroups here (we want to list them under parents, if listed)
-			$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
-			if ($display_alphabetically != 'no') {
-				$options['joins'] = array("JOIN {$db_prefix}groups_entity ge ON e.guid = ge.guid");
-				$options['order_by'] = 'ge.name ASC';
-			}
-	
-		}
-		$mygroups = elgg_get_entities_from_relationship($options);
-		foreach ($mygroups as $group) {
-			$groups .= '<li><a href="' . $group->getURL() . '">' 
-				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $group->name . '</a></li>';
-			// Si on liste les sous-groupes, on le fait ici si demandé
-			if (elgg_is_active_plugin('au_subgroups') && ($display_subgroups == 'yes')) {
-				$groups .= esope_list_groups_submenu($group, 1, true, $own);
-			}
-		}
-	// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
-		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());
-		$invites_count = sizeof($group_invites);
-		$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . elgg_echo('theme_inria:groupinvites') . '</a></li>';
-		if ($invites_count == 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '">' . $invites_count . '</a></li>';
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
-		} else if ($invites_count > 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '">' . $invites_count . '</a></li>';
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '</a></li>';
-		} else {
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
-		}
-	}
-	
 }
 
 
@@ -94,8 +50,8 @@ if (elgg_is_logged_in()) {
 			<li class="groups"><a <?php if( (current_page_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><i class="fa fa-comments-o"></i> &nbsp; <?php echo elgg_echo('groups'); ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">
 					<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
-					<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
-					<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
+					<li><a href="<?php echo $url . 'groups/discover'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
+					<li><a href="<?php echo $url . 'groups'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
 					<li><a href="<?php echo elgg_get_site_url() . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('groups:add'); ?></a></li>
 				</ul>
 			</li>

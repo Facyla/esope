@@ -709,6 +709,18 @@ Voir et commenter ce lien web :
 	'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki (accueil)",
+	
+	
+	
+		// Iris v2
+	'theme_inria:communities' => "Communautés",
+	'theme_inria:community:description:metiers' => "Métiers : description détaillée à définir",
+	'theme_inria:community:description:outils' => "Outils : description détaillée à définir",
+	'theme_inria:community:description:loisirs' => "Loisirs : description détaillée à définir",
+	'theme_inria:community:description:echanges-vie-pro' => "Echanges & Vie pro : description détaillée à définir",
+	'theme_inria:community:description:plan-strategique' => "Plan stratégique : description détaillée à définir",
+	'theme_inria:groups:discover:view' => "voir",
+	
 
 	
 	

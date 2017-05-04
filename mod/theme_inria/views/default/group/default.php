@@ -9,6 +9,7 @@ $group = $vars['entity'];
 
 //$icon = elgg_view_entity_icon($group, 'tiny');
 // Iris : bigger images
+$size = 'tiny';
 if (elgg_in_context('search')) { $size = 'large'; }
 
 //$icon = elgg_view_entity_icon($entity, $size, $vars);

@@ -440,5 +440,9 @@ Here is the new profile page : %s
 	'groups:content_access_mode:membersonly' => "Same as group - New content will have the same access level as the group",
 	
 	
+	// Iris v2
+	'theme_inria:community:icon:metiers' => "",
+	
+	
 );
 

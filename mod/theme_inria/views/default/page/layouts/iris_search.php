@@ -48,10 +48,10 @@ if ($topmenu) {
  * ou alors synchronise le champ avec le "vrai" formulaire
 */
 
-?>
 
-<div class="iris-search">
-	
+if ($vars['filter'] == 'search') {
+	?>
+	<div class="iris-search">
 	<div class="iris-search-header">
 		<div class="iris-search-image"><i class="fa fa-search"></i></div>
 		<div class="iris-search-quickform">
@@ -99,15 +99,22 @@ if ($topmenu) {
 			?>
 		</div>
 	</div>
+	<?php
+} else {
+	echo '<div class="iris-listing">';
+}
+?>
 	
 	<div class="<?php echo $class; ?>">
-		<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
-		<div class="elgg-sidebar iris-search-sidebar">
-			<h2 class="hidden"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
-			<?php
-				echo $vars['sidebar'];
-			?>
-		</div>
+		<?php if ($vars['sidebar']) { ?>
+			<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
+			<div class="elgg-sidebar iris-search-sidebar">
+				<h2 class="hidden"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
+				<?php
+					echo $vars['sidebar'];
+				?>
+			</div>
+		<?php } ?>
 
 		<div class="elgg-main elgg-body">
 			<?php
