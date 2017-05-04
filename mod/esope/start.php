@@ -1300,8 +1300,13 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
 	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
 	$metadata_name_value_pairs_operator = esope_extract('metadata_name_value_pairs_operator', $params, $defaults['metadata_name_value_pairs_operator']);
+	$metadata_names = esope_extract('metadata_names', $params, $defaults['metadata_names']);
+	$metadata_values = esope_extract('metadata_values', $params, $defaults['metadata_values']);
 	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
+	$relationship = esope_extract('relationship', $params, $defaults['relationship']);
+	$relationship_guid = esope_extract('relationship_guid', $params, $defaults['relationship_guid']);
 	$count = esope_extract('count', $params, $defaults['count']);
+	$add_url_params = esope_extract('add_url_params', $params, '');
 	$no_result = elgg_echo('esope:search:noresult');
 	if (isset($params['no_result'])) { $no_result = $params['no_result']; }
 	
@@ -1372,10 +1377,12 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	if ($hide_pagination != 'yes') {
 		$base_url = "?";
 		$url_fragment = '';
+		$url_fragment .= $add_url_params;
 		if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
 		if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
+		if (!empty($relationship)) { $url_fragment .= "&relationship=$relationship"; }
 		if ($friends_only) { $url_fragment .= "&friends_only=yes"; }
-		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'order_by');
+		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'relationship', 'relationship_guid', 'limit', 'offset', 'order_by');
 		foreach($search_filters as $filter) {
 			// Add valid filters to search query URL
 			if (!empty($$filter)) {
@@ -1431,22 +1438,29 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	// Paramètres de la recherche
 	$search_params = array(
 			'types' => $type,
-			'subtypes' => $subtype,
-			'metadata_name_value_pairs' => $metadata_name_value_pairs,
-			'metadata_case_sensitive' => $metadata_case_sensitive,
-			'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
-			'order_by_metadata' => $order_by_metadata,
+			//'subtypes' => $subtype,
+			//'metadata_name_value_pairs' => $metadata_name_value_pairs,
+			//'metadata_case_sensitive' => $metadata_case_sensitive,
+			//'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
+			//'order_by_metadata' => $order_by_metadata,
 			'limit' => $limit,
 			'offset' => $offset,
 			'order_by' => $order_by_clause,
 			'group_by' => $group_by,
 		);
 	
+	if ($subtype) { $search_params['subtypes'] = $subtype; }
 	if ($selects) { $search_params['selects'] = $selects; }
 	if ($joins) { $search_params['joins'] = $joins; }
 	if ($wheres) { $search_params['wheres'] = $wheres; }
 	if ($relationship) { $search_params['relationship'] = $relationship; }
 	if ($relationship_guid) { $search_params['relationship_guid'] = $relationship_guid; }
+	if ($metadata_names) { $search_params['metadata_names'] = $metadata_names; }
+	if ($metadata_values) { $search_params['metadata_values'] = $metadata_values; }
+	if ($metadata_name_value_pairs) { $search_params['metadata_name_value_pairs'] = $metadata_name_value_pairs; }
+	if ($metadata_case_sensitive) { $search_params['metadata_case_sensitive'] = $metadata_case_sensitive; }
+	if ($metadata_name_value_pairs_operator) { $search_params['metadata_name_value_pairs_operator'] = $metadata_name_value_pairs_operator; }
+	if ($order_by_metadata) { $search_params['order_by_metadata'] = $order_by_metadata; }
 	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
 	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
 	// Note : Friends only filter disables popular user count sort
