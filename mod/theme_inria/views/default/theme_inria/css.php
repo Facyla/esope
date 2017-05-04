@@ -525,7 +525,7 @@ input#iris-topbar-search-input { width: auto; }
 .iris-topbar-item.elgg-menu-topbar > li > a { padding:0; line-height: 2.5rem; }
 .iris-topbar-item.elgg-menu-topbar > li > a > img { height: 2.5rem; }
 .iris-topbar-item a .fa { font-size: 1.2em; }
-.iris-topbar-item.elgg-menu-topbar ul { position: relative; padding-top: 0px; left: 0; top: 0; width: 204px; margin: 0; background: white; }
+.iris-topbar-item.elgg-menu-topbar ul { position: relative; padding-top: 0px; left: 0; top: 0; width: auto; margin: 0; background: white; }
 .iris-topbar-item.elgg-menu-topbar-alt ul li { margin:0; }
 .iris-topbar-item.elgg-menu-topbar  ul > li > a { background: white; margin:0; width: 100%; text-indent: 0.5em; padding:1rem 0; font-size: 0.875rem; }
 .iris-topbar-item #user img { float: left; margin-right: 6px; }
@@ -574,6 +574,7 @@ input#iris-topbar-search-input { width: auto; }
 #iris-body h2.elgg-heading-main { margin:2.5rem 0 1rem 0; }
 #iris-body .elgg-layout-one-sidebar .elgg-sidebar { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
+#iris-body .elgg-layout-one-column .elgg-main { margin-top: 2rem; }
 
 #iris-footer { flex:0; /* margin-top: auto; */ position: absolute; bottom: 0; width: 204px; }
 .footer-inria { padding:1rem 2rem; }

@@ -34,7 +34,8 @@ switch ($page_type) {
 		$options['relationship'] = 'friend';
 		break;
 	default:
-		$title = elgg_echo('river:all');
+		//$title = elgg_echo('river:all');
+		$title = elgg_echo('theme_inria:home:wire');
 		$page_filter = 'all';
 		break;
 }
