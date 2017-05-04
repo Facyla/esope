@@ -45,11 +45,16 @@ if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 	}
 	?>
 	
+	<?php
+	//echo elgg_view('page/layouts/elements/header', $vars);
+	//if (!empty($vars['title'])) { echo '<h2>' . $vars['title'] . '</h2>'; }
+	?>
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
 	<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
 	<div class="elgg-sidebar">
 		<?php
-			echo elgg_view('page/elements/sidebar', $vars);
+		if (!empty($vars['title'])) { echo '<h2>' . $vars['title'] . '</h2>'; }
+		echo elgg_view('page/elements/sidebar', $vars);
 		?>
 	</div>
 
@@ -57,7 +62,7 @@ if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 		<?php
 			if (!$topmenu) { echo $nav; }
 			
-			echo elgg_view('page/layouts/elements/header', $vars);
+			//echo elgg_view('page/layouts/elements/header', $vars);
 			
 			// @todo deprecated so remove in Elgg 2.0
 			if (isset($vars['area1'])) {
@@ -69,5 +74,7 @@ if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 			echo elgg_view('page/layouts/elements/footer', $vars);
 		?>
 	</div>
+
+
 </div>
 

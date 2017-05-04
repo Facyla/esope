@@ -49,7 +49,7 @@ $body = elgg_view_layout('iris_search', array(
 	'sidebar' => $sidebar,
 	'q' => get_input('q'),
 	//'filter_context' => 'all',
-	'filter' => false,
+	'filter' => 'search',
 ));
 
 echo elgg_view_page($title, $body);

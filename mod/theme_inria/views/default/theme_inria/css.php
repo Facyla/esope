@@ -61,6 +61,10 @@ $iris_sidegrey = "#3C4458";
 $iris_topgrey = "#454C5F";
 $iris_textgrey = "rgba(255,255,255,0.5)";
 $iris_texttopgrey = "#384257";
+/* Used colors in Iris v2 theme
+$iris_lightgrey = "#969696";
+#6C6C6C
+*/
 
 $titlecolor = $iris_blue;
 
@@ -237,11 +241,12 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .footer-logo-inria { margin: 12px 0; }
 
 /* Buttons */
-.elgg-button.elgg-button-action { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 0.81rem; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
-.elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 1px solid <?php echo $color8; ?>; color:#333; }
-.elgg-button.elgg-button-submit { border-radius: 5px; border: 1px solid <?php echo $color6; ?>; color: white; font-weight: normal; font-size: 0.81rem; font-family: <?php echo $font2; ?>; padding: 4px 6px; }
-.elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 1px solid <?php echo $color8; ?>; color:#333; }
+.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; }
+.elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; }
+.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; }
+.elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; }
 .elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; }
+
 
 
 /* Page d'accueil */
@@ -511,7 +516,7 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 .iris-topbar-menu { flex: 1 0 auto; background:white; display: flex; }
 #iris-topbar-search { flex: 1; font-size: 1.2rem; padding-left: 3.5rem; }
-#iris-topbar-search button { border: 0; background: none; }
+#iris-topbar-search button { border: 0; background: none; font-size: 1.2rem; }
 input#iris-topbar-search-input { width: auto; }
 .iris-topbar-item { flex:0 0 auto; padding:1rem 0; position: relative; }
 .iris-topbar-item:last-of-type { padding:1rem 1rem 1rem 0; }
@@ -537,8 +542,13 @@ input#iris-topbar-search-input { width: auto; }
 .iris-topbar-notifications-tab { min-height: 100px; padding: 1rem; max-height: 60vh; overflow: auto; }
 .iris-topbar-item .iris-topbar-notifications-tab a { padding: 0; font-weight: initial; font-size: 0.9rem; }
 
-
-
+.elgg-menu-filter { margin-bottom: 1.625rem; border: 0; }
+.elgg-menu-filter > li { background: transparent; padding:0; margin:0 2.625rem 0 0; border:0; }
+.elgg-menu-filter > .elgg-state-selected { background: transparent; }
+.elgg-menu-filter li a { font-size: 18px; border-bottom: 4px solid transparent; color: rgba(56, 66, 87, 0.3); font-weight: bold; padding: 0 0 13px 0; }
+.elgg-menu-filter > .elgg-state-selected a { border-bottom: 4px solid; background: transparent; color: #384257; }
+.elgg-menu-filter > li:hover, .elgg-menu-filter > li:focus, .elgg-menu-filter > li:active { background:transparent; }
+.elgg-menu-filter > li > a:hover, .elgg-menu-filter > li > a:focus, .elgg-menu-filter > li > a:active { background:transparent; color: #384257; }
 
 #iris-page { display:flex; flex-direction:row; margin-top: 80px; }
 #iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: <?php echo $iris_sidegrey; ?>; padding-top: 2em; }
@@ -550,6 +560,8 @@ input#iris-topbar-search-input { width: auto; }
 #iris-navigation ul.elgg-menu-navigation li ul li { background: transparent; }
 #iris-navigation ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5em 0.75em; color: <?php echo $iris_textgrey; ?>; width: 100%; display: inline-block; padding: 0.3rem 0; margin: 0; text-indent: 2rem; }
 #iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { color: white; }
+.elgg-state-selected ul.hidden { display: block !important; }
+.elgg-menu-navigation li.elgg-state-selected > a { color: white !important; }
 
 
 #iris-body { background: #F1F1F1; width: 100%; }
@@ -558,6 +570,10 @@ input#iris-topbar-search-input { width: auto; }
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0 2.625rem 3rem 2.625rem; box-sizing: border-box; display: flex; flex-wrap: wrap; }
 #iris-body h2 { margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
 #iris-body .iris-box h2 { font-size: 1.75rem; }
+#iris-body .elgg-head { padding: 0 2.625rem 0rem 2.625rem; float: left; min-width: 20rem; width: 30%; box-sizing: border-box; }
+#iris-body h2.elgg-heading-main { margin:2.5rem 0 1rem 0; }
+#iris-body .elgg-layout-one-sidebar .elgg-sidebar { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
+#iris-body .elgg-layout-one-sidebar .elgg-main { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
 
 #iris-footer { flex:0; /* margin-top: auto; */ position: absolute; bottom: 0; width: 204px; }
 .footer-inria { padding:1rem 2rem; }
@@ -591,7 +607,7 @@ input#iris-topbar-search-input { width: auto; }
 .iris-profile-editavatar .fa { font-size: 2.5rem; }
 .iris-profile-icon:hover .iris-profile-editavatar { display: inline-block; }
 .iris-profile-addfriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
-.iris-profile-addfriend { right: 0rem; top: 1rem; background: #1488CA; }
+.iris-profile-addfriend { right: 0rem; top: 1rem; background: <?php echo $iris_blue; ?>; }
 .iris-profile-sendmessage { right: -1.5rem; top: 4.5rem; background: #384257; }
 .iris-profile-field { padding: 1rem; border-bottom: 2px solid #E0E0E0; }
 .iris-profile-field:last-of-type { border: 0; }
@@ -609,7 +625,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
 .elgg-tags li.elgg-tag:after { content:''; }
 .elgg-tag {  }
-.elgg-tag a { display:inline-block; padding: 0.4375rem 0.8125rem; border: 1px solid #1488CA; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
+.elgg-tag a { display:inline-block; padding: 0.4375rem 0.8125rem; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
 .elgg-pagination { text-align: right; }
 .elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
 .iris-topbar-item .iris-topbar-notifications-tab .elgg-pagination a { font-size: 1rem; padding: 0.5rem 1rem; }
@@ -645,10 +661,11 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-search-menu a:active,
 .iris-search-menu a:focus { border-bottom: 4px solid #384257; opacity:1; }
 
-.iris-search-sidebar { float:left; min-width: 20rem; width: 30%; }
+.elgg-sidebar, .iris-search-sidebar { float:left; clear:left; min-width: 20rem; width: 30%; }
 .iris-search-filters { float:left; }
 
 #esope-search-form { padding: 0 0 0rem 3.625rem; width: 100%; box-sizing: border-box; }
+.elgg-sidebar h3, 
 #esope-search-form h3 { text-transform: uppercase; font-size: 1rem; padding: 0;  margin-bottom: 2.6875rem; }
 .iris-search-fulltext { display:none; }
 .esope-search-metadata { width: 100%; min-height: initial; border: 0; border-bottom: 1px solid #C8C8C8; padding: 0 0 1.25rem 0; margin: 0 0 1.4375rem 0; float: none; display: block; color: #384257; }
@@ -666,14 +683,15 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 
 /* Boutons */
-#esope-esearch-loadmore a { background: #1488CA; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; color: white; text-decoration: none; display: inline-block; }
-.elgg-button.elgg-button-submit { border: 0; background: #1488CA; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; }
-.elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: #1488CA; color:white; /* box-shadow: 0 0 4px 0 #1488CA; */ }
+#esope-esearch-loadmore a { background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; color: white; text-decoration: none; display: inline-block; }
+
 
 
 
 
 /* River and listings */
+.elgg-river-layout .elgg-list-river { background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); max-width: 522px; padding: 2.5rem; box-sizing: border-box; }
+
 .elgg-list-river .elgg-item { padding: 1.8rem 0 1.2rem 0; }
 .elgg-list-river .elgg-item:first-of-type { padding-top: 0; }
 .elgg-image-block { padding: 0.5rem 0; }
@@ -692,7 +710,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-item-user li.elgg-menu-item-friend-request a,
 .elgg-item-user li.elgg-menu-item-is-friend a { height: 2.875rem; width: 2.875rem; line-height:2.875rem; border-radius: 1.5rem; display: inline-block; overflow: hidden; font-size: 1rem; color: white; text-align:center; }
 .elgg-menu-item-message .iris-user-message { background-color: #384257; }
-.elgg-item-user li.elgg-menu-item-add-friend a { background: #1488CA; }
+.elgg-item-user li.elgg-menu-item-add-friend a { background: <?php echo $iris_blue; ?>; }
 .elgg-item-user li.elgg-menu-item-remove-friend a { background: #FF0000; }
 .elgg-item-user li.elgg-menu-item-friend-request a { background: #d47d00; }
 .elgg-item-user li.elgg-menu-item-is-friend a { background: #95C11F; }
@@ -717,20 +735,28 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-item-group .elgg-menu-item-members, 
 .elgg-item-group .elgg-menu-item-membership { float: left; margin-left: 0; margin-right: 15px; }
 
-.iris-groups-community { flex: 0 0 32rem; height:12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 2rem; box-sizing: border-box; position: relative; }
+.iris-groups-community { flex: 0 0 32rem; height:12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 2rem; box-sizing: border-box; position: relative; overflow: auto; }
 .iris-community-icon { height: 4.375rem; margin: 2rem; width: 4.375rem; float: left; }
-.iris-groups-community .iris-community-hover { position: absolute; top: 0; left: 0; bottom: 0; right: 0; /* background: #1488CA; opacity: 0.9; */ background:rgba(20, 136, 202, 0.9); border-radius: 4px; font-size: 1.875rem; font-weight: bold; color: white; text-align: center; line-height: 12.5rem; text-transform: uppercase; }
+.iris-groups-community .iris-community-hover { position: absolute; top: 0; left: 0; bottom: 0; right: 0; /* background: <?php echo $iris_blue; ?>; opacity: 0.9; */ background:rgba(20, 136, 202, 0.9); border-radius: 4px; font-size: 1.875rem; font-weight: bold; color: white; text-align: center; line-height: 12.5rem; text-transform: uppercase; }
 .iris-groups-community:hover .iris-community-hover { display: block; }
 .iris-community-body { font-size:0.9375rem; color:#6C6C6C; }
 .iris-community-groups-count { color: #969696; font-size: 0.75rem; font-weight: bold; margin-bottom: 0.625rem; }
 .iris-community-body h3, .iris-community-body h3 a { color: #384257; font-size: 1.375rem; padding: 0; margin-bottom: 0.8125rem; }
 
-#iris-body .iris-listing h2 { margin-top: 2.5rem; width: 100%; text-indent: 1rem; }
+#iris-body .iris-listing h2 { margin-top: 2.5rem; width: 100%; text-indent: 1rem; padding:0; }
 #iris-body .iris-listing .elgg-main .elgg-list-entity { display: flex; flex-wrap: wrap; }
 .iris-listing .elgg-list .elgg-item.elgg-item-group { flex: 0 0 32rem; overflow:hidden; height:12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 0; box-sizing: border-box; position: relative; }
 .iris-listing .elgg-item-group h3, .iris-listing .elgg-item-group h3 a { color: #384257; font-size: 1.375rem; padding: 0; margin-bottom: 0.8125rem; }
 .iris-listing .elgg-item-group .elgg-subtext { font-size:0.9375rem; color:#6C6C6C; }
 
+.iris-groups-member-new { flex: 0 0 32rem; overflow: hidden; height: 12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 0rem; box-sizing: border-box; position: relative; }
+.iris-groups-member-new .iris-groups-member-new-image { float: left; width: 9.5rem; height: 9.5rem; text-align: center; line-height: 9.5rem; font-size: 4.8rem; border: 1px dashed; margin: 1.5rem; }
+.iris-groups-member-new .iris-groups-member-new-body { padding: 3rem; text-align: center; }
+.iris-groups-member-new-body a { margin-bottom: 1.5625rem; }
+
+/* The Wire */
+.elgg-layout-one-sidebar .elgg-form.thewire-form, .elgg-layout-one-sidebar .elgg-main .elgg-list-container { max-width: 522px; margin: 0; padding: 1rem; box-sizing: border-box; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
+.elgg-layout-one-sidebar .elgg-form.thewire-form { margin-bottom:1.25rem; }
 
 
 

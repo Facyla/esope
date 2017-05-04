@@ -145,7 +145,7 @@ return array(
 	'esope:directory' => 'Membres',
 	
 	'theme_inria:mygroups' => "Mes groupes",
-	'theme_inria:groups:discover' => "Les groupes à découvrir",
+	'theme_inria:groups:discover' => "Groupes à découvrir",
 	'inria:mygroups:title' => "Mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
 	'theme_inria:firststeps:show' => "Afficher",
@@ -721,7 +721,11 @@ Voir et commenter ce lien web :
 	'theme_inria:community:description:plan-strategique' => "Plan stratégique : description détaillée à définir",
 	'theme_inria:groups:discover:view' => "voir",
 	
-
+	'theme_inria:home:wire' => "Toutes vos actus",
+	'theme_inria:home:river' => "Ça bouge sur Iris",
+	'theme_inria:groups:add' => "Créer un groupe",
+	'theme_inria:agenda' => "Agenda",
+	'theme_inria:groups:register' => "S'abonner à un groupe",
 	
 	
 	

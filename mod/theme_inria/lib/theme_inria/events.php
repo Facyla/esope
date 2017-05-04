@@ -42,6 +42,7 @@ function theme_inria_setup_menu() {
 		elgg_register_menu_item("page", $menu_item);
 		
 	}
+
 	
 	// Ajout menu Invitations à rejoindre Iris
 	/*

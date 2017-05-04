@@ -44,18 +44,29 @@ if (!$activity) {
 	$activity = elgg_echo('river:none');
 }
 
+
+
+$sidebar = elgg_view('core/river/sidebar');
+$sidebar .= '<div class="clearfloat"></div>';
+$sidebar .= '<h3>' . "Filtres avancés" . '</h3>';
+
+$sidebar .= elgg_view('core/river/filter', array('selector' => $selector));
+
+
 $content = '';
+/*
 if ($page_type != 'mine') {
 	$content .= '<blockquote class="river-inria-info">'.elgg_echo('theme_inria:activity:explanations').'</blockquote>';
 	//$content .= '<div class="clearfloat"></div>';
 }
-$content .= elgg_view('core/river/filter', array('selector' => $selector));
+*/
+//$content .= elgg_view('core/river/filter', array('selector' => $selector));
+$content .= $activity;
 
-$sidebar = elgg_view('core/river/sidebar');
 
 $params = array(
 	'title' => $title,
-	'content' =>  $content . $activity,
+	'content' =>  $content,
 	'sidebar' => $sidebar,
 	'filter_context' => $page_filter,
 	'class' => 'elgg-river-layout',
@@ -64,3 +75,4 @@ $params = array(
 $body = elgg_view_layout('content', $params);
 
 echo elgg_view_page($title, $body);
+

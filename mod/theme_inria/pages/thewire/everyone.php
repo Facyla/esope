@@ -17,7 +17,8 @@ if (elgg_is_logged_in()) {
 }
 
 $content .= '<div class="clearfloat"></div>';
-$content .= '<blockquote class="thewire-inria-info">' . elgg_echo('theme_inria:thewire:explanations') . '</blockquote>';
+// Iris v2 : message supprimé ?
+//$content .= '<blockquote class="thewire-inria-info">' . elgg_echo('theme_inria:thewire:explanations') . '</blockquote>';
 
 $content .= elgg_list_entities(array(
 	'type' => 'object',

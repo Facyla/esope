@@ -28,6 +28,12 @@ $filter = get_input('filter', 'search');
 if (!in_array($filter, array('search', 'community', 'discover', 'member'))) { $filter = 'search'; }
 //elgg_require_js('elgg/spinner'); // @TODO make spinner work...
 
+
+if ($filter == 'search') {
+
+}
+
+
 switch($filter) {
 	case 'discover':
 	case 'community':
@@ -87,6 +93,15 @@ switch($filter) {
 				$content .= '<h2>' . elgg_echo("groups:user", array($user->name)) . " ($count)" . '</h2>';
 			}
 			$content .= $groups_content;
+			
+			// Bloc s'abonner + créer
+			$content .= '<div class="iris-groups-member-new">';
+			$content .= '<div class="iris-groups-member-new-image">+</div>';
+			$content .= '<div class="iris-groups-member-new-body">';
+				$content .= elgg_view('output/url', array('href' => 'groups', 'text' => elgg_echo('theme_inria:groups:register'), 'class' => 'elgg-button elgg-button-action'));
+				$content .= elgg_view('output/url', array('href' => 'groups/add', 'text' => elgg_echo('groups:add'), 'class' => 'elgg-button elgg-button-action'));
+			$content .= '</div>';
+			$content .= '</div>';
 		break;
 	
 	case 'search':
@@ -109,15 +124,22 @@ switch($filter) {
 }
 
 
-
-$body = elgg_view_layout('iris_search', array(
-	'title' => $title,
-	'content' => $content,
-	'sidebar' => $sidebar,
-	'q' => get_input('q'),
-	//'filter_context' => 'all',
-	'filter' => $filter,
-));
+if ($filter == 'search') {
+	$body = elgg_view_layout('iris_search', array(
+		'title' => $title,
+		'content' => $content,
+		'sidebar' => $sidebar,
+		'q' => get_input('q'),
+		'filter' => 'search',
+	));
+} else {
+	$body = elgg_view_layout('iris_listing', array(
+		'title' => $title,
+		'content' => $content,
+		'sidebar' => $sidebar,
+		'filter' => $filter,
+	));
+}
 
 echo elgg_view_page($title, $body);
 
