@@ -40,6 +40,10 @@ function default_icons_init() {
 	//elgg_register_plugin_hook_handler();
 	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'default_icons_user_hook', 1000);
 	
+	// Hooks so we can override default icons
+	//elgg_register_plugin_hook_handler();
+	elgg_register_plugin_hook_handler('entity:icon:url', 'group', 'default_icons_group_hook', 1000);
+	
 	
 	/* Some useful elements :
 	
@@ -99,6 +103,12 @@ include_once(elgg_get_plugins_path() . 'default_icons/lib/default_icons/hooks.ph
 include_once(elgg_get_plugins_path() . 'default_icons/lib/default_icons/events.php');
 include_once(elgg_get_plugins_path() . 'default_icons/lib/default_icons/functions.php');
 */
+
+
+// Returns list of available algorithms
+function default_icons_get_algorithms() {
+	return ['ringicon' => "RingIcon", 'vizhash' => "VizHash", 'unique_image' => "Exorithm Unique image", 'ideinticon' => "Ideinticon"];
+}
 
 
 // Page handler
@@ -173,10 +183,55 @@ function default_icons_user_hook($hook, $type, $return, $params) {
 }
 
 
-// Returns list of available algorithms
-function default_icons_get_algorithms() {
-	return ['ringicon' => "RingIcon", 'vizhash' => "VizHash", 'unique_image' => "Exorithm Unique image", 'ideinticon' => "Ideinticon"];
+
+/**
+ * Replaces a default user icon by an auto-generated one
+ * Note : to override all user icons, register a new hook in your plugin with a proper priority and overriding rules
+ * Caution : as is, this hook cannot detect cases where icon is set but not available (this will default to '_graphics/icons/default/')
+ */
+/* Notes : 
+ * '_graphics/icons/user/' correspond à une icône utilisateur non définie
+ * en cas d'erreur, on a l'icône par défaut '_graphics/icons/default/' qui correspond à une icône définie mais non trouvée
+ * 'mod/groups/graphics/' correspond à une icône de groupe non définie
+ */
+function default_icons_group_hook($hook, $type, $return, $params) {
+	static $algorithm = false;
+	static $enabled = false;
+	if (!$algorithm) {
+		$enabled = elgg_get_plugin_setting('default_group');
+		if ($enabled != 'no') {
+			$enabled = true;
+			$algorithm = elgg_get_plugin_setting('default_group_alg');
+			$algorithm_opt = default_icons_get_algorithms();
+			if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ideinticon'; }
+		} else {
+			$enabled = false;
+		}
+	}
+	// Detect default icon (but cannot use file_exists because it's an URL)
+	//if ($enabled && (strpos($return, 'mod/groups/graphics/') !== false)) {
+	// mod/groups/graphics/defaultlarge.gif (tiny, small, medium, large)
+	if ($enabled && file_exists($return)) {
+		// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
+		// Username-based seed enables portable avatar on other sites
+		$seed = $params['entity']->guid;
+		$size = $params['size'];
+		$icon_sizes = elgg_get_config('icon_sizes');
+		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
+		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+		/*
+		if (!empty($num)) $img_base_url .= "&num=$num";
+		if (!empty($background)) $img_base_url .= "&background=$background";
+		if (!empty($mono)) $img_base_url .= "&mono=$mono";
+		*/
+		$img_base_url .= "&algorithm=$algorithm";
+		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+		return $img_base_url;
+	}
+	
+	return $return;
 }
+
 
 
 
