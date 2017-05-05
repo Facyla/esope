@@ -22,14 +22,10 @@
 		*/
 		$mygroups = elgg_get_entities_from_relationship($options);
 		foreach ($mygroups as $group) {
-			$groups .= '<div class="iris-home-group">' . elgg_view_entity_icon($group, 'small') . '</div>';
-		//$groups .= '<a href="' . $group->getURL() . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" title="' . $group->name . '" /></a>';
-			/*
-			$groups .= '<li><a href="' . $group->getURL() . '">' 
-				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $group->name . '</a></li>';
-			*/
+			//$groups .= '<div class="iris-home-group">' . elgg_view_entity_icon($group, 'medium') . '</div>';
+			$groups .= '<div class="iris-home-group float"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></div>';
 		}
-			$groups .= '<div class="iris-home-group iris-home-group-add"><a href="' . elgg_get_site_url() . 'groups/add" title="">+</a></div>';
+			$groups .= '<div class="iris-home-group iris-home-group-add iris-user-groups-add float"><a href="' . elgg_get_site_url() . 'groups/add" title="">+</a></div>';
 		
 		// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
 		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());

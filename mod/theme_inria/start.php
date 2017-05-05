@@ -291,3 +291,13 @@ function inria_get_profile_ldap_fields() {
 
 
 
+function theme_inria_get_community_groups($community = false, $count = false) {
+	if (empty($community)) { return false; }
+	
+	$options = array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'community', 'value' => $community));
+	if ($count) { $options['count'] = true; }
+	return elgg_get_entities_from_metadata($options);
+}
+
+
+

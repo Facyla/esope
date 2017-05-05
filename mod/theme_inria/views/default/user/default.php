@@ -33,8 +33,6 @@ if (!$title) {
 	$title = elgg_view('output/url', $link_params);
 }
 
-// Iris : @TODO in start.php : add send message to user entity menu
-
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $entity,
@@ -69,7 +67,7 @@ if (elgg_get_context() == 'gallery') {
 		$tags = elgg_view("output/tags", array("value" => $user_tags));
 		if (!empty($tags)) {
 			//$tags .= '<h4>' . elgg_echo('profile:tags') . '</h4>' . $tags;
-			$tags = '<h4>' . "Compétences & Centres d'intérêts" . '</h4>' . $tags;
+			$tags = '<h4>' . elgg_echo('theme_inria:user:tags') . '</h4>' . $tags;
 		}
 		$params = array(
 			'entity' => $entity,

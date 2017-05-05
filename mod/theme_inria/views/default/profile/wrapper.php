@@ -38,13 +38,13 @@ $own = elgg_get_logged_in_user_entity();
 					);
 				$user_groups = elgg_get_entities_from_relationship($options);
 				$user_groups_count = sizeof($user_groups);
-				echo '<h4>Groupes (' . sizeof($user_groups) . ')</h4>';
+				echo '<h4>' . elgg_echo('theme_inria:user:groups:title', array($user_groups_count)) . 'Groupes (' . sizeof($user_groups) . ')</h4>';
 				foreach ($user_groups as $ent) {
 					//echo '<div class=""><a href="' . $ent->getUrl() . '">' . elgg_view_entity_icon($ent, 'small') . '</a></div>';
-					echo '<div class="float" style="margin:0 0.2rem 0.1rem 0;"><a href="' . $ent->getURL() . '" title="' . $ent->name . '"><img src="' . $ent->getIconURL(array('size' => 'medium')) . '" style="height:80px; width:80px;"/></a></div>';
+					echo '<div class="iris-user-groups float"><a href="' . $ent->getURL() . '" title="' . $ent->name . '"><img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /></a></div>';
 				}
 				if ($own->guid == $user->guid) {
-					echo '<div class="float" style="height:5rem; width:5rem; border:1px dashed #384257; display:flex; text-align:center; line-height:5rem; font-size:2rem;"><a href="' . elgg_get_site_url() . 'groups/all" style="width: 100%; color: #384257;"><i class="fa fa-plus"></i></a></div>';
+					echo '<div class="iris-user-groups-add float"><a href="' . elgg_get_site_url() . 'groups/all">+</a></div>';
 				}
 				?>
 				<div class="clearfloat"></div>
@@ -58,12 +58,12 @@ $own = elgg_get_logged_in_user_entity();
 					);
 				$user_friends = elgg_get_entities_from_relationship($options);
 				$user_friends_count = sizeof($user_friends);
-				echo '<h4>Mes contacts (' . sizeof($user_friends) . ')</h4>';
+				echo '<h4>' . elgg_echo('theme_inria:user:friends:title', array($user_friends_count)) . 'Mes contacts (' . sizeof($user_friends) . ')</h4>';
 				foreach ($user_friends as $ent) {
-					echo '<div class="float" style="margin:0 0.2rem 0.1rem 0; "><a href="' . $ent->getURL() . '" title="' . $ent->name . '"><img src="' . $ent->getIconURL(array('size' => 'medium')) . '" style="height:3.375rem; width:3.375rem; border-radius:3.375rem;"/></a></div>';
+					echo '<div class="iris-user-friend float"><a href="' . $ent->getURL() . '" title="' . $ent->name . '"><img src="' . $ent->getIconURL(array('size' => 'medium')) . '"/></a></div>';
 				}
 				if ($own->guid == $user->guid) {
-					echo '<div class="float" style="height:3.375rem; width:3.375rem; border:1px dashed #384257; display:flex; text-align:center; line-height:3.375rem; font-size:2rem;"><a href="' . elgg_get_site_url() . 'members" style="width: 100%; color: #384257;"><i class="fa fa-plus"></i></a></div>';
+					echo '<div class="iris-user-friends-add float"><a href="' . elgg_get_site_url() . 'members">+</a></div>';
 				}
 				?>
 				<div class="clearfloat"></div>

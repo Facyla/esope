@@ -43,14 +43,20 @@ switch($filter) {
 		if ($field_settings) {
 			foreach($field_settings[0]->getOptions() as $community => $label) {
 				if (empty($label)) { continue; }
+				$community_groups_count = theme_inria_get_community_groups($community, true);
+				if ($community_groups_count > 1) {
+					$num_groups = elgg_echo('theme_inria:community:groups:count', array($community_groups_count));
+				} else {
+					$num_groups = elgg_echo('theme_inria:community:groups:count:singular', array($community_groups_count));
+				}
 				$community = elgg_get_friendly_title($community);
 				$content .= '<div class="iris-groups-community iris-community-' . $community . '">';
 					$content .= '<a href="' . elgg_get_site_url() . 'groups/?community=' . $label . '"><div class="iris-community-hover hidden"><i class="fa fa-eye"></i> &nbsp; ' . elgg_echo('theme_inria:groups:discover:view') . '</div></a>';
 					$content .= '<div class="iris-community-icon">';
-					$content .= '<img src="' . elgg_get_site_url() . 'mod/theme_inria/graphics/communities/' . $community . '.png" />';
+					$content .= '<img src="' . elgg_get_site_url() . 'mod/theme_inria/graphics/communities/' . $community . '_100.png" />';
 					$content .= '</div>';
 					$content .= '<div class="iris-community-body">';
-						$content .= '<div class="iris-community-groups-count">X groupes</div>';
+						$content .= '<div class="iris-community-groups-count">' . $num_groups . '</div>';
 						$content .= '<h3><a href="' . elgg_get_site_url() . 'groups/?community=' . $label . '">' . elgg_echo('theme_inria:communities') . ' ' . $label . '</a></h3>';
 						$content .= '<p>' . elgg_echo('theme_inria:community:description:' . $community) . '</p>';
 					$content .= '</div>';

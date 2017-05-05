@@ -96,7 +96,14 @@ switch ($sort) {
 	case 'created':
 	case 'updated':
 	case 'action_on':
+		break;
+
 	case 'alpha':
+		// @TODO is this useful ?
+		break;
+
+	case 'likes':
+		// @TODO add where clause for likes orderings
 		break;
 
 	default:
@@ -109,6 +116,7 @@ $order = get_input('order', 'desc');
 if ($order != 'asc' && $order != 'desc') {
 	$order = 'desc';
 }
+
 
 // Dates filtering
 $created_time_lower = get_input('created_time_lower', null);
@@ -151,6 +159,8 @@ $params = array(
 //	'created_time_upper' => $created_time_upper,
 //	'modified_time_lower' => $modified_time_lower,
 //	'modified_time_upper' => $modified_time_upper,
+	'order' => $order,
+	'sort' => $sort,
 );
 
 
@@ -275,7 +285,7 @@ if (!empty($query)) {
 				'created' => elgg_echo('search:sort:created'),
 				'updated' => elgg_echo('search:sort:updated'),
 				'action_on' => elgg_echo('search:sort:action_on'),
-				'likes' => elgg_echo('search:sort:likes'),
+				'likes' => elgg_echo('search:sort:likes') ." (@TODO)",
 			);
 			$order = 
 		$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_objects_search_order', 'options_values' => $order_opt, 'value' => get_input('sort'))) . '</span>';
