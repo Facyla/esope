@@ -162,7 +162,7 @@ $main_maxwidth = "80%";
 
 
 /* Header */
-body { border-top:0; background:white; /* font-size:0.75rem; */ }
+body { border-top:0; background:white; font-size:16px; }
 section { background:white; }
 .elgg-page-header { background: #6F2D50 !important; border-top: 0; height:auto !important; }
 .elgg-page-header .elgg-inner h1 { margin: 0; padding:0; font-size:1rem; }
