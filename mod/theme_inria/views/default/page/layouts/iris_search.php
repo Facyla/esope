@@ -110,6 +110,7 @@ if ($vars['filter'] == 'search') {
 			<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
 			<div class="elgg-sidebar iris-search-sidebar">
 				<h2 class="hidden"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
+				<h3>Filtres avancés</h3>
 				<?php
 					echo $vars['sidebar'];
 				?>

@@ -116,7 +116,6 @@ $profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep t
 
 $search_form = '';
 $search_form .= '<form id="esope-search-form" method="post" action="' . $search_action . '">';
-$search_form .= '<h3>' . "Filtres avancés" . '</h3>';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
 // Pass URL values to search form (any URL parameter has to be passed to the form because it's JS-sent)

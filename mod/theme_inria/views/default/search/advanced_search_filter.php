@@ -19,6 +19,8 @@ $order_options = array(
 
 // Type & subtype filters
 $subtype_options[ELGG_ENTITIES_ANY_VALUE] = elgg_echo('esope:option:nofilter');
+// Add tags search_type to subtypes (will be treated apart in search)
+$subtype_options['search_type:tags'] = elgg_echo("search_types:tags");
 
 $types_list = elgg_extract('types_list', $vars, false);
 if ($types_list) {
@@ -32,6 +34,7 @@ if ($types_list) {
 		}
 	}
 }
+
 
 // Extract all search params
 $params = elgg_extract('search_params', $vars);
@@ -81,8 +84,6 @@ echo '</div>';
 // ADVANCED SEARCH FORM INTERFACE
 // Advanced search interface usable through a GET form
 echo '<form method="GET" action="' . elgg_get_site_url() . 'search" id="advanced-search-form">';
-echo '<fieldset>';
-echo '<legend>' . elgg_echo('esope:advancedsearch'). '</legend>';
 echo elgg_view('input/securitytokens');
 
 // Fulltext search
@@ -98,7 +99,8 @@ echo elgg_view('input/hidden', array('name' => 'search_type', 'value' => 'all'))
 //echo '<label>' . elgg_echo('search:field:type') . ' ' . elgg_view('input/select', array('name' => 'entity_type', 'options_values' => $type_options, 'value' => $params['type'])) . '</label> &nbsp; &nbsp; ';
 echo elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'object'));
 //echo '<label>' . elgg_echo('search:field:subtype') . ' ' . elgg_view('input/select', array('name' => 'entity_subtype', 'options_values' => $subtype_options, 'value' => $params['subtype'])) . '</label></p>';
-echo '<label>' . elgg_echo('search:field:subtype') . ' ' . elgg_view('input/radio', array('name' => 'entity_subtype', 'options' => array_flip($subtype_options), 'value' => $params['subtype'], 'onChange' => "$('#advanced-search-form').submit();")) . '</label></p>';
+//echo '<label>' . elgg_echo('search:field:subtype') . ' ' . elgg_view('input/radio', array('name' => 'entity_subtype', 'options' => array_flip($subtype_options), 'value' => $params['subtype'], 'onChange' => "$('#advanced-search-form').submit();")) . '</label></p>';
+echo elgg_view('input/radio', array('name' => 'entity_subtype', 'options' => array_flip($subtype_options), 'value' => $params['subtype'], 'onChange' => "$('#advanced-search-form').submit();"));
 
 
 
@@ -151,6 +153,5 @@ echo elgg_view('input/hidden', array('name' => 'offset', 'value' => $params['off
 
 echo elgg_view('input/submit', array('value' => elgg_echo('search'), 'class' => "elgg-button elgg-button-submit advanced-search-submit-bottom")) . '</p>';
 
-echo '</fieldset>';
 echo '</form>';
 

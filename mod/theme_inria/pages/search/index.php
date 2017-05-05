@@ -10,8 +10,8 @@ global $autofeed;
 $autofeed = true;
 
 // $search_type == all || entities || trigger plugin hook
-//$search_type = get_input('search_type', 'all');
-$search_type = 'all';
+$search_type = get_input('search_type', 'all');
+//$search_type = 'all';
 
 // @todo there is a bug in get_input that makes variables have slashes sometimes.
 // @todo is there an example query to demonstrate ^
@@ -33,6 +33,10 @@ if (strlen($query) < $min_chars) {
 
 $entity_type = get_input('entity_type', ELGG_ENTITIES_ANY_VALUE);
 $entity_subtype = get_input('entity_subtype', ELGG_ENTITIES_ANY_VALUE);
+if ($entity_subtype == 'search_type:tags') {
+	$search_type = 'tags';
+	//$entity_subtype = '';
+}
 if (empty($entity_type)) { $entity_type = ELGG_ENTITIES_ANY_VALUE; }
 if (empty($entity_subtype)) { $entity_subtype = ELGG_ENTITIES_ANY_VALUE; }
 
@@ -74,7 +78,8 @@ $display_query = htmlspecialchars($display_query, ENT_QUOTES, 'UTF-8', false);
 
 // get limit and offset.  override if on search dashboard, where only 2
 // of each most recent entity types will be shown.
-if (($search_type == 'all') && empty($entity_subtype)) {
+//if (($search_type == 'all') && empty($entity_subtype)) {
+if (($search_type == 'all') && (empty($entity_subtype) || ($entity_subtype == 'search_text:tags'))) {
 	$limit = get_input('limit', 2);
 	$offset = 0;
 	$pagination = false;
@@ -148,6 +153,7 @@ $params = array(
 //	'modified_time_upper' => $modified_time_upper,
 );
 
+
 // Search filters : add them only if applicable ; will be passed to all searches params and will be used to build URLs
 $add_if_nonempty = array('query', 'owner_guid', 'container_guid', 'limit', 'sort', 'order', 'created_time_lower', 'created_time_upper', 'modified_time_lower', 'modified_time_upper');
 $filter_params = array();
@@ -156,6 +162,8 @@ foreach ($add_if_nonempty as $field) {
 }
 // Add filter params
 $params = array_merge($params, $filter_params);
+// Remove subtype filter if performing a tags search
+if ($entity_subtype == 'search_type:tags') { $params['subtype'] = ELGG_ENTITIES_ANY_VALUE; }
 
 
 // SEARCH - start the actual search
@@ -168,7 +176,7 @@ $custom_results_html = '';
 // check that we have an actual query
 //if (strlen($query) >= $min_chars) {
 //if (empty($query)) {
-if ($search_type == 'all' || $search_type == 'entities') {
+if (!empty($query) && in_array($search_type, array('all', 'entities'))) {
 	// to pass the correct current search type to the views
 	$current_params = $params;
 	$current_params['search_type'] = 'entities';
@@ -184,7 +192,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 			foreach ($subtypes as $subtype) {
 				// no need to search if we're not interested in these results
 				// @todo when using index table, allow search to get full count.
-				if (!empty($entity_subtype) && ($entity_subtype != $subtype)) { continue; }
+				if (($entity_subtype != 'search_type:tags') && !empty($entity_subtype) && ($entity_subtype != $subtype)) { continue; }
 				$current_params['subtype'] = $subtype;
 				$current_params['type'] = $type;
 				
@@ -217,6 +225,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 
 // Custom searches : always apply (eg. tags search should be triggered even for entities search)
 //if ($search_type != 'entities' || $search_type == 'all') {
+if (!empty($query)) {
 	if (is_array($custom_types)) {
 		foreach ($custom_types as $type) {
 			//if (($search_type != 'all') && ($search_type != $type)) { continue; }
@@ -235,6 +244,7 @@ if ($search_type == 'all' || $search_type == 'entities') {
 			}
 		}
 	}
+}
 //}
 
 
@@ -249,46 +259,58 @@ if ($search_type == 'tags') {
 	$searched_words = search_remove_ignored_words($display_query, 'array');
 }
 
-$content .= '<div class="iris-search-sort">';
-	$content .= '<span class="iris-search-count">' . $results_count . ' ' . elgg_echo('theme_inria:objects') . '</span>';
-	$order_opt = array(
-			/*
-			'relevance' => "Pertinence",
-			'created' => "Date de création",
-			'updated' => "Date de mise à jour",
-			'action_on' => "Dernière action",
-			'likes' => "Popularité",
-			*/
-			'relevance' => elgg_echo('search:sort:relevance'),
-			'created' => elgg_echo('search:sort:created'),
-			'updated' => elgg_echo('search:sort:updated'),
-			'action_on' => elgg_echo('search:sort:action_on'),
-			'likes' => elgg_echo('search:sort:likes'),
-		);
-		$order = 
-	$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_objects_search_order', 'options_values' => $order_opt, 'value' => get_input('sort'))) . '</span>';
-$content .= '</div>';
 
-// Too short ? is that relevant ?  we do perform some searches on less than that...
-/*
-if (strlen($query) < $min_chars) {
-	$content .= '<p><em>' . elgg_echo('esope:search:tooshort:details', array($min_chars)) . '</em></p>';
+if (!empty($query)) {
+	$content .= '<div class="iris-search-sort">';
+		$content .= '<span class="iris-search-count">' . $results_count . ' ' . elgg_echo('theme_inria:objects') . '</span>';
+		$order_opt = array(
+				/*
+				'relevance' => "Pertinence",
+				'created' => "Date de création",
+				'updated' => "Date de mise à jour",
+				'action_on' => "Dernière action",
+				'likes' => "Popularité",
+				*/
+				'relevance' => elgg_echo('search:sort:relevance'),
+				'created' => elgg_echo('search:sort:created'),
+				'updated' => elgg_echo('search:sort:updated'),
+				'action_on' => elgg_echo('search:sort:action_on'),
+				'likes' => elgg_echo('search:sort:likes'),
+			);
+			$order = 
+		$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_objects_search_order', 'options_values' => $order_opt, 'value' => get_input('sort'))) . '</span>';
+	$content .= '</div>';
+
+	// Add results - If no result, say it !
+	if (!empty($custom_results_html)) {
+		$content .= '<div class="iris-search-tags">' . $custom_results_html . '</div>';
+	}
+	$content .= $results_html;
+	if (!$results_html && !$custom_results_html) { $content .= elgg_view('search/no_results'); }
+
+} else {
+	/*
+	// Too short ? is that relevant ?  we do perform some searches on less than that...
+	if (strlen($query) < $min_chars) {
+		$content .= '<p><em>' . elgg_echo('esope:search:tooshort:details', array($min_chars)) . '</em></p>';
+	}
+	*/
+	$content .= '<p><em>' . elgg_echo('theme_inria:search:empty') . '</em></p>';
 }
-*/
-
-// Add advanced search & sorting tools - if enabled (don't break default behaviour/interface)
-$as_params['search_params'] = $params;
-$as_params['types_list'] = $types;
-$as_params['custom_types_list'] = $custom_types;
-$advanced_search = elgg_view('search/advanced_search_filter', $as_params);
 
 
-// Add results - If no result, say it !
-if (!empty($custom_results_html)) {
-	$content .= '<div class="iris-search-tags">' . $custom_results_html . '</div>';
-}
-$content .= $results_html;
-if (!$results_html && !$custom_results_html) { $content .= elgg_view('search/no_results'); }
+
+
+// Sidebar : add advanced search & sorting tools - if enabled (don't break default behaviour/interface)
+// Add back subtype filter if performing a tags search
+if ($entity_subtype == 'search_type:tags') { $params['subtype'] = 'search_type:tags'; }
+
+$sidebar = elgg_view('search/advanced_search_filter', array(
+		'search_params' => $params, 
+		'types_list' => $types, 
+		'custom_types_list' => $custom_types, 
+	));
+
 
 
 elgg_push_context('objects');
@@ -298,7 +320,7 @@ $layout = elgg_view_layout('iris_search', array(
 		'q' => $query, 
 		'params' => $params, 
 		'content' => $content, 
-		'sidebar' => $advanced_search
+		'sidebar' => $sidebar, 
 	));
 
 $title = elgg_echo('search:results', array("\"$display_query\""));

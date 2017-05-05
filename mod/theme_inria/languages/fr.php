@@ -728,7 +728,7 @@ Voir et commenter ce lien web :
 	'theme_inria:groups:register' => "S'abonner à un groupe",
 	'theme_inria:objects' => "Publications",
 	'search:sort:likes' => "Popularité",
-	
+	'theme_inria:search:empty' => "Veuillez saisir un terme de recherche",
 	
 	
 );

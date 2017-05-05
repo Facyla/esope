@@ -532,7 +532,7 @@ input#iris-topbar-search-input { width: auto; }
 
 .iris-new { position: relative; bottom: 0.8rem; right: 0; width: 8px; height: 8px; background: red; border-radius: 8px; display: inline-block; font-size: 6px; color:red; text-align: center; vertical-align: middle; line-height: 8px; }
 
-#notifications .notifications-panel { display:hidden; position: absolute; top: 4rem; right: 0; width: 520px; z-index: 2; background: white; padding: 1rem 0; box-shadow: 0 0 4px 0; }
+#notifications .notifications-panel { display:hidden; position: absolute; top: 4rem; right: 0; width: 35rem; z-index: 2; background: white; padding: 1rem 0; box-shadow: 0 0 4px 0; }
 #notifications:hover .notifications-panel { display: block; }
 #notifications .notifications-panel .tabs a { font-size: 0.9rem; background: white; margin: 0 0 0 1rem; padding: 0.5rem 0; color: #384257; opacity:0.3; border-bottom: 4px transparent; }
 #notifications .notifications-panel .tabs a.elgg-state-selected,
@@ -653,10 +653,10 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 /* Pages de recherche : membres, groupes, publications */
 .iris-search { display:flex;flex-direction:column; }
-.iris-search-header { flex:1; width:100%; background-color: rgba(28,36,48,1); height:18.75rem; position: relative; /* margin-bottom: 3.5rem; */ }
+.iris-search-header { width:100%; background-color: rgba(28,36,48,1); height:18.75rem; position: relative; /* margin-bottom: 3.5rem; */ }
 .iris-search-quickform { position: absolute; top: 4.8125rem; left: 18.75rem; color: white; }
 #iris-body .iris-search-quickform h2 { float:left; font-size: 2.625rem; line-height: 2.75rem; margin-bottom: 1.875rem; padding:0; color: white; }
-.iris-search-q-results { float: right; line-height: 2.75rem; vertical-align: bottom; font-size:1.0625rem; font-weight:bold; }
+.iris-search-q-results { float: right; line-height: 2.75rem; vertical-align: bottom; font-size:1.0625rem; font-weight:bold; margin-left:2rem; }
 #iris-search-quickform { border: 1px solid white; height: 3.125rem; line-height: 3.125rem; width: 24.625rem; font-size: 1.1rem; padding: 0 0 0 0.8125rem; box-sizing: border-box; clear:both; }
 #iris-search-quickform #iris-search-header-input { border: 0; background: transparent; color: white; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; line-height: 1.5rem; padding: 0; width:21rem; }
 #iris-search-quickform input[type="reset"] { background: none; color: white; border: 0; width: auto; font-size: 0.75rem;     padding: 0; margin: 0; line-height: 3rem; }
@@ -676,7 +676,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 #esope-search-form { padding: 0 0 0rem 1rem; width: 100%; box-sizing: border-box; }
 .elgg-sidebar h3, 
-#esope-search-form h3 { text-transform: uppercase; font-size: 1rem; padding: 0;  margin-bottom: 2.6875rem; }
+#esope-search-form h3 { text-transform: uppercase; font-size: 1rem; padding: 0;  margin-bottom: 2.125rem; }
 .iris-search-fulltext { display:none; }
 .esope-search-metadata { width: 100%; min-height: initial; border: 0; border-bottom: 1px solid #C8C8C8; padding: 0 0 1.25rem 0; margin: 0 0 1.4375rem 0; float: none; display: block; color: #384257; }
 .esope-search-metadata:last-of-type { border: 0; }
@@ -691,9 +691,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-search-order select:selected, .iris-search-order select:hover, .iris-search-order select:active, .iris-search-order select:focus {  }
 .iris-search .elgg-layout-one-sidebar .elgg-list-container { max-width: initial; }
 #iris-body h2.search-heading-category { font-size: 1.75rem; color: #384257; line-height: 2.75rem; padding: 0; margin: 0; }
-/* @todo find more selective
-.search-list .elgg-item:last-of-type { border: 0; box-shadow: none; background: transparent; padding: 0; text-align: right; font-weight: bold; text-transform: uppercase; font-size: 0.8125rem; }
-*/
+.elgg-item-more { border: 0; box-shadow: none; background: transparent; padding: 0; margin-bottom: 2.5rem; text-align: right; font-weight: bold; text-transform: uppercase; font-size: 0.8125rem; }
 
 
 
@@ -774,7 +772,8 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 /* The Wire */
 .elgg-layout-one-sidebar .elgg-form.thewire-form, .elgg-layout-one-sidebar .elgg-main .elgg-list-container { max-width: 32.625rem; margin: 0; padding: 1rem; box-sizing: border-box; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
 .elgg-layout-one-sidebar .elgg-form.thewire-form { margin-bottom:1.25rem; }
-
+.iris-search .elgg-layout-one-sidebar .elgg-main .elgg-list-container { background: none; border: 0; max-width: initial; box-shadow: none; padding: 0; }
+.iris-search .elgg-input-radios label { font-weight: normal; color: #384257; line-height: 1.875rem; font-size: 1rem; }
 
 
 

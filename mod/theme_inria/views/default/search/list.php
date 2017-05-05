@@ -88,7 +88,7 @@ if (array_key_exists('search_type', $vars['params'])
 if ($show_more) {
 	$more_str = elgg_echo('search:more', array($count, $type_str));
 	$more_url = elgg_http_remove_url_query_element($url, 'limit');
-	$more_link = "<li class='elgg-item'><a href=\"$more_url\">$more_str</a></li>";
+	$more_link = "<div class='elgg-item-more'><a href=\"$more_url\">$more_str</a></div>";
 } else {
 	$more_link = '';
 }
@@ -122,8 +122,8 @@ $view_params = $vars['params'];
 if (!empty($list_body)) {
 	$body .= '<ul class="elgg-list search-list">';
 	$body .= $list_body;
-	$body .= $more_link;
 	$body .= '</ul>';
+	$body .= $more_link;
 }
 
 echo $body;

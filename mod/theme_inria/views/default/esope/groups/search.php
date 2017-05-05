@@ -116,7 +116,6 @@ if (elgg_is_active_plugin('profile_manager')) {
 
 $search_form = '';
 $search_form .= '<form id="esope-search-form" method="post" action="' . $search_action . '">';
-$search_form .= '<h3>' . "Filtres avancés" . '</h3>';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'group'));
 // Pass URL values to search form (any URL parameter has to be passed to the form because it's JS-sent)
