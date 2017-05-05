@@ -62,7 +62,7 @@ if ($page_type != 'mine') {
 }
 */
 //$content .= elgg_view('core/river/filter', array('selector' => $selector));
-$content .= $activity;
+$content .= '<div class="iris-box">' . $activity . '</div>';
 
 
 $params = array(

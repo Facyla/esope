@@ -591,7 +591,7 @@ input#iris-topbar-search-input { width: auto; }
 .iris-home-group-category a { text-decoration:none; }
 
 .iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; }
-.iris-col { flex:1; padding: 0 2em; max-width: 522px; margin: 0 auto; }
+.iris-col { flex:1; padding: 0 2em; max-width: 32.625rem; margin: 0 auto; }
 
 
 /* Profile */
@@ -618,6 +618,13 @@ input#iris-topbar-search-input { width: auto; }
 .iris-profile-field .profile-aboutme-contents { padding: 0 0 1.5rem 0; }
 
 /* Styles génériques */
+/* Forms */
+::-webkit-input-placeholder { color: #D3D3D3; }
+:-moz-placeholder { color: #D3D3D3; }
+::-moz-placeholder { color: #D3D3D3; }
+-ms-input-placeholder { color: #D3D3D3; }
+
+
 h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-breadcrumbs { display: none; }
 .view-all { color: <?php echo $iris_blue; ?>; font-size: 1rem; font-family: <?php echo $font2; ?>; font-variant: small-caps; font-weight:bold; }
@@ -631,7 +638,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
 .iris-topbar-item .iris-topbar-notifications-tab .elgg-pagination a { font-size: 1rem; padding: 0.5rem 1rem; }
 
-.iris-box { background: <?php echo $module_bg_color; ?>; min-width:10rem; margin:0 auto 1em auto; border: 1px solid #CCC; padding: 1em; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.iris-box { background: #FFFFFF; min-width:10rem; max-width:32.625rem; box-sizing: border-box; margin:0 0 1rem 0; border: 1px solid #CCC; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .iris-box h3, .iris-box h3 a { font-size:1rem; font-family:<?php echo $font2; ?>; font-weight:bold; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 
 .iris-box.home-wire img { border-radius: 100px; margin: 0.5em 0; width: 54px; }
@@ -640,11 +647,13 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .thewire-form #thewire-characters-remaining { display: inline-block; font-size: 1em; float: none; margin-right: 1em; }
 #thewire-characters-remaining span { margin: 0; float: none; font-size: 1em; }
 .home-wire .thewire-form .elgg-button-submit { display: inline-block; float: none; }
+.elgg-layout-one-sidebar .thewire-form img { width: 2.5rem; }
+.elgg-layout-one-sidebar .thewire-form textarea { width: 27.625rem; height: 4rem; }
 
 
 /* Pages de recherche : membres, groupes, publications */
 .iris-search { display:flex;flex-direction:column; }
-.iris-search-header { flex:1; width:100%; background-color: rgba(28,36,48,1); height:18.75rem; position: relative; margin-bottom: 3.5rem; }
+.iris-search-header { flex:1; width:100%; background-color: rgba(28,36,48,1); height:18.75rem; position: relative; /* margin-bottom: 3.5rem; */ }
 .iris-search-quickform { position: absolute; top: 4.8125rem; left: 18.75rem; color: white; }
 #iris-body .iris-search-quickform h2 { float:left; font-size: 2.625rem; line-height: 2.75rem; margin-bottom: 1.875rem; padding:0; color: white; }
 .iris-search-q-results { float: right; line-height: 2.75rem; vertical-align: bottom; font-size:1.0625rem; font-weight:bold; }
@@ -665,7 +674,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-sidebar, .iris-search-sidebar { float:left; clear:left; min-width: 20rem; width: 30%; }
 .iris-search-filters { float:left; }
 
-#esope-search-form { padding: 0 0 0rem 3.625rem; width: 100%; box-sizing: border-box; }
+#esope-search-form { padding: 0 0 0rem 1rem; width: 100%; box-sizing: border-box; }
 .elgg-sidebar h3, 
 #esope-search-form h3 { text-transform: uppercase; font-size: 1rem; padding: 0;  margin-bottom: 2.6875rem; }
 .iris-search-fulltext { display:none; }
@@ -680,7 +689,12 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-search-order { color: #384257; font-size: 1rem; font-weight:bold; text-transform:uppercase; float:right; }
 .iris-search-order select { color: #384257; font-size: 1rem; font-weight:normal; text-transform:initial; }
 .iris-search-order select:selected, .iris-search-order select:hover, .iris-search-order select:active, .iris-search-order select:focus {  }
-.elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
+.iris-search .elgg-layout-one-sidebar .elgg-list-container { max-width: initial; }
+#iris-body h2.search-heading-category { font-size: 1.75rem; color: #384257; line-height: 2.75rem; padding: 0; margin: 0; }
+/* @todo find more selective
+.search-list .elgg-item:last-of-type { border: 0; box-shadow: none; background: transparent; padding: 0; text-align: right; font-weight: bold; text-transform: uppercase; font-size: 0.8125rem; }
+*/
+
 
 
 /* Boutons */
@@ -691,11 +705,13 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 
 /* River and listings */
-.elgg-river-layout .elgg-list-river { background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); max-width: 522px; padding: 2.5rem; box-sizing: border-box; }
+.elgg-river-layout .elgg-list-river { background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); max-width: 32.625rem; padding: 2.5rem; box-sizing: border-box; }
 
 .elgg-list-river .elgg-item { padding: 1.8rem 0 1.2rem 0; }
 .elgg-list-river .elgg-item:first-of-type { padding-top: 0; }
 .elgg-image-block { padding: 0.5rem 0; }
+.elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
+.iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
 .elgg-list .elgg-item .elgg-image-block { padding: 0; }
 .elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; }
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
@@ -756,7 +772,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-groups-member-new-body a { margin-bottom: 1.5625rem; }
 
 /* The Wire */
-.elgg-layout-one-sidebar .elgg-form.thewire-form, .elgg-layout-one-sidebar .elgg-main .elgg-list-container { max-width: 522px; margin: 0; padding: 1rem; box-sizing: border-box; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
+.elgg-layout-one-sidebar .elgg-form.thewire-form, .elgg-layout-one-sidebar .elgg-main .elgg-list-container { max-width: 32.625rem; margin: 0; padding: 1rem; box-sizing: border-box; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
 .elgg-layout-one-sidebar .elgg-form.thewire-form { margin-bottom:1.25rem; }
 
 

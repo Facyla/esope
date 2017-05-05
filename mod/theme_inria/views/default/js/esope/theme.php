@@ -187,16 +187,29 @@ $(document).ready(function() {
 		}
 	});
 	
-	// Sync search fields
+	
+	/* Sync search fields */
+	
 	// Topbar search input
 	$('#iris-topbar-search input[name="q"]').on('change paste keyup', function(e) {
 		$('.iris-search-fulltext input[name="q"]').val($(this).val());
+		$('#advanced-search-form input[name="q"]').val($(this).val());
 	});
 	// Iris search header input
 	$('#iris-search-header-input').on('change paste keyup', function() {
 		$('.iris-search-fulltext input[name="q"]').val($(this).val());
+		$('#advanced-search-form input[name="q"]').val($(this).val());
 	});
-	// Members order
+	
+	// Objects order sync and submit form
+	$('.iris-search-sort select[name="iris_objects_search_order"]').on('change', function(e) {
+		if ($("#advanced-search-form").length) {
+			$('#advanced-search-form input[name="sort"]').val(this.value);
+			e.preventDefault();  //prevent form from submitting
+			$('#advanced-search-form').submit();
+		}
+	});
+	// Members order sync and submit form
 	$('.iris-search-sort select[name="iris_members_search_order"]').on('change', function(e) {
 		if ($("#esope-search-form").length) {
 			$('#esope-search-form input[name="order_by"]').val(this.value);
@@ -204,7 +217,7 @@ $(document).ready(function() {
 			$('#esope-search-form').submit();
 		}
 	});
-	// Groups order
+	// Groups order sync and submit form
 	$('.iris-search-sort select[name="iris_groups_search_order"]').on('change', function(e) {
 		if ($("#esope-search-form").length) {
 			$('#esope-search-form input[name="order_by"]').val(this.value);

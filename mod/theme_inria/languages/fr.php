@@ -726,6 +726,8 @@ Voir et commenter ce lien web :
 	'theme_inria:groups:add' => "Créer un groupe",
 	'theme_inria:agenda' => "Agenda",
 	'theme_inria:groups:register' => "S'abonner à un groupe",
+	'theme_inria:objects' => "Publications",
+	'search:sort:likes' => "Popularité",
 	
 	
 	

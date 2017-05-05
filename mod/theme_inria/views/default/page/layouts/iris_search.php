@@ -35,9 +35,9 @@ $owner = elgg_get_page_owner_entity();
 if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 	$topmenu = elgg_view('group/topmenu', array('entity' => $owner));
 }
-?>
 
-<?php
+
+
 // Inria : show nav and topmenu together here, and not above
 if ($topmenu) {
 	echo $nav . '<br >';
@@ -82,19 +82,19 @@ if ($vars['filter'] == 'search') {
 		<div class="iris-search-menu">
 			<?php
 			if ($search_entity_type == 'group') {
-				echo '<a href="' . elgg_get_site_url() . 'groups" class="elgg-state-selected">' . elgg_echo('groups') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'groups?q=' . $q . '" class="elgg-state-selected">' . elgg_echo('groups') . '</a>';
 			} else {
-				echo '<a href="' . elgg_get_site_url() . 'groups" class="">' . elgg_echo('groups') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'groups?q=' . $q . '" class="">' . elgg_echo('groups') . '</a>';
 			}
 			if ($search_entity_type == 'user') {
-				echo '<a href="' . elgg_get_site_url() . 'members" class="elgg-state-selected">' . elgg_echo('members') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'members?q=' . $q . '" class="elgg-state-selected">' . elgg_echo('members') . '</a>';
 			} else {
-				echo '<a href="' . elgg_get_site_url() . 'members" class="">' . elgg_echo('members') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'members?q=' . $q . '" class="">' . elgg_echo('members') . '</a>';
 			}
 			if ($search_entity_type == 'object') {
-				echo '<a href="' . elgg_get_site_url() . 'search" class="elgg-state-selected">objects</a>';
+				echo '<a href="' . elgg_get_site_url() . 'search?q=' . $q . '" class="elgg-state-selected">' . elgg_echo('theme_inria:objects') . '</a>';
 			} else {
-				echo '<a href="' . elgg_get_site_url() . 'search" class="">' . elgg_echo('objects') . '</a>';
+				echo '<a href="' . elgg_get_site_url() . 'search?q=' . $q . '" class="">' . elgg_echo('theme_inria:objects') . '</a>';
 			}
 			?>
 		</div>

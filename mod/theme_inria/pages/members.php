@@ -36,7 +36,7 @@ $content .= '<div class="iris-search-sort">';
 			'desc' => "Membres les + récents",
 			'asc' => "Membres les + anciens",
 		);
-	$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_members_search_order', 'options_values' => $order_opt)) . '</span>';
+	$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_members_search_order', 'options_values' => $order_opt, 'value' => get_input('order_by'))) . '</span>';
 $content .= '</div>';
 
 $content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';

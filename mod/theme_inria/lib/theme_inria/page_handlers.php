@@ -160,6 +160,88 @@ function theme_inria_elgg_river_page_handler($page) {
 }
 
 
+
+
+/**
+ * Profile page handler
+ *
+ * @param array $page Array of URL segments passed by the page handling mechanism
+ * @return bool
+ */
+// @TODO use views instead
+function theme_inria_profile_page_handler($page) {
+	
+	// Add some custom settings
+	$remove_profile_widgets = elgg_get_plugin_setting('remove_profile_widgets', 'esope');
+	$add_profile_activity = elgg_get_plugin_setting('add_profile_activity', 'esope');
+	$custom_profile_layout = elgg_get_plugin_setting('custom_profile_layout', 'esope');
+	$add_comments = elgg_get_plugin_setting('add_profile_comments', 'esope');
+	// Iris v2
+	$remove_profile_widgets = 'yes';
+	$add_profile_activity = 'no';
+	$custom_profile_layout = 'no';
+	$add_comments = 'no';
+	
+	if (isset($page[0])) {
+		$username = $page[0];
+		$user = get_user_by_username($username);
+		elgg_set_page_owner_guid($user->guid);
+	} elseif (elgg_is_logged_in()) {
+		forward(elgg_get_logged_in_user_entity()->getURL());
+	}
+
+	// short circuit if invalid or banned username
+	if (!$user || ($user->isBanned() && !elgg_is_admin_logged_in())) {
+		register_error(elgg_echo('profile:notfound'));
+		forward();
+	}
+
+	$action = NULL;
+	if (isset($page[1])) { $action = $page[1]; }
+
+	if ($action == 'edit') {
+		// use the core profile edit page
+		$base_dir = elgg_get_root_path();
+		require "{$base_dir}pages/profile/edit.php";
+		return true;
+	}
+
+	// main profile page
+	// Theme settings : Custom profile layout ? (default: no)
+	if ($custom_profile_layout == 'yes') {
+		
+		$content = elgg_view('esope/profile/wrapper');
+		
+	} else {
+		
+		// Classic layout + some theme options
+		$content = elgg_view('profile/wrapper');
+		
+		// Theme settings : Remove widgets ? (default: no)
+		if ($remove_profile_widgets != 'yes') {
+			$params = array('content' => $content, 'num_columns' => 3);
+			$content = elgg_view_layout('widgets', $params);
+		}
+		
+		// Theme settings : Add activity feed ? (default: no)
+		if ($add_profile_activity == 'yes') {
+			$db_prefix = elgg_get_config('dbprefix');
+			$activity = elgg_view('user/elements/activity', array('entity' => $user));
+			$content .= '<div class="profile-activity-river">' . $activity . '</div>';
+		}
+	}
+	
+	if ($add_comments == 'yes') {
+		$content .= elgg_view('user/elements/comments', array('entity' => $user));
+	}
+	
+	$body = elgg_view_layout('one_column', array('content' => $content));
+	echo elgg_view_page($user->name, $body);
+	return true;
+}
+
+
+
 // New "ressources/" page handler
 function theme_inria_members_page_handler($page) {
 	//elgg_load_library('elgg:groups');
@@ -179,11 +261,16 @@ function theme_inria_members_page_handler($page) {
 
 // New "ressources/" page handler
 function theme_inria_search_page_handler($page) {
-	//elgg_load_library('elgg:groups');
-	$base = elgg_get_plugins_path() . 'theme_inria/pages/';
-	$page_type = $page[0];
-	//if (isset($page[1])) set_input('guid', $page[2]);
-	include $base . 'search.php';
+	// if there is no q set, we're being called from a legacy installation
+	// it expects a search by tags.
+	// actually it doesn't, but maybe it should.
+	// maintain backward compatibility
+	if(!get_input('q', get_input('tag', NULL))) {
+		set_input('q', $page[0]);
+		//set_input('search_type', 'tags');
+	}
+	$base = elgg_get_plugins_path() . 'theme_inria/pages/search/';
+	include_once($base . 'index.php');
 	return true;
 }
 

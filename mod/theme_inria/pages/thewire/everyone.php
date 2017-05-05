@@ -20,11 +20,13 @@ $content .= '<div class="clearfloat"></div>';
 // Iris v2 : message supprimé ?
 //$content .= '<blockquote class="thewire-inria-info">' . elgg_echo('theme_inria:thewire:explanations') . '</blockquote>';
 
+$content .= '<div class="iris-box">';
 $content .= elgg_list_entities(array(
 	'type' => 'object',
 	'subtype' => 'thewire',
 	'limit' => get_input('limit', 15),
 ));
+$content .= '</div>';
 
 $body = elgg_view_layout('content', array(
 	'filter_context' => 'all',
