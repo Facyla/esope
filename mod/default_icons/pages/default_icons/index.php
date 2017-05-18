@@ -18,7 +18,7 @@ elgg_push_breadcrumb($title);
 $sidebar = "";
 
 $content = '';
-$content .= 'Tests icônes';
+$content .= elgg_echo('default_icons:test');
 
 // Default seed : unique (guid) + variable (username)
 $user_seed = elgg_get_logged_in_user_entity()->guid . '-' . elgg_get_logged_in_user_entity()->username;
@@ -28,6 +28,9 @@ $algorithm = get_input('algorithm', 'ringicon');
 $seed = get_input('seed', $user_seed);
 $num = get_input('num', 3);
 $width = get_input('width', 128);
+$background = get_input('background', $background);
+if (empty($background)) $background = elgg_get_plugin_setting('background', 'default_icons');
+$background = str_replace('#', '', $background);
 $mono = get_input('mono', 'no');
 if ($mono != 'yes') { $mono = false; }
 $format = 'png';

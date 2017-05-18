@@ -53,7 +53,7 @@ class ExorithmUniqueImage extends ElggDefaultIcons {
 	 */
 	protected function unique_image($string='whatever', $size = 200, $steps = 5, $background = '#FFFFFF'){
 		$step=$size/$steps;
-	
+		
 		$image = $this->image_create_alpha($size, $size, $background);
 	
 		$n = 0;
@@ -103,7 +103,7 @@ class ExorithmUniqueImage extends ElggDefaultIcons {
 		$img = imagecreatetruecolor($width, $height);
 	
 		if ($background) {
-			$colors = hex2rgb($background);
+			$colors = $this->hex2rgb($background);
 			// set background to white
 			$white = imagecolorallocate($img, $colors[0], $colors[1], $colors[2]);
 			imagefill($img, 0, 0, $white);

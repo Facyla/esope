@@ -24,8 +24,6 @@ $multiplayer_options = array(
 
 $content = '';
 
-$content = '<p>Contexte : ' . $context . '</p>';
-
 // @TODO display extended information only if available
 // @TODO extend only custom subtypes ?
 
@@ -219,6 +217,8 @@ if (sizeof($videos) > 0) {
 
 
 
+// DEV / DEBUG
+echo '<!-- Elgg Content Facets DEV : Contexte = ' . $context . '//-->';
 
 if (!empty($content)) {
 	echo '<div class="content-facets-extend">';

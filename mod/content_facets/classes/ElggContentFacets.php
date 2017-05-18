@@ -30,18 +30,21 @@ class ElggContentFacets {
 		$this->getImages();
 		$this->images = $this->sortLocalExternal($this->images);
 		
-		$this->getUrls();
-		$this->getEmails();
+		$this->extractUrls();
+		$this->extractEmails();
 		$this->links = $this->sortLocalExternal($this->links);
-		$this->getInternalLinks();
+		$this->extractInternalLinks();
 	}
 	
 	
+	// Get all links from text
+	public function getUrls() {
+		if ($this->links === false) { $this->extractUrls(); }
+		return $this->links;
+	}
 	/* Wrapper function that extracts all links from text, using various methods
 	 */
-	public function getUrls() {
-		if ($this->links) { return $this->links; }
-		
+	private function extractUrls() {
 		// Get site host from site url (without trailing slash)
 		$p_site_url = explode('/', elgg_get_site_url());
 		$site_host = $p_site_url[0] . '//' . $p_site_url[2];
@@ -69,17 +72,14 @@ class ElggContentFacets {
 			}
 		}
 		
-		
-		
 		return $this->links;
 	}
-	
 	
 	/**
 	 * Extract links URLs from HTML
 	 * @return array
 	 */
-	public function getLinks() {
+	private function getLinks() {
 		$links = array();
 		
 		// DOMDocument method
@@ -102,12 +102,11 @@ class ElggContentFacets {
 		return $links;
 	}
 	
-	
 	/* Extract non-links URLs from plain text
 	 * uses same parser as Elgg parse_urls function
 	 * Important note : does not extract links from HTML links : only non-HTML links
 	 */
-	public function getPlaintextLinks() {
+	private function getPlaintextLinks() {
 		$urls = array();
 		
 		// URI specification: http://www.ietf.org/rfc/rfc3986.txt
@@ -149,10 +148,13 @@ class ElggContentFacets {
 	}
 	
 	
-	// Extract images
+	// Get images
 	public function getImages() {
-		if ($this->images) { return $this->images; }
-		
+		if (!$this->images === false) { $this->extractImages(); }
+		return $this->images;
+	}
+	// Extract images
+	private function extractImages() {
 		$this->images = array();
 		$dom = new DOMDocument;
 		@$dom->loadHTML($this->text);
@@ -164,17 +166,19 @@ class ElggContentFacets {
 	}
 	
 	
-	// Extract emails (and remove found emails from links)
+	// Get emails
 	public function getEmails() {
-		if ($this->emails) { return $this->emails; }
-		
+		if ($this->emails === false) { $this->extractEmails(); }
+		//if (!is_array($this->emails)) { $this->extractEmails(); }
+		return $this->emails;
+	}
+	// Extract emails (and remove found emails from links)
+	private function extractEmails() {
 		$this->emails = array();
 		if (sizeof($this->links) > 0) {
 			foreach($this->links as $k => $link) {
 				//error_log("LINK = ".print_r($link, true));
-				if (strpos($link, 'mailto:') === 0) {
-					$link = substr($link, 7);
-				}
+				if (strpos($link, 'mailto:') === 0) { $link = substr($link, 7); }
 				$email = explode('?', $link);
 				$email = $email[0];
 				if (is_email_address($email)) {
@@ -191,10 +195,11 @@ class ElggContentFacets {
 		return $this->emails;
 	}
 	
+	
 	// Sort links or images urls
-	public function sortLocalExternal($urls) {
+	private function sortLocalExternal($urls) {
 		$links = array();
-		if (sizeof($urls) > 0) {
+		if ($urls && sizeof($urls) > 0) {
 			$p_site_url = parse_url(elgg_get_site_url());
 			foreach ($urls as $url) {
 				$p_url = parse_url($url);
@@ -208,10 +213,14 @@ class ElggContentFacets {
 		return $links;
 	}
 	
+	
 	// Get internal links (Elgg URLs)
 	public function getInternalLinks() {
-		if ($this->elgg_links) { return $this->elgg_links; }
-		
+		if ($this->elgg_links === false) { $this->extractInternalLinks; }
+		return $this->elgg_links;
+	}
+	// Extract internal links (Elgg URLs)
+	private function extractInternalLinks() {
 		$this->elgg_links = array();
 		if (sizeof($this->links['local']) > 0) {
 			$site_url = elgg_get_site_url();
@@ -230,6 +239,7 @@ class ElggContentFacets {
 		}
 		return $this->elgg_links;
 	}
+	
 	
 	// Return Elgg data from absolute url - if any
 	public function detectElggContent($url) {
