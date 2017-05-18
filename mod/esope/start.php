@@ -2864,6 +2864,45 @@ function esope_groups_get_pending_membership_requests($user_guid = false, $optio
 	return $groups;
 }
 
+/* Get groups where there are pending membership requests
+ * $user_guid : if false or not set, returns all site membership requests, if set, returns groups where user is admin or operator
+ * @return Groups where there are pending membership requests to examine
+ * @TODO option to return users having pending membership requests ?
+ */
+function esope_groups_get_pending_membership_requests($user_guid = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
+	
+	$defaults = array(
+		//'type' => '',
+		'relationship' => 'membership_request',
+		//'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => false,
+	);
+	
+	if ($user_guid) {
+		$user_operated_groups = esope_get_owned_groups($user_guid);
+		$in = array();
+		foreach($user_operated_groups as $ent) { $in[] = $ent->guid; }
+		$in = implode(',', $in);
+		$defaults['wheres'][] = "(r.guid_two IN ($in))";
+	}
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+
+	elgg_set_ignore_access($ia);
+
+	if ($return_guids) {
+		$guids = array();
+		foreach ($groups as $group) {
+			$guids[] = $group->getGUID();
+		}
+		return $guids;
+	}
+
+	return $groups;
+}
+
 
 /* Removes invites if the user is already member of the group
  * Some invites are not removed automatically, depending how the user joined the group
@@ -3066,6 +3105,44 @@ function esope_enable_plugin($name, $enable_deps = true, $simulate = true) {
 	return false;
 }
 
+/* Stopwords function
+ * string $text : input string
+ * array $stopwords : array or detected words
+ * string $mode : detect | filter | block
+ * @return : depends on mode
+ *   - detect : false if one detected | (int) number of detected matches
+ *   - filter : filtered string (stop words have been removed)
+ *   - block : $text | empty string if any stopword detected
+ */
+function esope_stopwords($text = '', $stopwords = false, $mode = 'detect') {
+	if (empty($text)) { return $text; }
+	
+	if (!$stopwords) {
+		$stopwords = elgg_get_plugin_setting('stopwords', 'esope');
+		$stopwords = esope_get_input_array($stopwords);
+	}
+	$pattern = '/(' . implode('|', $stopwords) . ')/';
+	// @TODO skip empty pattern
+	
+	switch($mode) {
+		case 'detect':
+			$result = false;
+			preg_match_all($pattern, $text, $matches);
+			if ($matches) { $result = sizeof($matches[0]); }
+			//error_log(" - STOPWORDS DETECTED : found " . count($matches[0]) . " bad entries = " . print_r($matches[0], true));
+			break;
+		case 'block':
+			$result = $text;
+			if (preg_match($pattern, $text)) { $result = ''; }
+			break;
+		case 'filter':
+		default:
+			$result = preg_replace($pattern, "", $text);
+			//error_log(" - STOPWORDS FILTERED TEXT => $result");
+	}
+	
+	return $result;
+}
 
 
 /* Stopwords function
