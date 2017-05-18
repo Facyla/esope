@@ -18,6 +18,9 @@ class ElggDefaultIcons extends ElggObject {
 	
 	
 	function __construct($seed = '', $width = 200, $steps = 4, $format = 'png', $background = "#FFFFFF") {
+		if (!$background) {
+			$background = elgg_get_plugin_setting('background', 'default_icons');
+		}
 		$this->seed = $seed;
 		$this->width = $width;
 		$this->height = $width; // square ratio

@@ -1300,8 +1300,13 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
 	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
 	$metadata_name_value_pairs_operator = esope_extract('metadata_name_value_pairs_operator', $params, $defaults['metadata_name_value_pairs_operator']);
+	$metadata_names = esope_extract('metadata_names', $params, $defaults['metadata_names']);
+	$metadata_values = esope_extract('metadata_values', $params, $defaults['metadata_values']);
 	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
+	$relationship = esope_extract('relationship', $params, $defaults['relationship']);
+	$relationship_guid = esope_extract('relationship_guid', $params, $defaults['relationship_guid']);
 	$count = esope_extract('count', $params, $defaults['count']);
+	$add_url_params = esope_extract('add_url_params', $params, '');
 	$no_result = elgg_echo('esope:search:noresult');
 	if (isset($params['no_result'])) { $no_result = $params['no_result']; }
 	
@@ -1372,10 +1377,12 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	if ($hide_pagination != 'yes') {
 		$base_url = "?";
 		$url_fragment = '';
+		$url_fragment .= $add_url_params;
 		if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
 		if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
+		if (!empty($relationship)) { $url_fragment .= "&relationship=$relationship"; }
 		if ($friends_only) { $url_fragment .= "&friends_only=yes"; }
-		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'order_by');
+		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'relationship', 'relationship_guid', 'limit', 'offset', 'order_by');
 		foreach($search_filters as $filter) {
 			// Add valid filters to search query URL
 			if (!empty($$filter)) {
@@ -1431,22 +1438,29 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	// Paramètres de la recherche
 	$search_params = array(
 			'types' => $type,
-			'subtypes' => $subtype,
-			'metadata_name_value_pairs' => $metadata_name_value_pairs,
-			'metadata_case_sensitive' => $metadata_case_sensitive,
-			'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
-			'order_by_metadata' => $order_by_metadata,
+			//'subtypes' => $subtype,
+			//'metadata_name_value_pairs' => $metadata_name_value_pairs,
+			//'metadata_case_sensitive' => $metadata_case_sensitive,
+			//'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
+			//'order_by_metadata' => $order_by_metadata,
 			'limit' => $limit,
 			'offset' => $offset,
 			'order_by' => $order_by_clause,
 			'group_by' => $group_by,
 		);
 	
+	if ($subtype) { $search_params['subtypes'] = $subtype; }
 	if ($selects) { $search_params['selects'] = $selects; }
 	if ($joins) { $search_params['joins'] = $joins; }
 	if ($wheres) { $search_params['wheres'] = $wheres; }
 	if ($relationship) { $search_params['relationship'] = $relationship; }
 	if ($relationship_guid) { $search_params['relationship_guid'] = $relationship_guid; }
+	if ($metadata_names) { $search_params['metadata_names'] = $metadata_names; }
+	if ($metadata_values) { $search_params['metadata_values'] = $metadata_values; }
+	if ($metadata_name_value_pairs) { $search_params['metadata_name_value_pairs'] = $metadata_name_value_pairs; }
+	if ($metadata_case_sensitive) { $search_params['metadata_case_sensitive'] = $metadata_case_sensitive; }
+	if ($metadata_name_value_pairs_operator) { $search_params['metadata_name_value_pairs_operator'] = $metadata_name_value_pairs_operator; }
+	if ($order_by_metadata) { $search_params['order_by_metadata'] = $order_by_metadata; }
 	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
 	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
 	// Note : Friends only filter disables popular user count sort
@@ -2792,8 +2806,87 @@ function esope_groups_get_user_membership_requests($user_guid, $return_guids = f
 		'relationship' => 'membership_request',
 		'relationship_guid' => (int) $user_guid,
 		'inverse_relationship' => false,
-		'limit' => 0,
+		'limit' => false,
 	);
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+
+	elgg_set_ignore_access($ia);
+
+	if ($return_guids) {
+		$guids = array();
+		foreach ($groups as $group) {
+			$guids[] = $group->getGUID();
+		}
+		return $guids;
+	}
+
+	return $groups;
+}
+
+/* Get groups where there are pending membership requests
+ * $user_guid : if false or not set, returns all site membership requests, if set, returns groups where user is admin or operator
+ * @return Groups where there are pending membership requests to examine
+ * @TODO option to return users having pending membership requests ?
+ */
+function esope_groups_get_pending_membership_requests($user_guid = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
+	
+	$defaults = array(
+		//'type' => '',
+		'relationship' => 'membership_request',
+		//'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => false,
+	);
+	
+	if ($user_guid) {
+		$user_operated_groups = esope_get_owned_groups($user_guid);
+		$in = array();
+		foreach($user_operated_groups as $ent) { $in[] = $ent->guid; }
+		$in = implode(',', $in);
+		$defaults['wheres'][] = "(r.guid_two IN ($in))";
+	}
+	
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+
+	elgg_set_ignore_access($ia);
+
+	if ($return_guids) {
+		$guids = array();
+		foreach ($groups as $group) {
+			$guids[] = $group->getGUID();
+		}
+		return $guids;
+	}
+
+	return $groups;
+}
+
+/* Get groups where there are pending membership requests
+ * $user_guid : if false or not set, returns all site membership requests, if set, returns groups where user is admin or operator
+ * @return Groups where there are pending membership requests to examine
+ * @TODO option to return users having pending membership requests ?
+ */
+function esope_groups_get_pending_membership_requests($user_guid = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
+	
+	$defaults = array(
+		//'type' => '',
+		'relationship' => 'membership_request',
+		//'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => false,
+	);
+	
+	if ($user_guid) {
+		$user_operated_groups = esope_get_owned_groups($user_guid);
+		$in = array();
+		foreach($user_operated_groups as $ent) { $in[] = $ent->guid; }
+		$in = implode(',', $in);
+		$defaults['wheres'][] = "(r.guid_two IN ($in))";
+	}
 	$options = array_merge($defaults, $options);
 	$groups = elgg_get_entities_from_relationship($options);
 
@@ -3012,6 +3105,84 @@ function esope_enable_plugin($name, $enable_deps = true, $simulate = true) {
 	return false;
 }
 
+/* Stopwords function
+ * string $text : input string
+ * array $stopwords : array or detected words
+ * string $mode : detect | filter | block
+ * @return : depends on mode
+ *   - detect : false if one detected | (int) number of detected matches
+ *   - filter : filtered string (stop words have been removed)
+ *   - block : $text | empty string if any stopword detected
+ */
+function esope_stopwords($text = '', $stopwords = false, $mode = 'detect') {
+	if (empty($text)) { return $text; }
+	
+	if (!$stopwords) {
+		$stopwords = elgg_get_plugin_setting('stopwords', 'esope');
+		$stopwords = esope_get_input_array($stopwords);
+	}
+	$pattern = '/(' . implode('|', $stopwords) . ')/';
+	// @TODO skip empty pattern
+	
+	switch($mode) {
+		case 'detect':
+			$result = false;
+			preg_match_all($pattern, $text, $matches);
+			if ($matches) { $result = sizeof($matches[0]); }
+			//error_log(" - STOPWORDS DETECTED : found " . count($matches[0]) . " bad entries = " . print_r($matches[0], true));
+			break;
+		case 'block':
+			$result = $text;
+			if (preg_match($pattern, $text)) { $result = ''; }
+			break;
+		case 'filter':
+		default:
+			$result = preg_replace($pattern, "", $text);
+			//error_log(" - STOPWORDS FILTERED TEXT => $result");
+	}
+	
+	return $result;
+}
+
+
+/* Stopwords function
+ * string $text : input string
+ * array $stopwords : array or detected words
+ * string $mode : detect | filter | block
+ * @return : depends on mode
+ *   - detect : false if one detected | (int) number of detected matches
+ *   - filter : filtered string (stop words have been removed)
+ *   - block : $text | empty string if any stopword detected
+ */
+function esope_stopwords($text = '', $stopwords = false, $mode = 'detect') {
+	if (empty($text)) { return $text; }
+	
+	if (!$stopwords) {
+		$stopwords = elgg_get_plugin_setting('stopwords', 'esope');
+		$stopwords = esope_get_input_array($stopwords);
+	}
+	$pattern = '/(' . implode('|', $stopwords) . ')/';
+	// @TODO skip empty pattern
+	
+	switch($mode) {
+		case 'detect':
+			$result = false;
+			preg_match_all($pattern, $text, $matches);
+			if ($matches) { $result = sizeof($matches[0]); }
+			//error_log(" - STOPWORDS DETECTED : found " . count($matches[0]) . " bad entries = " . print_r($matches[0], true));
+			break;
+		case 'block':
+			$result = $text;
+			if (preg_match($pattern, $text)) { $result = ''; }
+			break;
+		case 'filter':
+		default:
+			$result = preg_replace($pattern, "", $text);
+			//error_log(" - STOPWORDS FILTERED TEXT => $result");
+	}
+	
+	return $result;
+}
 
 
 

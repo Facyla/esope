@@ -7,8 +7,12 @@ return array(
 	'default_icons' => "Default icons",
 	
 	'default_icons:title' => "Alternate default icons",
+	'default_icons:test' => "Default icons test page",
 	
 	// Settings
+	// General
+	'default_icons:settings:background' => "Background color",
+	'default_icons:settings:background:details' => "Background color HEX code, eg. #FFFFFFF",
 	// User
 	'default_icons:settings:default_user' => "Override default user icon",
 	'default_icons:settings:default_user:details' => "\"No\" keeps default behaviour. \"Yes\" overrides user profile icons for users who haven't defined any profile picture yet.",

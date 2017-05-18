@@ -46,51 +46,6 @@ function default_icons_init() {
 	//elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'default_icons_object_hook', 1000);
 	
 	
-	/* Some useful elements :
-	
-	// Register actions
-	// Actions should be defined in actions/default_icons/action_name.php
-	$action_base = elgg_get_plugins_path() . 'systems_game/actions/';
-	elgg_register_action('systems_game/edit', $action_base . 'edit.php');
-	elgg_register_action('systems_game/delete', $action_base . 'delete.php');
-	
-	
-	// Register a view to simplecache
-	// Useful for any view that do not change, usually CSS or JS or other static data or content
-	elgg_register_simplecache_view('css/default_icons');
-	$css_url = elgg_get_simplecache_url('css', 'default_icons');
-	
-	// Register JS script - use with : elgg_load_js('default_icons');
-	$js_url = elgg_get_plugins_path() . 'default_icons/vendors/default_icons.js';
-	elgg_register_js('default_icons', $js_url, 'head');
-	
-	// Register CSS - use with : elgg_load_css('default_icons');
-	$css_url = elgg_get_plugins_path() . 'default_icons/vendors/default_icons.css';
-	elgg_register_css('default_icons', $css_url, 500);
-	
-	// Get a plugin setting
-	$setting = elgg_get_plugin_setting('setting_name', 'default_icons');
-	
-	// Get a user plugin setting (makes sense only if logged in)
-	if (elgg_is_logged_in()) {
-		$user_guid = elgg_get_logged_in_user_guid();
-		$usersetting = elgg_get_plugin_user_setting('user_plugin_setting', $user_guid, 'default_icons');
-	}
-	
-	// Register hook - see /admin/develop_tools/inspect?inspect_type=Hooks
-	elgg_register_plugin_hook_handler('login', 'user', 'default_icons_somehook');
-	
-	// Register event - see /admin/develop_tools/inspect?inspect_type=Events
-	elgg_register_event_handler('create','object','default_icons_someevent');
-	
-	// Override icons
-	elgg_register_plugin_hook_handler("entity:icon:url", "object", "default_icons_icon_hook");
-	
-	// override the default url to view a default_icons object
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'default_icons_set_url');
-	
-	*/
-	
 	// Register a page handler on "default_icons/"
 	elgg_register_page_handler('default_icons', 'default_icons_page_handler');
 	
@@ -172,11 +127,11 @@ function default_icons_user_hook($hook, $type, $return, $params) {
 		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
 		/*
 		if (!empty($num)) $img_base_url .= "&num=$num";
-		if (!empty($background)) $img_base_url .= "&background=$background";
 		if (!empty($mono)) $img_base_url .= "&mono=$mono";
 		*/
 		$img_base_url .= "&algorithm=$algorithm";
 		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+		if (!empty($background)) $img_base_url .= "&background=$background";
 		return $img_base_url;
 	}
 	
@@ -274,6 +229,105 @@ function default_icons_object_hook($hook, $type, $return, $params) {
 		*/
 		$img_base_url .= "&algorithm=$algorithm";
 		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+		return $img_base_url;
+	}
+	
+	return $return;
+}
+
+
+/**
+ * Replaces a default group icon by an auto-generated one
+ * Note : to override all grou icons, register a new hook in your plugin with a proper priority and overriding rules
+ * Caution : as is, this hook can detect default icons, but not unavailable defined icons
+ */
+/* Notes : 
+ * 'mod/groups/graphics/default' correspond à une icône de groupe non définie
+ */
+function default_icons_group_hook($hook, $type, $return, $params) {
+	static $algorithm = false;
+	static $enabled = false;
+	if (!$algorithm) {
+		$enabled = elgg_get_plugin_setting('default_group');
+		if ($enabled != 'no') {
+			$enabled = true;
+			$algorithm = elgg_get_plugin_setting('default_group_alg');
+			$algorithm_opt = default_icons_get_algorithms();
+			if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ideinticon'; }
+		} else {
+			$enabled = false;
+		}
+	}
+	// Detect default icon (but cannot use file_exists because it's an URL)
+	// mod/groups/graphics/defaultlarge.gif (tiny, small, medium, large)
+	//error_log("Group {$params['entity']->guid} {$params['entity']->name} =>  $return");
+	if ($enabled && (strpos($return, 'mod/groups/graphics/default') !== false)) {
+		// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
+		// Username-based seed enables portable avatar on other sites
+		$seed = $params['entity']->guid;
+		$size = $params['size'];
+		$icon_sizes = elgg_get_config('icon_sizes');
+		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
+		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+		/*
+		if (!empty($num)) $img_base_url .= "&num=$num";
+		if (!empty($mono)) $img_base_url .= "&mono=$mono";
+		*/
+		$img_base_url .= "&algorithm=$algorithm";
+		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+		if (!empty($background)) $img_base_url .= "&background=$background";
+		return $img_base_url;
+	}
+	
+	return $return;
+}
+
+
+/**
+ * Replaces a default object icon by an auto-generated one
+ * Note : to override all object icons, register a new hook in your plugin with a proper priority and overriding rules
+ * Caution : as is, this hook can detect default icons, but not unavailable defined icons
+ */
+/* Notes : 
+ * depends on each subtype hooks, so override only core default icons
+ */
+function default_icons_object_hook($hook, $type, $return, $params) {
+	// @TODO is this useful for content ?
+	return $return;
+	
+	static $algorithm = false;
+	static $enabled = false;
+	if (!$algorithm) {
+		$enabled = elgg_get_plugin_setting('default_group', 'default_icons');
+		if ($enabled != 'no') {
+			$enabled = true;
+			$algorithm = elgg_get_plugin_setting('default_group_alg', 'default_icons');
+			$algorithm_opt = default_icons_get_algorithms();
+			if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ideinticon'; }
+		} else {
+			$enabled = false;
+		}
+	}
+	// Detect default icon (but cannot use file_exists because it's an URL)
+	// mod/groups/graphics/defaultlarge.gif (tiny, small, medium, large)
+	//error_log("Group {$params['entity']->guid} {$params['entity']->name} =>  $return");
+	if ($enabled && (strpos($return, '_graphics/icons/default/') !== false)) {
+		// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
+		// Username-based seed enables portable avatar on other sites
+		$seed = $params['entity']->guid;
+		$size = $params['size'];
+		$background = elgg_get_plugin_setting('background', 'default_icons');
+		$background = str_replace('#', '', $background);
+		$icon_sizes = elgg_get_config('icon_sizes');
+		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
+		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+		/*
+		if (!empty($num)) $img_base_url .= "&num=$num";
+		if (!empty($mono)) $img_base_url .= "&mono=$mono";
+		*/
+		$img_base_url .= "&algorithm=$algorithm";
+		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+		if (!empty($background)) $img_base_url .= "&background=$background";
 		return $img_base_url;
 	}
 	
