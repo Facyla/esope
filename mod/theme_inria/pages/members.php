@@ -29,8 +29,10 @@ $sidebar .= elgg_view('esope/users/search', $vars);
 
 
 $content .= '<div class="iris-search-sort">';
+	/*
 	$num_members = esope_get_number_users();
 	$content .= '<span class="iris-search-count">' . $num_members . ' ' . elgg_echo('members') . '</span>';
+	*/
 	$order_opt = array(
 			'alpha' => "Ordre alphabétique",
 			'desc' => "Membres les + récents",

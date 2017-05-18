@@ -125,17 +125,20 @@ function theme_inria_user_menu_setup($hook, $type, $items, $vars) {
 		if ($item->getName() == 'friend_request') {
 			$item->setTooltip($item->getText());
 			$item->setText('<i class="fa fa-user-plus"></i>');
-			$item->setWeight(601);
+			$item->setPriority(601);
 		}
 		if ($item->getName() == 'add_friend') {
 			$item->setTooltip($item->getText());
 			$item->setText('<i class="fa fa-user-plus"></i>');
-			$item->setWeight(601);
+			$item->setPriority(601);
 		}
 		if ($item->getName() == 'remove_friend') {
+			unset($items[$k]);
+			/*
 			$item->setTooltip($item->getText());
 			$item->setText('<i class="fa fa-user-times"></i>');
-			$item->setWeight(601);
+			$item->setPriority(601);
+			*/
 		}
 	}
 	// Add send message
@@ -157,6 +160,36 @@ function theme_inria_user_menu_setup($hook, $type, $items, $vars) {
 				'link_class' => 'iris-user-is-friend',
 				'priority' => 602,
 			));
+	}
+	return $items;
+}
+
+// River menu : add container, remove ... ?
+function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
+	$object = $vars['item']->getObjectEntity();
+	// Add container
+	if (elgg_instanceof($object, 'object')) {
+		$container = $object->getContainerEntity();
+		if (elgg_instanceof($container, 'group')) {
+			$items[] = ElggMenuItem::factory(array(
+					'name' => 'container',
+					'text' => $container->name,
+					'href' => $container->getURL(),
+					'class' => 'iris-container',
+					'priority' => 603,
+				));
+		}
+	}
+	return $items;
+}
+
+// Extras menu : remove RSS... ?
+function theme_inria_extras_menu_setup($hook, $type, $items, $vars) {
+	// Update some existing menu items
+	foreach ($items as $k => $item) {
+		if ($item->getName() == 'rss') {
+			unset($items[$k]);
+		}
 	}
 	return $items;
 }
@@ -567,50 +600,88 @@ function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
 		return $return;
 	}
 
-	/* @var ElggGroup $entity */
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'groups') {
-		return $return;
-	}
 
-	// Replace members count if set
-	foreach ($return as $index => $item) {
-		if ($item->getName() == 'members') {
-			unset($return[$index]);
-			// number of members
-			$nb_members_wheres[] = "NOT EXISTS (
-				SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
-				WHERE md.entity_guid = e.guid
-					AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
-					AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
-			$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
-			$all_members = $entity->getMembers(array('count' => true));
-			//$members_string = elgg_echo('groups:member');
-			$members_string = $all_members . ' ' . elgg_echo('groups:member');
-			if ($all_members != $active_members) {
-				if ($active_members > 1) {
-					$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
-				} else {
-					if ($all_members > 1) {
-						$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
-					} else {
-						$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
-					}
-				}
+	if (elgg_instanceof($entity, 'object', 'thewire')) {
+		foreach ($return as $index => $item) {
+			if ($item->getName() == 'thread') {
+				unset($return[$index]);
 			}
-			$options = array(
-				'name' => 'members',
-				'text' => $members_string,
-				'href' => false,
-				'priority' => 200,
-			);
-			$return[] = ElggMenuItem::factory($options);
 		}
 	}
+	
+	/* @var ElggGroup $entity */
+	if ($handler == 'groups') {
+		//if (elgg_instanceof($entity, 'group')) {}
+		// Replace members count if set
+		foreach ($return as $index => $item) {
+			if ($item->getName() == 'members') {
+				unset($return[$index]);
+				// number of members
+				$nb_members_wheres[] = "NOT EXISTS (
+					SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
+					WHERE md.entity_guid = e.guid
+						AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+						AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
+				$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
+				$all_members = $entity->getMembers(array('count' => true));
+				//$members_string = elgg_echo('groups:member');
+				$members_string = $all_members . ' ' . elgg_echo('groups:member');
+				if ($all_members != $active_members) {
+					if ($active_members > 1) {
+						$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
+					} else {
+						if ($all_members > 1) {
+							$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
+						} else {
+							$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
+						}
+					}
+				}
+				$options = array(
+					'name' => 'members',
+					'text' => $members_string,
+					'href' => false,
+					'priority' => 200,
+				);
+				$return[] = ElggMenuItem::factory($options);
+			}
+		}
+	}
+	
 	return $return;
 }
 
 
+
+
+function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	
+	$warnings = array();
+	$user_guid = elgg_get_logged_in_user_guid();
+	
+	// Handle group / city images (attached to group and not group owner)
+	$images = array('banner');
+	foreach($images as $meta_name) {
+		// Attachment upload
+		if (isset($_FILES[$meta_name]['name']) && !empty($_FILES[$meta_name]['name']) && ($attachment_file = get_uploaded_file($meta_name))) {
+			// create file
+			$prefix = "groups/" . $group->guid;
+			$fh = new ElggFile();
+			$fh->owner_guid = $group->guid;
+			$fh->setFilename($prefix . $meta_name);
+			if($fh->open("write")){
+				$fh->write($attachment_file);
+				$fh->close();
+			}
+			$group->{$meta_name} = $meta_name;
+			$group->{$meta_name.'_name'} = htmlspecialchars($_FILES[$meta_name]['name'], ENT_QUOTES, 'UTF-8');
+		}
+	}
+
+	return true;
+}
 
 

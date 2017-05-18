@@ -50,6 +50,7 @@ function theme_inria_init(){
 	elgg_extend_view('css', 'theme_inria/css', 1000);
 	elgg_extend_view('css/admin', 'theme_inria/admin_css', 1000);
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
+	
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
 	// Extend user owner block
@@ -69,6 +70,9 @@ function theme_inria_init(){
 	//elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
 	
 	elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
+	
+	// Add group profile banner : more control directly in views
+	//elgg_extend_view('groups/edit/profile', 'theme_inria/groups/extend_edit_profile', 400);
 	
 	// Add RSS feed option
 	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
@@ -131,8 +135,16 @@ function theme_inria_init(){
 	elgg_register_event_handler('pagesetup', 'system', 'theme_inria_setup_menu');
 	// User actions
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
-	// Members count in group listing menu
+	// Entity menu : remove "thread" (thewire), members count in group listing menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_groups_entity_menu_setup', 900);
+	// River menu
+	elgg_register_plugin_hook_handler('register', 'menu:river', 'theme_inria_river_menu_setup', 900);
+	// River menu
+	elgg_register_plugin_hook_handler('register', 'menu:extras', 'theme_inria_extras_menu_setup', 900);
+	
+	// Add new image to group edit
+	elgg_register_event_handler('create', 'group', 'theme_inria_groups_edit_event_listener');
+	elgg_register_event_handler('update', 'group', 'theme_inria_groups_edit_event_listener');
 	
 	// Enable modifying members count algo
 	elgg_register_plugin_hook_handler('members', 'count', 'theme_inria_members_count_hook');
@@ -298,6 +310,21 @@ function theme_inria_get_community_groups($community = false, $count = false) {
 	if ($count) { $options['count'] = true; }
 	return elgg_get_entities_from_metadata($options);
 }
+
+
+// Get main (top parent) group from current page owner / workspace
+function theme_inria_get_main_group($main_group) {
+	if (!elgg_instanceof($main_group, 'group')) { return false; }
+	// Find top level parent
+	$parent = AU\SubGroups\get_parent_group($main_group);
+	if ($parent) {
+		$main_group = $parent;
+		while ($parent = AU\SubGroups\get_parent_group($parent)) { $main_group = $parent; }
+	}
+	return $main_group;
+}
+
+
 
 
 

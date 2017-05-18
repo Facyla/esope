@@ -14,6 +14,7 @@
 $url = elgg_get_site_url();
 $imgurl = $url . 'mod/theme_inria/graphics/';
 
+/*
 // Display default footer if no specific footer set in theme settings
 $footer = elgg_get_plugin_setting('footer', 'esope');
 // Footer menu
@@ -43,13 +44,13 @@ if (!empty($footer) && !empty($footer_menu)) {
 if (empty($footer) && !empty($footer_menu)) {
 	$footer = $footer_menu;
 }
-
+*/
 
 // Inria static override (=> move to site settings)
 $lang_select = elgg_view('language_selector/default', $vars);
 $footer = <<<FOOTER
 <ul>
-	<li><a href="https://intranet.inria.fr/" class="inria-intranet"><i class="fa fa-external-link"></i>&nbsp;Intranet</a></li>
+	<li><a href="https://intranet.inria.fr/" class="inria-intranet" target="_blank"><i class="fa fa-external-link"></i>&nbsp;Intranet</a></li>
 	<li><a href="{$url}groups/profile/8551/aide">Aide</a></li>
 	<li><a href="{$url}p/a-propos">A propos</a></li>
 	<li><a href="{$url}p/mentions-legale">Mentions légales</a></li>
@@ -67,4 +68,7 @@ FOOTER;
 	<?php echo $footer; ?>
 	<img class="footer-logo-inria" src="<?php echo $imgurl; ?>logo-inria.png">
 </div>
+
+
+
 

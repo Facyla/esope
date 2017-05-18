@@ -277,26 +277,28 @@ function theme_inria_search_page_handler($page) {
 
 function theme_inria_groups_page_handler($page) {
 	elgg_load_library('elgg:groups');
+	elgg_load_library('elgg:group_operators');
 	elgg_load_library('elgg:esope:groups');
 
 	elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
 	$esope_base = elgg_get_plugins_path() . 'esope/pages/';
 	$iris_base = elgg_get_plugins_path() . 'theme_inria/pages/';
 
+	set_input('group_layout_header', false); // Default to no header, add it for appropriate pages only
 	switch ($page[0]) {
-		/*
-		case 'all':
-			// Because we want to add discussions (if setting enabled) + alpha order tab + subgroups + other tweaks
-			esope_groups_handle_all_page();
+		case 'file':
+			if (isset($page[1])) { set_input("guid",$page[1]); }
+			if (isset($page[2])) { set_input("name",$page[2]); }
+			include($iris_base . 'groups/file.php');
 			break;
-		*/
+		
+		// Internal group search = regular search in group interface/context
 		/*
 		case 'groupsearch':
 			if (!empty($page[1])) set_input('q', $page[1]);
 			esope_groups_groupsearch_page();
 			break;
 		*/
-		// Internal group search = regulr search in group interface/context
 		case 'search':
 			// No group set : use group search instead
 			if (empty($page[1])) { forward('groups'); }
@@ -304,49 +306,64 @@ function theme_inria_groups_page_handler($page) {
 			if (!empty($page[2])) { set_input('q', $page[2]); }
 			esope_groups_search_page();
 			break;
-		
 		case 'owner': forward('groups?filter=owner'); break;
 		// Iris note : cannot view other user groups anymore (now in profile)
-		
 		case 'member':
 			//forward('groups?filter=member');
 			set_input('filter', 'member');
 			include $iris_base . 'groups.php';
 			break;
-		
 		case 'discover':
 			if (!empty($page[1])) { forward('groups?community=' . $page[1]); }
 			set_input('filter', 'discover');
 			include $iris_base . 'groups.php';
 			break;
 		
-		case 'invitations':
-			set_input('username', $page[1]);
-			groups_handle_invitations_page();
-			break;
 		case 'add':
+			set_input('group_layout_header', true);
 			groups_handle_edit_page('add');
 			break;
 		case 'edit':
+			set_input('group_layout_header', true);
 			groups_handle_edit_page('edit', $page[1]);
 			break;
+		
 		case 'profile':
-			groups_handle_profile_page($page[1]);
+			set_input('group_layout_header', true);
+			//groups_handle_profile_page($page[1]);
+			echo elgg_view('resources/groups/profile', array('group_guid' => $page[1]));
+			return true;
 			break;
+		case 'workspace':
+			set_input('group_layout_header', true);
+			echo elgg_view('resources/groups/workspace', array('group_guid' => $page[1]));
+			return true;
 		case 'activity':
+			set_input('group_layout_header', true);
 			groups_handle_activity_page($page[1]);
 			break;
+		
 		case 'members':
+			set_input('group_layout_header', true);
 			// ESOPE: use custom function because au_subgroups lib has hardcoded limit + add invite button for group admins
 			esope_groups_handle_members_page($page[1]);
 			break;
+		case 'invitations':
+			set_input('group_layout_header', true);
+			set_input('username', $page[1]);
+			groups_handle_invitations_page();
+			break;
 		case 'invite':
+			set_input('group_layout_header', true);
 			groups_handle_invite_page($page[1]);
 			break;
 		case 'requests':
+			set_input('group_layout_header', true);
 			groups_handle_requests_page($page[1]);
 			break;
+		
 		case 'subgroups':
+			set_input('group_layout_header', true);
 			// AU subgroups will add the breacrumb so avoid duplicating
 			elgg_pop_breadcrumb();
 			switch ($page[1]) {

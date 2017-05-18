@@ -7,16 +7,19 @@
  * @uses $vars['message']     Optional message (usually excerpt of text)
  * @uses $vars['attachments'] Optional attachments (displaying icons or other non-text data)
  * @uses $vars['responses']   Alternate respones (comments, replies, etc.)
+ * @uses $vars['no_menu']     Removes menu
  */
 
 $item = $vars['item'];
 /* @var ElggRiverItem $item */
 
-$menu = elgg_view_menu('river', array(
-	'item' => $item,
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-));
+if (!elgg_in_context('river-responses')) {
+	$menu = elgg_view_menu('river', array(
+		'item' => $item,
+		'sort_by' => 'priority',
+		'class' => 'elgg-menu-hz',
+	));
+}
 
 // river item header
 $timestamp = elgg_view_friendly_time($item->getTimePosted());
@@ -50,11 +53,13 @@ if (!empty($attachments)) {
 	$attachments = "<div class=\"elgg-river-attachments clearfix\">$attachments</div>";
 }
 
+elgg_push_context('widgets');
 $responses = elgg_view('river/elements/responses', $vars);
 //if ($responses) {
 if (!empty($responses)) {
 	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
 }
+elgg_pop_context();
 
 $group_string = '';
 $object = $item->getObjectEntity();
@@ -75,4 +80,5 @@ $message
 $attachments
 $responses
 $menu
+<div class="clearfloat"></div>
 RIVER;

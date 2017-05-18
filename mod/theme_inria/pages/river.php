@@ -35,7 +35,7 @@ switch ($page_type) {
 		break;
 	default:
 		//$title = elgg_echo('river:all');
-		$title = elgg_echo('theme_inria:home:wire');
+		$title = elgg_echo('theme_inria:home:river');
 		$page_filter = 'all';
 		break;
 }
@@ -49,7 +49,7 @@ if (!$activity) {
 
 $sidebar = elgg_view('core/river/sidebar');
 $sidebar .= '<div class="clearfloat"></div>';
-$sidebar .= '<h3>' . "Filtres avancés" . '</h3>';
+$sidebar .= '<h3>' . elgg_echo('theme_inria:search:filters') . '</h3>';
 
 $sidebar .= elgg_view('core/river/filter', array('selector' => $selector));
 

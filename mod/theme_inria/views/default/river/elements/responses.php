@@ -24,7 +24,9 @@ if ($item->annotation_id != 0 || !$object || $object instanceof ElggComment) {
 
 $comment_count = $object->countComments();
 
-if ($comment_count) {
+// Avoid listing comments on users, groups, sites...
+//if ($comment_count) {
+if ($comment_count && elgg_instanceof($object, 'object')) {
 	$comments = elgg_get_entities(array(
 		'type' => 'object',
 		'subtype' => 'comment',
@@ -57,3 +59,4 @@ if ($comment_count) {
 $form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
 $body_vars = array('entity' => $object, 'inline' => true);
 echo elgg_view_form('comment/save', $form_vars, $body_vars);
+

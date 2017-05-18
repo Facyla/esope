@@ -3,8 +3,10 @@
 	// Groupes
 	$groups = '';
 	if (elgg_is_active_plugin('groups')) {
+		$ownguid = elgg_get_logged_in_user_guid();
+		$max_groups = 9;
 		// Liste de ses groupes
-		$options = array( 'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => 99, 'order_by' => 'time_created asc');
+		$options = array( 'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => $max_groups, 'order_by' => 'time_created asc');
 		/*
 		// Cas des sous-groupes : listing avec marqueur de sous-groupe
 		if (elgg_is_active_plugin('au_subgroups')) {
@@ -21,11 +23,29 @@
 		}
 		*/
 		$mygroups = elgg_get_entities_from_relationship($options);
-		foreach ($mygroups as $group) {
-			//$groups .= '<div class="iris-home-group">' . elgg_view_entity_icon($group, 'medium') . '</div>';
-			$groups .= '<div class="iris-home-group float"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></div>';
+		$mygroups_more = elgg_get_entities_from_relationship($options + array('offset' => ($max_groups), 'limit' => false));
+		$mygroups_count = elgg_get_entities_from_relationship($options + array('count' => true));
+		if ($mygroups) {
+			foreach ($mygroups as $group) {
+				//$groups .= '<div class="iris-home-group">' . elgg_view_entity_icon($group, 'medium') . '</div>';
+				$groups .= '<div class="iris-home-group float"><a href="' . $group->getUrl() . '"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></a></div>';
+			}
 		}
-			$groups .= '<div class="iris-home-group iris-home-group-add iris-user-groups-add float"><a href="' . elgg_get_site_url() . 'groups/add" title="">+</a></div>';
+		
+		// Add toggle for next groups
+		if ($mygroups_more) {
+			foreach ($mygroups_more as $group) {
+				$groups .= '<div class="iris-home-group float hidden"><a href="' . $group->getUrl() . '"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></a></div>';
+			}
+		}
+		
+		// Lien vers tous les groupes
+		$groups .= '<div class="iris-home-group iris-home-group-add iris-user-groups-add float"><a href="' . elgg_get_site_url() . 'groups" title="">+</a></div>';
+		
+		// Add toggle for next groups
+		if ($mygroups_count > $max_groups) {
+			$groups .= '<div class="clearfloat"></div><p><a href="javascript:void(0);" onClick="javascript:$(\'.iris-home-group.hidden\').removeClass(\'hidden\'); $(this).hide();">' . elgg_echo('theme_inria:viewall') . '</a></p>';
+		}
 		
 		// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
 		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());

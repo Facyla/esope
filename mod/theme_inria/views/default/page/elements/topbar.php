@@ -17,6 +17,8 @@ $prev_q = ''; // Iris v2 switch to search page where there is an alternate input
 
 $lang = get_language();
 
+elgg_push_context('topbar');
+
 if (elgg_is_logged_in()) {
 	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
@@ -39,25 +41,63 @@ if (elgg_is_logged_in()) {
 	$notifications_mark = '';
 	$notifications_text = '';
 	$notifications_count = '';
+	$site_notifications_content = '';
 	if (elgg_is_active_plugin('site_notifications')) {
-		$site_notifications_count = elgg_get_entities_from_metadata(array(
-					'type' => 'object', 'subtype' => 'site_notification',
-					'owner_guid' => $own->guid,
-					'metadata_name' => 'read', 'metadata_value' => false,
-					'count' => true,
-				));
+		$site_notifications_opt = array(
+				'type' => 'object', 'subtype' => 'site_notification',
+				'owner_guid' => $own->guid,
+				'metadata_name' => 'read', 'metadata_value' => false,
+			);
+		$site_notifications_count = elgg_get_entities_from_metadata($site_notifications_opt + array('count' => true));
 		if ($site_notifications_count > 0) {
 			$notifications_count += $site_notifications_count;
 			$notifications_text .= elgg_echo("theme_inria:site_notifications:unreadcount", array($site_notifications_count));
 			$site_notifications_mark .= '<span class="iris-new" title="' . $site_notifications_text . '">' . $site_notifications_count . '</span>';
+			$site_notifications_content = elgg_list_entities_from_metadata($site_notifications_opt + array('pagination' => false));
 		}
 	}
 	
-	// @TODO Group invites
+	// Group invites
 	$groupinvites_options = array();
-	$groupinvites_count = '';
-	if ($friendrequests_count > 0) {
-		$groupinvites_text .= elgg_echo("theme_inria:friendrequests:unreadcount", array($groupinvites_count));
+	// Own invites
+	//$groupinvites_count = groups_get_invited_groups($own->guid, false, array('count' => true));
+	//$groupinvites = esope_groups_get_invited_groups($own->guid);
+	$groupinvites_count = esope_groups_get_invited_groups($own->guid, false, array('count' => true));
+	$groupinvites_content = '';
+	if ($groupinvites_count > 0) {
+		$groupinvites_text .= elgg_echo("theme_inria:groupinvites:unreadcount", array($groupinvites_count));
+		$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $groupinvites_count . '</span>';
+	}
+	//$groupinvites_content .= elgg_view('groups/invitationrequests', array('invitations' => $groupinvites));
+	$groupinvites_content .= elgg_view('groups/invitationrequests');
+	// Admin group membership requests (groups where user can validate requests as operator)
+	$grouprequests = esope_groups_get_pending_membership_requests($own->guid);
+	$grouprequests_count = count($grouprequests);
+	$groupinvites_count += $grouprequests_count;
+	if ($grouprequests_count > 0) {
+		if (!empty($groupinvites_text)) { $groupinvites_text .= ', '; }
+		$groupinvites_text .= elgg_echo("theme_inria:grouprequests:unreadcount", array($grouprequests_count));
+		//$groupinvites_content .= '<h3>' . "Demandes d'adhésion dans vos groupes" . '</h3>';
+		$groupinvites_content .= '<hr />';
+		foreach($grouprequests as $group) {
+			//$groupinvites_content .= elgg_view_entity($group, array('full_view' => false));
+			//$groupinvites_content .= '<div class=""><img src="' . $group->getIconURL(array('size' => 'small')) . '" /></div>';
+			$groupinvite_content = '';
+			/* Is it really useful to have a precise count here ? */
+			/*
+			$count = elgg_get_entities_from_relationship(array(
+				'type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true,
+				'count' => true,
+			));
+			$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true));
+			$groupinvite_content = elgg_echo('groups:membershiprequests:pending', array($count));
+			*/
+			$groupinvite_content = '<h4>' . $group->name . '</h4>';
+			$groupinvite_content .= elgg_echo('theme_inria:membershiprequests:examine');
+			$groupinvites_content .= '<a href="' . elgg_get_site_url() . 'groups/requests/' . $group->guid . '">' . elgg_view_image_block('<img src="' . $group->getIconURL(array('size' => 'small')) . '" />', $groupinvite_content, array('class' => "notifications-pending-groups-requests")) . '</a>';
+		}
+	}
+	if ($groupinvites_count > 0) {
 		$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $groupinvites_count . '</span>';
 		
 		$notifications_count += $groupinvites_count;
@@ -69,6 +109,7 @@ if (elgg_is_logged_in()) {
 	// Friend requests - Demandes de contact en attente
 	$friendrequests_options = array("type" => "user", "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true, "count" => true);
 	$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
+	$friendrequests_content = '';
 	if ($friendrequests_count > 0) {
 		$friendrequests_text .= elgg_echo("theme_inria:friendrequests:unreadcount", array($friendrequests_count));
 		$friendrequests_mark .= '<span class="iris-new" title="' . $friendrequests_text . '">' . $friendrequests_count . '</span>';
@@ -77,6 +118,7 @@ if (elgg_is_logged_in()) {
 		if (!empty($notifications_text)) { $notifications_text .= ', '; }
 		$notifications_text .= $friendrequests_text;
 	}
+	$friendrequests_content .= elgg_view('friend_request/sent', $vars) . elgg_view('friend_request/received', $vars);
 	/*
 	if ($friendrequests_count == 1) {
 		$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a></li>';
@@ -122,7 +164,7 @@ if (elgg_is_active_plugin('language_selector')) {
 
 <div class="iris-topbar-menu">
 	<?php
-	if (elgg_is_active_plugin('search')) {
+	if (elgg_is_active_plugin('search') && !elgg_in_context('search')) {
 		$search_text = elgg_echo('esope:search:defaulttext');
 		// Select search type (filter)
 		//$search_opt = array('' => elgg_echo('all'), 'object' => elgg_echo('item:object'), 'group' => elgg_echo('item:group'), 'user' => elgg_echo('item:user')); // options_values
@@ -135,6 +177,8 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 			echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-topbar-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
 			//echo '<noscript><input type="image" id="iris-topbar-search-submit" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" /></noscript>';
 		echo '</form>';
+	} else {
+		echo '<div id="iris-topbar-search"></div>';
 	}
 	
 	// TOPBAR MENU : personal tools and administration
@@ -177,11 +221,8 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 				} else {
 					echo '<div id="iris-topbar-notifications-site" class="iris-topbar-notifications-tab hidden">';
 				}
-				echo elgg_list_entities_from_metadata(array(
-						'type' => 'object', 'subtype' => 'site_notification',
-						'owner_guid' => $page_owner->guid, 'full_view' => false,
-						'metadata_name' => 'read', 'metadata_value' => false,
-					));
+				echo '<div class="iris-topbar-notifications-tab-content">' . $site_notifications_content . '</div>';
+				echo '<p style="text-align: center;"><a href="' . elgg_get_site_url() . 'site_notifications" class="view-all">' . elgg_echo('theme_inria:viewall') . '</a></p>';
 				echo '</div>';
 				
 				if (($tab == 'friends')) {
@@ -189,8 +230,7 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 				} else {
 					echo '<div id="iris-topbar-notifications-friends" class="iris-topbar-notifications-tab hidden">';
 				}
-				echo elgg_view('friend_request/sent', $vars);
-				echo elgg_view('friend_request/received', $vars);
+				echo '<div class="iris-topbar-notifications-tab-content">' . $friendrequests_content . '</div>';
 				echo '</div>';
 				
 				if (($tab == 'groups')) {
@@ -198,7 +238,7 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 				} else {
 					echo '<div id="iris-topbar-notifications-groups" class="iris-topbar-notifications-tab hidden">';
 				}
-				echo elgg_view('groups/invitationrequests', $vars);
+				echo '<div class="iris-topbar-notifications-tab-content">' . $groupinvites_content . '</div>';
 				echo '</div>';
 				?>
 			</div>
@@ -208,7 +248,7 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 		
 		<div class="menu-topbar-toggle" class="iris-topbar-item"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt iris-topbar-item" id="menu-topbar">
-			<li id="user"><a href="javascript:void(0);"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?></a>
+			<li id="user"><a href="javascript:void(0);"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">
 					<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><i class="fa fa-user-o"></i>&nbsp;<?php echo elgg_echo('theme_inria:topbar:profil'); ?></a>
 					<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog"></i>&nbsp;<?php echo elgg_echo('esope:usersettings'); ?></a></li>
@@ -234,4 +274,8 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 	}
 	?>
 </div>
+
+<?php
+elgg_pop_context();
+
 

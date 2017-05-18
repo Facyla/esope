@@ -27,7 +27,7 @@ if ($groups) {
 */
 
 
-echo '<h3><a href="' . elgg_get_site_url() . 'groups/all" title="' . elgg_echo('theme_inria:groups:discover:tooltip') . '">' . elgg_echo("theme_inria:groups:discover") . ' &nbsp; &#9654;</a></h3>';
+echo '<h3><a href="' . elgg_get_site_url() . 'groups/discover" title="' . elgg_echo('theme_inria:groups:discover:tooltip') . '">' . elgg_echo("theme_inria:groups:discover") . ' &nbsp; &#9654;</a></h3>';
 
 //$group_categories = ['work' => "Métiers", 'exchange' => "Echanges & Vie pro", 'tools' => "Outils", '' => "Loisirs", 'planstrategique' => "Plan stratégique"];
 

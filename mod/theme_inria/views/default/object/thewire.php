@@ -11,6 +11,7 @@ elgg_load_js('elgg.thewire');
 
 $full = elgg_extract('full_view', $vars, FALSE);
 $post = elgg_extract('entity', $vars, FALSE);
+$size = elgg_extract('size', $vars, 'medium');
 
 if (!$post) {
 	return true;
@@ -22,9 +23,10 @@ if (!$thread_id) {
 	$post->wire_thread = $post->guid;
 }
 
+
 $owner = $post->getOwnerEntity();
 
-$owner_icon = '<img src="' . $owner->getIconUrl(array('size' => 'medium')) . '" alt="' . $owner->name . '" />';
+$owner_icon = '<img src="' . $owner->getIconUrl(array('size' => $size)) . '" alt="' . $owner->name . '" />';
 $owner_link = elgg_view('output/url', array(
 	'href' => "thewire/owner/$owner->username",
 	'text' => $owner->name,

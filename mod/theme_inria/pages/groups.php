@@ -115,8 +115,10 @@ switch($filter) {
 		$sidebar .= elgg_view('esope/groups/search', $vars);
 		
 		$content .= '<div class="iris-search-sort">';
+			/*
 			$num_groups = elgg_get_entities(array('type' => 'group', 'count' => true));
 			$content .= '<span class="iris-search-count">' . $num_groups . ' ' . elgg_echo('groups') . '</span>';
+			*/
 			$order_opt = array(
 					'alpha' => "Ordre alphabétique",
 					'desc' => "Groupes les + récents",

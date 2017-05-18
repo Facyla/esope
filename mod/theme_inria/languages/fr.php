@@ -720,6 +720,15 @@ Voir et commenter ce lien web :
 	'theme_inria:community:description:echanges-vie-pro' => "Echanges & Vie pro : description détaillée à définir",
 	'theme_inria:community:description:plan-strategique' => "Plan stratégique : description détaillée à définir",
 	'theme_inria:groups:discover:view' => "voir",
+	'theme_inria:viewall' => "tout voir",
+	
+	'theme_inria:site_notifications:unreadcount' => "Notifications (%s)",
+	'theme_inria:groupinvites:unreadcount' => "Invitations (%s)",
+	'theme_inria:grouprequests:unreadcount' => "Demandes d'adhésion (%s)",
+	'theme_inria:friendrequests:unreadcount' => "Demandes de contact (%s)",
+	'theme_inria:membershiprequests:examine' => "Gérer les demandes d'adhésion",
+	
+	'theme_inria:search:filters' => "Filtres avancés",
 	
 	'theme_inria:home:wire' => "Toutes vos actus",
 	'theme_inria:home:river' => "Ça bouge sur Iris",
@@ -734,6 +743,26 @@ Voir et commenter ce lien web :
 	'theme_inria:community:groups:count:singular' => "%s groupe",
 	
 	'theme_inria:user:tags' => "Compétences & Centres d'intérêts",
+	'theme_inria:user:groups:title' => "Groupes (%s)",
+	'theme_inria:user:friends:title' => "Contacts (%s)",
+	'theme_inria:aboutme' => "A propos de moi",
+	
+	'groups:members:manage' => "Gérer les membres",
+	'groups:banner' => "Image d'entête du groupe (ne rien sélectionner pour laisser inchangé)",
+	'groups:about' => "A propos du groupe",
+	'theme_inria:groups:about' => "A propos",
+	'theme_inria:groups:operators' => "Responsables (%s)",
+	'theme_inria:groups:members' => "Tous les membres (%s)",
+	'theme_inria:groups:requests' => "Demandes en attente (%s)",
+	'theme_inria:groups:invites' => "Invitations (%s)",
+	'theme_inria:group:presentation' => "Présentation",
+	'theme_inria:group:workspace:add' => "Ajouter un espace de travail",
+	
+	'theme_inria:group:delete' => "Supprimer le groupe",
+	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
+	
+	'theme_inria:workspace' => "Espace de travail",
+	
 	
 );
 

@@ -6,7 +6,7 @@
 
 elgg_push_breadcrumb(elgg_echo('thewire'));
 
-$title = elgg_echo('thewire:everyone');
+$title = elgg_echo('theme_inria:home:wire');
 
 $content = '';
 
@@ -24,7 +24,7 @@ $content .= '<div class="iris-box">';
 $content .= elgg_list_entities(array(
 	'type' => 'object',
 	'subtype' => 'thewire',
-	'limit' => get_input('limit', 15),
+	'limit' => get_input('limit', 10),
 ));
 $content .= '</div>';
 

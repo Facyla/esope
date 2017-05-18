@@ -84,6 +84,8 @@ $main_maxwidth = "80%";
 /* <style> /**/
 
 
+* { box-sizing: border-box !important; }
+
 /* Main width */
 .elgg-page-default {
 	/* min-width: 800px; */
@@ -196,7 +198,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 
 /* Sidebar */
 .elgg-sidebar { border-left: 0px dotted #CCC; }
-.elgg-context-groups .elgg-sidebar { border-left: 1px dotted #CCC; padding-top:1%; }
+.elgg-context-groups .elgg-sidebar { border-left: 1px dotted #CCC; /* padding-top:1%; */ }
 .elgg-sidebar .elgg-module-aside h3 { font-size:0.875rem; }
 
 /* Titre objets dans les widgets notamment */
@@ -241,11 +243,13 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .footer-logo-inria { margin: 12px 0; }
 
 /* Buttons */
-.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; }
-.elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; }
-.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; }
-.elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; }
-.elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; }
+.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; }
+.elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
+.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; }
+.elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
+.elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; opacity:1; }
+.elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; box-shadow:none; }
+.elgg-button.elgg-button-delete:hover, .elgg-button.elgg-button-delete:active, .elgg-button.elgg-button-delete:focus { border: 0; color:white; opacity:1; }
 
 
 
@@ -515,32 +519,40 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 .iris-logo img { height: 42px; margin: 19px 64px; }
 
 .iris-topbar-menu { flex: 1 0 auto; background:white; display: flex; }
-#iris-topbar-search { flex: 1; font-size: 1.2rem; padding-left: 3.5rem; }
+#iris-topbar-search { flex: 1; font-size: 1.2rem; padding-left: 3.5rem; margin-top: 0.5rem; }
 #iris-topbar-search button { border: 0; background: none; font-size: 1.2rem; }
 input#iris-topbar-search-input { width: auto; }
 .iris-topbar-item { flex:0 0 auto; padding:1rem 0; position: relative; }
 .iris-topbar-item:last-of-type { padding:1rem 1rem 1rem 0; }
-.iris-topbar-item a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; padding: 1rem; display:inline-block; }
+.iris-topbar-item a { font-size:1.375rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; padding: 1rem; display:inline-block; }
 .iris-topbar-item.elgg-menu-topbar li a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; text-shadow: none; margin: 0 0 0 0; display:inline-block; }
 .iris-topbar-item.elgg-menu-topbar > li > a { padding:0; line-height: 2.5rem; }
 .iris-topbar-item.elgg-menu-topbar > li > a > img { height: 2.5rem; }
-.iris-topbar-item a .fa { font-size: 1.2em; }
+.iris-topbar-item a .fa { font-size: 1.375rem; }
 .iris-topbar-item.elgg-menu-topbar ul { position: relative; padding-top: 0px; left: 0; top: 0; width: auto; margin: 0; background: white; }
 .iris-topbar-item.elgg-menu-topbar-alt ul li { margin:0; }
 .iris-topbar-item.elgg-menu-topbar  ul > li > a { background: white; margin:0; width: 100%; text-indent: 0.5em; padding:1rem 0; font-size: 0.875rem; }
-.iris-topbar-item #user img { float: left; margin-right: 6px; }
+.iris-topbar-item #user img { float: left; margin-right: 0.375rem; border-radius: 1.125rem; height: 2.25rem }
+.iris-topbar-item #user { margin-top: 0.5rem; }
 
 .iris-new { position: relative; bottom: 0.8rem; right: 0; width: 8px; height: 8px; background: red; border-radius: 8px; display: inline-block; font-size: 6px; color:red; text-align: center; vertical-align: middle; line-height: 8px; }
 
-#notifications .notifications-panel { display:hidden; position: absolute; top: 4rem; right: 0; width: 35rem; z-index: 2; background: white; padding: 1rem 0; box-shadow: 0 0 4px 0; }
+#notifications .notifications-panel { display:hidden; position: absolute; top: 4rem; right: -8rem; width: 35rem; box-sizing: border-box; z-index: 2; background: white; padding: 1rem 0; box-shadow: 0 0 4px 0; }
 #notifications:hover .notifications-panel { display: block; }
-#notifications .notifications-panel .tabs a { font-size: 0.9rem; background: white; margin: 0 0 0 1rem; padding: 0.5rem 0; color: #384257; opacity:0.3; border-bottom: 4px transparent; }
+#notifications .notifications-panel .tabs a { font-size: 0.9rem; background: white; margin: 0 0 0 2rem; padding: 0.5rem 0; color: #384257; opacity:0.3; border-bottom: 4px transparent; }
 #notifications .notifications-panel .tabs a.elgg-state-selected,
 #notifications .notifications-panel .tabs a:hover,
 #notifications .notifications-panel .tabs a:active,
 #notifications .notifications-panel .tabs a:focus { opacity:1; border-bottom: 4px solid; }
-.iris-topbar-notifications-tab { min-height: 100px; padding: 1rem; max-height: 60vh; overflow: auto; }
+.iris-topbar-notifications-tab .iris-topbar-notifications-tab-content { min-height: 100px; padding: 1rem; max-height: 60vh; overflow: auto; }
+.iris-topbar-notifications-tab-content .elgg-body { font-size: 0.9375rem; }
 .iris-topbar-item .iris-topbar-notifications-tab a { padding: 0; font-weight: initial; font-size: 0.9rem; }
+#notifications .elgg-item { padding: 1rem 0; margin: 0 1rem 0.5rem 1rem; box-shadow: none; }
+#notifications .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
+.notifications-pending-group-invites { border-bottom: 1px solid #DCDCDC; margin: 0 1rem; }
+.notifications-pending-groups-requests { border-bottom: 1px solid #DCDCDC; padding: 1rem 0; margin: 0 1rem; }
+
+
 
 .elgg-menu-filter { margin-bottom: 1.625rem; border: 0; }
 .elgg-menu-filter > li { background: transparent; padding:0; margin:0 2.625rem 0 0; border:0; }
@@ -551,14 +563,16 @@ input#iris-topbar-search-input { width: auto; }
 .elgg-menu-filter > li > a:hover, .elgg-menu-filter > li > a:focus, .elgg-menu-filter > li > a:active { background:transparent; color: #384257; }
 
 #iris-page { display:flex; flex-direction:row; margin-top: 80px; }
-#iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: <?php echo $iris_sidegrey; ?>; padding-top: 2em; }
+#iris-navigation { flex:0 0 auto; min-height: 100vh; display:flex; flex-direction:column; width: 204px; background: <?php echo $iris_sidegrey; ?>; padding: 2rem 1rem; box-sizing: border-box; }
 .elgg-menu-navigation { z-index:2; background: <?php echo $iris_sidegrey; ?>; }
 #iris-navigation ul.elgg-menu-navigation li, #iris-navigation ul.elgg-menu-navigation li:first-child { border:0; float: none; }
-#iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1rem 0; text-indent: 1rem; text-transform:uppercase; text-decoration: none; color: <?php echo $iris_textgrey; ?>; font-family: "Inria Sans", sans-serif; font-size: 0.95rem; margin: 0 0 0.5em 0; }
+#iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1rem 0; text-indent: 1rem; text-transform:uppercase; text-decoration: none; color: <?php echo $iris_textgrey; ?>; font-family: "Inria Sans", sans-serif; font-size: 0.95rem; margin: 0 0 0.5rem 0; }
+.elgg-menu-navigation li a svg { height:1.25rem; vertical-align: bottom; margin-right: 0.5rem; fill: <?php echo $iris_textgrey; ?>; }
 #iris-navigation ul.elgg-menu-navigation li a.active, #iris-navigation ul.elgg-menu-navigation li a.elgg-state-selected, #iris-navigation ul.elgg-menu-navigation li a:hover, #iris-navigation ul.elgg-menu-navigation li a:focus, #iris-navigation ul.elgg-menu-navigation li a:active { color: white; }
-#iris-navigation ul.elgg-menu-navigation li ul { background: transparent; margin-top: -1em; left: 0px; box-shadow:none; }
+.elgg-menu-navigation li a.active svg, .elgg-menu-navigation li a.elgg-state-selected svg, .elgg-menu-navigation li a:hover svg, .elgg-menu-navigation li a:focus svg, .elgg-menu-navigation li a:active svg { fill:white; }
+#iris-navigation ul.elgg-menu-navigation li ul { background: transparent; margin-top: -1em; margin-bottom: 0.5rem; left: 0px; box-shadow:none; }
 #iris-navigation ul.elgg-menu-navigation li ul li { background: transparent; }
-#iris-navigation ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5em 0.75em; color: <?php echo $iris_textgrey; ?>; width: 100%; display: inline-block; padding: 0.3rem 0; margin: 0; text-indent: 2rem; }
+#iris-navigation ul.elgg-menu-navigation li ul li a { border-bottom: 0; text-transform: none; font-weight: normal; font-size: 0.875rem; padding: 0.5rem 0.75rem; color: <?php echo $iris_textgrey; ?>; width: 100%; display: inline-block; padding: 0.3rem 0; margin: 0; }
 #iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { color: white; }
 .elgg-state-selected ul.hidden { display: block !important; }
 .elgg-menu-navigation li.elgg-state-selected > a { color: white !important; }
@@ -590,12 +604,14 @@ input#iris-topbar-search-input { width: auto; }
 /* Accueil */
 .iris-home-group { display: inline-block; margin: 0 0.6rem 0.3rem 0; }
 .iris-home-group img, .iris-home-group a { width:5rem; height:5rem; display: inline-block; }
-.iris-home-group-category { float:left; width: 5rem; height: 8rem;  border: 1px solid <?php echo $iris_blue; ?>; padding: 0.5rem 0.2rem; box-sizing: border-box; margin: 0 0.5rem 0.3rem 0; text-align: center; color:<?php echo $iris_blue; ?>; font-weight:bold; font-size:0.8rem; }
+.iris-home-group-category { float:left; width: 5rem; height: 8rem;  border: 1px solid <?php echo $iris_blue; ?>; padding: 0.5rem 0.2rem; box-sizing: border-box; margin: 0 0.7rem 0.3rem 0; text-align: center; color:<?php echo $iris_blue; ?>; font-weight:normal; font-size:0.8rem; }
+.iris-home-group-category:last-of-type { margin-right: 0; }
 .iris-home-group-category img { width: 4rem; height: 4rem; margin: 0.5em 0 0.5em 0; }
 .iris-home-group-category a { text-decoration:none; }
 
-.iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; }
-.iris-col { flex:1; padding: 0 2em; max-width: 32.625rem; margin: 0 auto; }
+.iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; max-width: 2560px; width: 100%; }
+.iris-col { flex:1; padding: 0 0; max-width: 33rem; min-width: 33rem; margin: 0 auto; box-sizing: border-box; }
+.iris-col:last-of-type { margin: 0 auto 0 0; }
 
 
 /* Profile */
@@ -610,9 +626,11 @@ input#iris-topbar-search-input { width: auto; }
 .iris-profile-editavatar { display:none; margin: auto; font-size: 0.94rem; text-align: center; color: white; }
 .iris-profile-editavatar:hover { text-decoration:none; }
 .iris-profile-editavatar .fa { font-size: 2.5rem; }
-.iris-profile-icon:hover .iris-profile-editavatar { display: inline-block; }
-.iris-profile-addfriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
+.iris-profile-icon:hover .iris-profile-editavatar { display: inline-block;  background: rgba(0,0,0,0.2); box-sizing: border-box; position: absolute; border-radius: 7rem; left: 0; top: 0; right: 0; bottom: 0; padding: 5rem 0; }
+.iris-profile-addfriend, .iris-profile-isfriend, .iris-profile-removefriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
 .iris-profile-addfriend { right: 0rem; top: 1rem; background: <?php echo $iris_blue; ?>; }
+.iris-profile-removefriend { right: 0rem; top: 1rem; background: #FF0000; }
+.iris-profile-isfriend { right: 0rem; top: 1rem; background: #95C11F; }
 .iris-profile-sendmessage { right: -1.5rem; top: 4.5rem; background: #384257; }
 .iris-profile-field { padding: 1rem; border-bottom: 2px solid #E0E0E0; }
 .iris-profile-field:last-of-type { border: 0; }
@@ -639,8 +657,11 @@ input#iris-topbar-search-input { width: auto; }
 
 h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-breadcrumbs { display: none; }
+.iris-topbar-item .iris-topbar-notifications-tab a.view-all, 
 .view-all { color: <?php echo $iris_blue; ?>; font-size: 1rem; font-family: <?php echo $font2; ?>; font-variant: small-caps; font-weight:bold; }
+.iris-topbar-item .iris-topbar-notifications-tab a.view-all:hover, 
 .view-all:hover {text-decoration:none; }
+.elgg-context-profile .view-all { padding-top: 2rem; line-height: 2rem; }
 
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
 .elgg-tags li.elgg-tag:after { content:''; }
@@ -650,7 +671,8 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
 .iris-topbar-item .iris-topbar-notifications-tab .elgg-pagination a { font-size: 1rem; padding: 0.5rem 1rem; }
 
-.iris-box { background: #FFFFFF; min-width:10rem; max-width:32.625rem; box-sizing: border-box; margin:0 0 1rem 0; border: 1px solid #CCC; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.iris-box { background: #FFFFFF; min-width:10rem; max-width:32.625rem; box-sizing: border-box; margin:0 0 1rem 0; }
+.iris-cols .iris-box { border: 1px solid #CCC; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .iris-box h3, .iris-box h3 a { font-size:1rem; font-family:<?php echo $font2; ?>; font-weight:bold; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 
 .iris-box.home-wire img { border-radius: 100px; margin: 0.5em 0; width: 54px; }
@@ -673,11 +695,11 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 #iris-search-quickform #iris-search-header-input { border: 0; background: transparent; color: white; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; line-height: 1.5rem; padding: 0; width:21rem; }
 #iris-search-quickform input[type="reset"] { background: none; color: white; border: 0; width: auto; font-size: 0.75rem;     padding: 0; margin: 0; line-height: 3rem; }
 
-
 .iris-search-image { width:13.125rem; height:13.125rem; position: relative; top: 2.8125rem; left: 2.8125rem; background:#384257; z-index:3; color: white; font-size: 5rem; padding: 4.0625rem; box-sizing: border-box; }
 
 .iris-search-menu { z-index:2; background:white; position: absolute; bottom: 0; left: 0; right: 0; padding-left: 18.75rem; }
-.iris-search-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.9rem; font-weight: bold; display: inline-block; opacity:0.3; border-bottom:4px solid transparent; text-decoration:none; }
+.iris-search-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; display: inline-block; opacity:0.3; border-bottom:4px solid transparent; text-decoration:none; }
+.iris-search-menu a:first-of-type { margin-left:0; }
 .iris-search-menu a.elgg-state-selected,
 .iris-search-menu a:hover,
 .iris-search-menu a:active,
@@ -710,7 +732,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 /* Boutons */
 #esope-esearch-loadmore a { background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; color: white; text-decoration: none; display: inline-block; }
 
-
+#iris-footer #feedbackWrapper { top:initial; bottom:150px; }
 
 
 
@@ -719,12 +741,17 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 .elgg-list-river .elgg-item { padding: 1.8rem 0 1.2rem 0; }
 .elgg-list-river .elgg-item:first-of-type { padding-top: 0; }
+.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 0; }
 .elgg-image-block { padding: 0.5rem 0; }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
+.iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
 .elgg-list .elgg-item .elgg-image-block { padding: 0; }
 .elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; }
+.elgg-river-responses .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
+.elgg-menu .elgg-menu-item-container { float:left; }
+.elgg-menu .iris-container { font-weight: bold; font-size: 0.8125rem; color: #D3D3D3; line-height: 1.4rem; }
 .elgg-menu .elgg-menu-item-access { float:left; }
 .elgg-river-timestamp { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.3rem; display: inline-block; }
 .elgg-river-comments { margin: 1rem 0 0 0; }
@@ -785,6 +812,108 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-layout-one-sidebar .elgg-form.thewire-form { margin-bottom:1.25rem; }
 .iris-search .elgg-layout-one-sidebar .elgg-main .elgg-list-container { background: none; border: 0; max-width: initial; box-shadow: none; padding: 0; }
 .iris-search .elgg-input-radios label { font-weight: normal; color: #384257; line-height: 1.875rem; font-size: 1rem; }
+.thewire-parent { background: #FAFAFA; }
+.thewire-parent .thewire-post { padding: 0.25rem; }
+.thewire-parent .thewire-parent { margin: 0.5rem 0 0 0; padding-top: 0.5rem; border-top: 1px solid #C8C8C8; }
+
+
+
+/* Groupes */
+/* Pages de recherche : membres, groupes, publications */
+.iris-group { display:flex; flex-direction:column; }
+.iris-group-header { width:100%; background: #454C5F; min-height:18.75rem; position: relative; /* margin-bottom: 3.5rem; */ }
+.iris-group-header-alt { width:100%; background: #454C5F; height:15rem; position: relative; /* margin-bottom: 3.5rem; */ }
+.iris-group-header-alt h2 { color: white; margin-left: 3rem; }
+.iris-group-image { width:13.125rem; height:13.125rem; position: relative; top: 3.5rem; left: 3rem; background:#384257; z-index:3; color: white; box-sizing: border-box; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
+.iris-group-title { position: absolute; top: 4.5rem; left: 20rem; color: white; }
+#iris-body .iris-group-title h2 { font-size: 2.625rem; line-height: 2.75rem; margin-bottom: 0rem; padding:0; color: white; }
+.iris-group-subtitle { line-height: 2.75rem; vertical-align: bottom; font-size:1.0625rem; font-weight:bold; }
+.iris-group-community { font-size: 0.75rem; color: #969696; text-transform: uppercase; font-weight: bold; margin-bottom: 1rem; }
+
+.iris-group-menu { z-index:2; background:white; position: absolute; bottom: 0; left: 0; right: 0; padding-left: 18.75rem; }
+.iris-group-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; display: inline-block; opacity:0.3; border-bottom:4px solid transparent; text-decoration:none; }
+.iris-group-menu a:first-of-type { margin-left:0; }
+.iris-group-menu a.elgg-state-selected,
+.iris-group-menu a:hover,
+.iris-group-menu a:active,
+.iris-group-menu a:focus { border-bottom: 4px solid #384257; opacity:1; }
+
+.elgg-layout-group { display: flex; flex-direction: row; flex-wrap: wrap; margin-top: 2rem; }
+.iris-group-sidebar { flex: 0 0 auto; min-width: 20rem; width: 20rem; padding: 0 1rem 1rem 3rem; box-sizing: border-box; }
+#iris-body .iris-group .elgg-main { flex: 1; max-width: 35rem; background: white; padding: 2rem; box-sizing: border-box; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
+.iris-group-sidebar-alt { flex: 0 0 auto; min-width: 20rem; width: 20rem; padding: 0 3rem 1rem 1rem; box-sizing: border-box; }
+.iris-group-sidebar .elgg-module .elgg-body, .iris-group-sidebar .elgg-module .elgg-content, .iris-group-sidebar .elgg-module .elgg-river-summary { padding: 0 2.625rem 0rem 2.625rem; }
+.iris-sidebar-content { background: white; padding: 1.5rem 2rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.1); border-radius: 4px; }
+.iris-back { background-color: #1488CA; margin-bottom: 0.625rem; }
+#iris-body .iris-group-sidebar .iris-back a { color: white; font-weight: bold; font-size: 0.9375rem; }
+#iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; }
+#iris-body .iris-group-sidebar h2 { font-size: 1.125rem; color: #384257; font-weight: bold; font-family: "Inria Sans", sans-serif; }
+.iris-group-sidebar .fa-angle-right { float: right; }
+.iris-group-sidebar li { margin-bottom: 0.8rem; }
+.group-workspace-tabs { /* margin: -2rem -2rem 2rem -2rem; background: #F1F1F1; */ }
+.group-workspace-tabs .elgg-tabs { margin: 0; border: 0; padding: 0; display: flex; flex-wrap: wrap; border-radius: 4px 4px 0 0; box-shadow: -4px 0px 4px -4px rgba(0,0,0,0.1); }
+.group-workspace-tabs .elgg-tabs > li { flex: 0 0 auto; margin: 0; border: 0; padding: 0; border-radius:0; background:transparent; margin-top: -4px; padding-top: 4px; /* box-shadow: inset 4px -4px 4px -4px rgba(0,0,0,0.1); */ }
+.group-workspace-tabs .elgg-tabs > li > a { padding: 1rem 1rem; margin: 0; height: initial; background:white; opacity:0.6; }
+.group-workspace-tabs .elgg-tabs > li:first-of-type a { border-radius: 4px 0 0 0; }
+.group-workspace-tabs .elgg-tabs > li.elgg-state-selected  { margin-top: 0; padding-top: 0; box-shadow: 4px -4px 4px -4px rgba(0,0,0,0.1); }
+.group-workspace-tabs .elgg-tabs .elgg-state-selected a, 
+.group-workspace-tabs .elgg-tabs a:hover,
+.group-workspace-tabs .elgg-tabs a:active,
+.group-workspace-tabs .elgg-tabs a:focus { top:initial; opacity:1; }
+.group-members-count { font-size: 5.5rem; text-align: center; color: #1488CA; margin: 1rem 0 1.5rem 0; }
+#iris-body .iris-group .elgg-context-group_profile .elgg-main { background: transparent; border: 0; padding: 0; box-shadow: none; padding: 4px; margin: -4px; }
+.group-workspace-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
+.group-workspace-module { margin-bottom: 2.5rem; }
+.group-workspace-admins img { border-radius: 50px; }
+.group-workspace-admins .group-admin { float:left; margin-right: 3.75rem; }
+.group-workspace-admins .group-operators { float:left; max-width: 20rem; }
+.group-workspace-admins .group-operator { float:left; margin-right: 0.625rem; max-width: 6.25rem; font-size: 0.9375rem; }
+.group-workspace-members img { border-radius: 12.5px; }
+.iris-group-main { padding: 0rem; }
+.elgg-context-au_subgroups .iris-group-main { padding: 0 2rem; }
+
+
+/* Formulaires */
+form.elgg-form { padding: 0rem; width: initial; background: transparent; float: none; }
+fieldset > div { max-width: 30rem; }
+.ui-multiselect-checkboxes label { font-size: 0.75rem; color: #6C6C6C !important; font-weight: normal !important; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: #F1F1F1; border: 0; }
+
+#iris-body .elgg-form.elgg-form-alt.elgg-form-groups-edit { width: initial; }
+
+#iris-body .iris-group-header-alt h2 { padding-top: 3rem; }
+
+.form-groups-add .iris-group-sidebar { padding: 0 4rem 1rem 3rem; }
+.form-groups-add .iris-group-sidebar .iris-sidebar-content { height: 13rem; box-sizing: border-box; }
+.form-groups-add .iris-sidebar-content label { display: block; width: 100%; height: 100%; padding: 3rem 0 0 0; box-sizing: border-box; border: 1px dashed #D3D3D3; text-align: center; color: #D3D3D3; }
+.form-groups-add .iris-sidebar-content .fa { font-size: 2rem; margin-bottom: 0.8rem; }
+.form-groups-add .iris-sidebar-content label:hover, .form-groups-add .iris-sidebar-content label:active, .form-groups-add .iris-sidebar-content label:focus { color:#384257; cursor: pointer; }
+
+.form-groups-add .iris-group-sidebar-alt { padding: 0 3rem 1rem 4rem; }
+.form-groups-add .iris-group-sidebar-alt .iris-group-image-input { background: transparent; box-shadow: none; }
+.form-groups-add .iris-group-image-input label { display: block; width: 13rem; text-align: center; color: #D3D3D3; }
+.form-groups-add .iris-group-image-input .fa { font-size: 2rem; margin-bottom: 0.8rem; }
+.form-groups-add .iris-group-image-input label:hover, .form-groups-add .iris-group-image-input label:active, .form-groups-add .iris-group-image-input label:focus { color: white; cursor: pointer; }
+
+.form-groups-add .elgg-main h3 { padding-bottom: 3rem; }
+.groups-edit-field { display: flex; flex-direction: row; margin-bottom: 1rem; }
+.groups-edit-field .groups-edit-label { width: 9rem; flex: 0 0 auto; display: inline-block; margin: 0; padding: 0.5rem 1rem 0 0; min-height: 2rem; color: #6C6C6C; font-weight: normal; font-size: 0.9375rem; text-align: right; }
+form.elgg-form .groups-edit-field label { color: #6C6C6C; font-weight: normal; font-size: 0.9375rem; text-align: right; margin:0; }
+.groups-edit-field .groups-edit-input { width: 22rem; flex: 0 0 auto; min-height: 2rem; font-size: 0.75rem; color: #969696; }
+.groups-edit-field select, 
+.groups-edit-field select option, 
+.groups-edit-field .input-multiselect button, 
+.groups-edit-field .elgg-color-picker, 
+.groups-edit-field textarea, 
+form.elgg-form .groups-edit-field input { width: 22rem; padding:0.5rem; font-size: 0.75rem; color: #969696; background: white; border-radius: 0; }
+.groups-edit-field .elgg-color-picker { max-width:none; }
+.groups-edit-field ::placeholder { text-transform: uppercase; font-weight: bold; }
+.groups-edit-checkbox { margin-left: 9rem; margin-bottom: 0.8rem; }
+.groups-edit-checkbox label { color: #6C6C6C; font-size: 0.875rem; font-weight: normal; }
+.iris-group-delete { margin-top: 3rem; padding: 3rem 0; border-top: 2px solid #E0E0E0; }
+.group-delete-label { width:60%; float:left; }
+#iris-body .elgg-context-groups .elgg-head { width: 100%; float: none; }
+.elgg-form-alt > fieldset > .elgg-foot { border:0; }
 
 
 

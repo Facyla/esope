@@ -14,19 +14,27 @@
  * @uses $vars['class']   Additional class to apply to layout
  */
 
+// Iris v2 : switch to custom layout if group page owner
+$page_owner = elgg_get_page_owner_entity();
+if (elgg_instanceof($page_owner, 'group') || elgg_in_context('groups')) {
+	echo elgg_view('page/layouts/iris_group', $vars);
+	return;
+}
+
+
 $class = 'elgg-layout elgg-layout-one-sidebar clearfix';
 if (isset($vars['class'])) {
 	$class = "$class {$vars['class']}";
 }
 
 // ESOPE : Add context class, for page differenciation
-global $CONFIG;
-if ($CONFIG->context) foreach ($CONFIG->context as $context) {
+foreach(elgg_get_context_stack() as $context) {
 	$class .= ' elgg-context-' . $context;
 }
 
 // navigation defaults to breadcrumbs
-$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+//$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+$nav = elgg_extract('nav', $vars, '');
 
 // Change layout for groups - but only show if group can be seen
 $owner = elgg_get_page_owner_entity();

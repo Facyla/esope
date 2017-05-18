@@ -270,8 +270,10 @@ if ($search_type == 'tags') {
 }
 
 
-if (!empty($query)) {
+//if (!empty($query)) {
+if (true) {
 	$content .= '<div class="iris-search-sort">';
+		// if ($results_count > 1) {} else {}
 		$content .= '<span class="iris-search-count">' . $results_count . ' ' . elgg_echo('theme_inria:objects') . '</span>';
 		$order_opt = array(
 				/*
@@ -291,6 +293,9 @@ if (!empty($query)) {
 		$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_objects_search_order', 'options_values' => $order_opt, 'value' => get_input('sort'))) . '</span>';
 	$content .= '</div>';
 
+	// Highlight search terms : only on plain text (strips tags)
+	//$custom_results_html = search_get_highlighted_relevant_substrings($custom_results_html, $display_query);
+	
 	// Add results - If no result, say it !
 	if (!empty($custom_results_html)) {
 		$content .= '<div class="iris-search-tags">' . $custom_results_html . '</div>';
