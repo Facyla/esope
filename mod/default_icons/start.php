@@ -248,10 +248,10 @@ function default_icons_group_hook($hook, $type, $return, $params) {
 	static $algorithm = false;
 	static $enabled = false;
 	if (!$algorithm) {
-		$enabled = elgg_get_plugin_setting('default_group');
+		$enabled = elgg_get_plugin_setting('default_group', 'default_icons');
 		if ($enabled != 'no') {
 			$enabled = true;
-			$algorithm = elgg_get_plugin_setting('default_group_alg');
+			$algorithm = elgg_get_plugin_setting('default_group_alg', 'default_icons');
 			$algorithm_opt = default_icons_get_algorithms();
 			if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ideinticon'; }
 		} else {
@@ -275,7 +275,7 @@ function default_icons_group_hook($hook, $type, $return, $params) {
 		*/
 		$img_base_url .= "&algorithm=$algorithm";
 		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
-		if (!empty($background)) $img_base_url .= "&background=$background";
+		if (!empty($background)) { $img_base_url .= "&background=$background"; }
 		return $img_base_url;
 	}
 	
@@ -323,6 +323,7 @@ function default_icons_object_hook($hook, $type, $return, $params) {
 		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
 		/*
 		if (!empty($num)) $img_base_url .= "&num=$num";
+		if (!empty($background)) $img_base_url .= "&background=$background";
 		if (!empty($mono)) $img_base_url .= "&mono=$mono";
 		*/
 		$img_base_url .= "&algorithm=$algorithm";
