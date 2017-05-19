@@ -340,12 +340,18 @@ if ($new_file) {
 		$error = elgg_echo("file:uploadfailed");
 		register_error($error);
 	}
-
-	$container = get_entity($container_guid);
-	if (elgg_instanceof($container, 'group')) {
-		forward("file/group/$container->guid/all");
+	
+	// If empty title or description, forward to edit page instead
+	if (empty($title) || empty($desc)) {
+		system_message(elgg_echo('theme_inria:file:quicksaved'));
+		forward('file/edit/' . $file->guid);
 	} else {
-		forward("file/owner/$container->username");
+		$container = get_entity($container_guid);
+		if (elgg_instanceof($container, 'group')) {
+			forward("file/group/$container->guid/all");
+		} else {
+			forward("file/owner/$container->username");
+		}
 	}
 
 } else {

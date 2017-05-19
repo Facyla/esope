@@ -13,11 +13,25 @@ $main_group = theme_inria_get_main_group($group);
 
 $own = elgg_get_logged_in_user_entity();
 
+// Filter for content activity
+$filter_opt = theme_inria_group_object_subtypes_opt($group);
+$filter = get_input('filter', '');
+if (!isset($filter_opt[$filter])) { $filter = ''; }
+switch($filter) {
+	case 'pages':
+		$subtypes = array('page', 'page_top');
+		break;
+	default:
+		$subtypes = $filter;
+}
+if (empty($subtypes)) { $subtypes = theme_inria_group_object_subtypes($group); }
+
+
 // turn this into a core function
 global $autofeed;
 $autofeed = true;
 $url = elgg_get_site_url();
-elgg_push_context('group_profile');
+elgg_push_context('group_workspace');
 elgg_entity_gatekeeper($guid, 'group');
 elgg_push_breadcrumb($group->name);
 
@@ -29,45 +43,77 @@ $sidebar_alt = '';
 
 if (elgg_group_gatekeeper(false)) {
 	
-	$content .= '<div class="group-workspace-main">';
-		$content .= '<div class="group-workspace-activity">';
+	$content .= '<div class="group-workspace-main" id="group-workspace-addcontent">';
 			
-			$content .= '<div class="group-workspace-add-tabs">';
-				$content .= '<a href="#discussion"><i class="fa fa-quote-left"></i></a>';
-				$content .= '<a href="#file"><i class="fa fa-file-o"></i></a>';
-				$content .= '<a href="#blog"><i class="fa fa-file-text-o"></i></a>';
-			$content .= '</div>';
-			
-			$content .= '<div class="group-workspace-add-content">';
-				$content .= '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
-				$content .= elgg_view('input/plaintext', array('name' => 'description'));
-			$content .= '</div>';
-			
+		$content .= '<div class="group-workspace-add-tabs">';
+			$content .= '<a href="#group-workspace-add-discussion" class="elgg-state-selected" rel="nofollow"><i class="fa fa-quote-left"></i></a>';
+			$content .= '<a href="#group-workspace-add-file" rel="nofollow"><i class="fa fa-file-o"></i></a>';
+			$content .= '<a href="#group-workspace-add-blog" rel="nofollow"><i class="fa fa-file-text-o"></i></a>';
 		$content .= '</div>';
+		
+		$content .= '<div class="group-workspace-add-content">';
+			$content .= '<div id="group-workspace-add-discussion" class="group-workspace-addcontent-tab">';
+				$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
+				$discussion_form = elgg_view('input/plaintext', array('name' => 'description', 'placeholder' => "Partagez un message avec le groupe"));
+				$content .= elgg_view_image_block($own_image, $discussion_form);
+			$content .= '</div>';
+			$content .= '<div id="group-workspace-add-file" class="group-workspace-addcontent-tab hidden">';
+				/*
+				$content .= elgg_view('output/url', array(
+						'href' => $url . 'file/add/' . $group->guid,
+						'text' => elgg_echo('file:add'),
+						'class' => "elgg-button elgg-button-action",
+					));
+				*/
+				$content .= elgg_view_form('theme_inria/file/quick_upload', array(), array('action' => 'file/upload'));
+			$content .= '</div>';
+			$content .= '<div id="group-workspace-add-blog" class="group-workspace-addcontent-tab hidden">';
+				// @TODO pour édition directe : on ajoute un début de texte puis on bascule sur le form complet pour finir d'éditer
+				//$content .= elgg_view_form('blog/save');
+				$content .= elgg_view('output/url', array(
+						'href' => $url . 'blog/add/' . $group->guid,
+						'text' => elgg_echo('blog:add'),
+						'class' => "elgg-button elgg-button-action",
+					));
+				$content .= elgg_view('output/url', array(
+						'href' => $url . 'blog/group/' . $group->guid,
+						'text' => elgg_echo('theme_inria:blog:editdraft'),
+						'class' => "elgg-button elgg-button-action",
+					));
+			$content .= '</div>';
+		$content .= '</div>';
+			
 	$content .= '</div>';
 	
 	
 	// Entités par date (*pas* la river/l'activité)
 	$content .= '<div class="group-workspace-main">';
+		$content .= '<div class="group-workspace-activity-filter">';
+			// @TODO Basic form for content filter
+			// @TODO filter by available subtypes in group (+ files as they are always enabled through embed)
+			//$content .= print_r(get_registered_entity_types('object'), true);
+			
+			$content .= '<form id="group-workspace-content-filter">';
+				$content .= '<label>' . "Filtrer ";
+					$content .= elgg_view('input/select', array('name' => 'filter', 'value' => $filter, 'options_values' => $filter_opt, 'onChange' => "javascript:this.form.submit();"));
+				$content .= '</label>';
+			$content .= '</form>';
+		$content .= '</div>';
 		$content .= '<div class="group-workspace-activity">';
-		elgg_push_context('widgets');
-		$db_prefix = elgg_get_config('dbprefix');
-		$content .= elgg_list_entities(array(
-			'pagination' => true,
-			'limit' => 10,
-			'type' => 'object',
-			/*
-			'joins' => array(
-				"JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid",
-				"LEFT JOIN {$db_prefix}entities e2 ON e2.guid = rv.target_guid",
-			),
-			*/
-			'wheres' => array(
-				"(e.container_guid = $group->guid OR e.owner_guid = $group->guid)",
-			),
-			//'action_types' => array('join', 'vote', 'tag'),
-		));
-		elgg_pop_context();
+			elgg_push_context('workspace');
+			$db_prefix = elgg_get_config('dbprefix');
+			$content_activity_opt = array(
+				'type' => 'object',
+				'wheres' => array(
+					"(e.container_guid = $group->guid OR e.owner_guid = $group->guid)",
+				),
+				'limit' => 10,
+				'pagination' => true,
+			);
+			if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
+			//$content .= "SUBTYPES => " . print_r($subtypes, true);
+			$content .= elgg_list_entities($content_activity_opt);
+			elgg_pop_context();
 		$content .= '</div>';
 	$content .= '</div>';
 	
@@ -75,33 +121,37 @@ if (elgg_group_gatekeeper(false)) {
 	
 	// Config
 	//$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
-	$sidebar .= '<h3>' . "Description" . '</h3>';
+	$sidebar .= '<h3>' . elgg_echo('groups:briefdescription') . '</h3>';
 	$desc = $group->briefdescription;
 	if (empty($desc)) { $desc = elgg_get_excerpt($group->description); }
 	$sidebar .= '<p>' . $desc . '</p>';
 	
-	$sidebar .= '<h3>' . "Les fichiers (X)" . '</h3>';
-	$sidebar .= elgg_view('file/group_module');
+	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
 	
-	$sidebar .= '<h3>' . "Les articles (X)" . '</h3>';
-	$sidebar .= elgg_view('blog/group_module');
+	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
 	
-	$sidebar .= '<h3>' . "Pages wiki (X)" . '</h3>';
-	$sidebar .= elgg_view('pages/group_module');
+	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
 	
-	$sidebar .= '<h3>' . "Les liens web (X)" . '</h3>';
-	$sidebar .= elgg_view('bookmarks/group_module');
+	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
 	
-	$sidebar .= '<h3>' . "Les lettres d'info (X)" . '</h3>';
-	$sidebar .= elgg_view('newsletter/group_module');
+	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
 	
 	
-	// Agenda, sondages
-	$sidebar_alt .= '<h3>' . elgg_echo('agenda') . '</h3>';
-	$sidebar_alt .= elgg_view('event_calendar/group_module');
 	
-	$sidebar_alt .= '<h3>' . elgg_echo('survey') . '</h3>';
-	$sidebar_alt .= elgg_view('survey/group_module');
+	// SIDEBAR DROITE
+	// Agenda
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_agenda');
+	
+	// Break out from iris-sidebar-content and reopen it
+	$sidebar_alt .= '</div><div class="iris-sidebar-content">';
+	
+	// Sondages
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_poll');
 	
 }
 

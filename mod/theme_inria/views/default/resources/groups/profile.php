@@ -49,10 +49,12 @@ if (elgg_group_gatekeeper(false)) {
 	$workspaces_tabs .= '</ul></div>';
 	
 	
+	
+	
 	// Compose content
 	$content .= $workspaces_tabs;
 	
-	$content .= '<div class="group-workspace-main">';
+	$content .= '<div class="group-profile-main">';
 		
 		$content .= elgg_view('theme_inria/groups/profile_info', array('group' => $group));
 		
@@ -86,7 +88,7 @@ if (elgg_group_gatekeeper(false)) {
 	$content .= $workspaces_tabs;
 	
 	// Activité (sociale)
-	$content .= '<div class="group-workspace-main">';
+	$content .= '<div class="group-profile-main">';
 		
 		$content .= elgg_view('theme_inria/groups/profile_activity', array('group' => $group));
 		
@@ -100,8 +102,8 @@ if (elgg_group_gatekeeper(false)) {
 	
 	// Membres : total et en ligne
 	$sidebar_alt .= '<h3>' . elgg_echo('members') . '</h3>';
-	$sidebar_alt .= '<div class="group-members-count">' . $group->getMembers(array('count' => true)) . '</div>';
-	$sidebar_alt .= '<h3>' . elgg_echo('members:online') . '</h3>';
+	$sidebar_alt .= '<div class="group-members-count">' . theme_inria_get_group_active_members($group, array('count' => true)) . '</div>';
+	//$sidebar_alt .= '<h3>' . elgg_echo('members:online') . '</h3>';
 	$sidebar_alt .= elgg_view('groups/sidebar/online_groupmembers', array('entity' => $group));
 	
 	

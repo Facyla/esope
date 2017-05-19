@@ -745,6 +745,7 @@ Voir et commenter ce lien web :
 	'theme_inria:user:tags' => "Compétences & Centres d'intérêts",
 	'theme_inria:user:groups:title' => "Groupes (%s)",
 	'theme_inria:user:friends:title' => "Contacts (%s)",
+	'theme_inria:groups:online' => "En ligne (%s)",
 	'theme_inria:aboutme' => "A propos de moi",
 	
 	'groups:members:manage' => "Gérer les membres",
@@ -762,6 +763,16 @@ Voir et commenter ce lien web :
 	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
 	
 	'theme_inria:workspace' => "Espace de travail",
+	
+	'theme_inria:manage' => "gérer",
+	
+	'theme_inria:file:quicksaved' => "Le fichier a bien été publié. Vous pouvez préciser sa description si vous le souhaitez.",
+	'theme_inria:blog:editdraft' => "Modifier un brouillon",
+	'theme_inria:sidebar:file' => "Les fichiers (%s)",
+	'theme_inria:sidebar:blog' => "Les articles (%s)",
+	'theme_inria:sidebar:pages' => "Les pages wiki (%s)",
+	'theme_inria:sidebar:bookmarks' => "Les liens web (%s)",
+	'theme_inria:sidebar:newsletter' => "Les lettres d'info (%s)",
 	
 	
 );

@@ -148,9 +148,7 @@ $(document).ready(function() {
 });
 
 
-/**
- * Topbar tab switcher (Iris v2)
- */
+/* Topbar tab switcher (Iris v2) */
 $(document).ready(function() {
 	$('#notifications .notifications-panel .tabs a').on('click', function(){
 		// Select tab
@@ -160,6 +158,20 @@ $(document).ready(function() {
 		$('.iris-topbar-notifications-tab').hide();
 		var display_div = $(this).attr('href');
 		$(display_div).show();
+	});
+});
+
+/* Group workspace add content tab switcher (Iris v2) */
+$(document).ready(function() {
+	$('#group-workspace-addcontent .group-workspace-add-tabs a').on('click', function(){
+		// Select tab
+		$('#group-workspace-addcontent .group-workspace-add-tabs a').removeClass('elgg-state-selected');
+		$(this).addClass('elgg-state-selected');
+		// Display block
+		$('.group-workspace-addcontent-tab').hide();
+		var display_div = $(this).attr('href');
+		$(display_div).show();
+		return false;
 	});
 });
 

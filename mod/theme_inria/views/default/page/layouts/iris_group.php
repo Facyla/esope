@@ -78,10 +78,25 @@ if (elgg_instanceof($group, 'group')) {
 			<div class="iris-group-image" style="background: white url('<?php echo $group->getIconURL(array('size' => 'large')); ?>') no-repeat center/cover;"></div>
 			<div class="iris-group-title">
 				<?php
-				echo '<div class="iris-group-community">' . elgg_echo('community') . ' ' . $group->community . '</div>';
+				echo '<div class="iris-group-community">';
+				if (!empty($group->community)) { echo elgg_echo('community') . ' ' . $group->community; }
+				echo '</div>';
 				echo '<h2>' . $group->name . '</h2>';
 				echo '<div class="iris-group-subtitle">' . $group->briefdescription . '</div>';
-				echo '<div class="iris-group-rules">Audience : ' . $group->access_id . ' - Adhésion : ' . $group->membership . '</div>';
+				echo '<div class="iris-group-rules">';
+					// Access
+					echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span>';
+					echo ' - ';
+					// Membership
+					echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
+					if ($group->membership == ACCESS_PUBLIC) {
+						echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
+					} else {
+						echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
+					}
+					echo '</span>';
+				echo '</div>';
+		
 				?>
 			</div>
 			
