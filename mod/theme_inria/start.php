@@ -182,6 +182,7 @@ function theme_inria_init(){
 	elgg_register_page_handler('search', 'theme_inria_search_page_handler');
 	elgg_register_page_handler('members', 'theme_inria_members_page_handler');
 	elgg_register_page_handler('groups', 'theme_inria_groups_page_handler');
+	elgg_register_page_handler('au_subgroups', 'theme_inria_au_subgroups_page_handler');
 	// Override profile page
 	elgg_register_page_handler('profile', 'theme_inria_profile_page_handler');
 	

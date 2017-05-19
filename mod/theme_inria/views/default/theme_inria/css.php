@@ -842,6 +842,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-group-menu a:focus { border-bottom: 4px solid #384257; opacity:1; }
 
 .elgg-layout-group { display: flex; flex-direction: row; flex-wrap: wrap; margin-top: 2rem; }
+.elgg-layout-group-add { display: flex; flex-direction: row; flex-wrap: wrap; }
 .iris-group-sidebar { flex: 0 0 auto; min-width: 20rem; width: 20rem; padding: 0 1rem 1rem 3rem; box-sizing: border-box; }
 .iris-group-sidebar h3 { margin-bottom: 0.875rem; }
 #iris-body .iris-group .elgg-main { flex: 1; max-width: 35rem; background: white; padding: 2rem; box-sizing: border-box; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
@@ -851,7 +852,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-sidebar-content h3 { font-size: 1.125rem; }
 .iris-back { background-color: #1488CA; margin-bottom: 0.625rem; }
 #iris-body .iris-group-sidebar .iris-back a { color: white; font-weight: bold; font-size: 0.9375rem; }
-#iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; }
+#iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; border: 0; }
 #iris-body .iris-group-sidebar h2 { font-size: 1.125rem; color: #384257; font-weight: bold; font-family: "Inria Sans", sans-serif; }
 .iris-group-sidebar .fa-angle-right { float: right; }
 .iris-group-sidebar li { margin-bottom: 0.8rem; }
@@ -935,8 +936,10 @@ fieldset > div { /* max-width: 30rem; */ }
 .groups-edit-field select, .groups-edit-field select option, .groups-edit-field .input-multiselect button, 
 .groups-edit-field .elgg-color-picker, 
 .groups-edit-field textarea, 
-form.elgg-form .groups-edit-field input { width: 100%; padding:0.5rem; font-size: 0.75rem; color: #969696; background: white; border-radius: 0; }
+form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !important; padding:0.5rem; font-size: 0.75rem; color: #969696; background: white; border-radius: 0; }
 .form-input .elgg-color-picker, .groups-edit-field .elgg-color-picker { max-width:none; }
+.form-input .input-multiselect, .groups-edit-field .input-multiselect, 
+.form-input .input-multiselect button, .groups-edit-field .input-multiselect button { max-width: 22rem !important; }
 .form-input ::placeholder, .groups-edit-field ::placeholder { text-transform: uppercase; font-weight: bold; }
 .groups-edit-checkbox { margin-left: 9rem; margin-bottom: 0.8rem; }
 .groups-edit-checkbox label { color: #6C6C6C; font-size: 0.875rem; font-weight: normal; }
@@ -950,8 +953,11 @@ form.elgg-form .groups-edit-field input { width: 100%; padding:0.5rem; font-size
 
 
 /* Contents and subtype rendering */
-.workspace-subtype-header { padding: 1rem 2rem 1rem 2rem; margin: -1.5rem -2rem 1rem -2rem; border-bottom: 2px solid #E0E0E0; line-height: 2.25rem; }
-.workspace-subtype-header h3 {}
+.workspace-subtype-header { padding: 1rem 2rem 1rem 2rem; margin: 0 -2rem 0 -2rem; border-bottom: 2px solid #E0E0E0; line-height: 2.25rem; }
+.workspace-subtype-header:first-of-type { margin-top: -1.5rem; }
+.workspace-subtype-header:last-of-type { margin-bottom: -1.5rem; }
+.iris-group-sidebar-alt .workspace-subtype-header { margin-bottom:1rem; }
+.workspace-subtype-header h3 { margin:0; padding:0; }
 .workspace-subtype-header h3 a { font-size: 1.125rem; color: #384257; }
 .workspace-subtype-content img { /* max-width: 2.375rem; max-height: 2.375rem; */ max-width:100%; max-height:100%; }
 .iris-group-sidebar .workspace-subtype-content .elgg-image-block { padding:0; }

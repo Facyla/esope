@@ -51,6 +51,7 @@ $url = elgg_get_site_url();
 
 // There may be no page owner (eg. new group)
 $has_group_layout = get_input('group_layout_header', false);
+if ($has_group_layout != 'yes') { $has_group_layout = false; } else { $has_group_layout = true; }
 /*
 if (elgg_instanceof($group, 'group')) {
 	switch(current_page_url()) {
@@ -145,10 +146,19 @@ if (elgg_instanceof($group, 'group')) {
 	
 	<div class="<?php echo $class; ?>">
 		
-		<?php if ($has_group_layout) {
+		<?php
+		//if ($has_group_layout) {
 			
-			if (empty($vars['sidebar'])) { $vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars); }
-			if ($vars['sidebar']) { echo $vars['sidebar']; }
+			if (!elgg_in_context('groups_edit')) {
+				if (empty($vars['sidebar'])) {
+					if ($has_group_layout) {
+						$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
+					} else {
+						$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
+					}
+				}
+				if ($vars['sidebar']) { echo $vars['sidebar']; }
+			}
 		
 			echo '<div class="elgg-main elgg-body">';
 				if (isset($vars['content'])) { echo $vars['content']; }
@@ -165,12 +175,17 @@ if (elgg_instanceof($group, 'group')) {
 				<?php
 			}
 		
+		/*
 		} else {
+			
+			if (empty($vars['sidebar'])) { $vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars); }
+			if ($vars['sidebar']) { echo $vars['sidebar']; }
 			
 			echo '<div class="iris-cols iris-group-main">';
 			if (isset($vars['content'])) { echo $vars['content']; }
 			echo '</div>';
 		}
+		*/
 		?>
 		
 	</div>

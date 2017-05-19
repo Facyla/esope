@@ -18,7 +18,7 @@ if (elgg_instanceof($entity, 'group')) {
 	return;
 }
 
-echo '<div class="iris-group-header-alt" style="background: #454C5F; margin-top:-2rem;">';
+echo '<div class="iris-group-header-alt">';
 echo '<h2>' . elgg_echo('groups:add') . '</h2>';
 echo '</div>';
 echo '<div class="" style="margin-top: -7rem; z-index: 2;">';

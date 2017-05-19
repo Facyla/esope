@@ -119,23 +119,9 @@ if (elgg_group_gatekeeper(false)) {
 	
 	
 	
-	// Config
+	// Sidebar contenus
 	//$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
-	$sidebar .= '<h3>' . elgg_echo('groups:briefdescription') . '</h3>';
-	$desc = $group->briefdescription;
-	if (empty($desc)) { $desc = elgg_get_excerpt($group->description); }
-	$sidebar .= '<p>' . $desc . '</p>';
-	
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
-	
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
-	
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
-	
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
-	
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
-	
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_workspace', $vars);
 	
 	
 	// SIDEBAR DROITE

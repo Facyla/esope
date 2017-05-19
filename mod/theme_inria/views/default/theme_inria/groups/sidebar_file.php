@@ -6,7 +6,8 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->file_enable == 'yes') {
+//if ($group->file_enable == 'yes') {
+if (true) {
 	$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $group->guid, 'limit' => 8);
 	$count = elgg_get_entities($options + array('count' => true));
 	$objects = elgg_get_entities($options);

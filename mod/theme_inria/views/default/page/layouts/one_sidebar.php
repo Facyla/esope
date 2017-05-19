@@ -16,7 +16,10 @@
 
 // Iris v2 : switch to custom layout if group page owner
 $page_owner = elgg_get_page_owner_entity();
-if (elgg_instanceof($page_owner, 'group') || elgg_in_context('groups')) {
+if (elgg_in_context('groups_add')) {
+	echo elgg_view('page/layouts/iris_group_add', $vars);
+	return;
+} else if (elgg_instanceof($page_owner, 'group')) {
 	echo elgg_view('page/layouts/iris_group', $vars);
 	return;
 }

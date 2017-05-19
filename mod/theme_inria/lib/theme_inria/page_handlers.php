@@ -320,74 +320,47 @@ function theme_inria_groups_page_handler($page) {
 			break;
 		
 		case 'add':
-			set_input('group_layout_header', true);
+			elgg_push_context('groups_add');
+			set_input('group_layout_header', 'yes');
 			groups_handle_edit_page('add');
 			break;
 		case 'edit':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			groups_handle_edit_page('edit', $page[1]);
 			break;
 		
 		case 'profile':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			//groups_handle_profile_page($page[1]);
 			echo elgg_view('resources/groups/profile', array('group_guid' => $page[1]));
 			return true;
 			break;
 		case 'workspace':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			echo elgg_view('resources/groups/workspace', array('group_guid' => $page[1]));
 			return true;
 		case 'activity':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			groups_handle_activity_page($page[1]);
 			break;
 		
 		case 'members':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			// ESOPE: use custom function because au_subgroups lib has hardcoded limit + add invite button for group admins
 			esope_groups_handle_members_page($page[1]);
 			break;
 		case 'invitations':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			set_input('username', $page[1]);
 			groups_handle_invitations_page();
 			break;
 		case 'invite':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			groups_handle_invite_page($page[1]);
 			break;
 		case 'requests':
-			set_input('group_layout_header', true);
+			set_input('group_layout_header', 'yes');
 			groups_handle_requests_page($page[1]);
-			break;
-		
-		case 'subgroups':
-			set_input('group_layout_header', true);
-			// AU subgroups will add the breacrumb so avoid duplicating
-			elgg_pop_breadcrumb();
-			switch ($page[1]) {
-				case 'add':
-					set_input('au_subgroup', true);
-					set_input('au_subgroup_parent_guid', $page[2]);
-					elgg_set_page_owner_guid($page[2]);
-					echo elgg_view('resources/au_subgroups/add');
-					return true;
-					break;
-				case 'list':
-					elgg_set_page_owner_guid($page[2]);
-					echo elgg_view('resources/au_subgroups/list');
-					break;
-				case 'delete':
-					elgg_set_page_owner_guid($page[2]);
-					echo elgg_view('resources/au_subgroups/delete');
-					break;
-				case 'openclosed':
-					set_input('filter', $page[2]);
-					echo elgg_view('resources/au_subgroups/openclosed');
-					return true;
-					break;
-			}
 			break;
 		
 		case 'all':
@@ -400,6 +373,46 @@ function theme_inria_groups_page_handler($page) {
 			include $iris_base . 'groups.php';
 	}
 	return true;
+}
+
+
+function theme_inria_au_subgroups_page_handler($page) {
+	
+	// dirty check to avoid duplicate page handlers
+	// since this should only be called from the route, groups hook
+	if (strpos(current_page_url(), elgg_get_site_url() . 'au_subgroups') === 0) {
+		return false;
+	}
+	
+	set_input('group_layout_header', 'yes');
+	switch ($page[0]) {
+		case 'add':
+			elgg_push_context('groups_add');
+			set_input('au_subgroup', true);
+			set_input('au_subgroup_parent_guid', $page[1]);
+			elgg_set_page_owner_guid($page[1]);
+			echo elgg_view('resources/au_subgroups/add');
+			return true;
+			break;
+		
+		case 'list':
+			elgg_set_page_owner_guid($page[1]);
+			echo elgg_view('resources/au_subgroups/list');
+			break;
+		
+		case 'delete':
+			elgg_set_page_owner_guid($page[1]);
+			echo elgg_view('resources/au_subgroups/delete');
+			break;
+		
+		case 'openclosed':
+			set_input('filter', $page[1]);
+			echo elgg_view('resources/au_subgroups/openclosed');
+			return true;
+			break;
+	}
+	
+	return false;
 }
 
 
