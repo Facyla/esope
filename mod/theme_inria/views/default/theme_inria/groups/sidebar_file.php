@@ -35,6 +35,8 @@ if ($group->file_enable == 'yes') {
 	));
 
 
+	// Break out from iris-sidebar-content and reopen it
+	echo '</div><div class="iris-sidebar-content">';
 	//echo '<div class="workspace-subtype-header">';
 	//	echo $new_link;
 		echo '<h3>' . $all_link . '</h3>';

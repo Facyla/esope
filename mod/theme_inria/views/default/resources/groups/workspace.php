@@ -126,19 +126,14 @@ if (elgg_group_gatekeeper(false)) {
 	if (empty($desc)) { $desc = elgg_get_excerpt($group->description); }
 	$sidebar .= '<p>' . $desc . '</p>';
 	
-	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
 	
-	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
 	
-	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
 	
-	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
 	
-	$sidebar .= '</div><div class="iris-sidebar-content">'; // Break out from iris-sidebar-content and reopen it
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
 	
 	
@@ -147,8 +142,10 @@ if (elgg_group_gatekeeper(false)) {
 	// Agenda
 	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_agenda');
 	
-	// Break out from iris-sidebar-content and reopen it
-	$sidebar_alt .= '</div><div class="iris-sidebar-content">';
+	if ($group->event_calendar_enable == 'yes' && $group->poll_enable == 'yes') {
+		// Break out from iris-sidebar-content and reopen it
+		$sidebar_alt .= '</div><div class="iris-sidebar-content">';
+	}
 	
 	// Sondages
 	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_poll');
