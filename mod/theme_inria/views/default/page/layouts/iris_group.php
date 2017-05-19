@@ -150,12 +150,11 @@ if (elgg_instanceof($group, 'group')) {
 		//if ($has_group_layout) {
 			
 			if (!elgg_in_context('groups_edit')) {
-				if (empty($vars['sidebar'])) {
-					if ($has_group_layout) {
-						$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
-					} else {
-						$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
-					}
+				if ($has_group_layout) {
+					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
+				} else {
+					// Existing sidebar is wrapped into new sidebar (until sidebar is fully integrated)
+					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
 				}
 				if ($vars['sidebar']) { echo $vars['sidebar']; }
 			}

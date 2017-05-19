@@ -959,6 +959,7 @@ form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !importan
 .iris-group-sidebar-alt .workspace-subtype-header { margin-bottom:1rem; }
 .workspace-subtype-header h3 { margin:0; padding:0; }
 .workspace-subtype-header h3 a { font-size: 1.125rem; color: #384257; }
+.iris-group-sidebar .workspace-subtype-header .fa-angle-right { line-height: 2.25rem; }
 .workspace-subtype-content img { /* max-width: 2.375rem; max-height: 2.375rem; */ max-width:100%; max-height:100%; }
 .iris-group-sidebar .workspace-subtype-content .elgg-image-block { padding:0; }
 .iris-group-sidebar .workspace-subtype-content .elgg-image-block .elgg-image { width:2.5rem; height:2.5rem; margin: 0 0.9375rem 0 0; border: 1px solid rgba(56, 66, 87, 0.2); }

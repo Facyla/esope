@@ -20,7 +20,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "file/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:file', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:file', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -33,7 +33,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "blog/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:blog', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:blog', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -46,7 +46,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "pages/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:pages', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:pages', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -59,7 +59,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "bookmarks/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:bookmarks', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:bookmarks', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -73,7 +73,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "newsletter/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:newsletter', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:newsletter', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -86,7 +86,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "poll/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:poll', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:poll', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -99,7 +99,7 @@ $content .= '<div class="iris-sidebar-content">';
 		$count = elgg_get_entities($options + array('count' => true));
 		$link = elgg_view('output/url', array(
 				'href' => "event_calendar/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:event_calendar', array($count)),
+				'text' => elgg_echo('theme_inria:sidebar:event_calendar', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 			));
 		$content .= '<div class="workspace-subtype-header">';
@@ -108,6 +108,16 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 $content .= '</div>';
+
+
+
+
+if (!empty($vars['sidebar'])) {
+	$content .= '<div class="iris-sidebar-content">';
+	$content .= $vars['sidebar'];
+	$content .= '<div class="clearfloat"></div>';
+	$content .= '</div>';
+}
 
 
 

@@ -26,7 +26,7 @@ if ($group->bookmarks_enable == 'yes') {
 
 	$all_link = elgg_view('output/url', array(
 		'href' => "bookmarks/group/$group->guid/all",
-		'text' => elgg_echo('theme_inria:sidebar:bookmarks', array($count)),
+		'text' => elgg_echo('theme_inria:sidebar:bookmarks', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
 
