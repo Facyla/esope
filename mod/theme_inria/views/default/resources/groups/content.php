@@ -102,7 +102,7 @@ if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
 $content_activity_mine_opt = $content_activity_opt;
 $content_activity_mine_opt['owner_guid'] = $own->guid;
 $content_activity_draft_opt = $content_activity_mine_opt;
-$content_activity_draft_opt['wheres'][] = "e.access_id = '0'";
+$content_activity_draft_opt['wheres'][] = "e.access_id = '0'"; // works also for blogs (draft mode forces access to 0)
 $count_all = elgg_get_entities($content_activity_opt + ['count' => true]);
 $count_mine = elgg_get_entities($content_activity_mine_opt + ['count' => true]);
 $count_draft = elgg_get_entities($content_activity_draft_opt + ['count' => true]);
@@ -110,7 +110,7 @@ $count_draft = elgg_get_entities($content_activity_draft_opt + ['count' => true]
 switch($filter) {
 	case 'mine':
 		$count = $count_mine;
-		$entities_list = elgg_list_entities($content_activity_opt);
+		$entities_list = elgg_list_entities($content_activity_mine_opt);
 		break;
 	case 'draft':
 		$count = $count_draft;
@@ -119,7 +119,7 @@ switch($filter) {
 	case 'all':
 	default:
 		$count = $count_all;
-		$entities_list = elgg_list_entities($content_activity_mine_opt);
+		$entities_list = elgg_list_entities($content_activity_opt);
 }
 //elgg_pop_context();
 
