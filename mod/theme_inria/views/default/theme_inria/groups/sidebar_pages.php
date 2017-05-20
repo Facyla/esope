@@ -25,7 +25,7 @@ if ($group->pages_enable == 'yes') {
 	}
 
 	$all_link = elgg_view('output/url', array(
-		'href' => "pages/group/$group->guid/all",
+		'href' => "groups/content/$group->guid/pages/all",
 		'text' => elgg_echo('theme_inria:sidebar:pages', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));

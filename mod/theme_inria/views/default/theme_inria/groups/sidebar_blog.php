@@ -26,7 +26,7 @@ if ($group->blog_enable == 'yes') {
 	}
 
 	$all_link = elgg_view('output/url', array(
-		'href' => "blog/group/$group->guid/all",
+		'href' => "groups/content/$group->guid/blog/all",
 		'text' => elgg_echo('theme_inria:sidebar:blog', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));

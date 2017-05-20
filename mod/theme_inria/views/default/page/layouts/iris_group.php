@@ -104,38 +104,38 @@ if (elgg_instanceof($group, 'group')) {
 			<div class="iris-group-menu">
 				<?php
 				if (current_page_url() == $group->getURL()) {
-					echo '<a href="' . $group->getURL() . '" class="elgg-state-selected">' . elgg_echo('theme_inria:group:presentation') . '</a>';
-					echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="">' . $main_group->name . '</a>';
+					echo '<a href="' . $group->getURL() . '" class="tab elgg-state-selected">' . elgg_echo('theme_inria:group:presentation') . '</a>';
+					echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab">' . $main_group->name . '</a>';
 					if ($all_subgroups_guids) {
 						foreach($all_subgroups_guids as $guid) {
 							$ent = get_entity($guid);
-							echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="">' . $ent->name . '</a>';
+							echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="tab">' . $ent->name . '</a>';
 						}
 					}
 				} else {
-					echo '<a href="' . $group->getURL() . '" class="">' . elgg_echo('theme_inria:group:presentation') . '</a>';
+					echo '<a href="' . $group->getURL() . '" class="tab">' . elgg_echo('theme_inria:group:presentation') . '</a>';
 					if ($main_group->guid == $group->guid) {
-						echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="elgg-state-selected">' . $main_group->name . '</a>';
+						echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab elgg-state-selected">' . $main_group->name . '</a>';
 					} else {
-						echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="">' . $main_group->name . '</a>';
+						echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab">' . $main_group->name . '</a>';
 					}
 					if ($all_subgroups_guids) {
 						foreach($all_subgroups_guids as $guid) {
 							$ent = get_entity($guid);
 							if ($ent->guid == $group->guid) {
-								echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="elgg-state-selected">' . $ent->name . '</a>';
+								echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="tab elgg-state-selected">' . $ent->name . '</a>';
 							} else {
-								echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="">' . $ent->name . '</a>';
+								echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="tab">' . $ent->name . '</a>';
 							}
 						}
 					}
 				}
 				// Group search
 				if (elgg_is_active_plugin('search')) {
-					echo '<a href="' . $group->getURL() . '" class="float-alt"><i class="fa fa-search"></i></a>';
+					echo '<a href="' . $group->getURL() . '" class="search float-alt"><i class="fa fa-search"></i></a>';
 				}
 				// New subgroup (of level 1)
-				echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="float-alt">' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
+				echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">+&nbsp;' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
 				?>
 			</div>
 		</div>
@@ -149,6 +149,7 @@ if (elgg_instanceof($group, 'group')) {
 		<?php
 		//if ($has_group_layout) {
 			
+			// Left sidebar
 			if (!elgg_in_context('groups_edit')) {
 				if (!$has_group_layout) {
 					// Existing sidebar is wrapped into new sidebar (until sidebar is fully integrated)
@@ -160,12 +161,43 @@ if (elgg_instanceof($group, 'group')) {
 				}
 				if ($vars['sidebar']) { echo $vars['sidebar']; }
 			}
-		
+			
+			
+			// Main content
 			echo '<div class="elgg-main elgg-body">';
+				// Retour vers page listing
+				if (!$has_group_layout && !elgg_in_context('group_content')) {
+					echo '<div class="group-content-back">';
+						// Plein écran
+						echo '<a href="javascript:void(0);" onClick="javascript:$(\'body\').toggleClass(\'full-screen\')" class="elgg-button elgg-button-action float-alt">' . '<i class="fa fa-arrows-alt"></i>' . '</a>';
+						$back_list_url = $url . 'groups/content/' . elgg_get_context() . '/all';
+						// Edition d'un contenu : retour vers affichage (bouton croix)
+						$current_guid = get_input('guid');
+						$current_entity = get_entity($current_guid);
+						if (elgg_instanceof($current_entity, 'object')) {
+							$back_entity_url = $current_entity->getURL();
+							if (current_page_url() != $back_entity_url) {
+								echo '<a href="' . $back_entity_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . "Retour vers la publication" . '</a>';
+							} else {
+								// Retour au listing
+								echo '<a href="' . $back_list_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . "Retour vers la liste des publications" . '</a>';
+							}
+						} else {
+							// Retour au listing
+							echo '<a href="' . $back_list_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . "Retour vers la liste des publications" . '</a>';
+							// Nouvelle publication
+							echo '<a href="" class="add elgg-button elgg-button-action float-alt">' . "Créer" . '</a>';
+						}
+						echo '<div class="clearfloat"></div>';
+					echo '</div>';
+				}
+				
 				if (isset($vars['content'])) { echo $vars['content']; }
 				echo elgg_view('page/layouts/elements/footer', $vars);
 			echo '</div>';
 			
+			
+			// Right sidebar
 			if ($vars['sidebar-alt']) {
 				?>
 				<div class="sidebar-alt iris-group-sidebar-alt">

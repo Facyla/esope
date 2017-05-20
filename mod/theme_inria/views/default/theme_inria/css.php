@@ -654,6 +654,13 @@ input#iris-topbar-search-input { width: auto; }
 ::-moz-placeholder { color: #D3D3D3; }
 -ms-input-placeholder { color: #D3D3D3; }
 
+/* Fullscreen base & overlay */
+.full-screen div { max-width: initial !important; }
+.full-screen .overlay { z-index: 1000; }
+.overlay { background: rgba(0,0,0,0.8); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; }
+/* Fullscreen screens */
+.full-screen #iris-body .iris-group .elgg-main { position: absolute; top: 0; left: 0; right: 0; z-index: 1111; margin: 3rem 5rem; }
+
 
 h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-breadcrumbs { display: none; }
@@ -834,12 +841,14 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-group-community { font-size: 0.75rem; color: #969696; text-transform: uppercase; font-weight: bold; margin-bottom: 1rem; }
 
 .iris-group-menu { z-index:2; background:white; position: absolute; bottom: 0; left: 0; right: 0; padding-left: 18.75rem; }
-.iris-group-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; display: inline-block; opacity:0.3; border-bottom:4px solid transparent; text-decoration:none; }
-.iris-group-menu a:first-of-type { margin-left:0; }
-.iris-group-menu a.elgg-state-selected,
-.iris-group-menu a:hover,
-.iris-group-menu a:active,
-.iris-group-menu a:focus { border-bottom: 4px solid #384257; opacity:1; }
+.iris-group-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; border-bottom: 4px solid transparent; display: inline-block; text-decoration:none; }
+.iris-group-menu a.tab { opacity:0.3; }
+.iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; }
+.iris-group-menu a.tab:first-of-type { margin-left:0; }
+.iris-group-menu a.tab.elgg-state-selected,
+.iris-group-menu a.tab:hover,
+.iris-group-menu a.tab:active,
+.iris-group-menu a.tab:focus { border-bottom: 4px solid #384257; opacity:1; }
 
 .elgg-layout-group { display: flex; flex-direction: row; flex-wrap: wrap; margin-top: 2rem; }
 .elgg-layout-group-add { display: flex; flex-direction: row; flex-wrap: wrap; }
@@ -854,6 +863,9 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-back { background-color: #1488CA; margin-bottom: 0.625rem; }
 #iris-body .iris-group-sidebar .iris-back a { color: white; font-weight: bold; font-size: 0.9375rem; }
 #iris-body .iris-group-sidebar .iris-back a:hover, #iris-body .iris-group-sidebar .iris-back a:active, #iris-body .iris-group-sidebar .iris-back a:focus { color: white; }
+.group-content-back { margin-bottom: 1rem; border-bottom: 2px solid #E0E0E0; padding: 1rem 2rem 1rem 2rem; margin: -2rem -2rem 1rem -2rem; }
+.group-content-back .back { line-height:2rem; font-size: 0.8125rem; text-transform:uppercase; font-weight: bold; }
+.group-content-back .add {  }
 #iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; border: 0; }
 #iris-body .iris-group-sidebar a.elgg-state-selected, #iris-body .iris-group-sidebar a:hover, #iris-body .iris-group-sidebar a:active, #iris-body .iris-group-sidebar a:focus { color: #1488CA; }
 #iris-body .iris-group-sidebar h2 { font-size: 1.125rem; color: #384257; font-weight: bold; font-family: "Inria Sans", sans-serif; }

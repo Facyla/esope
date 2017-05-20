@@ -12,7 +12,7 @@ $group = elgg_get_page_owner_entity();
 if (poll_activated_for_group($group)) {
 	elgg_push_context('widgets');
 	$all_link = elgg_view('output/url', array(
-		'href' => "poll/group/$group->guid/all",
+		'href' => "groups/content/$group->guid/poll/all",
 		'text' => elgg_echo('poll:group_poll') . ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));

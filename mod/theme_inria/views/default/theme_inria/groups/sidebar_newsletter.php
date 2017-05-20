@@ -26,7 +26,7 @@ if ($group->newsletter_enable == 'yes') {
 	}
 
 	$all_link = elgg_view('output/url', array(
-		'href' => "newsletter/group/$group->guid/all",
+		'href' => "groups/content/$group->guid/newsletter/all",
 		'text' => elgg_echo('theme_inria:sidebar:newsletter', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));

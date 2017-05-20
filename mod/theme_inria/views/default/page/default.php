@@ -67,6 +67,8 @@ __BODY;
 
 $body .= elgg_view('page/elements/foot');
 
+$body .= '<div class="overlay"></div>';
+
 $head = elgg_view('page/elements/head', $vars['head']);
 
 $params = array(

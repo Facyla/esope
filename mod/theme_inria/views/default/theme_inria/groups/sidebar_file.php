@@ -24,7 +24,7 @@ if (true) {
 	}
 
 	$all_link = elgg_view('output/url', array(
-		'href' => "file/group/$group->guid/all",
+		'href' => "groups/content/$group->guid/file/all",
 		'text' => elgg_echo('theme_inria:sidebar:file', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));

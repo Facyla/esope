@@ -9,7 +9,7 @@ $group = elgg_get_page_owner_entity();
 if ($group->event_calendar_enable == 'yes') {
 	elgg_push_context('widgets');
 	$all_link = elgg_view('output/url', array(
-		'href' => "event_calendar/group/$group->guid",
+		'href' => "groups/content/$group->guid/event_calendar/all",
 		'text' => elgg_echo('event_calendar:group') . ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
