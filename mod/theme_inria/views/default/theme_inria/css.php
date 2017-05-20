@@ -846,6 +846,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-group-sidebar { flex: 0 0 auto; min-width: 20rem; width: 20rem; padding: 0 1rem 1rem 3rem; box-sizing: border-box; }
 .iris-group-sidebar h3 { margin-bottom: 0.875rem; }
 #iris-body .iris-group .elgg-main { flex: 1; max-width: 35rem; background: white; padding: 2rem; box-sizing: border-box; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
+#iris-body .iris-group div:not(.elgg-context-groups) .elgg-main { max-width: 47rem; }
 .iris-group-sidebar-alt { flex: 0 0 auto; min-width: 20rem; width: 20rem; padding: 0 3rem 1rem 1rem; box-sizing: border-box; }
 .iris-group-sidebar .elgg-module .elgg-body, .iris-group-sidebar .elgg-module .elgg-content, .iris-group-sidebar .elgg-module .elgg-river-summary { padding: 0 2.625rem 0rem 2.625rem; }
 .iris-sidebar-content { background: white; padding: 1.5rem 2rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.1); border-radius: 4px; margin-bottom: 1.25rem; }
