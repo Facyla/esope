@@ -335,14 +335,22 @@ function theme_inria_groups_page_handler($page) {
 			echo elgg_view('resources/groups/profile', array('group_guid' => $page[1]));
 			return true;
 			break;
+		case 'activity': // detailed profile activity
+			set_input('group_layout_header', 'yes');
+			groups_handle_activity_page($page[1]);
+			break;
 		case 'workspace':
 			set_input('group_layout_header', 'yes');
 			echo elgg_view('resources/groups/workspace', array('group_guid' => $page[1]));
 			return true;
-		case 'activity':
-			set_input('group_layout_header', 'yes');
-			groups_handle_activity_page($page[1]);
-			break;
+		case 'content':
+			elgg_push_context('group_content');
+			if (empty($page[2])) { forward('groups/workspace/'.$page[1]); }
+			set_input('subtype', $page[2]);
+			elgg_push_context($page[2]); // set subtype context
+			set_input('filter', $page[3]);
+			echo elgg_view('resources/groups/content', array('group_guid' => $page[1]));
+			return true;
 		
 		case 'members':
 			set_input('group_layout_header', 'yes');

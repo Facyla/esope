@@ -776,6 +776,10 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
 	
+	'theme_inria:contentfilter:all' => "Tous",
+	'theme_inria:contentfilter:mine' => "Les miens",
+	'theme_inria:contentfilter:draft' => "Mes brouillons",
+	'theme_inria:groups:content:no_result' => "Aucun résultat",
 	
 );
 
