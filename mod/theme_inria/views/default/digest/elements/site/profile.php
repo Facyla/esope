@@ -6,7 +6,7 @@
 */
 global $digest_site_profile_body;
 
-$interval = elgg_extract("user_interval", $vars);
+$interval = elgg_extract("interval", $vars);
 $site_guid = elgg_get_site_entity()->getGUID();
 
 $key = md5($interval . $site_guid);
@@ -30,7 +30,8 @@ if(isset($digest_site_profile_body[$key])){
 	
 	$member_options = array(
 			"type" => "user",
-			"limit" => 6,
+			//"limit" => 6,
+			"limit" => 0, // Iris : show all new users
 			"relationship" => "member_of_site",
 			"relationship_guid" => elgg_get_site_entity()->getGUID(),
 			"inverse_relationship" => true,
