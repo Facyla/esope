@@ -38,7 +38,13 @@ function digest_site(ElggUser $user, $interval) {
 	// store current user
 	$current_user = elgg_get_logged_in_user_entity();
 	if ($current_user == null) {
-		$is_impersonate_session = login($user);
+		$is_impersonate_session = false;
+		if (!$user->isBanned()) {
+			$session = _elgg_services()->session;
+			$session->setLoggedInUser($user);
+			$session->migrate();
+			$is_impersonate_session = true;
+		}
 	}
 	
 	// impersonate new user
@@ -110,7 +116,14 @@ function digest_site(ElggUser $user, $interval) {
 	
 	// restore current user
 	if ($is_impersonate_session) {
-		logout();
+		$session = _elgg_services()->session;
+		$user = $session->getLoggedInUser();
+		if ($user) {
+			_elgg_services()->persistentLogin->removePersistentLogin();
+			$old_msg = $session->get('msg');
+			$session->invalidate();
+			$session->set('msg', $old_msg);
+		}
 		unset($is_impersonate_session);
 	}
 	$SESSION["user"] = $current_user;
@@ -171,7 +184,13 @@ function digest_group(ElggGroup $group, ElggUser $user, $interval) {
 	// store current user
 	$current_user = elgg_get_logged_in_user_entity();
 	if ($current_user == null) {
-		$is_impersonate_session = login($user);
+		$is_impersonate_session = false;
+		if (!$user->isBanned()) {
+			$session = _elgg_services()->session;
+			$session->setLoggedInUser($user);
+			$session->migrate();
+			$is_impersonate_session = true;
+		}
 	}
 	
 	// impersonate new user
@@ -244,7 +263,14 @@ function digest_group(ElggGroup $group, ElggUser $user, $interval) {
 	
 	// restore current user
 	if ($is_impersonate_session) {
-		logout();
+		$session = _elgg_services()->session;
+		$user = $session->getLoggedInUser();
+		if ($user) {
+			_elgg_services()->persistentLogin->removePersistentLogin();
+			$old_msg = $session->get('msg');
+			$session->invalidate();
+			$session->set('msg', $old_msg);
+		}
 		unset($is_impersonate_session);
 	}
 	$SESSION["user"] = $current_user;
