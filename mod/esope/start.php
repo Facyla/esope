@@ -2840,12 +2840,15 @@ function esope_groups_get_pending_membership_requests($user_guid = false, $optio
 		'limit' => false,
 	);
 	
+	// Limit range to operated groups if user is set (optional)
 	if ($user_guid) {
 		$user_operated_groups = esope_get_owned_groups($user_guid);
 		$in = array();
-		foreach($user_operated_groups as $ent) { $in[] = $ent->guid; }
-		$in = implode(',', $in);
-		$defaults['wheres'][] = "(r.guid_two IN ($in))";
+		if (is_array($user_operated_groups)) {
+			foreach($user_operated_groups as $ent) { $in[] = $ent->guid; }
+			$in = implode(',', $in);
+			$defaults['wheres'][] = "(r.guid_two IN ($in))";
+		}
 	}
 	$options = array_merge($defaults, $options);
 	$groups = elgg_get_entities_from_relationship($options);
