@@ -2889,9 +2889,9 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 	$groups = elgg_get_entities_from_relationship($options);
 	elgg_set_ignore_access($ia);
 	
-	// Esope : clean invites
+	// Esope : clean invites (if not counting !)
 	$user = get_entity($user_guid);
-	if (elgg_instanceof($user, 'user') && $groups) {
+	if (elgg_instanceof($user, 'user') && !$options['count'] && is_array($groups)) {
 		foreach($groups as $k => $group) {
 			if ($group->isMember($user)) {
 				remove_entity_relationship($group->guid, 'invited', $user->guid);
