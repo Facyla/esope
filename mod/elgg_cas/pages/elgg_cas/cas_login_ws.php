@@ -1,11 +1,5 @@
 <?php
-
-// Check if CAS web service is activated
-$enable_ws_auth = elgg_get_plugin_setting('enable_ws_auth', 'elgg_cas');
-if ($enable_ws_auth != 'yes') {
-	register_error("CAS auth for webservices is not enabled. Please contact an admin.");
-	forward();
-};
+// Note : logout first is asked to, then check WS are enabled
 
 $guid = get_input('guid', false);
 
@@ -32,6 +26,25 @@ function elgg_cas_get_guid_username($guid) {
 	return $cache->load($guid . 'username');
 }
 
+// Allow to forward to asked URL after successful login, or last forwward if not explicitely set
+$forward = get_input('forward', $_SESSION['last_forward_from']);
+
+$client_loaded = elgg_cas_load_client();
+
+// logout if desired
+if (isset($_REQUEST['logout'])) { phpCAS::logout(); forward($forward); exit; }
+
+
+// Check if CAS web service is activated before allowing login through WS
+$enable_ws_auth = elgg_get_plugin_setting('enable_ws_auth', 'elgg_cas');
+if ($enable_ws_auth != 'yes') {
+	register_error("CAS auth for webservices is not enabled. Please contact an admin.");
+	forward();
+};
+
+
+$title = elgg_echo('elgg_cas:title');
+$content = '';
 
 if (isset($_GET['read'])) {
 	$token = elgg_cas_get_guid_token($guid);
@@ -40,23 +53,6 @@ if (isset($_GET['read'])) {
 } else if (isset($_GET['remove'])) {
 	elgg_cas_remove_guid($guid);
 	die('OK');
-}
-
-
-$title = elgg_echo('elgg_cas:title');
-$content = '';
-
-// Allow to forward to asked URL after successful login, or last forwward if not explicitely set
-$forward = get_input('forward', $_SESSION['last_forward_from']);
-
-
-
-$client_loaded = elgg_cas_load_client();
-
-
-// logout if desired
-if (isset($_REQUEST['logout'])) {
-	phpCAS::logout();
 }
 
 if (elgg_is_logged_in()) {

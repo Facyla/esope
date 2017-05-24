@@ -5,13 +5,12 @@ $content = '';
 // Allow to forward to asked URL after successful login, or last forward if not explicitely set
 $forward = get_input('forward', $_SESSION['last_forward_from']);
 
-
 // Initialise phpCAS
 $client_loaded = elgg_cas_load_client();
 
-
 // logout from CAS if asked to
-if (isset($_REQUEST['logout'])) { phpCAS::logout(); }
+if (isset($_REQUEST['logout'])) { phpCAS::logout(); forward($forward); exit; }
+
 
 // Break if already logged in in Elgg
 if (elgg_is_logged_in()) {
