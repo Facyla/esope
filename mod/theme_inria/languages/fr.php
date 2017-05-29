@@ -413,6 +413,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:groups:entity_menu' => "%s membres (%s actifs)",
 	'theme_inria:groups:entity_menu:singular' => "%s membres (%s actif)",
 	'theme_inria:groups:entity_menu:none' => "%s membre (%s actif)",
+	'theme_inria:groups:entity_menu:noinactive' => "%s membres",
 	
 	
 	
@@ -741,6 +742,7 @@ Voir et commenter ce lien web :
 	'theme_inria:search:empty' => "Veuillez saisir un terme de recherche",
 	'theme_inria:community:groups:count' => "%s groupes",
 	'theme_inria:community:groups:count:singular' => "%s groupe",
+	'theme_inria:group:alreadymember' => "Déjà membre",
 	
 	'theme_inria:user:tags' => "Compétences & Centres d'intérêts",
 	'theme_inria:user:groups:title' => "Groupes (%s)",

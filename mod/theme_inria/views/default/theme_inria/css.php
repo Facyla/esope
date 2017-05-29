@@ -623,14 +623,15 @@ input#iris-topbar-search-input { width: auto; }
 .iris-profile-info a {  }
 .iris-profile-info-field { flex: 1 0 auto; width: 9rem; }
 .iris-profile-info-field strong { color: #384257; text-transform: initial; display: inline-block; padding-top: 0.5rem; font-size: 0.94rem; }
-.iris-profile-editavatar { display:none; margin: auto; font-size: 0.94rem; text-align: center; color: white; }
-.iris-profile-editavatar:hover { text-decoration:none; }
+.iris-profile-editavatar { opacity:0; margin: auto; font-size: 0.94rem; text-align: center; color: white; display: inline-block;  background: rgba(0,0,0,0.2); box-sizing: border-box; position: absolute; border-radius: 7rem; left: 0; top: 0; right: 0; bottom: 0; padding: 5rem 0; }
+.iris-profile-editavatar:hover { opacity:1; text-decoration:none; }
+.iris-profile-icon:hover .iris-profile-editavatar {  }
 .iris-profile-editavatar .fa { font-size: 2.5rem; }
-.iris-profile-icon:hover .iris-profile-editavatar { display: inline-block;  background: rgba(0,0,0,0.2); box-sizing: border-box; position: absolute; border-radius: 7rem; left: 0; top: 0; right: 0; bottom: 0; padding: 5rem 0; }
-.iris-profile-addfriend, .iris-profile-isfriend, .iris-profile-removefriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
+.iris-profile-addfriend, .iris-profile-isfriend, .iris-profile-removefriend, .iris-profile-pendingfriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
 .iris-profile-addfriend { right: 0rem; top: 1rem; background: <?php echo $iris_blue; ?>; }
 .iris-profile-removefriend { right: 0rem; top: 1rem; background: #FF0000; }
 .iris-profile-isfriend { right: 0rem; top: 1rem; background: #95C11F; }
+.iris-profile-pendingfriend { right: 0rem; top: 1rem; background: #E09000; }
 .iris-profile-sendmessage { right: -1.5rem; top: 4.5rem; background: #384257; }
 .iris-profile-field { padding: 1rem; border-bottom: 2px solid #E0E0E0; }
 .iris-profile-field:last-of-type { border: 0; }
@@ -729,7 +730,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 #esope-search-form .esope-search-metadata select, #esope-search-form .esope-search-metadata input { float: right; min-width: initial; width: 10rem; font-size: 0.75rem; }
 #esope-search-form .esope-search-metadata input[type="checkbox"] { width: auto; margin: 0.125rem 0.25rem 0 0; float: left; }
 .iris-search-sort { margin-bottom: 1.625rem; }
-.iris-search-count, .esope-results-count { color: #6C6C6C; font-size: 0.9375rem; }
+.iris-search-count, .esope-results-count { color: #6C6C6C; font-size: 0.9375rem; margin-top: -1.625rem; display: block; margin-bottom: 1.625rem; }
 .iris-search-order { color: #384257; font-size: 1rem; font-weight:bold; text-transform:uppercase; float:right; }
 .iris-search-order select { color: #384257; font-size: 1rem; font-weight:normal; text-transform:initial; }
 .iris-search-order select:selected, .iris-search-order select:hover, .iris-search-order select:active, .iris-search-order select:focus {  }
@@ -792,12 +793,14 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-item-group .elgg-menu.elgg-menu-entity { margin: 0 0 0.8125rem 0; display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; color: #969696; }
 .elgg-item-group h3 { padding: 0; margin: 0 0 0.625rem 0; }
 .elgg-item-group h3 a { padding: 0; margin: 0; font-size: 1.375rem; color: #384257; text-decoration:none; }
-.elgg-item-group .elgg-image-block .elgg-image {  }
-.elgg-item-group .elgg-image img { max-width: 12.5rem; }
+.elgg-item-group .elgg-image-block .elgg-image a { width: 12.5rem; height: 12.5rem; line-height: 12.5rem; display: flex; background-: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); }
+ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group .elgg-image img { width: 12.5rem; margin: auto; }
 .elgg-item-group .iris-group-body { padding: 1.5rem 2rem 1.5rem 2rem; }
 .elgg-item-group .elgg-menu-item-access, 
 .elgg-item-group .elgg-menu-item-members, 
 .elgg-item-group .elgg-menu-item-membership { float: left; margin-left: 0; margin-right: 15px; }
+.already-member { color: #95C11F; }
+
 
 .iris-groups-community { flex: 0 0 32rem; height:12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 2rem; box-sizing: border-box; position: relative; overflow: auto; }
 .iris-community-icon { width: 6.375rem; height: 6.375rem; margin: 1rem; float: left; }
@@ -825,6 +828,8 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .thewire-parent { background: #FAFAFA; }
 .thewire-parent .thewire-post { padding: 0.25rem; }
 .thewire-parent .thewire-parent { margin: 0.5rem 0 0 0; padding-top: 0.5rem; border-top: 1px solid #C8C8C8; }
+#esope-search-results .elgg-menu-entity { text-align: left; }
+#esope-search-results .elgg-menu-entity > li { margin-left:0; margin-right:1rem; }
 
 
 
