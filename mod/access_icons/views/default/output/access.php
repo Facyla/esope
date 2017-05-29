@@ -87,12 +87,21 @@ switch($access_id) {
 		if (elgg_instanceof($collection_owner, 'group')) {
 			$help_details = elgg_echo('access_icons:group:details');
 			$access_class .= ' elgg-access-group';
+			if (!$hide_text) {
+				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->name, ENT_QUOTES, 'UTF-8', false);
+			}
 		} else if (elgg_instanceof($collection_owner, 'user')) {
 			$help_details = elgg_echo('access_icons:collection:details');
 			$access_class .= ' elgg-access-collection';
+			if (!$hide_text) {
+				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->name, ENT_QUOTES, 'UTF-8', false);
+			}
 		} else if (elgg_instanceof($collection_owner, 'site')) {
 			$help_details = elgg_echo('access_icons:site:details');
 			$access_class .= ' elgg-access-site';
+			if (!$hide_text) {
+				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->title, ENT_QUOTES, 'UTF-8', false);
+			}
 		} else {
 			// Container inconnu, typiquement car pas d'accès suffisant
 			$help_details = elgg_echo('access_icons:other:details');
