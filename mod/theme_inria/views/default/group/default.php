@@ -20,7 +20,7 @@ if (elgg_in_context('search')) {
 	$metadata = '<ul class="elgg-menu elgg-menu-entity elgg-menu-hz elgg-menu-entity-default">';
 		
 		// Access
-		$metadata .= '<li class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</li>';
+		$metadata .= '<li class="group-access">' . elgg_view('output/access', array('entity' => $group)) . '</li>';
 		
 		// Nb de membres
 		$all_members = $group->getMembers(array('count' => true));

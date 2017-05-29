@@ -589,7 +589,7 @@ input#iris-topbar-search-input { width: auto; }
 #iris-body .elgg-sidebar h2 { padding-top: 0; }
 #iris-body .iris-listing .elgg-layout-one-sidebar .elgg-main h2 { padding-top: 0; margin:0; }
 #iris-body .elgg-head { padding: 0 2.625rem 0rem 2.625rem; float: left; min-width: 20rem; width: 30%; box-sizing: border-box; }
-#iris-body .elgg-layout-one-sidebar .elgg-sidebar { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
+#iris-body .elgg-layout-one-sidebar .elgg-sidebar { padding: 2.5rem 0rem 3rem 2.625rem; box-sizing: border-box; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
 #iris-body .elgg-layout-one-column .elgg-main { /* margin-top: 2rem; */ }
 
@@ -677,7 +677,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
 .elgg-tags li.elgg-tag:after { content:''; }
 .elgg-tag {  }
-.elgg-tag a { display:inline-block; padding: 0.4375rem 0.8125rem; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
+.elgg-tag a { display:inline-block; padding: 0.3em 0.8em 0.2em 0.8em; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
 .elgg-pagination { text-align: right; }
 .elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
 .iris-topbar-item .iris-topbar-notifications-tab .elgg-pagination a { font-size: 1rem; padding: 0.5rem 1rem; }
@@ -719,14 +719,14 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-sidebar, .iris-search-sidebar { float:left; clear:left; min-width: 20rem; width: 30%; }
 .iris-search-filters { float:left; }
 
-#esope-search-form { padding: 0 0 0rem 1rem; width: 100%; box-sizing: border-box; }
+#esope-search-form { padding: 0 0 0rem 0rem; width: 100%; box-sizing: border-box; }
 .elgg-sidebar h3, 
 #esope-search-form h3 { text-transform: uppercase; font-size: 1rem; padding: 0;  margin-bottom: 2.125rem; }
 .iris-search-fulltext { display:none; }
 .esope-search-metadata { width: 100%; min-height: initial; border: 0; border-bottom: 1px solid #C8C8C8; padding: 0 0 1.25rem 0; margin: 0 0 1.4375rem 0; float: none; display: block; color: #384257; }
 .esope-search-metadata:last-of-type { border: 0; }
 .esope-search-metadata label { font-size: 1rem; color: #384257; font-weight:normal; }
-.esope-search-metadata-select label { font-size: 1.125rem; font-weight:bold; }
+.esope-search-metadata-select label { font-size: 1.0rem; font-weight:bold; }
 #esope-search-form .esope-search-metadata select, #esope-search-form .esope-search-metadata input { float: right; min-width: initial; width: 10rem; font-size: 0.75rem; }
 #esope-search-form .esope-search-metadata input[type="checkbox"] { width: auto; margin: 0.125rem 0.25rem 0 0; float: left; }
 .iris-search-sort { margin-bottom: 1.625rem; }

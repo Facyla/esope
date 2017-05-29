@@ -117,22 +117,26 @@ function theme_inria_select_tab($hook, $type, $items, $vars) {
 	return $items;
 }
 
-// Add direct message to user listing view
+// Add direct message to user listing view, and remove anything but friend requests
 function theme_inria_user_menu_setup($hook, $type, $items, $vars) {
 	if (!elgg_instanceof($vars['entity'], 'user')) { return $items; }
+	
+	$allowed = ['friend_request', 'add_friend', 'remove_friend', 'message'];
 	// Update some existing menu items
 	foreach ($items as $k => $item) {
-		if ($item->getName() == 'friend_request') {
+		$name = $item->getName();
+		if (!in_array($name, $allowed)) { unset($items[$k]); continue; }
+		if ($name == 'friend_request') {
 			$item->setTooltip($item->getText());
 			$item->setText('<i class="fa fa-user-plus"></i>');
 			$item->setPriority(601);
 		}
-		if ($item->getName() == 'add_friend') {
+		if ($name == 'add_friend') {
 			$item->setTooltip($item->getText());
 			$item->setText('<i class="fa fa-user-plus"></i>');
 			$item->setPriority(601);
 		}
-		if ($item->getName() == 'remove_friend') {
+		if ($name == 'remove_friend') {
 			unset($items[$k]);
 			/*
 			$item->setTooltip($item->getText());

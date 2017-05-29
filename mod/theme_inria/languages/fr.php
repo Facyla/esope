@@ -783,5 +783,8 @@ Voir et commenter ce lien web :
 	'theme_inria:contentfilter:draft' => "Mes brouillons",
 	'theme_inria:groups:content:no_result' => "Aucun résultat",
 	
+	'group_location' => "Localisation",
+	'community' => "Communautés",
+	
 );
 
