@@ -1403,7 +1403,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	//access_show_hidden_entities(true);
 
 	// Recherche par nom / username / titre / description, selon les cas
-	// @TODO ajouter par tag
+	// @TODO ajouter par tag + briefdescription, description => peut-être liste des métadonnées dans lesquelles faire une recherche fulltext ?
 	if ($q) {
 		switch($type) {
 			case 'user':
@@ -1571,6 +1571,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	elgg_push_context('search');
 	//elgg_push_context('widgets');
 	//$return .= elgg_list_entities_from_metadata($search_params);
+	// Pass query to view so we can handle search-specific hightlighting or filtering
+	$search_params['q'] = $q;
 	$return .= elgg_list_entities_from_relationship($search_params);
 	//$batch = new ElggBatch('elgg_list_entities_from_metadata', $search_params);
 	//$return .= '<pre>'.print_r($batch).'</pre>';
