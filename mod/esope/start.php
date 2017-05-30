@@ -1559,7 +1559,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		} else if ($return_count > 0) {
 			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
 		} else {
-			$return .= '<span class="esope-results-count">' . $no_result . '</span>';
+			$return .= '<span class="esope-results-count esope-noresult">' . $no_result . '</span>';
 		}
 	}
 	
