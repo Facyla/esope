@@ -9,6 +9,10 @@
 global $autofeed;
 $autofeed = true;
 
+// Set to allow or disable search results on empty query
+$allow_empty_query = true;
+
+
 // $search_type == all || entities || trigger plugin hook
 $search_type = get_input('search_type', 'all');
 //$search_type = 'all';
@@ -186,7 +190,8 @@ $custom_results_html = '';
 // check that we have an actual query
 //if (strlen($query) >= $min_chars) {
 //if (empty($query)) {
-if (!empty($query) && in_array($search_type, array('all', 'entities'))) {
+//if (!empty($query) && in_array($search_type, array('all', 'entities'))) {
+if (in_array($search_type, array('all', 'entities'))) {
 	// to pass the correct current search type to the views
 	$current_params = $params;
 	$current_params['search_type'] = 'entities';
@@ -235,7 +240,7 @@ if (!empty($query) && in_array($search_type, array('all', 'entities'))) {
 
 // Custom searches : always apply (eg. tags search should be triggered even for entities search)
 //if ($search_type != 'entities' || $search_type == 'all') {
-if (!empty($query)) {
+if (!empty($query) || $allow_empty_query) {
 	if (is_array($custom_types)) {
 		foreach ($custom_types as $type) {
 			//if (($search_type != 'all') && ($search_type != $type)) { continue; }
@@ -270,10 +275,10 @@ if ($search_type == 'tags') {
 }
 
 
-//if (!empty($query)) {
-if (true) {
+if (!empty($query) || $allow_empty_query) {
 	$content .= '<div class="iris-search-sort">';
 		// if ($results_count > 1) {} else {}
+		// Total results count
 		$content .= '<span class="iris-search-count">' . $results_count . ' ' . elgg_echo('theme_inria:objects') . '</span>';
 		$order_opt = array(
 				/*

@@ -26,9 +26,10 @@ if (!$thread_id) {
 
 $owner = $post->getOwnerEntity();
 
-$owner_icon = '<img src="' . $owner->getIconUrl(array('size' => $size)) . '" alt="' . $owner->name . '" />';
+$owner_icon = '<a href="' . $owner->getURL() . '"><img src="' . $owner->getIconUrl(array('size' => $size)) . '" alt="' . $owner->name . '" /></a>';
 $owner_link = elgg_view('output/url', array(
-	'href' => "thewire/owner/$owner->username",
+	//'href' => "thewire/owner/$owner->username",
+	'href' => $owner->getURL(),
 	'text' => $owner->name,
 	'is_trusted' => true,
 ));

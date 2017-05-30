@@ -198,13 +198,13 @@ return array(
 	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
 	'theme_inria:userprofile:status' => "Statut",
 	//'inria_location' => "Entité Inria (CRI ou siège)",
-	'inria_location' => "Localisation géographique",
+	'inria_location' => "Localisation",
 	'inria_location_main' => "Entité de rattachement (siège ou CRI)",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'skills' => "Compétences",
 	'interests' => "Centres d'intérêts",
 	'profile:interests' => "Centres d'intérêts",
-	'profile:inria_location' => "Localisation géographique",
+	'profile:inria_location' => "Localisation",
 	'profile:inria_location_main' => "Entité de rattachement",
 	'profile:epi_ou_service' => "EPI ou service",
 	'profile:inria_phone' => "Téléphone",
@@ -731,7 +731,7 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:search:filters' => "Filtres avancés",
 	
-	'theme_inria:home:wire' => "Toutes vos actus",
+	'theme_inria:home:wire' => "Toutes les actus",
 	'theme_inria:home:river' => "Ça bouge sur Iris",
 	'theme_inria:groups:add' => "Créer un groupe",
 	'theme_inria:agenda' => "Agenda",
@@ -782,6 +782,9 @@ Voir et commenter ce lien web :
 	'theme_inria:contentfilter:mine' => "Les miens",
 	'theme_inria:contentfilter:draft' => "Mes brouillons",
 	'theme_inria:groups:content:no_result' => "Aucun résultat",
+	
+	'theme_inria:user:activity' => "Activité",
+	'theme_inria:user:profile_type' => "Profil",
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",

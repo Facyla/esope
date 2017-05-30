@@ -28,44 +28,44 @@ if ((strtolower($profile_type) == 'inria') && (elgg_is_admin_logged_in() || ($us
 
 if (!empty($profile_type)) {
 	echo '<div class="iris-profile-info-field">';
-	echo elgg_echo("profile_manager:user_details:profile_type") . '<br /><strong>' . $profile_type . '</strong>';
+	echo elgg_echo('theme_inria:user:profile_type') . '<br /><strong>' . $profile_type . '</strong>';
 	echo '</div>';
 }
 
 // Display only for Inria accounts (LDAP data), and for logged in, Inria viewers - or admins
 if ($show_inria_fields) {
-	if (!empty($user->inria_location)) {
+	if (!empty(trim($user->inria_location))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_location') . '<br />
 			<strong>' . implode(', ', $user->inria_location) . '</strong>
 		</div>';
 	}
-	if (!empty($user->inria_location_main)) {
+	if (!empty(trim($user->inria_location_main))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_location_main') . '<br />
 			<strong>' . $user->inria_location_main . '</strong>
 		</div>';
 	}
-	if (!empty($user->epi_ou_service)) {
+	if (!empty(trim($user->epi_ou_service))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:epi_ou_service') . '<br />
 			<strong>' . elgg_view('output/tags', array('value' => $user->epi_ou_service)) . '</strong>
 		</div>';
 	}
-	if (!empty($user->inria_room)) {
+	if (!empty(trim($user->inria_room))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_room') . '<br />
 			<strong>' . implode(', ', $user->inria_room) . '</strong>
 		</div>';
 	}
 	/*
-	if (!empty($user->inria_phone)) {
+	if (!empty(trim($user->inria_phone))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_phone') . '<br />
 			<strong>' . implode(', ', $user->inria_phone) . '</strong>
 		</div>';
 	}
-	if (!empty($user->email)) {
+	if (!empty(trim($user->email))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:email') . '<br />
 			<strong>' . elgg_view("output/email", array("value" =>  $user->email)) . '</strong>

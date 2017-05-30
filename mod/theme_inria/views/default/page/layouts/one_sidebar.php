@@ -24,6 +24,13 @@ if (elgg_in_context('groups_add')) {
 	return;
 }
 
+// Iris v2 : remove sidebar for specific context (profile edit of another user)
+$page_owner = elgg_get_page_owner_entity();
+if (elgg_in_context('profile_edit') && ($page_owner->guid != elgg_get_logged_in_user_guid())) {
+	echo elgg_view('page/layouts/one_column', $vars);
+	return;
+}
+
 
 $class = 'elgg-layout elgg-layout-one-sidebar clearfix';
 if (isset($vars['class'])) {

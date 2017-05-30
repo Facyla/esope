@@ -32,6 +32,7 @@ $q = get_input('q');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 $order_by = get_input('order_by', 'alpha');
+$community = get_input('community', '');
 
 
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
@@ -83,10 +84,10 @@ foreach ($metadata_search_fields as $metadata) {
 	if ($use_profile_manager && !$use_text && !$use_auto_values) {
 		// Use profile manager configuration - will default to text input if field is not defined
 		// Metadata options fetching will only work if those are stored somewhere
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name, 'type' => 'group')) . '</label><div class="clearfloat"></div></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name, 'type' => 'group', 'value' => $$name)) . '</label><div class="clearfloat"></div></div>';
 	} else if ($use_auto_values) {
 		// Metadata options are selected from the database
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label><div class="clearfloat"></div></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name, 'value' => $$name)) . '</label><div class="clearfloat"></div></div>';
 	} else {
 		// We'll rely on text inputs then
 		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . $meta_title . '<input type="text" name="' . $name . '" /></label><div class="clearfloat"></div></div>';

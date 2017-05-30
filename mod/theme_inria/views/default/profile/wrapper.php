@@ -6,11 +6,17 @@
 $db_prefix = elgg_get_config('dbprefix');
 $user = elgg_get_page_owner_entity();
 $own = elgg_get_logged_in_user_entity();
+$url = elgg_get_site_url();
+
+$banner_css = '#424B5F';
+//if (!empty($user->banner)) { $banner_css = " url('{$url}groups/file/{$user->guid}/banner) no-repeat center/cover"; }
+//$banner_css = "linear-gradient(rgba(66, 75, 95, 0.45), rgba(66, 75, 95, 0.45)), #424B5F url('{$url}mod/theme_inria/graphics/aleatoire/" . rand(0,7) . ".png') no-repeat center/cover";
+$banner_css = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #424B5F url('{$url}mod/theme_inria/graphics/aleatoire/" . rand(0,7) . ".png') no-repeat center/cover";
+
 
 ?>
 
-<?php /* We add mrn here because we're doing stupid things with the grid system. Remove this hack */ ?>
-<div class="iris-profile-header" style="">
+<div class="iris-profile-header" style="background: <?php echo $banner_css; ?>;">
 	<?php echo elgg_view('profile/iris_header', $vars); ?>
 </div>
 <div class="iris-profile-info">
@@ -72,7 +78,7 @@ $own = elgg_get_logged_in_user_entity();
 	</div>
 	
 	<div class="iris-col">
-		<h2><?php echo elgg_echo('theme_inria:activity'); ?></h2>
+		<h2><?php echo elgg_echo('theme_inria:user:activity'); ?></h2>
 		<div class="iris-box">
 			<?php
 			$activity = elgg_list_river(array('subject_guids' => $user->guid, 'limit' => 6, 'pagination' => true));

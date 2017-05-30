@@ -74,8 +74,13 @@ if (elgg_instanceof($group, 'group')) {
 	
 	<?php
 	if ($has_group_layout) {
+		$banner_css = '#424B5F';
+		if (!empty($user->banner)) {
+			//$banner_css = "linear-gradient(rgba(66, 75, 95, 0.45), rgba(66, 75, 95, 0.45)), #424B5F url('{$url}groups/file/{$group->guid}/banner') no-repeat center/cover";
+			$banner_css = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #424B5F url('{$url}groups/file/{$group->guid}/banner') no-repeat center/cover";
+		}
 		?>
-		<div class="iris-group-header" style="background: #424B5F url('<?php echo $url . 'groups/file/'.$group->guid.'/banner'; ?>') no-repeat center/cover;">
+		<div class="iris-group-header" style="background: <?php echo $banner_css; ?>;">
 			<div class="iris-group-image" style="background: white url('<?php echo $group->getIconURL(array('size' => 'large')); ?>') no-repeat center/cover;"></div>
 			<div class="iris-group-title">
 				<?php

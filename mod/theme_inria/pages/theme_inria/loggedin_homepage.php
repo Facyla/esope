@@ -33,7 +33,7 @@ $thewire .= '</div>';
 
 // Ca bouge sur iris - Activité du site
 // Only for subtype filtering
-$site_activity = '<h2>' . elgg_echo('theme_inria:site:activity') . '<a href="' . $url . 'activity" title="' . elgg_echo('theme_inria:site:activity:tooltip') . '" class="float-alt view-all">&#9654; tout voir</a></h2>';
+$site_activity = '<h2>' . elgg_echo('theme_inria:site:activity') . '<a href="' . $url . 'activity" title="' . elgg_echo('theme_inria:site:activity:tooltip') . '" class="float-alt view-all">&#9654; ' . elgg_echo('theme_inria:viewall') . '</a></h2>';
 $site_activity .= '<div class="iris-box home-activity">';
 elgg_push_context('search'); // Permet de ne pas interprêter les shortcodes, mais afficher les menus...
 //$site_activity .= elgg_list_river(array('limit' => 3, 'pagination' => false, 'types' => array('object', 'group', 'site')));
