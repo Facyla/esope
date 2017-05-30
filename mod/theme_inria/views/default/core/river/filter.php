@@ -5,6 +5,10 @@
  * @uses $vars[]
  */
 
+elgg_load_js('elgg.ui.river');
+
+$filter = '';
+
 // create selection array
 $options = array();
 $options['type=all'] = elgg_echo('river:select', array(elgg_echo('all')));
@@ -33,21 +37,31 @@ $selector = $vars['selector'];
 if ($selector) {
 	$params['value'] = $selector;
 }
-echo '<div><label>' . "Types d'activité " . elgg_view('input/select', $params) . '</label><div class="clearfloat"></div></div>';
-
-elgg_load_js('elgg.ui.river');
+$filter .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . elgg_echo('theme_inria:activity_type') . elgg_view('input/select', $params) . '</label><div class="clearfloat"></div></div>';
 
 
 
 // Filtre par date
 $date_filter = get_input('date_filter', 'all');
 $date_filter_opt = array(
-		'all' => "Tout",
-		'today' => "Aujourd'hui seulement",
-		'yesterday' => "Hier seulement",
-		'lastweek' => "La semaine dernière",
-		'lastlogin' => "Depuis ma dernière connexion",
+		'all' => elgg_echo('theme_inria:date_filter:all'),
+		'today' => elgg_echo('theme_inria:date_filter:today'),
+		'yesterday' => elgg_echo('theme_inria:date_filter:yesterday'),
+		'lastweek' => elgg_echo('theme_inria:date_filter:lastweek'),
+		'lastlogin' => elgg_echo('theme_inria:date_filter:yesterday', array(date('d-m-Y H:i:s', $own->prev_last_login))),
 	);
-echo '<div><label>' . "Dates (NON FONCTIONNEL) " . elgg_view('input/select', array('name' => 'date_filter', 'value' => $date_filter, 'options_values' => $date_filter_opt)) . '</label><div class="clearfloat"></div></div>';
+$filter .= '<div class="esope-search-metadata esope-search-metadata-select">
+		<label>' . elgg_echo('theme_inria:date_filter') . elgg_view('input/select', array('name' => 'date_filter', 'value' => $date_filter, 'options_values' => $date_filter_opt)) . '</label>
+		<div class="clearfloat"></div>
+	</div>';
 
+
+// Submit
+$filter .= elgg_view('input/submit');
+
+
+
+echo '<form class="esope-date-filter">
+		' . $filter . '
+	</form>';
 

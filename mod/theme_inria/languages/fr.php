@@ -786,6 +786,14 @@ Voir et commenter ce lien web :
 	'theme_inria:user:activity' => "Activité",
 	'theme_inria:user:profile_type' => "Profil",
 	
+	'theme_inria:activity_type' => "Types d'activité",
+	'theme_inria:date_filter' => "Filtre par date",
+	'theme_inria:date_filter:all' => "Tout",
+	'theme_inria:date_filter:today' => "Aujourd'hui seulement",
+	'theme_inria:date_filter:yesterday' => "Hier seulement",
+	'theme_inria:date_filter:lastweek' => "La semaine dernière",
+	'theme_inria:date_filter:last_login' => "Depuis ma dernière connexion le %s",
+	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
 	
