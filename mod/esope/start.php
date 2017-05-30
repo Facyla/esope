@@ -1170,6 +1170,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 				//if ($empty) { $options['empty option'] = ''; }
 				//$options = array_reverse($options);
 				// Add (always) empty entry at the beginning of the array
+				$options = array_filter($options); // Remove empty entries to avoid duplicate
 				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
@@ -1212,6 +1213,7 @@ function esope_make_dropdown_from_metadata($params) {
 		if (is_array($options)) {
 			$options = array_merge(array('empty option' => ''), $options);
 		} else {
+			$options = array_filter($options); // Remove empty values before to avoid duplicate
 			$options = array('empty option' => '');
 		}
 	}
