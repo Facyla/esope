@@ -35,7 +35,7 @@ $field_settings = elgg_get_entities_from_metadata(array('types' => 'object', 'su
 if ($field_settings) {
 	foreach($field_settings[0]->getOptions() as $community => $label) {
 		if (empty($label)) { continue; }
-		$community = elgg_get_friendly_title($community);
+		//$community = elgg_get_friendly_title($community);
 		$group_categories[$community] = $label;
 	}
 }

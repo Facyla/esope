@@ -735,6 +735,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 #esope-search-form .esope-search-metadata input[type="checkbox"] { width: auto; margin: 0.125rem 0.25rem 0 0; float: left; }
 .iris-search-sort { margin-bottom: 1.625rem; }
 .iris-search-count, .esope-results-count { color: #6C6C6C; font-size: 0.9375rem; margin-top: -1.625rem; display: block; margin-bottom: 1.625rem; }
+.esope-noresult { margin-top: 3rem; }
 .iris-search-order { color: #384257; font-size: 1rem; font-weight:bold; text-transform:uppercase; float:right; }
 .iris-search-order select { color: #384257; font-size: 1rem; font-weight:normal; text-transform:initial; }
 .iris-search-order select:selected, .iris-search-order select:hover, .iris-search-order select:active, .iris-search-order select:focus {  }
