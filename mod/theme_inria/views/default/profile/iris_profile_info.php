@@ -37,7 +37,7 @@ if ($show_inria_fields) {
 	if (!empty(trim($user->inria_location))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_location') . '<br />
-			<strong>' . implode(', ', $user->inria_location) . '</strong>
+			<strong>' . implode(', ', (array)$user->inria_location) . '</strong>
 		</div>';
 	}
 	if (!empty(trim($user->inria_location_main))) {
@@ -55,14 +55,14 @@ if ($show_inria_fields) {
 	if (!empty(trim($user->inria_room))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_room') . '<br />
-			<strong>' . implode(', ', $user->inria_room) . '</strong>
+			<strong>' . implode(', ', (array)$user->inria_room) . '</strong>
 		</div>';
 	}
 	/*
 	if (!empty(trim($user->inria_phone))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_phone') . '<br />
-			<strong>' . implode(', ', $user->inria_phone) . '</strong>
+			<strong>' . implode(', ', (array)$user->inria_phone) . '</strong>
 		</div>';
 	}
 	if (!empty(trim($user->email))) {
