@@ -4,6 +4,7 @@
  */
 
 $own = elgg_get_logged_in_user_entity();
+
 $options = array();
 
 $options['no_results'] = '<p class="esope-search-noresult">' . elgg_echo('search:no_results') . '</p>';
@@ -12,6 +13,15 @@ $page_type = preg_replace('[\W]', '', get_input('page_type', 'all'));
 $type = preg_replace('[\W]', '', get_input('type', 'all'));
 $subtype = preg_replace('[\W]', '', get_input('subtype', ''));
 $date_filter = preg_replace('[\W]', '', get_input('date_filter', 'all'));
+$action_types = get_input('action_types', '');
+if (!empty($action_types)) { $action_types = explode(',', $action_types); } else { $action_types = false; }
+
+// Dernier login : si aucun, depuis la création du site
+$site = elgg_get_site_entity();
+$last_login = $own->prev_last_login;
+if ($last_login < 1) { $last_login = $own->last_login; }
+if ($last_login < 1) { $last_login = $site->time_created; }
+
 
 if ($subtype) {
 	$selector = "type=$type&subtype=$subtype";
@@ -50,31 +60,34 @@ switch($page_type) {
 switch($date_filter) {
 	case 'today':
 		$options['posted_time_upper'] = time();
-		$options['posted_time_lower'] = strtotime('today midnight');;
+		$options['posted_time_lower'] = strtotime('today midnight');
 		break;
 	case 'yesterday':
-		$options['posted_time_upper'] = time()-24*60;
-		$options['posted_time_lower'] = time()-2*24*60;
+		$options['posted_time_upper'] = strtotime('today midnight')-1;
+		$options['posted_time_lower'] = strtotime('yesterday midnight')-1;
 		break;
 	case 'lastweek':
 		$options['posted_time_upper'] = time();
 		$options['posted_time_lower'] = time()-7*24*60;
 		break;
 	case 'lastlogin':
-		//error_log("Date : " . date('d-m-Y H:i:s', $own->last_login) . "/ " . date('d-m-Y H:i:s', $own->prev_last_login));
+		//error_log("Date : " . date('d-m-Y H:i:s', $last_login));
 		$options['posted_time_upper'] = time();
-		$options['posted_time_lower'] = $own->prev_last_login;
+		$options['posted_time_lower'] = $last_login;
 		break;
 	case 'all':
 	default:
 }
 
+// Action types filter
+if ($action_types) {
+	$options['action_types'] = $action_types;
+}
 
 $activity = elgg_list_river($options);
 if (!$activity) {
 	$activity = elgg_echo('river:none');
 }
-
 
 
 $sidebar = elgg_view('core/river/sidebar');

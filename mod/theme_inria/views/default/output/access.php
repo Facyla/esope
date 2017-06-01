@@ -14,8 +14,11 @@ if (!elgg_is_logged_in()) { return; }
 $entity = elgg_extract('entity', $vars, false);
 
 // Default hide text in widgets context, except if forced
-if (elgg_in_context('widgets') || elgg_in_context('listing')) { $hide_text = true; }
+//if (elgg_in_context('widgets') || elgg_in_context('listing')) { $hide_text = true; }
+if (elgg_in_context('widgets')) { $hide_text = true; }
 $hide_text = elgg_extract('hide_text', $vars, $hide_text);
+// Iris v2 : force access name display in activity
+if (elgg_in_context('activity')) { $hide_text = false; }
 
 $access_class = 'elgg-access';
 

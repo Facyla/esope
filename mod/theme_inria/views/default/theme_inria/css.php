@@ -280,9 +280,10 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .iris-add-button { font-weight: bold; padding: 11px 0px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; width:100%; text-align:center; display:block; }
 .home-activity .elgg-menu-item-access { margin-top: 0; }
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
+.elgg-list-river > li:hover { background-color: transparent !important; }
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
-.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 0 !important; padding-left: 0; }
+.elgg-river-attachments, .elgg-river-message, .elgg-river-content { /* border-left: 0 !important; padding-left: 0; */ border-left: 1px solid #666; }
 /* The Wire */
 .thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 .elgg-form-thewire-group-add .elgg-foot { padding: 0 0 0.5em 0; }
@@ -557,8 +558,8 @@ input#iris-topbar-search-input { width: auto; }
 .elgg-menu-filter { margin-bottom: 1.625rem; border: 0; }
 .elgg-menu-filter > li { background: transparent; padding:0; margin:0 2.625rem 0 0; border:0; }
 .elgg-menu-filter > .elgg-state-selected { background: transparent; }
-.elgg-menu-filter li a { font-size: 18px; border-bottom: 4px solid transparent; color: rgba(56, 66, 87, 0.3); font-weight: bold; padding: 0 0 13px 0; }
-.elgg-menu-filter > .elgg-state-selected a { border-bottom: 4px solid; background: transparent; color: #384257; }
+.elgg-menu-filter li a { font-size: 1.125rem; height: auto; border-bottom: 4px solid transparent; color: rgba(56, 66, 87, 0.3); font-weight: bold; padding: 0 0 0.8rem 0; }
+.elgg-menu-filter > .elgg-state-selected a { top:initial; border-bottom: 4px solid; background: transparent; color: #384257; }
 .elgg-menu-filter > li:hover, .elgg-menu-filter > li:focus, .elgg-menu-filter > li:active { background:transparent; }
 .elgg-menu-filter > li > a:hover, .elgg-menu-filter > li > a:focus, .elgg-menu-filter > li > a:active { background:transparent; color: #384257; }
 
@@ -585,7 +586,7 @@ input#iris-topbar-search-input { width: auto; }
 #iris-body h2 { padding:2rem 0 0 0; margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
 #iris-body .iris-listing h2 { margin-top: 2.5rem; width: 100%; text-indent: 1rem; padding:0; }
 #iris-body .iris-box h2 { font-size: 1.75rem; }
-#iris-body .elgg-sidebar h2 { padding-top: 0; }
+#iris-body .elgg-sidebar h2 { padding-top: 0; margin-bottom:2.625rem; }
 
 #iris-body .elgg-layout-one-sidebar h2.elgg-heading-main { margin:2.5rem 0 1rem 0; }
 #iris-body .iris-listing .elgg-layout-one-sidebar .elgg-main h2 { padding-top: 0; margin:0; }
@@ -729,11 +730,12 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-search-fulltext { display:none; }
 .esope-search-metadata { width: 100%; min-height: initial; border: 0; border-bottom: 1px solid #C8C8C8; padding: 0 0 1.25rem 0; margin: 0 0 1.4375rem 0; float: none; display: block; color: #384257; }
 .esope-search-metadata:last-of-type { border: 0; }
-.esope-search-metadata label { font-size: 1rem; color: #384257; font-weight:normal; }
-.esope-search-metadata-select label { font-size: 1.0rem; font-weight:bold; }
-#esope-search-form .esope-search-metadata select, #esope-search-form .esope-search-metadata input { float: right; min-width: initial; width: 10rem; font-size: 0.75rem; }
+.esope-search-metadata label { font-size: 1rem; color: #384257; font-weight:normal; line-height: 2rem; height: 2rem; }
+.esope-search-metadata-select label { font-size: 1.0rem; font-weight:bold; line-height: 2rem; height: 2rem; }
+#esope-search-form .esope-search-metadata select, #esope-search-form .esope-search-metadata input { float: right; min-width: initial; width: 10rem; font-size: 0.75rem; line-height: 2rem; height: 2rem; }
 #esope-search-form .esope-search-metadata input[type="checkbox"] { width: auto; margin: 0.125rem 0.25rem 0 0; float: left; }
 .iris-search-sort { margin-bottom: 1.625rem; }
+.esope-date-filter select[name="date_filter"], .esope-date-filter #elgg-river-selector { margin: 0 0 0 0.5rem; }
 .iris-search-count, .esope-results-count { color: #6C6C6C; font-size: 0.9375rem; margin-top: -1.625rem; display: block; margin-bottom: 1.625rem; }
 .esope-noresult { margin-top: 3rem; }
 .iris-search-order { color: #384257; font-size: 1rem; font-weight:bold; text-transform:uppercase; float:right; }
@@ -753,11 +755,12 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 
 /* River and listings */
-.elgg-river-layout .elgg-list-river { background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); max-width: 32.625rem; padding: 2.5rem; box-sizing: border-box; }
+.elgg-river-layout .elgg-list-river { /* background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); max-width: 32.625rem; padding: 2.5rem; box-sizing: border-box; */ border-top:0; }
 
 .elgg-list-river .elgg-item { padding: 1.8rem 0 1.2rem 0; }
 .elgg-list-river .elgg-item:first-of-type { padding-top: 0; }
-.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 0; }
+.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 1rem 0 0 0; line-height:1.2rem; font-size: 0.8125rem; }
+
 .elgg-image-block { padding: 0.5rem 0; }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
@@ -769,9 +772,10 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-menu .elgg-menu-item-container { float:left; }
 .elgg-menu .iris-container { font-weight: bold; font-size: 0.8125rem; color: #D3D3D3; line-height: 1.4rem; }
 .elgg-menu .elgg-menu-item-access { float:left; }
-.elgg-river-timestamp { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.3rem; display: inline-block; }
+.elgg-river-timestamp { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; display: inline-block; }
 .elgg-river-comments { margin: 1rem 0 0 0; }
 .elgg-river-comments .elgg-item { padding: 0 0.5rem; }
+.elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
 
 .elgg-item-user .elgg-menu.elgg-menu-entity { width:auto; display: inline-block; float: right; max-width: 40%; margin: 0 0 0 1rem; }
 .elgg-menu-item-message .iris-user-message,
@@ -806,6 +810,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-item-group .elgg-menu-item-members, 
 .elgg-item-group .elgg-menu-item-membership { float: left; margin-left: 0; margin-right: 15px; }
 .already-member { color: #95C11F; }
+.elgg-menu-item-access .elgg-access a { color: #D3D3D3; font-style: normal; font-weight: bold; }
 
 
 .iris-groups-community { flex: 0 0 32rem; height:12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 2rem; box-sizing: border-box; position: relative; overflow: auto; }
@@ -816,6 +821,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-community-groups-count { color: #969696; font-size: 0.75rem; font-weight: bold; margin-bottom: 0.625rem; }
 .iris-community-body h3, .iris-community-body h3 a { color: #384257; font-size: 1.375rem; padding: 0; margin-bottom: 0.8125rem; }
 
+.elgg-list-entity .elgg-menu-entity { margin: 1rem 0 0 0; line-height:1.2rem; font-size: 0.8125rem; }
 #iris-body .iris-listing .elgg-main .elgg-list-entity { display: flex; flex-wrap: wrap; }
 .elgg-list-entity .elgg-item-object-thewire .elgg-image img { max-width: 3.4rem; border-radius: 1.7rem; }
 .iris-listing .elgg-list .elgg-item.elgg-item-group { flex: 0 0 32rem; overflow:hidden; height:12.5rem; width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 1rem 2rem 1rem; padding: 0; box-sizing: border-box; position: relative; }
