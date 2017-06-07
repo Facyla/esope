@@ -131,6 +131,9 @@ switch($filter) {
 // Nouvelle publication
 if ($group->isMember()) {
 	switch($subtype) {
+		case 'feedback':
+			// No new feedback in that way
+			break;
 		case 'event_calendar':
 		case 'newsletter':
 		case 'poll':

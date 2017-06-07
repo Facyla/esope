@@ -164,6 +164,9 @@
 .elgg-module-group-feedback .elgg-list { border-top:0;}
 .elgg-module-group-feedback .elgg-list li { border-bottom: 0; }
 
+.feedback-side-menu {  }
+.feedback-side-menu ul li a {  }
+
 
 
 @media (max-width:700px) {

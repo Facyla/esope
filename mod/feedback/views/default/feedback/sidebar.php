@@ -64,11 +64,12 @@ if ($all_feedbacks) foreach ($all_feedbacks as $ent) {
 
 
 // Sidebar menu - Menu latéral
-$sidebar = '<div id="site-categories">';
+//$sidebar = '<div id="site-categories">';
+$sidebar = '<div id="feedbacks" class="feedback-menu">';
 $sidebar .= '<h2>' . elgg_echo('feedback'). '</h2>';
 
 // Main status links
-$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
+$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-feedback">';
 foreach ($status_values as $status) {
 	$selected = '';
 	if ( (($status == 'total') && ((current_page_url() == $base_url) || ($status_filter == 'total'))) || (current_page_url() == $base_url . "status/$status") ) {
@@ -87,7 +88,7 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 	
 	// Open filters
 	$sidebar .= '<h2>' . elgg_echo('feedback:status:open'). '</h2>';
-	$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
+	$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-feedback">';
 	foreach ($about_values as $about) {
 		if (!in_array($about, $undefined_values)) {
 			if (($status_filter == 'open') && ($about == $about_filter)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
@@ -112,7 +113,7 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 	
 	// Closed filters
 	$sidebar .= '<h2>' . elgg_echo('feedback:status:closed'). '</h2>';
-	$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-owner-block-categories elgg-menu-owner-block-default">';
+	$sidebar .= '<ul class="elgg-menu elgg-menu-owner-block elgg-menu-feedback">';
 	foreach ($about_values as $about) {
 		if (!in_array($about, $undefined_values)) {
 			if (($status_filter == 'closed') && ($about == $about_filter)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }

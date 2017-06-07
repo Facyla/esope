@@ -35,14 +35,14 @@ $field_settings = elgg_get_entities_from_metadata(array('types' => 'object', 'su
 if ($field_settings) {
 	foreach($field_settings[0]->getOptions() as $community => $label) {
 		if (empty($label)) { continue; }
-		//$community = elgg_get_friendly_title($community);
+		$community = elgg_get_friendly_title($community);
 		$group_categories[$community] = $label;
 	}
 }
 
 foreach($group_categories as $community => $name) {
 	echo '<div class="iris-home-group-category">
-		<a href="' . elgg_get_site_url() . 'groups/discover/' . $community . '">
+		<a href="' . elgg_get_site_url() . 'groups/discover/' . $name . '">
 			<img src="' . elgg_get_site_url() . 'mod/theme_inria/graphics/communities/' . $community . '_100.png" />
 			<br />
 			' . $name . '

@@ -1004,6 +1004,7 @@ return array(
 	'item:object:file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
 	'item:object:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i> Sujets de discussion",
 	'item:object:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Photos",
+	'item:object:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	'item:object:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboard",

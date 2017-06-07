@@ -173,23 +173,26 @@ if (elgg_instanceof($group, 'group')) {
 					echo '<div class="group-content-back">';
 						// Plein écran
 						echo '<a href="javascript:void(0);" onClick="javascript:$(\'body\').toggleClass(\'full-screen\')" class="elgg-button elgg-button-action float-alt">' . '<i class="fa fa-arrows-alt"></i>' . '</a>';
-						$back_list_url = $url . 'groups/content/' . elgg_get_context() . '/all';
+						$subtype_context = elgg_get_context();
+						if ($subtype_context == 'event_calendar:view') { $subtype_context = 'event_calendar'; }
+						$back_list_url = $url . 'groups/content/' . $group->guid . '/' . $subtype_context . '/all';
 						// Edition d'un contenu : retour vers affichage (bouton croix)
 						$current_guid = get_input('guid');
 						$current_entity = get_entity($current_guid);
 						if (elgg_instanceof($current_entity, 'object')) {
 							$back_entity_url = $current_entity->getURL();
 							if (current_page_url() != $back_entity_url) {
-								echo '<a href="' . $back_entity_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . "Retour vers la publication" . '</a>';
+								echo '<a href="' . $back_entity_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . elgg_echo('theme_inria:backtocontent') . '</a>';
 							} else {
 								// Retour au listing
-								echo '<a href="' . $back_list_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . "Retour vers la liste des publications" . '</a>';
+								echo '<a href="' . $back_list_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . elgg_echo('theme_inria:backtocontents') . '</a>';
 							}
 						} else {
 							// Retour au listing
-							echo '<a href="' . $back_list_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . "Retour vers la liste des publications" . '</a>';
+							echo '<a href="' . $back_list_url . '" class="back"><i class="fa fa-caret-left"></i> &nbsp; ' . elgg_echo('theme_inria:backtocontents') . '</a>';
 							// Nouvelle publication
-							echo '<a href="" class="add elgg-button elgg-button-action float-alt">' . "Créer" . '</a>';
+							// @TODO
+							//echo '<a href="" class="add elgg-button elgg-button-action float-alt">' . elgg_echo('create') . '</a>';
 						}
 						echo '<div class="clearfloat"></div>';
 					echo '</div>';

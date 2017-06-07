@@ -412,6 +412,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 	padding: 6px 10px 4px;
 	text-transform: uppercase;
 }
+.elgg-sidebar #feedbacks ul li a, 
 .elgg-sidebar #site-categories ul li a { padding: 6px 10px 5px; }
 
 #feedbackDisplay a { color: <?php echo $linkcolor; ?>; }

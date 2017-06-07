@@ -122,6 +122,25 @@ $content .= '<div class="iris-sidebar-content">';
 		$content .= '</div>';
 	}
 
+	if (elgg_is_active_plugin('feedback')) {
+		$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
+		if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {
+			if (($feedbackgroup == 'grouptool' && ($group->feedback_enable == 'yes')) || ($feedbackgroup == $group->guid)) {
+				$options = array('type' => 'object', 'subtype' => 'feedback', 'limit' => 8);
+				$count = elgg_get_entities($options + array('count' => true));
+				$link = elgg_view('output/url', array(
+						'href' => $base_url . 'feedback/all',
+						'text' => elgg_echo('theme_inria:sidebar:feedback', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
+						'is_trusted' => true,
+						'class' => (elgg_in_context('feedback')) ? 'elgg-state-selected':'',
+					));
+				$content .= '<div class="workspace-subtype-header">';
+				$content .= '<h3>' . $link . '</h3>';
+				$content .= '</div>';
+			}
+		}
+	}
+
 $content .= '</div>';
 
 

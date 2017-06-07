@@ -777,6 +777,10 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:newsletter' => "Les lettres d'info (%s)",
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
+	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
+	
+	'theme_inria:backtocontent' => "Retour vers la publication",
+	'theme_inria:backtocontents' => "Retour vers la liste des publications",
 	
 	'theme_inria:contentfilter:all' => "Tous",
 	'theme_inria:contentfilter:mine' => "Les miens",

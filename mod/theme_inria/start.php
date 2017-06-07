@@ -149,8 +149,10 @@ function theme_inria_init(){
 	// Enable modifying members count algo
 	elgg_register_plugin_hook_handler('members', 'count', 'theme_inria_members_count_hook');
 	
+	/* Override object icons with images (but we use FA icons)
 	// Set object icons
 	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'theme_inria_object_icon_hook');
+	*/
 	
 	// Ajout niveau d'accès sur TheWire : désormais intégré dans Esope (ainsi que possibilité de définir un container)
 	/*
@@ -380,6 +382,15 @@ function theme_inria_group_object_subtypes_opt($group) {
 	if ($group->newsletter_enable) { $subtypes['newsletter'] = elgg_echo('item:object:newsletter'); }
 	if ($group->survey_enable) { $subtypes['survey'] = elgg_echo('item:object:survey'); }
 	if ($group->poll_enable) { $subtypes['poll'] = elgg_echo('item:object:poll'); }
+	if (elgg_is_active_plugin('feedback')) {
+		$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
+		if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {
+			if (($feedbackgroup == 'grouptool' && ($group->feedback_enable == 'yes')) || ($feedbackgroup == $group->guid)) {
+				$subtypes['feedback'] = elgg_echo('item:object:feedback');
+			}
+		}
+	}
+	
 	return $subtypes;
 }
 

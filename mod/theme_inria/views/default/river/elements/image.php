@@ -25,7 +25,8 @@ if (elgg_in_context('widgets')) {
 
 // Small view
 if (elgg_instanceof($object, 'object')) {
-	if (elgg_instanceof($object, 'object', 'file') && ($object->$simpletype == "image")) {
+	//if (elgg_instanceof($object, 'object', 'file') && ($object->$simpletype == "image")) {
+	if (elgg_instanceof($object, 'object', 'file')) {
 		echo '<img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="object ' . $object->getSubtype() . '" style="' . $style . '" />';
 	} else {
 		echo '<span class="' . $size . '">' . elgg_echo('esope:icon:'.$object->getSubtype()) . '</span>';

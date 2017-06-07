@@ -689,13 +689,12 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 }
 
 
+/* Override object icons with images (but we use FA icons)
 function theme_inria_object_icon_hook($hook, $type, $return, $params) {
 	// Detect default icon (but cannot use file_exists because it's an URL)
 	// mod/groups/graphics/defaultlarge.gif (tiny, small, medium, large)
 	//error_log("Group {$params['entity']->guid} {$params['entity']->name} =>  $return");
 	$subtype = $params['entity']->getSubtype();
-echo " 1 $return / $subtype ";
-echo "2";
 		// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
 		// Username-based seed enables portable avatar on other sites
 		$size = $params['size'];
@@ -706,7 +705,7 @@ echo "2";
 	
 	return $return;
 }
-
+*/
 
 
 
