@@ -97,6 +97,13 @@ $content_activity_opt = array(
 	'pagination' => true,
 );
 if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
+// Container does not matter if Feedback are published 
+if ($subtype == 'feedback') {
+	$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
+	if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'grouptool')) {
+		unset($content_activity_opt['wheres']);
+	}
+}
 
 // Count all filters results
 $content_activity_mine_opt = $content_activity_opt;

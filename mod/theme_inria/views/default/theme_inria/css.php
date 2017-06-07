@@ -764,7 +764,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 .elgg-list-river .elgg-item { padding: 1.8rem 0 1.2rem 0; }
 .elgg-list-river .elgg-item:first-of-type { padding-top: 0; }
-.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 1rem 0 0 0; line-height:1.2rem; font-size: 0.8125rem; }
+.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 1rem 0 0 0; /* line-height:1.2rem; */ line-height:normal; font-size: 0.8125rem; }
 
 .elgg-image-block { padding: 0.5rem 0; }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }

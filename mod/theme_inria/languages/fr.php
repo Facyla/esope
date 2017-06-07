@@ -760,6 +760,8 @@ Voir et commenter ce lien web :
 	'theme_inria:groups:invites' => "Invitations (%s)",
 	'theme_inria:group:presentation' => "Présentation",
 	'theme_inria:group:workspace:add' => "Ajouter un espace de travail",
+	'theme_inria:groups:mine:tooltip' => "Tous les groupes dont je suis membre",
+	'theme_inria:groups:discover:tooltip' => "Des groupes à découvrir, classés par thématiques",
 	
 	'theme_inria:group:delete' => "Supprimer le groupe",
 	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",

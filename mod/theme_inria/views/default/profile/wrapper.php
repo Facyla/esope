@@ -54,13 +54,15 @@ $banner_css = "#424B5F url('{$url}mod/theme_inria/graphics/backgrounds/profile/"
 					if ($k >= $max_groups) { $hidden = "hidden"; } else { $hidden = ''; }
 					echo '<div class="iris-user-groups float ' . $hidden . '"><a href="' . $ent->getURL() . '" title="' . $ent->name . '"><img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /></a></div>';
 				}
-				
 				// New group or show all groups ?
 				//if ($own->guid == $user->guid) {
 				//	echo '<div class="iris-user-groups-add float"><a href="' . elgg_get_site_url() . 'groups/all">+</a></div>';
 				// Add toggle for next groups
 				if ($user_groups_count > $max_groups) {
-					echo '<div class="iris-user-groups-add float"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-profile-field .iris-user-groups.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+'. ($user_groups_count - $max_groups) . '</a></div>';
+					$count = $user_groups_count - $max_groups;
+					$style = '';
+					if (strlen((string)$count) > 2) { $style = 'font-size: 1rem; line-height: 1rem; padding-top: 0.7rem;'; }
+					echo '<div class="iris-user-groups-add float" style="' . $style . '"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-profile-field .iris-user-groups.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+'. ($user_groups_count - $max_groups) . '</a></div>';
 				}
 				?>
 				<div class="clearfloat"></div>
@@ -79,12 +81,14 @@ $banner_css = "#424B5F url('{$url}mod/theme_inria/graphics/backgrounds/profile/"
 					if ($k >= $max_friends) { $hidden = "hidden"; } else { $hidden = ''; }
 					echo '<div class="iris-user-friend float ' . $hidden . '"><a href="' . $ent->getURL() . '" title="' . $ent->name . '"><img src="' . $ent->getIconURL(array('size' => 'medium')) . '"/></a></div>';
 				}
-				
 				//if ($own->guid == $user->guid) {
 				//	echo '<div class="iris-user-friends-add float"><a href="' . elgg_get_site_url() . 'members">+</a></div>';
 				// Add toggle for next groups
 				if ($user_friends_count > $max_friends) {
-					echo '<div class="iris-user-friends-add float"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-profile-field .iris-user-groups.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+'. ($user_friends_count - $max_friends) . '</a></div>';
+					$count = $user_friends_count - $max_friends;
+					$style = '';
+					if (strlen((string)$count) > 2) { $style = 'font-size: 1rem; line-height: 1rem; padding-top: 0.7rem;'; }
+					echo '<div class="iris-user-friends-add float" style="' . $style . '"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-profile-field .iris-user-groups.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+'. $count . '</a></div>';
 				}
 				?>
 				<div class="clearfloat"></div>
