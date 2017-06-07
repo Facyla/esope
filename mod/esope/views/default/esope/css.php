@@ -291,7 +291,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { color: <?php 
 .elgg-menu-page a:hover,
 .elgg-menu-page a:focus,
 .elgg-menu-page a:active,
-.elgg-menu-page .elgg-state-selected a,
+.elgg-menu-page .elgg-state-selected > a,
 .elgg-menu-page .elgg-state-selected a:hover,
 .elgg-menu-page .elgg-state-selected a:focus,
 .elgg-menu-page .elgg-state-selected a:active {
@@ -626,7 +626,11 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .elgg-sidebar li .fa { display: inline-block; min-width: 1em; }
 */
 li .fa { display: inline-block; /* min-width: 2.5ex; */ min-width: 1em; }
-
+.topbar .fa { font-size: 16px; }
+.tiny .fa { font-size: 25px; }
+.small .fa { font-size: 40px; }
+.medium .fa { font-size: 100px; }
+.large .fa { font-size: 200px; }
 
 
 

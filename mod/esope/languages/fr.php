@@ -919,18 +919,35 @@ return array(
 	
 	/* Esope FA icons - generic usage */
 	// Tools
-	'esope:icon:announcements' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
+	'esope:icon:album' => "<i class=\"fa fa-photo fa-fw\"></i>",
+	'esope:icon:au_set' => "<i class=\"fa fa-thumb-tack fa-fw\"></i>",
+	'esope:icon:announcements' => "<i class=\"fa fa-info-circle fa-fw\"></i>",
 	'esope:icon:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i>",
 	'esope:icon:bookmarks' => "<i class=\"fa fa-link fa-fw\"></i>",
 	'esope:icon:brainstorm' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i>",
+	'esope:icon:groupforumtopic' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
+	'esope:icon:comment' => "<i class=\"fa fa-comment fa-fw\"></i>",
 	'esope:icon:discussion' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
+	'esope:icon:discussion_reply' => "<i class=\"fa fa-comments-o fa-fw\"></i>",
 	'esope:icon:event_calendar' => "<i class=\"fa fa-calendar-o fa-fw\"></i>",
+	'esope:icon:event' => "<i class=\"fa fa-calendar-o fa-fw\"></i>",
+	'esope:icon:feedback' => "<i class=\"fa fa-bullhorn fa-fw\"></i>",
 	'esope:icon:file' => "<i class=\"fa fa-file-o fa-fw\"></i>",
 	'esope:icon:file_tools' => "<i class=\"fa fa-folder-o fa-fw\"></i>",
 	'esope:icon:group_activity' => "<i class=\"fa fa-flash fa-fw\"></i>",
+	'esope:icon:idea' => "<i class=\"fa fa-lightbulb-o fa-fw\"></i>",
+	'esope:icon:image' => "<i class=\"fa fa-file-photo-o fa-fw\"></i>",
+	'esope:icon:market' => "<i class=\"fa fa-shopping-cart fa-fw\"></i>",
 	'esope:icon:newsletter' => "<i class=\"fa fa-newspaper-o fa-fw\"></i>",
 	'esope:icon:pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
-	'esope:icon:comment' => "<i class=\"fa fa-comment fa-fw\"></i>",
+	'esope:icon:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
+	'esope:icon:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
+	'esope:icon:poll' => "<i class=\"fa fa-pie-chart fa-fw\"></i>",
+	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
+	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
+	
+	
+
 	// Sprites icons
 	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
 	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
@@ -945,7 +962,7 @@ return array(
 	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
 	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
 	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
-	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'item:object:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i> Le Fil",
 	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	// Plugins tools
 	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
@@ -978,7 +995,7 @@ return array(
 	'esope:search:filtered' => " (%s)",
 	'esope:search:unfiltered' => " (tout)",
 	//'all' => "",
-	'item:object:thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'item:object:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i> Le Fil",
 	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Annonces',
 	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
 	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
