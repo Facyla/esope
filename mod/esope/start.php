@@ -1211,9 +1211,9 @@ function esope_make_dropdown_from_metadata($params) {
 	//if ($empty) $options = array('empty option' => '') + $options;
 	if ($empty) {
 		if (is_array($options)) {
+			$options = array_filter($options); // Remove empty values before to avoid duplicate
 			$options = array_merge(array('empty option' => ''), $options);
 		} else {
-			$options = array_filter($options); // Remove empty values before to avoid duplicate
 			$options = array('empty option' => '');
 		}
 	}

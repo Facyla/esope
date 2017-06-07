@@ -113,7 +113,7 @@
 
 /* Group chat styles */
 /* Group chat button */
-#groupchat-grouplink { position:fixed; right:0; bottom: 3px; background:#EAEAFF; border: 1px solid #9999FF; border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px; height:14px; box-shadow:0 0 3px 0 #9999FF; overflow:hidden; vertical-align: top; z-index:111; }
+#groupchat-grouplink { position:fixed; right:0; bottom: 2rem; background:#EAEAFF; border: 1px solid #9999FF; border-radius: 10px; padding: 4px 16px 4px 6px; margin-right: -10px; width: 16px; height:14px; box-shadow:0 0 3px 0 #9999FF; overflow:hidden; vertical-align: top; z-index:111; }
 #groupchat-grouplink:hover, #groupchat-grouplink:focus, #groupchat-grouplink:active { width:auto; }
 
 #groupchat-grouplink.chat-active { bottom: 20px; border: 1px solid #000099; box-shadow:0 0 20px 0 #000099;  }
