@@ -25,8 +25,17 @@ if (elgg_in_context('groups_add')) {
 }
 
 // Iris v2 : remove sidebar for specific context (profile edit of another user)
-$page_owner = elgg_get_page_owner_entity();
+// @TODO Iris profile layout ?
+//echo print_r(elgg_get_context_stack(), true);
+// Back button
+// Contextes : settings = params perso mais avec sidebar
+//if (elgg_instanceof($page_owner, 'user') || elgg_in_context('profile_edit')) {
+if (elgg_in_context('profile_edit') || elgg_in_context('settings')) {
+	$profile_back = '<div class="iris-back iris-profile-back"><a href="' . $page_owner->getURL() . '"><i class="fa fa-angle-left"></i> &nbsp; ' . elgg_echo('theme_inria:profile:back') . '</a></div>';
+}
 if (elgg_in_context('profile_edit') && ($page_owner->guid != elgg_get_logged_in_user_guid())) {
+	//$vars['nav'] = $profile_back;
+	$vars['title'] .= $profile_back;
 	echo elgg_view('page/layouts/one_column', $vars);
 	return;
 }
@@ -71,6 +80,9 @@ if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 	<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
 	<div class="elgg-sidebar">
 		<?php
+		// Bouton de retour depuis les params perso
+		if (elgg_in_context('settings')) { echo $profile_back; }
+		
 		if (!empty($vars['title'])) { echo '<h2>' . $vars['title'] . '</h2>'; }
 		echo elgg_view('page/elements/sidebar', $vars);
 		?>

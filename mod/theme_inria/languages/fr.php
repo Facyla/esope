@@ -801,6 +801,10 @@ Voir et commenter ce lien web :
 	'theme_inria:date_filter:lastweek' => "La semaine dernière",
 	'theme_inria:date_filter:last_login' => "Depuis ma dernière connexion le %s",
 	
+	'theme_inria:workspace:back' => "Retour à l'espace de travail",
+	'theme_inria:group:back' => "Retour à la présentation",
+	'theme_inria:profile:back' => "Retour au profil",
+	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
 	

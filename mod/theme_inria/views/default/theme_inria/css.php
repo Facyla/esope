@@ -521,8 +521,9 @@ pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Ari
 
 .iris-topbar-menu { flex: 1 0 auto; background:white; display: flex; }
 #iris-topbar-search { flex: 1; font-size: 1.2rem; padding-left: 3.5rem; margin-top: 0.5rem; }
-#iris-topbar-search button { border: 0; background: none; font-size: 1.2rem; }
-input#iris-topbar-search-input { width: auto; }
+#iris-topbar-search button { border: 1px solid transparent; background: none; font-size: 1.2rem; float: left; }
+#iris-topbar-search button svg { width:1.3125rem; height:1.3125rem; }
+input#iris-topbar-search-input { width: auto; font-size: 1.2rem; }
 .iris-topbar-item { flex:0 0 auto; padding:1rem 0; position: relative; }
 .iris-topbar-item:last-of-type { padding:1rem 1rem 1rem 0; }
 .iris-topbar-item a { font-size:1.375rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; padding: 1rem; display:inline-block; }
@@ -554,6 +555,8 @@ input#iris-topbar-search-input { width: auto; }
 .notifications-pending-groups-requests { border-bottom: 1px solid #DCDCDC; padding: 1rem 0; margin: 0 1rem; }
 
 
+.elgg-menu-page .elgg-state-selected a, .elgg-menu-page .elgg-state-selected a:hover, .elgg-menu-page .elgg-state-selected a:focus, .elgg-menu-page .elgg-state-selected a:active { background-color: white; color: #1488CA; }
+
 
 .elgg-menu-filter { margin-bottom: 1.625rem; border: 0; }
 .elgg-menu-filter > li { background: transparent; padding:0; margin:0 2.625rem 0 0; border:0; }
@@ -568,6 +571,7 @@ input#iris-topbar-search-input { width: auto; }
 .elgg-menu-navigation { z-index:2; background: <?php echo $iris_sidegrey; ?>; }
 #iris-navigation ul.elgg-menu-navigation li, #iris-navigation ul.elgg-menu-navigation li:first-child { border:0; float: none; }
 #iris-navigation ul.elgg-menu-navigation li a { width: 100%; padding: 1rem 0; text-indent: 1rem; text-transform:uppercase; text-decoration: none; color: <?php echo $iris_textgrey; ?>; font-family: "Inria Sans", sans-serif; font-size: 0.95rem; margin: 0 0 0.5rem 0; }
+.elgg-menu-topbar li a svg { height:1.25rem; vertical-align: middle; margin-right: 0.5rem; fill: <?php echo $iris_texttopgrey; ?>; }
 .elgg-menu-navigation li a svg { height:1.25rem; vertical-align: bottom; margin-right: 0.5rem; fill: <?php echo $iris_textgrey; ?>; }
 #iris-navigation ul.elgg-menu-navigation li a.active, #iris-navigation ul.elgg-menu-navigation li a.elgg-state-selected, #iris-navigation ul.elgg-menu-navigation li a:hover, #iris-navigation ul.elgg-menu-navigation li a:focus, #iris-navigation ul.elgg-menu-navigation li a:active { color: white; }
 .elgg-menu-navigation li a.active svg, .elgg-menu-navigation li a.elgg-state-selected svg, .elgg-menu-navigation li a:hover svg, .elgg-menu-navigation li a:focus svg, .elgg-menu-navigation li a:active svg { fill:white; }
@@ -583,7 +587,7 @@ input#iris-topbar-search-input { width: auto; }
 #iris-body .elgg-main { padding:0; background: transparent; }
 #iris-body .iris-search .elgg-main { padding: 0 1.75rem 3rem 1.75rem; box-sizing: border-box; max-width: 47rem; }
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0 2.625rem 3rem 2.625rem; box-sizing: border-box; display: flex; flex-wrap: wrap; }
-#iris-body h2 { padding:2rem 0 0 0; margin-bottom: 1rem; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
+#iris-body h2 { padding:2rem 0 0 0; margin-bottom: 1rem; margin-right: 0; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
 #iris-body .iris-listing h2 { margin-top: 2.5rem; width: 100%; text-indent: 1rem; padding:0; }
 #iris-body .iris-box h2 { font-size: 1.75rem; }
 #iris-body .elgg-sidebar h2 { padding-top: 0; margin-bottom:2.625rem; }
@@ -712,6 +716,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 #iris-search-quickform input[type="reset"] { background: none; color: white; border: 0; width: auto; font-size: 0.75rem;     padding: 0; margin: 0; line-height: 3rem; }
 
 .iris-search-image { width:13.125rem; height:13.125rem; position: relative; top: 2.8125rem; left: 2.8125rem; background:#384257; z-index:3; color: white; font-size: 5rem; padding: 4.0625rem; box-sizing: border-box; }
+.iris-search-image { fill:white; }
 
 .iris-search-menu { z-index:2; background:white; position: absolute; bottom: 0; left: 0; right: 0; padding-left: 18.75rem; }
 .iris-search-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; display: inline-block; opacity:0.3; border-bottom:4px solid transparent; text-decoration:none; }
@@ -879,8 +884,13 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-sidebar-content { background: white; padding: 1.5rem 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; margin-bottom: 1.25rem; }
 .iris-sidebar-content h3 { font-size: 1.125rem; }
 .iris-back { background-color: #1488CA; margin-bottom: 0.625rem; }
+.iris-back a, #iris-body .iris-group-sidebar .iris-back a { font-family: "Inria Sans", sans-serif; background-color:#1488CA; display:block; color: white; font-weight: bold; font-size: 0.9375rem; }
+.elgg-sidebar .iris-profile-back { background: none; margin-bottom:2rem; }
+.elgg-sidebar .iris-profile-back a { padding: 1.5rem 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 #iris-body .iris-group-sidebar .iris-back a { color: white; font-weight: bold; font-size: 0.9375rem; }
 #iris-body .iris-group-sidebar .iris-back a:hover, #iris-body .iris-group-sidebar .iris-back a:active, #iris-body .iris-group-sidebar .iris-back a:focus { color: white; }
+.elgg-heading-main .iris-back { background:none; float: right; margin:0; }
+.elgg-heading-main .iris-back a { padding: 0rem 1rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .group-content-back { margin-bottom: 1rem; border-bottom: 2px solid #E0E0E0; padding: 1rem 2rem 1rem 2rem; margin: -2rem -2rem 1rem -2rem; }
 .group-content-back .back { line-height:2rem; font-size: 0.8125rem; text-transform:uppercase; font-weight: bold; }
 .group-content-back .add {  }
@@ -890,12 +900,13 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-sidebar .fa-angle-right { float: right; }
 .iris-group-sidebar li { margin-bottom: 0.8rem; }
 .iris-group-sidebar .elgg-menu-page label { font-weight: normal; }
+.elgg-menu-page li.elgg-state-selected { background: none; }
 .group-workspace-tabs { /* margin: -2rem -2rem 2rem -2rem; background: #F1F1F1; */ }
 .group-workspace-tabs .elgg-tabs { margin: 0; border: 0; padding: 0; display: flex; flex-wrap: wrap; border-radius: 4px 4px 0 0; box-shadow: -4px 0px 4px -4px rgba(0,0,0,0.1); }
 .group-workspace-tabs .elgg-tabs > li { flex: 0 0 auto; margin: 0; border: 0; padding: 0; border-radius:0; background:transparent; margin-top: -4px; padding-top: 4px; /* box-shadow: inset 4px -4px 4px -4px rgba(0,0,0,0.1); */ }
 .group-workspace-tabs .elgg-tabs > li > a { padding: 1rem 1rem; margin: 0; height: initial; background:white; opacity:0.6;     font-size: 0.9375rem; font-weight: bold; color: #384257; }
 .group-workspace-tabs .elgg-tabs > li:first-of-type a { border-radius: 4px 0 0 0; }
-.group-workspace-tabs .elgg-tabs > li.elgg-state-selected  { margin-top: 0; padding-top: 0; box-shadow: 4px -4px 4px -4px rgba(0,0,0,0.1); }
+.group-workspace-tabs .elgg-tabs > li.elgg-state-selected { margin-top: 0; padding-top: 0; box-shadow: 4px -4px 4px -4px rgba(0,0,0,0.1); }
 .group-workspace-tabs .elgg-tabs .elgg-state-selected a, 
 .group-workspace-tabs .elgg-tabs a:hover,
 .group-workspace-tabs .elgg-tabs a:active,

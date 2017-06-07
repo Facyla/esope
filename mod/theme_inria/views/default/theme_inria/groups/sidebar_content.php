@@ -10,7 +10,7 @@ $base_url = $url . 'groups/content/' . $group->guid . '/';
 
 // Back button
 if (current_page_url() != $url . 'groups/workspace/'.$group->guid) {
-	$content .= '<div class="iris-sidebar-content iris-back"><a href="' . $url . 'groups/workspace/'.$group->guid . '"><i class="fa fa-angle-left"></i> &nbsp; ' . "Retour à l'espace de travail" . '</a></div>';
+	$content .= '<div class="iris-sidebar-content iris-back"><a href="' . $url . 'groups/workspace/'.$group->guid . '"><i class="fa fa-angle-left"></i> &nbsp; ' . elgg_echo('theme_inria:workspace:back') . '</a></div>';
 }
 
 

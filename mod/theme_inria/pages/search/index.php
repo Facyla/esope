@@ -246,6 +246,7 @@ if (!empty($query) || $allow_empty_query) {
 			//if (($search_type != 'all') && ($search_type != $type)) { continue; }
 			$current_params = $params;
 			$current_params['search_type'] = $type;
+                        $current_params['type'] = null;
 			$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
 
 			// someone is saying not to display these types in searches.

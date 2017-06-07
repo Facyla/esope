@@ -172,7 +172,9 @@ if (elgg_is_active_plugin('language_selector')) {
 		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
 		$search_entity_type = get_input('entity_type', '');
 		echo '<form action="' . $url . 'search" method="get" id="iris-topbar-search" class="iris-topbar-item">';
-			echo '<button type="submit" id="iris-topbar-search-submit" title="' . elgg_echo('esope:search') . '"><i class="fa fa-search"></i></button>';
+			echo '<button type="submit" id="iris-topbar-search-submit" title="' . elgg_echo('esope:search') . '">
+				<svg id="iris-search-small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.49 16.49"><path d="M17.68,16.26l-3.59-3.59A7,7,0,0,0,3.54,3.54a7,7,0,0,0,9.14,10.55l3.59,3.59a1,1,0,0,0,1.41-1.41ZM8.49,13.49A5,5,0,1,1,12,12,5,5,0,0,1,8.49,13.49Z" transform="translate(-1.49 -1.49)"/></svg>
+			</button>';
 echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text . '</label>';
 			echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-topbar-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
 			//echo '<noscript><input type="image" id="iris-topbar-search-submit" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" /></noscript>';
@@ -250,12 +252,12 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt iris-topbar-item" id="menu-topbar">
 			<li id="user"><a href="javascript:void(0);"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">
-					<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><i class="fa fa-user-o"></i>&nbsp;<?php echo elgg_echo('theme_inria:topbar:profil'); ?></a>
+					<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 11.2c0.6-0.7 1-1.6 1-2.7 0-2.2-1.8-4.1-4.1-4.1S7.9 6.3 7.9 8.5c0 1 0.4 2 1 2.7 -2.9 1.2-4.9 4-4.9 7.3 0 0.6 0.4 1 1 1h13.8c0.6 0 1-0.4 1-1C19.9 15.2 17.9 12.4 15 11.2zM9.9 8.5c0-1.1 0.9-2.1 2.1-2.1s2.1 0.9 2.1 2.1 -0.9 2.1-2.1 2.1S9.9 9.7 9.9 8.5zM6.2 17.5c0.5-2.8 2.9-4.9 5.8-4.9 2.9 0 5.4 2.1 5.8 4.9H6.2z"/></svg><?php echo elgg_echo('theme_inria:topbar:profil'); ?></a>
 					<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><i class="fa fa-cog"></i>&nbsp;<?php echo elgg_echo('esope:usersettings'); ?></a></li>
 					<?php if (elgg_is_admin_logged_in()) { ?>
 						<li id="admin"><a href="<?php echo $url . 'admin/dashboard/'; ?>"><i class="fa fa-cogs"></i>&nbsp;<?php echo elgg_echo('admin'); ?></a></li>
 					<?php } ?>
-					<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<i class="fa fa-sign-out"></i>&nbsp;' . elgg_echo('logout'), 'is_action' => true)); ?></li>
+					<li><?php echo elgg_view('output/url', array('href' => $url . "action/logout", 'text' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.2 17H9c-0.7 0-1.2-0.6-1.2-1.3V8.3C7.8 7.6 8.3 7 9 7h2.2c0.6 0 1-0.4 1-1s-0.4-1-1-1H9C7.2 5 5.8 6.5 5.8 8.3v7.5C5.8 17.5 7.2 19 9 19h2.2c0.6 0 1-0.4 1-1S11.8 17 11.2 17z"/><path d="M20 11.3l-3-3c-0.4-0.4-1-0.4-1.4 0s-0.4 1 0 1.4l1.3 1.3h-5.6c-0.6 0-1 0.4-1 1s0.4 1 1 1h5.6l-1.3 1.3c-0.4 0.4-0.4 1 0 1.4 0.2 0.2 0.5 0.3 0.7 0.3s0.5-0.1 0.7-0.3l3-3C20.3 12.3 20.3 11.7 20 11.3z"/></svg>' . elgg_echo('logout'), 'is_action' => true)); ?></li>
 				</ul>
 			</li>
 		</ul>

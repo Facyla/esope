@@ -11,7 +11,7 @@ $content = '';
 
 // Back button
 if (current_page_url() != $group->getURL()) {
-	$content .= '<div class="iris-sidebar-content iris-back"><a href="' . $group->getURL() . '"><i class="fa fa-angle-left"></i> &nbsp; ' . "Retour à la présentation" . '</a></div>';
+	$content .= '<div class="iris-sidebar-content iris-back"><a href="' . $group->getURL() . '"><i class="fa fa-angle-left"></i> &nbsp; ' . elgg_echo('theme_inria:group:back') . '</a></div>';
 }
 
 // Actual sidebar

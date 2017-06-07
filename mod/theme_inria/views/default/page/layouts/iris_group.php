@@ -52,6 +52,7 @@ $url = elgg_get_site_url();
 // There may be no page owner (eg. new group)
 $has_group_layout = get_input('group_layout_header', false);
 if ($has_group_layout != 'yes') { $has_group_layout = false; } else { $has_group_layout = true; }
+
 /*
 if (elgg_instanceof($group, 'group')) {
 	switch(current_page_url()) {
@@ -102,7 +103,6 @@ if (elgg_instanceof($group, 'group')) {
 					}
 					echo '</span>';
 				echo '</div>';
-		
 				?>
 			</div>
 			
@@ -159,10 +159,8 @@ if (elgg_instanceof($group, 'group')) {
 				if (!$has_group_layout) {
 					// Existing sidebar is wrapped into new sidebar (until sidebar is fully integrated)
 					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
-				/*
 				} else {
 					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
-				*/
 				}
 				if ($vars['sidebar']) { echo $vars['sidebar']; }
 			}
