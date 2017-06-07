@@ -53,17 +53,17 @@ $details_result .= '<div class="iris-profile-field">';
 	
 	if (!empty($user->phone) || !empty($user->mobile)) {
 		$details_result .= '<p>';
-		if (!empty($user->phone)) { $details_result .= '<i class="fa fa-phone"></i>&nbsp; ' . $user->phone; }
-		if (!empty($user->mobile)) { $details_result .= '<i class="fa fa-mobile"></i>&nbsp; ' . $user->mobile; }
+		if (!empty($user->phone)) { $details_result .= '<i class="fa fa-phone"></i>&nbsp; ' . $user->phone . ' &nbsp; '; }
+		if (!empty($user->mobile)) { $details_result .= '<i class="fa fa-mobile"></i>&nbsp; ' . $user->mobile . ' &nbsp; '; }
 		$details_result .= '</p>';
 	}
 	
-	if (!empty($user->website)) { $details_result .= '<p><i class="fa fa-globe"></i><i class="fa icon-globe"></i><i class="icon-globe"></i>&nbsp; ' . $user->website . '</p>'; }
+	if (!empty($user->website)) { $details_result .= '<p><i class="fa fa-globe"></i>&nbsp; ' . $user->website . '</p>'; }
 	
 	if (!empty($user->location) || !empty($user->room)) {
 		$details_result .= '<p>';
-		if (!empty($user->location)) { $details_result .= '<i class="fa fa-map-marker"></i>&nbsp;' . $user->location; }
-		if (!empty($user->room)) { $details_result .= '<i class="fa fa-map-pin"></i>&nbsp;' . $user->room; }
+		if (!empty($user->location)) { $details_result .= '<i class="fa fa-map-marker"></i>&nbsp;' . $user->location . ' &nbsp; '; }
+		if (!empty($user->room)) { $details_result .= '<i class="fa fa-map-pin"></i>&nbsp;' . $user->room . ' &nbsp; '; }
 		$details_result .= '</p>';
 	}
 

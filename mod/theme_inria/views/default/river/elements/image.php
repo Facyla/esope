@@ -10,14 +10,32 @@
 $item = $vars['item'];
 /* @var ElggRiverItem $item */
 
+// Iris v2 : use entity type icon, *not owner
 $subject = $item->getSubjectEntity();
+$object = $item->getObjectEntity();
 
-// Iris v2 : @TODO : entity type icon, not owner
-$subject = $item->getObjectEntity();
 if (elgg_in_context('widgets')) {
-	//echo elgg_view_entity_icon($subject, 'tiny');
-	echo '<img src="' . $subject->getIconUrl(array('size' => 'tiny')) . '" alt="' . $subject->getSubtype() . '" style="max-width:16px; max-height:16px;" />';
+	$size = 'tiny';
+	$style = 'max-width:16px; max-height:16px;';
 } else {
-	//echo elgg_view_entity_icon($subject, 'small');
-	echo '<img src="' . $subject->getIconUrl(array('size' => 'small')) . '" alt="' . $subject->getSubtype() . '" style="max-width:40px; max-height:40px;" />';
+	$size = 'small';
+	$style = 'max-width:40px; max-height:40px;';
 }
+
+
+// Small view
+if (elgg_instanceof($object, 'object')) {
+	if (elgg_instanceof($object, 'object', 'file') && ($object->$simpletype == "image")) {
+		echo '<img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="object ' . $object->getSubtype() . '" style="' . $style . '" />';
+	} else {
+		echo '<span class="' . $size . '">' . elgg_echo('esope:icon:'.$object->getSubtype()) . '</span>';
+	}
+} else if (elgg_instanceof($object, 'site')) {
+	// join site
+	echo '<img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->getType() . ' ' . $subject->getSubtype() . '" style="' . $style . '" />';
+} else {
+	//echo elgg_view_entity_icon($object, $size);
+	echo '<img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="' . $object->getType() . ' ' . $object->getSubtype() . '" style="' . $style . '" />';
+}
+
+

@@ -149,6 +149,9 @@ function theme_inria_init(){
 	// Enable modifying members count algo
 	elgg_register_plugin_hook_handler('members', 'count', 'theme_inria_members_count_hook');
 	
+	// Set object icons
+	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'theme_inria_object_icon_hook');
+	
 	// Ajout niveau d'accès sur TheWire : désormais intégré dans Esope (ainsi que possibilité de définir un container)
 	/*
 	if (elgg_is_active_plugin('thewire')) {
