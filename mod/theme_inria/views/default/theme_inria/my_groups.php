@@ -48,7 +48,7 @@
 			$count = $mygroups_count - $max_groups;
 			$style = '';
 			if (strlen((string)$count) > 2) { $style = 'font-size: 1rem; line-height: 1rem; padding-top: 0.7rem;'; }
-			$groups .= '<div class="iris-home-group iris-home-group-add iris-user-groups-add float" style="' . $style . '"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-home-group.hidden\').removeClass(\'hidden\'); $(this).hide();" title="' . elgg_echo('theme_inria:viewall') . '">+' . $count . '</a></div>';
+			$groups .= '<div class="iris-home-group iris-home-group-add iris-user-groups-add float" style="' . $style . '"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-home-group.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+' . $count . '</a></div>';
 			//$groups .= '<div class="clearfloat"></div><p><a href="javascript:void(0);" onClick="javascript:$(\'.iris-home-group.hidden\').removeClass(\'hidden\'); $(this).hide();">' . elgg_echo('theme_inria:viewall') . '</a></p>';
 		}
 		

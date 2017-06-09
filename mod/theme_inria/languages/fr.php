@@ -767,6 +767,8 @@ Voir et commenter ce lien web :
 	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
 	
 	'theme_inria:workspace' => "Espace de travail",
+	'theme_inria:workspace:title' => "Espace de travail&nbsp;: %s",
+	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
 	
 	'theme_inria:manage' => "gérer",
 	
