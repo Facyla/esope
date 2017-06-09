@@ -31,6 +31,7 @@ if (empty($subtypes)) { $subtypes = theme_inria_group_object_subtypes($group); }
 global $autofeed;
 $autofeed = true;
 $url = elgg_get_site_url();
+elgg_push_context('workspace');
 elgg_push_context('group_workspace');
 elgg_entity_gatekeeper($guid, 'group');
 elgg_push_breadcrumb($group->name);
@@ -43,7 +44,24 @@ $sidebar_alt = '';
 
 if (elgg_group_gatekeeper(false)) {
 	
-	$content .= '<div class="group-workspace-main" id="group-workspace-addcontent">';
+	// SIDEBAR DROITE
+	// Agenda
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_agenda');
+	
+	if ($group->event_calendar_enable == 'yes' && $group->poll_enable == 'yes') {
+		// Break out from iris-sidebar-content and reopen it
+		$sidebar_alt .= '</div><div class="iris-sidebar-content">';
+	}
+	
+	// Sondages
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_poll');
+$sidebar_alt = '';
+	
+	
+	// COLONNE PRINCIPALE
+	$class = 'group-workspace-main';
+	if (empty($sidebar_alt)) { $class .= ' no-sidebar-alt'; }
+	$content .= '<div class="' . $class . '" id="group-workspace-addcontent">';
 			
 		$content .= '<div class="group-workspace-add-tabs">';
 			$content .= '<a href="#group-workspace-add-discussion" class="elgg-state-selected" rel="nofollow"><i class="fa fa-quote-left"></i></a>';
@@ -100,7 +118,6 @@ if (elgg_group_gatekeeper(false)) {
 			$content .= '</form>';
 		$content .= '</div>';
 		$content .= '<div class="group-workspace-activity">';
-			elgg_push_context('workspace');
 			$db_prefix = elgg_get_config('dbprefix');
 			$content_activity_opt = array(
 				'type' => 'object',
@@ -113,28 +130,13 @@ if (elgg_group_gatekeeper(false)) {
 			if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
 			//$content .= "SUBTYPES => " . print_r($subtypes, true);
 			$content .= elgg_list_entities($content_activity_opt);
-			elgg_pop_context();
 		$content .= '</div>';
 	$content .= '</div>';
-	
 	
 	
 	// Sidebar contenus
 	//$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_workspace', $vars);
-	
-	
-	// SIDEBAR DROITE
-	// Agenda
-	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_agenda');
-	
-	if ($group->event_calendar_enable == 'yes' && $group->poll_enable == 'yes') {
-		// Break out from iris-sidebar-content and reopen it
-		$sidebar_alt .= '</div><div class="iris-sidebar-content">';
-	}
-	
-	// Sondages
-	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_poll');
 	
 }
 

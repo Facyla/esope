@@ -136,7 +136,7 @@ function theme_inria_init(){
 	// User actions
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
 	// Entity menu : remove "thread" (thewire), members count in group listing menu
-	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_groups_entity_menu_setup', 900);
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_entity_menu_setup', 900);
 	// River menu
 	elgg_register_plugin_hook_handler('register', 'menu:river', 'theme_inria_river_menu_setup', 900);
 	// River menu
@@ -187,6 +187,7 @@ function theme_inria_init(){
 	elgg_register_page_handler('search', 'theme_inria_search_page_handler');
 	elgg_register_page_handler('members', 'theme_inria_members_page_handler');
 	elgg_register_page_handler('groups', 'theme_inria_groups_page_handler');
+	elgg_register_page_handler('group_operators', 'theme_inria_group_operators_page_handler');
 	elgg_register_page_handler('au_subgroups', 'theme_inria_au_subgroups_page_handler');
 	// Override profile page
 	elgg_register_page_handler('profile', 'theme_inria_profile_page_handler');

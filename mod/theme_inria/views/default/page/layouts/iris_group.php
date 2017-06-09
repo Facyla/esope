@@ -53,6 +53,8 @@ $url = elgg_get_site_url();
 $has_group_layout = get_input('group_layout_header', false);
 if ($has_group_layout != 'yes') { $has_group_layout = false; } else { $has_group_layout = true; }
 
+// @TODO group operators should use group layout
+
 /*
 if (elgg_instanceof($group, 'group')) {
 	switch(current_page_url()) {
@@ -193,11 +195,13 @@ if (elgg_instanceof($group, 'group')) {
 		<?php
 		// Left sidebar
 		if (!elgg_in_context('groups_edit')) {
-			if (!$has_group_layout) {
-				// Existing sidebar is wrapped into new sidebar (until sidebar is fully integrated)
-				$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
-			} else {
-				$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
+			if (!elgg_in_context('workspace')) {
+				if ($has_group_layout) {
+					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
+				} else {
+					// Existing sidebar is wrapped into new sidebar (until sidebar is fully integrated)
+					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
+				}
 			}
 			if ($vars['sidebar']) { echo $vars['sidebar']; }
 		}

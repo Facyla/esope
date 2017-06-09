@@ -31,8 +31,8 @@ $sidebar_alt = '';
 if (elgg_group_gatekeeper(false)) {
 	
 	// Workspaces tabs
-	$max_title = 30;
-	$max_title_more = 50;
+	$max_title = 15;
+	$max_title_more = 30;
 	$more_tabs_threshold = 1; // Displays if > 3 (main workspace + index 0 + index 1)
 	$all_subgroups_guids = AU\SubGroups\get_all_children_guids($main_group);
 	$add_more_tab = (sizeof($all_subgroups_guids) > $more_tabs_threshold+1);

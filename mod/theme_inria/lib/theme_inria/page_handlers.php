@@ -384,6 +384,22 @@ function theme_inria_groups_page_handler($page) {
 }
 
 
+function theme_inria_group_operators_page_handler($page) {
+	if (isset($page[0])) {
+		$file_dir = elgg_get_plugins_path() . 'group_operators/pages/group_operators';
+		$page_type = $page[0];
+		switch($page_type) {
+			case 'manage':
+				set_input('group_layout_header', 'yes');
+				set_input('group_guid', $page[1]);
+				include "$file_dir/manage.php";
+				return true; // Facyla 20111123
+				break;
+		}
+	}
+}
+
+
 function theme_inria_au_subgroups_page_handler($page) {
 	
 	// dirty check to avoid duplicate page handlers

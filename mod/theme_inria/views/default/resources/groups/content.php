@@ -86,7 +86,7 @@ $content .= elgg_view_menu('filter');
 
 
 // Entités par date (*pas* la river/l'activité)
-//elgg_push_context('workspace');
+elgg_push_context('workspace-content');
 $db_prefix = elgg_get_config('dbprefix');
 $content_activity_opt = array(
 	'type' => 'object',
@@ -114,6 +114,7 @@ $count_all = elgg_get_entities($content_activity_opt + ['count' => true]);
 $count_mine = elgg_get_entities($content_activity_mine_opt + ['count' => true]);
 $count_draft = elgg_get_entities($content_activity_draft_opt + ['count' => true]);
 
+elgg_push_context('groups-content');
 switch($filter) {
 	case 'mine':
 		$count = $count_mine;
@@ -128,7 +129,7 @@ switch($filter) {
 		$count = $count_all;
 		$entities_list = elgg_list_entities($content_activity_opt);
 }
-//elgg_pop_context();
+elgg_pop_context();
 
 
 

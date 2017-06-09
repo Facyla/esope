@@ -598,8 +598,8 @@ function theme_inria_members_count_hook($hook, $entity_type, $returnvalue, $para
 }
 
 
-// Members count in group listing menu
-function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
+// Members count in group listing menu + various changes to entity menu (comments and likes out)
+function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_in_context('widgets')) {
 		return $return;
 	}
@@ -610,6 +610,14 @@ function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
 	if (elgg_instanceof($entity, 'object', 'thewire')) {
 		foreach ($return as $index => $item) {
 			if ($item->getName() == 'thread') {
+				unset($return[$index]);
+			}
+		}
+	}
+	
+	if (elgg_instanceof($entity, 'object')) {
+		foreach ($return as $index => $item) {
+			if (in_array($item->getName(), array('likes'))) {
 				unset($return[$index]);
 			}
 		}

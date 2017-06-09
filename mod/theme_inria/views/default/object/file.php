@@ -87,6 +87,7 @@ if ($full && !elgg_in_context('gallery')) {
 	));
 
 } elseif (elgg_in_context('gallery')) {
+	
 	echo '<div class="file-gallery-item">';
 	echo "<h3>" . $file->title . "</h3>";
 	// Pas de dowload direct dans la galerie sinon on perd tout accès à la page du fichier
@@ -96,13 +97,24 @@ if ($full && !elgg_in_context('gallery')) {
 	echo $file_icon;
 	echo "<p class='subtitle'>$owner_link $date</p>";
 	echo '</div>';
+	
 } else {
+	
 	// brief view
+
+
+	if (elgg_in_context('workspace')) {
+		// Icon = auteur
+		$owner = $file->getOwnerEntity();
+		$file_icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIcon(array('medium')) . '" style="width:54px;" /></a>';
+		$metadata_alt = '';
+	} else {
+	}
 
 	$params = array(
 		'entity' => $file,
 		'metadata' => $metadata,
-		'subtitle' => $subtitle,
+		//'subtitle' => $subtitle,
 		'content' => $excerpt,
 	);
 	$params = $params + $vars;
