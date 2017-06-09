@@ -864,20 +864,20 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-community { font-size: 0.75rem; color: #969696; text-transform: uppercase; font-weight: bold; margin-bottom: 1rem; }
 
 .iris-group-menu { z-index:2; background:white; position: absolute; bottom: 0; left: 0; right: 0; padding-left: 18.75rem; }
-.iris-group-menu a { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; border-bottom: 4px solid transparent; display: inline-block; text-decoration:none; }
+.iris-group-menu a, .iris-group-menu .tab-more { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; border-bottom: 4px solid transparent; display: inline-block; text-decoration:none; }
 .iris-group-menu a.tab { opacity:0.3; }
-.iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; max-width: 7rem; }
-.iris-group-menu a.add, .iris-group-menu a.search { border: 0; margin: 0 1.5rem 0 0rem; }
+.iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; }
+.iris-group-menu a.add, .iris-group-menu a.search { border: 0; margin: 0 1.5rem 0 0rem; line-height: 1.125rem; }
 .iris-group-menu a.tab:first-of-type { margin-left:0; }
 .iris-group-menu a.tab.elgg-state-selected,
 .iris-group-menu a.tab:hover,
 .iris-group-menu a.tab:active,
 .iris-group-menu a.tab:focus { border-bottom: 4px solid #384257; opacity:1; }
 
-.tab.tab-more { display: inline-block; position: relative; }
-.tab.tab-more a { display: inline-block; }
+.tab.tab-more { display: inline-block; position: relative; padding:0; }
+.tab.tab-more a { display: inline-block; margin:0; border:0; }
 .tab-more-content { display: flex; }
-.iris-group-menu .tab-more-content { position: absolute; background: white; width: 16rem; top: 4rem; right: 0; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; }
+.iris-group-menu .tab-more-content { position: absolute; background: white; width: 16rem; top: 3.5rem; right: -1rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; }
 .iris-group-menu .tab.tab-more:hover .tab-more-content { display: flex; }
 .iris-group-menu .tab-more-content a { padding: 0.5rem 1rem; margin: 0; border-bottom: 1px solid #CCC; }
 .iris-group-menu .tab-more-content a:hover, .iris-group-menu .tab-more-content a:active, .iris-group-menu .tab-more-content a:focus { border-bottom: 1px solid #CCC; }
