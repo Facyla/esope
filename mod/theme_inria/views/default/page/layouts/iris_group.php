@@ -114,7 +114,7 @@ if (elgg_instanceof($group, 'group')) {
 				$max_title = 30;
 				$max_title_more = 50;
 				$more_tabs_threshold = 1; // Tabs in addition to main workspace tab (index)
-				$add_more_tab = (sizeof($all_subgroups_guids) >= $more_tabs_threshold);
+				$add_more_tab = (sizeof($all_subgroups_guids) > $more_tabs_threshold+1);
 				$more_tabs = '';
 				$more_selected = false;
 				

@@ -35,7 +35,7 @@ if (elgg_group_gatekeeper(false)) {
 	$max_title_more = 50;
 	$more_tabs_threshold = 1; // Displays if > 3 (main workspace + index 0 + index 1)
 	$all_subgroups_guids = AU\SubGroups\get_all_children_guids($main_group);
-	$add_more_tab = (sizeof($all_subgroups_guids) >= $more_tabs_threshold);
+	$add_more_tab = (sizeof($all_subgroups_guids) > $more_tabs_threshold+1);
 	$workspaces_tabs = '';
 	$workspaces_tabs .= '<div class="group-workspace-tabs"><ul class="elgg-tabs elgg-htabs">';
 		
