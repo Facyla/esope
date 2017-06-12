@@ -7,7 +7,7 @@ $user = elgg_get_page_owner_entity();
 $own = elgg_get_logged_in_user_entity();
 
 ?>
-<div class="iris-profile-icon" style="background:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>') no-repeat center/contain;" />
+<div class="iris-profile-icon" style="background:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>') no-repeat center/cover;" />
 	<?php
 
 	if ($user->canEdit()) {

@@ -58,15 +58,21 @@ if (elgg_instanceof($entity, 'group')) {
 }
 
 
+
+$icon_field = '<label for="icon">
+		<i class="fa fa-camera"></i><br />' . elgg_echo('groups:icon:inline') . '
+	</label>';
+$banner_field = '<label for="banner">
+		<i class="fa fa-camera"></i><br />' . elgg_echo('groups:banner:inline') . '
+	</label>';
+
+
 echo <<<HTML
 <div class="iris-cols form-groups-add">
 
 	<div class="sidebar iris-group-sidebar">
 		<div class="iris-sidebar-content">
-			<label for="icon">
-				<i class="fa fa-camera"></i><br />
-				Image du groupe
-			</label>
+			$icon_field
 		</div>
 	</div>
 
@@ -79,10 +85,7 @@ echo <<<HTML
 
 	<div class="sidebar-alt iris-group-sidebar-alt">
 		<div class="iris-group-image-input">
-			<label for="banner">
-				<i class="fa fa-camera"></i><br />
-				Cover du groupe
-			</label>
+			$banner_field
 		</div>
 	</div>
 

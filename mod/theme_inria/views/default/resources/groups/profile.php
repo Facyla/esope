@@ -132,8 +132,9 @@ if (elgg_group_gatekeeper(false)) {
 	$sidebar_alt .= '<h3>' . elgg_echo('members') . '</h3>';
 	$sidebar_alt .= '<div class="group-members-count">' . theme_inria_get_group_active_members($group, array('count' => true)) . '</div>';
 	//$sidebar_alt .= '<h3>' . elgg_echo('members:online') . '</h3>';
-	$sidebar_alt .= elgg_view('groups/sidebar/online_groupmembers', array('entity' => $group));
+	$sidebar_alt .= elgg_view('groups/sidebar/online_groupmembers', array('entity' => $group, 'limit' => 25));
 	
+	$sidebar_alt = '<div class="iris-sidebar-content">' . $sidebar_alt . '</div>';
 	
 }
 

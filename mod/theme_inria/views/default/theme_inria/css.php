@@ -593,7 +593,7 @@ input#iris-topbar-search-input { width: auto; font-size: 1.2rem; }
 #iris-body .elgg-sidebar h2 { padding-top: 0; margin-bottom:2.625rem; }
 
 #iris-body .elgg-layout-one-sidebar h2.elgg-heading-main { margin:2.5rem 0 1rem 0; }
-#iris-body .iris-listing .elgg-layout-one-sidebar .elgg-main h2 { padding-top: 0; margin:0; }
+#iris-body .iris-listing .elgg-layout-one-sidebar .elgg-main h2 { padding-top: 0; margin:0 0 2rem 0; }
 #iris-body .elgg-layout-one-sidebar .elgg-head { padding: 0 2.625rem 0rem 2.625rem; float: left; min-width: 20rem; width: 30%; box-sizing: border-box; }
 #iris-body .elgg-layout-one-sidebar .elgg-sidebar { padding: 2.5rem 0rem 3rem 2.625rem; box-sizing: border-box; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
@@ -817,7 +817,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-item-group .elgg-image-block .elgg-image { background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); }
 .elgg-item-group .elgg-image-block .elgg-image a { width: 12.5rem; height: 12.5rem; line-height: 12.5rem; display: flex; }
 ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group .elgg-image img { width: 12.5rem; margin: auto; }
-.elgg-item-group .iris-group-body { padding: 1.5rem 2rem 1.5rem 2rem; }
+.elgg-item-group .iris-group-body { padding: 1.5rem 2rem 1.5rem 0rem; }
 .elgg-item-group .elgg-menu-item-access, 
 .elgg-item-group .elgg-menu-item-members, 
 .elgg-item-group .elgg-menu-item-membership { float: left; margin-left: 0; margin-right: 15px; }
@@ -889,6 +889,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-header-alt h2 { color: white; margin-left: 3rem; }
 .iris-group-image { width:13.125rem; height:13.125rem; position: relative; top: 3.5rem; left: 3rem; background:#384257; z-index:3; color: white; box-sizing: border-box; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
 .iris-group-title { position: absolute; top: 4.5rem; left: 20rem; color: white; }
+.iris-group-title a { color: white; }
 #iris-body .iris-group-title h2 { font-size: 2.625rem; line-height: 2.75rem; margin-bottom: 0rem; padding:0; color: white; }
 .iris-group-subtitle { margin: 0.9rem 0 1.5rem 0; font-size:1.0625rem; font-weight:bold; }
 .iris-group-community { font-size: 0.75rem; color: #969696; text-transform: uppercase; font-weight: bold; margin-bottom: 1rem; }
@@ -968,13 +969,14 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-main { margin-bottom: 2rem; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 .group-workspace-module { margin-bottom: 2.5rem; }
 .group-workspace-admins { display:flex; }
-.group-workspace-admins .group-admin { flex:0; margin-right: 3.75rem; text-align: center; }
+.group-workspace-admins .group-admin { flex: 0 0 auto; margin-right: 3.75rem; text-align: center; }
 .group-workspace-admins .group-operators { flex: 1; }
 .group-workspace-admins .group-operator { float:left; margin-right: 0.625rem; max-width: 6.25rem; font-size: 0.9375rem; text-align: center; }
 .group-workspace-admins .operators-more { width: 6.25rem; height: 6.25rem; line-height: 6.75rem; font-size: 2.125rem; background: #384257; color: white; border-radius: 3.125rem; display: inline-block; font-weight: bold; }
 .group-workspace-admins img { border-radius: 50px; }
 .group-workspace-members img { width: 2rem; border-radius: 1rem; margin: 0 0.4375rem 0.4375rem 0; }
-.group-workspace-members .members-more { margin: 0 0.4375rem 0.4375rem 0; font-size:1rem; color: #384257; font-weight:bold; height:25px; line-height:25px; }
+.group-workspace-members a, 
+.group-workspace-members .members-more { margin: 0 0.4375rem 0.4375rem 0; font-size:1rem; color: #384257; font-weight:bold; height:2.5rem; line-height:2.5rem; float: left; }
 .group-members-online img { width: 2rem; border-radius: 1rem; margin: 0 0.4375rem 0.4375rem 0; }
 .group-workspace-add-tabs { background: #384257; padding: 1.25rem 3rem 1rem 3rem; font-size: 1.375rem; }
 .group-workspace-add-tabs a { color: white; margin-right: 2.25rem; opacity: 0.6; }

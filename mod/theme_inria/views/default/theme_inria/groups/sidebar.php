@@ -58,12 +58,15 @@ $content .= '<ul class="elgg-menu elgg-menu-page">';
 		)) . '</li>';
 	// Notification settings : notifications/group/$username
 	
+	// Direct newsletter subscription
 	// @TODO if newsletter enabled
-	$content .= '<li>' . elgg_view('input/checkbox', array(
-			'name' => '', 
-			'value' => 'yes', 
-			'label' => "S'abonner à la lettre d'info"
-		)) . '</li>';
+	if ($group->event_calendar_enable) {
+		$content .= '<li>' . elgg_view('input/checkbox', array(
+				'name' => '', 
+				'value' => 'yes', 
+				'label' => "S'abonner à la lettre d'info"
+			)) . '</li>';
+	}
 	
 $content .= '</ul>';
 

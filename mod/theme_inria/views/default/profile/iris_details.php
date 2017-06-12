@@ -105,6 +105,7 @@ if(count($cats) > 0){
 			}
 			
 			// build result
+			//if ($cat->metadata_name == 'admin') {} else {} // display admin data after all common blocks ?
 			$details_result .= '<div class="iris-profile-field">';
 			$details_result .= '<h4>' . $title . '</h4>';
 			$details_result .= elgg_view("output/" . $output_type, array("value" =>  $value, "target" => $target));
@@ -113,5 +114,33 @@ if(count($cats) > 0){
 	}
 }
 
+
+// if admin, display admin links
+$admin_links = '';
+if (elgg_is_admin_logged_in() && (elgg_get_logged_in_user_guid() != elgg_get_page_owner_guid())) {
+	$menu = elgg_trigger_plugin_hook('register', "menu:user_hover", array('entity' => $user), array());
+	$builder = new ElggMenuBuilder($menu);
+	$menu = $builder->getMenu();
+	//$actions = elgg_extract('action', $menu, array());
+	$admin = elgg_extract('admin', $menu, array());
+
+	$text = elgg_echo('admin:options');
+
+	$admin_links = '<div class="iris-profile-field profile-admin-menu-wrapper">';
+	$admin_links .= "<h4><a rel=\"toggle\" href=\"#profile-menu-admin\">$text&hellip;</a></h4>";
+	$admin_links .= '<ul class="profile-admin-menu" id="profile-menu-admin">';
+	foreach ($admin as $menu_item) {
+		$admin_links .= elgg_view('navigation/menu/elements/item', array('item' => $menu_item));
+	}
+	$admin_links .= '</ul>';
+	$admin_links .= '</div>';
+	echo $admin_links;
+}
+
+
 echo $details_result;
+
+
+
+
 

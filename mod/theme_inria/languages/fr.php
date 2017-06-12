@@ -754,6 +754,8 @@ Voir et commenter ce lien web :
 	'groups:banner' => "Image d'entête du groupe (ne rien sélectionner pour laisser inchangé)",
 	'groups:about' => "A propos du groupe",
 	'theme_inria:groups:about' => "A propos",
+	'groups:icon:inline' => "Image du groupe<br />(mini 200x200)",
+	'groups:banner:inline' => "Image de couverture<br />(mini 1200x200)",
 	'theme_inria:groups:operators' => "Responsables (%s)",
 	'theme_inria:groups:members' => "Tous les membres (%s)",
 	'theme_inria:groups:requests' => "Demandes en attente (%s)",

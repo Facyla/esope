@@ -34,13 +34,15 @@ if ($image) { $image = "<div class=\"elgg-image\">$image</div>"; }
 
 if ($alt_image) { $alt_image = "<div class=\"elgg-image-alt\">$alt_image</div>"; }
 
+/*
 if (elgg_instanceof($vars['entity'], 'group')) {
 	$body = "<div class=\"elgg-body\">" . $image . $body . $alt_image . "</div>";
 	$image = '';
 	$alt_image = '';
 } else {
+*/
 	$body = "<div class=\"elgg-body\">$body</div>";
-}
+//}
 
 
 echo <<<HTML
