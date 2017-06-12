@@ -866,7 +866,7 @@ function esope_sort_groups_by_grouptype($groups) {
 /* Renders a page content into a suitable page for iframe or lightbox use
  * $params = array('title' => '', 'content' => '', 'mode' => '', 'headers' => '')
  * with the following parameters
- * OR use several paramters (old way) :
+ * OR use several parameters (old way) :
  * $content = HTML content
  * $title = title override
  * $embed_mode = 
@@ -3111,5 +3111,37 @@ function esope_stopwords($text = '', $stopwords = false, $mode = 'detect') {
 	
 	return $result;
 }
+
+
+
+// Get an FA image instead of a regular one
+// Note : this replaces a full HTML image, not only the image URL !
+function esope_get_fa_icon($entity, $size) {
+	$type = $entity->getType();
+	$subtype = $entity->getSubtype();
+	
+	$title = $entity->title;
+	if (empty($title)) { $title = $entity->name; }
+	if (empty($title)) { $title = elgg_get_excerpt($entity->description); }
+	$title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false);
+	
+	// Get size
+	$sizes = array('small', 'medium', 'large', 'tiny', 'master', 'topbar');
+	if (!in_array($size, $sizes)) { $size = "medium"; }
+	$class = "$type $subtype $size";
+	
+	if (elgg_instanceof($entity, 'object') && !empty($subtype)) {
+		return '<span class="' . $class . '" alt="' . $title . '">' . elgg_echo('esope:icon:'.$subtype) . '</span>';
+//	} else if (elgg_instanceof($entity, 'user')) {
+//	} else if (elgg_instanceof($entity, 'group')) {
+//	} else if (elgg_instanceof($entity, 'site')) {
+	} else {
+		return '<span class="' . $class . '" alt="' . $title . '">' . elgg_echo('esope:icon:'.$type) . '</span>';
+	}
+	
+	return false;
+}
+
+
 
 

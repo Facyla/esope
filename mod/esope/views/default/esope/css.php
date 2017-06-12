@@ -412,6 +412,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 	padding: 6px 10px 4px;
 	text-transform: uppercase;
 }
+.elgg-sidebar #feedbacks ul li a, 
 .elgg-sidebar #site-categories ul li a { padding: 6px 10px 5px; }
 
 #feedbackDisplay a { color: <?php echo $linkcolor; ?>; }
@@ -521,8 +522,12 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
-.elgg-image .date, .elgg-module-group-event-calendar p.date, .elgg-widget-instance-event_calendar p.date { background: white; width: 9ex; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 130%; font-size: 90%; }
-.elgg-image .date span { font-size: 2em; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 4px 0; }
+.elgg-image .date, .elgg-module-group-event-calendar p.date, .elgg-widget-instance-event_calendar p.date { background: white; width: 5rem; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 1.2rem; font-size: 0.9rem; }
+.elgg-image .date span, .elgg-image .date div { font-size: 2rem; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 0.5rem 0 0.1rem 0; line-height: 1.8rem; }
+.elgg-image .date-in-month { background-color: <?php echo $linkcolor; ?>; width: 2.25rem; height: 2.25rem; border-radius: 50%; line-height: 2.5rem; color: white; font-size: 1rem; font-weight: bold; text-align: center; }
+/* Note: requires relative positionning on parent (usually .elgg-image) */
+.elgg-image-block .elgg-image { position:relative; }
+.calendar-action { color: <?php echo $linkcolor; ?>; position: absolute; top: -0.4rem; right: -0.4rem; font-size: 1.3125rem; border-radius: 50%; height: 1.3125rem; }
 
 
 /* Formulaires : boutons radios verticaux, mais sans casser les groupes (mal construits avec les labels..) */
