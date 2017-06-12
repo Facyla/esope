@@ -61,7 +61,9 @@ if (!empty($responses)) {
 }
 elgg_pop_context();
 
+// Iris v2 : indication présente dans le menu inférieur
 $group_string = '';
+/*
 $object = $item->getObjectEntity();
 $container = $object->getContainerEntity();
 if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_guid()) {
@@ -72,6 +74,7 @@ if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_g
 	));
 	$group_string = ' ' . elgg_echo('river:ingroup', array($group_link));
 }
+*/
 
 echo <<<RIVER
 <span class="elgg-river-timestamp">$timestamp</span>

@@ -60,7 +60,7 @@ $post_input = elgg_view('input/plaintext', array(
 		'id' => 'thewire-textarea',
 		'rows' => $num_lines,
 		'data-max-length' => $char_limit,
-		'style' => "height:initial;",
+		//'style' => "height:initial;",
 		//'maxlength' => 140, // Do not block at 140, and use the warning
 		'placeholder' => elgg_echo('theme_inria:thewire:placeholder'),
 	));

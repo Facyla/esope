@@ -51,8 +51,24 @@ $(document).ready(function() {
 // Fonction de gestion des menus
 // Note : la variable menu doit correspondre à l'élément ul de premier niveau
 function menu(menu) {
-	$(menu+" ul").hide();
+	//$(menu+" ul").hide();
 	var timeout;
+	
+	$(menu + " li a").click(function() {
+		if($(this).next().children("li").size() > 0) {
+			if($(this).next().is(":hidden")) {
+				$(this).next().slideToggle('slow');
+			} else {
+				$(this).next().hide();
+			}
+			//return false; // False si on veut que le clic ne déclenche pas le lien
+			return true;
+		} else {
+			return true;
+		}
+	});
+	
+	
 	$(menu + " li a").hover(function() {
 		var myLink = $(this);
 		timeout = setTimeout(function(){myLink.next().slideDown(200);}, 50);
@@ -74,6 +90,7 @@ function menu(menu) {
 			});
 		}
 	});
+	
 	$(menu + ">li>a").blur(function() {
 		//$(this).next().hide();
 		$(this).addClass("lastfocus");
@@ -90,19 +107,7 @@ function menu(menu) {
 		$(".lastfocus").removeClass("lastfocus");
 	});
 	
-	$(menu + " li a").click(function() {
-		if($(this).next().children("li").size() > 0) {
-			if($(this).next().is(":hidden")) {
-				$(this).next().slideDown(200);	
-			} else {
-				$(this).next().hide();
-			}
-			//return false; // False si on veut que le clic ne déclenche pas le lien
-			return true;
-		} else {
-			return true;
-		}
-	});
+	
 }
 
 $("#iris-navigation .elgg-menu-navigation ul").hide(); // Plus rapide pour masquer les sous-menus

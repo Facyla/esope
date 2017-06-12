@@ -48,10 +48,28 @@ if ($tags === '') {
 
 
 // Bottom menu
+$metadata_alt_after = '';
 $metadata_alt = '<ul class="elgg-menu-entity-alt float">' . $metadata_alt . '</ul>';
 
 // Add likes counter and actions
 $metadata_alt .= '<ul class="elgg-menu-entity-alt float-alt">';
+	
+	$comments = $entity->countComments();
+	if ($comments > 0) {
+		$metadata_alt .= '<li>' . $entity->countComments() . '&nbsp;<i class="fa fa-comments"></i>' . '</li>';
+	}
+	
+	if (elgg_instanceof($entity, 'object', 'thewire')) {
+		$metadata_alt .= '<li>' . elgg_view('output/url', array(
+				'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
+				'text' => '<i class="fa fa-comment"></i>',
+		)) . '</li>';
+			// Form should separated from menu
+		$form_vars = array('class' => 'thewire-form');
+		$metadata_alt_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
+		$metadata_alt_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
+		$metadata_alt_after .= '</div>';
+	}
 	
 	if ($entity->canAnnotate(0, 'likes')) {
 		$hasLiked = \Elgg\Likes\DataService::instance()->currentUserLikesEntity($entity->guid);
@@ -76,13 +94,11 @@ $metadata_alt .= '<ul class="elgg-menu-entity-alt float-alt">';
 		$metadata_alt .= '<li>' . elgg_view('likes/count', array('entity' => $entity, 'class' => '')) . '</li>';
 	}
 	
-	$comments = $entity->countComments();
-	if ($comments > 0) {
-		$metadata_alt .= '<li>' . $entity->countComments() . '&nbsp;<i class="fa fa-comments"></i>' . '</li>';
-	}
-	
 $metadata_alt .= '</ul>';
 
+$metadata_alt .= '<div class="clearfloat"></div>' . $metadata_alt_after;
+
+if (!elgg_in_context('main') && elgg_instanceof($entity, 'object', 'thewire')) { $metadata_alt = '';}
 
 
 if (elgg_in_context('workspace') && elgg_instanceof($entity, 'object')) {
@@ -106,19 +122,21 @@ if (elgg_in_context('workspace') && elgg_instanceof($entity, 'object')) {
 	
 } else {
 	
-	if (elgg_instanceof($entity, 'object')) {
-		$owner = $entity->getOwnerEntity();
-		echo '<div class="entity-headline">';
-			echo '<span class="elgg-avatar float"><img src="' . $owner->getIconURL(array('size' => 'small')) . '" /></span>&nbsp;<strong>' . $owner->name . '</strong>';
-			echo ' &nbsp; <span class="elgg-river-timestamp">' . elgg_view_friendly_time($entity->time_created) . '</span>';
-			if ($metadata && (elgg_instanceof($entity, 'user') || elgg_in_context('workspace-content'))) {
-				echo '<div class="entity-submenu">
-			<a href="javascript:void(0);" onClick="$(this).parent().find(\'.entity-submenu-content\').toggleClass(\'hidden\')"><i class="fa fa-ellipsis-h"></i></a>
-			<div class="entity-submenu-content hidden">' . $metadata . '</div>
-		</div>';
-			}
-		echo '</div>';
-		echo '<div class="clearfloat"></div>';
+	if (elgg_instanceof($entity, 'object') && !elgg_instanceof($entity, 'object', 'thewire')) {
+		if (!elgg_in_context('main')) {
+			$owner = $entity->getOwnerEntity();
+			echo '<div class="entity-headline">';
+				echo '<span class="elgg-avatar float"><img src="' . $owner->getIconURL(array('size' => 'small')) . '" /></span>&nbsp;<strong>' . $owner->name . '</strong>';
+				echo ' &nbsp; <span class="elgg-river-timestamp">' . elgg_view_friendly_time($entity->time_created) . '</span>';
+				if ($metadata && (elgg_instanceof($entity, 'user') || elgg_in_context('workspace-content'))) {
+					echo '<div class="entity-submenu">
+				<a href="javascript:void(0);" onClick="$(this).parent().find(\'.entity-submenu-content\').toggleClass(\'hidden\')"><i class="fa fa-ellipsis-h"></i></a>
+				<div class="entity-submenu-content hidden">' . $metadata . '</div>
+			</div>';
+				}
+			echo '</div>';
+			echo '<div class="clearfloat"></div>';
+		}
 	}
 	
 	if ($title_link) { echo "<h3>$title_link</h3>"; }
@@ -133,7 +151,8 @@ if (elgg_in_context('workspace') && elgg_instanceof($entity, 'object')) {
 
 	if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
 
-	if ($metadata && !elgg_instanceof($entity, 'user') && !elgg_in_context('workspace-content')) { echo $metadata; }
+	//if ($metadata && !elgg_instanceof($entity, 'user') && !elgg_in_context('workspace-content')) { echo $metadata; }
+	if ($metadata && !elgg_instanceof($entity, 'user') && !elgg_in_context('workspace-content') && !elgg_in_context('main')) { echo $metadata; }
 	
 	if (elgg_instanceof($entity, 'object') && $metadata_alt) { echo $metadata_alt; }
 	

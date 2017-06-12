@@ -58,10 +58,16 @@ if (elgg_in_context('widgets')) {
 	$metadata = '';
 }
 
+// @TODO Formulaire de réponse
+//if (elgg_in_context('widgets')) {
+	$metadata_alt = '';
+//}
+
 $params = array(
 	'entity' => $post,
 	'title' => false,
 	'metadata' => $metadata,
+	'metadata_alt' => $metadata_alt,
 	'subtitle' => $subtitle,
 	'content' => thewire_filter($post->description),
 	'tags' => false,
