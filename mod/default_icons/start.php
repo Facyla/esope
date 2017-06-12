@@ -44,6 +44,8 @@ function default_icons_init() {
 	// Default object icon
 	// @TODO could be set, but is this useful ?
 	//elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'default_icons_object_hook', 1000);
+	// @TODO ? Restore ability to override icons through views override
+	//elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'default_icons_override_object_icon_hook');
 	
 	
 	// Register a page handler on "default_icons/"
@@ -239,6 +241,34 @@ function default_icons_object_hook($hook, $type, $return, $params) {
 	return $return;
 }
 
+
+
+// Override object icons with images (but we use FA icons)
+// Note : we cannot use FA icons because it only replaces the URL and not the HTML image code...
+/*
+function default_icons_override_object_icon_hook($hook, $type, $url, $params) {
+	// Nothing specific set, so use theme defaults
+	if (!$url || empty($url) || (strpos($url, '_graphics/icons/default/') !== false)) {
+		$sizes = array('small', 'medium', 'large', 'tiny', 'master', 'topbar');
+		// Get size
+		if (!in_array($vars['size'], $sizes)) {
+			$vars['size'] = "medium";
+		}
+		$subtype = $params['entity']->getSubtype();
+		if (!empty($subtype)) {
+			//$overrideurl = elgg_view("icon/{$type}/{$subtype}/{$vars['size']}", array('entity' => $params['entity']));
+			$overrideurl = elgg_view("icon/{$type}/{$subtype}", array('entity' => $params['entity'], 'size' => $vars['size']));
+	echo "Test : $subtype $url => $overrideurl";
+			if (!empty($overrideurl)) { return $overrideurl; }
+		}
+		//$overrideurl = elgg_view("icon/{$type}/default/{$vars['size']}", array('entity' => $params['entity']));
+		$overrideurl = elgg_view("icon/{$type}/default", array('entity' => $params['entity'], 'size' => $vars['size']));
+		if (!empty($overrideurl)) { return $overrideurl; }
+		$url = "_graphics/icons/default/{$vars['size']}.png";
+	}
+	return elgg_normalize_url($url);
+}
+*/
 
 
 
