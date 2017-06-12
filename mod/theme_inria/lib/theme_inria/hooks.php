@@ -697,21 +697,28 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 }
 
 
-/* Override object icons with images (but we use FA icons)
-function theme_inria_object_icon_hook($hook, $type, $return, $params) {
-	// Detect default icon (but cannot use file_exists because it's an URL)
-	// mod/groups/graphics/defaultlarge.gif (tiny, small, medium, large)
-	//error_log("Group {$params['entity']->guid} {$params['entity']->name} =>  $return");
-	$subtype = $params['entity']->getSubtype();
-		// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
-		// Username-based seed enables portable avatar on other sites
-		$size = $params['size'];
-		$icon_sizes = elgg_get_config('icon_sizes');
-		$img_base_url = elgg_get_site_url() . "mod/theme_inria/graphics/objects/{$subtype}.png";
-		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
-		return $img_base_url;
+// Override object icons with images (but we use FA icons)
+/*
+function theme_inria_object_icon_hook($hook, $type, $url, $params) {
 	
-	return $return;
+	// Detect default icon (but cannot use file_exists because it's an URL)
+	if (!$url || empty($url) || (strpos($url, '_graphics/icons/default/') !== false)) {
+		$subtype = $params['entity']->getSubtype();
+	
+		$title = $params['entity']->title;
+		$title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false);
+	
+		// Get size
+		$size = $params['size'];
+		//$sizes = array('small', 'medium', 'large', 'tiny', 'master', 'topbar');
+		//if (!in_array($size, $sizes)) { $size = "medium"; }
+		$icon_sizes = elgg_get_config('icon_sizes');
+		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+		
+		return elgg_get_site_url() . "mod/theme_inria/graphics/objects/{$subtype}.png";
+	}
+	
+	return $url;
 }
 */
 

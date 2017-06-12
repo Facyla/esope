@@ -16,7 +16,8 @@ if ($group->newsletter_enable == 'yes') {
 		foreach ($objects as $ent) {
 			$content .= '<div class="newsletter">';
 				$content .= '<a href="' . $ent->getURL() . '" title="' . $ent->title . '">';
-					$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
 					$body .= $ent->title;
 					$content .= elgg_view_image_block($image, $body);
@@ -43,8 +44,8 @@ if ($group->newsletter_enable == 'yes') {
 	//echo '<div class="workspace-subtype-header">';
 	//	echo $new_link;
 		echo '<h3>' . $all_link . '</h3>';
-	//echo '</div>';
-	echo '<div class="workspace-subtype-content">';
+		//echo '</div>';
+		echo '<div class="workspace-subtype-content">';
 		echo $content;
 	echo '</div>';
 }

@@ -245,12 +245,10 @@ if (elgg_instanceof($group, 'group')) {
 		
 		
 		// Right sidebar
-		if ($vars['sidebar-alt']) {
+		if (!empty($vars['sidebar-alt'])) {
 			?>
 			<div class="sidebar-alt iris-group-sidebar-alt">
-				<div class="iris-sidebar-content">
-					<?php echo $vars['sidebar-alt']; ?>
-				</div>
+				<?php echo $vars['sidebar-alt']; ?>
 			</div>
 			<?php
 		}

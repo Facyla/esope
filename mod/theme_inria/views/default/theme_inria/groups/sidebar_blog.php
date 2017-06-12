@@ -16,9 +16,10 @@ if ($group->blog_enable == 'yes') {
 		foreach ($objects as $ent) {
 			$content .= '<div class="blog">';
 				$content .= '<a href="' . $ent->getURL() . '" title="' . $ent->title . '">';
-					$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
-					$body .= $ent->title;
+					$body .= '<h4>' . $ent->title . '</h4>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';

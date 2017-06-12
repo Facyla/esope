@@ -44,18 +44,24 @@ $sidebar_alt = '';
 
 if (elgg_group_gatekeeper(false)) {
 	
+	// SIDEBAR GAUCHE
+	//$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_workspace', $vars);
+	
+	
 	// SIDEBAR DROITE
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_workspace_alt', $vars);
+	/*
 	// Agenda
 	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_agenda');
 	
-	if ($group->event_calendar_enable == 'yes' && $group->poll_enable == 'yes') {
-		// Break out from iris-sidebar-content and reopen it
-		$sidebar_alt .= '</div><div class="iris-sidebar-content">';
-	}
-	
 	// Sondages
 	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_poll');
-$sidebar_alt = '';
+	
+	// Feedbacks
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_feedback');
+	*/
+	
 	
 	
 	// COLONNE PRINCIPALE
@@ -133,10 +139,6 @@ $sidebar_alt = '';
 		$content .= '</div>';
 	$content .= '</div>';
 	
-	
-	// Sidebar contenus
-	//$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_workspace', $vars);
 	
 }
 

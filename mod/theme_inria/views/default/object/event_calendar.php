@@ -50,14 +50,17 @@ if ($full) {
 		'title' => false,
 	);
 	$list_body = elgg_view('object/elements/summary', $params);
+	
 	echo '<a class="event-ical-file" href="' . $event->getURL . '?view=ical" title="' . elgg_echo('event_calendar:ical_popup_message') . ' ' . $event->getURL . '?view=ical"><i class="fa fa-calendar-o"></i> ' . elgg_echo('feed:ical') . '</a>';
 	echo $list_body;
 	echo $body;
+	
 	if ($event->long_description) {
 		echo '<p>'.$event->long_description.'</p>';
 	} else {
 		echo '<p>'.$event->description.'</p>';
 	}
+	
 	if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
 		echo elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
 	}
@@ -98,7 +101,7 @@ if ($full) {
 	if (elgg_in_context('workspace')) {
 		// Icon = auteur
 		$owner = $event->getOwnerEntity();
-		$icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIcon(array('medium')) . '" style="width:54px;" /></a>';
+		$icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIconURL(array('medium')) . '" style="width:54px;" /></a>';
 		$metadata_alt = '';
 	} else {
 	}

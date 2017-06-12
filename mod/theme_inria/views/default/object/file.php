@@ -106,7 +106,7 @@ if ($full && !elgg_in_context('gallery')) {
 	if (elgg_in_context('workspace')) {
 		// Icon = auteur
 		$owner = $file->getOwnerEntity();
-		$file_icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIcon(array('medium')) . '" style="width:54px;" /></a>';
+		$file_icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIconURL(array('medium')) . '" style="width:54px;" /></a>';
 		$metadata_alt = '';
 	} else {
 	}

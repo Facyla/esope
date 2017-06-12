@@ -782,6 +782,9 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
 	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
+	'theme_inria:workspace:event_calendar' => "Agenda",
+	'theme_inria:workspace:poll' => "Sondages",
+	'theme_inria:workspace:feedback' => "Feedbacks",
 	
 	'theme_inria:backtocontent' => "Retour vers la publication",
 	'theme_inria:backtocontents' => "Retour vers la liste des publications",

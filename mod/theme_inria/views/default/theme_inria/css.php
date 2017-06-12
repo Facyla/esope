@@ -771,7 +771,8 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
 .iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
 .elgg-list .elgg-item .elgg-image-block { padding: 0; overflox:hidden; }
-.elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; }
+.elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; position:relative; }
+.workspace-subtype-content .elgg-image-block .elgg-image { margin: 0 1.475rem 0 0; }
 .elgg-river-responses .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
 .elgg-menu .elgg-menu-item-container { float:left; }
@@ -932,8 +933,10 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-content-back { margin-bottom: 1rem; border-bottom: 2px solid #E0E0E0; padding: 1rem 2rem 1rem 2rem; margin: -2rem -2rem 1rem -2rem; }
 .group-content-back .back { line-height:2rem; font-size: 0.8125rem; text-transform:uppercase; font-weight: bold; }
 .group-content-back .add {  }
-#iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; border: 0; }
-#iris-body .iris-group-sidebar a.elgg-state-selected, #iris-body .iris-group-sidebar a:hover, #iris-body .iris-group-sidebar a:active, #iris-body .iris-group-sidebar a:focus { color: #1488CA; }
+#iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a, .workspace-subtype-content a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; border: 0; }
+#iris-body .iris-group-sidebar a.elgg-state-selected, 
+#iris-body .iris-group-sidebar a:hover, #iris-body .iris-group-sidebar a:active, #iris-body .iris-group-sidebar a:focus, 
+.workspace-subtype-content a:hover, .workspace-subtype-content a:active, .workspace-subtype-content a:focus { color: #1488CA; }
 #iris-body .iris-group-sidebar h2 { font-size: 1.125rem; color: #384257; font-weight: bold; font-family: "Inria Sans", sans-serif; }
 .iris-group-sidebar .fa-angle-right { float: right; }
 .iris-group-sidebar li { margin-bottom: 0.8rem; }
@@ -1064,13 +1067,29 @@ form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !importan
 .iris-group-sidebar .workspace-subtype-header .fa-angle-right { line-height: 2.25rem; }
 .workspace-subtype-content img { /* max-width: 2.375rem; max-height: 2.375rem; */ max-width:100%; max-height:100%; }
 .iris-group-sidebar .workspace-subtype-content .elgg-image-block { padding:0; }
-.iris-group-sidebar .workspace-subtype-content .elgg-image-block .elgg-image { width:2.5rem; height:2.5rem; margin: 0 0.9375rem 0 0; border: 1px solid rgba(56, 66, 87, 0.2); }
+.iris-group-sidebar .workspace-subtype-content .elgg-image-block .elgg-image,
+.iris-group-sidebar-alt .workspace-subtype-content .elgg-image-block .elgg-image { width:2.5rem; height:2.5rem; margin: 0 0.9375rem 0.625rem 0; display:flex; }
 .workspace-subtype-content .elgg-body { font-size: 0.8125rem; font-weight: bold; }
+.workspace-subtype-content .elgg-image span { margin:auto; }
 .workspace-subtype-content .file { width:2.5rem; height:2.5rem; display: inline-block; margin: 0 0.625rem 0.625rem 0; border: 1px solid rgba(56, 66, 87, 0.2); }
-.workspace-subtype-content .blog { margin: 0 0 0.625rem 0; }
-.workspace-subtype-content .pages { margin: 0 0 0.625rem 0; }
-.workspace-subtype-content .bookmarks { margin: 0 0 0.625rem 0; }
-.workspace-subtype-content .newsletter { margin: 0 0 0.625rem 0; }
+.workspace-subtype-content .blog .elgg-image, 
+.workspace-subtype-content .pages .elgg-image, 
+.workspace-subtype-content .bookmarks .elgg-image, 
+.workspace-subtype-content .newsletter .elgg-image, 
+.workspace-subtype-content .poll .elgg-image, 
+.workspace-subtype-content .feedback .elgg-image { border: 1px solid rgba(56, 66, 87, 0.2); }
+.workspace-subtype-content .blog {  }
+.workspace-subtype-content .pages {  }
+.workspace-subtype-content .bookmarks {  }
+.workspace-subtype-content .newsletter {  }
+.workspace-subtype-content .poll {  }
+.workspace-subtype-content .event_calendar {  }
+.workspace-subtype-content .feedback {  }
+
+.elgg-image .date-in-month { background: #FD6356; }
+.workspace-subtype-content .calendar-action { color: #1488CA; font-size: 1.3125rem; }
+.workspace-subtype-content h4, .workspace-subtype-content h4 a, .workspace-subtype-content a h4 { font-size: 0.9375rem; color: #384257; margin:0; }
+
 
 .iris-sidebar-content .ui-datepicker-inline { max-width: 100%; font-size: 0.75rem; }
 .iris-sidebar-content .ui-datepicker td { padding: 0; }

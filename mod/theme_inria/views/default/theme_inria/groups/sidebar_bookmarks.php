@@ -16,7 +16,8 @@ if ($group->bookmarks_enable == 'yes') {
 		foreach ($objects as $ent) {
 			$content .= '<div class="bookmarks">';
 				$content .= '<a href="' . $ent->getURL() . '" title="' . $ent->title . '">';
-					$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<p>' . elgg_get_excerpt($ent->title, 64) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';

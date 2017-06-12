@@ -261,6 +261,10 @@ function theme_inria_init(){
 		elgg_unregister_event_handler("create", "annotation", "advanced_notifications_create_annotation_event_handler");
 	}
 	
+	// Override default icons (with images only !) - late so previous plugins have already set their own icon if applicable
+	//elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'theme_inria_object_icon_hook', 1000);
+	
+	
 }
 
 // Include Inria page handlers

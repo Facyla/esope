@@ -10,12 +10,13 @@ if ($group->event_calendar_enable == 'yes') {
 	elgg_push_context('widgets');
 	$all_link = elgg_view('output/url', array(
 		'href' => "groups/content/$group->guid/event_calendar/all",
-		'text' => elgg_echo('event_calendar:group') . ' &nbsp; <i class="fa fa-angle-right"></i>',
+		'text' => elgg_echo('theme_inria:workspace:event_calendar') . ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
 	$new_link = elgg_view('output/url', array(
 		'href' => "event_calendar/add/$group->guid",
-		'text' => '+', //elgg_echo('event_calendar:add'),
+		'text' => '+', 
+		'title' => elgg_echo('event_calendar:add'),
 		'class' => "add-plus float-alt",
 		'is_trusted' => true,
 	));
@@ -32,13 +33,14 @@ if ($group->event_calendar_enable == 'yes') {
 	//if (!$content) { $content = '<p>'.elgg_echo("group:poll:empty").'</p>'; }
 
 
-
-	echo '<div class="workspace-subtype-header">';
-		echo $new_link;
-		echo '<h3>' . $all_link . '</h3>';
-	echo '</div>';
-	echo '<div class="workspace-subtype-content">';
-		echo $content;
+	echo '<div class="iris-sidebar-content">';
+		echo '<div class="workspace-subtype-header">';
+			echo $new_link;
+			echo '<h3>' . $all_link . '</h3>';
+		echo '</div>';
+		echo '<div class="workspace-subtype-content">';
+			echo $content;
+		echo '</div>';
 	echo '</div>';
 }
 
