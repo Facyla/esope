@@ -26,6 +26,21 @@ Can also be used to provide feedback on password match, email integrity, etc.
  * background : set background image color or transparency (depends of used library)
 
 
+## Note on icons override
+Their used to be 2 main methods to override an entity icon : plugin hook and icon override. 
+Plugin hook is called first, and falls back to views overrides only if there is no return. 
+So Method 2 should be set as a global default, and Method 1 as a custom / dynamic feature (eg. entity-specific icon).
+Default sizes are : master large, medium, small, tiny, topbar
+
+1. Register a plugin hook on "entity:icon:url,$type" to force a specific, dynamic icon :
+	Hook is triggered with : $url = elgg_trigger_plugin_hook('entity:icon:url', $entity->getType(), $params, $url);
+
+2. Override a default view at subtype or type level to provide a default icon for an entity type/subtype
+	Subtype icon : $overrideurl = elgg_view("icon/{$type}/{$subtype}/{$size}", array('entity' => $entity));
+	Type icon : $overrideurl = elgg_view("icon/{$type}/default/{$size}", array('entity' => $entity));
+	Global default : $url = "_graphics/icons/default/$size.png";
+
+
 
 # Credits
 This plugin uses several external classes or libraries :
