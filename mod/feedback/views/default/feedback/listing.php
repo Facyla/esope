@@ -110,7 +110,13 @@ if ($comment == 'yes') {
 
 // On n'affiche l'icône que si on a qqch de joli, inutile pour le moment
 //$icon = elgg_view('icon/default', array('entity' => $feedback, 'size' => 'small'));
-$icon = elgg_view('icon/default', array('entity' => $feedback->getOwnerEntity(), 'size' => 'small'));
+$owner = $feedback->getOwnerEntity();
+if (elgg_instanceof($owner, 'user')) {
+	//$icon = elgg_view('icon/default', array('entity' => $owner, 'size' => 'small'));
+	$icon = '<img src="' . $owner->getIconURL(array('size' => 'small')) . '" />';
+} else {
+	$icon = '<img src="' . $feedback->getIconURL(array('size' => 'small')) . '" />';
+}
 echo elgg_view('page/components/image_block', array('image' => $icon, 'body' => $info, 'class' => 'submitted-feedback ' . $class));
 //echo elgg_view('page/components/image_block', array('body' => $info, 'class' => 'submitted-feedback ' . $class));
 
