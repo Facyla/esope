@@ -301,4 +301,35 @@ function feedback_about_values() {
 }
 
 
+/* Determines feedback page owner (specific container, main group, user...)
+ * Specific container : specific group (ie. published in a specific group)
+ * Container not set (= owner) : main group if set, site or user otherwise
+ * @return $container
+ */
+function feedback_set_page_owner($feedback) {
+	if (!elgg_instanceof($feedback, 'object', 'feedback')) { return false; }
+	
+	// Specific container if set (valid group, different from owner user itself)
+	$container = $feedback->getContainerEntity();
+	if (elgg_instanceof($container, 'group')) {
+		elgg_set_page_owner_guid($container->guid);
+		return $container;
+	}
+	
+	// Main group if it is valid
+	$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
+	if (!empty($feedbackgroup) && !in_array($feedbackgroup, ['no', 'grouptool'])) {
+		$maingroup = get_entity($feedbackgroup);
+		if (elgg_instanceof($maingroup, 'group')) {
+			elgg_set_page_owner_guid($maingroup->guid);
+			return $maingroup;
+		}
+	}
+	
+	// Default container = site
+	$site = elgg_get_site_entity();
+	elgg_set_page_owner_guid($site->guid);
+	return $site;
+	
+}
 
