@@ -279,26 +279,6 @@ require_once(dirname(__FILE__) . '/lib/theme_inria/hooks.php');
 
 
 
-// Add thewire menu in group tools
-function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
-	$page_owner = elgg_get_page_owner_entity();
-	if (elgg_instanceof($page_owner, 'group')) {
-		if ($page_owner->isMember() || elgg_is_admin_logged_in()) {
-			$add_wire = elgg_get_plugin_setting('groups_add_wire', 'esope');
-			switch ($add_wire) {
-				case 'yes': break; 
-				case 'groupoption':
-					if ($page_owner->thewire_enable != 'yes') { return $return; }
-					break; 
-				default: return $return;
-			}
-			$title = elgg_echo('esope:thewire:group:title');
-			$return[] = new ElggMenuItem('thewire_group', $title, 'thewire/group/' . $page_owner->getGUID());
-		}
-	}
-	return $return;
-}
-
 
 // Returns Elgg fields coming from LDAP
 function inria_get_profile_ldap_fields() {

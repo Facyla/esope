@@ -47,8 +47,10 @@ if ($group->canEdit()) {
 $content .= '<div class="group-workspace-module group-workspace-admins">';
 	$content .= '<div class="group-admin">
 			<h3>' . elgg_echo('groups:owner') . '</h3>
-			<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
-			' . $owner->name . '
+			<a href="' . $owner->getURL() . '">
+				<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
+				' . $owner->name . '
+			</a>
 		</div>';
 	$content .= '<div class="group-operators">' . $manage_group_admins;
 		if ($operators_count > 0) {
@@ -56,8 +58,10 @@ $content .= '<div class="group-workspace-module group-workspace-admins">';
 			if ($operators) {
 				foreach($operators as $ent) {
 					$content .= '<div class="group-operator">
-							<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
-							' . $ent->name . '
+							<a href="' . $ent->getURL() . '">
+								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
+								' . $ent->name . '
+							</a>
 						</div>';
 				}
 			}

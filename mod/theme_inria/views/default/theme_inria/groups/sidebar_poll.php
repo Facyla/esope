@@ -21,7 +21,7 @@ if (poll_activated_for_group($group)) {
 	}
 	elgg_pop_context();
 	if (!$content) {
-	  $content = '<p>'.elgg_echo("group:poll:empty").'</p>';
+		$content = '<p>'.elgg_echo("group:poll:empty").'</p>';
 	}
 
 	$all_link = elgg_view('output/url', array(

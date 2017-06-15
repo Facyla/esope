@@ -818,6 +818,28 @@ Voir et commenter ce lien web :
 	'theme_inria:group:back' => "Retour à la présentation",
 	'theme_inria:profile:back' => "Retour au profil",
 	
+	
+	/* River and activity */
+	// Commentaire : on mentionne le type d'objet (ou alors icônes en rapport avec l'objet et pas le commentaire)
+	// Contenus identifiés : pas besoin de préciser
+	'river:comment:user:default' => "<strong>%s</strong> a commenté %s",
+	'river:update:object:default,' => "<strong>%s</strong> a mis à jour %s",
+	'river:comment:object:file' => "<strong>%s</strong> a commenté le fichier %s",
+	'river:comment:object:announcement' => "<strong>%s</strong> a commenté l'annonce %s",
+	'river:comment:object:event_calendar' => "<strong>%s</strong> a commenté l'événement %s",
+	//'river:comment:object:default' => "",
+	'river:create:object:thewire' => "<strong>%s</strong> a répondu à", // Note : 2e paramètre "le fil" non utilisé"
+	'river:reply:object:groupforumtopic' => "<strong>%s</strong> a répondu à %s",
+	//'river:create:object:default,' => "",
+	//'river:create:group:default' => "",
+	//'' => "",
+	//'' => "",
+	//'' => "",
+	//'river:update:object:default' => "",
+	
+	
+	
+	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
 	
