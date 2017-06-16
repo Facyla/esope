@@ -38,6 +38,7 @@ $content .= '<div class="group-workspace-module group-workspace-admins">';
 			$content .= '<h3>' . elgg_echo('theme_inria:groups:operators', array($operators_count)) . '</h3>';
 			if ($operators) {
 				foreach($operators as $ent) {
+					if ($ent->guid == $owner->guid) { continue; }
 					$content .= '<div class="group-operator">
 							<a href="' . $ent->getURL() . '">
 								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
@@ -46,7 +47,7 @@ $content .= '<div class="group-workspace-module group-workspace-admins">';
 						</div>';
 				}
 			}
-			if ($operators_count > $max_operators) {
+			if (($max_operators > 0) && ($operators_count > $max_operators)) {
 				$operators_more_count = $operators_count - $max_operators;
 				$content .= '<div class="group-operator more">' . elgg_view('output/url', array(
 					'href' => 'group_operators/manage/' . $group->guid,

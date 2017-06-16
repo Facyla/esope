@@ -639,7 +639,8 @@ input#iris-topbar-search-input { width: auto; font-size: 1.2rem; }
 .iris-profile-editavatar:hover { opacity:1; text-decoration:none; }
 .iris-profile-icon:hover .iris-profile-editavatar {  }
 .iris-profile-editavatar .fa { font-size: 2.5rem; }
-.iris-profile-addfriend, .iris-profile-isfriend, .iris-profile-removefriend, .iris-profile-pendingfriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
+.iris-round-button, .iris-profile-addfriend, .iris-profile-isfriend, .iris-profile-removefriend, .iris-profile-pendingfriend, .iris-profile-sendmessage { position: absolute; display: inline-block; width: 3rem; height: 3rem; border-radius: 3rem; color: white; text-align: center; line-height: 3rem; font-size: 1.4rem; }
+.iris-round-button { background: #384257; color: white; }
 .iris-profile-addfriend { right: 0rem; top: 1rem; background: <?php echo $iris_blue; ?>; }
 .iris-profile-removefriend { right: 0rem; top: 1rem; background: #FF0000; }
 .iris-profile-isfriend { right: 0rem; top: 1rem; background: #95C11F; }
@@ -993,6 +994,14 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #iris-body .iris-group .elgg-context-group_content .elgg-main { max-width: 47rem; padding: 4px 4px 4px 4px; margin-left: 4.675rem; }
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 .group-profile-main .elgg-list li { box-shadow: none; margin-bottom: 0; }
+.group-profile-main .iris-round-button { color:white; font-size: 1rem; height: 2rem; width: 2rem; line-height: 2.2rem; opacity: 0.6; }
+.group-operator:hover .iris-round-button, .group-member:hover .iris-round-button { opacity: 1; }
+.make-group-owner { top: 3.5rem; left: 1rem; }
+.remove-group-operator { top: 3.5rem; left: 3.5rem; }
+.group-profile-main .group-member .iris-round-button { float: right; position: initial; margin-left: 0.5rem; }
+.group-members-search { display:flex; margin: 1rem 0; }
+.group-members-search .fa { margin-right: 1rem; }
+.group-member img { border-radius: 50%; float: left; margin-right: 0.5rem; }
 .group-workspace-main { margin-bottom: 2rem; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 .group-workspace-module { margin-bottom: 2.5rem; }
 .group-workspace-admins { display:flex; }
@@ -1001,7 +1010,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-admins .group-operator { float:left; margin-right: 0.625rem; max-width: 6.25rem; font-size: 0.9375rem; text-align: center; }
 .group-workspace-admins .operators-more { width: 6.25rem; height: 6.25rem; line-height: 6.75rem; font-size: 2.125rem; background: #384257; color: white; border-radius: 3.125rem; display: inline-block; font-weight: bold; }
 .group-workspace-admins img { border-radius: 50px; }
-group-admin, .group-operator:not(.more) { min-height: 10rem; }
+.group-admin, .group-operator:not(.more) { min-height: 10rem; position: relative; }
 .group-admin img, .group-operator img { margin-bottom: 0.5rem; }
 .group-admin a, .group-operator a { color: #384257; }
 .group-operator.more { margin-right: 0; }
