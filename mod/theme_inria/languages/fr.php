@@ -818,6 +818,10 @@ Voir et commenter ce lien web :
 	'theme_inria:group:back' => "Retour à la présentation",
 	'theme_inria:profile:back' => "Retour au profil",
 	
+	'theme_inria:notification:email' => "Etre notifié par email",
+	'theme_inria:notification:site' => "Etre notifié via le site",
+	'theme_inria:newsletter:subscription' => "Abonnement lettre d'info",
+	
 	
 	/* River and activity */
 	// Commentaire : on mentionne le type d'objet (ou alors icônes en rapport avec l'objet et pas le commentaire)

@@ -322,11 +322,14 @@ function theme_inria_groups_page_handler($page) {
 		case 'add':
 			elgg_push_context('groups_add');
 			set_input('group_layout_header', 'yes');
-			groups_handle_edit_page('add');
+			//groups_handle_edit_page('add');
+			echo elgg_view('resources/groups/edit', array('page' => 'add', 'group_guid' => $page[1]));
 			break;
 		case 'edit':
+			elgg_push_context('group_edit');
 			set_input('group_layout_header', 'yes');
-			groups_handle_edit_page('edit', $page[1]);
+			//groups_handle_edit_page('edit', $page[1]);
+			echo elgg_view('resources/groups/edit', array('page' => 'edit', 'group_guid' => $page[1]));
 			break;
 		
 		case 'profile':
@@ -353,9 +356,11 @@ function theme_inria_groups_page_handler($page) {
 			return true;
 		
 		case 'members':
+			elgg_push_context('group_members');
 			set_input('group_layout_header', 'yes');
 			// ESOPE: use custom function because au_subgroups lib has hardcoded limit + add invite button for group admins
-			esope_groups_handle_members_page($page[1]);
+			//esope_groups_handle_members_page($page[1]);
+			echo elgg_view('resources/groups/members', array('group_guid' => $page[1]));
 			break;
 		case 'invitations':
 			set_input('group_layout_header', 'yes');
@@ -363,8 +368,10 @@ function theme_inria_groups_page_handler($page) {
 			groups_handle_invitations_page();
 			break;
 		case 'invite':
+			elgg_push_context('group_invites');
 			set_input('group_layout_header', 'yes');
-			groups_handle_invite_page($page[1]);
+			//groups_handle_invite_page($page[1]);
+			echo elgg_view('resources/groups/invite', array('group_guid' => $page[1]));
 			break;
 		case 'requests':
 			set_input('group_layout_header', 'yes');

@@ -598,6 +598,9 @@ input#iris-topbar-search-input { width: auto; font-size: 1.2rem; }
 #iris-body .elgg-layout-one-sidebar .elgg-sidebar { padding: 2.5rem 0rem 3rem 2.625rem; box-sizing: border-box; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { padding: 2.5rem 2.625rem 3rem 2.625rem; box-sizing: border-box; }
 
+#iris-body .elgg-layout-one-sidebar.elgg-context-settings .elgg-module-info .elgg-head { float: none; width: auto; margin-bottom: 1rem; padding: 0.5rem; }
+#iris-body .elgg-layout-one-sidebar.elgg-context-settings .elgg-module-info .elgg-body { margin-bottom: 2rem; }
+
 #iris-body .elgg-layout-one-column.elgg-context-profile_edit .elgg-main { max-width: 47rem; width: 100%; margin: 2rem auto; float: none; padding: 0 2.625rem 3rem 2.625rem; background:white; box-sizing: border-box; display: flex; flex-wrap: wrap; flex-direction: column; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 
 #iris-footer { flex:0; /* margin-top: auto; */ position: absolute; bottom: 0; width: 204px; }
@@ -655,7 +658,7 @@ input#iris-topbar-search-input { width: auto; font-size: 1.2rem; }
 .iris-user-groups-add a { width: 100%; color: #384257; text-decoration:none; }
 .iris-user-friend { margin:0 0.2rem 0.1rem 0; }
 .iris-user-friend img { height:3.375rem; width:3.375rem; border-radius:3.375rem; }
-.iris-user-friends-add { height:3.375rem; width:3.375rem; border:1px dashed #384257; display:flex; text-align:center; line-height:3.375rem; font-size:2rem; }
+.iris-user-friends-add { height:3.375rem; width:3.375rem; border:1px dashed #384257; display:flex; text-align:center; line-height:3.375rem; font-size:1rem; }
 .iris-user-friends-add a { width: 100%; color: #384257; text-decoration:none; }
 
 /* Styles génériques */
@@ -685,6 +688,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 
 
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
+.group-profile-main .elgg-list .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
 .elgg-tags li.elgg-tag:after { content:''; }
 .elgg-tag {  }
 .elgg-tag a { display:inline-block; padding: 0.3em 0.8em 0.2em 0.8em; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
@@ -773,6 +777,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
 .iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
+.group-workspace-activity .elgg-item { padding: 1rem 0; }
 .elgg-list .elgg-item .elgg-image-block { padding: 0; overflox:hidden; }
 .elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; position:relative; }
 .workspace-subtype-content .elgg-image-block .elgg-image { margin: 0 1.475rem 0 0; }
@@ -981,18 +986,26 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 .group-members-count { font-size: 5.5rem; /* text-align: center; */ color: #1488CA; margin: 1rem 0 1.5rem 0; }
 #iris-body .iris-group .elgg-context-group_profile .elgg-main, 
+#iris-body .iris-group .elgg-context-group_edit .elgg-main, 
+#iris-body .iris-group .elgg-context-group_members .elgg-main, 
+#iris-body .iris-group .elgg-context-group_invites .elgg-main, 
 #iris-body .iris-group .elgg-context-group_workspace .elgg-main { background: transparent; border: 0; padding: 0; box-shadow: none; padding: 4px; margin: -4px; }
 #iris-body .iris-group .elgg-context-group_content .elgg-main { max-width: 47rem; padding: 4px 4px 4px 4px; margin-left: 4.675rem; }
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
+.group-profile-main .elgg-list li { box-shadow: none; margin-bottom: 0; }
 .group-workspace-main { margin-bottom: 2rem; background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 .group-workspace-module { margin-bottom: 2.5rem; }
 .group-workspace-admins { display:flex; }
-.group-workspace-admins .group-admin { flex: 0 0 auto; margin-right: 3.75rem; text-align: center; }
+.group-workspace-admins .group-admin { flex: 0 0 auto; margin-right: 2.5rem; max-width: 8rem; text-align: center; }
 .group-workspace-admins .group-operators { flex: 1; }
 .group-workspace-admins .group-operator { float:left; margin-right: 0.625rem; max-width: 6.25rem; font-size: 0.9375rem; text-align: center; }
 .group-workspace-admins .operators-more { width: 6.25rem; height: 6.25rem; line-height: 6.75rem; font-size: 2.125rem; background: #384257; color: white; border-radius: 3.125rem; display: inline-block; font-weight: bold; }
 .group-workspace-admins img { border-radius: 50px; }
-.group-workspace-members img { width: 2rem; border-radius: 1rem; margin: 0 0.4375rem 0.4375rem 0; }
+group-admin, .group-operator:not(.more) { min-height: 10rem; }
+.group-admin img, .group-operator img { margin-bottom: 0.5rem; }
+.group-admin a, .group-operator a { color: #384257; }
+.group-operator.more { margin-right: 0; }
+.group-workspace-members img { width: 2rem; border-radius: 1rem; /* margin: 0 0.4375rem 0.4375rem 0; */ }
 .group-workspace-members a, 
 .group-workspace-members .members-more { margin: 0 0.4375rem 0.4375rem 0; font-size:1rem; color: #384257; font-weight:bold; height:2.5rem; line-height:2.5rem; float: left; }
 .group-members-online img { width: 2rem; border-radius: 1rem; margin: 0 0.4375rem 0.4375rem 0; }
@@ -1044,6 +1057,9 @@ fieldset > div { /* max-width: 30rem; */ }
 #iris-body .elgg-menu-feedback li > a:hover,
 #iris-body .elgg-menu-feedback li > a:active,
 #iris-body .elgg-menu-feedback li > a:focus { background: white; color: #1488CA; }
+
+.elgg-sidebar form.elgg-form-newsletter-subscribe { padding: 0; border: 0; }
+form.elgg-form-newsletter-subscribe label { margin: 0; }
 
 .form-groups-add .iris-group-sidebar-alt { padding: 0 3rem 1rem 4rem; }
 .form-groups-add .iris-group-sidebar-alt .iris-group-image-input { background: transparent; box-shadow: none; }

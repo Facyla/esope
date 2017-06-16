@@ -4,6 +4,7 @@ $group = elgg_get_page_owner_entity();
 // Determine main group
 $main_group = theme_inria_get_main_group($group);
 
+$own = elgg_get_logged_in_user_entity();
 
 $url = elgg_get_site_url();
 
@@ -48,24 +49,29 @@ $content .= '<ul class="elgg-menu elgg-menu-page">';
 	$email_notification = check_entity_relationship(elgg_get_logged_in_user_guid(), 'notifyemail', $group->guid);
 	*/
 	
-	// @TODO handle new form for direct group email notifications
-	// @TODO Alternative : 1 checkbox per available method
-	$content .= '<li>' . elgg_view('input/checkbox', array(
-			'name' => '', 
-			'value' => 'yes', 
-			'checked' => $email_notification, 
-			'label' => 'Etre notifé par email',
-		)) . '</li>';
+	// Direct group email notifications subscription
+	$content .= '<form action="' . $url . 'action/theme_inria/group_notification">';
+	$content .= elgg_view('input/securitytoken');
+	//$methods = array('email', 'site');
+	$methods = array('email');
+	foreach($methods as $method) {
+		$checked = '';
+		if (check_entity_relationship($own->guid, 'notify' . $method, $group->guid)) { $checked = 'checked="checked"'; }
+		//$content .= '<pre>' . print_r($email_notification, true) . '</pre>';
+		$method_label = elgg_echo('theme_inria:notification:'.$method);
+		$content .= '<p><label><input type="checkbox" name="' . $method . '" value="1" ' . $checked . ' onClick="$(this).closest(\'form\').submit();" />' . $method_label . '</label></p>';
+	}
+	$content .= elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $group->guid));
+	$content .= elgg_view('input/hidden', array('name' => 'guid', 'value' => $own->guid));
+	$content .= '<noscript>' . elgg_view('input/submit', array('value' => elgg_echo('save:groupnotifications'))) . '</noscript>';
+	$content .= '</form>';
 	// Notification settings : notifications/group/$username
 	
 	// Direct newsletter subscription
-	// @TODO if newsletter enabled
-	if ($group->event_calendar_enable) {
-		$content .= '<li>' . elgg_view('input/checkbox', array(
-				'name' => '', 
-				'value' => 'yes', 
-				'label' => "S'abonner à la lettre d'info"
-			)) . '</li>';
+	if ($group->newsletter_enable) {
+		if (newsletter_is_group_enabled($group)) {
+			$content .= '<li>' . elgg_view('theme_inria/groups/subscribe_newsletter', array('entity' => $group)) . '</li>';
+		}
 	}
 	
 $content .= '</ul>';

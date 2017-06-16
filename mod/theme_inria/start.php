@@ -39,6 +39,9 @@ function theme_inria_init(){
 	elgg_register_action("theme_inria/membersearch", $action_url . "theme_inria/membersearch.php");
 	elgg_register_action("theme_inria/groupsearch", $action_url . "theme_inria/groupsearch.php");
 	
+	// Per-group notificaiton settings
+	elgg_register_action("theme_inria/group_notification", $action_url . "theme_inria/group_notification.php");
+	
 	
 	// CSS - Inria custom styles
 	$css_url = elgg_get_site_url() . 'mod/theme_inria/fonts/';
@@ -380,5 +383,27 @@ function theme_inria_group_object_subtypes_opt($group) {
 }
 
 
+// Returns the proper URL for a group (or workspace) in a given context
+function theme_inria_get_group_tab_url($group, $link_type = 'home') {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	
+	switch($link_type) {
+		case 'edit':
+			return elgg_get_site_url() . 'groups/edit/' . $group->guid;
+			break;
+		case 'invite':
+			return elgg_get_site_url() . 'groups/invite/' . $group->guid;
+			break;
+		case 'members':
+			return elgg_get_site_url() . 'groups/members/' . $group->guid;
+			break;
+		case 'workspace':
+			return elgg_get_site_url() . 'groups/workspace/' . $group->guid;
+			break;
+		case 'home':
+		default:
+			return $group->getURL();
+	}
+}
 
 

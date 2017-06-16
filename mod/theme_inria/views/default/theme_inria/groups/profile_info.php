@@ -4,12 +4,62 @@ $group = elgg_extract('group', $vars);
 $content = '';
 
 
+// Présentation
+if (!empty($group->description)) {
+	$content .= '<div class="group-workspace-module group-workspace-about">';
+		$content .= '<h3>' . elgg_echo('theme_inria:groups:about') . '</h3>';
+		$content .= '<p>' . $group->description . '</p>';
+	$content .= '</div>';
+}
+
 // Owner and operators
 $owner = $group->getOwnerEntity();
 $max_operators = 2;
 $operators_opt = array('types'=>'user', 'limit'=> $max_operators, 'relationship_guid'=> $group->guid, 'relationship'=>'operator', 'inverse_relationship'=>true, 'wheres' => "e.guid != {$owner->guid}");
 $operators_count = elgg_get_entities_from_relationship($operators_opt + array('count' => true));
 $operators = elgg_get_entities_from_relationship($operators_opt);
+
+// Lien admin et responsables du groupe
+if ($group->canEdit()) {
+	$manage_group_admins = '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $group->guid . '" class="iris-manage float-alt">' . elgg_echo('theme_inria:manage') . '</a>';
+}
+$content .= '<div class="group-workspace-module group-workspace-admins">';
+	$content .= '<div class="group-admins">
+			<div class="group-admin">
+				<h3>' . elgg_echo('groups:owner') . '</h3>
+				<a href="' . $owner->getURL() . '">
+					<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
+					' . $owner->name . '
+				</a>
+			</div>
+		</div>';
+	$content .= '<div class="group-operators">' . $manage_group_admins;
+		if ($operators_count > 0) {
+			$content .= '<h3>' . elgg_echo('theme_inria:groups:operators', array($operators_count)) . '</h3>';
+			if ($operators) {
+				foreach($operators as $ent) {
+					$content .= '<div class="group-operator">
+							<a href="' . $ent->getURL() . '">
+								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
+								' . $ent->name . '
+							</a>
+						</div>';
+				}
+			}
+			if ($operators_count > $max_operators) {
+				$operators_more_count = $operators_count - $max_operators;
+				$content .= '<div class="group-operator more">' . elgg_view('output/url', array(
+					'href' => 'group_operators/manage/' . $group->guid,
+					'text' => "+".$operators_more_count,
+					'is_trusted' => true, 'class' => 'operators-more',
+				)) . '</div>';
+			}
+		}
+	$content .= '</div>';
+	$content .= '<div class="clearfloat"></div>';
+$content .= '</div>';
+
+
 
 // Members
 $max_members = 25;
@@ -29,56 +79,6 @@ if ($all_members != $members_count) {
 	}
 }
 
-
-
-// Présentation
-if (!empty($group->description)) {
-	$content .= '<div class="group-workspace-module group-workspace-about">';
-		$content .= '<h3>' . elgg_echo('theme_inria:groups:about') . '</h3>';
-		$content .= '<p>' . $group->description . '</p>';
-	$content .= '</div>';
-}
-
-// Admins
-// Lien admin des responsables de groupes
-if ($group->canEdit()) {
-	$manage_group_admins = '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $group->guid . '" class="iris-manage float-alt">' . elgg_echo('theme_inria:manage') . '</a>';
-}
-$content .= '<div class="group-workspace-module group-workspace-admins">';
-	$content .= '<div class="group-admin">
-			<h3>' . elgg_echo('groups:owner') . '</h3>
-			<a href="' . $owner->getURL() . '">
-				<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
-				' . $owner->name . '
-			</a>
-		</div>';
-	$content .= '<div class="group-operators">' . $manage_group_admins;
-		if ($operators_count > 0) {
-			$content .= '<h3>' . elgg_echo('theme_inria:groups:operators', array($operators_count)) . '</h3>';
-			if ($operators) {
-				foreach($operators as $ent) {
-					$content .= '<div class="group-operator">
-							<a href="' . $ent->getURL() . '">
-								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
-								' . $ent->name . '
-							</a>
-						</div>';
-				}
-			}
-			if ($operators_count > $max_operators) {
-				$operators_more_count = $operators_count - $max_operators;
-				$content .= '<div class="group-operator">' . elgg_view('output/url', array(
-					'href' => 'group_operators/manage/' . $group->guid,
-					'text' => "+".$operators_more_count,
-					'is_trusted' => true, 'class' => 'operators-more',
-				)) . '</div>';
-			}
-		}
-	$content .= '</div>';
-	$content .= '<div class="clearfloat"></div>';
-$content .= '</div>';
-
-// Members
 $content .= '<div class="group-workspace-module group-workspace-members">';
 	$content .= '<h3>' . $members_string . '</h3>';
 	foreach($members as $ent) {
@@ -102,6 +102,8 @@ $content .= '<div class="group-workspace-module group-workspace-invites">';
 $content .= '</div>';
 */
 
+
+// Membership requests
 $requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true, 'limit' => false));
 $requests_count = sizeof($requests);
 if ($requests_count > 0) {

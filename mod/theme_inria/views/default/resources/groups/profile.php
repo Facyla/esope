@@ -31,53 +31,7 @@ $sidebar_alt = '';
 if (elgg_group_gatekeeper(false)) {
 	
 	// Workspaces tabs
-	$max_title = 15;
-	$max_title_more = 30;
-	$more_tabs_threshold = 1; // Displays if > 3 (main workspace + index 0 + index 1)
-	$all_subgroups_guids = AU\SubGroups\get_all_children_guids($main_group);
-	$add_more_tab = (sizeof($all_subgroups_guids) > $more_tabs_threshold+1);
-	$workspaces_tabs = '';
-	$workspaces_tabs .= '<div class="group-workspace-tabs"><ul class="elgg-tabs elgg-htabs">';
-		
-		// Main workspace
-		if ($group->guid == $main_group->guid) { $workspaces_tabs .= '<li class="elgg-state-selected">'; } else { $workspaces_tabs .= '<li>'; }
-		$workspaces_tabs .= '<a href="' . $main_group->getURL() . '" title="' . elgg_echo('theme_inria:workspace:title', array($main_group->name)) . '">' . elgg_get_excerpt($main_group->name, $max_title) . '</a></li>';
-		// Onglets des sous-groupes
-		// Note : on prend tous les sous-groupes qq soit le niveau - mais on ne pourra créer de nouveaux sous-groupes qu'au 1er niveau
-		// Espaces de travail : si > 3 onglets, on en affiche 2 et le reste en sous-menu + limitation longueur du titre
-		$more_tabs = '';
-		$more_selected = false;
-		if ($all_subgroups_guids) {
-			foreach($all_subgroups_guids as $k => $guid) {
-				$ent = get_entity($guid);
-				$workspace_url = $url . 'groups/workspace/' . $ent->guid;
-				$title_excerpt = elgg_get_excerpt($ent->name, $max_title);
-				$tab_class = '';
-				if ($ent->guid == $group->guid) { $tab_class .= "elgg-state-selected"; $more_selected = true; }
-				if ($add_more_tab && ($k >= $more_tabs_threshold)) {
-					$title_excerpt = elgg_get_excerpt($ent->name, $max_title_more);
-					$more_tabs .= '<li class="' . $tab_class . '"><a href="' . $ent->getURL() . '" title="' . elgg_echo('theme_inria:workspace:title', array($ent->name)) . '">' . $title_excerpt . '</a></li>';
-				} else {
-					$workspaces_tabs .= '<li class="' . $tab_class . '"><a href="' . $ent->getURL() . '" title="' . elgg_echo('theme_inria:workspace:title', array($ent->name)) . '">' . $title_excerpt . '</a></li>';
-				}
-				
-			}
-		}
-		if ($add_more_tab) {
-			if ($more_selected) {
-				$workspaces_tabs .= '<li class="tab tab-more active">';
-			} else {
-				$workspaces_tabs .= '<li class="tab tab-more">';
-			}
-			$workspaces_tabs .= '<a href="javascript:void(0);" onClick="javascript:$(this).parent().toggleClass(\'elgg-state-selected\'); $(this).parent().find(\'.tab-more-content\').toggleClass(\'hidden\')">' . elgg_echo('theme_inria:workspaces:more', array((sizeof($all_subgroups_guids) - $more_tabs_threshold))) . '</a>
-					<ul class="tab-more-content hidden">' . $more_tabs . '</ul>
-			</li>';
-		}
-		
-	$workspaces_tabs .= '</ul></div>';
-	
-	
-	
+	$workspaces_tabs = elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
 	
 	// Compose content
 	$content .= $workspaces_tabs;

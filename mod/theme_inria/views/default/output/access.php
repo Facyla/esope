@@ -18,7 +18,7 @@ $entity = elgg_extract('entity', $vars, false);
 if (elgg_in_context('widgets')) { $hide_text = true; }
 $hide_text = elgg_extract('hide_text', $vars, $hide_text);
 // Iris v2 : force access name display in activity
-if (elgg_in_context('activity') || elgg_in_context('main') || elgg_in_context('profile')) { $hide_text = false; }
+if (elgg_in_context('activity') || elgg_in_context('main') || elgg_in_context('group_profile') || elgg_in_context('profile')) { $hide_text = false; }
 
 $access_class = 'elgg-access';
 
