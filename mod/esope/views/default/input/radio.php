@@ -5,7 +5,7 @@
  *
  * @warning Passing integers as labels does not currently work due to a
  * deprecated hack that will be removed in Elgg 1.9. To use integer labels,
- * the labels must be character codes: 1 would be &#0049;
+ * the labels must be character codes: 1 would be &#0049; (0 is &#0048)
  *
  * @package Elgg
  * @subpackage Core
