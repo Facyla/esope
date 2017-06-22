@@ -100,7 +100,7 @@ if (elgg_group_gatekeeper(false)) {
 						'class' => "elgg-button elgg-button-action",
 					));
 				$content .= elgg_view('output/url', array(
-						'href' => $url . 'blog/group/' . $group->guid,
+						'href' => $url . 'groups/content/' . $group->guid . '/blog/draft',
 						'text' => elgg_echo('theme_inria:blog:editdraft'),
 						'class' => "elgg-button elgg-button-action",
 					));
@@ -113,12 +113,12 @@ if (elgg_group_gatekeeper(false)) {
 	// Entités par date (*pas* la river/l'activité)
 	$content .= '<div class="group-workspace-main">';
 		$content .= '<div class="group-workspace-activity-filter">';
-			// @TODO Basic form for content filter
-			// @TODO filter by available subtypes in group (+ files as they are always enabled through embed)
+			// Switch form for content filter
+			// Filters by available subtypes in group (+ files as they are always enabled through embed)
 			//$content .= print_r(get_registered_entity_types('object'), true);
 			
 			$content .= '<form id="group-workspace-content-filter">';
-				$content .= '<label>' . "Filtrer ";
+				$content .= '<label>' . elgg_echo('theme_inria:filter');
 					$content .= elgg_view('input/select', array('name' => 'filter', 'value' => $filter, 'options_values' => $filter_opt, 'onChange' => "javascript:this.form.submit();"));
 				$content .= '</label>';
 			$content .= '</form>';
@@ -132,6 +132,7 @@ if (elgg_group_gatekeeper(false)) {
 				),
 				'limit' => 10,
 				'pagination' => true,
+				'no_results' => elgg_echo('theme_inria:groups:content:no_result'),
 			);
 			if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
 			//$content .= "SUBTYPES => " . print_r($subtypes, true);

@@ -24,6 +24,18 @@ if (elgg_in_context('groups_add')) {
 	return;
 }
 
+// @TODO voir si on utilise l'espace blanc pour menu ?
+if (elgg_instanceof($page_owner, 'user')) {
+	$user_header = '';
+	$user_header .= '<div class="iris-profile-header" style="background: ' . $banner_css . ';">' . elgg_view('profile/iris_owner_header', $vars) . '</div>';
+	//$user_header .= '<div class="iris-profile-info">' . elgg_view('profile/iris_profile_info', $vars) . '</div>';
+	//$user_header .= '<div class="iris-profile-info">' . '<br />' . '</div>';
+	$user_header .= '<div class="iris-profile-submenu">' . elgg_view_menu('owner_block', array('entity' => $page_owner)) . '</div>';
+	//if (!empty($vars['nav'])) $user_header .= '<div class="iris-profile-info">' . $vars['nav'] . '</div>';
+	//echo elgg_view('page/layouts/iris_user', $vars);
+	//return;
+}
+
 // Iris v2 : remove sidebar for specific context (profile edit of another user)
 // @TODO Iris profile layout ?
 //echo print_r(elgg_get_context_stack(), true);
@@ -36,9 +48,11 @@ if (elgg_in_context('profile_edit') || elgg_in_context('settings')) {
 if (elgg_in_context('profile_edit') && ($page_owner->guid != elgg_get_logged_in_user_guid())) {
 	//$vars['nav'] = $profile_back;
 	$vars['title'] .= $profile_back;
+	$vars['content'] = $user_header . $vars['content'];
 	echo elgg_view('page/layouts/one_column', $vars);
 	return;
 }
+
 
 
 $class = 'elgg-layout elgg-layout-one-sidebar clearfix';
@@ -56,10 +70,13 @@ foreach(elgg_get_context_stack() as $context) {
 $nav = elgg_extract('nav', $vars, '');
 
 // Change layout for groups - but only show if group can be seen
-$owner = elgg_get_page_owner_entity();
-if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
-	$topmenu = elgg_view('group/topmenu', array('entity' => $owner));
+/*
+$page_owner = elgg_get_page_owner_entity();
+if (elgg_instanceof($page_owner, 'group') && has_access_to_entity($page_owner)) {
+	$topmenu = elgg_view('group/topmenu', array('entity' => $page_owner));
 }
+*/
+
 ?>
 
 <div class="<?php echo $class; ?>">
@@ -69,6 +86,11 @@ if (elgg_instanceof($owner, 'group') && has_access_to_entity($owner)) {
 	if ($topmenu) {
 		echo $nav . '<br >';
 		echo $topmenu;
+	}
+	
+	// Iris v2 User banner instead of owner block
+	if (elgg_instanceof($page_owner, 'user')) {
+		echo $user_header;
 	}
 	?>
 	

@@ -10,6 +10,9 @@
 
 // ESOPE : enable admin-controlled tools sorting + default settings
 
+// may not be set yet
+$group = $vars['entity'];
+
 $tools = elgg_get_config("group_tool_options");
 if ($tools) {
 	usort($tools, create_function('$a,$b', 'return strcmp($a->label,$b->label);'));
@@ -47,6 +50,12 @@ foreach ($tools as $priority => $view) {
 	//foreach ($tools as $group_option) {
 	foreach ($group_options as $group_option) {
 		$group_option_toggle_name = $group_option->name . "_enable";
+		
+		// Iris v2 : force sous-groupe si pas de parent
+		if (elgg_instanceof($group, 'group') && ($group_option_toggle_name == 'subgroups_enable') && elgg_is_active_plugin('au_subgroups') && (AU\SubGroups\get_parent_group($group))) {
+			$group->$group_option_toggle_name = 'yes';
+			continue;
+		}
 		//$value = elgg_extract($group_option_toggle_name, $vars);
 		// Set tools to global default, or custom value
 		$group_default_tools = elgg_get_plugin_setting('group_tools_default', 'esope');

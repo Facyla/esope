@@ -27,6 +27,9 @@ if ($owner instanceof ElggGroup) {
 		'body' => $body,
 		'class' => 'elgg-owner-block',
 	));
+} else if ($owner instanceof ElggUser) {
+	//echo elgg_view_entity_icon($owner, array('size' => 'small'));
+	//echo elgg_view_menu('owner_block', array('entity' => $owner));
 }
 
 elgg_pop_context();

@@ -799,6 +799,8 @@ Voir et commenter ce lien web :
 	'theme_inria:user:activity' => "Activité",
 	'theme_inria:user:profile_type' => "Profil",
 	
+	'theme_inria:filter' => "Filtrer",
+	
 	'theme_inria:activity_filter:all' => "Aucun filtre",
 	'theme_inria:activity_filter:blog' => "Derniers articles publiés",
 	'theme_inria:activity_filter:comments' => "Commentaires récents",

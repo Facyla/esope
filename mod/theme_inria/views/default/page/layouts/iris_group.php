@@ -179,7 +179,9 @@ if (elgg_instanceof($group, 'group')) {
 				}
 				
 				// New subgroup (of level 1)
-				echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">+&nbsp;' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
+				if (elgg_is_active_plugin('au_subgroups') && ($main_group->subgroups_enable == 'yes')) {
+					echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">+&nbsp;' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
+				}
 				?>
 			</div>
 			
