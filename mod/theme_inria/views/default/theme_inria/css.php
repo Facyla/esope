@@ -743,6 +743,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-search { display:flex;flex-direction:column; }
 .iris-search-header { width:100%; background-color: rgba(28,36,48,1); height:18.75rem; position: relative; /* margin-bottom: 3.5rem; */ }
 .iris-search-quickform { position: absolute; top: 4.8125rem; left: 18.75rem; color: white; }
+.iris-group-header .iris-search-quickform { position: initial; margin-top: 1.875rem; }
 #iris-body .iris-search-quickform h2 { float:left; font-size: 2.625rem; line-height: 2.75rem; margin-bottom: 1.875rem; padding:0; color: white; }
 .iris-search-q-results { float: right; line-height: 2.75rem; vertical-align: bottom; font-size:1.0625rem; font-weight:bold; margin-left:2rem; }
 #iris-search-quickform { border: 1px solid white; height: 3.125rem; line-height: 3.125rem; width: 24.625rem; font-size: 1.1rem; padding: 0 0 0 0.8125rem; box-sizing: border-box; clear:both; }
@@ -1088,8 +1089,16 @@ fieldset > div { /* max-width: 30rem; */ }
 
 .form-groups-add .iris-group-sidebar { padding: 0 4rem 1rem 3rem; }
 .form-groups-add .iris-group-sidebar .iris-sidebar-content { height: 13rem; box-sizing: border-box; }
+.iris-group-header label[for="icon"], 
+.iris-group-header label[for="banner"], 
 .form-groups-add .iris-sidebar-content label { display: block; width: 100%; height: 100%; padding: 3rem 0 0 0; box-sizing: border-box; border: 1px dashed #D3D3D3; text-align: center; color: #D3D3D3; }
+.iris-group-header label[for="icon"] { border: 0; padding: 5rem 0 0 0; /* text-shadow: 1px 1px 3px black; */ }
+.iris-group-header label[for="banner"] { height: auto; margin: 8rem 0rem 0rem 0rem; position: absolute; width: 13rem; right: 2rem; border: 0; padding: 0; }
+.iris-group-header label[for="icon"] .fa, 
+.iris-group-header label[for="banner"] .fa, 
 .form-groups-add .iris-sidebar-content .fa { font-size: 2rem; margin-bottom: 0.8rem; }
+.iris-group-header label[for="icon"]:hover, .iris-group-header label[for="icon"]:active, .iris-group-header label[for="icon"]:focus { color:#384257; /* text-shadow: 1px 1px 3px white; */ cursor: pointer; }
+.iris-group-header label[for="banner"]:hover, .iris-group-header label[for="banner"]:active, .iris-group-header label[for="banner"]:focus { color: white; cursor: pointer; }
 .form-groups-add .iris-sidebar-content label:hover, .form-groups-add .iris-sidebar-content label:active, .form-groups-add .iris-sidebar-content label:focus { color:#384257; cursor: pointer; }
 .iris-group-sidebar .feedback-menu { margin: -1.5rem -2rem; }
 .elgg-sidebar.iris-group-sidebar #feedbacks h2 { padding: 0.5rem 2rem; }

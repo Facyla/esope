@@ -129,7 +129,13 @@ if (!empty($params['owner_guid'])) {
 // Container search : site, group, user
 if (!empty($params['container_guid'])) {
 	$container = get_entity($params['container_guid']);
-	echo '<p><label>' . elgg_echo('search:field:container_guid') . ' ' . elgg_view('input/select', array('name' => 'container_guid', 'value' => $params['container_guid'], 'options_values' => array('' => elgg_echo('option:none'), $params['container_guid'] => $container->name))) . '</label>';
+	// Container filter : displayed or hidden ?  hidden in group search, displayed otherwise
+	$page_owner = elgg_get_page_owner_entity();
+	if (elgg_instanceof($page_owner, 'group')) {
+		echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $params['container_guid']));
+	} else {
+		echo '<p><label>' . elgg_echo('search:field:container_guid') . ' ' . elgg_view('input/select', array('name' => 'container_guid', 'value' => $params['container_guid'], 'options_values' => array('' => elgg_echo('option:none'), $params['container_guid'] => $container->name))) . '</label>';
+	}
 } else {
 	//echo elgg_view('input/hidden', array('name' => 'container_guid', 'value' => $params['container_guid']));
 }

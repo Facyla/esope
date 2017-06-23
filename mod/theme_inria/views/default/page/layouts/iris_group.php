@@ -77,117 +77,7 @@ if (elgg_instanceof($group, 'group')) {
 	
 	<?php
 	if ($has_group_layout) {
-		$banner_css = '#424B5F';
-		if (!empty($user->banner)) {
-			//$banner_css = "linear-gradient(rgba(66, 75, 95, 0.45), rgba(66, 75, 95, 0.45)), #424B5F url('{$url}groups/file/{$group->guid}/banner') no-repeat center/cover";
-			$banner_css = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #424B5F url('{$url}groups/file/{$group->guid}/banner') no-repeat center/cover";
-		}
-		?>
-		<div class="iris-group-header" style="background: <?php echo $banner_css; ?>;">
-			
-			<div class="iris-group-image" style="background: white url('<?php echo $group->getIconURL(array('size' => 'large')); ?>') no-repeat center/cover;"></div>
-			
-			<div class="iris-group-title">
-				<?php
-				echo '<div class="iris-group-community">';
-				if (!empty($group->community)) { echo elgg_echo('community') . ' ' . $group->community; }
-				echo '</div>';
-				echo '<h2>' . $group->name . '</h2>';
-				echo '<div class="iris-group-subtitle">' . $group->briefdescription . '</div>';
-				echo '<div class="iris-group-rules">';
-					// Access
-					echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span>';
-					echo ' - ';
-					// Membership
-					echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
-					if ($group->membership == ACCESS_PUBLIC) {
-						echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
-					} else {
-						echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
-					}
-					echo '</span>';
-				echo '</div>';
-				?>
-			</div>
-			
-			<div class="iris-group-menu">
-				<?php
-				// Espaces de travail : si > 3 onglets, on en affiche 2 et le reste en sous-menu + limitation longueur du titre
-				$max_title = 30;
-				$max_title_more = 50;
-				$more_tabs_threshold = 1; // Tabs in addition to main workspace tab (index)
-				$add_more_tab = (sizeof($all_subgroups_guids) > $more_tabs_threshold+1);
-				$more_tabs = '';
-				$more_selected = false;
-				
-				// Current group home page
-				if (current_page_url() == $group->getURL()) {
-					echo '<a href="' . $group->getURL() . '" class="tab elgg-state-selected">' . elgg_echo('theme_inria:group:presentation') . '</a>';
-				} else {
-					echo '<a href="' . $group->getURL() . '" class="tab">' . elgg_echo('theme_inria:group:presentation') . '</a>';
-				}
-				
-				// Main workspace
-				$tab_class = '';
-				if (($main_group->guid == $group->guid) && (current_page_url() != $group->getURL())) { $tab_class .= " elgg-state-selected"; }
-				echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab' . $tab_class . '" title="' . $main_group->name . '">' . elgg_get_excerpt($main_group->name, $max_title) . '</a>';
-				
-				// Workspaces
-				if (current_page_url() == $group->getURL()) {
-					if ($all_subgroups_guids) {
-						foreach($all_subgroups_guids as $k => $guid) {
-							$ent = get_entity($guid);
-							if ($add_more_tab && ($k >= $more_tabs_threshold)) {
-								$more_tabs .= '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="tab" title="' . $ent->name . '">' . elgg_get_excerpt($ent->name, $max_title_more) . '</a>';
-							} else {
-								echo '<a href="' . $url . 'groups/workspace/' . $ent->guid . '" class="tab" title="' . $ent->name . '">' . elgg_get_excerpt($ent->name, $max_title) . '</a>';
-							}
-						}
-					}
-				} else {
-					// Workspaces
-					if ($all_subgroups_guids) {
-						foreach($all_subgroups_guids as $k => $guid) {
-							$ent = get_entity($guid);
-							$workspace_url = $url . 'groups/workspace/' . $ent->guid;
-							$tab_class = '';
-							if ($ent->guid == $group->guid) { $tab_class .= " elgg-state-selected"; $more_selected = true; }
-							$title_excerpt = elgg_get_excerpt($ent->name, $max_title);
-							if ($add_more_tab && ($k >= $more_tabs_threshold)) {
-								$title_excerpt = elgg_get_excerpt($ent->name, $max_title_more);
-								$more_tabs .= '<a href="' . $workspace_url . '" class="tab' . $tab_class . '" title="' . $ent->name . '">' . $title_excerpt . '</a>';
-							} else {
-								echo '<a href="' . $workspace_url . '" class="tab' . $tab_class . '" title="' . $ent->name . '">' . $title_excerpt . '</a>';
-							}
-						}
-					}
-				}
-				if ($add_more_tab) {
-					if ($more_selected) {
-						echo '<span class="tab tab-more active">';
-					} else {
-						echo '<span class="tab tab-more">';
-					}
-					echo '<a href="javascript:void(0);" onClick="javascript:$(\'.iris-group-menu .tab-more-content\').toggleClass(\'hidden\')">' . elgg_echo('theme_inria:workspaces:more', array((sizeof($all_subgroups_guids) - $more_tabs_threshold))) . '</a>
-							<div class="tab-more-content hidden">' . $more_tabs . '</div>
-					</span>';
-				}
-				
-				// Group search
-				if (elgg_is_active_plugin('search')) {
-					echo '<a href="' . $group->getURL() . '" class="search float-alt"><i class="fa fa-search"></i></a>';
-				}
-				
-				// New subgroup (of level 1)
-				if (elgg_is_active_plugin('au_subgroups') && ($main_group->subgroups_enable == 'yes')) {
-					echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">+&nbsp;' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
-				}
-				?>
-			</div>
-			
-		</div>
-		
-		<?php
+		echo elgg_view('theme_inria/groups/group_header', array('entity' => $group, 'main_group' => $main_group));
 	}
 	?>
 	
@@ -197,7 +87,7 @@ if (elgg_instanceof($group, 'group')) {
 		<?php
 		// Left sidebar
 		if (!elgg_in_context('groups_edit')) {
-			if (!elgg_in_context('workspace')) {
+			if (!elgg_in_context('workspace') && !elgg_in_context('search')) {
 				if ($has_group_layout) {
 					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar', $vars);
 				} else {

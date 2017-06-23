@@ -303,8 +303,11 @@ function theme_inria_groups_page_handler($page) {
 			// No group set : use group search instead
 			if (empty($page[1])) { forward('groups'); }
 			set_input('container_guid', $page[1]);
+			elgg_set_page_owner_guid($page[1]);
+			set_input('group_layout_header', 'yes');
 			if (!empty($page[2])) { set_input('q', $page[2]); }
-			esope_groups_search_page();
+			include_once(elgg_get_plugins_path() . 'theme_inria/pages/search/index.php');
+			//esope_groups_search_page();
 			break;
 		case 'owner': forward('groups?filter=owner'); break;
 		// Iris note : cannot view other user groups anymore (now in profile)

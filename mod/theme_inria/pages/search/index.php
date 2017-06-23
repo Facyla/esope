@@ -57,6 +57,7 @@ if ($owner_username) {
 	}
 }
 
+
 $container_guid = get_input('container_guid', ELGG_ENTITIES_ANY_VALUE);
 // Display results in appropriate layout for groups
 if (!empty($container_guid)) {
@@ -67,6 +68,7 @@ if (!empty($container_guid)) {
 		}
 	}
 }
+
 
 $friends = get_input('friends', ELGG_ENTITIES_ANY_VALUE);
 
@@ -246,7 +248,7 @@ if (!empty($query) || $allow_empty_query) {
 			//if (($search_type != 'all') && ($search_type != $type)) { continue; }
 			$current_params = $params;
 			$current_params['search_type'] = $type;
-                        $current_params['type'] = null;
+			$current_params['type'] = null;
 			$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
 
 			// someone is saying not to display these types in searches.

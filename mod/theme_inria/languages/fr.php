@@ -729,6 +729,8 @@ Voir et commenter ce lien web :
 	'theme_inria:friendrequests:unreadcount' => "Demandes de contact (%s)",
 	'theme_inria:membershiprequests:examine' => "Gérer les demandes d'adhésion",
 	
+	'theme_inria:search' => "Recherche",
+	'theme_inria:search:title' => "Résultats pour \"%s\"",
 	'theme_inria:search:filters' => "Filtres avancés",
 	
 	'theme_inria:home:wire' => "Toutes les actus",

@@ -30,6 +30,8 @@ if ($entity) {
 $form_footer .= elgg_view("input/submit", array("value" => elgg_echo("save"), 'class' => "elgg-button elgg-button-submit float-alt"));
 $form_footer .= '<div class="clearfloat"></div>';
 
+
+// EXISTING GROUP EDIT FORM
 if ($entity) {
 	$form_footer .= '<div class="iris-group-delete">';
 		$form_footer .= '<div class="group-delete-label">';
@@ -50,8 +52,6 @@ $form_footer .= '</div>';
 
 elgg_pop_context();
 
-
-// Use custom layout for new groups
 if (elgg_instanceof($entity, 'group')) {
 	echo $profile_fields . $access_fields . $tools_fields . $form_footer;
 	return;
@@ -59,13 +59,14 @@ if (elgg_instanceof($entity, 'group')) {
 
 
 
+// ADD NEW GROUP FORM
+// Use custom layout for new groups
 $icon_field = '<label for="icon">
 		<i class="fa fa-camera"></i><br />' . elgg_echo('groups:icon:inline') . '
 	</label>';
 $banner_field = '<label for="banner">
 		<i class="fa fa-camera"></i><br />' . elgg_echo('groups:banner:inline') . '
 	</label>';
-
 
 echo <<<HTML
 <div class="iris-cols form-groups-add">
