@@ -957,7 +957,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-menu a, .iris-group-menu .tab-more { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1.5rem; font-weight: bold; border-bottom: 4px solid transparent; display: inline-block; text-decoration:none; }
 .iris-group-menu a.tab { opacity:0.3; }
 .iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; }
-.iris-group-menu a.add, .iris-group-menu a.search { border: 0; margin: 0 1.5rem 0 0rem; line-height: 1.125rem; }
+.iris-group-menu a.add, .iris-group-menu a.search, .iris-group-menu span.search { border: 0; margin: 0 1.5rem 0 0rem; line-height: 1.125rem; }
 .iris-group-menu a.tab:first-of-type { margin-left:0; }
 .iris-group-menu a.tab.elgg-state-selected,
 .iris-group-menu a.tab:hover,
