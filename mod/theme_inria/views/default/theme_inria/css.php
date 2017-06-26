@@ -323,7 +323,18 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .anim-stats .elgg-table-alt td:first-child { max-width: 180px !important; }
 
 /* Navigation des pages wiki en pleine largeur */
-.full-width-pages-nav { border-top: 1px solid #ccc; margin-top: 0.5em; margin-bottom: 1em; padding: 0.5em; background: #efefef; }
+.full-width-pages-nav { color: white; padding: 1.5rem; border-radius: 4px; background-color: rgba(56, 66, 87, 0.5); box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: -2rem -2rem 1rem -2rem; }
+.full-width-pages-nav a[rel=toggle] { color: white; font-weight: bold; }
+.full-width-pages-nav a[rel=toggle] .fa { margin-right: 1rem; }
+#full-width-pages-nav-content { margin-top: 0.5rem; }
+.pages-nav a { color: white; }
+.pages-nav.treeview a:hover, .pages-nav.treeview a:active, .pages-nav.treeview a:focus { color: white; }
+.treeview li { font-size: 1rem; }
+.elgg-body-transp .elgg-image-block { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .esope-subpages-menu { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .comment_trackerWrapper { margin: 2rem -2rem 2rem -2rem; padding: 2rem 2rem 0rem 2rem; border-top: 2px solid #F1F1F1; }
+
 
 /* Anciens groupes */
 .inria-group-oldactivity { border:1px dotted black; background:yellow; padding:0.5rem 0;; margin: 0 0; text-align:center; font-size: 1rem; }
@@ -699,10 +710,11 @@ input#iris-topbar-search-input { width: auto; font-size: 1.2rem; }
 
 /* Fullscreen base & overlay */
 .full-screen div { max-width: initial !important; }
-.full-screen .overlay { z-index: 1000; }
-.overlay { background: rgba(0,0,0,0.8); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; }
+.overlay { background: rgba(0,0,0,0.8); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; opacity: 0; }
+.full-screen .overlay { z-index: 1000; opacity: 0; }
 /* Fullscreen screens */
-.full-screen #iris-body .iris-group .elgg-main { position: absolute; top: 0; left: 0; right: 0; z-index: 1111; margin: 3rem 5rem; }
+.full-screen #iris-body .iris-group .elgg-main { position: absolute; top: 0; left: 0; right: 0; z-index: 1111; margin: 3rem 5rem; padding: 3rem 2rem; }
+.full-screen .elgg-body-transp .elgg-button-fullscreen { position: absolute; z-index: 1112; right: 7rem; top: 3.75rem; }
 
 
 h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
@@ -990,7 +1002,8 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #iris-body .iris-group-sidebar .iris-back a:hover, #iris-body .iris-group-sidebar .iris-back a:active, #iris-body .iris-group-sidebar .iris-back a:focus { color: white; }
 .elgg-heading-main .iris-back { background:none; float: right; margin:0; }
 .elgg-heading-main .iris-back a { padding: 0rem 1rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
-.group-content-back { margin-bottom: 1rem; border-bottom: 2px solid #E0E0E0; padding: 1rem 2rem 1rem 2rem; margin: -2rem -2rem 1rem -2rem; }
+.elgg-body-transp { flex: 1; max-width: 47rem; display: flex; flex-direction: column; }
+.group-content-back { /* border-bottom: 2px solid #E0E0E0; */ padding: 1rem 2rem 1rem 2rem; /* margin: -2rem -2rem 1rem -2rem; */ }
 .group-content-back .back { line-height:2rem; font-size: 0.8125rem; text-transform:uppercase; font-weight: bold; }
 .group-content-back .add {  }
 #iris-body .iris-group-sidebar, #iris-body .iris-group-sidebar a, .workspace-subtype-content a { font-size: 0.9375rem; color: #384257; font-family: "Inria Sans", sans-serif; border: 0; }

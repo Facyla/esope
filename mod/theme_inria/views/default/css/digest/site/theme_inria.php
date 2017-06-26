@@ -1,6 +1,6 @@
 
 body {
-	background: none repeat scroll 0 0 #6D2D4F;
+	background: none repeat scroll 0 0 #FFFFFF;
 	color: #333333;
 	font: 80%/1.4 "Lucida Grande",Arial,Tahoma,Verdana,sans-serif;
 	word-wrap: break-word;
@@ -11,18 +11,18 @@ body {
 	hyphens: auto;
 }
 a {
-	color: #6D2D4F;
+	color: #1488CA;
 	text-decoration: none;
 }
 a:hover {
 	text-decoration: underline;
-	 color: #6D2D4F;
+	 color: #1488CA;
 }
 img {
 	border: medium none;
 }
 h1, h2, h3, h4 {
-   	color: #EF783E;
+	color: #384257;
 	margin: 0;
 }
 h1 {
@@ -38,21 +38,23 @@ h4 {
 	font-size: 14px;
 }
 #digest_online {
-	color: #FFFFFF;
+	color: #384257;
 	font-size: 11px;
 	padding: 10px 20px 0;
 	text-align: right;
+	width: 700px;
+	margin: 0 auto;
 }
 #digest_online a {
-	color: #FFFFFF;
+	color: #1488CA;
 	font-size: 11px;
 	/* padding: 10px 20px 0; */
 	text-align: right;
 	text-decoration:underline;
 }
 #digest_header {
-	background: none repeat scroll 0 0 #6D2D4F;
-	border-color: #6D2D4F;
+	background: none repeat scroll 0 0 #384257;
+	border-color: #384257;
 	border-radius: 5px 5px 0 0;
 	border-style: solid;
 	border-width: 1px;
@@ -77,12 +79,12 @@ h4 {
 .digest-groups img, .digest-groups img { margin-bottom: 3px; }
 
 #digest_unsubscribe {
-	color: #FFFFFF !important;
+	color: #384257 !important;
 	font-size: 11px;
 	padding: 20px;
 }
 #digest_unsubscribe a {
-	color: #FFFFFF;
+	color: #1488CA;
 	text-decoration: underline;
 	font-size: 11px;
 	/* padding: 20px; */
@@ -124,7 +126,7 @@ h4 {
 }
 .elgg-module-digest h1 a, .elgg-module-digest h2 a, .elgg-module-digest h3 a {
 	text-decoration: none;
-	color: #EF783E;
+	color: #384257;
 }
 .elgg-avatar {
 	display: inline-block;
@@ -226,7 +228,7 @@ h4 {
 }
 .digest-blog h4 a {
 	text-decoration: none;
-	color: #6D2D4F;
+	color: #384257;
 }
 .digest-groups {
 	border-collapse: collapse;

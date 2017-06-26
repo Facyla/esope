@@ -100,12 +100,14 @@ if (elgg_instanceof($group, 'group')) {
 		
 		
 		// Main content
-		echo '<div class="elgg-main elgg-body">';
-			// Retour vers page listing
-			if (!$has_group_layout && !elgg_in_context('group_content')) {
+		// If displaying an entity or inner page, set class for easier styling
+		// Retour vers page listing
+		if (!$has_group_layout && !elgg_in_context('group_content')) {
+			echo '<div class="elgg-body-transp">';
+				
 				echo '<div class="group-content-back">';
 					// Plein écran
-					echo '<a href="javascript:void(0);" onClick="javascript:$(\'body\').toggleClass(\'full-screen\')" class="elgg-button elgg-button-action float-alt">' . '<i class="fa fa-arrows-alt"></i>' . '</a>';
+					echo '<a href="javascript:void(0);" onClick="javascript:$(\'body\').toggleClass(\'full-screen\')" class="elgg-button elgg-button-action elgg-button-fullscreen float-alt">' . '<i class="fa fa-arrows-alt"></i>' . '</a>';
 					$subtype_context = elgg_get_context();
 					if ($subtype_context == 'event_calendar:view') { $subtype_context = 'event_calendar'; }
 					$back_list_url = $url . 'groups/content/' . $group->guid . '/' . $subtype_context . '/all';
@@ -129,11 +131,21 @@ if (elgg_instanceof($group, 'group')) {
 					}
 					echo '<div class="clearfloat"></div>';
 				echo '</div>';
-			}
+				
+				echo '<div class="elgg-main elgg-body">';
+					if (isset($vars['content'])) { echo $vars['content']; }
+					
+					echo elgg_view('page/layouts/elements/footer', $vars);
+				echo '</div>';
+				
+			echo '</div>';
 			
-			if (isset($vars['content'])) { echo $vars['content']; }
-			echo elgg_view('page/layouts/elements/footer', $vars);
-		echo '</div>';
+		} else {
+			echo '<div class="elgg-main elgg-body">';
+				if (isset($vars['content'])) { echo $vars['content']; }
+				echo elgg_view('page/layouts/elements/footer', $vars);
+			echo '</div>';
+		}
 		
 		
 		// Right sidebar
