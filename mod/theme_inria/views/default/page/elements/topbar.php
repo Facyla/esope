@@ -175,6 +175,9 @@ if (elgg_is_active_plugin('language_selector')) {
 </div>
 
 <div class="iris-topbar-menu">
+	
+	<div class="menu-navigation-toggle" title="<?php echo elgg_echo('esope:menu:navigation'); ?>"><i class="fa fa-bars"></i></div>
+	
 	<?php
 	if (elgg_is_active_plugin('search') && !elgg_in_context('search')) {
 		$search_text = elgg_echo('esope:search:defaulttext');

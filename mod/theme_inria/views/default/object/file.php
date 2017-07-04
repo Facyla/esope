@@ -76,15 +76,19 @@ if ($full && !elgg_in_context('gallery')) {
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
 
-	$text = elgg_view('output/longtext', array('value' => $file->description));
+	//$text = elgg_view('output/longtext', array('value' => $file->description));
+	if (!empty($file->description)) { $text = elgg_view('output/longtext', array('value' => $file->description)); }
 	$body = "$text $extra";
 
+	/*
 	echo elgg_view('object/elements/full', array(
 		'entity' => $file,
 		'icon' => $file_icon,
 		'summary' => $summary,
 		'body' => $body,
 	));
+	*/
+	$content = $body;
 
 } elseif (elgg_in_context('gallery')) {
 	
@@ -120,5 +124,10 @@ if ($full && !elgg_in_context('gallery')) {
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($file_icon, $list_body);
+	//echo elgg_view_image_block($file_icon, $list_body);
+	$content = $excerpt;
 }
+
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+

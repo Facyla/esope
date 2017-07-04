@@ -343,8 +343,7 @@ function theme_inria_group_object_subtypes($group) {
 	if ($group->bookmarks_enable) { $subtypes[] = 'bookmarks'; }
 	if ($group->forum_enable) { $subtypes[] = 'groupforumtopic'; $subtypes[] = 'discussion_reply'; }
 	$subtypes[] = 'file';
-	if ($group->pages_enable) { $subtypes[] = 'page_top'; }
-	if ($group->pages_enable) { $subtypes[] = 'page'; }
+	if ($group->pages_enable) { $subtypes[] = 'page_top'; $subtypes[] = 'page'; }
 	if ($group->thewire_enable) { $subtypes[] = 'thewire'; }
 	if ($group->event_calendar_enable) { $subtypes[] = 'event_calendar'; }
 	if ($group->newsletter_enable) { $subtypes[] = 'newsletter'; }
@@ -359,7 +358,7 @@ function theme_inria_group_object_subtypes_opt($group) {
 	$subtypes = array('' => '');
 	if ($group->blog_enable) { $subtypes['blog'] = elgg_echo('item:object:blog'); }
 	if ($group->bookmarks_enable) { $subtypes['bookmarks'] = elgg_echo('item:object:bookmarks'); }
-	if ($group->forum_enable) { $subtypes['groupforumtopic'] = elgg_echo('item:object:groupforumtopic'); }
+	if ($group->forum_enable) { $subtypes['discussion'] = elgg_echo('item:object:groupforumtopic'); }
 	//if ($group->file_enable) { $subtypes['file'] = elgg_echo('item:object:file'); }
 	$subtypes['file'] = elgg_echo('item:object:file');
 	if ($group->pages_enable) { $subtypes['pages'] = elgg_echo('item:object:pages'); }

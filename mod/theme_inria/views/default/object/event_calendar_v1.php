@@ -51,20 +51,18 @@ if ($full) {
 	);
 	$list_body = elgg_view('object/elements/summary', $params);
 	
-	
-	$content = '<a class="event-ical-file" href="' . $event->getURL . '?view=ical" title="' . elgg_echo('event_calendar:ical_popup_message') . ' ' . $event->getURL . '?view=ical"><i class="fa fa-calendar-o"></i> ' . elgg_echo('feed:ical') . '</a>';
-	//$content .= $list_body;
-	$content .= $tags;
-	$content .= $body;
+	echo '<a class="event-ical-file" href="' . $event->getURL . '?view=ical" title="' . elgg_echo('event_calendar:ical_popup_message') . ' ' . $event->getURL . '?view=ical"><i class="fa fa-calendar-o"></i> ' . elgg_echo('feed:ical') . '</a>';
+	echo $list_body;
+	echo $body;
 	
 	if ($event->long_description) {
-		$content .= '<p>'.$event->long_description.'</p>';
+		echo '<p>'.$event->long_description.'</p>';
 	} else {
-		$content .= '<p>'.$event->description.'</p>';
+		echo '<p>'.$event->description.'</p>';
 	}
 	
 	if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
-		$content .= elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
+		echo elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
 	}
 	
 } else {
@@ -105,16 +103,20 @@ if ($full) {
 		$owner = $event->getOwnerEntity();
 		$icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIconURL(array('medium')) . '" style="width:54px;" /></a>';
 		$metadata_alt = '';
+	} else {
 	}
 	
-	$content = $info . $tags;
+	
+	$params = array(
+		'entity' => $event,
+		'metadata' => $metadata,
+		'metadata_alt' => $metadata_alt,
+		//'subtitle' => $info,
+		'content' => $info,
+		'tags' => $tags,
+	);
+	$list_body = elgg_view('object/elements/summary', $params);
+	//echo '<h3><a href="'.$event->getURL().'">' . $event->title . '</a></h3>' . '<br class="clearfloat" />';
+	echo elgg_view_image_block($icon, $list_body);
 }
-
-
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
-/*
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'mode' => 'listing'));
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'mode' => 'content'));
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'mode' => 'full'));
-*/
 

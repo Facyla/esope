@@ -31,14 +31,15 @@ $sidebar_alt = '';
 if (elgg_group_gatekeeper(false)) {
 	
 	// Workspaces tabs
-	$workspaces_tabs = elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
+	//$workspaces_tabs = elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
+	$workspaces_tabs = '';
 	
 	// Compose content
 	$content .= $workspaces_tabs;
 	
 	$content .= '<div class="group-profile-main">';
 		
-		$content .= elgg_view('theme_inria/groups/profile_info', array('group' => $group));
+		$content .= elgg_view('theme_inria/groups/profile_info', array('group' => $group, 'main_group' => $main_group));
 		
 	$content .= '</div>';
 	
@@ -72,7 +73,7 @@ if (elgg_group_gatekeeper(false)) {
 	// Activité (sociale)
 	$content .= '<div class="group-profile-main">';
 		
-		$content .= elgg_view('theme_inria/groups/profile_activity', array('group' => $group));
+		$content .= elgg_view('theme_inria/groups/profile_activity', array('group' => $group, 'main_group' => $main_group));
 		
 	$content .= '</div>';
 	

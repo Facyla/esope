@@ -30,7 +30,8 @@ if (elgg_instanceof($page_owner, 'user')) {
 	$user_header .= '<div class="iris-profile-header" style="background: ' . $banner_css . ';">' . elgg_view('profile/iris_owner_header', $vars) . '</div>';
 	//$user_header .= '<div class="iris-profile-info">' . elgg_view('profile/iris_profile_info', $vars) . '</div>';
 	//$user_header .= '<div class="iris-profile-info">' . '<br />' . '</div>';
-	$user_header .= '<div class="iris-profile-submenu">' . elgg_view_menu('owner_block', array('entity' => $page_owner)) . '</div>';
+	//$user_header .= '<div class="iris-profile-submenu">' . elgg_view_menu('owner_block', array('entity' => $page_owner)) . '</div>';
+	$user_header .= '<div class="iris-profile-submenu"></div>';
 	//if (!empty($vars['nav'])) $user_header .= '<div class="iris-profile-info">' . $vars['nav'] . '</div>';
 	//echo elgg_view('page/layouts/iris_user', $vars);
 	//return;
@@ -77,6 +78,9 @@ if (elgg_instanceof($page_owner, 'group') && has_access_to_entity($page_owner)) 
 }
 */
 
+
+// Iris v2 User banner instead of owner block
+if (elgg_instanceof($page_owner, 'user')) { echo $user_header; }
 ?>
 
 <div class="<?php echo $class; ?>">
@@ -87,11 +91,6 @@ if (elgg_instanceof($page_owner, 'group') && has_access_to_entity($page_owner)) 
 		echo $nav . '<br >';
 		echo $topmenu;
 	}
-	
-	// Iris v2 User banner instead of owner block
-	if (elgg_instanceof($page_owner, 'user')) {
-		echo $user_header;
-	}
 	?>
 	
 	<?php
@@ -99,8 +98,9 @@ if (elgg_instanceof($page_owner, 'group') && has_access_to_entity($page_owner)) 
 	//if (!empty($vars['title'])) { echo '<h2>' . $vars['title'] . '</h2>'; }
 	?>
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
-	<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
+	<div class="menu-sidebar-toggle" title="<?php echo elgg_echo('esope:menu:sidebar'); ?>"><i class="fa fa-th-large"></i></div>
 	<div class="elgg-sidebar">
+		<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-compress"></i> <?php echo elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar'); ?></div>
 		<?php
 		// Bouton de retour depuis les params perso
 		if (elgg_in_context('settings')) { echo $profile_back; }

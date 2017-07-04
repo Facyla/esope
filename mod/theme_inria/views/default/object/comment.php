@@ -18,7 +18,8 @@ if (!$entity || !$commenter) {
 
 $friendlytime = elgg_view_friendly_time($comment->time_created);
 
-$commenter_icon = elgg_view_entity_icon($commenter, 'tiny');
+//$commenter_icon = elgg_view_entity_icon($commenter, 'tiny');
+$commenter_icon = '<span class="elgg-avatar tiny"><img src="' . $commenter->getIconURL(array('size' => 'tiny')) . '"></span>';
 $commenter_link = "<a href=\"{$commenter->getURL()}\">$commenter->name</a>";
 
 $entity_title = $entity->title ? $entity->title : elgg_echo('untitled');
@@ -76,3 +77,5 @@ HTML;
 
 	echo elgg_view_image_block($commenter_icon, $body);
 }
+
+

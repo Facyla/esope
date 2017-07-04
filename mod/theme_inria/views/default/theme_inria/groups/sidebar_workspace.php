@@ -7,6 +7,8 @@ $desc = $group->briefdescription;
 if (empty($desc)) { $desc = elgg_get_excerpt($group->description); }
 $sidebar .= '<p>' . $desc . '</p>';
 
+$sidebar .= elgg_view('theme_inria/groups/sidebar_discussion');
+
 $sidebar .= elgg_view('theme_inria/groups/sidebar_file');
 
 $sidebar .= elgg_view('theme_inria/groups/sidebar_blog');

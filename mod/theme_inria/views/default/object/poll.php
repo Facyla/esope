@@ -90,7 +90,8 @@ if (isset($vars['entity'])) {
 			echo "<br>";
 		}
 
-		echo elgg_view('poll/body', $vars);
+		//echo elgg_view('poll/body', $vars);
+		$content = elgg_view('poll/body', $vars);
 
 	} else {
 		$responses = $poll->countAnnotations('vote');
@@ -121,6 +122,12 @@ if (isset($vars['entity'])) {
 		$params = $params + $vars;
 		$list_body = elgg_view('object/elements/summary', $params);
 
-		echo elgg_view_image_block($owner_icon, $list_body);
+		//echo elgg_view_image_block($owner_icon, $list_body);
+		$content = $tags . $subtitle;
 	}
+	
+	echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+	
 }
+
+

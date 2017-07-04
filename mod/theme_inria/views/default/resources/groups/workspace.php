@@ -19,7 +19,12 @@ $filter = get_input('filter', '');
 if (!isset($filter_opt[$filter])) { $filter = ''; }
 switch($filter) {
 	case 'pages':
-		$subtypes = array('page', 'page_top');
+		//$subtypes = array('page', 'page_top');
+		$subtypes = array('page_top');
+		break;
+	case 'discussion':
+		//$subtypes = array('groupforumtopic', 'discussion_reply');
+		$subtypes = array('groupforumtopic',);
 		break;
 	default:
 		$subtypes = $filter;
@@ -78,7 +83,10 @@ if (elgg_group_gatekeeper(false)) {
 		$content .= '<div class="group-workspace-add-content">';
 			$content .= '<div id="group-workspace-add-discussion" class="group-workspace-addcontent-tab">';
 				$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
-				$discussion_form = elgg_view('input/plaintext', array('name' => 'description', 'placeholder' => "Partagez un message avec le groupe"));
+				$discussion_form = '';
+				$discussion_form .= elgg_view('input/plaintext', array('name' => 'description', 'placeholder' => "Partagez un message avec le groupe"));
+				$discussion_form .= elgg_view('input/submit', array('value' => elgg_echo('publish')));
+				$discussion_form .= '</form>';
 				$content .= elgg_view_image_block($own_image, $discussion_form);
 			$content .= '</div>';
 			$content .= '<div id="group-workspace-add-file" class="group-workspace-addcontent-tab hidden">';
@@ -144,7 +152,10 @@ if (elgg_group_gatekeeper(false)) {
 }
 
 
-$sidebar = '<div class="elgg-sidebar iris-group-sidebar"><div class="iris-sidebar-content">' . $sidebar . '</div></div>';
+$sidebar = '<div class="elgg-sidebar iris-group-sidebar">
+		<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-compress"></i> ' . elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar') . '</div>
+		<div class="iris-sidebar-content">' . $sidebar . '</div>
+	</div>';
 
 
 $params = array(

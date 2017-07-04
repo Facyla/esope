@@ -3,13 +3,23 @@
  * Main activity stream list page
  */
 
-$own = elgg_get_logged_in_user_entity();
+$user = elgg_get_logged_in_user_entity();
 
 $options = array();
 
 $options['no_results'] = '<p class="esope-search-noresult">' . elgg_echo('search:no_results') . '</p>';
 
 $page_type = preg_replace('[\W]', '', get_input('page_type', 'all'));
+$username = get_input('username', $vars);
+if (($page_type == 'owner') && !empty($username)) {
+	$ent = get_user_by_username($username);
+	if (elgg_instanceof($ent, 'user')) {
+		$user = $ent;
+	} else {
+		$page_type = 'mine';
+	}
+	elgg_set_page_owner_guid($user->guid);
+}
 $type = preg_replace('[\W]', '', get_input('type', 'all'));
 $subtype = preg_replace('[\W]', '', get_input('subtype', ''));
 $date_filter = preg_replace('[\W]', '', get_input('date_filter', 'all'));
@@ -18,8 +28,8 @@ if (!empty($action_types)) { $action_types = explode(',', $action_types); } else
 
 // Dernier login : si aucun, depuis la création du site
 $site = elgg_get_site_entity();
-$last_login = $own->prev_last_login;
-if ($last_login < 1) { $last_login = $own->last_login; }
+$last_login = $user->prev_last_login;
+if ($last_login < 1) { $last_login = $user->last_login; }
 if ($last_login < 1) { $last_login = $site->time_created; }
 
 
@@ -41,12 +51,19 @@ switch($page_type) {
 	case 'mine':
 		$title = elgg_echo('river:mine');
 		$page_filter = 'mine';
-		$options['subject_guid'] = $own->guid;
+		$options['subject_guid'] = $user->guid;
 		break;
+	/*
+	case 'owner':
+		$title = elgg_echo('river:mine');
+		$page_filter = 'owner';
+		$options['subject_guid'] = $user->guid;
+		break;
+	*/
 	case 'friends':
 		$title = elgg_echo('river:friends');
 		$page_filter = 'friends';
-		$options['relationship_guid'] = $own->guid;
+		$options['relationship_guid'] = $user->guid;
 		$options['relationship'] = 'friend';
 		break;
 	default:

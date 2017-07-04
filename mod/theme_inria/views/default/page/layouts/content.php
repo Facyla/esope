@@ -16,6 +16,8 @@
 
 $context = elgg_extract('context', $vars, elgg_get_context());
 
+$page_owner = elgg_get_page_owner_entity();
+
 $vars['title'] = elgg_extract('title', $vars, '');
 if (!$vars['title'] && $vars['title'] !== false) {
 	$vars['title'] = elgg_echo($context);
@@ -32,30 +34,48 @@ if (!isset($vars['filter']) && elgg_is_logged_in() && $context) {
 	$filter_context = elgg_extract('filter_context', $vars, 'all');
 
 	// generate a list of default tabs
-	$tabs = array(
-		'all' => array(
-			'text' => elgg_echo('all'),
-			'href' => (isset($vars['all_link'])) ? $vars['all_link'] : "$context/all",
-			'selected' => ($filter_context == 'all'),
-			'priority' => 200,
-		),
-		'mine' => array(
+	$tabs = array();
+	if (elgg_instanceof($page_owner, 'user')) {
+		$tabs['mine'] = array(
 			'text' => elgg_echo('mine'),
 			'href' => (isset($vars['mine_link'])) ? $vars['mine_link'] : "$context/owner/$username",
 			'selected' => ($filter_context == 'mine'),
 			'priority' => 300,
-		),
-		'friend' => array(
+		);
+		$tabs['friend'] = array(
 			'text' => elgg_echo('friends'),
 			'href' => (isset($vars['friend_link'])) ? $vars['friend_link'] : "$context/friends/$username",
 			'selected' => ($filter_context == 'friends'),
 			'priority' => 400,
-		),
-	);
+		);
+	} else  {
+		$tabs['all'] = array(
+			'text' => elgg_echo('all'),
+			'href' => (isset($vars['all_link'])) ? $vars['all_link'] : "$context/all",
+			'selected' => ($filter_context == 'all'),
+			'priority' => 200,
+		);
+		/*
+		$tabs['mine'] = array(
+			'text' => elgg_echo('mine'),
+			'href' => (isset($vars['mine_link'])) ? $vars['mine_link'] : "$context/owner/$username",
+			'selected' => ($filter_context == 'mine'),
+			'priority' => 300,
+		);
+		$tabs['friend'] = array(
+			'text' => elgg_echo('friends'),
+			'href' => (isset($vars['friend_link'])) ? $vars['friend_link'] : "$context/friends/$username",
+			'selected' => ($filter_context == 'friends'),
+			'priority' => 400,
+		);
+		*/
+	}
 
-	foreach ($tabs as $name => $tab) {
-		$tab['name'] = $name;
-		elgg_register_menu_item('filter', $tab);
+	if (sizeof($tabs) > 1) {
+		foreach ($tabs as $name => $tab) {
+			$tab['name'] = $name;
+			elgg_register_menu_item('filter', $tab);
+		}
 	}
 }
 

@@ -26,7 +26,12 @@ $subtypes = ''; // Subtype(s) string or array (for elgg_get_entities)
 if (!isset($subtype_opt[$subtype]) || empty($subtype) || ($subtype == 'all')) { forward($url . 'groups/workspace/' . $group->guid); }
 switch($subtype) {
 	case 'pages':
-		$subtypes = array('page', 'page_top');
+		//$subtypes = array('page', 'page_top');
+		$subtypes = array('page_top');
+		break;
+	case 'discussion':
+		//$subtypes = array('groupforumtopic', 'discussion_reply');
+		$subtypes = array('groupforumtopic',);
 		break;
 	default:
 		$subtypes = $subtype;

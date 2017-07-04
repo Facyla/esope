@@ -76,12 +76,15 @@ if ($full && !elgg_in_context('gallery')) {
 </div>
 HTML;
 
+	/*
 	echo elgg_view('object/elements/full', array(
 		'entity' => $bookmark,
 		'icon' => $owner_icon,
 		'summary' => $summary,
 		'body' => $body,
 	));
+	*/
+	$content = $categories . $description;
 
 } elseif (elgg_in_context('gallery')) {
 	echo <<<HTML
@@ -117,18 +120,18 @@ HTML;
 		if ($excerpt) { $excerpt = " - $excerpt"; }
 		if (strlen($url) > 25) {
 			$bits = parse_url($url);
-		if (isset($bits['host'])) {
-			$display_text = $bits['host'];
-		} else {
-			$display_text = elgg_get_excerpt($url, 100);
+			if (isset($bits['host'])) {
+				$display_text = $bits['host'];
+			} else {
+				$display_text = elgg_get_excerpt($url, 100);
+			}
 		}
-	}
-	$link = elgg_view('output/url', array(
-		'href' => $bookmark->address,
-		'text' => $display_text,
-	));
+		$link = elgg_view('output/url', array(
+			'href' => $bookmark->address,
+			'text' => $display_text,
+		));
 
-	$content = elgg_view_icon('push-pin-alt') . "$link{$excerpt}";
+		$content = elgg_view_icon('push-pin-alt') . "$link{$excerpt}";
 	}
 	
 	
@@ -141,5 +144,10 @@ HTML;
 	$params = $params + $vars;
 	$body = elgg_view('object/elements/summary', $params);
 	
-	echo elgg_view_image_block($owner_icon, $body);
+	//echo elgg_view_image_block($owner_icon, $body);
+	$content = elgg_view_icon('push-pin-alt') . "$link"; // {$excerpt}
 }
+
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+

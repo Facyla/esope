@@ -62,11 +62,13 @@ if (elgg_in_context('widgets')) {
 
 if ($full) {
 
-	$body = elgg_view('output/longtext', array(
-		'value' => $blog->description,
-		'class' => 'blog-post',
-	));
-
+	if (!empty($blog->description)) {
+		$body = elgg_view('output/longtext', array(
+			'value' => $blog->description,
+			'class' => 'blog-post',
+		));
+	}
+	
 	$params = array(
 		'entity' => $blog,
 		'title' => false,
@@ -76,12 +78,15 @@ if ($full) {
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
 
+	/*
 	echo elgg_view('object/elements/full', array(
 		'entity' => $blog,
 		'summary' => $summary,
 		'icon' => $owner_icon,
 		'body' => $body,
 	));
+	*/
+	$content = $comments_link . $categories . $body;
 
 } else {
 	// brief view
@@ -102,5 +107,10 @@ if ($full) {
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($owner_icon, $list_body);
+	//echo elgg_view_image_block($owner_icon, $list_body);
+	$content = $excerpt;
 }
+
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'full_view' => $vars['full_view']));
+

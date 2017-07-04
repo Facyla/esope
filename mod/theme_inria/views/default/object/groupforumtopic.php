@@ -100,11 +100,13 @@ if ($full) {
 		'class' => 'clearfix',
 	));
 
+	/*
 	echo <<<HTML
 $info
 $body
 HTML;
-
+	*/
+	$content = $subtitle . $tags . $body;
 } else {
 	// brief view
 
@@ -128,5 +130,10 @@ HTML;
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($poster_icon, $list_body);
+	//echo elgg_view_image_block($poster_icon, $list_body);
+	$content = $excerpt;
 }
+
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+

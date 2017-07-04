@@ -3,6 +3,8 @@
 $group = elgg_get_page_owner_entity();
 // Determine main group
 $main_group = theme_inria_get_main_group($group);
+// Sidebar is always main group
+$group = $main_group;
 
 $own = elgg_get_logged_in_user_entity();
 
@@ -18,6 +20,8 @@ if (current_page_url() != $group->getURL()) {
 // Actual sidebar
 
 $content .= '<div class="iris-sidebar-content">';
+
+
 //$content .= '<h2 class="hidden">' . elgg_echo('accessibility:sidebar:title') . '</h2>';
 $content .= '<h2>' . elgg_echo('settings') . '</h2>';
 
@@ -80,8 +84,8 @@ $content .= '<div class="clearfloat"></div>';
 $content .= '</div>';
 
 
-echo '<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> ' . elgg_echo('esope:menu:sidebar') . '</div>
-	<div class="elgg-sidebar iris-group-sidebar">
+echo '<div class="elgg-sidebar iris-group-sidebar">
+		<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-th-large"></i> ' . elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar') . '</div>
 		' . $content . '
 	</div>';
 

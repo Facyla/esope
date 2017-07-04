@@ -16,6 +16,21 @@ if (current_page_url() != $url . 'groups/workspace/'.$group->guid) {
 
 $content .= '<div class="iris-sidebar-content">';
 
+	if ($group->forum_enable == 'yes') {
+		$options = array('type' => 'object', 'subtype' => 'groupforumtopic', 'container_guid' => $group->guid, 'limit' => 8);
+		$count = elgg_get_entities($options + array('count' => true));
+		$link = elgg_view('output/url', array(
+				'href' => $base_url . 'discussion/all',
+				//'href' => "blog/group/$group->guid/all",
+				'text' => elgg_echo('theme_inria:sidebar:discussion', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
+				'is_trusted' => true,
+				'class' => (elgg_in_context('discussion')) ? 'elgg-state-selected':'',
+			));
+		$content .= '<div class="workspace-subtype-header">';
+			$content .= '<h3>' . $link . '</h3>';
+		$content .= '</div>';
+	}
+
 	//if ($group->file_enable == 'yes') {
 	if (true) {
 		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $group->guid, 'limit' => 8);
@@ -155,8 +170,8 @@ if (!empty($vars['sidebar'])) {
 
 
 
-echo '<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> ' . elgg_echo('esope:menu:sidebar') . '</div>
-	<div class="elgg-sidebar iris-group-sidebar">
+echo '<div class="elgg-sidebar iris-group-sidebar">
+		<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-compress"></i> ' . elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar') . '</div>
 		' . $content . '
 	</div>';
 

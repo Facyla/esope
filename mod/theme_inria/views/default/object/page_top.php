@@ -124,13 +124,14 @@ if ($full) {
 		'href' => "#full-width-pages-nav-content",
 		'rel' => 'toggle',
 	));
-	echo '<div class="full-width-pages-nav">
+	$content = '<div class="full-width-pages-nav">
 		' . $toggle_link . '
 		<div id="full-width-pages-nav-content" class="hidden">
 			' . elgg_view('pages/top-summary', array('page' => $page)) . '
 		</div>
 	</div>';
 	
+	/*
 	echo elgg_view('object/elements/full', array(
 		'entity' => $page,
 		'title' => false,
@@ -138,16 +139,19 @@ if ($full) {
 		'summary' => $summary,
 		'body' => $body,
 	));
+	*/
+	$content .= $body;
 	
 	// Liste des sous-pages
-	echo elgg_view('pages/sub-pages', array('entity' => $page));
+	$content .= elgg_view('pages/sub-pages', array('entity' => $page));
 	
 	// Edit button
 	if ($page->canEdit()) {
-		echo '<div class="clearfloat"></div><br /><br />';
-		echo '<h3>' . elgg_echo('pages:edit') . '</h3>';
-		echo '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('edit') . '</a></p>';
+		$content .= '<div class="clearfloat"></div><br /><br />';
+		$content .= '<h3>' . elgg_echo('pages:edit') . '</h3>';
+		$content .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('edit') . '</a></p>';
 	}
+	
 	
 } else {
 	// brief view
@@ -171,6 +175,10 @@ if ($full) {
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 
-	echo elgg_view_image_block($page_icon, $list_body);
+	//echo elgg_view_image_block($page_icon, $list_body);
+	$content = $subtitle . $excerpt;
 }
+
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
 

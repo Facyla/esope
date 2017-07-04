@@ -53,7 +53,7 @@ if (elgg_is_logged_in()) {
 	if ((elgg_in_context('event_calendar') && !elgg_in_context('groups')) || (strpos($current_url, $url.'event_calendar') === 0)) { $selected_event_calendar = true; }
 	
 	?>
-	<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
+	<div class="menu-navigation-toggle hidden" style="color:white;"><i class="fa fa-compress"></i> <?php echo elgg_echo('hide') . ' ' . elgg_echo('esope:menu:navigation'); ?></div>
 	<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
 		<li class="home <?php if ($selected_home) { echo 'elgg-state-selected'; } ?>">
 			<a href="javascript:void(0);" <?php if ($selected_home) { echo 'class="active elgg-state-selected"'; } ?> >

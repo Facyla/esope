@@ -178,7 +178,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 		
 		// Get real container for forum & comment
 		$subtype = $container->getSubtype();
-		error_log($object->guid .' // container='.$subtype . ' // object='.$object->getSubtype().' == '.print_r($vars['item'], true));
+		//error_log($object->guid .' // container='.$subtype . ' // object='.$object->getSubtype().' == '.print_r($vars['item'], true));
 		if ($subtype == 'discussion_reply') {
 			while(in_array($subtype, array('discussion_reply', 'groupforumtopic')) || !$parent_container) {
 				$parent_container = $container->getContainerEntity();

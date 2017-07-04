@@ -728,6 +728,7 @@ Voir et commenter ce lien web :
 	'theme_inria:grouprequests:unreadcount' => "Demandes d'adhésion (%s)",
 	'theme_inria:friendrequests:unreadcount' => "Demandes de contact (%s)",
 	'theme_inria:membershiprequests:examine' => "Gérer les demandes d'adhésion",
+	'theme_inria:ownmembership' => "Votre adhésion",
 	
 	'theme_inria:search' => "Recherche",
 	'theme_inria:search:title' => "Résultats pour \"%s\"",
@@ -772,12 +773,15 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:workspace' => "Espace de travail",
 	'theme_inria:workspace:title' => "Espace de travail&nbsp;: %s",
+	'theme_inria:workspace:title:main' => "Espace de travail principal&nbsp;: %s",
+	'theme_inria:workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
 	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
 	
 	'theme_inria:manage' => "gérer",
 	
 	'theme_inria:file:quicksaved' => "Le fichier a bien été publié. Vous pouvez préciser sa description si vous le souhaitez.",
 	'theme_inria:blog:editdraft' => "Modifier un brouillon",
+	'theme_inria:sidebar:discussion' => "Les sujets de discussion (%s)",
 	'theme_inria:sidebar:file' => "Les fichiers (%s)",
 	'theme_inria:sidebar:blog' => "Les articles (%s)",
 	'theme_inria:sidebar:pages' => "Les pages wiki (%s)",

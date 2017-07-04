@@ -95,7 +95,7 @@ if (elgg_instanceof($group, 'group')) {
 					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
 				}
 			}
-			if ($vars['sidebar']) { echo $vars['sidebar']; }
+			if ($vars['sidebar']) { echo '<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i></div>' . $vars['sidebar']; }
 		}
 		
 		
@@ -107,7 +107,7 @@ if (elgg_instanceof($group, 'group')) {
 				
 				echo '<div class="group-content-back">';
 					// Plein écran
-					echo '<a href="javascript:void(0);" onClick="javascript:$(\'body\').toggleClass(\'full-screen\')" class="elgg-button elgg-button-action elgg-button-fullscreen float-alt">' . '<i class="fa fa-arrows-alt"></i>' . '</a>';
+					echo '<a href="javascript:void(0);" onClick="javascript:$(\'body\').toggleClass(\'full-screen\')" class="elgg-button elgg-button-action elgg-button-fullscreen float-alt">' . '<i class="fa fa-expand"></i><i class="fa fa-compress"></i>' . '</a>';
 					$subtype_context = elgg_get_context();
 					if ($subtype_context == 'event_calendar:view') { $subtype_context = 'event_calendar'; }
 					$back_list_url = $url . 'groups/content/' . $group->guid . '/' . $subtype_context . '/all';

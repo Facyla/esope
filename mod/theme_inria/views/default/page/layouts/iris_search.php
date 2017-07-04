@@ -20,8 +20,7 @@ if (isset($vars['class'])) {
 }
 
 // ESOPE : Add context class, for page differenciation
-global $CONFIG;
-if ($CONFIG->context) foreach ($CONFIG->context as $context) {
+foreach(elgg_get_context_stack() as $context) {
 	$class .= ' elgg-context-' . $context;
 }
 
@@ -31,6 +30,9 @@ $nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
 $q = elgg_extract('q', $vars, '');
 
 $owner = elgg_get_page_owner_entity();
+
+$svg_search = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M84.7 81.2L66.8 63.3c9.3-11.8 8.5-28.9-2.3-39.8 -5.7-5.7-13.2-8.8-21.2-8.8 -8 0-15.5 3.1-21.2 8.8 -5.7 5.7-8.8 13.2-8.8 21.2 0 8 3.1 15.5 8.8 21.2 5.8 5.8 13.5 8.8 21.2 8.8 6.6 0 13.2-2.2 18.6-6.4l17.9 17.9c0.7 0.7 1.6 1 2.5 1s1.8-0.3 2.5-1C86 84.8 86 82.6 84.7 81.2zM27 61c-4.3-4.3-6.7-10.1-6.7-16.3s2.4-11.9 6.7-16.3c4.3-4.3 10.1-6.7 16.3-6.7s11.9 2.4 16.3 6.7c4.3 4.3 6.7 10.1 6.7 16.3S63.9 56.7 59.5 61c-4.3 4.3-10.1 6.7-16.3 6.7S31.3 65.4 27 61z"/></svg>';
+
 
 /*
 // Change layout for groups - but only show if group can be seen
@@ -60,7 +62,7 @@ if ($vars['filter'] == 'search') {
 		?>
 		<div class="iris-search">
 		<div class="iris-search-header">
-			<div class="iris-search-image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M84.7 81.2L66.8 63.3c9.3-11.8 8.5-28.9-2.3-39.8 -5.7-5.7-13.2-8.8-21.2-8.8 -8 0-15.5 3.1-21.2 8.8 -5.7 5.7-8.8 13.2-8.8 21.2 0 8 3.1 15.5 8.8 21.2 5.8 5.8 13.5 8.8 21.2 8.8 6.6 0 13.2-2.2 18.6-6.4l17.9 17.9c0.7 0.7 1.6 1 2.5 1s1.8-0.3 2.5-1C86 84.8 86 82.6 84.7 81.2zM27 61c-4.3-4.3-6.7-10.1-6.7-16.3s2.4-11.9 6.7-16.3c4.3-4.3 10.1-6.7 16.3-6.7s11.9 2.4 16.3 6.7c4.3 4.3 6.7 10.1 6.7 16.3S63.9 56.7 59.5 61c-4.3 4.3-10.1 6.7-16.3 6.7S31.3 65.4 27 61z"/></svg></div>
+			<div class="iris-search-image"><?php echo $svg_search; ?></div>
 			<div class="iris-search-quickform">
 				<h2><?php echo elgg_echo('theme_inria:search'); ?></h2>
 				<?php if (!empty($q)) { echo '<span class="iris-search-q-results">' . elgg_echo('theme_inria:search:title', array($q)) . '</span>'; } ?>
@@ -73,6 +75,9 @@ if ($vars['filter'] == 'search') {
 				} else if (elgg_in_context('members')) {
 					$search_entity_type = 'user';
 				} else if (elgg_in_context('objects')) {
+					$search_entity_type = 'object';
+				}
+				if (elgg_instanceof($owner, 'group')) {
 					$search_entity_type = 'object';
 				}
 			
@@ -115,10 +120,11 @@ if ($vars['filter'] == 'search') {
 	
 	<div class="<?php echo $class; ?>">
 		<?php if ($vars['sidebar']) { ?>
-			<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
+			<div class="menu-sidebar-toggle" title="<?php echo elgg_echo('esope:menu:sidebar'); ?>"><i class="fa fa-th-large"></i></div>
 			<div class="elgg-sidebar iris-search-sidebar">
+				<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-compress"></i> <?php echo elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar'); ?></div>
 				<h2 class="hidden"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
-				<h3>Filtres avancés</h3>
+				<h3><?php echo elgg_echo('theme_inria:search:filters'); ?></h3>
 				<?php
 					echo $vars['sidebar'];
 				?>

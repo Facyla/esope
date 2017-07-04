@@ -48,4 +48,8 @@ $params = [
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
 
-echo elgg_view_image_block($icon, $list_body);
+//echo elgg_view_image_block($icon, $list_body);
+$content = $subtitle . $excerpt;
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+

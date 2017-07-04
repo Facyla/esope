@@ -75,10 +75,15 @@ $params = array(
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
 
-echo elgg_view_image_block($owner_icon, $list_body, array('class' => 'thewire-post'));
+//echo elgg_view_image_block($owner_icon, $list_body, array('class' => 'thewire-post'));
+$content = $subtitle . thewire_filter($post->description);
 
 if ($post->reply) {
-	echo "<div class=\"thewire-parent hidden\" id=\"thewire-previous-{$post->guid}\">";
-	echo "</div>";
+	//echo "<div class=\"thewire-parent hidden\" id=\"thewire-previous-{$post->guid}\">";
+	//echo "</div>";
+	$content .= '<div class="thewire-parent hidden" id="thewire-previous-' . $post->guid . '"></div>';
 }
+
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
 

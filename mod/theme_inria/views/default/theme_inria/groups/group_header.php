@@ -1,6 +1,8 @@
 <?php
 $group = elgg_extract('entity', $vars);
 $main_group = theme_inria_get_main_group($group);
+// Header is always main group
+$group = $main_group;
 
 $q = get_input('q');
 
@@ -69,18 +71,62 @@ if (!empty($group->banner)) {
 		echo '<div class="iris-group-community">';
 		if (!empty($group->community)) { echo elgg_echo('community') . ' ' . $group->community; }
 		echo '</div>';
+		
+		// Membership
+		$actions_content = '';
+		// group members
+		if ($group->isMember($own)) {
+			/*
+			if ($group->getOwnerGUID() != $own->guid) {
+				// leave
+				$actions_content .= elgg_view('output/url', array(
+						'href' => $url . "action/groups/leave?group_guid={$group->guid}",
+						'text' => '<i class="fa fa-sign-out"></i>',
+						'title' => elgg_echo('groups:leave'),
+						'class' => "group-leave",
+						'is_action' => true,
+					));
+			}
+			*/
+		} elseif (elgg_is_logged_in()) {
+			// join - admins can always join.
+			if ($group->isPublicMembership() || $group->canEdit()) {
+				$actions_content .= elgg_view('output/url', array(
+						'href' => $url . "action/groups/join?group_guid={$group->guid}",
+						'text' => '<i class="fa fa-sign-in"></i>',
+						'title' => elgg_echo('groups:join'),
+						'class' => "group-join",
+						'is_action' => true,
+					));
+			} else {
+				// request membership
+				$actions_content .= elgg_view('output/url', array(
+						'href' => $url . "action/groups/join?group_guid={$group->guid}",
+						'text' => '<i class="fa fa-sign-in"></i>',
+						'title' => elgg_echo('groups:joinrequest'),
+						'class' => "group-request",
+						'is_action' => true,
+					));
+			}
+		}
+		if (!empty($actions_content)) {
+			echo '<div class="group-membership-actions">' . $actions_content . '</div>';
+		}
+		
 		echo '<h2>' . $group->name . '</h2>';
 		echo '<div class="iris-group-subtitle">' . $group->briefdescription . '</div>';
 		echo '<div class="iris-group-rules">';
 			// Access
 			echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span>';
-			echo ' - ';
+			echo ' &nbsp; &nbsp; ';
 			// Membership
 			echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
 			if ($group->membership == ACCESS_PUBLIC) {
-				echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
+				//echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
+				echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open");
 			} else {
-				echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
+				//echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
+				echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed");
 			}
 			echo '</span>';
 		echo '</div>';
@@ -157,7 +203,7 @@ if (!empty($group->banner)) {
 		
 		// New subgroup (of level 1)
 		if (elgg_is_active_plugin('au_subgroups') && ($main_group->subgroups_enable == 'yes')) {
-			echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">+&nbsp;' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
+			echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt"><i class="fa fa-plus-square-o"></i>&nbsp;' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
 		}
 		?>
 	</div>

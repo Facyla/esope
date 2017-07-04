@@ -145,13 +145,29 @@ function theme_inria_thewire_page_handler($page) {
 
 // Override river PH to add an info block
 function theme_inria_elgg_river_page_handler($page) {
-	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
-
 	// make a URL segment available in page handler script
 	$page_type = elgg_extract(0, $page, 'all');
 	$page_type = preg_replace('[\W]', '', $page_type);
-	if ($page_type == 'owner') {
-		$page_type = 'mine';
+	switch($page_type) {
+		case 'mine':
+			elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
+			$page_type = 'mine';
+			break;
+		case 'friends':
+			elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
+			$page_type = 'friends';
+			break;
+		case 'owner':
+			$page_type = 'owner';
+			if (empty($page[1])) {
+				elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
+				$page_type = 'mine';
+			} else {
+				set_input('username', $page[1]);
+			}
+			break;
+		default:
+			$page_type = 'all';
 	}
 	set_input('page_type', $page_type);
 
