@@ -97,7 +97,7 @@ if (elgg_group_gatekeeper(false)) {
 						'class' => "elgg-button elgg-button-action",
 					));
 				*/
-				$content .= elgg_view_form('theme_inria/file/quick_upload', array(), array('action' => 'file/upload'));
+				$content .= elgg_view_form('theme_inria/file/quick_upload', array('action' => 'action/file/upload', 'enctype' => "multipart/form-data"), array());
 			$content .= '</div>';
 			$content .= '<div id="group-workspace-add-blog" class="group-workspace-addcontent-tab hidden">';
 				// @TODO pour édition directe : on ajoute un début de texte puis on bascule sur le form complet pour finir d'éditer
