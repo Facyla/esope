@@ -567,7 +567,7 @@ Afficher et commenter le nouvel article :
 	'thewire:user' => "Le Fil de %s",
 	'thewire:friends' => "Messages des contacts sur le Fil",
 	'thewire:replying' => "Répondre à %s, qui a écrit",
-	'thewire:thread' => "Flux",
+	'thewire:thread' => "Conversation",
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
 	'thewire:noposts' => "Pas encore de message sur le Fil",

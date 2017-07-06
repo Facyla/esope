@@ -1058,8 +1058,9 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-menu { z-index:2; background:white; position: absolute; bottom: 0; left: 0; right: 0; padding-left: 18.75rem; }
 .iris-group-menu a, .iris-group-menu .tab-more { color: #384257; font-size: 1.125rem; padding: 1.375rem 0 1.25rem 0; margin: 0 1rem; font-weight: bold; border-bottom: 4px solid transparent; display: inline-block; text-decoration:none; }
 .iris-group-menu a.tab { opacity:0.6; }
-.iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; }
 .iris-group-menu a.add, .iris-group-menu a.search, .iris-group-menu span.search { border: 0; margin: 0 1.5rem 0 0rem; line-height: 1.125rem; }
+/* .iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; } */
+.iris-group-menu a.add { color: white; background: #1488CA; font-size:0.75rem; border-radius: 2em; padding: 0.5rem 1rem; margin: 0.5rem 1rem 0rem 0; width: 10em; text-align: center; }
 .iris-group-menu a.tab:first-of-type { margin-left:0; }
 .iris-group-menu a.tab.elgg-state-selected,
 .iris-group-menu span.tab.elgg-state-selected,
@@ -1356,7 +1357,12 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 #iris-body .iris-object h2 { padding: 0; }
 
 .entity-menu a { color: #AAAAAA; font-size: 1.25rem; }
-.iris-object .elgg-menu-entity { margin: 0 0 0.5rem 0; }
+/*
+*/
+.iris-object-actions { display: flex; margin-top: 1rem; }
+.iris-object-actions ul { flex: 1 1 auto; }
+.iris-object .elgg-menu-entity, .iris-object .elgg-menu-entity-alt { margin: 0 0 0.5rem 0; max-width: none; font-size: 0.8125rem; text-align: left; }
+.iris-object .elgg-menu-entity-alt { text-align: right; }
 .iris-object .elgg-menu-entity li { margin: 0 0.5rem 0 0; }
 .iris-object .elgg-menu-entity li, .iris-object .elgg-menu-entity-alt li { display: inline-block; color: #AAAAAA; }
 .iris-object .elgg-menu-entity a, .iris-object .elgg-menu-entity-alt a { color: #AAAAAA; }

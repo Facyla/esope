@@ -58,6 +58,13 @@ if (elgg_in_context('widgets')) {
 	$metadata = '';
 }
 
+/* Affiche toute la conversation
+*/
+$metadata_alt .= '<li>' . elgg_view('output/url', array(
+	'text' => elgg_echo('thewire:thread'),
+	'href' => "thewire/thread/$post->wire_thread",
+)) . '</li>';
+
 // Affiche le précédent
 if ($post->reply) {
 	$metadata_alt .= '<li>' . elgg_view('output/url', array(
@@ -67,12 +74,6 @@ if ($post->reply) {
 		'title' => elgg_echo('thewire:previous:help'),
 	)) . '</li>';
 }
-/* Affiche toute la conversation
-$metadata_alt .= '<li>' . elgg_view('output/url', array(
-	'text' => elgg_echo('thewire:thread'),
-	'href' => "thewire/thread/$post->wire_thread",
-)) . '</li>';
-*/
 
 /*
 $params = array(

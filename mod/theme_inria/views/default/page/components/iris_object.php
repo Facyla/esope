@@ -168,64 +168,66 @@ if (elgg_instanceof($entity, 'object') && !elgg_instanceof($page_owner, 'group')
 $access_info = '<li>' . elgg_view('output/access', array('entity' => $entity)) . '</li>';
 $metadata_alt = $access_info . $container_info . $metadata_alt;
 $actions = '<div class="clearfloat"></div>';
-if (!empty($metadata_alt)) {
-	$actions .= '<ul class="elgg-menu-entity float">' . $metadata_alt . '</ul>';
-}
-// Add likes counter and actions
-$actions .= '<ul class="elgg-menu-entity-alt float-alt">';
-	
-	// @TODO ajout form de commentaire ? pas sûr...
-	
-	// Wire : reply form
-	if (elgg_instanceof($entity, 'object', 'thewire')) {
-		$actions .= '<li>' . elgg_view('output/url', array(
-				'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
-				'text' => '<i class="fa fa-comment"></i>',
-		)) . '</li>';
-			// Form should separated from menu
-		$form_vars = array('class' => 'thewire-form');
-		$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
-		$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
-		$actions_after .= '</div>';
+$actions .= '<div class="iris-object-actions">';
+	if (!empty($metadata_alt)) {
+		$actions .= '<ul class="elgg-menu-entity float">' . $metadata_alt . '</ul>';
 	}
+	// Add likes counter and actions
+	$actions .= '<ul class="elgg-menu-entity-alt float-alt">';
 	
-	// Nb comments
-	$comments = $entity->countComments();
-	if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
-		$comments = elgg_get_entities(array(
-			'type' => 'object',
-			'subtype' => 'discussion_reply',
-			'container_guid' => $entity->getGUID(),
-			'count' => true,
-			'distinct' => false,
-		));
-	}
-	if ($comments > 0) { $actions .= '<li>' . $entity->countComments() . '&nbsp;<i class="fa fa-comments"></i>' . '</li>'; }
+		// @TODO ajout form de commentaire ? pas sûr...
 	
-	// Nb likes
-	$likes = \Elgg\Likes\DataService::instance()->getNumLikes($entity);
-	if ($likes > 0) { $actions .= '<li>' . elgg_view('likes/count', array('entity' => $entity, 'class' => '')) . '</li>'; }
-	
-	// Like / unlike
-	if ($entity->canAnnotate(0, 'likes')) {
-		$hasLiked = \Elgg\Likes\DataService::instance()->currentUserLikesEntity($entity->guid);
-		$actions .= '<li>' . elgg_view('output/url', array(
-				'name' => 'likes',
-				'href' => elgg_add_action_tokens_to_url("/action/likes/add?guid={$entity->guid}"),
-				'text' => elgg_view_icon('thumbs-up'),
-				'title' => elgg_echo('likes:likethis'),
-				'class' => $hasLiked ? 'hidden' : '',
+		// Wire : reply form
+		if (elgg_instanceof($entity, 'object', 'thewire')) {
+			$actions .= '<li>' . elgg_view('output/url', array(
+					'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
+					'text' => '<i class="fa fa-comment"></i>',
 			)) . '</li>';
-		$actions .= '<li>' . elgg_view('output/url', array(
-				'name' => 'unlike',
-				'href' => elgg_add_action_tokens_to_url("/action/likes/delete?guid={$entity->guid}"),
-				'text' => elgg_view_icon('thumbs-up-alt'),
-				'title' => elgg_echo('likes:remove'),
-				'class' => $hasLiked ? '' : 'hidden',
-			)) . '</li>';
-	}
+				// Form should separated from menu
+			$form_vars = array('class' => 'thewire-form');
+			$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
+			$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
+			$actions_after .= '</div>';
+		}
 	
-$actions .= '</ul>';
+		// Nb comments
+		$comments = $entity->countComments();
+		if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
+			$comments = elgg_get_entities(array(
+				'type' => 'object',
+				'subtype' => 'discussion_reply',
+				'container_guid' => $entity->getGUID(),
+				'count' => true,
+				'distinct' => false,
+			));
+		}
+		if ($comments > 0) { $actions .= '<li>' . $entity->countComments() . '&nbsp;<i class="fa fa-comments"></i>' . '</li>'; }
+	
+		// Nb likes
+		$likes = \Elgg\Likes\DataService::instance()->getNumLikes($entity);
+		if ($likes > 0) { $actions .= '<li>' . elgg_view('likes/count', array('entity' => $entity, 'class' => '')) . '</li>'; }
+	
+		// Like / unlike
+		if ($entity->canAnnotate(0, 'likes')) {
+			$hasLiked = \Elgg\Likes\DataService::instance()->currentUserLikesEntity($entity->guid);
+			$actions .= '<li>' . elgg_view('output/url', array(
+					'name' => 'likes',
+					'href' => elgg_add_action_tokens_to_url("/action/likes/add?guid={$entity->guid}"),
+					'text' => elgg_view_icon('thumbs-up'),
+					'title' => elgg_echo('likes:likethis'),
+					'class' => $hasLiked ? 'hidden' : '',
+				)) . '</li>';
+			$actions .= '<li>' . elgg_view('output/url', array(
+					'name' => 'unlike',
+					'href' => elgg_add_action_tokens_to_url("/action/likes/delete?guid={$entity->guid}"),
+					'text' => elgg_view_icon('thumbs-up-alt'),
+					'title' => elgg_echo('likes:remove'),
+					'class' => $hasLiked ? '' : 'hidden',
+				)) . '</li>';
+		}
+	
+	$actions .= '</ul>';
+$actions .= '</div>';
 $actions .= '<div class="clearfloat"></div>' . $actions_after;
 
 $actions .= $after;
