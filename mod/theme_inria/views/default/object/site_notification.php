@@ -12,7 +12,8 @@ $text = '';
 
 $text .= '<span class="elgg-river-timestamp"><time title="" datetime="' . date('U', $entity->getTimeCreated()) . '">' . elgg_view_friendly_time($entity->getTimeCreated()) . '</time></span>';
 
-$text .= '<div class="elgg-body">' . $entity->description . '</div>';
+//$text .= '<div class="elgg-body">' . $entity->description . '</div>';
+$text .= '<div class="elgg-body"><strong>' . $entity->description . '</strong></div>';
 
 // Icon : actor (it's not river : no action)
 $actor = $entity->getActor();
