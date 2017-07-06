@@ -12,34 +12,44 @@
 
 $group = elgg_extract("entity", $vars);
 
+//Iris v2 : workspaces
+$translation_prefix = '';
+$parent_group = elgg_extract("au_subgroup_of", $vars);
+if ($parent_group) { $translation_prefix = 'workspace:'; }
+$workspace_exclude_fields = array('community', 'briefdescription');
+
 $name_limit = elgg_get_plugin_setting("group_limit_name", "profile_manager");
 $description_limit = elgg_get_plugin_setting("group_limit_description", "profile_manager");
 
 if (!elgg_instanceof($group, 'group')) {
-	echo '<h3>' . elgg_echo('groups:about') . '</h3>';
+	echo '<h3>' . elgg_echo($translation_prefix.'groups:about') . '</h3>';
 }
 
-echo '<div class="groups-edit-field">
-	<div class="groups-edit-label">
-		<label>' . elgg_echo("groups:banner") . '</label>
-	</div>
-	<div class="groups-edit-input">
-		' . elgg_view("input/file", array("name" => "banner")) . '
-	</div>
-</div>';
+if (!$parent_group) {
+	echo '<div class="groups-edit-field">
+		<div class="groups-edit-label">
+			<label>' . elgg_echo($translation_prefix."groups:banner") . '</label>
+		</div>
+		<div class="groups-edit-input">
+			' . elgg_view("input/file", array("name" => "banner")) . '
+		</div>
+	</div>';
+}
+
+if (!$parent_group) {
+	echo '<div class="groups-edit-field">';
+		echo '<div class="groups-edit-label">';
+			echo "<label>" . elgg_echo($translation_prefix."groups:icon") . "</label>";
+		echo '</div>';
+		echo '<div class="groups-edit-input">';
+			echo elgg_view("input/file", array('name' => 'icon'));
+		echo '</div>';
+	echo '</div>';
+}
 
 echo '<div class="groups-edit-field">';
 	echo '<div class="groups-edit-label">';
-		echo "<label>" . elgg_echo("groups:icon") . "</label>";
-	echo '</div>';
-	echo '<div class="groups-edit-input">';
-		echo elgg_view("input/file", array('name' => 'icon'));
-	echo '</div>';
-echo '</div>';
-
-echo '<div class="groups-edit-field">';
-	echo '<div class="groups-edit-label">';
-		echo "<label>" . elgg_echo("groups:name") . "</label>";
+		echo "<label>" . elgg_echo($translation_prefix."groups:name") . "</label>";
 	echo '</div>';
 	echo '<div class="groups-edit-input">';
 			$show_input = false;
@@ -53,7 +63,7 @@ echo '<div class="groups-edit-field">';
 			if ($show_input) {
 				echo elgg_view("input/text", array('name' => 'name', 'value' => elgg_extract('name', $vars)));
 				if (!empty($name_edit_num_left)) {
-					echo "<div class='elgg-subtext'>" . elgg_echo("profile_manager:group:edit:limit", array("<strong>" . $name_edit_num_left . "</strong>")) . "</div>";
+					echo "<div class='elgg-subtext'>" . elgg_echo($translation_prefix."profile_manager:group:edit:limit", array("<strong>" . $name_edit_num_left . "</strong>")) . "</div>";
 				}
 			} else {
 				// show value
@@ -73,6 +83,9 @@ if (count($group_fields["fields"]) > 0) {
 	
 	foreach ($group_fields as $field) {
 		$metadata_name = $field->metadata_name;
+		
+		// Exclude fields that are not relevant for workspaces
+		if ($parent_group && in_array($metadata_name, $workspace_exclude_fields)) { continue; }
 		
 		// get options
 		$options = $field->getOptions();
@@ -137,11 +150,12 @@ if (count($group_fields["fields"]) > 0) {
 			}
 			
 			if ($show_input) {
+				if ($parent_group) $valtype = 'plaintext';
 				echo '<div class="groups-edit-input">';
 				echo elgg_view("input/{$valtype}", $field_output_options);
 				
 				if (!empty($edit_num_left)) {
-					echo "<div class='elgg-subtext'>" . elgg_echo("profile_manager:group:edit:limit", array("<strong>" . $edit_num_left . "</strong>")) . "</div>";
+					echo "<div class='elgg-subtext'>" . elgg_echo($translation_prefix."profile_manager:group:edit:limit", array("<strong>" . $edit_num_left . "</strong>")) . "</div>";
 				}
 				echo '</div>';
 			} else {

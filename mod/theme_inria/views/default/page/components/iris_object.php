@@ -77,11 +77,11 @@ if (!in_array($mode, array('full', 'listing', 'content'))) {
 
 
 // ICONS AND IMAGES
-$owner_icon = '<a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" style="width:54px;" /></a>';
+$owner_icon = '<a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a>';
 
 $entity_icon = $entity->getIconURL(array('size' => 'medium'));
 if (elgg_instanceof($entity, 'object', 'file')) {
-	$entity_icon = '<a href="' . $entity->getURL() . '" class="medium"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" style="width:54px;" /></a>';
+	$entity_icon = '<a href="' . $entity->getURL() . '" class="medium"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" /></a>';
 } else {
 	$entity_icon = '<a href="' . $entity->getURL() . '" title="' . $title . '"><span class="small">' . elgg_echo('esope:icon:'.$entity->getSubtype()) . '</span></a>';
 }
@@ -165,7 +165,7 @@ if (elgg_instanceof($entity, 'object') && !elgg_instanceof($page_owner, 'group')
 }
 
 $access_info = '<li>' . elgg_view('output/access', array('entity' => $entity)) . '</li>';
-$metadata_alt = $container_info . $access_info . $metadata_alt;
+$metadata_alt = $access_info . $container_info . $metadata_alt;
 $actions = '<div class="clearfloat"></div>';
 if (!empty($metadata_alt)) {
 	$actions .= '<ul class="elgg-menu-entity float">' . $metadata_alt . '</ul>';

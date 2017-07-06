@@ -28,7 +28,11 @@ $own = elgg_get_logged_in_user_entity();
 $content = '';
 
 // Workspaces switch
-$content .= elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'members'));
+/*
+if ($group->guid != $main_group->guid) {
+	$content .= elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'members'));
+}
+*/
 $content .= '<div class="group-profile-main">';
 	$content .= elgg_view_form('groups/invite', array(
 		'id' => 'invite_to_group',

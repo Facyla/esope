@@ -10,7 +10,7 @@ if ($group->event_calendar_enable == 'yes') {
 	elgg_push_context('widgets');
 	$all_link = elgg_view('output/url', array(
 		'href' => "groups/content/$group->guid/event_calendar/all",
-		'text' => elgg_echo('theme_inria:workspace:event_calendar') . ' &nbsp; <i class="fa fa-angle-right"></i>',
+		'text' => elgg_echo('workspace:event_calendar') . ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
 	$new_link = elgg_view('output/url', array(

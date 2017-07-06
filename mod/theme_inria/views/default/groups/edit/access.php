@@ -17,10 +17,15 @@ $content_access_mode = elgg_extract("content_access_mode", $vars);
 // ESOPE : set default visibility to site default (instead of always public)
 if (!elgg_instanceof($entity, 'group')) { $visibility = ACCESS_DEFAULT; }
 
+//Iris v2 : workspaces
+$translation_prefix = '';
+$parent_group = elgg_extract("au_subgroup_of", $vars);
+//if ($parent_group) { $translation_prefix = 'workspace:'; }
+
 ?>
 <div class="groups-edit-field">
 	<div class="groups-edit-label">
-		<label for="groups-membership"><?php echo elgg_echo("groups:membership"); ?></label>
+		<label for="groups-membership"><?php echo elgg_echo($translation_prefix."groups:membership"); ?></label>
 	</div>
 	<div class="groups-edit-input">
 		<?php echo elgg_view("input/select", array(
@@ -28,8 +33,8 @@ if (!elgg_instanceof($entity, 'group')) { $visibility = ACCESS_DEFAULT; }
 			"id" => "groups-membership",
 			"value" => $membership,
 			"options_values" => array(
-				ACCESS_PRIVATE => elgg_echo("groups:access:private"),
-				ACCESS_PUBLIC => elgg_echo("groups:access:public"),
+				ACCESS_PRIVATE => elgg_echo($translation_prefix."groups:access:private"),
+				ACCESS_PUBLIC => elgg_echo($translation_prefix."groups:access:public"),
 			)
 		));
 		?>
@@ -39,14 +44,14 @@ if (!elgg_instanceof($entity, 'group')) { $visibility = ACCESS_DEFAULT; }
 <?php if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes"): ?>
 	<div class="groups-edit-field">
 		<div class="groups-edit-label">
-			<label for="groups-vis"><?php echo elgg_echo("groups:visibility"); ?></label>
+			<label for="groups-vis"><?php echo elgg_echo($translation_prefix."groups:visibility"); ?></label>
 		</div>
 		<div class="groups-edit-input">
 			<?php
 			$visibility_options =  array(
-				ACCESS_PRIVATE => elgg_echo("groups:access:group"),
-				ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
-				ACCESS_PUBLIC => elgg_echo("PUBLIC"),
+				ACCESS_PRIVATE => elgg_echo($translation_prefix."groups:access:group"),
+				ACCESS_LOGGED_IN => elgg_echo($translation_prefix."LOGGED_IN"),
+				ACCESS_PUBLIC => elgg_echo($translation_prefix."PUBLIC"),
 			);
 			if (elgg_get_config("walled_garden")) {
 				unset($visibility_options[ACCESS_PUBLIC]);
@@ -73,8 +78,8 @@ $access_mode_params = array(
 	"id" => "groups-content-access-mode",
 	"value" => $content_access_mode,
 	"options_values" => array(
-		ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED => elgg_echo("groups:content_access_mode:unrestricted"),
-		ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY => elgg_echo("groups:content_access_mode:membersonly"),
+		ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED => elgg_echo($translation_prefix."groups:content_access_mode:unrestricted"),
+		ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY => elgg_echo($translation_prefix."groups:content_access_mode:membersonly"),
 	)
 );
 
@@ -88,7 +93,7 @@ if ($entity) {
 ?>
 <div class="groups-edit-field">
 	<div class="groups-edit-label">
-		<label for="groups-content-access-mode"><?php echo elgg_echo("groups:content_access_mode"); ?></label>
+		<label for="groups-content-access-mode"><?php echo elgg_echo($translation_prefix."groups:content_access_mode"); ?></label>
 	</div>
 	<div class="groups-edit-input">
 		<?php
@@ -97,7 +102,7 @@ if ($entity) {
 		if ($entity && $entity->getContentAccessMode() == ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED) {
 			// Warn the user that changing the content access mode to more
 			// restrictive will not affect the existing group content
-			$access_mode_warning = elgg_echo("groups:content_access_mode:warning");
+			$access_mode_warning = elgg_echo($translation_prefix."groups:content_access_mode:warning");
 			echo "<span class='elgg-text-help'>$access_mode_warning</span>";
 		}
 		?>
@@ -126,7 +131,7 @@ if ($entity && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_l
 
 	<div class="groups-edit-field">
 		<div class="groups-edit-label">
-			<label for="groups-owner-guid"><?php echo elgg_echo("groups:owner"); ?></label>
+			<label for="groups-owner-guid"><?php echo elgg_echo($translation_prefix."groups:owner"); ?></label>
 		</div>
 		<div class="groups-edit-input">
 			<?php
@@ -139,7 +144,7 @@ if ($entity && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_l
 			));
 
 			if ($owner_guid == elgg_get_logged_in_user_guid()) {
-				echo "<span class='elgg-text-help'>" . elgg_echo("groups:owner:warning") . "</span>";
+				echo "<span class='elgg-text-help'>" . elgg_echo($translation_prefix."groups:owner:warning") . "</span>";
 			}
 		?>
 		</div>

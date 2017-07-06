@@ -120,10 +120,10 @@ switch($filter) {
 			$content .= '<span class="iris-search-count">' . $num_groups . ' ' . elgg_echo('groups') . '</span>';
 			*/
 			$order_opt = array(
-					'alpha' => "Ordre alphabétique",
-					'desc' => "Groupes les + récents",
-					'asc' => "Groupes les + anciens",
-					'popular' => "Avec le plus de membres",
+					'alpha' => elgg_echo('groups:order:alpha'),
+					'desc' => elgg_echo('groups:order:desc'),
+					'asc' => elgg_echo('groups:order:asc'),
+					'popular' => elgg_echo('groups:order:popular'),
 				);
 			$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_groups_search_order', 'options_values' => $order_opt, 'value' => get_input('order_by'))) . '</span>';
 		$content .= '</div>';

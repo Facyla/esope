@@ -13,7 +13,10 @@ if (!empty($main_group->description)) {
 	$content .= '</div>';
 }
 
-$content .= elgg_view('theme_inria/groups/workspaces_select', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
+// Show only for workspaces ?
+if ($group->guid != $main_group->guid) {
+	$content .= elgg_view('theme_inria/groups/workspaces_select', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
+}
 
 // Owner and operators
 $owner = $group->getOwnerEntity();
@@ -124,7 +127,6 @@ if ($requests_count > 0) {
 
 // Membership action (for self)
 $actions_content = '';
-$actions_content = '<h3>' . elgg_echo('theme_inria:ownmembership') . '</h3>';
 // group members
 if ($group->isMember($own)) {
 	if ($group->getOwnerGUID() != $own->guid) {
@@ -133,6 +135,7 @@ if ($group->isMember($own)) {
 				'href' => $url . "action/groups/leave?group_guid={$group->guid}",
 				'text' => '<i class="fa fa-sign-out"></i>&nbsp;' . elgg_echo('groups:leave'),
 				'class' => "elgg-button elgg-button-delete",
+				'confirm' => elgg_echo('groups:leave:confirm'),
 				'is_action' => true,
 			));
 	}
@@ -156,7 +159,7 @@ if ($group->isMember($own)) {
 	}
 }
 if (!empty($actions_content)) {
-	$content .= '<div class="group-workspace-module group-workspace-membership">' . $actions_content . '</div>';
+	$content .= '<div class="group-workspace-module group-workspace-membership"><h3>' . elgg_echo('theme_inria:ownmembership') . '</h3>' . $actions_content . '</div>';
 }
 
 

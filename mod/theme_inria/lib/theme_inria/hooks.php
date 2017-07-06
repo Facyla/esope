@@ -629,15 +629,15 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 
 	if (elgg_instanceof($entity, 'object', 'thewire')) {
 		foreach ($return as $index => $item) {
-			if ($item->getName() == 'thread') {
-				unset($return[$index]);
-			}
+			if ($item->getName() == 'thread') { unset($return[$index]); }
+			if ($item->getName() == 'reply') { unset($return[$index]); }
+			if ($item->getName() == 'previous') { unset($return[$index]); }
 		}
 	}
 	
 	if (elgg_instanceof($entity, 'object')) {
 		foreach ($return as $index => $item) {
-			if (in_array($item->getName(), array('likes'))) {
+			if (in_array($item->getName(), array('likes', 'unlike', 'likes_count', 'access'))) {
 				unset($return[$index]);
 			}
 		}

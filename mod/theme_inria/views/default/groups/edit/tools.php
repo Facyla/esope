@@ -13,6 +13,11 @@
 // may not be set yet
 $group = $vars['entity'];
 
+//Iris v2 : workspaces
+$translation_prefix = '';
+$parent_group = elgg_extract("au_subgroup_of", $vars);
+//if ($parent_group) { $translation_prefix = 'workspace:'; }
+
 $tools = elgg_get_config("group_tool_options");
 if ($tools) {
 	usort($tools, create_function('$a,$b', 'return strcmp($a->label,$b->label);'));
@@ -23,7 +28,7 @@ if ($tools) {
 /*
 $views = elgg_get_config('views');
 $tools = $views->extensions['groups/tool_latest'];
-echo '<br /><p>' . elgg_echo('esope:grouptools:priority') . '</p>';
+echo '<br /><p>' . elgg_echo($translation_prefix.'esope:grouptools:priority') . '</p>';
 foreach ($tools as $priority => $view) {
 	if ($view != 'groups/tool_latest') {
 		echo '<label>' . $view . '</label>';
@@ -79,7 +84,7 @@ foreach ($tools as $priority => $view) {
 		
 		// Esope : add help title if set
 		$attrs = array('class' => 'groups-edit-checkbox');
-		$title = elgg_echo("groups:tools:$group_option->name:details");
+		$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
 		if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
 		echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
 			'name' => $group_option_toggle_name,

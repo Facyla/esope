@@ -772,9 +772,10 @@ Voir et commenter ce lien web :
 	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
 	
 	'theme_inria:workspace' => "Espace de travail",
-	'theme_inria:workspace:title' => "Espace de travail&nbsp;: %s",
-	'theme_inria:workspace:title:main' => "Espace de travail principal&nbsp;: %s",
-	'theme_inria:workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
+	'theme_inria:workspace:main' => "Espace de travail principal",
+	'workspace:title' => "Espace de travail&nbsp;: %s",
+	'workspace:title:main' => "Espace de travail principal&nbsp;: %s",
+	'workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
 	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
 	
 	'theme_inria:manage' => "gérer",
@@ -790,9 +791,9 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
 	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
-	'theme_inria:workspace:event_calendar' => "Agenda",
-	'theme_inria:workspace:poll' => "Sondages",
-	'theme_inria:workspace:feedback' => "Feedbacks",
+	'workspace:event_calendar' => "Agenda",
+	'workspace:poll' => "Sondages",
+	'workspace:feedback' => "Feedbacks",
 	
 	'theme_inria:backtocontent' => "Retour vers la publication",
 	'theme_inria:backtocontents' => "Retour vers la liste des publications",
@@ -803,6 +804,7 @@ Voir et commenter ce lien web :
 	'theme_inria:groups:content:no_result' => "Aucun résultat",
 	
 	'theme_inria:user:activity' => "Activité",
+	'theme_inria:user:activity:all' => "Voir toute l'activité",
 	'theme_inria:user:profile_type' => "Profil",
 	
 	'theme_inria:filter' => "Filtrer",
@@ -822,11 +824,11 @@ Voir et commenter ce lien web :
 	'theme_inria:date_filter:lastweek' => "La semaine dernière",
 	'theme_inria:date_filter:last_login' => "Depuis ma dernière connexion le %s",
 	
-	'theme_inria:workspace:back' => "Retour à l'espace de travail",
+	'workspace:back' => "Retour à l'espace de travail",
 	'theme_inria:group:back' => "Retour à la présentation",
 	'theme_inria:profile:back' => "Retour au profil",
 	
-	'theme_inria:notification:email' => "Etre notifié par email",
+	'theme_inria:notification:email' => "Notifications par email",
 	'theme_inria:notification:site' => "Etre notifié via le site",
 	'theme_inria:newsletter:subscription' => "Abonnement lettre d'info",
 	
@@ -849,7 +851,36 @@ Voir et commenter ce lien web :
 	//'' => "",
 	//'river:update:object:default' => "",
 	
+	'groups:order:alpha' => "Ordre alphabétique",
+	'groups:order:desc' => "Groupes les + récents",
+	'groups:order:asc' => "Groupes les + anciens",
+	'groups:order:popular' => "Avec le plus de membres",
+	'groups:settings' => "Paramètres du groupe",
+	'groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre du groupe",
 	
+	// Workspaces
+	'workspace:groups:add' => "Créer un nouvel espace de travail",
+	'workspace:groups:edit' => "Modifier l'espace de travail",
+	'workspace:groups:settings' => "Paramètres de l'espace de travail",
+	'workspace:groups:invite' => "Inviter des membres",
+	'workspace:groups:name' => "Nom de l'espace de travail",
+	'workspace:groups:tags' => 'mots clés',
+	'workspace:groups:interests' => 'Mots-clés',
+	'workspace:groups:members:manage' => "Gérer les membres",
+	'workspace:groups:banner' => "Image d'entête de l'espace de travail (ne rien sélectionner pour laisser inchangé)",
+	'workspace:groups:about' => "A propos de l'espace de travail",
+	'workspace:groups:icon:inline' => "Image de l'espace de travail<br />(mini 200x200)",
+	'workspace:groups:banner:inline' => "Image de couverture<br />(mini 1200x200)",
+	'workspace:theme_inria:group:delete' => "Supprimer l'espace de travail",
+	'workspace:groups:delete' => "Supprimer l'espace de travail",
+	'workspace:theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
+	'workspace:theme_inria:notification:email' => "Notifications par email",
+	'workspace:groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre de l'espace de travail",
+	'workspace:groups:leave' => "Quitter cet espace de travail",
+	'workspace:groups:join' => "Rejoindre cet espace de travail",
+	'workspace:groups:joinrequest' => "Demander à rejoindre cet espace de travail",
+	'workspace:theme_inria:ownmembership' => "Adhésion à cet espace de travail",
+	'workspace:groups:briefdescription' => "Espace de travail<br />%s",
 	
 	
 	'group_location' => "Localisation",

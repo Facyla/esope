@@ -97,6 +97,7 @@ $banner_css = "#424B5F url('{$url}mod/theme_inria/graphics/backgrounds/profile/"
 	</div>
 	
 	<div class="iris-col">
+		<?php echo '<a href="'. elgg_get_site_url() . 'activity/owner/' . $user->username . '" class="view-all float-alt">' . elgg_echo('theme_inria:user:activity:all') . '</a>'; ?>
 		<h2><?php echo elgg_echo('theme_inria:user:activity'); ?></h2>
 		<div class="iris-box">
 			<?php

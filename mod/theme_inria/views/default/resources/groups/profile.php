@@ -11,12 +11,16 @@ elgg_set_page_owner_guid($guid);
 // Determine main group
 $main_group = theme_inria_get_main_group($group);
 
-
-
 // turn this into a core function
 global $autofeed;
 $autofeed = true;
 $url = elgg_get_site_url();
+
+// If workspace => forward to workspace home
+if ($group->guid != $main_group->guid) {
+	forward($url . 'groups/workspace/' . $group->guid);
+}
+
 elgg_push_context('group_profile');
 elgg_entity_gatekeeper($guid, 'group');
 elgg_push_breadcrumb($group->name);
@@ -84,12 +88,7 @@ if (elgg_group_gatekeeper(false)) {
 	
 	
 	// Membres : total et en ligne
-	$sidebar_alt .= '<h3>' . elgg_echo('members') . '</h3>';
-	$sidebar_alt .= '<div class="group-members-count">' . theme_inria_get_group_active_members($group, array('count' => true)) . '</div>';
-	//$sidebar_alt .= '<h3>' . elgg_echo('members:online') . '</h3>';
-	$sidebar_alt .= elgg_view('groups/sidebar/online_groupmembers', array('entity' => $group, 'limit' => 25));
-	
-	$sidebar_alt = '<div class="iris-sidebar-content">' . $sidebar_alt . '</div>';
+	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_members');
 	
 }
 

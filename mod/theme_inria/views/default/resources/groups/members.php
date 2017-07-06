@@ -41,12 +41,16 @@ elgg_push_breadcrumb(elgg_echo('groups:members'));
 
 $content = '';
 
-// Workspaces switch
-$content .= elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'members'));
+// Workspaces switch ?
+/*
+if ($group->guid != $main_group->guid) {
+	$content .= elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'members'));
+}
+*/
 
 $content .= '<div class="group-profile-main">';
 	
-	// @TODO Ajouter les actions : rendre resp du groupe, enlever resp, rendre proprio
+	// Actions : rendre resp du groupe, enlever resp, rendre proprio
 	// Owner and operators
 	$owner = $group->getOwnerEntity();
 	$max_operators = 0;
@@ -55,22 +59,34 @@ $content .= '<div class="group-profile-main">';
 	$operators = elgg_get_entities_from_relationship($operators_opt);
 
 	// Lien admin et responsables de groupe
+	// Workspaces : on n'affiche que des responsables et pas de "propriétaire"
 	/*
 	if ($group->canEdit()) {
 		$manage_group_admins = '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $group->guid . '" class="iris-manage float-alt">' . elgg_echo('theme_inria:manage') . '</a>';
 	}
 	*/
 	$content .= '<div class="group-workspace-module group-workspace-admins">';
-		$content .= '<div class="group-admins">
-				<div class="group-admin">
-					<h3>' . elgg_echo('groups:owner') . '</h3>
-					<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
-					' . $owner->name . '
-				</div>
-			</div>';
+		if ($group->guid == $main_group->guid) {
+			$content .= '<div class="group-admins">
+					<div class="group-admin">
+						<h3>' . elgg_echo('groups:owner') . '</h3>
+						<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
+						' . $owner->name . '
+					</div>
+				</div>';
+		} else {
+			// Add owner to count
+			$operators_count++;
+		}
 		$content .= '<div class="group-operators">' . $manage_group_admins;
 			if ($operators_count > 0) {
 				$content .= '<h3>' . elgg_echo('theme_inria:groups:operators', array($operators_count)) . '</h3>';
+				if ($group->guid != $main_group->guid) {
+					$content .= '<div class="group-admin">
+							<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
+							' . $owner->name . '
+						</div>';
+				}
 				if ($operators) {
 					foreach($operators as $ent) {
 						if ($ent->guid == $owner->guid) { continue; }

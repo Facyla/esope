@@ -58,11 +58,23 @@ if (elgg_in_context('widgets')) {
 	$metadata = '';
 }
 
-// @TODO Formulaire de réponse
-//if (elgg_in_context('widgets')) {
-	$metadata_alt = '';
-//}
+// Affiche le précédent
+if ($post->reply) {
+	$metadata_alt .= '<li>' . elgg_view('output/url', array(
+		'text' => elgg_echo('previous'),
+		'href' => "thewire/previous/$post->guid",
+		'class' => 'thewire-previous',
+		'title' => elgg_echo('thewire:previous:help'),
+	)) . '</li>';
+}
+/* Affiche toute la conversation
+$metadata_alt .= '<li>' . elgg_view('output/url', array(
+	'text' => elgg_echo('thewire:thread'),
+	'href' => "thewire/thread/$post->wire_thread",
+)) . '</li>';
+*/
 
+/*
 $params = array(
 	'entity' => $post,
 	'title' => false,
@@ -74,9 +86,10 @@ $params = array(
 );
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
+*/
 
 //echo elgg_view_image_block($owner_icon, $list_body, array('class' => 'thewire-post'));
-$content = $subtitle . thewire_filter($post->description);
+$content = thewire_filter($post->description);
 
 if ($post->reply) {
 	//echo "<div class=\"thewire-parent hidden\" id=\"thewire-previous-{$post->guid}\">";
