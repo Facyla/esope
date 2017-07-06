@@ -49,6 +49,7 @@
 $entity = elgg_extract('entity', $vars, FALSE);
 $body = elgg_extract('body', $vars, FALSE);
 $metadata_alt = elgg_extract('metadata_alt', $vars, FALSE);
+$after = elgg_extract('after', $vars, FALSE);
 
 $mode = elgg_extract('mode', $vars, FALSE);
 $full = elgg_extract('full_view', $vars, FALSE);
@@ -227,6 +228,7 @@ $actions .= '<ul class="elgg-menu-entity-alt float-alt">';
 $actions .= '</ul>';
 $actions .= '<div class="clearfloat"></div>' . $actions_after;
 
+$actions .= $after;
 
 //echo $mode;
 echo '<div class="iris-object iris-object-' . $mode . '">';
