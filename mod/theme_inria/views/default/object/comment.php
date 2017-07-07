@@ -19,7 +19,9 @@ if (!$entity || !$commenter) {
 $friendlytime = elgg_view_friendly_time($comment->time_created);
 
 //$commenter_icon = elgg_view_entity_icon($commenter, 'tiny');
-$commenter_icon = '<span class="elgg-avatar tiny"><img src="' . $commenter->getIconURL(array('size' => 'tiny')) . '"></span>';
+$profile_type = esope_get_user_profile_type($commenter);
+if (empty($profile_type)) { $profile_type = 'external'; }
+$commenter_icon = '<span class="elgg-avatar elgg-avatar-tiny profile-type-' . $profile_type . '"><img src="' . $commenter->getIconURL(array('size' => 'tiny')) . '"></span>';
 $commenter_link = "<a href=\"{$commenter->getURL()}\">$commenter->name</a>";
 
 $entity_title = $entity->title ? $entity->title : elgg_echo('untitled');

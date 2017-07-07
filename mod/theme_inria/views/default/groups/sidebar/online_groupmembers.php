@@ -27,7 +27,9 @@ $options = array(
 $members_count = elgg_get_entities_from_relationship($options + array('count' => true));
 $online_members = elgg_get_entities_from_relationship($options);
 foreach($online_members as $ent) {
-	$body .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
+	$profile_type = esope_get_user_profile_type($ent);
+	if (empty($profile_type)) { $profile_type = 'external'; }
+	$body .= '<a href="' . $ent->getURL() . '" class="elgg-avatar profile-type-' . $profile_type . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
 }
 if (($limit > 0) && ($members_count > $limit)) {
 	$members_more_count = $members_count - $limit;

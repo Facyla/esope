@@ -19,7 +19,9 @@ if (elgg_in_context('search')) {
 }
 
 //$icon = elgg_view_entity_icon($entity, $size, $vars);
-$icon = '<a href="' . $entity->getURL() . '"><img src="' . $entity->getIconUrl(array('size' => $size)) . '" alt="' . $entity->name . '"></a>';
+$profile_type = esope_get_user_profile_type($entity);
+if (empty($profile_type)) { $profile_type = 'external'; }
+$icon = '<a href="' . $entity->getURL() . '" class="elgg-avatar elgg-avatar-' . $size . ' profile-type-' . $profile_type . '"><img src="' . $entity->getIconUrl(array('size' => $size)) . '" alt="' . $entity->name . '"></a>';
 
 $title = elgg_extract('title', $vars);
 if (!$title) {

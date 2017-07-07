@@ -78,7 +78,9 @@ if (!in_array($mode, array('full', 'listing', 'content'))) {
 
 
 // ICONS AND IMAGES
-$owner_icon = '<a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a>';
+$profile_type = esope_get_user_profile_type($owner);
+if (empty($profile_type)) { $profile_type = 'external'; }
+$owner_icon = '<span class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a></span>';
 
 $entity_icon = $entity->getIconURL(array('size' => 'medium'));
 if (elgg_instanceof($entity, 'object', 'file')) {
@@ -99,7 +101,7 @@ $menu = elgg_view_menu('entity', array(
 	));
 $header = '<div class="entity-headline">';
 	if ($mode != 'listing') {
-		$header .= '<div class="owner-icon"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'small')) . '" /></a></div>';
+		$header .= '<div class="owner-icon"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium profile-type-' . $profile_type . '"><img src="' . $owner->getIconURL(array('size' => 'small')) . '" /></a></div>';
 	}
 	
 	$header .= '<div class="entity-title">';

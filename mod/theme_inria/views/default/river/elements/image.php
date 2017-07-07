@@ -39,6 +39,10 @@ if (elgg_instanceof($object, 'object')) {
 	// join site
 	//$icon = '<img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->getType() . ' ' . $subject->getSubtype() . '" style="' . $style . '" />';
 	$icon = '<span class="' . $size . '"><i class="fa fa-sign-in"></i></span>';
+} else if (elgg_instanceof($object, 'user')) {
+	$profile_type = esope_get_user_profile_type($object);
+	if (empty($profile_type)) { $profile_type = 'external'; }
+	$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="' . $object->getType() . ' ' . $object->getSubtype() . '" style="' . $style . '" /></a>';
 } else {
 	//$icon = elgg_view_entity_icon($object, $size);
 	//$icon = '<span class="' . $size . '"><i class="fa fa-sign-in"></i></span>';

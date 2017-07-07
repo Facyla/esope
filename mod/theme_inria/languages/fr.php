@@ -791,6 +791,7 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
 	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
+	'theme_inria:workspace:poll' => "Les sondages",
 	'workspace:event_calendar' => "Agenda",
 	'workspace:poll' => "Sondages",
 	'workspace:feedback' => "Feedbacks",
@@ -832,6 +833,13 @@ Voir et commenter ce lien web :
 	'theme_inria:notification:site' => "Etre notifié via le site",
 	'theme_inria:newsletter:subscription' => "Abonnement lettre d'info",
 	
+	
+	'theme_inria:makeowner' => "Rendre propriétaire",
+	'theme_inria:removeoperator' => "Supprimer responsable",
+	'theme_inria:addoperator' => "Rendre responsable",
+	'theme_inria:removefromgroup' => "Retirer du groupe",
+	'theme_inria:group:allmembers' => "Tous les membres (%s)",
+	'theme_inria:group:members:search:placeholder' => "3 premières lettres",
 	
 	/* River and activity */
 	// Commentaire : on mentionne le type d'objet (ou alors icônes en rapport avec l'objet et pas le commentaire)

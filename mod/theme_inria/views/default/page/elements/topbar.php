@@ -36,6 +36,8 @@ if (elgg_is_logged_in()) {
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
 	
+	$profile_type = esope_get_user_profile_type($own);
+	if (empty($profile_type)) { $profile_type = 'external'; }
 	
 	// Messages non lus
 	$messages_mark = '';
@@ -265,7 +267,7 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 		
 		<div class="menu-topbar-toggle" class="iris-topbar-item"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt iris-topbar-item" id="menu-topbar">
-			<li id="user"><a href="javascript:void(0);"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?> <i class="fa fa-angle-down"></i></a>
+			<li id="user"><a href="javascript:void(0);" class="elgg-avatar elgg-avatar-small profile-type-<?php echo $profile_type; ?>"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">
 					<li><a href="<?php echo $url . 'profile/' . $ownusername; ?>"><?php echo $svg_profile . elgg_echo('theme_inria:topbar:profil'); ?></a>
 					<li id="usersettings"><a href="<?php echo $url . 'settings/user/' . $ownusername; ?>" title="<?php echo elgg_echo('theme_inria:usersettings:tooltip'); ?>"><?php echo $svg_settings . elgg_echo('esope:usersettings'); ?></a></li>

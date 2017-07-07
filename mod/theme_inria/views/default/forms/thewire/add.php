@@ -72,8 +72,10 @@ $submit_button = elgg_view('input/submit', array(
 ));
 
 echo <<<HTML
-$user_img
-$post_input
+<div class="wire-input">
+	$user_img
+	$post_input
+</div>
 <div class="elgg-foot mts">
 	$access_input
 	$parent_input

@@ -30,11 +30,14 @@ if ($group->canEdit()) {
 	//$manage_group_admins = '<a href="' . elgg_get_site_url() . 'group_operators/manage/' . $group->guid . '" class="iris-manage float-alt">' . elgg_echo('theme_inria:manage') . '</a>';
 	$manage_group_admins = '<a href="' . elgg_get_site_url() . 'groups/members/' . $group->guid . '" class="iris-manage">' . elgg_echo('theme_inria:manage') . '</a>';
 }
+
+$profile_type = esope_get_user_profile_type($owner);
+if (empty($profile_type)) { $profile_type = 'external'; }
 $content .= '<div class="group-workspace-module group-workspace-admins">';
 	$content .= '<div class="group-admins">
 			<div class="group-admin">
 				<h3>' . elgg_echo('groups:owner') . '</h3>
-				<a href="' . $owner->getURL() . '">
+				<a href="' . $owner->getURL() . '" class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '">
 					<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
 					' . $owner->name . '
 				</a>
@@ -46,8 +49,10 @@ $content .= '<div class="group-workspace-module group-workspace-admins">';
 			if ($operators) {
 				foreach($operators as $ent) {
 					if ($ent->guid == $owner->guid) { continue; }
+					$profile_type = esope_get_user_profile_type($ent);
+					if (empty($profile_type)) { $profile_type = 'external'; }
 					$content .= '<div class="group-operator">
-							<a href="' . $ent->getURL() . '">
+							<a href="' . $ent->getURL() . '" class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '">
 								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
 								' . $ent->name . '
 							</a>
@@ -92,7 +97,9 @@ $content .= '<div class="group-workspace-module group-workspace-members">';
 	$content .= '<a href="' . elgg_get_site_url() . 'groups/members/' . $group->guid . '" class="iris-manage">' . elgg_echo('theme_inria:manage') . '</a>';
 	$content .= '<h3>' . $members_string . '</h3>';
 	foreach($members as $ent) {
-		$content .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
+		$profile_type = esope_get_user_profile_type($ent);
+		if (empty($profile_type)) { $profile_type = 'external'; }
+		$content .= '<a href="' . $ent->getURL() . '" class="elgg-avatar profile-type-' . $profile_type . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
 	}
 	if ($members_count > $max_members) {
 		$members_more_count = $members_count - $max_members;
