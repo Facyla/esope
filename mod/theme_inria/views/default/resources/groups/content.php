@@ -139,6 +139,8 @@ elgg_pop_context();
 
 
 
+
+
 // Compose page content
 
 // Nouvelle publication
@@ -167,6 +169,12 @@ $content .= '<div class="group-content-filter tabs">';
 	if ($filter == 'draft') { $class = 'elgg-state-selected'; } else { $class = ''; }
 	$content .= '<a href="' . $base_url . 'draft" class="' . $class . '" rel="nofollow">' . elgg_echo('theme_inria:contentfilter:draft') . ' (' . $count_draft . ')</a>';
 $content .= '</div>';
+
+// Navigation du wiki
+if ($subtype == 'pages') {
+	$content .= '';
+}
+
 // Résultats
 if ($count > 0) {
 	$content .= $entities_list;

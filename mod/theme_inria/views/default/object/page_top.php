@@ -24,11 +24,16 @@ if ($page->write_access_id == ACCESS_PUBLIC) {
 	$page->write_access_id = ACCESS_LOGGED_IN;
 }
 
+$url = elgg_get_site_url();
+$page_owner = elgg_get_page_owner_entity();
+
 // Facyla : Export de la page courante
-elgg_register_menu_item('entity', array(
-		'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 'title' => elgg_echo('theme_inria:pages:pageexport:title'),
-		'href' => elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
-	));
+if (!$full && elgg_instanceof($page_owner, 'group')) {
+	elgg_register_menu_item('entity', array(
+			'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 'title' => elgg_echo('theme_inria:pages:pageexport:title'),
+			'href' => elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
+		));
+}
 
 
 if ($revision) {
@@ -74,6 +79,7 @@ if ($comments_count != 0 && !$revision) {
 }
 
 $subtitle = "$editor_text $comments_link $categories";
+$subtitle = '<div class="elgg-pages-subtitle">' . $subtitle . '</div>';
 
 // do not show the metadata and controls in widget view
 if (!elgg_in_context('widgets')) {
@@ -93,6 +99,38 @@ if (!elgg_in_context('widgets')) {
 			'class' => 'elgg-menu-hz',
 		));
 	}
+}
+
+
+// In groups
+if (elgg_instanceof($page_owner, 'group')) {
+	$menu = elgg_view_menu('entity', array(
+			'entity' => $page,
+			'handler' => $page->getSubtype(),
+			'sort_by' => 'priority',
+			'class' => 'elgg-menu-vert',
+		));
+	$menu = '<div class="entity-submenu float-alt">
+			<a href="javascript:void(0);" onClick="$(this).parent().find(\'.entity-submenu-content\').toggleClass(\'hidden\')"><i class="fa fa-ellipsis-h"></i></a>
+			<div class="entity-submenu-content hidden">' . $menu . '</div>
+		</div>';
+
+	$pages_actions = '';
+	$pages_actions .= '<li>' . elgg_view('output/url', array(
+			'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 
+			'title' => elgg_echo('theme_inria:pages:pageexport:title'),
+			'href' => elgg_add_action_tokens_to_url($url . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
+		)) . '</li>';
+	$pages_actions .= '<li><a href="' . $url . 'pages/edit/' . $page->guid . '"><i class="fa fa-edit"></i></a></li>';
+	$pages_actions .= '<li><a href="' . $url . 'pages/history/' . $page->guid . '"><i class="fa fa-clock-o"></i></a></li>';
+
+	$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'content', 'metadata' => $pages_actions));
+
+	$title = '<h3>' . $page->title . '</h3>';
+	if ($subpages) {
+		$title = '<h3><a href="javascript: void(0);" onClick="javascript:$(\'#pages-subpages-' . $page->guid . '\').slideToggle(); return false;"><i class="fa fa-angle-down"></i></a> ' . $page->title . '</h3>';
+	}
+		
 }
 
 
@@ -124,7 +162,7 @@ if ($full) {
 		'href' => "#full-width-pages-nav-content",
 		'rel' => 'toggle',
 	));
-	$content = '<div class="full-width-pages-nav">
+	$navigation = '<div class="full-width-pages-nav">
 		' . $toggle_link . '
 		<div id="full-width-pages-nav-content" class="hidden">
 			' . elgg_view('pages/top-summary', array('page' => $page)) . '
@@ -140,8 +178,12 @@ if ($full) {
 		'body' => $body,
 	));
 	*/
-	$content .= $body;
 	
+	
+	$content .= '<div class="pages-subpages hidden" id="pages-subpages-' . $page->guid . '">' . elgg_view('pages/sub-pages', array('entity' => $page)) . '</div>';
+	
+	
+	/*
 	// Liste des sous-pages
 	$content .= elgg_view('pages/sub-pages', array('entity' => $page));
 	
@@ -151,7 +193,16 @@ if ($full) {
 		$content .= '<h3>' . elgg_echo('pages:edit') . '</h3>';
 		$content .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('edit') . '</a></p>';
 	}
+	*/
 	
+	
+	// In groups
+	if (elgg_instanceof($page_owner, 'group')) {
+		echo $navigation . '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . $actions . '<div class="pages-content">' . $body . '</div></div>';
+		return;
+	}
+	
+	$content .= $navigation . $body . $actions;
 	
 } else {
 	// brief view
@@ -166,6 +217,7 @@ if ($full) {
 	
 	$excerpt = elgg_get_excerpt($page->description);
 
+	/*
 	$params = array(
 		'entity' => $page,
 		'metadata' => $metadata,
@@ -174,9 +226,19 @@ if ($full) {
 	);
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
+	*/
+	$subpages = '<div class="pages-subpages hidden" id="pages-subpages-' . $page->guid . '">' . elgg_view('pages/sub-pages', array('entity' => $page)) . '</div>';
 
+	
+	// In groups
+	if (elgg_instanceof($page_owner, 'group')) {
+		echo '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . $excerpt . $actions . $subpages . '</div>';
+		return;
+	}
+	
 	//echo elgg_view_image_block($page_icon, $list_body);
-	$content = $subtitle . $excerpt;
+	$content = $subtitle . $excerpt . $subpages;
+	
 }
 
 
