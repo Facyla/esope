@@ -54,7 +54,7 @@ if (elgg_is_logged_in()) {
 	// Site notifications
 	$notifications_mark = '';
 	$notifications_text = '';
-	$notifications_count = '';
+	$notifications_count = 0;
 	$site_notifications_content = '';
 	if (elgg_is_active_plugin('site_notifications')) {
 		$site_notifications_opt = array(
@@ -71,29 +71,75 @@ if (elgg_is_logged_in()) {
 		}
 	}
 	
+	
+	// Friend requests - Demandes de contact en attente (reçues)
+	$friendrequests_options = array("type" => "user", "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true, 'limit' => false);
+	$friendrequests_entities = elgg_get_entities_from_relationship($friendrequests_options);
+	$friendrequests_count = count($friendrequests_entities);
+	$friendrequests_content = '';
+	if ($friendrequests_count > 0) {
+		$friendrequests_text .= elgg_echo("theme_inria:friendrequests:unreadcount", array($friendrequests_count));
+		$friendrequests_mark .= '<span class="iris-new" title="' . $friendrequests_text . '">' . $friendrequests_count . '</span>';
+		
+		$notifications_count += $friendrequests_count;
+		if (!empty($notifications_text)) { $notifications_text .= ', '; }
+		$notifications_text .= $friendrequests_text;
+	}
+	// Friend requests - Demandes de contact envoyées (non comptées comme notif car pas "à traiter")
+	$friendrequests_options['inverse_relationship'] = false;
+	//$friendrequests_sent_entities = elgg_get_entities_from_relationship($friendrequests_options + ['inverse_relationship' => false]);
+	$friendrequests_sent_entities = elgg_get_entities_from_relationship($friendrequests_options);
+	//$friendrequests_sent_count = count($friendrequests_sent_entities);
+	
+	$friendrequests_content .= elgg_view('friend_request/received', ['entities' => $friendrequests_entities]);
+	$friendrequests_content .= elgg_view('friend_request/sent', ['entities' => $friendrequests_sent_entities]);
+	/*
+	if ($friendrequests_count == 1) {
+		$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a></li>';
+	} else if ($friendrequests_count > 1) {
+		$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a></li>';
+	}
+	*/
+	
+	if ($notifications_count > 0) {
+		$notifications_mark .= '<span class="iris-new" title="' . $notifications_text . '">' . $notifications_count . '</span>';
+	}
+	
+	
 	// Group invites
 	$groupinvites_options = array();
-	// Own invites
+	
+	// Own invites - invitations reçues
+	//$groupinvites_content .= '<h3>INVITATIONS RECUES</h3>';
+	// '<a href="' . elgg_get_site_url() . 'groups/invitations/' . $user->username . '">' . 
 	//$groupinvites_count = groups_get_invited_groups($own->guid, false, array('count' => true));
-	//$groupinvites = esope_groups_get_invited_groups($own->guid);
+	$groupinvites = esope_groups_get_invited_groups($own->guid);
 	$groupinvites_count = esope_groups_get_invited_groups($own->guid, false, array('count' => true));
 	$groupinvites_content = '';
 	if ($groupinvites_count > 0) {
 		$groupinvites_text .= elgg_echo("theme_inria:groupinvites:unreadcount", array($groupinvites_count));
-		$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $groupinvites_count . '</span>';
+		//$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $groupinvites_count . '</span>';
 	}
 	//$groupinvites_content .= elgg_view('groups/invitationrequests', array('invitations' => $groupinvites));
-	$groupinvites_content .= elgg_view('groups/invitationrequests');
+	$groupinvites_content .= elgg_view('groups/invitationrequests', array('invitations' => $groupinvites));
+	
+	// Demandes en attente
+	$grouprequests = esope_groups_get_requested_groups($own->guid);
+	//$groupinvites_content .= '<h3>DEMANDES ENVOYEES</h3>';
+	$groupinvites_content .= elgg_view('groups/pending_invitationrequests', array('requests' => $grouprequests));
+	
 	// Admin group membership requests (groups where user can validate requests as operator)
-	$grouprequests = esope_groups_get_pending_membership_requests($own->guid);
-	$grouprequests_count = count($grouprequests);
-	$groupinvites_count += $grouprequests_count;
-	if ($grouprequests_count > 0) {
+	//$groupinvites_content .= '<h3>DEMANDES A TRAITER (responsable de groupe)</h3>';
+	$grouppendingrequests = esope_groups_get_pending_membership_requests($own->guid);
+	$grouppendingrequests_count = count($grouppendingrequests);
+	$groupinvites_count += $grouppendingrequests_count;
+	if ($grouppendingrequests_count > 0) {
 		if (!empty($groupinvites_text)) { $groupinvites_text .= ', '; }
-		$groupinvites_text .= elgg_echo("theme_inria:grouprequests:unreadcount", array($grouprequests_count));
+		$groupinvites_text .= elgg_echo("theme_inria:grouprequests:unreadcount", array($grouppendingrequests_count));
 		//$groupinvites_content .= '<h3>' . "Demandes d'adhésion dans vos groupes" . '</h3>';
 		$groupinvites_content .= '<hr />';
-		foreach($grouprequests as $group) {
+		foreach($grouppendingrequests as $group) {
+			//if (!$group->canEdit()) { continue; }
 			//$groupinvites_content .= elgg_view_entity($group, array('full_view' => false));
 			//$groupinvites_content .= '<div class=""><img src="' . $group->getIconURL(array('size' => 'small')) . '" /></div>';
 			$groupinvite_content = '';
@@ -120,32 +166,6 @@ if (elgg_is_logged_in()) {
 	}
 	
 	
-	// Friend requests - Demandes de contact en attente
-	$friendrequests_options = array("type" => "user", "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true, "count" => true);
-	$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
-	$friendrequests_content = '';
-	if ($friendrequests_count > 0) {
-		$friendrequests_text .= elgg_echo("theme_inria:friendrequests:unreadcount", array($friendrequests_count));
-		$friendrequests_mark .= '<span class="iris-new" title="' . $friendrequests_text . '">' . $friendrequests_count . '</span>';
-		
-		$notifications_count += $friendrequests_count;
-		if (!empty($notifications_text)) { $notifications_text .= ', '; }
-		$notifications_text .= $friendrequests_text;
-	}
-	$friendrequests_content .= elgg_view('friend_request/sent', $vars) . elgg_view('friend_request/received', $vars);
-	/*
-	if ($friendrequests_count == 1) {
-		$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a></li>';
-	} else if ($friendrequests_count > 1) {
-		$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a></li>';
-	}
-	*/
-	
-	if ($notifications_count > 0) {
-		$notifications_mark .= '<span class="iris-new" title="' . $notifications_text . '">' . $notifications_count . '</span>';
-	}
-	
-	
 	// Login_as menu link
 	if (elgg_is_active_plugin('login_as')) {
 		$session = elgg_get_session();
@@ -154,7 +174,7 @@ if (elgg_is_logged_in()) {
 			$original_user = get_entity($original_user_guid);
 			$loginas_title = elgg_echo('login_as:return_to_user', array($ownusername, $original_user->username));
 			$loginas_html = elgg_view('login_as/topbar_return', array('user_guid' => $original_user_guid));
-			$loginas_logout = '<li id="logout">' . elgg_view('output/url', array('href' => $url . "action/logout_as", 'text' => $loginas_html, 'is_action' => true, 'name' => 'login_as_return', 'title' => $loginas_title, 'class' => 'login-as-topbar')) . '</li>';
+			$loginas_logout = '<div id="logout" class="iris-topbar-item">' . elgg_view('output/url', array('href' => $url . "action/logout_as", 'text' => $loginas_html, 'is_action' => true, 'name' => 'login_as_return', 'title' => $loginas_title, 'class' => 'login-as-topbar')) . '</div>';
 		}
 	}
 	
@@ -208,7 +228,8 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 		</div>
 		
 		<div id="notifications" class="iris-topbar-item">
-			<a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>" title="<?php echo elgg_echo('site_notifications:topbar'); ?>"><i class="fa fa-bell-o"></i><?php echo $notifications_mark; ?></a>
+			<?php /* <a href="<?php echo $url . 'site_notifications/view/' . $ownusername; ?>" title="<?php echo elgg_echo('site_notifications:topbar'); ?>"><i class="fa fa-bell-o"></i><?php echo $notifications_mark; ?></a> */ ?>
+			<a href="javascript: void(0);" onClick="javascript: $('#notifications .notifications-panel').toggleClass('hidden')" title="<?php echo elgg_echo('site_notifications:topbar'); ?>"><i class="fa fa-bell-o"></i><?php echo $notifications_mark; ?></a>
 			<div class="notifications-panel hidden">
 				<div class="tabs">
 					<?php

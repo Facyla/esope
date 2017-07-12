@@ -85,7 +85,15 @@ if ($full) {
 	echo elgg_view('output/longtext', array('value' => $message->description));
 } else {
 	
-	$body .= elgg_view("output/longtext", array("value" => elgg_get_excerpt($message->description), "class" => "elgg-subtext clearfloat"));
+	$excerpt = elgg_get_excerpt($message->description);
+	if (strlen($excerpt) != strlen(trim(elgg_strip_tags($message->description)))) {
+		$excerpt .= elgg_view('output/url', array(
+			'href' => $message->getUrl(),
+			'text' => elgg_echo('theme_inria:readmore'),
+			'class' => 'readmore',
+		));
+	}
+	$body .= elgg_view("output/longtext", array("value" => $excerpt, "class" => "elgg-subtext clearfloat"));
 	
 	if ($bulk_actions) {
 		$checkbox = elgg_view('input/checkbox', array(

@@ -9,21 +9,21 @@ if ($is_main_group) {
 	$sidebar .= '<h3>' . elgg_echo('groups:briefdescription') . '</h3>';
 } else {
 	$sidebar .= '<h3>' . elgg_echo('workspace:groups:briefdescription', array($group->name)) . '</h3>';
+	$sidebar .= '<div class="iris-workspace-rules">';
+		// Access
+		$sidebar .= '<span class="group-access">' . elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span><br />';
+		// Membership
+		$sidebar .= elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
+		if ($group->membership == ACCESS_PUBLIC) {
+			//echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
+			$sidebar .= '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open");
+		} else {
+			//echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
+			$sidebar .= '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed");
+		}
+		$sidebar .= '</span>';
+	$sidebar .= '</div>';
 }
-$sidebar .= '<div class="iris-workspace-rules">';
-	// Access
-	$sidebar .= '<span class="group-access">' . elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span>';
-	// Membership
-	$sidebar .= elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
-			if ($group->membership == ACCESS_PUBLIC) {
-				//echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
-		$sidebar .= '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open");
-			} else {
-				//echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
-		$sidebar .= '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed");
-			}
-	$sidebar .= '</span>';
-$sidebar .= '</div>';
 
 $desc = $group->briefdescription;
 if (empty($desc)) { $desc = elgg_get_excerpt($group->description); }

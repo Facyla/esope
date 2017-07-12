@@ -11,12 +11,16 @@ $url = elgg_get_site_url();
 $max_groups = 4;
 $max_friends = 6;
 
+$profile_type = esope_get_user_profile_type($user);
+if (empty($profile_type)) { $profile_type = 'external'; }
+
 $banner_css = '#424B5F';
+if ($profile_type == 'external') { $banner_css = '#F7A621'; }
+
 //if (!empty($user->banner)) { $banner_css = " url('{$url}groups/file/{$user->guid}/banner) no-repeat center/cover"; }
 //$banner_css = "linear-gradient(rgba(66, 75, 95, 0.45), rgba(66, 75, 95, 0.45)), #424B5F url('{$url}mod/theme_inria/graphics/aleatoire/" . rand(0,7) . ".png') no-repeat center/cover";
 //$banner_css = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #424B5F url('{$url}mod/theme_inria/graphics/backgrounds/profile/" . rand(1,3) . ".jpg') no-repeat center/cover";
-$banner_css = "#424B5F url('{$url}mod/theme_inria/graphics/backgrounds/profile/" . rand(1,3) . ".jpg') no-repeat center/cover";
-
+$banner_css .= " url('{$url}mod/theme_inria/graphics/backgrounds/profile/" . rand(1,3) . ".jpg') no-repeat center/cover";
 
 ?>
 

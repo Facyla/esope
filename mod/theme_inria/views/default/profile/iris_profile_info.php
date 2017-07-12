@@ -75,13 +75,34 @@ if ($show_inria_fields) {
 }
 
 
+if (strtolower($profile_type) == 'external') {
+	if (!empty(trim($user->organisation))) {
+		echo '<div class="iris-profile-info-field">' . elgg_echo('profile:organisation') . '<br />';
+			// @TODO organisations cliquables => recherche par tag
+			//echo '<strong>' . implode(', ', (array)$user->organisation) . '</strong>';
+			foreach((array)$user->organisation as $organisation) {
+				echo '<a href="' . $url . 'members/?q=' . $organisation . '">' . $organisation . '</a>';
+			}
+		echo '</div>';
+	}
+	if (!empty(trim($user->fonction))) {
+		echo '<div class="iris-profile-info-field">
+			' . elgg_echo('profile:fonction') . '<br />
+			<strong>' . implode(', ', (array)$user->fonction) . '</strong>
+		</div>';
+	}
+}
+
+
+
 // Inria fields (from LDAP)
 $categorized_fields = profile_manager_get_categorized_fields($user);
 $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
 // Display only for Inria accounts (LDAP data), and for logged in, Inria viewers - or admins
-if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($user_profile_type == 'inria'))) {
+//if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($user_profile_type == 'inria'))) {
+if ($show_inria_fields) {
 	// Following hasn't be modified (except the inria cat filter)
 	foreach($cats as $cat_guid => $cat){
 		$cat_title = "";
@@ -141,7 +162,7 @@ if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($user_profile_t
 			$details_result .= $cat_title;
 			// Add email
 			$field_result .= "<div class='" . $even_odd . "'>";
-			$field_result .= "<b>Email</b>:&nbsp;" . elgg_view("output/email", array("value" =>  $user->email));
+			$field_result .= "<b>" . elgg_echo('profile:email') . "</b>:&nbsp;" . elgg_view("output/email", array("value" =>  $user->email));
 			$field_result .= "</div>\n";
 			$details_result .= "<div>" . $field_result . "</div>";
 		}

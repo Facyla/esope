@@ -106,6 +106,10 @@ $header = '<div class="entity-headline">';
 	
 	$header .= '<div class="entity-title">';
 		$header .= '<strong>' . $owner->name . '</strong>';
+		
+		// Add profile type badge, if defined
+		if ($profile_type == 'external') { $header .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+		
 		$header .= '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($entity->time_created) . '</span>';
 		//$header .= elgg_view('output/access', array('entity' => $entity));
 	$header .= '</div>';

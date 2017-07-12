@@ -74,8 +74,9 @@ h4 {
 #digest_content {
 	min-height: 100px;
 }
-.digest-groups .table-item { float:left; width:120px; min-height:170px; text-align: center; padding: 3px 4px 3px 16px; line-height: 1; font-size:12px; }
-.digest-profile .table-item { float:left; width:120px; min-height:170px; text-align: center; padding: 3px 4px 3px 16px; line-height: 1; font-size:12px; }
+
+.digest-groups .table-item { float:left; width:120px; min-height:170px; text-align: center; margin: 6px 10px 10px 0px; line-height: 1; font-size:12px; flex: 1 0 auto; font-size: 12px; padding: 0; }
+.digest-profile .table-item { float:left; width:120px; min-height:170px; text-align: center; margin: 6px 10px 10px 0px; line-height: 1; font-size:12px; flex: 1 0 auto; font-size: 12px; padding: 0; }
 .digest-groups img, .digest-groups img { margin-bottom: 3px; }
 
 #digest_unsubscribe {
@@ -134,6 +135,7 @@ h4 {
 }
 .elgg-avatar > a > img {
 	display: block;
+	border-radius: 50%;
 }
 .elgg-avatar-tiny > a > img {
 	background-size: 25px auto;
@@ -155,6 +157,27 @@ h4 {
 	height: 200px;
 	width: 200px;
 }
+
+.elgg-avatar.elgg-avatar-large img, 
+.elgg-avatar.elgg-avatar-medium img { border: 3px solid transparent; padding: 3px; }
+.elgg-avatar.elgg-avatar-large.profile-type-external img, 
+.elgg-avatar.elgg-avatar-medium.profile-type-external img { border: 3px solid #F7A621; }
+
+.iris-badge-external {
+	text-transform: uppercase;
+	font-family: "Inria Sans", sans-serif;
+	border-radius: 1rem;
+	font-weight: bold;
+	margin: 0rem 0rem 0rem 1rem;
+	vertical-align: top;
+	color: white;
+	background-color: #F7A621;
+	font-size: 0.75rem;
+	padding: 0.3rem 0.5rem 0.2rem 0.5rem;
+	display: inline-block;
+	margin-top: 0.5rem;
+}
+
 .elgg-icon {
 	background: url("<?php echo elgg_get_site_url(); ?>_graphics/elgg_sprites.png") no-repeat scroll left center transparent;
 	height: 16px;
@@ -233,6 +256,8 @@ h4 {
 .digest-groups {
 	border-collapse: collapse;
 	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
 }
 .digest-groups td {
 	padding: 10px;
@@ -246,12 +271,31 @@ h4 {
 .digest-profile {
 	border-collapse: collapse;
 	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
 }
 .digest-profile td {
 	padding: 10px;
 	text-align: center;
 	vertical-align: top;
 	width: 33%;
+}
+.digest-groups .table-item a {
+	color: #384257;
+	font-weight: bold;
+	font-size: 0.75rem;
+	padding: 0rem;
+	display: block;
+}
+.group-oldactivity {
+	display: block;
+}
+.digest-profile .table-item a {
+	color: #384257;
+	font-weight: bold;
+	font-size: 0.75rem;
+	padding: 0rem;
+	display: block;
 }
 .digest-profile tr {
 	border-bottom: 1px dotted #DBDBDB;
@@ -262,6 +306,12 @@ h4 {
 }
 
 /* Hide subgroup text */
-.au_subgroup.au_subgroup_icon-medium { display: none; }
+/* .au_subgroup.au_subgroup_icon-medium { display: none; } */
+.au_subgroup {
+	color: #969696;
+	text-transform: uppercase;
+	font-size: 0.6rem;
+	display: block;
+}
 
 

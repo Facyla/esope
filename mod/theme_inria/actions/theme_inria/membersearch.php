@@ -16,10 +16,10 @@ $merge_params['wheres'][] = "NOT EXISTS (
         AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
 
 // Add skills and interests search from full text ?
-
+$user_profile_fields = array('interests', 'skills', 'briefdescription');
 
 //echo esope_esearch(array('merge_params' => $merge_params, 'debug' => true), array('add_count' => 'yes'));
-echo esope_esearch(array('merge_params' => $merge_params), array('add_count' => 'yes'));
+echo esope_esearch(array('merge_params' => $merge_params, 'user_profile_fields' => $user_profile_fields), array('add_count' => 'yes'));
 
 //$results = esope_esearch(array('merge_params' => $merge_params, 'returntype' => 'entities'), array('add_count' => 'yes'));
 

@@ -10,11 +10,8 @@ $profile_type = esope_get_user_profile_type($user);
 if (empty($profile_type)) { $profile_type = 'external'; }
 
 ?>
-<div class="iris-profile-icon <?php if (!empty($profile_type)) { echo 'profile-type-' . $profile_type; } ?>" style="background:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>') no-repeat center/cover;" />
+<div class="iris-profile-icon <?php if ($profile_type == 'external') { echo 'profile-type-' . $profile_type; } ?>" style="background-image:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>');" />
 	<?php
-	// Add profile type badge, if defined
-	if (!empty($profile_type)) { echo '<span class="profiletype-badge"><span class="profiletype-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
-
 	if ($user->canEdit()) {
 		echo '<a href="' . elgg_get_site_url() . 'avatar/edit/' . $user->username . '" class="iris-profile-editavatar"><i class="fa fa-camera"></i><br />' . elgg_echo('edit') . '</a>';
 	}
@@ -56,7 +53,13 @@ if (empty($profile_type)) { $profile_type = 'external'; }
 </div>
 
 <div class="iris-profile-title">
-	<h2><?php echo $user->name; ?></h2>
+	<h2>
+		<?php
+		echo $user->name;
+		// Add profile type badge, if defined
+		if (!empty($profile_type)) { echo '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+		?>
+	</h2>
 	<?php echo strip_tags($user->briefdescription); ?>
 </div>
 

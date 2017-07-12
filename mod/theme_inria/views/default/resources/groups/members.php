@@ -131,7 +131,8 @@ $content .= '<div class="group-profile-main">';
 			'relationship_guid' => $group->guid,
 			'inverse_relationship' => true,
 			'type' => 'user',
-			'limit' => (int)get_input('limit', max(20, elgg_get_config('default_limit')), false),
+			//'limit' => (int)get_input('limit', max(20, elgg_get_config('default_limit')), false),
+			'limit' => false,
 			'joins' => array("JOIN {$dbprefix}users_entity u ON e.guid=u.guid"),
 			'order_by' => 'u.name ASC',
 		);
@@ -140,13 +141,13 @@ $content .= '<div class="group-profile-main">';
 	
 	$content .= '<h3>' . elgg_echo('theme_inria:group:allmembers', array($members_count)) . '</h3>';
 	
-	// @TODO recherche live parmi les membres du groupe
-	$content .= '<div class="group-members-search"><i class="fa fa-search"></i><input type="text" placeholder="' . elgg_echo('') . '" class="" /></div>';
+	// Filtre live parmi les membres du groupe
+	$content .= '<div class="group-members-search"><i class="fa fa-search"></i><input type="text" placeholder="' . elgg_echo('theme_inria:group:members:livefilter') . '" id="group-members-filter" /></div>';
 	
 	
 	// Members listing
 	if ($members) {
-		$content .= '<div class="group-members">';
+		$content .= '<div class="group-members" id="group-members-live">';
 		foreach($members as $ent) {
 			$actions = '';
 			if ($group->canEdit()) {
@@ -159,23 +160,41 @@ $content .= '<div class="group-profile-main">';
 			}
 			$profile_type = esope_get_user_profile_type($ent);
 			if (empty($profile_type)) { $profile_type = 'external'; }
-			$content .= '<div class="group-member elgg-avatar profile-type-' . $profile_type . '" style="min-height: 3rem;">';
-			$content .= '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" /><br />' . $ent->name;
-			$content .= $actions;
+			$content .= '<div class="group-member elgg-avatar profile-type-' . $profile_type . '" style="min-height: 4rem;">';
+				$content .= '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+				$content .= $actions;
+				$content .= '<p><strong>' . $ent->name . '</strong>';
+				$content .= '<br />' . $ent->briefdescription;
+				$content .= '</p>';
 			$content .= '</div>';
 		}
 		$content .= '<div>';
 	}
-	
 
-$content .= '</div>';
+// @TODO pq 3 et pas 1 ?
+$content .= '</div></div></div>';
+
+
+$sidebar_alt = '';
+// Membership requests
+$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true, 'limit' => false));
+$requests_count = sizeof($requests);
+if ($requests_count > 0) {
+	$sidebar_alt .= '<div class="group-workspace-module group-workspace-requests">';
+		$sidebar_alt .= '<h3>' . elgg_echo('theme_inria:groups:requests', array($requests_count)) . '</h3>';
+		$sidebar_alt .= elgg_view('groups/membershiprequests', array('requests' => $requests));
+	$sidebar_alt .= '</div>';
+}
+if (!empty($sidebar_alt)) {
+	$sidebar_alt = '<div class="iris-sidebar-content">' . $sidebar_alt . '</div>';
+}
 
 
 $params = array(
 	'content' => $content,
 	'title' => $title,
 	'filter' => '',
-	'sidebar_alt' => "Demandes en attente",
+	'sidebar-alt' => $sidebar_alt,
 );
 $body = elgg_view_layout('iris_group', $params);
 

@@ -736,6 +736,51 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 }
 
 
+
+function theme_inria_user_icon_hook($hook, $type, $return, $params) {
+	static $algorithm = false;
+	static $enabled = false;
+	if (!$algorithm) {
+		$enabled = elgg_get_plugin_setting('default_user');
+		if ($enabled != 'no') {
+			$enabled = true;
+			$algorithm = elgg_get_plugin_setting('default_user_alg');
+			$algorithm_opt = default_icons_get_algorithms();
+			if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ringicon'; }
+		} else {
+			$enabled = false;
+		}
+	}
+	
+	
+	// Detect default icon (but cannot use file_exists because it's an URL)
+	if ($enabled && (strpos($return, '_graphics/icons/user/') !== false)) {
+		// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
+		// Username-based seed enables portable avatar on other sites
+		$seed = $params['entity']->guid;
+		$background = elgg_get_plugin_setting('background', 'default_icons');
+		$profile_type = esope_get_user_profile_type($params['entity']);
+		if (empty($profile_type)) { $profile_type = 'external'; }
+		if ($profile_type == 'external') { $background = 'F7A621'; }
+		$size = $params['size'];
+		$icon_sizes = elgg_get_config('icon_sizes');
+		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
+		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+		/*
+		if (!empty($num)) $img_base_url .= "&num=$num";
+		if (!empty($mono)) $img_base_url .= "&mono=$mono";
+		*/
+		$img_base_url .= "&algorithm=$algorithm";
+		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+		if (!empty($background)) $img_base_url .= "&background=$background";
+		return $img_base_url;
+	}
+	
+	return $return;
+}
+
+
+
 // Override object icons with images (but we use FA icons)
 /*
 function theme_inria_object_icon_hook($hook, $type, $url, $params) {

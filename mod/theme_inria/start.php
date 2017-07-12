@@ -28,11 +28,12 @@ function theme_inria_init(){
 	elgg_register_action("friends/add", $action_url . "friends/add.php", "logged_in");
 	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
 	
-	// Rewrite file upload action to avoid river entries for file images
-	/* @TODO : use modified version from elgg_cmis once it is ready !
-	*/
+	// Rewrite file upload action to avoid river entries for file images + quick upload
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
+	// Rewrite discussion save action for quick save
+	elgg_unregister_action('discussion/save');
+	elgg_register_action("discussion/save", $action_url . "discussion/save.php");
 	
 	// Use custom searches
 	//elgg_register_action("theme_inria/search", $action_url . "theme_inria/search.php");
@@ -266,6 +267,11 @@ function theme_inria_init(){
 	
 	// Override default icons (with images only !) - late so previous plugins have already set their own icon if applicable
 	//elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'theme_inria_object_icon_hook', 1000);
+	
+	// Custom changes (for profile-type-based background color)
+	
+	elgg_unregister_plugin_hook_handler('entity:icon:url', 'user', 'default_icons_user_hook');
+	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'theme_inria_user_icon_hook', 1000);
 	
 	
 }

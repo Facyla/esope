@@ -212,7 +212,7 @@ return array(
 	'profile:education' => "Formation",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
-	'profile:types:external' => "Extérieur",
+	'profile:types:external' => "Externe",
 	'profile:types:external:description' => "Les profils Externes regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
 	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "A propos de moi",
@@ -777,10 +777,15 @@ Voir et commenter ce lien web :
 	'workspace:title:main' => "Espace de travail principal&nbsp;: %s",
 	'workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
 	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
+	'au_subgroups:subgroup:of' => "Espace de travail de %s",
 	
 	'theme_inria:manage' => "gérer",
+	'theme_inria:readmore' => "Lire la suite",
+	
+	'theme_inria:discussion:placeholder' => "Partagez un message avec le groupe",
 	
 	'theme_inria:file:quicksaved' => "Le fichier a bien été publié. Vous pouvez préciser sa description si vous le souhaitez.",
+	'theme_inria:discussion:quicksaved' => "Votre message a bien été publié. Vous pouvez le préciser si vous le souhaitez.",
 	'theme_inria:blog:editdraft' => "Modifier un brouillon",
 	'theme_inria:sidebar:discussion' => "Les sujets de discussion (%s)",
 	'theme_inria:sidebar:file' => "Les fichiers (%s)",
@@ -792,6 +797,7 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
 	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
 	'theme_inria:workspace:poll' => "Les sondages",
+	'theme_inria:workspace:feedback' => "Les feedbacks",
 	'workspace:event_calendar' => "Agenda",
 	'workspace:poll' => "Sondages",
 	'workspace:feedback' => "Feedbacks",
@@ -859,12 +865,22 @@ Voir et commenter ce lien web :
 	//'' => "",
 	//'river:update:object:default' => "",
 	
+	'members:order:select' => "Trier par",
+	'members:order:alpha' => "Ordre alphabétique",
+	'members:order:desc' => "Membres les + récents",
+	'members:order:asc' => "Membres les + anciens",
 	'groups:order:alpha' => "Ordre alphabétique",
 	'groups:order:desc' => "Groupes les + récents",
 	'groups:order:asc' => "Groupes les + anciens",
 	'groups:order:popular' => "Avec le plus de membres",
 	'groups:settings' => "Paramètres du groupe",
 	'groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre du groupe",
+	
+	'theme_inria:group:pending_request' => "En attente",
+	
+	'au_subgroups:subgroup' => "Espace de travail",
+	'au_subgroups:group:enable' => "Espaces de travail : permettre la création d'espaces de travail ?",
+	'au_subgroups:group:memberspermissions' => "Espaces de travail : permettre aux membres de créer des espaces de travail ? (si non, seuls les responsables du groupe pourront en créer)",
 	
 	// Workspaces
 	'workspace:groups:add' => "Créer un nouvel espace de travail",
@@ -890,6 +906,9 @@ Voir et commenter ce lien web :
 	'workspace:theme_inria:ownmembership' => "Adhésion à cet espace de travail",
 	'workspace:groups:briefdescription' => "Espace de travail<br />%s",
 	
+	'theme_inria:group:members:livefilter' => "3 premières lettres",
+	
+	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe.",
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",

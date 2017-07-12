@@ -49,11 +49,16 @@ if(isset($digest_site_profile_body[$key])){
 	
 		$content = "<div class='digest-profile'>";
 	
-		foreach($newest_members as $index => $mem){
+		foreach($newest_members as $index => $mem) {
+			$profile_type = esope_get_user_profile_type($mem);
+			if (empty($profile_type)) { $profile_type = 'external'; }
+			
 			$content .= '<div class="table-item">';
 			//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
-			$content .= '<div class="elgg-avatar elgg-avatar-medium"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></div><br />' . $mem->name . '</a><br />';
+			$content .= '<div class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></div><br />' . $mem->name . '</a><br />';
 			$content .= $mem->briefdescription;
+			// Add profile type badge, if defined
+			if ($profile_type = 'external') { $content .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 			$content .= "</div>";
 		}
 		

@@ -18,6 +18,12 @@ if (elgg_instanceof($parent_group, 'group')) {
 // context needed for input/access view
 elgg_push_context("group-edit");
 
+if (elgg_instanceof($parent_group, 'group')) {
+	$disclaimer = elgg_view('cmspages/view', array('pagetype' => 'info-nouvel-espace-de-travail', 'rawcontent' => true));
+} else {
+	$disclaimer = elgg_view('cmspages/view', array('pagetype' => 'info-nouveau-groupe', 'rawcontent' => true));
+}
+
 // build the group profile fields
 $profile_fields = elgg_view("groups/edit/profile", $vars);
 
@@ -60,7 +66,7 @@ $form_footer .= '</div>';
 elgg_pop_context();
 
 if (elgg_instanceof($entity, 'group')) {
-	echo $profile_fields . $access_fields . $tools_fields . $form_footer;
+	echo $disclaimer . $profile_fields . $access_fields . $tools_fields . $form_footer;
 	return;
 }
 
@@ -92,6 +98,7 @@ echo <<<HTML
 	</div>
 
 	<div class="elgg-main">
+		$disclaimer
 		$profile_fields
 		$access_fields
 		$tools_fields

@@ -34,6 +34,12 @@ if ($group->guid != $main_group->guid) {
 }
 */
 $content .= '<div class="group-profile-main">';
+	
+	if ($group->guid != $main_group->guid) {
+		$content .= '<blockquote class="warning">' . elgg_echo('theme_inria:workspace:invites:warning') . '</blockquote><br />';
+		//system_message(elgg_echo('theme_inria:workspace:invites:warning'));
+	}
+	
 	$content .= elgg_view_form('groups/invite', array(
 		'id' => 'invite_to_group',
 		'class' => 'elgg-form-alt mtm',

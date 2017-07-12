@@ -52,15 +52,33 @@ foreach ($tools as $priority => $view) {
 	}
 	ksort($group_options);
 	
+	// Iris v2
+	// Si groupe
+	if (!$parent_group) {
+		echo elgg_view('input/hidden', array('name' => 'subgroups_enable', 'value' => 'yes'));
+	} else {
+		echo elgg_view('input/hidden', array('name' => 'subgroups_enable', 'value' => 'no'));
+	}
+	
 	//foreach ($tools as $group_option) {
 	foreach ($group_options as $group_option) {
 		$group_option_toggle_name = $group_option->name . "_enable";
 		
-		// Iris v2 : force sous-groupe si pas de parent
-		if (elgg_instanceof($group, 'group') && ($group_option_toggle_name == 'subgroups_enable') && elgg_is_active_plugin('au_subgroups') && (AU\SubGroups\get_parent_group($group))) {
-			$group->$group_option_toggle_name = 'yes';
-			continue;
+		// Iris v2 : options forcées
+		// Si groupe
+		if (!$parent_group) {
+			if (in_array($group_option_toggle_name, array('subgroups_enable'))) {
+				echo elgg_view('input/hidden', array('name' => $group_option_toggle_name, 'value' => 'yes'));
+				continue;
+			}
+		} else {
+			// Si espace de travail
+			if (in_array($group_option_toggle_name, array('subgroups_enable', 'subgroups_members_create_enable'))) {
+				echo elgg_view('input/hidden', array('name' => $group_option_toggle_name, 'value' => 'no'));
+				continue;
+			}
 		}
+		
 		//$value = elgg_extract($group_option_toggle_name, $vars);
 		// Set tools to global default, or custom value
 		$group_default_tools = elgg_get_plugin_setting('group_tools_default', 'esope');
@@ -76,10 +94,29 @@ foreach ($tools as $priority => $view) {
 				$group_option_default_value = 'no';
 			}
 		}
+		
+		// Valeur actuelle
 		if ($vars['entity']->$group_option_toggle_name) {
 			$value = $vars['entity']->$group_option_toggle_name;
 		} else {
 			$value = $group_option_default_value;
+		}
+		
+		// Iris v2 : Options toujours forcées
+		$disabled = false;
+		if (in_array($group_option_toggle_name, array('file_enable', 'forum_enable'))) {
+			$attrs = array('class' => 'groups-edit-checkbox');
+			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
+			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
+			echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
+				'name' => $group_option_toggle_name,
+				'value' => 'yes',
+				'default' => 'yes',
+				'checked' => true,
+				'label' => $group_option->label,
+				'disabled' => true,
+			)));
+			continue;
 		}
 		
 		// Esope : add help title if set

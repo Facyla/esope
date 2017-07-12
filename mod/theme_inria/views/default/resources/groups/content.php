@@ -154,7 +154,7 @@ if ($group->isMember()) {
 		case 'bookmarks':
 		case 'file':
 		default:
-			$content .= '<a href="' . $url . $subtype . '/add/' . $own->guid . '" class="elgg-button elgg-button-action float-alt" rel="nofollow">' . elgg_echo($subtype.':add') . '</a>';
+			$content .= '<a href="' . $url . $subtype . '/add/' . $group->guid . '" class="elgg-button elgg-button-action float-alt" rel="nofollow">' . elgg_echo($subtype.':add') . '</a>';
 	}
 }
 

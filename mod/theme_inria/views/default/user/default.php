@@ -15,6 +15,7 @@ $size = elgg_extract('size', $vars, 'tiny');
 if (elgg_in_context('search')) {
 	$size = 'medium';
 	$q = elgg_extract('q', $vars);
+	$q = trim(strip_tags($q));
 	$search_words = explode(' ', $q);
 }
 
@@ -44,6 +45,9 @@ if (!$title) {
 
 	$title = elgg_view('output/url', $link_params);
 }
+
+// Add profile type badge, if defined
+if ($profile_type = 'external') { $title .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 
 
 $metadata = elgg_view_menu('entity', array(
@@ -91,7 +95,7 @@ if (elgg_get_context() == 'gallery') {
 		
 		$briefdescription = $briefdescription . $tags;
 		// Highlight found terms
-		if (elgg_is_active_plugin('search') || function_exists('search_highlight_words')) {
+		if (!empty($q) && (elgg_is_active_plugin('search') || function_exists('search_highlight_words'))) {
 			$briefdescription = search_highlight_words($search_words, $briefdescription);
 		}
 		$params = array(
@@ -104,6 +108,8 @@ if (elgg_get_context() == 'gallery') {
 	}
 
 	$list_body = elgg_view('user/elements/summary', $params);
+	//$list_body = $title . $briefdescription . elgg_view('user/status', array('entity' => $entity));
 	
 	echo elgg_view_image_block($icon, $list_body, $vars);
 }
+

@@ -11,11 +11,17 @@ if (empty($profile_type)) { $profile_type = 'external'; }
 
 echo '<a href="' . $user->getURL() . '" title="' . elgg_echo('theme_inria:profile:back') . '">';
 	?>
-	<div class="iris-profile-icon <?php if (!empty($profile_type)) { echo 'profile-type-' . $profile_type; } ?>" style="background:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>') no-repeat center/cover;" />
+	<div class="iris-profile-icon <?php if ($profile_type == 'external') { echo 'profile-type-' . $profile_type; } ?>" style="background-image:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>');" />
 	</div>
 
 	<div class="iris-profile-title">
-		<h2><?php echo $user->name; ?></h2>
+		<h2>
+			<?php
+			echo $user->name;
+			// Add profile type badge, if defined
+			if (!empty($profile_type)) { echo '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+			?>
+		</h2>
 		<?php echo strip_tags($user->briefdescription); ?>
 	</div>
 </a>

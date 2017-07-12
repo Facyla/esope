@@ -134,8 +134,7 @@ if (elgg_instanceof($group, 'group')) {
 				
 				echo '<div class="elgg-main elgg-body">';
 					if (isset($vars['content'])) { echo $vars['content']; }
-					
-					echo elgg_view('page/layouts/elements/footer', $vars);
+					//echo elgg_view('page/layouts/elements/footer', $vars);
 				echo '</div>';
 				
 			echo '</div>';
@@ -143,7 +142,7 @@ if (elgg_instanceof($group, 'group')) {
 		} else {
 			echo '<div class="elgg-main elgg-body">';
 				if (isset($vars['content'])) { echo $vars['content']; }
-				echo elgg_view('page/layouts/elements/footer', $vars);
+				//echo elgg_view('page/layouts/elements/footer', $vars);
 			echo '</div>';
 		}
 		
@@ -162,4 +161,6 @@ if (elgg_instanceof($group, 'group')) {
 	
 </div>
 
+<?php
+echo elgg_view('page/layouts/elements/footer', $vars);
 

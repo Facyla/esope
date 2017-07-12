@@ -244,6 +244,15 @@ $(document).ready(function() {
 		}
 	});
 	*/
+	
+	
+	// Live members filter
+	$('#group-members-filter').on('change paste keyup', function(e) {
+		var filter = $(this).val(); // get the value of the input, which we filter on
+		$('#group-members-live .group-member').find("p:not(:contains(" + filter + "))").parent().slideUp();
+		$('#group-members-live .group-member').find("p:contains(" + filter + ")").parent().slideDown();
+	});
+	
 });
 
 
