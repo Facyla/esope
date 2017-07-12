@@ -108,10 +108,10 @@ function default_icons_user_hook($hook, $type, $return, $params) {
 	static $algorithm = false;
 	static $enabled = false;
 	if (!$algorithm) {
-		$enabled = elgg_get_plugin_setting('default_user');
+		$enabled = elgg_get_plugin_setting('default_user', 'default_icons');
 		if ($enabled != 'no') {
 			$enabled = true;
-			$algorithm = elgg_get_plugin_setting('default_user_alg');
+			$algorithm = elgg_get_plugin_setting('default_user_alg', 'default_icons');
 			$algorithm_opt = default_icons_get_algorithms();
 			if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ringicon'; }
 		} else {
@@ -124,6 +124,7 @@ function default_icons_user_hook($hook, $type, $return, $params) {
 		// Username-based seed enables portable avatar on other sites
 		$seed = $params['entity']->guid;
 		$size = $params['size'];
+		$background = elgg_get_plugin_setting('background', 'default_icons');
 		$icon_sizes = elgg_get_config('icon_sizes');
 		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
 		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
@@ -133,7 +134,7 @@ function default_icons_user_hook($hook, $type, $return, $params) {
 		*/
 		$img_base_url .= "&algorithm=$algorithm";
 		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
-		if (!empty($background)) $img_base_url .= "&background=$background";
+		if (!empty($background)) { $img_base_url .= "&background=$background"; }
 		return $img_base_url;
 	}
 	
@@ -171,6 +172,7 @@ function default_icons_group_hook($hook, $type, $return, $params) {
 		// Username-based seed enables portable avatar on other sites
 		$seed = $params['entity']->guid;
 		$size = $params['size'];
+		$background = elgg_get_plugin_setting('background', 'default_icons');
 		$icon_sizes = elgg_get_config('icon_sizes');
 		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
 		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
@@ -223,7 +225,6 @@ function default_icons_object_hook($hook, $type, $return, $params) {
 		$seed = $params['entity']->guid;
 		$size = $params['size'];
 		$background = elgg_get_plugin_setting('background', 'default_icons');
-		$background = str_replace('#', '', $background);
 		$icon_sizes = elgg_get_config('icon_sizes');
 		$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
 		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
@@ -234,7 +235,7 @@ function default_icons_object_hook($hook, $type, $return, $params) {
 		*/
 		$img_base_url .= "&algorithm=$algorithm";
 		$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
-		if (!empty($background)) $img_base_url .= "&background=$background";
+		if (!empty($background)) { $img_base_url .= "&background=$background"; }
 		return $img_base_url;
 	}
 	

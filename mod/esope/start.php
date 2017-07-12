@@ -1283,6 +1283,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 			'metadata_case_sensitive' => false,
 			'metadata_name_value_pairs_operator' => 'AND',
 			'count' => false,
+			'user_profile_fields' => false,
+			'group_profile_fields' => false,
 		);
 	if (is_array($defaults)) { $defaults = array_merge($esearch_defaults, $defaults); } else { $defaults = $esearch_defaults; }
 	
@@ -1308,6 +1310,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$relationship = esope_extract('relationship', $params, $defaults['relationship']);
 	$relationship_guid = esope_extract('relationship_guid', $params, $defaults['relationship_guid']);
 	$count = esope_extract('count', $params, $defaults['count']);
+	$user_profile_fields = esope_extract('user_profile_fields', $params, $defaults['user_profile_fields']);
+	$group_profile_fields = esope_extract('group_profile_fields', $params, $defaults['group_profile_fields']);
 	$add_url_params = esope_extract('add_url_params', $params, '');
 	$no_result = elgg_echo('esope:search:noresult');
 	if (isset($params['no_result'])) { $no_result = $params['no_result']; }
@@ -1410,11 +1414,64 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		switch($type) {
 			case 'user':
 				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)";
-				$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%')";
+				//$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%')";
+				if ($user_profile_fields) {
+					// Also search in any (or controlled) user profile field
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metadata md on e.guid = md.entity_guid";
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metastrings msv ON n_table.value_id = msv.id";
+					// get the where clauses for the md names
+					// can't use egef_metadata() because the n_table join comes too late.
+					if (!is_array($user_profile_fields)) { $user_profile_fields = array_keys(elgg_get_config('profile_fields')); }
+					$clauses = _elgg_entities_get_metastrings_options('metadata', array(
+						'metadata_names' => $user_profile_fields,
+						// avoid notices
+						'metadata_values' => null,
+						'metadata_name_value_pairs' => null,
+						'metadata_name_value_pairs_operator' => null,
+						'metadata_case_sensitive' => null,
+						'order_by_metadata' => null,
+						'metadata_owner_guids' => null,
+					));
+					$joins = array_merge($clauses['joins'], $joins);
+					$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$q%')";
+					/*
+					$md_in = "'" . implode("','", $user_profile_fields) . "'";
+					$md_where = "((msn.string IN ($md_in) AND msv.string LIKE '%$q%')";
+					*/
+					$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%' OR ($md_where))";
+				} else {
+					$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%')";
+				}
 				break;
 			case 'group':
 				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "groups_entity ge USING(guid)";
-				$wheres[] = "(ge.name like '%" . $q . "%' OR ge.description like '%" . $q . "%')";
+				// @TODO improve default fields support
+				if (is_array($group_profile_fields)) {
+					// Also search in any (or controlled) user profile field
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metadata md on e.guid = md.entity_guid";
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metastrings msv ON n_table.value_id = msv.id";
+					// get the where clauses for the md names
+					//if (!is_array($group_profile_fields)) { $group_profile_fields = array_keys(elgg_get_config('profile_fields')); }
+					$clauses = _elgg_entities_get_metastrings_options('metadata', array(
+						'metadata_names' => $group_profile_fields,
+						// avoid notices
+						'metadata_values' => null,
+						'metadata_name_value_pairs' => null,
+						'metadata_name_value_pairs_operator' => null,
+						'metadata_case_sensitive' => null,
+						'order_by_metadata' => null,
+						'metadata_owner_guids' => null,
+					));
+					$joins = array_merge($clauses['joins'], $joins);
+					$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$q%')";
+					/*
+					$md_in = "'" . implode("','", $group_profile_fields) . "'";
+					$md_where = "((msn.string IN ($md_in) AND msv.string LIKE '%$q%')";
+					*/
+					$wheres[] = "(ge.name like '%" . $q . "%' OR ge.description like '%" . $q . "%' OR ($md_where))";
+				} else {
+					$wheres[] = "(ge.name like '%" . $q . "%' OR ge.description like '%" . $q . "%')";
+				}
 				break;
 			case 'site':
 				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "sites_entity se USING(guid)";
@@ -2856,17 +2913,17 @@ function esope_groups_get_pending_membership_requests($user_guid = false, $optio
 	}
 	$options = array_merge($defaults, $options);
 	$groups = elgg_get_entities_from_relationship($options);
-
 	elgg_set_ignore_access($ia);
 
-	if ($return_guids) {
-		$guids = array();
-		foreach ($groups as $group) {
-			$guids[] = $group->getGUID();
+	$guids = array();
+	foreach ($groups as $k => $group) {
+		if ($user_guid && !$group->canEdit($user_guid)) {
+			unset($groups[$k]);
+			continue;
 		}
-		return $guids;
+		$guids[] = $group->getGUID();
 	}
-
+	if ($options['return_guids']) { return $guids; }
 	return $groups;
 }
 
@@ -2914,7 +2971,54 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 		}
 		return $guids;
 	}
+	return $groups;
+}
+
+
+/* Removes invites if the user is already member of the group
+ * Some invites are not removed automatically, depending how the user joined the group
+ * This function should be used as a replacement for groups_get_invited_groups()
+ *
+ * Grabs groups by invitations
+ * Have to override all access until there's a way override access to getter functions.
+ *
+ * @param int   $user_guid    The user's guid
+ * @param bool  $return_guids Return guids rather than ElggGroup objects
+ * @param array $options      Additional options
+ *
+ * @return mixed ElggGroups or guids depending on $return_guids, or count
+ */
+function esope_groups_get_requested_groups($user_guid, $return_guids = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
 	
+	$defaults = array(
+		'relationship' => 'membership_request',
+		'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => 0,
+	);
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+	$ia = elgg_set_ignore_access($ia);
+	
+	// Esope : clean invites (if not counting !)
+	$user = get_entity($user_guid);
+	if (elgg_instanceof($user, 'user') && !$options['count'] && is_array($groups)) {
+		foreach($groups as $k => $group) {
+			if ($group->isMember($user)) {
+				remove_entity_relationship($group->guid, 'membership_request', $user->guid);
+				unset($groups[$k]);
+			}
+		}
+	}
+	
+	if ($return_guids) {
+		$guids = array();
+		foreach ($groups as $group) {
+			$guids[] = $group->getGUID();
+		}
+		return $guids;
+	}
 	return $groups;
 }
 
