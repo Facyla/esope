@@ -126,11 +126,20 @@ if (elgg_instanceof($page_owner, 'group')) {
 
 	$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'content', 'metadata' => $pages_actions));
 
-	$title = '<h3>' . $page->title . '</h3>';
-	if ($subpages) {
-		$title = '<h3><a href="javascript: void(0);" onClick="javascript:$(\'#pages-subpages-' . $page->guid . '\').slideToggle(); return false;"><i class="fa fa-angle-down"></i></a> ' . $page->title . '</h3>';
+	$subpages = elgg_view('pages/sub-pages', array('entity' => $page));
+	if (!$full) {
+		$subpages = '<div class="pages-subpages hidden" id="pages-subpages-' . $page->guid . '">' . $subpages . '</div>';
 	}
-		
+
+	$title = $page->title;
+	if (!$full) {
+		if ($subpages) {
+			$title = '<h3><a href="javascript: void(0);" onClick="javascript:$(\'#pages-subpages-' . $page->guid . '\').slideToggle(); return false;"><i class="fa fa-angle-down"></i></a> <a href="' . $page->getURL() . '">' . $title . '</a></h3>';
+		} else {
+			$title = '<h3><a href="' . $page->getURL() . '">' . $title . '</a></h3>';
+		}
+	}
+	
 }
 
 
@@ -180,9 +189,6 @@ if ($full) {
 	*/
 	
 	
-	$content .= '<div class="pages-subpages hidden" id="pages-subpages-' . $page->guid . '">' . elgg_view('pages/sub-pages', array('entity' => $page)) . '</div>';
-	
-	
 	/*
 	// Liste des sous-pages
 	$content .= elgg_view('pages/sub-pages', array('entity' => $page));
@@ -198,11 +204,12 @@ if ($full) {
 	
 	// In groups
 	if (elgg_instanceof($page_owner, 'group')) {
-		echo $navigation . '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . $actions . '<div class="pages-content">' . $body . '</div></div>';
+		echo $navigation . '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . $actions . '<div class="pages-content">' . $body . '</div>' . $subpages . '</div>';
 		return;
 	}
 	
-	$content .= $navigation . $body . $actions;
+	$content .= $navigation . $body . $actions . $subpages;
+	
 	
 } else {
 	// brief view
@@ -227,8 +234,6 @@ if ($full) {
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
 	*/
-	$subpages = '<div class="pages-subpages hidden" id="pages-subpages-' . $page->guid . '">' . elgg_view('pages/sub-pages', array('entity' => $page)) . '</div>';
-
 	
 	// In groups
 	if (elgg_instanceof($page_owner, 'group')) {

@@ -421,7 +421,8 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 2rem 2rem; border-bottom: 2px solid #F1F1F1; }
 .elgg-body-transp #group-replies .elgg-content .elgg-output { margin: 0; padding: 0; border-bottom: 0; }
 #group-replies.elgg-comments .elgg-list > li { margin: 0; }
-.elgg-body-transp .esope-subpages-menu { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .esope-subpages-menu { margin: 0 0rem 2rem 0rem; padding: 1rem 0 0 0; border-top: 2px solid #F1F1F1; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .pages-subpages .esope-subpages-menu { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; border-top: 0; }
 .elgg-body-transp .comment_trackerWrapper { margin: 2rem -2rem 2rem -2rem; padding: 2rem 2rem 0rem 2rem; border-top: 2px solid #F1F1F1; }
 
 
