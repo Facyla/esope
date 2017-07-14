@@ -14,9 +14,7 @@ $full = elgg_extract('full_view', $vars, FALSE);
 $page = elgg_extract('entity', $vars, FALSE);
 $revision = elgg_extract('revision', $vars, FALSE);
 
-if (!$page) {
-	return TRUE;
-}
+if (!$page) { return TRUE; }
 
 // pages used to use Public for write access
 if ($page->write_access_id == ACCESS_PUBLIC) {
@@ -144,7 +142,6 @@ if (elgg_instanceof($page_owner, 'group')) {
 
 
 if ($full) {
-	
 	/*
 	// Export du wiki complet
 	elgg_register_menu_item('title', array(
@@ -167,16 +164,16 @@ if ($full) {
 	// Ajout Facyla pour avoir le sommaire qqpart dans l'interface et naviguer dans les pages...
 	// Note : si on prévoit des listings en full_view, il faut ajouter une var globale pour avoir un sommaire unique
 	$toggle_link = elgg_view('output/url', array(
-		'text' => '<i class="fa fa-caret-down"></i> ' . elgg_echo('theme_inria:pages:summarytoggle'),
-		'href' => "#full-width-pages-nav-content",
-		'rel' => 'toggle',
-	));
+			'text' => '<i class="fa fa-caret-down"></i> ' . elgg_echo('theme_inria:pages:summarytoggle'),
+			'href' => "#full-width-pages-nav-content",
+			'rel' => 'toggle',
+		));
 	$navigation = '<div class="full-width-pages-nav">
-		' . $toggle_link . '
-		<div id="full-width-pages-nav-content" class="hidden">
-			' . elgg_view('pages/top-summary', array('page' => $page)) . '
-		</div>
-	</div>';
+			' . $toggle_link . '
+			<div id="full-width-pages-nav-content" class="hidden">
+				' . elgg_view('pages/top-summary', array('page' => $page)) . '
+			</div>
+		</div>';
 	
 	/*
 	echo elgg_view('object/elements/full', array(
@@ -213,7 +210,6 @@ if ($full) {
 	
 } else {
 	// brief view
-
 	if (elgg_in_context('workspace')) {
 		// Icon = auteur
 		$owner = $page->getOwnerEntity();
@@ -236,7 +232,7 @@ if ($full) {
 	*/
 	
 	// In groups
-	if (elgg_instanceof($page_owner, 'group')) {
+	if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace')) {
 		echo '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . $excerpt . $actions . $subpages . '</div>';
 		return;
 	}
@@ -247,5 +243,5 @@ if ($full) {
 }
 
 
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'metadata' => $pages_actions));
 

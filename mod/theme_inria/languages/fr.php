@@ -787,7 +787,7 @@ Voir et commenter ce lien web :
 	'theme_inria:file:quicksaved' => "Le fichier a bien été publié. Vous pouvez préciser sa description si vous le souhaitez.",
 	'theme_inria:discussion:quicksaved' => "Votre message a bien été publié. Vous pouvez le préciser si vous le souhaitez.",
 	'theme_inria:blog:editdraft' => "Modifier un brouillon",
-	'theme_inria:sidebar:discussion' => "Les sujets de discussion (%s)",
+	'theme_inria:sidebar:discussion' => "Les discussions (%s)",
 	'theme_inria:sidebar:file' => "Les fichiers (%s)",
 	'theme_inria:sidebar:blog' => "Les articles (%s)",
 	'theme_inria:sidebar:pages' => "Les pages wiki (%s)",
@@ -912,6 +912,9 @@ Voir et commenter ce lien web :
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
+	
+	'likes:userlikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
+	'likes:userslikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
 	
 );
 

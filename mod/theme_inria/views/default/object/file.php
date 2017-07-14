@@ -8,9 +8,9 @@
 $full = elgg_extract('full_view', $vars, FALSE);
 $file = elgg_extract('entity', $vars, FALSE);
 
-if (!$file) {
-	return TRUE;
-}
+if (!$file) { return TRUE; }
+
+$page_owner = elgg_get_page_owner_entity();
 
 $owner = $file->getOwnerEntity();
 $container = $file->getContainerEntity();
@@ -18,6 +18,19 @@ $categories = elgg_view('output/categories', $vars);
 $excerpt = elgg_get_excerpt($file->description);
 $mime = $file->mimetype;
 $base_type = substr($mime, 0, strpos($mime,'/'));
+
+if ($size = $file->getSize()) { $filesize = '<span class="file-size">' . esope_friendly_size($size, 2) . '</span>'; }
+$mimetype = '<span class="file-mimetype">' . $file->getMimeType() . '</span>';
+$filename = '<span class="file-filename">' . $file->originalfilename . '</span>';
+$simpletype = '<span class="file-simpletype">' . $file->simpletype . '</span>';
+$extension = '<span class="file-extension">' . pathinfo($file->originalfilename)['extension'] . '</span>';
+$file_meta = '<p class="file-meta">';
+$file_meta .= $filename;
+$file_meta .= $filesize;
+$file_meta .= $extension;
+$file_meta .= $simpletype;
+$file_meta .= $mimetype;
+$file_meta .= '</p>';
 
 $owner_link = elgg_view('output/url', array(
 	'href' => "file/owner/$owner->username",
@@ -54,12 +67,10 @@ $metadata = elgg_view_menu('entity', array(
 $subtitle = "$author_text $date $comments_link $categories";
 
 // do not show the metadata and controls in widget view
-if (elgg_in_context('widgets')) {
-	$metadata = '';
-}
+if (elgg_in_context('widgets')) { $metadata = ''; }
+
 
 if ($full && !elgg_in_context('gallery')) {
-
 	$extra = '';
 	if (elgg_view_exists("file/specialcontent/$mime")) {
 		$extra = elgg_view("file/specialcontent/$mime", $vars);
@@ -105,8 +116,6 @@ if ($full && !elgg_in_context('gallery')) {
 } else {
 	
 	// brief view
-
-
 	if (elgg_in_context('workspace')) {
 		// Icon = auteur
 		$owner = $file->getOwnerEntity();
@@ -125,9 +134,19 @@ if ($full && !elgg_in_context('gallery')) {
 	$list_body = elgg_view('object/elements/summary', $params);
 
 	//echo elgg_view_image_block($file_icon, $list_body);
-	$content = $excerpt;
+	
+	// Workspace home listing soecific content
+	if (elgg_instanceof($page_owner, 'group') && elgg_in_context('workspace')) {
+		$content = '';
+		$file_icon = elgg_view_entity_icon($file, 'small');
+		$content .= elgg_view_image_block($file_icon, $file_meta, array('class' => 'iris-object-inner'));
+		$content .= $excerpt;
+	} else {
+		$content = $file_meta . $excerpt;
+	}
+	
 }
 
 
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
 

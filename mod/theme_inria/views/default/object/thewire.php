@@ -100,5 +100,5 @@ if ($post->reply) {
 }
 
 
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'after' => $after));
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'after' => $after));
 

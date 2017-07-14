@@ -72,18 +72,16 @@ if (!in_array($mode, array('full', 'listing', 'content'))) {
 	if ($full) {
 		$mode = 'full';
 	//} else if (elgg_instanceof($page_owner, 'group') || elgg_instanceof($page_owner, 'user')) {
-	} else if (elgg_instanceof($page_owner, 'group')) {
+	} else if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace')) {
 		$mode = 'content';
 	}
 }
 
 
 // ICONS AND IMAGES
-/*
 $profile_type = esope_get_user_profile_type($owner);
 if (empty($profile_type)) { $profile_type = 'external'; }
 $owner_icon = '<span class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a></span>';
-*/
 
 $entity_icon = $entity->getIconURL(array('size' => 'medium'));
 if (elgg_instanceof($entity, 'object', 'file')) {
@@ -112,7 +110,7 @@ if (!empty($body)) {
 }
 
 // ACTIONS - Bottom menu
-$actions = elgg_view('page/components/iris_object_actions', array('entity' => $entity, 'mode' => $mode)) . $after;
+$actions = elgg_view('page/components/iris_object_actions', array('entity' => $entity, 'mode' => $mode, 'metadata-alt' => $metadata_alt, 'metadata' => $metadata)) . $after;
 
 
 //echo $mode;

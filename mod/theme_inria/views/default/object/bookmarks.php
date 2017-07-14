@@ -9,9 +9,9 @@
 $full = elgg_extract('full_view', $vars, FALSE);
 $bookmark = elgg_extract('entity', $vars, FALSE);
 
-if (!$bookmark) {
-	return;
-}
+if (!$bookmark) { return; }
+
+$page_owner = elgg_get_page_owner_entity();
 
 $owner = $bookmark->getOwnerEntity();
 $owner_icon = elgg_view_entity_icon($owner, 'tiny');
@@ -149,5 +149,5 @@ HTML;
 }
 
 
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
 

@@ -8,9 +8,9 @@
 $full = elgg_extract('full_view', $vars, FALSE);
 $topic = elgg_extract('entity', $vars, FALSE);
 
-if (!$topic) {
-	return;
-}
+if (!$topic) { return; }
+
+$page_owner = elgg_get_page_owner_entity();
 
 $poster = $topic->getOwnerEntity();
 if (!$poster) {
@@ -135,5 +135,5 @@ HTML;
 }
 
 
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt));
 

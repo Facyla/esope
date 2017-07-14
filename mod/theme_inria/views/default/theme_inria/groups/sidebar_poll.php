@@ -16,7 +16,7 @@ if (poll_activated_for_group($group)) {
 	$content = '';
 	if ($poll_found = elgg_get_entities($options)) {
 		foreach ($poll_found as $poll) {
-			$content .= elgg_view('poll/widget', array('entity' => $poll));
+			$content .= elgg_view('object/poll_workspace', array('entity' => $poll));
 		}
 	}
 	elgg_pop_context();

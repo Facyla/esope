@@ -66,28 +66,8 @@ if (elgg_is_logged_in()) {
 }
 
 
-/*
-$extras = array($time_bit);
-if ($event->description) { $extras[] = $event->description; }
-if ($event_calendar_venue_view = elgg_get_plugin_setting('venue_view', 'event_calendar') == 'yes') { $extras[] = $event->venue; }
-if ($extras) { $info = "<p>".implode("<br />",$extras)."</p>"; } else { $info = ''; }
-
-$tags = elgg_view('output/tags', array('tags' => $event->tags));
-
-$params = array(
-	'entity' => $event,
-	'metadata' => false,
-	'title' => $event->title,
-	'subtitle' => $time_bit,
-	'tags' => $tags,
-);
-$list_body = elgg_view('object/elements/summary', $params);
-*/
-
 $list_body = '<h4><a href="' . $event->getURL() . '" title="' . $link_title . '">' . $event->title . '</a></h4>';
 $list_body .= '<span class="elgg-river-timestamp">' . $time_bit . '</span>';
 
-
-//echo '<h3><a href="'.$event->getURL().'">' . $event->title . '</a></h3>' . '<br class="clearfloat" />';
 echo elgg_view_image_block($icon, $list_body);
 

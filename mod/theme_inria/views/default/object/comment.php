@@ -67,7 +67,6 @@ HTML;
 
 } else {
 	// brief view
-
 	$excerpt = elgg_get_excerpt($comment->description, 80);
 	$posted = elgg_echo('generic_comment:on', array($commenter_link, $entity_link));
 

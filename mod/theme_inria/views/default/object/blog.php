@@ -8,9 +8,9 @@
 $full = elgg_extract('full_view', $vars, FALSE);
 $blog = elgg_extract('entity', $vars, FALSE);
 
-if (!$blog) {
-	return TRUE;
-}
+if (!$blog) { return TRUE; }
+
+$page_owner = elgg_get_page_owner_entity();
 
 $owner = $blog->getOwnerEntity();
 $categories = elgg_view('output/categories', $vars);
@@ -112,5 +112,5 @@ if ($full) {
 }
 
 
-echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'full_view' => $vars['full_view']));
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'full_view' => $vars['full_view']));
 
