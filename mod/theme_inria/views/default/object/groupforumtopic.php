@@ -131,7 +131,10 @@ HTML;
 	$list_body = elgg_view('object/elements/summary', $params);
 
 	//echo elgg_view_image_block($poster_icon, $list_body);
-	$content = $excerpt;
+	if ($topic->title != elgg_get_excerpt($topic->description)) {
+		$content = $excerpt;
+	}
+	
 }
 
 

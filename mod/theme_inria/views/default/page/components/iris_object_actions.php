@@ -87,6 +87,16 @@ $actions .= '<div class="iris-object-actions">';
 				$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
 				$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
 				$actions_after .= '</div>';
+			} else if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
+				$actions .= '<li>' . elgg_view('output/url', array(
+							'href' => "javascript:void(0);", 'onClick' => "$('#discussion-reply-{$entity->guid}').slideToggle('slow');",
+							'text' => '<i class="fa fa-comment"></i>',
+					)) . '</li>';
+					// Form should separated from menu
+				$form_vars = array();
+				$actions_after .= '<div id="discussion-reply-' . $entity->guid . '" class="discussion-reply-inline hidden">';
+				$actions_after .= elgg_view_form('discussion/reply/save', $form_vars, array('topic' => $entity, 'inline' => true));
+				$actions_after .= '</div>';
 			} else {
 				if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
 				// Generic inline comment form

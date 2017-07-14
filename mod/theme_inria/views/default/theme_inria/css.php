@@ -1228,8 +1228,10 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-add-tabs a.elgg-state-selected, .group-workspace-add-tabs a:hover, .group-workspace-add-tabs a:active, .group-workspace-add-tabs a:focus { opacity: 1; }
 .group-workspace-add-content { padding: 1.375rem 2.5rem 1.375rem 2.5rem; }
 .group-workspace-add-content img { width:2rem; border-radius:1rem; }
+.iris-object .elgg-form-discussion-reply-save textarea, 
 .iris-object .elgg-form-comment-save textarea, 
 .group-workspace-add-content textarea { height: 2rem; /* border: 0; */ }
+.iris-object .elgg-form-discussion-reply-save textarea:active, .iris-object .elgg-form-discussion-reply-save textarea:focus, 
 .iris-object .elgg-form-comment-save textarea:active, .iris-object .elgg-form-comment-save textarea:focus, 
 .group-workspace-add-content textarea:active, .group-workspace-add-content textarea:focus { height: auto; }
 #group-workspace-add-file { /* text-align: center; */ }

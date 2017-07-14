@@ -39,7 +39,7 @@ $subtitle = "$poster_text $date";
 
 if (elgg_in_context('activity')) {
 	$content = '<div class="elgg-output elgg-inner" data-role="comment-text">';
-	$content .= elgg_view('output/text', array(
+	$content .= elgg_view('output/plaintext', array(
 		'value' => elgg_get_excerpt($reply->description)
 	));
 	$content .= '</div>';
@@ -51,6 +51,7 @@ if (elgg_in_context('activity')) {
 	));
 }
 
+/*
 $params = array(
 	'entity' => $reply,
 	'metadata' => $metadata,
@@ -59,10 +60,11 @@ $params = array(
 );
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
+*/
 
 //echo elgg_view_image_block($poster_icon, $list_body);
 
-$content = $subtitle . $content;
+$content = $content;
 
 echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'mode' => 'listing'));
 
