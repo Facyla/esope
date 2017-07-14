@@ -17,5 +17,7 @@ if ($subpages) {
 	echo '<h3>' . elgg_echo('esope:pages:subpages') . '</h3>';
 	echo $subpages;
 	echo '</div>';
+} else {
+	echo '<p><a href="' . elgg_get_site_url() . 'pages/add/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('pages:newchild') . '</a></p>';
 }
 

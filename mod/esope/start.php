@@ -1931,6 +1931,15 @@ function esope_user_profile_gatekeeper($user = false, $forward = true) {
 function esope_human_filesize($filepath, $decimals = 2) {
 	if (!file_exists($filepath)) { return false; }
 	$bytes = filesize($filepath);
+	if ($bytes < 1024) { $decimals = 0; }
+	//$sz = elgg_echo('esope:filesize:units'); // Can be used for translations
+	$sz = 'BKMGTP';
+	$factor = floor((strlen($bytes) - 1) / 3);
+	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor];
+}
+// Convert bytes to friendly size
+function esope_friendly_size($bytes, $decimals = 2) {
+	if ($bytes < 1024) { $decimals = 0; }
 	//$sz = elgg_echo('esope:filesize:units'); // Can be used for translations
 	$sz = 'BKMGTP';
 	$factor = floor((strlen($bytes) - 1) / 3);
