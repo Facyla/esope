@@ -31,9 +31,7 @@ if (($allow_close_date == 'yes') && (isset($poll->close_date))) {
 	$date_month = gmdate('m', $poll->close_date);
 	$date_year = gmdate('Y', $poll->close_date);
 	$friendly_time = $date_day . '. ' . elgg_echo("poll:month:$date_month") . ' ' . $date_year;
-
 	$poll_state = $poll->isOpen() ? 'open' : 'closed';
-
 	$closing_date = "<div class='poll_closing-date-{$poll_state}'><b>" . elgg_echo('poll:poll_closing_date', array($friendly_time)) . '</b></div>';
 }
 
@@ -77,31 +75,23 @@ if (elgg_in_context('widgets')) {
 }
 
 
-$subtitle = "$closing_date  $comments_link $categories";
-$params = array(
-	'entity' => $poll,
-	'title' => false,
-	'metadata' => $metadata,
-	'subtitle' => $subtitle,
-	'tags' => $tags
-);
-$params = $params + $vars;
-$summary = elgg_view('object/elements/summary', $params);
-
 $description = $poll->description;
 if (!empty($description)) { $description = '<div class="" style="padding: 0.5rem 0">' . $description . '</div>'; }
 
 //echo elgg_view('poll/body', $vars);
 $content = elgg_view('poll/body', $vars);
+//$content = elgg_view('object/poll_content_workspace', $vars);
 
 
 
-echo '<div class="" style="margin-bottom: 0.5rem;">' . $date . '<br />' .  $author_text . '</div>';
-echo '<div class="entity-title"><h3>' . $poll->title . '</h3></div>';
-echo $responses;
-echo '<div class="entity-title">';
-echo $description;
-echo $content;
+echo '<div class="" style="margin-top: 1rem; margin-bottom: 1rem;">';
+	echo '<div class="" style="margin-bottom: 0.5rem;">' . $date . '<br />' .  $author_text . '</div>';
+	echo '<div class="entity-title"><h3>' . $poll->title . '</h3></div>';
+	echo $responses;
+	echo '<div class="clearfix">';
+		echo $description;
+		echo $content;
+	echo '</div>';
+	//echo '<div class="clearfloat"></div>';
 echo '</div>';
-echo $subtitle;
 

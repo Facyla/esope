@@ -1062,7 +1062,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-context-groups.elgg-context-workspace-content .elgg-list-entity h3, .elgg-context-groups.elgg-context-workspace-content .elgg-list-entity h3 a { font-size: 1.3125rem; color: #384257; }
 .elgg-context-workspace-content .elgg-item { /* height: 12.5rem; */ min-height: 12.5rem; /* overflow: hidden; */ }
 .elgg-context-workspace-content .elgg-image-block { margin: -1.5rem -2rem -1.5rem -2rem; display: flex; }
-.elgg-context-workspace-content .elgg-image-block .elgg-image { width: 12.5rem; height: 12.5rem; display: flex; background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); margin-right:0; }
+.elgg-context-workspace-content .elgg-image-block .elgg-image { width: 12.5rem; min-height: 12.5rem; display: flex; background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); margin-right:0; flex: 0 0 12.5rem; }
 .elgg-context-workspace-content .elgg-image-block .elgg-body { min-height: 12.5rem; padding: 1.5rem 2rem 0rem 2rem; }
 .elgg-context-workspace-content .elgg-image-block .elgg-image > * { margin: auto; }
 
@@ -1236,7 +1236,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-add-content textarea:active, .group-workspace-add-content textarea:focus { height: auto; }
 #group-workspace-add-file { /* text-align: center; */ }
 #group-workspace-add-blog { text-align: center; }
-#group-workspace-add-blog a:first-of-type { margin-right:0.625rem; }
+#group-workspace-add-blog a:first-of-type { margin-right:0.625rem; margin-bottom: 1rem; }
 .group-workspace-activity-filter { padding: 1rem 2.5rem; text-align: right; border-bottom: 2px solid #E0E0E0; }
 
 .group-content-filter.tabs { margin-bottom: 1.5625rem; }
@@ -1424,7 +1424,6 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 
 /* LISTINGS - NORMALISED */
 .elgg-item-object .elgg-image-block .elgg-image { margin:0; }
-.elgg-item-object.elgg-item-object-feedback .elgg-image-block { display: flex; }
 .elgg-image-block.elgg-river-item, 
 .iris-object-listing .elgg-image-block, 
 .iris-object-content .elgg-image-block { display: flex; }
@@ -1441,6 +1440,15 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .iris-object .elgg-access { margin: 0 0 0 1rem; line-height: 1rem; }
 .iris-object .elgg-access a { color: rgba(56, 66, 87, 0.5); font-size: 0.75rem; }
 .entity-headline .entity-menu { flex:0; }
+
+.elgg-item-object.elgg-item-object-feedback .elgg-image-block { display: flex; }
+.elgg-item-object.elgg-item-object-feedback .elgg-image-block .elgg-image {  }
+.elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-list-container { margin: -2rem; }
+.elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-list-container .elgg-list-entity { margin: 0; }
+.elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-list-container .elgg-list-entity li.elgg-item-object-feedback { margin: 0; }
+.elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-item-object.elgg-item-object-feedback .elgg-image-block { margin: 0; border: 0; }
+.elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-item-object.elgg-item-object-feedback .elgg-image-block .elgg-image { margin-right: 2rem; }
+
 
 /* Object types workspace rendering */
 p.file-meta { margin-bottom: 0.5rem; }
