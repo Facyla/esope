@@ -62,7 +62,7 @@ $post_input = elgg_view('input/plaintext', array(
 		'data-max-length' => $char_limit,
 		//'style' => "height:initial;",
 		//'maxlength' => 140, // Do not block at 140, and use the warning
-		'placeholder' => elgg_echo('theme_inria:thewire:placeholder'),
+		'placeholder' => elgg_echo('theme_inria:thewire:placeholder', array($char_limit)),
 	));
 
 $submit_button = elgg_view('input/submit', array(

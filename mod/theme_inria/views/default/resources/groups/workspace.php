@@ -88,7 +88,7 @@ if (elgg_group_gatekeeper(false)) {
 			//if ($group->thewire_enable) {
 				$content .= '<div id="group-workspace-add-thewire" class="group-workspace-addcontent-tab">';
 					$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
-					$discussion_form = elgg_view_form('thewire/group_add', array(/*'action' => 'action/discussion/save'*/), array());
+					$discussion_form = elgg_view_form('thewire/group_add', array('action' => 'action/thewire/add'), array());
 					$content .= elgg_view_image_block($own_image, $discussion_form);
 				$content .= '</div>';
 			//}
