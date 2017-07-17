@@ -148,6 +148,12 @@
 .feedback-mood { float:left; max-width:25%; margin-right: 1em; }
 .feedback-about { float:left; max-width:40%; margin-right: 1em; }
 
+.elgg-feedback-responses { clear: both; }
+.elgg-item-object.elgg-item-object-feedback .elgg-feedback-responses .elgg-item { min-height: initial; }
+.elgg-item-object.elgg-item-object-feedback .elgg-feedback-responses .elgg-image-block { /* display: block; */ margin: 0; }
+.elgg-item-object.elgg-item-object-feedback .elgg-feedback-responses .elgg-image-block .elgg-image { min-height: initial; box-shadow: none; flex: 0 1 auto; background: none; }
+.elgg-item-object.elgg-item-object-feedback .elgg-feedback-responses .elgg-image-block .elgg-body { min-height: initial; }
+
 
 /* Feedbacks status */
 .feedback-status-open {  }

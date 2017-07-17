@@ -118,7 +118,7 @@ $access_textcontent = elgg_get_plugin_setting('helptext', 'access_icons');
 if ($access_content) {
 	elgg_load_js('lightbox');
 	elgg_load_css('lightbox');
-	$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => $access_content, 'class' => 'elgg-lightbox'));
+	$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => $access_content, 'class' => 'elgg-lightbox', 'target' => "_blank"));
 /* @TODO : doesn't work as expected yet
 } else if ($access_textcontent) {
 	// Pour lightbox avec texte court dedans

@@ -76,7 +76,7 @@ if (!empty($feedback->page)) {
 
 // Render view
 if (feedback_is_about_enabled()) {
-	$info .= '<div class="feedback-mood" style="float:left; max-width:40%; margin-right: 1em;"><strong>' . elgg_echo('feedback:list:about') . '&nbsp;:</strong> ' . $about_mark . '</div>';
+	$info .= '<div class="feedback-about"><strong>' . elgg_echo('feedback:list:about') . '&nbsp;:</strong> ' . $about_mark . '</div>';
 }
 $info .= '<div class="controls">' . $controls . '</div>';
 if (feedback_is_mood_enabled()) {
@@ -101,9 +101,9 @@ if ($comment == 'yes') {
 		$info .= '<a href="' . $feedback->getURL() . '">' . elgg_echo('feedback:viewfull') . '</a>';
 		$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_' . $feedback->guid . '\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', array($num_comments_feedback)) . '</a>';
 	}
-	$info .= '<div id="feedback_' . $feedback->guid . '"';
-	if (!$full) { $info .= ' style="display:none;"'; }
-	$info .= '>' . elgg_view_comments($feedback) . '</div>';
+	$hidden = '';
+	if (!$full) { $hidden .= ' hidden'; }
+	$info .= '<div id="feedback_' . $feedback->guid . '" class="elgg-feedback-responses ' . $hidden . '">' . elgg_view_comments($feedback) . '</div>';
 	elgg_set_ignore_access($ia);
 }
 
