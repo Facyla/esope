@@ -370,7 +370,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-list-river > li:hover { background-color: transparent !important; }
 .home-activity .elgg-list-river > li:hover { background-color: #FFFFFF; }
 .home-activity .elgg-river-attachments, .home-activity .elgg-river-message, .home-activity .elgg-river-content { margin: 2px 0 0px 0; }
-.elgg-river-attachments, .elgg-river-message, .elgg-river-content { /* border-left: 0 !important; padding-left: 0; */ border-left: 1px solid #666; }
+.elgg-river-attachments, .elgg-river-message, .elgg-river-content { border-left: 0 !important; padding-left: 0; /* border-left: 1px solid #666; */ }
 /* The Wire */
 .thewire-inria-info { margin: 12px auto 24px auto; border: 1px solid grey; padding: 10px 20px; font-size: 1.1em; width: 70%; }
 .elgg-form-thewire-group-add .elgg-foot { padding: 0 0 0.5em 0; }
@@ -523,7 +523,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 /* Profils différenciés */
 .iris-profile-icon, 
-.elgg-avatar img { border: 1px solid transparent; background-size: calc(100% - 2px) !important; border-radius: 50% !important; }
+.elgg-avatar img { border: 1px solid transparent; /* background-size: calc(100% - 2px) !important; */ border-radius: 50% !important; }
 .elgg-avatar.profile-type- img, 
 .elgg-avatar.profile-type-inria img { border: 1px solid transparent; }
 .elgg-avatar.profile-type-external img { border: 1px solid #F7A621; padding: 1px; }
@@ -532,7 +532,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .elgg-avatar.elgg-avatar-medium.profile-type-inria img { border: 3px solid transparent; padding: 3px; }
 .elgg-avatar.elgg-avatar-large.profile-type-external img, 
 .elgg-avatar.elgg-avatar-medium.profile-type-external img { border: 3px solid #F7A621; padding: 3px; }
-.iris-profile-icon.profile-type-external { border: 3px solid #F7A621; background-size: calc(100% - 6px) !important; /* background-color: #F7A621; background-blend-mode: multiply; */ }
+.iris-profile-icon.profile-type-external { border: 3px solid #F7A621; /* background-size: calc(100% - 6px) !important; */ /* background-color: #F7A621; background-blend-mode: multiply; */ }
 /* 
 .elgg-avatar.profile-type-external:after { background: #F7A621; content: ''; display: inline-block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 12; }
 */
@@ -989,6 +989,8 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-river-comments { margin: 1rem 0 0 0; padding-top: 0.5rem; }
 .elgg-river-comments .elgg-item { padding: 0 0.5rem; }
 .elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
+
+.elgg-comments { margin-top: 1.5rem; }
 
 .elgg-item-user .elgg-menu.elgg-menu-entity { width:auto; display: inline-block; float: right; max-width: 40%; margin: 0 0 0 1rem; }
 .elgg-menu-item-message .iris-user-message,
@@ -1449,6 +1451,9 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-item-object.elgg-item-object-feedback .elgg-image-block { margin: 0; border: 0; }
 .elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-item-object.elgg-item-object-feedback .elgg-image-block .elgg-image { margin-right: 2rem; }
 
+.object-poll-workspace { margin-bottom: 2rem; }
+.object-poll-workspace:first-of-type {  }
+.object-poll-workspace:last-of-type { margin-bottom: 0; }
 
 /* Object types workspace rendering */
 p.file-meta { margin-bottom: 0.5rem; }
@@ -1493,8 +1498,12 @@ a[name=unlike] { color: #1488CA !important; }
 
 .iris-object .elgg-content { margin: 0.5rem 0; }
 
-#cboxContent { padding: 1rem 1rem 3rem 1rem; width: 27rem; }
-#cboxLoadedContent { padding: 0rem; width: 25rem; }
+#cboxContent { padding: 1rem 1rem 3rem 1rem; min-width: 27rem; width: 32rem; max-width: 100%; }
+#cboxLoadedContent { padding: 0rem; min-width: 25rem; width: 30rem; max-width: 100%; }
+.embed-wrapper { max-width: 100%; }
+
+.cke_reset_all a, .cke_reset_all * { box-sizing: content-box !important; }
+
 .elgg-likes-popup { max-width: 100%; width: 100%; }
 .elgg-likes-popup .elgg-list { margin: 0; }
 .elgg-likes-popup .elgg-list .elgg-item { padding: 0rem 0rem 0rem 0rem; box-shadow: none; border: 0; margin: 0 0 1rem 0; }

@@ -7,7 +7,8 @@
 $group = elgg_get_page_owner_entity();
 
 if ($group->pages_enable == 'yes') {
-	$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'limit' => 2);
+	//$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'limit' => 2);
+	$options = array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $group->guid, 'limit' => 2);
 	$count = elgg_get_entities($options + array('count' => true));
 	$objects = elgg_get_entities($options);
 

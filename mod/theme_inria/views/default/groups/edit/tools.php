@@ -103,8 +103,7 @@ foreach ($tools as $priority => $view) {
 		}
 		
 		// Iris v2 : Options toujours forcées
-		$disabled = false;
-		if (in_array($group_option_toggle_name, array('file_enable', 'forum_enable'))) {
+		if (in_array($group_option_toggle_name, array('file_enable', 'forum_enable', 'thewire_enable'))) {
 			$attrs = array('class' => 'groups-edit-checkbox');
 			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
 			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
@@ -118,6 +117,22 @@ foreach ($tools as $priority => $view) {
 			)));
 			continue;
 		}
+		/* @TODO uncomment once forum are merged with blogs
+		if (in_array($group_option_toggle_name, array('forum_enable'))) {
+			$attrs = array('class' => 'groups-edit-checkbox');
+			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
+			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
+			echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
+				'name' => $group_option_toggle_name,
+				'value' => 'yes',
+				'default' => 'yes',
+				'checked' => true,
+				'label' => $group_option->label,
+				'disabled' => true,
+			)));
+			continue;
+		}
+		*/
 		
 		// Esope : add help title if set
 		$attrs = array('class' => 'groups-edit-checkbox');

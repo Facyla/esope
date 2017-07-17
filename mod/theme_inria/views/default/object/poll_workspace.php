@@ -84,7 +84,7 @@ $content = elgg_view('poll/body', $vars);
 
 
 
-echo '<div class="" style="margin-top: 1rem; margin-bottom: 1rem;">';
+echo '<div class="object-poll-workspace" style="margin-top: 1rem; margin-bottom: 1rem;">';
 	echo '<div class="" style="margin-bottom: 0.5rem;">' . $date . '<br />' .  $author_text . '</div>';
 	echo '<div class="entity-title"><h3>' . $poll->title . '</h3></div>';
 	echo $responses;
