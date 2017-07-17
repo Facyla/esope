@@ -7,6 +7,10 @@
 
 $context = elgg_get_context();
 
+$convert_longtext = elgg_get_plugin_setting('convert_longtext', 'content_facets');
+$extend_longtext = elgg_get_plugin_setting('extend_longtext', 'content_facets');
+if ($extend_longtext != 'yes') { return true; }
+
 elgg_load_library('elgg:content_facets');
 elgg_load_library('elgg:content_facets:vendors');
 /*

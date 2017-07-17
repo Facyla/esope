@@ -23,6 +23,6 @@ echo '<p><label>' . elgg_echo('content_facets:settings:convert_longtext'). ' ' .
 
 
 // Ajouter les ressources après le contenu
-echo '<p><label>' . elgg_echo('content_facets:settings:extend_longtext'). ' ' . elgg_view('input/select', array('name' => 'params[extend_longtext]', 'options_values' => $ny_opt, 'value' => $vars['entity']->convert_longtext)) . '</label><br /><em>' . elgg_echo('content_facets:settings:extend_longtext:details'). '</em></p>';
+echo '<p><label>' . elgg_echo('content_facets:settings:extend_longtext'). ' ' . elgg_view('input/select', array('name' => 'params[extend_longtext]', 'options_values' => $ny_opt, 'value' => $vars['entity']->extend_longtext)) . '</label><br /><em>' . elgg_echo('content_facets:settings:extend_longtext:details'). '</em></p>';
 
 
