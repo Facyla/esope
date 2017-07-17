@@ -24,7 +24,7 @@ if (elgg_instanceof($entity, 'object') && !elgg_instanceof($page_owner, 'group')
 	
 	// Get real container for forum & comment
 	//$subtype = $container->getSubtype();
-	$subtype = $object->getSubtype();
+	$subtype = $entity->getSubtype();
 	//error_log($object->guid .' // container='.$subtype . ' // object='.$object->getSubtype().' == '.print_r($vars['item'], true));
 	if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic'))) {
 		while(elgg_instanceof($container, 'object')) {

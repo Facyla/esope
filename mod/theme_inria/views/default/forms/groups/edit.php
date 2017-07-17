@@ -70,7 +70,7 @@ if ($entity) {
 		$form_footer .= '</div>';
 		$form_footer .= elgg_view('output/url', array(
 			'name' => 'groups-archive',
-			'text' => elgg_echo('groups_archive:archive'),
+			'text' => elgg_echo($translation_prefix.'groups_archive:archive'),
 			'href' => elgg_get_site_url() . "groups-archive?guid={$entity->guid}&enabled=no",
 			"class" => "elgg-button elgg-button-delete float-alt",
 			'priority' => 800,

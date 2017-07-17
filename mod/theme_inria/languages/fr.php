@@ -911,8 +911,9 @@ Voir et commenter ce lien web :
 	'theme_inria:group:archive' => "Archiver le groupe",
 	'theme_inria:group:archive:details' => "L'archivage d'un groupe permet de rendre ce groupe ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression du groupe est que le groupe et ses contenus archivés peuvent être restaurés par un administrateur.",
 	'workspace:theme_inria:group:archive' => "Archiver l'espace de travail",
-	'workspace:theme_inria:group:archive' => "Archiver l'espace de travail",
 	'workspace:theme_inria:group:archive:details' => "L'archivage d'un espace de travail permet de rendre cet espace ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression de l'espace de travail est que l'espace de travail et ses contenus peuvent être restaurés par un administrateur.",
+	'workspace:groups_archive:archive' => "Archiver l'espace de travail",
+	'workspace:groups_archive:confirm' => "Attention, ceci rendra cet espace de travail et tous ses contenus inaccessibles pour tous les membres !",
 	
 	'theme_inria:group:members:livefilter' => "3 premières lettres",
 	

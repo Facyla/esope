@@ -73,16 +73,28 @@ if (elgg_group_gatekeeper(false)) {
 	$class = 'group-workspace-main';
 	if (empty($sidebar_alt)) { $class .= ' no-sidebar-alt'; }
 	$content .= '<div class="' . $class . '" id="group-workspace-addcontent">';
-			
+		
+		// Switch publication de nouveau contenu
 		$content .= '<div class="group-workspace-add-tabs">';
-			if ($group->forum_enable) $content .= '<a href="#group-workspace-add-discussion" class="elgg-state-selected" rel="nofollow"><i class="fa fa-quote-left"></i></a>';
+			if ($group->thewire_enable) $content .= '<a href="#group-workspace-add-thewire" class="elgg-state-selected" rel="nofollow"><i class="fa fa-quote-left"></i></a>';
+			//if ($group->forum_enable) $content .= '<a href="#group-workspace-add-discussion" class="elgg-state-selected" rel="nofollow"><i class="fa fa-quote-left"></i></a>';
 			//if ($group->file_enable) 
 			$content .= '<a href="#group-workspace-add-file" rel="nofollow"><i class="fa fa-file-o"></i></a>';
 			if ($group->blog_enable) $content .= '<a href="#group-workspace-add-blog" rel="nofollow"><i class="fa fa-file-text-o"></i></a>';
 		$content .= '</div>';
 		
 		$content .= '<div class="group-workspace-add-content">';
-			// Discussion (forum)
+			// Discussion (forum) : à fusionner dans les blogs
+			//if ($group->thewire_enable) {
+				$content .= '<div id="group-workspace-add-thewire" class="group-workspace-addcontent-tab">';
+					$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
+					$discussion_form = elgg_view_form('thewire/group_add', array(/*'action' => 'action/discussion/save'*/), array());
+					$content .= elgg_view_image_block($own_image, $discussion_form);
+				$content .= '</div>';
+			//}
+			
+			// Discussion (forum) : à fusionner dans les blogs
+			/*
 			if ($group->forum_enable) {
 				$content .= '<div id="group-workspace-add-discussion" class="group-workspace-addcontent-tab">';
 					$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
@@ -90,6 +102,7 @@ if (elgg_group_gatekeeper(false)) {
 					$content .= elgg_view_image_block($own_image, $discussion_form);
 				$content .= '</div>';
 			}
+			*/
 			
 			// Fichiers : toujours présents (activés ou pas - cf. embed)
 			//if ($group->file_enable) {
