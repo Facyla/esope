@@ -60,6 +60,26 @@ if ($entity) {
 			"class" => "elgg-button elgg-button-delete float-alt",
 		));
 	$form_footer .= '</div>';
+	
+	// Admin only
+	if (elgg_is_active_plugin('groups_archive') && elgg_is_admin_logged_in()) {
+		$form_footer .= '<div class="iris-group-delete">';
+		$form_footer .= '<div class="group-delete-label">';
+		$form_footer .= '<h3>' . elgg_echo($translation_prefix.'theme_inria:group:archive') . '</h3>';
+		$form_footer .= '<p>' . elgg_echo($translation_prefix.'theme_inria:group:archive:details') . '</p>';
+		$form_footer .= '</div>';
+		$form_footer .= elgg_view('output/url', array(
+			'name' => 'groups-archive',
+			'text' => elgg_echo('groups_archive:archive'),
+			'href' => elgg_get_site_url() . "groups-archive?guid={$entity->guid}&enabled=no",
+			"class" => "elgg-button elgg-button-delete float-alt",
+			'priority' => 800,
+			'is_action' => true,
+			'confirm' => elgg_echo($translation_prefix.'groups_archive:confirm'),
+		));
+	$form_footer .= '</div>';
+	}
+	
 }
 $form_footer .= '</div>';
 

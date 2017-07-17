@@ -78,7 +78,7 @@ if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_g
 
 echo <<<RIVER
 <span class="elgg-river-timestamp">$timestamp</span>
-<div class="elgg-river-summary">$summary$group_string</div>
+<div class="elgg-river-summary">$summary</div>
 $message
 $attachments
 $responses

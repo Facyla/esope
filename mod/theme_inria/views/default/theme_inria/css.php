@@ -251,6 +251,10 @@ $width = array(
 
 .elgg-access {     line-height: 1.4rem; }
 .elgg-autocomplete-item .elgg-access a { display: none; }
+.ui-autocomplete li.ui-menu-item { border-radius: 0; padding: 0.3rem 0.5rem 0.1rem 0.5rem; }
+.ui-autocomplete li.ui-menu-item a { padding:0; }
+.elgg-image-block.elgg-autocomplete-item { padding: 0; }
+.elgg-image-block.elgg-autocomplete-item .elgg-image { margin-right: 0.3rem; }
 
 
 
@@ -607,7 +611,7 @@ section div.module div.activites .elgg-widget-content .widget-title-details.grou
 .elgg-print-message { display:none; }
 .footer-inria .print-page { float:left; color:white; margin: 26px 0 10px 0; font-size: 0.75rem; }
 
-pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Arial; font-size: 0.875rem; }
+pre, code, blockquote { background-color: #F8F4F5; font-family: Neo Sans Std,Arial; /* font-size: 0.875rem; */ }
 
 
 /* Folders (masquer réglage) */
@@ -959,6 +963,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
 .elgg-context-thewire .elgg-list .elgg-item, 
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
+.elgg-river-item .elgg-river-message .elgg-river-target { margin-left: 1rem; float: none; font-variant: initial; font-size: 0.85em; }
 .iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
 #group-workspace-content-filter select { margin-left: 0.5rem; }
 .group-workspace-activity { padding: 0 1rem; }
@@ -1323,8 +1328,12 @@ form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !importan
 .form-input ::placeholder, .groups-edit-field ::placeholder { text-transform: uppercase; font-weight: bold; }
 .groups-edit-checkbox { margin-left: 9rem; margin-bottom: 0.8rem; }
 .groups-edit-checkbox label { color: #6C6C6C; font-size: 0.875rem; font-weight: normal; }
-.iris-group-delete { margin-top: 3rem; padding: 3rem 0; border-top: 2px solid #E0E0E0; }
+.iris-group-delete { margin-top: 2rem; padding: 2rem 0 4rem 0; border-top: 2px solid #E0E0E0; }
 .group-delete-label { width:60%; float:left; }
+#iris-body .elgg-context-group_edit .elgg-module-info { border-top: 2px solid #E0E0E0; border-radius: 0; background: transparent; margin-top: 2rem; padding: 2rem 0 0rem 0; }
+#iris-body .elgg-context-group_edit .elgg-module-info .elgg-head { background: none; padding: 0; min-height: initial; }
+#iris-body .elgg-context-group_edit .elgg-module-info .elgg-head h3 { margin:0; padding: 0; font-weight: bold; color: #384257; font-size: 1.17rem; font-family: "Inria Sans", sans-serif; text-transform: initial; }
+#iris-body .elgg-context-group_edit .elgg-module-info .elgg-body { padding: 0; font-size: initial; border: 0; }
 #iris-body .elgg-context-groups .elgg-head { width: 100%; float: none; }
 .elgg-form-alt > fieldset > .elgg-foot { border:0; }
 .elgg-form-theme-inria-file-quick-upload fieldset > div { display: flex; }

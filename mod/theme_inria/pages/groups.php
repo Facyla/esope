@@ -133,7 +133,7 @@ switch($filter) {
 		$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
 		
 }
-elgg_pop_context();
+if ($filter != 'search') { elgg_pop_context(); }
 
 
 if ($filter == 'search') {

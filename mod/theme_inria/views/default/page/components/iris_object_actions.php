@@ -16,29 +16,24 @@ if (empty($title)) { $title = $entity->name; }
 // ACTIONS - Bottom menu
 $actions_after = '';
 
-// Add container
+// Add container if we are in a global context
 $container_info = '';
 //if (elgg_instanceof($entity, 'object') && !elgg_instanceof($page_owner, 'group') && !elgg_instanceof($page_owner, 'user')) {
 if (elgg_instanceof($entity, 'object') && !elgg_instanceof($page_owner, 'group')) {
 	$container = $entity->getContainerEntity();
+	
 	// Get real container for forum & comment
-	$subtype = $container->getSubtype();
-	//error_log($entity->guid .' // container='.$subtype . ' // object='.$entity->getSubtype().' == '.print_r($vars['item'], true));
-	if ($subtype == 'discussion_reply') {
-		while(in_array($subtype, array('discussion_reply', 'groupforumtopic')) || !$parent_container) {
+	//$subtype = $container->getSubtype();
+	$subtype = $object->getSubtype();
+	//error_log($object->guid .' // container='.$subtype . ' // object='.$object->getSubtype().' == '.print_r($vars['item'], true));
+	if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic'))) {
+		while(elgg_instanceof($container, 'object')) {
 			$parent_container = $container->getContainerEntity();
 			if ($parent_container) { $container = $parent_container; }
-			$subtype = $container->getSubtype();
-		}
-	} else if ($subtype == 'comment') {
-		while($subtype == 'comment' || !$parent_container) {
-			$parent_container = $container->getContainerEntity();
-			if ($parent_container) { $container = $parent_container; }
-			$subtype = $container->getSubtype();
 		}
 	}
 	if (elgg_instanceof($container, 'group')) {
-		$container_info = '<li>' . elgg_view('output/url', array(
+		$container_info .= '<li>' . elgg_view('output/url', array(
 				'text' => $group_icon . '&nbsp;' . $container->name,
 				'href' => $container->getURL(),
 				'class' => 'iris-container',

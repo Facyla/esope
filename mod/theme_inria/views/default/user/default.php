@@ -62,6 +62,8 @@ if (elgg_in_context('owner_block') || elgg_in_context('widgets')) {
 
 if (elgg_get_context() == 'gallery') {
 	echo $icon;
+} else if (elgg_get_context() == 'livesearch') {
+	echo elgg_view_image_block($icon, $entity->name, $vars);
 } else {
 	if ($entity->isBanned()) {
 		$banned = elgg_echo('banned');

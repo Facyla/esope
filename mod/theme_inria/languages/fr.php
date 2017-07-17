@@ -908,6 +908,12 @@ Voir et commenter ce lien web :
 	'workspace:theme_inria:ownmembership' => "Adhésion à cet espace de travail",
 	'workspace:groups:briefdescription' => "Espace de travail<br />%s",
 	
+	'theme_inria:group:archive' => "Archiver le groupe",
+	'theme_inria:group:archive:details' => "L'archivage d'un groupe permet de rendre ce groupe ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression du groupe est que le groupe et ses contenus archivés peuvent être restaurés par un administrateur.",
+	'workspace:theme_inria:group:archive' => "Archiver l'espace de travail",
+	'workspace:theme_inria:group:archive' => "Archiver l'espace de travail",
+	'workspace:theme_inria:group:archive:details' => "L'archivage d'un espace de travail permet de rendre cet espace ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression de l'espace de travail est que l'espace de travail et ses contenus peuvent être restaurés par un administrateur.",
+	
 	'theme_inria:group:members:livefilter' => "3 premières lettres",
 	
 	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe.",

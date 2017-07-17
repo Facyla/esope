@@ -69,6 +69,7 @@ if ($full && !elgg_in_context('gallery')) {
 	$summary = elgg_view('object/elements/summary', $params);
 
 	$bookmark_icon = elgg_view_icon('push-pin-alt');
+	$link = elgg_view('output/longtext', array('value' => $link));
 	$body = <<<HTML
 <div class="bookmark elgg-content mts">
 	$bookmark_icon<span class="elgg-heading-basic mbs">$link</span>
@@ -84,7 +85,7 @@ HTML;
 		'body' => $body,
 	));
 	*/
-	$content = $categories . $description;
+	$content = $categories . $body;
 
 } elseif (elgg_in_context('gallery')) {
 	echo <<<HTML
