@@ -102,7 +102,7 @@ if (!empty($title)) {
 	if ($mode == 'full') {
 		$main_content .= '<h2>' . $title . '</h2>';
 	} else {
-		$main_content .= '<h3><a href="' . $entity->getURL() . '">' . $title . '</a></h3>';
+		$main_content .= '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 30) . '</a></h3>';
 	}
 }
 if (!empty($body)) {

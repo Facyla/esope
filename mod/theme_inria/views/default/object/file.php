@@ -21,7 +21,7 @@ $base_type = substr($mime, 0, strpos($mime,'/'));
 
 if ($size = $file->getSize()) { $filesize = '<span class="file-size">' . esope_friendly_size($size, 2) . '</span>'; }
 $mimetype = '<span class="file-mimetype">' . $file->getMimeType() . '</span>';
-$filename = '<span class="file-filename">' . $file->originalfilename . '</span>';
+$filename = '<span class="file-filename" title="' . $file->originalfilename . '">' . elgg_get_excerpt($file->originalfilename, 30) . '</span>';
 $simpletype = '<span class="file-simpletype">' . $file->simpletype . '</span>';
 $extension = '<span class="file-extension">' . pathinfo($file->originalfilename)['extension'] . '</span>';
 $file_meta = '<p class="file-meta">';
@@ -64,8 +64,6 @@ $metadata = elgg_view_menu('entity', array(
 	'class' => 'elgg-menu-hz',
 ));
 
-$subtitle = "$author_text $date $comments_link $categories";
-
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) { $metadata = ''; }
 
@@ -78,33 +76,16 @@ if ($full && !elgg_in_context('gallery')) {
 		$extra = elgg_view("file/specialcontent/$base_type/default", $vars);
 	}
 
-	$params = array(
-		'entity' => $file,
-		'title' => false,
-		'metadata' => $metadata,
-		'subtitle' => $subtitle,
-	);
-	$params = $params + $vars;
-	$summary = elgg_view('object/elements/summary', $params);
-
 	//$text = elgg_view('output/longtext', array('value' => $file->description));
 	if (!empty($file->description)) { $text = elgg_view('output/longtext', array('value' => $file->description)); }
 	$body = "$text $extra";
 
-	/*
-	echo elgg_view('object/elements/full', array(
-		'entity' => $file,
-		'icon' => $file_icon,
-		'summary' => $summary,
-		'body' => $body,
-	));
-	*/
 	$content = $body;
 
 } elseif (elgg_in_context('gallery')) {
 	
 	echo '<div class="file-gallery-item">';
-	echo "<h3>" . $file->title . "</h3>";
+	echo '<h3 title="' . $file->title . '">' . elgg_get_excerpt($file->title, 30) . '</h3>';
 	// Pas de dowload direct dans la galerie sinon on perd tout accès à la page du fichier
 	// Note : de plus cette fonction est apportée par file_tools...
 	$file_icon = elgg_view_entity_icon($file, 'medium');
@@ -127,7 +108,6 @@ if ($full && !elgg_in_context('gallery')) {
 	$params = array(
 		'entity' => $file,
 		'metadata' => $metadata,
-		//'subtitle' => $subtitle,
 		'content' => $excerpt,
 	);
 	$params = $params + $vars;

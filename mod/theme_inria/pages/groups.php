@@ -6,7 +6,6 @@
  */
 
 elgg_set_context('groups');
-elgg_push_context('search');
 
 /*
 elgg_pop_breadcrumb();
@@ -30,8 +29,11 @@ if (!in_array($filter, array('search', 'community', 'discover', 'member'))) { $f
 
 
 if ($filter == 'search') {
-
 }
+
+if (in_array($filter, array('search'))) {
+}
+elgg_push_context('search');
 
 
 switch($filter) {
@@ -89,6 +91,7 @@ switch($filter) {
 			if (elgg_is_active_plugin('au_subgroups')) {
 				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM " . elgg_get_config('dbprefix') . "entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
 			}
+			
 			$groups_content = elgg_list_entities_from_relationship($options);
 			// Add title + count
 			$options['count'] = true;
@@ -130,6 +133,7 @@ switch($filter) {
 		$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
 		
 }
+elgg_pop_context();
 
 
 if ($filter == 'search') {
