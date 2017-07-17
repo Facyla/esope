@@ -753,6 +753,8 @@ Voir et commenter ce lien web :
 	'theme_inria:groups:online' => "En ligne (%s)",
 	'theme_inria:aboutme' => "A propos de moi",
 	
+	'groups:access:members' => "Membres du groupe",
+	'workspace:access:members' => "Membres de l'espace de travail",
 	'groups:members:manage' => "Gérer les membres",
 	'groups:banner' => "Image d'entête du groupe (ne rien sélectionner pour laisser inchangé)",
 	'groups:about' => "A propos du groupe",

@@ -91,7 +91,10 @@ switch($access_id) {
 			$help_details = elgg_echo('access_icons:group:details');
 			$access_class .= ' elgg-access-group';
 			if (!$hide_text) {
-				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->name, ENT_QUOTES, 'UTF-8', false);
+				//$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->name, ENT_QUOTES, 'UTF-8', false);
+				$access_id_string = '<span class="access-icon-placeholder"></span>' . elgg_echo('groups:access:members');
+				$help_details = htmlspecialchars($collection_owner->name, ENT_QUOTES, 'UTF-8', false) . ' - ' . $help_details;
+				
 			}
 		} else if (elgg_instanceof($collection_owner, 'user')) {
 			$help_details = elgg_echo('access_icons:collection:details');
