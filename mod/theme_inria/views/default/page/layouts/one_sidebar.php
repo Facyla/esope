@@ -37,7 +37,7 @@ if (elgg_instanceof($page_owner, 'user')) {
 	//return;
 }
 
-// Iris v2 : remove sidebar for specific context (profile edit of another user)
+// Iris v2 : remove sidebar for specific context (profile edit of another user) => NO !   same layout but different header (based on owner)
 // @TODO Iris profile layout ?
 //echo print_r(elgg_get_context_stack(), true);
 // Back button
@@ -46,6 +46,7 @@ if (elgg_instanceof($page_owner, 'user')) {
 if (elgg_in_context('profile_edit') || elgg_in_context('settings')) {
 	$profile_back = '<div class="iris-back iris-profile-back"><a href="' . $page_owner->getURL() . '"><i class="fa fa-angle-left"></i> &nbsp; ' . elgg_echo('theme_inria:profile:back') . '</a></div>';
 }
+/*
 if (elgg_in_context('profile_edit') && ($page_owner->guid != elgg_get_logged_in_user_guid())) {
 	//$vars['nav'] = $profile_back;
 	$vars['title'] .= $profile_back;
@@ -53,7 +54,7 @@ if (elgg_in_context('profile_edit') && ($page_owner->guid != elgg_get_logged_in_
 	echo elgg_view('page/layouts/one_column', $vars);
 	return;
 }
-
+*/
 
 
 $class = 'elgg-layout elgg-layout-one-sidebar clearfix';
