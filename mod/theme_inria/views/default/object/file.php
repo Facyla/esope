@@ -78,7 +78,18 @@ if ($full && !elgg_in_context('gallery')) {
 
 	//$text = elgg_view('output/longtext', array('value' => $file->description));
 	if (!empty($file->description)) { $text = elgg_view('output/longtext', array('value' => $file->description)); }
-	$body = "$text $extra";
+	$body = '';
+	$details = '';
+	/*
+	$details = $extension;
+	if (!empty($filesize)) {
+		//if (!empty($details)) { $details .= ', '; }
+		$details .= $filesize;
+	}
+	if (!empty($details)) { $details = " ($details)"; }
+	*/
+	$body .= '<p>' . '<a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '" class="elgg-button elgg-button-action" target="_blank"><i class="fa fa-download"></i>&nbsp;' . elgg_echo('file:download') . $filesize . '</a>' . '</p>';
+	$body .= "$text $extra";
 
 	$content = $body;
 

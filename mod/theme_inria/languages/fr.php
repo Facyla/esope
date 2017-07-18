@@ -931,6 +931,7 @@ Voir et commenter ce lien web :
 	
 	'poll:totalvotes' => "Nombre total de votes : %s",
 	
+	'file:download' => "Télécharger le fichier",
 	
 );
 
