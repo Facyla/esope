@@ -96,18 +96,30 @@ $group_icon = '<svg class="iris-groupes" xmlns="http://www.w3.org/2000/svg" view
 // TOP MENU
 $header = elgg_view('page/components/iris_object_header', array('entity' => $entity, 'mode' => $mode));
 
-// MAIN CONTENT
-$main_content = '';
+// Main title
 if (!empty($title)) {
 	if ($mode == 'full') {
-		$main_content .= '<h2>' . $title . '</h2>';
+		$main_title = '<h2>' . $title . '</h2>';
 	} else {
-		$main_content .= '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 30) . '</a></h3>';
+		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 30) . '</a></h3>';
+		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 30) . '</h3>';
 	}
 }
+
+// MAIN CONTENT
+$main_content = '';
 if (!empty($body)) {
-	$main_content .= '<div class="elgg-content">' . $body . '</div>';
+	if ($mode != 'full') {
+		// Auto-detect link in text for more flexibility ?
+		if ((strpos($body, '<a ') === false) && (strpos($body, '</a>') === false)) {
+		//if (in_array($entity->getSubtype(), ['blog', 'file', 'bookmarks', 'page', 'page_top', 'thewire', 'newsletter'])) {
+			$main_content = '<a href="' . $entity->getUrl() . '"><div class="elgg-content">' . $body . '<span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></div></a>';
+		}
+	} else {
+		$main_content .= '<div class="elgg-content">' . $body . '</div>';
+	}
 }
+
 
 // ACTIONS - Bottom menu
 $actions = elgg_view('page/components/iris_object_actions', array('entity' => $entity, 'mode' => $mode, 'metadata-alt' => $metadata_alt, 'metadata' => $metadata)) . $after;
@@ -118,17 +130,18 @@ echo '<div class="iris-object iris-object-' . $mode . '">';
 switch($mode) {
 	case 'full':
 		echo $header;
+		echo $main_title;
 		echo $main_content;
 		echo $actions;
 		break;
 		
 	case 'content':
-		echo elgg_view_image_block($entity_icon, $header . $main_content . $actions);
+		echo elgg_view_image_block($entity_icon, $header . $main_title . $main_content . $actions);
 		break;
 		
 	case 'listing':
 	default:
-		echo elgg_view_image_block($owner_icon, $header . $main_content . $actions);
+		echo elgg_view_image_block($owner_icon, $header . $main_title . $main_content . $actions);
 }
 echo '</div>';
 

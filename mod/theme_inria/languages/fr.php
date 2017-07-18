@@ -774,9 +774,9 @@ Voir et commenter ce lien web :
 	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
 	
 	'theme_inria:workspace' => "Espace de travail",
-	'theme_inria:workspace:main' => "Espace de travail principal",
+	'theme_inria:workspace:main' => "Espace de travail",
 	'workspace:title' => "Espace de travail&nbsp;: %s",
-	'workspace:title:main' => "Espace de travail principal&nbsp;: %s",
+	'workspace:title:main' => "Espace de travail&nbsp;: %s",
 	'workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
 	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
 	'au_subgroups:subgroup:of' => "Espace de travail de %s",
@@ -804,8 +804,8 @@ Voir et commenter ce lien web :
 	'workspace:poll' => "Sondages",
 	'workspace:feedback' => "Feedbacks",
 	
-	'theme_inria:backtocontent' => "Retour vers la publication",
-	'theme_inria:backtocontents' => "Retour vers la liste des publications",
+	'theme_inria:backtocontent' => "Voir la publication",
+	'theme_inria:backtocontents' => "Voir la liste des publications",
 	
 	'theme_inria:contentfilter:all' => "Tous",
 	'theme_inria:contentfilter:mine' => "Les miens",

@@ -69,6 +69,7 @@ if ($full) {
 		));
 	}
 	
+	/*
 	$params = array(
 		'entity' => $blog,
 		'title' => false,
@@ -77,8 +78,7 @@ if ($full) {
 	);
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
-
-	/*
+	
 	echo elgg_view('object/elements/full', array(
 		'entity' => $blog,
 		'summary' => $summary,
@@ -90,7 +90,7 @@ if ($full) {
 
 } else {
 	// brief view
-
+	
 	if (elgg_in_context('workspace')) {
 		// Icon = auteur
 		$owner_icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIconURL(array('medium')) . '" style="width:54px;" /></a>';
@@ -98,6 +98,7 @@ if ($full) {
 	} else {
 	}
 
+	/*
 	$params = array(
 		'entity' => $blog,
 		'metadata' => $metadata,
@@ -106,8 +107,9 @@ if ($full) {
 	);
 	$params = $params + $vars;
 	$list_body = elgg_view('object/elements/summary', $params);
-
-	//echo elgg_view_image_block($owner_icon, $list_body);
+	echo elgg_view_image_block($owner_icon, $list_body);
+	*/
+	
 	$content = $excerpt;
 }
 

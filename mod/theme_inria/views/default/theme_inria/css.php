@@ -866,6 +866,9 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-manage { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; float: right; }
 .add-plus { height: 2.25rem; width: 2.25rem; border-radius: 1.125rem; background: #1488CA; color: white; font-size: 2rem; line-height: 2.5rem; text-align: center; }
 .readmore { margin-left: 1rem; }
+.iris-object a .elgg-content { color: #384257; }
+.iris-object a .elgg-content .readmore { color: #1488CA; font-size: 0.9em; font-weight:bold; }
+
 
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
 .group-profile-main .elgg-list .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
