@@ -69,7 +69,7 @@ $actions .= '<div class="iris-object-actions">';
 					'distinct' => false,
 				));
 			}
-			if ($comments > 0) { $actions .= '<li><a href="' . $entity->getURL() . '">' . $entity->countComments() . '&nbsp;<i class="fa fa-comments"></i></a></li>'; }
+			if ($comments > 0) { $actions .= '<li><a href="' . $entity->getURL() . '">' . $comments . '&nbsp;<i class="fa fa-comments"></i></a></li>'; }
 		
 			// Wire : reply form
 			if (elgg_instanceof($entity, 'object', 'thewire')) {
