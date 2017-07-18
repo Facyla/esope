@@ -372,6 +372,8 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-wire .elgg-list-access, .home-activity .elgg-list-access { display: none; }
 .iris-add-button { font-weight: bold; padding: 11px 0px; border: thin dotted <?php echo $titlecolor; ?>; background-color: #F8F4F5; width:100%; text-align:center; display:block; }
 .home-activity .elgg-list .elgg-item .elgg-image-block { margin-left: -1rem; }
+.home-activity .elgg-river-responses .elgg-list .elgg-item .elgg-image-block { margin: 0; }
+.home-activity .elgg-river-responses .elgg-list .elgg-item .elgg-image-block .elgg-image { margin-right: 0.5rem; }
 .home-activity .elgg-menu-item-access { margin-top: 0; }
 .home-activity .elgg-item .elgg-content { margin: 6px 0px 2px 0px; }
 .elgg-menu-river > li > a {  }
@@ -995,13 +997,14 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .elgg-river-responses textarea { height: 2rem; }
 .elgg-river-responses textarea:active, .elgg-river-responses textarea:focus { height: auto; }
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
+.elgg-menu .elgg-menu-item-access { float:left; margin-right: 1rem; margin-left: 0; }
 .elgg-menu .elgg-menu-item-container { float:left; margin-right: 1rem; margin-left: 0; }
 .elgg-menu-item-container svg { height: 1rem; line-height: 1rem; fill: rgba(56, 66, 87, 0.5); float: left; }
 .elgg-menu .iris-container { font-weight: bold; font-size: 0.8125rem; color: rgba(56, 66, 87, 0.5); line-height: 1.4rem; }
 .elgg-menu .elgg-menu-item-access { float:left; }
 .elgg-pages-subtitle { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; }
 .elgg-river-timestamp { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; display: inline-block; }
-.elgg-river-comments { margin: 1rem 0 0 0; padding-top: 0.5rem; }
+.elgg-river-comments { margin: 1rem 0 0 0; }
 .elgg-river-comments .elgg-item { padding: 0 0.5rem; }
 .elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
 

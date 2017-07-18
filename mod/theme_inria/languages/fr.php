@@ -928,5 +928,8 @@ Voir et commenter ce lien web :
 	'likes:userlikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
 	'likes:userslikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
 	
+	'poll:totalvotes' => "Nombre total de votes : %s",
+	
+	
 );
 

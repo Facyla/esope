@@ -125,7 +125,7 @@ if (!empty($body)) {
 
 
 // ACTIONS - Bottom menu
-$actions = elgg_view('page/components/iris_object_actions', array('entity' => $entity, 'mode' => $mode, 'metadata-alt' => $metadata_alt, 'metadata' => $metadata)) . $after;
+$actions = elgg_view('page/components/iris_object_actions', array('entity' => $entity, 'mode' => $mode, 'metadata_alt' => $metadata_alt, 'metadata' => $metadata)) . $after;
 
 
 //echo $mode;

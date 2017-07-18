@@ -12,7 +12,7 @@
  * @uses $vars['entity']    ElggEntity
  * @uses $vars['title']     Title link (optional) false = no title, '' = default
  * @uses $vars['metadata']  HTML for entity menu and metadata (optional)
- * @uses $vars['metadata-alt']  HTML for bottom entity menu and metadata (optional)
+ * @uses $vars['metadata_alt']  HTML for bottom entity menu and metadata (optional)
  * @uses $vars['subtitle']  HTML for the subtitle (optional)
  * @uses $vars['tags']      HTML for the tags (default is tags on entity, pass false for no tags)
  * @uses $vars['content']   HTML for the entity content (optional)

@@ -102,9 +102,7 @@ if ($action_types) {
 }
 
 $activity = elgg_list_river($options);
-if (!$activity) {
-	$activity = elgg_echo('river:none');
-}
+if (!$activity) { $activity = elgg_echo('river:none'); }
 
 
 $sidebar = elgg_view('core/river/sidebar');

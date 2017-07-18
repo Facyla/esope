@@ -194,7 +194,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 					'text' => $group_icon . '&nbsp;' . $container->name,
 					'href' => $container->getURL(),
 					'class' => 'iris-container',
-					'priority' => 9,
+					'priority' => 100,
 				));
 		}
 		
