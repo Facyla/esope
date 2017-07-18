@@ -18,6 +18,9 @@ $full = elgg_extract('full_view', $vars, FALSE);
 
 $page_owner = elgg_get_page_owner_entity();
 
+//$own = elgg_get_logged_in_user_entity();
+$ownguid = elgg_get_logged_in_user_guid();
+
 
 if ($full) {
 	// Full view
@@ -74,10 +77,11 @@ if ($full) {
 	$time_bit = event_calendar_get_formatted_time($event);
 	$time_bit = '<span class="elgg-event-timestamp">' . $time_bit . '</span>';
 	//$icon = '<img src="'.elgg_view("icon/object/event_calendar/small").'" />';
-	$month = date('n', $event->start_date);
+	$month = date('m', $event->start_date);
 	$month_translate = array('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
 	//monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
-	$month = $month_translate[(int)$month-1];
+	//$month = $month_translate[(int)$month-1];
+	$month = elgg_echo('event_calendar:month:' . $month);
 	$day = date('d', $event->start_date);
 	$year = date('Y', $event->start_date);
 	$icon = '<p class="date">' . $month . ' <span>' . $day . '</span> ' . $year . '</p>';

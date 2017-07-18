@@ -24,7 +24,8 @@ $time_bit = event_calendar_get_formatted_time($event);
 $month = date('n', $event->start_date);
 $month_translate = array('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
 //monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
-$month = $month_translate[(int)$month-1];
+	//$month = $month_translate[(int)$month-1];
+	$month = elgg_echo('event_calendar:month:' . $month);
 $day = date('d', $event->start_date);
 $year = date('Y', $event->start_date);
 

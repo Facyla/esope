@@ -1306,7 +1306,7 @@ form.elgg-form-newsletter-subscribe label { margin: 0; }
 
 .form-groups-add .iris-group-sidebar-alt { /* padding: 0 3rem 1rem 4rem; */ }
 .form-groups-add .iris-group-sidebar-alt .iris-group-image-input { background: transparent; box-shadow: none; }
-.form-groups-add .iris-group-image-input label { display: block; width: 13rem; text-align: center; color: rgba(56, 66, 87, 0.5); }
+.form-groups-add .iris-group-image-input label { display: block; width: 13rem; text-align: center; color: rgba(56, 66, 87, 0.5); color: #D3D3D3; }
 .form-groups-add .iris-group-image-input .fa { font-size: 2rem; margin-bottom: 0.8rem; }
 .form-groups-add .iris-group-image-input label:hover, .form-groups-add .iris-group-image-input label:active, .form-groups-add .iris-group-image-input label:focus { color: white; cursor: pointer; }
 

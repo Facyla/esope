@@ -437,7 +437,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:interests' => 'Mots-clés',
 	'access:read' => "Visibilité", // Accès en lecture
 	'LOGGED_IN' => "Membres Iris", // membres connectés
-	'GROUP_MEMBERS' => "Membres du groupe", // membres du groupe
+	'GROUP_MEMBERS' => "Groupe", // membres du groupe
 	'access:friends:label' => "Contacts seulement", // contacts
 	'PUBLIC' => "Tout internaute", // public
 	'river:all' => "Ça bouge sur Iris",
@@ -753,14 +753,14 @@ Voir et commenter ce lien web :
 	'theme_inria:groups:online' => "En ligne (%s)",
 	'theme_inria:aboutme' => "A propos de moi",
 	
-	'groups:access:members' => "Membres du groupe",
+	'groups:access:members' => "Groupe",
 	'workspace:access:members' => "Membres de l'espace de travail",
 	'groups:members:manage' => "Gérer les membres",
 	'groups:banner' => "Image d'entête du groupe (ne rien sélectionner pour laisser inchangé)",
 	'groups:about' => "A propos du groupe",
 	'theme_inria:groups:about' => "A propos",
-	'groups:icon:inline' => "Image du groupe<br />(mini 200x200)",
-	'groups:banner:inline' => "Image de couverture<br />(mini 1200x200)",
+	'groups:icon:inline' => "Image du groupe<br />Formats PNG, JPG, GIF<br />Minimum 200x200",
+	'groups:banner:inline' => "Image de couverture<br />Formats PNG, JPG, GIF<br />Minimum 1200x200",
 	'theme_inria:groups:operators' => "Responsables (%s)",
 	'theme_inria:groups:members' => "Tous les membres (%s)",
 	'theme_inria:groups:requests' => "Demandes en attente (%s)",
@@ -886,6 +886,7 @@ Voir et commenter ce lien web :
 	
 	// Workspaces
 	'workspace:groups:add' => "Créer un nouvel espace de travail",
+	'theme_inria:workspace:groups:add' => "Créer un nouvel espace de travail",
 	'workspace:groups:edit' => "Modifier l'espace de travail",
 	'workspace:groups:settings' => "Paramètres de l'espace de travail",
 	'workspace:groups:invite' => "Inviter des membres",
