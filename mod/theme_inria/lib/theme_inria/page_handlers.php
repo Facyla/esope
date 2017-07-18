@@ -35,11 +35,12 @@ function inria_page_handler($page) {
 		case "linkedin":
 			include($base . 'linkedin_profile_update.php');
 			break;
-		/*
 		case "invite":
 			include($base . 'invite_external.php');
 			break;
-		*/
+		case "upgrade":
+			include($base . 'upgrade.php');
+			break;
 		case "animation":
 			include($base . 'admin_tools.php');
 			break;

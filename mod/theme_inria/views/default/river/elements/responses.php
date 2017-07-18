@@ -64,9 +64,11 @@ if ($top_object->guid != $object->guid) {
 	}
 
 	// inline comment form
-	$form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
-	$body_vars = array('entity' => $object, 'inline' => true);
-	echo elgg_view_form('comment/save', $form_vars, $body_vars);
+	if ($object->canComment()) {
+		$form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
+		$body_vars = array('entity' => $object, 'inline' => true);
+		echo elgg_view_form('comment/save', $form_vars, $body_vars);
+	}
 	return true;
 }
 
@@ -108,7 +110,10 @@ if ($comment_count && elgg_instanceof($object, 'object')) {
 }
 
 // inline comment form
-$form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
-$body_vars = array('entity' => $object, 'inline' => true);
-echo elgg_view_form('comment/save', $form_vars, $body_vars);
+// @TODO handle forum replies (status = open|closed)
+if ($object->canComment()) {
+	$form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
+	$body_vars = array('entity' => $object, 'inline' => true);
+	echo elgg_view_form('comment/save', $form_vars, $body_vars);
+}
 
