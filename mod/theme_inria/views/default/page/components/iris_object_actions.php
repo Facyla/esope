@@ -42,14 +42,12 @@ if (elgg_instanceof($entity, 'object') && !elgg_instanceof($page_owner, 'group')
 }
 
 $access_info = '<li>' . elgg_view('output/access', array('entity' => $entity)) . '</li>';
-$metadata_alt = $access_info . $container_info . $metadata_alt;
+
 
 $actions = '<div class="clearfloat"></div>';
 $actions .= '<div class="iris-object-actions">';
 	// left
-	if (!empty($metadata_alt)) {
-		$actions .= '<ul class="elgg-menu-entity float">' . $metadata_alt . '</ul>';
-	}
+	$actions .= '<ul class="elgg-menu-entity float">' . $access_info . $container_info . $metadata_alt . '</ul>';
 	
 	// right
 	// Add likes counter and actions

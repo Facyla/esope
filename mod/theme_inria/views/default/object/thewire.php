@@ -19,9 +19,7 @@ if (!$post) {
 
 // make compatible with posts created with original Curverider plugin
 $thread_id = $post->wire_thread;
-if (!$thread_id) {
-	$post->wire_thread = $post->guid;
-}
+if (!$thread_id) { $post->wire_thread = $post->guid; }
 
 
 $owner = $post->getOwnerEntity();
@@ -44,6 +42,7 @@ $metadata = elgg_view_menu('entity', array(
 	'class' => 'elgg-menu-hz',
 ));
 
+/*
 $subtitle = "$author_text $date";
 // Esope : add group container support
 if (!empty($post->container_guid)) {
@@ -52,11 +51,10 @@ if (!empty($post->container_guid)) {
 		$subtitle .= ' ' . elgg_echo('river:ingroup', array('<a href="' . $post_container->getURL() . '">' . $post_container->name . '</a>'));
 	}
 }
+*/
 
 // do not show the metadata and controls in widget view
-if (elgg_in_context('widgets')) {
-	$metadata = '';
-}
+if (elgg_in_context('widgets')) { $metadata = ''; }
 
 /* Affiche toute la conversation
 */

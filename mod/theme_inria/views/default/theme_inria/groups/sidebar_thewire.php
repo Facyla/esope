@@ -6,20 +6,21 @@
 
 $group = elgg_get_page_owner_entity();
 
-if ($group->pages_enable == 'yes') {
-	//$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'limit' => 2);
-	$options = array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $group->guid, 'limit' => 2);
+if ($group->thewire_enable == 'yes') {
+	$options = array('type' => 'object', 'subtype' => 'thewire', 'container_guid' => $group->guid, 'limit' => 2);
 	$count = elgg_get_entities($options + array('count' => true));
 	$objects = elgg_get_entities($options);
 
 	$content = '';
 	if ($objects) {
 		foreach ($objects as $ent) {
-			$content .= '<div class="pages">';
-				$content .= '<a href="' . $ent->getURL() . '" title="' . $ent->title . '">';
+			$title = elgg_get_excerpt($ent->description, 140);
+			$content .= '<div class="thewire">';
+				$content .= '<a href="' . $ent->getURL() . '" title="' . $title . '">';
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
-					$body = '<p>' . elgg_get_excerpt($ent->title, 50) . '</p>';
+					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
+					$body .= '<p>' . elgg_get_excerpt($ent->description, 50) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';
@@ -27,15 +28,17 @@ if ($group->pages_enable == 'yes') {
 	}
 
 	$all_link = elgg_view('output/url', array(
-		'href' => "groups/content/$group->guid/pages/all",
-		'text' => elgg_echo('theme_inria:sidebar:pages', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
+		'href' => "groups/content/$group->guid/thewire/all",
+		'text' => elgg_echo('theme_inria:sidebar:thewire', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
 
+	// @TODO : Toggle add form, or return to workspace home ?
 	/*
 	$new_link = elgg_view('output/url', array(
-		'href' => "pages/add/$group->guid",
-		'text' => elgg_echo('pages:add'),
+		//'href' => "thewire/add/$group->guid",
+		'href' => "groups/workspace/$group->guid",
+		'text' => elgg_echo('theme_inria:thewire:add'),
 		'is_trusted' => true,
 	));
 	*/

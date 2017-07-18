@@ -866,8 +866,9 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-manage { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; float: right; }
 .add-plus { height: 2.25rem; width: 2.25rem; border-radius: 1.125rem; background: #1488CA; color: white; font-size: 2rem; line-height: 2.5rem; text-align: center; }
 .readmore { margin-left: 1rem; }
-.iris-object a .elgg-content { color: #384257; }
-.iris-object a .elgg-content .readmore { color: #1488CA; font-size: 0.9em; font-weight:bold; }
+a.iris-object-readmore { color: #384257; }
+a.iris-object-readmore .readmore { color: #1488CA; font-size: 0.9em; font-weight:bold; }
+a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readmore:focus { /* text-decoration: none; text-shadow: 0 0 0 black; */ }
 
 
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
@@ -888,6 +889,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-box.home-wire textarea { /* width: 80%; */ height:3em; }
 .iris-box.home-wire textarea::placeholder { color: #D3D3D3; }
 .thewire-form #thewire-characters-remaining { display: inline-block; font-size: 1em; float: none; margin-right: 1em; }
+#thewire-characters-remaining { float: none; }
 #thewire-characters-remaining span { margin: 0; float: none; font-size: 1em; }
 .home-wire .thewire-form .elgg-button-submit { display: inline-block; float: none; }
 .elgg-layout-one-sidebar .thewire-form textarea { width: 25.625rem; height: 4rem; }
@@ -964,7 +966,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .iris-sidebar-content .elgg-image-block { display: block; }
 .elgg-image-block .elgg-body { overflow: visible; }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
-.elgg-context-thewire .elgg-list .elgg-item, 
+.elgg-context-thewire:not(.elgg-context-workspace-content) .elgg-list .elgg-item, 
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
 .elgg-river-item .elgg-river-message .elgg-river-target { margin-left: 1rem; float: none; font-variant: initial; font-size: 0.85em; }
 .iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
@@ -976,6 +978,7 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .elgg-list .elgg-item .elgg-image-block { padding: 0; }
 .elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; position:relative; }
 .workspace-subtype-content .elgg-image-block .elgg-image { margin: 0 1.475rem 0 0; }
+.workspace-subtype-content .elgg-river-timestamp { margin-bottom: 0.1rem; }
 .elgg-river-responses .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 
 .elgg-image-block.elgg-river-item .elgg-image { margin: 1.5rem 1.875rem 0 0; margin:0; }
@@ -1491,9 +1494,13 @@ p.file-meta { margin-bottom: 0.5rem; }
 .elgg-list .elgg-item .elgg-image-block.iris-object-inner .elgg-photo { border: 0; padding: 0; }
 
 .elgg-event-timestamp { color: #969696; font-size: 0.9rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; display: inline-block; }
+.elgg-event-location { text-transform: uppercase; font-size: 0.85em; font-weight: bold; }
 .event_calendar-date { margin-bottom: 1rem; }
 .elgg-item-object .elgg-image-block.event_calendar-date .elgg-image { padding: 0.5rem 0 0 0; margin-right: 1rem; }
 .event_calendar-date .elgg-body { padding: 0.5rem 0; }
+.event-calendar-repeating-wrapper { display: flex; }
+.event-calendar-repeating-selected, 
+.event-calendar-repeating-unselected { font-size: 1rem; flex: 1 1 2rem; }
 
 
 #iris-body .iris-object h3 { display: block; padding: 0; margin-bottom: 0.5rem; }
@@ -1516,7 +1523,7 @@ a[name=like] { color: rgba(56, 66, 87, 0.5); }
 a[name=unlike] { color: #1488CA !important; }
 .iris-object .elgg-menu-entity svg { height: 0.8125rem; line-height: 0.8125rem; fill: rgba(56, 66, 87, 0.5); }
 
-.iris-object .elgg-content { margin: 0.5rem 0; }
+.iris-object .elgg-content { margin: 0.5rem 0; line-height: 1.25; }
 
 #cboxContent { padding: 1rem 1rem 3rem 1rem; min-width: 27rem; width: 32rem; max-width: 100%; }
 #cboxLoadedContent { padding: 0rem; min-width: 25rem; width: 30rem; max-width: 100%; }

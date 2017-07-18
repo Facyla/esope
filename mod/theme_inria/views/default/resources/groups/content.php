@@ -149,6 +149,9 @@ if ($group->isMember()) {
 		case 'feedback':
 			// No new feedback in that way
 			break;
+		case 'thewire':
+			$content .= '<a href="' . $url . 'groups/workspace/' . $group->guid . '" class="elgg-button elgg-button-action float-alt" rel="nofollow">' . elgg_echo('theme_inria:'.$subtype.':add') . '</a>';
+			break;
 		case 'event_calendar':
 		case 'newsletter':
 		case 'poll':

@@ -29,11 +29,13 @@ if (true) {
 		'is_trusted' => true,
 	));
 
+	/*
 	$new_link = elgg_view('output/url', array(
 		'href' => "file/add/$group->guid",
 		'text' => elgg_echo('file:add'),
 		'is_trusted' => true,
 	));
+	*/
 
 
 	// Break out from iris-sidebar-content and reopen it

@@ -219,6 +219,7 @@ if ($full) {
 	}
 	
 	$excerpt = elgg_get_excerpt($page->description);
+	$excerpt = '<a href="' . $page->getUrl() . '" class="iris-object-readmore"><div class="elgg-content">' . $excerpt . '<span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></div></a>';
 
 	/*
 	$params = array(

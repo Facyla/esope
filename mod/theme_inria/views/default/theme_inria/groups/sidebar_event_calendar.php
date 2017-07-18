@@ -31,11 +31,13 @@ if ($group->event_calendar_enable == 'yes') {
 		'is_trusted' => true,
 	));
 
+	/*
 	$new_link = elgg_view('output/url', array(
 		'href' => "event_calendar/add/$group->guid",
 		'text' => elgg_echo('event_calendar:add'),
 		'is_trusted' => true,
 	));
+	*/
 
 
 	// Break out from iris-sidebar-content and reopen it

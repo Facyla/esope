@@ -113,7 +113,10 @@ if (!empty($body)) {
 		// Auto-detect link in text for more flexibility ?
 		if ((strpos($body, '<a ') === false) && (strpos($body, '</a>') === false)) {
 		//if (in_array($entity->getSubtype(), ['blog', 'file', 'bookmarks', 'page', 'page_top', 'thewire', 'newsletter'])) {
-			$main_content = '<a href="' . $entity->getUrl() . '"><div class="elgg-content">' . $body . '<span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></div></a>';
+			$main_content .= '<a href="' . $entity->getUrl() . '" class="iris-object-readmore"><div class="elgg-content">' . $body . '<span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></div></a>';
+		} else {
+			//$main_content .= '<div class="elgg-content">' . $body . '<a href="' . $entity->getUrl() . '" class="iris-object-readmore"><span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></a></div>';
+			$main_content .= '<div class="elgg-content">' . $body . '</div>';
 		}
 	} else {
 		$main_content .= '<div class="elgg-content">' . $body . '</div>';

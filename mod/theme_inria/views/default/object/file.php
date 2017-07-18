@@ -39,7 +39,7 @@ $owner_link = elgg_view('output/url', array(
 ));
 $author_text = elgg_echo('byline', array($owner_link));
 
-//$file_icon = elgg_view_entity_icon($file, 'small');
+//$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));
 $file_icon = '<a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '" title="' . elgg_echo('file:download') . '" target="_blank"><img src="' . $file->getIconURL('small') . '" /></a>';
 
 $date = elgg_view_friendly_time($file->time_created);
@@ -88,7 +88,7 @@ if ($full && !elgg_in_context('gallery')) {
 	echo '<h3 title="' . $file->title . '">' . elgg_get_excerpt($file->title, 30) . '</h3>';
 	// Pas de dowload direct dans la galerie sinon on perd tout accès à la page du fichier
 	// Note : de plus cette fonction est apportée par file_tools...
-	$file_icon = elgg_view_entity_icon($file, 'medium');
+	$file_icon = elgg_view_entity_icon($file, 'medium', array('href' => false));
 	//$file_icon = '<a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '" title="' . elgg_echo('file:download') . '" target="_blank"><img src="' . $file->getIconURL('medium') . '" /></a>';
 	echo $file_icon;
 	echo "<p class='subtitle'>$owner_link $date</p>";
@@ -118,7 +118,7 @@ if ($full && !elgg_in_context('gallery')) {
 	// Workspace home listing soecific content
 	if (elgg_instanceof($page_owner, 'group') && elgg_in_context('workspace')) {
 		$content = '';
-		$file_icon = elgg_view_entity_icon($file, 'small');
+		$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));
 		$content .= elgg_view_image_block($file_icon, $file_meta, array('class' => 'iris-object-inner'));
 		$content .= $excerpt;
 	} else {

@@ -19,7 +19,7 @@ if ($group->blog_enable == 'yes') {
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
-					$body .= '<h4>' . $ent->title . '</h4>';
+					$body .= '<h4>' . elgg_get_excerpt($ent->title, 50) . '</h4>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';
@@ -32,11 +32,13 @@ if ($group->blog_enable == 'yes') {
 		'is_trusted' => true,
 	));
 
+	/*
 	$new_link = elgg_view('output/url', array(
 		'href' => "blog/add/$group->guid",
 		'text' => elgg_echo('blog:add'),
 		'is_trusted' => true,
 	));
+	*/
 
 
 	// Break out from iris-sidebar-content and reopen it

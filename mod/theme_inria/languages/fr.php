@@ -798,6 +798,8 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
 	'theme_inria:sidebar:poll' => "Les sondages (%s)",
 	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
+	'theme_inria:sidebar:thewire' => "Les messages (%s)",
+	'theme_inria:thewire:add' => "Nouveau message",
 	'theme_inria:workspace:poll' => "Les sondages",
 	'theme_inria:workspace:feedback' => "Les feedbacks",
 	'workspace:event_calendar' => "Agenda",

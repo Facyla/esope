@@ -18,7 +18,7 @@ if ($group->bookmarks_enable == 'yes') {
 				$content .= '<a href="' . $ent->getURL() . '" title="' . $ent->title . '">';
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
-					$body = '<p>' . elgg_get_excerpt($ent->title, 64) . '</p>';
+					$body = '<p>' . elgg_get_excerpt($ent->title, 50) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';
@@ -31,11 +31,13 @@ if ($group->bookmarks_enable == 'yes') {
 		'is_trusted' => true,
 	));
 
+	/*
 	$new_link = elgg_view('output/url', array(
 		'href' => "bookmarks/add/$group->guid",
 		'text' => elgg_echo('bookmarks:add'),
 		'is_trusted' => true,
 	));
+	*/
 
 
 	// Break out from iris-sidebar-content and reopen it

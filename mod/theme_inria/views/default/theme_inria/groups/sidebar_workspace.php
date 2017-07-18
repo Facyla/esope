@@ -35,6 +35,8 @@ if (!$is_main_group) {
 	$sidebar .= elgg_view('theme_inria/groups/workspace_sidebar', $vars);
 }
 
+$sidebar .= elgg_view('theme_inria/groups/sidebar_thewire');
+
 $sidebar .= elgg_view('theme_inria/groups/sidebar_discussion');
 
 $sidebar .= elgg_view('theme_inria/groups/sidebar_file');

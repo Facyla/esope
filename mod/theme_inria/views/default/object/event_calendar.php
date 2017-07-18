@@ -21,6 +21,10 @@ $page_owner = elgg_get_page_owner_entity();
 //$own = elgg_get_logged_in_user_entity();
 $ownguid = elgg_get_logged_in_user_guid();
 
+$excerpt = $event->description;
+if (empty($excerpt)) { $excerpt = $event->long_description; }
+$excerpt = elgg_get_excerpt($excerpt);
+
 
 if ($full) {
 	// Full view
@@ -47,6 +51,7 @@ if ($full) {
 	
 	$tags = elgg_view('output/tags', array('tags' => $event->tags));
 	
+	/*
 	$params = array(
 		'entity' => $event,
 		'metadata' => $metadata,
@@ -54,26 +59,23 @@ if ($full) {
 		'title' => false,
 	);
 	$list_body = elgg_view('object/elements/summary', $params);
-	
+	*/
 	
 	$content = '<a class="event-ical-file" href="' . $event->getURL . '?view=ical" title="' . elgg_echo('event_calendar:ical_popup_message') . ' ' . $event->getURL . '?view=ical"><i class="fa fa-calendar-o"></i> ' . elgg_echo('feed:ical') . '</a>';
 	//$content .= $list_body;
 	$content .= $tags;
 	$content .= $body;
 	
-	if ($event->long_description) {
-		$content .= '<p>'.$event->long_description.'</p>';
-	} else {
-		$content .= '<p>'.$event->description.'</p>';
-	}
+	if ($event->description) { $content .= '<p><strong>'.$event->description.'</strong></p>'; }
+	if ($event->long_description) { $content .= '<p>'.$event->long_description.'</p>'; }
 	
 	if (elgg_get_plugin_setting('add_to_group_calendar', 'event_calendar') == 'yes') {
 		$content .= elgg_view('event_calendar/forms/add_to_group',array('event' => $event));
 	}
 	
 } else {
-	
 	// Listing view
+	
 	$time_bit = event_calendar_get_formatted_time($event);
 	$time_bit = '<span class="elgg-event-timestamp">' . $time_bit . '</span>';
 	//$icon = '<img src="'.elgg_view("icon/object/event_calendar/small").'" />';
@@ -85,11 +87,16 @@ if ($full) {
 	$day = date('d', $event->start_date);
 	$year = date('Y', $event->start_date);
 	$icon = '<p class="date">' . $month . ' <span>' . $day . '</span> ' . $year . '</p>';
+	
 	$extras = array();
-	//$extras = array($time_bit);
-	if ($event_calendar_venue_view = elgg_get_plugin_setting('venue_view', 'event_calendar') == 'yes') { $extras[] = '<span class="elgg-event-location">' . $event->venue . '</span>'; }
-	if ($event->description) { $extras[] = $event->description; }
-	if ($extras) { $info = "<p>".implode("<br />",$extras)."</p>"; } else { $info = ''; }
+	//$extras[] = $time_bit;
+	if ($event_calendar_venue_view = elgg_get_plugin_setting('venue_view', 'event_calendar') == 'yes') {
+		$venue = '<span class="elgg-event-location">' . $event->venue . '</span>';
+		$extras[] = $venue;
+	}
+	if ($excerpt) { $extras[] = $excerpt; }
+	$info = '';
+	if ($extras) { $info = "<p>".implode("<br />",$extras)."</p>"; }
 	
 	$metadata = '';
 	if (!elgg_in_context('widgets')) {
@@ -103,7 +110,7 @@ if ($full) {
 	
 	$tags = elgg_view('output/tags', array('tags' => $event->tags));
 	
-	$list_body = elgg_view('object/elements/summary', $params);
+	//$list_body = elgg_view('object/elements/summary', $params);
 	
 	
 	$content = '';
