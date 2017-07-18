@@ -75,12 +75,13 @@ if (elgg_in_context('widgets')) {
 }
 
 
-$description = $poll->description;
+//$description = elgg_get_excerpt($poll->description) . ;
+$description = '<a href="' . $poll->getUrl() . '" class="iris-object-readmore">' . elgg_get_excerpt($poll->description) . '<span class="readmore">' . elgg_echo('theme_inria:readmore:vote') . '</span></a>';
 if (!empty($description)) { $description = '<div class="" style="padding: 0.5rem 0">' . $description . '</div>'; }
 
 //echo elgg_view('poll/body', $vars);
-$content = elgg_view('poll/body', $vars);
-//$content = elgg_view('object/poll_content_workspace', $vars);
+//$content = elgg_view('poll/body', $vars);
+$content = elgg_view('object/poll_content_workspace', $vars);
 
 
 

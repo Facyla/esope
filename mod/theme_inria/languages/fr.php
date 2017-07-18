@@ -783,6 +783,7 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:manage' => "gérer",
 	'theme_inria:readmore' => "Lire la suite",
+	'theme_inria:readmore:vote' => "Lire la suite et voter",
 	
 	'theme_inria:discussion:placeholder' => "Partagez un message avec le groupe",
 	

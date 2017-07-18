@@ -9,13 +9,15 @@ if($msg = elgg_extract('msg', $vars)) {
 
 if (elgg_is_logged_in()) {
 	$user = elgg_get_logged_in_user_entity();
+	$has_voted = $poll->hasVoted($user);
 	$can_vote = !$poll->hasVoted($user);
+	$can_vote = false;
 
 	//if user has voted, show the results
 	if (!$can_vote) {
 		$results_display = "block";
 		$show_text = elgg_echo('poll:show_poll');
-		$voted_text = elgg_echo("poll:voted");
+		if ($has_voted) $voted_text = elgg_echo("poll:voted");
 	} else {
 		$allow_close_date = elgg_get_plugin_setting('allow_close_date','poll');
 		if ($allow_close_date == 'yes' && !$poll->isOpen()) {

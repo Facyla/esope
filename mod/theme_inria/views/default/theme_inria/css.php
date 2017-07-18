@@ -1481,6 +1481,9 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .object-poll-workspace { margin-bottom: 2rem; }
 .object-poll-workspace:first-of-type {  }
 .object-poll-workspace:last-of-type { margin-bottom: 0; }
+.poll_input-poll-choice { margin-bottom: 0.2rem; }
+.elgg-form-poll-edit #add-choice { }
+
 
 /* Object types workspace rendering */
 p.file-meta { margin-bottom: 0.5rem; }
