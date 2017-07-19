@@ -63,7 +63,7 @@ $anchor
 HTML;
 
 	//echo elgg_view_image_block($commenter_icon, $body);
-	$content = $anchor . comment_text;
+	$content = $anchor . $comment_text;
 
 } else {
 	// brief view
