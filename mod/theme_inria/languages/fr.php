@@ -794,6 +794,7 @@ Voir et commenter ce lien web :
 	'theme_inria:sidebar:file' => "Les fichiers (%s)",
 	'theme_inria:sidebar:blog' => "Les articles (%s)",
 	'theme_inria:sidebar:pages' => "Les pages wiki (%s)",
+	'theme_inria:sidebar:pages' => "Les wikis (%s&nbsp;wikis, %s&nbsp;pages)",
 	'theme_inria:sidebar:bookmarks' => "Les liens web (%s)",
 	'theme_inria:sidebar:newsletter' => "Les lettres d'info (%s)",
 	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",

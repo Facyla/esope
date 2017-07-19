@@ -122,7 +122,11 @@ if (elgg_instanceof($page_owner, 'group')) {
 	$pages_actions .= '<li><a href="' . $url . 'pages/edit/' . $page->guid . '"><i class="fa fa-edit"></i></a></li>';
 	$pages_actions .= '<li><a href="' . $url . 'pages/history/' . $page->guid . '"><i class="fa fa-clock-o"></i></a></li>';
 
-	$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'content', 'metadata' => $pages_actions));
+	if ($full) {
+		$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'full', 'metadata' => $pages_actions));
+	} else {
+		$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'content', 'metadata' => $pages_actions));
+	}
 
 	$subpages = elgg_view('pages/sub-pages', array('entity' => $page));
 	if (!$full) {

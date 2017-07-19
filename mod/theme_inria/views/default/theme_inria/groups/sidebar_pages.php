@@ -10,6 +10,7 @@ if ($group->pages_enable == 'yes') {
 	//$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'limit' => 2);
 	$options = array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $group->guid, 'limit' => 2);
 	$count = elgg_get_entities($options + array('count' => true));
+	$count_pages = elgg_get_entities(array('subtype' => 'page', 'count' => true) + $options);
 	$objects = elgg_get_entities($options);
 
 	$content = '';
@@ -28,7 +29,7 @@ if ($group->pages_enable == 'yes') {
 
 	$all_link = elgg_view('output/url', array(
 		'href' => "groups/content/$group->guid/pages/all",
-		'text' => elgg_echo('theme_inria:sidebar:pages', array($count)). ' &nbsp; <i class="fa fa-angle-right"></i>',
+		'text' => elgg_echo('theme_inria:sidebar:pages', array($count, $count_pages)). ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
 

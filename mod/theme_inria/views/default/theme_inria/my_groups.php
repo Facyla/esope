@@ -61,9 +61,9 @@ if (elgg_is_active_plugin('groups')) {
 	if ($invites_count > 0) {
 		$groupinvites = '<div class="iris-home-group-invites">';
 		if ($invites_count > 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '">' . $invites_count . '</a></li>';
+			$invites = '<p><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '</a></p>';
 		} else {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '">' . $invites_count . '</a></li>';
+			$invites = '<p><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></p>';
 		}
 		$groupinvites = '</div>';
 	}

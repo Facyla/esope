@@ -676,6 +676,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #notifications .elgg-item { padding: 1rem 0; margin: 0 1rem 0.5rem 1rem; box-shadow: none; }
 #notifications .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 .notifications-pending-group-invites { border-bottom: 1px solid #DCDCDC; margin: 0 1rem; }
+.elgg-image-block.notifications-pending-invitations { margin: 0.5rem 0 1rem 0; }
 .notifications-pending-groups-requests { border-bottom: 1px solid #DCDCDC; padding: 1rem 0; margin: 0 1rem; }
 
 .elgg-layout-one-sidebar .elgg-main .elgg-form-site-notifications-process .elgg-list-container { background: transparent; padding: 0; }
@@ -1381,6 +1382,8 @@ form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !importan
 .workspace-subtype-content .poll {  }
 .workspace-subtype-content .event_calendar {  }
 .workspace-subtype-content .feedback {  }
+
+.bookmarks-address { margin-bottom: 1rem; word-break: break-all; }
 
 .elgg-image .date-in-month { background: #FD6356; }
 .calendar-action { color: #1488CA; font-size: 1.3125rem; }

@@ -17,8 +17,8 @@ if (current_page_url() != $url . 'groups/workspace/'.$group->guid) {
 $content .= '<div class="iris-sidebar-content">';
 
 	if ($group->thewire_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'thewire', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'thewire', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'thewire/all',
 				//'href' => "blog/group/$group->guid/all",
@@ -32,8 +32,8 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 	
 	if ($group->forum_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'groupforumtopic', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'groupforumtopic', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'discussion/all',
 				//'href' => "blog/group/$group->guid/all",
@@ -48,8 +48,8 @@ $content .= '<div class="iris-sidebar-content">';
 
 	//if ($group->file_enable == 'yes') {
 	if (true) {
-		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'file', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'file/all',
 				//'href' => "file/group/$group->guid/all",
@@ -63,8 +63,8 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 	if ($group->blog_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'blog', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'blog', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'blog/all',
 				//'href' => "blog/group/$group->guid/all",
@@ -78,12 +78,14 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 	if ($group->pages_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		//$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'count' => true);
+		$options = array('type' => 'object', 'subtype' => 'page_top', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
+		$count_pages = elgg_get_entities(array('subtype' => 'page', 'count' => true) + $options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'pages/all',
 				//'href' => "pages/group/$group->guid/all",
-				'text' => elgg_echo('theme_inria:sidebar:pages', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
+				'text' => elgg_echo('theme_inria:sidebar:pages', array($count, $count_pages)) . ' &nbsp; <i class="fa fa-angle-right"></i>',
 				'is_trusted' => true,
 				'class' => (elgg_in_context('pages')) ? 'elgg-state-selected':'',
 			));
@@ -93,8 +95,8 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 	if ($group->bookmarks_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'bookmarks', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'bookmarks', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'bookmarks/all',
 				//'href' => "bookmarks/group/$group->guid/all",
@@ -108,8 +110,8 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 	if ($group->newsletter_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'newsletter', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'newsletter', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'newsletter/all',
 				//'href' => "newsletter/group/$group->guid/all",
@@ -123,8 +125,8 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 	if ($group->poll_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'poll', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'poll', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'poll/all',
 				//'href' => "poll/group/$group->guid/all",
@@ -138,8 +140,8 @@ $content .= '<div class="iris-sidebar-content">';
 	}
 
 	if ($group->event_calendar_enable == 'yes') {
-		$options = array('type' => 'object', 'subtype' => 'event_calendar', 'container_guid' => $group->guid, 'limit' => 8);
-		$count = elgg_get_entities($options + array('count' => true));
+		$options = array('type' => 'object', 'subtype' => 'event_calendar', 'container_guid' => $group->guid, 'count' => true);
+		$count = elgg_get_entities($options);
 		$link = elgg_view('output/url', array(
 				'href' => $base_url . 'event_calendar/all',
 				//'href' => "event_calendar/group/$group->guid/all",
@@ -156,8 +158,8 @@ $content .= '<div class="iris-sidebar-content">';
 		$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
 		if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {
 			if (($feedbackgroup == 'grouptool' && ($group->feedback_enable == 'yes')) || ($feedbackgroup == $group->guid)) {
-				$options = array('type' => 'object', 'subtype' => 'feedback', 'limit' => 8);
-				$count = elgg_get_entities($options + array('count' => true));
+				$options = array('type' => 'object', 'subtype' => 'feedback', 'count' => true);
+				$count = elgg_get_entities($options);
 				$link = elgg_view('output/url', array(
 						'href' => $base_url . 'feedback/all',
 						'text' => elgg_echo('theme_inria:sidebar:feedback', array($count)) . ' &nbsp; <i class="fa fa-angle-right"></i>',

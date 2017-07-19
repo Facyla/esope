@@ -58,7 +58,7 @@ if(isset($digest_site_profile_body[$key])){
 			$content .= '<div class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></div><br />' . $mem->name . '</a><br />';
 			$content .= $mem->briefdescription;
 			// Add profile type badge, if defined
-			if ($profile_type = 'external') { $content .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+			if ($profile_type == 'external') { $content .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 			$content .= "</div>";
 		}
 		

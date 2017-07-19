@@ -22,25 +22,26 @@ $categories = elgg_view('output/categories', $vars);
 $bookmark_icon = elgg_view_icon('link');
 
 $address = $bookmark->address;
-$link = elgg_view('output/url', array(
+$address_text = htmlentities(urldecode($address));
+$link = '<p class="bookmarks-address">' . elgg_view('output/url', array(
 		'href' => $address, 
-		'text' => $bookmark_icon . '&nbsp;' . $address, 
-		'title' => elgg_echo('theme_inria:openinnewtab:bookmark', array($address)),
+		'text' => $bookmark_icon . '&nbsp;' . $address_text, 
+		'title' => elgg_echo('theme_inria:openinnewtab:bookmark', array($address_text)),
 		'target' => '_blank', 
-));
+)) . '</p>';
 $short_link = $address;
 if (strlen($address) > 25) {
 	$bits = parse_url($address);
 	if (isset($bits['host'])) {
 		$short_link = $bits['host'];
 	} else {
-		$short_link = elgg_get_excerpt($address, 100);
+		$short_link = elgg_get_excerpt($address_text, 100);
 	}
 }
 $short_link = elgg_view('output/url', array(
 	'href' => $address,
 	'text' => $bookmark_icon . '&nbsp;' . $short_link,
-	'title' => elgg_echo('theme_inria:openinnewtab:bookmark', array($address)),
+	'title' => elgg_echo('theme_inria:openinnewtab:bookmark', array($address_text)),
 	'target' => '_blank',
 ));
 
@@ -98,7 +99,7 @@ if ($full && !elgg_in_context('gallery')) {
 	//$link = elgg_view('output/longtext', array('value' => $link));
 	$body = <<<HTML
 <div class="bookmark elgg-content mts">
-	$link<br />
+	$link
 	$description
 </div>
 HTML;

@@ -47,7 +47,7 @@ if (!$title) {
 }
 
 // Add profile type badge, if defined
-if ($profile_type = 'external') { $title .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+if ($profile_type == 'external') { $title .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 
 
 $metadata = elgg_view_menu('entity', array(
