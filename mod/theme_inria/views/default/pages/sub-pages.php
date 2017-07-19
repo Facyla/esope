@@ -5,9 +5,7 @@
  * @uses $vars['entity'] Page object
  */
 
-
 $page = elgg_extract('entity', $vars, false);
-
 
 $subpages = esope_list_subpages($page, 'url', false);
 

@@ -103,7 +103,8 @@ foreach ($tools as $priority => $view) {
 		}
 		
 		// Iris v2 : Options toujours forcées
-		if (in_array($group_option_toggle_name, array('file_enable', 'forum_enable', 'thewire_enable'))) {
+		//if (in_array($group_option_toggle_name, array('file_enable', 'forum_enable', 'thewire_enable'))) {
+		if (in_array($group_option_toggle_name, array('file_enable', 'blog_enable'))) {
 			$attrs = array('class' => 'groups-edit-checkbox');
 			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
 			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }

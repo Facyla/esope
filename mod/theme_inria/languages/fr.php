@@ -911,6 +911,7 @@ Voir et commenter ce lien web :
 	'workspace:groups:joinrequest' => "Demander à rejoindre cet espace de travail",
 	'workspace:theme_inria:ownmembership' => "Adhésion à cet espace de travail",
 	'workspace:groups:briefdescription' => "Espace de travail<br />%s",
+	'theme_inria:workspace:notmember' => "Pour participer, rejoignez le groupe !",
 	
 	'theme_inria:group:archive' => "Archiver le groupe",
 	'theme_inria:group:archive:details' => "L'archivage d'un groupe permet de rendre ce groupe ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression du groupe est que le groupe et ses contenus archivés peuvent être restaurés par un administrateur.",
@@ -932,6 +933,10 @@ Voir et commenter ce lien web :
 	'poll:totalvotes' => "Nombre total de votes : %s",
 	
 	'file:download' => "Télécharger le fichier",
+	
+	'theme_inria:pages:edit' => "Modifier le wiki",
+	'theme_inria:pages:edit:button' => "Modifier cette page wiki",
+	
 	
 );
 

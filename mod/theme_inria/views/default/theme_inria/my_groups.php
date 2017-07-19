@@ -33,10 +33,12 @@ if (elgg_is_active_plugin('groups')) {
 	if ($mygroups) {
 		foreach ($mygroups as $k => $group) {
 			//$groups .= '<div class="iris-home-group">' . elgg_view_entity_icon($group, 'medium') . '</div>';
+			$group_url = $group->getURL();
+			if ($group->isMember()) { $group_url = elgg_get_site_url() . 'groups/workspace/' . $group->guid; }
 			if ($k < $max_groups) {
-				$groups .= '<div class="iris-home-group float"><a href="' . $group->getUrl() . '"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></a></div>';
+				$groups .= '<div class="iris-home-group float"><a href="' . $group_url . '"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></a></div>';
 			} else {
-				$groups_more .= '<div class="iris-home-group float hidden"><a href="' . $group->getUrl() . '"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></a></div>';
+				$groups_more .= '<div class="iris-home-group float hidden"><a href="' . $group_url . '"><img src="' . $group->getIconURL('medium') . '" alt="' . $group->name . '" title="' . $group->name . ' : ' . $group->briefdescription . '" /></a></div>';
 			}
 		}
 	}

@@ -10,8 +10,10 @@ if ($groups) {
 	elgg_push_context('widgets');
 	$body = '';
 	foreach ($groups as $group) {
+		$group_url = $group->getURL();
+		if ($group->isMember()) { $group_url = elgg_get_site_url() . 'groups/workspace/' . $group->guid; }
 		//$body .= elgg_view_entity_icon($group, 'small');
-		$body .= '<a href="' . $group->getURL() . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" title="' . $group->name . '" /></a>';
+		$body .= '<a href="' . $group_url . '"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" title="' . $group->name . '" /></a>';
 	}
 	elgg_pop_context();
 

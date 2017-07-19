@@ -26,14 +26,14 @@ $icon = '<a href="' . $entity->getURL() . '" class="elgg-avatar elgg-avatar-' . 
 
 $title = elgg_extract('title', $vars);
 if (!$title) {
-	$title = $entity->name . ' <span class="username">@' . $entity->username . '</span>';
+	$title = $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>';
 	// Highlight found terms
 	if (elgg_is_active_plugin('search') || function_exists('search_highlight_words')) {
-		$title = search_highlight_words($search_words, $entity->name) . ' <span class="username">@' . search_highlight_words($search_words, $entity->username) . '</span>';
+		$title = search_highlight_words($search_words, $entity->name) . ' &nbsp; <span class="username">@' . search_highlight_words($search_words, $entity->username) . '</span>';
 	}
 	$link_params = array(
 		'href' => $entity->getUrl(),
-		'text' => $entity->name . ' <span class="username">@' . $entity->username . '</span>',
+		'text' => $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>',
 	);
 
 	// Simple XFN, see http://gmpg.org/xfn/
@@ -61,10 +61,15 @@ if (elgg_in_context('owner_block') || elgg_in_context('widgets')) {
 }
 
 if (elgg_get_context() == 'gallery') {
+	
 	echo $icon;
+	
 } else if (elgg_get_context() == 'livesearch') {
+	
 	echo elgg_view_image_block($icon, $entity->name, $vars);
+	
 } else {
+	
 	if ($entity->isBanned()) {
 		$banned = elgg_echo('banned');
 		$params = array(

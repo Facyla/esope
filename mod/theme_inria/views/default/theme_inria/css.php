@@ -555,7 +555,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .iris-badge-external { background-color: #F7A621; }
 h2 .iris-badge span { font-size: 0.9rem; }
 h3 .iris-badge span { font-size: 0.75rem; padding: 0.5rem 0.75rem 0.35rem 0.75rem; }
-.elgg-item-user h3 .iris-badge span { display: inline-block; }
+.elgg-item-user h3 .iris-badge span { display: inline-block; margin: 0 0 0 0; }
 .iris-object .iris-badge span { font-size: 0.75rem; padding: 0.3rem 0.5rem 0.2rem 0.5rem; }
 
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
@@ -1031,12 +1031,13 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .elgg-subtext { font-size: 1.1rem; font-style: normal; color: <?php echo $iris_texttopgrey; ?>; }
 .elgg-subtext time { font-size: 0.75rem; text-transform: uppercase; margin-left: 1em; }
 
-.elgg-item-user .elgg-image img { border-radius: 50px; }
+.elgg-item-user .elgg-image-block { display: flex; }
+.elgg-item-user .elgg-image img { border-radius: 50%; }
 .elgg-item-user .elgg-subtext { font-size: 0.9375rem; color: #6C6C6C; }
 .elgg-item-user h3 { margin-bottom: 0.375rem; line-height: 1; }
-.elgg-item-user h3 a { padding:0; font-size: 1.375rem; color: #384257; }
+.elgg-item-user h3 a { padding:0; font-size: 1.375rem; color: #384257; margin-right: 1rem; }
 .elgg-item-user h4 { margin-bottom: 0.3125rem; font-size: 0.9375rem; }
-.elgg-item-user .username { margin-left: 1rem; font-size: 1rem; }
+.elgg-item-user .username { font-size: 1rem; }
 
 .elgg-list .elgg-item.elgg-item-group { padding:0; }
 .elgg-item-group .elgg-menu.elgg-menu-entity { margin: 0 0 0.8125rem 0; display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; color: #969696; }
@@ -1054,7 +1055,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-menu-item-access .elgg-access a { color: rgba(56, 66, 87, 0.5); font-style: normal; font-weight: bold; }
 
 
-.iris-groups-community { flex: 1 1 20rem; height:12.5rem; max-width: 40rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0; padding: 2rem; position: relative; overflow: auto; }
+.iris-groups-community { flex: 1 1 22rem; display: flex; height:12.5rem; max-width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0; padding: 2rem; position: relative; overflow: auto; }
 .iris-community-icon { width: 6.375rem; height: 6.375rem; margin: 1rem; float: left; }
 .iris-groups-community .iris-community-hover { position: absolute; top: 0; left: 0; bottom: 0; right: 0; /* background: <?php echo $iris_blue; ?>; opacity: 0.9; */ background:rgba(20, 136, 202, 0.9); border-radius: 4px; font-size: 1.875rem; font-weight: bold; color: white; text-align: center; line-height: 12.5rem; text-transform: uppercase; }
 .iris-groups-community:hover .iris-community-hover { display: block; }
@@ -1245,6 +1246,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-members .members-more { margin: 0 0.4375rem 0.4375rem 0; font-size:1rem; color: #384257; font-weight:bold; height:2.5rem; line-height:2.5rem; float: left; }
 .group-members-online img { width: 2rem; border-radius: 1rem; margin: 0 0.4375rem 0.4375rem 0; }
 .group-workspace-add-tabs { background: #384257; padding: 1.25rem 3rem 1rem 3rem; font-size: 1.375rem; }
+.group-workspace-add-tabs p, .group-workspace-add-tabs p a { color: white; opacity: 1; }
 .group-workspace-add-tabs a { color: white; margin-right: 2.25rem; opacity: 0.6; }
 .group-workspace-add-tabs a.elgg-state-selected, .group-workspace-add-tabs a:hover, .group-workspace-add-tabs a:active, .group-workspace-add-tabs a:focus { opacity: 1; }
 .group-workspace-add-content { padding: 1.375rem 2.5rem 1.375rem 2.5rem; }
@@ -1499,6 +1501,7 @@ p.file-meta { margin-bottom: 0.5rem; }
 .iris-object-content .file-filename { display: inline; margin-right: 1rem; }
 .elgg-list .elgg-item .elgg-image-block.iris-object-inner { border: 1px solid rgba(56, 66, 87, 0.2); padding: 0.5rem; margin-bottom: 0.5rem; display: block; }
 .elgg-list .elgg-item .elgg-image-block.iris-object-inner .elgg-photo { border: 0; padding: 0; }
+.elgg-button .file-size, .elgg-button .file-extension { margin: 0 0 0 1rem; color: #CCCCCC; }
 
 .elgg-event-timestamp { color: #969696; font-size: 0.9rem; font-style: normal; text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; display: inline-block; }
 .elgg-event-location { text-transform: uppercase; font-size: 0.85em; font-weight: bold; }

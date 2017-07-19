@@ -153,6 +153,7 @@ if ($full) {
 	
 	$body = elgg_view('output/longtext', array('value' => $annotation->value));
 
+	/*
 	$params = array(
 		'entity' => $page,
 		'metadata' => $metadata,
@@ -160,6 +161,7 @@ if ($full) {
 	);
 	$params = $params + $vars;
 	$summary = elgg_view('object/elements/summary', $params);
+	*/
 
 	// Ajout Facyla pour avoir le sommaire qqpart dans l'interface et naviguer dans les pages...
 	// Note : si on prévoit des listings en full_view, il faut ajouter une var globale pour avoir un sommaire unique
@@ -189,48 +191,36 @@ if ($full) {
 	/*
 	// Liste des sous-pages
 	$content .= elgg_view('pages/sub-pages', array('entity' => $page));
-	
-	// Edit button
-	if ($page->canEdit()) {
-		$content .= '<div class="clearfloat"></div><br /><br />';
-		$content .= '<h3>' . elgg_echo('pages:edit') . '</h3>';
-		$content .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('edit') . '</a></p>';
-	}
 	*/
 	
+	// Edit button
+	$edit_button = '';
+	if ($page->canEdit()) {
+		$edit_button .= '<div class="clearfloat"></div><br /><br />';
+		$edit_button .= '<h3>' . elgg_echo('theme_inria:pages:edit') . '</h3>';
+		$edit_button .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:pages:edit:button') . '</a></p>';
+	}
 	
 	// In groups
 	if (elgg_instanceof($page_owner, 'group')) {
-		echo $navigation . '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . $actions . '<div class="pages-content">' . $body . '</div>' . $subpages . '</div>';
+		echo $navigation . '<div class="iris-object iris-object-content">' . $menu . $title . $subtitle . '<div class="pages-content">' . $body . '</div>' . $edit_button . $actions . $subpages . '</div>';
 		return;
 	}
 	
-	$content .= $navigation . $body . $actions . $subpages;
-	
+	$content .= $navigation . $body . $edit_button . $actions . $subpages;
 	
 } else {
 	// brief view
+	
 	if (elgg_in_context('workspace')) {
 		// Icon = auteur
 		$owner = $page->getOwnerEntity();
 		$page_icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIconURL(array('medium')) . '" style="width:54px;" /></a>';
 		$metadata_alt = '';
-	} else {
 	}
 	
 	$excerpt = elgg_get_excerpt($page->description);
 	$excerpt = '<a href="' . $page->getUrl() . '" class="iris-object-readmore"><div class="elgg-content">' . $excerpt . '<span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></div></a>';
-
-	/*
-	$params = array(
-		'entity' => $page,
-		'metadata' => $metadata,
-		'subtitle' => $subtitle,
-		'content' => $excerpt,
-	);
-	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
-	*/
 	
 	// In groups
 	if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace')) {
@@ -240,7 +230,6 @@ if ($full) {
 	
 	//echo elgg_view_image_block($page_icon, $list_body);
 	$content = $subtitle . $excerpt . $subpages;
-	
 }
 
 

@@ -32,12 +32,14 @@
 
 $entity = $vars['entity'];
 
+$group_url = $entity->getURL();
+if ($entity->isMember()) { $group_url = elgg_get_site_url() . 'groups/workspace/' . $entity->guid; }
 $title_link = elgg_extract('title', $vars, '');
 if ($title_link === '') {
 	if (isset($entity->title)) { $text = $entity->title; } else { $text = $entity->name; }
 	$params = array(
 		'text' => elgg_get_excerpt($text, 100),
-		'href' => $entity->getURL(),
+		'href' => $group_url,
 		'is_trusted' => true,
 	);
 	$title_link = elgg_view('output/url', $params);

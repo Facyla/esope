@@ -12,8 +12,10 @@ $group = $vars['entity'];
 $size = 'tiny';
 if (elgg_in_context('search')) { $size = 'large'; }
 
+$group_url = $group->getURL();
+if ($group->isMember()) { $group_url = elgg_get_site_url() . 'groups/workspace/' . $group->guid; }
 //$icon = elgg_view_entity_icon($entity, $size, $vars);
-$icon = '<a href="' . $group->getURL() . '"><img src="' . $group->getIconUrl(array('size' => $size)) . '" alt="' . $group->name . '"></a>';
+$icon = '<a href="' . $group_url . '"><img src="' . $group->getIconUrl(array('size' => $size)) . '" alt="' . $group->name . '"></a>';
 
 
 if (elgg_in_context('search')) {
