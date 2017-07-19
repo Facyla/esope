@@ -167,6 +167,7 @@ $width = array(
 .elgg-layout-one-sidebar .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .elgg-main { padding:0; background: transparent; }
 
+#iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main, 
 #iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { <?php echo $width['main']; ?> background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 #iris-body .iris-search .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0; display: flex; flex-wrap: wrap; }
@@ -709,6 +710,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .elgg-list-entity .messages-timestamp { float: none; width: 100%; }
 .elgg-list-entity .messages-delete { float: right; }
 .elgg-context-messages .messages-container .elgg-list-entity li { padding: 1rem; border-radius: 4px; }
+#iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main li.elgg-item-message { padding: 0; margin: 0; }
 
 
 .elgg-sidebar ul.elgg-menu-page { margin-bottom: 1rem; float: none; background: transparent; }
@@ -1018,6 +1020,8 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
 
 .elgg-comments { margin-top: 1.5rem; }
+.elgg-comments .elgg-list > li { border-width: 1px; }
+.elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .elgg-list.elgg-latest-comments li.elgg-item { padding: 1rem; }
 .elgg-list.elgg-latest-comments li.elgg-item h4 { margin: 0; }
@@ -1025,7 +1029,9 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .elgg-list.elgg-latest-comments li.elgg-item .elgg-image-block .elgg-image { margin-right: 0.5rem; }
 .elgg-list-container .elgg-list-entity li.elgg-item-object-comment { padding: 0 0.5rem; }
 .elgg-list-entity li.elgg-item-object-comment .elgg-image-block { padding-bottom: 0; display: flex; }
+.elgg-form-comment-save { margin-bottom: 0.5rem; }
 
+.elgg-menu-title { float: none; text-align: right; margin-bottom: 1rem; }
 
 .elgg-item-user .elgg-menu.elgg-menu-entity { width:auto; display: inline-block; float: right; max-width: 40%; margin: 0 0 0 1rem; }
 .elgg-menu-item-message .iris-user-message,
@@ -1271,10 +1277,12 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-add-content img { width:2rem; border-radius:1rem; }
 .iris-object .elgg-form-discussion-reply-save textarea, 
 .iris-object .elgg-form-comment-save textarea, 
-.group-workspace-add-content textarea { height: 2rem; /* border: 0; */ }
+.group-workspace-add-content textarea { height: 3rem; /* border: 0; */ }
+/* Note : attention car si bouton d'envoi il ne fonctionnera pas à moins d'avoir déjà perdu le focus
 .iris-object .elgg-form-discussion-reply-save textarea:active, .iris-object .elgg-form-discussion-reply-save textarea:focus, 
 .iris-object .elgg-form-comment-save textarea:active, .iris-object .elgg-form-comment-save textarea:focus, 
 .group-workspace-add-content textarea:active, .group-workspace-add-content textarea:focus { height: auto; }
+*/
 #group-workspace-add-file { /* text-align: center; */ }
 #group-workspace-add-blog { text-align: center; }
 #group-workspace-add-blog a:first-of-type { margin-right:0.625rem; margin-bottom: 1rem; }

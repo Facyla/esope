@@ -38,7 +38,6 @@ if ($full_view) {
 	));
 	
 	if (elgg_in_context('activity')) {
-
 		$comment_text = '<div class="elgg-output elgg-inner" data-role="comment-text">';
 		$comment_text .= elgg_view('output/text', array(
 			'value' => elgg_get_excerpt($comment->description),
@@ -63,7 +62,8 @@ $anchor
 </div>
 HTML;
 
-	echo elgg_view_image_block($commenter_icon, $body);
+	//echo elgg_view_image_block($commenter_icon, $body);
+	$content = $anchor . comment_text;
 
 } else {
 	// brief view
@@ -78,10 +78,11 @@ $commenter_link $friendlytime
 </span>
 HTML;
 
-
-
-	echo elgg_view_image_block($commenter_icon, $body);
+	//echo elgg_view_image_block($commenter_icon, $body);
+	$content = $excerpt;
 	
 }
 
+
+echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'full_view' => false, 'mode' => 'listing') + $vars);
 

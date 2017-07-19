@@ -83,21 +83,24 @@ if (elgg_group_gatekeeper(false)) {
 				//if ($group->file_enable == 'yes') 
 				$content .= '<a href="#group-workspace-add-file" rel="nofollow"><i class="fa fa-file fa-fw"></i></a>';
 			$content .= '</div>';
-		
+			
+			// Publication tab contents (only first is displayed)
 			$content .= '<div class="group-workspace-add-content">';
+				$hidden = ''; // First tab that is displayed sets this to 'hidden'
 				
 				// The Wire
 				if ($group->thewire_enable == 'yes') {
-					$content .= '<div id="group-workspace-add-thewire" class="group-workspace-addcontent-tab">';
+					$content .= '<div id="group-workspace-add-thewire" class="group-workspace-addcontent-tab ' . $hidden . '">';
 						$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
 						$discussion_form = elgg_view_form('thewire/group_add', array('action' => 'action/thewire/add'), array());
 						$content .= elgg_view_image_block($own_image, $discussion_form);
 					$content .= '</div>';
+					$hidden = 'hidden';
 				}
 			
 				// Articles / discussions (blog)
 				if ($group->blog_enable == 'yes') {
-					$content .= '<div id="group-workspace-add-blog" class="group-workspace-addcontent-tab hidden">';
+					$content .= '<div id="group-workspace-add-blog" class="group-workspace-addcontent-tab ' . $hidden . '">';
 						// @TODO pour édition directe : on ajoute un début de texte puis on bascule sur le form complet pour finir d'éditer
 						//$content .= elgg_view_form('blog/save');
 						$content .= elgg_view('output/url', array(
@@ -111,22 +114,24 @@ if (elgg_group_gatekeeper(false)) {
 								'class' => "elgg-button elgg-button-action",
 							));
 					$content .= '</div>';
+					$hidden = 'hidden';
 				}
 			
 				// Discussion (forum) : à fusionner dans les blogs
 				/*
 				if ($group->forum_enable == 'yes') {
-					$content .= '<div id="group-workspace-add-discussion" class="group-workspace-addcontent-tab">';
+					$content .= '<div id="group-workspace-add-discussion" class="group-workspace-addcontent-tab ' . $hidden . '">';
 						$own_image = '<img src="' . $own->getIconURL(array('size' => 'small')) . '" />';
 						$discussion_form = elgg_view_form('theme_inria/discussion/quick_save', array('action' => 'action/discussion/save'), array());
 						$content .= elgg_view_image_block($own_image, $discussion_form);
 					$content .= '</div>';
+					$hidden = 'hidden';
 				}
 				*/
 			
 				// Fichiers : toujours présents (activés ou pas - cf. embed)
 				//if ($group->file_enable == 'yes') {
-					$content .= '<div id="group-workspace-add-file" class="group-workspace-addcontent-tab hidden">';
+					$content .= '<div id="group-workspace-add-file" class="group-workspace-addcontent-tab ' . $hidden . '">';
 						/*
 						$content .= elgg_view('output/url', array(
 								'href' => $url . 'file/add/' . $group->guid,
@@ -136,6 +141,7 @@ if (elgg_group_gatekeeper(false)) {
 						*/
 						$content .= elgg_view_form('theme_inria/file/quick_upload', array('action' => 'action/file/upload', 'enctype' => "multipart/form-data"), array());
 					$content .= '</div>';
+					$hidden = 'hidden';
 				//}
 			
 			$content .= '</div>';

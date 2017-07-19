@@ -120,6 +120,8 @@ if (elgg_instanceof($page_owner, 'user')) { echo $user_header; }
 			if (!$topmenu) { echo $nav; }
 			
 			//echo elgg_view('page/layouts/elements/header', $vars);
+			// Display only title menu
+			echo elgg_view_menu('title');
 			
 			// @todo deprecated so remove in Elgg 2.0
 			if (isset($vars['area1'])) {
