@@ -12,7 +12,7 @@ $reply_title = str_replace('RE: ', '', $reply_title);
 $username = '';
 $user = get_user($vars['message']->fromId);
 // Self-reply : keep sending to to same recipient if asked
-if ($vars['send_to_sender']) $user = $vars['message']->toId;
+if ($vars['send_to_sender']) $user = get_entity($vars['message']->toId);
 if ($user) {
 	$username = $user->username;
 }
