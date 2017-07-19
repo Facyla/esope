@@ -44,8 +44,10 @@ $file_icon = '<a href="' . elgg_get_site_url() . 'file/download/' . $file->guid 
 
 $date = elgg_view_friendly_time($file->time_created);
 
+/*
 $comments_count = $file->countComments();
 //only display if there are commments
+$comments_link = '';
 if ($comments_count != 0) {
 	$text = elgg_echo("comments") . " ($comments_count)";
 	$comments_link = elgg_view('output/url', array(
@@ -53,9 +55,8 @@ if ($comments_count != 0) {
 		'text' => $text,
 		'is_trusted' => true,
 	));
-} else {
-	$comments_link = '';
 }
+*/
 
 $metadata = elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
@@ -77,6 +78,7 @@ if ($full && !elgg_in_context('gallery')) {
 	}
 
 	//$text = elgg_view('output/longtext', array('value' => $file->description));
+	$text = '';
 	if (!empty($file->description)) { $text = elgg_view('output/longtext', array('value' => $file->description)); }
 	$body = '';
 	$details = '';
@@ -113,7 +115,6 @@ if ($full && !elgg_in_context('gallery')) {
 		$owner = $file->getOwnerEntity();
 		$file_icon = '<a href="' . $owner->getURL() . '" class="elgg-avatar"><img src="' . $owner->getIconURL(array('medium')) . '" style="width:54px;" /></a>';
 		$metadata_alt = '';
-	} else {
 	}
 
 	$params = array(
@@ -126,14 +127,17 @@ if ($full && !elgg_in_context('gallery')) {
 
 	//echo elgg_view_image_block($file_icon, $list_body);
 	
-	// Workspace home listing soecific content
+	// Workspace home listing specific content
+	$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));
 	if (elgg_instanceof($page_owner, 'group') && elgg_in_context('workspace')) {
 		$content = '';
-		$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));
 		$content .= elgg_view_image_block($file_icon, $file_meta, array('class' => 'iris-object-inner'));
 		$content .= $excerpt;
 	} else {
-		$content = $file_meta . $excerpt;
+		$content = '';
+		//$content = $file_icon;
+		$content = $file_meta;
+		$content .= $excerpt;
 	}
 	
 }

@@ -53,6 +53,8 @@ if (!empty($attachments)) {
 	$attachments = "<div class=\"elgg-river-attachments clearfix\">$attachments</div>";
 }
 
+// Iris v2 : pas d'affichage des réponses (elles sont dans le flux)
+/*
 elgg_push_context('widgets');
 $responses = elgg_view('river/elements/responses', $vars);
 //if ($responses) {
@@ -60,6 +62,7 @@ if (!empty($responses)) {
 	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
 }
 elgg_pop_context();
+*/
 
 // Iris v2 : indication présente dans le menu inférieur
 $group_string = '';

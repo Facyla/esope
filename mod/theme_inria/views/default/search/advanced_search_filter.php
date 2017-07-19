@@ -28,7 +28,9 @@ if ($types_list) {
 		if ($type == 'object') {
 			if (is_array($subtypes) && sizeof($subtypes) > 0) {
 				foreach ($subtypes as $subtype) {
-					$subtype_options[$subtype] = elgg_echo("item:$type:$subtype");
+					if (!in_array($subtype, array('cmspage', 'feedback')) || elgg_is_admin_logged_in()) {
+						$subtype_options[$subtype] = elgg_echo("item:$type:$subtype");
+					}
 				}
 			}
 		}
