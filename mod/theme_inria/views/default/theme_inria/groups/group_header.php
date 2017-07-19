@@ -1,7 +1,8 @@
 <?php
 $group = elgg_extract('entity', $vars);
-$main_group = theme_inria_get_main_group($group);
 // Header is always main group
+$main_group = theme_inria_get_main_group($group);
+$main_group_name = elgg_get_excerpt($main_group->name, 50);
 
 $q = get_input('q');
 
@@ -67,10 +68,6 @@ if (!empty($main_group->banner)) {
 	
 	<div class="iris-group-title">
 		<?php
-		echo '<div class="iris-group-community">';
-		if (!empty($main_group->community)) { echo elgg_echo('community') . ' ' . $main_group->community; }
-		echo '</div>';
-		
 		// Membership
 		$actions_content = '';
 		if (!elgg_in_context('group_edit') && !elgg_in_context('group_members') && !elgg_in_context('group_invites') && !elgg_in_context('group_members')) {
@@ -114,9 +111,11 @@ if (!empty($main_group->banner)) {
 			echo '<div class="group-membership-actions">' . $actions_content . '</div>';
 		}
 		
-		echo '<h2>' . $main_group->name . '</h2>';
-		echo '<div class="iris-group-subtitle">' . $main_group->briefdescription . '</div>';
+		echo '<h2>' . $main_group_name . '</h2>';
+		echo '<div class="iris-group-subtitle">' . elgg_get_excerpt($main_group->briefdescription) . '</div>';
 		echo '<div class="iris-group-rules">';
+			// Community
+			if (!empty($main_group->community)) { echo '<span class="iris-group-community">' . elgg_echo('community') . ' ' . $main_group->community . '</span>'; }
 			// Access
 			echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $main_group)) . '</span>';
 			echo ' &nbsp; &nbsp; ';

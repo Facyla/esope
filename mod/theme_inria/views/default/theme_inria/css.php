@@ -893,7 +893,7 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .iris-box.home-wire textarea { /* width: 80%; */ height:3em; }
 .iris-box.home-wire textarea::placeholder { color: #D3D3D3; }
 .thewire-form #thewire-characters-remaining { display: inline-block; font-size: 1em; float: none; margin-right: 1em; }
-#thewire-characters-remaining { float: none; }
+.elgg-foot #thewire-characters-remaining { float: none; }
 #thewire-characters-remaining span { margin: 0; float: none; font-size: 1em; }
 .home-wire .thewire-form .elgg-button-submit { display: inline-block; float: none; }
 .elgg-layout-one-sidebar .thewire-form textarea { width: 25.625rem; height: 4rem; }
