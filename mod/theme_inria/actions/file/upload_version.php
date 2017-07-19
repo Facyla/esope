@@ -1,4 +1,10 @@
 <?php
+// This actions should be the exact same behaviour as file/upload, except that only the file is updated
+
+// @TODO Add version message ?
+// Message could be added to description, or in its own metadata, or only saved in CMIS filestore
+// Or alternatively saved as comment <<= maybe best option
+
 /* CMIS : upload to CMIS repository
  * Inria : do not add river entry for images
  */
@@ -32,16 +38,8 @@ if ($use_cmis) {
  */
 
 // Get variables
-$title = htmlspecialchars(get_input('title', '', false), ENT_QUOTES, 'UTF-8');
-$desc = get_input("description");
-$access_id = (int) get_input("access_id");
-$container_guid = (int) get_input('container_guid', 0);
 $guid = (int) get_input('file_guid');
-$tags = get_input("tags");
-
-if ($container_guid == 0) {
-	$container_guid = elgg_get_logged_in_user_guid();
-}
+//$version_message = (int) get_input('version_message');
 
 elgg_make_sticky_form('file');
 
@@ -52,53 +50,20 @@ if (!empty($_FILES['upload']['name']) && $_FILES['upload']['error'] != 0) {
 	forward(REFERER);
 }
 
-// check whether this is a new file or an edit
-$new_file = true;
-if ($guid > 0) {
-	$new_file = false;
+
+
+// load original file object
+if ($guid > 0) { $file = new FilePluginFile($guid); }
+if (!$file) {
+	register_error(elgg_echo('file:cannotload'));
+	forward(REFERER);
 }
 
-if ($new_file) {
-	// must have a file if a new file upload
-	if (empty($_FILES['upload']['name'])) {
-		$error = elgg_echo('file:nofile');
-		register_error($error);
-		forward(REFERER);
-	}
-
-	$file = new FilePluginFile();
-	$file->subtype = "file";
-
-	// if no title on new upload, grab filename
-	if (empty($title)) {
-		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
-	}
-
-} else {
-	// load original file object
-	$file = new FilePluginFile($guid);
-	if (!$file) {
-		register_error(elgg_echo('file:cannotload'));
-		forward(REFERER);
-	}
-
-	// user must be able to edit file
-	if (!$file->canEdit()) {
-		register_error(elgg_echo('file:noaccess'));
-		forward(REFERER);
-	}
-
-	if (!$title) {
-		// user blanked title, but we need one
-		$title = $file->title;
-	}
+// user must be able to edit file
+if (!$file->canEdit()) {
+	register_error(elgg_echo('file:noaccess'));
+	forward(REFERER);
 }
-
-$file->title = $title;
-$file->description = $desc;
-$file->access_id = $access_id;
-$file->container_guid = $container_guid;
-$file->tags = string_to_tag_array($tags);
 
 // we have a file upload, so process it
 if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
@@ -107,13 +72,11 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 
 	// CMIS : handle new version instead of removing file
 	// if previous file in Elgg filestore, delete it
-	if (!$new_file) {
-		// CMIS : keep original file name (for versionning)
-		$file_name = substr($file->getFilename(), strlen($prefix));
-		$filename = $file->getFilenameOnFilestore();
-		if (file_exists($filename)) {
-			unlink($filename);
-		}
+	// CMIS : keep original file name (for versionning)
+	$file_name = substr($file->getFilename(), strlen($prefix));
+	$filename = $file->getFilenameOnFilestore();
+	if (file_exists($filename)) {
+		unlink($filename);
 	}
 	
 	$filestorename = elgg_strtolower(time().$_FILES['upload']['name']);
@@ -146,11 +109,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			
 			// File name on filestore should never change, but file name, content and type can change afterwards
 			// So use a content-agnostic naming, so we can reuse existing file if already stored
-			if ($new_file) {
-				//$filestorename = $guid . '_' . time(); // do we need ts ?
-				$filestorename = "$guid"; // Important : must be a string
-				$file_name = $filestorename;
-			} else if (!empty($file->cmis_path)) {
+			if (!empty($file->cmis_path)) {
 				// Get old file name on CMIS filestore
 				$cmis_path = explode('/', $file->cmis_path);
 				$file_name = array_pop($cmis_path);
@@ -166,7 +125,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 			$file_params = array('mime_type' => $mime_type);
 			// Avoid Fatal error screen and fallback gently to Elgg filestore if any failure
 			try{
-				if ($new_file || empty($file->cmis_path)) {
+				if (empty($file->cmis_path)) {
 					$return = elgg_cmis_create_document($file_path, $file_name, $file_content, $file_version, $file_params);
 				} else if ($file_path == $old_file_path) {
 					// Create new version of document
@@ -318,44 +277,11 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 elgg_clear_sticky_form('file');
 
 
-// handle results differently for new files and file updates
-if ($new_file) {
-	if (!$guid) {
-		// failed to save file object - nothing we can do about this
-		$error = elgg_echo("file:uploadfailed");
-		register_error($error);
-	}
-	
-	// Inria : do not add river entry for images
-	if ($file->simpletype != "image") {
-		elgg_create_river_item(array(
-			'view' => 'river/object/file/create',
-			'action_type' => 'create',
-			'subject_guid' => elgg_get_logged_in_user_guid(),
-			'object_guid' => $file->guid,
-		));
-	}
-	
-	// If empty title or description, forward to edit page instead
-	if (empty($title) || empty($desc)) {
-		system_message(elgg_echo('theme_inria:file:quicksaved'));
-		forward('file/edit/' . $file->guid);
-	} else {
-		system_message(elgg_echo("file:saved"));
-		$container = get_entity($container_guid);
-		if (elgg_instanceof($container, 'group')) {
-			forward("file/group/$container->guid/all");
-		} else {
-			forward("file/owner/$container->username");
-		}
-	}
-
+if ($guid) {
+	system_message(elgg_echo("file:saved"));
 } else {
-	if ($guid) {
-		system_message(elgg_echo("file:saved"));
-	} else {
-		register_error(elgg_echo("file:uploadfailed"));
-	}
-
-	forward($file->getURL());
+	register_error(elgg_echo("file:uploadfailed"));
 }
+
+forward($file->getURL());
+

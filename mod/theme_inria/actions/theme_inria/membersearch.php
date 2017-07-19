@@ -18,6 +18,9 @@ $merge_params['wheres'][] = "NOT EXISTS (
 // Add skills and interests search from full text ?
 $user_profile_fields = array('interests', 'skills', 'briefdescription');
 
+// Use case-insensitive search
+$merge_params['metadata_case_sensitive'] = false;
+
 //echo esope_esearch(array('merge_params' => $merge_params, 'debug' => true), array('add_count' => 'yes'));
 echo esope_esearch(array('merge_params' => $merge_params, 'user_profile_fields' => $user_profile_fields), array('add_count' => 'yes'));
 

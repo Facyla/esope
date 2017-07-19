@@ -16,7 +16,7 @@ if (!$entity || !$commenter) {
 	return true;
 }
 
-$friendlytime = elgg_view_friendly_time($comment->time_created);
+$friendlytime = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($comment->time_created) . '</span>';
 
 //$commenter_icon = elgg_view_entity_icon($commenter, 'tiny');
 $profile_type = esope_get_user_profile_type($commenter);
@@ -71,12 +71,17 @@ HTML;
 	$posted = elgg_echo('generic_comment:on', array($commenter_link, $entity_link));
 
 	$body = <<<HTML
+$commenter_link $friendlytime
+<h4>$entity_link</h4>
 <span class="elgg-subtext">
-	$posted ($friendlytime): $excerpt
+	<p>$excerpt</p>
 </span>
 HTML;
 
+
+
 	echo elgg_view_image_block($commenter_icon, $body);
+	
 }
 
 

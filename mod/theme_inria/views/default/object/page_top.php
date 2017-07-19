@@ -140,6 +140,8 @@ if (elgg_instanceof($page_owner, 'group')) {
 		} else {
 			$title = '<h3><a href="' . $page->getURL() . '">' . $title . '</a></h3>';
 		}
+	} else {
+		$title = '<h2>' . $title . '</h2>';
 	}
 	
 }

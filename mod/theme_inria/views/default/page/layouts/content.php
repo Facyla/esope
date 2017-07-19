@@ -23,6 +23,8 @@ if (!$vars['title'] && $vars['title'] !== false) {
 	$vars['title'] = elgg_echo($context);
 }
 
+$vars['class'] = $vars['class'] . ' elgg-layout-content';
+
 // 1.8 supported 'filter_override'
 if (isset($vars['filter_override'])) {
 	$vars['filter'] = $vars['filter_override'];
@@ -83,3 +85,4 @@ $filter = elgg_view('page/layouts/elements/filter', $vars);
 $vars['content'] = $filter . $vars['content'];
 
 echo elgg_view_layout('one_sidebar', $vars);
+

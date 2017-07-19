@@ -166,6 +166,8 @@ $width = array(
 .elgg-context-dashboard > .elgg-main { padding: 0; }
 .elgg-layout-one-sidebar .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .elgg-main { padding:0; background: transparent; }
+
+#iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { <?php echo $width['main']; ?> background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 #iris-body .iris-search .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0; display: flex; flex-wrap: wrap; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { /* padding: 2.5rem 0 0 0; */ }
@@ -342,6 +344,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; }
 .elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
 .elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; }
+.elgg-button.elgg-button-submit[name=preview] { background-color: #384257; }
 .elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
 .elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; opacity:1; }
 .elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; box-shadow:none; }
@@ -705,6 +708,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .elgg-list-entity .messages-subject { float: none; width: 100%; }
 .elgg-list-entity .messages-timestamp { float: none; width: 100%; }
 .elgg-list-entity .messages-delete { float: right; }
+.elgg-context-messages .messages-container .elgg-list-entity li { padding: 1rem; border-radius: 4px; }
 
 
 .elgg-sidebar ul.elgg-menu-page { margin-bottom: 1rem; float: none; background: transparent; }
@@ -844,6 +848,9 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 :-moz-placeholder { color: #D3D3D3; }
 ::-moz-placeholder { color: #D3D3D3; }
 -ms-input-placeholder { color: #D3D3D3; }
+
+/* Correct offset for anchors links */
+a[name*=comment] { padding-top: 7rem; margin-top: -7rem; display: block; }
 
 
 /* Fullscreen */
@@ -1011,6 +1018,14 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
 
 .elgg-comments { margin-top: 1.5rem; }
+.elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.elgg-list.elgg-latest-comments li.elgg-item { padding: 1rem; }
+.elgg-list.elgg-latest-comments li.elgg-item h4 { margin: 0; }
+.elgg-list.elgg-latest-comments li.elgg-item .elgg-image-block { display: flex; }
+.elgg-list.elgg-latest-comments li.elgg-item .elgg-image-block .elgg-image { margin-right: 0.5rem; }
+.elgg-list-container .elgg-list-entity li.elgg-item-object-comment { padding: 0 0.5rem; }
+.elgg-list-entity li.elgg-item-object-comment .elgg-image-block { padding-bottom: 0; display: flex; }
+
 
 .elgg-item-user .elgg-menu.elgg-menu-entity { width:auto; display: inline-block; float: right; max-width: 40%; margin: 0 0 0 1rem; }
 .elgg-menu-item-message .iris-user-message,
@@ -1096,6 +1111,8 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 
 #iris-body .iris-listing .elgg-main .elgg-list-entity { display: flex; flex-wrap: wrap; }
+.elgg-layout-content .elgg-list-entity li { padding: 0 0 1rem 0; box-shadow: none; }
+
 .elgg-list-entity .elgg-item-object-thewire .elgg-image img { max-width: 3.4rem; border-radius: 1.7rem; }
 .iris-listing .elgg-list .elgg-item.elgg-item-group { flex: 1 0 28rem; overflow:hidden; height:12.5rem; max-width: 46rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0rem; padding: 0; position: relative; }
 .iris-listing .elgg-item-group h3, .iris-listing .elgg-item-group h3 a { color: #384257; font-size: 1.375rem; padding: 0; margin-bottom: 0.8125rem; }

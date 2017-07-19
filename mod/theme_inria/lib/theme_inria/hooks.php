@@ -628,9 +628,8 @@ function theme_inria_members_count_hook($hook, $entity_type, $returnvalue, $para
 
 // Members count in group listing menu + various changes to entity menu (comments and likes out)
 function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) {
-		return $return;
-	}
+	
+	if (elgg_in_context('widgets')) { return $return; }
 
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
@@ -640,6 +639,19 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 			if ($item->getName() == 'thread') { unset($return[$index]); }
 			if ($item->getName() == 'reply') { unset($return[$index]); }
 			if ($item->getName() == 'previous') { unset($return[$index]); }
+		}
+	}
+	
+	if (elgg_instanceof($entity, 'object', 'file')) {
+		if ($entity->canEdit()) {
+			// @TODO édition en lightbox
+			$return[] = ElggMenuItem::factory(array(
+					'name' => 'upload_version',
+					'text' => elgg_echo('file:upload:version'),
+					'href' => "javascript:void(0);",
+					'onClick' => "$('').toggle();",
+					'priority' => 100,
+				));
 		}
 	}
 	

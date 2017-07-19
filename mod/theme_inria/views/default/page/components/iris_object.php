@@ -54,6 +54,16 @@ $after = elgg_extract('after', $vars, FALSE);
 
 $mode = elgg_extract('mode', $vars, FALSE);
 $full = elgg_extract('full_view', $vars, FALSE);
+if (!in_array($mode, array('full', 'listing', 'content'))) {
+	$mode = 'listing';
+	if ($full) {
+		$mode = 'full';
+	//} else if (elgg_instanceof($page_owner, 'group') || elgg_instanceof($page_owner, 'user')) {
+	} else if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace')) {
+		$mode = 'content';
+	}
+}
+
 $class = 'elgg-image-block';
 $additional_class = elgg_extract('class', $vars, '');
 if ($additional_class) { $class = "$class $additional_class"; }
@@ -64,18 +74,18 @@ if (isset($vars['id'])) { $id = "id=\"{$vars['id']}\""; }
 $page_owner = elgg_get_page_owner_entity();
 $owner = $entity->getOwnerEntity();
 
+// Main title
 $title = $entity->title;
 if (empty($title)) { $title = $entity->name; }
-
-if (!in_array($mode, array('full', 'listing', 'content'))) {
-	$mode = 'listing';
-	if ($full) {
-		$mode = 'full';
-	//} else if (elgg_instanceof($page_owner, 'group') || elgg_instanceof($page_owner, 'user')) {
-	} else if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace')) {
-		$mode = 'content';
+if (!empty($title)) {
+	if ($mode == 'full') {
+		$main_title = '<h2>' . $title . '</h2>';
+	} else {
+		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 30) . '</a></h3>';
+		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 30) . '</h3>';
 	}
 }
+
 
 
 // ICONS AND IMAGES
@@ -96,15 +106,6 @@ $group_icon = '<svg class="iris-groupes" xmlns="http://www.w3.org/2000/svg" view
 // TOP MENU
 $header = elgg_view('page/components/iris_object_header', array('entity' => $entity, 'mode' => $mode));
 
-// Main title
-if (!empty($title)) {
-	if ($mode == 'full') {
-		$main_title = '<h2>' . $title . '</h2>';
-	} else {
-		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 30) . '</a></h3>';
-		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 30) . '</h3>';
-	}
-}
 
 // MAIN CONTENT
 $main_content = '';

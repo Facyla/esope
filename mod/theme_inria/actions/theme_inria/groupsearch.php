@@ -54,6 +54,8 @@ switch($group_search_type) {
 // Add skills and interests search from full text ?
 $group_profile_fields = array('briefdescription', 'interests');
 
+// Use case-insensitive search
+$merge_params['metadata_case_sensitive'] = false;
 
 //echo esope_esearch(array('merge_params' => $merge_params, 'debug' => true), array('add_count' => 'yes'));
 echo esope_esearch(array('merge_params' => $merge_params, 'user_profile_fields' => $group_profile_fields, 'add_url_params' => "&group_search_type=$group_search_type"), array('add_count' => 'yes'));

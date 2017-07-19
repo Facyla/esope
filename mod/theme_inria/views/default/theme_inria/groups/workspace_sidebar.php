@@ -109,10 +109,9 @@ if (!elgg_in_context('group_edit') && !elgg_in_context('group_members')&& !elgg_
 			// Notification settings : notifications/group/$username
 
 			// Direct newsletter subscription
-			if ($group->newsletter_enable) {
-				if (newsletter_is_group_enabled($group)) {
-					$content .= '<li>' . elgg_view('theme_inria/groups/subscribe_newsletter', array('entity' => $group)) . '</li>';
-				}
+			//if ($group->newsletter_enable == 'yes') {
+			if (elgg_is_active_plugin('newsletter') && newsletter_is_group_enabled($group)) {
+				$content .= '<li>' . elgg_view('theme_inria/groups/subscribe_newsletter', array('entity' => $group)) . '</li>';
 			}
 		}
 

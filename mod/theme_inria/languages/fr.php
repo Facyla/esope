@@ -477,7 +477,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:invite:title' => "Invitez des membres à participer à ce groupe", // Invitez des amis à ce groupe
 	'groups:owned' => "Mes groupes (propriétaire ou responsable)",
 	'groups:owned:user' => 'Les groupes dont %s est propriétaire ou responsable',
-	'groups:yours' => "Mes groupes (membres)",
+	'groups:yours' => "Mes groupes",
 	'groups:enableforum' => 'Activer le forum du groupe',
 	'groups:members' => "membres", // membres du groupe
 	'groups:members:active' => "membres actifs",
@@ -485,6 +485,9 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:content_access_mode:membersonly' => "Identique au groupe - Les nouveaux contenus ont le même niveau d'accès que le groupe",
 	
 	'ckeditor:html' => "Activer/désactiver éditeur visuel",
+	
+	'file:upload:version' => "Charger une nouvelle version",
+	'file:upload:version:message' => "Message de version",
 	
 	'comment' => "Poster un commentaire", // commenter
 	

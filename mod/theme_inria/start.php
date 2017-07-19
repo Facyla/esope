@@ -31,6 +31,7 @@ function theme_inria_init(){
 	// Rewrite file upload action to avoid river entries for file images + quick upload
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
+	elgg_register_action("file/upload_version", $action_url . "file/upload_version.php");
 	// Rewrite discussion save action for quick save
 	elgg_unregister_action('discussion/save');
 	elgg_register_action("discussion/save", $action_url . "discussion/save.php");
@@ -345,16 +346,16 @@ function theme_inria_active_members_where_clause() {
 // note : always force files as they can be published through embeds
 function theme_inria_group_object_subtypes($group) {
 	$subtypes = array();
-	if ($group->blog_enable) { $subtypes[] = 'blog'; }
-	if ($group->bookmarks_enable) { $subtypes[] = 'bookmarks'; }
-	if ($group->forum_enable) { $subtypes[] = 'groupforumtopic'; $subtypes[] = 'discussion_reply'; }
+	if ($group->blog_enable == 'yes') { $subtypes[] = 'blog'; }
+	if ($group->bookmarks_enable == 'yes') { $subtypes[] = 'bookmarks'; }
+	if ($group->forum_enable == 'yes') { $subtypes[] = 'groupforumtopic'; $subtypes[] = 'discussion_reply'; }
 	$subtypes[] = 'file';
-	if ($group->pages_enable) { $subtypes[] = 'page_top'; $subtypes[] = 'page'; }
-	if ($group->thewire_enable) { $subtypes[] = 'thewire'; }
-	if ($group->event_calendar_enable) { $subtypes[] = 'event_calendar'; }
-	if ($group->newsletter_enable) { $subtypes[] = 'newsletter'; }
-	if ($group->survey_enable) { $subtypes[] = 'survey'; }
-	if ($group->poll_enable) { $subtypes[] = 'poll'; }
+	if ($group->pages_enable == 'yes') { $subtypes[] = 'page_top'; $subtypes[] = 'page'; }
+	if ($group->thewire_enable == 'yes') { $subtypes[] = 'thewire'; }
+	if ($group->event_calendar_enable == 'yes') { $subtypes[] = 'event_calendar'; }
+	if ($group->newsletter_enable == 'yes') { $subtypes[] = 'newsletter'; }
+	if ($group->survey_enable == 'yes') { $subtypes[] = 'survey'; }
+	if ($group->poll_enable == 'yes') { $subtypes[] = 'poll'; }
 	return $subtypes;
 }
 
@@ -362,19 +363,19 @@ function theme_inria_group_object_subtypes($group) {
 // note : always force files as they can be published through embeds
 function theme_inria_group_object_subtypes_opt($group) {
 	$subtypes = array('' => '');
-	if ($group->blog_enable) { $subtypes['blog'] = elgg_echo('item:object:blog'); }
-	if ($group->bookmarks_enable) { $subtypes['bookmarks'] = elgg_echo('item:object:bookmarks'); }
-	if ($group->forum_enable) { $subtypes['discussion'] = elgg_echo('item:object:groupforumtopic'); }
-	//if ($group->file_enable) { $subtypes['file'] = elgg_echo('item:object:file'); }
+	if ($group->blog_enable == 'yes') { $subtypes['blog'] = elgg_echo('item:object:blog'); }
+	if ($group->bookmarks_enable == 'yes') { $subtypes['bookmarks'] = elgg_echo('item:object:bookmarks'); }
+	if ($group->forum_enable == 'yes') { $subtypes['discussion'] = elgg_echo('item:object:groupforumtopic'); }
+	//if ($group->file_enable == 'yes') { $subtypes['file'] = elgg_echo('item:object:file'); }
 	$subtypes['file'] = elgg_echo('item:object:file');
-	if ($group->pages_enable) { $subtypes['pages'] = elgg_echo('item:object:pages'); }
-	//if ($group->pages_enable) { $subtypes['page_top'] = elgg_echo('item:object:page_top'); }
-	//if ($group->pages_enable) { $subtypes['page'] = elgg_echo('item:object:page'); }
-	if ($group->thewire_enable) { $subtypes['thewire'] = elgg_echo('item:object:thewire'); }
-	if ($group->event_calendar_enable) { $subtypes['event_calendar'] = elgg_echo('item:object:event_calendar'); }
-	if ($group->newsletter_enable) { $subtypes['newsletter'] = elgg_echo('item:object:newsletter'); }
-	if ($group->survey_enable) { $subtypes['survey'] = elgg_echo('item:object:survey'); }
-	if ($group->poll_enable) { $subtypes['poll'] = elgg_echo('item:object:poll'); }
+	if ($group->pages_enable == 'yes') { $subtypes['pages'] = elgg_echo('item:object:pages'); }
+	//if ($group->pages_enable == 'yes') { $subtypes['page_top'] = elgg_echo('item:object:page_top'); }
+	//if ($group->pages_enable == 'yes') { $subtypes['page'] = elgg_echo('item:object:page'); }
+	if ($group->thewire_enable == 'yes') { $subtypes['thewire'] = elgg_echo('item:object:thewire'); }
+	if ($group->event_calendar_enable == 'yes') { $subtypes['event_calendar'] = elgg_echo('item:object:event_calendar'); }
+	if ($group->newsletter_enable == 'yes') { $subtypes['newsletter'] = elgg_echo('item:object:newsletter'); }
+	if ($group->survey_enable == 'yes') { $subtypes['survey'] = elgg_echo('item:object:survey'); }
+	if ($group->poll_enable == 'yes') { $subtypes['poll'] = elgg_echo('item:object:poll'); }
 	if (elgg_is_active_plugin('feedback')) {
 		$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
 		if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {

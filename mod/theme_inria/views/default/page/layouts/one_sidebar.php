@@ -24,8 +24,16 @@ if (elgg_in_context('groups_add')) {
 	return;
 }
 
-// @TODO voir si on utilise l'espace blanc pour menu ?
+
+
+$class = 'elgg-layout elgg-layout-one-sidebar clearfix';
+if (isset($vars['class'])) {
+	$class = "$class {$vars['class']}";
+}
+
+// Utiliser l'espace blanc pour menu ? => non
 if (elgg_instanceof($page_owner, 'user')) {
+	$class .= " elgg-layout-user-owner";
 	$user_header = '';
 	$user_header .= '<div class="iris-profile-header" style="background: ' . $banner_css . ';">' . elgg_view('profile/iris_owner_header', $vars) . '</div>';
 	//$user_header .= '<div class="iris-profile-info">' . elgg_view('profile/iris_profile_info', $vars) . '</div>';
@@ -57,10 +65,6 @@ if (elgg_in_context('profile_edit') && ($page_owner->guid != elgg_get_logged_in_
 */
 
 
-$class = 'elgg-layout elgg-layout-one-sidebar clearfix';
-if (isset($vars['class'])) {
-	$class = "$class {$vars['class']}";
-}
 
 // ESOPE : Add context class, for page differenciation
 foreach(elgg_get_context_stack() as $context) {
