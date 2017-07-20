@@ -334,25 +334,35 @@ return array(
 	'inria_invite' => "Invitations sur Iris",
 	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
 	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
+	'theme_inria:useradd:groups' => "Inviter dans le(s) groupe(s)",
+	'theme_inria:useradd:groups:details' => "Si vous êtes responsable du groupe, votre contact sera immédiatement inscrit. Si vous êtes membre du groupe et que l'adhésion est modérée, une demande sera faite pour votre contact.",
+	'theme_inria:useradd:groups:details:admin' => "En tant qu'admin, vous pouvez inscrire directement dans tous les groupes",
+	'theme_inria:useradd:email' => "Email",
+	'theme_inria:useradd:name' => "Prénom et nom",
+	'theme_inria:useradd:username' => "Identifiant",
+	'theme_inria:useradd:organisation' => "Organisation",
+	'theme_inria:useradd:fonction' => "Fonction",
+	'theme_inria:useradd:message' => "Message à ajouter à votre invitation",
+	'theme_inria:useradd:message:details' => "Ce message sera intégré dans le mail d'invitation.",
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
-	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
-	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
+	'theme_inria:useradd:reason:details' => "Vous pouvez indiquer le motif de création de ce compte, par ex. alumni, projet de recherche, etc.",
 	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas activé immédiatement ! Le compte doit d'abord être validé par un administrateur.",
 	'theme_inria:useradd:disabled:adminvalidation' => "Le compte créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
-	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
-	'theme_inria:useradd:body' => "
-%s,
+	'theme_inria:useradd:register' => "Envoyer l'invitation",
+	'theme_inria:useradd:subject' => "[%1\$s] Invitation de %2\$s",
+	'theme_inria:useradd:body' => "Bonjour %1\$s
 
-Un compte utilisateur vous a été créé sur %s par %s. Pour vous connecter, rendez-vous :
+%2\$s vous invite à rejoindre %3\$s
 
-%s
+%4\$s
 
-Et authentifiez-vous avec les éléments suivant :
+Pour vous connecter, rendez-vous :
 
-Identifiant de connexion : %s
-Mot de passe : %s
+%5\$s
 
-Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de changer votre mot de passe.
+Et identifiez-vous avec :
+- votre identifiant : %6\$s &nbsp; ou votre adresse email %7\$s
+- votre mot de passe : %8\$s
 ",
 	'theme_inria:useradd:admin:subject' => "Compte de l'utilisateur créé",
 	'theme_inria:useradd:admin:body' => "
@@ -785,8 +795,8 @@ Voir et commenter ce lien web :
 	'au_subgroups:subgroup:of' => "Espace de travail de %s",
 	
 	'theme_inria:manage' => "gérer",
-	'theme_inria:readmore' => "Lire la suite",
-	'theme_inria:readmore:vote' => "Lire la suite et voter",
+	'theme_inria:readmore' => "Afficher la page",
+	'theme_inria:readmore:vote' => "Afficher le sondage et voter",
 	
 	'theme_inria:discussion:placeholder' => "Partagez un message avec le groupe",
 	

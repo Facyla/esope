@@ -83,6 +83,9 @@ if (elgg_instanceof($page_owner, 'group') && has_access_to_entity($page_owner)) 
 }
 */
 
+$sidebar = elgg_view('page/elements/sidebar', $vars);
+// @TODO Switch layout if no real content in sidebar
+//if (empty($sidebar)) { return elgg_view_layout('one_column', $vars); }
 
 // Iris v2 User banner instead of owner block
 if (elgg_instanceof($page_owner, 'user')) { echo $user_header; }
@@ -111,7 +114,8 @@ if (elgg_instanceof($page_owner, 'user')) { echo $user_header; }
 		if (elgg_in_context('settings')) { echo $profile_back; }
 		
 		if (!empty($vars['title'])) { echo '<h2>' . $vars['title'] . '</h2>'; }
-		echo elgg_view('page/elements/sidebar', $vars);
+		//echo elgg_view('page/elements/sidebar', $vars);
+		echo $sidebar;
 		?>
 	</div>
 

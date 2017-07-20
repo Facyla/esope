@@ -167,6 +167,7 @@ $width = array(
 .elgg-layout-one-sidebar .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .elgg-main { padding:0; background: transparent; }
 
+#iris-body .elgg-layout-one-sidebar.elgg-context-invite_external .elgg-main, 
 #iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main, 
 #iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { <?php echo $width['main']; ?> background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 #iris-body .iris-search .elgg-main { <?php echo $width['main']; ?> }
@@ -878,10 +879,11 @@ h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
 .group-workspace-members a.iris-manage,
 .iris-manage { color: #969696; font-size: 0.75rem; font-style: normal; text-transform: uppercase; font-weight: bold; float: right; }
 .add-plus { height: 2.25rem; width: 2.25rem; border-radius: 1.125rem; background: #1488CA; color: white; font-size: 2rem; line-height: 2.5rem; text-align: center; }
-.readmore { margin-left: 1rem; }
+.readmore { /* margin-left: 1rem; */ float: right; }
 a.iris-object-readmore { color: #384257; }
 a.iris-object-readmore .readmore { color: #1488CA; font-size: 0.9em; font-weight:bold; }
-a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readmore:focus { /* text-decoration: none; text-shadow: 0 0 0 black; */ }
+a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readmore:focus { text-decoration: none; /* text-shadow: 0 0 0 black; */ }
+a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore, a.iris-object-readmore:focus .readmore { text-decoration: underline; /* text-shadow: 0 0 0 black; */ }
 
 
 .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
@@ -1283,16 +1285,21 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-add-tabs a.elgg-state-selected, .group-workspace-add-tabs a:hover, .group-workspace-add-tabs a:active, .group-workspace-add-tabs a:focus { opacity: 1; }
 .group-workspace-add-content { padding: 1.375rem 2.5rem 1.375rem 2.5rem; }
 .group-workspace-add-content img { width:2rem; border-radius:1rem; }
+
+.elgg-context-invite_external textarea, 
 .elgg-river-responses textarea, 
 .iris-object .elgg-form-discussion-reply-save textarea, 
 .iris-object .elgg-form-comment-save textarea, 
 .group-workspace-add-content textarea { height: 3rem; transition-duration: 1s; transition-delay: 1s;/* border: 0; */ }
-/* Note : attention car si bouton d'envoi il ne fonctionnera pas à moins d'avoir déjà perdu le focus
-*/
+/* Note : delay car siinon l'envoi ne fonctionnera pas à moins car il perd le focus */
+.elgg-context-invite_external textarea:active, .elgg-context-invite_external textarea:focus, 
 .elgg-river-responses textarea:active, .elgg-river-responses textarea:focus, 
 .iris-object .elgg-form-discussion-reply-save textarea:active, .iris-object .elgg-form-discussion-reply-save textarea:focus, 
 .iris-object .elgg-form-comment-save textarea:active, .iris-object .elgg-form-comment-save textarea:focus, 
 .group-workspace-add-content textarea:active, .group-workspace-add-content textarea:focus { height: 12rem; transition-delay: 0s; transition-duration: 1s; }
+
+.elgg-context-invite_external label em { font-weight:normal; }
+
 #group-workspace-add-file { /* text-align: center; */ }
 #group-workspace-add-blog { text-align: center; }
 #group-workspace-add-blog a:first-of-type { margin-right:0.625rem; margin-bottom: 1rem; }

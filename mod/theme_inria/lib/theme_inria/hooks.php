@@ -210,7 +210,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 function theme_inria_extras_menu_setup($hook, $type, $items, $vars) {
 	// Update some existing menu items
 	foreach ($items as $k => $item) {
-		if ($item->getName() == 'rss') {
+		if (in_array($item->getName(), array('rss', 'qrcode'))) {
 			unset($items[$k]);
 		}
 	}
