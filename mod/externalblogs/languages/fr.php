@@ -10,7 +10,7 @@ return array(
 	'externalblogs:mine' => "Mes blogs (admin)",
 	'externalblogs:mine:author' => "Mes blogs (auteur)",
 	'externalblogs:others' => "Les autres blogs",
-	'externalblog:passwordprotected' => "Veuillez saisir le mot de passe pour accéder à ce blog",
+	'externalblogs:passwordprotected' => "Veuillez saisir le mot de passe pour accéder à ce blog",
 	
 	// Modules
 	'externalblogs:module:none' => "Aucun module pour le moment",
@@ -29,11 +29,11 @@ return array(
 	
 	
 	// Actions
-	'externalblog:add' => "Créer un blog externe",
-	'externalblog:externalblogthis' => "Publier dans un blog externe",
-	'externalblog:created' => "Blog externe créé",
-	'externalblog:edited' => "Blog externe modifié",
-	'externalblog:deleted' => "Blog externe supprimé",
+	'externalblogs:add' => "Créer un blog externe",
+	'externalblogs:externalblogthis' => "Publier dans un blog externe",
+	'externalblogs:created' => "Blog externe créé",
+	'externalblogs:edited' => "Blog externe modifié",
+	'externalblogs:deleted' => "Blog externe supprimé",
 	'externalblogs:externalbloged' => "Publication ajoutée au blog externe : ",
 	'externalblogs:unexternalbloged' => "Publication retirée du blog externe : ",
 	

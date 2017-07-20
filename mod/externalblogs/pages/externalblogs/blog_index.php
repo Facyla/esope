@@ -47,10 +47,10 @@ $blog_base_url = $url . $externalblog->blogname;
 
 // CONTRÔLE D'ACCÈS
 if (!$public_view) {
-	if (!$externalblog) { register_error('externalblog:unknown'); forward(); }
+	if (!$externalblog) { register_error('externalblogs:unknown'); forward(); }
 } else {
 	// Blog externe non valide ou blog non public => exit
-	if (!$externalblog || ($externalblog->access_id != 2)) { register_error('externalblog:unknown'); forward(); }
+	if (!$externalblog || ($externalblog->access_id != 2)) { register_error('externalblogs:unknown'); forward(); }
 }
 
 // Contrôle de mot de passe du blog, si défini
@@ -59,7 +59,7 @@ if (!empty($externalblog->password)) {
 	if ($logout == 'yes') {
 		unset($_SESSION['externalblog']);
 		//if (logout())
-		system_message('externalblog:sessiondestroyed');
+		system_message('externalblogs:sessiondestroyed');
 	}
 	$passhash = md5($url . $externalblog->password);
 	if ($_SESSION['externalblog'][$externalblog->guid]['passhash'] !== $passhash) {
@@ -69,7 +69,7 @@ if (!empty($externalblog->password)) {
 			$_SESSION['externalblog'][$externalblog->guid]['passhash'] = $passhash;
 		} else {
 			$content = '<form method="POST" action="">' . elgg_view('input/password', array('name' => 'password')) . elgg_view('input/submit', array('value' => 'login')) . '</form>';
-			$title = elgg_echo('externalblog:passwordprotected');
+			$title = elgg_echo('externalblogs:passwordprotected');
 			$body = elgg_view_layout('one_column', array('title' => $title, 'content' => $content, 'filter' => ''));
 			echo elgg_view_page($title, $body);
 			exit;
