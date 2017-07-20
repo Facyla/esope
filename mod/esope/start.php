@@ -3255,6 +3255,28 @@ function esope_get_fa_icon($entity, $size) {
 	return false;
 }
 
+// Get top parent object entity (that is commentable without thread)
+// If top object, return initial object
+function esope_get_top_object_entity($entity = false) {
+	if (!elgg_instanceof($entity, 'object')) { return false; }
+	$subtype = $entity->getSubtype();
+	if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic'))) {
+		$container = $entity;
+		while(elgg_instanceof($container, 'object')) {
+			$entity = $container;
+			$container = $entity->getContainerEntity();
+		}
+	}
+	return $entity;
+}
+
+// Get real container (user, group, site) for special object types (forum, comments)
+function esope_get_container_entity($entity = false) {
+	if (!elgg_instanceof($entity, 'object')) { return false; }
+	$top_object = esope_get_top_object_entity($entity);
+	if ($top_object) { return $top_object->getContainerEntity(); }
+	return false;
+}
 
 
 
