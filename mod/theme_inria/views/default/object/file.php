@@ -68,6 +68,13 @@ $metadata = elgg_view_menu('entity', array(
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) { $metadata = ''; }
 
+// Add new file version form popup
+$upload_version = '';
+$upload_version .= '<div class="elgg-module elgg-module-popup file-upload-version hidden clearfix" id="file-upload-version-' . $file->guid . '">';
+$upload_version .= elgg_view_form('file/upload_version', array('enctype' => 'multipart/form-data'), array('entity' => $file));
+$upload_version .= '</div>';
+
+
 
 if ($full && !elgg_in_context('gallery')) {
 	$extra = '';
@@ -93,7 +100,7 @@ if ($full && !elgg_in_context('gallery')) {
 	$body .= '<p>' . '<a href="' . elgg_get_site_url() . 'file/download/' . $file->guid . '" class="elgg-button elgg-button-action" target="_blank"><i class="fa fa-download"></i>&nbsp;' . elgg_echo('file:download') . $extension . $filesize . '</a>' . '</p>';
 	$body .= "$text $extra";
 
-	$content = $body;
+	$content = $body . $upload_version;
 
 } elseif (elgg_in_context('gallery')) {
 	
@@ -106,6 +113,7 @@ if ($full && !elgg_in_context('gallery')) {
 	echo $file_icon;
 	echo "<p class='subtitle'>$owner_link $date</p>";
 	echo '</div>';
+	echo $upload_version;
 	
 } else {
 	
@@ -126,6 +134,9 @@ if ($full && !elgg_in_context('gallery')) {
 	$list_body = elgg_view('object/elements/summary', $params);
 
 	//echo elgg_view_image_block($file_icon, $list_body);
+	
+	// Add new version form
+	$excerpt .= $upload_version;
 	
 	// Workspace home listing specific content
 	$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));

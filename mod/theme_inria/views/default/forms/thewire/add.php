@@ -9,7 +9,9 @@ elgg_load_js('elgg.thewire');
 
 $parent_post = elgg_extract('post', $vars);
 $forced_access = elgg_extract('access_id', $vars, false);
-$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
+// Iris v2 : soft limit (real limit = plugin settings)
+//$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
+$char_limit = 140;
 $own = elgg_get_logged_in_user_entity();
 
 $text = elgg_echo('post');

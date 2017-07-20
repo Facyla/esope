@@ -50,11 +50,9 @@ if (!empty($_FILES['upload']['name']) && $_FILES['upload']['error'] != 0) {
 	forward(REFERER);
 }
 
-
-
 // load original file object
-if ($guid > 0) { $file = new FilePluginFile($guid); }
-if (!$file) {
+$file = get_entity($guid);
+if (!elgg_instanceof($file, 'object', 'file')) {
 	register_error(elgg_echo('file:cannotload'));
 	forward(REFERER);
 }
@@ -64,6 +62,7 @@ if (!$file->canEdit()) {
 	register_error(elgg_echo('file:noaccess'));
 	forward(REFERER);
 }
+
 
 // we have a file upload, so process it
 if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {

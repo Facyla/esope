@@ -7,12 +7,11 @@
 
 // Adds prevent_notification form field
 
-$guid = elgg_extract('guid', $vars, null);
+$file = elgg_extract('entity', $vars, null);
+if (!elgg_instanceof($file, 'object', 'file')) { return; }
 
-if ($guid) {
-	$file_label = elgg_echo("file:replace");
-	$submit_label = elgg_echo('save');
-}
+$file_label = elgg_echo("file:replace");
+$submit_label = elgg_echo('save');
 
 // Get post_max_size and upload_max_filesize
 $post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
@@ -43,7 +42,7 @@ $is_embed = false;
 
 <div class="elgg-foot">
 	<?php
-	echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $guid));
+	echo elgg_view('input/hidden', array('name' => 'file_guid', 'value' => $file->guid));
 
 	//echo elgg_view('prevent_notifications/prevent_form_extend', array());
 

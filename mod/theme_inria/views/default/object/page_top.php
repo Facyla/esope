@@ -202,8 +202,8 @@ if ($full) {
 	// Edit button
 	$edit_button = '';
 	if ($page->canEdit()) {
-		$edit_button .= '<div class="clearfloat"></div><br /><br />';
-		$edit_button .= '<h3>' . elgg_echo('theme_inria:pages:edit') . '</h3>';
+		$edit_button .= '<div class="clearfloat"></div>';
+		//$edit_button .= '<h3>' . elgg_echo('theme_inria:pages:edit') . '</h3>';
 		$edit_button .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:pages:edit:button') . '</a></p>';
 	}
 	

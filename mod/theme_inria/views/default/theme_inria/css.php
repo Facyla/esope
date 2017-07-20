@@ -852,7 +852,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 -ms-input-placeholder { color: #D3D3D3; }
 
 /* Correct offset for anchors links */
-a[name*=comment] { padding-top: 7rem; margin-top: -7rem; display: block; }
+a[name*=comment] { padding-top: 7rem; margin-top: -7rem; display: block; width: 0; }
 
 
 /* Fullscreen */
@@ -1005,8 +1005,6 @@ a.iris-object-readmore:hover, a.iris-object-readmore:active, a.iris-object-readm
 .iris-box.home-wire .thewire-reply-inline img { width: 2rem; height: 2rem; margin: 0.5rem 0.5rem 0.5rem 0; }
 .home-wire .thewire-reply-inline #thewire-textarea { height: 3rem; font-size:1rem; flex: 1 1 auto; }
 .thewire-reply-inline .elgg-button.elgg-button-submit {}
-.elgg-river-responses textarea { height: 2rem; }
-.elgg-river-responses textarea:active, .elgg-river-responses textarea:focus { height: auto; }
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
 .elgg-menu .elgg-menu-item-access { float:left; margin-right: 1rem; margin-left: 0; }
 .elgg-menu .elgg-menu-item-container { float:left; margin-right: 1rem; margin-left: 0; }
@@ -1093,15 +1091,23 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .entity-submenu { display:inline-block; position: relative; }
 .entity-submenu a { display: block; padding: 0 0.5rem; }
 .entity-submenu a .fa { color: rgba(56, 66, 87, 0.5); font-size: 1.25rem; }
+
+/* Alternative for pure hover (no click to keep menu visible) 
+.entity-submenu-content { position: absolute; right: 0; top: 0; padding: 1.5rem 0 0 0; z-index: 2; }
+.elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; }
+*/
 .entity-submenu-content { position: absolute; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
 .elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; }
+.iris-object .entity-submenu-content .elgg-menu-entity li a, 
 .elgg-list-entity .entity-submenu-content ul li { margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; }
-.elgg-list-entity .entity-submenu-content ul li a { color: #384257; }
+.elgg-list-entity .entity-submenu-content ul li a { color: #384257; padding: 0; margin: 0; }
 .entity-submenu:hover .entity-submenu-content, .entity-submenu:active .entity-submenu-content, .entity-submenu:focus .entity-submenu-content { display: block; }
 .iris-object .entity-submenu-content .elgg-menu-entity li { display: block; margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; float: none; }
 .iris-object .entity-submenu-content ul li *, 
 .elgg-list-entity .entity-submenu-content ul li * { color: #384257; font-weight: normal; font-size: 0.9375rem; }
 .iris-object .entity-submenu-content .elgg-menu-entity li.elgg-menu-item-access span { margin: 0; }
+
+.file-upload-version { padding:1rem; width: 30rem; max-width: 30rem; }
 
 .entity-headline { line-height: 1.2rem; margin-bottom: 0.6875rem; }
 .entity-headline .elgg-avatar img { width:2rem; height:2rem; }
@@ -1277,14 +1283,16 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-add-tabs a.elgg-state-selected, .group-workspace-add-tabs a:hover, .group-workspace-add-tabs a:active, .group-workspace-add-tabs a:focus { opacity: 1; }
 .group-workspace-add-content { padding: 1.375rem 2.5rem 1.375rem 2.5rem; }
 .group-workspace-add-content img { width:2rem; border-radius:1rem; }
+.elgg-river-responses textarea, 
 .iris-object .elgg-form-discussion-reply-save textarea, 
 .iris-object .elgg-form-comment-save textarea, 
-.group-workspace-add-content textarea { height: 3rem; /* border: 0; */ }
+.group-workspace-add-content textarea { height: 3rem; transition-duration: 1s; transition-delay: 1s;/* border: 0; */ }
 /* Note : attention car si bouton d'envoi il ne fonctionnera pas à moins d'avoir déjà perdu le focus
+*/
+.elgg-river-responses textarea:active, .elgg-river-responses textarea:focus, 
 .iris-object .elgg-form-discussion-reply-save textarea:active, .iris-object .elgg-form-discussion-reply-save textarea:focus, 
 .iris-object .elgg-form-comment-save textarea:active, .iris-object .elgg-form-comment-save textarea:focus, 
-.group-workspace-add-content textarea:active, .group-workspace-add-content textarea:focus { height: auto; }
-*/
+.group-workspace-add-content textarea:active, .group-workspace-add-content textarea:focus { height: 12rem; transition-delay: 0s; transition-duration: 1s; }
 #group-workspace-add-file { /* text-align: center; */ }
 #group-workspace-add-blog { text-align: center; }
 #group-workspace-add-blog a:first-of-type { margin-right:0.625rem; margin-bottom: 1rem; }

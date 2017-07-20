@@ -9,7 +9,7 @@
 // allow river views to override the response content
 $responses = elgg_extract('responses', $vars, false);
 if ($responses) {
-	echo $responses;
+	echo $responses ."0000";
 	return;
 }
 
@@ -18,7 +18,9 @@ $item = $vars['item'];
 $object = $item->getObjectEntity();
 
 // Iris : allow comments on responses (top object)
-$subtype = $object->getSubtype();
+$top_object = esope_get_top_object_entity($object);
+$container = esope_get_container_entity($object);
+/*
 $top_object = $object;
 //error_log($object->guid .' // container='.$subtype . ' // object='.$object->getSubtype().' == '.print_r($vars['item'], true));
 if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic'))) {
@@ -28,12 +30,16 @@ if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic')))
 		if ($parent_container) { $container = $parent_container; }
 	}
 }
-// @TODO
-if ($top_object->guid != $object->guid) {
-	$object = $top_object;
-	$comment_count = $object->countComments();
+*/
+// @TODO Handle comments
+$subtype = $object->getSubtype();
+if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic'))) {
+//if ($top_object->guid != $object->guid) {
 	// Avoid listing comments on users, groups, sites...
+	$comment_count = $object->countComments();
 	//if ($comment_count) {
+	// Iris : pas de listing ici
+	/*
 	if ($comment_count && elgg_instanceof($object, 'object')) {
 		$comments = elgg_get_entities(array(
 			'type' => 'object',
@@ -62,25 +68,29 @@ if ($top_object->guid != $object->guid) {
 			echo "<div class=\"elgg-river-more\">$link</div>";
 		}
 	}
+	*/
 
 	// inline comment form
-	if ($object->canComment()) {
-		$form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
-		$body_vars = array('entity' => $object, 'inline' => true);
+	if ($top_object->canComment()) {
+		$form_vars = array('id' => "comments-add-{$object->getGUID()}-{$top_object->guid}", 'class' => 'hidden');
+		$body_vars = array('entity' => $top_object, 'inline' => true);
 		echo elgg_view_form('comment/save', $form_vars, $body_vars);
 	}
 	return true;
 }
 
+echo "BBB";
 // annotations and comments do not have responses
 //if ($item->annotation_id != 0 || !$object || $object instanceof ElggComment) {
 if ($item->annotation_id != 0 || !$object || $object instanceof ElggComment) { return; }
 
+echo "AAA";
 $comment_count = $object->countComments();
 
 // Avoid listing comments on users, groups, sites...
 //if ($comment_count) {
-if ($comment_count && elgg_instanceof($object, 'object')) {
+/*
+//if ($comment_count && elgg_instanceof($object, 'object')) {
 	$comments = elgg_get_entities(array(
 		'type' => 'object',
 		'subtype' => 'comment',
@@ -108,6 +118,7 @@ if ($comment_count && elgg_instanceof($object, 'object')) {
 		echo "<div class=\"elgg-river-more\">$link</div>";
 	}
 }
+*/
 
 // inline comment form
 // @TODO handle forum replies (status = open|closed)

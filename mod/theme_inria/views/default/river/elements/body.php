@@ -6,7 +6,7 @@
  * @uses $vars['summary']     Alternate summary (the short text summary of action)
  * @uses $vars['message']     Optional message (usually excerpt of text)
  * @uses $vars['attachments'] Optional attachments (displaying icons or other non-text data)
- * @uses $vars['responses']   Alternate respones (comments, replies, etc.)
+ * @uses $vars['responses']   Alternate responses (comments, replies, etc.)
  * @uses $vars['no_menu']     Removes menu
  */
 
@@ -53,8 +53,7 @@ if (!empty($attachments)) {
 	$attachments = "<div class=\"elgg-river-attachments clearfix\">$attachments</div>";
 }
 
-// Iris v2 : pas d'affichage des réponses (elles sont dans le flux)
-/*
+// Iris v2 : pas d'affichage des réponses (elles sont dans le flux) => listing retiré dans river/elements/responses
 elgg_push_context('widgets');
 $responses = elgg_view('river/elements/responses', $vars);
 //if ($responses) {
@@ -62,7 +61,6 @@ if (!empty($responses)) {
 	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
 }
 elgg_pop_context();
-*/
 
 // Iris v2 : indication présente dans le menu inférieur
 $group_string = '';
