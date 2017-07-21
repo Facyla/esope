@@ -21,11 +21,14 @@ if ($post) {
 	$text = elgg_echo('thewire:reply');
 }
 
+$id = 'thewire-textarea';
+
 if ($post) {
 	echo elgg_view('input/hidden', array(
 		'name' => 'parent_guid',
 		'value' => $post->guid,
 	));
+	$id = 'thewire-textarea-' . $post->guid;
 }
 
 // Integration into groups : add container
@@ -44,7 +47,7 @@ if ($char_limit == 0) {
 echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',
-	'id' => 'thewire-textarea',
+	'id' => $id,
 	'rows' => $num_lines,
 	'data-max-length' => $char_limit,
 	'style' => "height:initial;",

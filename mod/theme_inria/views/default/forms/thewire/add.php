@@ -14,8 +14,13 @@ $forced_access = elgg_extract('access_id', $vars, false);
 $char_limit = 140;
 $own = elgg_get_logged_in_user_entity();
 
+$id = 'thewire-textarea';
+
 $text = elgg_echo('post');
-if ($parent_post) { $text = elgg_echo('thewire:reply'); }
+if ($parent_post) {
+	$text = elgg_echo('thewire:reply');
+	$id = 'thewire-textarea-' . $parent_post->guid;
+}
 //$chars_left = elgg_echo('thewire:charleft');
 $chars_left = elgg_echo('esope:thewire:charleft');
 
@@ -59,7 +64,7 @@ $user_img = '<img src="' . $own->getIconUrl(array('size' => 'small')) . '" alt="
 $post_input = elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',
-		'id' => 'thewire-textarea',
+		'id' => $id,
 		'rows' => $num_lines,
 		'data-max-length' => $char_limit,
 		//'style' => "height:initial;",

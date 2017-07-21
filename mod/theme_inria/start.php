@@ -43,6 +43,11 @@ function theme_inria_init(){
 	
 	// Per-group notificaiton settings
 	elgg_register_action("theme_inria/group_notification", $action_url . "theme_inria/group_notification.php");
+	// Force site notifications
+	elgg_unregister_action("notificationsettings/save");
+	elgg_register_action("notificationsettings/save", $action_url . "notifications/save.php");
+	elgg_unregister_action("notificationsettings/groupsave");
+	elgg_register_action("notificationsettings/groupsave", $action_url . "notifications/groupsave.php");
 	
 	
 	// CSS - Inria custom styles
@@ -346,10 +351,15 @@ function theme_inria_active_members_where_clause() {
 // note : always force files as they can be published through embeds
 function theme_inria_group_object_subtypes($group) {
 	$subtypes = array();
+	// Files can always be added, even if disabled
+	$subtypes[] = 'file';
+	// A comment can always happen - but this will not work as comments have container_guid set to commented entity
+	//$subtypes[] = 'comment';
 	if ($group->blog_enable == 'yes') { $subtypes[] = 'blog'; }
 	if ($group->bookmarks_enable == 'yes') { $subtypes[] = 'bookmarks'; }
+	// Forums : handle topic and replies - no reply will not be displayed, as their container is the parent groupforumtopic
 	if ($group->forum_enable == 'yes') { $subtypes[] = 'groupforumtopic'; $subtypes[] = 'discussion_reply'; }
-	$subtypes[] = 'file';
+	// Pages : all pages
 	if ($group->pages_enable == 'yes') { $subtypes[] = 'page_top'; $subtypes[] = 'page'; }
 	if ($group->thewire_enable == 'yes') { $subtypes[] = 'thewire'; }
 	if ($group->event_calendar_enable == 'yes') { $subtypes[] = 'event_calendar'; }
@@ -363,11 +373,13 @@ function theme_inria_group_object_subtypes($group) {
 // note : always force files as they can be published through embeds
 function theme_inria_group_object_subtypes_opt($group) {
 	$subtypes = array('' => '');
+	// Files can always be added, even if disabled
+	$subtypes['file'] = elgg_echo('item:object:file');
+	// A comment can always happen - will not work as comments have container_guid set to commented entity
+	//$subtypes['comment'] = elgg_echo('item:object:comment');
 	if ($group->blog_enable == 'yes') { $subtypes['blog'] = elgg_echo('item:object:blog'); }
 	if ($group->bookmarks_enable == 'yes') { $subtypes['bookmarks'] = elgg_echo('item:object:bookmarks'); }
 	if ($group->forum_enable == 'yes') { $subtypes['discussion'] = elgg_echo('item:object:groupforumtopic'); }
-	//if ($group->file_enable == 'yes') { $subtypes['file'] = elgg_echo('item:object:file'); }
-	$subtypes['file'] = elgg_echo('item:object:file');
 	if ($group->pages_enable == 'yes') { $subtypes['pages'] = elgg_echo('item:object:pages'); }
 	//if ($group->pages_enable == 'yes') { $subtypes['page_top'] = elgg_echo('item:object:page_top'); }
 	//if ($group->pages_enable == 'yes') { $subtypes['page'] = elgg_echo('item:object:page'); }

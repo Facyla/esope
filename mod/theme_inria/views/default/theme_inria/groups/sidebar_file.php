@@ -44,7 +44,7 @@ if (true) {
 	//	echo $new_link;
 		echo '<h3>' . $all_link . '</h3>';
 	//echo '</div>';
-	echo '<div class="workspace-subtype-content">';
+	echo '<div class="workspace-subtype-content file">';
 		echo $content;
 	echo '</div>';
 }

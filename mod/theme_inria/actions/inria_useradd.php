@@ -170,34 +170,54 @@ if (!$already_registered) {
 // @TODO add invite message + notification to group admin
 if ($group_guid) {
 	foreach($group_guid as $guid) {
-		$ent = get_entity($guid);
-		if (elgg_instanceof($ent, 'group')) {
-			if ($ent->canEdit() || elgg_is_admin_logged_in() || $ent->isPublicMembership()) {
-				// Join group - handle subgroups
-				if (elgg_is_active_plugin('au_subgroups')) {
-					$parent = get_parent_group($ent);
-					if ($parent) {
-						if ($parent->canEdit() || elgg_is_admin_logged_in() || $parent->isPublicMembership()) {
-							// Join parent
-							groups_join_group($parent, $new_user);
-							// Join group
-							groups_join_group($ent, $new_user);
+		$group = get_entity($guid);
+		if (elgg_instanceof($group, 'group')) {
+			if (!$group->isMember($new_user)) {
+				if ($group->canEdit() || elgg_is_admin_logged_in() || $group->isPublicMembership()) {
+					// Join group - handle subgroups
+					if (elgg_is_active_plugin('au_subgroups')) {
+						if (elgg_is_admin_logged_in()) {
+							\AU\SubGroups\join_parents_recursive($group, $new_user);
 						} else {
-							add_entity_relationship($new_user->guid, 'membership_request', $parent->guid);
-							add_entity_relationship($new_user->guid, 'membership_request', $ent->guid);
+							$parent = \AU\SubGroups\get_parent_group($group);
+							if ($parent) {
+								if ($parent->canEdit() || elgg_is_admin_logged_in() || $parent->isPublicMembership()) {
+									// Join parent
+									if ($parent->join($new_user)) { system_message("Group {$parent->name} joined."); }
+									// Join group
+									if ($group->join($new_user)) { system_message("Workspace {$group->name} joined."); }
+									$group->join($new_user);
+								} else {
+									add_entity_relationship($new_user->guid, 'membership_request', $parent->guid);
+									add_entity_relationship($new_user->guid, 'membership_request', $group->guid);
+								}
+							} else {
+								if ($group->join($new_user)) { system_message("Group {$group->name} joined."); }
+							}
 						}
 					} else {
-						groups_join_group($ent, $new_user);
+						if ($group->join($new_user)) { system_message("Group {$group->name} joined."); }
 					}
+					
+				} else if ($group->isMember()) {
+					// Invite with no admin rights
+					if (add_entity_relationship($new_user->guid, 'membership_request', $group->guid)) {
+						system_message("Group membership for {$group->name}.");
+					} else {
+						system_message("Membership request already existing for {$group->name}.");
+					}
+				
 				} else {
-					groups_join_group($ent, $new_user);
+					// Invite with no admin rights
+					if (add_entity_relationship($new_user->guid, 'membership_request', $group->guid)) {
+						system_message("Group membership for {$group->name}.");
+					} else {
+						system_message("Membership request already existing for {$group->name}.");
+					}
 				}
-			} else if ($ent->isMember()) {
-				// Invite with no admin rights
-				add_entity_relationship($new_user->guid, 'membership_request', $ent->guid);
+				
 			} else {
-				// Invite with no admin rights
-				add_entity_relationship($new_user->guid, 'membership_request', $ent->guid);
+				system_message("Already member of {$group->name}.");
 			}
 		}
 	}

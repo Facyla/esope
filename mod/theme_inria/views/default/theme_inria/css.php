@@ -683,6 +683,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .notifications-pending-group-invites { border-bottom: 1px solid #DCDCDC; margin: 0 1rem; }
 .elgg-image-block.notifications-pending-invitations { margin: 0.5rem 0 1rem 0; }
 .notifications-pending-groups-requests { border-bottom: 1px solid #DCDCDC; padding: 1rem 0; margin: 0 1rem; }
+#notificationstable td.sitetogglefield a { cursor: default; }
 
 .elgg-layout-one-sidebar .elgg-main .elgg-form-site-notifications-process .elgg-list-container { background: transparent; padding: 0; }
 .elgg-list .elgg-item.elgg-item-object-site_notification .elgg-image-block { display: block; }
@@ -853,7 +854,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 -ms-input-placeholder { color: #D3D3D3; }
 
 /* Correct offset for anchors links */
-a[name*=comment] { padding-top: 7rem; margin-top: -7rem; display: block; width: 0; }
+a[name*=comment] { position: absolute; padding-top: 7rem; margin-top: -7rem; display: block; width: 0; }
 
 
 /* Fullscreen */
@@ -994,6 +995,9 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .elgg-image-block .elgg-image { margin: 0 1.875rem 0 0; position:relative; }
 .workspace-subtype-content .elgg-image-block .elgg-image { margin: 0 1.475rem 0 0; }
 .workspace-subtype-content .elgg-river-timestamp { margin-bottom: 0.1rem; }
+.workspace-subtype-content.file { display: flex; flex-wrap: wrap; }
+.workspace-subtype-content .file a { height: 100%; width: 100%; display: flex; }
+.workspace-subtype-content .file a img { margin: auto; }
 .elgg-river-responses .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 
 .elgg-image-block.elgg-river-item .elgg-image { margin: 1.5rem 1.875rem 0 0; margin:0; }
@@ -1002,10 +1006,10 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .elgg-image-block.elgg-river-item .elgg-image .fa { color: rgba(56, 66, 87, 0.5); }
 
 .elgg-river-item .elgg-river-responses form.elgg-form, 
-.thewire-reply-inline { border:0; padding:0.5rem 1rem; background: #FAFAFA; }
-.thewire-reply-inline { font-size:1rem; }
+.thewire-reply-inline { border:0; padding:0.5rem 1rem; background: #FAFAFA; display: flex; font-size:1rem; }
 .iris-box.home-wire .thewire-reply-inline img { width: 2rem; height: 2rem; margin: 0.5rem 0.5rem 0.5rem 0; }
-.home-wire .thewire-reply-inline #thewire-textarea { height: 3rem; font-size:1rem; flex: 1 1 auto; }
+.home-wire .thewire-reply-inline textarea { height: 3rem; font-size:1rem; flex: 1 1 auto; padding: 6px; }
+.thewire-reply-inline .wire-input textarea { flex: 1 1 auto; }
 .thewire-reply-inline .elgg-button.elgg-button-submit {}
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
 .elgg-menu .elgg-menu-item-access { float:left; margin-right: 1rem; margin-left: 0; }
@@ -1089,7 +1093,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 .elgg-list-entity .elgg-menu-entity { margin: 1rem 0 0 0; line-height:1.2rem; font-size: 0.8125rem; }
 .elgg-menu-entity .elgg-menu-item-edit a { background: none; border: 0; box-shadow: none; color: inherit; padding: 0; margin: 0; font-size: inherit; border-radius:0; }
-.elgg-menu-entity .elgg-menu-item-edit a:hover, .elgg-menu-entity .elgg-menu-item-edit a:focus, .elgg-menu-entity .elgg-menu-item-edit a:active { color:inherit; background:none; font-size: 0.8125rem; text-decoration:underline; }
+.elgg-menu-entity .elgg-menu-item-edit a:hover, .elgg-menu-entity .elgg-menu-item-edit a:focus, .elgg-menu-entity .elgg-menu-item-edit a:active { color:inherit; background:none; font-size: 0.9375rem; text-decoration:underline; }
 .entity-submenu { display:inline-block; position: relative; }
 .entity-submenu a { display: block; padding: 0 0.5rem; }
 .entity-submenu a .fa { color: rgba(56, 66, 87, 0.5); font-size: 1.25rem; }
@@ -1098,10 +1102,11 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .entity-submenu-content { position: absolute; right: 0; top: 0; padding: 1.5rem 0 0 0; z-index: 2; }
 .elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; }
 */
-.entity-submenu-content { position: absolute; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
+.entity-submenu-content { position: absolute; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 10rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
 .elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; }
+.iris-object .entity-submenu-content .elgg-menu-entity { margin: 0; }
 .iris-object .entity-submenu-content .elgg-menu-entity li a, 
-.elgg-list-entity .entity-submenu-content ul li { margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; }
+.elgg-list-entity .entity-submenu-content ul li { margin: 0; /* padding: 0.3rem 0 0.2rem 0; */ padding: 0; text-align: left; color: #384257; }
 .elgg-list-entity .entity-submenu-content ul li a { color: #384257; padding: 0; margin: 0; }
 .entity-submenu:hover .entity-submenu-content, .entity-submenu:active .entity-submenu-content, .entity-submenu:focus .entity-submenu-content { display: block; }
 .iris-object .entity-submenu-content .elgg-menu-entity li { display: block; margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; float: none; }
@@ -1185,7 +1190,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-menu a.tab { opacity:0.6; }
 .iris-group-menu a.search, .iris-group-menu span.search { border: 0; margin: 0 1.5rem 0 0rem; line-height: 1.125rem; }
 /* .iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; } */
-.iris-group-menu a.add { color: white; background: #1488CA; font-size:0.75rem; border-radius: 3rem; padding: 0.5rem 0.75rem 0.25rem 0.75rem; margin: 0.5rem 1rem 0rem 0; width: 6rem; text-align: center; }
+.iris-group-menu a.add { color: white; background: #1488CA; font-size:0.75rem; border-radius: 3rem; padding: 0.5rem 0.75rem 0.25rem 0.75rem; margin: 0.5rem 1rem 0rem 0; width: 10rem; text-align: center; }
 .iris-group-menu a.tab:first-of-type { margin-left:0; }
 .iris-group-menu a.tab.elgg-state-selected,
 .iris-group-menu span.tab.elgg-state-selected,
