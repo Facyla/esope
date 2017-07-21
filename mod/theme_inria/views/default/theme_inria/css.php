@@ -343,13 +343,13 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .footer-logo-inria { margin: 12px 0; }
 
 /* Buttons */
-.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; </* transition-duration:0.2s; */ opacity:0.5; }
+.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; /* transition-duration:0.2s; */ opacity:0.5; }
 .elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
-.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; </* transition-duration:0.2s; */ opacity:0.5; }
+.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; /* transition-duration:0.2s; */ opacity:0.5; }
 .elgg-button.elgg-button-submit[name=preview] { background-color: #384257; }
 .elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
 .elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; opacity:1; }
-.elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; </* transition-duration:0.2s; */ opacity:0.5; box-shadow:none; }
+.elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; /* transition-duration:0.2s; */ opacity:0.5; box-shadow:none; }
 .elgg-button.elgg-button-delete:hover, .elgg-button.elgg-button-delete:active, .elgg-button.elgg-button-delete:focus { border: 0; color:white; opacity:1; }
 
 

@@ -85,7 +85,12 @@ $actions .= '<div class="iris-object-actions">';
 					// Form should separated from menu
 				$form_vars = array('class' => 'thewire-form');
 				$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
-				$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
+				$wire_container = $entity->getContainerEntity();
+				if (elgg_instanceof($wire_container, 'group')) {
+					$actions_after .= elgg_view_form('thewire/group_add', $form_vars, array('post' => $entity));
+				} else {
+					$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
+				}
 				$actions_after .= '</div>';
 				
 			} else if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
