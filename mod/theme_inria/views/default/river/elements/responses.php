@@ -79,12 +79,11 @@ if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic')))
 	return true;
 }
 
-echo "BBB";
+
 // annotations and comments do not have responses
 //if ($item->annotation_id != 0 || !$object || $object instanceof ElggComment) {
 if ($item->annotation_id != 0 || !$object || $object instanceof ElggComment) { return; }
 
-echo "AAA";
 $comment_count = $object->countComments();
 
 // Avoid listing comments on users, groups, sites...
@@ -123,7 +122,7 @@ $comment_count = $object->countComments();
 // inline comment form
 // @TODO handle forum replies (status = open|closed)
 if ($object->canComment()) {
-	$form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
+	$form_vars = array('id' => "comments-add-{$object->getGUID()}-{$top_object->guid}", 'class' => 'hidden');
 	$body_vars = array('entity' => $object, 'inline' => true);
 	echo elgg_view_form('comment/save', $form_vars, $body_vars);
 }

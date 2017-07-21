@@ -16,7 +16,9 @@ $content .= elgg_list_river(array(
 	'wheres' => array(
 		"(e1.container_guid = $group->guid OR e2.container_guid = $group->guid)",
 	),
-	//'action_types' => array('join', 'vote', 'tag'),
+	'action_types' => array('join', 'vote', 'tag'),
+	//'action_types' => array('join'),
+	//'types' => array('group', 'user'),
 ));
 elgg_pop_context();
 

@@ -58,7 +58,7 @@ if (!isset($vars['name'])) {
 } else {
 	$name = $vars['name'];
 }
-		
+
 // Initialise values
 if (!isset($vars['value'])) {
 	$vars['value'] = array();
@@ -89,7 +89,7 @@ if (!isset($vars['friendspicker'])) {
 
 $users = array();
 $activeletters = array();
-		
+
 // Are we displaying form tags and submit buttons?
 // (If we've been given a target, then yes! Otherwise, no.)
 if (isset($vars['formtarget'])) {
@@ -97,7 +97,7 @@ if (isset($vars['formtarget'])) {
 } else {
 	$formtarget = false;
 }
-		
+
 // Sort users by letter
 if (is_array($friends) && sizeof($friends)) {
 	foreach($friends as $friend) {
@@ -115,7 +115,7 @@ if (is_array($friends) && sizeof($friends)) {
 }
 
 if (!$callback) {
-			
+
 ?>
 
 <div class="friends-picker-main-wrapper">
@@ -184,7 +184,7 @@ if (!isset($vars['replacement'])) {
 ?>
 			<div class="panel" title="<?php echo $letter; ?>">
 				<div class="wrapper">
-					<h3><?php echo $letter; ?></h3>					
+					<h3><?php echo $letter; ?></h3>
 					
 <?php
 
@@ -195,59 +195,64 @@ if (!isset($vars['replacement'])) {
 <table id="notificationstable" cellspacing="0" cellpadding="4" border="0" width="100%">
 <tr>
 	<td>&nbsp;</td>
-<?php
-			$i = 0;
-			foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-				if ($i > 0) {
-					echo "<td class='spacercolumn'>&nbsp;</td>";
-				}
-?>
+	<?php
+	$i = 0;
+	foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+		if ($i > 0) {
+			echo "<td class='spacercolumn'>&nbsp;</td>";
+		}
+		?>
 	<td class="<?php echo $method; ?>togglefield"><?php echo elgg_echo('notification:method:'.$method); ?></td>
-<?php
-				$i++;
-			}
-?>
+		<?php
+		$i++;
+	}
+	?>
 	<td>&nbsp;</td>
 </tr>
 
 <?php
-
-			if (is_array($users[$letter]) && sizeof($users[$letter]) > 0) {
-				foreach($users[$letter] as $friend) {
-					if ($friend instanceof ElggUser ) {
-				
-						if (!in_array($letter,$activeletters)) {
-							$activeletters[] = $letter;
-						}
-				
-						$method = array();
-						$fields = '';
-						$i = 0;
-				
-						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-							if (isset($subs[$method]) && in_array($friend->guid,$subs[$method])) {
-								$checked[$method] = 'checked="checked"';
-							} else {
-								$checked[$method] = '';
-							}
-							if ($i > 0) {
-								$fields .= "<td class='spacercolumn'>&nbsp;</td>";
-							}
-							$fields .= <<< END
-<td class="{$method}togglefield">
-<a border="0" id="{$method}{$friend->guid}" class="{$method}toggleOff" onclick="adjust{$method}_alt('{$method}{$friend->guid}');" title="{$method} {$friend->name}">
-<input type="checkbox" name="{$method}subscriptions[]" id="{$method}checkbox" onclick="adjust{$method}('{$method}{$friend->guid}');" value="{$friend->guid}" {$checked[$method]} /></a></td>
+if (is_array($users[$letter]) && sizeof($users[$letter]) > 0) {
+	foreach($users[$letter] as $friend) {
+		if ($friend instanceof ElggUser ) {
+	
+			if (!in_array($letter,$activeletters)) {
+				$activeletters[] = $letter;
+			}
+	
+			$method = array();
+			$fields = '';
+			$i = 0;
+	
+			foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+				if (isset($subs[$method]) && in_array($friend->guid,$subs[$method])) {
+					$checked[$method] = 'checked="checked"';
+				} else {
+					$checked[$method] = '';
+				}
+				if ($i > 0) {
+					$fields .= "<td class='spacercolumn'>&nbsp;</td>";
+				}
+				if ($method == 'site') {
+					$fields .= <<< END
+	<td class="sitetogglefield">
+	<a border="0" id="site{$friend->guid}" class="sitetoggleOff" title="site {$friend->name}">
+	<input type="checkbox" name="sitesubscriptions[]" id="sitecheckbox" value="{$friend->guid}" checked="checked" disabled="disabled" /></a></td>
 END;
-							$i++;
-						}
+				} else {
+					$fields .= <<< END
+	<td class="{$method}togglefield">
+	<a border="0" id="{$method}{$friend->guid}" class="{$method}toggleOff" onclick="adjust{$method}_alt('{$method}{$friend->guid}');" title="{$method} {$friend->name}">
+	<input type="checkbox" name="{$method}subscriptions[]" id="{$method}checkbox" onclick="adjust{$method}('{$method}{$friend->guid}');" value="{$friend->guid}" {$checked[$method]} /></a></td>
+END;
+				}
+					$i++;
+				}
 ?>
 
 <tr>
 	<td class="namefield" title="<?php echo elgg_echo('link:userprofile', $friend->name); ?>">
 		<a href="<?php echo $friend->getURL(); ?>">
-<?php
-			echo elgg_view_entity_icon($friend, 'tiny', array('use_hover' => false));
-?>
+		<?php echo elgg_view_entity_icon($friend, 'tiny', array('use_hover' => false)); ?>
 		</a>
 		<p class="namefieldlink">
 			<a href="<?php echo $friend->getURL(); ?>"><?php echo $friend->name ?></a>
@@ -261,10 +266,9 @@ END;
 
 
 <?php
-					}
-				}
-			}
-
+		}
+	}
+}
 ?>
 </table>
 
@@ -284,7 +288,7 @@ END;
 	}
 		
 ?>
-		</div>		
+		</div>
 	</div>
 	</div>
 	
@@ -332,8 +336,7 @@ if (!isset($vars['replacement'])) {
 </script>
 
 <?php
-
 }
-
 ?>
 </div>
+

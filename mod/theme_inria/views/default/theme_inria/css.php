@@ -343,13 +343,13 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .footer-logo-inria { margin: 12px 0; }
 
 /* Buttons */
-.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; }
+.elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; </* transition-duration:0.2s; */ opacity:0.5; }
 .elgg-button.elgg-button-action:hover, .elgg-button.elgg-button-action:active, .elgg-button.elgg-button-action:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
-.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; }
+.elgg-button.elgg-button-submit { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; </* transition-duration:0.2s; */ opacity:0.5; }
 .elgg-button.elgg-button-submit[name=preview] { background-color: #384257; }
 .elgg-button.elgg-button-submit:hover, .elgg-button.elgg-button-submit:active, .elgg-button.elgg-button-submit:focus { border: 0; background: <?php echo $iris_blue; ?>; color:white; opacity:1; }
 .elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; opacity:1; }
-.elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; transition-duration:0.2s; opacity:0.5; box-shadow:none; }
+.elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; </* transition-duration:0.2s; */ opacity:0.5; box-shadow:none; }
 .elgg-button.elgg-button-delete:hover, .elgg-button.elgg-button-delete:active, .elgg-button.elgg-button-delete:focus { border: 0; color:white; opacity:1; }
 
 
@@ -848,10 +848,11 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 
 /* Styles génériques */
 /* Forms */
-::-webkit-input-placeholder { color: #D3D3D3; }
-:-moz-placeholder { color: #D3D3D3; }
-::-moz-placeholder { color: #D3D3D3; }
--ms-input-placeholder { color: #D3D3D3; }
+::-webkit-input-placeholder { color: rgba(189,189,189,0.5); }
+:-moz-placeholder { color: rgba(189,189,189,0.5); }
+::-moz-placeholder { color: rgba(189,189,189,0.5); }
+-ms-input-placeholder { color: rgba(189,189,189,0.5); }
+::placeholder { color: rgba(189,189,189,0.5); }
 
 /* Correct offset for anchors links */
 a[name*=comment] { position: absolute; padding-top: 7rem; margin-top: -7rem; display: block; width: 0; }
@@ -1005,7 +1006,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .elgg-image-block.elgg-river-item .elgg-image span, .elgg-image-block.elgg-river-item .elgg-image img { margin: auto !important; color: #384257; }
 .elgg-image-block.elgg-river-item .elgg-image .fa { color: rgba(56, 66, 87, 0.5); }
 
-.elgg-river-item .elgg-river-responses form.elgg-form, 
+.elgg-river-item .elgg-river-responses form.elgg-form { border:0; padding:0.5rem 1rem; background: #FAFAFA; /* display: flex; */ font-size:1rem; }
 .thewire-reply-inline { border:0; padding:0.5rem 1rem; background: #FAFAFA; display: flex; font-size:1rem; }
 .iris-box.home-wire .thewire-reply-inline img { width: 2rem; height: 2rem; margin: 0.5rem 0.5rem 0.5rem 0; }
 .home-wire .thewire-reply-inline textarea { height: 3rem; font-size:1rem; flex: 1 1 auto; padding: 6px; }
