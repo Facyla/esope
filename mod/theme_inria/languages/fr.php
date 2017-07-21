@@ -134,7 +134,7 @@ return array(
 	
 	'file:edit' => 'Modifier le fichier',
 	'file:delete' => 'Supprimer le fichier',
-	'file:upload' => 'Partager un nouveau fichier',
+	'file:upload' => 'Uploader un nouveau fichier',
 	'files:none' => "Aucun fichier",
 	
 	'forum:none' => 'Aucune discussion pour le moment',
@@ -951,6 +951,7 @@ Voir et commenter ce lien web :
 	'theme_inria:pages:edit' => "Modifier le wiki",
 	'theme_inria:pages:edit:button' => "Modifier cette page wiki",
 	
+	'placeholder:tags' => "tag1, mot-clef 2..."
 	
 );
 

@@ -112,7 +112,8 @@ $main_content = '';
 if (!empty($body)) {
 	if ($mode != 'full') {
 		// Auto-detect link in text for more flexibility ?
-		if ((strpos($body, '<a ') === false) && (strpos($body, '</a>') === false)) {
+		//if ((strpos($body, '<a ') === false) && (strpos($body, '</a>') === false)) {
+		if ((strpos($body, '<a ') === false) && (strpos($body, '</a>') === false) && !in_array($entity->getSubtype(), array('thewire'))) {
 		//if (in_array($entity->getSubtype(), ['blog', 'file', 'bookmarks', 'page', 'page_top', 'thewire', 'newsletter'])) {
 			$main_content .= '<a href="' . $entity->getUrl() . '" class="iris-object-readmore"><div class="elgg-content">' . $body . '<span class="readmore">' . elgg_echo('theme_inria:readmore') . '</span></div></a>';
 		} else {

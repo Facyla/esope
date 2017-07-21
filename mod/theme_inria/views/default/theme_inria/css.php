@@ -1585,9 +1585,11 @@ a[name=unlike] { color: #1488CA !important; }
 
 .iris-object .elgg-content { margin: 0.5rem 0; line-height: 1.25; }
 
-#cboxContent { padding: 1rem 1rem 3rem 1rem; min-width: 27rem; width: 32rem; max-width: 100%; }
-#cboxLoadedContent { padding: 0rem; min-width: 25rem; width: 30rem; max-width: 100%; }
-.embed-wrapper { max-width: 100%; }
+#cboxWrapper { /* max-width: 36rem; width: 36rem; */ }
+#cboxContent { padding: 1rem 1rem 3rem 1rem; /* min-width: 27rem; width: 32rem; max-width: 100%; */ }
+#cboxLoadedContent { margin: 0 0 2rem 0; padding: 0rem; /* min-width: 25rem; width: 30rem; */ max-width: calc(100% - 2rem); max-width: 32rem; }
+#cboxLoadedContent .elgg-pagination { /* display: inline-block; */ text-align: center; }
+.embed-wrapper { /* width: 32rem; max-width: 100%; */ width: unset !important; }
 
 .cke_reset_all a, .cke_reset_all * { box-sizing: content-box !important; }
 
