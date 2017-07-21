@@ -1009,7 +1009,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .thewire-reply-inline { border:0; padding:0.5rem 1rem; background: #FAFAFA; display: flex; font-size:1rem; }
 .iris-box.home-wire .thewire-reply-inline img { width: 2rem; height: 2rem; margin: 0.5rem 0.5rem 0.5rem 0; }
 .home-wire .thewire-reply-inline textarea { height: 3rem; font-size:1rem; flex: 1 1 auto; padding: 6px; }
-.thewire-reply-inline .wire-input textarea { flex: 1 1 auto; }
+.thewire-reply-inline .wire-input textarea { flex: 1 1 auto; width: 10rem; }
 .thewire-reply-inline .elgg-button.elgg-button-submit {}
 .elgg-menu.elgg-menu-entity { float: none; text-align: right; max-width: none; width: 100%; text-align: right; margin: 0.5rem 0; }
 .elgg-menu .elgg-menu-item-access { float:left; margin-right: 1rem; margin-left: 0; }
