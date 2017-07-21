@@ -45,7 +45,7 @@ $banner_css .= " url('{$url}mod/theme_inria/graphics/backgrounds/profile/" . ran
 			<?php echo elgg_view('profile/iris_details'); ?>
 		
 			<div class="iris-profile-field">
-				<?php
+				<?php // Groupes du membre
 				$options = array(
 						'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $user->guid,
 						'limit' => false, 'full_view' => FALSE, 'pagination' => FALSE,
@@ -73,7 +73,7 @@ $banner_css .= " url('{$url}mod/theme_inria/graphics/backgrounds/profile/" . ran
 			</div>
 			
 			<div class="iris-profile-field">
-				<?php
+				<?php // Contacts du membre
 				$options = array(
 						'type' => 'user', 'relationship' => 'friend', 'relationship_guid' => $user->guid,
 						'limit' => false, 'size' => "small", 'list_type' => 'gallery', 'pagination' => false,
@@ -92,7 +92,7 @@ $banner_css .= " url('{$url}mod/theme_inria/graphics/backgrounds/profile/" . ran
 					$count = $user_friends_count - $max_friends;
 					$style = '';
 					if (strlen((string)$count) > 2) { $style = 'font-size: 1rem; line-height: 1rem; padding-top: 0.7rem;'; }
-					echo '<div class="iris-user-friends-add float" style="' . $style . '"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-profile-field .iris-user-groups.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+'. $count . '</a></div>';
+					echo '<div class="iris-user-friends-add float" style="' . $style . '"><a href="javascript:void(0);" onClick="javascript:$(\'.iris-profile-field .iris-user-friend.hidden\').removeClass(\'hidden\'); $(this).parent().hide();" title="' . elgg_echo('theme_inria:viewall') . '">+'. $count . '</a></div>';
 				}
 				?>
 				<div class="clearfloat"></div>

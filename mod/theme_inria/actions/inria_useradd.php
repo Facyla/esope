@@ -142,21 +142,23 @@ if (!$already_registered) {
 		access_show_hidden_entities($hidden_entities);
 	}
 
-	// ADMIN NOTIFICATION
+	// ADMIN NOTIFICATION : no matter if validation needed of not
+	// We can notify up to 3 admins so new members can be moderated
 	if ($admin_validation) {
-		// We can notify up to 3 admins so new members can be moderated
 		$admin_subject = elgg_echo('theme_inria:useradd:admin:subject');
-		$admin_body = elgg_echo('theme_inria:useradd:admin:body', array(
-			$name,
-			$email,
-			$inviter->name . ' (' . $inviter_guid . ')',
-			$reason,
-			$new_user->getURL(),
-		));
-		if ($disable_notice) { $admin_body .= $disable_notice; }
-		foreach ($admins as $notify_user) {
-			notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body);
-		}
+	} else {
+		$admin_subject = elgg_echo('theme_inria:useradd:admin:subject:confirm');
+	}
+	$admin_body = elgg_echo('theme_inria:useradd:admin:body', array(
+		$name,
+		$email,
+		$inviter->name . ' (' . $inviter_guid . ')',
+		$reason,
+		$new_user->getURL(),
+	));
+	if ($disable_notice) { $admin_body .= $disable_notice; }
+	foreach ($admins as $notify_user) {
+		notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body);
 	}
 	
 	system_message(elgg_echo("adduser:ok", array($site->name)));

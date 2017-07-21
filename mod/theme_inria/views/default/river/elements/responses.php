@@ -9,7 +9,7 @@
 // allow river views to override the response content
 $responses = elgg_extract('responses', $vars, false);
 if ($responses) {
-	echo $responses ."0000";
+	echo $responses;
 	return;
 }
 

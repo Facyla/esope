@@ -364,15 +364,16 @@ Et identifiez-vous avec :
 - votre identifiant : %6\$s &nbsp; ou votre adresse email %7\$s
 - votre mot de passe : %8\$s
 ",
-	'theme_inria:useradd:admin:subject' => "Compte de l'utilisateur créé",
+	'theme_inria:useradd:admin:subject' => "Création de compte externe",
+	'theme_inria:useradd:admin:subject:confirm' => "Création de compte externe à confirmer",
 	'theme_inria:useradd:admin:body' => "
-Un compte utilisateur a été créé pour %s, email %s, par %s.
+Un compte utilisateur a été créé pour %1\$s, email %2\$s, par %3\$s.
 
 Motif de l'inscription :
 
-%s
+%4\$s
 
-Voici l'adresse du nouveau compte créé : %s
+Voici l'adresse du nouveau compte créé : %5\$s
 ",
 	
 	'theme_inria:pages:summarytoggle' => "Navigation du wiki (afficher/masquer)",

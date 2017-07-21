@@ -144,13 +144,17 @@ elgg_pop_context();
 // Compose page content
 
 // Nouvelle publication
-if ($group->isMember()) {
+if ($group->isMember() || $group->canEdit()) {
 	switch($subtype) {
 		case 'feedback':
 			// No new feedback in that way
 			break;
 		case 'thewire':
 			$content .= '<a href="' . $url . 'groups/workspace/' . $group->guid . '" class="elgg-button elgg-button-action float-alt" rel="nofollow">' . elgg_echo('theme_inria:'.$subtype.':add') . '</a>';
+			break;
+		case 'page':
+		case 'page_top':
+			$content .= '<a href="' . $url . 'pages/add/' . $group->guid . '" class="elgg-button elgg-button-action float-alt" rel="nofollow">' . elgg_echo($subtype.':add') . '</a>';
 			break;
 		case 'event_calendar':
 		case 'newsletter':
