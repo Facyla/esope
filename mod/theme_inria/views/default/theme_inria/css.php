@@ -434,10 +434,10 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .pages-nav.treeview a:hover, .pages-nav.treeview a:active, .pages-nav.treeview a:focus { color: white; }
 .treeview li { font-size: 1rem; }
 .elgg-body-transp .elgg-image-block { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; border-bottom: 2px solid #F1F1F1; }
-.elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 2rem 2rem; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 2rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
 .elgg-body-transp #group-replies .elgg-content .elgg-output { margin: 0; padding: 0; border-bottom: 0; }
 #group-replies.elgg-comments .elgg-list > li { margin: 0; }
-.elgg-body-transp .esope-subpages-menu { margin: 0 0rem 2rem 0rem; padding: 1rem 0 0 0; border-top: 2px solid #F1F1F1; border-bottom: 2px solid #F1F1F1; }
+.elgg-body-transp .esope-subpages-menu { margin: 0 0rem 2rem 0rem; padding: 1rem 0 0rem 0; border-top: 2px solid #F1F1F1; border-bottom: 2px solid #F1F1F1; }
 .elgg-body-transp .pages-subpages .esope-subpages-menu { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; border-top: 0; }
 .elgg-body-transp .comment_trackerWrapper { margin: 2rem -2rem 2rem -2rem; padding: 2rem 2rem 0rem 2rem; border-top: 2px solid #F1F1F1; }
 
@@ -1590,7 +1590,10 @@ a[name=unlike] { color: #1488CA !important; }
 
 #cboxWrapper { /* max-width: 36rem; width: 36rem; */ }
 #cboxContent { padding: 1rem 1rem 3rem 1rem; /* min-width: 27rem; width: 32rem; max-width: 100%; */ }
-#cboxLoadedContent { margin: 0 0 2rem 0; padding: 0rem; /* min-width: 25rem; width: 30rem; */ max-width: calc(100% - 2rem); max-width: 32rem; }
+/*
+#cboxLoadedContent { margin: 0 0 2rem 0; padding: 0rem; max-width: calc(100% - 2rem); max-width: 32rem; }
+*/
+#cboxLoadedContent { margin: 0 0 2rem 0; padding: 0rem; min-width: 32rem; width: auto; max-width: 100%; }
 #cboxLoadedContent .elgg-pagination { /* display: inline-block; */ text-align: center; }
 .embed-wrapper { /* width: 32rem; max-width: 100%; */ width: unset !important; }
 
@@ -1600,7 +1603,7 @@ a[name=unlike] { color: #1488CA !important; }
 .elgg-likes-popup .elgg-list { margin: 0; }
 .elgg-likes-popup .elgg-list .elgg-item { padding: 0rem 0rem 0rem 0rem; box-shadow: none; border: 0; margin: 0 0 1rem 0; }
 
-.iris-object.iris-object-full, .iris-object.iris-object-full .entity-headline { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; border-bottom: 2px solid #F1F1F1; }
+.iris-object.iris-object-full, .iris-object.iris-object-full .entity-headline { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
 
 .elgg-body-transp .elgg-comments .elgg-image-block { margin: 0; border: 0; padding: 0.5rem 0rem; }
 .elgg-body-transp .elgg-comments .elgg-image-block .elgg-image { margin: 0rem 0.5rem 0rem 0rem; }

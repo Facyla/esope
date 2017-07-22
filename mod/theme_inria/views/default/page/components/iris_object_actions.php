@@ -42,6 +42,7 @@ if ($container && !elgg_instanceof($page_owner, 'group')) {
 	if (elgg_instanceof($container, 'group')) {
 		$container_info .= '<li>' . elgg_view('output/url', array(
 				'text' => $group_icon . '&nbsp;' . $container->name,
+				'title' => "",
 				'href' => $container->getURL(),
 				'class' => 'iris-container',
 			)) . '</li>';
@@ -74,13 +75,14 @@ $actions .= '<div class="iris-object-actions">';
 					'distinct' => false,
 				));
 			}
-			if ($comments > 0) { $actions .= '<li><a href="' . $entity->getURL() . '">' . $comments . '&nbsp;<i class="fa fa-comments"></i></a></li>'; }
+			if ($comments > 0) { $actions .= '<li><a href="' . $entity->getURL() . '" title="' . elgg_echo('theme_inria:object:comments:count', array($comments)) . '">' . $comments . '&nbsp;<i class="fa fa-comments"></i></a></li>'; }
 		
 			// Wire : reply form
 			if (elgg_instanceof($entity, 'object', 'thewire')) {
 				$actions .= '<li>' . elgg_view('output/url', array(
 							'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
 							'text' => '<i class="fa fa-comment"></i>',
+							'title' => elgg_echo('theme_inria:object:comment'),
 					)) . '</li>';
 					// Form should separated from menu
 				$form_vars = array('class' => 'thewire-form');
@@ -97,6 +99,7 @@ $actions .= '<div class="iris-object-actions">';
 				if ($entity->status != 'closed') {
 					$actions .= '<li>' . elgg_view('output/url', array(
 								'href' => "javascript:void(0);", 'onClick' => "$('#discussion-reply-{$entity->guid}').slideToggle('slow');",
+								'title' => elgg_echo('theme_inria:object:comment'),
 								'text' => '<i class="fa fa-comment"></i>',
 						)) . '</li>';
 						// Form should separated from menu
@@ -111,6 +114,7 @@ $actions .= '<div class="iris-object-actions">';
 				// Generic inline comment form
 				$actions .= '<li>' . elgg_view('output/url', array(
 							'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
+							'title' => elgg_echo('theme_inria:object:comment'),
 							'text' => '<i class="fa fa-comment"></i>',
 					)) . '</li>';
 				$actions_after .= elgg_view_form('comment/save', 
@@ -123,6 +127,7 @@ $actions .= '<div class="iris-object-actions">';
 				// Generic inline comment form
 				$actions .= '<li>' . elgg_view('output/url', array(
 							'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
+							'title' => elgg_echo('theme_inria:object:comment'),
 							'text' => '<i class="fa fa-comment"></i>',
 					)) . '</li>';
 				$actions_after .= elgg_view_form('comment/save', 

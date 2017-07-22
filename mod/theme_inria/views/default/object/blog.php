@@ -86,7 +86,7 @@ if ($full) {
 		'body' => $body,
 	));
 	*/
-	$content = $comments_link . $categories . $body;
+	$content = $categories . $body;
 
 } else {
 	// brief view

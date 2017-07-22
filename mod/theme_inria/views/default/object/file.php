@@ -21,7 +21,7 @@ $base_type = substr($mime, 0, strpos($mime,'/'));
 
 if ($size = $file->getSize()) { $filesize = '<span class="file-size">' . esope_friendly_size($size, 2) . '</span>'; }
 $mimetype = '<span class="file-mimetype">' . $file->getMimeType() . '</span>';
-$filename = '<span class="file-filename" title="' . $file->originalfilename . '">' . elgg_get_excerpt($file->originalfilename, 30) . '</span>';
+$filename = '<span class="file-filename" title="' . $file->originalfilename . '">' . elgg_get_excerpt($file->originalfilename, 50) . '</span>';
 $simpletype = '<span class="file-simpletype">' . $file->simpletype . '</span>';
 $extension = '<span class="file-extension">' . pathinfo($file->originalfilename)['extension'] . '</span>';
 $file_meta = '<p class="file-meta">';
@@ -105,7 +105,7 @@ if ($full && !elgg_in_context('gallery')) {
 } elseif (elgg_in_context('gallery')) {
 	
 	echo '<div class="file-gallery-item">';
-	echo '<h3 title="' . $file->title . '">' . elgg_get_excerpt($file->title, 30) . '</h3>';
+	echo '<h3 title="' . $file->title . '">' . elgg_get_excerpt($file->title, 50) . '</h3>';
 	// Pas de dowload direct dans la galerie sinon on perd tout accès à la page du fichier
 	// Note : de plus cette fonction est apportée par file_tools...
 	$file_icon = elgg_view_entity_icon($file, 'medium', array('href' => false));

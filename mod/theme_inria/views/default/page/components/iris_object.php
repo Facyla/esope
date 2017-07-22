@@ -81,8 +81,8 @@ if (!empty($title)) {
 	if ($mode == 'full') {
 		$main_title = '<h2>' . $title . '</h2>';
 	} else {
-		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 30) . '</a></h3>';
-		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 30) . '</h3>';
+		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 50) . '</a></h3>';
+		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 50) . '</h3>';
 	}
 }
 

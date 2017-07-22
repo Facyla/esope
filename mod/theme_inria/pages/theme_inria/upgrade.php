@@ -145,7 +145,8 @@ if ($remaining_forums === 0) {
 		foreach($groups as $ent) {
 			if ($group->forum_enable != 'no') {
 				$group->forum_enable = 'no';
-				$content .= "Forum désactivé dans {$group->name}<br />";
+				$group->blog_enable = 'yes';
+				$content .= "Forum désactivé et Blog activé dans {$group->name}<br />";
 			}
 		}
 		$content .= '<p><strong>' . "Tous les forums ont bien été désactivés. Le transtypage des forums en blogs est terminé !" . '</strong></p>';

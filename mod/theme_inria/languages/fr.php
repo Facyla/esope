@@ -500,7 +500,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'file:upload:version' => "Charger une nouvelle version",
 	'file:upload:version:message' => "Message de version",
 	
-	'comment' => "Poster un commentaire", // commenter
+	'comment' => "Commenter", // commenter
 	
 	'event_calendar:read_access' => 'Visibilité',
 	
@@ -938,6 +938,11 @@ Voir et commenter ce lien web :
 	'theme_inria:group:members:livefilter' => "3 premières lettres",
 	
 	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe.",
+	
+	'theme_inria:object:comment' => "Commenter",
+	'theme_inria:object:comments:count' => "%s commentaire(s)",
+	'theme_inria:pages:edit' => "Modifier cette page",
+	'theme_inria:pages:history' => "Voir les modifications de cette page",
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",

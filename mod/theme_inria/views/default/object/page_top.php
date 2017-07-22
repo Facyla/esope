@@ -114,13 +114,17 @@ if (elgg_instanceof($page_owner, 'group')) {
 		</div>';
 
 	$pages_actions = '';
-	$pages_actions .= '<li>' . elgg_view('output/url', array(
-			'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 
-			'title' => elgg_echo('theme_inria:pages:pageexport:title'),
-			'href' => elgg_add_action_tokens_to_url($url . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
-		)) . '</li>';
-	$pages_actions .= '<li><a href="' . $url . 'pages/edit/' . $page->guid . '"><i class="fa fa-edit"></i></a></li>';
-	$pages_actions .= '<li><a href="' . $url . 'pages/history/' . $page->guid . '"><i class="fa fa-clock-o"></i></a></li>';
+	$page_owner = elgg_get_page_owner_entity();
+	if ($full || (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace'))) {
+		$pages_actions .= '<li>' . elgg_view('output/url', array(
+				'name' => 'htmlexport', 'text' => elgg_echo('theme_inria:pages:pageexport'), 
+				'title' => elgg_echo('theme_inria:pages:pageexport:title'),
+				'href' => elgg_add_action_tokens_to_url($url . 'action/pages/html_export?subpages=yes&guid=' . $page->guid),
+			)) . '</li>';
+	
+		$pages_actions .= '<li><a href="' . $url . 'pages/edit/' . $page->guid . '" title="' . elgg_echo('theme_inria:pages:edit') . '"><i class="fa fa-edit"></i></a></li>';
+		$pages_actions .= '<li><a href="' . $url . 'pages/history/' . $page->guid . '" title="' . elgg_echo('theme_inria:pages:history') . '"><i class="fa fa-clock-o"></i></a></li>';
+	}
 
 	if ($full) {
 		$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'full', 'metadata' => $pages_actions));
@@ -204,7 +208,7 @@ if ($full) {
 	if ($page->canEdit()) {
 		$edit_button .= '<div class="clearfloat"></div>';
 		//$edit_button .= '<h3>' . elgg_echo('theme_inria:pages:edit') . '</h3>';
-		$edit_button .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:pages:edit:button') . '</a></p>';
+		$edit_button .= '<p><a href="' . elgg_get_site_url() . 'pages/edit/' . $page->guid . '" class="elgg-button elgg-button-action float-alt">' . elgg_echo('theme_inria:pages:edit:button') . '</a></p>';
 	}
 	
 	// In groups
