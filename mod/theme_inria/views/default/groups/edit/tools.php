@@ -118,22 +118,22 @@ foreach ($tools as $priority => $view) {
 			)));
 			continue;
 		}
-		/* @TODO uncomment once forum are merged with blogs
-		if (in_array($group_option_toggle_name, array('forum_enable'))) {
-			$attrs = array('class' => 'groups-edit-checkbox');
-			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
-			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
-			echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
-				'name' => $group_option_toggle_name,
-				'value' => 'yes',
-				'default' => 'yes',
-				'checked' => true,
-				'label' => $group_option->label,
-				'disabled' => true,
-			)));
-			continue;
+		// Forum : on désactive s'il n'y en a plus - mais on laisse le choix tant qu'il reste du contenu
+		if ($group_option_toggle_name == 'forum_enable') {
+			$existing_topic = elgg_get_entities(array('type' => 'object', 'subtype' => 'groupforumtopic', 'container_guid' => $group->guid, 'count' => true));
+			if ($existing_topic === 0) {
+				// Can be safely disabled
+				echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
+					'name' => $group_option_toggle_name,
+					'value' => 'yes',
+					'default' => 'yes',
+					'checked' => false,
+					'label' => $group_option->label,
+					'disabled' => true,
+				)));
+				continue;
+			}
 		}
-		*/
 		
 		// Esope : add help title if set
 		$attrs = array('class' => 'groups-edit-checkbox');

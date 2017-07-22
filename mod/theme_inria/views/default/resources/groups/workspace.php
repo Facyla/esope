@@ -75,7 +75,7 @@ if (elgg_group_gatekeeper(false)) {
 	// Publication rapide : membres seulement
 	$content .= '<div class="' . $class . '" id="group-workspace-addcontent">';
 		// Avertissement si non membre
-		if (!$group->isMember) { else {
+		if (!$group->isMember) {
 			$content .= '<div class="group-workspace-add-tabs">';
 				$content .= '<p><a href="' . $group->getURL() . '">' . elgg_echo('theme_inria:workspace:notmember') . '</a></p>';
 			$content .= '</div>';
