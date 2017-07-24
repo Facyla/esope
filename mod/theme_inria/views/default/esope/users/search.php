@@ -32,7 +32,8 @@ $q = get_input('q');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
 $order_by = get_input('order_by', 'alpha');
-
+$friends_only = get_input('friends_only', false);
+if ($friends_only == 'yes') { $friends_only = true; } else { $friends_only = false; }
 
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
@@ -157,7 +158,6 @@ if (sizeof($profiletypes_opt) > 2) {
 $search_form .= $metadata_search;
 
 $search_form .= '<div class="esope-search-metadata">';
-$friends_only = false;
 // matchon : groups|users|friends
 $search_form .= elgg_view('input/checkbox', array('name' => 'friends_only', 'value' => 'yes', 'default' => '', 'checked' => $friends_only, 'label' => "Afficher seulement mes contacts"));
 $search_form .= '</div>';

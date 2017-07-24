@@ -172,34 +172,70 @@ if ($upgrade_transtype == 'yes') {
 
 
 // @TODO Activation des notifications 'site'
-function theme_inria_force_user_site_notifications($user) {
+function theme_inria_force_user_site_notifications($user, $simulate = false) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
+	
+	$notifications_content .= "User {$user->guid} {$user->name} : "
 	// pour ses propres contenus (réglage global)
-	set_user_notification_setting($user->guid, 'site', true);
+	if ($simulate) {
+		$notifications_content .= "<br /> - notifications personnelles : aucune action";
+	} else {
+		set_user_notification_setting($user->guid, 'site', true);
+		$notifications_content .= " - notifications personnelles : activées";
+	}
 	
 	// pour les groupes
 	// Get group memberships and condense them down to an array of guids
 	$groups = array();
 	$options = array('relationship' => 'member', 'relationship_guid' => $user->guid, 'type' => 'group', 'limit' => false);
 	if ($groupmemberships = elgg_get_entities_from_relationship($options)) {
-		foreach ($groupmemberships as $group) { elgg_add_subscription($user->guid, 'site', $group); }
+		$notifications_content .= "<br /> - notifications pour les groupes : ";
+		foreach ($groupmemberships as $group) {
+			if ($simulate) {
+				$notifications_content .= "{$group->guid} {$group->name} : aucune action, ";
+			} else {
+				elgg_add_subscription($user->guid, 'site', $group);
+				$notifications_content .= "{$group->guid} {$group->name} : activé, ";
+			}
+		}
 	}
 
 	// pour ses contacts
 	$friends = $user->getFriends(array('limit' => 0));
-	foreach($friends as $friend) { elgg_add_subscription($user->guid, 'site', $friend->guid); }
+	if ($friends) {
+		$notifications_content .= "<br /> - notifications pour les contacts : ";
+		foreach($friends as $friend) {
+			if ($simulate) {
+				$notifications_content .= "{$friend->guid} {$friend->name} : aucune action, ";
+			} else {
+				elgg_add_subscription($user->guid, 'site', $friend->guid);
+				$notifications_content .= "{$friend->guid} {$friend->name} : activé, ";
+			}
+		}
+	}
 
 	// pour ses collections
 	if ($collections = get_user_access_collections($user->guid)) {
 		$collections_ids[] = -1;
 		foreach ($collections as $collection) { $collections_ids[] = $collection->id; }
-		$user->collections_notifications_preferences_site = $collections_ids;
+		$notifications_content .= "<br /> - notifications pour les listes de contacts : " . implode(', ', $collections_ids);
+		if ($simulate) {
+			$notifications_content .= " : aucune action";
+		} else {
+			$user->collections_notifications_preferences_site = $collections_ids;
+			$notifications_content .= " : activé";
+		}
 	}
 	
 	// Pour les contenus commentés (réglage global)
 	if (elgg_is_active_plugin('comment_tracker')) {
 		$site = elgg_get_site_entity();
-		remove_entity_relationship($user->guid, 'block_comment_notifysite', $site->guid);
+		if ($simulate) {
+			$notifications_content .= "<br /> - notifications pour les contenus commentés : aucune action";
+		} else {
+			remove_entity_relationship($user->guid, 'block_comment_notifysite', $site->guid);
+			$notifications_content .= "<br /> - notifications pour les contenus commentés : activé";
+		}
 	}
 	
 	return true;
@@ -208,18 +244,33 @@ function theme_inria_force_user_site_notifications($user) {
 $notifications_content .= '<form method="POST">';
 	$notifications_content .= elgg_view('input/securitytoken');
 	$notifications_content .= elgg_view('input/hidden', array('name' => 'upgrade_notifications', 'value' => 'yes'));
-	$notifications_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'transtype', 'value' => '', 'options_values' => ['no' => "Non (limité dans un groupe)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
-	$notifications_content .= '<p><label>GUID du groupe ' . elgg_view('input/text', array('name' => 'group_guid', 'value' => $transtype_group_guid)) . '</label></p>';
+	$notifications_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'notifications', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
 	$notifications_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer activation des notifications site")) . '</p>';
 $notifications_content .= '</form><br /><br />';
 
 
 $upgrade_notifications = get_input('upgrade_notifications', false);
 if ($upgrade_notifications == 'yes') {
+	$notifications = get_input('notifications', false);
+	if ($notifications == 'yes') { $simulate_notifications = false; } else { $simulate_notifications = true;  }
 	$users = elgg_get_entities(array('type' => 'user', 'limit' => false));
-	foreach($users as $user) { theme_inria_force_user_site_notifications($user); }
+	foreach($users as $user) { theme_inria_force_user_site_notifications($user, $simulate_notifications); }
 }
 
+
+
+/* Batch example
+error_log("CRON : LDAP start " . date('Ymd H:i:s'));
+		$debug_0 = microtime(TRUE);
+		$users_options = array('types' => 'user', 'limit' => 0);
+		$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_cron_ldap_check', 10);
+		$debug_1 = microtime(TRUE);
+		error_log("CRON : LDAP end " . date('Ymd H:i:s') . " => " . round($debug_1-$debug_0, 4) . " secondes");
+		echo '<p>' . elgg_echo('theme_inria:cron:ldap:done') . '</p>';
+
+function theme_inria_cron_ldap_check($user, $getter, $options) {
+
+*/
 
 
 

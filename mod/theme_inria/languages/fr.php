@@ -277,7 +277,7 @@ return array(
 	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les responsables du groupe.",
 	
 	'theme_inria:groups:presentation' => "Présentation",
-	'theme_inria:groups:blog' => "Articles",
+	'theme_inria:groups:blog' => "Sujets",
 	'theme_inria:groups:forum' => "Discussion",
 	'theme_inria:groups:pages' => "Pages wiki",
 	'theme_inria:groups:ressources' => "Ressources",
@@ -332,10 +332,11 @@ return array(
 	
 	// Création de comptes
 	'inria_invite' => "Invitations sur Iris",
+	'theme_inria:invite_external' => "Inviter des membres non-Inria",
 	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
 	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
 	'theme_inria:useradd:groups' => "Inviter dans le(s) groupe(s)",
-	'theme_inria:useradd:groups:details' => "Si vous êtes responsable du groupe, votre contact sera immédiatement inscrit. Si vous êtes membre du groupe et que l'adhésion est modérée, une demande sera faite pour votre contact.",
+	'theme_inria:useradd:groups:details' => "Si vous êtes admin ou responsable du groupe, ou que le groupe est en accès libre, votre contact sera immédiatement inscrit. Si vous êtes membre du groupe et que l'adhésion est modérée, une demande sera faite pour votre contact.",
 	'theme_inria:useradd:groups:details:admin' => "En tant qu'admin, vous pouvez inscrire directement dans tous les groupes",
 	'theme_inria:useradd:email' => "Email",
 	'theme_inria:useradd:name' => "Prénom et nom",
@@ -521,39 +522,42 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	*/
 	
 	
-	// Blog override (blog => article)
-	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
-	'blog:blogs' => "Articles",
+	// Blog override (blog => article => sujet)
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Sujets",
+	'blog:blogs' => "Sujets",
 	'blog:archives' => "Archives",
-	'blog:blog' => "Article",
-	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
+	'blog:blog' => "Sujet",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Sujets",
 
-	'blog:title:user_blogs' => "Articles de %s",
-	'blog:title:all_blogs' => "Tous les articles du site",
-	'blog:title:friends' => "Articles des contacts",
+	'blog:title:user_blogs' => "Sujets de %s",
+	'blog:title:all_blogs' => "Tous les sujets du site",
+	'blog:title:friends' => "Sujets des contacts",
 
-	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
-	'blog:enableblog' => "Activer les articles du groupe",
-	'blog:write' => "Écrire un article",
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Sujets",
+	'blog:enableblog' => "Activer les sujets du groupe",
+	'blog:write' => "Écrire un sujet",
+	'blog:add' => 'Nouveau sujet',
+	'blog:edit' => 'Modifier le sujet',
+	'blog:body' => 'Corps du sujet',
 	// river
-	'blog:river:create' => "Publier un article",
-	'river:commented:object:blog' => "l'article",
-	'river:create:object:blog' => "%s a publié un article %s",
-	'river:comment:object:blog' => "%s a commenté l'article %s",
+	'blog:river:create' => "Publier un sujet",
+	'river:commented:object:blog' => "le sujet",
+	'river:create:object:blog' => "%s a publié un sujet %s",
+	'river:comment:object:blog' => "%s a commenté le sujet %s",
 	// notifications
-	'blog:newpost' => 'Nouvel article',
+	'blog:newpost' => 'Nouveau sujet',
 	// widget
-	'blog:widget:description' => "Ce widget affiche vos derniers articles.",
-	'blog:moreblogs' => "Plus d'articles",
-	'blog:numbertodisplay' => "Nombre d'articles à afficher",
-	'blog:noblogs' => "Aucun article",
-	'blog:notification' => "%s a écrit un nouvel article :
+	'blog:widget:description' => "Ce widget affiche vos derniers sujets.",
+	'blog:moreblogs' => "Plus de sujets",
+	'blog:numbertodisplay' => "Nombre de sujets à afficher",
+	'blog:noblogs' => "Aucun sujet",
+	'blog:notification' => "%s a écrit un nouveau sujet&nbsp; :
 
 %s
 
 %s
 
-Afficher et commenter le nouvel article :
+Afficher et commenter le nouveau sujet :
 
 %s",
 	
@@ -806,7 +810,7 @@ Voir et commenter ce lien web :
 	'theme_inria:blog:editdraft' => "Modifier un brouillon",
 	'theme_inria:sidebar:discussion' => "Les discussions (%s)",
 	'theme_inria:sidebar:file' => "Les fichiers (%s)",
-	'theme_inria:sidebar:blog' => "Les articles (%s)",
+	'theme_inria:sidebar:blog' => "Les sujets (%s)",
 	'theme_inria:sidebar:pages' => "Les pages wiki (%s)",
 	'theme_inria:sidebar:pages' => "Les wikis (%s&nbsp;wikis, %s&nbsp;pages)",
 	'theme_inria:sidebar:bookmarks' => "Les liens web (%s)",
@@ -837,7 +841,7 @@ Voir et commenter ce lien web :
 	'theme_inria:filter' => "Filtrer",
 	
 	'theme_inria:activity_filter:all' => "Aucun filtre",
-	'theme_inria:activity_filter:blog' => "Derniers articles publiés",
+	'theme_inria:activity_filter:blog' => "Derniers sujets publiés",
 	'theme_inria:activity_filter:comments' => "Commentaires récents",
 	'theme_inria:activity_filter:users' => "Derniers inscrits",
 	'theme_inria:activity_filter:profile' => "Mises à jour de profil",
@@ -957,7 +961,9 @@ Voir et commenter ce lien web :
 	'theme_inria:pages:edit' => "Modifier le wiki",
 	'theme_inria:pages:edit:button' => "Modifier cette page wiki",
 	
-	'placeholder:tags' => "tag1, mot-clef 2..."
+	'placeholder:tags' => "tag1, mot-clef 2...",
+	
+	'friend' => "Contact",
 	
 );
 

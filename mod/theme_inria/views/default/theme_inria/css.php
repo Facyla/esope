@@ -167,9 +167,22 @@ $width = array(
 .elgg-layout-one-sidebar .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .elgg-main { padding:0; background: transparent; }
 
+
 #iris-body .elgg-layout-one-sidebar.elgg-context-invite_external .elgg-main, 
 #iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main, 
 #iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { <?php echo $width['main']; ?> background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+
+#iris-body .elgg-layout-one-sidebar.elgg-layout-user-owner.elgg-context-friend_request .elgg-main, 
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-blog-save, 
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-bookmarks-save, 
+.elgg-layout-one-sidebar:not(.elgg-layout-group) .elgg-form-event-calendar-edit, 
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-pages-edit, 
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-poll-edit { background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-newsletter-edit, 
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-file-upload { background: white; padding: 2rem; border-radius: 0 0 4px 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-menu-newsletter-steps, 
+.elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-main #file-tools-upload-tabs { margin-bottom: 0; }
+#iris-body .elgg-layout-user-owner.elgg-context-friends .elgg-main { background: none; padding: 0; box-shadow: none; }
 #iris-body .iris-search .elgg-main { <?php echo $width['main']; ?> }
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0; display: flex; flex-wrap: wrap; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { /* padding: 2.5rem 0 0 0; */ }
@@ -804,9 +817,9 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-profile-icon { position: relative; top: 4rem; left: 3rem; width: 13rem; height: 13rem; z-index: 2; border-radius: 13rem; display:flex; background-repeat: no-repeat; background-position: center; background-size: cover; }
 .iris-profile-title { position: absolute; top: 5rem; left: 20rem; color: white; }
 #iris-body .iris-profile-title h2 { color: white; font-size:2.5rem; padding:0; margin-bottom: 0.75rem; }
-.iris-profile-info { background: white; font-size:0.75rem; color: #969696; margin-bottom: 1rem; padding: 1rem 1rem 1rem 20rem; text-transform: uppercase; font-weight: bold; display:flex; }
+.iris-profile-info { background: white; font-size:0.75rem; color: #969696; margin-bottom: 1rem; padding: 1rem 1rem 1rem 20rem; text-transform: uppercase; font-weight: bold; display:flex; flex-wrap: wrap; }
 .iris-profile-info a {  }
-.iris-profile-info-field { flex: 0 1 auto; margin-right: 5rem; }
+.iris-profile-info-field { flex: 0 1 auto; margin-right: 3rem; }
 .iris-profile-info-field:last-of-type { margin-right: 0; }
 .iris-profile-info-field strong { color: #384257; text-transform: initial; display: inline-block; padding-top: 0.5rem; font-size: 0.94rem; }
 .iris-profile-info-field .elgg-tags > li { margin-bottom:0; }
@@ -830,18 +843,19 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-profile-isfriend { right: 0rem; top: 1rem; background: #95C11F; }
 .iris-profile-pendingfriend { right: 0rem; top: 1rem; background: #E09000; }
 .iris-profile-sendmessage { right: -1.5rem; top: 4.5rem; background: #384257; }
-.iris-profile-field { padding: 1rem; border-bottom: 2px solid #E0E0E0; }
+.iris-profile-field { padding: 1rem; border-bottom: 2px solid #E0E0E0; display: flex; flex-wrap: wrap; justify-content: space-between; }
 .iris-profile-field:last-of-type { border: 0; }
+.iris-profile-field h4 { width: 100%; }
 .profile-activity-river { /* padding: 1rem; */ }
 .profile-activity-river .elgg-list-river { margin: 0; }
 .profile-activity-river .elgg-river-item { padding: 0; }
 .iris-profile-field .profile-aboutme-contents { padding: 0 0 1.5rem 0; }
 .profile-admin-menu-wrapper, .profile-admin-menu-wrapper a { color: red; }
-.iris-user-groups { margin:0 0.2rem 0.1rem 0; }
-.iris-user-groups img { height:80px; width:80px; }
+.iris-user-groups { margin: 0 0 0.25rem 0; flex: 1 0 5.5rem; }
+.iris-user-groups img { height:  5rem; width: 5rem; }
 .iris-user-groups-add { height:5rem; width:5rem; border:1px dashed #384257; display:flex; text-align:center; line-height:5rem; font-size:2rem; }
 .iris-user-groups-add a { width: 100%; color: #384257; text-decoration:none; }
-.iris-user-friend { margin:0 0.2rem 0.1rem 0; }
+.iris-user-friend { margin: 0 0 0.25rem 0; flex: 1 0 3.625rem; }
 .iris-user-friend img { height:3.375rem; width:3.375rem; border-radius:3.375rem; }
 .iris-user-friends-add { height:3.375rem; width:3.375rem; border:1px dashed #384257; display:flex; text-align:center; line-height:3.375rem; font-size:1rem; }
 .iris-user-friends-add a { width: 100%; color: #384257; text-decoration:none; }
@@ -944,7 +958,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 #esope-search-form h3 { text-transform: uppercase; font-size: 1rem; padding: 0;  margin-bottom: 2.125rem; }
 .iris-search-fulltext { display:none; }
 .esope-search-metadata { width: 100%; min-height: initial; border: 0; border-bottom: 1px solid #C8C8C8; padding: 0 0 1.25rem 0; margin: 0 0 1.4375rem 0; float: none; display: block; color: #384257; }
-.esope-search-metadata:last-of-type { border: 0; }
+.esope-search-metadata:last-of-type { border: 0; margin-bottom: 0; }
 .esope-search-metadata label { font-size: 1rem; color: #384257; font-weight:normal; line-height: 2rem; height: 2rem; }
 .esope-search-metadata-select label { font-size: 1.0rem; font-weight:bold; line-height: 2rem; height: 2rem; }
 #esope-search-form .esope-search-metadata select, #esope-search-form .esope-search-metadata input { float: right; min-width: initial; width: 10rem; font-size: 0.75rem; line-height: 2rem; height: 2rem; }
@@ -1271,6 +1285,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-members-search .fa { margin-right: 1rem; }
 .group-members .elgg-avatar { display:block; }
 #group-members-livefilter {  }
+.iris-invite-external { margin-top: 3rem; }
 .group-member img { border-radius: 50%; float: left; margin-right: 0.5rem; }
 .group-workspace-main { background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px 4px 4px 4px; margin-bottom: 1rem; /* overflow: hidden; */ }
 .group-workspace-module { margin-bottom: 2.5rem; }
