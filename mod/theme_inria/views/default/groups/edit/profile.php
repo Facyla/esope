@@ -61,7 +61,7 @@ echo '<div class="groups-edit-field">';
 				$name_edit_num_left = $name_limit - $name_edit_count;
 			}
 			if ($show_input) {
-				echo elgg_view("input/text", array('name' => 'name', 'value' => elgg_extract('name', $vars)));
+				echo elgg_view("input/text", array('name' => 'name', 'value' => elgg_extract('name', $vars), 'required' => true));
 				if (!empty($name_edit_num_left)) {
 					echo "<div class='elgg-subtext'>" . elgg_echo($translation_prefix."profile_manager:group:edit:limit", array("<strong>" . $name_edit_num_left . "</strong>")) . "</div>";
 				}
@@ -160,7 +160,7 @@ if (count($group_fields["fields"]) > 0) {
 				echo '</div>';
 			} else {
 				// show value
-				echo elgg_view("output/{$valtype}", array('value' => $value));
+				echo elgg_view("output/{$valtype}", array('value' => $value, 'required' => true));
 					
 				// add hidden so it gets saved and form checks still are valid
 				echo elgg_view("input/hidden", array('name' => $metadata_name, 'value' => $value));

@@ -12,6 +12,7 @@ $user = $vars['user'];
 echo elgg_view('notifications/subscriptions/personal', $vars);
 echo elgg_view('notifications/subscriptions/collections', $vars);
 echo elgg_view('notifications/subscriptions/forminternals', $vars);
+// Iris note : extended by comment_tracker/settings
 
 ?>
 <div class="elgg-foot">

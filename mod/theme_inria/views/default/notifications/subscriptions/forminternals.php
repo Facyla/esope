@@ -30,6 +30,8 @@ $friends = $user->getFriends(array('limit' => 0));
 
 $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
 foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+	// Iris v2 : force site notifications
+	if ($method == 'site') { continue; }
 	$subsbig[$method] = elgg_get_entities_from_relationship(array(
 		'relationship' => 'notify' . $method,
 		'relationship_guid' => $user->guid,
@@ -40,6 +42,8 @@ foreach($NOTIFICATION_HANDLERS as $method => $foo) {
 		
 $subs = array();
 foreach($subsbig as $method => $big) {
+	// Iris v2 : force site notifications
+	if ($method == 'site') { continue; }
 	if (is_array($subsbig[$method]) && sizeof($subsbig[$method])) {
 		foreach($subsbig[$method] as $u) { 
 			$subs[$method][] = $u->guid;
@@ -198,6 +202,8 @@ if (!isset($vars['replacement'])) {
 	<?php
 	$i = 0;
 	foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+		// Iris v2 : force site notifications
+		if ($method == 'site') { continue; }
 		if ($i > 0) {
 			echo "<td class='spacercolumn'>&nbsp;</td>";
 		}
@@ -224,6 +230,8 @@ if (is_array($users[$letter]) && sizeof($users[$letter]) > 0) {
 			$i = 0;
 	
 			foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+				// Iris v2 : force site notifications
+				if ($method == 'site') { continue; }
 				if (isset($subs[$method]) && in_array($friend->guid,$subs[$method])) {
 					$checked[$method] = 'checked="checked"';
 				} else {

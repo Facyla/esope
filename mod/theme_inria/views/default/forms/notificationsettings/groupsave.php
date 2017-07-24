@@ -13,6 +13,8 @@ $user = $vars['user'];
 
 $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
 foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
+	// Iris v2 : skip site (always enabled)
+	if ($method == 'site') { continue; }
 	$subsbig[$method] = elgg_get_entities_from_relationship(array(
 		'relationship' => 'notify' . $method,
 		'relationship_guid' => $user->guid,
@@ -45,6 +47,8 @@ foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 					<?php
 					$i = 0; 
 					foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+						// Iris v2 : skip site (always enabled)
+						if ($method == 'site') { continue; }
 						if ($i > 0) { echo "<td class='spacercolumn'>&nbsp;</td>"; }
 						?>
 						<td class="<?php echo $method; ?>togglefield"><?php echo elgg_echo('notification:method:'.$method); ?></td>
@@ -59,6 +63,8 @@ foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 					$fields = '';
 					$i = 0;
 					foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+						// Iris v2 : skip site (always enabled)
+						if ($method == 'site') { continue; }
 						$checked[$method] = '';
 						if (in_array($group->guid,$subsbig[$method])) { $checked[$method] = 'checked="checked"'; }
 						// Iris v2 : always force site notification (= disabled here, forced server-side)

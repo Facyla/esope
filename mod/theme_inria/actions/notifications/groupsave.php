@@ -6,6 +6,8 @@
  * @package ElggNotifications
  */
 
+// Iris : force site notifications (setting is not visible to members)
+
 $current_user = elgg_get_logged_in_user_entity();
 
 $guid = (int) get_input('guid', 0);

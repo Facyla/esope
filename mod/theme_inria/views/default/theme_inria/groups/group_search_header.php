@@ -58,15 +58,18 @@ if (!empty($group->banner)) {
 		/*
 		echo '<div class="iris-group-subtitle">' . $group->briefdescription . '</div>';
 		echo '<div class="iris-group-rules">';
+			// Community
+			if (!empty($main_group->community)) { echo '<span class="iris-group-community">' . elgg_echo('community') . ' ' . $main_group->community . '</span>'; }
 			// Access
-			echo '<span class="group-access">' .elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span>';
-			echo ' - ';
+			echo '<span class="group-access">' . elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $main_group)) . '</span>';
 			// Membership
-			echo elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
-			if ($group->membership == ACCESS_PUBLIC) {
-				echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
+			echo '<span class="group-membership">' . elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
+			if ($main_group->membership == ACCESS_PUBLIC) {
+				//echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
+				echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
 			} else {
-				echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
+				//echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . ' - ' . elgg_echo("theme_inria:groupmembership:closed:details");
+				echo '<span class="membership-group-closed">' . elgg_echo("theme_inria:groupmembership:closed") . '</span>';
 			}
 			echo '</span>';
 		echo '</div>';

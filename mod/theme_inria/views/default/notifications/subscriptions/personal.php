@@ -5,6 +5,8 @@
  * ESOPE: accessibility patch - add 1 title in link (based on 1.8.16)
  */
 
+// Iris v2 : force site notificaitons
+
 /* @var ElggUser $user */
 $user = $vars['user'];
 
@@ -25,6 +27,8 @@ $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecated
 		<?php
 		$i = 0; 
 		foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+			// Iris v2 : force site notifications
+			if ($method == 'site') { continue; }
 			if ($i > 0) {
 				echo "<td class='spacercolumn'>&nbsp;</td>";
 			}
@@ -48,6 +52,8 @@ $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecated
 $fields = '';
 $i = 0;
 foreach($NOTIFICATION_HANDLERS as $method => $foo) {
+	// Iris v2 : force site notifications
+	if ($method == 'site') { continue; }
 	if ($notification_settings = get_user_notification_settings($user->guid)) {
 		$personalchecked[$method] = '';
 		if (isset($notification_settings->$method) && $notification_settings->$method) {
@@ -57,6 +63,7 @@ foreach($NOTIFICATION_HANDLERS as $method => $foo) {
 	if ($i > 0) {
 		$fields .= "<td class='spacercolumn'>&nbsp;</td>";
 	}
+	// Iris v2 : force site notifications
 	if ($method == 'site') {
 		$fields .= <<< END
 			<td class="sitetogglefield">
