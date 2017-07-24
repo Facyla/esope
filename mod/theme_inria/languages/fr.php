@@ -337,7 +337,7 @@ return array(
 	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
 	'theme_inria:useradd:groups' => "Inviter dans le(s) groupe(s)",
 	'theme_inria:useradd:groups:details' => "Si vous êtes admin ou responsable du groupe, ou que le groupe est en accès libre, votre contact sera immédiatement inscrit. Si vous êtes membre du groupe et que l'adhésion est modérée, une demande sera faite pour votre contact.",
-	'theme_inria:useradd:groups:details:admin' => "En tant qu'admin, vous pouvez inscrire directement dans tous les groupes",
+	'theme_inria:useradd:groups:details:admin' => "En tant qu'admin, vous pouvez inscrire directement dans tous les groupes de votre choix",
 	'theme_inria:useradd:email' => "Email",
 	'theme_inria:useradd:name' => "Prénom et nom",
 	'theme_inria:useradd:username' => "Identifiant",
@@ -501,7 +501,8 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'file:upload:version' => "Charger une nouvelle version",
 	'file:upload:version:message' => "Message de version",
 	
-	'comment' => "Commenter", // commenter
+	'comment:toggle' => "Commenter", // commenter
+	'comment' => "Publier mon commentaire", // commenter
 	
 	'event_calendar:read_access' => 'Visibilité',
 	
@@ -947,6 +948,11 @@ Voir et commenter ce lien web :
 	'theme_inria:object:comments:count' => "%s commentaire(s)",
 	'theme_inria:pages:edit' => "Modifier cette page",
 	'theme_inria:pages:history' => "Voir les modifications de cette page",
+	
+	'theme_inria:groupinvite:email' => "Méthode 3 : invitation par email",
+	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas. Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe. Les emails qui ne sont associés à aucun compte Iris pourront être invités à rejoindre le réseau.",
+	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
+email3@domain.tld email4@domain.tld ",
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",

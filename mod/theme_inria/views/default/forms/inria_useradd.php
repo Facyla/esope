@@ -18,8 +18,15 @@
  * 
  */
 
-$name = $username = $email = $password = $reason = '';
-$password = generate_random_cleartext_password();
+$email = get_input('email', '');
+$username = get_input('username', '');
+$name = get_input('name', '');
+$organisation = get_input('organisation', '');
+$fonction = get_input('fonction', '');
+$group_guid = get_input('group_guid', '');
+$message = get_input('message', '');
+$reason = get_input('reason', '');
+//$password = generate_random_cleartext_password();
 
 if (elgg_is_sticky_form('useradd')) {
 	extract(elgg_get_sticky_values('useradd'));
@@ -39,10 +46,19 @@ echo '<p><label>' . elgg_echo('theme_inria:useradd:organisation') . '' . elgg_vi
 
 echo '<p><label>' . elgg_echo('theme_inria:useradd:fonction') . '' . elgg_view('input/text', array('name' => 'fonction', 'value' => $fonction)) . '</label></p>';
 
+// @TODO : use custom, simpler and multiple group select
+$groups = elgg_get_entities(array('type' => 'group', 'limit' => false));
+//$groups_options = array('' => elgg_echo('option:none')); // for select only (not for multiselect)
+$groups_options = array();
+foreach ($groups as $ent) { $groups_options[$ent->guid] = $ent->name; }
 if (elgg_is_admin_logged_in()) {
-	echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'all')) . '</label></p>';
+	// all groups
+	//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'all')) . '</label></p>';
+	echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
 } else {
-	echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'member')) . '</label></p>';
+	// known groups only
+	//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'member')) . '</label></p>';
+	echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
 }
 
 

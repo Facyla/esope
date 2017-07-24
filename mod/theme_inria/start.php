@@ -115,6 +115,10 @@ function theme_inria_init(){
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 	//elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600); // already extended by esope
 	
+	// Add email invites to groups
+	elgg_extend_view('forms/groups/invite', 'forms/groups/email_invite', 1001);
+	
+	
 	
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)

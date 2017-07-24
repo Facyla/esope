@@ -862,11 +862,11 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 
 /* Styles génériques */
 /* Forms */
-::-webkit-input-placeholder { color: rgba(189,189,189,0.5); opacity: 1; }
-:-moz-placeholder { color: rgba(189,189,189,0.5); opacity: 1; }
-::-moz-placeholder { color: rgba(189,189,189,0.5); opacity: 1; }
--ms-input-placeholder { color: rgba(189,189,189,0.5); opacity: 1; }
-::placeholder { color: rgba(189,189,189,0.5); opacity: 1; }
+::-webkit-input-placeholder { color: rgba(56, 66, 87, 0.5); opacity: 1; }
+:-moz-placeholder { color: rgba(56, 66, 87, 0.5); opacity: 1; }
+::-moz-placeholder { color: rgba(56, 66, 87, 0.5); opacity: 1; }
+-ms-input-placeholder { color: rgba(56, 66, 87, 0.5); opacity: 1; }
+input::placeholder, textarea::placeholder { color: rgba(56, 66, 87, 0.5); opacity: 1; }
 
 /* Correct offset for anchors links */
 a[name*=comment] { position: absolute; padding-top: 7rem; margin-top: -7rem; display: block; width: 0; }
@@ -1382,6 +1382,7 @@ form.elgg-form-newsletter-subscribe label { margin: 0; }
 #esope-search-form-invite-groups .esope-search-metadata { background: transparent; border: 0; padding: 0; margin-bottom: 0.5rem; margin-right: 2.5rem; display: inline-block; width: auto; }
 #esope-search-form-invite-groups .esope-search-metadata select { margin-left: 0.5rem; }
 #esope-search-form-invite-groups .esope-search-metadata label { margin-right: 0; }
+#esope-form-email-invite-groups { margin-top: 2.5rem; }
 
 .form-groups-add .iris-group-sidebar-alt { /* padding: 0 3rem 1rem 4rem; */ }
 .form-groups-add .iris-group-sidebar-alt .iris-group-image-input { background: transparent; box-shadow: none; }
