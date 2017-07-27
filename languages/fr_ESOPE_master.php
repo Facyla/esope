@@ -153,7 +153,7 @@ return array(
 	'PRIVATE' => "Privé",
 	'LOGGED_IN' => "Membres connectés",
 	'PUBLIC' => "Public",
-	'LOGGED_OUT' => "Visiteurs non connectés",
+	'LOGGED_OUT' => "Utilisateurs non connectés",
 	'access:friends:label' => "Contacts",
 	'access' => "Accès",
 	'access:overridenotice' => "Note : en accord avec la politique de confidentialité de ce groupe, ce contenu ne sera accessible qu'aux membres du groupe. ",
@@ -163,7 +163,7 @@ return array(
 	'access:write' => "Accès en écriture",
 	'access:admin_only' => "Seulement les administrateurs",
 	'access:missing_name' => "Le nom du niveau d'accès est manquant",
-	'access:comments:change' => "Cette discussion n'est actuellement visible que par un public limité. Faites attention à qui vous la partagez.",
+	'access:comments:change' => "Cette discussion n'est actuellement visible que par un public limité. Faites attention avec qui vous la partagez.",
 
 /**
  * Dashboard and widgets
@@ -230,7 +230,7 @@ return array(
 	'friends:of:none' => "Personne n'a encore ajouté ce membre comme contact.",
 	'friends:of:none:you' => "Personne ne vous a encore ajouté comme contact. Commencez par compléter votre page de profil et publiez du contenu pour que les gens vous trouvent !",
 
-	'friends:of:owned' => "Les personnes qui ont %s comme contact",
+	'friends:of:owned' => "Les personnes qui ont %s dans leurs contacts",
 
 	'friends:of' => "Contacts de",
 	'friends:collections' => "Liste de contacts",
@@ -467,7 +467,7 @@ return array(
 	'admin:configuration:dataroot:relative_path' => 'Impossible de définir "%s" comme racine pour le dossier de données car ce n\'est pas un chemin absolu.',
 	'admin:configuration:default_limit' => 'Le nombre d\'éléments par page doit être d\'au moins 1.',
 
-	'admin:unknown_section' => 'Partie Admin invalide.',
+	'admin:unknown_section' => 'Section Admin invalide.',
 
 	'admin' => "Administration",
 	'admin:description' => "Le panneau d'administration vous permet de contrôler tous les aspects du système, de la gestion des utilisateurs au comportement des outils installés. Choisissez une option ci-dessous pour commencer.",
