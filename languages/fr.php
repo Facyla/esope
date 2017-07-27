@@ -152,7 +152,7 @@ return array(
 	'PRIVATE' => "Privé",
 	'LOGGED_IN' => "Membres connectés",
 	'PUBLIC' => "Public",
-	'LOGGED_OUT' => "Visiteurs non connectés",
+	'LOGGED_OUT' => "Utilisateurs non connectés",
 	'access:friends:label' => "Contacts",
 	'access' => "Accès",
 	'access:overridenotice' => "Note : en accord avec la politique de confidentialité de ce groupe, ce contenu ne sera accessible qu'aux membres du groupe. ",
@@ -162,7 +162,7 @@ return array(
 	'access:write' => "Accès en écriture",
 	'access:admin_only' => "Seulement les administrateurs",
 	'access:missing_name' => "Le nom du niveau d'accès est manquant",
-	'access:comments:change' => "Cette discussion n'est actuellement visible que par un public limité. Faites attention à qui vous la partagez.",
+	'access:comments:change' => "Cette discussion n'est actuellement visible que par un public limité. Faites attention avec qui vous la partagez.",
 
 /**
  * Dashboard and widgets
@@ -229,7 +229,7 @@ return array(
 	'friends:of:none' => "Personne n'a encore ajouté ce membre comme contact.",
 	'friends:of:none:you' => "Personne ne vous a encore ajouté comme contact. Commencez par compléter votre page de profil et publiez du contenu pour que les gens vous trouvent !",
 
-	'friends:of:owned' => "Les personnes qui ont %s comme contact",
+	'friends:of:owned' => "Les personnes qui ont %s dans leurs contacts",
 
 	'friends:of' => "Contacts de",
 	'friends:collections' => "Liste de contacts",
@@ -466,7 +466,7 @@ return array(
 	'admin:configuration:dataroot:relative_path' => 'Impossible de définir "%s" comme racine pour le dossier de données car ce n\'est pas un chemin absolu.',
 	'admin:configuration:default_limit' => 'Le nombre d\'éléments par page doit être d\'au moins 1.',
 
-	'admin:unknown_section' => 'Partie Admin invalide.',
+	'admin:unknown_section' => 'Section Admin invalide.',
 
 	'admin' => "Administration",
 	'admin:description' => "Le panneau d'administration vous permet de contrôler tous les aspects du système, de la gestion des utilisateurs au comportement des outils installés. Choisissez une option ci-dessous pour commencer.",
@@ -490,7 +490,7 @@ return array(
 	'admin:users:online' => 'Actuellement en ligne',
 	'admin:users:newest' => 'Nouveaux',
 	'admin:users:admins' => 'Administrateurs',
-	'admin:users:add' => 'Ajouter un utilisateur',
+	'admin:users:add' => 'Créer un utilisateur',
 	'admin:users:description' => "Ce panneau d'administration vous permet de contrôler les paramètres des utilisateurs de votre site. Choisissez une option ci-dessous pour commencer.",
 	'admin:users:adduser:label' => "Cliquez ici pour ajouter un nouvel utilisateur...",
 	'admin:users:opt:linktext' => "Configurer les utilisateurs...",
@@ -628,7 +628,7 @@ return array(
 
 	'admin:plugins:warning:elgg_version_unknown' => 'Ce plugin utilise un ancien fichier manifest.xml et ne précise pas de version d\'Elgg compatible. Il ne fonctionnera probablement pas !',
 	'admin:plugins:warning:unmet_dependencies' => 'Ce plugin a des dépendances non satisfaites et ne peut pas être activé. Vérifiez les dépendances dans la partie "Plus d\'informations".',
-	'admin:plugins:warning:invalid' => '%s n\'est pas un plugin d\'Elgg valide. Vérifiez <a href="http://learn.elgg.org/en/stable/appendix/faqs.html?highlight=invalid#plugin-cannot-start-and-has-been-deactivated-or-this-plugin-is-invalid">la documentation d\'Elgg</a> les conseils de dépannage.',
+	'admin:plugins:warning:invalid' => '%s n\'est pas un plugin d\'Elgg valide. Vérifiez <a href="http://docs.elgg.org/Invalid_Plugin">la documentation d\'Elgg</a> les conseils de dépannage.',
 	'admin:plugins:warning:invalid:check_docs' => 'Vérifiez <a href="http://learn.elgg.org/fr/stable/appendix/faqs.html">la documentation d\'Elgg</a> pour des astuces de débogage. Vous pouvez également consulter <a href="http://learn.elgg.org/en/stable/appendix/faqs.html">version anglophone</a>, qui peut être plus complète / récente.',
 	'admin:plugins:cannot_activate' => 'Activation impossible',
 
@@ -655,7 +655,7 @@ return array(
 	'admin:plugins:dependencies:comment' => 'Commentaire',
 
 	'admin:statistics:description' => "Ceci est un aperçu des statistiques du site. Si vous avez besoin de statistiques plus détaillées, une version professionnelle d'administration est disponible.",
-	'admin:statistics:opt:description' => "Afficher les informations statistiques sur les utilisateurs et les objets du site.",
+	'admin:statistics:opt:description' => "Afficher les statistiques sur les utilisateurs et les objets du site.",
 	'admin:statistics:opt:linktext' => "Voir les statistiques...",
 	'admin:statistics:label:basic' => "Statistiques de base du site",
 	'admin:statistics:label:numentities' => "Entités sur le site",

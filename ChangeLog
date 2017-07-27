@@ -1,3 +1,20 @@
+2017-05-10  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* CHANGELOG.md, composer.json, docs/locale/es/LC_MESSAGES/admin.mo,
+  docs/locale/es/LC_MESSAGES/appendix.mo, docs/locale/fr/LC_MESSAGES/about.mo,
+  docs/locale/fr/LC_MESSAGES/intro.mo, docs/locale/fr/LC_MESSAGES/tutorials.mo,
+  docs/locale/ja/LC_MESSAGES/about.mo, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot, docs/locale/pt_BR/LC_MESSAGES/index.mo:
+  chore(release): v1.12.16
+
+2017-04-09  iionly <iionly@gmx.de>
+
+  	* .travis.yml, composer.json: chore(core): disable code sniffer checks
+
 2017-01-26  Jerome Bakker <jeabakker@coldtrick.com>
 
   	* CHANGELOG.md, composer.json: chore(release): v1.12.15
