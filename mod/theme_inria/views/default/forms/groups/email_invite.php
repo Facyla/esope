@@ -59,13 +59,16 @@ if ($invited_emails) {
 if ($invite_external_emails) {
 	$content .= '<p>' . elgg_echo('These emails are not associated with any member account : you may want to invite them to join Iris.') . '</p>';
 	foreach($invite_external_emails as $email) {
-		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action" onClick="$(this).hide();">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
+		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
 	}
+	// Or all at once
+	$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_guid=' . $group->guid . '&email=' . implode(',', $invite_external_emails) . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:invite:allemails') . '</a></p>';
 }
 
 // @TODO Proceed to regular invites
+// @TODO DEV function qui gère l'invitation d'un membre : avec inscription ou pas (et selon les droits de l'user connecté), et surtout si déjà invité ou les messages envoyés au membre et aux admins du groupe
 if ($existing_users) {
-	$content .= '<h4>' . elgg_echo('These emails are associated with an existing account, which has been invited.') . '</h4>';
+	$content .= '<h4>' . "@TODO - NON OPERATIONNEL !!  - " . elgg_echo('These emails are associated with an existing account, which has been invited.') . '</h4>';
 	$content .= '<p>';
 	foreach($existing_users as $ent) {
 		$content .= $ent->email . ' => ' . $ent->name . '<br />';
