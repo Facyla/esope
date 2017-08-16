@@ -21,13 +21,34 @@ if (!empty($subtype)) { $selector[] = "subtype=$subtype"; }
 if (!empty($action_types)) { $selector[] = "action_types=$action_types"; }
 $vars['selector'] = implode('&', $selector);
 
-// create selection array
-$options = array();
-$options['type=all'] = elgg_echo('river:select', array(elgg_echo('all')));
-$registered_entities = elgg_get_config('registered_entities');
+$params = array(
+	'id' => 'elgg-river-selector',
+	'options_values' => $options,
+);
+$selector = $vars['selector'];
+if ($selector) {
+	$params['value'] = $selector;
+}
 
+
+// Filtres composites
+$options = array();
+$options['type=all'] = elgg_echo('theme_inria:activity_filter:all');
+$options["type=object&subtype=blog"] = elgg_echo('theme_inria:activity_filter:blog');
+$options["type=object&subtype=comment"] = elgg_echo('theme_inria:activity_filter:comments');
+$options["type=site&action_types=join"] = elgg_echo('theme_inria:activity_filter:users');
+$options["type=user&action_types=update"] = elgg_echo('theme_inria:activity_filter:profile');
+$options["type=group"] = elgg_echo('theme_inria:activity_filter:groups');
+
+
+// create selection array
+//$options = array();
+//$options['type=all'] = elgg_echo('river:select', array(elgg_echo('all')));
+$registered_entities = elgg_get_config('registered_entities');
 if (!empty($registered_entities)) {
 	foreach ($registered_entities as $type => $subtypes) {
+		// Skip groups (option already exists)
+		if ($type == 'group') { continue; }
 		// subtype will always be an array.
 		if (!count($subtypes)) {
 			$label = elgg_echo('river:select', array(elgg_echo("item:$type")));
@@ -41,23 +62,6 @@ if (!empty($registered_entities)) {
 	}
 }
 
-$params = array(
-	'id' => 'elgg-river-selector',
-	'options_values' => $options,
-);
-$selector = $vars['selector'];
-if ($selector) {
-	$params['value'] = $selector;
-}
-
-// Filtres composites
-$options = array();
-$options['type=all'] = elgg_echo('theme_inria:activity_filter:all');
-$options["type=object&subtype=blog"] = elgg_echo('theme_inria:activity_filter:blog');
-$options["type=object&subtype=comment"] = elgg_echo('theme_inria:activity_filter:comments');
-$options["type=site&action_types=join"] = elgg_echo('theme_inria:activity_filter:users');
-$options["type=user&action_types=update"] = elgg_echo('theme_inria:activity_filter:profile');
-$options["type=group"] = elgg_echo('theme_inria:activity_filter:groups');
 $params['options_values'] = $options;
 
 $filter .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . elgg_echo('theme_inria:activity_type') . elgg_view('input/select', $params) . '</label><div class="clearfloat"></div></div>';

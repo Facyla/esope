@@ -195,6 +195,14 @@ $width = array(
 */
 #iris-body .iris-group .elgg-context-group_workspace .elgg-main { background: transparent; border: 0; padding: 0; box-shadow: none; padding: 4px; margin: -4px calc(2.5rem - 4px) calc(2.5rem - 4px) -4px; }
 #iris-body .iris-group .elgg-context-group_content .elgg-main { <?php echo $width['main']; ?> padding: 4px 4px 4px 4px; /* margin-left: 4.675rem; */ }
+#iris-body .elgg-layout-user-owner .elgg-main .iris-object-full {
+    background: white;
+    padding: 2rem;
+    box-shadow: 0 0 4px 0 rgba(189,189,189,0.5);
+    border-radius: 4px;
+    margin: 0;
+}
+
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 
 .elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; margin: 0 2.5rem 2.5rem 0; }
@@ -440,6 +448,7 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 
 /* Navigation des pages wiki en pleine largeur */
 .full-width-pages-nav { color: white; padding: 1.5rem; border-radius: 4px; background-color: rgba(56, 66, 87, 0.5); box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: -2rem -2rem 1rem -2rem; }
+.elgg-layout-user-owner .full-width-pages-nav { margin: 0rem -2rem 2rem -2rem; }
 .full-width-pages-nav a[rel=toggle] { color: white; font-weight: bold; }
 .full-width-pages-nav a[rel=toggle] .fa { margin-right: 1rem; }
 #full-width-pages-nav-content { margin-top: 0.5rem; }
@@ -1046,6 +1055,10 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-comments .elgg-list > li { border-width: 1px; }
 .elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.elgg-layout-user-owner .elgg-comments .elgg-list > li { border: 0; padding: 0; }
+.elgg-layout-user-owner ul.elgg-list.elgg-list-entity { border: 0; }
+.elgg-layout-user-owner ul.elgg-list.elgg-list-entity:before { content: ''; display: none; }
+.elgg-layout-user-owner .elgg-comments a[rel=toggle] { margin-top: 1rem; }
 .elgg-list.elgg-latest-comments li.elgg-item { padding: 1rem; }
 .elgg-list.elgg-latest-comments li.elgg-item h4 { margin: 0; }
 .elgg-list.elgg-latest-comments li.elgg-item .elgg-image-block { display: flex; }
@@ -1184,6 +1197,8 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-item-object .thewire-parent .elgg-image-block .elgg-image a.medium img { width: 2rem; height: 2rem; margin: 0 0.5rem !important; }
 .thewire-parent .thewire-post { padding: 0.25rem; }
 .thewire-parent .thewire-parent { margin: 0.5rem 0 0 -3rem; padding-top: 0.5rem; border-top: 1px solid #C8C8C8; }
+.thewire-parent .iris-object.iris-object-full { margin: 0; padding: 0 1rem; }
+.thewire-parent .thewire-parent .iris-object.iris-object-full { margin: 0 0rem 0 2rem; }
 #esope-search-results .elgg-menu-entity { text-align: left; }
 #esope-search-results .elgg-menu-entity > li { margin-left:0; margin-right:1rem; }
 
@@ -1329,8 +1344,8 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #group-workspace-add-blog a:first-of-type { margin-right:0.625rem; margin-bottom: 1rem; }
 .group-workspace-activity-filter { padding: 1rem 2.5rem; text-align: right; border-bottom: 2px solid #E0E0E0; }
 
-.group-content-filter.tabs { margin-bottom: 1.5625rem; }
-.group-content-filter.tabs a { font-size: 1.125rem; font-weight: bold; color: #384257; opacity: 0.3; margin: 0 2.5625rem 0 0; padding-bottom: 0.625rem; border-bottom: 4px solid transparent; }
+.group-content-filter.tabs { margin-bottom: 0.5625rem; }
+.group-content-filter.tabs a { font-size: 1.125rem; font-weight: bold; color: #384257; opacity: 0.3; margin: 0 2.5625rem 1rem 0; padding-bottom: 0.625rem; border-bottom: 4px solid transparent; display: inline-block; }
 .group-content-filter.tabs a.elgg-state-selected, .group-content-filter.tabs a:hover, .group-content-filter.tabs a:active, .group-content-filter.tabs a:focus { opacity: 1; border-bottom: 4px solid #384257; }
 
 
@@ -1621,6 +1636,7 @@ a[name=unlike] { color: #1488CA !important; }
 .elgg-likes-popup .elgg-list .elgg-item { padding: 0rem 0rem 0rem 0rem; box-shadow: none; border: 0; margin: 0 0 1rem 0; }
 
 .iris-object.iris-object-full, .iris-object.iris-object-full .entity-headline { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
+.elgg-layout-user-owner .iris-object.iris-object-full .entity-headline { margin: 0; padding: 0 0rem 1rem 0rem; }
 
 .elgg-body-transp .elgg-comments .elgg-image-block { margin: 0; border: 0; padding: 0.5rem 0rem; }
 .elgg-body-transp .elgg-comments .elgg-image-block .elgg-image { margin: 0rem 0.5rem 0rem 0rem; }

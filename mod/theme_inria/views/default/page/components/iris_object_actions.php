@@ -85,11 +85,11 @@ $actions .= '<div class="iris-object-actions">';
 							'title' => elgg_echo('theme_inria:object:comment'),
 					)) . '</li>';
 					// Form should separated from menu
-				$form_vars = array('class' => 'thewire-form');
+				$form_vars = array('class' => 'thewire-form', 'action' => 'action/thewire/add');
 				$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
 				$wire_container = $entity->getContainerEntity();
 				if (elgg_instanceof($wire_container, 'group')) {
-					$actions_after .= elgg_view_form('thewire/group_add', $form_vars, array('post' => $entity));
+					$actions_after .= elgg_view_form('thewire/group_add', $form_vars, array('entity' => $wire_container, 'post' => $entity));
 				} else {
 					$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
 				}
