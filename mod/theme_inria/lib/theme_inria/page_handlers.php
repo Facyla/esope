@@ -113,7 +113,7 @@ function theme_inria_thewire_page_handler($page) {
 			if (isset($page[1])) {
 				set_input('thread_id', $page[1]);
 			}
-			include $base . "thread.php";
+			include $inria_base . "thread.php";
 			break;
 
 		case "reply":

@@ -77,6 +77,17 @@ if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic')))
 		echo elgg_view_form('comment/save', $form_vars, $body_vars);
 	}
 	return true;
+} else  if ($subtype == 'thewire') {
+		$form_vars = array('class' => 'thewire-form', 'action' => 'action/thewire/add');
+		$thewire_form .= '<div id="comments-add-' . $object->getGUID() . '-' . $top_object->guid . '" class="thewire-reply-inline hidden">';
+		$wire_container = $object->getContainerEntity();
+		if (elgg_instanceof($wire_container, 'group')) {
+			$thewire_form .= elgg_view_form('thewire/group_add', $form_vars, array('entity' => $wire_container, 'post' => $object));
+		} else {
+			$thewire_form .= elgg_view_form('thewire/add', $form_vars, array('post' => $object));
+		}
+		$thewire_form .= '</div>';
+		echo $thewire_form;
 }
 
 

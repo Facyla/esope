@@ -34,8 +34,10 @@ if ($reply && $reply->canEdit()) {
 	$reply_label = elgg_echo("discussion:reply:edit");
 	$submit_text = elgg_echo('save');
 } else {
-	$reply_label = elgg_echo("reply:this");
-	$submit_text = elgg_echo('reply');
+	//$reply_label = elgg_echo("reply:this");
+	//$submit_text = elgg_echo('reply');
+	$reply_label  = elgg_echo("generic_comments:add");
+	$submit_text = elgg_echo('comment');
 }
 
 $cancel_button = '';

@@ -6,6 +6,7 @@
 $object = $vars['item']->getObjectEntity();
 $excerpt = strip_tags($object->description);
 $excerpt = thewire_filter($excerpt);
+$excerpt = elgg_view('output/url', array('href' => $object->getURL(), 'text' => $excerpt));
 
 $subject = $vars['item']->getSubjectEntity();
 $subject_link = elgg_view('output/url', array(

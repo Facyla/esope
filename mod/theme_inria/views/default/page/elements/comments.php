@@ -47,7 +47,7 @@ echo "<div $id class=\"$class\">";
 
 	if ($show_add_form) {
 		$form_id = esope_unique_id('iris-comments-');
-		echo elgg_view('output/url', array('href' => '#' . $form_id, 'rel' => 'toggle', 'text' => elgg_echo('comment:toggle'), 'class' => 'elgg-button elgg-button-action'));
+		echo elgg_view('output/url', array('href' => '#' . $form_id, 'rel' => 'toggle', 'text' => elgg_echo('comment:toggle'), 'class' => 'elgg-button elgg-button-action elgg-button-comment-toggle'));
 		//echo elgg_view_form('comments/add', array('name' => 'elgg_add_comment'), $vars);
 		echo elgg_view_form('comment/save', array('id' => $form_id, 'class' => 'hidden'), $vars);
 	}

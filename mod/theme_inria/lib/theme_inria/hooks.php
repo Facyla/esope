@@ -200,6 +200,15 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 					'rel' => 'toggle',
 					'priority' => 50,
 				));
+		} else if (elgg_instanceof($top_object, 'object', 'thewire')) {
+			$items[] = \ElggMenuItem::factory(array(
+					'name' => 'comment',
+					'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
+					'text' => elgg_view_icon('speech-bubble'),
+					'title' => elgg_echo('comment:this'),
+					'rel' => 'toggle',
+					'priority' => 50,
+				));
 		}
 		
 	}

@@ -160,7 +160,7 @@ $width = array(
 .iris-col { <?php echo $width['main']; ?> padding: 0 0; /* margin: 0 auto; */ }
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
-.elgg-main { <?php echo $width['main']; ?> }
+.elgg-main { <?php echo $width['main']; ?> min-height: initial; }
 
 .elgg-layout-one-column .elgg-main { max-width: initial; margin-right: 0; }
 .elgg-context-dashboard > .elgg-main { padding: 0; }
@@ -372,7 +372,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-button.elgg-button-cancel:hover, .elgg-button.elgg-button-cancel:focus, .elgg-button.elgg-button-cancel:active { color:white; opacity:1; }
 .elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; /* transition-duration:0.2s; */ opacity:0.5; box-shadow:none; }
 .elgg-button.elgg-button-delete:hover, .elgg-button.elgg-button-delete:active, .elgg-button.elgg-button-delete:focus { border: 0; color:white; opacity:1; }
-
+.elgg-button-comment-toggle { margin-top: 1rem; }
 
 
 /* Page d'accueil */
@@ -456,7 +456,7 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .pages-nav.treeview a:hover, .pages-nav.treeview a:active, .pages-nav.treeview a:focus { color: white; }
 .treeview li { font-size: 1rem; }
 .elgg-body-transp .elgg-image-block { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; border-bottom: 2px solid #F1F1F1; }
-.elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 2rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
+.elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
 .elgg-body-transp #group-replies .elgg-content .elgg-output { margin: 0; padding: 0; border-bottom: 0; }
 #group-replies.elgg-comments .elgg-list > li { margin: 0; }
 .elgg-body-transp .esope-subpages-menu { margin: 0 0rem 2rem 0rem; padding: 1rem 0 0rem 0; border-top: 2px solid #F1F1F1; border-bottom: 2px solid #F1F1F1; }
@@ -1010,6 +1010,8 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
 .elgg-context-thewire:not(.elgg-context-workspace-content) .elgg-list .elgg-item, 
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
+.elgg-layout-group .elgg-list .elgg-item.elgg-item-object-thewire { border: 0; margin: 0 0 1.25rem 0; padding: 1.5rem 2rem; }
+.elgg-layout-group.elgg-context-thewire-thread .elgg-list .elgg-item.elgg-item-object-thewire { padding: 0; margin: 0; }
 .elgg-river-item .elgg-river-message .elgg-river-target { margin-left: 1rem; float: none; font-variant: initial; font-size: 0.85em; }
 .iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
 #group-workspace-content-filter select { margin-left: 0.5rem; }
@@ -1051,7 +1053,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-river-comments > li:first-of-type { border-top: 0; }
 .elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
 
-.elgg-comments { margin-top: 1.5rem; }
+.elgg-comments { margin-top: 1.5rem; /* margin: 0 -2rem; padding:1rem 2rem 0 2rem; border-top: 2px solid #F1F1F1; */ }
 .elgg-comments .elgg-list > li { border-width: 1px; }
 .elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
@@ -1547,7 +1549,7 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 
 .entity-headline { display:flex; margin-bottom: 0.2rem;}
 .entity-headline .owner-icon { flex:0; margin-right: 1rem; }
-.entity-headline .entity-title { flex:1; margin-right: 1rem; }
+.entity-headline .entity-title { flex:1; margin-right: 1rem; line-height: 2rem; }
 .iris-object .elgg-river-timestamp { line-height: 1rem; margin: 0 0 0 1rem; }
 .iris-object .elgg-access { margin: 0 0 0 1rem; line-height: 1rem; }
 .iris-object .elgg-access a { color: rgba(56, 66, 87, 0.5); font-size: 0.75rem; }
@@ -1635,7 +1637,8 @@ a[name=unlike] { color: #1488CA !important; }
 .elgg-likes-popup .elgg-list { margin: 0; }
 .elgg-likes-popup .elgg-list .elgg-item { padding: 0rem 0rem 0rem 0rem; box-shadow: none; border: 0; margin: 0 0 1rem 0; }
 
-.iris-object.iris-object-full, .iris-object.iris-object-full .entity-headline { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
+.iris-object.iris-object-full { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
+.iris-object.iris-object-full .entity-headline { margin: 0 -2rem 0 -2rem; padding: 0 2rem 1rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
 .elgg-layout-user-owner .iris-object.iris-object-full .entity-headline { margin: 0; padding: 0 0rem 1rem 0rem; }
 
 .elgg-body-transp .elgg-comments .elgg-image-block { margin: 0; border: 0; padding: 0.5rem 0rem; }
