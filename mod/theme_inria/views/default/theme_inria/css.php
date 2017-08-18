@@ -879,6 +879,12 @@ input::placeholder, textarea::placeholder { color: rgba(56, 66, 87, 0.5); opacit
 
 /* Correct offset for anchors links */
 a[name*=comment] { position: absolute; padding-top: 7rem; margin-top: -7rem; display: block; width: 0; }
+/* Correct offset for list items
+li[id*=elgg-object-]:before { content:""; display:block; height:7rem; margin:-7rem 0 0; }
+*/
+
+/* CKEditor controls : unhide toggle menu so we can start with editor disabled */
+.ckeditor-toggle-editor.elgg-longtext-control.hidden { display: block; }
 
 
 /* Fullscreen */

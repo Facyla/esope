@@ -587,6 +587,7 @@ Afficher et commenter le nouveau sujet :
 	'thewire:friends' => "Messages des contacts sur le Fil",
 	'thewire:replying' => "Répondre à %s, qui a écrit",
 	'thewire:thread' => "Conversation",
+	'thewire:thread:view' => "Afficher la conversation",
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
 	'thewire:noposts' => "Pas encore de message sur le Fil",
@@ -882,6 +883,7 @@ Voir et commenter ce lien web :
 	'river:comment:object:event_calendar' => "<strong>%s</strong> a commenté l'événement %s",
 	//'river:comment:object:default' => "",
 	'river:create:object:thewire' => "<strong>%s</strong> a publié", // Note : 2e paramètre "le fil" non utilisé"
+	'river:create:object:thewire:reply' => "<strong>%s</strong> a répondu à %s", // Note : 2e paramètre "le fil" non utilisé"
 	'river:reply:object:groupforumtopic' => "<strong>%s</strong> a répondu à %s",
 	//'river:create:object:default,' => "",
 	//'river:create:group:default' => "",

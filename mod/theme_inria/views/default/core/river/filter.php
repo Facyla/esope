@@ -58,6 +58,13 @@ if (!empty($registered_entities)) {
 				$label = elgg_echo('river:select', array(elgg_echo("item:$type:$subtype")));
 				$options["type=$type&subtype=$subtype"] = $label;
 			}
+			// Ajout réponses dans forum
+			/*
+			if ($type == 'object') {
+				$label = elgg_echo('river:select', array(elgg_echo("item:object:discussion_reply")));
+				$options["type=$type&subtype=discussion_reply"] = $label;
+			}
+			*/
 		}
 	}
 }

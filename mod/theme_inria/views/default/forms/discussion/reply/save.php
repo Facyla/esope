@@ -66,7 +66,9 @@ FORM;
 } else {
 	$description_input = elgg_view('input/longtext', array(
 		'name' => 'description',
-		'value' => $value
+		'value' => $value,
+		//'class' => 'elgg-input-longtext-basic',
+		//'data-cke-init' => true
 	));
 
 echo <<<FORM
