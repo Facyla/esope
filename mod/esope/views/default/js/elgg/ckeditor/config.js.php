@@ -34,6 +34,24 @@ define(function(require) {
 				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
 				['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 			],
+		
+		// Add new custom toolbars
+		toolbar_basic: [
+				// styles
+				['Format'], 
+				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
+				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
+				['Blockquote'], 
+				['Link', 'Unlink'], 
+				// source, iframe, flash, table
+				['Source'], 
+				['Scayt'], 
+				['Maximize'], 
+			],
+		
+		// Auto-enable SCAYT (spell checker)
+		scayt_autoStartup: true,
+		
 		/*
 		toolbarGroups: [
 				{"name":"basicstyles","groups":["basicstyles"]},
