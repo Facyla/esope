@@ -175,7 +175,7 @@ if ($upgrade_transtype == 'yes') {
 function theme_inria_force_user_site_notifications($user, $simulate = false) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
-	$notifications_content .= "User {$user->guid} {$user->name} : "
+	$notifications_content .= "User {$user->guid} {$user->name} : ";
 	// pour ses propres contenus (réglage global)
 	if ($simulate) {
 		$notifications_content .= "<br /> - notifications personnelles : aucune action";

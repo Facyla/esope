@@ -13,7 +13,7 @@ if ($parent) {
 	//$excerpt = elgg_view('output/url', array('href' => $object->getURL(), 'text' => $excerpt));
 	$excerpt .= elgg_view('output/url', array('href' => "thewire/thread/$object->wire_thread", 'text' => elgg_echo('thewire:thread:view'), 'class' => 'elgg-river-target'));
 } else {
-	$excerpt = elgg_view('output/url', array('href' => $object->getURL(), 'text' => $excerpt));
+	//$excerpt = elgg_view('output/url', array('href' => $object->getURL(), 'text' => $excerpt));
 }
 //$excerpt = '<div class="elgg-river-message">&laquo;&nbsp;' . $excerpt . '&nbsp;&raquo;</div>';
 $excerpt = '<div class="elgg-river-message">' . $excerpt . '</div>';
