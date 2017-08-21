@@ -58,6 +58,27 @@ function theme_inria_update_discussion_reply_as_comment($transtype_ent) {
 	return false;
 }
 
+// Transformation des sujets et réponses des forums en articles
+function theme_inria_transtype_forums($transtype_ent, $getter, $options) {
+	//$transtype_content .= elgg_view_entity($transtype_ent);
+	$transtype_content .= '<p>' . "$transtype_ent->guid $transtype_ent->title $transtype_ent->subtype $transtype_ent->access_id $transtype_ent->status";
+
+	// "Simulation" : on limite les risques
+	$transtype_transtype = get_input('transtype', 'no');
+	if ($transtype_transtype == 'yes') {
+		if (elgg_instanceof($transtype_ent, 'object', 'groupforumtopic')) {
+			$transtype_content .= theme_inria_update_groupforumtopic_as_blog($transtype_ent);
+		} else if (elgg_instanceof($transtype_ent, 'object', 'discussion_reply')) {
+			$transtype_content .= theme_inria_update_discussion_reply_as_comment($transtype_ent);
+		}
+		$transtype_content .= " => Transtypage effectué" . '</p>';
+		$transtype_ent->save();
+	} else {
+		$transtype_content .= " => Pas d'action effectuée" . '</p>';
+	}
+	echo $transtype_content;
+}
+
 $transtype_content = '';
 $sidebar = '';
 
@@ -95,7 +116,9 @@ if ($upgrade_transtype == 'yes') {
 	$transtype_forums = false;
 	if ($transtype_transtype == 'yes') {
 		// Mise en production
-		$transtype_forums = elgg_get_entities($transtype_forums_opt);
+		//$transtype_forums = elgg_get_entities($transtype_forums_opt);
+		$transtype_content .= "Transtypage des forums du site";
+		$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
 	} else {
 		// Simulation "réelle" limitée à un groupe
 		// attention pour les réponses, container = sujet de forum (pas groupe)
@@ -104,33 +127,16 @@ if ($upgrade_transtype == 'yes') {
 			$transtype_forums_opt['container_guid'] = $transtype_group_guid;
 			// "Simulation" : on limite les risques (note : fait dans la boucle de transtypage, afin de lister les sujets non convertis)
 			//$transtype_forums_opt['limit'] = 1;
-			$transtype_forums = elgg_get_entities($transtype_forums_opt);
+			//$transtype_forums = elgg_get_entities($transtype_forums_opt);
+			$transtype_content .= "Transtypage des forums du groupe $transtype_group_guid";
+			$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
 		} else {
+			$transtype_forums_opt = false;
 			$transtype_content .= '<p>' . "Vous devez définir soit un groupe dans lequel valider le fonctionnement du transtypage, soit ajouter ?transtype=yes à l'URL pour effectuer le transtypage sur l'ensemble des forums du site" . '</p>';
 		}
 	}
-
-	if ($transtype_forums) {
-		foreach ($transtype_forums as $transtype_k => $transtype_ent) {
-			// Transformation des sujets et réponses des forums en articles
-			//$transtype_content .= elgg_view_entity($transtype_ent);
-			$transtype_content .= '<p>' . "$transtype_ent->guid $transtype_ent->title $transtype_ent->subtype $transtype_ent->access_id $transtype_ent->status";
-		
-			// "Simulation" : on limite les risques
-			//if (($transtype_transtype == 'yes') || ($transtype_k < 1)) {
-			if (($transtype_transtype == 'yes') || ($transtype_k < 1)) {
-				if (elgg_instanceof($transtype_ent, 'object', 'groupforumtopic')) {
-					$transtype_content .= theme_inria_update_groupforumtopic_as_blog($transtype_ent);
-				} else if (elgg_instanceof($transtype_ent, 'object', 'discussion_reply')) {
-					$transtype_content .= theme_inria_update_discussion_reply_as_comment($transtype_ent);
-				}
-				$transtype_content .= " => Transtypage effectué" . '</p>';
-				$transtype_ent->save();
-			} else {
-				$transtype_content .= " => Pas d'action effectuée" . '</p>';
-			}
-		}
-	} else {
+	
+	if (!$transtype_forums_opt) {
 		if ($transtype_group_guid > 0) {
 			$transtype_content .= '<p>' . "Aucun sujet de discussion trouvé dans ce groupe" . '</p>';
 		} else {
@@ -172,8 +178,11 @@ if ($upgrade_transtype == 'yes') {
 
 
 // @TODO Activation des notifications 'site'
-function theme_inria_force_user_site_notifications($user, $simulate = false) {
+function theme_inria_force_user_site_notifications($user, $getter, $options) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
+	
+	$notifications = get_input('notifications', false);
+	if ($notifications == 'yes') { $simulate = false; } else { $simulate = true;  }
 	
 	$notifications_content .= "User {$user->guid} {$user->name} : ";
 	// pour ses propres contenus (réglage global)
@@ -238,6 +247,7 @@ function theme_inria_force_user_site_notifications($user, $simulate = false) {
 		}
 	}
 	
+	echo $user->guid . ' : ' . $notifications_content . '<br />';
 	return true;
 }
 
@@ -253,8 +263,12 @@ $upgrade_notifications = get_input('upgrade_notifications', false);
 if ($upgrade_notifications == 'yes') {
 	$notifications = get_input('notifications', false);
 	if ($notifications == 'yes') { $simulate_notifications = false; } else { $simulate_notifications = true;  }
+	/*
 	$users = elgg_get_entities(array('type' => 'user', 'limit' => false));
 	foreach($users as $user) { theme_inria_force_user_site_notifications($user, $simulate_notifications); }
+	*/
+	$users_options = array('types' => 'user', 'limit' => false);
+	$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_force_user_site_notifications', 10);
 }
 
 
@@ -275,6 +289,7 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 
 
 $content .= $transtype_content;
+$content .= '<hr />';
 $content .= $notifications_content;
 //$content .= $transtype_content;
 

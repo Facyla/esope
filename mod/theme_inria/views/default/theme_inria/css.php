@@ -175,6 +175,7 @@ $width = array(
 #iris-body .elgg-layout-one-sidebar.elgg-layout-user-owner.elgg-context-friend_request .elgg-main, 
 .elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-blog-save, 
 .elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-bookmarks-save, 
+.elgg-context-event_calendar #calendar, 
 .elgg-layout-one-sidebar:not(.elgg-layout-group) .elgg-form-event-calendar-edit, 
 .elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-pages-edit, 
 .elgg-layout-one-sidebar.elgg-layout-user-owner .elgg-form-poll-edit { background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
@@ -1063,6 +1064,8 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-comments .elgg-list > li { border-width: 1px; }
 .elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+.elgg-latest-comments .iris-object-actions li { box-shadow: none; border-radius: 0; }
+.elgg-sidebar .elgg-module-aside .elgg-body .elgg-menu-entity-alt li { float: none; }
 .elgg-layout-user-owner .elgg-comments .elgg-list > li { border: 0; padding: 0; }
 .elgg-layout-user-owner ul.elgg-list.elgg-list-entity { border: 0; }
 .elgg-layout-user-owner ul.elgg-list.elgg-list-entity:before { content: ''; display: none; }
@@ -1369,6 +1372,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 fieldset { min-width: initial; }
 form.elgg-form { padding: 0rem; width: initial; background: transparent; float: none; }
 fieldset > div { /* max-width: 30rem; */ }
+.ui-multiselect { max-width: 100%; }
 .ui-multiselect-checkboxes label { font-size: 0.75rem; color: #6C6C6C !important; font-weight: normal !important; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: #F1F1F1; border: 0; }
 
@@ -1532,6 +1536,7 @@ contenu : 40 + 8 + 33 = 81 = 1500
 .event_calendar_agenda .event_calendar_agenda_date { margin-bottom: 1rem; }
 .event_calendar_agenda .event_calendar_agenda_date_section tr { padding: 0.5rem 1rem; }
 .event_calendar_agenda .event_calendar_agenda_date_section td { padding: 0.5rem 1rem; }
+.elgg-context-event_calendar .elgg-sidebar .iris-object-actions { display: none; }
 
 .iris-group-sidebar-alt { <?php echo $width['sidebar']; ?> padding: 0 0rem 1rem 0rem; }
 

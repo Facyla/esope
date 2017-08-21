@@ -19,6 +19,8 @@ if (elgg_in_context('search')) {
 	$search_words = explode(' ', $q);
 }
 
+//if ($entity->memberstatus == 'closed') { echo "ARCHIVE $entity->name "; return; }
+
 //$icon = elgg_view_entity_icon($entity, $size, $vars);
 $profile_type = esope_get_user_profile_type($entity);
 if (empty($profile_type)) { $profile_type = 'external'; }

@@ -125,8 +125,8 @@ foreach ($tools as $priority => $view) {
 				// Can be safely disabled
 				echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
 					'name' => $group_option_toggle_name,
-					'value' => 'yes',
-					'default' => 'yes',
+					'value' => 'no',
+					'default' => 'no',
 					'checked' => false,
 					'label' => $group_option->label,
 					'disabled' => true,
