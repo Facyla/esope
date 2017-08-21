@@ -29,7 +29,8 @@ $message = get_input('message');
 $group_guid = get_input('group_guid');
 if (!is_array($group_guid)) { $group_guid = array($group_guid); }
 
-
+$hidden_entities = access_get_show_hidden_status();
+access_show_hidden_entities(TRUE);
 foreach ($emails as $email) {
 	
 	if (!is_email_address($email)) {
@@ -76,7 +77,7 @@ foreach ($emails as $email) {
 		*/
 	
 		$real_name = trim(strip_tags($name));
-		if (empty($real_name)) { $real_name = $username; }
+		if (empty($real_name)) { $real_name = substr($real_username, 4); }
 	
 		// For now, just try and register the user - No duplicate emails !
 		$guid = register_user($real_username, $password, $real_name, $email, false);
@@ -150,14 +151,14 @@ foreach ($emails as $email) {
 		// Now all is done : disable new user account if required by plugin setting
 			// Use the same code as in uservalidationbyadmin uservalidationbyadmin_disable_new_user hook
 			elgg_push_context('uservalidationbyadmin_new_user');
-			$hidden_entities = access_get_show_hidden_status();
-			access_show_hidden_entities(TRUE);
+			//$hidden_entities = access_get_show_hidden_status();
+			//access_show_hidden_entities(TRUE);
 			$new_user->disable('uservalidationbyadmin_new_user', FALSE);
 			// set user as unvalidated and send out validation email
 			elgg_set_user_validation_status($new_user->guid, FALSE);
 			uservalidationbyadmin_request_validation($new_user->guid);
 			elgg_pop_context();
-			access_show_hidden_entities($hidden_entities);
+			//access_show_hidden_entities($hidden_entities);
 		}
 
 		// ADMIN NOTIFICATION : no matter if validation needed of not
@@ -244,7 +245,7 @@ foreach ($emails as $email) {
 		}
 	}
 }
-
+access_show_hidden_entities($hidden_entities);
 
 
 forward(REFERER);
