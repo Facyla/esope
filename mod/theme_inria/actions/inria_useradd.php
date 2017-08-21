@@ -66,7 +66,14 @@ foreach ($emails as $email) {
 	if (!$already_registered) {
 		$password = generate_random_cleartext_password();
 		// We can safely add the 'ext_' prefix here to avoid duplicates
-		$username = profile_manager_generate_username_from_email('ext_'.$email);
+		$real_username = profile_manager_generate_username_from_email('ext_'.$email);
+		/*
+		if (strpos($username, 'ext_') === 0) {
+			$real_username = $username;
+		} else {
+			$real_username = 'ext_' . $username;
+		}
+		*/
 	
 		$real_name = trim(strip_tags($name));
 		if (empty($real_name)) { $real_name = $username; }
