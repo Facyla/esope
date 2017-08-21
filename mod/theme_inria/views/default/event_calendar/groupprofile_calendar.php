@@ -15,12 +15,12 @@ elgg_load_library('elgg:event_calendar');
 
 $page_owner_entity = elgg_get_page_owner_entity();
 
-if (event_calendar_activated_for_group($page_owner_entity)) {
+if (event_calendar_activated_for_group($page_owner_entity) && ($page_owner_entity->isMember() || $page_owner_entity->canEdit())) {
 	$num = 4;
 	// Get the upcoming events
 	$start_date = time(); // now
 	$end_date = $start_date + 60*60*24*365*2; // maximum is two years from now
-	$events = event_calendar_get_events_between($start_date, $end_date, false, $num, 0, elgg_get_page_owner_guid());
+	$events = event_calendar_get_events_between($start_date, $end_date, false, $num, 0, $page_owner_entity->guid);
 
 	// If there are any events to view, view them
 	if (is_array($events) && sizeof($events) > 0) {

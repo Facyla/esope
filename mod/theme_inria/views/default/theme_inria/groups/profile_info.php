@@ -76,41 +76,47 @@ $content .= '</div>';
 
 
 // Members
-$max_members = 25;
-$all_members = $group->getMembers(array('count' => true));
-$members_count = $group->getMembers(array('count' => true, 'wheres' => array(theme_inria_active_members_where_clause())));
-$members = $group->getMembers(array('wheres' => array(theme_inria_active_members_where_clause())));
-$members_string = elgg_echo('theme_inria:groups:members', array($all_members));
-if ($all_members != $members_count) {
-	if ($members_count > 1) {
-		$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $members_count));
-	} else {
-		if ($all_members > 1) {
-			$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $members_count));
+if (elgg_group_gatekeeper(false)) {
+	$max_members = 25;
+	$all_members = $group->getMembers(array('count' => true));
+	$members_count = $group->getMembers(array('count' => true, 'wheres' => array(theme_inria_active_members_where_clause())));
+	$members = $group->getMembers(array('wheres' => array(theme_inria_active_members_where_clause())));
+	$members_string = elgg_echo('theme_inria:groups:members', array($all_members));
+	if ($all_members != $members_count) {
+		if ($members_count > 1) {
+			$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $members_count));
 		} else {
-			$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $members_count));
+			if ($all_members > 1) {
+				$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $members_count));
+			} else {
+				$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $members_count));
+			}
 		}
 	}
-}
 
-$content .= '<div class="group-workspace-module group-workspace-members">';
-	$content .= '<a href="' . elgg_get_site_url() . 'groups/members/' . $group->guid . '" class="iris-manage">' . elgg_echo('theme_inria:manage') . '</a>';
-	$content .= '<h3>' . $members_string . '</h3>';
-	foreach($members as $ent) {
-		$profile_type = esope_get_user_profile_type($ent);
-		if (empty($profile_type)) { $profile_type = 'external'; }
-		$content .= '<a href="' . $ent->getURL() . '" class="elgg-avatar profile-type-' . $profile_type . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
-	}
-	if ($members_count > $max_members) {
-		$members_more_count = $members_count - $max_members;
-		$content .= elgg_view('output/url', array(
-			'href' => 'groups/members/' . $group->guid,
-			'text' => "+".$members_more_count,
-			'is_trusted' => true, 'class' => 'members-more',
-		));
-	}
-	$content .= '<div class="clearfloat"></div>';
-$content .= '</div>';
+	$content .= '<div class="group-workspace-module group-workspace-members">';
+		if ($group->canEdit()) {
+			$content .= '<a href="' . elgg_get_site_url() . 'groups/members/' . $group->guid . '" class="iris-manage">' . elgg_echo('theme_inria:manage') . '</a>';
+		} else {
+			$content .= '<a href="' . elgg_get_site_url() . 'groups/members/' . $group->guid . '" class="iris-manage">' . elgg_echo('theme_inria:view') . '</a>';
+		}
+		$content .= '<h3>' . $members_string . '</h3>';
+		foreach($members as $ent) {
+			$profile_type = esope_get_user_profile_type($ent);
+			if (empty($profile_type)) { $profile_type = 'external'; }
+			$content .= '<a href="' . $ent->getURL() . '" class="elgg-avatar profile-type-' . $profile_type . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
+		}
+		if ($members_count > $max_members) {
+			$members_more_count = $members_count - $max_members;
+			$content .= elgg_view('output/url', array(
+				'href' => 'groups/members/' . $group->guid,
+				'text' => "+".$members_more_count,
+				'is_trusted' => true, 'class' => 'members-more',
+			));
+		}
+		$content .= '<div class="clearfloat"></div>';
+	$content .= '</div>';
+}
 
 /*
 $content .= '<div class="group-workspace-module group-workspace-invites">';
@@ -121,13 +127,15 @@ $content .= '</div>';
 
 
 // Membership requests
-$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true, 'limit' => false));
-$requests_count = sizeof($requests);
-if ($requests_count > 0) {
-	$content .= '<div class="group-workspace-module group-workspace-requests">';
-		$content .= '<h3>' . elgg_echo('theme_inria:groups:requests', array($requests_count)) . '</h3>';
-		$content .= elgg_view('groups/membershiprequests', array('requests' => $requests));
-	$content .= '</div>';
+if ($group->canEdit()) {
+	$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true, 'limit' => false));
+	$requests_count = sizeof($requests);
+	if ($requests_count > 0) {
+		$content .= '<div class="group-workspace-module group-workspace-requests">';
+			$content .= '<h3>' . elgg_echo('theme_inria:groups:requests', array($requests_count)) . '</h3>';
+			$content .= elgg_view('groups/membershiprequests', array('requests' => $requests));
+		$content .= '</div>';
+	}
 }
 
 

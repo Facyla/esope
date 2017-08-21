@@ -19,6 +19,7 @@ if (elgg_in_context('search')) {
 	$search_words = explode(' ', $q);
 }
 
+// @TODO Archived accounts
 //if ($entity->memberstatus == 'closed') { echo "ARCHIVE $entity->name "; return; }
 
 //$icon = elgg_view_entity_icon($entity, $size, $vars);

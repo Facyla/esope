@@ -176,14 +176,16 @@ $content .= '</div></div></div>';
 
 
 $sidebar_alt = '';
-// Membership requests
-$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true, 'limit' => false));
-$requests_count = sizeof($requests);
-if ($requests_count > 0) {
-	$sidebar_alt .= '<div class="group-workspace-module group-workspace-requests">';
-		$sidebar_alt .= '<h3>' . elgg_echo('theme_inria:groups:requests', array($requests_count)) . '</h3>';
-		$sidebar_alt .= elgg_view('groups/membershiprequests', array('requests' => $requests));
-	$sidebar_alt .= '</div>';
+if ($group->canEdit()) {
+	// Membership requests
+	$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $group->guid, 'inverse_relationship' => true, 'limit' => false));
+	$requests_count = sizeof($requests);
+	if ($requests_count > 0) {
+		$sidebar_alt .= '<div class="group-workspace-module group-workspace-requests">';
+			$sidebar_alt .= '<h3>' . elgg_echo('theme_inria:groups:requests', array($requests_count)) . '</h3>';
+			$sidebar_alt .= elgg_view('groups/membershiprequests', array('requests' => $requests));
+		$sidebar_alt .= '</div>';
+	}
 }
 if (!empty($sidebar_alt)) {
 	$sidebar_alt = '<div class="iris-sidebar-content">' . $sidebar_alt . '</div>';

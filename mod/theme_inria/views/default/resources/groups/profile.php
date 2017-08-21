@@ -32,65 +32,65 @@ $content = '';
 $sidebar = '';
 $sidebar_alt = '';
 
-if (elgg_group_gatekeeper(false)) {
+
+// Workspaces tabs
+//$workspaces_tabs = elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
+$workspaces_tabs = '';
+
+// Compose content
+$content .= $workspaces_tabs;
+
+$content .= '<div class="group-profile-main">';
 	
-	// Workspaces tabs
-	//$workspaces_tabs = elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'home'));
-	$workspaces_tabs = '';
+	$content .= elgg_view('theme_inria/groups/profile_info', array('group' => $group, 'main_group' => $main_group));
 	
-	// Compose content
-	$content .= $workspaces_tabs;
-	
-	$content .= '<div class="group-profile-main">';
-		
-		$content .= elgg_view('theme_inria/groups/profile_info', array('group' => $group, 'main_group' => $main_group));
-		
-	$content .= '</div>';
-	
-	
-	// Autres espaces de travail : on va sur l'URL de l'espace de travail correspondant (seul les onglets sont communs)
-	/*if ($subgroups) {
-		foreach($subgroups as $subgroup) {
-			$content .= '<div class="group-workspace-X">';
-				$content .= '<div class="group-workspace-about">';
-				$content .= '<h3>A propos</h3>';
-				$content .= '<p>' . $subgroup->description . '</p>';
-				$content .= '</div>';
-				$content .= '<h3>Propriétaire / Responsables (X)</h3>';
-				$content .= '<p>' . 'XXX XXX XXX' . '</p>';
-				$content .= '<h3>Tous les membres</h3>';
-				$content .= '<p>' . 'XXX XXX XXX' . '</p>';
-				//$content .= '<h3>Invitations en attente (X)</h3>';
-				//$content .= elgg_view('groups/invitationrequests');
-				$content .= '<h3>Demandes d\'adhésion en attente (X)</h3>';
-				$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $subgroup->guid, 'inverse_relationship' => true));
-				$content .= elgg_view('groups/membershiprequests', array('requests' => $requests));
-				$content .= '<p>' . 'XXX XXX XXX' . '</p>';
+$content .= '</div>';
+
+
+// Autres espaces de travail : on va sur l'URL de l'espace de travail correspondant (seul les onglets sont communs)
+/*if ($subgroups) {
+	foreach($subgroups as $subgroup) {
+		$content .= '<div class="group-workspace-X">';
+			$content .= '<div class="group-workspace-about">';
+			$content .= '<h3>A propos</h3>';
+			$content .= '<p>' . $subgroup->description . '</p>';
 			$content .= '</div>';
-		}
+			$content .= '<h3>Propriétaire / Responsables (X)</h3>';
+			$content .= '<p>' . 'XXX XXX XXX' . '</p>';
+			$content .= '<h3>Tous les membres</h3>';
+			$content .= '<p>' . 'XXX XXX XXX' . '</p>';
+			//$content .= '<h3>Invitations en attente (X)</h3>';
+			//$content .= elgg_view('groups/invitationrequests');
+			$content .= '<h3>Demandes d\'adhésion en attente (X)</h3>';
+			$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $subgroup->guid, 'inverse_relationship' => true));
+			$content .= elgg_view('groups/membershiprequests', array('requests' => $requests));
+			$content .= '<p>' . 'XXX XXX XXX' . '</p>';
+		$content .= '</div>';
 	}
-	*/
-	
-	
-	$content .= $workspaces_tabs;
-	
-	// Activité (sociale)
-	$content .= '<div class="group-profile-main">';
-		
-		$content .= elgg_view('theme_inria/groups/profile_activity', array('group' => $group, 'main_group' => $main_group));
-		
-	$content .= '</div>';
-	
-	
-	
-	// Config
-	$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
-	
-	
-	// Membres : total et en ligne
-	$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_members');
-	
 }
+*/
+
+
+$content .= $workspaces_tabs;
+
+// Activité (sociale)
+if (elgg_group_gatekeeper(false)) {
+	$content .= '<div class="group-profile-main">';
+	
+		$content .= elgg_view('theme_inria/groups/profile_activity', array('group' => $group, 'main_group' => $main_group));
+	
+	$content .= '</div>';
+}
+
+
+
+// Config
+$sidebar .= elgg_view('theme_inria/groups/sidebar', $vars);
+
+
+// Membres : total et en ligne
+$sidebar_alt .= elgg_view('theme_inria/groups/sidebar_members');
+
 
 
 
