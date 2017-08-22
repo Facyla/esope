@@ -10,7 +10,7 @@
  */
 
 $url = elgg_get_site_url();
-$current_url = full_url();
+$current_url = current_page_url();
 $reserved_urls = array($url.'login', $url.'register');
 
 $is_sticky_register = elgg_is_sticky_form('register');
