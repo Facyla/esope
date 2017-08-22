@@ -58,7 +58,7 @@ foreach ($emails as $email) {
 		// User is already registered
 		$already_registered = $already_registered[0];
 		if (elgg_instanceof($already_registered, 'user')) {
-			system_message('User already exists : <a href="' . $already_registered->getURL() . '">' . $already_registered->name . '</a>');
+			register_error('User already exists : <a href="' . $already_registered->getURL() . '">' . $already_registered->name . '</a>');
 		}
 	}
 
@@ -88,7 +88,7 @@ foreach ($emails as $email) {
 		}
 	
 		// Handle new account meta and validation rules
-		$new_user = get_entity($guid);
+		$user = get_entity($guid);
 
 		$site = elgg_get_site_entity();
 
@@ -97,7 +97,7 @@ foreach ($emails as $email) {
 		$inviter_guid = elgg_get_logged_in_user_guid();
 
 		$admin_validation = elgg_get_plugin_setting('admin_validation', 'theme_inria');
-		if ($admin_validation == 'yes') { $admin_validation = true; } else { $admin_validation = false; }
+		if (($admin_validation == 'yes') && elgg_is_active_plugin('uservalidationbyadmin')) { $admin_validation = true; } else { $admin_validation = false; }
 
 		$notified = array(); $admins = array();
 		$notified[] = elgg_get_plugin_setting('useradd_notify1', 'theme_inria');
@@ -108,20 +108,20 @@ foreach ($emails as $email) {
 			if ($notify_user) { $admins[] = $notify_user; }
 		}
 	
-		//$new_user->admin_created = TRUE;
+		//$user->admin_created = TRUE;
 // @TODO Handle Inria emails ?  useless, as it will be handled on next LDAP sync ?
-		$new_user->membertype = 'external';
-		$new_user->memberstatus = 'active';
-		$new_user->firstmemberreason = 'created_by_inria_member';
-		$new_user->membercreatedby = $inviter_guid;
-		$new_user->registermemberreason = "Account registered by {$inviter->name} ($inviter_guid) with motive : $reason";
+		$user->membertype = 'external';
+		$user->memberstatus = 'active';
+		$user->firstmemberreason = 'created_by_inria_member';
+		$user->membercreatedby = $inviter_guid;
+		$user->registermemberreason = "Account registered by {$inviter->name} ($inviter_guid) with motive : $reason";
 		// Initiate this because account would be disabled if not set at creation
-		$new_user->last_action = time();
-		esope_set_user_profile_type($new_user, 'external');
+		$user->last_action = time();
+		esope_set_user_profile_type($user, 'external');
 
 		// Remember account creation + make mutual friends
-		$new_user->created_by_guid = $inviter_guid;
-		$new_user->addFriend($inviter_guid);
+		$user->created_by_guid = $inviter_guid;
+		$user->addFriend($inviter_guid);
 		$inviter->addFriend($guid);
 
 		// elgg_set_user_validation_status
@@ -144,24 +144,47 @@ foreach ($emails as $email) {
 			$password,
 		));
 		if ($disable_notice) { $user_body .= $disable_notice; }
-		notify_user($new_user->guid, $site->guid, $user_subject, $user_body);
+		notify_user($user->guid, $site->guid, $user_subject, $user_body);
 
 		// ADMIN VALIDATION
 		if ($admin_validation) {
-		// Now all is done : disable new user account if required by plugin setting
-			// Use the same code as in uservalidationbyadmin uservalidationbyadmin_disable_new_user hook
+			// Now all is done : disable new user account if required by plugin setting
+			// Use the same code as in uservalidationbyadmin uservalidationbyadmin_register_user_hook hook
+			
 			elgg_push_context('uservalidationbyadmin_new_user');
-			//$hidden_entities = access_get_show_hidden_status();
-			//access_show_hidden_entities(TRUE);
-			$new_user->disable('uservalidationbyadmin_new_user', FALSE);
-			// set user as unvalidated and send out validation email
-			elgg_set_user_validation_status($new_user->guid, FALSE);
-			uservalidationbyadmin_request_validation($new_user->guid);
+			
+			// this user needs validation
+			$user->admin_validated = false;
+			
+			// set user as unvalidated
+			//elgg_set_user_validation_status($user->guid, FALSE, 'theme_inria');
+			
+			// Store registration IP address (for further guessed geolocation detection)
+			$user->register_ip = $_SERVER['REMOTE_ADDR'];
+	
+			// check who to notify
+			$notify_admins = uservalidationbyadmin_get_admin_notification_setting();
+			if ($notify_admins == "direct") {
+				uservalidationbyadmin_notify_admins();
+			}
+	
+			// check if we need to disable the user
+			if ($user->isEnabled()) {
+				$user->disable('uservalidationbyadmin_new_user', FALSE);
+			}
+	
+			// restore context
 			elgg_pop_context();
-			//access_show_hidden_entities($hidden_entities);
+			
+			/* Note : admin emails are sent after that
+			//uservalidationbyadmin_request_validation($user->guid); // was used in previous plugin version
+			// notify the admins about pending approvals
+			uservalidationbyadmin_notify_admins();
+			elgg_pop_context();
+			*/
 		}
 
-		// ADMIN NOTIFICATION : no matter if validation needed of not
+		// ADMIN NOTIFICATION : always notify, wether validation is needed or not
 		// We can notify up to 3 admins so new members can be moderated
 		if ($admin_validation) {
 			$admin_subject = elgg_echo('theme_inria:useradd:admin:subject');
@@ -173,7 +196,7 @@ foreach ($emails as $email) {
 			$email,
 			$inviter->name . ' (' . $inviter_guid . ')',
 			$reason,
-			$new_user->getURL(),
+			$user->getURL(),
 		));
 		if ($disable_notice) { $admin_body .= $disable_notice; }
 		foreach ($admins as $notify_user) {
@@ -194,36 +217,36 @@ foreach ($emails as $email) {
 		foreach($group_guid as $guid) {
 			$group = get_entity($guid);
 			if (elgg_instanceof($group, 'group')) {
-				if (!$group->isMember($new_user)) {
+				if (!$group->isMember($user)) {
 					if ($group->canEdit() || elgg_is_admin_logged_in() || $group->isPublicMembership()) {
 						// Join group - handle subgroups
 						if (elgg_is_active_plugin('au_subgroups')) {
 							if (elgg_is_admin_logged_in()) {
-								\AU\SubGroups\join_parents_recursive($group, $new_user);
+								\AU\SubGroups\join_parents_recursive($group, $user);
 							} else {
 								$parent = \AU\SubGroups\get_parent_group($group);
 								if ($parent) {
 									if ($parent->canEdit() || elgg_is_admin_logged_in() || $parent->isPublicMembership()) {
 										// Join parent
-										if ($parent->join($new_user)) { system_message("Group {$parent->name} joined."); }
+										if ($parent->join($user)) { system_message("Group {$parent->name} joined."); }
 										// Join group
-										if ($group->join($new_user)) { system_message("Workspace {$group->name} joined."); }
-										$group->join($new_user);
+										if ($group->join($user)) { system_message("Workspace {$group->name} joined."); }
+										$group->join($user);
 									} else {
-										add_entity_relationship($new_user->guid, 'membership_request', $parent->guid);
-										add_entity_relationship($new_user->guid, 'membership_request', $group->guid);
+										add_entity_relationship($user->guid, 'membership_request', $parent->guid);
+										add_entity_relationship($user->guid, 'membership_request', $group->guid);
 									}
 								} else {
-									if ($group->join($new_user)) { system_message("Group {$group->name} joined."); }
+									if ($group->join($user)) { system_message("Group {$group->name} joined."); }
 								}
 							}
 						} else {
-							if ($group->join($new_user)) { system_message("Group {$group->name} joined."); }
+							if ($group->join($user)) { system_message("Group {$group->name} joined."); }
 						}
 					
 					} else if ($group->isMember()) {
 						// Invite with no admin rights
-						if (add_entity_relationship($new_user->guid, 'membership_request', $group->guid)) {
+						if (add_entity_relationship($user->guid, 'membership_request', $group->guid)) {
 							system_message("Group membership for {$group->name}.");
 						} else {
 							system_message("Membership request already existing for {$group->name}.");
@@ -231,7 +254,7 @@ foreach ($emails as $email) {
 				
 					} else {
 						// Invite with no admin rights
-						if (add_entity_relationship($new_user->guid, 'membership_request', $group->guid)) {
+						if (add_entity_relationship($user->guid, 'membership_request', $group->guid)) {
 							system_message("Group membership for {$group->name}.");
 						} else {
 							system_message("Membership request already existing for {$group->name}.");

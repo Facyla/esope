@@ -1,8 +1,6 @@
 <?php
 /**
- * Walled garden page shell
- *
- * Used for the walled garden index page
+ * 
  */
 
 admin_gatekeeper();
@@ -23,6 +21,52 @@ Modifier :
 Désactivation des forums dans les groupes (si plus rien à convertir)
 */
 
+// Transformation des sujets et réponses des forums en articles
+// Batch
+function theme_inria_transtype_forums($transtype_ent, $getter, $options) {
+	//$transtype_content .= elgg_view_entity($transtype_ent);
+	$transtype_content .= "$transtype_ent->guid $transtype_ent->title : $transtype_ent->getSubtype(), access $transtype_ent->access_id, status $transtype_ent->status";
+
+	// production ou Simulation
+	$transtype_prod = get_input('transtype', 'no');
+	if ($transtype_prod != 'yes') {
+		$transtype_content .= " => simulation";
+	} else {
+		$transtype_content .= " => Transtypage : ";
+		if (elgg_instanceof($transtype_ent, 'object', 'groupforumtopic')) {
+			$transtype_content .= theme_inria_update_groupforumtopic_as_blog($transtype_ent);
+		} else if (elgg_instanceof($transtype_ent, 'object', 'discussion_reply')) {
+			$transtype_content .= theme_inria_update_discussion_reply_as_comment($transtype_ent);
+		}
+		$transtype_ent->save();
+	}
+	return true;
+}
+
+// Batch : désactivation forum + activation blog
+function theme_inria_disable_forums($group, $getter, $options) {
+	if (!elgg_instanceof($group, 'group')) { echo "Not a group"; return true; }
+	
+	$options = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
+	$options['container_guid'] = $group->guid;
+	$remaining = elgg_get_entities($options);
+	if ($remaining > 0) { echo "{$group->guid} : Remaining topics, cannot disable<br />"; return true; }
+	
+	$transtype_prod = get_input('transtype', 'no');
+	if ($transtype_prod != 'yes') {
+		echo "Simulation : Forum désactivé et Blog activé dans {$group->name}<br />";
+	} else {
+		if ($group->forum_enable != 'no') {
+			$group->forum_enable = 'no';
+			$group->blog_enable = 'yes';
+			echo "Forum désactivé et Blog activé dans {$group->name}<br />";
+		}
+	}
+	return true;
+}
+
+
+// Convert forum topic to blog
 function theme_inria_update_groupforumtopic_as_blog($transtype_ent) {
 	if (elgg_instanceof($transtype_ent, 'object', 'groupforumtopic')) {
 		// Transtyping to blog
@@ -47,6 +91,7 @@ function theme_inria_update_groupforumtopic_as_blog($transtype_ent) {
 	return false;
 }
 
+// Convert discussion repluy to comment
 function theme_inria_update_discussion_reply_as_comment($transtype_ent) {
 	if (elgg_instanceof($transtype_ent, 'object', 'discussion_reply')) {
 		$transtype_dbprefix = elgg_get_config('dbprefix');
@@ -58,34 +103,13 @@ function theme_inria_update_discussion_reply_as_comment($transtype_ent) {
 	return false;
 }
 
-// Transformation des sujets et réponses des forums en articles
-function theme_inria_transtype_forums($transtype_ent, $getter, $options) {
-	//$transtype_content .= elgg_view_entity($transtype_ent);
-	$transtype_content .= '<p>' . "$transtype_ent->guid $transtype_ent->title $transtype_ent->subtype $transtype_ent->access_id $transtype_ent->status";
-
-	// "Simulation" : on limite les risques
-	$transtype_transtype = get_input('transtype', 'no');
-	if ($transtype_transtype == 'yes') {
-		if (elgg_instanceof($transtype_ent, 'object', 'groupforumtopic')) {
-			$transtype_content .= theme_inria_update_groupforumtopic_as_blog($transtype_ent);
-		} else if (elgg_instanceof($transtype_ent, 'object', 'discussion_reply')) {
-			$transtype_content .= theme_inria_update_discussion_reply_as_comment($transtype_ent);
-		}
-		$transtype_content .= " => Transtypage effectué" . '</p>';
-		$transtype_ent->save();
-	} else {
-		$transtype_content .= " => Pas d'action effectuée" . '</p>';
-	}
-	echo $transtype_content;
-}
-
 $transtype_content = '';
 $sidebar = '';
-
 $transtype_group_guid = get_input('group_guid');
-$transtype_transtype = get_input('transtype', 'no');
+$transtype_prod = get_input('transtype', 'no');
+$upgrade_transtype = get_input('upgrade_transtype', false);
 
-
+// Form
 $transtype_content .= '<div id="inria-upgrade" class="">';
 	$transtype_content .= "<p>Cette page regroupe des outils utiles lors des mises à jour.</p>";
 
@@ -93,6 +117,10 @@ $transtype_content .= '<div id="inria-upgrade" class="">';
 	$transtype_content .= '<p><blockquote>' . "<strong>Cette opération est très délicate, et irréversible.</strong><br />Les sujets de discussion des forums seront transformés en articles de blog, et les réponses en commentaires. Ce transtypage ne produit pas de perte d'information, mais les forums d'origine seront détruits.<br />Afin de valider le fonctionnement du transtypage, cette opération peut être limitée dans un groupe précis, en indiquant son GUID : dans ce cas un seul sujet (et ses réponses) sera traité à la fois." . '</blockquote></p>';
 	
 	$transtype_remaining_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
+	if ($transtype_group_guid > 1) {
+		$transtype_remaining_forums_opt['container_guid'] = $transtype_group_guid;
+		$transtype_content .= "Transtypage limité au groupe $transtype_group_guid<br />";
+	}
 	$transtype_remaining_forums = elgg_get_entities($transtype_remaining_forums_opt);
 	if ($transtype_remaining_forums === 0) {
 		$transtype_content .= '<p>' . "Plus aucun sujet ou réponse de forum : désactivation des forums possible" . '</p>';
@@ -100,7 +128,6 @@ $transtype_content .= '<div id="inria-upgrade" class="">';
 		$transtype_content .= '<p>' . "Le site comporte " . $transtype_remaining_forums . " sujets de discussion et réponses." . '</p>';
 	}
 	
-	/// Transtype form
 	$transtype_content .= '<form method="POST">';
 		$transtype_content .= elgg_view('input/securitytoken');
 		$transtype_content .= elgg_view('input/hidden', array('name' => 'upgrade_transtype', 'value' => 'yes'));
@@ -109,75 +136,100 @@ $transtype_content .= '<div id="inria-upgrade" class="">';
 		$transtype_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer le transtypage")) . '</p>';
 	$transtype_content .= '</form><br /><br />';
 
-
-$upgrade_transtype = get_input('upgrade_transtype', false);
+// Process
+// Simulation "réelle" limitée à un groupe
+// attention pour les réponses, container = sujet de forum (pas groupe)
+// Note : on ne vérifie pas l'existence du groupe de manière à traiter aussi des contenus dont le groupe n'existerait plus ou serait archivé
 if ($upgrade_transtype == 'yes') {
 	$transtype_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'limit' => 0);
 	$transtype_forums = false;
-	if ($transtype_transtype == 'yes') {
-		// Mise en production
-		//$transtype_forums = elgg_get_entities($transtype_forums_opt);
-		$transtype_content .= "Transtypage des forums du site";
-		$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
+	// Limitation dans un groupe
+	if ($transtype_group_guid > 1) {
+		$transtype_forums_opt['container_guid'] = $transtype_group_guid;
+		$transtype_content .= "<strong>Transtypage limité au groupe $transtype_group_guid</strong><br />";
 	} else {
-		// Simulation "réelle" limitée à un groupe
-		// attention pour les réponses, container = sujet de forum (pas groupe)
-		// Note : on ne vérifie pas l'existence du groupe de manière à traiter aussi des contenus dont le groupe n'existerait plus ou serait archivé
-		if ($transtype_group_guid > 1) {
-			$transtype_forums_opt['container_guid'] = $transtype_group_guid;
-			// "Simulation" : on limite les risques (note : fait dans la boucle de transtypage, afin de lister les sujets non convertis)
-			//$transtype_forums_opt['limit'] = 1;
-			//$transtype_forums = elgg_get_entities($transtype_forums_opt);
-			$transtype_content .= "Transtypage des forums du groupe $transtype_group_guid";
-			$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
-		} else {
-			$transtype_forums_opt = false;
-			$transtype_content .= '<p>' . "Vous devez définir soit un groupe dans lequel valider le fonctionnement du transtypage, soit ajouter ?transtype=yes à l'URL pour effectuer le transtypage sur l'ensemble des forums du site" . '</p>';
-		}
+		$transtype_content .= "<strong>Transtypage de tous les forums du site</strong><br />";
 	}
-	
+	// Lancement du batch
+	$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
 	if (!$transtype_forums_opt) {
 		if ($transtype_group_guid > 0) {
-			$transtype_content .= '<p>' . "Aucun sujet de discussion trouvé dans ce groupe" . '</p>';
+			$transtype_content .= '<p>' . "Aucun forum trouvé dans ce groupe" . '</p>';
 		} else {
-			$transtype_content .= '<p>' . "Aucun sujet de discussion trouvé dans l'ensemble du site" . '</p>';
+			$transtype_content .= '<p>' . "Aucun forum trouvé dans l'ensemble du site" . '</p>';
 		}
 	}
 
 	// Désactivation des forums dans les groupes (si plus rien à convertir)
 	// Ensure we get all topics and replies (no orphans)
-	$transtype_remaining_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
-	$transtype_remaining_forums = elgg_get_entities($transtype_forums_opt);
-	if ($transtype_remaining_forums === 0) {
-		$transtype_content .= '<h3>' . "Désactivation des forums" . '</h3>';
-		if ($transtype_transtype == 'yes') {
-			$transtype_groups = elgg_get_entities(array('type' => 'group', 'limit' => 0));
-			foreach($transtype_groups as $transtype_ent) {
-				if ($transtype_group->forum_enable != 'no') {
-					$transtype_group->forum_enable = 'no';
-					$transtype_group->blog_enable = 'yes';
-					$transtype_content .= "Forum désactivé et Blog activé dans {$transtype_group->name}<br />";
-				}
-			}
-			$transtype_content .= '<p><strong>' . "Tous les forums ont bien été désactivés. Le transtypage des forums en blogs est terminé !" . '</strong></p>';
+	$transtype_content .= '<h3>' . "Désactivation des forums" . '</h3>';
+	if ($transtype_prod == 'yes') {
+		$disable_groups_opt = array('type' => 'group', 'limit' => 0);
+		if ($transtype_group_guid > 1) {
+			$disable_groups_opt['guids'] = $transtype_group_guid;
 		}
+		$batch = new ElggBatch('elgg_get_entities', $disable_groups_opt, 'theme_inria_disable_forums', 10);
+		$transtype_content .= '<p><strong>' . "Désactivation des forums et activation des blogs !" . '</strong></p>';
+	} else {
+		$transtype_content .= '<p><strong>' . "Simulation de désactivation des forums" . '</strong></p>';
 	}
+}
 
-	$transtype_content .= '</div>';
+$transtype_content .= '</div>';
+
+
+
+
+// Fusion skills et interests
+// Batch
+function theme_inria_merge_skills_interests($user, $getter, $options) {
+	if (!elgg_instanceof($user, 'user')) { return false; }
+	
+	$skills_merge_prod = get_input('skills_merge_prod', false);
+	if ($skills_merge_prod == 'yes') {
+		$user->skills = array_merge((array)$user->skills, (array)$user->interests);
+		$user->interests = null;
+		echo $user->guid . ' : skills et interests fusionnés dans skills' . print_r($user->skills, true) . '<br />';
+	} else {
+		$skills = array_merge((array)$user->skills, (array)$user->interests);
+		echo $user->guid . ' : fusion de skills (' . print_r($user->skills, true) . ') et interests (' . print_r($user->skills, true) . ') => ' . print_r($skills, true) . '<br />';
+	}
+	
+	return true;
+}
+
+// Form
+$merge_user_guid = get_input('merge_user_guid', false);
+$skills_merge_content .= '<h3>Fuision skills + interests => skills</h3>';
+$skills_merge_content .= '<form method="POST">';
+	$skills_merge_content .= elgg_view('input/securitytoken');
+	$skills_merge_content .= elgg_view('input/hidden', array('name' => 'skills_merge', 'value' => 'yes'));
+	$skills_merge_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'skills_merge_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
+	$skills_merge_content .= '<p><label>GUID du membre ' . elgg_view('input/text', array('name' => 'merge_user_guid', 'value' => $merge_user_guid)) . '</label></p>';
+	$skills_merge_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer fusion des skills et interests dans skills")) . '</p>';
+$skills_merge_content .= '</form><br /><br />';
+
+// Process
+$skills_merge = get_input('skills_merge', false);
+if ($skills_merge == 'yes') {
+	$users_options = array('types' => 'user', 'limit' => 1);
+	if ($merge_user_guid) { $users_options['guids'] = $merge_user_guid; }
+	$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_merge_skills_interests', 10);
 }
 
 
 
 
-// @TODO Fusion skills et interests
-
-
 
 // @TODO Conversion accès Membres du site => Inria seulement
+// Batch
 
 
 
 // @TODO Activation des notifications 'site'
+$notifications_content .= '<h3>Activation systématique des notifications via le site</h3>';
+
+// Batch
 function theme_inria_force_user_site_notifications($user, $getter, $options) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
@@ -251,6 +303,7 @@ function theme_inria_force_user_site_notifications($user, $getter, $options) {
 	return true;
 }
 
+// Form
 $notifications_content .= '<form method="POST">';
 	$notifications_content .= elgg_view('input/securitytoken');
 	$notifications_content .= elgg_view('input/hidden', array('name' => 'upgrade_notifications', 'value' => 'yes'));
@@ -258,7 +311,7 @@ $notifications_content .= '<form method="POST">';
 	$notifications_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer activation des notifications site")) . '</p>';
 $notifications_content .= '</form><br /><br />';
 
-
+// Process
 $upgrade_notifications = get_input('upgrade_notifications', false);
 if ($upgrade_notifications == 'yes') {
 	$notifications = get_input('notifications', false);
@@ -291,6 +344,9 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 $content .= $transtype_content;
 $content .= '<hr />';
 $content .= $notifications_content;
+$content .= '<hr />';
+$content .= $skills_merge_content;
+
 //$content .= $transtype_content;
 
 $body = elgg_view_layout('content', array('content' => $content, 'sidebar' => $sidebar, 'filter' => false));

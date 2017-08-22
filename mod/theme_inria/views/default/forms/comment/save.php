@@ -68,6 +68,7 @@ if ($inline) {
 	$comment_input = elgg_view('input/longtext', array(
 		'name' => 'generic_comment',
 		'value' => $comment_text,
+		'class' => 'elgg-input-longtext-basic', // basic editor
 	));
 
 	$is_edit_page_input = elgg_view('input/hidden', array(

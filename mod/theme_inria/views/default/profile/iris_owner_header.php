@@ -8,10 +8,12 @@ $own = elgg_get_logged_in_user_entity();
 
 $profile_type = esope_get_user_profile_type($user);
 if (empty($profile_type)) { $profile_type = 'external'; }
+// Archive : replace profile type by member status archived
+if ($user->memberstatus == 'closed') { $profile_type = 'archive'; }
 
 echo '<a href="' . $user->getURL() . '" title="' . elgg_echo('theme_inria:profile:back') . '">';
 	?>
-	<div class="iris-profile-icon <?php if ($profile_type == 'external') { echo 'profile-type-' . $profile_type; } ?>" style="background-image:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>');" />
+	<div class="iris-profile-icon <?php if (in_array($profile_type, ['external', 'archive'])) { echo 'profile-type-' . $profile_type; } ?>" style="background-image:url('<?php echo $user->getIconUrl(array('size' => 'large')); ?>');" />
 	</div>
 
 	<div class="iris-profile-title">

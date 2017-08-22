@@ -566,14 +566,19 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 .elgg-avatar.profile-type- img, 
 .elgg-avatar.profile-type-inria img { border: 1px solid transparent; }
 .elgg-avatar.profile-type-external img { border: 1px solid #F7A621; padding: 1px; }
+.elgg-avatar.profile-type-archive img { border: 1px solid #384257; padding: 1px; }
 /* Bordure large seulement sur page de profil */
 .elgg-avatar.elgg-avatar-large.profile-type-inria img, 
 .elgg-avatar.elgg-avatar-medium.profile-type-inria img { border: 3px solid transparent; padding: 3px; }
 .elgg-avatar.elgg-avatar-large.profile-type-external img, 
 .elgg-avatar.elgg-avatar-medium.profile-type-external img { border: 3px solid #F7A621; padding: 3px; }
+.elgg-avatar.elgg-avatar-large.profile-type-archive img, 
+.elgg-avatar.elgg-avatar-medium.profile-type-archive img { border: 3px solid #384257; padding: 3px; background-color: #384257; background-blend-mode: overlay; }
 .iris-profile-icon.profile-type-external { border: 3px solid #F7A621; /* background-size: calc(100% - 6px) !important; */ /* background-color: #F7A621; background-blend-mode: multiply; */ }
+.iris-profile-icon.profile-type-archive { border: 3px solid #384257; /* background-size: calc(100% - 6px) !important; */ background-color: #384257; background-blend-mode: overlay; }
 /* 
 .elgg-avatar.profile-type-external:after { background: #F7A621; content: ''; display: inline-block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 12; }
+.elgg-avatar.profile-type-archive:after { background: #384257; content: ''; display: inline-block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 12; }
 */
 .profiletype-badge { position: absolute; width: 100%; height: 100%; /* border: 3px solid transparent; */ }
 .profiletype-badge-inria { position: absolute; right: 0px; bottom: 0; background: #e33729; color: white; padding: 4px 2px 0px 6px; border-radius: 8px 0 0 0; font-weight: bold; z-index: 11; }
@@ -581,6 +586,7 @@ a.avatar_edit_hover { position: absolute; z-index: 10; width: 200px; height: 200
 
 .iris-badge span { font-size: 0.9rem; text-transform: uppercase; font-family: "Inria Sans", sans-serif; padding: 0.75rem 1rem 0.5rem 1rem; border-radius: 1rem; font-weight: bold; margin: 0rem 0rem 0rem 1rem; vertical-align: top; color: white; }
 .iris-badge-external { background-color: #F7A621; }
+.iris-badge-archive { background-color: #384257; } 
 h2 .iris-badge span { font-size: 0.9rem; }
 h3 .iris-badge span { font-size: 0.75rem; padding: 0.5rem 0.75rem 0.35rem 0.75rem; }
 .elgg-item-user h3 .iris-badge span { display: inline-block; margin: 0 0 0 0; }

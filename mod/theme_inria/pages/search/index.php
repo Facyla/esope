@@ -179,7 +179,11 @@ foreach ($add_if_nonempty as $field) {
 // Add filter params
 $params = array_merge($params, $filter_params);
 // Remove subtype filter if performing a tags search
-if ($entity_subtype == 'search_type:tags') { $params['subtype'] = ELGG_ENTITIES_ANY_VALUE; }
+if ($entity_subtype == 'search_type:tags') {
+	$params['subtype'] = ELGG_ENTITIES_ANY_VALUE;
+	// Include subtype filter again if set separately
+	//$params['subtype'] = get_input('subtype', ELGG_ENTITIES_ANY_VALUE);
+}
 
 
 // SEARCH - start the actual search
@@ -249,6 +253,14 @@ if (!empty($query) || $allow_empty_query) {
 			$current_params = $params;
 			$current_params['search_type'] = $type;
 			$current_params['type'] = null;
+			// Enable fine-filtering : set wanted values, force to object if no type specified
+			$tags_type = get_input('type', ELGG_ENTITIES_ANY_VALUE);
+			$tags_subtype = get_input('subtype', ELGG_ENTITIES_ANY_VALUE);
+			if (!empty($tags_type)) { $current_params['type'] = $tags_type; }
+			if (!empty($tags_subtype)) {
+				if (empty($tags_type)) { $current_params['type'] = 'object'; }
+				$current_params['subtype'] = $tags_subtype;
+			}
 			$results = elgg_trigger_plugin_hook('search', $type, $current_params, array());
 
 			// someone is saying not to display these types in searches.

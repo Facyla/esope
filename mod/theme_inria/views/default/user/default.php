@@ -19,12 +19,11 @@ if (elgg_in_context('search')) {
 	$search_words = explode(' ', $q);
 }
 
-// @TODO Archived accounts
-//if ($entity->memberstatus == 'closed') { echo "ARCHIVE $entity->name "; return; }
-
 //$icon = elgg_view_entity_icon($entity, $size, $vars);
 $profile_type = esope_get_user_profile_type($entity);
 if (empty($profile_type)) { $profile_type = 'external'; }
+// Archive : replace profile type by member status archived
+if ($entity->memberstatus == 'closed') { $profile_type = 'archive'; }
 $icon = '<a href="' . $entity->getURL() . '" class="elgg-avatar elgg-avatar-' . $size . ' profile-type-' . $profile_type . '"><img src="' . $entity->getIconUrl(array('size' => $size)) . '" alt="' . $entity->name . '"></a>';
 
 $title = elgg_extract('title', $vars);
@@ -50,7 +49,9 @@ if (!$title) {
 }
 
 // Add profile type badge, if defined
-if ($profile_type == 'external') { $title .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+if (in_array($profile_type, ['external', 'archive'])) {
+	$title .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>';
+}
 
 
 $metadata = elgg_view_menu('entity', array(

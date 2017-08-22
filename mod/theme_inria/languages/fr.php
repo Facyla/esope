@@ -214,6 +214,8 @@ return array(
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
 	'profile:types:external' => "Externe",
 	'profile:types:external:description' => "Les profils Externes regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
+	'profile:types:archive' => "Archive",
+	'profile:types:archive:description' => "Les profils Archive regroupent les comptes qui ne sont plus membres du réseau. Leurs publications sont conservées mais les personnes correspondantes ne reçoivent plus aucun message et ne peuvent plus se connecter.",
 	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "A propos de moi",
 	'profile:categories:inria' => "Données Inria",

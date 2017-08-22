@@ -19,16 +19,22 @@ inria_phone [tags]
 $profile_type = '';
 $profile_type_ent = get_entity($user->custom_profile_type);
 if ($profile_type_ent instanceof ProfileManagerCustomProfileType) {
-	$profile_type = $profile_type_ent->getTitle();
+	$profile_type = $profile_type_ent->metadata_name;
+	$profile_type_label = $profile_type_ent->getTitle();
 }
-$user_profile_type = esope_get_user_profile_type($user);
+// Archive : replace profile type by member status archived
+if ($user->memberstatus == 'closed') {
+	$profile_type = 'archive';
+	$profile_type_label = elgg_echo('profile:types:archive');
+}
+$own_profile_type = esope_get_user_profile_type($own);
 
 $show_inria_fields = false;
-if ((strtolower($profile_type) == 'inria') && (elgg_is_admin_logged_in() || ($user_profile_type == 'inria'))) { $show_inria_fields = true; }
+if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($own_profile_type == 'inria'))) { $show_inria_fields = true; }
 
-if (!empty($profile_type)) {
+if (!empty($profile_type_label)) {
 	echo '<div class="iris-profile-info-field">';
-	echo elgg_echo('theme_inria:user:profile_type') . '<br /><strong>' . $profile_type . '</strong>';
+	echo elgg_echo('theme_inria:user:profile_type') . '<br /><strong>' . $profile_type_label . '</strong>';
 	echo '</div>';
 }
 
@@ -101,7 +107,7 @@ $cats = $categorized_fields['categories'];
 $fields = $categorized_fields['fields'];
 
 // Display only for Inria accounts (LDAP data), and for logged in, Inria viewers - or admins
-//if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($user_profile_type == 'inria'))) {
+//if (($profile_type == 'inria') && (elgg_is_admin_logged_in() || ($own_profile_type == 'inria'))) {
 if ($show_inria_fields) {
 	// Following hasn't be modified (except the inria cat filter)
 	foreach($cats as $cat_guid => $cat){
@@ -168,7 +174,7 @@ if ($show_inria_fields) {
 		}
 	}
 	if ($details_result) {
-		if ($user_profile_type && ($user->guid == $own->guid)) {
+		if ($own_profile_type && ($user->guid == $own->guid)) {
 			$details_result .= '<p class="update-ldap-details">' . elgg_echo('theme_inria:ldapprofile:updatelink') . '</p>';
 		}
 		$inria_fields = '<div class="inria-ldap-details"><h3>' . elgg_echo('theme_inria:ldapdetails') . '</h3>' . $details_result . '</div>';
