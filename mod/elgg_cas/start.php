@@ -21,6 +21,9 @@ function elgg_cas_init() {
 	// Extend login form
 	elgg_extend_view('forms/login', 'elgg_cas/login_extend', 300);
 	
+	// Expose CAS backend also in walled garden mode
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'elgg_cas_public_pages');
+	
 	// Add CAS library (default to version 1.3.4)
 	/* Note : when used with openssl 0.9.8k, please choose lib 1.3.2 and apply patch (see README)
 	 * The patch is already made in 1.3.2, in CAS/Request/ CurlRequest and CurlMultiRequest
@@ -215,6 +218,21 @@ function elgg_cas_login($debug = false) {
 		}
 	}
 	return false;
+}
+
+// Permet l'accès à diverses pages en mode "walled garden"
+function elgg_cas_public_pages($hook, $type, $return, $params) {
+	// Main CAS auth backend
+	$return[] = 'cas_auth';
+	$return[] = 'cas_auth/.*';
+	$enable_ws_auth = elgg_get_plugin_setting('enable_ws_auth', 'elgg_cas');
+	if ($enable_ws_auth == 'yes') {
+		// Main WS CAS auth backend
+		$return[] = 'cas_auth_ws';
+		$return[] = 'cas_auth_ws/.*';
+	}
+	
+	return $return;
 }
 
 
