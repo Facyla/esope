@@ -744,6 +744,7 @@ Voir et commenter ce lien web :
 	'theme_inria:community:description:plan-strategique' => "Plan stratégique : description détaillée à définir",
 	'theme_inria:groups:discover:view' => "voir",
 	'theme_inria:viewall' => "tout voir",
+	'theme_inria:view' => "voir",
 	
 	'theme_inria:site_notifications:unreadcount' => "Notifications (%s)",
 	'theme_inria:groupinvites:unreadcount' => "Invitations (%s)",
@@ -920,6 +921,7 @@ Voir et commenter ce lien web :
 	'workspace:groups:name' => "Nom de l'espace de travail",
 	'workspace:groups:tags' => 'mots clés',
 	'workspace:groups:interests' => 'Mots-clés',
+	'workspace:groups:members' => "Voir les membres",
 	'workspace:groups:members:manage' => "Gérer les membres",
 	'workspace:groups:banner' => "Image d'entête de l'espace de travail (ne rien sélectionner pour laisser inchangé)",
 	'workspace:groups:about' => "A propos de l'espace de travail",
@@ -935,7 +937,9 @@ Voir et commenter ce lien web :
 	'workspace:groups:joinrequest' => "Demander à rejoindre cet espace de travail",
 	'workspace:theme_inria:ownmembership' => "Adhésion à cet espace de travail",
 	'workspace:groups:briefdescription' => "Espace de travail<br />%s",
-	'theme_inria:workspace:notmember' => "Pour participer, rejoignez le groupe !",
+	'theme_inria:group:nodescription' => "(pas de présentation)",
+	'theme_inria:group:notmember' => "Pour participer, rejoignez ce groupe !",
+	'theme_inria:workspace:notmember' => "Pour participer, rejoignez cet espace de travail !",
 	
 	'theme_inria:group:archive' => "Archiver le groupe",
 	'theme_inria:group:archive:details' => "L'archivage d'un groupe permet de rendre ce groupe ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression du groupe est que le groupe et ses contenus archivés peuvent être restaurés par un administrateur.",

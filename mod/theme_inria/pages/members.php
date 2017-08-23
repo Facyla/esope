@@ -26,18 +26,23 @@ if ($hide_directory == 'yes') { gatekeeper(); }
 //elgg_require_js('elgg/spinner'); // @TODO make spinner work...
 
 $sidebar .= elgg_view('esope/users/search', $vars);
-// Invite external members
-$sidebar .= '<div class="clearfloat"></div>';
-$sidebar .= '<div class="iris-invite-external">
-		<ul class="elgg-menu elgg-menu-page elgg-menu-page-invite">
-			<li class="elgg-menu-item-invite">
-				<a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-menu-content">' . elgg_echo('theme_inria:invite_external') . '</a>
-			</li>
-		</ul>
-	</div>';
-//		<p><a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-button elgg-button-action elgg-menu-content">' . elgg_echo('theme_inria:invite_external') . '</a>
-// If using the page menu, normalize it first !
-//$sidebar .= elgg_view_menu('page', $vars);
+
+
+// Invite external members - Inria only
+$profile_type = esope_get_user_profile_type($user);
+if ($profile_type == 'inria') {
+	$sidebar .= '<div class="clearfloat"></div>';
+	$sidebar .= '<div class="iris-invite-external">
+			<ul class="elgg-menu elgg-menu-page elgg-menu-page-invite">
+				<li class="elgg-menu-item-invite">
+					<a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-menu-content">' . elgg_echo('theme_inria:invite_external') . '</a>
+				</li>
+			</ul>
+		</div>';
+	//		<p><a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-button elgg-button-action elgg-menu-content">' . elgg_echo('theme_inria:invite_external') . '</a>
+	// If using the page menu, normalize it first !
+	//$sidebar .= elgg_view_menu('page', $vars);
+}
 
 
 $content .= '<div class="iris-search-sort">';

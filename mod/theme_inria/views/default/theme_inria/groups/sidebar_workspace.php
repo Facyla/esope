@@ -27,10 +27,11 @@ if ($is_main_group) {
 
 $desc = $group->briefdescription;
 if (empty($desc)) { $desc = elgg_get_excerpt($group->description); }
+if (empty($desc)) { $desc = '<em>' . elgg_echo('theme_inria:group:nodescription') . '</em>'; }
 $sidebar .= '<div class="elgg-workspace-description">' . $desc . '</div>';
 
 
-
+// Spécifique espaces de travail : liens vers gestion de l'espace'
 if (!$is_main_group) {
 	$sidebar .= elgg_view('theme_inria/groups/workspace_sidebar', $vars);
 }

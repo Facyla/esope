@@ -176,7 +176,8 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 	if (elgg_instanceof($object, 'object')) {
 		// Get real container for forum & comments
 		$top_object = esope_get_top_object_entity($object);
-		$container = esope_get_container_entity($object);
+		//$container = esope_get_container_entity($object);
+		$container = esope_get_container_entity($top_object);
 		//error_log("Object : $object->guid $object->name $object->title / Top = $top_object->guid $top_object->name $top_object->title / container = $container->guid $container->name $container->title");
 		if (elgg_instanceof($container, 'group')) {
 			$group_icon = '<svg class="iris-groupes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M25.54,3.17H9.66a1,1,0,0,0-1,1v5h-5a1,1,0,0,0-1,1V26a1,1,0,0,0,1.51.86L8.95,24H19.58a1,1,0,0,0,1-1V18.23L25,20.9A1,1,0,0,0,26.54,20V4.17A1,1,0,0,0,25.54,3.17ZM18.58,22H8.67a1,1,0,0,0-.51.14L4.71,24.23V11.12h4v5.94a1,1,0,0,0,1,1h8.92Zm6-3.74-3.45-2.07a1,1,0,0,0-.51-.14H10.66V5.17H24.54Z"></path><circle cx="21.07" cy="10.61" r="0.99"></circle><circle cx="17.6" cy="10.61" r="0.99"></circle><circle cx="14.13" cy="10.61" r="0.99"></circle></svg>';
@@ -189,7 +190,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 				));
 		}
 		
-		// Inline comment form (toggle link registred via river menu hook)
+		// Inline comment form (toggle link registered via river menu hook)
 		//if (elgg_instanceof($top_object, 'object') && ($top_object->guid != $object->guid) && $top_object->canComment()) {
 		if ($top_object->canComment()) {
 			$items[] = \ElggMenuItem::factory(array(
@@ -200,16 +201,21 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 					'rel' => 'toggle',
 					'priority' => 50,
 				));
+		//} else if (elgg_instanceof($object, 'object', 'thewire') || elgg_instanceof($top_object, 'object', 'thewire')) {
 		} else if (elgg_instanceof($top_object, 'object', 'thewire')) {
-			// Thewire reply form
-			$items[] = \ElggMenuItem::factory(array(
-					'name' => 'comment',
-					'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
-					'text' => elgg_view_icon('speech-bubble'),
-					'title' => elgg_echo('comment:this'),
-					'rel' => 'toggle',
-					'priority' => 10,
-				));
+			// @TODO should be displayed if member of the container group, or not in group
+			//$container = $top_object->getContainerEntity();
+			if ((elgg_instanceof($container, 'group') && $container->isMember()) || !elgg_instanceof($container, 'group')) {
+				// Thewire reply form toggle link
+				$items[] = \ElggMenuItem::factory(array(
+						'name' => 'comment',
+						'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
+						'text' => elgg_view_icon('speech-bubble'),
+						'title' => elgg_echo('comment:this'),
+						'rel' => 'toggle',
+						'priority' => 10,
+					));
+			}
 			// Thread
 			// @TODO remove wire thread in thewire-thread context (redundant)
 			/*

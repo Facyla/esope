@@ -6,11 +6,11 @@
  */
 
 $group = elgg_extract('entity', $vars, elgg_get_page_owner_entity());
+$own = elgg_get_logged_in_user_entity();
 
 // Wire in groups is only available to group members (or admins)
 if (!elgg_instanceof($group, 'group')) { return; }
-if (!($group->isMember() || elgg_is_admin_logged_in())) { return; }
-
+if (!$group->isMember() && !elgg_is_admin_logged_in()) { return; }
 elgg_load_js('elgg.thewire');
 
 $post = elgg_extract('post', $vars);
@@ -44,6 +44,11 @@ if ($char_limit == 0) {
 } else if ($char_limit > 140) {
 	$num_lines = 4;
 }
+
+if (!elgg_in_context('workspace')) {
+	echo '<img src="' . $own->getIconUrl(array('size' => 'small')) . '" alt="' . $own->name . '" />';
+}
+
 echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',

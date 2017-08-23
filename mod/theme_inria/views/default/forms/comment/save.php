@@ -57,9 +57,11 @@ if ($comment) {
 
 if ($inline) {
 	//$comment_input = elgg_view('input/text', array(
-	$comment_input = elgg_view('input/plaintext', array(
+	$comment_input = elgg_view('input/longtext', array(
 		'name' => 'generic_comment',
 		'value' => $comment_text,
+		'class' => 'elgg-input-longtext-basic', // basic editor
+		'data-cke-init' => true, // start disabled
 	));
 
 	echo $comment_input . $entity_guid_input . $comment_guid_input . $submit_input;
@@ -69,6 +71,7 @@ if ($inline) {
 		'name' => 'generic_comment',
 		'value' => $comment_text,
 		'class' => 'elgg-input-longtext-basic', // basic editor
+		//'data-cke-init' => true, // start disabled
 	));
 
 	$is_edit_page_input = elgg_view('input/hidden', array(

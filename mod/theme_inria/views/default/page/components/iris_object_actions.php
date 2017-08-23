@@ -62,8 +62,8 @@ $actions .= '<div class="iris-object-actions">';
 	$actions .= '<ul class="elgg-menu-entity-alt float-alt">';
 	
 		$actions .= $metadata;
-		
-		if (($mode != 'full') && !in_array($entity->comments_on, array('no', 'Off'))) {
+		// Add links in listings (except for Wire also in full mode), and only if comments are not explicitely disabled
+		if ((($mode != 'full') || elgg_instanceof($entity, 'object', 'thewire')) && !in_array($entity->comments_on, array('no', 'Off'))) {
 			// Nb comments
 			$comments = $entity->countComments();
 			if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
@@ -79,21 +79,24 @@ $actions .= '<div class="iris-object-actions">';
 		
 			// Wire : reply form
 			if (elgg_instanceof($entity, 'object', 'thewire')) {
-				$actions .= '<li>' . elgg_view('output/url', array(
-							'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
-							'text' => '<i class="fa fa-comment"></i>',
-							'title' => elgg_echo('theme_inria:object:comment'),
-					)) . '</li>';
-					// Form should separated from menu
-				$form_vars = array('class' => 'thewire-form', 'action' => 'action/thewire/add');
-				$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
 				$wire_container = $entity->getContainerEntity();
-				if (elgg_instanceof($wire_container, 'group')) {
-					$actions_after .= elgg_view_form('thewire/group_add', $form_vars, array('entity' => $wire_container, 'post' => $entity));
-				} else {
-					$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
+				// Can reply only if member of the group, or not in a group
+				if (!elgg_instanceof($wire_container, 'group') || (elgg_instanceof($wire_container, 'group') && $wire_container->isMember())) {
+					$actions .= '<li>' . elgg_view('output/url', array(
+								'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
+								'text' => '<i class="fa fa-comment"></i>',
+								'title' => elgg_echo('theme_inria:object:comment'),
+						)) . '</li>';
+					// Form should separated from menu
+					$form_vars = array('class' => 'thewire-form', 'action' => 'action/thewire/add');
+					$actions_after .= '<div id="thewire-reply-' . $entity->guid . '" class="thewire-reply-inline hidden">';
+					if (elgg_instanceof($wire_container, 'group')) {
+						$actions_after .= elgg_view_form('thewire/group_add', $form_vars, array('entity' => $wire_container, 'post' => $entity));
+					} else {
+						$actions_after .= elgg_view_form('thewire/add', $form_vars, array('post' => $entity));
+					}
+					$actions_after .= '</div>';
 				}
-				$actions_after .= '</div>';
 				
 			} else if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
 				if ($entity->status != 'closed') {

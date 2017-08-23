@@ -5,7 +5,7 @@
 
 admin_gatekeeper();
 
-
+set_time_limit(0);
 
 /* Transtypage des forums en articles de blog
 Modifier : 
@@ -212,7 +212,7 @@ $skills_merge_content .= '</form><br /><br />';
 // Process
 $skills_merge = get_input('skills_merge', false);
 if ($skills_merge == 'yes') {
-	$users_options = array('types' => 'user', 'limit' => 1);
+	$users_options = array('types' => 'user', 'limit' => 0);
 	if ($merge_user_guid) { $users_options['guids'] = $merge_user_guid; }
 	$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_merge_skills_interests', 10);
 }

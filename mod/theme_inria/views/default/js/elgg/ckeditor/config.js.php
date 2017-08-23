@@ -37,20 +37,19 @@ define(function(require) {
 		
 		// Add new custom toolbars
 		toolbar_basic: [
-				// styles
-				['Format'], 
 				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
-				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
+				['NumberedList', 'BulletedList'], 
 				['Blockquote'], 
 				['Link', 'Unlink'], 
-				// source, iframe, flash, table
-				['Source'], 
 				['Scayt'], 
 				['Maximize'], 
 			],
 		
 		// Auto-enable SCAYT (spell checker)
 		scayt_autoStartup: true,
+		// Set default language
+		/// Available languages : en_US, en_GB, pt_BR, da_DK, nl_NL, en_CA, fi_FI, fr_FR, fr_CA, de_DE, el_GR, it_IT, nb_NO, pt_PT, es_ES, sv_SE
+		scayt_sLang: 'fr_FR',
 		
 		/*
 		toolbarGroups: [

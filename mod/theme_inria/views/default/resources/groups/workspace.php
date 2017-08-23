@@ -10,6 +10,8 @@ if (!elgg_instanceof($group, 'group')) {
 elgg_set_page_owner_guid($guid);
 // Determine main group
 $main_group = theme_inria_get_main_group($group);
+$is_main_group = true;
+if ($group->guid != $main_group->guid) { $is_main_group = false; }
 
 $own = elgg_get_logged_in_user_entity();
 
@@ -77,8 +79,30 @@ if (elgg_group_gatekeeper(false)) {
 		// Avertissement si non membre
 		if (!$group->isMember()) {
 			$content .= '<div class="group-workspace-add-tabs">';
-				$content .= '<p><a href="' . $group->getURL() . '">' . elgg_echo('theme_inria:workspace:notmember') . '</a></p>';
+				if ($is_main_group) {
+					$content .= '<p><a href="' . $group->getURL() . '">' . elgg_echo('theme_inria:group:notmember') . '</a></p>';
+				} else {
+					$content .= '<p><a href="' . $group->getURL() . '">' . elgg_echo('theme_inria:workspace:notmember') . '</a></p>';
+					// join - admins can always join.
+					if ($group->isPublicMembership() || $group->canEdit()) {
+						$content .= elgg_view('output/url', array(
+								'href' => $url . "action/groups/join?group_guid={$group->guid}",
+								'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('workspace:groups:join'),
+								'class' => "elgg-button elgg-button-action",
+								'is_action' => true,
+							));
+					} else {
+						// request membership
+						$content .= elgg_view('output/url', array(
+								'href' => $url . "action/groups/join?group_guid={$group->guid}",
+								'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('workspace:groups:joinrequest'),
+								'class' => "elgg-button elgg-button-action",
+								'is_action' => true,
+							));
+					}
+				}
 			$content .= '</div>';
+			
 		}
 		if ($group->isMember() || $group->canEdit()) {
 			// Switch publication de nouveau contenu

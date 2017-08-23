@@ -767,7 +767,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .elgg-sidebar ul.elgg-menu-page a:active { color: #384257 !important; font-weight:bold; background: transparent; }
 .elgg-menu-page li.elgg-state-selected { background: none; }
 
-.group-workspace-sidebar-membership { margin-bottom: 1.75rem; }
+.group-workspace-sidebar-membership { margin-top: 2rem; margin-bottom: 1.75rem; }
 #iris-body .iris-group-sidebar .group-workspace-sidebar-membership a { color: white; }
 
 
@@ -837,7 +837,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-profile-info a {  }
 .iris-profile-info-field { flex: 0 1 auto; margin-right: 3rem; }
 .iris-profile-info-field:last-of-type { margin-right: 0; }
-.iris-profile-info-field strong { color: #384257; text-transform: initial; display: inline-block; padding-top: 0.5rem; font-size: 0.94rem; }
+.iris-profile-info-field strong, .iris-profile-info-field a { color: #384257; text-transform: initial; display: inline-block; padding-top: 0.5rem; font-size: 0.94rem; }
 .iris-profile-info-field .elgg-tags > li { margin-bottom:0; }
 
 .iris-profile-submenu { background: white; font-size:0.75rem; color: #969696; margin-bottom: 1rem; padding: 0rem 0rem 0rem 0rem; /* text-transform: uppercase; */ font-weight: bold; display:flex; min-height: 3rem; }
@@ -1279,6 +1279,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #iris-body .iris-group-sidebar a.elgg-state-selected, 
 #iris-body .iris-group-sidebar a:hover, #iris-body .iris-group-sidebar a:active, #iris-body .iris-group-sidebar a:focus, 
 .workspace-subtype-content a:hover, .workspace-subtype-content a:active, .workspace-subtype-content a:focus { color: #1488CA; }
+#iris-body .iris-group-sidebar a.elgg-button:active, #iris-body .iris-group-sidebar a.elgg-button:focus, #iris-body .iris-group-sidebar a.elgg-button:hover { color: white; }
 #iris-body .iris-group-sidebar h2 { font-size: 1.125rem; color: #384257; font-weight: bold; font-family: "Inria Sans", sans-serif; }
 .iris-group-sidebar .fa-angle-right { /* float: right; */ }
 .iris-group-sidebar li { margin-bottom: 2rem; }
