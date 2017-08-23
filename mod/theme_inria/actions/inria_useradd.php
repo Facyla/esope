@@ -23,7 +23,7 @@ if (!is_array($emails)) { $emails = array($emails); }
 $name = get_input('name');
 $organisation = get_input('organisation');
 $organisation = string_to_tag_array($organisation);
-$fonction = get_input('fonction');
+$briefdescription = get_input('briefdescription');
 $reason = get_input('reason');
 $message = get_input('message');
 $group_guid = get_input('group_guid');
@@ -118,6 +118,10 @@ foreach ($emails as $email) {
 		// Initiate this because account would be disabled if not set at creation
 		$user->last_action = time();
 		esope_set_user_profile_type($user, 'external');
+		
+		// Add some fields values
+		$user->organisation = $organisation;
+		$user->briefdescription = $briefdescription;
 
 		// Remember account creation + make mutual friends
 		$user->created_by_guid = $inviter_guid;

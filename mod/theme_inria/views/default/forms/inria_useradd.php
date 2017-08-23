@@ -22,7 +22,7 @@ $email = get_input('email', '');
 $username = get_input('username', '');
 $name = get_input('name', '');
 $organisation = get_input('organisation', '');
-$fonction = get_input('fonction', '');
+$briefdescription = get_input('briefdescription', '');
 $group_guid = get_input('group_guid', '');
 $message = get_input('message', '');
 $reason = get_input('reason', '');
@@ -44,7 +44,7 @@ echo '<p><label>' . elgg_echo('theme_inria:useradd:name') . '' . elgg_view('inpu
 
 echo '<p><label>' . elgg_echo('theme_inria:useradd:organisation') . '' . elgg_view('input/tags', array('name' => 'organisation', 'value' => $organisation, 'required' => true)) . '</label></p>';
 
-echo '<p><label>' . elgg_echo('theme_inria:useradd:fonction') . '' . elgg_view('input/text', array('name' => 'fonction', 'value' => $fonction)) . '</label></p>';
+echo '<p><label>' . elgg_echo('theme_inria:useradd:fonction') . '' . elgg_view('input/text', array('name' => 'briefdescription', 'value' => $briefdescription)) . '</label></p>';
 
 // @TODO : use custom, simpler and multiple group select
 $groups = elgg_get_entities(array('type' => 'group', 'limit' => false));
