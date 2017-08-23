@@ -344,7 +344,7 @@ return array(
 	'theme_inria:useradd:name' => "Prénom et nom",
 	'theme_inria:useradd:username' => "Identifiant",
 	'theme_inria:useradd:organisation' => "Organisation",
-	'theme_inria:useradd:fonction' => "Fonction",
+	'theme_inria:useradd:fonction' => "Fonction / Rôle",
 	'theme_inria:useradd:message' => "Message à ajouter à votre invitation",
 	'theme_inria:useradd:message:details' => "Ce message sera intégré dans le mail d'invitation.",
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
@@ -445,6 +445,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	
 	// Main translation file
 	'profile:briefdescription' => "Fonction / Rôle", // Brève description (Profil)
+	'profile:organisation' => "Organisation",
 	'profile:location' => "Localisation", // Adresse
 	'profile:field:location' => "Localisation", // Adresse
 	'groups:briefdescription' => 'Résumé', // Brève description

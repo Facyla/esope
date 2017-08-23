@@ -21,10 +21,7 @@ if (event_calendar_activated_for_group($page_owner_entity)) {
 	// Get the upcoming events
 	$start_date = time(); // now
 	$end_date = $start_date + 60*60*24*365*2; // maximum is two years from now
-	//$ia = elgg_set_ignore_access(true);
-	// @TODO "fatal error" lié à un pb avec accès si pas admin - cependant pas de risque car les objets non visibles ne seront pas affichés
 	$events = event_calendar_get_events_between($start_date, $end_date, false, $num, 0, $page_owner_entity->guid);
-	elgg_set_ignore_access($ia);
 
 	// If there are any events to view, view them
 	if (is_array($events) && sizeof($events) > 0) {

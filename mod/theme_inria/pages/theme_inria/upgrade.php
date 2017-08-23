@@ -200,7 +200,7 @@ function theme_inria_merge_skills_interests($user, $getter, $options) {
 
 // Form
 $merge_user_guid = get_input('merge_user_guid', false);
-$skills_merge_content .= '<h3>Fuision skills + interests => skills</h3>';
+$skills_merge_content .= '<h3>Fusion skills + interests => skills</h3>';
 $skills_merge_content .= '<form method="POST">';
 	$skills_merge_content .= elgg_view('input/securitytoken');
 	$skills_merge_content .= elgg_view('input/hidden', array('name' => 'skills_merge', 'value' => 'yes'));
@@ -223,6 +223,61 @@ if ($skills_merge == 'yes') {
 
 // @TODO Conversion accès Membres du site => Inria seulement
 // Batch
+function theme_inria_entity_access_membertoinria($entity, $getter, $options) {
+	if (!elgg_instanceof($entity, 'object') && !elgg_instanceof($entity, 'group')) { return true; }
+	if ($entity->access_id != ACCESS_LOGGED_IN) { return true; }
+	
+	// Skip some special objects, or better filter only those that should be explictely updated
+	$update_subtypes = array('blog', 'comment', 'event_calendar', 'groupforumtopic', 'discussion_reply', 'bookmarks', 'file', 'page', 'page_top', 'thewire', 'feedback', 'newsletter', 'poll', 'survey');
+	if (elgg_instanceof($entity, 'object')) {
+		$subtype = $entity->getSubtype();
+		if (!in_array($subtype, $update_subtypes)) { echo "Wrong subtype<br />"; return true; }
+	}
+	
+	
+	$inria_collection = access_collections_get_collection_by_name('profiletype:inria');
+	if ($inria_collection && !empty($inria_collection->id)) {
+		$inria_access_id = $inria_collection->id;
+		echo $entity->getType() . " $entity->guid " . $entity->getSubtype() . " : access $entity->access_id => {$inria_collection->id} => ";
+		$production = get_input('access_update_prod', false);
+		if ($production == 'yes') {
+			$entity->access_id = $inria_collection->id;
+			echo "OK !";
+		} else { echo "Simulation"; }
+		echo '<br />';
+	}
+	return true;
+}
+
+// Form
+$access_update = get_input('access_update', false);
+$access_content .= '<h3>Mise à niveau des accès (Membres Iris => Inria seulement)</h3>';
+$access_content .= '<form method="POST">';
+	$access_content .= elgg_view('input/securitytoken');
+	$access_content .= elgg_view('input/hidden', array('name' => 'access_update', 'value' => 'yes'));
+	$access_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'access_update_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
+	$access_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer mise à niveau des droits d'accès")) . '</p>';
+$access_content .= '</form><br /><br />';
+
+// Process
+$access_update = get_input('access_update', false);
+if ($access_update == 'yes') {
+	// Access : Members => Inria access
+	$entities_opt = array('types' => array('object', 'group'), 'access_id' => ACCESS_LOGGED_IN, 'limit' => 0);
+	$batch = new ElggBatch('elgg_get_entities', $entities_opt, 'theme_inria_entity_access_membertoinria', 50);
+	/*
+	$groups_opt = array('types' => 'group', 'access_id' => ACCESS_LOGGED_IN, 'limit' => 10);
+	$batch = new ElggBatch('elgg_get_entities', $groups_opt, 'theme_inria_entity_access_membertoinria', 50);
+	*/
+}
+
+/*
+	Contenus ; y compris les Champs de profil = contenu (object)
+	Groupes
+	Etapes : 
+		1. Membres Iris => Inria seulement
+		2. Tout internaute => Membres Iris : inutile car walled garden activé
+*/
 
 
 
@@ -346,6 +401,8 @@ $content .= '<hr />';
 $content .= $notifications_content;
 $content .= '<hr />';
 $content .= $skills_merge_content;
+$content .= '<hr />';
+$content .= $access_content;
 
 //$content .= $transtype_content;
 
