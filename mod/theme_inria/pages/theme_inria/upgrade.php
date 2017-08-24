@@ -192,10 +192,10 @@ function theme_inria_merge_skills_interests($user, $getter, $options) {
 }
 
 $skills_merge_content .= '<h3>Fusion skills + interests => skills</h3>';
-$count_skills = elgg_get_entities_from_metadata(array('types' => 'user', 'metadata_names' => 'skills', 'count' => true);
-$count_interests = elgg_get_entities_from_metadata(array('types' => 'user', 'metadata_names' => 'interests', 'count' => true);
+$count_skills = elgg_get_entities_from_metadata(array('types' => 'user', 'metadata_names' => 'skills', 'count' => true));
+$count_interests = elgg_get_entities_from_metadata(array('types' => 'user', 'metadata_names' => 'interests', 'count' => true));
 
-$skills_merge_content .= '<p>' . $count_interests . ' méta "interests" et ' . $count_skills ' méta "skills".</p>';
+$skills_merge_content .= '<p>' . $count_interests . ' méta "interests" et ' . $count_skills . ' méta "skills".</p>';
 if ($count_interests > 0) {
 	// Form
 	$merge_user_guid = get_input('merge_user_guid', false);
