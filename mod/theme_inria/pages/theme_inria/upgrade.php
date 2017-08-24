@@ -220,13 +220,13 @@ if ($skills_merge == 'yes') {
 // Batch
 function theme_inria_entity_access_membertoinria($entity, $getter, $options) {
 	if (!elgg_instanceof($entity, 'object') && !elgg_instanceof($entity, 'group')) { return true; }
-	if ($entity->access_id != ACCESS_LOGGED_IN) { return true; }
+	if ($entity->access_id !== 1) { echo "{$entity->guid} : Wrong access<br />"; return true; }
 	
 	// Skip some special objects, or better filter only those that should be explictely updated
 	$update_subtypes = array('blog', 'comment', 'event_calendar', 'groupforumtopic', 'discussion_reply', 'bookmarks', 'file', 'page', 'page_top', 'thewire', 'feedback', 'newsletter', 'poll', 'survey');
 	if (elgg_instanceof($entity, 'object')) {
 		$subtype = $entity->getSubtype();
-		if (!in_array($subtype, $update_subtypes)) { echo "Wrong subtype<br />"; return true; }
+		if (!in_array($subtype, $update_subtypes)) { echo "{$entity->guid} : Wrong subtype<br />"; return true; }
 	}
 	
 	
@@ -237,6 +237,7 @@ function theme_inria_entity_access_membertoinria($entity, $getter, $options) {
 		$production = get_input('access_update_prod', false);
 		if ($production == 'yes') {
 			$entity->access_id = $inria_collection->id;
+			$entity->save();
 			echo "OK !";
 		} else { echo "Simulation"; }
 		echo '<br />';
@@ -244,41 +245,48 @@ function theme_inria_entity_access_membertoinria($entity, $getter, $options) {
 	return true;
 }
 
-// Form
-$access_update = get_input('access_update', false);
 $access_content .= '<h3>Mise à niveau des accès (Membres Iris => Inria seulement)</h3>';
-// Membres du site (à MAJ ou nouvelles publications)
-$entities_opt = array('types' => array('object', 'group'), 'access_id' => ACCESS_LOGGED_IN, 'limit' => 0);
-$remaining = elgg_get_entities_from_access_id($entities_opt + ['count' => true]);
-$access_content .= '<p>' . $remaining . ' publication(s) ou groupe(s) avec le niveau d\'accès "Membres Iris".</p>';
-// Inria seulement (déjà mis à jour)
+
+// Pré-requis : la collection d'accès "inria" doit exister
 $inria_collection = access_collections_get_collection_by_name('profiletype:inria');
 if ($inria_collection && !empty($inria_collection->id)) {
-	$updated_entities_opt = array('types' => array('object', 'group'), 'access_id' => $inria_collection->id, 'limit' => 0);
-	$updated = elgg_get_entities_from_access_id($updated_entities_opt + ['count' => true]);
-	$access_content .= '<p>' . $updated . ' publication(s) ou groupe(s) avec le niveau d\'accès "Inria" (' .  $inria_collection->id . ').</p>';
-}
-if ($remaining > 0) {
-	$access_content .= '<p>Attention cela ne signifie pas que la mise à niveau n\'a pas été faite : de nouvelles publications ont pu être créées depuis !</p>';
-	$access_content .= '<form method="POST">';
-		$access_content .= elgg_view('input/securitytoken');
-		$access_content .= elgg_view('input/hidden', array('name' => 'access_update', 'value' => 'yes'));
-		$access_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'access_update_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
-		$access_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer mise à niveau des droits d'accès")) . '</p>';
-	$access_content .= '</form><br /><br />';
-
-	// Process
-	// Access : Members => Inria access
+	// Form
 	$access_update = get_input('access_update', false);
-	if ($access_update == 'yes') {
-		$batch = new ElggBatch('elgg_get_entities_from_access_id', $entities_opt, 'theme_inria_entity_access_membertoinria', 50);
-		/*
-		$groups_opt = array('types' => 'group', 'access_id' => ACCESS_LOGGED_IN, 'limit' => 10);
-		$batch = new ElggBatch('elgg_get_entities', $groups_opt, 'theme_inria_entity_access_membertoinria', 50);
-		*/
+	// Membres du site (à MAJ ou nouvelles publications)
+	$entities_opt = array('types' => array('object', 'group'), 'access_id' => 1, 'limit' => 0);
+	$remaining = elgg_get_entities_from_access_id($entities_opt + ['count' => true]);
+	$access_content .= '<p>' . $remaining . ' publication(s) ou groupe(s) avec le niveau d\'accès "Membres Iris".</p>';
+	// Inria seulement (déjà mis à jour)
+	$inria_collection = access_collections_get_collection_by_name('profiletype:inria');
+	if ($inria_collection && !empty($inria_collection->id)) {
+		$updated_entities_opt = array('types' => array('object', 'group'), 'access_id' => $inria_collection->id, 'limit' => 0);
+		$updated = elgg_get_entities_from_access_id($updated_entities_opt + ['count' => true]);
+		$access_content .= '<p>' . $updated . ' publication(s) ou groupe(s) avec le niveau d\'accès "Inria" (' .  $inria_collection->id . ').</p>';
+	}
+	if ($remaining > 0) {
+		$access_content .= '<p>Attention cela ne signifie pas que la mise à niveau n\'a pas été faite : de nouvelles publications ont pu être créées depuis !</p>';
+		$access_content .= '<form method="POST">';
+			$access_content .= elgg_view('input/securitytoken');
+			$access_content .= elgg_view('input/hidden', array('name' => 'access_update', 'value' => 'yes'));
+			$access_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'access_update_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
+			$access_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer mise à niveau des droits d'accès")) . '</p>';
+		$access_content .= '</form><br /><br />';
+
+		// Process
+		// Access : Members => Inria access
+		$access_update = get_input('access_update', false);
+		if ($access_update == 'yes') {
+			$batch = new ElggBatch('elgg_get_entities_from_access_id', $entities_opt, 'theme_inria_entity_access_membertoinria', 50);
+			/*
+			$groups_opt = array('types' => 'group', 'access_id' => 1, 'limit' => 10);
+			$batch = new ElggBatch('elgg_get_entities', $groups_opt, 'theme_inria_entity_access_membertoinria', 50);
+			*/
+		}
+	} else {
+		$access_content .= '<p>Aucun fichier ou groupe avec le niveau d\'accès "Membres Iris"</p>';
 	}
 } else {
-	$access_content .= '<p>Aucun fichier ou groupe avec le niveau d\'accès "Membres Iris"</p>';
+	$access_content .= '<p>Le niveau d\'accès "inria" associé au type de profil n\'existe pas encore : veuillez la créér pour pouvoir exécuter ce script.</p>';
 }
 
 /*
