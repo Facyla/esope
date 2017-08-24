@@ -404,6 +404,8 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'theme_inria:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'theme_inria:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
+	'theme_inria:reply' => "Répondre",
+	
 	'theme_inria:option:nofilter' => "(aucun filtre)",
 	
 	'theme_inria:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
@@ -459,7 +461,8 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'LOGGED_IN' => "Membres Iris", // membres connectés
 	'GROUP_MEMBERS' => "Groupe", // membres du groupe
 	'access:friends:label' => "Contacts seulement", // contacts
-	'PUBLIC' => "Tout internaute", // public
+	//'PUBLIC' => "Tout internaute", // public
+	'PUBLIC' => "Membres Iris", // public en mode Walled Garden
 	'river:all' => "Ça bouge sur Iris",
 	'search_types:tags' => "Mots-clés",
 	

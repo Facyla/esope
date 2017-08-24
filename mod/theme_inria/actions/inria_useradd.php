@@ -148,7 +148,7 @@ foreach ($emails as $email) {
 			$password,
 		));
 		if ($disable_notice) { $user_body .= $disable_notice; }
-		notify_user($user->guid, $site->guid, $user_subject, $user_body);
+		notify_user($user->guid, $site->guid, $user_subject, $user_body, array(), array('email', 'site'));
 
 		// ADMIN VALIDATION
 		if ($admin_validation) {
@@ -204,7 +204,7 @@ foreach ($emails as $email) {
 		));
 		if ($disable_notice) { $admin_body .= $disable_notice; }
 		foreach ($admins as $notify_user) {
-			notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body);
+			notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body, array(), array('email', 'site'));
 		}
 		
 		//system_message(elgg_echo("adduser:ok", array($site->name)));

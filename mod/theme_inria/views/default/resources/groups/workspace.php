@@ -88,7 +88,7 @@ if (elgg_group_gatekeeper(false)) {
 						$content .= elgg_view('output/url', array(
 								'href' => $url . "action/groups/join?group_guid={$group->guid}",
 								'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('workspace:groups:join'),
-								'class' => "elgg-button elgg-button-action",
+								'class' => "workspace-button-join",
 								'is_action' => true,
 							));
 					} else {
@@ -96,7 +96,7 @@ if (elgg_group_gatekeeper(false)) {
 						$content .= elgg_view('output/url', array(
 								'href' => $url . "action/groups/join?group_guid={$group->guid}",
 								'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('workspace:groups:joinrequest'),
-								'class' => "elgg-button elgg-button-action",
+								'class' => "workspace-button-join",
 								'is_action' => true,
 							));
 					}

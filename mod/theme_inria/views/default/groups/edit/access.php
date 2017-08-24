@@ -53,6 +53,10 @@ $parent_group = elgg_extract("au_subgroup_of", $vars);
 				ACCESS_LOGGED_IN => elgg_echo($translation_prefix."LOGGED_IN"),
 				ACCESS_PUBLIC => elgg_echo($translation_prefix."PUBLIC"),
 			);
+			$inria_access_id = theme_inria_get_inria_access_id();
+			if ($inria_access_id) {
+				$visibility_options[$inria_access_id] = elgg_echo('profiletype:inria');
+			}
 			if (elgg_get_config("walled_garden")) {
 				unset($visibility_options[ACCESS_PUBLIC]);
 			}
