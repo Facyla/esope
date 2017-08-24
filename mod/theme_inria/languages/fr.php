@@ -351,6 +351,7 @@ return array(
 	'theme_inria:useradd:reason:details' => "Vous pouvez indiquer le motif de création de ce compte, par ex. alumni, projet de recherche, etc.",
 	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas activé immédiatement ! Le compte doit d'abord être validé par un administrateur.",
 	'theme_inria:useradd:disabled:adminvalidation' => "Le compte créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
+	'theme_inria:useradd:ok' => "Le compte de %s (%s) a bien été créé. <a href=\"%s\">Voir sa page de profil</a>",
 	'theme_inria:useradd:register' => "Envoyer l'invitation",
 	'theme_inria:useradd:subject' => "[%1\$s] Invitation de %2\$s",
 	'theme_inria:useradd:body' => "Bonjour %1\$s
@@ -445,8 +446,12 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	
 	// Main translation file
 	'profile:briefdescription' => "Fonction / Rôle", // Brève description (Profil)
+	'profile:hint:briefdescription' => "Votre ou vos fonction(s), poste(s), rôle(s) en une phrase. Utilisez la description pour détailler", // Brève description (Profil)
+	'profile:fonction' => "Fonction",
 	'profile:organisation' => "Organisation",
+	'profile:hint:organisation' => "Votre organisation, ou une liste de vos organisations séparées par des virgules",
 	'profile:location' => "Localisation", // Adresse
+	//'profile:hint:location' => "Veuillez indiquer votre localisation sous la forme d'une adresse.", // Adresse
 	'profile:field:location' => "Localisation", // Adresse
 	'groups:briefdescription' => 'Résumé', // Brève description
 	'groups:interests' => 'Mots-clés',
@@ -498,6 +503,8 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'groups:members:active' => "membres actifs",
 	'groups:member:active' => "membre actif",
 	'groups:content_access_mode:membersonly' => "Identique au groupe - Les nouveaux contenus ont le même niveau d'accès que le groupe",
+	'groups:invitations:pending:none' => "Aucune demande d'adhésion en attente.",
+	'groups:invitations:request:none' => "Aucune demande à examiner.",
 	
 	'ckeditor:html' => "Activer/désactiver éditeur visuel",
 	

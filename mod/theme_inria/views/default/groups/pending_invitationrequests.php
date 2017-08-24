@@ -21,6 +21,6 @@ if (isset($vars['requests'])) {
 
 $vars['items'] = $requests;
 $vars['item_view'] = 'group/format/pending_invitationrequest';
-$vars['no_results'] = elgg_echo('groups:invitations:none');
+$vars['no_results'] = elgg_echo('groups:invitations:pending:none');
 
 echo elgg_view('page/components/list', $vars);

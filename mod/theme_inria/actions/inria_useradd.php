@@ -206,8 +206,9 @@ foreach ($emails as $email) {
 		foreach ($admins as $notify_user) {
 			notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body);
 		}
-	
-		system_message(elgg_echo("adduser:ok", array($site->name)));
+		
+		//system_message(elgg_echo("adduser:ok", array($site->name)));
+		system_message(elgg_echo("theme_inria:useradd:ok", array($user->name, $user->email, $user->getUrl())));
 		elgg_clear_sticky_form('useradd');
 	}
 
@@ -237,7 +238,10 @@ foreach ($emails as $email) {
 										if ($group->join($user)) { system_message("Workspace {$group->name} joined."); }
 										$group->join($user);
 									} else {
+										// Add membership request
+										// @TODO Notify group owner + operators
 										add_entity_relationship($user->guid, 'membership_request', $parent->guid);
+										// @TODO Notify group owner + operators
 										add_entity_relationship($user->guid, 'membership_request', $group->guid);
 									}
 								} else {
@@ -249,17 +253,19 @@ foreach ($emails as $email) {
 						}
 					
 					} else if ($group->isMember()) {
-						// Invite with no admin rights
+						// Invite with no admin rights = membership request
 						if (add_entity_relationship($user->guid, 'membership_request', $group->guid)) {
-							system_message("Group membership for {$group->name}.");
+							// @TODO Notify group owner + operators
+							system_message("Group membership request for {$group->name}.");
 						} else {
 							system_message("Membership request already existing for {$group->name}.");
 						}
 				
 					} else {
-						// Invite with no admin rights
+						// Invite with no admin rights = membership request
 						if (add_entity_relationship($user->guid, 'membership_request', $group->guid)) {
-							system_message("Group membership for {$group->name}.");
+							// @TODO Notify group owner + operators
+							system_message("Group membership request for {$group->name}.");
 						} else {
 							system_message("Membership request already existing for {$group->name}.");
 						}

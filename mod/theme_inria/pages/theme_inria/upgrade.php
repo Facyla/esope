@@ -26,7 +26,6 @@ Désactivation des forums dans les groupes (si plus rien à convertir)
 function theme_inria_transtype_forums($transtype_ent, $getter, $options) {
 	//$transtype_content .= elgg_view_entity($transtype_ent);
 	$transtype_content .= "$transtype_ent->guid $transtype_ent->title : $transtype_ent->getSubtype(), access $transtype_ent->access_id, status $transtype_ent->status";
-
 	// production ou Simulation
 	$transtype_prod = get_input('transtype', 'no');
 	if ($transtype_prod != 'yes') {
@@ -42,30 +41,6 @@ function theme_inria_transtype_forums($transtype_ent, $getter, $options) {
 	}
 	return true;
 }
-
-// Batch : désactivation forum + activation blog
-function theme_inria_disable_forums($group, $getter, $options) {
-	if (!elgg_instanceof($group, 'group')) { echo "Not a group"; return true; }
-	
-	$options = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
-	$options['container_guid'] = $group->guid;
-	$remaining = elgg_get_entities($options);
-	if ($remaining > 0) { echo "{$group->guid} : Remaining topics, cannot disable<br />"; return true; }
-	
-	$transtype_prod = get_input('transtype', 'no');
-	if ($transtype_prod != 'yes') {
-		echo "Simulation : Forum désactivé et Blog activé dans {$group->name}<br />";
-	} else {
-		if ($group->forum_enable != 'no') {
-			$group->forum_enable = 'no';
-			$group->blog_enable = 'yes';
-			echo "Forum désactivé et Blog activé dans {$group->name}<br />";
-		}
-	}
-	return true;
-}
-
-
 // Convert forum topic to blog
 function theme_inria_update_groupforumtopic_as_blog($transtype_ent) {
 	if (elgg_instanceof($transtype_ent, 'object', 'groupforumtopic')) {
@@ -90,8 +65,7 @@ function theme_inria_update_groupforumtopic_as_blog($transtype_ent) {
 	}
 	return false;
 }
-
-// Convert discussion repluy to comment
+// Convert discussion reply to comment
 function theme_inria_update_discussion_reply_as_comment($transtype_ent) {
 	if (elgg_instanceof($transtype_ent, 'object', 'discussion_reply')) {
 		$transtype_dbprefix = elgg_get_config('dbprefix');
@@ -101,6 +75,27 @@ function theme_inria_update_discussion_reply_as_comment($transtype_ent) {
 		return "discussion_reply {$transtype_ent->guid} updated<br />";
 	}
 	return false;
+}
+// Batch : désactivation forum + activation blog
+function theme_inria_disable_forums($group, $getter, $options) {
+	if (!elgg_instanceof($group, 'group')) { echo "Not a group"; return true; }
+	
+	$options = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
+	$options['container_guid'] = $group->guid;
+	$remaining = elgg_get_entities($options);
+	if ($remaining > 0) { echo "{$group->guid} : Remaining topics, cannot disable<br />"; return true; }
+	
+	$transtype_prod = get_input('transtype', 'no');
+	if ($transtype_prod != 'yes') {
+		echo "Simulation : Forum désactivé et Blog activé dans {$group->name}<br />";
+	} else {
+		if ($group->forum_enable != 'no') {
+			$group->forum_enable = 'no';
+			$group->blog_enable = 'yes';
+			echo "Forum désactivé et Blog activé dans {$group->name}<br />";
+		}
+	}
+	return true;
 }
 
 $transtype_content = '';
@@ -122,7 +117,7 @@ $transtype_content .= '<div id="inria-upgrade" class="">';
 		$transtype_content .= "Transtypage limité au groupe $transtype_group_guid<br />";
 	}
 	$transtype_remaining_forums = elgg_get_entities($transtype_remaining_forums_opt);
-	if ($transtype_remaining_forums === 0) {
+	if ($transtype_remaining_forums < 1) {
 		$transtype_content .= '<p>' . "Plus aucun sujet ou réponse de forum : désactivation des forums possible" . '</p>';
 	} else  {
 		$transtype_content .= '<p>' . "Le site comporte " . $transtype_remaining_forums . " sujets de discussion et réponses." . '</p>';
@@ -252,23 +247,38 @@ function theme_inria_entity_access_membertoinria($entity, $getter, $options) {
 // Form
 $access_update = get_input('access_update', false);
 $access_content .= '<h3>Mise à niveau des accès (Membres Iris => Inria seulement)</h3>';
-$access_content .= '<form method="POST">';
-	$access_content .= elgg_view('input/securitytoken');
-	$access_content .= elgg_view('input/hidden', array('name' => 'access_update', 'value' => 'yes'));
-	$access_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'access_update_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
-	$access_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer mise à niveau des droits d'accès")) . '</p>';
-$access_content .= '</form><br /><br />';
+// Membres du site (à MAJ ou nouvelles publications)
+$entities_opt = array('types' => array('object', 'group'), 'access_id' => ACCESS_LOGGED_IN, 'limit' => 0);
+$remaining = elgg_get_entities_from_access_id($entities_opt + ['count' => true]);
+$access_content .= '<p>' . $remaining . ' publication(s) ou groupe(s) avec le niveau d\'accès "Membres Iris".</p>';
+// Inria seulement (déjà mis à jour)
+$inria_collection = access_collections_get_collection_by_name('profiletype:inria');
+if ($inria_collection && !empty($inria_collection->id)) {
+	$updated_entities_opt = array('types' => array('object', 'group'), 'access_id' => $inria_collection->id, 'limit' => 0);
+	$updated = elgg_get_entities_from_access_id($updated_entities_opt + ['count' => true]);
+	$access_content .= '<p>' . $updated . ' publication(s) ou groupe(s) avec le niveau d\'accès "Inria" (' .  $inria_collection->id . ').</p>';
+}
+if ($remaining > 0) {
+	$access_content .= '<p>Attention cela ne signifie pas que la mise à niveau n\'a pas été faite : de nouvelles publications ont pu être créées depuis !</p>';
+	$access_content .= '<form method="POST">';
+		$access_content .= elgg_view('input/securitytoken');
+		$access_content .= elgg_view('input/hidden', array('name' => 'access_update', 'value' => 'yes'));
+		$access_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'access_update_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
+		$access_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer mise à niveau des droits d'accès")) . '</p>';
+	$access_content .= '</form><br /><br />';
 
-// Process
-$access_update = get_input('access_update', false);
-if ($access_update == 'yes') {
+	// Process
 	// Access : Members => Inria access
-	$entities_opt = array('types' => array('object', 'group'), 'access_id' => ACCESS_LOGGED_IN, 'limit' => 0);
-	$batch = new ElggBatch('elgg_get_entities', $entities_opt, 'theme_inria_entity_access_membertoinria', 50);
-	/*
-	$groups_opt = array('types' => 'group', 'access_id' => ACCESS_LOGGED_IN, 'limit' => 10);
-	$batch = new ElggBatch('elgg_get_entities', $groups_opt, 'theme_inria_entity_access_membertoinria', 50);
-	*/
+	$access_update = get_input('access_update', false);
+	if ($access_update == 'yes') {
+		$batch = new ElggBatch('elgg_get_entities_from_access_id', $entities_opt, 'theme_inria_entity_access_membertoinria', 50);
+		/*
+		$groups_opt = array('types' => 'group', 'access_id' => ACCESS_LOGGED_IN, 'limit' => 10);
+		$batch = new ElggBatch('elgg_get_entities', $groups_opt, 'theme_inria_entity_access_membertoinria', 50);
+		*/
+	}
+} else {
+	$access_content .= '<p>Aucun fichier ou groupe avec le niveau d\'accès "Membres Iris"</p>';
 }
 
 /*

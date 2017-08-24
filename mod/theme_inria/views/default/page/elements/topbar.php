@@ -125,6 +125,7 @@ if (elgg_is_logged_in()) {
 	
 	// Demandes en attente
 	$grouprequests = esope_groups_get_requested_groups($own->guid);
+	$groupinvites_content .= '<hr />';
 	//$groupinvites_content .= '<h3>DEMANDES ENVOYEES</h3>';
 	$groupinvites_content .= elgg_view('groups/pending_invitationrequests', array('requests' => $grouprequests));
 	
@@ -136,8 +137,8 @@ if (elgg_is_logged_in()) {
 	if ($grouppendingrequests_count > 0) {
 		if (!empty($groupinvites_text)) { $groupinvites_text .= ', '; }
 		$groupinvites_text .= elgg_echo("theme_inria:grouprequests:unreadcount", array($grouppendingrequests_count));
-		//$groupinvites_content .= '<h3>' . "Demandes d'adhésion dans vos groupes" . '</h3>';
 		$groupinvites_content .= '<hr />';
+		//$groupinvites_content .= '<h3>' . "Demandes d'adhésion dans vos groupes" . '</h3>';
 		foreach($grouppendingrequests as $group) {
 			//if (!$group->canEdit()) { continue; }
 			//$groupinvites_content .= elgg_view_entity($group, array('full_view' => false));
