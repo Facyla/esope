@@ -97,10 +97,11 @@ switch($access_id) {
 				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->name, ENT_QUOTES, 'UTF-8', false);
 			}
 		} else if (elgg_instanceof($collection_owner, 'site')) {
+			// A priori cas spécial : collections définies globalement (plugin eg. access_collections, admin, etc.)
 			$help_details = elgg_echo('access_icons:site:details');
 			$access_class .= ' elgg-access-site';
 			if (!$hide_text) {
-				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars($collection_owner->title, ENT_QUOTES, 'UTF-8', false);
+				$access_id_string = '<span class="access-icon-placeholder"></span>' . htmlspecialchars(elgg_echo($acl->name), ENT_QUOTES, 'UTF-8', false);
 			}
 		} else {
 			// Container inconnu, typiquement car pas d'accès suffisant
@@ -118,7 +119,7 @@ $access_textcontent = elgg_get_plugin_setting('helptext', 'access_icons');
 if ($access_content) {
 	elgg_load_js('lightbox');
 	elgg_load_css('lightbox');
-	$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => $access_content, 'class' => 'elgg-lightbox'));
+	$access_id_string = elgg_view('output/url', array('text' => $access_id_string, 'href' => $access_content, 'class' => 'elgg-lightbox', 'target' => "_blank"));
 /* @TODO : doesn't work as expected yet
 } else if ($access_textcontent) {
 	// Pour lightbox avec texte court dedans
