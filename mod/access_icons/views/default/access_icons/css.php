@@ -49,14 +49,15 @@ $padding_left = '0';
 
 
 /* Couleur par défaut : grisé */
-.elgg-access.elgg-access-default { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-default.png) no-repeat top left; }
+.elgg-access, .elgg-access.elgg-access-default { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-default.png) no-repeat top left; }
 
 /* Public : noir et ouvert */
 .elgg-access.elgg-access-public { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-public.png) no-repeat top left; }
 
 /* Membres : vert et fermé */
 .elgg-access.elgg-access-members { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-members.png) no-repeat top left; }
-/* Site = accès spéciaux génériques */
+
+/* Site = accès spéciaux génériques : violet */
 .elgg-access.elgg-access-site { padding-left:<?php echo $padding_left; ?>; min-width:16px; min-height:16px; background: transparent url(<?php echo $urlicon; ?>access-site.png) no-repeat top left; }
 
 /* Groupe : bleu et fermé */

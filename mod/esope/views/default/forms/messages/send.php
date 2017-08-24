@@ -68,6 +68,7 @@ $recipient_autocomplete = elgg_view('input/autocomplete', array(
 	<?php echo elgg_view("input/longtext", array(
 		'name' => 'body',
 		'value' => $body,
+		'class' => 'elgg-input-longtext-basic',
 	));
 	?>
 </div>

@@ -44,6 +44,7 @@ echo elgg_view('input/hidden', array(
 	<?php echo elgg_view("input/longtext", array(
 		'name' => 'body',
 		'value' => '',
+		'class' => 'elgg-input-longtext-basic',
 	));
 	?>
 </div>
