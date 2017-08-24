@@ -1009,7 +1009,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 #esope-esearch-loadmore a { background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; color: white; text-decoration: none; display: inline-block; }
 
 #iris-footer #feedbackWrapper { top:initial; bottom:150px; }
-
+#feedBackToggler #feedBackTogglerLink { background: transparent; border: 0; box-shadow: none; }
 
 
 /* River and listings */
