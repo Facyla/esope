@@ -82,8 +82,8 @@ function theme_inria_disable_forums($group, $getter, $options) {
 	
 	$options = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
 	$options['container_guid'] = $group->guid;
-	$remaining = elgg_get_entities($options);
-	if ($remaining > 0) { echo "{$group->guid} : Remaining topics, cannot disable<br />"; return true; }
+	$count = elgg_get_entities($options);
+	if ($count > 0) { echo "{$group->guid} : Remaining topics, cannot disable<br />"; return true; }
 	
 	$transtype_prod = get_input('transtype', 'no');
 	if ($transtype_prod != 'yes') {
@@ -179,7 +179,6 @@ $transtype_content .= '</div>';
 // Batch
 function theme_inria_merge_skills_interests($user, $getter, $options) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
-	
 	$skills_merge_prod = get_input('skills_merge_prod', false);
 	if ($skills_merge_prod == 'yes') {
 		$user->skills = array_merge((array)$user->skills, (array)$user->interests);
@@ -189,34 +188,41 @@ function theme_inria_merge_skills_interests($user, $getter, $options) {
 		$skills = array_merge((array)$user->skills, (array)$user->interests);
 		echo $user->guid . ' : fusion de skills (' . print_r($user->skills, true) . ') et interests (' . print_r($user->skills, true) . ') => ' . print_r($skills, true) . '<br />';
 	}
-	
 	return true;
 }
 
-// Form
-$merge_user_guid = get_input('merge_user_guid', false);
 $skills_merge_content .= '<h3>Fusion skills + interests => skills</h3>';
-$skills_merge_content .= '<form method="POST">';
-	$skills_merge_content .= elgg_view('input/securitytoken');
-	$skills_merge_content .= elgg_view('input/hidden', array('name' => 'skills_merge', 'value' => 'yes'));
-	$skills_merge_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'skills_merge_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
-	$skills_merge_content .= '<p><label>GUID du membre ' . elgg_view('input/text', array('name' => 'merge_user_guid', 'value' => $merge_user_guid)) . '</label></p>';
-	$skills_merge_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer fusion des skills et interests dans skills")) . '</p>';
-$skills_merge_content .= '</form><br /><br />';
+$count_skills = elgg_get_entities_from_metadata(array('types' => 'user', 'metadata_names' => 'skills', 'count' => true);
+$count_interests = elgg_get_entities_from_metadata(array('types' => 'user', 'metadata_names' => 'interests', 'count' => true);
 
-// Process
-$skills_merge = get_input('skills_merge', false);
-if ($skills_merge == 'yes') {
-	$users_options = array('types' => 'user', 'limit' => 0);
-	if ($merge_user_guid) { $users_options['guids'] = $merge_user_guid; }
-	$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_merge_skills_interests', 10);
+$skills_merge_content .= '<p>' . $count_interests . ' méta "interests" et ' . $count_skills ' méta "skills".</p>';
+if ($count_interests > 0) {
+	// Form
+	$merge_user_guid = get_input('merge_user_guid', false);
+	$skills_merge_content .= '<form method="POST">';
+		$skills_merge_content .= elgg_view('input/securitytoken');
+		$skills_merge_content .= elgg_view('input/hidden', array('name' => 'skills_merge', 'value' => 'yes'));
+		$skills_merge_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'skills_merge_prod', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
+		$skills_merge_content .= '<p><label>GUID du membre ' . elgg_view('input/text', array('name' => 'merge_user_guid', 'value' => $merge_user_guid)) . '</label></p>';
+		$skills_merge_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer fusion des skills et interests dans skills")) . '</p>';
+	$skills_merge_content .= '</form><br /><br />';
+
+	// Process
+	$skills_merge = get_input('skills_merge', false);
+	if ($skills_merge == 'yes') {
+		$users_options = array('types' => 'user', 'limit' => 0);
+		if ($merge_user_guid) { $users_options['guids'] = $merge_user_guid; }
+		$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_merge_skills_interests', 10);
+	}
+} else {
+	$skills_merge_content .= '<p><strong>Mise à jour terminée</strong> : il ne reste plus aucun compte avec le champ "interests" (tout a été fusionné avec "skills".</p>';
 }
 
 
 
 
 
-// @TODO Conversion accès Membres du site => Inria seulement
+// Conversion accès Membres du site => Inria seulement
 // Batch
 function theme_inria_entity_access_membertoinria($entity, $getter, $options) {
 	if (!elgg_instanceof($entity, 'object') && !elgg_instanceof($entity, 'group')) { return true; }
@@ -254,17 +260,17 @@ if ($inria_collection && !empty($inria_collection->id)) {
 	$access_update = get_input('access_update', false);
 	// A MAJ (ou nouvelles publications) : Membres du site
 	$groups_opt = array('types' => array('group'), 'access_id' => 1, 'limit' => 0);
-	$remaining_groups = elgg_get_entities_from_access_id($groups_opt + ['count' => true]);
+	$count_groups = elgg_get_entities_from_access_id($groups_opt + ['count' => true]);
 	$update_subtypes = array('blog', 'comment', 'event_calendar', 'groupforumtopic', 'discussion_reply', 'bookmarks', 'file', 'page', 'page_top', 'thewire', 'feedback', 'newsletter', 'poll', 'survey'); // Attention : cf. sync avec fonction de batch !
 	$entities_opt = array('types' => array('object'), 'subtypes' => $update_subtypes, 'access_id' => 1, 'limit' => 0);
-	$remaining = elgg_get_entities_from_access_id($entities_opt + ['count' => true]);
-	$access_content .= '<p>' . $remaining_groups . ' groupe(s) et ' . $remaining . ' publication(s) avec le niveau d\'accès "Membres Iris".</p>';
+	$count = elgg_get_entities_from_access_id($entities_opt + ['count' => true]);
+	$access_content .= '<p>' . $count_groups . ' groupe(s) et ' . $count . ' publication(s) avec le niveau d\'accès "Membres Iris".</p>';
 	// Inria seulement (déjà mis à jour)
 	$updated_entities_opt = array('types' => array('object', 'group'), 'access_id' => $inria_collection->id, 'limit' => 0);
 	$updated = elgg_get_entities_from_access_id($updated_entities_opt + ['count' => true]);
 	$access_content .= '<p>' . $updated . ' publication(s) ou groupe(s) avec le niveau d\'accès "Inria" (' .  $inria_collection->id . ').</p>';
 	
-	if (($remaining_groups > 0) || ($remaining > 0)) {
+	if (($count_groups > 0) || ($count > 0)) {
 		$access_content .= '<p>Attention cela ne signifie pas que la mise à niveau n\'a pas été faite : de nouveaux groupes ou de nouvelles publications ont pu être créés depuis !</p>';
 		$access_content .= '<form method="POST">';
 			$access_content .= elgg_view('input/securitytoken');
@@ -277,10 +283,10 @@ if ($inria_collection && !empty($inria_collection->id)) {
 		// Access : Members => Inria access
 		$access_update = get_input('access_update', false);
 		if ($access_update == 'yes') {
-			if ($remaining_groups > 0) {
+			if ($count_groups > 0) {
 				$batch = new ElggBatch('elgg_get_entities_from_access_id', $groups_opt, 'theme_inria_entity_access_membertoinria', 10);
 			}
-			if ($remaining > 0) {
+			if ($count > 0) {
 				$batch = new ElggBatch('elgg_get_entities_from_access_id', $entities_opt, 'theme_inria_entity_access_membertoinria', 50);
 			}
 			/*
@@ -289,10 +295,10 @@ if ($inria_collection && !empty($inria_collection->id)) {
 			*/
 		}
 	} else {
-		$access_content .= '<p>Aucun groupe ou publication avec le niveau d\'accès "Membres Iris"</p>';
+		$access_content .= '<p><strong>Mise à jour terminée</strong> il n\'y a plus aucun groupe ou publication avec le niveau d\'accès "Membres Iris"</p>';
 	}
 } else {
-	$access_content .= '<p>Le niveau d\'accès associé au type de profil "inria" n\'existe pas encore : veuillez le créér pour pouvoir exécuter ce script.</p>';
+	$access_content .= '<p><strong>Attention</strong> : le niveau d\'accès associé au type de profil "inria" n\'existe pas encore : veuillez le créér pour pouvoir exécuter ce script.</p>';
 }
 
 /*
@@ -305,8 +311,9 @@ if ($inria_collection && !empty($inria_collection->id)) {
 
 
 
-// @TODO Activation des notifications 'site'
+// Activation des notifications 'site'
 $notifications_content .= '<h3>Activation systématique des notifications via le site</h3>';
+// @TODO identifier dernier GUID traité, et vérifier qu'il a bien été mis à jour
 
 // Batch
 function theme_inria_force_user_site_notifications($user, $getter, $options) {
