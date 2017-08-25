@@ -63,7 +63,7 @@ $content .= '</div>';
 			//$content .= elgg_view('groups/invitationrequests');
 			$content .= '<h3>Demandes d\'adhésion en attente (X)</h3>';
 			$requests = elgg_get_entities_from_relationship(array('type' => 'user', 'relationship' => 'membership_request', 'relationship_guid' => $subgroup->guid, 'inverse_relationship' => true));
-			$content .= elgg_view('groups/membershiprequests', array('requests' => $requests));
+			$content .= elgg_view('groups/membershiprequests', array('requests' => $requests, 'entity' => $subgroup));
 			$content .= '<p>' . 'XXX XXX XXX' . '</p>';
 		$content .= '</div>';
 	}

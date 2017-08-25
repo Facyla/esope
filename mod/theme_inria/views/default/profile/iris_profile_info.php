@@ -40,7 +40,7 @@ if (!empty($profile_type_label)) {
 
 // Display only for Inria accounts (LDAP data), and for logged in, Inria viewers - or admins
 if ($show_inria_fields) {
-	if (!empty(trim($user->inria_location))) {
+	if ($user->inria_location) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_location') . '<br />
 			<strong>' . implode(', ', (array)$user->inria_location) . '</strong>
@@ -52,13 +52,13 @@ if ($show_inria_fields) {
 			<strong>' . $user->inria_location_main . '</strong>
 		</div>';
 	}
-	if (!empty(trim($user->epi_ou_service))) {
+	if ($user->epi_ou_service) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:epi_ou_service') . '<br />
 			<strong>' . elgg_view('output/tags', array('value' => $user->epi_ou_service)) . '</strong>
 		</div>';
 	}
-	if (!empty(trim($user->inria_room))) {
+	if ($user->inria_room) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_room') . '<br />
 			<strong>' . implode(', ', (array)$user->inria_room) . '</strong>

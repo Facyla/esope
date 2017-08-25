@@ -841,7 +841,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #iris-body .iris-profile-title h2 { color: white; font-size:2.5rem; padding:0; margin-bottom: 0.75rem; }
 .iris-profile-info { background: white; font-size:0.75rem; color: #969696; margin-bottom: 1rem; padding: 1rem 1rem 1rem 20rem; text-transform: uppercase; font-weight: bold; display:flex; flex-wrap: wrap; }
 .iris-profile-info a {  }
-.iris-profile-info-field { flex: 0 1 auto; margin-right: 3rem; }
+.iris-profile-info-field { flex: 0 1 auto; margin-right: 3rem; max-width: 16rem; }
 .iris-profile-info-field:last-of-type { margin-right: 0; }
 .iris-profile-info-field strong, .iris-profile-info-field a { color: #384257; text-transform: initial; display: inline-block; padding-top: 0.5rem; font-size: 0.94rem; }
 .iris-profile-info-field .elgg-tags > li { margin-bottom:0; }
@@ -872,7 +872,10 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .profile-activity-river .elgg-list-river { margin: 0; }
 .profile-activity-river .elgg-river-item { padding: 0; }
 .iris-profile-field .profile-aboutme-contents { padding: 0 0 1.5rem 0; }
-.profile-admin-menu-wrapper, .profile-admin-menu-wrapper a { color: red; }
+.profile-admin-menu-wrapper, .profile-admin-menu-wrapper a { color: red; padding: 0; margin: 0; }
+.profile-admin-menu-wrapper::before { display: none; }
+.profile-admin-menu-wrapper h4 { padding: 0; margin: 0; }
+.profile-admin-menu { margin-bottom: 1rem; }
 .iris-user-groups { margin: 0 0 0.25rem 0; flex: 1 0 5.5rem; }
 .iris-user-groups img { height:  5rem; width: 5rem; }
 .iris-user-groups-add { height:5rem; width:5rem; border:1px dashed #384257; display:flex; text-align:center; line-height:5rem; font-size:2rem; }

@@ -183,7 +183,7 @@ if ($group->canEdit()) {
 	if ($requests_count > 0) {
 		$sidebar_alt .= '<div class="group-workspace-module group-workspace-requests">';
 			$sidebar_alt .= '<h3>' . elgg_echo('theme_inria:groups:requests', array($requests_count)) . '</h3>';
-			$sidebar_alt .= elgg_view('groups/membershiprequests', array('requests' => $requests));
+			$sidebar_alt .= elgg_view('groups/membershiprequests', array('requests' => $requests, 'entity' => $group));
 		$sidebar_alt .= '</div>';
 	}
 }
