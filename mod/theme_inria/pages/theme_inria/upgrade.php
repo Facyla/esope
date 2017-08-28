@@ -7,19 +7,10 @@ admin_gatekeeper();
 
 set_time_limit(0);
 
-/* Transtypage des forums en articles de blog
-Modifier : 
-- groupforumtopic
-	subtype: groupforumtopic => blog
-	status: open|closed => comments_on: On|Off
-	=> status: published
 
-- discussion_reply
-	subtype: discussion_reply => comment
-	container_guid: 5161
+$transtype_content .= '<div id="inria-upgrade" class="">';
+	$transtype_content .= "<p>Cette page regroupe des outils utiles lors des mises à jour.</p>";
 
-Désactivation des forums dans les groupes (si plus rien à convertir)
-*/
 
 // Transformation des sujets et réponses des forums en articles
 // Batch
@@ -105,24 +96,32 @@ $transtype_prod = get_input('transtype', 'no');
 $upgrade_transtype = get_input('upgrade_transtype', false);
 
 // Form
-$transtype_content .= '<div id="inria-upgrade" class="">';
-	$transtype_content .= "<p>Cette page regroupe des outils utiles lors des mises à jour.</p>";
+$transtype_content .= '<h3>Transtypage des sujets de forum en articles de blog</h3>';
+$transtype_content .= '<p><blockquote>' . "<strong>Cette opération est très délicate, et irréversible.</strong><br />Les sujets de discussion des forums seront transformés en articles de blog, et les réponses en commentaires. Ce transtypage ne produit pas de perte d'information, mais les forums d'origine seront détruits.<br />Afin de valider le fonctionnement du transtypage, cette opération peut être limitée dans un groupe précis, en indiquant son GUID : dans ce cas un seul sujet (et ses réponses) sera traité à la fois." . '</blockquote></p>';
 
-	$transtype_content .= '<h3>Transtypage des sujets de forum en articles de blog</h3>';
-	$transtype_content .= '<p><blockquote>' . "<strong>Cette opération est très délicate, et irréversible.</strong><br />Les sujets de discussion des forums seront transformés en articles de blog, et les réponses en commentaires. Ce transtypage ne produit pas de perte d'information, mais les forums d'origine seront détruits.<br />Afin de valider le fonctionnement du transtypage, cette opération peut être limitée dans un groupe précis, en indiquant son GUID : dans ce cas un seul sujet (et ses réponses) sera traité à la fois." . '</blockquote></p>';
-	
-	$transtype_remaining_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
-	if ($transtype_group_guid > 1) {
-		$transtype_remaining_forums_opt['container_guid'] = $transtype_group_guid;
-		$transtype_content .= "Transtypage limité au groupe $transtype_group_guid<br />";
-	}
-	$transtype_remaining_forums = elgg_get_entities($transtype_remaining_forums_opt);
-	if ($transtype_remaining_forums < 1) {
-		$transtype_content .= '<p>' . "Plus aucun sujet ou réponse de forum : désactivation des forums possible" . '</p>';
-	} else  {
-		$transtype_content .= '<p>' . "Le site comporte " . $transtype_remaining_forums . " sujets de discussion et réponses." . '</p>';
-	}
-	
+// Sujets ou réponses restant à convertir
+$transtype_remaining_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'count' => true);
+if ($transtype_group_guid > 1) {
+	$transtype_remaining_forums_opt['container_guid'] = $transtype_group_guid;
+	$transtype_content .= "Transtypage limité au groupe $transtype_group_guid<br />";
+}
+$transtype_remaining_forums = elgg_get_entities($transtype_remaining_forums_opt);
+if ($transtype_remaining_forums < 1) {
+	$transtype_content .= '<p>' . "Mise à jour terminée : Plus aucun sujet ou réponse de forum." . '</p>';
+} else  {
+	$transtype_content .= '<p>' . "Le site comporte " . $transtype_remaining_forums . " sujets de discussion et réponses." . '</p>';
+}
+// Groupes avec forum activé
+$transtype_remaining_group_forums_opt = array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'forum_enable', 'value' => 'yes'), 'count' => true);
+$transtype_remaining_group_forums = elgg_get_entities_from_metadata($transtype_remaining_group_forums_opt);
+if ($transtype_remaining_group_forums < 1) {
+	$transtype_content .= '<p>' . "Mise à jour terminée : désactivation des forums possible" . '</p>';
+} else  {
+	$transtype_content .= '<p>' . "Le site comporte " . $transtype_remaining_group_forums . " groupes avec un forum activé." . '</p>';
+}
+
+if (($transtype_remaining_forums > 0) || ($transtype_remaining_group_forums > 0)) {
+	// Form
 	$transtype_content .= '<form method="POST">';
 		$transtype_content .= elgg_view('input/securitytoken');
 		$transtype_content .= elgg_view('input/hidden', array('name' => 'upgrade_transtype', 'value' => 'yes'));
@@ -131,42 +130,43 @@ $transtype_content .= '<div id="inria-upgrade" class="">';
 		$transtype_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer le transtypage")) . '</p>';
 	$transtype_content .= '</form><br /><br />';
 
-// Process
-// Simulation "réelle" limitée à un groupe
-// attention pour les réponses, container = sujet de forum (pas groupe)
-// Note : on ne vérifie pas l'existence du groupe de manière à traiter aussi des contenus dont le groupe n'existerait plus ou serait archivé
-if ($upgrade_transtype == 'yes') {
-	$transtype_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'limit' => 0);
-	$transtype_forums = false;
-	// Limitation dans un groupe
-	if ($transtype_group_guid > 1) {
-		$transtype_forums_opt['container_guid'] = $transtype_group_guid;
-		$transtype_content .= "<strong>Transtypage limité au groupe $transtype_group_guid</strong><br />";
-	} else {
-		$transtype_content .= "<strong>Transtypage de tous les forums du site</strong><br />";
-	}
-	// Lancement du batch
-	$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
-	if (!$transtype_forums_opt) {
-		if ($transtype_group_guid > 0) {
-			$transtype_content .= '<p>' . "Aucun forum trouvé dans ce groupe" . '</p>';
-		} else {
-			$transtype_content .= '<p>' . "Aucun forum trouvé dans l'ensemble du site" . '</p>';
-		}
-	}
-
-	// Désactivation des forums dans les groupes (si plus rien à convertir)
-	// Ensure we get all topics and replies (no orphans)
-	$transtype_content .= '<h3>' . "Désactivation des forums" . '</h3>';
-	if ($transtype_prod == 'yes') {
-		$disable_groups_opt = array('type' => 'group', 'limit' => 0);
+	// Process
+	// Simulation "réelle" limitée à un groupe
+	// attention pour les réponses, container = sujet de forum (pas groupe)
+	// Note : on ne vérifie pas l'existence du groupe de manière à traiter aussi des contenus dont le groupe n'existerait plus ou serait archivé
+	if ($upgrade_transtype == 'yes') {
+		$transtype_forums_opt = array('type' => 'object', 'subtype' => array('groupforumtopic', 'discussion_reply'), 'limit' => 0);
+		$transtype_forums = false;
+		// Limitation dans un groupe
 		if ($transtype_group_guid > 1) {
-			$disable_groups_opt['guids'] = $transtype_group_guid;
+			$transtype_forums_opt['container_guid'] = $transtype_group_guid;
+			$transtype_content .= "<strong>Transtypage limité au groupe $transtype_group_guid</strong><br />";
+		} else {
+			$transtype_content .= "<strong>Transtypage de tous les forums du site</strong><br />";
 		}
-		$batch = new ElggBatch('elgg_get_entities', $disable_groups_opt, 'theme_inria_disable_forums', 10);
-		$transtype_content .= '<p><strong>' . "Désactivation des forums et activation des blogs !" . '</strong></p>';
-	} else {
-		$transtype_content .= '<p><strong>' . "Simulation de désactivation des forums" . '</strong></p>';
+		// Lancement du batch
+		$batch = new ElggBatch('elgg_get_entities', $transtype_forums_opt, 'theme_inria_transtype_forums', 10);
+		if (!$transtype_forums_opt) {
+			if ($transtype_group_guid > 0) {
+				$transtype_content .= '<p>' . "Aucun forum trouvé dans ce groupe" . '</p>';
+			} else {
+				$transtype_content .= '<p>' . "Aucun forum trouvé dans l'ensemble du site" . '</p>';
+			}
+		}
+
+		// Désactivation des forums dans les groupes (si plus rien à convertir)
+		// Ensure we get all topics and replies (no orphans)
+		$transtype_content .= '<h3>' . "Désactivation des forums" . '</h3>';
+		if ($transtype_prod == 'yes') {
+			$disable_groups_opt = array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'forum_enable', 'value' => 'yes'), 'limit' => 0);
+			if ($transtype_group_guid > 1) {
+				$disable_groups_opt['guids'] = $transtype_group_guid;
+			}
+			$batch = new ElggBatch('elgg_get_entities_from_metadata', $disable_groups_opt, 'theme_inria_disable_forums', 10);
+			$transtype_content .= '<p><strong>' . "Désactivation des forums et activation des blogs !" . '</strong></p>';
+		} else {
+			$transtype_content .= '<p><strong>' . "Simulation de désactivation des forums" . '</strong></p>';
+		}
 	}
 }
 

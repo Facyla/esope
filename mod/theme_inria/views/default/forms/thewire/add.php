@@ -46,8 +46,13 @@ if ($parent_post) {
 	// If value is invalid, use site or user default
 	if (!$default_access) { $default_access = get_default_access(); }
 	// Forcé sur Membres du site
-	$access_input .= elgg_view('input/hidden', array('name' => 'access_id', 'value' => $default_access));
+	//$access_input .= elgg_view('input/hidden', array('name' => 'access_id', 'value' => $default_access));
 	//$access_input .= '<div style="display:inline-block;">' . elgg_view('output/access', array('value' => $default_access)) . '</div>';
+	$access_id = elgg_extract('access_id', $vars, ACCESS_LOGGED_IN);
+	$inria_access_id = theme_inria_get_inria_access_id();
+	$access_opt = array('1' => elgg_echo('LOGGED_IN'));
+	if ($inria_access_id) { $access_opt[$inria_access_id] = elgg_echo('profiletype:inria'); }
+	$access_input .= elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
 }
 
 $count_down = "<span>$char_limit</span> $chars_left";

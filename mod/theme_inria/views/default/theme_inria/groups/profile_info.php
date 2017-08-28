@@ -33,6 +33,8 @@ if ($group->canEdit()) {
 
 $profile_type = esope_get_user_profile_type($owner);
 if (empty($profile_type)) { $profile_type = 'external'; }
+// Archive : replace profile type by member status archived
+if ($owner->memberstatus == 'closed') { $profile_type = 'archive'; }
 $content .= '<div class="group-workspace-module group-workspace-admins">';
 	$content .= '<div class="group-admins">
 			<div class="group-admin">
@@ -51,6 +53,8 @@ $content .= '<div class="group-workspace-module group-workspace-admins">';
 					if ($ent->guid == $owner->guid) { continue; }
 					$profile_type = esope_get_user_profile_type($ent);
 					if (empty($profile_type)) { $profile_type = 'external'; }
+					// Archive : replace profile type by member status archived
+					if ($ent->memberstatus == 'closed') { $profile_type = 'archive'; }
 					$content .= '<div class="group-operator">
 							<a href="' . $ent->getURL() . '" class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '">
 								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
@@ -104,6 +108,8 @@ if (elgg_group_gatekeeper(false)) {
 		foreach($members as $ent) {
 			$profile_type = esope_get_user_profile_type($ent);
 			if (empty($profile_type)) { $profile_type = 'external'; }
+			// Archive : replace profile type by member status archived
+			if ($ent->memberstatus == 'closed') { $profile_type = 'archive'; }
 			$content .= '<a href="' . $ent->getURL() . '" class="elgg-avatar profile-type-' . $profile_type . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" title="' . $ent->name . '" /></a>';
 		}
 		if ($members_count > $max_members) {

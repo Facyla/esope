@@ -74,8 +74,13 @@ echo elgg_view('input/plaintext', array(
 	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
 	$access_opt = array(
 			$group->group_acl => get_readable_access_level($group->group_acl),
-			'1' => elgg_echo('LOGGED_IN')
+			//'1' => elgg_echo('LOGGED_IN')
 		);
+	// Force to group access if content access mode enabled
+	if ($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
+		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
+		return;
+	}
 	echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
 	/*
 	echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
