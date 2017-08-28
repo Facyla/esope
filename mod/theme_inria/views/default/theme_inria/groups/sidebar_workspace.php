@@ -40,8 +40,6 @@ $sidebar .= elgg_view('theme_inria/groups/sidebar_thewire');
 
 $sidebar .= elgg_view('theme_inria/groups/sidebar_discussion');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
-
 $sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
 
 $sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
@@ -49,6 +47,8 @@ $sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
 $sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
 
 $sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
+
+$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
 
 
 echo $sidebar;
