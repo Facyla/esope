@@ -916,6 +916,11 @@ Voir et commenter ce lien web :
 	'groups:order:popular' => "Avec le plus de membres",
 	'groups:settings' => "Paramètres du groupe",
 	'groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre du groupe",
+	'groups:visibility' => 'Audience',
+	'groups:content_access_mode' => "Audience des nouvelles publications",
+	//'groups:membership' => "Type d'adhésion",
+	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
+	//'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
 	
 	'theme_inria:group:pending_request' => "En attente",
 	
@@ -972,8 +977,14 @@ Voir et commenter ce lien web :
 	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas. Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe. Les emails qui ne sont associés à aucun compte Iris pourront être invités à rejoindre le réseau.",
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",
+	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
+	'theme_inria:invite:newemails' => "These emails are not associated with any member account : you may want to invite them to join Iris.",
+	'theme_inria:invite:invalidemails' => "These emails could not be processed : they are either associated with multiple accounts (which should not happen), or are invalid emails.",
+	'theme_inria:invite:existing_users' => "@TODO - NON OPERATIONNEL !!  - These emails are associated with an existing account, which has been invited.",
+	'theme_inria:invite:proceednext' => "Pour poursuivre vos invitations par email, veuillez cliquer sur les liens d'invitation.",
 	
 	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
+	'theme_inria:useradd:group' => "Invitation dans le groupe \"%s\"",
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",

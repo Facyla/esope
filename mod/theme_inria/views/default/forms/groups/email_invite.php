@@ -55,45 +55,76 @@ if ($invited_emails) {
 	}
 }
 
-// @TODO Invite existing users (using same setting as regular invite so we can join directly instead of inviting ?)
+// Invite existing users (using same setting as regular invite so we can join directly instead of inviting ?)
 if ($invite_external_emails) {
-	$content .= '<p>' . elgg_echo('These emails are not associated with any member account : you may want to invite them to join Iris.') . '</p>';
+	system_message(elgg_echo('theme_inria:invite:proceednext'));
+	$content .= '<p>' . elgg_echo('theme_inria:invite:newemails') . '</p>';
 	foreach($invite_external_emails as $email) {
-		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
+		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
 	}
 	// Or all at once
-	$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_guid=' . $group->guid . '&email=' . implode(',', $invite_external_emails) . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:invite:allemails') . '</a></p>';
+	if (count($invite_external_emails) > 1) {
+		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . implode(',', $invite_external_emails) . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:invite:allemails') . '</a></p>';
+	}
 }
 
-// @TODO Proceed to regular invites
+// Proceed to regular invites
 // @TODO DEV function qui gère l'invitation d'un membre : avec inscription ou pas (et selon les droits de l'user connecté), et surtout si déjà invité ou les messages envoyés au membre et aux admins du groupe
 if ($existing_users) {
-	$content .= '<h4>' . "@TODO - NON OPERATIONNEL !!  - " . elgg_echo('These emails are associated with an existing account, which has been invited.') . '</h4>';
-	$content .= '<p>';
+	$content .= '<h4>' . elgg_echo('theme_inria:invite:existing_users') . '</h4>';
+	$content .= '<ul>';
 	foreach($existing_users as $ent) {
-		$content .= $ent->email . ' => ' . $ent->name . '<br />';
+		$content .= '<li>' . $ent->email . ' => ' . $ent->name . ' : ';
+		if (!$group->isMember($ent)) {
+			// Join parent first if any
+			if (elgg_is_active_plugin('au_subgroups')) {
+				$parent = \AU\SubGroups\get_parent_group($group);
+				if ($parent && !$parent->isMember($ent)) {
+					if ($parent->canEdit() || $parent->isPublicMembership()) {
+						// Join parent
+						$parent->join($ent);
+						$content .= 'adhésion groupe parent OK => ';
+					} else {
+						// Add membership request
+						// @TODO Notify group owner + operators
+						add_entity_relationship($ent->guid, 'membership_request', $parent->guid);
+					}
+				}
+			}
+			// Join group (we have the rights because we're on this page ;)
+			$group->join($ent);
+			$content .= 'adhésion OK';
+		} else {
+			$content .= 'déjà membre';
+		}
+		$content .= '</li>';
 	}
-	$content .= '</p>';
+	$content .= '</ul>';
 }
 
 // Invalid emails (invalid because email is not valid or is associated with multiple accounts)
 if ($invited_emails) {
-	$content .= '<h4>' . elgg_echo('These emails could not be processed : they are either associated with multiple accounts (which should not happen), or are invalid emails.') . '</h4>';
-	$content .= '<p>';
+	$content .= '<h4>' . elgg_echo('theme_inria:invite:invalidemails') . '</h4>';
+	$content .= '<ul>';
 	foreach($invited_emails as $email) {
-		$content .= $email . '<br />';
+		$content .= '<li>' . $email . '</li>';
 	}
-	$content .= '</p>';
+	$content .= '</ul>';
 }
 
 
 
 // FORM CONTENT
-$content .= '<div class="clearfloat"></div><br />';
-$content .= elgg_view('input/plaintext', array('name' => 'email_invites', 'value' => $emails, 'placeholder' => elgg_echo('theme_inria:groupinvite:email:placeholder')));
+if (!$invite_external_emails) {
+	$content .= '<div class="clearfloat"></div><br />';
+	$content .= elgg_view('input/plaintext', array('name' => 'email_invites', 'value' => $emails, 'placeholder' => elgg_echo('theme_inria:groupinvite:email:placeholder')));
 
-$content .= '<div class="clearfloat"></div>';
-$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('invite'))) . '</p>';
+	$content .= '<div class="clearfloat"></div>';
+	$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('invite'))) . '</p>';
+} else {
+	$content .= '<div class="clearfloat"></div><br />';
+	$content .= '<p>' . elgg_view('input/button', array('type' => 'reset', 'value' => elgg_echo('cancel'), 'class' => "elgg-button elgg-button-cancel")) . '</p>';
+}
 
 
 // Note : closing </form> is rendered by forms/groups/invite view (inner extend)

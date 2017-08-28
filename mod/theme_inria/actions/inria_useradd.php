@@ -27,6 +27,8 @@ $briefdescription = get_input('briefdescription');
 $reason = get_input('reason');
 $message = get_input('message');
 $group_guid = get_input('group_guid');
+// Also support CSV input
+if (strpos($group_guid, ',') !== false) { $group_guid = explode(',', $group_guid); }
 if (!is_array($group_guid)) { $group_guid = array($group_guid); }
 
 $hidden_entities = access_get_show_hidden_status();

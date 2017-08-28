@@ -24,6 +24,7 @@ $name = get_input('name', '');
 $organisation = get_input('organisation', '');
 $briefdescription = get_input('briefdescription', '');
 $group_guid = get_input('group_guid', '');
+$group_invite = get_input('group_invite'); // hide group select if enabled
 $message = get_input('message', '');
 $reason = get_input('reason', '');
 //$password = generate_random_cleartext_password();
@@ -46,19 +47,27 @@ echo '<p><label>' . elgg_echo('theme_inria:useradd:organisation') . '' . elgg_vi
 
 echo '<p><label>' . elgg_echo('theme_inria:useradd:fonction') . '' . elgg_view('input/text', array('name' => 'briefdescription', 'value' => $briefdescription)) . '</label></p>';
 
-// @TODO : use custom, simpler and multiple group select
-$groups = elgg_get_entities(array('type' => 'group', 'limit' => false));
-//$groups_options = array('' => elgg_echo('option:none')); // for select only (not for multiselect)
-$groups_options = array();
-foreach ($groups as $ent) { $groups_options[$ent->guid] = $ent->name; }
-if (elgg_is_admin_logged_in()) {
-	// all groups
-	//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'all')) . '</label></p>';
-	echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
+// Groupes : masqué si invité depuis un groupe, visible sinon
+if ($group_invite == 'yes') {
+	$group = get_entity($group_guid);
+	echo elgg_view('input/hidden', array('name' => 'group_invite', 'value' => 'yes'));
+	echo '<p><strong><img src="' . $group->getIconURL(array('size' => 'tiny')) . '" class="float" />&nbsp;' . elgg_echo('theme_inria:useradd:group', array($group->name)) . '</strong></p>';
+	if (empty($reason)) { $reason = elgg_echo('theme_inria:useradd:group', array($group->name)); }
 } else {
-	// known groups only
-	//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'member')) . '</label></p>';
-	echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
+	// @TODO : use custom, simpler and multiple group select
+	$groups = elgg_get_entities(array('type' => 'group', 'limit' => false));
+	//$groups_options = array('' => elgg_echo('option:none')); // for select only (not for multiselect)
+	$groups_options = array();
+	foreach ($groups as $ent) { $groups_options[$ent->guid] = $ent->name; }
+	if (elgg_is_admin_logged_in()) {
+		// all groups
+		//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'all')) . '</label></p>';
+		echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
+	} else {
+		// known groups only
+		//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'member')) . '</label></p>';
+		echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
+	}
 }
 
 
