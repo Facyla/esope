@@ -8,9 +8,6 @@ admin_gatekeeper();
 set_time_limit(0);
 
 
-$transtype_content .= '<div id="inria-upgrade" class="">';
-	$transtype_content .= "<p>Cette page regroupe des outils utiles lors des mises à jour.</p>";
-
 
 // Transformation des sujets et réponses des forums en articles
 // Batch
@@ -169,8 +166,6 @@ if (($transtype_remaining_forums > 0) || ($transtype_remaining_group_forums > 0)
 		}
 	}
 }
-
-$transtype_content .= '</div>';
 
 
 
@@ -426,14 +421,18 @@ function theme_inria_cron_ldap_check($user, $getter, $options) {
 */
 
 
+$content .= '<div id="inria-upgrade" class="">';
+	$content .= "<p>Cette page regroupe des outils utiles lors des mises à jour.</p>";
+	
+	$content .= $transtype_content;
+	$content .= '<hr />';
+	$content .= $notifications_content;
+	$content .= '<hr />';
+	$content .= $skills_merge_content;
+	$content .= '<hr />';
+	$content .= $access_content;
 
-$content .= $transtype_content;
-$content .= '<hr />';
-$content .= $notifications_content;
-$content .= '<hr />';
-$content .= $skills_merge_content;
-$content .= '<hr />';
-$content .= $access_content;
+$content .= '</div>';
 
 //$content .= $transtype_content;
 

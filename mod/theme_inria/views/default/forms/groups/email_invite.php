@@ -124,6 +124,7 @@ if (!$invite_external_emails) {
 } else {
 	$content .= '<div class="clearfloat"></div><br />';
 	$content .= '<p>' . elgg_view('input/button', array('type' => 'reset', 'value' => elgg_echo('cancel'), 'class' => "elgg-button elgg-button-cancel")) . '</p>';
+	$content .= '<p>' . elgg_view('output/url', array('href' => 'groups/invite/' . $group->guid, 'text' => elgg_echo('cancel'), 'class' => "elgg-button elgg-button-cancel")) . '</p>';
 }
 
 

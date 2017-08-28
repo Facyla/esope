@@ -921,6 +921,7 @@ Voir et commenter ce lien web :
 	//'groups:membership' => "Type d'adhésion",
 	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
 	//'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
+	'groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
 	
 	'theme_inria:group:pending_request' => "En attente",
 	
