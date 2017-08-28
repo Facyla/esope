@@ -973,6 +973,8 @@ Voir et commenter ce lien web :
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",
 	
+	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
+	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
 	

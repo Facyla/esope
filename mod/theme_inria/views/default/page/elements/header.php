@@ -26,6 +26,10 @@ if (elgg_is_logged_in()) {
 	$own = elgg_get_logged_in_user_entity();
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
+	
+	
+	// Non-inria cannot create new groups
+	$profile_type = esope_get_user_profile_type();
 }
 
 
@@ -76,7 +80,9 @@ if (elgg_is_logged_in()) {
 				<li<?php if ($current_url == $url.'groups/member') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url . 'groups/member'; ?>"><?php echo elgg_echo('theme_inria:mygroups'); ?></a></li>
 				<li<?php if ($current_url == $url.'groups/discover') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url . 'groups/discover'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
 				<li<?php if ($selected_groupsearch) { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url . 'groups'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
-				<li<?php if ($current_url == $url.'groups/add') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo elgg_get_site_url() . 'groups/add'; ?>"><?php echo elgg_echo('theme_inria:groups:add'); ?></a></li>
+				<?php if ($profile_type == 'inria') { ?>
+					<li<?php if ($current_url == $url.'groups/add') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo elgg_get_site_url() . 'groups/add'; ?>"><?php echo elgg_echo('theme_inria:groups:add'); ?></a></li>
+				<?php } ?>
 			</ul>
 		</li>
 		<?php } ?>

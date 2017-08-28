@@ -343,6 +343,9 @@ function theme_inria_groups_page_handler($page) {
 			elgg_push_context('groups_add');
 			set_input('group_layout_header', 'yes');
 			//groups_handle_edit_page('add');
+			// Non-inria cannot create new groups
+			$profile_type = esope_get_user_profile_type();
+			if ($profile_type != 'inria') { register_error(elgg_echo('theme_inria:inria_restricted')); forward(REFERER); }
 			echo elgg_view('resources/groups/edit', array('page' => 'add', 'group_guid' => $page[1]));
 			break;
 		case 'edit':
