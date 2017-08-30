@@ -74,8 +74,10 @@ $content .= '<div class="group-profile-main">';
 			$content .= '<div class="group-admins">
 					<div class="group-admin elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"">
 						<h3>' . elgg_echo('groups:owner') . '</h3>
-						<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
-						' . $owner->name . '
+						<a href="' . $owner->getURL() . '">
+							<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
+							' . $owner->name . '
+						</a>
 					</div>
 				</div>';
 		} else {
@@ -86,10 +88,10 @@ $content .= '<div class="group-profile-main">';
 			if ($operators_count > 0) {
 				$content .= '<h3>' . elgg_echo('theme_inria:groups:operators', array($operators_count)) . '</h3>';
 				if ($group->guid != $main_group->guid) {
-					$content .= '<div class="group-admin elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '">
+					$content .= '<div class="group-admin elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '">
 							<img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /><br />
 							' . $owner->name . '
-						</div>';
+						</a></div>';
 				}
 				if ($operators) {
 					foreach($operators as $ent) {
@@ -106,8 +108,10 @@ $content .= '<div class="group-profile-main">';
 							$actions .= '<a href="' . $remove_operator_url . '" class="iris-round-button remove-group-operator" title="' . elgg_echo('theme_inria:removeoperator') . '" style="background: #FF0000;"><i class="fa fa-user-times"></i></a>';
 						}
 						$content .= '<div class="group-operator elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '">
-								<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
-								' . $ent->name . '
+								<a href="' . $ent->getURL() . '">
+									<img src="' . $ent->getIconURL(array('size' => 'medium')) . '" /><br />
+									' . $ent->name . '
+								</a>
 								' . $actions . '
 							</div>';
 					}
@@ -166,12 +170,12 @@ $content .= '<div class="group-profile-main">';
 			if (empty($profile_type)) { $profile_type = 'external'; }
 			// Archive : replace profile type by member status archived
 			if ($ent->memberstatus == 'closed') { $profile_type = 'archive'; }
-			$content .= '<div class="group-member elgg-avatar profile-type-' . $profile_type . '" style="min-height: 4rem;">';
-				$content .= '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
+			$content .= '<div class="group-member elgg-avatar profile-type-' . $profile_type . '" style="min-height: 4rem;"><a href="' . $ent->getURL() . '">';
+				$content .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" /></a>';
 				$content .= $actions;
-				$content .= '<p><strong>' . $ent->name . '</strong>';
+				$content .= '<p><a href="' . $ent->getURL() . '"><strong>' . $ent->name . '</strong>';
 				$content .= '<br />' . $ent->briefdescription;
-				$content .= '</p>';
+				$content .= '</a></p>';
 			$content .= '</div>';
 		}
 		$content .= '<div>';

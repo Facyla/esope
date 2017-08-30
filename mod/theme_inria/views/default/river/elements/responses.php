@@ -79,7 +79,6 @@ if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic')))
 	return true;
 } else if ($subtype == 'thewire') {
 	$wire_container = $object->getContainerEntity();
-	$thewire_form .= "Group ! ";
 	if (!elgg_instanceof($wire_container, 'group') || (elgg_instanceof($wire_container, 'group') && $wire_container->isMember())) {
 		$form_vars = array('class' => 'thewire-form', 'action' => 'action/thewire/add');
 		$thewire_form .= '<div id="comments-add-' . $object->getGUID() . '-' . $top_object->guid . '" class="thewire-reply-inline hidden">';

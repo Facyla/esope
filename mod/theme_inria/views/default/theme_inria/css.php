@@ -291,11 +291,17 @@ section { background:white; }
 .elgg-page-header { background: #6F2D50 !important; border-top: 0; height:auto !important; }
 .elgg-page-header .elgg-inner h1 { margin: 0; padding:0; font-size:1rem; }
 
+.elgg-form-login, .elgg-form-account { max-width: none; }
+#iris-body .elgg-context-login .elgg-main, #iris-body .elgg-context-register .elgg-main { max-width: 46.5rem; border: 1px solid #CCCCCC; padding: 0.5em 1em; margin-top: 2em; background: #F6F6F6; margin: 0 auto; }
+.elgg-context-login .elgg-module-aside { width: auto; }
+#adf-homepage .elgg-main { margin: auto; float: none; }
 #adf-homepage .inria-login a, #adf-homepage .inria-login a:visited { color: white; }
-#adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #333; text-shadow:none; }
+#adf-homepage .inria-login a:hover, #adf-homepage .inria-login a:focus, #adf-homepage .inria-login a:active { color: #FFF; text-shadow:none; }
 .cas-login { float:left; }
 .basic-login { float:right; }
-.basic-login-toggle, #adf-homepage .inria-login .basic-login-toggle { float:right; color:<?php echo $linkcolor; ?>; }
+#adf-persistent { margin: 0.5rem 0; }
+.adf-lostpassword-toggle { font-weight: bold; font-size: 0.85rem; padding: 0.5rem 0 0 0; display: inline-block; }
+.basic-login-toggle, #adf-homepage .inria-login .basic-login-toggle { float:right; color: white; }
 .elgg-context-login .elgg-module-aside { float: right; width: 50%; }
 
 /* Main menu */
@@ -378,7 +384,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-button.elgg-button-delete { font-family: <?php echo $font2; ?>; border: 0; background: #FF0000; color:white; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; /* transition-duration:0.2s; */ opacity:0.5; box-shadow:none; }
 .elgg-button.elgg-button-delete:hover, .elgg-button.elgg-button-delete:active, .elgg-button.elgg-button-delete:focus { border: 0; color:white; opacity:1; }
 .elgg-button-comment-toggle { margin-top: 1rem; }
-.workspace-button-join { background: white; color: #384257; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; vertical-align: baseline; display: inline-block; text-decoration: none; }
+.group-workspace-add-tabs a.workspace-button-join { background: white; color: #384257; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; vertical-align: baseline; display: inline-block; text-decoration: none; }
 
 
 /* Page d'accueil */
@@ -700,7 +706,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-topbar-item #user img { float: left; margin-right: 0.375rem; border-radius: 1.125rem; height: 2.25rem }
 .login-as-arrow { vertical-align: 20%; }
 
-.iris-new { position: relative; bottom: 0.8rem; right: 0; width: 8px; height: 8px; background: red; border-radius: 8px; display: inline-block; font-size: 6px; color:red; text-align: center; vertical-align: middle; line-height: 8px; }
+.iris-new { position: relative; bottom: 0.8rem; right: 0;height: 8px; /*  width: 8px; background: red; */ border-radius: 8px; display: inline-block; font-size: 8px; width: auto; color:red; text-align: center; vertical-align: middle; line-height: 8px; }
 
 #notifications .notifications-panel { display:hidden; position: absolute; top: 2.5rem; right: -8rem; width: 38rem; z-index: 2; background: white; padding: 1rem 0; box-shadow: 0 0 4px 0; }
 #notifications:hover .notifications-panel { display: block; }
@@ -739,15 +745,17 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 
 .elgg-layout-one-sidebar .elgg-main .elgg-form-messages-process .elgg-list-container { background: transparent; padding: 0; box-shadow: none; }
 /* .elgg-form-messages-process .elgg-item { padding: 1rem 0; box-shadow: none; margin: 0; } */
-.elgg-form-messages-process input[type="checkbox"] { margin: 0.5rem 1rem; }
+.elgg-item-object-messages .elgg-image-block { display: flex; }
+.elgg-form-messages-process input[type="checkbox"] { margin: 0.5rem 1rem 0 0; }
 .elgg-list-entity .messages-owner { float: none; width: 100%; line-height: 2rem; margin-bottom: 0.5rem; }
 .elgg-list-entity .messages-owner .elgg-avatar { float: left; margin-right: 0.5rem; }
 .elgg-list-entity .messages-subject { float: none; width: 100%; display: inline-block; width: auto; }
 .elgg-list-entity .messages-timestamp { float: none; width: 100%; display: inline-block; width: auto; }
 .elgg-list-entity .messages-delete { float: right; width: 2em; }
 .elgg-list-entity .messages-reply { margin-top: 0.5rem; }
-.elgg-context-messages .messages-container .elgg-list-entity li { padding: 1rem; border-radius: 4px; }
+.elgg-context-messages .messages-container .elgg-list-entity li { padding: 0rem 0rem 1rem 0; border-radius: 0px; }
 #iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main li.elgg-item-message { padding: 0; margin: 0; }
+.elgg-form-messages-process .select-all { padding-bottom: 1rem; border-bottom: 1px solid #DCDCDC; }
 
 
 .elgg-sidebar ul.elgg-menu-page { margin-bottom: 1rem; float: none; background: transparent; }
@@ -798,6 +806,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #iris-navigation ul.elgg-menu-navigation li ul li a:hover, #iris-navigation ul.elgg-menu-navigation li ul li a:focus, #iris-navigation ul.elgg-menu-navigation li ul li a:active { color: white; }
 .elgg-state-selected ul.hidden { display: block !important; }
 .elgg-menu-navigation li.elgg-state-selected > a { color: white !important; }
+.elgg-menu-navigation .fa.fa-angle-down { float: right; }
 
 
 #iris-body h2 { padding: 0rem 0 0 0; margin-bottom: 1rem; margin-right: 0; font-size: 2rem; font-weight: normal; font-family:"Inria Serif", serif; }
@@ -1076,6 +1085,8 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-river-message .elgg-river-target { float: right; color: #1488CA; font-size: 1rem; font-variant: small-caps; font-weight: bold; }
 
 .elgg-comments { margin-top: 1.5rem; /* margin: 0 -2rem; padding:1rem 2rem 0 2rem; border-top: 2px solid #F1F1F1; */ }
+.elgg-layout-one-sidebar .elgg-main .elgg-comments .elgg-list-container { box-shadow: none; border: 0; }
+.elgg-comments .elgg-list { border-top: 0; }
 .elgg-comments .elgg-list > li { border-width: 1px; }
 .elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
@@ -1249,7 +1260,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-menu a.tab { opacity:0.6; }
 .iris-group-menu a.search, .iris-group-menu span.search { border: 0; margin: 0 1.5rem 0 0rem; line-height: 1.125rem; }
 /* .iris-group-menu a.add { color:#1488CA; font-size:0.75rem; text-transform:uppercase; } */
-.iris-group-menu a.add { color: white; background: #1488CA; font-size:0.75rem; border-radius: 3rem; padding: 0.5rem 0.75rem 0.25rem 0.75rem; margin: 0.5rem 1rem 0rem 0; width: 10rem; text-align: center; }
+.iris-group-menu a.add { color: white; background: #1488CA; font-size:0.75rem; border-radius: 3rem; padding: 0.5rem 0.75rem 0.25rem 0.75rem; margin: 0.5rem 1rem 0rem 0; width: 10rem; text-align: center; hyphens: none; }
 .iris-group-menu a.tab:first-of-type { margin-left:0; }
 .iris-group-menu a.tab.elgg-state-selected,
 .iris-group-menu span.tab.elgg-state-selected,
@@ -1584,7 +1595,6 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 
 .elgg-item-object.elgg-item-object-feedback .elgg-image-block { display: flex; }
 .elgg-item-object.elgg-item-object-feedback .elgg-image-block .elgg-image { margin-right: 1rem; }
-.elgg-context-feedback .elgg-image-block{ margin-top: 1rem; }
 .elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-body > .elgg-list-container { margin: -2rem; }
 .elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-body > .elgg-list-container .elgg-list-entity { margin: 0; }
 .elgg-context-feedback:not(.elgg-context-workspace-content) .elgg-body > .elgg-list-container .elgg-list-entity li.elgg-item-object-feedback { margin: 0; }
@@ -1593,6 +1603,9 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .elgg-context-feedback .elgg-body-transp .elgg-image-block { margin: 0; padding: 1rem; border: 0; }
 /*
 */
+.elgg-context-feedback:not(.elgg-layout-group) .elgg-body { <?php echo $width['main']; ?> }
+.elgg-context-feedback:not(.elgg-layout-group) .elgg-body .elgg-image-block { margin: 1rem 0 0 0; }
+
 
 
 .object-poll-workspace { margin-bottom: 2rem; }

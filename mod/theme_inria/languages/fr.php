@@ -462,7 +462,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'GROUP_MEMBERS' => "Groupe", // membres du groupe
 	'access:friends:label' => "Contacts seulement", // contacts
 	//'PUBLIC' => "Tout internaute", // public
-	'PUBLIC' => "Membres Iris", // public en mode Walled Garden
+	'PUBLIC' => "Tout internaute", // public en mode Walled Garden
 	'river:all' => "Ça bouge sur Iris",
 	'search_types:tags' => "Mots-clés",
 	
@@ -1000,9 +1000,13 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:pages:edit' => "Modifier le wiki",
 	'theme_inria:pages:edit:button' => "Modifier cette page wiki",
 	
+	'theme_inria:selectall' => "Sélectionner",
+	
 	'placeholder:tags' => "tag1, mot-clef 2...",
 	
 	'friend' => "Contact",
+	
+	'user:password:lost' => "<i class=\"fa fa-key\"></i>&nbsp;Mot de passe perdu ?",
 	
 );
 
