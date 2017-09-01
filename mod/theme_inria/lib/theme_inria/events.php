@@ -298,15 +298,15 @@ function theme_inria_create_relationship_event($event, $type, $relationship) {
 				$user->name,
 				$group->name,
 			), $ent->language);
-
+		
 		$body = elgg_echo('groups:request:body', array(
-				$group->getOwnerEntity()->name,
+				$owner->name,
 				$user->name,
 				$group->name,
 				$user->getURL(),
 				$url,
 			), $ent->language);
-
+			
 		$params = [
 			'action' => 'membership_request',
 			'object' => $group,
@@ -317,6 +317,14 @@ function theme_inria_create_relationship_event($event, $type, $relationship) {
 		notify_user($owner->guid, $user_guid, $subject, $body, $params);
 		
 		foreach ($operators as $ent) {
+			$body = elgg_echo('groups:request:body', array(
+					$ent->name,
+					$user->name,
+					$group->name,
+					$user->getURL(),
+					$url,
+				), $ent->language);
+			
 			// Avoid duplicate if owner is also in operators
 			if ($ent->guid == $owner->guid) { continue; }
 			notify_user($ent->guid, $user_guid, $subject, $body, $params);

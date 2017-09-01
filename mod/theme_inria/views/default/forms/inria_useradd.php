@@ -47,7 +47,7 @@ echo '<p><label>' . elgg_echo('theme_inria:useradd:organisation') . '' . elgg_vi
 
 echo '<p><label>' . elgg_echo('theme_inria:useradd:fonction') . '' . elgg_view('input/text', array('name' => 'briefdescription', 'value' => $briefdescription)) . '</label></p>';
 
-// Groupes : masqué si invité depuis un groupe, visible sinon
+// Groupes : masqué si invité depuis un groupe ou si pas admin, visible sinon
 if ($group_invite == 'yes') {
 	$group = get_entity($group_guid);
 	echo elgg_view('input/hidden', array('name' => 'group_invite', 'value' => 'yes'));
@@ -64,9 +64,11 @@ if ($group_invite == 'yes') {
 		//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'all')) . '</label></p>';
 		echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details:admin') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
 	} else {
+		/*
 		// known groups only
 		//echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/groups_select', array('name' => 'group_guid', 'value' => $group_guid, 'scope' => 'member')) . '</label></p>';
 		echo '<p><label>' . elgg_echo('theme_inria:useradd:groups') . '<br /><em>' . elgg_echo('theme_inria:useradd:groups:details') . '</em>' . elgg_view('input/multiselect', array('name' => 'group_guid', 'value' => $group_guid, 'options_values' => $groups_options)) . '</label></p>';
+		*/
 	}
 }
 
