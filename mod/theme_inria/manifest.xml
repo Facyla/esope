@@ -26,6 +26,10 @@
 		<type>plugin</type>
 		<name>language_selector</name>
 	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>default_icons</name>
+	</requires>
 	
 	<activate_on_install>false</activate_on_install>
 	
