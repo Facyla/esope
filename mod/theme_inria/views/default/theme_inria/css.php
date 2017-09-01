@@ -89,9 +89,9 @@ $main_maxwidth = "80%";
 
 
 // @TODO Bug Safari : normalement on utilise flex x x 0%  MAIS sur safari le conteneur ne s'adapte pas et considère que la base est de 0. 
-// Ca fonctionne avec 0 mais crée d'autres effets de bord ailleurs
 // Pose des pbs sur l'accueil, et sur les pages de contenus en vue complète notamment
-
+// Ca fonctionne moins mal avec 0 ou auto mais crée d'autres effets de bord ailleurs (liste des feedbacks par ex.)
+// Note : une solution semble d'ajouter flex-basis: 0; à chaque utilisation de flex-direction column : voir si pas d'effet de bord ?
 $width = array(
 	/*
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
@@ -166,8 +166,8 @@ $width = array(
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
 /* Colonnes égales */
-.elgg-context-main .iris-col { display: flex; flex-direction: column; }
-.iris-box:last-of-type { flex: 1; display: flex; flex-direction: column; }
+.elgg-context-main .iris-col { display: flex; flex-direction: column; flex-basis: 0; }
+.iris-box:last-of-type { flex: 1; display: flex; flex-direction: column; flex-basis: 0; }
 
 
 .elgg-main { <?php echo $width['main']; ?> min-height: initial; }
@@ -198,7 +198,7 @@ $width = array(
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0; display: flex; flex-wrap: wrap; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { /* padding: 2.5rem 0 0 0; */ }
 #iris-body .elgg-layout-one-sidebar.elgg-context-settings .elgg-main { <?php echo $width['main']; ?> background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
-#iris-body .elgg-layout-one-column.elgg-context-profile_edit .elgg-main { <?php echo $width['main']; ?> width: 100%; margin: 2.5rem auto; float: none; padding: 0 2.5rem 3rem 2.5rem; background:white; display: flex; flex-wrap: wrap; flex-direction: column; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+#iris-body .elgg-layout-one-column.elgg-context-profile_edit .elgg-main { <?php echo $width['main']; ?> width: 100%; margin: 2.5rem auto; float: none; padding: 0 2.5rem 3rem 2.5rem; background:white; display: flex; flex-wrap: wrap; flex-direction: column; flex-basis: 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 #iris-body .elgg-layout-one-column.elgg-context-avatar.elgg-context-profile_edit .elgg-main { margin-top: 0; background: none; box-shadow: none; padding: 0; }
 #iris-body .iris-group .elgg-main { background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
 /*
@@ -216,7 +216,7 @@ $width = array(
 
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 
-.elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; margin: 0 2.5rem 2.5rem 0; }
+.elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; flex-basis: 0; margin: 0 2.5rem 2.5rem 0; }
 .elgg-body-transp .elgg-main, 
 #iris-body .iris-group .elgg-body-transp .elgg-main { margin: 0; }
 
@@ -1183,10 +1183,10 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 /* Alternative for pure hover (no click to keep menu visible) 
 .entity-submenu-content { position: absolute; right: 0; top: 0; padding: 1.5rem 0 0 0; z-index: 2; }
-.elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; }
+.elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; flex-basis: 0; }
 */
 .entity-submenu-content { position: absolute; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 10rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
-.elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; }
+.elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; flex-basis: 0; }
 .iris-object .entity-submenu-content .elgg-menu-entity { margin: 0; }
 .iris-object .entity-submenu-content .elgg-menu-entity li a, 
 .elgg-list-entity .entity-submenu-content ul li { margin: 0; /* padding: 0.3rem 0 0.2rem 0; */ padding: 0; text-align: left; color: #384257; }
@@ -1288,7 +1288,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .tab.tab-more { display: inline-block; position: relative; padding:0; }
 .tab.tab-more a { display: inline-block; margin:0; border:0; }
 .tab-more-content { display: flex; }
-.iris-group-menu .tab-more-content { position: absolute; background: white; min-width: 16rem; top: 3.5rem; right: -1rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; }
+.iris-group-menu .tab-more-content { position: absolute; background: white; min-width: 16rem; top: 3.5rem; right: -1rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; flex-basis: 0; }
 .iris-group-menu .tab.tab-more:hover .tab-more-content { display: flex; }
 .iris-group-menu .tab-more-content a { padding: 0.5rem 1rem; margin: 0; border-bottom: 1px solid #CCC; }
 .iris-group-menu .tab-more-content a:hover, .iris-group-menu .tab-more-content a:active, .iris-group-menu .tab-more-content a:focus { border-bottom: 1px solid #CCC; }
@@ -1337,7 +1337,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-tabs .elgg-tabs li:active,
 .group-workspace-tabs .elgg-tabs li:focus { opacity:1; box-shadow: 4px -4px 4px -4px rgba(0,0,0,0.1); }
 .group-workspace-tabs .elgg-tabs .elgg-state-selected a { top:initial; }
-.group-workspace-tabs .tab-more-content { position: absolute; background: white; width: 12rem; top: 2.9375rem; right: 0; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; }
+.group-workspace-tabs .tab-more-content { position: absolute; background: white; width: 12rem; top: 2.9375rem; right: 0; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; flex-basis: 0; }
 .group-workspace-tabs .tab.tab-more:hover .tab-more-content { display: flex; }
 .group-workspace-tabs .tab-more-content li { opacity: 0.6; border: 0; background: transparent; margin: 0; border-radius: 0; float: none; display: flex; }
 .group-workspace-tabs .tab-more-content a { padding: 0.5rem 1rem; margin: 0; color: #384257; border-bottom: 1px solid #CCC; flex: 1 1 auto; margin: 0; text-align: left; display: block; height: initial; }
@@ -1769,7 +1769,7 @@ a[name=unlike] { color: #1488CA !important; }
 	
 	#notifications .notifications-panel { position: fixed; left: 0; right: 0; top: 5rem; }
 
-	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; */ }
+	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; flex-basis: 0; */ }
 	#iris-page { display: block; }
 	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
 	.iris-cols { display: block; }
