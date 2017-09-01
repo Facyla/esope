@@ -314,8 +314,6 @@ $notifications_content .= '<h3>Activation systématique des notifications via le
 function theme_inria_force_user_site_notifications($user, $getter, $options) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
-error_log("Site notif update : user " . $user->guid);
-	
 	$notifications = get_input('notifications', false);
 	if ($notifications == 'yes') { $simulate = false; } else { $simulate = true;  }
 	

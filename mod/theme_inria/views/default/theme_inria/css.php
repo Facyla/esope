@@ -97,7 +97,7 @@ $width = array(
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
 	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
 	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
-	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 auto; margin: 0 2.5rem 2.5rem 0;",
+	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 0%; margin: 0 2.5rem 2.5rem 0;",
 );
 
 ?>
@@ -157,7 +157,7 @@ $width = array(
 .iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; /* max-width: 100,5rem; */ width: 100%; /* justify-content: space-evenly; */ justify-content: space-around; justify-content: flex-start; }
 .iris-cols.form-groups-add { padding: 0 0 0 2.5rem; }
 .elgg-context-profile .iris-cols { padding: 0 0 0 2.5rem; margin-top: 2.5rem; }
-.iris-col { <?php echo $width['main']; ?> padding: 0 0; /* margin: 0 auto; */ }
+.iris-col { <?php echo $width['main']; ?> flex: 1 1 auto; padding: 0 0; /* margin: 0 auto; */ }
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
 /* Colonnes égales */
@@ -1760,9 +1760,9 @@ a[name=unlike] { color: #1488CA !important; }
 }
 
 @media (max-width:768px) {
-	* { max-width: initial !important; }
+	* { min-width: initial !important; max-width: initial !important; }
 	
-	.elgg-layout { /* flex-direction: column; */ }
+	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; */ }
 	
 	.elgg-menu-topbar { margin-left: 0; display: block; }
 	.footer-logo-inria { margin: 12px 0; }
