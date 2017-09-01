@@ -17,6 +17,11 @@ $content_access_mode = elgg_extract("content_access_mode", $vars);
 // ESOPE : set default visibility to site default (instead of always public)
 if (!elgg_instanceof($entity, 'group')) { $visibility = ACCESS_DEFAULT; }
 
+// Iris : allow values that are neither Public/Members/Private (corrects behaviour from groups lib function : groups_prepare_form_vars)
+// To allow *any* access level for groups, simply align visibility to access_id...
+$inria_access_id = theme_inria_get_inria_access_id();
+if (($visibility === 0) && ($entity->access_id == $inria_access_id)) { $visibility = $inria_access_id; }
+
 //Iris v2 : workspaces
 $translation_prefix = '';
 $parent_group = elgg_extract("au_subgroup_of", $vars);
