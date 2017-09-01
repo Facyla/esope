@@ -87,6 +87,11 @@ $main_maxwidth = "80%";
 - principal : flex 1 1 33rem 28-46rem / 448-736px
 */
 
+
+// @TODO Bug Safari : normalement on utilise flex x x 0%  MAIS sur safari le conteneur ne s'adapte pas et considère que la base est de 0. 
+// Ca fonctionne avec 0 mais crée d'autres effets de bord ailleurs
+// Pose des pbs sur l'accueil, et sur les pages de contenus en vue complète notamment
+
 $width = array(
 	/*
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
@@ -97,7 +102,7 @@ $width = array(
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
 	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0; margin: 0 2.5rem 2.5rem 0;",
 	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0; margin: 0 2.5rem 2.5rem 0;",
-	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 auto; margin: 0 2.5rem 2.5rem 0;",
+	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 0; margin: 0 2.5rem 2.5rem 0;",
 );
 
 ?>
