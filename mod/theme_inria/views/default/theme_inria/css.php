@@ -160,6 +160,11 @@ $width = array(
 .iris-col { <?php echo $width['main']; ?> padding: 0 0; /* margin: 0 auto; */ }
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
+/* Colonnes égales */
+.elgg-context-main .iris-col { display: flex; flex-direction: column; }
+.iris-box:last-of-type { flex: 1; display: flex; flex-direction: column; }
+
+
 .elgg-main { <?php echo $width['main']; ?> min-height: initial; }
 
 .elgg-layout-one-column .elgg-main { max-width: initial; margin-right: 0; }
@@ -405,6 +410,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-wire #thewire-textarea { margin-top: 0; height: 4em; width: calc(100% - 4rem); flex: 1 1 auto; }
 .home-wire .thewire-form { padding: 0; }
 .home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
+.home-wire .thewire-form select { margin-left: 3.5rem; max-width: 10rem; }
 
 .home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:1.375rem; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
