@@ -314,6 +314,8 @@ $notifications_content .= '<h3>Activation systématique des notifications via le
 function theme_inria_force_user_site_notifications($user, $getter, $options) {
 	if (!elgg_instanceof($user, 'user')) { return false; }
 	
+error_log("Site notif update : user " . $user->guid);
+	
 	$notifications = get_input('notifications', false);
 	if ($notifications == 'yes') { $simulate = false; } else { $simulate = true;  }
 	
@@ -381,14 +383,18 @@ function theme_inria_force_user_site_notifications($user, $getter, $options) {
 	}
 	
 	echo $user->guid . ' : ' . $notifications_content . '<br />';
+	error_log("   User " . $user->guid . " => OK");
+	
 	return true;
 }
 
 // Form
+$upgrade_notifications_guid = get_input('upgrade_notifications_guid', 0);
 $notifications_content .= '<form method="POST">';
 	$notifications_content .= elgg_view('input/securitytoken');
 	$notifications_content .= elgg_view('input/hidden', array('name' => 'upgrade_notifications', 'value' => 'yes'));
 	$notifications_content .= '<p><label>Mise en production ' . elgg_view('input/select', array('name' => 'notifications', 'value' => '', 'options_values' => ['no' => "Non (simulation)", 'yes' => "Oui (mise en production)"])) . '</label></p>';
+	$notifications_content .= '<p><label>GUID du membre de départ ' . elgg_view('input/text', array('name' => 'upgrade_notifications_guid', 'value' => $upgrade_notifications_guid)) . '</label></p>';
 	$notifications_content .= '<p>' . elgg_view('input/submit', array('value' => "Démarrer activation des notifications site")) . '</p>';
 $notifications_content .= '</form><br /><br />';
 
@@ -401,7 +407,8 @@ if ($upgrade_notifications == 'yes') {
 	$users = elgg_get_entities(array('type' => 'user', 'limit' => false));
 	foreach($users as $user) { theme_inria_force_user_site_notifications($user, $simulate_notifications); }
 	*/
-	$users_options = array('types' => 'user', 'limit' => false);
+	$users_options = array('types' => 'user', 'limit' => false, 'order_by' => "guid ASC");
+	if ($upgrade_notifications_guid > 0) { $users_options['wheres'][] = "e.guid >= $upgrade_notifications_guid"; register_error(" guid > $upgrade_notifications_guid"); }
 	$batch = new ElggBatch('elgg_get_entities', $users_options, 'theme_inria_force_user_site_notifications', 10);
 }
 
