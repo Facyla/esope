@@ -41,7 +41,7 @@ if ($container && !elgg_instanceof($page_owner, 'group')) {
 	//error_log($object->guid .' // container='.$subtype . ' // object='.$object->getSubtype().' == '.print_r($vars['item'], true));
 	if (elgg_instanceof($container, 'group')) {
 		$container_info .= '<li>' . elgg_view('output/url', array(
-				'text' => $group_icon . '&nbsp;' . $container->name,
+				'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name),
 				'title' => "",
 				'href' => $container->getURL(),
 				'class' => 'iris-container',
