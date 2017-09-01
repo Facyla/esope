@@ -27,31 +27,34 @@ if ($groups) {
 */
 
 
+echo '<div class="sidebar-discover-groups">';
 
-echo '<h3><a href="' . elgg_get_site_url() . 'groups/discover" title="' . elgg_echo('theme_inria:groups:discover:tooltip') . '">' . elgg_echo("theme_inria:groups:discover") . ' &nbsp; &#9654;</a></h3>';
+	echo '<h3><a href="' . elgg_get_site_url() . 'groups/discover" title="' . elgg_echo('theme_inria:groups:discover:tooltip') . '">' . elgg_echo("theme_inria:groups:discover") . ' &nbsp; &#9654;</a></h3>';
 
-echo '<div class="iris-home-discover-groups">';
+	echo '<div class="iris-home-discover-groups">';
 
-	//$group_categories = ['work' => "Métiers", 'exchange' => "Echanges & Vie pro", 'tools' => "Outils", '' => "Loisirs", 'planstrategique' => "Plan stratégique"];
+		//$group_categories = ['work' => "Métiers", 'exchange' => "Echanges & Vie pro", 'tools' => "Outils", '' => "Loisirs", 'planstrategique' => "Plan stratégique"];
 
-	$field_settings = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_group_field', 'metadata_names' => 'metadata_name', 'metadata_values' => 'community'));
-	if ($field_settings) {
-		foreach($field_settings[0]->getOptions() as $community => $label) {
-			if (empty($label)) { continue; }
-			$community = elgg_get_friendly_title($community);
-			$group_categories[$community] = $label;
+		$field_settings = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_group_field', 'metadata_names' => 'metadata_name', 'metadata_values' => 'community'));
+		if ($field_settings) {
+			foreach($field_settings[0]->getOptions() as $community => $label) {
+				if (empty($label)) { continue; }
+				$community = elgg_get_friendly_title($community);
+				$group_categories[$community] = $label;
+			}
 		}
-	}
 
-	foreach($group_categories as $community => $name) {
-		echo '<div class="iris-home-group-category">
-			<a href="' . elgg_get_site_url() . 'groups/discover/' . $name . '">
-				<img src="' . elgg_get_site_url() . 'mod/theme_inria/graphics/communities/' . $community . '_100.png" />
-				<br />
-				' . $name . '
-			</a>
-		</div>';
-	}
+		foreach($group_categories as $community => $name) {
+			echo '<div class="iris-home-group-category">
+				<a href="' . elgg_get_site_url() . 'groups/discover/' . $name . '">
+					<img src="' . elgg_get_site_url() . 'mod/theme_inria/graphics/communities/' . $community . '_100.png" />
+					<br />
+					' . $name . '
+				</a>
+			</div>';
+		}
+
+	echo '</div>';
 
 echo '</div>';
 

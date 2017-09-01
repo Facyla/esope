@@ -288,7 +288,9 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 			
 		<?php if ($loginas_logout) { echo $loginas_logout; } ?>
 		
+		<?php /*
 		<div class="menu-topbar-toggle" class="iris-topbar-item"><i class="fa fa-user"></i> <?php echo elgg_echo('esope:menu:topbar'); ?></div>
+		*/ ?>
 		<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt iris-topbar-item" id="menu-topbar">
 			<li id="user"><a href="javascript:void(0);" class="elgg-avatar elgg-avatar-small profile-type-<?php echo $profile_type; ?>"><img src="<?php echo $own->getIconURL('small'); ?>" alt="<?php echo $own->name; ?>" />&nbsp;<?php echo $own->name; ?> <i class="fa fa-angle-down"></i></a>
 				<ul class="hidden">

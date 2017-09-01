@@ -1762,8 +1762,27 @@ a[name=unlike] { color: #1488CA !important; }
 @media (max-width:768px) {
 	* { min-width: initial !important; max-width: initial !important; }
 	
+	#notifications .notifications-panel { position: fixed; left: 0; right: 0; top: 5rem; }
+
 	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; */ }
+	#iris-page { display: block; }
+	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
+	.iris-cols { display: block; }
 	
+	/* Recherche groupe */
+	.iris-search-header { height: 14rem; }
+	#iris-body .iris-search-quickform h2 { font-size: 2rem; line-height: 2.25rem; margin-bottom: 1rem; }
+	.iris-search-image { top: 2rem; left: 2rem; padding: 0.5rem; width: 6rem; height: 6rem; }
+	.iris-search-quickform { top: 2rem; left: 10rem; width: 20rem; }
+	#iris-search-quickform { height: 2.5rem; line-height: 2.5rem; width: 20rem; }
+	#iris-search-quickform #iris-search-header-input { width: 17.5rem; }
+	#iris-search-quickform input[type="reset"] { line-height: 2rem; }
+	.iris-search-menu { padding-left: 3rem; }
+	
+	/* Profil */
+	.iris-profile-title { top: 2rem; left: 10rem; }
+	.iris-profile-icon { top: 2rem; left: 2rem; width: 8rem; height: 8rem; }
+
 	.elgg-menu-topbar { margin-left: 0; display: block; }
 	.footer-logo-inria { margin: 12px 0; }
 	
