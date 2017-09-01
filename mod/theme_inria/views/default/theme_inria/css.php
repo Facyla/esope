@@ -157,7 +157,7 @@ $width = array(
 .iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; /* max-width: 100,5rem; */ width: 100%; /* justify-content: space-evenly; */ justify-content: space-around; justify-content: flex-start; }
 .iris-cols.form-groups-add { padding: 0 0 0 2.5rem; }
 .elgg-context-profile .iris-cols { padding: 0 0 0 2.5rem; margin-top: 2.5rem; }
-.iris-col { <?php echo $width['main']; ?> flex: 1 1 auto; padding: 0 0; /* margin: 0 auto; */ }
+.iris-col { <?php echo $width['main']; ?> padding: 0 0; /* margin: 0 auto; */ }
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
 /* Colonnes égales */
