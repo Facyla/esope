@@ -102,7 +102,7 @@ $width = array(
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
 	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0; margin: 0 2.5rem 2.5rem 0;",
 	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0; margin: 0 2.5rem 2.5rem 0;",
-	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 0; margin: 0 2.5rem 2.5rem 0;",
+	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 auto; margin: 0 2.5rem 2.5rem 0;",
 );
 
 ?>
