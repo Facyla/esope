@@ -219,7 +219,7 @@ foreach ($emails as $email) {
 	// Note : invite = bypass for closed group (user must canEdit())
 	// join : idem
 	// request = "invite" by a regular member
-	// @TODO add invite message + notification to group admin
+	// add invite message + notification to group admin
 	if ($group_guid) {
 		foreach($group_guid as $guid) {
 			$group = get_entity($guid);
@@ -241,9 +241,9 @@ foreach ($emails as $email) {
 										$group->join($user);
 									} else {
 										// Add membership request
-										// @TODO Notify group owner + operators
+										// Notify group owner + operators => through event handler on create,relationship
 										add_entity_relationship($user->guid, 'membership_request', $parent->guid);
-										// @TODO Notify group owner + operators
+										// Notify group owner + operators => through event handler on create,relationship
 										add_entity_relationship($user->guid, 'membership_request', $group->guid);
 									}
 								} else {
@@ -257,7 +257,7 @@ foreach ($emails as $email) {
 					} else if ($group->isMember()) {
 						// Invite with no admin rights = membership request
 						if (add_entity_relationship($user->guid, 'membership_request', $group->guid)) {
-							// @TODO Notify group owner + operators
+							// Notify group owner + operators => through event handler on create,relationship
 							system_message("Group membership request for {$group->name}.");
 						} else {
 							system_message("Membership request already existing for {$group->name}.");
@@ -266,7 +266,7 @@ foreach ($emails as $email) {
 					} else {
 						// Invite with no admin rights = membership request
 						if (add_entity_relationship($user->guid, 'membership_request', $group->guid)) {
-							// @TODO Notify group owner + operators
+							// Notify group owner + operators => through event handler on create,relationship
 							system_message("Group membership request for {$group->name}.");
 						} else {
 							system_message("Membership request already existing for {$group->name}.");

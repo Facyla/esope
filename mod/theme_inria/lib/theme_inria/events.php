@@ -283,5 +283,46 @@ function theme_inria_annotation_notifications_event_block($event, $type, $annota
 	}
 }
 
+// Also notify group operators
+function theme_inria_create_relationship_event($event, $type, $relationship) {
+	if (($type == 'relationship') && ($relationship->relationship == "membership_request")) {
+		$user_guid = $relationship->guid_one;
+		$group_guid = $relationship->guid_two;
+		$operators = elgg_get_entities_from_relationship(array('types'=>'user', 'relationship_guid'=>$group_guid, 'relationship'=>'operator', 'inverse_relationship'=>true));
+		
+		// Notify all group operators + group owner if not passed through join action
+		$user = get_entity($user_guid);
+		$group = get_entity($group_guid);
+		$url = elgg_get_site_url() . "groups/requests/$group_guid";
+		$subject = elgg_echo('groups:request:subject', array(
+				$user->name,
+				$group->name,
+			), $ent->language);
+
+		$body = elgg_echo('groups:request:body', array(
+				$group->getOwnerEntity()->name,
+				$user->name,
+				$group->name,
+				$user->getURL(),
+				$url,
+			), $ent->language);
+
+		$params = [
+			'action' => 'membership_request',
+			'object' => $group,
+		];
+		
+		// Notify owner first
+		$owner = $group->getOwnerEntity();
+		notify_user($owner->guid, $user_guid, $subject, $body, $params);
+		
+		foreach ($operators as $ent) {
+			// Avoid duplicate if owner is also in operators
+			if ($ent->guid == $owner->guid) { continue; }
+			notify_user($ent->guid, $user_guid, $subject, $body, $params);
+		}
+	}
+}
+
 
 

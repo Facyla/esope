@@ -186,7 +186,7 @@ return array(
 	'inria:groups:featured' => "Groupes à la Une",
 	'inria:members:newest' => "Derniers inscrits",
 	'loginusername' => "Identifiant Iris",
-	'theme_inria:basiclogin' => "Connexion Externes",
+	'theme_inria:basiclogin' => "Connexion Invités",
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
 	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
@@ -212,8 +212,8 @@ return array(
 	'profile:education' => "Formation",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
-	'profile:types:external' => "Externe",
-	'profile:types:external:description' => "Les profils Externes regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
+	'profile:types:external' => "Invité",
+	'profile:types:external:description' => "Les profils Invités regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
 	'profile:types:archive' => "Archive",
 	'profile:types:archive:description' => "Les profils Archive regroupent les comptes qui ne sont plus membres du réseau. Leurs publications sont conservées mais les personnes correspondantes ne reçoivent plus aucun message et ne peuvent plus se connecter.",
 	'theme_inria:status:closed' => "Archive",
@@ -335,7 +335,7 @@ return array(
 	// Création de comptes
 	'inria_invite' => "Invitations sur Iris",
 	'theme_inria:invite_external' => "Inviter des membres non-Inria",
-	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
+	'theme_inria:useradd' => "Création d'un compte Invité pour une personne externe à Inria",
 	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
 	'theme_inria:useradd:groups' => "Inviter dans le(s) groupe(s)",
 	'theme_inria:useradd:groups:details' => "Si vous êtes admin ou responsable du groupe, ou que le groupe est en accès libre, votre contact sera immédiatement inscrit. Si vous êtes membre du groupe et que l'adhésion est modérée, une demande sera faite pour votre contact.",
@@ -368,8 +368,8 @@ Et identifiez-vous avec :
 - votre identifiant : %6\$s &nbsp; ou votre adresse email %7\$s
 - votre mot de passe : %8\$s
 ",
-	'theme_inria:useradd:admin:subject' => "Création de compte externe",
-	'theme_inria:useradd:admin:subject:confirm' => "Création de compte externe à confirmer",
+	'theme_inria:useradd:admin:subject' => "Création de compte Invité",
+	'theme_inria:useradd:admin:subject:confirm' => "Création de compte Invité à confirmer",
 	'theme_inria:useradd:admin:body' => "
 Un compte utilisateur a été créé pour %1\$s, email %2\$s, par %3\$s.
 
@@ -458,7 +458,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'groups:briefdescription' => 'Résumé', // Brève description
 	'groups:interests' => 'Mots-clés',
 	'access:read' => "Visibilité", // Accès en lecture
-	'LOGGED_IN' => "Membres Iris", // membres connectés
+	'LOGGED_IN' => "Inria & invités", // membres connectés
 	'GROUP_MEMBERS' => "Groupe", // membres du groupe
 	'access:friends:label' => "Contacts seulement", // contacts
 	//'PUBLIC' => "Tout internaute", // public

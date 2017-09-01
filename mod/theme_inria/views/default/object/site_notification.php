@@ -17,9 +17,21 @@ $text .= '<div class="elgg-body"><strong>' . $entity->description . '</strong></
 
 // Icon : actor (it's not river : no action)
 $actor = $entity->getActor();
-if ($actor) {
+if ($actor ) {
 	//$icon = elgg_view_entity_icon($actor, $size);
-	$icon = '<a href="' . $actor->getURL() . '"><img src="' . $actor->getIconURL(array('size' => $size)) . '" /></a>';
+	if (!elgg_in_context('topbar') && (elgg_instanceof($actor, 'user') || elgg_instanceof($actor, 'group') || elgg_instanceof($actor, 'object'))) {
+		if (elgg_instanceof($actor, 'user')) {
+			$icon = '<a href="' . $actor->getURL() . '" class="elgg-avatar"><img src="' . $actor->getIconURL(array('size' => $size)) . '" /></a>';
+		} else {
+			$icon = '<a href="' . $actor->getURL() . '"><img src="' . $actor->getIconURL(array('size' => $size)) . '" /></a>';
+		}
+	} else {
+		if (elgg_instanceof($actor, 'user')) {
+			$icon = '<span class="elgg-avatar"><img src="' . $actor->getIconURL(array('size' => $size)) . '" /></span>';
+		} else {
+			$icon = '<img src="' . $actor->getIconURL(array('size' => $size)) . '" />';
+		}
+	}
 }
 
 // Wrap in a link
@@ -34,8 +46,9 @@ if ($url) {
 	));
 }
 
-if (!elgg_in_context('topbar')) {
-	
+if (elgg_in_context('topbar')) {
+	echo elgg_view_image_block($icon, $text);
+} else {
 	// @TODO : Mark as read once displayed ?
 	//$entity->setRead();
 	
@@ -70,7 +83,5 @@ if (!elgg_in_context('topbar')) {
 	));
 
 	echo elgg_view_image_block($checkbox, $list_body);
-} else {
-	echo elgg_view_image_block($icon, $text);
 }
 

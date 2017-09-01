@@ -187,7 +187,7 @@ return array(
 	'inria:groups:featured' => "Featured groups",
 	'inria:members:newest' => "New members",
 	'loginusername' => "Iris login",
-	'theme_inria:basiclogin' => "External access login",
+	'theme_inria:basiclogin' => "Guests access login",
 	'theme_inria:caslogin' => "Inria login (CAS)",
 	'theme_inria:invalidaccess' => "Login not allowed: this access is no longer valid. Please contact an administrator.",
 	
@@ -213,8 +213,8 @@ return array(
 	'profile:education' => "Education",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Inria profiles are all people who have a valid Inria LDAP access: this includes personnel, authorized subcontractors, Inria research teams, etc.",
-	'profile:types:external' => "External",
-	'profile:types:external:description' => "External profiles are people who do not have a valid Inria LDAP access, but are allowed into Iris. This includes Inria alumni, collaborators from other teams and institutes, subcontractors, etc.",
+	'profile:types:external' => "Guest",
+	'profile:types:external:description' => "Guests profiles are people who do not have a valid Inria LDAP access, but are allowed into Iris. This includes Inria alumni, collaborators from other teams and institutes, subcontractors, etc.",
 	'profile:types:archive' => "Archived",
 	'profile:types:archive:description' => "Archived profiles are former Iris member who are not granted anymore into Iris. Their contributions remain for reference, but they cannot login to Iris nor receive any information from the network.",
 	'theme_inria:status:closed' => "Archive",
@@ -242,9 +242,6 @@ return array(
 	'groups:tools:thewire:details' => "to share very brief news, reminders, updates",
 	'groups:tools:transitions:details' => "",
 	
-	'profile:types:inria:description' => "Inria profiles are people who have a valid access to in the Inria LDAP directory : active agents, subcontractors, research teams, etc.",
-	'profile:types:external' => "External",
-	'profile:types:external:description' => "External profiles are people who do not belong to Inria, but were granted a special access for various reasons : as an alumni, associated researcher, subcontractor, etc.",
 	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "About me",
 	'profile:categories:inria' => "Inria data",
@@ -344,8 +341,8 @@ return array(
 	// Création de comptes
 	'inria_invite' => "Invite  user account",
 	'theme_inria:invite_external' => "Invite non-Inria people",
-	'theme_inria:useradd' => "Create a new account for a non-Inria person",
-	'theme_inria:useradd:details' => "<p>As %s, you can grant access to to Iris people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once the account will be created and validated by an administrator, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p><p>Please contact <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a> for any questions.</p>",
+	'theme_inria:useradd' => "Create a new Guest account for a non-Inria person",
+	'theme_inria:useradd:details' => "<p>As %s, you can grant access to Iris to people not belonging to Inria.</p><p>To process, use the form below and click on confirmation button to create the new account. Once the account will be created and validated by an administrator, you will be automatically set as mutual friends on Iris.</p><p>Caution : please double-check that the account you're willing to create fits Iris membership rules, as defined in the site Terms of service ! &nbsp; Any account that do not respect the TOS can be desactivated by a site administrator.</p><p>Please contact <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a> for any questions.</p>",
 	'theme_inria:useradd:groups' => "Invite into group(s)",
 	'theme_inria:useradd:groups:details' => "If you are a group admin or operator, or if the group membership is open, your contact will be immetialy registered to the group. Otherwise, a membership request will be sent to the group operators.",
 	'theme_inria:useradd:groups:details:admin' => "As a general admin, you can register directly in any group of your choice",
@@ -379,7 +376,7 @@ Password: %s
 Once you have logged in, we highly recommend that you change your password.
 ",
 	'theme_inria:useradd:admin:subject' => "User account created",
-	'theme_inria:useradd:admin:subject:confirm' => "External account registration to be confirmed",
+	'theme_inria:useradd:admin:subject:confirm' => "Guest account registration to be confirmed",
 	'theme_inria:useradd:admin:body' => "
 A user account has been created for %1\$s (email %2\$s), by %3\$s.
 
@@ -471,11 +468,11 @@ Here is the new profile page : %5\s
 	'groups:briefdescription' => 'Brief description', // Brève description
 	'groups:interests' => 'Keywords',
 	'access:read' => "Visibility", // Accès en lecture
-	'LOGGED_IN' => "Iris members", // membres connectés
+	'LOGGED_IN' => "Iris & Guests", // membres connectés
 	'GROUP_MEMBERS' => "Group", // membres du groupe
 	'access:friends:label' => "Contacts only", // contacts
 	//'PUBLIC' => "Tout internaute", // public
-	'PUBLIC' => "Public", // public en mode Walled Garden
+	'PUBLIC' => "All visitors", // public en mode Walled Garden
 	'river:all' => "On the move in Iris ...",
 	'search_types:tags' => "Keywords",
 	

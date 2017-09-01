@@ -465,7 +465,7 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .anim-stats .elgg-table-alt td:first-child { max-width: 180px !important; }
 
 /* Navigation des pages wiki en pleine largeur */
-.full-width-pages-nav { color: white; padding: 1.5rem; border-radius: 4px; background-color: rgba(56, 66, 87, 0.5); box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: -2rem -2rem 1rem -2rem; }
+.full-width-pages-nav { color: white; padding: 1.5rem; border-radius: 4px 4px 0 0; background-color: rgba(56, 66, 87, 0.5); box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: -2rem -2rem 1rem -2rem; }
 .elgg-layout-user-owner .full-width-pages-nav { margin: 0rem -2rem 2rem -2rem; }
 .full-width-pages-nav a[rel=toggle] { color: white; font-weight: bold; }
 .full-width-pages-nav a[rel=toggle] .fa { margin-right: 1rem; }
@@ -724,7 +724,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-topbar-notifications-tab .iris-topbar-notifications-tab-content { min-height: 100px; padding: 1rem; max-height: 60vh; overflow: auto; }
 .iris-topbar-notifications-tab-content .elgg-body { font-size: 0.9375rem; }
 .iris-topbar-item .iris-topbar-notifications-tab a { padding: 0; font-weight: initial; font-size: 0.9rem; }
-#notifications .elgg-item { padding: 1rem 0; margin: 0 1rem 0.5rem 1rem; box-shadow: none; }
+#notifications .elgg-item-object-site_notification { padding: 0 0 0.5rem 0; margin: 0 1rem 0.5rem 1rem; box-shadow: none; }
 #notifications .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 .notifications-pending-group-invites { border-bottom: 1px solid #DCDCDC; margin: 0 1rem; }
 .elgg-image-block.notifications-pending-invitations { margin: 0.5rem 0 1rem 0; }
@@ -733,7 +733,9 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 
 .elgg-layout-one-sidebar .elgg-main .elgg-form-site-notifications-process .elgg-list-container { /* background: transparent; padding: 0; */ }
 .elgg-list .elgg-item.elgg-item-object-site_notification .elgg-image-block { display: block; }
+#notifications .elgg-item-object-site_notification .elgg-image-block { display: flex; }
 .elgg-form-site-notifications-process input[type="checkbox"] { margin: 1rem 1rem; }
+.elgg-form-site-notifications-process .elgg-item-object-site_notification img, .elgg-form-site-notifications-process ul.elgg-list li.elgg-item-object-site_notification div.elgg-image a img { margin-right: 1rem; }
 
 #friend_request_received_listing, 
 #friend_request_sent_listing { padding: 1rem; margin: 0; }
@@ -928,6 +930,7 @@ li[id*=elgg-object-]:before { content:""; display:block; height:7rem; margin:-7r
 .full-screen div { max-width: initial !important; }
 .overlay { background: rgba(0,0,0,1); position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; opacity: 0; transition-duration:1s; }
 .full-screen .overlay { z-index: 1000; opacity: 0.9; }
+.full-screen .full-width-pages-nav { margin-top: 0.5rem; border-radius: 0; }
 
 
 h4 { font-size: 1.125rem; margin-bottom: 0.75rem;; }
@@ -1041,6 +1044,8 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 a.elgg-river-subject { font-weight: bold; color: #384257; font-size: .9em; }
 a.elgg-river-target, a.elgg-river-object {  }
 
+.elgg-no-results { width: 100%; }
+
 .elgg-image-block { /* display:flex; */ overflow:visible; padding: 0.5rem 0; }
 .iris-sidebar-content .elgg-image-block { display: block; }
 .elgg-image-block .elgg-body { overflow: visible; }
@@ -1092,7 +1097,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 
 .elgg-comments { margin-top: 1.5rem; /* margin: 0 -2rem; padding:1rem 2rem 0 2rem; border-top: 2px solid #F1F1F1; */ }
 .elgg-layout-one-sidebar .elgg-main .elgg-comments .elgg-list-container { box-shadow: none; border: 0; }
-.elgg-comments .elgg-list { border-top: 0; }
+.elgg-comments .elgg-list { /* border-top: 0; */ }
 .elgg-comments .elgg-list > li { border-width: 1px; }
 .elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }

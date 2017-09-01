@@ -52,6 +52,7 @@ if (elgg_is_logged_in()) {
 	
 	
 	// Site notifications
+	elgg_load_js('elgg.site_notifications');
 	$notifications_mark = '';
 	$notifications_text = '';
 	$notifications_count = 0;
