@@ -31,7 +31,9 @@ function esope_search(){
 $q = get_input('q');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
-
+$order_by = get_input('order_by', 'alpha');
+$friends_only = get_input('friends_only', false);
+if ($friends_only == 'yes') { $friends_only = true; } else { $friends_only = false; }
 
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
@@ -79,13 +81,13 @@ foreach ($metadata_search_fields as $metadata) {
 	if ($use_profile_manager && !$use_text && !$use_auto_values) {
 		// Use profile manager configuration - will default to text input if field is not defined
 		// Metadata options fetching will only work if those are stored somewhere
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_search_field_from_profile_field(array('metadata' => $metadata, 'name' => $name)) . '</label><div class="clearfloat"></div></div>';
 	} else if ($use_auto_values) {
 		// Metadata options are selected from the database
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . $meta_title . esope_make_dropdown_from_metadata(array('metadata' => $metadata, 'name' => $name)) . '</label><div class="clearfloat"></div></div>';
 	} else {
 		// We'll rely on text inputs then
-		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . $meta_title . '<input type="text" name="' . $name . '" /></label></div>';
+		$metadata_search .= '<div class="esope-search-metadata esope-search-metadata-text"><label>' . $meta_title . '<input type="text" name="' . $name . '" /></label><div class="clearfloat"></div></div>';
 	}
 }
 
@@ -113,12 +115,15 @@ $profiletypes_opt[0] = '';
 $profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep the keys here !
 
 
-$search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">';
+$search_form = '';
+$search_form .= '<form id="esope-search-form" method="post" action="' . $search_action . '">';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'user'));
 // Pass URL values to search form (any URL parameter has to be passed to the form because it's JS-sent)
 $search_form .= elgg_view('input/hidden', array('name' => 'limit', 'value' => $limit));
 $search_form .= elgg_view('input/hidden', array('name' => 'offset', 'value' => $offset));
+$search_form .= elgg_view('input/hidden', array('name' => 'order_by', 'value' => $order_by));
+
 
 // Use preset hidden filters
 if ($metadata_search_filter) {
@@ -143,26 +148,35 @@ if (false && elgg_is_admin_logged_in()) {
 }
 */
 
-$search_form .= '<fieldset>';
+$search_form .= '<div class="iris-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:user') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
+
 // Display role filter only if it has a meaning
 if (sizeof($profiletypes_opt) > 2) {
-	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label></div>';
+	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label><div class="clearfloat"></div></div>';
 }
-$search_form .= $metadata_search . '<div class="clearfloat"></div>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:user') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
+$search_form .= $metadata_search;
+
+$search_form .= '<div class="esope-search-metadata">';
+// matchon : groups|users|friends
+$search_form .= elgg_view('input/checkbox', array('name' => 'friends_only', 'value' => 'yes', 'default' => '', 'checked' => $friends_only, 'label' => "Afficher seulement mes contacts"));
+$search_form .= '</div>';
+
 $search_form .= '<input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" />';
-$search_form .= '</fieldset></form><br />';
+$search_form .= '</form>';
+
+
+
 
 $content .= $search_form;
-$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
+// Iris v2 : form in sidebar, results in main content
+//$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
 
 // If any parameter is passed, perform search on page load (>1 because there is always a default __elgg_uri param)
 //echo '<pre>' . print_r($_GET, true) . '</pre>'; // debug
-//if (!empty($_GET)) {
-if (sizeof($_GET) > 1) {
-	$content .= '<script type="text/javascript">esope_search();</script>';
-}
+//if (sizeof($_GET) > 1) {
+$content .= '<script type="text/javascript">esope_search();</script>';
+//}
 
 echo $content;
 

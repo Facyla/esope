@@ -6,7 +6,7 @@
 	html *, body * { min-height:0 !important; }
 	
 	html, body, section { background:white !important; }
-	* { background-color: white !important; color: black !important; font-family:"times new roman",times,serif; }
+	* { background-color: white !important; color: black !important; font-family:"Inria Serif",times,serif; }
 	a:link { text-decoration: underline; }
 	
 	/* Conversion des URL relatives en URL absolues */

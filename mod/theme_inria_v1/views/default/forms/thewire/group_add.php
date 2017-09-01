@@ -6,11 +6,11 @@
  */
 
 $group = elgg_extract('entity', $vars, elgg_get_page_owner_entity());
+$own = elgg_get_logged_in_user_entity();
 
 // Wire in groups is only available to group members (or admins)
 if (!elgg_instanceof($group, 'group')) { return; }
-if (!($group->isMember() || elgg_is_admin_logged_in())) { return; }
-
+if (!$group->isMember() && !elgg_is_admin_logged_in()) { return; }
 elgg_load_js('elgg.thewire');
 
 $post = elgg_extract('post', $vars);
@@ -21,11 +21,14 @@ if ($post) {
 	$text = elgg_echo('thewire:reply');
 }
 
+$id = 'thewire-textarea';
+
 if ($post) {
 	echo elgg_view('input/hidden', array(
 		'name' => 'parent_guid',
 		'value' => $post->guid,
 	));
+	$id = 'thewire-textarea-' . $post->guid;
 }
 
 // Integration into groups : add container
@@ -41,14 +44,19 @@ if ($char_limit == 0) {
 } else if ($char_limit > 140) {
 	$num_lines = 4;
 }
+
+if (!elgg_in_context('workspace')) {
+	echo '<img src="' . $own->getIconUrl(array('size' => 'small')) . '" alt="' . $own->name . '" />';
+}
+
 echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',
-	'id' => 'thewire-textarea',
+	'id' => $id,
 	'rows' => $num_lines,
 	'data-max-length' => $char_limit,
 	'style' => "height:initial;",
-	'placeholder' => elgg_echo('theme_inria:thewire:group:placeholder'),
+	'placeholder' => elgg_echo('theme_inria:thewire:group:placeholder', array($char_limit)),
 ));
 ?>
 
@@ -66,9 +74,17 @@ echo elgg_view('input/plaintext', array(
 	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
 	$access_opt = array(
 			$group->group_acl => get_readable_access_level($group->group_acl),
-			'1' => elgg_echo('LOGGED_IN')
+			//'1' => elgg_echo('LOGGED_IN')
 		);
+	// Force to group access if content access mode enabled
+	if ($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
+		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
+		return;
+	}
 	echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
+	/*
+	echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
+	*/
 	?>
 </div>
 

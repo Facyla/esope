@@ -24,13 +24,16 @@ if (elgg_get_config('allow_registration')) {
 // Composition de la page
 $content = '<div id="adf-homepage" class="">';
 
+/*
 $content .= '<div style="width:46%; float:left;">';
 	$intro = elgg_get_plugin_setting('homeintro', 'adf_public_platform');
 	if (!empty($intro)) $content .= $intro . '<div class="clearfloat"></div>';
 	$content .= '<div class="clearfloat"></div><br />';
 $content .= '</div>';
+*/
 
-$content .= '<div style="width:50%; float:right;">';
+//$content .= '<div style="width:50%; float:right;">';
+$content .= '<div class="elgg-main">';
 	$content .= '<div style="border:1px solid #CCCCCC; padding:0.5em 1em; margin-top:2em; background:#F6F6F6;">';
 		// Connexion + mot de passe perdu
 		$content .= '<h2>Connexion</h2>';
@@ -43,6 +46,9 @@ $content .= '<div style="width:50%; float:right;">';
 		$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
 	$content .= '<div class="clearfloat"></div><br />';
+$content .= '</div>';
+
+
 $content .= '</div>';
 
 

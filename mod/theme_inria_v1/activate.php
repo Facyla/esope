@@ -23,3 +23,14 @@ update_subtype('object', 'webinar');
 
 
 
+// Auto-enable plugin dependencies
+$plugins = ['theme_inria'];
+foreach ($plugins as $plugin) {
+	//enable_plugin($plugin);
+	echo esope_enable_plugin($plugin, true, false);
+}
+
+elgg_regenerate_simplecache();
+elgg_reset_system_cache();
+
+

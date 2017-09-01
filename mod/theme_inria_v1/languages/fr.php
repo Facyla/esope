@@ -16,8 +16,8 @@ return array(
 	'theme_inria:topbar:explorer' => "Explorer",
 	'theme_inria:topbar:home' => "Accueil",
 	'theme_inria:topbar:news' => "Actualités",
-	'theme_inria:topbar:groups' => "Les&nbsp;groupes",
-	'theme_inria:topbar:members' => "Les&nbsp;membres",
+	'theme_inria:topbar:groups' => "Groupes",
+	'theme_inria:topbar:members' => "Membres",
 	'theme_inria:topbar:activity' => "Les&nbsp;activités",
 	'theme_inria:topbar:pages' => "Les&nbsp;pages",
 	'theme_inria:topbar:action' => "Agir",
@@ -134,7 +134,7 @@ return array(
 	
 	'file:edit' => 'Modifier le fichier',
 	'file:delete' => 'Supprimer le fichier',
-	'file:upload' => 'Partager un nouveau fichier',
+	'file:upload' => 'Uploader un nouveau fichier',
 	'files:none' => "Aucun fichier",
 	
 	'forum:none' => 'Aucune discussion pour le moment',
@@ -144,7 +144,7 @@ return array(
 
 	'esope:directory' => 'Membres',
 	
-	'inria:mygroups' => "Tous mes groupes",
+	'theme_inria:mygroups' => "Mes groupes",
 	'theme_inria:groups:discover' => "Groupes à découvrir",
 	'inria:mygroups:title' => "Mes groupes",
 	'theme_inria:firststeps:hide' => "Ne plus afficher",
@@ -153,9 +153,9 @@ return array(
 	'theme_inria:thewire:access' => "Accès : ",
 	'theme_inria:thewire:title' => "Vos actualités en 140 caractères",
 	'theme_inria:thewire:details' => "Un message ou une info à partager ?",
-	'theme_inria:thewire:placeholder' => "140 caractères pour saisir votre message à tous",
+	'theme_inria:thewire:placeholder' => "%s caractères pour saisir votre message à tous",
 	'theme_inria:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages pour le groupe",
-	'theme_inria:thewire:group:placeholder' => "140 caractères pour votre message aux membres du groupe",
+	'theme_inria:thewire:group:placeholder' => "%s caractères pour votre message aux membres du groupe",
 	'theme_inria:widgets:add:home' => "Personnaliser mon tableau de bord",
 	'theme_inria:widgets:add:profile' => "Personnaliser ma page de profil",
 	
@@ -186,7 +186,7 @@ return array(
 	'inria:groups:featured' => "Groupes à la Une",
 	'inria:members:newest' => "Derniers inscrits",
 	'loginusername' => "Identifiant Iris",
-	'theme_inria:basiclogin' => "Connexion Externes",
+	'theme_inria:basiclogin' => "Connexion Invité-e-s",
 	'theme_inria:caslogin' => "Connexion Inria (CAS)",
 	'theme_inria:invalidaccess' => "Connexion impossible : cet accès n'est plus valide. Veuillez contacter un administrateur.",
 	
@@ -198,13 +198,13 @@ return array(
 	'theme_inria:userprofile:irislogin' => "Se connecter à Iris",
 	'theme_inria:userprofile:status' => "Statut",
 	//'inria_location' => "Entité Inria (CRI ou siège)",
-	'inria_location' => "Localisation géographique",
+	'inria_location' => "Localisation",
 	'inria_location_main' => "Entité de rattachement (siège ou CRI)",
 	'epi_ou_service' => "Equipe projet Inria ou service",
 	'skills' => "Compétences",
 	'interests' => "Centres d'intérêts",
 	'profile:interests' => "Centres d'intérêts",
-	'profile:inria_location' => "Localisation géographique",
+	'profile:inria_location' => "Localisation",
 	'profile:inria_location_main' => "Entité de rattachement",
 	'profile:epi_ou_service' => "EPI ou service",
 	'profile:inria_phone' => "Téléphone",
@@ -212,8 +212,10 @@ return array(
 	'profile:education' => "Formation",
 	'profile:types:inria' => "Inria",
 	'profile:types:inria:description' => "Les profils Inria regroupent toutes les personnes qui ont un accès valide au LDAP Inria : personnels en poste, prestataires autorisés, équipes de recherches, etc.",
-	'profile:types:external' => "Extérieur",
-	'profile:types:external:description' => "Les profils Externes regorupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
+	'profile:types:external' => "Invité-e",
+	'profile:types:external:description' => "Les profils Invité-e-s regroupent les personnes qui ne font pas ou plus partie d'Inria, mais se sont vus autoriser un accès pour diverses raisons : en tant qu'alumni, que chercheur associé à une équipe, prestataire, etc.",
+	'profile:types:archive' => "Archive",
+	'profile:types:archive:description' => "Les profils Archive regroupent les comptes qui ne sont plus membres du réseau. Leurs publications sont conservées mais les personnes correspondantes ne reçoivent plus aucun message et ne peuvent plus se connecter.",
 	'theme_inria:status:closed' => "Archive",
 	'profile:categories:aboutme' => "A propos de moi",
 	'profile:categories:inria' => "Données Inria",
@@ -277,7 +279,7 @@ return array(
 	'theme_inria:groupmembership:closed:details' => "Les demandes d'adhésion sont gérées par les responsables du groupe.",
 	
 	'theme_inria:groups:presentation' => "Présentation",
-	'theme_inria:groups:blog' => "Articles",
+	'theme_inria:groups:blog' => "Sujets",
 	'theme_inria:groups:forum' => "Discussion",
 	'theme_inria:groups:pages' => "Pages wiki",
 	'theme_inria:groups:ressources' => "Ressources",
@@ -332,37 +334,50 @@ return array(
 	
 	// Création de comptes
 	'inria_invite' => "Invitations sur Iris",
-	'theme_inria:useradd' => "Création d'un compte pour une personne externe à Inria",
+	'theme_inria:invite_external' => "Inviter des membres non-Inria",
+	'theme_inria:useradd' => "Création d'un compte Invité-e pour une personne externe à Inria",
 	'theme_inria:useradd:details' => "<p>En tant que %s, vous avez la possibilité de donner un accès à Iris à une personne hors-Inria.</p><p>Pour cela, renseignez le formulaire ci-dessous, puis cliquez sur le bouton de confirmation pour créer le compte. Une fois le nouveau membre validé par un administrateur, il sera automatiquement mis en contact avec vous.</p><p>Attention : ce compte aura accès à tous les contenus accessibles aux membres d'Iris, aussi veuillez vérifier que l'accès que vous créez respecte bien les critères d'admission définis dans la Charte ! &nbsp; Tout compte qui ne respecte pas la Charte d'utilisation peut être désactivé par un administrateur.</p><p>Pour toutes questions, contactez <a href=\"mailto:iris@inria.fr\">iris@inria.fr</a></p>",
+	'theme_inria:useradd:groups' => "Inviter dans le(s) groupe(s)",
+	'theme_inria:useradd:groups:details' => "Si vous êtes admin ou responsable du groupe, ou que le groupe est en accès libre, votre contact sera immédiatement inscrit. Si vous êtes membre du groupe et que l'adhésion est modérée, une demande sera faite pour votre contact.",
+	'theme_inria:useradd:groups:details:admin' => "En tant qu'admin, vous pouvez inscrire directement dans tous les groupes de votre choix",
+	'theme_inria:useradd:email' => "Email",
+	'theme_inria:useradd:name' => "Prénom et nom",
+	'theme_inria:useradd:username' => "Identifiant",
+	'theme_inria:useradd:organisation' => "Organisation",
+	'theme_inria:useradd:fonction' => "Fonction / Rôle",
+	'theme_inria:useradd:message' => "Message à ajouter à votre invitation",
+	'theme_inria:useradd:message:details' => "Ce message sera intégré dans le mail d'invitation.",
 	'theme_inria:useradd:reason' => "Motif de création de ce compte",
-	'theme_inria:useradd:group' => "Groupe auquel inscrire le membre",
-	'theme_inria:useradd:reason:details' => "Ce motif sera envoyé à l'administrateur pour justifier la création de ce compte. Merci de fournir toute précision utile pour faciliter la validation du nouveau compte !",
+	'theme_inria:useradd:reason:details' => "Vous pouvez indiquer le motif de création de ce compte, par ex. alumni, projet de recherche, etc.",
 	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas activé immédiatement ! Le compte doit d'abord être validé par un administrateur.",
 	'theme_inria:useradd:disabled:adminvalidation' => "Le compte créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
-	'theme_inria:useradd:subject' => "Compte de l'utilisateur créé",
-	'theme_inria:useradd:body' => "
-%s,
+	'theme_inria:useradd:ok' => "Le compte de %s (%s) a bien été créé. <a href=\"%s\">Voir sa page de profil</a>",
+	'theme_inria:useradd:register' => "Envoyer l'invitation",
+	'theme_inria:useradd:subject' => "[%1\$s] Invitation de %2\$s",
+	'theme_inria:useradd:body' => "Bonjour %1\$s
 
-Un compte utilisateur vous a été créé sur %s par %s. Pour vous connecter, rendez-vous :
+%2\$s vous invite à rejoindre %3\$s
 
-%s
+%4\$s
 
-Et authentifiez-vous avec les éléments suivant :
+Pour vous connecter, rendez-vous :
 
-Identifiant de connexion : %s
-Mot de passe : %s
+%5\$s
 
-Une fois que vous vous êtes connecté(e), nous vous conseillons fortement de changer votre mot de passe.
+Et identifiez-vous avec :
+- votre identifiant : %6\$s &nbsp; ou votre adresse email %7\$s
+- votre mot de passe : %8\$s
 ",
-	'theme_inria:useradd:admin:subject' => "Compte de l'utilisateur créé",
+	'theme_inria:useradd:admin:subject' => "Création de compte Invité",
+	'theme_inria:useradd:admin:subject:confirm' => "Création de compte Invité à confirmer",
 	'theme_inria:useradd:admin:body' => "
-Un compte utilisateur a été créé pour %s, email %s, par %s.
+Un compte utilisateur a été créé pour %1\$s, email %2\$s, par %3\$s.
 
 Motif de l'inscription :
 
-%s
+%4\$s
 
-Voici l'adresse du nouveau compte créé : %s
+Voici l'adresse du nouveau compte créé : %5\$s
 ",
 	
 	'theme_inria:pages:summarytoggle' => "Navigation du wiki (afficher/masquer)",
@@ -389,6 +404,8 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'theme_inria:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
 	
+	'theme_inria:reply' => "Répondre",
+	
 	'theme_inria:option:nofilter' => "(aucun filtre)",
 	
 	'theme_inria:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
@@ -413,6 +430,7 @@ Voici l'adresse du nouveau compte créé : %s
 	'theme_inria:groups:entity_menu' => "%s membres (%s actifs)",
 	'theme_inria:groups:entity_menu:singular' => "%s membres (%s actif)",
 	'theme_inria:groups:entity_menu:none' => "%s membre (%s actif)",
+	'theme_inria:groups:entity_menu:noinactive' => "%s membres",
 	
 	
 	
@@ -430,16 +448,22 @@ Voici l'adresse du nouveau compte créé : %s
 	
 	// Main translation file
 	'profile:briefdescription' => "Fonction / Rôle", // Brève description (Profil)
+	'profile:hint:briefdescription' => "Votre ou vos fonction(s), poste(s), rôle(s) en une phrase. Utilisez la description pour détailler", // Brève description (Profil)
+	'profile:fonction' => "Fonction",
+	'profile:organisation' => "Organisation",
+	'profile:hint:organisation' => "Votre organisation, ou une liste de vos organisations séparées par des virgules",
 	'profile:location' => "Localisation", // Adresse
+	//'profile:hint:location' => "Veuillez indiquer votre localisation sous la forme d'une adresse.", // Adresse
 	'profile:field:location' => "Localisation", // Adresse
 	'groups:briefdescription' => 'Résumé', // Brève description
 	'groups:interests' => 'Mots-clés',
 	'access:read' => "Visibilité", // Accès en lecture
-	'LOGGED_IN' => "Membres Iris", // membres connectés
-	'GROUP_MEMBERS' => "Membres du groupe", // membres du groupe
+	'LOGGED_IN' => "Inria & Invités", // membres connectés
+	'GROUP_MEMBERS' => "Groupe", // membres du groupe
 	'access:friends:label' => "Contacts seulement", // contacts
-	'PUBLIC' => "Tout internaute", // public
-	'river:all' => "Ça bouge sur Iris ...",
+	//'PUBLIC' => "Tout internaute", // public
+	'PUBLIC' => "Tout internaute", // public en mode Walled Garden
+	'river:all' => "Ça bouge sur Iris",
 	'search_types:tags' => "Mots-clés",
 	
 	'avatar' => "Photo",
@@ -476,16 +500,22 @@ Voici l'adresse du nouveau compte créé : %s
 	'groups:invite:title' => "Invitez des membres à participer à ce groupe", // Invitez des amis à ce groupe
 	'groups:owned' => "Mes groupes (propriétaire ou responsable)",
 	'groups:owned:user' => 'Les groupes dont %s est propriétaire ou responsable',
-	'groups:yours' => "Mes groupes (membres)",
+	'groups:yours' => "Mes groupes",
 	'groups:enableforum' => 'Activer le forum du groupe',
 	'groups:members' => "membres", // membres du groupe
 	'groups:members:active' => "membres actifs",
 	'groups:member:active' => "membre actif",
 	'groups:content_access_mode:membersonly' => "Identique au groupe - Les nouveaux contenus ont le même niveau d'accès que le groupe",
+	'groups:invitations:pending:none' => "Aucune demande d'adhésion en attente.",
+	'groups:invitations:request:none' => "Aucune demande à examiner.",
 	
 	'ckeditor:html' => "Activer/désactiver éditeur visuel",
 	
-	'comment' => "Poster un commentaire", // commenter
+	'file:upload:version' => "Charger une nouvelle version",
+	'file:upload:version:message' => "Message de version",
+	
+	'comment:toggle' => "Commenter", // commenter
+	'comment' => "Publier mon commentaire", // commenter
 	
 	'event_calendar:read_access' => 'Visibilité',
 	
@@ -506,39 +536,42 @@ Voici l'adresse du nouveau compte créé : %s
 	*/
 	
 	
-	// Blog override (blog => article)
-	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
-	'blog:blogs' => "Articles",
+	// Blog override (blog => article => sujet)
+	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Sujets",
+	'blog:blogs' => "Sujets",
 	'blog:archives' => "Archives",
-	'blog:blog' => "Article",
-	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
+	'blog:blog' => "Sujet",
+	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Sujets",
 
-	'blog:title:user_blogs' => "Articles de %s",
-	'blog:title:all_blogs' => "Tous les articles du site",
-	'blog:title:friends' => "Articles des contacts",
+	'blog:title:user_blogs' => "Sujets de %s",
+	'blog:title:all_blogs' => "Tous les sujets du site",
+	'blog:title:friends' => "Sujets des contacts",
 
-	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Articles",
-	'blog:enableblog' => "Activer les articles du groupe",
-	'blog:write' => "Écrire un article",
+	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Sujets",
+	'blog:enableblog' => "Activer les sujets du groupe",
+	'blog:write' => "Écrire un sujet",
+	'blog:add' => 'Nouveau sujet',
+	'blog:edit' => 'Modifier le sujet',
+	'blog:body' => 'Corps du sujet',
 	// river
-	'blog:river:create' => "Publier un article",
-	'river:commented:object:blog' => "l'article",
-	'river:create:object:blog' => "%s a publié un article %s",
-	'river:comment:object:blog' => "%s a commenté l'article %s",
+	'blog:river:create' => "Publier un sujet",
+	'river:commented:object:blog' => "le sujet",
+	'river:create:object:blog' => "%s a publié un sujet %s",
+	'river:comment:object:blog' => "%s a commenté le sujet %s",
 	// notifications
-	'blog:newpost' => 'Nouvel article',
+	'blog:newpost' => 'Nouveau sujet',
 	// widget
-	'blog:widget:description' => "Ce widget affiche vos derniers articles.",
-	'blog:moreblogs' => "Plus d'articles",
-	'blog:numbertodisplay' => "Nombre d'articles à afficher",
-	'blog:noblogs' => "Aucun article",
-	'blog:notification' => "%s a écrit un nouvel article :
+	'blog:widget:description' => "Ce widget affiche vos derniers sujets.",
+	'blog:moreblogs' => "Plus de sujets",
+	'blog:numbertodisplay' => "Nombre de sujets à afficher",
+	'blog:noblogs' => "Aucun sujet",
+	'blog:notification' => "%s a écrit un nouveau sujet&nbsp; :
 
 %s
 
 %s
 
-Afficher et commenter le nouvel article :
+Afficher et commenter le nouveau sujet :
 
 %s",
 	
@@ -566,7 +599,8 @@ Afficher et commenter le nouvel article :
 	'thewire:user' => "Le Fil de %s",
 	'thewire:friends' => "Messages des contacts sur le Fil",
 	'thewire:replying' => "Répondre à %s, qui a écrit",
-	'thewire:thread' => "Flux",
+	'thewire:thread' => "Conversation",
+	'thewire:thread:view' => "Afficher la conversation",
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
 	'thewire:noposts' => "Pas encore de message sur le Fil",
@@ -709,9 +743,270 @@ Voir et commenter ce lien web :
 	'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki (accueil)",
-
 	
 	
+	
+		// Iris v2
+	'theme_inria:communities' => "Communautés",
+	'theme_inria:community:description:metiers' => "Métiers : description détaillée à définir",
+	'theme_inria:community:description:outils' => "Outils : description détaillée à définir",
+	'theme_inria:community:description:loisirs' => "Loisirs : description détaillée à définir",
+	'theme_inria:community:description:echanges-vie-pro' => "Echanges & Vie pro : description détaillée à définir",
+	'theme_inria:community:description:plan-strategique' => "Plan stratégique : description détaillée à définir",
+	'theme_inria:groups:discover:view' => "voir",
+	'theme_inria:viewall' => "tout voir",
+	'theme_inria:view' => "voir",
+	
+	'theme_inria:site_notifications:unreadcount' => "Notifications (%s)",
+	'theme_inria:groupinvites:unreadcount' => "Invitations (%s)",
+	'theme_inria:grouprequests:unreadcount' => "Demandes d'adhésion (%s)",
+	'theme_inria:friendrequests:unreadcount' => "Demandes de contact (%s)",
+	'theme_inria:membershiprequests:examine' => "Gérer les demandes d'adhésion",
+	'theme_inria:ownmembership' => "Votre adhésion",
+	
+	'theme_inria:search' => "Recherche",
+	'theme_inria:search:title' => "Résultats pour \"%s\"",
+	'theme_inria:search:filters' => "Filtres avancés",
+	
+	'theme_inria:home:wire' => "Toutes les actus",
+	'theme_inria:home:river' => "Ça bouge sur Iris",
+	'theme_inria:groups:add' => "Créer un groupe",
+	'theme_inria:agenda' => "Agenda",
+	'theme_inria:groups:register' => "S'abonner à un groupe",
+	'theme_inria:objects' => "Publications",
+	
+	'search:sort:likes' => "Popularité",
+	'theme_inria:search:empty' => "Veuillez saisir un terme de recherche",
+	'theme_inria:community:groups:count' => "%s groupes",
+	'theme_inria:community:groups:count:singular' => "%s groupe",
+	'theme_inria:group:alreadymember' => "Déjà membre",
+	
+	'theme_inria:user:tags' => "Compétences & Centres d'intérêts",
+	'theme_inria:user:groups:title' => "Groupes (%s)",
+	'theme_inria:user:friends:title' => "Contacts (%s)",
+	'theme_inria:groups:online' => "En ligne (%s)",
+	'theme_inria:aboutme' => "A propos de moi",
+	
+	'groups:access:members' => "Groupe",
+	'workspace:access:members' => "Membres de l'espace de travail",
+	'groups:members:manage' => "Gérer les membres",
+	'groups:banner' => "Image d'entête du groupe (ne rien sélectionner pour laisser inchangé)",
+	'groups:about' => "A propos du groupe",
+	'theme_inria:groups:about' => "A propos",
+	'groups:icon:inline' => "Image du groupe<br />Formats PNG, JPG, GIF<br />Minimum 200x200",
+	'groups:banner:inline' => "Image de couverture<br />Formats PNG, JPG, GIF<br />Minimum 1200x200",
+	'theme_inria:groups:operators' => "Responsables (%s)",
+	'theme_inria:groups:members' => "Tous les membres (%s)",
+	'theme_inria:groups:requests' => "Demandes en attente (%s)",
+	'theme_inria:groups:invites' => "Invitations (%s)",
+	'theme_inria:group:presentation' => "Présentation",
+	'theme_inria:group:workspace:add' => "Ajouter un espace de travail",
+	'theme_inria:groups:mine:tooltip' => "Tous les groupes dont je suis membre",
+	'theme_inria:groups:discover:tooltip' => "Des groupes à découvrir, classés par thématiques",
+	
+	'theme_inria:group:delete' => "Supprimer le groupe",
+	'theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
+	
+	'theme_inria:workspace' => "Espace de travail",
+	'theme_inria:workspace:main' => "Espace de travail",
+	'workspace:title' => "Espace de travail&nbsp;: %s",
+	'workspace:title:main' => "Espace de travail&nbsp;: %s",
+	'workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
+	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
+	'au_subgroups:subgroup:of' => "Espace de travail de %s",
+	
+	'theme_inria:manage' => "gérer",
+	'theme_inria:readmore' => "Afficher la page",
+	'theme_inria:readmore:vote' => "Afficher le sondage et voter",
+	
+	'theme_inria:discussion:placeholder' => "Partagez un message avec le groupe",
+	
+	'theme_inria:file:quicksaved' => "Le fichier a bien été publié. Vous pouvez préciser sa description si vous le souhaitez.",
+	'theme_inria:discussion:quicksaved' => "Votre message a bien été publié. Vous pouvez le préciser si vous le souhaitez.",
+	'theme_inria:blog:editdraft' => "Modifier un brouillon",
+	'theme_inria:sidebar:discussion' => "Les discussions (%s)",
+	'theme_inria:sidebar:file' => "Les fichiers (%s)",
+	'theme_inria:sidebar:blog' => "Les sujets (%s)",
+	'theme_inria:sidebar:pages' => "Les pages wiki (%s)",
+	'theme_inria:sidebar:pages' => "Les wikis (%s&nbsp;wikis, %s&nbsp;pages)",
+	'theme_inria:sidebar:bookmarks' => "Les liens web (%s)",
+	'theme_inria:sidebar:newsletter' => "Les lettres d'info (%s)",
+	'theme_inria:sidebar:event_calendar' => "Les événements (%s)",
+	'theme_inria:sidebar:poll' => "Les sondages (%s)",
+	'theme_inria:sidebar:feedback' => "Les feedbacks (%s)",
+	'theme_inria:sidebar:thewire' => "Les messages (%s)",
+	'theme_inria:thewire:add' => "Nouveau message",
+	'theme_inria:workspace:poll' => "Les sondages",
+	'theme_inria:workspace:feedback' => "Les feedbacks",
+	'workspace:event_calendar' => "Agenda",
+	'workspace:poll' => "Sondages",
+	'workspace:feedback' => "Feedbacks",
+	
+	'theme_inria:backtocontent' => "Voir la publication",
+	'theme_inria:backtocontents' => "Voir la liste des publications",
+	
+	'theme_inria:contentfilter:all' => "Tous",
+	'theme_inria:contentfilter:mine' => "Les miens",
+	'theme_inria:contentfilter:draft' => "Mes brouillons",
+	'theme_inria:groups:content:no_result' => "Aucun résultat",
+	
+	'theme_inria:user:activity' => "Activité",
+	'theme_inria:user:activity:all' => "Voir toute l'activité",
+	'theme_inria:user:profile_type' => "Profil",
+	
+	'theme_inria:filter' => "Filtrer",
+	
+	'theme_inria:activity_filter:all' => "Aucun filtre",
+	'theme_inria:activity_filter:blog' => "Derniers sujets publiés",
+	'theme_inria:activity_filter:comments' => "Commentaires récents",
+	'theme_inria:activity_filter:users' => "Derniers inscrits",
+	'theme_inria:activity_filter:profile' => "Mises à jour de profil",
+	'theme_inria:activity_filter:groups' => "Adhésions aux groupes",
+	
+	'theme_inria:activity_type' => "Types d'activité",
+	'theme_inria:date_filter' => "Filtre par date",
+	'theme_inria:date_filter:all' => "Tout",
+	'theme_inria:date_filter:today' => "Aujourd'hui seulement",
+	'theme_inria:date_filter:yesterday' => "Hier seulement",
+	'theme_inria:date_filter:lastweek' => "La semaine dernière",
+	'theme_inria:date_filter:last_login' => "Depuis ma dernière connexion le %s",
+	
+	'workspace:back' => "Retour à l'espace de travail",
+	'theme_inria:group:back' => "Retour à la présentation",
+	'theme_inria:profile:back' => "Retour au profil",
+	
+	'theme_inria:notification:email' => "Notifications par email",
+	'theme_inria:notification:site' => "Etre notifié via le site",
+	'theme_inria:newsletter:subscription' => "Abonnement lettre d'info",
+	
+	
+	'theme_inria:makeowner' => "Rendre propriétaire",
+	'theme_inria:removeoperator' => "Supprimer responsable",
+	'theme_inria:addoperator' => "Rendre responsable",
+	'theme_inria:removefromgroup' => "Retirer du groupe",
+	'theme_inria:group:allmembers' => "Tous les membres (%s)",
+	'theme_inria:group:members:search:placeholder' => "3 premières lettres",
+	
+	/* River and activity */
+	// Commentaire : on mentionne le type d'objet (ou alors icônes en rapport avec l'objet et pas le commentaire)
+	// Contenus identifiés : pas besoin de préciser
+	'river:comment:user:default' => "<strong>%s</strong> a commenté %s",
+	'river:update:object:default,' => "<strong>%s</strong> a mis à jour %s",
+	'river:comment:object:file' => "<strong>%s</strong> a commenté le fichier %s",
+	'river:comment:object:announcement' => "<strong>%s</strong> a commenté l'annonce %s",
+	'river:comment:object:event_calendar' => "<strong>%s</strong> a commenté l'événement %s",
+	//'river:comment:object:default' => "",
+	'river:create:object:thewire' => "<strong>%s</strong> a écrit", // Note : 2e paramètre "le fil" non utilisé"
+	'river:create:object:thewire:reply' => "<strong>%s</strong> a répondu à %s", // Note : 2e paramètre "le fil" non utilisé"
+	'river:reply:object:groupforumtopic' => "<strong>%s</strong> a répondu à %s",
+	//'river:create:object:default,' => "",
+	//'river:create:group:default' => "",
+	//'' => "",
+	//'' => "",
+	//'' => "",
+	//'river:update:object:default' => "",
+	
+	'members:order:select' => "Trier par",
+	'members:order:alpha' => "Ordre alphabétique",
+	'members:order:desc' => "Membres les + récents",
+	'members:order:asc' => "Membres les + anciens",
+	'groups:order:alpha' => "Ordre alphabétique",
+	'groups:order:desc' => "Groupes les + récents",
+	'groups:order:asc' => "Groupes les + anciens",
+	'groups:order:popular' => "Avec le plus de membres",
+	'groups:settings' => "Paramètres du groupe",
+	'groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre du groupe",
+	'groups:visibility' => 'Audience',
+	'groups:content_access_mode' => "Audience des nouvelles publications",
+	//'groups:membership' => "Type d'adhésion",
+	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
+	//'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
+	'groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
+	
+	'theme_inria:group:pending_request' => "En attente",
+	
+	'au_subgroups:subgroup' => "Espace de travail",
+	'au_subgroups:group:enable' => "Espaces de travail : permettre la création d'espaces de travail ?",
+	'au_subgroups:group:memberspermissions' => "Espaces de travail : permettre aux membres de créer des espaces de travail ? (si non, seuls les responsables du groupe pourront en créer)",
+	
+	// Workspaces
+	'workspace:groups:add' => "Créer un nouvel espace de travail",
+	'theme_inria:workspace:groups:add' => "Créer un nouvel espace de travail",
+	'workspace:groups:edit' => "Modifier l'espace de travail",
+	'workspace:groups:settings' => "Paramètres de l'espace de travail",
+	'workspace:groups:invite' => "Inviter des membres",
+	'workspace:groups:name' => "Nom de l'espace de travail",
+	'workspace:groups:tags' => 'mots clés',
+	'workspace:groups:interests' => 'Mots-clés',
+	'workspace:groups:members' => "Voir les membres",
+	'workspace:groups:members:manage' => "Gérer les membres",
+	'workspace:groups:banner' => "Image d'entête de l'espace de travail (ne rien sélectionner pour laisser inchangé)",
+	'workspace:groups:about' => "A propos de l'espace de travail",
+	'workspace:groups:icon:inline' => "Image de l'espace de travail<br />(mini 200x200)",
+	'workspace:groups:banner:inline' => "Image de couverture<br />(mini 1200x200)",
+	'workspace:theme_inria:group:delete' => "Supprimer l'espace de travail",
+	'workspace:groups:delete' => "Supprimer l'espace de travail",
+	'workspace:theme_inria:group:delete:details' => "Vous supprimerez son existence et l'ensemble de son contenu.",
+	'workspace:theme_inria:notification:email' => "Notifications par email",
+	'workspace:groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre de l'espace de travail",
+	'workspace:groups:leave' => "Quitter cet espace de travail",
+	'workspace:groups:join' => "Rejoindre cet espace de travail",
+	'workspace:groups:joinrequest' => "Demander à rejoindre cet espace de travail",
+	'workspace:theme_inria:ownmembership' => "Adhésion à cet espace de travail",
+	'workspace:groups:briefdescription' => "Espace de travail<br />%s",
+	'theme_inria:group:nodescription' => "(pas de présentation)",
+	'theme_inria:group:notmember' => "Pour participer, rejoignez ce groupe !",
+	'theme_inria:workspace:notmember' => "Pour participer, rejoignez cet espace de travail !",
+	
+	'theme_inria:group:archive' => "Archiver le groupe",
+	'theme_inria:group:archive:details' => "L'archivage d'un groupe permet de rendre ce groupe ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression du groupe est que le groupe et ses contenus archivés peuvent être restaurés par un administrateur.",
+	'workspace:theme_inria:group:archive' => "Archiver l'espace de travail",
+	'workspace:theme_inria:group:archive:details' => "L'archivage d'un espace de travail permet de rendre cet espace ainsi que l'ensemble de ses contenus inaccessibles pour tous les membres. La différence avec la suppression de l'espace de travail est que l'espace de travail et ses contenus peuvent être restaurés par un administrateur.",
+	'workspace:groups_archive:archive' => "Archiver l'espace de travail",
+	'workspace:groups_archive:confirm' => "Attention, ceci rendra cet espace de travail et tous ses contenus inaccessibles pour tous les membres !",
+	
+	'theme_inria:group:members:livefilter' => "3 premières lettres",
+	
+	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe.",
+	
+	'theme_inria:object:comment' => "Commenter",
+	'theme_inria:object:comments:count' => "%s commentaire(s)",
+	'theme_inria:pages:edit' => "Modifier cette page",
+	'theme_inria:pages:history' => "Voir les modifications de cette page",
+	
+	'theme_inria:groupinvite:email' => "Méthode 3 : invitation par email",
+	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas. Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe. Les emails qui ne sont associés à aucun compte Iris pourront être invités à rejoindre le réseau.",
+	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
+email3@domain.tld email4@domain.tld ",
+	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
+	'theme_inria:invite:newemails' => "These emails are not associated with any member account : you may want to invite them to join Iris.",
+	'theme_inria:invite:invalidemails' => "These emails could not be processed : they are either associated with multiple accounts (which should not happen), or are invalid emails.",
+	'theme_inria:invite:existing_users' => "@TODO - NON OPERATIONNEL !!  - These emails are associated with an existing account, which has been invited.",
+	'theme_inria:invite:proceednext' => "Pour poursuivre vos invitations par email, veuillez cliquer sur les liens d'invitation.",
+	
+	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
+	'theme_inria:useradd:group' => "Invitation dans le groupe \"%s\"",
+	
+	'group_location' => "Localisation",
+	'community' => "Communautés",
+	
+	'likes:userlikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
+	'likes:userslikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
+	
+	'poll:totalvotes' => "Nombre total de votes : %s",
+	
+	'file:download' => "Télécharger le fichier",
+	
+	'theme_inria:pages:edit' => "Modifier le wiki",
+	'theme_inria:pages:edit:button' => "Modifier cette page wiki",
+	
+	'theme_inria:selectall' => "Sélectionner",
+	
+	'placeholder:tags' => "tag1, mot-clef 2...",
+	
+	'friend' => "Contact",
+	
+	'user:password:lost' => "<i class=\"fa fa-key\"></i>&nbsp;Mot de passe perdu ?",
 	
 );
 

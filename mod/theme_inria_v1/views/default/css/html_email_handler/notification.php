@@ -21,13 +21,14 @@ if (!empty($notification_css)) {
 	return;
 }
 // Default CSS (basic integration with theme colors)
+$font2 = '"Inria Serif",serif';
+$font4 = '"Inria Sans",sans-serif';
+$linkcolor = "#1488CA";
+$linkhovercolor = "#1488CA";
 ?>
 body {
 	font: 12px/17px <?php echo $font4; ?>;
 	color: #333333;
-}
-a {
-	color: #6D2D4F;
 }
 h1, h2, h3, h4, h5, h6 { font-family: <?php echo $font2; ?>; }
 a { color: <?php echo $linkcolor; ?>; }
@@ -43,12 +44,12 @@ a:hover, a:active, a:focus { color: <?php echo $linkhovercolor; ?>; }
 	/* padding: 0 0 10px; */
 	padding: 0;
 	height: 3px;
-	background: #6D2D4F;
+	background: #384257;
 }
 #notification_header a {
 	text-decoration: none;
 	font-weight: bold;
-	color: #6D2D4F;
+	color: #1488CA;
 	font-size: 1.5em;
 }
 #notification_wrapper {
@@ -57,7 +58,7 @@ a:hover, a:active, a:focus { color: <?php echo $linkhovercolor; ?>; }
 }
 #notification_wrapper h2 {
 	margin: 5px 0 0px 10px;
-	color: #6D2D4F;
+	color: #384257;
 	font-size: 1.35em;
 	line-height: 1.2em;
 }

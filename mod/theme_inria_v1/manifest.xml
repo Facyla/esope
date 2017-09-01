@@ -18,10 +18,32 @@
 		<version>1.12</version>
 	</requires>
 	
-	<suggests>
+	<requires>
 		<type>plugin</type>
 		<name>esope</name>
+	</requires>
+	<requires>
+		<type>plugin</type>
+		<name>default_icons</name>
+	</requires>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>language_selector</name>
 	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>access_collections</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>access_collections</name>
+	</suggests>
+	<suggests>
+		<type>plugin</type>
+		<name>hypeLists</name>
+	</suggests>
+	
 	
 	<activate_on_install>false</activate_on_install>
 	

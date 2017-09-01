@@ -1,7 +1,5 @@
 <?php
 /* CMIS : upload to CMIS repository
- * @TODO : set up version-safe folder structure - this means not using ts nor filename-dependent path in filestore
- * @TODO : add versionning
  * Inria : do not add river entry for images
  */
 
@@ -25,7 +23,7 @@ if ($use_cmis) {
 	if ($always_use_elggfilestore != 'no') { $always_use_elggfilestore = true; } else { $always_use_elggfilestore = false; }
 }
 
-error_log("CMIS : using action");
+//error_log("CMIS : using action");
 
 /**
  * Elgg file uploader/edit action
@@ -50,7 +48,6 @@ elgg_make_sticky_form('file');
 // check if upload attempted and failed
 if (!empty($_FILES['upload']['name']) && $_FILES['upload']['error'] != 0) {
 	$error = elgg_get_friendly_upload_error($_FILES['upload']['error']);
-
 	register_error($error);
 	forward(REFERER);
 }
@@ -323,29 +320,34 @@ elgg_clear_sticky_form('file');
 
 // handle results differently for new files and file updates
 if ($new_file) {
-	if ($guid) {
-		$message = elgg_echo("file:saved");
-		system_message($message);
-		// Inria : do not add river entry for images
-		if ($file->simpletype != "image") {
-			elgg_create_river_item(array(
-				'view' => 'river/object/file/create',
-				'action_type' => 'create',
-				'subject_guid' => elgg_get_logged_in_user_guid(),
-				'object_guid' => $file->guid,
-			));
-		}
-	} else {
+	if (!$guid) {
 		// failed to save file object - nothing we can do about this
 		$error = elgg_echo("file:uploadfailed");
 		register_error($error);
 	}
-
-	$container = get_entity($container_guid);
-	if (elgg_instanceof($container, 'group')) {
-		forward("file/group/$container->guid/all");
+	
+	// Inria : do not add river entry for images
+	if ($file->simpletype != "image") {
+		elgg_create_river_item(array(
+			'view' => 'river/object/file/create',
+			'action_type' => 'create',
+			'subject_guid' => elgg_get_logged_in_user_guid(),
+			'object_guid' => $file->guid,
+		));
+	}
+	
+	// If empty title or description, forward to edit page instead
+	if (empty($title) || empty($desc)) {
+		system_message(elgg_echo('theme_inria:file:quicksaved'));
+		forward('file/edit/' . $file->guid);
 	} else {
-		forward("file/owner/$container->username");
+		system_message(elgg_echo("file:saved"));
+		$container = get_entity($container_guid);
+		if (elgg_instanceof($container, 'group')) {
+			forward("file/group/$container->guid/all");
+		} else {
+			forward("file/owner/$container->username");
+		}
 	}
 
 } else {

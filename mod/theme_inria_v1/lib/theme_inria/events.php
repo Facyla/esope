@@ -42,6 +42,7 @@ function theme_inria_setup_menu() {
 		elgg_register_menu_item("page", $menu_item);
 		
 	}
+
 	
 	// Ajout menu Invitations à rejoindre Iris
 	/*
@@ -87,6 +88,10 @@ function theme_inria_setup_menu() {
  *  - memberstatus : statut du compte = actif ou non (= permet de s'identifier ou non) => active/closed
  *  - memberreason : qualification du type de compte, raison de la validité de l'accès => validldap/invalidldap/partner/researchteam/...
  *
+ */
+/* Iris v2 : avec membres externes
+ * Les comptes Inria qui sortent du LDAP ne sont plus désactivés, mais ils quittent leurs groupes (on garde la liste ds une meta, au cas où)
+ * Pas d'archivage auto
  */
 function inria_check_and_update_user_status($event, $object_type, $user) {
 	// Note : return true to avoid blocking access if we are not in the right context
@@ -150,23 +155,43 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			// Update external account : disable if not used for more than 1 year
 			// Skip unused accounts (only created ones...)
 			if (!empty($user->last_action) && ((time() - $user->last_action) > 31622400)) {
+				/* Iris v2 : pas d'archivage auto ?
 				$memberstatus = 'closed';
 				$memberreason = 'inactive';
 				if ($debug) error_log("Not logged in since more than a year : closing account");
+				*/
 			}
 			// @TODO : add reminders through cron a few days before closing account ?
 			
 			// Fermeture d'un ex-compte Inria (devenu invalide)
+			// Iris v2 : le compte n'est plus désactivé car on a maintenant des comptes externes
 			// Si le compte LDAP est fermé, et qu'on n'a pas de nouveau motif de le garder actif, il est archivé
 			// Càd que si l'ancien statut était un compte Inria ou était justifié par un LDAP valide
 			// (car un statut externe est toujours justifié par une autre valeur que 'validldap')
 			// Effet rétroactif pour les comptes qui n'avaient pas été mis à jour correctement
 			// => désactivation du compte
 			if (($user->membertype == 'inria') || ($user->memberreason == 'validldap') || $force_archive) {
-				$memberstatus = 'closed';
-				$memberreason = 'invalidldap';
+				//$memberstatus = 'closed';
+				//$memberreason = 'invalidldap';
+				$memberstatus = 'active';
+				$memberreason = 'alumni';
 				// Note : email removal is replaced by the email blocking hook, much cleaner and extensible
-				if ($debug) error_log("Previously valid Inria has become invalid : closing account");
+				if ($debug) error_log("Previously valid Inria has become alumni : quitting groups");
+				// @TODO leave groups : probably leave only some groups (not if owner, not if open group...)
+				$user_groups = elgg_get_entities_from_relationship(array('relationship' => 'member', 'relationship_guid' => $user->guid, 'type' => 'group', 'limit' => false));
+				$left_groups_guids = (array) $user->inria_left_groups;
+				if ($user_groups) {
+					foreach($user_groups as $group) {
+						// Don't remove if group owner
+						// Operator ? To avoid removing operators, use a proper operator function - not: !$entity->canEdit($user->guid)
+						// Don't remove if group access is public or limited to members
+						if (($group->owner_guid != $user->guid)  && !in_array($group->access_id, [2, 1])) {
+							if (!in_array($group->guid, $left_groups_guids)) { $left_groups_guids[] = $group->guid; }
+							$group->leave($user);
+						}
+					}
+					$user->inria_left_groups = $left_groups_guids;
+				}
 			}
 		}
 		
@@ -254,6 +279,55 @@ function theme_inria_annotation_notifications_event_block($event, $type, $annota
 					error_log("  => ABO auto desactive");
 				}
 			}
+		}
+	}
+}
+
+// Also notify group operators
+function theme_inria_create_relationship_event($event, $type, $relationship) {
+	if (($type == 'relationship') && ($relationship->relationship == "membership_request")) {
+		$user_guid = $relationship->guid_one;
+		$group_guid = $relationship->guid_two;
+		$operators = elgg_get_entities_from_relationship(array('types'=>'user', 'relationship_guid'=>$group_guid, 'relationship'=>'operator', 'inverse_relationship'=>true));
+		
+		// Notify all group operators + group owner if not passed through join action
+		$user = get_entity($user_guid);
+		$group = get_entity($group_guid);
+		$url = elgg_get_site_url() . "groups/requests/$group_guid";
+		$subject = elgg_echo('groups:request:subject', array(
+				$user->name,
+				$group->name,
+			), $ent->language);
+		
+		$body = elgg_echo('groups:request:body', array(
+				$owner->name,
+				$user->name,
+				$group->name,
+				$user->getURL(),
+				$url,
+			), $ent->language);
+			
+		$params = [
+			'action' => 'membership_request',
+			'object' => $group,
+		];
+		
+		// Notify owner first
+		$owner = $group->getOwnerEntity();
+		notify_user($owner->guid, $user_guid, $subject, $body, $params);
+		
+		foreach ($operators as $ent) {
+			$body = elgg_echo('groups:request:body', array(
+					$ent->name,
+					$user->name,
+					$group->name,
+					$user->getURL(),
+					$url,
+				), $ent->language);
+			
+			// Avoid duplicate if owner is also in operators
+			if ($ent->guid == $owner->guid) { continue; }
+			notify_user($ent->guid, $user_guid, $subject, $body, $params);
 		}
 	}
 }

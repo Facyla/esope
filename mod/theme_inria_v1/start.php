@@ -7,6 +7,7 @@ elgg_register_event_handler('init','system','theme_inria_init');
 /* Initialise the theme */
 function theme_inria_init(){
 	global $CONFIG;
+	
 	$action_url = elgg_get_plugins_path() . 'theme_inria/actions/';
 	
 	// HTML export action
@@ -27,18 +28,41 @@ function theme_inria_init(){
 	elgg_register_action("friends/add", $action_url . "friends/add.php", "logged_in");
 	elgg_register_action("friend_request/approve", $action_url . "friend_request/approve.php", "logged_in");
 	
-	// Rewrite file upload action to avoid river entries for file images
-	/* @TODO : use modified version from elgg_cmis once it is ready !
-	*/
+	// Rewrite file upload action to avoid river entries for file images + quick upload
 	elgg_unregister_action('file/upload');
 	elgg_register_action("file/upload", $action_url . "file/upload.php");
+	elgg_register_action("file/upload_version", $action_url . "file/upload_version.php");
+	// Rewrite discussion save action for quick save
+	elgg_unregister_action('discussion/save');
+	elgg_register_action("discussion/save", $action_url . "discussion/save.php");
 	
-	// Use custom members search
+	// Use custom searches
+	//elgg_register_action("theme_inria/search", $action_url . "theme_inria/search.php");
 	elgg_register_action("theme_inria/membersearch", $action_url . "theme_inria/membersearch.php");
+	elgg_register_action("theme_inria/groupsearch", $action_url . "theme_inria/groupsearch.php");
 	
-	elgg_extend_view('css', 'theme_inria/css', 900);
-	elgg_extend_view('css/admin', 'theme_inria/admin_css');
+	// Per-group notificaiton settings
+	elgg_register_action("theme_inria/group_notification", $action_url . "theme_inria/group_notification.php");
+	// Force site notifications
+	elgg_unregister_action("notificationsettings/save");
+	elgg_register_action("notificationsettings/save", $action_url . "notifications/save.php");
+	elgg_unregister_action("notificationsettings/groupsave");
+	elgg_register_action("notificationsettings/groupsave", $action_url . "notifications/groupsave.php");
+	
+	elgg_register_action("group/membership/join", $action_url . "groups/membership/join.php");
+	
+	
+	// CSS - Inria custom styles
+	$css_url = elgg_get_site_url() . 'mod/theme_inria/fonts/';
+	elgg_register_css('inria-sans', $css_url.'InriaSans/Web/fonts.css');
+	elgg_register_css('inria-serif', $css_url.'InriaSerif/Web/fonts.css');
+	elgg_load_css('inria-sans');
+	elgg_load_css('inria-serif');
+	
+	elgg_extend_view('css', 'theme_inria/css', 1000);
+	elgg_extend_view('css/admin', 'theme_inria/admin_css', 1000);
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
+	
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
 	// Extend user owner block
@@ -58,6 +82,9 @@ function theme_inria_init(){
 	//elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
 	
 	elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
+	
+	// Add group profile banner : more control directly in views
+	//elgg_extend_view('groups/edit/profile', 'theme_inria/groups/extend_edit_profile', 400);
 	
 	// Add RSS feed option
 	//add_group_tool_option('rss_feed', elgg_echo('theme_inria:group_option:cmisfolder'), false);
@@ -90,6 +117,10 @@ function theme_inria_init(){
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 	//elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600); // already extended by esope
 	
+	// Add email invites to groups
+	elgg_extend_view('forms/groups/invite', 'forms/groups/email_invite', 1001);
+	
+	
 	
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
@@ -120,11 +151,24 @@ function theme_inria_init(){
 	elgg_register_event_handler('pagesetup', 'system', 'theme_inria_setup_menu');
 	// User actions
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'theme_inria_user_hover_menu');
-	// Members count in group listing menu
-	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_groups_entity_menu_setup', 900);
+	// Entity menu : remove "thread" (thewire), members count in group listing menu
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_entity_menu_setup', 900);
+	// River menu
+	elgg_register_plugin_hook_handler('register', 'menu:river', 'theme_inria_river_menu_setup', 900);
+	// River menu
+	elgg_register_plugin_hook_handler('register', 'menu:extras', 'theme_inria_extras_menu_setup', 900);
+	
+	// Add new image to group edit
+	elgg_register_event_handler('create', 'group', 'theme_inria_groups_edit_event_listener');
+	elgg_register_event_handler('update', 'group', 'theme_inria_groups_edit_event_listener');
 	
 	// Enable modifying members count algo
 	elgg_register_plugin_hook_handler('members', 'count', 'theme_inria_members_count_hook');
+	
+	/* Override object icons with images (but we use FA icons)
+	// Set object icons
+	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'theme_inria_object_icon_hook');
+	*/
 	
 	// Ajout niveau d'accès sur TheWire : désormais intégré dans Esope (ainsi que possibilité de définir un container)
 	/*
@@ -134,9 +178,8 @@ function theme_inria_init(){
 	}
 	*/
 	
-	// Remplacement du modèle d'event_calendar
-	// @TODO : inutile avec version pour Elgg 1.12 ?
-	//elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
+	// Remplacement du modèle d'event_calendar correction
+	elgg_register_library('elgg:event_calendar', elgg_get_plugins_path() . 'theme_inria/lib/event_calendar/model.php');
 	
 	// Check access validity and update meta fields (inria/external, active/closed)
 	elgg_register_event_handler('login:before','user', 'inria_check_and_update_user_status', 900);
@@ -155,6 +198,15 @@ function theme_inria_init(){
 	elgg_register_page_handler('activity', 'theme_inria_elgg_river_page_handler');
 	// Override thewire PH
 	elgg_register_page_handler('thewire', 'theme_inria_thewire_page_handler');
+	// Override search PH
+	elgg_register_page_handler('search', 'theme_inria_search_page_handler');
+	elgg_register_page_handler('members', 'theme_inria_members_page_handler');
+	elgg_register_page_handler('groups', 'theme_inria_groups_page_handler');
+	elgg_register_page_handler('group_operators', 'theme_inria_group_operators_page_handler');
+	elgg_register_page_handler('au_subgroups', 'theme_inria_au_subgroups_page_handler');
+	// Override profile page
+	elgg_register_page_handler('profile', 'theme_inria_profile_page_handler');
+	
 	// Add tool entry to group menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_inria_thewire_group_menu');
 	// Add link to longtext menu
@@ -168,6 +220,8 @@ function theme_inria_init(){
 	// Add Etherpad (and iframes) embed
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'theme_inria_select_tab', 801);
 	
+	// Add message to user listing view
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'theme_inria_user_menu_setup');
 	
 	// Filtrage des contenus saisis
 	if (elgg_is_active_plugin('htmlawed')) {
@@ -222,6 +276,18 @@ function theme_inria_init(){
 		elgg_unregister_event_handler("create", "annotation", "advanced_notifications_create_annotation_event_handler");
 	}
 	
+	// Override default icons (with images only !) - late so previous plugins have already set their own icon if applicable
+	//elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'theme_inria_object_icon_hook', 1000);
+	
+	// Custom changes (for profile-type-based background color)
+	
+	elgg_unregister_plugin_hook_handler('entity:icon:url', 'user', 'default_icons_user_hook');
+	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'theme_inria_user_icon_hook', 1000);
+	
+	// Intercept membership requests so we can notify the operators
+	elgg_register_event_handler('create','relationship','theme_inria_create_relationship_event');
+	
+	
 }
 
 // Include Inria page handlers
@@ -236,26 +302,6 @@ require_once(dirname(__FILE__) . '/lib/theme_inria/hooks.php');
 
 
 
-// Add thewire menu in group tools
-function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
-	$page_owner = elgg_get_page_owner_entity();
-	if (elgg_instanceof($page_owner, 'group')) {
-		if ($page_owner->isMember() || elgg_is_admin_logged_in()) {
-			$add_wire = elgg_get_plugin_setting('groups_add_wire', 'esope');
-			switch ($add_wire) {
-				case 'yes': break; 
-				case 'groupoption':
-					if ($page_owner->thewire_enable != 'yes') { return $return; }
-					break; 
-				default: return $return;
-			}
-			$title = elgg_echo('esope:thewire:group:title');
-			$return[] = new ElggMenuItem('thewire_group', $title, 'thewire/group/' . $page_owner->getGUID());
-		}
-	}
-	return $return;
-}
-
 
 // Returns Elgg fields coming from LDAP
 function inria_get_profile_ldap_fields() {
@@ -267,6 +313,133 @@ function inria_get_profile_ldap_fields() {
 			'inria_phone', // Téléphone
 		);
 	return $ldap_fields;
+}
+
+
+
+function theme_inria_get_community_groups($community = false, $count = false) {
+	if (empty($community)) { return false; }
+	
+	$options = array('type' => 'group', 'metadata_name_value_pairs' => array('name' => 'community', 'value' => $community));
+	if ($count) { $options['count'] = true; }
+	return elgg_get_entities_from_metadata($options);
+}
+
+
+// Get main (top parent) group from current page owner / workspace
+function theme_inria_get_main_group($main_group) {
+	if (!elgg_instanceof($main_group, 'group')) { return false; }
+	// Find top level parent
+	$parent = AU\SubGroups\get_parent_group($main_group);
+	if ($parent) {
+		$main_group = $parent;
+		while ($parent = AU\SubGroups\get_parent_group($parent)) { $main_group = $parent; }
+	}
+	return $main_group;
+}
+
+// Get active group members (= not closed account)
+function theme_inria_get_group_active_members($group, $options = array()) {
+	// Filter out closed accounts
+	$options['wheres'][] = theme_inria_active_members_where_clause();
+	return $group->getMembers($options);
+}
+// Active group members SQL WHERE clause (= not closed account)
+function theme_inria_active_members_where_clause() {
+	return "NOT EXISTS (
+			SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
+			WHERE md.entity_guid = e.guid
+			AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+			AND md.value_id = " . elgg_get_metastring_id('closed') . "
+		)";
+}
+
+
+// Returns valid objects subtypes filter in a group (for elgg_get_entities_)
+// note : always force files as they can be published through embeds
+function theme_inria_group_object_subtypes($group) {
+	$subtypes = array();
+	// Files can always be added, even if disabled
+	$subtypes[] = 'file';
+	// A comment can always happen - but this will not work as comments have container_guid set to commented entity
+	//$subtypes[] = 'comment';
+	if ($group->blog_enable == 'yes') { $subtypes[] = 'blog'; }
+	if ($group->bookmarks_enable == 'yes') { $subtypes[] = 'bookmarks'; }
+	// Forums : handle topic and replies - no reply will not be displayed, as their container is the parent groupforumtopic
+	if ($group->forum_enable == 'yes') { $subtypes[] = 'groupforumtopic'; $subtypes[] = 'discussion_reply'; }
+	// Pages : all pages
+	if ($group->pages_enable == 'yes') { $subtypes[] = 'page_top'; $subtypes[] = 'page'; }
+	if ($group->thewire_enable == 'yes') { $subtypes[] = 'thewire'; }
+	if ($group->event_calendar_enable == 'yes') { $subtypes[] = 'event_calendar'; }
+	if ($group->newsletter_enable == 'yes') { $subtypes[] = 'newsletter'; }
+	if ($group->survey_enable == 'yes') { $subtypes[] = 'survey'; }
+	if ($group->poll_enable == 'yes') { $subtypes[] = 'poll'; }
+	return $subtypes;
+}
+
+// Returns valid objects subtypes filter options in a group
+// note : always force files as they can be published through embeds
+function theme_inria_group_object_subtypes_opt($group) {
+	$subtypes = array('' => '');
+	// Files can always be added, even if disabled
+	$subtypes['file'] = elgg_echo('item:object:file');
+	// A comment can always happen - will not work as comments have container_guid set to commented entity
+	//$subtypes['comment'] = elgg_echo('item:object:comment');
+	if ($group->blog_enable == 'yes') { $subtypes['blog'] = elgg_echo('item:object:blog'); }
+	if ($group->bookmarks_enable == 'yes') { $subtypes['bookmarks'] = elgg_echo('item:object:bookmarks'); }
+	if ($group->forum_enable == 'yes') { $subtypes['discussion'] = elgg_echo('item:object:groupforumtopic'); }
+	if ($group->pages_enable == 'yes') { $subtypes['pages'] = elgg_echo('item:object:pages'); }
+	//if ($group->pages_enable == 'yes') { $subtypes['page_top'] = elgg_echo('item:object:page_top'); }
+	//if ($group->pages_enable == 'yes') { $subtypes['page'] = elgg_echo('item:object:page'); }
+	if ($group->thewire_enable == 'yes') { $subtypes['thewire'] = elgg_echo('item:object:thewire'); }
+	if ($group->event_calendar_enable == 'yes') { $subtypes['event_calendar'] = elgg_echo('item:object:event_calendar'); }
+	if ($group->newsletter_enable == 'yes') { $subtypes['newsletter'] = elgg_echo('item:object:newsletter'); }
+	if ($group->survey_enable == 'yes') { $subtypes['survey'] = elgg_echo('item:object:survey'); }
+	if ($group->poll_enable == 'yes') { $subtypes['poll'] = elgg_echo('item:object:poll'); }
+	if (elgg_is_active_plugin('feedback')) {
+		$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
+		if (!empty($feedbackgroup) && ($feedbackgroup != 'no')) {
+			if (($feedbackgroup == 'grouptool' && ($group->feedback_enable == 'yes')) || ($feedbackgroup == $group->guid)) {
+				$subtypes['feedback'] = elgg_echo('item:object:feedback');
+			}
+		}
+	}
+	
+	return $subtypes;
+}
+
+
+// Returns the proper URL for a group (or workspace) in a given context
+function theme_inria_get_group_tab_url($group, $link_type = 'home') {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	
+	switch($link_type) {
+		case 'edit':
+			return elgg_get_site_url() . 'groups/edit/' . $group->guid;
+			break;
+		case 'invite':
+			return elgg_get_site_url() . 'groups/invite/' . $group->guid;
+			break;
+		case 'members':
+			return elgg_get_site_url() . 'groups/members/' . $group->guid;
+			break;
+		case 'workspace':
+			return elgg_get_site_url() . 'groups/workspace/' . $group->guid;
+			break;
+		case 'home':
+		default:
+			return $group->getURL();
+	}
+}
+
+
+// Get the custom access level based on profile type
+function theme_inria_get_inria_access_id() {
+	if (elgg_is_active_plugin('access_collections')) {
+		$inria_collection = access_collections_get_collection_by_name('profiletype:inria');
+		if ($inria_collection) { 	return $inria_collection->id; }
+	}
+	return false;
 }
 
 

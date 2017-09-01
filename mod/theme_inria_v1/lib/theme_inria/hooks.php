@@ -117,6 +117,134 @@ function theme_inria_select_tab($hook, $type, $items, $vars) {
 	return $items;
 }
 
+// Add direct message to user listing view, and remove anything but friend requests
+function theme_inria_user_menu_setup($hook, $type, $items, $vars) {
+	if (!elgg_instanceof($vars['entity'], 'user')) { return $items; }
+	
+	$allowed = ['friend_request', 'add_friend', 'remove_friend', 'message'];
+	// Update some existing menu items
+	foreach ($items as $k => $item) {
+		$name = $item->getName();
+		if (!in_array($name, $allowed)) { unset($items[$k]); continue; }
+		if ($name == 'friend_request') {
+			$item->setTooltip($item->getText());
+			$item->setText('<i class="fa fa-user-plus"></i>');
+			$item->setPriority(601);
+		}
+		if ($name == 'add_friend') {
+			$item->setTooltip($item->getText());
+			$item->setText('<i class="fa fa-user-plus"></i>');
+			$item->setPriority(601);
+		}
+		if ($name == 'remove_friend') {
+			unset($items[$k]);
+			/*
+			$item->setTooltip($item->getText());
+			$item->setText('<i class="fa fa-user-times"></i>');
+			$item->setPriority(601);
+			*/
+		}
+	}
+	// Add send message
+	$items[] = ElggMenuItem::factory(array(
+			'name' => 'message',
+			'text' => '<i class="fa fa-envelope-o"></i>',
+			'title' => elgg_echo('messages:sendmessage'),
+			'href' => elgg_get_site_url() . 'messages/compose?send_to=' . $vars['entity']->guid,
+			'link_class' => 'iris-user-message',
+			'priority' => 603,
+		));
+	// Add send message
+	if (elgg_is_logged_in() && $vars['entity']->isFriend()) {
+		$items[] = ElggMenuItem::factory(array(
+				'name' => 'is-friend',
+				'text' => '<i class="fa fa-user"></i>',
+				'title' => elgg_echo('friend'),
+				'href' => "javascript:void(0);",
+				'link_class' => 'iris-user-is-friend',
+				'priority' => 602,
+			));
+	}
+	return $items;
+}
+
+// River menu : add container, remove ... ?
+function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
+	$object = $vars['item']->getObjectEntity();
+	
+	// Add container
+	if (elgg_instanceof($object, 'object')) {
+		// Get real container for forum & comments
+		$top_object = esope_get_top_object_entity($object);
+		//$container = esope_get_container_entity($object);
+		$container = esope_get_container_entity($top_object);
+		//error_log("Object : $object->guid $object->name $object->title / Top = $top_object->guid $top_object->name $top_object->title / container = $container->guid $container->name $container->title");
+		if (elgg_instanceof($container, 'group')) {
+			$group_icon = '<svg class="iris-groupes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M25.54,3.17H9.66a1,1,0,0,0-1,1v5h-5a1,1,0,0,0-1,1V26a1,1,0,0,0,1.51.86L8.95,24H19.58a1,1,0,0,0,1-1V18.23L25,20.9A1,1,0,0,0,26.54,20V4.17A1,1,0,0,0,25.54,3.17ZM18.58,22H8.67a1,1,0,0,0-.51.14L4.71,24.23V11.12h4v5.94a1,1,0,0,0,1,1h8.92Zm6-3.74-3.45-2.07a1,1,0,0,0-.51-.14H10.66V5.17H24.54Z"></path><circle cx="21.07" cy="10.61" r="0.99"></circle><circle cx="17.6" cy="10.61" r="0.99"></circle><circle cx="14.13" cy="10.61" r="0.99"></circle></svg>';
+			$items[] = ElggMenuItem::factory(array(
+					'name' => 'container',
+					'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name, 30),
+					'href' => $container->getURL(),
+					'class' => 'iris-container',
+					'priority' => 100,
+				));
+		}
+		
+		// Inline comment form (toggle link registered via river menu hook)
+		//if (elgg_instanceof($top_object, 'object') && ($top_object->guid != $object->guid) && $top_object->canComment()) {
+		if ($top_object->canComment()) {
+			$items[] = \ElggMenuItem::factory(array(
+					'name' => 'comment',
+					'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
+					'text' => elgg_view_icon('speech-bubble'),
+					'title' => elgg_echo('comment:this'),
+					'rel' => 'toggle',
+					'priority' => 50,
+				));
+		//} else if (elgg_instanceof($object, 'object', 'thewire') || elgg_instanceof($top_object, 'object', 'thewire')) {
+		} else if (elgg_instanceof($top_object, 'object', 'thewire')) {
+			// @TODO should be displayed if member of the container group, or not in group
+			//$container = $top_object->getContainerEntity();
+			if ((elgg_instanceof($container, 'group') && $container->isMember()) || !elgg_instanceof($container, 'group')) {
+				// Thewire reply form toggle link
+				$items[] = \ElggMenuItem::factory(array(
+						'name' => 'comment',
+						'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
+						'text' => elgg_view_icon('speech-bubble'),
+						'title' => elgg_echo('comment:this'),
+						'rel' => 'toggle',
+						'priority' => 10,
+					));
+			}
+			// Thread
+			// @TODO remove wire thread in thewire-thread context (redundant)
+			/*
+			$items[] = \ElggMenuItem::factory(array(
+					'name' => 'thread',
+					'href' => "thewire/thread/$post->wire_thread",
+					'text' => elgg_echo('thewire:thread'),
+					'class' => 'wire-thread',
+					'priority' => 50,
+				));
+			*/
+		}
+		
+	}
+	return $items;
+}
+
+// Extras menu : remove RSS... ?
+function theme_inria_extras_menu_setup($hook, $type, $items, $vars) {
+	// Update some existing menu items
+	foreach ($items as $k => $item) {
+		if (in_array($item->getName(), array('rss', 'qrcode'))) {
+			unset($items[$k]);
+		}
+	}
+	return $items;
+}
+
+
 
 // HTMLAWED AND INPUT FILTERING
 
@@ -183,14 +311,14 @@ function theme_inria_ldap_clean_group_name($hook, $type, $result, $params) {
 // Note 2 : always prefer data from contacts branch
 function theme_inria_ldap_check_profile($hook, $type, $result, $params) {
 	$debug = false;
-	if ($debug) error_log("LDAP hook : check_profile");
+	if ($debug) { error_log("LDAP hook : check_profile"); }
 	$mainpropchange = false;
 	$user = $params['user'];
 	
 	// Do not update accounts that do not have an active LDAP account 
 	// because they are now "out of Inria", and we do not want to update their email
 	// Anyway, Inria directory information are not displayed anymore if people are not active anymore
-	if (!ldap_auth_is_active($user->username)) return false;
+	if (!ldap_auth_is_active($user->username)) { return false; }
 	
 	// Check that user at least exists in auth branch
 	$auth_result = ldap_user_exists($user->username);
@@ -516,56 +644,207 @@ function theme_inria_members_count_hook($hook, $entity_type, $returnvalue, $para
 }
 
 
-// Members count in group listing menu
-function theme_inria_groups_entity_menu_setup($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) {
-		return $return;
-	}
+// Members count in group listing menu + various changes to entity menu (comments and likes out)
+function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
+	
+	if (elgg_in_context('widgets')) { return $return; }
 
-	/* @var ElggGroup $entity */
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'groups') {
-		return $return;
-	}
 
-	// Replace members count if set
-	foreach ($return as $index => $item) {
-		if ($item->getName() == 'members') {
-			unset($return[$index]);
-			// number of members
-			$nb_members_wheres[] = "NOT EXISTS (
-				SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
-				WHERE md.entity_guid = e.guid
-					AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
-					AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
-			$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
-			$all_members = $entity->getMembers(array('count' => true));
-			//$members_string = elgg_echo('groups:member');
-			$members_string = $all_members . ' ' . elgg_echo('groups:member');
-			if ($all_members != $active_members) {
-				if ($active_members > 1) {
-					$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
-				} else {
-					if ($all_members > 1) {
-						$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
+	if (elgg_instanceof($entity, 'object', 'thewire')) {
+		foreach ($return as $index => $item) {
+			if ($item->getName() == 'thread') { unset($return[$index]); }
+			if ($item->getName() == 'reply') { unset($return[$index]); }
+			if ($item->getName() == 'previous') { unset($return[$index]); }
+		}
+	}
+	
+	if (elgg_instanceof($entity, 'object', 'file')) {
+		if ($entity->canEdit()) {
+			// @TODO édition en lightbox
+			$return[] = ElggMenuItem::factory(array(
+					'name' => 'upload_version',
+					'text' => elgg_echo('file:upload:version'),
+					'href' => "#file-upload-version-{$entity->guid}",
+					'rel' => 'popup', 
+					'priority' => 100,
+				));
+		}
+	}
+	
+	if (elgg_instanceof($entity, 'object')) {
+		foreach ($return as $index => $item) {
+			if (in_array($item->getName(), array('likes', 'unlike', 'likes_count', 'access'))) {
+				unset($return[$index]);
+			}
+		}
+	}
+	
+	/* @var ElggGroup $entity */
+	if ($handler == 'groups') {
+		//if (elgg_instanceof($entity, 'group')) {}
+		// Replace members count if set
+		foreach ($return as $index => $item) {
+			if ($item->getName() == 'members') {
+				unset($return[$index]);
+				// number of members
+				$nb_members_wheres[] = "NOT EXISTS (
+					SELECT 1 FROM " . elgg_get_config('dbprefix') . "metadata md
+					WHERE md.entity_guid = e.guid
+						AND md.name_id = " . elgg_get_metastring_id('memberstatus') . "
+						AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
+				$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
+				$all_members = $entity->getMembers(array('count' => true));
+				//$members_string = elgg_echo('groups:member');
+				$members_string = $all_members . ' ' . elgg_echo('groups:member');
+				if ($all_members != $active_members) {
+					if ($active_members > 1) {
+						$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
 					} else {
-						$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
+						if ($all_members > 1) {
+							$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
+						} else {
+							$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
+						}
 					}
 				}
+				$options = array(
+					'name' => 'members',
+					'text' => $members_string,
+					'href' => false,
+					'priority' => 200,
+				);
+				$return[] = ElggMenuItem::factory($options);
 			}
-			$options = array(
-				'name' => 'members',
-				'text' => $members_string,
-				'href' => false,
-				'priority' => 200,
-			);
-			$return[] = ElggMenuItem::factory($options);
+		}
+	}
+	
+	return $return;
+}
+
+
+// Add thewire menu in group tools
+function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
+	$page_owner = elgg_get_page_owner_entity();
+	if (elgg_instanceof($page_owner, 'group')) {
+		if ($page_owner->isMember() || elgg_is_admin_logged_in()) {
+			$add_wire = elgg_get_plugin_setting('groups_add_wire', 'esope');
+			switch ($add_wire) {
+				case 'yes': break; 
+				case 'groupoption':
+					if ($page_owner->thewire_enable != 'yes') { return $return; }
+					break; 
+				default: return $return;
+			}
+			$title = elgg_echo('esope:thewire:group:title');
+			$return[] = new ElggMenuItem('thewire_group', $title, 'thewire/group/' . $page_owner->getGUID());
 		}
 	}
 	return $return;
 }
 
+
+function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	
+	$warnings = array();
+	$user_guid = elgg_get_logged_in_user_guid();
+	
+	// Handle group / city images (attached to group and not group owner)
+	$images = array('banner');
+	foreach($images as $meta_name) {
+		// Attachment upload
+		if (isset($_FILES[$meta_name]['name']) && !empty($_FILES[$meta_name]['name']) && ($attachment_file = get_uploaded_file($meta_name))) {
+			// create file
+			$prefix = "groups/" . $group->guid;
+			$fh = new ElggFile();
+			$fh->owner_guid = $group->guid;
+			$fh->setFilename($prefix . $meta_name);
+			if($fh->open("write")){
+				$fh->write($attachment_file);
+				$fh->close();
+			}
+			$group->{$meta_name} = $meta_name;
+			$group->{$meta_name.'_name'} = htmlspecialchars($_FILES[$meta_name]['name'], ENT_QUOTES, 'UTF-8');
+		}
+	}
+
+	return true;
+}
+
+
+
+function theme_inria_user_icon_hook($hook, $type, $return, $params) {
+	if (elgg_is_active_plugin('default_icons')) {
+		static $algorithm = false;
+		static $enabled = false;
+		if (!$algorithm) {
+			$enabled = elgg_get_plugin_setting('default_user', 'default_icons');
+			if ($enabled != 'no') {
+				$enabled = true;
+				$algorithm = elgg_get_plugin_setting('default_user_alg', 'default_icons');
+				$algorithm_opt = default_icons_get_algorithms();
+				if (!isset($algorithm_opt[$algorithm])) { $algorithm = 'ringicon'; }
+			} else {
+				$enabled = false;
+			}
+		}
+	
+	
+		// Detect default icon (but cannot use file_exists because it's an URL)
+		if ($enabled && (strpos($return, '_graphics/icons/user/') !== false)) {
+			// GUID seed will ensure static result on a single site (so an entity with same GUID on another site will have the same rendering)
+			// Username-based seed enables portable avatar on other sites
+			$seed = $params['entity']->guid;
+			$background = elgg_get_plugin_setting('background', 'default_icons');
+			$profile_type = esope_get_user_profile_type($params['entity']);
+			if (empty($profile_type)) { $profile_type = 'external'; }
+			if ($profile_type == 'external') { $background = 'F7A621'; }
+			$size = $params['size'];
+			$icon_sizes = elgg_get_config('icon_sizes');
+			$img_base_url = elgg_get_site_url() . "default_icons/icon?seed=$seed";
+			if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+			/*
+			if (!empty($num)) $img_base_url .= "&num=$num";
+			if (!empty($mono)) $img_base_url .= "&mono=$mono";
+			*/
+			$img_base_url .= "&algorithm=$algorithm";
+			$img_base_url .= '&width=' . $icon_sizes[$size]['w'];
+			if (!empty($background)) $img_base_url .= "&background=$background";
+			return $img_base_url;
+		}
+	}
+	
+	return $return;
+}
+
+
+
+// Override object icons with images (but we use FA icons)
+/*
+function theme_inria_object_icon_hook($hook, $type, $url, $params) {
+	
+	// Detect default icon (but cannot use file_exists because it's an URL)
+	if (!$url || empty($url) || (strpos($url, '_graphics/icons/default/') !== false)) {
+		$subtype = $params['entity']->getSubtype();
+	
+		$title = $params['entity']->title;
+		$title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false);
+	
+		// Get size
+		$size = $params['size'];
+		//$sizes = array('small', 'medium', 'large', 'tiny', 'master', 'topbar');
+		//if (!in_array($size, $sizes)) { $size = "medium"; }
+		$icon_sizes = elgg_get_config('icon_sizes');
+		if (!isset($icon_sizes[$size])) { $size = 'medium'; }
+		
+		return elgg_get_site_url() . "mod/theme_inria/graphics/objects/{$subtype}.png";
+	}
+	
+	return $url;
+}
+*/
 
 
 

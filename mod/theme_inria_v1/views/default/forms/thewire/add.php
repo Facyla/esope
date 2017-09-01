@@ -9,10 +9,18 @@ elgg_load_js('elgg.thewire');
 
 $parent_post = elgg_extract('post', $vars);
 $forced_access = elgg_extract('access_id', $vars, false);
-$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
+// Iris v2 : soft limit (real limit = plugin settings)
+//$char_limit = (int)elgg_get_plugin_setting('limit', 'thewire', 140);
+$char_limit = 140;
+$own = elgg_get_logged_in_user_entity();
+
+$id = 'thewire-textarea';
 
 $text = elgg_echo('post');
-if ($parent_post) { $text = elgg_echo('thewire:reply'); }
+if ($parent_post) {
+	$text = elgg_echo('thewire:reply');
+	$id = 'thewire-textarea-' . $parent_post->guid;
+}
 //$chars_left = elgg_echo('thewire:charleft');
 $chars_left = elgg_echo('esope:thewire:charleft');
 
@@ -38,8 +46,20 @@ if ($parent_post) {
 	// If value is invalid, use site or user default
 	if (!$default_access) { $default_access = get_default_access(); }
 	// Forcé sur Membres du site
-	$access_input .= elgg_view('input/hidden', array('name' => 'access_id', 'value' => $default_access));
+	//$access_input .= elgg_view('input/hidden', array('name' => 'access_id', 'value' => $default_access));
 	//$access_input .= '<div style="display:inline-block;">' . elgg_view('output/access', array('value' => $default_access)) . '</div>';
+	$inria_access_id = theme_inria_get_inria_access_id();
+	// Only Inria only can select access (defaults to Inria only))
+	if ($inria_access_id) {
+		$access_id = elgg_extract('access_id', $vars, $inria_access_id);
+		$access_opt = array(
+				$inria_access_id => elgg_echo('profiletype:inria'),
+				'1' => elgg_echo('LOGGED_IN'),
+			);
+		$access_input .= elgg_view('input/select', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
+	} else {
+		$access_input .= elgg_view('input/hidden', array('name' => 'access_id', 'value' => ACCESS_LOGGED_IN));
+	}
 }
 
 $count_down = "<span>$char_limit</span> $chars_left";
@@ -51,15 +71,17 @@ if ($char_limit == 0) {
 	$num_lines = 4;
 }
 
+$user_img = '<img src="' . $own->getIconUrl(array('size' => 'small')) . '" alt="' . $own->name . '" />';
+
 $post_input = elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',
-		'id' => 'thewire-textarea',
+		'id' => $id,
 		'rows' => $num_lines,
 		'data-max-length' => $char_limit,
-		'style' => "height:initial;",
+		//'style' => "height:initial;",
 		//'maxlength' => 140, // Do not block at 140, and use the warning
-		'placeholder' => elgg_echo('theme_inria:thewire:placeholder'),
+		'placeholder' => elgg_echo('theme_inria:thewire:placeholder', array($char_limit)),
 	));
 
 $submit_button = elgg_view('input/submit', array(
@@ -69,7 +91,10 @@ $submit_button = elgg_view('input/submit', array(
 ));
 
 echo <<<HTML
-$post_input
+<div class="wire-input">
+	$user_img
+	$post_input
+</div>
 <div class="elgg-foot mts">
 	$access_input
 	$parent_input

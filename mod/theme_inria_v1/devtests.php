@@ -10,11 +10,26 @@ if (!in_array($enabled, array('yes', 'no'))) { $enabled = 'yes'; }
 
 header('Content-type: text/html; charset=utf-8');
 
+
+
+/* Auto-enable plugin dependencies
+$plugins = ['theme_inria'];
+foreach ($plugins as $plugin) {
+	//enable_plugin($plugin);
+	echo esope_enable_plugin($plugin, true, true);
+}
+*/
+
+
+
+
+/* TESTS CHAMPS
 echo '<form method="POST">';
 echo esope_make_search_field_from_profile_field(array('metadata' => 'inria_location', 'name' => "Localisation"));
 echo esope_make_search_field_from_profile_field(array('metadata' => 'inria_location_main', 'name' => "Centre de rattachement"));
 echo esope_make_search_field_from_profile_field(array('metadata' => 'epi_ou_service', 'name' => "EPI ou service"));
 echo '<input type="submit" value="Envoyer"></form>';
+*/
 
 
 /* TESTS DE DESACTIVATION D'UN GROUPE ET DE SES CONTENUS

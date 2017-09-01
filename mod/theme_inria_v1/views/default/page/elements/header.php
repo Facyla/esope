@@ -27,225 +27,82 @@ if (elgg_is_logged_in()) {
 	$ownguid = $own->guid;
 	$ownusername = $own->username;
 	
-	// Groupes
-	$groups = '';
-	if (elgg_is_active_plugin('groups')) {
-		// Liste de ses groupes
-		$options = array( 'type' => 'group', 'relationship' => 'member', 'relationship_guid' => $ownguid, 'inverse_relationship' => false, 'limit' => 99, 'order_by' => 'time_created asc');
-		// Cas des sous-groupes : listing avec marqueur de sous-groupe
-		if (elgg_is_active_plugin('au_subgroups')) {
-			// Si les sous-groupes sont activés : listing des sous-groupes sous les groupes, et ordre alpha si demandé
-			$display_subgroups = elgg_get_plugin_setting('display_subgroups', 'au_subgroups');
-			$display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
-			$db_prefix = elgg_get_config('dbprefix');
-			// Don't list subgroups here (we want to list them under parents, if listed)
-			$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM {$db_prefix}entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
-			if ($display_alphabetically != 'no') {
-				$options['joins'] = array("JOIN {$db_prefix}groups_entity ge ON e.guid = ge.guid");
-				$options['order_by'] = 'ge.name ASC';
-			}
 	
-		}
-		$mygroups = elgg_get_entities_from_relationship($options);
-		foreach ($mygroups as $group) {
-			$groups .= '<li><a href="' . $group->getURL() . '">' 
-				. '<img src="' . $group->getIconURL('tiny') . '" alt="' . str_replace('"', "''", $group->name) . ' (' . elgg_echo('esope:groupicon') . '" />' . $group->name . '</a></li>';
-			// Si on liste les sous-groupes, on le fait ici si demandé
-			if (elgg_is_active_plugin('au_subgroups') && ($display_subgroups == 'yes')) {
-				$groups .= esope_list_groups_submenu($group, 1, true, $own);
-			}
-		}
-	// "Invitations" dans les groupes : affiché seulement s'il y a des invitations en attente
-		$group_invites = groups_get_invited_groups(elgg_get_logged_in_user_guid());
-		$invites_count = sizeof($group_invites);
-		$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . elgg_echo('theme_inria:groupinvites') . '</a></li>';
-		if ($invites_count == 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '">' . $invites_count . '</a></li>';
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
-		} else if ($invites_count > 1) {
-			$invites = '<li class="group-invites"><a href="' . $url . 'groups/invitations/' . $ownusername . '" title="' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '">' . $invites_count . '</a></li>';
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvites') . '</a></li>';
-		} else {
-			//$groupinvites = '<li><a href="' . $url . 'groups/invitations/' . $ownusername . '">' . $invites_count . ' ' . elgg_echo('esope:groupinvite') . '</a></li>';
-		}
-		
-		// Demandes de contact en attente : affiché seulement s'il y a des demandes en attente
-		$friendrequests_options = array("type" => "user", "count" => true, "relationship" => "friendrequest", "relationship_guid" => $own->guid, "inverse_relationship" => true);
-		$friendrequests_count = elgg_get_entities_from_relationship($friendrequests_options);
-		$friendrequests_li = '<li><a href="' . $url . 'friend_request/' . $ownusername . '">' . elgg_echo('theme_inria:friendsinvites') . '</a></li>';
-
-		if ($friendrequests_count == 1) {
-			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvite') . '">' . $friendrequests_count . '</a></li>';
-		} else if ($friendrequests_count > 1) {
-			$friendrequests = '<li class="invites"><a href="' . $url . 'friend_request/' . $ownusername . '" title="' . $friendrequests_count . ' ' . elgg_echo('esope:friendinvites') . '">' . $friendrequests_count . '</a></li>';
-		}
-	}
-	
-	// Liste des catégories (thématiques du site)
-	if (elgg_is_active_plugin('categories')) {
-		$categories = '';
-		$themes = $site->categories;
-		/*
-		if ($themes) foreach ($themes as $theme) {
-			$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme . '</a></li>';
-		}
-		*/
-		if ($themes) {
-			sort($themes); // Sort categories
-			foreach ($themes as $theme) {
-				// Add tree categories support
-				$theme_label = $theme;
-				if (strpos($theme, '/') !== false) {
-					$theme_a = explode('/', $theme);
-					$theme_label = '';
-					for ($i = 1; $i < count($theme_a); $i++) { $theme_label .= "-"; }
-					$theme_label .= ' ' . end($theme_a);
-				}
-				$categories .= '<li><a href="' . $url . 'categories/list?category='.urlencode($theme) . '">' . $theme_label . '</a></li>';
-			}
-		}
-	}
-	
+	// Non-inria cannot create new groups
+	$profile_type = esope_get_user_profile_type();
 }
 
 
 // MAIN NAVIGATION MENU
 if (elgg_is_logged_in()) {
 	
-	// Close enclosing divs and reopen new ones
-	//echo '	</div></div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
-	echo '</div><div id="transverse" class="elgg-page-sitemenu is-not-floatable"><div class="elgg-inner">';
-
-		?>
-		<div class="menu-navigation-toggle"><i class="fa fa-bars"></i> <?php echo elgg_echo('esope:menu:navigation'); ?></div>
-		<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
-			<li class="home"><a href="javascript:void(0);" <?php if ((current_page_url() == $url) || (current_page_url() == $url . 'activity')) { echo 'class="active elgg-state-selected"'; } ?> ><?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-caret-down"></i></a>
-				<ul class="hidden">
-					<?php if (elgg_is_active_plugin('dashboard')) { ?>
-						<li class="home"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('river:all'); ?></a></li>
-						<li><a href="<?php echo $url; ?>thewire/all"><?php echo elgg_echo('thewire:everyone'); ?></a></li>
-					<?php } ?>
-				</ul>
-			</li>
+	// Compute open/closed tabs (makes menu more clear)
+	$current_url = current_page_url();
+	// Remove parameters for easier comparison (not really needed as the strpos method is preferable for RESTful URLs)
+	if (strpos($current_url, '?')) $current_url = substr($current_url, 0, strpos($current_url, '?'));
 	
-			<?php /* activity : Fil d'activité du site */ ?>
-
-			<?php if (elgg_is_active_plugin('groups')) { ?>
-			<li class="groups"><a <?php if( (current_page_url() != $url . 'groups/all') && (elgg_in_context('groups') || (elgg_instanceof(elgg_get_page_owner_entity(), 'group')))) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('groups'); ?> <i class="fa fa-caret-down"></i></a>
-				<ul class="hidden">
-					<li><a href="<?php echo $url . 'groups/groupsearch'; ?>"><?php echo elgg_echo('search:group:go'); ?></a></li>
-					<li><a href="<?php echo $url . 'groups/all?filter=newest'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
-					<li><a href="<?php echo $url . 'p/groupes'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
-					<li><a href="<?php echo $url . 'groups/member/' . $ownusername; ?>"><?php echo elgg_echo('groups:yours'); ?></a></li>
-					<li><a href="<?php echo $url . 'groups/owner/' . $ownusername; ?>"><?php echo elgg_echo('groups:owned'); ?></a></li>
-					<?php echo $groupinvites; ?>
-					<li><a href="<?php echo elgg_get_site_url() . 'groups/add/' . $ownguid; ?>"><?php echo elgg_echo('groups:add'); ?></a></li>
-					<?php //echo $groups; ?>
-				</ul>
-			</li>
-			<?php echo $invites; ?>
-			<?php } ?>
+	$selected_wire = $selected_activity = $selected_home = false;
+	if (strpos($current_url, $url.'activity') === 0) { $selected_activity = true; }
+	if (strpos($current_url, $url.'thewire') === 0) { $selected_wire = true; }
+	if (($current_url == $url) || $selected_activity || $selected_wire) { $selected_home = true; }
 	
-			<?php if (elgg_is_active_plugin('categories')) { ?>
-				<li class="thematiques"><a <?php if(elgg_in_context('categories')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'categories'; ?>"><?php echo elgg_echo('esope:categories'); ?></a>
-					<ul class="hidden">
-						<li><a href="<?php echo $url; ?>categories"><?php echo elgg_echo('esope:categories:all'); ?></a></li>
-						<?php echo $categories; ?>
-					</ul>
-				</li>
-			<?php } ?>
+	$selected_groups = $selected_groupsearch = false;
+	if (elgg_in_context('groups') || elgg_instanceof(elgg_get_page_owner_entity(), 'group')) { $selected_groups = true; }
+	if (($current_url == $url.'groups') || (strpos($current_url, $url.'groups?') === 0)) { $selected_groupsearch = true; }
 	
-			<?php if (elgg_is_active_plugin('members')) { ?>
-				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:members'); ?> <i class="fa fa-caret-down"></i></a>
-					<ul class="hidden">
-						<li><a href="<?php echo $url . 'members/search/'; ?>"><?php echo elgg_echo('members:search'); ?></a></li>
-						<li><a href="<?php echo $url . 'friends/' . $ownusername; ?>?limit=30"><?php echo elgg_echo('theme_inria:friends'); ?></a></li>
-						<li><a href="<?php echo $url . 'collections/owner/' . $ownusername; ?>"><?php echo elgg_echo('theme_inria:friends:collections'); ?></a></li>
-						<li><a href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('members'); ?></a></li>
-						<?php echo $friendrequests_li; ?>
-						<?php
-						if (($own->membertype == 'inria') || elgg_is_admin_logged_in()) {
-							//echo '<li><a href="' . $url . 'inria/invite">' . elgg_echo('inria_invite') . '</a></li>';
-						}
-					// echo '<li><a href="' . elgg_get_site_url() . 'invite">' . elgg_echo("theme_inria:topbar:invite") . '</a></li>';
-						?>
-					</ul>
-				</li>
-				<?php echo $friendrequests; ?>
-			<?php } ?>
+	$selected_members = false;
+	if (elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends') || (strpos($current_url, $url.'members') === 0)) { $selected_members = true; }
 	
-			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
-				<li class="agenda"><a <?php if (elgg_in_context('event_calendar') && !elgg_in_context('groups')) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);"><?php echo elgg_echo('theme_inria:event_calendar'); ?> <i class="fa fa-caret-down"></i></a>
-					<ul class="hidden">
-						<?php $start_date = date('Y-m-01'); ?>
-						<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/all'; ?>"><?php echo elgg_echo('event_calendar:show_all'); ?></a></li>
-						<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/mine'; ?>"><?php echo elgg_echo('event_calendar:show_mine'); ?></a></li>
-						<!--
-						<li><a href="<?php echo $url . 'event_calendar/list/' . $start_date . '/month/friends'; ?>"><?php echo elgg_echo('event_calendar:show_friends'); ?></a></li>
-						//-->
-					</ul>
-				</li>
-			<?php } ?>
+	$selected_event_calendar = false;
+	if ((elgg_in_context('event_calendar') && !elgg_in_context('groups')) || (strpos($current_url, $url.'event_calendar') === 0)) { $selected_event_calendar = true; }
 	
-			<?php
-			// Custom menu
-			$main_menu_help_count = elgg_get_plugin_setting('help_menu_count', 'theme_inria');
-			if (!empty($main_menu_help_count)) {
-				?>
-				<li class="help"><a href="javascript:void(0);"><?php echo elgg_echo('theme_inria:menu:firststeps'); ?> <i class="fa fa-caret-down"></i></a>
-					<ul class="hidden">
-						<?php
-						for ($i = 1; $i <= $main_menu_help_count; $i++) {
-							if ($lang == 'en') {
-								$main_menu_item = elgg_get_plugin_setting('help_menu_'.$i.'_en', 'theme_inria');
-							} else {
-								$main_menu_item = elgg_get_plugin_setting('help_menu_'.$i, 'theme_inria');
-							}
-							if (!empty($main_menu_item)) {
-								$main_menu_item = explode('::', $main_menu_item);
-								$menu_item_url = $main_menu_item[0];
-								if ($main_menu_item[1]) { $menu_item_link = $main_menu_item[1]; }
-								else { $menu_item_link = $main_menu_item[0]; }
-								if ($main_menu_item[2]) { $menu_item_title = $main_menu_item[2]; }
-								echo '<li><a href="' . $menu_item_url . '" title="' . $menu_item_title . '">' . $menu_item_link . '</a></li>';
-							}
-						}
-						?>
-					</ul>
-				</li>
-				<?php
-			}
-			?>
-	
+	?>
+	<div class="menu-navigation-toggle hidden" style="color:white;"><i class="fa fa-compress"></i> <?php echo elgg_echo('hide') . ' ' . elgg_echo('esope:menu:navigation'); ?></div>
+	<ul class="elgg-menu elgg-menu-navigation elgg-menu-navigation-alt">
+		<li class="home <?php if ($selected_home) { echo 'elgg-state-selected'; } ?>">
+			<a href="javascript:void(0);" <?php if ($selected_home) { echo 'class="active elgg-state-selected"'; } ?> >
+				<svg id="iris-actus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M7 5.2v9.4H2.7V22a3 3 0 0 0 3 3H21.9a3 3 0 0 0 3-3V5.2ZM5.7 23a1 1 0 0 1-1-1V16.6H6.9V22a1 1 0 0 1-1 1Zm17.2-1a1 1 0 0 1-1 1H9V7.2H22.8Z"/><path d="M11.4 11.6h0l7.6 0a1 1 0 0 0 0-2h0l-7.5 0a1 1 0 0 0 0 2Z"/><path d="M11.4 16.1h8.4a1 1 0 1 0 0-2H11.4a1 1 0 1 0 0 2Z"/><path d="M11.4 20.5H16.9a1 1 0 1 0 0-2H11.4a1 1 0 0 0 0 2Z"/></svg>
+				<?php echo elgg_echo('theme_inria:topbar:news'); ?> <i class="fa fa-angle-down"></i></a>
+			<ul class="hidden">
+				<?php if (elgg_is_active_plugin('dashboard')) { ?>
+					<li<?php if ($selected_wire) { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url; ?>thewire/all"><?php echo elgg_echo('theme_inria:home:wire'); ?></a></li>
+					<li class="home<?php if ($selected_activity) { echo ' elgg-state-selected'; } ?>"><a href="<?php echo $url; ?>activity"><?php echo elgg_echo('theme_inria:home:river'); ?></a></li>
+				<?php } ?>
+			</ul>
 		</li>
 
-		</ul>
-	
-		<?php
-		if (elgg_is_active_plugin('search')) {
-		$search_text = elgg_echo('esope:search:defaulttext');
-		// Select search type (filter)
-		//$search_opt = array('' => elgg_echo('all'), 'object' => elgg_echo('item:object'), 'group' => elgg_echo('item:group'), 'user' => elgg_echo('item:user')); // options_values
-		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
-		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
-		$search_entity_type = get_input('entity_type', '');
-		echo '<form action="' . $url . 'search" method="get">';
-			echo '<label for="esope-search-input" class="invisible">' . $search_text . '</label>';
-			$livesearch = elgg_get_plugin_setting('livesearch', 'esope');
-			if ($livesearch != 'no') {
-				echo elgg_view('input/autocomplete', array('name' => 'q', 'id' => 'esope-search-input', 'match_on' => 'all', 'user_return' => 'name', 'value' => $prev_q, 'placeholder' => $search_text));
-			} else {
-				echo elgg_view('input/text', array('name' => 'q', 'id' => 'esope-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
-			}
-			echo '<input type="image" id="esope-search-submit-button" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" />';
-			echo '<br />';
-			echo elgg_view('input/radio', array('name' => 'entity_type', 'options' => $search_opt, 'value' => $search_entity_type, 'align' => 'horizontal'));
-		echo '</form>';
-		}
+		<?php if (elgg_is_active_plugin('groups')) { ?>
+		<li class="groups<?php if ($selected_groups) { echo ' elgg-state-selected"'; } ?>">
+			<a <?php if ($selected_groups) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);">
+				<svg id="iris-groupes"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M25.54,3.17H9.66a1,1,0,0,0-1,1v5h-5a1,1,0,0,0-1,1V26a1,1,0,0,0,1.51.86L8.95,24H19.58a1,1,0,0,0,1-1V18.23L25,20.9A1,1,0,0,0,26.54,20V4.17A1,1,0,0,0,25.54,3.17ZM18.58,22H8.67a1,1,0,0,0-.51.14L4.71,24.23V11.12h4v5.94a1,1,0,0,0,1,1h8.92Zm6-3.74-3.45-2.07a1,1,0,0,0-.51-.14H10.66V5.17H24.54Z"/><circle cx="21.07" cy="10.61" r="0.99"/><circle cx="17.6" cy="10.61" r="0.99"/><circle cx="14.13" cy="10.61" r="0.99"/></svg>
+				<?php echo elgg_echo('groups'); ?> <i class="fa fa-angle-down"></i></a>
+			<ul class="hidden">
+				<li<?php if ($current_url == $url.'groups/member') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url . 'groups/member'; ?>"><?php echo elgg_echo('theme_inria:mygroups'); ?></a></li>
+				<li<?php if ($current_url == $url.'groups/discover') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url . 'groups/discover'; ?>"><?php echo elgg_echo('theme_inria:groups:discover'); ?></a></li>
+				<li<?php if ($selected_groupsearch) { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo $url . 'groups'; ?>"><?php echo elgg_echo('groups:all'); ?></a></li>
+				<?php if ($profile_type == 'inria') { ?>
+					<li<?php if ($current_url == $url.'groups/add') { echo ' class="elgg-state-selected"'; } ?>><a href="<?php echo elgg_get_site_url() . 'groups/add'; ?>"><?php echo elgg_echo('theme_inria:groups:add'); ?></a></li>
+				<?php } ?>
+			</ul>
+		</li>
+		<?php } ?>
 
-		?>
-		<div class="clearfloat"></div>
-	</div>
+		<?php if (elgg_is_active_plugin('members')) { ?>
+			<li class="members <?php if ($selected_members) { echo ' elgg-state-selected'; } ?>">
+				<a <?php if ($selected_members) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>">
+					<svg id="iris-membres" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M25.7 15A10.7 10.7 0 1 0 7.4 22.5l0 0.1a10.7 10.7 0 0 0 15.1 0l0.1 0A10.6 10.6 0 0 0 25.7 15ZM15 6.4a8.6 8.6 0 0 1 7 13.8 8.9 8.9 0 0 0-3.6-2.6 4.6 4.6 0 1 0-6.6 0 8.9 8.9 0 0 0-3.6 2.7A8.6 8.6 0 0 1 15 6.4Zm2.6 8A2.6 2.6 0 1 1 15 11.8 2.6 2.6 0 0 1 17.6 14.4ZM9.5 21.7a7 7 0 0 1 11 0 8.6 8.6 0 0 1-11 0Z"/></svg>
+					<?php echo elgg_echo('theme_inria:members'); ?></a>
+			</li>
+		<?php } ?>
+
+		<?php if (elgg_is_active_plugin('event_calendar')) { ?>
+			<li class="agenda <?php if ($selected_event_calendar) { echo ' elgg-state-selected'; } ?>">
+				<a href="<?php echo $url; ?>event_calendar/list/">
+					<svg id="iris-agenda" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M19.6 15.6H17.1a1 1 0 0 0 0 2h2.5a1 1 0 0 0 0-2Z"/><path d="M19.6 19.5H17.1a1 1 0 0 0 0 2h2.5a1 1 0 1 0 0-2Z"/><path d="M12.7 15.6H10.2a1 1 0 0 0 0 2h2.5a1 1 0 0 0 0-2Z"/><path d="M12.6 19.5H10.2a1 1 0 1 0 0 2h2.5a1 1 0 1 0 0-2Z"/><path d="M21.1 7.1h-1v-2a1 1 0 0 0-2 0v2h-6v-2a1 1 0 0 0-2 0v2h-1a4 4 0 0 0-4 4V22.5a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4V11.1A4 4 0 0 0 21.1 7.1Zm-12 2h12a2 2 0 0 1 2 2h-16A2 2 0 0 1 9.1 9.1Zm12 15.4h-12a2 2 0 0 1-2-2V13.1h16V22.5A2 2 0 0 1 21.1 24.5Z"/></svg>
+					<?php echo elgg_echo('theme_inria:agenda'); ?></a>
+			</li>
+		<?php } ?>
+	</ul>
 	<?php
 }
 

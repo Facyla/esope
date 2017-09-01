@@ -130,12 +130,15 @@ if (($container instanceof ElggGroup)
  */
 
 /* Supprime le niveau d'accès Public => Membres connectés
-// @TODO if we do that, do it only under specific circumstances eg. walled garden,  group settings...
-if (isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { unset($vars['options_values'][2]); }
-*/
-
-// Inria : Même dans les groupes en accès restreints ou en mode Walled Garden, on veut pouvoir autoriser quelques pages et fichiers publics
-if (!isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { $vars['options_values'][2] = elgg_echo('esope:access:public'); }
+ * @TODO if we do that, do it only under specific circumstances eg. walled garden,  group settings...
+	*/
+$walled_garden = elgg_get_config('walled_garden');
+if ($walled_garden && !elgg_is_admin_logged_in()) {
+	if (isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { unset($vars['options_values'][2]); }
+} else {
+	// Inria : Même dans les groupes en accès restreints ou en mode Walled Garden, on veut pouvoir autoriser quelques pages et fichiers publics
+	if (!isset($vars['options_values'][2]) && in_array($vars['name'], $standard_cases)) { $vars['options_values'][2] = elgg_echo('esope:access:public'); }
+}
 
 /* Auto-update current public value to loggedin / MAJ auto accès Public => Membres
 // @TODO auto-update is not something we want to do (use scripting instead if required)
