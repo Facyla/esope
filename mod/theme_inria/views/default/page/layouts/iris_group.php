@@ -28,7 +28,8 @@ foreach(elgg_get_context_stack() as $context) {
 }
 
 // navigation defaults to breadcrumbs
-$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+//$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+$nav = elgg_extract('nav', $vars, '');
 
 
 // Change layout for groups - but only show if group can be seen
@@ -95,7 +96,7 @@ if (elgg_instanceof($group, 'group')) {
 					$vars['sidebar'] = elgg_view('theme_inria/groups/sidebar_content', $vars);
 				}
 			}
-			if ($vars['sidebar']) { echo '<div class="menu-sidebar-toggle"><i class="fa fa-th-large"></i></div>' . $vars['sidebar']; }
+			if ($vars['sidebar']) { echo '<div class="menu-sidebar-toggle" title="' . elgg_echo('esope:menu:sidebar') . '"><i class="fa fa-th-large"></i> ' . elgg_echo('esope:menu:sidebar') . '</div>' . $vars['sidebar']; }
 		}
 		
 		

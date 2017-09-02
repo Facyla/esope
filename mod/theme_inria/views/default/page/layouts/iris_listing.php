@@ -30,7 +30,8 @@ if ($CONFIG->context) foreach ($CONFIG->context as $context) {
 }
 
 // navigation defaults to breadcrumbs
-$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+//$nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
+$nav = elgg_extract('nav', $vars, '');
 
 ?>
 
@@ -38,7 +39,7 @@ $nav = elgg_extract('nav', $vars, elgg_view('navigation/breadcrumbs'));
 	
 	<div class="<?php echo $class; ?>">
 		<?php if ($vars['sidebar']) { ?>
-			<div class="menu-sidebar-toggle" title="<?php echo elgg_echo('esope:menu:sidebar'); ?>"><i class="fa fa-th-large"></i></div>
+			<div class="menu-sidebar-toggle" title="<?php echo elgg_echo('esope:menu:sidebar'); ?>"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
 			<div class="elgg-sidebar iris-search-sidebar">
 				<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-compress"></i> <?php echo elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar'); ?></div>
 				<h2 class="hidden"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>

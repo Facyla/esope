@@ -91,7 +91,7 @@ $main_maxwidth = "80%";
 // @TODO Bug Safari : normalement on utilise flex x x 0%  MAIS sur safari le conteneur ne s'adapte pas et considère que la base est de 0. 
 // Pose des pbs sur l'accueil, et sur les pages de contenus en vue complète notamment
 // Ca fonctionne moins mal avec 0 ou auto mais crée d'autres effets de bord ailleurs (liste des feedbacks par ex.)
-// Note : une solution semble d'ajouter flex-basis: 0; à chaque utilisation de flex-direction column : voir si pas d'effet de bord ?
+// Note : une solution semble d'ajouter flex-basis: 0% ou auto ? à chaque utilisation de flex-direction column : voir si pas d'effet de bord ?
 $width = array(
 	/*
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
@@ -166,8 +166,8 @@ $width = array(
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
 /* Colonnes égales */
-.elgg-context-main .iris-col { display: flex; flex-direction: column; flex-basis: 0; }
-.iris-box:last-of-type { flex: 1; display: flex; flex-direction: column; flex-basis: 0; }
+.elgg-context-main .iris-col { display: flex; flex-direction: column; flex-basis: 0%; }
+.iris-box:last-of-type { flex: 1; display: flex; flex-direction: column; flex-basis: 0%; }
 
 
 .elgg-main { <?php echo $width['main']; ?> min-height: initial; }
@@ -198,7 +198,7 @@ $width = array(
 #iris-body .iris-listing .elgg-main { width: 100%; padding: 0; display: flex; flex-wrap: wrap; }
 #iris-body .elgg-layout-one-sidebar .elgg-main { /* padding: 2.5rem 0 0 0; */ }
 #iris-body .elgg-layout-one-sidebar.elgg-context-settings .elgg-main { <?php echo $width['main']; ?> background: white; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
-#iris-body .elgg-layout-one-column.elgg-context-profile_edit .elgg-main { <?php echo $width['main']; ?> width: 100%; margin: 2.5rem auto; float: none; padding: 0 2.5rem 3rem 2.5rem; background:white; display: flex; flex-wrap: wrap; flex-direction: column; flex-basis: 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
+#iris-body .elgg-layout-one-column.elgg-context-profile_edit .elgg-main { <?php echo $width['main']; ?> width: 100%; margin: 2.5rem auto; float: none; padding: 0 2.5rem 3rem 2.5rem; background:white; display: flex; flex-wrap: wrap; flex-direction: column; flex-basis: 0%; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 #iris-body .elgg-layout-one-column.elgg-context-avatar.elgg-context-profile_edit .elgg-main { margin-top: 0; background: none; box-shadow: none; padding: 0; }
 #iris-body .iris-group .elgg-main { background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
 /*
@@ -216,7 +216,7 @@ $width = array(
 
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 
-.elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; flex-basis: 0; margin: 0 2.5rem 2.5rem 0; }
+.elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; flex-basis: 0%; margin: 0 2.5rem 2.5rem 0; }
 .elgg-body-transp .elgg-main, 
 #iris-body .iris-group .elgg-body-transp .elgg-main { margin: 0; }
 
@@ -415,6 +415,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-wire #thewire-textarea { margin-top: 0; height: 4em; width: calc(100% - 4rem); flex: 1 1 auto; }
 .home-wire .thewire-form { padding: 0; }
 .home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
+.elgg-context-thewire .thewire-form select, 
 .home-wire .thewire-form select { margin-left: 3.5rem; max-width: 10rem; }
 
 .home-wire, .home-activity { background:white; padding:0; }
@@ -709,6 +710,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-topbar-item.elgg-menu-topbar li a { font-size:1rem; font-weight:bold; color: <?php echo $iris_texttopgrey; ?>; text-shadow: none; margin: 0 0 0 0; display:inline-block; }
 .iris-topbar-item.elgg-menu-topbar > li > a { padding:0; line-height: 2.5rem; }
 .iris-topbar-item.elgg-menu-topbar > li > a > img { height: 2.5rem; }
+.elgg-menu-topbar > li > ul { display: block; }
 .iris-topbar-item a .fa { font-size: 1.375rem; }
 .iris-topbar-item.elgg-menu-topbar ul { position: relative; padding-top: 0px; left: 0; top: 0; width: auto; margin: 0; background: white; }
 .iris-topbar-item.elgg-menu-topbar-alt ul li { margin:0; }
@@ -1036,14 +1038,22 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 
 #iris-footer #feedbackWrapper { top:initial; bottom:150px; }
 #feedBackToggler #feedBackTogglerLink { background: transparent; border: 0; box-shadow: none; }
-
+#feedbackWrapper #feedBackContent { padding: 0.5rem 1rem; }
+#feedBackIntro { font-size: 1rem; }
+#feedBackFormInputs, #feedBackForm, #feedBackForm label, #feedBackForm input, #feedBackForm select { font-size: 0.9rem; }
+#feedBackForm label { margin: 0 0.5rem 0.5rem 0; display: inline-block; }
+#feedbackWrapper #feedBackContent .elgg-head { background: none; padding: 0; }
+#feedbackWrapper #feedBackContent .elgg-head h3 { color: #384257; margin: 0 0 0.5rem 0; padding: 0; font-size: 2rem; font-weight: normal; font-family: "Inria Serif", serif; text-transform: initial; }
+#feedbackWrapper .feedbackText, #feedbackWrapper textarea#feedback_txt { font-size: 1rem; margin: 0.2rem 0 0.2rem 0; }
+#feedbackWrapper #feedbackDisplay a { background: #384257; color: white; padding: 0.5rem 1rem; display: inline-block; border-radius: 2rem; margin: 0.5rem 0 0 0; font-size: 0.9rem; }
+#feedbackWrapper #feedbackDisplay a:hover, #feedbackWrapper #feedbackDisplay a:active, #feedbackWrapper #feedbackDisplay a:focus { color:white; text-decoration: none; }
 
 /* River and listings */
 .elgg-river-layout .elgg-list-river { /* background: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); max-width: 32.625rem; padding: 2.5rem; */ border-top:0; }
 
 .elgg-list-river .elgg-item { padding: 1.8rem 0 1.2rem 0; }
 .elgg-list-river .elgg-item:first-of-type { padding-top: 0; }
-.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 1rem 0 0 0; /* line-height:1.2rem; */ line-height:normal; font-size: 0.8125rem; }
+.elgg-menu-river { width: 100%; clear: both; text-align: right; margin: 1rem 0 0 0; /* line-height:1.2rem; */ line-height:normal; font-size: 0.8125rem; height: auto; }
 
 .elgg-river-summary strong a, 
 a.elgg-river-subject { font-weight: bold; color: #384257; font-size: .9em; }
@@ -1183,10 +1193,10 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 /* Alternative for pure hover (no click to keep menu visible) 
 .entity-submenu-content { position: absolute; right: 0; top: 0; padding: 1.5rem 0 0 0; z-index: 2; }
-.elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; flex-basis: 0; }
+.elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; flex-basis: 0%; }
 */
 .entity-submenu-content { position: absolute; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 10rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
-.elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; flex-basis: 0; }
+.elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; flex-basis: 0%; }
 .iris-object .entity-submenu-content .elgg-menu-entity { margin: 0; }
 .iris-object .entity-submenu-content .elgg-menu-entity li a, 
 .elgg-list-entity .entity-submenu-content ul li { margin: 0; /* padding: 0.3rem 0 0.2rem 0; */ padding: 0; text-align: left; color: #384257; }
@@ -1288,7 +1298,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .tab.tab-more { display: inline-block; position: relative; padding:0; }
 .tab.tab-more a { display: inline-block; margin:0; border:0; }
 .tab-more-content { display: flex; }
-.iris-group-menu .tab-more-content { position: absolute; background: white; min-width: 16rem; top: 3.5rem; right: -1rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; flex-basis: 0; }
+.iris-group-menu .tab-more-content { position: absolute; background: white; min-width: 16rem; top: 3.5rem; right: -1rem; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; flex-basis: 0%; }
 .iris-group-menu .tab.tab-more:hover .tab-more-content { display: flex; }
 .iris-group-menu .tab-more-content a { padding: 0.5rem 1rem; margin: 0; border-bottom: 1px solid #CCC; }
 .iris-group-menu .tab-more-content a:hover, .iris-group-menu .tab-more-content a:active, .iris-group-menu .tab-more-content a:focus { border-bottom: 1px solid #CCC; }
@@ -1337,7 +1347,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-tabs .elgg-tabs li:active,
 .group-workspace-tabs .elgg-tabs li:focus { opacity:1; box-shadow: 4px -4px 4px -4px rgba(0,0,0,0.1); }
 .group-workspace-tabs .elgg-tabs .elgg-state-selected a { top:initial; }
-.group-workspace-tabs .tab-more-content { position: absolute; background: white; width: 12rem; top: 2.9375rem; right: 0; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; flex-basis: 0; }
+.group-workspace-tabs .tab-more-content { position: absolute; background: white; width: 12rem; top: 2.9375rem; right: 0; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); flex-direction: column; flex-basis: 0%; }
 .group-workspace-tabs .tab.tab-more:hover .tab-more-content { display: flex; }
 .group-workspace-tabs .tab-more-content li { opacity: 0.6; border: 0; background: transparent; margin: 0; border-radius: 0; float: none; display: flex; }
 .group-workspace-tabs .tab-more-content a { padding: 0.5rem 1rem; margin: 0; color: #384257; border-bottom: 1px solid #CCC; flex: 1 1 auto; margin: 0; text-align: left; display: block; height: initial; }
@@ -1573,6 +1583,7 @@ contenu : 40 + 8 + 33 = 81 = 1500
 .iris-box { max-width: initial; }
 
 .messages-buttonbank, .elgg-layout-one-sidebar .elgg-form.thewire-form, .elgg-layout-one-sidebar .elgg-main .elgg-list-container { max-width: initial; }
+.elgg-foot.messages-buttonbank input { margin-bottom: 1rem; }
 .elgg-layout-one-sidebar .thewire-form textarea { /* width: calc(100% - 6rem); */ margin-top: 0; flex: 1 1 auto; }
 
 .elgg-main #event_list { min-width: 20rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0; max-width: 46rem; background: white; padding: 1rem 1rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
@@ -1713,6 +1724,8 @@ a[name=unlike] { color: #1488CA !important; }
 */
 
 
+/* VUES RESPONSIVE */
+
 @media (max-width:1400px) {
 	#iris-navigation { display: none; }
 	.menu-navigation-toggle { display: block; }
@@ -1739,16 +1752,19 @@ a[name=unlike] { color: #1488CA !important; }
 }
 
 
-
 @media (max-width:1020px) {
 	.elgg-main, .elgg-page .elgg-layout .elgg-main { /* padding: 1rem 2rem !important; */ margin: 0 2.5rem 2.5rem 0; }
+	.full-screen #iris-body .iris-group .elgg-main { width: auto; margin: 0.2rem 0.3rem; }
+	.full-screen .elgg-body-transp .elgg-button-fullscreen { right: 1rem; top: 0.75rem; }
 	
 	.elgg-page .elgg-layout .elgg-sidebar { display: block; <?php echo $width['sidebar']; ?>; padding: 0; }
 	.menu-sidebar-toggle { display: none; }
 }
 
+
 @media (max-width:980px) {
 	.elgg-menu-topbar { /* position:absolute; top: 11px; right:5px; margin-left: 140px; */ }
+	.elgg-layout { flex-direction: column; }
 	.menu-topbar-toggle { color: white; }
 	
 	.profile-col-profile { width:40%; }
@@ -1758,21 +1774,56 @@ a[name=unlike] { color: #1488CA !important; }
 	.profile-col-largedetails { width:66%; }
 	
 	.elgg-page .elgg-layout .elgg-sidebar { display: none; }
-	.menu-sidebar-toggle { display: initial; flex: 0 0 1.5rem; padding: 2.5rem; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
-	.elgg-sidebar .menu-sidebar-toggle { padding: 0; margin: 0; }
+	.menu-sidebar-toggle { display: initial; min-width: 1.5rem; flex: 0 0 auto; padding: 2.5rem; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
+	.elgg-sidebar .menu-sidebar-toggle { display: block; padding: 2.5rem 0 1rem 0; margin: -3rem -1rem 1rem -1rem; }
+	
+	.group-content-filter.tabs { clear: both; }
+
+	#iris-body .elgg-layout-one-sidebar .elgg-main { width: auto; padding:0; max-width: none; }
+	#iris-body .elgg-layout-one-sidebar .elgg-sidebar { width: auto; max-width: none; /* background: rgba(0,0,0,0.1) !important; */ padding: 0.5rem 1rem; border: 0; /* box-shadow: 0px 6px 5px -5px rgba(189,189,189,0.5) !important; */ }
+	.iris-group-sidebar-alt { max-width: none; }
 	
 	#iris-topbar-search-input { display: none; }
+	
 }
 
+
+
+/* VUES MOBILES */
 @media (max-width:768px) {
 	* { min-width: initial !important; max-width: initial !important; }
 	
-	#notifications .notifications-panel { position: fixed; left: 0; right: 0; top: 5rem; }
-
-	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; flex-basis: 0; */ }
+	/* Topbar */
+	.iris-logo { flex: 0 0 8.5rem; }
+	.iris-logo img { margin: 1.1875rem 2rem; }
+	.elgg-menu-topbar { margin-left: 0; display: block; }
+	.iris-topbar-item.elgg-menu-topbar ul { position: fixed; top: 5.1rem; right: 0.1rem; left: 0.1; padding: 0 1rem 0 0; }
+	.iris-topbar-menu #user { max-width: 2.5rem; height: 2.5rem; overflow: hidden; margin-left: 0.5rem; }
+	.iris-topbar-item.elgg-menu-topbar li#user > a { padding: 0; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
+	#notifications .notifications-panel { position: fixed; left: 0.1rem; right: 0.1rem; top: 5.1rem; width: auto; }
+	
+	/* Navigation menu */
+	#iris-navigation.menu-enabled { padding-top: 0; }
+	#iris-navigation ul.elgg-menu-navigation li a { font-size: 1.5rem; line-height: 2rem; display: inline-block; }
+	#iris-navigation ul.elgg-menu-navigation svg { height: 2rem; }
+	#iris-navigation ul.elgg-menu-navigation li ul li a { display: block; font-size: 1.2rem; }
+	
+	/* Footer */
+	#iris-footer { position: initial; bottom: 0; left: 0; right: 0; margin: 1rem -1rem -1rem -1rem; border-top: 1px solid rgba(255,255,255,0.5); }
+	.footer-logo-inria { margin: 12px 0; }
+	#iris-footer li a { font-size: 1.2rem; }
+	
+	/* Sidebar */
+	.elgg-menu-owner-block li a, .elgg-sidebar ul.elgg-menu-page li a { border: 0; }
+	/* Alt Sidebar */
+	.iris-group-sidebar-alt { margin: 0 0 2.5rem 0; }
+	
+	/* Main layout */
+	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; flex-basis: 0%; */ }
 	#iris-page { display: block; }
 	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
 	.iris-cols { display: block; }
+	#iris-body .elgg-layout-one-sidebar.elgg-context-invite_external .elgg-main, #iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main, #iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { margin-right: 0; }
 	
 	/* Recherche groupe */
 	.iris-search-header { height: 14rem; }
@@ -1785,19 +1836,58 @@ a[name=unlike] { color: #1488CA !important; }
 	.iris-search-menu { padding-left: 3rem; }
 	
 	/* Profil */
+	.elgg-layout.elgg-context-profile { padding: 0; }
+	.iris-profile-header { min-height: 10rem; height: auto; }
+	.iris-profile-header > a { display: flex; flex-wrap: wrap; }
+	.iris-profile-header > a .iris-profile-icon { flex: 0 0 auto; position: initial; margin: 2rem 0rem 2rem 2rem; }
+	.iris-profile-header > a .iris-profile-title { flex: 1 1 0%; position: initial; margin: 2rem 0rem 2rem 2rem; }
 	.iris-profile-title { top: 2rem; left: 10rem; }
-	.iris-profile-icon { top: 2rem; left: 2rem; width: 8rem; height: 8rem; }
-
-	.elgg-menu-topbar { margin-left: 0; display: block; }
-	.footer-logo-inria { margin: 12px 0; }
-	
+	#iris-body .iris-profile-title h2 { font-size: 2rem; }
+	.iris-profile-icon { top: 2rem; left: 2rem; width: 6rem; height: 6rem; }
+	.iris-profile-editavatar { padding: 2rem 1rem; }
+	.iris-profile-editavatar .fa { font-size: 1.5rem; }
+	.iris-profile-addfriend { right: -1rem; top: -1rem; }
+	.iris-profile-removefriend { right: -1rem; top: 1rem; }
+	.iris-profile-isfriend { right: -1rem; top: -11rem; }
+	.iris-profile-pendingfriend { right: -1rem; top: -1rem; }
+	.iris-profile-sendmessage { right: -1.5rem; top: 3.5rem; }
+	.iris-profile-info { padding-left: 1rem; }
 	.profile-col-profile, .profile-col-details { width:46%; }
 	.profile-col-activity { width:100%; }
 	.profile-col-profile2, .profile-col-largedetails { width:100%; }
-	.profile-col-profile .profile { floatabl:none; :40%; }
+	.profile-col-profile .profile { float:none; width:40%; }
 	
-	.iris-topbar-menu #user { max-width: 2.5rem; height: 2.5rem; overflow: hidden; }
+	/* Groupe */
+	.iris-group-header { min-height: 16rem; }
+	.iris-group-image { height: 6rem; width: 6rem; left: 2rem; top: 2rem; }
+	.iris-group-title { top: 2rem; right: 2rem; left: 10rem; }
+	#iris-body .iris-group-title h2 { font-size: 2rem; line-height: 2.25rem; }
+	.iris-group-menu { padding-left: 2rem; }
+	.iris-group-subtitle { margin: 0.5rem 0 1rem 0; font-size: 0.9rem; font-weight: normal; }
+	.iris-group-rules { font-size: 1rem; }
+	
+	
+	/* River */
+	.elgg-menu-river lifloat, .elgg-menu-river li.elgg-menu-item-container, .elgg-menu-river li.elgg-menu-item-access { clear: left; }
+	
+	/* Feedback */
+	#feedbackWrapper #feedBackContentWrapper { background: #384257; z-index: 501; }
+	#feedbackWrapper #feedBackContent { width: auto; padding: 1rem; margin: 1rem; }
+	
+	
+	/* Chat */
+	.elgg-page #groupchat-sitelink { display: block; border: 0; box-shadow: none; color: rgba(255,255,255,0.5); background: transparent; margin: 0; width: auto; height: auto; padding: 1rem 0 0.5rem 1rem; text-indent: 0; text-transform: uppercase; text-decoration: none; font-size: 1.5rem; }
+	
+	
+	
 }
 
+
+@media (max-width: 700px) {
+	/* Feedback */
+	#feedBackContentWrapper { background: #384257; z-index: 501; }
+	#feedBackContent { width: auto; padding: 1rem; margin: 1rem; }
+	
+}
 
 

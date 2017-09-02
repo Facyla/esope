@@ -106,7 +106,7 @@ if (elgg_instanceof($page_owner, 'user')) { echo $user_header; }
 	//if (!empty($vars['title'])) { echo '<h2>' . $vars['title'] . '</h2>'; }
 	?>
 	<h2 class="invisible"><?php echo elgg_echo('accessibility:sidebar:title'); ?></h2>
-	<div class="menu-sidebar-toggle" title="<?php echo elgg_echo('esope:menu:sidebar'); ?>"><i class="fa fa-th-large"></i></div>
+	<div class="menu-sidebar-toggle" title="<?php echo elgg_echo('esope:menu:sidebar'); ?>"><i class="fa fa-th-large"></i> <?php echo elgg_echo('esope:menu:sidebar'); ?></div>
 	<div class="elgg-sidebar">
 		<div class="menu-sidebar-toggle hidden" style=""><i class="fa fa-compress"></i> <?php echo elgg_echo('hide') . ' ' . elgg_echo('esope:menu:sidebar'); ?></div>
 		<?php

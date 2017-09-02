@@ -185,7 +185,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 					'name' => 'container',
 					'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name, 30),
 					'href' => $container->getURL(),
-					'class' => 'iris-container',
+					'link_class' => 'iris-container',
 					'priority' => 100,
 				));
 		}
@@ -223,7 +223,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 					'name' => 'thread',
 					'href' => "thewire/thread/$post->wire_thread",
 					'text' => elgg_echo('thewire:thread'),
-					'class' => 'wire-thread',
+					'link_class' => 'wire-thread',
 					'priority' => 50,
 				));
 			*/

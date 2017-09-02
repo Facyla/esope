@@ -124,7 +124,7 @@ $(document).ready(function() {
 	button.on('click', function() {
 		menu.toggleClass('menu-enabled');
 		//menu.toggle();
-		button.toggleClass('hidden');
+		//button.toggleClass('hidden');
 	});
 });
 
