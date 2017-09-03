@@ -1645,11 +1645,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$loadmore_offset = $search_params['offset'] + $search_params['limit'];
 	if (($hide_loadmore != 'yes') && ($loadmore_offset > 0) && ($loadmore_offset < $return_count)) {
 		$target = '#esope-search-results';
-error_log("   url_fragment $url_fragment");
-		//$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
-		$loadmore_url = elgg_http_add_url_query_elements(current_page_url(), array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
-		$loadmore_url .= $url_fragment;
-error_log("   loadmore_url $loadmore_url");
+		$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
 		$remaining_results = $return_count - $loadmore_offset;
 		$next_results = min($search_params['limit'], $remaining_results);
 		if ($remaining_results > $next_results) { 
