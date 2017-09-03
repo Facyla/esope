@@ -1196,15 +1196,16 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .entity-submenu-content { position: absolute; right: 0; top: 0; padding: 1.5rem 0 0 0; z-index: 2; }
 .elgg-list-entity .entity-submenu-content ul { background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 13rem; max-width: 16rem; padding: 0.5rem 1.25rem; margin: 0; display: flex; flex-direction: column; flex-basis: 0%; }
 */
-.entity-submenu-content { position: absolute; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 10rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
+.entity-submenu-content { position: absolute; top:0; right: 0; background: white; box-shadow: 0 0 4px 0 rgba(0,0,0,0.5); width: 10rem; max-width: 16rem; padding: 0.5rem 1.25rem; z-index: 2; }
 .elgg-list-entity .entity-submenu-content ul { margin: 0; display: flex; flex-direction: column; flex-basis: 0%; }
 .iris-object .entity-submenu-content .elgg-menu-entity { margin: 0; }
 .iris-object .entity-submenu-content .elgg-menu-entity li a, 
 .elgg-list-entity .entity-submenu-content ul li { margin: 0; /* padding: 0.3rem 0 0.2rem 0; */ padding: 0; text-align: left; color: #384257; }
 .elgg-list-entity .entity-submenu-content ul li a { color: #384257; padding: 0; margin: 0; }
 .entity-submenu:hover .entity-submenu-content, .entity-submenu:active .entity-submenu-content, .entity-submenu:focus .entity-submenu-content { display: block; }
-/* Enlarge the hovered zone so we don't loose the submenu too easily */
-.entity-submenu:hover a, .entity-submenu:active a, .entity-submenu:focus a { padding: 0 0.5rem 0 8.5rem; }
+/* Enlarge the hovered zone so we don't loose the submenu too easily
+.entity-submenu:hover a, .entity-submenu:active a, .entity-submenu:focus a { padding: 0 0.5rem 0 0.5rem; }
+*/
 .iris-object .entity-submenu-content .elgg-menu-entity li { display: block; margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; float: none; }
 .iris-object .entity-submenu-content .elgg-menu-entity li.elgg-menu-multilingual { display: inline-block; padding-right: 1rem; }
 .iris-object .entity-submenu-content ul li *, 
