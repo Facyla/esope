@@ -1257,7 +1257,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
    Note that search can be parametered both directly (params), or with URL. Params will override URL queries.
    Important : $params are NOT defaults, these are filters = if set to anything (except false), it will override GET inputs
  * $defaults : sets the defaults for any input value
- * *max_results : let's override the max number of displayed results. 
+ * $max_results : let's override the max number of displayed results. 
    Note that a pagination should be implemented by any plugin using this function
  * TODO :
    - fulltext search in tags
@@ -1485,7 +1485,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	}
 
 	// Build metadata name-value pairs from input array
-	if ($metadata && ($hide_pagination != 'yes')) {
+	if ($metadata) {
 		foreach ($metadata as $name => $value) {
 			if (!empty($name) && !empty($value)) {
 				$metadata_name_value_pairs[] = array('name' => $name, 'value' => $value);
@@ -1645,7 +1645,11 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$loadmore_offset = $search_params['offset'] + $search_params['limit'];
 	if (($hide_loadmore != 'yes') && ($loadmore_offset > 0) && ($loadmore_offset < $return_count)) {
 		$target = '#esope-search-results';
-		$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
+error_log("   url_fragment $url_fragment");
+		//$loadmore_url = elgg_http_add_url_query_elements(current_page_url() . $url_fragment, array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
+		$loadmore_url = elgg_http_add_url_query_elements(current_page_url(), array('offset' => $loadmore_offset, 'add_count' => false, 'hide_pagination' => 'yes', 'hide_loadmore' => 'no'));
+		$loadmore_url .= $url_fragment;
+error_log("   loadmore_url $loadmore_url");
 		$remaining_results = $return_count - $loadmore_offset;
 		$next_results = min($search_params['limit'], $remaining_results);
 		if ($remaining_results > $next_results) { 
@@ -1661,7 +1665,7 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 				//'onClick' => "$.post('" . $loadmore_url . "', function(data) { $('" . $target . "').append(data); });",
 				'onClick' => "$.post('" . $loadmore_url . "', function(data) { $('#esope-esearch-loadmore').replaceWith(data); });",
 				'is_trusted' => true,
-				'is_action' => true,
+				//'is_action' => true, // tokens already added in $loadmore_url
 			));
 		$return .= '</div>';
 	}
