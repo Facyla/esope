@@ -92,6 +92,7 @@ $main_maxwidth = "80%";
 // Pose des pbs sur l'accueil, et sur les pages de contenus en vue complète notamment
 // Ca fonctionne moins mal avec 0 ou auto mais crée d'autres effets de bord ailleurs (liste des feedbacks par ex.)
 // Note : une solution semble d'ajouter flex-basis: 0% ou auto ? à chaque utilisation de flex-direction column : voir si pas d'effet de bord ?
+/* Pages concernées : accueil, profil membre, listing des feedbacks... */
 $width = array(
 	/*
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
@@ -100,9 +101,9 @@ $width = array(
 	'main' => "min-width: 28rem; max-width: 46rem; flex: 1 1 28rem; margin: 0 2.5rem 2.5rem 0;",
 	*/
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
-	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0; margin: 0 2.5rem 2.5rem 0;",
-	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0; margin: 0 2.5rem 2.5rem 0;",
-	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 auto; margin: 0 2.5rem 2.5rem 0;",
+	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
+	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
+	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 0%; margin: 0 2.5rem 2.5rem 0;",
 );
 
 ?>
@@ -159,7 +160,7 @@ $width = array(
 .elgg-page .elgg-layout .elgg-sidebar.menu-enabled { display: block; }
 
 /* Main content */
-.iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; /* max-width: 100,5rem; */ width: 100%; /* justify-content: space-evenly; */ justify-content: space-around; justify-content: flex-start; }
+.iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; /* max-width: 100.5rem; */ width: 100%; /* justify-content: space-evenly; */ justify-content: space-around; justify-content: flex-start; }
 .iris-cols.form-groups-add { padding: 0 0 0 2.5rem; }
 .elgg-context-profile .iris-cols { padding: 0 0 0 2.5rem; margin-top: 2.5rem; }
 .iris-col { <?php echo $width['main']; ?> padding: 0 0; /* margin: 0 auto; */ }
@@ -416,7 +417,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .home-wire .thewire-form { padding: 0; }
 .home-wire .thewire-form .elgg-button-submit { margin-top:3px; }
 .elgg-context-thewire .thewire-form select, 
-.home-wire .thewire-form select { margin-left: 3.5rem; max-width: 10rem; }
+.home-wire .thewire-form select { margin: 0.25rem 0 0.25rem 3.5rem; padding: 0.25rem; max-width: 10rem; }
 
 .home-wire, .home-activity { background:white; padding:0; }
 .home-wire h2 a, .home-activity h2 a { font-size:1.375rem; margin-bottom: 0; color:<?php echo $titlecolor; ?>; }
@@ -441,10 +442,10 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-form-thewire-group-add #thewire-textarea { height: 4em; padding: 1px 3px; }
 .elgg-form-thewire-group-add #thewire-characters-remaining span { margin: 0 12px 0 0; float:none; font-size: 1.2em; }
 .thewire-remaining-message { color: red; }
-.elgg-form-thewire-group-add .elgg-button-submit { margin-top: 3px; }
+.elgg-form-thewire-group-add .elgg-button-submit { margin-top: 0; }
 .theme_inria-thewire-group-add {}
 .theme_inria-thewire-group-add h3 { margin-top: 20px; }
-.elgg-form-thewire-group-add select { max-width: 20ex; float: right; }
+.elgg-form-thewire-group-add select { margin: 0.25rem 0 0.25rem 0; padding: 0.25rem; max-width: 10rem; }
 
 /* Réduction des contenus de la rivière : voir si home seule ou partout */
 .elgg-river .elgg-item img, .elgg-river .elgg-item iframe { max-width: 100%; max-height: 50px; }
@@ -1165,7 +1166,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-item-group h3 { padding: 0; margin: 0 0 0.625rem 0; }
 .elgg-item-group h3 a { padding: 0; margin: 0; font-size: 1.375rem; color: #384257; text-decoration:none; }
 .elgg-item-group .elgg-image-block .elgg-image { background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); }
-.elgg-item-group .elgg-image-block .elgg-image a { width: 12.5rem; height: 12.5rem; line-height: 12.5rem; display: flex; }
+.elgg-item-group .elgg-image-block .elgg-image a { width: 12.5rem; height: 12.5rem; overflow: hidden; line-height: 12.5rem; display: flex; }
 ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group .elgg-image img { width: 12.5rem; margin: auto; }
 .elgg-item-group .iris-group-body { padding: 1.5rem 2rem 1.5rem 0rem; }
 .elgg-item-group .elgg-menu-item-access, 
@@ -1202,7 +1203,10 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-list-entity .entity-submenu-content ul li { margin: 0; /* padding: 0.3rem 0 0.2rem 0; */ padding: 0; text-align: left; color: #384257; }
 .elgg-list-entity .entity-submenu-content ul li a { color: #384257; padding: 0; margin: 0; }
 .entity-submenu:hover .entity-submenu-content, .entity-submenu:active .entity-submenu-content, .entity-submenu:focus .entity-submenu-content { display: block; }
+/* Enlarge the hovered zone so we don't loose the submenu too easily */
+.entity-submenu:hover a, .entity-submenu:active a, .entity-submenu:focus a { padding: 0 0.5rem 0 8.5rem; }
 .iris-object .entity-submenu-content .elgg-menu-entity li { display: block; margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; float: none; }
+.iris-object .entity-submenu-content .elgg-menu-entity li.elgg-menu-multilingual { display: inline-block; padding-right: 1rem; }
 .iris-object .entity-submenu-content ul li *, 
 .elgg-list-entity .entity-submenu-content ul li * { color: #384257; font-weight: normal; font-size: 0.9375rem; }
 .iris-object .entity-submenu-content .elgg-menu-entity li.elgg-menu-item-access span { margin: 0; }
@@ -1640,7 +1644,7 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .object-poll-workspace:last-of-type { margin-bottom: 0; }
 .poll_input-poll-choice { margin-bottom: 0.2rem; }
 .elgg-form-poll-edit #add-choice { }
-.poll_closing-date-open, .poll_closing-date-closed { color: #969696; }
+div.poll_closing-date-open, div.poll_closing-date-closed { color: #969696; }
 
 
 /* Object types workspace rendering */

@@ -27,7 +27,7 @@ function esope_search(){
 }
 </script>';
 
-// @TODO Handle and perform URL-preset query
+// Handle and perform URL-preset query
 $q = get_input('q');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);

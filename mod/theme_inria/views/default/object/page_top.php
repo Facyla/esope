@@ -104,7 +104,8 @@ if (!elgg_in_context('widgets')) {
 if (elgg_instanceof($page_owner, 'group')) {
 	$menu = elgg_view_menu('entity', array(
 			'entity' => $page,
-			'handler' => $page->getSubtype(),
+			//'handler' => $page->getSubtype(), // wrong edit links
+			'handler' => 'pages',
 			'sort_by' => 'priority',
 			'class' => 'elgg-menu-vert',
 		));

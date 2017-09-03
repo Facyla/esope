@@ -21,6 +21,7 @@ $menu = elgg_view_menu('entity', array(
 		'sort_by' => 'priority',
 		'class' => 'elgg-menu-vert',
 	));
+$menu = "TEST";
 $header = '<div class="entity-headline">';
 	if ($mode != 'listing') {
 		$header .= '<div class="owner-icon"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium profile-type-' . $profile_type . '"><img src="' . $owner->getIconURL(array('size' => 'small')) . '" /></a></div>';

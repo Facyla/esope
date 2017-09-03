@@ -652,14 +652,6 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
 
-	if (elgg_instanceof($entity, 'object', 'thewire')) {
-		foreach ($return as $index => $item) {
-			if ($item->getName() == 'thread') { unset($return[$index]); }
-			if ($item->getName() == 'reply') { unset($return[$index]); }
-			if ($item->getName() == 'previous') { unset($return[$index]); }
-		}
-	}
-	
 	if (elgg_instanceof($entity, 'object', 'file')) {
 		if ($entity->canEdit()) {
 			// @TODO édition en lightbox
@@ -675,8 +667,19 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 	
 	if (elgg_instanceof($entity, 'object')) {
 		foreach ($return as $index => $item) {
-			if (in_array($item->getName(), array('likes', 'unlike', 'likes_count', 'access'))) {
+			if (in_array($item->getName(), array('likes', 'unlike', 'likes_count', 'access', 'history'))) {
 				unset($return[$index]);
+			}
+			
+			if (elgg_instanceof($entity, 'object', 'thewire')) {
+				if (in_array($item->getName(), array('thread', 'reply', 'previous'))) { unset($return[$index]); }
+			}
+			
+			if ($item->getName() == 'delete') {
+				$return[$index]->setText('<i class="fa fa-times"></i>&nbsp;' . elgg_echo('delete'));
+			}
+			if ($item->getName() == 'edit') {
+				$return[$index]->setText('<i class="fa fa-pencil"></i>&nbsp;' . elgg_echo('edit'));
 			}
 		}
 	}
@@ -774,7 +777,7 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 }
 
 
-
+// Replaces default user icon with a unique generated icon
 function theme_inria_user_icon_hook($hook, $type, $return, $params) {
 	if (elgg_is_active_plugin('default_icons')) {
 		static $algorithm = false;

@@ -1,6 +1,6 @@
 <?php
 /**
-* Elgg theme_inria plugin language pack
+* Elgg theme_inria plugin english language pack
 * 
 * @package theme_inria
 **/

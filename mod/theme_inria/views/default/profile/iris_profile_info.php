@@ -42,29 +42,25 @@ if (!empty($profile_type_label)) {
 if ($show_inria_fields) {
 	if ($user->inria_location) {
 		echo '<div class="iris-profile-info-field">
-			' . elgg_echo('profile:inria_location') . '<br />
-			<strong>';
+			' . elgg_echo('profile:inria_location') . '<br />';
 		foreach((array)$user->inria_location as $inria_location) {
 			echo elgg_view('output/url', array('text' => $inria_location, 'href' => "members?inria_location=" . $inria_location));
 		}
-		echo '</strong>
-		</div>';
+		echo '</div>';
 	}
 	if (!empty(trim($user->inria_location_main))) {
 		echo '<div class="iris-profile-info-field">
 			' . elgg_echo('profile:inria_location_main') . '<br />
-			<strong>' . elgg_view('output/url', array('text' => $user->inria_location_main, 'href' => "members?inria_location_main=" . $user->inria_location_main)) . '</strong>
-		</div>';
+			' . elgg_view('output/url', array('text' => $user->inria_location_main, 'href' => "members?inria_location_main=" . $user->inria_location_main)) . '
+			</div>';
 	}
 	if ($user->epi_ou_service) {
 		echo '<div class="iris-profile-info-field">
-			' . elgg_echo('profile:epi_ou_service') . '<br />
-			<strong>';
+			' . elgg_echo('profile:epi_ou_service') . '<br />';
 		foreach((array)$user->epi_ou_service as $epi_ou_service) {
 			echo elgg_view('output/url', array('text' => $epi_ou_service, 'href' => "members?epi_ou_service=" . $epi_ou_service));
 		}
-		echo '</strong>
-		</div>';
+		echo '</div>';
 	}
 	if ($user->inria_room) {
 		echo '<div class="iris-profile-info-field">
