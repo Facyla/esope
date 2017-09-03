@@ -50,7 +50,7 @@ if ($parent_post) {
 	//$access_input .= '<div style="display:inline-block;">' . elgg_view('output/access', array('value' => $default_access)) . '</div>';
 	$inria_access_id = theme_inria_get_inria_access_id();
 	// Only Inria only can select access (defaults to Inria only))
-	if ($inria_access_id) {
+	if ($inria_access_id && (esope_get_user_profile_type() == 'inria')) {
 		$access_id = elgg_extract('access_id', $vars, $inria_access_id);
 		$access_opt = array(
 				$inria_access_id => elgg_echo('profiletype:inria'),

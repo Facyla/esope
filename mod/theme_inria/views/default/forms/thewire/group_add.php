@@ -71,20 +71,22 @@ echo elgg_view('input/plaintext', array(
 		?>
 	</span>
 	<?php
-	$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
-	$access_opt = array(
-			$group->group_acl => get_readable_access_level($group->group_acl),
-			//'1' => elgg_echo('LOGGED_IN')
-		);
+	
 	// Force to group access if content access mode enabled
 	if ($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
 		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
-		return;
+	} else {
+		$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
+		$inria_access_id = theme_inria_get_inria_access_id();
+		// Only Inria only can select access (defaults to Inria only))
+		$access_id = elgg_extract('access_id', $vars, $inria_access_id);
+		$access_opt = array();
+		$access_opt[$group->group_acl] = get_readable_access_level($group->group_acl);
+		if ($inria_access_id && (esope_get_user_profile_type() == 'inria')) { $access_opt[$inria_access_id] = elgg_echo('profiletype:inria'); }
+		$access_opt['1'] = elgg_echo('LOGGED_IN');
+		echo elgg_view('input/select', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
 	}
-	echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
-	/*
-	echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
-	*/
 	?>
+	
 </div>
 

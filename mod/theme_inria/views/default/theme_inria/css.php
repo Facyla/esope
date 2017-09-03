@@ -345,7 +345,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 /* Titre listing des groupes */
 .groups-profile-icon .au_subgroups_group_icon-large { height: auto; width: auto; }
 .groups-profile-icon .au_subgroups_group_icon-large img { height: auto; width: auto; max-height: 100px; max-width: 200px; }
-.elgg-context-groups .elgg-list-entity h3 { /* font-size: 1rem; */ display:inline-block; }
+.elgg-context-groups .elgg-list-entity h3 { /* font-size: 1rem; display:inline-block; */ display:inline; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium { width: 50px; height: 50px; }
 .elgg-context-groups .elgg-list-entity .elgg-image .au_subgroups_group_icon-medium img { width: 100%; height: 100%; }
 .au_subgroups_group_icon span.au_subgroup { display: none; }
@@ -1067,7 +1067,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-list .elgg-item { background: white; margin: 0 0 1.25rem 0; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); padding: 1.5rem 2rem; }
 .elgg-context-thewire:not(.elgg-context-workspace-content) .elgg-list .elgg-item, 
 .iris-box .elgg-list .elgg-item { padding: 0 0 1rem 0; box-shadow: none; }
-.elgg-layout-group .elgg-list .elgg-item.elgg-item-object-thewire { border: 0; margin: 0 0 1.25rem 0; padding: 1.5rem 2rem; }
+.elgg-layout-group:not(.elgg-context-workspace) .elgg-list .elgg-item.elgg-item-object-thewire { border: 0; margin: 0 0 1.25rem 0; padding: 1.5rem 2rem; }
 .elgg-layout-group.elgg-context-thewire-thread .elgg-list .elgg-item.elgg-item-object-thewire { padding: 0; margin: 0; }
 .elgg-river-item .elgg-river-message .elgg-river-target { margin-left: 1rem; float: none; font-variant: initial; font-size: 0.85em; }
 .iris-box .elgg-river-responses .elgg-list .elgg-item { padding: 0.25rem; }
@@ -1640,6 +1640,7 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .object-poll-workspace:last-of-type { margin-bottom: 0; }
 .poll_input-poll-choice { margin-bottom: 0.2rem; }
 .elgg-form-poll-edit #add-choice { }
+.poll_closing-date-open, .poll_closing-date-closed { color: #969696; }
 
 
 /* Object types workspace rendering */
@@ -1815,6 +1816,7 @@ a[name=unlike] { color: #1488CA !important; }
 	
 	/* Sidebar */
 	.elgg-menu-owner-block li a, .elgg-sidebar ul.elgg-menu-page li a { border: 0; }
+	.menu-sidebar-toggle, .elgg-sidebar .menu-sidebar-toggle { margin: 0 -1.5rem; }
 	/* Alt Sidebar */
 	.iris-group-sidebar-alt { margin: 0 0 2.5rem 0; }
 	
@@ -1824,16 +1826,24 @@ a[name=unlike] { color: #1488CA !important; }
 	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
 	.iris-cols { display: block; }
 	#iris-body .elgg-layout-one-sidebar.elgg-context-invite_external .elgg-main, #iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main, #iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { margin-right: 0; }
+	#iris-body .elgg-layout-one-sidebar .elgg-main { margin-right: 0; }
 	
-	/* Recherche groupe */
+	/* Listings */
+	.elgg-list .elgg-item { padding: 1rem; }
+	
+	/* Recherche group user object */
 	.iris-search-header { height: 14rem; }
-	#iris-body .iris-search-quickform h2 { font-size: 2rem; line-height: 2.25rem; margin-bottom: 1rem; }
-	.iris-search-image { top: 2rem; left: 2rem; padding: 0.5rem; width: 6rem; height: 6rem; }
-	.iris-search-quickform { top: 2rem; left: 10rem; width: 20rem; }
-	#iris-search-quickform { height: 2.5rem; line-height: 2.5rem; width: 20rem; }
-	#iris-search-quickform #iris-search-header-input { width: 17.5rem; }
+	#iris-body .iris-search-quickform h2 { font-size: 1.75rem; line-height: 2rem; margin-bottom: 1rem; }
+	.iris-search-image { top: 1rem; left: 1rem; padding: 0.5rem; width: 6rem; height: 6rem; }
+	.iris-search-quickform { top: 1rem; left: 8rem; width: 18rem; }
+	#iris-search-quickform { height: 2.5rem; line-height: 2.5rem; width: 18rem; }
+	#iris-search-quickform #iris-search-header-input { width: 16rem; }
 	#iris-search-quickform input[type="reset"] { line-height: 2rem; }
-	.iris-search-menu { padding-left: 3rem; }
+	.iris-search-menu { padding-left: 1rem; }
+	#esope-search-results .elgg-menu-entity { text-align: center; float: none; }
+	#esope-search-results .elgg-item-user h3 { margin: 0.5rem; padding: 0; font-size: 1rem; }
+	
+	span.iris-badge { display: block; margin-top: 0.5rem; }
 	
 	/* Profil */
 	.elgg-layout.elgg-context-profile { padding: 0; }
@@ -1841,9 +1851,9 @@ a[name=unlike] { color: #1488CA !important; }
 	.iris-profile-header > a { display: flex; flex-wrap: wrap; }
 	.iris-profile-header > a .iris-profile-icon { flex: 0 0 auto; position: initial; margin: 2rem 0rem 2rem 2rem; }
 	.iris-profile-header > a .iris-profile-title { flex: 1 1 0%; position: initial; margin: 2rem 0rem 2rem 2rem; }
-	.iris-profile-title { top: 2rem; left: 10rem; }
-	#iris-body .iris-profile-title h2 { font-size: 2rem; }
-	.iris-profile-icon { top: 2rem; left: 2rem; width: 6rem; height: 6rem; }
+	.iris-profile-title { top: 1rem; left: 8rem; }
+	#iris-body .iris-profile-title h2 { font-size: 1.75rem; line-height: 2rem; }
+	.iris-profile-icon { top: 1rem; left: 1rem; width: 6rem; height: 6rem; }
 	.iris-profile-editavatar { padding: 2rem 1rem; }
 	.iris-profile-editavatar .fa { font-size: 1.5rem; }
 	.iris-profile-addfriend { right: -1rem; top: -1rem; }
@@ -1859,13 +1869,16 @@ a[name=unlike] { color: #1488CA !important; }
 	
 	/* Groupe */
 	.iris-group-header { min-height: 16rem; }
-	.iris-group-image { height: 6rem; width: 6rem; left: 2rem; top: 2rem; }
-	.iris-group-title { top: 2rem; right: 2rem; left: 10rem; }
-	#iris-body .iris-group-title h2 { font-size: 2rem; line-height: 2.25rem; }
-	.iris-group-menu { padding-left: 2rem; }
+	.iris-group-image { height: 6rem; width: 6rem; top: 1rem; left: 1rem; }
+	.iris-group-title { top: 1rem; right: 1rem; left: 10rem; }
+	#iris-body .iris-group-title h2 { font-size: 1.75rem; line-height: 2rem; }
+	.iris-group-menu { padding-left: 1rem; }
 	.iris-group-subtitle { margin: 0.5rem 0 1rem 0; font-size: 0.9rem; font-weight: normal; }
 	.iris-group-rules { font-size: 1rem; }
 	
+	.groups-edit-field { display: block; }
+	.groups-edit-field .groups-edit-label, 
+	.groups-edit-field .groups-edit-input { width: auto; text-align:justify; }
 	
 	/* River */
 	.elgg-menu-river lifloat, .elgg-menu-river li.elgg-menu-item-container, .elgg-menu-river li.elgg-menu-item-access { clear: left; }

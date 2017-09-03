@@ -26,10 +26,10 @@ $simpletype = '<span class="file-simpletype">' . $file->simpletype . '</span>';
 $extension = '<span class="file-extension">' . pathinfo($file->originalfilename)['extension'] . '</span>';
 $file_meta = '<p class="file-meta">';
 $file_meta .= $filename;
-$file_meta .= $filesize;
-$file_meta .= $extension;
 $file_meta .= $simpletype;
-$file_meta .= $mimetype;
+$file_meta .= $extension;
+$file_meta .= $filesize;
+//$file_meta .= $mimetype;
 $file_meta .= '</p>';
 
 $owner_link = elgg_view('output/url', array(

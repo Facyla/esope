@@ -113,15 +113,15 @@ return array(
 	'groups:tabs:presentation' => 'Présentations',
 	'groups:tabs:photos' => 'Photos',
 	
-	'blog:none' => 'Aucune news pour le moment',
-	'blog:addpost' => "Ajouter une nouvelle news",
-	'blog:editpost' => "Editer cette news",
-	'blog:delpost' => "Supprimer cette news",
+	'blog:none' => 'Aucun sujet pour le moment',
+	'blog:addpost' => "Ajouter un nouveau sujet",
+	'blog:editpost' => "Editer ce sujet",
+	'blog:delpost' => "Supprimer ce sujet",
 	
-	'bookmarks:none' => 'Aucun signet pour le moment',
-	'bookmarks:edit' => 'Modifier ce signet',
-	'bookmarks:delete' => 'Supprimer ce signet',
-	'bookmarks:add' => 'Partager un nouveau signet',
+	'bookmarks:none' => 'Aucun lien web pour le moment',
+	'bookmarks:edit' => 'Modifier ce lien web',
+	'bookmarks:delete' => 'Supprimer ce lien web',
+	'bookmarks:add' => 'Partager un nouveau lien web',
 	
 	'pages:new' => 'Ajouter une nouvelle page',
 	'pages:none' => 'Aucune page pour le moment',
@@ -129,7 +129,7 @@ return array(
 	'groups:deltopic' => 'Supprimer la discussion',
 	'groups:tabs:river' => 'Les dernières activités',
 	'groups:lastactivity' => 'Dernière activité %s',
-	'groups:admin' => 'Admin: ',
+	'groups:admin' => 'Admin : ',
 	'groups:publications' => 'Publications',
 	
 	'file:edit' => 'Modifier le fichier',
@@ -417,10 +417,12 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'theme_inria:cron:ldap:done' => "CRON quotidien Inria LDAP...OK",
 	'theme_inria:cron:done' => "CRON quotidien Inria...OK",
 	
+	// Cron
+	'theme_inria:cron:ldap:done' => "Daily CRON Inria LDAP done",
+	'theme_inria:cron:done' => "Daily CRON Inria done",
+
 	// New ACLs
 	'profiletype:inria' => "Inria seulement",
-	
-	
 	
 	// Groups invites
 	'userpicker:only_friends' => "Afficher seulement les contacts",
@@ -475,7 +477,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'avatar:current' => 'Image actuelle',
 	'avatar:remove' => 'Supprime votre photo et restaure l\'icône par défaut',
 	'avatar:crop:title' => 'Outil pour recadrer votre photo',
-	'avatar:upload:instructions' => "Votre photo est affichée sur tout le site. Vous pouvez la changer quand vous le souhaitez. (Formats de fichiers acceptés: GIF, JPG ou PNG - format carré - dimensions minimum recommandées 200x200)",
+	'avatar:upload:instructions' => "Votre photo est affichée sur tout le site. Vous pouvez la changer quand vous le souhaitez. (Formats de fichiers acceptés : GIF, JPG ou PNG - format carré - dimensions minimum recommandées 200x200)",
 	'avatar:create:instructions' => "Agrandissez et déplacez le carré qui apparaît afin de recadrer votre photo. Un aperçu est disponible à droite de l'image. Un aperçu s'affiche sur la droite. Lorsque le résultat vous convient, cliquez sur « Créer la photo ». Cette version recadrée sera utilisée sur l'ensemble du site pour vous représenter.",
 	'avatar:upload:success' => 'La photo a bien été chargée',
 	'avatar:upload:fail' => 'Échec du chargement de la photo',
@@ -566,14 +568,13 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'blog:numbertodisplay' => "Nombre de sujets à afficher",
 	'blog:noblogs' => "Aucun sujet",
 	'blog:notification' => "%s a écrit un nouveau sujet&nbsp; :
-
 %s
 
 %s
 
 Afficher et commenter le nouveau sujet :
-
-%s",
+%s
+",
 	
 	'theme_inria:postbymail:nousersettings' => "Réglage désactivé - Seules les adresses Inria sont autorisées à publier par email sur le site.",
 	
@@ -674,9 +675,9 @@ Afficher et commenter le nouveau sujet :
 	'bookmarks:notify:summary' => 'Nouveau lien web intitulé %s',
 	'bookmarks:notify:subject' => 'Nouveau lien web : %s',
 	'bookmarks:notify:body' =>
-'%s a ajouté un nouveau lien web: %s
+'%s a ajouté un nouveau lien web : %s
 
-Adresse: %s
+Adresse : %s
 
 %s
 
@@ -809,9 +810,9 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:workspace' => "Espace de travail",
 	'theme_inria:workspace:main' => "Espace de travail",
-	'workspace:title' => "Espace de travail&nbsp;: %s",
-	'workspace:title:main' => "Espace de travail&nbsp;: %s",
-	'workspace:title:current' => "Espace de travail actuel&nbsp;: %s",
+	'workspace:title' => "Espace de travail&nbsp; : %s",
+	'workspace:title:main' => "Espace de travail&nbsp; : %s",
+	'workspace:title:current' => "Espace de travail actuel&nbsp; : %s",
 	'theme_inria:workspaces:more' => "+%s espaces <i class=\"fa fa-angle-down\"></i>",
 	'au_subgroups:subgroup:of' => "Espace de travail de %s",
 	
@@ -979,9 +980,9 @@ Voir et commenter ce lien web :
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",
 	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
-	'theme_inria:invite:newemails' => "These emails are not associated with any member account : you may want to invite them to join Iris.",
-	'theme_inria:invite:invalidemails' => "These emails could not be processed : they are either associated with multiple accounts (which should not happen), or are invalid emails.",
-	'theme_inria:invite:existing_users' => "@TODO - NON OPERATIONNEL !!  - These emails are associated with an existing account, which has been invited.",
+	'theme_inria:invite:newemails' => "Ces emails ne sont associés avec aucun compte : vous pouvez si vous le souhaitez les inviter à rejoindre Iris.",
+	'theme_inria:invite:invalidemails' => "Ces emails n'ont pas pu être traités : ils sont soit associés avec plusieurs comptes (ce qui ne devrait pas se produire), ou ce sont des emails non valides.",
+	'theme_inria:invite:existing_users' => "@TODO - NON OPERATIONNEL !!  - Ces emails sont associés avec un compte, qui a été invité.",
 	'theme_inria:invite:proceednext' => "Pour poursuivre vos invitations par email, veuillez cliquer sur les liens d'invitation.",
 	
 	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
@@ -989,6 +990,7 @@ email3@domain.tld email4@domain.tld ",
 	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
+	'profile:community' => "Communautés",
 	
 	'likes:userlikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',
 	'likes:userslikedthis' => '%s&nbsp;<i class="fa fa-thumbs-up"></i>',

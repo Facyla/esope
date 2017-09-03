@@ -72,7 +72,13 @@ $details_result .= "</div>\n";
 $details_result .= '<div class="iris-profile-field">';
 	$details_result .= '<h4>' . "Compétences & Centres d'intérêts" . '</h4>';
 	$user_tags = array_merge((array)$user->skills, (array)$user->interests);
-	$details_result .= elgg_view("output/tags", array("value" => $user_tags));
+	if ($user_tags) {
+		$details_result .= '<ul class="elgg-tags">';
+		foreach($user_tags as $tag) {
+			$details_result .= '<li class="elgg-tag">' . elgg_view('output/url', array('text' => $tag, 'href' => "members?skills=" . $tag)) . '</li>';
+		}
+		$details_result .= '</ul>';
+	}
 $details_result .= "</div>\n";
 
 
