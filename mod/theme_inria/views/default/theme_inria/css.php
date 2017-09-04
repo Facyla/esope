@@ -727,7 +727,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-topbar-item.elgg-menu-topbar  ul > li > a { background: white; margin:0; width: 100%; text-indent: 0.5em; padding:1rem 0; font-size: 0.875rem; }
 .iris-topbar-item #user { margin: 0.5rem 0rem 0rem 1rem; }
 .iris-topbar-item #user img { float: left; margin-right: 0.375rem; border-radius: 1.125rem; height: 2.25rem }
-.login-as-arrow { vertical-align: 20%; }
+.login-as-arrow { vertical-align: 20%; color: black; margin: 0 -0.45rem; }
 
 .iris-new { position: relative; bottom: 0.8rem; right: 0;height: 8px; /*  width: 8px; background: red; */ border-radius: 8px; display: inline-block; font-size: 8px; width: auto; color:red; text-align: center; vertical-align: middle; line-height: 8px; }
 
@@ -1873,11 +1873,11 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-logo img { margin: 1.1875rem 2rem; }
 	.elgg-menu-topbar { margin-left: 0; display: block; }
 	.iris-topbar-item.elgg-menu-topbar ul { position: fixed; top: 5.1rem; right: 0.1rem; left: 0.1; padding: 0 1rem 0 0; }
-	.iris-topbar-menu #user { max-width: 2.5rem; height: 2.5rem; overflow: hidden; margin-left: 0.5rem; }
+	.iris-topbar-menu #user { max-width: 2.5rem; height: 4rem; overflow: hidden; margin-left: 0.5rem; }
 	.iris-topbar-item.elgg-menu-topbar li#user > a { padding: 0; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
-	.iris-topbar-item > a { padding: 0 0 1.75rem 0; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
+	.iris-topbar-item > a { padding-bottom: 1.75rem; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
+	#logout a.login-as-topbar { padding: .75rem 0.5rem; text-decoration: none; }
 	#notifications .notifications-panel { position: fixed; left: 0.1rem; right: 0.1rem; top: 5.1rem; width: auto; }
-	.iris-topbar-menu #user { height: 3.5rem; }
 	#notifications .notifications-panel .tabs a { margin-left: 1rem; }
 	
 	/* Navigation menu */
