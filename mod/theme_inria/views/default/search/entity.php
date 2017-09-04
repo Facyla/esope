@@ -79,7 +79,7 @@ if (!$time) {
 	$tu = $entity->time_updated;
 	$time = elgg_view_friendly_time(($tu > $tc) ? $tu : $tc);
 }
-if ($tu > $tc) $time .= elgg_echo('theme_inria:updated_time_sep') . elgg_view_friendly_time($tu);
+if ($tu > $tc) $time .= '<span class="time-sep">' . elgg_echo('theme_inria:updated_time_sep') . '</span>' . elgg_view_friendly_time($tu);
 
 $body = "<p class=\"mbn\">$title</p>$description";
 if ($extra_info) {

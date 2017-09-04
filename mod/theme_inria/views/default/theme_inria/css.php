@@ -1161,6 +1161,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 
 .elgg-subtext { font-size: 1.1rem; font-style: normal; color: <?php echo $iris_texttopgrey; ?>; }
 .elgg-subtext time { font-size: 0.75rem; text-transform: uppercase; margin-left: 1em; }
+.time-sep { font-size: 0.75rem; margin: 0 -1em 0 0; }
 
 .elgg-item-user .elgg-image-block { display: flex; }
 .elgg-item-user .elgg-image img { border-radius: 50%; }

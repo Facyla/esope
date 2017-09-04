@@ -306,11 +306,11 @@ if (!empty($query) || $allow_empty_query) {
 				'relevance' => elgg_echo('search:sort:relevance'),
 				'created' => elgg_echo('search:sort:created'),
 				'updated' => elgg_echo('search:sort:updated'),
-				'action_on' => elgg_echo('search:sort:action_on'),
-				'likes' => elgg_echo('search:sort:likes') ." (@TODO)",
+				//'action_on' => elgg_echo('search:sort:action_on'),
+				//'likes' => elgg_echo('search:sort:likes'),
 			);
 			$order = 
-		$content .= '<span class="iris-search-order">' . 'Trier par ' . elgg_view('input/select', array('name' => 'iris_objects_search_order', 'options_values' => $order_opt, 'value' => get_input('sort'))) . '</span>';
+		$content .= '<span class="iris-search-order">' . elgg_echo('members:order:select') . ' ' . elgg_view('input/select', array('name' => 'iris_objects_search_order', 'options_values' => $order_opt, 'value' => get_input('sort'))) . '</span>';
 	$content .= '</div>';
 
 	// Highlight search terms : only on plain text (strips tags)
