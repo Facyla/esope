@@ -1956,7 +1956,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-group-subtitle { margin: 0.5rem 0 1rem 0; font-size: 0.9rem; font-weight: normal; }
 	.iris-group-rules { font-size: 1rem; }
 	.iris-group-menu a, .iris-group-menu .tab-more { font-size: 1rem; padding: 1rem 0; }
-	.iris-group-menu a.add { padding: .25rem .75rem 0rem .75rem; margin: 0.5rem; }
+	.iris-group-menu a.add { width: auto; padding: .25rem .75rem 0rem .75rem; margin: 0.5rem; }
 	
 	.groups-edit-field { display: block; }
 	.groups-edit-field .groups-edit-label, 

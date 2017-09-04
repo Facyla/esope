@@ -6,6 +6,7 @@
  */
 
 $poll = elgg_extract('entity', $vars);
+$full = elgg_extract('full_view', $vars);
 
 if (!$poll) { return TRUE; }
 
@@ -45,6 +46,7 @@ $responses = "<div>" . $responses . " " . $noun . "</div>";
 
 // TODO: support comments off
 // The "on" status changes for comments, so best to check for !Off
+$comments_link = '';
 if ($poll->comments_on != 'Off') {
 	$comments_count = $poll->countComments();
 	//only display if there are commments
@@ -55,17 +57,12 @@ if ($poll->comments_on != 'Off') {
 			'text' => $text,
 			'is_trusted' => true
 		));
-	} else {
-		$comments_link = '';
 	}
-} else {
-	$comments_link = '';
 }
 
 // do not show the metadata and controls in widget view
-if (elgg_in_context('widgets')) {
-	$metadata = '';
-} else {
+$metadata = '';
+if (!elgg_in_context('widgets')) {
 	$metadata = elgg_view_menu('entity', array(
 			'entity' => $poll,
 			'handler' => 'poll',

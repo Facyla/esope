@@ -121,7 +121,7 @@ if ($full) {
 	//echo elgg_view_image_block($owner_icon, $list_body);
 	$content = $closing_date /* . $tags . $categories . $responses */;
 	$content .= $description;
-	if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace')) {
+	if (elgg_instanceof($page_owner, 'group') && !elgg_in_context('workspace') && !elgg_in_context('workspace-content')) {
 		$content .= elgg_view('object/poll_content', $vars);
 	}
 	
