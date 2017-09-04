@@ -218,6 +218,7 @@ $width = array(
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 
 .elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; flex-basis: auto; margin: 0 2.5rem 2.5rem 0; }
+.elgg-body-transp .elgg-main { flex-basis: auto; }
 .elgg-body-transp .elgg-main, 
 #iris-body .iris-group .elgg-body-transp .elgg-main { margin: 0; }
 
