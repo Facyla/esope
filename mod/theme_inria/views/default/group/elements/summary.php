@@ -38,7 +38,7 @@ $title_link = elgg_extract('title', $vars, '');
 if ($title_link === '') {
 	if (isset($entity->title)) { $text = $entity->title; } else { $text = $entity->name; }
 	$params = array(
-		'text' => elgg_get_excerpt($text, 50),
+		'text' => elgg_get_excerpt($text, 70),
 		'href' => $group_url,
 		'is_trusted' => true,
 	);

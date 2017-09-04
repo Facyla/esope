@@ -963,7 +963,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .group-profile-main .elgg-list .elgg-tags > li { float: none; display: inline-block; margin: 0 0.625rem 0.625rem 0; }
 .elgg-tags li.elgg-tag:after { content:''; }
 .elgg-tag {  }
-.elgg-tag a { display:inline-block; padding: 0.3em 0.8em 0.2em 0.8em; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
+.elgg-tag a { display:inline-block; padding: 0.3em 0.8em 0.2em 0.8em; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; line-height: 1.2; }
 .small .elgg-icon-tag.fa { font-size: inherit; }
 .elgg-pagination { text-align: right; margin: 0; padding: 0.5rem 0 1.5rem 0; }
 .elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
@@ -1148,7 +1148,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-item-user li.elgg-menu-item-add-friend a { background: <?php echo $iris_blue; ?>; }
 .elgg-item-user li.elgg-menu-item-remove-friend a { background: #FF0000; }
 .elgg-item-user li.elgg-menu-item-friend-request a { background: #d47d00; }
-.elgg-item-user li.elgg-menu-item-is-friend a { background: #95C11F; }
+.elgg-item-user li.elgg-menu-item-is-friend a { background: #95C11F; cursor: initial; }
 
 .elgg-subtext { font-size: 1.1rem; font-style: normal; color: <?php echo $iris_texttopgrey; ?>; }
 .elgg-subtext time { font-size: 0.75rem; text-transform: uppercase; margin-left: 1em; }
@@ -1206,7 +1206,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 /* Enlarge the hovered zone so we don't loose the submenu too easily
 .entity-submenu:hover a, .entity-submenu:active a, .entity-submenu:focus a { padding: 0 0.5rem 0 0.5rem; }
 */
-.iris-object .entity-submenu-content .elgg-menu-entity li { display: block; margin: 0; padding: 0.3rem 0 0.2rem 0; text-align: left; color: #384257; float: none; }
+.iris-object .entity-submenu-content .elgg-menu-entity li { display: block; margin: 0; padding: 0.5rem 0 0.3rem 0; text-align: left; color: #384257; float: none; }
 .iris-object .entity-submenu-content .elgg-menu-entity li.elgg-menu-multilingual { display: inline-block; padding-right: 1rem; }
 .iris-object .entity-submenu-content ul li *, 
 .elgg-list-entity .entity-submenu-content ul li * { color: #384257; font-weight: normal; font-size: 0.9375rem; }

@@ -1017,5 +1017,7 @@ email3@domain.tld email4@domain.tld ",
 	
 	'user:password:lost' => "<i class=\"fa fa-key\"></i>&nbsp;Lost password?",
 	
+	'thewire:filter:add_group_container' => "Include group messages",
+	
 );
 

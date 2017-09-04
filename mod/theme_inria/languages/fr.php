@@ -1010,5 +1010,7 @@ email3@domain.tld email4@domain.tld ",
 	
 	'user:password:lost' => "<i class=\"fa fa-key\"></i>&nbsp;Mot de passe perdu ?",
 	
+	'thewire:filter:add_group_container' => "Afficher les messages des groupes",
+	
 );
 
