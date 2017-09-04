@@ -1840,7 +1840,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-page .elgg-layout .elgg-sidebar { display: none; width: auto; }
 	.elgg-page .elgg-layout .elgg-sidebar { order: 1; }
 	.elgg-page .elgg-layout .sidebar-alt { order: 2; }
-	.elgg-page .elgg-layout .elgg-main { order: 3; }
+	.elgg-page .elgg-layout .elgg-main { flex-basis: auto; order: 3; }
 	.menu-sidebar-toggle { display: initial; min-width: 1.5rem; flex: 0 0 auto; padding: 2.5rem; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
 	.elgg-sidebar .menu-sidebar-toggle { display: block; padding: 2.5rem 0 1rem 0; margin: -3rem -1rem 1rem -1rem; }
 	
