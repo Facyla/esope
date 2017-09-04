@@ -11,6 +11,8 @@ $owner = $entity->getOwnerEntity();
 // ICONS AND IMAGES
 $profile_type = esope_get_user_profile_type($owner);
 if (empty($profile_type)) { $profile_type = 'external'; }
+// Archive : replace profile type by member status archived
+if ($owner->memberstatus == 'closed') { $profile_type = 'archive'; }
 $owner_icon = '<span class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a></span>';
 
 
@@ -30,7 +32,7 @@ $header = '<div class="entity-headline">';
 		$header .= '<strong>' . $owner->name . '</strong>';
 		
 		// Add profile type badge, if defined
-		if ($profile_type == 'external') { $header .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+		if (in_array($profile_type, array('external', 'archive'))) { $header .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 		
 		$header .= '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($entity->time_created) . '</span>';
 		//$header .= elgg_view('output/access', array('entity' => $entity));

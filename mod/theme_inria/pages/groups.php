@@ -130,7 +130,8 @@ switch($filter) {
 				);
 			$content .= '<span class="iris-search-order">' . elgg_echo('members:order:select') . ' ' . elgg_view('input/select', array('name' => 'iris_groups_search_order', 'options_values' => $order_opt, 'value' => get_input('order_by'))) . '</span>';
 		$content .= '</div>';
-		$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
+		//$content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch') . '</div>';
+		$content .= '<div id="esope-search-results"></div>';
 		
 }
 if ($filter != 'search') { elgg_pop_context(); }

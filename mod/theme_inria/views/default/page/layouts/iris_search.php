@@ -73,10 +73,13 @@ if ($vars['filter'] == 'search') {
 				$search_entity_type = '';
 				if (elgg_in_context('groups')) {
 					$search_entity_type = 'group';
+					$reset_url = elgg_get_site_url() . 'groups';
 				} else if (elgg_in_context('members')) {
 					$search_entity_type = 'user';
+					$reset_url = elgg_get_site_url() . 'members';
 				} else if (elgg_in_context('objects')) {
 					$search_entity_type = 'object';
+					$reset_url = elgg_get_site_url() . 'search';
 				}
 				if (elgg_instanceof($owner, 'group')) {
 					$search_entity_type = 'object';
@@ -87,7 +90,8 @@ if ($vars['filter'] == 'search') {
 					echo '<label for="iris-search-header-input" class="invisible">' . $search_text . '</label>';
 					echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-search-header-input', 'value' => $q, 'placeholder' => $search_text));
 					//echo '<noscript><input type="image" id="iris-topbar-search-submit" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" /></noscript>';
-					echo '<input type="reset" value="X">';
+					//echo '<input type="reset" value="X">';
+					echo '<a href="' . $reset_url . '" class="iris-search-reset">X</a>';
 					echo '<noscript><button type="submit" id="iris-search-header-submit" title="' . elgg_echo('esope:search') . '"><i class="fa fa-search"></i></button></noscript>';
 				echo '</form>';
 				?>

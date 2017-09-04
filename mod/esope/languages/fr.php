@@ -943,11 +943,10 @@ return array(
 	'esope:icon:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
 	'esope:icon:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
 	'esope:icon:poll' => "<i class=\"fa fa-pie-chart fa-fw\"></i>",
+	'esope:icon:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i>",
 	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
 	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
 	
-	
-
 	// Sprites icons
 	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
 	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",

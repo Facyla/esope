@@ -462,6 +462,8 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'access:read' => "Visibilité", // Accès en lecture
 	'LOGGED_IN' => "Inria & Invités", // membres connectés
 	'GROUP_MEMBERS' => "Groupe", // membres du groupe
+	'access:GROUP_MEMBERS' => "Membres du groupe",
+	'workspace:access:GROUP_MEMBERS' => "Membres de l'espace de travail",
 	'access:friends:label' => "Contacts seulement", // contacts
 	//'PUBLIC' => "Tout internaute", // public
 	'PUBLIC' => "Tout internaute", // public en mode Walled Garden

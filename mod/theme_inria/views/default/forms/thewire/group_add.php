@@ -81,7 +81,18 @@ echo elgg_view('input/plaintext', array(
 		// Only Inria only can select access (defaults to Inria only))
 		$access_id = elgg_extract('access_id', $vars, $inria_access_id);
 		$access_opt = array();
-		$access_opt[$group->group_acl] = get_readable_access_level($group->group_acl);
+		
+		//$access_opt[$group->group_acl] = get_readable_access_level($group->group_acl);
+		// Note : we can access the real collection name by getting the collection, 
+		// but a plain translation is fine in that case (we don't need the group name)
+		//$group_acl = get_access_collection($group->group_acl);
+		$main_group = theme_inria_get_main_group($group);
+		if ($group->guid == $main_group->guid) {
+			$access_opt[$group->group_acl] = elgg_echo('access:GROUP_MEMBERS');
+		} else {
+			$access_opt[$group->group_acl] = elgg_echo('workspaceaccess:GROUP_MEMBERS');
+		}
+		
 		if ($inria_access_id && (esope_get_user_profile_type() == 'inria')) { $access_opt[$inria_access_id] = elgg_echo('profiletype:inria'); }
 		$access_opt['1'] = elgg_echo('LOGGED_IN');
 		echo elgg_view('input/select', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));

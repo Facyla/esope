@@ -466,6 +466,8 @@ Here is the new profile page: %5\s
 	'access:read' => "Visibility", // Accès en lecture
 	'LOGGED_IN' => "Iris & Guests", // membres connectés
 	'GROUP_MEMBERS' => "Group", // membres du groupe
+	'access:GROUP_MEMBERS' => "Group members",
+	'workspace:access:GROUP_MEMBERS' => "Workspace members",
 	'access:friends:label' => "Contacts only", // contacts
 	//'PUBLIC' => "Tout internaute", // public
 	'PUBLIC' => "All visitors", // public en mode Walled Garden

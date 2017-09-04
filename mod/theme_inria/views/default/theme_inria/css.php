@@ -615,6 +615,8 @@ h2 .iris-badge span { font-size: 0.9rem; }
 h3 .iris-badge span { font-size: 0.75rem; padding: 0.5rem 0.75rem 0.35rem 0.75rem; }
 .elgg-item-user h3 .iris-badge span { display: inline-block; margin: 0 0 0 0; }
 .iris-object .iris-badge span { font-size: 0.75rem; padding: 0.3rem 0.5rem 0.2rem 0.5rem; }
+.elgg-image .iris-badge { display: block; width: 100%; margin-top: 0.5rem; }
+.elgg-image .iris-badge span { display: block; width: 100%; margin-top: 0.5rem; margin: 0; }
 
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
 
@@ -993,8 +995,8 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 #iris-body .iris-search-quickform h2 { float:left; font-size: 2.5rem; line-height: 2.75rem; margin-bottom: 1.875rem; padding:0; color: white; }
 .iris-search-q-results { float: right; line-height: 2.75rem; vertical-align: bottom; font-size:1.0625rem; font-weight:bold; margin-left:2rem; }
 #iris-search-quickform { border: 1px solid white; height: 3.125rem; line-height: 3.125rem; width: 24.625rem; font-size: 1.1rem; padding: 0 0 0 0.8125rem; clear:both; }
-#iris-search-quickform #iris-search-header-input { border: 0; background: transparent; color: white; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; line-height: 1.5rem; padding: 0; width:21rem; }
-#iris-search-quickform input[type="reset"] { background: none; color: white; border: 0; width: auto; font-size: 0.75rem;     padding: 0; margin: 0; line-height: 3rem; }
+#iris-search-quickform #iris-search-header-input { border: 0; background: transparent; color: white; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; line-height: 1.5rem; padding: 0; width:22rem; }
+.iris-search-reset, #iris-search-quickform input[type="reset"] { background: none; color: white; border: 0; width: auto; /* font-size: 0.75rem; */ font-size: 0.9rem; padding: 0; margin: 0; line-height: 3rem; }
 
 .iris-search-image { width:13.125rem; height:13.125rem; position: relative; top: 2.8125rem; left: 2.8125rem; background:#384257; z-index:3; color: white; font-size: 5rem; padding: 4.0625rem; }
 .iris-search-image { fill:white; }
@@ -1843,7 +1845,7 @@ a[name=unlike] { color: #1488CA !important; }
 	.iris-search-quickform { top: 1rem; left: 8rem; width: 18rem; }
 	#iris-search-quickform { height: 2.5rem; line-height: 2.5rem; width: 18rem; }
 	#iris-search-quickform #iris-search-header-input { width: 16rem; }
-	#iris-search-quickform input[type="reset"] { line-height: 2rem; }
+	.iris-search-reset, #iris-search-quickform input[type="reset"] { line-height: 2rem; }
 	.iris-search-menu { padding-left: 1rem; }
 	#esope-search-results .elgg-menu-entity { text-align: center; float: none; }
 	#esope-search-results .elgg-item-user h3 { margin: 0.5rem; padding: 0; font-size: 1rem; }

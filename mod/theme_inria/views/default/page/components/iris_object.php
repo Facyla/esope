@@ -91,6 +91,8 @@ if (!empty($title)) {
 // ICONS AND IMAGES
 $profile_type = esope_get_user_profile_type($owner);
 if (empty($profile_type)) { $profile_type = 'external'; }
+// Archive : replace profile type by member status archived
+if ($owner->memberstatus == 'closed') { $profile_type = 'archive'; }
 $owner_icon = '<span class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a></span>';
 
 $entity_icon = $entity->getIconURL(array('size' => 'medium'));

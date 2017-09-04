@@ -48,6 +48,13 @@ if (!empty($metadata_search_fields)) {
 	$metadata_search_fields = explode(',', $metadata_search_fields);
 }
 
+// Add "memberstatus" metadata filter = Archive accounts for admins only
+if (elgg_is_admin_logged_in()) {
+	array_unshift($metadata_search_fields, "memberstatus:auto");
+}
+
+
+
 // Preset hidden filters
 $metadata_search_filter = elgg_get_plugin_setting('metadata_membersearch_filter', 'esope');
 // Default to general search filters if not set
@@ -63,7 +70,7 @@ $metadata_search = '';
 // Build metadata search fields
 // Use PFM if available, except if forced to text, or to auto select values
 $use_profile_manager = elgg_is_active_plugin('profile_manager');
-foreach ($metadata_search_fields as $metadata) {
+foreach($metadata_search_fields as $metadata) {
 	// @TODO : autocomplete using existing values ? (as a text input alternative to select)
 	$use_text = false;
 	$use_auto_values = false;
@@ -134,6 +141,7 @@ if ($metadata_search_filter) {
 		}
 	}
 }
+
 
 /* Dev and debug options
 if (false && elgg_is_admin_logged_in()) {

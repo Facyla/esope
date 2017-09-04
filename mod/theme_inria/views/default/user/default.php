@@ -25,6 +25,8 @@ if (empty($profile_type)) { $profile_type = 'external'; }
 // Archive : replace profile type by member status archived
 if ($entity->memberstatus == 'closed') { $profile_type = 'archive'; }
 $icon = '<a href="' . $entity->getURL() . '" class="elgg-avatar elgg-avatar-' . $size . ' profile-type-' . $profile_type . '"><img src="' . $entity->getIconUrl(array('size' => $size)) . '" alt="' . $entity->name . '"></a>';
+// Add profile type badge, if defined
+if (in_array($profile_type, array('external', 'archive'))) { $icon .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 
 $title = elgg_extract('title', $vars);
 if (!$title) {
