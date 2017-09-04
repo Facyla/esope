@@ -1856,6 +1856,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-item-object .elgg-image-block .elgg-image a.medium img { margin: 0 1rem 0 0 !important; }
 
 	#iris-body .elgg-layout-one-sidebar .elgg-main { width: auto; padding:0; max-width: none; flex-basis: auto; }
+	.elgg-page .elgg-layout .elgg-main { flex-basis: auto; }
 	#iris-body .elgg-layout-one-sidebar .elgg-sidebar { width: auto; max-width: none; /* background: rgba(0,0,0,0.1) !important; */ padding: 0.5rem 1rem; border: 0; /* box-shadow: 0px 6px 5px -5px rgba(189,189,189,0.5) !important; */ }
 	.iris-group-sidebar-alt { max-width: none; }
 	
