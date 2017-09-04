@@ -26,18 +26,21 @@ if (empty($profile_type)) { $profile_type = 'external'; }
 if ($entity->memberstatus == 'closed') { $profile_type = 'archive'; }
 $icon = '<a href="' . $entity->getURL() . '" class="elgg-avatar elgg-avatar-' . $size . ' profile-type-' . $profile_type . '"><img src="' . $entity->getIconUrl(array('size' => $size)) . '" alt="' . $entity->name . '"></a>';
 // Add profile type badge, if defined
-if (in_array($profile_type, array('external', 'archive'))) { $icon .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+//if (in_array($profile_type, array('external', 'archive'))) { $icon .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
 
 $title = elgg_extract('title', $vars);
 if (!$title) {
-	$title = $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>';
+	//$title = $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>';
+	$title = $entity->name;
 	// Highlight found terms
 	if (elgg_is_active_plugin('search') || function_exists('search_highlight_words')) {
-		$title = search_highlight_words($search_words, $entity->name) . ' &nbsp; <span class="username">@' . search_highlight_words($search_words, $entity->username) . '</span>';
+		//$title = search_highlight_words($search_words, $entity->name) . ' &nbsp; <span class="username">@' . search_highlight_words($search_words, $entity->username) . '</span>';
+		$title = search_highlight_words($search_words, $entity->name);
 	}
 	$link_params = array(
 		'href' => $entity->getUrl(),
-		'text' => $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>',
+		//'text' => $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>',
+		'text' => $entity->name,
 	);
 
 	// Simple XFN, see http://gmpg.org/xfn/
@@ -52,7 +55,7 @@ if (!$title) {
 
 // Add profile type badge, if defined
 if (in_array($profile_type, ['external', 'archive'])) {
-	$title .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>';
+	$title .= '<div class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></div>';
 }
 
 

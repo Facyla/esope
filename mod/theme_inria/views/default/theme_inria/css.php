@@ -617,6 +617,12 @@ h3 .iris-badge span { font-size: 0.75rem; padding: 0.5rem 0.75rem 0.35rem 0.75re
 .iris-object .iris-badge span { font-size: 0.75rem; padding: 0.3rem 0.5rem 0.2rem 0.5rem; }
 .elgg-image .iris-badge { display: block; width: 100%; margin-top: 0.5rem; }
 .elgg-image .iris-badge span { display: block; width: 100%; margin-top: 0.5rem; margin: 0; }
+.elgg-item-user h3 .iris-badge { margin-top: 0.25rem; }
+
+.elgg-menu-item-profile-manager-user-summary-control-entity-menu { width:100%; }
+.elgg-menu-item-profile-manager-user-summary-control-entity-menu .elgg-tag {
+    margin: 0;
+}
 
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
 
