@@ -997,6 +997,8 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:inria_restricted' => "This feature is reserved to Inria members only",
 	'theme_inria:useradd:group' => "Invitation to the group \"%s\"",
 	
+	'theme_inria:isfriend' => "Already friends",
+	
 	'group_location' => "Localisation",
 	'community' => "Communities",
 	'community' => "Communities",

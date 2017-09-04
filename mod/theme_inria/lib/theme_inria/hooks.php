@@ -145,21 +145,24 @@ function theme_inria_user_menu_setup($hook, $type, $items, $vars) {
 			*/
 		}
 	}
-	// Add send message
-	$items[] = ElggMenuItem::factory(array(
-			'name' => 'message',
-			'text' => '<i class="fa fa-envelope-o"></i>',
-			'title' => elgg_echo('messages:sendmessage'),
-			'href' => elgg_get_site_url() . 'messages/compose?send_to=' . $vars['entity']->guid,
-			'link_class' => 'iris-user-message',
-			'priority' => 603,
-		));
-	// Add send message
+	// Add send message - Inria members only
+	$profile_type = esope_get_user_profile_type();
+	if ($profile_type == 'inria') {
+		$items[] = ElggMenuItem::factory(array(
+				'name' => 'message',
+				'text' => '<i class="fa fa-envelope-o"></i>',
+				'title' => elgg_echo('messages:sendmessage'),
+				'href' => elgg_get_site_url() . 'messages/compose?send_to=' . $vars['entity']->guid,
+				'link_class' => 'iris-user-message',
+				'priority' => 603,
+			));
+	}
+	// Add info if already friends
 	if (elgg_is_logged_in() && $vars['entity']->isFriend()) {
 		$items[] = ElggMenuItem::factory(array(
 				'name' => 'is-friend',
 				'text' => '<i class="fa fa-user"></i>',
-				'title' => elgg_echo('friend'),
+				'title' => elgg_echo('theme_inria:isfriend'),
 				'href' => "javascript:void(0);",
 				'link_class' => 'iris-user-is-friend',
 				'priority' => 602,

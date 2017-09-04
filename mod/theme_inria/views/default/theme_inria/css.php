@@ -91,6 +91,7 @@ $main_maxwidth = "80%";
 // @TODO Bug Safari : normalement on utilise flex x x 0%  MAIS sur safari le conteneur ne s'adapte pas et considère que la base est de 0. 
 // Pose des pbs sur l'accueil, et sur les pages de contenus en vue complète notamment
 // Ca fonctionne moins mal avec 0 ou auto mais crée d'autres effets de bord ailleurs (liste des feedbacks par ex.)
+// Pb avec 0% : la compression CSS la transforme en 0, qui ne marche pas...
 // Note : une solution semble d'ajouter flex-basis: 0% ou auto ? à chaque utilisation de flex-direction column : voir si pas d'effet de bord ?
 /* Pages concernées : accueil, profil membre, listing des feedbacks... */
 $width = array(
@@ -101,9 +102,9 @@ $width = array(
 	'main' => "min-width: 28rem; max-width: 46rem; flex: 1 1 28rem; margin: 0 2.5rem 2.5rem 0;",
 	*/
 	'navigation' => "min-width: 12.5rem; max-width: 12.5rem; flex: 0 0 12.5rem;",
-	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
-	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
-	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 0%; margin: 0 2.5rem 2.5rem 0;",
+	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 auto; margin: 0 2.5rem 2.5rem 0;",
+	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 auto; margin: 0 2.5rem 2.5rem 0;",
+	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 auto; margin: 0 2.5rem 2.5rem 0;",
 );
 
 ?>
@@ -619,10 +620,11 @@ h3 .iris-badge span { font-size: 0.75rem; padding: 0.5rem 0.75rem 0.35rem 0.75re
 .elgg-image .iris-badge span { display: block; width: 100%; margin-top: 0.5rem; margin: 0; }
 .elgg-item-user h3 .iris-badge { margin-top: 0.25rem; }
 
-.elgg-menu-item-profile-manager-user-summary-control-entity-menu { width:100%; }
-.elgg-menu-item-profile-manager-user-summary-control-entity-menu .elgg-tag {
-    margin: 0;
-}
+#esope-search-results .elgg-item-user .elgg-menu-entity { text-align: right; }
+#esope-search-results .elgg-item-user .elgg-menu-entity > li { text-align: right; padding-left: 1rem; margin-right: 0; }
+.elgg-menu-item-profile-manager-user-summary-control-entity-menu { width: 100%; }
+.elgg-menu-item-profile-manager-user-summary-control-entity-menu .elgg-tag { margin: 0 0 0.25rem 0; }
+
 
 .update-ldap-details { font-size:11px; margin-top:6px; padding-top:4px; text-align:center; }
 

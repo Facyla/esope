@@ -990,6 +990,8 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
 	'theme_inria:useradd:group' => "Invitation dans le groupe \"%s\"",
 	
+	'theme_inria:isfriend' => "Déjà en contact",
+	
 	'group_location' => "Localisation",
 	'community' => "Communautés",
 	'profile:community' => "Communautés",
