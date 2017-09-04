@@ -998,6 +998,7 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:useradd:group' => "Invitation to the group \"%s\"",
 	
 	'theme_inria:isfriend' => "Already friends",
+	'theme_inria:updated_time_sep' => ", updated ",
 	
 	'group_location' => "Localisation",
 	'community' => "Communities",

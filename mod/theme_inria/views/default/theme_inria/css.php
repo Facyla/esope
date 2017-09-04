@@ -1731,6 +1731,12 @@ a[name=unlike] { color: #1488CA !important; }
 .elgg-body-transp .elgg-comments .elgg-menu-entity li { margin: 0 0.5rem 0 0; }
 
 
+/* FLEX SAFARI DEBUG */
+.iris-col { flex-basis: 0; }
+
+
+
+
 /*
 @media (max-width:1550px) {
 	.elgg-sidebar { order:1; }

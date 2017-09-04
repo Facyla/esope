@@ -70,6 +70,8 @@ if (!$url) {
 	$url = $entity->getURL();
 }
 
+$order = get_input('iris_objects_search_order');
+
 $title = "<a href=\"$url\">$title</a>";
 $time = $entity->getVolatileData('search_time');
 if (!$time) {
@@ -77,6 +79,7 @@ if (!$time) {
 	$tu = $entity->time_updated;
 	$time = elgg_view_friendly_time(($tu > $tc) ? $tu : $tc);
 }
+if ($tu > $tc) $time .= elgg_echo('theme_inria:updated_time_sep') . elgg_view_friendly_time($tu);
 
 $body = "<p class=\"mbn\">$title</p>$description";
 if ($extra_info) {

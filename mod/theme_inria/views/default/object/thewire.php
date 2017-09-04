@@ -52,15 +52,15 @@ if (!empty($post->container_guid)) {
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) { $metadata = ''; }
 
-/* Affiche toute la conversation
-*/
-$metadata_alt .= '<li>' . elgg_view('output/url', array(
-	'text' => elgg_echo('thewire:thread'),
-	'href' => "thewire/thread/$post->wire_thread",
-)) . '</li>';
-
-// Affiche le précédent
+// Seulement pour les posts faisant partie d'une conversation
 if ($post->reply) {
+	// Affiche toute la conversation
+	$metadata_alt .= '<li>' . elgg_view('output/url', array(
+		'text' => elgg_echo('thewire:thread'),
+		'href' => "thewire/thread/$post->wire_thread",
+	)) . '</li>';
+
+	// Affiche le précédent
 	$metadata_alt .= '<li>' . elgg_view('output/url', array(
 		'text' => elgg_echo('previous'),
 		'href' => "thewire/previous/$post->guid",
