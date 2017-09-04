@@ -30,7 +30,7 @@ $thewire_params = array(
 
 $add_group_container = get_input('add_group_container', 'no');
 // This is for container filtering only, can be removed if no filtering
-if ($add_group_container == 'yes') {
+if ($add_group_container != 'yes') {
 	$thewire_params["joins"] = array("INNER JOIN " . elgg_get_config('dbprefix') . "entities AS ce ON e.container_guid = ce.guid");
 	$thewire_params["wheres"] = array("ce.type != 'group'"); // avoid messages where container is a group
 }
