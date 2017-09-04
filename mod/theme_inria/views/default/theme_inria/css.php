@@ -1875,7 +1875,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-topbar-item.elgg-menu-topbar ul { position: fixed; top: 5.1rem; right: 0.1rem; left: 0.1; padding: 0 1rem 0 0; }
 	.iris-topbar-menu #user { max-width: 2.5rem; height: 4rem; overflow: hidden; margin-left: 0.5rem; }
 	.iris-topbar-item.elgg-menu-topbar li#user > a { padding: 0; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
-	.iris-topbar-item > a { padding-bottom: 1.75rem; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
+	.iris-topbar-item > a { padding-bottom: 1.75rem; }
 	#logout a.login-as-topbar { padding: .75rem 0.5rem; text-decoration: none; }
 	#notifications .notifications-panel { position: fixed; left: 0.1rem; right: 0.1rem; top: 5.1rem; width: auto; }
 	#notifications .notifications-panel .tabs a { margin-left: 1rem; }
