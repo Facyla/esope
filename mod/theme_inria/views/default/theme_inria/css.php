@@ -223,7 +223,7 @@ $width = array(
 
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 
-.elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; flex-basis: 0%; margin: 0 2.5rem 2.5rem 0; }
+.elgg-body-transp { <?php echo $width['main']; ?> display: flex; flex-direction: column; flex-basis: auto; margin: 0 2.5rem 2.5rem 0; }
 .elgg-body-transp .elgg-main, 
 #iris-body .iris-group .elgg-body-transp .elgg-main { margin: 0; }
 
@@ -995,7 +995,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .elgg-foot #thewire-characters-remaining { float: none; }
 #thewire-characters-remaining span { margin: 0; float: none; font-size: 1em; }
 .home-wire .thewire-form .elgg-button-submit { display: inline-block; float: none; }
-.elgg-layout-one-sidebar .thewire-form textarea { width: 25.625rem; height: 4rem; }
+.elgg-layout-one-sidebar .thewire-form textarea { width: auto; height: 4rem; }
 .iris-box.home-wire .elgg-item-object .elgg-image-block .elgg-image a.medium img { margin: 0 1.3125rem 0 0.3125rem; }
 .elgg-layout-one-sidebar .thewire-reply-inline .elgg-form.thewire-form { background: transparent; border: 0; padding: 0; box-shadow: none; margin: 0; }
 
@@ -1430,6 +1430,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 .group-content-filter.tabs { margin-bottom: 0.5625rem; }
 .group-content-filter.tabs a { font-size: 1.125rem; font-weight: bold; color: #384257; opacity: 0.3; margin: 0 2.5625rem 1rem 0; padding-bottom: 0.625rem; border-bottom: 4px solid transparent; display: inline-block; }
+.group-content-filter.tabs a:last-of-type { margin-right: 0; }
 .group-content-filter.tabs a.elgg-state-selected, .group-content-filter.tabs a:hover, .group-content-filter.tabs a:active, .group-content-filter.tabs a:focus { opacity: 1; border-bottom: 4px solid #384257; }
 
 
@@ -1838,13 +1839,23 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	
 	.elgg-page .elgg-layout .sidebar-alt, 
 	.elgg-page .elgg-layout .elgg-sidebar { display: none; width: auto; }
-	.elgg-page .elgg-layout .elgg-sidebar { order: 1; }
-	.elgg-page .elgg-layout .sidebar-alt { order: 2; }
-	.elgg-page .elgg-layout .elgg-main { flex-basis: auto; order: 3; }
-	.menu-sidebar-toggle { display: initial; min-width: 1.5rem; flex: 0 0 auto; padding: 2.5rem; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
+	
+	.elgg-sidebar { order: 1; }
+	.sidebar-alt { order: 2; }
+	.elgg-main { flex-basis: auto; order: 3; }
+	.elgg-body-transp { flex-basis: auto; }
+	.menu-sidebar-toggle { display: initial; min-width: 1.5rem; flex: 0 0 auto; padding: 2.5rem 0; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
 	.elgg-sidebar .menu-sidebar-toggle { display: block; padding: 2.5rem 0 1rem 0; margin: -3rem -1rem 1rem -1rem; }
 	
 	.group-content-filter.tabs { clear: both; }
+	.group-content-filter.tabs a { margin-right: 1.125rem; }
+	
+	.elgg-context-workspace-content .elgg-image-block { margin: 0; }
+	.elgg-context-workspace-content .elgg-image-block .elgg-image { display: block; min-height: 6rem; flex: 0 0 auto; margin: 0; box-shadow: none; width: auto; background: none; }
+	.elgg-context-workspace-content .elgg-image-block .elgg-body { min-height: 6rem; padding: 0; }
+	.iris-object-actions { margin-bottom: 1rem; }
+	
+	.elgg-item-object .elgg-image-block .elgg-image a.medium img { margin: 0 1rem 0 0 !important; }
 
 	#iris-body .elgg-layout-one-sidebar .elgg-main { width: auto; padding:0; max-width: none; flex-basis: auto; }
 	#iris-body .elgg-layout-one-sidebar .elgg-sidebar { width: auto; max-width: none; /* background: rgba(0,0,0,0.1) !important; */ padding: 0.5rem 1rem; border: 0; /* box-shadow: 0px 6px 5px -5px rgba(189,189,189,0.5) !important; */ }
@@ -1867,7 +1878,10 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-topbar-item.elgg-menu-topbar ul { position: fixed; top: 5.1rem; right: 0.1rem; left: 0.1; padding: 0 1rem 0 0; }
 	.iris-topbar-menu #user { max-width: 2.5rem; height: 2.5rem; overflow: hidden; margin-left: 0.5rem; }
 	.iris-topbar-item.elgg-menu-topbar li#user > a { padding: 0; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
+	.iris-topbar-item a { padding: 0; line-height: 2.5rem; width: 2.25rem; height: 2.25rem; overflow: hidden; }
 	#notifications .notifications-panel { position: fixed; left: 0.1rem; right: 0.1rem; top: 5.1rem; width: auto; }
+	.iris-topbar-item a { padding-bottom: 1.75rem; }
+	.iris-topbar-menu #user { height: 3.5rem; }
 	#notifications .notifications-panel .tabs a { margin-left: 1rem; }
 	
 	/* Navigation menu */
@@ -1882,6 +1896,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	#iris-footer li a { font-size: 1.2rem; }
 	
 	/* Main layout */
+	.elgg-layout.elgg-context-profile.elgg-context-profile_edit, 
 	.elgg-layout { padding: 0 1.5rem; flex-direction: column; /* flex-basis: 0%; */ }
 	#iris-page { display: block; }
 	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
@@ -1939,11 +1954,13 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	/* Groupe */
 	.iris-group-header { min-height: 16rem; }
 	.iris-group-image { height: 6rem; width: 6rem; top: 1rem; left: 1rem; }
-	.iris-group-title { top: 1rem; right: 1rem; left: 10rem; }
+	.iris-group-title { top: 1rem; right: 1rem; left: 8rem; }
 	#iris-body .iris-group-title h2 { font-size: 1.75rem; line-height: 2rem; }
 	.iris-group-menu { padding-left: 1rem; }
 	.iris-group-subtitle { margin: 0.5rem 0 1rem 0; font-size: 0.9rem; font-weight: normal; }
 	.iris-group-rules { font-size: 1rem; }
+	.iris-group-menu a, .iris-group-menu .tab-more { font-size: 1rem; padding: 1rem 0; }
+	.iris-group-menu a.add { padding: .25rem .75rem 0rem .75rem; margin: 0.5rem; }
 	
 	.groups-edit-field { display: block; }
 	.groups-edit-field .groups-edit-label, 
