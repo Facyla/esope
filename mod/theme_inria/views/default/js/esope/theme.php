@@ -136,9 +136,11 @@ $(document).ready(function() {
 	if (!button) return;
 	// Hide button if menu is missing or empty.
 	var menu = $('.elgg-sidebar');
+	var menu2 = $('.sidebar-alt');
 	if (!menu) { button.hide(); return; }
 	button.on('click', function() {
 		menu.toggleClass('menu-enabled');
+		menu2.toggleClass('menu-enabled');
 		button.toggleClass('hidden');
 	});
 	//$('.menu-sidebar-toggle').on('click', function() { menu.toggleClass('hidden'); }); // Easier

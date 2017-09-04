@@ -105,6 +105,7 @@ $width = array(
 	'sidebar' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
 	'sidebar_alt' => "min-width: 15rem; max-width: 22rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
 	'main' => "min-width: 28rem; max-width: 46.5rem; flex: 2 1 0%; margin: 0 2.5rem 2.5rem 0;",
+	'col' => "min-width: 28rem; max-width: 46.5rem; flex: 1 1 0%; margin: 0 2.5rem 2.5rem 0;",
 );
 
 ?>
@@ -158,13 +159,14 @@ $width = array(
 
 /* Sidebars */
 .elgg-sidebar, .iris-search-sidebar { <?php echo $width['sidebar']; ?> }
+.elgg-page .elgg-layout .sidebar-alt.menu-enabled, 
 .elgg-page .elgg-layout .elgg-sidebar.menu-enabled { display: block; }
 
 /* Main content */
 .iris-cols { display:flex; flex-direction:row; flex-wrap: wrap; /* max-width: 100.5rem; */ width: 100%; /* justify-content: space-evenly; */ justify-content: space-around; justify-content: flex-start; }
 .iris-cols.form-groups-add { padding: 0 0 0 2.5rem; }
 .elgg-context-profile .iris-cols { padding: 0 0 0 2.5rem; margin-top: 2.5rem; }
-.iris-col { <?php echo $width['main']; ?> padding: 0 0; /* margin: 0 auto; */ }
+.iris-col { <?php echo $width['col']; ?> padding: 0 0; /* margin: 0 auto; */ }
 .iris-col:last-of-type { /* margin: 0 auto 0 0; */ }
 
 /* Colonnes égales */
@@ -1731,11 +1733,15 @@ a[name=unlike] { color: #1488CA !important; }
 .elgg-body-transp .elgg-comments .elgg-menu-entity li { margin: 0 0.5rem 0 0; }
 
 
+
+
+
 /* FLEX SAFARI DEBUG */
+/*
 .elgg-context-main .iris-col, .iris-col { flex-basis: 0 !important; }
 .elgg-main { flex-basis: auto !important; }
-
-
+.elgg-main { flex-basis: auto !important; }
+*/
 
 /* Valeurs valides selon les navigateurs
 Accueil : .elgg-context-main .iris-col
@@ -1748,13 +1754,20 @@ Profil : .iris-col
 	Firefox flex-basis 0% ou 0, pas auto
 	Safari
 
+Accueil groupe : .elgg-main
+	Chrome flex-basis 0% ou 0, pas auto
+	Firefox flex-basis 0% ou 0, pas auto
+	Safari
+
 Feedback : .elgg-main
 	Chrome flex-basis 0% ou auto, pas 0
 	Firefox flex-basis 0% ou auto, pas 0
 	Safari
 
 
-
+Conclusions : 
+iris-col => 0 ou 0%
+elgg-main => 0% marche partout, 0 et auto selon les endroits
 
 */
 
@@ -1779,6 +1792,7 @@ Feedback : .elgg-main
 @media (max-width:1200px) {
 	.elgg-layout { flex-wrap: wrap; }
 	
+	.elgg-page .elgg-layout .sidebar-alt, 
 	.elgg-page .elgg-layout .elgg-sidebar { display: block; <?php echo $width['sidebar']; ?>; margin: 0 2.5rem 2.5rem 0 !important; }
 	.menu-sidebar-toggle { display: none; }
 }
@@ -1802,6 +1816,7 @@ Feedback : .elgg-main
 	.full-screen #iris-body .iris-group .elgg-main { width: auto; margin: 0.2rem 0.3rem; }
 	.full-screen .elgg-body-transp .elgg-button-fullscreen { right: 1rem; top: 0.75rem; }
 	
+	.elgg-page .elgg-layout .sidebar-alt, 
 	.elgg-page .elgg-layout .elgg-sidebar { display: block; <?php echo $width['sidebar']; ?>; padding: 0; }
 	.menu-sidebar-toggle { display: none; }
 }
@@ -1818,7 +1833,11 @@ Feedback : .elgg-main
 	.profile-col-profile2 { width:33%; }
 	.profile-col-largedetails { width:66%; }
 	
-	.elgg-page .elgg-layout .elgg-sidebar { display: none; }
+	.elgg-page .elgg-layout .sidebar-alt, 
+	.elgg-page .elgg-layout .elgg-sidebar { display: none; width: auto; }
+	.elgg-page .elgg-layout .elgg-sidebar { order: 1; }
+	.elgg-page .elgg-layout .sidebar-alt { order: 2; }
+	.elgg-page .elgg-layout .elgg-main { order: 3; }
 	.menu-sidebar-toggle { display: initial; min-width: 1.5rem; flex: 0 0 auto; padding: 2.5rem; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
 	.elgg-sidebar .menu-sidebar-toggle { display: block; padding: 2.5rem 0 1rem 0; margin: -3rem -1rem 1rem -1rem; }
 	
@@ -1858,19 +1877,21 @@ Feedback : .elgg-main
 	.footer-logo-inria { margin: 12px 0; }
 	#iris-footer li a { font-size: 1.2rem; }
 	
-	/* Sidebar */
-	.elgg-menu-owner-block li a, .elgg-sidebar ul.elgg-menu-page li a { border: 0; }
-	.menu-sidebar-toggle, .elgg-sidebar .menu-sidebar-toggle { margin: 0 -1.5rem; }
-	/* Alt Sidebar */
-	.iris-group-sidebar-alt { margin: 0 0 2.5rem 0; }
-	
 	/* Main layout */
-	.elgg-layout { padding: 0 1.5rem; /* flex-direction: column; flex-basis: 0%; */ }
+	.elgg-layout { padding: 0 1.5rem; flex-direction: column; /* flex-basis: 0%; */ }
 	#iris-page { display: block; }
 	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
 	.iris-cols { display: block; }
 	#iris-body .elgg-layout-one-sidebar.elgg-context-invite_external .elgg-main, #iris-body .elgg-layout-one-sidebar.elgg-context-messages .elgg-main, #iris-body .elgg-layout-user-owner:not(.elgg-layout-content) .elgg-main { margin-right: 0; }
 	#iris-body .elgg-layout-one-sidebar .elgg-main { margin-right: 0; }
+	
+	/* Sidebar */
+	.elgg-page .elgg-layout .elgg-sidebar, 
+	.elgg-page .elgg-layout .sidebar-alt { max-width: none; width: auto; }
+	.elgg-menu-owner-block li a, .elgg-sidebar ul.elgg-menu-page li a { border: 0; }
+	.menu-sidebar-toggle, .elgg-sidebar .menu-sidebar-toggle { margin: 0 -1.5rem; }
+	/* Alt Sidebar */
+	.iris-group-sidebar-alt { margin: 0 0 2.5rem 0; }
 	
 	/* Listings */
 	.elgg-list .elgg-item { padding: 1rem; }
