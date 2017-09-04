@@ -213,13 +213,7 @@ $width = array(
 */
 #iris-body .iris-group .elgg-context-group_workspace .elgg-main { background: transparent; border: 0; padding: 0; box-shadow: none; padding: 4px; margin: -4px calc(2.5rem - 4px) calc(2.5rem - 4px) -4px; }
 #iris-body .iris-group .elgg-context-group_content .elgg-main { <?php echo $width['main']; ?> padding: 4px 4px 4px 4px; /* margin-left: 4.675rem; */ }
-#iris-body .elgg-layout-user-owner .elgg-main .iris-object-full {
-    background: white;
-    padding: 2rem;
-    box-shadow: 0 0 4px 0 rgba(189,189,189,0.5);
-    border-radius: 4px;
-    margin: 0;
-}
+#iris-body .elgg-layout-user-owner .elgg-main .iris-object-full { background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; margin: 0; }
 
 .group-profile-main { margin-bottom: 2rem; background: white; padding: 2rem; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 0 0 4px 4px; }
 
@@ -1831,6 +1825,9 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-layout { flex-direction: column; }
 	.menu-topbar-toggle { color: white; }
 	
+	.elgg-body-transp { flex-basis: auto; }
+	#iris-body .iris-group .elgg-context-group_content .elgg-main { flex-basis: auto; }
+	
 	.profile-col-profile { width:40%; }
 	.profile-col-details { width:60%; }
 	.profile-col-activity { width:100%; }
@@ -1843,7 +1840,6 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-sidebar { order: 1; }
 	.sidebar-alt { order: 2; }
 	.elgg-main { flex-basis: auto; order: 3; }
-	.elgg-body-transp { flex-basis: auto; }
 	.menu-sidebar-toggle { display: initial; min-width: 1.5rem; flex: 0 0 auto; padding: 2.5rem 0; margin: -2.5rem -0.5rem 0rem -2.5rem; font-size: 1.5rem; }
 	.elgg-sidebar .menu-sidebar-toggle { display: block; padding: 2.5rem 0 1rem 0; margin: -3rem -1rem 1rem -1rem; }
 	
