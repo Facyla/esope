@@ -116,7 +116,13 @@ if (($container instanceof ElggGroup)
 	$show_override_notice = true;
 	$restricted_content_access = true;
 	// Inria : always add container access level
-	$vars['options_values'][$container->access_id] = get_readable_access_level($container->access_id);
+	if (!isset($vars['options_values'][$container->access_id])) {
+		if ($vars['options_values'][$container->access_id] == theme_inria_get_inria_access_id()) {
+			$vars['options_values'][$container->access_id] = get_readable_access_level($container->access_id);
+		} else {
+			$vars['options_values'][$container->access_id] = elgg_echo('profiletype:inria');
+		}
+	}
 	// Inria : always set default access to container access level
 	if ($no_current_value) { $vars['value'] = $container->access_id; }
 } else {
@@ -177,7 +183,7 @@ if (elgg_instanceof($container, 'group')) {
 			// Add default to available options if needed
 			if (!isset($vars['options_values'][$vars['value']])) {
 				if ($vars['value'] == theme_inria_get_inria_access_id()) {
-					$vars['options_values'][$vars['value']] = elgg_echo('profiletype:inria');
+				$vars['options_values'][$vars['value']] = elgg_echo('profiletype:inria');
 				} else {
 					$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
 				}

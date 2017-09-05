@@ -25,7 +25,7 @@ return array(
 	'access_collections:acl:removed' => "Forcer la suppression des niveaux d'accès désactivés.",
 	'access_collections:acl:delete:locked' => "Ce niveau d'accès est désactivé. ATTENTION, il sera supprimé si vous forcez la suppression des niveaux d'accès désactivés !",
 	'access_collections:delete:enable' => "Déverrouiller la suppression des niveaux d'accès (NE PAS ACTIVER)",
-	'access_collections:delete:enable:details' => "La suppression d'un niveau d'accès est définitive&nbsp;: les contenus créés avec ce niveau d'accès ne seront plus accessibles, et il n'est pas possible de le créer à nouveau pour y redonner accès. Pour ces raisons, les niveaux d'accès une fois créés ne devraient plus être supprimés. Si toutefois vous souhaitez les supprimer, vous pouvez forcer la suppression via cette option&nbsp;: tous les niveaux d'accès désactivés (\"Non\") seront supprimés.",
+	'access_collections:delete:enable:details' => "La suppression d'un niveau d'accès est irréversible&nbsp;: les contenus créés avec ce niveau d'accès ne seront plus accessibles, et il n'est pas possible de le créer à nouveau pour y redonner accès (car il aura un nouvel id). Pour ces raisons, les niveaux d'accès une fois créés ne devraient plus être supprimés. Si toutefois vous souhaitez les supprimer, vous pouvez forcer la suppression via cette option&nbsp;: tous les niveaux d'accès désactivés (\"Non\") seront supprimés.",
 	'access_collections:invalidprofiletype' => "Erreur&nbsp;: type de profil non valide.",
 	'access_collections:profile_manager:disabled' => "Erreur&nbsp;: le plugin Profile Manager n'est pas activé.",
 	
