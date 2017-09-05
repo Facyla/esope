@@ -14,6 +14,8 @@ $membership = elgg_extract("membership", $vars);
 $visibility = elgg_extract("vis", $vars, ACCESS_DEFAULT);
 $owner_guid = elgg_extract("owner_guid", $vars);
 $content_access_mode = elgg_extract("content_access_mode", $vars);
+// Iris : force default mode on restricted
+if (!$entity) { $content_access_mode = ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY; }
 // ESOPE : set default visibility to site default (instead of always public)
 if (!elgg_instanceof($entity, 'group')) { $visibility = ACCESS_DEFAULT; }
 
@@ -88,8 +90,8 @@ $access_mode_params = array(
 	"id" => "groups-content-access-mode",
 	"value" => $content_access_mode,
 	"options_values" => array(
-		ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED => elgg_echo($translation_prefix."groups:content_access_mode:unrestricted"),
 		ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY => elgg_echo($translation_prefix."groups:content_access_mode:membersonly"),
+		ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED => elgg_echo($translation_prefix."groups:content_access_mode:unrestricted"),
 	)
 );
 

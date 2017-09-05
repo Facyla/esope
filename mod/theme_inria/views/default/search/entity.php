@@ -73,13 +73,21 @@ if (!$url) {
 $order = get_input('iris_objects_search_order');
 
 $title = "<a href=\"$url\">$title</a>";
+/*
 $time = $entity->getVolatileData('search_time');
 if (!$time) {
 	$tc = $entity->time_created;
 	$tu = $entity->time_updated;
 	$time = elgg_view_friendly_time(($tu > $tc) ? $tu : $tc);
 }
-if ($tu > $tc) $time .= '<span class="time-sep">' . elgg_echo('theme_inria:updated_time_sep') . '</span>' . elgg_view_friendly_time($tu);
+*/
+// Always display creation date ; we may display updated date only if > to some time lapse (eg. 1 day ?)
+$tc = $entity->time_created;
+$tu = $entity->time_updated;
+$time = elgg_view_friendly_time($tc);
+if ($tu > $tc) {
+	$time .= '<span class="time-sep">' . elgg_echo('theme_inria:updated_time_sep') . '</span>' . elgg_view_friendly_time($tu);
+}
 
 $body = "<p class=\"mbn\">$title</p>$description";
 if ($extra_info) {

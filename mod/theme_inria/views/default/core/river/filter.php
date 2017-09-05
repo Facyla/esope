@@ -5,7 +5,9 @@
  * @uses $vars[]
  */
 
-elgg_load_js('elgg.ui.river');
+// Iris : désactivation du JS car on a maintenant 2 champs de recherche et donc on veut pouvoir cliquer sur le bouton d'envoi
+// Note : impact sur passage des paramètres + le select doit avoir un name si JS désactivé
+//elgg_load_js('elgg.ui.river');
 
 $filter = '';
 
@@ -15,21 +17,19 @@ $subtype = get_input('subtype');
 $action_types = get_input('action_types');
 
 // Build activity type selector
+/*
 $selector = array();
 if (!empty($type)) { $selector[] = "type=$type"; }
 if (!empty($subtype)) { $selector[] = "subtype=$subtype"; }
 if (!empty($action_types)) { $selector[] = "action_types=$action_types"; }
 $vars['selector'] = implode('&', $selector);
-
+*/
 $params = array(
 	'id' => 'elgg-river-selector',
 	'options_values' => $options,
 );
 $selector = $vars['selector'];
-if ($selector) {
-	$params['value'] = $selector;
-}
-
+if ($selector) { $params['value'] = urldecode($selector); }
 
 // Filtres composites
 $options = array();
@@ -38,23 +38,36 @@ $options["type=object&subtype=blog"] = elgg_echo('theme_inria:activity_filter:bl
 $options["type=object&subtype=comment"] = elgg_echo('theme_inria:activity_filter:comments');
 $options["type=site&action_types=join"] = elgg_echo('theme_inria:activity_filter:users');
 $options["type=user&action_types=update"] = elgg_echo('theme_inria:activity_filter:profile');
+//$options["type=user&action_types=friend"] = elgg_echo('theme_inria:activity_filter:friends');
 $options["type=group"] = elgg_echo('theme_inria:activity_filter:groups');
 
 
 // create selection array
+$exclude_subtypes = array('groupforumtopic', 'discussion_reply');
+// Some subtypes are reserved for admins
+if (!elgg_is_admin_logged_in()) {
+	$exclude_subtypes[] = 'cmspage';
+	$exclude_subtypes[] = 'feedback';
+}
 //$options = array();
 //$options['type=all'] = elgg_echo('river:select', array(elgg_echo('all')));
 $registered_entities = elgg_get_config('registered_entities');
 if (!empty($registered_entities)) {
 	foreach ($registered_entities as $type => $subtypes) {
 		// Skip groups (option already exists)
-		if ($type == 'group') { continue; }
+		//if ($type == 'group') { continue; }
+		if ($type != 'object') { continue; }
+		
 		// subtype will always be an array.
 		if (!count($subtypes)) {
 			$label = elgg_echo('river:select', array(elgg_echo("item:$type")));
 			$options["type=$type"] = $label;
 		} else {
 			foreach ($subtypes as $subtype) {
+				// Skip unwanted subtypes
+				if (in_array($subtype, $exclude_subtypes)) { continue; }
+				// Merge pages
+				if (in_array($subtype, array('page_top', 'page'))) { $subtype = 'pages'; }
 				$label = elgg_echo('river:select', array(elgg_echo("item:$type:$subtype")));
 				$options["type=$type&subtype=$subtype"] = $label;
 			}
@@ -70,6 +83,7 @@ if (!empty($registered_entities)) {
 }
 
 $params['options_values'] = $options;
+$params['name'] = 'river_selector';
 
 $filter .= '<div class="esope-search-metadata esope-search-metadata-select"><label>' . elgg_echo('theme_inria:activity_type') . elgg_view('input/select', $params) . '</label><div class="clearfloat"></div></div>';
 

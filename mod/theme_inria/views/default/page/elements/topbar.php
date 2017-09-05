@@ -203,27 +203,30 @@ if (elgg_is_active_plugin('language_selector')) {
 	<div class="menu-navigation-toggle" title="<?php echo elgg_echo('esope:menu:navigation'); ?>"><i class="fa fa-bars"></i></div>
 	
 	<?php
-	if (elgg_is_active_plugin('search') && !elgg_in_context('search')) {
-		$search_text = elgg_echo('esope:search:defaulttext');
-		// Select search type (filter)
-		//$search_opt = array('' => elgg_echo('all'), 'object' => elgg_echo('item:object'), 'group' => elgg_echo('item:group'), 'user' => elgg_echo('item:user')); // options_values
-		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
-		$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
-		$search_entity_type = get_input('entity_type', '');
-		echo '<form action="' . $url . 'search" method="get" id="iris-topbar-search" class="iris-topbar-item">';
-			echo '<button type="submit" id="iris-topbar-search-submit" title="' . elgg_echo('esope:search') . '">
-				<svg id="iris-search-small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.49 16.49"><path d="M17.68,16.26l-3.59-3.59A7,7,0,0,0,3.54,3.54a7,7,0,0,0,9.14,10.55l3.59,3.59a1,1,0,0,0,1.41-1.41ZM8.49,13.49A5,5,0,1,1,12,12,5,5,0,0,1,8.49,13.49Z" transform="translate(-1.49 -1.49)"/></svg>
-			</button>';
-echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text . '</label>';
-			echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-topbar-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
-			//echo '<noscript><input type="image" id="iris-topbar-search-submit" src="' . $urlicon . 'recherche.png" value="' . elgg_echo('esope:search') . '" /></noscript>';
-		echo '</form>';
-	} else {
-		echo '<div id="iris-topbar-search"></div>';
-	}
-	
 	// TOPBAR MENU : personal tools and administration
 	if (elgg_is_logged_in()) {
+		
+		// Search form
+		if (elgg_is_active_plugin('search') && !elgg_in_context('search')) {
+			$search_text = elgg_echo('esope:search:defaulttext');
+			// Select search type (filter)
+			/*
+			$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object') => 'object', elgg_echo('item:group') => 'group', elgg_echo('item:user') => 'user'); // options
+			$search_opt = array(elgg_echo('all') => '', elgg_echo('item:object:icon') => 'object', elgg_echo('item:user:icon') => 'user', elgg_echo('item:group:icon') => 'group'); // options
+			*/
+			$search_entity_type = get_input('entity_type', '');
+			echo '<form action="' . $url . 'search" method="get" id="iris-topbar-search" class="iris-topbar-item">';
+				echo '<button type="submit" id="iris-topbar-search-submit" title="' . elgg_echo('esope:search') . '">
+					<svg id="iris-search-small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.49 16.49"><path d="M17.68,16.26l-3.59-3.59A7,7,0,0,0,3.54,3.54a7,7,0,0,0,9.14,10.55l3.59,3.59a1,1,0,0,0,1.41-1.41ZM8.49,13.49A5,5,0,1,1,12,12,5,5,0,0,1,8.49,13.49Z" transform="translate(-1.49 -1.49)"/></svg>
+				</button>';
+				echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text . '</label>';
+				echo elgg_view('input/text', array('name' => 'q', 'id' => 'iris-topbar-search-input', 'value' => $prev_q, 'placeholder' => $search_text));
+			echo '</form>';
+		} else {
+			echo '<div id="iris-topbar-search"></div>';
+		}
+		
+		// Topbar menu
 		?>
 		<div id="msg" class="iris-topbar-item">
 			<a href="<?php echo $url . 'messages/inbox/' . $ownusername; ?>" title="<?php echo elgg_echo('messages'); ?>"><i class="fa fa-envelope-o"></i><?php echo $messages_mark; ?></a>
@@ -303,23 +306,22 @@ echo '<label for="iris-topbar-search-input" class="invisible">' . $search_text .
 				</ul>
 			</li>
 		</ul>
-		
 		<?php
+		
 	} else {
-		// Bouton de connexion partout sauf sur la home
-		if (current_page_url() != $url) {
-			echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">';
+		
+		echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">';
+			// Bouton de connexion partout sauf sur la home et sur la page de login
+			if (!elgg_in_context('main') && !elgg_in_context('login')) {
 				echo '<li><i class="fa fa-sign-in"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li>';
-				if ($language_selector) {
-					echo '<li class="language-selector">' . $language_selector . '</li>';
-				}
-			echo '</ul>';
-		}
+			}
+			if ($language_selector) { echo '<li class="language-selector">' . $language_selector . '</li>'; }
+		echo '</ul>';
+		
 	}
 	?>
 </div>
 
 <?php
 elgg_pop_context();
-
 

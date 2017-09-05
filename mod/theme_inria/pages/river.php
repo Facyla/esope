@@ -9,6 +9,25 @@ $options = array();
 
 $options['no_results'] = '<p class="esope-search-noresult">' . elgg_echo('search:no_results') . '</p>';
 
+
+// Iris : enable parameters interception if no JS
+$river_selector = get_input('river_selector');
+if (!empty($river_selector)) {
+	//$river_selector = urldecode($river_selector);
+	$river_selector = str_replace('&amp;', '&', $river_selector);
+	$selector = $river_selector;
+	$river_selector = explode('&', $river_selector);
+	foreach($river_selector as $s) {
+		$s = explode('=', $s);
+		$name = $s[0];
+		$value = $s[1];
+		if ($name == 'type') { set_input('type', $value); }
+		else if ($name == 'subtype') { set_input('subtype', $value); }
+		else if ($name == 'action_types') { set_input('action_types', $value); }
+	}
+}
+
+
 $page_type = preg_replace('[\W]', '', get_input('page_type', 'all'));
 $username = get_input('username', $vars);
 if (($page_type == 'owner') && !empty($username)) {
@@ -33,15 +52,19 @@ if ($last_login < 1) { $last_login = $user->last_login; }
 if ($last_login < 1) { $last_login = $site->time_created; }
 
 
-if ($subtype) {
-	$selector = "type=$type&subtype=$subtype";
-} else {
-	$selector = "type=$type";
+// If no JS, pass raw selector instead
+if (empty($river_selector)) {
+	if ($subtype) {
+		$selector = "type=$type&subtype=$subtype";
+	} else {
+		$selector = "type=$type";
+	}
 }
 
 if ($type != 'all') {
 	$options['type'] = $type;
 	if ($subtype) {
+		if ($subtype == 'pages') { $subtype = array('page_top', 'page'); }
 		$options['subtype'] = $subtype;
 	}
 }

@@ -919,8 +919,8 @@ Voir et commenter ce lien web :
 	'groups:order:popular' => "Avec le plus de membres",
 	'groups:settings' => "Paramètres du groupe",
 	'groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre du groupe",
-	'groups:visibility' => 'Audience',
-	'groups:content_access_mode' => "Audience des nouvelles publications",
+	'groups:visibility' => 'Audience du groupe',
+	'groups:content_access_mode' => "Audience des publications",
 	//'groups:membership' => "Type d'adhésion",
 	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
 	//'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
@@ -994,6 +994,7 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:updated_time_sep' => ", mis à jour ",
 	
 	'group_location' => "Localisation",
+	'profile:group_location' => "Localisation",
 	'community' => "Communautés",
 	'profile:community' => "Communautés",
 	
