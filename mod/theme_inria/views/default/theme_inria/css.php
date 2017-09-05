@@ -490,7 +490,7 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .elgg-body-transp .pages-subpages .esope-subpages-menu { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; border-top: 0; }
 .elgg-body-transp .comment_trackerWrapper { margin: 2rem -2rem 2rem -2rem; padding: 2rem 2rem 0rem 2rem; border-top: 2px solid #F1F1F1; }
 
-.views_counter { background: rgba(56,66,87,.5); color: white; border-radius: 4px; border: 0; padding: 0rem 0.25rem; margin: 0 0 0.25rem 0.25rem; }
+.views-counter-container.views_counter { background: rgba(56,66,87,.5); color: white; border-radius: 4px; border: 0; padding: 0.1rem 0.25rem; margin: 0 0 0.25rem 0.25rem; }
 .views_counter a { color: white; }
 
 

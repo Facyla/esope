@@ -175,7 +175,13 @@ if (elgg_instanceof($container, 'group')) {
 				default: $vars['value'] = $group_acl;
 			}
 			// Add default to available options if needed
-			if (!isset($vars['options_values'][$vars['value']])) { $vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']); }
+			if (!isset($vars['options_values'][$vars['value']])) {
+				if ($vars['value'] == theme_inria_get_inria_access_id()) {
+					$vars['options_values'][$vars['value']] = elgg_echo('profiletype:inria');
+				} else {
+					$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
+				}
+			}
 		}
 	}
 	
@@ -235,7 +241,11 @@ if (!isset($vars['options_values'][$vars['value']])) {
 	//$display = $acl ? $acl->name : elgg_echo('access:missing_name');
 	//$vars['options_values'][$vars['value']] = $display;
 	// Esope : this is more clear (displays Limited if no access to collection)
-	$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
+	if ($vars['value'] == theme_inria_get_inria_access_id()) {
+		$vars['options_values'][$vars['value']] = elgg_echo('profiletype:inria');
+	} else {
+		$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
+	}
 }
 
 
