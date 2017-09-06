@@ -479,8 +479,9 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 .full-width-pages-nav a[rel=toggle] { color: white; font-weight: bold; }
 .full-width-pages-nav a[rel=toggle] .fa { margin-right: 1rem; }
 #full-width-pages-nav-content { margin-top: 0.5rem; }
-.treeview.pages-nav a { color: white; }
-.pages-nav.treeview a:hover, .pages-nav.treeview a:active, .pages-nav.treeview a:focus { color: white; }
+.treeview { background: white; }
+.treeview.pages-nav a { color: #384257; }
+.pages-nav.treeview a:hover, .pages-nav.treeview a:active, .pages-nav.treeview a:focus { color: #384257; }
 .treeview li { font-size: 1rem; }
 .elgg-body-transp .elgg-image-block { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem; border-bottom: 2px solid #F1F1F1; }
 .elgg-body-transp .elgg-content .elgg-output { margin: 0 -2rem 0rem -2rem; padding: 0 2rem 0rem 2rem; /* border-bottom: 2px solid #F1F1F1; */ }
