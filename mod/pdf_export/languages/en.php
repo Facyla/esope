@@ -1,5 +1,5 @@
 <?php
-$english = array(
+return array(
 	
 	'pdfexport'	=>	"PDF export",
 	'pdfexport:download:alt' => "Download as PDF",
@@ -30,6 +30,4 @@ $english = array(
 	'pdf_export:validsubtypes:default' => "Default list: %s",
 	
 );
-
-add_translation('en', $english);
 

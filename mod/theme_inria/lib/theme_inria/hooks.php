@@ -678,12 +678,12 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 				if (in_array($item->getName(), array('thread', 'reply', 'previous'))) { unset($return[$index]); }
 			}
 			
-			if ($item->getName() == 'delete') {
-				$return[$index]->setText('<i class="fa fa-times"></i>&nbsp;' . elgg_echo('delete'));
-			}
-			if ($item->getName() == 'edit') {
-				$return[$index]->setText('<i class="fa fa-pencil"></i>&nbsp;' . elgg_echo('edit'));
-			}
+			// Renames
+			if ($item->getName() == 'edit') { $return[$index]->setText('<i class="fa fa-pencil"></i>&nbsp;' . elgg_echo('edit')); }
+			if ($item->getName() == 'delete') { $return[$index]->setText('<i class="fa fa-times"></i>&nbsp;' . elgg_echo('delete')); }
+			if ($item->getName() == 'download') { $return[$index]->setText('<i class="fa fa-download"></i>&nbsp;' . elgg_echo('download')); }
+			if ($item->getName() == 'pdf-export') { $return[$index]->setText('<i class="fa fa-file-pdf-o"></i>&nbsp;' . elgg_echo('pdfexport:download:alt')); }
+			
 		}
 	}
 	
