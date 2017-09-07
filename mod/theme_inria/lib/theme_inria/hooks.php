@@ -655,8 +655,8 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
 
-	if (elgg_instanceof($entity, 'object', 'file')) {
-		if ($entity->canEdit()) {
+	if ($entity->canEdit()) {
+		if (elgg_instanceof($entity, 'object', 'file')) {
 			// @TODO édition en lightbox
 			$return[] = ElggMenuItem::factory(array(
 					'name' => 'upload_version',
@@ -664,6 +664,16 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 					'href' => "#file-upload-version-{$entity->guid}",
 					'rel' => 'popup', 
 					'priority' => 100,
+				));
+		}
+		if (elgg_instanceof($entity, 'object', 'page_top') || elgg_instanceof($entity, 'object', 'page')) {
+			$return[] = ElggMenuItem::factory(array(
+					'name' => 'add_subpage',
+					'href' => "pages/add/{$entity->guid}",
+					//'text' => '<i class="fa fa-plus-square-o"></i>&nbsp;' . elgg_echo('pages:newchild:link'),
+					'text' => '<i class="fa fa-pencil-square-o"></i>&nbsp;' . elgg_echo('pages:newchild:link'),
+					'title' => elgg_echo('pages:newchild'),
+					'priority' => 200,
 				));
 		}
 	}
@@ -772,6 +782,7 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 				$fh->close();
 			}
 			$group->{$meta_name} = $meta_name;
+			$group->{$meta_name.'time'} = time(); // Keep timestamp so we can use it when calling the image - and cache it
 			$group->{$meta_name.'_name'} = htmlspecialchars($_FILES[$meta_name]['name'], ENT_QUOTES, 'UTF-8');
 		}
 	}

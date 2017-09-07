@@ -36,7 +36,9 @@ if ($disposition) {
 } else {
 	header("Content-Disposition: attachment; filename=$filename");
 }
-header("Expires: " . date("r", time() + 86400)); // 1 day ?
+// TODO Ajouter des headers If-Modified pour gérer les changements de fichier et mettre en place un cache très longue durée
+//header("Expires: " . date("r", time() + 86400)); // 1 day ?
+header("Expires: " . date("r", time() + 30*86400)); // 30 days ?
 header("Pragma: public");
 header("Cache-Control: public");
 header("Content-Length: " . strlen($contents));

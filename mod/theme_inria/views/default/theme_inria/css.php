@@ -983,7 +983,8 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .elgg-tag a { display:inline-block; padding: 0.3em 0.8em 0.2em 0.8em; border: 1px solid <?php echo $iris_blue; ?>; border-radius: 1rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; line-height: 1.2; }
 .small .elgg-icon-tag.fa { font-size: inherit; }
 .elgg-pagination { text-align: right; margin: 0; padding: 0.5rem 0 1.5rem 0; }
-.elgg-pagination a, .elgg-pagination span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
+.elgg-pagination a, .elgg-pagination span {}
+.elgg-pagination-infinite a, .elgg-pagination-infinite span { border-radius: 1em; background: <?php echo $iris_blue; ?>; color: white; border: 0; font-size: 1rem; padding: 0.5rem 1rem; }
 .iris-topbar-item .iris-topbar-notifications-tab .elgg-pagination a { font-size: 1rem; padding: 0.5rem 1rem; }
 
 .iris-box { background: #FFFFFF; min-width:10rem; max-width:32.625rem; margin:0 0 1rem 0; }

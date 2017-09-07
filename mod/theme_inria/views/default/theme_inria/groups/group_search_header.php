@@ -35,7 +35,7 @@ $search_form .= '</div>';
 $banner_css = '#424B5F';
 if (!empty($group->banner)) {
 	//$banner_css = "linear-gradient(rgba(66, 75, 95, 0.45), rgba(66, 75, 95, 0.45)), #424B5F url('{$url}groups/file/{$group->guid}/banner') no-repeat center/cover";
-	$banner_css = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #424B5F url('{$url}groups/file/{$group->guid}/banner') no-repeat center/cover";
+	$banner_css = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), #424B5F url('{$url}groups/file/{$group->guid}/banner?icontime={$group->bannertime}') no-repeat center/cover";
 }
 ?>
 <div class="iris-group-header" style="background: <?php echo $banner_css; ?>;">

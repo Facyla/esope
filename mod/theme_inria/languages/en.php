@@ -498,6 +498,7 @@ Here is the new profile page: %5\s
 	'groups:newgroup:disclaimer' => "<blockquote><div><strong>Excerpt from the Charter:</strong> <em>any person or group or persons willing to create a group - under the condition to <a href=\"mailto:iris@inria.fr\">declaring oneself as group animator to the platform team</a>, has admin rights on the group, and engages to make its members respect the <a href=\"https://reseau-iris.inria.fr/p/charte\">terms and usage rules of content creation of the network « Iris: The internal network of Inria »</a></em></div></blockquote>",
 	'groups:enablepages' => "Enable the wiki (collaborative pages)", // Autoriser les pages du groupe
 	'pages:newchild' => "create a new sub-page in this wiki", // créer une sous page
+	'pages:newchild:link' => "create a sub-page ", // entity menu link
 	//'pages:group' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages du groupe",
 	//'item:object:page' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Pages wiki",
 	//'item:object:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
