@@ -655,7 +655,7 @@ function cmspages_compose_module($module_name, $module_config = false) {
 /* Affichage d'une page cms de tout type
  * $params : rendering parameters (which does not depend of page content)
  * $vars : content vars and data to be passed to the views (used by the page)
- *   - 'mode' : view/read (onlmy first level can be in mode 'read')
+ *   - 'mode' : view/read (only first level can be in mode 'read')
  *        Certaines infos sont masquées en mode 'view' (titre, tags...) 
  *        + softfail si accès interdit + aucun impact sur la suite de l'affichage (contextes, etc.)
  *   - 'embed' : can be passed to change some rendering elements based on read embed

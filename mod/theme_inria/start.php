@@ -443,4 +443,24 @@ function theme_inria_get_inria_access_id() {
 }
 
 
+/* Get a title for interface links
+ * If a translation exists, use it
+ * Otherwise default to cmspage
+ */
+function theme_inria_get_link_title($key) {
+	$title = 'linktitle:' . $key;
+	$translated_title = elgg_echo($title);
+	if ($translated_title != $title) { return $translated_title; }
+	
+	if (elgg_is_active_plugin('cmspages')) {
+		$cmspage = cmspages_get_entity($pagetype);
+		if ($cmspage) {
+			$cmspage_title = $cmspage->description;
+			if (!empty($cmspage_title)) { return $cmspage_title; }
+		}
+	}
+	
+	return false;
+}
+
 
