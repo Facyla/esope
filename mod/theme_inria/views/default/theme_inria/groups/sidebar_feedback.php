@@ -4,12 +4,12 @@
  *
  */
 
-$group = elgg_get_page_owner_entity();
-
 if (!elgg_is_active_plugin('feedback')) { return true; }
 
+$group = elgg_get_page_owner_entity();
+
 $feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
-if (empty($feedbackgroup) || ($feedbackgroup != 'no')) { return true; }
+if (empty($feedbackgroup) || ($feedbackgroup == 'no')) { return true; }
 
 if (($feedbackgroup == 'grouptool' && ($group->feedback_enable == 'yes')) || ($feedbackgroup == $group->guid)) {
 	$options = array('type' => 'object', 'subtype' => 'feedback', 'limit' => 2);
