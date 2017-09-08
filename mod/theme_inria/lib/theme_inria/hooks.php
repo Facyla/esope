@@ -864,4 +864,50 @@ function theme_inria_object_icon_hook($hook, $type, $url, $params) {
 */
 
 
+// Routage des adresses de certains plugins pour utiliser les bonnes URL du thème Iris v2
+function theme_inria_route($hook, $type, $return, $params) {
+	$url = elgg_get_site_url();
+	
+	// Page handler et segments de l'URL
+	// Note : les segments commencent après le page_handler (ex.: URL: groups/all donne 0 => 'all')
+	$handler = $return['handler'];
+	$segments = $return['segments'];
+	//echo print_r($segments, true); // debug
+	//register_error($handler . ' => ' . print_r($segments, true));
+	//error_log('DEBUG Inria ROUTE : ' . $handler . ' => ' . print_r($segments, true));
+	//error_log('DEBUG Inria ROUTE : ' . $handler . ' => ' . print_r($return, true));
+	
+	switch($handler) {
+		case 'blog':
+		case 'bookmarks':
+		case 'file':
+		case 'pages':
+		case 'poll':
+		case 'newsletter':
+		case 'thewire':
+			if ($segments[0] == 'group') {
+				forward($url . 'groups/content/' . $segments[1] . '/' . $handler . '/' . implode('/', array_slice($segments, 2)));
+				return false;
+			}
+			break;
+		case 'event_calendar':
+			break;
+	}
+	
+	
+	//	@todo : Pour tous les autres cas => déterminer le handler et ajuster le comportement
+	//register_error("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
+	//error_log("L'accès à ces pages n'est pas encore déterminé : " . $handler . ' / ' . print_r($segments, true));
+	
+	/* Valeurs de retour :
+	 * return false; // Interrompt la gestion des handlers
+	 * return $return; // Laisse le fonctionnement habituel se poursuivre
+	*/
+	// Par défaut on ne fait rien du tout
+	return $return;
+}
+
+
+
+
 

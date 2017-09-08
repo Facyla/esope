@@ -207,6 +207,10 @@ function theme_inria_init(){
 	// Override profile page
 	elgg_register_page_handler('profile', 'theme_inria_profile_page_handler');
 	
+	
+	// Gestion des redirections et URL modifiées par le plugin (contenu des groupes essentiellement)
+	elgg_register_plugin_hook_handler('route', 'all', 'theme_inria_route');
+	
 	// Add tool entry to group menu
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_inria_thewire_group_menu');
 	// Add link to longtext menu
