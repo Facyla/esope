@@ -105,13 +105,22 @@ if (elgg_group_gatekeeper(false)) {
 			
 		}
 		if ($group->isMember() || $group->canEdit()) {
+			$selected = 'elgg-state-selected'; // First tab selected sets this to '';
 			// Switch publication de nouveau contenu
 			$content .= '<div class="group-workspace-add-tabs">';
-				if ($group->thewire_enable == 'yes') { $content .= '<a href="#group-workspace-add-thewire" class="elgg-state-selected" rel="nofollow"><i class="fa fa-comment-o fa-fw"></i></a>'; }
+				if ($group->thewire_enable == 'yes') {
+					$content .= '<a href="#group-workspace-add-thewire" class="' . $selected . '" rel="nofollow"><i class="fa fa-comment-o fa-fw"></i></a>';
+					$selected = '';
+				}
 				//if ($group->forum_enable == 'yes') $content .= '<a href="#group-workspace-add-discussion" class="elgg-state-selected" rel="nofollow"><i class="fa fa-coments-o fa-fw"></i></a>';
-				if ($group->blog_enable == 'yes') { $content .= '<a href="#group-workspace-add-blog" rel="nofollow"><i class="fa fa-file-text-o fa-fw"></i></a>'; }
-				//if ($group->file_enable == 'yes') 
-				$content .= '<a href="#group-workspace-add-file" rel="nofollow"><i class="fa fa-file fa-fw"></i></a>';
+				if ($group->blog_enable == 'yes') {
+					$content .= '<a href="#group-workspace-add-blog" rel="nofollow" class="' . $selected . '"><i class="fa fa-file-text-o fa-fw"></i></a>';
+					$selected = '';
+				}
+				//if ($group->file_enable == 'yes') {
+				$content .= '<a href="#group-workspace-add-file" rel="nofollow" class="' . $selected . '"><i class="fa fa-file fa-fw"></i></a>';
+				//$selected = '';
+				//}
 			$content .= '</div>';
 			
 			// Publication tab contents (only first is displayed)

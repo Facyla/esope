@@ -106,7 +106,7 @@ function theme_inria_thewire_page_handler($page) {
 			if (isset($page[1])) {
 				set_input('guid', $page[1]);
 			}
-			include $base . "view.php";
+			include $inria_base . "view.php";
 			break;
 
 		case "thread":

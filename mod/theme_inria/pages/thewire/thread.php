@@ -22,6 +22,7 @@ $content = elgg_list_entities_from_metadata(array(
 	"subtype" => "thewire",
 	"limit" => max(20, elgg_get_config('default_limit')),
 	'preload_owners' => true,
+	'order_by' => 'time_created ASC',
 ));
 
 $body = elgg_view_layout('content', array(

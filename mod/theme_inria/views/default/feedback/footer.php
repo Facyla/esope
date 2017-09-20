@@ -118,11 +118,14 @@ if ($memberview == 'yes') $memberview = true; else $memberview = false;
 					$access_opt["0"] = elgg_echo('feedback:access:admin');
 					$access_opt["1"] = elgg_echo('feedback:access:sitemembers');
 					$page_owner = elgg_get_page_owner_entity();
+					// No group access
+					/*
 					if (elgg_instanceof($page_owner, 'group')) {
 						$group_id = $page_owner->group_acl;
 						$access_opt["$group_id"] = elgg_echo('feedback:access:group');
 						$default_access = $group_id;
 					}
+					*/
 					?>
 					<div>
 						<label><?php echo elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt)); ?></label>

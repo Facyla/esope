@@ -123,9 +123,9 @@ switch($filter) {
 			$content .= '<span class="iris-search-count">' . $num_groups . ' ' . elgg_echo('groups') . '</span>';
 			*/
 			$order_opt = array(
-					'alpha' => elgg_echo('groups:order:alpha'),
 					'desc' => elgg_echo('groups:order:desc'),
 					'asc' => elgg_echo('groups:order:asc'),
+					'alpha' => elgg_echo('groups:order:alpha'),
 					'popular' => elgg_echo('groups:order:popular'),
 				);
 			$content .= '<span class="iris-search-order">' . elgg_echo('members:order:select') . ' ' . elgg_view('input/select', array('name' => 'iris_groups_search_order', 'options_values' => $order_opt, 'value' => get_input('order_by'))) . '</span>';

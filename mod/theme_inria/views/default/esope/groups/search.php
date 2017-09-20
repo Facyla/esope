@@ -31,7 +31,7 @@ function esope_search(){
 $q = get_input('q');
 $limit = get_input('limit', 100);
 $offset = get_input('offset', 0);
-$order_by = get_input('order_by', 'alpha');
+$order_by = get_input('order_by', 'desc');
 $community = get_input('community', '');
 
 
