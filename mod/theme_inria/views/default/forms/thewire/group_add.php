@@ -74,7 +74,14 @@ echo elgg_view('input/plaintext', array(
 	
 	// Force to group access if content access mode enabled
 	if ($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
+		// Group members only
 		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
+		echo elgg_view('output/access', array('value' => $group->group_acl));
+		/*
+		// Same as group visibility
+		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->access_id));
+		echo elgg_view('output/access', array('value' => $group->access_id));
+		*/
 	} else {
 		$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
 		$inria_access_id = theme_inria_get_inria_access_id();
