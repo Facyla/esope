@@ -115,7 +115,7 @@ $filter .= elgg_view('input/submit');
 
 
 
-echo '<form class="esope-date-filter" id="esope-search-form">
+echo '<form class="esope-date-filter">
 		' . $filter . '
 	</form>';
 
