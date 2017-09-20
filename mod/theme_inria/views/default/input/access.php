@@ -115,7 +115,8 @@ if (($container instanceof ElggGroup)
 	&& !($entity instanceof ElggGroup)) {
 	$show_override_notice = true;
 	$restricted_content_access = true;
-	// Inria : always add container access level
+	// Inria : always add container access level (not group members level, but same level as group access_id)
+	// Add option if missing
 	if (!isset($vars['options_values'][$container->access_id])) {
 		if ($vars['options_values'][$container->access_id] == theme_inria_get_inria_access_id()) {
 			$vars['options_values'][$container->access_id] = get_readable_access_level($container->access_id);
@@ -164,12 +165,13 @@ if (elgg_instanceof($container, 'group')) {
 				$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
 				if (empty($defaultaccess)) { $defaultaccess = 'groupvis'; }
 			} else {
-				$closedgroups_defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+				$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
 				if (empty($defaultaccess)) { $defaultaccess = 'group'; }
 			}
-			// If access policy says group only, always default to group acl
+			// If access policy says group only, always default to group acl (or whatever esope settings says)
 			if ($restricted_content_access) {
-				$defaultaccess = 'group';
+				$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+				if (empty($defaultaccess)) { $defaultaccess = 'group'; }
 			}
 			// Now set default content access value
 			switch($defaultaccess) {
