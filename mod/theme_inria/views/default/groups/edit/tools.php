@@ -107,7 +107,7 @@ foreach ($tools as $priority => $view) {
 		if (in_array($group_option_toggle_name, array('file_enable', 'blog_enable'))) {
 			$attrs = array('class' => 'groups-edit-checkbox');
 			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
-			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
+			if (!empty($title) && ($title != "groups:tools:$group_option->name:details")) { $attrs['title'] = $title; }
 			echo elgg_view('input/hidden', array('name' => $group_option_toggle_name, 'value' => 'yes'));
 			/*
 			echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
@@ -125,6 +125,8 @@ foreach ($tools as $priority => $view) {
 		if ($group_option_toggle_name == 'forum_enable') {
 			$existing_topic = elgg_get_entities(array('type' => 'object', 'subtype' => 'groupforumtopic', 'container_guid' => $group->guid, 'count' => true));
 			if ($existing_topic === 0) {
+				echo elgg_view('input/hidden', array('name' => $group_option_toggle_name, 'value' => 'no'));
+				/*
 				// Can be safely disabled
 				echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
 					'name' => $group_option_toggle_name,
@@ -134,6 +136,7 @@ foreach ($tools as $priority => $view) {
 					'label' => $group_option->label,
 					'disabled' => true,
 				)));
+				*/
 				continue;
 			}
 		}
