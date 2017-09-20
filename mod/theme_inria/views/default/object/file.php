@@ -148,7 +148,7 @@ if ($full && !elgg_in_context('gallery')) {
 		$content .= $excerpt;
 	} else {
 		$content = '';
-		//$content = $file_icon;
+		$content = $file_icon;
 		$content = $file_meta;
 		$content .= $excerpt;
 	}
