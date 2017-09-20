@@ -23,18 +23,21 @@ elgg_push_breadcrumb($title);
 $content = elgg_view_entity($post);
 
 // Add conversation
-$content .= '<br />';
-$content .= '<h3>' . elgg_echo('thewire:thread') . '</h3>';
-$thread = get_entity($post->thread_id);
-$content .= elgg_list_entities_from_metadata(array(
-	"metadata_name" => "wire_thread",
-	"metadata_value" => $post->thread_id,
-	"type" => "object",
-	"subtype" => "thewire",
-	"limit" => max(20, elgg_get_config('default_limit')),
-	'preload_owners' => true,
-	'order_by' => 'time_created ASC',
-));
+if ($post->wire_thread > 0) {
+	$content .= '<div class="wire-thread">';
+	$content .= '<h3>' . elgg_echo('thewire:thread') . '</h3>';
+	$thread = get_entity($post->wire_thread);
+	$content .= elgg_list_entities_from_metadata(array(
+		"metadata_name" => "wire_thread",
+		"metadata_value" => $post->wire_thread,
+		"type" => "object",
+		"subtype" => "thewire",
+		"limit" => max(20, elgg_get_config('default_limit')),
+		'preload_owners' => true,
+		'order_by' => 'time_created ASC',
+	));
+	$content .= '</div>';
+}
 
 
 $body = elgg_view_layout('content', array(
