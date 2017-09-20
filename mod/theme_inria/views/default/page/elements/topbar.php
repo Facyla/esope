@@ -241,19 +241,19 @@ if (elgg_is_active_plugin('language_selector')) {
 					$tab = 'site'; // friends | groups
 					$class = ''; if ($tab == 'site') { $class = 'elgg-state-selected'; }
 					echo elgg_view('output/url', array(
-							'text' => 'Notifications'.$site_notifications_mark, 
+							'text' => elgg_echo('theme_inria:groupinvites:tab') . $site_notifications_mark, 
 							'href' => '#iris-topbar-notifications-site',
 							'class' => $class
 						));
 					$class = ''; if ($tab == 'groups') { $class = 'elgg-state-selected'; }
 					echo elgg_view('output/url', array(
-							'text' => 'Demandes de contact'.$friendrequests_mark, 
+							'text' => elgg_echo('theme_inria:grouprequests:tab') . $friendrequests_mark, 
 							'href' => '#iris-topbar-notifications-friends',
 							'class' => $class
 						));
 					$class = ''; if ($tab == 'friends') { $class = 'elgg-state-selected'; }
 					echo elgg_view('output/url', array(
-							'text' => 'Invitations aux groupes'.$groupinvites_mark, 
+							'text' => elgg_echo('theme_inria:friendrequests:tab') . $groupinvites_mark, 
 							'href' => '#iris-topbar-notifications-groups',
 							'class' => $class
 						));

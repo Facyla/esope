@@ -761,6 +761,9 @@ Voir et commenter ce lien web :
 	'theme_inria:viewall' => "tout voir",
 	'theme_inria:view' => "voir",
 	
+	'theme_inria:groupinvites:tab' => "Invitations",
+	'theme_inria:grouprequests:tab' => "Demandes d'adhésion",
+	'theme_inria:friendrequests:tab' => "Demandes de contact",
 	'theme_inria:site_notifications:unreadcount' => "Notifications (%s)",
 	'theme_inria:groupinvites:unreadcount' => "Invitations (%s)",
 	'theme_inria:grouprequests:unreadcount' => "Demandes d'adhésion (%s)",
@@ -972,6 +975,9 @@ Voir et commenter ce lien web :
 	'theme_inria:group:members:livefilter' => "3 premières lettres",
 	
 	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe.",
+	'theme_inria:workspace:addcontent:thewire' => "Publier un nouveau message",
+	'theme_inria:workspace:addcontent:blog' => "Publier un nouvel article",
+	'theme_inria:workspace:addcontent:file' => "Publier un nouveau fichier",
 	
 	'theme_inria:object:comment' => "Commenter",
 	'theme_inria:object:comments:count' => "%s commentaire(s)",

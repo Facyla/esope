@@ -141,10 +141,7 @@ $actions = elgg_view('page/components/iris_object_actions', array('entity' => $e
 echo '<div class="iris-object iris-object-' . $mode . '">';
 switch($mode) {
 	case 'full':
-		echo $header;
-		echo $main_title;
-		echo $main_content;
-		echo $actions;
+		echo $header . $main_title . $main_content . $actions;
 		break;
 		
 	case 'content':

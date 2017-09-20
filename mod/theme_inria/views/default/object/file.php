@@ -21,7 +21,9 @@ $base_type = substr($mime, 0, strpos($mime,'/'));
 
 if ($size = $file->getSize()) { $filesize = '<span class="file-size">' . esope_friendly_size($size, 2) . '</span>'; }
 $mimetype = '<span class="file-mimetype">' . $file->getMimeType() . '</span>';
-$filename = '<span class="file-filename" title="' . $file->originalfilename . '">' . elgg_get_excerpt($file->originalfilename, 50) . '</span>';
+if ($file->originalfilename != $file->title) {
+	$filename = '<span class="file-filename" title="' . $file->originalfilename . '">' . elgg_get_excerpt($file->originalfilename, 30) . '</span>';
+}
 $simpletype = '<span class="file-simpletype">' . $file->simpletype . '</span>';
 $extension = '<span class="file-extension">' . pathinfo($file->originalfilename)['extension'] . '</span>';
 $file_meta = '<p class="file-meta">';

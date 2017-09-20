@@ -749,7 +749,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .iris-topbar-notifications-tab .iris-topbar-notifications-tab-content { min-height: 100px; padding: 1rem; max-height: 60vh; overflow: auto; }
 .iris-topbar-notifications-tab-content .elgg-body { font-size: 0.9375rem; }
 .iris-topbar-item .iris-topbar-notifications-tab a { padding: 0; font-weight: initial; font-size: 0.9rem; }
-#notifications .elgg-item-object-site_notification { padding: 0 0 0.5rem 0; margin: 0 1rem 0.5rem 1rem; box-shadow: none; }
+#notifications .elgg-item-object-site_notification { padding: 0 0 0.5rem 0; margin: 0.5rem 1rem 1rem 1rem; box-shadow: none; }
 #notifications .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 .notifications-pending-group-invites { border-bottom: 1px solid #DCDCDC; margin: 0 1rem; }
 .elgg-image-block.notifications-pending-invitations { margin: 0.5rem 0 1rem 0; }
@@ -1196,7 +1196,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-menu-item-access .elgg-access a { color: rgba(56, 66, 87, 0.5); font-style: normal; font-weight: bold; }
 
 
-.iris-groups-community { flex: 1 1 22rem; display: flex; height:12.5rem; max-width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0; padding: 2rem; position: relative; overflow: auto; }
+.iris-groups-community { flex: 1 1 22rem; display: flex; min-height:12.5rem; max-width: 32rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0; padding: 2rem 2rem 2rem 0rem; position: relative; overflow: auto; }
 .iris-community-icon { width: 6.375rem; height: 6.375rem; margin: 1rem; float: left; }
 .iris-groups-community .iris-community-hover { position: absolute; top: 0; left: 0; bottom: 0; right: 0; /* background: <?php echo $iris_blue; ?>; opacity: 0.9; */ background:rgba(20, 136, 202, 0.9); border-radius: 4px; font-size: 1.875rem; font-weight: bold; color: white; text-align: center; line-height: 12.5rem; text-transform: uppercase; }
 .iris-groups-community:hover .iris-community-hover { display: block; }
@@ -1241,6 +1241,9 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-context-workspace-content .elgg-image-block .elgg-image { width: 12.5rem; min-height: 12.5rem; display: flex; background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); margin-right:0; flex: 0 0 12.5rem; }
 .elgg-context-workspace-content .elgg-image-block .elgg-body { min-height: 12.5rem; padding: 1.5rem 2rem 0rem 2rem; }
 .elgg-context-workspace-content .elgg-image-block .elgg-image > * { margin: auto; }
+.iris-object .elgg-image-block .elgg-body { display: flex; flex-direction: column; }
+.iris-object .elgg-image-block .elgg-body .iris-object-actions { margin-top: auto; }
+.iris-object .elgg-image-block .elgg-body .iris-object-readmore, .iris-object .elgg-image-block .elgg-body .elgg-content { flex: 1 1 auto; }
 
 .pages-subpages { border-top: 2px solid #F1F1F1; margin: 1rem -2rem 0rem -2rem; padding: 0 2rem; }
 .elgg-context-pages .elgg-list-annotation li .elgg-image-block { margin: 0; border: 0; }
@@ -1636,6 +1639,7 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .elgg-item-object .elgg-image-block .elgg-image a.medium img { width: 3.375rem; height: 3.375rem; margin: 0 1.3125rem !important; }
 .elgg-item-object .elgg-image-block .elgg-image a span.small { width: 3.375rem; height: 3.375rem; margin: 0 1.3125rem !important; }
 .elgg-image-block .elgg-image .fa { color: #aaa; }
+.elgg-item-object-file .iris-object { word-break: break-all; }
 
 .entity-headline { display:flex; margin-bottom: 0.2rem;}
 .entity-headline .owner-icon { flex:0; margin-right: 1rem; }
@@ -1681,6 +1685,8 @@ p.file-meta { margin-bottom: 0.5rem; }
 .file-mimetype:after { content:')'; }
 .iris-object-content .file-filename { display: inline; margin-right: 1rem; }
 .elgg-list .elgg-item .elgg-image-block.iris-object-inner { border: 1px solid rgba(56, 66, 87, 0.2); padding: 0.5rem; margin-bottom: 0.5rem; display: block; }
+.elgg-image-block.iris-object-inner .elgg-image { min-width: 2rem; min-height: 3.75rem; display: flex; }
+.elgg-image-block.iris-object-inner .elgg-image img { flex: 0 0 auto; margin-top: auto; margin-bottom: auto; }
 .elgg-list .elgg-item .elgg-image-block.iris-object-inner .elgg-photo { border: 0; padding: 0; margin-right: 0.5rem; }
 .elgg-button .file-size, .elgg-button .file-extension { margin: 0 0 0 1rem; color: #CCCCCC; }
 

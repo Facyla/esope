@@ -7,5 +7,5 @@ echo elgg_view('theme_inria/groups/sidebar_agenda');
 
 echo elgg_view('theme_inria/groups/sidebar_poll');
 
-echo elgg_view('theme_inria/groups/sidebar_feedback');
+echo elgg_view('theme_inria/groups/sidebar_alt_feedback');
 

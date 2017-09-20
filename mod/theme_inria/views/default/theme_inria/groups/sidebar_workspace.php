@@ -50,7 +50,9 @@ $sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
 
 $sidebar .= elgg_view('theme_inria/groups/sidebar_file');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_feedback');
+if (!elgg_in_context('workspace')) {
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_feedback');
+}
 
 
 echo $sidebar;

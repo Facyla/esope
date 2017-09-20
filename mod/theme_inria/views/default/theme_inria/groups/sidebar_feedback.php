@@ -45,16 +45,16 @@ if (($feedbackgroup == 'grouptool' && ($group->feedback_enable == 'yes')) || ($f
 		'class' => "add-plus float-alt",
 		'is_trusted' => true,
 	));
-
-
-	echo '<div class="iris-sidebar-content">';
-		echo '<div class="workspace-subtype-header">';
-			echo $new_link;
-			echo '<h3>' . $all_link . '</h3>';
-		echo '</div>';
-		echo '<div class="workspace-subtype-content">';
-			echo $content;
-		echo '</div>';
+	
+	
+	// Break out from iris-sidebar-content and reopen it
+	echo '</div><div class="iris-sidebar-content">';
+	//echo '<div class="workspace-subtype-header">';
+	//	echo $new_link;
+		echo '<h3>' . $all_link . '</h3>';
+	//echo '</div>';
+	echo '<div class="workspace-subtype-content file">';
+		echo $content;
 	echo '</div>';
 }
 

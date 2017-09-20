@@ -144,7 +144,7 @@ return array(
 
 	'esope:directory' => 'Members',
 	
-	'inria:mygroups' => "All my groups",
+	'theme_inria:mygroups' => "All my groups",
 	'theme_inria:groups:discover' => "Groups to be discovered",
 	'inria:mygroups:title' => "My groups",
 	'theme_inria:firststeps:hide' => "Don't show anymore",
@@ -768,6 +768,9 @@ View and comment on the bookmark:
 	'theme_inria:viewall' => "view all",
 	'theme_inria:view' => "view",
 	
+	'theme_inria:groupinvites:tab' => "Invitations",
+	'theme_inria:grouprequests:tab' => "Membership requests",
+	'theme_inria:friendrequests:tab' => "Friendship requests",
 	'theme_inria:site_notifications:unreadcount' => "Notifications (%s)",
 	'theme_inria:groupinvites:unreadcount' => "Invitations (%s)",
 	'theme_inria:grouprequests:unreadcount' => "Join requests (%s)",
@@ -979,6 +982,9 @@ View and comment on the bookmark:
 	'theme_inria:group:members:livefilter' => "3 first letters",
 	
 	'theme_inria:workspace:invites:warning' => "Warning, if the group is in restricted access mode, you can only invite group members.",
+	'theme_inria:workspace:addcontent:thewire' => "Publish a new message",
+	'theme_inria:workspace:addcontent:blog' => "Publish a new article",
+	'theme_inria:workspace:addcontent:file' => "Publish a new file",
 	
 	'theme_inria:object:comment' => "Comment",
 	'theme_inria:object:comments:count' => "%s comment(s)",
