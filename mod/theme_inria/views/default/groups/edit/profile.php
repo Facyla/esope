@@ -96,6 +96,9 @@ if (count($group_fields["fields"]) > 0) {
 		
 		// get title
 		$title = $field->getTitle();
+		if ($field->metadata_name == $field->getTitle()) {
+			$title = elgg_echo($field->getTitle());
+		}
 		
 		// get value
 		$value = elgg_extract($metadata_name, $vars);
@@ -106,11 +109,14 @@ if (count($group_fields["fields"]) > 0) {
 		echo '<div class="groups-edit-label">';
 			echo '<label>' . $title . "</label>";
 		
-		if ($hint = $field->getHint()) {
-			?>
-			<span class='custom_fields_more_info' id='more_info_<?php echo $metadata_name; ?>'></span>
-			<span class="hidden" id="text_more_info_<?php echo $metadata_name; ?>"><?php echo $hint;?></span>
-			<?php
+		// Use translated hints first
+		$translated_hint = theme_inria_get_translation('groups:hint:'.$metadata_name);
+		if ($translated_hint) {
+			echo '<span class="custom_fields_more_info" id="more_info_' . $metadata_name . '"></span>';
+			echo '<span class="hidden" id="text_more_info_' . $metadata_name . '">' . $translated_hint . '</span>';
+		} else if ($hint = $field->getHint()) {
+			echo '<span class="custom_fields_more_info" id="more_info_' . $metadata_name . '"></span>';
+			echo '<span class="hidden" id="text_more_info_' . $metadata_name . '">' . $hint . '</span>';
 		}
 		echo '</div>';
 		
@@ -150,7 +156,9 @@ if (count($group_fields["fields"]) > 0) {
 			}
 			
 			if ($show_input) {
-				if ($parent_group) $valtype = 'plaintext';
+				// Editeur simplifié pour les EDT
+				//if ($parent_group) { $valtype = 'plaintext'; }
+				if ($parent_group) { $field_output_options['class'] = 'elgg-input-longtext-basic'; }
 				echo '<div class="groups-edit-input">';
 				echo elgg_view("input/{$valtype}", $field_output_options);
 				

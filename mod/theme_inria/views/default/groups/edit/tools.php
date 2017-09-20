@@ -108,6 +108,8 @@ foreach ($tools as $priority => $view) {
 			$attrs = array('class' => 'groups-edit-checkbox');
 			$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
 			if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
+			echo elgg_view('input/hidden', array('name' => $group_option_toggle_name, 'value' => 'yes'));
+			/*
 			echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
 				'name' => $group_option_toggle_name,
 				'value' => 'yes',
@@ -116,6 +118,7 @@ foreach ($tools as $priority => $view) {
 				'label' => $group_option->label,
 				'disabled' => true,
 			)));
+			*/
 			continue;
 		}
 		// Forum : on désactive s'il n'y en a plus - mais on laisse le choix tant qu'il reste du contenu
@@ -137,14 +140,19 @@ foreach ($tools as $priority => $view) {
 		
 		// Esope : add help title if set
 		$attrs = array('class' => 'groups-edit-checkbox');
-		$title = elgg_echo($translation_prefix."groups:tools:$group_option->name:details");
-		if ($title != "groups:tools:$group_option->name:details") { $attrs['title'] = $title; }
+		$title = theme_inria_get_translation($translation_prefix."groups:tools:$group_option->name:details");
+		$hint = '';
+		if (!empty($title)) {
+			//$attrs['title'] = $title;
+			$hint = '<span class="custom_fields_more_info" id="more_info_' . $group_option_toggle_name . '"></span>';
+			$hint .= '<span class="hidden" id="text_more_info_' . $group_option_toggle_name . '">' . $title . '</span>';
+		}
 		echo elgg_format_element('div', $attrs, elgg_view('input/checkbox', array(
 			'name' => $group_option_toggle_name,
 			'value' => 'yes',
 			'default' => 'no',
 			'checked' => ($value === 'yes') ? true : false,
-			'label' => $group_option->label,
+			'label' => $group_option->label . $hint,
 		)));
 	}
 }

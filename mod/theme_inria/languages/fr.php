@@ -306,6 +306,10 @@ return array(
 	'groups:hint:customtab4' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
 	'groups:customtab5' => "Onglet configurable n°5 (URL::Titre onglet::Infobulle facultative)",
 	'groups:hint:customtab5' => "Utilisez la syntaxe suivante, en utilisant '::' comme séparateur : URL::Titre de l'onglet",
+	'groups:hint:description' => "Décrivez-ici votre groupe : quel est son objectif ? Dans quel contexte s'inscrit-il ? A qui s'adresse-t-il ?",
+	'groups:hint:briefdescription' => "Une description courte du groupe affichée dans les listings et dans l'espace de travail principal",
+	'groups:tools:hint:thewire' => "pour partager de très courtes nouvelles (500 car max) ou faire des rappels",
+	'groups:tools:hint:blog' => "raconter les dernières nouvelles, les avancées d'un projet, poser des questions",
 	
 	// Etherpad embed
 	'theme_inria:embed:etherpad' => "Pad",

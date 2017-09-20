@@ -449,18 +449,23 @@ function theme_inria_get_inria_access_id() {
 
 /* Get a title for interface links
  * If a translation exists, use it
- * Otherwise default to cmspage
+ * Otherwise try to use cmspage
  */
-function theme_inria_get_link_title($key) {
-	$title = 'linktitle:' . $key;
-	$translated_title = elgg_echo($title);
-	if ($translated_title != $title) { return $translated_title; }
+function theme_inria_get_link_title($key, $use_cmspages = false) {
+	return theme_inria_get_translation('linktitle:' . $key);
+}
+
+/* Check if a translation exists before retuning it
+ */
+function theme_inria_get_translation($key, $use_cmspages = false) {
+	$translated = elgg_echo($key);
+	if ($translated != $key) { return $translated; }
 	
-	if (elgg_is_active_plugin('cmspages')) {
+	if ($use_cmspages && elgg_is_active_plugin('cmspages')) {
 		$cmspage = cmspages_get_entity($pagetype);
 		if ($cmspage) {
-			$cmspage_title = $cmspage->description;
-			if (!empty($cmspage_title)) { return $cmspage_title; }
+			$translated = $cmspage->description;
+			if (!empty($translated)) { return $translated; }
 		}
 	}
 	
