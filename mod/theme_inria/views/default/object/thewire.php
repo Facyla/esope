@@ -52,21 +52,31 @@ if (!empty($post->container_guid)) {
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) { $metadata = ''; }
 
+// Post parent ?
+$parent = thewire_get_parent($post->guid);
+
 // Seulement pour les posts faisant partie d'une conversation
 if ($post->reply) {
-	// Affiche toute la conversation
-	$metadata_alt .= '<li>' . elgg_view('output/url', array(
-		'text' => elgg_echo('thewire:thread'),
-		'href' => "thewire/thread/$post->wire_thread",
-	)) . '</li>';
-
-	// Affiche le précédent
-	$metadata_alt .= '<li>' . elgg_view('output/url', array(
-		'text' => elgg_echo('previous'),
-		'href' => "thewire/previous/$post->guid",
-		'class' => 'thewire-previous',
-		'title' => elgg_echo('thewire:previous:help'),
-	)) . '</li>';
+	if (!elgg_in_context('thewire-thread')) {
+		// Affiche toute la conversation
+		$metadata_alt .= '<li>' . elgg_view('output/url', array(
+			'text' => elgg_echo('thewire:thread'),
+			'href' => "thewire/thread/$post->wire_thread",
+		)) . '</li>';
+	}
+	
+	// @TODO Display reply link if not direct parent ? or better organise content in threaded view ?
+	// For now, list all messages by date, and add special class to tell apart direct replies from others
+	//if ($parent && ($parent->guid != $post->wire_thread)) {
+	if (!elgg_in_context('thewire-thread')) {
+		// Affiche le précédent
+		$metadata_alt .= '<li>' . elgg_view('output/url', array(
+			'text' => elgg_echo('previous'),
+			'href' => "thewire/previous/$post->guid",
+			'class' => 'thewire-previous',
+			'title' => elgg_echo('thewire:previous:help'),
+		)) . '</li>';
+	}
 }
 
 /*
@@ -87,12 +97,22 @@ $list_body = elgg_view('object/elements/summary', $params);
 $content = thewire_filter($post->description);
 
 $after = '';
-if ($post->reply) {
+//if ($post->reply && $parent && ($parent->guid != $post->wire_thread)) {
+if ($post->reply && !elgg_in_context('thewire-tread')) {
 	//echo "<div class=\"thewire-parent hidden\" id=\"thewire-previous-{$post->guid}\">";
 	//echo "</div>";
 	$after = '<div class="thewire-parent hidden" id="thewire-previous-' . $post->guid . '"></div>';
 }
 
+// Add classes for reply level (top parent, direct reply, other replies)
+if (!$parent) {
+	$class = 'thewire-parent-top';
+} else {
+	$class .= ' thewire-reply';
+	if ($parent->guid == $post->wire_thread) { $class .= ' thewire-reply-top'; }
+	$class .= ' thewire-reply-to-' . $parent->guid;
+}
 
-echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'after' => $after));
+
+echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'after' => $after, 'class' => $class));
 

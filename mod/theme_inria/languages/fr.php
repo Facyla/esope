@@ -457,6 +457,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'profile:hint:briefdescription' => "Votre ou vos fonction(s), poste(s), rôle(s) en une phrase. Utilisez la description pour détailler", // Brève description (Profil)
 	'profile:fonction' => "Fonction",
 	'profile:organisation' => "Organisation",
+	'profile:memberstatus' => "Statut du compte",
 	'profile:hint:organisation' => "Votre organisation, ou une liste de vos organisations séparées par des virgules",
 	'profile:location' => "Localisation", // Adresse
 	//'profile:hint:location' => "Veuillez indiquer votre localisation sous la forme d'une adresse.", // Adresse
@@ -1028,6 +1029,10 @@ email3@domain.tld email4@domain.tld ",
 	'user:password:lost' => "<i class=\"fa fa-key\"></i>&nbsp;Mot de passe perdu ?",
 	
 	'thewire:filter:add_group_container' => "Inclure les messages des groupes",
+	'theme_inria:wire:num_replies' => "Ce message a reçu %s réponse(s)",
+	'theme_inria:wire:inthread' => "Ce message fait partie d'une conversation (%s messages)",
+	'theme_inria:wire:startthread' => "Ce message est à l'origine d'une conversation (%s messages)",
+	'theme_inria:wire:viewthread' => "Voir la conversation",
 	
 );
 

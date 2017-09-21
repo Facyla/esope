@@ -458,6 +458,7 @@ Here is the new profile page: %5\s
 	'profile:fonction' => "Position",
 	'profile:organisation' => "Organisation",
 	'profile:hint:organisation' => "Your organisation, or a comma-separated list of your organisations",
+	'profile:memberstatus' => "User account status",
 	'profile:location' => "Location", // Adresse
 	//'profile:hint:location' => "Veuillez indiquer votre localisation sous la forme d'une adresse.", // Adresse
 	'profile:field:location' => "Location", // Adresse
@@ -1031,6 +1032,10 @@ email3@domain.tld email4@domain.tld ",
 	'user:password:lost' => "<i class=\"fa fa-key\"></i>&nbsp;Lost password?",
 	
 	'thewire:filter:add_group_container' => "Include group messages",
+	'theme_inria:wire:num_replies' => "This message has received %s replies",
+	'theme_inria:wire:inthread' => "This message is part of a thread (%s messages)",
+	'theme_inria:wire:startthread' => "This message is the starting point of a thread (%s messages)",
+	'theme_inria:wire:viewthread' => "View thread",
 	
 );
 

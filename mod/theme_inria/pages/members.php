@@ -35,7 +35,7 @@ if ($profile_type == 'inria') {
 	$sidebar .= '<div class="iris-invite-external">
 			<ul class="elgg-menu elgg-menu-page elgg-menu-page-invite">
 				<li class="elgg-menu-item-invite">
-					<a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-menu-content">' . elgg_echo('theme_inria:invite_external') . '</a>
+					<a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-menu-content"><i class="fa fa-user-plus"></i>&nbsp;' . elgg_echo('theme_inria:invite_external') . '</a>
 				</li>
 			</ul>
 		</div>';

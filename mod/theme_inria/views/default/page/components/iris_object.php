@@ -65,11 +65,14 @@ if (!in_array($mode, array('full', 'listing', 'content'))) {
 }
 
 $class = 'elgg-image-block';
+$class = '';
 $additional_class = elgg_extract('class', $vars, '');
 if ($additional_class) { $class = "$class $additional_class"; }
 
 $id = '';
 if (isset($vars['id'])) { $id = "id=\"{$vars['id']}\""; }
+
+$image_block_vars = array();
 
 $page_owner = elgg_get_page_owner_entity();
 $owner = $entity->getOwnerEntity();
@@ -89,18 +92,26 @@ if (!empty($title)) {
 
 
 // ICONS AND IMAGES
-if (elgg_instanceof($owner)) {
-	$profile_type = esope_get_user_profile_type($owner);
-	if (empty($profile_type)) { $profile_type = 'external'; }
-	// Archive : replace profile type by member status archived
-	if ($owner->memberstatus == 'closed') { $profile_type = 'archive'; }
-	$owner_icon = '<span class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a></span>';
+// Use image for files instead of owner icon
+if (elgg_instanceof($entity, 'object', 'file') && ($entity->simpletype == 'image')) {
+	//$owner_icon = '<a href="' . $entity->getURL() . '"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" /></a>';
+	$owner_icon = '<a href="' . $entity->getURL() . '" style="background: url(\'' . $entity->getIconUrl(array('size' => 'medium')) . '\') no-repeat center/cover; width: 100%; margin: 0;"></a>';
+	$image_block_vars['class'] = 'file-image';
 } else {
-	$owner_icon = '';
-	error_log('DEBUG page/components/iris_object : invalid $owner');
+	if (elgg_instanceof($owner)) {
+		$profile_type = esope_get_user_profile_type($owner);
+		if (empty($profile_type)) { $profile_type = 'external'; }
+		// Archive : replace profile type by member status archived
+		if ($owner->memberstatus == 'closed') { $profile_type = 'archive'; }
+		$owner_icon = '<span class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' . $owner->getURL() . '" title="' . $owner->name . '" class="elgg-avatar medium"><img src="' . $owner->getIconURL(array('size' => 'medium')) . '" /></a></span>';
+	} else {
+		$owner_icon = '';
+		error_log('DEBUG page/components/iris_object : invalid $owner');
+	}
 }
 
-$entity_icon = $entity->getIconURL(array('size' => 'medium'));
+
+//$entity_icon = $entity->getIconURL(array('size' => 'medium'));
 if (elgg_instanceof($entity, 'object', 'file')) {
 	$entity_icon = '<a href="' . $entity->getURL() . '" class="medium"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" /></a>';
 } else {
@@ -138,19 +149,19 @@ $actions = elgg_view('page/components/iris_object_actions', array('entity' => $e
 
 
 //echo $mode;
-echo '<div class="iris-object iris-object-' . $mode . '">';
+echo '<div class="iris-object iris-object-' . $mode . ' ' . $class . '">';
 switch($mode) {
 	case 'full':
 		echo $header . $main_title . $main_content . $actions;
 		break;
 		
 	case 'content':
-		echo elgg_view_image_block($entity_icon, $header . $main_title . $main_content . $actions);
+		echo elgg_view_image_block($entity_icon, $header . $main_title . $main_content . $actions, $image_block_vars);
 		break;
 		
 	case 'listing':
 	default:
-		echo elgg_view_image_block($owner_icon, $header . $main_title . $main_content . $actions);
+		echo elgg_view_image_block($owner_icon, $header . $main_title . $main_content . $actions, $image_block_vars);
 }
 echo '</div>';
 

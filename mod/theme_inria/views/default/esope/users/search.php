@@ -77,8 +77,8 @@ foreach($metadata_search_fields as $metadata) {
 	$metadata_params = explode(':', $metadata);
 	$metadata = array_shift($metadata_params);
 	$name = "metadata[$metadata]";
-	$meta_title = elgg_echo("profile:$metadata");
-	if ($meta_title == "profile:$metadata") { $meta_title = elgg_echo($metadata); }
+	$meta_title = theme_inria_get_translation("profile:$metadata");
+	if (!$meta_title) { $meta_title = elgg_echo($metadata); }
 	$meta_title = ucfirst($meta_title);
 	// Process special syntax parameters (text takes precedence over auto parameter)
 	if (count($metadata) > 0) {

@@ -177,6 +177,7 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 	
 	// Add container
 	if (elgg_instanceof($object, 'object')) {
+		
 		// Get real container for forum & comments
 		$top_object = esope_get_top_object_entity($object);
 		//$container = esope_get_container_entity($object);
@@ -206,9 +207,9 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 				));
 		//} else if (elgg_instanceof($object, 'object', 'thewire') || elgg_instanceof($top_object, 'object', 'thewire')) {
 		} else if (elgg_instanceof($top_object, 'object', 'thewire')) {
-			// @TODO should be displayed if member of the container group, or not in group
+			// Comment form hould be displayed if member of (or can write in) the container group, or not in a group at all
 			//$container = $top_object->getContainerEntity();
-			if ((elgg_instanceof($container, 'group') && $container->isMember()) || !elgg_instanceof($container, 'group')) {
+			if ((elgg_instanceof($container, 'group') && ($container->isMember() || $container->canEdit())) || !elgg_instanceof($container, 'group')) {
 				// Thewire reply form toggle link
 				$items[] = \ElggMenuItem::factory(array(
 						'name' => 'comment',
@@ -219,17 +220,6 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 						'priority' => 10,
 					));
 			}
-			// Thread
-			// @TODO remove wire thread in thewire-thread context (redundant)
-			/*
-			$items[] = \ElggMenuItem::factory(array(
-					'name' => 'thread',
-					'href' => "thewire/thread/$post->wire_thread",
-					'text' => elgg_echo('thewire:thread'),
-					'link_class' => 'wire-thread',
-					'priority' => 50,
-				));
-			*/
 		}
 		
 	}
@@ -684,6 +674,7 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 				unset($return[$index]);
 			}
 			
+			// Wire : remove useless links (note: they are added to iris-object-actions in view object/thewire view)
 			if (elgg_instanceof($entity, 'object', 'thewire')) {
 				if (in_array($item->getName(), array('thread', 'reply', 'previous'))) { unset($return[$index]); }
 			}

@@ -70,7 +70,7 @@ $metadata = elgg_view_menu('entity', array(
 // do not show the metadata and controls in widget view
 if (elgg_in_context('widgets')) { $metadata = ''; }
 
-// Add new file version form popup
+// Add new file version form popup (link is in entity menu)
 $upload_version = '';
 $upload_version .= '<div class="elgg-module elgg-module-popup file-upload-version hidden clearfix" id="file-upload-version-' . $file->guid . '">';
 $upload_version .= elgg_view_form('file/upload_version', array('enctype' => 'multipart/form-data'), array('entity' => $file));
@@ -80,6 +80,8 @@ $upload_version .= '</div>';
 
 if ($full && !elgg_in_context('gallery')) {
 	$extra = '';
+	
+	// File image (icon or image itself)
 	if (elgg_view_exists("file/specialcontent/$mime")) {
 		$extra = elgg_view("file/specialcontent/$mime", $vars);
 	} else if (elgg_view_exists("file/specialcontent/$base_type/default")) {
@@ -141,15 +143,15 @@ if ($full && !elgg_in_context('gallery')) {
 	$excerpt .= $upload_version;
 	
 	// Workspace home listing specific content
+	$content = '';
 	$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));
+	// Accueil de l'espace de travail
 	if (elgg_instanceof($page_owner, 'group') && elgg_in_context('workspace')) {
-		$content = '';
 		$content .= elgg_view_image_block($file_icon, $file_meta, array('class' => 'iris-object-inner'));
 		$content .= $excerpt;
 	} else {
-		$content = '';
-		$content = $file_icon;
-		$content = $file_meta;
+		$content .= $file_icon;
+		$content .= $file_meta;
 		$content .= $excerpt;
 	}
 	
