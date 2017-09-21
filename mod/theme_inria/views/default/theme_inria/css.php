@@ -991,7 +991,8 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .iris-cols .iris-box { border: 1px solid #CCC; padding: 2rem; border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .iris-box h3, .iris-box h3 a { font-size:1rem; font-family:<?php echo $font2; ?>; font-weight:bold; margin-bottom: 0.8em; color:<?php echo $titlecolor; ?>; }
 
-.thewire-form img { border-radius: 50%; margin: 1.125rem 1rem 1.125rem 0; width: 2.5rem; height: 2.5rem; flex: 0 0 auto; }
+.thewire-form img { border-radius: 50%; margin: 1.125rem 1rem 1.125rem 0; /* margin: 0.75rem 1rem 1.125rem 0; */ width: 2.5rem; height: 2.5rem; flex: 0 0 auto; }
+.thewire-reply-inline .thewire-form img { margin: 0.75rem 0.5rem 0.75rem 0; }
 .iris-box.home-wire textarea { /* width: 80%; */ height:3em; }
 .iris-box.home-wire textarea::placeholder { color: #D3D3D3; }
 .thewire-form #thewire-characters-remaining { display: inline-block; font-size: 1em; float: none; margin-right: 1em; }
