@@ -54,13 +54,21 @@ elgg.site_notifications.auto_delete = function(event) {
 	require(['elgg/spinner'], function (spinner) {
 		// Facyla : also handle notifications from topbar
 		var valid_href = $('#' + id).prop('href');
-		if (typeof valid_href === "undefined") { valid_href = href; }
-		elgg.action($('#' + id).prop('href'), {
-			beforeSend: spinner.start,
-			complete: function() {
-				location.href = href;
-			}
-		});
+		if (typeof valid_href === "undefined") {
+			elgg.action(href, {
+				beforeSend: spinner.start,
+				complete: function() {
+					location.href = href;
+				}
+			});
+		} else {
+			elgg.action($('#' + id).prop('href'), {
+				beforeSend: spinner.start,
+				complete: function() {
+					location.href = href;
+				}
+			});
+		}
 	});
 
 	return false;
