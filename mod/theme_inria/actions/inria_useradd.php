@@ -138,6 +138,7 @@ foreach ($emails as $email) {
 		}
 
 		// USER NOTIFICATION
+		// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
 		$user_subject = elgg_echo('theme_inria:useradd:subject', array($site->name, $inviter->name));
 		$user_body = elgg_echo('theme_inria:useradd:body', array(
 			$name,
@@ -150,7 +151,7 @@ foreach ($emails as $email) {
 			$password,
 		));
 		if ($disable_notice) { $user_body .= $disable_notice; }
-		notify_user($user->guid, $site->guid, $user_subject, $user_body, array(), array('email', 'site'));
+		notify_user($user->guid, $site->guid, $user_subject, $user_body, array(), array('email'));
 
 		// ADMIN VALIDATION
 		if ($admin_validation) {
@@ -206,7 +207,7 @@ foreach ($emails as $email) {
 		));
 		if ($disable_notice) { $admin_body .= $disable_notice; }
 		foreach ($admins as $notify_user) {
-			notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body, array(), array('email', 'site'));
+			notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body, array('object' => $user), array('email', 'site'));
 		}
 		
 		//system_message(elgg_echo("adduser:ok", array($site->name)));

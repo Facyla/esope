@@ -761,6 +761,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #notifications .elgg-item-object-site_notification .elgg-image-block { display: flex; }
 .elgg-form-site-notifications-process input[type="checkbox"] { margin: 1rem 1rem; }
 .elgg-form-site-notifications-process .elgg-item-object-site_notification img, .elgg-form-site-notifications-process ul.elgg-list li.elgg-item-object-site_notification div.elgg-image a img { margin-right: 1rem; }
+.elgg-item-object-site_notification .elgg-image-alt { order: 3; }
 
 #friend_request_received_listing, 
 #friend_request_sent_listing { padding: 1rem; margin: 0; }

@@ -50,6 +50,7 @@ elgg.site_notifications.delete = function(event) {
 elgg.site_notifications.auto_delete = function(event) {
 	var href = this.href;
 	var id = this.id.replace("link", "delete");
+	alert(this.id + "Action pour supprimer : " + id);
 
 	require(['elgg/spinner'], function (spinner) {
 		// Facyla : also handle notifications from topbar
