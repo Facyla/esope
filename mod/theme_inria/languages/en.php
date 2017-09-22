@@ -610,6 +610,7 @@ View and comment the new subject:
 	'thewire:replying' => "Reply to %s, who wrote",
 	'thewire:thread' => "Thread",
 	'thewire:thread:view' => "View the thread",
+	'thewire:thread:viewnum' => "View the thread (%s messages)",
 	'thewire:charleft' => "remaining chars",
 	'thewire:tags' => "Wire messages annotated with '%s' with",
 	'thewire:noposts' => "No Wire message yet",
@@ -769,6 +770,7 @@ View and comment on the bookmark:
 	'theme_inria:viewall' => "view all",
 	'theme_inria:view' => "view",
 	
+	'theme_inria:notifications:tab' => "Notifications",
 	'theme_inria:groupinvites:tab' => "Invitations",
 	'theme_inria:grouprequests:tab' => "Membership requests",
 	'theme_inria:friendrequests:tab' => "Friendship requests",

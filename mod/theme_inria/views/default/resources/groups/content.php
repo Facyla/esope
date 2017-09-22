@@ -102,6 +102,12 @@ $content_activity_opt = array(
 	'pagination' => true,
 );
 if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
+// We want only wire messages that do not have parent
+if ($subtype == 'thewire') {
+	$name_metastring_id = elgg_get_metastring_id('reply');
+	$value_metastring_id = elgg_get_metastring_id('1');
+	$content_activity_opt['wheres'][] = "NOT EXISTS (SELECT 1 FROM {$db_prefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $name_metastring_id AND md.value_id = $value_metastring_id)";
+}
 // Container does not matter if Feedback are published 
 if ($subtype == 'feedback') {
 	$feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
@@ -115,24 +121,24 @@ $content_activity_mine_opt = $content_activity_opt;
 $content_activity_mine_opt['owner_guid'] = $own->guid;
 $content_activity_draft_opt = $content_activity_mine_opt;
 $content_activity_draft_opt['wheres'][] = "e.access_id = '0'"; // works also for blogs (draft mode forces access to 0)
-$count_all = elgg_get_entities($content_activity_opt + ['count' => true]);
-$count_mine = elgg_get_entities($content_activity_mine_opt + ['count' => true]);
-$count_draft = elgg_get_entities($content_activity_draft_opt + ['count' => true]);
+$count_all = elgg_get_entities_from_metadata($content_activity_opt + ['count' => true]);
+$count_mine = elgg_get_entities_from_metadata($content_activity_mine_opt + ['count' => true]);
+$count_draft = elgg_get_entities_from_metadata($content_activity_draft_opt + ['count' => true]);
 
 elgg_push_context('groups-content');
 switch($filter) {
 	case 'mine':
 		$count = $count_mine;
-		$entities_list = elgg_list_entities($content_activity_mine_opt);
+		$entities_list = elgg_list_entities_from_metadata($content_activity_mine_opt);
 		break;
 	case 'draft':
 		$count = $count_draft;
-		$entities_list = elgg_list_entities($content_activity_draft_opt);
+		$entities_list = elgg_list_entities_from_metadata($content_activity_draft_opt);
 		break;
 	case 'all':
 	default:
 		$count = $count_all;
-		$entities_list = elgg_list_entities($content_activity_opt);
+		$entities_list = elgg_list_entities_from_metadata($content_activity_opt);
 }
 elgg_pop_context();
 

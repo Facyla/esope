@@ -241,7 +241,7 @@ if (elgg_is_active_plugin('language_selector')) {
 					$tab = 'site'; // friends | groups
 					$class = ''; if ($tab == 'site') { $class = 'elgg-state-selected'; }
 					echo elgg_view('output/url', array(
-							'text' => elgg_echo('theme_inria:groupinvites:tab') . $site_notifications_mark, 
+							'text' => elgg_echo('theme_inria:notifications:tab') . $site_notifications_mark, 
 							'href' => '#iris-topbar-notifications-site',
 							'class' => $class
 						));

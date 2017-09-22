@@ -24,10 +24,12 @@ $mimetype = '<span class="file-mimetype">' . $file->getMimeType() . '</span>';
 if ($file->originalfilename != $file->title) {
 	$filename = '<span class="file-filename" title="' . $file->originalfilename . '">' . elgg_get_excerpt($file->originalfilename, 30) . '</span>';
 }
+$title = $file->title;
+if (empty($file->title)) { $title = $file->originalfilename; }
 $simpletype = '<span class="file-simpletype">' . $file->simpletype . '</span>';
 $extension = '<span class="file-extension">' . pathinfo($file->originalfilename)['extension'] . '</span>';
 $file_meta = '<p class="file-meta">';
-$file_meta .= $filename;
+//$file_meta .= $filename;
 $file_meta .= $simpletype;
 $file_meta .= $extension;
 $file_meta .= $filesize;
@@ -109,7 +111,7 @@ if ($full && !elgg_in_context('gallery')) {
 } elseif (elgg_in_context('gallery')) {
 	
 	echo '<div class="file-gallery-item">';
-	echo '<h3 title="' . $file->title . '">' . elgg_get_excerpt($file->title, 50) . '</h3>';
+	echo '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 50) . '</h3>';
 	// Pas de dowload direct dans la galerie sinon on perd tout accès à la page du fichier
 	// Note : de plus cette fonction est apportée par file_tools...
 	$file_icon = elgg_view_entity_icon($file, 'medium', array('href' => false));
@@ -144,16 +146,26 @@ if ($full && !elgg_in_context('gallery')) {
 	
 	// Workspace home listing specific content
 	$content = '';
+	$excerpt = '<div>' . $excerpt . '</div>';
 	$file_icon = elgg_view_entity_icon($file, 'small', array('href' => false));
 	// Accueil de l'espace de travail
-	if (elgg_instanceof($page_owner, 'group') && elgg_in_context('workspace')) {
-		$content .= elgg_view_image_block($file_icon, $file_meta, array('class' => 'iris-object-inner'));
+	/*
+	//if (elgg_instanceof($page_owner, 'group') && elgg_in_context('workspace')) {
 		$content .= $excerpt;
+		if ($file->simpletype == 'image') {
+			$content .= $file_meta;
+		} else {
+			$content .= elgg_view_image_block($file_icon, $file_meta, array('class' => 'iris-object-inner'));
+		}
 	} else {
-		$content .= $file_icon;
-		$content .= $file_meta;
 		$content .= $excerpt;
+		if ($file->simpletype != 'image') {
+			$content .= $file_icon;
+		}
+		$content .= $file_meta;
 	}
+	*/
+	$content .= $file_meta . $excerpt;
 	
 }
 

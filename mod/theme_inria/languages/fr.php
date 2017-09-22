@@ -609,7 +609,8 @@ Afficher et commenter le nouveau sujet :
 	'thewire:friends' => "Messages des contacts sur le Fil",
 	'thewire:replying' => "Répondre à %s, qui a écrit",
 	'thewire:thread' => "Conversation",
-	'thewire:thread:view' => "Afficher la conversation",
+	'thewire:thread:view' => "Voir la conversation",
+	'thewire:thread:viewnum' => "Voir la conversation (%s messages)",
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
 	'thewire:noposts' => "Pas encore de message sur le Fil",
@@ -766,6 +767,7 @@ Voir et commenter ce lien web :
 	'theme_inria:viewall' => "tout voir",
 	'theme_inria:view' => "voir",
 	
+	'theme_inria:notifications:tab' => "Notifications",
 	'theme_inria:groupinvites:tab' => "Invitations",
 	'theme_inria:grouprequests:tab' => "Demandes d'adhésion",
 	'theme_inria:friendrequests:tab' => "Demandes de contact",

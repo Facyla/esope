@@ -16,7 +16,20 @@ $notify_message_opt = array(
 );
 
 
+
 /// Settings form
+
+// @TODO Sur chaque type d'action, pouvoir choisir si on notifie ou pas, et qui
+
+// Registered events
+$events = _elgg_services()->events->getAllHandlers();
+foreach ($events as $event => $types) {
+	foreach ($types as $type => $handlers) {
+		$tree[$event][$type] = array_values($handlers);
+		echo "$event $type / ";
+	}
+}
+//echo print_r($tree, true);
 
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:objects') . '</legend>';
@@ -33,27 +46,50 @@ echo "<fieldset>";
 	echo '</p>';
 	
 	// @TODO on/off setting, or also allow blocking messages ?
-	$subtypes = array();
-	foreach($objects as $subtype) {
-		if (!in_array($subtype, $subtypes)) {
-			$param = 'object_' . $subtype;
-			if ($vars['entity']->$param == 'allow') { $subtypes[] = $subtype; }
-			$options = array(
-				'name' => "params[{$param}]",
-				'value' => $vars['entity']->$param ? $vars['entity']->$param : 'default',
-				'options_values' => $notify_subject_opt,
-			);
-			$msg_subtype = notification_messages_readable_subtype($subtype);
-			echo '<p><label>' . $msg_subtype . '&nbsp;: ' . elgg_view('input/select', $options) . '</label>';
-			/* @TODO preview default message ?
-			echo ' - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: ';
-			//echo '<em>' . $subject . '</em>';
-			//echo elgg_trigger_plugin_hook('prepare', "notification:create:object:$subtype", array(), false);
-			//echo elgg_echo("$subtype:notify:subject");
-			*/
-			echo '</p>';
-		}
-	}
+	echo '<table border="1">';
+		echo '<thead>';
+			echo '<tr>';
+				echo '<th>' . elgg_echo('notification_messages:object:subtype') . '</th>';
+				echo '<th>' . elgg_echo('notification_messages:setting') . '</th>';
+				echo '<th>' . 'create' . '</th>';
+				echo '<th>' . 'publish' . '</th>';
+				echo '<th>' . 'update' . '</th>';
+				echo '<th>' . 'delete' . '</th>';
+			echo '</tr>';
+		echo '</thead>';
+		echo '<tbody>';
+			$subtypes = array();
+			foreach($objects as $subtype) {
+				if (!in_array($subtype, $subtypes)) {
+					$param = 'object_' . $subtype;
+					if ($vars['entity']->$param == 'allow') { $subtypes[] = $subtype; }
+					$options = array(
+						'name' => "params[{$param}]",
+						'value' => $vars['entity']->$param ? $vars['entity']->$param : 'default',
+						'options_values' => $notify_subject_opt,
+					);
+					$msg_subtype = notification_messages_readable_subtype($subtype);
+					
+					echo '<tr>';
+					echo '<td><label>' . $msg_subtype . '</label></td>';
+					echo '<td>' . elgg_view('input/select', $options) . '</td>';
+					echo '<td>' . print_r($tree['create'][$subtype], true) . '</td>';
+					echo '<td>' . print_r($tree['publish'][$subtype], true) . '</td>';
+					echo '<td>' . print_r($tree['update'][$subtype], true) . '</td>';
+					echo '<td>' . print_r($tree['delete'][$subtype], true) . '</td>';
+					
+						//echo '<label>' . $msg_subtype . '&nbsp;: ' . elgg_view('input/select', $options) . '</label>';
+						/* @TODO preview default message ?
+						echo ' - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: ';
+						//echo '<em>' . $subject . '</em>';
+						//echo elgg_trigger_plugin_hook('prepare', "notification:create:object:$subtype", array(), false);
+						//echo elgg_echo("$subtype:notify:subject");
+						*/
+					echo '</tr>';
+				}
+			}
+		echo '</tbody>';
+	echo '</table>';
 	
 	// Save all enabled subtypes in a single fields (for easier processing)
 	if ($subtypes) { $subtypes = implode(',', $subtypes); }
@@ -133,6 +169,24 @@ echo "<fieldset>";
 	echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:object_notifications_hook:subtext") . "</div>";
 	echo "</p>";
 echo "</fieldset>";
+*/
+
+/* Gestion des types de notifications
+ * Choix de ce qu'on notifie : 
+ * subtype, action, type notif
+ * Doc : http://learn.elgg.org/en/1.12/guides/notifications.html
+ * Doc : http://reference.elgg.org/1.12/notification_8php.html#af7a43dcb0cf13ba55567d9d7874a3b20
+ 'create', 'update', and 'publish'
+ 
+ 1. Définition des actions à notifier => elgg_register_notification_event('object', 'photo', array('create'));
+ 2. Préparation des notifications : destinataires et contenu : elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification');
+ 3. Définition des destinataires : elgg_register_plugin_hook_handler('get', 'subscriptions', 'discussion_get_subscriptions');
+ Liste des destinataires : elgg_get_subscriptions_for_container
+ 
+
+
+}
+ 
 */
 
 

@@ -746,10 +746,10 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #notifications .notifications-panel .tabs a:hover,
 #notifications .notifications-panel .tabs a:active,
 #notifications .notifications-panel .tabs a:focus { opacity:1; border-bottom: 4px solid; text-decoration: none; }
-.iris-topbar-notifications-tab .iris-topbar-notifications-tab-content { min-height: 100px; padding: 1rem; max-height: 60vh; overflow: auto; }
+.iris-topbar-notifications-tab .iris-topbar-notifications-tab-content { min-height: 100px; padding: 1rem; max-height: 60vh; margin-bottom: 1rem; overflow: auto; }
 .iris-topbar-notifications-tab-content .elgg-body { font-size: 0.9375rem; }
 .iris-topbar-item .iris-topbar-notifications-tab a { padding: 0; font-weight: initial; font-size: 0.9rem; }
-#notifications .elgg-item-object-site_notification { padding: 0 0 0.5rem 0; margin: 0.5rem 1rem 1rem 1rem; box-shadow: none; }
+#notifications .elgg-item-object-site_notification { padding: 0 0 0.5rem 0; margin: 0.5rem 1rem 1rem 1rem; box-shadow: none; border: 0; }
 #notifications .elgg-image-block .elgg-image { margin: 0 0.5rem 0 0; }
 .notifications-pending-group-invites { border-bottom: 1px solid #DCDCDC; margin: 0 1rem; }
 .elgg-image-block.notifications-pending-invitations { margin: 0.5rem 0 1rem 0; }
@@ -1135,6 +1135,8 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-layout-one-sidebar .elgg-main .elgg-comments .elgg-list-container { box-shadow: none; border: 0; }
 .elgg-comments .elgg-list { /* border-top: 0; */ }
 .elgg-comments .elgg-list > li { border-width: 1px; }
+.elgg-comments .elgg-list.elgg-list-entity-replies .elgg-item.elgg-item-object-thewire { border: 1px solid #DCDCDC; margin-bottom: 1rem; }
+.elgg-comments .elgg-list.elgg-list-entity-replies .elgg-item.elgg-item-object-thewire:first-of-type {border-top: 0; }
 .elgg-comments .elgg-list > li:first-of-type { border-top: 0; }
 .elgg-latest-comments li { border-radius: 4px; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); }
 .elgg-latest-comments .iris-object-actions li { box-shadow: none; border-radius: 0; }
@@ -1150,6 +1152,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-list-container .elgg-list-entity li.elgg-item-object-comment { padding: 0 0.5rem; }
 .elgg-list-entity li.elgg-item-object-comment .elgg-image-block { padding-bottom: 0; display: flex; }
 .elgg-form-comment-save { margin-bottom: 0.5rem; }
+
 
 .elgg-menu-title { float: none; text-align: right; margin-bottom: 1rem; }
 
@@ -1246,6 +1249,9 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-object .elgg-image-block .elgg-body { display: flex; flex-direction: column; }
 .iris-object .elgg-image-block .elgg-body .iris-object-actions { margin-top: auto; padding-top: 0.5rem; }
 .iris-object .elgg-image-block .elgg-body .iris-object-readmore, .iris-object .elgg-image-block .elgg-body .elgg-content { flex: 1 1 auto; }
+.elgg-context-workspace-content .thewire-parent .elgg-image-block { margin: 0; }
+.elgg-context-workspace-content .thewire-parent .elgg-image-block .elgg-body { min-height: initial; padding: initial; }
+.elgg-context-workspace-content .thewire-parent .elgg-image-block .elgg-image { width: initial; min-height: initial; display: initial; background: initial; box-shadow: initial; margin-right: initial; flex: initial; }
 
 .pages-subpages { border-top: 2px solid #F1F1F1; margin: 1rem -2rem 0rem -2rem; padding: 0 2rem; }
 .elgg-context-pages .elgg-list-annotation li .elgg-image-block { margin: 0; border: 0; }
@@ -1256,7 +1262,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #iris-body .iris-listing .elgg-main .elgg-list-entity { display: flex; flex-wrap: wrap; }
 .elgg-layout-content .elgg-list-entity li { padding: 0 0 1rem 0; box-shadow: none; }
 
-.elgg-list-entity .elgg-item-object-thewire .elgg-image img { max-width: 3.4rem; border-radius: 1.7rem; }
+.elgg-list-entity .elgg-item-object-thewire .elgg-image img { /* max-width: 3.4rem; */ border-radius: 1.7rem; }
 .iris-listing .elgg-list .elgg-item.elgg-item-group { flex: 1 0 28rem; overflow:hidden; height:12.5rem; max-width: 46rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0rem; padding: 0; position: relative; }
 .iris-listing .elgg-item-group h3, .iris-listing .elgg-item-group h3 a { color: #384257; font-size: 1.375rem; padding: 0; margin-bottom: 0.8125rem; }
 .iris-listing .elgg-item-group .elgg-subtext { font-size:0.9375rem; color:#6C6C6C; }
@@ -1270,6 +1276,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #notifications .elgg-list .elgg-item .elgg-image-block.notifications-pending-invitations { padding: 0; }
 #notifications.iris-topbar-item .iris-topbar-notifications-tab a.elgg-button { padding: 0.5rem 1rem; color: white; }
 .notifications-pending-groups-requests h4 { margin: 0; }
+#notifications .elgg-river-timestamp { margin-bottom: 0.25rem; }
 
 
 .iris-groups-member-new { flex: 0 0 28rem; overflow: hidden; height: 12.5rem; max-width: 46rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0rem; padding: 0rem; position: relative; }
@@ -1421,7 +1428,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-add-tabs a { color: white; margin-right: 2.25rem; opacity: 0.6; }
 .group-workspace-add-tabs a.elgg-state-selected, .group-workspace-add-tabs a:hover, .group-workspace-add-tabs a:active, .group-workspace-add-tabs a:focus { opacity: 1; }
 .group-workspace-add-content { padding: 1.375rem 2.5rem 1.375rem 2.5rem; }
-.group-workspace-add-content img { width:2rem; border-radius:1rem; }
+.group-workspace-add-content img { width: 3rem; border-radius: 100%; margin-top: 1rem; }
 
 .elgg-context-invite_external textarea, 
 .elgg-river-responses textarea, 
@@ -1643,8 +1650,13 @@ form.elgg-form-rate-rate { margin: 0 -2rem 2rem -2rem; padding: 0 2rem 1rem 2rem
 .iris-object-content .elgg-image-block { display: flex; }
 .iris-object-content .elgg-image-block .elgg-image { /* margin-right: 2rem; */ }
 .elgg-item-object .elgg-image-block .elgg-image a { display: flex; /* width: 6rem; height: 5rem; */ }
-.elgg-item-object .elgg-image-block .elgg-image a.medium img { width: 3.375rem; height: 3.375rem; margin: 0 1.3125rem !important; }
+.elgg-item-object .elgg-image-block .elgg-image a.medium img { margin: 0 1.3125rem !important; }
+.elgg-context-workspace .elgg-item-object .elgg-image-block .elgg-image a.medium img { width: 3.375rem; height: 3.375rem; }
 .elgg-item-object .elgg-image-block .elgg-image a span.small { width: 3.375rem; height: 3.375rem; margin: 0 1.3125rem !important; }
+
+.elgg-item-object .elgg-image-block .elgg-image a.file-image { width: 6rem; min-height: 3.375rem; }
+.elgg-item-object .elgg-image-block .elgg-image a.file-image img { margin: auto; max-width: 6rem; }
+
 .elgg-image-block .elgg-image .fa { color: #aaa; }
 .elgg-item-object-file .iris-object { word-break: break-all; }
 
@@ -1680,7 +1692,7 @@ div.poll_closing-date-open, div.poll_closing-date-closed { color: #969696; }
 
 
 /* Object types workspace rendering */
-p.file-meta { margin-bottom: 0.5rem; }
+p.file-meta { margin-bottom: 1rem; margin-top: -1rem; }
 .file-filename { display: block; font-weight: bold; padding: 0.5rem 0; }
 .file-simpletype, 
 .file-mimetype, 
@@ -1698,7 +1710,7 @@ p.file-meta { margin-bottom: 0.5rem; }
 .elgg-button .file-size, .elgg-button .file-extension { margin: 0 0 0 1rem; color: #CCCCCC; }
 .file-photo a { display: block; position: relative; margin: 0 -2rem 0 -2rem; }
 .file-photo img.elgg-photo { /* width: 100%; */ border:0; }
-.file-photo a .file-colorbox-link { background: #1488CA; position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.9; }
+.file-photo a .file-colorbox-link { background: #1488CA; position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.6; }
 .file-photo a .file-colorbox-link i { color: white; margin: auto; font-size: 2rem; }
 .file-photo a:hover .file-colorbox-link, .file-photo a:active .file-colorbox-link, .file-photo a:focus .file-colorbox-link { display: flex; }
 

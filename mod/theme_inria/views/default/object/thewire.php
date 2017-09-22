@@ -56,15 +56,25 @@ if (elgg_in_context('widgets')) { $metadata = ''; }
 $parent = thewire_get_parent($post->guid);
 
 // Seulement pour les posts faisant partie d'une conversation
-if ($post->reply) {
+// mais y compris le post initial s'il a des réponses
+$num_thread = elgg_get_entities_from_metadata(array(
+	"type" => "object", "subtype" => "thewire",
+	"metadata_name" => "wire_thread", "metadata_value" => $post->wire_thread,
+	'count' => true,
+));
+if ($num_thread > 1) {
 	if (!elgg_in_context('thewire-thread')) {
 		// Affiche toute la conversation
 		$metadata_alt .= '<li>' . elgg_view('output/url', array(
-			'text' => elgg_echo('thewire:thread'),
+			'text' => elgg_echo('thewire:thread:viewnum', array($num_thread)),
 			'href' => "thewire/thread/$post->wire_thread",
 		)) . '</li>';
 	}
-	
+}
+
+if ($post->reply) {
+	// Iris : no more "previous" link
+	/*
 	// @TODO Display reply link if not direct parent ? or better organise content in threaded view ?
 	// For now, list all messages by date, and add special class to tell apart direct replies from others
 	//if ($parent && ($parent->guid != $post->wire_thread)) {
@@ -77,6 +87,7 @@ if ($post->reply) {
 			'title' => elgg_echo('thewire:previous:help'),
 		)) . '</li>';
 	}
+	*/
 }
 
 /*
@@ -97,12 +108,14 @@ $list_body = elgg_view('object/elements/summary', $params);
 $content = thewire_filter($post->description);
 
 $after = '';
+/* Iris : no more "previous" link
 //if ($post->reply && $parent && ($parent->guid != $post->wire_thread)) {
 if ($post->reply && !elgg_in_context('thewire-tread')) {
 	//echo "<div class=\"thewire-parent hidden\" id=\"thewire-previous-{$post->guid}\">";
 	//echo "</div>";
 	$after = '<div class="thewire-parent hidden" id="thewire-previous-' . $post->guid . '"></div>';
 }
+*/
 
 // Add classes for reply level (top parent, direct reply, other replies)
 if (!$parent) {

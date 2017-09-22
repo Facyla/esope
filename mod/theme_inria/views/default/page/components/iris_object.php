@@ -94,9 +94,12 @@ if (!empty($title)) {
 // ICONS AND IMAGES
 // Use image for files instead of owner icon
 if (elgg_instanceof($entity, 'object', 'file') && ($entity->simpletype == 'image')) {
-	//$owner_icon = '<a href="' . $entity->getURL() . '"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" /></a>';
-	$owner_icon = '<a href="' . $entity->getURL() . '" style="background: url(\'' . $entity->getIconUrl(array('size' => 'medium')) . '\') no-repeat center/cover; width: 100%; margin: 0;"></a>';
-	$image_block_vars['class'] = 'file-image';
+	if (elgg_in_context('workspace')) {
+		$owner_icon = '<a href="' . $entity->getURL() . '" class="file-image"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" /></a>';
+	} else {
+		$owner_icon = '<a href="' . $entity->getURL() . '" style="background: url(\'' . $entity->getIconUrl(array('size' => 'medium')) . '\') no-repeat center/cover; width: 100%; margin: 0;"></a>';
+		$image_block_vars['class'] = 'file-image';
+	}
 } else {
 	if (elgg_instanceof($owner)) {
 		$profile_type = esope_get_user_profile_type($owner);

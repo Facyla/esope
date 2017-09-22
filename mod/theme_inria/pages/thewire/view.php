@@ -26,21 +26,26 @@ $content = elgg_view_entity($post);
 // Any post may have direct replies (same parent relationship), but also nested replies (same thread)
 if ($post->wire_thread > 0) {
 	// Count message in thread
+	/*
 	$num_replies = elgg_get_entities_from_relationship(array(
 		'relationship' => 'parent', 'relationship_guid' => $post->guid, 'inverse_relationship' => true, 
 		"metadata_name" => "wire_thread", "metadata_value" => $post->wire_thread,
 		'count' => true,
 	));
+	*/
 	$num_thread = elgg_get_entities_from_metadata(array(
 		"type" => "object", "subtype" => "thewire",
 		"metadata_name" => "wire_thread", "metadata_value" => $post->wire_thread,
 		'count' => true,
 	));
-	if (($num_replies > 0) || ($num_thread > 1)) {
+	//if (($num_replies > 0) || ($num_thread > 1)) {
+	if ($num_thread > 1) {
 		$content .= '<div class="wire-thread">';
+			/* Iris : info pas utile
 			if ($num_replies > 0) {
 				$content .= '<p>' . elgg_echo('theme_inria:wire:num_replies', array($num_replies)) . '</p>';
 			}
+			*/
 			// Note: thread count includes post itself
 			if ($num_thread > 1) {
 				if ($post->wire_thread == $post->guid) {
