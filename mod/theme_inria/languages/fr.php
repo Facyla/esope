@@ -998,8 +998,21 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
 	'theme_inria:invite:newemails' => "Ces emails ne sont associés avec aucun compte : vous pouvez si vous le souhaitez les inviter à rejoindre Iris.",
 	'theme_inria:invite:invalidemails' => "Ces emails n'ont pas pu être traités : ils sont soit associés avec plusieurs comptes (ce qui ne devrait pas se produire), ou ce sont des emails non valides.",
-	'theme_inria:invite:existing_users' => "@TODO - NON OPERATIONNEL !!  - Ces emails sont associés avec un compte, qui a été invité.",
+	'theme_inria:invite:existing_users' => "Ces emails sont associés avec un compte, qui a été invité.",
 	'theme_inria:invite:proceednext' => "Pour poursuivre vos invitations par email, veuillez cliquer sur les liens d'invitation.",
+	
+	'theme_inria:parentgroup:request:subject' => "Invitation dans l'espace de travail \"%s\"",
+	'theme_inria:parentgroup:request:body' => "Bonjour %s,
+
+%s, responsable de l'espace de travail \"%s\", souhaiterait inviter %s. Pour cela, veuillez accepter sa demande d'adhésion dans le groupe principal.
+",
+	'theme_inria:parentgroup:inviterequest:subject' => "Invitation dans l'espace de travail \"%s\"",
+	'theme_inria:parentgroup:inviterequest:body' => "Bonjour %s,
+
+%s vous a invité à rejoindre l'espace de travail \"%s\" du groupe \"%s\".
+
+Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a été faite pour vous auprès des responsables du groupe : une fois cette demande acceptée, vous pourrez rejoindre l'espace de travail en cliquant sur %s.
+",
 	
 	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
 	'theme_inria:useradd:group' => "Invitation dans le groupe \"%s\"",

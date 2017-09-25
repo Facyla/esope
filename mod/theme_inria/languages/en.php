@@ -1001,7 +1001,7 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:invite:allemails' => "Invite all email addresses",
 	'theme_inria:invite:newemails' => "These emails are not associated with any member account: you may want to invite them to join Iris.",
 	'theme_inria:invite:invalidemails' => "These emails could not be processed: they are either associated with multiple accounts (which should not happen), or are invalid emails.",
-	'theme_inria:invite:existing_users' => "@TODO - NOT OPERATIONNAL!!  - These emails are associated with an existing account, which has been invited.",
+	'theme_inria:invite:existing_users' => "These emails are associated with an existing account, which has been invited.",
 	'theme_inria:invite:proceednext' => "To keep going, please click on the following invitation links.",
 	
 	'theme_inria:inria_restricted' => "This feature is reserved to Inria members only",

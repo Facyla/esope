@@ -82,18 +82,38 @@ if ($existing_users) {
 				if ($parent && !$parent->isMember($ent)) {
 					if ($parent->canEdit() || $parent->isPublicMembership()) {
 						// Join parent
-						$parent->join($ent);
-						$content .= 'adhésion groupe parent OK => ';
+						if ($parent->join($ent)) { $content .= 'adhésion groupe parent OK => '; }
 					} else {
 						// Add membership request
 						// @TODO Notify group owner + operators
 						add_entity_relationship($ent->guid, 'membership_request', $parent->guid);
+						// X, resp. de l'EDT truc, souhaiterait inviter X dans son EDT, et que vous l'acceptiez sa demande d'adhésion dans le groupe principal. + lien vers profil resp de l'EDT et de l'invité
+						$subject = elgg_echo('theme_inria:parentgroup:request:subject', array($group->name));
+						$message = elgg_echo('theme_inria:parentgroup:request:subject', array($admin->name, $own->name, $group->name, $ent->name);
+						notify_user($ent->guid, $own->guid, $subject, $message, array(), array('email'));
+						// Message à l'invité
+						$subject = elgg_echo('theme_inria:parentgroup:inviterequest:subject', array($group->name));
+						$message = elgg_echo('theme_inria:parentgroup:inviterequest:subject', array($ent->name, $own->name, $group->name, $parent->name, $group->getUrl()));
+						notify_user($ent->guid, $own->guid, $subject, $message, array(), array('email'));
 					}
 				}
 			}
 			// Join group (we have the rights because we're on this page ;)
-			$group->join($ent);
-			$content .= 'adhésion OK';
+			if ($group->join($ent)) {
+				$content .= 'adhésion OK';
+				// Message à l'invité
+				$subject = elgg_echo('groups:welcome:subject', array($group->name));
+				$message = elgg_echo('groups:welcome:body', array($ent->name, $group->name, $group->getUrl()));
+				notify_user($ent->guid, $own->guid, $subject, $message, array(), array('email'));
+			} else {
+				add_entity_relationship($ent->guid, 'membership_request', $group->guid);
+				// Message à l'invité : pas pu entrer dans le groupe car doit entrer dans le groupe parent avant
+				/* Note : message envoyé ci-dessus
+				$subject = elgg_echo('groups:welcome:subject', array($group->name));
+				$message = elgg_echo('groups:welcome:body', array($ent->name, $group->name, $group->getUrl()));
+				notify_user($ent->guid, $own->guid, $subject, $message, array(), array('email'));
+				*/
+			}
 		} else {
 			$content .= 'déjà membre';
 		}
