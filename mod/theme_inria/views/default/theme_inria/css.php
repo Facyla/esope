@@ -1001,7 +1001,7 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 #thewire-characters-remaining span { margin: 0; float: none; font-size: 1em; }
 .home-wire .thewire-form .elgg-button-submit { display: inline-block; float: none; }
 .elgg-layout-one-sidebar .thewire-form textarea { width: auto; height: 4rem; }
-.iris-box.home-wire .elgg-item-object .elgg-image-block .elgg-image a.medium img { margin: 0 1.3125rem 0 0.3125rem; }
+.iris-box.home-wire .elgg-item-object .elgg-image-block .elgg-image a.medium img { margin: 0 1.3125rem 0 0.3125rem !important; width: 2.5rem; height: 2.5rem; padding: 0; }
 .elgg-layout-one-sidebar .thewire-reply-inline .elgg-form.thewire-form { background: transparent; border: 0; padding: 0; box-shadow: none; margin: 0; }
 
 
