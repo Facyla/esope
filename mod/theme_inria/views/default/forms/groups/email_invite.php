@@ -89,7 +89,7 @@ if ($existing_users) {
 						add_entity_relationship($ent->guid, 'membership_request', $parent->guid);
 						// X, resp. de l'EDT truc, souhaiterait inviter X dans son EDT, et que vous l'acceptiez sa demande d'adhésion dans le groupe principal. + lien vers profil resp de l'EDT et de l'invité
 						$subject = elgg_echo('theme_inria:parentgroup:request:subject', array($group->name));
-						$message = elgg_echo('theme_inria:parentgroup:request:subject', array($admin->name, $own->name, $group->name, $ent->name);
+						$message = elgg_echo('theme_inria:parentgroup:request:subject', array($admin->name, $own->name, $group->name, $ent->name));
 						notify_user($ent->guid, $own->guid, $subject, $message, array(), array('email'));
 						// Message à l'invité
 						$subject = elgg_echo('theme_inria:parentgroup:inviterequest:subject', array($group->name));

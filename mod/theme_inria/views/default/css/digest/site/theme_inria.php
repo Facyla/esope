@@ -271,8 +271,10 @@ h4 {
 .digest-profile {
 	border-collapse: collapse;
 	width: 100%;
+	/*
 	display: flex;
 	flex-wrap: wrap;
+	*/
 }
 .digest-profile td {
 	padding: 10px;
