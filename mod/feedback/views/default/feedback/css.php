@@ -87,17 +87,17 @@
 
 #feedBackSend { padding-top:6px; }
 
-#feedbackError {
-	font-style: bold;
+#feedbackError, #feedbackSuccess {
+	font-weight: bold;
 	color: black;
+	padding: 0.25rem 0.5rem 0.125rem 0.5rem;
+	margin: 0.25rem 0;
+}
+#feedbackError {
 	background-color: #ff0000;
 }
-
 #feedbackSuccess {
-	color: black;
 	background-color: #00ff00;
-	font-weight: bold;
-	padding: 2px 4px;
 }
 
 #feedBackIntro { padding:2px 4px; font-size:13px; }

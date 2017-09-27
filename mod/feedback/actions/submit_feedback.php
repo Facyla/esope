@@ -30,7 +30,8 @@ if (!elgg_is_logged_in()) {
 		$token = get_input('captcha_token');
 		$input = get_input('captcha_input');
 		if ( !$token || !captcha_verify_captcha($input, $token) ) {
-			echo '<div id="feedbackError">' . elgg_echo('captcha:captchafail') . '</div>';
+			$msg = '<div id="feedbackError">' . elgg_echo('captcha:captchafail') . '</div>';
+			echo json_encode(['msg' => $msg, 'error' => 1]);
 			exit();
 		}
 	}
@@ -54,7 +55,8 @@ if (empty($feedback_status)) { $feedback_status = 'open'; }
 // Refuse empty feedbacks
 if (empty($feedback_txt) || empty($feedback_sender)) {
 	// Error message
-	echo '<div id="feedbackError">' . elgg_echo("feedback:submit:error") . '</div>';
+	$msg = '<div id="feedbackError">' . elgg_echo("feedback:submit:error") . '</div>';
+	echo json_encode(['msg' => $msg, 'error' => 1]);
 	exit;
 }
 
@@ -88,18 +90,20 @@ $feedback->status = $feedback_status; // Default status = open
 // save the feedback now
 if ($feedback->save()) {
 	// Success message
-	echo '<div id="feedbackSuccess">' . elgg_echo("feedback:submit:success") . '</div>';
+	$msg = '<div id="feedbackSuccess">' . elgg_echo("feedback:submit:success") . '</div>';
+	echo json_encode(['msg' => $msg, 'success' => 1]);
 } else {
 	// Error message
-	echo '<div id="feedbackError">' . elgg_echo("feedback:submit:error") . '</div>';
+	$msg = '<div id="feedbackError">' . elgg_echo("feedback:submit:error") . '</div>';
+	echo json_encode(['msg' => $msg, 'error' => 1]);
 }
 
 // Get feedback text info now, before we potentially lose access to entity (public mode)
 $feedback_url = $feedback->getURL();
 $details = $feedback->about;
-if (!empty($details)) $details .= ', ';
+if (!empty($details)) { $details .= ', '; }
 $details .= $feedback->mood;
-if (!empty($details)) $details = " ($details)";
+if (!empty($details)) { $details = " ($details)"; }
 $feedback_title = $feedback->title . $details;
 
 elgg_set_ignore_access($ia);
@@ -109,7 +113,7 @@ $user_guids = array();
 // Notify up to 5 configured users
 // @TODO : use a unique input text field instead ?
 for ($idx=1; $idx<=5; $idx++) {
-	$name = elgg_get_plugin_setting( 'user_'.$idx, 'feedback' );
+	$name = elgg_get_plugin_setting('user_'.$idx, 'feedback');
 	if (!empty($name)) {
 		if ($user = get_user_by_username($name)) {
 			$user_guids[$user->guid] = $user;
