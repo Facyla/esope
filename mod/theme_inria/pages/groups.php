@@ -86,21 +86,21 @@ switch($filter) {
 				$favorite_options = array(
 					'type' => 'group', 'relationship' => 'favorite', 
 					'relationship_guid' => $user->guid, 'inverse_relationship' => true, 
-					'limit' => false,
+					'limit' => false, 'order_by' => "r.time_created DESC",
 				);
 				$favorite_groups = elgg_get_entities_from_relationship($favorite_options);
 				if ($favorite_groups) {
 					foreach ($favorite_groups as $ent) {
 						if ($ent->isMember()) {
 							$favorite_guids[] = $ent->guid;
+							//$favorite_ents[] = $ent;
 						}
 					}
 				}
 				if (sizeof($favorite_guids) > 0) {
-					$groups_content .= elgg_list_entities(array('guids' => $favorite_guids));
+					$groups_content .=implode(', ', $favorite_guids). elgg_list_entities(array('guids' => $favorite_guids));
 				}
 			}
-			$groups_content .= '<hr />';
 			// Other groups
 			$options = array(
 				'type' => 'group', 
