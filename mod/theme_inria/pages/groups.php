@@ -96,8 +96,11 @@ switch($filter) {
 						}
 					}
 				}
-				$groups_content .= elgg_list_entities(array('guids' => $favorite_guids));
+				if (sizeof($favorite_guids) > 0) {
+					$groups_content .= elgg_list_entities(array('guids' => $favorite_guids));
+				}
 			}
+			$groups_content .= '<hr />';
 			// Other groups
 			$options = array(
 				'type' => 'group', 
