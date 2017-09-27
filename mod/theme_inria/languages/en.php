@@ -1040,5 +1040,16 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:wire:startthread' => "This message is the starting point of a thread (%s messages)",
 	'theme_inria:wire:viewthread' => "View thread",
 	
+	'favorite:add' => "Add to my favorites",
+	'favorite:remove' => "Remove from my favorites",
+	'favorite:group:add' => "Add to my favourite groups",
+	'favorite:group:remove' => "Remove from my favorite groups",
+	'favorite:added' => "Added to my favorites",
+	'favorite:add:error' => "Error, could not add to favourites",
+	'favorite:removed' => "Removed from favorites",
+	'favorite:remove:error' => "Error, could not remove from favorites",
+	'favorite:invalidentity' => "Invalid entity",
+	
+	
 );
 

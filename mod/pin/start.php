@@ -66,8 +66,11 @@ function pin_entity_menu_setup($hook, $type, $return, $params) {
 		// Types d'entités autorisées
 		$validhighlight = elgg_get_plugin_setting('validhighlight', 'pin');
 		if (!empty($validhighlight)) {
-			if (function_exists('esope_get_input_array')) $validhighlight = esope_get_input_array($validhighlight);
-			else $validhighlight = explode(',', $validhighlight);
+			if (function_exists('esope_get_input_array')) {
+			$validhighlight = esope_get_input_array($validhighlight);
+			} else {
+				$validhighlight = explode(',', $validhighlight);
+			}
 		}
 		if (empty($validhighlight) || in_array($subtype, $validhighlight)) {
 			$options = array('name' => 'pins', 'href' => false, 'priority' => 200, 'text' => elgg_view('pin/entity_menu', array('entity' => $entity)));

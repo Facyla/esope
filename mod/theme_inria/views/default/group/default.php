@@ -6,6 +6,7 @@
  */
 
 $group = $vars['entity'];
+$ownguid = elgg_get_logged_in_user_guid();
 
 //$icon = elgg_view_entity_icon($group, 'tiny');
 // Iris : bigger images
@@ -53,6 +54,23 @@ if (elgg_in_context('search')) {
 			} else {
 				$metadata .= '<li class="membership-group-closed" title="' . elgg_echo("theme_inria:groupmembership:closed:details") . '">' . elgg_echo("theme_inria:groupmembership:closed") . '</li>';
 			}
+		}
+		// User group pin
+		// @TODO up to 4 groups ?
+		if ($group->isMember()) {
+			if (check_entity_relationship($group->guid, 'favorite', $ownguid)) {
+				$pin_title = elgg_echo('favorite:group:remove');
+				$pin_text = '<i class="fa fa-bookmark"></i>';
+			} else {
+				$pin_title = elgg_echo('favorite:group:add');
+				$pin_text = '<i class="fa fa-bookmark-o"></i>';
+			}
+			$metadata .= '<li class="favorite-group">' . elgg_view('output/url', array(
+					'href' => "action/theme_inria/favorite?guid={$group->guid}",
+					'text' => $pin_text,
+					'title' => $pin_title,
+					'is_action' => true,
+				)) . '</li>';
 		}
 		
 	$metadata .= '</ul>';

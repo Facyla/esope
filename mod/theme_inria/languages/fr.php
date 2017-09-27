@@ -1050,5 +1050,16 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:wire:startthread' => "Ce message est à l'origine d'une conversation (%s messages)",
 	'theme_inria:wire:viewthread' => "Voir la conversation",
 	
+	'favorite:add' => "Ajouter à mes favoris",
+	'favorite:remove' => "Retirer de mes favoris",
+	'favorite:group:add' => "Ajouter à mes groupes favoris",
+	'favorite:group:remove' => "Retirer de mes groupes favoris",
+	'favorite:added' => "Ajouté aux favoris",
+	'favorite:add:error' => "Erreur lors de l'ajout aux favoris",
+	'favorite:removed' => "Retiré des favoris",
+	'favorite:remove:error' => "Erreur lors du retrait des favoris",
+	'favorite:invalidentity' => "Entité non valide",
+	
+	
 );
 

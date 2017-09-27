@@ -19,6 +19,8 @@ function theme_inria_init(){
 	elgg_register_action("inria_archive_user", $action_url . "inria_archive_user.php", "logged_in");
 	elgg_register_action("inria_unarchive_user", $action_url . "inria_unarchive_user.php", "logged_in");
 	
+	elgg_register_action("theme_inria/favorite", $action_url . "theme_inria/favorite_toggle.php", "logged_in");
+	
 	// Modified to make pages top_level / sub-pages
 	//elgg_register_action("pages/edit", $action_url . "pages/edit.php");
 	

@@ -870,7 +870,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 /* Accueil */
 .iris-home-my-groups { display: flex; flex-wrap: wrap; justify-content: space-between; }
 .iris-home-group { display: inline-block; margin: 0 0.6rem 0.3rem 0; }
-.iris-home-group:last-of-type { margin-right: auto; }
+.iris-home-group:last-of-type { margin-right: 0; }
 .iris-home-group img, .iris-home-group a { width:5rem; height:5rem; display: inline-block; }
 .iris-home-discover-groups { display: flex; justify-content: space-between; }
 .iris-home-group-category { float:left; width: 5rem; height: 8rem; border: 1px solid <?php echo $iris_blue; ?>; padding: 0.5rem 0.125rem; margin: 0 0.7rem 0.3rem 0; text-align: center; color:<?php echo $iris_blue; ?>; font-weight:normal; font-size:0.8rem; flex: 1 1 auto; max-width: 6rem; min-width: 4rem; }
@@ -1153,7 +1153,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-list-container .elgg-list-entity li.elgg-item-object-comment { padding: 0 0.5rem; }
 .elgg-list-entity li.elgg-item-object-comment .elgg-image-block { padding-bottom: 0; display: flex; }
 .elgg-form-comment-save { margin-bottom: 0.5rem; }
-
+.elgg-comments .elgg-avatar-medium > a > img { width: 46px; height: 46px;}
 
 .elgg-menu-title { float: none; text-align: right; margin-bottom: 1rem; }
 
@@ -1264,9 +1264,13 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .elgg-layout-content .elgg-list-entity li { padding: 0 0 1rem 0; box-shadow: none; }
 
 .elgg-list-entity .elgg-item-object-thewire .elgg-image img { /* max-width: 3.4rem; */ border-radius: 1.7rem; }
-.iris-listing .elgg-list .elgg-item.elgg-item-group { flex: 1 0 28rem; overflow:hidden; height:12.5rem; max-width: 46rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0rem; padding: 0; position: relative; }
+.iris-listing .elgg-list .elgg-item.elgg-item-group, .iris-groups-member-new { flex: 1 0 28rem; overflow:hidden; height:12.5rem; max-width: 46rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0rem; padding: 0; position: relative; }
 .iris-listing .elgg-item-group h3, .iris-listing .elgg-item-group h3 a { color: #384257; font-size: 1.375rem; padding: 0; margin-bottom: 0.8125rem; }
 .iris-listing .elgg-item-group .elgg-subtext { font-size:0.9375rem; color:#6C6C6C; }
+.iris-groups-member-new {  }
+.iris-groups-member-new .iris-groups-member-new-image { float: left; width: 9.5rem; height: 9.5rem; text-align: center; line-height: 9.5rem; font-size: 4.8rem; border: 1px dashed; margin: 1.5rem; }
+.iris-groups-member-new .iris-groups-member-new-body { padding: 3rem; text-align: center; }
+.iris-groups-member-new-body a { margin-bottom: 1.5625rem; }
 
 .elgg-list .elgg-item .elgg-image-block.notifications-pending-requests, 
 .elgg-list .elgg-item .elgg-image-block.notifications-pending-invitations { padding: 1rem; display: flex; }
@@ -1280,10 +1284,6 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 #notifications .elgg-river-timestamp { margin-bottom: 0.25rem; }
 
 
-.iris-groups-member-new { flex: 0 0 28rem; overflow: hidden; height: 12.5rem; max-width: 46rem; border-radius: 4px; background-color: #FFFFFF; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); margin: 0 2rem 2rem 0rem; padding: 0rem; position: relative; }
-.iris-groups-member-new .iris-groups-member-new-image { float: left; width: 9.5rem; height: 9.5rem; text-align: center; line-height: 9.5rem; font-size: 4.8rem; border: 1px dashed; margin: 1.5rem; }
-.iris-groups-member-new .iris-groups-member-new-body { padding: 3rem; text-align: center; }
-.iris-groups-member-new-body a { margin-bottom: 1.5625rem; }
 
 /* The Wire */
 /* .messages-buttonbank, */
@@ -1939,6 +1939,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	/* Main layout */
 	.elgg-layout.elgg-context-profile.elgg-context-profile_edit, 
 	.elgg-layout { padding: 0 1.5rem; flex-direction: column; /* flex-basis: 0%; */ }
+	.elgg-layout .elgg-main h2 { margin-top: 1rem; }
 	#iris-page { display: block; }
 	#iris-navigation ul.elgg-menu-navigation li ul.hidden { display: block !important; }
 	.iris-cols { display: block; }
@@ -1949,7 +1950,8 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-page .elgg-layout .elgg-sidebar, 
 	.elgg-page .elgg-layout .sidebar-alt { max-width: none; width: auto; }
 	.elgg-menu-owner-block li a, .elgg-sidebar ul.elgg-menu-page li a { border: 0; }
-	.menu-sidebar-toggle, .elgg-sidebar .menu-sidebar-toggle { margin: 0 -1.5rem; }
+	.menu-sidebar-toggle { margin: -2.5rem -1.5rem -0.5rem -1.5rem; }
+	.elgg-sidebar .menu-sidebar-toggle { /* margin: 0 -1.5rem; */ }
 	/* Alt Sidebar */
 	.iris-group-sidebar-alt { margin: 0 0 2.5rem 0; }
 	
@@ -1967,6 +1969,9 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-search-menu { padding-left: 1rem; }
 	#esope-search-results .elgg-menu-entity { text-align: center; float: none; }
 	#esope-search-results .elgg-item-user h3 { margin: 0.5rem; padding: 0; font-size: 1rem; }
+	
+	.elgg-sidebar h3, #esope-search-form h3 { margin-bottom: 1rem; }
+	.esope-search-metadata { padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
 	
 	span.iris-badge { display: block; margin-top: 0.5rem; }
 	
@@ -2037,10 +2042,49 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	
 }
 
+
+@media (max-width: 600px) {
+	div.elgg-subtext { float:none; margin-right: 0; }
+	
+}
+
+@media (max-width: 500px) {
+	#esope-search-results .elgg-menu-entity { margin-bottom: 0.5rem; }
+	.elgg-item-group .iris-group-body { padding: 0.5rem 1rem 0.5rem 1rem; }
+	.elgg-item-group .elgg-image-block .elgg-image a { width: 7.5rem; min-height: 7.5rem; height: auto; }
+	.elgg-item-group .elgg-image-block .elgg-image { margin-right: 0.875rem; }
+	
+	.iris-listing .elgg-list .elgg-item.elgg-item-group, .iris-groups-member-new { flex-shrink: 1;  margin-right: 0; height: auto; margin-bottom: 1rem; }
+	.iris-object-actions { margin-bottom: 0.5rem; }
+	
+		/* Home */
+	.entity-headline .entity-title { line-height: normal; }
+	.iris-home-discover-groups { flex-wrap: wrap; margin: 0 -0.25rem; }
+	.iris-home-group-category, .iris-home-group-category:last-of-type { margin: 0.25rem; }
+	
+	.elgg-list .elgg-item { margin-bottom: 0.5rem; padding-bottom: 0.5rem; }
+	.elgg-context-thewire:not(.elgg-context-workspace-content) .elgg-list .elgg-item, .iris-box .elgg-list .elgg-item { padding-bottom: 0.5rem; }
+	
+	
+	
+}
+
 @media (max-width: 420px) {
 	.iris-topbar-menu { padding-left: 0; }
 	#iris-topbar-search { padding-left: 0.5rem; }
 	.iris-topbar-item > a { padding: 0.75rem 0.5rem; }
+	.iris-topbar-menu #user { margin-left: 0; }
+	
+	.iris-groups-community { flex-direction: column; padding: 0 1rem 1rem 1rem; margin-right: 0; min-height: initial; }
+	.iris-community-icon { margin: 0 auto; }
+	.iris-community-body { text-align: center; }
+	div.iris-community-icon, .iris-community-icon img { width: 4.375rem; height: 4.375rem; }
+	
+	.elgg-item-group .elgg-image-block .elgg-image, .elgg-item-group .elgg-image-block .elgg-body { float: none; margin: 0; }
+	.elgg-item-group .elgg-image-block .elgg-image a { text-align: center; margin: 0; display: block; min-height: 0; height: 7.5rem; width: auto; }
+	ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group .elgg-image img { height: auto; width: auto; }
+	
+	.esope-results-count { margin-top: 0; margin-bottom: 0; min-width: 10rem; }
 	
 }
 

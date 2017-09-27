@@ -78,6 +78,27 @@ switch($filter) {
 				register_error(elgg_echo('noaccess'));
 				forward('groups');
 			}
+			
+			
+			// Favorite groups first - only for self
+			$favorite_guids = array();
+			if ($user->guid == elgg_get_logged_in_user_guid()) {
+				$favorite_options = array(
+					'type' => 'group', 'relationship' => 'favorite', 
+					'relationship_guid' => $user->guid, 'inverse_relationship' => true, 
+					'limit' => false,
+				);
+				$favorite_groups = elgg_get_entities_from_relationship($favorite_options);
+				if ($favorite_groups) {
+					foreach ($favorite_groups as $ent) {
+						if ($ent->isMember()) {
+							$favorite_guids[] = $ent->guid;
+						}
+					}
+				}
+				$groups_content .= elgg_list_entities(array('guids' => $favorite_guids));
+			}
+			// Other groups
 			$options = array(
 				'type' => 'group', 
 				'relationship' => 'member', 
@@ -87,12 +108,16 @@ switch($filter) {
 				'limit' => false,
 				'no_results' => elgg_echo('groups:none'),
 			);
+			// Exclude favorite groups if any (already listed above)
+			if (sizeof($favorite_guids) > 0) {
+				$options['wheres'][] = "e.guid NOT IN (" . implode(',', $favorite_guids) . ")";
+			}
 			// Exclude subgroups from listing ?
 			if (elgg_is_active_plugin('au_subgroups')) {
-				$options['wheres'] = array("NOT EXISTS ( SELECT 1 FROM " . elgg_get_config('dbprefix') . "entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )");
+				$options['wheres'][] = "NOT EXISTS ( SELECT 1 FROM " . elgg_get_config('dbprefix') . "entity_relationships WHERE guid_one = e.guid AND relationship = '" . AU\SubGroups\AU_SUBGROUPS_RELATIONSHIP . "' )";
 			}
+			$groups_content .= elgg_list_entities_from_relationship($options);
 			
-			$groups_content = elgg_list_entities_from_relationship($options);
 			// Add title + count
 			$options['count'] = true;
 			$count = elgg_get_entities_from_relationship($options);

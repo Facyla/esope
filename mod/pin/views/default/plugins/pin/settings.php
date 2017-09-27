@@ -9,18 +9,18 @@ foreach($validentities as $type) { $validlist .= $type.','; }
 
 
 echo '<p><label>' . elgg_echo('pin:settings:highlight')
-	. elgg_view('input/pulldown', array( 'name' => 'params[highlight]', 'value' => $vars['entity']->highlight, 'options_values' => $yesno_opt ))
+	. elgg_view('input/select', array( 'name' => 'params[highlight]', 'value' => $vars['entity']->highlight, 'options_values' => $yesno_opt ))
 	. '</label></p>';
 
-if (!isset($vars['entity']->extendfullonly)) $vars['entity']->extendfullonly = 'yes';
+if (!isset($vars['entity']->extendfullonly)) { $vars['entity']->extendfullonly = 'yes'; }
 echo '<p><label>' . elgg_echo('pin:settings:extendfullonly')
-	. elgg_view('input/pulldown', array( 'name' => 'params[extendfullonly]', 'value' => $vars['entity']->extendfullonly, 'options_values' => $yesno_opt ))
+	. elgg_view('input/select', array('name' => 'params[extendfullonly]', 'value' => $vars['entity']->extendfullonly, 'options_values' => $yesno_opt))
 	. '</label><br />' . elgg_echo('pin:settings:extendfullonly:help')
 	. '</p>';
 
 
 echo '<p><label>' . elgg_echo('pin:settings:validhighlight') 
-	. elgg_view('input/text', array( 'name' => 'params[validhighlight]', 'value' => $vars['entity']->validhighlight ))
+	. elgg_view('input/text', array('name' => 'params[validhighlight]', 'value' => $vars['entity']->validhighlight))
 	. '</label><br />' . $validlist . '</p>';
 
 
