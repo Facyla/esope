@@ -34,9 +34,9 @@ $content .= '</div>';
 
 //$content .= '<div style="width:50%; float:right;">';
 $content .= '<div class="elgg-main">';
-	$content .= '<div style="border:1px solid #CCCCCC; padding:0.5em 1em; margin-top:2em; background:#F6F6F6;">';
+	$content .= '<div style="border:1px solid #CCCCCC; padding:0.5rem 1rem; margin: 2rem; background:#F6F6F6;">';
 		// Connexion + mot de passe perdu
-		$content .= '<h2>Connexion</h2>';
+		$content .= '<h2>' . elgg_echo('login') . '</h2>';
 		$content .= elgg_view_form('login');
 		$content .= $lostpassword_form;
 		$content .= '<div class="clearfloat"></div>';

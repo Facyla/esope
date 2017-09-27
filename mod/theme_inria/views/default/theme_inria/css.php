@@ -119,6 +119,7 @@ $width = array(
 .elgg-page-default {
 	/* min-width: 800px; */
 }
+.elgg-page { background: #F1F1F1; }
 .elgg-page-default .elgg-page-header > .elgg-inner, 
 .elgg-page-default .elgg-page-body > .elgg-inner, 
 .elgg-page-default .elgg-page-footer > .elgg-inner, 
@@ -2025,10 +2026,21 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 @media (max-width: 700px) {
 	.cas-login, .basic-login-toggle { float: none; }
 	.inria-login { text-align: center; }
+	.basic-login-toggle, #adf-homepage .inria-login .basic-login-toggle { float:none; }
+	
+	body .elgg-page-messages .elgg-system-messages { right: auto; top: 5rem; margin: 0 1rem; width: calc(100% - 2rem); }
 	
 	/* Feedback */
+	#feedbackWrapper { position: fixed; bottom: 0; top: initial; }
 	#feedBackContentWrapper { background: #384257; z-index: 501; }
 	#feedBackContent { width: auto; padding: 1rem; margin: 1rem; }
+	
+}
+
+@media (max-width: 420px) {
+	.iris-topbar-menu { padding-left: 0; }
+	#iris-topbar-search { padding-left: 0.5rem; }
+	.iris-topbar-item > a { padding: 0.75rem 0.5rem; }
 	
 }
 

@@ -64,13 +64,18 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 
 			<div id="feedBackFormInputs">
 				<form id="feedBackForm" action="" method="post" onsubmit="FeedBack_Send();return false;">
+					
+					<div id="feedBackText">
+						<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" placeholder="<?php echo elgg_echo('feedback:default:txt'); ?>" class="feedbackTextbox mceNoEditor"></textarea>
+					</div>
+					
 					<?php
 					// Mood
 					if (feedback_is_mood_enabled()) {
 						$mood_values = feedback_mood_values();
 						if (sizeof($mood_values) > 1) {
 							?>
-							<div>
+							<div class="feedback-item">
 								<div class="float"><b><?php echo elgg_echo('feedback:list:mood'); ?>&nbsp;: &nbsp</b> 
 									<?php
 									foreach ($mood_values as $mood) {
@@ -80,7 +85,6 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 								</div>
 								<div class="clearfloat"></div>
 							</div>
-							<br />
 							<?php
 						} else {
 							// We only have one value (not indexed)
@@ -94,7 +98,7 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 						$about_values = feedback_about_values();
 						if (sizeof($about_values) > 1) {
 							?>
-							<div>
+							<div class="feedback-item">
 								<div class="float"><b><?php echo elgg_echo('feedback:list:about'); ?>&nbsp;: &nbsp</b> 
 									<?php
 									foreach ($about_values as $about) {
@@ -104,7 +108,6 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 								</div>
 								<div class="clearfloat"></div>
 							</div>
-							<br />
 							<?php
 						} else {
 							// We only have one value (not indexed)
@@ -128,24 +131,21 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 							$default_access = $group_id;
 						}
 						*/
-						echo '<div><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt)) . '</label></div><br />';
+						echo '<div class="feedback-item"><label>' . elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt)) . '</label></div>';
 					} else {
 						echo '<input type="hidden" name="feedback_access_id" value="0" />';
-						}
-						?>
-					<div>
+					}
+					?>
+					
+					<div class="feedback-item">
 						<input type="text" name="feedback_id" value="<?php echo $user_id?>" id="feedback_id" size="30" placeholder="<?php echo elgg_echo('feedback:default:id'); ?>" class="feedbackText" />
-					</div>
-				
-					<div id="feedBackText">
-						<textarea name="feedback_txt" cols="34" rows="10" id="feedback_txt" placeholder="<?php echo elgg_echo('feedback:default:txt'); ?>" class="feedbackTextbox mceNoEditor"></textarea>
 					</div>
 				
 					<?php
 					// Captcha : only when logged out
 					if (!elgg_is_logged_in() ) {
 						// if captcha functions are loaded, then use captcha
-						if ( function_exists ( "captcha_generate_token" ) ) {
+						if (function_exists ( "captcha_generate_token" )) {
 							echo elgg_view('input/captcha');
 						}
 					}

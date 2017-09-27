@@ -83,6 +83,10 @@
 	text-decoration: none;
 }
 
+.feedback-item {
+	margin-bottom: 0.5rem;
+}
+
 #feedBackText { padding-top:5px; }
 
 #feedBackSend { padding-top:6px; }
@@ -180,6 +184,14 @@
 	#feedBackToggler { position: initial; transform: rotate(90deg); margin-left: 70px; transform-origin: bottom right; height: 30px;  }
 	#feedBackContentWrapper { background: white; left:0; }
 	#feedBackContent { width: auto; max-width: 94%; margin-top: 1rem; }
+	
+	/* pour changer l'ordre des champs
+	#feedBackForm { display: flex; flex-direction: column; }
+	#feedBackText { order: -1; }
+	*/
+	
+}
+
 
 }
 
