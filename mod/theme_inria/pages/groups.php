@@ -98,7 +98,7 @@ switch($filter) {
 					}
 				}
 				if (sizeof($favorite_guids) > 0) {
-					$groups_content .=implode(', ', $favorite_guids). elgg_list_entities(array('guids' => $favorite_guids));
+					$groups_content .= elgg_list_entities(array('guids' => $favorite_guids));
 				}
 			}
 			// Other groups
