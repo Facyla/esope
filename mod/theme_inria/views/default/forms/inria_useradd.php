@@ -43,7 +43,7 @@ echo '<p><label>' . elgg_echo('theme_inria:useradd:email') . '' . elgg_view('inp
 
 echo '<p><label>' . elgg_echo('theme_inria:useradd:name') . '' . elgg_view('input/text', array('name' => 'name', 'value' => $name, 'required' => true)) . '</label></p>';
 
-echo '<p><label>' . elgg_echo('theme_inria:useradd:organisation') . '' . elgg_view('input/tags', array('name' => 'organisation', 'value' => $organisation, 'required' => true)) . '</label></p>';
+echo '<p><label>' . elgg_echo('theme_inria:useradd:organisation') . '' . elgg_view('input/tags', array('name' => 'organisation', 'value' => $organisation, 'required' => true, 'placeholder' => elgg_echo('theme_inria:useradd:organisation:placeholder'))) . '</label></p>';
 
 echo '<p><label>' . elgg_echo('theme_inria:useradd:fonction') . '' . elgg_view('input/text', array('name' => 'briefdescription', 'value' => $briefdescription)) . '</label></p>';
 

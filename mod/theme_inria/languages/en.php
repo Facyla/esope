@@ -349,6 +349,7 @@ return array(
 	'theme_inria:useradd:name' => "First and last name",
 	'theme_inria:useradd:username' => "Login",
 	'theme_inria:useradd:organisation' => "Organisation",
+	'theme_inria:useradd:organisation:placeholder' => "Organisation 1, Organisation 2, etc.",
 	'theme_inria:useradd:fonction' => "Position / Role",
 	'theme_inria:useradd:message' => "Message to your invited contact",
 	'theme_inria:useradd:message:details' => "This message will be integrated into the invitation email.",

@@ -348,6 +348,7 @@ return array(
 	'theme_inria:useradd:name' => "Prénom et nom",
 	'theme_inria:useradd:username' => "Identifiant",
 	'theme_inria:useradd:organisation' => "Organisation",
+	'theme_inria:useradd:organisation:placeholder' => "Organisation 1, Organisation 2, etc.",
 	'theme_inria:useradd:fonction' => "Fonction / Rôle",
 	'theme_inria:useradd:message' => "Message à ajouter à votre invitation",
 	'theme_inria:useradd:message:details' => "Ce message sera intégré dans le mail d'invitation.",
