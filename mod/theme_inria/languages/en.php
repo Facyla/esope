@@ -1051,6 +1051,9 @@ email3@domain.tld email4@domain.tld ",
 	'favorite:remove:error' => "Error, could not remove from favorites",
 	'favorite:invalidentity' => "Invalid entity",
 	
+	'theme_inria:hide_entity:select' => "Hide workplace activity",
+	'theme_inria:hide_entity:yes' => "Yes (this file will no appear in workplace activity)",
+	'theme_inria:hide_entity:no' => "No (default)",
 	
 );
 

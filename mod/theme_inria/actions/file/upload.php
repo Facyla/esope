@@ -38,6 +38,8 @@ $access_id = (int) get_input("access_id");
 $container_guid = (int) get_input('container_guid', 0);
 $guid = (int) get_input('file_guid');
 $tags = get_input("tags");
+$hide_entity = get_input("hide_entity", 'no');
+if ($hide_entity != 'yes') { $hide_entity = ''; }
 
 if ($container_guid == 0) {
 	$container_guid = elgg_get_logged_in_user_guid();
@@ -99,6 +101,8 @@ $file->description = $desc;
 $file->access_id = $access_id;
 $file->container_guid = $container_guid;
 $file->tags = string_to_tag_array($tags);
+// Iris : allow to hide entity in workspace listing
+$file->hide_entity = $hide_entity;
 
 // we have a file upload, so process it
 if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {

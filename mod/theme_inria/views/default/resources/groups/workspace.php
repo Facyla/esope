@@ -213,8 +213,17 @@ if (elgg_group_gatekeeper(false)) {
 				'no_results' => elgg_echo('theme_inria:groups:content:no_result'),
 			);
 			if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
+			
+			// Iris : Hide some entities here, based on "hide_entity" metadata (set to "no")
+			$dbprefix = elgg_get_config('dbprefix');
+			$name_metastring_id = elgg_get_metastring_id('hide_entity');
+			$value_metastring_id = elgg_get_metastring_id('yes');
+			$content_activity_opt['wheres'][] = "NOT EXISTS (SELECT 1 FROM {$dbprefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $name_metastring_id AND md.value_id = $value_metastring_id)";
+			//$content_activity_opt['metadata_name_value_pairs'] = array('name' => 'hide_entity', 'value' => 'yes', 'operand' => '<>'); // does not work because entity must have this metadata set to be listed
+			
+			
 			//$content .= "SUBTYPES => " . print_r($subtypes, true);
-			$content .= elgg_list_entities($content_activity_opt);
+			$content .= elgg_list_entities_from_metadata($content_activity_opt);
 		$content .= '</div>';
 	$content .= '</div>';
 	

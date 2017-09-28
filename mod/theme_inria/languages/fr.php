@@ -1061,6 +1061,9 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'favorite:remove:error' => "Erreur lors du retrait des favoris",
 	'favorite:invalidentity' => "Entité non valide",
 	
+	'theme_inria:hide_entity:select' => "Masquer dans l'espace de travail",
+	'theme_inria:hide_entity:yes' => "Oui (il n'apparaîtra pas dans l'activité de l'espace de travail)",
+	'theme_inria:hide_entity:no' => "Non (par défaut)",
 	
 );
 
