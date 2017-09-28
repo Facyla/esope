@@ -76,7 +76,7 @@ h4 {
 }
 
 .digest-groups .table-item { float:left; width:120px; min-height:170px; text-align: center; margin: 6px 10px 10px 0px; line-height: 1; font-size:12px; flex: 1 0 auto; font-size: 12px; padding: 0; }
-.digest-profile .table-item { float:left; width:120px; min-height:170px; text-align: center; margin: 6px 10px 10px 0px; line-height: 1; font-size:12px; flex: 1 0 auto; font-size: 12px; padding: 0; }
+.digest-profile .table-item { float:left; width:120px; min-height:190px; text-align: center; margin: 6px 10px 10px 0px; line-height: 1; font-size:12px; flex: 1 0 auto; font-size: 12px; padding: 0; }
 .digest-groups img, .digest-groups img { margin-bottom: 3px; }
 
 #digest_unsubscribe {

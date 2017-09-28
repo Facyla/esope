@@ -317,6 +317,8 @@ section { background:white; }
 .adf-lostpassword-toggle { font-weight: bold; font-size: 0.85rem; padding: 0.5rem 0 0 0; display: inline-block; }
 .basic-login-toggle, #adf-homepage .inria-login .basic-login-toggle { float:right; color: white; }
 .elgg-context-login .elgg-module-aside { float: right; width: 50%; }
+.elgg-public .elgg-menu-topbar li { margin: 0; padding: 0.75rem 0 0.75rem 1rem; }
+.elgg-public .elgg-menu-topbar li a { color: #384257; text-shadow: none; }
 
 /* Main menu */
 .elgg-page-header { background: <?php echo $module_bg_color; ?>; border: 0; box-shadow: none; min-height: 37px; }

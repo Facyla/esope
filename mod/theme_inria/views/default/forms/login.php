@@ -31,7 +31,7 @@ echo '<p>' . elgg_echo('theme_inria:login:details') . '</p>';
 
 <div id="inria-basiclogin" style="<?php echo $default_hide; ?>">
 	<div>
-		<label for="login_username"><?php echo elgg_echo('loginusername'); ?>*</label>
+		<label for="login_username"><?php echo elgg_echo('loginusername'); ?></label>
 	<?php echo elgg_view('input/text', array(
 			'name' => 'username',
 			'autofocus' => true,
@@ -42,7 +42,7 @@ echo '<p>' . elgg_echo('theme_inria:login:details') . '</p>';
 	?>
 	</div>
 	<div>
-		<label for="login_password"><?php echo elgg_echo('password'); ?>*</label>
+		<label for="login_password"><?php echo elgg_echo('password'); ?></label>
 		<?php echo elgg_view('input/password', array(
 			'name' => 'password', 
 			'id' => 'login_password', 

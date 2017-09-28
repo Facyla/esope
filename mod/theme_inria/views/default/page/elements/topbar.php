@@ -313,7 +313,7 @@ if (elgg_is_active_plugin('language_selector')) {
 		echo '<ul class="elgg-menu elgg-menu-topbar elgg-menu-topbar-alt">';
 			// Bouton de connexion partout sauf sur la home et sur la page de login
 			if (!elgg_in_context('main') && !elgg_in_context('login')) {
-				echo '<li><i class="fa fa-sign-in"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li>';
+				echo '<li class="login"><i class="fa fa-sign-in"></i><a href="' . $url . '">' . elgg_echo('theme_inria:login') . '</a></li>';
 			}
 			if ($language_selector) { echo '<li class="language-selector">' . $language_selector . '</li>'; }
 		echo '</ul>';
