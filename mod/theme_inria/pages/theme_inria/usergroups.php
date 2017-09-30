@@ -51,6 +51,10 @@ $content .= '<div style="">';
 
 // Vérification si tout est ok pour affichage
 if (elgg_instanceof($user, 'user')) {
+	
+	elgg_push_context('widgets');
+	$content .= '<div>';
+
 	// Autorisé si l'user l'autorise, ou si on est connecté sur Iris ou via CAS
 	$allowed = esope_user_profile_gatekeeper($user, false);
 	if ($allowed || elgg_instanceof($own, 'user')) {
@@ -58,26 +62,58 @@ if (elgg_instanceof($user, 'user')) {
 		$title = elgg_echo('inria:mygroups:title');
 		$content .= '<h3>' . $title . '</h3>';
 		
-		$groups = elgg_get_entities_from_relationship(array(
+		// Favorite groups first - only for self
+		$favorite_guids = array();
+		if ($user->guid == elgg_get_logged_in_user_guid()) {
+			$favorite_options = array(
+				'type' => 'group', 'relationship' => 'favorite', 
+				'relationship_guid' => $user->guid, 'inverse_relationship' => true, 
+				'limit' => false, 'order_by' => "r.time_created DESC",
+			);
+			$favorite_groups = elgg_get_entities_from_relationship($favorite_options);
+			if ($favorite_groups) {
+				foreach ($favorite_groups as $ent) {
+					if ($ent->isMember()) {
+						$favorite_guids[] = $ent->guid;
+						//$favorite_ents[] = $ent;
+					}
+				}
+			}
+			if (sizeof($favorite_guids) > 0) {
+				$favorite_groups = elgg_get_entities(array('guids' => $favorite_guids));
+			}
+		}
+		if ($favorite_groups) {
+			foreach ($favorite_groups as $group) {
+				$content .= '<a href="' . $group->getURL() . '" title="' . $group->name . '" target="_blank"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" /></a>';
+			}
+		}
+		
+		$groups_options = array(
 				'type' => 'group',
 				'relationship' => 'member',
 				'relationship_guid' => $own->guid,
 				'inverse_relationship' => false,
 				'limit' => $limit,
-			));
-			if ($groups) {
-				elgg_push_context('widgets');
-				$content .= '<div>';
-				foreach ($groups as $group) {
-					$content .= '<a href="' . $group->getURL() . '" title="' . $group->name . '" target="_blank"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" /></a>';
-				}
-				$content .= '</div>';
-				$content .= '<br />';
-				elgg_pop_context();
-
-				$content .= '<p><a href="' . elgg_get_site_url() . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-plus-circle"></i> ' . elgg_echo("inria:mygroups") . '</a></p>';
+			);
+		// Exclude favorite groups if any (already listed above)
+		if (sizeof($favorite_guids) > 0) {
+			$groups_options['wheres'][] = "e.guid NOT IN (" . implode(',', $favorite_guids) . ")";
+		}
+		
+		$groups = elgg_get_entities_from_relationship($groups_options);
+		if ($groups) {
+			foreach ($groups as $group) {
+				$content .= '<a href="' . $group->getURL() . '" title="' . $group->name . '" target="_blank"><img src="' . $group->getIconURL('small') . '" style="margin:1px 6px 3px 0;" /></a>';
 			}
-			
+		}
+		
+		$content .= '</div>';
+		$content .= '<br />';
+		elgg_pop_context();
+
+		$content .= '<p><a href="' . elgg_get_site_url() . 'groups/member/' . $own->username . '" target="_blank"><i class="fa fa-plus-circle"></i> ' . elgg_echo("theme_inria:mygroups") . '</a></p>';
+		
 		// $content .= '</div>'; // Bloc d'encadrement inutile car seule une partie est utile pour l'intranet
 		
 	} else {

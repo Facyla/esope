@@ -59,11 +59,11 @@ if (elgg_in_context('search')) {
 		// @TODO up to 4 groups ?
 		if ($group->isMember()) {
 			if (check_entity_relationship($group->guid, 'favorite', $ownguid)) {
-				$pin_title = elgg_echo('favorite:group:remove');
-				$pin_text = '<i class="fa fa-bookmark"></i>';
+				$pin_title = elgg_echo('favorite:group:remove:title');
+				$pin_text = '<i class="fa fa-star"></i>&nbsp;' . elgg_echo('favorite:group:remove');
 			} else {
-				$pin_title = elgg_echo('favorite:group:add');
-				$pin_text = '<i class="fa fa-bookmark-o"></i>';
+				$pin_title = elgg_echo('favorite:group:add:title');
+				$pin_text = '<i class="fa fa-star-o"></i>&nbsp;' . elgg_echo('favorite:group:add');
 			}
 			$metadata .= '<li class="favorite-group">' . elgg_view('output/url', array(
 					'href' => "action/theme_inria/favorite?guid={$group->guid}",

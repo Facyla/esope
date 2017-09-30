@@ -1192,6 +1192,7 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-item-group .elgg-menu.elgg-menu-entity { margin: 0 0 0.8125rem 0; display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; color: #969696; }
 .elgg-item-group h3 { padding: 0; margin: 0 0 0.625rem 0; }
 .elgg-item-group h3 a { padding: 0; margin: 0; font-size: 1.375rem; color: #384257; text-decoration:none; }
+.elgg-item-group .elgg-image-block { display: flex; }
 .elgg-item-group .elgg-image-block .elgg-image { background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); }
 .elgg-item-group .elgg-image-block .elgg-image a { width: 12.5rem; height: 12.5rem; overflow: hidden; line-height: 12.5rem; display: flex; }
 ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group .elgg-image img { width: 12.5rem; margin: auto; }

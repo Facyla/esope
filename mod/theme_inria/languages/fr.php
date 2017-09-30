@@ -1053,8 +1053,10 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	
 	'favorite:add' => "Ajouter à mes favoris",
 	'favorite:remove' => "Retirer de mes favoris",
-	'favorite:group:add' => "Ajouter à mes groupes favoris",
-	'favorite:group:remove' => "Retirer de mes groupes favoris",
+	'favorite:group:add' => "Ajouter aux favoris",
+	'favorite:group:remove' => "Favori",
+	'favorite:group:add:title' => "Ajouter à mes groupes favoris",
+	'favorite:group:remove:title' => "Retirer de mes groupes favoris",
 	'favorite:added' => "Ajouté aux favoris",
 	'favorite:add:error' => "Erreur lors de l'ajout aux favoris",
 	'favorite:removed' => "Retiré des favoris",

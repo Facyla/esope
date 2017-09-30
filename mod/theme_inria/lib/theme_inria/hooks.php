@@ -876,12 +876,11 @@ function theme_inria_route($hook, $type, $return, $params) {
 		case 'poll':
 		case 'newsletter':
 		case 'thewire':
+		case 'event_calendar':
 			if ($segments[0] == 'group') {
 				forward($url . 'groups/content/' . $segments[1] . '/' . $handler . '/' . implode('/', array_slice($segments, 2)));
 				return false;
 			}
-			break;
-		case 'event_calendar':
 			break;
 	}
 	
