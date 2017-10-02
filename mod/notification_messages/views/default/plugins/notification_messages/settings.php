@@ -3,33 +3,121 @@
 $yesno_options = array("yes" => elgg_echo("option:yes"), "no" => elgg_echo("option:no"));
 $noyes_options = array_reverse($yesno_options, true);
 
+// @TODO Register event notification setting
+/*
+$notify_opt = array(
+	'default' => elgg_echo('notification_messages:register:default'), 
+	'yes' => elgg_echo('option:yes'), 
+	'no' => elgg_echo('option:no'), 
+);
+*/
+$notify_opt = array(
+	elgg_echo('notification_messages:notify:create') => 'create', 
+	elgg_echo('notification_messages:notify:publish') => 'publish', 
+	elgg_echo('notification_messages:notify:update') => 'update', 
+	elgg_echo('notification_messages:notify:delete') => 'delete', 
+);
+
+// Prepare notification setting
 $notify_subject_opt = array(
 	'default' => elgg_echo('notification_messages:subject:default'), 
 	'allow' => elgg_echo('notification_messages:subject:allow'), 
 	//'deny' => elgg_echo('notification_messages:subject:deny'), 
 );
-
 $notify_message_opt = array(
 	'default' => elgg_echo('notification_messages:message:default'), 
 	'allow' => elgg_echo('notification_messages:message:allow'), 
 	//'deny' => elgg_echo('notification_messages:subject:deny'), 
 );
 
+// @TODO Recipients setting
+$recipients_opt = array(
+	'default' => elgg_echo('notification_messages:recipients:default'), // registered group members
+	'allgroup' => elgg_echo('notification_messages:recipients:allgroup'), // force all group members
+	'author' => elgg_echo('notification_messages:recipients:author'), // default + author
+	'thread' => elgg_echo('notification_messages:recipients:thread'), // initial author + thread members
+	//'deny' => elgg_echo('notification_messages:subject:deny'), 
+);
+
+
+// Some explanations on the notification process
+echo '<h3>' . elgg_echo('notification_messages:process') . '</h3>';
+echo '<p>' . elgg_echo('notification_messages:process:details') . '</p>';
 
 
 /// Settings form
 
-// @TODO Sur chaque type d'action, pouvoir choisir si on notifie ou pas, et qui
+// @TODO Sur chaque type d'action, pouvoir choisir si on notifie ou pas, et qui notifier
+/* les notifications s'appuient sur les events
+ - enregistrer un type de notification : elgg_register_notification_event('object', 'photo', array('create'));
+ _elgg_services()->notifications->registerEvent
+ $events = _elgg_services()->events->getAllHandlers();
+ 
+ - préparer la notification : elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification');
+ - déterminer les destinataires : elgg_register_plugin_hook_handler('get', 'subscriptions', 'discussion_get_subscriptions');
+*/
 
-// Registered events
-$events = _elgg_services()->events->getAllHandlers();
-foreach ($events as $event => $types) {
+// Type d'objets et events enregistrés pour notifications
+$registered_notification_events = _elgg_services()->notifications->getEvents();
+$registered_notification_events_content = '<pre>' . print_r($registered_notification_events, true) . '</pre>';
+
+// Contenu et destinataires des notifications
+//$hooks = _elgg_services()->hooks->getOrderedHandlers('get', 'subscriptions');
+$hooks = _elgg_services()->hooks->getAllHandlers();
+foreach ($hooks as $hook => $types) {
+	//echo $hook . ', ';
+	//if (!in_array($hook, array('prepare', 'get'))) { continue; }
 	foreach ($types as $type => $handlers) {
-		$tree[$event][$type] = array_values($handlers);
-		echo "$event $type / ";
+		// Get, subscriptions
+		if (($hook == 'get') && ($type == 'subscriptions')) { $get_subscriptions_hooks = $handlers; }
+		// Prepare, notification:[action][type][subtype]
+		if (($hook == 'prepare') && (substr($type, 0, 13) == 'notification:')) {
+			$type = explode(':', $type);
+			$prepare_notification_hooks[$type[2]][$type[3]][$type[1]] = array_values($handlers);
+		}
 	}
 }
-//echo print_r($tree, true);
+// Contenu des notifications
+$prepare_notification_content = '<pre>' . print_r($prepare_notification_hooks, true) . '</pre>';
+
+// Destinataires des notifications
+$subscriptions_content = '<pre>' . implode('<br />', $get_subscriptions_hooks) . '</pre>';
+
+// Other registered events handlers - may add/alter notification behaviour
+$events_handlers = _elgg_services()->events->getAllHandlers();
+foreach ($events_handlers as $event => $types) {
+	if (!in_array($event, array('create', 'publish', 'update', 'delete'))) { continue; }
+	foreach ($types as $type => $handlers) {
+		if (!in_array($event, array('object', 'all'))) { continue; }
+		$events_handlers_tree[$event][$type] = array_values($handlers);
+	}
+}
+$other_events_content = '<pre>' . print_r($events_handlers_tree, true) . '</pre>';
+
+// Display detailed information on notifications events and hooks
+// Togglers
+echo '<h4>' . elgg_view('output/url', array('text' => "Registered notification events", 'href' => "#registered-notification-events", 'rel' => 'toggle')) . '</h4>';
+echo '<h4>' . elgg_view('output/url', array('text' => "Other event handlers", 'href' => "#other-events-handlers", 'rel' => 'toggle')) . '</h4>';
+echo '<h4>' . elgg_view('output/url', array('text' => "Prepare notification content hooks", 'href' => "#prepare-notification-hooks", 'rel' => 'toggle')) . '</h4>';
+echo '<h4>' . elgg_view('output/url', array('text' => "Recipients subscription hooks", 'href' => "#subscriptions-hooks", 'rel' => 'toggle')) . '</h4>';
+// Hidden content
+echo elgg_view_module('featured', 'Registered events', $registered_notification_events_content, array('id' => 'registered-notification-events', 'class' => 'hidden mtm'));
+echo elgg_view_module('featured', 'Other events handlers', $other_events_content, array('id' => 'other-events-handlers', 'class' => 'hidden mtm'));
+echo elgg_view_module('featured', 'Prepare notifications', $prepare_notification_content, array('id' => 'prepare-notification-hooks', 'class' => 'hidden mtm'));
+echo elgg_view_module('featured', 'Recipients', $subscriptions_content, array('id' => 'subscriptions-hooks', 'class' => 'hidden mtm'));
+
+
+echo '<style>
+.notification-messages-admin-table { display: block; border: 1px solid black; width: 100%; }
+.notification-messages-admin-table tr { border: 1px solid black; }
+.notification-messages-admin-table tr.global { background: #ccc; }
+.notification-messages-admin-table th, 
+.notification-messages-admin-table td { border: 1px solid #999; padding: 0.2rem 0.2rem; word-break: break-all; font-size: .75rem; }
+.notification-messages-admin-table th { background: #333; color: white; font-weight: bold; }
+
+ul.elgg-input-checkboxes.elgg-horizontal li { display: inline-block; margin-right: 1rem; line-height: 1rem; }
+</style>';
+
 
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:objects') . '</legend>';
@@ -41,60 +129,153 @@ echo "<fieldset>";
 	//if (elgg_is_active_plugin('blog')) { $objects['object']['blog'] = elgg_echo('blog:newpost'); }
 
 	echo '<p>' . elgg_echo('notification_messages:settings:details') . '</p>';
-	echo '<p><strong>' . elgg_echo('notification_messages:object:subtype') . '&nbsp;:</strong> ' . elgg_echo('notification_messages:setting');
+	echo '<p>' . elgg_echo('notification_messages:object:subtype') . '&nbsp;: ' . elgg_echo('notification_messages:setting');
 	//echo ' - <em>' . elgg_echo('notification_messages:subject:default') . '</em>';
 	echo '</p>';
 	
 	// @TODO on/off setting, or also allow blocking messages ?
-	echo '<table border="1">';
+	echo '<table class="notification-messages-admin-table">';
 		echo '<thead>';
 			echo '<tr>';
-				echo '<th>' . elgg_echo('notification_messages:object:subtype') . '</th>';
-				echo '<th>' . elgg_echo('notification_messages:setting') . '</th>';
-				echo '<th>' . 'create' . '</th>';
-				echo '<th>' . 'publish' . '</th>';
-				echo '<th>' . 'update' . '</th>';
-				echo '<th>' . 'delete' . '</th>';
+				echo '<th rowspan="2" style="width: 15%;">' . elgg_echo('notification_messages:object:subtype') . '</th>';
+				echo '<th colspan="4" style="width: 70%;">' . elgg_echo('notification_messages:events') . '</th>';
+				echo '<th rowspan="2" style="width: 15%;">' . elgg_echo('notification_messages:prepare:setting') . '<br />' . elgg_echo('notification_messages:recipients:setting') . '</th>';
+			echo '</tr>';
+			echo '<tr>';
+				echo '<th style="width: 20%;">' . 'create' . '</th>';
+				echo '<th style="width: 20%;">' . 'publish' . '</th>';
+				echo '<th style="width: 15%;">' . 'update' . '</th>';
+				echo '<th style="width: 15%;">' . 'delete' . '</th>';
 			echo '</tr>';
 		echo '</thead>';
+		
 		echo '<tbody>';
-			$subtypes = array();
+			// Global hooks
+			echo '<tr class="global" style="border: 1px solid black;">';
+				echo '<td>all</td>';
+				echo '<td>' . implode('<br />', $events_handlers_tree['create']['all']) . '</td>';
+				echo '<td>' . implode('<br />', $events_handlers_tree['publish']['all']) . '</td>';
+				echo '<td>' . implode('<br />', $events_handlers_tree['update']['all']) . '</td>';
+				echo '<td>' . implode('<br />', $events_handlers_tree['delete']['all']) . '</td>';
+				echo '<td>' . '' . '</td>';
+			echo '</tr>';
+			
+			// Settings per subtype
+			$prepare_object_subtypes = array();
 			foreach($objects as $subtype) {
-				if (!in_array($subtype, $subtypes)) {
-					$param = 'object_' . $subtype;
-					if ($vars['entity']->$param == 'allow') { $subtypes[] = $subtype; }
-					$options = array(
-						'name' => "params[{$param}]",
-						'value' => $vars['entity']->$param ? $vars['entity']->$param : 'default',
+				if (!in_array($subtype, $prepare_object_subtypes)) {
+					
+					// Prepare objects for notifications
+					$prepare_param = 'object_' . $subtype;
+					$prepare_params = array(
+						'name' => "params[{$prepare_param}]",
+						'value' => $vars['entity']->$prepare_param ? $vars['entity']->$prepare_param : 'default',
 						'options_values' => $notify_subject_opt,
 					);
-					$msg_subtype = notification_messages_readable_subtype($subtype);
+					// Add to list of prepared notifications
+					if ($vars['entity']->$prepare_param == 'allow') { $prepare_object_subtypes[] = $subtype; }
 					
-					echo '<tr>';
-					echo '<td><label>' . $msg_subtype . '</label></td>';
-					echo '<td>' . elgg_view('input/select', $options) . '</td>';
-					echo '<td>' . print_r($tree['create'][$subtype], true) . '</td>';
-					echo '<td>' . print_r($tree['publish'][$subtype], true) . '</td>';
-					echo '<td>' . print_r($tree['update'][$subtype], true) . '</td>';
-					echo '<td>' . print_r($tree['delete'][$subtype], true) . '</td>';
-					
-						//echo '<label>' . $msg_subtype . '&nbsp;: ' . elgg_view('input/select', $options) . '</label>';
-						/* @TODO preview default message ?
-						echo ' - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: ';
-						//echo '<em>' . $subject . '</em>';
-						//echo elgg_trigger_plugin_hook('prepare', "notification:create:object:$subtype", array(), false);
-						//echo elgg_echo("$subtype:notify:subject");
-						*/
+					echo '<tr style="border: 1px solid black;">';
+						
+						// subtype title
+						echo '<td><label>' . notification_messages_readable_subtype($subtype) . '<br />(' . $subtype . ')</label></td>';
+						
+						// Create event
+						echo '<td colspan="4">';
+							// @TODO besoin d'un réglage rapide : multiselect ou checkboxes : 
+							// soit non global, soit array des events concernés
+							// soit un hook pour intercepter l'enregistrement des paramètres, soit autre méthode ?
+							echo elgg_view('input/checkboxes', array(
+									'name' => "register_object_{$subtype}", 'options' => $notify_opt, 'align' => 'horizontal', 
+									'value' => explode(',', $vars['entity']->{"register_object_{$subtype}"}),
+								));
+							echo '<pre>' . print_r($vars['entity']->{"register_object_{$subtype}"}, true) . '</pre>';
+							// Add setting to global config of prepared notifications
+							$register_object_subtypes[$subtype] = $vars['entity']->{"register_object_{$subtype}"};
+							
+							echo '<p>create : ';
+							if (in_array('create', $registered_notification_events['object'][$subtype])) {
+								echo elgg_echo('notification_messages:settings:messagehandledby');
+								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['create']);
+								if ($events_handlers_tree['create'][$subtype]) {
+									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+									echo implode('<br />', $events_handlers_tree['create'][$subtype]);
+								}
+							} else { echo elgg_echo('notification_messages:settings:nomessage'); }
+							echo '</p>';
+						//echo '</td>';
+						
+						// Publish event
+						//echo '<td>';
+							echo '<p>publish : ';
+							if (in_array('publish', $registered_notification_events['object'][$subtype])) {
+								echo elgg_echo('notification_messages:settings:messagehandledby');
+								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['publish']);
+								if ($events_handlers_tree['publish'][$subtype]) {
+									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+									echo implode('<br />', $events_handlers_tree['publish'][$subtype]);
+								}
+							 } else { echo elgg_echo('notification_messages:settings:nomessage'); }
+							echo '</p>';
+						//echo '</td>';
+						
+						// Update event
+						//echo '<td>';
+							echo '<p>update : ';
+							if (in_array('update', $registered_notification_events['object'][$subtype])) {
+								echo elgg_echo('notification_messages:settings:messagehandledby');
+								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['update']);
+								if ($events_handlers_tree['update'][$subtype]) {
+									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+									echo implode('<br />', $events_handlers_tree['update'][$subtype]);
+								}
+							} else { echo elgg_echo('notification_messages:settings:nomessage'); }
+							echo '</p>';
+						//echo '</td>';
+						
+						// Delete event
+						//echo '<td>';
+							echo '<p>delete : ';
+							if (in_array('delete', $registered_notification_events['object'][$subtype])) {
+								echo elgg_echo('notification_messages:settings:messagehandledby');
+								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['delete']);
+								if ($events_handlers_tree['delete'][$subtype]) {
+									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+									echo implode('<br />', $events_handlers_tree['delete'][$subtype]);
+								}
+							} else { echo elgg_echo('notification_messages:settings:nomessage'); }
+							echo '</p>';
+						echo '</td>';
+						
+						// Prepare notification
+						echo '<td>';
+							echo elgg_view('input/select', $prepare_params);
+						echo '</td>';
+						
+							//echo '<label>' . notification_messages_readable_subtype($subtype) . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label>';
+							/* @TODO preview default message ?
+							echo ' - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: ';
+							//echo '<em>' . $subject . '</em>';
+							//echo elgg_trigger_plugin_hook('prepare', "notification:create:object:$subtype", array(), false);
+							//echo elgg_echo("$subtype:notify:subject");
+							*/
 					echo '</tr>';
 				}
 			}
 		echo '</tbody>';
 	echo '</table>';
 	
-	// Save all enabled subtypes in a single fields (for easier processing)
-	if ($subtypes) { $subtypes = implode(',', $subtypes); }
-	elgg_set_plugin_setting('object_subtypes', $subtypes, 'notification_messages');
+	
+	// Save all enabled subtypes in a single fields (for easier processing, so we can loop through the list to get direct params)
+	if ($prepare_object_subtypes) { $prepare_object_subtypes = implode(',', $prepare_object_subtypes); }
+	elgg_set_plugin_setting('object_subtypes', $prepare_object_subtypes, 'notification_messages');
+	
+	// Use complete PHP array setting so we need 1 single DB call...
+	$register_object_subtypes = serialize($register_object_subtypes);
+	elgg_set_plugin_setting('register_object_subtypes', $register_object_subtypes, 'notification_messages');
+	
 echo "</fieldset>";
+
 
 
 // Comment notification subject
@@ -104,12 +285,12 @@ echo "<fieldset>";
 	
 	/*
 	// Generic comments support
-	$options = array(
+	$prepare_params = array(
 			'name' => "params[generic_comment]",
 			'value' => $vars['entity']->generic_comment ? $vars['entity']->generic_comment : 'default',
 			'options_values' => $notify_subject_opt,
 		);
-	echo '<p><label>' . elgg_echo('notification_messages:settings:generic_comment') . '&nbsp;: ' . elgg_view('input/select', $options) . '</label> - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: <em>' . elgg_echo('generic_comment:email:subject') . '</em></p>';
+	echo '<p><label>' . elgg_echo('notification_messages:settings:generic_comment') . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label> - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: <em>' . elgg_echo('generic_comment:email:subject') . '</em></p>';
 	*/
 
 	// Notify user if owner of a comment ?
@@ -121,12 +302,12 @@ echo "<fieldset>";
 		$vars['entity']->notify_owner = $notify_owner;
 		echo '&nbsp;: ' . $noyes_options[$vars['entity']->notify_owner] . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
-		echo "<div class='elgg-subtext'><strong>" . elgg_echo("notification_messages:settings:notify_user:comment_tracker") . "</strong></div>";
+		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:comment_tracker") . "</div>";
 	} else {
 		echo "&nbsp;" . elgg_view("input/select", array("name" => "params[notify_owner]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_owner)) . '</label>';
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
 	}
-	echo "</p>";
+	echo '</p>';
 	
 echo "</fieldset>";
 
@@ -136,13 +317,13 @@ echo "</fieldset>";
 */
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:objects:message') . '</legend>';
-	$param = "object_blog_message";
-	$options = array(
-		'name' => "params[{$param}]",
-		'value' => $vars['entity']->$param ? $vars['entity']->$param : 'default',
+	$prepare_param = "object_blog_message";
+	$prepare_params = array(
+		'name' => "params[{$prepare_param}]",
+		'value' => $vars['entity']->$prepare_param ? $vars['entity']->$prepare_param : 'default',
 		'options_values' => $notify_message_opt,
 	);
-	echo '<p><label>' . 'blog' . '&nbsp;: ' . elgg_view('input/select', $options) . '</label> - ' . elgg_echo('notification_messages:message:default:blog') . '</p>';
+	echo '<p><label>' . 'blog' . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label> - ' . elgg_echo('notification_messages:message:default:blog') . '</p>';
 	
 echo "</fieldset>";
 
@@ -154,7 +335,7 @@ echo "<fieldset>";
 	echo '<p><label>' . elgg_echo("notification_messages:settings:messages_send");
 	echo "&nbsp;" . elgg_view("input/select", array("name" => "params[messages_send]", "options_values" => $yesno_options, "value" => $vars['entity']->messages_send)) . '</label>';
 	echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:messages_send:subtext") . "</div>";
-	echo "</p>";
+	echo '</p>';
 echo "</fieldset>";
 
 
@@ -167,7 +348,7 @@ echo "<fieldset>";
 	echo '<p><label>' . elgg_echo("notification_messages:settings:object_notifications_hook");
 	echo "&nbsp;" . elgg_view("input/select", array("name" => "params[object_notifications_hook]", "options_values" => $yesno_options, "value" => $vars['entity']->object_notifications_hook)) . '</label>';
 	echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:object_notifications_hook:subtext") . "</div>";
-	echo "</p>";
+	echo '</p>';
 echo "</fieldset>";
 */
 

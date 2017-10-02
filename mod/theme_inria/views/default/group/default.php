@@ -55,23 +55,6 @@ if (elgg_in_context('search')) {
 				$metadata .= '<li class="membership-group-closed" title="' . elgg_echo("theme_inria:groupmembership:closed:details") . '">' . elgg_echo("theme_inria:groupmembership:closed") . '</li>';
 			}
 		}
-		// User group pin
-		// @TODO up to 4 groups ?
-		if ($group->isMember()) {
-			if (check_entity_relationship($group->guid, 'favorite', $ownguid)) {
-				$pin_title = elgg_echo('favorite:group:remove:title');
-				$pin_text = '<i class="fa fa-star"></i>&nbsp;' . elgg_echo('favorite:group:remove');
-			} else {
-				$pin_title = elgg_echo('favorite:group:add:title');
-				$pin_text = '<i class="fa fa-star-o"></i>&nbsp;' . elgg_echo('favorite:group:add');
-			}
-			$metadata .= '<li class="favorite-group">' . elgg_view('output/url', array(
-					'href' => "action/theme_inria/favorite?guid={$group->guid}",
-					'text' => $pin_text,
-					'title' => $pin_title,
-					'is_action' => true,
-				)) . '</li>';
-		}
 		
 	$metadata .= '</ul>';
 } else {

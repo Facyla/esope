@@ -15,13 +15,32 @@ return array(
 	'notification_messages:delete' => "a supprimé",
 	'notification_messages:update' => "a mis à jour",
 	
+	// Explanations
+	'notification_messages:process' => "Comment fonctionnent les notifications ?",
+	'notification_messages:process:details' => "2 modes de fonctionnement :
+		<ol>
+			<li>Direct : les notifications sont envoyées immédiatement, par une action du système, via notify_user. C'est le cas en particulier pour toutes les notifications telles que les emails d'inscription, de validation, d'adhésion, ou les messages directs. Cette méthode est adaptée lorsque le nombre de destinataires est réduit.</li>
+			<li>File d'attente : les notifications sont envoyées lorsque se produit un événement qui a été enregistré pour générérer des notifications. Les messages sont ensuite envoyés par le cron \"minute\", afin de ne pas ralentir l'action en cours.
+				<ul>
+					<li>Les événements qui génèrent des notifications sont enregistrés via <code>elgg_register_notification_event('object', 'photo', array('create'))</code><br />D'autres gestionnaires d'événements peuvent prendre en charge et/ou affecter l'envoi de notifications, par ex. en les bloquant, etc.</li>
+					<li>Le titre et le contenu du message de notification peuvent être modifiés par le hook <code>elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification')</code></li>
+					<li>Enfin les destinataires peuvent être modifiés par le hook <code>elgg_register_plugin_hook_handler('get', 'subscriptions', 'discussion_get_subscriptions')</code></li>
+				</ul>
+			</li>
+		</ol>",
+	
 	// Settings
 	'notification_messages:settings:objects' => "Sujet des nouvelles publications (objets)",
 	'notification_messages:settings:details' => "En activant les messages de notification détaillés pour chacun des types de contenus suivants, vous pouvez remplacer le titre du mail par défaut par un titre explicite composé sous la forme : [Type de publication Nom du groupe ou du membre] Titre du contenu<br />Cette forme facilite également l'identification de conversations par les messageries.",
 	'notification_messages:object:subtype' => "Type d'objet",
 	'notification_messages:setting' => "Réglage",
-	'notification_messages:subject:default' => "Sujet par défaut",
-	'notification_messages:subject:allow' => "Sujet amélioré",
+	'notification_messages:events' => "Notification pour les types d'événements",
+	'notification_messages:prepare:setting' => "Sujet et message",
+	'notification_messages:recipients:setting' => "Destinataires",
+	'notification_messages:register:default' => "Par défaut",
+	'notification_messages:recipients:default' => "Par défaut",
+	'notification_messages:subject:default' => "Par défaut",
+	'notification_messages:subject:allow' => "Amélioré",
 	'notification_messages:subject:deny' => "Bloqué (pas de notification)",
 	'notification_messages:message:default' => "Message par défaut",
 	'notification_messages:message:allow' => "Message amélioré",
@@ -34,6 +53,15 @@ return array(
 	'notification_messages:settings:notify_user:details' => "Par défaut l'auteur d'un commentaire n'est pas notifié. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
 	'notification_messages:settings:notify_user:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage identique est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">configuration de comment_tracker</a>.",
 	'notification_messages:settings:expert' => "Expert",
+	'notification_messages:settings:messagehandledby' => "OUI, géré par : ",
+	'notification_messages:settings:nomessage' => "NON",
+	'notification_messages:settings:recipients' => "Destinataires : ",
+	
+	'notification_messages:notify:create' => "create",
+	'notification_messages:notify:publish' => "publish",
+	'notification_messages:notify:update' => "update",
+	'notification_messages:notify:delete' => "delete",
+	
 	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Contenu des messages de notification",

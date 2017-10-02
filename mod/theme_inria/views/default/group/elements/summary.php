@@ -32,6 +32,8 @@
 
 $entity = $vars['entity'];
 
+$ownguid = elgg_get_logged_in_user_guid();
+
 $group_url = $entity->getURL();
 if ($entity->isMember()) { $group_url = elgg_get_site_url() . 'groups/workspace/' . $entity->guid; }
 $title_link = elgg_extract('title', $vars, '');
@@ -57,6 +59,26 @@ echo '<div class="iris-group-body">';
 
 	if ($metadata) { echo $metadata; }
 	if ($title_link) { echo "<h3>$title_link</h3>"; }
+	
+	// User favorites groups
+	// @TODO limit to 4 groups ?
+	if ($entity->isMember()) {
+		if (check_entity_relationship($entity->guid, 'favorite', $ownguid)) {
+			$pin_title = elgg_echo('favorite:group:remove:title');
+			$pin_text = '<i class="fa fa-star"></i>&nbsp;' . elgg_echo('favorite:group:remove');
+		} else {
+			$pin_title = elgg_echo('favorite:group:add:title');
+			$pin_text = '<i class="fa fa-star-o"></i>&nbsp;' . elgg_echo('favorite:group:add');
+		}
+		//echo '<div class="favorite-group float-alt">' . elgg_view('output/url', array(
+		echo '<div class="favorite-group">' . elgg_view('output/url', array(
+				'href' => "action/theme_inria/favorite?guid={$entity->guid}",
+				'text' => $pin_text,
+				'title' => $pin_title,
+				'is_action' => true,
+			)) . '</div>';
+	}
+	
 	echo "<div class=\"elgg-subtext\"><p>$subtitle</p></div>";
 	echo $tags;
 

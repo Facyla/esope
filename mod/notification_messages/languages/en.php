@@ -13,11 +13,30 @@ return array(
 	'notification_messages:delete' => "has deleted",
 	'notification_messages:update' => "has updated",
 	
+	// Explanations
+	'notification_messages:process' => "How do notifications work?",
+	'notification_messages:process:details' => "2 different modes:
+		<ol>
+			<li>Direct: notifications are sent immediately, through a system's action, by notify_user. This is especially the case for registration or requests notifications, direct messages, and any notification where the number of recipients is limited.</li>
+			<li>Scheduled queue: notifications are sent when a registered notification happens. The notifications are then sent through the \"minute\" cron, so the current action is not slowed down.
+				<ul>
+					<li>Notifications-triggering events are registered through <code>elgg_register_notification_event('object', 'photo', array('create'))</code><br />Other event handlers may afffect the notifications behaviour, eg. by blocking them.</li>
+					<li>Subject and message content can be modified by the hook <code>elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification')</code></li>
+					<li>Recipients can be modified by the hook <code>elgg_register_plugin_hook_handler('get', 'subscriptions', 'discussion_get_subscriptions')</code></li>
+				</ul>
+			</li>
+		</ol>",
+	
 	// Settings
 	'notification_messages:settings:objects' => "Subject for new content (registered objects)",
 	'notification_messages:settings:details' => "By activating detailed notification messages for each of these content types, you can replace the default mail title by a more meaningful subject, composed in this form: [Publication type Group or member name] Content title<br />This facilitates the identification of conversations by email clients.",
 	'notification_messages:object:subtype' => "Object type",
 	'notification_messages:setting' => "Setting",
+	'notification_messages:events' => "Notification for event types",
+	'notification_messages:recipients:setting' => "Recipients",
+	'notification_messages:register:default' => "Default",
+	'notification_messages:recipients:default' => "Default",
+	'notification_messages:prepare:setting' => "Prepare message content",
 	'notification_messages:subject:default' => "Default subject",
 	'notification_messages:subject:allow' => "Improved subject",
 	'notification_messages:subject:deny' => "Blocked (no notification at all)",
@@ -32,6 +51,15 @@ return array(
 	'notification_messages:settings:notify_user:details' => "By default, the comment author is not notified. You can change thios behaviour, which can be particularly useful when using email reply.",
 	'notification_messages:settings:notify_user:comment_tracker' => "When comment_tracker plugin is enabled, this setting is not available and should be set directly in <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">comment_tracker plugin settings</a>.",
 	'notification_messages:settings:expert' => "Expert",
+	'notification_messages:settings:messagehandledby' => "YES, handled by: ",
+	'notification_messages:settings:nomessage' => "NO",
+	'notification_messages:settings:recipients' => "Recipients: ",
+	
+	'notification_messages:notify:create' => "create",
+	'notification_messages:notify:publish' => "publish",
+	'notification_messages:notify:update' => "update",
+	'notification_messages:notify:delete' => "delete",
+	
 	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Notification messages content",
