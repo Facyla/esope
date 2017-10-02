@@ -29,19 +29,29 @@ if (elgg_in_context('search')) {
 		$all_members = $group->getMembers(array('count' => true));
 		$members_count = $group->getMembers(array('count' => true, 'wheres' => array(theme_inria_active_members_where_clause())));
 		$members = $group->getMembers(array('wheres' => array(theme_inria_active_members_where_clause())));
-		$members_string = elgg_echo('theme_inria:groups:entity_menu:noinactive', array($all_members));
+		if ($members_count > 1) {
+			$members_text = elgg_echo('theme_inria:groups:entity_menu:title', array($members_count));
+		} else {
+			$members_text = elgg_echo('theme_inria:groups:entity_menu:title:singular', array($members_count));
+		}
 		if ($all_members != $members_count) {
 			if ($members_count > 1) {
-				$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $members_count));
+				$members_title = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $members_count));
 			} else {
 				if ($all_members > 1) {
-					$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $members_count));
+					$members_title = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $members_count));
 				} else {
-					$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $members_count));
+					$members_title = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $members_count));
 				}
 			}
+		} else {
+			if ($all_members > 1) {
+				$members_title = elgg_echo('theme_inria:groups:entity_menu:noinactive', array($all_members));
+			} else {
+				$members_title = elgg_echo('theme_inria:groups:entity_menu:noinactive:singular', array($all_members));
+			}
 		}
-		$metadata .= '<li class="members-count">' . $members_string . '</li>';
+		$metadata .= '<li class="members-count" title="' . $members_title . '">' . $members_text . '</li>';
 				$metadata .= '';
 		// Type adhésion ou déjà membre
 		if ($group->isMember()) {
@@ -57,6 +67,27 @@ if (elgg_in_context('search')) {
 		}
 		
 	$metadata .= '</ul>';
+	
+	
+	// User favorites groups
+	// @TODO limit to 4 groups ?
+	if ($group->isMember()) {
+		if (check_entity_relationship($group->guid, 'favorite', $ownguid)) {
+			$pin_title = elgg_echo('favorite:group:remove:title');
+			$pin_text = '<i class="fa fa-star"></i>&nbsp;' . elgg_echo('favorite:group:remove');
+		} else {
+			$pin_title = elgg_echo('favorite:group:add:title');
+			$pin_text = '<i class="fa fa-star-o"></i>&nbsp;' . elgg_echo('favorite:group:add');
+		}
+		//echo '<div class="favorite-group float-alt">' . elgg_view('output/url', array(
+		$actions = '<div class="iris-object-actions"><ul class="elgg-menu-entity-alt float-alt"><li class="favorite-group">' . elgg_view('output/url', array(
+				'href' => "action/theme_inria/favorite?guid={$group->guid}",
+				'text' => $pin_text,
+				'title' => $pin_title,
+				'is_action' => true,
+			)) . '</li></ul></div>';
+	}
+	
 } else {
 	$metadata = elgg_view_menu('entity', array(
 		'entity' => $group,
@@ -84,6 +115,7 @@ if ($vars['full_view']) {
 	);
 	$params = $params + $vars;
 	$list_body = elgg_view('group/elements/summary', $params);
+	$list_body .= $actions;
 
 	echo elgg_view_image_block($icon, $list_body, $vars);
 }

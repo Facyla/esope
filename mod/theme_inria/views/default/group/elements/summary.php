@@ -60,31 +60,13 @@ echo '<div class="iris-group-body">';
 	if ($metadata) { echo $metadata; }
 	if ($title_link) { echo "<h3>$title_link</h3>"; }
 	
-	// User favorites groups
-	// @TODO limit to 4 groups ?
-	if ($entity->isMember()) {
-		if (check_entity_relationship($entity->guid, 'favorite', $ownguid)) {
-			$pin_title = elgg_echo('favorite:group:remove:title');
-			$pin_text = '<i class="fa fa-star"></i>&nbsp;' . elgg_echo('favorite:group:remove');
-		} else {
-			$pin_title = elgg_echo('favorite:group:add:title');
-			$pin_text = '<i class="fa fa-star-o"></i>&nbsp;' . elgg_echo('favorite:group:add');
-		}
-		//echo '<div class="favorite-group float-alt">' . elgg_view('output/url', array(
-		echo '<div class="favorite-group">' . elgg_view('output/url', array(
-				'href' => "action/theme_inria/favorite?guid={$entity->guid}",
-				'text' => $pin_text,
-				'title' => $pin_title,
-				'is_action' => true,
-			)) . '</div>';
-	}
-	
 	echo "<div class=\"elgg-subtext\"><p>$subtitle</p></div>";
 	echo $tags;
 
 	echo elgg_view('object/summary/extend', $vars);
 
 	if ($content) { echo "<div class=\"elgg-content\">$content</div>"; }
+
 
 
 	// Display some group details only in owner_block
@@ -132,22 +114,30 @@ echo '<div class="iris-group-body">';
 		$active_members = $entity->getMembers(array('wheres' => $active_members_wheres, 'count' => true));
 		// Total count
 		$all_members = $entity->getMembers(array('count' => true));
-
-
-		$members_string = $all_members . ' ' . elgg_echo('groups:member');
-	
+		
+		if ($active_members > 1) {
+			$members_text = elgg_echo('theme_inria:groups:entity_menu:title', array($active_members));
+		} else {
+			$members_text = elgg_echo('theme_inria:groups:entity_menu:title:singular', array($active_members));
+		}
 		if ($all_members != $active_members) {
 			if ($active_members > 1) {
-				$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
+				$members_title = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
 			} else {
 				if ($all_members > 1) {
-					$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
+					$members_title = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
 				} else {
-					$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
+					$members_title = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
 				}
 			}
+		} else {
+			if ($all_members > 1) {
+				$members_title = elgg_echo('theme_inria:groups:entity_menu:noinactive', array($all_members));
+			} else {
+				$members_title = elgg_echo('theme_inria:groups:entity_menu:noinactive:singular', array($all_members));
+			}
 		}
-		echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . elgg_echo('groups:members:more') . '">' . $members_string . '</a></p>';
+		echo '<p><a href="' . elgg_get_site_url() . 'groups/members/' . $entity->guid . '" class="viewall" title="' . $members_title . ' - ' . elgg_echo('groups:members:more') . '">' . $members_text . '</a></p>';
 		?>
 	</div>
 	<br />

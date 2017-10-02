@@ -703,22 +703,32 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 						AND md.value_id = " . elgg_get_metastring_id('closed') . ")";
 				$active_members = $entity->getMembers(array('wheres' => $nb_members_wheres, 'count' => true));
 				$all_members = $entity->getMembers(array('count' => true));
-				//$members_string = elgg_echo('groups:member');
-				$members_string = $all_members . ' ' . elgg_echo('groups:member');
+				if ($active_members > 1) {
+					$members_text = elgg_echo('theme_inria:groups:entity_menu:title', array($active_members));
+				} else {
+					$members_text = elgg_echo('theme_inria:groups:entity_menu:title:singular', array($active_members));
+				}
 				if ($all_members != $active_members) {
 					if ($active_members > 1) {
-						$members_string = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
+						$members_title = elgg_echo('theme_inria:groups:entity_menu', array($all_members, $active_members));
 					} else {
 						if ($all_members > 1) {
-							$members_string = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
+							$members_title = elgg_echo('theme_inria:groups:entity_menu:singular', array($all_members, $active_members));
 						} else {
-							$members_string = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
+							$members_title = elgg_echo('theme_inria:groups:entity_menu:none', array($all_members, $active_members));
 						}
+					}
+				} else {
+					if ($all_members > 1) {
+						$members_title = elgg_echo('theme_inria:groups:entity_menu:noinactive', array($all_members));
+					} else {
+						$members_title = elgg_echo('theme_inria:groups:entity_menu:noinactive:singular', array($all_members));
 					}
 				}
 				$options = array(
 					'name' => 'members',
-					'text' => $members_string,
+					'text' => $members_text,
+					//'title' => $members_title,
 					'href' => false,
 					'priority' => 200,
 				);

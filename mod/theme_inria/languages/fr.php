@@ -435,10 +435,13 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	
 	'theme_inria:clicktotweet' => "Cliquer pour tweeter <i class=\"fa fa-twitter\"></i>",
 	
-	'theme_inria:groups:entity_menu' => "%s membres (%s actifs)",
-	'theme_inria:groups:entity_menu:singular' => "%s membres (%s actif)",
-	'theme_inria:groups:entity_menu:none' => "%s membre (%s actif)",
-	'theme_inria:groups:entity_menu:noinactive' => "%s membres",
+	'theme_inria:groups:entity_menu:title' => "%s membres",
+	'theme_inria:groups:entity_menu:title:singular' => "%s membre",
+	'theme_inria:groups:entity_menu' => "%s membres au total, dont %s actifs",
+	'theme_inria:groups:entity_menu:singular' => "%s membres au total, dont %s actif",
+	'theme_inria:groups:entity_menu:none' => "%s membre au total, dont %s actif",
+	'theme_inria:groups:entity_menu:noinactive' => "%s membres au total",
+	'theme_inria:groups:entity_menu:noinactive:singular' => "%s membre au total",
 	
 	
 	

@@ -435,10 +435,13 @@ Here is the new profile page: %5\s
 	
 	'theme_inria:clicktotweet' => "Click to tweet <i class=\"fa fa-twitter\"></i>",
 	
-	'theme_inria:groups:entity_menu' => "%s members (%s active)",
-	'theme_inria:groups:entity_menu:singular' => "%s members (%s active)",
-	'theme_inria:groups:entity_menu:none' => "%s member (%s active)",
-	'theme_inria:groups:entity_menu:noinactive' => "%s members",
+	'theme_inria:groups:entity_menu:title' => "%s members",
+	'theme_inria:groups:entity_menu:title:singular' => "%s member",
+	'theme_inria:groups:entity_menu' => "%s total members, including %s active",
+	'theme_inria:groups:entity_menu:singular' => "%s total members, including %s active",
+	'theme_inria:groups:entity_menu:none' => "%s total members, including %s active",
+	'theme_inria:groups:entity_menu:noinactive' => "%s total members",
+	'theme_inria:groups:entity_menu:noinactive:singular' => "%s total member",
 	
 
 
