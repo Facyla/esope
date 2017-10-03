@@ -950,6 +950,11 @@ View and comment on the bookmark:
 	'au_subgroups:subgroup' => "Workspace",
 	'au_subgroups:group:enable' => "Workspaces: enable workspaces creation?",
 	'au_subgroups:group:memberspermissions' => "Workspaces: enable group members to create new workspaces (if no, only group operators can create new workspaces)",
+	'au_subgroups:move:edit:title' => "Move as another group's workspace",
+	'au_subgroups:transfer:help' => "You can define this as a workspace of any group you are admin / operator of. If the members are not member of the new parent groupe, they will be removed, and will receive an invitation to join the new parent group.",
+	//'au_subgroups:search:text' => "",
+	//'au_subgroups:search:noresults' => "",
+	//'esope:subgroups:search:details' => "",
 	
 	// Workspaces
 	'workspace:groups:add' => "Create a new workspace",

@@ -947,6 +947,11 @@ Voir et commenter ce lien web :
 	'au_subgroups:subgroup' => "Espace de travail",
 	'au_subgroups:group:enable' => "Espaces de travail : permettre la création d'espaces de travail ?",
 	'au_subgroups:group:memberspermissions' => "Espaces de travail : permettre aux membres de créer des espaces de travail ? (si non, seuls les responsables du groupe pourront en créer)",
+	'au_subgroups:move:edit:title' => "Déplacer en espace de travail d'un autre groupe",
+	'au_subgroups:transfer:help' => "Vous pouvez définir cet espace comme un espace de travail de tout groupe dont vous êtes responsable. Si les membres ne sont pas membres du nouveau groupe parent, ils seront retirés et recevront une invitation au groupe parent.",
+	//'au_subgroups:search:text' => "",
+	//'au_subgroups:search:noresults' => "",
+	//'esope:subgroups:search:details' => "",
 	
 	// Workspaces
 	'workspace:groups:add' => "Créer un nouvel espace de travail",
