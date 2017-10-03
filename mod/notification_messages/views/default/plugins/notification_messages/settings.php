@@ -34,7 +34,7 @@ $notify_message_opt = array(
 	//'deny' => elgg_echo('notification_messages:subject:deny'), 
 );
 
-// @TODO Recipients setting
+// @TODO Recipients setting => make several unique settings
 $recipients_opt = array(
 	'default' => elgg_echo('notification_messages:recipients:default'), // registered group members
 	'allgroup' => elgg_echo('notification_messages:recipients:allgroup'), // force all group members
@@ -284,17 +284,7 @@ echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:comments') . '</legend>';
 	echo '<p>' . elgg_echo('notification_messages:settings:comments:details') . '</p>';
 	
-	/*
-	// Generic comments support
-	$prepare_params = array(
-			'name' => "params[generic_comment]",
-			'value' => $vars['entity']->generic_comment ? $vars['entity']->generic_comment : 'default',
-			'options_values' => $notify_subject_opt,
-		);
-	echo '<p><label>' . elgg_echo('notification_messages:settings:generic_comment') . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label> - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: <em>' . elgg_echo('generic_comment:email:subject') . '</em></p>';
-	*/
-
-	// Notify user if owner of a comment ?
+	// Notify also the author (of a comment) ?
 	// Note : this is mostly useful if you want to let owner reply by email
 	echo '<p><label>' . elgg_echo("notification_messages:settings:notify_user");
 	if (elgg_is_active_plugin('comment_tracker')) {
@@ -309,6 +299,16 @@ echo "<fieldset>";
 		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_user:details") . "</div>";
 	}
 	echo '</p>';
+	
+	/*
+	// Generic comments support
+	$prepare_params = array(
+			'name' => "params[generic_comment]",
+			'value' => $vars['entity']->generic_comment ? $vars['entity']->generic_comment : 'default',
+			'options_values' => $notify_subject_opt,
+		);
+	echo '<p><label>' . elgg_echo('notification_messages:settings:generic_comment') . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label> - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: <em>' . elgg_echo('generic_comment:email:subject') . '</em></p>';
+	*/
 	
 echo "</fieldset>";
 
@@ -338,6 +338,24 @@ echo "<fieldset>";
 	echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:messages_send:subtext") . "</div>";
 	echo '</p>';
 echo "</fieldset>";
+
+
+
+// Recipients : notify author, all group members (recursive container, not only direct)
+echo "<fieldset>";
+	echo '<legend>' . elgg_echo('notification_messages:settings:recipients') . '</legend>';
+	echo '<p>' . elgg_echo('notification_messages:settings:recipients:details') . '</p>';
+
+	// @TODO Notify replies (comments) the same way as the main entity ? = to all group members
+	echo '<p><label>@TODO ' . elgg_echo("notification_messages:settings:notify_replies");
+		echo "&nbsp;" . elgg_view("input/select", array("name" => "params[notify_replies]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_replies)) . '</label>';
+		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_replies:details") . "</div>";
+	echo '</p>';
+	
+echo "</fieldset>";
+
+
+
 
 
 // Advanced settings - for file attachments
