@@ -73,9 +73,9 @@ if (!empty($main_group->banner)) {
 		$actions_content = '';
 		if (!elgg_in_context('group_edit') && !elgg_in_context('group_members') && !elgg_in_context('group_invites') && !elgg_in_context('group_members')) {
 			// group members
-			if ($main_group->isMember($own) || $own->isAdmin()) {
+			if ($main_group->isMember() || elgg_is_admin_logged_in()) {
 				/*
-				if ($main_group->getOwnerGUID() != $own->guid) {
+				if ($main_group->getOwnerGUID() != elgg_get_logged_in_user_guid()) {
 					// leave
 					$actions_content .= elgg_view('output/url', array(
 							'href' => $url . "action/groups/leave?group_guid={$main_group->guid}",
@@ -151,7 +151,7 @@ if (!empty($main_group->banner)) {
 			echo '<a href="' . $main_group->getURL() . '" class="tab">' . elgg_echo('theme_inria:group:presentation') . '</a>';
 		}
 		
-		if ($main_group->isMember($own) || $own->isAdmin()) {
+		if ($main_group->isMember() || elgg_is_admin_logged_in()) {
 			// Main workspace
 			$tab_class = '';
 			if (($main_group->guid == $group->guid) && (current_page_url() != $group->getURL()) && !elgg_in_context('group_edit') && !elgg_in_context('group_members') && !elgg_in_context('group_invites')) { $tab_class .= " elgg-state-selected"; }
