@@ -67,8 +67,9 @@ if (!empty($main_group->banner)) {
 	</div>
 	
 	<div class="iris-group-title">
+		
 		<?php
-		// Membership
+		// Membership to main group
 		$actions_content = '';
 		if (!elgg_in_context('group_edit') && !elgg_in_context('group_members') && !elgg_in_context('group_invites') && !elgg_in_context('group_members')) {
 			// group members
@@ -132,6 +133,7 @@ if (!empty($main_group->banner)) {
 		?>
 	</div>
 	
+	
 	<div class="iris-group-menu">
 		<?php
 		// Espaces de travail : si > 3 onglets, on en affiche 2 et le reste en sous-menu + limitation longueur du titre
@@ -149,7 +151,7 @@ if (!empty($main_group->banner)) {
 			echo '<a href="' . $main_group->getURL() . '" class="tab">' . elgg_echo('theme_inria:group:presentation') . '</a>';
 		}
 		
-		if (elgg_group_gatekeeper(false)) {
+		if ($main_group->isMember($own)) {
 			// Main workspace
 			$tab_class = '';
 			if (($main_group->guid == $group->guid) && (current_page_url() != $group->getURL()) && !elgg_in_context('group_edit') && !elgg_in_context('group_members') && !elgg_in_context('group_invites')) { $tab_class .= " elgg-state-selected"; }

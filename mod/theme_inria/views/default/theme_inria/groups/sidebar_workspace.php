@@ -31,24 +31,28 @@ if (empty($desc)) { $desc = '<em>' . elgg_echo('theme_inria:group:nodescription'
 $sidebar .= '<div class="elgg-workspace-description">' . $desc . '</div>';
 
 
-// Spécifique espaces de travail : liens vers gestion de l'espace'
+// Spécifique espaces de travail : liens vers gestion de l'espace
 if (!$is_main_group) {
 	$sidebar .= elgg_view('theme_inria/groups/workspace_sidebar', $vars);
 }
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_thewire');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_discussion');
+// Contenu réservés aux membres
+if (elgg_group_gatekeeper(false)) {
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_thewire');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_discussion');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
 
-$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
+
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
+}
 
 if (!elgg_in_context('workspace')) {
 	$sidebar .= elgg_view('theme_inria/groups/sidebar_feedback');

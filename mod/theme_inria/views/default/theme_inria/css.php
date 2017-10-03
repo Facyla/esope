@@ -1592,7 +1592,7 @@ a.poll-show-link, a.poll-show-link:hover, a.poll-show-link:active, a.poll-show-l
 .iris-object-full .elgg-form-poll-vote label { font-size: 1.3rem; }
 
 .iris-sidebar-content .ui-datepicker-inline { max-width: 100%; font-size: 0.75rem; }
-.iris-sidebar-content .ui-datepicker td { padding: 0; }
+.iris-sidebar-content .ui-datepicker td { padding: 0; word-wrap: normal !important; }
 .iris-sidebar-content .ui-state-highlight, .iris-sidebar-content .ui-widget-content .ui-state-highlight, .iris-sidebar-content .ui-widget-header .ui-state-highlight { border:0; }
 .iris-sidebar-content .ui-state-default, .iris-sidebar-content .ui-widget-content .ui-state-default, .iris-sidebar-content .ui-widget-header .ui-state-default { border:0; background:white; height:26px; width:26px; line-height:22px; text-align:center; display:inline-block; border-radius:13px; }
 .iris-sidebar-content .ui-datepicker-current-day a.ui-state-default, .iris-sidebar-content .ui-datepicker-today a.ui-state-default { background: #384257; color: white; }

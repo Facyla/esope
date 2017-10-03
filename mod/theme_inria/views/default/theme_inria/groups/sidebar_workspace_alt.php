@@ -3,9 +3,12 @@
 
 echo elgg_view('theme_inria/groups/workspace_sidebar_members');
 
-echo elgg_view('theme_inria/groups/sidebar_agenda');
+// Contenus réservés aux membres
+if (elgg_group_gatekeeper(false)) {
+	echo elgg_view('theme_inria/groups/sidebar_agenda');
 
-echo elgg_view('theme_inria/groups/sidebar_poll');
+	echo elgg_view('theme_inria/groups/sidebar_poll');
 
-echo elgg_view('theme_inria/groups/sidebar_alt_feedback');
+	echo elgg_view('theme_inria/groups/sidebar_alt_feedback');
+}
 
