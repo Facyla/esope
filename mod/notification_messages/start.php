@@ -11,12 +11,94 @@
 // @TODO : handle file attachments
 // @TODO : other plugins (comment_tracker)
 
+/* Notification process :
+
+ * engine/lib/notifications.php
+ * Initie l'envoi des notifications
+ 
+function _elgg_notifications_cron() {
+  // calculate when we should stop
+  // @todo make configurable?
+  $stop_time = time() + 45;
+  _elgg_services()->notifications->processQueue($stop_time);
+}
+
+ * engine/classes/Elgg/Notifications/NotificationsService.php
+ * Dépile les notifications en attente, récupère la liste des abonnés, et envoie les notifications
+ * Hooks sur : abonnements, avant envoi, après envoi
+ 
+public function processQueue($stopTime) {
+  $this->subscriptions->methods = $this->methods;
+  $count = 0;
+  // @todo grab mutex
+  $ia = $this->session->setIgnoreAccess(true);
+
+  while (time() < $stopTime) {
+    // dequeue notification event
+    $event = $this->queue->dequeue();
+    if (!$event) { break; }
+    // $event = Elgg\Notifications\Event Object(action:protected, object_type:protected, object_subtype:protected, object_id:protected, actor_guid:protected)
+
+    // test for usage of the deprecated override hook
+    if ($this->existsDeprecatedNotificationOverride($event)) { continue;  }
+
+    $subscriptions = $this->subscriptions->getSubscriptions($event);
+    // 
+
+    // return false to stop the default notification sender
+    $params = array('event' => $event, 'subscriptions' => $subscriptions);
+    if ($this->hooks->trigger('send:before', 'notifications', $params, true)) {
+      $this->sendNotifications($event, $subscriptions);
+    }
+    $this->hooks->trigger('send:after', 'notifications', $params);
+    $count++;
+  }
+
+  // release mutex
+  $this->session->setIgnoreAccess($ia);
+  return $count;
+}
+
+ * engine/classes/Elgg/Notifications/sendNotifications.php
+ 
+
+ * engine/classes/Elgg/Notifications/SubscriptionsService.php
+ * Récupère les abonnements + méthodes, sur la base du container uniquement 
+ * (donc contenus initiux et pas les réponses)
+ 
+public function getSubscriptions(\Elgg\Notifications\Event $event) {
+  $subscriptions = array();
+  if (!$this->methods) { return $subscriptions; }
+  
+  $object = $event->getObject();
+  if (!$object) { return $subscriptions; }
+  
+  if ($object instanceof \ElggEntity) {
+    $prefixLength = strlen(self::RELATIONSHIP_PREFIX);
+    $records = $this->getSubscriptionRecords($object->getContainerGUID());
+    foreach ($records as $record) {
+      $deliveryMethods = explode(',', $record->methods);
+      $subscriptions[$record->guid] = substr_replace($deliveryMethods, '', 0, $prefixLength);
+    }
+  }
+  $params = array('event' => $event);
+  
+  // Note : this hook overrrides the former results
+  return _elgg_services()->hooks->trigger('get', 'subscriptions', $params, $subscriptions);
+}
+
+ * 
+
+
+ */
+
+
 
 elgg_register_event_handler('init', 'system', 'notification_messages_init'); // Init
 
 
 /**
- * Init adf_notification_messages plugin.
+ * Init notification_messages plugin
  */
 function notification_messages_init() {
 	
