@@ -36,13 +36,15 @@ function notification_messages_init() {
 	$register_object_subtypes = elgg_get_plugin_setting('register_object_subtypes', 'notification_messages');
 	$register_object_subtypes = unserialize($register_object_subtypes);
 	
-	if ($register_object_subtypes) {
-		foreach ($register_object_subtypes as $subtype => $setting) {
-			
-			//elgg_register_notification_event($object_type, $object_subtype, $actions = array())
-			//elgg_unregister_notification_event($object_type, $object_subtype)
-			$actions = array();
-			//if (elgg_get_plugin_setting('register_object_'))
+	//error_log(print_r($register_object_subtypes, true));
+	
+	// DO NOT OVERRIDE when defining settings, so we can know what happens otherwise (and use defaults)
+	//error_log("NOTIFICATION MESSAGES register events : " . print_r(elgg_get_context_stack(), true));
+	if (!elgg_in_context('admin') && $register_object_subtypes) {
+		foreach ($register_object_subtypes as $subtype => $events) {
+			//error_log("$subtype => " . print_r($events, true));
+			elgg_unregister_notification_event('object', $subtype);
+			if (sizeof($events) > 0) { elgg_register_notification_event('object', $subtype, $events); }
 		}
 	}
 	

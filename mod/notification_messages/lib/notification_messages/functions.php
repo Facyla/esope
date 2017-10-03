@@ -25,11 +25,17 @@ function notification_messages_plugin_settings($hook, $type, $value, $params) {
 	$objects = get_registered_entity_types('object');
 	foreach($objects as $subtype) {
 		// Save registered notificaiton events
-		$value = get_input("register_object_{$subtype}");
+		$value = (array)get_input("register_object_{$subtype}");
+		$register_object_subtypes[$subtype] = $value;
 		elgg_set_plugin_setting("register_object_{$subtype}", implode(',', $value), 'notification_messages');
 		//echo $subtype . '<pre>' . print_r(get_input("register_object_{$subtype}"), true) . '</pre>';
+		// Add setting to global config of prepared notifications
 		
 	}
+	
+	// Use complete PHP array setting so we need 1 single DB call...
+	$register_object_subtypes = serialize($register_object_subtypes);
+	elgg_set_plugin_setting('register_object_subtypes', $register_object_subtypes, 'notification_messages');
 	
 	$plugin->save();
 

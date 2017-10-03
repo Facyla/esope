@@ -51,7 +51,7 @@ return array(
 	'notification_messages:settings:notify_user:details' => "By default, the comment author is not notified. You can change thios behaviour, which can be particularly useful when using email reply.",
 	'notification_messages:settings:notify_user:comment_tracker' => "When comment_tracker plugin is enabled, this setting is not available and should be set directly in <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">comment_tracker plugin settings</a>.",
 	'notification_messages:settings:expert' => "Expert",
-	'notification_messages:settings:messagehandledby' => "YES, handled by: ",
+	'notification_messages:settings:messagehandledby' => "Message defined by: ",
 	'notification_messages:settings:nomessage' => "NO",
 	'notification_messages:settings:recipients' => "Recipients: ",
 	

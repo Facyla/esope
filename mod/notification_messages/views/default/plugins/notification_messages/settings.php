@@ -3,6 +3,10 @@
 $yesno_options = array("yes" => elgg_echo("option:yes"), "no" => elgg_echo("option:no"));
 $noyes_options = array_reverse($yesno_options, true);
 
+// Load defaults
+$reset_registered_events = get_input('reset_registered_events');
+
+
 // @TODO Register event notification setting
 /*
 $notify_opt = array(
@@ -44,6 +48,7 @@ $recipients_opt = array(
 echo '<h3>' . elgg_echo('notification_messages:process') . '</h3>';
 echo '<p>' . elgg_echo('notification_messages:process:details') . '</p>';
 
+echo '<p><a href="?reset_registered_events=reset" class="elgg-button elgg-button-action">RESET to default registered events config</a></p>';
 
 /// Settings form
 
@@ -116,8 +121,10 @@ echo '<style>
 .notification-messages-admin-table th { background: #333; color: white; font-weight: bold; }
 
 ul.elgg-input-checkboxes.elgg-horizontal li { display: inline-block; margin-right: 1rem; line-height: 1rem; }
-</style>';
 
+.settings-defaults, .settings-defaults label { color: #AAA; }
+ul.settings-defaults.elgg-horizontal { display: inline-block; }
+</style>';
 
 echo "<fieldset>";
 	echo '<legend>' . elgg_echo('notification_messages:settings:objects') . '</legend>';
@@ -137,15 +144,10 @@ echo "<fieldset>";
 	echo '<table class="notification-messages-admin-table">';
 		echo '<thead>';
 			echo '<tr>';
-				echo '<th rowspan="2" style="width: 15%;">' . elgg_echo('notification_messages:object:subtype') . '</th>';
-				echo '<th colspan="4" style="width: 70%;">' . elgg_echo('notification_messages:events') . '</th>';
-				echo '<th rowspan="2" style="width: 15%;">' . elgg_echo('notification_messages:prepare:setting') . '<br />' . elgg_echo('notification_messages:recipients:setting') . '</th>';
-			echo '</tr>';
-			echo '<tr>';
-				echo '<th style="width: 20%;">' . 'create' . '</th>';
-				echo '<th style="width: 20%;">' . 'publish' . '</th>';
-				echo '<th style="width: 15%;">' . 'update' . '</th>';
-				echo '<th style="width: 15%;">' . 'delete' . '</th>';
+				echo '<th style="width: 15%;">' . elgg_echo('notification_messages:object:subtype') . '</th>';
+				echo '<th style="width: 35%;">' . elgg_echo('notification_messages:events') . 'create, publish, update, delete<br /></th>';
+				echo '<th style="width: 35%;">' . elgg_echo('notification_messages:prepare:setting') . '</th>';
+				echo '<th style="width: 15%;">' . elgg_echo('notification_messages:recipients:setting') . '</th>';
 			echo '</tr>';
 		echo '</thead>';
 		
@@ -153,10 +155,11 @@ echo "<fieldset>";
 			// Global hooks
 			echo '<tr class="global" style="border: 1px solid black;">';
 				echo '<td>all</td>';
-				echo '<td>' . implode('<br />', $events_handlers_tree['create']['all']) . '</td>';
-				echo '<td>' . implode('<br />', $events_handlers_tree['publish']['all']) . '</td>';
-				echo '<td>' . implode('<br />', $events_handlers_tree['update']['all']) . '</td>';
-				echo '<td>' . implode('<br />', $events_handlers_tree['delete']['all']) . '</td>';
+				echo '<td>' . implode('<br />', (array)$events_handlers_tree['create']['all']);
+				echo '<br />' . implode('<br />', (array)$events_handlers_tree['publish']['all']);
+				echo '<br />' . implode('<br />', (array)$events_handlers_tree['update']['all']);
+				echo '<br />' . implode('<br />', (array)$events_handlers_tree['delete']['all']) . '</td>';
+				echo '<td>' . '' . '</td>';
 				echo '<td>' . '' . '</td>';
 			echo '</tr>';
 			
@@ -180,76 +183,78 @@ echo "<fieldset>";
 						// subtype title
 						echo '<td><label>' . notification_messages_readable_subtype($subtype) . '<br />(' . $subtype . ')</label></td>';
 						
-						// Create event
-						echo '<td colspan="4">';
-							// @TODO besoin d'un réglage rapide : multiselect ou checkboxes : 
+						// Registered notification events
+						echo '<td>';
+							// Load defaults if settings are not defined yet, or explicitely using reset
+							if (!isset($vars['entity']->{"register_object_{$subtype}"}) || ($reset_registered_events== 'reset')) {
+								$events = $registered_notification_events['object'][$subtype];
+							} else {
+								$events = explode(',', $vars['entity']->{"register_object_{$subtype}"});
+							}
+							// Display actual custom setting
 							// soit non global, soit array des events concernés
 							// soit un hook pour intercepter l'enregistrement des paramètres, soit autre méthode ?
 							echo elgg_view('input/checkboxes', array(
 									'name' => "register_object_{$subtype}", 'options' => $notify_opt, 'align' => 'horizontal', 
-									'value' => explode(',', $vars['entity']->{"register_object_{$subtype}"}),
+									'value' => $events,
 								));
-							echo '<pre>' . print_r($vars['entity']->{"register_object_{$subtype}"}, true) . '</pre>';
-							// Add setting to global config of prepared notifications
-							$register_object_subtypes[$subtype] = $vars['entity']->{"register_object_{$subtype}"};
-							
-							echo '<p>create : ';
-							if (in_array('create', $registered_notification_events['object'][$subtype])) {
-								echo elgg_echo('notification_messages:settings:messagehandledby');
-								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['create']);
-								if ($events_handlers_tree['create'][$subtype]) {
-									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
-									echo implode('<br />', $events_handlers_tree['create'][$subtype]);
-								}
-							} else { echo elgg_echo('notification_messages:settings:nomessage'); }
-							echo '</p>';
-						//echo '</td>';
-						
-						// Publish event
-						//echo '<td>';
-							echo '<p>publish : ';
-							if (in_array('publish', $registered_notification_events['object'][$subtype])) {
-								echo elgg_echo('notification_messages:settings:messagehandledby');
-								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['publish']);
-								if ($events_handlers_tree['publish'][$subtype]) {
-									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
-									echo implode('<br />', $events_handlers_tree['publish'][$subtype]);
-								}
-							 } else { echo elgg_echo('notification_messages:settings:nomessage'); }
-							echo '</p>';
-						//echo '</td>';
-						
-						// Update event
-						//echo '<td>';
-							echo '<p>update : ';
-							if (in_array('update', $registered_notification_events['object'][$subtype])) {
-								echo elgg_echo('notification_messages:settings:messagehandledby');
-								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['update']);
-								if ($events_handlers_tree['update'][$subtype]) {
-									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
-									echo implode('<br />', $events_handlers_tree['update'][$subtype]);
-								}
-							} else { echo elgg_echo('notification_messages:settings:nomessage'); }
-							echo '</p>';
-						//echo '</td>';
-						
-						// Delete event
-						//echo '<td>';
-							echo '<p>delete : ';
-							if (in_array('delete', $registered_notification_events['object'][$subtype])) {
-								echo elgg_echo('notification_messages:settings:messagehandledby');
-								echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['delete']);
-								if ($events_handlers_tree['delete'][$subtype]) {
-									echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
-									echo implode('<br />', $events_handlers_tree['delete'][$subtype]);
-								}
-							} else { echo elgg_echo('notification_messages:settings:nomessage'); }
-							echo '</p>';
+							// Display defaults
+							echo '<div class="settings-defaults"><strong>Defaults :</strong> ' . elgg_view('input/checkboxes', array('value' => $registered_notification_events['object'][$subtype], 'options' => $notify_opt, 'disabled' => 'disabled', 'align' => 'horizontal', 'class' => 'settings-defaults')) . '</div>';
 						echo '</td>';
 						
-						// Prepare notification
+						
+						// Prepare notification message setting and hooks
 						echo '<td>';
+							// Enable custom message override or not
 							echo elgg_view('input/select', $prepare_params);
+							
+							if ($registered_notification_events['object'][$subtype]) {
+								// Create event
+								if (in_array('create', $registered_notification_events['object'][$subtype])) {
+									echo '<br />create : ';
+									echo elgg_echo('notification_messages:settings:messagehandledby');
+									echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['create']);
+									if ($events_handlers_tree['create'][$subtype]) {
+										echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+										echo implode('<br />', $events_handlers_tree['create'][$subtype]);
+									}
+								}// else { echo elgg_echo('notification_messages:settings:nomessage'); }
+								// Publish event
+								if (in_array('publish', $registered_notification_events['object'][$subtype])) {
+									echo '<br />publish : ';
+									echo elgg_echo('notification_messages:settings:messagehandledby');
+									echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['publish']);
+									if ($events_handlers_tree['publish'][$subtype]) {
+										echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+										echo implode('<br />', $events_handlers_tree['publish'][$subtype]);
+									}
+								 }// else { echo elgg_echo('notification_messages:settings:nomessage'); }
+								// Update event
+								if (in_array('update', $registered_notification_events['object'][$subtype])) {
+									echo '<br />update : ';
+									echo elgg_echo('notification_messages:settings:messagehandledby');
+									echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['update']);
+									if ($events_handlers_tree['update'][$subtype]) {
+										echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+										echo implode('<br />', $events_handlers_tree['update'][$subtype]);
+									}
+								}// else { echo elgg_echo('notification_messages:settings:nomessage'); }
+								// Delete event
+								if (in_array('delete', $registered_notification_events['object'][$subtype])) {
+									echo '<br />delete : ';
+									echo elgg_echo('notification_messages:settings:messagehandledby');
+									echo implode('<br />', $prepare_notification_hooks['object'][$subtype]['delete']);
+									if ($events_handlers_tree['delete'][$subtype]) {
+										echo '</p><p>' . elgg_echo('notification_messages:settings:recipients');
+										echo implode('<br />', $events_handlers_tree['delete'][$subtype]);
+									}
+								}// else { echo elgg_echo('notification_messages:settings:nomessage'); }
+							}
+						echo '</td>';
+						
+						// Recipients
+						echo '<td>';
+							//echo '<p>See registered get,subscriptions hooks to check recipients - recipients do not rely on subtypes.</p>';
 						echo '</td>';
 						
 							//echo '<label>' . notification_messages_readable_subtype($subtype) . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label>';
@@ -269,10 +274,6 @@ echo "<fieldset>";
 	// Save all enabled subtypes in a single fields (for easier processing, so we can loop through the list to get direct params)
 	if ($prepare_object_subtypes) { $prepare_object_subtypes = implode(',', $prepare_object_subtypes); }
 	elgg_set_plugin_setting('object_subtypes', $prepare_object_subtypes, 'notification_messages');
-	
-	// Use complete PHP array setting so we need 1 single DB call...
-	$register_object_subtypes = serialize($register_object_subtypes);
-	elgg_set_plugin_setting('register_object_subtypes', $register_object_subtypes, 'notification_messages');
 	
 echo "</fieldset>";
 
