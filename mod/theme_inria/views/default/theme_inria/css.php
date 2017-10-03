@@ -1196,9 +1196,10 @@ a.elgg-river-target, a.elgg-river-object {  }
 .elgg-item-group .elgg-image-block .elgg-image { background: #FAFAFA; box-shadow: 0 0 4px 0 rgba(0,0,0,0.2); }
 .elgg-item-group .elgg-image-block .elgg-image a { width: 12.5rem; height: 12.5rem; overflow: hidden; line-height: 12.5rem; display: flex; }
 ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group .elgg-image img { width: 12.5rem; margin: auto; }
+.elgg-item-group .elgg-body { position: relative; }
 .elgg-item-group .iris-group-body { padding: 1.5rem 2rem 1.5rem 0rem; }
-.iris-group-body  .iris-object-actions { position: absolute; bottom: 0rem; right: 0rem; margin: 0 1rem 0.5rem 0; }
-.iris-group-body  .iris-object-actions li a { font-size: 0.8125rem; color: rgba(56, 66, 87, 0.5); }
+.iris-group-body .iris-object-actions { position: absolute; bottom: 0rem; right: 0rem; margin: 0 1rem 0.5rem 0; }
+.iris-group-body .iris-object-actions li a { font-size: 0.8125rem; color: rgba(56, 66, 87, 0.5); }
 .elgg-item-group .elgg-menu-item-access, 
 .elgg-item-group .elgg-menu-item-members, 
 .elgg-item-group .elgg-menu-item-membership { float: left; margin-left: 0; margin-right: 1rem; }
