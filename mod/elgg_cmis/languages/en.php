@@ -23,6 +23,7 @@ return array(
 	'elgg_cmis:noconf' => "Not configured",
 	'elgg_cmis:invalidurl' => "Invalid URL",
 	'elgg_cmis:settings:usercmis' => "Enable User mode",
+	'elgg_cmis:settings:usercmis:disabled' => "User mode disabled",
 	'elgg_cmis:settings:usercmis:details' => "Members use their own CMIS credentials to use CMIS",
 	'elgg_cmis:settings:usercmis:legend' => "Specific settings for user mode",
 	'elgg_cmis:settings:backend' => "Enable Backend mode",

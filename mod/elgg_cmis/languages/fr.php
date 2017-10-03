@@ -10,6 +10,7 @@ return array(
 	'elgg_cmis:settings:vendor' => "Bibliothèque CMIS",
 	'elgg_cmis:settings:vendor:details' => "Apache Chemistry CMIS PHP Client is the most known PHP CMIS library. However it lacks some features that the other library has implemented, such as versionning.<br />PHP CMIS Client is a port of OpenCMIS (Java) to PHP. Interfaces are mostly the same so most OpenCMIS examples should be also usable for this PHP CMIS Library.",
 	'elgg_cmis:settings:usercmis' => "Activer le mode Utilisateur",
+	'elgg_cmis:settings:usercmis:disabled' => "Mode Utilisateur désactivé",
 	'elgg_cmis:settings:usercmis:details' => "Les membres accèdent à CMIS avec leur propre accès. Cela nécessite qu'ils renseignent leur mot de passe dans leurs paramètres personnels - celui-ci est crypté cependant ce n'est pas idéal du point de vue sécurité.",
 	'elgg_cmis:settings:usercmis:legend' => "Paramètres spécifiques pour le mode Utilisateur",
 	'elgg_cmis:settings:backend' => "Activer le mode Backend",

@@ -1,7 +1,14 @@
 <?php
 /**
- * Elgg CMIS authentication settings
+ * Elgg CMIS personal authentication settings
  */
+
+if (elgg_get_plugin_setting('usercmis', 'elgg_cmis') != 'yes') {
+	return false;
+	//echo elgg_echo('');
+}
+
+
 $own = elgg_get_page_owner_entity();
 
 $no_yes_opt = array( 'no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes') );

@@ -22,21 +22,25 @@ function elgg_cmis_init(){
 	
 	// CMIS libraries : as we want to switch between 2 libraries, we will register and load through own functions instead
 	
-	// CMIS widgets - add only if enabled
-	if (elgg_get_plugin_setting('widget_mine', 'elgg_cmis') == 'yes') {
-		elgg_register_widget_type('elgg_cmis_mine', elgg_echo('elgg_cmis:widget:cmis_mine'), elgg_echo('elgg_cmis:widget:cmis_mine:details'), array('dashboard'), false);
-	}
-	if (elgg_get_plugin_setting('widget_cmis', 'elgg_cmis') == 'yes') {
-		elgg_register_widget_type('elgg_cmis', elgg_echo('elgg_cmis:widget:cmis'), elgg_echo('elgg_cmis:widget:cmis:details'), array('dashboard'), true);
-	}
-	if (elgg_get_plugin_setting('widget_folder', 'elgg_cmis') == 'yes') {
-		elgg_register_widget_type('elgg_cmis_folder', elgg_echo('elgg_cmis:widget:cmis_folder'), elgg_echo('elgg_cmis:widget:cmis_folder:details'), array('dashboard'), true);
-	}
-	if (elgg_get_plugin_setting('widget_search', 'elgg_cmis') == 'yes') {
-		elgg_register_widget_type('elgg_cmis_search', elgg_echo('elgg_cmis:widget:cmis_search'), elgg_echo('elgg_cmis:widget:cmis_search:details'), array('dashboard'), true);
-	}
-	if (elgg_get_plugin_setting('widget_insearch', 'elgg_cmis') == 'yes') {
-		elgg_register_widget_type('elgg_cmis_insearch', elgg_echo('elgg_cmis:widget:cmis_insearch'), elgg_echo('elgg_cmis:widget:cmis_insearch:details'), array('dashboard'), true);
+	// User mode
+	if (elgg_get_plugin_setting('usercmis', 'elgg_cmis') == 'yes') {
+		elgg_extend_view('plugins/elgg_cmis/usersettings', 'plugins/elgg_cmis/extend_usersettings');
+		// CMIS widgets - add only if enabled
+		if (elgg_get_plugin_setting('widget_mine', 'elgg_cmis') == 'yes') {
+			elgg_register_widget_type('elgg_cmis_mine', elgg_echo('elgg_cmis:widget:cmis_mine'), elgg_echo('elgg_cmis:widget:cmis_mine:details'), array('dashboard'), false);
+		}
+		if (elgg_get_plugin_setting('widget_cmis', 'elgg_cmis') == 'yes') {
+			elgg_register_widget_type('elgg_cmis', elgg_echo('elgg_cmis:widget:cmis'), elgg_echo('elgg_cmis:widget:cmis:details'), array('dashboard'), true);
+		}
+		if (elgg_get_plugin_setting('widget_folder', 'elgg_cmis') == 'yes') {
+			elgg_register_widget_type('elgg_cmis_folder', elgg_echo('elgg_cmis:widget:cmis_folder'), elgg_echo('elgg_cmis:widget:cmis_folder:details'), array('dashboard'), true);
+		}
+		if (elgg_get_plugin_setting('widget_search', 'elgg_cmis') == 'yes') {
+			elgg_register_widget_type('elgg_cmis_search', elgg_echo('elgg_cmis:widget:cmis_search'), elgg_echo('elgg_cmis:widget:cmis_search:details'), array('dashboard'), true);
+		}
+		if (elgg_get_plugin_setting('widget_insearch', 'elgg_cmis') == 'yes') {
+			elgg_register_widget_type('elgg_cmis_insearch', elgg_echo('elgg_cmis:widget:cmis_insearch'), elgg_echo('elgg_cmis:widget:cmis_insearch:details'), array('dashboard'), true);
+		}
 	}
 	
 	// CMIS page handler
