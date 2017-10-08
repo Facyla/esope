@@ -12,7 +12,7 @@ if (elgg_is_active_plugin('groups')) {
 	$favorite_guids = array();
 	$favorite_options = array(
 		'type' => 'group', 'relationship' => 'favorite', 
-		'relationship_guid' => $user->guid, 'inverse_relationship' => true, 
+		'relationship_guid' => $ownguid, 'inverse_relationship' => true, 
 		'limit' => false,
 	);
 	if (elgg_is_active_plugin('au_subgroups')) {
