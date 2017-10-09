@@ -56,7 +56,7 @@ function ldap_auth_login($username, $password) {
 }
 
 
-/** Check if LDAP account exists
+/** Check if LDAP account exists (username)
  *
  * @param string $username the LDAP login.
  * @param bool $strict if true, will return false if multiple results
@@ -80,6 +80,19 @@ function ldap_user_exists($username, $strict = false) {
 	return $result;
 }
 
+
+/** Return user username from email
+ * @param string $email the LDAP email.
+ * @param string username, of false if not found
+ */
+function ldap_get_username($email) {
+	$email_field = elgg_get_plugin_setting('mail_field_name', 'ldap_auth');
+	$username_field = elgg_get_plugin_setting('username_field_name', 'ldap_auth');
+	// Check LDAP auth server for email
+	$result = ldap_get_search_infos("$email_field=$email", ldap_auth_settings_auth(), array($username_field));
+	if ($result) { return $result[0][$username_field][0]; }
+	return false;
+}
 
 /* Return user email from username */
 function ldap_get_email($username) {

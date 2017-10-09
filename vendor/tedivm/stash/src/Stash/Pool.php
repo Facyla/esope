@@ -11,7 +11,7 @@
 
 namespace Stash;
 
-use PSR\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemInterface;
 use Stash\Exception\InvalidArgumentException;
 use Stash\Driver\Ephemeral;
 use Stash\Interfaces\DriverInterface;
@@ -187,7 +187,6 @@ class Pool implements PoolInterface
     public function deleteItems(array $keys)
     {
         // temporarily cheating here by wrapping around single calls.
-        $items = array();
         $results = true;
         foreach ($keys as $key) {
             $results = $this->deleteItem($key) && $results;

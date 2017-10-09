@@ -217,6 +217,10 @@ class Item implements ItemInterface
                     $this->invalidationArg2);
             }
 
+            if (false === $this->isHit) {
+                return null;
+            }
+
             return $this->data;
         } catch (Exception $e) {
             $this->logException('Retrieving from cache caused exception.', $e);
@@ -226,6 +230,9 @@ class Item implements ItemInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setInvalidationMethod($invalidation = Invalidation::PRECOMPUTE, $arg = null, $arg2 = null)
     {
         $this->invalidationMethod = $invalidation;
@@ -336,6 +343,9 @@ class Item implements ItemInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setTTL($ttl = null)
     {
         if (is_numeric($ttl) || ($ttl instanceof \DateInterval)) {
@@ -348,6 +358,9 @@ class Item implements ItemInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function expiresAt($expiration = null)
     {
         if (!is_null($expiration) && !($expiration instanceof \DateTimeInterface)) {
@@ -361,6 +374,9 @@ class Item implements ItemInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function expiresAfter($time)
     {
         $date = new \DateTime();
@@ -381,6 +397,9 @@ class Item implements ItemInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save()
     {
         try {
@@ -403,7 +422,7 @@ class Item implements ItemInterface
         $store['return'] = $data;
         $store['createdOn'] = time();
 
-        if (isset($time) && ($time instanceof \DateTime)) {
+        if (isset($time) && (($time instanceof \DateTime) || ($time instanceof \DateTimeInterface))) {
             $expiration = $time->getTimestamp();
             $cacheTime = $expiration - $store['createdOn'];
         } else {
@@ -599,7 +618,7 @@ class Item implements ItemInterface
                 break;
 
             case Invalidation::OLD:
-                $this->isHit = $record['data']['return'] !== null;
+                $this->isHit = isset($record['data']) && $record['data']['return'] !== null;
                 break;
 
             default:

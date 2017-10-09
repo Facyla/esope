@@ -1,3 +1,25 @@
+2017-09-21  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(release): v1.12.17
+
+2017-08-01  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* .../messages/exceptions/admin_exception.php,
+  .../messages/exceptions/admin_exception.php: security(exceptions): show
+  admins less on exceptions  Exception pages no longer dump the exception state
+  for `DatabaseException`s as these may contain credentials. Unless
+  `developers` is enabled, admins are not shown exception details at all. 
+  Fixes #10521
+
+2017-05-10  Brett Profitt <brett.profitt@gmail.com>
+
+  	* COPYRIGHT.txt, LICENSE.txt: chore(docs): Updated copyright and license.
+
 2017-05-10  Jerome Bakker <jeabakker@coldtrick.com>
 
   	* CHANGELOG.md, composer.json, docs/locale/es/LC_MESSAGES/admin.mo,

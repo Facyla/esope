@@ -13,6 +13,13 @@ $main_group = theme_inria_get_main_group($group);
 $is_main_group = true;
 if ($group->guid != $main_group->guid) { $is_main_group = false; }
 
+// If cannot see parent group, hide also any subgroup / workspace
+if (!$is_main_group && !has_access_to_entity($main_group)) {
+//if (elgg_group_gatekeeper(false, $main_group->guid)) {
+	register_error(elgg_echo('theme_inria:workspace:noaccesstomaingroup'));
+	forward(REFERER);
+}
+
 $own = elgg_get_logged_in_user_entity();
 
 // Filter for content activity

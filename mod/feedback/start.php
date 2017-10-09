@@ -27,7 +27,7 @@ function feedback_init() {
 	
 	// extend the site CSS
 	elgg_extend_view('css/elgg', 'feedback/css');
-	elgg_extend_view('css/admin', 'feedback/admin_css');
+	elgg_extend_view('css/admin', 'feedback/css');
 	
 	// create feedback page in admin section
 	elgg_register_admin_menu_item('administer', 'feedback', 'administer_utilities');

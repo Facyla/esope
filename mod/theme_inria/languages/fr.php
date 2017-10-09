@@ -358,6 +358,7 @@ return array(
 	'theme_inria:useradd:adminvalidation' => "ATTENTION : le compte créé ne sera pas activé immédiatement ! Le compte doit d'abord être validé par un administrateur.",
 	'theme_inria:useradd:disabled:adminvalidation' => "Le compte créé doit être validé par un administrateur. Veuillez patienter, vous recevrez un nouveau mail lorsque votre compte aura été activé.",
 	'theme_inria:useradd:ok' => "Le compte de %s (%s) a bien été créé. <a href=\"%s\">Voir sa page de profil</a>",
+	'theme_inria:useradd:inria:ok' => "Le compte de %s (%s) a bien été créé. <a href=\"%s\">Voir sa page de profil</a>",
 	'theme_inria:useradd:register' => "Envoyer l'invitation",
 	'theme_inria:useradd:subject' => "[%1\$s] Invitation de %2\$s",
 	'theme_inria:useradd:body' => "Bonjour %1\$s
@@ -374,10 +375,35 @@ Et identifiez-vous avec :
 - votre identifiant : %6\$s &nbsp; ou votre adresse email %7\$s
 - votre mot de passe : %8\$s
 ",
+
+	'theme_inria:useradd:inria:subject' => "[%1\$s] Invitation de %2\$s",
+	'theme_inria:useradd:inria:body' => "Bonjour %1\$s
+
+%2\$s vous invite à rejoindre %3\$s
+
+%4\$s
+
+Pour vous connecter, rendez-vous :
+
+%5\$s
+
+Et identifiez-vous avec la connexion CAS.
+",
 	'theme_inria:useradd:admin:subject' => "Création de compte Invité",
 	'theme_inria:useradd:admin:subject:confirm' => "Création de compte Invité à confirmer",
 	'theme_inria:useradd:admin:body' => "
 Un compte utilisateur a été créé pour %1\$s, email %2\$s, par %3\$s.
+
+Motif de l'inscription :
+
+%4\$s
+
+Voici l'adresse du nouveau compte créé : %5\$s
+",
+	
+	'theme_inria:useradd:inria:admin:subject' => "Création de compte Inria",
+	'theme_inria:useradd:inria:admin:body' => "
+Un compte utilisateur Inria a été créé pour %1\$s, email %2\$s, par %3\$s.
 
 Motif de l'inscription :
 
@@ -1074,6 +1100,8 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:hide_entity:select' => "Masquer dans l'espace de travail",
 	'theme_inria:hide_entity:yes' => "Oui (il n'apparaîtra pas dans l'activité de l'espace de travail)",
 	'theme_inria:hide_entity:no' => "Non (par défaut)",
+	
+	'theme_inria:workspace:noaccesstomaingroup' => "Impossible d'afficher cet espace de travail car il dépend d'un groupe auquel vous n'avez pas accès.",
 	
 );
 

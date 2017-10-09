@@ -360,6 +360,7 @@ return array(
 	'theme_inria:useradd:adminvalidation' => "WARNING: the new account will not be activated immediately! The new account has to be approved by an administrator.",
 	'theme_inria:useradd:disabled:adminvalidation' => "The created account will be disabled until an administrator validates it. Please be patient, you will receive a new mail once it has been validated.",
 	'theme_inria:useradd:ok' => "The account of %s (%s) has been successfully created. <a href=\"%s\">Watch the profile page</a>",
+	'theme_inria:useradd:inria:ok' => "The account of %s (%s) has been successfully created. <a href=\"%s\">Watch the profile page</a>",
 	'theme_inria:useradd:register' => "Send invitation",
 	'theme_inria:useradd:subject' => "User account created",
 	'theme_inria:useradd:body' => "Hi %1\$s
@@ -1064,6 +1065,8 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:hide_entity:select' => "Hide workplace activity",
 	'theme_inria:hide_entity:yes' => "Yes (this file will no appear in workplace activity)",
 	'theme_inria:hide_entity:no' => "No (default)",
+	
+	'theme_inria:workspace:noaccesstomaingroup' => "Unable to display this workspace, as it relies on a group you do not have access to.",
 	
 );
 

@@ -28,12 +28,13 @@ return array(
 		</ol>",
 	
 	// Settings
-	'notification_messages:settings:objects' => "Subject for new content (registered objects)",
+	'notification_messages:settings:objects' => "Registered notification events and subject handling",
 	'notification_messages:settings:details' => "By activating detailed notification messages for each of these content types, you can replace the default mail title by a more meaningful subject, composed in this form: [Publication type Group or member name] Content title<br />This facilitates the identification of conversations by email clients.",
 	'notification_messages:object:subtype' => "Object type",
 	'notification_messages:setting' => "Setting",
 	'notification_messages:events' => "Notification for event types",
 	'notification_messages:recipients:setting' => "Recipients",
+	'notification_messages:recipients:setting:details' => "Use get,subscriptions hook",
 	'notification_messages:register:default' => "Default",
 	'notification_messages:recipients:default' => "Default",
 	'notification_messages:prepare:setting' => "Prepare message content",
@@ -54,7 +55,8 @@ return array(
 	'notification_messages:settings:expert' => "Expert",
 	'notification_messages:settings:messagehandledby' => "Message defined by: ",
 	'notification_messages:settings:nomessage' => "NO",
-	'notification_messages:settings:recipients' => "Recipients: ",
+	'notification_messages:settings:notify_replies' => "Replies notification",
+	'notification_messages:settings:notify_replies:details' => "Notify replies and comments the same way as initial publications",
 	
 	'notification_messages:notify:create' => "create",
 	'notification_messages:notify:publish' => "publish",

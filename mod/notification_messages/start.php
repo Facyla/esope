@@ -4,17 +4,17 @@
  *
  */
 
-// @DONE : direct messages
 // @DONE : subjects for objects (including discussions)
 // @DONE : handle comments
+// @DONE : direct messages
 // @TODO : notify owner
 // @TODO : handle file attachments
 // @TODO : other plugins (comment_tracker)
 
-/* Notification process :
 
- * engine/lib/notifications.php
- * Initie l'envoi des notifications
+/* @DOC : NOTIFICATION PROCESS AND FUNCTIONS :
+
+ * engine/lib/notifications.php => Initie l'envoi des notifications
  
 function _elgg_notifications_cron() {
   // calculate when we should stop
@@ -23,8 +23,8 @@ function _elgg_notifications_cron() {
   _elgg_services()->notifications->processQueue($stop_time);
 }
 
- * engine/classes/Elgg/Notifications/NotificationsService.php
- * Dépile les notifications en attente, récupère la liste des abonnés, et envoie les notifications
+
+ * engine/classes/Elgg/Notifications/NotificationsService.php => Dépile les notifications en attente, récupère la liste des abonnés, et envoie les notifications
  * Hooks sur : abonnements, avant envoi, après envoi
  
 public function processQueue($stopTime) {
@@ -59,13 +59,13 @@ public function processQueue($stopTime) {
   return $count;
 }
 
- * engine/classes/Elgg/Notifications/sendNotifications.php
- 
 
- * engine/classes/Elgg/Notifications/SubscriptionsService.php
- * Récupère les abonnements + méthodes, sur la base du container uniquement 
- * (donc contenus initiux et pas les réponses)
- 
+ * engine/classes/Elgg/Notifications/sendNotifications.php => boucle d'envoi des notifications
+
+
+ * engine/classes/Elgg/Notifications/SubscriptionsService.php => Récupère les abonnements + méthodes, sur la base du container uniquement 
+ * (donc contenus initiaux seulement mais pas les réponses)
+
 public function getSubscriptions(\Elgg\Notifications\Event $event) {
   $subscriptions = array();
   if (!$this->methods) { return $subscriptions; }
@@ -87,8 +87,6 @@ public function getSubscriptions(\Elgg\Notifications\Event $event) {
   return _elgg_services()->hooks->trigger('get', 'subscriptions', $params, $subscriptions);
 }
 
- * 
-
 
  */
 
@@ -102,25 +100,28 @@ elgg_register_event_handler('init', 'system', 'notification_messages_init'); // 
  */
 function notification_messages_init() {
 	
-	// Override settings save action so we can usr checkboxes / multiselect
-	elgg_register_plugin_hook_handler('action', 'plugins/settings/save', 'notification_messages_plugin_settings');
+	$action_path = elgg_get_plugins_path() . 'notification_messages/actions/messages';
 	
 	// Get all subtypes handled by this plugin
-	$subtypes = elgg_get_plugin_setting('object_subtypes', 'notification_messages');
-	$subtypes = explode(',', $subtypes);
+	$prepare_object_subtypes = elgg_get_plugin_setting('object_subtypes', 'notification_messages');
+	$prepare_object_subtypes = explode(',', $prepare_object_subtypes);
 	// Add discussion replies if discussion is in the list
-	if (in_array('groupforumtopic', $subtypes)) { $subtypes[] = 'discussion_reply'; }
-	$subtypes = array_unique($subtypes);
+	if (in_array('groupforumtopic', $prepare_object_subtypes)) { $prepare_object_subtypes[] = 'discussion_reply'; }
+	$prepare_object_subtypes = array_unique($prepare_object_subtypes);
+	
+	
+	// Override settings save action so we can usr checkboxes / multiselect
+	elgg_register_plugin_hook_handler('action', 'plugins/settings/save', 'notification_messages_plugin_settings');
 	
 	
 	/* STEP 1 : register notification events */
 	// elgg_register_notification_event('object', 'photo', array('create'));
+	// Settings array lists for each object subtype the array of actions that should be registered as notification events (no notification if none)
 	$register_object_subtypes = elgg_get_plugin_setting('register_object_subtypes', 'notification_messages');
 	$register_object_subtypes = unserialize($register_object_subtypes);
-	
 	//error_log(print_r($register_object_subtypes, true));
 	
-	// DO NOT OVERRIDE when defining settings, so we can know what happens otherwise (and use defaults)
+	// Note : SKIP OVERRIDE in admin context, so we can know what happens otherwise (and display defaults values)
 	//error_log("NOTIFICATION MESSAGES register events : " . print_r(elgg_get_context_stack(), true));
 	if (!elgg_in_context('admin') && $register_object_subtypes) {
 		foreach ($register_object_subtypes as $subtype => $events) {
@@ -132,13 +133,15 @@ function notification_messages_init() {
 	
 	
 	
-	/* STEP 2 : define notification content => elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification'); */
+	/* STEP 2 : prepare notification content 
+	 * => elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification');
+	 */
 	
 	// Update subject + body + summary
 	// Handle new (registered) objects notification subjects
 	//elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
-	if ($subtypes) {
-		foreach ($subtypes as $subtype) {
+	if ($prepare_object_subtypes) {
+		foreach ($prepare_object_subtypes as $subtype) {
 			// @TODO : also handle update and delete events ?
 			// Note : we enable regular (create) and specific hook (publish) in all cases, because at worst it would be called twice and produce the same result, 
 			// Regular hook
@@ -149,7 +152,46 @@ function notification_messages_init() {
 			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
 				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'notification_messages_prepare_notification', 900);
 			}
+			elgg_register_plugin_hook_handler('prepare', "notification:update:object:$subtype", 'notification_messages_prepare_notification', 900);
+			elgg_register_plugin_hook_handler('prepare', "notification:delete:object:$subtype", 'notification_messages_prepare_notification', 900);
 		}
+	}
+	
+	
+	/* Handle special cases : these are not triggered by a registered event but an action, and require an action override
+	 * Comments : direct notification for owner only, registered event for other recipients
+	 * Direct messages : direct notificaiton only (but also 1 single recipient)
+	 */
+	
+	/* Generic comments support
+	 * Why ?   because default comment,save action (always) notifies owner if someone else posted a comment, using a basic title and content
+	 * When ?   If prepare,notification:create:object:comment is handled by notification_messages 
+	 *          we have to override the action, so we can set the proper message title and content.
+	 * How ?   replace comment action so we can set our custom notification subject and content
+	 */
+	if (in_array('comment', $prepare_object_subtypes)) {
+		elgg_unregister_action('comment/save');
+		elgg_register_action('comment/save', $action_path . 'comments/save.php');
+	}
+	/* Comments subject override
+	 * Why ?   Core function that adds the "Re: " for replies is loaded right before email sending hook, and can be skipped 
+	 *         only by passing a non-array value.
+	 *         But we need a parameters array to keep going, so we need to register our own instead
+	 * How ?    Replace system default comment subject handler
+	 */
+	elgg_unregister_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
+	// Register *earlier* to same hook and update (has to run before core and html_email_handler hook, which are both default priority 500)
+	elgg_register_plugin_hook_handler('email', 'system', 'notification_messages_comments_notification_email_subject', 100);
+	
+	/* Direct Messages support
+	 * Why ?   Control subject/content of message notifications
+	 * When ?   If setting are set so DM are handled through this plugin..
+	 * How ?   replace message action so we can use our custom message content
+	 */
+	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
+	if ($messages_send == 'yes') {
+		elgg_unregister_action("messages/send");
+		elgg_register_action("messages/send", "$action_path/send.php");
 	}
 	
 	
@@ -175,43 +217,12 @@ function notification_messages_init() {
 	//elgg_register_plugin_hook_handler('notify:annotation:message', 'comment', 'notification_messages_prepare_notification', 900);
 	
 	
-	// @TODO Handle properly comment subjects
-	// Register *earlier* to same hook and update (has to run before core and html_email_handler hook, which are default priority)
-	elgg_register_plugin_hook_handler('email', 'system', 'notification_messages_comments_notification_email_subject', 100);
-	// Remove system default comment subject handler (because it is loaded right before email sending hook)
-	elgg_unregister_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
 	
 	
-	// Replace message action so we can use our custom message content
-	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
-	if ($messages_send != 'no') {
-		$action_path = elgg_get_plugins_path() . 'notification_messages/actions/messages';
-		elgg_unregister_action("messages/send");
-		elgg_register_action("messages/send", "$action_path/send.php");
-	}
-	
-	
-	/* Except if other plugin breaks behaviour, this hook should not be useful anymore in 1.11+
-	// NOTIFICATION MESSAGE HOOKS
-	// Note : advanced_notifications should be able to act after this hook (can remove message content), so priority has to be < 999)
-	$blog_message = elgg_get_plugin_setting('object_blog_message', 'notification_messages');
-	if ($blog_message == 'allow') {
-		elgg_unregister_plugin_hook_handler('notify:entity:message', 'object', 'blog_notify_message');
-		elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'notification_messages_notify_message_blog');
-	}
-	
-	// FORUM REPLIES
-	$groupforumtopic = elgg_get_plugin_setting('object_groupforumtopic', 'notification_messages');
-	if ($groupforumtopic == 'allow') {
-		// Some advanced_notifications features are limiting flexibility, so unregister them first
-		if (elgg_is_active_plugin('advanced_notifications')) {
-			// Forum topic reply subject
-			elgg_unregister_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "advanced_notifications_discussion_reply_subject_hook");
-		}
-		// Handle forum topic reply subject
-		elgg_register_plugin_hook_handler("notify:annotation:subject", "group_topic_post", "notification_messages_reply_subject_hook");
-	}
-	*/
+	/* Deprecated notes : 
+	 * hook on notify:entity:message : replaced by prepare:notification:... hook since 1.9, not used if prepare hook is set
+	 * hook on notify:annotation:subject (used by advanced_notifications) : handled differntly since replies are regular discussion_reply objects
+	 */
 	
 	
 	/*
@@ -245,25 +256,10 @@ function notification_messages_init() {
 	}
 	*/
 	
-	// Replace comment action if asked to
-	$generic_comment = elgg_get_plugin_setting('generic_comment', 'notification_messages');
-	switch ($generic_comment) {
-		case 'allow':
-			$action_path = elgg_get_plugins_path() . 'notification_messages/actions/';
-			elgg_unregister_action('comment/save');
-			elgg_register_action('comment/save', $action_path . 'comments/save.php');
-			break;
-		case 'deny':
-			elgg_unregister_action('comment/save');
-			break;
-		default:
-			// do not change anything
-	}
-	
 }
 
 
-
-// Include Inria functions
+// Include notification_messages functions & hooks
 require_once(dirname(__FILE__) . '/lib/notification_messages/functions.php');
+
 

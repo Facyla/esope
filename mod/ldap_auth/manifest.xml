@@ -2,10 +2,10 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>LDAP Auth</name>
 	<author>Florian DANIEL, Simon Bouland</author>
-	<version>1.12.0</version>
-	<description>LDAP Authentication pam handler</description>
+	<version>1.12.1</version>
+	<description>LDAP Authentication PAM handler</description>
 	<website>http://www.elgg.org/</website>
-	<copyright>(C) Inria 2012-2016</copyright>
+	<copyright>(C) Inria 2012-2017</copyright>
 	<license>GNU General Public License version 2</license>
 
 	<requires>
@@ -21,6 +21,7 @@
 
 History
 
+1.12.1 : 20171009: Added function to get username from email
 1.12.0 : 20160319 - Updated to Elgg 1.12
 
 0.3 : This plugin has evolved since its first releases to become more extendable

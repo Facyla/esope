@@ -30,13 +30,14 @@ return array(
 		</ol>",
 	
 	// Settings
-	'notification_messages:settings:objects' => "Sujet des nouvelles publications (objets)",
+	'notification_messages:settings:objects' => "Types d'événéments notifiés et prise en charge des sujets des nouvelles publications",
 	'notification_messages:settings:details' => "En activant les messages de notification détaillés pour chacun des types de contenus suivants, vous pouvez remplacer le titre du mail par défaut par un titre explicite composé sous la forme : [Type de publication Nom du groupe ou du membre] Titre du contenu<br />Cette forme facilite également l'identification de conversations par les messageries.",
 	'notification_messages:object:subtype' => "Type d'objet",
 	'notification_messages:setting' => "Réglage",
 	'notification_messages:events' => "Notification pour les types d'événements",
 	'notification_messages:prepare:setting' => "Sujet et message",
 	'notification_messages:recipients:setting' => "Destinataires",
+	'notification_messages:settings:recipients:details' => "Utilisation du hook get,subscriptions",
 	'notification_messages:register:default' => "Par défaut",
 	'notification_messages:recipients:default' => "Par défaut",
 	'notification_messages:subject:default' => "Par défaut",
@@ -56,7 +57,8 @@ return array(
 	'notification_messages:settings:expert' => "Expert",
 	'notification_messages:settings:messagehandledby' => "Message défini par : ",
 	'notification_messages:settings:nomessage' => "NON",
-	'notification_messages:settings:recipients' => "Destinataires : ",
+	'notification_messages:settings:notify_replies' => "Notification des réponses",
+	'notification_messages:settings:notify_replies:details' => "Notifier les réponses et commentaires de la même manièreque les publications initiales",
 	
 	'notification_messages:notify:create' => "create",
 	'notification_messages:notify:publish' => "publish",

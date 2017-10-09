@@ -13,6 +13,30 @@
 - optional invited groups
 */
 
+
+// @TODO Vérifier si le compte existe dans LDAP => si oui le créer avec le bon login
+
+// Get plugin config
+$admin_validation = elgg_get_plugin_setting('admin_validation', 'theme_inria');
+if (($admin_validation == 'yes') && elgg_is_active_plugin('uservalidationbyadmin')) { $admin_validation = true; } else { $admin_validation = false; }
+// Notified admins
+$notified = array();
+$admins = array();
+$notified[] = elgg_get_plugin_setting('useradd_notify1', 'theme_inria');
+$notified[] = elgg_get_plugin_setting('useradd_notify2', 'theme_inria');
+$notified[] = elgg_get_plugin_setting('useradd_notify3', 'theme_inria');
+foreach ($notified as $admin_username) {
+	$notify_user = get_user_by_username($admin_username);
+	if ($notify_user) { $admins[] = $notify_user; }
+}
+// Other used vars
+$site = elgg_get_site_entity();
+// Invited people should be friend with inviter...
+$inviter = elgg_get_logged_in_user_entity();
+$inviter_guid = elgg_get_logged_in_user_guid();
+
+
+
 elgg_make_sticky_form('useradd');
 
 // Get variables
@@ -33,7 +57,9 @@ if (!is_array($group_guid)) { $group_guid = array($group_guid); }
 
 $hidden_entities = access_get_show_hidden_status();
 access_show_hidden_entities(TRUE);
+
 foreach ($emails as $email) {
+	$user = false;
 	
 	if (!is_email_address($email)) {
 		register_error(elgg_echo("Invalid email : {$email}"));
@@ -47,10 +73,10 @@ foreach ($emails as $email) {
 		continue;
 	}
 
-
+	// Ensure user does not already exists
 	$already_registered = get_user_by_email($email);
 	if (sizeof($already_registered) > 1) {
-		register_error(elgg_echo("Users already exist with this email : {$email}"));
+		register_error(elgg_echo("Users already exist with this email : {$email}, but only 1 account should be associated with a given email. Please contact a site administrator."));
 		//forward(REFERER);
 		continue;
 	} else if (sizeof($already_registered) < 1) {
@@ -65,11 +91,73 @@ foreach ($emails as $email) {
 	}
 
 
-	// Account creation
+	// Account creation through LDAP, if exists
 	if (!$already_registered) {
+		// Check if user exists in Inria LDAP => different creation process
+		if (elgg_is_active_plugin('ldap_auth')) {
+			$ldap_username = ldap_get_username($email);
+			if ($ldap_username) {
+				// User exists in LDAP : register
+				// If LDAP account can be associated with multiple emails, ensure the account doesn't exist
+				$already_registered = get_user_by_username($ldap_username);
+				if (sizeof($already_registered) < 1) {
+					$already_registered = false;
+				} else {
+					$user = ldap_auth_create_profile($ldap_username, $password);
+					// Send a different email (no password, use CAS, etc.)
+					if (elgg_instanceof($user, 'user')) {
+						// user and admin notifications
+					
+						// USER NOTIFICATION
+						// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
+						$user_subject = elgg_echo('theme_inria:useradd:inria:subject', array($site->name, $inviter->name));
+						$user_body = elgg_echo('theme_inria:useradd:inria:body', array(
+							$name,
+							$inviter->name,
+							$site->name,
+							$site->url,
+							$message,
+							$ldap_username,
+							$email,
+							$password,
+						));
+						notify_user($user->guid, $site->guid, $user_subject, $user_body, array(), array('email'));
+						
+						// ADMIN NOTIFICATION : always notify, whether validation is needed or not
+						// We can notify up to 3 admins so new members can be moderated
+						$admin_subject = elgg_echo('theme_inria:useradd:inria:admin:subject');
+						$admin_body = elgg_echo('theme_inria:useradd:inria:admin:body', array(
+							$name,
+							$email,
+							$inviter->name . ' (' . $inviter_guid . ')',
+							$reason,
+							$user->getURL(),
+						));
+						foreach ($admins as $notify_user) {
+							notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body, array('object' => $user), array('email', 'site'));
+						}
+		
+						//system_message(elgg_echo("adduser:ok", array($site->name)));
+						system_message(elgg_echo("theme_inria:useradd:inria:ok", array($user->name, $user->email, $user->getUrl())));
+						elgg_clear_sticky_form('useradd');
+						
+						*/
+				
+				
+					}
+				}
+			}
+		
+		}
+	}
+	
+	
+	// Now create the user as guest account
+	if (!$already_registered) {
+		
 		$password = generate_random_cleartext_password();
 		// We can safely add the 'ext_' prefix here to avoid duplicates
-		$real_username = profile_manager_generate_username_from_email('ext_'.$email);
+		$real_username = profile_manager_generate_username_from_email('ext_' . $email);
 		/*
 		if (strpos($username, 'ext_') === 0) {
 			$real_username = $username;
@@ -91,25 +179,7 @@ foreach ($emails as $email) {
 	
 		// Handle new account meta and validation rules
 		$user = get_entity($guid);
-
-		$site = elgg_get_site_entity();
-
-		// Invited people should be friend with inviter...
-		$inviter = elgg_get_logged_in_user_entity();
-		$inviter_guid = elgg_get_logged_in_user_guid();
-
-		$admin_validation = elgg_get_plugin_setting('admin_validation', 'theme_inria');
-		if (($admin_validation == 'yes') && elgg_is_active_plugin('uservalidationbyadmin')) { $admin_validation = true; } else { $admin_validation = false; }
-
-		$notified = array(); $admins = array();
-		$notified[] = elgg_get_plugin_setting('useradd_notify1', 'theme_inria');
-		$notified[] = elgg_get_plugin_setting('useradd_notify2', 'theme_inria');
-		$notified[] = elgg_get_plugin_setting('useradd_notify3', 'theme_inria');
-		foreach ($notified as $admin_username) {
-			$notify_user = get_user_by_username($admin_username);
-			if ($notify_user) { $admins[] = $notify_user; }
-		}
-	
+		
 		//$user->admin_created = TRUE;
 // @TODO Handle Inria emails ?  useless, as it will be handled on next LDAP sync ?
 		$user->membertype = 'external';
@@ -194,9 +264,9 @@ foreach ($emails as $email) {
 		// ADMIN NOTIFICATION : always notify, wether validation is needed or not
 		// We can notify up to 3 admins so new members can be moderated
 		if ($admin_validation) {
-			$admin_subject = elgg_echo('theme_inria:useradd:admin:subject');
-		} else {
 			$admin_subject = elgg_echo('theme_inria:useradd:admin:subject:confirm');
+		} else {
+			$admin_subject = elgg_echo('theme_inria:useradd:admin:subject');
 		}
 		$admin_body = elgg_echo('theme_inria:useradd:admin:body', array(
 			$name,

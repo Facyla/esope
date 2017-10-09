@@ -33,7 +33,7 @@
 	position:relative; 
 	background: #eee;
 	border: 1px outset;
-	border-radius: 0 3px 3px 0;
+	border-radius: 0 8px 8px 0;;
 	border-left: 0;
 	box-shadow: 0 0 3px 0 white;
 }
@@ -68,7 +68,7 @@
 	-webkit-box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.8);
 	-moz-box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.8);
 	box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.8);
-	padding:0 0 6px 0;
+	padding: 0.5rem 1rem;
 }
 
 #feedBackContent h1 {
@@ -86,6 +86,8 @@
 .feedback-item {
 	margin-bottom: 0.5rem;
 }
+
+input#feedback_id { width: 100%; }
 
 #feedBackText { padding-top:5px; }
 
@@ -165,8 +167,18 @@
 
 .closed_button { float:right; width: auto; padding: 4px; margin:12px 0 0 8px; -webkit-border-radius: 4px; -moz-border-radius: 4px; background:#FFFFFF; border: 1px solid #999999; font: 12px/100% Arial, Helvetica, sans-serif; font-weight: bold; color: #000000; }
 
+
+.submitted-feedback {
+	margin: 5px 0 0;
+	padding: 5px 7px 3px 9px;
+	border: 1px solid #666666;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
 .submitted-feedback .controls { float:right; }
-.submitted-feedback .controls > a, .submitted-feedback .controls > span { margin-right:8px; margin-top:2px; }
+.submitted-feedback .controls > a, .submitted-feedback .controls > span { margin-right: 0.5rem; margin-top:2px; }
 .submitted-feedback .elgg-body { overflow: initial; }
 
 .elgg-module-group-feedback { margin-top: 10px; }

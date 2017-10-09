@@ -4,6 +4,7 @@
  *
  */
 
+/* 0. PLUGIN SETTINGS */
 
 /**
  * Saves the plugin settings.
@@ -44,6 +45,18 @@ function notification_messages_plugin_settings($hook, $type, $value, $params) {
 
 
 
+/* 1. REGISTER NOTIFICATIONS EVENTS */
+
+
+
+/* 2. PREPARE NOTIFICATIONS CONTENT */
+
+/* Determine setting for this particular object subtype */
+function notification_messages_get_subtype_setting($subtype = '') {
+	$setting = elgg_get_plugin_setting('object_' . $subtype, 'notification_messages');
+	if (empty($setting)) { $setting == 'default'; }
+	return $setting;
+}
 
 // Guess best subtype title depending on defined translation strings
 function notification_messages_readable_subtype($subtype) {
@@ -53,15 +66,6 @@ function notification_messages_readable_subtype($subtype) {
 	}
 	return strip_tags($msg_subtype);
 }
-
-
-/* Determine setting for this entity type */
-function notification_messages_get_subtype_setting($subtype = '') {
-	$setting = elgg_get_plugin_setting('object_' . $subtype, 'notification_messages');
-	if (empty($setting)) { $setting == 'default'; }
-	return $setting;
-}
-
 
 // Notification summary
 function notification_messages_build_summary($entity, $params) {
@@ -103,6 +107,30 @@ function notification_messages_comment_action_hook($hooks, $type, $returnvalue, 
 			// Break notification process before sending
 			return false;
 			break;
+	}
+	return $returnvalue;
+}
+
+// Core function override : Override system default comment email subject (forces full subject instead of adding Re:)
+function notification_messages_comments_notification_email_subject($hook, $type, $returnvalue, $params) {
+	if (!is_array($returnvalue)) {
+		// another hook handler returned a non-array, let's not override it
+		return;
+	}
+	/** @var Elgg\Notifications\Notification */
+	$notification = elgg_extract('notification', $params['params']);
+	if ($notification instanceof Elgg\Notifications\Notification) {
+		$object = elgg_extract('object', $notification->params);
+		if ($object instanceof ElggComment) {
+			$container = $object->getContainerEntity();
+			$new_subject = notification_messages_build_subject($object, $notification->params);
+			if (!empty($new_subject)) {
+				$returnvalue['params']['notification']->subject = $new_subject;
+				//$returnvalue['subject'] = 'Re: ' . $new_subject;
+			} else {
+				$returnvalue['params']['notification']->subject = 'Re: ' . $container->getDisplayName();
+			}
+		}
 	}
 	return $returnvalue;
 }
@@ -328,6 +356,89 @@ function notification_messages_build_body($entity, $params) {
 	}
 	return false;
 }
+
+
+
+/* 3. ADJUST RECIPIENTS
+ * Note : core function remove author from recipients, so we need to add author afterwards, or send the notification separately
+ * Design rule : never force if user is not suscribed to the (top level) container
+ * - notify initial object owner on replies (if setting 'emailpersonal' is set)
+ * - notify self (published object / reply author)
+ * - notify replies the same way as initial entities (according to their own notification settings)
+ * - notify discussion participants (can be not subscribed to group or member)
+ */
+
+// Should we also send notifications to the owner (of the comment) ?
+function notification_messages_notify_owner() {
+	$notify = false;
+	
+	// Setting is synchronized with comment_tracker's
+	if (elgg_is_active_plugin('comment_tracker')) {
+		$notify_owner = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
+	} else {
+		$notify_owner = elgg_get_plugin_setting('notify_owner', 'notification_messages');
+	}
+	if ($notify_owner == 'yes') { $notify = true; }
+	
+	// @TODO : should we force to true if using postbymail ?
+	//if (elgg_is_active_plugin('postbymail')) { $notify = true; }
+	
+	return $notify;
+}
+
+/**
+ * Add owner to subscribers
+ *
+ * @param string $hook          'get'
+ * @param string $type          'subscriptions'
+ * @param array  $subscriptions Array containing subscriptions in the form
+ *                       <user guid> => array('email', 'site', etc.)
+ * @param array  $params        Hook parameters
+ * @return array
+ */
+// Note : this will not work as expected because NotificationsService core class function "sendNotification()" blocks sending to owner
+function notification_messages_get_subscriptions_addowner($hook, $type, $subscriptions, $params) {
+	$object = $params['event']->getObject();
+	if (!elgg_instanceof($object)) { return $subscriptions; }
+	
+	// Check plugin setting
+	$notify_owner = notification_messages_notify_owner();
+	if ($notify_owner) {
+		$owner_guid = $object->getOwnerGUID();
+		if (!isset($subscriptions[$owner_guid])) {
+			$subscriptions[$owner_guid] = array('email');
+		}
+		if (!in_array('email', $subscriptions[$owner_guid])) {
+			$subscriptions[$owner_guid][] = 'email';
+		}
+	}
+	//error_log("NOTIF : " . print_r($subscriptions, true));
+	
+	return $subscriptions;
+}
+
+// Send notification to author
+// Note : NotificationsService core class function "sendNotification()" blocks sending to owner
+// So we have to send email directly, without modifying subscribers
+// @TODO remove hook and direct notification sending once core accepts sending to owner
+function notification_messages_send_before_addowner($hook, $type, $return, $params) {
+	$object = $params['event']->getObject();
+	if (!elgg_instanceof($object)) { return $return; }
+	
+	// Check plugin setting
+	$notify_owner = notification_messages_notify_owner();
+	if ($notify_owner) {
+		$owner_guid = $object->getOwnerGUID();
+		$subscriptions = array("$owner_guid" => array('email'));
+		// Send notification (to owner only) right now
+		// Note : this method is not very friendly, better remove blocking check in core function (PR submitted on 20160317)
+		$result = notification_messages_sendNotification($params['event'], $owner_guid, 'email');
+	}
+	
+	return $return;
+}
+
+
 
 
 /**
@@ -578,80 +689,6 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 }
 
 
-// Should we also send notifications to the owner (of the comment) ?
-function notification_messages_notify_owner() {
-	$notify = false;
-	
-	// Setting is synchronized with comment_tracker's
-	if (elgg_is_active_plugin('comment_tracker')) {
-		$notify_owner = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
-	} else {
-		$notify_owner = elgg_get_plugin_setting('notify_owner', 'notification_messages');
-	}
-	if ($notify_owner == 'yes') { $notify = true; }
-	
-	// @TODO : should we force to true if using postbymail ?
-	//if (elgg_is_active_plugin('postbymail')) { $notify = true; }
-	
-	return $notify;
-}
-
-
-/**
- * Add owner to subscribers
- *
- * @param string $hook          'get'
- * @param string $type          'subscriptions'
- * @param array  $subscriptions Array containing subscriptions in the form
- *                       <user guid> => array('email', 'site', etc.)
- * @param array  $params        Hook parameters
- * @return array
- */
-// Note : this will not work as expected because NotificationsService core class function "sendNotification()" blocks sending to owner
-function notification_messages_get_subscriptions_addowner($hook, $type, $subscriptions, $params) {
-	$object = $params['event']->getObject();
-	if (!elgg_instanceof($object)) { return $subscriptions; }
-	
-	// Check plugin setting
-	$notify_owner = notification_messages_notify_owner();
-	if ($notify_owner) {
-		$owner_guid = $object->getOwnerGUID();
-		if (!isset($subscriptions[$owner_guid])) {
-			$subscriptions[$owner_guid] = array('email');
-		}
-		if (!in_array('email', $subscriptions[$owner_guid])) {
-			$subscriptions[$owner_guid][] = 'email';
-		}
-	}
-	//error_log("NOTIF : " . print_r($subscriptions, true));
-	
-	return $subscriptions;
-}
-
-
-// Send notification to author
-// Note : NotificationsService core class function "sendNotification()" blocks sending to owner
-// So we have to send email directly, without modifying subscribers
-// @TODO remove hook and direct notification sending once core accepts sending to owner
-function notification_messages_send_before_addowner($hook, $type, $return, $params) {
-	$object = $params['event']->getObject();
-	if (!elgg_instanceof($object)) { return $return; }
-	
-	// Check plugin setting
-	$notify_owner = notification_messages_notify_owner();
-	if ($notify_owner) {
-		$owner_guid = $object->getOwnerGUID();
-		$subscriptions = array("$owner_guid" => array('email'));
-		// Send notification (to owner only) right now
-		// Note : this method is not very friendly, better remove blocking check in core function (PR submitted on 20160317)
-		$result = notification_messages_sendNotification($params['event'], $owner_guid, 'email');
-	}
-	
-	return $return;
-}
-
-
-
 
 /* CORE FUNCTIONS OVERRIDES */
 
@@ -690,39 +727,13 @@ function notification_messages_sendNotification(\Elgg\Notifications\Event $event
 }
 
 
-// Override system default comment email subject (forces full subject instead of adding Re:)
-function notification_messages_comments_notification_email_subject($hook, $type, $returnvalue, $params) {
-	if (!is_array($returnvalue)) {
-		// another hook handler returned a non-array, let's not override it
-		return;
-	}
-	/** @var Elgg\Notifications\Notification */
-	$notification = elgg_extract('notification', $params['params']);
-	if ($notification instanceof Elgg\Notifications\Notification) {
-		$object = elgg_extract('object', $notification->params);
-		if ($object instanceof ElggComment) {
-			$container = $object->getContainerEntity();
-			$new_subject = notification_messages_build_subject($object, $notification->params);
-			if (!empty($new_subject)) {
-				$returnvalue['params']['notification']->subject = $new_subject;
-				//$returnvalue['subject'] = 'Re: ' . $new_subject;
-			} else {
-				$returnvalue['params']['notification']->subject = 'Re: ' . $container->getDisplayName();
-			}
-		}
-	}
-	return $returnvalue;
-}
 
 
-
-
-/* COMMENT TRACKER FUNCTIONS OVERRIDES */
-
+/* COMMENT TRACKER FUNCTIONS OVERRIDES
+ * Réécriture de comment_tracker_notifications pour pouvoir définir une fonction de remplacement 
+ * et ainsi pouvoir définir le contenu de la notification envoyée, mais avec les destinataires définis via comment_tracker...
+ */
 if (elgg_is_active_plugin('comment_tracker')) {
-	
-	// Réécriture de comment_tracker_notifications pour pouvoir définir une fonction de remplacement 
-	// et ainsi pouvoir définir le contenu de la notification envoyée, mais avec les destinataires définis via comment_tracker...
 	
 	// ESOPE : la fonction doit être identique à celle d'origine, à l'exception de la fonction de notification utilisée
 	// annotation event handler function to manage comment notifications
@@ -801,7 +812,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 				}
 			}
 			
-		
 			$entity_link = elgg_view('output/url', array(
 				'url' => $entity->getUrl(),
 				'text' => $entity->title,
@@ -921,4 +931,6 @@ if (elgg_is_active_plugin('comment_tracker')) {
 	}
 	
 }
+
+
 

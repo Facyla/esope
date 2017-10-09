@@ -176,18 +176,21 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 				$memberstatus = 'active';
 				$memberreason = 'alumni';
 				// Note : email removal is replaced by the email blocking hook, much cleaner and extensible
-				if ($debug) error_log("Previously valid Inria has become alumni : quitting groups");
+				if ($debug) { error_log("Previously valid Inria has become alumni : quitting groups"); }
 				// @TODO leave groups : probably leave only some groups (not if owner, not if open group...)
 				$user_groups = elgg_get_entities_from_relationship(array('relationship' => 'member', 'relationship_guid' => $user->guid, 'type' => 'group', 'limit' => false));
 				$left_groups_guids = (array) $user->inria_left_groups;
 				if ($user_groups) {
 					foreach($user_groups as $group) {
 						// Don't remove if group owner
-						// Operator ? To avoid removing operators, use a proper operator function - not: !$entity->canEdit($user->guid)
-						// Don't remove if group access is public or limited to members
-						if (($group->owner_guid != $user->guid)  && !in_array($group->access_id, [2, 1])) {
-							if (!in_array($group->guid, $left_groups_guids)) { $left_groups_guids[] = $group->guid; }
-							$group->leave($user);
+						if ($group->owner_guid != $user->guid) {
+						// Operator too ?
+						//if (($group->owner_guid != $user->guid) && !check_entity_relationship($user->guid, 'operator', $group->guid)) {
+								// Don't remove if group access is public or limited to all members
+							if (!in_array($group->access_id, [2, 1])) {
+								if (!in_array($group->guid, $left_groups_guids)) { $left_groups_guids[] = $group->guid; }
+								$group->leave($user);
+							}
 						}
 					}
 					$user->inria_left_groups = $left_groups_guids;
