@@ -106,8 +106,9 @@ foreach ($emails as $email) {
 					$user = ldap_auth_create_profile($ldap_username, $password);
 					// Send a different email (no password, use CAS, etc.)
 					if (elgg_instanceof($user, 'user')) {
+						$already_registered = true;
 						// user and admin notifications
-					
+						
 						// USER NOTIFICATION
 						// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
 						$user_subject = elgg_echo('theme_inria:useradd:inria:subject', array($site->name, $inviter->name));
@@ -136,14 +137,10 @@ foreach ($emails as $email) {
 						foreach ($admins as $notify_user) {
 							notify_user($notify_user->guid, $site->guid, $admin_subject, $admin_body, array('object' => $user), array('email', 'site'));
 						}
-		
+						
 						//system_message(elgg_echo("adduser:ok", array($site->name)));
 						system_message(elgg_echo("theme_inria:useradd:inria:ok", array($user->name, $user->email, $user->getUrl())));
 						elgg_clear_sticky_form('useradd');
-						
-						*/
-				
-				
 					}
 				}
 			}
