@@ -362,7 +362,7 @@ return array(
 	'theme_inria:useradd:ok' => "The account of %s (%s) has been successfully created. <a href=\"%s\">Watch the profile page</a>",
 	'theme_inria:useradd:inria:ok' => "The account of %s (%s) has been successfully created. <a href=\"%s\">Watch the profile page</a>",
 	'theme_inria:useradd:register' => "Send invitation",
-	'theme_inria:useradd:subject' => "User account created",
+	'theme_inria:useradd:subject' => "[%1\$s] Invitation from %2\$s",
 	'theme_inria:useradd:body' => "Hi %1\$s
 
 %2\$s invites you to join %3\$s
@@ -370,12 +370,24 @@ return array(
 %4\$s
 
 To get started, go to:
-
 %5\$s
 
 And login with:
 - your login: %6\$s &nbsp; or your email address %7\$s
 - your password: %8\$s
+",
+
+	'theme_inria:useradd:inria:subject' => "[%1\$s] Invitation from %2\$s",
+	'theme_inria:useradd:inria:body' => "Hi %1\$s
+
+%2\$s invites you to join %3\$s
+
+%4\$s
+
+To login, please go to:
+%5\$s
+
+And use the CAS connection.
 ",
 	'theme_inria:useradd:admin:subject' => "Guest account created",
 	'theme_inria:useradd:admin:subject:confirm' => "Guest account registration to be confirmed",
@@ -387,6 +399,16 @@ Registration motive:
 %4\$s
 
 Here is the new profile page: %5\s
+",
+	
+	'theme_inria:useradd:inria:admin:subject' => "Inria account created",
+	'theme_inria:useradd:inria:admin:body' => "
+A user account has been createed for %1\$s, email %2\$s, by %3\$s.
+
+Invitation reason:
+%4\$s
+
+Here is the new account page: %5\$s
 ",
 	
 	'theme_inria:pages:summarytoggle' => "Wiki navigation (show/hide)",

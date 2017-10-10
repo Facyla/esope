@@ -35,6 +35,7 @@ $site = elgg_get_site_entity();
 $inviter = elgg_get_logged_in_user_entity();
 $inviter_guid = elgg_get_logged_in_user_guid();
 
+if ($debug) error_log("Inria user_add action : validation : $admin_validation / notif : " . print_r($notified, true));
 
 
 elgg_make_sticky_form('useradd');
@@ -51,14 +52,14 @@ $briefdescription = get_input('briefdescription');
 $reason = get_input('reason');
 $message = get_input('message');
 $group_guid = get_input('group_guid');
-// Also support CSV input
-if (strpos($group_guid, ',') !== false) { $group_guid = explode(',', $group_guid); }
-if (!is_array($group_guid)) { $group_guid = array($group_guid); }
 
 $hidden_entities = access_get_show_hidden_status();
 access_show_hidden_entities(TRUE);
 
+if ($debug) error_log("  Emails : " . print_r($emails, true)); // debug
+
 foreach ($emails as $email) {
+	if ($debug) error_log("email $i : $email"); // debug
 	$user = false;
 	
 	if (!is_email_address($email)) {
@@ -89,21 +90,27 @@ foreach ($emails as $email) {
 			register_error('User already exists : <a href="' . $already_registered->getURL() . '">' . $already_registered->name . '</a>');
 		}
 	}
+	if ($debug) error_log("  Registered : " . print_r($already_registered, true)); // debug
 
 
 	// Account creation through LDAP, if exists
 	if (!$already_registered) {
+		if ($debug) error_log("  Trying LDAP");
 		// Check if user exists in Inria LDAP => different creation process
 		if (elgg_is_active_plugin('ldap_auth')) {
 			elgg_load_library("elgg:ldap_auth");
 			$ldap_username = ldap_get_username($email);
+			if ($debug) error_log("  LDAP active : username found = " . print_r($ldap_username, true));
 			if ($ldap_username) {
 				// User exists in LDAP : register
 				// If LDAP account can be associated with multiple emails, ensure the account doesn't exist
 				$already_registered = get_user_by_username($ldap_username);
-				if (sizeof($already_registered) < 1) {
-					$already_registered = false;
+				if ($debug) error_log("  Checking if registered : " . print_r($already_registered, true));
+				if (elgg_instanceof($already_registered)) {
+					$already_registered = true;
 				} else {
+					$already_registered = false;
+					$password = generate_random_cleartext_password();
 					$user = ldap_auth_create_profile($ldap_username, $password);
 					// Send a different email (no password, use CAS, etc.)
 					if (elgg_instanceof($user, 'user')) {
@@ -117,11 +124,8 @@ foreach ($emails as $email) {
 							$name,
 							$inviter->name,
 							$site->name,
-							$site->url,
 							$message,
-							$ldap_username,
-							$email,
-							$password,
+							$site->url,
 						));
 						notify_user($user->guid, $site->guid, $user_subject, $user_body, array(), array('email'));
 						
@@ -212,8 +216,8 @@ foreach ($emails as $email) {
 			$name,
 			$inviter->name,
 			$site->name,
-			$site->url,
 			$message,
+			$site->url,
 			$real_username,
 			$email,
 			$password,
@@ -290,6 +294,9 @@ foreach ($emails as $email) {
 	// request = "invite" by a regular member
 	// add invite message + notification to group admin
 	if ($group_guid) {
+		// Also support CSV input
+		if (strpos($group_guid, ',') !== false) { $group_guid = explode(',', $group_guid); }
+		if (!is_array($group_guid)) { $group_guid = array($group_guid); }
 		foreach($group_guid as $guid) {
 			$group = get_entity($guid);
 			if (elgg_instanceof($group, 'group')) {

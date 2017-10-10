@@ -383,11 +383,10 @@ Et identifiez-vous avec :
 
 %4\$s
 
-Pour vous connecter, rendez-vous :
-
+Pour vous connecter, rendez-vous sur :
 %5\$s
 
-Et identifiez-vous avec la connexion CAS.
+Et identifiez-vous avec CAS.
 ",
 	'theme_inria:useradd:admin:subject' => "Création de compte Invité",
 	'theme_inria:useradd:admin:subject:confirm' => "Création de compte Invité à confirmer",
@@ -395,7 +394,6 @@ Et identifiez-vous avec la connexion CAS.
 Un compte utilisateur a été créé pour %1\$s, email %2\$s, par %3\$s.
 
 Motif de l'inscription :
-
 %4\$s
 
 Voici l'adresse du nouveau compte créé : %5\$s
@@ -406,7 +404,6 @@ Voici l'adresse du nouveau compte créé : %5\$s
 Un compte utilisateur Inria a été créé pour %1\$s, email %2\$s, par %3\$s.
 
 Motif de l'inscription :
-
 %4\$s
 
 Voici l'adresse du nouveau compte créé : %5\$s
