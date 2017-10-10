@@ -111,7 +111,7 @@ foreach ($emails as $email) {
 				} else {
 					$already_registered = false;
 					$password = generate_random_cleartext_password();
-					$user = ldap_auth_create_profile($ldap_username, $password);
+					$user = ldap_auth_create_profile($ldap_username, $password, false);
 					// Send a different email (no password, use CAS, etc.)
 					if (elgg_instanceof($user, 'user')) {
 						$already_registered = true;
