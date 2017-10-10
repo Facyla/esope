@@ -95,6 +95,7 @@ foreach ($emails as $email) {
 	if (!$already_registered) {
 		// Check if user exists in Inria LDAP => different creation process
 		if (elgg_is_active_plugin('ldap_auth')) {
+			elgg_load_library("elgg:ldap_auth");
 			$ldap_username = ldap_get_username($email);
 			if ($ldap_username) {
 				// User exists in LDAP : register
