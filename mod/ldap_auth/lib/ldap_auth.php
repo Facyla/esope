@@ -223,7 +223,7 @@ function ldap_auth_create_profile($username, $password = false, $login_user = tr
 	
 	// Email : we use a fallback noreply email until we get the info from LDAP
 	$register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth');
-	if (!$password || empty($password)) { $password = generate_random_cleartext_password() }
+	if (!$password || empty($password)) { $password = generate_random_cleartext_password(); }
 	// Optionally process usernames
 	$new_username = $username;
 	/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
