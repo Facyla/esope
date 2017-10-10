@@ -207,10 +207,12 @@ function ldap_auth_is_valid($username, $password) {
 /** Create user by username - requires active LDAP access
  *
  * @param string $username The user's username
+ * @password : optional password
+ * @$login_user : bool login the newly created user ?
  *
  * @return ElggUser|false Depending on success
  */
-function ldap_auth_create_profile($username, $password) {
+function ldap_auth_create_profile($username, $password = false, $login_user = true) {
 	global $CONFIG;
 	// Registration is allowed only if set in plugin
 	$allow_registration = elgg_get_plugin_setting('allow_registration', 'ldap_auth', 'yes');
@@ -221,7 +223,7 @@ function ldap_auth_create_profile($username, $password) {
 	
 	// Email : we use a fallback noreply email until we get the info from LDAP
 	$register_email = elgg_get_plugin_setting('generic_register_email', 'ldap_auth');
-	
+	if (!$password || empty($password)) { $password = generate_random_cleartext_password() }
 	// Optionally process usernames
 	$new_username = $username;
 	/* Noms d'utilisateurs de moins de 6 caractères : on ajoute un padding de "0"
@@ -247,7 +249,9 @@ function ldap_auth_create_profile($username, $password) {
 	// Create user on Elgg site
 	if ($user_guid = register_user($new_username, $password, $username, $register_email, true)) {
 		$user = get_user($user_guid);
-		login($user);
+		if ($login_user) {
+			login($user);
+		}
 		$user->ldap_username = $username;
 		// Optionally update profile with ldap infos
 		ldap_auth_check_profile($user);
