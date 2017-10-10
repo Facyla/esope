@@ -46,12 +46,12 @@ if (!is_array($emails)) { $emails = array($emails); }
 //$username = get_input('username');
 //$password = get_input('password');
 $name = get_input('name');
-$organisation = get_input('organisation');
-$organisation = string_to_tag_array($organisation);
+$organisations = get_input('organisation');
+if (!empty($organisations)) { $organisations = string_to_tag_array($organisations); } else { $organisations = false; }
 $briefdescription = get_input('briefdescription');
 $reason = get_input('reason');
 $message = get_input('message');
-$group_guid = get_input('group_guid');
+$group_guids = get_input('group_guid');
 
 $hidden_entities = access_get_show_hidden_status();
 access_show_hidden_entities(TRUE);
@@ -194,8 +194,8 @@ foreach ($emails as $email) {
 		esope_set_user_profile_type($user, 'external');
 		
 		// Add some fields values
-		$user->organisation = $organisation;
-		$user->briefdescription = $briefdescription;
+		if ($organisations) $user->organisation = $organisations;
+		if (!empty($briefdescription)) $user->briefdescription = $briefdescription;
 
 		// Remember account creation + make mutual friends
 		$user->created_by_guid = $inviter_guid;
@@ -293,11 +293,11 @@ foreach ($emails as $email) {
 	// join : idem
 	// request = "invite" by a regular member
 	// add invite message + notification to group admin
-	if ($group_guid) {
+	if ($group_guids) {
 		// Also support CSV input
-		if (strpos($group_guid, ',') !== false) { $group_guid = explode(',', $group_guid); }
-		if (!is_array($group_guid)) { $group_guid = array($group_guid); }
-		foreach($group_guid as $guid) {
+		if (is_string($group_guids) && strpos($group_guids, ',') !== false) { $group_guids = explode(',', $group_guids); }
+		if (!is_array($group_guids)) { $group_guids = array($group_guids); }
+		foreach($group_guids as $guid) {
 			$group = get_entity($guid);
 			if (elgg_instanceof($group, 'group')) {
 				if (!$group->isMember($user)) {
