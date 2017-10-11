@@ -295,12 +295,21 @@ echo '</div>';
 
 
 // Recipients : notify author, all group members (recursive container, not only direct)
+/* @TODO
+ * Design rule : never force if user is not suscribed to the (top level) container
+ * - notify self (published object / reply author)
+ * - notify initial object owner on replies (if setting 'emailpersonal' is set)
+ * - notify replies the same way as initial entities (according to their own notification settings) => use top level container instead of entity
+ * - notify all discussion participants (can be not subscribed to group or member)
+*/
+
 echo '<h3><i class="fa fa-users"></i> ' . elgg_echo('notification_messages:settings:recipients') . '</h3>';
 echo '<div>';
 	echo '<p>' . elgg_echo('notification_messages:settings:recipients:details') . '</p>';
 	
 	// Notify also the author (of a comment) ?
 	// Note : this is mostly useful if you want to let owner reply by email
+	// @TODO Notify initial object owner on replies (if setting 'emailpersonal' is set)
 	echo '<p><label>' . elgg_echo("notification_messages:settings:notify_user");
 	if (elgg_is_active_plugin('comment_tracker')) {
 		// Synchronize setting with comment tracker's and block editing
@@ -329,6 +338,18 @@ echo '<div>';
 	echo '<p><label>' . elgg_echo('notification_messages:settings:generic_comment') . '&nbsp;: ' . elgg_view('input/select', $prepare_params) . '</label> - ' . elgg_echo('notification_messages:subject:default') . '&nbsp;: <em>' . elgg_echo('generic_comment:email:subject') . '</em></p>';
 	*/
 
+	// @TODO Notify self (published object / reply author)
+	echo '<p><label>' . elgg_echo("notification_messages:settings:notify_self");
+		echo "&nbsp;" . elgg_view("input/select", array("name" => "params[notify_self]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_self)) . '</label>';
+		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_self:details") . "</div>";
+	echo '</p>';
+	
+	// @TODO Notify discussion participants (even if not subscribed to container entity)
+	echo '<p><label>' . elgg_echo("notification_messages:settings:notify_participants");
+		echo "&nbsp;" . elgg_view("input/select", array("name" => "params[notify_participants]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_participants)) . '</label>';
+		echo "<div class='elgg-subtext'>" . elgg_echo("notification_messages:settings:notify_participants:details") . "</div>";
+	echo '</p>';
+	
 	// @TODO Notify replies (comments) the same way as the main entity ? = to all group members
 	echo '<p><label>@TODO ' . elgg_echo("notification_messages:settings:notify_replies");
 		echo "&nbsp;" . elgg_view("input/select", array("name" => "params[notify_replies]", "options_values" => $noyes_options, "value" => $vars['entity']->notify_replies)) . '</label>';
@@ -365,10 +386,6 @@ echo "</fieldset>";
  2. Préparation des notifications : destinataires et contenu : elgg_register_plugin_hook_handler('prepare', 'notification:create:object:photo', 'photos_prepare_notification');
  3. Définition des destinataires : elgg_register_plugin_hook_handler('get', 'subscriptions', 'discussion_get_subscriptions');
  Liste des destinataires : elgg_get_subscriptions_for_container
- 
-
-
-}
  
 */
 

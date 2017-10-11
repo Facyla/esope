@@ -171,7 +171,7 @@ function notification_messages_init() {
 	 */
 	if (in_array('comment', $prepare_object_subtypes)) {
 		elgg_unregister_action('comment/save');
-		elgg_register_action('comment/save', $action_path . 'comments/save.php');
+		elgg_register_action('comment/save', elgg_get_plugins_path() . 'notification_messages/actions/comments/save.php');
 	}
 	/* Comments subject override
 	 * Why ?   Core function that adds the "Re: " for replies is loaded right before email sending hook, and can be skipped 
@@ -191,7 +191,7 @@ function notification_messages_init() {
 	$messages_send = elgg_get_plugin_setting('messages_send', 'notification_messages');
 	if ($messages_send == 'yes') {
 		elgg_unregister_action("messages/send");
-		elgg_register_action("messages/send", "$action_path/send.php");
+		elgg_register_action("messages/send", elgg_get_plugins_path() . 'notification_messages/actions/messages/send.php');
 	}
 	
 	
