@@ -65,6 +65,11 @@ function theme_inria_init(){
 	elgg_extend_view('css/admin', 'theme_inria/admin_css', 1000);
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	
+	
+	$js = elgg_get_simplecache_url('js', 'esope/event_calendar_adjust_end_dates');
+	elgg_register_js('esope.event_calendar_adjust_end_dates', $js);
+	elgg_load_js('esope.event_calendar_adjust_end_dates');
+	
 	elgg_extend_view('newsletter/sidebar/steps', 'theme_inria/newsletter_sidebar_steps');
 	
 	// Extend user owner block

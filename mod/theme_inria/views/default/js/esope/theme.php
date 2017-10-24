@@ -160,6 +160,7 @@ $(document).ready(function() {
 	});
 });
 
+
 /* Group workspace add content tab switcher (Iris v2) */
 $(document).ready(function() {
 	$('#group-workspace-addcontent .group-workspace-add-tabs a').on('click', function(){
@@ -173,6 +174,7 @@ $(document).ready(function() {
 		return false;
 	});
 });
+
 
 /* Iris members search : sync external input fields sync with main advanced search form
  * Intercepts topbar search form and replace it with main advanced form, if exists
@@ -246,7 +248,6 @@ $(document).ready(function() {
 		}
 	});
 	*/
-	
 	
 	// Live members filter
 	$('#group-members-filter').on('change paste keyup', function(e) {
