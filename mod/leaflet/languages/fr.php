@@ -11,6 +11,8 @@ return array(
 	'leaflet' => "Cartographie",
 	
 	'leaflet:settings:osm:api_key' => "Clef d'API OSM",
+	'leaflet:settings:osm:api_key:get' => "Récupérer une clef d'API OSM",
+	'leaflet:settings:cron_enable' => "Activer le cron de géocodage",
 	
 	// Errors and warnings
 	'leaflet:error:missingapikey' => "Clef d'API manquante pour le géocodage. Impossible de géocoder.",

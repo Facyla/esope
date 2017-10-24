@@ -326,6 +326,9 @@ function leaflet_read_positions_from_file($filePath = '', $tslimit = false) {
  * Geocode all registered members locations
  */
 function leaflet_cron_geocode_all_members($hook, $entity_type, $returnvalue, $params) {
+	$cron_enabled = elgg_get_plugin_setting('cron_enable', 'leaflet');
+	if ($cron_enable != 'yes') { return ''; }
+	
 	elgg_load_library('leaflet');
 	
 	error_log("LEAFLET : geocode cron batch triggered");

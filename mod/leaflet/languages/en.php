@@ -11,6 +11,8 @@ return array(
 	'leaflet' => "Cartography",
 	
 	'leaflet:settings:osm:api_key' => "OSM API key",
+	'leaflet:settings:osm:api_key:get' => "Get OSM API key",
+	'leaflet:settings:cron_enable' => "Enable daily batch geocoding cron",
 	
 	// Errors and warnings
 	'leaflet:error:missingapikey' => "Missing API key for geocoding. Cannot geocode.",
