@@ -6,6 +6,20 @@
  * @subpackage Core
  */
 
+/*
+if (elgg_is_sticky_form('register')) {
+	$values = elgg_get_sticky_values('register');
+
+	// Add the sticky values to $vars so views extending
+	// register/extend also get access to them.
+	$vars = array_merge($vars, $values);
+
+	elgg_clear_sticky_form('register');
+} else {
+	$values = array();
+}
+*/
+
 $password = $password2 = '';
 $username = elgg_extract('username', $vars, get_input('u'));
 $email = elgg_extract('email', $vars, get_input('e'));
@@ -53,8 +67,8 @@ if (elgg_get_plugin_setting("generate_username_from_email", "profile_manager") =
 			'id' => 'register-name',
 			'name' => 'name',
 			'value' => $name,
-			'class' => 'elgg-autofocus',
-			'required' => 'required',
+			'autofocus' => true,
+			'required' => true
 		));
 		?>
 		</div>
@@ -74,7 +88,7 @@ if (elgg_get_plugin_setting("generate_username_from_email", "profile_manager") =
 				'id' => 'register-email',
 				'name' => 'email',
 				'value' => $email,
-				'required' => 'required',
+				'required' => true
 			));
 			?>
 			<span class='elgg-icon profile_manager_validate_icon'></span>
@@ -96,7 +110,7 @@ if (elgg_get_plugin_setting("generate_username_from_email", "profile_manager") =
 					'id' => 'register-username',
 					'name' => 'username',
 					'value' => $username,
-					'required' => 'required',
+					'required' => true
 				));
 				?>
 				<div class='elgg-icon profile_manager_validate_icon'></div>
@@ -147,10 +161,10 @@ if (elgg_get_plugin_setting("generate_username_from_email", "profile_manager") =
 </fieldset>
 <?php
 // view to extend to add more fields to the registration form
-echo elgg_view('register/extend');
+echo elgg_view('register/extend', $vars);
 
 // Add captcha hook
-echo elgg_view('input/captcha');
+echo elgg_view('input/captcha', $vars);
 
 echo "</div>";
 
