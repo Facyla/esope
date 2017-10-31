@@ -680,7 +680,15 @@ function theme_inria_entity_menu_setup($hook, $type, $return, $params) {
 			}
 			
 			// Renames
-			if ($item->getName() == 'edit') { $return[$index]->setText('<i class="fa fa-pencil"></i>&nbsp;' . elgg_echo('edit')); }
+			if ($item->getName() == 'edit') {
+				$return[$index]->setText('<i class="fa fa-pencil"></i>&nbsp;' . elgg_echo('edit'));
+				// Update comment edit link so it doesn't toggle the add new comment form
+				if (elgg_instanceof($entity, 'object', 'comment')) {
+					$return[$index]->setName('edit_comment');
+					// Note : we could use the inline editor, but as we are editing HTML, better use the edit link which leads to the full-featured editor
+					//$return[$index]->setHref("javascript:void(0); $('#comments-edit-{$entity->guid}').slideToggle('slow');");
+				}
+			}
 			if ($item->getName() == 'delete') { $return[$index]->setText('<i class="fa fa-times"></i>&nbsp;' . elgg_echo('delete')); }
 			if ($item->getName() == 'download') { $return[$index]->setText('<i class="fa fa-download"></i>&nbsp;' . elgg_echo('download')); }
 			if ($item->getName() == 'pdf-export') { $return[$index]->setText('<i class="fa fa-file-pdf-o"></i>&nbsp;' . elgg_echo('pdfexport:download:alt')); }

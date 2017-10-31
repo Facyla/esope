@@ -70,6 +70,12 @@ if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic')))
 	}
 	*/
 
+	// inline edit form
+	if ($object->canEdit()) {
+		$form_vars = array('id' => "comments-edit-{$object->getGUID()}-{$top_object->guid}", 'class' => 'hidden');
+		$body_vars = array('entity' => $top_object, 'comment' => $object, 'inline' => true);
+		echo elgg_view_form('comment/save', $form_vars, $body_vars);
+	}
 	// inline comment form
 	if ($top_object->canComment()) {
 		$form_vars = array('id' => "comments-add-{$object->getGUID()}-{$top_object->guid}", 'class' => 'hidden');

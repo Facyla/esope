@@ -114,7 +114,7 @@ $actions .= '<div class="iris-object-actions">';
 				
 			} else if (elgg_instanceof($entity, 'object', 'comment')) {
 				if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
-				// Generic inline comment form
+				// Generic inline add comment form
 				$actions .= '<li>' . elgg_view('output/url', array(
 							'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
 							'title' => elgg_echo('theme_inria:object:comment'),
@@ -123,6 +123,11 @@ $actions .= '<div class="iris-object-actions">';
 				$actions_after .= elgg_view_form('comment/save', 
 						array('id' => "comments-add-{$entity->guid}", 'class' => 'hidden'), 
 						array('entity' => $top_object, 'inline' => true)
+					);
+				// Edit form (link is added by registered entity menu)
+				$actions_after .= elgg_view_form('comment/save', 
+						array('id' => "comments-edit-{$entity->guid}", 'class' => 'hidden'), 
+						array('entity' => $top_object, 'comment' => $entity, 'inline' => true)
 					);
 					
 			} else {

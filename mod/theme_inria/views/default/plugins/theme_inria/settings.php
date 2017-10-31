@@ -16,7 +16,7 @@ if (!isset($vars['entity']->home_slider)) { $vars['entity']->home_slider = 'home
 if (!empty($vars['entity']->home_slider)) { $vars['entity']->home_slider = elgg_get_friendly_title($vars['entity']->home_slider); }
 echo '<fieldset><legend>Gestion du menu "Aide"</legend>';
 	
-	echo '<p><label>Nombre de liens dans le menu Aide</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[help_menu_count]', 'options_values' => $count_opt, 'value' => $vars['entity']->help_menu_count )) . '</p>';
+	echo '<p><label>Nombre de liens dans le menu Aide</label> ' . elgg_view('input/select', array( 'name' => 'params[help_menu_count]', 'options_values' => $count_opt, 'value' => $vars['entity']->help_menu_count )) . '</p>';
 	
 	if ($vars['entity']->help_menu_count > 0) {
 		// FR
@@ -42,7 +42,7 @@ echo '<fieldset><legend>Gestion des inscriptions</legend>';
 
 	echo "<p>Vous pouvez choisir de ne pas activer les comptes, et requérir une validaiton manuelle par un administrateur.<br />Note : l'activation de cette fonctionnalité nécesssite que le plugin \"User validation by admin\" soit activé (et \"User validation by email désactivé\").</p>";
 
-	echo '<p><label>Validation manuelle des comptes par un admin</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[admin_validation]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->admin_validation )) . '</p>';
+	echo '<p><label>Validation manuelle des comptes par un admin</label> ' . elgg_view('input/select', array( 'name' => 'params[admin_validation]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->admin_validation )) . '</p>';
 
 	if (($vars['entity']->admin_validation == 'yes') && !elgg_is_active_plugin('uservalidationbyadmin')) {
 		register_error("Attention : le plugin uservalidationbyadmin n'est pas activé !  Les comptes créés ne pourront pas être activés !");
@@ -53,7 +53,7 @@ echo '<fieldset><legend>Gestion des inscriptions</legend>';
 	/*
 	echo "<div>";
 	echo elgg_echo("html_email_handler:settings:notifications");
-	echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[notifications]", "options_values" => $noyes_options, "value" => $plugin->notifications));
+	echo "&nbsp;" . elgg_view("input/select", array("name" => "params[notifications]", "options_values" => $noyes_options, "value" => $plugin->notifications));
 	echo "<div class='elgg-subtext'>" . elgg_echo("html_email_handler:settings:notifications:subtext") . "</div>";
 	echo "</div>";
 	*/
@@ -73,13 +73,13 @@ echo '</fieldset>';
 echo '<fieldset><legend>Blocage des notifications des Discussions dans certains groupes</legend>';
 	echo "<p>Ceci permet de bloquer totalement l'envoi de notifications dans certains groupes, quels que soient les réglages de notifications définis dans ce groupe. L'intérêt est d'éviter de recevoir des flots d'email lors de l'utilisation d'applications mobiles ou de systèmes d'actualisation des discussions en temps réel.</p>";
 	echo '<p><label>GUID des groupes (guid1, guid2, etc.) </label> ' . elgg_view('input/text', array( 'name' => 'params[block_notif_forum_groups]', 'value' => $vars['entity']->{'block_notif_forum_groups'} )) . '</p>';
-	echo '<p><label>Bloquer les notifications lors de la création de nouveaux sujets</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[block_notif_forum_groups_object]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->block_notif_forum_groups_object)) . '</p>';
-	echo '<p><label>Bloquer les notifications des réponses</label> ' . elgg_view('input/dropdown', array( 'name' => 'params[block_notif_forum_groups_replies]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->block_notif_forum_groups_replies)) . '</p>';
+	echo '<p><label>Bloquer les notifications lors de la création de nouveaux sujets</label> ' . elgg_view('input/select', array( 'name' => 'params[block_notif_forum_groups_object]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->block_notif_forum_groups_object)) . '</p>';
+	echo '<p><label>Bloquer les notifications des réponses</label> ' . elgg_view('input/select', array( 'name' => 'params[block_notif_forum_groups_replies]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->block_notif_forum_groups_replies)) . '</p>';
 echo '</fieldset>';
 
 
 echo "<fieldset><legend>Activation du cron d'actualisation des données LDAP</legend>";
-	echo '<p><label>Activer le cron quotidien de synchronisation des donnes LDAP ' . elgg_view('input/dropdown', array( 'name' => 'params[ldap_cron]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->ldap_cron)) . '</label></p>';
+	echo '<p><label>Activer le cron quotidien de synchronisation des donnes LDAP ' . elgg_view('input/select', array( 'name' => 'params[ldap_cron]', 'options_values' => $no_yes_opt, 'value' => $vars['entity']->ldap_cron)) . '</label></p>';
 echo '</fieldset>';
 
 
