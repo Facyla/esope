@@ -38,8 +38,14 @@ function notification_messages_plugin_settings($hook, $type, $value, $params) {
 	$register_object_subtypes = serialize($register_object_subtypes);
 	elgg_set_plugin_setting('register_object_subtypes', $register_object_subtypes, 'notification_messages');
 	
+	// Also save basic settings (as we override, they won't be saved otherwise)
+	$params = get_input('params');
+	foreach($params as $param => $value) {
+		elgg_set_plugin_setting($param, $value, 'notification_messages');
+	}
+	
 	$plugin->save();
-
+	
 	forward(REFERER);
 }
 
@@ -154,10 +160,15 @@ function notification_messages_comments_notification_email_subject($hook, $type,
  */
 function notification_messages_prepare_notification($hook, $type, $notification, $params) {
 	$entity = $params['event']->getObject();
-	$owner = $params['event']->getActor();
+	$author = $params['event']->getActor();
+	$action = $params['event']->getAction();
 	$recipient = $params['recipient'];
 	$language = $params['language'];
 	$method = $params['method'];
+	
+	error_log("NOT_MES functions hook type for $action by $author->guid in $language using $method : $hook / $type");
+	
+	// @TODO adjust messages depending on events (create/publish/update/delete)
 	
 	// Note : we do not use behaviour setting anymore (update subject and content but do not block sending)
 	// Determine behaviour - default is not changing anything (can be already specific)
@@ -168,15 +179,24 @@ function notification_messages_prepare_notification($hook, $type, $notification,
 	
 	// Notification subject
 	$subject = notification_messages_build_subject($entity, $params);
-	if (!empty($subject)) { $notification->subject = $subject; }
+	if (!empty($subject)) {
+		if ($action != 'create') { $subject .= "[" . elgg_echo("notification_messages:$action") . "] $subject"; }
+		$notification->subject = $subject;
+	}
 
 	// Notification message body
 	$body = notification_messages_build_body($entity, $params);
-	if (!empty($body)) { $notification->body = $body; }
+	if (!empty($body)) {
+		if ($action != 'create') { $body .= "[" . elgg_echo("notification_messages:$action") . "]\r\n\r\n$body"; }
+		$notification->body = $body;
+	}
 
 	// Short summary about the notification
 	$summary = notification_messages_build_summary($entity, $params);
-	if (!empty($summary)) { $notification->summary = $summary; }
+	if (!empty($summary)) {
+		if ($action != 'create') { $summary .= "[" . elgg_echo("notification_messages:$action") . "]\r\n\r\n$summary"; }
+		$notification->summary = $summary;
+	}
 	
 	return $notification;
 }
@@ -377,6 +397,7 @@ function notification_messages_notify_owner() {
 		$notify_owner = elgg_get_plugin_setting('notify_owner', 'comment_tracker');
 	} else {
 		$notify_owner = elgg_get_plugin_setting('notify_owner', 'notification_messages');
+		// @TODO enable the 'emailpersonal' user setting too
 	}
 	if ($notify_owner == 'yes') { $notify = true; }
 	
@@ -387,7 +408,12 @@ function notification_messages_notify_owner() {
 }
 
 /**
- * Add owner to subscribers
+ * Adjust subscribers
+ * 
+ * - notify initial object owner on replies (if setting 'emailpersonal' is set)
+ * - notify self (published object / reply author)
+ * - notify replies the same way as initial entities (according to their own notification settings) => use top level container instead of entity
+ * - notify all discussion participants (can be not subscribed to group or member)
  *
  * @param string $hook          'get'
  * @param string $type          'subscriptions'
@@ -397,11 +423,17 @@ function notification_messages_notify_owner() {
  * @return array
  */
 // Note : this will not work as expected because NotificationsService core class function "sendNotification()" blocks sending to owner
-function notification_messages_get_subscriptions_addowner($hook, $type, $subscriptions, $params) {
+function notification_messages_get_subscriptions($hook, $type, $subscriptions, $params) {
+	$debug = false;
 	$object = $params['event']->getObject();
 	if (!elgg_instanceof($object)) { return $subscriptions; }
 	
 	// Check plugin setting
+	$notify_owner = elgg_get_plugin_setting('notify_owner', 'notification_messages');
+	$notify_self = elgg_get_plugin_setting('notify_self', 'notification_messages');
+	$notify_participants = elgg_get_plugin_setting('notify_participants', 'notification_messages');
+	$notify_replies = elgg_get_plugin_setting('notify_replies', 'notification_messages');
+	
 	$notify_owner = notification_messages_notify_owner();
 	if ($notify_owner) {
 		$owner_guid = $object->getOwnerGUID();
@@ -412,32 +444,180 @@ function notification_messages_get_subscriptions_addowner($hook, $type, $subscri
 			$subscriptions[$owner_guid][] = 'email';
 		}
 	}
-	//error_log("NOTIF : " . print_r($subscriptions, true));
+	if ($debug) error_log("NOTIF subscriptions for {$object->guid} {$object->getType()} / {$object->getSubtype()} : " . print_r($subscriptions, true));
+	
+	$top_object = notification_messages_get_top_object_entity($object);
+	if ($debug) error_log(" - Top object : {$top_object->guid} {$top_object->getType()} / {$top_object->getSubtype()}");
+	$top_container = notification_messages_get_top_container_entity($object);
+	if ($debug) error_log(" - Top container : {$top_container->guid} {$top_container->getType()} / {$top_container->getSubtype()}");
+	
+	$self = $object->getOwnerEntity();
+	$top_owner = $top_object->getOwnerEntity();
+	
+	// Notify initial object owner
+	if ($notify_owner) {
+		if ($top_owner->guid != $self->guid) {
+			$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $top_owner->guid);
+		}
+	}
+	if ($debug) error_log(" + notify_owner $notify_owner : " . print_r($subscriptions, true));
+	
+	// Notify self : note that it won't work (because owner is removed from reciepients so we need to use the send:before hook)
+	if ($notify_self == 'yes') {
+		$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $self->guid);
+	}
+	if ($debug) error_log(" + notify_self $notify_self : " . print_r($subscriptions, true));
+	
+	/* Notify all participants
+	 * - from comments
+	 * - from thread (parent objects)
+	 * - from replies
+	 * - from wiki versions
+	 * - from wire thread
+	 */
+	if ($notify_participants == 'yes') {
+		
+		// Comments : for any object subtype (get comments from original content)
+		if ($debug) error_log(" ..from comments :");
+		$comments = elgg_get_entities(array(
+				'type' => 'object', 'subtype' => 'comment',
+				'container_guid' => $top_object->guid,
+				'limit' => false,
+			));
+		foreach ($comments as $ent) {
+			$ent_owner_guid = $ent->getOwnerGUID();
+			$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $ent_owner_guid);
+			if ($debug) error_log("   adding comment owner $ent_owner_guid");
+		}
+		
+		// Also add all thread participants (alll parent objects owners)
+		$parent = $object;
+		while(elgg_instanceof($parent, 'object')) {
+			$parent_owner_guid = $parent->getOwnerGUID();
+			$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $parent_owner_guid);
+			if ($debug) error_log("   adding parent object owner (thread participant) $parent_owner_guid");
+			$parent = $parent->getContainerEntity();
+		}
+
+		switch($top_object->getSubtype()) {
+			case 'groupforumtopic':
+			case 'discussion':
+				if ($debug) error_log(" ..from discussion replies :");
+				$replies = elgg_get_entities(array(
+					'type' => 'object', 'subtype' => 'discussion_reply',
+					'container_guid' => $top_object->guid,
+					'limit' => false,
+				));
+				foreach ($replies as $ent) {
+					$ent_owner_guid = $ent->getOwnerGUID();
+					$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $ent_owner_guid);
+					if ($debug) error_log("   adding discussion reply owner $ent_owner_guid");
+				}
+				break;
+				
+			case 'page_top':
+				if ($debug) error_log(" ..from page versions :");
+				$versions = elgg_get_annotations(array(
+					'guid' => $object->guid,
+					'annotation_name' => 'page',
+					'limit' => false,
+				));
+				foreach ($versions as $ent) {
+					$ent_owner_guid = $ent->getOwnerGUID();
+					$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $ent_owner_guid);
+					if ($debug) error_log("   adding pages version owner $ent_owner_guid");
+				}
+				break;
+				
+			case 'thewire':
+				if ($debug) error_log(" ..from wire thread :");
+				$wire_replies = elgg_get_entities_from_metadata(array(
+					"type" => "object", "subtype" => "thewire",
+					"metadata_name" => "wire_thread", "metadata_value" => $object->wire_thread,
+					'limit' => false,
+				));
+				if ($debug) error_log("   adding wire to $object->guid $object->wire_thread $top_object->guid");
+				foreach ($wire_replies as $ent) {
+					$ent_owner_guid = $ent->getOwnerGUID();
+					$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $ent_owner_guid);
+					if ($debug) error_log("   adding wire reply owner $ent_owner_guid");
+				}
+				break;
+			
+			default:
+				// 
+		}
+		
+	}
+	if ($debug) error_log(" + notify_participants $notify_self : " . print_r($subscriptions, true));
+	
+	// Notify replies as objects (to members subscribed to the top parent container)
+	if ($notify_replies == 'yes') {
+		$container_subscribers = elgg_get_subscriptions_for_container($top_container->guid);
+		if ($debug) error_log(" + notify_replies : container subscribers : " . print_r($container_subscribers, true));
+		foreach($container_subscribers as $guid => $methods) {
+			$subscriptions = notification_messages_add_to_subscriptions($subscriptions, $guid, $methods);
+			if ($debug) error_log("   adding group member $guid / " . implode(', ', $methods));
+		}
+	}
+	if ($debug) error_log(" + notify_replies $notify_self : " . print_r($subscriptions, true));
+	
 	
 	return $subscriptions;
 }
 
-// Send notification to author
-// Note : NotificationsService core class function "sendNotification()" blocks sending to owner
-// So we have to send email directly, without modifying subscribers
-// @TODO remove hook and direct notification sending once core accepts sending to owner
+// Adds a specific GUID and notification methods to the subscriptions array
+function notification_messages_add_to_subscriptions($subscriptions, $guid, $methods = array('email')) {
+	if (!is_array($methods)) { $methods = array($methods); }
+	if (!isset($subscriptions[$guid])) {
+		$subscriptions[$guid] = $methods;
+	} else {
+		foreach ($methods as $method) {
+			if (!in_array($method, $subscriptions[$guid])) {
+				$subscriptions[$guid][] = $method;
+			}
+		}
+	}
+	return $subscriptions;
+}
+
+/* Sends directly the notification to the owner
+ * Reason : NotificationsService core class function "sendNotification()" blocks sending to owner
+ * So we have to send email directly, without modifying subscribers
+ * @TODO once core accepts sending to owner : remove hook and direct notification sending
+ */
 function notification_messages_send_before_addowner($hook, $type, $return, $params) {
 	$object = $params['event']->getObject();
 	if (!elgg_instanceof($object)) { return $return; }
 	
 	// Check plugin setting
-	$notify_owner = notification_messages_notify_owner();
-	if ($notify_owner) {
+	//$notify_owner = notification_messages_notify_owner();
+	$notify_self = elgg_get_plugin_setting('notify_self', 'notification_messages');
+	//if ($notify_owner) {
+	if ($notify_self == 'yes') {
 		$owner_guid = $object->getOwnerGUID();
-		$subscriptions = array("$owner_guid" => array('email'));
+		$self = $params['event']->getActor();
+		//$subscriptions = array("$owner_guid" => array('email'));
 		// Send notification (to owner only) right now
 		// Note : this method is not very friendly, better remove blocking check in core function (PR submitted on 20160317)
 		$result = notification_messages_sendNotification($params['event'], $owner_guid, 'email');
+		//$result = notification_messages_sendNotification($params['event'], $self->guid, 'email');
 	}
 	
+	// Return $result (default: true) so we keep through the normal process (sends to member but the owner)
+	// false stops the process
 	return $return;
 }
 
+
+/* Intercepts and replaces the sendNotifications function so we can use our own function instead
+ * @TODO Non fonctionnel et non utilisé : car le hook ne passe pas $this qui ne peut donc pas être correctement initialisé
+ */
+function notification_messages_send_before_sendNotifications_override($hook, $type, $return, $params) {
+	notification_messages_sendNotifications($params['event'], $params['subscriptions']);
+	//return false to stop the default notification sender
+	return false;
+}
 
 
 
@@ -692,12 +872,37 @@ function notification_messages_send($subject, $body, $recipient_guid, $sender_gu
 
 /* CORE FUNCTIONS OVERRIDES */
 
+/* Overrides a core function to allow using our own function
+ * @TODO non fonctionnel et non utilisé : car $this n'est pas passé via le hook et donc pas initialisé corrrectement
+ * Note : $this is replaced by _elgg_services()
+ */
+function notification_messages_sendNotifications($event, $subscriptions) {
+	if (!$this->methods) { return 0; }
+	$count = 0;
+	foreach ($subscriptions as $guid => $methods) {
+		foreach ($methods as $method) {
+			if (in_array($method, _elgg_services()->methods)) {
+				//if ($this->sendNotification($event, $guid, $method)) { $count++; }
+				if (notification_messages_sendNotification($event, $guid, $method)) { $count++; }
+			}
+		}
+	}
+	return $count;
+}
+
+
 /* Overrides a core function to allow sending to owner
+ * Note : $this is replaced by _elgg_services()
  */
 function notification_messages_sendNotification(\Elgg\Notifications\Event $event, $guid, $method) {
 	$recipient = get_user($guid);
-	if (!$recipient || $recipient->isBanned()) {
-		return false;
+	if (!$recipient || $recipient->isBanned()) { return false; }
+
+	// ESOPE : we DO want to allow sending to the author
+	// don't notify the creator of the content
+	if ($recipient->getGUID() == $event->getActorGUID()) {
+		//return false;
+		error_log("Not_MES : sending to author $guid about {$event->getObject()->guid}");
 	}
 
 	$actor = $event->getActor();
@@ -715,15 +920,34 @@ function notification_messages_sendNotification(\Elgg\Notifications\Event $event
 		'object' => $object,
 	);
 
-	$subject = elgg_echo('notification:subject', array($actor->name), $language);
-	$body = elgg_echo('notification:body', array($object->getURL()), $language);
-	$from = elgg_get_site_entity();
-	$notification = new \Elgg\Notifications\Notification($from, $recipient, $language, $subject, $body, '', $params);
-	$type = 'notification:' . $event->getDescription();
-	$params['notification'] = $notification;
-	$notification = elgg_trigger_plugin_hook('prepare', $type, $params, $notification);
+	$subject = _elgg_services()->translator->translate('notification:subject', array($actor->name), $language);
+	$body = _elgg_services()->translator->translate('notification:body', array($object->getURL()), $language);
+	$notification = new \Elgg\Notifications\Notification($event->getActor(), $recipient, $language, $subject, $body, '', $params);
 
-	return elgg_trigger_plugin_hook('send', "notification:$method", $params, false);
+	$type = 'notification:' . $event->getDescription();
+	if (_elgg_services()->hooks->hasHandler('prepare', $type)) {
+		$notification = _elgg_services()->hooks->trigger('prepare', $type, $params, $notification);
+	} else {
+		// pre Elgg 1.9 notification message generation
+		$notification = _elgg_services()->getDeprecatedNotificationBody($notification, $event, $method);
+	}
+
+	if (_elgg_services()->hooks->hasHandler('send', "notification:$method")) {
+		// return true to indicate the notification has been sent
+		$params = array(
+			'notification' => $notification,
+			'event' => $event,
+		);
+		return _elgg_services()->hooks->trigger('send', "notification:$method", $params, false);
+	} else {
+		// pre Elgg 1.9 notification handler
+		$userGuid = $notification->getRecipientGUID();
+		$senderGuid = $notification->getSenderGUID();
+		$subject = $notification->subject;
+		$body = $notification->body;
+		$params = $notification->params;
+		return (bool)_elgg_notify_user($userGuid, $senderGuid, $subject, $body, $params, array($method));
+	}
 }
 
 
@@ -930,6 +1154,30 @@ if (elgg_is_active_plugin('comment_tracker')) {
 		return false;
 	}
 	
+}
+
+
+
+
+// Helper functions
+
+// Get top parent object entity (that is commentable without thread)
+// If top object, return initial object
+function notification_messages_get_top_object_entity($entity = false) {
+	if (!elgg_instanceof($entity, 'object')) { return false; }
+	$parent = $entity;
+	while(elgg_instanceof($parent, 'object')) {
+		$entity = $parent;
+		$parent = $entity->getContainerEntity();
+	}
+	return $entity;
+}
+
+// Get real container (user, group, site) for special object types (forum, comments)
+function notification_messages_get_top_container_entity($entity = false) {
+	if (!elgg_instanceof($entity, 'object')) { return false; }
+	$entity = notification_messages_get_top_object_entity($entity);
+	return $entity->getContainerEntity();
 }
 
 

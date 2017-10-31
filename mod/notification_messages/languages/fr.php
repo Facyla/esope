@@ -51,26 +51,35 @@ return array(
 	'notification_messages:settings:generic_comment' => "Activer pour les commentaires génériques",
 	'notification_messages:settings:messages' => "Messages",
 	'notification_messages:settings:recipients' => "Destinataires des notifications",
-	'notification_messages:settings:notify_user' => "Notifier également l'auteur des commentaires ?",
-	'notification_messages:settings:notify_user:details' => "Par défaut l'auteur d'un commentaire n'est pas notifié. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
-	'notification_messages:settings:notify_user:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage identique est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">configuration de comment_tracker</a>.",
-	'notification_messages:settings:notify_self' => "@TODO Notifier l'auteur",
-	'notification_messages:settings:notify_self:details' => "Notifie également l'auteur de la publicaiton ou de la réponse.",
+	
+	'notification_messages:settings:notify_owner' => "Notifier l'auteur ?",
+	'notification_messages:settings:notify_owner:details' => "Notifie l'auteur d'une publication lorsqu'une réponse ou un commentaire est fait sur sa propre publication.",
+	'notification_messages:settings:notify_owner:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage similaire est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">configuration de comment_tracker</a>.",
+	
+	'notification_messages:settings:notify_self' => "@TODO Notifier ses propres publications ?",
+	'notification_messages:settings:notify_self:details' => "Par défaut l'auteur n'est pas notifié de ses propres publications. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
+	
 	'notification_messages:settings:notify_participants' => "@TODO Notifier les participants",
-	'notification_messages:settings:notify_participants:details' => "Notifie également tous les membres ayant participé à la discussion.",
+	'notification_messages:settings:notify_participants:details' => "Notifie tous les membres ayant participé à la discussion (réponses ou édition d'un wiki).",
+	
 	'notification_messages:settings:notify_replies' => "@TODO Notifier les réponses comme les publications",
-	'notification_messages:settings:notify_replies:details' => "Notifie les réponses et commentaires de la même manière que les nouvelles publications.",
+	'notification_messages:settings:notify_replies:details' => "Notifie les réponses et commentaires de la même manière que les nouvelles publications : tous les membres du groupe, ou tous les abonnés à ce membre.",
+	
 	'notification_messages:settings:expert' => "Expert",
 	'notification_messages:settings:messagehandledby' => "Message défini par : ",
 	'notification_messages:settings:nomessage' => "NON",
 	'notification_messages:settings:notify_replies' => "Notification des réponses",
-	'notification_messages:settings:notify_replies:details' => "Notifier les réponses et commentaires de la même manièreque les publications initiales",
+	'notification_messages:settings:notify_replies:details' => "Notifier les réponses et commentaires de la même manière que les publications initiales",
 	
 	'notification_messages:notify:create' => "create",
 	'notification_messages:notify:publish' => "publish",
 	'notification_messages:notify:update' => "update",
 	'notification_messages:notify:delete' => "delete",
 	
+	'notification_messages:create' => "CREATION",
+	'notification_messages:publish' => "PUBLICATION",
+	'notification_messages:update' => "MISE A JOUR",
+	'notification_messages:delete' => "SUPPRESSION",
 	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Contenu des messages de notification",

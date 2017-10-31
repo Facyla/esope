@@ -125,7 +125,7 @@ function notification_messages_init() {
 	//error_log("NOTIFICATION MESSAGES register events : " . print_r(elgg_get_context_stack(), true));
 	if (!elgg_in_context('admin') && $register_object_subtypes) {
 		foreach ($register_object_subtypes as $subtype => $events) {
-			//error_log("$subtype => " . print_r($events, true));
+			//error_log("NOT_MES : register notif events for $subtype : " . print_r($events, true));
 			elgg_unregister_notification_event('object', $subtype);
 			if (sizeof($events) > 0) { elgg_register_notification_event('object', $subtype, $events); }
 		}
@@ -139,19 +139,19 @@ function notification_messages_init() {
 	
 	// Update subject + body + summary
 	// Handle new (registered) objects notification subjects
+	// Also handle publish, update and delete events
 	//elgg_register_plugin_hook_handler('notify:entity:subject', 'object', 'notification_messages_notify_subject');
 	if ($prepare_object_subtypes) {
 		foreach ($prepare_object_subtypes as $subtype) {
-			// @TODO : also handle update and delete events ?
 			// Note : we enable regular (create) and specific hook (publish) in all cases, because at worst it would be called twice and produce the same result, 
 			// Regular hook
 			// but this will avoid having to maintain the list here in case some plugin change called hook
 			elgg_register_plugin_hook_handler('prepare', "notification:create:object:$subtype", 'notification_messages_prepare_notification', 900);
 			// Some subtypes use a specific hook
-			// @TODO : always register both hooks, just in case ?
-			if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
+			// Note : Always register all hooks, as we can set the notification event on any of these
+			//if (in_array($subtype, array('blog', 'survey', 'transitions'))) {
 				elgg_register_plugin_hook_handler('prepare', "notification:publish:object:$subtype", 'notification_messages_prepare_notification', 900);
-			}
+			//}
 			elgg_register_plugin_hook_handler('prepare', "notification:update:object:$subtype", 'notification_messages_prepare_notification', 900);
 			elgg_register_plugin_hook_handler('prepare', "notification:delete:object:$subtype", 'notification_messages_prepare_notification', 900);
 		}
@@ -171,7 +171,7 @@ function notification_messages_init() {
 	 */
 	if (in_array('comment', $prepare_object_subtypes)) {
 		elgg_unregister_action('comment/save');
-		elgg_register_action('comment/save', elgg_get_plugins_path() . 'notification_messages/actions/comments/save.php');
+		elgg_register_action('comment/save', elgg_get_plugins_path() . 'notification_messages/actions/comment/save.php');
 	}
 	/* Comments subject override
 	 * Why ?   Core function that adds the "Re: " for replies is loaded right before email sending hook, and can be skipped 
@@ -203,9 +203,14 @@ function notification_messages_init() {
 	   we need to send the notification email directly to the owner through the send:before hook
 	   at least until owner is not blocked in core
 	 * @TODO : remove send:before hook once core accepts sending to owner !
+	 * Note : we could alternatively use prepare hook, but send:before is the most logical
+	 
+	 * Alternative : use send:before hook to override core functions, and 
 	*/
-	elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions_addowner', 900);
+	elgg_register_plugin_hook_handler('get', 'subscriptions', 'notification_messages_get_subscriptions', 900);
 	elgg_register_plugin_hook_handler('send:before', 'notifications', 'notification_messages_send_before_addowner', 900);
+	// Serait une bonne méthode mais le hook ne passe pas $this qui n'est pas initialisé correctement
+	//elgg_register_plugin_hook_handler('send:before', 'notifications', 'notification_messages_send_before_sendNotifications_override', 1000);
 	
 	
 	

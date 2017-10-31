@@ -66,6 +66,9 @@ if ($comment_guid) {
 		forward(REFERER);
 	}
 
+	// @TODO : remove this action override and use the send:before hook instead
+	// Notify if poster wasn't owner
+	//if ($entity->owner_guid != $user->guid) {
 	// Always notify owner if poster is not owner, use setting otherwise
 	$notify_owner = false;
 	if ($user->guid != $entity->owner_guid) {

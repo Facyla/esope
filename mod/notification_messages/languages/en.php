@@ -63,6 +63,10 @@ return array(
 	'notification_messages:notify:update' => "update",
 	'notification_messages:notify:delete' => "delete",
 	
+	'notification_messages:create' => "CREATE",
+	'notification_messages:publish' => "PUBLISH",
+	'notification_messages:update' => "UPDATE",
+	'notification_messages:delete' => "DELETE",
 	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Notification messages content",
