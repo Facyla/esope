@@ -38,7 +38,8 @@ $title = "<a href=\"$url\">$title</a>";
 $description = $entity->getVolatileData('search_matched_description');
 // Remove highlighting if empty search, otherwise there is a display bug with UTF8 characters
 $q = get_input('q');
-if (empty(trim($q))) {
+$q_text = trim($q);
+if (empty($q_text)) {
 	$description = strip_tags($description);
 }
 
