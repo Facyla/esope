@@ -1194,6 +1194,7 @@ This is an automated notification, please do not reply to this email.",
 	'bookmarks:filter' => "Bookmarks to be displayed",
 	'bookmarks:mine' => "Mine",
 	'bookmarks:mygroups' => "In my groups",
+	'bookmarks:more' => "More bookmarks",
 	'pages:widget:description' => "Displays your pages.",
 	
 	'event_calendar:widget:description' => "Displays your upcoming events.",

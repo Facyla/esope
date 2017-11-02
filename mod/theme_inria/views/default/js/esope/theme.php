@@ -249,11 +249,19 @@ $(document).ready(function() {
 	});
 	*/
 	
+	// New jQuery selector - cf. eg. http://webtopian.com/find-element-with-jquery-containing-case-insensitive-text
+	// Usage : use instead of :contains to select case-insensitive
+	$.expr[':'].icontains = $.expr.createPseudo(function(text) {
+		return function(e) {
+			return $(e).text().toUpperCase().indexOf(text.toUpperCase()) >= 0;
+		};
+	});
+	
 	// Live members filter
 	$('#group-members-filter').on('change paste keyup', function(e) {
 		var filter = $(this).val(); // get the value of the input, which we filter on
-		$('#group-members-live .group-member').find("p:not(:contains(" + filter + "))").parent().slideUp();
-		$('#group-members-live .group-member').find("p:contains(" + filter + ")").parent().slideDown();
+		$('#group-members-live .group-member').find("p:not(:icontains(" + filter + "))").parent().slideUp();
+		$('#group-members-live .group-member').find("p:icontains(" + filter + ")").parent().slideDown();
 	});
 	
 });

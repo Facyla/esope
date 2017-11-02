@@ -1208,6 +1208,7 @@ Il s'agit d'un message de notification automatique, merci de ne pas répondre di
 	'bookmarks:filter' => "Liens à afficher",
 	'bookmarks:mine' => "Les miens",
 	'bookmarks:mygroups' => "Dans mes groupes",
+	'bookmarks:more' => "Plus de liens web",
 	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
 	
 	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",

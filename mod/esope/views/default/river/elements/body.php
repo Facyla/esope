@@ -67,7 +67,9 @@ if ($attachments !== null) {
 }
 
 $responses = elgg_view('river/elements/responses', $vars);
-if (!empty(trim(strip_tags($responses)))) {
+//if (!empty(trim(strip_tags($responses)))) {   // fails with old php versions
+$response_text = trim(strip_tags($responses));
+if (!empty($responses_text)) {
 	$use_hide_block = elgg_get_plugin_setting('river_hide_block', 'esope');
 	if ($use_hide_block == 'yes') {
 		$responses = elgg_view('output/url', array(

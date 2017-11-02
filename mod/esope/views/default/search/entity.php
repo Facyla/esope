@@ -51,7 +51,8 @@ $extra_info = $entity->getVolatileData('search_matched_extra');
 $url = $entity->getVolatileData('search_url');
 // Remove highlighting if empty search, otherwise there is a display bug with UTF8 characters
 $q = get_input('q');
-if (empty(trim($q))) {
+$q_text = trim($q);
+if (empty($q_text)) {
 	$title = strip_tags($title);
 	$description = strip_tags($description);
 	$extra_info = strip_tags($extra_info);

@@ -156,35 +156,35 @@ $content .= '<div class="group-profile-main">';
 	// Members listing
 	if ($members) {
 		$content .= '<div class="group-members" id="group-members-live">';
-		foreach($members as $ent) {
-			$actions = '';
-			if ($group->canEdit()) {
-				$remove_member_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/groups/remove?group_guid=' . $group->guid . '&user_guid=' . $ent->guid);
-				$actions .= '<a href="' . $remove_member_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:removefromgroup') . 'Retirer du groupe" style="background: #FF0000;"><i class="fa fa-user-times"></i></a>';
-				if (!check_entity_relationship($ent->guid, 'operator', $group->guid)) {
-					$make_operator_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/group_operators/add?mygroup=' . $group->guid . '&who=' . $ent->guid);
-					$actions .= '<a href="' . $make_operator_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:addoperator') . '" style="background: #1488CA;"><i class="fa fa-user-plus fa-user-circle"></i></a>';
+			foreach($members as $ent) {
+				$actions = '';
+				if ($group->canEdit()) {
+					$remove_member_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/groups/remove?group_guid=' . $group->guid . '&user_guid=' . $ent->guid);
+					$actions .= '<a href="' . $remove_member_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:removefromgroup') . 'Retirer du groupe" style="background: #FF0000;"><i class="fa fa-user-times"></i></a>';
+					if (!check_entity_relationship($ent->guid, 'operator', $group->guid)) {
+						$make_operator_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/group_operators/add?mygroup=' . $group->guid . '&who=' . $ent->guid);
+						$actions .= '<a href="' . $make_operator_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:addoperator') . '" style="background: #1488CA;"><i class="fa fa-user-plus fa-user-circle"></i></a>';
+					}
 				}
+				$profile_type = esope_get_user_profile_type($ent);
+				if (empty($profile_type)) { $profile_type = 'external'; }
+				// Archive : replace profile type by member status archived
+				if ($ent->memberstatus == 'closed') { $profile_type = 'archive'; }
+				$content .= '<div class="group-member elgg-avatar profile-type-' . $profile_type . '" style="min-height: 4rem;"><a href="' . $ent->getURL() . '">';
+					$content .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" /></a>';
+					$content .= $actions;
+					$content .= '<p><a href="' . $ent->getURL() . '"><strong>' . $ent->name . '</strong>';
+					$content .= '<br />' . $ent->briefdescription;
+					$content .= '</a></p>';
+				$content .= '</div>';
 			}
-			$profile_type = esope_get_user_profile_type($ent);
-			if (empty($profile_type)) { $profile_type = 'external'; }
-			// Archive : replace profile type by member status archived
-			if ($ent->memberstatus == 'closed') { $profile_type = 'archive'; }
-			$content .= '<div class="group-member elgg-avatar profile-type-' . $profile_type . '" style="min-height: 4rem;"><a href="' . $ent->getURL() . '">';
-				$content .= '<a href="' . $ent->getURL() . '"><img src="' . $ent->getIconURL(array('size' => 'small')) . '" /></a>';
-				$content .= $actions;
-				$content .= '<p><a href="' . $ent->getURL() . '"><strong>' . $ent->name . '</strong>';
-				$content .= '<br />' . $ent->briefdescription;
-				$content .= '</a></p>';
-			$content .= '</div>';
-		}
-		$content .= '<div>';
+		$content .= '</div>';
 	}
+	
+$content .= '</div>';
 
-// @TODO pq 3 et pas 1 ?
-$content .= '</div></div></div>';
 
-
+// Right sidebar (if any content inside)
 $sidebar_alt = '';
 if ($group->canEdit()) {
 	// Membership requests
