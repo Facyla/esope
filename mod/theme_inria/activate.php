@@ -30,7 +30,7 @@ foreach ($plugins as $plugin) {
 	echo esope_enable_plugin($plugin, true, false);
 }
 
-elgg_regenerate_simplecache();
+elgg_invalidate_simplecache();
 elgg_reset_system_cache();
 
 
