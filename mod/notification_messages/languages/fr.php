@@ -1,8 +1,8 @@
 <?php
 /** Elgg notification_messages plugin language
  * @author Florian DANIEL - Facyla
- * @copyright Florian DANIEL - Facyla 2015
- * @link http://id.facyla.net/
+ * @copyright Florian DANIEL - Facyla 2015-2017
+ * @link https://facyla.fr/
  */
 
 $url = elgg_get_site_url();
@@ -53,16 +53,16 @@ return array(
 	'notification_messages:settings:recipients' => "Destinataires des notifications",
 	
 	'notification_messages:settings:notify_owner' => "Notifier l'auteur ?",
-	'notification_messages:settings:notify_owner:details' => "Notifie l'auteur d'une publication lorsqu'une réponse ou un commentaire est fait sur sa propre publication.",
+	'notification_messages:settings:notify_owner:details' => "Notifie l'auteur d'une publication lorsqu'une réponse ou un commentaire est fait sur sa propre publication, ou qu'elle a été modifiée.",
 	'notification_messages:settings:notify_owner:comment_tracker' => "Lorsque le plugin comment_tracker est utilisé, un réglage similaire est proposé, ce réglage n'est pas disponible et doit être modifié directement dans la <a href=\"" . $url . "admin/plugin_settings/comment_tracker\">configuration de comment_tracker</a>.",
 	
-	'notification_messages:settings:notify_self' => "@TODO Notifier ses propres publications ?",
+	'notification_messages:settings:notify_self' => "Notifier ses propres publications ?",
 	'notification_messages:settings:notify_self:details' => "Par défaut l'auteur n'est pas notifié de ses propres publications. Vous pouvez choisir de le notifier également, ce qui est particulièrement utile si vous utilisez des réponses par email.",
 	
-	'notification_messages:settings:notify_participants' => "@TODO Notifier les participants",
+	'notification_messages:settings:notify_participants' => "Notifier les participants",
 	'notification_messages:settings:notify_participants:details' => "Notifie tous les membres ayant participé à la discussion (réponses ou édition d'un wiki).",
 	
-	'notification_messages:settings:notify_replies' => "@TODO Notifier les réponses comme les publications",
+	'notification_messages:settings:notify_replies' => "Notifier les réponses comme les publications",
 	'notification_messages:settings:notify_replies:details' => "Notifie les réponses et commentaires de la même manière que les nouvelles publications : tous les membres du groupe, ou tous les abonnés à ce membre.",
 	
 	'notification_messages:settings:expert' => "Expert",
@@ -80,6 +80,10 @@ return array(
 	'notification_messages:publish' => "PUBLICATION",
 	'notification_messages:update' => "MISE A JOUR",
 	'notification_messages:delete' => "SUPPRESSION",
+	'notification_messages:create:body' => "",
+	'notification_messages:publish:body' => "",
+	'notification_messages:update:body' => "La publication a été modifiée.\r\n\r\n",
+	'notification_messages:delete:body' => "La publication a été supprimée.\r\n\r\n",
 	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Contenu des messages de notification",
@@ -87,8 +91,13 @@ return array(
 	
 	// Notification subject
 	'notification_messages:objects:subject' => "[%s | %s] %s",
+	'notification_messages:objects:subject:update' => "[%s | Edition %s] %s",
+	'notification_messages:objects:subject:delete' => "[%s | Suppression %s] %s",
 	'notification_messages:objects:subject:nocontainer' => "[%s] %s",
+	'notification_messages:objects:subject:nocontainer:update' => "[Edition %s] %s",
+	'notification_messages:objects:subject:nocontainer:delete' => "[Suppression %s] %s",
 	'notification_messages:untitled' => "(sans titre)",
+	
 	'notification_messages:objects:body' => "%s a publié %s dans %s :
 
 %s
@@ -96,7 +105,36 @@ return array(
 Voir et commenter en ligne :
 %s
 ",
+	'notification_messages:objects:body:update' => "%s a modifié %s dans %s :
+
+%s
+
+Voir et commenter en ligne :
+%s
+",
+	'notification_messages:objects:body:delete' => "%s a supprimé %s dans %s :
+
+%s
+
+Voir et commenter en ligne :
+%s
+",
+	
 	'notification_messages:objects:body:nocontainer' => "%s a publié %s :
+
+%s
+
+Voir et commenter en ligne :
+%s
+",
+	'notification_messages:objects:body:nocontainer:update' => "%s a modifié %s :
+
+%s
+
+Voir et commenter en ligne :
+%s
+",
+	'notification_messages:objects:body:nocontainer:delete' => "%s a supprimé %s :
 
 %s
 

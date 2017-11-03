@@ -73,28 +73,16 @@ function notification_messages_readable_subtype($subtype) {
 	return strip_tags($msg_subtype);
 }
 
-// Notification summary
-function notification_messages_build_summary($entity, $params) {
-	if (elgg_instanceof($entity)) {
-		$subject = notification_messages_build_subject($entity, $params);
-		// @TODO : add excerpt + URL
-		/*
-		$excerpt = elgg_get_excerpt($entity->description);
-		$entity_url = $entity->getURL();
-		$subject .= elgg_echo('notification_messages:summary:wrapper', array($excerpt, $entity_url));
-		*/
-		return $subject;
-	}
-	return false;
-}
-
 
 // Handle group topic reply subject hook
 function notification_messages_reply_subject_hook($hook, $type, $returnvalue, $params) {
 	$entity_guid = $params['annotation']->entity_guid;
-	if ($entity_guid && ($entity = get_entity($entity_guid))) {
-		$subject = notification_messages_build_subject($entity);
-		if (!empty($subject)) { $returnvalue = $subject; }
+	if ($entity_guid) {
+		$entity = get_entity($entity_guid);
+		if (elgg_instanceof($entity)) {
+			$subject = notification_messages_build_subject($entity);
+			if (!empty($subject)) { $returnvalue = $subject; }
+		}
 	}
 	return $returnvalue;
 }
@@ -159,6 +147,8 @@ function notification_messages_comments_notification_email_subject($hook, $type,
  * @return Elgg_Notifications_Notification
  */
 function notification_messages_prepare_notification($hook, $type, $notification, $params) {
+	$debug = false;
+	
 	$entity = $params['event']->getObject();
 	$author = $params['event']->getActor();
 	$action = $params['event']->getAction();
@@ -166,7 +156,7 @@ function notification_messages_prepare_notification($hook, $type, $notification,
 	$language = $params['language'];
 	$method = $params['method'];
 	
-	error_log("NOT_MES functions hook type for $action by $author->guid in $language using $method : $hook / $type");
+	if ($debug) error_log("NOT_MES functions.php : prepare hook for $action by $author->guid in $language using $method : $hook / $type");
 	
 	// @TODO adjust messages depending on events (create/publish/update/delete)
 	
@@ -178,23 +168,35 @@ function notification_messages_prepare_notification($hook, $type, $notification,
 	// This has to be handled in all 3 functions (because we need the acting entity too)
 	
 	// Notification subject
-	$subject = notification_messages_build_subject($entity, $params);
+	$subject = notification_messages_build_subject($entity, $params, $action);
 	if (!empty($subject)) {
-		if ($action != 'create') { $subject .= "[" . elgg_echo("notification_messages:$action") . "] $subject"; }
+		/*
+		if (in_array($action, ['update', 'delete'])) {
+			$subject = "[" . elgg_echo("notification_messages:$action") . "] $subject";
+		}
+		*/
 		$notification->subject = $subject;
 	}
 
 	// Notification message body
-	$body = notification_messages_build_body($entity, $params);
+	$body = notification_messages_build_body($entity, $params, $action);
 	if (!empty($body)) {
-		if ($action != 'create') { $body .= "[" . elgg_echo("notification_messages:$action") . "]\r\n\r\n$body"; }
+		/*
+		if (in_array($action, ['update', 'delete'])) {
+			$body = "[" . elgg_echo("notification_messages:$action") . "]\r\n\r\n$body";
+		}
+		*/
 		$notification->body = $body;
 	}
 
 	// Short summary about the notification
-	$summary = notification_messages_build_summary($entity, $params);
+	$summary = notification_messages_build_summary($entity, $params, $action);
 	if (!empty($summary)) {
-		if ($action != 'create') { $summary .= "[" . elgg_echo("notification_messages:$action") . "]\r\n\r\n$summary"; }
+		/*
+		if (in_array($action, ['update', 'delete'])) {
+			$summary = "[" . elgg_echo("notification_messages:$action") . "]\r\n\r\n$summary";
+		}
+		*/
 		$notification->summary = $summary;
 	}
 	
@@ -207,8 +209,9 @@ function notification_messages_prepare_notification($hook, $type, $notification,
  * or when no container : [subtype] Title
  * $entity : notified entity
  * $params : original hook $params
+ * $action : notification event action (create|publish|update|delete)
  */
-function notification_messages_build_subject($entity, $params = array()) {
+function notification_messages_build_subject($entity, $params = array(), $action = 'create') {
 	if (elgg_instanceof($entity)) {
 		//error_log(print_r($entity, true) . print_r($params, true));
 		/*
@@ -262,9 +265,17 @@ function notification_messages_build_subject($entity, $params = array()) {
 		
 		// Handle when using a specific container
 		if ($msg_container) {
-			$subject = elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title), $language);
+			if (in_array($action, ['update', 'delete'])) {
+				$subject = elgg_echo('notification_messages:objects:subject:' . $action, array($msg_container, $msg_subtype, $msg_title), $language);
+			} else {
+				$subject = elgg_echo('notification_messages:objects:subject', array($msg_container, $msg_subtype, $msg_title), $language);
+			}
 		} else {
-			$subject = elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title), $language);
+			if (in_array($action, ['update', 'delete'])) {
+				$subject = elgg_echo('notification_messages:objects:subject:nocontainer:' . $action, array($msg_subtype, $msg_title), $language);
+			} else {
+				$subject = elgg_echo('notification_messages:objects:subject:nocontainer', array($msg_subtype, $msg_title), $language);
+			}
 		}
 		
 		$subject = strip_tags($subject);
@@ -282,9 +293,23 @@ function notification_messages_build_subject($entity, $params = array()) {
 	return false;
 }
 
+// Notification summary
+function notification_messages_build_summary($entity, $params = array(), $action = 'create') {
+	if (elgg_instanceof($entity)) {
+		$subject = notification_messages_build_subject($entity, $params, $action);
+		// @TODO : add excerpt + URL
+		/*
+		$excerpt = elgg_get_excerpt($entity->description);
+		$entity_url = $entity->getURL();
+		$subject .= elgg_echo('notification_messages:summary:wrapper', array($excerpt, $entity_url));
+		*/
+		return $subject;
+	}
+	return false;
+}
 
-// Notification message content
-function notification_messages_build_body($entity, $params) {
+// Notification message body
+function notification_messages_build_body($entity, $params = array(), $action = 'create') {
 	if (elgg_instanceof($entity)) {
 		
 		$subtype = $entity->getSubtype();
@@ -355,20 +380,39 @@ function notification_messages_build_body($entity, $params) {
 				if (empty($title)) { $title = $entity->name; }
 				$title = '<strong>' . $title . '</strong>';
 				if ($msg_container) {
-					$body = elgg_echo('notification_messages:objects:body', array(
-							$owner->name,
-							$title,
-							$msg_container, 
-							$descr,
-							$entity->getURL()
-						), $language);
+					if (in_array($action, ['update', 'delete'])) {
+						$body = elgg_echo('notification_messages:objects:body:' . $action, array(
+								$owner->name,
+								$title,
+								$msg_container, 
+								$descr,
+								$entity->getURL()
+							), $language);
+					} else {
+						$body = elgg_echo('notification_messages:objects:body', array(
+								$owner->name,
+								$title,
+								$msg_container, 
+								$descr,
+								$entity->getURL()
+							), $language);
+					}
 				} else {
-					$body = elgg_echo('notification_messages:objects:body:nocontainer', array(
-							$owner->name,
-							$title,
-							$descr,
-							$entity->getURL()
-						), $language);
+					if (in_array($action, ['update', 'delete'])) {
+						$body = elgg_echo('notification_messages:objects:body:nocontainer:' . $action, array(
+								$owner->name,
+								$title,
+								$descr,
+								$entity->getURL()
+							), $language);
+					} else {
+						$body = elgg_echo('notification_messages:objects:body:nocontainer', array(
+								$owner->name,
+								$title,
+								$descr,
+								$entity->getURL()
+							), $language);
+					}
 				}
 		}
 		
@@ -902,7 +946,7 @@ function notification_messages_sendNotification(\Elgg\Notifications\Event $event
 	// don't notify the creator of the content
 	if ($recipient->getGUID() == $event->getActorGUID()) {
 		//return false;
-		error_log("Not_MES : sending to author $guid about {$event->getObject()->guid}");
+		//error_log("NOT_MES functions.php : sending to author $guid about {$event->getObject()->guid}");
 	}
 
 	$actor = $event->getActor();

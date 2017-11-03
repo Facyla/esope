@@ -2,7 +2,7 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Notification messages</name>
 	<author>Florian DANIEL</author>
-	<version>1.12.2-beta</version>
+	<version>1.12.2-rc1</version>
 	<blurb>Replaces default notifications subjects by meaningful email subjects</blurb>
 	<description>Enable this plugin to provide meaningful subjects for email notifications, when new content is created, and when replies or comments are made. It uses html_email_handler, and advanced_notifications plugin enabled.</description>
 	<website>http://datawyz.fr/</website>
@@ -49,9 +49,18 @@ Notes :
 
 HISTORY :
 
-1.12.2-beta : 20171031 - Added several settings to control recipients and notification events
+1.12.2-rc1 : 20171103 - Added several settings to control recipients and notification events
+1.12.2-beta : 20171031 - Better settings
+ * Added several settings to control recipients and notification events :
+   - notify owner
+   - notify self
+   - notify participants
+   - notifify top container subscribers
+ * Rewrite some helper functions
 
-1.12.1 : 20171004 - Adding registered notifications events settings and support
+1.12.1 : 20171004 - Better settings and explanations
+ * Adding registered notifications events settings and support
+ * Added list of registered hooks and events related to notifications control
 
 1.12.0-dev : 20160311 - Updating to Elgg 1.12
 
