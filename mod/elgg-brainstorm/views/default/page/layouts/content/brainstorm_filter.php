@@ -63,9 +63,16 @@ if (elgg_is_logged_in() && $context) {
 		}
 
 		if (!$is_empty) {
+			$href = 'javascript:void(0);';
+			if ((isset($vars[$name.'_link']))) {
+				$href =  $vars[$name.'_link'];
+			} else {
+				if (elgg_instanceof($page_owner)) $href = "$context/group/{$page_owner->getGUID()}/$name{$order_text[$name]}";
+			}
+			
 			$tabs[$name] = array(
 				'text' => $text,
-				'href' => (isset($vars[$name.'_link'])) ? $vars[$name.'_link'] : "$context/group/{$page_owner->getGUID()}/$name{$order_text[$name]}",
+				'href' => $href,
 				'selected' => ($filter_context == $name),
 				'class' => $class,
 				'priority' => $i,
