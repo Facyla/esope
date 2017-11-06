@@ -5,7 +5,7 @@
 $page_owner = elgg_get_page_owner_entity();
 $user = elgg_get_logged_in_user_guid();
 
-if ($page_owner->canWriteToContainer($user)) {
+if (elgg_instanceof($page_owner) && $page_owner->canWriteToContainer($user)) {
 
 	elgg_load_library('brainstorm:utilities');
 
