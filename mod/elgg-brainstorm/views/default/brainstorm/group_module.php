@@ -5,13 +5,14 @@
  * @package Brainstorm
  */
 
-$group_guid = elgg_get_page_owner_entity();
+$group = elgg_get_page_owner_entity();
 
 if ($group->brainstorm_enable == "no") {
 	return true;
 }
 
 elgg_push_context('widgets');
+elgg_pop_context();
 
 $content = elgg_list_entities_from_annotation_calculation(array(
 	'type' => 'object',
@@ -25,7 +26,6 @@ $content = elgg_list_entities_from_annotation_calculation(array(
 	'limit' => 6,
 	'pagination' => false
 ));
-elgg_pop_context();
 
 if (!$content) {
 	$content = '<p>' . elgg_echo('brainstorm:none') . '</p>';
@@ -34,15 +34,18 @@ if (!$content) {
 $all_link = elgg_view('output/url', array(
 	'href' => "brainstorm/group/$group->guid/all",
 	'text' => elgg_echo('brainstorm:view:all'),
+	'title' => elgg_echo('brainstorm:group') . ', ' . elgg_echo('link:view:all'),
 ));
 
 $new_link = elgg_view('output/url', array(
 	'href' => "brainstorm/add/$group->guid",
 	'text' => ucfirst(elgg_echo('brainstorm:add')),
+	'title' => elgg_echo('brainstorm:group') . ', ' . elgg_echo('brainstorm:add'),
 ));
 
 echo elgg_view('groups/profile/module', array(
-	'title' => elgg_echo('brainstorm:group:idea'),
+	'title' => elgg_echo('brainstorm:group'),
+	'class' => 'elgg-module-group-brainstorm',
 	'content' => $content,
 	'all_link' => $all_link,
 	'add_link' => $new_link,

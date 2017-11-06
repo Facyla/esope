@@ -9,7 +9,7 @@ $page_owner = elgg_get_page_owner_entity();
 elgg_push_breadcrumb($page_owner->name);
 elgg_push_breadcrumb(elgg_echo('brainstorm:filter:top'));
 
-if ($page_owner->canEdit() || elgg_is_admin_logged_in()) {
+if (elgg_instanceof($page_owner) && $page_owner->canEdit() || elgg_is_admin_logged_in()) {
 	elgg_register_menu_item('title', array(
 		'name' => 'settings',
 		'href' => "brainstorm/group/$page_owner->guid/settings",

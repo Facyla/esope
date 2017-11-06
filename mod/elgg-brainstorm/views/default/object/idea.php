@@ -84,7 +84,7 @@ $params = array(
 $params = $params + $vars;
 $list_body = elgg_view('object/elements/summary', $params);
 
-$ideaPoints = brainstorm_idea_get_points($idea->getGUID());
+if (elgg_instanceof($container)) $ideaPoints = brainstorm_idea_get_points($idea->getGUID());
 
 if ( $ideaPoints['total'] == '' ) $ideaPoints['total'] = 0;
 
@@ -96,7 +96,7 @@ $voteString = $ideaPoints['userPoints'];
 if ( $ideaPoints['userPoints'] == '' || $ideaPoints['userPoints'] == '0' ) $voteString = $ideaPoints['userPoints'] = 'vote';
 if ( $userPointsLeft <= 0 && $ideaPoints['userPoints'] == 'vote' ) $ideaPoints['userPoints'] = '0';
 
-if ( !$container->canWriteToContainer($user) ) {
+if (elgg_instanceof($container)) if ( !$container->canWriteToContainer($user) ) {
 	$vote = "<div class='idea-points mbs'>{$ideaPoints['total']}</div>";
 } elseif ( $idea->status == 'completed' || $idea->status == 'declined' ) {
 	$vote = "<div class='idea-points mbs'>{$ideaPoints['total']}</div>" .

@@ -17,9 +17,7 @@ elgg_load_library('brainstorm:utilities');
 
 $owner = $idea->getOwnerEntity();
 $owner_icon = elgg_view_entity_icon($owner, 'small');
-$ia = elgg_set_ignore_access(true); // in case container is disabled (ie not accessible to user)
 $container = $idea->getContainerEntity();
-elgg_set_ignore_access($ia);
 $user_guid = elgg_get_logged_in_user_guid();
 $categories = elgg_view('output/categories', $vars);
 
