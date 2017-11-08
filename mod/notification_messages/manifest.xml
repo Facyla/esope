@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Notification messages</name>
+	<author>Florian DANIEL</author>
+	<version>1.12.0-dev</version>
+	<blurb>Replaces default notifications subjects by meaningful email subjects</blurb>
+	<description>Enable this plugin to provide meaningful subjects for email notifications, when new content is created, and when replies or comments are made. It uses html_email_handler, and advanced_notifications plugin enabled.</description>
+	<website>http://datawyz.fr/</website>
+	<copyright>(C) Florian DANIEL 2014-2016</copyright>
+	<license>GNU Public License version 2</license>
+	
+	<category>email</category>
+	<category>notification</category>
+	
+	<requires>
+		<type>elgg_release</type>
+		<version>1.12</version>
+	</requires>
+	<requires>
+		<type>priority</type>
+		<plugin>comment_tracker</plugin>
+		<priority>after</priority>
+	</requires>
+	
+	<conflicts>
+		<type>plugin</type>
+		<name>notification_subjects</name>
+	</conflicts>
+	
+	<suggests>
+		<type>plugin</type>
+		<name>html_email_handler</name>
+	</suggests>
+	
+	<activate_on_install>false</activate_on_install>
+	
+</plugin_manifest>
+
+
+<!--
+
+Notes : 
+ * This plugin is inspired by former plugin notification_messages for Elgg 1.6 (discontinued due to API changes)
+ * Developped after an initial PR on html_email_handler to add a hook to change subject 
+ *   (same as notify:entity:message core hook, but for subjects)
+ * Used hook is implemented in advanced_notifications (by Coldtrick) / and this html_email_handler version
+ * Also built after careful reading of notification_subjects by Matt Backet (but missing blog support)
+
+
+HISTORY :
+1.12.0-dev : 20160311.. - Updating to Elgg 1.12
+
+0.3 : 20140326.. - Forum replies and generic_comment support
+
+0.2 : 201403.. - First functionnal version (new objects)
+
+0.1 : 20140317 - Initial version
+
+//-->
+
