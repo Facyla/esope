@@ -143,6 +143,14 @@ body { background:#EBE7DF; font-family:Lato; }
 /* Collections */
 
 
+
+
+/* Newsletter : Corrects missing hover CSS in newsletter plugin*/
+#newsletter-edit-template-select li:hover .hidden { display: inline; }
+#newsletter-form-schedule input { color: #333; border-color: #333; }
+
+
+
 /* Topbar */
 .elgg-page-topbar { background: white; border: 0; color: #666; font-size: 14px; }
 .elgg-menu-topbar > li > a { color: #666; font-size: 14px; padding-top:0; margin:0 10px; }
