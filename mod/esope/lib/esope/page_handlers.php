@@ -162,7 +162,10 @@ function esope_input_livesearch_page_handler($page) {
 		$match_on = array($match_on);
 	}
 
-	$default_limit = elgg_get_config('default_limit');
+	//$default_limit = elgg_get_config('default_limit');
+	$default_limit = 0; // or very high, eg. 500 ?
+	$limit = sanitise_int(get_input('limit', $default_limit));
+	error_log("ESOPE livesearch limit = $limit");
 	
 	// all = users and groups
 	if (in_array('all', $match_on)) {
@@ -174,8 +177,6 @@ function esope_input_livesearch_page_handler($page) {
 	if (get_input('match_owner', false)) {
 		$owner_guid = $user->getGUID();
 	}
-
-	$limit = sanitise_int(get_input('limit', $default_limit));
 	
 	// Note : it requires a custom input/autocomplete view to handle new vars
 	// Control input value

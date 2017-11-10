@@ -30,6 +30,8 @@ html {
 }
 */
 
+/* Word break in image alt text (requires carriage return in source) */
+img { white-space: pre; }
 
 /* Accordion styles */
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }

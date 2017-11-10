@@ -143,6 +143,8 @@ input:focus, textarea:focus { outline:0; }
 => remplacer par un masquage en JS
 */
 
+.ui-autocomplete { max-height: 80vh; overflow-y: auto; }
+
 
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */
 
