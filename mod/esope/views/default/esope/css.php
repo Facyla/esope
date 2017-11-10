@@ -710,6 +710,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-sidebar .elgg-module-aside .elgg-body ul.elgg-menu-newsletter-steps li { clear:left; width:100%; text-indent:4ex; }
 */
 #newsletter-embed-list { clear: both; }
+/* Corrects missing hover CSS in newsletter plugin*/
+#newsletter-edit-template-select li:hover .hidden { display: inline; }
 
 .elgg-form-alt > fieldset > .elgg-foot { clear: both; }
 
