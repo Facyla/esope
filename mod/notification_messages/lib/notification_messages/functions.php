@@ -1229,13 +1229,13 @@ function notification_messages_message_add_container($entity = false) {
 	$msg_container = false;
 	$container = $entity->getContainerEntity();
 	// User : pointless
-	//if (elgg_instanceof(elgg_instanceof($container, "user")) { $msg_container = $container->name; }
+	//if (elgg_instanceof($container, "user")) { $msg_container = $container->name; }
 	// Group
-	if (elgg_instanceof(elgg_instanceof($container, "group")) { $msg_container = $container->name; }
+	if (elgg_instanceof($container, "group")) { $msg_container = $container->name; }
 	// @TODO Site : multisite installation ?
-	//if (elgg_instanceof(elgg_instanceof($container, "site")) { $msg_container = $container->name; }
+	//if (elgg_instanceof($container, "site")) { $msg_container = $container->name; }
 	// @TODO Object : attached content ?
-	//if (elgg_instanceof(elgg_instanceof($container, "object")) { $msg_container = $container->title; }
+	//if (elgg_instanceof($container, "object")) { $msg_container = $container->title; }
 	
 	return $msg_container;
 }
