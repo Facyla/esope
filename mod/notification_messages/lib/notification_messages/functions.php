@@ -244,10 +244,8 @@ function notification_messages_build_subject($entity, $params = array(), $action
 			//$msg_subtype = elgg_echo('notification_messages:subject:discussion_reply', array($msg_subtype));
 		}
 		
-		// Container should be a group or user, can also be a site
-		$msg_container = false;
-		$container = $entity->getContainerEntity();
-		if (elgg_instanceof($container, "user") || elgg_instanceof($container, "group") || elgg_instanceof($container, "site")) { $msg_container = $container->name; }
+		// Container should be a group or user, can also be a site, and potentially an object (attached content)
+		$msg_container = notification_messages_message_add_container($entity);
 	
 		/* @TODO Owner should be used for Sender name (using site email, not here)
 		$owner = $entity->getOwnerEntity();
@@ -353,6 +351,9 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 			}
 		}
 		
+		// Add container message ?
+		$msg_container = notification_messages_message_add_container($entity);
+		
 		switch($subtype) {
 			case 'blog':
 				$descr = '';
@@ -369,9 +370,6 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 				break;
 				
 			default:
-				$container = $entity->getContainerEntity();
-				if (elgg_instanceof($container, "user") || elgg_instanceof($container, "group") || elgg_instanceof($container, "site")) { $msg_container = $container->name; }
-				
 				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
 				$descr .= strip_tags($entity->description, $allowed_tags);
@@ -1224,5 +1222,22 @@ function notification_messages_get_top_container_entity($entity = false) {
 	return $entity->getContainerEntity();
 }
 
+/* Return container for notification message (ie do not return container if meaningless)
+ * Container can be a group, user, site, object
+ */
+function notification_messages_message_add_container($entity = false) {
+	$msg_container = false;
+	$container = $entity->getContainerEntity();
+	// User : pointless
+	//if (elgg_instanceof(elgg_instanceof($container, "user")) { $msg_container = $container->name; }
+	// Group
+	if (elgg_instanceof(elgg_instanceof($container, "group")) { $msg_container = $container->name; }
+	// @TODO Site : multisite installation ?
+	//if (elgg_instanceof(elgg_instanceof($container, "site")) { $msg_container = $container->name; }
+	// @TODO Object : attached content ?
+	//if (elgg_instanceof(elgg_instanceof($container, "object")) { $msg_container = $container->title; }
+	
+	return $msg_container;
+}
 
 
