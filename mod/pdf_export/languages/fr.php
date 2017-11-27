@@ -28,6 +28,7 @@ return array(
 	'pdf_export:disableintro' => "Désactiver le bloc d'introduction en entête des pages exportées en PDF (non par défaut, car cela fournit des informations utiles sur la page exportée)",
 	'pdf_export:validsubtypes' => "Types de publications (subtypes) pour lesquelles un export PDF est disponible. Effacer pour récupérer la liste par défaut.",
 	'pdf_export:validsubtypes:default' => "Liste par défaut : %s",
+	'pdf_export:add_comments' => "Exporter aussi les commentaires",
 	
 );
 

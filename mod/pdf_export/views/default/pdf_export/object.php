@@ -1,6 +1,7 @@
 <?php
 $entity = elgg_extract('entity', $vars);
 
+// Object title and content (description)
 if (elgg_instanceof($entity, 'object')) {
 	$title = $entity->title;
 	if (empty($title)) $title = $entity->name;

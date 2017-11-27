@@ -28,6 +28,7 @@ return array(
 	'pdf_export:disableintro' => "Disable metadata block on exported PDF (default: no, as it provides useful information on exported page content)",
 	'pdf_export:validsubtypes' => "Content types (subtypes) for which  PDF export is enabled. Clear list to restore default values.",
 	'pdf_export:validsubtypes:default' => "Default list: %s",
+	'pdf_export:add_comments' => "Also export comments",
 	
 );
 

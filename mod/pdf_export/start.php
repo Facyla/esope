@@ -12,6 +12,9 @@ elgg_register_page_handler('pdfexport','pdf_export_page_handler');
 
 function pdf_export_init() {
 	//elgg_extend_view('css', 'pdf_export/css');
+	elgg_extend_view('pdf_export/default', 'pdf_export/comments_extend');
+	elgg_extend_view('pdf_export/object', 'pdf_export/comments_extend');
+	
 	
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'pdf_export_dropdown_registration', 9999);
 	
@@ -37,7 +40,7 @@ function pdf_export_dropdown_registration($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'object')) {
 		// Settings
 		$validsubtypes = elgg_get_plugin_setting('validsubtypes', 'pdf_export');
-		if (empty($validsubtypes)) $validsubtypes = 'page, page_top, blog, groupforumtopic, bookmarks';
+		if (empty($validsubtypes)) { $validsubtypes = 'page, page_top, blog, groupforumtopic, bookmarks'; }
 		$validsubtypes = str_replace(' ', '', $validsubtypes); // No white space ! (we want clean array values)
 		$validsubtypes = explode(',', $validsubtypes);
 		// Only add menu to valid chosen object subtypes
