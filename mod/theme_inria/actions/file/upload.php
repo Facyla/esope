@@ -341,7 +341,8 @@ if ($new_file) {
 	}
 	
 	// If empty title or description, forward to edit page instead
-	if (empty($title) || empty($desc)) {
+	//if (empty($title) || empty($desc)) {
+	if (empty($title)) {
 		system_message(elgg_echo('theme_inria:file:quicksaved'));
 		forward('file/edit/' . $file->guid);
 	} else {
