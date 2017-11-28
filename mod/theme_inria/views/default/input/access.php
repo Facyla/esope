@@ -158,30 +158,34 @@ if (elgg_instanceof($container, 'group')) {
 	$group_acl = $container->group_acl;
 	
 	// Esope : default group content access value (if not set or default)
-	if ($no_current_value) {
-		if (in_array($vars['name'], $content_cases)) {
-			// Define default group content access method
-			if ($container->membership == 2) {
-				$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
-				if (empty($defaultaccess)) { $defaultaccess = 'groupvis'; }
-			} else {
-				$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
-				if (empty($defaultaccess)) { $defaultaccess = 'group'; }
-			}
-			// If access policy says group only, always default to group acl (or whatever esope settings says)
-			if ($restricted_content_access) {
-				$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
-				if (empty($defaultaccess)) { $defaultaccess = 'group'; }
-			}
-			// Now set default content access value
-			switch($defaultaccess) {
-				case 'group': $vars['value'] = $group_acl; break;
-				case 'groupvis': $vars['value'] = $container->access_id; break;
-				case 'members': $vars['value'] = 1; break;
-				case 'public': $vars['value'] = 2; break;
-				case 'default': /* Do not set (let original check do it) $vars['value'] = get_default_access(); */ break;
-				default: $vars['value'] = $group_acl;
-			}
+	if (in_array($vars['name'], $content_cases)) {
+		// Determine default access
+		// Define default group content access method
+		if ($container->membership == 2) {
+			$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
+			if (empty($defaultaccess)) { $defaultaccess = 'groupvis'; }
+		} else {
+			$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+			if (empty($defaultaccess)) { $defaultaccess = 'group'; }
+		}
+		// If access policy says group only, always default to group acl (or whatever esope settings says)
+		if ($restricted_content_access) {
+			$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+			if (empty($defaultaccess)) { $defaultaccess = 'group'; }
+		}
+		
+		switch($defaultaccess) {
+			case 'group': $default_access_value = $group_acl; break;
+			case 'groupvis': $default_access_value = $container->access_id; break;
+			case 'members': $default_access_value = 1; break;
+			case 'public': $default_access_value = 2; break;
+			case 'default': /* Do not set (let original check do it) $vars['value'] = get_default_access(); */ break;
+			default: $default_access_value = $group_acl;
+		}
+		
+		// Now set default content access value if needed
+		if ($no_current_value) {
+			$vars['value'] = $default_access_value;
 			// Add default to available options if needed
 			if (!isset($vars['options_values'][$vars['value']])) {
 				if ($vars['value'] == theme_inria_get_inria_access_id()) {
@@ -284,10 +288,13 @@ if ((sizeof($vars['options_values']) > 1) || (is_array($content_cases) && !in_ar
 }
 
 if ($show_override_notice) {
+	$default_access_title = elgg_echo('esope:groupdefaultaccess:'.$defaultaccess);
+	$default_access_title = $vars['options_values'][$default_access_value];
 	// Esope : Use custom override if there was a previous value
 	if (!$no_current_value && !in_array($vars['value'], array('0', $group_acl))) {
-		echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('esope:access:overridenotice:existingvalue'));
+		echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('theme_inria:access:overridenotice:existingvalue', array($default_access_title)));
 	} else {
-		echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('esope:access:overridenotice'));
+		//echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('esope:access:overridenotice'));
+		echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('theme_inria:access:overridenotice', array($default_access_title)));
 	}
 }

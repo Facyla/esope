@@ -868,7 +868,7 @@ return array(
 	
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
 	'esope:access:userfield' => "Viewable by...",
-'esope:access:overridenotice' => "Note: Following the group policy, this content should be accessible only by group members.",
+	'esope:access:overridenotice' => "Note: Following the group policy, this content should be accessible only by group members.",
 	'esope:access:overridenotice:existingvalue' => "Note: Following the group policy, this content should be accessible only by group members. Please update the access level to Group Members",
 	'groups:content_access_mode' => "Access permission of new group content",
 	'groups:content_access_mode:warning' => "Warning: Changing this setting won't change the access permission of existing group content.",

@@ -30,6 +30,12 @@ $translation_prefix = '';
 $parent_group = elgg_extract("au_subgroup_of", $vars);
 //if ($parent_group) { $translation_prefix = 'workspace:'; }
 
+$opengroups_defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
+$closedgroups_defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+$open_default_access = elgg_echo('esope:groupdefaultaccess:' . $opengroups_defaultaccess);
+$closed_default_access = elgg_echo('esope:groupdefaultaccess:' . $closedgroups_defaultaccess);
+
+
 ?>
 <div class="groups-edit-field">
 	<div class="groups-edit-label">
@@ -49,7 +55,10 @@ $parent_group = elgg_extract("au_subgroup_of", $vars);
 	</div>
 </div>
 
-<?php if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes"): ?>
+<?php
+// Group visibility
+if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes") {
+	?>
 	<div class="groups-edit-field">
 		<div class="groups-edit-label">
 			<label for="groups-vis"><?php echo elgg_echo($translation_prefix."groups:visibility"); ?></label>
@@ -78,13 +87,16 @@ $parent_group = elgg_extract("au_subgroup_of", $vars);
 				'entity_type' => 'group',
 				'entity_subtype' => '',
 			));
+			echo '<span class="elgg-text-help">' . elgg_echo('Lorsque la visibilité du groupe est limitée aux membres du groupe (groupe privé), la visibilité des nouveaux contenus est forcée sur "Membres du groupe seulement".') . '</span>';
 			?>
 		</div>
 	</div>
-<?php endif; ?>
+	<?php
+}
 
-<?php
 
+
+// New content visibility
 $access_mode_params = array(
 	"name" => "content_access_mode",
 	"id" => "groups-content-access-mode",
@@ -94,7 +106,14 @@ $access_mode_params = array(
 		ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED => elgg_echo($translation_prefix."groups:content_access_mode:unrestricted"),
 	)
 );
-
+if ($entity) {
+	if ($entity->getContentAccessMode() == ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED) {
+		$access_mode_params['options_values'][ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY] .= ' &rarr; ' . $open_default_access;
+	} else {
+		$access_mode_params['options_values'][ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY] .= ' &rarr; ' . $closed_default_access;
+	}
+}
+	
 if ($entity) {
 	// Disable content_access_mode field for hidden groups because the setting
 	// will be forced to members_only regardless of the entered value
@@ -111,6 +130,7 @@ if ($entity) {
 		<?php
 		echo elgg_view("input/select", $access_mode_params);
 
+		echo '<span class="elgg-text-help">' . elgg_echo('groups:content_access_mode:details', array($open_default_access, $closed_default_access)) . '</span>';
 		if ($entity && $entity->getContentAccessMode() == ElggGroup::CONTENT_ACCESS_MODE_UNRESTRICTED) {
 			// Warn the user that changing the content access mode to more
 			// restrictive will not affect the existing group content

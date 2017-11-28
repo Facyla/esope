@@ -543,7 +543,13 @@ Here is the new account page: %5\$s
 	'groups:members' => "members", // membres du groupe
 	'groups:members:active' => "active members",
 	'groups:member:active' => "active member",
-	'groups:content_access_mode:membersonly' => "Same as group access - New content will have the same access as the group",
+	'groups:content_access_mode:details' => "New content visibility depends on the chosen membership:<br />
+ - Open &rarr; <strong>%s</strong><br />
+ - Closed &rarr; <strong>%s</strong>",
+	//'groups:content_access_mode:membersonly' => "Same as group access - New content will have the same access as the group",
+	'groups:content_access_mode:membersonly' => "Restricted",
+	'theme_inria:access:overridenotice' => "Note: Following the group policy, this content should be accessible only to: %s",
+	'theme_inria:access:overridenotice:existingvalue' => "Note: Following the group policy, this content should be accessible only to: %1\$s. Please update the access level to \"%1\$s\"",
 	'groups:invitations:pending:none' => "No pending invitation.",
 	'groups:invitations:request:none' => "No pending membership request.",
 	

@@ -961,11 +961,17 @@ Voir et commenter ce lien web :
 	'groups:visibility' => 'Visibilité du groupe',
 	'groups:visibility:details' => "Qui sait que le groupe existe ?",
 	'groups:content_access_mode' => "Visibilité des publications",
-	'groups:content_access_mode:details' => "Qui peut voir les publications ?",
+	//'groups:content_access_mode:details' => "Qui peut voir les publications ?",
+	'groups:content_access_mode:details' => "La visibilité des nouvelles publications dépend du type d'adhésion choisie&nbsp;:<br />
+ - Ouvert &rarr; <strong>%s</strong><br />
+ - Fermé &rarr; <strong>%s</strong>",
 	//'groups:membership' => "Type d'adhésion",
 	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
 	//'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
-	'groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
+	'groups:content_access_mode:membersonly' => "Restreint",
+	'theme_inria:access:overridenotice' => "Note : en accord avec la politique de confidentialité de ce groupe, l'accès à ce contenu devrait être réservé à&nbsp;: %s",
+	'theme_inria:access:overridenotice:existingvalue' => "Note : en accord avec la politique de confidentialité de ce groupe, l'accès à ce contenu devrait être réservé à&nbsp;: %1\$s. Merci de choisir le niveau d'accès \"%1\$s\".",
+	'groups:content_access_mode:groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
 	
 	'theme_inria:group:pending_request' => "En attente",
 	

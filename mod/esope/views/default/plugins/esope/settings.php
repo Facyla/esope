@@ -40,7 +40,13 @@ $pages_list_subpages_opt['group'] = elgg_echo('esope:settings:pages_list_subpage
 
 $registered_objects = get_registered_entity_types('object');
 
-$group_defaultaccess_opt = array('default' => elgg_echo('esope:groupdefaultaccess:default'), 'groupvis' => elgg_echo('esope:groupdefaultaccess:groupvis'), 'group' => elgg_echo('esope:groupdefaultaccess:group'), 'members' => elgg_echo('esope:groupdefaultaccess:members'), 'public' => elgg_echo('esope:groupdefaultaccess:public'));
+$group_defaultaccess_opt = array(
+		'default' => elgg_echo('esope:groupdefaultaccess:default'), 
+		'groupvis' => elgg_echo('esope:groupdefaultaccess:groupvis'), 
+		'group' => elgg_echo('esope:groupdefaultaccess:group'), 
+		'members' => elgg_echo('esope:groupdefaultaccess:members'), 
+		'public' => elgg_echo('esope:groupdefaultaccess:public'),
+	);
 
 $group_groupjoin_enablenotif_opt = array(
 		'email' => elgg_echo('option:notify:email'),
