@@ -8,7 +8,7 @@ if (elgg_instanceof($entity)) {
 	$add_comments = elgg_get_plugin_setting('add_comments', 'pdf_export');
 	if ($add_comments != 'yes') { return; }
 	
-	$comments = elgg_get_entities(array('types' => 'object', 'subtypes' => 'comment', 'container_guid' => $entity->guid, 'limit' => false, 'preload_owners' => true));
+	$comments = elgg_get_entities(array('types' => 'object', 'subtypes' => 'comment', 'container_guid' => $entity->guid, 'limit' => false, 'preload_owners' => true, 'order_by' => 'time_created asc'));
 	foreach($comments as $ent) {
 		$commenter = $ent->getOwnerEntity();
 		//echo '<img src="' . $commenter->getIconURL(array('size' => 'tiny')) . '" />';
