@@ -37,13 +37,9 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 ?>
 
 <div id="feedbackWrapper">
-
-	<div id="feedBackToggler">
-		<a id="feedBackTogglerLink" href="javascript:void(0)" onclick="FeedBack_Toggle();this.blur();">
-			<?php echo elgg_view('feedback/toggle_button') ?>
-		</a>
-	</div>
-
+	
+	<?php echo elgg_view('feedback/toggle_menu'); ?>
+	
 	<div id="feedBackContentWrapper">
 		<div id="feedBackContent" class="elgg-module elgg-module-info">
 		
