@@ -36,16 +36,23 @@ if ($group->guid != $main_group->guid) {
 $content .= '<div class="group-profile-main">';
 	
 	if ($group->guid != $main_group->guid) {
-		$content .= '<blockquote class="warning">' . elgg_echo('theme_inria:workspace:invites:warning') . '</blockquote><br />';
+		$content .= '<blockquote class="warning">' . elgg_echo('theme_inria:workspace:invites:warning') . '</blockquote>';
 		//system_message(elgg_echo('theme_inria:workspace:invites:warning'));
+		$content .= elgg_view_form('groups/parent_group_invite', array(
+				'id' => 'invite_parent_to_group',
+				'class' => 'elgg-form-alt mtm',
+			), array(
+				'entity' => $group,
+			));
+		$content .= '<br />';
 	}
 	
 	$content .= elgg_view_form('groups/invite', array(
-		'id' => 'invite_to_group',
-		'class' => 'elgg-form-alt mtm',
-	), array(
-		'entity' => $group,
-	));
+			'id' => 'invite_to_group',
+			'class' => 'elgg-form-alt mtm',
+		), array(
+			'entity' => $group,
+		));
 $content .= '</div>';
 
 $params = array(

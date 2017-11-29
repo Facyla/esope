@@ -53,6 +53,8 @@ function theme_inria_init(){
 	
 	elgg_register_action("group/membership/join", $action_url . "groups/membership/join.php");
 	
+	elgg_register_action("groups/parent_group_invite", $action_url . "groups/membership/parent_group_invite.php");
+	
 	
 	// CSS - Inria custom styles
 	$css_url = elgg_get_site_url() . 'mod/theme_inria/fonts/';
