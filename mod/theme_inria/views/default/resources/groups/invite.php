@@ -45,6 +45,7 @@ $content .= '<div class="group-profile-main">';
 				'entity' => $group,
 			));
 		$content .= '<br />';
+		$content .= '<br />';
 	}
 	
 	$content .= elgg_view_form('groups/invite', array(

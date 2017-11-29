@@ -1030,7 +1030,7 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:group:members:livefilter' => "3 premières lettres",
 	
-	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe.",
+	'theme_inria:workspace:invites:warning' => "Attention, si le groupe est en accès restreint, vous ne pouvez inviter que des membres du groupe parent.",
 	'theme_inria:workspace:addcontent:thewire' => "Publier un nouveau message",
 	'theme_inria:workspace:addcontent:blog' => "Publier un nouvel article",
 	'theme_inria:workspace:addcontent:file' => "Publier un nouveau fichier",
