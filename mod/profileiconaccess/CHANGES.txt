@@ -1,11 +1,12 @@
 == Version History ==
 
-x.x:
+1.1.1 - 2017-11-29:
+ - enable admins to edit someone else's profile icon access
 
 1.1.0 (10/12/2015):
  - upgrade for Elgg 1.9
  - AMD load js
 
 1.0 (09/10/2012):
-  - initial release
-  - rewritten based on original version for Elgg 1.6 by Curverider
+ - initial release
+ - rewritten based on original version for Elgg 1.6 by Curverider
