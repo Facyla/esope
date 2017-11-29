@@ -35,21 +35,21 @@ switch ($page[1]) {
 $ts_upper = time();
 
 switch ($interval) {
-	case constant(DIGEST_INTERVAL_DAILY):
+	case DIGEST_INTERVAL_DAILY:
 		$ts_lower = $ts_upper - (60 * 60 * 24);
 		break;
-	case constant(DIGEST_INTERVAL_WEEKLY):
+	case DIGEST_INTERVAL_WEEKLY:
 		$ts_lower = $ts_upper - (60 * 60 * 24 * 7);
 		break;
-	case constant(DIGEST_INTERVAL_FORTNIGHTLY):
+	case DIGEST_INTERVAL_FORTNIGHTLY:
 		$ts_lower = $ts_upper - (60 * 60 * 24 * 14);
 		break;
-	case constant(DIGEST_INTERVAL_MONTHLY):
+	case DIGEST_INTERVAL_MONTHLY:
 		$ts_lower = $ts_upper - (60 * 60 * 24 * 31);
 		break;
 	default:
 		$interval = DIGEST_INTERVAL_MONTHLY;
-		$ts_lower = 1;
+		$ts_lower = $ts_upper - (60 * 60 * 24 * 31);
 }
 
 $user = elgg_get_logged_in_user_entity();
