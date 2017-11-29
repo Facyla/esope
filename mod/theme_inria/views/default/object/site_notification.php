@@ -49,7 +49,8 @@ if ($url) {
 		'id' => 'site-notifications-link-' . $entity->guid,
 	));
 } else {
-	error_log("DEBUG object/site_notification {$entity->guid} : no object entity passed so no URL available");
+	// Note : SiteNotification object may not have any URL, and this is not an error but only a special case
+	//error_log("DEBUG object/site_notification {$entity->guid} : no object entity passed so no URL available");
 }
 
 if (elgg_in_context('topbar')) {
