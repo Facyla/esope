@@ -72,17 +72,21 @@ echo elgg_view('input/plaintext', array(
 	</span>
 	<?php
 	
-	// Force to group access if content access mode enabled
-	if ($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
+	// Force to group access if content access mode enabled OR if not an Inria member
+	if (($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) || (esope_get_user_profile_type() != 'inria')) {
 		/*
 		// Group members only
 		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->group_acl));
 		echo elgg_view('output/access', array('value' => $group->group_acl));
 		*/
 		// Iris : Same as group visibility
-		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $group->access_id));
-		echo elgg_view('output/access', array('value' => $group->access_id));
+		//$default_access = $group->access_id;
+		// 20171128 => now same as default group content access
+		$default_access = theme_inria_group_default_access_value($group);
+		echo elgg_view('input/hidden', array('name' => 'access_id', 'value' => $default_access));
+		echo elgg_view('output/access', array('value' => $default_access));
 	} else {
+		/*
 		$access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
 		$inria_access_id = theme_inria_get_inria_access_id();
 		// Only Inria only can select access (defaults to Inria only))
@@ -103,6 +107,8 @@ echo elgg_view('input/plaintext', array(
 		if ($inria_access_id && (esope_get_user_profile_type() == 'inria')) { $access_opt[$inria_access_id] = elgg_echo('profiletype:inria'); }
 		$access_opt['1'] = elgg_echo('LOGGED_IN');
 		echo elgg_view('input/select', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
+		*/
+		echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'options_values' => $access_opt));
 	}
 	?>
 	

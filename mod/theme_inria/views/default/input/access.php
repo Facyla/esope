@@ -159,6 +159,7 @@ if (elgg_instanceof($container, 'group')) {
 	
 	// Esope : default group content access value (if not set or default)
 	if (in_array($vars['name'], $content_cases)) {
+		/*
 		// Determine default access
 		// Define default group content access method
 		if ($container->membership == 2) {
@@ -179,9 +180,14 @@ if (elgg_instanceof($container, 'group')) {
 			case 'groupvis': $default_access_value = $container->access_id; break;
 			case 'members': $default_access_value = 1; break;
 			case 'public': $default_access_value = 2; break;
-			case 'default': /* Do not set (let original check do it) $vars['value'] = get_default_access(); */ break;
+			case 'default':
+				// Do not set (let original check do it) $vars['value'] = get_default_access();
+				break;
 			default: $default_access_value = $group_acl;
 		}
+		*/
+		$defaultaccess = theme_inria_group_default_access($container);
+		$default_access_value = theme_inria_group_default_access_value($container);
 		
 		// Now set default content access value if needed
 		if ($no_current_value) {

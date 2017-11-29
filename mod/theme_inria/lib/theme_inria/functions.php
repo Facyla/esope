@@ -74,4 +74,46 @@ function theme_inria_ldap_convert_locality($codes) {
 }
 
 
+// Détermine le niveau d'accès par défaut dans un groupe
+function theme_inria_group_default_access($group) {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	
+	// Determine default access
+	// Define default group content access method
+	if ($group->membership == 2) {
+		$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
+		if (empty($defaultaccess)) { $defaultaccess = 'groupvis'; }
+	} else {
+		$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+		if (empty($defaultaccess)) { $defaultaccess = 'group'; }
+	}
+	// If access policy says group only, always default to group acl (or whatever esope settings says)
+	if ($group->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
+		$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
+		if (empty($defaultaccess)) { $defaultaccess = 'group'; }
+	}
+	
+	return $defaultaccess;
+}
+
+// Détermine la valeur du niveau d'accès par défaut dans un groupe
+function theme_inria_group_default_access_value($group) {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	
+	// Determine default access
+	$defaultaccess = theme_inria_group_default_access($group);
+	switch($defaultaccess) {
+		case 'group': $default_access_value = $group->group_acl; break;
+		case 'groupvis': $default_access_value = $group->access_id; break;
+		case 'members': $default_access_value = 1; break;
+		case 'public': $default_access_value = 2; break;
+		case 'default':
+			// Do not set (let original check do it) $vars['value'] = get_default_access();
+			break;
+		default: $default_access_value = $group->group_acl;
+	}
+	return $default_access_value;
+}
+
+
 

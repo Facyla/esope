@@ -1483,6 +1483,8 @@ fieldset > div { /* max-width: 30rem; */ }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: #F1F1F1; border: 0; }
 select[disabled], input[disabled] { color: #AAA; background: #EEE; }
 
+.elgg-text-help { margin: 0.25rem 0; font-size: 0.85rem; }
+
 #iris-body .elgg-form.elgg-form-alt.elgg-form-groups-edit { width: initial; }
 
 #iris-body .iris-group-header-alt h2 { padding-top: 3rem; }
