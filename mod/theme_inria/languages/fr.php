@@ -1119,5 +1119,7 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	
 	'theme_inria:workspace:noaccesstomaingroup' => "Impossible d'afficher cet espace de travail car il dépend d'un groupe auquel vous n'avez pas accès.",
 	
+	'theme_inria:submitandcreateagain' => "puis en créer un autre",
+	
 );
 

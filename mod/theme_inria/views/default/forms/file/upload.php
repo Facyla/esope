@@ -52,7 +52,9 @@ if ($is_embed) {
 		<?php echo elgg_view('input/file', array('name' => 'upload')); ?>
 	</div>
 	<?php
+	// Access
 	echo '<div class="home-static-container" style="width:30%; margin-right:3%; display:inline-block;"><label>' . elgg_echo('access') . '</label><br />' . elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id, 'entity' => get_entity($guid), 'container_guid' => $container_guid, 'entity_type' => 'object', 'entity_subtype' => 'file')) . '</div>';
+	// Submit
 	echo '<div class="home-static-container" style="width:20%; display:inline-block;">' . elgg_view('input/submit', array('value' => $submit_label)) . '</div>';
 } else {
 	?>
@@ -141,6 +143,11 @@ if (!$is_embed) {
 	echo '<p><label>' . elgg_echo('theme_inria:hide_entity:select') . elgg_view('input/select', array('name' => 'hide_entity', 'value' => $hide_entity, 'options_values' => array('no' => elgg_echo('theme_inria:hide_entity:no'), 'yes' => elgg_echo('theme_inria:hide_entity:yes')))) . '</label></p>';
 
 	echo elgg_view('input/submit', array('value' => $submit_label));
+	if (!$is_embed) {
+		echo elgg_view('input/hidden', array('name'=>'backtoform', 'value'=> 'no'));
+		$submit_again_label = $submit_label . ' ' . elgg_echo('theme_inria:submitandcreateagain');
+		echo elgg_view('input/submit', array('value' => $submit_again_label, 'onClick' => 'javascript:$(\'input[name="backtoform"]\').val("yes");'));
+	}
 	?>
 </div>
 

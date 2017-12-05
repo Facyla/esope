@@ -1107,5 +1107,7 @@ email3@domain.tld email4@domain.tld ",
 	
 	'theme_inria:workspace:noaccesstomaingroup' => "Unable to display this workspace, as it relies on a group you do not have access to.",
 	
+	'theme_inria:submitandcreateagain' => "then add a new one",
+	
 );
 

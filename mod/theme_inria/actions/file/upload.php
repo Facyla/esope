@@ -45,6 +45,8 @@ if ($container_guid == 0) {
 	$container_guid = elgg_get_logged_in_user_guid();
 }
 
+$backtoform = get_input('backtoform');
+
 elgg_make_sticky_form('file');
 
 // check if upload attempted and failed
@@ -347,7 +349,10 @@ if ($new_file) {
 		forward('file/edit/' . $file->guid);
 	} else {
 		system_message(elgg_echo("file:saved"));
+		
 		$container = get_entity($container_guid);
+		// Si demandé : on en publie directement un autre
+		if ($backtoform == 'yes') { forward('file/add/'.$container->guid); }
 		if (elgg_instanceof($container, 'group')) {
 			forward("file/group/$container->guid/all");
 		} else {
