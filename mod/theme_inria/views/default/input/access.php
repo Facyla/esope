@@ -157,35 +157,13 @@ if (elgg_instanceof($container, 'group')) {
 	// Useful vars for all group checks
 	$group_acl = $container->group_acl;
 	
+	// Remove access level ACCESS_LOGGED_IN if visibility different from Public or Site members
+	if (!in_array($container->access_id, array(1, 2))) {
+		unset($vars['options_values'][1]);
+	}
+	
 	// Esope : default group content access value (if not set or default)
 	if (in_array($vars['name'], $content_cases)) {
-		/*
-		// Determine default access
-		// Define default group content access method
-		if ($container->membership == 2) {
-			$defaultaccess = elgg_get_plugin_setting('opengroups_defaultaccess', 'esope');
-			if (empty($defaultaccess)) { $defaultaccess = 'groupvis'; }
-		} else {
-			$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
-			if (empty($defaultaccess)) { $defaultaccess = 'group'; }
-		}
-		// If access policy says group only, always default to group acl (or whatever esope settings says)
-		if ($restricted_content_access) {
-			$defaultaccess = elgg_get_plugin_setting('closedgroups_defaultaccess', 'esope');
-			if (empty($defaultaccess)) { $defaultaccess = 'group'; }
-		}
-		
-		switch($defaultaccess) {
-			case 'group': $default_access_value = $group_acl; break;
-			case 'groupvis': $default_access_value = $container->access_id; break;
-			case 'members': $default_access_value = 1; break;
-			case 'public': $default_access_value = 2; break;
-			case 'default':
-				// Do not set (let original check do it) $vars['value'] = get_default_access();
-				break;
-			default: $default_access_value = $group_acl;
-		}
-		*/
 		$defaultaccess = theme_inria_group_default_access($container);
 		$default_access_value = theme_inria_group_default_access_value($container);
 		
@@ -253,7 +231,7 @@ if (!isset($vars['disabled'])) {
 	$vars['disabled'] = false;
 }
 
-// if access is set to a value not present in the available options, add the option
+// if current access is set to a value not present in the available options, add the option
 if (!isset($vars['options_values'][$vars['value']])) {
 	//$acl = get_access_collection($vars['value']);
 	//$display = $acl ? $acl->name : elgg_echo('access:missing_name');

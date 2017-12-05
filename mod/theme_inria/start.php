@@ -126,6 +126,12 @@ function theme_inria_init(){
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 	//elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600); // already extended by esope
 	
+	// Add preview link to newsletter edit form (page menu is not displayed in new design Iris v2)
+	elgg_extend_view('forms/newsletter/edit/content', 'forms/newsletter/extend_preview', 100);
+	elgg_extend_view('forms/newsletter/edit/recipients', 'forms/newsletter/extend_preview', 100);
+	elgg_extend_view('forms/newsletter/edit/schedule', 'forms/newsletter/extend_preview', 100);
+	elgg_extend_view('forms/newsletter/edit/template', 'forms/newsletter/extend_preview', 100);
+	
 	// Add email invites to groups
 	elgg_extend_view('forms/groups/invite', 'forms/groups/email_invite', 1001);
 	

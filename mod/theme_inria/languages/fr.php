@@ -122,6 +122,9 @@ return array(
 	'bookmarks:edit' => 'Modifier ce lien web',
 	'bookmarks:delete' => 'Supprimer ce lien web',
 	'bookmarks:add' => 'Partager un nouveau lien web',
+	'theme_inria:bookmarklet:description' => "Saviez-vous que vous pouvez ajouter ces liens directement depuis votre navigateur lorsque vous naviguez sur une page ?",
+	'theme_inria:bookmarklet:description' => "Le \"bookmarklet\" (ou \"marque-page dynamique\") vous permet de partager ce que vous trouvez sur le web avec vos groupes, ou pour vous-même. Pour l'utiliser, glissez-déposez le bouton ci-dessous dans la barre de liens de votre navigateur, ou faites un clic droit sur le bouton pour l'ajouter à vos favoris, puis dans votre barre de liens personnelle.",
+	'theme_inria:bookmarklet:button:title' => "Ajouter à Iris",
 	
 	'pages:new' => 'Ajouter une nouvelle page',
 	'pages:none' => 'Aucune page pour le moment',

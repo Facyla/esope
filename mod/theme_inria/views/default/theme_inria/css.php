@@ -518,8 +518,8 @@ section .elgg-inner div.module div.activites { background-color: <?php echo $mod
 
 .elgg-tabs { font-size: 0.75rem; }
 .elgg-tabs > li { margin: 0 0 0 4px; }
-.elgg-tabs > li > a { height: 18px; }
-
+.elgg-tabs > li > a { height: 1.3rem; padding-top: 0.125rem; padding-bottom: 0.1875rem; line-height: 1.3rem; }
+.elgg-tabs .elgg-state-selected a { top: initial; }
 
 /* Groups */
 .elgg-owner-block .elgg-head { /* background: #F8F4F5; */ background: #FFFFFF; }
@@ -1587,6 +1587,10 @@ form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !importan
 .workspace-subtype-content .feedback {  }
 
 .bookmarks-address { margin-bottom: 1rem; word-break: break-all; }
+
+.elgg-form-bookmarks-save blockquote { font-size: 0.8rem; line-height: 1.2; padding: 1rem 2rem; }
+.elgg-form-bookmarks-save blockquote .fa-info-circle { float:left; margin-right: 0.5rem; font-size: 1.75rem; }
+.bookmarklet-button { background: <?php echo $iris_blue; ?>; color:white; font-weight: bold; padding: 0.5rem 1rem; text-decoration: none;  }
 
 .elgg-image .date-in-month { background: #FD6356; }
 .calendar-action { color: #1488CA; font-size: 1.3125rem; }

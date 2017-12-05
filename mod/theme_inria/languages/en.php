@@ -122,6 +122,9 @@ return array(
 	'bookmarks:edit' => 'Edit this bookmark',
 	'bookmarks:delete' => 'Delete this bookmark',
 	'bookmarks:add' => 'Share new bookrmark',
+	'theme_inria:bookmarklet:description:intro' => "Did you know that you could add these links directly from your browser while your are surfing on a webpage?",
+	'theme_inria:bookmarklet:description' => "The \"bookmarklet\" lets you share web resources with your groups, or for yourself. Tu use it, drag and drop the following icon to your browser's links toolbar, or right-clic on the icon and add the link to your favorites, and then to your personal toolbar.",
+	'theme_inria:bookmarklet:button:title' => "Add to Iris",
 
 	'pages:new' => 'Add new page',
 	'pages:none' => 'No page yet in this group',
