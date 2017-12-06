@@ -14,8 +14,13 @@ $tags = elgg_extract('tags', $vars, '');
 $access_id = elgg_extract('access_id', $vars, ACCESS_DEFAULT);
 $container_guid = elgg_extract('container_guid', $vars);
 if (!$container_guid) {
+	$container_guid = elgg_get_page_owner_guid();
+}
+$container = get_entity($container_guid);
+if (!(elgg_instanceof($container, 'group') || elgg_instanceof($container, 'user'))) {
 	$container_guid = elgg_get_logged_in_user_guid();
 }
+
 $guid = elgg_extract('guid', $vars, null);
 
 $hide_entity = 'no';
@@ -37,7 +42,7 @@ $upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
 $max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
 
 $upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_upload)));
-
+echo $container_guid;
 $is_embed = false;
 if (elgg_in_context('embed')) { $is_embed = true; }
 ?>
