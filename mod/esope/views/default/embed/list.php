@@ -16,7 +16,7 @@
  */
 $page_owner = elgg_get_page_owner_entity();
 //if ($page_owner instanceof ElggGroup && $page_owner->isMember()) {
-if (elgg_instance($page_owner, 'group') && ($page_owner->isMember() || $page_owner->canEdit())) {
+if (elgg_instanceof($page_owner, 'group') && ($page_owner->isMember() || $page_owner->canEdit())) {
 	$vars['base_url'] = 'embed?container_guid=' . $page_owner->guid;
 } else {
 	$vars['base_url'] = 'embed';
