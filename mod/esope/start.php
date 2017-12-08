@@ -464,6 +464,19 @@ function esope_init() {
 		elgg_register_page_handler('likes', 'esope_likes_page_handler');
 	}
 	
+	// Amélirations embed
+	if (elgg_is_active_plugin('embed')) {
+		// Page handler for the modal media embed (same behaviour for admin and members)
+		elgg_unregister_page_handler('embed', 'embed_page_handler');
+		elgg_register_page_handler('embed', 'esope_embed_page_handler');
+		
+		if (elgg_is_logged_in()) {
+			elgg_unregister_plugin_hook_handler('register', 'menu:longtext', 'embed_longtext_menu');
+			elgg_register_plugin_hook_handler('register', 'menu:longtext', 'esope_embed_longtext_menu');
+		}
+	}
+
+	
 	// Ajout gestionnaire pour les dossiers
 	/* @TODO : add setting + see if we want this by default or not
 	if (elgg_is_active_plugin('file_tools') && elgg_is_logged_in()) {

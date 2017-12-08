@@ -972,4 +972,33 @@ function esope_digest_page_handler($page) {
 */
 
 
+/**
+ * Serves the content for the embed lightbox
+ *
+ * @param array $page URL segments
+ * 
+ * ESOPE : enable admin to use the same way as members
+ */
+function esope_embed_page_handler($page) {
+
+	$container_guid = (int)get_input('container_guid');
+	if ($container_guid) {
+		$container = get_entity($container_guid);
+
+//		if (elgg_instanceof($container, 'group') && $container->isMember()) {
+		if (elgg_instanceof($container, 'group') && ($container->isMember() || $container->canEdit())) {
+			// embedding inside a group so save file to group files
+			elgg_set_page_owner_guid($container_guid);
+		}
+	}
+
+	set_input('page', $page[1]); 
+
+	echo elgg_view('embed/layout');
+
+	// exit because this is in a modal display.
+	exit;
+}
+
+
 

@@ -75,7 +75,6 @@ if ($entity) {
 		$vars['data-original-value'] = $entity->access_id;
 	}
 }
-
 $container = elgg_get_page_owner_entity();
 if (!$params['container_guid'] && $container) {
 	$params['container_guid'] = $container->guid;
