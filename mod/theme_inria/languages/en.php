@@ -496,7 +496,7 @@ Here is the new account page: %5\$s
 	'groups:briefdescription' => 'Brief description', // Brève description
 	'groups:interests' => 'Keywords',
 	'access:read' => "Visibility", // Accès en lecture
-	'PRIVATE' => "Draft",
+	'PRIVATE' => "Private / Draft",
 	'LOGGED_IN' => "Inria & Guests", // membres connectés
 	'GROUP_MEMBERS' => "Group", // membres du groupe
 	'access:GROUP_MEMBERS' => "Group members",
