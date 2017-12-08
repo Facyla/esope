@@ -496,6 +496,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'groups:briefdescription' => 'Résumé', // Brève description
 	'groups:interests' => 'Mots-clés',
 	'access:read' => "Visibilité", // Accès en lecture
+	'PRIVATE' => "Brouillon",
 	'LOGGED_IN' => "Inria & Invités", // membres connectés
 	'GROUP_MEMBERS' => "Groupe", // membres du groupe
 	'access:GROUP_MEMBERS' => "Membres du groupe",
