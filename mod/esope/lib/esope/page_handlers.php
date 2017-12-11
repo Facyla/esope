@@ -165,7 +165,7 @@ function esope_input_livesearch_page_handler($page) {
 	//$default_limit = elgg_get_config('default_limit');
 	$default_limit = 0; // or very high, eg. 500 ?
 	$limit = sanitise_int(get_input('limit', $default_limit));
-	error_log("ESOPE livesearch limit = $limit");
+	//error_log("ESOPE livesearch limit = $limit");
 	
 	// all = users and groups
 	if (in_array('all', $match_on)) {

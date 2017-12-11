@@ -8,7 +8,7 @@ $use_cmis = true;
 if (!elgg_is_active_plugin('elgg_cmis')) { $use_cmis = false; }
 
 if ($use_cmis) {
-	error_log("CMIS : backend mode - file upload");
+	//error_log("CMIS : backend mode - file upload");
 	
 	// Load libraries (and get base page handler include path)
 	$vendor = elgg_cmis_vendor();

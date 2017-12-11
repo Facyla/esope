@@ -121,10 +121,10 @@ foreach ($tools as $priority => $view) {
 			*/
 			continue;
 		}
-		// Forum : on désactive s'il n'y en a plus - mais on laisse le choix tant qu'il reste du contenu
+		// Forum : on désactive si nouveau groupe ou s'il n'y a plus de sujet - mais on laisse le choix tant qu'il reste du contenu
 		if ($group_option_toggle_name == 'forum_enable') {
 			$existing_topic = elgg_get_entities(array('type' => 'object', 'subtype' => 'groupforumtopic', 'container_guid' => $group->guid, 'count' => true));
-			if ($existing_topic === 0) {
+			if (!elgg_instanceof($group, 'group') || ($existing_topic === 0)) {
 				echo elgg_view('input/hidden', array('name' => $group_option_toggle_name, 'value' => 'no'));
 				/*
 				// Can be safely disabled
