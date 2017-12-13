@@ -35,7 +35,7 @@ $site = elgg_get_site_entity();
 $inviter = elgg_get_logged_in_user_entity();
 $inviter_guid = elgg_get_logged_in_user_guid();
 
-if ($debug) error_log("Inria user_add action : validation : $admin_validation / notif : " . print_r($notified, true));
+if ($debug) { error_log("Inria user_add action : validation : $admin_validation / notif : " . print_r($notified, true)); }
 
 
 elgg_make_sticky_form('useradd');
@@ -117,6 +117,23 @@ foreach ($emails as $email) {
 						$already_registered = true;
 						// user and admin notifications
 						
+						// Update some meta if not set yet
+						if (empty($user->membertype)) $user->membertype = 'inria'; }
+						if (empty($user->memberstatus)) { $user->memberstatus = 'active'; }
+						if (empty($user->firstmemberreason)) { $user->firstmemberreason = 'created_by_inria_member'; }
+						if (empty($user->membercreatedby)) { $user->membercreatedby = $inviter_guid; }
+						if (empty($user->registermemberreason)) { $user->registermemberreason = "Account registered by {$inviter->name} ($inviter_guid) with motive : $reason"; }
+						// Initiate this because account would be disabled if not set at creation
+						$user->last_action = time();
+						// Add some fields values
+						if ($organisations && empty($user->organisation)) { $user->organisation = $organisations; }
+						if (!empty($briefdescription) && empty($user->briefdescription)) { $user->briefdescription = $briefdescription; }
+						// Remember account creation + make mutual friends
+						if (empty($user->created_by_guid)) { $user->created_by_guid = $inviter_guid; }
+						$user->addFriend($inviter_guid);
+						$inviter->addFriend($guid);
+						
+						
 						// USER NOTIFICATION
 						// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
 						$user_subject = elgg_echo('theme_inria:useradd:inria:subject', array($site->name, $inviter->name));
@@ -194,8 +211,8 @@ foreach ($emails as $email) {
 		esope_set_user_profile_type($user, 'external');
 		
 		// Add some fields values
-		if ($organisations) $user->organisation = $organisations;
-		if (!empty($briefdescription)) $user->briefdescription = $briefdescription;
+		if ($organisations) { $user->organisation = $organisations; }
+		if (!empty($briefdescription)) { $user->briefdescription = $briefdescription; }
 
 		// Remember account creation + make mutual friends
 		$user->created_by_guid = $inviter_guid;
