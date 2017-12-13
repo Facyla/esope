@@ -520,6 +520,7 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .blog-archives li { clear: left; font-weight: bold; padding: 0 0 4px 0; }
 .pages-nav li { clear: left; }
 .esope-subpages-menu { margin-top:2rem; }
+.elgg-pages-input-parent-picker { max-width: 100%; }
 
 
 /* Agenda à côté et non sous la liste d'événements */

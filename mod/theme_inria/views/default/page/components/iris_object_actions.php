@@ -81,10 +81,10 @@ $actions .= '<div class="iris-object-actions">';
 			if (elgg_instanceof($entity, 'object', 'thewire')) {
 				$wire_container = $entity->getContainerEntity();
 				// Can reply only if member of the group, or not in a group
-				if (!elgg_instanceof($wire_container, 'group') || (elgg_instanceof($wire_container, 'group') && $wire_container->isMember())) {
+				if (!elgg_instanceof($wire_container, 'group') || (elgg_instanceof($wire_container, 'group') && ($wire_container->isMember() || $wire_container->canEdit()))) {
 					$actions .= '<li>' . elgg_view('output/url', array(
 								'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
-								'text' => '<i class="fa fa-comment"></i>',
+								'text' => '<i class="fa fa-comment"></i>&nbsp;' . elgg_echo('reply'),
 								'title' => elgg_echo('theme_inria:object:comment'),
 						)) . '</li>';
 					// Form should separated from menu
