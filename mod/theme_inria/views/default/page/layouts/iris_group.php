@@ -79,6 +79,8 @@ if (elgg_instanceof($group, 'group')) {
 	<?php
 	if ($has_group_layout) {
 		echo elgg_view('theme_inria/groups/group_header', array('entity' => $group, 'main_group' => $main_group));
+	} else {
+		echo elgg_view('theme_inria/groups/group_header_thin', array('entity' => $group, 'main_group' => $main_group));
 	}
 	?>
 	

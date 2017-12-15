@@ -9,7 +9,9 @@ $file = $vars['entity'];
 
 $image_url = $file->getIconURL('large');
 $image_url = elgg_format_url($image_url);
-$download_url = elgg_get_site_url() . "file/download/{$file->getGUID()}";
+//$download_url = elgg_get_site_url() . "file/download/{$file->getGUID()}";
+// Iris : le bouton de DL étant au-dessus, pas besoin de lien sur l'image (qui devrait s'afficher en lightbox une fois le JS chargé)
+$download_url = "javascript:void(0);";
 
 if ($vars['full_view']) {
 	elgg_load_js('lightbox');

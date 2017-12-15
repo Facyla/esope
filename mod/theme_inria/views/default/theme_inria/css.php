@@ -1405,6 +1405,17 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-tabs .tab-more-content a { padding: 0.5rem 1rem; margin: 0; color: #384257; border-bottom: 1px solid #CCC; flex: 1 1 auto; margin: 0; text-align: left; display: block; height: initial; }
 .group-workspace-tabs .tab-more-content a:hover, .group-workspace-tabs .tab-more-content a:active, .group-workspace-tabs .tab-more-content a:focus { opacity: 1; border-bottom: 1px solid #CCC; }
 
+/* Bandeau réduit */
+.iris-group-header.iris-group-header-thin { min-height: 2.5rem; display: flex; padding: 0.25rem; }
+.iris-group-header-thin > div { position: initial; flex: 1 0 auto; margin-right: 1rem; }
+.iris-group-header-thin .iris-group-title {  }
+.iris-group-header-thin .iris-group-image { position: initial; flex: 0 0 auto; height: 2rem; width: 2rem; }
+#iris-body .iris-group-header-thin .iris-group-title h2 { font-size: 1.75rem; line-height: 2rem; display: inline-block; margin-right: 1rem; }
+.iris-group-header-thin .iris-group-subtitle { line-height: 2rem; margin: 0 0 0 0rem; }
+.iris-group-header-thin .iris-group-search { flex: 0 0 auto; margin-right: 0; }
+.iris-group-header-thin  .search { line-height: 2rem; color: white; padding: 0 0.5rem; }
+
+
 .group-members-count { font-size: 5.5rem; /* text-align: center; */ color: #1488CA; margin: 1rem 0 1.5rem 0; }
 .group-profile-main .elgg-list li { box-shadow: none; margin-bottom: 0; }
 .group-profile-main .iris-round-button { color:white; font-size: 1rem; height: 2rem; width: 2rem; line-height: 2.2rem; opacity: 0.6; }
@@ -2026,6 +2037,11 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-group-rules { font-size: 1rem; }
 	.iris-group-menu a, .iris-group-menu .tab-more { font-size: 1rem; padding: 1rem 0; }
 	.iris-group-menu a.add { width: auto; padding: .25rem .75rem 0rem .75rem; margin: 0.5rem; }
+	/* Bandeau réduit */
+	.iris-group-header.iris-group-header-thin { min-height: 2rem; flex-wrap: wrap; }
+	.iris-group-header-thin .iris-group-image { height: 1.5rem; width: 1.5rem; }
+	.iris-group-header-thin .iris-group-title { order: 3; display: flex; flex-direction: column; margin-right: 0; width: 100%; }
+	#iris-body .iris-group-header-thin .iris-group-title h2 { font-size: 1.25rem; line-height: 1.5rem; }
 	
 	.groups-edit-field { display: block; }
 	.groups-edit-field .groups-edit-label, 
@@ -2038,6 +2054,12 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	#feedbackWrapper #feedBackContentWrapper { background: #384257; z-index: 501; }
 	#feedbackWrapper #feedBackContent { width: auto; padding: 1rem; margin: 1rem; }
 	
+	/*  */
+	.iris-object.iris-object-full .entity-headline { margin: 0; padding: 0; }
+	.entity-headline .owner-icon { margin-right: 0.5rem; }
+	.entity-headline .entity-title { margin-right: 0.5rem; padding-top: 0.5rem; }
+	
+	.views-counter-container.views_counter { float: none; margin: 0 0 0.25rem 0; display: inline-block; }
 	
 	/* Chat */
 	.elgg-page #groupchat-grouplink, 
@@ -2084,6 +2106,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-list .elgg-item { margin-bottom: 0.5rem; padding-bottom: 0.5rem; }
 	.elgg-context-thewire:not(.elgg-context-workspace-content) .elgg-list .elgg-item, .iris-box .elgg-list .elgg-item { padding-bottom: 0.5rem; }
 	
+	#iris-body .iris-group .elgg-main { padding: 1rem; }
 	
 	
 }
