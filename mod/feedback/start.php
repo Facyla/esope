@@ -203,7 +203,7 @@ function feedback_comment_get_subscriptions_hook($hook, $type, $subscriptions, $
 		// Add configured admins
 		for ($i=1; $i<=5; $i++) {
 			$name = elgg_get_plugin_setting('user_'.$i, 'feedback');
-			if ( !empty($name) ) {
+			if (!empty($name)) {
 				if ($user = get_user_by_username($name)) {
 					$subscriptions[$user->guid] = array('email');
 				}

@@ -871,7 +871,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 
 
 /* Accueil */
-.iris-home-my-groups { display: flex; flex-wrap: wrap; justify-content: space-between; }
+.iris-home-my-groups { display: flex; flex-wrap: wrap; justify-content: flex-start; }
 .iris-home-group { display: inline-block; margin: 0 0.6rem 0.3rem 0; }
 .iris-home-group:last-of-type { margin-right: 0; }
 .iris-home-group img, .iris-home-group a { width:5rem; height:5rem; display: inline-block; }

@@ -33,6 +33,8 @@ $content_cases = array('access_id', 'write_access_id');
 // Do not modify cases = when access is used with very custom values that should not be too much tweaked...
 // Group membership is not a standard access level - rather an access setting
 $donotmodify_cases = array('membership');
+// Inria only access level
+$inria_access_id = theme_inria_get_inria_access_id();
 
 // Do we have a real value ?
 $no_current_value = false;
@@ -117,7 +119,7 @@ if (($container instanceof ElggGroup)
 	// Inria : always add container access level (not group members level, but same level as group access_id)
 	// Add option if missing
 	if (!isset($vars['options_values'][$container->access_id])) {
-		if ($vars['options_values'][$container->access_id] == theme_inria_get_inria_access_id()) {
+		if ($vars['options_values'][$container->access_id] == $inria_access_id) {
 			$vars['options_values'][$container->access_id] = get_readable_access_level($container->access_id);
 		} else {
 			$vars['options_values'][$container->access_id] = elgg_echo('profiletype:inria');
@@ -171,7 +173,7 @@ if (elgg_instanceof($container, 'group')) {
 			$vars['value'] = $default_access_value;
 			// Add default to available options if needed
 			if (!isset($vars['options_values'][$vars['value']])) {
-				if ($vars['value'] == theme_inria_get_inria_access_id()) {
+				if ($vars['value'] == $inria_access_id) {
 				$vars['options_values'][$vars['value']] = elgg_echo('profiletype:inria');
 				} else {
 					$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
@@ -184,9 +186,11 @@ if (elgg_instanceof($container, 'group')) {
 	if (elgg_is_active_plugin('au_subgroups')) {
 		$group = $container;
 		$parent_level = 1;
+		$ordered_parent_acls = array();
 		while($parent = AU\SubGroups\get_parent_group($group)) {
 			//$vars['options_values'][$parent->group_acl] = $parent->name . " ($parent_level)";
 			$vars['options_values'][$parent->group_acl] = elgg_echo('esope:subgroups:access:parent', array($parent->name, $parent_level));
+			$ordered_parent_acls[] = $parent->group_acl;
 			$group = $parent;
 			$parent_level++;
 		}
@@ -236,7 +240,7 @@ if (!isset($vars['options_values'][$vars['value']])) {
 	//$display = $acl ? $acl->name : elgg_echo('access:missing_name');
 	//$vars['options_values'][$vars['value']] = $display;
 	// Esope : this is more clear (displays Limited if no access to collection)
-	if ($vars['value'] == theme_inria_get_inria_access_id()) {
+	if ($vars['value'] == $inria_access_id) {
 		$vars['options_values'][$vars['value']] = elgg_echo('profiletype:inria');
 	} else {
 		$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
@@ -261,6 +265,135 @@ if ($show_override_notice) {
 	$vars['data-group-acl'] = $container->group_acl;
 }
 
+/* Sort options from most private to most public
+ * Options order : from most private to most public
+ * 0 - Private
+ * [string | 0 for new group] - current group]
+ * [string] - parent group] 'parent_group_acl'
+ * [> 2] Group access
+ * custom - Inria only
+ * 1 - Members
+ * 2 - Public
+ */
+
+//error_log("ACCESS {$vars['name']} : method 1 numeric keys");
+//error_log(" - before : " . print_r($vars['options_values'], true));
+//echo '<pre>' . print_r($vars['options_values'], true) . '</pre>';
+//  Sort by numeric key
+ksort($vars['options_values']);
+
+// @TODO voir si on peut avoir la clef 'string' ailleurs qu'au début avec autre méthode de tri
+
+// Eviter le cas où on a à la fois "0" et l'acl du groupe pour "Groupe seulement"
+if ((isset($vars['options_values'][0]) || array_key_exists(0, $vars['options_values'])) && $group_acl && (isset($vars['options_values'][$group_acl]) || array_key_exists($group_acl, $vars['options_values'])) && ($vars['options_values'][0] == elgg_echo('groups:access:group'))) {
+	unset($vars['options_values'][$group_acl]);
+	//unset($vars['options_values'][0]);
+}
+// @TODO Avoid potential duplicate 'parent_group_acl' and acl in $ordered_parent_acls
+
+//error_log(" - after :  " . print_r($vars['options_values'], true));
+$sorted_options = array();
+// Add known initial options (most private)
+if (isset($vars['options_values'][-1]) || array_key_exists(-1, $vars['options_values'])) { $sorted_options[-1] = $vars['options_values'][-1]; unset($vars['options_values'][-1]); } // Default
+if (isset($vars['options_values'][0]) || array_key_exists(0, $vars['options_values'])) { $sorted_options[0] = $vars['options_values'][0]; unset($vars['options_values'][0]); } // Private
+if (isset($vars['options_values'][-2]) || array_key_exists(-2, $vars['options_values'])) { $sorted_options[-2] = $vars['options_values'][-2]; unset($vars['options_values'][-2]); } // Friends
+// Group and parent groups ACL
+// Les réorganiser avant le foreach car leurs acl ne sont pas dans l'ordre (en supprimant les entrées au fur et à mesure)
+if (isset($vars['options_values'][$group_acl]) || array_key_exists($group_acl, $vars['options_values'])) { $sorted_options[$group_acl] = $vars['options_values'][$group_acl]; } // Current group
+// Parent groups
+if ($ordered_parent_acls) {
+	unset($vars['options_values']['parent_group_acl']);
+	foreach($ordered_parent_acls as $k => $acl) {
+		if (isset($vars['options_values'][$acl]) || array_key_exists($acl, $vars['options_values'])) { $sorted_options[$acl] = $vars['options_values'][$acl]; unset($vars['options_values'][$acl]); } // Next parent group
+	}
+} else if (isset($vars['options_values']['parent_group_acl']) || array_key_exists('parent_group_acl', $vars['options_values'])) {
+	// Immediate (or top?) parent group
+	$sorted_options['parent_group_acl'] = $vars['options_values']['parent_group_acl']; unset($vars['options_values']['parent_group_acl']);
+}
+// Add mid-select options : groups or custom collections
+$special_acls = [-2, -1, 0, 1, 2, 'current_group_acl', 'parent_group_acl', $inria_access_id];
+if (is_array($ordered_parent_acls)) { $special_acls = array_merge($special_acls, $ordered_parent_acls); }
+foreach($vars['options_values'] as $k => $val) {
+	if (in_array($k, $special_acls)) { continue; }
+	$sorted_options[$k] = $val;
+	unset($vars['options_values'][$k]);
+}
+// Add latest options
+if (isset($vars['options_values'][$inria_access_id]) || array_key_exists($inria_access_id, $vars['options_values'])) { $sorted_options[$inria_access_id] = $vars['options_values'][$inria_access_id]; } // Inria only
+if (isset($vars['options_values'][1]) || array_key_exists(1, $vars['options_values'])) { $sorted_options[1] = $vars['options_values'][1]; } // Members
+if (isset($vars['options_values'][2]) || array_key_exists(2, $vars['options_values'])) { $sorted_options[2] = $vars['options_values'][2]; } // Public
+$vars['options_values'] = $sorted_options;
+//error_log(" - final 1 :  " . print_r($vars['options_values'], true));
+//echo '<pre>' . print_r($vars['options_values'], true) . '</pre>';
+
+/* Alternate methods
+error_log("ACCESS {$vars['name']} : method 2 string keys");
+error_log(" - before : " . print_r($vars['options_values'], true));
+//  Sort by numeric key
+ksort($vars['options_values']);
+error_log(" - after :  " . print_r($vars['options_values'], true));
+$sorted_options = array();
+// Add known initial options (most private)
+if (array_key_exists(-1, $vars['options_values'])) { $sorted_options["-1"] = $vars['options_values'][-1]; } // Default
+if (array_key_exists(0, $vars['options_values'])) { $sorted_options["0"] = $vars['options_values'][0]; } // Private
+if (array_key_exists(-2, $vars['options_values'])) { $sorted_options["-2"] = $vars['options_values'][-2]; } // Friends
+// Group and parent groups ACL
+if (array_key_exists($group_acl, $vars['options_values'])) { $sorted_options[$group_acl] = $vars['options_values'][$group_acl]; } // Current group
+// Parent groups
+if (array_key_exists('parent_group_acl', $vars['options_values'])) { $sorted_options['parent_group_acl'] = $vars['options_values']['parent_group_acl']; } // Next parent group
+if ($ordered_parent_acls) foreach($ordered_parent_acls as $k => $acl) {
+	if (array_key_exists($acl, $vars['options_values'])) { $sorted_options[$acl] = $vars['options_values'][$acl]; } // Parent group
+}
+// Add mid-select options : groups or custom collections
+$special_acls = [-2, -1, 0, 1, 2, 'current_group_acl', 'parent_group_acl', $inria_access_id];
+if (is_array($ordered_parent_acls)) { $special_acls = array_merge($special_acls, $ordered_parent_acls); }
+foreach($vars['options_values'] as $k => $val) {
+	if (in_array($k, $special_acls)) { continue; }
+	$sorted_options[$k] = $val;
+}
+// Add latest options
+if (array_key_exists($inria_access_id, $vars['options_values'])) { $sorted_options["$inria_access_id"] = $vars['options_values'][$inria_access_id]; } // Inria only
+if (array_key_exists(1, $vars['options_values'])) { $sorted_options["1"] = $vars['options_values'][1]; } // Members
+if (array_key_exists(2, $vars['options_values'])) { $sorted_options["2"] = $vars['options_values'][2]; } // Public
+$vars['options_values'] = $sorted_options;
+error_log(" - final 2 :  " . print_r($vars['options_values'], true));
+echo '<pre>' . print_r($vars['options_values'], true) . '</pre>';
+
+
+error_log("ACCESS {$vars['name']} : method 3 array merge");
+error_log(" - before : " . print_r($vars['options_values'], true));
+//  Sort by numeric key
+ksort($vars['options_values']);
+error_log(" - after :  " . print_r($vars['options_values'], true));
+$sorted_options = array();
+// Add known initial options (most private)
+if (isset($vars['options_values'][-1]) || array_key_exists(-1, $vars['options_values'])) { $sorted_options = $sorted_options + array('-1' => $vars['options_values'][-1]); } // Default
+if (isset($vars['options_values'][0]) || array_key_exists(0, $vars['options_values'])) { $sorted_options = $sorted_options + array('0' => $vars['options_values'][0]); } // Private
+if (isset($vars['options_values'][-2]) || array_key_exists(-2, $vars['options_values'])) { $sorted_options = $sorted_options + array('-2' => $vars['options_values'][-2]); } // Friends
+// Group and parent groups ACL
+if (isset($vars['options_values'][$group_acl]) || array_key_exists($group_acl, $vars['options_values'])) { $sorted_options[$group_acl] = $vars['options_values'][$group_acl]; } // Current group
+// Parent groups
+if (isset($vars['options_values']['parent_group_acl']) || array_key_exists('parent_group_acl', $vars['options_values'])) { $sorted_options['parent_group_acl'] = $vars['options_values']['parent_group_acl']; } // Next parent group
+if ($ordered_parent_acls) foreach($ordered_parent_acls as $k => $acl) {
+	if (isset($vars['options_values'][acl]) || array_key_exists($acl, $vars['options_values'])) { $sorted_options[$acl] = $vars['options_values'][$acl]; } // Parent group
+}
+// Add mid-select options : groups or custom collections
+$special_acls = [-2, -1, 0, 1, 2, 'current_group_acl', 'parent_group_acl', $inria_access_id];
+if (is_array($ordered_parent_acls)) { $special_acls = array_merge($special_acls, $ordered_parent_acls); }
+foreach($vars['options_values'] as $k => $val) {
+	if (in_array($k, $special_acls)) { continue; }
+	$sorted_options = $sorted_options + array("$k" => $val);
+}
+// Add latest options
+if (isset($vars['options_values'][$inria_access_id]) || array_key_exists($inria_access_id, $vars['options_values'])) { $sorted_options = $sorted_options + array("$inria_access_id" => $vars['options_values'][$inria_access_id]); } // Inria only
+if (isset($vars['options_values'][1]) || array_key_exists(1, $vars['options_values'])) { $sorted_options = $sorted_options + array('1' => $vars['options_values'][1]); } // Members
+if (isset($vars['options_values'][2]) || array_key_exists(2, $vars['options_values'])) { $sorted_options = $sorted_options + array('2' => $vars['options_values'][2]); } // Public
+$vars['options_values'] = $sorted_options;
+error_log(" - final 3 :  " . print_r($vars['options_values'], true));
+echo '<pre>' . print_r($vars['options_values'], true) . '</pre>';
+*/
+
+
 // Esope : replace select by access notice if only one option, and only if it is actually a content access level
 if ((sizeof($vars['options_values']) > 1) || (is_array($content_cases) && !in_array($vars['name'], $content_cases))) {
 	echo elgg_view('input/select', $vars);
@@ -281,3 +414,4 @@ if ($show_override_notice) {
 		echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('theme_inria:access:overridenotice', array($default_access_title)));
 	}
 }
+
