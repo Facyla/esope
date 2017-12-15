@@ -1044,7 +1044,9 @@ Voir et commenter ce lien web :
 	'theme_inria:pages:edit' => "Modifier cette page",
 	'theme_inria:pages:history' => "Voir les modifications de cette page",
 	
-	'theme_inria:groupinvite:email' => "Méthode 3 : invitation par email",
+	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations de membres Iris",
+	'esope:groupinvite:search' => "Méthode 2&nbsp;: Invitations par critères",
+	'theme_inria:groupinvite:email' => "Méthode 3&nbsp;: Invitations via email (dont externes Inria)",
 	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas. Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe. Les emails qui ne sont associés à aucun compte Iris pourront être invités à rejoindre le réseau.",
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",

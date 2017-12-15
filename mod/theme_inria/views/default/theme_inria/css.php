@@ -1513,6 +1513,7 @@ select[disabled], input[disabled] { color: #AAA; background: #EEE; }
 
 .elgg-sidebar form.elgg-form-newsletter-subscribe { padding: 0; border: 0; }
 form.elgg-form-newsletter-subscribe label { margin: 0; }
+.elgg-context-newsletter form .elgg-button.elgg-button-action[name=preview] { margin-left: 1rem; margin: -2.8rem 0 0 1rem; }
 
 #esope-search-form-invite-groups { margin-top: 2.5rem; }
 #esope-search-form-invite-groups .esope-search-metadata { background: transparent; border: 0; padding: 0; margin-bottom: 0.5rem; margin-right: 2.5rem; display: inline-block; width: auto; }
@@ -1537,7 +1538,7 @@ form.elgg-form-newsletter-subscribe label { margin: 0; }
 .groups-edit-field select, .groups-edit-field select option, .groups-edit-field .input-multiselect button, 
 .groups-edit-field .elgg-color-picker, 
 .groups-edit-field textarea, 
-form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !important; padding:0.5rem; font-size: 0.75rem; color: #969696; background: white; border-radius: 0; }
+form.elgg-form .groups-edit-field input { width: 100%; max-width: 100% !important; padding:0.5rem; font-size: 0.75rem; color: <?php echo $iris_texttopgrey; ?>; background: white; border-radius: 0; }
 .form-input .elgg-color-picker, .groups-edit-field .elgg-color-picker { max-width:none; }
 .form-input .input-multiselect, .groups-edit-field .input-multiselect, 
 .form-input .input-multiselect button, .groups-edit-field .input-multiselect button { max-width: 22rem !important; }

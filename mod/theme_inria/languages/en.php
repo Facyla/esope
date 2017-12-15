@@ -1045,7 +1045,9 @@ View and comment on the bookmark:
 	'theme_inria:pages:edit' => "Edit this page",
 	'theme_inria:pages:history' => "View page history",
 	
-	'theme_inria:groupinvite:email' => "Method 3: invitation by email",
+	'esope:groupinvite:standard' => "Method 1: Iris members invitations",
+	'esope:groupinvite:search' => "Method 2: Criteria-based invitations",
+	'theme_inria:groupinvite:email' => "Method 3: Email invitations (including non-Inria people)",
 	'theme_inria:groupinvite:email:details' => "Anyone may be invited by email, whether already an Iris member or not. If the invited email matches a known Iris account, this member will be invited or subscribed to the group. Otherwise invitation links will be generated so you can invite them to join Iris and the group.",
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",

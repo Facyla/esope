@@ -145,7 +145,7 @@ if (!$is_embed) {
 		echo elgg_view('prevent_notifications/prevent_form_extend', array());
 	}
 	// Allow to hide file in workspace listings, using a generic metadata
-	echo '<p><label>' . elgg_echo('theme_inria:hide_entity:select') . elgg_view('input/select', array('name' => 'hide_entity', 'value' => $hide_entity, 'options_values' => array('no' => elgg_echo('theme_inria:hide_entity:no'), 'yes' => elgg_echo('theme_inria:hide_entity:yes')))) . '</label></p>';
+	echo '<p><label>' . elgg_echo('theme_inria:hide_entity:select') . ' ' . elgg_view('input/select', array('name' => 'hide_entity', 'value' => $hide_entity, 'options_values' => array('no' => elgg_echo('theme_inria:hide_entity:no'), 'yes' => elgg_echo('theme_inria:hide_entity:yes')))) . '</label></p>';
 
 	echo elgg_view('input/submit', array('value' => $submit_label));
 	if (!$is_embed) {

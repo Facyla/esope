@@ -36,26 +36,6 @@ $open_default_access = elgg_echo('esope:groupdefaultaccess:' . $opengroups_defau
 $closed_default_access = elgg_echo('esope:groupdefaultaccess:' . $closedgroups_defaultaccess);
 
 
-?>
-<div class="groups-edit-field">
-	<div class="groups-edit-label">
-		<label for="groups-membership"><?php echo elgg_echo($translation_prefix."groups:membership"); ?></label>
-	</div>
-	<div class="groups-edit-input">
-		<?php echo elgg_view("input/select", array(
-			"name" => "membership",
-			"id" => "groups-membership",
-			"value" => $membership,
-			"options_values" => array(
-				ACCESS_PRIVATE => elgg_echo($translation_prefix."groups:access:private"),
-				ACCESS_PUBLIC => elgg_echo($translation_prefix."groups:access:public"),
-			)
-		));
-		?>
-	</div>
-</div>
-
-<?php
 // Group visibility
 if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes") {
 	?>
@@ -93,9 +73,28 @@ if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes") {
 	</div>
 	<?php
 }
+?>
+
+<div class="groups-edit-field">
+	<div class="groups-edit-label">
+		<label for="groups-membership"><?php echo elgg_echo($translation_prefix."groups:membership"); ?></label>
+	</div>
+	<div class="groups-edit-input">
+		<?php echo elgg_view("input/select", array(
+			"name" => "membership",
+			"id" => "groups-membership",
+			"value" => $membership,
+			"options_values" => array(
+				ACCESS_PRIVATE => elgg_echo($translation_prefix."groups:access:private"),
+				ACCESS_PUBLIC => elgg_echo($translation_prefix."groups:access:public"),
+			)
+		));
+		?>
+	</div>
+</div>
 
 
-
+<?php
 // New content visibility
 $access_mode_params = array(
 	"name" => "content_access_mode",
