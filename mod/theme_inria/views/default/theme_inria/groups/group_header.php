@@ -214,7 +214,7 @@ if (!empty($main_group->banner)) {
 		}
 		
 		// New subgroup (of level 1)
-		if (elgg_is_active_plugin('au_subgroups') && ($group->guid == $main_group->guid) && ($main_group->subgroups_enable == 'yes') && ($main_group->canEdit() || ($main_group->isMember() && ($main_group->subgroups_members_create_enable == 'yes')))) {
+		if (elgg_is_active_plugin('au_subgroups') && !elgg_in_context('group_edit') && ($group->guid == $main_group->guid) && ($main_group->subgroups_enable == 'yes') && ($main_group->canEdit() || ($main_group->isMember() && ($main_group->subgroups_members_create_enable == 'yes')))) {
 			echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
 			// <i class="fa fa-plus-square-o"></i>&nbsp;
 		}

@@ -1407,7 +1407,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 /* Bandeau réduit */
 .iris-group-header.iris-group-header-thin { min-height: 3rem; display: flex; padding: 0.5rem 1rem 0.5rem 2.5rem }
-.iris-group-header-thin > div { position: initial; flex: 1 0 auto; margin-right: 1rem; }
+.iris-group-header-thin > div { position: initial; flex: 1 1 auto; margin-right: 1rem; }
 .iris-group-header-thin .iris-group-title {  }
 .iris-group-header-thin .iris-group-image { position: initial; flex: 0 0 auto; height: 2rem; width: 2rem; }
 #iris-body .iris-group-header-thin .iris-group-title h2 { font-size: 1.75rem; line-height: 2rem; display: inline-block; margin-right: 1rem; }
@@ -1739,9 +1739,9 @@ p.file-meta { margin-bottom: 1rem; margin-top: -1rem; }
 .elgg-image-block.iris-object-inner .elgg-image img { flex: 0 0 auto; margin-top: auto; margin-bottom: auto; }
 .elgg-list .elgg-item .elgg-image-block.iris-object-inner .elgg-photo { border: 0; padding: 0; margin-right: 0.5rem; }
 .elgg-button .file-size, .elgg-button .file-extension { margin: 0 0 0 1rem; color: #CCCCCC; }
-.file-photo a { display: block; position: relative; margin: 0 -2rem 0 -2rem; }
+.file-photo a { display: block; position: relative; margin: 0 -2rem 0 -2rem; min-height: 3rem; }
 .file-photo img.elgg-photo { /* width: 100%; */ border:0; }
-.file-photo a .file-colorbox-link { background: #1488CA; position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.6; }
+.file-photo a .file-colorbox-link { background: #1488CA; position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.6; min-height: 3rem; }
 .file-photo a .file-colorbox-link i { color: white; margin: auto; font-size: 2rem; }
 .file-photo a:hover .file-colorbox-link, .file-photo a:active .file-colorbox-link, .file-photo a:focus .file-colorbox-link { display: flex; }
 
