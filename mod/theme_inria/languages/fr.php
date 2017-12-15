@@ -839,7 +839,7 @@ Voir et commenter ce lien web :
 	'groups:banner' => "Image d'entête du groupe (ne rien sélectionner pour laisser inchangé)",
 	'groups:about' => "A propos du groupe",
 	'theme_inria:groups:about' => "A propos",
-	'groups:icon:inline' => "Image du groupe<br />Formats PNG, JPG, GIF<br />Minimum 200x200",
+	'groups:icon:inline' => "Image<br />Formats PNG, JPG, GIF<br />Minimum 200x200",
 	'groups:banner:inline' => "Image de couverture<br />Formats PNG, JPG, GIF<br />Minimum 1200x200",
 	'theme_inria:groups:operators' => "Responsables (%s)",
 	'theme_inria:groups:members' => "Tous les membres (%s)",
@@ -962,7 +962,8 @@ Voir et commenter ce lien web :
 	'groups:order:popular' => "Avec le plus de membres",
 	'groups:settings' => "Paramètres du groupe",
 	'groups:leave:confirm' => "Si vous confirmez, vous ne serez plus membre du groupe",
-	'groups:visibility' => 'Visibilité du groupe',
+	'groups:visibility' => 'Visibilité',
+	'groups:visibility:details' => "Lorsque la visibilité du groupe est limitée aux membres du groupe (groupe privé), la visibilité des nouveaux contenus est forcée sur \"Membres du groupe seulement\".",
 	'groups:visibility:details' => "Qui sait que le groupe existe ?",
 	'groups:content_access_mode' => "Visibilité des publications",
 	//'groups:content_access_mode:details' => "Qui peut voir les publications ?",
@@ -973,7 +974,7 @@ Voir et commenter ce lien web :
 	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
 	//'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
 	'groups:content_access_mode:membersonly' => "Restreint",
-	'theme_inria:access:overridenotice' => "Note : en accord avec la politique de confidentialité de ce groupe, l'accès à ce contenu devrait être réservé à&nbsp;: %s",
+	'theme_inria:access:overridenotice' => "Note : en accord avec la politique de confidentialité de cet espace, l'accès à ce contenu devrait être réservé à&nbsp;: %s",
 	'theme_inria:access:overridenotice:existingvalue' => "Note : en accord avec la politique de confidentialité de ce groupe, l'accès à ce contenu devrait être réservé à&nbsp;: %1\$s. Merci de choisir le niveau d'accès \"%1\$s\".",
 	'groups:content_access_mode:groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
 	
@@ -1066,7 +1067,7 @@ email3@domain.tld email4@domain.tld ",
 
 %s vous a invité à rejoindre l'espace de travail \"%s\" du groupe \"%s\".
 
-Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a été faite pour vous auprès des responsables du groupe : une fois cette demande acceptée, vous pourrez rejoindre l'espace de travail en cliquant sur %s.
+Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a été faite pour vous auprès de ses responsables&nbsp;: une fois cette demande acceptée, vous pourrez rejoindre l'espace de travail en cliquant sur %s.
 ",
 	
 	'theme_inria:inria_restricted' => "Cette fonctionnalité est réservée aux membres Inria",
@@ -1123,6 +1124,14 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:workspace:noaccesstomaingroup' => "Impossible d'afficher cet espace de travail car il dépend d'un groupe auquel vous n'avez pas accès.",
 	
 	'theme_inria:submitandcreateagain' => "puis en créer un autre",
+	
+	'esope:groups:enablethewire' => "Activer les discussions (Fil)",
+	'newsletter:group:tool_option' => "Activer les lettres d'information",
+	'groups:enablepages' => "Activer le wiki (pages collaboratives)",
+	'bookmarks:enablebookmarks' => "Activer les liens web",
+	'event_calendar:enable_event_calendar' => "Activer l'agenda",
+	'group_chat:group_option' => "Activer le chat",
+	'groups:enableforum' => "Activer le forum",
 	
 );
 

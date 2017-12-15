@@ -1406,7 +1406,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .group-workspace-tabs .tab-more-content a:hover, .group-workspace-tabs .tab-more-content a:active, .group-workspace-tabs .tab-more-content a:focus { opacity: 1; border-bottom: 1px solid #CCC; }
 
 /* Bandeau réduit */
-.iris-group-header.iris-group-header-thin { min-height: 2.5rem; display: flex; padding: 0.25rem; }
+.iris-group-header.iris-group-header-thin { min-height: 3rem; display: flex; padding: 0.5rem 1rem 0.5rem 2.5rem }
 .iris-group-header-thin > div { position: initial; flex: 1 0 auto; margin-right: 1rem; }
 .iris-group-header-thin .iris-group-title {  }
 .iris-group-header-thin .iris-group-image { position: initial; flex: 0 0 auto; height: 2rem; width: 2rem; }
@@ -2038,7 +2038,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.iris-group-menu a, .iris-group-menu .tab-more { font-size: 1rem; padding: 1rem 0; }
 	.iris-group-menu a.add { width: auto; padding: .25rem .75rem 0rem .75rem; margin: 0.5rem; }
 	/* Bandeau réduit */
-	.iris-group-header.iris-group-header-thin { min-height: 2rem; flex-wrap: wrap; }
+	.iris-group-header.iris-group-header-thin { min-height: 2rem; flex-wrap: wrap; padding: 0.25rem 0.5rem 0.25rem 0.5rem; }
 	.iris-group-header-thin .iris-group-image { height: 1.5rem; width: 1.5rem; }
 	.iris-group-header-thin .iris-group-title { order: 3; display: flex; flex-direction: column; margin-right: 0; width: 100%; }
 	#iris-body .iris-group-header-thin .iris-group-title h2 { font-size: 1.25rem; line-height: 1.5rem; }

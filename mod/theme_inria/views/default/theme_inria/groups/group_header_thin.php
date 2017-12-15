@@ -4,7 +4,7 @@ if (!elgg_instanceof($group, 'group')) { return; }
 
 // Thin head should display main group > EDT, or only current group or EDT
 $main_group = theme_inria_get_main_group($group);
-$main_group_name = elgg_get_excerpt($main_group->name, 50);
+$group_name = elgg_get_excerpt($group->name, 50);
 
 $url = elgg_get_site_url();
 $icon_field = $banner_field = '';
@@ -25,17 +25,17 @@ if (!empty($main_group->banner)) {
 	<div class="iris-group-title">
 		
 		<?php
-		echo '<h2>' . $main_group_name . '</h2>';
-		echo '<span class="iris-group-subtitle">' . elgg_get_excerpt($main_group->briefdescription) . '</span>';
+		echo '<h2>' . $group_name . '</h2>';
+		echo '<span class="iris-group-subtitle">' . elgg_get_excerpt($group->briefdescription) . '</span>';
 		/*
 		echo '<div class="iris-group-rules">';
 			// Community
-			if (!empty($main_group->community)) { echo '<span class="iris-group-community">' . elgg_echo('community') . ' ' . $main_group->community . '</span>'; }
+			if (!empty($group->community)) { echo '<span class="iris-group-community">' . elgg_echo('community') . ' ' . $group->community . '</span>'; }
 			// Access
-			echo '<span class="group-access">' . elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $main_group)) . '</span>';
+			echo '<span class="group-access">' . elgg_echo('theme_inria:access:groups') . '&nbsp;: ' . elgg_view('output/access', array('entity' => $group)) . '</span>';
 			// Membership
 			echo '<span class="group-membership">' . elgg_echo('theme_inria:groupmembership') . '&nbsp;: ';
-			if ($main_group->membership == ACCESS_PUBLIC) {
+			if ($group->membership == ACCESS_PUBLIC) {
 				//echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . ' - ' . elgg_echo("theme_inria:groupmembership:open:details");
 				echo '<span class="membership-group-open">' . elgg_echo("theme_inria:groupmembership:open") . '</span>';
 			} else {

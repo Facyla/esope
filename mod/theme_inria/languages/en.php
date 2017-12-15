@@ -971,7 +971,8 @@ View and comment on the bookmark:
 	'groups:order:popular' => "With the most members",
 	'groups:settings' => "Group settings",
 	'groups:leave:confirm' => "If you confirm, you will no longer be a member of this group",
-	'groups:visibility' => 'Group visibility',
+	'groups:visibility' => 'Visibility',
+	'groups:visibility:details' => "If the visibility is restricted to group members (private group), the new content visibility is forced to \"Group members only\".",
 	'groups:content_access_mode' => "New content visibility",
 	//'groups:membership' => "Type d'adhésion",
 	//'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès des nouveaux contenus",
@@ -1111,6 +1112,17 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:workspace:noaccesstomaingroup' => "Unable to display this workspace, as it relies on a group you do not have access to.",
 	
 	'theme_inria:submitandcreateagain' => "then add a new one",
+	
+	/*
+	'esope:groups:enablethewire' => "Activer les discussions (Fil)",
+	'newsletter:group:tool_option' => "Activer les lettres d'information",
+	'groups:enablepages' => "Activer le wiki (pages collaboratives)",
+	'bookmarks:enablebookmarks' => "Activer les liens web",
+	'event_calendar:enable_event_calendar' => "Activer l'agenda",
+	'group_chat:group_option' => "Activer le chat",
+	'groups:enableforum' => "Activer le forum"
+	*/
+	
 	
 );
 

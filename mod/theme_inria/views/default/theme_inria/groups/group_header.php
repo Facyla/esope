@@ -14,7 +14,8 @@ $all_subgroups_guids = AU\SubGroups\get_all_children_guids($main_group);
 $url = elgg_get_site_url();
 
 $icon_field = $banner_field = '';
-if (elgg_in_context('group_edit')) {
+// Edition des icônes du groupe : ssi ds le group principal
+if (elgg_in_context('group_edit') && ($main_group->guid == $group->guid) && $main_group->canEdit()) {
 	$icon_field = '<label for="icon">
 			<i class="fa fa-camera"></i><br />' . elgg_echo('groups:icon:inline') . '
 		</label>';
@@ -213,7 +214,7 @@ if (!empty($main_group->banner)) {
 		}
 		
 		// New subgroup (of level 1)
-		if (elgg_is_active_plugin('au_subgroups') && ($main_group->subgroups_enable == 'yes') && ($group->canEdit() || ($group->isMember() && ($main_group->subgroups_members_create_enable == 'yes')))) {
+		if (elgg_is_active_plugin('au_subgroups') && ($group->guid == $main_group->guid) && ($main_group->subgroups_enable == 'yes') && ($main_group->canEdit() || ($main_group->isMember() && ($main_group->subgroups_members_create_enable == 'yes')))) {
 			echo '<a href="' . $url . 'groups/subgroups/add/' . $main_group->guid . '" class="add float-alt">' . elgg_echo('theme_inria:group:workspace:add') . '</a>';
 			// <i class="fa fa-plus-square-o"></i>&nbsp;
 		}

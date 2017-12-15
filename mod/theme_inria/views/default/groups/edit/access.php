@@ -67,7 +67,7 @@ if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes") {
 				'entity_type' => 'group',
 				'entity_subtype' => '',
 			));
-			echo '<span class="elgg-text-help">' . elgg_echo('Lorsque la visibilité du groupe est limitée aux membres du groupe (groupe privé), la visibilité des nouveaux contenus est forcée sur "Membres du groupe seulement".') . '</span>';
+			echo '<span class="elgg-text-help">' . elgg_echo('groups:visibility:details') . '</span>';
 			?>
 		</div>
 	</div>
