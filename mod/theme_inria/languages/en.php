@@ -1123,6 +1123,9 @@ email3@domain.tld email4@domain.tld ",
 	'groups:enableforum' => "Activer le forum"
 	*/
 	
+	'theme_inria:digest:newmembers' => "%s new members have joined Iris.",
+	'theme_inria:digest:newmembers' => "Check out who and welcome them!",
+	
 	
 );
 

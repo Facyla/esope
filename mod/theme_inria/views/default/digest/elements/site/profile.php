@@ -28,6 +28,8 @@ if(isset($digest_site_profile_body[$key])){
 	$ts_lower = (int) elgg_extract("ts_lower", $vars);
 	$ts_upper = (int) elgg_extract("ts_upper", $vars);
 	
+	// Display profiles or count only ?
+	$display_profiles = 'no';
 	$member_options = array(
 			"type" => "user",
 			//"limit" => 6,
@@ -38,6 +40,7 @@ if(isset($digest_site_profile_body[$key])){
 			"order_by" => "r.time_created DESC",
 			"wheres" => array("(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")")
 	);
+	if ($display_profiles != 'yes') { $member_options['count'] = true; }
 	
 	$newest_members = elgg_get_entities_from_relationship($member_options);
 	if (!empty($newest_members)) {
@@ -49,20 +52,24 @@ if(isset($digest_site_profile_body[$key])){
 	
 		$content = "<div class='digest-profile'>";
 	
-		foreach($newest_members as $index => $mem) {
-			$profile_type = esope_get_user_profile_type($mem);
-			if (empty($profile_type)) { $profile_type = 'external'; }
+		if ($display_profiles == 'yes') {
+			foreach($newest_members as $index => $mem) {
+				$profile_type = esope_get_user_profile_type($mem);
+				if (empty($profile_type)) { $profile_type = 'external'; }
 			
-			$content .= '<div class="table-item">';
-			//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
-			$content .= '<div class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></div><br />' . $mem->name . '</a><br />';
-			$content .= $mem->briefdescription;
-			// Add profile type badge, if defined
-			if ($profile_type == 'external') { $content .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
-			$content .= "</div>";
+				$content .= '<div class="table-item">';
+				//$content .= elgg_view_entity_icon($mem, 'medium', array('use_hover' => false)) . "<br />";
+				$content .= '<div class="elgg-avatar elgg-avatar-medium profile-type-' . $profile_type . '"><a href="' .  $mem->getURL() . '"><img src="' . $mem->getIconUrl('medium') .  '" /></div><br />' . $mem->name . '</a><br />';
+				$content .= $mem->briefdescription;
+				// Add profile type badge, if defined
+				if ($profile_type == 'external') { $content .= '<span class="iris-badge"><span class="iris-badge-' . $profile_type . '" title="' . elgg_echo('profile:types:'.$profile_type.':description') . '">' . elgg_echo('profile:types:'.$profile_type) . '</span></span>'; }
+				$content .= "</div>";
+			}
+			$content .= '<div class="clearfloat"></div>';
+		} else {
+			$content .= '<p>' . elgg_echo('theme_inria:digest:newmembers', array($newest_members)) . '<br /><a href="' . elgg_get_site_url() . 'members?order_by=desc">' . elgg_echo('theme_inria:digest:welcomenewmembers', array($newest_members)) . '</a></p>';
 		}
 		
-		$content .= '<div class="clearfloat"></div>';
 		$content .= "</div>";
 	
 		// Set global var for later reuse

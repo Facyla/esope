@@ -1133,5 +1133,8 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'group_chat:group_option' => "Activer le chat",
 	'groups:enableforum' => "Activer le forum",
 	
+	'theme_inria:digest:newmembers' => "%s nouveaux membres ont rejoint Iris.",
+	'theme_inria:digest:welcomenewmembers' => "Regardez qui et souhaitez-leur la bienvenue&nbsp;!",
+	
 );
 

@@ -862,7 +862,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #iris-body .elgg-layout-one-sidebar.elgg-context-settings .elgg-module-info .elgg-body { margin-bottom: 2rem; }
 
 
-#iris-footer { /* margin-top: auto; */ position: absolute; bottom: 0; <?php echo $width['navigation']; ?> }
+#iris-footer { /* margin-top: auto; position: absolute; */ position: fixed; left:0; bottom: 0; background: <?php echo $iris_sidegrey; ?>;  <?php echo $width['navigation']; ?> }
 .footer-inria { padding:1rem 2rem; }
 #iris-footer li a { color:<?php echo $iris_textgrey; ?>; width: 100%; text-indent: 0rem; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.94rem; }
 #iris-footer .language_selector { display: inline-block; position: initial; width:100%; }
