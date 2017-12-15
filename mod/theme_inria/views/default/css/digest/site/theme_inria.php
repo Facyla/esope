@@ -316,7 +316,7 @@ h4 {
 	display: block;
 }
 
-#digest-content .elgg-river-attachments, #digest-content .elgg-river-message, #digest-content .elgg-river-content {
+#digest_content .elgg-river-attachments, #digest_content .elgg-river-message, #digest_content .elgg-river-content {
 	padding-left: 0;
 	border: 0;
 }
