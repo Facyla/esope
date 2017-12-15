@@ -26,7 +26,7 @@ if (!empty($main_group->banner)) {
 		
 		<?php
 		echo '<h2>' . $group_name . '</h2>';
-		echo '<span class="iris-group-subtitle">' . elgg_get_excerpt($group->briefdescription) . '</span>';
+		//echo '<span class="iris-group-subtitle">' . elgg_get_excerpt($group->briefdescription) . '</span>';
 		/*
 		echo '<div class="iris-group-rules">';
 			// Community

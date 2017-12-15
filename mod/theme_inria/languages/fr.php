@@ -1135,6 +1135,8 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	
 	'theme_inria:digest:newmembers' => "%s nouveaux membres ont rejoint Iris.",
 	'theme_inria:digest:welcomenewmembers' => "Regardez qui et souhaitez-leur la bienvenue&nbsp;!",
+	'theme_inria:useradd:unarchived' => "Le compte a été réactivé, cependant il est probable que l'email du comtpe ne soit plus valide&nbsp;: veuillez contacter l'administrateur du site en indiquant l'identifiant de ce compte ainsi qu'une adresse email valide, de sorte que celle-ci puisse être mise à jour si nécessaire&nbsp;: %s",
+	
 	
 );
 

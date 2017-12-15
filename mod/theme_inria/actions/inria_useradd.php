@@ -87,7 +87,12 @@ foreach ($emails as $email) {
 		// User is already registered
 		$already_registered = $already_registered[0];
 		if (elgg_instanceof($already_registered, 'user')) {
-			register_error('User already exists : <a href="' . $already_registered->getURL() . '">' . $already_registered->name . '</a>');
+			system_message('User already exists : <a href="' . $already_registered->getURL() . '">' . $already_registered->name . '</a>');
+			if ($user->memberstatus != 'active') {
+				register_error(elgg_echo("User account has been un-archived, but archived account usually have wrong emails which should be updated: please contact the site administrator with the following username and a valid email so it can be updated if needed: %s", array($already_registered->username)));
+				$user->memberstatus = 'active';
+				$user->memberreason = 'unarchived_by_inria_member';
+			}
 		}
 	}
 	if ($debug) error_log("  Registered : " . print_r($already_registered, true)); // debug

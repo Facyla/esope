@@ -171,10 +171,10 @@ function inria_check_and_update_user_status($event, $object_type, $user) {
 			// Effet rétroactif pour les comptes qui n'avaient pas été mis à jour correctement
 			// => désactivation du compte
 			if (($user->membertype == 'inria') || ($user->memberreason == 'validldap') || $force_archive) {
-				//$memberreason = 'invalidldap';
-				//$memberstatus = 'active';
+				$memberreason = 'invalidldap';
 				$memberstatus = 'closed';
-				$memberreason = 'alumni';
+				//$memberstatus = 'active';
+				//$memberreason = 'alumni';
 				// Note : email removal is replaced by the email blocking hook, much cleaner and extensible
 				if ($debug) { error_log("Previously valid Inria has become alumni : quitting groups"); }
 				// @TODO leave groups : probably leave only some groups (not if owner, not if open group...)
