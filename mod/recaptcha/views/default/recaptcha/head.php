@@ -21,6 +21,7 @@ var ReCaptchaCallback = function(){
 ?>
 
 <script type="text/javascript">
+require(['jquery'], function(){
 // Cloning method : must occur after all page is loaded, so cannot use $(document).ready(function() {}));
 $(window).load(function() {
 	$(".g-recaptcha").each(function(index) {
@@ -28,6 +29,7 @@ $(window).load(function() {
 			// Duplicate our first reCapcha
 			$('#g-recaptcha-' + (index+1)).html($('#g-recaptcha-1').clone(true,true));
 		}
+		});
 	});
 });
 </script>

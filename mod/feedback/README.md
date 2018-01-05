@@ -1,9 +1,7 @@
-Feedback plugin for Elgg 1.8
-Latest Version: 1.8.19
-Released: 2014-08-27
-Contact: fd@items.fr
+Feedback plugin for Elgg 2.3
+----------------------------
 License: GNU General Public License version 2
-Copyright: (c) Facyla (1.8 improvements), iionly (for Elgg 1.8), Simon ST (for Elgg 1.7), Prashant Juvekar
+Copyright: (c) Facyla (1.8 improvements), iionly (for Elgg 1.8), Simon ST (for Elgg 1.7), Prashant Juvekar (initial plugin)
 
 
 This plugin will display a feedback dialog window on the left hand side of the pages on your Elgg site. Normally, the dialog windows is minimized but can be brought up by a slider button. The feedback button will show up on all pages on your site when a user is logged in. For logged-out site visitors you can configure the feedback button to show or not via a plugin setting.
@@ -12,17 +10,42 @@ The feedback sent by users will be listed in the admin section of your site ("Ad
 
 
 
-Installation:
+Installation
+------------
 
 1. copy the feedback folder into the mod folder of your site.
 
 2. enable the plugin in the admin section of your site.
 
-3. you can enter up to five usernames in the feedback plugin settings of site members who should get notified about new feedback. Also, you can configure if the feedback dialog should be accessible when logged out or not.
+3. Settings : 
+ - admin notificaitons : you can enter up to five usernames in the feedback plugin settings of site members who should get notified about new feedback
+ - public mode : determines if the feedback dialog should be accessible when logged out or not
+ - enable the optional theme and mood features
+ - set group integration mode : can be bound to a group, or used as a group tool
+ - enable feedback replies/comments
+
+
+
+Usage
+------------
+
+Users : send a feedback ; view feedbacks ; get notifications about their feedback ; comment/reply to feedbacks
+Admins : get notifications about feedback ; mark feedbacks as closed
+
+
+Theme developers
+----------------
+
+Add "feedback-toggle" class to any link or interface element to bind a click event to this element
 
 
 
 Changelog:
+------------
+
+2.3 - AMD for JS
+
+1.12 - more additions, some refactoring
 
 1.8.19 - Facyla additions
 	listing page and categorization menu, public comments, feedback status, notifications, various rewrites...

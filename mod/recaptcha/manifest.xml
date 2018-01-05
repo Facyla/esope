@@ -24,6 +24,8 @@
 <!--
 COMMENTS - HISTORY
 
+2.3 : 20171114 - use AMD for JS
+
 1.12.0 : 20160723 - Update to Elgg 1.12
  - do not block if settings are not set
  - alert if settings are not set

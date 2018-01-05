@@ -83,9 +83,12 @@
 	text-decoration: none;
 }
 
-#feedBackText { padding-top:5px; }
+#feedback_id { margin-top: 0.25rem; }
 
-#feedBackSend { padding-top:6px; }
+#feedBackText { padding-top: 0.25rem; }
+#feedback_txt { padding: 0.25rem; }
+
+#feedBackSend { padding-top: 0.25rem; }
 
 #feedbackError {
 	font-style: bold;
@@ -123,6 +126,8 @@
 .submitted-feedback { padding:2px; margin-bottom:4px; }
 
 /* Feedbacks mood */
+#feedback_mood { margin-bottom: 0.25rem; }
+#feedback_mood input { vertical-align: text-bottom; }
 .feedback-mood-angry { border:2px solid #A00; }
 .feedback-mood-neutral { border:2px solid #666; }
 .feedback-mood-happy { border:2px solid #070; }
@@ -131,6 +136,8 @@
 .happy { color:#070; }
 
 /* Feedbacks about */
+#feedback_about { margin-bottom: 0.25rem; }
+#feedback_about input { vertical-align: text-bottom; }
 .feedback-about-content { border-left:12px solid #A00; }
 .feedback-about-bug_report { border-left:12px solid #930; }
 .feedback-about-suggestions { border-left:12px solid #066; }
