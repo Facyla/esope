@@ -66,12 +66,13 @@ if ($invited_emails) {
 if ($invite_external_emails) {
 	system_message(elgg_echo('theme_inria:invite:proceednext'));
 	$content .= '<p>' . elgg_echo('theme_inria:invite:newemails') . '</p>';
-	foreach($invite_external_emails as $email) {
-		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
-	}
 	// Or all at once
 	if (count($invite_external_emails) > 1) {
 		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . implode(',', $invite_external_emails) . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:invite:allemails') . '</a></p>';
+	}
+	$content .= '<p>' . elgg_echo('theme_inria:groupinvite:email:or') . '</p>';
+	foreach($invite_external_emails as $email) {
+		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
 	}
 }
 

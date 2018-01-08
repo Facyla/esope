@@ -1056,6 +1056,7 @@ Si la personne n'est pas encore membre : deux solutions<br />
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",
 	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
+	'theme_inria:groupinvite:email:or' => "Ou individuellement&nbsp;:",
 	'theme_inria:invite:newemails' => "Ces emails ne sont associés avec aucun compte : vous pouvez si vous le souhaitez les inviter à rejoindre Iris.",
 	'theme_inria:invite:invalidemails' => "Ces emails n'ont pas pu être traités : ils sont soit associés avec plusieurs comptes (ce qui ne devrait pas se produire), ou ce sont des emails non valides.",
 	'theme_inria:invite:existing_users' => "Ces emails sont associés avec un compte, qui a été invité.",
