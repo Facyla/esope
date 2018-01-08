@@ -1048,7 +1048,11 @@ Voir et commenter ce lien web :
 	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations de membres Iris",
 	'esope:groupinvite:search' => "Méthode 2&nbsp;: Invitations par critères",
 	'theme_inria:groupinvite:email' => "Méthode 3&nbsp;: Invitations via email (dont externes Inria)",
-	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas. Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe. Les emails qui ne sont associés à aucun compte Iris pourront être invités à rejoindre le réseau.",
+	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas d'Iris.<br />
+Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe.<br />
+Si la personne n'est pas encore membre : deux solutions<br />
+&nbsp;> Les emails Inria qui ne sont associés à aucun compte Iris seront invités à rejoindre Iris et ce groupe en particulier<br />
+&nbsp;> Les emails non Inria pourront être invités à rejoindre ce groupe et la partie d'Iris visible des \"Inria & invités\"",
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",
 	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
@@ -1133,8 +1137,8 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'group_chat:group_option' => "Activer le chat",
 	'groups:enableforum' => "Activer le forum",
 	
-	'theme_inria:digest:newmembers' => "%s nouveaux membres ont rejoint Iris.",
-	'theme_inria:digest:welcomenewmembers' => "Regardez qui et souhaitez-leur la bienvenue&nbsp;!",
+	'theme_inria:digest:newmembers' => "Depuis la dernière lettre, %s nouveaux membres ont rejoint Iris.",
+	'theme_inria:digest:welcomenewmembers' => "Découvrez qui ils sont et souhaitez-leur la bienvenue&nbsp;!",
 	'theme_inria:useradd:unarchived' => "Le compte a été réactivé, cependant il est probable que l'email du comtpe ne soit plus valide&nbsp;: veuillez contacter l'administrateur du site en indiquant l'identifiant de ce compte ainsi qu'une adresse email valide, de sorte que celle-ci puisse être mise à jour si nécessaire&nbsp;: %s",
 	
 	

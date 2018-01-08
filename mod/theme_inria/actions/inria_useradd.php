@@ -98,9 +98,10 @@ foreach ($emails as $email) {
 	if ($debug) error_log("  Registered : " . print_r($already_registered, true)); // debug
 
 
-	// Account creation through LDAP, if exists
+	// Handle Inria emails (even if they could be handled on next LDAP sync)
+	// Create account through LDAP, if exists
 	if (!$already_registered) {
-		if ($debug) error_log("  Trying LDAP");
+		if ($debug) error_log("  Trying LDAP");  // debug
 		// Check if user exists in Inria LDAP => different creation process
 		if (elgg_is_active_plugin('ldap_auth')) {
 			elgg_load_library("elgg:ldap_auth");
@@ -123,7 +124,7 @@ foreach ($emails as $email) {
 						// user and admin notifications
 						
 						// Update some meta if not set yet
-						if (empty($user->membertype)) $user->membertype = 'inria'; }
+						if (empty($user->membertype)) { $user->membertype = 'inria'; }
 						if (empty($user->memberstatus)) { $user->memberstatus = 'active'; }
 						if (empty($user->firstmemberreason)) { $user->firstmemberreason = 'created_by_inria_member'; }
 						if (empty($user->membercreatedby)) { $user->membercreatedby = $inviter_guid; }
@@ -137,7 +138,6 @@ foreach ($emails as $email) {
 						if (empty($user->created_by_guid)) { $user->created_by_guid = $inviter_guid; }
 						$user->addFriend($inviter_guid);
 						$inviter->addFriend($guid);
-						
 						
 						// USER NOTIFICATION
 						// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
@@ -171,14 +171,12 @@ foreach ($emails as $email) {
 					}
 				}
 			}
-		
 		}
 	}
-	
-	
-	// Now create the user as guest account
+
+
+	// If LDAP failed, create the user as guest account
 	if (!$already_registered) {
-		
 		$password = generate_random_cleartext_password();
 		// We can safely add the 'ext_' prefix here to avoid duplicates
 		$real_username = profile_manager_generate_username_from_email('ext_' . $email);
@@ -189,7 +187,6 @@ foreach ($emails as $email) {
 			$real_username = 'ext_' . $username;
 		}
 		*/
-	
 		$real_name = trim(strip_tags($name));
 		if (empty($real_name)) { $real_name = substr($real_username, 4); }
 	
@@ -205,7 +202,6 @@ foreach ($emails as $email) {
 		$user = get_entity($guid);
 		
 		//$user->admin_created = TRUE;
-// @TODO Handle Inria emails ?  useless, as it will be handled on next LDAP sync ?
 		$user->membertype = 'external';
 		$user->memberstatus = 'active';
 		$user->firstmemberreason = 'created_by_inria_member';
@@ -379,7 +375,6 @@ foreach ($emails as $email) {
 	}
 }
 access_show_hidden_entities($hidden_entities);
-
 
 forward(REFERER);
 

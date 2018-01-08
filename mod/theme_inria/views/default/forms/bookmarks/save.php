@@ -71,7 +71,7 @@ if ($categories) {
 			// And of course also force if group access level has been set (i wonder how), because the option has been removed and replaced
 			if (($access_id == ACCESS_DEFAULT) || ($access_id == $container->group_acl)) { $access_id = "00"; }
 		}
-		$params = array('name' => 'access_id', 'value' => $access_id, 'options_values' => $options_values);
+		$params = array('name' => 'access_id', 'value' => $access_id, 'options_values' => $options_values, 'nofilter' => TRUE);
 		echo elgg_view('input/access', $params);
 	} else {
 		echo elgg_view('input/access', array('name' => 'access_id', 'value' => $access_id));

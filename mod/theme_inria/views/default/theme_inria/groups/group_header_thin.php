@@ -4,7 +4,7 @@ if (!elgg_instanceof($group, 'group')) { return; }
 
 // Thin head should display main group > EDT, or only current group or EDT
 $main_group = theme_inria_get_main_group($group);
-$group_name = elgg_get_excerpt($group->name, 50);
+$group_name = elgg_get_excerpt($group->name, 120);
 
 $url = elgg_get_site_url();
 $icon_field = $banner_field = '';
