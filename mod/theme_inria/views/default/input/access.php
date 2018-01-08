@@ -279,9 +279,9 @@ if ($vars['nofilter'] !== TRUE) {
 	 * 2 - Public
 	 */
 
-	error_log("ACCESS {$vars['name']} : method 1 numeric keys");
-	error_log(" - before : " . print_r($vars['options_values'], true));
-	echo '<pre>' . print_r($vars['options_values'], true) . '</pre>';
+	//error_log("ACCESS {$vars['name']} : method 1 numeric keys");
+	//error_log(" - before : " . print_r($vars['options_values'], true));
+	//echo '<pre>' . print_r($vars['options_values'], true) . '</pre>';
 	//  Sort by numeric key
 	ksort($vars['options_values']);
 
