@@ -71,6 +71,16 @@ if ($categories) {
 			// And of course also force if group access level has been set (i wonder how), because the option has been removed and replaced
 			if (($access_id == ACCESS_DEFAULT) || ($access_id == $container->group_acl)) { $access_id = "00"; }
 		}
+		// Ajout Inria seulement
+		$inria_access_id = theme_inria_get_inria_access_id();
+		if ($inria_access_id && !isset($options_values[$inria_access_id])) {
+			$options_values[$inria_access_id]= elgg_echo('profiletype:inria');
+		}
+		// Ajout Inria & Invités
+		if (!isset($options_values[ACCESS_LOGGED_IN])) {
+			$options_values[ACCESS_LOGGED_IN]= elgg_echo('LOGGED_IN');
+		}
+		
 		$params = array('name' => 'access_id', 'value' => $access_id, 'options_values' => $options_values, 'nofilter' => TRUE);
 		echo elgg_view('input/access', $params);
 	} else {

@@ -460,7 +460,7 @@ function theme_inria_get_group_tab_url($group, $link_type = 'home') {
 function theme_inria_get_inria_access_id() {
 	if (elgg_is_active_plugin('access_collections')) {
 		$inria_collection = access_collections_get_collection_by_name('profiletype:inria');
-		if ($inria_collection) { 	return $inria_collection->id; }
+		if ($inria_collection) { return $inria_collection->id; }
 	}
 	return false;
 }

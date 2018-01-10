@@ -7,14 +7,17 @@
  */
 
 /* External members invitation rules
-- any Inria member may invite <=> create account for external member
+- any Inria member may invite <=> create account for external member (and also other Inria members)
+- if account is identified as Inria, it is created using LDAP data
 - email validation required
 - no admin validation required
 - optional invited groups
 */
 
 
-// @TODO Vérifier si le compte existe dans LDAP => si oui le créer avec le bon login
+
+// Debug mode
+$debug = false;
 
 // Get plugin config
 $admin_validation = elgg_get_plugin_setting('admin_validation', 'theme_inria');
@@ -41,14 +44,15 @@ if ($debug) { error_log("Inria user_add action : validation : $admin_validation 
 elgg_make_sticky_form('useradd');
 
 // Get variables
+// Personal fields
 $emails = get_input('email');
 if (!is_array($emails)) { $emails = array($emails); }
 //$username = get_input('username');
 //$password = get_input('password');
 $name = get_input('name');
 $organisations = get_input('organisation');
-if (!empty($organisations)) { $organisations = string_to_tag_array($organisations); } else { $organisations = false; }
-$briefdescription = get_input('briefdescription');
+$briefdescription = get_input('briefdescription'); // fonction
+// Common fields
 $reason = get_input('reason');
 $message = get_input('message');
 $group_guids = get_input('group_guid');
@@ -58,8 +62,9 @@ access_show_hidden_entities(TRUE);
 
 if ($debug) error_log("  Emails : " . print_r($emails, true)); // debug
 
-foreach ($emails as $email) {
-	if ($debug) error_log("email $i : $email"); // debug
+// Process each email
+foreach ($emails as $k => $email) {
+	if ($debug) error_log("email $k : $email"); // debug
 	$user = false;
 	
 	if (!is_email_address($email)) {
@@ -132,8 +137,8 @@ foreach ($emails as $email) {
 						// Initiate this because account would be disabled if not set at creation
 						$user->last_action = time();
 						// Add some fields values
-						if ($organisations && empty($user->organisation)) { $user->organisation = $organisations; }
-						if (!empty($briefdescription) && empty($user->briefdescription)) { $user->briefdescription = $briefdescription; }
+						if ($organisations[$k] && empty($user->organisation)) { $user->organisation = string_to_tag_array($organisations[$k]); }
+						if (!empty($briefdescription[$k]) && empty($user->briefdescription)) { $user->briefdescription = $briefdescription[$k]; }
 						// Remember account creation + make mutual friends
 						if (empty($user->created_by_guid)) { $user->created_by_guid = $inviter_guid; }
 						$user->addFriend($inviter_guid);
@@ -143,7 +148,7 @@ foreach ($emails as $email) {
 						// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
 						$user_subject = elgg_echo('theme_inria:useradd:inria:subject', array($site->name, $inviter->name));
 						$user_body = elgg_echo('theme_inria:useradd:inria:body', array(
-							$name,
+							$name[$k],
 							$inviter->name,
 							$site->name,
 							$message,
@@ -155,7 +160,7 @@ foreach ($emails as $email) {
 						// We can notify up to 3 admins so new members can be moderated
 						$admin_subject = elgg_echo('theme_inria:useradd:inria:admin:subject');
 						$admin_body = elgg_echo('theme_inria:useradd:inria:admin:body', array(
-							$name,
+							$name[$k],
 							$email,
 							$inviter->name . ' (' . $inviter_guid . ')',
 							$reason,
@@ -187,7 +192,7 @@ foreach ($emails as $email) {
 			$real_username = 'ext_' . $username;
 		}
 		*/
-		$real_name = trim(strip_tags($name));
+		$real_name = trim(strip_tags($name[$k]));
 		if (empty($real_name)) { $real_name = substr($real_username, 4); }
 	
 		// For now, just try and register the user - No duplicate emails !
@@ -212,8 +217,8 @@ foreach ($emails as $email) {
 		esope_set_user_profile_type($user, 'external');
 		
 		// Add some fields values
-		if ($organisations) { $user->organisation = $organisations; }
-		if (!empty($briefdescription)) { $user->briefdescription = $briefdescription; }
+		if ($organisations[$k]) { $user->organisation = string_to_tag_array($organisations[$k]); }
+		if (!empty($briefdescription[$k])) { $user->briefdescription = $briefdescription[$k]; }
 
 		// Remember account creation + make mutual friends
 		$user->created_by_guid = $inviter_guid;
@@ -231,7 +236,7 @@ foreach ($emails as $email) {
 		// Note: registration email with cleartext credentials should be sent by email *only* (don't leave this in the site itself !)
 		$user_subject = elgg_echo('theme_inria:useradd:subject', array($site->name, $inviter->name));
 		$user_body = elgg_echo('theme_inria:useradd:body', array(
-			$name,
+			$name[$k],
 			$inviter->name,
 			$site->name,
 			$message,
@@ -289,7 +294,7 @@ foreach ($emails as $email) {
 			$admin_subject = elgg_echo('theme_inria:useradd:admin:subject');
 		}
 		$admin_body = elgg_echo('theme_inria:useradd:admin:body', array(
-			$name,
+			$name[$k],
 			$email,
 			$inviter->name . ' (' . $inviter_guid . ')',
 			$reason,
