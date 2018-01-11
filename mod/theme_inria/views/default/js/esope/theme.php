@@ -198,6 +198,10 @@ $(document).ready(function() {
 			e.preventDefault();  //prevent form from submitting
 			$('#esope-search-form').submit();
 		}
+		if ($("#advanced-search-form").length) {
+			e.preventDefault();  //prevent form from submitting
+			$('#advanced-search-form').submit();
+		}
 	});
 	
 	
