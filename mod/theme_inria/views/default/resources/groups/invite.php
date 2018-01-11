@@ -33,7 +33,7 @@ if ($group->guid != $main_group->guid) {
 	$content .= elgg_view('theme_inria/groups/workspaces_tabs', array('main_group' => $main_group, 'group' => $group, 'link_type' => 'members'));
 }
 */
-$content .= '<div class="group-profile-main">';
+$content .= '<div class="group-profile-main" id="group-invites">';
 	
 	if ($group->guid != $main_group->guid) {
 		$content .= '<blockquote class="warning">' . elgg_echo('theme_inria:workspace:invites:warning') . '</blockquote>';
@@ -48,9 +48,27 @@ $content .= '<div class="group-profile-main">';
 		$content .= '<br />';
 	}
 	
+	// Add tabs for the different invite methods
+	$group_invite_tab = get_input('group_invite_tab');
+	if (!in_array($group_invite_tab, ['main', 'search', 'email'])) { $group_invite_tab = 'main'; }
+	$content .= '<ul class="elgg-tabs">';
+	//if (current_page_url() == elgg_get_site_url() . 'groups/invite/' . $group->guid) {
+	if ($group_invite_tab == 'main') { $content .= '<li class="elgg-state-selected">'; } else { $content .= '<li>'; }
+	$content .= '<a href="#invite_to_group">' . elgg_echo('esope:groupinvite:standard:tab') . '</a></li>';
+	//if (current_page_url() == elgg_get_site_url() . 'groups/invite/' . $group->guid . '/search') {
+	if ($group_invite_tab == 'search') { $content .= '<li class="elgg-state-selected">'; } else { $content .= '<li>'; }
+	$content .= '<a href="#esope-search-form-invite-groups">' . elgg_echo('esope:groupinvite:search:tab') . '</a></li>';
+	//if (current_page_url() == elgg_get_site_url() . 'groups/invite/' . $group->guid . '/email') {
+	if ($group_invite_tab == 'email') { $content .= '<li class="elgg-state-selected">'; } else { $content .= '<li>'; }
+	$content .= '<a href="#esope-form-email-invite-groups">' . elgg_echo('theme_inria:groupinvite:email:tab') . '</a></li>';
+	$content .= '</ul>';
+	
+	$class = 'elgg-form-alt mtm';
+	//if (current_page_url() != elgg_get_site_url() . 'groups/invite/' . $group->guid) { $class .= ' hidden'; }
+	if ($group_invite_tab != 'main') { $class .= ' hidden'; }
 	$content .= elgg_view_form('groups/invite', array(
 			'id' => 'invite_to_group',
-			'class' => 'elgg-form-alt mtm',
+			'class' => $class,
 		), array(
 			'entity' => $group,
 		));

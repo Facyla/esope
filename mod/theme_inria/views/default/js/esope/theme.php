@@ -176,6 +176,20 @@ $(document).ready(function() {
 });
 
 
+/* Group invites tab switcher (Iris v2) */
+$(document).ready(function() {
+	$('#group-invites .elgg-tabs a').on('click', function(){
+		// Select tab
+		$('#group-invites .elgg-tabs li').removeClass('elgg-state-selected');
+		$(this).parent().addClass('elgg-state-selected');
+		// Display block
+		$('#group-invites form').hide();
+		var display_div = $(this).attr('href');
+		$(display_div).slideToggle();
+	});
+});
+
+
 /* Iris members search : sync external input fields sync with main advanced search form
  * Intercepts topbar search form and replace it with main advanced form, if exists
  * topbar search term

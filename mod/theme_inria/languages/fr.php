@@ -1048,16 +1048,21 @@ Voir et commenter ce lien web :
 	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations de membres Iris",
 	'esope:groupinvite:search' => "Méthode 2&nbsp;: Invitations par critères",
 	'theme_inria:groupinvite:email' => "Méthode 3&nbsp;: Invitations via email (dont externes Inria)",
+	'esope:groupinvite:standard:tab' => "Membres Iris",
+	'esope:groupinvite:search:tab' => "Critères de recherche",
+	'theme_inria:groupinvite:email:tab' => "Emails et externes",
 	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas d'Iris.<br />
 Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe.<br />
 Si la personne n'est pas encore membre : deux solutions<br />
 &nbsp;> Les emails Inria qui ne sont associés à aucun compte Iris seront invités à rejoindre Iris et ce groupe en particulier<br />
 &nbsp;> Les emails non Inria pourront être invités à rejoindre ce groupe et la partie d'Iris visible des \"Inria & invités\"",
+	'theme_inria:groupinvite:email:step1' => "Etape 1&nbsp;: Indiquer les adresses emails à inviter",
+	'theme_inria:groupinvite:email:step2' => "Etape 2&nbsp;: Envoyer des invitations aux personnes qui ne disposent pas encore de compte Iris",
 	'theme_inria:groupinvite:email:placeholder' => "email1@inria.fr, email2@domain.tld
 email3@domain.tld email4@domain.tld ",
 	'theme_inria:invite:allemails' => "Inviter toutes les adresses email",
 	'theme_inria:groupinvite:email:or' => "Ou individuellement&nbsp;:",
-	'theme_inria:invite:newemails' => "Ces emails ne sont associés avec aucun compte : vous pouvez si vous le souhaitez les inviter à rejoindre Iris.",
+	'theme_inria:invite:newemails' => "Les emails suivants ne sont associés avec aucun compte&nbsp;: vous pouvez si vous le souhaitez les inviter à rejoindre Iris.",
 	'theme_inria:invite:invalidemails' => "Ces emails n'ont pas pu être traités : ils sont soit associés avec plusieurs comptes (ce qui ne devrait pas se produire), ou ce sont des emails non valides.",
 	'theme_inria:invite:existing_users' => "Ces emails sont associés avec un compte, qui a été invité.",
 	'theme_inria:invite:proceednext' => "Pour poursuivre vos invitations par email, veuillez cliquer sur les liens d'invitation.",

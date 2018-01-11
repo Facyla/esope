@@ -30,13 +30,9 @@ $content = '';
 //$content .= "</div>";
 $content .= "</fieldset></form>";
 
-// Use form as wrapper for better integration within existing form...
-$content .= '<form id="esope-form-email-invite-groups" method="POST" class="elgg-form elgg-form-groups-email-invite" action="#esope-form-email-invite-groups"><fieldset>';
-$content .= '<h3>' . elgg_echo('theme_inria:groupinvite:email') . '</h3>';
-$content .= '<p><em>' . elgg_echo('theme_inria:groupinvite:email:details') . '</em></p>';
 
-$content .= elgg_view('input/securitytoken');
 
+// Processing form
 $emails = get_input('email_invites');
 $group_register = get_input('group_register');
 $invited_emails = esope_get_input_array($emails, array("\n", "\r", "\t", ",", ";", "|", ' ')); // Add space to separators list
@@ -62,24 +58,43 @@ if ($invited_emails) {
 	}
 }
 
-// Invite existing users (using same setting as regular invite so we can join directly instead of inviting ?)
-if ($invite_external_emails) {
-	system_message(elgg_echo('theme_inria:invite:proceednext'));
-	$content .= '<p>' . elgg_echo('theme_inria:invite:newemails') . '</p>';
-	// Or all at once
-	if (count($invite_external_emails) > 1) {
-		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . implode(',', $invite_external_emails) . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:invite:allemails') . '</a></p>';
-	}
-	$content .= '<p>' . elgg_echo('theme_inria:groupinvite:email:or') . '</p>';
-	foreach($invite_external_emails as $email) {
-		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
-	}
+
+// Use form as wrapper for better integration within existing form...
+$action_url = elgg_get_site_url() . 'groups/invite/' . $group->guid . '/email';
+$group_invite_tab = get_input('group_invite_tab');
+//if (current_page_url() == $action_url) {
+if ($group_invite_tab == 'email') {
+	$content .= '<form id="esope-form-email-invite-groups" method="POST" class="elgg-form elgg-form-groups-email-invite" action="' . $action_url . '"><fieldset>';
+} else {
+	$content .= '<form id="esope-form-email-invite-groups" method="POST" class="elgg-form elgg-form-groups-email-invite hidden" action="' . $action_url . '"><fieldset>';
 }
+
+$content .= '<h3>' . elgg_echo('theme_inria:groupinvite:email') . '</h3>';
+$content .= '<p><em>' . elgg_echo('theme_inria:groupinvite:email:details') . '</em></p>';
+
+$content .= '<div class="clearfloat"></div><br />';
+$content .= '<h4>' . elgg_echo('theme_inria:groupinvite:email:step1') . '</h4>';
+
+$content .= elgg_view('input/securitytoken');
+$content .= elgg_view('input/hidden', array('name' => 'group_invite_tab', 'value' => 'email'));
+
+// Step 1 form
+if (!$invite_external_emails) {
+	$content .= elgg_view('input/plaintext', array('name' => 'email_invites', 'value' => $emails, 'placeholder' => elgg_echo('theme_inria:groupinvite:email:placeholder')));
+	// Allow direct registration
+	if ($allowregister == 'yes') {
+		$content .= ' <p><label>' . elgg_echo('esope:groups:allowregister') . '</label> ' . elgg_view('input/select', array('name' => 'group_register', 'options_values' => array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')), 'value' => $group_register)) . '</p>';
+	}
+	$content .= '<div class="clearfloat"></div>';
+	$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('invite'))) . '</p>';
+}
+
+
 
 // Proceed to regular invites
 // @TODO DEV function qui gère l'invitation d'un membre : avec inscription ou pas (et selon les droits de l'user connecté), et surtout si déjà invité ou les messages envoyés au membre et aux admins du groupe
 if ($existing_users) {
-	$content .= '<h4>' . elgg_echo('theme_inria:invite:existing_users') . '</h4>';
+	$content .= '<h5>' . elgg_echo('theme_inria:invite:existing_users') . '</h5>';
 	$content .= '<ul>';
 	foreach($existing_users as $ent) {
 		$content .= '<li>' . $ent->email . ' => ' . $ent->name . ' : ';
@@ -130,9 +145,9 @@ if ($existing_users) {
 	$content .= '</ul>';
 }
 
-// Invalid emails (invalid because email is not valid or is associated with multiple accounts)
+// List invalid emails (invalid because email is not valid or is associated with multiple accounts)
 if ($invited_emails) {
-	$content .= '<h4>' . elgg_echo('theme_inria:invite:invalidemails') . '</h4>';
+	$content .= '<h5>' . elgg_echo('theme_inria:invite:invalidemails') . '</h5>';
 	$content .= '<ul>';
 	foreach($invited_emails as $email) {
 		$content .= '<li>' . $email . '</li>';
@@ -142,22 +157,28 @@ if ($invited_emails) {
 
 
 
-// FORM CONTENT
-if (!$invite_external_emails) {
-	$content .= '<div class="clearfloat"></div><br />';
-	$content .= elgg_view('input/plaintext', array('name' => 'email_invites', 'value' => $emails, 'placeholder' => elgg_echo('theme_inria:groupinvite:email:placeholder')));
-	// Allow direct registration
-	if ($allowregister == 'yes') {
-		$content .= ' <p><label>' . elgg_echo('esope:groups:allowregister') . '</label> ' . elgg_view('input/select', array('name' => 'group_register', 'options_values' => array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')), 'value' => $group_register)) . '</p>';
+
+
+// Step 2 : Invite existing users (using same setting as regular invite so we can join directly instead of inviting ?)
+$content .= '<div class="clearfloat"></div><br />';
+$content .= '<h4>' . elgg_echo('theme_inria:groupinvite:email:step2') . '</h4>';
+if ($invite_external_emails) {
+	system_message(elgg_echo('theme_inria:invite:proceednext'));
+	
+	$content .= '<p>' . elgg_echo('theme_inria:invite:newemails') . '</p>';
+	// Or all at once
+	if (count($invite_external_emails) > 1) {
+		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . implode(',', $invite_external_emails) . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:invite:allemails') . '</a></p>';
+		$content .= '<p>' . elgg_echo('theme_inria:groupinvite:email:or') . '</p>';
 	}
-	$content .= '<div class="clearfloat"></div>';
-	$content .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('invite'))) . '</p>';
-} else {
+	foreach($invite_external_emails as $email) {
+		$content .= '<p><a href="' . elgg_get_site_url() . 'inria/invite?group_invite=yes&group_guid=' . $group->guid . '&email=' . $email . '" target="_blank" class="elgg-button elgg-button-action">' . elgg_echo('invite') . ' ' . $email . '</a></p>';
+	}
+	
 	// back to invite main form
 	$content .= '<div class="clearfloat"></div><br />';
 	$content .= '<p>' . elgg_view('output/url', array('href' => 'groups/invite/' . $group->guid, 'text' => elgg_echo('cancel'), 'class' => "elgg-button elgg-button-cancel")) . '</p>';
 }
-
 
 // Note : closing </form> is rendered by forms/groups/invite view (inner extend)
 
