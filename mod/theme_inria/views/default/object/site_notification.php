@@ -49,6 +49,15 @@ if ($url) {
 		'id' => 'site-notifications-link-' . $entity->guid,
 	));
 } else {
+	// Use same page URL but still display a link s notification can be deleted once read
+	$text = elgg_view('output/url', array(
+		'text' => $text,
+		'href' => current_page_url(),
+		//'href' => '#',
+		'is_trusted' => true,
+		'class' => 'site-notifications-link',
+		'id' => 'site-notifications-link-' . $entity->guid,
+	));
 	// Note : SiteNotification object may not have any URL, and this is not an error but only a special case
 	//error_log("DEBUG object/site_notification {$entity->guid} : no object entity passed so no URL available");
 }

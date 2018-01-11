@@ -97,7 +97,8 @@ if (elgg_instanceof($entity, 'object', 'file') && ($entity->simpletype == 'image
 	if (elgg_in_context('workspace')) {
 		$owner_icon = '<a href="' . $entity->getURL() . '" class="file-image"><img src="' . $entity->getIconUrl(array('size' => 'medium')) . '" alt="object ' . $entity->getSubtype() . '" /></a>';
 	} else {
-		$owner_icon = '<a href="' . $entity->getURL() . '" style="background: url(\'' . $entity->getIconUrl(array('size' => 'medium')) . '\') no-repeat center/cover; width: 100%; margin: 0;"></a>';
+		// Note : replaced center/cover by top contain to avoid resizing when commenting
+		$owner_icon = '<a href="' . $entity->getURL() . '" style="background: url(\'' . $entity->getIconUrl(array('size' => 'medium')) . '\') no-repeat top/contain; width: 100%; margin: 0;"></a>';
 		$image_block_vars['class'] = 'file-image';
 	}
 } else {

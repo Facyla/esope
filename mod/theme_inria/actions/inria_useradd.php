@@ -381,5 +381,7 @@ foreach ($emails as $k => $email) {
 }
 access_show_hidden_entities($hidden_entities);
 
-forward(REFERER);
+//forward(REFERER);
+// Better clear URL paramters if any (eg. group invite)
+forward('inria/invite');
 

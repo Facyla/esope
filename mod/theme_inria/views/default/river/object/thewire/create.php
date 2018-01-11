@@ -20,12 +20,15 @@ $excerpt = '<div class="elgg-river-message">' . $excerpt . '</div>';
 
 
 $subject = $vars['item']->getSubjectEntity();
+/* Iris v2 : Subject : no link
 $subject_link = elgg_view('output/url', array(
 	'href' => $subject->getURL(),
 	'text' => $subject->name,
 	'class' => 'elgg-river-subject',
 	'is_trusted' => true,
 ));
+ */
+$subject_link = '<strong>' . $subject->name . '</strong>';
 
 if ($parent) {
 	$parent_text = strip_tags($parent->description);

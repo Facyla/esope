@@ -10,13 +10,14 @@ $item = $vars['item'];
 $subject = $item->getSubjectEntity();
 $object = $item->getObjectEntity();
 
-/* Iris v2 : Subject : no link */
+/* Iris v2 : Subject : no link
 $subject_link = elgg_view('output/url', array(
 	'href' => $subject->getURL(),
 	'text' => $subject->name,
 	'class' => 'elgg-river-subject',
 	'is_trusted' => true,
 ));
+ */
 $subject_link = '<strong>' . $subject->name . '</strong>';
 
 $object_text = $object->title ? $object->title : $object->name;

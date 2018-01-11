@@ -40,10 +40,12 @@ if (elgg_is_sticky_form('useradd')) {
 // Groupes : pas de sélecteur si invité depuis un groupe
 if ($group_invite == 'yes') {
 	$group = get_entity($group_guid);
-	echo elgg_view('input/hidden', array('name' => 'group_invite', 'value' => 'yes'));
-	echo '<p><strong><img src="' . $group->getIconURL(array('size' => 'tiny')) . '" class="float" />&nbsp;' . elgg_echo('theme_inria:useradd:group', array($group->name)) . '</strong></p>';
-	if (empty($reason)) { $reason = elgg_echo('theme_inria:useradd:group', array($group->name)); }
-	echo '<br />';
+	if (elgg_instanceof($group, 'group')) {
+		echo elgg_view('input/hidden', array('name' => 'group_invite', 'value' => 'yes'));
+		echo '<p><strong><img src="' . $group->getIconURL(array('size' => 'tiny')) . '" class="float" />&nbsp;' . elgg_echo('theme_inria:useradd:group', array($group->name)) . '</strong></p>';
+		if (empty($reason)) { $reason = elgg_echo('theme_inria:useradd:group', array($group->name)); }
+		echo '<br />';
+	}
 }
 
 

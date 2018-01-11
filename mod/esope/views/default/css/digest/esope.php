@@ -10,3 +10,10 @@
 .market-list-block { margin-top: 1em; clear: both; display: inline-block; }
 .market-list-block .elgg-image { float: left; margin-right: 1em; }
 
+
+.group-title { line-height: 2rem; }
+.group-title a { }
+.group-title img { float: left; margin: 0.25rem 0 0.5rem 0; }
+
+
+

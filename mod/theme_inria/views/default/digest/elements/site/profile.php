@@ -29,21 +29,22 @@ if(isset($digest_site_profile_body[$key])){
 	$ts_upper = (int) elgg_extract("ts_upper", $vars);
 	
 	// Display profiles or count only ?
+	$display_count = 'yes';
 	$display_profiles = 'no';
+	
 	$member_options = array(
 			"type" => "user",
-			//"limit" => 6,
-			"limit" => 0, // Iris : show all new users
+			"limit" => 6,
+			//"limit" => 0, // Iris : show all new users
 			"relationship" => "member_of_site",
 			"relationship_guid" => elgg_get_site_entity()->getGUID(),
 			"inverse_relationship" => true,
 			"order_by" => "r.time_created DESC",
-			"wheres" => array("(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")")
+			"wheres" => array("(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")"),
+			'count' => true,
 	);
-	if ($display_profiles != 'yes') { $member_options['count'] = true; }
-	
-	$newest_members = elgg_get_entities_from_relationship($member_options);
-	if (!empty($newest_members)) {
+	$newest_members_count = elgg_get_entities_from_relationship($member_options);
+	if ($newest_members_count > 0) {
 		$title = elgg_view("output/url", array(
 			"text" => elgg_echo("theme_inria:digest:members"),
 			"href" => "members",
@@ -52,7 +53,12 @@ if(isset($digest_site_profile_body[$key])){
 	
 		$content = "<div class='digest-profile'>";
 	
+		if ($display_count == 'yes') {
+			$content .= '<span class="new-members-count" style="font-size:2rem; float:left; margin-right:2rem;">' . $newest_members_count . '</span>';
+			$content .= '<p>' . elgg_echo('theme_inria:digest:newmembers', array($newest_members_count)) . '</p><p><a href="' . elgg_get_site_url() . 'members?order_by=desc">' . elgg_echo('theme_inria:digest:welcomenewmembers', array($newest_members_count)) . '</a></p>';
+		}
 		if ($display_profiles == 'yes') {
+			$newest_members = elgg_get_entities_from_relationship(['count'=>false] + $member_options);
 			foreach($newest_members as $index => $mem) {
 				$profile_type = esope_get_user_profile_type($mem);
 				if (empty($profile_type)) { $profile_type = 'external'; }
@@ -66,8 +72,6 @@ if(isset($digest_site_profile_body[$key])){
 				$content .= "</div>";
 			}
 			$content .= '<div class="clearfloat"></div>';
-		} else {
-			$content .= '<p>' . elgg_echo('theme_inria:digest:newmembers', array($newest_members)) . '<br /><a href="' . elgg_get_site_url() . 'members?order_by=desc">' . elgg_echo('theme_inria:digest:welcomenewmembers', array($newest_members)) . '</a></p>';
 		}
 		
 		$content .= "</div>";

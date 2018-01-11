@@ -1,8 +1,15 @@
 
+@import url("https://commons.inria.fr/INRIA_FONT/InriaSans/Web/fonts.css");
+@import url("https://commons.inria.fr/INRIA_FONT/InriaSerif/Web/fonts.css");
+
+
 body {
 	background: none repeat scroll 0 0 #FFFFFF;
 	color: #333333;
 	font: 80%/1.4 "Lucida Grande",Arial,Tahoma,Verdana,sans-serif;
+	/*
+	font: 80%/1.4 "Inria Sans",Arial,Tahoma,Verdana,sans-serif;
+	*/
 	word-wrap: break-word;
 	-moz-hyphens: auto;
 	-webkit-hyphens: auto;
@@ -21,9 +28,10 @@ a:hover {
 img {
 	border: medium none;
 }
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6 {
 	color: #384257;
 	margin: 0;
+	font-family:'Inria Sans',sans-serif;
 }
 h1 {
 	font-size: 18px;
@@ -321,4 +329,17 @@ h4 {
 	border: 0;
 }
 
+
+.group-title {
+	background: #424B5F;
+	color: white;
+	line-height: 2rem;
+}
+.group-title a {
+	color: white;
+}
+.group-title img {
+	float: left;
+	margin: 0.25rem 0.25rem 0.5rem 0.25rem;
+}
 
