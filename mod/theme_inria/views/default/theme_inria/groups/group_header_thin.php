@@ -25,7 +25,12 @@ if (!empty($main_group->banner)) {
 	<div class="iris-group-title">
 		
 		<?php
-		echo '<h2>' . $group_name . '</h2>';
+		echo '<h2>';
+		if ($main_group->guid != $group->guid) {
+			echo elgg_get_excerpt($main_group->name, 120) . ' / ';
+		}
+		echo $group_name;
+		echo '</h2>';
 		//echo '<span class="iris-group-subtitle">' . elgg_get_excerpt($group->briefdescription) . '</span>';
 		/*
 		echo '<div class="iris-group-rules">';
