@@ -1147,6 +1147,8 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:digest:welcomenewmembers' => "Découvrez qui ils sont et souhaitez-leur la bienvenue&nbsp;!",
 	'theme_inria:useradd:unarchived' => "Le compte a été réactivé, cependant il est probable que l'email du comtpe ne soit plus valide&nbsp;: veuillez contacter l'administrateur du site en indiquant l'identifiant de ce compte ainsi qu'une adresse email valide, de sorte que celle-ci puisse être mise à jour si nécessaire&nbsp;: %s",
 	
+	'ldap_auth:error:alreadyexists' => "Un compte est déjà associé à votre adresse email %s : veuillez contacter l'administrateur du site à l'adresse <a href=\"mailto:aide-iris@inria.fr?subject=Concordance login LDAP&body=\">aide-iris@inria.fr</a> pour que votre identifiant de connexion corresponde à votre identifiant LDAP.",
+
 	
 );
 
