@@ -102,40 +102,42 @@ if (elgg_is_logged_in()) {
 	}
 	*/
 	
-	if ($notifications_count > 0) {
-		$notifications_mark .= '<span class="iris-new" title="' . $notifications_text . '">' . $notifications_count . '</span>';
-	}
-	
 	
 	// Group invites
 	$groupinvites_options = array();
+	$groupinvites_content = '';
+	$group_notifications_count = 0;
 	
-	// Own invites - invitations reçues
+	// Own invites - Invitations reçues
 	//$groupinvites_content .= '<h3>INVITATIONS RECUES</h3>';
 	// '<a href="' . elgg_get_site_url() . 'groups/invitations/' . $user->username . '">' . 
-	//$groupinvites_count = groups_get_invited_groups($own->guid, false, array('count' => true));
+	//$group_notifications_count = groups_get_invited_groups($own->guid, false, array('count' => true));
 	$groupinvites = esope_groups_get_invited_groups($own->guid);
 	$groupinvites_count = esope_groups_get_invited_groups($own->guid, false, array('count' => true));
-	$groupinvites_content = '';
 	if ($groupinvites_count > 0) {
+		$group_notifications_count += $groupinvites_count;
 		$groupinvites_text .= elgg_echo("theme_inria:groupinvites:unreadcount", array($groupinvites_count));
 		//$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $groupinvites_count . '</span>';
 	}
 	//$groupinvites_content .= elgg_view('groups/invitationrequests', array('invitations' => $groupinvites));
 	$groupinvites_content .= elgg_view('groups/invitationrequests', array('invitations' => $groupinvites));
 	
-	// Demandes en attente
+	// Own requests - Demandes en attente
 	$grouprequests = esope_groups_get_requested_groups($own->guid);
-	$groupinvites_content .= '<hr />';
-	//$groupinvites_content .= '<h3>DEMANDES ENVOYEES</h3>';
-	$groupinvites_content .= elgg_view('groups/pending_invitationrequests', array('requests' => $grouprequests));
+	$grouprequests_count = esope_groups_get_requested_groups($own->guid, false, array('count' => true));
+	$group_notifications_count += $grouprequests_count;
+	if ($grouprequests_count > 0) {
+		$groupinvites_content .= '<hr />';
+		//$groupinvites_content .= '<h3>DEMANDES ENVOYEES</h3>';
+		$groupinvites_content .= elgg_view('groups/pending_invitationrequests', array('requests' => $grouprequests));
+	}
 	
 	// Admin group membership requests (groups where user can validate requests as operator)
 	//$groupinvites_content .= '<h3>DEMANDES A TRAITER (responsable de groupe)</h3>';
 	$grouppendingrequests = esope_groups_get_pending_membership_requests($own->guid);
 	$grouppendingrequests_count = count($grouppendingrequests);
-	$groupinvites_count += $grouppendingrequests_count;
 	if ($grouppendingrequests_count > 0) {
+		$group_notifications_count += $grouppendingrequests_count;
 		if (!empty($groupinvites_text)) { $groupinvites_text .= ', '; }
 		$groupinvites_text .= elgg_echo("theme_inria:grouprequests:unreadcount", array($grouppendingrequests_count));
 		$groupinvites_content .= '<hr />';
@@ -159,12 +161,17 @@ if (elgg_is_logged_in()) {
 			$groupinvites_content .= '<a href="' . elgg_get_site_url() . 'groups/requests/' . $group->guid . '">' . elgg_view_image_block('<img src="' . $group->getIconURL(array('size' => 'small')) . '" />', $groupinvite_content, array('class' => "notifications-pending-groups-requests")) . '</a>';
 		}
 	}
-	if ($groupinvites_count > 0) {
-		$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $groupinvites_count . '</span>';
-		
-		$notifications_count += $groupinvites_count;
+	if ($group_notifications_count > 0) {
+		$notifications_count += $group_notifications_count;
+		$groupinvites_mark .= '<span class="iris-new" title="' . $groupinvites_text . '">' . $group_notifications_count . '</span>';
 		if (!empty($notifications_text)) { $notifications_text .= ', '; }
 		$notifications_text .= $groupinvites_text;
+	}
+	
+	
+	// Total unread notifications count
+	if ($notifications_count > 0) {
+		$notifications_mark .= '<span class="iris-new" title="' . $notifications_text . '">' . $notifications_count . '</span>';
 	}
 	
 	
@@ -247,13 +254,13 @@ if (elgg_is_active_plugin('language_selector')) {
 						));
 					$class = ''; if ($tab == 'groups') { $class = 'elgg-state-selected'; }
 					echo elgg_view('output/url', array(
-							'text' => elgg_echo('theme_inria:grouprequests:tab') . $friendrequests_mark, 
+							'text' => elgg_echo('theme_inria:friendrequests:tab') . $friendrequests_mark, 
 							'href' => '#iris-topbar-notifications-friends',
 							'class' => $class
 						));
 					$class = ''; if ($tab == 'friends') { $class = 'elgg-state-selected'; }
 					echo elgg_view('output/url', array(
-							'text' => elgg_echo('theme_inria:friendrequests:tab') . $groupinvites_mark, 
+							'text' => elgg_echo('theme_inria:grouprequests:tab') . $groupinvites_mark, 
 							'href' => '#iris-topbar-notifications-groups',
 							'class' => $class
 						));

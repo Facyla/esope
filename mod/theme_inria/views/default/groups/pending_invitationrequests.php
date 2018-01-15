@@ -19,6 +19,7 @@ if (isset($vars['requests'])) {
 			));
 }
 
+echo print_r($requests, true);
 $vars['items'] = $requests;
 $vars['item_view'] = 'group/format/pending_invitationrequest';
 $vars['no_results'] = elgg_echo('groups:invitations:pending:none');

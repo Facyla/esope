@@ -3012,23 +3012,24 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
  */
 function esope_groups_get_requested_groups($user_guid, $return_guids = false, $options = array()) {
 	$ia = elgg_set_ignore_access(true);
-	
 	$defaults = array(
 		'relationship' => 'membership_request',
 		'relationship_guid' => (int) $user_guid,
 		'inverse_relationship' => false,
-		'limit' => 0,
+		'limit' => false,
 	);
 	$options = array_merge($defaults, $options);
 	$groups = elgg_get_entities_from_relationship($options);
 	$ia = elgg_set_ignore_access($ia);
+
+	if ($options['count']) { return $groups; }
 	
 	// Esope : clean invites (if not counting !)
 	$user = get_entity($user_guid);
-	if (elgg_instanceof($user, 'user') && !$options['count'] && is_array($groups)) {
+	if (elgg_instanceof($user, 'user') && is_array($groups)) {
 		foreach($groups as $k => $group) {
 			if ($group->isMember($user)) {
-				remove_entity_relationship($group->guid, 'membership_request', $user->guid);
+				remove_entity_relationship($user->guid, 'membership_request', $group->guid);
 				unset($groups[$k]);
 			}
 		}
