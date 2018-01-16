@@ -89,7 +89,7 @@ if ($tu > $tc) {
 	$time .= '<span class="time-sep">' . elgg_echo('theme_inria:updated_time_sep') . '</span>' . elgg_view_friendly_time($tu);
 }
 
-$body = "<p class=\"mbn\">$title</p>$description";
+$body = "<p class=\"mbn\">$title</p><p>$description</p>";
 if ($extra_info) {
 	$body .= "<p class=\"elgg-subtext\">$extra_info</p>";
 }
