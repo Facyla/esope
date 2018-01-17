@@ -5,7 +5,7 @@ $groups = '';
 $groups_more = '';
 if (elgg_is_active_plugin('groups')) {
 	$ownguid = elgg_get_logged_in_user_guid();
-	$max_groups = 4;
+	$max_groups = 5;
 	
 	// D'abord les favoris, puis les autres groupes
 	// Favorite groups first
