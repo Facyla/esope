@@ -28,7 +28,7 @@ function esope_search(){
 
 // @TODO Handle and perform URL-preset query
 $q = get_input('q');
-$limit = get_input('limit', 100);
+$limit = get_input('limit', elgg_get_config('default_limit'));
 $offset = get_input('offset', 0);
 
 

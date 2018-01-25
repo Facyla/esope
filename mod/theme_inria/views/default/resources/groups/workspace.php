@@ -218,7 +218,7 @@ if (elgg_group_gatekeeper(false)) {
 				'wheres' => array(
 					"(e.container_guid = $group->guid OR e.owner_guid = $group->guid)",
 				),
-				'limit' => 10,
+				'limit' => elgg_get_config('default_limit'),
 				'pagination' => true,
 				'no_results' => elgg_echo('theme_inria:groups:content:no_result'),
 			);
