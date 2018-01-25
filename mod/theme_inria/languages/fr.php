@@ -1045,11 +1045,12 @@ Voir et commenter ce lien web :
 	'theme_inria:pages:edit' => "Modifier cette page",
 	'theme_inria:pages:history' => "Voir les modifications de cette page",
 	
-	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations de membres Iris",
-	'esope:groupinvite:search' => "Méthode 2&nbsp;: Invitations par critères",
-	'theme_inria:groupinvite:email' => "Méthode 3&nbsp;: Invitations via email (dont externes Inria)",
+	'esope:groupinvite:standard' => "Invitations de membres Iris",
+	'esope:groupinvite:search' => "Invitations par critères de recherche",
+	'theme_inria:groupinvite:email' => "Invitations via email (dont externes Inria)",
 	'esope:groupinvite:standard:tab' => "Membres Iris",
 	'esope:groupinvite:search:tab' => "Critères de recherche",
+	'theme_inria:groupinvite:parent:tab' => "Membres du groupe",
 	'theme_inria:groupinvite:email:tab' => "Emails et externes",
 	'theme_inria:groupinvite:email:details' => "Toute personne peut être invitée par email, qu'elle soit membre ou pas d'Iris.<br />
 Si l'email correspond à un compte Iris, le membre correspondant sera invité ou inscrit dans le groupe.<br />

@@ -134,6 +134,8 @@ function theme_inria_init(){
 	
 	// Add email invites to groups
 	elgg_extend_view('forms/groups/invite', 'forms/groups/email_invite', 1001);
+	// Add parent group invites to groups
+	//elgg_extend_view('forms/groups/invite', 'forms/groups/parent_group_invite', 1001);
 	
 	// Avoid feedback being hidden with main menu
 	if (elgg_get_plugin_setting("publicAvailable_feedback", "feedback") == "yes" || elgg_is_logged_in()) {

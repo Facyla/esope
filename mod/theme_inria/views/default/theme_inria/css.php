@@ -1033,6 +1033,21 @@ a.iris-object-readmore:hover .readmore, a.iris-object-readmore:active .readmore,
 .thewire-parent-top {  }
 .thewire-reply {  }
 .thewire-reply-top {  }
+.thewire-thread-link-parent, .thewire-thread-link-reply {
+    border: 1px dotted #CCC;
+    padding: 0.25rem 0;
+    border-left: 0;
+    border-right: 0;
+    background: #FAFAFA;
+}
+.thewire-thread-link-parent a, .thewire-thread-link-reply a {
+    color: rgba(56, 66, 87, 0.5);
+    font-size: 0.8rem;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+
 
 
 /* Pages de recherche : membres, groupes, publications */

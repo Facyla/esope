@@ -62,13 +62,15 @@ $num_thread = elgg_get_entities_from_metadata(array(
 	"metadata_name" => "wire_thread", "metadata_value" => $post->wire_thread,
 	'count' => true,
 ));
+$thread_link = false;
 if ($num_thread > 1) {
 	if (!elgg_in_context('thewire-thread')) {
 		// Affiche toute la conversation
-		$metadata_alt .= '<li>' . elgg_view('output/url', array(
+		$thread_link = elgg_view('output/url', array(
 			'text' => elgg_echo('thewire:thread:viewnum', array($num_thread)),
 			'href' => "thewire/thread/$post->wire_thread",
-		)) . '</li>';
+		));
+		$metadata_alt .= '<li>' . $thread_link . '</li>';
 	}
 }
 
@@ -126,6 +128,14 @@ if (!$parent) {
 	$class .= ' thewire-reply-to-' . $parent->guid;
 }
 
+/* A valider 
+if ($parent && $thread_link) { echo '<div class="thewire-thread-link-reply">' . $thread_link . '</div>'; }
+*/
 
 echo elgg_view('page/components/iris_object', $vars + array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'after' => $after, 'class' => $class));
+
+/* A valider 
+if (!$parent && $thread_link) { echo '<div class="thewire-thread-link-parent">' . $thread_link . '</div>'; }
+*/
+
 
