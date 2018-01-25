@@ -98,7 +98,7 @@ $content_activity_opt = array(
 	'wheres' => array(
 		"(e.container_guid = $group->guid OR e.owner_guid = $group->guid)",
 	),
-	'limit' => 10,
+	'limit' => elgg_get_config('default_limit'),
 	'pagination' => true,
 );
 if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
