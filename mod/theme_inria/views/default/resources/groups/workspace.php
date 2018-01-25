@@ -37,8 +37,9 @@ switch($filter) {
 		break;
 	default:
 		$subtypes = $filter;
+		if (!empty($subtypes) && !is_array($subtypes)) { $subtypes = array($subtypes); } else { $subtypes = null; }
 }
-if (empty($subtypes)) { $subtypes = theme_inria_group_object_subtypes($group); }
+if (!$subtypes) { $subtypes = theme_inria_group_object_subtypes($group); }
 
 
 // turn this into a core function
@@ -212,7 +213,6 @@ if (elgg_group_gatekeeper(false)) {
 			$content .= '</form>';
 		$content .= '</div>';
 		$content .= '<div class="group-workspace-activity">';
-			$db_prefix = elgg_get_config('dbprefix');
 			$content_activity_opt = array(
 				'type' => 'object',
 				'wheres' => array(
@@ -222,16 +222,43 @@ if (elgg_group_gatekeeper(false)) {
 				'pagination' => true,
 				'no_results' => elgg_echo('theme_inria:groups:content:no_result'),
 			);
-			if (!empty($subtypes)) { $content_activity_opt['subtypes'] = $subtypes; }
+			
+			$dbprefix = elgg_get_config('dbprefix');
+			
+			// Add subtype filter
+			if ($subtypes) {
+				// Allow to search for comments, too
+				$subtypes[] = 'comment';
+				$content_activity_opt['subtypes'] = $subtypes;
+			}
+			
+			// Add comments selector to entity search
+			// Note : selection is based on objects whose container has the group as container_guid
+			$comment_subtype = get_subtype_id('object', 'comment');
+			if ($subtypes) {
+				// Filter comments on filtered group objects only
+				$objects_subtypes_ids = array();
+				foreach($subtypes as $s) {
+					if (!empty($s)) {
+						$objects_subtypes_ids[] = get_subtype_id('object', $s);
+					}
+				}
+				if ($objects_subtypes_ids) {
+					$objects_subtypes_ids = implode(',', $objects_subtypes_ids);
+					$content_activity_opt['wheres'] = array("((e.container_guid = $group->guid OR e.owner_guid = $group->guid) OR (e.subtype = $comment_subtype AND (e.container_guid IN (SELECT guid FROM  `{$dbprefix}entities` WHERE `subtype` IN ($objects_subtypes_ids) AND `container_guid` = $group->guid))))");
+				}
+			} else {
+				// All comments on group objects
+				$content_activity_opt['wheres'] = array("((e.container_guid = $group->guid OR e.owner_guid = $group->guid) OR (e.subtype = $comment_subtype AND (e.container_guid IN (SELECT guid FROM  `{$dbprefix}entities` WHERE `container_guid` = $group->guid))))");
+			}
 			
 			// Iris : Hide some entities here, based on "hide_entity" metadata (set to "no")
-			$dbprefix = elgg_get_config('dbprefix');
 			$name_metastring_id = elgg_get_metastring_id('hide_entity');
 			$value_metastring_id = elgg_get_metastring_id('yes');
-			$content_activity_opt['wheres'][] = "NOT EXISTS (SELECT 1 FROM {$dbprefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $name_metastring_id AND md.value_id = $value_metastring_id)";
 			//$content_activity_opt['metadata_name_value_pairs'] = array('name' => 'hide_entity', 'value' => 'yes', 'operand' => '<>'); // does not work because entity must have this metadata set to be listed
+			$content_activity_opt['wheres'][] = "(NOT EXISTS (SELECT 1 FROM {$dbprefix}metadata md WHERE md.entity_guid = e.guid AND md.name_id = $name_metastring_id AND md.value_id = $value_metastring_id))";
 			
-			//$content .= "SUBTYPES => " . print_r($subtypes, true);
+			//$content .= "SUBTYPES => " . print_r($content_activity_opt, true);
 			$content .= elgg_list_entities_from_metadata($content_activity_opt);
 			
 		$content .= '</div>';
