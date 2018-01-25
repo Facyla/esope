@@ -85,6 +85,9 @@ return array(
 	'notification_messages:update:body' => "La publication a été modifiée.\r\n\r\n",
 	'notification_messages:delete:body' => "La publication a été supprimée.\r\n\r\n",
 	
+	// Notification containers
+	'notification_messages:container:subgroup' => "%s / %s",
+	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Contenu des messages de notification",
 	'notification_messages:message:default:blog' => "Par défaut les messages de notification des blogs ne contiennent que l'extrait.",

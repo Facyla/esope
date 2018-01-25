@@ -85,6 +85,9 @@ return array(
 	'notification_messages:update:body' => "The content has been updated.\r\n\r\n",
 	'notification_messages:delete:body' => "The content has been removed.\r\n\r\n",
 	
+	// Notification containers
+	'notification_messages:container:subgroup' => "%s / %s",
+	
 	// Notification message content
 	'notification_messages:settings:objects:message' => "Notification messages content",
 	'notification_messages:message:default:blog' => "By default, blog notification messages contains only the extract.",

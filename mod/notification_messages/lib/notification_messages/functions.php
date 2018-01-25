@@ -449,6 +449,16 @@ function notification_messages_notify_owner() {
 	return $notify;
 }
 
+
+// Should we also send notifications to the author (notify self)
+function notification_messages_notify_self() {
+	$notify_self = elgg_get_plugin_setting('notify_self', 'notification_messages');
+	if ($notify_self == 'yes') { return true; }
+	return false;
+}
+
+
+
 /**
  * Adjust subscribers
  * 
@@ -1222,8 +1232,25 @@ function notification_messages_get_top_container_entity($entity = false) {
 	return $entity->getContainerEntity();
 }
 
+/* Get top group (if using subgroups)
+ * @return ElggGroup entity | false
+ * bool $false_if_noparent : returns false instead of group entity if group has no parent
+ */
+function notification_messages_get_top_group($group = false, $false_if_noparent = true) {
+	if (!elgg_instanceof($group, 'group')) { return false; }
+	$parent = $group;
+	if (elgg_is_active_plugin('au_subgroups')) {
+		while ($has_parent = AU\SubGroups\get_parent_group($parent)) {
+			$parent = $has_parent;
+		}
+	}
+	if ($false_if_noparent && ($parent->guid == $group->guid)) { return false; }
+	return $parent;
+}
+
 /* Return container for notification message (ie do not return container if meaningless)
  * Container can be a group, user, site, object
+ * If using subgroups, main group can be added too
  */
 function notification_messages_message_add_container($entity = false) {
 	$msg_container = false;
@@ -1231,7 +1258,15 @@ function notification_messages_message_add_container($entity = false) {
 	// User : pointless
 	//if (elgg_instanceof($container, "user")) { $msg_container = $container->name; }
 	// Group
-	if (elgg_instanceof($container, "group")) { $msg_container = $container->name; }
+	if (elgg_instanceof($container, "group")) {
+		$msg_container = $container->name;
+		// Add top group only if existing
+		if (elgg_is_active_plugin('au_subgroups')) {
+			if ($topgroup = notification_messages_get_top_group($container)) {
+				$msg_container = elgg_echo('notification_messages:container:subgroup', array($topgroup->name, $container->name));
+			}
+		}
+	}
 	// @TODO Site : multisite installation ?
 	//if (elgg_instanceof($container, "site")) { $msg_container = $container->name; }
 	// @TODO Object : attached content ?
