@@ -113,22 +113,37 @@ $actions .= '<div class="iris-object-actions">';
 				}
 				
 			} else if (elgg_instanceof($entity, 'object', 'comment')) {
-				if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
-				// Generic inline add comment form
-				$actions .= '<li>' . elgg_view('output/url', array(
-							'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
-							'title' => elgg_echo('theme_inria:object:comment'),
-							'text' => '<i class="fa fa-comment"></i>',
-					)) . '</li>';
-				$actions_after .= elgg_view_form('comment/save', 
-						array('id' => "comments-add-{$entity->guid}", 'class' => 'hidden'), 
-						array('entity' => $top_object, 'inline' => true)
-					);
-				// Edit form (link is added by registered entity menu)
-				$actions_after .= elgg_view_form('comment/save', 
-						array('id' => "comments-edit-{$entity->guid}", 'class' => 'hidden'), 
-						array('entity' => $top_object, 'comment' => $entity, 'inline' => true)
-					);
+				/* Note : si le commentaire est affiché seul on indique le nb de commentaires de la conversation et un lien vers celle-ci
+				 * mais pas forcément le lien pour commenter directement (manque de contexte)
+				 * Dans les autres cas, pas besoin de lien vers la conversation, mais on peut commenter directement sous chaque commentaire 
+				 * =< voir si c'est utile car on peut commenter à la fin de la conversation
+				 */
+				if (elgg_in_context('workspace')) {
+					$main_entity = get_entity($entity->container_guid);
+					$comments = $main_entity->countComments();
+					$actions .= '<li>' . elgg_view('output/url', array(
+								'href' => $entity->getURL(),
+								'title' => elgg_echo('theme_inria:comment:viewthread'),
+								'text' => '<i class="fa fa-comments"></i>&nbsp;' . elgg_echo('theme_inria:comment_on:num', array($comments, $main_entity->title)),
+						)) . '</li>';
+				} else {
+					if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
+					// Generic inline add comment form
+					$actions .= '<li>' . elgg_view('output/url', array(
+								'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
+								'title' => elgg_echo('theme_inria:object:comment'),
+								'text' => '<i class="fa fa-comment"></i>',
+						)) . '</li>';
+					$actions_after .= elgg_view_form('comment/save', 
+							array('id' => "comments-add-{$entity->guid}", 'class' => 'hidden'), 
+							array('entity' => $top_object, 'inline' => true)
+						);
+					// Edit form (link is added by registered entity menu)
+					$actions_after .= elgg_view_form('comment/save', 
+							array('id' => "comments-edit-{$entity->guid}", 'class' => 'hidden'), 
+							array('entity' => $top_object, 'comment' => $entity, 'inline' => true)
+						);
+				}
 					
 			} else {
 				if (in_array($entity->comments_on, array('Off', 'no'))) { break; }

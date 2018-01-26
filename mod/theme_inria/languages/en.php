@@ -1043,6 +1043,9 @@ View and comment on the bookmark:
 	
 	'theme_inria:object:comment' => "Comment",
 	'theme_inria:object:comments:count' => "%s comment(s)",
+	'theme_inria:comment_on' => "Comment on %s",
+	'theme_inria:comment_on:num' => "%s <em>%s</em>",
+	'theme_inria:comment:viewthread' => "View conversation",
 	'theme_inria:pages:edit' => "Edit this page",
 	'theme_inria:pages:history' => "View page history",
 	

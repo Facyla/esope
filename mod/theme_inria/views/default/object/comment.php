@@ -68,6 +68,7 @@ HTML;
 } else {
 	// brief view
 	$excerpt = elgg_get_excerpt($comment->description, 80);
+	/*
 	$posted = elgg_echo('generic_comment:on', array($commenter_link, $entity_link));
 
 	$body = <<<HTML
@@ -79,10 +80,18 @@ $commenter_link $friendlytime
 HTML;
 
 	//echo elgg_view_image_block($commenter_icon, $body);
-	$content = $excerpt;
+	*/
 	
+	$content = $excerpt;
 }
 
+// @TODO ? Affiche toute la conversation
+/*
+if (!$full_view) {
+	$thread_link = '<a href="' . $entity->getURL() . '">' . elgg_echo('theme_inria:comment:viewthread') . '</a>';
+	echo '<div class="thewire-thread-link-reply">' . $thread_link . '</div>';
+}
+*/
 
 echo elgg_view('page/components/iris_object', array('entity' => $vars['entity'], 'body' => $content, 'metadata_alt' => $metadata_alt, 'full_view' => false, 'mode' => 'listing') + $vars);
 
