@@ -1045,6 +1045,7 @@ Voir et commenter ce lien web :
 	'theme_inria:comment_on' => "Commentaire sur %s",
 	'theme_inria:comment_on:num' => "%s <em>%s</em>",
 	'theme_inria:comment:viewthread' => "Afficher la conversation",
+	'theme_inria:comment:viewentity' => "Afficher la conversation sur %s",
 	'theme_inria:pages:edit' => "Modifier cette page",
 	'theme_inria:pages:history' => "Voir les modifications de cette page",
 	

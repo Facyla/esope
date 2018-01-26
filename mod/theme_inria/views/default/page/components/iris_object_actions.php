@@ -121,10 +121,11 @@ $actions .= '<div class="iris-object-actions">';
 				if (elgg_in_context('workspace')) {
 					$main_entity = get_entity($entity->container_guid);
 					$comments = $main_entity->countComments();
+					$main_entity_title = elgg_get_excerpt($main_entity->title, 60);
 					$actions .= '<li>' . elgg_view('output/url', array(
 								'href' => $entity->getURL(),
-								'title' => elgg_echo('theme_inria:comment:viewthread'),
-								'text' => '<i class="fa fa-comments"></i>&nbsp;' . elgg_echo('theme_inria:comment_on:num', array($comments, $main_entity->title)),
+								'title' => elgg_echo('theme_inria:comment:viewentity', array($main_entity->title)),
+								'text' => '<i class="fa fa-comments"></i>&nbsp;' . elgg_echo('theme_inria:comment_on:num', array($comments, $main_entity_title)),
 						)) . '</li>';
 				} else {
 					if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
