@@ -43,7 +43,7 @@ if (!empty($share_tags)) { $share_label .= ' #' . implode(' #', (array)$share_ta
 if (!empty($share_via)) { $share_label .= ' via @' . implode(' @', (array)$share_via); }
 
 $share_params = array();
-if (!empty($share_text)) { $share_params[] = "text=$share_text"; }
+if (!empty($share_text)) { $share_params[] = "text=" . urlencode($share_text); }
 if (!empty($share_tags)) { $share_params[] = "hashtags=" . implode(',', (array)$share_tags); }
 if (!empty($share_via)) { $share_params[] = "via=$share_via"; }
 if (!empty($share_url)) { $share_params[] = "url=$share_url"; }
