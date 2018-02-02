@@ -1142,6 +1142,10 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:blog:message:saved:draft' => "Draft saved",
 	'theme_inria:blog:draft' => "This article is in draft state, and is not published yet.",
 	
+	'theme_inria:site_notifications:delete_all' => "Delete all site notifications (%s)",
+	'theme_inria:site_notifications:delete_all:details' => "This will remove all your site notifications.",
+	'theme_inria:site_notifications:delete_all:confirm' => "Warning, this will mark all your site notifications as read. Do you wish to continue?",
+	
 	
 );
 

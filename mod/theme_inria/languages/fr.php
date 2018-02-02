@@ -1157,6 +1157,10 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:blog:message:saved:draft' => "Brouillon enregistré",
 	'theme_inria:blog:draft' => "Cet article est un brouillon et n'est pas encore publié.",
 	
+	'theme_inria:site_notifications:delete_all' => "Supprimer toutes les notifications",
+	'theme_inria:site_notifications:delete_all:details' => "Ceci supprimera l'ensemble de vos notifications.",
+	'theme_inria:site_notifications:delete_all:confirm' => "Attention, ceci marquera l'ensemble de vos notifications comme lues : souhaitez-vous continuer ?",
+	
 	
 	
 );

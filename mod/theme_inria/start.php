@@ -59,6 +59,9 @@ function theme_inria_init(){
 	elgg_unregister_action('blog/save');
 	elgg_register_action("blog/save", $action_url . "blog/save.php");
 	
+	// Site notifications : remove all
+	elgg_register_action('site_notifications/remove_all', $action_url . "site_notifications/remove_all.php");
+	
 	
 	// CSS - Inria custom styles
 	$css_url = elgg_get_site_url() . 'mod/theme_inria/fonts/';
@@ -146,6 +149,8 @@ function theme_inria_init(){
 		elgg_unextend_view('page/elements/footer', 'feedback/footer');
 		elgg_extend_view('page/elements/foot', 'feedback/footer');
 	}
+	
+	elgg_extend_view('forms/site_notifications/process', 'theme_inria/site_notifications/remove_all');
 	
 	// WIDGETS
 	/// Widget thewire : liste tous les messages (et pas juste ceux de l'user connecté)
