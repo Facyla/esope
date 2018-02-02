@@ -646,7 +646,7 @@ Afficher et commenter le nouveau sujet :
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
 	'thewire:noposts' => "Pas encore de message sur le Fil",
-	'item:object:thewire' => "Messages du Fil",
+	'item:object:thewire' => "Messages brefs (Fil)",
 	'thewire:by' => 'Message sur le Fil de %s',
 	'thewire:previous:help' => "Voir le message précédent",
 	'thewire:hide:help' => "Masquer le message précédent",
@@ -1140,7 +1140,7 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	
 	'theme_inria:submitandcreateagain' => "puis en créer un autre",
 	
-	'esope:groups:enablethewire' => "Activer les discussions (Fil)",
+	'esope:groups:enablethewire' => "Activer les messages brefs (Fil)",
 	'newsletter:group:tool_option' => "Activer les lettres d'information",
 	'groups:enablepages' => "Activer le wiki (pages collaboratives)",
 	'bookmarks:enablebookmarks' => "Activer les liens web",
