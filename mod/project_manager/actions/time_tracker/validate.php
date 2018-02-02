@@ -49,8 +49,8 @@ if (is_array($time_trackers))
 foreach($time_trackers as $ent) {
 	// Validation de chacune des saisies effectuées
 	if ($ent->canEdit()) {
-		error_log("DEBUG time tracker validation action : {$ent->guid} {$ent->title} = $validation");
-		$ent->validation = $validation;
+		//error_log("DEBUG time tracker validation action : {$ent->guid} {$ent->title} = $validation");
+		$ent->validation = (bool)$validation;
 		$success++;
 	} else $error++;
 }
