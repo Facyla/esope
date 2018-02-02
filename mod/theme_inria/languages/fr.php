@@ -976,7 +976,7 @@ Voir et commenter ce lien web :
 	'groups:content_access_mode:membersonly' => "Restreint",
 	'theme_inria:access:overridenotice' => "Note : en accord avec la politique de confidentialité de cet espace, l'accès à ce contenu devrait être réservé à&nbsp;: %s",
 	'theme_inria:access:overridenotice:existingvalue' => "Note : en accord avec la politique de confidentialité de ce groupe, l'accès à ce contenu devrait être réservé à&nbsp;: %1\$s. Merci de choisir le niveau d'accès \"%1\$s\".",
-	'groups:content_access_mode:groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
+	'groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
 	
 	'theme_inria:group:pending_request' => "En attente",
 	
