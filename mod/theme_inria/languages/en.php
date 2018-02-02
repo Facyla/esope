@@ -1139,6 +1139,8 @@ email3@domain.tld email4@domain.tld ",
 	
 	'ldap_auth:error:alreadyexists' => "User(s) already exist, registered with your email %s : please contact site administrator at <a href=\"mailto:aide-iris@inria.fr?subject=Concordance login LDAP&body=\">aide-iris@inria.fr</a> so your site login matches LDAP login.",
 	
+	'theme_inria:blog:message:saved:draft' => "Draft saved",
+	
 	
 );
 

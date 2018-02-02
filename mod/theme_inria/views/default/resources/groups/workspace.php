@@ -260,7 +260,6 @@ if (elgg_group_gatekeeper(false)) {
 			
 			//$content .= "SUBTYPES => " . print_r($content_activity_opt, true);
 			$content .= elgg_list_entities_from_metadata($content_activity_opt);
-			$content .= implode(' | ', elgg_get_context_stack());
 			
 		$content .= '</div>';
 	$content .= '</div>';

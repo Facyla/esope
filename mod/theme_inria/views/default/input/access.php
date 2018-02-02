@@ -14,6 +14,8 @@
  * @uses $vars['container_guid']         Optional. Container GUID of the entity
  * @usee $vars['entity_allows_comments'] Optional. (bool) whether the entity uses comments - used for UI display of access change warnings
  *
+ * @uses $vars['nofilter']						Optional. (bool) Keep exact options values
+ * 
  */
 
 // bail if set to a unusable value

@@ -47,16 +47,19 @@ if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes") {
 			<?php
 			$visibility_options =  array(
 				ACCESS_PRIVATE => elgg_echo($translation_prefix."groups:access:group"),
-				ACCESS_LOGGED_IN => elgg_echo($translation_prefix."LOGGED_IN"),
-				ACCESS_PUBLIC => elgg_echo($translation_prefix."PUBLIC"),
 			);
 			$inria_access_id = theme_inria_get_inria_access_id();
 			if ($inria_access_id) {
 				$visibility_options[$inria_access_id] = elgg_echo('profiletype:inria');
 			}
+			$visibility_options[ACCESS_LOGGED_IN] = elgg_echo($translation_prefix."LOGGED_IN");
+			// Inria : always disable public view
+			/*
+			$visibility_options[ACCESS_PUBLIC] = elgg_echo($translation_prefix."PUBLIC");
 			if (elgg_get_config("walled_garden")) {
 				unset($visibility_options[ACCESS_PUBLIC]);
 			}
+			*/
 		
 			echo elgg_view("input/access", array(
 				"name" => "vis",
@@ -66,6 +69,7 @@ if (elgg_get_plugin_setting("hidden_groups", "groups") == "yes") {
 				'entity' => $entity,
 				'entity_type' => 'group',
 				'entity_subtype' => '',
+				'nofilter' => true,
 			));
 			echo '<span class="elgg-text-help">' . elgg_echo('groups:visibility:details') . '</span>';
 			?>
