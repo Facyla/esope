@@ -1155,6 +1155,7 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'ldap_auth:error:alreadyexists' => "Un compte est déjà associé à votre adresse email %s : veuillez contacter l'administrateur du site à l'adresse <a href=\"mailto:aide-iris@inria.fr?subject=Concordance login LDAP&body=\">aide-iris@inria.fr</a> pour que votre identifiant de connexion corresponde à votre identifiant LDAP.",
 	
 	'theme_inria:blog:message:saved:draft' => "Brouillon enregistré",
+	'theme_inria:blog:draft' => "Cet article est un brouillon et n'est pas encore publié.",
 	
 	
 	
