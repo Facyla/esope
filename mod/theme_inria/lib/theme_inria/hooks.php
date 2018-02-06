@@ -916,6 +916,18 @@ function theme_inria_route($hook, $type, $return, $params) {
 }
 
 
+// Use custom print CSS
+function theme_inria_page_head_hook($hook, $type, $return, $params) {
+	
+	$url = elgg_get_site_url();
+	// Replace print CSS
+	$return['links']['stylesheet-print'] = array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url . 'mod/theme_inria/print.css', 'media' => 'print');
+	
+	return $return;
+}
+
+
+
 
 
 

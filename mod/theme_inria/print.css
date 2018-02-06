@@ -1,0 +1,68 @@
+/* Feuille de style 'print' destinée à l'impression des pages du site */
+
+html *, body * { min-height:0 !important; }
+html, body, section { background:white !important; }
+* { background-color: white !important; color: black !important; font-family:"times new roman",times,serif; text-align:justify; }
+a:link { text-decoration: underline; }
+/* Conversion des URL relatives en URL absolues
+a:[href^="/"]:after{  content: " <?php echo elgg_get_site_url(); ?>" attr(href); }
+ */
+/* URL des liens
+a[href]:after { content: " (" attr(href) ")"; }
+ */
+/* Signification des abbréviations */
+abbr[title]:after { content: " (" attr(title) ") "; }
+/* URL des sources des citations */
+blockquote[title]:after { content: " (" attr(cite) ") "; }
+
+#elgg-print-message { display: block; }
+
+
+/* Masquage des éléments d'interface */
+.elgg-page > header, #transverse, footer { display: none; }
+/* Masquage des formulaires */
+.elgg-form, .elgg-form-comments-add, .elgg-form-discussion-reply-save { display: none; }
+#feedbackWrapper, #groupchat-grouplink, #groupchat-sitelink { display: none; }
+
+/* Page layout */
+#iris-topbar, #iris-navigation { display: none !important; }
+#iris-page { margin: 0 !important; }
+* { max-width: initial !important; }
+.iris-group-header { background: none; }
+
+.interne { max-width: 100%; width: 98%; margin: auto; }
+
+.elgg-page-topbar, .elgg-page-header, .elgg-page-footer { display:none; }
+#page_container:before { content:"Merci d’économiser de l’encre et du papier : n’imprimez ce message que si c’est vraiment nécessaire"; display:block; border-bottom:1px solid grey; font-style:italic; }
+/*
+#page_container:after { content:'La version pour impression peut ne pas rendre compte exactement de la version en ligne'; display:block; border-top:1px solid grey; font-style:italic; }
+*/
+#page_container { width:95%; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
+#page_container .elgg-inner { width:100%; }
+#page_container .elgg-main { border:0; }
+
+/* .elgg-output a:after { content: " (" attr(href) ") "; } */
+
+/* Main layout : no sidebar */
+.elgg-sidebar { display: none !important; }
+.elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
+
+/* Various menus and actions (some are kept) */
+.elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history, 
+.elgg-menu-item-reply, .elgg-menu-item-previous, .elgg-menu-item-likes, 
+.elgg-menu-widget { display:none !important; }
+.elgg-requires-confirmation { display:none !important; }
+.elgg-button { display:none !important; }
+
+.elgg-main .elgg-breadcrumbs { top:0; }
+
+
+
+/* Eléments propres à certains thèmes */
+
+.group-top-menu { display: none !important; }
+/* Navigation wiki */
+.full-width-pages-nav { display:none !important; }
+.elgg-menu-item-pdfexport, .elgg-menu-item-htmlexport { display:none !important; }
+
+

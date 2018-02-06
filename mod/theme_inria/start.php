@@ -318,6 +318,9 @@ function theme_inria_init(){
 	elgg_unregister_plugin_hook_handler('entity:icon:url', 'user', 'default_icons_user_hook');
 	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'theme_inria_user_icon_hook', 1000);
 	
+	// Head
+	elgg_register_plugin_hook_handler('head', 'page','theme_inria_page_head_hook');
+	
 	// Intercept membership requests so we can notify the operators
 	elgg_register_event_handler('create','relationship','theme_inria_create_relationship_event');
 	
