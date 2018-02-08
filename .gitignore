@@ -1,4 +1,5 @@
 # ignore Elgg configuration
 /elgg-config/settings.php
 /.htaccess
+/composer-update.sh
 
