@@ -63,17 +63,17 @@ class QueryBuilder
     /**
      * @var array The array of SQL parts collected.
      */
-    private $sqlParts = [
-        'select'  => [],
-        'from'    => [],
-        'join'    => [],
-        'set'     => [],
+    private $sqlParts = array(
+        'select'  => array(),
+        'from'    => array(),
+        'join'    => array(),
+        'set'     => array(),
         'where'   => null,
-        'groupBy' => [],
+        'groupBy' => array(),
         'having'  => null,
-        'orderBy' => [],
-        'values'  => [],
-    ];
+        'orderBy' => array(),
+        'values'  => array(),
+    );
 
     /**
      * The complete SQL string for this query.
@@ -87,14 +87,14 @@ class QueryBuilder
      *
      * @var array
      */
-    private $params = [];
+    private $params = array();
 
     /**
      * The parameter type map of this query.
      *
      * @var array
      */
-    private $paramTypes = [];
+    private $paramTypes = array();
 
     /**
      * The type of query this is. Can be select, update or delete.
@@ -262,9 +262,9 @@ class QueryBuilder
      *         ->setParameter(':user_id', 1);
      * </code>
      *
-     * @param string|integer      $key   The parameter position or name.
-     * @param mixed               $value The parameter value.
-     * @param string|integer|null $type  One of the PDO::PARAM_* constants.
+     * @param string|integer $key   The parameter position or name.
+     * @param mixed          $value The parameter value.
+     * @param string|null    $type  One of the PDO::PARAM_* constants.
      *
      * @return $this This QueryBuilder instance.
      */
@@ -298,7 +298,7 @@ class QueryBuilder
      *
      * @return $this This QueryBuilder instance.
      */
-    public function setParameters(array $params, array $types = [])
+    public function setParameters(array $params, array $types = array())
     {
         $this->paramTypes = $types;
         $this->params = $params;
@@ -527,10 +527,10 @@ class QueryBuilder
             return $this;
         }
 
-        return $this->add('from', [
+        return $this->add('from', array(
             'table' => $delete,
             'alias' => $alias
-        ]);
+        ));
     }
 
     /**
@@ -557,10 +557,10 @@ class QueryBuilder
             return $this;
         }
 
-        return $this->add('from', [
+        return $this->add('from', array(
             'table' => $update,
             'alias' => $alias
-        ]);
+        ));
     }
 
     /**
@@ -590,9 +590,9 @@ class QueryBuilder
             return $this;
         }
 
-        return $this->add('from', [
+        return $this->add('from', array(
             'table' => $insert
-        ]);
+        ));
     }
 
     /**
@@ -612,10 +612,10 @@ class QueryBuilder
      */
     public function from($from, $alias = null)
     {
-        return $this->add('from', [
+        return $this->add('from', array(
             'table' => $from,
             'alias' => $alias
-        ], true);
+        ), true);
     }
 
     /**
@@ -659,14 +659,14 @@ class QueryBuilder
      */
     public function innerJoin($fromAlias, $join, $alias, $condition = null)
     {
-        return $this->add('join', [
-            $fromAlias => [
+        return $this->add('join', array(
+            $fromAlias => array(
                 'joinType'      => 'inner',
                 'joinTable'     => $join,
                 'joinAlias'     => $alias,
                 'joinCondition' => $condition
-            ]
-        ], true);
+            )
+        ), true);
     }
 
     /**
@@ -688,14 +688,14 @@ class QueryBuilder
      */
     public function leftJoin($fromAlias, $join, $alias, $condition = null)
     {
-        return $this->add('join', [
-            $fromAlias => [
+        return $this->add('join', array(
+            $fromAlias => array(
                 'joinType'      => 'left',
                 'joinTable'     => $join,
                 'joinAlias'     => $alias,
                 'joinCondition' => $condition
-            ]
-        ], true);
+            )
+        ), true);
     }
 
     /**
@@ -717,14 +717,14 @@ class QueryBuilder
      */
     public function rightJoin($fromAlias, $join, $alias, $condition = null)
     {
-        return $this->add('join', [
-            $fromAlias => [
+        return $this->add('join', array(
+            $fromAlias => array(
                 'joinType'      => 'right',
                 'joinTable'     => $join,
                 'joinAlias'     => $alias,
                 'joinCondition' => $condition
-            ]
-        ], true);
+            )
+        ), true);
     }
 
     /**
@@ -1302,8 +1302,6 @@ class QueryBuilder
      * @param array  $knownAliases
      *
      * @return string
-     *
-     * @throws QueryException
      */
     private function getSQLForJoins($fromAlias, array &$knownAliases)
     {

@@ -48,10 +48,10 @@ interface Connection
     /**
      * Quotes a string for use in a query.
      *
-     * @param mixed  $input
+     * @param string  $input
      * @param integer $type
      *
-     * @return mixed
+     * @return string
      */
     function quote($input, $type=\PDO::PARAM_STR);
 

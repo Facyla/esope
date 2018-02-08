@@ -121,11 +121,11 @@ class SQLAnywhereConnection implements Connection, ServerInfoAwareConnection
      */
     public function exec($statement)
     {
-        if (false === sasql_real_query($this->connection, $statement)) {
-            throw SQLAnywhereException::fromSQLAnywhereError($this->connection);
-        }
+        $stmt = $this->prepare($statement);
 
-        return sasql_affected_rows($this->connection);
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     /**

@@ -29,7 +29,7 @@ namespace Doctrine\DBAL\Driver;
  * @link   www.doctrine-project.org
  * @since  2.5
  */
-interface DriverException extends \Throwable
+interface DriverException
 {
     /**
      * Returns the driver specific error code if available.

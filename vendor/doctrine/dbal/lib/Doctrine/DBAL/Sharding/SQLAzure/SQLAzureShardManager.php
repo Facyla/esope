@@ -198,14 +198,14 @@ class SQLAzureShardManager implements ShardManager
      /**
       * {@inheritDoc}
       */
-    public function queryAll($sql, array $params = [], array $types = [])
+    public function queryAll($sql, array $params = array(), array $types = array())
     {
         $shards = $this->getShards();
         if (!$shards) {
             throw new \RuntimeException("No shards found for " . $this->federationName);
         }
 
-        $result = [];
+        $result = array();
         $oldDistribution = $this->getCurrentDistributionValue();
 
         foreach ($shards as $shard) {

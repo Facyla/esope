@@ -172,8 +172,6 @@ class AnnotationReader implements Reader
      * Initializes a new AnnotationReader.
      *
      * @param DocParser $parser
-     *
-     * @throws AnnotationException
      */
     public function __construct(DocParser $parser = null)
     {

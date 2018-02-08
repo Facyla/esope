@@ -111,18 +111,18 @@ class PDOStatement extends \PDOStatement implements Statement
     /**
      * {@inheritdoc}
      */
-    public function fetch($fetchMode = null, $cursorOrientation = \PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
+    public function fetch($fetchMode = null, $cursorOrientation = null, $cursorOffset = null)
     {
         try {
-            if ($fetchMode === null && \PDO::FETCH_ORI_NEXT === $cursorOrientation && 0 === $cursorOffset) {
+            if ($fetchMode === null && $cursorOrientation === null && $cursorOffset === null) {
                 return parent::fetch();
             }
 
-            if (\PDO::FETCH_ORI_NEXT === $cursorOrientation && 0 === $cursorOffset) {
+            if ($cursorOrientation === null && $cursorOffset === null) {
                 return parent::fetch($fetchMode);
             }
 
-            if (0 === $cursorOffset) {
+            if ($cursorOffset === null) {
                 return parent::fetch($fetchMode, $cursorOrientation);
             }
 
@@ -138,15 +138,15 @@ class PDOStatement extends \PDOStatement implements Statement
     public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
     {
         try {
-            if ($fetchMode === null && null === $fetchArgument && null === $ctorArgs) {
+            if ($fetchMode === null && $fetchArgument === null && $ctorArgs === null) {
                 return parent::fetchAll();
             }
 
-            if (null === $fetchArgument && null === $ctorArgs) {
+            if ($fetchArgument === null && $ctorArgs === null) {
                 return parent::fetchAll($fetchMode);
             }
 
-            if (null === $ctorArgs) {
+            if ($ctorArgs === null) {
                 return parent::fetchAll($fetchMode, $fetchArgument);
             }
 

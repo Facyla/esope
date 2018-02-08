@@ -70,11 +70,11 @@ class ReservedWordsCommand extends Command
         $this
         ->setName('dbal:reserved-words')
         ->setDescription('Checks if the current database contains identifiers that are reserved.')
-        ->setDefinition([
+        ->setDefinition(array(
             new InputOption(
                 'list', 'l', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Keyword-List name.'
             )
-        ])
+        ))
         ->setHelp(<<<EOT
 Checks if the current database contains tables and columns
 with names that are identifiers in this dialect or in other SQL dialects.
@@ -87,7 +87,7 @@ and SQL Anywhere keywords are checked:
 If you want to check against specific dialects you can
 pass them to the command:
 
-    <info>%command.full_name% -l mysql -l pgsql</info>
+    <info>%command.full_name% mysql pgsql</info>
 
 The following keyword lists are currently shipped with Doctrine:
 
@@ -138,7 +138,7 @@ EOT
             );
         }
 
-        $keywords = [];
+        $keywords = array();
         foreach ($keywordLists as $keywordList) {
             if (!isset($this->keywordListClasses[$keywordList])) {
                 throw new \InvalidArgumentException(

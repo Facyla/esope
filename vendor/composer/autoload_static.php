@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite2639b9670e5cd0c017131ac6f483af1
+class ComposerStaticInitf98e1db6a95a7348609191dcae49db2a
 {
     public static $files = array (
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
@@ -50,7 +50,6 @@ class ComposerStaticInite2639b9670e5cd0c017131ac6f483af1
         ),
         'D' => 
         array (
-            'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
@@ -126,10 +125,6 @@ class ComposerStaticInite2639b9670e5cd0c017131ac6f483af1
         array (
             0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
         ),
-        'Doctrine\\Common\\Inflector\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
-        ),
         'Doctrine\\Common\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
@@ -172,6 +167,10 @@ class ComposerStaticInite2639b9670e5cd0c017131ac6f483af1
             'Doctrine\\Common\\Lexer\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
+            ),
+            'Doctrine\\Common\\Inflector\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
             ),
             'Doctrine\\Common\\Collections\\' => 
             array (
@@ -244,11 +243,11 @@ class ComposerStaticInite2639b9670e5cd0c017131ac6f483af1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite2639b9670e5cd0c017131ac6f483af1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite2639b9670e5cd0c017131ac6f483af1::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInite2639b9670e5cd0c017131ac6f483af1::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInite2639b9670e5cd0c017131ac6f483af1::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInite2639b9670e5cd0c017131ac6f483af1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf98e1db6a95a7348609191dcae49db2a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf98e1db6a95a7348609191dcae49db2a::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitf98e1db6a95a7348609191dcae49db2a::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitf98e1db6a95a7348609191dcae49db2a::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitf98e1db6a95a7348609191dcae49db2a::$classMap;
 
         }, null, ClassLoader::class);
     }

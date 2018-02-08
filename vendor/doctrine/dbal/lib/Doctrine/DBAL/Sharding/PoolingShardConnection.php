@@ -236,7 +236,7 @@ class PoolingShardConnection extends Connection
     {
         $params = $this->getParams();
 
-        $driverOptions = isset($params['driverOptions']) ? $params['driverOptions'] : [];
+        $driverOptions = isset($params['driverOptions']) ? $params['driverOptions'] : array();
 
         $connectionParams = $this->connections[$shardId];
 

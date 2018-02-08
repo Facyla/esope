@@ -45,7 +45,7 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
     /**
      * @var string Constructor arguments for the default class to instantiate when fetch mode is \PDO::FETCH_CLASS.
      */
-    private $defaultFetchClassCtorArgs = [];
+    private $defaultFetchClassCtorArgs = array();
 
     /**
      * @var int Default fetch mode to use.
@@ -193,7 +193,7 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
      *
      * @throws SQLAnywhereException
      */
-    public function fetch($fetchMode = null, $cursorOrientation = \PDO::FETCH_ORI_NEXT, $cursorOffset = 0)
+    public function fetch($fetchMode = null)
     {
         if ( ! is_resource($this->result)) {
             return false;
@@ -213,7 +213,7 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
                 if (func_num_args() >= 2) {
                     $args      = func_get_args();
                     $className = $args[1];
-                    $ctorArgs  = isset($args[2]) ? $args[2] : [];
+                    $ctorArgs  = isset($args[2]) ? $args[2] : array();
                 }
 
                 $result = sasql_fetch_object($this->result);
@@ -235,13 +235,13 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
     /**
      * {@inheritdoc}
      */
-    public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
+    public function fetchAll($fetchMode = null)
     {
-        $rows = [];
+        $rows = array();
 
         switch ($fetchMode) {
             case PDO::FETCH_CLASS:
-                while ($row = call_user_func_array([$this, 'fetch'], func_get_args())) {
+                while ($row = call_user_func_array(array($this, 'fetch'), func_get_args())) {
                     $rows[] = $row;
                 }
                 break;
@@ -310,7 +310,7 @@ class SQLAnywhereStatement implements IteratorAggregate, Statement
      *
      * @throws SQLAnywhereException
      */
-    private function castObject(\stdClass $sourceObject, $destinationClass, array $ctorArgs = [])
+    private function castObject(\stdClass $sourceObject, $destinationClass, array $ctorArgs = array())
     {
         if ( ! is_string($destinationClass)) {
             if ( ! is_object($destinationClass)) {

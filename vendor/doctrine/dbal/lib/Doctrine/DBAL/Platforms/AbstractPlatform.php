@@ -400,12 +400,6 @@ abstract class AbstractPlatform
 
         $dbType = strtolower($dbType);
         $this->doctrineTypeMapping[$dbType] = $doctrineType;
-
-        $doctrineType = Type::getType($doctrineType);
-
-        if ($doctrineType->requiresSQLCommentHint($this)) {
-            $this->markDoctrineTypeCommented($doctrineType);
-        }
     }
 
     /**
@@ -1615,24 +1609,6 @@ abstract class AbstractPlatform
     }
 
     /**
-     * Returns the SQL to create inline comment on a column.
-     *
-     * @param string $comment
-     *
-     * @return string
-     *
-     * @throws \Doctrine\DBAL\DBALException If not supported on this platform.
-     */
-    public function getInlineColumnCommentSQL($comment)
-    {
-        if (! $this->supportsInlineColumnComments()) {
-            throw DBALException::notSupported(__METHOD__);
-        }
-
-        return "COMMENT " . $this->quoteStringLiteral($comment);
-    }
-
-    /**
      * Returns the SQL used to create a table.
      *
      * @param string $tableName
@@ -2236,11 +2212,11 @@ abstract class AbstractPlatform
             $check = (isset($field['check']) && $field['check']) ?
                     ' ' . $field['check'] : '';
 
-            $typeDecl = $field['type']->getSQLDeclaration($field, $this);
+            $typeDecl = $field['type']->getSqlDeclaration($field, $this);
             $columnDef = $typeDecl . $charset . $default . $notnull . $unique . $check . $collation;
 
             if ($this->supportsInlineColumnComments() && isset($field['comment']) && $field['comment'] !== '') {
-                $columnDef .= ' ' . $this->getInlineColumnCommentSQL($field['comment']);
+                $columnDef .= " COMMENT " . $this->quoteStringLiteral($field['comment']);
             }
         }
 

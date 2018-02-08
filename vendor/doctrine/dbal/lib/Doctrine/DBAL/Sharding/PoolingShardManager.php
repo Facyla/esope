@@ -88,10 +88,10 @@ class PoolingShardManager implements ShardManager
     public function getShards()
     {
         $params = $this->conn->getParams();
-        $shards = [];
+        $shards = array();
 
         foreach ($params['shards'] as $shard) {
-            $shards[] = ['id' => $shard['id']];
+            $shards[] = array('id' => $shard['id']);
         }
 
         return $shards;
@@ -113,7 +113,7 @@ class PoolingShardManager implements ShardManager
             throw new \RuntimeException("No shards found.");
         }
 
-        $result = [];
+        $result = array();
         $oldDistribution = $this->getCurrentDistributionValue();
 
         foreach ($shards as $shard) {

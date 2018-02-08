@@ -88,22 +88,17 @@ class QueryCacheProfile
     }
 
     /**
-     * Generates the real cache key from query, params, types and connection parameters.
+     * Generates the real cache key from query, params and types.
      *
      * @param string $query
      * @param array  $params
      * @param array  $types
-     * @param array  $connectionParams
      *
      * @return array
      */
-    public function generateCacheKeys($query, $params, $types, array $connectionParams = [])
+    public function generateCacheKeys($query, $params, $types)
     {
-        $realCacheKey = 'query=' . $query .
-            '&params=' . serialize($params) .
-            '&types=' . serialize($types) .
-            '&connectionParams=' . serialize($connectionParams);
-
+        $realCacheKey = $query . "-" . serialize($params) . "-" . serialize($types);
         // should the key be automatically generated using the inputs or is the cache key set?
         if ($this->cacheKey === null) {
             $cacheKey = sha1($realCacheKey);
