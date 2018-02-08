@@ -2,6 +2,8 @@
 $group = elgg_extract('group', $vars);
 $main_group = elgg_extract('main_group', $vars);
 
+$own = elgg_get_logged_in_user_entity();
+
 $content = '';
 
 
@@ -149,7 +151,7 @@ if ($group->canEdit()) {
 // Membership action (for self)
 $actions_content = '';
 // group members
-if ($group->isMember($own)) {
+if ($group->isMember()) {
 	if ($group->getOwnerGUID() != $own->guid) {
 		// leave
 		$actions_content .= elgg_view('output/url', array(
