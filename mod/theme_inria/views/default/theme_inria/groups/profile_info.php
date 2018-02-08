@@ -172,13 +172,23 @@ if ($group->isMember()) {
 				'is_action' => true,
 			));
 	} else {
-		// request membership
-		$actions_content .= elgg_view('output/url', array(
-				'href' => $url . "action/groups/join?group_guid={$group->guid}",
-				'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequest'),
-				'class' => "elgg-button elgg-button-action",
-				'is_action' => true,
-			));
+		if (check_entity_relationship($own->guid, 'membership_request', $group->guid)) {
+			// request already made
+			$actions_content .= elgg_view('output/url', array(
+					'href' => "javascript:void(0);",
+					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequestmade'),
+					'class' => "elgg-button elgg-button-action",
+					'is_action' => true,
+				));
+		} else {
+			// request membership
+			$actions_content .= elgg_view('output/url', array(
+					'href' => $url . "action/groups/join?group_guid={$group->guid}",
+					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequest'),
+					'class' => "elgg-button elgg-button-action",
+					'is_action' => true,
+				));
+		}
 	}
 }
 if (!empty($actions_content)) {
