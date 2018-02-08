@@ -1,5 +1,4 @@
 # ignore Elgg configuration
-/engine/settings.php
 /elgg-config/settings.php
 /.htaccess
 
