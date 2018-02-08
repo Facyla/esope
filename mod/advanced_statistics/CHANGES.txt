@@ -1,0 +1,31 @@
+Version history
+===============
+
+2.0.1 (2016-12-12):
+
+- several small chores/fixes
+
+2.0 (2016-08-26):
+
+- added: composer support
+- added: dutch translation added
+- added: French translation
+- changed: js libraries are now AMD loaded
+- changed: updated to jqplot 1.0.9
+- changed: upped Elgg requirement to v2.0
+- fixed: updated widget for new AMD modules
+
+1.1 (2015-07-08):
+
+- added: online users count admin widget
+- fixed: replaced deprecated function usage add_metastring_id
+
+1.0 (2014-11-07):
+
+- added: widget to add individual stats to your admin dashboard
+- changed: updated for Elgg 1.9
+- fixed: correctly check for empty data to prevent endless loader icon
+
+0.1 (2012-12-19):
+
+- initial release
