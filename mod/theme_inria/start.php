@@ -325,6 +325,10 @@ function theme_inria_init(){
 	elgg_register_event_handler('create','relationship','theme_inria_create_relationship_event');
 	
 	
+	// Public pages - les pages auxquelles on peut accéder hors connexion
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'theme_inria_public_pages');
+	
+	
 }
 
 // Include Inria page handlers
