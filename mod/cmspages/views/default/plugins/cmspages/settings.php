@@ -80,7 +80,7 @@ echo '<fieldset><legend>' . elgg_echo('cmspages:fieldset:categories') . '</legen
 	// On pré-traite le contenu pour générer un array PHP qu'on va stocker (sérialisé), 
 	// au lieu de devoir tout reconstruire à chaque appel
 	// Returns : array prêt pour construire un menu <=> array d'entrées avec un parent_name
-	if ($plugin->categories) {
+	if (isset($plugin->categories)) {
 		$menu_categories = array();
 		$menu_cats = esope_get_input_array($plugin->categories, "\n");
 		if (count($menu_cats) > 0) {

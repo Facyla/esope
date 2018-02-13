@@ -24,8 +24,8 @@ if (!empty($pagetype)) {
 
 // Set owner to site, for all "global" cmspages
 elgg_set_page_owner_guid(elgg_get_site_entity()->guid);
-elgg_set_context('cmspages_admin');
-elgg_push_context('admin');
+elgg_set_context('admin');
+elgg_push_context('cmspages_admin');
 
 // Build the page content
 $content = '';
@@ -52,9 +52,9 @@ $content .= '<blockquote style="padding:6px 12px; margin: 1ex 0;">
 
 $content .= elgg_view('cmspages/listing');
 
-
+$content .= print_r(elgg_get_context_stack(),true);
 //$page = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
-$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
+$page = elgg_view_layout('admin', array('title' => $title, 'content' => $content));
 
 echo elgg_view_page($title, $page);
 
