@@ -23,6 +23,9 @@ function theme_inria_public_index($page) {
 function inria_page_handler($page) {
 	$base = elgg_get_plugins_path() . 'theme_inria/pages/theme_inria/';
 	switch($page[0]){
+		case "members-icons":
+			include($base . 'members_icons.php');
+			break;
 		case "userimage":
 			include($base . 'userimage.php');
 			break;
