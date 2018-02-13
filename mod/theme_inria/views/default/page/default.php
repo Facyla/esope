@@ -34,7 +34,8 @@ $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmess
 
 $header = elgg_view('page/elements/header', $vars);
 $content = elgg_view('page/elements/body', $vars);
-$footer = elgg_view('page/elements/footer', $vars);
+$footer_side = elgg_view('page/elements/footer_side', $vars);
+$footer_main = elgg_view('page/elements/footer_main', $vars);
 
 $body = <<<__BODY
 <div class="elgg-page elgg-page-default $class">
@@ -55,11 +56,14 @@ $body .= <<<__BODY
 		<div id="iris-navigation">
 			$header
 			<div id="iris-footer">
-				$footer
+				$footer_side
 			</div>
 		</div>
 		<div id="iris-body">
 			$content
+			<div id="iris-footer-main">
+				$footer_main
+			</div>
 		</div>
 	</div>
 __BODY;

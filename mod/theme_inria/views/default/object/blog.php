@@ -60,8 +60,17 @@ if (elgg_in_context('widgets')) {
 	$metadata = '';
 }
 
-if ($full) {
+$status = '';
+if ($blog->status == 'draft') {
+	$status .= '<p>
+		<blockquote>' . elgg_echo('theme_inria:blog:draft') . '<br />
+		<a href="' . elgg_get_site_url() . 'blog/edit/' . $blog->guid . '" class="elgg-button elgg-button-action">' . elgg_echo('edit') . '</a>
+		</blockquote></p>';
+}
 
+
+if ($full) {
+	
 	if (!empty($blog->description)) {
 		$body = elgg_view('output/longtext', array(
 			'value' => $blog->description,
@@ -86,7 +95,7 @@ if ($full) {
 		'body' => $body,
 	));
 	*/
-	$content = $categories . $body;
+	$content = $status . $categories . $body;
 
 } else {
 	// brief view

@@ -8,6 +8,8 @@ $user = elgg_get_page_owner_entity();
 $own = elgg_get_logged_in_user_entity();
 $url = elgg_get_site_url();
 
+if (!elgg_instanceof($user, 'user')) { return; }
+
 $max_groups = 4;
 $max_friends = 6;
 

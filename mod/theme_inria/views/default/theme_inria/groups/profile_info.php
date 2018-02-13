@@ -2,6 +2,8 @@
 $group = elgg_extract('group', $vars);
 $main_group = elgg_extract('main_group', $vars);
 
+$own = elgg_get_logged_in_user_entity();
+
 $content = '';
 
 
@@ -149,7 +151,7 @@ if ($group->canEdit()) {
 // Membership action (for self)
 $actions_content = '';
 // group members
-if ($group->isMember($own)) {
+if ($group->isMember()) {
 	if ($group->getOwnerGUID() != $own->guid) {
 		// leave
 		$actions_content .= elgg_view('output/url', array(
@@ -170,13 +172,23 @@ if ($group->isMember($own)) {
 				'is_action' => true,
 			));
 	} else {
-		// request membership
-		$actions_content .= elgg_view('output/url', array(
-				'href' => $url . "action/groups/join?group_guid={$group->guid}",
-				'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequest'),
-				'class' => "elgg-button elgg-button-action",
-				'is_action' => true,
-			));
+		if (check_entity_relationship($own->guid, 'membership_request', $group->guid)) {
+			// request already made
+			$actions_content .= elgg_view('output/url', array(
+					'href' => "javascript:void(0);",
+					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequestmade'),
+					'class' => "elgg-button elgg-button-action",
+					'is_action' => true,
+				));
+		} else {
+			// request membership
+			$actions_content .= elgg_view('output/url', array(
+					'href' => $url . "action/groups/join?group_guid={$group->guid}",
+					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequest'),
+					'class' => "elgg-button elgg-button-action",
+					'is_action' => true,
+				));
+		}
 	}
 }
 if (!empty($actions_content)) {

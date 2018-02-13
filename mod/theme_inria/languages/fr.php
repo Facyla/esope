@@ -646,7 +646,7 @@ Afficher et commenter le nouveau sujet :
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil commentés par '%s' avec",
 	'thewire:noposts' => "Pas encore de message sur le Fil",
-	'item:object:thewire' => "Messages du Fil",
+	'item:object:thewire' => "Messages brefs (Fil)",
 	'thewire:by' => 'Message sur le Fil de %s',
 	'thewire:previous:help' => "Voir le message précédent",
 	'thewire:hide:help' => "Masquer le message précédent",
@@ -976,7 +976,7 @@ Voir et commenter ce lien web :
 	'groups:content_access_mode:membersonly' => "Restreint",
 	'theme_inria:access:overridenotice' => "Note : en accord avec la politique de confidentialité de cet espace, l'accès à ce contenu devrait être réservé à&nbsp;: %s",
 	'theme_inria:access:overridenotice:existingvalue' => "Note : en accord avec la politique de confidentialité de ce groupe, l'accès à ce contenu devrait être réservé à&nbsp;: %1\$s. Merci de choisir le niveau d'accès \"%1\$s\".",
-	'groups:content_access_mode:groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
+	'groups:error:invalid' => "Ce groupe n'existe pas ou vous n'y avez pas accès.",
 	
 	'theme_inria:group:pending_request' => "En attente",
 	
@@ -1140,7 +1140,7 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	
 	'theme_inria:submitandcreateagain' => "puis en créer un autre",
 	
-	'esope:groups:enablethewire' => "Activer les discussions (Fil)",
+	'esope:groups:enablethewire' => "Activer les messages brefs (Fil)",
 	'newsletter:group:tool_option' => "Activer les lettres d'information",
 	'groups:enablepages' => "Activer le wiki (pages collaboratives)",
 	'bookmarks:enablebookmarks' => "Activer les liens web",
@@ -1155,6 +1155,11 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'ldap_auth:error:alreadyexists' => "Un compte est déjà associé à votre adresse email %s : veuillez contacter l'administrateur du site à l'adresse <a href=\"mailto:aide-iris@inria.fr?subject=Concordance login LDAP&body=\">aide-iris@inria.fr</a> pour que votre identifiant de connexion corresponde à votre identifiant LDAP.",
 	
 	'theme_inria:blog:message:saved:draft' => "Brouillon enregistré",
+	'theme_inria:blog:draft' => "Cet article est un brouillon et n'est pas encore publié.",
+	
+	'theme_inria:site_notifications:delete_all' => "Supprimer toutes les notifications",
+	'theme_inria:site_notifications:delete_all:details' => "Ceci supprimera l'ensemble de vos notifications.",
+	'theme_inria:site_notifications:delete_all:confirm' => "Attention, ceci marquera l'ensemble de vos notifications comme lues : souhaitez-vous continuer ?",
 	
 	
 	

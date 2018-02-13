@@ -916,6 +916,38 @@ function theme_inria_route($hook, $type, $return, $params) {
 }
 
 
+// Use custom print CSS
+function theme_inria_page_head_hook($hook, $type, $return, $params) {
+	
+	$url = elgg_get_site_url();
+	// Replace print CSS
+	$return['links']['stylesheet-print'] = array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url . 'mod/theme_inria/print.css', 'media' => 'print');
+	
+	return $return;
+}
+
+
+
+// Permet l'accès à diverses pages en mode "walled garden"
+function theme_inria_public_pages($hook, $type, $return, $params) {
+	// Digest
+	$return[] = 'digest/.*';
+	// Icones générées
+	$return[] = 'default_icons/.*';
+	// Icones des groupes
+	$return[] = 'groupicon/.*';
+	// Icones des membres ?  a priori inutile
+
+	/* Les pages à rendre accessibles doivent correspondre à l'URL exacte, ou utiliser le wildcard .*
+	$return[] = 'page-publique';
+	$return[] = 'page-avec-params.*';
+	$return[] = 'rubrique-publique/.*';
+	*/
+	return $return;
+}
+
+
+
 
 
 

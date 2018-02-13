@@ -384,7 +384,7 @@ input:focus, textarea:focus { background: #FFFAF0; }
 .elgg-page .elgg-page-footer .elgg-inner { padding: 0; }
 .elgg-page-footer ul { margin: 0 auto; max-width: 500px; }
 .elgg-page-footer ul li { padding-left: 13px; margin: 26px 7px 10px 0; background: transparent url("<?php echo $url; ?>mod/esope/img/theme/puce-footer.png") left 7px no-repeat scroll; color: #fff; }
-.footer-logo-inria { margin: 12px 0; }
+.footer-logo-inria { margin: 0.5rem 0; }
 
 /* Buttons */
 .elgg-button.elgg-button-action { font-family: <?php echo $font2; ?>; border: 0; background: <?php echo $iris_blue; ?>; padding: 0.5em 1.5em; border-radius: 2em; font-size: 0.9375rem; font-weight: bold; font-family: "Inria Sans", sans-serif; text-shadow: none; /* transition-duration:0.2s; */ opacity:0.5; }
@@ -865,11 +865,17 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 .theme-sandbox-main { flex: 1; }
 
 #iris-footer { /* margin-top: auto; position: absolute; */ position: fixed; left:0; bottom: 0; background: <?php echo $iris_sidegrey; ?>;  <?php echo $width['navigation']; ?> }
-.footer-inria { padding:1rem 2rem; }
-#iris-footer li a { color:<?php echo $iris_textgrey; ?>; width: 100%; text-indent: 0rem; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.94rem; }
+.footer-inria { padding: 1rem 2rem; }
+.footer-inria li a { color:<?php echo $iris_textgrey; ?>; width: 100%; text-indent: 0rem; display: inline-block; padding: 0.2em 0; margin: 0.1em 0; font-size: 0.94rem; }
 #iris-footer .language_selector { display: inline-block; position: initial; width:100%; }
 #iris-footer .language_selector a { display: inline; }
 #iris-footer li a.inria-intranet { color:#95C11F; }
+
+#iris-footer-main { background: <?php echo $iris_sidegrey; ?>; min-height: 5rem;}
+#iris-footer-main .footer-inria { padding: 2rem 2rem; }
+#iris-footer-main li { display: inline-block; margin-right: 2rem; }
+#iris-footer-main li a { font-size: 1rem; }
+
 
 
 /* Accueil */
@@ -1984,7 +1990,7 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	
 	/* Footer */
 	#iris-footer { position: initial; bottom: 0; left: 0; right: 0; margin: 1rem -1rem -1rem -1rem; border-top: 1px solid rgba(255,255,255,0.5); }
-	.footer-logo-inria { margin: 12px 0; }
+	.footer-logo-inria { margin: 0.5rem 0; }
 	#iris-footer li a { font-size: 1.2rem; }
 	
 	/* Main layout */

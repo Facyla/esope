@@ -495,6 +495,9 @@ function esope_page_head_hook($hook, $type, $return, $params) {
 	unset($return['links']['icon-128']);
 	unset($return['links']['icon-vector']);
 	
+	// Set print CSS
+	$return['links']['stylesheet-print'] = array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url . 'mod/esope/print.css', 'media' => 'print');
+	
 	return $return;
 }
 
