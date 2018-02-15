@@ -20,7 +20,6 @@ $object = $item->getObjectEntity();
 $is_digest = false;
 if (elgg_in_context('digest') || elgg_in_context('cron')) { $is_digest = true; }
 
-
 //if ((elgg_in_context('widgets') || elgg_in_context('activity')) && !elgg_instanceof($object, 'object', 'file')) {
 if ( (elgg_instanceof($object, 'object') || elgg_instanceof($object, 'site')) 
 	&& !elgg_instanceof($object, 'object', 'file') 
@@ -33,6 +32,7 @@ if ( (elgg_instanceof($object, 'object') || elgg_instanceof($object, 'site'))
 	$style = 'max-width:40px; max-height:40px;';
 }
 
+
 // These cases generate an image
 if (elgg_instanceof($object, 'user')) {
 	$profile_type = esope_get_user_profile_type($object);
@@ -40,14 +40,14 @@ if (elgg_instanceof($object, 'user')) {
 	$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="' . $object->getType() . ' ' . $object->getSubtype() . '" style="' . $style . '" /></a>';
 	
 } else if (elgg_instanceof($object, 'group')) {
-	// Replce group icon by user icon in river digest
+	// Replace group icon by user icon in river digest
 	if (!$is_digest) {
 		$icon = '<img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="' . $object->getType() . ' ' . $object->getSubtype() . '" style="' . $style . '" />';
 	} else {
 		if (elgg_instanceof($subject, 'user')) {
 			$profile_type = esope_get_user_profile_type($object);
 			if (empty($profile_type)) { $profile_type = 'external'; }
-			$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="' . $object->getType() . ' ' . $object->getSubtype() . '" style="' . $style . '" /></a>';
+			$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->getType() . ' ' . $subject->getSubtype() . '" style="' . $style . '" /></a>';
 		}
 	}
 
