@@ -154,5 +154,11 @@ if ($vars['filter'] == 'search') {
 		</div>
 	</div>
 	
-</div>
+<?php
+if ($vars['filter'] == 'search') {
+	
+} else {
+	echo '</div>';
+}
+
 

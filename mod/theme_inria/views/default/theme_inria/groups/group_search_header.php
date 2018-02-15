@@ -1,6 +1,8 @@
 <?php
 $group = elgg_extract('entity', $vars);
+// Header is always main group
 $main_group = theme_inria_get_main_group($group);
+$main_group_name = elgg_get_excerpt($main_group->name, 38); // -12 car ajout "Search - " ou "Recherche - "
 
 $q = get_input('q');
 
@@ -50,7 +52,7 @@ if (!empty($group->banner)) {
 		if (!empty($group->community)) { echo elgg_echo('community') . ' ' . $group->community; }
 		echo '</div>';
 		*/
-		echo '<h2 class="float">' . elgg_echo('theme_inria:search') . ' - ' . $group->name . '</h2>';
+		echo '<h2 class="float">' . elgg_echo('theme_inria:search') . ' - ' . $main_group_name . '</h2>';
 		if (!empty($q)) { echo '<span class="iris-search-q-results">' . elgg_echo('theme_inria:search:title', array($q)) . '</span>'; }
 		echo '<div class="clearfloat"></div>';
 		
