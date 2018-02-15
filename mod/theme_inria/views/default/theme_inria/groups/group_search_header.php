@@ -142,11 +142,13 @@ if (!empty($group->banner)) {
 			</span>';
 		}
 		
-		// Group search
+		// Group search - doublon sur cette page...
+		/*
 		if (elgg_is_active_plugin('search')) {
 			//echo '<a href="' . $url . 'groups/search/' . $group->guid . '" class="search float-alt"><i class="fa fa-search"></i></a>';
 			echo '<a href="javascript:void(0);" class="search float-alt"><i class="fa fa-search"></i></a>';
 		}
+		*/
 		
 		// New subgroup (of level 1)
 		if (elgg_is_active_plugin('au_subgroups') && ($main_group->subgroups_enable == 'yes')) {
