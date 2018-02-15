@@ -19,7 +19,7 @@ blockquote[title]:after { content: " (" attr(cite) ") "; }
 
 
 /* Masquage des éléments d'interface */
-.elgg-page > header, #transverse, footer { display: none; }
+.elgg-page > header, #transverse, footer, #iris-footer-main { display: none; }
 /* Masquage des formulaires */
 .elgg-form, .elgg-form-comments-add, .elgg-form-discussion-reply-save { display: none; }
 #feedbackWrapper, #groupchat-grouplink, #groupchat-sitelink { display: none; }

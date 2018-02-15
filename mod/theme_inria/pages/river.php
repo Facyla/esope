@@ -3,6 +3,8 @@
  * Main activity stream list page
  */
 
+gatekeeper();
+
 $user = elgg_get_logged_in_user_entity();
 
 $options = array();
