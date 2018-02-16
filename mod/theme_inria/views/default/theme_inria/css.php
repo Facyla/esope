@@ -1352,7 +1352,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 .iris-group-header-alt { width:100%; background: #454C5F; height:15rem; position: relative; /* margin-bottom: 3.5rem; */ }
 .iris-group-header-alt h2 { color: white; margin-left: 3rem; }
 .iris-group-image { width:13.125rem; height:13.125rem; position: relative; top: 3.5rem; left: 3rem; background:#384257; z-index:3; color: white; box-shadow: 0 0 4px 0 rgba(189,189,189,0.5); border-radius: 4px; }
-.iris-group-title { position: absolute; top: 4.5rem; left: 20rem; right: 3rem; color: white; }
+.iris-group-title { position: absolute; top: 3.5rem; left: 20rem; right: 3rem; color: white; }
 .iris-group-title a { color: white; }
 #iris-body .iris-group-title h2 { font-size: 2.5rem; line-height: 2.75rem; margin-bottom: 0rem; padding:0; color: white; }
 .iris-group-subtitle { margin: 0.9rem 0 1.5rem 0; font-size:1.0625rem; font-weight:bold; }
