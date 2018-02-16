@@ -1916,6 +1916,10 @@ elgg-main => 0% marche partout, 0 et auto selon les endroits
 	.elgg-page .elgg-layout .sidebar-alt, 
 	.elgg-page .elgg-layout .elgg-sidebar { display: block; <?php echo $width['sidebar']; ?>; padding: 0; }
 	.menu-sidebar-toggle { display: none; }
+	
+	.iris-group-title { position: absolute; top: 2.5rem; left: 20rem; right: 2rem; color: white; }
+	#iris-body .iris-group-title h2 { font-size: 2.5rem; line-height: 2.75rem; }
+
 }
 
 
