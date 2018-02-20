@@ -42,7 +42,10 @@ if ($groups) {
 				"pagination" => false,
 			);
 			
+			// Note : we need direct access so images can be generated and inlined into email (because of walled garden)
+			// but this is not working for these images for some reason ?
 			$icon = '<img src="' . $group->getIconURL('tiny') . '" />';
+			//$icon = '<img src="' . elgg_get_site_url() . 'mod/groups/icon.php?group_guid=' . $group->guid . '&size=tiny" />';
 			$content .= '<h4 class="group-title">' . elgg_view("output/url", array("text" => $icon . $group->name, "href" => $group->getURL())) . '</h4>';
 			$content .= elgg_view("page/components/list", $options);
 			$content .= '<br /><br />';
