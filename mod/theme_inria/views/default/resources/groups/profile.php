@@ -4,7 +4,7 @@
 $guid = elgg_extract('group_guid', $vars);
 $group = get_entity($guid);
 if (!elgg_instanceof($group, 'group')) {
-	register_error('groups:error:invalid');
+	register_error(elgg_echo('groups:error:invalid'));
 	forward();
 }
 elgg_set_page_owner_guid($guid);
