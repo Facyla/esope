@@ -936,7 +936,9 @@ function theme_inria_public_pages($hook, $type, $return, $params) {
 	$return[] = 'default_icons/.*';
 	// Icones des groupes
 	$return[] = 'groupicon/.*';
-	// Icones des membres ?  a priori inutile
+	// Icones des membres ?  a priori inutile car accès URL direct au fichier PHP
+	// Pièces jointes et téléchargements directs
+	$return[] = 'file/download/.*';
 
 	/* Les pages à rendre accessibles doivent correspondre à l'URL exacte, ou utiliser le wildcard .*
 	$return[] = 'page-publique';

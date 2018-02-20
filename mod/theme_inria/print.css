@@ -44,8 +44,8 @@ blockquote[title]:after { content: " (" attr(cite) ") "; }
 /* .elgg-output a:after { content: " (" attr(href) ") "; } */
 
 /* Main layout : no sidebar */
-.elgg-sidebar { display: none !important; }
-.elgg-main.elgg-body { width: 100% !important; padding:0 !important; }
+.elgg-sidebar, .menu-sidebar-toggle { display: none !important; }
+.elgg-main.elgg-body { width: 100% !important; padding:0 !important; overflow: visible; position: absolute; }
 
 /* Various menus and actions (some are kept) */
 .elgg-menu-item-edit, .elgg-menu-item-delete, .elgg-menu-item-history, 
