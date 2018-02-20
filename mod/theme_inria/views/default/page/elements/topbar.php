@@ -192,9 +192,12 @@ if (elgg_is_logged_in()) {
 	// @TODO : autres indicateurs d'actions admin ?
 }
 
+// Note : déjà dans le footer latéral
+/*
 if (elgg_is_active_plugin('language_selector')) {
 	$language_selector = elgg_view('language_selector/default');
 }
+*/
 ?>
 
 <div class="iris-logo">
