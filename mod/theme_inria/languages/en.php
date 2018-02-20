@@ -1146,6 +1146,8 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:site_notifications:delete_all:details' => "This will remove all your site notifications.",
 	'theme_inria:site_notifications:delete_all:confirm' => "Warning, this will mark all your site notifications as read. Do you wish to continue?",
 	
+	'theme_inria:prevent_notifications:label' => "Send a notification",
+	
 	
 );
 

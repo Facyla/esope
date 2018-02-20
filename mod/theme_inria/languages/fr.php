@@ -607,7 +607,7 @@ Voici l'adresse du nouveau compte créé : %5\$s
 	'blog:moreblogs' => "Plus de sujets",
 	'blog:numbertodisplay' => "Nombre de sujets à afficher",
 	'blog:noblogs' => "Aucun sujet",
-	'blog:notification' => "%s a écrit un nouveau sujet&nbsp; :
+	'blog:notification' => "%s a écrit un nouveau sujet&nbsp;:
 %s
 
 %s
@@ -615,6 +615,16 @@ Voici l'adresse du nouveau compte créé : %5\$s
 Afficher et commenter le nouveau sujet :
 %s
 ",
+	'blog:notify:summary' => 'Nouveau sujet : %s',
+	'blog:notify:subject' => 'Nouveau sujet : %s',
+	'blog:notify:body' => '%s a écrit un nouveau sujet&nbsp;:
+	%s
+
+%s
+
+Afficher et commenter le nouveau sujet :
+%s
+',
 	
 	'theme_inria:postbymail:nousersettings' => "Réglage désactivé - Seules les adresses Inria sont autorisées à publier par email sur le site.",
 	
@@ -1161,6 +1171,7 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:site_notifications:delete_all:details' => "Ceci supprimera l'ensemble de vos notifications.",
 	'theme_inria:site_notifications:delete_all:confirm' => "Attention, ceci marquera l'ensemble de vos notifications comme lues : souhaitez-vous continuer ?",
 	
+	'theme_inria:prevent_notifications:label' => "Envoyer une notification",
 	
 	
 );
