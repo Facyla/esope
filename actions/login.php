@@ -36,7 +36,7 @@ if (strpos($username, '@') !== false && ($users = get_user_by_email($username)))
 	$username = $users[0]->username;
 }
 
-$result = true;//elgg_authenticate($username, $password);
+$result = elgg_authenticate($username, $password);
 if ($result !== true) {
 	register_error($result);
 	forward(REFERER);
