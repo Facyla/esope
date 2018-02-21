@@ -30,37 +30,27 @@ if ( (elgg_instanceof($object, 'object') || elgg_instanceof($object, 'site'))
 }
 
 
-// Special rendering and images URLs for digest
-// Note : digest is detected via cron and digest context (both for testing and real sending)
+/* Special rendering and images URLs for digest
+ * Iris v2 : always use images for digest, so it can display correctly in emails
+ * Use always user image as river icon
+ * Note : digest is detected via cron and digest context (both for testing and real sending)
+ */
 $is_digest = false;
 if (elgg_in_context('digest') || elgg_in_context('cron')) { $is_digest = true; }
+
 if ($is_digest) {
-	// These cases generate an image
 	if (elgg_instanceof($object, 'user')) {
 		$profile_type = esope_get_user_profile_type($object);
 		if (empty($profile_type)) { $profile_type = 'external'; }
 		$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="' . $object->getType() . ' ' . $object->getSubtype() . '" style="' . $style . '" /></a>';
 	
-	} else if (elgg_instanceof($object, 'group')) {
-		// Replace group icon by user icon in river digest
-		if (elgg_instanceof($subject, 'user')) {
-			$profile_type = esope_get_user_profile_type($object);
-			if (empty($profile_type)) { $profile_type = 'external'; }
-			$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->getType() . ' ' . $subject->getSubtype() . '" style="' . $style . '" /></a>';
-		}
-	
-	} else if (elgg_instanceof($object, 'object', 'file')) {
-		$icon = '<img src="' . $object->getIconUrl(array('size' => $size)) . '" alt="object ' . $object->getSubtype() . '" style="' . $style . '" />';
-	
+	} else if (elgg_instanceof($subject, 'user')) {
+		$profile_type = esope_get_user_profile_type($subject);
+		if (empty($profile_type)) { $profile_type = 'external'; }
+		$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->username . ' ' . $subject->name . '" style="' . $style . '" /></a>';
 	} else {
-		// Iris v2 : always use images for digest, so it can display correctly in emails
-		if (elgg_instanceof($subject, 'user')) {
-			$profile_type = esope_get_user_profile_type($subject);
-			if (empty($profile_type)) { $profile_type = 'external'; }
-			$icon = '<span class="elgg-avatar elgg-avatar-' . $size . ' elgg-profile-type-' . $profile_type . '"><img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->username . ' ' . $subject->name . '" style="' . $style . '" /></a>';
-		} else {
-			//$icon = '<img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->getType() . ' ' . $subject->getSubtype() . '" style="' . $style . '" />';
-		}
+		// No icon
+		//$icon = '<img src="' . $subject->getIconUrl(array('size' => $size)) . '" alt="' . $subject->getType() . ' ' . $subject->getSubtype() . '" style="' . $style . '" />';
 	}
 	
 } else {
