@@ -2,4 +2,9 @@
 /elgg-config/settings.php
 /.htaccess
 /composer-update.sh
+/.gitignore
+
+# Non-public devs
+/mod/theme_ecogestion
+/mod/dossiers_inscriptions
 
