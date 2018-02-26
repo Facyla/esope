@@ -45,13 +45,14 @@ elgg_make_sticky_form('useradd');
 
 // Get variables
 // Personal fields
-$emails = get_input('email');
+$emails = (array)get_input('email');
 if (!is_array($emails)) { $emails = array($emails); }
 //$username = get_input('username');
 //$password = get_input('password');
-$name = get_input('name');
-$organisations = get_input('organisation');
-$briefdescription = get_input('briefdescription'); // fonction
+$name = (array)get_input('name');
+if (!is_array($name)) { $name = array($name); }
+$organisations = (array)get_input('organisation');
+$briefdescription = (array)get_input('briefdescription'); // fonction
 // Common fields
 $reason = get_input('reason');
 $message = get_input('message');

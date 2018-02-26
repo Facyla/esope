@@ -934,6 +934,11 @@ function theme_inria_public_pages($hook, $type, $return, $params) {
 	$return[] = 'digest/.*';
 	// Icones générées
 	$return[] = 'default_icons/.*';
+	// URL utilisées par intranet
+	$return[] = 'inria/userimage.*';
+	$return[] = 'inria/usergroups.*';
+	$return[] = 'inria/userprofile.*';
+	$return[] = 'inria/groupicon.*';
 	// Icones des groupes
 	$return[] = 'groupicon/.*';
 	// Icones des membres ?  a priori inutile car accès URL direct au fichier PHP
