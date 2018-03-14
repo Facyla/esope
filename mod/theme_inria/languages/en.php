@@ -1005,6 +1005,8 @@ View and comment on the bookmark:
 	'theme_inria:workspace:invite_parent_members:success' => "All parent group members have been successfully invited into the workspace.",
 	'theme_inria:workspace:register_parent_members:success' => "All parent group members have been successfully registered into the workspace.",
 	'workspace:groups:name' => "Workspace title",
+	'groups:workspace_name' => "Main workspace title",
+	'groups:workspace_name:details' => "Replaces \"Workspace by a custom title.",
 	'workspace:groups:tags' => 'tags',
 	'workspace:groups:interests' => 'Tags',
 	'workspace:groups:members' => "View all members",

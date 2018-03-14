@@ -795,6 +795,9 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 			$group->{$meta_name.'_name'} = htmlspecialchars($_FILES[$meta_name]['name'], ENT_QUOTES, 'UTF-8');
 		}
 	}
+	
+	// Save workspace name
+	$group->workspace_name = get_input('workspace_name');
 
 	return true;
 }

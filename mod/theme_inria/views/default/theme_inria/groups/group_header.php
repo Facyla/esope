@@ -157,7 +157,9 @@ if (!empty($main_group->banner)) {
 			$tab_class = '';
 			if (($main_group->guid == $group->guid) && (current_page_url() != $group->getURL()) && !elgg_in_context('group_edit') && !elgg_in_context('group_members') && !elgg_in_context('group_invites')) { $tab_class .= " elgg-state-selected"; }
 			//echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab' . $tab_class . '" title="' . $main_group->name . '">' . elgg_get_excerpt($main_group->name, $max_title) . '</a>';
-			echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab' . $tab_class . '" title="' . elgg_echo('workspace:title:main', array($main_group->name)) . '">' . elgg_echo('theme_inria:workspace:main') . '</a>';
+			$workspace_name = $main_group->workspace_name; // Custom title
+			if (empty($workspace_name)) { $workspace_name = elgg_echo('theme_inria:workspace:main'); }
+			echo '<a href="' . $url . 'groups/workspace/' . $main_group->guid . '" class="tab' . $tab_class . '" title="' . elgg_echo('workspace:title:main', array($main_group->name)) . '">' . $workspace_name . '</a>';
 		
 			// Workspaces
 			/*

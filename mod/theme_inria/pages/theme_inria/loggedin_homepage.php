@@ -64,6 +64,7 @@ $site_activity .= '</div>';
 
 
 $groups = '';
+$sizes = elgg_get_config('icon_sizes');
 $groups .= '<h2>' . elgg_echo('theme_inria:topbar:groups') . '<a href="' . $url . 'groups/all" class="float-alt view-all">&#9654; tout voir</a></h2>';
 $groups .= '<div class="iris-box">';
 $groups .= elgg_view('theme_inria/my_groups');

@@ -75,6 +75,19 @@ echo '<div class="groups-edit-field">';
 	echo '</div>';
 echo '</div>';
 
+// Workspace title (main group only)
+if (!$parent_group) {
+	echo '<div class="groups-edit-field">';
+		echo '<div class="groups-edit-label">';
+			echo "<label>" . elgg_echo("groups:workspace_name") . "</label>";
+		echo '</div>';
+		echo '<div class="groups-edit-input">';
+				echo elgg_view("input/text", array('name' => 'workspace_name', 'value' => elgg_extract('workspace_name', $vars), 'required' => true, 'placeholder' => elgg_echo('theme_inria:workspace:main')));
+				echo '<br /><em>' . elgg_echo('groups:workspace_name:details') . '</em>';
+		echo '</div>';
+	echo '</div>';
+}
+
 // retrieve group fields
 $group_fields = profile_manager_get_categorized_group_fields();
 

@@ -1014,6 +1014,8 @@ Voir et commenter ce lien web :
 	'theme_inria:workspace:invite_parent_members:success' => "Tous les membres du groupe parent ont bien été invités dans l'espace de travail.",
 	'theme_inria:workspace:register_parent_members:success' => "Tous les membres du groupe parent ont bien été inscrits dans l'espace de travail.",
 	'workspace:groups:name' => "Nom de l'espace de travail",
+	'groups:workspace_name' => "Nom de l'espace de travail principal",
+	'groups:workspace_name:details' => "Remplace \"Espace de travail\" par un titre personnalisé.",
 	'workspace:groups:tags' => 'mots clés',
 	'workspace:groups:interests' => 'Mots-clés',
 	'workspace:groups:members' => "Voir les membres",
