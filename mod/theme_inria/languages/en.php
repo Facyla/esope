@@ -864,6 +864,8 @@ View and comment on the bookmark:
 	
 	'theme_inria:workspace' => "Workspace",
 	'theme_inria:workspace:main' => "Workspace",
+	'groups:operators_edit_only' => "Publication is reserved to group operators",
+	'groups:operators_edit_only:details' => "If set to Yes, only group operators will be able to publish and comment within the group. The other members will be able to view them, but can publish and comment only in group workspaces.",
 	'workspace:title' => "Workspace&nbsp;: %s",
 	'workspace:title:main' => "Workspace&nbsp;: %s",
 	'workspace:title:current' => "Current workspace&nbsp;: %s",

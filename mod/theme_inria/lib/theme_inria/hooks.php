@@ -799,6 +799,9 @@ function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
 	// Save workspace name
 	$group->workspace_name = get_input('workspace_name');
 
+	// Save operator-only main group option
+	$group->workspace_name = get_input('operators_edit_only');
+
 	return true;
 }
 

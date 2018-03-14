@@ -865,6 +865,8 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:workspace' => "Espace de travail",
 	'theme_inria:workspace:main' => "Espace de travail",
+	'groups:operators_edit_only' => "Publication limitée aux responsables",
+	'groups:operators_edit_only:details' => "Si Oui, seuls les responsables du groupe pourront publier et commenter les publications du groupe. Les autres membres pourront les consulter mais ne pourront publier et réagir que dans les espaces de travail.",
 	'workspace:title' => "Espace de travail&nbsp; : %s",
 	'workspace:title:main' => "Espace de travail&nbsp; : %s",
 	'workspace:title:current' => "Espace de travail actuel&nbsp; : %s",

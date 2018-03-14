@@ -23,7 +23,12 @@ $description_limit = elgg_get_plugin_setting("group_limit_description", "profile
 
 if (!elgg_instanceof($group, 'group')) {
 	echo '<h3>' . elgg_echo($translation_prefix.'groups:about') . '</h3>';
+} else {
+	$workspace_name = $group->workspace_name;
+	$operators_edit_only = $group->operators_edit_only;
 }
+
+
 
 if (!$parent_group) {
 	echo '<div class="groups-edit-field">
@@ -82,11 +87,27 @@ if (!$parent_group) {
 			echo "<label>" . elgg_echo("groups:workspace_name") . "</label>";
 		echo '</div>';
 		echo '<div class="groups-edit-input">';
-				echo elgg_view("input/text", array('name' => 'workspace_name', 'value' => elgg_extract('workspace_name', $vars), 'required' => true, 'placeholder' => elgg_echo('theme_inria:workspace:main')));
+				echo elgg_view("input/text", array('name' => 'workspace_name', 'value' => $workspace_name, 'required' => true, 'placeholder' => elgg_echo('theme_inria:workspace:main')));
 				echo '<br /><em>' . elgg_echo('groups:workspace_name:details') . '</em>';
 		echo '</div>';
 	echo '</div>';
 }
+
+
+// Option so operators only can publish in group (main group only)
+if (!$parent_group) {
+	echo '<div class="groups-edit-field">';
+		echo '<div class="groups-edit-label">';
+			echo "<label>" . elgg_echo("groups:operators_edit_only") . "</label>";
+		echo '</div>';
+		echo '<div class="groups-edit-input">';
+				echo elgg_view("input/select", array('name' => 'operators_edit_only', 'value' => $operators_edit_only, 'options_values' => ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')]));
+				echo '<br /><em>' . elgg_echo('groups:operators_edit_only:details') . '</em>';
+		echo '</div>';
+	echo '</div>';
+}
+
+
 
 // retrieve group fields
 $group_fields = profile_manager_get_categorized_group_fields();
