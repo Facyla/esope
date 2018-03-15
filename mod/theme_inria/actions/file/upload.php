@@ -44,6 +44,8 @@ if ($hide_entity != 'yes') { $hide_entity = ''; }
 if ($container_guid == 0) {
 	$container_guid = elgg_get_logged_in_user_guid();
 }
+// @TODO else check if can write to container ?
+
 
 $backtoform = get_input('backtoform');
 

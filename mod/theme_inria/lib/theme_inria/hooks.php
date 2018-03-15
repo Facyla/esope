@@ -196,29 +196,30 @@ function theme_inria_river_menu_setup($hook, $type, $items, $vars) {
 		
 		// Inline comment form (toggle link registered via river menu hook)
 		//if (elgg_instanceof($top_object, 'object') && ($top_object->guid != $object->guid) && $top_object->canComment()) {
-		if ($top_object->canComment()) {
-			$items[] = \ElggMenuItem::factory(array(
-					'name' => 'comment',
-					'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
-					'text' => elgg_view_icon('speech-bubble'),
-					'title' => elgg_echo('comment:this'),
-					'rel' => 'toggle',
-					'priority' => 50,
-				));
-		//} else if (elgg_instanceof($object, 'object', 'thewire') || elgg_instanceof($top_object, 'object', 'thewire')) {
-		} else if (elgg_instanceof($top_object, 'object', 'thewire')) {
-			// Comment form hould be displayed if member of (or can write in) the container group, or not in a group at all
-			//$container = $top_object->getContainerEntity();
-			if ((elgg_instanceof($container, 'group') && ($container->isMember() || $container->canEdit())) || !elgg_instanceof($container, 'group')) {
-				// Thewire reply form toggle link
+		if ((!elgg_instanceof($container, 'group') || $container->canWriteToContainer())) {
+			if ($top_object->canComment()) {
 				$items[] = \ElggMenuItem::factory(array(
 						'name' => 'comment',
 						'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
 						'text' => elgg_view_icon('speech-bubble'),
 						'title' => elgg_echo('comment:this'),
 						'rel' => 'toggle',
-						'priority' => 10,
+						'priority' => 50,
 					));
+			//} else if (elgg_instanceof($object, 'object', 'thewire') || elgg_instanceof($top_object, 'object', 'thewire')) {
+			} else if (elgg_instanceof($top_object, 'object', 'thewire')) {
+				// Comment form hould be displayed if member of (or can write in) the container group, or not in a group at all
+			//if (!elgg_instanceof($container, 'group') || $container->isMember() || $container->canEdit())) {
+					// Thewire reply form toggle link
+					$items[] = \ElggMenuItem::factory(array(
+							'name' => 'comment',
+							'href' => "#comments-add-{$object->getGUID()}-{$top_object->guid}",
+							'text' => elgg_view_icon('speech-bubble'),
+							'title' => elgg_echo('comment:this'),
+							'rel' => 'toggle',
+							'priority' => 10,
+						));
+				//}
 			}
 		}
 		
@@ -960,6 +961,63 @@ function theme_inria_public_pages($hook, $type, $return, $params) {
 }
 
 
+
+/** Blocks regular member edit right if defined so in groups settings
+ * Removes group_acl from write access if group setting is set to operators_edit_only
+ * Note : Overrides (and does not replace !) the groups plugin hook : easier for updating
+ * Has to run after groups plugin hook (mini priority 501)
+ */
+function theme_inria_write_acl_plugin_hook($hook, $entity_type, $returnvalue, $params) {
+	$user_guid = sanitise_int(elgg_extract('user_id', $params), false);
+error_log("Group write access for $user_guid");
+	$user = get_user($user_guid);
+	if (empty($user)) { return $returnvalue; }
+
+	$page_owner = elgg_get_page_owner_entity();
+	if (!($page_owner instanceof ElggGroup)) { return $returnvalue; }
+
+error_log(" - group $page_owner->guid / operators only: $page_owner->operators_edit_only");
+	// Is setting enabled ?
+	if ($page_owner->operators_edit_only == 'yes') {
+		// Do not block owner or operators
+		if (!$page_owner->canEdit($user_guid)) {
+			unset($returnvalue[$page_owner->group_acl]);
+error_log(" -> should be blocked");
+		}
+	}
+
+	return $returnvalue;
+}
+
+
+/**
+ * Prevent group members from writing to the group container if restricted to operators
+ *
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param bool   $result The value of the hook
+ * @param array  $params Parameters related to the hook
+ * @return bool
+ * @access private
+ */
+function theme_inria_groups_container_override($hook, $type, $result, $params) {
+//error_log("Checking permissions for user {$params['user']->guid} in group {$params['container']->guid}");
+	if ($result !== false) {
+		$container = $params['container'];
+		$user = $params['user'];
+		if (elgg_instanceof($container, 'group') && $user) {
+			if ($container->operators_edit_only == 'yes') {
+//error_log(" -> restricted permissions enabled");
+				// Do not block owner or operators
+				if (!$container->canEdit($user_guid)) {
+//error_log(" -> not an operator : should be blocked");
+					return false;
+				}
+			}
+		}
+	}
+	return $result;
+}
 
 
 

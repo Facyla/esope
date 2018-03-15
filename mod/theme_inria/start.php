@@ -318,12 +318,14 @@ function theme_inria_init(){
 	elgg_unregister_plugin_hook_handler('entity:icon:url', 'user', 'default_icons_user_hook');
 	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'theme_inria_user_icon_hook', 1000);
 	
-	// Head
+	// HTML head
 	elgg_register_plugin_hook_handler('head', 'page','theme_inria_page_head_hook');
 	
 	// Intercept membership requests so we can notify the operators
 	elgg_register_event_handler('create','relationship','theme_inria_create_relationship_event');
 	
+	// Block adding content to main group if defined so in group settings
+	elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'theme_inria_groups_container_override', 502); // Must run after core hook
 	
 	// Public pages - les pages auxquelles on peut accéder hors connexion
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'theme_inria_public_pages');

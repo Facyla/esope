@@ -150,7 +150,8 @@ elgg_pop_context();
 // Compose page content
 
 // Nouvelle publication
-if ($group->isMember() || $group->canEdit()) {
+//if ($group->isMember() || $group->canEdit()) {
+if ($group->canWriteToContainer()) {
 	switch($subtype) {
 		case 'feedback':
 			// No new feedback in that way

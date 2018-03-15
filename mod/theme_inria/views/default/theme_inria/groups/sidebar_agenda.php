@@ -13,13 +13,15 @@ if ($group->event_calendar_enable == 'yes') {
 		'text' => elgg_echo('workspace:event_calendar') . ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
-	$new_link = elgg_view('output/url', array(
-		'href' => "event_calendar/add/$group->guid",
-		'text' => '+', 
-		'title' => elgg_echo('event_calendar:add'),
-		'class' => "add-plus float-alt",
-		'is_trusted' => true,
-	));
+	if ($group->canWriteToContainer()) {
+		$new_link = elgg_view('output/url', array(
+			'href' => "event_calendar/add/$group->guid",
+			'text' => '+', 
+			'title' => elgg_echo('event_calendar:add'),
+			'class' => "add-plus float-alt",
+			'is_trusted' => true,
+		));
+	}
 
 	$options = array('type' => 'object', 'subtype'=>'poll', 'limit' => 4, 'container_guid' => elgg_get_page_owner_guid());
 	$content = '';

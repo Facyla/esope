@@ -29,13 +29,15 @@ if (poll_activated_for_group($group)) {
 		'text' => elgg_echo('theme_inria:workspace:poll') . ' &nbsp; <i class="fa fa-angle-right"></i>',
 		'is_trusted' => true,
 	));
-	$new_link = elgg_view('output/url', array(
-		'href' => "poll/add/$group->guid",
-		'text' => '+', 
-		'title' => elgg_echo('poll:addpost'),
-		'class' => "add-plus float-alt",
-		'is_trusted' => true,
-	));
+	if ($group->canWriteToContainer()) {
+		$new_link = elgg_view('output/url', array(
+			'href' => "poll/add/$group->guid",
+			'text' => '+', 
+			'title' => elgg_echo('poll:addpost'),
+			'class' => "add-plus float-alt",
+			'is_trusted' => true,
+		));
+	}
 	
 	
 	echo '<div class="iris-sidebar-content">';

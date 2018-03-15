@@ -57,7 +57,8 @@ $actions .= '<div class="iris-object-actions">';
 	// left
 	$actions .= '<ul class="elgg-menu-entity float">' . $access_info . $container_info . $metadata_alt . '</ul>';
 	
-	// right
+	
+	// right side
 	// Add likes counter and actions
 	$actions .= '<ul class="elgg-menu-entity-alt float-alt">';
 	
@@ -80,8 +81,8 @@ $actions .= '<div class="iris-object-actions">';
 			// Wire : reply form
 			if (elgg_instanceof($entity, 'object', 'thewire')) {
 				$wire_container = $entity->getContainerEntity();
-				// Can reply only if member of the group, or not in a group
-				if (!elgg_instanceof($wire_container, 'group') || (elgg_instanceof($wire_container, 'group') && ($wire_container->isMember() || $wire_container->canEdit()))) {
+				// Can reply only if member of the group and has access, or not in a group
+				if (!elgg_instanceof($wire_container, 'group') || (elgg_instanceof($wire_container, 'group') && ($wire_container->canWriteToContainer()))) {
 					$actions .= '<li>' . elgg_view('output/url', array(
 								'href' => "javascript:void(0);", 'onClick' => "$('#thewire-reply-{$entity->guid}').slideToggle('slow');",
 								'text' => '<i class="fa fa-comment"></i>&nbsp;' . elgg_echo('reply'),
@@ -99,7 +100,7 @@ $actions .= '<div class="iris-object-actions">';
 				}
 				
 			} else if (elgg_instanceof($entity, 'object', 'groupforumtopic')) {
-				if ($entity->status != 'closed') {
+				if (($entity->status != 'closed') && $container->canWriteToContainer()) {
 					$actions .= '<li>' . elgg_view('output/url', array(
 								'href' => "javascript:void(0);", 'onClick' => "$('#discussion-reply-{$entity->guid}').slideToggle('slow');",
 								'title' => elgg_echo('theme_inria:object:comment'),
@@ -128,8 +129,28 @@ $actions .= '<div class="iris-object-actions">';
 								'text' => '<i class="fa fa-comments"></i>&nbsp;' . elgg_echo('theme_inria:comment_on:num', array($comments, $main_entity_title)),
 						)) . '</li>';
 				} else {
-					if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
-					// Generic inline add comment form
+					if (!in_array($entity->comments_on, array('Off', 'no')) && (!elgg_instanceof($container, 'group') || $container->canWriteToContainer())) {
+						// Generic inline add comment form
+						$actions .= '<li>' . elgg_view('output/url', array(
+									'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
+									'title' => elgg_echo('theme_inria:object:comment'),
+									'text' => '<i class="fa fa-comment"></i>',
+							)) . '</li>';
+						$actions_after .= elgg_view_form('comment/save', 
+								array('id' => "comments-add-{$entity->guid}", 'class' => 'hidden'), 
+								array('entity' => $top_object, 'inline' => true)
+							);
+						// Edit form (link is added by registered entity menu)
+						$actions_after .= elgg_view_form('comment/save', 
+								array('id' => "comments-edit-{$entity->guid}", 'class' => 'hidden'), 
+								array('entity' => $top_object, 'comment' => $entity, 'inline' => true)
+							);
+					}
+				}
+					
+			} else {
+				if (!in_array($entity->comments_on, array('Off', 'no')) && (!elgg_instanceof($container, 'group') || $container->canWriteToContainer())) {
+					// Generic inline comment form
 					$actions .= '<li>' . elgg_view('output/url', array(
 								'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
 								'title' => elgg_echo('theme_inria:object:comment'),
@@ -137,27 +158,9 @@ $actions .= '<div class="iris-object-actions">';
 						)) . '</li>';
 					$actions_after .= elgg_view_form('comment/save', 
 							array('id' => "comments-add-{$entity->guid}", 'class' => 'hidden'), 
-							array('entity' => $top_object, 'inline' => true)
-						);
-					// Edit form (link is added by registered entity menu)
-					$actions_after .= elgg_view_form('comment/save', 
-							array('id' => "comments-edit-{$entity->guid}", 'class' => 'hidden'), 
-							array('entity' => $top_object, 'comment' => $entity, 'inline' => true)
+							array('entity' => $entity, 'inline' => true)
 						);
 				}
-					
-			} else {
-				if (in_array($entity->comments_on, array('Off', 'no'))) { break; }
-				// Generic inline comment form
-				$actions .= '<li>' . elgg_view('output/url', array(
-							'href' => "javascript:void(0);", 'onClick' => "$('#comments-add-{$entity->guid}').slideToggle('slow');",
-							'title' => elgg_echo('theme_inria:object:comment'),
-							'text' => '<i class="fa fa-comment"></i>',
-					)) . '</li>';
-				$actions_after .= elgg_view_form('comment/save', 
-						array('id' => "comments-add-{$entity->guid}", 'class' => 'hidden'), 
-						array('entity' => $entity, 'inline' => true)
-					);
 			}
 		}
 		

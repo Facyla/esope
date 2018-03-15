@@ -16,6 +16,12 @@ $show_add_form = elgg_extract('show_add_form', $vars, true);
 $full_view = elgg_extract('full_view', $vars, true);
 $limit = elgg_extract('limit', $vars, get_input('limit', 25));
 
+// Iris : pas de commentaire si l'édition est réservée aux responsables d'un groupe
+$page_owner = elgg_get_page_owner_entity();
+if (elgg_instanceof($page_owner, 'group') && ($page_owner->operators_edit_only == 'yes')) {
+	if (!$page_owner->canWriteToContainer()) { $show_add_form = false; }
+}
+
 $id = '';
 if (isset($vars['id'])) {
 	$id = "id =\"{$vars['id']}\"";
@@ -41,7 +47,10 @@ echo "<div $id class=\"$class\">";
 	));
 
 	if ($html) {
-		echo '<h3 id="comments">' . elgg_echo('comments') . '</h3>';
+		// Iris : on masque aussi le titre s'il n'y a pas de commentaire du tout
+		if ($show_add_form || ($vars['entity']->countComments() > 0)) {
+			echo '<h3 id="comments">' . elgg_echo('comments') . '</h3>';
+		}
 		echo $html;
 	}
 
