@@ -21,6 +21,8 @@ if (elgg_is_sticky_form('register')) {
 */
 
 $password = $password2 = '';
+// Generate random password (12 chars)
+//$password = $password2 = generate_random_cleartext_password();
 $username = elgg_extract('username', $vars, get_input('u'));
 $email = elgg_extract('email', $vars, get_input('e'));
 $name = elgg_extract('name', $vars, get_input('n'));
