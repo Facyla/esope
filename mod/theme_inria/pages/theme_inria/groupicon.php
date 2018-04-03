@@ -17,11 +17,11 @@ if (!elgg_is_logged_in()) {
 	$icontime = get_input('icontime');
 	$ia = elgg_set_ignore_access(true);
 	$group = get_entity($group_guid);
-	elgg_set_ignore_access($ia);
 	if (!elgg_instanceof($group, 'group') || ($icontime != $group->icontime)) {
 		header("HTTP/1.1 404 Not Found");
 		exit;
 	}
+	elgg_set_ignore_access($ia);
 } else {
 	if (!elgg_instanceof($group, 'group')) {
 		header("HTTP/1.1 404 Not Found");
