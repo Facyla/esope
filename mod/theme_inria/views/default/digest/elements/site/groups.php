@@ -30,7 +30,7 @@ if (!empty($newest_groups)) {
 	foreach($newest_groups as $key => $group){
 		$group_items .= '<div class="table-item">';
 		//$group_items .= elgg_view_entity_icon($group, "medium");
-		$icon_url = $group->getIconURL(['size' => 'tiny']);
+		$icon_url = $group->getIconURL(['size' => 'medium']);
 		if (strpos($icon_url, 'default_icons') === false) {
 			$icon_url = elgg_get_site_url() . 'inria/groupicon/' . $group->guid . '/medium/' . $group->icontime;
 		}
