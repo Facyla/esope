@@ -29,6 +29,12 @@ function inria_page_handler($page) {
 		case "userimage":
 			include($base . 'userimage.php');
 			break;
+		case "groupicon":
+			set_input('group_guid', $page[1]);
+			set_input('size', $page[2]);
+			set_input('icontime', $page[3]);
+			include($base . 'groupicon.php');
+			break;
 		case "userprofile":
 			include($base . 'userprofile.php');
 			break;

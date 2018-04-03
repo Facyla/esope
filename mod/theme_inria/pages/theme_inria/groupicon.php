@@ -5,15 +5,22 @@
  * @package ElggGroups
  */
 
-require_once(dirname(dirname(dirname(__FILE__))) . "/engine/start.php");
+require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/engine/start.php");
 
 $group_guid = get_input('group_guid');
 
 /* @var ElggGroup $group */
 $group = get_entity($group_guid);
 if (!elgg_instanceof($group, 'group')) {
-	header("HTTP/1.1 404 Not Found");
-	exit;
+	// Add pass-through if icontime is known and valid (eg. for digest)
+	$icontime = get_input('icontime');
+	$ia = elgg_set_ignore_access(true);
+	$group = get_entity($group_guid);
+	elgg_set_ignore_access($ia);
+	if (!elgg_instanceof($group, 'group') || ($icontime != $group->icontime)) {
+		header("HTTP/1.1 404 Not Found");
+		exit;
+	}
 }
 
 // If is the same ETag, content didn't changed.
