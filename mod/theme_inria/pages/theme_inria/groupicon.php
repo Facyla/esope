@@ -11,13 +11,19 @@ $group_guid = get_input('group_guid');
 
 /* @var ElggGroup $group */
 $group = get_entity($group_guid);
-if (!elgg_instanceof($group, 'group')) {
-	// Add pass-through if icontime is known and valid (eg. for digest)
+
+// Add pass-through if icontime is known and valid (eg. for digest)
+if (!elgg_is_logged_in()) {
 	$icontime = get_input('icontime');
 	$ia = elgg_set_ignore_access(true);
 	$group = get_entity($group_guid);
 	elgg_set_ignore_access($ia);
 	if (!elgg_instanceof($group, 'group') || ($icontime != $group->icontime)) {
+		header("HTTP/1.1 404 Not Found");
+		exit;
+	}
+} else {
+	if (!elgg_instanceof($group, 'group')) {
 		header("HTTP/1.1 404 Not Found");
 		exit;
 	}
