@@ -29,7 +29,8 @@ if (!empty($newest_groups)) {
 	
 	foreach($newest_groups as $key => $group){
 		$group_items .= '<div class="table-item">';
-		$group_items .= elgg_view_entity_icon($group, "medium");
+		//$group_items .= elgg_view_entity_icon($group, "medium");
+		$group_items .= '<img src="' . elgg_get_site_url() . 'inria/groupicon/' . $group->guid . '/medium/' . $group->icontime . '" />';
 		$group_items .= '<a href="' . $group->getURL() . '">' . $group->name . '</a>';
 		$group_items .= '</div>';
 	}
