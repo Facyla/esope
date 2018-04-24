@@ -150,6 +150,9 @@ function theme_inria_init(){
 		elgg_extend_view('page/elements/foot', 'feedback/footer');
 	}
 	
+	// Add analytics (default extends page/elements/footer)
+	elgg_extend_view('page/elements/footer_main', 'page/elements/analytics');
+	
 	elgg_extend_view('forms/site_notifications/process', 'theme_inria/site_notifications/remove_all');
 	
 	// WIDGETS
