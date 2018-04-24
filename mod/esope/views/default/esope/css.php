@@ -105,6 +105,7 @@ html, body { word-break:break-word; word-wrap: break-word; hyphens: auto; }
 .elgg-input-rawtext { width:99%; }
 /* Tableaux */
 th { font-weight:bold; background:#CCCCCC; }
+.elgg-table-alt td:first-child { width: auto; max-width: 12.5rem; min-width: 2rem; }
 /* Access level informations */
 .elgg-access {}
 .elgg-access-group-closed {}

@@ -25,14 +25,18 @@ function phpoffice_init() {
 	// Elgg additional functions
 	$base_lib = elgg_get_plugins_path() . 'phpoffice/lib/phpoffice/';
 	// Note : use Composer to install PHPOffice libraries and generate autoload.php file
-	// elgg_register_library('elgg:phpoffice', elgg_get_plugins_path() . 'phpoffice/vendor/autoload.php');
+	elgg_register_library('elgg:phpoffice', elgg_get_plugins_path() . 'phpoffice/vendor/autoload.php');
 	elgg_register_library('phpoffice:common', $base . 'Common/vendor/autoload.php');
+	
 	elgg_register_library('phpoffice:word', $base . 'PHPWord/bootstrap.php');
 	elgg_register_library('elgg:phpoffice:word', $base_lib . 'word.php');
+	
 	elgg_register_library('phpoffice:presentation', $base . 'PHPPresentation/vendor/autoload.php');
 	elgg_register_library('elgg:phpoffice:presentation', $base_lib . 'presentation.php');
+	
 	elgg_register_library('phpoffice:excel', $base . 'PHPExcel/vendor/autoload.php');
 	elgg_register_library('elgg:phpoffice:excel', $base_lib . 'excel.php');
+	
 	elgg_register_library('phpoffice:project', $base . 'PHPProject/src/PhpProject/Autoloader.php');
 	elgg_register_library('elgg:phpoffice:project', $base_lib . 'project.php');
 

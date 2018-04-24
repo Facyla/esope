@@ -502,10 +502,11 @@ function esope_init() {
 
 
 
-// Include page_handlers, hooks & events functions (lightens this file)
+// Include page_handlers, hooks & events, & functions (lightens this file)
 require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
 require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
 require_once(dirname(__FILE__) . '/lib/esope/events.php');
+require_once(dirname(__FILE__) . '/lib/esope/functions.php');
 
 
 

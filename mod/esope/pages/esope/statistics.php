@@ -1,10 +1,8 @@
 <?php
 /**
- * Statistics for everyone
+ * Statistics for everyone and for admins
  *
  */
-
-global $CONFIG;
 
 gatekeeper();
 
@@ -17,30 +15,47 @@ if (in_array($_SESSION['username'], explode(',', elgg_get_plugin_setting('editor
 
 if (!$allowed) { forward(); }
 
+$url = elgg_get_site_url();
+
 $content = '';
 $sidebar = '';
+
+
+// @TODO Error and access logs / basic stats ?
+/*
+if (elgg_is_admin_logged_in()) {
+	$log_dir = '/var/log/apache2/';
+	$access_log = $log_dir . 'access.log';
+	$error_log = $log_dir . 'error.log';
+	ini_set("open_basedir = /var/log/apache2");
+	$content .= "Access log : $access_log" . '<pre>' . esope_tail($access_log, 20) . '</pre>';
+	$content .= "Error log : $error_log" . '<pre>' . esope_tail($error_log, 20) . '</pre>';
+}
+*/
+
+
 
 // Composition de la page
 
 // SIDEBAR
 
 // Accès autorisés pour tous
-$sidebar .= '<p><a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'feedback">Afficher les feedbacks</a>' . "</p>";
+$sidebar .= '<p><a class="elgg-button elgg-button-action" href="' . $url . 'feedback">Afficher les feedbacks</a>' . "</p>";
 
 // Accès autorisés pour certaines personnes choisies
 if (elgg_is_admin_logged_in()) {
 	// @TODO ajouter editors
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'cmspages">Gérer les pages CMS</a>';
-	$sidebar .= ' et <a href="' . $CONFIG->url . 'admin/plugin_settings/cmspages">gérer les éditeurs autorisés</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $url . 'cmspages">Gérer les pages CMS</a>';
+	$sidebar .= ' et <a href="' . $url . 'admin/plugin_settings/cmspages">gérer les éditeurs autorisés</a>' . "</p>";
 }
 
 // Accès admin seulement
 if (elgg_is_admin_logged_in()) {
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'groups/all">Gérer les groupes à la Une</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'admin/appearance/profile_fields">Gérer les champs du profil</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'admin/statistics/digest">Analyse des résumés (digest)</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'views_counter/list_entities">Statistiques du compteur de vues</a>' . "</p>";
-	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $CONFIG->url . 'event_calendar/list">Gérer les événements du site</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $url . 'groups/all">Gérer les groupes à la Une</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $url . 'admin/appearance/profile_fields">Gérer les champs du profil</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $url . 'admin/statistics/digest">Analyse des résumés (digest)</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $url . 'views_counter/list_entities">Statistiques du compteur de vues</a>' . "</p>";
+	$sidebar .= "<p>" . '<a class="elgg-button elgg-button-action" href="' . $url . 'event_calendar/list">Gérer les événements du site</a>' . "</p>";
 	$sidebar .= '<span class="anim-stats">' . elgg_view('admin/statistics/overview') . '</span>';
 }
 
