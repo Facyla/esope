@@ -49,7 +49,7 @@ $fr = array(
 	'hybridauth:linkedin:viewprofile' => "vérifier votre profil mis à jour",
 	
 	'hybridauth:linkedin:import:title' => "Importer des informations depuis votre profil LinkedIn",
-	'hybridauth:linkedin:import:details' => "<p>Vous pouvez récupérer certaines informations à partir de votre profil LinkedIn pour démarrer ou compléter votre profil.</p><p>Vous pouvez prévisualiser les informations disponibles ci-dessous, et choisir pour chacune si vous sugaitez l'importer ou non. Certaines informations sont ajoutées à votre profil (afin de ne pas perdre les informations existantes).</p><p>Une fois l'import terminé, il est conseillé de poursuivre l'édition de votre profil via les liens proposés.",
+	'hybridauth:linkedin:import:details' => "<p>Vous pouvez récupérer certaines informations à partir de votre profil LinkedIn pour démarrer ou compléter votre profil.</p><p>Vous pouvez prévisualiser les informations disponibles ci-dessous, et choisir pour chacune si vous souhaitez l'importer ou non. Certaines informations sont ajoutées à votre profil au lieu de les remplacer (afin de ne pas perdre les informations existantes).</p><p>Une fois l'import terminé, il est conseillé de poursuivre l'édition de votre profil via les liens proposés.",
 	'hybridauth:linkedin:import:profile_url' => "Importer l'URL du profil public (remplace : Profil LinkedIn)",
 	'hybridauth:linkedin:import:photo' => "Importer la photo (remplace votre photo actuelle)",
 	'hybridauth:linkedin:import:industry' => "Importer le secteur (remplace : Secteur professionnel)",

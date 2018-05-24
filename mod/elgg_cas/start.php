@@ -125,7 +125,10 @@ function elgg_cas_load_client($debug = false) {
 		$cas_server_ca_cert_path = elgg_get_plugin_setting('ca_cert_path', 'elgg_cas', '');
 		if (empty($cas_host) || empty($cas_port) || empty($cas_context)) { return false; }
 	
-		phpCAS::setDebug();
+		if ($debug) {
+			// enable debug log in /tmp/phpCAS.log - can grow a lot if not rotated (and its' not rotated by default)
+			phpCAS::setDebug();
+		}
 		phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 		if (!empty($cas_server_ca_cert_path)) {
 			phpCAS::setCasServerCACert($cas_server_ca_cert_path);
