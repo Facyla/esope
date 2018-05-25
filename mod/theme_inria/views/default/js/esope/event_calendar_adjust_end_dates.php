@@ -31,7 +31,7 @@ $(document).ready(function() {
 	$('select[name="start_time_hour"]').on('change', function(e) {
 		if ($('input[name="end_date"]').datepicker('getDate') <= $('input[name="start_date"]').datepicker('getDate')) {
 			// Adjust hours
-			if (Number($('select[name="start_time_hour"]').val()) > Number($('select[name="end_time_hour"]').val())) {
+			if (Number($('select[name="start_time_hour"]').val()) >= Number($('select[name="end_time_hour"]').val())) {
 				$('select[name="end_time_hour"]').val($('select[name="start_time_hour"]').val());
 				// Also adjust minutes
 				$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
@@ -41,7 +41,7 @@ $(document).ready(function() {
 	$('select[name="end_time_hour"]').on('change', function(e) {
 		if ($('input[name="end_date"]').datepicker('getDate') <= $('input[name="start_date"]').datepicker('getDate')) {
 			// Adjust hours
-			if (Number($('select[name="start_time_hour"]').val()) > Number($('select[name="end_time_hour"]').val())) {
+			if (Number($('select[name="start_time_hour"]').val()) >= Number($('select[name="end_time_hour"]').val())) {
 				$('select[name="end_time_hour"]').val($('select[name="start_time_hour"]').val());
 				// Also adjust minutes
 				if (Number($('select[name="start_time_minute"]').val()) > Number($('select[name="end_time_minute"]').val())) {
