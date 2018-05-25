@@ -7,6 +7,8 @@ Or alternatively, you could attach a handler using jQuery's bind function:
 $('#datepicker').bind('onSelect', function() {  });
 
 $('#datepicker').datepicker('option', {onClose: function() {...}});
+
+// Important : inutile de créer des variables, comme on utilise des handlers il faudrait les réécrire dans chacun
 */
 ?>
 
@@ -22,11 +24,14 @@ $(document).ready(function() {
 		$('input[name="end_date"]').datepicker('option', 'minDate', $('input[name="start_date"]').datepicker('getDate'));
 	});
 	
+	//alert($('select[name="start_time_hour"]').val() + " > " + $('select[name="end_time_hour"]').val() + " vs " + Number($('select[name="start_time_hour"]').val())  + " > " + Number($('select[name="end_time_hour"]').val()) );
+	//alert(typeof $('select[name="start_time_hour"]').val() + " > " + typeof $('select[name="end_time_hour"]').val() + " vs " + typeof Number($('select[name="start_time_hour"]').val())  + " > " + typeof Number($('select[name="end_time_hour"]').val()) );
+	
 	// Force end time if same date
 	$('select[name="start_time_hour"]').on('change', function(e) {
 		if ($('input[name="end_date"]').datepicker('getDate') <= $('input[name="start_date"]').datepicker('getDate')) {
 			// Adjust hours
-			if ($('select[name="start_time_hour"]').val() > $('select[name="end_time_hour"]').val()) {
+			if (Number($('select[name="start_time_hour"]').val()) > Number($('select[name="end_time_hour"]').val())) {
 				$('select[name="end_time_hour"]').val($('select[name="start_time_hour"]').val());
 				// Also adjust minutes
 				$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
@@ -36,10 +41,10 @@ $(document).ready(function() {
 	$('select[name="end_time_hour"]').on('change', function(e) {
 		if ($('input[name="end_date"]').datepicker('getDate') <= $('input[name="start_date"]').datepicker('getDate')) {
 			// Adjust hours
-			if ($('select[name="start_time_hour"]').val() > $('select[name="end_time_hour"]').val()) {
+			if (Number($('select[name="start_time_hour"]').val()) > Number($('select[name="end_time_hour"]').val())) {
 				$('select[name="end_time_hour"]').val($('select[name="start_time_hour"]').val());
 				// Also adjust minutes
-				if ($('select[name="start_time_minute"]').val() > $('select[name="end_time_minute"]').val()) {
+				if (Number($('select[name="start_time_minute"]').val()) > Number($('select[name="end_time_minute"]').val())) {
 					$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
 				}
 			}
@@ -48,8 +53,8 @@ $(document).ready(function() {
 	// Adjust minutes if same date and hour
 	$('select[name="start_time_minute"]').on('change', function(e) {
 		if ($('input[name="end_date"]').datepicker('getDate') <= $('input[name="start_date"]').datepicker('getDate')) {
-			if ($('select[name="start_time_hour"]').val() >= $('select[name="end_time_hour"]').val()) {
-				if ($('select[name="start_time_minute"]').val() > $('select[name="end_time_minute"]').val()) {
+			if (Number($('select[name="start_time_hour"]').val()) >= Number($('select[name="end_time_hour"]').val())) {
+				if (Number($('select[name="start_time_minute"]').val()) > Number($('select[name="end_time_minute"]').val())) {
 					$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
 				}
 			}
@@ -57,8 +62,8 @@ $(document).ready(function() {
 	});
 	$('select[name="end_time_minute"]').on('change', function(e) {
 		if ($('input[name="end_date"]').datepicker('getDate') <= $('input[name="start_date"]').datepicker('getDate')) {
-			if ($('select[name="start_time_hour"]').val() >= $('select[name="end_time_hour"]').val()) {
-				if ($('select[name="start_time_minute"]').val() > $('select[name="end_time_minute"]').val()) {
+			if (Number($('select[name="start_time_hour"]').val()) >= Number($('select[name="end_time_hour"]').val())) {
+				if (Number($('select[name="start_time_minute"]').val()) > Number($('select[name="end_time_minute"]').val())) {
 					$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
 				}
 			}
@@ -76,13 +81,13 @@ $(document).ready(function() {
 			// Set end date and time to start date and time
 			if (start >= end) {
 				$('input[name="end_date"]').datepicker('setDate', start);
-				console.log($('select[name="start_time_hour"]').val() + " / " +  $('select[name="start_time_minute"]').val() + " // " + $('select[name="end_time_hour"]').val() + " / " +  $('select[name="end_time_minute"]').val());
+				//console.log($('select[name="start_time_hour"]').val() + " / " +  $('select[name="start_time_minute"]').val() + " // " + $('select[name="end_time_hour"]').val() + " / " +  $('select[name="end_time_minute"]').val());
 				// Adjust hours
-				if ($('select[name="start_time_hour"]').val() > $('select[name="end_time_hour"]').val()) {
+				if (Number($('select[name="start_time_hour"]').val()) > Number($('select[name="end_time_hour"]').val())) {
 					$('select[name="end_time_hour"]').val($('select[name="start_time_hour"]').val());
 				}
 				// Adjust minutes
-				if ($('select[name="start_time_minute"]').val() > $('select[name="end_time_minute"]').val()) {
+				if (Number($('select[name="start_time_minute"]').val()) > Number($('select[name="end_time_minute"]').val())) {
 					$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
 				}
 			}
@@ -112,15 +117,14 @@ $(document).ready(function() {
 			// ESOPE : custom behaviour
 			// Set end date and time to start date and time
 			if (end <= start) {
-			
-				console.log($('select[name="start_time_hour"]').val() + " / " +  $('select[name="start_time_minute"]').val() + " // " + $('select[name="end_time_hour"]').val() + " / " +  $('select[name="end_time_minute"]').val());
+				//console.log($('select[name="start_time_hour"]').val() + " / " +  $('select[name="start_time_minute"]').val() + " // " + $('select[name="end_time_hour"]').val() + " / " +  $('select[name="end_time_minute"]').val());
 				$('input[name="end_date"]').datepicker('setDate', start);
 				// Adjust hours
-				if ($('select[name="start_time_hour"]').val() > $('select[name="end_time_hour"]').val()) {
+				if (Number($('select[name="start_time_hour"]').val()) > Number($('select[name="end_time_hour"]').val())) {
 					$('select[name="end_time_hour"]').val($('select[name="start_time_hour"]').val());
 				}
 				// Adjust minutes
-				if ($('select[name="start_time_minute"]').val() > $('select[name="end_time_minute"]').val()) {
+				if (Number($('select[name="start_time_minute"]').val()) > Number($('select[name="end_time_minute"]').val())) {
 					$('select[name="end_time_minute"]').val($('select[name="start_time_minute"]').val());
 				}
 			}
