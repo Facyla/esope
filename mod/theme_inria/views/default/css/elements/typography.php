@@ -44,9 +44,9 @@ $font6 = $css['font6'];
 	font-family: 'Puritan', sans-serif;
 	font-family: 'Didact Gothic', sans-serif;
  */
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
-@import url(http://fonts.googleapis.com/css?family=Puritan:400,700,400italic,700italic);
-@import url(http://fonts.googleapis.com/css?family=Didact+Gothic&subset=latin,latin-ext);
+@import url(//fonts.googleapis.com/css?family=Lato:400,700.css);
+@import url(//fonts.googleapis.com/css?family=Puritan:400,700,400italic,700italic.css);
+@import url(//fonts.googleapis.com/css?family=Didact+Gothic&subset=latin,latin-ext.css);
 
 
 /*
