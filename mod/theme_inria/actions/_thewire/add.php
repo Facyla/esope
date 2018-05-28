@@ -12,7 +12,7 @@ $method = 'site';
 $parent_guid = (int) get_input('parent_guid');
 
 // Niveau d'accès associé à un groupe
-$group_guid = (int) get_input('group_guid');;
+$group_guid = (int) get_input('group_guid');
 /*
 if ($group_guid) {
 	$group = get_entity($group_guid);

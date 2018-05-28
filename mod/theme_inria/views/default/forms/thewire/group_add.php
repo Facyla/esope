@@ -22,6 +22,7 @@ if ($post) {
 }
 
 $id = 'thewire-textarea';
+$counter_id = 'thewire-textarea-remaining';
 
 if ($post) {
 	echo elgg_view('input/hidden', array(
@@ -29,6 +30,7 @@ if ($post) {
 		'value' => $post->guid,
 	));
 	$id = 'thewire-textarea-' . $post->guid;
+	$counter_id = 'thewire-textarea-remaining-' . $post->guid;
 }
 
 // Integration into groups : add container
@@ -53,8 +55,10 @@ echo elgg_view('input/plaintext', array(
 	'name' => 'body',
 	'class' => 'mtm',
 	'id' => $id,
+	'class' => 'thewire-textarea',
 	'rows' => $num_lines,
 	'data-max-length' => $char_limit,
+	'data-counter-id' => $counter_id,
 	'style' => "height:initial;",
 	'placeholder' => elgg_echo('theme_inria:thewire:group:placeholder', array($char_limit)),
 ));
@@ -62,7 +66,7 @@ echo elgg_view('input/plaintext', array(
 
 <div class="elgg-foot mts">
 	<span style="float:right; margin-left:2em;">
-		<span id="thewire-characters-remaining"><?php echo $count_down; ?></span>
+		<span id="<?php echo $counter_id; ?>" class="thewire-characters-remaining"><?php echo $count_down; ?></span>
 		<?php
 		echo elgg_view('input/submit', array(
 			'value' => $text,

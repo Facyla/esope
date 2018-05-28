@@ -15,11 +15,13 @@ $char_limit = 140;
 $own = elgg_get_logged_in_user_entity();
 
 $id = 'thewire-textarea';
+$counter_id = 'thewire-textarea-remaining';
 
 $text = elgg_echo('post');
 if ($parent_post) {
 	$text = elgg_echo('thewire:reply');
 	$id = 'thewire-textarea-' . $parent_post->guid;
+	$counter_id = 'thewire-textarea-remaining-' . $parent_post->guid;
 }
 //$chars_left = elgg_echo('thewire:charleft');
 $chars_left = elgg_echo('esope:thewire:charleft');
@@ -77,8 +79,10 @@ $post_input = elgg_view('input/plaintext', array(
 		'name' => 'body',
 		'class' => 'mtm',
 		'id' => $id,
+		'class' => 'thewire-textarea',
 		'rows' => $num_lines,
 		'data-max-length' => $char_limit,
+		'data-counter-id' => $counter_id,
 		//'style' => "height:initial;",
 		//'maxlength' => 140, // Do not block at 140, and use the warning
 		'placeholder' => elgg_echo('theme_inria:thewire:placeholder', array($char_limit)),
@@ -99,7 +103,7 @@ echo <<<HTML
 	$access_input
 	$parent_input
 	<span style="float:right;">
-		<div id="thewire-characters-remaining" style="margin-bottom:5px;">$count_down</div>
+		<div id="$counter_id" class="thewire-characters-remaining" style="margin-bottom:5px;">$count_down</div>
 		$submit_button
 	</span>
 </div>
