@@ -55,6 +55,7 @@ if ($post->wire_thread > 0) {
 				}
 				$content .= '<p><a href="' . elgg_get_site_url() . 'thewire/thread/' . $post->wire_thread . '" class="elgg-button elgg-button-action">' . elgg_echo('theme_inria:wire:viewthread', array($num_thread)) . '</a></p>';
 			}
+		$content .= '</div>';
 	}
 		
 		/*
@@ -70,7 +71,6 @@ if ($post->wire_thread > 0) {
 			'order_by' => 'time_created ASC',
 		));
 		*/
-	$content .= '</div>';
 }
 
 

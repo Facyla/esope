@@ -149,7 +149,7 @@ $width = array(
 
 #iris-page { display:flex; flex-direction:row; margin-top: 5rem; background: #F1F1F1; }
 
-#iris-body { max-width: 100.5rem; width: 100%; min-height: calc(100vh - 5rem); }
+#iris-body { max-width: 100.5rem; width: 100%; min-height: calc(100vh - 5rem); display: flex; flex-direction: column; }
 /* Note : marge de 2rem avant #adf-homepage ?? */
 #adf-homepage { min-height: calc(100vh - 12rem); }
 
@@ -873,7 +873,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #iris-footer .language_selector a { display: inline; }
 #iris-footer li a.inria-intranet { color:#95C11F; }
 
-#iris-footer-main { background: <?php echo $iris_sidegrey; ?>; min-height: 5rem; clear: both; }
+#iris-footer-main { background: <?php echo $iris_sidegrey; ?>; min-height: 5rem; clear: both; margin-top: auto; }
 #iris-footer-main .footer-inria { padding: 2rem 2rem; }
 #iris-footer-main li { display: inline-block; margin-right: 2rem; }
 #iris-footer-main li a { font-size: 1rem; }

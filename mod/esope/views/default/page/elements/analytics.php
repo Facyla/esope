@@ -8,9 +8,9 @@
 
 $analytics = elgg_get_plugin_setting('analytics', 'esope');
 if (!empty($analytics)) {
-	echo '<script type="text/javascript">';
-	echo $analytics;
-	echo '</script>';
+	echo '<script type="text/javascript">
+' . $analytics . '
+</script>';
 }
 
 
