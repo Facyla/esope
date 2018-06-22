@@ -1349,7 +1349,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 /* Groupes */
 /* Pages de recherche : membres, groupes, publications */
-.iris-group { display:flex; flex-direction:column; }
+.iris-group { flex: 1; display:flex; flex-direction:column; }
 .iris-group-header { width:100%; background: #454C5F; min-height:18.75rem; position: relative; /* margin-bottom: 3.5rem; */ }
 .iris-group-header-alt { width:100%; background: #454C5F; height:15rem; position: relative; /* margin-bottom: 3.5rem; */ }
 .iris-group-header-alt h2 { color: white; margin-left: 3rem; }
