@@ -771,41 +771,6 @@ function theme_inria_thewire_group_menu($hook, $type, $return, $params) {
 }
 
 
-function theme_inria_groups_edit_event_listener($event, $object_type, $group) {
-	if (!elgg_instanceof($group, 'group')) { return false; }
-	
-	$warnings = array();
-	$user_guid = elgg_get_logged_in_user_guid();
-	
-	// Handle group / city images (attached to group and not group owner)
-	$images = array('banner');
-	foreach($images as $meta_name) {
-		// Attachment upload
-		if (isset($_FILES[$meta_name]['name']) && !empty($_FILES[$meta_name]['name']) && ($attachment_file = get_uploaded_file($meta_name))) {
-			// create file
-			$prefix = "groups/" . $group->guid;
-			$fh = new ElggFile();
-			$fh->owner_guid = $group->guid;
-			$fh->setFilename($prefix . $meta_name);
-			if($fh->open("write")){
-				$fh->write($attachment_file);
-				$fh->close();
-			}
-			$group->{$meta_name} = $meta_name;
-			$group->{$meta_name.'time'} = time(); // Keep timestamp so we can use it when calling the image - and cache it
-			$group->{$meta_name.'_name'} = htmlspecialchars($_FILES[$meta_name]['name'], ENT_QUOTES, 'UTF-8');
-		}
-	}
-	
-	// Save workspace name
-	$group->workspace_name = get_input('workspace_name');
-
-	// Save operator-only main group option
-	$group->operators_edit_only = get_input('operators_edit_only');
-
-	return true;
-}
-
 
 // Replaces default user icon with a unique generated icon
 function theme_inria_user_icon_hook($hook, $type, $return, $params) {
