@@ -87,7 +87,7 @@ if (!$parent_group) {
 			echo "<label>" . elgg_echo("groups:workspace_name") . "</label>";
 		echo '</div>';
 		echo '<div class="groups-edit-input">';
-				echo elgg_view("input/text", array('name' => 'workspace_name', 'value' => $workspace_name, 'required' => true, 'placeholder' => elgg_echo('theme_inria:workspace:main')));
+				echo elgg_view("input/text", array('name' => 'workspace_name', 'value' => $workspace_name, 'placeholder' => elgg_echo('theme_inria:workspace:main')));
 				echo '<br /><em>' . elgg_echo('groups:workspace_name:details') . '</em>';
 		echo '</div>';
 	echo '</div>';
