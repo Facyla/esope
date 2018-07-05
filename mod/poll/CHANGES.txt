@@ -1,6 +1,33 @@
 Changelog
 =========
 
+1.10.8
+------
+
+- Populate 'entity' attribute on calling object/elements/full view,
+- Prevent duplicate element ids to be used when adding/removing poll choices on editing a poll,
+- Allow for removal of existing poll choices when editing a poll,
+- Display correct closing date in info text in widgets after a poll is closed,
+- Add alt attribute within img tag in widget view (strictly speaking necessary by html standard but as the image is purely decoration it's just been an empty alt attribute value that has been missing...).
+
+1.10.7
+------
+
+- French translation updated,
+- Finnish translation updated.
+
+1.10.6
+------
+
+- Feature: multiple-answer polls (users can select more than a single choice on voting). Poll creator can decide on the maximum number of choices selectable (thanks to Beaufort8 and Juho Jaakkola for implementing this feature),
+- Multiple-answer polls can be allowed/prevented by a new poll plugin settings,
+- Fixed: keep access_id of poll choices in sync with access_id of their poll when the poll's access_id is changed (to fix possible discrepancies in existing polls an update script that can be executed via the poll plugin settings page has been added - if the Upgrade button shows up, run the upgrade),
+- Feature: plugin option added to allow for notification of poll creators on new votes made in their polls (the creator will receive notifications depending on his/her user-specific, site-wide notification settings, i.e. email notifications and/or site-notifications or none),
+- Fixed: no longer use the $closing_date variable in the poll object view before intializing it (had resulted in a warning),
+- Fixed: internal poll choice counter on input form counts correctly (by also decrementing removed choices),
+- Rework on plugin settings page layout,
+- French translation added (thanks to Facyla).
+
 1.10.5
 ------
 
