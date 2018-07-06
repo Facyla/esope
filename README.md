@@ -4,7 +4,7 @@
 
 
 ## Quelle version choisir ?
-* _**esope_1.8 : version LTS - ancienne branche de production MISE A NIVEAU RECOMMANDEE **_
+* _**esope_1.8 : version LTS - ancienne branche de production MISE A NIVEAU RECOMMANDEE**_
 * esope_1.9 : branche intermédiaire - mises à jour seulement
 * esope_1.10 : branche intermédiaire - mises à jour seulement
 * esope_1.11 : branche intermédiaire - mises à jour seulement
