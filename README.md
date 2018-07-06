@@ -4,15 +4,15 @@
 
 
 ## Quelle version choisir ?
-* ''esope_1.8 : ancienne branche de production NON RECOMMANDEE- version LTS''
+* _**esope_1.8 : ancienne branche de production NON RECOMMANDEE- version LTS**_
 * esope_1.9 : branche intermédiaire - mises à jour seulement
 * esope_1.10 : branche intermédiaire - mises à jour seulement
 * esope_1.11 : branche intermédiaire - mises à jour seulement
-* ''esope_1.12 : branche de production RECOMMANDEE - version LTS''
+* **esope_1.12 : branche de production RECOMMANDEE - version LTS**
 * esope_2.0 : branche intermédiaire - mises à jour seulement
 * esope_2.1 : branche intermédiaire - mises à jour seulement
 * esope_2.2 : branche intermédiaire - mises à jour seulement
-* ''esope_2.3 : branche de production RECOMMANDEE pour de nouveaux projets - future version LTS''
+* **esope_2.3 : branche de production RECOMMANDEE pour de nouveaux projets - future version LTS**
 
 
 ## A propos d'Elgg
