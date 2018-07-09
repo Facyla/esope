@@ -136,7 +136,10 @@ switch($filter) {
 			$content .= '<div class="iris-groups-member-new-image">+</div>';
 			$content .= '<div class="iris-groups-member-new-body">';
 				$content .= elgg_view('output/url', array('href' => 'groups', 'text' => elgg_echo('theme_inria:groups:register'), 'class' => 'elgg-button elgg-button-action'));
-				$content .= elgg_view('output/url', array('href' => 'groups/add', 'text' => elgg_echo('groups:add'), 'class' => 'elgg-button elgg-button-action'));
+				// La création de groupe est réservée aux membres Inria
+				if (esope_get_user_profile_type() == 'inria') {
+					$content .= ' &nbsp; ' . elgg_view('output/url', array('href' => 'groups/add', 'text' => elgg_echo('groups:add'), 'class' => 'elgg-button elgg-button-action'));
+				}
 			$content .= '</div>';
 			$content .= '</div>';
 		break;
