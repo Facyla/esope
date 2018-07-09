@@ -94,12 +94,17 @@ if (elgg_is_logged_in()) {
 		</li>
 		<?php } ?>
 
-		<?php if (elgg_is_active_plugin('members')) { ?>
-			<li class="members <?php if ($selected_members) { echo ' elgg-state-selected'; } ?>">
-				<a <?php if ($selected_members) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>" title="<?php echo theme_inria_get_link_title('membres'); ?>" >
-					<?php echo $svg_membres . elgg_echo('theme_inria:members'); ?></a>
-			</li>
-		<?php } ?>
+		<?php if (elgg_is_active_plugin('members')) {
+			// Guests have no access to directory (TransAlgo)
+			if ($profile_type == 'inria') {
+				?>
+				<li class="members <?php if ($selected_members) { echo ' elgg-state-selected'; } ?>">
+					<a <?php if ($selected_members) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>" title="<?php echo theme_inria_get_link_title('membres'); ?>" >
+						<?php echo $svg_membres . elgg_echo('theme_inria:members'); ?></a>
+				</li>
+				<?php
+			}
+		} ?>
 
 		<?php if (elgg_is_active_plugin('event_calendar')) { ?>
 			<li class="agenda <?php if ($selected_event_calendar) { echo ' elgg-state-selected'; } ?>">
