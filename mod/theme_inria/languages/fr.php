@@ -1181,5 +1181,11 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'theme_inria:prevent_notifications:label' => "Envoyer une notification",
 	
 	
+	// TransAlgo
+	'transalgo:login:title' => "Participer au forum TransAlgo",
+	'transalgo:login:subtitle' => "Groupe de conversation scientifique TransAlgo",
+	'transalgo:login:details' => "<p>TransAlgo rassemble une large communauté de scientifiques et des partenaires. L'objectif: pousser la réflexion de manière pluridisciplinaire et interdisciplinaire afin d'évaluer la responsabilité et la transparence des systèmes algorithmiques.<br />Qui planche sur quoi&nbsp;? Découvrez les groupes de travail, les thématiques associées.</p><p>L'inscription se fait sur invitation. N'hésitez pas à participer au forum de discussion TransAlgo&nbsp;!</p>",
+	
+	
 );
 

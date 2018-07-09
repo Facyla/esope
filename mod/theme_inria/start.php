@@ -71,6 +71,7 @@ function theme_inria_init(){
 	elgg_load_css('inria-serif');
 	
 	elgg_extend_view('css', 'theme_inria/css', 1000);
+	elgg_extend_view('css', 'transalgo/css', 1000);
 	elgg_extend_view('css/admin', 'theme_inria/admin_css', 1000);
 	elgg_extend_view('css/digest/core', 'css/digest/site/theme_inria');
 	
@@ -223,6 +224,9 @@ function theme_inria_init(){
 	
 	// PAGE HANDLERS
 	elgg_register_page_handler("inria", "inria_page_handler");
+	
+	// TransAlgo
+	elgg_register_page_handler("transalgo", "transalgo_page_handler");
 	
 	// Add a "ressources" page handler for groups
 	elgg_register_page_handler("ressources", "inria_ressources_page_handler");

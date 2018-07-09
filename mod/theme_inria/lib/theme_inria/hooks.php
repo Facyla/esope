@@ -916,7 +916,10 @@ function theme_inria_public_pages($hook, $type, $return, $params) {
 	// Icones des membres ?  a priori inutile car accès URL direct au fichier PHP
 	// Pièces jointes et téléchargements directs
 	$return[] = 'file/download/.*';
-
+	// TransAlgo
+	$return[] = 'transalgo';
+	$return[] = 'transalgo/.*';
+	
 	/* Les pages à rendre accessibles doivent correspondre à l'URL exacte, ou utiliser le wildcard .*
 	$return[] = 'page-publique';
 	$return[] = 'page-avec-params.*';

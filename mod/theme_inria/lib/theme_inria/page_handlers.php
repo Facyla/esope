@@ -67,6 +67,22 @@ function inria_page_handler($page) {
 	return true;
 }
 
+// TransAlgo page handler
+function transalgo_page_handler($page) {
+	$base = elgg_get_plugins_path() . 'theme_inria/pages/transalgo/';
+	/*
+	switch($page[0]){
+		case "members-icons":
+			include($base . 'members_icons.php');
+			break;
+		default:
+			include($base . 'index.php');
+	}
+	*/
+	include($base . 'login.php');
+	return true;
+}
+
 // New "ressources/" page handler
 function inria_ressources_page_handler($page) {
 	//elgg_load_library('elgg:groups');
