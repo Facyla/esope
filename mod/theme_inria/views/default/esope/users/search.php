@@ -35,6 +35,8 @@ $order_by = get_input('order_by', 'alpha');
 $friends_only = get_input('friends_only', false);
 if ($friends_only == 'yes') { $friends_only = true; } else { $friends_only = false; }
 
+$profile_type = get_input('custom_profile_type', '');
+
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
 
@@ -160,7 +162,7 @@ $search_form .= '<div class="iris-search-fulltext"><label>' . elgg_echo('esope:f
 
 // Display role filter only if it has a meaning
 if (sizeof($profiletypes_opt) > 2) {
-	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => '', 'options_values' => $profiletypes_opt)) . '</label><div class="clearfloat"></div></div>';
+	$search_form .= '<div class="esope-search-metadata esope-search-profiletype esope-search-metadata-select"><label> ' . elgg_echo('esope:search:members:role') . ' ' . elgg_view('input/select', array('name' => 'metadata[custom_profile_type]', 'value' => $profile_type, 'options_values' => $profiletypes_opt)) . '</label><div class="clearfloat"></div></div>';
 }
 
 $search_form .= $metadata_search;

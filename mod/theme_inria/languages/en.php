@@ -167,6 +167,7 @@ return array(
 	'theme_inria:digest:friends' => "My friends activity on Iris",
 	'theme_inria:digest:groups' => "New groups on Iris",
 	'theme_inria:digest:members' => "New Iris members",
+	'theme_inria:digest:members:inria' => "New Inria members",
 	'theme_inria:digest:thewire' => "Inria the Wire",
 	
 	// Newsletter
@@ -1138,6 +1139,7 @@ email3@domain.tld email4@domain.tld ",
 	*/
 	
 	'theme_inria:digest:newmembers' => "%s new members have joined Iris.",
+	'theme_inria:digest:newmembers:inria' => "%s new Inria members have joined Iris.",
 	'theme_inria:digest:newmembers' => "Check out who and welcome them!",
 	'theme_inria:useradd:unarchived' => "User account has been un-archived, but archived account usually have wrong emails which should be updated: please contact the site administrator with the following username and a valid email so it can be updated if needed: %s",
 	
