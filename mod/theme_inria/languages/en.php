@@ -1159,6 +1159,12 @@ email3@domain.tld email4@domain.tld ",
 	'transalgo:login:title' => "Participate to the TransAlgo forum",
 	'transalgo:login:subtitle' => "TransAlgo scientific conversation group",
 	'transalgo:login:details' => "<p>TransAlgo gathers a large community of scientifics and partners. The aim: foster a pluridisciplinary and interdisciplinary thought in order to evaluate the responsability and transparency of algorithmic systems.<br />Who is working on what? Discover the work groups and associated thematics</p><p>Registration is on invite only. Do not hesitate to take part to the TransAlgo discussion group!</p>",
+	'transalgo:login:lostpassword' => "Lost password?",
+	'transalgo:login:connect' => "Log in to your account",
+	'transalgo:login:email' => "Email (mandatory)",
+	'transalgo:login:password' => "Password (mandatory)",
+	'transalgo:login:submit' => "Connect",
+	'transalgo:login:persistent' => "Remember me",
 	
 	
 );
