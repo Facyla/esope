@@ -27,7 +27,6 @@ if(isset($digest_site_profile_body[$key])){
 			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members?custom_profile_type=inria"));
 		} else {
 			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members"));
-
 		}
 		echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
 	}
@@ -50,7 +49,8 @@ if(isset($digest_site_profile_body[$key])){
 	//$total_members_count = elgg_get_entities_from_relationship($member_options);
 	// Filter only Inria members
 	if ($count_inria_only) {
-		$member_options['metadata_name_value_pairs'][] = ['name' => 'custom_profile_type', 'value' => 'inria'];
+		$inria_profile_type_guid = esope_get_profiletype_guid('inria');
+		$member_options['metadata_name_value_pairs'][] = ['name' => 'custom_profile_type', 'value' => $inria_profile_type_guid ];
 	}
 	$members_count = elgg_get_entities_from_relationship($member_options);
 	if ($members_count > 0) {
