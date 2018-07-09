@@ -42,6 +42,9 @@ if ($profile_type == 'inria') {
 	//		<p><a href="' . elgg_get_site_url() . 'inria/invite" class="elgg-button elgg-button-action elgg-menu-content">' . elgg_echo('theme_inria:invite_external') . '</a>
 	// If using the page menu, normalize it first !
 	//$sidebar .= elgg_view_menu('page', $vars);
+} else {
+	// No directory for guests (TransAlgo)
+	forward(REFERER);
 }
 
 

@@ -15,23 +15,25 @@ if(!isset($digest_site_profile_body)){
 	$digest_site_profile_body = array();
 }
 
+// Display profiles or count only ?
+$display_count = true;
+$count_inria_only = true;
+$display_profiles = false;
+
 if(isset($digest_site_profile_body[$key])){
 	// return from memory
 	if(!empty($digest_site_profile_body[$key])){
-		$title = elgg_view("output/url", array(
-			"text" => elgg_echo("theme_inria:digest:members"),
-			"href" => "members"
-		));
+		if ($count_inria_only) {
+			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members?custom_profile_type=inria"));
+		} else {
+			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members"));
+
+		}
 		echo elgg_view_module("digest", $title , $digest_site_profile_body[$key]);
-	}		
+	}
 } else {
 	$ts_lower = (int) elgg_extract("ts_lower", $vars);
 	$ts_upper = (int) elgg_extract("ts_upper", $vars);
-	
-	// Display profiles or count only ?
-	$display_count = true;
-	$count_inria_only = true;
-	$display_profiles = false;
 	
 	$member_options = array(
 			"type" => "user",
@@ -53,7 +55,7 @@ if(isset($digest_site_profile_body[$key])){
 	$members_count = elgg_get_entities_from_relationship($member_options);
 	if ($members_count > 0) {
 		if ($count_inria_only) {
-			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members:inria"), "href" => "members", "is_trusted" => true));
+			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members:inria"), "href" => "members?custom_profile_type=inria", "is_trusted" => true));
 		} else {
 			$title = elgg_view("output/url", array("text" => elgg_echo("theme_inria:digest:members"), "href" => "members", "is_trusted" => true));
 		}
@@ -66,7 +68,7 @@ if(isset($digest_site_profile_body[$key])){
 			if ($display_count) {
 				$content .= '<span class="new-members-count" style="font-size:2rem; float:left; margin-right:2rem;">' . $members_count . '</span>';
 				if ($count_inria_only) {
-					$content .= '<p>' . elgg_echo('theme_inria:digest:newmembers:inria', array($members_count)) . '</p><p><a href="' . elgg_get_site_url() . 'members?order_by=desc">' . elgg_echo('theme_inria:digest:welcomenewmembers', array($members_count)) . '</a></p>';
+					$content .= '<p>' . elgg_echo('theme_inria:digest:newmembers:inria', array($members_count)) . '</p><p><a href="' . elgg_get_site_url() . 'members?custom_profile_type=inria&order_by=desc">' . elgg_echo('theme_inria:digest:welcomenewmembers', array($members_count)) . '</a></p>';
 				} else {
 					$content .= '<p>' . elgg_echo('theme_inria:digest:newmembers', array($members_count)) . '</p><p><a href="' . elgg_get_site_url() . 'members?order_by=desc">' . elgg_echo('theme_inria:digest:welcomenewmembers', array($members_count)) . '</a></p>';
 				}

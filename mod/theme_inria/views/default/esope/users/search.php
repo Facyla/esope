@@ -35,8 +35,6 @@ $order_by = get_input('order_by', 'alpha');
 $friends_only = get_input('friends_only', false);
 if ($friends_only == 'yes') { $friends_only = true; } else { $friends_only = false; }
 
-$profile_type = get_input('custom_profile_type', '');
-
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
 
@@ -122,6 +120,9 @@ if (elgg_is_active_plugin('profile_manager')) {
 $profiletypes_opt = esope_get_profiletypes(true); // $guid => $title
 $profiletypes_opt[0] = '';
 $profiletypes_opt = array_reverse($profiletypes_opt, true); // We need to keep the keys here !
+
+$profile_type = get_input('custom_profile_type', '');
+if (!empty($profile_type) && !isset($profiletypes_opt[$profile_type])) { $profile_type = esope_get_profiletype_guid($profile_type); }
 
 
 $search_form = '';
