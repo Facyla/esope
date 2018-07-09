@@ -36,7 +36,7 @@ $content = '<div id="transalgo-login">';
 	$content .= '<div class="transalgo-login-box">';
 		// Connexion + mot de passe perdu
 		$content .= '<h2>' . elgg_echo('login') . '</h2>';
-		$content .= elgg_view_form('transalgo/login', ['action' => 'login'], []);
+		$content .= elgg_view_form('transalgo/login', ['action' => 'action/login'], []);
 		$content .= $lostpassword_form;
 		$content .= '<div class="clearfloat"></div>';
 	$content .= '</div>';
