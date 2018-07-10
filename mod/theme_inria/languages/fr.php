@@ -1184,11 +1184,14 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	// TransAlgo
 	'transalgo:login:title' => "Participer au forum TransAlgo",
 	'transalgo:login:subtitle' => "Groupe de conversation scientifique TransAlgo",
-	'transalgo:login:details' => "<p>TransAlgo rassemble une large communauté de scientifiques et des partenaires. L'objectif: pousser la réflexion de manière pluridisciplinaire et interdisciplinaire afin d'évaluer la responsabilité et la transparence des systèmes algorithmiques.<br />Qui planche sur quoi&nbsp;? Découvrez les groupes de travail, les thématiques associées.</p><p>L'inscription se fait sur invitation. N'hésitez pas à participer au forum de discussion TransAlgo&nbsp;!</p>",
+	'transalgo:login:details' => "<p>TransAlgo rassemble une large communauté de scientifiques et des partenaires. L'objectif: pousser la réflexion de manière pluridisciplinaire et interdisciplinaire afin d'évaluer la responsabilité et la transparence des systèmes algorithmiques.<br />Qui planche sur quoi&nbsp;? Découvrez les groupes de travail, les thématiques associées.</p><p><strong>N'hésitez pas à participer au forum de discussion TransAlgo&nbsp;! L'inscription se fait sur invitation, après avoir manifesté votre intérêt via le <a href=\"https://transalgo.org/participer-au-forum-scientifique/\">formulaire sur transalgo.org</a>.</strong></p>",
 	'transalgo:login:lostpassword' => "Mot de passe oublié&nbsp;?",
 	'transalgo:login:connect' => "Connectez-vous à votre compte",
+	'transalgo:login:cas:details' => "Je suis personnel Inria, je m'authentifie avec le CAS<br />(Service d'authentification centralisée)",
 	'transalgo:login:email' => "Email (obligatoire)",
 	'transalgo:login:password' => "Mot de passe (obligatoire)",
+	'transalgo:login:cas' => "Se connecter (CAS)",
+	'transalgo:login:or' => "OU",
 	'transalgo:login:submit' => "Se connecter",
 	'transalgo:login:persistent' => "Se souvenir de moi",
 	

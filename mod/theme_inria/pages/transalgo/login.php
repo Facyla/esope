@@ -5,6 +5,8 @@
  * Used for the walled garden index page
  */
 
+if (elgg_is_logged_in()) { forward('/'); }
+
 elgg_push_context('login'); // Avoids 'login' link in topbar
 
 $site = elgg_get_site_entity();
@@ -35,7 +37,10 @@ $content = '<div id="transalgo-login">';
 	//$content .= '<div style="width:50%; float:right;">';
 	$content .= '<div class="transalgo-login-box">';
 		// Connexion + mot de passe perdu
-		$content .= '<h2>' . elgg_echo('login') . '</h2>';
+		$content .= '<h2>' . elgg_echo('transalgo:login:connect') . '</h2>';
+		$content .= '<p>' . elgg_echo('transalgo:login:cas:details') . '</p>';
+		$content .= '<div class="transalgo-cas-link"><a href="' . $url . 'cas_auth" class="elgg-button elgg-button-action">' . elgg_echo('transalgo:login:cas') . '</a></div>';
+		$content .= '<div class="transalgo-login-sep"><div>' . elgg_echo('transalgo:login:or') . '</div></div>';
 		$content .= elgg_view_form('transalgo/login', ['action' => 'action/login'], []);
 		$content .= $lostpassword_form;
 		$content .= '<div class="clearfloat"></div>';
