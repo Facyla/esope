@@ -89,3 +89,14 @@ echo "<p>
 	<a href="' . elgg_get_site_url() . 'slider" class="" target="_blank">Afficher la liste des sliders disponibles</a>
 	</p>';
 
+
+
+// TransAlgo
+echo '</div>';
+
+echo '<div class="elgg-head"><h3>Configuration TransAlgo</h3></div>';
+echo '<div class="elgg-body">';
+	echo "<p><label>Page de redirection après connexion (URL complète) " . elgg_view('input/text', array('name' => 'params[login_redirect]', 'value' => $vars['entity']->login_redirect)) . '</label></p>';
+echo '</div>';
+
+
