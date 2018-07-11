@@ -15,7 +15,7 @@ $tools_url = $imgurl . 'inria_widget/';
 .transalgo-login-box { background: #3c4458; color: white; max-width: 30rem; margin: 2rem 0; padding: 2rem 3rem; text-align: initial; }
 #transalgo-login .transalgo-login-box h2 { font-family: "Inria Sans", sans-serif; font-size: 1.5rem; text-align: center; color: white; margin-bottom: 2rem; }
 .transalgo-login-box form label { color: #CCC; font-size: 1rem; font-weight: normal; margin: 0 0 0.25rem 0; display: inline-block; }
-.transalgo-login-box form input { margin-bottom: 1rem; }
+.transalgo-login-box form input[type="text"]  { margin-bottom: 1rem; }
 .transalgo-lostpassword-toggle { text-decoration: underline; color: #CCC; margin: 0.5rem 0 1rem 0; display: inline-block; }
 .transalgo-cas { text-align: center; }
 .transalgo-cas-link { text-align:center; margin: 2rem 0; }
