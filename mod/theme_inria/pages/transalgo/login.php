@@ -27,7 +27,7 @@ $content = '<div id="transalgo-login">';
 
 	$content .= '<h1>' . elgg_echo('transalgo:login:title') . '</h1>';
 	$content .= '<p class="subtitle">' . elgg_echo('transalgo:login:subtitle') . '</p>';
-	$content .= '<p class="transalgo-cas">' . elgg_echo('transalgo:login:details') . '</p>';
+	$content .= elgg_echo('transalgo:login:details');
 
 	/*
 	$content .= '<div style="width:46%; float:left;">';
@@ -41,7 +41,7 @@ $content = '<div id="transalgo-login">';
 	$content .= '<div class="transalgo-login-box">';
 		// Connexion + mot de passe perdu
 		$content .= '<h2>' . elgg_echo('transalgo:login:connect') . '</h2>';
-		$content .= '<p>' . elgg_echo('transalgo:login:cas:details') . '</p>';
+		$content .= '<p class="transalgo-cas">' . elgg_echo('transalgo:login:cas:details') . '</p>';
 		$content .= '<div class="transalgo-cas-link"><a href="' . $url . 'cas_auth" class="elgg-button elgg-button-action">' . elgg_echo('transalgo:login:cas') . '</a></div>';
 		$content .= '<div class="transalgo-login-sep"><span>' . elgg_echo('transalgo:login:or') . '</span></div>';
 		$content .= elgg_view_form('transalgo/login', ['action' => 'action/login'], []);
