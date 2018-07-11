@@ -1158,7 +1158,7 @@ email3@domain.tld email4@domain.tld ",
 	// TransAlgo
 	'transalgo:login:title' => "Participate to the TransAlgo forum",
 	'transalgo:login:subtitle' => "TransAlgo scientific conversation group",
-	'transalgo:login:details' => "<p>TransAlgo gathers a large community of scientifics and partners. The aim: foster a pluridisciplinary and interdisciplinary thought in order to evaluate the responsability and transparency of algorithmic systems.<br />Who is working on what? Discover the work groups and associated thematics</p><p><strong>Do not hesitate to take part to the TransAlgo discussion group! Registration is on invite only, after you've noticed your interest through the <a href=\"https://transalgo.org/participer-au-forum-scientifique/\">form on transalgo.org</a>.</strong></p>",
+	'transalgo:login:details' => "<p>TransAlgo gathers a large community of scientifics and partners. The aim: foster a pluridisciplinary and interdisciplinary thought in order to evaluate the responsability and transparency of algorithmic systems.<br />Who is working on what? Discover the work groups and associated thematics</p><p><strong>Do not hesitate to take part to the TransAlgo discussion group!</strong></p><p><strong>Registration is on invite only, after you've noticed your interest through the <a href=\"https://transalgo.org/participer-au-forum-scientifique/\">form on transalgo.org</a>.</strong></p>",
 	'transalgo:login:lostpassword' => "Lost password?",
 	'transalgo:login:connect' => "Log in to your account",
 	'transalgo:login:cas:details' => "I am Inria personnel, I log in using CAS (Centralized Authentication Service)",
