@@ -431,10 +431,11 @@ function notification_messages_filter_text($string = '', $allowed_tags = null) {
 	if($string == strip_tags($string)) {
 		$string = elgg_autop($string);
 	}
-	// Remove any remaining \n or \r in HTML
-	$string = str_replace(['\n', '\r'], '', $string);
 	
-	// Filter using allowed tags
+	// Remove any remaining \n or \r in HTML
+	$string = str_replace(["\n", "\r", PHP_EOL], '', $string);
+	
+	// Filter HTML keeping only allowed tags
 	$descr .= strip_tags($entity->description, $allowed_tags);
 	
 	return $string;
