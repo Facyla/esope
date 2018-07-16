@@ -358,7 +358,8 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 			case 'blog':
 				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
-				$descr .= strip_tags($entity->description, $allowed_tags);
+				//$descr .= strip_tags($entity->description, $allowed_tags);
+				$descr .= notification_messages_filter_text($entity->description);
 				if (!empty($reply_descr)) { $descr = elgg_echo('notification_messages:body:inreplyto', array($descr, $reply_descr), $language); }
 				$title = '<strong>' . $entity->title . '</strong>';
 				$body = elgg_echo('blog:notify:body', array(
@@ -372,7 +373,8 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 			default:
 				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
-				$descr .= strip_tags($entity->description, $allowed_tags);
+				//$descr .= strip_tags($entity->description, $allowed_tags);
+				$descr .= notification_messages_filter_text($entity->description);
 				if (!empty($reply_descr)) { $descr = elgg_echo('notification_messages:body:inreplyto', array($descr, $reply_descr), $language); }
 				$title = $entity->title;
 				if (empty($title)) { $title = $entity->name; }
@@ -418,6 +420,26 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 	}
 	return false;
 }
+
+// Filter allowed tags and prepare for HTML rendering
+function notification_messages_filter_text($string = '', $allowed_tags = null) {
+	if (!$allowed_tags) {
+		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
+	}
+	
+	// Convert to HTML if input did not use wysiwyg editor
+	if($string == strip_tags($string)) {
+		$string = elgg_autop($string);
+	}
+	// Remove any remaining \n or \r in HTML
+	$string = str_replace(['\n', '\r'], '', $string);
+	
+	// Filter using allowed tags
+	$descr .= strip_tags($entity->description, $allowed_tags);
+	
+	return $string;
+}
+
 
 
 
