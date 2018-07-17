@@ -17,11 +17,11 @@ if (empty($comment_text)) {
 }
 
 // Convert to HTML if input did not use wysiwyg editor
-if($string == strip_tags($string)) {
-	$string = elgg_autop($string);
+if($comment_text == strip_tags($comment_text)) {
+	$comment_text = elgg_autop($comment_text);
 }
 // Remove any remaining \n or \r in HTML
-//$string = str_replace(["\n", "\r", PHP_EOL], '', $string);
+//$comment_text = str_replace(["\n", "\r", PHP_EOL], '', $comment_text);
 
 if ($comment_guid) {
 	// Edit an existing comment
