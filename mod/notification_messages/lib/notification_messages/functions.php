@@ -421,13 +421,14 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 	return false;
 }
 
-// Filter allowed tags and prepare for HTML rendering
+/* Prepare text content for HTML rendering in notifications
+ * by converting plain text to HTML, removing newlines and carriage returns, and filtering the HTML
+ * 
+ * $string : text to be converted/filtered
+ * $allowed_tags : concatenated list of HTML allowed tags. Use defined list to override defaults, true to skip
+ */
 function notification_messages_filter_text($string = '', $allowed_tags = null) {
-	if (!$allowed_tags) {
-		$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
-	}
-	
-	// Convert to HTML if input did not use wysiwyg editor
+	// Convert plain text to HTML if input did not use wysiwyg editor
 	if($string == strip_tags($string)) {
 		$string = elgg_autop($string);
 	}
@@ -436,7 +437,13 @@ function notification_messages_filter_text($string = '', $allowed_tags = null) {
 	$string = str_replace(["\n", "\r", PHP_EOL], '', $string);
 	
 	// Filter HTML keeping only allowed tags
-	$descr .= strip_tags($entity->description, $allowed_tags);
+	if ($allowed_tags !== true) {
+		// Set default filtered tags
+		if ($allowed_tags !== false) {
+			$allowed_tags = '<br><br/><p><a><ul><ol><li><strong><em><b><u><i><h1><h2><h3><h4><h5><h6><q><blockquote><code><pre>';
+		}
+		$string = strip_tags($string, $allowed_tags);
+	}
 	
 	return $string;
 }

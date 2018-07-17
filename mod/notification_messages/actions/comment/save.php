@@ -16,6 +16,13 @@ if (empty($comment_text)) {
 	forward(REFERER);
 }
 
+// Convert to HTML if input did not use wysiwyg editor
+if($string == strip_tags($string)) {
+	$string = elgg_autop($string);
+}
+// Remove any remaining \n or \r in HTML
+//$string = str_replace(["\n", "\r", PHP_EOL], '', $string);
+
 if ($comment_guid) {
 	// Edit an existing comment
 	$comment = get_entity($comment_guid);
