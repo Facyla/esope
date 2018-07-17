@@ -95,10 +95,16 @@ if ($new_file) {
 	}
 
 	if (!$title) {
-		// user blanked title, but we need one
+		// user blanked title, but we still need one
 		$title = $file->title;
 	}
 }
+
+// Convert to HTML if input did not use wysiwyg editor
+if($descr == strip_tags($descr)) {
+	$descr = elgg_autop($descr);
+}
+
 
 $file->title = $title;
 $file->description = $desc;

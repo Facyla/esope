@@ -20,7 +20,7 @@ if (empty($comment_text)) {
 if($comment_text == strip_tags($comment_text)) {
 	$comment_text = elgg_autop($comment_text);
 }
-// Remove any remaining \n or \r in HTML
+// Remove any remaining \n or \r in HTML ? (useless because wysiwyg editor adds CR anyway on edition)
 //$comment_text = str_replace(["\n", "\r", PHP_EOL], '', $comment_text);
 
 if ($comment_guid) {
