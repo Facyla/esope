@@ -4,9 +4,9 @@
 	<author>Florian DANIEL</author>
 	<version>1.12.2-rc3</version>
 	<blurb>Replaces default notifications subjects by meaningful email subjects</blurb>
-	<description>Enable this plugin to provide meaningful subjects for email notifications, when new content is created, and when replies or comments are made. It uses html_email_handler, and advanced_notifications plugin enabled.</description>
-	<website>http://datawyz.fr/</website>
-	<copyright>(C) Florian DANIEL 2014-2016</copyright>
+	<description>Enable this plugin to provide meaningful subjects for email notifications, when new content is created, and when replies or comments are made.</description>
+	<website>https://facyla.fr/</website>
+	<copyright>(c) Florian DANIEL 2014-2018</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<category>email</category>

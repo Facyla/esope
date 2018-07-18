@@ -145,6 +145,7 @@ h4 {
 	display: block;
 	border-radius: 50%;
 }
+.elgg-avatar > img { border-radius: 12.5%; }
 .elgg-avatar-tiny > a > img {
 	background-size: 25px auto;
 	border-radius: 3px;
@@ -342,4 +343,7 @@ h4 {
 	float: left;
 	margin: 0.25rem 0.25rem 0.5rem 0.25rem;
 }
+
+/* Avoid some unwanted style added by third-party apps eg. GMail */
+#digest_container .gs li { margin-left: 0; }
 
