@@ -345,5 +345,5 @@ h4 {
 }
 
 /* Avoid some unwanted style added by third-party apps eg. GMail */
-#digest_container .gs li { margin-left: 0; }
+#digest_container li { margin-left: 0 !important; }
 
