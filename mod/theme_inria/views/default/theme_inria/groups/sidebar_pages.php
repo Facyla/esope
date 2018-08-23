@@ -5,6 +5,7 @@
  */
 
 $group = elgg_get_page_owner_entity();
+$excerpt_limit = elgg_extract('excerpt_limit', $vars, 50);
 
 if ($group->pages_enable == 'yes') {
 	//$options = array('type' => 'object', 'subtype' => array('page', 'page_top'), 'container_guid' => $group->guid, 'limit' => 2);
@@ -20,7 +21,7 @@ if ($group->pages_enable == 'yes') {
 				$content .= '<a href="' . $ent->getURL() . '" title="' . $ent->title . '">';
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
-					$body = '<p>' . elgg_get_excerpt($ent->title, 50) . '</p>';
+					$body = '<p>' . elgg_get_excerpt($ent->title, $excerpt_limit) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';

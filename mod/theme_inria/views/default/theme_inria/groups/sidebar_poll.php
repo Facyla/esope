@@ -8,6 +8,7 @@ elgg_load_library('elgg:poll');
 elgg_require_js('elgg/poll/poll');
 
 $group = elgg_get_page_owner_entity();
+//$excerpt_limit = elgg_extract('excerpt_limit', $vars, 50);
 
 if (poll_activated_for_group($group)) {
 	elgg_push_context('widgets');

@@ -5,6 +5,10 @@ $main_group = theme_inria_get_main_group($group);
 $is_main_group = true;
 if ($group->guid != $main_group->guid) { $is_main_group = false; }
 
+// Set title excerpt length
+$excerpt_limit = 70;
+
+
 if ($is_main_group) {
 	$sidebar .= '<h3>' . elgg_echo('groups:briefdescription') . '</h3>';
 } else {
@@ -39,23 +43,23 @@ if (!$is_main_group) {
 
 // Contenu réservés aux membres
 if (elgg_group_gatekeeper(false)) {
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_thewire');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_thewire', ['excerpt_limit' => $excerpt_limit]);
 
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_discussion');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_discussion', ['excerpt_limit' => $excerpt_limit]);
 
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_blog');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_blog', ['excerpt_limit' => $excerpt_limit]);
 
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_pages');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_pages', ['excerpt_limit' => $excerpt_limit]);
 
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_bookmarks', ['excerpt_limit' => $excerpt_limit]);
 
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_newsletter', ['excerpt_limit' => $excerpt_limit]);
 
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_file');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_file', ['excerpt_limit' => $excerpt_limit]);
 }
 
 if (!elgg_in_context('workspace')) {
-	$sidebar .= elgg_view('theme_inria/groups/sidebar_feedback');
+	$sidebar .= elgg_view('theme_inria/groups/sidebar_feedback', ['excerpt_limit' => $excerpt_limit]);
 }
 
 

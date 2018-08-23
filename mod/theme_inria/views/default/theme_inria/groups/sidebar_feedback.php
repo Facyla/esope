@@ -7,6 +7,7 @@
 if (!elgg_is_active_plugin('feedback')) { return true; }
 
 $group = elgg_get_page_owner_entity();
+//$excerpt_limit = elgg_extract('excerpt_limit', $vars, 50);
 
 $feedbackgroup = elgg_get_plugin_setting("feedbackgroup", "feedback");
 if (empty($feedbackgroup) || ($feedbackgroup == 'no')) { return true; }

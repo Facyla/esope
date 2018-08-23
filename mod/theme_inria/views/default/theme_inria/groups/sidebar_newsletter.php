@@ -5,6 +5,7 @@
  */
 
 $group = elgg_get_page_owner_entity();
+$excerpt_limit = elgg_extract('excerpt_limit', $vars, 50);
 
 if ($group->newsletter_enable == 'yes') {
 	$options = array('type' => 'object', 'subtype' => 'newsletter', 'container_guid' => $group->guid, 'limit' => 2);
@@ -19,7 +20,7 @@ if ($group->newsletter_enable == 'yes') {
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
-					$body .= elgg_get_excerpt($ent->title, 50);
+					$body .= elgg_get_excerpt($ent->title, $excerpt_limit);
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';

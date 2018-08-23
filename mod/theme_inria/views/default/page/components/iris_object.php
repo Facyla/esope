@@ -63,6 +63,7 @@ if (!in_array($mode, array('full', 'listing', 'content'))) {
 		$mode = 'content';
 	}
 }
+$excerpt_limit = elgg_extract('excerpt_limit', $vars, 70);
 
 $class = 'elgg-image-block';
 $class = '';
@@ -84,8 +85,8 @@ if (!empty($title)) {
 	if ($mode == 'full') {
 		$main_title = '<h2>' . $title . '</h2>';
 	} else {
-		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, 50) . '</a></h3>';
-		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, 50) . '</h3>';
+		$main_title = '<h3 title="' . $title . '"><a href="' . $entity->getURL() . '">' . elgg_get_excerpt($title, $excerpt_limit) . '</a></h3>';
+		//$main_content .= '<h3 title="' . $title . '">' . elgg_get_excerpt($title, $excerpt_limit) . '</h3>';
 	}
 }
 

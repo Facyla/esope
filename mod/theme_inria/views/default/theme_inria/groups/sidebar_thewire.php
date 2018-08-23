@@ -5,6 +5,7 @@
  */
 
 $group = elgg_get_page_owner_entity();
+$excerpt_limit = elgg_extract('excerpt_limit', $vars, 50);
 
 if ($group->thewire_enable == 'yes') {
 	$options = array('type' => 'object', 'subtype' => 'thewire', 'container_guid' => $group->guid, 'limit' => 2);
@@ -20,7 +21,7 @@ if ($group->thewire_enable == 'yes') {
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
-					$body .= '<p>' . elgg_get_excerpt($ent->description, 50) . '</p>';
+					$body .= '<p>' . elgg_get_excerpt($ent->description, $excerpt_limit) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';

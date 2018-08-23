@@ -5,6 +5,7 @@
  */
 
 $group = elgg_get_page_owner_entity();
+//$excerpt_limit = elgg_extract('excerpt_limit', $vars, 50);
 
 //if ($group->file_enable == 'yes') {
 if (true) {
