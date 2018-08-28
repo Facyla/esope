@@ -286,7 +286,7 @@ function theme_inria_annotation_notifications_event_block($event, $type, $annota
 	}
 }
 
-// Also notify group operators
+// Also notify group operators for membership requests
 function theme_inria_create_relationship_event($event, $type, $relationship) {
 	if (($type == 'relationship') && ($relationship->relationship == "membership_request")) {
 		$user_guid = $relationship->guid_one;
@@ -294,41 +294,44 @@ function theme_inria_create_relationship_event($event, $type, $relationship) {
 		$operators = elgg_get_entities_from_relationship(array('types'=>'user', 'relationship_guid'=>$group_guid, 'relationship'=>'operator', 'inverse_relationship'=>true));
 		
 		// Notify all group operators + group owner if not passed through join action
+		
 		$user = get_entity($user_guid);
 		$group = get_entity($group_guid);
-		$url = elgg_get_site_url() . "groups/requests/$group_guid";
+		$owner = $group->getOwnerEntity();
+		$request_url = elgg_get_site_url() . "groups/requests/$group_guid";
+		
+		// Notify group owner : disabled because owner is notified immediately through the action (unless action is overriden)
+		/*
 		$subject = elgg_echo('groups:request:subject', array(
 				$user->name,
 				$group->name,
-			), $ent->language);
+			), $owner->language);
 		
 		$body = elgg_echo('groups:request:body', array(
 				$owner->name,
 				$user->name,
 				$group->name,
 				$user->getURL(),
-				$url,
-			), $ent->language);
-			
+				$request_url,
+			), $owner->language);
 		$params = [
 			'action' => 'membership_request',
 			'object' => $group,
 		];
-		
-		// Notify owner first
-		$owner = $group->getOwnerEntity();
 		notify_user($owner->guid, $user_guid, $subject, $body, $params);
+		*/
 		
+		// Notify the other operators
 		foreach ($operators as $ent) {
 			$body = elgg_echo('groups:request:body', array(
 					$ent->name,
 					$user->name,
 					$group->name,
 					$user->getURL(),
-					$url,
+					$request_url,
 				), $ent->language);
 			
-			// Avoid duplicate if owner is also in operators
+			// Never notify owner here - avoids duplicate if owner is also in operators
 			if ($ent->guid == $owner->guid) { continue; }
 			notify_user($ent->guid, $user_guid, $subject, $body, $params);
 		}
