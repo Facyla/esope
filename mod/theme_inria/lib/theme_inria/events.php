@@ -307,7 +307,6 @@ function theme_inria_create_relationship_event($event, $type, $relationship) {
 		
 		/* Notify group owner : disabled because owner is already notified 
 		 * Owner notification occurs immediately through the action (unless action is overriden)
-		 */
 		$body = elgg_echo('groups:request:body', array(
 				$owner->name,
 				$user->name,
@@ -320,7 +319,7 @@ function theme_inria_create_relationship_event($event, $type, $relationship) {
 			'object' => $group,
 		];
 		notify_user($owner->guid, $user_guid, $subject, $body, $params);
-		*/
+		 */
 		
 		// Notify the other operators
 		foreach ($operators as $ent) {
