@@ -1163,7 +1163,22 @@ Comme vous n'êtes pas encore membre de ce groupe, une demande d'adhésion a ét
 	'event_calendar:enable_event_calendar' => "Activer l'agenda",
 	'group_chat:group_option' => "Activer le chat",
 	'groups:enableforum' => "Activer le forum",
-	
+	'groups:request:body' => "Bonjour %s,
+
+%s a demandé à rejoindre le groupe \"%s'\". Cliquez le lien ci-dessous pour voir son profil :
+
+%s
+
+ou cliquez sur le lien ci-dessous pour confirmer ou refuser son adhésion :
+
+%s",
+	'groups:invite:body' => "Bonjour %s,
+
+%s vous a invité(e) à rejoindre le groupe \"%s\". Cliquez sur le lien ci-dessous pour confirmer ou refuser :
+
+%s",
+
+
 	'theme_inria:digest:newmembers' => "Depuis la dernière lettre, %s nouveaux membres ont rejoint Iris.",
 	'theme_inria:digest:newmembers:inria' => "Depuis la dernière lettre, %s nouveaux membres Inria ont rejoint Iris.",
 	'theme_inria:digest:welcomenewmembers' => "Découvrez qui ils sont et souhaitez-leur la bienvenue&nbsp;!",
