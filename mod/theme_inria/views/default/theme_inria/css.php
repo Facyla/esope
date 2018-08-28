@@ -1446,7 +1446,7 @@ ul.elgg-list li.elgg-item.elgg-item-group div.elgg-image a img, .elgg-item-group
 
 .group-members-count { font-size: 5.5rem; /* text-align: center; */ color: #1488CA; margin: 1rem 0 1.5rem 0; }
 .group-profile-main .elgg-list li { box-shadow: none; margin-bottom: 0; }
-.group-profile-main .iris-round-button { color:white; font-size: 1rem; height: 2rem; width: 2rem; line-height: 2.2rem; opacity: 0.6; }
+.group-profile-main .iris-round-button { color:white; font-size: 1rem; height: 2rem; width: 2rem; line-height: 2rem; opacity: 0.6; }
 .group-operator:hover .iris-round-button, .group-member:hover .iris-round-button { opacity: 1; }
 .make-group-owner { top: 3.5rem; left: 1rem; }
 .remove-group-operator { top: 3.5rem; left: 3.5rem; }
