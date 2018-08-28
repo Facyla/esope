@@ -160,8 +160,8 @@ $content .= '<div class="group-profile-main">';
 				$actions = '';
 				if ($group->canEdit()) {
 					$remove_member_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/groups/remove?group_guid=' . $group->guid . '&user_guid=' . $ent->guid);
-					$actions .= '<a href="' . $remove_member_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:removefromgroup') . 'Retirer du groupe" style="background: #FF0000;"><i class="fa fa-user-times"></i></a>';
-					if (!check_entity_relationship($ent->guid, 'operator', $group->guid)) {
+					$actions .= '<a href="' . $remove_member_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:removefromgroup') . '" style="background: #FF0000;"><i class="fa fa-user-times"></i></a>';
+					if (!check_entity_relationship($ent->guid, 'operator', $group->guid) && ($ent->guid != $owner->guid)) {
 						$make_operator_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/group_operators/add?mygroup=' . $group->guid . '&who=' . $ent->guid);
 						$actions .= '<a href="' . $make_operator_url . '" class="iris-round-button" title="' . elgg_echo('theme_inria:addoperator') . '" style="background: #1488CA;"><i class="fa fa-user-plus fa-user-circle"></i></a>';
 					}
