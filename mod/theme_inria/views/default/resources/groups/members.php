@@ -103,7 +103,7 @@ $content .= '<div class="group-profile-main">';
 						$actions = '';
 						if ($group->canEdit()) {
 							$make_owner_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/group_operators/mkowner?mygroup=' . $group->guid . '&who=' . $ent->guid);
-							$actions .= '<a href="' . $make_owner_url . '" class="iris-round-button make-group-owner" title="' . elgg_echo('theme_inria:makeowner') . '" style="background: #1488CA;"><i class="fa fa-gears fa-user-circle-o"></i></a>';
+							$actions .= '<a href="' . $make_owner_url . '" class="iris-round-button make-group-owner" title="' . elgg_echo('theme_inria:makeowner') . '" style="background: #1488CA;"><i class="fa fa-gears"></i></a>';
 							$remove_operator_url = elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/group_operators/remove?mygroup=' . $group->guid . '&who=' . $ent->guid);
 							$actions .= '<a href="' . $remove_operator_url . '" class="iris-round-button remove-group-operator" title="' . elgg_echo('theme_inria:removeoperator') . '" style="background: #FF0000;"><i class="fa fa-times"></i></a>';
 						}
