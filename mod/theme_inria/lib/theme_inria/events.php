@@ -300,13 +300,14 @@ function theme_inria_create_relationship_event($event, $type, $relationship) {
 		$owner = $group->getOwnerEntity();
 		$request_url = elgg_get_site_url() . "groups/requests/$group_guid";
 		
-		// Notify group owner : disabled because owner is notified immediately through the action (unless action is overriden)
-		/*
 		$subject = elgg_echo('groups:request:subject', array(
 				$user->name,
 				$group->name,
 			), $owner->language);
 		
+		/* Notify group owner : disabled because owner is already notified 
+		 * Owner notification occurs immediately through the action (unless action is overriden)
+		 */
 		$body = elgg_echo('groups:request:body', array(
 				$owner->name,
 				$user->name,
