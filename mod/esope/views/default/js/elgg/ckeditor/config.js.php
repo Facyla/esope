@@ -21,7 +21,7 @@ define(function(require) {
 				['Blockquote'], 
 				['Link', 'Unlink'], 
 				// source, iframe, flash, table
-				['Image'], 
+				['Image'], //['Smiley'], ['SpecialChar'], 
 				['Iframe'], 
 				['Table'], 
 				['Source'], 
@@ -69,7 +69,7 @@ define(function(require) {
 		//removePlugins: 'liststyle,contextmenu,tabletools,resize',
 		removePlugins: '',
 		extraPlugins: 'blockimagepaste,colorbutton,colordialog', //colorbutton,colordialog
-		defaultLanguage: 'en',
+		defaultLanguage: 'fr',
 		language: elgg.get_language(),
 		skin: 'moono',
 		uiColor: '#EEEEEE',
