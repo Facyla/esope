@@ -39,7 +39,7 @@ define(function(require) {
 		toolbar_basic: [
 				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
 				['NumberedList', 'BulletedList'], 
-				['Blockquote'], 
+				['Smiley'], ['Blockquote'], 
 				['Link', 'Unlink'], 
 				['Scayt'], 
 				['Maximize'], 
