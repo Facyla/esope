@@ -25,6 +25,9 @@ $categories = elgg_view('output/categories', $vars);
 $container = $poll->getContainerEntity();
 $date = elgg_view_friendly_time($poll->time_created);
 
+$own = elgg_get_logged_in_user_entity();
+
+
 $allow_close_date = elgg_get_plugin_setting('allow_close_date','poll');
 if (($allow_close_date == 'yes') && (isset($poll->close_date))) {
 	$date_day = gmdate('j', $poll->close_date);
@@ -76,7 +79,11 @@ if (!elgg_in_context('widgets')) {
 if ($full) {
 	$description = $poll->description;
 } else {
-	$description = '<a href="' . $poll->getUrl() . '" class="iris-object-readmore">' . elgg_get_excerpt($poll->description) . '<span class="readmore">' . elgg_echo('theme_inria:readmore:vote') . '</span></a>';
+	if ($poll->isOpen() && !$poll->hasVoted($own)) {
+		$description = '<a href="' . $poll->getUrl() . '" class="iris-object-readmore">' . elgg_get_excerpt($poll->description) . '<span class="readmore">' . elgg_echo('theme_inria:readmore:vote') . '</span></a>';
+	} else {
+		$description = '<a href="' . $poll->getUrl() . '" class="iris-object-readmore">' . elgg_get_excerpt($poll->description) . '<span class="readmore">' . elgg_echo('theme_inria:readmore:view') . '</span></a>';
+	}
 }
 if (!empty($description)) { $description = '<div class="" style="padding: 0.5rem 0">' . $description . '</div>'; }
 

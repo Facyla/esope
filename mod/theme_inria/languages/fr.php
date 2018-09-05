@@ -877,6 +877,7 @@ Voir et commenter ce lien web :
 	
 	'theme_inria:manage' => "gérer",
 	'theme_inria:readmore' => "Afficher la page",
+	'theme_inria:readmore:view' => "Afficher les résultats du sondage",
 	'theme_inria:readmore:vote' => "Afficher le sondage et voter",
 	
 	'theme_inria:discussion:placeholder' => "Partagez un message avec le groupe",

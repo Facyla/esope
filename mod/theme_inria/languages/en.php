@@ -875,6 +875,7 @@ View and comment on the bookmark:
 	
 	'theme_inria:manage' => "manage",
 	'theme_inria:readmore' => "Display the page",
+	'theme_inria:readmore:view' => "Display poll results",
 	'theme_inria:readmore:vote' => "Display poll and vote",
 	
 	'theme_inria:discussion:placeholder' => "Share a message with the group",
