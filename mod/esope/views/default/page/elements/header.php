@@ -177,7 +177,13 @@ if (elgg_is_logged_in()) {
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('members')) { ?>
-				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('esope:directory'); ?></a></li>
+				<li class="members"><a <?php if(elgg_in_context('members') || elgg_in_context('profile') || elgg_in_context('friends')) { echo 'class="active elgg-state-selected"'; } ?> href="<?php echo $url . 'members'; ?>"><?php echo elgg_echo('esope:directory'); ?></a>
+					<?php if (elgg_is_active_plugin('invitefriends') && elgg_get_config('allow_registration')) { ?>
+						<ul class="hidden">
+							<li><a href="<?php echo $url . 'invite'; ?>"><?php echo elgg_echo('friends:invite'); ?></a></li>
+						</ul>
+					<?php } ?>
+				</li>
 			<?php } ?>
 	
 			<?php if (elgg_is_active_plugin('event_calendar')) { ?>
