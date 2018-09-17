@@ -96,6 +96,12 @@ if ($full) {
 	));
 	*/
 	$content = $status . $categories . $body;
+	
+	// Add comments, without the add form
+	if ($blog->comments_on == 'Off') {
+		$content .= elgg_view_comments($blog, false, []);
+		$content .= '<p><em>' . elgg_echo('theme_inria:comments:off') . '</em></p>';
+	}
 
 } else {
 	// brief view

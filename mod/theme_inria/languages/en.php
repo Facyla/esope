@@ -1154,6 +1154,7 @@ email3@domain.tld email4@domain.tld ",
 	'theme_inria:site_notifications:delete_all:confirm' => "Warning, this will mark all your site notifications as read. Do you wish to continue?",
 	
 	'theme_inria:prevent_notifications:label' => "Send a notification",
+	'theme_inria:comments:off' => "Comments are now closed.",
 	
 	
 	// TransAlgo

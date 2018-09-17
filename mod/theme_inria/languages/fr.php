@@ -1195,6 +1195,7 @@ ou cliquez sur le lien ci-dessous pour confirmer ou refuser son adhésion :
 	'theme_inria:site_notifications:delete_all:confirm' => "Attention, ceci marquera l'ensemble de vos notifications comme lues : souhaitez-vous continuer ?",
 	
 	'theme_inria:prevent_notifications:label' => "Envoyer une notification",
+	'theme_inria:comments:off' => "Les commentaires sont désactivés.",
 	
 	
 	// TransAlgo

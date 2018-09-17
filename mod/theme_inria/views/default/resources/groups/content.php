@@ -32,6 +32,7 @@ switch($subtype) {
 	case 'discussion':
 		//$subtypes = array('groupforumtopic', 'discussion_reply');
 		$subtypes = array('groupforumtopic',);
+		//$subtypes = array('discussion');
 		break;
 	default:
 		$subtypes = $subtype;

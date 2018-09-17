@@ -21,9 +21,17 @@ if (elgg_instanceof($owner)) {
 }
 
 // TOP MENU
+// Use correct handler for discussions
+$handler = $entity->getSubtype();
+switch($handler) {
+	case 'groupforumtopic':
+		$handler = 'discussion';
+		break;
+	default:
+}
 $menu = elgg_view_menu('entity', array(
 		'entity' => $entity,
-		'handler' => $entity->getSubtype(),
+		'handler' => $handler,
 		'sort_by' => 'priority',
 		'class' => 'elgg-menu-vert',
 	));
