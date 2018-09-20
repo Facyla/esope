@@ -1,7 +1,9 @@
 <?php
 if (!elgg_is_logged_in()) { return; }
 
-$time = elgg_extract('seconds', $vars, 600);
+//$time = elgg_extract('seconds', $vars, 600);
+$seconds = elgg_extract('seconds', $vars, 600); // 10 minutes
+$time = time() - $seconds;
 // No limit (0) is fine for small sites but have to limit displayed results on big ones
 $limit = elgg_extract('limit', $vars, 14);
 $group = elgg_get_page_owner_entity();
@@ -22,7 +24,7 @@ $options = array(
 	'gallery_class' => 'elgg-gallery-users',
 	'pagination' => false,
 );
-$body = elgg_list_entities_from_relationship($options);
+$body = elgg_list_entities_from_relationship($options, 'find_active_users');
 
 /* Avoid this method : might lead to memory overflow on big sites
 // Limit : will be filtered, but do not set to high (or better use a custom direct query)
