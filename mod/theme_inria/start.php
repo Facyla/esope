@@ -341,6 +341,10 @@ function theme_inria_init(){
 	require_once('vendors/EmojiDetection/Emoji.php');
 	elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_emoji_input');
 	elgg_register_plugin_hook_handler('view', 'output/longtext', 'theme_inria_emoji_output');
+	//elgg_register_event_handler("create", "object", "theme_inria_thewire_handler_event", 0);
+	elgg_unregister_action('thewire/add');
+	$thewire_action_path = elgg_get_plugins_path() . 'theme_inria/actions/thewire/';
+	elgg_register_action("thewire/add", $thewire_action_path . 'add.php');
 }
 
 // Include Inria page handlers
@@ -523,16 +527,22 @@ function theme_inria_get_translation($key, $use_cmspages = false) {
 
 
 // EMOJI SUPPORT
+// 👶 👧 👦 👩👵👳 ♂ 👩⚕ 👩🌾 👨🍳 👩‍🎤
 // Input text filter, used to validate text content, extract data, replace strings, etc.
 // Note : Wire input uses a custom getter
 function theme_inria_emoji_input($hook, $type, $input, $params) {
 	$emojis = Emoji\detect_emoji($input);
 	$map = Emoji\_load_map();
 	if (count($emojis) > 0) {
+		error_log("EMOJI detected");
 		foreach($emojis as $emoji) {
 			$replace_map['emojis'][] = $emoji['emoji'];
 			$replace_map['shortcodes'][] = ':' . $emoji['short_name'] . ':';
-			$replace_map['html'][] = '&#x' . $emoji['hex_str'];
+			//$replace_map['html'][] = '&#x' . $emoji['hex_str'];
+			$replace_map['html'][] = '&#x' . str_replace('-', '&#x', $emoji['hex_str']);
+			error_log('&#x' . str_replace('-', '&#x', $emoji['hex_str']));
+			//$replace_map['html'][] = '&#x' . implode('&#x', $emoji['points_hex']);
+			//error_log('&#x' . implode('&#x', $emoji['points_hex']));
 			//error_log(" => " . print_r($emoji, true));
 		}
 		// Replace by shortcodes // Caution in editors - will be displayed as the shortcode
@@ -568,11 +578,60 @@ function theme_inria_emoji_get_map() {
  */
 function theme_inria_emoji_output($hook, $type, $text, $params) {
 	$replace_map = theme_inria_emoji_get_map();
-	// Make emjois displayable
-	return str_replace('&amp;#x', '&#x', $text);
+	// Make HTML emojis displayable
+	$text = str_replace('&amp;#x', '&#x', $text);
 	// Convert shortcodes to emojis
-	//return str_replace($replace_map['text'], $replace_map['emojis'], $text);
+	$text = str_replace($replace_map['text'], $replace_map['emojis'], $text);
+	return $text;
 }
 
+/**
+ * Replace urls, hash tags, and @'s by links
+ *
+ * @param string $text The text of a post
+ * @return string
+ */
+function theme_inria_thewire_filter($text) {
+	global $CONFIG;
+	$text = ' ' . $text;
+	// email addresses
+	$text = preg_replace(
+				'/(^|[^\w])([\w\-\.]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})/i',
+				'$1<a href="mailto:$2@$3">$2@$3</a>',
+				$text);
+	// links
+	$text = parse_urls($text);
+	// usernames
+	$text = preg_replace(
+				'/(^|[^\w])@([\p{L}\p{Nd}._]+)/u',
+				'$1<a href="' . $CONFIG->wwwroot . 'thewire/owner/$2">@$2</a>',
+				$text);
+	// hashtags => avoid &#xXXXX being interpreted as hashtag (Unicode codepoint)
+	$text = preg_replace(
+				//'/(^|[^\w])#(\w*[^\s\d!-\/:-@]+\w*)/',
+				'/(^|[^\w|\&])#(\w*[^\s\d!-\/:-@]+\w*)/',
+				'$1<a href="' . $CONFIG->wwwroot . 'thewire/tag/$2">#$2</a>',
+				$text);
+	$text = trim($text);
+	return $text;
+}
+
+/* Support Wire posts content
+function theme_inria_thewire_handler_event($event, $type, $object) {
+//	if (!empty($object) && elgg_instanceof($object, "object", "thewire")) {
+		$text = get_input('body', '', false);
+		error_log("TEXT : $text");
+		$text = theme_inria_emoji_input('', '', $text, []);
+		// no html tags allowed so we escape
+		$text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+		error_log(" => $text");
+		set_input('body', $text);
+		//$object->description = $text;
+		// Update entity
+		//$object->save();
+//	}
+	// Return false halts the process, true or no return is equivalent
+}
+ */
 
 
