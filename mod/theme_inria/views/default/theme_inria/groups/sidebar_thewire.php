@@ -21,7 +21,8 @@ if ($group->thewire_enable == 'yes') {
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
-					$body .= '<p>' . elgg_get_excerpt($ent->description, $excerpt_limit) . '</p>';
+					$excerpt = theme_inria_emoji_output('', '', $ent->description, []);
+					$body .= '<p>' . elgg_get_excerpt($excerpt) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
 			$content .= '</div>';
