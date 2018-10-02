@@ -338,6 +338,9 @@ function theme_inria_init(){
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'theme_inria_public_pages');
 	
 	
+	require_once('vendors/EmojiDetection/Emoji.php');
+	elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_emoji_input');
+	elgg_register_plugin_hook_handler('view', 'output/longtext', 'theme_inria_emoji_output');
 }
 
 // Include Inria page handlers
@@ -517,5 +520,59 @@ function theme_inria_get_translation($key, $use_cmspages = false) {
 	
 	return false;
 }
+
+
+// EMOJI SUPPORT
+// Input text filter, used to validate text content, extract data, replace strings, etc.
+// Note : Wire input uses a custom getter
+function theme_inria_emoji_input($hook, $type, $input, $params) {
+	$emojis = Emoji\detect_emoji($input);
+	$map = Emoji\_load_map();
+	if (count($emojis) > 0) {
+		foreach($emojis as $emoji) {
+			$replace_map['emojis'][] = $emoji['emoji'];
+			$replace_map['shortcodes'][] = ':' . $emoji['short_name'] . ':';
+			$replace_map['html'][] = '&#x' . $emoji['hex_str'];
+			//error_log(" => " . print_r($emoji, true));
+		}
+		// Replace by shortcodes // Caution in editors - will be displayed as the shortcode
+		//$input = str_replace($replace_map['emojis'], $replace_map['shortcodes'], $input);
+		// Replace by HTML codepoint text
+		$input = str_replace($replace_map['emojis'], $replace_map['html'], $input);
+	}
+	return $input;
+}
+// Add colon padding for unicode emoji shortcodes
+function theme_inria_emoji_pad(&$text) { $text = ":$text:"; }
+// Add HTML representation of codepoint
+function theme_inria_emoji_html_codepoint(&$codepoint) { $codepoint = "&#x$codepoint"; }
+// Get replacement map for text emojis
+function theme_inria_emoji_get_map() {
+	static $replace_map = 1;
+	if (!is_array($replace_map)) {
+		$emojis_map = Emoji\_load_map();
+		$emojis = array_keys($emojis_map);
+		array_walk($emojis, 'theme_inria_emoji_html_codepoint');
+		$text = array_values($emojis_map);
+		array_walk($text, 'theme_inria_emoji_pad');
+		$replace_map = [
+			'emojis' => $emojis,
+			'text' => $text,
+		];
+	}
+	return $replace_map;
+}
+/* Prepare emjoi for display
+ * replace emoji text value with emoji
+ * or make HTML codepoint viewable
+ */
+function theme_inria_emoji_output($hook, $type, $text, $params) {
+	$replace_map = theme_inria_emoji_get_map();
+	// Make emjois displayable
+	return str_replace('&amp;#x', '&#x', $text);
+	// Convert shortcodes to emojis
+	//return str_replace($replace_map['text'], $replace_map['emojis'], $text);
+}
+
 
 
