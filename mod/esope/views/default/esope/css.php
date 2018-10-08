@@ -718,6 +718,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 
 
 
+
 <?php if (!$fixedwidth) { ?>
 /* .elgg-page-body RESPONSIVE DESIGN */
 

@@ -35,6 +35,7 @@ html {
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 
 
+.theme-sandbox-layout { display: block; }
 
 <?php if (!$fixedwidth) { ?>
 /* RESPONSIVE */

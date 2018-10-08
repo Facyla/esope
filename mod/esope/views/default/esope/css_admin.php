@@ -49,3 +49,5 @@ textarea, .elgg-input-rawtext { width:100%; }
 #groups-settings fieldset fieldset { width: 45%; min-width: 200px; float: left; margin-left:1%; margin-right:1%; padding: 1%; }
 
 
+
+
