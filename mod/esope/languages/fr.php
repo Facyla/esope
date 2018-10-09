@@ -324,6 +324,7 @@ return array(
 	'esope:css:help' => "Les CSS ajoutés ici surchargent la feuille de style (sans la remplacer), et viennent se charger après tous les autres modules. Ajoutez ici vos styles personnalisés",
 	'esope:css:default' => "/* Pour modifier le bandeau */\nheader {  }\n\n/* Les liens */\na, a:visited {  }\na:hover, a:active, a:focus {  }\n\n/* Les titres */\nh1, h2, h3, h4, h5 {  }\n/* etc. */\n",
 	'esope:dashboardheader' => "Zone configurable en entête du tableau de bord des membres.",
+	'esope:index_slider' => "Ajouter un Diaporama (article de blog) sur l'accueil",
 	'esope:index_wire' => "Ajouter Le Fil sur l'accueil.",
 	'esope:index_groups' => "Afficher les groupes à la Une",
 	'esope:index_members' => "Afficher les membres connectés",

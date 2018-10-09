@@ -324,6 +324,14 @@ $(function() {
 			
 			// Colonne centrale
 			echo '<fieldset>';
+			if (elgg_is_active_plugin('slider')) {
+			// à terme : permettre d'indiquer le guid ou identifiant du slider, ou yes pour contenu automatique
+			// GUID ou identifiant du slider à afficher sur l'accueil
+			// Afficher la liste des sliders disponibles
+				echo '<p><label>' . elgg_echo('esope:index_slider') . '</label>';
+					echo elgg_view('input/select', array('name' => 'params[index_slider]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_slider));
+			echo '</p>';
+			}
 			if (elgg_is_active_plugin('thewire')) {
 				echo '<p><label>' . elgg_echo('esope:index_wire') . '</label>';
 					echo elgg_view('input/select', array('name' => 'params[index_wire]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_wire));

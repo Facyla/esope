@@ -136,12 +136,15 @@ echo '</p>';
 	<?php echo elgg_view('input/text', array( 'name' => 'params[css_textslide]', 'value' => $vars['entity']->css_textslide )); ?>
 </p><br />
 
-<!--
+<?php
+/*
 <p><label><?php echo elgg_echo('slider:settings:css'); ?></label><br />
 	<?php echo elgg_echo('slider:css:help'); ?>
 	<?php echo elgg_view('input/plaintext', array( 'name' => 'params[css]', 'value' => $vars['entity']->css )); ?>
 </p>
-//-->
+*/
+?>
+
 
 <br />
 

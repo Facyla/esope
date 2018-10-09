@@ -312,6 +312,7 @@ return array(
 	'esope:css:help' => "The CSS you add here are loaded after the main CSS (without overriding it), and after any plugins CSS.",
 	'esope:css:default' => "/* Edit headers style */\nheader {  }\n\n/* Links */\na, a:visited {  }\na:hover, a:active, a:focus {  }\n\n/* Titles */\nh1, h2, h3, h4, h5 {  }\n/* etc. */\n",
 	'esope:dashboardheader' => "Custom introduction text before the user dashboard.",
+	'esope:index_slider' => "Add a Slider (from blog posts) on homepage",
 	'esope:index_wire' => "Add The Wire on homepage.",
 	'esope:index_groups' => "Display featured groups",
 	'esope:index_members' => "Display online members",
