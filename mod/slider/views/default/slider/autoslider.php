@@ -66,7 +66,8 @@ if ($entities) foreach ($entities as $ent) {
 	//$owner = $ent->getOwnerEntity();
 	$container = $ent->getContainerEntity();
 	if (elgg_instanceof($container, 'group')) {
-		$group_icon = $ent->getIconURL('tiny');
+		$group_icon = elgg_view_entity_icon($ent, 'tiny');
+		//$group_icon = elgg_view_entity_icon($ent, 'tiny', ['size' => 'tiny']);
 		$container_info .= elgg_view('output/url', array(
 					'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name),
 					'title' => $container->name,
