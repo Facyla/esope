@@ -31,29 +31,53 @@ $i = 0;
 if ($entities) foreach ($entities as $ent) {
 	$i++;
 	
+	// Content title (or name)
 	$title = $ent->title;
-	// Get best suitable image
+	if (empty($title)) { $title = $ent->name; }
+	$title = elgg_view('output/url', ['text' => $title, 'href' => $ent->getURL()]);
+	
+	// Illustration - Get best suitable image
 	$image_url = '';
 	if ($ent->icontime) { $image_url = $ent->getIconURL('large'); }
 	// Forget empty or default image
 	if (empty($image_url) || strpos($image_url, 'graphics/icons/default')) {
 		$image_url = esope_extract_first_image($ent->description, false);
 	}
-	// Last method if no image found : use author image
+	// If no image found : use author image
 	if (empty($image_url)) {
 		$container = $ent->getOwnerEntity();
 		$image_url = $container->getIconURL('large');
 	}
+	// Default image or none ?  rather none by now
 	//$image = '<img src="' . $image_url . '" style="max-height: ' . $height . ' !important; width:auto !important; flex: 0 0 auto;" />';
-	$image = '<img src="' . $image_url . '" style="max-height: ' . $height . ' !important; width:auto !important;" />'; // not flex
+	//$image = '<img src="' . $image_url . '" style="max-height: ' . $height . ' !important; width:auto !important;" />'; // not flex
 	$image = '<img src="' . $image_url . '" style="margin:auto; max-height: ' . $height . ' !important; width:auto !important;" />'; // flex
+	$image = elgg_view('output/url', ['text' => $image, 'href' => $ent->getURL()]);
 	
 	// Excerpt
 	$text = $ent->excerpt;
-	if (empty($text)) $text = $ent->briefdescription;
+	if (empty($text)) { $text = $ent->briefdescription; }
 	$text .= $ent->description;
 	$text =  htmlspecialchars(html_entity_decode(strip_tags($text)), ENT_NOQUOTES, 'UTF-8');
 	$excerpt = elgg_get_excerpt($text, 300);
+	
+	// Some basic meta : date, container, author, num comments...
+	//$access_info = elgg_view('output/access', array('entity' => $ent));
+	//$owner = $ent->getOwnerEntity();
+	$container = $ent->getContainerEntity();
+	if (elgg_instanceof($container, 'group')) {
+		$group_icon = $ent->getIconURL('tiny');
+		$container_info .= elgg_view('output/url', array(
+					'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name),
+					'title' => $container->name,
+					'href' => $container->getURL(),
+				));
+	}
+	$meta = '';
+	//if (!empty($access_info)) $meta .= $access_info . ' &nbsp; ';
+	if (!empty($container_info)) $meta .= $container_info . ' &nbsp; ';
+	$meta .= elgg_get_friendly_time($ent->time_updated);
+	
 	
 	// Compose slider element
 	/*
@@ -67,13 +91,15 @@ if ($entities) foreach ($entities as $ent) {
 	$content .= '</div></li>';
 	*/
 	
-	/*
-	*/
 	$content .= '<li>';
-	$content .= '<div style="display: flex;">';
-	$content .= '<div class="imageSlide" style="flex: 0 0 auto; display: flex; min-width: ' . $height . '">' . $image . '</div>';
-	$content .= '<div class="textSlide" style="flex: 1 1 auto;"><h3><a href="' . $ent->getURL() . '">' . $title . '</a></h3><div style="font-size: 1.25rem;">' . $excerpt . '</div></div>';
-	$content .= '</div>';
+		$content .= '<div style="display: flex; height: 100%;">';
+			$content .= '<div class="imageSlide" style="flex: 0 0 auto; display: flex; min-width: ' . $height . '">' . $image . '</div>';
+			$content .= '<div class="textSlide" style="flex: 1 1 auto; display: flex; flex-direction: column;">
+				<h3 style="flex: 0 0 auto;">' . $title . '</h3>
+				<div style="font-size: 1.25rem; flex: 1 1 auto;">' . $excerpt . '</div>
+				<div style="margin-bottom: 0; padding-top: 1rem; flex: 0 0 auto; text-align: right;">' . $meta . '</div>
+			</div>';
+		$content .= '</div>';
 	$content .= '</li>';
 	
 	if ($i >= $max) { break; }
