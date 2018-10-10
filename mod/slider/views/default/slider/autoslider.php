@@ -8,7 +8,7 @@ $html_content = elgg_extract('html_content', $vars, ''); // HTML content (HTML l
 $entities = elgg_extract('entities', $vars, ''); // Entities for slider population (ElggEntity array)
 // default content (not used - rather don't display anything than demo data)
 $default_content = elgg_get_plugin_setting('content', 'slider');
-
+$max = 20;
 
 $content = '';
 
@@ -31,10 +31,16 @@ $i = 0;
 if ($entities) foreach ($entities as $ent) {
 	$i++;
 	
+	//$access_info = elgg_view('output/access', array('entity' => $ent));
+	$owner = $ent->getOwnerEntity();
+	$container = $ent->getContainerEntity();
+	
 	// Content title (or name)
 	$title = $ent->title;
 	if (empty($title)) { $title = $ent->name; }
-	$title = elgg_view('output/url', ['text' => $title, 'href' => $ent->getURL()]);
+	if (!empty($title)) {
+		$title = elgg_view('output/url', ['text' => $title, 'href' => $ent->getURL()]);
+	}
 	
 	// Illustration - Get best suitable image
 	$image_url = '';
@@ -44,15 +50,21 @@ if ($entities) foreach ($entities as $ent) {
 		$image_url = esope_extract_first_image($ent->description, false);
 	}
 	// If no image found : use author image
-	if (empty($image_url)) {
-		$container = $ent->getOwnerEntity();
+	if (empty($image_url) || strpos($image_url, 'graphics/icons/default')) {
+		$image_url = $owner->getIconURL('large');
+	}
+	// Last option : use container image
+	if (empty($image_url) || strpos($image_url, 'graphics/icons/default')) {
 		$image_url = $container->getIconURL('large');
 	}
 	// Default image or none ?  rather none by now
 	//$image = '<img src="' . $image_url . '" style="max-height: ' . $height . ' !important; width:auto !important; flex: 0 0 auto;" />';
 	//$image = '<img src="' . $image_url . '" style="max-height: ' . $height . ' !important; width:auto !important;" />'; // not flex
-	$image = '<img src="' . $image_url . '" style="margin:auto; max-height: ' . $height . ' !important; width:auto !important;" />'; // flex
-	$image = elgg_view('output/url', ['text' => $image, 'href' => $ent->getURL()]);
+	$image = '';
+	if (!empty($image_url)) {
+		$image = '<img src="' . $image_url . '" style="margin:auto; max-height: ' . $height . ' !important; width:auto !important;" />'; // flex
+		$image = elgg_view('output/url', ['text' => $image, 'href' => $ent->getURL()]);
+	}
 	
 	// Excerpt
 	$text = $ent->excerpt;
@@ -62,21 +74,19 @@ if ($entities) foreach ($entities as $ent) {
 	$excerpt = elgg_get_excerpt($text, 300);
 	
 	// Some basic meta : date, container, author, num comments...
-	//$access_info = elgg_view('output/access', array('entity' => $ent));
-	//$owner = $ent->getOwnerEntity();
-	$container = $ent->getContainerEntity();
+	$meta = '';
+	$container_info = '';
+	$group_icon = '';
 	if (elgg_instanceof($container, 'group')) {
-		$group_icon = elgg_view_entity_icon($ent, 'tiny');
-		//$group_icon = elgg_view_entity_icon($ent, 'tiny', ['size' => 'tiny']);
+		$group_icon = '<img src="' . $container->getIconURL('topbar') . '" />';
 		$container_info .= elgg_view('output/url', array(
 					'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name),
 					'title' => $container->name,
 					'href' => $container->getURL(),
 				));
 	}
-	$meta = '';
-	//if (!empty($access_info)) $meta .= $access_info . ' &nbsp; ';
-	if (!empty($container_info)) $meta .= $container_info . ' &nbsp; ';
+	//if (!empty($access_info)) { $meta .= $access_info . ' &nbsp; '; }
+	if (!empty($container_info)) { $meta .= $container_info . ' &nbsp; '; }
 	$meta .= elgg_get_friendly_time($ent->time_updated);
 	
 	
