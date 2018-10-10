@@ -18,4 +18,6 @@
 .anythingSlider.anythingSlider-cs-portfolio .anythingControls ul a { width: 18px; height: 18px; margin: 3px 3px; box-shadow: 0 0 1px 0 rgba(0,0,0,0.8); }
 .anythingSlider.anythingSlider-cs-portfolio .anythingControls a.cur, .anythingSlider.anythingSlider-cs-portfolio .anythingControls a:hover { width: 22px; height: 22px; margin: 0 1px; }
 
+.imageSlide { background: rgba(0,0,0,0.1); }
+.imageSlide > * { display: flex; width: 100%; }
 
