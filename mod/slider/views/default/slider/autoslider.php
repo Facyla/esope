@@ -8,7 +8,6 @@ $html_content = elgg_extract('html_content', $vars, ''); // HTML content (HTML l
 $entities = elgg_extract('entities', $vars, ''); // Entities for slider population (ElggEntity array)
 // default content (not used - rather don't display anything than demo data)
 $default_content = elgg_get_plugin_setting('content', 'slider');
-$max = 20;
 
 $content = '';
 

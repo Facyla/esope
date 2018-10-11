@@ -144,7 +144,7 @@ if (elgg_is_active_plugin('members')) {
 $static = '';
 if (!empty($slider)) {
 	$static .= $slider;
-	$static .= '<div class="clearfloat"></div>';
+	$static .= '<div class="clearfloat"></div><br />';
 }
 if ($thewire && $left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:32%; float:left; margin-right:3%;">' . $left_side . '</div>';

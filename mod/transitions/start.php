@@ -77,6 +77,7 @@ function transitions_init() {
 	elgg_register_action('transitions/delete', "$action_path/delete.php");
 	
 	// Note : add , 'public' to allow onyone to use action
+	// Quickform is a light contribution form that quickly creates a draft
 	elgg_register_action('transitions/quickform', "$action_path/save.php");
 	elgg_register_action('transitions/addtag', "$action_path/addtag.php");
 	elgg_register_action('transitions/addlink', "$action_path/addlink.php");
@@ -84,7 +85,6 @@ function transitions_init() {
 	elgg_register_action('transitions/addrelation', "$action_path/addrelation.php");
 	
 	// TEMPORARY HACK TO ALLOW USING BOTH URL
-	// Quickform is a light contribution form that quickly creates a draft
 	elgg_register_action('catalogue/save', "$action_path/save.php");
 	elgg_register_action('catalogue/auto_save_revision', "$action_path/auto_save_revision.php");
 	elgg_register_action('catalogue/delete', "$action_path/delete.php");

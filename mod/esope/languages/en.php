@@ -929,6 +929,7 @@ return array(
 	'esope:icon:poll' => "<i class=\"fa fa-pie-chart fa-fw\"></i>",
 	'esope:icon:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i>",
 	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
+	'esope:icon:transitions' => "<i class=\"fa fa-puzzle-piece fa-fw\"></i>",
 	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
 	
 	// Sprites icons
