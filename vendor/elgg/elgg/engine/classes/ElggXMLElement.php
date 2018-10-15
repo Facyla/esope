@@ -1,11 +1,15 @@
 <?php
+
 /**
  * A parser for XML that uses SimpleXMLElement
  *
  * @package    Elgg.Core
  * @subpackage XML
+ *
+ * @see        \Elgg\Integration\ElggCoreRegressionBugsTest
+ * @see        \Elgg\Integration\ElggCorePluginsAPITest
  */
-class ElggXMLElement {
+class ElggXMLElement implements Serializable {
 	/**
 	 * @var SimpleXMLElement
 	 */
@@ -13,7 +17,7 @@ class ElggXMLElement {
 
 	/**
 	 * Creates an \ElggXMLParser from a string or existing SimpleXMLElement
-	 * 
+	 *
 	 * @param string|SimpleXMLElement $xml The XML to parse
 	 */
 	public function __construct($xml) {
@@ -42,22 +46,23 @@ class ElggXMLElement {
 	public function getAttributes() {
 		//include namespace declarations as attributes
 		$xmlnsRaw = $this->_element->getNamespaces();
-		$xmlns = array();
+		$xmlns = [];
 		foreach ($xmlnsRaw as $key => $val) {
 			$label = 'xmlns' . ($key ? ":$key" : $key);
 			$xmlns[$label] = $val;
 		}
 		//get attributes and merge with namespaces
 		$attrRaw = $this->_element->attributes();
-		$attr = array();
+		$attr = [];
 		foreach ($attrRaw as $key => $val) {
 			$attr[$key] = $val;
 		}
 		$attr = array_merge((array) $xmlns, (array) $attr);
-		$result = array();
+		$result = [];
 		foreach ($attr as $key => $val) {
 			$result[$key] = (string) $val;
 		}
+
 		return $result;
 	}
 
@@ -73,7 +78,7 @@ class ElggXMLElement {
 	 */
 	public function getChildren() {
 		$children = $this->_element->children();
-		$result = array();
+		$result = [];
 		foreach ($children as $val) {
 			$result[] = new \ElggXMLElement($val);
 		}
@@ -83,49 +88,66 @@ class ElggXMLElement {
 
 	/**
 	 * Override ->
-	 * 
+	 *
 	 * @param string $name Property name
+	 *
 	 * @return mixed
 	 */
 	public function __get($name) {
 		switch ($name) {
 			case 'name':
 				return $this->getName();
-				break;
+
 			case 'attributes':
 				return $this->getAttributes();
-				break;
+
 			case 'content':
 				return $this->getContent();
-				break;
+
 			case 'children':
 				return $this->getChildren();
-				break;
 		}
+
 		return null;
 	}
 
 	/**
 	 * Override isset
-	 * 
+	 *
 	 * @param string $name Property name
+	 *
 	 * @return boolean
 	 */
 	public function __isset($name) {
 		switch ($name) {
 			case 'name':
 				return $this->getName() !== null;
-				break;
+
 			case 'attributes':
 				return $this->getAttributes() !== null;
-				break;
+
 			case 'content':
 				return $this->getContent() !== null;
-				break;
+
 			case 'children':
 				return $this->getChildren() !== null;
-				break;
 		}
+
 		return false;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function serialize() {
+		return serialize($this->getContent());
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function unserialize($serialized) {
+		$element = $this->unserialize($serialized);
+		return new static($element);
 	}
 }

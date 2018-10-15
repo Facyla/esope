@@ -5,10 +5,12 @@
 
 $site = elgg_get_site_entity();
 
-if (get_input('simple_cache')) {
-	elgg_enable_simplecache();
-} else {
-	elgg_disable_simplecache();
+if (!_elgg_config()->hasInitialValue('simplecache_enabled')) {
+	if (get_input('simple_cache')) {
+		elgg_enable_simplecache();
+	} else {
+		elgg_disable_simplecache();
+	}
 }
 
 if (get_input('system_cache')) {
@@ -17,11 +19,13 @@ if (get_input('system_cache')) {
 	elgg_disable_system_cache();
 }
 
-$debug = get_input('debug_level');
-if ($debug) {
-	set_config('debug', $debug, $site->getGUID());
-} else {
-	unset_config('debug', $site->getGUID());
+if (!_elgg_config()->hasInitialValue('debug')) {
+	$debug = get_input('debug_level');
+	if ($debug) {
+		elgg_save_config('debug', $debug);
+	} else {
+		elgg_remove_config('debug');
+	}
 }
 
 $simple_settings = [
@@ -32,6 +36,9 @@ $simple_settings = [
 	'log_events',
 	'show_gear',
 	'show_modules',
+	'block_email',
+	'forward_email',
+	'enable_error_log',
 ];
 foreach ($simple_settings as $setting) {
 	elgg_set_plugin_setting($setting, get_input($setting), 'developers');
@@ -39,6 +46,4 @@ foreach ($simple_settings as $setting) {
 
 elgg_flush_caches();
 
-system_message(elgg_echo('developers:settings:success'));
-
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('developers:settings:success'));

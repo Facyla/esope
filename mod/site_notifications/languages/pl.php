@@ -6,7 +6,6 @@ return array(
 	'item:object:site_notification' => 'Powiadomienia',
 
 	'site_notifications:no_access' => 'Nie masz uprawnień do wyświetlenia tej strony. Może potrzebujesz się zalogować.',
-	'site_notifications:no_delete' => 'Nie można usunąć',
 	'site_notifications:empty' => 'Brak powiadomień',
 	'site_notifications:toggle_all' => 'Przełącz wszystkie',
 	'site_notifications:error:notifications_not_selected' => 'Nie wybrano żadnych powiadomień',

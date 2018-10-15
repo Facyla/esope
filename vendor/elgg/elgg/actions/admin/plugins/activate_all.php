@@ -4,9 +4,6 @@
  *
  * All specified plugins in the mod/ directory that aren't active are activated and the views
  * cache and simplecache are invalidated.
- *
- * @package Elgg.Core
- * @subpackage Administration.Plugins
  */
 
 $guids = get_input('guids');
@@ -18,12 +15,12 @@ if (empty($guids)) {
 		'type' => 'object',
 		'subtype' => 'plugin',
 		'guids' => explode(',', $guids),
-		'limit' => false
+		'limit' => false,
 	]);
 }
 
 if (empty($plugins)) {
-	forward(REFERER);
+	return elgg_ok_response();
 }
 
 do {
@@ -39,10 +36,10 @@ do {
 			continue;
 		}
 
-		$ids = array(
+		$ids = [
 			'cannot_start' . $plugin->getID(),
 			'invalid_and_deactivated_' . $plugin->getID()
-		);
+		];
 
 		foreach ($ids as $id) {
 			elgg_delete_admin_notice($id);
@@ -63,12 +60,9 @@ if (count($plugins) > 0) {
 	foreach ($plugins as $plugin) {
 		$msg = $plugin->getError();
 		$string = ($msg) ? 'admin:plugins:activate:no_with_msg' : 'admin:plugins:activate:no';
-		register_error(elgg_echo($string, array($plugin->getFriendlyName(), $msg)));
+
+		return elgg_error_response(elgg_echo($string, [$plugin->getDisplayName(), $msg]));
 	}
 }
 
-// don't regenerate the simplecache because the plugin won't be
-// loaded until next run.  Just invalidate and let it regnerate as needed
-elgg_flush_caches();
-
-forward(REFERER);
+return elgg_ok_response();

@@ -1,7 +1,6 @@
 <?php
-return array(
+return [
 	'admin:users:unvalidated' => 'Non convalidati',
-	
 	'email:validate:subject' => "%s per favore conferma il tuo indirizzo email per %s!",
 	'email:validate:body' => "%s,
 
@@ -34,7 +33,7 @@ Se non riesci a cliccare sul collegamento, copialo e incollalo manualmente nel t
 	'uservalidationbyemail:confirm_validate_checked' => 'Convalidare gli utenti selezionati?',
 	'uservalidationbyemail:confirm_resend_validation_checked' => 'Reinviare la validazione agli utenti selezionati?',
 	'uservalidationbyemail:confirm_delete_checked' => 'Eliminare gli utenti selezionati?',
-	
+
 	'uservalidationbyemail:errors:unknown_users' => 'Utenti sconosciuti',
 	'uservalidationbyemail:errors:could_not_validate_user' => 'Impossibile convalidare l\'utente.',
 	'uservalidationbyemail:errors:could_not_validate_users' => 'Impossibile convalidare gli utenti selezionati.',
@@ -50,4 +49,4 @@ Se non riesci a cliccare sul collegamento, copialo e incollalo manualmente nel t
 	'uservalidationbyemail:messages:resent_validation' => 'Richiesta di convalidazione rispedita.',
 	'uservalidationbyemail:messages:resent_validations' => 'Richieste di convalidazione rispedite a tutti gli utenti selezionati.'
 
-);
+];

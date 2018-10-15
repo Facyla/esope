@@ -16,15 +16,15 @@ if ($vars['num_failures'] != 0) {
 
 echo elgg_autop($instruct_text);
 
-$report = $vars['report'];
+$report = elgg_extract('report', $vars);
 foreach ($report as $category => $checks) {
 	$title = elgg_echo("install:require:$category");
 	echo "<h3>$title</h3>";
 	echo "<ul class=\"elgg-require-$category\">";
 	foreach ($checks as $check) {
-		echo "<li class=\"{$check['severity']}\">";
-		echo elgg_autop($check['message']);
-		echo "</li>";
+		echo '<li>';
+		echo elgg_view_message(elgg_extract('severity', $check, 'notice'), elgg_autop($check['message']));
+		echo '</li>';
 	}
 	echo "</ul>";
 }

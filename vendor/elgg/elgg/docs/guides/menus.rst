@@ -36,10 +36,21 @@ Examples
 		'href' => '/item/url',
 	));
 
-.. code:: php
+.. code-block:: php
 
 	// Remove the "Elgg" logo from the topbar menu
 	elgg_unregister_menu_item('topbar', 'elgg_logo');
+	
+Admin menu
+==========
+
+You can also register `page` menu items to the admin backend menu. When registering for the admin menu you can set the context of
+the menu items to `admin` so the menu items only show in the `admin` context. There are 3 default sections to add your menu items to.
+ 
+ - `administer` for daily tasks, usermanagement and other actionable tasks
+ - `configure` for settings, configuration and utilities that configure stuff
+ - `information` for statistics, overview of information or status
+
 
 Advanced usage
 ==============
@@ -93,12 +104,8 @@ Examples
 				break;
 		}
 
-		foreach ($items as $key => $item) {
-			if ($item->getName() == 'albums') {
-				// Set the new URL
-				$item->setURL($url);
-				break;
-			}
+		if ($items->has('albums')) {
+			$items->get('albums')->setURL($url);
 		}
 
 		return $items;
@@ -131,17 +138,11 @@ Examples
 			return $menu;
 		}
 
-		foreach ($items as $key => $item) {
-			switch ($item->getName()) {
-				case 'likes':
-					// Remove the "likes" menu item
-					unset($items[$key]);
-					break;
-				case 'edit':
-					// Change the "Edit" text into a custom icon
-					$item->setText(elgg_view_icon('pencil'));
-					break;
-			}
+		$items->remove('likes');
+
+		if ($items->has('edit')) {
+			$items->get('edit')->setText('Modify');
+			$items->get('edit')->icon = 'pencil';
 		}
 
 		return $items;
@@ -164,7 +165,7 @@ in alphapetical order:
 .. code-block:: php
 
 	// in a resource view
-	echo elgg_view_menu('my_menu', array('sort_by' => 'title'));
+	echo elgg_view_menu('my_menu', array('sort_by' => 'text'));
 
 You can now add new items to the menu like this:
 
@@ -179,6 +180,51 @@ You can now add new items to the menu like this:
 
 Furthermore it is now possible to modify the menu using the hooks
 ``'register', 'menu:my_menu'`` and ``'prepare', 'menu:my_menu'``.
+
+Child Dropdown Menus
+====================
+
+Child menus can be configured using ``child_menu`` factory option on the parent item.
+
+``child_menu`` options array accepts ``display`` parameter, which can be used
+to set the child menu to open as ``dropdown`` or be displayed via ``toggle``.
+All other key value pairs will be passed as attributes to the ``ul`` element.
+
+
+.. code-block:: php
+
+	// Register a parent menu item that has a dropdown submenu
+	elgg_register_menu_item('my_menu', array(
+		'name' => 'parent_item',
+		'href' => '#',
+		'text' => 'Show dropdown menu',
+		'child_menu' => [
+			'display' => 'dropdown',
+			'class' => 'elgg-additional-child-menu-class',
+			'data-position' => json_encode([
+				'at' => 'right bottom',
+				'my' => 'right top',
+				'collision' => 'fit fit',
+			]),
+			'data-foo' => 'bar',
+			'id' => 'dropdown-menu-id',
+		],
+	));
+
+	// Register a parent menu item that has a hidden submenu toggled when item is clicked
+	elgg_register_menu_item('my_menu', array(
+		'name' => 'parent_item',
+		'href' => '#',
+		'text' => 'Show submenu',
+		'child_menu' => [
+			'display' => 'dropdown',
+			'class' => 'elgg-additional-submenu-class',
+			'data-toggle-duration' => 'medium',
+			'data-foo' => 'bar2',
+			'id' => 'submenu-id',
+		],
+	));
+
 
 Theming
 =======
@@ -200,7 +246,35 @@ with a high degree of control and flexibility when styling the site.
 		<li class="elgg-menu-item elgg-menu-item-bar"></li>
 	</ul>
 
+Toggling Menu Items
+===================
 
+There are situations where you wish to toggle menu items that are actions that are the opposite
+of each other and ajaxify them. E.g. like/unlike, friend/unfriend, ban/unban, etc. Elgg has built-in support
+for this kind of actions. When you register a menu item you can provide a name of the menu item (in the same menu)
+that should be toggled. An ajax call will be made using the href of the menu item.
+
+.. code-block:: php
+
+	elgg_register_menu_item('my_menu', [
+		'name' => 'like',
+		'data-toggle' => 'unlike',
+		'href' => 'action/like',
+		'text' => elgg_echo('like'),
+	]);
+
+	elgg_register_menu_item('my_menu', [
+		'name' => 'unlike',
+		'data-toggle' => 'like',
+		'href' => 'action/unlike',
+		'text' => elgg_echo('unlike'),
+	]);
+
+.. note::
+
+	The menu items are optimistically toggled. This means the menu items are toggled before the actions finish. If the actions fail,
+	the menu items will be toggled back.
+	
 JavaScript
 ==========
 

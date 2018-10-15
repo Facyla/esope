@@ -15,10 +15,15 @@ abstract class ElggCache implements \ArrayAccess {
 	private $variables;
 
 	/**
+	 * @var bool
+	 */
+	protected $disabled = false;
+
+	/**
 	 * Set the constructor.
 	 */
 	public function __construct() {
-		$this->variables = array();
+		$this->variables = [];
 	}
 
 	/**
@@ -31,7 +36,7 @@ abstract class ElggCache implements \ArrayAccess {
 	 */
 	public function setVariable($variable, $value) {
 		if (!is_array($this->variables)) {
-			$this->variables = array();
+			$this->variables = [];
 		}
 
 		$this->variables[$variable] = $value;
@@ -83,7 +88,7 @@ abstract class ElggCache implements \ArrayAccess {
 	 * @return bool
 	 */
 	public function __isset($key) {
-		return (bool)$this->load($key);
+		return (bool) $this->load($key);
 	}
 
 	/**
@@ -100,26 +105,22 @@ abstract class ElggCache implements \ArrayAccess {
 	/**
 	 * Save data in a cache.
 	 *
-	 * @param string $key  Name
-	 * @param string $data Value
+	 * @param string $key          Name
+	 * @param mixed  $data         Value
+	 * @param int    $expire_after Number of seconds to expire the cache after
 	 *
 	 * @return bool
 	 */
-	abstract public function save($key, $data);
+	abstract public function save($key, $data, $expire_after = null);
 
 	/**
 	 * Load data from the cache using a given key.
 	 *
-	 * @todo $offset is a horrible variable name because it creates confusion
-	 * with the \ArrayAccess methods
+	 * @param string $key Name
 	 *
-	 * @param string $key    Name
-	 * @param int    $offset Offset
-	 * @param int    $limit  Limit
-	 *
-	 * @return mixed The stored data or false.
+	 * @return mixed|null The stored data or null if it's a miss
 	 */
-	abstract public function load($key, $offset = 0, $limit = null);
+	abstract public function load($key);
 
 	/**
 	 * Invalidate a key
@@ -136,6 +137,38 @@ abstract class ElggCache implements \ArrayAccess {
 	 * @return bool
 	 */
 	abstract public function clear();
+
+	/**
+	 * Disable cache
+	 * Do not write or read from cache
+	 * @return void
+	 */
+	public function disable() {
+		$this->disabled = true;
+	}
+
+	/**
+	 * Enable disabled cache
+	 * @return void
+	 */
+	public function enable() {
+		$this->disabled = false;
+	}
+
+	/**
+	 * Populate cache from an array of key => values
+	 *
+	 * @param array $values        Values
+	 * @param int   $expires_after Expiration duration
+	 *
+	 * @return void
+	 */
+	public function populate($values, $expires_after) {
+		$this->clear();
+		foreach ($values as $key => $value) {
+			$this->save($key, $value, $expires_after);
+		}
+	}
 
 	/**
 	 * Add a key only if it doesn't already exist.

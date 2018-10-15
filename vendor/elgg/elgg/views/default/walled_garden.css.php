@@ -3,81 +3,83 @@
  * Walled garden CSS
  */
 
-$url = elgg_get_site_url();
-
+echo elgg_view('core.css');
 ?>
-/* <style> /**/
 
-.elgg-body-walledgarden {
-	margin: 100px auto 0 auto;
+.elgg-page-walled-garden {
+	margin: 0;
 	position: relative;
-	width: 530px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
 }
-.elgg-module-walledgarden {
+
+.elgg-page-walled-garden-background {
 	position: absolute;
 	top: 0;
 	left: 0;
-}
-.elgg-module-walledgarden > .elgg-head {
-	height: 17px;
-}
-.elgg-module-walledgarden > .elgg-body {
-	padding: 0 10px;
-}
-.elgg-module-walledgarden > .elgg-foot {
-	height: 17px;
-}
-.elgg-walledgarden-double > .elgg-head {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/two_column_top.png"); ?>) no-repeat left top;
-}
-.elgg-walledgarden-double > .elgg-body {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/two_column_middle.png"); ?>) repeat-y left top;
-}
-.elgg-walledgarden-double > .elgg-foot {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/two_column_bottom.png"); ?>) no-repeat left top;
-}
-.elgg-walledgarden-single > .elgg-head {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/one_column_top.png"); ?>) no-repeat left top;
-}
-.elgg-walledgarden-single > .elgg-body {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/one_column_middle.png"); ?>) repeat-y left top;
-}
-.elgg-walledgarden-single > .elgg-foot {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/one_column_bottom.png"); ?>) no-repeat left top;
+	width: 100%;
+	height: 100%;
+	background-image: url('graphics/walled_garden.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: 50%;
+	filter: blur(4px);
 }
 
-.elgg-col > .elgg-inner {
-	margin: 0 0 0 5px;
-}
-.elgg-col:first-child > .elgg-inner {
-	margin: 0 5px 0 0;
-}
-.elgg-col > .elgg-inner {
-	padding: 0 8px;
+.elgg-heading-walled-garden {
+	font-size: 3rem;
+	line-height: 3rem;
+	color: $(text-color-strong);
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+	font-weight: $(font-bold-weight);
 }
 
-.elgg-walledgarden-single > .elgg-body {
-	padding: 0 18px;
+.elgg-page-walled-garden > .elgg-inner {
+	width: 30rem;
+	min-height: 100%;
 }
 
-.elgg-module-walledgarden-login {
-	margin: 0;
-}
-.elgg-body-walledgarden h3 {
-	font-size: 1.5em;
-	line-height: 1.1em;
-	padding-bottom: 5px;
+.elgg-page-walled-garden > .elgg-inner > div {
+	&.elgg-page-body {
+		padding: 1.5rem 3rem;
+		background: #fff;
+		box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3), -1px -1px 1px rgba(0, 0, 0, 0.3);
+	}
+	&.elgg-page-header {
+		padding: 3rem 0;
+	}
+	&.elgg-page-footer {
+		background: none;
+		a {
+			color: $(text-color-strong);
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+			font-weight: $(font-bold-weight);
+		}
+	}
+
 }
 
-.elgg-heading-walledgarden {
-	margin-top: 60px;
-	line-height: 1.1em;
+.elgg-page-walled-garden .elgg-main {
+	min-height: 0;
+	padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	color: #666;
+.elgg-heading-walled-garden a {
+	text-decoration: none;
+	color: inherit;
 }
 
-a {
-	color: #999;
+.elgg-page-walled-garden .elgg-form-login,
+.elgg-page-walled-garden .elgg-form-account {
+	max-width: none;
 }
+
+@media $(media-mobile-only) {
+	.elgg-page-walled-garden {
+		width: 100%;
+		float: none;
+	}
+}
+

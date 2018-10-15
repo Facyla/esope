@@ -8,6 +8,23 @@
  */
 
 /**
+ * Prepare HTML output
+ *
+ * @param string $html    HTML string
+ * @param array  $options Formatting options
+ *
+ * @option bool $parse_urls Replace URLs with anchor tags
+ * @option bool $parse_emails Replace email addresses with anchor tags
+ * @option bool $sanitize Sanitize HTML tags
+ * @option bool $autop Add paragraphs instead of new lines
+ *
+ * @return string
+ */
+function elgg_format_html($html, array $options = []) {
+	return _elgg_services()->html_formatter->formatBlock($html, $options);
+}
+
+/**
  * Takes a string and turns any URLs into formatted links
  *
  * @param string $text The input string
@@ -15,10 +32,7 @@
  * @return string The output string with formatted links
  */
 function parse_urls($text) {
-
-	$linkify = new \Misd\Linkify\Linkify();
-		
-	return $linkify->processUrls($text, ['attr' => ['rel' => 'nofollow']]);
+	return _elgg_services()->html_formatter->parseUrls($text);
 }
 
 /**
@@ -31,9 +45,7 @@ function parse_urls($text) {
  * @since 2.3
  */
 function elgg_parse_emails($text) {
-	$linkify = new \Misd\Linkify\Linkify();
-		
-	return $linkify->processEmails($text, ['attr' => ['rel' => 'nofollow']]);
+	return _elgg_services()->html_formatter->parseEmails($text);
 }
 
 /**
@@ -44,7 +56,7 @@ function elgg_parse_emails($text) {
  * @return string
  **/
 function elgg_autop($string) {
-	return _elgg_services()->autoP->process($string);
+	return _elgg_services()->html_formatter->addParagaraphs($string);
 }
 
 /**
@@ -71,18 +83,6 @@ function elgg_get_excerpt($text, $num_chars = 250) {
 }
 
 /**
- * Handles formatting of ampersands in urls
- *
- * @param string $url The URL
- *
- * @return string
- * @since 1.7.1
- */
-function elgg_format_url($url) {
-	return preg_replace('/&(?!amp;)/', '&amp;', $url);
-}
-
-/**
  * Format bytes to a human readable format
  *
  * @param int $size      File size in bytes to format
@@ -98,7 +98,7 @@ function elgg_format_bytes($size, $precision = 2) {
 	}
 
 	$base = log($size) / log(1024);
-	$suffixes = array('B', 'kB', 'MB', 'GB', 'TB');
+	$suffixes = ['B', 'kB', 'MB', 'GB', 'TB'];
 
 	return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
 }
@@ -106,8 +106,6 @@ function elgg_format_bytes($size, $precision = 2) {
 /**
  * Converts an associative array into a string of well-formed HTML/XML attributes
  * Returns a concatenated string of HTML attributes to be inserted into a tag (e.g., <tag $attrs>)
- *
- * @see elgg_format_element
  *
  * @param array $attrs Attributes
  *                     An array of attribute => value pairs
@@ -125,54 +123,11 @@ function elgg_format_bytes($size, $precision = 2) {
  *                     </code>
  *
  * @return string
+ *
+ * @see elgg_format_element()
  */
-function elgg_format_attributes(array $attrs = array()) {
-	if (!is_array($attrs) || empty($attrs)) {
-		return '';
-	}
-
-	$attributes = [];
-
-	foreach ($attrs as $attr => $val) {
-		if (0 !== strpos($attr, 'data-') && false !== strpos($attr, '_')) {
-			// this is probably a view $vars variable not meant for output
-			continue;
-		}
-
-		$attr = strtolower($attr);
-
-		if (!isset($val) || $val === false) {
-			continue;
-		}
-
-		if ($val === true) {
-			$val = $attr; //e.g. checked => true ==> checked="checked"
-		}
-
-		if (is_scalar($val)) {
-			$val = [$val];
-		}
-
-		if (!is_array($val)) {
-			continue;
-		}
-
-		// Check if array contains non-scalar values and bail if so
-		$filtered_val = array_filter($val, function($e) {
-			return is_scalar($e);
-		});
-
-		if (count($val) != count($filtered_val)) {
-			continue;
-		}
-
-		$val = implode(' ', $val);
-
-		$val = htmlspecialchars($val, ENT_QUOTES, 'UTF-8', false);
-		$attributes[] = "$attr=\"$val\"";
-	}
-
-	return implode(' ', $attributes);
+function elgg_format_attributes(array $attrs = []) {
+	return _elgg_services()->html_formatter->formatAttributes($attrs);
 }
 
 /**
@@ -205,67 +160,13 @@ function elgg_format_attributes(array $attrs = array()) {
  * @throws InvalidArgumentException
  * @since 1.9.0
  */
-function elgg_format_element($tag_name, array $attributes = array(), $text = '', array $options = array()) {
-	if (is_array($tag_name)) {
-		$args = $tag_name;
-
-		if ($attributes !== [] || $text !== '' || $options !== []) {
-			throw new \InvalidArgumentException('If $tag_name is an array, the other arguments must not be set');
-		}
-
-		if (isset($args['#tag_name'])) {
-			$tag_name = $args['#tag_name'];
-		}
-		if (isset($args['#text'])) {
-			$text = $args['#text'];
-		}
-		if (isset($args['#options'])) {
-			$options = $args['#options'];
-		}
-
-		unset($args['#tag_name'], $args['#text'], $args['#options']);
-		$attributes = $args;
-	}
-
-	if (!is_string($tag_name) || $tag_name === '') {
-		throw new \InvalidArgumentException('$tag_name is required');
-	}
-
-	if (isset($options['is_void'])) {
-		$is_void = $options['is_void'];
-	} else {
-		// from http://www.w3.org/TR/html-markup/syntax.html#syntax-elements
-		$is_void = in_array(strtolower($tag_name), array(
-			'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'menuitem',
-			'meta', 'param', 'source', 'track', 'wbr'
-		));
-	}
-
-	if (!empty($options['encode_text'])) {
-		$double_encode = empty($options['double_encode']) ? false : true;
-		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8', $double_encode);
-	}
-
-	if ($attributes) {
-		$attrs = elgg_format_attributes($attributes);
-		if ($attrs !== '') {
-			$attrs = " $attrs";
-		}
-	} else {
-		$attrs = '';
-	}
-
-	if ($is_void) {
-		return empty($options['is_xml']) ? "<{$tag_name}{$attrs}>" : "<{$tag_name}{$attrs} />";
-	} else {
-		return "<{$tag_name}{$attrs}>$text</$tag_name>";
-	}
+function elgg_format_element($tag_name, array $attributes = [], $text = '', array $options = []) {
+	return _elgg_services()->html_formatter->formatElement($tag_name, $attributes, $text, $options);
 }
 
 /**
- * Converts shorthand urls to absolute urls.
- *
- * No change is made if the URL: is absolute, protocol-relative, starts with a protocol/fragment/query.
+ * Converts shorthand URLs to absolute URLs, unless the given URL is absolute, protocol-relative,
+ * or starts with a protocol/fragment/query
  *
  * @example
  * elgg_normalize_url('');                   // 'http://my.site.com/'
@@ -275,7 +176,7 @@ function elgg_format_element($tag_name, array $attributes = array(), $text = '',
  *
  * @param string $url The URL to normalize
  *
- * @return string The absolute url
+ * @return string The absolute URL
  */
 function elgg_normalize_url($url) {
 	$url = str_replace(' ', '%20', $url);
@@ -315,6 +216,28 @@ function elgg_normalize_url($url) {
 }
 
 /**
+ * From untrusted input, get a site URL safe for forwarding.
+ *
+ * @param string $unsafe_url URL from untrusted input
+ *
+ * @return bool|string Normalized URL or false if given URL was not a path.
+ *
+ * @since 3.0.0
+ */
+function elgg_normalize_site_url($unsafe_url) {
+	if (!is_string($unsafe_url)) {
+		return false;
+	}
+
+	$unsafe_url = elgg_normalize_url($unsafe_url);
+	if (0 === strpos($unsafe_url, elgg_get_site_url())) {
+		return $unsafe_url;
+	}
+
+	return false;
+}
+
+/**
  * When given a title, returns a version suitable for inclusion in a URL
  *
  * @param string $title The title
@@ -325,7 +248,7 @@ function elgg_normalize_url($url) {
 function elgg_get_friendly_title($title) {
 
 	// return a URL friendly title to short circuit normal title formatting
-	$params = array('title' => $title);
+	$params = ['title' => $title];
 	$result = elgg_trigger_plugin_hook('format', 'friendly:title', $params, null);
 	if ($result) {
 		return $result;
@@ -357,13 +280,13 @@ function elgg_get_friendly_time($time, $current_time = null) {
 	}
 
 	// return a time string to short circuit normal time formatting
-	$params = array('time' => $time, 'current_time' => $current_time);
+	$params = ['time' => $time, 'current_time' => $current_time];
 	$result = elgg_trigger_plugin_hook('format', 'friendly:time', $params, null);
 	if ($result) {
 		return $result;
 	}
 
-	$diff = abs((int)$current_time - (int)$time);
+	$diff = abs((int) $current_time - (int) $time);
 
 	$minute = 60;
 	$hour = $minute * 60;
@@ -388,10 +311,10 @@ function elgg_get_friendly_time($time, $current_time = null) {
 		$diff = 1;
 	}
 	
-	$future = ((int)$current_time - (int)$time < 0) ? ':future' : '';
+	$future = ((int) $current_time - (int) $time < 0) ? ':future' : '';
 	$singular = ($diff == 1) ? ':singular' : '';
 
-	return elgg_echo("friendlytime{$future}{$granularity}{$singular}", array($diff));
+	return elgg_echo("friendlytime{$future}{$granularity}{$singular}", [$diff]);
 }
 
 /**
@@ -453,13 +376,7 @@ function elgg_get_friendly_upload_error($error_code) {
  * @return string String run through strip_tags() and any plugin hooks.
  */
 function elgg_strip_tags($string, $allowable_tags = null) {
-	$params['original_string'] = $string;
-	$params['allowable_tags'] = $allowable_tags;
-
-	$string = strip_tags($string, $allowable_tags);
-	$string = elgg_trigger_plugin_hook('format', 'strip_tags', $params, $string);
-
-	return $string;
+	return _elgg_services()->html_formatter->stripTags($string, $allowable_tags);
 }
 
 /**
@@ -490,40 +407,13 @@ function elgg_strip_tags($string, $allowable_tags = null) {
  * @license Released under dual-license GPL2/MIT by explicit permission of Pádraic Brady
  */
 function elgg_html_decode($string) {
-	$string = str_replace(
-		array('&gt;', '&lt;', '&amp;', '&quot;', '&#039;'),
-		array('&amp;gt;', '&amp;lt;', '&amp;amp;', '&amp;quot;', '&amp;#039;'),
-		$string
-	);
-	$string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
-	$string = str_replace(
-		array('&amp;gt;', '&amp;lt;', '&amp;amp;', '&amp;quot;', '&amp;#039;'),
-		array('&gt;', '&lt;', '&amp;', '&quot;', '&#039;'),
-		$string
-	);
-	return $string;
-}
-
-/**
- * Alias of elgg_html_decode
- *
- * This is kept in 2.0 because it was used in public views and might have been copied into plugins.
- *
- * @param string $string Encoded HTML
- *
- * @return string
- * @see elgg_html_decode
- * @deprecated
- */
-function _elgg_html_decode($string) {
-	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated. Use elgg_html_decode()', '2.0');
-	return elgg_html_decode($string);
+	return _elgg_services()->html_formatter->decode($string);
 }
 
 /**
  * Prepares query string for output to prevent CSRF attacks.
  *
- * @param string $string
+ * @param string $string string to prepare
  * @return string
  *
  * @access private
@@ -569,7 +459,3 @@ function _elgg_sane_validate_url($url) {
 	// Re-check now.
 	return filter_var($s, FILTER_VALIDATE_URL) ? $url : false;
 }
-
-return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-
-};

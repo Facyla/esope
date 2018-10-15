@@ -33,6 +33,11 @@ class WidgetDefinition {
 	 * @var bool Can the widget be added multiple times
 	 */
 	public $multiple;
+
+	/**
+	 * @var array A list of optional required plugins that need to be activated for this definition to be available
+	 */
+	public $required_plugin;
 	
 	/**
 	 * WidgetDefinition constructor
@@ -58,7 +63,7 @@ class WidgetDefinition {
 	 *    context => ARRAY contexts in which the widget is available
 	 *    multiple => BOOL can the widget be added multiple times
 	 *
-	 * @throws InvalidParameterException
+	 * @throws \InvalidParameterException
 	 * @return \Elgg\WidgetDefinition
 	 */
 	public static function factory(array $options) {
@@ -88,10 +93,52 @@ class WidgetDefinition {
 			$definition->description = $description;
 		}
 		
-		$definition->context = (array) elgg_extract('context', $options, ['all']);
+		$context = (array) elgg_extract('context', $options, ['all']);
+		if (in_array('all', $context)) {
+			$context[] = 'profile';
+			$context[] = 'dashboard';
+			
+			_elgg_services()->logger->warning("The widget '{$id}' need to be registered for explicit contexts");
+			$pos = array_search('all', $context);
+			unset($context[$pos]);
+			
+			$context = array_unique($context);
+		}
+		$definition->context = $context;
+		
 		$definition->multiple = (bool) elgg_extract('multiple', $options, false);
 		
+		$definition->required_plugin = (array) elgg_extract('required_plugin', $options, []);
+		
 		return $definition;
+	}
+	
+	/**
+	 * Checks if the widget definition meets all requirements
+	 *
+	 * @return boolean
+	 */
+	public function isValid() {
+		return $this->checkRequiredActivePlugins();
+	}
+	
+	/**
+	 * Checks if the required plugins are active. If none set this function will return true.
+	 *
+	 * @return boolean
+	 */
+	protected function checkRequiredActivePlugins() {
+		if (empty($this->required_plugin)) {
+			return true;
+		}
+		
+		foreach ($this->required_plugin as $plugin) {
+			if (!elgg_is_active_plugin($plugin)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**

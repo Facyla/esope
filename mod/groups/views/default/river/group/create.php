@@ -3,17 +3,11 @@
  * Group creation river view.
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
+$item = elgg_extract('item', $vars);
+if (!$item instanceof ElggRiverItem) {
+	return;
+}
 
-$object = $item->getObjectEntity();
-$excerpt = strip_tags($object->description);
-$excerpt = elgg_get_excerpt($excerpt);
+$vars['message'] = elgg_get_excerpt($item->getObjectEntity()->description);
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $item,
-	'message' => $excerpt,
-
-	// truthy value to bypass responses rendering
-	'responses' => ' ',
-));
+echo elgg_view('river/elements/layout', $vars);

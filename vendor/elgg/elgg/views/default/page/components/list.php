@@ -17,13 +17,17 @@
  * @uses $vars['list_class']   Additional CSS class for the <ul> element
  * @uses $vars['item_class']   Additional CSS class for the <li> elements
  * @uses $vars['item_view']    Alternative view to render list items
- * @uses $vars['no_results']   Message to display if no results (string|Closure)
+ * @uses $vars['no_results']   Message to display if no results (string|true|Closure)
  */
-$items = $vars['items'];
+$items = elgg_extract('items', $vars);
 $count = elgg_extract('count', $vars);
 $pagination = elgg_extract('pagination', $vars, true);
 $position = elgg_extract('position', $vars, 'after');
 $no_results = elgg_extract('no_results', $vars, '');
+
+if ($no_results === true) {
+	$no_results = elgg_echo('notfound');
+}
 
 if (!$items && $no_results) {
 	echo elgg_view('page/components/no_results', $vars);
@@ -34,15 +38,9 @@ if (!is_array($items) || count($items) == 0) {
 	return;
 }
 
-$list_classes = ['elgg-list'];
-if (isset($vars['list_class'])) {
-	$list_classes[] = $vars['list_class'];
-}
+$list_classes = elgg_extract_class($vars, 'elgg-list', 'list_class');
 
-$item_classes = ['elgg-item'];
-if (isset($vars['item_class'])) {
-	$item_classes[] = $vars['item_class'];
-}
+$item_classes = elgg_extract_class($vars, 'elgg-item', 'item_class');
 
 $nav = ($pagination) ? elgg_view('navigation/pagination', $vars) : '';
 
@@ -69,7 +67,7 @@ foreach ($items as $item) {
 		if ($subtype) {
 			$li_attrs['class'][] = "elgg-item-$type-$subtype";
 		}
-	} elseif (is_callable(array($item, 'getType'))) {
+	} elseif (is_callable([$item, 'getType'])) {
 		$type = $item->getType();
 
 		$li_attrs['id'] = "item-$type-{$item->id}";

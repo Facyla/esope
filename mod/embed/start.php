@@ -5,11 +5,12 @@
  * @package ElggEmbed
  */
 
-
-elgg_register_event_handler('init', 'system', 'embed_init');
+use Elgg\Collections\Collection;
 
 /**
  * Init function
+ *
+ * @return void
  */
 function embed_init() {
 	elgg_extend_view('elgg.css', 'embed/css');
@@ -20,42 +21,26 @@ function embed_init() {
 	}
 	elgg_register_plugin_hook_handler('register', 'menu:embed', 'embed_select_tab', 1000);
 
-	// Page handler for the modal media embed
-	elgg_register_page_handler('embed', 'embed_page_handler');
-
-	// @deprecated 2.2
-	$embed_js = elgg_get_simplecache_url('embed/embed.js');
-	elgg_register_js('elgg.embed', $embed_js, 'footer');
-
-	if (elgg_view_exists('embed/custom_insert_js')) {
-		elgg_deprecated_notice("The view embed/custom_insert_js has been replaced by the 'embed, editor' JS hook.", '1.9');
-		elgg_extend_view('elgg.js', 'embed/embed_custom_insert.js.php');
-	}
-	
 	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'embed_set_thumbnail_url', 1000);
 }
 
 /**
  * Add the embed menu item to the long text menu
  *
- * @param string $hook
- * @param string $type
- * @param array $items
- * @param array $vars
- * @return array
+ * @param string         $hook  'register'
+ * @param string         $type  'menu:longtext'
+ * @param ElggMenuItem[] $items current return value
+ * @param array          $vars  supplied params
+ *
+ * @return void|ElggMenuItem[]
  */
 function embed_longtext_menu($hook, $type, $items, $vars) {
 
 	if (elgg_get_context() == 'embed') {
-		return $items;
-	}
-	
-	$id = elgg_extract('id', $vars);
-	if ($id === null) {
 		return;
 	}
-
-	$id = elgg_extract('id', $vars);
+	
+	$id = elgg_extract('textarea_id', $vars);
 	if ($id === null) {
 		return;
 	}
@@ -63,13 +48,13 @@ function embed_longtext_menu($hook, $type, $items, $vars) {
 	$url = 'embed';
 
 	$page_owner = elgg_get_page_owner_entity();
-	if (elgg_instanceof($page_owner, 'group') && $page_owner->isMember()) {
+	if ($page_owner instanceof ElggGroup && $page_owner->isMember()) {
 		$url = elgg_http_add_url_query_elements($url, [
 			'container_guid' => $page_owner->guid,
 		]);
 	}
 
-	$items[] = ElggMenuItem::factory(array(
+	$items[] = ElggMenuItem::factory([
 		'name' => 'embed',
 		'href' => 'javascript:',
 		'data-colorbox-opts' => json_encode([
@@ -80,7 +65,7 @@ function embed_longtext_menu($hook, $type, $items, $vars) {
 		'link_class' => "elgg-longtext-control elgg-lightbox embed-control embed-control-{$id} elgg-lightbox",
 		'deps' => ['elgg/embed'],
 		'priority' => 10,
-	));
+	]);
 
 	return $items;
 }
@@ -88,16 +73,16 @@ function embed_longtext_menu($hook, $type, $items, $vars) {
 /**
  * Select the correct embed tab for display
  *
- * @param string $hook
- * @param string $type
- * @param array $items
- * @param array $vars
+ * @param string     $hook  'register'
+ * @param string     $type  'menu:embed'
+ * @param Collection $items current return value
+ * @param array      $vars  supplied params
+ *
+ * @return Collection
  */
 function embed_select_tab($hook, $type, $items, $vars) {
-
-	// can this ba called from page handler instead?
-	$page = get_input('page');
-	$tab_name = array_pop(explode('/', $page));
+	$tab_name = elgg_extract('tab', $vars);
+		
 	foreach ($items as $item) {
 		if ($item->getName() == $tab_name) {
 			$item->setSelected();
@@ -106,34 +91,12 @@ function embed_select_tab($hook, $type, $items, $vars) {
 	}
 
 	if (!elgg_get_config('embed_tab') && count($items) > 0) {
-		$items[0]->setSelected();
+		$keys = array_keys($items->all());
+		$items->get($keys[0])->setSelected();
 		elgg_set_config('embed_tab', $items[0]);
 	}
-}
-
-/**
- * Serves the content for the embed lightbox
- *
- * @param array $page URL segments
- */
-function embed_page_handler($page) {
-
-	elgg_ajax_gatekeeper();
-
-	$container_guid = (int)get_input('container_guid');
-	if ($container_guid) {
-		$container = get_entity($container_guid);
-
-		if (elgg_instanceof($container, 'group') && $container->isMember()) {
-			// embedding inside a group so save file to group files
-			elgg_set_page_owner_guid($container_guid);
-		}
-	}
-
-	set_input('page', $page[1]);
-
-	echo elgg_view('embed/layout');
-	return true;
+	
+	return $items;
 }
 
 /**
@@ -145,12 +108,12 @@ function embed_page_handler($page) {
  * @param array $vars     Display parameters
  * @return string
  */
-function embed_list_items($entities, $vars = array()) {
+function embed_list_items($entities, $vars = []) {
 
-	$defaults = array(
+	$defaults = [
 		'items' => $entities,
 		'list_class' => 'elgg-list-entity',
-	);
+	];
 
 	$vars = array_merge($defaults, $vars);
 
@@ -160,12 +123,13 @@ function embed_list_items($entities, $vars = array()) {
 /**
  * Set the options for the list of embedable content
  *
- * @param array $options
+ * @param array $options additional options
+ *
  * @return array
  */
-function embed_get_list_options($options = array()) {
+function embed_get_list_options($options = []) {
 
-	$container_guids = array(elgg_get_logged_in_user_guid());
+	$container_guids = [elgg_get_logged_in_user_guid()];
 	if (elgg_get_page_owner_guid()) {
 		$page_owner_guid = elgg_get_page_owner_guid();
 		if ($page_owner_guid != elgg_get_logged_in_user_guid()) {
@@ -173,11 +137,12 @@ function embed_get_list_options($options = array()) {
 		}
 	}
 
-	$defaults = array(
+	$defaults = [
 		'limit' => 6,
 		'container_guids' => $container_guids,
 		'item_class' => 'embed-item',
-	);
+		'no_results' => true,
+	];
 
 	$options = array_merge($defaults, $options);
 
@@ -187,7 +152,7 @@ function embed_get_list_options($options = array()) {
 /**
  * Substitutes thumbnail's inline URL with a permanent URL
  * Registered with a very late priority of 1000 to ensure we replace all previous values
- * 
+ *
  * @param string $hook   "entity:icon:url"
  * @param string $type   "object"
  * @param string $return URL
@@ -210,3 +175,7 @@ function embed_set_thumbnail_url($hook, $type, $return, $params) {
 
 	return elgg_get_embed_url($entity, $size);
 }
+
+return function() {
+	elgg_register_event_handler('init', 'system', 'embed_init');
+};

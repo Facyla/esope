@@ -8,7 +8,7 @@
 $page_owner = elgg_get_page_owner_entity();
 
 if ($page_owner instanceof ElggGroup) {
-	$title = elgg_echo("bookmarks:this:group", array($page_owner->name));
+	$title = elgg_echo("bookmarks:this:group", [$page_owner->getDisplayName()]);
 } else {
 	$title = elgg_echo("bookmarks:this");
 }
@@ -19,17 +19,23 @@ if (!$name && ($user = elgg_get_logged_in_user_entity())) {
 	$name = $user->username;
 }
 
-$url = elgg_get_site_url();
-$img = elgg_view('output/img', array(
-	'src' => elgg_get_simplecache_url('bookmarks/bookmarklet.gif'),
-	'alt' => $title,
-));
-$bookmarklet = "<a href=\"javascript:location.href='{$url}bookmarks/add/$guid?address='"
-	. "+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)\">"
-	. $img . "</a>";
+$code = elgg_view('bookmarks/bookmarklet.js');
+
+$base_url = elgg_generate_url('add:object:bookmarks', ['guid' => $guid]);
+$base_url_str = json_encode($base_url, JSON_UNESCAPED_SLASHES);
+$code = str_replace('BASEURL', $base_url_str, $code);
+
+$bookmarklet = elgg_view('output/url', [
+	'text' => $title,
+	'icon' => 'push-pin-alt',
+	'href' => "javascript:$code",
+	'onclick' => 'return false',
+	'class' => 'elgg-button elgg-button-action',
+	'style' => 'cursor:move',
+]);
 
 ?>
-<p><?php echo elgg_echo("bookmarks:bookmarklet:description"); ?></p>
-<p><?php echo $bookmarklet; ?></p>
-<p><?php echo elgg_echo("bookmarks:bookmarklet:descriptionie"); ?></p>
-<p><?php echo elgg_echo("bookmarks:bookmarklet:description:conclusion"); ?></p>
+<p><?= elgg_echo("bookmarks:bookmarklet:description"); ?></p>
+<p><?= $bookmarklet; ?></p>
+<p><?= elgg_echo("bookmarks:bookmarklet:descriptionie"); ?></p>
+<p><?= elgg_echo("bookmarks:bookmarklet:description:conclusion"); ?></p>

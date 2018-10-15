@@ -5,7 +5,7 @@
  *
  * @package    Elgg.Core
  * @subpackage Core
- * 
+ *
  * @property-read int    $id            The unique identifier (read-only)
  * @property-read int    $subject_guid  The GUID of the actor
  * @property-read int    $object_guid   The GUID of the object
@@ -25,8 +25,6 @@ class ElggRiverItem {
 	public $object_guid;
 	public $target_guid;
 	public $annotation_id;
-	public $type;
-	public $subtype;
 	public $action_type;
 	public $access_id;
 	public $view;
@@ -44,10 +42,10 @@ class ElggRiverItem {
 		}
 
 		// the casting is to support typed serialization like json
-		$int_types = array('id', 'subject_guid', 'object_guid', 'target_guid', 'annotation_id', 'access_id', 'posted');
+		$int_types = ['id', 'subject_guid', 'object_guid', 'target_guid', 'annotation_id', 'access_id', 'posted'];
 		foreach ($object as $key => $value) {
 			if (in_array($key, $int_types)) {
-				$this->$key = (int)$value;
+				$this->$key = (int) $value;
 			} else {
 				$this->$key = $value;
 			}
@@ -55,8 +53,23 @@ class ElggRiverItem {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function __get($name) {
+		switch ($name) {
+			case 'type' :
+			case 'subtype' :
+				$object = get_entity($this->object_guid);
+				if ($object) {
+					return $object->$name;
+				}
+				break;
+		}
+	}
+
+	/**
 	 * Get the subject of this river item
-	 * 
+	 *
 	 * @return \ElggEntity
 	 */
 	public function getSubjectEntity() {
@@ -83,7 +96,7 @@ class ElggRiverItem {
 
 	/**
 	 * Get the Annotation for this river item
-	 * 
+	 *
 	 * @return \ElggAnnotation
 	 */
 	public function getAnnotation() {
@@ -101,27 +114,16 @@ class ElggRiverItem {
 
 	/**
 	 * Get the time this activity was posted
-	 * 
-	 * @return int
-	 * @deprecated 1.9 Use getTimePosted()
-	 */
-	public function getPostedTime() {
-		elgg_deprecated_notice("\ElggRiverItem::getPostedTime() deprecated in favor of getTimePosted()", 1.9);
-		return (int)$this->posted;
-	}
-
-	/**
-	 * Get the time this activity was posted
-	 * 
+	 *
 	 * @return int
 	 */
 	public function getTimePosted() {
-		return (int)$this->posted;
+		return (int) $this->posted;
 	}
 
 	/**
 	 * Get the type of the object
-	 * 
+	 *
 	 * This is required for elgg_view_list_item(). All the other data types
 	 * (entities, extenders, relationships) have a type/subtype.
 	 *
@@ -133,7 +135,7 @@ class ElggRiverItem {
 
 	/**
 	 * Get the subtype of the object
-	 * 
+	 *
 	 * This is required for elgg_view_list_item().
 	 *
 	 * @return string 'item'
@@ -146,8 +148,6 @@ class ElggRiverItem {
 	 * Can a user delete this river item?
 	 *
 	 * @tip Can be overridden by registering for the "permissions_check:delete", "river" plugin hook.
-	 *
-	 * @note This is not called by elgg_delete_river().
 	 *
 	 * @param int $user_guid The user GUID, optionally (default: logged in user)
 	 *
@@ -185,7 +185,7 @@ class ElggRiverItem {
 
 	/**
 	 * Get a plain old object copy for public consumption
-	 * 
+	 *
 	 * @return \stdClass
 	 */
 	public function toObject() {
@@ -198,7 +198,7 @@ class ElggRiverItem {
 		$object->action = $this->action_type;
 		$object->time_posted = date('c', $this->getTimePosted());
 		$object->enabled = $this->enabled;
-		$params = array('item' => $this);
+		$params = ['item' => $this];
 		return _elgg_services()->hooks->trigger('to:object', 'river_item', $params, $object);
 	}
 

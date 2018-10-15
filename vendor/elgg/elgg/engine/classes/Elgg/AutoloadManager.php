@@ -1,14 +1,18 @@
 <?php
+
 namespace Elgg;
+
 /**
  * Manages core autoloading and caching of class maps
  *
  * @access private
- * 
+ *
  * @package    Elgg.Core
  * @subpackage Autoloader
  */
 class AutoloadManager {
+
+	use Cacheable;
 
 	const FILENAME = 'autoload_data.php';
 	const KEY_CLASSES = 'classes';
@@ -22,7 +26,7 @@ class AutoloadManager {
 	/**
 	 * @var array directories that have already been scanned for classes
 	 */
-	protected $scannedDirs = array();
+	protected $scannedDirs = [];
 
 	/**
 	 * @var bool was data in the manager altered?
@@ -30,13 +34,8 @@ class AutoloadManager {
 	protected $altered = false;
 
 	/**
-	 * @var \ElggCache
-	 */
-	protected $storage = null;
-
-	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param \Elgg\ClassLoader $loader Class loader object
 	 */
 	public function __construct(\Elgg\ClassLoader $loader) {
@@ -75,7 +74,7 @@ class AutoloadManager {
 	 */
 	protected function scanClassesDir($dir) {
 		$dir = new \DirectoryIterator($dir);
-		$map = array();
+		$map = [];
 
 		foreach ($dir as $file) {
 			/* @var \SplFileInfo $file */
@@ -96,29 +95,17 @@ class AutoloadManager {
 	}
 
 	/**
-	 * Register the location of a class on the class map
-	 *
-	 * @param string $class Class name
-	 * @param string $path  Path of class file
-	 * @return \Elgg\AutoloadManager
-	 */
-	public function setClassPath($class, $path) {
-		$this->loader->getClassMap()->setPath($class, $path);
-		return $this;
-	}
-
-	/**
 	 * If necessary, save necessary state details
 	 *
 	 * @return \Elgg\AutoloadManager
 	 */
 	public function saveCache() {
-		if ($this->storage) {
+		if ($this->cache) {
 			$map = $this->loader->getClassMap();
 			if ($this->altered || $map->getAltered()) {
 				$spec[self::KEY_CLASSES] = $map->getMap();
 				$spec[self::KEY_SCANNED_DIRS] = $this->scannedDirs;
-				$this->storage->save(self::FILENAME, serialize($spec));
+				$this->cache->save(self::FILENAME, serialize($spec));
 			}
 		}
 		return $this;
@@ -130,14 +117,14 @@ class AutoloadManager {
 	 * @return bool was the cache loaded?
 	 */
 	public function loadCache() {
-		$spec = $this->getSpec();
-		if ($spec) {
+		$cache = $this->getCacheFileContents();
+		if ($cache) {
 			// the cached class map will have the full scanned core classes, so
 			// don't consider the earlier mappings as "altering" the map
 			$this->loader->getClassMap()
-				->setMap($spec[self::KEY_CLASSES])
+				->setMap($cache[self::KEY_CLASSES])
 				->setAltered(false);
-			$this->scannedDirs = $spec[self::KEY_SCANNED_DIRS];
+			$this->scannedDirs = $cache[self::KEY_SCANNED_DIRS];
 			return true;
 		}
 		$this->altered = true;
@@ -145,21 +132,25 @@ class AutoloadManager {
 	}
 
 	/**
-	 * Some method that does something
-	 * 
-	 * @todo what is a spec?
-	 * @return bool|array
+	 * Tries to read the contents of the cache file and if valid returns the content
+	 *
+	 * @return false|array
 	 */
-	protected function getSpec() {
-		if ($this->storage) {
-			$serialization = $this->storage->load(self::FILENAME);
-			if ($serialization) {
-				$spec = unserialize($serialization);
-				if (isset($spec[self::KEY_CLASSES])) {
-					return $spec;
-				}
-			}
+	protected function getCacheFileContents() {
+		if (!$this->cache) {
+			return false;
 		}
+		
+		$serialization = $this->cache->load(self::FILENAME);
+		if (!$serialization) {
+			return false;
+		}
+		
+		$spec = unserialize($serialization);
+		if (isset($spec[self::KEY_CLASSES])) {
+			return $spec;
+		}
+		
 		return false;
 	}
 
@@ -169,38 +160,18 @@ class AutoloadManager {
 	 * @return \Elgg\AutoloadManager
 	 */
 	public function deleteCache() {
-		if ($this->storage) {
-			$this->storage->delete(self::FILENAME);
+		if ($this->cache) {
+			$this->cache->delete(self::FILENAME);
 		}
 		return $this;
 	}
 
 	/**
 	 * Get the class loader
-	 * 
+	 *
 	 * @return \Elgg\ClassLoader
 	 */
 	public function getLoader() {
 		return $this->loader;
 	}
-
-	/**
-	 * Set the cache storage object
-	 * 
-	 * @param \ElggCache $storage Cache object
-	 * @return void
-	 */
-	public function setStorage(\ElggCache $storage) {
-		$this->storage = $storage;
-	}
-
-	/**
-	 * Save the cache on object destruction
-	 *
-	 * @return void
-	 */
-	public function __destruct() {
-		$this->saveCache();
-	}
 }
-

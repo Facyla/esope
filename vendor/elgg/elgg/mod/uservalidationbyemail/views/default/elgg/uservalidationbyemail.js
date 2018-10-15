@@ -1,43 +1,29 @@
-/**
- * Uservalidationbyemail module
- *
- * @note The name is required for inlining, do not remove it
- */
-define('elgg/uservalidationbyemail', function (require) {
+define(function (require) {
 	var $ = require('jquery');
 	var elgg = require('elgg');
-
-	function init() {
-		$('#uservalidationbyemail-checkall').click(function() {
-			$('#uservalidationbyemail-form .elgg-body').find('input[type=checkbox]').prop('checked', this.checked);
-		});
-
-		$('.uservalidationbyemail-submit').click(function(event) {
-			var form = $('#uservalidationbyemail-form')[0];
-			event.preventDefault();
-
-			// check if there are selected users
-			if ($('.elgg-body', form).find('input[type=checkbox]:checked').length < 1) {
-				return false;
-			}
-
-			// confirmation
-			if (!confirm(this.title)) {
-				return false;
-			}
-
-			form.action = this.href;
-			form.submit();
-		});
-	}
-
-	elgg.register_hook_handler('init', 'system', init);
-
-	/**
-	 * elgg.uservalidationbyemail object is deprecated. Do not call it directly.
-	 * @deprecated 2.3
-	 */
-	elgg.uservalidationbyemail = {
-		init: init
+	var spinner = require('elgg/spinner');
+	
+	var get_checkboxes = function () {
+		return $('#admin-users-unvalidated-bulk .elgg-input-checkbox[name="user_guids[]"]');
 	};
+	
+	var bulk_submit = function() {
+		
+		var $checkboxes = get_checkboxes().filter(':checked');
+		if (!$checkboxes.length) {
+			return false;
+		}
+		
+		var $form = $('#admin-users-unvalidated-bulk');
+		$form.prop('action', $(this).prop('href'));
+		
+		spinner.start();
+		$form.submit();
+		
+		return false;
+	};
+	
+	elgg.register_hook_handler('init', 'system', function() {
+		$(document).on('click', '#uservalidationbyemail-bulk-resend', bulk_submit);
+	});
 });

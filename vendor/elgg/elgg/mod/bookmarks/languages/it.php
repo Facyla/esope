@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
 
 	/**
 	 * Menu items and titles
@@ -75,4 +75,4 @@ Visualizza e commenta il segnalibro:
 	'bookmarks:save:invalid' => "L'indirizzo del segnalibro non è valido e non può essere salvato.",
 	'bookmarks:delete:failed' => "Il segnalibro non può essere eliminato. Riprovare.",
 	'bookmarks:unknown_bookmark' => 'Impossibile trovare il segnalibro specificato.',
-);
+];

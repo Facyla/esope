@@ -1,27 +1,25 @@
 <?php
 return array(
-	'blog' => 'Blogs',
-	'blog:blogs' => 'Blogs',
+	'item:object:blog' => 'Blog',
+	'collection:object:blog' => 'Blogs',
+	'collection:object:blog:all' => 'All site blogs',
+	'collection:object:blog:owner' => '%s\'s blogs',
+	'collection:object:blog:group' => 'Group blogs',
+	'collection:object:blog:friends' => 'Friends\' blogs',
+	'add:object:blog' => 'Add blog post',
+	'edit:object:blog' => 'Edit blog post',
+
 	'blog:revisions' => 'Revisions',
 	'blog:archives' => 'Archives',
-	'blog:blog' => 'Blog',
-	'item:object:blog' => 'Blogs',
 
-	'blog:title:user_blogs' => '%s\'s blogs',
-	'blog:title:all_blogs' => 'All site blogs',
-	'blog:title:friends' => 'Friends\' blogs',
-
-	'blog:group' => 'Group blog',
-	'blog:enableblog' => 'Enable group blog',
+	'groups:tool:blog' => 'Enable group blog',
 	'blog:write' => 'Write a blog post',
 
 	// Editing
-	'blog:add' => 'Add blog post',
-	'blog:edit' => 'Edit blog post',
 	'blog:excerpt' => 'Excerpt',
 	'blog:body' => 'Body',
 	'blog:save_status' => 'Last saved: ',
-	
+
 	'blog:revision' => 'Revision',
 	'blog:auto_saved_revision' => 'Auto Saved Revision',
 
@@ -42,8 +40,8 @@ return array(
 	'blog:error:revision_not_found' => 'Cannot find this revision.',
 
 	// river
-	'river:create:object:blog' => '%s published a blog post %s',
-	'river:comment:object:blog' => '%s commented on the blog %s',
+	'river:object:blog:create' => '%s published a blog post %s',
+	'river:object:blog:comment' => '%s commented on the blog %s',
 
 	// notifications
 	'blog:notify:summary' => 'New blog post called %s',
@@ -59,8 +57,8 @@ View and comment on the blog post:
 ',
 
 	// widget
-	'blog:widget:description' => 'Display your latest blog posts',
+	'widgets:blog:name' => 'Blog posts',
+	'widgets:blog:description' => 'Display your latest blog posts',
 	'blog:moreblogs' => 'More blog posts',
 	'blog:numbertodisplay' => 'Number of blog posts to display',
-	'blog:noblogs' => 'No blog posts'
 );

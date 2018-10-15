@@ -5,7 +5,7 @@ return array(
 	 * Menu items and titles
 	 */
 	'expages' => "Externe pagina's",
-	'admin:appearance:expages' => "Externe pagina's",
+	'admin:configure_utilities:expages' => "Externe pagina's",
 	'expages:edit:viewpage' => "Bekijk pagina op de site",
 	'expages:about' => "Over ons",
 	'expages:terms' => "Algemene voorwaarden",

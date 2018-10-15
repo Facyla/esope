@@ -10,6 +10,8 @@
  * @subpackage Statistics
  */
 
+use Elgg\Database\Clauses\OrderByClause;
+
 /**
  * Return an array reporting the number of various entities in the system.
  *
@@ -20,21 +22,21 @@
 function get_entity_statistics($owner_guid = 0) {
 
 	$owner_guid = (int) $owner_guid;
-	$entity_stats = array();
+	$entity_stats = [];
 
-	$grouped_entities = elgg_get_entities(array(
-		'selects' => array('COUNT(*) as cnt'),
+	$grouped_entities = elgg_get_entities([
+		'selects' => ['COUNT(*) as cnt'],
 		'owner_guids' => ($owner_guid) ? : ELGG_ENTITIES_ANY_VALUE,
-		'group_by' => 'e.type, e.subtype',
+		'group_by' => ['e.type', 'e.subtype'],
 		'limit' => 0,
-		'order_by' => 'cnt DESC',
-	));
+		'order_by' => new OrderByClause('cnt', 'DESC'),
+	]);
 	
 	if (!empty($grouped_entities)) {
 		foreach ($grouped_entities as $entity) {
 			$type = $entity->getType();
 			if (!isset($entity_stats[$type]) || !is_array($entity_stats[$type])) {
-				$entity_stats[$type] = array();
+				$entity_stats[$type] = [];
 			}
 			$subtype = $entity->getSubtype();
 			if (!$subtype) {
@@ -55,24 +57,27 @@ function get_entity_statistics($owner_guid = 0) {
  * @return int
  */
 function get_number_users($show_deactivated = false) {
-	global $CONFIG;
 
-	$access = "";
+	$where = new \Elgg\Database\Clauses\EntityWhereClause();
+	$where->type_subtype_pairs = [
+		'user' => null,
+	];
 
-	if (!$show_deactivated) {
-		$access = "and " . _elgg_get_access_where_sql(array('table_alias' => ''));
+	if ($show_deactivated) {
+		$where->use_enabled_clause = false;
 	}
 
-	$query = "SELECT count(*) as count
-		from {$CONFIG->dbprefix}entities where type='user' $access";
+	$select = \Elgg\Database\Select::fromTable('entities', 'e');
+	$select->select('COUNT(DISTINCT e.guid) AS count');
+	$select->addClause($where, 'e');
 
-	$result = get_data_row($query);
+	$result = _elgg_services()->db->getDataRow($select);
 
 	if ($result) {
 		return $result->count;
 	}
 
-	return false;
+	return 0;
 }
 
 /**
@@ -86,10 +91,10 @@ function get_number_users($show_deactivated = false) {
  *
  * @return string
  */
-function get_online_users(array $options = array()) {
-	$options = array_merge(array(
+function get_online_users(array $options = []) {
+	$options = array_merge([
 		'seconds' => 600,
-	), $options);
+	], $options);
 
 	return elgg_list_entities($options, 'find_active_users');
 }
@@ -103,9 +108,11 @@ function get_online_users(array $options = array()) {
 function statistics_init() {
 	elgg_extend_view('core/settings/statistics', 'core/settings/statistics/online');
 	elgg_extend_view('core/settings/statistics', 'core/settings/statistics/numentities');
-	elgg_extend_view('core/settings/statistics', 'core/settings/statistics/login_history');
 }
 
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', 'statistics_init');
 };

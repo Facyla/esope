@@ -7,15 +7,10 @@
  * @subpackage Cache
  */
 
-/* Filepath Cache */
-
 /**
  * Returns an \ElggCache object suitable for caching system information
  *
- * @todo Can this be done in a cleaner way?
- * @todo Swap to memcache etc?
- *
- * @return \ElggFileCache
+ * @return ElggCache
  */
 function elgg_get_system_cache() {
 	return _elgg_services()->fileCache;
@@ -52,6 +47,17 @@ function elgg_load_system_cache($type) {
 }
 
 /**
+ * Deletes the contents of a system cache.
+ *
+ * @param string $type The type of cache to delete
+ * @return bool
+ * @since 3.0
+ */
+function elgg_delete_system_cache($type) {
+	return _elgg_services()->systemCache->delete($type);
+}
+
+/**
  * Is system cache enabled
  *
  * @return bool
@@ -64,7 +70,7 @@ function elgg_is_system_cache_enabled() {
 /**
  * Enables the system disk cache.
  *
- * Uses the 'system_cache_enabled' datalist with a boolean value.
+ * Uses the 'system_cache_enabled' config with a boolean value.
  * Resets the system cache.
  *
  * @return void
@@ -76,7 +82,7 @@ function elgg_enable_system_cache() {
 /**
  * Disables the system disk cache.
  *
- * Uses the 'system_cache_enabled' datalist with a boolean value.
+ * Uses the 'system_cache_enabled' config with a boolean value.
  * Resets the system cache.
  *
  * @return void
@@ -91,10 +97,7 @@ function elgg_disable_system_cache() {
  * Registers a view to simple cache.
  *
  * Simple cache is a caching mechanism that saves the output of
- * a view and its extensions into a file.  If the view is called
- * by the {@link engine/handlers/cache_handler.php} file, the Elgg
- * engine will not be loaded and the contents of the view will returned
- * from file.
+ * a view and its extensions into a file.
  *
  * @warning Simple cached views must take no parameters and return
  * the same content no matter who is logged in.
@@ -106,7 +109,7 @@ function elgg_disable_system_cache() {
  * @since 1.8.0
  */
 function elgg_register_simplecache_view($view_name) {
-	_elgg_services()->simpleCache->registerView($view_name);
+	_elgg_services()->views->registerCacheableView($view_name);
 }
 
 /**
@@ -185,10 +188,14 @@ function elgg_disable_simplecache() {
 function _elgg_rmdir($dir, $empty = false) {
 	if (!$dir) {
 		// realpath can return false
-		_elgg_services()->logger->warn(__FUNCTION__ . ' called with empty $dir');
+		_elgg_services()->logger->warning(__FUNCTION__ . ' called with empty $dir');
 		return true;
 	}
-	$files = array_diff(scandir($dir), array('.', '..'));
+	if (!is_dir($dir)) {
+		return true;
+	}
+
+	$files = array_diff(scandir($dir), ['.', '..']);
 	
 	foreach ($files as $file) {
 		if (is_dir("$dir/$file")) {
@@ -223,48 +230,165 @@ function elgg_invalidate_simplecache() {
  * @since 1.11
  */
 function elgg_flush_caches() {
-	_elgg_services()->events->trigger('cache:flush', 'system');
+	_elgg_services()->events->triggerSequence('cache:flush', 'system');
 }
 
 /**
  * Checks if /cache directory has been symlinked to views simplecache directory
- * 
+ *
  * @return bool
  * @access private
  */
 function _elgg_is_cache_symlinked() {
-	$link = elgg_get_root_path() . 'cache/';
-	$target = elgg_get_cache_path() . 'views_simplecache/';
-	return is_dir($link) && realpath($target) == realpath($link);
+	$root_path = elgg_get_root_path();
+
+	$simplecache_path = elgg_get_asset_path();
+	$symlink_path = "{$root_path}cache";
+
+	if (!is_dir($simplecache_path)) {
+		return false;
+	}
+	return is_dir($symlink_path) && realpath($simplecache_path) == realpath($symlink_path);
 }
 
 /**
- * Invalidate entity cache
+ * Symlinks /cache directory to views simplecache directory
  *
- * @param int $entity_guid The GUID of the entity to invalidate
- *
- * @return void
+ * @return bool
  * @access private
  */
-function _elgg_invalidate_cache_for_entity($entity_guid) {
-	_elgg_services()->entityCache->remove($entity_guid);
+function _elgg_symlink_cache() {
+
+	if (_elgg_is_cache_symlinked()) {
+		// Symlink exists, no need to proceed
+		return true;
+	}
+
+	$root_path = elgg_get_root_path();
+	$simplecache_path = rtrim(elgg_get_asset_path(), '/');
+	$symlink_path = "{$root_path}cache";
+
+	if (is_dir($symlink_path)) {
+		// Cache directory already exists
+		// We can not proceed without overwriting files
+		return false;
+	}
+
+	if (!is_dir($simplecache_path)) {
+		// Views simplecache directory has not yet been created
+		mkdir($simplecache_path, 0700, true);
+	}
+
+	symlink($simplecache_path, $symlink_path);
+
+	if (_elgg_is_cache_symlinked()) {
+		return true;
+	}
+
+	if (is_dir($symlink_path)) {
+		unlink($symlink_path);
+	}
+	
+	return false;
 }
 
 /**
  * Initializes the simplecache lastcache variable and creates system cache files
  * when appropriate.
  *
+ * @return void
+ *
  * @access private
  */
 function _elgg_cache_init() {
-	_elgg_services()->simpleCache->init();
 	_elgg_services()->systemCache->init();
 }
 
+/**
+ * Disable all caches
+ *
+ * @return void
+ * @internal
+ * @access private
+ */
+function _elgg_disable_caches() {
+	_elgg_services()->boot->getCache()->disable();
+	_elgg_services()->plugins->getCache()->disable();
+	_elgg_services()->sessionCache->disable();
+	_elgg_services()->dataCache->disable();
+	_elgg_services()->dic_cache->getCache()->disable();
+	_elgg_services()->autoloadManager->getCache()->disable();
+	_elgg_services()->systemCache->getCache()->disable();
+}
+
+/**
+ * Clear all caches
+ *
+ * @return void
+ * @internal
+ * @access private
+ */
+function _elgg_clear_caches() {
+	_elgg_services()->boot->invalidateCache();
+	_elgg_services()->plugins->clear();
+	_elgg_services()->sessionCache->clear();
+	_elgg_services()->dataCache->clear();
+	_elgg_services()->dic_cache->flushAll();
+	_elgg_services()->simpleCache->invalidate();
+	_elgg_services()->autoloadManager->deleteCache();
+	_elgg_services()->fileCache->clear();
+}
+
+/**
+ * Enable all caches
+ *
+ * @return void
+ * @internal
+ * @access private
+ */
+function _elgg_enable_caches() {
+	_elgg_services()->boot->getCache()->enable();
+	_elgg_services()->plugins->getCache()->enable();
+	_elgg_services()->sessionCache->enable();
+	_elgg_services()->dataCache->enable();
+	_elgg_services()->dic_cache->getCache()->enable();
+	_elgg_services()->autoloadManager->getCache()->enable();
+	_elgg_services()->systemCache->getCache()->enable();
+}
+
+/**
+ * Rebuild public service container
+ *
+ * @return void
+ * @internal
+ * @access private
+ */
+function _elgg_rebuild_public_container() {
+	$services = _elgg_services();
+
+	$dic_builder = new \DI\ContainerBuilder(\Elgg\Di\PublicContainer::class);
+	$dic_builder->useAnnotations(false);
+	$dic_builder->setDefinitionCache($services->dic_cache);
+
+	$definitions = $services->dic_loader->getDefinitions();
+	foreach ($definitions as $definition) {
+		$dic_builder->addDefinitions($definition);
+	}
+
+	$dic = $dic_builder->build();
+
+	_elgg_services()->setValue('dic_builder', $dic_builder);
+	_elgg_services()->setValue('dic', $dic);
+}
+
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('ready', 'system', '_elgg_cache_init');
-	
-	// register plugin hooks for cache reset
-	$events->registerHandler('cache:flush', 'system', 'elgg_reset_system_cache');
-	$events->registerHandler('cache:flush', 'system', 'elgg_invalidate_simplecache');
+
+	$events->registerHandler('cache:flush:before', 'system', '_elgg_disable_caches');
+	$events->registerHandler('cache:flush', 'system', '_elgg_clear_caches');
+	$events->registerHandler('cache:flush:after', 'system', '_elgg_enable_caches');
+	$events->registerHandler('cache:flush:after', 'system', '_elgg_rebuild_public_container');
 };

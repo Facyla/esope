@@ -9,29 +9,32 @@
  * </code>
  */
 
-elgg_register_event_handler('init', 'system', 'likes_init');
+use Elgg\Likes\DataService;
+use Elgg\Services\AjaxResponse;
+use Elgg\Likes\AjaxResponseHandler;
+use Elgg\Likes\JsConfigHandler;
 
+/**
+ * Likes init
+ *
+ * @return void
+ */
 function likes_init() {
-
-	elgg_extend_view('elgg.css', 'likes/css');
-
-	// inline module
-	elgg_extend_view('elgg.js', 'elgg/likes.js');
-	elgg_require_js('elgg/likes');
+	elgg_extend_view('elgg.css', 'elgg/likes.css');
 
 	// used to preload likes data before rendering river
 	elgg_extend_view('page/components/list', 'likes/before_lists', 1);
 
-	// registered with priority < 500 so other plugins can remove likes
-	elgg_register_plugin_hook_handler('register', 'menu:river', 'likes_river_menu_setup', 400);
-	elgg_register_plugin_hook_handler('register', 'menu:entity', 'likes_entity_menu_setup', 400);
+	elgg_register_plugin_hook_handler('register', 'menu:social', 'likes_social_menu_setup');
 	elgg_register_plugin_hook_handler('permissions_check', 'annotation', 'likes_permissions_check');
 	elgg_register_plugin_hook_handler('permissions_check:annotate', 'all', 'likes_permissions_check_annotate', 0);
-	
-	$actions_base = __DIR__ . '/actions/likes';
-	elgg_register_action('likes/add', "$actions_base/add.php");
-	elgg_register_action('likes/delete', "$actions_base/delete.php");
-	
+
+	// update count when an entity is subject of an ajax request
+	elgg_register_plugin_hook_handler(AjaxResponse::RESPONSE_HOOK, 'all', AjaxResponseHandler::class);
+
+	// pass config to elgg/likes module
+	elgg_register_plugin_hook_handler('elgg.data', 'site', JsConfigHandler::class);
+		
 	elgg_register_ajax_view('likes/popup');
 }
 
@@ -40,21 +43,20 @@ function likes_init() {
  *
  * @param string $hook   "permissions_check"
  * @param string $type   "annotation"
- * @param array  $return Current value
+ * @param bool   $return Current value
  * @param array  $params Hook parameters
  *
- * @return bool
+ * @return void|bool
  */
 function likes_permissions_check($hook, $type, $return, $params) {
-	
 	$annotation = elgg_extract('annotation', $params);
 	if (!$annotation || $annotation->name !== 'likes') {
-		return $return;
+		return;
 	}
 	
 	$owner = $annotation->getOwnerEntity();
 	if (!$owner) {
-		return $return;
+		return;
 	}
 	
 	return $owner->canEdit();
@@ -65,10 +67,10 @@ function likes_permissions_check($hook, $type, $return, $params) {
  *
  * @param string $hook   "permissions_check:annotate"
  * @param string $type   "object"|"user"|"group"|"site"
- * @param array  $return Current value
+ * @param bool   $return Current value
  * @param array  $params Hook parameters
  *
- * @return bool
+ * @return void|bool
  */
 function likes_permissions_check_annotate($hook, $type, $return, $params) {
 	if (elgg_extract('annotation_name', $params) !== 'likes') {
@@ -85,140 +87,124 @@ function likes_permissions_check_annotate($hook, $type, $return, $params) {
 	$type = $entity->type;
 	$subtype = $entity->getSubtype();
 
-	return (bool)elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
+	return (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
 }
 
 /**
- * Add likes to entity menu at end of the menu
+ * Add likes to social menu
+ *
+ * @param \Elgg\Hook $hook 'register' 'menu:social'
+ *
+ * @return void|ElggMenuItem[]
+ *
+ * @since 3.0
  */
-function likes_entity_menu_setup($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) {
-		return $return;
-	}
-
-	$entity = elgg_extract('entity', $params);
-	if (!($entity instanceof \ElggEntity)) {
-		return $return;
-	}
-
-	$type = $entity->type;
-	$subtype = $entity->getSubtype();
-	$likable = (bool)elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
-	if (!$likable) {
-		return $return;
-	}
-
-	if ($entity->canAnnotate(0, 'likes')) {
-		$hasLiked = \Elgg\Likes\DataService::instance()->currentUserLikesEntity($entity->guid);
-		
-		// Always register both. That makes it super easy to toggle with javascript
-		$return[] = ElggMenuItem::factory(array(
-			'name' => 'likes',
-			'href' => elgg_add_action_tokens_to_url("/action/likes/add?guid={$entity->guid}"),
-			'text' => elgg_view_icon('thumbs-up'),
-			'title' => elgg_echo('likes:likethis'),
-			'item_class' => $hasLiked ? 'hidden' : '',
-			'priority' => 1000,
-		));
-		$return[] = ElggMenuItem::factory(array(
-			'name' => 'unlike',
-			'href' => elgg_add_action_tokens_to_url("/action/likes/delete?guid={$entity->guid}"),
-			'text' => elgg_view_icon('thumbs-up-alt'),
-			'title' => elgg_echo('likes:remove'),
-			'item_class' => $hasLiked ? '' : 'hidden',
-			'priority' => 1000,
-		));
+function likes_social_menu_setup(\Elgg\Hook $hook) {
+	$entity = $hook->getEntityParam();
+	if (!$entity) {
+		return;
 	}
 	
-	// likes count
-	$count = elgg_view('likes/count', array('entity' => $entity));
-	if ($count) {
-		$options = array(
-			'name' => 'likes_count',
-			'text' => $count,
-			'href' => false,
-			'priority' => 1001,
-		);
-		$return[] = ElggMenuItem::factory($options);
+	$type = $entity->type;
+	$subtype = $entity->getSubtype();
+
+	$supports_likes = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
+	if (!$supports_likes) {
+		return;
 	}
+	
+	$return = $hook->getValue();
+
+	if ($entity->canAnnotate(0, 'likes')) {
+		$return[] = _likes_menu_item($entity);
+	}
+	
+	$return[] = _likes_count_menu_item($entity);
 
 	return $return;
 }
 
 /**
- * Add a like button to river actions
+ * Get thumbs up menu item
+ *
+ * @param ElggEntity $entity   Entity
+ * @param int        $priority Item priority
+ *
+ * @return ElggMenuItem
+ * @access private
  */
-function likes_river_menu_setup($hook, $type, $return, $params) {
-	if (!elgg_is_logged_in() || elgg_in_context('widgets')) {
-		return;
-	}
+function _likes_menu_item(ElggEntity $entity, $priority = 500) {
+	$is_liked = DataService::instance()->currentUserLikesEntity($entity->guid);
 
-	$item = $params['item'];
-	/* @var ElggRiverItem $item */
-
-	// only like group creation #3958
-	if ($item->type == "group" && $item->view != "river/group/create") {
-		return;
-	}
-
-	if ($item->annotation_id != 0) {
-		return;
-	}
-
-	$object = $item->getObjectEntity();
-	if (!$object || !$object->canAnnotate(0, 'likes')) {
-		return;
-	}
-
-	$hasLiked = \Elgg\Likes\DataService::instance()->currentUserLikesEntity($object->guid);
-
-	// Always register both. That makes it super easy to toggle with javascript
-	$return[] = ElggMenuItem::factory(array(
+	return ElggMenuItem::factory([
 		'name' => 'likes',
-		'href' => elgg_add_action_tokens_to_url("/action/likes/add?guid={$object->guid}"),
-		'text' => elgg_view_icon('thumbs-up'),
-		'title' => elgg_echo('likes:likethis'),
-		'item_class' => $hasLiked ? 'hidden' : '',
-		'priority' => 100,
-	));
-	$return[] = ElggMenuItem::factory(array(
-		'name' => 'unlike',
-		'href' => elgg_add_action_tokens_to_url("/action/likes/delete?guid={$object->guid}"),
-		'text' => elgg_view_icon('thumbs-up-alt'),
-		'title' => elgg_echo('likes:remove'),
-		'item_class' => $hasLiked ? '' : 'hidden',
-		'priority' => 100,
-	));
-
-	// likes count
-	$count = elgg_view('likes/count', array('entity' => $object));
-	if ($count) {
-		$return[] = ElggMenuItem::factory(array(
-			'name' => 'likes_count',
-			'text' => $count,
-			'href' => false,
-			'priority' => 101,
-		));
-	}
-
-	return $return;
+		'href' => '#',
+		'icon' => 'thumbs-up',
+		'class' => $is_liked ? 'elgg-state-active' : '',
+		'text' => elgg_echo($is_liked ? 'likes:remove' : 'likes:likethis'),
+		'title' => elgg_echo($is_liked ? 'likes:remove' : 'likes:likethis'),
+		'data-likes-state' => $is_liked ? 'liked' : 'unliked',
+		'data-likes-guid' => $entity->guid,
+		'priority' => $priority,
+		'deps' => ['elgg/likes'],
+	]);
 }
 
 /**
- * Count how many people have liked an entity.
+ * Get likes count menu item.
  *
- * @param ElggEntity $entity
+ * @param ElggEntity $entity   Entity
+ * @param int        $priority Item priority
  *
- * @return int Number of likes
+ * @return ElggMenuItem
+ * @access private
+ */
+function _likes_count_menu_item(ElggEntity $entity, $priority = 500) {
+	$num_likes = DataService::instance()->getNumLikes($entity);
+
+	if ($num_likes == 1) {
+		$likes_string = elgg_echo('likes:userlikedthis', [$num_likes]);
+	} else {
+		$likes_string = elgg_echo('likes:userslikedthis', [$num_likes]);
+	}
+
+	return ElggMenuItem::factory([
+		'name' => 'likes_count',
+		'text' => '',
+		'title' => elgg_echo('likes:see'),
+		'href' => '#',
+		'badge' => $likes_string,
+		'data-likes-guid' => $entity->guid,
+		'data-colorbox-opts' => json_encode([
+			'maxHeight' => '85%',
+			'href' => elgg_normalize_url("ajax/view/likes/popup?guid={$entity->guid}")
+		]),
+		'link_class' => 'elgg-lightbox',
+		'item_class' => $num_likes ? '' : 'hidden',
+		'priority' => $priority,
+		'deps' => ['elgg/likes'],
+	]);
+}
+
+/**
+ * Get the count of how many people have liked an entity
+ *
+ * @param ElggEntity $entity entity to get likes count for
+ *
+ * @return int
  */
 function likes_count(ElggEntity $entity) {
 	$type = $entity->getType();
-	$params = array('entity' => $entity);
+	$params = ['entity' => $entity];
 	$number = elgg_trigger_plugin_hook('likes:count', $type, $params, false);
 
-	if ($number) {
-		return $number;
-	} else {
-		return $entity->countAnnotations('likes');
+	if ($number !== false) {
+		return (int) $number;
 	}
+	
+	return $entity->countAnnotations('likes');
 }
+
+return function() {
+	elgg_register_event_handler('init', 'system', 'likes_init');
+};

@@ -1,4 +1,7 @@
 <?php
+
+use Elgg\Collections\Collection;
+
 /**
  * Elgg Menu Item
  *
@@ -12,17 +15,17 @@
  * @subpackage Navigation
  * @since      1.8.0
  */
-class ElggMenuItem {
+class ElggMenuItem implements \Elgg\Collections\CollectionItemInterface {
 
 	/**
 	 * @var array Non-rendered data about the menu item
 	 */
-	protected $data = array(
+	protected $data = [
 		// string Identifier of the menu
 		'name' => '',
 
 		// array Page contexts this menu item should appear on
-		'contexts' => array('all'),
+		'contexts' => ['all'],
 
 		// string Menu section identifier
 		'section' => 'default',
@@ -30,8 +33,8 @@ class ElggMenuItem {
 		// int Smaller priorities float to the top
 		'priority' => 100,
 
-		// bool Is this the currently selected menu item
-		'selected' => false,
+		// bool Is this the currently selected menu item (null for autodetection)
+		'selected' => null,
 
 		// string Identifier of this item's parent
 		'parent_name' => '',
@@ -40,17 +43,20 @@ class ElggMenuItem {
 		'parent' => null,
 
 		// array Array of children objects or empty array
-		'children' => array(),
+		'children' => [],
+
+		// array An array of options for child menu of the parent item
+		'child_menu' => [],
 
 		// array Classes to apply to the li tag
-		'itemClass' => array(),
+		'itemClass' => [],
 
 		// array Classes to apply to the anchor tag
-		'linkClass' => array(),
+		'linkClass' => [],
 
 		// array AMD modules required by this menu item
-		'deps' => array()
-	);
+		'deps' => []
+	];
 
 	/**
 	 * @var string The menu display string (HTML)
@@ -118,6 +124,7 @@ class ElggMenuItem {
 	 *    selected    => BOOL Is this menu item currently selected?
 	 *    confirm     => STR  If set, the link will be drawn with the output/confirmlink view instead of output/url.
 	 *    deps        => ARR  AMD modules required by this menu item
+	 *    child_menu  => ARR  Options for the child menu
 	 *    data        => ARR  Custom attributes stored in the menu item.
 	 *
 	 * @return ElggMenuItem or null on error
@@ -151,10 +158,6 @@ class ElggMenuItem {
 		if (isset($options['link_class'])) {
 			$item->setLinkClass($options['link_class']);
 			unset($options['link_class']);
-		} elseif (isset($options['class'])) {
-			elgg_deprecated_notice("\ElggMenuItem::factory() does not accept 'class' key anymore, use 'link_class' instead", 1.9);
-			$item->setLinkClass($options['class']);
-			unset($options['class']);
 		}
 
 		if (isset($options['item_class'])) {
@@ -168,7 +171,7 @@ class ElggMenuItem {
 		}
 		
 		foreach ($options as $key => $value) {
-			if (isset($item->data[$key])) {
+			if (array_key_exists($key, $item->data)) {
 				$item->data[$key] = $value;
 			} else {
 				$item->$key = $value;
@@ -231,7 +234,7 @@ class ElggMenuItem {
 
 	/**
 	 * Set the display text of the menu item
-	 * 
+	 *
 	 * @param string $text The display text as HTML
 	 * @return void
 	 */
@@ -276,7 +279,7 @@ class ElggMenuItem {
 	 */
 	public function setContext($contexts) {
 		if (is_string($contexts)) {
-			$contexts = array($contexts);
+			$contexts = [$contexts];
 		}
 		$this->data['contexts'] = $contexts;
 	}
@@ -311,6 +314,7 @@ class ElggMenuItem {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -330,7 +334,11 @@ class ElggMenuItem {
 	 * @return bool
 	 */
 	public function getSelected() {
-		return $this->data['selected'];
+		if (isset($this->data['selected'])) {
+			return $this->data['selected'];
+		}
+
+		return elgg_http_url_is_identical(current_page_url(), $this->getHref());
 	}
 
 	/**
@@ -379,7 +387,7 @@ class ElggMenuItem {
 	 */
 	public function setLinkClass($class) {
 		if (!is_array($class)) {
-			$this->data['linkClass'] = array($class);
+			$this->data['linkClass'] = [$class];
 		} else {
 			$this->data['linkClass'] = $class;
 		}
@@ -438,6 +446,25 @@ class ElggMenuItem {
 	}
 
 	/**
+	 * Set child menu options for a parent item
+	 *
+	 * @param array $options Options
+	 * @return void
+	 */
+	public function setChildMenuOptions(array $options = []) {
+		$this->data['child_menu'] = $options;
+	}
+
+	/**
+	 * Returns child menu options for parent items
+	 *
+	 * @return array
+	 */
+	public function getChildMenuOptions() {
+		return $this->data['child_menu'];
+	}
+
+	/**
 	 * Set the li classes
 	 *
 	 * @param mixed $class An array of class names, or a single string class name.
@@ -445,7 +472,7 @@ class ElggMenuItem {
 	 */
 	public function setItemClass($class) {
 		if (!is_array($class)) {
-			$this->data['itemClass'] = array($class);
+			$this->data['itemClass'] = [$class];
 		} else {
 			$this->data['itemClass'] = $class;
 		}
@@ -458,11 +485,8 @@ class ElggMenuItem {
 	 */
 	public function getItemClass() {
 		// allow people to specify name with underscores and colons
-		$name = strtolower($this->getName());
-		$name = str_replace('_', '-', $name);
-		$name = str_replace(':', '-', $name);
-		$name = str_replace(' ', '-', $name);
-
+		$name = preg_replace('/[^a-z0-9\-]/i', '-', strtolower($this->getName()));
+		
 		$class = implode(' ', $this->data['itemClass']);
 		if ($class) {
 			return "elgg-menu-item-$name $class";
@@ -485,7 +509,7 @@ class ElggMenuItem {
 	// @codingStandardsIgnoreStart
 	/**
 	 * Add additional classes
-	 * 
+	 *
 	 * @param array $current    The current array of classes
 	 * @param mixed $additional Additional classes (either array of string)
 	 * @return void
@@ -498,30 +522,6 @@ class ElggMenuItem {
 		}
 	}
 	// @codingStandardsIgnoreEnd
-
-
-	/**
-	 * Set the priority of the menu item
-	 *
-	 * @param int $priority The smaller numbers mean higher priority (1 before 100)
-	 * @return void
-	 * @deprecated 1.9 Use setPriority()
-	 */
-	public function setWeight($priority) {
-		elgg_deprecated_notice("\ElggMenuItem::setWeight() deprecated by \ElggMenuItem::setPriority()", 1.9);
-		$this->data['priority'] = $priority;
-	}
-
-	/**
-	 * Get the priority of the menu item
-	 *
-	 * @return int
-	 * @deprecated 1.9 Use getPriority()
-	 */
-	public function getWeight() {
-		elgg_deprecated_notice("\ElggMenuItem::getWeight() deprecated by \ElggMenuItem::getPriority()", 1.9);
-		return $this->data['priority'];
-	}
 
 	/**
 	 * Set the priority of the menu item
@@ -582,7 +582,7 @@ class ElggMenuItem {
 
 	/**
 	 * Set the parent menu item
-	 * 
+	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @param \ElggMenuItem $parent The parent of this menu item
@@ -595,7 +595,7 @@ class ElggMenuItem {
 
 	/**
 	 * Get the parent menu item
-	 * 
+	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @return \ElggMenuItem or null
@@ -607,7 +607,7 @@ class ElggMenuItem {
 
 	/**
 	 * Add a child menu item
-	 * 
+	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @param \ElggMenuItem $item A child menu item
@@ -620,7 +620,7 @@ class ElggMenuItem {
 
 	/**
 	 * Set the menu item's children
-	 * 
+	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @param ElggMenuItem[] $children Array of items
@@ -633,7 +633,7 @@ class ElggMenuItem {
 
 	/**
 	 * Get the children menu items
-	 * 
+	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @return ElggMenuItem[]
@@ -645,7 +645,7 @@ class ElggMenuItem {
 
 	/**
 	 * Sort the children
-	 * 
+	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @param string $sortFunction A function that is passed to usort()
@@ -661,7 +661,7 @@ class ElggMenuItem {
 
 	/**
 	 * Get all the values for this menu item. Useful for rendering.
-	 * 
+	 *
 	 * @return array
 	 * @since 1.9.0
 	 */
@@ -673,14 +673,10 @@ class ElggMenuItem {
 	}
 
 	/**
-	 * Get the menu item content (usually a link)
-	 *
-	 * @param array $vars Options to pass to output/url if a link
-	 * @return string
-	 * @deprecated 1.9 Use elgg_view_menu_item()
+	 * Get unique item identifier within a collection
+	 * @return string|int
 	 */
-	public function getContent(array $vars = array()) {
-		elgg_deprecated_notice("\ElggMenuItem::getContent() deprecated by elgg_view_menu_item()", 1.9);
-		return elgg_view_menu_item($this, $vars);
+	public function getId() {
+		return $this->getName();
 	}
 }

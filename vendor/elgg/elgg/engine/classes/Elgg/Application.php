@@ -2,8 +2,40 @@
 
 namespace Elgg;
 
+use ClassException;
+use Closure;
+use ConfigurationException;
+use DatabaseException;
+use Elgg\Application\BootHandler;
+use Elgg\Application\ErrorHandler;
+use Elgg\Application\ExceptionHandler;
+use Elgg\Application\ShutdownHandler;
+use Elgg\Database\DbConfig;
 use Elgg\Di\ServiceProvider;
 use Elgg\Filesystem\Directory;
+use Elgg\Filesystem\Directory\Local;
+use Elgg\Http\ErrorResponse;
+use Elgg\Http\OkResponse;
+use Elgg\Http\RedirectResponse;
+use Elgg\Http\Request;
+use Elgg\Http\ResponseBuilder;
+use Elgg\Http\ResponseTransport;
+use Elgg\Project\Paths;
+use Elgg\Security\UrlSigner;
+use ElggInstaller;
+use Exception;
+use InstallationException;
+use InvalidArgumentException;
+use InvalidParameterException;
+use SecurityException;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirect;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Load, boot, and implement a front controller for an Elgg application
@@ -14,53 +46,60 @@ use Elgg\Filesystem\Directory;
  * The full path is necessary to work around this: https://bugs.php.net/bug.php?id=55726
  *
  * @since 2.0.0
- *
- * @property-read \Elgg\Menu\Service $menus
- * @property-read \Elgg\Views\TableColumn\ColumnFactory $table_columns
  */
 class Application {
 
-	const GET_PATH_KEY = '__elgg_uri';
-	const REWRITE_TEST_TOKEN = '__testing_rewrite';
-	const REWRITE_TEST_OUTPUT = 'success';
+	use Loggable;
+
+	const DEFAULT_LANG = 'en';
+	const DEFAULT_LIMIT = 10;
 
 	/**
 	 * @var ServiceProvider
-	 */
-	private $services;
-
-	/**
-	 * @var string
-	 */
-	private $engine_dir;
-
-	/**
-	 * @var bool
-	 */
-	private static $testing_app;
-
-	/**
-	 * Property names of the service provider to be exposed via __get()
 	 *
-	 * E.g. the presence of `'foo' => true` in the list would allow _elgg_services()->foo to
-	 * be accessed via elgg()->foo.
-	 *
-	 * @var string[]
+	 * @internal DO NOT USE
 	 */
-	private static $public_services = [
-		//'config' => true,
-		'menus' => true,
-		'table_columns' => true,
-	];
+	public $_services;
 
 	/**
-	 * Reference to the loaded Application returned by elgg()
+	 * @var Closure[]
+	 */
+	private static $_setups = [];
+
+	/**
+	 * Reference to the loaded Application
 	 *
-	 * @internal Do not use this. use elgg() to access the application
+	 * @internal Do not use this
 	 * @access private
 	 * @var Application
 	 */
 	public static $_instance;
+
+	/**
+	 * Get the global Application instance. If not set, it's auto-created and wired to $CONFIG.
+	 *
+	 * @return Application|null
+	 * @throws ConfigurationException
+	 */
+	public static function getInstance() {
+		if (self::$_instance === null) {
+			self::$_instance = self::factory();
+			self::setGlobalConfig(self::$_instance);
+		}
+
+		return self::$_instance;
+	}
+
+	/**
+	 * Set the global Application instance
+	 *
+	 * @param Application $application Global application
+	 *
+	 * @return void
+	 */
+	public static function setInstance(Application $application = null) {
+		self::$_instance = $application;
+	}
 
 	/**
 	 * Constructor
@@ -70,159 +109,82 @@ class Application {
 	 * @param ServiceProvider $services Elgg services provider
 	 */
 	public function __construct(ServiceProvider $services) {
-		$this->services = $services;
-
-		/**
-		 * The time with microseconds when the Elgg engine was started.
-		 *
-		 * @global float
-		 */
-		if (!isset($GLOBALS['START_MICROTIME'])) {
-			$GLOBALS['START_MICROTIME'] = microtime(true);
-		}
-
-		$services->timer->begin([]);
-
-		/**
-		 * This was introduced in 2.0 in order to remove all internal non-API state from $CONFIG. This will
-		 * be a breaking change, but frees us to refactor in 2.x without fear of plugins depending on
-		 * $CONFIG.
-		 *
-		 * @access private
-		 */
-		if (!isset($GLOBALS['_ELGG'])) {
-			$GLOBALS['_ELGG'] = new \stdClass();
-		}
-
-		$this->engine_dir = __DIR__ . '/../..';
+		$this->_services = $services;
 	}
 
 	/**
-	 * Load settings.php
+	 * Define all Elgg global functions and constants, wire up boot events, but don't boot
 	 *
-	 * This is done automatically during the boot process or before requesting a database object
+	 * This includes all the .php files in engine/lib (not upgrades). If a script returns a function,
+	 * it is queued and executed at the end.
 	 *
-	 * @see Config::loadSettingsFile
-	 * @return void
-	 */
-	public function loadSettings() {
-		$this->services->config->loadSettingsFile();
-	}
-
-	/**
-	 * Load all Elgg procedural code and wire up boot events, but don't boot
-	 *
-	 * This is used for internal testing purposes
-	 *
-	 * @return void
+	 * @return array
 	 * @access private
 	 * @internal
+	 * @throws InstallationException
 	 */
-	public function loadCore() {
-		if (function_exists('elgg')) {
-			return;
+	public static function loadCore() {
+		$setups = [];
+
+		$path = Paths::elgg() . 'engine/lib';
+
+		// include library files, capturing setup functions
+		foreach (self::getEngineLibs() as $file) {
+			try {
+				$setups[] = self::requireSetupFileOnce("$path/$file");
+			} catch (\Error $e) {
+				throw new \InstallationException("Elgg lib file failed include: $path/$file");
+			}
 		}
 
-		$lib_dir = self::elggDir()->chroot("engine/lib");
-
-		// load the rest of the library files from engine/lib/
-		// All on separate lines to make diffs easy to read + make it apparent how much
-		// we're actually loading on every page (Hint: it's too much).
-		$lib_files = array(
-			// Needs to be loaded first to correctly bootstrap
-			'autoloader.php',
-			'elgglib.php',
-
-			// The order of these doesn't matter, so keep them alphabetical
-			'access.php',
-			'actions.php',
-			'admin.php',
-			'annotations.php',
-			'cache.php',
-			'comments.php',
-			'configuration.php',
-			'cron.php',
-			'database.php',
-			'entities.php',
-			'extender.php',
-			'filestore.php',
-			'friends.php',
-			'group.php',
-			'input.php',
-			'languages.php',
-			'mb_wrapper.php',
-			'memcache.php',
-			'metadata.php',
-			'metastrings.php',
-			'navigation.php',
-			'notification.php',
-			'objects.php',
-			'output.php',
-			'pagehandler.php',
-			'pageowner.php',
-			'pam.php',
-			'plugins.php',
-			'private_settings.php',
-			'relationships.php',
-			'river.php',
-			'sessions.php',
-			'sites.php',
-			'statistics.php',
-			'system_log.php',
-			'tags.php',
-			'user_settings.php',
-			'users.php',
-			'upgrade.php',
-			'views.php',
-			'widgets.php',
-
-			// backward compatibility
-			'deprecated-1.9.php',
-			'deprecated-1.10.php',
-			'deprecated-1.11.php',
-			'deprecated-1.12.php',
-			'deprecated-2.1.php',
-		);
-
-		// isolate global scope
-		call_user_func(function () use ($lib_dir, $lib_files) {
-
-			$setups = array();
-
-			// include library files, capturing setup functions
-			foreach ($lib_files as $file) {
-				$setup = (require_once $lib_dir->getPath($file));
-
-				if ($setup instanceof \Closure) {
-					$setups[$file] = $setup;
-				}
-			}
-
-			// store instance to be returned by elgg()
-			self::$_instance = $this;
-
-			// set up autoloading and DIC
-			_elgg_services($this->services);
-
-			$events = $this->services->events;
-			$hooks = $this->services->hooks;
-
-			// run setups
-			foreach ($setups as $func) {
-				$func($events, $hooks);
-			}
-		});
+		return $setups;
 	}
 
 	/**
-	 * Replacement for loading engine/start.php
+	 * Require a library/plugin file once and capture returned anonymous functions
+	 *
+	 * @param string $file File to require
+	 *
+	 * @return mixed
+	 * @internal
+	 * @access private
+	 */
+	public static function requireSetupFileOnce($file) {
+		if (isset(self::$_setups[$file])) {
+			return self::$_setups[$file];
+		}
+
+		$return = Includer::requireFileOnce($file);
+		self::$_setups[$file] = $return;
+
+		return $return;
+	}
+
+	/**
+	 * Start and boot the core
 	 *
 	 * @return self
+	 * @throws ClassException
+	 * @throws ConfigurationException
+	 * @throws DatabaseException
+	 * @throws InstallationException
+	 * @throws InvalidParameterException
+	 * @throws SecurityException
 	 */
 	public static function start() {
-		$app = self::create();
+		$app = self::getInstance();
 		$app->bootCore();
+
 		return $app;
+	}
+
+	/**
+	 * Are Elgg's global functions loaded?
+	 *
+	 * @return bool
+	 */
+	public static function isCoreLoaded() {
+		return function_exists('elgg');
 	}
 
 	/**
@@ -230,237 +192,309 @@ class Application {
 	 *
 	 * This method loads the full Elgg engine, checks the installation
 	 * state, and triggers a series of events to finish booting Elgg:
-	 * 	- {@elgg_event boot system}
-	 * 	- {@elgg_event init system}
-	 * 	- {@elgg_event ready system}
+	 *    - {@elgg_event plugins_load system}
+	 *    - {@elgg_event plugins_boot system}
+	 *    - {@elgg_event init system}
+	 *    - {@elgg_event ready system}
+	 *
+	 * Please note that the Elgg session is started after all plugins are loader, there will therefore
+	 * be no information about a logged user available until plugins_load,system event is complete.
 	 *
 	 * If Elgg is not fully installed, the browser will be redirected to an installation page.
 	 *
 	 * @return void
+	 *
+	 * @throws InstallationException
+	 * @throws InvalidParameterException
+	 * @throws SecurityException
+	 * @throws ClassException
+	 * @throws DatabaseException
+	 *
+	 * @access private
+	 * @internal
 	 */
 	public function bootCore() {
+		$boot = new BootHandler($this);
+		$boot();
+	}
 
-		$config = $this->services->config;
-
-		if ($this->isTestingApplication()) {
-			throw new \RuntimeException('Unit tests should not call ' . __METHOD__);
-		}
-
-		if ($config->getVolatile('boot_complete')) {
-			return;
-		}
-
-		$this->loadSettings();
-
-		$config->set('boot_complete', false);
-
-		// This will be overridden by the DB value but may be needed before the upgrade script can be run.
-		$config->set('default_limit', 10);
-
-		// in case not loaded already
-		$this->loadCore();
-
-		$events = $this->services->events;
-
-		// Connect to database, load language files, load configuration, init session
-		// Plugins can't use this event because they haven't been loaded yet.
-		$events->trigger('boot', 'system');
-
-		// Load the plugins that are active
-		$this->services->plugins->load();
-
-		$root = Directory\Local::root();
-		if ($root->getPath() != self::elggDir()->getPath()) {
-			// Elgg is installed as a composer dep, so try to treat the root directory
-			// as a custom plugin that is always loaded last and can't be disabled...
-			if (!elgg_get_config('system_cache_loaded')) {
-				// configure view locations for the custom plugin (not Elgg core)
-				$viewsFile = $root->getFile('views.php');
-				if ($viewsFile->exists()) {
-					$viewsSpec = $viewsFile->includeFile();
-					if (is_array($viewsSpec)) {
-						_elgg_services()->views->mergeViewsSpec($viewsSpec);
-					}
-				}
-
-				// find views for the custom plugin (not Elgg core)
-				_elgg_services()->views->registerPluginViews($root->getPath());
-			}
-
-			if (!elgg_get_config('i18n_loaded_from_cache')) {
-				_elgg_services()->translator->registerPluginTranslations($root->getPath());
-			}
-
-			// This is root directory start.php, not elgg/engine/start.php
-			$root_start = $root->getPath("start.php");
-			if (is_file($root_start)) {
-				require $root_start;
-			}
-		}
-
-
-		// @todo move loading plugins into a single boot function that replaces 'boot', 'system' event
-		// and then move this code in there.
-		// This validates the view type - first opportunity to do it is after plugins load.
-		$viewtype = elgg_get_viewtype();
-		if (!elgg_is_registered_viewtype($viewtype)) {
-			elgg_set_viewtype('default');
-		}
-
-		$this->allowPathRewrite();
-
-		// Allows registering handlers strictly before all init, system handlers
-		$events->trigger('plugins_boot', 'system');
-
-		// Complete the boot process for both engine and plugins
-		$events->trigger('init', 'system');
-
-		$config->set('boot_complete', true);
-
-		// System loaded and ready
-		$events->trigger('ready', 'system');
+	/**
+	 * Get the DB credentials.
+	 *
+	 * We no longer leave DB credentials in the config in case it gets accidentally dumped.
+	 *
+	 * @return \Elgg\Database\DbConfig
+	 */
+	public function getDbConfig() {
+		return $this->_services->dbConfig;
 	}
 
 	/**
 	 * Get a Database wrapper for performing queries without booting Elgg
 	 *
-	 * If settings.php has not been loaded, it will be loaded to configure the DB connection.
-	 *
-	 * @note Do not type hint on \Elgg\Database, as this will fail in 3.0. If you must type hint,
-	 *       expect an \Elgg\Application\Database.
+	 * If settings has not been loaded, it will be loaded to configure the DB connection.
 	 *
 	 * @note Before boot, the Database instance will not yet be bound to a Logger.
 	 *
 	 * @return \Elgg\Application\Database
 	 */
 	public function getDb() {
-		$this->loadSettings();
-		return $this->services->publicDb;
+		return $this->_services->publicDb;
 	}
 
 	/**
-	 * Get an undefined property
+	 * Make the global $CONFIG a reference to this application's config service
 	 *
-	 * @param string $name The property name accessed
+	 * @param Application $application The Application
 	 *
-	 * @return mixed
+	 * @return void
 	 */
-	public function __get($name) {
-		if (isset(self::$public_services[$name])) {
-			return $this->services->{$name};
-		}
-		trigger_error("Undefined property: " . __CLASS__ . ":\${$name}");
+	public static function setGlobalConfig(Application $application) {
+		global $CONFIG;
+		$CONFIG = $application->_services->config;
 	}
 
 	/**
-	 * Creates a new, trivial instance of Elgg\Application and set it as the singleton instance.
-	 * If the singleton is already set, it's returned.
+	 * Create a new application.
+	 *
+	 * @warning You generally want to use getInstance().
+	 *
+	 * For normal operation, you must use setInstance() and optionally setGlobalConfig() to wire the
+	 * application to Elgg's global API.
+	 *
+	 * @param array $spec Specification for initial call.
 	 *
 	 * @return self
+	 * @throws ConfigurationException
+	 * @throws InvalidArgumentException
 	 */
-	private static function create() {
-		if (self::$_instance === null) {
-			// we need to register for shutdown before Symfony registers the
-			// session_write_close() function. https://github.com/Elgg/Elgg/issues/9243
-			register_shutdown_function(function () {
-				// There are cases where we may exit before this function is defined
-				if (function_exists('_elgg_shutdown_hook')) {
-					_elgg_shutdown_hook();
-				}
-			});
+	public static function factory(array $spec = []) {
 
-			self::$_instance = new self(new Di\ServiceProvider(new Config()));
+		$defaults = [
+			'config' => null,
+			'handle_exceptions' => true,
+			'handle_shutdown' => true,
+			'request' => null,
+			'service_provider' => null,
+			'set_start_time' => true,
+			'settings_path' => null,
+		];
+		$spec = array_merge($defaults, $spec);
+
+		if ($spec['set_start_time']) {
+			/**
+			 * The time with microseconds when the Elgg engine was started.
+			 *
+			 * @global float
+			 */
+			if (!isset($GLOBALS['START_MICROTIME'])) {
+				$GLOBALS['START_MICROTIME'] = microtime(true);
+			}
 		}
 
-		return self::$_instance;
+		if ($spec['handle_exceptions']) {
+			set_error_handler(new ErrorHandler());
+			set_exception_handler(new ExceptionHandler());
+		}
+
+		self::loadCore();
+
+		if (!$spec['service_provider']) {
+			if (!$spec['config']) {
+				$spec['config'] = Config::factory($spec['settings_path']);
+			}
+			$spec['service_provider'] = new ServiceProvider($spec['config']);
+		}
+
+		if ($spec['request']) {
+			if ($spec['request'] instanceof Request) {
+				$spec['service_provider']->setValue('request', $spec['request']);
+			} else {
+				throw new InvalidArgumentException("Given request is not a " . Request::class);
+			}
+		}
+
+		$app = new self($spec['service_provider']);
+
+		if ($spec['handle_shutdown']) {
+			register_shutdown_function(new ShutdownHandler($app));
+		}
+
+		return $app;
+	}
+
+	/**
+	 * Route a request
+	 *
+	 * @param Request $request Request
+	 *
+	 * @return Response|false
+	 * @throws ClassException
+	 * @throws DatabaseException
+	 * @throws InstallationException
+	 * @throws InvalidParameterException
+	 * @throws SecurityException
+	 */
+	public static function route(Request $request) {
+		self::loadCore();
+
+		if ($request->isRewriteCheck()) {
+			$response = new OkResponse(Request::REWRITE_TEST_OUTPUT);
+			return self::respond($response);
+		}
+
+		if (self::$_instance) {
+			$app = self::$_instance;
+			$app->_services->setValue('request', $request);
+		} else {
+			try {
+				$app = self::factory([
+					'request' => $request,
+				]);
+
+				self::setGlobalConfig($app);
+				self::setInstance($app);
+			} catch (ConfigurationException $ex) {
+				return self::install();
+			}
+		}
+
+		return $app->run();
+	}
+
+	/**
+	 * Build and send a response
+	 *
+	 * If application is booted, we will use the response factory service,
+	 * otherwise we will prepare a non-cacheable response
+	 *
+	 * @param ResponseBuilder $builder Response builder
+	 *
+	 * @return Response|false Sent response
+	 * @throws InvalidParameterException
+	 */
+	public static function respond(ResponseBuilder $builder) {
+		if (self::$_instance) {
+			self::$_instance->_services->responseFactory->respond($builder);
+
+			return self::$_instance->_services->responseFactory->getSentResponse();
+		}
+
+		try {
+			$content = $builder->getContent();
+			$status = $builder->getStatusCode();
+			$headers = $builder->getHeaders();
+
+			if ($builder->isRedirection()) {
+				$forward_url = $builder->getForwardURL();
+				$response = new SymfonyRedirect($forward_url, $status, $headers);
+			} else {
+				$response = new Response($content, $status, $headers);
+			}
+		} catch (Exception $ex) {
+			$response = new Response($ex->getMessage(), 500);
+		}
+
+		$response->headers->set('Pragma', 'public');
+		$response->headers->set('Cache-Control', 'no-cache, must-revalidate');
+		$response->headers->set('Expires', 'Fri, 05 Feb 1982 00:00:00 -0500');
+
+		self::getResponseTransport()->send($response);
+
+		return $response;
 	}
 
 	/**
 	 * Elgg's front controller. Handles basically all incoming URL requests.
 	 *
-	 * @return bool True if Elgg will handle the request, false if the server should (PHP-CLI server)
+	 * @return Response|false True if Elgg will handle the request, false if the server should (PHP-CLI server)
+	 * @throws ClassException
+	 * @throws DatabaseException
+	 * @throws InstallationException
+	 * @throws InvalidParameterException
+	 * @throws SecurityException
 	 */
 	public static function index() {
-		return self::create()->run();
+		return self::route(self::getRequest());
 	}
 
 	/**
 	 * Routes the request, booting core if not yet booted
 	 *
-	 * @return bool False if Elgg wants the PHP CLI server to handle the request
+	 * @return Response|false False if Elgg wants the PHP CLI server to handle the request
+	 * @throws ClassException
+	 * @throws DatabaseException
+	 * @throws InstallationException
+	 * @throws InvalidParameterException
+	 * @throws SecurityException
 	 */
 	public function run() {
-		$path = $this->setupPath();
+		$config = $this->_services->config;
+		$request = $this->_services->request;
 
-		// allow testing from the upgrade page before the site is upgraded.
-		if (isset($_GET[self::REWRITE_TEST_TOKEN])) {
-			if (false !== strpos($path, self::REWRITE_TEST_TOKEN)) {
-				echo self::REWRITE_TEST_OUTPUT;
+		try {
+			if ($request->isCliServer()) {
+				if ($request->isCliServable(Paths::project())) {
+					return false;
+				}
+
+				// overwrite value from settings
+				$www_root = rtrim($request->getSchemeAndHttpHost() . $request->getBaseUrl(), '/') . '/';
+				$config->wwwroot = $www_root;
+				$config->wwwroot_cli_server = $www_root;
 			}
-			return true;
-		}
 
-		if (php_sapi_name() === 'cli-server') {
-			$www_root = "http://{$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}/";
-			$this->services->config->set('wwwroot', $www_root);
-		}
+			if (0 === strpos($request->getElggPath(), '/cache/')) {
+				$response = $this->_services->cacheHandler->handleRequest($request, $this)->prepare($request);
+				self::getResponseTransport()->send($response);
 
-		if (0 === strpos($path, '/cache/')) {
-			(new Application\CacheHandler($this, $this->services->config, $_SERVER))->handleRequest($path);
-			return true;
-		}
-
-		if (0 === strpos($path, '/serve-file/')) {
-			$this->services->serveFileHandler->getResponse($this->services->request)->send();
-			return true;
-		}
-
-		if ($path === '/rewrite.php') {
-			require Directory\Local::root()->getPath("install.php");
-			return true;
-		}
-
-		if (php_sapi_name() === 'cli-server') {
-			// The CLI server routes ALL requests here (even existing files), so we have to check for these.
-			if ($path !== '/' && Directory\Local::root()->isFile($path)) {
-				// serve the requested resource as-is.
-				return false;
+				return $response;
 			}
+
+			if (0 === strpos($request->getElggPath(), '/serve-file/')) {
+				$response = $this->_services->serveFileHandler->getResponse($request);
+				self::getResponseTransport()->send($response);
+
+				return $response;
+			}
+
+			$this->bootCore();
+
+			// re-fetch new request from services in case it was replaced by route:rewrite
+			$request = $this->_services->request;
+
+			if (!$this->_services->router->route($request)) {
+				throw new PageNotFoundException();
+			}
+		} catch (HttpException $ex) {
+			$forward_url = $ex->getRedirectUrl();
+			if (!$forward_url) {
+				if ($ex instanceof GatekeeperException) {
+					$forward_url = elgg_is_logged_in() ? null : elgg_get_login_url();
+				} else if ($request->getFirstUrlSegment() == 'action') {
+					$forward_url = REFERRER;
+				}
+			}
+
+			$hook_params = [
+				'exception' => $ex,
+			];
+
+			$forward_url = $this->_services->hooks->trigger('forward', $ex->getCode(), $hook_params, $forward_url);
+
+			if ($forward_url) {
+				if ($ex->getMessage()) {
+					$this->_services->systemMessages->addErrorMessage($ex->getMessage());
+				}
+				$response = new RedirectResponse($forward_url);
+			} else {
+				$response = new ErrorResponse($ex->getMessage(), $ex->getCode(), $forward_url);
+			}
+
+			self::respond($response);
 		}
 
-		$this->bootCore();
-
-		// TODO use formal Response object instead
-		header("Content-Type: text/html;charset=utf-8");
-
-		if (!$this->services->router->route($this->services->request)) {
-			forward('', '404');
-		}
-	}
-
-	/**
-	 * Determine the Elgg data directory with trailing slash, save it to config, and return it
-	 *
-	 * @todo Consider a better place for this logic? We need it before boot
-	 *
-	 * @return string
-	 * @throws \InstallationException
-	 */
-	public static function getDataPath() {
-		$app = self::create();
-		$app->services->config->loadSettingsFile();
-
-		if ($GLOBALS['_ELGG']->dataroot_in_settings) {
-			return $app->services->config->getVolatile('dataroot');
-		}
-
-		$dataroot = $app->services->datalist->get('dataroot');
-		if (!$dataroot) {
-			throw new \InstallationException('The datalists table lacks a value for "dataroot".');
-		}
-		$dataroot = rtrim($dataroot, '/\\') . DIRECTORY_SEPARATOR;
-		$app->services->config->set('dataroot', $dataroot);
-		return $dataroot;
+		return $this->_services->responseFactory->getSentResponse();
 	}
 
 	/**
@@ -469,20 +503,36 @@ class Application {
 	 *
 	 * @return Directory
 	 */
-	public static function elggDir() /*: Directory*/ {
-		return Directory\Local::fromPath(realpath(__DIR__ . '/../../..'));
+	public static function elggDir() {
+		return Local::elggRoot();
+	}
+
+	/**
+	 * Returns a directory that points to the project root, where composer is installed.
+	 *
+	 * @return Directory
+	 */
+	public static function projectDir() {
+		return Local::projectRoot();
 	}
 
 	/**
 	 * Renders a web UI for installing Elgg.
 	 *
-	 * @return void
+	 * @return Response|false
+	 * @throws InvalidParameterException
 	 */
 	public static function install() {
 		ini_set('display_errors', 1);
-		$installer = new \ElggInstaller();
-		$step = get_input('step', 'welcome');
-		$installer->run($step);
+
+		try {
+			$installer = new ElggInstaller();
+			$response = $installer->run();
+		} catch (Exception $ex) {
+			$response = new ErrorResponse($ex->getMessage(), 500);
+		}
+
+		return self::respond($response);
 	}
 
 	/**
@@ -497,128 +547,254 @@ class Application {
 	 * The URL to forward to after upgrades are complete can be specified by setting $_GET['forward']
 	 * to a relative URL.
 	 *
-	 * @return void
+	 * @return Response|false
+	 * @throws ClassException
+	 * @throws ConfigurationException
+	 * @throws DatabaseException
+	 * @throws InstallationException
+	 * @throws InvalidParameterException
+	 * @throws SecurityException
 	 */
 	public static function upgrade() {
-		// we want to know if an error occurs
-		ini_set('display_errors', 1);
 
-		define('UPGRADING', 'upgrading');
+		try {
+			self::migrate();
+			self::start();
 
-		self::start();
+			$request = self::$_instance->_services->request;
+			$signer = self::$_instance->_services->urlSigner;
 
-		$site_url = elgg_get_config('url');
-		$site_host = parse_url($site_url, PHP_URL_HOST) . '/';
+			$url = $request->getCurrentURL();
+			$query = $request->getParams();
 
-		// turn any full in-site URLs into absolute paths
-		$forward_url = get_input('forward', '/admin', false);
-		$forward_url = str_replace(array($site_url, $site_host), '/', $forward_url);
-
-		if (strpos($forward_url, '/') !== 0) {
-			$forward_url = '/' . $forward_url;
-		}
-
-		if (get_input('upgrade') == 'upgrade') {
-
-			$upgrader = _elgg_services()->upgrades;
-			$result = $upgrader->run();
-			if ($result['failure'] == true) {
-				register_error($result['reason']);
-				forward($forward_url);
-			}
-		} else {
-			$rewriteTester = new \ElggRewriteTester();
-			$url = elgg_get_site_url() . "__testing_rewrite?__testing_rewrite=1";
-			if (!$rewriteTester->runRewriteTest($url)) {
-				// see if there is a problem accessing the site at all
-				// due to ip restrictions for example
-				if (!$rewriteTester->runLocalhostAccessTest()) {
-					// note: translation may not be available until after upgrade
-					$msg = elgg_echo("installation:htaccess:localhost:connectionfailed");
-					if ($msg === "installation:htaccess:localhost:connectionfailed") {
-						$msg = "Elgg cannot connect to itself to test rewrite rules properly. Check "
-								. "that curl is working and there are no IP restrictions preventing "
-								. "localhost connections.";
-					}
-					echo $msg;
-					exit;
-				}
-
-				// note: translation may not be available until after upgrade
-				$msg = elgg_echo("installation:htaccess:needs_upgrade");
-				if ($msg === "installation:htaccess:needs_upgrade") {
-					$msg = "You must update your .htaccess file so that the path is injected "
-						. "into the GET parameter __elgg_uri (you can use install/config/htaccess.dist as a guide).";
-				}
-				echo $msg;
-				exit;
+			// We need to resign the URL because the path is different
+			$mac = elgg_extract(UrlSigner::KEY_MAC, $query);
+			if (isset($mac) && !$signer->isValid($url)) {
+				throw new \Elgg\HttpException(elgg_echo('invalid_request_signature'), ELGG_HTTP_FORBIDDEN);
 			}
 
-			$vars = array(
-				'forward' => $forward_url
-			);
+			unset($query[UrlSigner::KEY_MAC]);
 
-			// reset cache to have latest translations available during upgrade
-			elgg_reset_system_cache();
+			$base_url = elgg_normalize_site_url('upgrade/init');
+			$url = elgg_http_add_url_query_elements($base_url, $query);
 
-			echo elgg_view_page(elgg_echo('upgrading'), '', 'upgrade', $vars);
-			exit;
+			if (isset($mac)) {
+				$url = self::$_instance->_services->urlSigner->sign($url);
+			}
+
+			$response = new RedirectResponse($url, ELGG_HTTP_PERMANENTLY_REDIRECT);
+		} catch (Exception $ex) {
+			$response = new ErrorResponse($ex->getMessage(), $ex->getCode() ? : 500);
 		}
 
-		forward($forward_url);
+		return self::respond($response);
 	}
 
 	/**
-	 * Get the request URI and store it in $_GET['__elgg_uri']
+	 * Runs database migrations
 	 *
-	 * @return string e.g. "cache/123..."
+	 * @throws InstallationException
+	 * @return bool
 	 */
-	private function setupPath() {
-		if (!isset($_GET[self::GET_PATH_KEY]) || is_array($_GET[self::GET_PATH_KEY])) {
-			if (php_sapi_name() === 'cli-server') {
-				$_GET[self::GET_PATH_KEY] = (string)parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-			} else {
-				$_GET[self::GET_PATH_KEY] = '/';
-			}
+	public static function migrate() {
+		$conf = self::elggDir()->getPath('engine/conf/migrations.php');
+		if (!$conf) {
+			throw new InstallationException('Settings file is required to run database migrations.');
 		}
 
-		// normalize
-		$_GET[self::GET_PATH_KEY] = '/' . trim($_GET[self::GET_PATH_KEY], '/');
+		// setting timeout because some database migrations can take a long time
+		set_time_limit(0);
 
-		return $_GET[self::GET_PATH_KEY];
+		$app = new \Phinx\Console\PhinxApplication();
+		$wrapper = new \Phinx\Wrapper\TextWrapper($app, [
+			'configuration' => $conf,
+		]);
+		$log = $wrapper->getMigrate();
+
+		if (!empty($_SERVER['argv']) && in_array('--verbose', $_SERVER['argv'])) {
+			error_log($log);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns configuration array for database migrations
+	 * @return array
+	 */
+	public static function getMigrationSettings() {
+
+		$config = Config::factory();
+		$db_config = DbConfig::fromElggConfig($config);
+
+		if ($db_config->isDatabaseSplit()) {
+			$conn = $db_config->getConnectionConfig(DbConfig::WRITE);
+		} else {
+			$conn = $db_config->getConnectionConfig();
+		}
+
+		return [
+			"paths" => [
+				"migrations" => Paths::elgg() . 'engine/schema/migrations/',
+			],
+			"environments" => [
+				"default_migration_table" => "{$conn['prefix']}migrations",
+				"default_database" => "prod",
+				"prod" => [
+					"adapter" => "mysql",
+					"host" => $conn['host'],
+					"name" => $conn['database'],
+					"user" => $conn['user'],
+					"pass" => $conn['password'],
+					"charset" => $conn['encoding'],
+					"table_prefix" => $conn['prefix'],
+				],
+			],
+		];
 	}
 
 	/**
 	 * Allow plugins to rewrite the path.
 	 *
 	 * @return void
+	 * @access private
+	 * @internal
 	 */
-	private function allowPathRewrite() {
-		$request = $this->services->request;
-		$new = $this->services->router->allowRewrite($request);
+	public function allowPathRewrite() {
+		$request = $this->_services->request;
+		$new = $this->_services->router->allowRewrite($request);
 		if ($new === $request) {
 			return;
 		}
 
-		$this->services->setValue('request', $new);
-		_elgg_set_initial_context($new);
+		$this->_services->setValue('request', $new);
 	}
 
 	/**
-	 * Flag this application as running for testing (PHPUnit)
-	 * 
-	 * @param bool $testing Is testing application
-	 * @return void
-	 */
-	public static function setTestingApplication($testing = true) {
-		self::$testing_app = $testing;
-	}
-
-	/**
-	 * Checks if the application is running in PHPUnit
+	 * Is application running in CLI
 	 * @return bool
 	 */
-	public static function isTestingApplication() {
-		return (bool) self::$testing_app;
+	public static function isCli() {
+		switch (php_sapi_name()) {
+			case 'cli' :
+			case 'phpdbg' :
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	/**
+	 * Build request object
+	 * @return Request
+	 */
+	public static function getRequest() {
+		if (self::$_instance) {
+			return self::$_instance->_services->request;
+		}
+
+		return Request::createFromGlobals();
+	}
+
+	/**
+	 * Load console input interface
+	 * @return InputInterface
+	 */
+	public static function getStdIn() {
+		if (self::isCli()) {
+			$request = self::getRequest();
+			$argv = $request->server->get('argv') ? : [];
+			return new ArgvInput($argv);
+		}
+
+		return new ArrayInput([]);
+	}
+
+	/**
+	 * Load console output interface
+	 * @return OutputInterface
+	 */
+	public static function getStdOut() {
+		if (self::isCli()) {
+			return new ConsoleOutput();
+		} else {
+			return new NullOutput();
+		}
+	}
+
+	/**
+	 * Load console error output interface
+	 * @return OutputInterface
+	 */
+	public static function getStdErr() {
+		$std_out = self::getStdOut();
+		if (is_callable([$std_out, 'getErrorOutput'])) {
+			return $std_out->getErrorOutput();
+		}
+
+		return $std_out;
+	}
+
+	/**
+	 * Build a transport for sending responses
+	 * @return ResponseTransport
+	 */
+	public static function getResponseTransport() {
+		if (self::isCli()) {
+			return new \Elgg\Http\OutputBufferTransport();
+		}
+
+		return new \Elgg\Http\HttpProtocolTransport();
+	}
+
+	/**
+	 * Get all engine/lib library filenames
+	 *
+	 * @note We can't just pull in all directory files because some users leave old files in place.
+	 *
+	 * @return string[]
+	 */
+	private static function getEngineLibs() {
+		return [
+			'elgglib.php',
+			'access.php',
+			'actions.php',
+			'admin.php',
+			'annotations.php',
+			'cache.php',
+			'comments.php',
+			'configuration.php',
+			'constants.php',
+			'cron.php',
+			'database.php',
+			'deprecated-2.3.php',
+			'deprecated-3.0.php',
+			'entities.php',
+			'filestore.php',
+			'group.php',
+			'input.php',
+			'languages.php',
+			'mb_wrapper.php',
+			'metadata.php',
+			'navigation.php',
+			'notification.php',
+			'output.php',
+			'pagehandler.php',
+			'pageowner.php',
+			'pam.php',
+			'plugins.php',
+			'relationships.php',
+			'river.php',
+			'search.php',
+			'sessions.php',
+			'statistics.php',
+			'tags.php',
+			'upgrade.php',
+			'user_settings.php',
+			'users.php',
+			'views.php',
+			'widgets.php',
+		];
 	}
 }

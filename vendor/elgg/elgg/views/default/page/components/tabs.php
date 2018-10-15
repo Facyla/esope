@@ -47,8 +47,7 @@ if (empty($tabs)) {
 $content = '';
 foreach ($tabs as $index => $tab) {
 	if (!isset($tab['href']) && !isset($tab['content'])) {
-		elgg_log('Tab configuration in "page/components/tabs"
-			requires either a "href" or "content" parameter', 'ERROR');
+		elgg_log('Tab configuration in "page/components/tabs" requires either a "href" or "content" parameter', 'NOTICE');
 		continue;
 	}
 
@@ -84,10 +83,7 @@ $content = elgg_format_element('div', [
 
 $module = elgg_extract('module', $vars, 'tabs');
 unset($vars['module']);
-echo elgg_view_module($module, $tabs, $content, $vars);
 
-?>
-<script>
-	require(['page/components/tabs']);
-</script>
+echo elgg_view_module($module, elgg_extract('title', $vars), $tabs . $content, $vars);
 
+elgg_require_js('page/components/tabs');

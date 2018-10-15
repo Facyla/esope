@@ -60,7 +60,7 @@ Just copy the script to a text file and name the file with a .pl extension. You 
 
 Change the following to reflect your directory structure:
 
-.. code:: perl
+.. code-block:: perl
 
    # ENTER THE PATH TO THE DIRECTORY YOU WANT TO BACKUP, NO TRAILING SLASH
    $directory_to_backup = '/home/userx/public_html';
@@ -70,7 +70,7 @@ Change the following to reflect your directory structure:
 
 Change the following to reflect your database parameters:
 
-.. code:: perl
+.. code-block:: perl
 
    # MYSQL BACKUP PARAMETERS
    $dbhost = 'localhost';
@@ -81,7 +81,7 @@ Change the following to reflect your database parameters:
 
 Change the following to reflect your off-site FTP server parameters:
 
-.. code:: perl
+.. code-block:: perl
 
    # FTP PARAMETERS
    $ftp_host = "FTP HOSTNAME/IP";
@@ -167,7 +167,7 @@ Edit the MySQL backup
 
 Open the ``.sql`` file that you extracted from your backup in your favorite text editor. Comment out the following lines with a hash mark:
 
-.. code:: mysql
+.. code-block:: mysql
 
    #CREATE DATABASE /*!32312 IF NOT EXISTS*/ `userx_elgg` /*!40100 DEFAULT CHARACTER SET latin1 */;
    #USE `userx_elgg`;
@@ -208,7 +208,7 @@ The restored elgg installation knows **nothing** about the new database name, da
 
 Edit ``/public_html/elgg-config/settings.php`` on the new hosting provider to reflect the database information for the database that you just created.
 
-.. code:: php
+.. code-block:: php
 
    // Database username
    $CONFIG->dbuser = 'usery_elgg';
@@ -222,6 +222,8 @@ Edit ``/public_html/elgg-config/settings.php`` on the new hosting provider to re
    // Database server
    // (For most configurations, you can leave this as 'localhost')
    $CONFIG->dbhost = 'localhost';
+   
+   $CONFIG->wwwroot = 'http://your.website.com/'
 
 Upload the ``settings.php`` file back to the new host - overwriting the existing file.
 
@@ -229,27 +231,21 @@ Open the phpMyAdmin tool on the new host from the CPanel. Select the ``usery_elg
 
 Change the installation path
 
-.. code:: sql
+.. code-block:: sql
 
-   UPDATE `elgg_datalists` SET `value` = "/home/usery/public_html/grid/" WHERE `name` = "path";
+   UPDATE `elgg_config` SET `value` = REPLACE(`value`, "/home/userx/public_html/grid/", "/home/usery/public_html/grid/") WHERE `name` = "path";
    
 Change the data directory
 
-.. code:: sql
+.. code-block:: sql
 
-   UPDATE `elgg_datalists` SET `value` = "/home/usery/elggdata/" WHERE `name` = "dataroot";
-
-Change the site URL (if this has changed)
-
-.. code:: sql
-
-   UPDATE `elgg_sites_entity` SET `url` = "http://mynewdomain.com";
+   UPDATE `elgg_config` SET `value` = REPLACE(`value`, "/home/userx/elggdata/", "/home/usery/elggdata/") WHERE `name` = "dataroot";
 
 Change the filestore data directory
 
-.. code:: sql
+.. code-block:: sql
 
-   UPDATE elgg_metastrings set string = '/home/usery/elggdata/' WHERE id = (SELECT value_id from elgg_metadata where name_id = (SELECT * FROM (SELECT id FROM elgg_metastrings WHERE string = 'filestore::dir_root') as ms2) LIMIT 1);
+   UPDATE elgg_metadata set value = '/home/usery/elggdata/' WHERE name = 'filestore::dir_root';
 
 Finalizing the new installation
 -------------------------------

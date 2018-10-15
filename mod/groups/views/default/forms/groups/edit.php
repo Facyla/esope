@@ -22,27 +22,14 @@ echo elgg_view("groups/edit/tools", $vars);
 
 // display the save button and some additional form data
 if ($entity) {
-	echo elgg_view("input/hidden", array(
+	echo elgg_view("input/hidden", [
 		"name" => "group_guid",
 		"value" => $entity->getGUID(),
-	));
+	]);
 }
 
 // build form footer
-$footer = '';
-
-if (!empty($entity) && $entity->canDelete()) {
-	// add delete link
-	$footer .= elgg_view("output/url", array(
-		"text" => elgg_echo("groups:delete"),
-		"href" => "action/groups/delete?guid={$entity->guid}",
-		"confirm" => elgg_echo("groups:deletewarning"),
-		"class" => "elgg-button elgg-button-delete float-alt",
-	));
-}
-
-// save button
-$footer .= elgg_view_field([
+$footer = elgg_view_field([
 	'#type' => 'submit',
 	'value' => elgg_echo('save'),
 ]);

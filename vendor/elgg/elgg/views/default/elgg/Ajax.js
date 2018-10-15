@@ -52,17 +52,29 @@ define(function (require) {
 			 * Show messages and require dependencies
 			 *
 			 * @param {Object} data
+			 * @param {Number} status_code HTTP status code
 			 */
-			function extract_metadata(data) {
+			function extract_metadata(data, status_code) {
+
+				status_code = status_code || 200;
+
 				if (!metadata_extracted) {
 					var m = data._elgg_msgs;
 					if (m && m.error) {
-						elgg.register_error(m.error);
+						data.error = m.error;
+					}
+
+					if (data.error) {
+						elgg.register_error(data.error);
 						error_displayed = true;
+					}
+
+					if (data.error || status_code !== 200) {
 						data.status = -1;
 					} else {
 						data.status = 0;
 					}
+
 					m && m.success && elgg.system_message(m.success);
 					delete data._elgg_msgs;
 
@@ -99,6 +111,9 @@ define(function (require) {
 			}
 			if ($.isPlainObject(options.data)) {
 				options.data = options.data || {};
+			} else if (options.data instanceof FormData) {
+				options.processData = false;
+				options.contentType = false;
 			} else {
 				if (typeof options.data !== 'string') {
 					throw new Error('if defined, options.data must be a plain object or string');
@@ -151,7 +166,7 @@ define(function (require) {
 					try {
 						var data = $.parseJSON(jqXHR.responseText);
 						if ($.isPlainObject(data)) {
-							extract_metadata(data);
+							extract_metadata(data, jqXHR.status);
 						}
 					} catch (e) {
 						if (window.console) {
@@ -172,7 +187,7 @@ define(function (require) {
 
 				data = $.parseJSON(data);
 
-				extract_metadata(data);
+				extract_metadata(data, 200);
 
 				var params = {
 					options: orig_options
@@ -332,29 +347,33 @@ define(function (require) {
 		};
 
 		/**
-		 * Convert a form/element to a data object. Use this instead of $.serialize to allow other plugins
+		 * Convert a form element to a FormData object. Use this instead of $.serialize to allow other plugins
 		 * to alter the request by plugin hook.
 		 *
-		 * @param {*} el HTML element or CSS selector
-		 * @returns {Object}
+		 * @param {*} el HTML form element or CSS selector (to a form element)
+		 * @returns {FormData}
 		 */
 		this.objectify = function (el) {
-			// http://stackoverflow.com/a/1186309/3779
-			var o = {};
-			var a = $(el).serializeArray();
+			$(el).one('submit', function (e) {
+				// Let other plugins, e.g. CKEditor populate the fields
+				// with actual values
+				e.preventDefault();
+				return false;
+			}).trigger('submit');
 
-			$.each(a, function() {
-				if (o[this.name] !== undefined) {
-					if (!o[this.name].push) {
-						o[this.name] = [o[this.name]];
-					}
-					o[this.name].push(this.value || '');
-				} else {
-					o[this.name] = this.value || '';
-				}
-			});
+			return new FormData($(el)[0]);
+		};
 
-			return o;
+		/**
+		 * Issue a redirect and display a spinner
+		 *
+		 * @param destination String URL to forward to
+		 * @returns {void}
+		 */
+		this.forward = function(destination) {
+			spinner_starts++;
+			spinner.start();
+			elgg.forward(destination);
 		};
 	}
 
@@ -390,3 +409,4 @@ define(function (require) {
 
 	return Ajax;
 });
+

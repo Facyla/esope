@@ -32,6 +32,22 @@ if (!isset($CONFIG)) {
  */
 
 /**
+ * The full file path for Elgg data storage. E.g. "/path/to/elgg-data/"
+ *
+ * @global string $CONFIG->dataroot
+ */
+$CONFIG->dataroot = "{{dataroot}}";
+
+/**
+ * The installation root URL of the site. E.g. "https://example.org/elgg/"
+ *
+ * If not provided, this is sniffed from the Symfony Request object
+ *
+ * @global string $CONFIG->wwwroot
+ */
+$CONFIG->wwwroot = "{{wwwroot}}";
+
+/**
  * The database username
  *
  * @global string $CONFIG->dbuser
@@ -71,6 +87,17 @@ $CONFIG->dbhost = '{{dbhost}}';
  * @global string $CONFIG->dbprefix
  */
 $CONFIG->dbprefix = '{{dbprefix}}';
+
+/**
+ * The database encoding.
+ *
+ * If installing a fresh instance of Elgg 3.x or later, this MUST be set to "utf8mb4".
+ * If you've upgraded an earlier Elgg version, do not set this until you have
+ * manually converted your Elgg tables to utf8mb4.
+ *
+ * @global string $CONFIG->dbencoding
+ */
+$CONFIG->dbencoding = 'utf8mb4';
 
 /**
  * Multiple database connections
@@ -121,26 +148,34 @@ $CONFIG->dbprefix = '{{dbprefix}}';
 // $CONFIG->memcache_namespace_prefix = '';
 
 /**
+ * Redis setup (optional)
+ * This is where you may optionally set up Redis.
+ */
+//$CONFIG->redis = true;
+//
+//$CONFIG->redis_servers = array (
+//	array('server1', 6379),
+//	array('server2', 6379)
+//);
+
+/**
  * Better caching performance
  *
- * Configuring the location of your data directory and enabling simplecache in
- * the settings.php file improves caching performance. It allows Elgg to skip
- * connecting to the database when serving cached JavaScript and CSS files. If
- * you uncomment and configure these settings, you will not be able to change
- * them from the Elgg advanced settings page.
+ * Configuring simplecache in the settings.php file improves caching performance.
+ * It allows Elgg to skip connecting to the database when serving cached JavaScript
+ * and CSS files. If you uncomment and configure these settings, you will not be able
+ * to change them from the Elgg advanced settings page.
  */
-//$CONFIG->dataroot = "";
 //$CONFIG->simplecache_enabled = true;
 
 /**
- * Enable the boot cache
+ * Configure the boot cache TTL
  *
  * Elgg can store most non-user-specific boot up data in a cache. If you want to
- * enable this, uncomment the next line to set it to 10. Although Elgg has a built-
- * in invalidation strategy for this cache, you should consider a small TTL to
- * minimize the damage if the cache should grow stale.
+ * configure how long Elgg takes before invalidating this cache, uncomment the next line
+ * and set it to a number of seconds. If not set Elgg will default to 3600 seconds.
  */
-//$CONFIG->boot_cache_ttl = 10;
+//$CONFIG->boot_cache_ttl = 3600;
 
 /**
  * Set cache directory
@@ -151,6 +186,16 @@ $CONFIG->dbprefix = '{{dbprefix}}';
  * for the cache files here.
  */
 //$CONFIG->cacheroot = "";
+
+/**
+ * Set views simplecache directory
+ *
+ * Elgg uses the asset directory to store cached asset files.
+ * By default, assets are stored in the cache root and site owners are
+ * advised to symlink project root /cache to asset root.
+ * Using this config value, you can change the default behavior
+ */
+//$CONFIG->assetroot = "";
 
 /**
  * Enable SendFile file serving
@@ -284,3 +329,46 @@ $CONFIG->exception_include = '';
 //	// total time captured. .1% by default
 //	$CONFIG->profiling_minimum_percentage = .1;
 //}
+
+/**
+ * Maximum php execution time for actions (in seconds)
+ *
+ * This setting can be used to set a custom default php execution time only for all registered Elgg actions.
+ * Note that if some actions set their own execution time limit, this setting will no affect those actions.
+ *
+ * @global int $CONFIG->action_time_limit
+ */
+$CONFIG->action_time_limit = 120;
+
+/**
+ * Allow access to PHPInfo
+ *
+ * This setting can be used to allow site administrators access to the PHPInfo page.
+ * By default this is not allowed.
+ *
+ * @global bool $CONFIG->allow_phpinfo
+ */
+$CONFIG->allow_phpinfo = false;
+
+/**
+ * Configure image processor
+ *
+ * This setting can be used to select a different image processor. By default the GD library is used.
+ * Currently only 'imagick' is supported as a different configuration.
+ * For Imagick the 'imagick' extension is required.
+ *
+ * @global string $CONFIG->image_processor
+ */
+//$CONFIG->image_processor = 'imagick';
+
+/**
+ * Logging level
+ *
+ * By default, the logging level at boot-time is calculated from PHP's error_reporting(), and during boot
+ * it is changed to the value specified on the Advanced Settings page. INFO-level events like DB queries
+ * will not be logged during the initial boot.
+ *
+ * However, if the level is set here, it will be used during the entire request. It can be set to one of
+ * the string levels in Elgg\Logger or ''. E.g., use 'INFO' to log all DB queries during boot up.
+ */
+//$CONFIG->debug = 'INFO';

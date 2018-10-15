@@ -5,45 +5,38 @@
  * @package ElggDiagnostics
  */
 
-elgg_register_event_handler('init', 'system', 'diagnostics_init');
-
 /**
  * Initialise the diagnostics tool
+ *
+ * @return void
  */
 function diagnostics_init() {
-
-	// Add admin menu item
-	elgg_register_admin_menu_item('administer', 'diagnostics', 'administer_utilities');
-
-	// Register some actions
-	$file = __DIR__ . "/actions/download.php";
-	elgg_register_action("diagnostics/download", $file, 'admin');
+	elgg_register_menu_item('page', [
+		'name' => 'diagnostics',
+		'text' => elgg_echo('admin:diagnostics'),
+		'href' => 'admin/diagnostics',
+		'section' => 'information',
+		'context' => 'admin',
+	]);
 }
 
 /**
- * Generate a basic report.
+ * Generate a basic report
+ *
+ * @param string $hook        'diagnostics:report'
+ * @param string $type        'system'
+ * @param string $returnvalue current return value
+ * @param mixed  $params      supplied params
  *
  * @return string
  */
-function diagnostics_basic_hook($hook, $entity_type, $returnvalue, $params) {
+function diagnostics_basic_hook($hook, $type, $returnvalue, $params) {
 
 	// Get version information
 	$version = elgg_get_version();
 	$release = elgg_get_version(true);
 
-	$returnvalue .= elgg_echo('diagnostics:report:basic', array($release, $version));
-
-	return $returnvalue;
-}
-
-/**
- * Get some information about the plugins installed on the system.
- *
- * @return tring
- */
-function diagnostics_plugins_hook($hook, $entity_type, $returnvalue, $params) {
-	// @todo this is a really bad idea because of the new plugin system
-	//$returnvalue .= elgg_echo('diagnostics:report:plugins', array(print_r(elgg_get_plugins(), true)));
+	$returnvalue .= elgg_echo('diagnostics:report:basic', [$release, $version]);
 
 	return $returnvalue;
 }
@@ -51,11 +44,12 @@ function diagnostics_plugins_hook($hook, $entity_type, $returnvalue, $params) {
 /**
  * Recursively list through a directory tree producing a hash of all installed files
  *
- * @param starting dir $dir
- * @param buffer $buffer
+ * @param string $dir starting dir
+ *
+ * @return string
  */
 function diagnostics_md5_dir($dir) {
-	$extensions_allowed = array('.php', '.js', '.css');
+	$extensions_allowed = ['.php', '.js', '.css'];
 
 	$buffer = "";
 
@@ -77,14 +71,19 @@ function diagnostics_md5_dir($dir) {
 }
 
 /**
- * Get some information about the files installed on a system.
+ * Get some information about the files installed on a system
+ *
+ * @param string $hook        'diagnostics:report'
+ * @param string $type        'system'
+ * @param string $returnvalue current return value
+ * @param mixed  $params      supplied params
  *
  * @return string
  */
-function diagnostics_sigs_hook($hook, $entity_type, $returnvalue, $params) {
+function diagnostics_sigs_hook($hook, $type, $returnvalue, $params) {
 
 	$base_dir = elgg_get_root_path();
-	$returnvalue .= elgg_echo('diagnostics:report:md5', array(diagnostics_md5_dir($base_dir)));
+	$returnvalue .= elgg_echo('diagnostics:report:md5', [diagnostics_md5_dir($base_dir)]);
 
 	return $returnvalue;
 }
@@ -92,49 +91,60 @@ function diagnostics_sigs_hook($hook, $entity_type, $returnvalue, $params) {
 /**
  * Get some information about the php install
  *
+ * @param string $hook        'diagnostics:report'
+ * @param string $type        'system'
+ * @param string $returnvalue current return value
+ * @param mixed  $params      supplied params
+ *
  * @return string
  */
-function diagnostics_phpinfo_hook($hook, $entity_type, $returnvalue, $params) {
+function diagnostics_phpinfo_hook($hook, $type, $returnvalue, $params) {
 
 	ob_start();
 	phpinfo();
-	$phpinfo = array('phpinfo' => array());
+	$phpinfo = ['phpinfo' => []];
 
 	if (preg_match_all('#(?:<h2>(?:<a name=".*?">)?(.*?)(?:</a>)?</h2>)|(?:<tr(?: class=".*?")?><t[hd](?: class=".*?")?>(.*?)\s*</t[hd]>(?:<t[hd](?: class=".*?")?>(.*?)\s*</t[hd]>(?:<t[hd](?: class=".*?")?>(.*?)\s*</t[hd]>)?)?</tr>)#s', ob_get_clean(), $matches, PREG_SET_ORDER)) {
-
 		foreach ($matches as $match) {
 			if (strlen($match[1])) {
-				$phpinfo[$match[1]] = array();
-			} else if(isset($match[3])) {
-				$phpinfo[end(array_keys($phpinfo))][$match[2]] = isset($match[4]) ? array($match[3], $match[4]) : $match[3];
+				$phpinfo[$match[1]] = [];
+			} else if (isset($match[3])) {
+				$phpinfo[end(array_keys($phpinfo))][$match[2]] = isset($match[4]) ? [$match[3], $match[4]] : $match[3];
 			} else {
 				$phpinfo[end(array_keys($phpinfo))][] = $match[2];
 			}
 		}
 	}
 
-	$returnvalue .= elgg_echo('diagnostics:report:php', array(print_r($phpinfo, true)));
+	$returnvalue .= elgg_echo('diagnostics:report:php', [print_r($phpinfo, true)]);
 
 	return $returnvalue;
 }
 
 /**
- * Get global variables.
+ * Get global variables
+ *
+ * @param string $hook        'diagnostics:report'
+ * @param string $type        'system'
+ * @param string $returnvalue current return value
+ * @param mixed  $params      supplied params
  *
  * @return string
  */
-function diagnostics_globals_hook($hook, $entity_type, $returnvalue, $params) {
-	global $CONFIG;
+function diagnostics_globals_hook($hook, $type, $returnvalue, $params) {
 
-	$output = str_replace($CONFIG->dbpass, '<<DBPASS>>', print_r($GLOBALS, true));
-	$returnvalue .= elgg_echo('diagnostics:report:globals', array($output));
+	$output = str_replace(elgg_get_config('dbpass'), '<<DBPASS>>', print_r($GLOBALS, true));
+	$returnvalue .= elgg_echo('diagnostics:report:globals', [$output]);
 
 	return $returnvalue;
 }
 
-elgg_register_plugin_hook_handler("diagnostics:report", "system", "diagnostics_basic_hook", 0); // show basics first
-elgg_register_plugin_hook_handler("diagnostics:report", "system", "diagnostics_plugins_hook", 2); // Now the plugins
-elgg_register_plugin_hook_handler("diagnostics:report", "system", "diagnostics_sigs_hook", 1); // Now the signatures
+return function() {
+	elgg_register_event_handler('init', 'system', 'diagnostics_init');
 
-elgg_register_plugin_hook_handler("diagnostics:report", "system", "diagnostics_globals_hook"); // Global variables
-elgg_register_plugin_hook_handler("diagnostics:report", "system", "diagnostics_phpinfo_hook"); // PHP info
+	elgg_register_plugin_hook_handler('diagnostics:report', 'system', 'diagnostics_basic_hook', 0); // show basics first
+	elgg_register_plugin_hook_handler('diagnostics:report', 'system', 'diagnostics_sigs_hook', 1); // Now the signatures
+
+	elgg_register_plugin_hook_handler('diagnostics:report', 'system', 'diagnostics_globals_hook'); // Global variables
+	elgg_register_plugin_hook_handler('diagnostics:report', 'system', 'diagnostics_phpinfo_hook'); // PHP info
+};

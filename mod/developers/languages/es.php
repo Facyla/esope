@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
 	// menu
 	'admin:develop_tools' => 'Herramientas',
 	'admin:develop_tools:sandbox' => 'Sanbox del Tema',
@@ -40,7 +40,7 @@ return array(
 	'developers:debug:warning' => 'Precaución',
 	'developers:debug:notice' => 'Información',
 	'developers:debug:info' => 'Información',
-	
+
 	// entity explorer
 	'developers:entity_explorer:help' => 'Ver información sobre entidades y realizar algunas acciones básicas en ellas.',
 	'developers:entity_explorer:guid:label' => 'Introduzca el guid de la entidad para inspeccionar',
@@ -50,7 +50,7 @@ return array(
 	'developers:entity_explorer:info:relationships' => 'Relaciones',
 	'developers:entity_explorer:info:private_settings' => 'Configuración privada',
 	'developers:entity_explorer:delete_entity' => 'Eliminar esta entidad',
-	
+
 	// inspection
 	'developers:inspect:help' => 'Inspección de configuration del framework Elgg.',
 	'developers:inspect:actions' => 'Acciones',
@@ -99,6 +99,5 @@ return array(
 
 	// status messages
 	'developers:settings:success' => 'Configuraciones almacenadas',
-
 	'developers:amd' => 'AMD',
-);
+];

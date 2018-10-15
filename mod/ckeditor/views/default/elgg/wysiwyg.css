@@ -4,6 +4,7 @@
 html, body {
 	height: auto;
 	margin: 0;
+	background: #ffffff;
 }
 
 body {
@@ -36,3 +37,4 @@ img {
 	max-width: 100%;
 	height: auto;
 }
+

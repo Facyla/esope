@@ -4,59 +4,26 @@
  *
  * Icon and profile fields
  *
- * @uses $vars['group']
+ * @uses $vars['entity']
  */
 
-if (!isset($vars['entity']) || !$vars['entity']) {
+$group = elgg_extract('entity', $vars);
+if (!($group instanceof \ElggGroup)) {
 	echo elgg_echo('groups:notfound');
-	return true;
+	return;
 }
 
-$group = $vars['entity'];
-$owner = $group->getOwnerEntity();
+// we don't force icons to be square so don't set width/height
+$icon = elgg_format_element('div', [
+	'class' => 'groups-profile-icon',
+], elgg_view_entity_icon($group, 'large', [
+	'href' => '',
+	'width' => '',
+	'height' => '',
+]));
 
-if (!$owner) {
-	// not having an owner is very bad so we throw an exception
-	$msg = "Sorry, '" . 'group owner' . "' does not exist for guid:" . $group->guid;
-	throw new InvalidParameterException($msg);
-}
+$body = elgg_format_element('div', [
+	'class' => 'groups-profile-fields',
+], elgg_view('groups/profile/fields', $vars));
 
-?>
-<div class="groups-profile clearfix elgg-image-block">
-	<div class="elgg-image">
-		<div class="groups-profile-icon">
-			<?php
-				// we don't force icons to be square so don't set width/height
-				echo elgg_view_entity_icon($group, 'large', array(
-					'href' => '',
-					'width' => '',
-					'height' => '',
-				)); 
-			?>
-		</div>
-		<div class="groups-stats">
-			<p>
-				<b><?php echo elgg_echo("groups:owner"); ?>: </b>
-				<?php
-					echo elgg_view('output/url', array(
-						'text' => $owner->name,
-						'value' => $owner->getURL(),
-						'is_trusted' => true,
-					));
-				?>
-			</p>
-			<p>
-			<?php
-				$num_members = $group->getMembers(array('count' => true));
-				echo elgg_echo('groups:members') . ": " . $num_members;
-			?>
-			</p>
-		</div>
-	</div>
-
-	<div class="groups-profile-fields elgg-body">
-		<?php
-			echo elgg_view('groups/profile/fields', $vars);
-		?>
-	</div>
-</div>
+echo elgg_view_image_block($icon, $body, ['class' => 'groups-profile']);

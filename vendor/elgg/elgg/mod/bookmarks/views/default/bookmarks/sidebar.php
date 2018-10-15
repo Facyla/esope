@@ -3,12 +3,14 @@
  * Bookmarks sidebar
  */
 
-echo elgg_view('page/elements/comments_block', array(
-	'subtypes' => 'bookmarks',
-	'container_guid' => elgg_get_page_owner_guid(),
-));
+$entity = elgg_extract('entity', $vars, elgg_get_page_owner_entity());
 
-echo elgg_view('page/elements/tagcloud_block', array(
+echo elgg_view('page/elements/comments_block', [
 	'subtypes' => 'bookmarks',
-	'container_guid' => elgg_get_page_owner_guid(),
-));
+	'container_guid' => $entity ? $entity->guid : null,
+]);
+
+echo elgg_view('page/elements/tagcloud_block', [
+	'subtypes' => 'bookmarks',
+	'container_guid' => $entity ? $entity->guid : null,
+]);

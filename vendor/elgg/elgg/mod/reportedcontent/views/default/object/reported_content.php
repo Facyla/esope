@@ -22,18 +22,18 @@ if ($report->state == 'archived') {
 	<div class="clearfix">
 		<div class="clearfix controls">
 <?php
-	if ($report->state != 'archived') {
-		$attrs = [
-			'class' => 'elgg-button elgg-button-action',
-			'data-elgg-action' => json_encode([
-				'name' => 'reportedcontent/archive',
-				'data' => [
-					'guid' => $report->guid,
-				]
-			]),
-		];
-		echo elgg_format_element('button', $attrs, elgg_echo('reportedcontent:archive'));
-	}
+if ($report->state != 'archived') {
+	$attrs = [
+	'class' => 'elgg-button elgg-button-action',
+	'data-elgg-action' => json_encode([
+		'name' => 'reportedcontent/archive',
+		'data' => [
+			'guid' => $report->guid,
+		]
+	]),
+	];
+	echo elgg_format_element('button', $attrs, elgg_echo('reportedcontent:archive'));
+}
 	$attrs = [
 		'class' => 'elgg-button elgg-button-action',
 		'data-elgg-action' => json_encode([
@@ -48,7 +48,7 @@ if ($report->state == 'archived') {
 		</div>
 		<h3 class="mbm">
 			<?php echo elgg_view('output/url', [
-				'text' => $report->title,
+				'text' => $report->getDisplayName(),
 				'href' => $report->address,
 				'is_trusted' => true,
 				'class' => 'elgg-reported-content-address elgg-lightbox',
@@ -63,13 +63,13 @@ if ($report->state == 'archived') {
 		<p><b><?php echo elgg_echo('reportedcontent:by') ?></b>
 			<?php echo elgg_view('output/url', [
 				'href' => $reporter->getURL(),
-				'text' => $reporter->name,
+				'text' => $reporter->getDisplayName(),
 				'is_trusted' => true,
 			]);
 			echo " " . elgg_view_friendly_time($report->time_created);
 			?>
 		</p>
-		<?php if ($report->description): ?>
+		<?php if ($report->description) : ?>
 			<p><?php echo $report->description; ?></p>
 		<?php endif; ?>
 	</div>

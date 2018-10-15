@@ -4,6 +4,7 @@ namespace Elgg\Notifications;
 
 use Elgg\Database\EntityTable;
 use Elgg\I18n\Translator;
+use Elgg\Loggable;
 use Elgg\Logger;
 use Elgg\PluginHooksService;
 use Elgg\Queue\Queue;
@@ -12,6 +13,8 @@ use ElggEntity;
 use ElggSession;
 use ElggUser;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use RuntimeException;
 
 /**
@@ -24,6 +27,8 @@ use RuntimeException;
  * @since      1.9.0
  */
 class NotificationsService {
+
+	use Loggable;
 
 	const QUEUE_NAME = 'notifications';
 
@@ -44,21 +49,18 @@ class NotificationsService {
 
 	/** @var EntityTable */
 	protected $entities;
-
-	/** @var Logger */
-	protected $logger;
 	
 	/** @var array Registered notification events */
-	protected $events = array();
+	protected $events = [];
 
 	/** @var array Registered notification methods */
-	protected $methods = array();
+	protected $methods = [];
 
 	/** @var array Deprecated notification handlers */
-	protected $deprHandlers = array();
+	protected $deprHandlers = [];
 
 	/** @var array Deprecated message subjects */
-	protected $deprSubjects = array();
+	protected $deprSubjects = [];
 
 	/**
 	 * Constructor
@@ -69,7 +71,7 @@ class NotificationsService {
 	 * @param ElggSession          $session       Session service
 	 * @param Translator           $translator    Translator
 	 * @param EntityTable          $entities      Entity table
-	 * @param Logger               $logger        Logger
+	 * @param LoggerInterface      $logger        Logger
 	 */
 	public function __construct(
 			SubscriptionsService $subscriptions,
@@ -77,7 +79,8 @@ class NotificationsService {
 			ElggSession $session,
 			Translator $translator,
 			EntityTable $entities,
-			Logger $logger) {
+			LoggerInterface $logger
+	) {
 
 		$this->subscriptions = $subscriptions;
 		$this->queue = $queue;
@@ -89,16 +92,26 @@ class NotificationsService {
 	}
 
 	/**
+	 * Register a notification event
+	 *
+	 * @param string $type    'object', 'user', 'group', 'site'
+	 * @param string $subtype The subtype or name of the entity
+	 * @param array  $actions Array of actions or empty array for the action event.
+	 *                        An event is usually described by the first string passed
+	 *                        to elgg_trigger_event(). Examples include
+	 *                        'create', 'update', and 'publish'. The default is 'create'.
+	 * @return void
+	 *
 	 * @see elgg_register_notification_event()
 	 * @access private
 	 */
-	public function registerEvent($type, $subtype, array $actions = array()) {
+	public function registerEvent($type, $subtype, array $actions = []) {
 
 		if (!isset($this->events[$type])) {
-			$this->events[$type] = array();
+			$this->events[$type] = [];
 		}
 		if (!isset($this->events[$type][$subtype])) {
-			$this->events[$type][$subtype] = array();
+			$this->events[$type][$subtype] = [];
 		}
 
 		$action_list =& $this->events[$type][$subtype];
@@ -110,6 +123,13 @@ class NotificationsService {
 	}
 
 	/**
+	 * Unregister a notification event
+	 *
+	 * @param string $type    'object', 'user', 'group', 'site'
+	 * @param string $subtype The type of the entity
+	 *
+	 * @return bool
+	 *
 	 * @see elgg_unregister_notification_event()
 	 * @access private
 	 */
@@ -125,6 +145,10 @@ class NotificationsService {
 	}
 
 	/**
+	 * Return the notification events
+	 *
+	 * @return array
+	 *
 	 * @access private
 	 */
 	public function getEvents() {
@@ -132,6 +156,11 @@ class NotificationsService {
 	}
 
 	/**
+	 * Register a delivery method for notifications
+	 *
+	 * @param string $name The notification method name
+	 * @return void
+	 *
 	 * @see elgg_register_notification_method()
 	 * @access private
 	 */
@@ -140,6 +169,11 @@ class NotificationsService {
 	}
 
 	/**
+	 * Unregister a delivery method for notifications
+	 *
+	 * @param string $name The notification method name
+	 * @return bool
+	 *
 	 * @see elgg_unregister_notification_method()
 	 * @access private
 	 */
@@ -152,6 +186,11 @@ class NotificationsService {
 	}
 
 	/**
+	 * Returns registered delivery methods for notifications
+	 *
+	 * @return string[]
+	 *
+	 * @see elgg_get_notification_methods()
 	 * @access private
 	 */
 	public function getMethods() {
@@ -179,10 +218,10 @@ class NotificationsService {
 			}
 
 			if ($registered) {
-				$params = array(
+				$params = [
 					'action' => $action,
 					'object' => $object,
-				);
+				];
 				$registered = $this->hooks->trigger('enqueue', 'notification', $params, $registered);
 			}
 
@@ -224,11 +263,6 @@ class NotificationsService {
 
 			if (!$event instanceof NotificationEvent || !$event->getObject() || !$event->getActor()) {
 				// event object or actor have been deleted since the event was enqueued
-				continue;
-			}
-		
-			// test for usage of the deprecated override hook
-			if ($this->existsDeprecatedNotificationOverride($event)) {
 				continue;
 			}
 
@@ -294,7 +328,7 @@ class NotificationsService {
 			}
 		}
 
-		$this->logger->notice("Results for the notification event {$event->getDescription()}: " . print_r($result, true));
+		$this->logger->info("Results for the notification event {$event->getDescription()}: " . print_r($result, true));
 		return $result;
 	}
 
@@ -312,10 +346,10 @@ class NotificationsService {
 	 * ]
 	 * </code>
 	 *
-	 * @param ElggEntity  $sender     Sender of the notification
-	 * @param ElggUser[]  $recipients An array of entities to notify
-	 * @param array       $params     Notification parameters
-	 * 
+	 * @param ElggEntity $sender     Sender of the notification
+	 * @param ElggUser[] $recipients An array of entities to notify
+	 * @param array      $params     Notification parameters
+	 *
 	 * @uses $params['subject']          string
 	 *                                   Default message subject
 	 * @uses $params['body']             string
@@ -368,7 +402,6 @@ class NotificationsService {
 		$subscriptions = [];
 
 		foreach ($recipients as $recipient) {
-
 			// Are we overriding delivery?
 			$methods = $methods_override;
 			if (empty($methods)) {
@@ -488,13 +521,13 @@ class NotificationsService {
 
 		if ($this->hooks->hasHandler('send', "notification:$method")) {
 			// return true to indicate the notification has been sent
-			$params = array(
+			$params = [
 				'notification' => $notification,
 				'event' => $event,
-			);
+			];
 
 			$result = $this->hooks->trigger('send', "notification:$method", $params, false);
-			if ($this->logger->getLevel() == Logger::INFO) {
+			if ($this->logger->isLoggable(LogLevel::INFO)) {
 				$logger_data = print_r((array) $notification->toObject(), true);
 				if ($result) {
 					$this->logger->info("Notification sent: " . $logger_data);
@@ -510,7 +543,7 @@ class NotificationsService {
 			$subject = $notification->subject;
 			$body = $notification->body;
 			$params = $notification->params;
-			return (bool) _elgg_notify_user($userGuid, $senderGuid, $subject, $body, $params, array($method));
+			return (bool) _elgg_notify_user($userGuid, $senderGuid, $subject, $body, $params, [$method]);
 		}
 	}
 
@@ -542,14 +575,14 @@ class NotificationsService {
 			} else {
 				$display_name = '';
 			}
-			return $this->translator->translate($subject_key, array(
-						$actor->name,
-						$display_name,
-							), $language);
+			return $this->translator->translate($subject_key, [
+				$actor->getDisplayName(),
+				$display_name,
+			], $language);
 		}
 
 		// Fall back to default subject
-		return $this->translator->translate('notification:subject', array($actor->name), $language);
+		return $this->translator->translate('notification:subject', [$actor->getDisplayName()], $language);
 	}
 
 	/**
@@ -609,18 +642,18 @@ class NotificationsService {
 				$container_name = '';
 			}
 
-			return $this->translator->translate($body_key, array(
-						$recipient->name,
-						$actor->name,
-						$display_name,
-						$container_name,
-						$object->description,
-						$object->getURL(),
-							), $language);
+			return $this->translator->translate($body_key, [
+				$recipient->getDisplayName(),
+				$actor->getDisplayName(),
+				$display_name,
+				$container_name,
+				$object->description,
+				$object->getURL(),
+			], $language);
 		}
 
 		// Fall back to default body
-		return $this->translator->translate('notification:body', array($object->getURL()), $language);
+		return $this->translator->translate('notification:body', [$object->getURL()], $language);
 	}
 
 	/**
@@ -655,7 +688,7 @@ class NotificationsService {
 	 * @return array
 	 */
 	public function getMethodsAsDeprecatedGlobal() {
-		$data = array();
+		$data = [];
 		foreach ($this->methods as $method) {
 			$data[$method] = 'empty';
 		}
@@ -675,11 +708,11 @@ class NotificationsService {
 		if (!$entity) {
 			return $notification;
 		}
-		$params = array(
+		$params = [
 			'entity' => $entity,
 			'to_entity' => $notification->getRecipient(),
 			'method' => $method,
-		);
+		];
 		$subject = $this->getDeprecatedNotificationSubject($entity->getType(), $entity->getSubtype());
 		$string = $subject . ": " . $entity->getURL();
 		$body = $this->hooks->trigger('notify:entity:message', $entity->getType(), $params, $string);
@@ -709,7 +742,7 @@ class NotificationsService {
 		}
 
 		if (!isset($this->deprSubjects[$type])) {
-			$this->deprSubjects[$type] = array();
+			$this->deprSubjects[$type] = [];
 		}
 
 		$this->deprSubjects[$type][$subtype] = $subject;
@@ -740,31 +773,4 @@ class NotificationsService {
 
 		return $this->deprSubjects[$type][$subtype];
 	}
-
-	/**
-	 * Is someone using the deprecated override
-	 *
-	 * @param NotificationEvent $event Event
-	 * @return boolean
-	 */
-	protected function existsDeprecatedNotificationOverride(NotificationEvent $event) {
-		$entity = $event->getObject();
-		if (!elgg_instanceof($entity)) {
-			return false;
-		}
-		$params = array(
-			'event' => $event->getAction(),
-			'object_type' => $entity->getType(),
-			'object' => $entity,
-		);
-		$hookresult = $this->hooks->trigger('object:notifications', $entity->getType(), $params, false);
-		if ($hookresult === true) {
-			elgg_deprecated_notice("Using the plugin hook 'object:notifications' has been deprecated "
-				. "by the hook 'send:before', 'notifications'", 1.9);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }

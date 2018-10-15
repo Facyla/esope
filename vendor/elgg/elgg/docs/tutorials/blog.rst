@@ -199,30 +199,64 @@ The ``getURL`` method fetches the URL of the new post. It is recommended
 that you override this method. The overriding will be done in the
 ``start.php`` file.
 
+Create elgg-plugin.php
+======================
+
+The ``/mod/my_blog/elgg-plugin.php`` file is used to declare various functionalities of the plugin.
+It can, for example, be used to configure entities, actions, widgets and routes.
+
+.. code-block:: php
+
+    <?php
+    
+	return [
+		'entities' => [
+			[
+				'type' => 'object',
+				'subtype' => 'my_blog',
+				'searchable' => true,
+			],
+		],
+		'actions' => [
+			'my_blog/save' => [],
+		],
+		'routes' => [
+			'view:object:blog' => [
+				'path' => '/my_blog/view/{guid}/{title?}',
+				'resource' => 'my_blog/view',
+			],
+			'add:object:blog' => [
+				'path' => '/my_blog/add/{guid?}',
+				'resource' => 'my_blog/add',
+			],
+			'edit:object:blog' => [
+				'path' => '/my_blog/edit/{guid}/{revision?}',
+				'resource' => 'my_blog/edit',
+				'requirements' => [
+					'revision' => '\d+',
+				],
+			],
+		],
+	];
+
+
 Create start.php
 ================
 
-The ``/mod/my_blog/start.php`` file needs to
-register the save action you created earlier,
-register a page handler and
-override the URL generation.
+The ``/mod/my_blog/start.php`` file needs to register a hook to override the URL generation.
 
 .. code-block:: php
 
     <?php
 
-    // register an initializer
-    elgg_register_event_handler('init', 'system', 'my_blog_init');
-
     function my_blog_init() {
-        // register the save action
-	elgg_register_action("my_blog/save", __DIR__ . "/actions/my_blog/save.php");
-
-        // register the page handler
-        elgg_register_page_handler('my_blog', 'my_blog_page_handler');
-
         // register a hook handler to override urls
         elgg_register_plugin_hook_handler('entity:url', 'object', 'my_blog_set_url');
+    }
+
+    return function() {
+        // register an initializer
+        elgg_register_event_handler('init', 'system', 'my_blog_init');
     }
 
 Registering the save action will make it available as ``/action/my_blog/save``.
@@ -274,7 +308,7 @@ forwarded to the site's 404 page (requested page does not exist or not found).
 In this particular example, the URL must contain either ``/my_blog/add`` or
 ``/my_blog/view/id`` where id is a valid ID of an entity with the ``my_blog`` subtype.
 More information about page handling is at
-:doc:`Page handler</guides/pagehandler>`.
+:doc:`Page handler</guides/routing>`.
 
 .. _tutorials/blog#view:
 
@@ -295,15 +329,15 @@ Create the file ``/mod/my_blog/views/default/resources/my_blog/view.php``:
     // get the content of the post
     $content = elgg_view_entity($my_blog, array('full_view' => true));
 
-    $params = array(
-        'title' => $my_blog->title,
+    $params = [
+        'title' => $my_blog->getDisplayName(),
         'content' => $content,
         'filter' => '',
-    );
+    ];
 
     $body = elgg_view_layout('content', $params);
 
-    echo elgg_view_page($my_blog->title, $body);
+    echo elgg_view_page($my_blog->getDisplayName(), $body);
 
 This page has much in common with the ``add.php`` page. The biggest differences
 are that some information is extracted from the my_blog entity, and instead of
@@ -440,8 +474,8 @@ Change ``/mod/my_blog/views/default/object/my_blog.php`` to look like this:
         echo elgg_view_title(
             elgg_view('output/url', array(
                 'href' => $vars['entity']->getURL(),
-                'text' => $vars['entity']->title,
-                'is_trusted' => true
+                'text' => $vars['entity']->getDisplayName(),
+                'is_trusted' => true,
         )));
         echo elgg_view('output/tags', array('tags' => $vars['entity']->tags));
     }

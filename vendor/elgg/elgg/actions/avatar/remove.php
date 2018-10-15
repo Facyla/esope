@@ -3,15 +3,13 @@
  * Avatar remove action
  */
 
-$user_guid = get_input('guid');
+$user_guid = (int) get_input('guid');
 $user = get_user($user_guid);
 
 if (!$user || !$user->canEdit()) {
-	register_error(elgg_echo('avatar:remove:fail'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('avatar:remove:fail'));
 }
 
 $user->deleteIcon();
 
-system_message(elgg_echo('avatar:remove:success'));
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('avatar:remove:success'));

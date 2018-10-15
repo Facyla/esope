@@ -46,7 +46,7 @@ To find the string use ``grep`` or a text editor that provides searching through
 
 You should locate the string "Add friend" in ``/languages/en.php``. You should see something like this in the file:
 
-.. code:: php
+.. code-block:: php
    
    'friend:add' => "Add friend",
 
@@ -61,7 +61,7 @@ To override this definition, we will add a languages file to the plugin that we 
 2. Create a file in that directory called ``en.php``
 3. Add these lines to that file
 
-.. code:: php
+.. code-block:: php
    
    <?php
    
@@ -112,7 +112,7 @@ What goes into the log in debug mode?
 What does the data look like?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code::
+.. code-block:: text
 
    [07-Mar-2009 14:27:20] Query cache invalidated
    [07-Mar-2009 14:27:20] ** GUID:1 loaded from DB
@@ -129,7 +129,6 @@ What does the data look like?
    [07-Mar-2009 14:27:20] DEBUG: 2009-03-07 14:27:20 (MST): "Undefined index:  user" in file /var/www/elgg/engine/lib/elgglib.php (line 62)
    [07-Mar-2009 14:27:20] DEBUG: 2009-03-07 14:27:20 (MST): "Undefined index:  pass" in file /var/www/elgg/engine/lib/elgglib.php (line 62)
    [07-Mar-2009 14:27:20] ***************** DB PROFILING ********************
-   [07-Mar-2009 14:27:20] 1 times: 'SELECT * from elggdatalists' 
    [07-Mar-2009 14:27:20] 1 times: 'SELECT * from elggentities where guid=1 and (  (access_id in (2) or (owner_guid = -1) or (access_id = 0 and owner_guid = -1)) and enabled='yes')' 
    ...
    [07-Mar-2009 14:27:20] 2 times: 'update elggmetadata set access_id = 2 where entity_guid = 1' 
@@ -144,26 +143,17 @@ What does the data look like?
 What events are triggered on every page load?
 ---------------------------------------------
 
-There are 5 :doc:`Elgg events </design/events>` that are triggered on every page load:
+There are 4 :doc:`Elgg events </design/events>` that are triggered on every page load:
 
-1. boot, system
-2. plugins_boot, system
-3. init, system
-4. pagesetup, system (deprecated)
-5. shutdown, system
+#. plugins_boot, system
+#. init, system
+#. ready, system
+#. shutdown, system
 
-The *boot*, *system* event is triggered before the plugins get loaded. There does not appear to be any difference between the timing of the next two events: *plugins_boot*, *system* and *init*, *system* so plugins tend to use *init*, *system*. This event is triggered in ``Elgg\Application::bootCore``. The *pagesetup*, *system* event is thrown the first time ``elgg_view()`` is called. Some pages like the default ``index.php`` do not call ``elgg_view()`` so it is not triggered for them. The *shutdown*, *system* event is triggered after the page has been sent to the requester and is handled through the PHP function ``register_shutdown_function()``.
+The first three are triggered in ``Elgg\Application::bootCore``. **shutdown, system** is triggered in ``\Elgg\Application\ShutdownHandler`` after
+the response has been sent to the client. They are all :doc:`documented </guides/events-list>`.
 
-There are :doc:`other events </guides/events-list>` that are triggered by the Elgg core but they happen occasionally (such as when a user logs in).
-
-What variables are reserved by Elgg?
-------------------------------------
-
-- ``$CONFIG``
-- ``$vars``
-- ``$autofeed``
-- ``$_GET['action']`` / ``$_POST['action']``
-- ``$viewtype``
+There are other events triggered by Elgg occasionally (such as when a user logs in).
 
 Copy a plugin
 -------------

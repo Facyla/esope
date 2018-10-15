@@ -1,25 +1,130 @@
 <?php
 namespace Elgg;
 
-use Elgg\Filesystem\Directory;
+use Elgg\Collections\Collection;
+use Elgg\Config\DatarootSettingMigrator;
+use Elgg\Config\WwwrootSettingMigrator;
+use Elgg\Database\ConfigTable;
+use ConfigurationException;
+use Elgg\Project\Paths;
 
 /**
  * Access to configuration values
  *
  * @since 1.10.0
+ *
+ * @property int           $action_time_limit
+ * @property int           $action_token_timeout
+ * @property bool          $allow_registration
+ * @property string        $allow_user_default_access
+ * @property string        $assetroot            Path of asset (views) simplecache with trailing "/"
+ * @property bool          $auto_disable_plugins
+ * @property int           $batch_run_time_in_secs
+ * @property bool          $boot_complete
+ * @property int           $boot_cache_ttl
+ * @property array         $breadcrumbs
+ * @property string        $cacheroot            Path of cache storage with trailing "/"
+ * @property array         $css_compiler_options Options passed to CssCrush during CSS compilation
+ * @property string        $dataroot             Path of data storage with trailing "/"
+ * @property bool          $data_dir_override
+ * @property string        $date_format          Preferred PHP date format
+ * @property string        $date_format_datepicker Preferred jQuery datepicker date format
+ * @property array         $db
+ * @property string        $dbencoding
+ * @property string        $dbname
+ * @property string        $dbuser
+ * @property string        $dbhost
+ * @property string        $dbpass
+ * @property string        $dbprefix
+ * @property string        $debug
+ * @property int           $default_access
+ * @property int           $default_limit
+ * @property array         $default_widget_info
+ * @property bool          $disable_rss Is RSS disabled
+ * @property bool          $elgg_config_locks The application will lock some settings (default true)
+ * @property string[]      $elgg_cron_periods
+ * @property array         $elgg_lazy_hover_menus
+ * @property bool          $elgg_load_sync_code
+ * @property bool          $elgg_maintenance_mode
+ * @property string        $elgg_settings_file
+ * @property bool          $elgg_config_set_secret
+ * @property bool          $enable_profiling
+ * @property mixed         $embed_tab
+ * @property string        $exception_include
+ * @property string[]      $group
+ * @property bool          $i18n_loaded_from_cache
+ * @property array         $icon_sizes
+ * @property string        $image_processor
+ * @property string        $installed
+ * @property bool          $installer_running
+ * @property string        $language     Site language code
+ * @property int           $lastcache
+ * @property array         $libraries
+ * @property bool          $memcache
+ * @property string        $memcache_namespace_prefix
+ * @property array         $memcache_servers
+ * @property array         $menus
+ * @property int           $min_password_length
+ * @property int           $minusername
+ * @property string[]      $pages
+ * @property-read string   $path         Path of composer install with trailing "/"
+ * @property-read string   $pluginspath  Alias of plugins_path
+ * @property-read string   $plugins_path Path of project "mod/" directory
+ * @property array         $profile_custom_fields
+ * @property array         $profile_fields
+ * @property string        $profiling_minimum_percentage
+ * @property bool          $profiling_sql
+ * @property array         $processed_upgrades
+ * @property bool          $redis
+ * @property array         $redis_servers
+ * @property string[]      $registered_entities
+ * @property bool          $remove_branding Is Elgg branding disabled
+ * @property bool          $security_disable_password_autocomplete
+ * @property bool          $security_email_require_password
+ * @property bool          $security_notify_admins
+ * @property bool          $security_notify_user_admin
+ * @property bool          $security_notify_user_ban
+ * @property bool          $security_protect_cron
+ * @property bool          $security_protect_upgrade
+ * @property int           $simplecache_enabled
+ * @property int           $simplecache_lastupdate
+ * @property bool          $simplecache_minify_css
+ * @property bool          $simplecache_minify_js
+ * @property \ElggSite     $site
+ * @property string        $sitedescription
+ * @property string        $sitename
+ * @property string[]      $site_custom_menu_items
+ * @property string[]      $site_featured_menu_names
+ * @property-read int      $site_guid
+ * @property bool          $system_cache_enabled
+ * @property bool          $system_cache_loaded
+ * @property string        $time_format  Preferred PHP time format
+ * @property string        $url          Alias of "wwwroot"
+ * @property int           $version
+ * @property string        $view         Default viewtype (usually not set)
+ * @property bool          $walled_garden
+ * @property string        $wwwroot      Site URL
+ * @property string        $x_sendfile_type
+ * @property string        $x_accel_mapping
+ * @property bool          $_boot_cache_hit
+ * @property bool          $_elgg_autofeed
+ *
+ * @property bool          $_service_boot_complete
+ * @property bool          $_plugins_boot_complete
+ * @property bool          $_application_boot_complete
  */
-class Config implements Services\Config {
-	/**
-	 * Configuration storage. Is usually reference to global $CONFIG
-	 * 
-	 * @var \stdClass
-	 */
-	private $config;
+class Config {
+	use Loggable;
 
 	/**
-	 * @var bool
+	 * @var array Configuration storage
 	 */
-	private $settings_loaded = false;
+	private $values;
+
+	/**
+	 * @var array
+	 */
+	private $initial_values;
 
 	/**
 	 * @var bool
@@ -27,304 +132,488 @@ class Config implements Services\Config {
 	private $cookies_configured = false;
 
 	/**
+	 * @var array
+	 */
+	private $cookies;
+
+	/**
+	 * @var ConfigTable Do not use directly. Use getConfigTable().
+	 */
+	private $config_table;
+
+	/**
+	 * @var array
+	 */
+	private $locked = [];
+
+	/**
+	 * @var string
+	 */
+	private $settings_path;
+
+	/**
 	 * Constructor
 	 *
-	 * @internal Access this object via Elgg\Application::$config
-	 *
-	 * @param \stdClass $config     Elgg's $CONFIG object
-	 * @param bool      $set_global Copy the config object to global $CONFIG
+	 * @param array $values Initial config values from Env/settings file
+	 * @internal Do not use
+	 * @access private
 	 */
-	public function __construct(\stdClass $config = null, $set_global = true) {
-		if (!$config) {
-			$config = new \stdClass();
-		}
-		$this->config = $config;
-		$this->config->path = Directory\Local::root()->getPath('/');
+	public function __construct(array $values = []) {
+		$this->values = $values;
 
-		if ($set_global) {
-			/**
-			 * Configuration values.
-			 *
-			 * The $CONFIG global contains configuration values required
-			 * for running Elgg as defined in the settings.php file.
-			 *
-			 * Plugin authors are encouraged to use elgg_get_config() instead of accessing
-			 * the global directly.
-			 *
-			 * @see elgg_get_config()
-			 * @see engine/settings.php
-			 * @global \stdClass $CONFIG
-			 */
-			global $CONFIG;
-			$CONFIG = $config;
+		// Don't keep copies of these in case config gets dumped
+		$sensitive_props = [
+			'__site_secret__',
+			'db',
+			'dbhost',
+			'dbuser',
+			'dbpass',
+			'dbname',
+			'profiler_secret_get_var'
+		];
+		foreach ($sensitive_props as $name) {
+			unset($values[$name]);
 		}
+		$this->initial_values = $values;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Build a config from default settings locations
+	 *
+	 * @param string $settings_path Path of settings file
+	 * @param bool   $try_env       If path not given, try $_ENV['ELGG_SETTINGS_FILE']
+	 * @return Config
+	 *
+	 * @throws ConfigurationException
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function getSiteUrl($site_guid = 0) {
-		if ($site_guid == 0) {
-			return $this->config->wwwroot;
+	public static function factory($settings_path = '', $try_env = true) {
+		$reason1 = '';
+		$reason2 = '';
+
+		$settings_path = self::resolvePath($settings_path, $try_env);
+
+		$config = self::fromFile($settings_path, $reason1);
+
+		if (!$config) {
+			$msg = __METHOD__ . ": Reading configs failed: $reason1 $reason2";
+			throw new ConfigurationException($msg);
 		}
-	
-		$site = get_entity($site_guid);
-	
-		if (!$site instanceof \ElggSite) {
+
+		$config->settings_path = $settings_path;
+
+		return $config;
+	}
+
+	/**
+	 * Build a config from a file
+	 *
+	 * @param string $path   Path of settings.php
+	 * @param string $reason Returned reason for failure
+	 *
+	 * @return bool|Config false on failure
+	 *
+	 * @access private
+	 * @internal
+	 */
+	public static function fromFile($path, &$reason = '') {
+		if (!is_file($path)) {
+			$reason = "File $path not present.";
 			return false;
 		}
-		/* @var \ElggSite $site */
-	
-		return $site->url;
+
+		if (!is_readable($path)) {
+			$reason = "File $path not readable.";
+			return false;
+		}
+
+		// legacy loading. If $CONFIG doesn't exist, remove it after the
+		// settings file is read.
+		if (isset($GLOBALS['CONFIG'])) {
+			// don't overwrite it
+			$global = $GLOBALS['CONFIG'];
+			unset($GLOBALS['CONFIG']);
+		} else {
+			$global = null;
+		}
+
+		Includer::requireFile($path);
+
+		$get_db = function() {
+			// try to migrate settings to the file
+			$db_conf = new \Elgg\Database\DbConfig($GLOBALS['CONFIG']);
+			return new Database($db_conf);
+		};
+
+		if (empty($GLOBALS['CONFIG']->dataroot)) {
+			$dataroot = (new DatarootSettingMigrator($get_db(), $path))->migrate();
+			if (!isset($dataroot)) {
+				$reason = 'The Elgg settings file is missing $CONFIG->dataroot.';
+				return false;
+			}
+
+			$GLOBALS['CONFIG']->dataroot = $dataroot;
+
+			// just try this one time to migrate wwwroot
+			if (!isset($GLOBALS['CONFIG']->wwwroot)) {
+				$wwwroot = (new WwwrootSettingMigrator($get_db(), $path))->migrate();
+				if (isset($wwwroot)) {
+					$GLOBALS['CONFIG']->wwwroot = $wwwroot;
+				}
+			}
+		}
+
+		$config = new self(get_object_vars($GLOBALS['CONFIG']));
+
+		if ($global !== null) {
+			// restore
+			$GLOBALS['CONFIG'] = $global;
+		} else {
+			unset($GLOBALS['CONFIG']);
+		}
+
+		if ($config->{'X-Sendfile-Type'}) {
+			$config->{'x_sendfile_type'} = $config->{'X-Sendfile-Type'};
+			unset($config->{'X-Sendfile-Type'});
+		}
+		if ($config->{'X-Accel-Mapping'}) {
+			$config->{'x_accel_mapping'} = $config->{'X-Accel-Mapping'};
+			unset($config->{'X-Accel-Mapping'});
+		}
+
+		$config->elgg_settings_file = $path;
+		$config->lock('elgg_settings_file');
+
+		return $config;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Resolve settings path
+	 *
+	 * @param string $settings_path Path of settings file
+	 * @param bool   $try_env       If path not given, try $_ENV['ELGG_SETTINGS_FILE']
+	 * @return Config
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function getPluginsPath() {
-		return $this->config->pluginspath;
+	public static function resolvePath($settings_path = '', $try_env = true) {
+		if (!$settings_path) {
+			if ($try_env && !empty($_ENV['ELGG_SETTINGS_FILE'])) {
+				$settings_path = $_ENV['ELGG_SETTINGS_FILE'];
+			} else if (!$settings_path) {
+				$settings_path = Paths::settingsFile(Paths::SETTINGS_PHP);
+			}
+		}
+
+		return \Elgg\Project\Paths::sanitize($settings_path, false);
 	}
 
 	/**
-	 * Set up and return the cookie configuration array resolved from settings.php
+	 * Set an array of values
+	 *
+	 * @param array $values Values
+	 * @return void
+	 *
+	 * @access private
+	 * @internal
+	 */
+	public function mergeValues(array $values) {
+		foreach ($values as $name => $value) {
+			$this->__set($name, $value);
+		}
+	}
+
+	/**
+	 * Get all values
 	 *
 	 * @return array
+	 *
+	 * @access private
+	 * @internal
+	 */
+	public function getValues() {
+		return $this->values;
+	}
+
+	/**
+	 * Set up and return the cookie configuration array resolved from settings
+	 *
+	 * @return array
+	 *
+	 * @access private
+	 * @internal
 	 */
 	public function getCookieConfig() {
-		$c = $this->config;
-
 		if ($this->cookies_configured) {
-			return $c->cookies;
+			return $this->cookies;
 		}
 
-		$this->loadSettingsFile();
-
-		// set cookie values for session and remember me
-		if (!isset($c->cookies)) {
-			$c->cookies = array();
+		$cookies = $this->cookies;
+		if (!is_array($cookies)) {
+			$cookies = [];
 		}
-		if (!isset($c->cookies['session'])) {
-			$c->cookies['session'] = array();
+
+		if (!isset($cookies['session'])) {
+			$cookies['session'] = [];
 		}
 		$session_defaults = session_get_cookie_params();
 		$session_defaults['name'] = 'Elgg';
-		$c->cookies['session'] = array_merge($session_defaults, $c->cookies['session']);
-		if (!isset($c->cookies['remember_me'])) {
-			$c->cookies['remember_me'] = array();
+		$cookies['session'] = array_merge($session_defaults, $cookies['session']);
+		if (!isset($cookies['remember_me'])) {
+			$cookies['remember_me'] = [];
 		}
 		$session_defaults['name'] = 'elggperm';
 		$session_defaults['expire'] = strtotime("+30 days");
-		$c->cookies['remember_me'] = array_merge($session_defaults, $c->cookies['remember_me']);
+		$cookies['remember_me'] = array_merge($session_defaults, $cookies['remember_me']);
 
+		$this->cookies = $cookies;
 		$this->cookies_configured = true;
 
-		return $c->cookies;
+		return $cookies;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Get an Elgg configuration value if it's been set or loaded during the boot process.
+	 *
+	 * Before \Elgg\BootService::boot, values from the database will not be present.
+	 *
+	 * @param string $name Name
+	 *
+	 * @return mixed null if does not exist
 	 */
-	public function getDataPath() {
-		if (!isset($this->config->dataroot)) {
-			\Elgg\Application::getDataPath();
+	public function __get($name) {
+		switch ($name) {
+			case 'group_tool_options':
+				elgg_deprecated_notice("'$name' config option is no longer in use. Use elgg()->group_tools->all()", '3.0');
+				return elgg()->group_tools->all();
 		}
 
-		return $this->config->dataroot;
+		if (isset($this->values[$name])) {
+			return $this->values[$name];
+		}
+
+		return null;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Test if we have a set value
+	 *
+	 * @param string $name Name
+	 *
+	 * @return bool
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function getCachePath() {
-		$this->loadSettingsFile();
-
-		if (!isset($this->config->cacheroot)) {
-			$this->config->cacheroot = $this->getDataPath();
-		}
-
-		return $this->config->cacheroot;
+	public function hasValue($name) {
+		return isset($this->values[$name]);
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Get a value set at construction time
+	 *
+	 * @param string $name Name
+	 * @return mixed null = not set
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function get($name, $site_guid = 0) {
-		$name = trim($name);
-	
-		// do not return $config value if asking for non-current site
-		if (($site_guid === 0 || $site_guid === null || $site_guid == $this->config->site_guid) && isset($this->config->$name)) {
-			return $this->config->$name;
-		}
-	
-		if ($site_guid === null) {
-			// installation wide setting
-			$value = _elgg_services()->datalist->get($name);
-		} else {
-			if ($site_guid == 0) {
-				$site_guid = (int) $this->config->site_guid;
-			}
-	
-			// hit DB only if we're not sure if value isn't already loaded
-			if (!isset($this->config->site_config_loaded) || $site_guid != $this->config->site_guid) {
-				// site specific setting
-				$value = _elgg_services()->configTable->get($name, $site_guid);
-			} else {
-				$value = null;
-			}
-		}
-	
-		// @todo document why we don't cache false
-		if ($value === false) {
-			return null;
-		}
-	
-		if ($site_guid == $this->config->site_guid || $site_guid === null) {
-			$this->config->$name = $value;
-		}
-	
-		return $value;
+	public function getInitialValue($name) {
+		return isset($this->initial_values[$name]) ? $this->initial_values[$name] : null;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Was a value available at construction time? (From settings.php)
+	 *
+	 * @param string $name Name
+	 *
+	 * @return bool
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function getVolatile($name) {
-		return isset($this->config->{$name}) ? $this->config->{$name} : null;
+	public function hasInitialValue($name) {
+		return isset($this->initial_values[$name]);
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Make a value read-only
+	 *
+	 * @param string $name Name
+	 * @return void
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function set($name, $value) {
-		$name = trim($name);
-		$this->config->$name = $value;
+	public function lock($name) {
+		$this->locked[$name] = true;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Is this value locked?
+	 *
+	 * @param string $name Name
+	 *
+	 * @return bool
+	 *
+	 * @access private
+	 * @internal
 	 */
-	public function save($name, $value, $site_guid = 0) {
-		$name = trim($name);
-	
-		if (strlen($name) > 255) {
-			_elgg_services()->logger->error("The name length for configuration variables cannot be greater than 255");
+	public function isLocked($name) {
+		return isset($this->locked[$name]);
+	}
+
+	/**
+	 * Set an Elgg configuration value
+	 *
+	 * @warning This does not persist the configuration setting. Use elgg_save_config()
+	 *
+	 * @param string $name  Name
+	 * @param mixed  $value Value
+	 * @return void
+	 */
+	public function __set($name, $value) {
+		if ($this->wasWarnedLocked($name)) {
+			return;
+		}
+		$this->values[$name] = $value;
+	}
+
+	/**
+	 * Handle isset()
+	 *
+	 * @param string $name Name
+	 * @return bool
+	 */
+	public function __isset($name) {
+		return $this->__get($name) !== null;
+	}
+
+	/**
+	 * Handle unset()
+	 *
+	 * @param string $name Name
+	 * @return void
+	 */
+	public function __unset($name) {
+		if ($this->wasWarnedLocked($name)) {
+			return;
+		}
+
+		unset($this->values[$name]);
+	}
+
+	/**
+	 * Save a configuration setting to the database
+	 *
+	 * @param string $name  Name (cannot be greater than 255 characters)
+	 * @param mixed  $value Value
+	 *
+	 * @return bool
+	 */
+	public function save($name, $value) {
+		if ($this->wasWarnedLocked($name)) {
 			return false;
 		}
-	
-		if ($site_guid === null) {
-			if (is_array($value) || is_object($value)) {
-				return false;
+
+		if (strlen($name) > 255) {
+			if ($this->logger) {
+				$this->logger->error("The name length for configuration variables cannot be greater than 255");
 			}
-			$result = _elgg_services()->datalist->set($name, $value);
-		} else {
-			if ($site_guid == 0) {
-				$site_guid = (int) $this->config->site_guid;
-			}
-			$result = _elgg_services()->configTable->set($name, $value, $site_guid);
+			return false;
 		}
-	
-		if ($site_guid === null || $site_guid == $this->config->site_guid) {
-			$this->set($name, $value);
-		}
+
+		$result = $this->getConfigTable()->set($name, $value);
+
+		$this->__set($name, $value);
 	
 		return $result;
 	}
 
 	/**
-	 * Get expected settings file paths
+	 * Removes a configuration setting from the database
+	 *
+	 * @param string $name Configuration name
+	 *
+	 * @return bool
+	 */
+	public function remove($name) {
+		if ($this->wasWarnedLocked($name)) {
+			return false;
+		}
+
+		$result = $this->getConfigTable()->remove($name);
+
+		unset($this->values[$name]);
+	
+		return $result;
+	}
+
+	/**
+	 * Log a read-only warning if the name is read-only
+	 *
+	 * @param string $name Name
+	 * @return bool
+	 *
+	 * @access private
+	 * @internal
+	 */
+	private function wasWarnedLocked($name) {
+		if (!isset($this->locked[$name])) {
+			return false;
+		}
+
+		if ($this->logger) {
+			$this->logger->warning("The property $name is read-only.");
+		}
+		return true;
+	}
+
+	/**
+	 * Set the config table service (must be set)
+	 *
+	 * This is a necessary evil until we refactor so that the service provider has no dependencies.
+	 *
+	 * @param ConfigTable $table the config table service
+	 * @return void
+	 *
+	 * @access private
+	 * @internal
+	 */
+	public function setConfigTable(ConfigTable $table) {
+		$this->config_table = $table;
+	}
+
+	/**
+	 * Get the core entity types
 	 *
 	 * @return string[]
-	 * @array private
 	 */
-	public function getSettingsPaths() {
-		$root = Directory\Local::root();
-		return [
-			$root->getPath('engine/settings.php'),
-			$root->getPath('elgg-config/settings.php'),
-		];
+	public static function getEntityTypes() {
+		return ['group', 'object', 'site', 'user'];
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function loadSettingsFile() {
-		if ($this->settings_loaded) {
-			return;
-		}
-
-		if (isset($this->config->Config_file)) {
-			if ($this->config->Config_file === false) {
-				$this->settings_loaded = true;
-				return;
-			}
-			$path = $this->config->Config_file;
-		} else {
-			foreach ($this->getSettingsPaths() as $path) {
-				if (is_file($path)) {
-					break;
-				}
-			}
-		}
-
-		// No settings means a fresh install
-		if (!is_file($path)) {
-			if ($this->getVolatile('installer_running')) {
-				$this->settings_loaded = true;
-				return;
-			}
-
-			header("Location: install.php");
-			exit;
-		}
-
-		if (!is_readable($path)) {
-			echo "The Elgg settings file exists but the web server doesn't have read permission to it.";
-			exit;
-		}
-
-		// we assume settings is going to write to CONFIG, but we may need to copy its values
-		// into our local config
-		global $CONFIG;
-		$global_is_bound = (isset($CONFIG) && $CONFIG === $this->config);
-
-		require_once $path;
-
-		// normalize commonly needed values
-		if (isset($CONFIG->dataroot)) {
-			$CONFIG->dataroot = rtrim($CONFIG->dataroot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-			$GLOBALS['_ELGG']->dataroot_in_settings = true;
-		} else {
-			$GLOBALS['_ELGG']->dataroot_in_settings = false;
-		}
-
-		$GLOBALS['_ELGG']->simplecache_enabled_in_settings = isset($CONFIG->simplecache_enabled);
-
-		if (!empty($CONFIG->cacheroot)) {
-			$CONFIG->cacheroot = rtrim($CONFIG->cacheroot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-		}
-
-		if (!$global_is_bound) {
-			// must manually copy settings into our storage
-			foreach ($CONFIG as $key => $value) {
-				$this->config->{$key} = $value;
-			}
-		}
-
-		$this->settings_loaded = true;
-	}
-
-	/**
-	 * Get the raw \stdClass object used for storage.
+	 * Get the config table API
 	 *
-	 * We need this, for now, to construct some services.
+	 * @return ConfigTable
 	 *
-	 * @internal Do not use this plugins or new core code!
-	 * @todo Get rid of this.
-	 *
-	 * @return \stdClass
 	 * @access private
+	 * @internal
 	 */
-	public function getStorageObject() {
-		return $this->config;
+	private function getConfigTable() {
+		if (!$this->config_table) {
+			if (!function_exists('_elgg_services')) {
+				throw new \RuntimeException('setConfigTable() must be called before using API that' .
+					' uses the database.');
+			}
+
+			$this->config_table = _elgg_services()->configTable;
+		}
+
+		return $this->config_table;
 	}
 }

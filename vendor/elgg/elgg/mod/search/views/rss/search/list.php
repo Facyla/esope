@@ -6,20 +6,22 @@
  * @uses $vars['params']
  */
 
-$entities = $vars['results']['entities'];
+$results = elgg_extract('results', $vars);
+$entities = elgg_extract('entities', $results);
 
-if (!is_array($entities) || !count($entities)) {
-	return FALSE;
+if (empty($entities)) {
+	return;
 }
+
+$params = elgg_extract('params', $vars);
+$service = new \Elgg\Search\Search($params);
 
 foreach ($entities as $entity) {
-	if ($view = search_get_search_view($vars['params'], 'entity')) {
-		$body .= elgg_view($view, array(
+	if ($view = $service->getSearchView()) {
+		echo elgg_view($view, [
 			'entity' => $entity,
-			'params' => $vars['params'],
-			'results' => $vars['results']
-		));
+			'params' => $service->getParams(),
+			'results' => $results,
+		]);
 	}
 }
-
-echo $body;

@@ -1,15 +1,12 @@
 <?php
 /**
 * Profile widgets/tools
-* 
+*
 * @package ElggGroups
-*/ 
-	
-// tools widget area
-echo '<ul id="groups-tools" class="elgg-gallery elgg-gallery-fluid mtl clearfix">';
+*/
 
-// enable tools to extend this area
-echo elgg_view("groups/tool_latest", $vars);
+$modules = elgg_view('groups/profile/modules', $vars);
 
-echo "</ul>";
-
+echo elgg_format_element('div', [
+	'id' => 'groups-tools',
+], $modules);

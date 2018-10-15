@@ -19,19 +19,19 @@ class ElggHMACCache extends ElggCache {
 	/**
 	 * Save a key
 	 *
-	 * @param string $key  Name
-	 * @param string $data Value
+	 * @param string $key          Name
+	 * @param string $data         Value
+	 * @param int    $expire_after Number of seconds to expire cache after
 	 *
 	 * @return boolean
 	 */
-	public function save($key, $data) {
-		global $CONFIG;
-
+	public function save($key, $data, $expire_after = null) {
+		$dbprefix = elgg_get_config('dbprefix');
 		$key = sanitise_string($key);
 		$time = time();
 
-		$query = "INSERT into {$CONFIG->dbprefix}hmac_cache (hmac, ts) VALUES ('$key', '$time')";
-		return insert_data($query);
+		$query = "INSERT into {$dbprefix}hmac_cache (hmac, ts) VALUES ('$key', '$time')";
+		return elgg()->db->insertData($query);
 	}
 
 	/**
@@ -44,11 +44,10 @@ class ElggHMACCache extends ElggCache {
 	 * @return string
 	 */
 	public function load($key, $offset = 0, $limit = null) {
-		global $CONFIG;
-
+		$dbprefix = elgg_get_config('dbprefix');
 		$key = sanitise_string($key);
 
-		$row = get_data_row("SELECT * from {$CONFIG->dbprefix}hmac_cache where hmac='$key'");
+		$row = elgg()->db->getDataRow("SELECT * from {$dbprefix}hmac_cache where hmac='$key'");
 		if ($row) {
 			return $row->hmac;
 		}
@@ -64,11 +63,10 @@ class ElggHMACCache extends ElggCache {
 	 * @return bool
 	 */
 	public function delete($key) {
-		global $CONFIG;
-
+		$dbprefix = elgg_get_config('dbprefix');
 		$key = sanitise_string($key);
 
-		return delete_data("DELETE from {$CONFIG->dbprefix}hmac_cache where hmac='$key'");
+		return elgg()->db->deleteData("DELETE from {$dbprefix}hmac_cache where hmac='$key'");
 	}
 
 	/**
@@ -87,13 +85,12 @@ class ElggHMACCache extends ElggCache {
 	 *
 	 */
 	public function __destruct() {
-		global $CONFIG;
-
+		$dbprefix = elgg_get_config('dbprefix');
 		$time = time();
-		$age = (int)$this->getVariable("max_age");
+		$age = (int) $this->getVariable("max_age");
 
 		$expires = $time - $age;
 
-		delete_data("DELETE from {$CONFIG->dbprefix}hmac_cache where ts<$expires");
+		elgg()->db->deleteData("DELETE from {$dbprefix}hmac_cache where ts<$expires");
 	}
 }

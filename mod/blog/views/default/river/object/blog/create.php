@@ -3,16 +3,16 @@
  * Blog river view.
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
+$item = elgg_extract('item', $vars);
+if (!$item instanceof ElggRiverItem) {
+	return;
+}
 
-$object = $item->getObjectEntity();
+$blog = $item->getObjectEntity();
+if (!$blog instanceof ElggBlog) {
+	return;
+}
 
-$excerpt = $object->excerpt ? $object->excerpt : $object->description;
-$excerpt = strip_tags($excerpt);
-$excerpt = elgg_get_excerpt($excerpt);
+$vars['message'] = $blog->getExcerpt();
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $vars['item'],
-	'message' => $excerpt,
-));
+echo elgg_view('river/elements/layout', $vars);

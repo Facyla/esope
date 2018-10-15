@@ -277,7 +277,7 @@ Module ``elgg``
 
 Translate interface text
 
-.. code:: js
+.. code-block:: js
 
    elgg.echo('example:text', ['arg1']);
 
@@ -286,7 +286,7 @@ Translate interface text
 
 Display a status message to the user.
 
-.. code:: js
+.. code-block:: js
 
    elgg.system_message(elgg.echo('success'));
 
@@ -295,7 +295,7 @@ Display a status message to the user.
 
 Display an error message to the user.
 
-.. code:: js
+.. code-block:: js
 
    elgg.register_error(elgg.echo('error'));
 
@@ -304,7 +304,7 @@ Display an error message to the user.
 
 Normalize a URL relative to the elgg root:
 
-.. code:: js
+.. code-block:: js
 
     // "http://localhost/elgg/blog"
     elgg.normalize_url('/blog');
@@ -313,7 +313,7 @@ Normalize a URL relative to the elgg root:
 
 Redirect to a new page.
 
-.. code:: js
+.. code-block:: js
 
     elgg.forward('/blog');
 
@@ -324,7 +324,7 @@ This function automatically normalizes the URL.
 
 Parse a URL into its component parts:
 
-.. code:: js
+.. code-block:: js
 
    // returns {
    //   fragment: "fragment",
@@ -380,8 +380,6 @@ Force a refresh of all XSRF tokens on the page.
 
 This is automatically called every 5 minutes by default.
 
-This requires a valid security token in 1.8, but not in 1.9.
-
 The user will be warned if their session has expired.
 
 
@@ -389,7 +387,7 @@ The user will be warned if their session has expired.
 
 Add a security token to an object, URL, or query string:
 
-.. code:: js
+.. code-block:: js
 
    // returns {
    //   __elgg_token: "1468dc44c5b437f34423e2d55acfdd87",
@@ -432,7 +430,7 @@ Get the current page's language.
 
 There are a number of configuration values set in the elgg object:
 
-.. code:: js
+.. code-block:: js
 
     // The root of the website.
     elgg.config.wwwroot;
@@ -474,7 +472,7 @@ Module ``elgg/spinner``
 
 The ``elgg/spinner`` module can be used to create an Ajax loading indicator fixed to the top of the window.
 
-.. code:: js
+.. code-block:: js
 
    define(function (require) {
       var spinner = require('elgg/spinner');
@@ -501,7 +499,7 @@ attribute and defining target module with a ``href`` (or ``data-href``) attribut
 
 .. $.position(): http://api.jqueryui.com/position/
 
-.. code:: php
+.. code-block:: php
 
    echo elgg_format_element('div', [
       'class' => 'elgg-module-popup hidden',
@@ -531,7 +529,7 @@ attribute and defining target module with a ``href`` (or ``data-href``) attribut
 The ``elgg/popup`` module allows you to build out more complex UI/UX elements. You can open and close
 popup modules programmatically:
 
-.. code:: js
+.. code-block:: js
 
    define(function(require) {
       var $ = require('jquery');
@@ -556,7 +554,7 @@ popup modules programmatically:
 You can use ``getOptions, ui.popup`` plugin hook to manipulate the position of the popup before it has been opened.
 You can use jQuery ``open`` and ``close`` events to manipulate popup module after it has been opened or closed.
 
-.. code:: js
+.. code-block:: js
 
    define(function(require) {
 
@@ -594,7 +592,7 @@ Module ``elgg/widgets``
 
 Plugins that load a widget layout via Ajax should initialize via this module:
 
-.. code:: js
+.. code-block:: js
 
    require(['elgg/widgets'], function (widgets) {
        widgets.init();
@@ -614,7 +612,7 @@ Use the following classes to bind your anchor elements to a lightbox:
 
 You may apply colorbox options to an individual ``elgg-lightbox`` element by setting the attribute ``data-colorbox-opts`` to a JSON settings object.
 
-.. code:: php
+.. code-block:: php
 
    echo elgg_view('output/url', [
       'text' => 'Open lightbox',
@@ -629,7 +627,7 @@ Use ``"getOptions", "ui.lightbox"`` plugin hook to filter options passed to ``$.
 
 ``elgg/lightbox`` AMD module should be used to open and close the lightbox programmatically:
 
-.. code:: js
+.. code-block:: js
 
    define(function(require) {
       var lightbox = require('elgg/lightbox');
@@ -650,7 +648,7 @@ Use ``"getOptions", "ui.lightbox"`` plugin hook to filter options passed to ``$.
 
 To support gallery sets (via ``rel`` attribute), you need to bind colorbox directly to a specific selector (note that this will ignore ``data-colorbox-opts`` on all elements in a set):
 
-.. code:: js
+.. code-block:: js
 
    require(['elgg/lightbox'], function(lightbox) {
       var options = {
@@ -662,7 +660,7 @@ To support gallery sets (via ``rel`` attribute), you need to bind colorbox direc
 
 You can also resize the lightbox programmatically if needed:
 
-.. code:: js
+.. code-block:: js
 
    define(function(require) {
       var lightbox = require('elgg/lightbox');
@@ -678,7 +676,7 @@ Module ``elgg/ckeditor``
 This module can be used to add WYSIWYG editor to a textarea (requires ``ckeditor`` plugin to be enabled).
 Note that WYSIWYG will be automatically attached to all instances of ``.elgg-input-longtext``.
 
-.. code:: js
+.. code-block:: js
 
    require(['elgg/ckeditor'], function (elggCKEditor) {
       elggCKEditor.bind('#my-text-area');
@@ -704,7 +702,7 @@ Inline tabs component
 
 Inline tabs component fires an ``open`` event whenever a tabs is open and, in case of ajax tabs, finished loading:
 
-.. code:: js
+.. code-block:: js
 
     // Add custom animation to tab content
 	require(['jquery', 'elgg/ready'], function($) {
@@ -727,7 +725,7 @@ Traditional scripts
 
 Although we highly recommend using AMD modules, you can register scripts with ``elgg_register_js``:
 
-.. code:: php
+.. code-block:: php
 
    elgg_register_js('jquery', $cdnjs_url);
 
@@ -735,7 +733,7 @@ This will override any URLs previously registered under this name.
 
 Load a library on the current page with ``elgg_load_js``:
 
-.. code:: php
+.. code-block:: php
 
    elgg_load_js('jquery');
 
@@ -796,7 +794,7 @@ Triggering custom hooks
 
 Plugins can trigger their own hooks:
 
-.. code:: javascript
+.. code-block:: javascript
 
     define(function(require) {
         require('elgg/init');
@@ -830,6 +828,7 @@ Available hooks
 
 **ajax_request_data, \***
     This filters request data sent by the ``elgg/Ajax`` module. See :doc:`ajax` for details.
+    The hook must check if the data is a plain object or an instanceof ``FormData`` to piggyback the values using correct API.
 
 **ajax_response_data, \***
     This filters the response data returned to users of the ``elgg/Ajax`` module. See :doc:`ajax` for details.
@@ -841,18 +840,37 @@ Third-party assets
 ==================
 
 We recommend managing third-party scripts and styles with Composer.
-Elgg core uses ``fxp/composer-asset-plugin`` for this purpose.
-This plugin allows you to pull dependencies from the Bower or NPM package repositories,
-but using the Composer command-line tool.
+Elgg's composer.json is configured to install dependencies from the **Bower** or **Yarn** package repositories using
+Composer command-line tool. Core configuration installs the assets from `Asset Packagist <https://asset-packagist.org>`_
+(a repository managed by the Yii community).
+
+Alternatively, you can install ``fxp/composer-asset-plugin`` globally to achieve the same results, but the installation
+and update takes much longer.
 
 For example, to include jQuery, you could run the following Composer commands:
 
-.. code-block:: shell
+.. code-block:: sh
 
-    composer global require fxp/composer-asset-plugin:~1.1.4
     composer require bower-asset/jquery:~2.0
 
-.. note::
 
-    ``fxp/composer-asset-plugin`` must be installed globally!
-    See https://github.com/francoispluchino/composer-asset-plugin for more info.
+If you are using a starter-project, or pulling in Elgg as a composer dependency via a custom composer project,
+update your ``composer.json`` with the following configuration:
+
+.. code-block:: json
+
+	{
+	    "repositories": [
+	        {
+	            "type": "composer",
+	            "url": "https://asset-packagist.org"
+	        }
+	    ],
+		"config": {
+	        "fxp-asset": {
+	            "enabled": false
+	        }
+	    },
+	}
+
+You can find additional information at `Asset Packagist <https://asset-packagist.org>`_ website.

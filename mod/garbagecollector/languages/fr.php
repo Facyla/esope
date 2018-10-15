@@ -9,9 +9,4 @@ return array(
 	'garbagecollector' => "Ramasse-miettes\n",
 	'garbagecollector:done' => "Terminé\n",
 	'garbagecollector:optimize' => "Optimisation en cours de %s ",
-
-	'garbagecollector:error' => "ERREUR",
-	'garbagecollector:ok' => "OK",
-
-	'garbagecollector:gc:metastrings' => 'Nettoyage des chaînes meta (metastrings) non liées: ',
 );

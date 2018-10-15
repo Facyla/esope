@@ -5,40 +5,46 @@
  * @uses $vars['entity']
  */
 
-if ($vars['entity']->forum_enable == 'no') {
-	return true;
+$group = elgg_extract('entity', $vars);
+if (!($group instanceof \ElggGroup)) {
+	return;
 }
 
-$group = $vars['entity'];
+if (!$group->isToolEnabled('forum')) {
+	return;
+}
 
-$all_link = elgg_view('output/url', array(
-	'href' => "discussion/owner/$group->guid",
+$all_link = elgg_view('output/url', [
+	'href' => elgg_generate_url('collection:object:discussion:group', ['guid' => $group->guid]),
 	'text' => elgg_echo('link:view:all'),
 	'is_trusted' => true,
-));
+]);
 
 elgg_push_context('widgets');
-$options = array(
+$options = [
 	'type' => 'object',
 	'subtype' => 'discussion',
-	'container_guid' => $group->getGUID(),
+	'container_guid' => $group->guid,
 	'limit' => 6,
 	'full_view' => false,
 	'pagination' => false,
 	'no_results' => elgg_echo('discussion:none'),
-);
+];
 $content = elgg_list_entities($options);
 elgg_pop_context();
 
-$new_link = elgg_view('output/url', array(
-	'href' => "discussion/add/" . $group->getGUID(),
-	'text' => elgg_echo('discussion:addtopic'),
-	'is_trusted' => true,
-));
+$new_link = null;
+if ($group->canWriteToContainer(0, 'object', 'discussion')) {
+	$new_link = elgg_view('output/url', [
+		'href' => elgg_generate_url('add:object:discussion', ['guid' => $group->guid]),
+		'text' => elgg_echo('add:object:discussion'),
+		'is_trusted' => true,
+	]);
+}
 
-echo elgg_view('groups/profile/module', array(
-	'title' => elgg_echo('discussion:group'),
+echo elgg_view('groups/profile/module', [
+	'title' => elgg_echo('collection:object:discussion:group'),
 	'content' => $content,
 	'all_link' => $all_link,
 	'add_link' => $new_link,
-));
+]);

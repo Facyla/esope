@@ -5,11 +5,13 @@
 
 $widget = elgg_extract('entity', $vars);
 
+$num_display = (int) $widget->num_display ?: 4;
+
 $content = elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'file',
 	'container_guid' => $widget->owner_guid,
-	'limit' => $widget->num_display,
+	'limit' => $num_display,
 	'pagination' => false,
 	'distinct' => false,
 ]);
@@ -23,7 +25,7 @@ if (empty($content)) {
 echo $content;
 
 $more_link = elgg_view('output/url', [
-	'href' => 'file/owner/' . $widget->getOwnerEntity()->username,
+	'href' => elgg_generate_url('collection:object:file:owner', ['username' => $widget->getOwnerEntity()->username]),
 	'text' => elgg_echo('file:more'),
 	'is_trusted' => true,
 ]);

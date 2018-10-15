@@ -5,33 +5,39 @@
  * @package ElggGroups
  */
 
-$group = $vars['entity'];
-
-$icon = elgg_view_entity_icon($group, 'tiny', $vars);
-
-$metadata = '';
-if (!elgg_in_context('owner_block') && !elgg_in_context('widgets')) {
-	// only show entity menu outside of widgets and owner block
-	$metadata = elgg_view_menu('entity', array(
-		'entity' => $group,
-		'handler' => 'groups',
-		'sort_by' => 'priority',
-		'class' => 'elgg-menu-hz',
-	));
+$entity = elgg_extract('entity', $vars);
+if (!($entity instanceof \ElggGroup)) {
+	return;
 }
 
-
-if ($vars['full_view']) {
+if (elgg_extract('full_view', $vars, false)) {
 	echo elgg_view('groups/profile/summary', $vars);
-} else {
-	// brief view
-	$params = array(
-		'entity' => $group,
-		'metadata' => $metadata,
-		'subtitle' => $group->briefdescription,
-	);
-	$params = $params + $vars;
-	$list_body = elgg_view('group/elements/summary', $params);
-
-	echo elgg_view_image_block($icon, $list_body, $vars);
+	return;
 }
+
+$members_count = $entity->getMembers(['count' => true]);
+
+$imprint = [
+	[
+		'icon_name' => 'users',
+		'content' => elgg_echo('groups:members_count', [$members_count]),
+		'class' => 'elgg-listing-group-members',
+	],
+];
+
+if (!$entity->isPublicMembership()) {
+	$imprint[] = [
+		'icon_name' => 'lock',
+		'content' => elgg_echo('groups:closed'),
+		'class' => 'elgg-listing-group-membership elgg-state elgg-state-danger',
+	];
+}
+
+$vars['content'] = $entity->briefdescription;
+$vars['byline'] = false;
+$vars['access'] = false;
+$vars['time'] = false;
+$vars['imprint'] = $imprint;
+$vars['icon_entity'] = $entity;
+
+echo elgg_view('group/elements/summary', $vars);

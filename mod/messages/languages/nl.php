@@ -6,28 +6,18 @@ return array(
 
 	'messages' => "Berichten",
 	'messages:unreadcount' => "%s ongelezen",
-	'messages:back' => "terug naar berichten",
 	'messages:user' => "Postvak in van %s",
-	'messages:posttitle' => "Berichten van %s: %s",
 	'messages:inbox' => "Postvak In",
 	'messages:sent' => "Verstuurde berichten",
 	'messages:message' => "Bericht",
 	'messages:title' => "Titel",
 	'messages:to:help' => "Schrijf hier de gebruikersnaam van de ontvanger.",
-	'messages:replying' => "Bericht beantwoorden",
 	'messages:inbox' => "Postvak In",
 	'messages:sendmessage' => "Verstuur een bericht",
 	'messages:add' => "Schrijf een bericht",
 	'messages:sentmessages' => "Verstuurde berichten",
-	'messages:recent' => "Recente berichten",
-	'messages:original' => "Originele bericht",
-	'messages:yours' => "Jouw bericht",
 	'messages:toggle' => 'Selecteer alles',
 	'messages:markread' => 'Markeer als gelezen',
-	'messages:recipient' => 'Kies een ontvanger...',
-	'messages:to_user' => 'Aan: %s',
-
-	'messages:new' => 'Nieuw bericht',
 
 	'notification:method:site' => 'Site',
 
@@ -51,32 +41,23 @@ return array(
 	*/
 
 	'messages:email:subject' => 'Je hebt een nieuw bericht!',
-	'messages:email:body' => "Hallo!
+	'messages:email:body' => "Je hebt een nieuw bericht van %s
 
-Je hebt een nieuw bericht van %s. Het bericht is:
-
-%s
-
-Om je berichten te bekijken klik je hier:
+Bericht:
 
 %s
 
-Om %s direct een bericht te sturen klik je hier:
-
+Om al je berichten te bekijken, klik hier:
 %s
 
----
-
-Dit is een automatisch aangemaakt bericht. Je kunt hier niet op antwoorden. ",
+Om een bericht te sturen naar %s, klik hier:
+%s",
 
 	/**
 	* Error messages
 	*/
 
 	'messages:blank' => "Sorry, je moet wel tekst invullen voordat we je bericht kunnen versturen.",
-	'messages:notfound' => "Sorry, we konden het opgegeven bericht niet vinden.",
-	'messages:notdeleted' => "Sorry, we konden dit bericht niet verwijderen.",
-	'messages:nopermission' => "Je hebt onvoldoende rechten om dit bericht te kunnen verwijderen.",
 	'messages:nomessages' => "Er zijn geen berichten om weer te geven.",
 	'messages:user:nonexist' => "We konden de geadresseerde niet in de gebruikerslijst vinden .",
 	'messages:user:blank' => "Je hebt niemand geselecteerd om dit naar te sturen.",

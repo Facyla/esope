@@ -34,12 +34,12 @@ rating to the owner.
 	$subject = elgg_echo('ratings:notification:subject', array(), $owner->language);
 
 	// Summary of the notification
-	$summary = elgg_echo('ratings:notification:summary', array($user->name), $owner->language);
+	$summary = elgg_echo('ratings:notification:summary', array($user->getDisplayName()), $owner->language);
 
 	// Body of the notification message
 	$body = elgg_echo('ratings:notification:body', array(
-		$user->name,
-		$owner->name,
+		$user->getDisplayName(),
+		$owner->getDisplayName(),
 		$rating->getValue() // A value between 1-5
 	), $owner->language);
 
@@ -152,18 +152,18 @@ the contents of the notification when a new objects of subtype 'photo' is create
 	    $method = $params['method'];
 
 	    // Title for the notification
-	    $notification->subject = elgg_echo('photos:notify:subject', array($entity->title), $language);
+	    $notification->subject = elgg_echo('photos:notify:subject', [$entity->getDisplayName()], $language);
 
 	    // Message body for the notification
 	    $notification->body = elgg_echo('photos:notify:body', array(
-	        $owner->name,
-	        $entity->title,
+	        $owner->getDisplayName(),
+	        $entity->getDisplayName(),
 	        $entity->getExcerpt(),
 	        $entity->getURL()
 	    ), $language);
 
 	    // Short summary about the notification
-	    $notification->summary = elgg_echo('photos:notify:summary', array($entity->title), $language);
+	    $notification->summary = elgg_echo('photos:notify:summary', [$entity->getDisplayName()], $language);
 
 	    return $notification;
 	}
@@ -286,7 +286,7 @@ Example:
 	function discussion_get_subscriptions($hook, $type, $subscriptions, $params) {
 		$reply = $params['event']->getObject();
 
-		if (!elgg_instanceof($reply, 'object', 'discussion_reply', 'ElggDiscussionReply')) {
+		if (!elgg_instanceof($reply, 'object', 'discussion_reply')) {
 			return $subscriptions;
 		}
 
@@ -295,3 +295,41 @@ Example:
 
 		return ($subscriptions + $group_subscribers);
 	}
+
+E-mail attachments
+==================
+
+``notify_user()`` or enqueued notifications support attachments for e-mail notifications if provided in ``$params``. To add one or more attachments
+add a key ``attachments`` in ``$params`` which is an array of the attachments. An attachment should be in one of the following formats:
+
+- An ``ElggFile`` which points to an existing file
+- An array with the file contents
+- An array with a filepath
+
+.. code-block:: php
+
+	// this example is for notify_user()
+	$params['attachments'] = [];
+	
+	// Example of an ElggFile attachment
+	$file = new \ElggFile();
+	$file->owner_guid = <some owner_guid>;
+	$file->setFilename('<some filename>');
+	
+	$params['attachments'][] = $file;
+	
+	// Example of array with content  
+	$params['attachments'][] = [
+		'content' => 'The file content',
+		'filename' => 'test_file.txt',
+		'type' => 'text/plain',
+	];
+  	
+  	// Example of array with filepath
+  	// 'filename' can be provided, if not basename() of filepath will be used
+  	// 'type' can be provided, if not will try a best guess
+	$params['attachments'][] = [
+		'filepath' => '<path to a valid file>',
+  	];
+  	
+  	notify_user($to_guid, $from_guid, $subject, $body, $params);

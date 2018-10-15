@@ -7,58 +7,52 @@
  * @uses $vars['title']  Optional override for the title
  */
 
-$entity = $vars['entity'];
-$size = elgg_extract('size', $vars, 'tiny');
-
-$icon = elgg_view_entity_icon($entity, $size, $vars);
-
-$title = elgg_extract('title', $vars);
-if (!$title) {
-	$link_params = array(
-		'href' => $entity->getUrl(),
-		'text' => $entity->name,
-	);
-
-	// Simple XFN, see http://gmpg.org/xfn/
-	if (elgg_get_logged_in_user_guid() == $entity->guid) {
-		$link_params['rel'] = 'me';
-	} elseif (check_entity_relationship(elgg_get_logged_in_user_guid(), 'friend', $entity->guid)) {
-		$link_params['rel'] = 'friend';
-	}
-
-	$title = elgg_view('output/url', $link_params);
+$entity = elgg_extract('entity', $vars);
+if (!$entity instanceof ElggUser) {
+	return;
 }
+
+$size = elgg_extract('size', $vars, 'small');
 
 if (elgg_get_context() == 'gallery') {
-	echo $icon;
+	echo elgg_view_entity_icon($entity, $size, $vars);
+	return;
+}
+	
+$title = elgg_extract('title', $vars);
+if (!$title) {
+	$title = elgg_view('output/url', [
+		'href' => $entity->getUrl(),
+		'text' => $entity->getDisplayName(),
+	]);
+}
+
+$params = [
+	'entity' => $entity,
+	'title' => $title,
+	'icon_entity' => $entity,
+	'icon_size' => $size,
+	'tags' => false,
+];
+
+if ($entity->isBanned()) {
+	$params['subtitle'] = elgg_echo('banned');
 } else {
-	$metadata = '';
-	if (!elgg_in_context('owner_block') && !elgg_in_context('widgets')) {
-		$metadata = elgg_view_menu('entity', array(
-			'entity' => $entity,
-			'sort_by' => 'priority',
-			'class' => 'elgg-menu-hz',
-		));
+	$subtitle = '';
+	$location = $entity->location;
+	if (is_string($location) && $location !== '') {
+		$location = elgg_view_icon('map-marker') . ' ' . $location;
+		$subtitle .= elgg_format_element('div', [], $location);
 	}
 	
-	if ($entity->isBanned()) {
-		$banned = elgg_echo('banned');
-		$params = array(
-			'entity' => $entity,
-			'title' => $title,
-			'metadata' => $metadata,
-		);
-	} else {
-		$params = array(
-			'entity' => $entity,
-			'title' => $title,
-			'metadata' => $metadata,
-			'subtitle' => $entity->briefdescription,
-			'content' => elgg_view('user/status', array('entity' => $entity)),
-		);
+	$subtitle .= elgg_format_element('div', [], $entity->briefdescription);
+	
+	$params['subtitle'] = $subtitle;
+	if (elgg_view_exists('user/status')) {
+		$params['content'] = elgg_view('user/status', ['entity' => $entity]);
 	}
-
-	$list_body = elgg_view('user/elements/summary', $params);
-
-	echo elgg_view_image_block($icon, $list_body, $vars);
 }
+
+$params = $params + $vars;
+
+echo elgg_view('user/elements/summary', $params);

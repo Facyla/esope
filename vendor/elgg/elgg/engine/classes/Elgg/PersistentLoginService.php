@@ -1,5 +1,7 @@
 <?php
+
 namespace Elgg;
+
 /**
  * \Elgg\PersistentLoginService
  *
@@ -50,14 +52,14 @@ class PersistentLoginService {
 
 		$prefix = $this->db->prefix;
 		$this->table = "{$prefix}users_remember_me_cookies";
-		$this->time = is_numeric($time) ? (int)$time : time();
+		$this->time = is_numeric($time) ? (int) $time : time();
 	}
 
 	/**
 	 * Make the user's login persistent
 	 *
 	 * @param \ElggUser $user The user who logged in
-	 * 
+	 *
 	 * @return void
 	 */
 	public function makeLoginPersistent(\ElggUser $user) {
@@ -66,12 +68,12 @@ class PersistentLoginService {
 
 		$this->storeHash($user, $hash);
 		$this->setCookie($token);
-		$this->setSession($token);
+		$this->setSessionToken($token);
 	}
 
 	/**
 	 * Remove the persisted login token from client and server
-	 * 
+	 *
 	 * @return void
 	 */
 	public function removePersistentLogin() {
@@ -81,7 +83,7 @@ class PersistentLoginService {
 		}
 
 		$this->setCookie("");
-		$this->setSession("");
+		$this->setSessionToken("");
 	}
 
 	/**
@@ -89,7 +91,7 @@ class PersistentLoginService {
 	 *
 	 * @param \ElggUser $subject  The user whose password changed
 	 * @param \ElggUser $modifier The user who changed the password
-	 * 
+	 *
 	 * @return void
 	 */
 	public function handlePasswordChange(\ElggUser $subject, \ElggUser $modifier = null) {
@@ -116,7 +118,7 @@ class PersistentLoginService {
 		$cookie_hash = $this->hashToken($this->cookie_token);
 		$user = $this->getUserFromHash($cookie_hash);
 		if ($user) {
-			$this->setSession($this->cookie_token);
+			$this->setSessionToken($this->cookie_token);
 			// note: if the token is legacy, we don't both replacing it here because
 			// it will be replaced during the next request boot
 			return $user;
@@ -133,7 +135,7 @@ class PersistentLoginService {
 	 * Replace the user's token if it's a legacy hexadecimal token
 	 *
 	 * @param \ElggUser $logged_in_user The logged in user
-	 * 
+	 *
 	 * @return void
 	 */
 	public function replaceLegacyToken(\ElggUser $logged_in_user) {
@@ -150,7 +152,7 @@ class PersistentLoginService {
 	 * Find a user with the given hash
 	 *
 	 * @param string $hash The hashed token
-	 * 
+	 *
 	 * @return \ElggUser|null
 	 */
 	public function getUserFromHash($hash) {
@@ -158,10 +160,15 @@ class PersistentLoginService {
 			return null;
 		}
 
-		$hash = $this->db->sanitizeString($hash);
-		$query = "SELECT guid FROM {$this->table} WHERE code = '$hash'";
+		
+		$query = "SELECT guid
+			FROM {$this->table}
+			WHERE code = :hash";
+		$params = [
+			':hash' => $hash,
+		];
 		try {
-			$user_row = $this->db->getDataRow($query);
+			$user_row = $this->db->getDataRow($query, null, $params);
 		} catch (\DatabaseException $e) {
 			return $this->handleDbException($e);
 		}
@@ -172,13 +179,81 @@ class PersistentLoginService {
 		$user = call_user_func($this->_callable_get_user, $user_row->guid);
 		return $user ? $user : null;
 	}
+	
+	/**
+	 * Update the timestamp linked to a persistent cookie code, this indicates that the code was used recently
+	 *
+	 * @param \ElggUser $user the user to update the cookie code for
+	 *
+	 * @return bool|null
+	 */
+	public function updateTokenUsage(\ElggUser $user) {
+		if (!$this->cookie_token) {
+			return null;
+		}
+		
+		// update the database record
+		$query = "UPDATE {$this->table}
+			SET timestamp = :time
+			WHERE guid = :guid
+			AND code = :hash";
+		$params = [
+			':time' => time(),
+			':guid' => $user->guid,
+			':hash' => $this->hashToken($this->cookie_token),
+		];
+		try {
+			$res = (bool) $this->db->updateData($query, false, $params);
+			if ($res) {
+				// also update the cookie lifetime client-side
+				$this->setCookie($this->cookie_token);
+			}
+			return $res;
+		} catch (\DatabaseException $e) {
+			$this->handleDbException($e);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Remove all persistent codes from the database which have expired based on the cookie config
+	 *
+	 * @param int $time the base timestamp to use
+	 *
+	 * @return bool
+	 */
+	public function removeExpiredTokens($time) {
+		$time = Values::normalizeTime($time);
+		
+		$expires = Values::normalizeTime($this->cookie_config['expire']);
+		$diff = $time->diff($expires);
+		
+		$time->sub($diff);
+		if ($time->getTimestamp() > time()) {
+			return false;
+		}
+		
+		$query = "DELETE FROM {$this->table}
+			WHERE timestamp < :time";
+		$params = [
+			':time' => $time->getTimestamp(),
+		];
+		try {
+			return (bool) $this->db->deleteData($query, $params);
+		} catch (\DatabaseException $e) {
+			$this->handleDbException($e);
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Store a hash in the DB
 	 *
 	 * @param \ElggUser $user The user for whom we're storing the hash
 	 * @param string    $hash The hashed token
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function storeHash(\ElggUser $user, $hash) {
@@ -186,15 +261,15 @@ class PersistentLoginService {
 		// and for unknown reasons. See https://github.com/Elgg/Elgg/issues/8104
 		$this->removeHash($hash);
 
-		$time = time();
-		$hash = $this->db->sanitizeString($hash);
-
-		$query = "
-			INSERT INTO {$this->table} (code, guid, timestamp)
-		    VALUES ('$hash', {$user->guid}, $time)
-		";
+		$query = "INSERT INTO {$this->table} (code, guid, timestamp)
+		    VALUES (:hash, :guid, :time)";
+		$params = [
+			':hash' => $hash,
+			':guid' => $user->guid,
+			':time' => time(),
+		];
 		try {
-			$this->db->insertData($query);
+			$this->db->insertData($query, $params);
 		} catch (\DatabaseException $e) {
 			$this->handleDbException($e);
 		}
@@ -207,11 +282,13 @@ class PersistentLoginService {
 	 * @return void
 	 */
 	protected function removeHash($hash) {
-		$hash = $this->db->sanitizeString($hash);
-
-		$query = "DELETE FROM {$this->table} WHERE code = '$hash'";
+		$query = "DELETE FROM {$this->table}
+			WHERE code = :hash";
+		$params = [
+			':hash' => $hash,
+		];
 		try {
-			$this->db->deleteData($query);
+			$this->db->deleteData($query, $params);
 		} catch (\DatabaseException $e) {
 			$this->handleDbException($e);
 		}
@@ -222,7 +299,7 @@ class PersistentLoginService {
 	 *
 	 * @param \DatabaseException $exception The exception to handle
 	 * @param string             $default   The value to return if the table doesn't exist yet
-	 * 
+	 *
 	 * @return mixed
 	 *
 	 * @throws \DatabaseException
@@ -240,13 +317,17 @@ class PersistentLoginService {
 	 * Remove all the hashes associated with a user
 	 *
 	 * @param \ElggUser $user The user for whom we're removing hashes
-	 * 
+	 *
 	 * @return void
 	 */
-	protected function removeAllHashes(\ElggUser $user) {
-		$query = "DELETE FROM {$this->table} WHERE guid = '{$user->guid}'";
+	public function removeAllHashes(\ElggUser $user) {
+		$query = "DELETE FROM {$this->table}
+			WHERE guid = :guid";
+		$params = [
+			':guid' => $user->guid,
+		];
 		try {
-			$this->db->deleteData($query);
+			$this->db->deleteData($query, $params);
 		} catch (\DatabaseException $e) {
 			$this->handleDbException($e);
 		}
@@ -256,7 +337,7 @@ class PersistentLoginService {
 	 * Create a hash from the token
 	 *
 	 * @param string $token The token to hash
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function hashToken($token) {
@@ -269,12 +350,12 @@ class PersistentLoginService {
 	 * Store the token in the client cookie (or remove the cookie)
 	 *
 	 * @param string $token Empty string to remove cookie
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function setCookie($token) {
 		$cookie = new \ElggCookie($this->cookie_config['name']);
-		foreach (array('expire', 'path', 'domain', 'secure', 'httponly') as $key) {
+		foreach (['expire', 'path', 'domain', 'secure', 'httponly'] as $key) {
 			$cookie->$key = $this->cookie_config[$key];
 		}
 		$cookie->value = $token;
@@ -288,10 +369,10 @@ class PersistentLoginService {
 	 * Store the token in the session (or remove it from the session)
 	 *
 	 * @param string $token The token to store in session. Empty string to remove.
-	 * 
+	 *
 	 * @return void
 	 */
-	protected function setSession($token) {
+	protected function setSessionToken($token) {
 		if ($token) {
 			$this->session->set('code', $token);
 		} else {
@@ -315,7 +396,7 @@ class PersistentLoginService {
 	 * Is the given token a legacy MD5 hash?
 	 *
 	 * @param string $token The token to analyze
-	 * 
+	 *
 	 * @return bool
 	 */
 	protected function isLegacyToken($token) {

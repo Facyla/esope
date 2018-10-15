@@ -1,10 +1,13 @@
 <?php
+
 return array(
 /**
  * Sites
  */
 
-	'item:site' => 'Sites',
+	'item:site:site' => 'Site',
+	'collection:site:site' => 'Sites',
+	'index:content' => '<p>Welcome to your Elgg site.</p><p><strong>Tip:</strong> Many sites use the <code>activity</code> plugin to place a site activity stream on this page.</p>',
 
 /**
  * Sessions
@@ -61,10 +64,16 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'There is an invalid %s dependency "%s" in plugin %s.  Plugins cannot conflict with or require something they provide!',
 	'ElggPluginPackage:InvalidPlugin:ConflictsWithPlugin' => 'Conflicts with plugin: %s',
 	'ElggPluginPackage:InvalidPlugin:UnreadableConfig' => 'Plugin file "elgg-plugin.php" file is present but unreadable.',
+	'ElggPlugin:Error' => 'Plugin error',
+	'ElggPlugin:Error:ID' => 'Error in plugin "%s"',
+	'ElggPlugin:Error:Path' => 'Error in plugin path "%s"',
+	'ElggPlugin:Error:Unknown' => 'Undefined plugin error',
 	'ElggPlugin:Exception:CannotIncludeFile' => 'Cannot include %s for plugin %s (guid: %s) at %s.',
 	'ElggPlugin:Exception:IncludeFileThrew' => 'Threw exception including %s for plugin %s (guid: %s) at %s.',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'Cannot open views dir for plugin %s (guid: %s) at %s.',
 	'ElggPlugin:Exception:NoID' => 'No ID for plugin guid %s!',
+	'ElggPlugin:Exception:InvalidPackage' => 'Package cannot be loaded',
+	'ElggPlugin:Exception:InvalidManifest' => 'Plugin manifest is missing or invalid',
 	'PluginException:NoPluginName' => "The plugin name could not be found",
 	'PluginException:ParserError' => 'Error parsing manifest with API version %s in plugin %s.',
 	'PluginException:NoAvailableParser' => 'Cannot find a parser for manifest API version %s in plugin %s.',
@@ -107,6 +116,14 @@ return array(
 
 	'UserFetchFailureException' => 'Cannot check permission for user_guid [%s] as the user does not exist.',
 
+	'PageNotFoundException' => 'The page you are trying to view does not exist or you do not have permissions to view it',
+	'EntityNotFoundException' => 'The content you were trying to access has been removed or you do not have permissions to access it.',
+	'EntityPermissionsException' => 'You do not have sufficient permissions for this action.',
+	'GatekeeperException' => 'You do not have permissions to view the page you are trying to access',
+	'BadRequestException' => 'Bad request',
+	'ValidationException' => 'Submitted data did not meet the requirements, please check your input.',
+	'LogicException:InterfaceNotImplemented' => '%s must implement %s',
+
 	'deprecatedfunction' => 'Warning: This code uses the deprecated function \'%s\' and is not compatible with this version of Elgg',
 
 	'pageownerunavailable' => 'Warning: The page owner %d is not accessible!',
@@ -117,6 +134,8 @@ return array(
 	'error:missing_data' => 'There was some data missing in your request',
 	'save:fail' => 'There was a failure saving your data',
 	'save:success' => 'Your data was saved',
+
+	'forward:error' => 'Sorry. An error occurred while redirecting to you to another site.',
 
 	'error:default:title' => 'Oops...',
 	'error:default:content' => 'Oops... something went wrong.',
@@ -180,12 +199,12 @@ return array(
  * Access
  */
 
-	'PRIVATE' => "Private",
-	'LOGGED_IN' => "Logged in users",
-	'PUBLIC' => "Public",
-	'LOGGED_OUT' => "Logged out users",
-	'access:friends:label' => "Friends",
-	'access' => "Access",
+	'access:label:private' => "Private",
+	'access:label:logged_in' => "Logged in users",
+	'access:label:public' => "Public",
+	'access:label:logged_out' => "Logged out users",
+	'access:label:friends' => "Friends",
+	'access' => "Who can see this",
 	'access:overridenotice' => "Note: Due to group policy, this content will be accessible only by group members.",
 	'access:limited:label' => "Limited",
 	'access:help' => "The access level",
@@ -204,7 +223,6 @@ return array(
 
 	'widgets:add' => 'Add widgets',
 	'widgets:add:description' => "Click on any widget button below to add it to the page.",
-	'widgets:panel:close' => "Close widgets panel",
 	'widgets:position:fixed' => '(Fixed position on page)',
 	'widget:unavailable' => 'You have already added this widget',
 	'widget:numbertodisplay' => 'Number of items to display',
@@ -214,7 +232,8 @@ return array(
 
 	'widgets' => "Widgets",
 	'widget' => "Widget",
-	'item:object:widget' => "Widgets",
+	'item:object:widget' => "Widget",
+	'collection:object:widget' => 'Widgets',
 	'widgets:save:success' => "The widget was successfully saved.",
 	'widgets:save:failure' => "We could not save your widget.",
 	'widgets:add:success' => "The widget was successfully added.",
@@ -227,66 +246,29 @@ return array(
  */
 
 	'group' => "Group",
-	'item:group' => "Groups",
+	'item:group' => "Group",
+	'collection:group' => 'Groups',
+	'item:group:group' => "Group",
+	'collection:group:group' => 'Groups',
+	'groups:tool_gatekeeper' => "The requested functionality is currently not enabled in this group",
 
 /**
  * Users
  */
 
 	'user' => "User",
-	'item:user' => "Users",
-
-/**
- * Friends
- */
+	'item:user' => "User",
+	'collection:user' => 'Users',
+	'item:user:user' => 'User',
+	'collection:user:user' => 'Users',
 
 	'friends' => "Friends",
-	'friends:yours' => "Your friends",
-	'friends:owned' => "%s's friends",
-	'friend:add' => "Add friend",
-	'friend:remove' => "Remove friend",
-
-	'friends:add:successful' => "You have successfully added %s as a friend.",
-	'friends:add:failure' => "We couldn't add %s as a friend.",
-
-	'friends:remove:successful' => "You have successfully removed %s from your friends.",
-	'friends:remove:failure' => "We couldn't remove %s from your friends.",
-
-	'friends:none' => "No friends yet.",
-	'friends:none:you' => "You don't have any friends yet.",
-
-	'friends:none:found' => "No friends were found.",
-
-	'friends:of:none' => "Nobody has added this user as a friend yet.",
-	'friends:of:none:you' => "Nobody has added you as a friend yet. Start adding content and fill in your profile to let people find you!",
-
-	'friends:of:owned' => "People who have made %s a friend",
-
-	'friends:of' => "Friends of",
-	'friends:collections' => "Friend collections",
-	'collections:add' => "New collection",
-	'friends:collections:add' => "New friends collection",
-	'friends:addfriends' => "Select friends",
-	'friends:collectionname' => "Collection name",
-	'friends:collectionfriends' => "Friends in collection",
-	'friends:collectionedit' => "Edit this collection",
-	'friends:nocollections' => "You do not have any collections yet.",
-	'friends:collectiondeleted' => "Your collection has been deleted.",
-	'friends:collectiondeletefailed' => "We were unable to delete the collection. Either you don't have permission, or some other problem has occurred.",
-	'friends:collectionadded' => "Your collection was successfully created",
-	'friends:nocollectionname' => "You need to give your collection a name before it can be created.",
-	'friends:collections:members' => "Collection members",
-	'friends:collections:edit' => "Edit collection",
-	'friends:collections:edited' => "Saved collection",
-	'friends:collection:edit_failed' => 'Could not save collection.',
-
-	'friendspicker:chararray' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+	'collection:friends' => 'Friends\' %s',
 
 	'avatar' => 'Avatar',
 	'avatar:noaccess' => "You're not allowed to edit this user's avatar",
 	'avatar:create' => 'Create your avatar',
 	'avatar:edit' => 'Edit avatar',
-	'avatar:preview' => 'Preview',
 	'avatar:upload' => 'Upload a new avatar',
 	'avatar:current' => 'Current avatar',
 	'avatar:remove' => 'Remove your avatar and set the default icon',
@@ -300,50 +282,16 @@ return array(
 	'avatar:crop:fail' => 'Avatar cropping failed',
 	'avatar:remove:success' => 'Removing the avatar succeeded',
 	'avatar:remove:fail' => 'Avatar remove failed',
-
-	'profile:edit' => 'Edit profile',
-	'profile:aboutme' => "About me",
-	'profile:description' => "About me",
-	'profile:briefdescription' => "Brief description",
-	'profile:location' => "Location",
-	'profile:skills' => "Skills",
-	'profile:interests' => "Interests",
-	'profile:contactemail' => "Contact email",
-	'profile:phone' => "Telephone",
-	'profile:mobile' => "Mobile phone",
-	'profile:website' => "Website",
-	'profile:twitter' => "Twitter username",
-	'profile:saved' => "Your profile was successfully saved.",
-
-	'profile:field:text' => 'Short text',
-	'profile:field:longtext' => 'Large text area',
-	'profile:field:tags' => 'Tags',
-	'profile:field:url' => 'Web address',
-	'profile:field:email' => 'Email address',
-	'profile:field:location' => 'Location',
-	'profile:field:date' => 'Date',
-
-	'admin:appearance:profile_fields' => 'Edit Profile Fields',
-	'profile:edit:default' => 'Edit profile fields',
-	'profile:label' => "Profile label",
-	'profile:type' => "Profile type",
-	'profile:editdefault:delete:fail' => 'Removing profile field failed',
-	'profile:editdefault:delete:success' => 'Profile field deleted',
-	'profile:defaultprofile:reset' => 'Profile fields reset to the system default',
-	'profile:resetdefault' => 'Reset profile fields to system defaults',
-	'profile:resetdefault:confirm' => 'Are you sure you want to delete your custom profile fields?',
-	'profile:explainchangefields' => "You can replace the existing profile fields with your own using the form below. \n\n Give the new profile field a label, for example, 'Favorite team', then select the field type (eg. text, url, tags), and click the 'Add' button. To re-order the fields drag on the handle next to the field label. To edit a field label - click on the label's text to make it editable. \n\n At any time you can revert back to the default profile set up, but you will lose any information already entered into custom fields on profile pages.",
-	'profile:editdefault:success' => 'New profile field added',
-	'profile:editdefault:fail' => 'Default profile could not be saved',
-	'profile:field_too_long' => 'Cannot save your profile information because the "%s" section is too long.',
-	'profile:noaccess' => "You do not have permission to edit this profile.",
-	'profile:invalid_email' => '%s must be a valid email address.',
-
+	
+	'action:user:validate:already' => "%s was already validated",
+	'action:user:validate:success' => "%s has been validated",
+	'action:user:validate:error' => "An error occurred while validating %s",
 
 /**
  * Feeds
  */
-	'feed:rss' => 'RSS feed for this page',
+	'feed:rss' => 'RSS',
+	'feed:rss:title' => 'RSS feed for this page',
 /**
  * Links
  */
@@ -355,9 +303,8 @@ return array(
  * River
  */
 	'river' => "River",
-	'river:friend:user:default' => "%s is now a friend with %s",
+	'river:user:friend' => "%s is now a friend with %s",
 	'river:update:user:avatar' => '%s has a new avatar',
-	'river:update:user:profile' => '%s has updated their profile',
 	'river:noaccess' => 'You do not have permission to view this item.',
 	'river:posted:generic' => '%s posted',
 	'riveritem:single:user' => 'a user',
@@ -371,13 +318,9 @@ return array(
 	'river:delete:lack_permission' => 'You lack permission to delete this activity item',
 	'river:can_delete:invaliduser' => 'Cannot check canDelete for user_guid [%s] as the user does not exist.',
 	'river:subject:invalid_subject' => 'Invalid user',
-	'activity:owner' => 'View activity',
+	'activity:owner' => 'Activity',
 
-	'river:widget:title' => "Activity",
-	'river:widget:description' => "Display latest activity",
-	'river:widget:type' => "Type of activity",
-	'river:widgets:friends' => 'Friends activity',
-	'river:widgets:all' => 'All site activity',
+	
 
 /**
  * Notifications
@@ -433,6 +376,7 @@ return array(
 	'registerdisabled' => "Registration has been disabled by the system administrator",
 	'register:fields' => 'All fields are required',
 
+	'registration:noname' => 'Display name is required.',
 	'registration:notemail' => 'The email address you provided does not appear to be a valid email address.',
 	'registration:userexists' => 'That username already exists',
 	'registration:usernametooshort' => 'Your username must be a minimum of %u characters long.',
@@ -452,6 +396,8 @@ return array(
 	'user:name:label' => "Display name",
 	'user:name:success' => "Successfully changed display name on the system.",
 	'user:name:fail' => "Could not change display name on the system.",
+	'user:username:success' => "Successfully changed username on the system.",
+	'user:username:fail' => "Could not change username on the system.",
 
 	'user:set:password' => "Account password",
 	'user:current_password:label' => 'Current password',
@@ -471,8 +417,10 @@ return array(
 	'user:language:fail' => "Language settings could not be saved.",
 
 	'user:username:notfound' => 'Username %s not found.',
+	'user:username:help' => 'Please be aware that changing a username will change all dynamic user related links',
 
 	'user:password:lost' => 'Lost password',
+	'user:password:hash_missing' => 'Regretfully, we must ask you to reset your password. We have improved the security of passwords on the site, but were unable to migrate all accounts in the process.',
 	'user:password:changereq:success' => 'Successfully requested a new password, email sent',
 	'user:password:changereq:fail' => 'Could not request a new password.',
 
@@ -480,7 +428,7 @@ return array(
 
 	'user:persistent' => 'Remember me',
 
-	'walled_garden:welcome' => 'Welcome to',
+	'walled_garden:home' => 'Home',
 
 /**
  * Administration
@@ -488,6 +436,7 @@ return array(
 	'menu:page:header:administer' => 'Administer',
 	'menu:page:header:configure' => 'Configure',
 	'menu:page:header:develop' => 'Develop',
+	'menu:page:header:information' => 'Information',
 	'menu:page:header:default' => 'Other',
 
 	'admin:view_site' => 'View site',
@@ -504,10 +453,9 @@ return array(
 	'admin' => "Administration",
 	'admin:description' => "The admin panel allows you to control all aspects of the system, from user management to how plugins behave. Choose an option below to get started.",
 
-	'admin:statistics' => "Statistics",
-	'admin:statistics:overview' => 'Overview',
-	'admin:statistics:server' => 'Server Info',
-	'admin:statistics:cron' => 'Cron',
+	'admin:statistics' => 'Statistics',
+	'admin:server' => 'Server',
+	'admin:cron' => 'Cron',
 	'admin:cron:record' => 'Latest Cron Jobs',
 	'admin:cron:period' => 'Cron period',
 	'admin:cron:friendly' => 'Last completed',
@@ -532,9 +480,18 @@ return array(
 	'admin:users:opt:linktext' => "Configure users...",
 	'admin:users:opt:description' => "Configure users and account information. ",
 	'admin:users:find' => 'Find',
-
-	'admin:administer_utilities:maintenance' => 'Maintenance mode',
+	'admin:users:unvalidated' => 'Unvalidated',
+	'admin:users:unvalidated:no_results' => 'No unvalidated users.',
+	'admin:users:unvalidated:registered' => 'Registered: %s',
+	
+	'admin:configure_utilities:maintenance' => 'Maintenance mode',
 	'admin:upgrades' => 'Upgrades',
+	'admin:upgrades:run' => 'Run upgrades now',
+	'admin:upgrades:error:invalid_upgrade' => 'Entity %s does not exist or not a valid instance of ElggUpgrade',
+	'admin:upgrades:error:invalid_batch' => 'Batch runner for the upgrade %s (%s) could not be instantiated',
+	'admin:upgrades:completed' => 'Upgrade "%s" completed at %s',
+	'admin:upgrades:completed:errors' => 'Upgrade "%s" completed at %s but encountered %s errors',
+	'admin:upgrades:failed' => 'Upgrade "%s" failed',
 
 	'admin:settings' => 'Settings',
 	'admin:settings:basic' => 'Basic Settings',
@@ -543,11 +500,6 @@ return array(
 	'admin:site:opt:linktext' => "Configure site...",
 	'admin:settings:in_settings_file' => 'This setting is configured in settings.php',
 
-	'admin:legend:security' => 'Security',
-	'admin:site:secret:intro' => 'Elgg uses a key to create security tokens for various purposes.',
-	'admin:site:secret_regenerated' => "Your site secret has been regenerated.",
-	'admin:site:secret:regenerate' => "Regenerate site secret",
-	'admin:site:secret:regenerate:help' => "Note: Regenerating your site secret may inconvenience some users by invalidating tokens used in \"remember me\" cookies, e-mail validation requests, invitation codes, etc.",
 	'site_secret:current_strength' => 'Key Strength',
 	'site_secret:strength:weak' => "Weak",
 	'site_secret:strength_msg:weak' => "We strongly recommend that you regenerate your site secret.",
@@ -567,8 +519,11 @@ return array(
 	'admin:widget:content_stats:help' => 'Keep track of the content created by your users',
 	'admin:widget:cron_status' => 'Cron status',
 	'admin:widget:cron_status:help' => 'Shows the status of the last time cron jobs finished',
-	'widget:content_stats:type' => 'Content type',
-	'widget:content_stats:number' => 'Number',
+	'admin:statistics:numentities' => 'Content Statistics',
+	'admin:statistics:numentities:type' => 'Content type',
+	'admin:statistics:numentities:number' => 'Number',
+	'admin:statistics:numentities:searchable' => 'Searchable entities',
+	'admin:statistics:numentities:other' => 'Other entities',
 
 	'admin:widget:admin_welcome' => 'Welcome',
 	'admin:widget:admin_welcome:help' => "A short introduction to Elgg's admin area",
@@ -579,11 +534,12 @@ return array(
 "Navigation for the administration area is provided by the menu to the right. It is organized into
 three sections:
 	<dl>
-		<dt>Administer</dt><dd>Everyday tasks like monitoring reported content, checking who is online, and viewing statistics.</dd>
-		<dt>Configure</dt><dd>Occasional tasks like setting the site name or activating a plugin.</dd>
+		<dt>Administer</dt><dd>Basic tasks like managing users, monitoring reported content and activating plugins.</dd>
+		<dt>Configure</dt><dd>Occasional tasks like setting the site name or configuring settings of a plugin.</dd>
+		<dt>Information</dt><dd>Information about your site like statistics.</dd>
 		<dt>Develop</dt><dd>For developers who are building plugins or designing themes. (Requires a developer plugin.)</dd>
 	</dl>
-	",
+",
 
 	// argh, this is ugly
 	'admin:widget:admin_welcome:outro' => '<br />Be sure to check out the resources available through the footer links and thank you for using Elgg!',
@@ -620,11 +576,103 @@ three sections:
 	'admin:plugins:markdown:unknown_plugin' => 'Unknown plugin.',
 	'admin:plugins:markdown:unknown_file' => 'Unknown file.',
 
+	'admin:notices:delete_all' => 'Dismiss all %s notices',
 	'admin:notices:could_not_delete' => 'Could not delete notice.',
 	'item:object:admin_notice' => 'Admin notice',
+	'collection:object:admin_notice' => 'Admin notices',
 
 	'admin:options' => 'Admin options',
 
+	'admin:security' => 'Security',
+	'admin:security:settings' => 'Settings',
+	'admin:security:settings:description' => 'On this page you can configure some security features. Please read the settings carefully.',
+	'admin:security:settings:label:hardening' => 'Hardening',
+	'admin:security:settings:label:notifications' => 'Notifications',
+	'admin:security:settings:label:site_secret' => 'Site secret',
+	
+	'admin:security:settings:notify_admins' => 'Notify all site administrators when an admin is added or removed',
+	'admin:security:settings:notify_admins:help' => 'This will send out a notification to all site administrators that one of the admins added/removed a site administrator.',
+	
+	'admin:security:settings:notify_user_admin' => 'Notify the user when the admin role is added or removed',
+	'admin:security:settings:notify_user_admin:help' => 'This will send a notification to the user that the admin role was added to/removed from their account.',
+	
+	'admin:security:settings:notify_user_ban' => 'Notify the user when their account gets (un)banned',
+	'admin:security:settings:notify_user_ban:help' => 'This will send a notification to the user that their account was (un)banned.',
+	
+	'admin:security:settings:protect_upgrade' => 'Protect upgrade.php',
+	'admin:security:settings:protect_upgrade:help' => 'This will protect upgrade.php so you require a valid token or you\'ll have to be an administrator.',
+	'admin:security:settings:protect_upgrade:token' => 'In order to be able to use the upgrade.php when logged out or as a non admin, the following URL needs to be used:',
+	
+	'admin:security:settings:protect_cron' => 'Protect the /cron URLs',
+	'admin:security:settings:protect_cron:help' => 'This will protect the /cron URLs with a token, only if a valid token is provided will the cron execute.',
+	'admin:security:settings:protect_cron:token' => 'In order to be able to use the /cron URLs the following tokens needs to be used. Please note that each interval has its own token.',
+	'admin:security:settings:protect_cron:toggle' => 'Show/hide cron URLs',
+	
+	'admin:security:settings:disable_password_autocomplete' => 'Disable autocomplete on password fields',
+	'admin:security:settings:disable_password_autocomplete:help' => 'Data entered in these fields will be cached by the browser. An attacker who can access the victim\'s browser could steal this information. This is especially important if the application is commonly used in shared computers such as cyber cafes or airport terminals. If you disable this, password management tools can no longer autofill these fields. The support for the autocomplete attribute can be browser specific.',
+	
+	'admin:security:settings:email_require_password' => 'Require password to change email address',
+	'admin:security:settings:email_require_password:help' => 'When the user wishes to change their email address, require that they provide their current password.',
+	
+	'admin:security:settings:site_secret:intro' => 'Elgg uses a key to create security tokens for various purposes.',
+	'admin:security:settings:site_secret:regenerate' => "Regenerate site secret",
+	'admin:security:settings:site_secret:regenerate:help' => "Note: Regenerating your site secret may inconvenience some users by invalidating tokens used in \"remember me\" cookies, e-mail validation requests, invitation codes, etc.",
+	
+	'admin:site:secret:regenerated' => "Your site secret has been regenerated",
+	'admin:site:secret:prevented' => "The regeneration of the site secret was prevented",
+	
+	'admin:notification:make_admin:admin:subject' => 'A new site administrator was added to %s',
+	'admin:notification:make_admin:admin:body' => 'Hi %s,
+
+%s made %s a site administrator of %s.
+
+To view the profile of the new administrator, click here:
+%s
+
+To go to the site, click here:
+%s',
+	
+	'admin:notification:make_admin:user:subject' => 'You were added as a site administator of %s',
+	'admin:notification:make_admin:user:body' => 'Hi %s,
+
+%s made you a site administrator of %s.
+
+To go to the site, click here:
+%s',
+	'admin:notification:remove_admin:admin:subject' => 'A site administrator was removed from %s',
+	'admin:notification:remove_admin:admin:body' => 'Hi %s,
+
+%s removed %s as a site administrator of %s.
+
+To view the profile of the old administrator, click here:
+%s
+
+To go to the site, click here:
+%s',
+	
+	'admin:notification:remove_admin:user:subject' => 'You were removed as a site administator from %s',
+	'admin:notification:remove_admin:user:body' => 'Hi %s,
+
+%s removed you as site administrator of %s.
+
+To go to the site, click here:
+%s',
+	'user:notification:ban:subject' => 'Your account on %s was banned',
+	'user:notification:ban:body' => 'Hi %s,
+
+Your account on %s was banned.
+
+To go to the site, click here:
+%s',
+	
+	'user:notification:unban:subject' => 'Your account on %s is no longer banned',
+	'user:notification:unban:body' => 'Hi %s,
+
+Your account on %s is no longer banned. You can use the site again.
+
+To go to the site, click here:
+%s',
+	
 /**
  * Plugins
  */
@@ -634,7 +682,8 @@ three sections:
 	'plugins:settings:save:fail' => "There was a problem saving settings for the %s plugin.",
 	'plugins:usersettings:save:ok' => "User settings for the %s plugin were saved successfully.",
 	'plugins:usersettings:save:fail' => "There was a problem saving  user settings for the %s plugin.",
-	'item:object:plugin' => 'Plugins',
+	'item:object:plugin' => 'Plugin',
+	'collection:object:plugin' => 'Plugins',
 
 	'admin:plugins' => "Plugins",
 	'admin:plugins:activate_all' => 'Activate All',
@@ -668,6 +717,7 @@ three sections:
 	'admin:plugins:label:contributors:username' => 'Community username',
 	'admin:plugins:label:contributors:description' => 'Description',
 	'admin:plugins:label:dependencies' => 'Dependencies',
+	'admin:plugins:label:missing_dependency' => 'Missing dependency [%s].',
 
 	'admin:plugins:warning:unmet_dependencies' => 'This plugin has unmet dependencies and cannot be activated. Check dependencies under more info.',
 	'admin:plugins:warning:invalid' => 'This plugin is invalid: %s',
@@ -702,7 +752,7 @@ three sections:
 	'admin:statistics:description' => "This is an overview of statistics on your site. If you need more detailed statistics, a professional administration feature is available.",
 	'admin:statistics:opt:description' => "View statistical information about users and objects on your site.",
 	'admin:statistics:opt:linktext' => "View statistics...",
-	'admin:statistics:label:basic' => "Basic site statistics",
+	'admin:statistics:label:user' => "User statistics",
 	'admin:statistics:label:numentities' => "Entities on site",
 	'admin:statistics:label:numusers' => "Number of users",
 	'admin:statistics:label:numonline' => "Number of users online",
@@ -710,9 +760,12 @@ three sections:
 	'admin:statistics:label:admins'=>"Admins",
 	'admin:statistics:label:version' => "Elgg version",
 	'admin:statistics:label:version:release' => "Release",
-	'admin:statistics:label:version:version' => "Version",
+	'admin:statistics:label:version:version' => "Database Version",
+	'admin:statistics:label:version:code' => "Code Version",
 
+	'admin:server:label:elgg' => 'Elgg',
 	'admin:server:label:php' => 'PHP',
+	'admin:server:label:phpinfo' => 'Show PHPInfo',
 	'admin:server:label:web_server' => 'Web Server',
 	'admin:server:label:server' => 'Server',
 	'admin:server:label:log_location' => 'Log Location',
@@ -725,11 +778,17 @@ three sections:
 	'admin:server:label:post_max_size' => 'POST maximum size',
 	'admin:server:label:upload_max_filesize' => 'Upload maximum size',
 	'admin:server:warning:post_max_too_small' => '(Note: post_max_size must be larger than this value to support uploads of this size)',
-	'admin:server:label:memcache' => 'Memcache',
+	'admin:server:label:memcache' => 'Memcached',
 	'admin:server:memcache:inactive' => '
 		Memcache is not setup on this server or it has not yet been configured in Elgg config.
-		For improved performance, it is recommended that you enable and configure memcache.
-	',
+		For improved performance, it is recommended that you enable and configure memcache (or redis).
+',
+
+	'admin:server:label:redis' => 'Redis',
+	'admin:server:redis:inactive' => '
+		Redis is not setup on this server or it has not yet been configured in Elgg config.
+		For improved performance, it is recommended that you enable and configure redis (or memcached).
+',
 
 	'admin:user:label:search' => "Find users:",
 	'admin:user:label:searchbutton' => "Search",
@@ -753,7 +812,7 @@ three sections:
 	'admin:user:removeadmin:no' => "We could not remove administrator privileges from this user.",
 	'admin:user:self:removeadmin:no' => "You cannot remove your own administrator privileges.",
 
-	'admin:appearance:menu_items' => 'Menu Items',
+	'admin:configure_utilities:menu_items' => 'Menu Items',
 	'admin:menu_items:configure' => 'Configure main menu items',
 	'admin:menu_items:description' => 'Select which menu items you want to show as featured links.  Unused items will be added as "More" at the end of the list.',
 	'admin:menu_items:hide_toolbar_entries' => 'Remove links from tool bar menu?',
@@ -761,7 +820,7 @@ three sections:
 	'admin:add_menu_item' => 'Add a custom menu item',
 	'admin:add_menu_item:description' => 'Fill out the Display name and URL to add custom items to your navigation menu.',
 
-	'admin:appearance:default_widgets' => 'Default Widgets',
+	'admin:configure_utilities:default_widgets' => 'Default Widgets',
 	'admin:default_widgets:unknown_type' => 'Unknown widget type',
 	'admin:default_widgets:instructions' => 'Add, remove, position, and configure default widgets for the selected widget page.
 These changes will only affect new users on the site.',
@@ -789,7 +848,7 @@ These changes will only affect new users on the site.',
 	'usersettings:statistics' => "Your statistics",
 	'usersettings:statistics:opt:description' => "View statistical information about users and objects on your site.",
 	'usersettings:statistics:opt:linktext' => "Account statistics",
-	
+
 	'usersettings:statistics:login_history' => "Login History",
 	'usersettings:statistics:login_history:date' => "Date",
 	'usersettings:statistics:login_history:ip' => "IP Address",
@@ -824,12 +883,6 @@ These changes will only affect new users on the site.',
 	'river:comments:all' => 'View all %u comments',
 	'river:generic_comment' => 'commented on %s %s',
 
-	'friends:widget:description' => "Displays some of your friends.",
-	'friends:num_display' => "Number of friends to display",
-	'friends:icon_size' => "Icon size",
-	'friends:tiny' => "tiny",
-	'friends:small' => "small",
-
 /**
  * Icons
  */
@@ -847,6 +900,7 @@ These changes will only affect new users on the site.',
  */
 
 	'save' => "Save",
+	'save_go' => "Save, and go to %s",
 	'reset' => 'Reset',
 	'publish' => "Publish",
 	'cancel' => "Cancel",
@@ -897,6 +951,7 @@ These changes will only affect new users on the site.',
 	'create' => 'Create',
 	'remove' => 'Remove',
 	'revert' => 'Revert',
+	'validate' => 'Validate',
 
 	'site' => 'Site',
 	'activity' => 'Activity',
@@ -1007,15 +1062,15 @@ These changes will only affect new users on the site.',
 
 	'deleteconfirm' => "Are you sure you want to delete this item?",
 	'deleteconfirm:plural' => "Are you sure you want to delete these items?",
-	'fileexists' => "A file has already been uploaded. To replace it, select it below:",
+	'fileexists' => "A file has already been uploaded. To replace it, select a new one below",
+	'input:file:upload_limit' => 'Maximum allowed file size is %s',
 
 /**
  * User add
  */
 
 	'useradd:subject' => 'User account created',
-	'useradd:body' => '
-%s,
+	'useradd:body' => '%s,
 
 A user account has been created for you at %s. To log in, visit:
 
@@ -1026,8 +1081,7 @@ And log in with these user credentials:
 Username: %s
 Password: %s
 
-Once you have logged in, we highly recommend that you change your password.
-',
+Once you have logged in, we highly recommend that you change your password.',
 
 /**
  * System messages
@@ -1035,6 +1089,15 @@ Once you have logged in, we highly recommend that you change your password.
 
 	'systemmessages:dismiss' => "click to dismiss",
 
+
+/**
+ * Messages
+ */
+	'messages:title:success' => 'Success',
+	'messages:title:error' => 'Error',
+	'messages:title:warning' => 'Warning',
+	'messages:title:help' => 'Help',
+	'messages:title:notice' => 'Notice',
 
 /**
  * Import / export
@@ -1047,6 +1110,10 @@ Once you have logged in, we highly recommend that you change your password.
  * Time
  */
 
+	'input:date_format' => 'Y-m-d',
+	'input:date_format:datepicker' => 'yy-mm-dd', // jQuery UI datepicker format
+	'input:time_format' => 'g:ia',
+
 	'friendlytime:justnow' => "just now",
 	'friendlytime:minutes' => "%s minutes ago",
 	'friendlytime:minutes:singular' => "a minute ago",
@@ -1055,6 +1122,7 @@ Once you have logged in, we highly recommend that you change your password.
 	'friendlytime:days' => "%s days ago",
 	'friendlytime:days:singular' => "yesterday",
 	'friendlytime:date_format' => 'j F Y @ g:ia',
+	'friendlytime:date_format:short' => 'j M Y',
 
 	'friendlytime:future:minutes' => "in %s minutes",
 	'friendlytime:future:minutes:singular' => "in a minute",
@@ -1075,7 +1143,7 @@ Once you have logged in, we highly recommend that you change your password.
 	'date:month:10' => 'October %s',
 	'date:month:11' => 'November %s',
 	'date:month:12' => 'December %s',
-	
+
 	'date:month:short:01' => 'Jan %s',
 	'date:month:short:02' => 'Feb %s',
 	'date:month:short:03' => 'Mar %s',
@@ -1114,7 +1182,6 @@ Once you have logged in, we highly recommend that you change your password.
 	'interval:weekly' => 'Weekly',
 	'interval:monthly' => 'Monthly',
 	'interval:yearly' => 'Yearly',
-	'interval:reboot' => 'On reboot',
 
 /**
  * System settings
@@ -1122,6 +1189,7 @@ Once you have logged in, we highly recommend that you change your password.
 
 	'installation:sitename' => "The name of your site:",
 	'installation:sitedescription' => "Short description of your site (optional):",
+	'installation:sitedescription:help' => "With bundled plugins this appears only in the description meta tag for search engine results.",
 	'installation:wwwroot' => "The site URL:",
 	'installation:path' => "The full path of the Elgg installation:",
 	'installation:dataroot' => "The full path of the data directory:",
@@ -1137,9 +1205,9 @@ Once you have logged in, we highly recommend that you change your password.
 	'installation:debug:info' => 'Log everything',
 
 	// Walled Garden support
-	'installation:registration:description' => 'User registration is enabled by default. Turn this off if you do not want people to register on their own.',
-	'installation:registration:label' => 'Allow new users to register',
-	'installation:walled_garden:description' => 'Enable this to prevent non-members from viewing the site except for web pages marked as public (such as login and registration).',
+	'installation:registration:description' => 'If enabled, visitors can create their own user accounts.',
+	'installation:registration:label' => 'Allow visitors to register',
+	'installation:walled_garden:description' => 'If enabled, logged-out visitors can see only pages marked public (such as login and registration).',
 	'installation:walled_garden:label' => 'Restrict pages to logged-in users',
 
 	'installation:view' => "Enter the view which will be used as the default for your site or leave this blank for the default view (if in doubt, leave as default):",
@@ -1164,7 +1232,7 @@ Once you have logged in, we highly recommend that you change your password.
 	'installation:minify_js:label' => "Compress JavaScript (recommended)",
 	'installation:minify_css:label' => "Compress CSS (recommended)",
 
-	'installation:htaccess:needs_upgrade' => "You must update your .htaccess file so that the path is injected into the GET parameter __elgg_uri (you can use install/config/htaccess.dist as a guide).",
+	'installation:htaccess:needs_upgrade' => "You must update your .htaccess file (use install/config/htaccess.dist as a guide).",
 	'installation:htaccess:localhost:connectionfailed' => "Elgg cannot connect to itself to test rewrite rules properly. Check that curl is working and there are no IP restrictions preventing localhost connections.",
 
 	'installation:systemcache:description' => "The system cache decreases the loading time of Elgg by caching data to files.",
@@ -1175,26 +1243,32 @@ Once you have logged in, we highly recommend that you change your password.
 	'admin:legend:content_access' => 'Content Access',
 	'admin:legend:site_access' => 'Site Access',
 	'admin:legend:debug' => 'Debugging and Logging',
-
+	
+	'config:remove_branding:label' => "Remove Elgg branding",
+	'config:remove_branding:help' => "Throughout the site there are various links and logo's that show this site is made using Elgg. If you remove the branding consider donating on https://elgg.org/about/supporters",
+	'config:disable_rss:label' => "Disable RSS feeds",
+	'config:disable_rss:help' => "Disable this to no longer promote the availability of RSS feeds",
+	'config:friendly_time_number_of_days:label' => "Number of days friendly time is presented",
+	'config:friendly_time_number_of_days:help' => "You can configure how many days the friendly time notation is used. After the set amount of days the friendly time will change into a regular date format. Setting this to 0 will disable the friendly time format.",
+	
 	'upgrading' => 'Upgrading...',
 	'upgrade:core' => 'Your Elgg installation was upgraded.',
 	'upgrade:unlock' => 'Unlock upgrade',
 	'upgrade:unlock:confirm' => "The database is locked for another upgrade. Running concurrent upgrades is dangerous. You should only continue if you know there is not another upgrade running. Unlock?",
+	'upgrade:terminated' => 'Upgrade has been terminated by an event handler',
 	'upgrade:locked' => "Cannot upgrade. Another upgrade is running. To clear the upgrade lock, visit the Admin section.",
 	'upgrade:unlock:success' => "Upgrade unlocked successfully.",
 	'upgrade:unable_to_upgrade' => 'Unable to upgrade.',
-	'upgrade:unable_to_upgrade_info' =>
-		'This installation cannot be upgraded because legacy views
-		were detected in the Elgg core views directory. These views have been deprecated and need to be
-		removed for Elgg to function correctly. If you have not made changes to Elgg core, you can
-		simply delete the views directory and replace it with the one from the latest
-		package of Elgg downloaded from <a href="http://elgg.org">elgg.org</a>.<br /><br />
+	'upgrade:unable_to_upgrade_info' => 'This installation cannot be upgraded because legacy views
+were detected in the Elgg core views directory. These views have been deprecated and need to be
+removed for Elgg to function correctly. If you have not made changes to Elgg core, you can
+simply delete the views directory and replace it with the one from the latest
+package of Elgg downloaded from <a href="https://elgg.org">elgg.org</a>.<br /><br />
 
-		If you need detailed instructions, please visit the <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">
-		Upgrading Elgg documentation</a>.  If you require assistance, please post to the
-		<a href="http://community.elgg.org/pg/groups/discussion/">Community Support Forums</a>.',
+If you need detailed instructions, please visit the <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">
+Upgrading Elgg documentation</a>. If you require assistance, please post to the
+<a href="https://elgg.org/discussion/all">Community Support Forums</a>.',
 
-	'update:twitter_api:deactivated' => 'Twitter API (previously Twitter Service) was deactivated during the upgrade. Please activate it manually if required.',
 	'update:oauth_api:deactivated' => 'OAuth API (previously OAuth Lib) was deactivated during the upgrade.  Please activate it manually if required.',
 	'upgrade:site_secret_warning:moderate' => "You are encouraged to regenerate your site key to improve system security. See Configure &gt; Settings &gt; Advanced",
 	'upgrade:site_secret_warning:weak' => "You are strongly encouraged to regenerate your site key to improve system security. See Configure &gt; Settings &gt; Advanced",
@@ -1203,15 +1277,14 @@ Once you have logged in, we highly recommend that you change your password.
 
 	'admin:pending_upgrades' => 'The site has pending upgrades that require your immediate attention.',
 	'admin:view_upgrades' => 'View pending upgrades.',
-	'item:object:elgg_upgrade' => 'Site upgrades',
+	'item:object:elgg_upgrade' => 'Site upgrade',
+	'collection:object:elgg_upgrade' => 'Site upgrades',
 	'admin:upgrades:none' => 'Your installation is up to date!',
 
 	'upgrade:item_count' => 'There are <b>%s</b> items that need to be upgraded.',
 	'upgrade:warning' => '<b>Warning:</b> On a large site this upgrade may take a significantly long time!',
 	'upgrade:success_count' => 'Upgraded:',
-	'upgrade:error_count' => 'Errors:',
-	'upgrade:river_update_failed' => 'Failed to update the river entry for item id %s',
-	'upgrade:timestamp_update_failed' => 'Failed to update the timestamps for item id %s',
+	'upgrade:error_count' => 'Errors: %s',
 	'upgrade:finished' => 'Upgrade finished',
 	'upgrade:finished_with_errors' => '<p>Upgrade finished with errors. Refresh the page and try running the upgrade again.</p></p><br />If the error recurs, check the server error log for possible cause. You can seek help for fixing the error from the <a href="http://community.elgg.org/groups/profile/179063/elgg-technical-support">Technical support group</a> in the Elgg community.</p>',
 
@@ -1236,18 +1309,19 @@ Once you have logged in, we highly recommend that you change your password.
 
 	'email:settings' => "Email settings",
 	'email:address:label' => "Email address",
+	'email:address:password' => "Password",
+	'email:address:password:help' => "In order to be able to change your email address you need to provide your current password.",
 
-	'email:save:success' => "New email address saved. Verification is requested.",
+	'email:save:success' => "New email address saved.",
 	'email:save:fail' => "New email address could not be saved.",
+	'email:save:fail:password' => "The password doesn't match your current password, could not change your email address",
 
 	'friend:newfriend:subject' => "%s has made you a friend!",
 	'friend:newfriend:body' => "%s has made you a friend!
 
 To view their profile, click here:
 
-%s
-
-Please do not reply to this email.",
+%s",
 
 	'email:changepassword:subject' => "Password changed!",
 	'email:changepassword:body' => "Hi %s,
@@ -1262,12 +1336,11 @@ Your password has been reset to: %s",
 	'email:changereq:subject' => "Request for password change.",
 	'email:changereq:body' => "Hi %s,
 
-Somebody (from the IP address %s) has requested a password change for their account.
+Somebody (from the IP address %s) has requested a password change for this account.
 
 If you requested this, click on the link below. Otherwise ignore this email.
 
-%s
-",
+%s",
 
 /**
  * user default access
@@ -1283,9 +1356,10 @@ If you requested this, click on the link below. Otherwise ignore this email.
  */
 
 	'comments:count' => "%s comments",
-	'item:object:comment' => 'Comments',
+	'item:object:comment' => 'Comment',
+	'collection:object:comment' => 'Comments',
 
-	'river:comment:object:default' => '%s commented on %s',
+	'river:object:default:comment' => '%s commented on %s',
 
 	'generic_comments:add' => "Leave a comment",
 	'generic_comments:edit' => "Edit comment",
@@ -1294,33 +1368,39 @@ If you requested this, click on the link below. Otherwise ignore this email.
 	'generic_comments:latest' => "Latest comments",
 	'generic_comment:posted' => "Your comment was successfully posted.",
 	'generic_comment:updated' => "The comment was successfully updated.",
-	'generic_comment:deleted' => "The comment was successfully deleted.",
+	'entity:delete:object:comment:success' => "The comment was successfully deleted.",
 	'generic_comment:blank' => "Sorry, you need to actually put something in your comment before we can save it.",
 	'generic_comment:notfound' => "Sorry, we could not find the specified comment.",
 	'generic_comment:notfound_fallback' => "Sorry, we could not find the specified comment, but we've forwarded you to the page where it was left.",
-	'generic_comment:notdeleted' => "Sorry, we could not delete this comment.",
 	'generic_comment:failure' => "An unexpected error occurred when saving the comment.",
 	'generic_comment:none' => 'No comments',
 	'generic_comment:title' => 'Comment by %s',
 	'generic_comment:on' => '%s on %s',
 	'generic_comments:latest:posted' => 'posted a',
 
-	'generic_comment:email:subject' => 'You have a new comment!',
-	'generic_comment:email:body' => "You have a new comment on your item \"%s\" from %s. It reads:
-
+	'generic_comment:notification:owner:subject' => 'You have a new comment!',
+	'generic_comment:notification:owner:summary' => 'You have a new comment!',
+	'generic_comment:notification:owner:body' => "You have a new comment on your item \"%s\" from %s. It reads:
 
 %s
 
-
 To reply or view the original item, click here:
-
 %s
 
 To view %s's profile, click here:
+%s",
+	
+	'generic_comment:notification:user:subject' => 'A new comment on: %s',
+	'generic_comment:notification:user:summary' => 'A new comment on: %s',
+	'generic_comment:notification:user:body' => "A new comment was made on \"%s\" by %s. It reads:
 
 %s
 
-Please do not reply to this email.",
+To reply or view the original item, click here:
+%s
+
+To view %s's profile, click here:
+%s",
 
 /**
  * Entities
@@ -1328,7 +1408,6 @@ Please do not reply to this email.",
 
 	'byline' => 'By %s',
 	'byline:ingroup' => 'in the group %s',
-	'entity:default:strapline' => 'Created %s by %s',
 	'entity:default:missingsupport:popup' => 'This entity cannot be displayed correctly. This may be because it requires support provided by a plugin that is no longer installed.',
 
 	'entity:delete:item' => 'Item',
@@ -1531,4 +1610,21 @@ Please do not reply to this email.",
 
 	"field:required" => 'Required',
 
+	"core:upgrade:2017080900:title" => "Alter database encoding for multi-byte support",
+	"core:upgrade:2017080900:description" => "Alters database and table encoding to utf8mb4, in order to support multi-byte characters such as emoji",
+
+	"core:upgrade:2017080950:title" => "Update default security parameters",
+	"core:upgrade:2017080950:description" => "Installed Elgg version introduces additional security parameters. It is recommended that your run this upgrade to configure the defaults. You can later update these parameters in your site settings.",
+
+	"core:upgrade:2017121200:title" => "Create friends access collections",
+	"core:upgrade:2017121200:description" => "Migrates the friends access collection to an actual access collection",
+
+	"core:upgrade:2018041800:title" => "Activate new plugins",
+	"core:upgrade:2018041800:description" => "Certain core features have been extracted into plugins. This upgrade activates these plugins to maintain compatibility with third-party plugins that maybe dependant on these features",
+
+	"core:upgrade:2018041801:title" => "Delete old plugin entities",
+	"core:upgrade:2018041801:description" => "Deletes entities associated with plugins removed in Elgg 3.0",
+	
+	"core:upgrade:2018061401:title" => "Migrate cron log entries",
+	"core:upgrade:2018061401:description" => "Migrate the cron log entries in the database to the new location.",
 );

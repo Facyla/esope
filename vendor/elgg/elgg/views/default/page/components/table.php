@@ -23,7 +23,7 @@ use Elgg\Views\TableColumn;
  * @uses $vars['item_view']    Alternative view to render list items
  * @uses $vars['no_results']   Message to display if no results (string|Closure)
  */
-$items = $vars['items'];
+$items = elgg_extract('items', $vars);
 $count = elgg_extract('count', $vars);
 $pagination = elgg_extract('pagination', $vars, true);
 $position = elgg_extract('position', $vars, 'after');
@@ -34,7 +34,6 @@ $columns = elgg_extract('columns', $vars);
 /* @var TableColumn[] $columns */
 
 if (empty($columns) || !is_array($columns)) {
-	elgg_log('$vars["columns"] must be an array of ' . TableColumn::class, 'ERROR');
 	return;
 }
 
@@ -53,7 +52,7 @@ if (!is_array($items) || count($items) == 0) {
 $headings = '';
 foreach ($columns as $column) {
 	if (!$column instanceof TableColumn) {
-		elgg_log('$vars["columns"] must be an array of ' . TableColumn::class, 'ERROR');
+		elgg_log('$vars["columns"] must be an array of ' . TableColumn::class, 'NOTICE');
 		return;
 	}
 
@@ -65,22 +64,15 @@ foreach ($columns as $column) {
 }
 $headings = "<thead><tr>$headings</tr></thead>";
 
-$table_classes = ['elgg-list', 'elgg-table'];
-if (isset($vars['list_class'])) {
-	$table_classes[] = $vars['list_class'];
-}
+$table_classes = elgg_extract_class($vars, ['elgg-list', 'elgg-table'], 'list_class');
 
 $nav = ($pagination) ? elgg_view('navigation/pagination', $vars) : '';
 
 $rows = '';
 foreach ($items as $item) {
 	$row_attrs = [
-		'class' => ['elgg-item']
+		'class' => elgg_extract_class($vars, 'elgg-item', 'item_class'),
 	];
-
-	if (!empty($vars['item_class'])) {
-		$row_attrs['class'][] = $vars['item_class'];
-	}
 
 	$type = '';
 	$entity = null;
@@ -98,8 +90,7 @@ foreach ($items as $item) {
 		if ($subtype) {
 			$row_attrs['class'][] = "elgg-item-$type-$subtype";
 		}
-
-	} elseif (is_callable(array($item, 'getType'))) {
+	} elseif (is_callable([$item, 'getType'])) {
 		$type = $item->getType();
 
 		$row_attrs['id'] = "elgg-$type-{$item->id}";
@@ -109,7 +100,7 @@ foreach ($items as $item) {
 
 	$row = '';
 
-	foreach	($columns as $column) {
+	foreach ($columns as $column) {
 		$cell = trim($column->renderCell($item, $type, $vars));
 		if (!preg_match('~^<t[dh]~i', $cell)) {
 			$cell = "<td>$cell</td>";

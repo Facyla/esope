@@ -6,41 +6,37 @@
 echo elgg_view('elements/reset.css', $vars);
 echo elgg_view('elements/core.css', $vars);
 echo elgg_view('elements/helpers.css', $vars);
+echo elgg_view('elements/z-index.css', $vars);
 
 ?>
 /* <style> /**/
 
 body {
-	font-size: 80%;
-	font-family: "Lucida Grande", Arial, Tahoma, Verdana, sans-serif;
+	font-size: 90%;
 	line-height: 1.4em;
+	font-family: "Helvetica Neue", Helvetica, "Lucida Grande", Arial, sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
-	color: #666;
-    font-weight: bold;
+	color: #2d3047;
+	font-weight: bold;
 }
 h1 {
-	font-size: 2em;
+	font-size: 1.8em;
 	margin-bottom: 1em;
 }
 h3 {
-	font-size: 1.3em;
-	margin-bottom: 0.4em;
+	font-size: 1.5em;
+	line-height: 1.1em;
+	margin-bottom: 5px;
 }
 a {
 	color: #999;
 }
-p {
-	margin-bottom: 15px;
-}
-p:last-child {
-	margin-bottom: 0;
-}
-
 
 /* ***************************************
 	LAYOUT
 *************************************** */
+
 .elgg-body-maintenance {
 	margin: 100px auto 0 auto;
 	position: relative;
@@ -50,49 +46,43 @@ p:last-child {
 	position: absolute;
 	top: 0;
 	left: 0;
+
+	background-color: #FFF;
+	border: 1px solid #DEDEDE;
+	padding: 10px;
+
+	border-radius: 3px;
+	box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
 }
 .elgg-module-maintenance > .elgg-head {
-	height: 17px;
+	padding: 20px 20px 0 20px;
 }
 .elgg-module-maintenance > .elgg-body {
-	padding: 10px 20px;
+	padding: 0 20px;
 }
 .elgg-module-maintenance > .elgg-foot {
-	height: 17px;
+	padding: 0 20px 20px 20px;
 }
-.elgg-module-maintenance > .elgg-head {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/one_column_top.png"); ?>) no-repeat left top;
-}
-.elgg-module-maintenance > .elgg-body {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/one_column_middle.png"); ?>) repeat-y left top;
-}
-.elgg-module-maintenance > .elgg-foot {
-	background: url(<?= elgg_get_simplecache_url("walled_garden/one_column_bottom.png"); ?>) no-repeat left top;
-}
+
 .elgg-system-messages {
 	position: fixed;
-	top: 24px;
+	top: 32px;
 	right: 20px;
-	z-index: 2000;
+	max-width: 500px;
 }
-.elgg-system-messages li {
-	margin-top: 10px;
-}
-.elgg-system-messages li p {
-	margin: 0;
-}
+
 .elgg-output {
-	margin-bottom: 3em;
-}
-.elgg-module-maintenance-login {
-	font-size: 12px;
-	line-height: 1.4em;
-	width: 200px;
-	float: right;
-	margin: 0;
-	border: 1px solid #ccc;
-	padding: 5px;
+	font-size: 14px;
+	margin-top: 20px;
+	padding: 20px;
+	color: #B94A48;
+	background-color: #F8E8E8;
+	border: 1px solid #E5B7B5;
 	border-radius: 5px;
+	margin-bottom: 42px;
+}
+.elgg-form-login {
+	max-width: 470px;
 }
 
 /* ***************************************
@@ -118,10 +108,10 @@ p:last-child {
 	padding-left: .4em;
 }
 .elgg-output table {
-	border: 1px solid #ccc;
+	border: 1px solid #DCDCDC;
 }
 .elgg-output table td {
-	border: 1px solid #ccc;
+	border: 1px solid #DCDCDC;
 	padding: 3px 5px;
 }
 .elgg-output img {
@@ -132,9 +122,11 @@ p:last-child {
 /* ***************************************
 	Form Elements
 *************************************** */
+
 fieldset > div {
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 }
+
 fieldset > div:last-child {
 	margin-bottom: 0;
 }
@@ -144,14 +136,12 @@ label {
 	font-size: 110%;
 }
 input, textarea {
-	border: 1px solid #ccc;
+	border: 1px solid #DCDCDC;
 	color: #666;
-	font: 120% Arial, Helvetica, sans-serif;
-	padding: 5px;
+	font: 100% Arial, Helvetica, sans-serif;
+	padding: 7px 6px;
 	width: 100%;
-	border-radius: 5px;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
+	border-radius: 3px;
 	box-sizing: border-box;
 }
 
@@ -161,9 +151,8 @@ input[type=text]:focus,
 input[type=number]:focus,
 input[type=url]:focus,
 textarea:focus {
-	border: solid 1px #aaa;
-	background: #eee;
-	color:#333;
+	border: solid 1px #C2C2C2;
+	background: #e6e6ea;
 	/* We remove outlines from specific input types so we can leave the browser
 	   defaults (like glows) for everything else */
 	outline: 0 none;
@@ -183,20 +172,25 @@ input[type="number"] {
 	display: inline;
 	padding-right: 10px;
 }
+
+/* **************************
+	BUTTONS
+************************** */
 .elgg-button {
-	font-size: 14px;
-	font-weight: bold;
-	border-radius: 5px;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	color: #FFF;
 	width: auto;
-	padding: 2px 4px;
+	padding: 5px 12px;
 	cursor: pointer;
-	box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.40);
+
+	border-radius: 3px;
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);
 }
 .elgg-button-submit {
 	background-color: #666;
 	border-color: #555;
 	color: white;
-	text-shadow: 1px 1px 0px black;
+	text-shadow: none;
 	text-decoration: none;
 }
 .elgg-button-submit:hover {
@@ -204,24 +198,18 @@ input[type="number"] {
 	border-color: #222;
 }
 
+<?= elgg_view('elements/components/messages.css') ?>
+
 /* ***************************************
-	Messages
+	RESPONSIVE
 *************************************** */
-.elgg-message {
-	color: white;
-	display: block;
-	padding: 3px 10px;
-	opacity: 0.9;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
-	border-radius: 8px;
-	font-weight: bold;
-}
-.elgg-state-success {
-	background-color: black;
-}
-.elgg-state-error {
-	background-color: red;
-}
-.elgg-state-notice {
-	background-color: #4690D6;
+
+@media (max-width: 600px) {
+	.elgg-page-maintenance {
+		padding: 20px;
+	}
+	.elgg-body-maintenance {
+		margin: 40px auto 0;
+		width: auto;
+	}
 }

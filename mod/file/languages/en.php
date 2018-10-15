@@ -1,27 +1,22 @@
 <?php
 return array(
 
-	/**
-	 * Menu items and titles
-	 */
-	'file' => "Files",
-	'file:user' => "%s's files",
-	'file:friends' => "Friends' files",
-	'file:all' => "All site files",
-	'file:edit' => "Edit file",
+	'item:object:file' => 'File',
+	'collection:object:file' => 'Files',
+	'collection:object:file:all' => "All site files",
+	'collection:object:file:owner' => "%s's files",
+	'collection:object:file:friends' => "Friends' files",
+	'collection:object:file:group' => "Group files",
+	'add:object:file' => "Upload a file",
+	'edit:object:file' => "Edit file",
+
 	'file:more' => "More files",
 	'file:list' => "list view",
-	'file:group' => "Group files",
-	'file:gallery' => "gallery view",
-	'file:gallery_list' => "Gallery or list view",
+
 	'file:num_files' => "Number of files to display",
-	'file:user:gallery'=>'View %s gallery',
-	'file:upload' => "Upload a file",
 	'file:replace' => 'Replace file content (leave blank to not change file)',
 	'file:list:title' => "%s's %s %s",
 	'file:title:friends' => "Friends'",
-
-	'file:add' => 'Upload a file',
 
 	'file:file' => "File",
 
@@ -53,38 +48,26 @@ return array(
 	'file:widget' => "File widget",
 	'file:widget:description' => "Showcase your latest files",
 
-	'groups:enablefiles' => 'Enable group files',
+	'groups:tool:file' => 'Enable group files',
 
-	'file:delete:confirm' => "Are you sure you want to delete this file?",
-
-	'file:upload_limit' => 'Maximum allowed file size is %s',
-
-	'file:tagcloud' => "Tag cloud",
-
-	'file:display:number' => "Number of files to display",
-
-	'river:create:object:file' => '%s uploaded the file %s',
-	'river:comment:object:file' => '%s commented on the file %s',
-
-	'item:object:file' => 'Files',
+	'river:object:file:create' => '%s uploaded the file %s',
+	'river:object:file:comment' => '%s commented on the file %s',
 
 	'file:notify:summary' => 'New file called %s',
 	'file:notify:subject' => 'New file: %s',
-	'file:notify:body' =>
-'%s uploaded a new file: %s
+	'file:notify:body' => '%s uploaded a new file: %s
 
 %s
 
 View and comment on the file:
-%s
-',
+%s',
 
 	/**
 	 * Status messages
 	 */
 
-	'file:saved' => "Your file was successfully saved.",
-	'file:deleted' => "Your file was successfully deleted.",
+	'file:saved' => "The file was successfully saved.",
+	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages
@@ -92,9 +75,6 @@ View and comment on the file:
 
 	'file:none' => "No files.",
 	'file:uploadfailed' => "Sorry; we could not save your file.",
-	'file:downloadfailed' => "Sorry; this file is not available at this time.",
-	'file:deletefailed' => "Your file could not be deleted at this time.",
 	'file:noaccess' => "You do not have permissions to change this file",
 	'file:cannotload' => "There was an error uploading the file",
-	'file:nofile' => "You must select a file",
 );

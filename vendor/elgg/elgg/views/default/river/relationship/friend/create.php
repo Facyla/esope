@@ -2,19 +2,23 @@
 /**
  * Create friend river view
  */
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
+
+$item = elgg_extract('item', $vars);
+if (!$item instanceof ElggRiverItem) {
+	return;
+}
 
 $subject = $item->getSubjectEntity();
 $object = $item->getObjectEntity();
 
-$subject_icon = elgg_view_entity_icon($subject, 'tiny');
-$object_icon = elgg_view_entity_icon($object, 'tiny');
+if (!$subject instanceof ElggUser || !$object instanceof ElggUser) {
+	return;
+}
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $item,
-	'attachments' => $subject_icon . elgg_view_icon('arrow-right') . $object_icon,
+$subject_icon = elgg_view_entity_icon($subject, 'small');
+$object_icon = elgg_view_entity_icon($object, 'small');
 
-	// truthy value to bypass responses rendering
-	'responses' => ' ',
-));
+$vars['attachments'] = $subject_icon . elgg_view_icon('arrow-right') . $object_icon;
+$vars['responses'] = false;
+
+echo elgg_view('river/elements/layout', $vars);

@@ -4,64 +4,75 @@
  *
  * Includes functions for manipulating the configuration values stored in the database
  * Plugin authors should use the {@link elgg_get_config()}, {@link elgg_set_config()},
- * {@link elgg_save_config()}, and {@unset_config()} functions to access or update
+ * {@link elgg_save_config()}, and {@elgg_remove_config()} functions to access or update
  * config values.
  *
- * Elgg's configuration is split among 2 tables and 1 file:
+ * Elgg's configuration is split among 1 table and 1 file:
  * - dbprefix_config
- * - dbprefix_datalists
  * - engine/settings.php (See {@link settings.example.php})
  *
  * Upon system boot, all values in dbprefix_config are read into $CONFIG.
  */
 
-use Elgg\Filesystem\Directory;
+use Elgg\Project\Paths;
 
 /**
- * Get the URL for the current (or specified) site
+ * Get the URL for the current (or specified) site, ending with "/".
  *
- * @param int $site_guid The GUID of the site whose URL we want to grab
  * @return string
  * @since 1.8.0
  */
-function elgg_get_site_url($site_guid = 0) {
-	return _elgg_services()->config->getSiteUrl($site_guid);
+function elgg_get_site_url() {
+	return _elgg_config()->wwwroot;
 }
 
 /**
- * Get the plugin path for this installation
+ * Get the plugin path for this installation, ending with slash.
  *
  * @return string
  * @since 1.8.0
  */
 function elgg_get_plugins_path() {
-	return _elgg_services()->config->getPluginsPath();
+	return _elgg_services()->plugins->getPath();
 }
 
 /**
- * Get the data directory path for this installation
+ * Get the data directory path for this installation, ending with slash.
  *
  * @return string
  * @since 1.8.0
  */
 function elgg_get_data_path() {
-	return _elgg_services()->config->getDataPath();
+	return _elgg_config()->dataroot;
 }
 
 /**
- * Get the cache directory path for this installation.
+ * Get the cache directory path for this installation, ending with slash.
  *
- * If not set in settings.php, the data path will be returned.
+ * If not set in settings, the data path will be returned.
  *
  * @return string
  */
 function elgg_get_cache_path() {
-	return _elgg_services()->config->getCachePath();
+	$path = _elgg_config()->cacheroot ? : elgg_get_data_path() . 'caches/';
+	return Paths::sanitize($path);
 }
 
 /**
- * Get the root directory path for this installation
- * 
+ * Get the asset cache directory path for this installation, ending with slash.
+ *
+ * If not set in settings, the cache path will be returned.
+ *
+ * @return string
+ */
+function elgg_get_asset_path() {
+	$path = _elgg_config()->assetroot ? : elgg_get_cache_path() . 'views_simplecache/';
+	return Paths::sanitize($path);
+}
+
+/**
+ * Get the project path (where composer is installed), ending with slash.
+ *
  * Note: This is not the same as the Elgg root! In the Elgg 1.x series, Elgg
  * was always at the install root, but as of 2.0, Elgg can be installed as a
  * composer dependency, so you cannot assume that it the install root anymore.
@@ -70,39 +81,39 @@ function elgg_get_cache_path() {
  * @since 1.8.0
  */
 function elgg_get_root_path() {
-	return Directory\Local::root()->getPath('/');
+	return Paths::project();
 }
 
 /**
- * /path/to/elgg/engine
- * 
- * No trailing slash
- * 
+ * /path/to/elgg/engine with no trailing slash.
+ *
  * @return string
  */
 function elgg_get_engine_path() {
-	return dirname(__DIR__);
+	return Paths::elgg() . 'engine';
 }
 
 /**
  * Get an Elgg configuration value
  *
- * @param string $name      Name of the configuration value
- * @param int    $site_guid null for installation setting, 0 for default site
+ * @param string $name    Name of the configuration value
+ * @param mixed  $default (optional) default value if configuration value is not set
  *
- * @return mixed Configuration value or null if it does not exist
+ * @return mixed Configuration value or the default value if it does not exist
  * @since 1.8.0
  */
-function elgg_get_config($name, $site_guid = 0) {
-	if ($name === 'siteemail') {
-		$msg = 'The config value "siteemail" is deprecated. Use elgg_get_site_entity()->email';
-		elgg_deprecated_notice($msg, '2.1');
-	} else if ($name == 'icon_sizes') {
+function elgg_get_config($name, $default = null) {
+	if ($name == 'icon_sizes') {
 		$msg = 'The config value "icon_sizes" is deprecated. Use elgg_get_icon_sizes()';
 		elgg_deprecated_notice($msg, '2.2');
 	}
 
-	return _elgg_services()->config->get($name, $site_guid);
+	if (!_elgg_config()->hasValue($name)) {
+		elgg_log("Config value for '$name' is not set'", 'INFO');
+		return $default;
+	}
+
+	return _elgg_config()->$name;
 }
 
 /**
@@ -117,163 +128,62 @@ function elgg_get_config($name, $site_guid = 0) {
  * @since 1.8.0
  */
 function elgg_set_config($name, $value) {
-	return _elgg_services()->config->set($name, $value);
+	_elgg_config()->$name = $value;
 }
 
 /**
  * Save a configuration setting
  *
- * @param string $name      Configuration name (cannot be greater than 255 characters)
- * @param mixed  $value     Configuration value. Should be string for installation setting
- * @param int    $site_guid null for installation setting, 0 for default site
+ * @param string $name  Configuration name (cannot be greater than 255 characters)
+ * @param mixed  $value Configuration value. Should be string for installation setting
  *
  * @return bool
  * @since 1.8.0
  */
-function elgg_save_config($name, $value, $site_guid = 0) {
-	return _elgg_services()->config->save($name, $value, $site_guid);
-}
-
-/**
- * Get the value of a datalist element.
- * 
- * Plugin authors should use elgg_get_config() and pass null for the site GUID.
- *
- * @internal Datalists are stored in the datalist table.
- *
- * @tip Use datalists to store information common to a full installation.
- *
- * @param string $name The name of the datalist
- * @return string|null|false String if value exists, null if doesn't, false on error
- * @access private
- */
-function datalist_get($name) {
-	return _elgg_services()->datalist->get($name);
-}
-
-/**
- * Set the value for a datalist element.
- * 
- * Plugin authors should use elgg_save_config() and pass null for the site GUID.
- * 
- * @warning Names should be selected so as not to collide with the names for the
- * site config.
- * 
- * @warning Values set through datalist_set() are not available in $CONFIG until
- * next page load.
- *
- * @param string $name  The name of the datalist
- * @param string $value The new value
- *
- * @return bool
- * @access private
- */
-function datalist_set($name, $value) {
-	return _elgg_services()->datalist->set($name, $value);
-}
-
-/**
- * Run a function one time per installation.
- *
- * If you pass a timestamp as the second argument, it will run the function
- * only if (i) it has never been run before or (ii) the timestamp is >=
- * the last time it was run.
- *
- * @warning Functions are determined by their name.  If you change the name of a function
- * it will be run again.
- *
- * @tip Use $timelastupdatedcheck in your plugins init function to perform automated
- * upgrades.  Schedule a function to run once and pass the timestamp of the new release.
- * This will cause the run once function to be run on all installations.  To perform
- * additional upgrades, create new functions for each release.
- *
- * @warning The function name cannot be longer than 255 characters long due to
- * the current schema for the datalist table.
- *
- * @internal A datalist entry $functioname is created with the value of time().
- *
- * @param string $functionname         The name of the function you want to run.
- * @param int    $timelastupdatedcheck A UNIX timestamp. If time() is > than this,
- *                                     this function will be run again.
- *
- * @return bool
- * @todo deprecate
- */
-function run_function_once($functionname, $timelastupdatedcheck = 0) {
-	return _elgg_services()->datalist->runFunctionOnce($functionname, $timelastupdatedcheck);
+function elgg_save_config($name, $value) {
+	return _elgg_config()->save($name, $value);
 }
 
 /**
  * Removes a config setting.
  *
- * @note Internal: These settings are stored in the dbprefix_config table and read
- * during system boot into $CONFIG.
- *
- * @param string $name      The name of the field.
- * @param int    $site_guid Optionally, the GUID of the site (default: current site).
+ * @param string $name The name of the field.
  *
  * @return bool Success or failure
- *
- * @see get_config()
- * @see set_config()
  */
-function unset_config($name, $site_guid = 0) {
-	return _elgg_services()->configTable->remove($name, $site_guid);
+function elgg_remove_config($name) {
+	return _elgg_config()->remove($name);
 }
 
 /**
- * Add or update a config setting.
- * 
- * Plugin authors should use elgg_set_config().
+ * Get the Elgg config service
  *
- * If the config name already exists, it will be updated to the new value.
- *
- * @warning Names should be selected so as not to collide with the names for the
- * datalist (application configuration)
- * 
- * @internal These settings are stored in the dbprefix_config table and read 
- * during system boot into $CONFIG.
- * 
- * @internal The value is serialized so we maintain type information.
- *
- * @param string $name      The name of the configuration value
- * @param mixed  $value     Its value
- * @param int    $site_guid Optionally, the GUID of the site (current site is assumed by default)
- *
- * @return bool
- * @see unset_config()
- * @see get_config()
+ * @return \Elgg\Config
  * @access private
  */
-function set_config($name, $value, $site_guid = 0) {
-	return _elgg_services()->configTable->set($name, $value, $site_guid);
+function _elgg_config() {
+	$config = _elgg_services()->config;
+	if (!$config) {
+		throw new \RuntimeException(__FUNCTION__ . ' can not be called before an instance of ' . \Elgg\Application::class . ' is bootstrapped');
+	}
+
+	return $config;
 }
 
 /**
- * Gets a configuration value
- * 
- * Plugin authors should use elgg_get_config().
+ * Register unit tests
  *
- * @internal These settings are stored in the dbprefix_config table and read 
- * during system boot into $CONFIG.
+ * @param string $hook  'unit_test'
+ * @param string $type  'system'
+ * @param array  $tests current return value
  *
- * @param string $name      The name of the config value
- * @param int    $site_guid Optionally, the GUID of the site (default: current site)
+ * @return array
  *
- * @return mixed|null
- * @see set_config()
- * @see unset_config()
  * @access private
- */
-function get_config($name, $site_guid = 0) {
-	return _elgg_services()->configTable->get($name, $site_guid);
-}
-
-/**
- * @access private
+ * @codeCoverageIgnore
  */
 function _elgg_config_test($hook, $type, $tests) {
-	$tests[] = \Elgg\Application::elggDir()->getPath("engine/tests/ElggCoreConfigTest.php");
+	$tests[] = ElggCoreConfigTest::class;
 	return $tests;
 }
 
@@ -289,6 +199,9 @@ function elgg_get_icon_sizes($entity_type = null, $entity_subtype = null, $type 
 	return _elgg_services()->iconService->getSizes($entity_type, $entity_subtype, $type);
 }
 
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$hooks->registerHandler('unit_test', 'system', '_elgg_config_test');
 };

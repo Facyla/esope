@@ -7,8 +7,8 @@ namespace Elgg;
  * Note that the wrapper will not share the type of the wrapped object and will
  * fail type hints, instanceof, etc.
  *
- * This was introduced for deprecating passing particular variabled to views
- * automatically in elgg_view(). It also used to wrap the deprecated global $SESSION.
+ * This was introduced for deprecating passing particular variables to views
+ * automatically in elgg_view().
  * It can be removed once that use is no longer required.
  *
  * Wraps:
@@ -19,7 +19,7 @@ namespace Elgg;
  *  config object in ElggPlugin::includeFile
  *
  * @access private
- * 
+ *
  * @package Elgg.Core
  */
 class DeprecationWrapper implements \ArrayAccess {
@@ -40,7 +40,7 @@ class DeprecationWrapper implements \ArrayAccess {
 
 	/**
 	 * Create the wrapper
-	 * 
+	 *
 	 * @param mixed    $object   The object or string to wrap
 	 * @param string   $message  The deprecation message to display when used
 	 * @param string   $version  The Elgg version this was deprecated
@@ -59,7 +59,7 @@ class DeprecationWrapper implements \ArrayAccess {
 
 	/**
 	 * Get a property on the object
-	 * 
+	 *
 	 * @param string $name Property name
 	 * @return mixed
 	 */
@@ -70,7 +70,7 @@ class DeprecationWrapper implements \ArrayAccess {
 
 	/**
 	 * Set a property on the object
-	 * 
+	 *
 	 * @param string $name  Property name
 	 * @param mixed  $value Property value
 	 * @return void
@@ -81,20 +81,31 @@ class DeprecationWrapper implements \ArrayAccess {
 	}
 
 	/**
+	 * Is a property set?
+	 *
+	 * @param string $name Property name
+	 * @return bool
+	 */
+	public function __isset($name) {
+		$this->displayWarning();
+		return isset($this->object->$name);
+	}
+
+	/**
 	 * Call a method on the object
-	 * 
+	 *
 	 * @param string $name      Method name
 	 * @param array  $arguments Method arguments
 	 * @return mixed
 	 */
 	public function __call($name, $arguments) {
 		$this->displayWarning();
-		return call_user_func_array(array($this->object, $name), $arguments);
+		return call_user_func_array([$this->object, $name], $arguments);
 	}
 
 	/**
 	 * Get the object as string
-	 * 
+	 *
 	 * @return string
 	 */
 	public function __toString() {
@@ -108,7 +119,7 @@ class DeprecationWrapper implements \ArrayAccess {
 
 	/**
 	 * Display a warning
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function displayWarning() {

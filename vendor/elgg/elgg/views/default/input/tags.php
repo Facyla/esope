@@ -11,22 +11,22 @@
 
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-tags');
 
-$defaults = array(
+$defaults = [
 	'value' => '',
 	'disabled' => false,
 	'autocapitalize' => 'off',
 	'type' => 'text'
-);
+];
 
 if (isset($vars['entity'])) {
-	$defaults['value'] = $vars['entity']->tags;
+	$defaults['value'] = elgg_extract('entity', $vars)->tags;
 	unset($vars['entity']);
 }
 
 $vars = array_merge($defaults, $vars);
 
 if (is_array($vars['value'])) {
-	$tags = array();
+	$tags = [];
 
 	foreach ($vars['value'] as $tag) {
 		if (is_string($tag)) {

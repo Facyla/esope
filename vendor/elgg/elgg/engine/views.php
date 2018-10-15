@@ -11,36 +11,37 @@ return [
 		 */
 		"jquery.js" => "vendor/bower-asset/jquery/dist/jquery.min.js",
 		"jquery.min.map" => "vendor/bower-asset/jquery/dist/jquery.min.map",
-		"jquery-migrate.js" => "vendor/bower-asset/jquery-migrate/jquery-migrate.min.js",
 		"jquery-ui.js" => "vendor/bower-asset/jquery-ui/jquery-ui.min.js",
 
 		"jquery.form.js" => "vendor/bower-asset/jquery-form/jquery.form.js",
 		"jquery.colorbox.js" => "vendor/bower-asset/jquery-colorbox/jquery.colorbox-min.js",
 		"require.js" => "vendor/bower-asset/requirejs/require.js",
 		"text.js" => "vendor/bower-asset/text/text.js",
+		"sprintf.js" => "vendor/bower-asset/sprintf/src/sprintf.js",
 		
+		"jquery.imgareaselect.css" => "vendor/bower-asset/jquery.imgareaselect/distfiles/css/imgareaselect-deprecated.css",
+		"jquery.imgareaselect.js" => "vendor/bower-asset/jquery.imgareaselect/jquery.imgareaselect.dev.js",
+
+		"jquery-treeview/" => "vendor/bower-asset/jquery-treeview/",
+
 		// need to use some folder structure, because FontAwesome includes fonts relative to css
-		"font-awesome/css/font-awesome.css" => "vendor/fortawesome/font-awesome/css/font-awesome.min.css",
-		"font-awesome/fonts/" => "vendor/fortawesome/font-awesome/fonts",
-
-		/**
-		 * __DIR__ should be utilized when referring to assets that are checked in to version control.
-		 */
-		"/" => dirname(__DIR__) . "/_graphics",
-
-		"elgg/ui.avatar_cropper.js" => dirname(__DIR__) . "/js/lib/ui.avatar_cropper.js",
-		"elgg/ui.friends_picker.js" => dirname(__DIR__) . "/js/lib/ui.friends_picker.js",
-
-		// @deprecated 2.2
-		"elgg/ui.river.js" => dirname(__DIR__) . "/js/lib/ui.river.js",
+		"font-awesome/css/font-awesome.css" => "vendor/bower-asset/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css",
+		"font-awesome/webfonts/" => "vendor/bower-asset/fontawesome/web-fonts-with-css/webfonts/",
 
 		// For datepicker. More info in the jquery-ui.js view
 		"jquery-ui/i18n/" => "vendor/bower-asset/jquery-ui/ui/minified/i18n",
 
-		"jquery.imgareaselect.css" => dirname(__DIR__) . "/bower_components/jquery-imgareaselect/distfiles/css/imgareaselect-deprecated.css",
-		"jquery.imgareaselect.js" => dirname(__DIR__) . "/bower_components/jquery-imgareaselect/jquery.imgareaselect.dev.js",
-		"jquery.jeditable.js" => dirname(__DIR__) . "/bower_components/jquery-jeditable/jquery.jeditable.js",
+		/**
+		 * __DIR__ should be utilized when referring to assets that are checked in to version control.
+		 */
+
 		"jquery.ui.autocomplete.html.js" => dirname(__DIR__) . "/bower_components/jquery-ui-extensions/src/autocomplete/jquery.ui.autocomplete.html.js",
-		"sprintf.js" => dirname(__DIR__) . "/bower_components/sprintf/src/sprintf.js",
+
+		// CSS Reset
+		"normalize.css" => "vendor/bower-asset/normalize-css/normalize.css",
+
+		// Polyfills
+		"weakmap-polyfill.js" => "vendor/npm-asset/weakmap-polyfill/weakmap-polyfill.min.js",
+		"formdata-polyfill.js" => "vendor/npm-asset/formdata-polyfill/formdata.min.js",
 	],
 ];

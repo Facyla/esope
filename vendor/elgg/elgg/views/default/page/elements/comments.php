@@ -7,40 +7,91 @@
  * @uses $vars['id']            Optional id for the div
  * @uses $vars['class']         Optional additional class for the div
  * @uses $vars['limit']         Optional limit value (default is 25)
- *
- * @todo look into restructuring this so we are not calling elgg_list_entities()
- * in this view
  */
 
-$show_add_form = elgg_extract('show_add_form', $vars, true);
-$full_view = elgg_extract('full_view', $vars, true);
-$limit = elgg_extract('limit', $vars, get_input('limit', 0));
-if (!$limit) {
-	$limit = elgg_trigger_plugin_hook('config', 'comments_per_page', [], 25);
+use Elgg\Database\QueryBuilder;
+use Elgg\Database\Clauses\OrderByClause;
+
+$entity = elgg_extract('entity', $vars);
+if (!$entity instanceof \ElggEntity) {
+	return;
 }
 
-$attr = [
+$show_add_form = elgg_extract('show_add_form', $vars, true);
+
+$latest_first = elgg_comments_are_latest_first($entity);
+
+$limit = elgg_extract('limit', $vars, get_input('limit', 0));
+if (!$limit) {
+	$limit = elgg_comments_per_page($entity);
+}
+
+$module_vars = [
 	'id' => elgg_extract('id', $vars, 'comments'),
 	'class' => elgg_extract_class($vars, 'elgg-comments'),
 ];
 
-// work around for deprecation code in elgg_view()
-unset($vars['internalid']);
-
-$content = elgg_list_entities(array(
+$options = [
 	'type' => 'object',
 	'subtype' => 'comment',
-	'container_guid' => $vars['entity']->guid,
-	'reverse_order_by' => true,
+	'container_guid' => $entity->guid,
 	'full_view' => true,
 	'limit' => $limit,
 	'preload_owners' => true,
 	'distinct' => false,
-	'url_fragment' => $attr['id'],
-));
+	'url_fragment' => $module_vars['id'],
+	'order_by' => [new OrderByClause('e.guid', $latest_first ? 'DESC' : 'ASC')],
+	'list_class' => 'comments-list',
+];
 
-if ($show_add_form) {
-	$content .= elgg_view_form('comment/save', array(), $vars);
+$show_guid = (int) elgg_extract('show_guid', $vars);
+if ($show_guid && $limit) {
+	// show the offset that includes the comment
+	// this won't work with threaded comments, but core doesn't support that yet
+	$operator = $latest_first ? '>' : '<';
+	$condition = function(QueryBuilder $qb) use ($show_guid, $operator) {
+		return $qb->compare('e.guid', $operator, $show_guid, ELGG_VALUE_INTEGER);
+	};
+	$count = elgg_get_entities([
+		'type' => 'object',
+		'subtype' => 'comment',
+		'container_guid' => $entity->guid,
+		'count' => true,
+		'wheres' => [$condition],
+	]);
+	$options['offset'] = (int) floor($count / $limit) * $limit;
 }
 
-echo elgg_format_element('div', $attr, $content);
+$comments_list = elgg_list_entities($options);
+
+$content = '';
+if ($show_add_form && $entity->canComment()) {
+	$form_vars = [];
+	if ($comments_list) {
+		$form_vars['class'] = 'hidden';
+		
+		$module_vars['menu'] = elgg_view_menu('comments', [
+			'items' => [
+				[
+					'name' => 'add',
+					'text' => elgg_echo('generic_comments:add'),
+					'href' => false,
+					'icon' => 'plus',
+					'class' => ['elgg-button', 'elgg-button-action'],
+					'rel' => 'toggle',
+					'data-toggle-selector' => '.elgg-form-comment-save',
+				],
+			],
+		]);
+	}
+	
+	$content .= elgg_view_form('comment/save', $form_vars, $vars);
+}
+
+$content .= $comments_list;
+
+if (empty($content)) {
+	return;
+}
+
+echo elgg_view_module('comments', elgg_echo('comments'), $content, $module_vars);

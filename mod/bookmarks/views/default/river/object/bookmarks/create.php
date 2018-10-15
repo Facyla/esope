@@ -5,14 +5,13 @@
  * @package Bookmarks
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
+$item = elgg_extract('item', $vars);
+if (!$item instanceof ElggRiverItem) {
+	return;
+}
 
 $object = $item->getObjectEntity();
-$excerpt = elgg_get_excerpt($object->description);
+$vars['message'] = elgg_get_excerpt($object->description);
+$vars['attachments'] = elgg_view('output/url', ['href' => $object->address]);
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $item,
-	'message' => $excerpt,
-	'attachments' => elgg_view('output/url', array('href' => $object->address)),
-));
+echo elgg_view('river/elements/layout', $vars);

@@ -5,23 +5,21 @@ return array(
 	 * Menu items and titles
 	 */
 
-	'pages' => "Pages",
-	'pages:owner' => "%s's pages",
-	'pages:friends' => "Friends' pages",
-	'pages:all' => "All site pages",
-	'pages:add' => "Add a page",
+	'item:object:page' => 'Page',
+	'collection:object:page' => 'Pages',
+	'collection:object:page:all' => "All site pages",
+	'collection:object:page:owner' => "%s's pages",
+	'collection:object:page:friends' => "Friends' pages",
+	'collection:object:page:group' => "Group pages",
+	'add:object:page' => "Add a page",
+	'edit:object:page' => "Edit this page",
 
-	'pages:group' => "Group pages",
-	'groups:enablepages' => 'Enable group pages',
+	'groups:tool:pages' => 'Enable group pages',
 
-	'pages:new' => "A new page",
-	'pages:edit' => "Edit this page",
 	'pages:delete' => "Delete this page",
 	'pages:history' => "History",
 	'pages:view' => "View page",
 	'pages:revision' => "Revision",
-	'pages:current_revision' => "Current Revision",
-	'pages:revert' => "Revert",
 
 	'pages:navigation' => "Navigation",
 
@@ -33,11 +31,8 @@ return array(
 %s
 
 View and comment on the page:
-%s
-',
-	'item:object:page_top' => 'Top-level pages',
-	'item:object:page' => 'Pages',
-	'pages:nogroup' => 'This group does not have any pages yet',
+%s',
+
 	'pages:more' => 'More pages',
 	'pages:none' => 'No pages created yet',
 
@@ -45,13 +40,10 @@ View and comment on the page:
 	* River
 	**/
 
-	'river:create:object:page' => '%s created a page %s',
-	'river:create:object:page_top' => '%s created a page %s',
-	'river:update:object:page' => '%s updated a page %s',
-	'river:update:object:page_top' => '%s updated a page %s',
-	'river:comment:object:page' => '%s commented on a page titled %s',
-	'river:comment:object:page_top' => '%s commented on a page titled %s',
-
+	'river:object:page:create' => '%s created a page %s',
+	'river:object:page:update' => '%s updated a page %s',
+	'river:object:page:comment' => '%s commented on a page titled %s',
+	
 	/**
 	 * Form fields
 	 */
@@ -66,21 +58,13 @@ View and comment on the page:
 	/**
 	 * Status and error messages
 	 */
-	'pages:noaccess' => 'No access to page',
 	'pages:cantedit' => 'You cannot edit this page',
 	'pages:saved' => 'Page saved',
 	'pages:notsaved' => 'Page could not be saved',
 	'pages:error:no_title' => 'You must specify a title for this page.',
-	'pages:delete:success' => 'The page was successfully deleted.',
-	'pages:delete:failure' => 'The page could not be deleted.',
+	'entity:delete:object:page:success' => 'The page was successfully deleted.',
 	'pages:revision:delete:success' => 'The page revision was successfully deleted.',
 	'pages:revision:delete:failure' => 'The page revision could not be deleted.',
-	'pages:revision:not_found' => 'Cannot find this revision.',
-
-	/**
-	 * Page
-	 */
-	'pages:strapline' => 'Last updated %s by %s',
 
 	/**
 	 * History
@@ -92,7 +76,8 @@ View and comment on the page:
 	 **/
 
 	'pages:num' => 'Number of pages to display',
-	'pages:widget:description' => "This is a list of your pages.",
+	'widgets:pages:name' => 'Pages',
+	'widgets:pages:description' => "This is a list of your pages.",
 
 	/**
 	 * Submenu items
@@ -101,13 +86,14 @@ View and comment on the page:
 	'pages:label:edit' => "Edit page",
 	'pages:label:history' => "Page history",
 
-	/**
-	 * Sidebar items
-	 */
-	'pages:sidebar:this' => "This page",
-	'pages:sidebar:children' => "Sub-pages",
-	'pages:sidebar:parent' => "Parent",
-
 	'pages:newchild' => "Create a sub-page",
-	'pages:backtoparent' => "Back to '%s'",
+	
+	/**
+	 * Upgrades
+	 */
+	'pages:upgrade:2017110700:title' => "Migrate page_top to page entities",
+	'pages:upgrade:2017110700:description' => "Changes the subtype of all top pages to 'page' and sets metadata to ensure correct listing.",
+	
+	'pages:upgrade:2017110701:title' => "Migrate page_top river entries",
+	'pages:upgrade:2017110701:description' => "Changes the subtype of all river items for top pages to 'page'.",
 );

@@ -1,15 +1,14 @@
 List of events in core
 ######################
 
+For more information on how events work visit :doc:`/design/events`.
+
 .. contents:: Contents
    :local:
    :depth: 1
 
 System events
 =============
-
-**boot, system**
-    First event triggered. Triggered before plugins have been loaded.
 
 **plugins_boot, system**
     Triggered just after the plugins are loaded. Rarely used. init, system is used instead.
@@ -20,10 +19,6 @@ System events
 **ready, system**
 	Triggered after the ``init, system`` event. All plugins are fully loaded and the engine is ready
 	to serve pages.
-
-**pagesetup, system** (deprecated in 2.3)
-    Called just before the first content is produced. Is triggered by ``elgg_view()``.
-    Use the menu or page shell hooks instead.
 
 **shutdown, system**
     Triggered after the page has been sent to the user. Expensive operations could be done here
@@ -44,17 +39,12 @@ System events
     Triggered after the site secret has been regenerated.
 
 **log, systemlog**
-	Called for all triggered events. Used internally by ``system_log_default_logger()`` to populate
-	the ``system_log`` table.
+	Called for all triggered events by ``system_log`` plugin.
+	Used internally by ``system_log_default_logger()`` to populate the ``system_log`` table.
 
 **upgrade, system**
 	Triggered after a system upgrade has finished. All upgrade scripts have run, but the caches 
 	are not cleared.
-
-**upgrade, upgrade**
-	A single upgrade script finished executing. Handlers are passed a ``stdClass`` object with the properties
-		* from - The version of Elgg upgrading from.
-		* to - The version just upgraded to.
 
 **activate, plugin**
     Return false to prevent activation of the plugin.
@@ -73,6 +63,9 @@ System events
 
 **send:after, http_response**
     Triggered after an HTTP response is sent. Handlers will receive an instance of `\Symfony\Component\HttpFoundation\Response` that was sent to the requester.
+
+**reload:after, translations**
+    Triggered after the translations are (re)loaded.
 
 User events
 ===========
@@ -93,6 +86,12 @@ User events
     When a user registers, the user's account is disabled. This event is triggered
     to allow a plugin to determine how the user should be validated (for example,
     through an email with a validation link).
+
+**validate:after, user**
+    Triggered when user's account has been validated.
+
+**invalidate:after, user**
+    Triggered when user's account validation has been revoked.
 
 **profileupdate, user**
     User has changed profile
@@ -118,9 +117,6 @@ Relationship events
 **create, relationship**
     Triggered after a relationship has been created. Returning false deletes
     the relationship that was just created.
-
-.. note:: This event was broken in Elgg 1.9 - 1.12.3, returning false would *not*
-   delete the relationship.  This is working as of 1.12.4
 
 **delete, relationship**
     Triggered before a relationship is deleted. Return false to prevent it

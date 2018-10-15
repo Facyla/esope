@@ -5,51 +5,45 @@
  * @package ElggPages
  */
 
-$annotation = $vars['annotation'];
-$page = get_entity($annotation->entity_guid);
-if (!pages_is_page($page)) {
+$annotation = elgg_extract('annotation', $vars);
+if (!($annotation instanceof \ElggAnnotation)) {
 	return;
 }
 
-$icon = elgg_view("pages/icon", array(
-	'annotation' => $annotation,
-	'size' => 'small',
-));
-
-$owner_guid = $annotation->owner_guid;
-$owner = get_entity($owner_guid);
-if (!$owner) {
+$page = $annotation->getEntity();
+if (!$page instanceof ElggPage) {
 	return;
 }
-$owner_link = elgg_view('output/url', array(
+
+$owner = $annotation->getOwnerEntity();
+if (!$owner instanceof ElggEntity) {
+	return;
+}
+$icon = elgg_view_entity_icon($owner, 'small');
+
+$owner_link = elgg_view('output/url', [
 	'href' => $owner->getURL(),
-	'text' => $owner->name,
+	'text' => $owner->getDisplayName(),
 	'is_trusted' => true,
-));
+]);
 
 $date = elgg_view_friendly_time($annotation->time_created);
 
-$title_link = elgg_view('output/url', array(
+$title_link = elgg_view('output/url', [
 	'href' => $annotation->getURL(),
-	'text' => $page->title,
+	'text' => $page->getDisplayName(),
 	'is_trusted' => true,
-));
+]);
 
-$subtitle = elgg_echo('pages:revision:subtitle', array($date, $owner_link));
-
-$body = <<< HTML
-<h3>$title_link</h3>
-<p class="elgg-subtext">$subtitle</p>
-HTML;
+$subtitle = elgg_echo('pages:revision:subtitle', [$date, $owner_link]);
 
 $menu = '';
 if (!elgg_in_context('widgets')) {
 	// only show annotation menu outside of widgets
-	$menu = elgg_view_menu('annotation', array(
+	$menu = elgg_view_menu('annotation', [
 		'annotation' => $annotation,
-		'sort_by' => 'priority',
 		'class' => 'elgg-menu-hz float-alt',
-	));
+	]);
 }
 
 $body = <<<HTML

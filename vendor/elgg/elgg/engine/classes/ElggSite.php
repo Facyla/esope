@@ -4,174 +4,72 @@
  *
  * \ElggSite represents a single site entity.
  *
- * An \ElggSite object is an \ElggEntity child class with the subtype
- * of "site."  It is created upon installation and holds information about a site:
+ * An \ElggSite object is an \ElggEntity child class with the subtype of "site."
+ * It is created upon installation and holds information about a site:
  *  - name
  *  - description
  *  - url
  *
  * Every \ElggEntity belongs to a site.
  *
- * @note Internal: \ElggSite represents a single row from the sites_entity
- * table, as well as the corresponding \ElggEntity row from the entities table.
+ * @note Internal: \ElggSite represents a single row from the entities table.
  *
- * @warning Multiple site support isn't fully developed.
- *
- * @package    Elgg.Core
- * @subpackage DataMode.Site
  * @link       http://learn.elgg.org/en/stable/design/database.html
  *
- * @property string $name        The name or title of the website
- * @property string $description A motto, mission statement, or description of the website
- * @property string $url         The root web address for the site, including trailing slash
+ * @property      string $name        The name or title of the website
+ * @property      string $description A motto, mission statement, or description of the website
+ * @property-read string $url         The root web address for the site, including trailing slash
  */
 class ElggSite extends \ElggEntity {
 
 	/**
-	 * Initialize the attributes array.
-	 * This is vital to distinguish between metadata and base attributes.
-	 *
-	 * @return void
+	 * {@inheritdoc}
 	 */
 	protected function initializeAttributes() {
-		parent::initializeAttributes();
+		ElggData::initializeAttributes();
 
-		$this->attributes['type'] = "site";
-		$this->attributes += self::getExternalAttributes();
+		$this->attributes['guid'] = null;
+		$this->attributes['type'] = 'site';
+		$this->attributes['subtype'] = 'site';
+
+		$this->attributes['owner_guid'] = 0;
+		$this->attributes['container_guid'] = 0;
+
+		$this->attributes['access_id'] = ACCESS_PUBLIC;
+		$this->attributes['time_updated'] = null;
+		$this->attributes['last_action'] = null;
+		$this->attributes['enabled'] = "yes";
 	}
 
 	/**
-	 * Get default values for attributes stored in a separate table
-	 *
-	 * @return array
-	 * @access private
-	 *
-	 * @see \Elgg\Database\EntityTable::getEntities
+	 * {@inheritdoc}
 	 */
-	final public static function getExternalAttributes() {
-		return [
-			'name' => null,
-			'description' => null,
-			'url' => null,
-		];
+	public function getType() {
+		return 'site';
 	}
 
 	/**
-	 * Create a new \ElggSite.
-	 *
-	 * Plugin developers should only use the constructor to create a new entity.
-	 * To retrieve entities, use get_entity() and the elgg_get_entities* functions.
-	 *
-	 * @param \stdClass $row Database row result. Default is null to create a new site.
-	 *
-	 * @throws IOException If cannot load remaining data from db
-	 * @throws InvalidParameterException If not passed a db result
+	 * {@inheritdoc}
 	 */
-	public function __construct($row = null) {
-		$this->initializeAttributes();
+	public function save() {
+		$db = $this->getDatabase();
+		$qb = \Elgg\Database\Select::fromTable('entities', 'e');
+		$qb->select('e.*')
+			->where($qb->compare('e.type', '=', 'site', ELGG_VALUE_STRING));
 
-		if (!empty($row)) {
-			// Is $row is a DB entity table row
-			if ($row instanceof \stdClass) {
-				// Load the rest
-				if (!$this->load($row)) {
-					$msg = "Failed to load new " . get_class() . " for GUID:" . $row->guid;
-					throw new \IOException($msg);
-				}
-			} else if (strpos($row, "http") !== false) {
-				// url so retrieve by url
-				elgg_deprecated_notice("Passing URL to constructor is deprecated. Use get_site_by_url()", 1.9);
-				$row = get_site_by_url($row);
-				foreach ($row->attributes as $key => $value) {
-					$this->attributes[$key] = $value;
-				}
-			} else if (is_numeric($row)) {
-				// $row is a GUID so load
-				elgg_deprecated_notice('Passing a GUID to constructor is deprecated. Use get_entity()', 1.9);
-				if (!$this->load($row)) {
-					throw new \IOException("Failed to load new " . get_class() . " from GUID:" . $row);
-				}
-			} else {
-				throw new \InvalidParameterException("Unrecognized value passed to constuctor.");
+		$row = $db->getDataRow($qb);
+
+		if ($row) {
+			if ($row->guid == $this->attributes['guid']) {
+				// can save active site
+				return parent::save();
 			}
-		}
-	}
 
-	/**
-	 * Loads the full \ElggSite when given a guid.
-	 *
-	 * @param mixed $guid GUID of \ElggSite entity or database row object
-	 *
-	 * @return bool
-	 * @throws InvalidClassException
-	 */
-	protected function load($guid) {
-		$attr_loader = new \Elgg\AttributeLoader(get_class(), 'site', $this->attributes);
-		$attr_loader->requires_access_control = !($this instanceof \ElggPlugin);
-		$attr_loader->secondary_loader = 'get_site_entity_as_row';
-
-		$attrs = $attr_loader->getRequiredAttributes($guid);
-		if (!$attrs) {
+			_elgg_services()->logger->error('More than 1 site entity cannot be created.');
 			return false;
 		}
 
-		$this->attributes = $attrs;
-		$this->loadAdditionalSelectValues($attr_loader->getAdditionalSelectValues());
-		_elgg_services()->entityCache->set($this);
-
-		return true;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function create() {
-		global $CONFIG;
-
-		$guid = parent::create();
-
-		$name = sanitize_string($this->attributes['name']);
-		$description = sanitize_string($this->attributes['description']);
-		$url = sanitize_string($this->attributes['url']);
-
-		$query = "INSERT into {$CONFIG->dbprefix}sites_entity
-			(guid, name, description, url) values ($guid, '$name', '$description', '$url')";
-
-		$result = $this->getDatabase()->insertData($query);
-		if ($result === false) {
-			// TODO(evan): Throw an exception here?
-			return false;
-		}
-
-		// make sure the site guid is set to self if not already set
-		if (!$this->site_guid) {
-			$this->site_guid = $guid;
-			$this->getDatabase()->updateData("UPDATE {$CONFIG->dbprefix}entities
-				SET site_guid = $guid WHERE guid = $guid");
-		}
-
-		return $guid;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function update() {
-		global $CONFIG;
-
-		if (!parent::update()) {
-			return false;
-		}
-
-		$guid = (int)$this->guid;
-		$name = sanitize_string($this->name);
-		$description = sanitize_string($this->description);
-		$url = sanitize_string($this->url);
-
-		$query = "UPDATE {$CONFIG->dbprefix}sites_entity
-			SET name='$name', description='$description', url='$url' WHERE guid=$guid";
-
-		return $this->getDatabase()->updateData($query) !== false;
+		return parent::save(); // TODO: Change the autogenerated stub
 	}
 
 	/**
@@ -185,8 +83,7 @@ class ElggSite extends \ElggEntity {
 	 * @throws SecurityException
 	 */
 	public function delete($recursive = true) {
-		global $CONFIG;
-		if ($CONFIG->site->getGUID() == $this->guid) {
+		if ($this->guid == 1) {
 			throw new \SecurityException('You cannot delete the current site');
 		}
 
@@ -205,240 +102,59 @@ class ElggSite extends \ElggEntity {
 	 * @throws SecurityException
 	 */
 	public function disable($reason = "", $recursive = true) {
-		global $CONFIG;
-
-		if ($CONFIG->site->getGUID() == $this->guid) {
+		if ($this->guid == 1) {
 			throw new \SecurityException('You cannot disable the current site');
 		}
 
 		return parent::disable($reason, $recursive);
 	}
-	
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __set($name, $value) {
+		if ($name === 'url') {
+			_elgg_services()->logger->warning("ElggSite::url cannot be set");
+			return;
+		}
+		parent::__set($name, $value);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __get($name) {
+		if ($name === 'url') {
+			return $this->getURL();
+		}
+		return parent::__get($name);
+	}
+
 	/**
 	 * Returns the URL for this site
 	 *
 	 * @return string The URL
 	 */
 	public function getURL() {
-		return $this->url;
+		return _elgg_config()->wwwroot;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDisplayName() {
-		return $this->name;
+	public function isCacheable() {
+		return false;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function setDisplayName($displayName) {
-		$this->name = $displayName;
-	}
-
-	/**
-	 * Gets an array of \ElggUser entities who are members of the site.
-	 *
-	 * @param array $options An associative array for key => value parameters
-	 *                       accepted by elgg_get_entities(). Common parameters
-	 *                       include 'limit', and 'offset'.
-	 *
-	 * @return array of \ElggUsers
-	 * @deprecated 1.9 Use \ElggSite::getEntities()
-	 */
-	public function getMembers($options = array()) {
-		elgg_deprecated_notice('\ElggSite::getMembers() is deprecated. Use \ElggSite::getEntities()', 1.9);
-
-		$defaults = array(
-			'site_guids' => ELGG_ENTITIES_ANY_VALUE,
-			'relationship' => 'member_of_site',
-			'relationship_guid' => $this->getGUID(),
-			'inverse_relationship' => true,
-			'type' => 'user',
-		);
-
-		$options = array_merge($defaults, $options);
-
-		return elgg_get_entities_from_relationship($options);
-	}
-
-	/**
-	 * List the members of this site
-	 *
-	 * @param array $options An associative array for key => value parameters
-	 *                       accepted by elgg_list_entities(). Common parameters
-	 *                       include 'full_view', 'limit', and 'offset'.
-	 *
-	 * @return string
-	 * @since 1.8.0
-	 * @deprecated 1.9 Use elgg_list_entities_from_relationship()
-	 */
-	public function listMembers($options = array()) {
-		elgg_deprecated_notice('\ElggSite::listMembers() is deprecated. Use elgg_list_entities_from_relationship()', 1.9);
-		$defaults = array(
-			'site_guids' => ELGG_ENTITIES_ANY_VALUE,
-			'relationship' => 'member_of_site',
-			'relationship_guid' => $this->getGUID(),
-			'inverse_relationship' => true,
-			'type' => 'user',
-		);
-
-		$options = array_merge($defaults, $options);
-
-		return elgg_list_entities_from_relationship($options);
-	}
-
-	/**
-	 * Adds an entity to the site.
-	 *
-	 * This adds a 'member_of_site' relationship between between the entity and
-	 * the site. It does not change the site_guid of the entity.
-	 *
-	 * @param \ElggEntity $entity User, group, or object entity
-	 *
-	 * @return bool
-	 */
-	public function addEntity(\ElggEntity $entity) {
-		if (elgg_instanceof($entity, 'site')) {
-			return false;
-		}
-		return add_entity_relationship($entity->guid, "member_of_site", $this->guid);
-	}
-
-	/**
-	 * Removes an entity from this site
-	 *
-	 * @param \ElggEntity $entity User, group, or object entity
-	 *
-	 * @return bool
-	 */
-	public function removeEntity($entity) {
-		if (elgg_instanceof($entity, 'site')) {
-			return false;
-		}
-		return remove_entity_relationship($entity->guid, "member_of_site", $this->guid);
-	}
-
-	/**
-	 * Get an array of entities that belong to the site.
-	 *
-	 * This only returns entities that have been explicitly added to the
-	 * site through addEntity().
-	 *
-	 * @param array $options Options array for elgg_get_entities_from_relationship()
-	 *                       Parameters set automatically by this method:
-	 *                       'relationship', 'relationship_guid', 'inverse_relationship'
-	 * @return array
-	 */
-	public function getEntities(array $options = array()) {
-		$options['relationship'] = 'member_of_site';
-		$options['relationship_guid'] = $this->guid;
-		$options['inverse_relationship'] = true;
-		if (!isset($options['site_guid']) || !isset($options['site_guids'])) {
-			$options['site_guids'] = ELGG_ENTITIES_ANY_VALUE;
-		}
-
-		return elgg_get_entities_from_relationship($options);
-	}
-
-	/**
-	 * Adds a user to the site.
-	 *
-	 * @param int $user_guid GUID
-	 *
-	 * @return bool
-	 * @deprecated 1.9 Use \ElggSite::addEntity()
-	 */
-	public function addUser($user_guid) {
-		elgg_deprecated_notice('\ElggSite::addUser() is deprecated. Use \ElggEntity::addEntity()', 1.9);
-		return add_site_user($this->getGUID(), $user_guid);
-	}
-
-	/**
-	 * Removes a user from the site.
-	 *
-	 * @param int $user_guid GUID
-	 *
-	 * @return bool
-	 * @deprecated 1.9 Use \ElggSite::removeEntity()
-	 */
-	public function removeUser($user_guid) {
-		elgg_deprecated_notice('\ElggSite::removeUser() is deprecated. Use \ElggEntity::removeEntity()', 1.9);
-		return remove_site_user($this->getGUID(), $user_guid);
-	}
-
-	/**
-	 * Returns an array of \ElggObject entities that belong to the site.
-	 *
-	 * @warning This only returns objects that have been explicitly added to the
-	 * site through addObject()
-	 *
-	 * @param string $subtype Entity subtype
-	 * @param int    $limit   Limit
-	 * @param int    $offset  Offset
-	 *
-	 * @return array
-	 * @deprecated 1.9 Use \ElggSite:getEntities()
-	 */
-	public function getObjects($subtype = "", $limit = 10, $offset = 0) {
-		elgg_deprecated_notice('\ElggSite::getObjects() is deprecated. Use \ElggSite::getEntities()', 1.9);
-		return get_site_objects($this->getGUID(), $subtype, $limit, $offset);
-	}
-
-	/**
-	 * Adds an object to the site.
-	 *
-	 * @param int $object_guid GUID
-	 *
-	 * @return bool
-	 * @deprecated 1.9 Use \ElggSite::addEntity()
-	 */
-	public function addObject($object_guid) {
-		elgg_deprecated_notice('\ElggSite::addObject() is deprecated. Use \ElggEntity::addEntity()', 1.9);
-		return add_site_object($this->getGUID(), $object_guid);
-	}
-
-	/**
-	 * Remvoes an object from the site.
-	 *
-	 * @param int $object_guid GUID
-	 *
-	 * @return bool
-	 * @deprecated 1.9 Use \ElggSite::removeEntity()
-	 */
-	public function removeObject($object_guid) {
-		elgg_deprecated_notice('\ElggSite::removeObject() is deprecated. Use \ElggEntity::removeEntity()', 1.9);
-		return remove_site_object($this->getGUID(), $object_guid);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function prepareObject($object) {
+	protected function prepareObject(\Elgg\Export\Entity $object) {
 		$object = parent::prepareObject($object);
 		$object->name = $this->getDisplayName();
 		$object->description = $this->description;
 		unset($object->read_access);
 		return $object;
-	}
-
-	/*
-	 * EXPORTABLE INTERFACE
-	 */
-
-	/**
-	 * Return an array of fields which can be exported.
-	 *
-	 * @return array
-	 * @deprecated 1.9 Use toObject()
-	 */
-	public function getExportableValues() {
-		return array_merge(parent::getExportableValues(), array(
-			'name',
-			'description',
-			'url',
-		));
 	}
 
 	/**
@@ -453,99 +169,28 @@ class ElggSite extends \ElggEntity {
 	}
 
 	/**
-	 * Halts bootup and redirects to the site front page
-	 * if site is in walled garden mode, no user is logged in,
-	 * and the URL is not a public page.
+	 * Get the email address for the site
 	 *
-	 * @return void
-	 * @since 1.8.0
+	 * This can be set in the basic site settings or fallback to noreply@domain
+	 *
+	 * @return string
+	 * @since 3.0.0
 	 */
-	public function checkWalledGarden() {
-		// command line calls should not invoke the walled garden check
-		if (PHP_SAPI === 'cli') {
-			return;
+	public function getEmailAddress() {
+		$email = $this->email;
+		if (empty($email)) {
+			$email = "noreply@{$this->getDomain()}";
 		}
 
-		if (!elgg_get_config('walled_garden')) {
-			return;
-		}
-		
-		if (elgg_get_config('default_access') == ACCESS_PUBLIC) {
-			elgg_set_config('default_access', ACCESS_LOGGED_IN);
-		}
-		
-		if (!_elgg_services()->session->isLoggedIn()) {
-			// override the front page
-			elgg_register_page_handler('', '_elgg_walled_garden_index');
-
-			if (!$this->isPublicPage()) {
-				_elgg_services()->redirects->setLastForwardFrom();
-				register_error(_elgg_services()->translator->translate('loggedinrequired'));
-				forward('', 'walled_garden');
-			}
-		}
+		return $email;
 	}
-
+	
 	/**
-	 * Returns if a URL is public for this site when in Walled Garden mode.
-	 *
-	 * Pages are registered to be public by {@elgg_plugin_hook public_pages walled_garden}.
-	 *
-	 * @param string $url Defaults to the current URL.
-	 *
-	 * @return bool
-	 * @since 1.8.0
+	 * {@inheritDoc}
+	 * @see ElggEntity::canComment()
+	 * @since 3.0
 	 */
-	public function isPublicPage($url = '') {
-		global $CONFIG;
-
-		if (empty($url)) {
-			$url = current_page_url();
-
-			// do not check against URL queries
-			if ($pos = strpos($url, '?')) {
-				$url = substr($url, 0, $pos);
-			}
-		}
-
-		// always allow index page
-		if ($url == _elgg_services()->config->getSiteUrl($this->guid)) {
-			return true;
-		}
-
-		// default public pages
-		$defaults = array(
-			'walled_garden/.*',
-			'action/.*',
-			'login',
-			'register',
-			'forgotpassword',
-			'changepassword',
-			'refresh_token',
-			'ajax/view/languages.js',
-			'upgrade\.php',
-			'css/.*',
-			'js/.*',
-			'cache/[0-9]+/\w+/.*',
-			'cron/.*',
-			'services/.*',
-			'serve-file/.*',
-			'robots.txt',
-			'favicon.ico',
-		);
-
-		// include a hook for plugin authors to include public pages
-		$plugins = _elgg_services()->hooks->trigger('public_pages', 'walled_garden', null, array());
-
-		// allow public pages
-		foreach (array_merge($defaults, $plugins) as $public) {
-			$pattern = "`^{$CONFIG->url}$public/*$`i";
-			if (preg_match($pattern, $url)) {
-				return true;
-			}
-		}
-
-		// non-public page
+	public function canComment($user_guid = 0, $default = null) {
 		return false;
 	}
 }

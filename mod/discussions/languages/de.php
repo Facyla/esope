@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'discussion' => 'Diskussionen',
 	'discussion:add' => 'Neue Diskussion hinzufügen',
 	'discussion:latest' => 'Neueste Diskussionen',
@@ -57,9 +57,9 @@ Schau Dir die neue Diskussion an und antworte darauf:
 %s
 ',
 
-	'discussion:reply:notify:summary' => 'Neue Antwort in Diskussion %s',
-	'discussion:reply:notify:subject' => 'Neue Antwort in Diskussion: %s',
-	'discussion:reply:notify:body' =>
+	'discussion:comment:notify:summary' => 'Neue Antwort in Diskussion %s',
+	'discussion:comment:notify:subject' => 'Neue Antwort in Diskussion: %s',
+	'discussion:comment:notify:body' =>
 '%s hat in der Diskussion "%s" geantwortet:
 
 %s
@@ -96,4 +96,4 @@ Schau Dir die Diskussion an und antworte selbst darauf:
 
 	'discussion:reply:edited' => "Die Änderung wurde gespeichert.",
 	'discussion:reply:error' => "Beim Speichern der Änderung ist ein Problem aufgetreten.",
-);
+];

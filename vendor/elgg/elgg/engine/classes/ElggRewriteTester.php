@@ -1,13 +1,13 @@
 <?php
 
 use Elgg\Filesystem\Directory;
+use Elgg\Application;
+use Elgg\Project\Paths;
+use Elgg\Http\Request;
 
 /**
  * Elgg RewriteTester.
  * Test if URL rewriting is working.
- *
- * @package    Elgg.Core
- * @subpackage Installer
  */
 class ElggRewriteTester {
 	protected $webserver;
@@ -36,7 +36,7 @@ class ElggRewriteTester {
 
 		$this->rewriteTestPassed = $this->runRewriteTest($url);
 
-		if ($this->rewriteTestPassed == FALSE) {
+		if ($this->rewriteTestPassed == false) {
 			if ($this->webserver == 'apache' || $this->webserver == 'unknown') {
 				if ($this->createHtaccess($url, $path)) {
 					$this->rewriteTestPassed = $this->runRewriteTest($url);
@@ -53,10 +53,14 @@ class ElggRewriteTester {
 	 * @return string
 	 */
 	public static function guessWebServer() {
+		if (empty($_SERVER['SERVER_SOFTWARE'])) {
+			return 'unknown';
+		}
+
 		$serverString = strtolower($_SERVER['SERVER_SOFTWARE']);
-		$possibleServers = array('apache', 'nginx', 'lighttpd', 'iis');
+		$possibleServers = ['apache', 'nginx', 'lighttpd', 'iis'];
 		foreach ($possibleServers as $server) {
-			if (strpos($serverString, $server) !== FALSE) {
+			if (strpos($serverString, $server) !== false) {
 				return $server;
 			}
 		}
@@ -68,7 +72,7 @@ class ElggRewriteTester {
 	 *
 	 * @param string $url Rewrite test URL
 	 *
-	 * @return string|bool Subdirectory string with beginning and trailing slash or false if were unable to determine subdirectory 
+	 * @return string|bool Subdirectory string with beginning and trailing slash or false if were unable to determine subdirectory
 	 * or pointing at root of domain already
 	 */
 	public function guessSubdirectory($url) {
@@ -92,18 +96,18 @@ class ElggRewriteTester {
 	 * @return bool
 	 */
 	public function runRewriteTest($url) {
-		$this->serverSupportsRemoteRead = ($this->fetchUrl($url) === \Elgg\Application::REWRITE_TEST_OUTPUT);
+		$this->serverSupportsRemoteRead = ($this->fetchUrl($url) === Request::REWRITE_TEST_OUTPUT);
 		return $this->serverSupportsRemoteRead;
 	}
 	
 	/**
 	 * Check whether the site homepage can be fetched via curl
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function runLocalhostAccessTest() {
-		$url = _elgg_services()->config->getSiteUrl();
-		return (bool)$this->fetchUrl($url);
+		$url = _elgg_config()->wwwroot;
+		return (bool) $this->fetchUrl($url);
 	}
 
 	/**
@@ -117,12 +121,12 @@ class ElggRewriteTester {
 		$response = '';
 
 		if (ini_get('allow_url_fopen')) {
-			$ctx = stream_context_create(array(
-				'http' => array(
+			$ctx = stream_context_create([
+				'http' => [
 					'follow_location' => 0,
 					'timeout' => 5,
-				),
-			));
+				],
+			]);
 			$response = @file_get_contents($url, null, $ctx);
 		}
 
@@ -136,7 +140,7 @@ class ElggRewriteTester {
 			curl_close($ch);
 		}
 
-		return (string)$response;
+		return (string) $response;
 	}
 
 	/**
@@ -147,39 +151,41 @@ class ElggRewriteTester {
 	 * @return bool
 	 */
 	public function createHtaccess($url) {
-		$root = Directory\Local::root();
+		$root = Directory\Local::projectRoot();
 		$file = $root->getFile(".htaccess");
+
 		if ($file->exists()) {
 			// check that this is the Elgg .htaccess
 			$data = $file->getContents();
-			if ($data === FALSE) {
+			if ($data === false) {
 				// don't have permission to read the file
 				$this->htaccessIssue = 'read_permission';
-				return FALSE;
+				return false;
 			}
-			if (strpos($data, 'Elgg') === FALSE) {
+
+			if (strpos($data, 'Elgg') === false) {
 				$this->htaccessIssue = 'non_elgg_htaccess';
-				return FALSE;
-			} else {
-				// check if this is an old Elgg htaccess
-				if (strpos($data, 'RewriteRule ^rewrite.php$ install.php') == FALSE) {
-					$this->htaccessIssue = 'old_elgg_htaccess';
-					return FALSE;
-				}
-				return TRUE;
+				return false;
 			}
+
+			// check if this is an old Elgg htaccess
+			if (strpos($data, 'RewriteRule ^rewrite.php$ install.php') == false) {
+				$this->htaccessIssue = 'old_elgg_htaccess';
+				return false;
+			}
+			return true;
 		}
 
 		if (!is_writable($root->getPath())) {
 			$this->htaccessIssue = 'write_permission';
-			return FALSE;
+			return false;
 		}
 
 		// create the .htaccess file
-		$result = copy(\Elgg\Application::elggDir()->getPath("install/config/htaccess.dist"), $file->getPath());
+		$result = copy(Paths::elgg() . "install/config/htaccess.dist", $file->getPath());
 		if (!$result) {
 			$this->htaccessIssue = 'cannot_copy';
-			return FALSE;
+			return false;
 		}
 		
 		// does default RewriteBase work already?
@@ -194,7 +200,7 @@ class ElggRewriteTester {
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -206,20 +212,20 @@ class ElggRewriteTester {
 	 */
 	protected function returnStatus($url) {
 		if ($this->rewriteTestPassed) {
-			return array(
-				'severity' => 'pass',
+			return [
+				'severity' => 'success',
 				'message' => _elgg_services()->translator->translate('install:check:rewrite:success'),
-			);
+			];
 		}
 
-		if ($this->serverSupportsRemoteRead == FALSE) {
-			$msg = _elgg_services()->translator->translate('install:warning:rewrite:unknown', array($url));
-			$msg .= elgg_view('install/js_rewrite_check', array('url' => $url));
+		if ($this->serverSupportsRemoteRead == false) {
+			$msg = _elgg_services()->translator->translate('install:warning:rewrite:unknown', [$url]);
+			$msg .= elgg_view('install/js_rewrite_check', ['url' => $url]);
 			
-			return array(
+			return [
 				'severity' => 'warning',
 				'message' => $msg,
-			);
+			];
 		}
 
 		if ($this->webserver == 'apache') {
@@ -227,33 +233,33 @@ class ElggRewriteTester {
 			$msg = "$serverString\n\n";
 			if (!isset($this->htaccessIssue)) {
 				$msg .= _elgg_services()->translator->translate('install:error:rewrite:allowoverride');
-				$msg .= elgg_view('install/js_rewrite_check', array('url' => $url));
+				$msg .= elgg_view('install/js_rewrite_check', ['url' => $url]);
 			
-				return array(
-					'severity' => 'failure',
+				return [
+					'severity' => 'warning',
 					'message' => $msg,
-				);
+				];
 			}
 			$msg .= _elgg_services()->translator->translate("install:error:rewrite:htaccess:{$this->htaccessIssue}");
-			return array(
-				'severity' => 'failure',
+			return [
+				'severity' => 'warning',
 				'message' => $msg,
-			);
+			];
 		}
 
 		if ($this->webserver != 'unknown') {
 			$serverString = _elgg_services()->translator->translate("install:error:rewrite:{$this->webserver}");
 			$msg = "$serverString\n\n";
 			$msg .= _elgg_services()->translator->translate("install:error:rewrite:altserver");
-			return array(
-				'severity' => 'failure',
+			return [
+				'severity' => 'warning',
 				'message' => $msg,
-			);
+			];
 		}
 
-		return array(
-			'severity' => 'failure',
+		return [
+			'severity' => 'warning',
 			'message' => _elgg_services()->translator->translate('install:error:rewrite:unknown'),
-		);
+		];
 	}
 }

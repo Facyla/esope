@@ -3,20 +3,19 @@
  * Banned users admin widget
  */
 $widget = elgg_extract('entity', $vars);
-
-$num_display = sanitize_int($widget->num_display, false);
-// set default value for display number
-if (!$num_display) {
-	$num_display = 5;
+if (!$widget instanceof ElggWidget) {
+	return;
 }
 
-$db_prefix = elgg_get_config('dbprefix');
+$num_display = (int) $widget->num_display ?: 4;
 
 echo elgg_list_entities([
 	'type' => 'user',
 	'subtype'=> null,
-	'wheres' => ["ue.banned = 'yes'"],
-	'joins' => ["JOIN {$db_prefix}users_entity ue on ue.guid = e.guid"],
+	'metadata_name_value_pairs' => [
+		['banned' => 'yes'],
+	],
 	'pagination' => false,
 	'limit' => $num_display,
+	'no_results' => true,
 ]);

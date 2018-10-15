@@ -9,7 +9,7 @@
 error_reporting(E_ALL);
 
 // only allow from the command line.
-if (php_sapi_name() != 'cli') {
+if (!\Elgg\Application::isCli()) {
 	die('Upgrades can only be created from the command line.');
 }
 
@@ -79,7 +79,11 @@ $upgrade_code = <<<___UPGRADE
  * Elgg $release upgrade $upgrade_version
  * $name
  *
- * Description
+ * Upgrade script will always run after ALL database migrations are complete.
+ * 
+ * Do not use upgrade scripts for database schema migrations, use phinx instead. See docs for instructions.
+ * 
+ * Do not use upgrade script for long-running scripts, use async upgrades instead. See docs for instructions. 
  */
 
 // upgrade code here.
@@ -174,7 +178,7 @@ ___MSG;
 function elgg_get_file_list($directory, $exceptions = array(), $list = array(),
 $extensions = NULL) {
 
-	$directory = sanitise_filepath($directory);
+	$directory = \Elgg\Project\Paths::sanitize($directory);
 	if ($handle = opendir($directory)) {
 		while (($file = readdir($handle)) !== FALSE) {
 			if (!is_file($directory . $file) || in_array($file, $exceptions)) {
@@ -203,7 +207,7 @@ $extensions = NULL) {
  *
  * @return string
  */
-function sanitise_filepath($path, $append_slash = TRUE) {
+function \Elgg\Project\Paths::sanitize($path, $append_slash = TRUE) {
 	// Convert to correct UNIX paths
 	$path = str_replace('\\', '/', $path);
 	$path = str_replace('../', '/', $path);

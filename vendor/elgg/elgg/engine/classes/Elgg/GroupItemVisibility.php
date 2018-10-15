@@ -9,6 +9,8 @@ namespace Elgg;
  * @subpackage Groups
  *
  * @access private
+ * @deprecated 3.0 Use ElggGroup::canAccessContent or Gatekeeper::assertAccessibleGroup
+ *
  */
 class GroupItemVisibility {
 
@@ -34,13 +36,13 @@ class GroupItemVisibility {
 	 *
 	 * @return \Elgg\GroupItemVisibility
 	 *
-	 * @todo Make this faster, considering it must run for every river item.
+	 * @deprecated 3.0 Use ElggGroup::canAccessContent
 	 */
 	static public function factory($container_guid, $use_cache = true) {
 		// cache because this may be called repeatedly during river display, and
 		// due to need to check group visibility, cache will be disabled for some
 		// get_entity() calls
-		static $cache = array();
+		static $cache = [];
 
 		if (!$container_guid) {
 			return new \Elgg\GroupItemVisibility();
@@ -60,9 +62,9 @@ class GroupItemVisibility {
 
 			if (!$is_visible) {
 				// see if it *really* exists...
-				$prev_access = elgg_set_ignore_access();
+				$prev_access = _elgg_services()->session->setIgnoreAccess();
 				$container = get_entity($container_guid);
-				elgg_set_ignore_access($prev_access);
+				_elgg_services()->session->setIgnoreAccess($prev_access);
 			}
 
 			$ret = new \Elgg\GroupItemVisibility();

@@ -1,101 +1,78 @@
 <?php
 /**
  * Page edit form body
- *
- * @package ElggPages
  */
 
-$variables = elgg_get_config('pages');
-$user = elgg_get_logged_in_user_entity();
-$entity = elgg_extract('entity', $vars);
-$can_change_access = true;
-if ($user && $entity) {
-	$can_change_access = ($user->isAdmin() || $user->getGUID() == $entity->owner_guid);
+$fields = elgg_get_config('pages');
+if (empty($fields)) {
+	return;
 }
 
-foreach ($variables as $name => $type) {
-	// don't show read / write access inputs for non-owners or admin when editing
-	if (($type == 'access' || $type == 'write_access') && !$can_change_access) {
-		continue;
-	}
-	
-	// don't show parent picker input for top or new pages.
-	if ($name == 'parent_guid' && (!$vars['parent_guid'] || !$vars['guid'])) {
-		continue;
-	}
+$user = elgg_get_logged_in_user_entity();
 
-	if ($type == 'parent') {
-		$input_view = "pages/input/$type";
-	} else {
-		$input_view = "input/$type";
-	}
+$entity = elgg_extract('entity', $vars);
+$parent_guid = elgg_extract('parent_guid', $vars);
 
-?>
-<div>
-	<label><?php echo elgg_echo("pages:$name") ?></label>
-	<?php
-		if ($type != 'longtext') {
-			echo '<br />';
-		}
+foreach ($fields as $name => $type) {
+	$field = [
+		'name' => $name,
+		'value' => $vars[$name],
+		'#type' => $type,
+		'#label' => elgg_echo("pages:$name"),
+	];
 
-		$view_vars = array(
-			'name' => $name,
-			'value' => $vars[$name],
-			'entity' => ($name == 'parent_guid') ? $vars['entity'] : null,
-		);
-		if ($input_view === 'input/access' || $input_view === 'input/write_access') {
-			$view_vars['entity'] = $entity;
-			$view_vars['entity_type'] = 'object';
-			$view_vars['entity_subtype'] = $vars['parent_guid'] ? 'page': 'page_top';
+	switch ($name) {
+		case 'title' :
+			$field['required'] = true;
+			break;
+
+		case 'access_id' :
+		case 'write_access_id' :
+			if (!$user->canEdit()) {
+				// Only owner and admins can change access
+				continue;
+			}
+
+			$field['entity'] = $entity;
+			$field['entity_type'] = 'object';
+			$field['entity_subtype'] = 'page';
 
 			if ($name === 'write_access_id') {
-				$view_vars['purpose'] = 'write';
-				if ($entity) {
-					$view_vars['value'] = $entity->write_access_id;
-					
-					// no access change warning for write access input
-					$view_vars['entity_allows_comments'] = false;
-				}
+				$field['purpose'] = 'write';
+				// no access change warning for write access input
+				$field['entity_allows_comments'] = false;
 			}
-		}
+			break;
 
-		$output = elgg_view($input_view, $view_vars);
+		case 'parent_guid' :
+			if ($parent_guid) {
+				$field['entity'] = $entity;
+			} else {
+				// skip field if there is no parent_guid
+				continue(2);
+			}
+			break;
+	}
 
-		if ($input_view === 'input/write_access' && strpos($output, "<!-- -->") !== 0) {
-			// a dev has extended input/write_access
-			elgg_deprecated_notice("The input/write_access view is deprecated. The pages plugin now uses the ['access:collections:write', 'user'] hook to alter options.", "1.11");
-		}
-
-		echo $output;
-	?>
-</div>
-<?php
+	echo elgg_view_field($field);
 }
 
-$cats = elgg_view('input/categories', $vars);
-if (!empty($cats)) {
-	echo $cats;
-}
-
-
-echo '<div class="elgg-foot">';
-if ($vars['guid']) {
-	echo elgg_view('input/hidden', array(
+if ($entity instanceof ElggPage) {
+	echo elgg_view_field([
+		'#type' => 'hidden',
 		'name' => 'page_guid',
-		'value' => $vars['guid'],
-	));
+		'value' => $entity->guid,
+	]);
 }
-echo elgg_view('input/hidden', array(
+
+echo elgg_view_field([
+	'#type' => 'hidden',
 	'name' => 'container_guid',
-	'value' => $vars['container_guid'],
-));
-if (!$vars['guid']) {
-	echo elgg_view('input/hidden', array(
-		'name' => 'parent_guid',
-		'value' => $vars['parent_guid'],
-	));
-}
+	'value' => elgg_extract('container_guid', $vars),
+]);
 
-echo elgg_view('input/submit', array('value' => elgg_echo('save')));
-
-echo '</div>';
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => elgg_echo('save'),
+]);
+elgg_set_form_footer($footer);

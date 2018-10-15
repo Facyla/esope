@@ -20,17 +20,13 @@ return array(
 
 	'groups:icon' => 'Group icon (leave blank to leave unchanged)',
 	'groups:name' => 'Group name',
-	'groups:username' => 'Group short name (displayed in URLs, alphanumeric characters only)',
 	'groups:description' => 'Description',
 	'groups:briefdescription' => 'Brief description',
 	'groups:interests' => 'Tags',
 	'groups:website' => 'Website',
 	'groups:members' => 'Group members',
-	'groups:my_status' => 'My status',
-	'groups:my_status:group_owner' => 'You own this group',
-	'groups:my_status:group_member' => 'You are in this group',
-	'groups:subscribed' => 'Group notifications are on',
-	'groups:unsubscribed' => 'Group notifications are off',
+
+	'groups:members_count' => '%s members',
 
 	'groups:members:title' => 'Members of %s',
 	'groups:members:more' => "View all members",
@@ -46,14 +42,7 @@ return array(
 	'groups:widget:membership' => 'Group membership',
 	'groups:widgets:description' => 'Display the groups you are a member of on your profile',
 
-	'groups:widget:group_activity:title' => 'Group activity',
-	'groups:widget:group_activity:description' => 'View the activity in one of your groups',
-	'groups:widget:group_activity:edit:select' => 'Select a group',
-	'groups:widget:group_activity:content:noactivity' => 'There is no activity in this group',
-	'groups:widget:group_activity:content:noselect' => 'Edit this widget to select a group',
-
 	'groups:noaccess' => 'No access to group',
-	'groups:ingroup' => 'in the group',
 	'groups:cantcreate' => 'You can not create a group. Only admins can.',
 	'groups:cantedit' => 'You can not edit this group',
 	'groups:saved' => 'Group saved',
@@ -70,33 +59,28 @@ return array(
 	'groups:leave' => 'Leave group',
 	'groups:invite' => 'Invite friends',
 	'groups:invite:title' => 'Invite friends to this group',
-	'groups:inviteto' => "Invite friends to '%s'",
-	'groups:nofriends' => "You have no friends left who have not been invited to this group.",
+	'groups:invite:friends:help' => 'Search for a friend by name or username and select the friend from the list',
+	'groups:invite:resend' => 'Resend the invitations to already invited users',
+
 	'groups:nofriendsatall' => 'You have no friends to invite!',
-	'groups:viagroups' => "via groups",
 	'groups:group' => "Group",
 	'groups:search:tags' => "tag",
-	'groups:search:title' => "Search for groups tagged with '%s'",
+	'groups:search:title' => "Search for groups with '%s'",
 	'groups:search:none' => "No matching groups were found",
 	'groups:search_in_group' => "Search in this group",
 	'groups:acl' => "Group: %s",
-
-	'groups:activity' => "Group activity",
-	'groups:enableactivity' => 'Enable group activity',
-	'groups:activity:none' => "There is no group activity yet",
+	'groups:acl:in_context' => 'Group members',
 
 	'groups:notfound' => "Group not found",
-	'groups:notfound:details' => "The requested group either does not exist or you do not have access to it",
-
+	
 	'groups:requests:none' => 'There are no current membership requests.',
 
 	'groups:invitations:none' => 'There are no current invitations.',
 
-	'groups:count' => "groups created",
 	'groups:open' => "open group",
 	'groups:closed' => "closed group",
 	'groups:member' => "members",
-	'groups:searchtag' => "Search for groups by tag",
+	'groups:search' => "Search for groups",
 
 	'groups:more' => 'More groups',
 	'groups:none' => 'No groups',
@@ -117,12 +101,9 @@ return array(
 	/**
 	 * Group tools
 	 */
-	'groups:lastupdated' => 'Last updated %s by %s',
-	'groups:lastcomment' => 'Last comment %s by %s',
 
 	'admin:groups' => 'Groups',
 
-	'groups:privategroup' => 'This group is closed. Requesting membership.',
 	'groups:notitle' => 'Groups must have a title',
 	'groups:cantjoin' => 'Can not join group',
 	'groups:cantleave' => 'Could not leave group',
@@ -133,72 +114,53 @@ return array(
 	'groups:joinrequestnotmade' => 'Could not request to join group',
 	'groups:joinrequestmade' => 'Requested to join group',
 	'groups:joinrequest:exists' => 'You already requested membership for this group',
+	'groups:button:joined' => 'Joined',
+	'groups:button:owned' => 'Owned',
 	'groups:joined' => 'Successfully joined group!',
 	'groups:left' => 'Successfully left group',
-	'groups:notowner' => 'Sorry, you are not the owner of this group.',
-	'groups:notmember' => 'Sorry, you are not a member of this group.',
-	'groups:alreadymember' => 'You are already a member of this group!',
 	'groups:userinvited' => 'User has been invited.',
 	'groups:usernotinvited' => 'User could not be invited.',
 	'groups:useralreadyinvited' => 'User has already been invited',
 	'groups:invite:subject' => "%s you have been invited to join %s!",
-	'groups:started' => "Started by %s",
 	'groups:joinrequest:remove:check' => 'Are you sure you want to remove this join request?',
 	'groups:invite:remove:check' => 'Are you sure you want to remove this invitation?',
 	'groups:invite:body' => "Hi %s,
 
-%s invited you to join the '%s' group. Click below to view your invitations:
+%s invited you to join the '%s' group.
 
+Click below to view your invitations:
 %s",
 
 	'groups:welcome:subject' => "Welcome to the %s group!",
 	'groups:welcome:body' => "Hi %s!
 
-You are now a member of the '%s' group! Click below to begin posting!
+You are now a member of the '%s' group.
 
+Click below to begin posting!
 %s",
 
 	'groups:request:subject' => "%s has requested to join %s",
 	'groups:request:body' => "Hi %s,
 
-%s has requested to join the '%s' group. Click below to view their profile:
+%s has requested to join the '%s' group.
 
+Click below to view their profile:
 %s
 
 or click below to view the group's join requests:
-
 %s",
 
-	/**
-	 * Forum river items
-	 */
+	'river:group:create' => '%s created the group %s',
+	'river:group:join' => '%s joined the group %s',
 
-	'river:create:group:default' => '%s created the group %s',
-	'river:join:group:default' => '%s joined the group %s',
-
-	'groups:nowidgets' => 'No widgets have been defined for this group.',
-
-
-	'groups:widgets:members:title' => 'Group members',
-	'groups:widgets:members:description' => 'List the members of a group.',
-	'groups:widgets:members:label:displaynum' => 'List the members of a group.',
-	'groups:widgets:members:label:pleaseedit' => 'Please configure this widget.',
-
-	'groups:widgets:entities:title' => "Objects in group",
-	'groups:widgets:entities:description' => "List the objects saved in this group",
-	'groups:widgets:entities:label:displaynum' => 'List the objects of a group.',
-	'groups:widgets:entities:label:pleaseedit' => 'Please configure this widget.',
-
-	'groups:allowhiddengroups' => 'Do you want to allow private (invisible) groups?',
+	'groups:allowhiddengroups' => 'Allow private (invisible) groups?',
 	'groups:whocancreate' => 'Who can create new groups?',
 
 	/**
 	 * Action messages
 	 */
-	'group:deleted' => 'Group and group contents deleted',
-	'group:notdeleted' => 'Group could not be deleted',
-
-	'group:notfound' => 'Could not find the group',
+	'groups:deleted' => 'Group and group contents deleted',
+	'groups:notdeleted' => 'Group could not be deleted',
 	'groups:deletewarning' => "Are you sure you want to delete this group? There is no undo!",
 
 	'groups:invitekilled' => 'The invite has been deleted.',
@@ -210,4 +172,11 @@ or click below to view the group's join requests:
 	 * ecml
 	 */
 	'groups:ecml:groupprofile' => 'Group profiles',
+
+	/**
+	 * Upgrades
+	 */
+	'groups:upgrade:2016101900:title' => 'Transfer group icons to new location',
+	'groups:upgrade:2016101900:description' => 'New entity icon API stores icons in a predictable location on the filestore
+relative to the entity\'s filestore directory. This upgrade aligns will align group plugin with the requirements of the new API.',
 );

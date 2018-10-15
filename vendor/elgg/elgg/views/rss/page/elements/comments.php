@@ -6,6 +6,11 @@
  * @uses $vars['limit']         Optional limit value (default is 25)
  */
 
+$entity = elgg_extract('entity', $vars);
+if (!$entity instanceof ElggEntity) {
+	return;
+}
+
 $limit = elgg_extract('limit', $vars, get_input('limit', 0));
 if (!$limit) {
 	$limit = elgg_trigger_plugin_hook('config', 'comments_per_page', [], 25);

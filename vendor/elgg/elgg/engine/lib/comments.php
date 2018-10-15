@@ -7,6 +7,8 @@
  * @since 1.9
  */
 
+use Elgg\Database\QueryBuilder;
+
 /**
  * Comments initialization function
  *
@@ -15,48 +17,53 @@
  */
 function _elgg_comments_init() {
 	elgg_register_entity_type('object', 'comment');
-	elgg_register_plugin_hook_handler('register', 'menu:entity', '_elgg_comment_setup_entity_menu', 900);
-	elgg_register_plugin_hook_handler('entity:url', 'object', '_elgg_comment_url_handler');
+
 	elgg_register_plugin_hook_handler('container_permissions_check', 'object', '_elgg_comments_container_permissions_override');
 	elgg_register_plugin_hook_handler('permissions_check', 'object', '_elgg_comments_permissions_override');
 	elgg_register_plugin_hook_handler('email', 'system', '_elgg_comments_notification_email_subject');
 	
+	elgg_register_plugin_hook_handler('register', 'menu:social', '_elgg_comments_social_menu_setup');
+	
 	elgg_register_event_handler('update:after', 'all', '_elgg_comments_access_sync', 600);
 
-	elgg_register_page_handler('comment', '_elgg_comments_page_handler');
-
 	elgg_register_ajax_view('core/ajax/edit_comment');
+	elgg_register_ajax_view('page/elements/comments');
+	elgg_register_ajax_view('river/elements/responses');
 
 	elgg_register_plugin_hook_handler('likes:is_likable', 'object:comment', 'Elgg\Values::getTrue');
+	
+	elgg_register_notification_event('object', 'comment', ['create']);
+	elgg_register_plugin_hook_handler('get', 'subscriptions', '_elgg_comments_add_content_owner_to_subscriptions');
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:comment', '_elgg_comments_prepare_content_owner_notification');
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:comment', '_elgg_comments_prepare_notification');
 }
 
 /**
- * Page handler for generic comments manipulation.
+ * Are comments displayed with latest first?
  *
- * @param array $segments
- * @return bool
- * @access private
+ * @param ElggEntity $container Entity containing comments
+ * @return bool False means oldest first.
+ * @since 3.0
  */
-function _elgg_comments_page_handler($segments) {
+function elgg_comments_are_latest_first(ElggEntity $container = null) {
+	$params = [
+		'entity' => $container,
+	];
+	return (bool) elgg_trigger_plugin_hook('config', 'comments_latest_first', $params, true);
+}
 
-	$page = elgg_extract(0, $segments);
-	switch ($page) {
-
-		case 'edit':
-			echo elgg_view_resource('comments/edit', [
-				'guid' => elgg_extract(1, $segments),
-			]);
-			return true;
-			break;
-
-		case 'view':
-			_elgg_comment_redirect(elgg_extract(1, $segments), elgg_extract(2, $segments));
-			break;
-
-		default:
-			return false;
-			break;
-	}
+/**
+ * How many comments appear per page.
+ *
+ * @param ElggEntity $container Entity containing comments
+ * @return int
+ * @since 3.0
+ */
+function elgg_comments_per_page(ElggEntity $container = null) {
+	$params = [
+		'entity' => $container,
+	];
+	return (int) elgg_trigger_plugin_hook('config', 'comments_per_page', $params, 25);
 }
 
 /**
@@ -86,7 +93,7 @@ function _elgg_comment_redirect($comment_guid, $fallback_guid) {
 		forward($fallback->getURL());
 	}
 
-	if (!elgg_instanceof($comment, 'object', 'comment')) {
+	if (!$comment instanceof ElggComment) {
 		$fail();
 	}
 
@@ -95,17 +102,22 @@ function _elgg_comment_redirect($comment_guid, $fallback_guid) {
 		$fail();
 	}
 
+	$operator = elgg_comments_are_latest_first($container) ? '>' : '<';
+
 	// this won't work with threaded comments, but core doesn't support that yet
+	$condition = function(QueryBuilder $qb) use ($comment, $operator) {
+		return $qb->compare('e.guid', $operator, $comment->guid, ELGG_VALUE_INTEGER);
+	};
 	$count = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => 'comment',
 		'container_guid' => $container->guid,
 		'count' => true,
-		'wheres' => ["e.guid < " . (int)$comment->guid],
+		'wheres' => [$condition],
 	]);
-	$limit = (int)get_input('limit');
+	$limit = (int) get_input('limit');
 	if (!$limit) {
-		$limit = elgg_trigger_plugin_hook('config', 'comments_per_page', [], 25);
+		$limit = elgg_comments_per_page($container);
 	}
 	$offset = floor($count / $limit) * $limit;
 	if (!$offset) {
@@ -122,69 +134,6 @@ function _elgg_comment_redirect($comment_guid, $fallback_guid) {
 	$url = elgg_http_build_url($parts, false);
 	
 	forward($url);
-}
-
-/**
- * Setup the menu shown with a comment
- *
- * @param string         $hook   'register'
- * @param string         $type   'menu:entity'
- * @param \ElggMenuItem[] $return Array of \ElggMenuItem objects
- * @param array          $params Array of view vars
- *
- * @return array
- * @access private
- */
-function _elgg_comment_setup_entity_menu($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) {
-		return $return;
-	}
-
-	$entity = $params['entity'];
-	if (!elgg_instanceof($entity, 'object', 'comment')) {
-		return $return;
-	}
-
-	// Remove edit link and access level from the menu
-	foreach ($return as $key => $item) {
-		if ($item->getName() === 'access') {
-			unset($return[$key]);
-		}
-	}
-
-	return $return;
-}
-
-/**
- * Format and return the URL for a comment.
- *
- * This is the container's URL because comments don't have their own page.
- *
- * @param string $hook   'entity:url'
- * @param string $type   'object'
- * @param string $return URL for entity
- * @param array  $params Array with the elgg entity passed in as 'entity'
- *
- * @return string
- * @access private
- */
-function _elgg_comment_url_handler($hook, $type, $return, $params) {
-	$entity = $params['entity'];
-	/* @var \ElggObject $entity */
-
-	if (!elgg_instanceof($entity, 'object', 'comment') || !$entity->getOwnerEntity()) {
-		// not a comment or has no owner
-
-		// @todo handle anonymous comments
-		return $return;
-	}
-
-	$container = $entity->getContainerEntity();
-	if (!$container) {
-		return $return;
-	}
-
-	return "comment/view/{$entity->guid}/{$container->guid}";
 }
 
 /**
@@ -227,7 +176,7 @@ function _elgg_comments_permissions_override($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 	$user = $params['user'];
 	
-	if (elgg_instanceof($entity, 'object', 'comment') && $user) {
+	if ($entity instanceof ElggComment && $user) {
 		return $entity->getOwnerGUID() == $user->getGUID();
 	}
 	
@@ -294,15 +243,15 @@ function _elgg_comments_access_sync($event, $type, $entity) {
 	// need to override access in case comments ended up with ACCESS_PRIVATE
 	// and to ensure write permissions
 	$ia = elgg_set_ignore_access(true);
-	$options = array(
+	$options = [
 		'type' => 'object',
 		'subtype' => 'comment',
 		'container_guid' => $entity->getGUID(),
-		'wheres' => array(
-			"e.access_id != {$entity->access_id}"
-		),
+		'wheres' => [function(\Elgg\Database\QueryBuilder $qb) use ($entity) {
+			return $qb->compare('e.access_id', '!=', $entity->access_id, 'integer');
+		}],
 		'limit' => 0,
-	);
+	];
 
 	$batch = new \ElggBatch('elgg_get_entities', $options, null, 25, false);
 	foreach ($batch as $comment) {
@@ -317,6 +266,188 @@ function _elgg_comments_access_sync($event, $type, $entity) {
 }
 
 /**
+ * Add the owner of the content being commented on to the subscribers
+ *
+ * @param string $hook        'get'
+ * @param string $type        'subscribers'
+ * @param array  $returnvalue current subscribers
+ * @param array  $params      supplied params
+ *
+ * @return void|array
+ *
+ * @access private
+ */
+function _elgg_comments_add_content_owner_to_subscriptions($hook, $type, $returnvalue, $params) {
+	
+	$event = elgg_extract('event', $params);
+	if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+		return;
+	}
+	
+	$object = $event->getObject();
+	if (!$object instanceof ElggComment) {
+		return;
+	}
+	
+	$content_owner = $object->getContainerEntity()->getOwnerEntity();
+	if (!($content_owner instanceof ElggUser)) {
+		return;
+	}
+	
+	$notification_settings = $content_owner->getNotificationSettings();
+	if (empty($notification_settings)) {
+		return;
+	}
+	
+	$returnvalue[$content_owner->getGUID()] = [];
+	foreach ($notification_settings as $method => $enabled) {
+		if (empty($enabled)) {
+			continue;
+		}
+		
+		$returnvalue[$content_owner->getGUID()][] = $method;
+	}
+	
+	return $returnvalue;
+}
+
+/**
+ * Set the notification message for the owner of the content being commented on
+ *
+ * @param string                           $hook        'prepare'
+ * @param string                           $type        'notification:create:object:comment'
+ * @param \Elgg\Notifications\Notification $returnvalue current notification message
+ * @param array                            $params      supplied params
+ *
+ * @return void|\Elgg\Notifications\Notification
+ *
+ * @access private
+ */
+function _elgg_comments_prepare_content_owner_notification($hook, $type, $returnvalue, $params) {
+	
+	$comment = elgg_extract('object', $params);
+	if (!$comment instanceof ElggComment) {
+		return;
+	}
+	
+	/* @var $content \ElggEntity */
+	$content = $comment->getContainerEntity();
+	$recipient = elgg_extract('recipient', $params);
+	if ($content->owner_guid !== $recipient->guid) {
+		// not the content owner
+		return;
+	}
+	
+	$language = elgg_extract('language', $params);
+	/* @var $commenter \ElggUser */
+	$commenter = $comment->getOwnerEntity();
+	
+	$returnvalue->subject = elgg_echo('generic_comment:notification:owner:subject', [], $language);
+	$returnvalue->summary = elgg_echo('generic_comment:notification:owner:summary', [], $language);
+	$returnvalue->body = elgg_echo('generic_comment:notification:owner:body', [
+		$content->getDisplayName(),
+		$commenter->getDisplayName(),
+		$comment->description,
+		$comment->getURL(),
+		$commenter->getDisplayName(),
+		$commenter->getURL(),
+	], $language);
+	
+	return $returnvalue;
+}
+
+/**
+ * Set the notification message for interested users
+ *
+ * @param string                           $hook        'prepare'
+ * @param string                           $type        'notification:create:object:comment'
+ * @param \Elgg\Notifications\Notification $returnvalue current notification message
+ * @param array                            $params      supplied params
+ *
+ * @return void|\Elgg\Notifications\Notification
+ *
+ * @access private
+ */
+function _elgg_comments_prepare_notification($hook, $type, $returnvalue, $params) {
+	
+	$comment = elgg_extract('object', $params);
+	if (!$comment instanceof ElggComment) {
+		return;
+	}
+	
+	/* @var $content \ElggEntity */
+	$content = $comment->getContainerEntity();
+	$recipient = elgg_extract('recipient', $params);
+	if ($content->getOwnerGUID() === $recipient->getGUID()) {
+		// the content owner, this is handled in other hook
+		return;
+	}
+	
+	$language = elgg_extract('language', $params);
+	/* @var $commenter \ElggUser */
+	$commenter = $comment->getOwnerEntity();
+	
+	$returnvalue->subject = elgg_echo('generic_comment:notification:user:subject', [$content->getDisplayName()], $language);
+	$returnvalue->summary = elgg_echo('generic_comment:notification:user:summary', [$content->getDisplayName()], $language);
+	$returnvalue->body = elgg_echo('generic_comment:notification:user:body', [
+		$content->getDisplayName(),
+		$commenter->getDisplayName(),
+		$comment->description,
+		$comment->getURL(),
+		$commenter->getDisplayName(),
+		$commenter->getURL(),
+	], $language);
+
+	$returnvalue->url = $comment->getURL();
+	
+	return $returnvalue;
+}
+
+/**
+ * Adds comment menu items to entity menu
+ *
+ * @param \Elgg\Hook $hook Hook information
+ *
+ * @return void|\ElggMenuItem[]
+ *
+ * @access private
+ * @since 3.0
+ */
+function _elgg_comments_social_menu_setup(\Elgg\Hook $hook) {
+	$entity = $hook->getEntityParam();
+	if (!$entity) {
+		return;
+	}
+	
+	$return = $hook->getValue();
+	
+	$comment_count = $entity->countComments();
+	$can_comment = $entity->canComment();
+	if ($can_comment || $comment_count) {
+		$text = $can_comment ? elgg_echo('comment:this') : elgg_echo('comments');
+		
+		$options = [
+			'name' => 'comment',
+			'icon' => 'speech-bubble',
+			'badge' => $comment_count ?: null,
+			'text' => $text,
+			'title' => $text,
+			'href' => $entity->getURL() . '#comments',
+		];
+				
+		$item = $hook->getParam('item');
+		if ($item && $can_comment) {
+			$options['href'] = "#comments-add-{$entity->guid}-{$item->id}";
+			$options['rel'] = 'toggle';
+		}
+		
+		$return[] = \ElggMenuItem::factory($options);
+	}
+	
+	return $return;
+}
+
+/**
  * Runs unit tests for \ElggComment
  *
  * @param string $hook   unit_test
@@ -326,13 +457,16 @@ function _elgg_comments_access_sync($event, $type, $entity) {
  *
  * @return array
  * @access private
+ * @codeCoverageIgnore
  */
 function _elgg_comments_test($hook, $type, $value, $params) {
-	global $CONFIG;
-	$value[] = "{$CONFIG->path}engine/tests/ElggCommentTest.php";
+	$value[] = ElggCoreCommentTest::class;
 	return $value;
 }
 
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', '_elgg_comments_init');
 	$hooks->registerHandler('unit_test', 'system', '_elgg_comments_test');

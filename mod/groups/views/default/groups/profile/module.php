@@ -10,16 +10,24 @@
 
 $group = elgg_get_page_owner_entity();
 
-$header = "<span class=\"groups-widget-viewall\">{$vars['all_link']}</span>";
-$header .= '<h3>' . $vars['title'] . '</h3>';
+$title = elgg_extract('title', $vars);
 
-if ($group->canWriteToContainer() && isset($vars['add_link'])) {
-	$vars['content'] .= "<span class='elgg-widget-more'>{$vars['add_link']}</span>";
+$menu = '';
+$all_link = elgg_extract('all_link', $vars);
+if ($all_link) {
+	$menu = elgg_format_element('span', [
+		'class' => 'groups-widget-viewall',
+	], $all_link);
 }
 
-echo '<li>';
-echo elgg_view_module('info', '', $vars['content'], array(
-	'header' => $header,
+if ($group->canWriteToContainer() && isset($vars['add_link'])) {
+	$footer = elgg_format_element('span', [
+		'class' => 'elgg-widget-more',
+	], elgg_extract('add_link', $vars));
+}
+
+echo elgg_view_module('info', $title, $vars['content'], [
+	'menu' => $menu,
 	'class' => 'elgg-module-group',
-));
-echo '</li>';
+	'footer' => $footer,
+]);

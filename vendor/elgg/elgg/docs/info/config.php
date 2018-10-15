@@ -1,15 +1,16 @@
 <?php
 /**
- * Stub info for $CONFIG global options.
+ * Legacy documentation for the old $CONFIG object. In Elgg 3.0 this is a reference to
+ * the Config service.
  *
- * @tip Plugins should never use the $CONFIG array directly.
- *
- * @package    Elgg.Core
- * @subpackage Configuration
+ * @warning DO NOT USE $CONFIG except in a legacy settings.php file. Note that it will be unset
+ *          by the boot process after reading.
  */
 
 /**
  * The full path where Elgg is installed.
+ *
+ * This is set in \Elgg\Config::__construct
  *
  * @global string $CONFIG->path;
  */
@@ -58,18 +59,11 @@ $CONFIG->language;
 $CONFIG->installed;
 
 /**
- * The guid of the current site object.
+ * The guid of the site object (1)
  *
  * @global int $CONFIG->site_guid
  */
 $CONFIG->site_guid;
-
-/**
- * Copy of $CONFIG->site_guid
- *
- * @global int $CONFIG->site_id
- */
-$CONFIG->site_id;
 
 /**
  * The current site object.
@@ -118,14 +112,6 @@ $CONFIG->auto_disable_plugins;
  * @global string $CONFIG->sitedescription
  */
 $CONFIG->sitedescription;
-
-/**
- * The site email from the current site object.
- *
- * @global string $CONFIG->siteemail
- * @deprecated 2.1 Use elgg_get_site_entity()->email
- */
-$CONFIG->siteemail;
 
 /**
  * The default "limit" used in site queries.
@@ -207,14 +193,6 @@ $CONFIG->pluginlistcache;
 $CONFIG->registered_entities;
 
 /**
- * A list of entity types and subtypes that have metadata whose access permission
- * can be changed independently of the main object.  {@link register_metadata_as_indepenent()}
- *
- * @global string $CONFIG->independents
- */
-$CONFIG->independents;
-
-/**
  * Holds items for all submenus.
  *
  * @global string $CONFIG->submenu_items
@@ -250,13 +228,6 @@ $CONFIG->registers;
 $CONFIG->register_objects;
 
 /**
- * Holds available group tools options.  Added with {@link add_group_tool_option()}
- *
- * @global array $CONFIG->group_tool_options
- */
-$CONFIG->group_tool_options;
-
-/**
  * The last cache time for the current viewtype.  Used in the generation of CSS and JS links.
  *
  * @global string $CONFIG->lastcache
@@ -281,6 +252,26 @@ $CONFIG->lastcache;
 $CONFIG->exception_include = '';
 
 /**
+ * Maximum php execution time for actions (in seconds)
+ *
+ * This setting can be used to set a custom php execution time specifically for Elgg actions.
+ * Note that if some actions set their own execution time limit, this setting will no affect those actions.
+ *
+ * @global int $CONFIG->action_time_limit
+ */
+$CONFIG->action_time_limit;
+
+/**
+ * Allow access to PHPInfo
+ *
+ * This setting can be used to allow site administrators access to the PHPInfo page.
+ * By default this is not allowed.
+ *
+ * @global bool $CONFIG->allow_phpinfo
+ */
+$CONFIG->allow_phpinfo = false;
+
+/**
  * Plugins with more than the configured number of plugin settings won't be loaded into
  * bootdata cache. This is done to prevent memory issues.
  *
@@ -291,63 +282,3 @@ $CONFIG->exception_include = '';
  * @global int $CONFIG->bootdata_plugin_settings_limit
  */
 $CONFIG->bootdata_plugin_settings_limit;
-
-/**
- * Paths to scan for autoloading languages.
- *
- * Languages are automatically loaded for the site or
- * user's default language.  Plugins can extend or override strings.
- * language_paths is an array of paths to scan for PHP files matching
- * the default language.  The order of paths is determined by the plugin load order,
- * with later entries overriding earlier.  Language files within these paths are
- * named as the two-letter ISO 639-1 country codes for the language they represent.
- *
- * Language paths are stored as array keys in the format:
- * <code>
- * $_ELGG->language_paths[str $language_path] = true
- * </code>
- *
- * @link http://en.wikipedia.org/wiki/ISO_639-1
- * @see register_language()
- * @global array $_ELGG->language_paths
- * @access private
- */
-$_ELGG->language_paths;
-
-/**
- * String translations for the current language.
- *
- * Elgg uses a key-based system for string internationalization, which
- * is accessed with {@link elgg_echo()}.
- *
- * Translations are stored as an array in the following format:
- * <code>
- * $_ELGG->translations[str $language_code][str $string_key] = str 'Translated Language String';
- * </code>
- *
- * @see register_translation()
- * @see elgg_echo()
- * @global array $_ELGG->translations
- * @access private
- */
-$_ELGG->translations;
-
-/**
- * An array of metadata names to be used as tags.
- *
- * Because tags are simply names of meatdata, This is used
- * in search to prevent data exposure by searching on
- * arbitrary metadata.
- *
- * @global array $_ELGG->registered_tag_metadata_names
- * @access private
- */
-$_ELGG->registered_tag_metadata_names;
-
-/**
- * A list of valid view types as discovered.
- *
- * @global array $_ELGG->view_types
- * @access private
- */
-$_ELGG->view_types;

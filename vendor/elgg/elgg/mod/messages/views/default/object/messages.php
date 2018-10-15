@@ -2,97 +2,102 @@
 /**
  * File renderer.
  *
- * @package ElggFile
+ * @uses $vars['entity'] ELggMessage to show
  */
 
-$full = elgg_extract('full_view', $vars, false);
-$message = elgg_extract('entity', $vars, false);
-$bulk_actions = (bool) elgg_extract('bulk_actions', $vars, false);
-
-if (!$message) {
-	return true;
+$entity = elgg_extract('entity', $vars, false);
+if (!$entity instanceof ElggMessage) {
+	return;
 }
 
-if ($message->toId == elgg_get_page_owner_guid()) {
+$icon_entity = null;
+$icon = '';
+$byline = '';
+$user_link = elgg_echo('messages:deleted_sender');
+
+$class = ['message'];
+if ($entity->toId == elgg_get_page_owner_guid()) {
 	// received
-	$user = get_user($message->fromId);
+	$user = $entity->getSender();
 	if ($user) {
-		$icon = elgg_view_entity_icon($user, 'tiny');
-		$user_link = elgg_view('output/url', array(
-			'href' => "messages/compose?send_to=$user->guid",
-			'text' => $user->name,
+		$icon_entity = $user;
+		$user_link = elgg_view('output/url', [
+			'href' => elgg_generate_url('add:object:messages', [
+				'send_to' => $user->guid,
+			]),
+			'text' => $user->getDisplayName(),
 			'is_trusted' => true,
-		));
-	} else {
-		$icon = '';
-		$user_link = elgg_echo('messages:deleted_sender');
+		]);
+		
+		$byline = elgg_echo('email:from') . ' ' . $user_link;
 	}
 
-	if ($message->readYet) {
-		$class = 'message read';
-	} else {
-		$class = 'message unread';
-	}
-
+	$class[] = $entity->readYet ? 'read': 'unread';
 } else {
 	// sent
-	$user = get_user($message->toId);
-
+	$user = $entity->getRecipient();
 	if ($user) {
-		$icon = elgg_view_entity_icon($user, 'tiny');
-		$user_link = elgg_view('output/url', array(
-			'href' => "messages/compose?send_to=$user->guid",
-			'text' => elgg_echo('messages:to_user', array($user->name)),
+		$icon_entity = $user;
+		$user_link = elgg_view('output/url', [
+			'href' => elgg_generate_url('add:object:messages', [
+				'send_to' => $user->guid,
+			]),
+			'text' => $user->getDisplayName(),
 			'is_trusted' => true,
-		));
-	} else {
-		$icon = '';
-		$user_link = elgg_echo('messages:deleted_sender');
+		]);
+
+		$byline = elgg_echo('email:to') . ' ' . $user_link;
 	}
 
-	$class = 'message read';
+	$class[] = 'read';
 }
 
-$timestamp = elgg_view_friendly_time($message->time_created);
+if (elgg_extract('full_view', $vars)) {
+	$body = elgg_view('output/longtext', [
+		'value' => $entity->description,
+	]);
 
-$subject_info = elgg_view('output/url', array(
-	'href' => $message->getURL(),
-	'text' => $message->title,
-	'is_trusted' => true,
-));
-
-$delete_link = elgg_view("output/url", array(
-						'href' => "action/messages/delete?guid=" . $message->getGUID() . "&full=$full",
-						'text' => elgg_view_icon('delete', 'float-alt'),
-						'confirm' => elgg_echo('deleteconfirm'),
-						'encode_text' => false,
-					));
-
-$body = <<<HTML
-<div class="messages-owner">$user_link</div>
-<div class="messages-subject">$subject_info</div>
-<div class="messages-timestamp">$timestamp</div>
-<div class="messages-delete">$delete_link</div>
-HTML;
-
-if ($full) {
-	echo elgg_view_image_block($icon, $body, array('class' => $class));
-	echo elgg_view('output/longtext', array('value' => $message->description));
-} else {
+	$params = [
+		'byline' => $byline,
+		'show_social_menu' => false,
+		'access' => false,
+		'show_summary' => true,
+		'icon_entity' => $icon_entity,
+		'body' => $body,
+		'class' => $class,
+		'show_responses' => false,
+	];
+	$params = $params + $vars;
 	
-	$body .= elgg_view("output/longtext", array("value" => elgg_get_excerpt($message->description), "class" => "elgg-subtext clearfloat"));
-	
-	if ($bulk_actions) {
-		$checkbox = elgg_view('input/checkbox', array(
-			'name' => 'message_id[]',
-			'value' => $message->guid,
-			'default' => false
-		));
-	
-		$entity_listing = elgg_view_image_block($icon, $body, array('class' => $class));
-		
-		echo elgg_view_image_block($checkbox, $entity_listing);
-	} else {
-		echo elgg_view_image_block($icon, $body, array('class' => $class));
-	}
+	echo elgg_view('object/elements/full', $params);
+	return;
 }
+
+$body .= elgg_view('output/longtext', [
+	'value' => elgg_get_excerpt($entity->description),
+]);
+
+$params = [
+	'class' => $class,
+	'access' => false,
+	'byline' => $byline,
+	'show_social_menu' => false,
+	'content' => $body,
+	'icon_entity' => $icon_entity,
+];
+$params = $params + $vars;
+$summary = elgg_view('object/elements/summary', $params);
+
+$bulk_actions = (bool) elgg_extract('bulk_actions', $vars, false);
+if (!$bulk_actions) {
+	echo $summary;
+	return;
+}
+
+$checkbox = elgg_view('input/checkbox', [
+	'name' => 'message_id[]',
+	'value' => $entity->guid,
+	'default' => false,
+]);
+
+echo elgg_view_image_block($checkbox, $summary);

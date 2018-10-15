@@ -101,19 +101,25 @@ Consider this PHP script that runs at ``http://example.org/myplugin_time``.
 
 .. code-block:: php
 
-    // in myplugin/start.php
-    elgg_register_page_handler('myplugin_time', 'myplugin_get_time');
+    // in myplugin/elgg-plugin.php
+    return [
+		'routes' => [
+			'default:myplugin:time' => [
+				'path' => '/myplugin_time',
+				'resource' => 'myplugin/time',
+			],
+		],
+	];
+   
+	// in myplugin/views/default/resources/myplugin/time.php
+    elgg_ajax_gatekeeper();
 
-    function myplugin_get_time() {
-        elgg_ajax_gatekeeper();
+    echo json_encode([
+        'rfc2822' => date(DATE_RFC2822),
+        'day' => date('l'),
+    ]);
 
-        echo json_encode([
-            'rfc2822' => date(DATE_RFC2822),
-            'day' => date('l'),
-        ]);
-
-        return true;
-    }
+    return true;
 
 To fetch its output, use ``ajax.path('<url_path>', options)``.
 
@@ -244,6 +250,28 @@ Notes for forms:
 	``get_input()``, but may not be the type you're expecting or may have unexpected keys.
 
 
+Submitting forms
+----------------
+
+To submit a form using Ajax, simply pass ``ajax`` parameter with form variables:
+
+.. code-block:: php
+
+    echo elgg_view_form('login', ['ajax' => true]);
+
+
+Redirects
+---------
+
+Use ``ajax.forward()`` to start a spinner and redirect the user to a new destination.
+
+.. code-block:: js
+
+	var Ajax = require('elgg/Ajax');
+    var ajax = new Ajax();
+    ajax.forward('/activity');
+
+
 Piggybacking on an Ajax request
 -------------------------------
 
@@ -268,6 +296,8 @@ Let's say when the view ``foo`` is fetched, we want to also send the server some
 This data can be read server-side via ``get_input('bar');``.
 
 .. note:: If data was given as a string (e.g. ``$form.serialize()``), the request hooks are not triggered.
+
+.. note:: The form will be objectified as ``FormData``, and the request content type will be determined accordingly. Effectively this allows plugins to submit multipart form data without using ``jquery.form`` plugin and other ``iframe`` hacks.
 
 Piggybacking on an Ajax response
 --------------------------------
@@ -404,7 +434,7 @@ elgg.action notes
 elgg.action JSON response wrapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code::
+.. code-block:: json
 
     {
         current_url: {String} "http://example.org/action/example/math", // not very useful

@@ -12,11 +12,11 @@ if (isset($vars['invitations'])) {
 	$user = elgg_get_page_owner_entity();
 	$vars['limit'] = get_input('limit', elgg_get_config('default_limit'));
 	$vars['offset'] = get_input('offset', 0);
-	$vars['count'] = groups_get_invited_groups($user->guid, false, array('count' => true));
-	$invitations = groups_get_invited_groups($user->guid, false, array(
-		'limit' => $limit,
-		'offset' => $offset
-			));
+	$vars['count'] = groups_get_invited_groups($user->guid, false, ['count' => true]);
+	$invitations = groups_get_invited_groups($user->guid, false, [
+		'limit' => $vars['limit'],
+		'offset' => $vars['offset'],
+	]);
 }
 
 $vars['items'] = $invitations;

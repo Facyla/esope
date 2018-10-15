@@ -1,9 +1,9 @@
 <?php
 
-$menus_present = (array) elgg_get_config("lazy_hover:menus");
+$menus_present = (array) elgg_get_config("elgg_lazy_hover_menus");
 
 $user = elgg_extract("entity", $vars);
-if (!elgg_instanceof($user, "user")) {
+if (!$user instanceof ElggUser) {
 	return;
 }
 
@@ -18,7 +18,8 @@ $mac = elgg_build_hmac($data)->getToken();
 
 $attrs = [
 	"rel" => $mac,
-	"class" => "elgg-menu elgg-menu-hover elgg-ajax-loader",
+	"class" => "elgg-menu elgg-menu-hover",
+	'data-menu-placeholder' => '1', // flag for the JS to know this menu isn't fully loaded yet
 ];
 
 if (empty($menus_present[$mac])) {
@@ -31,7 +32,7 @@ if (empty($menus_present[$mac])) {
 	]);
 
 	$menus_present[$mac] = true;
-	elgg_set_config("lazy_hover:menus", $menus_present);
+	elgg_set_config("elgg_lazy_hover_menus", $menus_present);
 }
 
 echo elgg_format_element('ul', $attrs);

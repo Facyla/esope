@@ -4,14 +4,17 @@
  *
  * @uses $vars['item']
  */
-$item = $vars['item'];
+$item = elgg_extract('item', $vars);
+if (!$item instanceof ElggRiverItem) {
+	return;
+}
 
-$name = $item->getSubjectEntity()->name;
+$name = $item->getSubjectEntity()->getDisplayName();
 $name = htmlspecialchars($name, ENT_NOQUOTES, 'UTF-8');
-$title = elgg_echo('river:update', array($name));
+$title = elgg_echo('river:update', [$name]);
 
 $timestamp = date('r', $item->getTimePosted());
-$summary = elgg_view('river/elements/summary', $vars, false, false, 'default');
+$summary = elgg_view('river/elements/summary', $vars, 'default');
 $body = elgg_extract('summary', $vars, $summary);
 
 

@@ -5,11 +5,11 @@ You need to perform some extra steps if your plugin needs settings to be saved a
 
 - Create a file in your plugin’s default view folder called ``plugins/your_plugin/settings.php``, where ``your_plugin`` is the name of your plugin’s directory in the ``mod`` hierarchy
 - Fill this file with the form elements you want to display together with :doc:`internationalised <i18n>` text labels
-- Set the name attribute in your form components to ``param[`varname`]`` where ``varname`` is the name of the variable. These will be saved as private settings attached to a plugin entity. So, if your variable is called ``param[myparameter]`` your plugin (which is also passed to this view as ``$vars['entity']``) will be called ``$vars['entity']->myparameter``
+- Set the name attribute in your form components to ``params[`varname`]`` where ``varname`` is the name of the variable. These will be saved as private settings attached to a plugin entity. So, if your variable is called ``params[myparameter]`` your plugin (which is also passed to this view as ``$vars['entity']``) will be called ``$vars['entity']->myparameter``
 
 An example ``settings.php`` would look like:
 
-.. code:: php
+.. code-block:: php
 
    <p>
       <?php echo elgg_echo('myplugin:settings:limit'); ?>
@@ -30,6 +30,16 @@ An example ``settings.php`` would look like:
 
    You cannot use form components that send no value when "off." These include radio inputs and check boxes.
 
+If your plugin settings require a cache flush you can add a (hidden) input on the form with the name 'flush_cache' and value '1'
+  
+.. code-block:: php
+
+	elgg_view_field([
+		'#type' => 'hidden',
+		'name' => 'flush_cache',
+		'value' => 1,
+	]);
+
 User settings
 -------------
 
@@ -44,13 +54,13 @@ Retrieving settings in your code
 
 To retrieve settings from your code use:
 
-.. code:: php
+.. code-block:: php
 
    $setting = elgg_get_plugin_setting($name, $plugin_id);
    
 or for user settings
 
-.. code:: php
+.. code-block:: php
 
    $user_setting = elgg_get_plugin_user_setting($name, $user_guid, $plugin_id);
    
@@ -65,16 +75,43 @@ Setting values while in code
 
 Values may also be set from within your plugin code, to do this use one of the following functions:
 
-.. code:: php
+.. code-block:: php
 
    elgg_set_plugin_setting($name, $value, $plugin_id);
 
 or 
 
-.. code:: php
+.. code-block:: php
 
    elgg_set_plugin_user_setting($name, $value, $user_guid, $plugin_id);
    
 .. warning::
 
    The ``$plugin_id`` needs to be provided when setting plugin (user)settings.
+   
+Default plugin (user) settings
+------------------------------
+
+If a plugin or a user not have a setting stored in the database, you sometimes have the need for a certain default value.
+You can pass this when using the getter functions.
+
+.. code-block:: php
+
+   $user_setting = elgg_get_plugin_user_setting($name, $user_guid, $plugin_id, $default);
+   
+   $plugin_setting = elgg_get_plugin_setting($name, $plugin_id, $default);
+   
+Alternatively you can also provide default plugin and user settings in the ``elgg-plugin.php`` file.
+
+.. code-block:: php
+
+	<?php
+
+	return [
+		'settings' => [
+		    'key' => 'value',
+		],
+		'user_settings' => [
+		    'key' => 'value',
+		],
+	];

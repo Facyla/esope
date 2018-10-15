@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Elgg filestore.
  * This file contains functions for saving and retrieving data from files.
@@ -7,6 +6,7 @@
  * @package Elgg.Core
  * @subpackage DataModel.FileStorage
  */
+
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 function get_dir_size($dir, $total_size = 0) {
 	$handle = @opendir($dir);
 	while ($file = @readdir($handle)) {
-		if (in_array($file, array('.', '..'))) {
+		if (in_array($file, ['.', '..'])) {
 			continue;
 		}
 		if (is_dir($dir . $file)) {
@@ -32,25 +32,6 @@ function get_dir_size($dir, $total_size = 0) {
 	@closedir($handle);
 
 	return($total_size);
-}
-
-/**
- * Get the contents of an uploaded file.
- * (Returns false if there was an issue.)
- *
- * @param string $input_name The name of the file input field on the submission form
- *
- * @return mixed|false The contents of the file, or false on failure.
- * @deprecated 2.3
- */
-function get_uploaded_file($input_name) {
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated and will be removed', '2.3');
-	$inputs = elgg_get_uploaded_files($input_name);
-	$input = array_shift($inputs);
-	if (!$input || !$input->isValid()) {
-		return false;
-	}
-	return file_get_contents($input->getPathname());
 }
 
 /**
@@ -78,178 +59,8 @@ function get_uploaded_file($input_name) {
  * @return bool
  * @since 2.3
  */
-function elgg_save_resized_image($source, $destination = null, array $params = array()) {
+function elgg_save_resized_image($source, $destination = null, array $params = []) {
 	return _elgg_services()->imageService->resize($source, $destination, $params);
-}
-
-/**
- * Gets the jpeg contents of the resized version of an uploaded image
- * (Returns false if the uploaded file was not an image)
- *
- * @param string $input_name The name of the file input field on the submission form
- * @param int    $maxwidth   The maximum width of the resized image
- * @param int    $maxheight  The maximum height of the resized image
- * @param bool   $square     If set to true, will take the smallest
- *                           of maxwidth and maxheight and use it to set the
- *                           dimensions on all size; the image will be cropped.
- * @param bool   $upscale    Resize images smaller than $maxwidth x $maxheight?
- *
- * @return false|mixed The contents of the resized image, or false on failure
- * @deprecated 2.3
- */
-function get_resized_image_from_uploaded_file($input_name, $maxwidth, $maxheight,
-		$square = false, $upscale = false) {
-
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated. Use elgg_save_resized_image()', '2.3');
-
-	$files = _elgg_services()->request->files;
-	if (!$files->has($input_name)) {
-		return false;
-	}
-
-	$file = $files->get($input_name);
-	if (empty($file)) {
-		// a file input was provided but no file uploaded
-		return false;
-	}
-	if ($file->getError() !== 0) {
-		return false;
-	}
-
-	return get_resized_image_from_existing_file($file->getPathname(), $maxwidth, $maxheight, $square, 0, 0, 0, 0, $upscale);
-}
-
-/**
- * Gets the jpeg contents of the resized version of an already uploaded image
- * (Returns false if the file was not an image)
- *
- * @param string $input_name The name of the file on the disk
- * @param int    $maxwidth   The desired width of the resized image
- * @param int    $maxheight  The desired height of the resized image
- * @param bool   $square     If set to true, takes the smallest of maxwidth and
- * 			                 maxheight and use it to set the dimensions on the new image.
- *                           If no crop parameters are set, the largest square that fits
- *                           in the image centered will be used for the resize. If square,
- *                           the crop must be a square region.
- * @param int    $x1         x coordinate for top, left corner
- * @param int    $y1         y coordinate for top, left corner
- * @param int    $x2         x coordinate for bottom, right corner
- * @param int    $y2         y coordinate for bottom, right corner
- * @param bool   $upscale    Resize images smaller than $maxwidth x $maxheight?
- *
- * @return false|mixed The contents of the resized image, or false on failure
- * @deprecated 2.3
- */
-function get_resized_image_from_existing_file($input_name, $maxwidth, $maxheight,
-			$square = false, $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
-
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated. Use elgg_save_resized_image()', '2.3');
-
-	if (!is_readable($input_name)) {
-		return false;
-	}
-
-	// we will write resized image to a temporary file and then delete it
-	// need to add a valid image extension otherwise resizing fails
-	$tmp_filename = tempnam(sys_get_temp_dir(), 'icon_resize');
-	
-	$params = [
-		'w' => $maxwidth,
-		'h' => $maxheight,
-		'x1' => $x1,
-		'y1' => $y1,
-		'x2' => $x2,
-		'y2' => $y2,
-		'square' => $square,
-		'upscale' => $upscale,
-	];
-
-	$image_bytes = false;
-	if (elgg_save_resized_image($input_name, $tmp_filename, $params)) {
-		$image_bytes = file_get_contents($tmp_filename);
-	}
-
-	unlink($tmp_filename);
-
-	return $image_bytes;
-}
-
-/**
- * Calculate the parameters for resizing an image
- *
- * @param int   $width  Natural width of the image
- * @param int   $height Natural height of the image
- * @param array $params Resize parameters
- *                      - 'maxwidth' maximum width of the resized image
- *                      - 'maxheight' maximum height of the resized image
- *                      - 'upscale' allow upscaling
- *                      - 'square' constrain to a square
- *                      - 'x1', 'y1', 'x2', 'y2' cropping coordinates
- *
- * @return array|false
- * @since 1.7.2
- * @deprecated 2.3
- */
-function get_image_resize_parameters($width, $height, array $params = []) {
-
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated and will be removed from public API', '2.3');
-
-	try {
-		$params['w'] = elgg_extract('maxwidth', $params);
-		$params['h'] = elgg_extract('maxheight', $params);
-		unset($params['maxwidth']);
-		unset($params['maxheight']);
-		$params = _elgg_services()->imageService->normalizeResizeParameters($width, $height, $params);
-		return [
-			'newwidth' => $params['w'],
-			'newheight' => $params['h'],
-			'selectionwidth' => $params['x2'] - $params['x1'],
-			'selectionheight' => $params['y2'] - $params['y1'],
-			'xoffset' => $params['x1'],
-			'yoffset' => $params['y1'],
-		];
-	} catch (\LogicException $ex) {
-		elgg_log($ex->getMessage(), 'ERROR');
-		return false;
-	}
-}
-
-/**
- * Delete an \ElggFile file
- *
- * @param int $guid \ElggFile GUID
- *
- * @return bool
- */
-function file_delete($guid) {
-	$file = get_entity($guid);
-	if (!$file || !$file->canEdit()) {
-		return false;
-	}
-
-	$thumbnail = $file->thumbnail;
-	$smallthumb = $file->smallthumb;
-	$largethumb = $file->largethumb;
-	if ($thumbnail) {
-		$delfile = new \ElggFile();
-		$delfile->owner_guid = $file->owner_guid;
-		$delfile->setFilename($thumbnail);
-		$delfile->delete();
-	}
-	if ($smallthumb) {
-		$delfile = new \ElggFile();
-		$delfile->owner_guid = $file->owner_guid;
-		$delfile->setFilename($smallthumb);
-		$delfile->delete();
-	}
-	if ($largethumb) {
-		$delfile = new \ElggFile();
-		$delfile->owner_guid = $file->owner_guid;
-		$delfile->setFilename($largethumb);
-		$delfile->delete();
-	}
-
-	return $file->delete();
 }
 
 /**
@@ -260,6 +71,15 @@ function file_delete($guid) {
  * @return bool
  */
 function delete_directory($directory) {
+
+	if (!file_exists($directory)) {
+		return true;
+	}
+
+	if (!is_dir($directory)) {
+		return false;
+	}
+
 	// sanity check: must be a directory
 	if (!$handle = opendir($directory)) {
 		return false;
@@ -267,7 +87,7 @@ function delete_directory($directory) {
 
 	// loop through all files
 	while (($file = readdir($handle)) !== false) {
-		if (in_array($file, array('.', '..'))) {
+		if (in_array($file, ['.', '..'])) {
 			continue;
 		}
 
@@ -289,59 +109,6 @@ function delete_directory($directory) {
 }
 
 /**
- * Removes all entity files
- *
- * @warning This only deletes the physical files and not their entities.
- * This will result in FileExceptions being thrown.  Don't use this function.
- *
- * @warning This must be kept in sync with \ElggDiskFilestore.
- *
- * @todo Remove this when all files are entities.
- *
- * @param \ElggEntity $entity An \ElggEntity
- *
- * @return void
- * @access private
- */
-function _elgg_clear_entity_files($entity) {
-	$dir = new \Elgg\EntityDirLocator($entity->guid);
-	$file_path = elgg_get_config('dataroot') . $dir;
-	if (file_exists($file_path)) {
-		delete_directory($file_path);
-	}
-}
-
-/// Variable holding the default datastore
-$DEFAULT_FILE_STORE = null;
-
-/**
- * Return the default filestore.
- *
- * @return \ElggFilestore
- * @deprecated Will be removed in 3.0
- */
-function get_default_filestore() {
-	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated.', '2.1');
-
-	return $GLOBALS['DEFAULT_FILE_STORE'];
-}
-
-/**
- * Set the default filestore for the system.
- *
- * @param \ElggFilestore $filestore An \ElggFilestore object.
- *
- * @return true
- * @deprecated Will be removed in 3.0
- */
-function set_default_filestore(\ElggFilestore $filestore) {
-	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated.', '2.1');
-
-	$GLOBALS['DEFAULT_FILE_STORE'] = $filestore;
-	return true;
-}
-
-/**
  * Returns the category of a file from its MIME type
  *
  * @param string $mime_type The MIME type
@@ -350,23 +117,8 @@ function set_default_filestore(\ElggFilestore $filestore) {
  * @since 1.10
  */
 function elgg_get_file_simple_type($mime_type) {
-	$params = array('mime_type' => $mime_type);
+	$params = ['mime_type' => $mime_type];
 	return elgg_trigger_plugin_hook('simple_type', 'file', $params, 'general');
-}
-
-/**
- * Bootstraps the default filestore at "boot, system" event
- *
- * @return void
- * @access private
- */
-function _elgg_filestore_boot() {
-	global $CONFIG;
-
-	// Now register a default filestore
-	if (isset($CONFIG->dataroot)) {
-		$GLOBALS['DEFAULT_FILE_STORE'] = new \ElggDiskFilestore($CONFIG->dataroot);
-	}
 }
 
 /**
@@ -385,9 +137,6 @@ function _elgg_filestore_init() {
 
 	// Unit testing
 	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_filestore_test');
-
-	// Handler for serving embedded icons
-	elgg_register_page_handler('serve-icon', '_elgg_filestore_serve_icon_handler');
 
 	// Touch entity icons if entity access id has changed
 	elgg_register_event_handler('update:after', 'object', '_elgg_filestore_touch_icons');
@@ -456,16 +205,16 @@ function _elgg_filestore_parse_simpletype($hook, $type, $simple_type, $params) {
 /**
  * Unit tests for files
  *
- * @param string $hook   unit_test
- * @param string $type   system
- * @param mixed  $value  Array of tests
+ * @param string $hook  'unit_test'
+ * @param string $type  'system'
+ * @param mixed  $value Array of tests
  *
  * @return array
  * @access private
+ * @codeCoverageIgnore
  */
 function _elgg_filestore_test($hook, $type, $value) {
-	global $CONFIG;
-	$value[] = "{$CONFIG->path}engine/tests/ElggCoreFilestoreTest.php";
+	$value[] = ElggCoreFilestoreTest::class;
 	return $value;
 }
 
@@ -480,12 +229,7 @@ function _elgg_filestore_test($hook, $type, $value) {
  * @return string
  */
 function elgg_get_download_url(\ElggFile $file, $use_cookie = true, $expires = '+2 hours') {
-	$file_svc = new Elgg\FileService\File();
-	$file_svc->setFile($file);
-	$file_svc->setExpires($expires);
-	$file_svc->setDisposition('attachment');
-	$file_svc->bindSession($use_cookie);
-	return $file_svc->getURL();
+	return $file->getDownloadURL($use_cookie, $expires);
 }
 
 /**
@@ -500,14 +244,7 @@ function elgg_get_download_url(\ElggFile $file, $use_cookie = true, $expires = '
  * @return string
  */
 function elgg_get_inline_url(\ElggFile $file, $use_cookie = false, $expires = '') {
-	$file_svc = new Elgg\FileService\File();
-	$file_svc->setFile($file);
-	if ($expires) {
-		$file_svc->setExpires($expires);
-	}
-	$file_svc->setDisposition('inline');
-	$file_svc->bindSession($use_cookie);
-	return $file_svc->getURL();
+	return $file->getInlineURL($use_cookie, $expires);
 }
 
 /**
@@ -523,7 +260,10 @@ function elgg_get_inline_url(\ElggFile $file, $use_cookie = false, $expires = ''
  * @since 2.2
  */
 function elgg_get_embed_url(\ElggEntity $entity, $size) {
-	return elgg_normalize_url("serve-icon/$entity->guid/$size");
+	return elgg_normalize_url(elgg_generate_url('serve-icon', [
+		'guid' => $entity->guid,
+		'size' => $size,
+	]));
 }
 
 /**
@@ -638,10 +378,34 @@ function _elgg_filestore_move_icons($event, $type, $entity) {
  * @return UploadedFile[]|false
  */
 function elgg_get_uploaded_files($input_name) {
-	return _elgg_services()->uploads->getUploadedFiles($input_name);
+	return _elgg_services()->uploads->getFiles($input_name);
 }
 
+/**
+ * Returns a single valid uploaded file object
+ *
+ * @param string $input_name         Form input name
+ * @param bool   $check_for_validity If there is an uploaded file, is it required to be valid
+ *
+ * @return UploadedFile|false
+ */
+function elgg_get_uploaded_file($input_name, $check_for_validity = true) {
+	return _elgg_services()->uploads->getFile($input_name, $check_for_validity);
+}
+
+/**
+ * Returns a ElggTempFile which can handle writing/reading of data to a temporary file location
+ *
+ * @return ElggTempFile
+ * @since 3.0
+ */
+function elgg_get_temp_file() {
+	return new ElggTempFile();
+}
+
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$events->registerHandler('boot', 'system', '_elgg_filestore_boot', 100);
 	$events->registerHandler('init', 'system', '_elgg_filestore_init', 100);
 };

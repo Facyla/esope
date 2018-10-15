@@ -33,8 +33,19 @@ return array(
 	'developers:help:log_events' => "Write events and plugin hooks to the log. Warning: there are many of these per page.",
 	'developers:label:show_gear' => "Use %s outside admin area",
 	'developers:help:show_gear' => "An icon on the bottom right of the viewport that gives admins access to developer settings and links.",
+	'developers:label:block_email' => "Block all outgoing e-mails",
+	'developers:help:block_email' => "You can block outgoing e-mail to regular users or to all users",
+	'developers:label:forward_email' => "Forward all outgoing e-mails to one address",
+	'developers:help:forward_email' => "All outgoing e-mails will be sent to the configured e-mail address",
+	'developers:label:enable_error_log' => "Enable error log",
+	'developers:help:enable_error_log' => "Maintain a separate log of errors and messages logged to the error_log() based on your trace level setting. The log is viewable via admin interface.",
+
 	'developers:label:submit' => "Save and flush caches",
 
+	'developers:block_email:forward' => 'Forward all e-mails',
+	'developers:block_email:users' => 'Only regular users',
+	'developers:block_email:all' => 'Admins and regular users',
+	
 	'developers:debug:off' => 'Off',
 	'developers:debug:error' => 'Error',
 	'developers:debug:warning' => 'Warning',
@@ -59,6 +70,7 @@ return array(
 	'developers:inspect:pluginhooks' => 'Plugin Hooks',
 	'developers:inspect:priority' => 'Priority',
 	'developers:inspect:simplecache' => 'Simple Cache',
+	'developers:inspect:routes' => 'Routes',
 	'developers:inspect:views' => 'Views',
 	'developers:inspect:views:all_filtered' => "<b>Note!</b> All view input/output is filtered through these Plugin Hooks:",
 	'developers:inspect:views:input_filtered' => "(input filtered by plugin hook: %s)",
@@ -67,7 +79,19 @@ return array(
 	'developers:inspect:webservices' => 'Webservices',
 	'developers:inspect:widgets:context' => 'Context',
 	'developers:inspect:functions' => 'Functions',
-	'developers:inspect:file_location' => 'File path from Elgg root',
+	'developers:inspect:file_location' => 'File path from Elgg root or controller',
+	'developers:inspect:route' => 'Route Name',
+	'developers:inspect:path' => 'Path Pattern',
+	'developers:inspect:resource' => 'Resource View',
+	'developers:inspect:handler' => 'Handler',
+	'developers:inspect:controller' => 'Controller',
+	'developers:inspect:file' => 'File',
+	'developers:inspect:middleware' => 'File',
+	'developers:inspect:handler_type' => 'Handled by',
+	'developers:inspect:services' => 'Services',
+	'developers:inspect:service:name' => 'Name',
+	'developers:inspect:service:path' => 'Definition',
+	'developers:inspect:service:class' => 'Class',
 
 	// event logging
 	'developers:request_stats' => "Request Statistics (does not include the shutdown event)",
@@ -92,13 +116,11 @@ return array(
 
 	'theme_sandbox:icons:blurb' => 'Use <em>elgg_view_icon($name)</em> to display icons.',
 
-	// unit tests
-	'developers:unit_tests:description' => 'Elgg has unit and integration tests for detecting bugs in its core classes and functions.',
-	'developers:unit_tests:warning' => 'Warning: Do Not Run These Tests on a Production Site. They can corrupt your database.',
-	'developers:unit_tests:run' => 'Run',
-
 	// status messages
 	'developers:settings:success' => 'Settings saved and caches flushed',
 
 	'developers:amd' => 'AMD',
+
+	'admin:develop_tools:error_log' => 'Error Log',
+	'developers:logs:empty' => 'Error log is empty',
 );

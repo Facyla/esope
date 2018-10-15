@@ -1,16 +1,14 @@
 /**
  * Messageboard module
- *
- * @note The name is required for inlining, do not remove it
  */
-define('elgg/messageboard', function (require) {
+define(function (require) {
 	var $ = require('jquery');
 	var elgg = require('elgg');
 
 	var MB = {
 		init: function() {
 			var form = $('form[name=elgg-messageboard]');
-			form.on('click', 'input[type=submit]', MB.submit);
+			form.on('click', '[type=submit]', MB.submit);
 
 			// remove the default binding for confirmation since we're doing extra stuff.
 			// @todo remove if we add a hook to the requires confirmation callback
@@ -61,9 +59,4 @@ define('elgg/messageboard', function (require) {
 	};
 
 	elgg.register_hook_handler('init', 'system', MB.init);
-
-	/**
-	 * @deprecated 2.3 Do not call methods on elgg.messageboard
-	 */
-	elgg.messageboard = MB;
 });

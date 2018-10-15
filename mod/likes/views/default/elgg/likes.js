@@ -1,67 +1,53 @@
 /**
  * Likes module
- *
- * @note The name is required for inlining, do not remove it
  */
-define('elgg/likes', function (require) {
+define(function (require) {
 	var $ = require('jquery');
 	var elgg = require('elgg');
+	var Ajax = require('elgg/Ajax');
 
-	elgg.provide('elgg.ui');
+	var ajax = new Ajax();
 
 	/**
-	 * Repositions the likes popup
-	 *
-	 * @param {String} hook    'getOptions'
-	 * @param {String} type    'ui.popup'
-	 * @param {Object} params  An array of info about the target and source.
-	 * @param {Object} options Options to pass to
-	 *
-	 * @return {Object}
-	 * @deprecated 2.3 Do not call this directly
+	 * @see \Elgg\Likes\JsConfigHandler
 	 */
-	elgg.ui.likesPopupHandler = function(hook, type, params, options) {
-		if (params.target.hasClass('elgg-likes')) {
-			options.my = 'right bottom';
-			options.at = 'left top';
-			return options;
-		}
-		return null;
-	};
+	var STATES = elgg.data.likes_states;
 
-	elgg.register_hook_handler('getOptions', 'ui.popup', elgg.ui.likesPopupHandler);
+	function update_like_menu_item(guid, menu_item) {
+		$('.elgg-menu-item-likes > a[data-likes-guid=' + guid + ']').each(function(){
+			$(this).html(menu_item);
+		})
+	}
 
-	function setupHandlers(nameA, nameB) {
-		$(document).on('click', '.elgg-menu-item-' + nameA + ' a', function() {
-			var $menu = $(this).closest('.elgg-menu');
+	function set_counts(guid, num_likes, new_value) {
+		var li_modifier = num_likes > 0 ? 'removeClass' : 'addClass';
 
-			// Be optimistic about success
-			elgg.ui.toggleMenuItems($menu, nameB, nameA);
-
-			$menu.find('.elgg-menu-item-' + nameB + ' a').blur();
-
-			// Send the ajax request
-			elgg.action($(this).attr('href'), {
-				success: function(data) {
-					if (data.system_messages.error.length) {
-						// Something went wrong, so undo the optimistic changes
-						elgg.ui.toggleMenuItems($menu, nameA, nameB);
-					}
-
-					var func_name = data.output.num_likes > 0 ? 'removeClass' : 'addClass';
-					$(data.output.selector).text(data.output.text)[func_name]('hidden');
-				},
-				error: function() {
-					// Something went wrong, so undo the optimistic changes
-					elgg.ui.toggleMenuItems($menu, nameA, nameB);
-				}
-			});
-
-			// Don't want to actually click the link
-			return false;
+		$('.elgg-menu-item-likes-count [data-likes-guid=' + guid + ']').each(function () {
+			$(this)
+				.html(new_value)
+				.parent()[li_modifier]('hidden');
 		});
 	}
 
-	setupHandlers('likes', 'unlike');
-	setupHandlers('unlike', 'likes');
+	$(document).on('click', '.elgg-menu-item-likes a', function () {
+		// warning: data is "live" and reflects changes from set_liked_state()
+		var data = $(this).data(),
+			guid = data.likesGuid,
+			current_state = data.likesState;
+
+		ajax.action(STATES[current_state].action, {
+			data: {guid: guid}
+		});
+
+		return false;
+	});
+
+	// Any Ajax operation can return likes data
+	elgg.register_hook_handler(Ajax.RESPONSE_DATA_HOOK, 'all', function (hook, type, params, value) {
+		if (value.likes_status) {
+			var status = value.likes_status;
+			update_like_menu_item(status.guid, status.like_menu_item);
+			set_counts(status.guid, status.count, status.count_menu_item);
+		}
+	});
 });

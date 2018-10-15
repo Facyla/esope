@@ -1,22 +1,21 @@
 <?php
 namespace Elgg\Cache;
 
-use Elgg\Profilable;
+use Elgg\Cacheable;
 use Elgg\Config;
-use ElggFileCache;
-use Elgg\Database\Datalist;
+use Elgg\Profilable;
+use ElggCache;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * System Cache
  *
  * @access private
- *
- * @package    Elgg.Core
- * @subpackage Cache
- * @since      1.10.0
+ * @since  1.10.0
  */
 class SystemCache {
+
 	use Profilable;
+	use Cacheable;
 
 	/**
 	 * @var Config
@@ -24,26 +23,14 @@ class SystemCache {
 	private $config;
 
 	/**
-	 * @var ElggFileCache
-	 */
-	private $cache;
-
-	/**
-	 * @var Datalist
-	 */
-	private $datalist;
-
-	/**
 	 * Constructor
 	 *
-	 * @param ElggFileCache $cache    Elgg disk cache
-	 * @param Config        $config   Elgg config
-	 * @param Datalist      $datalist Elgg datalist
+	 * @param ElggCache $cache  Elgg disk cache
+	 * @param Config    $config Elgg config
 	 */
-	public function __construct(ElggFileCache $cache, Config $config, Datalist $datalist) {
+	public function __construct(ElggCache $cache, Config $config) {
 		$this->cache = $cache;
 		$this->config = $config;
-		$this->datalist = $datalist;
 	}
 
 	/**
@@ -88,77 +75,55 @@ class SystemCache {
 	}
 	
 	/**
+	 * Deletes the contents of a system cache.
+	 *
+	 * @param string $type The type of cache to delete
+	 * @return string
+	 */
+	function delete($type) {
+		return $this->cache->delete($type);
+	}
+	
+	/**
 	 * Is system cache enabled
 	 *
 	 * @return bool
 	 */
 	function isEnabled() {
-		return (bool)$this->config->getVolatile('system_cache_enabled');
+		return (bool) $this->config->system_cache_enabled;
 	}
 	
 	/**
 	 * Enables the system disk cache.
 	 *
-	 * Uses the 'system_cache_enabled' datalist with a boolean value.
+	 * Uses the 'system_cache_enabled' config with a boolean value.
 	 * Resets the system cache.
 	 *
 	 * @return void
 	 */
 	function enable() {
-		$this->datalist->set('system_cache_enabled', 1);
-		$this->config->set('system_cache_enabled', 1);
+		$this->config->save('system_cache_enabled', 1);
 		$this->reset();
 	}
 	
 	/**
 	 * Disables the system disk cache.
 	 *
-	 * Uses the 'system_cache_enabled' datalist with a boolean value.
+	 * Uses the 'system_cache_enabled' config with a boolean value.
 	 * Resets the system cache.
 	 *
 	 * @return void
 	 */
 	function disable() {
-		$this->datalist->set('system_cache_enabled', 0);
-		$this->config->set('system_cache_enabled', 0);
+		$this->config->save('system_cache_enabled', 0);
 		$this->reset();
-	}
-	
-	/**
-	 * Loads the system cache during engine boot
-	 *
-	 * @see elgg_reset_system_cache()
-	 * @access private
-	 */
-	function loadAll() {
-		if ($this->timer) {
-			$this->timer->begin([__METHOD__]);
-		}
-
-		$this->config->set('system_cache_loaded', false);
-
-		if (!_elgg_services()->views->configureFromCache($this)) {
-			return;
-		}
-
-		$data = $this->load('view_types');
-		if (!is_string($data)) {
-			return;
-		}
-		$GLOBALS['_ELGG']->view_types = unserialize($data);
-
-		// Note: We don't need view_overrides for operation. Inspector can pull this from the cache
-
-		$this->config->set('system_cache_loaded', true);
-
-		if ($this->timer) {
-			$this->timer->end([__METHOD__]);
-		}
 	}
 	
 	/**
 	 * Initializes the simplecache lastcache variable and creates system cache files
 	 * when appropriate.
+	 *
+	 * @return void
 	 *
 	 * @access private
 	 */
@@ -168,17 +133,14 @@ class SystemCache {
 		}
 
 		// cache system data if enabled and not loaded
-		if (!$this->config->getVolatile('system_cache_loaded')) {
-			$this->save('view_types', serialize($GLOBALS['_ELGG']->view_types));
-
+		if (!$this->config->system_cache_loaded) {
 			_elgg_services()->views->cacheConfiguration($this);
 		}
 	
-		if (!$GLOBALS['_ELGG']->i18n_loaded_from_cache) {
-
+		if (!_elgg_services()->translator->wasLoadedFromCache()) {
 			_elgg_services()->translator->reloadAllTranslations();
 
-			foreach ($GLOBALS['_ELGG']->translations as $lang => $map) {
+			foreach (_elgg_services()->translator->getLoadedTranslations() as $lang => $map) {
 				$this->save("$lang.lang", serialize($map));
 			}
 		}

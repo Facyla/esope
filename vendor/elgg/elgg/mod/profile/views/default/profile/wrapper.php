@@ -1,14 +1,17 @@
 <?php
 /**
  * Profile info box
+ *
+ * @uses $vars['entity'] The user entity
  */
 
-?>
+$user = elgg_extract('entity', $vars);
+if ($user->isBanned()) {
+	$reason = ($user->ban_reason === 'banned') ? '' : $user->ban_reason;
+	
+	echo elgg_view_message('warning', $reason, [
+		'title' => elgg_echo('banned'),
+	]);
+}
 
-<?php /* We add mrn here because we're doing stupid things with the grid system. Remove this hack */ ?>
-<div class="profile elgg-col-2of3 mrn">
-	<div class="elgg-inner clearfix h-card vcard">
-		<?php echo elgg_view('profile/owner_block'); ?>
-		<?php echo elgg_view('profile/details'); ?>
-	</div>
-</div>
+echo elgg_view('profile/details', $vars);

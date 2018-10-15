@@ -14,16 +14,16 @@
 
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-plaintext');
 
-$defaults = array(
+$defaults = [
 	'value' => '',
 	'rows' => '10',
 	'cols' => '50',
 	'disabled' => false,
-);
+];
 
 $vars = array_merge($defaults, $vars);
 
-$value = htmlspecialchars($vars['value'], ENT_QUOTES, 'UTF-8');
+$value = htmlspecialchars($vars['value'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 unset($vars['value']);
 
 echo elgg_format_element('textarea', $vars, $value);

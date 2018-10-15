@@ -3,15 +3,17 @@
 	<id>login_as</id>
 	<name>Login As</name>
 	<author>Brett Profitt</author>
-	<version>1.9.2</version>
+	<author>Core Developers</author>
+	<version>2.0</version>
 	<category>admin</category>
 	<category>bundled</category>
-	<description>Allows admin users to login as another user.</description>
+	<description>Allows admin users to login as another user</description>
 	<website>http://www.elgg.org/</website>
-	<copyright>(C) Brett Profitt 2010-2011</copyright>
+	<copyright>(c) Brett Profitt 2010-2017</copyright>
+	<copyright>(c) Elgg Foundation 2016-2017</copyright>
 	<license>GNU General Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
-		<version>1.9</version>
+		<version>3.0</version>
 	</requires>
 </plugin_manifest>

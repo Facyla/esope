@@ -29,15 +29,15 @@ unset($vars['entity_allows_comments']);
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-access');
 
 // this will be passed to plugin hooks ['access:collections:write', 'user'] and ['default', 'access']
-$params = array();
+$params = [];
 
-$keys = array(
+$keys = [
 	'entity' => null,
 	'entity_type' => null,
 	'entity_subtype' => null,
 	'container_guid' => null,
 	'purpose' => 'read',
-);
+];
 foreach ($keys as $key => $default_value) {
 	$params[$key] = elgg_extract($key, $vars, $default_value);
 	unset($vars[$key]);
@@ -70,12 +70,12 @@ if (!isset($vars['value']) || $vars['value'] == ACCESS_DEFAULT) {
 	} else if (empty($vars['options_values']) || !is_array($vars['options_values'])) {
 		$vars['value'] = get_default_access(null, $params);
 	} else {
-		$options_values_ids = array_keys($vars['options_values']);
+		$options_values_ids = array_keys(elgg_extract('options_values', $vars));
 		$vars['value'] = $options_values_ids[0];
 	}
 }
 
-$params['value'] = $vars['value'];
+$params['value'] = elgg_extract('value', $vars);
 
 // don't call get_write_access_array() unless we need it
 if (!isset($vars['options_values'])) {
@@ -88,25 +88,7 @@ if (!isset($vars['disabled'])) {
 
 // if access is set to a value not present in the available options, add the option
 if (!isset($vars['options_values'][$vars['value']])) {
-	$acl = get_access_collection($vars['value']);
-	$display = $acl ? $acl->name : elgg_echo('access:missing_name');
-	$vars['options_values'][$vars['value']] = $display;
+	$vars['options_values'][$vars['value']] = get_readable_access_level($vars['value']);
 }
 
-// should we tell users that public/logged-in access levels will be ignored?
-if (($container instanceof ElggGroup)
-	&& $container->getContentAccessMode() === ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY
-	&& !elgg_in_context('group-edit')
-	&& !($entity instanceof ElggGroup)) {
-	$show_override_notice = true;
-} else {
-	$show_override_notice = false;
-}
-
-if ($show_override_notice) {
-	$vars['data-group-acl'] = $container->group_acl;
-}
 echo elgg_view('input/select', $vars);
-if ($show_override_notice) {
-	echo elgg_format_element('p', ['class' => 'elgg-text-help'], elgg_echo('access:overridenotice'));
-}

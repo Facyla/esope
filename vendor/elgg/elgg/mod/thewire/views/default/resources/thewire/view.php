@@ -13,18 +13,18 @@ if (!$owner) {
 	forward();
 }
 
-$title = elgg_echo('thewire:by', array($owner->name));
+$title = elgg_echo('thewire:by', [$owner->getDisplayName()]);
 
 elgg_push_breadcrumb(elgg_echo('thewire'), 'thewire/all');
-elgg_push_breadcrumb($owner->name, 'thewire/owner/' . $owner->username);
+elgg_push_breadcrumb($owner->getDisplayName(), 'thewire/owner/' . $owner->username);
 elgg_push_breadcrumb($title);
 
 $content = elgg_view_entity($post);
 
-$body = elgg_view_layout('content', array(
+$body = elgg_view_layout('content', [
 	'filter' => false,
 	'content' => $content,
 	'title' => $title,
-));
+]);
 
 echo elgg_view_page($title, $body);

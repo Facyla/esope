@@ -35,7 +35,7 @@ and help everyone understand the status of open PRs.
 
 Bugfix PRs:
 
-.. code::
+.. code-block:: text
 
  - [ ] Commit messages are in the standard format
  - [ ] Includes regression test
@@ -45,7 +45,7 @@ Bugfix PRs:
 
 Feature PRs:
 
-.. code::
+.. code-block:: text
 
  - [ ] Commit messages are in the standard format
  - [ ] Includes tests
@@ -130,7 +130,7 @@ follow these steps:
 
 When done, your commit message will have the format:
 
-.. code::
+.. code-block:: text
 
 	type(component): summary
 
@@ -143,7 +143,7 @@ When done, your commit message will have the format:
 
 Here is an example of a good commit message:
 
-.. code::
+.. code-block:: text
 
     perf(upgrade): speeds up migrating remember me codes
 
@@ -156,7 +156,7 @@ Here is an example of a good commit message:
 To validate commit messages locally, make sure ``.scripts/validate_commit_msg.php`` is executable, and make a copy
 or symlink to it in the directory ``.git/hooks/commit-msg``.
 
-.. code::
+.. code-block:: sh
 
     chmod u+x .scripts/validate_commit_msg.php
     ln -s .scripts/validate_commit_msg.php .git/hooks/commit-msg/validate_commit_msg.php
@@ -181,12 +181,40 @@ Otherwise you may need to perform an interactive rebase:
 4. ``git push -f your_remote your_branch`` to force push the branch (updating your PR).
 5. Rename the PR title to match
 
+
+.. _contribute/code#standards:
+
+Coding Standards
+================
+
+Elgg uses set of standards that are based partially on PEAR and PSR2 standards. You can view the ruleset in ``vendor/elgg/sniffs/elgg.xml``.
+
+To check your code for standard violations (provided you have installed Elgg with dev dependencies), run:
+
+.. code-block:: sh
+
+    phpcs --standard=vendor/elgg/sniffs/elgg.xml -s path/to/dir/to/check
+
+
+To automatically fix fixable violations, run:
+
+.. code-block:: sh
+
+    phpcbf --standard=vendor/elgg/sniffs/elgg.xml path/to/dir/to/fix
+
+To check core directories, you can use shortcut ``composer lint`` and ``composer lint-fixer``.
+
+
 .. _contribute/code#testing:
 
 Testing
 =======
 
 Elgg has automated tests for both PHP and JavaScript functionality. All new contributions are required to come with appropriate tests.
+
+.. seealso::
+
+	:doc:`tests`
 
 General guidelines
 ------------------
@@ -240,7 +268,7 @@ on new ``*Test.js`` files and run those tests.
 Test boilerplate
 ----------------
 
-.. code:: js
+.. code-block:: js
 
 	define(function(require) {
 		var elgg = require('elgg');
@@ -259,23 +287,23 @@ Elgg uses `Karma`_ with `Jasmine`_ to run JS unit tests.
 .. _Karma: http://karma-runner.github.io/0.8/index.html
 .. _Jasmine: http://pivotal.github.io/jasmine/
 
-You will need to have nodejs and npm installed.
+You will need to have nodejs and yarn installed.
 
 First install all the development dependencies:
 
-.. code::
+.. code-block:: sh
 
-   npm install
+   yarn
 
 Run through the tests just once and then quit:
 
-.. code::
+.. code-block:: sh
 
-   npm test
+   yarn test
 
 You can also run tests continuously during development so they run on each save:
 
-.. code::
+.. code-block:: sh
 
    karma start js/tests/karma.conf.js
 
@@ -284,9 +312,9 @@ Debugging JS tests
 
 You can run the test suite inside Chrome dev tools:
 
-.. code::
+.. code-block:: sh
 
-   npm run chrome
+   yarn run chrome
 
 This will output a URL like ``http://localhost:9876/``.
 
@@ -389,7 +417,7 @@ Good comments describe the "why."  Good code describes the "how." E.g.:
 
 Bad:
 
-.. code:: php
+.. code-block:: php
 
 	// increment $i only when the entity is marked as active.
 	foreach ($entities as $entity) {
@@ -400,7 +428,7 @@ Bad:
 
 Good:
 
-.. code:: php
+.. code-block:: php
 
 	// find the next index for inserting a new active entity.
 	foreach ($entities as $entity) {
@@ -412,7 +440,7 @@ Good:
 Always include a comment if it's not obvious that something must be done in a certain way. Other
 developers looking at the code should be discouraged from refactoring in a way that would break the code.
 
-.. code:: php
+.. code-block:: php
 
     // Can't use empty()/boolean: "0" is a valid value
     if ($str === '') {
@@ -489,7 +517,7 @@ Naming
 
 * All other function names must begin with ``_elgg_``.
 
-* Name globals and constants in ``ALL_CAPS`` (``ACCESS_FRIENDS``, ``$CONFIG``).
+* Name globals and constants in ``ALL_CAPS`` (``ACCESS_PUBLIC``, ``$CONFIG``).
 
 Miscellaneous
 ^^^^^^^^^^^^^
@@ -506,18 +534,132 @@ When creating strings with variables:
 
 Bad (hard to read, misuse of quotes and {}s):
 
-.. code:: php
+.. code-block:: php
 
 	echo 'Hello, '.$name."!  How is your {$time_of_day}?";
 
 Good:
 
-.. code:: php
+.. code-block:: php
 
 	echo "Hello, $name!  How is your $time_of_day?";
 
 Remove trailing whitespace at the end of lines. An easy way to do this before you commit is to run
 ``php .scripts/fix_style.php`` from the installation root.
+
+Value validation
+^^^^^^^^^^^^^^^^
+
+When working with user input prepare the input outside of the validation method.
+
+Bad:
+
+.. code-block:: php
+
+	function validate_email($email) {
+		$email = trim($email);
+
+		// validate
+	}
+
+	$email = get_input($email);
+
+	if (validate_email($email)) {
+		// the validated email value is now out of sync with an actual input
+	}
+
+Good:
+
+.. code-block:: php
+
+	function validate_email($email) {
+		// validate
+	}
+
+	$email = get_input($email);
+	$email = trim($email);
+
+	if (validate_email($email)) {
+		// green light
+	}
+
+Use exceptions
+^^^^^^^^^^^^^^
+
+Do not be afraid to use exceptions. They are easier to deal with than mixed function output:
+
+Bad:
+
+.. code-block:: php
+
+	/**
+	* @return string|bool
+	*/
+	function validate_email($email) {
+		if (empty($email)) {
+			return 'Email is empty';
+		}
+
+		// validate
+
+		return true;
+	}
+
+Good:
+
+.. code-block:: php
+
+	/**
+	* @return void
+	* @throw InvalidArgumentException
+	*/
+	function validate_email($email) {
+		if (empty($email)) {
+			throw new InvalidArgumentException('Email is empty');
+		}
+
+		// validate and throw if invalid
+	}
+
+Documenting return values
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do not use ``@return void`` on methods that return a value or null.
+
+Bad:
+
+.. code-block:: php
+
+	/**
+	* @return bool|void
+	*/
+	function validate_email($email) {
+		if (empty($email)) {
+			return;
+		}
+
+		// validate
+
+		return true;
+	}
+
+Good:
+
+.. code-block:: php
+
+	/**
+	* @return bool|null
+	*/
+	function validate_email($email) {
+		if (empty($email)) {
+			return null;
+		}
+
+		// validate
+
+		return true;
+	}
+
 
 CSS guidelines
 --------------
@@ -527,7 +669,7 @@ Use shorthand where possible
 
 Bad:
 
-.. code:: css
+.. code-block:: css
 
 	background-color: #333333;
 	background-image:  url(...);
@@ -537,7 +679,7 @@ Bad:
 
 Good:
 
-.. code:: css
+.. code-block:: css
 
 	background: #333 url(...) repeat-x left 10px;
 	padding: 2px 9px;
@@ -547,13 +689,13 @@ Use hyphens, not underscores
 
 Bad:
 
-.. code:: css
+.. code-block:: css
 
     .example_class {}
 
 Good:
 
-.. code:: css
+.. code-block:: css
 
     .example-class {}
 
@@ -562,13 +704,13 @@ One property per line
 
 Bad:
 
-.. code:: css
+.. code-block:: css
 
 	color: white;font-size: smaller;
 
 Good:
 
-.. code:: css
+.. code-block:: css
 
 	color: white;
 	font-size: smaller;
@@ -580,7 +722,7 @@ These should be spaced like so: ``property: value;``
 
 Bad:
 
-.. code:: css
+.. code-block:: css
 
 	color:value;
 	color :value;
@@ -588,7 +730,7 @@ Bad:
 
 Good:
 
-.. code:: css
+.. code-block:: css
 
 	color: value;
 
@@ -602,7 +744,7 @@ Vendor prefixes
 
 Bad:
 
-.. code:: css
+.. code-block:: css
 
 	-moz-border-radius: 5px;
 	border: 1px solid #999999;
@@ -611,7 +753,7 @@ Bad:
 
 Good:
 
-.. code:: css
+.. code-block:: css
 
 	border: 1px solid #999999;
 
@@ -626,7 +768,7 @@ Group subproperties
 
 Bad:
 
-.. code:: css
+.. code-block:: css
 
 	background-color: white;
 	color: #0054A7;
@@ -634,7 +776,7 @@ Bad:
 
 Good:
 
-.. code:: css
+.. code-block:: css
 
 	background-color: white;
 	background-position: 2px -257px;
@@ -649,7 +791,7 @@ All functions should be in the ``elgg`` namespace.
 
 Function expressions should end with a semi-colon.
 
-.. code:: js
+.. code-block:: js
 
 	elgg.ui.toggles = function(event) {
 		event.preventDefault();

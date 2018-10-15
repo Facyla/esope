@@ -9,66 +9,81 @@
  * @uses $vars['responses']   Alternate respones (comments, replies, etc.)
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
+$item = elgg_extract('item', $vars);
+if (!($item instanceof \ElggRiverItem)) {
+	return;
+}
 
-$menu = elgg_view_menu('river', array(
-	'item' => $item,
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-));
+// metadata (eg. menus)
+$metadata = elgg_extract('metadata', $vars);
+if (!isset($metadata)) {
+	$metadata = elgg_view_menu('river', [
+		'item' => $item,
+	]);
+	
+	$object = $item->getObjectEntity();
+	if ($object) {
+		$metadata .= elgg_view_menu('social', [
+			'entity' => $object,
+			'item' => $item,
+			'class' => 'elgg-menu-hz',
+		]);
+	}
+}
 
-// river item header
+if (!empty($metadata)) {
+	echo elgg_format_element('div', [
+		'class' => 'elgg-river-metadata',
+	], $metadata);
+}
+
+// summary
 $timestamp = elgg_view_friendly_time($item->getTimePosted());
+if (!empty($timestamp)) {
+	$timestamp = elgg_format_element('span', ['class' => 'elgg-river-timestamp'], $timestamp);
+}
 
 $summary = elgg_extract('summary', $vars);
-if ($summary === null) {
-	$summary = elgg_view('river/elements/summary', array(
-		'item' => $vars['item'],
-	));
+if (!isset($summary)) {
+	$summary = elgg_view('river/elements/summary', $vars);
 }
 
 if ($summary === false) {
 	$subject = $item->getSubjectEntity();
-	$summary = elgg_view('output/url', array(
-		'href' => $subject->getURL(),
-		'text' => $subject->name,
-		'class' => 'elgg-river-subject',
-		'is_trusted' => true,
-	));
+	if ($subject instanceof ElggEntity) {
+		$summary = elgg_view('output/url', [
+			'href' => $subject->getURL(),
+			'text' => $subject->getDisplayName(),
+			'class' => 'elgg-river-subject',
+			'is_trusted' => true,
+		]);
+	}
 }
 
+$summary = trim("$summary $timestamp");
+if (!empty($summary)) {
+	echo elgg_format_element('div', ['class' => 'elgg-river-summary'], $summary);
+}
+
+// message (eg excerpt)
 $message = elgg_extract('message', $vars);
-if ($message !== null) {
-	$message = "<div class=\"elgg-river-message\">$message</div>";
+if (!empty($message)) {
+	echo elgg_format_element('div', ['class' => 'elgg-river-message',], $message);
 }
 
+// attachments
 $attachments = elgg_extract('attachments', $vars);
-if ($attachments !== null) {
-	$attachments = "<div class=\"elgg-river-attachments clearfix\">$attachments</div>";
+if (!empty($attachments)) {
+	echo elgg_format_element('div', [
+		'class' => [
+			'elgg-river-attachments',
+			'clearfix',
+		],
+	], $attachments);
 }
 
+// responses (eg. comments)
 $responses = elgg_view('river/elements/responses', $vars);
-if ($responses) {
-	$responses = "<div class=\"elgg-river-responses\">$responses</div>";
+if (!empty($responses)) {
+	echo elgg_format_element('div', ['class' => 'elgg-river-responses',], $responses);
 }
-
-$group_string = '';
-$object = $item->getObjectEntity();
-$container = $object->getContainerEntity();
-if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_guid()) {
-	$group_link = elgg_view('output/url', array(
-		'href' => $container->getURL(),
-		'text' => $container->name,
-		'is_trusted' => true,
-	));
-	$group_string = elgg_echo('river:ingroup', array($group_link));
-}
-
-echo <<<RIVER
-$menu
-<div class="elgg-river-summary">$summary $group_string <span class="elgg-river-timestamp">$timestamp</span></div>
-$message
-$attachments
-$responses
-RIVER;

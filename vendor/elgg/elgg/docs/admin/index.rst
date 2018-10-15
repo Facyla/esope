@@ -7,6 +7,7 @@ Best practices for effectively managing an Elgg-based site.
 	:maxdepth: 1
 
 	getting_started
+	composer
 	upgrading
 	plugins
 	performance
@@ -14,3 +15,5 @@ Best practices for effectively managing an Elgg-based site.
 	backup-restore
 	duplicate-installation
 	getting-help
+	security
+	uservalidation

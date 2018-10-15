@@ -1,9 +1,10 @@
 <?php
+
 namespace Elgg\Cache;
 
+use Elgg\Application;
 use Elgg\Config;
-use Elgg\Database\Datalist;
-use Elgg\ViewsService as Views;
+use Elgg\ViewsService;
 
 
 /**
@@ -11,52 +12,32 @@ use Elgg\ViewsService as Views;
  *
  * @access private
  *
- * @since 1.10.0
+ * @since  1.10.0
  */
 class SimpleCache {
 
-	/** @var Config */
-	private $config;
+	/**
+	 * @var Config
+	 */
+	protected $config;
 
-	/** @var Datalist */
-	private $datalist;
-
-	/** @var Views */
-	private $views;
+	/**
+	 * @var ViewsService
+	 */
+	protected $views;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Config   $config   Elgg's global configuration
-	 * @param Datalist $datalist Elgg's database config storage
-	 * @param Views    $views    Elgg's views registry
+	 * @param Config       $config Elgg's global configuration
+	 * @param ViewsService $views  Views service
 	 */
-	public function __construct(Config $config, Datalist $datalist, Views $views) {
+	public function __construct(
+		Config $config,
+		ViewsService $views
+	) {
 		$this->config = $config;
-		$this->datalist = $datalist;
 		$this->views = $views;
-	}
-
-	/**
-	 * Registers a view to simple cache.
-	 *
-	 * Simple cache is a caching mechanism that saves the output of
-	 * a view and its extensions into a file.  If the view is called
-	 * by the {@link engine/handlers/cache_handler.php} file, the Elgg
-	 * engine will not be loaded and the contents of the view will returned
-	 * from file.
-	 *
-	 * @warning Simple cached views must take no parameters and return
-	 * the same content no matter who is logged in.
-	 *
-	 * @param string $view_name View name
-	 *
-	 * @return void
-	 * @see elgg_get_simplecache_url()
-	 */
-	function registerView($view_name) {
-		$view_name = $this->views->canonicalizeViewName($view_name);
-		elgg_register_external_view($view_name, true);
 	}
 
 	/**
@@ -66,7 +47,7 @@ class SimpleCache {
 	 *
 	 * ```
 	 * $blog_js = $simpleCache->getUrl('blog/save_draft.js');
-	 * $favicon = $simpleCache->getUrl('favicon.ico');
+	 * $favicon = $simpleCache->getUrl('graphics/favicon.ico');
 	 * ```
 	 *
 	 * For backwards compatibility with older versions of Elgg, you can also pass
@@ -95,10 +76,11 @@ class SimpleCache {
 			$view = "$view/$subview";
 		}
 
-		$view = $this->views->canonicalizeViewName($view);
+		$view = ViewsService::canonicalizeViewName($view);
 
 		// should be normalized to canonical form by now: `getUrl('blog/save_draft.js')`
-		$this->registerView($view);
+		$this->views->registerCacheableView($view);
+
 		return $this->getRoot() . $view;
 	}
 
@@ -111,8 +93,7 @@ class SimpleCache {
 	function getRoot() {
 		$viewtype = elgg_get_viewtype();
 		if ($this->isEnabled()) {
-			// stored in datalist as 'simplecache_lastupdate'
-			$lastcache = (int)$this->config->get('lastcache');
+			$lastcache = (int) $this->config->lastcache;
 		} else {
 			$lastcache = 0;
 		}
@@ -126,7 +107,7 @@ class SimpleCache {
 	 * @return bool
 	 */
 	function isEnabled() {
-		return (bool) $this->config->get('simplecache_enabled');
+		return (bool) $this->config->simplecache_enabled;
 	}
 
 	/**
@@ -136,8 +117,7 @@ class SimpleCache {
 	 * @return void
 	 */
 	function enable() {
-		$this->datalist->set('simplecache_enabled', 1);
-		$this->config->set('simplecache_enabled', 1);
+		$this->config->save('simplecache_enabled', 1);
 		$this->invalidate();
 	}
 
@@ -146,13 +126,12 @@ class SimpleCache {
 	 *
 	 * @warning Simplecache is also purged when disabled.
 	 *
-	 * @see elgg_register_simplecache_view()
+	 * @see     elgg_register_simplecache_view()
 	 * @return void
 	 */
 	function disable() {
-		if ($this->config->get('simplecache_enabled')) {
-			$this->datalist->set('simplecache_enabled', 0);
-			$this->config->set('simplecache_enabled', 0);
+		if ($this->config->simplecache_enabled) {
+			$this->config->save('simplecache_enabled', 0);
 
 			$this->invalidate();
 		}
@@ -164,8 +143,7 @@ class SimpleCache {
 	 * @return string
 	 */
 	private function getPath() {
-		$realpath = realpath($this->config->getCachePath());
-		return rtrim($realpath, DIRECTORY_SEPARATOR) . "/views_simplecache";
+		return $this->config->assetroot;
 	}
 
 	/**
@@ -178,21 +156,9 @@ class SimpleCache {
 		_elgg_rmdir($this->getPath(), true);
 
 		$time = time();
-		$this->datalist->set("simplecache_lastupdate", $time);
-		$this->config->set('lastcache', $time);
+		$this->config->save("simplecache_lastupdate", $time);
+		$this->config->lastcache = $time;
 
 		return true;
-	}
-
-	/**
-	 * Set up config appropriately on engine boot.
-	 *
-	 * @return void
-	 */
-	function init() {
-		$lastcache = $this->config->get('lastcache');
-		if (!defined('UPGRADING') && empty($lastcache)) {
-			$this->config->set('lastcache', (int)$this->datalist->get('simplecache_lastupdate'));
-		}
 	}
 }

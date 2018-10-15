@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'discussion' => '会議室',
 	'discussion:add' => '議題を追加',
 	'discussion:latest' => '最新の話題',
@@ -57,9 +57,9 @@ return array(
 %s
 ',
 
-	'discussion:reply:notify:summary' => '新着返答:  議題 %s',
-	'discussion:reply:notify:subject' => '新着返答:  議題 %s',
-	'discussion:reply:notify:body' =>
+	'discussion:comment:notify:summary' => '新着返答:  議題 %s',
+	'discussion:comment:notify:subject' => '新着返答:  議題 %s',
+	'discussion:comment:notify:body' =>
 '%sさんが議題「%s」に返答しました:
 
 %s
@@ -96,4 +96,4 @@ return array(
 
 	'discussion:reply:edited' => "投稿を編集しました。",
 	'discussion:reply:error' => "投稿を編集する際に問題が発生しました。",
-);
+];

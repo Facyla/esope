@@ -7,48 +7,32 @@
  * @uses $user ElggUser
  */
 
-$current_user = elgg_get_logged_in_user_entity();
-$username = elgg_extract('username', $vars);
-$user = get_user_by_username($username);
-if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
-	forward();
+$user = elgg_get_page_owner_entity();
+if (!$user instanceof ElggUser) {
+	$user = elgg_get_logged_in_user_entity();
 }
 
-if (!isset($user) || !($user instanceof ElggUser)) {
-	$url = 'notifications/personal/' . elgg_get_logged_in_user_entity()->username;
-	forward($url);
+if (!$user instanceof ElggUser || !$user->canEdit()) {
+	throw new \Elgg\EntityPermissionsException();
 }
 
 elgg_set_page_owner_guid($user->guid);
 
+// Set the context to settings
+elgg_set_context('settings');
+
 $title = elgg_echo('notifications:subscriptions:changesettings');
 
-elgg_push_breadcrumb(elgg_echo('settings'), "settings/user/$user->username");
-elgg_push_breadcrumb($title);
+elgg_push_breadcrumb(elgg_echo('settings'), "settings/user/{$user->username}");
 
-// Get the form
-$people = array();
-if ($people_ents = elgg_get_entities_from_relationship(array(
-		'relationship' => 'notify',
-		'relationship_guid' => $user->guid,
-		'type' => 'user',
-		'limit' => false,
-	))) {
-	
-	foreach($people_ents as $ent) {
-		$people[] = $ent->guid;
-	}
-}
-
-$body = elgg_view('notifications/subscriptions/form', array(
-	'people' => $people,
+$content = elgg_view('notifications/personal', [
 	'user' => $user,
-));
+]);
 
-$params = array(
-	'content' => $body,
+$layout = elgg_view_layout('one_sidebar', [
+	'content' => $content,
 	'title' => $title,
-);
-$body = elgg_view_layout('one_sidebar', $params);
+	'show_owner_block_menu' => false,
+]);
 
-echo elgg_view_page($title, $body);
+echo elgg_view_page($title, $layout);

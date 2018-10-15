@@ -1,17 +1,20 @@
 # ignore Elgg configuration
 /engine/settings.php
-/elgg-config/settings.php
+/elgg-config/*
 /.htaccess
 /mod/*
 /composer.phar
 /cache
+
+# don't ignore example settings
+!/elgg-config/settings.example.php
 
 # Don't check in third party code
 /node_modules
 /vendor
 
 # don't ignore bundled plugins
-!/mod/aalborg_theme/
+!/mod/activity
 !/mod/blog/
 !/mod/bookmarks/
 !/mod/categories/
@@ -24,14 +27,12 @@
 !/mod/embed/
 !/mod/externalpages/
 !/mod/file/
+!/mod/friends/
+!/mod/friends_collections/
 !/mod/garbagecollector/
 !/mod/groups/
-!/mod/htmlawed/
 !/mod/invitefriends/
-!/mod/legacy_urls/
 !/mod/likes/
-!/mod/logbrowser/
-!/mod/logrotate/
 !/mod/members/
 !/mod/messageboard/
 !/mod/messages/
@@ -41,9 +42,9 @@
 !/mod/reportedcontent/
 !/mod/search/
 !/mod/site_notifications/
+!/mod/system_log/
 !/mod/tagcloud/
 !/mod/thewire/
-!/mod/twitter_api/
 !/mod/uservalidationbyemail/
 !/mod/web_services/
 !/mod/zaudio/

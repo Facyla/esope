@@ -2,10 +2,8 @@
 
 namespace Elgg\Database;
 
-use Elgg\Database\Seeds\Objects;
-use Elgg\Database\Seeds\Groups;
+use Elgg\Cli\Progress;
 use Elgg\Database\Seeds\Seed;
-use Elgg\Database\Seeds\Users;
 use Elgg\PluginHooksService;
 
 /**
@@ -17,52 +15,73 @@ use Elgg\PluginHooksService;
  */
 class Seeder {
 
-	private $seeds = [
-		Users::class,
-		Groups::class,
-		Objects::class,
-	];
-
 	/**
 	 * @var PluginHooksService
 	 */
 	protected $hooks;
 
 	/**
+	 * @var Progress
+	 */
+	protected $progress;
+
+	/**
 	 * Seeder constructor.
 	 *
-	 * @param PluginHooksService $hooks Hooks registration service
+	 * @param PluginHooksService $hooks    Hooks registration service
+	 * @param Progress           $progress Progress helper
 	 */
-	public function __construct(PluginHooksService $hooks) {
+	public function __construct(
+		PluginHooksService $hooks,
+		Progress $progress
+	) {
 		$this->hooks = $hooks;
+		$this->progress = $progress;
 	}
 
 	/**
 	 * Load seed scripts
 	 *
+	 * @param int $limit the max number of entities to seed
+	 *
 	 * @return void
 	 */
-	public function seed() {
-		$ia = elgg_set_ignore_access(true);
-
-		$ha = access_get_show_hidden_status();
-		access_show_hidden_entities(true);
-		
-		foreach ($this->seeds as $seed) {
-			if (!class_exists($seed)) {
-				continue;
-			}
-			$seed = new $seed();
-			if (!is_subclass_of($seed, Seed::class)) {
-				continue;
-			}
-
-			$seed->seed();
+	public function seed($limit = null) {
+		if (!$limit) {
+			$limit = max(elgg_get_config('default_limit'), 20);
 		}
 
-		access_show_hidden_entities($ha);
+		$ia = _elgg_services()->session->setIgnoreAccess(true);
 
-		elgg_set_ignore_access($ia);
+		$ha = _elgg_services()->session->getDisabledEntityVisibility();
+		_elgg_services()->session->setDisabledEntityVisibility(true);
+
+		$seeds = $this->hooks->trigger('seeds', 'database', null, []);
+
+		foreach ($seeds as $seed) {
+			if (!class_exists($seed)) {
+				elgg_log("Seeding class $seed not found", 'ERROR');
+				continue;
+			}
+			if (!is_subclass_of($seed, Seed::class)) {
+				elgg_log("Seeding class $seed does not extend " . Seed::class, 'ERROR');
+				continue;
+			}
+
+			$seeder = new $seed($limit);
+			/* @var $seeder Seed */
+
+			$progress_bar = $this->progress->start($seed, $limit);
+
+			$seeder->setProgressBar($progress_bar);
+
+			$seeder->seed();
+
+			$this->progress->finish($progress_bar);
+		}
+
+		_elgg_services()->session->setDisabledEntityVisibility($ha);
+		_elgg_services()->session->setIgnoreAccess($ia);
 	}
 
 	/**
@@ -71,25 +90,35 @@ class Seeder {
 	 */
 	public function unseed() {
 
-		$ia = elgg_set_ignore_access(true);
+		$ia = _elgg_services()->session->setIgnoreAccess(true);
 
-		$ha = access_get_show_hidden_status();
-		access_show_hidden_entities(true);
+		$ha = _elgg_services()->session->getDisabledEntityVisibility();
+		_elgg_services()->session->setDisabledEntityVisibility(true);
 
-		foreach ($this->seeds as $seed) {
+		$seeds = $this->hooks->trigger('seeds', 'database', null, []);
+
+		foreach ($seeds as $seed) {
 			if (!class_exists($seed)) {
+				elgg_log("Seeding class $seed not found", 'ERROR');
 				continue;
 			}
-			$seed = new $seed();
 			if (!is_subclass_of($seed, Seed::class)) {
+				elgg_log("Seeding class $seed does not extend " . Seed::class, 'ERROR');
 				continue;
 			}
+			$seeder = new $seed();
+			/* @var $seeder Seed */
 
-			$seed->unseed();
+			$progress_bar = $this->progress->start($seed);
+
+			$seeder->setProgressBar($progress_bar);
+
+			$seeder->unseed();
+
+			$this->progress->finish($progress_bar);
 		}
 
-		access_show_hidden_entities($ha);
-
-		elgg_set_ignore_access($ia);
+		_elgg_services()->session->setDisabledEntityVisibility($ha);
+		_elgg_services()->session->setIgnoreAccess($ia);
 	}
 }

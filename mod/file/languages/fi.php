@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
 
 	/**
 	 * Menu items and titles
@@ -97,4 +97,4 @@ Voit nähdä tiedoston täällä:
 	'file:noaccess' => "Sinulla ei ole oikeuksia tämän tiedoston muuttamiseen",
 	'file:cannotload' => "Tiedoston lataamisessa tapahtui virhe",
 	'file:nofile' => "Sinun pitää valita tiedosto",
-);
+];

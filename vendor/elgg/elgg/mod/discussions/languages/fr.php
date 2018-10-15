@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'discussion' => 'Discussions',
 	'discussion:add' => 'Ajouter un sujet de discussion',
 	'discussion:latest' => 'Dernières discussions',
@@ -34,7 +34,7 @@ return array(
 	'discussion:reply:missing' => 'Vous ne pouvez pas publier une réponse vide.',
 	'discussion:reply:topic_not_found' => 'Le sujet de discussion n\'a pas été trouvé',
 	'discussion:reply:error:cannot_edit' => 'Vous n\'avez pas la permission de modifier cette réponse.',
-	'discussion:reply:error:permissions' => 'You are not allowed to reply to this topic',
+	'discussion:reply:error:permissions' => 'Vous n\'avez pas l\'autorisation de répondre à ce sujet',
 
 	/**
 	 * River
@@ -57,9 +57,9 @@ Voir la discussion et répondre :
 %s
 ',
 
-	'discussion:reply:notify:summary' => 'Nouvelle réponse dans la discussion : %s',
-	'discussion:reply:notify:subject' => 'Nouvelle réponse dans la discussion : %s',
-	'discussion:reply:notify:body' =>
+	'discussion:comment:notify:summary' => 'Nouvelle réponse dans la discussion : %s',
+	'discussion:comment:notify:subject' => 'Nouvelle réponse dans la discussion : %s',
+	'discussion:comment:notify:body' =>
 '%s a répondu au sujet de discussion "%s" :
 
 %s
@@ -96,4 +96,4 @@ Voir la discussion et répondre :
 
 	'discussion:reply:edited' => "Vous avez bien modifié cette discussion.",
 	'discussion:reply:error' => "Il y a eu un problème lors de la modification de la discussion.",
-);
+];

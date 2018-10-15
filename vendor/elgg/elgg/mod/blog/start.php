@@ -3,190 +3,76 @@
  * Blogs
  *
  * @package Blog
- *
- * @todo
- * - Either drop support for "publish date" or duplicate more entity getter
- * functions to work with a non-standard time_created.
- * - Pingbacks
- * - Notifications
- * - River entry for posts saved as drafts and later published
  */
 
-elgg_register_event_handler('init', 'system', 'blog_init');
-
 /**
- * Init blog plugin.
+ * Init blog plugin
+ *
+ * @return void
  */
 function blog_init() {
 
-	elgg_register_library('elgg:blog', __DIR__ . '/lib/blog.php');
-
 	// add a site navigation item
-	$item = new ElggMenuItem('blog', elgg_echo('blog:blogs'), 'blog/all');
-	elgg_register_menu_item('site', $item);
-
-	elgg_register_event_handler('upgrade', 'upgrade', 'blog_run_upgrades');
-
-	// add to the main css
-	elgg_extend_view('elgg.css', 'blog/css');
-
-	// routing of urls
-	elgg_register_page_handler('blog', 'blog_page_handler');
-
-	// override the default url to view a blog object
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'blog_set_url');
+	elgg_register_menu_item('site', [
+		'name' => 'blog',
+		'icon' => 'pencil-square-o',
+		'text' => elgg_echo('collection:object:blog'),
+		'href' => elgg_generate_url('collection:object:blog:all'),
+	]);
 
 	// notifications
-	elgg_register_notification_event('object', 'blog', array('publish'));
+	elgg_register_notification_event('object', 'blog', ['publish']);
 	elgg_register_plugin_hook_handler('prepare', 'notification:publish:object:blog', 'blog_prepare_notification');
 
-	// add blog link to
+	// add blog link to owner block
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'blog_owner_block_menu');
 
-	// pingbacks
-	//elgg_register_event_handler('create', 'object', 'blog_incoming_ping');
-	//elgg_register_plugin_hook_handler('pingback:object:subtypes', 'object', 'blog_pingback_subtypes');
-
-	// Register for search.
-	elgg_register_entity_type('object', 'blog');
-
 	// Add group option
-	add_group_tool_option('blog', elgg_echo('blog:enableblog'), true);
-	elgg_extend_view('groups/tool_latest', 'blog/group_module');
+	elgg()->group_tools->register('blog');
 
-	// add a blog widget
-	elgg_register_widget_type('blog', elgg_echo('blog'), elgg_echo('blog:widget:description'));
-
-	// register actions
-	$action_path = __DIR__ . '/actions/blog';
-	elgg_register_action('blog/save', "$action_path/save.php");
-	elgg_register_action('blog/auto_save_revision', "$action_path/auto_save_revision.php");
-	elgg_register_action('blog/delete', "$action_path/delete.php");
-
-	// entity menu
-	elgg_register_plugin_hook_handler('register', 'menu:entity', 'blog_entity_menu_setup');
+	// archive menu
+	elgg_register_plugin_hook_handler('register', 'menu:blog_archive', 'blog_archive_menu_setup');
 
 	// ecml
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'blog_ecml_views_hook');
 
 	// allow to be liked
 	elgg_register_plugin_hook_handler('likes:is_likable', 'object:blog', 'Elgg\Values::getTrue');
-}
 
-/**
- * Dispatches blog pages.
- * URLs take the form of
- *  All blogs:       blog/all
- *  User's blogs:    blog/owner/<username>
- *  Friends' blog:   blog/friends/<username>
- *  User's archives: blog/archives/<username>/<time_start>/<time_stop>
- *  Blog post:       blog/view/<guid>/<title>
- *  New post:        blog/add/<guid>
- *  Edit post:       blog/edit/<guid>/<revision>
- *  Preview post:    blog/preview/<guid>
- *  Group blog:      blog/group/<guid>/all
- *
- * Title is ignored
- *
- * @todo no archives for all blogs or friends
- *
- * @param array $page
- * @return bool
- */
-function blog_page_handler($page) {
-
-	elgg_load_library('elgg:blog');
-
-	// push all blogs breadcrumb
-	elgg_push_breadcrumb(elgg_echo('blog:blogs'), 'blog/all');
-
-	$page_type = elgg_extract(0, $page, 'all');
-	$resource_vars = [
-		'page_type' => $page_type,
-	];
-
-	switch ($page_type) {
-		case 'owner':
-			$resource_vars['username'] = elgg_extract(1, $page);
-			
-			echo elgg_view_resource('blog/owner', $resource_vars);
-			break;
-		case 'friends':
-			$resource_vars['username'] = elgg_extract(1, $page);
-			
-			echo elgg_view_resource('blog/friends', $resource_vars);
-			break;
-		case 'archive':
-			$resource_vars['username'] = elgg_extract(1, $page);
-			$resource_vars['lower'] = elgg_extract(2, $page);
-			$resource_vars['upper'] = elgg_extract(3, $page);
-			
-			echo elgg_view_resource('blog/archive', $resource_vars);
-			break;
-		case 'view':
-			$resource_vars['guid'] = elgg_extract(1, $page);
-			
-			echo elgg_view_resource('blog/view', $resource_vars);
-			break;
-		case 'add':
-			$resource_vars['guid'] = elgg_extract(1, $page);
-			
-			echo elgg_view_resource('blog/add', $resource_vars);
-			break;
-		case 'edit':
-			$resource_vars['guid'] = elgg_extract(1, $page);
-			$resource_vars['revision'] = elgg_extract(2, $page);
-			
-			echo elgg_view_resource('blog/edit', $resource_vars);
-			break;
-		case 'group':
-			$resource_vars['group_guid'] = elgg_extract(1, $page);
-			$resource_vars['subpage'] = elgg_extract(2, $page);
-			$resource_vars['lower'] = elgg_extract(3, $page);
-			$resource_vars['upper'] = elgg_extract(4, $page);
-			
-			echo elgg_view_resource('blog/group', $resource_vars);
-			break;
-		case 'all':
-			echo elgg_view_resource('blog/all', $resource_vars);
-			break;
-		default:
-			return false;
-	}
-
-	return true;
-}
-
-/**
- * Format and return the URL for blogs.
- *
- * @param string $hook
- * @param string $type
- * @param string $url
- * @param array  $params
- * @return string URL of blog.
- */
-function blog_set_url($hook, $type, $url, $params) {
-	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'blog')) {
-		$friendly_title = elgg_get_friendly_title($entity->title);
-		return "blog/view/{$entity->guid}/$friendly_title";
-	}
+	// register database seed
+	elgg_register_plugin_hook_handler('seeds', 'database', 'blog_register_db_seeds');
 }
 
 /**
  * Add a menu item to an ownerblock
+ *
+ * @param string         $hook   'register'
+ * @param string         $type   'menu:owner_block'
+ * @param ElggMenuItem[] $return current return value
+ * @param array          $params supplied params
+ *
+ * @return ElggMenuItem[]
  */
 function blog_owner_block_menu($hook, $type, $return, $params) {
 	$entity = elgg_extract('entity', $params);
 	if ($entity instanceof ElggUser) {
-		$url = "blog/owner/{$entity->username}";
-		$return[] = new ElggMenuItem('blog', elgg_echo('blog'), $url);
-
+		$return[] = ElggMenuItem::factory([
+					'name' => 'blog',
+					'text' => elgg_echo('collection:object:blog'),
+					'href' => elgg_generate_url('collection:object:blog:owner', [
+						'username' => $entity->username,
+					]),
+		]);
 	} elseif ($entity instanceof ElggGroup) {
-		if ($entity->blog_enable != "no") {
-			$url = "blog/group/{$entity->guid}/all";
-			$return[] = new ElggMenuItem('blog', elgg_echo('blog:group'), $url);
+		if ($entity->isToolEnabled('blog')) {
+			$return[] = ElggMenuItem::factory([
+						'name' => 'blog',
+						'text' => elgg_echo('collection:object:blog:group'),
+						'href' => elgg_generate_url('collection:object:blog:group', [
+							'guid' => $entity->guid,
+							'subpage' => 'all',
+						]),
+			]);
 		}
 	}
 
@@ -194,35 +80,100 @@ function blog_owner_block_menu($hook, $type, $return, $params) {
 }
 
 /**
- * Add particular blog links/info to entity menu
+ * Add menu items to the archive menu
+ *
+ * @param string         $hook   'register'
+ * @param string         $type   'menu:blog_archive'
+ * @param ElggMenuItem[] $return current return value
+ * @param array          $params supplied params
+ *
+ * @return void|ElggMenuItem[]
  */
-function blog_entity_menu_setup($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) {
-		return $return;
+function blog_archive_menu_setup($hook, $type, $return, $params) {
+
+	$page_owner = elgg_extract('entity', $params, elgg_get_page_owner_entity());
+	$page = elgg_extract('page', $params);
+	
+	$options = [
+		'type' => 'object',
+		'subtype' => 'blog',
+	];
+	if ($page_owner instanceof ElggUser) {
+		if ($page === 'friends') {
+			$options['relationship'] = 'friend';
+			$options['relationship_guid'] = (int) $page_owner->guid;
+			$options['relationship_join_on'] = 'owner_guid';
+		} else {
+			$options['owner_guid'] = $page_owner->guid;
+		}
+	} elseif ($page_owner instanceof ElggEntity) {
+		$options['container_guid'] = $page_owner->guid;
+	}
+	
+	$dates = elgg_get_entity_dates($options);
+	if (!$dates) {
+		return;
 	}
 
-	$entity = $params['entity'];
-	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'blog') {
-		return $return;
-	}
-
-	if ($entity->status != 'published') {
-		// draft status replaces access
-		foreach ($return as $index => $item) {
-			if ($item->getName() == 'access') {
-				unset($return[$index]);
+	$dates = array_reverse($dates);
+	
+	$generate_url = function($lower = null, $upper = null) use ($page_owner, $page) {
+		if ($page_owner instanceof ElggUser) {
+			if ($page === 'friends') {
+				$url_segment = elgg_generate_url('collection:object:blog:friends', [
+					'username' => $page_owner->username,
+					'lower' => $lower,
+					'upper' => $upper,
+				]);
+			} else {
+				$url_segment = elgg_generate_url('collection:object:blog:owner', [
+					'username' => $page_owner->username,
+					'lower' => $lower,
+					'upper' => $upper,
+				]);
 			}
+		} else if ($page_owner instanceof ElggGroup) {
+			$url_segment = elgg_generate_url('collection:object:blog:group', [
+				'guid' => $page_owner->guid,
+				'subpage' => 'archive',
+				'lower' => $lower,
+				'upper' => $upper,
+			]);
+		} else {
+			$url_segment = elgg_generate_url('collection:object:blog:all', [
+				'lower' => $lower,
+				'upper' => $upper,
+			]);
 		}
 
-		$status_text = elgg_echo("status:{$entity->status}");
-		$options = array(
-			'name' => 'published_status',
-			'text' => "<span>$status_text</span>",
-			'href' => false,
-			'priority' => 150,
-		);
-		$return[] = ElggMenuItem::factory($options);
+		return $url_segment;
+	};
+	
+	$years = [];
+	foreach ($dates as $date) {
+		$timestamplow = mktime(0, 0, 0, substr($date, 4, 2), 1, substr($date, 0, 4));
+		$timestamphigh = mktime(0, 0, 0, ((int) substr($date, 4, 2)) + 1, 1, substr($date, 0, 4));
+
+		$year = substr($date, 0, 4);
+		if (!in_array($year, $years)) {
+			$return[] = ElggMenuItem::factory([
+				'name' => $year,
+				'text' => $year,
+				'href' => '#',
+				'child_menu' => [
+					'display' => 'toggle',
+				]
+			]);
+		}
+
+		$month = trim(elgg_echo('date:month:' . substr($date, 4, 2), ['']));
+
+		$return[] = ElggMenuItem::factory([
+			'name' => $date,
+			'text' => $month,
+			'href' => $generate_url($timestamplow, $timestamphigh),
+			'parent_name' => $year,
+		]);
 	}
 
 	return $return;
@@ -244,40 +195,132 @@ function blog_prepare_notification($hook, $type, $notification, $params) {
 	$language = $params['language'];
 	$method = $params['method'];
 
-	$notification->subject = elgg_echo('blog:notify:subject', array($entity->title), $language);
-	$notification->body = elgg_echo('blog:notify:body', array(
-		$owner->name,
-		$entity->title,
+	$notification->subject = elgg_echo('blog:notify:subject', [$entity->getDisplayName()], $language);
+	$notification->body = elgg_echo('blog:notify:body', [
+		$owner->getDisplayName(),
+		$entity->getDisplayName(),
 		$entity->getExcerpt(),
 		$entity->getURL()
-	), $language);
-	$notification->summary = elgg_echo('blog:notify:summary', array($entity->title), $language);
+	], $language);
+	$notification->summary = elgg_echo('blog:notify:summary', [$entity->getDisplayName()], $language);
+	$notification->url = $entity->getURL();
 
 	return $notification;
 }
 
+
 /**
- * Register blogs with ECML.
+ * Pull together blog variables for the save form
+ *
+ * @param ElggBlog       $post     blog post being edited
+ * @param ElggAnnotation $revision a revision from which to edit
+ * @return array
  */
-function blog_ecml_views_hook($hook, $entity_type, $return_value, $params) {
-	$return_value['object/blog'] = elgg_echo('blog:blogs');
+function blog_prepare_form_vars($post = null, $revision = null) {
+
+	// input names => defaults
+	$values = [
+		'title' => null,
+		'description' => null,
+		'status' => 'published',
+		'access_id' => ACCESS_DEFAULT,
+		'comments_on' => 'On',
+		'excerpt' => null,
+		'tags' => null,
+		'container_guid' => null,
+		'guid' => null,
+		'entity' => $post,
+		'draft_warning' => '',
+	];
+
+	if ($post) {
+		foreach (array_keys($values) as $field) {
+			if (isset($post->$field)) {
+				$values[$field] = $post->$field;
+			}
+		}
+
+		if ($post->status == 'draft') {
+			$values['access_id'] = $post->future_access;
+		}
+	}
+
+	if (elgg_is_sticky_form('blog')) {
+		$sticky_values = elgg_get_sticky_values('blog');
+		foreach ($sticky_values as $key => $value) {
+			$values[$key] = $value;
+		}
+	}
+
+	$params = ['entity' => $post];
+	$values = elgg_trigger_plugin_hook('form:values', 'blog', $params, $values);
+
+	elgg_clear_sticky_form('blog');
+
+	if (!$post) {
+		return $values;
+	}
+
+	// load the revision annotation if requested
+	if ($revision instanceof ElggAnnotation && $revision->entity_guid == $post->getGUID()) {
+		$values['revision'] = $revision;
+		$values['description'] = $revision->value;
+	}
+
+	// display a notice if there's an autosaved annotation
+	// and we're not editing it.
+	$auto_save_annotations = $post->getAnnotations([
+		'annotation_name' => 'blog_auto_save',
+		'limit' => 1,
+	]);
+	if ($auto_save_annotations) {
+		$auto_save = $auto_save_annotations[0];
+	} else {
+		$auto_save = false;
+	}
+	/* @var ElggAnnotation|false $auto_save */
+
+	if ($auto_save && $revision && $auto_save->id != $revision->id) {
+		$values['draft_warning'] = elgg_echo('blog:messages:warning:draft');
+	}
+
+	return $values;
+}
+
+
+/**
+ * Register blogs with ECML
+ *
+ * @param string $hook         'get_views'
+ * @param string $type         'ecml'
+ * @param array  $return_value current return value
+ * @param array  $params       supplied params
+ *
+ * @return array
+ */
+function blog_ecml_views_hook($hook, $type, $return_value, $params) {
+	$return_value['object/blog'] = elgg_echo('item:object:blog');
 
 	return $return_value;
 }
 
 /**
- * Upgrade from 1.7 to 1.8.
+ * Register database seed
+ *
+ * @elgg_plugin_hook seeds database
+ *
+ * @param \Elgg\Hook $hook Hook
+ * @return array
  */
-function blog_run_upgrades($event, $type, $details) {
-	$blog_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'blogs');
+function blog_register_db_seeds(\Elgg\Hook $hook) {
 
-	if (!$blog_upgrade_version) {
-		 // When upgrading, check if the ElggBlog class has been registered as this
-		 // was added in Elgg 1.8
-		if (!update_subtype('object', 'blog', 'ElggBlog')) {
-			add_subtype('object', 'blog', 'ElggBlog');
-		}
+	$seeds = $hook->getValue();
 
-		elgg_set_plugin_setting('upgrade_version', 1, 'blogs');
-	}
+	$seeds[] = \Elgg\Blog\Seeder::class;
+
+	return $seeds;
 }
+
+return function() {
+	elgg_register_event_handler('init', 'system', 'blog_init');
+};

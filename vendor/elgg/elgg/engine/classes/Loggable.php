@@ -22,14 +22,6 @@ interface Loggable {
 	public function getSystemLogID();
 
 	/**
-	 * Return the class name of the object.
-	 * Added as a function because get_class causes errors for some reason.
-	 *
-	 * @return string
-	 */
-	public function getClassName();
-
-	/**
 	 * Return the type of the object - eg. object, group, user, relationship, metadata, annotation etc
 	 *
 	 * @return string
@@ -51,7 +43,7 @@ interface Loggable {
 	 *
 	 * @param int $id GUID of an entity
 	 *
-	 * @return \ElggEntity
+	 * @return static|false
 	 */
 	public function getObjectFromID($id);
 }

@@ -11,7 +11,7 @@
 elgg_make_sticky_form('groups');
 
 // Get group fields
-$input = array();
+$input = [];
 foreach (elgg_get_config('group') as $shortname => $valuetype) {
 	$value = get_input($shortname);
 
@@ -37,45 +37,43 @@ foreach (elgg_get_config('group') as $shortname => $valuetype) {
 }
 
 // only set if submitted
-$name = get_input('name', null, false);
+$name = elgg_get_title_input('name', null);
 if ($name !== null) {
-	$input['name'] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+	$input['name'] = $name;
 }
 
 $user = elgg_get_logged_in_user_entity();
 
-$group_guid = (int)get_input('group_guid');
-$is_new_group = $group_guid == 0;
+$group_guid = (int) get_input('group_guid');
 
-if ($is_new_group
-		&& (elgg_get_plugin_setting('limited_groups', 'groups') == 'yes')
-		&& !$user->isAdmin()) {
-	register_error(elgg_echo("groups:cantcreate"));
-	forward(REFERER);
-}
-
-$group = $group_guid ? get_entity($group_guid) : new ElggGroup();
-if (elgg_instanceof($group, "group") && !$group->canEdit()) {
-	register_error(elgg_echo("groups:cantedit"));
-	forward(REFERER);
+if ($group_guid) {
+	$is_new_group = false;
+	$group = get_entity($group_guid);
+	if (!$group instanceof ElggGroup || !$group->canEdit()) {
+		$error = elgg_echo('groups:cantedit');
+		return elgg_error_response($error);
+	}
+} else {
+	if (elgg_get_plugin_setting('limited_groups', 'groups') == 'yes' && !$user->isAdmin()) {
+		$error = elgg_echo('groups:cantcreate');
+		return elgg_error_response($error);
+	}
+	
+	$container_guid = get_input('container_guid', $user->guid);
+	$container = get_entity($container_guid);
+	
+	if (!$container || !$container->canWriteToContainer($user->guid, 'group')) {
+		$error = elgg_echo('groups:cantcreate');
+		return elgg_error_response($error);
+	}
+	
+	$is_new_group = true;
+	$group = new ElggGroup();
+	$group->container_guid = $container->guid;
 }
 
 // Assume we can edit or this is a new group
 foreach ($input as $shortname => $value) {
-	// update access collection name if group name changes
-	if (!$is_new_group && $shortname == 'name' && $value != $group->name) {
-		$group_name = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-		$ac_name = sanitize_string(elgg_echo('groups:group') . ": " . $group_name);
-		$acl = get_access_collection($group->group_acl);
-		if ($acl) {
-			// @todo Elgg api does not support updating access collection name
-			$db_prefix = elgg_get_config('dbprefix');
-			$query = "UPDATE {$db_prefix}access_collections SET name = '$ac_name'
-				WHERE id = $group->group_acl";
-			update_data($query);
-		}
-	}
-
 	if ($value === '' && !in_array($shortname, ['name', 'description'])) {
 		// The group profile displays all profile fields that have a value.
 		// We don't want to display fields with empty string value, so we
@@ -89,25 +87,30 @@ foreach ($input as $shortname => $value) {
 
 // Validate create
 if (!$group->name) {
-	register_error(elgg_echo("groups:notitle"));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('groups:notitle'));
 }
 
 // Set group tool options (only pass along saved entities)
-$tool_entity = !$is_new_group ? $group : null;
-$tool_options = groups_get_group_tool_options($tool_entity);
-if ($tool_options) {
-	foreach ($tool_options as $group_option) {
-		$option_toggle_name = $group_option->name . "_enable";
-		$option_default = $group_option->default_on ? 'yes' : 'no';
-		$value = get_input($option_toggle_name);
+// @todo: move this to an event handler to make sure groups created outside of the action
+// get their tools configured
+if ($is_new_group) {
+	$tools = elgg()->group_tools->all();
+} else {
+	$tools = elgg()->group_tools->group($group);
+}
 
-		// if already has option set, don't change if no submission
-		if ($group->$option_toggle_name && $value === null) {
-			continue;
-		}
+foreach ($tools as $tool) {
+	$prop_name = $tool->mapMetadataName();
+	$value = get_input($prop_name);
 
-		$group->$option_toggle_name = $value ? $value : $option_default;
+	if (!isset($value)) {
+		continue;
+	}
+
+	if ($value === 'yes') {
+		$group->enableTool($tool->name);
+	} else {
+		$group->disableTool($tool->name);
 	}
 }
 
@@ -118,7 +121,7 @@ if ($group->membership === null || $value !== null) {
 	$group->membership = $is_public_membership ? ACCESS_PUBLIC : ACCESS_PRIVATE;
 }
 
-$group->setContentAccessMode((string)get_input('content_access_mode'));
+$group->setContentAccessMode((string) get_input('content_access_mode'));
 
 if ($is_new_group) {
 	$group->access_id = ACCESS_PUBLIC;
@@ -126,8 +129,8 @@ if ($is_new_group) {
 
 $old_owner_guid = $is_new_group ? 0 : $group->owner_guid;
 
-$value = get_input('owner_guid');
-$new_owner_guid = ($value === null) ? $old_owner_guid : (int)$value;
+$value = (array) get_input('owner_guid');
+$new_owner_guid = empty($value) ? $old_owner_guid : (int) $value[0];
 
 if (!$is_new_group && $new_owner_guid && $new_owner_guid != $old_owner_guid) {
 	// verify new owner is member and old owner/admin is logged in
@@ -140,27 +143,13 @@ if (!$is_new_group && $new_owner_guid && $new_owner_guid != $old_owner_guid) {
 			// container if it the group is not contained by the original owner.
 			$group->container_guid = $new_owner_guid;
 		}
-
-		$metadata = elgg_get_metadata(array(
-			'guid' => $group_guid,
-			'limit' => false,
-		));
-		if ($metadata) {
-			foreach ($metadata as $md) {
-				if ($md->owner_guid == $old_owner_guid) {
-					$md->owner_guid = $new_owner_guid;
-					$md->save();
-				}
-			}
-		}
 	}
 }
 
 if ($is_new_group) {
 	// if new group, we need to save so group acl gets set in event handler
 	if (!$group->save()) {
-		register_error(elgg_echo("groups:save_error"));
-		forward(REFERER);
+		return elgg_error_response(elgg_echo('groups:save_error'));
 	}
 }
 
@@ -171,14 +160,17 @@ if ($is_new_group) {
 if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 	$value = get_input('vis');
 	if ($is_new_group || $value !== null) {
-		$visibility = (int)$value;
+		$visibility = (int) $value;
 
 		if ($visibility == ACCESS_PRIVATE) {
 			// Make this group visible only to group members. We need to use
 			// ACCESS_PRIVATE on the form and convert it to group_acl here
 			// because new groups do not have acl until they have been saved once.
-			$visibility = $group->group_acl;
-
+			$acl = _groups_get_group_acl($group);
+			if ($acl) {
+				$visibility = $acl->id;
+			}
+			
 			// Force all new group content to be available only to members
 			$group->setContentAccessMode(ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY);
 		}
@@ -188,8 +180,7 @@ if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 }
 
 if (!$group->save()) {
-	register_error(elgg_echo("groups:save_error"));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('groups:save_error'));
 }
 
 // group saved so clear sticky form
@@ -197,35 +188,20 @@ elgg_clear_sticky_form('groups');
 
 // group creator needs to be member of new group and river entry created
 if ($is_new_group) {
-
 	// @todo this should not be necessary...
 	elgg_set_page_owner_guid($group->guid);
 
 	$group->join($user);
-	elgg_create_river_item(array(
+	elgg_create_river_item([
 		'view' => 'river/group/create',
 		'action_type' => 'create',
-		'subject_guid' => $user->guid,
 		'object_guid' => $group->guid,
-	));
+	]);
 }
 
-$has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
+$group->saveIconFromUploadedFile('icon');
 
-if ($has_uploaded_icon) {
-	$filehandler = new ElggFile();
-	$filehandler->owner_guid = $group->owner_guid;
-	$filehandler->setFilename("groups/$group->guid.jpg");
-	$filehandler->open("write");
-	$filehandler->write(get_uploaded_file('icon'));
-	$filehandler->close();
-
-	if ($filehandler->exists()) {
-		// Non existent file throws exception
-		$group->saveIconFromElggFile($filehandler);
-	}
-}
-
-system_message(elgg_echo("groups:saved"));
-
-forward($group->getUrl());
+$data = [
+	'entity' => $group,
+];
+return elgg_ok_response($data, elgg_echo('groups:saved'), $group->getURL());

@@ -3,20 +3,17 @@
  * Process a set of site notifications
  */
 
-$notification_guids = get_input('notification_id', array());
+$notification_guids = get_input('notification_id', []);
 
 if (!$notification_guids) {
-	register_error(elgg_echo('site_notifications:error:notifications_not_selected'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('site_notifications:error:notifications_not_selected'));
 }
 
-$success_msg = elgg_echo('site_notifications:success:delete');
 foreach ($notification_guids as $guid) {
 	$notification = get_entity($guid);
-	if (elgg_instanceof($notification, 'object', 'site_notification') && $notification->canEdit()) {
+	if ($notification instanceof SiteNotification && $notification->canDelete()) {
 		$notification->delete();
 	}
 }
 
-system_message($success_msg);
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('site_notifications:success:delete'));

@@ -15,52 +15,72 @@
  * @uses $vars['class']     Additional CSS class
  * @uses $vars['timestamp'] Store as a Unix timestamp in seconds. Default = false
  * @uses $vars['datepicker_options'] An array of options to pass to the jQuery UI datepicker
+ * @uses $vars['format']    Date format, default Y-m-d (2018-01-30)
  */
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-date');
 
-//@todo popup_calendar deprecated in 1.8.  Remove in 2.0
-$vars['class'][] = 'popup_calendar';
-
-$defaults = array(
+$defaults = [
 	'value' => '',
 	'disabled' => false,
 	'timestamp' => false,
-	'type' => 'text'
-);
+	'type' => 'text',
+	'format' => elgg_get_config('date_format', elgg_echo('input:date_format')),
+];
 
 $vars = array_merge($defaults, $vars);
 
-$timestamp = $vars['timestamp'];
+$timestamp = elgg_extract('timestamp', $vars);
 unset($vars['timestamp']);
+
+$format = elgg_extract('format', $vars, $defaults['format'], false);
+unset($vars['format']);
+
+$name = elgg_extract('name', $vars);
+$value = elgg_extract('value', $vars);
+
+$value_date = '';
+$value_timestamp = '';
+
+if ($value) {
+	try {
+		$dt = \Elgg\Values::normalizeTime($value);
+
+		$value_date = $dt->format($format);
+		$value_timestamp = $dt->getTimestamp();
+	} catch (DataFormatException $ex) {
+	}
+}
 
 if ($timestamp) {
 	if (!isset($vars['id'])) {
-		$vars['id'] = $vars['name'];
+		$vars['id'] = $name;
 	}
 	echo elgg_view('input/hidden', [
-		'name' => $vars['name'],
-		'value' => $vars['value'],
-		'rel' => $vars['id'],
+		'name' => $name,
+		'value' => $value_timestamp,
+		'rel' => elgg_extract('id', $vars),
 	]);
 	$vars['class'][] = 'elgg-input-timestamp';
 	unset($vars['name']);
 }
 
-// convert timestamps to text for display
-if (is_numeric($vars['value'])) {
-	$vars['value'] = gmdate('Y-m-d', $vars['value']);
+$vars['value'] = $value_date;
+
+$datepicker_options = (array) elgg_extract('datepicker_options', $vars, []);
+unset($vars['datepicker_options']);
+
+if (empty($datepicker_options['dateFormat'])) {
+	$datepicker_options['dateFormat'] = elgg_get_config('date_format_datepicker', elgg_echo('input:date_format:datepicker'));
 }
 
-$datepicker_options = elgg_extract('datepicker_options', $vars);
 $vars['data-datepicker-opts'] = $datepicker_options ? json_encode($datepicker_options) : '';
-unset($vars['datepicker_options']);
 
 echo elgg_format_element('input', $vars);
 
 if (isset($vars['id'])) {
 	$selector = "#{$vars['id']}";
 } else {
-	$selector = ".elgg-input-date[name='{$vars['name']}']";
+	$selector = ".elgg-input-date[name='{$name}']";
 }
 ?>
 <script>

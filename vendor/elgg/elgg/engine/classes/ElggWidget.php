@@ -27,7 +27,7 @@ class ElggWidget extends \ElggObject {
 	}
 
 	/**
-	 * Get a value from attributes or private settings
+	 * Get a value from attributes, metadata or private settings
 	 *
 	 * @param string $name The name of the value
 	 * @return mixed
@@ -37,32 +37,18 @@ class ElggWidget extends \ElggObject {
 		if (array_key_exists($name, $this->attributes)) {
 			return $this->attributes[$name];
 		}
-
-		// @todo clean up now that private settings return null
-		// No, so see if its in the private data store.
-		$meta = $this->getPrivateSetting($name);
-		if ($meta) {
-			return $meta;
+		
+	
+		// object title and description are stored as metadata
+		if (in_array($name, ['title', 'description'])) {
+			return parent::__get($name);
 		}
 
-		// Can't find it, so return null
-		return null;
+		return $this->getPrivateSetting($name);
 	}
 
 	/**
-	 * Override entity get and sets in order to save data to private data store.
-	 *
-	 * @param string $name Name
-	 * @return mixed
-	 * @deprecated 1.9
-	 */
-	public function get($name) {
-		elgg_deprecated_notice("Use -> instead of get()", 1.9);
-		return $this->__get($name);
-	}
-
-	/**
-	 * Set an attribute or private setting value
+	 * Set an attribute, metadata or private setting value
 	 *
 	 * @param string $name  The name of the value to set
 	 * @param mixed  $value The value to set
@@ -76,26 +62,18 @@ class ElggWidget extends \ElggObject {
 			}
 
 			$this->attributes[$name] = $value;
-		} else {
-			$this->setPrivateSetting($name, $value);
+			return;
 		}
+		
+		// object title and description are stored as metadata
+		if (in_array($name, ['title', 'description'])) {
+			parent::__set($name, $value);
+			return;
+		}
+		
+		$this->setPrivateSetting($name, $value);
 	}
 
-	/**
-	 * Override entity get and sets in order to save data to private data store.
-	 *
-	 * @param string $name  Name
-	 * @param string $value Value
-	 * @return bool
-	 * @deprecated 1.9
-	 */
-	public function set($name, $value) {
-		elgg_deprecated_notice("Use -> instead of set()", 1.9);
-		$this->__set($name, $value);
-
-		return true;
-	}
-	
 	/**
 	 * Unset a property from private settings or attribute.
 	 *
@@ -109,13 +87,19 @@ class ElggWidget extends \ElggObject {
 	public function __unset($name) {
 		if (array_key_exists($name, $this->attributes)) {
 			parent::__unset($name);
-		} else {
-			$this->removePrivateSetting($name);
 		}
+		
+		// object title and description are stored as metadata
+		if (in_array($name, ['title', 'description'])) {
+			parent::__unset($name);
+			return;
+		}
+		
+		$this->removePrivateSetting($name);
 	}
 	
 	/**
-	 * Test if property is set either as an attribute or private setting
+	 * Test if property is set either as an attribute, metadata or private setting
 	 *
 	 * @tip Use isset($entity->property)
 	 *
@@ -129,10 +113,15 @@ class ElggWidget extends \ElggObject {
 	public function __isset($name) {
 		if (array_key_exists($name, $this->attributes)) {
 			return parent::__isset($name);
-		} else {
-			$private_setting = $this->getPrivateSetting($name);
-			return !is_null($private_setting);
 		}
+		
+		// object title and description are stored as metadata
+		if (in_array($name, ['title', 'description'])) {
+			return parent::__isset($name);
+		}
+		
+		$private_setting = $this->getPrivateSetting($name);
+		return !is_null($private_setting);
 	}
 
 	/**
@@ -143,7 +132,8 @@ class ElggWidget extends \ElggObject {
 	 * @since 1.8.0
 	 */
 	public function setContext($context) {
-		return $this->setPrivateSetting('context', $context);
+		$this->context = $context;
+		return true;
 	}
 
 	/**
@@ -153,7 +143,7 @@ class ElggWidget extends \ElggObject {
 	 * @since 1.8.0
 	 */
 	public function getContext() {
-		return $this->getPrivateSetting('context');
+		return (string) $this->context;
 	}
 
 	/**
@@ -163,11 +153,21 @@ class ElggWidget extends \ElggObject {
 	 * @since 1.8.0
 	 */
 	public function getTitle() {
-		$title = $this->title;
-		if (!$title) {
-			$title = _elgg_services()->widgets->getNameById($this->handler, $this->getContext(), $this->getContainerEntity());
+		_elgg_services()->deprecation->sendNotice(__CLASS__ . '::' . __FUNCTION__ . ' is deprecated. '
+					. 'Use getDisplayName() instead', '3.0');
+		return $this->getDisplayName();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getDisplayName() {
+		$result = parent::getDisplayName();
+		if (!$result) {
+			$container = $this->getContainerEntity() ? : null;
+			$result = _elgg_services()->widgets->getNameById($this->handler, $this->getContext(), $container);
 		}
-		return $title;
+		return $result;
 	}
 
 	/**
@@ -179,31 +179,33 @@ class ElggWidget extends \ElggObject {
 	 * @since 1.8.0
 	 */
 	public function move($column, $rank) {
-		$options = array(
+		$options = [
 			'type' => 'object',
 			'subtype' => 'widget',
 			'container_guid' => $this->container_guid,
 			'limit' => false,
-			'private_setting_name_value_pairs' => array(
-				array('name' => 'context', 'value' => $this->getContext()),
-				array('name' => 'column', 'value' => $column)
-			)
-		);
-		$widgets = elgg_get_entities_from_private_settings($options);
+			'private_setting_name_value_pairs' => [
+				['name' => 'context', 'value' => $this->getContext()],
+				['name' => 'column', 'value' => $column]
+			]
+		];
+		$widgets = elgg_get_entities($options);
 		if (!$widgets) {
-			$this->column = (int)$column;
+			$this->column = (int) $column;
 			$this->order = 0;
 			return;
 		}
 
-		usort($widgets, function($a, $b) {return (int) $a->order > (int) $b->order;});
+		usort($widgets, function($a, $b) {return (int) $a->order > (int) $b->order;
+
+		});
 
 		// remove widgets from inactive plugins
 		$widget_types = elgg_get_widget_types([
 			'context' => $this->context,
 			'container' => $this->getContainerEntity(),
 		]);
-		$inactive_widgets = array();
+		$inactive_widgets = [];
 		foreach ($widgets as $index => $widget) {
 			if (!array_key_exists($widget->handler, $widget_types)) {
 				$inactive_widgets[] = $widget;
@@ -285,11 +287,11 @@ class ElggWidget extends \ElggObject {
 
 		// plugin hook handlers should return true to indicate the settings have
 		// been saved so that default code does not run
-		$hook_params = array(
+		$hook_params = [
 			'widget' => $this,
 			'params' => $params
-		);
-		if (_elgg_services()->hooks->trigger('widget_settings', $this->handler, $hook_params, false) == true) {
+		];
+		if (_elgg_services()->hooks->trigger('widget_settings', $this->handler, $hook_params, false) === true) {
 			return true;
 		}
 

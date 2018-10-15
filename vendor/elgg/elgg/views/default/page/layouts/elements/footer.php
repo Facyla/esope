@@ -2,11 +2,14 @@
 /**
  * Layout footer
  *
- * @uses $vars['footer']
+ * @uses $vars['footer'] Footer view
  */
 
-if (isset($vars['footer']) && $vars['footer']) {
-	echo '<div class="elgg-foot clearfix">';
-	echo $vars['footer'];
-	echo '</div>';
+$footer = elgg_extract('footer', $vars);
+if (!isset($footer) || empty($footer)) {
+	return;
 }
+?>
+<div class="elgg-foot elgg-layout-footer">
+	<?= $footer ?>
+</div>

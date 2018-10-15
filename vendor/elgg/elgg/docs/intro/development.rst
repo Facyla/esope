@@ -43,7 +43,7 @@ JavaScript
 ==========
 
 Elgg uses an AMD-compatible JavaScript system provided by RequireJs. Bundled with Elgg are jQuery, jQuery UI, 
-jQuery Form, jQuery jeditable, and jQuery UI Autocomplete.
+jQuery Form, and jQuery UI Autocomplete.
 
 Plugins can load their own JS libs.
 
@@ -76,10 +76,14 @@ Elgg provides some base database seeds to populate the database with entities fo
 
 You can run the following commands to seed and unseed the database.
 
-..code::sh
+.. code-block:: sh
 
     # seed the database
-    composer database:seeder:seed
+    vendor/bin/elgg-cli database:seed
 
     # unseed the database
-    composer database:seeder:unseed
+    vendor/bin/elgg-cli database:unseed
+
+
+Plugins can register their own seeds via ``'seeds', 'database'`` hook. The handler must return the class name of the seed,
+which must extend ``\Elgg\Database\Seeder\Seed`` class.

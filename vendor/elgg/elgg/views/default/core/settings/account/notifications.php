@@ -6,8 +6,13 @@
  * @subpackage Core
  */
 
+$page_owner = elgg_get_page_owner_entity();
+if (!$page_owner instanceof ElggUser) {
+	return;
+}
+
 $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
-$notification_settings = get_user_notification_settings(elgg_get_page_owner_guid());
+$notification_settings = $page_owner->getNotificationSettings();
 
 $title = elgg_echo('notifications:usersettings');
 
@@ -15,21 +20,20 @@ $rows = '';
 
 // Loop through options
 foreach ($NOTIFICATION_HANDLERS as $k => $v) {
-
-	if ($notification_settings->$k) {
+	if ($notification_settings[$k]) {
 		$val = "yes";
 	} else {
 		$val = "no";
 	}
 
-	$radio = elgg_view('input/radio', array(
+	$radio = elgg_view('input/radio', [
 		'name' => "method[$k]",
 		'value' => $val,
-		'options' => array(
+		'options' => [
 			elgg_echo('option:yes') => 'yes',
 			elgg_echo('option:no') => 'no'
-		),
-	));
+		],
+	]);
 
 	$cells = '<td class="prm pbl">' . elgg_echo("notification:method:$k") . ': </td>';
 	$cells .= "<td>$radio</td>";
@@ -37,7 +41,6 @@ foreach ($NOTIFICATION_HANDLERS as $k => $v) {
 	$rows .= "<tr>$cells</tr>";
 }
 
-$content = '';
-$content .= "<table>$rows</table>";
+$content = "<table>$rows</table>";
 
 echo elgg_view_module('info', $title, $content);

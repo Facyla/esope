@@ -6,31 +6,31 @@
  * @subpackage Core
  */
 
-// Get entity statistics
-$entity_stats = get_entity_statistics(elgg_get_page_owner_guid());
+$user = elgg_get_page_owner_entity();
+if (!$user instanceof ElggUser) {
+	return;
+}
+
+$entity_stats = get_entity_statistics($user->guid);
 
 if ($entity_stats) {
 	$rows = '';
-	$even_odd = null;
+	
 	foreach ($entity_stats as $k => $entry) {
 		foreach ($entry as $a => $b) {
-
-			// This function controls the alternating class
-			$even_odd = ( 'odd' != $even_odd ) ? 'odd' : 'even';
-
 			if ($a == "__base__") {
-				$a = elgg_echo("item:{$k}");
+				$a = elgg_echo("collection:{$k}");
 				if (empty($a)) {
 					$a = $k;
 				}
 			} else {
-				$a = elgg_echo("item:{$k}:{$a}");
+				$a = elgg_echo("collection:{$k}:{$a}");
 				if (empty($a)) {
 					$a = "$k $a";
 				}
 			}
 			$rows .= <<< END
-				<tr class="{$even_odd}">
+				<tr>
 					<td class="column-one"><b>{$a}:</b></td>
 					<td>{$b}</td>
 				</tr>

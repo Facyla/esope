@@ -1,4 +1,7 @@
 <?php
+
+use Elgg\Collections\CollectionItemInterface;
+
 /**
  * A generic class that contains shared code among
  * \ElggExtender, \ElggEntity, and \ElggRelationship
@@ -6,15 +9,14 @@
  * @package    Elgg.Core
  * @subpackage DataModel
  */
-abstract class ElggData implements
-	Loggable,    // Can events related to this object class be logged
-	Iterator,    // Override foreach behaviour
-	\ArrayAccess, // Override for array access
-	Exportable   // (deprecated 1.9)
-{
+abstract class ElggData implements CollectionItemInterface,
+								   Serializable,
+								   Loggable,
+								   Iterator,
+								   ArrayAccess {
 
 	use \Elgg\TimeUsing;
-	
+
 	/**
 	 * The main attributes of an entity.
 	 * Holds attributes to save to database
@@ -22,7 +24,7 @@ abstract class ElggData implements
 	 * Subclasses should add to this in their constructors.
 	 * Any field not appearing in this will be viewed as metadata
 	 */
-	protected $attributes = array();
+	protected $attributes = [];
 
 	/**
 	 * Initialize the attributes array.
@@ -34,7 +36,7 @@ abstract class ElggData implements
 	protected function initializeAttributes() {
 		// Create attributes array if not already created
 		if (!is_array($this->attributes)) {
-			$this->attributes = array();
+			$this->attributes = [];
 		}
 
 		$this->attributes['time_created'] = null;
@@ -63,27 +65,6 @@ abstract class ElggData implements
 	}
 
 	/**
-	 * Fetch the specified attribute
-	 *
-	 * @param string $name The attribute to fetch
-	 *
-	 * @return mixed The attribute, if it exists.  Otherwise, null.
-	 * @deprecated 1.9
-	 */
-	abstract protected function get($name);
-
-	/**
-	 * Set the specified attribute
-	 *
-	 * @param string $name  The attribute to set
-	 * @param mixed  $value The value to set it to
-	 *
-	 * @return bool The success of your set function?
-	 * @deprecated 1.9
-	 */
-	abstract protected function set($name, $value);
-
-	/**
 	 * Get a URL for this object
 	 *
 	 * @return string
@@ -96,7 +77,7 @@ abstract class ElggData implements
 	 * @return bool
 	 */
 	abstract public function save();
-	
+
 	/**
 	 * Delete this data.
 	 *
@@ -110,30 +91,17 @@ abstract class ElggData implements
 	 * @return int UNIX epoch time
 	 */
 	public function getTimeCreated() {
-		return $this->time_created;
+		return $this->attributes['time_created'];
 	}
 
 	/**
 	 * Get a plain old object copy for public consumption
-	 * 
-	 * @return \stdClass
-	 */
-	abstract public function toObject();
-
-	/*
-	 *  SYSTEM LOG INTERFACE
-	 */
-
-	/**
-	 * Return the class name of the object.
 	 *
-	 * @return string
-	 * @deprecated 1.9 Use get_class()
+	 * @param array $params Export parameters
+	 *
+	 * @return \Elgg\Export\Data
 	 */
-	public function getClassName() {
-		elgg_deprecated_notice("getClassName() is deprecated. Use get_class().", 1.9);
-		return get_class($this);
-	}
+	abstract public function toObject(array $params = []);
 
 	/*
 	 * ITERATOR INTERFACE
@@ -229,6 +197,7 @@ abstract class ElggData implements
 		if (array_key_exists($key, $this->attributes)) {
 			return $this->attributes[$key];
 		}
+
 		return null;
 	}
 
@@ -259,5 +228,33 @@ abstract class ElggData implements
 	 */
 	public function offsetExists($offset) {
 		return array_key_exists($offset, $this->attributes);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getId() {
+		return $this->getSystemLogID();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getPriority() {
+		return $this->getTimeCreated();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function serialize() {
+		return serialize($this->attributes);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function unserialize($serialized) {
+		$this->attributes = unserialize($serialized);
 	}
 }

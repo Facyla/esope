@@ -10,7 +10,7 @@ The following is an example of a plugin with standard structure. For further exp
 
 The following files for plugin ``example`` would go in ``/mod/example/``
 
-.. code::
+.. code-block:: text
 
     actions/
         example/
@@ -64,18 +64,18 @@ The following files for plugin ``example`` would go in ``/mod/example/``
     manifest.xml
     README.txt
     start.php
+    composer.json
 
 Required Files
 --------------
 
-Plugins **must** provide a ``start.php`` and ``manifest.xml`` file in the plugin root in order to be recognized by Elgg.
+Plugins **must** provide a ``manifest.xml`` file in the plugin root in order to be recognized by Elgg.
 
 Therefore the following is the minimally compliant structure:
 
-.. code::
+.. code-block:: text
 
     mod/example/
-        start.php
         manifest.xml
 
 Actions
@@ -85,7 +85,7 @@ Plugins *should* place scripts for actions an ``actions/`` directory, and furthe
 
 For example, the action ``my/example/action`` would go in ``my_plugin/actions/my/example/action.php``. This makes it very obvious which script is associated with which action.
 
-Similarly, the body of the form that submits to this action should be located in ``forms/my/example/action.php``. Not only does this make the connection b/w action handler, form code, and action name obvious, but it allows you to use the new (as of Elgg 1.8) ``elgg_view_form()`` function easily.
+Similarly, the body of the form that submits to this action should be located in ``forms/my/example/action.php``. Not only does this make the connection b/w action handler, form code, and action name obvious, but it allows you to use the ``elgg_view_form()`` function easily.
 
 Text Files
 ----------

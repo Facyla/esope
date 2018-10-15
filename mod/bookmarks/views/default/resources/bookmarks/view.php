@@ -9,31 +9,27 @@ $guid = elgg_extract('guid', $vars);
 
 elgg_entity_gatekeeper($guid, 'object', 'bookmarks');
 
-$bookmark = get_entity($guid);
+$entity = get_entity($guid);
 
-$page_owner = elgg_get_page_owner_entity();
+elgg_push_entity_breadcrumbs($entity, false);
 
-elgg_group_gatekeeper();
+$title = $entity->getDisplayName();
 
-$crumbs_title = $page_owner->name;
+$content = elgg_view_entity($entity, [
+	'full_view' => true,
+	'show_responses' => true,
+]);
 
-if (elgg_instanceof($page_owner, 'group')) {
-	elgg_push_breadcrumb($crumbs_title, "bookmarks/group/$page_owner->guid/all");
-} else {
-	elgg_push_breadcrumb($crumbs_title, "bookmarks/owner/$page_owner->username");
-}
-
-$title = $bookmark->title;
-
-elgg_push_breadcrumb($title);
-
-$content = elgg_view_entity($bookmark, array('full_view' => true));
-$content .= elgg_view_comments($bookmark);
-
-$body = elgg_view_layout('content', array(
+$body = elgg_view_layout('default', [
 	'content' => $content,
 	'title' => $title,
 	'filter' => '',
-));
+	'entity' => $entity,
+	'sidebar' => elgg_view('object/bookmarks/elements/sidebar', [
+		'entity' => $entity,
+	]),
+]);
 
-echo elgg_view_page($title, $body);
+echo elgg_view_page($title, $body, 'default', [
+	'entity' => $entity,
+]);

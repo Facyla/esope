@@ -2,7 +2,7 @@
 
 $file = new ElggFile();
 
-$mapping = array(
+$mapping = [
 	'general' => 'general',
 	'application' => 'application',
 	'audio' => 'music',
@@ -16,11 +16,11 @@ $mapping = array(
 	'application/vnd.oasis.opendocument.text' => 'openoffice',
 	'application/zip' => 'archive',
 	'text/v-card' => 'vcard',
-);
+];
 
-$sizes = array('large', 'medium', 'small', 'tiny');
+$sizes = ['large', 'medium', 'small', 'tiny'];
 ?>
-<table class="theme-sandbox-table">
+<table class="elgg-table">
 	<tr>
 		<th></th>
 		<?php
@@ -38,7 +38,7 @@ $sizes = array('large', 'medium', 'small', 'tiny');
 			<?php
 			foreach ($sizes as $size) {
 				echo '<td>';
-				echo elgg_view_entity_icon($file, $size);
+				echo elgg_view_entity_icon($file, $size, ['use_link' => false]);
 				echo '</td>';
 			}
 			?>

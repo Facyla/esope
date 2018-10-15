@@ -9,19 +9,15 @@
  * @uses $vars['object'] The array of message registers
  */
 
-echo '<ul class="elgg-system-messages">';
+$messages = (array) elgg_extract('object', $vars, []);
 
-// hidden li so we validate
-echo '<li class="hidden"></li>';
+// hidden li so we validate, we need this for javascript added system messages
+$list_items = elgg_format_element('li', ['class' => 'hidden']);
 
-if (isset($vars['object']) && is_array($vars['object']) && sizeof($vars['object']) > 0) {
-	foreach ($vars['object'] as $type => $list ) {
-		foreach ($list as $message) {
-			echo "<li class=\"elgg-message elgg-state-$type\">";
-			echo elgg_autop($message);
-			echo '</li>';
-		}
+foreach ($messages as $type => $list) {
+	foreach ($list as $message) {
+		$list_items .= elgg_format_element('li', [], elgg_view_message($type, $message, ['title' => false]));
 	}
 }
 
-echo '</ul>';
+echo elgg_format_element('ul', ['class' => 'elgg-system-messages'], $list_items);

@@ -2,19 +2,30 @@
 
 namespace Elgg\Likes;
 
+/**
+ * Likes preloader
+ */
 class Preloader {
 
 	/**
-	 * @var DataService
+	 * @var \Elgg\Likes\DataService
 	 */
 	protected $data;
 
+	/**
+	 * Create a preloader
+	 *
+	 * @param \Elgg\Likes\DataService $data a dataservice
+	 */
 	public function __construct(DataService $data) {
 		$this->data = $data;
 	}
 
 	/**
-	 * @param \ElggRiverItem[]|\ElggEntity[] $items
+	 * Preload likes for a set of items
+	 *
+	 * @param \ElggRiverItem[]|\ElggEntity[] $items the items to preload for
+	 *
 	 * @return void
 	 */
 	public function preloadForList(array $items) {
@@ -32,17 +43,21 @@ class Preloader {
 	}
 
 	/**
-	 * @param int[] $guids
+	 * Preload likes count based on guids
+	 *
+	 * @param int[] $guids the guids to preload
+	 *
+	 * @return void
 	 */
 	protected function preloadCountsFromQuery(array $guids) {
-		$count_rows = elgg_get_annotations(array(
+		$count_rows = elgg_get_annotations([
 			'annotation_names' => 'likes',
 			'guids' => $guids,
-			'selects' => array('e.guid', 'COUNT(*) AS cnt'),
+			'selects' => ['e.guid', 'COUNT(*) AS cnt'],
 			'group_by' => 'e.guid',
 			'limit' => false,
 			'callback' => false,
-		));
+		]);
 		foreach ($guids as $guid) {
 			$this->data->setNumLikes($guid, 0);
 		}
@@ -52,16 +67,19 @@ class Preloader {
 	}
 
 	/**
-	 * @param \ElggEntity[] $entities
+	 * Preload based of entities
+	 *
+	 * @param \ElggEntity[] $entities given entities
+	 *
 	 * @return int[]
 	 */
 	protected function preloadCountsFromHook(array $entities) {
-		$guids_not_loaded = array();
+		$guids_not_loaded = [];
 
 		foreach ($entities as $entity) {
 			// BC with likes_count(). If this hook is used this preloader may not be of much help.
 			$type = $entity->getType();
-			$params = array('entity' => $entity);
+			$params = ['entity' => $entity];
 
 			$num_likes = elgg_trigger_plugin_hook('likes:count', $type, $params, false);
 			if ($num_likes) {
@@ -75,7 +93,11 @@ class Preloader {
 	}
 
 	/**
-	 * @param int[] $guids
+	 * Preload likes for given guids for current user
+	 *
+	 * @param int[] $guids preload guids
+	 *
+	 * @return void
 	 */
 	protected function preloadCurrentUserLikes(array $guids) {
 		$owner_guid = elgg_get_logged_in_user_guid();
@@ -83,13 +105,13 @@ class Preloader {
 			return;
 		}
 
-		$annotation_rows = elgg_get_annotations(array(
+		$annotation_rows = elgg_get_annotations([
 			'annotation_names' => 'likes',
 			'annotation_owner_guids' => $owner_guid,
 			'guids' => $guids,
 			'limit' => false,
 			'callback' => false,
-		));
+		]);
 
 		foreach ($guids as $guid) {
 			$this->data->setLikedByCurrentUser($guid, false);
@@ -100,15 +122,16 @@ class Preloader {
 	}
 
 	/**
-	 * @param \ElggRiverItem[]|\ElggEntity[] $items
+	 * Convert river items and/or entities to guids
+	 *
+	 * @param \ElggRiverItem[]|\ElggEntity[] $items the items to process
+	 *
 	 * @return int[]
 	 */
 	protected function getGuidsToPreload(array $items) {
-		$guids = array();
+		$guids = [];
 
 		foreach ($items as $item) {
-			// TODO remove duplication of @link likes_river_menu_setup()
-
 			if ($item instanceof \ElggRiverItem) {
 				// only like group creation #3958
 				if ($item->type == "group" && $item->view != "river/group/create") {
@@ -117,7 +140,7 @@ class Preloader {
 
 				$type = $item->type;
 				$subtype = $item->subtype;
-				$likable = (bool)elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
+				$likable = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
 				if (!$likable) {
 					continue;
 				}
@@ -130,10 +153,9 @@ class Preloader {
 					$guids[$item->object_guid] = true;
 				}
 			} elseif ($item instanceof \ElggEntity) {
-
 				$type = $item->type;
 				$subtype = $item->getSubtype();
-				$likable = (bool)elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
+				$likable = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
 				if ($likable) {
 					$guids[$item->guid] = true;
 				}
@@ -145,16 +167,17 @@ class Preloader {
 	/**
 	 * Get entities in any order checking cache first
 	 *
-	 * @param int[] $guids
+	 * @param int[] $guids guids of entities to return
+	 *
 	 * @return \ElggEntity[]
 	 */
 	protected function getEntities(array $guids) {
 		// most objects are already preloaded
-		$entities = array();
-		$fetch_guids = array();
+		$entities = [];
+		$fetch_guids = [];
 
 		foreach ($guids as $guid) {
-			$entity = _elgg_services()->entityCache->get($guid);
+			$entity = _elgg_services()->entityTable->getFromCache($guid);
 			if ($entity) {
 				$entities[] = $entity;
 			} else {
@@ -162,10 +185,10 @@ class Preloader {
 			}
 		}
 		if ($fetch_guids) {
-			$fetched = elgg_get_entities(array(
+			$fetched = elgg_get_entities([
 				'guids' => $fetch_guids,
 				'limit' => false,
-			));
+			]);
 			array_splice($entities, count($entities), 0, $fetched);
 		}
 		return $entities;

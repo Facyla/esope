@@ -9,9 +9,4 @@ return array(
 	'garbagecollector' => "МУСОРЩИК\n",
 	'garbagecollector:done' => "ВЫПОЛНЕНО\n",
 	'garbagecollector:optimize' => "Оптимизация %s ",
-
-	'garbagecollector:error' => "ОШИБКА",
-	'garbagecollector:ok' => "OK",
-
-	'garbagecollector:gc:metastrings' => 'Очищаем несвязанные метастроки: ',
 );

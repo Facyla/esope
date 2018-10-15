@@ -2,6 +2,8 @@
 
 namespace Elgg;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
@@ -12,15 +14,12 @@ namespace Elgg;
  */
 class FormsService {
 
+	use Loggable;
+
 	/**
 	 * @var ViewsService
 	 */
 	private $views;
-
-	/**
-	 * @var Logger
-	 */
-	private $logger;
 
 	/**
 	 * @var bool
@@ -35,10 +34,10 @@ class FormsService {
 	/**
 	 * Constructor
 	 *
-	 * @param ViewsService $views  Views service
-	 * @param Logger       $logger Logger service
+	 * @param ViewsService    $views  Views service
+	 * @param LoggerInterface $logger Logger service
 	 */
-	public function __construct(ViewsService $views, Logger $logger) {
+	public function __construct(ViewsService $views, LoggerInterface $logger) {
 		$this->views = $views;
 		$this->logger = $logger;
 	}
@@ -73,15 +72,18 @@ class FormsService {
 	 * @param string $action    The name of the action. An action name does not include
 	 *                          the leading "action/". For example, "login" is an action name.
 	 * @param array  $form_vars $vars passed to the "input/form" view
+	 *                           - 'ajax' bool If true, the form will be submitted with an ajax request
 	 * @param array  $body_vars $vars passed to the "forms/<action>" view
 	 *
 	 * @return string The complete form
 	 */
-	public function render($action, $form_vars = array(), $body_vars = array()) {
+	public function render($action, $form_vars = [], $body_vars = []) {
 
-		$defaults = array(
-			'action' => elgg_normalize_url("action/$action"),
-		);
+		$defaults = [
+			'action' => elgg_generate_action_url($action, [], false),
+			'method' => 'post',
+			'ajax' => false,
+		];
 
 		// append elgg-form class to any class options set
 		$form_vars['class'] = (array) elgg_extract('class', $form_vars, []);
@@ -89,7 +91,18 @@ class FormsService {
 
 		$form_vars = array_merge($defaults, $form_vars);
 
+		if (!isset($form_vars['enctype']) && strtolower($form_vars['method']) == 'post') {
+			$form_vars['enctype'] = 'multipart/form-data';
+		}
+
+		if (elgg_extract('ajax', $form_vars)) {
+			$form_vars['class'][] = 'elgg-js-ajax-form';
+			unset($form_vars['ajax']);
+		}
+
 		$form_vars['action_name'] = $action;
+		
+		$form_vars['ignore_empty_body'] = (bool) elgg_extract('ignore_empty_body', $form_vars, false);
 		
 		if (!isset($form_vars['body'])) {
 			$this->rendering = true;
@@ -103,6 +116,8 @@ class FormsService {
 				$body .= $this->views->renderView('elements/forms/footer', [
 					'footer' => $this->getFooter(),
 					'action_name' => $action,
+					'body_vars' => $body_vars,
+					'form_vars' => $form_vars,
 				]);
 			}
 			

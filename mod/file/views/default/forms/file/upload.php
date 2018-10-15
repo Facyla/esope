@@ -5,7 +5,7 @@
  *
  * @package ElggFile
  */
-// once elgg_view stops throwing all sorts of junk into $vars, we can use 
+// once elgg_view stops throwing all sorts of junk into $vars, we can use
 $title = elgg_extract('title', $vars, '');
 $desc = elgg_extract('description', $vars, '');
 $tags = elgg_extract('tags', $vars, '');
@@ -24,15 +24,6 @@ if ($guid) {
 	$submit_label = elgg_echo('upload');
 }
 
-// Get post_max_size and upload_max_filesize
-$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
-$upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
-
-// Determine the correct value
-$max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
-
-$upload_limit = elgg_echo('file:upload_limit', array(elgg_format_bytes($max_upload)));
-
 $categories_field = $vars;
 $categories_field['#type'] = 'categories';
 
@@ -40,7 +31,6 @@ $fields = [
 	[
 		'#type' => 'file',
 		'#label' => $file_label,
-		'#help' => $upload_limit,
 		'name' => 'upload',
 		'value' => ($guid),
 		'required' => (!$guid),
@@ -56,6 +46,7 @@ $fields = [
 		'#label' => elgg_echo('description'),
 		'name' => 'description',
 		'value' => $desc,
+		'editor_type' => 'simple',
 	],
 	[
 		'#type' => 'tags',

@@ -14,8 +14,7 @@
 
 // check new registration allowed
 if (elgg_get_config('allow_registration') == false) {
-	register_error(elgg_echo('registerdisabled'));
-	forward();
+	throw new \Elgg\GatekeeperException(elgg_echo('registerdisabled'));
 }
 
 $friend_guid = (int) get_input('friend_guid', 0);
@@ -23,31 +22,29 @@ $invitecode = get_input('invitecode');
 
 // only logged out people need to register
 if (elgg_is_logged_in()) {
-	forward();
+	throw new \Elgg\GatekeeperException();
 }
 
-$title = elgg_echo("register");
+$title = elgg_echo('register');
 
-$form_params = array(
+$form_params = [
 	'class' => 'elgg-form-account',
-);
+	'ajax' => true,
+];
 
-$body_params = array(
+$body_params = [
 	'friend_guid' => $friend_guid,
 	'invitecode' => $invitecode
-);
+];
 $content = elgg_view_form('register', $form_params, $body_params);
 
 $content .= elgg_view('help/register');
 
-if (elgg_get_config('walled_garden')) {
-	elgg_load_css('elgg.walled_garden');
-	$body = elgg_view_layout('walled_garden', array('content' => $content));
-	echo elgg_view_page($title, $body, 'walled_garden');
-} else {
-	$body = elgg_view_layout('one_column', array(
-		'title' => $title,
-		'content' => $content,
-	));
-	echo elgg_view_page($title, $body);
-}
+$shell = elgg_get_config('walled_garden') ? 'walled_garden' : 'default';
+
+$body = elgg_view_layout('default', [
+	'content' => $content,
+	'title' => $title,
+	'sidebar' => false,
+]);
+echo elgg_view_page($title, $body, $shell);

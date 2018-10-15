@@ -25,10 +25,21 @@ class WidgetsService {
 	 * @see \Elgg\WidgetsService::getWidgets()
 	 * @var array
 	 */
-	private $widgetCache = array();
+	private $widgetCache = [];
 
 	/**
-	 * @see elgg_get_widgets
+	 * Get widgets for a particular context
+	 *
+	 * The widgets are ordered for display and grouped in columns.
+	 * $widgets = elgg_get_widgets(elgg_get_logged_in_user_guid(), 'dashboard');
+	 * $first_column_widgets = $widgets[1];
+	 *
+	 * @param int    $owner_guid The owner GUID of the layout
+	 * @param string $context    The context (profile, dashboard, etc)
+	 *
+	 * @return \ElggWidget[] An 2D array of \ElggWidget objects
+	 *
+	 * @see elgg_get_widgets()
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -39,25 +50,26 @@ class WidgetsService {
 			return $this->widgetCache[$widget_cache_key];
 		}
 
-		$options = array(
+		$widgets = elgg_get_entities([
 			'type' => 'object',
 			'subtype' => 'widget',
 			'owner_guid' => $owner_guid,
 			'private_setting_name' => 'context',
 			'private_setting_value' => $context,
 			'limit' => 0,
-		);
-		$widgets = elgg_get_entities_from_private_settings($options);
+			'preload_private_settings' => true,
+		]);
+		
 		if (!$widgets) {
-			return array();
+			return [];
 		}
 
-		$sorted_widgets = array();
+		$sorted_widgets = [];
 		foreach ($widgets as $widget) {
-			if (!isset($sorted_widgets[(int)$widget->column])) {
-				$sorted_widgets[(int)$widget->column] = array();
+			if (!isset($sorted_widgets[(int) $widget->column])) {
+				$sorted_widgets[(int) $widget->column] = [];
 			}
-			$sorted_widgets[(int)$widget->column][$widget->order] = $widget;
+			$sorted_widgets[(int) $widget->column][$widget->order] = $widget;
 		}
 
 		foreach ($sorted_widgets as $col => $widgets) {
@@ -70,7 +82,16 @@ class WidgetsService {
 	}
 
 	/**
-	 * @see elgg_create_widget
+	 * Create a new widget instance
+	 *
+	 * @param int    $owner_guid GUID of entity that owns this widget
+	 * @param string $handler    The handler for this widget
+	 * @param string $context    The context for this widget
+	 * @param int    $access_id  If not specified, it is set to the default access level
+	 *
+	 * @return int|false Widget GUID or false on failure
+	 *
+	 * @see elgg_create_widget()
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -89,13 +110,9 @@ class WidgetsService {
 
 		$widget = new \ElggWidget;
 		$widget->owner_guid = $owner_guid;
-		$widget->container_guid = $owner_guid; // @todo - will this work for group widgets?
-		if (isset($access_id)) {
-			$widget->access_id = $access_id;
-		} else {
-			$widget->access_id = get_default_access();
-		}
-
+		$widget->container_guid = $owner_guid;
+		$widget->access_id = isset($access_id) ? $access_id : get_default_access();
+		
 		if (!$widget->save()) {
 			return false;
 		}
@@ -108,7 +125,14 @@ class WidgetsService {
 	}
 
 	/**
-	 * @see elgg_can_edit_widget_layout
+	 * Can the user edit the widget layout
+	 *
+	 * @param string $context   The widget context
+	 * @param int    $user_guid The GUID of the user (0 for logged in user)
+	 *
+	 * @return bool
+	 *
+	 * @see elgg_can_edit_widget_layout()
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -125,20 +149,22 @@ class WidgetsService {
 			$return = false;
 		}
 
-		$params = array(
+		$params = [
 			'user' => $user,
 			'context' => $context,
 			'page_owner' => elgg_get_page_owner_entity(),
-		);
+		];
 		return _elgg_services()->hooks->trigger('permissions_check', 'widget_layout', $params, $return);
 	}
 
 	/**
-	 * @param WidgetDefinition Definition of the widget
+	 * Register a widget type
+	 *
+	 * @param WidgetDefinition $definition Definition of the widget
 	 *
 	 * @return bool
 	 *
-	 * @see elgg_register_widget_type
+	 * @see elgg_register_widget_type()
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -158,9 +184,13 @@ class WidgetsService {
 	}
 
 	/**
-	 * @param string $id
+	 * Remove a widget type
+	 *
+	 * @param string $id The identifier for the widget
+	 *
 	 * @return bool
-	 * @see elgg_unregister_widget_type
+	 *
+	 * @see elgg_unregister_widget_type()
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -175,11 +205,13 @@ class WidgetsService {
 	/**
 	 * Checks if a widget type exists for a given id
 	 *
-	 * @param string $id             Widget identifier
-	 * @param string $context        Optional context to check
+	 * @param string      $id        Widget identifier
+	 * @param string      $context   Optional context to check
 	 * @param \ElggEntity $container Optional limit widget definitions to a container
 	 *
-	 * @see elgg_is_widget_type
+	 * @return bool
+	 *
+	 * @see elgg_is_widget_type()
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -199,6 +231,10 @@ class WidgetsService {
 	}
 
 	/**
+	 * Get all widgets
+	 *
+	 * @return \Elgg\WidgetDefinition[]
+	 *
 	 * @access private
 	 * @since 1.9.0
 	 */
@@ -209,8 +245,8 @@ class WidgetsService {
 	/**
 	 * Returns widget name based on id
 	 *
-	 * @param string $id             Widget identifier
-	 * @param string $context        Context to check
+	 * @param string      $id        Widget identifier
+	 * @param string      $context   Context to check
 	 * @param \ElggEntity $container Optional limit widget definitions to a container
 	 *
 	 * @return string|boolean
@@ -230,11 +266,10 @@ class WidgetsService {
 	}
 
 	/**
-	 * @param $params Associative array of params used to determine what to return
+	 * @param array $params Associative array of params used to determine what to return
 	 *
 	 * array (
 	 *     'context' => string (defaults to elgg_get_context()),
-	 *     'exact'   => bool (defaults to false),
 	 *     'container' => \ElggEntity (defaults to null)
 	 * )
 	 *
@@ -244,7 +279,6 @@ class WidgetsService {
 	 * @since 1.9.0
 	 */
 	public function getTypes(array $params = []) {
-		$exact = (bool) elgg_extract('exact', $params, false);
 		$context = elgg_extract('context', $params, '');
 		if (!$context) {
 			$context = elgg_get_context();
@@ -257,20 +291,21 @@ class WidgetsService {
 		}
 		
 		$widgets = [];
+		/* @var $widget_definition \Elgg\WidgetDefinition */
 		foreach ($available_widgets as $widget_definition) {
 			if (!($widget_definition instanceof WidgetDefinition)) {
 				continue;
 			}
-			
-			if ($exact) {
-				if (in_array($context, $widget_definition->context)) {
-					$widgets[$widget_definition->id] = $widget_definition;
-				}
-			} else {
-				if (in_array('all', $widget_definition->context) || in_array($context, $widget_definition->context)) {
-					$widgets[$widget_definition->id] = $widget_definition;
-				}
+
+			if (!in_array($context, $widget_definition->context)) {
+				continue;
 			}
+			
+			if (!$widget_definition->isValid()) {
+				continue;
+			}
+			
+			$widgets[$widget_definition->id] = $widget_definition;
 		}
 
 		return $widgets;

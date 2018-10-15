@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
 
 	/**
 	 * Menu items and titles
@@ -75,4 +75,4 @@ Schau Dir das neue Lesezeichen an und schreibe einen Kommentar:
 	'bookmarks:save:invalid' => "Die Adresse des Lesezeichens ist ungültig und kann nicht gespeichert werden.",
 	'bookmarks:delete:failed' => "Das Lesezeichen konnte nicht gelöscht werden. Versuche es bitte noch einmal.",
 	'bookmarks:unknown_bookmark' => 'Das ausgewählte Lesezeichen ist nicht auffindbar.',
-);
+];

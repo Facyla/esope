@@ -3,159 +3,43 @@
  * Procedural code for creating, loading, and modifying \ElggEntity objects.
  */
 
-use Elgg\Database\EntityTable\UserFetchFailureException;
-
 /**
- * Return the id for a given subtype.
+ * Return the class name registered as a constructor for an entity of a given type and subtype
  *
- * \ElggEntity objects have a type and a subtype.  Subtypes
- * are defined upon creation and cannot be changed.
- *
- * Plugin authors generally don't need to use this function
- * unless writing their own SQL queries.  Use {@link \ElggEntity::getSubtype()}
- * to return the string subtype.
- *
- * @internal Subtypes are stored in the entity_subtypes table.  There is a foreign
- * key in the entities table.
- *
- * @param string $type    Type
- * @param string $subtype Subtype
- *
- * @return int Subtype ID
- * @see get_subtype_from_id()
- */
-function get_subtype_id($type, $subtype) {
-	return _elgg_services()->subtypeTable->getId($type, $subtype);
-}
-
-/**
- * Gets the denormalized string for a given subtype ID.
- *
- * @param int $subtype_id Subtype ID from database
- * @return string|false Subtype name, false if subtype not found
- * @see get_subtype_id()
- * @access private
- */
-function get_subtype_from_id($subtype_id) {
-	return _elgg_services()->subtypeTable->getSubtype($subtype_id);
-}
-
-/**
- * Return the class name for a registered type and subtype.
- *
- * Entities can be registered to always be loaded as a certain class
- * with add_subtype() or update_subtype(). This function returns the class
- * name if found and null if not.
+ * @see elgg_set_entity_type()
  *
  * @param string $type    The type
  * @param string $subtype The subtype
  *
- * @return string|null a class name or null
- * @see get_subtype_from_id()
- * @see get_subtype_class_from_id()
+ * @return string
  */
-function get_subtype_class($type, $subtype) {
-	return _elgg_services()->subtypeTable->getClass($type, $subtype);
+function elgg_get_entity_class($type, $subtype) {
+	return _elgg_services()->entityTable->getEntityClass($type, $subtype);
 }
 
 /**
- * Returns the class name for a subtype id.
+ * Sets class constructor name for entities with given type and subtype
  *
- * @param int $subtype_id The subtype id
+ * By default entities are loaded as one of the 4 parent objects:
+ *  - site: ElggSite
+ *  - user: ElggUser
+ *  - object: ElggObject
+ *  - group: ElggGroup
  *
- * @return string|null
- * @see get_subtype_class()
- * @see get_subtype_from_id()
- * @access private
+ * Entity classes for subtypes should extend the base class for entity type,
+ * e.g. ElggBlog must extend ElggObject
+ *
+ * @param string $type    Entity type
+ * @param string $subtype Entity subtype
+ * @param string $class   Class name for the object
+ *                        Can be empty to reset previously declared class name
+ *
+ * @return void
  */
-function get_subtype_class_from_id($subtype_id) {
-	return _elgg_services()->subtypeTable->getClassFromId($subtype_id);
+function elgg_set_entity_class($type, $subtype, $class = "") {
+	_elgg_services()->entityTable->setEntityClass($type, $subtype, $class);
 }
 
-/**
- * Register \ElggEntities with a certain type and subtype to be loaded as a specific class.
- *
- * By default entities are loaded as one of the 4 parent objects: site, user, object, or group.
- * If you subclass any of these you can register the classname with add_subtype() so
- * it will be loaded as that class automatically when retrieved from the database with
- * {@link get_entity()}.
- *
- * @warning This function cannot be used to change the class for a type-subtype pair.
- * Use update_subtype() for that.
- *
- * @param string $type    The type you're subtyping (site, user, object, or group)
- * @param string $subtype The subtype
- * @param string $class   Optional class name for the object
- *
- * @return int
- * @see update_subtype()
- * @see remove_subtype()
- * @see get_entity()
- */
-function add_subtype($type, $subtype, $class = "") {
-	return _elgg_services()->subtypeTable->add($type, $subtype, $class);
-}
-
-/**
- * Removes a registered \ElggEntity type, subtype, and classname.
- *
- * @warning You do not want to use this function. If you want to unregister
- * a class for a subtype, use update_subtype(). Using this function will
- * permanently orphan all the objects created with the specified subtype.
- *
- * @param string $type    Type
- * @param string $subtype Subtype
- *
- * @return bool
- * @see add_subtype()
- * @see update_subtype()
- */
-function remove_subtype($type, $subtype) {
-	return _elgg_services()->subtypeTable->remove($type, $subtype);
-}
-
-/**
- * Update a registered \ElggEntity type, subtype, and class name
- *
- * @param string $type    Type
- * @param string $subtype Subtype
- * @param string $class   Class name to use when loading this entity
- *
- * @return bool
- */
-function update_subtype($type, $subtype, $class = '') {
-	return _elgg_services()->subtypeTable->update($type, $subtype, $class);
-}
-
-/**
- * Determine if a given user can write to an entity container.
- *
- * An entity can be a container for any other entity by setting the
- * container_guid.  container_guid can differ from owner_guid.
- *
- * A plugin hook container_permissions_check:$entity_type is emitted to allow granular
- * access controls in plugins.
- *
- * @param int    $user_guid      The user guid, or 0 for logged in user.
- * @param int    $container_guid The container, or 0 for the current page owner.
- * @param string $type           The type of entity we want to create (default: 'all')
- * @param string $subtype        The subtype of the entity we want to create (default: 'all')
- *
- * @return bool
- * @deprecated 2.2
- */
-function can_write_to_container($user_guid = 0, $container_guid = 0, $type = 'all', $subtype = 'all') {
-	elgg_deprecated_notice(__FUNCTION__ . ' is deprecated. Use ElggEntity::canWriteToContainer()', '2.2');
-	if (!$container_guid) {
-		$container_guid = elgg_get_page_owner_guid();
-	}
-	$container = get_entity($container_guid);
-	if (!$container) {
-		return false;
-	}
-
-	return $container->canWriteToContainer($user_guid, $type, $subtype);
-}
 
 /**
  * Returns a database row from the entities table.
@@ -184,7 +68,6 @@ function get_entity_as_row($guid) {
  *
  * @return \ElggEntity|false
  * @see get_entity_as_row()
- * @see add_subtype()
  * @see get_entity()
  * @access private
  *
@@ -202,6 +85,9 @@ function entity_row_to_elggstar($row) {
  * @return \ElggEntity The correct Elgg or custom object based upon entity type and subtype
  */
 function get_entity($guid) {
+	if ($guid == 1) {
+		return _elgg_config()->site;
+	}
 	return _elgg_services()->entityTable->get($guid);
 }
 
@@ -236,130 +122,428 @@ function elgg_enable_entity($guid, $recursive = true) {
 }
 
 /**
- * Returns an array of entities with optional filtering.
+ * Get the current site entity
  *
- * Entities are the basic unit of storage in Elgg.  This function
- * provides the simplest way to get an array of entities.  There
- * are many options available that can be passed to filter
- * what sorts of entities are returned.
+ * @return \ElggSite
+ * @since 1.8.0
+ */
+function elgg_get_site_entity() {
+	return _elgg_config()->site;
+}
+
+/**
+ * Fetches/counts entities or performs a calculation on their properties
  *
- * @tip To output formatted strings of entities, use {@link elgg_list_entities()} and
- * its cousins.
+ * Note that you can use singulars for most options, e.g. $options['type'] will be normalized to $options['types']
  *
- * @tip Plural arguments can be written as singular if only specifying a
- * single element.  ('type' => 'object' vs 'types' => array('object')).
+ * ------------------------
+ * TYPE SUBTYPE CONSTRAINTS
+ * ------------------------
  *
- * @param array $options Array in format:
+ * Filter entities by their type and subtype
  *
- * 	types => null|STR entity type (type IN ('type1', 'type2')
- *           Joined with subtypes by AND. See below)
+ * @option string[] $types
+ * @option string[] $subtypes
+ * @option string[] $type_subtype_pairs
  *
- * 	subtypes => null|STR entity subtype (SQL: subtype IN ('subtype1', 'subtype2))
- *              Use ELGG_ENTITIES_NO_VALUE to match the default subtype.
- *              Use ELGG_ENTITIES_ANY_VALUE to match any subtype.
+ * <code>
+ * $options['types'] = ['object'];
+ * $options['subtypes'] = ['blog', 'file'];
+ * $options['type_subtype_pairs'] = [
+ *     'object' => ['blog', 'file'],
+ *     'group' => [], // all group subtypes
+ *     'user' => null, // all user subtypes
+ * ];
+ * </code>
  *
- * 	type_subtype_pairs => null|ARR (array('type' => 'subtype'))
- *                        array(
- *                            'object' => array('blog', 'file'), // All objects with subtype of 'blog' or 'file'
- *                            'user' => ELGG_ENTITY_ANY_VALUE, // All users irrespective of subtype
- *                        );
+ * ----------------
+ * GUID CONSTRAINTS
+ * ----------------
  *
- *	guids => null|ARR Array of entity guids
+ * Filter entities by their guid, owner or container
  *
- * 	owner_guids => null|ARR Array of owner guids
+ * @option int[]|ElggEntity[] $guids
+ * @option int[]|ElggEntity[] $owner_guids
+ * @option int[]|ElggEntity[] $container_guids
  *
- * 	container_guids => null|ARR Array of container_guids
+ * ----------------
+ * TIME CONSTRAINTS
+ * ----------------
  *
- * 	site_guids => null (current_site)|ARR Array of site_guid
+ * Filter entities that were created, updated or last acted on within certain bounds
  *
- * 	order_by => null (time_created desc)|STR SQL order by clause
+ * @option DateTime|string|int $created_after
+ * @option DateTime|string|int $created_before
+ * @option DateTime|string|int $updated_after
+ * @option DateTime|string|int $updated_before
+ * @option DateTime|string|int $last_action_after
+ * @option DateTime|string|int $last_action_before
  *
- *  reverse_order_by => BOOL Reverse the default order by clause
+ * <code>
+ * $options['created_after'] = '-1 year';
+ * $options['created_before'] = 'now';
+ * </code>
  *
- * 	limit => null (from settings)|INT SQL limit clause (0 means no limit)
+ * ------------------
+ * ACCESS CONSTRAINTS
+ * ------------------
  *
- * 	offset => null (0)|INT SQL offset clause
+ * Filter entities by their access_id attribute. Note that this filter apply to entities that the user has access to.
+ * You can ignore access system using {@link elgg_set_ignore_access()}
  *
- * 	created_time_lower => null|INT Created time lower boundary in epoch time
+ * @option int[] $access_id
  *
- * 	created_time_upper => null|INT Created time upper boundary in epoch time
+ * ----------------
+ * LIMIT AND OFFSET
+ * ----------------
  *
- * 	modified_time_lower => null|INT Modified time lower boundary in epoch time
+ * This options are used for paginating lists of entities
  *
- * 	modified_time_upper => null|INT Modified time upper boundary in epoch time
+ * @option int $limit
+ * @option int $offset
  *
- * 	count => true|false return a count instead of entities
+ * --------------------
+ * METADATA CONSTRAINTS
+ * --------------------
  *
- * 	wheres => array() Additional where clauses to AND together
+ * Filter entities by their metadata and attributes
  *
- * 	joins => array() Additional joins
+ * The following options will be merged and applied as a metadata pair to @options['metadata_name_value_pairs']
+ * Note metadata names can contain attributes names and will be resolved automatically during query building.
+ * @option int[]                $metadata_ids
+ * @option string[]             $metadata_names
+ * @option mixed                $metadata_values
+ * @option DateTime|string|int  $metadata_created_after
+ * @option DateTime|string|int  $metadata_created_before
+ * @option bool                 $metadata_case_sensitive
  *
- * 	preload_owners => bool (false) If set to true, this function will preload
- * 					  all the owners of the returned entities resulting in better
- * 					  performance when displaying entities owned by several users
+ * Metadata name value pairs will be joined by the boolean specified in $metadata_name_value_pairs_operator
+ * @option array                $metadata_name_value_pairs
+ * @option string               $metadata_name_value_pairs_operator
  *
- * 	callback => string A callback function to pass each row through
+ * In addition to metadata name value pairs, you can specify search pair, which will be merged using OR boolean
+ * and will filter entities regardless of metadata name value pairs and their operator
+ * @warning During normalization, search name value pairs will ignore properties under metadata_ namespace, that is
+ *          you can not use metadata_ids, metadata_created_before, metadata_created_after, metadata_case_sensitive
+ *          to constrain search pairs. You will need to pass these properties for each individual search pair,
+ *          as seen in the example below
  *
- * 	distinct => bool (true) If set to false, Elgg will drop the DISTINCT clause from
- *				the MySQL query, which will improve performance in some situations.
- *				Avoid setting this option without a full understanding of the underlying
- *				SQL query Elgg creates.
+ * @option array                $search_name_value_pairs
  *
- *  batch => bool (false) If set to true, an Elgg\BatchResult object will be returned instead of an array.
- *           Since 2.3
+ * <code>
+ * // Search for entities with:
+ * // status of draft or unsaved_draft
+ * // AND index greater than 5
+ * // AND (title/description containing the word hello OR tags containing the word world)
+ * $options['metadata_name_value_pairs'] = [
+ *    [
+ *       'name' => 'status',
+ *       'value' => ['draft', 'unsaved_draft'],
+ *       'operand' => 'IN',
+ *       'created_after' => '-1 day',
+ *    ],
+ *    [
+ *        'name' => 'index',
+ *        'value' => 5,
+ *        'operand' => '>=',
+ *        'type' => ELGG_VALUE_INTEGER,
+ *    ]
+ * ];
+ * $options['search_name_value_pairs'] = [
+ *    [
+ *       'name' => ['title', 'description'],
+ *       'value' => '%hello%',
+ *       'operand' => 'LIKE',
+ *       'case_sensitive' => false,
+ *    ],
+ *    [
+ *       // 'ids' => [55, 56, 57, 58, 59, 60], // only search these 5 metadata rows
+ *       'name' => 'tags',
+ *       'value' => '%world%',
+ *       'operand' => 'LIKE',
+ *       'case_sensitive' => false,
+ *       'created_after' => '-1 day',
+ *       'created_before' => 'now',
+ *    ],
+ * ];
+ * </code>
  *
- *  batch_inc_offset => bool (true) If "batch" is used, this tells the batch to increment the offset
- *                      on each fetch. This must be set to false if you delete the batched results.
+ * ----------------------
+ * ANNOTATION CONSTRAINTS
+ * ----------------------
  *
- *  batch_size => int (25) If "batch" is used, this is the number of entities/rows to pull in before
- *                requesting more.
+ * Filter entities by their annotations
+ *
+ * The following options will be merged and applied as an annotation pair to @options['annotation_name_value_pairs']
+ * @option int[]                $annotation_ids
+ * @option string[]             $annotation_names
+ * @option mixed                $annotation_values
+ * @option bool                 $annotation_case_sensitive
+ * @option DateTime|string|int  $annotation_created_after
+ * @option DateTime|string|int  $annotation_created_before
+ * @option int[]|ElggEntity[]   $annotation_owner_guids
+ * @option int[]|ElggEntity[]   $annotation_access_ids
+ *
+ * Annotation name value pairs will be joined by the boolean specified in $annotation_name_value_pairs_operator
+ * @option array                $annotation_name_value_pairs
+ * @option string               $annotation_name_value_pairs_operator
+ **
+ * <code>
+ * $options['annotation_name_value_pairs'] = [
+ *    [
+ *       'name' => 'likes',
+ *       'created_after' => '-1 day',
+ *    ],
+ *    [
+ *        'name' => 'rating',
+ *        'value' => 5,
+ *        'operand' => '>=',
+ *        'type' => ELGG_VALUE_INTEGER,
+ *    ],
+ *    [
+ *        'name' => 'review',
+ *        'value' => '%awesome%',
+ *        'operand' => 'LIKE',
+ *        'type' => ELGG_VALUE_STRING,
+ *    ]
+ * ];
+ * </code>
+ *
+ * ------------------------
+ * RELATIONSHIP CONSTRAINTS
+ * ------------------------
+ *
+ * Filter entities by their relationships
+ *
+ * The following options will be merged and applied as a relationship pair to $options['relationship_name_value_pairs']
+ * @option int[]                $relationship_ids
+ * @option string[]             $relationship
+ * @option int[]|ElggEntity[]   $relationship_guid
+ * @option bool                 $inverse_relationship
+ * @option DateTime|string|int  $relationship_created_after
+ * @option DateTime|string|int  $relationship_created_before
+ * @option string               $relationship_join_on Column name in the name main table
+ *
+ * @option array                $relationship_pairs
+ *
+ * <code>
+ * // Get all entities that user with guid 25 has friended or been friended by
+ * $options['relationship_pairs'] = [
+ *    [
+ *       'relationship' => 'friend',
+ *       'relationship_guid' => 25,
+ *       'inverse_relationship' => true,
+ *    ],
+ *    [
+ *       'relationship' => 'friend',
+ *       'relationship_guid' => 25,
+ *       'inverse_relationship' => false,
+ *    ],
+ * ];
+ * </code>
+ *
+ * ----------------------------
+ * PRIVATE SETTINGS CONSTRAINTS
+ * ----------------------------
+ *
+ * Filter entities by their private settings
+ *
+ * The following options will be merged and applied as a private_setting pair to
+ * $options['private_setting_name_value_pairs']
+ * @option int[]                $private_setting_ids
+ * @option string[]             $private_setting_names
+ * @option mixed                $private_setting_values
+ * @option bool                 $private_setting_case_sensitive
+ *
+ * Private name value pairs will be joined by the boolean specified in $private_setting_name_value_pairs_operator
+ * @option array                $private_setting_name_value_pairs
+ * @option string               $private_setting_name_value_pairs_operator
+ *
+ * Setting names in all pairs can be namespaced using the prefix
+ * @option string               $private_setting_name_prefix
+ *
+ * <code>
+ * $options['private_setting_name_value_pairs'] = [
+ *    [
+ *       'name' => 'handler',
+ *       'value' => ['admin', 'dashboard'],
+ *       'operand' => 'IN',
+ *    ],
+ * ];
+ * </code>
+ *
+ * -------
+ * SORTING
+ * -------
+ *
+ * You can specify sorting options using ONE of the following options
+ *
+ * Order by a calculation performed on annotation name value pairs
+ * $option array annotation_sort_by_calculation e.g. avg, max, min, sum
+ *
+ * Order by value of a specific annotation
+ * @option array $order_by_annotation
+ *
+ * Order by value of a speicifc metadata/attribute
+ * @option array $order_by_metadata
+ *
+ * Order by arbitrary clauses
+ * @option array $order_by
+ *
+ * <code>
+ * $options['order_by_metadata'] = [
+ *     'name' => 'priority',
+ *     'direction' => 'DESC',
+ *     'as' => 'integer',
+ * ];
+ * $options['order_by_annotation'] = [
+ *     'name' => 'priority',
+ *     'direction' => 'DESC',
+ *     'as' => 'integer',
+ * ];
+ *
+ * $sort_by = new \Elgg\Database\Clauses\EntitySortByClause();
+ * $sort_by->property = 'private';
+ * $sort_by->property_type = 'private_setting';
+ * $sort_by->join_type = 'left';
+ *
+ * $fallback = new \Elgg\Database\Clauses\OrderByClause('e.time_created', 'desc');
+ *
+ * $options['order_by'] = [
+ *     $sort_by,
+ *     $fallback,
+ * ];
+ * </code>
+ *
+ * -----------------
+ * COUNT/CALCULATION
+ * -----------------
+ *
+ * Performs a calculation on a set of entities that match all of the criteria
+ * If any of these are specific, the return of this function will be int or float
+ *
+ * Return total number of entities
+ * @option bool $count
+ *
+ * Perform a calculation on a set of entity's annotations using a numeric sql function
+ * If specified, the number of annotation name value pairs can not be more than 1, or they must be merged using OR
+ * operator
+ * @option string $annotation_calculation e.g. avg, max, min, sum
+ *
+ * Perform a calculation on a set of entity's metadat using a numeric sql function
+ * If specified, the number of metadata name value pairs can not be more than 1, or they must be merged using OR
+ * operator
+ * @option string $metadata_calculation e.g. avg, max, min, sum
+ *
+ * ----------
+ * SQL SELECT
+ * ----------
+ *
+ * @option array $selects
+ * <code>
+ * $options['selects'] = [
+ *    'e.last_action AS last_action',
+ *    function(QueryBulder $qb, $main_alias) {
+ *        $joined_alias = $qb->joinMetadataTable($main_alias, 'guid', 'status');
+ *        return "$joined_alias.value AS status";
+ *    }
+ * ];
+ * </code>
+ *
+ * --------
+ * SQL JOIN
+ * --------
+ *
+ * @option array $joins
+ * <code>
+ * $on = function(QueryBuilder $qb, $joined_alias, $main_alias) {
+ *     return $qb->compare("$joined_alias.user_guid", '=', "$main_alias.guid");
+ * };
+ * $options['joins'] = [
+ *     new JoinClause('access_collections_membership', 'acm', $on);
+ * ];
+ * </code>
+ *
+ * ----------
+ * SQL GROUPS
+ * ----------
+ *
+ * @option array $group_by
+ * @option array $having
+ *
+ * <code>
+ * $options['group_by'] = [
+ *      function(QueryBuilder $qb, $main_alias) {
+ *          return "$main_alias.guid";
+ *      }
+ * ];
+ * $options['having'] = [
+ *      function(QueryBuilder $qb, $main_alias) {
+ *          return $qb->compare("$main_alias.guid", '>=', 50, ELGG_VALUE_INTEGER);
+ *      }
+ * ];
+ * </code>
+ *
+ * ---------
+ * SQL WHERE
+ * ---------
+ *
+ * @option array $where
+ * <code>
+ * $options['wheres'] = [
+ *      function(QueryBuilder $qb, $main_alias) {
+ *          return $qb->merge([
+ *              $qb->compare("$main_alias.guid", '>=', 50, ELGG_VALUE_INTEGER),
+ *              $qb->compare("$main_alias.guid", '<=', 250, ELGG_VALUE_INTEGER),
+ *          ], 'OR');
+ *      }
+ * ];
+ * </code>
+ *
+ * --------------
+ * RESULT OPTIONS
+ * --------------
+ *
+ * @option bool $distinct                 If set to false, Elgg will drop the DISTINCT clause from
+ *                                        the MySQL query, which will improve performance in some situations.
+ *                                        Avoid setting this option without a full understanding of the underlying
+ *                                        SQL query Elgg creates.
+ *                                        Default: true
+ * @option callable|false $callback       A callback function to pass each row through
+ *                                        Default: entity_row_to_elggstar
+ * @option bool $preload_owners           If set to true, this function will preload
+ *                                        all the owners of the returned entities resulting in better
+ *                                        performance when displaying entities owned by several users
+ *                                        Default: false
+ * @option bool $preload_containers       If set to true, this function will preload
+ *                                        all the containers of the returned entities resulting in better
+ *                                        performance when displaying entities contained by several users/groups
+ *                                        Default: false
+ * @option bool $preload_private_settings If set to true, this function will preload
+ *                                        all the private settings of the returned entities resulting in better
+ *                                        performance when displaying entities where private settings are often used, such as widgets
+ *                                        Default: false
+ * @option bool $batch                    If set to true, an Elgg\BatchResult object will be returned instead of an array.
+ *                                        Default: false
+ * @option bool $batch_inc_offset         If "batch" is used, this tells the batch to increment the offset
+ *                                        on each fetch. This must be set to false if you delete the batched results.
+ *                                        Default: true
+ * @option int  $batch_size               If "batch" is used, this is the number of entities/rows to pull in before
+ *                                        requesting more.
+ *                                        Default: 25
+ *
+ *
+ * @see    elgg_list_entities()
+ * @see    \Elgg\Database\LegacyQueryOptionsAdapter
+ *
+ * @param array $options Options
  *
  * @return \ElggEntity[]|int|mixed If count, int. Otherwise an array or an Elgg\BatchResult. false on errors.
  *
  * @since 1.7.0
- * @see elgg_get_entities_from_metadata()
- * @see elgg_get_entities_from_relationship()
- * @see elgg_get_entities_from_access_id()
- * @see elgg_get_entities_from_annotations()
- * @see elgg_list_entities()
  */
-function elgg_get_entities(array $options = array()) {
-	return _elgg_services()->entityTable->getEntities($options);
-}
-
-/**
- * Returns SQL where clause for owner and containers.
- *
- * @param string     $column Column name the guids should be checked against. Usually
- *                           best to provide in table.column format.
- * @param null|array $guids  Array of GUIDs.
- *
- * @return false|string
- * @since 1.8.0
- * @access private
- */
-function _elgg_get_guid_based_where_sql($column, $guids) {
-	return _elgg_services()->entityTable->getGuidBasedWhereSql($column, $guids);
-}
-
-/**
- * Returns SQL where clause for entity time limits.
- *
- * @param string   $table              Entity table prefix as defined in
- *                                     SELECT...FROM entities $table
- * @param null|int $time_created_upper Time created upper limit
- * @param null|int $time_created_lower Time created lower limit
- * @param null|int $time_updated_upper Time updated upper limit
- * @param null|int $time_updated_lower Time updated lower limit
- *
- * @return false|string false on fail, string on success.
- * @since 1.7.0
- * @access private
- */
-function _elgg_get_entity_time_where_sql($table, $time_created_upper = null,
-		$time_created_lower = null, $time_updated_upper = null, $time_updated_lower = null) {
-	return _elgg_services()->entityTable->getEntityTimeWhereSql($table,
-		$time_created_upper, $time_created_lower, $time_updated_upper, $time_updated_lower);
+function elgg_get_entities(array $options = []) {
+	return \Elgg\Database\Entities::find($options);
 }
 
 /**
@@ -380,38 +564,35 @@ function _elgg_get_entity_time_where_sql($table, $time_created_upper = null,
  *                   columns => ARR instances of Elgg\Views\TableColumn if list_type is "table"
  *                   list_type_toggle => BOOL Display gallery / list switch
  *                   pagination => BOOL Display pagination links
- *                   no_results => STR|Closure Message to display when there are no entities
+ *                   no_results => STR|true for default notfound text|Closure Message to display when there are no entities
  *
- * @param callback $getter  The entity getter function to use to fetch the entities.
- * @param callback $viewer  The function to use to view the entity list.
+ * @param callable $getter  The entity getter function to use to fetch the entities.
+ * @param callable $viewer  The function to use to view the entity list.
  *
  * @return string
  * @since 1.7
  * @see elgg_get_entities()
  * @see elgg_view_entity_list()
  */
-function elgg_list_entities(array $options = array(), $getter = 'elgg_get_entities',
-	$viewer = 'elgg_view_entity_list') {
+function elgg_list_entities(array $options = [], $getter = 'elgg_get_entities', $viewer = 'elgg_view_entity_list') {
 
 	elgg_register_rss_link();
 
 	$offset_key = isset($options['offset_key']) ? $options['offset_key'] : 'offset';
 
-	$defaults = array(
+	$defaults = [
 		'offset' => (int) max(get_input($offset_key, 0), 0),
-		'limit' => (int) max(get_input('limit', elgg_get_config('default_limit')), 0),
+		'limit' => (int) max(get_input('limit', _elgg_config()->default_limit), 0),
 		'full_view' => false,
 		'list_type_toggle' => false,
 		'pagination' => true,
 		'no_results' => '',
-	);
+	];
 
 	$options = array_merge($defaults, $options);
-
-	// backward compatibility
-	if (isset($options['view_type_toggle'])) {
-		elgg_deprecated_notice("Option 'view_type_toggle' deprecated by 'list_type_toggle' in elgg_list* functions", 1.9);
-		$options['list_type_toggle'] = $options['view_type_toggle'];
+	
+	if ($options['no_results'] === true) {
+		$options['no_results'] = elgg_echo('notfound');
 	}
 
 	$options['count'] = false;
@@ -439,74 +620,19 @@ function elgg_list_entities(array $options = array(), $getter = 'elgg_get_entiti
 }
 
 /**
- * Gets entities based upon attributes in secondary tables.
- * Also accepts all options available to elgg_get_entities(),
- * elgg_get_entities_from_metadata(), and elgg_get_entities_from_relationship().
- *
- * @warning requires that the entity type be specified and there can only be one
- * type.
- *
- * @see elgg_get_entities
- * @see elgg_get_entities_from_metadata
- * @see elgg_get_entities_from_relationship
- *
- * @param array $options Array in format:
- *
- * 	attribute_name_value_pairs => ARR (
- *                                   'name' => 'name',
- *                                   'value' => 'value',
- *                                   'operand' => '=', (optional)
- *                                   'case_sensitive' => false (optional)
- *                                  )
- * 	                             If multiple values are sent via
- *                               an array ('value' => array('value1', 'value2')
- *                               the pair's operand will be forced to "IN".
- *
- * 	attribute_name_value_pairs_operator => null|STR The operator to use for combining
- *                                        (name = value) OPERATOR (name = value); default is AND
- *
- * @return \ElggEntity[]|mixed If count, int. If not count, array. false on errors.
- * @since 1.9.0
- * @throws InvalidArgumentException
- * @todo Does not support ordering by attributes or using an attribute pair shortcut like this ('title' => 'foo')
- */
-function elgg_get_entities_from_attributes(array $options = array()) {
-	return _elgg_services()->entityTable->getEntitiesFromAttributes($options);
-}
-
-/**
- * Get the join and where clauses for working with entity attributes
- *
- * @return false|array False on fail, array('joins', 'wheres')
- * @since 1.9.0
- * @access private
- * @throws InvalidArgumentException
- */
-function _elgg_get_entity_attribute_where_sql(array $options = array()) {
-	return _elgg_services()->entityTable->getEntityAttributeWhereSql($options);
-}
-
-/**
  * Returns a list of months in which entities were updated or created.
  *
- * @tip Use this to generate a list of archives by month for when entities were added or updated.
- *
- * @todo document how to pass in array for $subtype
+ * @tip     Use this to generate a list of archives by month for when entities were added or updated.
  *
  * @warning Months are returned in the form YYYYMM.
  *
- * @param string $type           The type of entity
- * @param string $subtype        The subtype of entity
- * @param int    $container_guid The container GUID that the entities belong to
- * @param int    $site_guid      The site GUID
- * @param string $order_by       Order_by SQL order by clause
+ * @param array $options all entity options supported by {@see elgg_get_entities()}
  *
  * @return array|false Either an array months as YYYYMM, or false on failure
+ * @since 3.0
  */
-function get_entity_dates($type = '', $subtype = '', $container_guid = 0, $site_guid = 0,
-		$order_by = 'time_created') {
-	return _elgg_services()->entityTable->getDates(
-		$type, $subtype, $container_guid, $site_guid, $order_by);
+function elgg_get_entity_dates(array $options = []) {
+	return \Elgg\Database\Entities::with($options)->getDates();
 }
 
 /**
@@ -515,7 +641,7 @@ function get_entity_dates($type = '', $subtype = '', $container_guid = 0, $site_
  *
  * @warning Entities that aren't registered here will not show up in search.
  *
- * @tip Add a language string item:type:subtype to make sure the items are display properly.
+ * @tip Add a language string item:type:subtype and collection:type:subtype to make sure the items are display properly.
  *
  * @param string $type    The type of entity (object, site, user, group)
  * @param string $subtype The subtype to register (may be blank)
@@ -524,24 +650,25 @@ function get_entity_dates($type = '', $subtype = '', $container_guid = 0, $site_
  * @see get_registered_entity_types()
  */
 function elgg_register_entity_type($type, $subtype = null) {
-	global $CONFIG;
-
 	$type = strtolower($type);
-	if (!in_array($type, $CONFIG->entity_types)) {
+	if (!in_array($type, \Elgg\Config::getEntityTypes())) {
 		return false;
 	}
 
-	if (!isset($CONFIG->registered_entities)) {
-		$CONFIG->registered_entities = array();
+	$entities = _elgg_config()->registered_entities;
+	if (!$entities) {
+		$entities = [];
 	}
 
-	if (!isset($CONFIG->registered_entities[$type])) {
-		$CONFIG->registered_entities[$type] = array();
+	if (!isset($entities[$type])) {
+		$entities[$type] = [];
 	}
 
 	if ($subtype) {
-		$CONFIG->registered_entities[$type][] = $subtype;
+		$entities[$type][] = $subtype;
 	}
+
+	_elgg_config()->registered_entities = $entities;
 
 	return true;
 }
@@ -559,32 +686,32 @@ function elgg_register_entity_type($type, $subtype = null) {
  * @see elgg_register_entity_type()
  */
 function elgg_unregister_entity_type($type, $subtype = null) {
-	global $CONFIG;
-
 	$type = strtolower($type);
-	if (!in_array($type, $CONFIG->entity_types)) {
+	if (!in_array($type, \Elgg\Config::getEntityTypes())) {
 		return false;
 	}
 
-	if (!isset($CONFIG->registered_entities)) {
+	$entities = _elgg_config()->registered_entities;
+	if (!$entities) {
 		return false;
 	}
 
-	if (!isset($CONFIG->registered_entities[$type])) {
+	if (!isset($entities[$type])) {
 		return false;
 	}
 
 	if ($subtype) {
-		if (in_array($subtype, $CONFIG->registered_entities[$type])) {
-			$key = array_search($subtype, $CONFIG->registered_entities[$type]);
-			unset($CONFIG->registered_entities[$type][$key]);
+		if (in_array($subtype, $entities[$type])) {
+			$key = array_search($subtype, $entities[$type]);
+			unset($entities[$type][$key]);
 		} else {
 			return false;
 		}
 	} else {
-		unset($CONFIG->registered_entities[$type]);
+		unset($entities[$type]);
 	}
 
+	_elgg_config()->registered_entities = $entities;
 	return true;
 }
 
@@ -597,23 +724,24 @@ function elgg_unregister_entity_type($type, $subtype = null) {
  * @see elgg_register_entity_type()
  */
 function get_registered_entity_types($type = null) {
-	global $CONFIG;
-
-	if (!isset($CONFIG->registered_entities)) {
+	$registered_entities = _elgg_config()->registered_entities;
+	if (!$registered_entities) {
 		return false;
 	}
+
 	if ($type) {
 		$type = strtolower($type);
 	}
-	if (!empty($type) && empty($CONFIG->registered_entities[$type])) {
+
+	if (!empty($type) && !isset($registered_entities[$type])) {
 		return false;
 	}
 
 	if (empty($type)) {
-		return $CONFIG->registered_entities;
+		return $registered_entities;
 	}
 
-	return $CONFIG->registered_entities[$type];
+	return $registered_entities[$type];
 }
 
 /**
@@ -625,98 +753,23 @@ function get_registered_entity_types($type = null) {
  * @return bool Depending on whether or not the type has been registered
  */
 function is_registered_entity_type($type, $subtype = null) {
-	global $CONFIG;
-
-	if (!isset($CONFIG->registered_entities)) {
-		return false;
+	$registered_entities = _elgg_config()->registered_entities;
+	if (!$registered_entities) {
+		return true;
 	}
 
 	$type = strtolower($type);
 
 	// @todo registering a subtype implicitly registers the type.
 	// see #2684
-	if (!isset($CONFIG->registered_entities[$type])) {
+	if (!isset($registered_entities[$type])) {
 		return false;
 	}
 
-	if ($subtype && !in_array($subtype, $CONFIG->registered_entities[$type])) {
+	if ($subtype && !in_array($subtype, $registered_entities[$type])) {
 		return false;
 	}
 	return true;
-}
-
-/**
- * Returns a viewable list of entities based on the registered types.
- *
- * @see elgg_view_entity_list
- *
- * @param array $options Any elgg_get_entity() options plus:
- *
- * 	full_view => BOOL Display full view entities
- *
- * 	list_type_toggle => BOOL Display gallery / list switch
- *
- * 	allowed_types => true|ARRAY True to show all types or an array of valid types.
- *
- * 	pagination => BOOL Display pagination links
- *
- * @return string A viewable list of entities
- * @since 1.7.0
- */
-function elgg_list_registered_entities(array $options = array()) {
-	elgg_register_rss_link();
-
-	$defaults = array(
-		'full_view' => false,
-		'allowed_types' => true,
-		'list_type_toggle' => false,
-		'pagination' => true,
-		'offset' => 0,
-		'types' => array(),
-		'type_subtype_pairs' => array(),
-	);
-
-	$options = array_merge($defaults, $options);
-
-	// backward compatibility
-	if (isset($options['view_type_toggle'])) {
-		elgg_deprecated_notice("Option 'view_type_toggle' deprecated by 'list_type_toggle' in elgg_list* functions", 1.9);
-		$options['list_type_toggle'] = $options['view_type_toggle'];
-	}
-
-	$types = get_registered_entity_types();
-
-	foreach ($types as $type => $subtype_array) {
-		if (in_array($type, $options['allowed_types']) || $options['allowed_types'] === true) {
-			// you must explicitly register types to show up in here and in search for objects
-			if ($type == 'object') {
-				if (is_array($subtype_array) && count($subtype_array)) {
-					$options['type_subtype_pairs'][$type] = $subtype_array;
-				}
-			} else {
-				if (is_array($subtype_array) && count($subtype_array)) {
-					$options['type_subtype_pairs'][$type] = $subtype_array;
-				} else {
-					$options['type_subtype_pairs'][$type] = ELGG_ENTITIES_ANY_VALUE;
-				}
-			}
-		}
-	}
-
-	if (!empty($options['type_subtype_pairs'])) {
-		$count = elgg_get_entities(array_merge(array('count' => true), $options));
-		if ($count > 0) {
-			$entities = elgg_get_entities($options);
-		} else {
-			$entities = array();
-		}
-	} else {
-		$count = 0;
-		$entities = array();
-	}
-
-	$options['count'] = $count;
-	return elgg_view_entity_list($entities, $options);
 }
 
 /**
@@ -728,12 +781,11 @@ function elgg_list_registered_entities(array $options = array()) {
  * @param mixed  $entity  Entity
  * @param string $type    Entity type
  * @param string $subtype Entity subtype
- * @param string $class   Class name
  *
  * @return bool
  * @since 1.8.0
  */
-function elgg_instanceof($entity, $type = null, $subtype = null, $class = null) {
+function elgg_instanceof($entity, $type = null, $subtype = null) {
 	$return = ($entity instanceof \ElggEntity);
 
 	if ($type) {
@@ -745,60 +797,56 @@ function elgg_instanceof($entity, $type = null, $subtype = null, $class = null) 
 		$return = $return && ($entity->getSubtype() == $subtype);
 	}
 
-	if ($class) {
-		$return = $return && ($entity instanceof $class);
-	}
-
 	return $return;
 }
 
 /**
- * Update the last_action column in the entities table for $guid.
+ * Checks options for the existing of site_guid or site_guids contents and reports a warning if found
  *
- * @warning This is different to time_updated.  Time_updated is automatically set,
- * while last_action is only set when explicitly called.
+ * @param array $options array of options to check
  *
- * @param int $guid   Entity annotation|relationship action carried out on
- * @param int $posted Timestamp of last action
- *
- * @return int|false Timestamp or false on failure
- * @access private
- * @deprecated 2.3
+ * @return void
  */
-function update_entity_last_action($guid, $posted = null) {
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated. Refrain from updating last action timestamp manually', '2.3');
-
-	$result = false;
-	$ia = elgg_set_ignore_access(true);
-	$entity = get_entity($guid);
-	if ($entity) {
-		$result = $entity->updateLastAction($posted);
+function _elgg_check_unsupported_site_guid(array $options = []) {
+	$site_guid = elgg_extract('site_guid', $options, elgg_extract('site_guids', $options));
+	if ($site_guid === null) {
+		return;
 	}
-	elgg_set_ignore_access($ia);
-	return $result;
+	
+	$backtrace = debug_backtrace();
+	// never show this call.
+	array_shift($backtrace);
+
+	if (!empty($backtrace[0]['class'])) {
+		$warning = "Passing site_guid or site_guids to the method {$backtrace[0]['class']}::{$backtrace[0]['file']} is not supported.";
+		$warning .= "Please update your usage of the method.";
+	} else {
+		$warning = "Passing site_guid or site_guids to the function {$backtrace[0]['function']} in {$backtrace[0]['file']} is not supported.";
+		$warning .= "Please update your usage of the function.";
+	}
+
+	_elgg_services()->logger->warning($warning);
 }
 
 /**
  * Runs unit tests for the entity objects.
  *
- * @param string $hook   unit_test
- * @param string $type   system
- * @param array  $value  Array of tests
+ * @param string $hook  'unit_test'
+ * @param string $type  'system'
+ * @param array  $value Array of tests
  *
  * @return array
  * @access private
+ * @codeCoverageIgnore
  */
 function _elgg_entities_test($hook, $type, $value) {
-	global $CONFIG;
-	$value[] = $CONFIG->path . 'engine/tests/ElggEntityTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreAttributeLoaderTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromAnnotationsTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromMetadataTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromPrivateSettingsTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromRelationshipTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromAttributesTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggEntityPreloaderIntegrationTest.php';
+	$value[] = ElggEntityUnitTest::class;
+	$value[] = ElggCoreGetEntitiesFromAnnotationsTest::class;
+	$value[] = ElggCoreGetEntitiesFromMetadataTest::class;
+	$value[] = ElggCoreGetEntitiesFromPrivateSettingsTest::class;
+	$value[] = ElggCoreGetEntitiesFromRelationshipTest::class;
+	$value[] = ElggEntityPreloaderIntegrationTest::class;
+	$value[] = ElggCoreObjectTest::class;
 	return $value;
 }
 
@@ -813,6 +861,9 @@ function _elgg_entities_init() {
 	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_entities_test');
 }
 
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', '_elgg_entities_init');
 };

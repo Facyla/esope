@@ -1,40 +1,29 @@
 <?php
 /**
  * List a user's friends' pages
- *
- * @package ElggPages
  */
 
-$owner = elgg_get_page_owner_entity();
-if (!$owner) {
-	forward('', '404');
+$username = elgg_extract('username', $vars);
+$owner = get_user_by_username($username);
+
+if (!$owner instanceof ElggUser) {
+	throw new \Elgg\EntityNotFoundException();
 }
 
-elgg_push_breadcrumb($owner->name, "pages/owner/$owner->username");
-elgg_push_breadcrumb(elgg_echo('friends'));
+elgg_push_collection_breadcrumbs('object', 'page', $owner, true);
 
-elgg_register_title_button('pages', 'add', 'object', 'page_top');
+elgg_register_title_button('pages', 'add', 'object', 'page');
 
-$title = elgg_echo('pages:friends');
+$title = elgg_echo('collection:object:page:friends');
 
-$content = elgg_list_entities_from_relationship(array(
-	'type' => 'object',
-	'subtype' => 'page_top',
-	'full_view' => false,
-	'relationship' => 'friend',
-	'relationship_guid' => $owner->guid,
-	'relationship_join_on' => 'container_guid',
-	'no_results' => elgg_echo('pages:none'),
-	'preload_owners' => true,
-	'preload_containers' => true,
-));
+$content = elgg_view('pages/listing/friends', [
+	'entity' => $owner,
+]);
 
-$params = array(
+$body = elgg_view_layout('content', [
 	'filter_context' => 'friends',
 	'content' => $content,
 	'title' => $title,
-);
-
-$body = elgg_view_layout('content', $params);
+]);
 
 echo elgg_view_page($title, $body);

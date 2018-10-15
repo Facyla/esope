@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'discussion' => 'Keskustelut',
 	'discussion:add' => 'Lisää uusi keskustelu',
 	'discussion:latest' => 'Uusimmat keskustelut',
@@ -57,9 +57,9 @@ Osallistu keskusteluun:
 %s
 ',
 
-	'discussion:reply:notify:summary' => 'Uusi vastaus keskustelussa: %s',
-	'discussion:reply:notify:subject' => 'Uusi vastaus keskustelussa: %s',
-	'discussion:reply:notify:body' =>
+	'discussion:comment:notify:summary' => 'Uusi vastaus keskustelussa: %s',
+	'discussion:comment:notify:subject' => 'Uusi vastaus keskustelussa: %s',
+	'discussion:comment:notify:body' =>
 '%s vastasi keskusteluun "%s":
 
 %s
@@ -96,4 +96,4 @@ Osallistu keskusteluun:
 
 	'discussion:reply:edited' => "Vastaus tallennettu",
 	'discussion:reply:error' => "Vastauksen tallentaminen epäonnistui",
-);
+];

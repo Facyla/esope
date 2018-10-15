@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
 
 	/**
 	 * Menu items and titles
@@ -210,4 +210,4 @@ return array(
 	 * ecml
 	 */
 	'groups:ecml:groupprofile' => 'グループプロフィール',
-);
+];

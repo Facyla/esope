@@ -12,86 +12,87 @@
  * @subpackage Plugins
  */
 /* @var ElggPlugin $plugin */
-$plugin = $vars['entity'];
+$plugin = elgg_extract('entity', $vars);
 $reordering = elgg_extract('display_reordering', $vars, false);
 $priority = $plugin->getPriority();
 $active = $plugin->isActive();
+$plugin_id = $plugin->getID();
 
-if ($plugin->isActive()) {
-	$can_activate = false;
-	$can_deactivate = $plugin->canDeactivate();
-} else {
-	$can_deactivate = false;
-	$can_activate = $plugin->canActivate();
-}
-
-$max_priority = _elgg_get_max_plugin_priority();
 $actions_base = '/action/admin/plugins/';
-$css_id = preg_replace('/[^a-z0-9-]/i', '-', $plugin->getID());
 
 // build reordering links
 $links = '';
-$classes = array('elgg-plugin');
+$classes = ['elgg-plugin'];
 
 if ($reordering) {
+	$max_priority = _elgg_get_max_plugin_priority();
+	
+	if ($active) {
+		$can_activate = false;
+		$can_deactivate = $plugin->canDeactivate();
+	} else {
+		$can_deactivate = false;
+		$can_activate = $plugin->canActivate();
+	}
+
 	$classes[] = 'elgg-state-draggable';
 
 	// top and up link only if not at top
 	if ($priority > 1) {
-		$top_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', array(
+		$top_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', [
 			'plugin_guid' => $plugin->guid,
 			'priority' => 'first',
 			'is_action' => true
-		));
+		]);
 
-		$links .= "<li>" . elgg_view('output/url', array(
+		$links .= "<li>" . elgg_view('output/url', [
 			'href' => $top_url,
 			'text' => elgg_echo('top'),
 			'is_action' => true,
 			'is_trusted' => true,
-		)) . "</li>";
+		]) . "</li>";
 
-		$up_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', array(
+		$up_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', [
 			'plugin_guid' => $plugin->guid,
 			'priority' => '-1',
 			'is_action' => true
-		));
+		]);
 
-		$links .= "<li>" . elgg_view('output/url', array(
+		$links .= "<li>" . elgg_view('output/url', [
 			'href' => $up_url,
 			'text' => elgg_echo('up'),
 			'is_action' => true,
 			'is_trusted' => true,
-		)) . "</li>";
+		]) . "</li>";
 	}
 
 	// down and bottom links only if not at bottom
 	if ($priority < $max_priority) {
-		$down_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', array(
+		$down_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', [
 			'plugin_guid' => $plugin->guid,
 			'priority' => '+1',
 			'is_action' => true
-		));
+		]);
 
-		$links .= "<li>" . elgg_view('output/url', array(
+		$links .= "<li>" . elgg_view('output/url', [
 			'href' => $down_url,
 			'text' => elgg_echo('down'),
 			'is_action' => true,
 			'is_trusted' => true,
-		)) . "</li>";
+		]) . "</li>";
 
-		$bottom_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', array(
+		$bottom_url = elgg_http_add_url_query_elements($actions_base . 'set_priority', [
 			'plugin_guid' => $plugin->guid,
 			'priority' => 'last',
 			'is_action' => true
-		));
+		]);
 
-		$links .= "<li>" . elgg_view('output/url', array(
+		$links .= "<li>" . elgg_view('output/url', [
 			'href' => $bottom_url,
 			'text' => elgg_echo('bottom'),
 			'is_action' => true,
 			'is_trusted' => true,
-		)) . "</li>";
+		]) . "</li>";
 	}
 
 	if ($links) {
@@ -101,13 +102,13 @@ if ($reordering) {
 	$classes[] = 'elgg-state-undraggable';
 }
 
-
 // activate / deactivate links
 // always let them deactivate
-$options = array(
+$options = [
 	'is_action' => true,
 	'is_trusted' => true,
-);
+];
+$action = false;
 if ($active) {
 	$classes[] = 'elgg-state-active';
 	$options['title'] = elgg_echo('admin:plugins:deactivate');
@@ -116,7 +117,6 @@ if ($active) {
 		$action = 'deactivate';
 		$options['class'] = 'elgg-button elgg-button-cancel elgg-plugin-state-change';
 	} else {
-		$action = '';
 		$classes[] = 'elgg-state-cannot-deactivate';
 		$options['title'] = elgg_echo('admin:plugins:cannot_deactivate');
 		$options['class'] = 'elgg-button elgg-button-cancel elgg-state-disabled';
@@ -130,7 +130,6 @@ if ($active) {
 	$options['text'] = elgg_echo('admin:plugins:activate');
 } else {
 	$classes[] = 'elgg-state-inactive elgg-state-cannot-activate';
-	$action = '';
 	$options['title'] = elgg_echo('admin:plugins:cannot_activate');
 	$options['class'] = 'elgg-button elgg-button-submit elgg-state-disabled';
 	$options['text'] = elgg_echo('admin:plugins:activate');
@@ -138,95 +137,62 @@ if ($active) {
 }
 
 if ($action) {
-	$url = elgg_http_add_url_query_elements($actions_base . $action, array(
+	$options['href'] = elgg_http_add_url_query_elements($actions_base . $action, [
 		'plugin_guids[]' => $plugin->guid
-	));
-
-	$options['href'] = $url;
+	]);
 }
 
 $action_button = elgg_view('output/url', $options);
 
-$action_button = elgg_trigger_plugin_hook("action_button", "plugin", array("entity" => $plugin), $action_button);
+$action_button = elgg_trigger_plugin_hook("action_button", "plugin", ["entity" => $plugin], $action_button);
 
 // Display categories and make category classes
 $categories = $plugin->getManifest()->getCategories();
 
-$categories[] = "all";
+$categories[] = 'all';
+$categories[] = $active ? 'active' : 'inactive';
 
-if (!in_array("bundled", $categories)) {
-	$categories[] = "nonbundled";
+if (!in_array('bundled', $categories)) {
+	$categories[] = 'nonbundled';
 }
 
-if ($active) {
-	$categories[] = "active";
-} else {
-	$categories[] = "inactive";
+foreach ($categories as $category) {
+	$css_class = preg_replace('/[^a-z0-9-]/i', '-', $category);
+	$classes[] = "elgg-plugin-category-$css_class";
 }
 
-$categories_html = '';
-if ($categories) {
-	foreach ($categories as $category) {
-		$css_class = preg_replace('/[^a-z0-9-]/i', '-', $category);
-		$classes[] = "elgg-plugin-category-$css_class";
-	}
+$body = elgg_view('output/url', [
+	'href' => "ajax/view/object/plugin/details?guid={$plugin->getGUID()}",
+	'text' => $plugin->getDisplayName(),
+	'class' => 'elgg-lightbox elgg-plugin-title',
+]);
+
+if (elgg_view_exists("plugins/{$plugin_id}/settings")) {
+	$body .= elgg_view('output/url', [
+		'href' => "admin/plugin_settings/{$plugin_id}",
+		'title' => elgg_echo('settings'),
+		'text' => elgg_view_icon('settings-alt'),
+		'class' => 'elgg-plugin-settings',
+	]);
 }
 
-// metadata
-$description = elgg_view('output/longtext', array('value' => $plugin->getManifest()->getDescription()));
-
-$settings_view_old = 'settings/' . $plugin->getID() . '/edit';
-$settings_view_new = 'plugins/' . $plugin->getID() . '/settings';
-$settings_link = '';
-if (elgg_view_exists($settings_view_old) || elgg_view_exists($settings_view_new)) {
-	$link = elgg_get_site_url() . "admin/plugin_settings/" . $plugin->getID();
-	$settings_link = "<a class='elgg-plugin-settings' href='$link' title='" . elgg_echo('settings') . "'>" . elgg_view_icon("settings-alt") . "</a>";
+$description = elgg_view('output/longtext', ['value' => $plugin->getManifest()->getDescription()]);
+$body .= elgg_format_element('span', [
+	'class' => 'elgg-plugin-list-description',
+], $description);
+	
+$error = $plugin->getError();
+if ($error) {
+	$message = elgg_format_element('p', [
+		'class' => $active ? 'elgg-text-help' : 'elgg-text-help elgg-state-error',
+	], $error);
+	
+	$body .= "<div>$message</div>";
 }
 
-$attrs = [
+$result = elgg_view_image_block($action_button, $links . $body);
+echo elgg_format_element('div', [
 	'class' => $classes,
-	'id' => $css_id,
+	'id' => preg_replace('/[^a-z0-9-]/i', '-', $plugin_id),
 	'data-guid' => $plugin->guid,
-];
-?>
-<div <?= elgg_format_attributes($attrs) ?>>
-	<div class="elgg-image-block">
-		<div class="elgg-image">
-			<div>
-				<?php echo $action_button; ?>
-			</div>
-		</div>
-		<div class="elgg-body">
-			<div class="elgg-head">
-				<?php
-				echo $links;
-				$url_options = array(
-					"href" => "ajax/view/object/plugin/details?guid=" . $plugin->getGUID(),
-					"text" => $plugin->getManifest()->getName(),
-					"class" => "elgg-lightbox elgg-plugin-title",
-				);
-				echo elgg_view("output/url", $url_options);
-
-				echo " " . $settings_link;
-				?>
-				<span class="elgg-plugin-list-description">
-					<?php echo $description; ?>
-				</span>
-			</div>
-			<?php
-			$error = $plugin->getError();
-			if ($error) {
-				?>
-				<div class="elgg-body elgg-plugin-list-error">
-					<?php
-					echo elgg_format_element('p', [
-						'class' => $plugin->isActive() ? 'elgg-text-help' : 'elgg-text-help elgg-state-error',
-					], $error);
-					?>
-				</div>
-				<?php
-			}
-			?>
-		</div>
-	</div>
-</div>
+], $result);

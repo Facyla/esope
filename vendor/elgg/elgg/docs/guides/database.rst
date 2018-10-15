@@ -19,8 +19,6 @@ variables or properties. The built-in properties are:
 
 -  **``guid``** The entity's GUID; set automatically
 -  **``owner_guid``** The owning user's GUID
--  **``site_guid``** The owning site's GUID. This is set automatically
-   when an instance of ``ElggObject`` gets created)
 -  **``subtype``** A single-word arbitrary string that defines what kind
    of object it is, for example ``blog``
 -  **``access_id``** An integer representing the access level of the
@@ -35,7 +33,7 @@ make this unique, so that other plugins don't accidentally try and use
 the same subtype. For the purposes of this document, let's assume we're
 building a simple forum. Therefore, the subtype will be *forum*:
 
-.. code:: php
+.. code-block:: php
 
     $object = new ElggObject();
     $object->subtype = "forum";
@@ -47,7 +45,6 @@ object will be private, and only the creator user will be able to see
 it. Elgg defines constants for the special values of ``access_id``:
 
 -  **ACCESS_PRIVATE** Only the owner can see it
--  **ACCESS_FRIENDS** Only the owner and his/her friends can see it
 -  **ACCESS_LOGGED_IN** Any logged in user can see it
 -  **ACCESS_PUBLIC** Even visitors not logged in can see it
 
@@ -58,7 +55,7 @@ call ``$object->save()`` again, and it will update the database for you.
 You can set metadata on an object just like a standard property. Let's
 say we want to set the SKU of a product:
 
-.. code:: php
+.. code-block:: php
 
     $object->SKU = 62784;
 
@@ -75,7 +72,7 @@ Loading an object
 By GUID
 ~~~~~~~
 
-.. code:: php
+.. code-block:: php
 
     $entity = get_entity($guid);
     if (!$entity) {
@@ -87,11 +84,10 @@ But what if you don't know the GUID? There are several options.
 By user, subtype or site
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you know the user ID you want to get objects for, or the subtype, or
-the site, you have several options. The easiest is probably to call the
-procedural function ``elgg_get_entities``:
+If you know the user ID you want to get objects for, or the subtype, you have several options.
+The easiest is probably to call the procedural function ``elgg_get_entities``:
 
-.. code:: php
+.. code-block:: php
 
     $entities = elgg_get_entities(array(
         'type' => $entity_type,
@@ -110,41 +106,18 @@ If you already have an ``ElggUser`` – e.g. ``elgg_get_logged_in_user_entity``,
 which always has the current user's object when you're logged in – you can
 simply use:
 
-.. code:: php
+.. code-block:: php
 
     $objects = $user->getObjects($subtype, $limit, $offset)
 
 But what about getting objects with a particular piece of metadata?
 
-By metadata
-~~~~~~~~~~~
-
-The function ``elgg_get_entities_from_metadata`` allows fetching entities
-with metadata in a variety of ways.
-
-By annotation
+By properties
 ~~~~~~~~~~~~~
 
-The function ``elgg_get_entities_from_annotations`` allows fetching entities
-with metadata in a variety of ways.
+You can fetch entities by their properties using ``elgg_get_entities``. Using specific parameters passed to ``$options``
+array, you can retrieve entities by their attributes, metadata, annotations, private settings and relationships.
 
-.. note::
-
-   As of Elgg 1.10 the default behaviour of `elgg_get_entities_from_annotations` was brought inline with the rest of the `elgg_get_entities*` functions.
-   
-   Pre Elgg 1.10 the sorting of the entities was based on the latest addition of an annotation (in $options your could add `$options['order_by'] = 'maxtime ASC'` or `$options['order_by'] = 'maxtime DESC'`. As of Elgg 1.10 this was changed to the creation time of the entity, just like the rest of the `elgg_get_entities*` functions.
-   To get the old behaviour back add the following to your `$options`:
-   
-   .. code:: php
-   
-      $options['selects'] = array('MAX(n_table.time_created) AS maxtime');
-      $options['group_by'] = 'n_table.entity_guid';
-      $options['order_by'] = 'maxtime ASC'
-      
-      or
-      
-      $options['order_by'] = 'maxtime DESC'
-      
 
 Displaying entities
 -------------------
@@ -169,9 +142,9 @@ Entity Icons
 ~~~~~~~~~~~~
 
 Entity icons can be saved from uploaded files, existing local files, or existing ElggFile 
-objects. These methods save all sizes of icons defined in the system.
+objects. These methods save the `master` size of the icon defined in the system. The other defined sizes will be generated when requested.
 
-.. code:: php
+.. code-block:: php
 
 	$object = new ElggObject();
 	$object->title = 'Example entity';
@@ -192,7 +165,7 @@ objects. These methods save all sizes of icons defined in the system.
 	$object->save();
 
 The following sizes exist by default: 
- * ``master`` - 550px at longer edge (not upscaled)
+ * ``master`` - 2048px at longer edge (not upscaled)
  * ``large`` - 200px at longer edge (not upscaled)
  * ``medium`` - 100px square
  * ``small`` - 40px square
@@ -204,7 +177,7 @@ The function triggers the ``entity:icon:sizes`` :ref:`hook <guides/hooks-list#ot
 
 To check if an icon is set, use ``$object->hasIcon($size)``.
 
-You can retrieve the URL of the generated icon with``ElggEntity::getIconURL($params)`` method.
+You can retrieve the URL of the generated icon with ``ElggEntity::getIconURL($params)`` method.
 This method accepts a ``$params`` argument as an array that specifies the size, type, and provide 
 additional context for the hook to determine the icon to serve. 
 The method triggers the ``entity:icon:url`` :ref:`hook <guides/hooks-list#other>`.
@@ -225,10 +198,31 @@ $type
 $subtype
 	Entity subtype, e.g. ``'blog'`` or ``'page'``.
 
+You do not have to return a fallback icon from the hook handler. If no uploaded icon is found,
+the view system will scan the views (in this specific order):
+
+#. views/$viewtype/$icon_type/$entity_type/$entity_subtype.svg
+#. views/$viewtype/$icon_type/$entity_type/$entity_subtype/$size.gif
+#. views/$viewtype/$icon_type/$entity_type/$entity_subtype/$size.png
+#. views/$viewtype/$icon_type/$entity_type/$entity_subtype/$size.jpg
+
+Where
+
+$viewtype
+	Type of view, e.g. ``'default'`` or ``'json'``.
+$icon_type
+	Icon type, e.g. ``'icon'`` or ``'cover_image'``.
+$entity_type
+	Type of entity, e.g. ``'group'`` or ``'user'``.
+$entity_subtype
+	Entity subtype, e.g. ``'blog'`` or ``'page'`` (or ``'default'`` if entity has not subtype).
+$size
+    Icon size (note that we do not use the size with svg icons)
+
 Icon methods support passing an icon type if an entity has more than one icon. For example, a user
 might have an avatar and a cover photo icon. You would pass ``'cover_photo'`` as the icon type:
 
-.. code:: php
+.. code-block:: php
 
 	$object->saveIconFromUploadedFile('uploaded_photo', 'cover_photo');
 
@@ -237,8 +231,11 @@ might have an avatar and a cover photo icon. You would pass ``'cover_photo'`` as
 		'type' => 'cover_photo'
 	]);
 
-Note that custom icon types (e.g. cover photos) do not have preset sizes and coordinates.
-Use ``entity:<icon_type>:url`` :ref:`hook <guides/hooks-list#other>` to configure them.
+
+.. note::
+	
+	Custom icon types (e.g. cover photos) only have a preset for `master` size, to add custom sizes
+	use ``entity:<icon_type>:url`` :ref:`hook <guides/hooks-list#other>` to configure them.
 
 By default icons will be stored in ``/icons/<icon_type>/<size>.jpg`` relative to entity's directory on filestore.
 To provide an alternative location, use the ``entity:<icon_type>:file`` :ref:`hook <guides/hooks-list#other>`.
@@ -250,7 +247,7 @@ Annotations could be used, for example, to track ratings. To annotate an
 entity you can use the object's ``annotate()`` method. For example, to
 give a blog post a rating of 5, you could use:
 
-.. code:: php
+.. code-block:: php
 
     $blog_post->annotate('rating', 5);
 
@@ -275,7 +272,7 @@ get\_entity() et al. will return the appropriate PHP class. For example,
 if I customize ElggGroup in a class called "Committee", I need to make
 Elgg aware of the new mapping. Following is an example class extension:
 
-.. code:: php
+.. code-block:: php
 
     // Class source
     class Committee extends ElggGroup {
@@ -288,21 +285,27 @@ Elgg aware of the new mapping. Following is an example class extension:
         // more customizations here
     }
 
-    function committee_init() {
-        
-        register_entity_type('group', 'committee');
-        
-        // Tell Elgg that group subtype "committee" should be loaded using the Committee class
-        // If you ever change the name of the class, use update_subtype() to change it
-        add_subtype('group', 'committee', 'Committee');
-    }
+In your plugins ``elgg-plugin.php`` file add the ``entities`` section.
 
-    register_elgg_event_handler('init', 'system', 'committee_init');
+.. code-block:: php
+
+    <?php // mod/example/elgg-plugin.php
+    return [
+        // entities registration
+        'entities' => [
+			[
+				'type' => 'group',
+				'subtype' => 'committee',
+				'class' => 'Committee',
+				'searchable' => true, 
+			],
+		],
+    ];
+    
+The entities will be registered upon activation of the plugin.
     
 Now if you invoke ``get_entity()`` with the GUID of a committee object,
 you'll get back an object of type Committee.
-
-This template was extracted from the definition of ElggFile.
 
 Advanced features
 -----------------
@@ -336,21 +339,6 @@ Entity loading performance
 
 The internals of Elgg entity queries is a complex subject and it's recommended to seek help on the Elgg Community site before using the ``distinct`` option.
 
-Pre-1.8 Notes
--------------
-
-update\_subtype(): This function is new in 1.8. In prior versions, you
-would need to edit the database by hand if you updated the class name
-associated with a given subtype.
-
-elgg\_register\_entity\_url\_handler(): This function is new in 1.8. It
-deprecates register\_entity\_url\_handler(), which you should use if
-developing for a pre-1.8 version of Elgg.
-
-elgg\_get\_entities\_from\_metadata(): This function is new in 1.8. It
-deprecates get\_entities\_from\_metadata(), which you should use if
-developing for a pre-1.8 version of Elgg.
-
 Custom database functionality
 =============================
 
@@ -364,7 +352,7 @@ This example shows how you can populate your database on plugin activation.
 
 my_plugin/activate.php:
 
-.. code:: php
+.. code-block:: php
 
     if (!elgg_get_plugin_setting('database_version', 'my_plugin') {
         run_sql_script(__DIR__ . '/sql/activate.sql');
@@ -374,7 +362,7 @@ my_plugin/activate.php:
 
 my_plugin/sql/activate.sql:
 
-.. code:: sql
+.. code-block:: sql
 
     -- Create some table
     CREATE TABLE prefix_custom_table(
@@ -421,13 +409,13 @@ There are some reasons why you might want to create your own system log. For exa
 
 To do this, you can create a function that listens to all events for all types of object:
 
-.. code:: php
+.. code-block:: php
 
    register_elgg_event_handler('all','all','your_function_name');
 
 Your function can then be defined as:
 
-.. code:: php
+.. code-block:: php
 
    function your_function_name($object, $event) {
       if ($object instanceof Loggable) {

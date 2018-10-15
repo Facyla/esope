@@ -90,7 +90,7 @@ All plugins reside in the ``mod`` directory of your Elgg installation.
 To install a new plugin:
  * extract (unzip) contents of the plugin distribution package
  * copy/FTP the extracted folder into the ``mod`` directory of your Elgg
-   installation, making sure that ``manifest.xml`` and ``start.php`` are
+   installation, making sure that ``manifest.xml`` is
    directly under the plugin directory (e.g. if you were to install a plugin called
    ``my_elgg_plugin``, plugin's manifest would need to be found at
    ``mod/my_elgg_plugin/manifest.xml``)
@@ -113,9 +113,3 @@ Some general rules for ordering plugins:
 
 - A theme plugin should be last or at least near the bottom
 - A plugin that modifies the behavior of another plugin should be lower in the plugin list
-
-Pre-1.8 notes
-=============
-
-In Elgg 1.7 and below, the interface for managing installed plugins is located at
-Administration -> Tool Administration.

@@ -9,9 +9,4 @@ return array(
 	'garbagecollector' => "Recolledor do lixo\n",
 	'garbagecollector:done' => "Listo\n",
 	'garbagecollector:optimize' => "Optimizando %s…",
-
-	'garbagecollector:error' => "Erro",
-	'garbagecollector:ok' => "Si",
-
-	'garbagecollector:gc:metastrings' => 'Limpando cadeas de metadatos desligadas:',
 );

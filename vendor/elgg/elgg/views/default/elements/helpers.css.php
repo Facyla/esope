@@ -68,22 +68,22 @@
 	BORDERS AND SEPARATORS
 *************************************** */
 .elgg-border-plain {
-	border: 1px solid #eeeeee;
+	border: 1px solid $(border-color-soft);
 }
 .elgg-border-transition {
-	border: 1px solid #eeeeee;
+	border: 1px solid $(border-color-soft);
 }
 .elgg-divide-top {
-	border-top: 1px solid #CCCCCC;
+	border-top: 1px solid $(border-color-soft);
 }
 .elgg-divide-bottom {
-	border-bottom: 1px solid #CCCCCC;
+	border-bottom: 1px solid $(border-color-soft);
 }
 .elgg-divide-left {
-	border-left: 1px solid #CCCCCC;
+	border-left: 1px solid $(border-color-soft);
 }
 .elgg-divide-right {
-	border-right: 1px solid #CCCCCC;
+	border-right: 1px solid $(border-color-soft);
 }
 
 /* ***************************************

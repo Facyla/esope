@@ -1,78 +1,50 @@
 <?php
 /**
  * Elgg Pages
- *
- * @package ElggPages
  */
 
-elgg_register_event_handler('init', 'system', 'pages_init');
+require_once(dirname(__FILE__) . '/lib/pages.php');
 
 /**
- * Initialize the pages plugin.
+ * Initialize the pages plugin
  *
+ * @return void
  */
 function pages_init() {
 
 	// register a library of helper functions
-	elgg_register_library('elgg:pages', __DIR__ . '/lib/pages.php');
+	\Elgg\Includer::requireFileOnce(__DIR__ . '/lib/pages.php');
 
-	$item = new ElggMenuItem('pages', elgg_echo('pages'), 'pages/all');
-	elgg_register_menu_item('site', $item);
-
-	// Register a page handler, so we can have nice URLs
-	elgg_register_page_handler('pages', 'pages_page_handler');
+	elgg_register_menu_item('site', [
+		'name' => 'pages',
+		'icon' => 'file-text-o',
+		'text' => elgg_echo('collection:object:page'),
+		'href' => elgg_generate_url('default:object:page'),
+	]);
 
 	// Register a url handler
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'pages_set_url');
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'pages_set_url');
 	elgg_register_plugin_hook_handler('extender:url', 'annotation', 'pages_set_revision_url');
-
-	// Register some actions
-	$action_base = __DIR__ . '/actions';
-	elgg_register_action("pages/edit", "$action_base/pages/edit.php");
-	elgg_register_action("pages/delete", "$action_base/pages/delete.php");
-	elgg_register_action("annotations/page/delete", "$action_base/annotations/page/delete.php");
 
 	// Extend the main css view
 	elgg_extend_view('elgg.css', 'pages/css');
 
-	elgg_define_js('jquery.treeview', array(
-		'src' => '/mod/pages/vendors/jquery-treeview/jquery.treeview.min.js',
-		'exports' => 'jQuery.fn.treeview',
-		'deps' => array('jquery'),
-	));
-	$css_url = 'mod/pages/vendors/jquery-treeview/jquery.treeview.css';
-	elgg_register_css('jquery.treeview', $css_url);
-
-	// Register entity type for search
-	elgg_register_entity_type('object', 'page');
-	elgg_register_entity_type('object', 'page_top');
-
 	// Register for notifications
 	elgg_register_notification_event('object', 'page');
-	elgg_register_notification_event('object', 'page_top');
 	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:page', 'pages_prepare_notification');
-	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:page_top', 'pages_prepare_notification');
 
 	// add to groups
-	add_group_tool_option('pages', elgg_echo('groups:enablepages'), true);
-	elgg_extend_view('groups/tool_latest', 'pages/group_module');
-
-	//add a widget
-	elgg_register_widget_type('pages', elgg_echo('pages'), elgg_echo('pages:widget:description'));
-
+	elgg()->group_tools->register('pages');
+	
 	// Language short codes must be of the form "pages:key"
 	// where key is the array key below
-	elgg_set_config('pages', array(
+	elgg_set_config('pages', [
 		'title' => 'text',
 		'description' => 'longtext',
 		'tags' => 'tags',
-		'parent_guid' => 'parent',
+		'parent_guid' => 'pages/parent',
 		'access_id' => 'access',
-
-		// TODO change to "access" when input/write_access is removed
-		'write_access_id' => 'write_access',
-	));
+		'write_access_id' => 'access',
+	]);
 
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'pages_owner_block_menu');
 
@@ -93,297 +65,224 @@ function pages_init() {
 
 	// allow to be liked
 	elgg_register_plugin_hook_handler('likes:is_likable', 'object:page', 'Elgg\Values::getTrue');
-	elgg_register_plugin_hook_handler('likes:is_likable', 'object:page_top', 'Elgg\Values::getTrue');
 	
 	// prevent public write access
 	elgg_register_plugin_hook_handler('view_vars', 'input/access', 'pages_write_access_vars');
-}
 
-/**
- * Dispatcher for pages.
- * URLs take the form of
- *  All pages:        pages/all
- *  User's pages:     pages/owner/<username>
- *  Friends' pages:   pages/friends/<username>
- *  View page:        pages/view/<guid>/<title>
- *  New page:         pages/add/<guid> (container: user, group, parent)
- *  Edit page:        pages/edit/<guid>
- *  History of page:  pages/history/<guid>
- *  Revision of page: pages/revision/<id>
- *  Group pages:      pages/group/<guid>/all
- *
- * Title is ignored
- *
- * @param array $page
- * @return bool
- */
-function pages_page_handler($page) {
-
-	elgg_load_library('elgg:pages');
-	
-	if (!isset($page[0])) {
-		$page[0] = 'all';
-	}
-
-	elgg_push_breadcrumb(elgg_echo('pages'), 'pages/all');
-
-	$page_type = $page[0];
-	switch ($page_type) {
-		case 'owner':
-			echo elgg_view_resource('pages/owner');
-			break;
-		case 'friends':
-			echo elgg_view_resource('pages/friends');
-			break;
-		case 'view':
-			echo elgg_view_resource('pages/view', [
-				'guid' => $page[1],
-			]);
-			break;
-		case 'add':
-			echo elgg_view_resource('pages/new', [
-				'guid' => $page[1],
-			]);
-			break;
-		case 'edit':
-			echo elgg_view_resource('pages/edit', [
-				'guid' => $page[1],
-			]);
-			break;
-		case 'group':
-			echo elgg_view_resource('pages/owner');
-			break;
-		case 'history':
-			echo elgg_view_resource('pages/history', [
-				'guid' => $page[1],
-			]);
-			break;
-		case 'revision':
-			echo elgg_view_resource('pages/revision', [
-				'id' => $page[1],
-			]);
-			break;
-		case 'all':
-			$dir = __DIR__ . "/views/" . elgg_get_viewtype();
-			if (_elgg_view_may_be_altered('resources/pages/world', "$dir/resources/pages/world.php")) {
-				elgg_deprecated_notice('The view "resources/pages/world" is deprecated. Use "resources/pages/all".', 2.3);
-				echo elgg_view_resource('pages/world', ['__shown_notice' => true]);
-			} else {
-				echo elgg_view_resource('pages/all');
-			}
-			break;
-		default:
-			return false;
-	}
-	return true;
-}
-
-/**
- * Override the page url
- * 
- * @param string $hook
- * @param string $type
- * @param string $url
- * @param array  $params
- * @return string
- */
-function pages_set_url($hook, $type, $url, $params) {
-	$entity = $params['entity'];
-	if (pages_is_page($entity)) {
-		$title = elgg_get_friendly_title($entity->title);
-		return "pages/view/$entity->guid/$title";
-	}
+	// register database seed
+	elgg_register_plugin_hook_handler('seeds', 'database', 'pages_register_db_seeds');
 }
 
 /**
  * Override the page annotation url
  *
- * @param string $hook
- * @param string $type
- * @param string $url
- * @param array  $params
- * @return string
+ * @param string $hook   'extender:url'
+ * @param string $type   'annotation'
+ * @param string $url    current return value
+ * @param array  $params supplied params
+ *
+ * @return void|string
  */
 function pages_set_revision_url($hook, $type, $url, $params) {
-	$annotation = $params['extender'];
+	
+	$annotation = elgg_extract('extender', $params);
 	if ($annotation->getSubtype() == 'page') {
-		return "pages/revision/$annotation->id";
+		return elgg_generate_url('revision:object:page', [
+			'id' => $annotation->id,
+		]);
 	}
 }
 
 /**
  * Override the default entity icon for pages
  *
- * @return string Relative URL
+ * @param string $hook        'entity:icon:url'
+ * @param string $type        'object'
+ * @param string $returnvalue current return value
+ * @param array  $params      supplied params
+ *
+ * @return string
  */
 function pages_icon_url_override($hook, $type, $returnvalue, $params) {
-	$entity = $params['entity'];
-	if (pages_is_page($entity)) {
-		switch ($params['size']) {
-			case 'topbar':
-			case 'tiny':
-			case 'small':
-				return elgg_get_simplecache_url('pages/pages.gif');
-				break;
-			default:
-				return elgg_get_simplecache_url('pages/pages_lrg.gif');
-				break;
-		}
+	
+	$entity = elgg_extract('entity', $params);
+	if ($entity instanceof ElggPage) {
+		return elgg_get_simplecache_url('pages/images/pages.gif');
 	}
 }
 
 /**
  * Add a menu item to the user ownerblock
+ *
+ * @param string         $hook   'register'
+ * @param string         $type   'menu:owner_block'
+ * @param ElggMenuItem[] $return current return value
+ * @param array          $params supplied params
+ *
+ * @return ElggMenuItem[]
  */
 function pages_owner_block_menu($hook, $type, $return, $params) {
-	if (elgg_instanceof($params['entity'], 'user')) {
-		$url = "pages/owner/{$params['entity']->username}";
-		$item = new ElggMenuItem('pages', elgg_echo('pages'), $url);
+	
+	$entity = elgg_extract('entity', $params);
+	if ($entity instanceof ElggUser) {
+		$url = elgg_generate_url('collection:object:page:owner', [
+			'username' => $entity->username,
+		]);
+		$item = new ElggMenuItem('pages', elgg_echo('collection:object:page'), $url);
 		$return[] = $item;
-	} else {
-		if ($params['entity']->pages_enable != "no") {
-			$url = "pages/group/{$params['entity']->guid}/all";
-			$item = new ElggMenuItem('pages', elgg_echo('pages:group'), $url);
+	} elseif ($entity instanceof ElggGroup) {
+		if ($entity->isToolEnabled('pages')) {
+			$url = elgg_generate_url('collection:object:page:group', [
+				'guid' => $entity->guid,
+				'subpage' => 'all',
+			]);
+			$item = new ElggMenuItem('pages', elgg_echo('collection:object:page:group'), $url);
 			$return[] = $item;
 		}
 	}
-
+	
 	return $return;
 }
 
 /**
  * Add links/info to entity menu particular to pages plugin
+ *
+ * @param string         $hook   'register'
+ * @param string         $type   'menu:entity'
+ * @param ElggMenuItem[] $return current return value
+ * @param array          $params supplied params
+ *
+ * @return void|ElggMenuItem[]
  */
 function pages_entity_menu_setup($hook, $type, $return, $params) {
-	if (elgg_in_context('widgets')) {
-		return $return;
-	}
 
-	elgg_load_library('elgg:pages');
-	$entity = $params['entity'];
-	$handler = elgg_extract('handler', $params, false);
-	if ($handler != 'pages') {
-		return $return;
+	$entity = elgg_extract('entity', $params);
+	if (!$entity instanceof ElggPage) {
+		return;
 	}
-
-	// remove delete if not owner or admin
-	if (!elgg_is_admin_logged_in() 
-		&& elgg_get_logged_in_user_guid() != $entity->getOwnerGuid() 
-		&& ! pages_can_delete_page($entity)) {
-		foreach ($return as $index => $item) {
-			if ($item->getName() == 'delete') {
-				unset($return[$index]);
-			}
-		}
+	
+	if (!$entity->canEdit()) {
+		return;
 	}
-
-	$options = array(
+	
+	$return[] = \ElggMenuItem::factory([
 		'name' => 'history',
+		'icon' => 'history',
 		'text' => elgg_echo('pages:history'),
-		'href' => "pages/history/$entity->guid",
-		'priority' => 150,
-	);
-	$return[] = ElggMenuItem::factory($options);
+		'href' => elgg_generate_url('history:object:page', [
+			'guid' => $entity->guid,
+		]),
+	]);
 
 	return $return;
 }
 
 /**
  * Prepare a notification message about a new page
- * 
- * @param string                          $hook         Hook name
- * @param string                          $type         Hook type
+ *
+ * @param string                          $hook         'prepare'
+ * @param string                          $type         'notification:create:object:page' | 'notification:create:object:page_top'
  * @param Elgg\Notifications\Notification $notification The notification to prepare
  * @param array                           $params       Hook parameters
- * @return Elgg\Notifications\Notification
+ *
+ * @return void|Elgg\Notifications\Notification
  */
 function pages_prepare_notification($hook, $type, $notification, $params) {
-	$entity = $params['event']->getObject();
-	$owner = $params['event']->getActor();
-	$recipient = $params['recipient'];
-	$language = $params['language'];
-	$method = $params['method'];
+	
+	$event = elgg_extract('event', $params);
+	
+	$entity = $event->getObject();
+	if (!$entity instanceof ElggPage) {
+		return;
+	}
+	
+	$owner = $event->getActor();
+	$recipient = elgg_extract('recipient', $params);
+	$language = elgg_extract('language', $params);
+	$method = elgg_extract('method', $params);
 
 	$descr = $entity->description;
-	$title = $entity->title;
+	$title = $entity->getDisplayName();
 
-	$notification->subject = elgg_echo('pages:notify:subject', array($title), $language); 
-	$notification->body = elgg_echo('pages:notify:body', array(
-		$owner->name,
+	$notification->subject = elgg_echo('pages:notify:subject', [$title], $language);
+	$notification->body = elgg_echo('pages:notify:body', [
+		$owner->getDisplayName(),
 		$title,
 		$descr,
 		$entity->getURL(),
-	), $language);
-	$notification->summary = elgg_echo('pages:notify:summary', array($entity->title), $language);
-
+	], $language);
+	$notification->summary = elgg_echo('pages:notify:summary', [$entity->getDisplayName()], $language);
+	$notification->url = $entity->getURL();
+	
 	return $notification;
 }
 
 /**
  * Extend permissions checking to extend can-edit for write users.
  *
- * @param string $hook
- * @param string $entity_type
- * @param bool   $returnvalue
- * @param array  $params
+ * @param string $hook        'permissions_check'
+ * @param string $type        'object'
+ * @param bool   $returnvalue current return value
+ * @param array  $params      supplied params
  *
- * @return bool
+ * @return void|bool
  */
-function pages_write_permission_check($hook, $entity_type, $returnvalue, $params) {
-	if (!pages_is_page($params['entity'])) {
-		return null;
+function pages_write_permission_check($hook, $type, $returnvalue, $params) {
+	
+	$entity = elgg_extract('entity', $params);
+	if (!$entity instanceof ElggPage) {
+		return;
 	}
-	$entity = $params['entity'];
-	/* @var ElggObject $entity */
+	
+	$write_permission = (int) $entity->write_access_id;
+	$user = elgg_extract('user', $params);
 
-	$write_permission = $entity->write_access_id;
-	$user = $params['user'];
-
-	if ($write_permission && $user) {
-		switch ($write_permission) {
-			case ACCESS_PRIVATE:
-				// Elgg's default decision is what we want
-				return null;
-				break;
-			case ACCESS_FRIENDS:
-				$owner = $entity->getOwnerEntity();
-				if (($owner instanceof ElggUser) && $owner->isFriendsWith($user->guid)) {
-					return true;
-				}
-				break;
-			default:
-				$list = get_access_array($user->guid);
-				if (in_array($write_permission, $list)) {
-					// user in the access collection
-					return true;
-				}
-				break;
-		}
+	if (empty($write_permission) || !$user instanceof ElggUser) {
+		return;
+	}
+	
+	switch ($write_permission) {
+		case ACCESS_PRIVATE:
+			// Elgg's default decision is what we want
+			return;
+			break;
+		default:
+			$list = get_access_array($user->guid);
+			if (in_array($write_permission, $list)) {
+				// user in the access collection
+				return true;
+			}
+			break;
 	}
 }
 
 /**
- * Extend container permissions checking to extend can_write_to_container for write users.
+ * Extend container permissions checking to extend container write access for write users.
  *
- * @param string $hook
- * @param string $entity_type
- * @param bool   $returnvalue
- * @param array  $params
+ * @param string $hook        'container_permissions_check'
+ * @param string $type        'object'
+ * @param bool   $returnvalue current return value
+ * @param array  $params      supplied params
  *
- * @return bool
+ * @return void|bool
  */
-function pages_container_permission_check($hook, $entity_type, $returnvalue, $params) {
+function pages_container_permission_check($hook, $type, $returnvalue, $params) {
+	
+	$subtype = elgg_extract('subtype', $params);
+	// check type/subtype
+	if ($type !== 'object' || $subtype !== 'page') {
+		return;
+	}
+	
 	$container = elgg_extract('container', $params);
 	$user = elgg_extract('user', $params);
-	$subtype = elgg_extract('subtype', $params);
-
-	// check type/subtype
-	if ($entity_type !== 'object' || !in_array($subtype, ['page', 'page_top'])) {
-		return null;
+	
+	if (!$user instanceof ElggUser) {
+		return;
 	}
-
+	
 	// OK if you can write to the container
-	if ($container && $container->canWriteToContainer($user->guid)) {
+	if ($container instanceof ElggEntity && $container->canWriteToContainer($user->guid)) {
 		return true;
 	}
 
@@ -393,8 +292,8 @@ function pages_container_permission_check($hook, $entity_type, $returnvalue, $pa
 	} elseif ($parent_guid = get_input('parent_guid', 0)) {
 		$page = get_entity($parent_guid);
 	}
-	if (!pages_is_page($page)) {
-		return null;
+	if (!$page instanceof ElggPage) {
+		return;
 	}
 
 	// try the page's container
@@ -412,16 +311,15 @@ function pages_container_permission_check($hook, $entity_type, $returnvalue, $pa
 /**
  * Return views to parse for pages.
  *
- * @param string $hook
- * @param string $entity_type
- * @param array  $return_value
- * @param array  $params
+ * @param string $hook         'get_views'
+ * @param string $type         'ecml'
+ * @param array  $return_value current return value
+ * @param array  $params       supplied params
  *
  * @return array
  */
-function pages_ecml_views_hook($hook, $entity_type, $return_value, $params) {
+function pages_ecml_views_hook($hook, $type, $return_value, $params) {
 	$return_value['object/page'] = elgg_echo('item:object:page');
-	$return_value['object/page_top'] = elgg_echo('item:object:page_top');
 
 	return $return_value;
 }
@@ -429,65 +327,75 @@ function pages_ecml_views_hook($hook, $entity_type, $return_value, $params) {
 /**
  * Is the given value a page object?
  *
- * @param mixed $value
+ * @param ElggObject $value the entity to check
  *
  * @return bool
  * @access private
  */
 function pages_is_page($value) {
-	return ($value instanceof ElggObject) && in_array($value->getSubtype(), array('page', 'page_top'));
+	
+	if (!$value instanceof ElggObject) {
+		return false;
+	}
+	
+	return in_array($value->getSubtype(), ['page', 'page_top']);
 }
 
 /**
  * Return options for the write_access_id input
  *
- * @param string $hook
- * @param string $type
- * @param array  $return_value
- * @param array  $params
+ * @param string $hook         'access:collections:write'
+ * @param string $type         'user'
+ * @param array  $return_value current return value
+ * @param array  $params       supplied params
  *
- * @return array
+ * @return void|array
  */
 function pages_write_access_options_hook($hook, $type, $return_value, $params) {
-	if (empty($params['input_params']['entity_subtype'])
-			|| !in_array($params['input_params']['entity_subtype'], array('page', 'page_top'))) {
-		return null;
+	
+	$input_params = elgg_extract('input_params', $params);
+	if (empty($input_params) || !isset($return_value[ACCESS_PUBLIC])) {
+		return;
+	}
+	
+	if (elgg_extract('entity_subtype', $input_params) !== 'page') {
+		return;
 	}
 
-	if ($params['input_params']['purpose'] === 'write') {
-		unset($return_value[ACCESS_PUBLIC]);
-		return $return_value;
+	if (elgg_extract('purpose', $input_params) !== 'write') {
+		return;
 	}
+	
+	unset($return_value[ACCESS_PUBLIC]);
+	
+	return $return_value;
 }
-
 
 /**
  * Called on view_vars, input/access hook
  * Prevent ACCESS_PUBLIC from ending up as a write access option
- * 
- * @param string $hook
- * @param string $type
- * @param array $return
- * @param array $params
- * @return array
+ *
+ * @param string $hook   'view_vars'
+ * @param string $type   'input/access'
+ * @param array  $return current return value
+ * @param array  $params supplied params
+ *
+ * @return void|array
  */
 function pages_write_access_vars($hook, $type, $return, $params) {
 	
-	if ($return['name'] != 'write_access_id') {
-		return $return;
+	if (elgg_extract('name', $return) !== 'write_access_id' || elgg_extract('purpose', $return) !== 'write') {
+		return;
 	}
 	
-	if ($return['purpose'] != 'write') {
-		return $return;
-	}
-	
-	if ($return['value'] != ACCESS_PUBLIC && $return['value'] != ACCESS_DEFAULT) {
-		return $return;
+	$value = (int) elgg_extract('value', $return);
+	if ($value !== ACCESS_PUBLIC && $value !== ACCESS_DEFAULT) {
+		return;
 	}
 	
 	$default_access = get_default_access();
 	
-	if ($return['value'] == ACCESS_PUBLIC || $default_access == ACCESS_PUBLIC) {
+	if ($value === ACCESS_PUBLIC || $default_access === ACCESS_PUBLIC) {
 		// is the value public, or default which resolves to public?
 		// if so we'll set it to logged in, the next most permissible write access level
 		$return['value'] = ACCESS_LOGGED_IN;
@@ -495,3 +403,24 @@ function pages_write_access_vars($hook, $type, $return, $params) {
 	
 	return $return;
 }
+
+/**
+ * Register database seed
+ *
+ * @elgg_plugin_hook seeds database
+ *
+ * @param \Elgg\Hook $hook Hook
+ * @return array
+ */
+function pages_register_db_seeds(\Elgg\Hook $hook) {
+
+	$seeds = $hook->getValue();
+
+	$seeds[] = \Elgg\Pages\Seeder::class;
+
+	return $seeds;
+}
+
+return function() {
+	elgg_register_event_handler('init', 'system', 'pages_init');
+};

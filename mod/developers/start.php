@@ -3,50 +3,76 @@
  * Elgg developer tools
  */
 
-// we want to run this as soon as possible - other plugins should not need to do this
-developers_process_settings();
+use Elgg\DevelopersPlugin\Hooks;
 
-elgg_register_event_handler('init', 'system', 'developers_init');
-
+/**
+ * Developers init
+ *
+ * @return void
+ */
 function developers_init() {
-	elgg_register_event_handler('pagesetup', 'system', 'developers_setup_menu');
 
+	elgg_register_plugin_hook_handler('register', 'menu:page', '_developers_page_menu');
+		
 	elgg_extend_view('admin.css', 'developers/css');
+	elgg_extend_view('admin.css', 'admin/develop_tools/error_log.css');
 	elgg_extend_view('elgg.css', 'developers/css');
-
-	elgg_register_page_handler('theme_sandbox', 'developers_theme_sandbox_controller');
-	elgg_register_page_handler('developers_ajax_demo', 'developers_ajax_demo_controller');
+	elgg_extend_view('elgg.css', 'admin/develop_tools/error_log.css');
 
 	elgg_register_external_view('developers/ajax'); // for lightbox in sandbox
 	elgg_register_ajax_view('developers/ajax_demo.html');
-	$sandbox_css = elgg_get_simplecache_url('theme_sandbox.css');
-	elgg_register_css('dev.theme_sandbox', $sandbox_css);
-
-	$action_base = __DIR__ . '/actions/developers';
-	elgg_register_action('developers/settings', "$action_base/settings.php", 'admin');
-	elgg_register_action('developers/ajax_demo', "$action_base/ajax_demo.php", 'admin');
-	elgg_register_action('developers/entity_explorer_delete', "$action_base/entity_explorer_delete.php", 'admin');
 
 	elgg_register_ajax_view('forms/developers/ajax_demo');
-	elgg_register_ajax_view('theme_sandbox/components/tabs/ajax_demo');
+	elgg_register_ajax_view('theme_sandbox/components/tabs/ajax');
 }
 
+/**
+ * Process plugin settings before plugins are started
+ *
+ * @return void
+ */
 function developers_process_settings() {
 	$settings = elgg_get_plugin_from_id('developers')->getAllSettings();
 
-	ini_set('display_errors', (int)!empty($settings['display_errors']));
+	ini_set('display_errors', (int) !empty($settings['display_errors']));
 
-	if (!empty($settings['screen_log'])) {
+	if (!empty($settings['screen_log']) && (elgg_get_viewtype() === 'default')) {
 		// don't show in action/simplecache
 		$path = substr(current_page_url(), strlen(elgg_get_site_url()));
 		if (!preg_match('~^(cache|action)/~', $path)) {
-			$cache = new ElggLogCache();
-			elgg_set_config('log_cache', $cache);
-			elgg_register_plugin_hook_handler('debug', 'log', array($cache, 'insertDump'));
-			elgg_register_plugin_hook_handler('view_vars', 'page/elements/html', function($hook, $type, $vars, $params) {
+			// Write to JSON file to not take up memory See #11886
+			$uid = substr(hash('md5', uniqid('', true)), 0, 10);
+			$log_file = \Elgg\Project\Paths::sanitize(elgg_get_config('dataroot') . "logs/screen/$uid.html", false);
+			elgg()->config->log_cache = $log_file;
+
+			$handler = new \Monolog\Handler\StreamHandler(
+				$log_file,
+				elgg()->logger->getLevel()
+			);
+
+			$formatter = new \Elgg\DevelopersPlugin\ErrorLogHtmlFormatter();
+			$handler->setFormatter($formatter);
+
+			elgg()->logger->pushHandler($handler);
+
+			$handler->pushProcessor(new \Elgg\Logger\BacktraceProcessor());
+
+			elgg_register_plugin_hook_handler('view_vars', 'page/elements/html', function($hook, $type, $vars, $params)  use ($handler) {
+				$handler->close();
+
 				$vars['body'] .= elgg_view('developers/log');
 				return $vars;
 			});
+
+			elgg_register_event_handler('shutdown', 'system', function() use ($handler) {
+				// Prevent errors in cli
+				$handler->close();
+				
+				$log_file = elgg()->config->log_cache;
+				if (is_file($log_file)) {
+					unlink($log_file);
+				}
+			}, 1000);
 		}
 	}
 
@@ -74,49 +100,129 @@ function developers_process_settings() {
 		elgg_register_ajax_view('developers/gear_popup');
 		elgg_register_simplecache_view('elgg/dev/gear.html');
 
-		// TODO use ::class in 2.0
-		$handler = ['Elgg\DevelopersPlugin\Hooks', 'alterMenuSectionVars'];
+		$handler = [Hooks::class, 'alterMenuSectionVars'];
 		elgg_register_plugin_hook_handler('view_vars', 'navigation/menu/elements/section', $handler);
 
-		$handler = ['Elgg\DevelopersPlugin\Hooks', 'alterMenuSections'];
+		$handler = [Hooks::class, 'alterMenuSections'];
 		elgg_register_plugin_hook_handler('view', 'navigation/menu/elements/section', $handler);
+
+		$handler = [Hooks::class, 'alterMenu'];
+		elgg_register_plugin_hook_handler('view', 'navigation/menu/default', $handler);
 	}
-}
-
-function developers_setup_menu() {
-	if (elgg_in_context('admin') && elgg_is_admin_logged_in()) {
-		elgg_register_admin_menu_item('develop', 'inspect');
-		elgg_register_admin_menu_item('develop', 'sandbox', 'develop_tools');
-		elgg_register_admin_menu_item('develop', 'unit_tests', 'develop_tools');
-		elgg_register_admin_menu_item('develop', 'entity_explorer', 'develop_tools');
-
-		elgg_register_menu_item('page', array(
-			'name' => 'dev_settings',
-			'href' => 'admin/developers/settings',
-			'text' => elgg_echo('settings'),
-			'context' => 'admin',
-			'priority' => 10,
-			'section' => 'develop'
-		));
+	
+	if (!empty($settings['block_email'])) {
+		$handler = [Hooks::class, 'blockOutgoingEmails'];
+		elgg_register_plugin_hook_handler('transport', 'system:email', $handler);
 		
-		$inspect_options = developers_get_inspect_options();
-		foreach ($inspect_options as $key => $value) {
-			elgg_register_menu_item('page', array(
-				'name' => 'dev_inspect_' . elgg_get_friendly_title($key),
-				'href' => "admin/develop_tools/inspect?" . http_build_query([
-					'inspect_type' => $key,
-				]),
-				'text' => $value,
-				'context' => 'admin',
-				'section' => 'develop',
-				'parent_name' => 'inspect'
-			));
+		if (!empty($settings['forward_email'])) {
+			$handler = [Hooks::class, 'setForwardEmailAddress'];
+			elgg_register_plugin_hook_handler('prepare', 'system:email', $handler);
 		}
+	}
+
+	if (!empty($settings['enable_error_log'])) {
+		$handler = new \Monolog\Handler\RotatingFileHandler(
+			\Elgg\Project\Paths::sanitize(elgg_get_config('dataroot') . 'logs/html/errors.html', false),
+			elgg_extract('error_log_max_files', $settings, 60),
+			\Psr\Log\LogLevel::ERROR
+		);
+
+		$formatter = new \Elgg\DevelopersPlugin\ErrorLogHtmlFormatter();
+		$handler->setFormatter($formatter);
+
+		$handler->pushProcessor(new \Monolog\Processor\PsrLogMessageProcessor());
+		$handler->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor());
+		$handler->pushProcessor(new \Monolog\Processor\MemoryPeakUsageProcessor());
+		$handler->pushProcessor(new \Monolog\Processor\ProcessIdProcessor());
+		$handler->pushProcessor(new \Monolog\Processor\WebProcessor());
+		$handler->pushProcessor(new \Elgg\Logger\BacktraceProcessor());
+
+		elgg()->logger->pushHandler($handler);
 	}
 }
 
 /**
- * Adds debug info to all translatable strings.
+ * Register menu items for the page menu
+ *
+ * @param string         $hook   'register'
+ * @param string         $type   'menu:page'
+ * @param ElggMenuItem[] $return current return value
+ * @param array          $params supplied params
+ *
+ * @return void|ElggMenuItem[]
+ *
+ * @access private
+ * @since 3.0
+ */
+function _developers_page_menu($hook, $type, $return, $params) {
+	if (!elgg_in_context('admin') || !elgg_is_admin_logged_in()) {
+		return;
+	}
+	
+	$return[] = \ElggMenuItem::factory([
+		'name' => 'dev_settings',
+		'href' => 'admin/developers/settings',
+		'text' => elgg_echo('settings'),
+		'priority' => 10,
+		'section' => 'develop',
+	]);
+
+	$return[] = \ElggMenuItem::factory([
+		'name' => 'error_log',
+		'href' => 'admin/develop_tools/error_log',
+		'text' => elgg_echo('admin:develop_tools:error_log'),
+		'section' => 'develop',
+	]);
+	
+	$return[] = \ElggMenuItem::factory([
+		'name' => 'inspect',
+		'text' => elgg_echo('admin:inspect'),
+		'section' => 'develop',
+	]);
+
+	$inspect_options = developers_get_inspect_options();
+	foreach ($inspect_options as $key => $value) {
+		$return[] = \ElggMenuItem::factory([
+			'name' => 'dev_inspect_' . elgg_get_friendly_title($key),
+			'href' => "admin/develop_tools/inspect?" . http_build_query([
+				'inspect_type' => $key,
+			]),
+			'text' => $value,
+			'section' => 'develop',
+			'parent_name' => 'inspect',
+		]);
+	}
+	
+	$return[] = \ElggMenuItem::factory([
+		'name' => 'develop_tools',
+		'text' => elgg_echo('admin:develop_tools'),
+		'section' => 'develop',
+	]);
+	
+	$return[] = \ElggMenuItem::factory([
+		'name' => 'develop_tools:sandbox',
+		'href' => 'theme_sandbox/intro',
+		'text' => elgg_echo('admin:develop_tools:sandbox'),
+		'parent_name' => 'develop_tools',
+		'section' => 'develop',
+		'target' => '_blank',
+	]);
+	
+	$return[] = \ElggMenuItem::factory([
+		'name' => 'develop_tools:entity_explorer',
+		'href' => 'admin/develop_tools/entity_explorer',
+		'text' => elgg_echo('admin:develop_tools:entity_explorer'),
+		'parent_name' => 'develop_tools',
+		'section' => 'develop',
+	]);
+	
+	return $return;
+}
+
+/**
+ * Adds debug info to all translatable strings
+ *
+ * @return void
  */
 function developers_decorate_all_translations() {
 	$language = get_current_language();
@@ -130,9 +236,13 @@ function developers_decorate_all_translations() {
  * This function checks if the suffix has already been added so it is idempotent
  *
  * @param string $language Language code like "en"
+ *
+ * @return void
  */
 function _developers_decorate_translations($language) {
-	foreach ($GLOBALS['_ELGG']->translations[$language] as $key => &$value) {
+	$translations = _elgg_services()->translator->getLoadedTranslations();
+
+	foreach ($translations[$language] as $key => &$value) {
 		$needle = " ($key)";
 		
 		// if $value doesn't already end with " ($key)", append it
@@ -140,17 +250,6 @@ function _developers_decorate_translations($language) {
 			$value .= $needle;
 		}
 	}
-}
-
-/**
- * Clear all the strings so the raw descriptor strings are displayed
- *
- * @deprecated Superceded by developers_decorate_all_translations
- */
-function developers_clear_strings() {
-	$language = get_current_language();
-	$GLOBALS['_ELGG']->translations[$language] = array();
-	$GLOBALS['_ELGG']->translations['en'] = array();
 }
 
 /**
@@ -163,23 +262,34 @@ function developers_clear_strings() {
  *
  * @warning this will break views in the default viewtype that return non-HTML data
  * that do not match the above restrictions.
+ *
+ * @param string $hook   'view'
+ * @param string $type   'all'
+ * @param string $result current return value
+ * @param mixed  $params supplied params
+ *
+ * @return void|string
  */
 function developers_wrap_views($hook, $type, $result, $params) {
 	if (elgg_get_viewtype() != "default") {
 		return;
 	}
+	
+	if (stristr(current_page_url(), elgg_normalize_url('cache/'))) {
+		return;
+	}
 
-	$excluded_bases = array('resources', 'input', 'output', 'embed', 'icon', 'json', 'xml');
+	$excluded_bases = ['resources', 'input', 'output', 'embed', 'icon', 'json', 'xml'];
 
-	$excluded_views = array(
+	$excluded_views = [
 		'page/default',
 		'page/admin',
 		'page/elements/head',
-	);
+	];
 
 	$view = $params['view'];
 
-	$view_hierarchy = explode('/',$view);
+	$view_hierarchy = explode('/', $view);
 	if (in_array($view_hierarchy[0], $excluded_bases)) {
 		return;
 	}
@@ -201,6 +311,11 @@ function developers_wrap_views($hook, $type, $result, $params) {
 
 /**
  * Log the events and plugin hooks
+ *
+ * @param string $name the name of the event/hook
+ * @param string $type the type of the event/hook
+ *
+ * @return void
  */
 function developers_log_events($name, $type) {
 
@@ -236,37 +351,15 @@ function developers_log_events($name, $type) {
 		$function = $stack[$index]['file'];
 	}
 
-	$msg = elgg_echo('developers:event_log_msg', array(
+	$msg = elgg_echo('developers:event_log_msg', [
 		$event_type,
 		$name,
 		$type,
 		$function,
-	));
+	]);
 	elgg_dump($msg, false);
 
 	unset($stack);
-}
-
-/**
- * Serve the theme sandbox pages
- *
- * @param array $page
- * @return bool
- */
-function developers_theme_sandbox_controller($page) {
-	if (!isset($page[0])) {
-		forward('theme_sandbox/intro');
-	}
-
-	echo elgg_view_resource('theme_sandbox', [
-		'page' => $page[0],
-	]);
-	return true;
-}
-
-function developers_ajax_demo_controller() {
-	echo elgg_view_resource('developers/ajax_demo');
-	return true;
 }
 
 /**
@@ -275,15 +368,17 @@ function developers_ajax_demo_controller() {
  * @return array
  */
 function developers_get_inspect_options() {
-	$options = array(
+	$options = [
 		'Actions' => elgg_echo('developers:inspect:actions'),
 		'Events' => elgg_echo('developers:inspect:events'),
 		'Menus' => elgg_echo('developers:inspect:menus'),
 		'Plugin Hooks' => elgg_echo('developers:inspect:pluginhooks'),
+		'Routes' => elgg_echo('developers:inspect:routes'),
+		'Services' => elgg_echo('developers:inspect:services'),
 		'Simple Cache' => elgg_echo('developers:inspect:simplecache'),
 		'Views' => elgg_echo('developers:inspect:views'),
 		'Widgets' => elgg_echo('developers:inspect:widgets'),
-	);
+	];
 	
 	if (elgg_is_active_plugin('web_services')) {
 		$options['Web Services'] = elgg_echo('developers:inspect:webservices');
@@ -293,3 +388,10 @@ function developers_get_inspect_options() {
 	
 	return $options;
 }
+
+return function() {
+	// we want to run this as soon as possible - other plugins should not need to do this
+	developers_process_settings();
+
+	elgg_register_event_handler('init', 'system', 'developers_init');
+};

@@ -1,22 +1,20 @@
 <?php
 
-if (elgg_is_logged_in()) {
-	forward('activity');
+$user = elgg_get_logged_in_user_entity();
+
+if ($user) {
+	$title = elgg_echo('welcome:user', [$user->getDisplayName()]);
+	$sidebar = null;
+} else {
+	$title = elgg_echo('welcome');
+	$sidebar = elgg_view('core/account/login_box');
 }
 
-$title = elgg_echo('content:latest');
-$content = elgg_list_river();
-if (!$content) {
-	$content = elgg_echo('river:none');
-}
-
-$login_box = elgg_view('core/account/login_box');
-
-$params = array(
+$params = [
 		'title' => $title,
-		'content' => $content,
-		'sidebar' => $login_box
-);
+		'content' => elgg_echo('index:content'),
+		'sidebar' => $sidebar,
+];
 $body = elgg_view_layout('one_sidebar', $params);
 
 echo elgg_view_page(null, $body);

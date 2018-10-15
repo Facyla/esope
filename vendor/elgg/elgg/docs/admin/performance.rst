@@ -84,13 +84,13 @@ This cache is automatically flushed when a plugin is enabled, disabled or reorde
 or when upgrade.php is executed.
 
 For best performance, you can also create a symlink from ``/cache/`` in your www
-root dir to the ``/views_simplecache/`` directory in the data directory you
-configured when you installed Elgg:
+root dir to the ``assetroot`` directory specified in your config (by default it's located under
+``/path/to/dataroot/caches/views_simplecache/``:
 
-.. code:: shell
+.. code-block:: sh
 
     cd /path/to/wwwroot/
-    ln -s /path/to/dataroot/views_simplecache/ cache
+    ln -s /path/to/dataroot/caches/views_simplecache/ cache
 
 If your webserver supports following symlinks, this will serve files straight off
 disk without booting up PHP each time.
@@ -100,7 +100,7 @@ by default only if the owner of the symlink source and target match. If the cach
 fails to work on your server, you can change the owner of the cache symlink itself (and
 not the ``/views_simplecache/`` directory) with
 
-.. code:: shell
+.. code-block:: sh
 
     cd /path/to/wwwroot/
     chown -h wwwrun:www cache
@@ -129,15 +129,15 @@ The system cache can be disabled via the administration menu, and it is
 recommended that you do this on your development platform if you are
 writing Elgg plugins.
 
-Boot cache (experimental)
--------------------------
+Boot cache
+----------
 
 Elgg has the ability to cache numerous resources created and fetched during
-the boot process. To enable this cache you must set a TTL in your ``settings.php``
-file: ``$CONFIG->boot_cache_ttl = 10;``
+the boot process. To configure how long this cache is valid you must set a TTL in your ``settings.php``
+file: ``$CONFIG->boot_cache_ttl = 3600;``
 
-A small TTL is recommended because it brings all the benefits of caching under load
-while reducing the harm if Elgg's cache invalidation strategy should miss something.
+Look at the `Stash <http://www.stashphp.com/index.html>`_ documentation for more info about the TTL. 
+
 
 Database query cache
 --------------------
@@ -169,23 +169,26 @@ If the static assets aren't being cached:
 
 __ https://addons.mozilla.org/en-us/firefox/addon/yslow/
 
-Memcache
---------
+Memcached
+---------
 
-Memcache is a generic caching technology developed by Brad Fitzpatrick for LiveJournal.
+Libmemcached was created by Brian Aker and was designed from day one to give the best performance available to users of Memcached. 
 
-.. warning:: SUPPORT FOR MEMCACHE IS EXPERIMENTAL AND MAY BE CHANGED.
+.. seealso::
+
+	http://libmemcached.org/About.html and https://secure.php.net/manual/en/book.memcached.php
 
 Installation requirements:
 
-- php5-memcache
+- php-memcached
+- libmemcached
 - memcached
 
 Configuration:
 
 Uncomment and populate the following sections in ``settings.php``
 
-.. code:: php
+.. code-block:: php
 
     $CONFIG->memcache = true;
     
@@ -197,7 +200,7 @@ Uncomment and populate the following sections in ``settings.php``
 Optionaly if you run multiple Elgg installations but use ony one Memcache server, you may want 
 to add a namespace prefix. In order to do this, uncomment the following line
 
-.. code:: php
+.. code-block:: php
 
 	$CONFIG->memcache_namespace_prefix = '';
 

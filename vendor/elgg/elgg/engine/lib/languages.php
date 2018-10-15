@@ -18,8 +18,8 @@
  * @return string Either the translated string, the English string,
  * or the original language string.
  */
-function elgg_echo($message_key, $args = array(), $language = "") {
-	return _elgg_services()->translator->translate($message_key, $args, $language);
+function elgg_echo($message_key, array $args = [], $language = "") {
+	return elgg()->echo($message_key, $args, $language);
 }
 
 /**
@@ -36,7 +36,7 @@ function elgg_echo($message_key, $args = array(), $language = "") {
  * @return bool Depending on success
  */
 function add_translation($country_code, $language_array) {
-	return _elgg_services()->translator->addTranslation($country_code, $language_array);
+	return elgg()->translator->addTranslation($country_code, $language_array);
 }
 
 /**
@@ -45,7 +45,7 @@ function add_translation($country_code, $language_array) {
  * @return string The language code for the site/user or "en" if not set
  */
 function get_current_language() {
-	return _elgg_services()->translator->getCurrentLanguage();
+	return elgg()->translator->getCurrentLanguage();
 }
 
 /**
@@ -54,44 +54,19 @@ function get_current_language() {
  * @return string The language code (eg "en") or false if not set
  */
 function get_language() {
-	return _elgg_services()->translator->detectLanguage();
-}
-
-/**
- * When given a full path, finds translation files and loads them
- *
- * @param string $path     Full path
- * @param bool   $load_all If true all languages are loaded, if
- *                         false only the current language + en are loaded
- * @param string $language Language code if other than current + en
- *
- * @return bool success
- */
-function register_translations($path, $load_all = false, $language = null) {
-	return _elgg_services()->translator->registerTranslations($path, $load_all, $language);
-}
-
-/**
- * Reload all translations from all registered paths.
- *
- * This is only called by functions which need to know all possible translations.
- *
- * @todo Better on demand loading based on language_paths array
- *
- * @return void
- */
-function reload_all_translations() {
-	return _elgg_services()->translator->reloadAllTranslations();
+	return elgg()->translator->getCurrentLanguage();
 }
 
 /**
  * Return an array of installed translations as an associative
  * array "two letter code" => "native language name".
  *
+ * @param boolean $calculate_completeness Set to true if you want a completeness postfix added to the language text
+ *
  * @return array
  */
-function get_installed_translations() {
-	return _elgg_services()->translator->getInstalledTranslations();
+function get_installed_translations($calculate_completeness = false) {
+	return elgg()->translator->getInstalledTranslations($calculate_completeness);
 }
 
 /**
@@ -102,19 +77,7 @@ function get_installed_translations() {
  * @return int
  */
 function get_language_completeness($language) {
-	return _elgg_services()->translator->getLanguageCompleteness($language);
-}
-
-/**
- * Return the translation keys missing from a given language,
- * or those that are identical to the english version.
- *
- * @param string $language The language
- *
- * @return mixed
- */
-function get_missing_language_keys($language) {
-	return _elgg_services()->translator->getMissingLanguageKeys($language);
+	return elgg()->translator->getLanguageCompleteness($language);
 }
 
 /**
@@ -131,7 +94,15 @@ function get_missing_language_keys($language) {
  * @since 1.11
  */
 function elgg_language_key_exists($key, $language = 'en') {
-	return _elgg_services()->translator->languageKeyExists($key, $language);
+	return elgg()->translator->languageKeyExists($key, $language);
 }
 
-return function(\Elgg\EventsService $events) {};
+/**
+ * Returns an array of available languages
+ *
+ * @return array
+ * @since 3.0
+ */
+function elgg_get_available_languages() {
+	return elgg()->translator->getAvailableLanguages();
+}

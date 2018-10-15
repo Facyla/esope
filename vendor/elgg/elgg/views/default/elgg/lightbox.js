@@ -1,11 +1,29 @@
 /**
  * Lightbox module
- * We use a named module and inline it in elgg.js. This allows us to deprecate the old
- * elgg.ui.lightbox library.
- * 
+ *
+ * Elgg is distributed with the Colorbox jQuery library. Please go to
+ * http://www.jacklmoore.com/colorbox for more information on the options of this lightbox.
+ *
+ * Use .elgg-lightbox or .elgg-lightbox-photo class on your anchor element to
+ * bind it to a lightbox.
+ *
+ * You may apply colorbox options to an individual .elgg-lightbox element
+ * by setting the attribute data-colorbox-opts to a JSON settings object.
+ * You can use "getOptions", "ui.lightbox" plugin hook to filter options before
+ * they are passed to $.colorbox().
+ *
+ * To support a hidden div as the source, add "inline: true" as a
+ * data-colorbox-opts option. For example, using the output/url view, add:
+ *    'data-colorbox-opts' => '{"inline": true}',
+ *
+ * Overriding with a different lightbox
+ * -------------------------------------
+ * In a plugin, override this view and override the registration for the
+ * lightbox JavaScript and CSS (@see elgg_views_boot()).
+ *
  * @module elgg/lightbox
  */
-define('elgg/lightbox', function (require) {
+define(function (require) {
 
 	var elgg = require('elgg');
 	var $ = require('jquery');
@@ -25,27 +43,17 @@ define('elgg/lightbox', function (require) {
 				opts = {};
 			}
 
-			// Note: keep these in sync with /views/default/lightbox.js.php
-			var settings = {
-				current: elgg.echo('js:lightbox:current', ['{current}', '{total}']),
-				previous: elgg.echo('previous'),
-				next: elgg.echo('next'),
-				close: elgg.echo('close'),
-				xhrError: elgg.echo('error:default'),
-				imgError: elgg.echo('error:default'),
-				opacity: 0.5,
-				maxWidth: '100%',
+			// data set server side using elgg.data,site hook
+			var defaults = elgg.data.lightbox;
+
+			if (!defaults.reposition) {
 				// don't move colorbox on small viewports https://github.com/Elgg/Elgg/issues/5312
-				reposition: $(window).height() > 600
-			};
-			
+				defaults.reposition = $(window).height() > 600;
+			}
+
 			elgg.provide('elgg.ui.lightbox');
 			
-			if ($.isPlainObject(elgg.ui.lightbox.deprecated_settings)) {
-				$.extend(settings, elgg.ui.lightbox.deprecated_settings, opts);
-			} else {
-				$.extend(settings, opts);
-			}
+			var settings = $.extend({}, defaults, opts);
 
 			return elgg.trigger_hook('getOptions', 'ui.lightbox', null, settings);
 		},
@@ -72,6 +80,12 @@ define('elgg/lightbox', function (require) {
 			$(document)
 				.off('click.lightbox', selector)
 				.on('click.lightbox', selector, function (e) {
+					// trigger a click event on document to close open menus / dropdowns like the entity menu #11748
+					$(document).click();
+					
+					// remove system messages when opening a lightbox
+					$('.elgg-system-messages .elgg-message').remove();
+					
 					e.preventDefault();
 					var $this = $(this),
 							href = $this.prop('href') || $this.prop('src'),
@@ -93,7 +107,36 @@ define('elgg/lightbox', function (require) {
 						currentOpts.href = elgg.getSelectorFromUrlFragment(currentOpts.href);
 					}
 
+					if (currentOpts.photo || currentOpts.inline || currentOpts.iframe || currentOpts.html) {
+						lightbox.open(currentOpts);
+						return;
+					}
+						
+					href = currentOpts.href;
+					currentOpts.href = false;
+					var data = currentOpts.data;
+					currentOpts.data = undefined;
+					
+					// open lightbox without a href so we get a loader
 					lightbox.open(currentOpts);
+					
+					require(['elgg/Ajax'], function(Ajax) {
+						var ajax = new Ajax(false);
+						ajax.path(href, {data: data}).done(function(output) {
+							currentOpts.html = output;
+							lightbox.open(currentOpts);
+							
+							// clear data so next fetch will refresh contents
+							currentOpts.html = undefined;
+						});
+					});
+				});
+
+			$(window)
+				.off('resize.lightbox')
+				.on('resize.lightbox', function() {
+					elgg.data.lightbox.reposition = $(window).height() > 600;
+					lightbox.resize();
 				});
 		},
 

@@ -1,16 +1,15 @@
 {
 	"type": "project",
 	"name": "elgg/starter-project",
-	"description": "This is a quickstart skeleton for building a site based on Elgg 2.x.",
+	"description": "This is a quickstart skeleton for building a site based on Elgg 3.x.",
 	"license": "MIT",
 	"prefer-stable": true,
 	"minimum-stability": "dev",
 	"require": {
-		"elgg/elgg": "2.3.6"
+		"elgg/elgg": "3.0.0-rc.1"
 	},
 	"require-dev": {
-		"srokap/code_review": "^1.0.5",
-		"phpunit/phpunit": "^4.7"
+		"phpunit/phpunit": "~6.4"
 	},
 	"scripts": {
 		"post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
@@ -20,7 +19,18 @@
 	"config": {
 		"process-timeout": 0,
 		"platform": {
-			"php": "5.6"
-		}
-	}
+			"php": "7.0"
+		},
+        "fxp-asset": {
+            "enabled": false
+        },
+        "optimize-autoloader": true,
+	    "apcu-autoloader": true
+	},
+	"repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }

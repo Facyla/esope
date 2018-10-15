@@ -5,10 +5,11 @@
  * @package Blog
  */
 
-//If editing a post, show the previous revisions and drafts.
-$blog = elgg_extract('entity', $vars, FALSE);
+use Elgg\Database\Clauses\OrderByClause;
 
-if (!elgg_instanceof($blog, 'object', 'blog')) {
+//If editing a post, show the previous revisions and drafts.
+$blog = elgg_extract('entity', $vars, false);
+if (!$blog instanceof ElggBlog) {
 	return;
 }
 
@@ -17,7 +18,7 @@ if (!$blog->canEdit()) {
 }
 
 $owner = $blog->getOwnerEntity();
-$revisions = array();
+$revisions = [];
 
 $auto_save_annotations = $blog->getAnnotations([
 	'annotation_name' => 'blog_auto_save',
@@ -29,17 +30,23 @@ if ($auto_save_annotations) {
 
 $saved_revisions = $blog->getAnnotations([
 	'annotation_name' => 'blog_revision',
-	'reverse_order_by' => true,
-	'limit' => false
+	'order_by' => [
+		new OrderByClause('n_table.time_created', 'DESC'),
+		new OrderByClause('n_table.id', 'DESC'),
+	],
+	'limit' => false,
 ]);
 
 $revisions = array_merge($revisions, $saved_revisions);
+/* @var ElggAnnotation[] $revisions */
 
 if (empty($revisions)) {
 	return;
 }
 
-$load_base_url = "blog/edit/{$blog->getGUID()}";
+$load_base_url = elgg_generate_url('edit:object:blog', [
+	'guid' => $blog->guid,
+]);
 
 // show the "published revision"
 $published_item = '';
@@ -65,11 +72,11 @@ foreach ($revisions as $revision) {
 		$revision_lang = elgg_echo('blog:revision') . " $n";
 	}
 	
-	$load = elgg_view('output/url', array(
+	$load = elgg_view('output/url', [
 		'href' => "$load_base_url/$revision->id",
 		'text' => $revision_lang,
 		'is_trusted' => true,
-	));
+	]);
 
 	$revisions_list .= elgg_format_element('li', ['class' => 'auto-saved'], "$load: $time");
 	

@@ -5,27 +5,19 @@
  * @package ElggPages
  */
 
-$title = elgg_echo('pages:all');
+$title = elgg_echo('collection:object:page:all');
 
-elgg_pop_breadcrumb();
-elgg_push_breadcrumb(elgg_echo('pages'));
+elgg_push_collection_breadcrumbs('object', 'page');
 
-elgg_register_title_button('pages', 'add', 'object', 'page_top');
+elgg_register_title_button('pages', 'add', 'object', 'page');
 
-$content = elgg_list_entities(array(
-	'type' => 'object',
-	'subtype' => 'page_top',
-	'full_view' => false,
-	'no_results' => elgg_echo('pages:none'),
-	'preload_owners' => true,
-	'preload_containers' => true,
-));
+$content = elgg_view('pages/listing/all', $vars);
 
-$body = elgg_view_layout('content', array(
-	'filter_context' => 'all',
+$body = elgg_view_layout('default', [
+	'filter_value' => 'all',
 	'content' => $content,
 	'title' => $title,
-	'sidebar' => elgg_view('pages/sidebar'),
-));
+	'sidebar' => elgg_view('pages/sidebar', $vars),
+]);
 
 echo elgg_view_page($title, $body);

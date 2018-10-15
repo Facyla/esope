@@ -6,6 +6,7 @@ use Elgg\Database\EntityTable;
 use Elgg\Database\EntityTable\UserFetchFailureException;
 use ElggAnnotation;
 use ElggEntity;
+use ElggFile;
 use ElggRiverItem;
 use ElggMetadata;
 use ElggSession;
@@ -13,9 +14,9 @@ use InvalidArgumentException;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- * 
+ *
  * Use the elgg_* versions instead.
- * 
+ *
  * @access private
  * @since 2.2
  */
@@ -50,6 +51,35 @@ class UserCapabilities {
 	}
 
 	/**
+	 * Decides if the access system should be ignored for a user.
+	 *
+	 * Returns true (meaning ignore access) if either of these 2 conditions are true:
+	 *   1) an admin user guid is passed to this function.
+	 *   2) {@link elgg_get_ignore_access()} returns true.
+	 *
+	 * @see elgg_set_ignore_access()
+	 *
+	 * @param int $user_guid The user to check against.
+	 *
+	 * @return bool
+	 */
+	public function canBypassPermissionsCheck($user_guid = 0) {
+		if ($this->session->getIgnoreAccess()) {
+			// Checking ignored access first to avoid infinite loops,
+			// when trying to fetch a user by guid
+			return true;
+		}
+
+		try {
+			$user = $this->entities->getUserForPermissionsCheck($user_guid);
+		} catch (UserFetchFailureException $e) {
+			return false;
+		}
+
+		return $user && $user->isAdmin();
+	}
+
+	/**
 	 * Can a user edit this entity?
 	 *
 	 * @tip Can be overridden by registering for the permissions_check plugin hook.
@@ -61,6 +91,10 @@ class UserCapabilities {
 	 * @see elgg_set_ignore_access()
 	 */
 	public function canEdit(ElggEntity $entity, $user_guid = 0) {
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -98,7 +132,7 @@ class UserCapabilities {
 			return ($container && $container->canEdit($user->guid));
 		});
 
-		$params = array('entity' => $entity, 'user' => $user);
+		$params = ['entity' => $entity, 'user' => $user];
 		return $this->hooks->trigger('permissions_check', $entity->getType(), $params, $default);
 	}
 
@@ -115,6 +149,10 @@ class UserCapabilities {
 	 * @see elgg_set_ignore_access()
 	 */
 	public function canDelete(ElggEntity $entity, $user_guid = 0) {
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -135,8 +173,6 @@ class UserCapabilities {
 	 *
 	 * @tip Can be overridden by registering for the "permissions_check:delete", "river" plugin hook.
 	 *
-	 * @note This is not called by elgg_delete_river().
-	 *
 	 * @param ElggRiverItem $item      River item
 	 * @param int           $user_guid The user GUID, optionally (default: logged in user)
 	 *
@@ -145,19 +181,21 @@ class UserCapabilities {
 	 * @see elgg_set_ignore_access()
 	 */
 	public function canDeleteRiverItem(ElggRiverItem $item, $user_guid = 0) {
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
 			return false;
 		}
 
-		$return = ($user && $user->isAdmin());
-
 		$params = [
 			'item' => $item,
 			'user' => $user,
 		];
-		return $this->hooks->trigger('permissions_check:delete', 'river', $params, $return);
+		return $this->hooks->trigger('permissions_check:delete', 'river', $params, false);
 	}
 
 	/**
@@ -166,8 +204,13 @@ class UserCapabilities {
 	 * If no specific metadata is passed, it returns whether the user can
 	 * edit any metadata on the entity.
 	 *
-	 * @tip Can be overridden by by registering for the permissions_check:metadata
-	 * plugin hook.
+	 * Since 3.0, metadata is not owned and can in priciple be updated by any user,
+	 * who has access to the entity. You can still use the hook to prevent the metadata from being
+	 * written to the database, however it may propagate in ElggEntity properties.
+	 * Use ElggEntity::canEdit() before setting metadata, if you want to ensure that only
+	 * owners/admins can update metadata.
+	 *
+	 * @tip Can be overridden by by registering for the permissions_check:metadata plugin hook.
 	 *
 	 * @param ElggEntity   $entity    Object entity
 	 * @param int          $user_guid The user GUID, optionally (default: logged in user)
@@ -175,11 +218,16 @@ class UserCapabilities {
 	 *
 	 * @return bool
 	 * @see elgg_set_ignore_access()
+	 * @deprecated 3.0
 	 */
 	public function canEditMetadata(ElggEntity $entity, $user_guid = 0, ElggMetadata $metadata = null) {
 		if (!$entity->guid) {
 			// @todo cannot edit metadata on unsaved entity?
 			return false;
+		}
+
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
 		}
 
 		try {
@@ -188,24 +236,16 @@ class UserCapabilities {
 			return false;
 		}
 
-		if ($user) {
-			$user_guid = $user->guid;
-		}
-
-		// if metadata is not owned or owned by the user, then can edit
-		if ($metadata && ($metadata->owner_guid == 0 || $metadata->owner_guid == $user_guid)) {
-			$return = true;
-		} else {
-			$return = $entity->canEdit($user_guid);
-		}
-
 		// metadata and user may be null
 		$params = [
 			'entity' => $entity,
 			'user' => $user,
 			'metadata' => $metadata
 		];
-		return $this->hooks->trigger('permissions_check:metadata', $entity->getType(), $params, $return);
+
+		$default = $metadata ? true : $entity->canEdit($user->guid);
+
+		return $this->hooks->trigger('permissions_check:metadata', $entity->getType(), $params, $default);
 	}
 
 	/**
@@ -222,6 +262,11 @@ class UserCapabilities {
 		if (!$annotation) {
 			return false;
 		}
+
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -292,7 +337,11 @@ class UserCapabilities {
 		if ($logic_check === false) {
 			return false;
 		}
-		
+
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		$return = false;
 		if ($entity) {
 			// If the user can edit the container, they can also write to it
@@ -319,6 +368,10 @@ class UserCapabilities {
 	 * @return bool
 	 */
 	public function canComment(ElggEntity $entity, $user_guid = 0, $default = null) {
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -357,6 +410,10 @@ class UserCapabilities {
 			throw new InvalidArgumentException(__METHOD__ . ' expects \$annotation_name to be a string');
 		}
 
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -376,6 +433,36 @@ class UserCapabilities {
 		}
 
 		return $this->hooks->trigger('permissions_check:annotate', $entity->getType(), $params, $return);
+	}
+
+	/**
+	 * Can a user download a file?
+	 *
+	 * @tip Can be overridden by registering for the permissions_check:download,file plugin hook.
+	 *
+	 * @param ElggFile $entity    File entity
+	 * @param int      $user_guid User guid (default is logged in user)
+	 * @param bool     $default   Default permission
+	 *
+	 * @return bool
+	 */
+	public function canDownload(ElggFile $entity, $user_guid = 0, $default = true) {
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			return true;
+		}
+
+		try {
+			$user = $this->entities->getUserForPermissionsCheck($user_guid);
+		} catch (UserFetchFailureException $e) {
+			return false;
+		}
+
+		$params = [
+			'entity' => $entity,
+			'user' => $user
+		];
+
+		return $this->hooks->trigger('permissions_check:download', 'file', $params, $default);
 	}
 
 }

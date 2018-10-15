@@ -1,24 +1,24 @@
 {
     "name": "elgg/elgg",
-    "version": "2.3.6",
+    "version": "3.0.0-rc.1",
     "description": "Elgg is an award-winning social networking engine, delivering the building blocks that enable businesses, schools, universities and associations to create their own fully-featured social networks and applications.",
     "license": "GPL-2.0-only",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "type": "project",
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.0",
         "ext-pdo": "*",
         "ext-gd": "*",
         "ext-json": "*",
         "ext-xml": "*",
+        "ckeditor/ckeditor": "dev-full/4.7.x",
         "doctrine/dbal": "~2.5",
         "symfony/http-foundation": "~2.6",
         "mrclay/minify": "~2.0",
         "tedivm/stash": "0.14.*",
         "roave/security-advisories": "dev-master",
-        "elgg/login_as": "~1.9",
-        "elgg/data_views": "~1.0",
+        "elgg/login_as": "~2.0.0",
         "zendframework/zend-mail": "~2.4",
         "league/flysystem": "~1.0",
         "bower-asset/jquery": "^2.1.4",
@@ -27,30 +27,65 @@
         "bower-asset/requirejs": "^2.1.18",
         "bower-asset/jquery-form": "^3.51",
         "bower-asset/jquery-colorbox": "^1.5.14",
-        "FortAwesome/Font-Awesome": "^4.3",
+        "bower-asset/sprintf": "~1.0.3",
+        "bower-asset/jquery.imgareaselect": "~0.9.10",
+        "css-crush/css-crush": "^2.4.0",
         "michelf/php-markdown": "^1.5.0",
         "misd/linkify": "~1.1.2",
         "league/flysystem-memory": "^1.0",
-        "imagine/imagine": "^0.6.3"
+        "vanilla/htmlawed": "~2.2.0",
+        "imagine/imagine": "^0.7.1",
+        "bower-asset/jquery-treeview": "^1.4",
+        "robmorgan/phinx": "^0.8.1",
+        "symfony/console": "~3.3",
+        "symfony/var-dumper": "~3.3",
+        "fzaninotto/faker": "^1.6",
+        "peppeocchi/php-cron-scheduler": "2.*",
+        "bower-asset/normalize-css": "dev-master",
+        "symfony/routing": "^3.3",
+        "php-di/php-di": "^5.4",
+        "doctrine/cache": "^1.6",
+        "npm-asset/formdata-polyfill": "^3.0",
+        "npm-asset/weakmap-polyfill": "^2.0",
+        "bower-asset/fontawesome": "~5.0",
+        "monolog/monolog": "^1.23",
+        "symfony/polyfill-php72": "^1.7",
+        "symfony/polyfill-php71": "^1.7",
+        "react/promise": "^2.5"
+    },
+    "config": {
+        "process-timeout": 0,
+        "platform": {
+            "php": "7.0"
+        },
+        "fxp-asset": {
+            "enabled": false
+        }
     },
     "scripts": {
-        "pre-install-cmd": "php .scripts/check_global_requirements.php",
         "lint": [
-            "phpcs --standard=vendor/elgg/sniffs/elgg.xml --warning-severity=0 --tab-width=4 --ignore=*/tests/*,*/upgrades/*,*/deprecated* engine/classes engine/lib",
+            "phpcs --standard=vendor/elgg/sniffs/elgg.xml -sp --ignore=*/mod/login_as/*,*/mod/data_views/* engine/classes engine/lib actions mod views",
             "composer validate"
+        ],
+        "lint-fixer": [
+            "phpcbf --standard=vendor/elgg/sniffs/elgg.xml *.php actions engine install mod views"
         ],
         "test": "phpunit",
         "travis:install": [
             "composer self-update",
-            "composer global require \"fxp/composer-asset-plugin:~1.1.4\" --prefer-dist",
             "composer install --prefer-dist"
         ],
         "travis:install-with-mysql": [
             "composer travis:install",
             "mysql -e 'create database elgg;'",
             "echo \"USE mysql; UPDATE user SET password=PASSWORD('password') WHERE user='root'; FLUSH PRIVILEGES;\" | mysql -u root",
-            "mkdir \"${HOME}/elgg_data/\"",
-            "php -f ./install/cli/travis_installer.php"
+            "php ./elgg-cli install --config ./install/cli/testing_app.php --verbose"
+        ],
+        "docs:build": [
+            "sphinx-build -b html -nW docs docs/_build/html/en",
+            "sphinx-build -b latex -nW docs docs/_build/latex/en",
+            "sphinx-intl build --locale-dir=docs/locale/",
+            "sphinx-build -b html -D language=es -n docs docs/_build/html/es"
         ]
     },
     "suggest": {
@@ -63,15 +98,28 @@
     },
     "autoload-dev": {
         "psr-0": {
-            "": "engine/tests/phpunit/"
+            "": [
+                "engine/tests/classes/",
+                "engine/tests/phpunit/unit/",
+                "engine/tests/phpunit/integration/",
+                "engine/tests/simpletest/"
+            ]
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.1",
-        "squizlabs/php_codesniffer": "~1.5",
+        "elgg/sniffs": "3.x-dev",
+        "squizlabs/php_codesniffer": "^2.8.1",
         "simpletest/simpletest": "~1.1",
         "phpdocumentor/reflection-docblock": "~2.0",
-        "elgg/sniffs": "2.x-dev",
-        "fzaninotto/faker": "^1.6"
-    }
+        "phpunit/phpunit": "~6.4"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "bin": [
+        "elgg-cli"
+    ]
 }

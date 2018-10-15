@@ -4,21 +4,17 @@ namespace Elgg;
 use Elgg\SystemMessages\RegisterSet;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * System messages service
  *
- * Use the elgg_* versions instead.
+ * Use elgg()->system_messages
  *
- * @access private
- *
- * @package    Elgg.Core
- * @subpackage UX
  * @since      1.11.0
  */
 class SystemMessagesService {
 
 	const SUCCESS = 'success';
 	const ERROR = 'error';
-	const SESSION_KEY = 'msg';
+	const SESSION_KEY = '_elgg_msgs';
 
 	/**
 	 * @var \ElggSession
@@ -29,6 +25,8 @@ class SystemMessagesService {
 	 * Constructor
 	 *
 	 * @param \ElggSession $session The Elgg session
+	 * @access private
+	 * @internal
 	 */
 	public function __construct(\ElggSession $session) {
 		$this->session = $session;
@@ -41,6 +39,8 @@ class SystemMessagesService {
 	 * @param string $register_name The register. Empty string for all.
 	 *
 	 * @return array The array of registers dumped
+	 * @access private
+	 * @internal
 	 */
 	public function dumpRegister($register_name = '') {
 		$set = $this->loadRegisters();
@@ -88,15 +88,13 @@ class SystemMessagesService {
 	/**
 	 * Display a system message on next page load.
 	 *
-	 * @see system_messages()
-	 *
 	 * @param string|string[] $message Message or messages to add
 	 *
 	 * @return void
 	 */
 	public function addSuccessMessage($message) {
 		$set = $this->loadRegisters();
-		foreach ((array)$message as $str) {
+		foreach ((array) $message as $str) {
 			$set->success[] = $str;
 		}
 		$this->saveRegisters($set);
@@ -105,15 +103,13 @@ class SystemMessagesService {
 	/**
 	 * Display an error on next page load.
 	 *
-	 * @see system_messages()
-	 *
 	 * @param string|string[] $error Error or errors to add
 	 *
 	 * @return void
 	 */
 	public function addErrorMessage($error) {
 		$set = $this->loadRegisters();
-		foreach ((array)$error as $str) {
+		foreach ((array) $error as $str) {
 			$set->error[] = $str;
 		}
 		$this->saveRegisters($set);
@@ -125,7 +121,7 @@ class SystemMessagesService {
 	 * @return RegisterSet
 	 */
 	public function loadRegisters() {
-		$registers = $this->session->get(self::SESSION_KEY, array());
+		$registers = $this->session->get(self::SESSION_KEY, []);
 		$set = new RegisterSet();
 		foreach ($registers as $key => $register) {
 			$set->{$key} = $register;

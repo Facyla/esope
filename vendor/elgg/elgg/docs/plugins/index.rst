@@ -16,29 +16,28 @@ Elgg comes with a set of plugins. These provide the basic functionality for your
    pages
    profile
    thewire
+   uservalidationbyemail
 
 The following plugins are also bundled with Elgg, but are not (yet) documented
 
-- aalborg_theme
+- activity
 - bookmarks
 - ckeditor
 - custom_index
 - developers
+- discussions
 - embed
 - externalpages
+- friends
+- friends_collections
 - garbagecollector
-- htmlawed
 - invitefriends
-- legacy_urls
 - likes
-- logbrowser
-- logrotate
 - members
 - notifications
 - reportedcontent
 - search
 - site_notifications
+- system_log
 - tagcloud
-- twitter_api
-- uservalidationbyemail
 - web_services

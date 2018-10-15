@@ -1,5 +1,6 @@
 <?php
 namespace Elgg;
+use Elgg\Project\Paths;
 
 /**
  * Analyzes duration of functions, queries, and processes
@@ -40,12 +41,12 @@ class Profiler {
 	/**
 	 * Turn the tree of times into a sorted list
 	 *
-	 * @param array  &$list  Output list of times to populate
+	 * @param array  $list   Output list of times to populate
 	 * @param array  $tree   Result of buildTree()
 	 * @param string $prefix Prefix of period string. Leave empty.
 	 * @return void
 	 */
-	public function flattenTree(array &$list = [], array $tree, $prefix = '') {
+	public function flattenTree(array &$list = [], array $tree = [], $prefix = '') {
 		$is_root = empty($list);
 
 		if (isset($tree['periods'])) {
@@ -96,7 +97,7 @@ class Profiler {
 	 */
 	public static function handlePageOutput($hook, $type, $html, $params) {
 		$profiler = new self();
-		$min_percentage = elgg_get_config('profiling_minimum_percentage');
+		$min_percentage = _elgg_config()->profiling_minimum_percentage;
 		if ($min_percentage !== null) {
 			$profiler->minimum_percentage = $min_percentage;
 		}
@@ -109,7 +110,7 @@ class Profiler {
 		$list = [];
 		$profiler->flattenTree($list, $tree);
 
-		$root = elgg_get_config('path');
+		$root = Paths::project();
 		$list = array_map(function ($period) use ($root) {
 			$period['name'] = str_replace("Closure $root", "Closure ", $period['name']);
 			return "{$period['percentage']}% ({$period['duration']}) {$period['name']}";
@@ -216,8 +217,8 @@ class Profiler {
 	private function diffMicrotime($start, $end) {
 		list($start_usec, $start_sec) = explode(" ", $start);
 		list($end_usec, $end_sec) = explode(" ", $end);
-		$diff_sec = (int)$end_sec - (int)$start_sec;
-		$diff_usec = (float)$end_usec - (float)$start_usec;
-		return (float)$diff_sec + $diff_usec;
+		$diff_sec = (int) $end_sec - (int) $start_sec;
+		$diff_usec = (float) $end_usec - (float) $start_usec;
+		return (float) $diff_sec + $diff_usec;
 	}
 }

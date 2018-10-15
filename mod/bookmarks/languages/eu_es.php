@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
 
 	/**
 	 * Menu items and titles
@@ -75,4 +75,4 @@ Ikusi eta iruzkina idatzi laster-markan:
 	'bookmarks:save:invalid' => "Laster-markaren helbidea ez da egokia eta ezin da gorde.",
 	'bookmarks:delete:failed' => "Ezin da zure laster-marka ezabatu. Saiatu berriro mesedez.",
 	'bookmarks:unknown_bookmark' => 'Ezin da zehaztutako laster-marka aurkitu',
-);
+];

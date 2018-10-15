@@ -4,14 +4,16 @@ Upgrading Elgg
 Switch a live site to a new version of Elgg.
 
 If you've written custom plugins, you should also read the developer guides for
-:doc:`information on upgrading plugin code </guides/upgrading>` for the latest version of Elgg.
+:doc:`information on upgrading plugin code </appendix/upgrade-notes>` for the latest version of Elgg.
 
 Advice
 ======
 
 * **Back up your database** and code
 * Mind any version-specific comments below
-* Upgrade only one minor version at a time (1.6 => 1.7, then 1.7 => 1.8)
+* Version below 2.0 are advised to only upgrade one minor version at a time
+* You can upgrade from any minor version to any higher minor version in the same major (2.0 -> 2.1 or 2.0 -> 2.3)
+* You can only upgrade the latest minor version in the previous major version to any minor version in the next version (2.3 -> 3.0 or 2.3 -> 3.2, but not 2.2 -> 3.x or 2.3 -> 4.x).
 * Try out the new version on a test site before doing an upgrade
 * Report any problems in plugins to the plugin authors
 * If you are a plugin author you can `report any backwards-compatibility issues to GitHub <issues_>`_
@@ -20,6 +22,24 @@ Advice
 
 Basic instructions
 ==================
+
+Composer Upgrade
+----------------
+
+If you had your Elgg 2.3 project installed using composer, you can follow this sequence:
+
+.. code-block:: sh
+
+    composer self-update
+
+    cd ./path/to/project/root
+    composer require elgg/elgg:~3.0
+    composer update
+    vendor/bin/elgg-cli upgrade async -v
+
+
+Manual Upgrade
+--------------
 
 #. Log in as an admin to your site
 #. Disable caching in Advanced Settings
@@ -39,6 +59,89 @@ Basic instructions
    Any modifications should have been written within plugins, so that they are not lost on overwriting.
    If this is not the case, take care to maintain your modifications. 
 
+From 2.3 to 3.0
+===============
+
+Update ``settings.php``
+-----------------------
+
+On your working 2.3 installation:
+
+1. Open your ``settings.php`` file.
+2. In the browser, open the site's Advanced Settings page in the admin area
+3. Copy the **data directory** path into your settings file as ``$CONFIG->dataroot``.
+4. Copy the **site URL** into your settings file as ``$CONFIG->wwwroot``.
+
+.. warning:: Elgg 3.0 **will not operate** at all without ``$CONFIG->dataroot`` set in ``settings.php``.
+
+Update ``.htaccess``
+--------------------
+
+Find the line:
+
+.. code-block:: apache
+
+	RewriteRule ^(.*)$ index.php?__elgg_uri=$1 [QSA,L]
+
+And replace it with:
+
+.. code-block:: apache
+
+	RewriteRule ^(.*)$ index.php [QSA,L]
+
+Removed / changed language keys
+-------------------------------
+
+ * The language keys related to comment notifications have changed. Check the ``generic_comment:notification:owner:`` language keys
+
+New MySQL schema features are not applied
+-----------------------------------------
+
+New 3.0 installations require MySQL 5.5.3 and use the utf8mb4 character set and LONGTEXT content columns (notably allowing storing longer content and extended characters like emoji).
+
+Miscellaneous changes
+---------------------
+
+The settings "Allow visitors to register" and "Restrict pages to logged-in users" now appear on the Basic Settings admin page.
+
+Twitter API plugin
+------------------
+
+The ``twitter_api`` plugin no longer comes bundled with Elgg.
+
+Unit and Integration Testing
+----------------------------
+
+Elgg's PHPUnit bootstrap can now handle both unit and integration tests. Please note that **you shouldn't run tests on a production site**,
+as it may damage data integrity. To prevent data loss, you need to specify database settings via environment variables.
+You can do so via the phpunit.xml bootstrap.
+
+Plugins can now implement their own PHPUnit tests by extending ``\Elgg\UnitTestCase`` and ``\Elgg\IntegrationTestCase`` classes.
+``plugins`` test suite will automatically autoload PHPUnit tests from ``mod/<plugin_id>/tests/phpunit/unit`` and
+``mod/<plugin_id>/tests/phpunit/integration``.
+
+Prior to running integration tests, you need to enable the plugins that you wish to test alongside core API.
+
+``\Elgg\IntegrationTestCase`` uses ``\Elgg\Seeding`` trait, which can be used to conveniently build new entities and
+write them to the database.
+
+``\Elgg\UnitTestCase`` does not use the database, but provides a database mocking interface, which allows tests to
+define query specs with predefined returns.
+
+By default, both unit and integration tests will be run whenever ``phpunit`` is called. You can use ``--testsuite`` flag to only run a specific suite: ``phpunit --testsuite unit`` or ``phpunit --testsuite integration`` or ``phpunit --testsuite plugins``.
+
+For integration testing to run properly, plugins are advised to not put any logic into the root of ``start.php``, and instead
+return a Closure. This allows the testsuite to build a new Application instance without loosing plugin initialization logic.
+
+Plugins with simpletests will continue working as perviously. However, method signatures in the ``ElggCoreUnitTest`` abstract class
+have changed and you will need to update your tests accordingly. Namely, it's discouraged to use ``__construct`` and
+``__desctruct`` methods. ``setUp`` and ``tearDown`` have been marked as private and are used for consistent test
+boostrapping and asserting pre and post conditions, your test case should use ``up`` and ``down`` methods instead.
+
+Simpletests can no longer be executed from the admin interface of the developers plugin.
+Use Elgg cli command: ``elgg-cli simpletest``
+
+
 From 2.2 to 2.3
 ===============
 
@@ -55,14 +158,21 @@ Tests
 -----
 
  * PHPUnit bootstrap is deprecated by composer autoloader: Tests should no longer bootstrap themselves using ``/engine/tests/phpunit/bootstrap.php``. Instead, tests should extend ``\Elgg\TestCase``.
- * Some core files now sniff if	``PHPUNIT_ELGG_TESTING_APPLICATION`` constant is set to determine whether Elgg is being bootstrapped for PHPUnit tests. ``phpunit.xml`` configuration needs to updated to include this constant definition.
- * PHPUnit bootstrap no longer sets global ``$CONFIG``. Tests should use ``_elgg_services()->config`` instead.
+ * PHPUnit bootstrap no longer sets global ``$CONFIG``. Tests should use ``_elgg_config()`` instead.
  * Core and tests no longer use private global values in ``$_ELGG->view_path`` and ``$_ELGG->allowed_ajax_views``
 
 Schema
 ------
 
  * The database GUID columns need to be aligned. In the admin section an upgrade is available to handle this. Please make sure you have a backup available
+
+From 2.3 to 3.0
+===============
+
+Data removal
+------------
+
+Be aware the 3.0 upgrade process will remove any remaining "legacy" password hashes. This will affect users who have never logged in under an Elgg 1.10 or later system. These users will be politely asked to reset their password.
 
 From 1.x to 2.0
 ===============

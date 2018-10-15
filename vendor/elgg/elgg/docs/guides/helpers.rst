@@ -1,6 +1,10 @@
 Helper functions
 ================
 
+.. contents:: Contents
+   :local:
+   :depth: 1
+
 Input and output
 ----------------
 
@@ -44,8 +48,37 @@ Interface and annotations
 - ``elgg_view_image_block($icon, $info)`` Return the result in a formatted list
 - ``elgg_view_comments($entity)`` Returns any comments associated with the given entity
 - ``elgg_get_friendly_time($unix_timestamp)`` Returns a date formatted in a friendlier way - "18 minutes ago", "2 days ago", etc.
-- You can pass ``'use_hover' => false`` to the user icon view if you don't want the avatar drop down menu to appear e.g.
 
-.. code:: php
+Messages
+--------
 
-   elgg_view_entity_icon($user, 'small', array('use_hover' => false));
+- ``system_message($message)`` Registers a success message
+- ``register_error($message)`` Registers an error message
+- ``elgg_view_message($type, $message)`` Outputs a message
+
+E-mail address formatting
+-------------------------
+
+Elgg has a helper class to aid in getting formatted e-mail addresses: ``\Elgg\Email\Address``.
+
+.. code-block:: php
+
+	// the constructor takes two variables
+	// first is the email address, this is REQUIRED
+	// second is the name, this is optional
+	$address = new \Elgg\Email\Address('example@elgg.org', 'Example');
+	
+	// this will result in 'Example <example@elgg.org>'
+	echo $address->toString();
+	
+	// to change the name use:
+	$address->setName('New Example');
+	
+	// to change the e-mail address use:
+	$address->setEmail('example2@elgg.org');
+
+There are some helper functions available
+
+- ``\Elgg\Email\Address::fromString($string)`` Will return an ``\Elgg\Email\Address`` class with e-mail and name set,
+  provided a formatted string (eg. ``Example <example@elgg.org>``)
+- ``\Elgg\Email\Address::getFormattedEmailAddress($email, $name)`` Will return a formatted string provided an e-mail address and optionaly a name

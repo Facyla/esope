@@ -5,18 +5,46 @@
  * @package ElggGroups
  */
 
-$group = $vars['entity'];
-$owner = $group->getOwnerEntity();
-$forward_url = $group->getURL();
-$friends = elgg_get_logged_in_user_entity()->getFriends(array('limit' => 0));
-
-if ($friends) {
-	echo elgg_view('input/friendspicker', array('entities' => $friends, 'name' => 'user_guid', 'highlight' => 'all'));
-	echo '<div class="elgg-foot">';
-	echo elgg_view('input/hidden', array('name' => 'forward_url', 'value' => $forward_url));
-	echo elgg_view('input/hidden', array('name' => 'group_guid', 'value' => $group->guid));
-	echo elgg_view('input/submit', array('value' => elgg_echo('invite')));
-	echo '</div>';
-} else {
-	echo elgg_echo('groups:nofriendsatall');
+$group = elgg_extract('entity', $vars);
+if (!($group instanceof \ElggGroup)) {
+	return;
 }
+
+$friends_count = elgg_get_logged_in_user_entity()->getFriends(['count' => true]);
+if (empty($friends_count)) {
+	echo elgg_echo('groups:nofriendsatall');
+	return;
+}
+
+echo elgg_view_field([
+	'#type' => 'hidden',
+	'name' => 'forward_url',
+	'value' => $group->getURL(),
+]);
+
+echo elgg_view_field([
+	'#type' => 'hidden',
+	'name' => 'group_guid',
+	'value' => $group->guid,
+]);
+
+echo elgg_view_field([
+	'#type' => 'friendspicker',
+	'#help' => elgg_echo('groups:invite:friends:help'),
+	'name' => 'user_guid',
+]);
+
+echo elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => elgg_echo('groups:invite:resend'),
+	'name' => 'resend',
+	'value' => 1,
+	'switch' => true,
+]);
+
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => elgg_echo('invite'),
+]);
+
+elgg_set_form_footer($footer);

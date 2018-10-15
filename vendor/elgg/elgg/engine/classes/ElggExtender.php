@@ -11,7 +11,7 @@
  * @subpackage DataModel.Extender
  * @see        \ElggAnnotation
  * @see        \ElggMetadata
- * 
+ *
  * @property string $type         annotation or metadata (read-only after save)
  * @property int    $id           The unique identifier (read-only)
  * @property int    $entity_guid  The GUID of the entity that this extender describes
@@ -25,12 +25,16 @@
  */
 abstract class ElggExtender extends \ElggData {
 
+	protected $int_columns = [
+		'id',
+		'entity_guid',
+		'owner_guid',
+		'time_created',
+		'access_id',
+	];
+
 	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see \ElggData::initializeAttributes()
-	 *
-	 * @return void
+	 * {@inheritdoc}
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -51,20 +55,24 @@ abstract class ElggExtender extends \ElggData {
 	 * @return void
 	 */
 	public function __set($name, $value) {
-		if ($name === 'access_id' && $this instanceof ElggMetadata && $value != ACCESS_PUBLIC) {
-			elgg_deprecated_notice('Setting ->access_id to a value other than ACCESS_PUBLIC is deprecated. '
-				. 'All metadata will be public in 3.0.', '2.3');
+		if ($name === 'access_id' && $this instanceof ElggMetadata) {
+			$value = ACCESS_PUBLIC;
 		}
-
+		if (isset($value) && in_array($name, $this->int_columns)) {
+			$value = (int) $value;
+		}
 		$this->attributes[$name] = $value;
 		if ($name == 'value') {
+			if (is_bool($value)) {
+				$value = (int) $value;
+			}
 			$this->attributes['value_type'] = self::detectValueType($value);
 		}
 	}
 
 	/**
 	 * Set the value of the extender
-	 * 
+	 *
 	 * @param mixed  $value      The value being set
 	 * @param string $value_type The type of the : 'integer' or 'text'
 	 * @return void
@@ -73,27 +81,6 @@ abstract class ElggExtender extends \ElggData {
 	public function setValue($value, $value_type = '') {
 		$this->attributes['value'] = $value;
 		$this->attributes['value_type'] = self::detectValueType($value, $value_type);
-	}
-
-	/**
-	 * Set an attribute
-	 *
-	 * @param string $name       Name
-	 * @param mixed  $value      Value
-	 * @param string $value_type Value type
-	 *
-	 * @return boolean
-	 * @deprecated 1.9
-	 */
-	protected function set($name, $value, $value_type = '') {
-		elgg_deprecated_notice("Use -> instead of set()", 1.9);
-		if ($name == 'value') {
-			$this->setValue($value, $value_type);
-		} else {
-			$this->__set($name, $value);
-		}
-
-		return true;
 	}
 
 	/**
@@ -107,7 +94,7 @@ abstract class ElggExtender extends \ElggData {
 			if ($name == 'value') {
 				switch ($this->attributes['value_type']) {
 					case 'integer' :
-						return (int)$this->attributes['value'];
+						return (int) $this->attributes['value'];
 						break;
 					case 'text' :
 						return $this->attributes['value'];
@@ -119,22 +106,14 @@ abstract class ElggExtender extends \ElggData {
 				}
 			}
 
+			if ($name === 'access_id' && $this instanceof ElggMetadata) {
+				return ACCESS_PUBLIC;
+			}
+
 			return $this->attributes[$name];
 		}
 
 		return null;
-	}
-
-	/**
-	 * Returns an attribute
-	 *
-	 * @param string $name Name
-	 * @return mixed
-	 * @deprecated 1.9
-	 */
-	protected function get($name) {
-		elgg_deprecated_notice("Use -> instead of get()", 1.9);
-		return $this->__get($name);
 	}
 
 	/**
@@ -178,8 +157,9 @@ abstract class ElggExtender extends \ElggData {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function toObject() {
-		$object = new \stdClass();
+	public function toObject(array $params = []) {
+
+		$object = new \Elgg\Export\Extender();
 		$object->id = $this->id;
 		$object->entity_guid = $this->entity_guid;
 		$object->owner_guid = $this->owner_guid;
@@ -187,56 +167,16 @@ abstract class ElggExtender extends \ElggData {
 		$object->value = $this->value;
 		$object->time_created = date('c', $this->getTimeCreated());
 		$object->read_access = $this->access_id;
-		$params = array(
-			$this->getSubtype() => $this, // deprecated use
-			$this->getType() => $this,
-		);
-		if (_elgg_services()->hooks->hasHandler('to:object', $this->getSubtype())) {
-			_elgg_services()->deprecation->sendNotice("Triggering 'to:object' hook by extender name '{$this->getSubtype()}' has been deprecated. "
-			. "Use the generic 'to:object','{$this->getType()}' hook instead.", '2.3');
-			$object = _elgg_services()->hooks->trigger('to:object', $this->getSubtype(), $params, $object);
-		}
+
+		$params[$this->getSubtype()] = $this; // deprecated use
+		$params[$this->getType()] = $this;
+		
+		// deprecated toObject hook
+		$deprecated_msg = "Triggering 'to:object' hook by extender name '{$this->getSubtype()}' has been deprecated. "
+			. "Use the generic 'to:object','{$this->getType()}' hook instead.";
+		$object = _elgg_services()->hooks->triggerDeprecated('to:object', $this->getSubtype(), $params, $object, $deprecated_msg, '2.3');
+		
 		return _elgg_services()->hooks->trigger('to:object', $this->getType(), $params, $object);
-	}
-
-	/*
-	 * EXPORTABLE INTERFACE
-	 */
-
-	/**
-	 * Return an array of fields which can be exported.
-	 *
-	 * @return array
-	 * @deprecated 1.9 Use toObject()
-	 */
-	public function getExportableValues() {
-		elgg_deprecated_notice(__METHOD__ . ' has been deprecated by toObject()', 1.9);
-		return array(
-			'id',
-			'entity_guid',
-			'name',
-			'value',
-			'value_type',
-			'owner_guid',
-			'type',
-		);
-	}
-
-	/**
-	 * Export this object
-	 *
-	 * @return array
-	 * @deprecated 1.9 Use toObject()
-	 */
-	public function export() {
-		elgg_deprecated_notice(__METHOD__ . ' has been deprecated', 1.9);
-		$uuid = get_uuid_from_object($this);
-
-		$meta = new ODDMetaData($uuid, guid_to_uuid($this->entity_guid), $this->attributes['name'],
-			$this->attributes['value'], $this->attributes['type'], guid_to_uuid($this->owner_guid));
-		$meta->setAttribute('published', date("r", $this->time_created));
-
-		return $meta;
 	}
 
 	/*
@@ -282,35 +222,8 @@ abstract class ElggExtender extends \ElggData {
 	 */
 	public function getURL() {
 
-		$url = "";
-		$type = $this->getType();
-		$subtype = $this->getSubtype();
-
-		// @todo remove when elgg_register_extender_url_handler() has been removed
-		if ($this->id) {
-			global $CONFIG;
-
-			$function = "";
-			if (isset($CONFIG->extender_url_handler[$type][$subtype])) {
-				$function = $CONFIG->extender_url_handler[$type][$subtype];
-			}
-			if (isset($CONFIG->extender_url_handler[$type]['all'])) {
-				$function = $CONFIG->extender_url_handler[$type]['all'];
-			}
-			if (isset($CONFIG->extender_url_handler['all']['all'])) {
-				$function = $CONFIG->extender_url_handler['all']['all'];
-			}
-			if (is_callable($function)) {
-				$url = call_user_func($function, $this);
-			}
-
-			if ($url) {
-				$url = elgg_normalize_url($url);
-			}
-		}
-
-		$params = array('extender' => $this);
-		$url = _elgg_services()->hooks->trigger('extender:url', $type, $params, $url);
+		$params = ['extender' => $this];
+		$url = _elgg_services()->hooks->trigger('extender:url', $this->getType(), $params, '');
 
 		return elgg_normalize_url($url);
 	}

@@ -1,21 +1,39 @@
 <?php
 
-$params = array();
-$params['name'] = 'sandbox_page';
-$params['menu'] = array();
-$params['menu']['default'] = array();
-for ($i = 1; $i <= 5; $i++) {
-	$params['menu']['default'][] = new ElggMenuItem($i, "Page $i", "#");
+$items = [];
+
+foreach (['cogs', 'support', 'question', 'info'] as $index => $icon) {
+	$items[] = [
+		'name' => $icon,
+		'icon' => $icon,
+		'badge' => $index ?: null,
+		'text' => "Menu item",
+		'href' => '#',
+		'link_class' => $icon == 'info' ? 'elgg-state elgg-state-notice' : '',
+	];
+
+
+	foreach (['A', 'B', 'C'] as $letter) {
+		$items[] = [
+			'name' => "$icon:$letter",
+			'href' => '#',
+			'text' => "Child $letter",
+			'parent_name' => $icon,
+			'link_class' => $icon == 'info' ? 'elgg-state elgg-state-notice' : '',
+		];
+
+		foreach (['AA', 'BB', 'CC'] as $subletter) {
+			$items[] = [
+				'name' => "$icon:$letter:$subletter",
+				'href' => '#',
+				'text' => "Child $subletter",
+				'parent_name' => "$icon:$letter",
+				'link_class' => $icon == 'info' ? 'elgg-state elgg-state-notice' : '',
+			];
+		}
+	}
 }
-$params['menu']['default'][2]->setSelected(true);
 
-$m = new ElggMenuItem(10, "Child", "#");
-$m->setParent($params['menu']['default'][1]);
-$params['menu']['default'][1]->addChild($m);
-?>
-
-<div class="theme-sandbox-demo-sidebar">
-<?php 
-	echo elgg_view('navigation/menu/page', $params);
-?>
-</div>
+echo elgg_view_menu('page', [
+	'items' => $items,
+]);

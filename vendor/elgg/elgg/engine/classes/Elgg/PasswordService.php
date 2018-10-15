@@ -3,7 +3,7 @@ namespace Elgg;
 
 /**
  * PRIVATE CLASS. API IN FLUX. DO NOT USE DIRECTLY.
- * 
+ *
  * @package Elgg.Core
  * @access  private
  * @since   1.10.0
@@ -56,18 +56,6 @@ final class PasswordService {
 	}
 
 	/**
-	 * Hash a password for storage. Currently salted MD5.
-	 *
-	 * @param \ElggUser $user     The user this is being generated for.
-	 * @param string    $password Password in clear text
-	 *
-	 * @return string
-	 */
-	function generateLegacyHash(\ElggUser $user, $password) {
-		return md5($password . $user->salt);
-	}
-
-	/**
 	 * Generate and send a password request email to a given user's registered email address.
 	 *
 	 * @param int $user_guid User GUID
@@ -75,7 +63,7 @@ final class PasswordService {
 	 * @return bool
 	 */
 	function sendNewPasswordRequest($user_guid) {
-		$user_guid = (int)$user_guid;
+		$user_guid = (int) $user_guid;
 
 		$user = _elgg_services()->entityTable->get($user_guid);
 		if (!$user instanceof \ElggUser) {
@@ -88,15 +76,18 @@ final class PasswordService {
 		$user->setPrivateSetting('passwd_conf_time', time());
 
 		// generate link
-		$link = _elgg_services()->config->getSiteUrl() . "changepassword?u=$user_guid&c=$code";
+		$link = elgg_generate_url('account:password:change', [
+			'u' => $user_guid,
+			'c' => $code,
+		]);
 		$link = _elgg_services()->urlSigner->sign($link, '+1 day');
-		
+
 		// generate email
 		$ip_address = _elgg_services()->request->getClientIp();
 		$message = _elgg_services()->translator->translate(
-			'email:changereq:body', array($user->name, $ip_address, $link), $user->language);
+			'email:changereq:body', [$user->name, $ip_address, $link], $user->language);
 		$subject = _elgg_services()->translator->translate(
-			'email:changereq:subject', array(), $user->language);
+			'email:changereq:subject', [], $user->language);
 
 		$params = [
 			'action' => 'requestnewpassword',
@@ -128,9 +119,9 @@ final class PasswordService {
 
 		$user->setPassword($password);
 
-		$ia = elgg_set_ignore_access(true);
-		$result = (bool)$user->save();
-		elgg_set_ignore_access($ia);
+		$ia = _elgg_services()->session->setIgnoreAccess(true);
+		$result = (bool) $user->save();
+		_elgg_services()->session->setIgnoreAccess($ia);
 
 		return $result;
 	}
@@ -145,7 +136,7 @@ final class PasswordService {
 	 * @return bool True on success
 	 */
 	function executeNewPasswordReset($user_guid, $conf_code, $password = null) {
-		$user_guid = (int)$user_guid;
+		$user_guid = (int) $user_guid;
 		$user = get_entity($user_guid);
 
 		if ($password === null) {
@@ -184,8 +175,8 @@ final class PasswordService {
 		$ns = $reset ? 'resetpassword' : 'changepassword';
 
 		$message = _elgg_services()->translator->translate(
-			"email:$ns:body", array($user->username, $password), $user->language);
-		$subject = _elgg_services()->translator->translate("email:$ns:subject", array(), $user->language);
+			"email:$ns:body", [$user->username, $password], $user->language);
+		$subject = _elgg_services()->translator->translate("email:$ns:subject", [], $user->language);
 
 		$params = [
 			'action' => $ns,

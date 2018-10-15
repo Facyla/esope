@@ -45,7 +45,7 @@ The function to use to expose a method is ``elgg_ws_expose_function()``. As an
 example, let's assume you want to expose a function that echos text back
 to the calling application. The function could look like this
 
-.. code:: php
+.. code-block:: php
 
     function my_echo($string) {
         return $string;
@@ -56,7 +56,7 @@ API clients, we will require neither API authentication nor user
 authentication. This call registers the function with the web services
 API framework:
 
-.. code:: php
+.. code-block:: php
 
 	elgg_ws_expose_function(
 		"test.echo",
@@ -79,7 +79,7 @@ test the exposed method from a web browser, you could hit the url:
 http://yoursite.com/services/api/rest/json/?method=test.echo&string=testing
 and you should see JSON data like this:
 
-.. code:: json
+.. code-block:: json
 
     {"status":0,"result":"testing"}
 
@@ -97,7 +97,8 @@ You can also add additional response formats by defining new viewtypes.
 Parameters
 ~~~~~~~~~~
 
-Parameters expected by each method should be listed as an associative array, where the key represents the parameter name, and the value contains an array with ``type``, ``default`` and ``required`` fields.
+Parameters expected by each method should be listed as an associative array, where the key represents the parameter name, and the value 
+contains an array with ``type``, ``default`` and ``required`` fields.
 
 Values submitted with the API request for each parameter should match the declared type. API will throw on exception if validation fails.
 
@@ -113,7 +114,7 @@ Unrecognized types will throw an API exception.
 
 You can use additional fields to describe your parameter, e.g. ``description``.
 
-.. code:: php
+.. code-block:: php
 
 	elgg_ws_expose_function(
 		'test.greet',
@@ -139,7 +140,7 @@ You can use additional fields to describe your parameter, e.g. ``description``.
 
 .. note::
 
-	If a missing parameter has no default value, the argument will be ``null``. Before 2.1, a bug caused later
+	If a missing parameter has no default value, the argument will be ``null``. Before Elgg v2.1, a bug caused later
 	arguments to be shifted left in this case.
 
 Receive parameters as associative array
@@ -150,7 +151,7 @@ to invoke the callback function with a single argument that contains an associat
 array of parameter => input pairs (instead of each parameter being a separate argument).
 To do that, set ``$assoc`` to ``true`` in ``elgg_ws_expose_function()``.
 
-.. code:: php
+.. code-block:: php
 
 	function greet_me($values) {
 		$name = elgg_extract('name', $values);
@@ -207,7 +208,7 @@ Key-based authentication
 As an example, let's write a function that returns the number of users
 that have viewed the site in the last x minutes.
 
-.. code:: php
+.. code-block:: php
 
     function count_active_users($minutes=10) {
         $seconds = 60 * $minutes;
@@ -218,7 +219,7 @@ that have viewed the site in the last x minutes.
 Now, let's expose it and make the number of minutes an optional
 parameter:
 
-.. code:: php
+.. code-block:: php
 
 	elgg_ws_expose_function(
 		"users.active",
@@ -259,13 +260,6 @@ authentication method. Be aware that it is much more involved and could
 turn off developers when there are other sites out there with key-based
 authentication.
 
-OAuth
-~~~~~
-
-With the addition of the OAuth plugin, Elgg also fully supports the
-OAuth 1.0a authorization standard. Clients can then use standard OAuth
-libraries to make any API calls to the site.
-
 User authentication
 -------------------
 
@@ -285,7 +279,7 @@ extend the current capability to use an approach like OAuth.
 
 Let's write our wire posting function:
 
-.. code:: php
+.. code-block:: php
 
     function my_post_to_wire($text) {
         
@@ -301,7 +295,7 @@ Exposing this function is the same as the previous except we require
 user authentication and we're going to make this use POST rather than
 GET HTTP requests.
 
-.. code:: php
+.. code-block:: php
 
 	elgg_ws_expose_function(
 		"thewire.post",
@@ -319,11 +313,7 @@ GET HTTP requests.
 
 Please note that you will not be able to test this using a web browser
 as you did with the other methods. You need to write some client code to
-do this. There is some example client code in ``/engine/lib/api.php``.
-Take a look at `send\_api\_post\_call()`_. You can also do a search for
-clients that have been written for the APIs of Flickr or Twitter or any
-other similar API. You will find a wide variety written in almost any
-language you can think of.
+do this.
 
 Building out your API
 ---------------------
@@ -337,8 +327,6 @@ sites for inspiration. If you are looking for 3rd party developers to
 build applications using your API, you will probably want to provide one
 or more language-specific clients.
 
-.. _send\_api\_post\_call(): http://reference.elgg.org/lib_2api_8php.html#ee7382c2cbf1ad49ac6892556d3eaff2
-
 Determining the authentication available
 ----------------------------------------
 
@@ -351,24 +339,24 @@ authentication PAM but would prefer using OAuth? You can do this.
 The first step is registering a callback function for the *rest, init*
 plugin hook:
 
-.. code:: php
+.. code-block:: php
 
     register_plugin_hook('rest', 'init', 'rest_plugin_setup_pams');
 
 Then in the callback function, you register the PAMs that you want to
 use:
 
-.. code:: php
+.. code-block:: php
 
     function rest_plugin_setup_pams() {
         // user token can also be used for user authentication
         register_pam_handler('pam_auth_usertoken');
 
-        // simple API key check 
+        // simple API key check
         register_pam_handler('api_auth_key', "sufficient", "api");
-            
+        
         // override the default pams
-        return true;    
+        return true;
     }
 
 When testing, you may find it useful to register the
@@ -376,18 +364,14 @@ When testing, you may find it useful to register the
 the browser. Be careful not to use this PAM on a production site because
 it could open up your users to a `CSRF attack`_.
 
-Right now, the only other PAMs publicly available besides those provided
-by the Elgg core are the OAuth PAMs. See `Justin Richer's OAuth plugin`_
-for more detail.
-
 .. _pluggable authentication module (PAM): http://en.wikipedia.org/wiki/Pluggable_Authentication_Modules
 .. _CSRF attack: http://en.wikipedia.org/wiki/Csrf
-.. _Justin Richer's OAuth plugin: http://community.elgg.org/pg/plugins/jricher/read/385119/oauth
 
 Related
 -------
 
 .. toctree::
    :maxdepth: 1
+   :glob:
    
-   web-services/hmac
+   web-services/*

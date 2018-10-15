@@ -2,8 +2,8 @@
 
 namespace Elgg;
 
-use Elgg\Cache\EntityCache;
 use Elgg\Database\EntityTable;
+use Elgg\Database\Entities;
 
 /**
  * Preload entities based on properties of fetched objects
@@ -27,15 +27,14 @@ class EntityPreloader {
 	/**
 	 * Constructor
 	 *
-	 * @param EntityCache $entity_cache Entity cache
 	 * @param EntityTable $entity_table Entity service
 	 */
-	public function __construct(EntityCache $entity_cache, EntityTable $entity_table) {
-		$this->_callable_cache_checker = function ($guid) use ($entity_cache) {
-			return $entity_cache->get($guid);
+	public function __construct(EntityTable $entity_table) {
+		$this->_callable_cache_checker = function ($guid) use ($entity_table) {
+			return $entity_table->getFromCache($guid);
 		};
-		$this->_callable_entity_loader = function ($options) use ($entity_table) {
-			return $entity_table->getEntities($options);
+		$this->_callable_entity_loader = function ($options) {
+			return Entities::find($options);
 		};
 	}
 
@@ -50,12 +49,13 @@ class EntityPreloader {
 	 */
 	public function preload($objects, array $guid_properties) {
 		$guids = $this->getGuidsToLoad($objects, $guid_properties);
+		
 		// If only 1 to load, not worth the overhead of elgg_get_entities(),
 		// get_entity() will handle it later.
 		if (count($guids) > 1) {
-			call_user_func($this->_callable_entity_loader, array(
+			call_user_func($this->_callable_entity_loader, [
 				'guids' => $guids,
-			));
+			]);
 		}
 	}
 
@@ -70,9 +70,9 @@ class EntityPreloader {
 	 */
 	protected function getGuidsToLoad($objects, array $guid_properties) {
 		if (!is_array($objects) || count($objects) < 2) {
-			return array();
+			return [];
 		}
-		$preload_guids = array();
+		$preload_guids = [];
 		foreach ($objects as $object) {
 			if (is_object($object)) {
 				foreach ($guid_properties as $property) {

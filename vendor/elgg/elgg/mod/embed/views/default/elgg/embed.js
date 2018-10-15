@@ -12,8 +12,6 @@ define(function (require) {
 	var lightbox = require('elgg/lightbox');
 	require('jquery.form');
 
-	elgg.provide('elgg.embed');
-
 	var embed = {
 		/**
 		 * Initializes the module
@@ -26,9 +24,7 @@ define(function (require) {
 
 			// inserts the embed content into the textarea
 			$(document).on('click', ".embed-item", embed.insert);
-			if (typeof elgg.embed._deprecated_custom_insert_js === 'function') {
-				elgg.register_hook_handler('embed', 'editor', elgg.embed._deprecated_custom_insert_js);
-			}
+
 			// caches the current textarea id
 			$(document).on('click', ".embed-control", function () {
 				var textAreaId = /embed-control-(\S)+/.exec($(this).attr('class'))[0];
@@ -39,6 +35,7 @@ define(function (require) {
 			$(document).on('click', '.embed-section', embed.forward);
 			$(document).on('submit', '.elgg-form-embed', embed.submit);
 		},
+
 		/**
 		 * Inserts data attached to an embed list item in textarea
 		 *
@@ -55,7 +52,7 @@ define(function (require) {
 			// this is a temporary work-around for #3971
 			if (content.indexOf('/serve-icon/') != -1) {
 				content = content.replace(/\/serve-icon\/[0-9]*\/small/g, function replacer(match) {
-					return match.replace('small', 'medium');
+					return match.replace('small', 'large');
 				});
 			}
 
@@ -86,6 +83,7 @@ define(function (require) {
 			lightbox.close();
 			event.preventDefault();
 		},
+
 		/**
 		 * Submit an upload form through Ajax
 		 *
@@ -120,9 +118,7 @@ define(function (require) {
 							$('.embed-throbber').hide();
 							$('.embed-wrapper .elgg-form-file-upload').show();
 						}
-					}
-
-					// ie 7 and 8 have a null response because of the use of an iFrame
+					} // ie 7 and 8 have a null response because of the use of an iFrame
 					// so just show the list after upload.
 					// http://jquery.malsup.com/form/#file-upload claims you can wrap JSON
 					// in a textarea, but a quick test didn't work, and that is fairly
@@ -144,6 +140,7 @@ define(function (require) {
 			event.preventDefault();
 			event.stopPropagation();
 		},
+
 		/**
 		 * Loads content within the lightbox
 		 *
@@ -157,6 +154,7 @@ define(function (require) {
 			$('.embed-wrapper').parent().load(url);
 			event.preventDefault();
 		},
+
 		/**
 		 * Adds the container guid to a URL
 		 *
@@ -173,15 +171,10 @@ define(function (require) {
 		}
 	};
 
-	/**
-	 * elgg.embed object is deprecated. Do not call it directly.
-	 * @deprecaated 2.2
-	 */
-	elgg.embed = embed;
-
 	require(['elgg/init'], function () {
 		embed.init();
 	});
 
 	return embed;
 });
+

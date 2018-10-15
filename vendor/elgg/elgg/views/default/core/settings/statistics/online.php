@@ -7,6 +7,9 @@
  */
 
 $user = elgg_get_page_owner_entity();
+if (!$user instanceof ElggUser) {
+	return;
+}
 
 $label_name = elgg_echo('usersettings:statistics:label:name');
 $label_email = elgg_echo('usersettings:statistics:label:email');
@@ -20,19 +23,19 @@ $title = elgg_echo('usersettings:statistics:yourdetails');
 
 $content = <<<__HTML
 <table class="elgg-table-alt">
-	<tr class="odd">
+	<tr>
 		<td class="column-one">$label_name</td>
-		<td>$user->name</td>
+		<td>{$user->getDisplayName()}</td>
 	</tr>
-	<tr class="even">
+	<tr>
 		<td class="column-one">$label_email</td>
 		<td>$user->email</td>
 	</tr>
-	<tr class="odd">
+	<tr>
 		<td class="column-one">$label_member_since</td>
 		<td>$time_created</td>
 	</tr>
-	<tr class="even">
+	<tr>
 		<td class="column-one">$label_last_login</td>
 		<td>$last_login</td>
 	</tr>

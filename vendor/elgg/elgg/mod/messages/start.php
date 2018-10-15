@@ -2,47 +2,42 @@
 /**
 * Elgg internal messages plugin
 * This plugin lets users send messages to each other.
-*
-* @package ElggMessages
 */
 
-
-elgg_register_event_handler('init', 'system', 'messages_init');
-
+/**
+ * Messages init
+ *
+ * @return void
+ */
 function messages_init() {
-
-	// register a library of helper functions
-	elgg_register_library('elgg:messages', __DIR__ . '/lib/messages.php');
 
 	// add page menu items
 	if (elgg_is_logged_in()) {
-		elgg_register_menu_item('page', array(
+		elgg_register_menu_item('page', [
 			'name' => 'messages:inbox',
 			'text' => elgg_echo('messages:inbox'),
 			'href' => "messages/inbox/" . elgg_get_logged_in_user_entity()->username,
 			'context' => 'messages',
-		));
+		]);
 		
-		elgg_register_menu_item('page', array(
+		elgg_register_menu_item('page', [
 			'name' => 'messages:sentmessages',
 			'text' => elgg_echo('messages:sentmessages'),
 			'href' => "messages/sent/" . elgg_get_logged_in_user_entity()->username,
 			'context' => 'messages',
-		));		
+		]);
 	}
 
 	// Extend system CSS with our own styles, which are defined in the messages/css view
 	elgg_extend_view('elgg.css', 'messages/css');
 	elgg_extend_view('elgg.js', 'messages/js');
-	
-	// Register a page handler, so we can have nice URLs
-	elgg_register_page_handler('messages', 'messages_page_handler');
 
 	// Register a URL handler
 	elgg_register_plugin_hook_handler('entity:url', 'object', 'messages_set_url');
 
 	// Extend avatar hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'messages_user_hover_menu');
+	elgg_register_plugin_hook_handler('register', 'menu:title', 'messages_user_hover_menu');
 
 	// delete messages sent by a user when user is deleted
 	elgg_register_event_handler('delete', 'user', 'messages_purge');
@@ -55,179 +50,114 @@ function messages_init() {
 	elgg_register_plugin_hook_handler('permissions_check', 'object', 'messages_can_edit');
 	elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'messages_can_edit_container');
 
-	// Register actions
-	$action_path = __DIR__ . '/actions/messages';
-	elgg_register_action("messages/send", "$action_path/send.php");
-	elgg_register_action("messages/delete", "$action_path/delete.php");
-	elgg_register_action("messages/process", "$action_path/process.php");
-
 	// Topbar menu. We assume this menu will render *after* a message is rendered. If a refactor/plugin
 	// causes it to render first, the unread count notification will not update until the next page.
 	elgg_register_plugin_hook_handler('register', 'menu:topbar', 'messages_register_topbar');
 }
 
 /**
- * Messages page handler
- *
- * @param array $page Array of URL components for routing
- * @return bool
- */
-function messages_page_handler($page) {
-
-	$current_user = elgg_get_logged_in_user_entity();
-	if (!$current_user) {
-		register_error(elgg_echo('noaccess'));
-		elgg_get_session()->set('last_forward_from', current_page_url());
-		forward('');
-	}
-
-	elgg_load_library('elgg:messages');
-
-	elgg_push_breadcrumb(elgg_echo('messages'), 'messages/inbox/' . $current_user->username);
-
-	if (!isset($page[0])) {
-		$page[0] = 'inbox';
-	}
-
-	// Support the old inbox url /messages/<username>, but only if it matches the logged in user.
-	// Otherwise having a username like "read" on the system could confuse this function.
-	if ($current_user->username === $page[0]) {
-		$page[1] = $page[0];
-		$page[0] = 'inbox';
-	}
-
-	if (!isset($page[1])) {
-		$page[1] = $current_user->username;
-	}
-
-	switch ($page[0]) {
-		case 'inbox':
-			echo elgg_view_resource('messages/inbox', [
-				'username' => $page[1],
-			]);
-			break;
-		case 'sent':
-			echo elgg_view_resource('messages/sent', [
-				'username' => $page[1],
-			]);
-			break;
-		case 'read':
-			echo elgg_view_resource('messages/read', [
-				'guid' => $page[1],
-			]);
-			break;
-		case 'compose':
-		case 'add':
-			echo elgg_view_resource('messages/send');
-			break;
-		default:
-			return false;
-	}
-	return true;
-}
-
-/**
- * @deprecated Do not use this
- */
-function messages_notifier() {
-	elgg_deprecated_notice( __FUNCTION__ . ' is no longer used and will be removed', '2.0');
-}
-
-/**
  * Add inbox link to topbar
  *
- * @param string $hook   "register"
- * @param string $type   "menu:topbar"
- * @param array  $items  Menu items
- * @param array  $params Hook params
- * @return array
+ * @param string         $hook   "register"
+ * @param string         $type   "menu:topbar"
+ * @param ElggMenuItem[] $items  Menu items
+ * @param array          $params Hook params
+ *
+ * @return void|ElggMenuItem[]
  */
 function messages_register_topbar($hook, $type, $items, $params) {
 	if (!elgg_is_logged_in()) {
 		return;
 	}
 
-	$text = elgg_view_icon("mail");
-	$tooltip = elgg_echo("messages");
+	$user = elgg_get_logged_in_user_entity();
 
-	// get unread messages
-	$num_messages = (int)messages_count_unread();
-	if ($num_messages != 0) {
-		$text .= "<span class=\"messages-new\">$num_messages</span>";
-		$tooltip .= " (" . elgg_echo("messages:unreadcount", array($num_messages)) . ")";
+	$text = elgg_echo('messages');
+	$title = $text;
+
+	$num_messages = (int) messages_count_unread();
+	if ($num_messages) {
+		$title .= " (" . elgg_echo("messages:unreadcount", [$num_messages]) . ")";
 	}
 
 	$items[] = ElggMenuItem::factory([
 		'name' => 'messages',
-		'href' => 'messages/inbox/' . elgg_get_logged_in_user_entity()->username,
+		'href' => "messages/inbox/$user->username",
 		'text' => $text,
 		'priority' => 600,
-		'title' => $tooltip,
+		'title' => $title,
+		'icon' => 'mail',
+		'badge' => $num_messages ? $num_messages : null,
 	]);
+
 	return $items;
 }
 
 /**
  * Override the canEditMetadata function to return true for messages
  *
+ * @param string $hook         'permissions_check:metadata'
+ * @param string $type         'object'
+ * @param bool   $return_value current return value
+ * @param array  $parameters   supplied params
+ *
+ * @return void|true
  */
-function messages_can_edit_metadata($hook_name, $entity_type, $return_value, $parameters) {
+function messages_can_edit_metadata($hook, $type, $return_value, $parameters) {
 
 	global $messagesendflag;
 
-	if ($messagesendflag == 1) {
-		$entity = $parameters['entity'];
-		if ($entity->getSubtype() == "messages") {
-			return true;
-		}
+	if ($messagesendflag !== 1) {
+		return;
 	}
-
-	return $return_value;
+	
+	$entity = elgg_extract('entity', $parameters);
+	if ($entity instanceof ElggObject && $entity->getSubtype() == 'messages') {
+		return true;
+	}
 }
 
 /**
- * Override the canEdit function to return true for messages within a particular context.
+ * Override the canEdit function to return true for messages within a particular context
  *
+ * @param string $hook         'permissions_check'
+ * @param string $type         'object'
+ * @param bool   $return_value current return value
+ * @param array  $parameters   supplied params
+ *
+ * @return void|true
  */
-function messages_can_edit($hook_name, $entity_type, $return_value, $parameters) {
+function messages_can_edit($hook, $type, $return_value, $parameters) {
 
 	global $messagesendflag;
-
-	if ($messagesendflag == 1) {
-		$entity = $parameters['entity'];
-		if ($entity->getSubtype() == "messages") {
-			return true;
-		}
+	
+	if ($messagesendflag !== 1) {
+		return;
 	}
-
-	return $return_value;
-}
-
-/**
- * Prevent messages from generating a notification
- */
-function messages_notification_msg($hook_name, $entity_type, $return_value, $params) {
-
-	if ($params['entity'] instanceof ElggEntity) {
-		if ($params['entity']->getSubtype() == 'messages') {
-			return false;
-		}
+	
+	$entity = elgg_extract('entity', $parameters);
+	if ($entity instanceof ElggObject && $entity->getSubtype() == 'messages') {
+		return true;
 	}
 }
 
 /**
- * Override the canEdit function to return true for messages within a particular context.
+ * Override the canEdit function to return true for messages within a particular context
  *
+ * @param string $hook         'container_permissions_check'
+ * @param string $type         'object'
+ * @param bool   $return_value current return value
+ * @param array  $parameters   supplied params
+ *
+ * @return void|true
  */
-function messages_can_edit_container($hook_name, $entity_type, $return_value, $parameters) {
+function messages_can_edit_container($hook, $type, $return_value, $parameters) {
 
 	global $messagesendflag;
 
 	if ($messagesendflag == 1) {
 		return true;
 	}
-
-	return $return_value;
 }
 
 /**
@@ -240,7 +170,8 @@ function messages_can_edit_container($hook_name, $entity_type, $return_value, $p
  * @param int    $original_msg_guid The GUID of the message to reply from (default: none)
  * @param bool   $notify            Send a notification (default: true)
  * @param bool   $add_to_sent       If true (default), will add a message to the sender's 'sent' tray
- * @return bool
+ *
+ * @return false|int
  */
 function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $original_msg_guid = 0, $notify = true, $add_to_sent = true) {
 
@@ -261,12 +192,8 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 		$sender_guid = (int) elgg_get_logged_in_user_guid();
 	}
 
-	// Initialise 2 new ElggObject
-	$message_to = new ElggObject();
-	$message_sent = new ElggObject();
-
-	$message_to->subtype = "messages";
-	$message_sent->subtype = "messages";
+	$message_to = new ElggMessage();
+	$message_sent = new ElggMessage();
 
 	$message_to->owner_guid = $recipient_guid;
 	$message_to->container_guid = $recipient_guid;
@@ -321,20 +248,21 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 		$recipient = get_user($recipient_guid);
 		$sender = get_user($sender_guid);
 		
-		$subject = elgg_echo('messages:email:subject', array(), $recipient->language);
-		$body = elgg_echo('messages:email:body', array(
-				$sender->name,
+		$subject = elgg_echo('messages:email:subject', [], $recipient->language);
+		$body = elgg_echo('messages:email:body', [
+				$sender->getDisplayName(),
 				$message_contents,
 				elgg_get_site_url() . "messages/inbox/" . $recipient->username,
-				$sender->name,
-				elgg_get_site_url() . "messages/compose?send_to=" . $sender_guid
-			),
+				$sender->getDisplayName(),
+				elgg_get_site_url() . "messages/add?send_to=" . $sender_guid,
+			],
 			$recipient->language
 		);
 
 		$params = [
 			'object' => $message_to,
 			'action' => 'send',
+			'url' => $message_to->getURL(),
 		];
 		notify_user($recipient_guid, $sender_guid, $subject, $body, $params);
 	}
@@ -346,17 +274,21 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 /**
  * Message URL override
  *
- * @param string $hook
- * @param string $type
- * @param string $url
- * @param array  $params
- * @return string
+ * @param string $hook   'entity:url'
+ * @param string $type   'object'
+ * @param string $url    current return value
+ * @param array  $params supplied params
+ *
+ * @return void|string
  */
 function messages_set_url($hook, $type, $url, $params) {
-	$entity = $params['entity'];
-	if (elgg_instanceof($entity, 'object', 'messages')) {
-		return 'messages/read/' . $entity->getGUID();
+	
+	$entity = elgg_extract('entity', $params);
+	if (!$entity instanceof ElggObject || $entity->getSubtype() !== 'messages') {
+		return;
 	}
+	
+	return "messages/read/{$entity->getGUID()}";
 }
 
 /**
@@ -367,46 +299,27 @@ function messages_set_url($hook, $type, $url, $params) {
  * @param int  $offset    Start at a defined offset (for listings)
  * @param bool $count     Switch between entities array or count mode
  *
- * @return array, int (if $count = true)
+ * @return ElggObject[]|int
  * @since 1.9
  */
 function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count = false) {
 	if (!$user_guid) {
 		$user_guid = elgg_get_logged_in_user_guid();
 	}
-	$db_prefix = elgg_get_config('dbprefix');
 
-	// denormalize the md to speed things up.
-	// seriously, 10 joins if you don't.
-	$map = elgg_get_metastring_map(['toId', $user_guid, 'readYet', 0]);
-
-	if ($limit === null) {
-		$limit = elgg_get_config('default_limit');
-	}
-
-	$options = array(
-		// original options before denormalizing
-		// 'metadata_name_value_pairs' => array(
-		// 'toId' => elgg_get_logged_in_user_guid(),
-		// 'readYet' => 0,
-		// 'msg' => 1
-		// ),
-		'joins' => array(
-			"JOIN {$db_prefix}metadata msg_toId on e.guid = msg_toId.entity_guid",
-			"JOIN {$db_prefix}metadata msg_readYet on e.guid = msg_readYet.entity_guid",
-		),
-		'wheres' => array(
-			"msg_toId.name_id='{$map['toId']}' AND msg_toId.value_id='{$map[$user_guid]}'",
-			"msg_readYet.name_id='{$map['readYet']}' AND msg_readYet.value_id='{$map[0]}'",
-		),
-		'owner_guid' => $user_guid,
-		'limit' => $limit,
+	return elgg_get_entities([
+		'type' => 'object',
+		'subtype' => 'messages',
+		'metadata_name_value_pairs' => [
+			'toId' => (int) $user_guid,
+			'readYet' => 0,
+		],
+		'owner_guid' => (int) $user_guid,
+		'limit' => $limit ? : elgg_get_config('default_limit'),
 		'offset' => $offset,
 		'count' => $count,
 		'distinct' => false,
-	);
-
-	return elgg_get_entities($options);
+	]);
 }
 
 /**
@@ -421,17 +334,69 @@ function messages_count_unread($user_guid = 0) {
 }
 
 /**
+ * Prepare the compose form variables
+ *
+ * @param int $recipient_guid new message recipient
+ *
+ * @return array
+ */
+function messages_prepare_form_vars($recipient_guid = 0) {
+
+	$recipients = [];
+	$recipient = get_user($recipient_guid);
+	if (!empty($recipient)) {
+		$recipients[] = $recipient->getGUID();
+	}
+
+	// input names => defaults
+	$values = [
+		'subject' => elgg_get_sticky_value('messages', 'subject', ''),
+		'body' => elgg_get_sticky_value('messages', 'body', ''),
+		'recipients' => elgg_get_sticky_value('messages', 'recipients', $recipients),
+	];
+
+	elgg_clear_sticky_form('messages');
+
+	return $values;
+}
+
+/**
  * Add to the user hover menu
+ *
+ * @param string         $hook   'register'
+ * @param string         $type   'menu:user_hover' or 'menu:title'
+ * @param ElggMenuItem[] $return current return value
+ * @param array          $params supplied params
+ *
+ * @return void|ElggMenuItem[]
  */
 function messages_user_hover_menu($hook, $type, $return, $params) {
-	$user = $params['entity'];
-
-	if (elgg_is_logged_in() && elgg_get_logged_in_user_guid() != $user->guid) {
-		$url = "messages/compose?send_to={$user->guid}";
-		$item = new ElggMenuItem('send', elgg_echo('messages:sendmessage'), $url);
-		$item->setSection('action');
-		$return[] = $item;
+	
+	$user = elgg_extract('entity', $params);
+	if (!elgg_is_logged_in() || !$user instanceof ElggUser) {
+		return;
 	}
+	
+	if (elgg_get_logged_in_user_guid() === $user->guid) {
+		return;
+	}
+	
+	$menu_options = [
+		'name' => 'send',
+		'text' => elgg_echo('messages:sendmessage'),
+		'icon' => 'mail',
+		'href' => "messages/add?send_to={$user->guid}",
+	];
+	
+	if ($type == 'menu:user_hover') {
+		$menu_options['section'] = 'action';
+	}
+	
+	if ($type == 'menu:title') {
+		$menu_options['class'] = ['elgg-button', 'elgg-button-action'];
+	}
+	
+	$return[] = ElggMenuItem::factory($menu_options);
 
 	return $return;
 }
@@ -442,6 +407,8 @@ function messages_user_hover_menu($hook, $type, $return, $params) {
  * @param string   $event Event name
  * @param string   $type  Event type
  * @param ElggUser $user  User being deleted
+ *
+ * @return void
  */
 function messages_purge($event, $type, $user) {
 
@@ -450,18 +417,19 @@ function messages_purge($event, $type, $user) {
 	}
 
 	// make sure we delete them all
-	$entity_disable_override = access_get_show_hidden_status();
-	access_show_hidden_entities(true);
+	$entity_disable_override = access_show_hidden_entities(true);
 	$ia = elgg_set_ignore_access(true);
 
-	$options = array(
+	$options = [
 		'type' => 'object',
 		'subtype' => 'messages',
-		'metadata_name' => 'fromId',
-		'metadata_value' => $user->getGUID(),
-		'limit' => 0,
-	);
+		'metadata_name_value_pairs' => [
+			'fromId' => $user->guid,
+		],
+		'limit' => false,
+	];
 	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options);
+	$batch->setIncrementOffset(false);
 	foreach ($batch as $e) {
 		$e->delete();
 	}
@@ -473,15 +441,19 @@ function messages_purge($event, $type, $user) {
 /**
  * Register messages with ECML.
  *
- * @param string $hook
- * @param string $entity_type
- * @param string $return_value
- * @param array  $params
+ * @param string $hook         'get_views'
+ * @param string $type         'ecml'
+ * @param string $return_value current return value
+ * @param array  $params       supplied params
  *
  * @return array
  */
-function messages_ecml_views_hook($hook, $entity_type, $return_value, $params) {
+function messages_ecml_views_hook($hook, $type, $return_value, $params) {
 	$return_value['messages/messages'] = elgg_echo('messages');
 
 	return $return_value;
 }
+
+return function() {
+	elgg_register_event_handler('init', 'system', 'messages_init');
+};

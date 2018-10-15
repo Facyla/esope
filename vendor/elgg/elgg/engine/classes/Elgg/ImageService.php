@@ -6,6 +6,7 @@ use Exception;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
+use Imagine\Filter\Basic\Autorotate;
 use Elgg\Filesystem\MimeTypeDetector;
 
 /**
@@ -15,6 +16,7 @@ use Elgg\Filesystem\MimeTypeDetector;
  * @access private
  */
 class ImageService {
+	use Loggable;
 
 	const JPEG_QUALITY = 75;
 
@@ -102,11 +104,38 @@ class ImageService {
 			unset($image);
 			unset($thumbnail);
 		} catch (Exception $ex) {
-			_elgg_services()->logger->error($ex->getMessage());
+			$logger = $this->logger ? $this->logger : _elgg_services()->logger;
+			$logger->error($ex);
 			return false;
 		}
 
 		return true;
+	}
+	
+	/**
+	 * If needed the image will be rotated based on orientation information
+	 *
+	 * @param string $filename Path to image
+	 *
+	 * @return bool
+	 */
+	function fixOrientation($filename) {
+		try {
+			$image = $this->imagine->open($filename);
+			$metadata = $image->metadata();
+			if (!isset($metadata['ifd0.Orientation'])) {
+				// no need to perform an orientation fix
+				return true;
+			}
+			
+			$autorotate = new Autorotate();
+			$autorotate->apply($image)->save($filename);
+			return true;
+		} catch (Exception $ex) {
+			$logger = $this->logger ? $this->logger : _elgg_services()->logger;
+			$logger->notice($ex);
+		}
+		return false;
 	}
 
 	/**

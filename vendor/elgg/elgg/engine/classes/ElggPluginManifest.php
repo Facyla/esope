@@ -33,97 +33,97 @@ class ElggPluginManifest {
 	/**
 	 * The expected structure of a plugins requires element
 	 */
-	private $depsStructPlugin = array(
+	private $depsStructPlugin = [
 		'type' => '',
 		'name' => '',
 		'version' => '',
 		'comparison' => 'ge'
-	);
+	];
 
 	/**
 	 * The expected structure of a priority element
 	 */
-	private $depsStructPriority = array(
+	private $depsStructPriority = [
 		'type' => '',
 		'priority' => '',
 		'plugin' => ''
-	);
+	];
 
 	/*
 	 * The expected structure of elgg_release requires element
 	 */
-	private $depsStructElgg = array(
+	private $depsStructElgg = [
 		'type' => '',
 		'version' => '',
 		'comparison' => 'ge'
-	);
+	];
 
 	/**
 	 * The expected structure of a requires php_version dependency element
 	 */
-	private $depsStructPhpVersion = array(
+	private $depsStructPhpVersion = [
 		'type' => '',
 		'version' => '',
 		'comparison' => 'ge'
-	);
+	];
 
 	/**
 	 * The expected structure of a requires php_ini dependency element
 	 */
-	private $depsStructPhpIni = array(
+	private $depsStructPhpIni = [
 		'type' => '',
 		'name' => '',
 		'value' => '',
 		'comparison' => '='
-	);
+	];
 
 	/**
 	 * The expected structure of a requires php_extension dependency element
 	 */
-	private $depsStructPhpExtension = array(
+	private $depsStructPhpExtension = [
 		'type' => '',
 		'name' => '',
 		'version' => '',
 		'comparison' => '='
-	);
+	];
 
 	/**
 	 * The expected structure of a conflicts depedency element
 	 */
-	private $depsConflictsStruct = array(
+	private $depsConflictsStruct = [
 		'type' => '',
 		'name' => '',
 		'version' => '',
 		'comparison' => '='
-	);
+	];
 
 	/**
 	 * The expected structure of a provides dependency element.
 	 */
-	private $depsProvidesStruct = array(
+	private $depsProvidesStruct = [
 		'type' => '',
 		'name' => '',
 		'version' => ''
-	);
+	];
 
 	/**
 	 * The expected structure of a screenshot element
 	 */
-	private $screenshotStruct = array(
+	private $screenshotStruct = [
 		'description' => '',
 		'path' => ''
-	);
+	];
 
 	/**
 	 * The expected structure of a contributor element
 	 */
-	private $contributorStruct = array(
+	private $contributorStruct = [
 		'name' => '',
 		'email' => '',
 		'website' => '',
 		'username' => '',
 		'description' => '',
-	);
+	];
 
 	/**
 	 * The API version of the manifest.
@@ -173,8 +173,8 @@ class ElggPluginManifest {
 		}
 
 		if (!$manifest_obj) {
-			throw new \PluginException(_elgg_services()->translator->translate('PluginException:InvalidManifest',
-						array($this->getPluginID())));
+			$msg = elgg_echo('PluginException:InvalidManifest', [$this->getPluginID()]);
+			throw PluginException::factory('InvalidManifest', null, $msg);
 		}
 
 		// set manifest api version
@@ -199,13 +199,13 @@ class ElggPluginManifest {
 		if ($class_exists) {
 			$this->parser = new $parser_class_name($manifest_obj, $this);
 		} else {
-			throw new \PluginException(_elgg_services()->translator->translate('PluginException:NoAvailableParser',
-							array($this->apiVersion, $this->getPluginID())));
+			$msg = elgg_echo('PluginException:NoAvailableParser', [$this->apiVersion, $this->getPluginID()]);
+			throw PluginException::factory('NoAvailableParser', null, $msg);
 		}
 
 		if (!$this->parser->parse()) {
-			throw new \PluginException(_elgg_services()->translator->translate('PluginException:ParserError',
-						array($this->apiVersion, $this->getPluginID())));
+			$msg = elgg_echo('PluginException:ParserError', [$this->apiVersion, $this->getPluginID()]);
+			throw PluginException::factory('ParseError', null, $msg);
 		}
 	}
 
@@ -227,7 +227,7 @@ class ElggPluginManifest {
 		if ($this->pluginID) {
 			return $this->pluginID;
 		} else {
-			return _elgg_services()->translator->translate('unknown');
+			return elgg_echo('unknown');
 		}
 	}
 
@@ -381,8 +381,8 @@ class ElggPluginManifest {
 	 * @return array
 	 */
 	public function getCategories() {
-		$bundled_plugins = array(
-			'aalborg_theme',
+		$bundled_plugins = [
+			'activity',
 			'blog',
 			'bookmarks',
 			'ckeditor',
@@ -394,15 +394,13 @@ class ElggPluginManifest {
 			'embed',
 			'externalpages',
 			'file',
+			'friends',
+			'friends_collections',
 			'garbagecollector',
 			'groups',
-			'htmlawed',
 			'invitefriends',
-			'legacy_urls',
 			'likes',
-			'logbrowser',
 			'login_as',
-			'logrotate',
 			'members',
 			'messageboard',
 			'messages',
@@ -412,17 +410,17 @@ class ElggPluginManifest {
 			'reportedcontent',
 			'search',
 			'site_notifications',
+			'system_log',
 			'tagcloud',
 			'thewire',
-			'twitter_api',
 			'uservalidationbyemail',
 			'web_services',
-		);
+		];
 
 		$cats = $this->parser->getAttribute('category');
 
 		if (!$cats) {
-			$cats = array();
+			$cats = [];
 		}
 
 		if (in_array('bundled', $cats) && !in_array($this->getPluginID(), $bundled_plugins)) {
@@ -441,10 +439,10 @@ class ElggPluginManifest {
 		$ss = $this->parser->getAttribute('screenshot');
 
 		if (!$ss) {
-			$ss = array();
+			$ss = [];
 		}
 
-		$normalized = array();
+		$normalized = [];
 		foreach ($ss as $s) {
 			$normalized[] = $this->buildStruct($this->screenshotStruct, $s);
 		}
@@ -461,10 +459,10 @@ class ElggPluginManifest {
 		$ss = $this->parser->getAttribute('contributor');
 
 		if (!$ss) {
-			$ss = array();
+			$ss = [];
 		}
 
-		$normalized = array();
+		$normalized = [];
 		foreach ($ss as $s) {
 			$normalized[] = $this->buildStruct($this->contributorStruct, $s);
 		}
@@ -480,25 +478,25 @@ class ElggPluginManifest {
 	public function getProvides() {
 		// normalize for 1.7
 		if ($this->getApiVersion() < 1.8) {
-			$provides = array();
+			$provides = [];
 		} else {
 			$provides = $this->parser->getAttribute('provides');
 		}
 
 		if (!$provides) {
-			$provides = array();
+			$provides = [];
 		}
 
 		// always provide ourself if we can
 		if ($this->pluginID) {
-			$provides[] = array(
+			$provides[] = [
 				'type' => 'plugin',
 				'name' => $this->getPluginID(),
 				'version' => $this->getVersion()
-			);
+			];
 		}
 
-		$normalized = array();
+		$normalized = [];
 		foreach ($provides as $provide) {
 			$normalized[] = $this->buildStruct($this->depsProvidesStruct, $provide);
 		}
@@ -515,10 +513,10 @@ class ElggPluginManifest {
 		$reqs = $this->parser->getAttribute('requires');
 
 		if (!$reqs) {
-			$reqs = array();
+			$reqs = [];
 		}
 
-		$normalized = array();
+		$normalized = [];
 		foreach ($reqs as $req) {
 			$normalized[] = $this->normalizeDep($req);
 		}
@@ -535,10 +533,10 @@ class ElggPluginManifest {
 		$suggests = $this->parser->getAttribute('suggests');
 
 		if (!$suggests) {
-			$suggests = array();
+			$suggests = [];
 		}
 
-		$normalized = array();
+		$normalized = [];
 		foreach ($suggests as $suggest) {
 			$normalized[] = $this->normalizeDep($suggest);
 		}
@@ -554,6 +552,9 @@ class ElggPluginManifest {
 	 * @return array The normalized deps array.
 	 */
 	private function normalizeDep($dep) {
+		
+		$struct = [];
+		
 		switch ($dep['type']) {
 			case 'elgg_release':
 				$struct = $this->depsStructElgg;
@@ -602,8 +603,7 @@ class ElggPluginManifest {
 				// unrecognized so we just return the raw dependency
 				return $dep;
 		}
-
-		// @todo $struct may not have been defined...
+		
 		$normalized_dep = $this->buildStruct($struct, $dep);
 
 		// normalize comparison operators
@@ -648,16 +648,16 @@ class ElggPluginManifest {
 	public function getConflicts() {
 		// normalize for 1.7
 		if ($this->getApiVersion() < 1.8) {
-			$conflicts = array();
+			$conflicts = [];
 		} else {
 			$conflicts = $this->parser->getAttribute('conflicts');
 		}
 
 		if (!$conflicts) {
-			$conflicts = array();
+			$conflicts = [];
 		}
 
-		$normalized = array();
+		$normalized = [];
 
 		foreach ($conflicts as $conflict) {
 			$normalized[] = $this->buildStruct($this->depsConflictsStruct, $conflict);
@@ -698,7 +698,7 @@ class ElggPluginManifest {
 	 * @return array
 	 */
 	protected function buildStruct(array $struct, array $array) {
-		$return = array();
+		$return = [];
 
 		foreach ($struct as $index => $default) {
 			$return[$index] = elgg_extract($index, $array, $default);
@@ -719,7 +719,7 @@ class ElggPluginManifest {
 	static public function getFriendlyCategory($category) {
 		$cat_raw_string = "admin:plugins:category:$category";
 		if (_elgg_services()->translator->languageKeyExists($cat_raw_string)) {
-			return _elgg_services()->translator->translate($cat_raw_string);
+			return elgg_echo($cat_raw_string);
 		}
 		
 		$category = str_replace(['-', '_'], ' ', $category);

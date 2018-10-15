@@ -3,28 +3,28 @@
  * Update avatar river view
  */
 
-$item = $vars['item'];
-/* @var ElggRiverItem $item */
+$item = elgg_extract('item', $vars);
+if (!$item instanceof ElggRiverItem) {
+	return;
+}
 
 $subject = $item->getSubjectEntity();
+if (!$subject instanceof ElggUser) {
+	return;
+}
 
-$subject_link = elgg_view('output/url', array(
+$subject_link = elgg_view('output/url', [
 	'href' => $subject->getURL(),
-	'text' => $subject->name,
+	'text' => $subject->getDisplayName(),
 	'class' => 'elgg-river-subject',
 	'is_trusted' => true,
-));
+]);
 
-$string = elgg_echo('river:update:user:avatar', array($subject_link));
+$vars['summary'] = elgg_echo('river:update:user:avatar', [$subject_link]);
+$vars['attachments'] = elgg_view_entity_icon($subject, 'tiny', [
+	'use_hover' => false,
+	'use_link' => false,
+]);
+$vars['responses'] = false;
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $item,
-	'summary' => $string,
-	'attachments' => elgg_view_entity_icon($subject, 'tiny', array(
-		'use_hover' => false,
-		'use_link' => false,
-	)),
-
-	// truthy value to bypass responses rendering
-	'responses' => ' ',
-));
+echo elgg_view('river/elements/layout', $vars);

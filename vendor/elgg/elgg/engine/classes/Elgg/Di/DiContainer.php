@@ -21,7 +21,7 @@ namespace Elgg\Di;
  * </code>
  *
  * @access private
- * 
+ *
  * @package Elgg.Core
  * @since   1.9
  */
@@ -30,7 +30,7 @@ class DiContainer {
 	/**
 	 * @var array each element is an array: ['callable' => mixed $factory, 'shared' => bool $isShared]
 	 */
-	private $factories_ = array();
+	private $factories_ = [];
 
 	const CLASS_NAME_PATTERN_53 = '/^(\\\\?[a-z_\x7f-\xff][a-z0-9_\x7f-\xff]*)+$/i';
 
@@ -57,7 +57,7 @@ class DiContainer {
 
 	/**
 	 * Build a value
-	 * 
+	 *
 	 * @param mixed  $factory The factory for the value
 	 * @param string $name    The name of the value
 	 * @return mixed
@@ -92,9 +92,19 @@ class DiContainer {
 		if (substr($name, -1) === '_') {
 			throw new \InvalidArgumentException('$name cannot end with "_"');
 		}
-		$this->remove($name);
 		$this->{$name} = $value;
 		return $this;
+	}
+
+	/**
+	 * Remove previously built service, so that it's rebuld from factory on next call
+	 *
+	 * @param string $name Name
+	 * @return void
+	 */
+	public function reset($name) {
+		$this->{$name} = null;
+		unset($this->{$name});
 	}
 
 	/**
@@ -114,10 +124,10 @@ class DiContainer {
 			throw new \InvalidArgumentException('$factory must appear callable');
 		}
 		$this->remove($name);
-		$this->factories_[$name] = array(
+		$this->factories_[$name] = [
 			'callable' => $callable,
 			'shared' => $shared,
-		);
+		];
 		return $this;
 	}
 
@@ -146,7 +156,7 @@ class DiContainer {
 
 	/**
 	 * Remove a value from the container
-	 * 
+	 *
 	 * @param string $name The name of the value
 	 * @return \Elgg\Di\DiContainer
 	 */
@@ -161,7 +171,7 @@ class DiContainer {
 
 	/**
 	 * Does the container have this value
-	 * 
+	 *
 	 * @param string $name The name of the value
 	 * @return bool
 	 */
@@ -172,7 +182,7 @@ class DiContainer {
 		if (substr($name, -1) === '_') {
 			return false;
 		}
-		return (bool)property_exists($this, $name);
+		return (bool) property_exists($this, $name);
 	}
 
 	/**

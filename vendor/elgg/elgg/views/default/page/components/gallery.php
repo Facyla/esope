@@ -17,11 +17,15 @@
  * @uses $vars['item_view']     Alternative view to render list items
  * @uses $vars['no_results']    Message to display if no results (string|Closure)
  */
-$items = $vars['items'];
+$items = elgg_extract('items', $vars);
 $count = elgg_extract('count', $vars);
 $pagination = elgg_extract('pagination', $vars, true);
 $position = elgg_extract('position', $vars, 'after');
 $no_results = elgg_extract('no_results', $vars, '');
+
+if ($no_results === true) {
+	$no_results = elgg_echo('notfound');
+}
 
 if (!$items && $no_results) {
 	echo elgg_view('page/components/no_results', $vars);
@@ -34,15 +38,9 @@ if (!is_array($items) || count($items) == 0) {
 
 elgg_push_context('gallery');
 
-$list_classes = ['elgg-gallery'];
-if (isset($vars['gallery_class'])) {
-	$list_classes[] = $vars['gallery_class'];
-}
+$list_classes = elgg_extract_class($vars, 'elgg-gallery', 'gallery_class');
 
-$item_classes = ['elgg-item'];
-if (isset($vars['item_class'])) {
-	$item_classes[] = $vars['item_class'];
-}
+$item_classes = elgg_extract_class($vars, 'elgg-item', 'item_class');
 
 $nav = ($pagination) ? elgg_view('navigation/pagination', $vars) : '';
 
@@ -60,7 +58,7 @@ foreach ($items as $item) {
 
 	if ($item instanceof \ElggEntity) {
 		$li_attrs['id'] = "elgg-{$item->getType()}-{$item->getGUID()}";
-	} else if (is_callable(array($item, 'getType'))) {
+	} else if (is_callable([$item, 'getType'])) {
 		$li_attrs['id'] = "item-{$item->getType()}-{$item->id}";
 	}
 

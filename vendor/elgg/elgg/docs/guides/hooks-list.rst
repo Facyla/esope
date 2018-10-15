@@ -1,8 +1,10 @@
 List of plugin hooks in core
 ############################
 
+For more information on how hooks work visit :doc:`/design/events`.
+
 .. contents:: Contents
-   :local:
+    :local:
    :depth: 1
 
 System hooks
@@ -22,16 +24,19 @@ System hooks
 **diagnostics:report, system**
 	Filter the output for the diagnostics report download.
 
-**search_types, get_types**
-
 **cron, <period>**
 	Triggered by cron for each period.
 
 **validate, input**
 	Filter GET and POST input. This is used by ``get_input()`` to sanitize user input.
 
-**geocode, location**
-	Deprecated as of 1.9.
+**prepare, html**
+	Triggered by ``elgg_format_html()`` and used to prepare untrusted HTML.
+
+	The ``$return`` value is an array:
+
+	 * ``html`` - HTML string being prepared
+	 * ``options`` - Preparation options
 
 **diagnostics:report, system**
 	Filters the output for a diagnostic report.
@@ -66,34 +71,68 @@ System hooks
 **output, page**
     In ``elgg_view_page()``, this filters the output return value.
 
-**output:before, layout**
-	In ``elgg_view_layout()``, filters ``$params`` before it's passed to the layout view.
-
-**output:after, layout**
-	In ``elgg_view_layout()``, filters the return value of the layout view.
-
 **parameters, menu:<menu_name>**
 	Triggered by ``elgg_view_menu()``. Used to change menu variables (like sort order) before rendering.
+
+	The ``$params`` array will contain:
+
+	 * ``name`` - name of the menu
+	 * ``sort_by`` - preferring sorting parameter
+	 * other parameters passed to ``elgg_view_menu()``
 
 **register, menu:<menu_name>**
 	Filters the initial list of menu items pulled from configuration, before the menu has been split into
 	sections. Triggered by ``elgg_view_menu()`` and ``elgg()->menus->getMenu()``.
+
+	The ``$params`` array will contain parameters returned by ``parameters, menu:<menu_name>`` hook.
+
+	The return value is an instance of ``\Elgg\Collections\Collection`` containing ``\ElggMenuItem`` objects.
+
+	Hook handlers can add/remove items to the collection using the collection API, as well as array access operations.
 
 **prepare, menu:<menu_name>**
 	Filters the array of menu sections before they're displayed. Each section is a string key mapping to
 	an area of menu items. This is a good hook to sort, add, remove, and modify menu items. Triggered by
 	``elgg_view_menu()`` and ``elgg()->menus->prepareMenu()``.
 
+	The ``$params`` array will contain:
+
+	 * ``selected_item`` - ``ElggMenuItem`` selected in the menu, if any
+
+	The return value is an instance of ``\Elgg\Menu\PreparedMenu``. The prepared menu is a collection of ``\Elgg\Menu\MenuSection``,
+	which in turn are collections of ``\ElggMenuItem`` objects.
+
+**register, menu:filter:<filter_id>**
+	Allows plugins to modify layout filter tabs on layouts that specify ``<filter_id>`` parameter. Parameters and return values
+	are same as in ``register, menu:<menu_name>`` hook.
+
+**filter_tabs, <context>**
+	Filters the array of ``ElggMenuItem`` used to display the All/Mine/Friends tabs. The ``$params``
+	array includes:
+
+	 * ``selected``: the selected menu item name
+	 * ``user``: the logged in ``ElggUser`` or ``null``
+	 * ``vars``: The ``$vars`` argument passed to ``elgg_get_filter_tabs``
+
 **creating, river**
 	The options for ``elgg_create_river_item`` are filtered through this hook. You may alter values
 	or return ``false`` to cancel the item creation.
 
 **simplecache:generate, <view>**
-	Triggered when generating the cached content of a view.
+	Filters the view output for a ``/cache`` URL when simplecache is enabled.
+
+**cache:generate, <view>**
+	Filters the view output for a ``/cache`` URL when simplecache is disabled. Note this will be fired
+	for every ``/cache`` request--no Expires headers are used when simplecache is disabled.
 
 **prepare, breadcrumbs**
-    In elgg_get_breadcrumbs(), this filters the registered breadcrumbs before
+    In ``elgg_get_breadcrumbs()``, this filters the registered breadcrumbs before
     returning them, allowing a plugin to alter breadcrumb strategy site-wide.
+    ``$params`` array includes:
+
+      * ``breadcrumbs`` - an array of bredcrumbs, each with ``title`` and ``link`` keys
+      * ``identifier`` - route identifier of the current page
+      * ``segments`` - route segments of the current page
 
 **add, river**
 
@@ -113,12 +152,41 @@ System hooks
    ``$params`` array contains an array of query elements added to the login URL by the invoking script.
    The hook must return an absolute URL of the login page.
 
+**commands, cli**
+   Allows plugins to register their own commands executable via ``elgg-cli`` binary.
+   Handlers must return an array of command class names. Commands must extend ``\Elgg\Cli\Command`` to be executable.
+
+**seeds, database**
+   Allows plugins to register their own database seeds. Seeds populate the database with fake entities for testing purposes.
+   Seeds must extend ``\Elgg\Database\Seeds\Seed`` class to be executable via ``elgg-cli database:seed``.
+
+**languages, translations**
+   Allows plugins to add/remove languages from the configurable languages in the system.
+
+
 User hooks
 ==========
 
 **usersettings:save, user**
-	Triggered in the aggregate action to save user settings. Return false prevent sticky
-	forms from being cleared.
+	Triggered in the aggregate action to save user settings.
+	The hook handler must return ``false`` to prevent sticky forms from being cleared (i.e. to indicate that some of the values were not saved).
+	Do not return ``true`` from your hook handler, as you will override other hooks' output, instead return ``null`` to indicate successful operation.
+
+	The ``$params`` array will contain:
+
+	 * ``user`` - ``\ElggUser``, whose settings are being saved
+	 * ``request`` - ``\Elgg\Request`` to the action controller
+
+**change:email, user**
+	Triggered before the user email is changed.
+	Allows plugins to implement additional logic required to change email, e.g. additional email validation.
+	The hook handler must return false to prevent the email from being changed right away.
+
+	The ``$params`` array will contain:
+
+	 * ``user`` - ``\ElggUser``, whose settings are being saved
+	 * ``email`` - Email address that passes sanity checks
+	 * ``request`` - ``\Elgg\Request`` to the action controller
 
 **access:collections:write, user**
 	Filters an array of access permissions that the user ``$params['user_id']`` is allowed to save
@@ -126,16 +194,25 @@ User hooks
 
 **registeruser:validate:username, all**
 	Return boolean for if the string in ``$params['username']`` is valid for a username.
+	Hook handler can throw ``\RegistrationException`` with an error message to be shown to the user.
 
 **registeruser:validate:password, all**
 	Return boolean for if the string in ``$params['password']`` is valid for a password.
+	Hook handler can throw ``\RegistrationException`` with an error message to be shown to the user.
 
 **registeruser:validate:email, all**
 	Return boolean for if the string in ``$params['email']`` is valid for an email address.
+	Hook handler can throw ``\RegistrationException`` with an error message to be shown to the user.
 
 **register, user**
 	Triggered by the ``register`` action after the user registers. Return ``false`` to delete the user.
 	Note the function ``register_user`` does *not* trigger this hook.
+	Hook handlers can throw ``\RegistrationException`` with an error message to be displayed to the user.
+
+	The ``$params`` array will contain:
+
+	 * ``user`` - Newly registered user entity
+	 * All parameters sent with the request to the action (incl. ``password``, ``friend_guid``, ``invitecode`` etc)
 
 **login:forward, user**
     Filters the URL to which the user will be forwarded after login.
@@ -164,11 +241,88 @@ Object hooks
 **likes:count, <entity_type>**
 	Return the number of likes for ``$params['entity']``.
 
+Access hooks
+============
+
+**access_collection:url, access_collection**
+	Can be used to filter the URL of the access collection.
+
+	The ``$params`` array will contain:
+
+	 * ``access_collection`` - `ElggAccessCollection`
+
+**access_collection:name, access_collection**
+	Can be used to filter the display name (readable access level) of the access collection.
+
+	The ``$params`` array will contain:
+
+	 * ``access_collection`` - `ElggAccessCollection`
+
+**access:collections:read, user**
+	Filters an array of access IDs that the user ``$params['user_id']`` can see.
+
+	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
+
+**access:collections:write, user**
+	Filters an array of access IDs that the user ``$params['user_id']`` can write to. In
+	get_write_access_array(), this hook filters the return value, so it can be used to alter
+	the available options in the input/access view. For core plugins, the value "input_params"
+	has the keys "entity" (ElggEntity|false), "entity_type" (string), "entity_subtype" (string),
+	"container_guid" (int) are provided. An empty entity value generally means the form is to
+	create a new object.
+
+	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
+
+**access:collections:addcollection, collection**
+	Triggered after an access collection ``$params['collection_id']`` is created.
+
+**access:collections:deletecollection, collection**
+	Triggered before an access collection ``$params['collection_id']`` is deleted.
+	Return false to prevent deletion.
+
+**access:collections:add_user, collection**
+	Triggered before adding user ``$params['user_id']`` to collection ``$params['collection_id']``.
+	Return false to prevent adding.
+
+**access:collections:remove_user, collection**
+	Triggered before removing user ``$params['user_id']`` to collection ``$params['collection_id']``.
+	Return false to prevent removal.
+
+**get_sql, access**
+	Filters SQL clauses restricting/allowing access to entities and annotations.
+
+	**The hook is triggered regardless if the access is ignored**. The handlers may need to check if access is ignored and return early, if appended clauses should only apply to access controlled contexts.
+
+	``$return`` value is a nested array of ``ands`` and ``ors``.
+
+	``$params`` includes:
+
+	 * ``table_alias`` - alias of the main table used in select clause
+	 * ``ignore_access`` - whether ignored access is enabled
+	 * ``use_enabled_clause`` - whether disabled entities are shown/hidden
+	 * ``access_column`` - column in the main table containing the access collection ID value
+	 * ``owner_guid_column`` - column in the main table referencing the GUID of the owner
+	 * ``guid_column`` - column in the main table referencing the GUID of the entity
+	 * ``enabled_column`` - column in the main table referencing the enabled status of the entity
+	 * ``query_builder`` - an instance of the ``QueryBuilder``
+
+
 Action hooks
 ============
 
 **action, <action>**
+	Deprecated. Use ``'action:validate', <action>`` hook instead.
 	Triggered before executing action scripts. Return false to abort action.
+
+**action:validate, <action>**
+	Trigger before action script/controller is executed.
+	This hook should be used to validate/alter user input, before proceeding with the action.
+	The hook handler can throw an instance of ``\Elgg\ValidationException`` or return ``false``
+	to terminate further execution.
+
+    ``$params`` array includes:
+
+     * ``request`` - instance of ``\Elgg\Request``
 
 **action_gatekeeper:permissions:check, all**
 	Triggered after a CSRF token is validated. Return false to prevent validation.
@@ -179,6 +333,7 @@ Action hooks
 
 **forward, <reason>**
 	Filter the URL to forward a user to when ``forward($url, $reason)`` is called.
+	In certain cases, the ``params`` array will contain an instance of ``HttpException`` that triggered the error.
 
 **response, action:<action>**
     Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
@@ -256,7 +411,13 @@ Permission hooks
 	Return boolean for if the user ``$params['user']`` can delete the river item ``$params['item']``. Defaults to
 	``true`` for admins and ``false`` for other users.
 
-	.. note:: This check is not performed when using the deprecated ``elgg_delete_river()``.
+**permissions_check:download, file**
+	Return boolean for if the user ``$params['user']`` can download the file in ``$params['entity']``.
+
+	The ``$params`` array will contain:
+
+	 * ``entity`` - Instance of ``ElggFile``
+	 * ``user`` - User who will download the file
 
 **permissions_check, widget_layout**
 	Return boolean for if ``$params['user']`` can edit the widgets in the context passed as
@@ -292,41 +453,17 @@ Permission hooks
 **api_key, use**
 	Triggered by ``api_auth_key()``. Returning false prevents the key from being authenticated.
 
-**access:collections:read, user**
-	Filters an array of access IDs that the user ``$params['user_id']`` can see.
-
-	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
-
-**access:collections:write, user**
-	Filters an array of access IDs that the user ``$params['user_id']`` can write to. In
-	get_write_access_array(), this hook filters the return value, so it can be used to alter
-	the available options in the input/access view. For core plugins, the value "input_params"
-	has the keys "entity" (ElggEntity|false), "entity_type" (string), "entity_subtype" (string),
-	"container_guid" (int) are provided. An empty entity value generally means the form is to
-	create a new object.
-
-	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
-
-**access:collections:addcollection, collection**
-	Triggered after an access collection ``$params['collection_id']`` is created.
-
-**access:collections:deletecollection, collection**
-	Triggered before an access collection ``$params['collection_id']`` is deleted.
-	Return false to prevent deletion.
-
-**access:collections:add_user, collection**
-	Triggered before adding user ``$params['user_id']`` to collection ``$params['collection_id']``.
-	Return false to prevent adding.
-
-**access:collections:remove_user, collection**
-	Triggered before removing user ``$params['user_id']`` to collection ``$params['collection_id']``.
-	Return false to prevent removal.
-
-**get_sql, access**
-    Filters the SQL clauses used in ``_elgg_get_access_where_sql()``.
-
 **gatekeeper, <entity_type>:<entity_subtype>**
-    Filters the result of ``elgg_entity_gatekeeper()`` to prevent access to an entity that user would otherwise have access to. A handler should return false to deny access to an entity.
+    Filters the result of ``elgg_entity_gatekeeper()`` to prevent or allow access to an entity that user would otherwise have or not have access to.
+    A handler can return ``false`` or an instance of ``HttpException`` to prevent access to an entity.
+    A handler can return ``true`` to override the result of the gatekeeper.
+    **Important** that the entity received by this hook is fetched with ignored access and including disabled entities,
+    so you have to be careful to not bypass the access system.
+
+    ``$params`` array includes:
+
+	 * ``entity`` - Entity that is being accessed
+	 * ``user`` - User accessing the entity (``null`` implies logged in user)
 
 
 Notifications
@@ -358,7 +495,7 @@ Note that not all hooks apply to instant notifications.
 
 	Handlers must return an array in the form:
 
-.. code:: php
+.. code-block:: php
 
 	array(
 		<user guid> => array('sms'),
@@ -429,21 +566,6 @@ Note that not all hooks apply to instant notifications.
 
 	 * ``notification`` - a notification object ``\Elgg\Notifications\Notification``
 
-**email, system**
-	Triggered by ``elgg_send_email()``.
-	Applies to **subscriptions** and **instant** notifications with ``email`` method.
-	This hook can be used to alter email parameters (subject, body, headers etc) - the handler should return an array of altered parameters.
-	This hook can also be used to implement a custom email transport (in place of Elgg's default plaintext ``\Zend\Mail\Transport\Sendmail``) - the handler must return ``true`` or ``false`` to indicate whether the email was sent using a custom transport.
-
-	``$params`` contains:
-
-	 * ``to`` - email address or string in the form ``Name <name@example.org>`` of the recipient
-	 * ``from`` - email address or string in the form ``Name <name@example.org>`` of the sender
-	 * ``subject`` - subject line of the email
-	 * ``body`` - body of the email
-	 * ``headers`` - an array of headers
-	 * ``params`` - other parameters inherited from the notification object or passed directly to ``elgg_send_email()``
-
 **send:after, notifications**
 	Triggered after all notifications in the queue for the notifications event have been processed.
 	Applies to **subscriptions** and **instant** notifications.
@@ -455,18 +577,57 @@ Note that not all hooks apply to instant notifications.
 	 * ``deliveries`` - a matrix of delivery statuses by user for each delivery method
 
 
+Emails
+======
+
+**prepare, system:email**
+	Triggered by ``elgg_send_email()``.
+	Applies to all outgoing system and notification emails.
+	This hook allows you to alter an instance of ``\Elgg\Email`` before it is passed to the email transport.
+	This hook can be used to alter the sender, recipient, subject, body, and/or headers of the email.
+
+	``$params`` are empty. The ``$return`` value is an instance of ``\Elgg\Email``.
+
+**validate, system:email**
+	Triggered by ``elgg_send_email()``.
+	Applies to all outgoing system and notification emails.
+	This hook allows you to suppress or whitelist outgoing emails, e.g. when the site is in a development mode.
+	The handler must return ``false`` to supress the email delivery.
+
+	``$params`` contains:
+
+	 * ``email`` - An instance of ``\Elgg\Email``
+
+**transport, system:email**
+	Triggered by ``elgg_send_email()``.
+	Applies to all outgoing system and notification emails.
+	This hook allows you to implement a custom email transport, e.g. delivering emails via a third-party proxy service such as SendGrid or Mailgun.
+	The handler must return ``true`` to indicate that the email was transported.
+
+	``$params`` contains:
+
+	 * ``email`` - An instance of ``\Elgg\Email``
+
+**zend:message, system:email**
+	Triggered by the default email transport handler (Elgg uses ``zendframework/zend-mail``).
+	Applies to all outgoing system and notification emails that were not transported using the **transport, system:email** hook.
+	This hook allows you to alter an instance of ``\Zend\Mail\Message`` before it is passed to the Zend email transport.
+
+	``$params`` contains:
+
+	 * ``email`` - An instance of ``\Elgg\Email``
+
 Routing
 =======
 
-**route, <identifier>**
-    Allows applying logic or returning a response before the page handler is called. See :doc:`routing`
-    for details.
-    Note that plugins using this hook to rewrite paths, will not be able to filter the response object by
-    its final path and should either switch to ``route:rewrite, <identifier>`` hook or use ``response, path:<path>`` hook for
-    the original path.
+**route:config, <route_name>**
+	Allows altering the route configuration before it is registered.
+	This hook can be used to alter the path, default values, requirements, as well as to set/remove middleware.
+	Please note that the handler for this hook should be registered outside of the ``init`` event handler, as core routes are registered during ``plugins_boot`` event.
 
 **route:rewrite, <identifier>**
-	Allows altering the site-relative URL path. See :doc:`routing` for details.
+	Allows altering the site-relative URL path for an incoming request. See :doc:`routing` for details.
+	Please note that the handler for this hook should be registered outside of the ``init`` event handler, as route rewrites take place after ``plugins_boot`` event has completed.
 
 **response, path:<path>**
     Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
@@ -492,7 +653,12 @@ Views
     Filters the returned content of the view
 
 **layout, page**
-    In ``elgg_view_layout()``, filters the layout name
+    In ``elgg_view_layout()``, filters the layout name.
+    ``$params`` array includes:
+
+     * ``identifier`` - ID of the page being rendered
+     * ``segments`` - URL segments of the page being rendered
+     * other ``$vars`` received by ``elgg_view_layout()``
 
 **shell, page**
     In ``elgg_view_page()``, filters the page shell name
@@ -505,7 +671,7 @@ Views
     Each meta and link element contains a set of key/value pairs that are formatted
     into html tag attributes, e.g.
 
-.. code:: php
+.. code-block:: php
 
     return [
        'title' => 'Current page title',
@@ -526,7 +692,7 @@ Views
              'rel' => 'icon',
              'sizes' => '16x16',
              'type' => 'image/png',
-		     'href' => elgg_get_simplecache_url('favicon-16.png'),
+		     'href' => elgg_get_simplecache_url('graphics/favicon-16.png'),
           ],
        ],
     ];
@@ -554,8 +720,29 @@ Views
     ``$params['arguments']`` and should return an instance of ``Elgg\Views\TableColumn`` if they
     wish to specify the column directly.
 
+**vars:compiler, css**
+    Allows plugins to alter CSS variables passed to CssCrush during compilation.
+    See `CSS variables <_guides/theming#css-vars>`.
+
+
 Files
 =====
+
+**download:url, file**
+    Allows plugins to filter the download URL of the file.
+	By default, the download URL is generated by the file service.
+
+    ``$params`` array includes:
+
+     * ``entity`` - instance of ``ElggFile``
+
+**inline:url, file**
+    Allows plugins to filter the inline URL of the image file.
+	By default, the inline URL is generated by the file service.
+
+    ``$params`` array includes:
+
+     * ``entity`` - instance of ``ElggFile``
 
 **mime_type, file**
 	Return the mimetype for the filename ``$params['filename']`` with original filename ``$params['original_filename']``
@@ -580,13 +767,76 @@ Files
      * ``file`` - instance of ``ElggFile`` to write to
      * ``upload`` - instance of Symfony's ``UploadedFile``
 
+
+.. _guides/hooks-list#search:
+
+Search
+======
+
+**search:results, <search_type>**
+    Triggered by ``elgg_search()``. Receives normalized options suitable for ``elgg_get_entities()`` call and must return an array of entities matching search options.
+    This hook is designed for use by plugins integrating third-party indexing services, such as Solr and Elasticsearch.
+
+**search:params, <search_type>**
+    Triggered by ``elgg_search()``. Filters search parameters (query, sorting, search fields etc) before search clauses are prepared for a given search type.
+    Elgg core only provides support for ``entities`` search type.
+
+**search:fields, <entity_type>**
+    Triggered by ``elgg_search()``. Filters search fields before search clauses are prepared.
+    ``$return`` value contains an array of names for each entity property type, which should be matched against the search query.
+    ``$params`` array contains an array of search params passed to and filtered by ``elgg_search()``.
+
+.. code-block:: php
+
+    return [
+        'attributes' => [],
+        'metadata' => ['title', 'description'],
+        'annotations' => ['revision'],
+        'private_settings' => ['internal_notes'],
+    ];
+
+**search:fields, <entity_type>:<entity_subtype>**
+   See **search:fields, <entity_type>**
+
+**search:fields, <search_type>**
+    See **search:fields, <entity_type>**
+
+**search:options, <entity_type>**
+    Triggered by ``elgg_search()``. Prepares search clauses (options) to be passed to ``elgg_get_entities()``.
+
+**search:options, <entity_type>:<entity_subtype>**
+    See **search:options, <entity_type>**
+
+**search:options, <search_type>**
+    See **search:options, <entity_type>**
+
+**search:config, search_types**
+    Implemented in the **search** plugin.
+    Filters an array of custom search types. This allows plugins to add custom search types (e.g. tag or location search).
+    Adding a custom search type will extend the search plugin user interface with appropriate links and lists.
+
+**search:config, type_subtype_pairs**
+    Implemented in the **search** plugin.
+    Filters entity type/subtype pairs before entity search is performed.
+    Allows plugins to remove certain entity types/subtypes from search results, group multiple subtypes together, or to reorder search sections.
+
+**search:format, entity**
+    Implemented in the **search** plugin.
+    Allows plugins to populate entity's volatile data before it's passed to search view.
+    This is used for highlighting search hit, extracting relevant substrings in long text fields etc.
+
 .. _guides/hooks-list#other:
 
 Other
 =====
 
 **config, comments_per_page**
-	Filters the number of comments displayed per page. Default is 25.
+	Filters the number of comments displayed per page. Default is 25. ``$params['entity']`` will hold
+	the containing entity or null if not provided.
+
+**config, comments_latest_first**
+	Filters the order of comments. Default is ``true`` for latest first. ``$params['entity']`` will hold
+	the containing entity or null if not provided.
 
 **default, access**
 	In get_default_access(), this hook filters the return value, so it can be used to alter
@@ -594,6 +844,10 @@ Other
 	the keys "entity" (ElggEntity|false), "entity_type" (string), "entity_subtype" (string),
 	"container_guid" (int) are provided. An empty entity value generally means the form is to
 	create a new object.
+
+**classes, icon**
+	Can be used to filter CSS classes applied to icon glyphs. By default, Elgg uses FontAwesome. Plugins can use this
+	hook to switch to a different font family and remap icon classes.
 
 **entity:icon:sizes, <entity_type>**
 	Triggered by ``elgg_get_icon_sizes()`` and sets entity type/subtype specific icon sizes.
@@ -605,18 +859,17 @@ Other
 	The hook must return an associative array where keys are the names of the icon sizes
 	(e.g. "large"), and the values are arrays with the following keys:
 
-	 * ``w`` - Width of the image in pixels
-	 * ``h`` - Height of the image in pixels
-	 * ``square`` - Should the aspect ratio be a square (true/false)
-	 * ``upscale`` - Should the image be upscaled in case it is smaller than the given
-           width and height (true/false)
+     * ``w`` - Width of the image in pixels
+     * ``h`` - Height of the image in pixels
+     * ``square`` - Should the aspect ratio be a square (true/false)
+     * ``upscale`` - Should the image be upscaled in case it is smaller than the given width and height (true/false)
 
 	If the configuration array for an image size is empty, the image will be
 	saved as an exact copy of the source without resizing or cropping.
 
 	Example:
 
-.. code:: php
+.. code-block:: php
 
 	return [
 		'small' => [
@@ -648,7 +901,7 @@ Other
 	Example on how one could default to a Gravatar icon for users that
 	have not yet uploaded an avatar:
 
-.. code:: php
+.. code-block:: php
 
 	// Priority 600 so that handler is triggered after avatar handler
 	elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'gravatar_icon_handler', 600);
@@ -661,10 +914,10 @@ Other
 		if ($params['entity']->icontime) {
 			return $url;
 		}
-		
+
 		// Generate gravatar hash for user email
 		$hash = md5(strtolower(trim($params['entity']->email)));
-		
+
 		// Default icon size
 		$size = '150x150';
 
@@ -674,7 +927,7 @@ Other
 		if (isset($config[$key])) {
 			$size = $config[$key]['w'] . 'x' . $config[$key]['h'];
 		}
-		
+
 		// Produce URL used to retrieve icon
 		return "http://www.gravatar.com/avatar/$hash?s=$size";
 	}
@@ -773,7 +1026,7 @@ Other
 	Filter an array of profile fields. The result should be returned as an array in the format
 	``name => input view name``. For example:
 
-.. code:: php
+.. code-block:: php
 
 	array(
 		'about' => 'longtext'
@@ -784,7 +1037,7 @@ Other
 	Filter an array of profile fields. The result should be returned as an array in the format
 	``name => input view name``. For example:
 
-.. code:: php
+.. code-block:: php
 
 	array(
 		'about' => 'longtext'
@@ -802,7 +1055,7 @@ Other
 	Filters a list of default widgets to add for newly registered users. The list is an array
 	of arrays in the format:
 
-.. code:: php
+.. code-block:: php
 
 	array(
 		'event' => $event,
@@ -812,8 +1065,14 @@ Other
 	)
 
 **public_pages, walled_garden**
-	Filter the URLs that are can be seen by logged out users if Walled Garden is
-	enabled. ``$value`` is an array of regex strings that will allow access if matched.
+	Filters a list of URLs (paths) that can be seen by logged out users in a walled garden mode.
+	Handlers must return an array of regex strings that will allow access if matched.
+	Please note that system public routes are passed as the default value to the hook,
+	and plugins must take care to not accidentally override these values.
+
+	The ``$params`` array contains:
+
+	 * ``url`` - URL of the page being tested for public accessibility
 
 **volatile, metadata**
 	Triggered when exporting an entity through the export handler. This is rare.
@@ -849,7 +1108,13 @@ Groups
 	Filters buttons (``ElggMenuItem`` instances) to be registered in the title menu of the group profile page
 
 **tool_options, group**
-	Use this hook to influence the available group tool options
+	Filters a collection of tools available within a specific group:
+
+	The ``$return`` is ``\Elgg\Collections\Collection<\Elgg\Groups\Tool>``, a collection of group tools.
+
+	The ``$params`` array contains:
+
+	 * ``entity`` - ``\ElggGroup``
 
 HTMLawed
 --------
@@ -858,7 +1123,10 @@ HTMLawed
 	Filter the HTMLawed allowed style array.
 
 **config, htmlawed**
-	Filter the HTMLawed config array.
+	Filter the HTMLawed ``$config`` array.
+
+**spec, htmlawed**
+	Filter the HTMLawed ``$spec`` string (default empty).
 
 Likes
 -----
@@ -879,13 +1147,6 @@ Members
     This hook is used to assemble an array of tabs to be passed to the navigation/tabs view
     for the members pages.
 
-Twitter API
------------
-
-**authorize, twitter_api**
-	Triggered when a user is authorizes Twitter for a login. ``$params['token']`` contains the Twitter
-	authorization token.
-
 Reported Content
 ----------------
 
@@ -898,26 +1159,6 @@ Reported Content
 **reportedcontent:delete, system**
 	Triggered before deleting the reported content object ``$params['report']``. Return false to prevent deleting.
 
-Search
-------
-
-**search, <type>:<subtype>**
-	Filter more granular search results than searching by type alone. Must return an array with ``count`` as the
-	total count of results and  ``entities`` an array of ElggUser entities.
-
-**search, tags**
-
-**search, <type>**
-	Filter the search for entities for type ``$type``. Must return an array with ``count`` as the
-	total count of results and  ``entities`` an array of ElggUser entities.
-
-**search_types, get_types**
-	Filter an array of search types. This allows plugins to add custom types that don't correspond
-	directly to entities.
-
-**search_types, get_queries**
-    Before a search this filters the types queried. This can be used to reorder
-    the display of search results.
 
 Web Services
 ------------

@@ -1,6 +1,10 @@
 File System
 ###########
 
+.. contents:: Contents
+   :local:
+   :depth: 1
+
 Filestore
 =========
 
@@ -127,16 +131,9 @@ In order to implement an action that saves a single file uploaded by a user, you
 .. code-block:: php
 
 	// in your action
-	$uploaded_files = elgg_get_uploaded_files('upload');
-	if (!$uploaded_files) {
+	$uploaded_file = elgg_get_uploaded_file('upload');
+	if (!$uploaded_file) {
 		register_error("No file was uploaded");
-		forward(REFERER);
-	}
-
-	$uploaded_file = array_shift($uploaded_files);
-	if (!$uploaded_file->isValid()) {
-		$error = elgg_get_friendly_upload_error($uploaded_file->getError());
-		register_error($error);
 		forward(REFERER);
 	}
 
@@ -181,3 +178,17 @@ If your file input supports multiple files, you can iterate through them in your
 			$file->save();
 		}
 	}
+
+.. note::
+
+   If images are uploaded their is an automatic attempt to fix the orientation of the image.
+
+Temporary files
+===============
+
+If you ever need a temporary file you can use ``elgg_get_temp_file()``. You'll get an instance of an ``ElggTempFile`` which has all the 
+file functions of an ``ElggFile``, but writes it's data to the systems temp folder.
+
+.. warning::
+	
+	It's not possible to save the ``ElggTempFile`` to the database. You'll get an ``IOException`` if you try.

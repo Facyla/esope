@@ -10,9 +10,9 @@ General
 This error is usually accompanied by more details explaining why the plugin is invalid. This is usually
 caused by an incorrectly installed plugin.
 
-If you are installing a plugin called "test", there will be a test directory under mod. In that test directory there needs to be a start.php file: ``/mod/test/start.php`` and a manifest.xml file ``/mod/test/manifest.xml``.
+If you are installing a plugin called "test", there will be a test directory under mod. In that test directory there needs to be a manifest.xml file ``/mod/test/manifest.xml``.
 
-If these files do not exist, it could be caused by:
+If this file does not exist, it could be caused by:
 	* installing a plugin to the wrong directory
 	* creating a directory under /mod that does not contain a plugin
 	* a bad ftp transfer
@@ -95,7 +95,7 @@ If no one gets email at all, it is quite likely your server is not configured pr
 
 To quickly check if PHP and an MTA are correctly configured, create a file on your server with the following content:
 
-.. code:: php
+.. code-block:: php
 
 	<?php
 	$address = "your_email@your_host.com";
@@ -286,13 +286,13 @@ Can I add extra fields to tables in the database?
 
 No, this is a bad idea. Learn the :doc:`data model </design/database>` and you will see that unless it's a very specific and highly customized installation, you can do everything you need within Elgg's current data model.
 
-I want to remove users. Can't I just delete them from the elgg_users_entity table?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I want to remove users. Can't I just delete them from the elgg_entities table?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 No, it will corrupt your database. Delete them through the site.
 
-I want to remove spam. Can't I just search and delete it from the elgg_objects_entity table?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I want to remove spam. Can't I just search and delete it from the elgg_entities table?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 No, it will corrupt your database. Delete it through the site.
 
@@ -347,8 +347,6 @@ The second cause would be an entity where the owner no longer exists. This could
 
    Reed the section "Should I edit the database manually?". Be very carefull when editing the database directly. It can break your site. **Always** make a backup before doing this.
 
-The third cause is a user not having a username. This also indicates a database problem as this should not be possible. If it does occur, you could see this error when viewing a list of users (such as with the Members plugin). To fix, check your ``users_entity`` table for users without a username and if so, create a fake a username for that person. You should probably then delete the user through Elgg.
-
 Fixes
 ^^^^^
 
@@ -373,23 +371,6 @@ Wrong permissions on the data directory
 
 Check the permissions for the data directory. The data directory should be readable and writeable by the web server user.
 
-Different timezone
-^^^^^^^^^^^^^^^^^^
-
-.. note::
-
-   This only applies to Elgg versions before 1.9
-
-If you migrated servers or upgraded PHP, check that PHP's timezone settings are the same between the old and the new. If you cannot or don't want to change the system-wide ``php.ini`` file, you can put the following at the top of ``settings.php``:
-
-.. code:: php
-
-   date_default_timezone_set('MY_TIME_ZONE');
-   
-Where ``MY_TIME_ZONE`` is a valid `PHP timezone`_.
-
-.. _PHP timezone: http://php.net/manual/en/timezones.php
-
 Migrated installation with new data directory location
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -400,7 +381,7 @@ Deprecation warnings
 
 If you are seeing many deprecation warnings that say things like
 
-.. code::
+.. code-block:: text
 
    Deprecated in 1.7: extend_view() was deprecated by elgg_extend_view()!
 

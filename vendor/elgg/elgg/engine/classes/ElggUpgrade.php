@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade object for upgrades that need to be tracked
  * and listed in the admin area.
@@ -6,22 +7,30 @@
  * @todo Expand for all upgrades to be \ElggUpgrade subclasses.
  */
 
+use Elgg\TimeUsing;
+use Elgg\Upgrade\Batch;
+
 /**
  * Represents an upgrade that runs outside of the upgrade.php script.
- * These are listed in admin/upgrades and allow for ajax upgrades.
- *
- * @note The "upgrade_url" private setting originally stored the full URL, but
- *       was changed to hold the relative path from the site URL for #6838
  *
  * @package Elgg.Admin
  * @access private
+ *
+ * @property int $is_completed
+ * @property int $processed
+ * @property int $offset
+ * @property int $has_errors
  */
-class ElggUpgrade extends \ElggObject {
-	private $requiredProperties = array(
+class ElggUpgrade extends ElggObject {
+
+	use TimeUsing;
+	
+	private $requiredProperties = [
+		'id',
 		'title',
 		'description',
-		'upgrade_url',
-	);
+		'class',
+	];
 
 	/**
 	 * Do not use.
@@ -42,11 +51,8 @@ class ElggUpgrade extends \ElggObject {
 		$this->attributes['subtype'] = 'elgg_upgrade';
 
 		// unowned
-		$this->attributes['site_guid'] = 0;
 		$this->attributes['container_guid'] = 0;
 		$this->attributes['owner_guid'] = 0;
-
-		$this->is_completed = 0;
 	}
 
 	/**
@@ -56,7 +62,9 @@ class ElggUpgrade extends \ElggObject {
 	 */
 	public function setCompleted() {
 		$this->setCompletedTime();
-		return $this->is_completed = true;
+		$this->is_completed = true;
+
+		elgg_trigger_event('complete', 'upgrade', $this);
 	}
 
 	/**
@@ -69,33 +77,56 @@ class ElggUpgrade extends \ElggObject {
 	}
 
 	/**
-	 * Sets an upgrade URL path
+	 * Sets an unique id for the upgrade
 	 *
-	 * @param string $path Set the URL path (without site URL) for the upgrade page
+	 * @param string $id Upgrade id in format <plugin_name>:<yyymmddhh>
 	 * @return void
-	 * @throws InvalidArgumentException
 	 */
-	public function setPath($path) {
-		if (!$path) {
-			throw new InvalidArgumentException('Invalid value for URL path.');
-		}
-
-		$path = ltrim($path, '/');
-
-		if ($this->getUpgradeFromPath($path)) {
-			throw new InvalidArgumentException('Upgrade URL paths must be unique.');
-		}
-
-		$this->upgrade_url = $path;
+	public function setID($id) {
+		$this->id = $id;
 	}
 
 	/**
-	 * Returns a normalized URL for the upgrade page.
+	 * Sets a class for the upgrade
 	 *
-	 * @return string
+	 * @param string $class Fully qualified class name
+	 * @return void
 	 */
-	public function getURL() {
-		return elgg_normalize_url($this->upgrade_url);
+	public function setClass($class) {
+		$this->class = $class;
+	}
+
+	/**
+	 * Check if the upgrade should be run asynchronously
+	 * @return bool
+	 */
+	public function isAsynchronous() {
+		return !is_subclass_of($this->class, \Elgg\Upgrade\SystemUpgrade::class);
+	}
+
+	/**
+	 * Return instance of the class that processes the data
+	 *
+	 * @return Batch|false
+	 */
+	public function getBatch() {
+		try {
+			$batch = _elgg_services()->upgradeLocator->getBatch($this->class);
+		} catch (InvalidArgumentException $ex) {
+			elgg_log($ex->getMessage(), 'ERROR');
+			return false;
+		}
+
+		// check version before shouldBeSkipped() so authors can get immediate feedback on an invalid batch.
+		$version = $batch->getVersion();
+
+		// Version must be in format yyyymmddnn
+		if (preg_match("/^[0-9]{10}$/", $version) == 0) {
+			elgg_log("Upgrade $this->class returned an invalid version: $version");
+			return false;
+		}
+
+		return $batch;
 	}
 
 	/**
@@ -106,7 +137,7 @@ class ElggUpgrade extends \ElggObject {
 	 */
 	public function setCompletedTime($time = null) {
 		if (!$time) {
-			$time = time();
+			$time = $this->getCurrentTime()->getTimestamp();
 		}
 
 		return $this->completed_time = $time;
@@ -128,6 +159,10 @@ class ElggUpgrade extends \ElggObject {
 	 * @throws UnexpectedValueException
 	 */
 	public function save() {
+		if (!isset($this->is_completed)) {
+			$this->is_completed = 0;
+		}
+
 		foreach ($this->requiredProperties as $prop) {
 			if (!$this->$prop) {
 				throw new UnexpectedValueException("ElggUpgrade objects must have a value for the $prop property.");
@@ -170,41 +205,9 @@ class ElggUpgrade extends \ElggObject {
 	}
 
 	/**
-	 * Find an ElggUpgrade object by the unique URL path
-	 *
-	 * @param string $path The Upgrade URL path (after site URL)
-	 * @return ElggUpgrade|false
+	 * {@inheritdoc}
 	 */
-	public function getUpgradeFromPath($path) {
-		$path = ltrim($path, '/');
-
-		if (!$path) {
-			return false;
-		}
-
-		// test for full URL values (used at 1.9.0)
-		$options = array(
-			'type' => 'object',
-			'subtype' => 'elgg_upgrade',
-			'private_setting_name' => 'upgrade_url',
-			'private_setting_value' => elgg_normalize_url($path),
-		);
-		$upgrades = call_user_func($this->_callable_egefps, $options);
-		/* @var ElggUpgrade[] $upgrades */
-
-		if ($upgrades) {
-			// replace URL with path (we can't use setPath due to recursion)
-			$upgrades[0]->upgrade_url = $path;
-			return $upgrades[0];
-		}
-
-		$options['private_setting_value'] = $path;
-		$upgrades = call_user_func($this->_callable_egefps, $options);
-
-		if ($upgrades) {
-			return $upgrades[0];
-		}
-
-		return false;
+	public function getDisplayName() {
+		return elgg_echo($this->title);
 	}
 }

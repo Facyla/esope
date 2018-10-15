@@ -5,40 +5,33 @@
  * This action can be overriden for a specific plugin by creating the
  * <plugin_id>/settings/save action in that plugin.
  *
- * @uses array $_REQUEST['params']    A set of key/value pairs to save to the ElggPlugin entity
- * @uses int   $_REQUEST['plugin_id'] The ID of the plugin
- *
- * @package Elgg.Core
- * @subpackage Plugins.Settings
+ * @uses array $_REQUEST['params']      A set of key/value pairs to save to the ElggPlugin entity
+ * @uses mixed $_REQUEST['flush_cache'] If a truthy value is provided the caches will be flushed
+ * @uses int   $_REQUEST['plugin_id']   The ID of the plugin
  */
 
 $params = get_input('params');
+$flush_cache = get_input('flush_cache');
 $plugin_id = get_input('plugin_id');
 $plugin = elgg_get_plugin_from_id($plugin_id);
 
-if (!($plugin instanceof ElggPlugin)) {
-	register_error(elgg_echo('plugins:settings:save:fail', array($plugin_id)));
-	forward(REFERER);
+if (!$plugin) {
+	return elgg_error_response(elgg_echo('plugins:settings:save:fail', [$plugin_id]));
 }
 
-$plugin_name = $plugin->getManifest()->getName();
+$plugin_name = $plugin->getDisplayName();
 
 $result = false;
 
-// allow a plugin to override the save action for their settings
-if (elgg_action_exists("$plugin_id/settings/save")) {
-	action("$plugin_id/settings/save");
-} else {
-	foreach ($params as $k => $v) {
-		
-		$result = $plugin->setSetting($k, $v);
-		if (!$result) {
-			register_error(elgg_echo('plugins:settings:save:fail', array($plugin_name)));
-			forward(REFERER);
-			exit;
-		}
+foreach ($params as $k => $v) {
+	$result = $plugin->setSetting($k, $v);
+	if (!$result) {
+		return elgg_error_response(elgg_echo('plugins:settings:save:fail', [$plugin_name]));
 	}
 }
 
-system_message(elgg_echo('plugins:settings:save:ok', array($plugin_name)));
-forward(REFERER);
+if ($flush_cache) {
+	elgg_flush_caches();
+}
+
+return elgg_ok_response('', elgg_echo('plugins:settings:save:ok', [$plugin_name]));

@@ -1,25 +1,36 @@
 <?php
 
-$subpage = elgg_extract('subpage', $vars);
-$page_type = elgg_extract('page_type', $vars);
-$group_guid = elgg_extract('group_guid', $vars);
+$group_guid = elgg_extract('guid', $vars, elgg_extract('group_guid', $vars)); // group_guid for BC
 $lower = elgg_extract('lower', $vars);
 $upper = elgg_extract('upper', $vars);
 
+elgg_entity_gatekeeper($group_guid, 'group');
 $group = get_entity($group_guid);
 
-if (!elgg_instanceof($group, 'group')) {
-	forward('', '404');
+elgg_register_title_button('blog', 'add', 'object', 'blog');
+
+elgg_push_collection_breadcrumbs('object', 'blog', $group);
+
+$title = elgg_echo('collection:object:blog:group');
+if ($lower) {
+	$title .= ': ' . elgg_echo('date:month:' . date('m', $lower), [date('Y', $lower)]);
 }
 
-if (!isset($subpage) || $subpage == 'all') {
-	$params = blog_get_page_content_list($group_guid);
-} else {
-	$params = blog_get_page_content_archive($group_guid, $lower, $upper);
-}
+$content = elgg_view('blog/listing/group', [
+	'entity' => $group,
+	'lower' => $lower,
+	'upper' => $upper,
+]);
 
-$params['sidebar'] = elgg_view('blog/sidebar', ['page' => $page_type]);
+$layout = elgg_view_layout('default', [
+	'title' => $title,
+	'content' => $content,
+	'sidebar' => elgg_view('blog/sidebar', [
+		'page' => 'group',
+		'entity' => $group,
+	]),
+	'filter_id' => 'blog/group',
+	'filter_value' => 'all',
+]);
 
-$body = elgg_view_layout('content', $params);
-
-echo elgg_view_page($params['title'], $body);
+echo elgg_view_page($title, $layout);

@@ -4,17 +4,19 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
-	'bookmarks' => "Bookmarks",
-	'bookmarks:add' => "Add a bookmark",
-	'bookmarks:edit' => "Edit bookmark",
-	'bookmarks:owner' => "%s's bookmarks",
-	'bookmarks:friends' => "Friends' bookmarks",
-	'bookmarks:everyone' => "All site bookmarks",
+	'item:object:bookmarks' => 'Bookmark',
+	'collection:object:bookmarks' => 'Bookmarks',
+	'collection:object:bookmarks:group' => 'Group bookmarks',
+	'collection:object:bookmarks:all' => "All site bookmarks",
+	'collection:object:bookmarks:owner' => "%s's bookmarks",
+	'collection:object:bookmarks:friends' => "Friends' bookmarks",
+	'add:object:bookmarks' => "Add a bookmark",
+	'edit:object:bookmarks' => "Edit bookmark",
+
 	'bookmarks:this' => "Bookmark this page",
 	'bookmarks:this:group' => "Bookmark in %s",
 	'bookmarks:bookmarklet' => "Get bookmarklet",
 	'bookmarks:bookmarklet:group' => "Get group bookmarklet",
-	'bookmarks:inbox' => "Bookmarks inbox",
 	'bookmarks:address' => "Address of the bookmark",
 	'bookmarks:none' => 'No bookmarks',
 
@@ -31,25 +33,18 @@ View and comment on the bookmark:
 %s
 ',
 
-	'bookmarks:delete:confirm' => "Are you sure you want to delete this resource?",
-
 	'bookmarks:numbertodisplay' => 'Number of bookmarks to display',
 
-	'river:create:object:bookmarks' => '%s bookmarked %s',
-	'river:comment:object:bookmarks' => '%s commented on a bookmark %s',
-	'bookmarks:river:annotate' => 'a comment on this bookmark',
-	'bookmarks:river:item' => 'an item',
+	'river:object:bookmarks:create' => '%s bookmarked %s',
+	'river:object:bookmarks:comment' => '%s commented on a bookmark %s',
 
-	'item:object:bookmarks' => 'Bookmarks',
-
-	'bookmarks:group' => 'Group bookmarks',
-	'bookmarks:enablebookmarks' => 'Enable group bookmarks',
-	'bookmarks:nogroup' => 'This group does not have any bookmarks yet',
+	'groups:tool:bookmarks' => 'Enable group bookmarks',
 	
 	/**
 	 * Widget and bookmarklet
 	 */
-	'bookmarks:widget:description' => "Display your latest bookmarks.",
+	'widgets:bookmarks:name' => 'Bookmarks',
+	'widgets:bookmarks:description' => "Display your latest bookmarks.",
 
 	'bookmarks:bookmarklet:description' =>
 			"A bookmarklet is a special kind of button you save to your browser's links bar. This allows you to save any resource you find on the web to your bookmarks. To set it up, drag the button below to your browser's links bar:",
@@ -65,14 +60,12 @@ View and comment on the bookmark:
 	 */
 
 	'bookmarks:save:success' => "Your item was successfully bookmarked.",
-	'bookmarks:delete:success' => "Your bookmark was deleted.",
+	'entity:delete:object:bookmarks:success' => "The bookmark was deleted.",
 
 	/**
 	 * Error messages
 	 */
 
 	'bookmarks:save:failed' => "Your bookmark could not be saved. Make sure you've entered a title and address and then try again.",
-	'bookmarks:save:invalid' => "The address of the bookmark is invalid and could not be saved.",
-	'bookmarks:delete:failed' => "Your bookmark could not be deleted. Please try again.",
 	'bookmarks:unknown_bookmark' => 'Cannot find specified bookmark',
 );

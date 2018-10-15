@@ -7,8 +7,6 @@
  * @subpackage PageOwner
  */
 
-use Elgg\Http\Request;
-
 /**
  * Gets the guid of the entity that owns the current page.
  *
@@ -28,16 +26,24 @@ function elgg_get_page_owner_guid($guid = 0) {
 	}
 	
 	if ($guid) {
-		$page_owner_guid = (int)$guid;
+		$page_owner_guid = (int) $guid;
 	}
 
 	if (isset($page_owner_guid)) {
 		return $page_owner_guid;
 	}
 
+	$route = _elgg_services()->request->getRoute();
+	if ($route) {
+		$page_owner = $route->resolvePageOwner();
+		if ($page_owner) {
+			return $page_owner->guid;
+		}
+	}
+
 	// return guid of page owner entity
 	// Note: core registers default_page_owner_handler() to handle this hook.
-	$guid = (int)elgg_trigger_plugin_hook('page_owner', 'system', null, 0);
+	$guid = (int) elgg_trigger_plugin_hook('page_owner', 'system', null, 0);
 
 	if ($guid) {
 		$page_owner_guid = $guid;
@@ -107,21 +113,9 @@ function default_page_owner_handler($hook, $entity_type, $returnvalue, $params) 
 	$ia = elgg_set_ignore_access(true);
 
 	$username = get_input("username");
-	if ($username) {
-		// @todo using a username of group:<guid> is deprecated
-		if (substr_count($username, 'group:')) {
-			preg_match('/group\:([0-9]+)/i', $username, $matches);
-			$guid = $matches[1];
-			if ($entity = get_entity($guid)) {
-				elgg_set_ignore_access($ia);
-				return $entity->getGUID();
-			}
-		}
-
-		if ($user = get_user_by_username($username)) {
-			elgg_set_ignore_access($ia);
-			return $user->getGUID();
-		}
+	if ($user = get_user_by_username($username)) {
+		elgg_set_ignore_access($ia);
+		return $user->getGUID();
 	}
 
 	$owner = get_input("owner_guid");
@@ -174,7 +168,7 @@ function default_page_owner_handler($hook, $entity_type, $returnvalue, $params) 
  * output could be different for those two contexts ('blog' vs 'widget').
  *
  * Pages that pass through the page handling system set the context to the
- * first string after the root url. Example: http://example.org/elgg/bookmarks/ 
+ * first string after the root url. Example: http://example.org/elgg/bookmarks/
  * results in the initial context being set to 'bookmarks'.
  *
  * The context is a stack so that for a widget on a profile, the context stack
@@ -190,7 +184,7 @@ function default_page_owner_handler($hook, $entity_type, $returnvalue, $params) 
  * @since 1.8.0
  */
 function elgg_set_context($context) {
-	return _elgg_services()->context->set($context);
+	return _elgg_services()->request->getContextStack()->set($context);
 }
 
 /**
@@ -202,7 +196,7 @@ function elgg_set_context($context) {
  * @since 1.8.0
  */
 function elgg_get_context() {
-	return _elgg_services()->context->peek();
+	return _elgg_services()->request->getContextStack()->peek();
 }
 
 /**
@@ -213,7 +207,7 @@ function elgg_get_context() {
  * @since 1.8.0
  */
 function elgg_push_context($context) {
-	_elgg_services()->context->push($context);
+	_elgg_services()->request->getContextStack()->push($context);
 }
 
 /**
@@ -223,7 +217,7 @@ function elgg_push_context($context) {
  * @since 1.8.0
  */
 function elgg_pop_context() {
-	return _elgg_services()->context->pop();
+	return _elgg_services()->request->getContextStack()->pop();
 }
 
 /**
@@ -239,7 +233,7 @@ function elgg_pop_context() {
  * @since 1.8.0
  */
 function elgg_in_context($context) {
-	return _elgg_services()->context->contains($context);
+	return _elgg_services()->request->getContextStack()->contains($context);
 }
 
 /**
@@ -249,7 +243,7 @@ function elgg_in_context($context) {
  * @since 1.11
  */
 function elgg_get_context_stack() {
-	return _elgg_services()->context->toArray();
+	return _elgg_services()->request->getContextStack()->toArray();
 }
 
 /**
@@ -260,40 +254,22 @@ function elgg_get_context_stack() {
  * @since 1.11
  */
 function elgg_set_context_stack(array $stack) {
-	_elgg_services()->context->fromArray($stack);
+	_elgg_services()->request->getContextStack()->fromArray($stack);
 }
 
 /**
- * Set an initial context if using index.php front controller.
- *
- * @param Request $request Elgg HTTP request
- * @return void
- * @access private
- */
-function _elgg_set_initial_context(\Elgg\Http\Request $request) {
-	// don't do this for *_handler.php, etc.
-	if (basename($request->server->get('SCRIPT_FILENAME')) === 'index.php') {
-		$context = $request->getFirstUrlSegment();
-		if (!$context) {
-			$context = 'main';
-		}
-
-		_elgg_services()->context->set($context);
-	}
-}
-
-/**
- * Initializes the page owner functions
+ * Set up default page owner default
  *
  * @return void
  * @access private
  */
-function page_owner_boot() {
+function _elgg_pageowner_init() {
 	elgg_register_plugin_hook_handler('page_owner', 'system', 'default_page_owner_handler');
-
-	_elgg_set_initial_context(_elgg_services()->request);
 }
 
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$events->registerHandler('boot', 'system', 'page_owner_boot');
+	$events->registerHandler('init', 'system', '_elgg_pageowner_init');
 };

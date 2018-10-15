@@ -2,166 +2,159 @@
 
 namespace Elgg;
 
-use Elgg\Filesystem\Directory\Local;
-use Stash\Driver\BlackHole;
-use Stash\Driver\FileSystem;
-use Stash\Driver\Memcache;
+use Elgg\Database\SiteSecret;
+use Elgg\Di\ServiceProvider;
+use Elgg\Project\Paths;
+use ElggCache;
 use Stash\Invalidation;
-use Stash\Pool;
 
 /**
  * Boots Elgg and manages a cache of data needed during boot
  *
  * @access private
- * @since 2.1
+ * @since  2.1
  */
 class BootService {
+
 	use Profilable;
+	use Cacheable;
 
 	/**
-	 * Under load, a short TTL gives nearly all of the benefits of a longer TTL, but it also ensures
-	 * that, should cache invalidation fail for some reason, it'll be rebuilt quickly anyway.
-	 *
-	 * In 2.x we do not cache by default. This will likely change to 10 in 3.0.
+	 * The default TTL if not set in settings.php
 	 */
-	const DEFAULT_BOOT_CACHE_TTL = 0;
+	const DEFAULT_BOOT_CACHE_TTL = 3600;
+
+	/**
+	 * The default limit for the number of plugin settings a plugin can have before it won't be loaded into bootdata
+	 *
+	 * Can be set in settings.php
+	 */
+	const DEFAULT_BOOTDATA_PLUGIN_SETTINGS_LIMIT = 40;
+
+	/**
+	 * Cache
+	 *
+	 * @param ElggCache $cache Cache
+	 */
+	public function __construct(ElggCache $cache) {
+		$this->cache = $cache;
+	}
 
 	/**
 	 * Boots the engine
 	 *
+	 * @param ServiceProvider $services Services
+	 *
 	 * @return void
+	 * @throws \ClassException
+	 * @throws \DatabaseException
+	 * @throws \InstallationException
+	 * @throws \InvalidParameterException
+	 * @throws \SecurityException
 	 */
-	public function boot() {
-		// Register the error handlers
-		set_error_handler('_elgg_php_error_handler');
-		set_exception_handler('_elgg_php_exception_handler');
-
-		$db = _elgg_services()->db;
-
-		// we inject the logger here to allow use of DB without loading core
-		$db->setLogger(_elgg_services()->logger);
-
-		$db->setupConnections();
-		$db->assertInstalled();
-
-		$CONFIG = _elgg_services()->config->getStorageObject();
-		$local_path = Local::root()->getPath();
-
-		// setup stuff available without any DB info
-		$CONFIG->path = $local_path;
-		$CONFIG->plugins_path = "{$local_path}mod/";
-		$CONFIG->pluginspath = "{$local_path}mod/";
-		$CONFIG->entity_types = ['group', 'object', 'site', 'user'];
-		$CONFIG->language = 'en';
+	public function boot(ServiceProvider $services) {
+		$db = $services->db;
+		$config = $services->config;
 
 		// set cookie values for session and remember me
-		_elgg_services()->config->getCookieConfig();
+		$config->getCookieConfig();
 
-		// we need this stuff before cache
-		$rows = $db->getData("
-			SELECT *
-			FROM {$db->prefix}datalists
-			WHERE `name` IN ('__site_secret__', 'default_site', 'dataroot')
-		");
-		$datalists = [];
-		foreach ($rows as $row) {
-			$datalists[$row->name] = $row->value;
+		// defaults in case these aren't in config table
+		if ($config->boot_cache_ttl === null) {
+			$config->boot_cache_ttl = self::DEFAULT_BOOT_CACHE_TTL;
+		}
+		if ($config->bootdata_plugin_settings_limit === null) {
+			$config->bootdata_plugin_settings_limit = self::DEFAULT_BOOTDATA_PLUGIN_SETTINGS_LIMIT;
+		}
+		if ($config->simplecache_enabled === null) {
+			$config->simplecache_enabled = 0;
+		}
+		if ($config->system_cache_enabled === null) {
+			$config->system_cache_enabled = false;
+		}
+		if ($config->simplecache_lastupdate === null) {
+			$config->simplecache_lastupdate = 0;
+		}
+		if ($config->min_password_length === null) {
+			$config->min_password_length = 6;
+		}
+		if ($config->minusername === null) {
+			$config->minusername = 4;
+		}
+		if ($config->batch_run_time_in_secs === null) {
+			$config->batch_run_time_in_secs = 4;
 		}
 
-		// booting during installation
-		if (empty($datalists['dataroot'])) {
-			$datalists['dataroot'] = '';
-
-			// don't use cache
-			$CONFIG->boot_cache_ttl = 0;
+		// we were using NOTICE temporarily so we can't just check for null
+		if (!$config->hasInitialValue('debug') && !$config->debug) {
+			$config->debug = '';
 		}
 
-		if (!$GLOBALS['_ELGG']->dataroot_in_settings) {
-			$CONFIG->dataroot = rtrim($datalists['dataroot'], '/\\') . DIRECTORY_SEPARATOR;
+		// copy all table values into config
+		$config->mergeValues($services->configTable->getAll());
+
+		// needs to be set before [init, system] for links in html head
+		$config->lastcache = (int) $config->simplecache_lastupdate;
+
+		if (!$config->elgg_config_set_secret) {
+			$site_secret = SiteSecret::fromConfig($config);
+			if ($site_secret) {
+				$services->setValue('siteSecret', $site_secret);
+			} else {
+				throw new \RuntimeException('The site secret is not set.');
+			}
 		}
-		$CONFIG->site_guid = (int)$datalists['default_site'];
-		$CONFIG->site_id = (int)$datalists['default_site'];
-		if (!isset($CONFIG->boot_cache_ttl)) {
-			$CONFIG->boot_cache_ttl = self::DEFAULT_BOOT_CACHE_TTL;
-		}
+
+		$installed = isset($config->installed);
 
 		if ($this->timer) {
 			$this->timer->begin([__CLASS__ . '::getBootData']);
 		}
 
 		// early config is done, now get the core boot data
-		$data = $this->getBootData($CONFIG, $db);
+		$data = $this->getBootData($config, $db, $installed);
 
-		if ($this->timer) {
-			$this->timer->begin([__CLASS__ . '::getBootData']);
+		$site = $data->getSite();
+		if (!$site) {
+			// must be set in config
+			$site = $config->site;
+			if (!$site instanceof \ElggSite) {
+				throw new \RuntimeException('Before installation, config->site must have an unsaved ElggSite.');
+			}
 		}
 
-		// copy earlier fetches values into the datalist cache and inject into the service
-		$datalist_cache = $data->getDatalistCache();
-		foreach (['__site_secret__', 'default_site', 'dataroot'] as $key) {
-			$datalist_cache->put($key, $datalists[$key]);
-		}
-		_elgg_services()->datalist->setCache($datalist_cache);
+		$config->site = $site;
+		$config->sitename = $site->name;
+		$config->sitedescription = $site->description;
 
-		$CONFIG->site = $data->getSite();
-		$CONFIG->wwwroot = $CONFIG->site->url;
-		$CONFIG->sitename = $CONFIG->site->name;
-		$CONFIG->sitedescription = $CONFIG->site->description;
-		$CONFIG->url = $CONFIG->wwwroot;
-
-		_elgg_services()->subtypeTable->setCachedValues($data->getSubtypeData());
-
-		foreach ($data->getConfigValues() as $key => $value) {
-			$CONFIG->$key = $value;
+		$settings = $data->getPluginSettings();
+		foreach ($settings as $guid => $entity_settings) {
+			$services->privateSettingsCache->save($guid, $entity_settings);
 		}
 
-		_elgg_services()->plugins->setBootPlugins($data->getActivePlugins());
-
-		_elgg_services()->pluginSettingsCache->setCachedValues($data->getPluginSettings());
-
-		if (!$GLOBALS['_ELGG']->simplecache_enabled_in_settings) {
-			$simplecache_enabled = $datalist_cache->get('simplecache_enabled');
-			$CONFIG->simplecache_enabled = ($simplecache_enabled === false) ? 1 : $simplecache_enabled;
+		foreach ($data->getPluginMetadata() as $guid => $metadata) {
+			$services->dataCache->metadata->save($guid, $metadata);
 		}
 
-		$system_cache_enabled = $datalist_cache->get('system_cache_enabled');
-		$CONFIG->system_cache_enabled = ($system_cache_enabled === false) ? 1 : $system_cache_enabled;
+		$services->plugins->setBootPlugins($data->getActivePlugins());
 
-		// needs to be set before [init, system] for links in html head
-		$CONFIG->lastcache = (int)$datalist_cache->get("simplecache_lastupdate");
+		// use value in settings.php if available
+		$debug = $config->hasInitialValue('debug') ? $config->getInitialValue('debug') : $config->debug;
+		$services->logger->setLevel($debug);
 
-		$GLOBALS['_ELGG']->i18n_loaded_from_cache = false;
+		if ($config->system_cache_enabled) {
+			$config->system_cache_loaded = false;
 
-		if (!empty($CONFIG->debug)) {
-			_elgg_services()->logger->setLevel($CONFIG->debug);
-			_elgg_services()->logger->setDisplay(true);
+			if ($services->views->configureFromCache($services->systemCache)) {
+				$config->system_cache_loaded = true;
+			}
 		}
 
-		_elgg_services()->views->view_path = \Elgg\Application::elggDir()->getPath("/views/");
-
-		// finish boot sequence
-		_elgg_session_boot();
-		if ($CONFIG->system_cache_enabled) {
-			_elgg_services()->systemCache->loadAll();
-		}
-		_elgg_services()->translator->loadTranslations();
-
-		// we always need site->email and user->icontime, so load them together
-		$preload_md_guids = [$CONFIG->site_guid];
-		$user_guid = _elgg_services()->session->getLoggedInUserGuid();
-		if ($user_guid) {
-			$preload_md_guids[] = $user_guid;
-		}
-		_elgg_services()->metadataCache->populateFromEntities($preload_md_guids);
-
-		// TODO get rid of in 3.0, then we can drop the metadata preload for anon visitors
-		$CONFIG->siteemail = $CONFIG->site->email;
-
-		// gives hint to get() how to approach missing values
-		$CONFIG->site_config_loaded = true;
+		// we don't store langs in boot data because it varies by user
+		$services->translator->loadTranslations();
 
 		// invalidate on some actions just in case other invalidation triggers miss something
-		_elgg_services()->hooks->registerHandler('action', 'all', function ($action) {
+		$services->hooks->registerHandler('action', 'all', function ($action) {
 			if (0 === strpos($action, 'admin/' || $action === 'plugins/settings/save')) {
 				$this->invalidateCache();
 			}
@@ -171,84 +164,48 @@ class BootService {
 	/**
 	 * Invalidate the cache item
 	 *
-	 * @param int $site_guid Site GUID or empty for current site
-	 *
 	 * @return void
 	 */
-	public function invalidateCache($site_guid = 0) {
-		$CONFIG = _elgg_services()->config->getStorageObject();
-		if (!$site_guid) {
-			$site_guid = $CONFIG->site_guid;
-		}
-
-		// this gets called a lot on plugins page, avoid thrashing cache
-		static $cleared = [];
-		if (empty($cleared[$site_guid])) {
-			$this->getStashItem($CONFIG, $site_guid)->clear();
-			$cleared[$site_guid] = true;
-		}
+	public function invalidateCache() {
+		$this->cache->clear();
+		_elgg_services()->plugins->setBootPlugins(null);
+		_elgg_config()->system_cache_loaded = false;
+		_elgg_config()->_boot_cache_hit = false;
 	}
 
 	/**
 	 * Get the boot data
 	 *
-	 * @param \stdClass $CONFIG Elgg config object
-	 * @param Database  $db     Elgg database
+	 * @param Config   $config    Elgg config object
+	 * @param Database $db        Elgg database
+	 * @param bool     $installed Is the site installed?
 	 *
 	 * @return BootData
 	 *
+	 * @throws \ClassException
+	 * @throws \DatabaseException
 	 * @throws \InstallationException
+	 * @throws \InvalidParameterException
 	 */
-	private function getBootData(\stdClass $CONFIG, Database $db) {
-		$CONFIG->_boot_cache_hit = false;
+	private function getBootData(Config $config, Database $db, $installed) {
+		$config->_boot_cache_hit = false;
 
-		if (!$CONFIG->boot_cache_ttl) {
-			$data = new BootData();
-			$data->populate($CONFIG, $db, _elgg_services()->entityTable, _elgg_services()->plugins);
-			return $data;
+		$data = null;
+		if ($config->boot_cache_ttl > 0) {
+			$data = $this->cache->load('boot_data');
 		}
 
-		$item = $this->getStashItem($CONFIG, $CONFIG->site_guid);
-		$item->setInvalidationMethod(Invalidation::NONE);
-		$data = $item->get();
-		if ($item->isMiss()) {
+		if (!isset($data)) {
 			$data = new BootData();
-			$data->populate($CONFIG, $db, _elgg_services()->entityTable, _elgg_services()->plugins);
-			$item->set($data);
-			$item->expiresAfter($CONFIG->boot_cache_ttl);
-			$item->save();
+			$data->populate($config, $db, _elgg_services()->entityTable, _elgg_services()->plugins, $installed);
+			if ($config->boot_cache_ttl && $installed) {
+				$this->cache->save('boot_data', $data, $config->boot_cache_ttl);
+			}
 		} else {
-			$CONFIG->_boot_cache_hit = true;
+			$config->_boot_cache_hit = true;
 		}
 
 		return $data;
 	}
 
-	/**
-	 * Get a Stash cache item
-	 *
-	 * @param \stdClass $CONFIG    Elgg config object
-	 * @param int       $site_guid The current site GUID
-	 *
-	 * @return \Stash\Interfaces\ItemInterface
-	 */
-	private function getStashItem(\stdClass $CONFIG, $site_guid) {
-		if (!empty($CONFIG->memcache) && Memcache::isAvailable()) {
-			$options = [];
-			if (!empty($CONFIG->memcache_servers)) {
-				$options['servers'] = $CONFIG->memcache_servers;
-			}
-			$driver = new Memcache($options);
-		} else {
-			if (!$CONFIG->dataroot) {
-				// we're in the installer
-				$driver = new BlackHole();
-			} else {
-				$driver = new FileSystem([
-					'path' => $CONFIG->dataroot,
-				]);
-			}
-		}
-		return (new Pool($driver))->getItem("boot_data_{$site_guid}");
-	}
 }

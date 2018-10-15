@@ -5,11 +5,12 @@
  * @property string $status      The published status of the blog post (published, draft)
  * @property string $comments_on Whether commenting is allowed (Off, On)
  * @property string $excerpt     An excerpt of the blog post used when displaying the post
+ * @property string $new_post    Whether this is an auto-save (not fully saved) ("1" = yes, "" = no)
  */
 class ElggBlog extends ElggObject {
 
 	/**
-	 * Set subtype to blog.
+	 * {@inheritDoc}
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -35,7 +36,7 @@ class ElggBlog extends ElggObject {
 			return $result;
 		}
 
-		if ($this->comments_on == 'Off') {
+		if ($this->comments_on === 'Off' || $this->status !== 'published') {
 			return false;
 		}
 		

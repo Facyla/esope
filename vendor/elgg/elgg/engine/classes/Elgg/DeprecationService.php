@@ -1,6 +1,8 @@
 <?php
 namespace Elgg;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
@@ -14,17 +16,14 @@ namespace Elgg;
  */
 class DeprecationService {
 
-	/**
-	 * @var Logger
-	 */
-	protected $logger;
+	use Loggable;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Logger $logger Logger service
+	 * @param LoggerInterface $logger Logger service
 	 */
-	public function __construct(Logger $logger) {
+	public function __construct(LoggerInterface $logger) {
 		$this->logger = $logger;
 	}
 
@@ -45,7 +44,7 @@ class DeprecationService {
 
 		// Get a file and line number for the log. Skip over the function that
 		// sent this notice and see who called the deprecated function itself.
-		$stack = array();
+		$stack = [];
 		$backtrace = debug_backtrace();
 		// never show this call.
 		array_shift($backtrace);
@@ -69,9 +68,9 @@ class DeprecationService {
 			}
 		}
 
-		$msg .= implode("<br /> -> ", $stack);
+		$msg .= implode(PHP_EOL . " -> ", $stack);
 
-		$this->logger->warn($msg);
+		$this->logger->warning($msg);
 
 		return true;
 	}

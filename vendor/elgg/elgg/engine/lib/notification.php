@@ -1,8 +1,4 @@
 <?php
-
-use Elgg\Mail\Address;
-use Zend\Mail\Message;
-
 /**
  * Adding a New Notification Event
  * ===============================
@@ -29,8 +25,8 @@ use Zend\Mail\Message;
  * 2. Register for the plugin hook for sending notifications:
  *    'send', 'notification:[method name]'. It receives the notification object
  *    of the namespace Elgg\Notifications;
-
-  class Notification in the params array with the
+ *
+ *	  class Notification in the params array with the
  *    key 'notification'. The callback should return a boolean to indicate whether
  *    the message was sent.
  *
@@ -62,7 +58,7 @@ use Zend\Mail\Message;
  * @return void
  * @since 1.9
  */
-function elgg_register_notification_event($object_type, $object_subtype, array $actions = array()) {
+function elgg_register_notification_event($object_type, $object_subtype, array $actions = []) {
 	_elgg_services()->notifications->registerEvent($object_type, $object_subtype, $actions);
 }
 
@@ -183,8 +179,8 @@ function elgg_get_subscriptions_for_container($container_guid) {
  *
  * This function triggers the 'enqueue', 'notification' hook.
  *
- * @param string   $action The name of the action
- * @param string   $type   The type of the object
+ * @param string    $action The name of the action
+ * @param string    $type   The type of the object
  * @param \ElggData $object The object of the event
  * @return void
  * @access private
@@ -195,6 +191,10 @@ function _elgg_enqueue_notification_event($action, $type, $object) {
 }
 
 /**
+ * Process notification queue
+ *
+ * @return void
+ *
  * @access private
  */
 function _elgg_notifications_cron() {
@@ -220,9 +220,11 @@ function _elgg_send_email_notification($hook, $type, $result, $params) {
 		// assume someone else already sent the message
 		return;
 	}
-	
-	/* @var \Elgg\Notifications\Notification $message */
+
 	$message = $params['notification'];
+	if (!$message instanceof \Elgg\Notifications\Notification) {
+		return false;
+	}
 
 	$sender = $message->getSender();
 	$recipient = $message->getRecipient();
@@ -235,40 +237,32 @@ function _elgg_send_email_notification($hook, $type, $result, $params) {
 		return false;
 	}
 
-	$to = $recipient->email;
+	$email = \Elgg\Email::factory([
+		'from' => $sender,
+		'to' => $recipient,
+		'subject' => $message->subject,
+		'body' => $message->body,
+		'params' => $message->params,
+	]);
 
-	$site = elgg_get_site_entity();
-	// If there's an email address, use it - but only if it's not from a user.
-	if (!($sender instanceof \ElggUser) && $sender->email) {
-		$from = $sender->email;
-	} else if ($site->email) {
-		$from = $site->email;
-	} else {
-		// If all else fails, use the domain of the site.
-		$from = 'noreply@' . $site->getDomain();
-	}
-
-	return elgg_send_email($from, $to, $message->subject, $message->body, $params);
+	return _elgg_services()->emails->send($email);
 }
 
 /**
  * Adds default Message-ID header to all e-mails
  *
- * @param string $hook        Equals to 'email'
- * @param string $type        Equals to 'system'
- * @param array  $returnvalue Array containing fields: 'to', 'from', 'subject', 'body', 'headers', 'params'
- * @param array  $params      The same value as $returnvalue
+ * @param string      $hook  "prepare"
+ * @param string      $type  "system:email"
+ * @param \Elgg\Email $email Email instance
  *
- * @see https://tools.ietf.org/html/rfc5322#section-3.6.4
+ * @see    https://tools.ietf.org/html/rfc5322#section-3.6.4
  *
  * @return array
- *
  * @access private
  */
-function _elgg_notifications_smtp_default_message_id_header($hook, $type, $returnvalue, $params) {
+function _elgg_notifications_smtp_default_message_id_header($hook, $type, $email) {
 	
-	if (!is_array($returnvalue) || !is_array($returnvalue['params'])) {
-		// another hook handler returned a non-array, let's not override it
+	if (!$email instanceof \Elgg\Email) {
 		return;
 	}
 	
@@ -277,68 +271,75 @@ function _elgg_notifications_smtp_default_message_id_header($hook, $type, $retur
 	
 	$mt = microtime(true);
 	
-	$returnvalue['headers']['Message-ID'] = "{$url_path}.default.{$mt}@{$hostname}";
+	$email->addHeader('Message-ID', "{$url_path}.default.{$mt}@{$hostname}");
 	
-	return $returnvalue;
+	return $email;
 }
+
 /**
  * Adds default thread SMTP headers to group messages correctly.
  * Note that it won't be sufficient for some email clients. Ie. Gmail is looking at message subject anyway.
  *
- * @param string $hook        Equals to 'email'
- * @param string $type        Equals to 'system'
- * @param array  $returnvalue Array containing fields: 'to', 'from', 'subject', 'body', 'headers', 'params'
- * @param array  $params      The same value as $returnvalue
+ * @param string      $hook  "prepare"
+ * @param string      $type  "system:email"
+ * @param \Elgg\Email $email Email instance
+ *
  * @return array
  * @access private
  */
-function _elgg_notifications_smtp_thread_headers($hook, $type, $returnvalue, $params) {
+function _elgg_notifications_smtp_thread_headers($hook, $type, $email) {
 
-	if (!is_array($returnvalue) || !is_array($returnvalue['params'])) {
-		// another hook handler returned a non-array, let's not override it
+	if (!$email instanceof \Elgg\Email) {
 		return;
 	}
 
-	$notificationParams = elgg_extract('params', $returnvalue, array());
-	/** @var \Elgg\Notifications\Notification */
-	$notification = elgg_extract('notification', $notificationParams);
+	$notificationParams = $email->getParams();
 
-	if (!($notification instanceof \Elgg\Notifications\Notification)) {
-		return $returnvalue;
+	$notification = elgg_extract('notification', $notificationParams);
+	if (!$notification instanceof \Elgg\Notifications\Notification) {
+		return;
+	}
+
+	$object = elgg_extract('object', $notification->params);
+	if (!$object instanceof \ElggEntity) {
+		return;
+	}
+
+	$event = elgg_extract('event', $notification->params);
+	if (!$event instanceof \Elgg\Notifications\NotificationEvent) {
+		return;
 	}
 
 	$hostname = parse_url(elgg_get_site_url(), PHP_URL_HOST);
 	$urlPath = parse_url(elgg_get_site_url(), PHP_URL_PATH);
 
-	$object = elgg_extract('object', $notification->params);
-	/** @var \Elgg\Notifications\Event $event */
-	$event = elgg_extract('event', $notification->params);
-
-	if (($object instanceof \ElggEntity) && ($event instanceof \Elgg\Notifications\NotificationEvent)) {
-		if ($event->getAction() === 'create') {
-			// create event happens once per entity and we need to guarantee message id uniqueness
-			// and at the same time have thread message id that we don't need to store
-			$messageId = "{$urlPath}.entity.{$object->guid}@{$hostname}";
-		} else {
-			$mt = microtime(true);
-			$messageId = "{$urlPath}.entity.{$object->guid}.$mt@{$hostname}";
-		}
-		$returnvalue['headers']["Message-ID"] = $messageId;
-		$container = $object->getContainerEntity();
-
-		// let's just thread comments by default
-		if (($container instanceof \ElggEntity) && ($object instanceof \ElggComment)) {
-
-			$threadMessageId = "<{$urlPath}.entity.{$container->guid}@{$hostname}>";
-			$returnvalue['headers']['In-Reply-To'] = $threadMessageId;
-			$returnvalue['headers']['References'] = $threadMessageId;
-		}
+	if ($event->getAction() === 'create') {
+		// create event happens once per entity and we need to guarantee message id uniqueness
+		// and at the same time have thread message id that we don't need to store
+		$messageId = "{$urlPath}.entity.{$object->guid}@{$hostname}";
+	} else {
+		$mt = microtime(true);
+		$messageId = "{$urlPath}.entity.{$object->guid}.$mt@{$hostname}";
 	}
 
-	return $returnvalue;
+	$email->addHeader("Message-ID", $messageId);
+
+	// let's just thread comments by default
+	$container = $object->getContainerEntity();
+	if ($container instanceof \ElggEntity && $object instanceof \ElggComment) {
+		$threadMessageId = "<{$urlPath}.entity.{$container->guid}@{$hostname}>";
+		$email->addHeader('In-Reply-To', $threadMessageId);
+		$email->addHeader('References', $threadMessageId);
+	}
+
+	return $email;
 }
 
 /**
+ * Notification init
+ *
+ * @return void
+ *
  * @access private
  */
 function _elgg_notifications_init() {
@@ -348,11 +349,11 @@ function _elgg_notifications_init() {
 	// add email notifications
 	elgg_register_notification_method('email');
 	elgg_register_plugin_hook_handler('send', 'notification:email', '_elgg_send_email_notification');
-	elgg_register_plugin_hook_handler('email', 'system', '_elgg_notifications_smtp_default_message_id_header', 1);
-	elgg_register_plugin_hook_handler('email', 'system', '_elgg_notifications_smtp_thread_headers');
+	elgg_register_plugin_hook_handler('prepare', 'system:email', '_elgg_notifications_smtp_default_message_id_header', 1);
+	elgg_register_plugin_hook_handler('prepare', 'system:email', '_elgg_notifications_smtp_thread_headers');
 
 	// add ability to set personal notification method
-	elgg_extend_view('forms/account/settings', 'core/settings/account/notifications');
+	elgg_extend_view('forms/usersettings/save', 'core/settings/account/notifications');
 	elgg_register_plugin_hook_handler('usersettings:save', 'user', '_elgg_save_notification_user_settings');
 }
 
@@ -377,65 +378,77 @@ function _elgg_notify_user($to, $from, $subject, $message, array $params = null,
 
 	// Sanitise
 	if (!is_array($to)) {
-		$to = array((int) $to);
+		$to = [(int) $to];
 	}
 	$from = (int) $from;
 	//$subject = sanitise_string($subject);
 	// Get notification methods
 	if (($methods_override) && (!is_array($methods_override))) {
-		$methods_override = array($methods_override);
+		$methods_override = [$methods_override];
 	}
 
-	$result = array();
+	$result = [];
 
 	foreach ($to as $guid) {
 		// Results for a user are...
-		$result[$guid] = array();
+		$result[$guid] = [];
 
-		if ($guid) { // Is the guid > 0?
-			// Are we overriding delivery?
-			$methods = $methods_override;
-			if (!$methods) {
-				$tmp = get_user_notification_settings($guid);
-				$methods = array();
-				// $tmp may be false. don't cast
-				if (is_object($tmp)) {
-					foreach ($tmp as $k => $v) {
-						// Add method if method is turned on for user!
-						if ($v) {
-							$methods[] = $k;
-						}
-					}
-				}
+		$recipient = get_entity($guid);
+		if (empty($recipient)) {
+			continue;
+		}
+
+		// Are we overriding delivery?
+		$methods = $methods_override;
+		if (empty($methods)) {
+			$methods = [];
+
+			if (!($recipient instanceof ElggUser)) {
+				// not sending to a user so can't get user notification settings
+				continue;
 			}
 
-			if ($methods) {
-				// Deliver
-				foreach ($methods as $method) {
+			$tmp = $recipient->getNotificationSettings();
+			if (empty($tmp)) {
+				// user has no notification settings
+				continue;
+			}
 
-					$handler = $notify_service->getDeprecatedHandler($method);
-					/* @var callable $handler */
-					if (!$handler || !is_callable($handler)) {
-						elgg_log("No handler registered for the method $method", 'WARNING');
-						continue;
-					}
-
-					elgg_log("Sending message to $guid using $method");
-
-					// Trigger handler and retrieve result.
-					try {
-						$result[$guid][$method] = call_user_func(
-							$handler,
-							$from ? get_entity($from) : null,
-							get_entity($guid),
-							$subject,
-							$message,
-							$params
-						);
-					} catch (Exception $e) {
-						error_log($e->getMessage());
-					}
+			foreach ($tmp as $k => $v) {
+				// Add method if method is turned on for user!
+				if ($v) {
+					$methods[] = $k;
 				}
+			}
+		}
+
+		if (empty($methods)) {
+			continue;
+		}
+
+		// Deliver
+		foreach ($methods as $method) {
+			$handler = $notify_service->getDeprecatedHandler($method);
+			/* @var callable $handler */
+			if (!$handler || !is_callable($handler)) {
+				elgg_log("No handler registered for the method $method", 'INFO');
+				continue;
+			}
+
+			elgg_log("Sending message to $guid using $method");
+
+			// Trigger handler and retrieve result.
+			try {
+				$result[$guid][$method] = call_user_func(
+					$handler,
+					$from ? get_entity($from) : null,
+					get_entity($guid),
+					$subject,
+					$message,
+					$params
+				);
+			} catch (Exception $e) {
+				elgg_log($e, 'ERROR');
 			}
 		}
 	}
@@ -491,7 +504,7 @@ function _elgg_notify_user($to, $from, $subject, $message, array $params = null,
  * @return array Compound array of each delivery user/delivery method's success or failure.
  * @throws NotificationException
  */
-function notify_user($to, $from = 0, $subject = '', $message = '', array $params = array(), $methods_override = null) {
+function notify_user($to, $from = 0, $subject = '', $message = '', array $params = [], $methods_override = null) {
 
 	$params['subject'] = $subject;
 	$params['body'] = $message;
@@ -520,149 +533,45 @@ function notify_user($to, $from = 0, $subject = '', $message = '', array $params
 }
 
 /**
- * Get the notification settings for a given user.
- *
- * @param int $user_guid The user id
- *
- * @return \stdClass|false
- * @deprecated 2.3
- */
-function get_user_notification_settings($user_guid = 0) {
-
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated by ElggUser::getNotificationSettings()', '2.3');
-
-	if ((int) $user_guid == 0) {
-		$user_guid = elgg_get_logged_in_user_guid();
-	}
-
-	$user = get_entity($user_guid);
-	if (!$user instanceof \ElggUser) {
-		return false;
-	}
-
-	return (object) $user->getNotificationSettings();
-}
-
-/**
- * Set a user notification pref.
- *
- * @param int    $user_guid The user id.
- * @param string $method    The delivery method (eg. email)
- * @param bool   $value     On(true) or off(false).
- *
- * @return bool
- * @deprecated 2.3
- */
-function set_user_notification_setting($user_guid, $method, $value) {
-	elgg_deprecated_notice(__FUNCTION__ . ' has been deprecated by ElggUser::setNotificationSetting()', '2.3');
-
-	if (!$user_guid) {
-		$user_guid = elgg_get_logged_in_user_guid();
-	}
-	$user = get_entity($user_guid);
-	if (!$user instanceof \ElggUser) {
-		return false;
-	}
-
-	if (is_string($value)) {
-		$value = strtolower($value);
-	}
-	if ($value == 'yes' || $value == 'on' || $value == 'enabled') {
-		$value = true;
-	} else if ($value == 'no' || $value == 'off' || $value == 'disabled') {
-		$value = false;
-	}
-
-	return $user->setNotificationSetting($method, (bool) $value);
-}
-
-/**
  * Send an email to any email address
  *
- * @param string $from    Email address or string: "name <email>"
- * @param string $to      Email address or string: "name <email>"
- * @param string $subject The subject of the message
- * @param string $body    The message body
- * @param array  $params  Optional parameters (none used in this function)
- *
+ * @param \Elgg\Email $email Email
  * @return bool
- * @throws NotificationException
  * @since 1.7.2
  */
-function elgg_send_email($from, $to, $subject, $body, array $params = null) {
-	if (!$from) {
-		$msg = "Missing a required parameter, '" . 'from' . "'";
-		throw new \NotificationException($msg);
+function elgg_send_email($email) {
+
+	if (!$email instanceof \Elgg\Email) {
+		elgg_deprecated_notice(__FUNCTION__ . '
+			 should be given a single instance of \Elgg\Email
+		', '3.0');
+
+		$args = func_get_args();
+		$email = \Elgg\Email::factory([
+			'from' => array_shift($args),
+			'to' => array_shift($args),
+			'subject' => array_shift($args),
+			'body' => array_shift($args),
+			'params' => array_shift($args) ? : [],
+		]);
 	}
 
-	if (!$to) {
-		$msg = "Missing a required parameter, '" . 'to' . "'";
-		throw new \NotificationException($msg);
-	}
+	return _elgg_services()->emails->send($email);
+}
 
-	$headers = array(
-		"Content-Type" => "text/plain; charset=UTF-8; format=flowed",
-		"MIME-Version" => "1.0",
-		"Content-Transfer-Encoding" => "8bit",
-	);
-
-	// return true/false to stop elgg_send_email() from sending
-	$mail_params = array(
-		'to' => $to,
-		'from' => $from,
-		'subject' => $subject,
-		'body' => $body,
-		'headers' => $headers,
-		'params' => $params,
-	);
-
-	// $mail_params is passed as both params and return value. The former is for backwards
-	// compatibility. The latter is so handlers can now alter the contents/headers of
-	// the email by returning the array
-	$result = _elgg_services()->hooks->trigger('email', 'system', $mail_params, $mail_params);
-	if (!is_array($result)) {
-		// don't need null check: Handlers can't set a hook value to null!
-		return (bool) $result;
-	}
-
-	// strip name from to and from
-
-	$to_address = Address::fromString($result['to']);
-	$from_address = Address::fromString($result['from']);
-
-
-	$subject = elgg_strip_tags($result['subject']);
-	$subject = html_entity_decode($subject, ENT_QUOTES, 'UTF-8');
-	// Sanitise subject by stripping line endings
-	$subject = preg_replace("/(\r\n|\r|\n)/", " ", $subject);
-	$subject = trim($subject);
-
-	$body = elgg_strip_tags($result['body']);
-	$body = html_entity_decode($body, ENT_QUOTES, 'UTF-8');
-	$body = wordwrap($body);
-
-	$message = new Message();
-	$message->setEncoding('UTF-8');
-	$message->addFrom($from_address);
-	$message->addTo($to_address);
-	$message->setSubject($subject);
-	$message->setBody($body);
-
-	foreach ($result['headers'] as $headerName => $headerValue) {
-		// Create a headerline in the format 'name: value'
-		// This is done to force correct class detection for each header type
-		// which influences the output of the header in the message
-		$message->getHeaders()->addHeaderLine("{$headerName}: {$headerValue}");
-	}
-
-	try {
-		_elgg_services()->mailer->send($message);
-	} catch (\Zend\Mail\Exception\RuntimeException $e) {
-		_elgg_services()->logger->error($e->getMessage());
-		return false;
-	}
-
-	return true;
+/**
+ * Replace default email transport
+ *
+ * @note If you are replacing the transport persistently, e.g. on each page request via
+ * a plugin, avoid using plugin settings to store transport configuration, as it
+ * may be expensive to fetch these settings. Instead, configure the transport
+ * via elgg-config/settings.php or use site config DB storage.
+ *
+ * @param \Zend\Mail\Transport\TransportInterface $mailer Transport
+ * @return void
+ */
+function elgg_set_email_transport(\Zend\Mail\Transport\TransportInterface $mailer) {
+	_elgg_services()->setValue('mailer', $mailer);
 }
 
 /**
@@ -701,14 +610,25 @@ function _elgg_save_notification_user_settings() {
 }
 
 /**
+ * Register unit tests
+ *
+ * @param string $hook  'unit_test'
+ * @param string $type  'system'
+ * @param array  $tests current return value
+ *
+ * @return array
+ *
  * @access private
+ * @codeCoverageIgnore
  */
 function _elgg_notifications_test($hook, $type, $tests) {
-	global $CONFIG;
-	$tests[] = "{$CONFIG->path}engine/tests/ElggCoreDatabaseQueueTest.php";
+	$tests[] = ElggCoreDatabaseQueueTest::class;
 	return $tests;
 }
 
+/**
+ * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
+ */
 return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
 	$events->registerHandler('init', 'system', '_elgg_notifications_init');
 

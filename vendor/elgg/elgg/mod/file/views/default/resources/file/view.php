@@ -13,35 +13,30 @@ $file = get_entity($guid);
 
 $owner = elgg_get_page_owner_entity();
 
-elgg_group_gatekeeper();
+elgg_push_entity_breadcrumbs($file, false);
 
-elgg_push_breadcrumb(elgg_echo('file'), 'file/all');
+$title = $file->getDisplayName();
 
-$crumbs_title = $owner->name;
-if (elgg_instanceof($owner, 'group')) {
-	elgg_push_breadcrumb($crumbs_title, "file/group/$owner->guid/all");
-} else {
-	elgg_push_breadcrumb($crumbs_title, "file/owner/$owner->username");
+$content = elgg_view_entity($file, [
+	'full_view' => true,
+	'show_responses' => true,
+]);
+
+if ($file->canDownload()) {
+	elgg_register_menu_item('title', [
+		'name' => 'download',
+		'text' => elgg_echo('download'),
+		'href' => $file->getDownloadURL(),
+		'icon' => 'download',
+		'link_class' => 'elgg-button elgg-button-action',
+	]);
 }
 
-$title = $file->title;
-
-elgg_push_breadcrumb($title);
-
-$content = elgg_view_entity($file, array('full_view' => true));
-$content .= elgg_view_comments($file);
-
-elgg_register_menu_item('title', array(
-	'name' => 'download',
-	'text' => elgg_echo('download'),
-	'href' => elgg_get_download_url($file),
-	'link_class' => 'elgg-button elgg-button-action',
-));
-
-$body = elgg_view_layout('content', array(
+$body = elgg_view_layout('content', [
 	'content' => $content,
 	'title' => $title,
 	'filter' => '',
-));
+	'entity' => $file,
+]);
 
 echo elgg_view_page($title, $body);

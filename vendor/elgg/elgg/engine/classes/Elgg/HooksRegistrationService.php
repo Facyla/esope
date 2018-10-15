@@ -2,21 +2,18 @@
 namespace Elgg;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * Base class for events and hooks
  *
  * @access private
- *
- * @package    Elgg.Core
- * @subpackage Hooks
- * @since      1.9.0
  */
 abstract class HooksRegistrationService {
 
 	const REG_KEY_PRIORITY = 0;
 	const REG_KEY_INDEX = 1;
 	const REG_KEY_HANDLER = 2;
+	
+	const OPTION_DEPRECATION_MESSAGE = 'deprecation_message';
+	const OPTION_DEPRECATION_VERSION = 'deprecation_version';
 
 	/**
 	 * @var int
@@ -34,28 +31,18 @@ abstract class HooksRegistrationService {
 	private $backups = [];
 
 	/**
-	 * @var \Elgg\Logger
-	 */
-	protected $logger;
-
-	/**
-	 * Set a logger instance, e.g. for reporting uncallable handlers
+	 * Register a callback as a plugin hook handler.
 	 *
-	 * @param \Elgg\Logger $logger The logger
-	 * @return self
-	 */
-	public function setLogger(\Elgg\Logger $logger = null) {
-		$this->logger = $logger;
-		return $this;
-	}
-	
-	/**
-	 * Registers a handler.
+	 * @param string   $name     The name of the hook
+	 * @param string   $type     The type of the hook
+	 * @param callable $callback The name of a valid function or an array with object and method
+	 * @param int      $priority The priority - 500 is default, lower numbers called first
+	 *
+	 * @return bool
 	 *
 	 * @warning This doesn't check if a callback is valid to be called, only if it is in the
 	 *          correct format as a callable.
-	 *
-	 * @access private
+	 * @see elgg_register_plugin_hook_handler()
 	 */
 	public function registerHandler($name, $type, $callback, $priority = 500) {
 		if (empty($name) || empty($type) || !is_callable($callback, true)) {
@@ -73,20 +60,20 @@ abstract class HooksRegistrationService {
 	}
 	
 	/**
-	 * Unregister a handler
+	 * Unregister a callback as a plugin hook of event handler.
 	 *
-	 * @param string   $name
-	 * @param string   $type
-	 * @param callable $callback
+	 * @param string   $name     The name of the hook/event
+	 * @param string   $type     The name of the type of entity (eg "user", "object" etc)
+	 * @param callable $callback The PHP callback to be removed. Since 1.11, static method
+	 *                           callbacks will match dynamic methods
 	 *
 	 * @return bool
+	 *
+	 * @see elgg_unregister_plugin_hook_handler()
+	 * @see elgg_unregister_event_handler()
 	 * @access private
 	 */
 	public function unregisterHandler($name, $type, $callback) {
-		if (($name == 'view' || $name == 'view_vars') && $type != 'all') {
-			$type = _elgg_services()->views->canonicalizeViewName($type);
-		}
-
 		if (empty($this->registrations[$name][$type])) {
 			return false;
 		}
@@ -94,7 +81,6 @@ abstract class HooksRegistrationService {
 		$matcher = $this->getMatcher($callback);
 
 		foreach ($this->registrations[$name][$type] as $i => $registration) {
-
 			if ($matcher) {
 				if (!$matcher->matches($registration[self::REG_KEY_HANDLER])) {
 					continue;
@@ -113,12 +99,14 @@ abstract class HooksRegistrationService {
 	}
 	
 	/**
-	 * Clears all handlers for a specific hook
+	 * Clears all callback registrations for a plugin hook.
 	 *
-	 * @param string   $name
-	 * @param string   $type
+	 * @param string $name The name of the hook
+	 * @param string $type The type of the hook
 	 *
 	 * @return void
+	 *
+	 * @see elgg_clear_plugin_hook_handlers()
 	 * @access private
 	 */
 	public function clearHandlers($name, $type) {
@@ -256,7 +244,7 @@ abstract class HooksRegistrationService {
 	 * @note This behaves like a stack. You must call restore() for each backup() call.
 	 *
 	 * @return void
-	 * @see restore
+	 * @see HooksRegistrationService::restore()
 	 * @access private
 	 * @internal
 	 */
@@ -269,7 +257,7 @@ abstract class HooksRegistrationService {
 	 * Restore backed up event/hook registrations (after tests)
 	 *
 	 * @return void
-	 * @see backup
+	 * @see HooksRegistrationService::backup()
 	 * @access private
 	 * @internal
 	 */
@@ -278,5 +266,32 @@ abstract class HooksRegistrationService {
 		if (is_array($backup)) {
 			$this->registrations = $backup;
 		}
+	}
+	
+	/**
+	 * Check if handlers are registered on a deprecated hook/event. If so Display a message
+	 *
+	 * @param string $name    the name of the hook/event
+	 * @param string $type    the type of the hook/event
+	 * @param array  $options deprecation options
+	 *
+	 * @return void
+	 */
+	protected function checkDeprecation($name, $type, array $options = []) {
+		$options = array_merge([
+			self::OPTION_DEPRECATION_MESSAGE => '',
+			self::OPTION_DEPRECATION_VERSION => '',
+		], $options);
+		
+		$handlers = $this->hasHandler($name, $type);
+		if (!$handlers || !$options[self::OPTION_DEPRECATION_MESSAGE]) {
+			return;
+		}
+		
+		_elgg_services()->deprecation->sendNotice(
+			$options[self::OPTION_DEPRECATION_MESSAGE],
+			$options[self::OPTION_DEPRECATION_VERSION],
+			4
+		);
 	}
 }

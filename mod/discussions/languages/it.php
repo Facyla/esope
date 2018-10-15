@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	'discussion' => 'Forum',
 	'discussion:add' => 'Aggiungi argomento',
 	'discussion:latest' => 'Ultimi argomenti',
@@ -58,9 +58,9 @@ Visualizza e rispondi qui:
 %s
 ',
 
-	'discussion:reply:notify:summary' => 'Nuova risposta alla discussione: %s',
-	'discussion:reply:notify:subject' => 'Nuova risposta alla discussione: %s',
-	'discussion:reply:notify:body' =>
+	'discussion:comment:notify:summary' => 'Nuova risposta alla discussione: %s',
+	'discussion:comment:notify:subject' => 'Nuova risposta alla discussione: %s',
+	'discussion:comment:notify:body' =>
 '%s ha inviato una risposta nella discussione "%s":
 
 %s
@@ -98,4 +98,4 @@ Visualizza e rispondi qui:
 
 	'discussion:reply:edited' => "Hai modificato con successo il post",
 	'discussion:reply:error' => "Problema durante la modifica del post",
-);
+];

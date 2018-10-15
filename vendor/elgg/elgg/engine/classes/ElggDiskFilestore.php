@@ -12,7 +12,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	/**
 	 * Directory root.
 	 */
-	private $dir_root;
+	protected $dir_root;
 
 	/**
 	 * Number of entries per matrix dir.
@@ -29,7 +29,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 		if ($directory_root) {
 			$this->dir_root = $directory_root;
 		} else {
-			$this->dir_root = _elgg_services()->config->getDataPath();
+			$this->dir_root = _elgg_config()->dataroot;
 		}
 	}
 
@@ -45,7 +45,6 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 *
 	 * @throws InvalidParameterException
 	 * @return resource File pointer resource
-	 * @todo This really shouldn't try to create directories if not writing.
 	 */
 	public function open(\ElggFile $file, $mode) {
 		$fullname = $this->getFilenameOnFilestore($file);
@@ -67,7 +66,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 			try {
 				$this->makeDirectoryRoot($path);
 			} catch (Exception $e) {
-				_elgg_services()->logger->warn("Couldn't create directory: $path");
+				_elgg_services()->logger->warning("Couldn't create directory: $path");
 				return false;
 			}
 		}
@@ -97,7 +96,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 * @param resource $f    File pointer resource
 	 * @param mixed    $data The data to write.
 	 *
-	 * @return bool
+	 * @return false|int
 	 */
 	public function write($f, $data) {
 		return fwrite($f, $data);
@@ -294,7 +293,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 * @return array
 	 */
 	public function getParameters() {
-		return array("dir_root" => $this->dir_root);
+		return ["dir_root" => $this->dir_root];
 	}
 
 	/**
@@ -311,31 +310,5 @@ class ElggDiskFilestore extends \ElggFilestore {
 		}
 
 		return false;
-	}
-
-
-	
-	/**
-	 * Deprecated methods
-	 */
-
-	/**
-	 * Construct a file path matrix for an entity.
-	 *
-	 * @param int $guid The guid of the entity to store the data under.
-	 *
-	 * @return string The path where the entity's data will be stored relative to the data dir.
-	 * @deprecated 1.9 Use \Elgg\EntityDirLocator()
-	 */
-	protected function makeFileMatrix($guid) {
-		elgg_deprecated_notice('\ElggDiskFilestore::makeFileMatrix() is deprecated by \Elgg\EntityDirLocator', 1.9);
-		$entity = get_entity($guid);
-
-		if (!$entity instanceof \ElggEntity) {
-			return false;
-		}
-
-		$dir = new \Elgg\EntityDirLocator($guid);
-		return $dir->getPath();
 	}
 }

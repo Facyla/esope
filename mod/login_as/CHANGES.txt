@@ -1,3 +1,9 @@
+### Login As 2.0.0 - December, 2017 ###
+ * Updated for Elgg 3.0
+
+### Login As 1.9.3 - October 27, 2016 ###
+ * fix(menus): do not register a menu item for non-admin users
+
 ### Login As 1.9.2 - September 3, 2015 ###
  * Fixes fatal error on logout
 

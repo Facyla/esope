@@ -14,26 +14,38 @@ In Elgg, everything runs on a unified data model based on atomic
 units of data called entities.
 
 Plugins are discouraged from interacting directly with the database,
-which creates a more stable system and a better user experience becase
+which creates a more stable system and a better user experience because
 content created by different plugins can be mixed together in
 consistent ways. With this approach, plugins are faster to develop,
 and are at the same time much more powerful.
 
 Every entity in the system inherits the ``ElggEntity`` class. This class
-controls access permissions, ownership
+controls access permissions, ownership, containment and provides consistent API
+for accessing and updating entity properties.
 
 .. _thumb\|The Elgg data model diagramIn: image:Elgg_data_model.png
 
 You can extend entities with extra information in two ways:
 
-``Metadata``: This is information describing the entity, usually
-   added by the author of the entity when the entity is created.
-   For example, tags, an ISBN number, a file location, or
-   source language is metadata.
-``Annotations``: This is information about the entity, usually
-   added by a third party after the entity is created. 
-   For example, ratings, likes, and votes are annotations.
-   (Comments were before 1.9.)
+``Metadata``: This information describes the entity, it is usually
+   added by the author of the entity when the entity is created or updated.
+   Examples of metadata include tags, ISBN number or a third-party ID, location,
+   geocoordinates etc. Think of metadata as a simple key-value storage.
+
+``Annotations``: This information extends the entity with properties usually
+   added by a third party. Such properties include ratings, likes, and votes.
+
+The main differences between metadata and annotations:
+
+- metadata does not have owners, while annotations do
+- metadata is not access controlled, while annotations are
+- metadata is preloaded when entity is constructed, while annotations are only loaded on demand
+
+These differences might have implications for performance and your business logic, so consider carefully,
+how you would like to attach data to your entities.
+
+In certain cases, it may be benefitial to avoid using metadata and annotations and create new
+entities instead and attaching them via ``container_guid`` or a relationship.
 
 Datamodel
 =========
@@ -70,37 +82,35 @@ Type     PHP class       Represents
 =======  ==============  ===================================================================
 object   ``ElggObject``  Most user-created content, like blog posts, uploads, and bookmarks.
 group    ``ElggGroup``   An organized group of users with its own profile page
-user     ``ElggUser``    A system user
+user     ``ElggUser``    A user of the system
 site     ``ElggSite``    The site served by the Elgg installation
 =======  ==============  ===================================================================
 
-Each has its own extended API. E.g. objects have a ``title`` and ``description``, users have a
-``username`` and a way to set their password, and so on.
+Each type has its own extended API. E.g. users can be friends with other users, group can have members,
+while objects can be liked and commented on.
 
 Subtypes
 --------
 
-Each entity also has a custom string **subtype**, which plugins use to further specialize the entity.
-Elgg makes it easy to query specific subtypes as well as assign them special behaviors and views.
+Each entity must define a **subtype**, which plugins use to further specialize the entity.
+Elgg makes it easy to query specific for entities of a given subtype(s), as well as assign them special behaviors and views.
 
-Subtypes are most commonly given to instances of ElggObject to denote the kind of content created.
+Subtypes are most commonly given to instances of ``ElggEntity`` to denote the kind of content created.
 E.g. the blog plugin creates objects with subtype ``"blog"``.
 
-For historic reasons, the subtype API is a bit complex, but boils down to: write to ``->subtype``
-before saving, otherwise always read ``getSubtype()``. Below are more details.
+By default, users, groups and sites have the the subtypes of ``user``, ``group`` and ``site`` respectively.
+
+Plugins can use custom entity classes that extend the base type class. To do so, they need to register their class at
+runtime (e.g. in the ``'init','system'`` handler), using ``elgg_set_entity_class()``.
+For example, the blog plugin could use ``elgg_set_entity_class('object', 'blog', \ElggBlog::class)``.
+
+Plugins can use ``elgg-plugin.php`` to define entity class via shortcut ``entities`` parameter.
 
 Subtype Gotchas
 ---------------
 
-- Before an entity's ``save()`` method is called, the subtype can be set by writing a string to the
-  ``subtype`` property.
+- Before an entity's ``save()`` method is called, the subtype must be set by writing a string to the ``subtype`` property.
 - *Subtype cannot be changed after saving.*
-- After saving, you must always use ``getSubtype()`` to read it.
-- If no subtype was set, ``""`` is returned, however some parts of the Elgg API (like Views) may map
-  this value to the string ``"default"``. E.g. a group with ``getSubtype() === ""`` will be rendered
-  using the view ``"group/default"``.
-- Read carefully the documentation for ``elgg_get_entities()`` before trying to match subtypes; this
-- API is a bit of a minefield. E.g. you cannot use ``""`` to fetch entities with the default subtype.
 
 GUIDs
 -----
@@ -147,8 +157,7 @@ Beyond the standard ElggEntity properties, ElggUsers also support:
 ElggSite
 ========
 
-The ``ElggSite`` entity type represents sites within your Elgg install.
-Most installs will have only one.
+The ``ElggSite`` entity type represents your Elgg installation (via your site URL).
 
 Beyond the standard ElggEntity properties, ElggSites also support:
 
@@ -180,9 +189,6 @@ profile page linking users to content within the group.
 You can alter the user experience via the traditional means of extending
 plugins or completely replace the Groups plugin with your own.
 
-Because ``ElggGroup`` can be subtyped like all other ElggEntities, you
-can have multiple types of groups running on the same site.
-
 Writing a group-aware plugin
 ----------------------------
 
@@ -195,9 +201,7 @@ Adding content
 By passing along the group as ``container_guid`` via a hidden input field,
 you can use a single form and action to add both user and group content.
 
-Use
-`can_write_to_container <http://reference.elgg.org/entities_8php.html#16a972909c7cb75f646cb707be001a6f>`_
-to determine whether or not the current user has the right to
+Use ``ElggEntity->canWriteToContainer()`` to determine whether or not the current user has the right to
 add content to a group.
 
 Be aware that you will then need to pass the container GUID
@@ -207,12 +211,15 @@ field, for easy passing to your actions. Within a "create" action,
 you'll need to take in this input field and save it as a property of
 your new element (defaulting to the current user's container):
 
-.. code:: php
+.. code-block:: php
 
     $user = elgg_get_logged_in_user_entity();
     $container_guid = (int)get_input('container_guid');
+    
     if ($container_guid) {
-        if (!can_write_to_container($user->guid, $container_guid)) {
+    	$container = get_entity($container_guid);
+    	
+        if (!$container->canWriteToContainer($user->guid)) {
             // register error and forward
         }
     } else {
@@ -227,15 +234,6 @@ your new element (defaulting to the current user's container):
     $container = get_entity($container_guid);
     forward($container->getURL());
 
-Usernames and page ownership
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Groups have a simulated username of the form *group:\ GUID*, which you
-can get the value of by checking ``$group->username``. If you pass this
-username to a page on the URL line as part of the ``username`` variable
-(i.e., ``/yourpage?username=group:nnn``), Elgg will automatically
-register that group as being the owner of the page (unless overridden).
-
 Juggling users and groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -245,35 +243,6 @@ most of the methods of
 icon, name etc using the same calls, and if you ask for a group's
 friends, you'll get its members. This has been designed specifically for
 you to alternate between groups and users in your code easily.
-
-Menu options
-~~~~~~~~~~~~
-
-***This section is deprecated as of Elgg 1.8***
-
-The final piece of the puzzle, for default groups, is to add a link to
-your functionality from the group's profile. Here we'll use the file
-plugin as an example.
-
-This involves creating a view within your plugin - in this case
-file/menu - which will extend the group's menu. File/menu consists of a
-link within paragraph tags that points to the file repository of the
-page\_owner():
-
-.. code:: php
-
-    <p>
-      <a href="<?php echo $vars['url']; ?>pg/file/<?php echo page_owner_entity()->username; ?>">
-        <?php echo elgg_echo("file"); ?>
-      </a>
-    </p>
-
-You can then extend the group's menu view with this one, within your
-plugin's input function (in this case file\_init):
-
-.. code:: php
-
-    extend_view('groups/menu/links', 'file/menu');
 
 Ownership
 =========
@@ -306,8 +275,7 @@ Annotations
 
 Annotations are pieces of data attached to an entity that allow users
 to leave ratings, or other relevant feedback. A poll plugin might
-register votes as annotations. Before Elgg 1.9, comments and group
-discussion replies were stored as annotations.
+register votes as annotations.
 
 Annotations are stored as instances of the ``ElggAnnotation`` class.
 
@@ -327,7 +295,7 @@ Adding an annotation
 The easiest way to annotate is to use the ``annotate`` method on an
 entity, which is defined as:
 
-.. code:: php
+.. code-block:: php
 
     public function annotate(
         $name,           // The name of the annotation type (eg 'comment')
@@ -339,7 +307,7 @@ entity, which is defined as:
 
 For example, to leave a rating on an entity, you might call:
 
-.. code:: php
+.. code-block:: php
 
     $entity->annotate('rating', $rating_value, $entity->access_id);
     
@@ -348,7 +316,7 @@ Reading annotations
 
 To retrieve annotations on an object, you can call the following method:
 
-.. code:: php
+.. code-block:: php
 
     $annotations = $entity->getAnnotations(
         $name,    // The type of annotation
@@ -360,7 +328,7 @@ To retrieve annotations on an object, you can call the following method:
 If your annotation type largely deals with integer values, a couple of
 useful mathematical functions are provided:
 
-.. code:: php
+.. code-block:: php
 
     $averagevalue = $entity->getAnnotationsAvg($name);  // Get the average value
     $total = $entity->getAnnotationsSum($name);         // Get the total value
@@ -376,7 +344,7 @@ Comments
 If you want to provide comment functionality on your plugin objects, the
 following function will provide the full listing, form and actions:
 
-.. code:: php
+.. code-block:: php
 
     function elgg_view_comments(ElggEntity $entity)
 
@@ -395,14 +363,14 @@ Under the hood, metadata is stored as an instance of the
 practice (although if you're interested, see the ``ElggMetadata`` class
 reference). What you need to know is:
 
--  Metadata has an owner and access ID (see note below), both of which may be different
-   to the owner of the entity it's attached to
+-  Metadata has an owner, which may be different to the owner of the entity
+   it's attached to
 -  You can potentially have multiple items of each type of metadata
    attached to a single entity
 -  Like annotations, values are stored as strings unless the value given is a PHP integer (``is_int($value)`` is true),
    or unless the ``$value_type`` is manually specified as ``integer`` (see below).
 
-.. note:: Metadata's ``access_id`` value will be ignored in Elgg 3.0 and all metadata values will be available in all contexts.
+.. note:: As of Elgg 3.0, metadata no longer have ``access_id``.
 
 The simple case
 ---------------
@@ -412,26 +380,25 @@ Adding metadata
 
 To add a piece of metadata to an entity, just call:
 
-.. code:: php
+.. code-block:: php
 
     $entity->metadata_name = $metadata_value;
 
 For example, to add a date of birth to a user:
 
-.. code:: php
+.. code-block:: php
 
     $user->dob = $dob_timestamp;
 
 Or to add a couple of tags to an object:
 
-.. code:: php
+.. code-block:: php
 
     $object->tags = array('tag one', 'tag two', 'tag three');
 
 When adding metadata like this:
 
 -  The owner is set to the currently logged-in user
--  Access permissions are inherited from the entity (see note below)
 -  Reassigning a piece of metadata will overwrite the old value
 
 This is suitable for most purposes. Be careful to note which attributes
@@ -442,14 +409,14 @@ built in attributes. As an example, if you changed the access id of an
 ElggObject, you need to save it or the change isn't pushed to the
 database.
 
-.. note:: Metadata's ``access_id`` value will be ignored in Elgg 3.0 and all metadata values will be available in all contexts.
+.. note:: As of Elgg 3.0, metadata's ``access_id`` property is ignored.
 
 Reading metadata
 ~~~~~~~~~~~~~~~~
 
 To retrieve metadata, treat it as a property of the entity:
 
-.. code:: php
+.. code-block:: php
 
     $tags_value = $object->tags;
 
@@ -463,7 +430,7 @@ If you stored only one value, you will get a string or integer back.
 Storing an array with only one value will return a string back to you.
 E.g.
 
-.. code:: php
+.. code-block:: php
 
     $object->tags = array('tag');
     $tags = $object->tags;
@@ -471,66 +438,19 @@ E.g.
 
 To always get an array back, simply cast to an array;
 
-.. code:: php
+.. code-block:: php
 
     $tags = (array)$object->tags;
 
-Finer control
--------------
-
-Adding metadata
-~~~~~~~~~~~~~~~
-
-If you need more control, for example to assign an access ID other than
-the default, you can use the ``create_metadata`` function, which is
-defined as follows:
-
-.. code:: php
-
-        function create_metadata(
-            $entity_guid,           // The GUID of the parent entity
-            $name,                  // The name of the metadata (eg 'tags')
-            $value,                 // The metadata value
-            $value_type,            // Currently either 'text' or 'integer'
-            $owner_guid,            // The owner of the metadata
-            $access_id = 0,         // The access restriction
-            $allow_multiple = false // Do we have more than one value?
-            )
-
-For single values, you can therefore write metadata as follows (taking
-the example of a date of birth attached to a user):
-
-.. code:: php
-
-    create_metadata($user_guid, 'dob', $dob_timestamp, 'integer', $_SESSION['guid'], $access_id);
-
-.. note:: ``$access_id`` will be ignored in Elgg 3.0 and all metadata values will be available in all contexts. Always set it to ``ACCESS_PUBLIC`` for compatibility with Elgg 3.0.
-
-For multiple values, you will need to iterate through and call
-``create_metadata`` on each one. The following piece of code comes from
-the profile save action:
-
-.. code:: php
-
-    $i = 0;
-    foreach ($value as $interval) {
-        $i++;
-        $multiple = ($i != 1);
-        create_metadata($user->guid, $shortname, $interval, 'text', $user->guid, $access_id, $multiple);
-    }
-
-Note that the *allow multiple* setting is set to *false* in the first
-iteration and *true* thereafter.
-
-Reading metadata
-~~~~~~~~~~~~~~~~
+Reading metadata as objects
+---------------------------
 
 ``elgg_get_metadata`` is the best function for retrieving metadata as ElggMetadata
 objects:
 
 E.g., to retrieve a user's DOB
 
-.. code:: php
+.. code-block:: php
 
     elgg_get_metadata(array(
         'metadata_name' => 'dob',
@@ -539,7 +459,7 @@ E.g., to retrieve a user's DOB
 
 Or to get all metadata objects:
 
-.. code:: php
+.. code-block:: php
 
     elgg_get_metadata(array(
         'metadata_owner_guid' => $user_guid,
@@ -558,7 +478,7 @@ Note that you cannot "append" values to metadata arrays as if they were
 normal php arrays. For example, the following will not do what it looks
 like it should do.
 
-.. code:: php
+.. code-block:: php
 
     $object->tags[] = "tag four";
 
@@ -569,14 +489,14 @@ Elgg does not support storing ordered maps (name/value pairs) in
 metadata. For example, the following does not work as you might first
 expect it to:
 
-.. code:: php
+.. code-block:: php
 
     // Won't work!! Only the array values are stored
     $object->tags = array('one' => 'a', 'two' => 'b', 'three' => 'c');
 
 You can instead store the information like so:
 
-.. code:: php
+.. code-block:: php
 
     $object->one = 'a';
     $object->two = 'b';
@@ -635,7 +555,7 @@ Creating a relationship
 E.g. to establish that "**$user** is a **fan** of **$artist**"
 (user is the subject, artist is the target):
 
-.. code:: php
+.. code-block:: php
 
     // option 1
     $success = add_entity_relationship($user->guid, 'fan', $artist->guid);
@@ -653,7 +573,7 @@ Verifying a relationship
 
 E.g. to verify that "**$user** is a **fan** of **$artist**":
 
-.. code:: php
+.. code-block:: php
 
     if (check_entity_relationship($user->guid, 'fan', $artist->guid)) {
         // relationship exists
@@ -662,7 +582,7 @@ E.g. to verify that "**$user** is a **fan** of **$artist**":
 Note that, if the relationship exists, ``check_entity_relationship()``
 returns an ``ElggRelationship`` object:
 
-.. code:: php
+.. code-block:: php
 
     $relationship = check_entity_relationship($user->guid, 'fan', $artist->guid);
     if ($relationship) {
@@ -674,7 +594,7 @@ Deleting a relationship
 
 E.g. to be able to assert that "**$user** is no longer a **fan** of **$artist**":
 
-.. code:: php
+.. code-block:: php
 
     $was_removed = remove_entity_relationship($user->guid, 'fan', $artist->guid);
 
@@ -686,31 +606,31 @@ be ``false``.
 Other useful functions:
 
 - ``delete_relationship()`` : delete by ID
-- ``remove_entity_relationships()`` : delete those relating to an entity (*note:* in versions before Elgg 1.9, this did not trigger delete events)
+- ``remove_entity_relationships()`` : delete those relating to an entity
 
 Finding relationships and related entities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Below are a few functions to fetch relationship objects
-and/or related entities. A few are listed below:
+Below are a few functions to fetch relationship objects and/or related entities. A few are listed below:
 
 - ``get_entity_relationships()`` : fetch relationships by subject or target entity
 - ``get_relationship()`` : get a relationship object by ID
-- ``elgg_get_entities_from_relationship()`` : fetch entities in relationships in a
-  variety of ways
+- ``elgg_get_entities()`` : fetch entities in relationships in a variety of ways
 
-E.g. retrieving users who joined your site in January 2014.
+E.g. retrieving users who joined your group in January 2014.
 
-.. code:: php
+.. code-block:: php
 
-    $entities = elgg_get_entities_from_relationship(array(
-        'relationship' => 'member_of_site',
-        'relationship_guid' => elgg_get_site_entity()->guid,
+    $entities = elgg_get_entities(array(
+        'relationship' => 'member',
+        'relationship_guid' => $group->guid,
         'inverse_relationship' => true,
 
         'relationship_created_time_lower' => 1388534400, // January 1st 2014
         'relationship_created_time_upper' => 1391212800, // February 1st 2014
     ));
+
+.. _database-access-control:
 
 Access Control
 ==============
@@ -723,10 +643,10 @@ over who sees an item of data he or she creates.
 Access controls in the data model
 ---------------------------------
 
-In order to achieve this, every entity, annotation and piece of
-metadata contains an ``access_id`` property, which in turn corresponds
-to one of the pre-defined access controls or an entry in the
-``access_collections`` database table.
+In order to achieve this, every entity and annotation contains an 
+``access_id`` property, which in turn corresponds to one of the 
+pre-defined access controls or an entry in the ``access_collections`` 
+database table.
 
 Pre-defined access controls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -734,25 +654,22 @@ Pre-defined access controls
 -  ``ACCESS_PRIVATE`` (value: 0) Private.
 -  ``ACCESS_LOGGED_IN`` (value: 1) Logged in users.
 -  ``ACCESS_PUBLIC`` (value: 2) Public data.
--  ``ACCESS_FRIENDS`` (value: -2) Owner and his/her friends.
 
 User defined access controls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You may define additional access groups and assign them to an entity,
-annotation or metadata. A number of functions have been defined to
-assist you; see the `access library reference`_ for more information.
+or annotation. A number of functions have been defined to
+assist you; see the :doc:`/guides/access` for more information.
 
 How access affects data retrieval
 ---------------------------------
 
 All data retrieval functions above the database layer - for example
-``get_entities`` and its cousins - will only return items that the
-current user has access to see. It is not possible to retrieve items
-that the current user does not have access to. This makes it very hard
-to create a security hole for retrieval.
-
-.. _access library reference: http://reference.elgg.org/engine_2lib_2access_8php.html
+``elgg_get_entities`` will only return items that the current user has 
+access to see. It is not possible to retrieve items that the current 
+user does not have access to. This makes it very hard to create a 
+security hole for retrieval.
 
 Write access
 ------------
@@ -770,20 +687,10 @@ function that has announced it wants to be referenced. Returning
 ``true`` will allow write access; returning ``false`` will deny it. See
 :ref:`the plugin hook reference for permissions\_check <guides/hooks-list#permission-hooks>` for more details.
 
-.. seealso::
-
-   `Access library reference`_
-
-.. _Access library reference: http://reference.elgg.org/engine_2lib_2access_8php.html
-
 Schema
 ======
 
-The database contains a number of primary tables and secondary tables.
-Its schema table is stored in ``/engine/schema/mysql.sql``.
-
-Each table is prefixed by "prefix\_", this is replaced by the Elgg
-framework during installation.
+The database contains a number of primary and secondary tables. You can follow schema changes in ``engine/schema/migrations/``
 
 Main tables
 -----------
@@ -800,66 +707,45 @@ populated with your first site.
 
 It contains the following fields:
 
--  **guid** An auto-incrementing counter producing a GUID that uniquely
-   identifies this entity in the system.
+-  **guid** An auto-incrementing counter producing a GUID that uniquely identifies this entity in the system
 -  **type** The type of entity - object, user, group or site
--  **subtype** A reference to the `entity_subtypes` table, or ``0`` for the default subtype.
--  **owner\_guid** The GUID of the owner's entity.
--  **site\_guid** The site the entity belongs to.
--  **container\_guid** The GUID this entity is contained by - either a user or
-   a group.
--  **access\_id** Access controls on this entity.
--  **time\_created** Unix timestamp of when the entity is created.
--  **time\_updated** Unix timestamp of when the entity was updated.
+-  **subtype** A subtype of entity
+-  **owner\_guid** The GUID of the owner's entity
+-  **container\_guid** The GUID this entity is contained by - either a user or a group
+-  **access\_id** Access controls on this entity
+-  **time\_created** Unix timestamp of when the entity is created
+-  **time\_updated** Unix timestamp of when the entity was updated
 -  **enabled** If this is 'yes' an entity is accessible, if 'no' the entity
    has been disabled (Elgg treats it as if it were deleted without actually
-   removing it from the database).
-
-Table: entity\_subtypes
-~~~~~~~~~~~~~~~~~~~~~~~
-
-This table contains entity subtype information:
-
--  **id** A counter.
--  **type** The type of entity - object, user, group or site.
--  **subtype** The subtype name as a string.
--  **class** Optional class name if this subtype is linked with a class
+   removing it from the database)
 
 Table: metadata
 ~~~~~~~~~~~~~~~
 
 This table contains `Metadata`_, extra information attached to an entity.
 
--  **id** A counter.
--  **entity\_guid** The entity this is attached to.
--  **name\_id** A link to the metastrings table defining the name
-   table.
--  **value\_id** A link to the metastrings table defining the value.
--  **value\_type** The value class, either text or an integer.
--  **owner\_guid** The owner GUID of the owner who set this item of
-   metadata.
--  **access\_id** An Access controls on this item of metadata.
--  **time\_created** Unix timestamp of when the metadata is created.
--  **enabled** If this is 'yes' an item is accessible, if 'no' the item
-   has been deleted.
+-  **id** A unique IDentifier
+-  **entity\_guid** The entity this is attached to
+-  **name** The name string
+-  **value** The value string
+-  **value\_type** The value class, either text or an integer
+-  **time\_created** Unix timestamp of when the metadata is created
+-  **enabled** If this is 'yes' an item is accessible, if 'no' the item has been disabled
 
 Table: annotations
 ~~~~~~~~~~~~~~~~~~
 
 This table contains `Annotations`_, this is distinct from `Metadata`_.
 
--  **id** A counter.
--  **entity\_guid** The entity this is attached to.
--  **name\_id** A link to the metastrings table defining the type of
-   annotation.
--  **value\_id** A link to the metastrings table defining the value.
--  **value\_type** The value class, either text or an integer.
--  **owner\_guid** The owner GUID of the owner who set this item of
-   metadata.
--  **access\_id** An Access controls on this item of metadata.
--  **time\_created** Unix timestamp of when the metadata is created.
--  **enabled** If this is 'yes' an item is accessible, if 'no' the item
-   has been deleted.
+-  **id** A unique IDentifier
+-  **entity\_guid** The entity this is attached to
+-  **name** The name string
+-  **value** The value string
+-  **value\_type** The value class, either text or an integer
+-  **owner\_guid** The owner GUID of the owner who set this annotation
+-  **access\_id** An Access controls on this annotation
+-  **time\_created** Unix timestamp of when the annotation is created.
+-  **enabled** If this is 'yes' an item is accessible, if 'no' the item has been disabled
 
 Table: relationships
 ~~~~~~~~~~~~~~~~~~~~
@@ -870,39 +756,15 @@ This table defines `Relationships`_, these link one entity with another.
 -  **relationship** The type of the relationship.
 -  **guid\_two** The GUID of the target entity.
 
-Table: objects\_entity
-~~~~~~~~~~~~~~~~~~~~~~
+Secundairy tables
+-----------------
 
-Extra information specifically relating to objects. These are split in
-order to reduce load on the metadata table and make an obvious
-difference between attributes and metadata.
+Table: access_collections
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Table: sites\_entity
-~~~~~~~~~~~~~~~~~~~~
+This table defines Access Collections, which grant users access to `Entities`_ or `Annotations`_.
 
-Extra information specifically relating to sites. These are split in
-order to reduce load on the metadata table and make an obvious
-difference between attributes and metadata.
-
-Table: users\_entity
-~~~~~~~~~~~~~~~~~~~~
-
-Extra information specifically relating to users. These are split in
-order to reduce load on the metadata table and make an obvious
-difference between attributes and metadata.
-
-Table: groups\_entity
-~~~~~~~~~~~~~~~~~~~~~
-
-Extra information specifically relating to groups. These are split in
-order to reduce load on the metadata table and make an obvious
-difference between attributes and metadata.
-
-Table: metastrings
-~~~~~~~~~~~~~~~~~~
-
-Metastrings contain the actual string of metadata which is linked to by
-the metadata and annotations tables.
-
-This is to avoid duplicating strings, saving space and making database
-lookups more efficient.
+- **id** A unique IDentifier
+- ***name**  The name of the access collection
+- **owner_guid** The GUID of the owning entity (eg. a user or a group)
+- **subtype** the subtype of the access collection (eg. `friends` or `group_acl`)

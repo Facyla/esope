@@ -1,175 +1,171 @@
 <?php
 namespace Elgg\Database;
 
+use Elgg\BootService;
+use Elgg\Database;
+use Psr\Log\LoggerInterface;
+
 /**
- * These settings are stored in the dbprefix_config table and read 
- * during system boot into $CONFIG.
- * 
+ * Manipulates values in the dbprefix_config table. Do not use to read/write $CONFIG.
+ *
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
  * @access private
- *
- * @package    Elgg.Core
- * @subpackage Database
- * @since      1.10.0
+ * @since  1.10.0
  */
 class ConfigTable {
 		
 	/**
-	 * Global Elgg configuration
-	 * 
-	 * @var \stdClass
+	 * @var Database
 	 */
-	private $CONFIG;
+	protected $db;
+	
+	/**
+	 * @var BootService
+	 */
+	protected $boot;
+	
+	/**
+	 * @var \Elgg\Logger
+	 */
+	protected $logger;
 
 	/**
 	 * Constructor
+	 *
+	 * @param Database        $db     Database
+	 * @param BootService     $boot   BootService
+	 * @param LoggerInterface $logger Logger
 	 */
-	public function __construct() {
-		global $CONFIG;
-		$this->CONFIG = $CONFIG;
+	public function __construct(
+		Database $db,
+		BootService $boot,
+		LoggerInterface $logger
+	) {
+		$this->db = $db;
+		$this->boot = $boot;
+		$this->logger = $logger;
 	}
 
 	/**
 	 * Removes a config setting.
 	 *
-	 * @param string $name      The name of the field.
-	 * @param int    $site_guid Optionally, the GUID of the site (default: current site).
+	 * @param string $name The name of the field.
 	 *
 	 * @return bool Success or failure
 	 */
-	function remove($name, $site_guid = 0) {
-		$name = trim($name);
-	
-		$site_guid = (int) $site_guid;
-		if ($site_guid == 0) {
-			$site_guid = (int) $this->CONFIG->site_guid;
-		}
-	
-		if ($site_guid == $this->CONFIG->site_guid && isset($this->CONFIG->$name)) {
-			unset($this->CONFIG->$name);
-		}
-	
-		$escaped_name = sanitize_string($name);
-		$query = "DELETE FROM {$this->CONFIG->dbprefix}config WHERE name = '$escaped_name' AND site_guid = $site_guid";
+	function remove($name) {
+		$query = "
+			DELETE FROM {$this->db->prefix}config
+			WHERE name = :name
+		";
 
-		_elgg_services()->boot->invalidateCache($site_guid);
+		$params = [
+			':name' => $name,
+		];
+		
+		$this->boot->invalidateCache();
 	
-		return _elgg_services()->db->deleteData($query) !== false;
+		return $this->db->deleteData($query, $params) !== false;
 	}
 	
 	/**
 	 * Add or update a config setting.
-	 * 
-	 * Plugin authors should use elgg_set_config().
+	 *
+	 * Plugin authors should use elgg_save_config().
 	 *
 	 * If the config name already exists, it will be updated to the new value.
 	 *
-	 * @warning Names should be selected so as not to collide with the names for the
-	 * datalist (application configuration)
-	 * 
 	 * @note Internal: These settings are stored in the dbprefix_config table and read
-	 * during system boot into $CONFIG.
-	 * 
+	 * during system boot into the config service.
+	 *
 	 * @note Internal: The value is serialized so we maintain type information.
 	 *
-	 * @param string $name      The name of the configuration value
-	 * @param mixed  $value     Its value
-	 * @param int    $site_guid Optionally, the GUID of the site (current site is assumed by default)
+	 * @param string $name  The name of the configuration value
+	 * @param mixed  $value Its value
 	 *
 	 * @return bool
 	 */
-	function set($name, $value, $site_guid = 0) {
-		$name = trim($name);
-	
+	function set($name, $value) {
 		// cannot store anything longer than 255 characters in db, so catch before we set
 		if (elgg_strlen($name) > 255) {
-			_elgg_services()->logger->error("The name length for configuration variables cannot be greater than 255");
+			$this->logger->error("The name length for configuration variables cannot be greater than 255");
 			return false;
 		}
 	
-		$site_guid = (int) $site_guid;
-		if ($site_guid == 0) {
-			$site_guid = (int) $this->CONFIG->site_guid;
-		}
-	
-		if ($site_guid == $this->CONFIG->site_guid) {
-			$this->CONFIG->$name = $value;
-		}
-	
-		$escaped_name = sanitize_string($name);
-		$escaped_value = sanitize_string(serialize($value));
-		$result = _elgg_services()->db->insertData("INSERT INTO {$this->CONFIG->dbprefix}config
-			SET name = '$escaped_name', value = '$escaped_value', site_guid = $site_guid
-			ON DUPLICATE KEY UPDATE value = '$escaped_value'");
+		$sql = "
+			INSERT INTO {$this->db->prefix}config
+			SET name = :name,
+				value = :value
+			ON DUPLICATE KEY UPDATE value = :value
+		";
+		
+		$params = [
+			':name' => $name,
+			':value' => serialize($value),
+		];
+				
+		$result = $this->db->insertData($sql, $params);
 
-		_elgg_services()->boot->invalidateCache($site_guid);
+		$this->boot->invalidateCache();
 	
 		return $result !== false;
 	}
 	
 	/**
 	 * Gets a configuration value
-	 * 
+	 *
 	 * Plugin authors should use elgg_get_config().
 	 *
 	 * @note Internal: These settings are stored in the dbprefix_config table and read
-	 * during system boot into $CONFIG.
+	 * during system boot into the config service.
 	 *
-	 * @param string $name      The name of the config value
-	 * @param int    $site_guid Optionally, the GUID of the site (default: current site)
+	 * @param string $name The name of the config value
 	 *
 	 * @return mixed|null
 	 */
-	function get($name, $site_guid = 0) {
-		$name = trim($name);
-	
-		$site_guid = (int) $site_guid;
-	
-		// check for deprecated values.
-		// @todo might be a better spot to define this?
-		$new_name = false;
-		switch($name) {
-			case 'pluginspath':
-				$new_name = 'plugins_path';
-				break;
-	
-			case 'sitename':
-				$new_name = 'site_name';
-				break;
-		}
-	
-		// @todo these haven't really been implemented in Elgg 1.8. Complete in 1.9.
-		// show dep message
-		if ($new_name) {
-			//	$msg = "Config value $name has been renamed as $new_name";
-			$name = $new_name;
-			//	elgg_deprecated_notice($msg, $dep_version);
-		}
-	
-		if ($site_guid == 0) {
-			$site_guid = (int) $this->CONFIG->site_guid;
-		}
-	
-		// decide from where to return the value
-		if ($site_guid == $this->CONFIG->site_guid && isset($this->CONFIG->$name)) {
-			return $this->CONFIG->$name;
-		}
-	
-		$escaped_name = sanitize_string($name);
-		$result = _elgg_services()->db->getDataRow("SELECT value FROM {$this->CONFIG->dbprefix}config
-			WHERE name = '$escaped_name' AND site_guid = $site_guid");
-	
+	function get($name) {
+		$sql = "
+			SELECT value
+			FROM {$this->db->prefix}config
+			WHERE name = :name
+		";
+			
+		$params[':name'] = $name;
+		
+		$result = $this->db->getDataRow($sql, null, $params);
 		if ($result) {
-			$result = unserialize($result->value);
-	
-			if ($site_guid == $this->CONFIG->site_guid) {
-				$this->CONFIG->$name = $result;
-			}
-	
-			return $result;
+			return unserialize($result->value);
 		}
 	
 		return null;
+	}
+
+	/**
+	 * Load all config values from the config table
+	 * @return array
+	 * @throws \DatabaseException
+	 */
+	public function getAll() {
+		$values = [];
+
+		$qb = Select::fromTable('config');
+		$qb->select('*');
+
+		$data = $this->db->getData($qb);
+
+		foreach ($data as $row) {
+			$values[$row->name] = unserialize($row->value);
+		}
+
+		// don't pull in old config values
+		/**
+		 * @see \Elgg\Config::__construct sets this
+		 */
+		unset($values['path']);
+		unset($values['dataroot']);
+		unset($values['default_site']);
+
+		return $values;
 	}
 }

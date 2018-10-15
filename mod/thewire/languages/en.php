@@ -5,15 +5,19 @@ return array(
 	 * Menu items and titles
 	 */
 	'thewire' => "The Wire",
-	'thewire:everyone' => "All wire posts",
-	'thewire:user' => "%s's wire posts",
-	'thewire:friends' => "Friends' wire posts",
+
+	'item:object:thewire' => "Wire post",
+	'collection:object:thewire' => 'Wire posts',
+	'collection:object:thewire:all' => "All wire posts",
+	'collection:object:thewire:owner' => "%s's wire posts",
+	'collection:object:thewire:friends' => "Friends' wire posts",
+
 	'thewire:replying' => "Replying to %s (@%s) who wrote",
 	'thewire:thread' => "Thread",
 	'thewire:charleft' => "characters remaining",
 	'thewire:tags' => "Wire posts tagged with '%s'",
 	'thewire:noposts' => "No wire posts yet",
-	'item:object:thewire' => "Wire posts",
+
 	'thewire:by' => 'Wire post by %s',
 	'thewire:previous:help' => "View previous post",
 	'thewire:hide:help' => "Hide previous post",
@@ -21,7 +25,7 @@ return array(
 	/**
 	 * The wire river
 	 */
-	'river:create:object:thewire' => "%s posted to %s",
+	'river:object:thewire:create' => "%s posted to %s",
 	'thewire:wire' => 'the wire',
 
 	/**
@@ -37,7 +41,6 @@ return array(
 	'thewire:posted' => "Your message was successfully posted to the wire.",
 	'thewire:deleted' => "The wire post was successfully deleted.",
 	'thewire:blank' => "Sorry, you need to enter some text before we can post this.",
-	'thewire:notfound' => "Sorry, we could not find the specified wire post.",
 	'thewire:notsaved' => "Sorry. We could not save this wire post.",
 	'thewire:notdeleted' => "Sorry. We could not delete this wire post.",
 

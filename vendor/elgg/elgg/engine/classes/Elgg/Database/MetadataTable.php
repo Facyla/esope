@@ -1,856 +1,442 @@
 <?php
+
 namespace Elgg\Database;
 
-
+use Elgg\Cache\MetadataCache;
 use Elgg\Database;
-use Elgg\Database\EntityTable;
-use Elgg\Database\MetastringsTable;
+use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\EventsService as Events;
-use ElggSession as Session;
-use Elgg\Cache\MetadataCache as Cache;
+use Elgg\TimeUsing;
+use ElggMetadata;
 
 /**
+ * This class interfaces with the database to perform CRUD operations on metadata
+ *
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
  * @access private
- *
- * @package    Elgg.Core
- * @subpackage Database
- * @since      1.10.0
  */
 class MetadataTable {
 
-	use \Elgg\TimeUsing;
+	use TimeUsing;
 
-	/** @var array */
-	protected $independents = array();
-	
-	/** @var Cache */
-	protected $cache;
-	
-	/** @var Database */
+	/**
+	 * @var MetadataCache
+	 */
+	protected $metadata_cache;
+
+	/**
+	 * @var Database
+	 */
 	protected $db;
-	
-	/** @var EntityTable */
-	protected $entityTable;
-	
-	/** @var MetastringsTable */
-	protected $metastringsTable;
-	
-	/** @var Events */
+
+	/**
+	 * @var Events
+	 */
 	protected $events;
-	
-	/** @var Session */
-	protected $session;
-	
-	/** @var string */
-	protected $table;
+
+	/**
+	 * @var string[]
+	 */
+	protected $tag_names = [];
+
+	const MYSQL_TEXT_BYTE_LIMIT = 65535;
 
 	/**
 	 * Constructor
-	 * 
-	 * @param Cache            $cache            A cache for this table
-	 * @param Database         $db               The Elgg database
-	 * @param EntityTable      $entityTable      The entities table
-	 * @param Events           $events           The events registry
-	 * @param MetastringsTable $metastringsTable The metastrings table
-	 * @param Session          $session          The session
+	 *
+	 * @param MetadataCache $metadata_cache A cache for this table
+	 * @param Database      $db             The Elgg database
+	 * @param Events        $events         The events registry
 	 */
 	public function __construct(
-			Cache $cache,
-			Database $db,
-			EntityTable $entityTable,
-			Events $events,
-			MetastringsTable $metastringsTable,
-			Session $session) {
-		$this->cache = $cache;
+		MetadataCache $metadata_cache,
+		Database $db,
+		Events $events
+	) {
+		$this->metadata_cache = $metadata_cache;
 		$this->db = $db;
-		$this->entityTable = $entityTable;
 		$this->events = $events;
-		$this->metastringsTable = $metastringsTable;
-		$this->session = $session;
-		$this->table = $this->db->prefix . "metadata";
 	}
 
 	/**
-	 * Get a specific metadata object by its id.
-	 * If you want multiple metadata objects, use
-	 * {@link elgg_get_metadata()}.
+	 * Registers a metadata name as containing tags for an entity.
+	 *
+	 * @param string $name Tag name
+	 *
+	 * @return bool
+	 */
+	public function registerTagName($name) {
+		if (!in_array($name, $this->tag_names)) {
+			$this->tag_names[] = $name;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Unregisters a metadata tag name
+	 *
+	 * @param string $name Tag name
+	 *
+	 * @return bool
+	 */
+	public function unregisterTagName($name) {
+		$index = array_search($name, $this->tag_names);
+		if ($index >= 0) {
+			unset($this->tag_names[$index]);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns an array of valid metadata names for tags.
+	 *
+	 * @return string[]
+	 */
+	public function getTagNames() {
+		return $this->tag_names;
+	}
+
+	/**
+	 * Get popular tags and their frequencies
+	 *
+	 * Accepts all options supported by {@link elgg_get_entities()}
+	 *
+	 * Returns an array of objects that include "tag" and "total" properties
+	 *
+	 * @todo   When updating this function for 3.0, I have noticed that docs explicitly mention
+	 *       that tags must be registered, but it was not really checked anywhere in code
+	 *       So, either update the docs or decide what the behavior should be
+	 *
+	 * @param array $options Options
+	 *
+	 * @return    object[]|false
+	 * @throws \DatabaseException
+	 * @option int      $threshold Minimum number of tag occurrences
+	 * @option string[] $tag_names Names of registered tag names to include in search
+	 *
+	 */
+	public function getTags(array $options = []) {
+		$defaults = [
+			'threshold' => 1,
+			'tag_names' => [],
+		];
+
+		$options = array_merge($defaults, $options);
+
+		$singulars = ['tag_name'];
+		$options = LegacyQueryOptionsAdapter::normalizePluralOptions($options, $singulars);
+
+		$tag_names = elgg_extract('tag_names', $options);
+		if (empty($tag_names)) {
+			$tag_names = elgg_get_registered_tag_metadata_names();
+		}
+
+		$threshold = elgg_extract('threshold', $options, 1, false);
+
+		unset($options['tag_names']);
+		unset($options['threshold']);
+
+		$qb = \Elgg\Database\Select::fromTable('metadata', 'md');
+		$qb->select('md.value AS tag')
+			->addSelect('COUNT(md.id) AS total')
+			->where($qb->compare('md.name', 'IN', $tag_names, ELGG_VALUE_STRING))
+			->andWhere($qb->compare('md.value', '!=', '', ELGG_VALUE_STRING))
+			->groupBy('md.value')
+			->having($qb->compare('total', '>=', $threshold, ELGG_VALUE_INTEGER))
+			->orderBy('total', 'desc');
+
+		$options = new \Elgg\Database\QueryOptions($options);
+		$alias = $qb->joinEntitiesTable('md', 'entity_guid', 'inner', 'e');
+		$qb->addClause(\Elgg\Database\Clauses\EntityWhereClause::factory($options), $alias);
+
+		return _elgg_services()->db->getData($qb);
+	}
+
+	/**
+	 * Get a specific metadata object by its id
+	 *
+	 * @see MetadataTable::getAll()
 	 *
 	 * @param int $id The id of the metadata object being retrieved.
 	 *
-	 * @return \ElggMetadata|false  false if not found
+	 * @return ElggMetadata|false  false if not found
+	 * @throws \DatabaseException
 	 */
-	function get($id) {
-		return _elgg_get_metastring_based_object_from_id($id, 'metadata');
+	public function get($id) {
+		$qb = Select::fromTable('metadata');
+		$qb->select('*');
+
+		$where = new MetadataWhereClause();
+		$where->ids = $id;
+		$qb->addClause($where);
+
+		$row = $this->db->getDataRow($qb);
+		if ($row) {
+			return new ElggMetadata($row);
+		}
+
+		return false;
 	}
-	
+
 	/**
-	 * Deletes metadata using its ID.
+	 * Deletes metadata using its ID
 	 *
-	 * @param int $id The metadata ID to delete.
+	 * @param ElggMetadata $metadata Metadata
+	 *
 	 * @return bool
+	 * @throws \DatabaseException
 	 */
-	function delete($id) {
-		$metadata = $this->get($id);
-
-		return $metadata ? $metadata->delete() : false;
-	}
-	
-	/**
-	 * Create a new metadata object, or update an existing one.
-	 *
-	 * Metadata can be an array by setting allow_multiple to true, but it is an
-	 * indexed array with no control over the indexing.
-	 *
-	 * @param int    $entity_guid    The entity to attach the metadata to
-	 * @param string $name           Name of the metadata
-	 * @param string $value          Value of the metadata
-	 * @param string $value_type     'text', 'integer', or '' for automatic detection
-	 * @param int    $owner_guid     GUID of entity that owns the metadata. Default is logged in user.
-	 * @param int    $access_id      Default is ACCESS_PRIVATE
-	 * @param bool   $allow_multiple Allow multiple values for one key. Default is false
-	 *
-	 * @return int|false id of metadata or false if failure
-	 */
-	function create($entity_guid, $name, $value, $value_type = '', $owner_guid = 0,
-			$access_id = ACCESS_PRIVATE, $allow_multiple = false) {
-
-		$entity_guid = (int)$entity_guid;
-		// name and value are encoded in add_metastring()
-		$value_type = \ElggExtender::detectValueType($value, trim($value_type));
-		$time = $this->getCurrentTime()->getTimestamp();
-		$owner_guid = (int)$owner_guid;
-		$allow_multiple = (boolean)$allow_multiple;
-	
-		if (!isset($value)) {
+	public function delete(ElggMetadata $metadata) {
+		if (!$metadata->id || !$metadata->canEdit()) {
 			return false;
 		}
-	
-		if ($owner_guid == 0) {
-			$owner_guid = $this->session->getLoggedInUserGuid();
+
+		if (!_elgg_services()->events->trigger('delete', 'metadata', $metadata)) {
+			return false;
 		}
-	
-		$access_id = (int) $access_id;
-	
-		$query = "SELECT * FROM {$this->table}
-			WHERE entity_guid = :entity_guid and name_id = :name_id LIMIT 1";
 
-		$params = [
-			':entity_guid' => $entity_guid,
-			':name_id' => $this->metastringsTable->getId($name)
-		];
+		$qb = Delete::fromTable('metadata');
+		$qb->where($qb->compare('id', '=', $metadata->id, ELGG_VALUE_INTEGER));
 
-		$existing = $this->db->getDataRow($query, null, $params);
-		if ($existing && !$allow_multiple) {
-			$id = (int)$existing->id;
-			$result = $this->update($id, $name, $value, $value_type, $owner_guid, $access_id);
-	
-			if (!$result) {
-				return false;
-			}
-		} else {
-			// Support boolean types
-			if (is_bool($value)) {
-				$value = (int)$value;
-			}
-	
-			// Add the metastrings
-			$value_id = $this->metastringsTable->getId($value);
-			if (!$value_id) {
-				return false;
-			}
-	
-			$name_id = $this->metastringsTable->getId($name);
-			if (!$name_id) {
-				return false;
-			}
-	
-			// If ok then add it
-			$query = "INSERT INTO {$this->table}
-				(entity_guid, name_id, value_id, value_type, owner_guid, time_created, access_id)
-				VALUES (:entity_guid, :name_id, :value_id, :value_type, :owner_guid, :time_created, :access_id)";
+		$deleted = $this->db->deleteData($qb);
 
-			$params = [
-				':entity_guid' => $entity_guid,
-				':name_id' => $name_id,
-				':value_id' => $value_id,
-				':value_type' => $value_type,
-				':owner_guid' => $owner_guid,
-				':time_created' => $time,
-				':access_id' => $access_id,
-			];
-			
-			$id = $this->db->insertData($query, $params);
-			
-			if ($id !== false) {
-				$obj = $this->get($id);
-				if ($this->events->trigger('create', 'metadata', $obj)) {
+		if ($deleted) {
+			$this->metadata_cache->clear($metadata->entity_guid);
+		}
 
-					$this->cache->clear($entity_guid);
-	
-					return $id;
-				} else {
-					$this->delete($id);
+		return $deleted !== false;
+	}
+
+	/**
+	 * Create a new metadata object, or update an existing one (if multiple is allowed)
+	 *
+	 * Metadata can be an array by setting allow_multiple to true, but it is an
+	 * indexed array with no control over the indexing
+	 *
+	 * @param ElggMetadata $metadata       Metadata
+	 * @param bool         $allow_multiple Allow multiple values for one key. Default is false
+	 *
+	 * @return int|false id of metadata or false if failure
+	 * @throws \DatabaseException
+	 */
+	public function create(ElggMetadata $metadata, $allow_multiple = false) {
+		if (!isset($metadata->value) || !isset($metadata->entity_guid)) {
+			elgg_log("Metadata must have a value and entity guid", 'ERROR');
+			return false;
+		}
+
+		if (!is_scalar($metadata->value)) {
+			elgg_log("To set multiple metadata values use ElggEntity::setMetadata", 'ERROR');
+			return false;
+		}
+
+		if ($metadata->id) {
+			if ($this->update($metadata)) {
+				return $metadata->id;
+			}
+		}
+
+		if (strlen($metadata->value) > self::MYSQL_TEXT_BYTE_LIMIT) {
+			elgg_log("Metadata '$metadata->name' is above the MySQL TEXT size limit and may be truncated.", 'WARNING');
+		}
+
+		if (!$allow_multiple) {
+			$id = $this->getIdsByName($metadata->entity_guid, $metadata->name);
+
+			if (is_array($id)) {
+				throw new \LogicException("
+					Multiple '{$metadata->name}' metadata values exist for entity [guid: {$metadata->entity_guid}].
+					Use ElggEntity::setMetadata()
+				");
+			}
+
+			if ($id) {
+				$metadata->id = $id;
+
+				if ($this->update($metadata)) {
+					return $metadata->id;
 				}
 			}
 		}
-	
-		return $id;
-	}
-	
-	/**
-	 * Update a specific piece of metadata.
-	 *
-	 * @param int    $id         ID of the metadata to update
-	 * @param string $name       Metadata name
-	 * @param string $value      Metadata value
-	 * @param string $value_type Value type
-	 * @param int    $owner_guid Owner guid
-	 * @param int    $access_id  Access ID
-	 *
-	 * @return bool
-	 */
-	function update($id, $name, $value, $value_type, $owner_guid, $access_id) {
-		$id = (int)$id;
-	
-		if (!$md = $this->get($id)) {
-			return false;
-		}
-		if (!$md->canEdit()) {
-			return false;
-		}
-	
-		$value_type = \ElggExtender::detectValueType($value, trim($value_type));
-	
-		$owner_guid = (int)$owner_guid;
-		if ($owner_guid == 0) {
-			$owner_guid = $this->session->getLoggedInUserGuid();
-		}
-	
-		$access_id = (int)$access_id;
-	
-		// Support boolean types (as integers)
-		if (is_bool($value)) {
-			$value = (int)$value;
-		}
-	
-		$value_id = $this->metastringsTable->getId($value);
-		if (!$value_id) {
-			return false;
-		}
-	
-		$name_id = $this->metastringsTable->getId($name);
-		if (!$name_id) {
-			return false;
-		}
-	
-		// If ok then add it
-		$query = "UPDATE {$this->table}
-			SET name_id = :name_id,
-			    value_id = :value_id,
-				value_type = :value_type,
-				access_id = :access_id,
-			    owner_guid = :owner_guid
-			WHERE id = :id";
 
-		$params = [
-			':name_id' => $name_id,
-			':value_id' => $value_id,
-			':value_type' => $value_type,
-			':access_id' => $access_id,
-			':owner_guid' => $owner_guid,
-			':id' => $id,
-		];
-		
-		$result = $this->db->updateData($query, false, $params);
-		
-		if ($result !== false) {
-	
-			$this->cache->clear($md->entity_guid);
-	
-			// @todo this event tells you the metadata has been updated, but does not
-			// let you do anything about it. What is needed is a plugin hook before
-			// the update that passes old and new values.
-			$obj = $this->get($id);
-			$this->events->trigger('update', 'metadata', $obj);
+		if (!$this->events->triggerBefore('create', 'metadata', $metadata)) {
+			return false;
 		}
-	
-		return $result;
+
+		$time_created = $this->getCurrentTime()->getTimestamp();
+
+		$qb = Insert::intoTable('metadata');
+		$qb->values([
+			'name' => $qb->param($metadata->name, ELGG_VALUE_STRING),
+			'entity_guid' => $qb->param($metadata->entity_guid, ELGG_VALUE_INTEGER),
+			'value' => $qb->param($metadata->value, $metadata->value_type === 'integer' ? ELGG_VALUE_INTEGER : ELGG_VALUE_STRING),
+			'value_type' => $qb->param($metadata->value_type, ELGG_VALUE_STRING),
+			'time_created' => $qb->param($time_created, ELGG_VALUE_INTEGER),
+		]);
+
+		$id = $this->db->insertData($qb);
+
+		if ($id === false) {
+			return false;
+		}
+
+		$metadata->id = (int) $id;
+		$metadata->time_created = $time_created;
+
+		if ($this->events->trigger('create', 'metadata', $metadata)) {
+			$this->metadata_cache->clear($metadata->entity_guid);
+
+			$this->events->triggerAfter('create', 'metadata', $metadata);
+
+			return $id;
+		} else {
+			$this->delete($metadata);
+
+			return false;
+		}
 	}
-	
+
 	/**
-	 * This function creates metadata from an associative array of "key => value" pairs.
+	 * Update a specific piece of metadata
 	 *
-	 * To achieve an array for a single key, pass in the same key multiple times with
-	 * allow_multiple set to true. This creates an indexed array. It does not support
-	 * associative arrays and there is no guarantee on the ordering in the array.
-	 *
-	 * @param int    $entity_guid     The entity to attach the metadata to
-	 * @param array  $name_and_values Associative array - a value can be a string, number, bool
-	 * @param string $value_type      'text', 'integer', or '' for automatic detection
-	 * @param int    $owner_guid      GUID of entity that owns the metadata
-	 * @param int    $access_id       Default is ACCESS_PRIVATE
-	 * @param bool   $allow_multiple  Allow multiple values for one key. Default is false
+	 * @param ElggMetadata $metadata Updated metadata
 	 *
 	 * @return bool
+	 * @throws \DatabaseException
 	 */
-	function createFromArray($entity_guid, array $name_and_values, $value_type, $owner_guid,
-			$access_id = ACCESS_PRIVATE, $allow_multiple = false) {
-	
-		foreach ($name_and_values as $k => $v) {
-			$result = $this->create($entity_guid, $k, $v, $value_type, $owner_guid,
-				$access_id, $allow_multiple);
-			if (!$result) {
-				return false;
-			}
+	public function update(ElggMetadata $metadata) {
+		if (!$metadata->canEdit()) {
+			return false;
 		}
+
+		if (!$this->events->triggerBefore('update', 'metadata', $metadata)) {
+			return false;
+		}
+
+		if (strlen($metadata->value) > self::MYSQL_TEXT_BYTE_LIMIT) {
+			elgg_log("Metadata '$metadata->name' is above the MySQL TEXT size limit and may be truncated.", 'WARNING');
+		}
+
+		$qb = Update::table('metadata');
+		$qb->set('name', $qb->param($metadata->name, ELGG_VALUE_STRING))
+			->set('value', $qb->param($metadata->value, $metadata->value_type === 'integer' ? ELGG_VALUE_INTEGER : ELGG_VALUE_STRING))
+			->set('value_type', $qb->param($metadata->value_type, ELGG_VALUE_STRING))
+			->where($qb->compare('id', '=', $metadata->id, ELGG_VALUE_INTEGER));
+
+		$result = $this->db->updateData($qb);
+
+		if ($result === false) {
+			return false;
+		}
+
+		$this->metadata_cache->clear($metadata->entity_guid);
+
+		$this->events->trigger('update', 'metadata', $metadata);
+		$this->events->triggerAfter('update', 'metadata', $metadata);
+
 		return true;
 	}
-	
+
 	/**
-	 * Returns metadata.  Accepts all elgg_get_entities() options for entity
-	 * restraints.
+	 * Returns metadata
 	 *
-	 * @see elgg_get_entities
+	 * Accepts all {@link elgg_get_entities()} options for entity restraints.
 	 *
-	 * @warning 1.7's find_metadata() didn't support limits and returned all metadata.
-	 *          This function defaults to a limit of 25. There is probably not a reason
-	 *          for you to return all metadata unless you're exporting an entity,
-	 *          have other restraints in place, or are doing something horribly
-	 *          wrong in your code.
+	 * @see     elgg_get_entities()
 	 *
-	 * @param array $options Array in format:
+	 * @param array $options Options
 	 *
-	 * metadata_names               => null|ARR metadata names
-	 * metadata_values              => null|ARR metadata values
-	 * metadata_ids                 => null|ARR metadata ids
-	 * metadata_case_sensitive      => BOOL Overall Case sensitive
-	 * metadata_owner_guids         => null|ARR guids for metadata owners
-	 * metadata_created_time_lower  => INT Lower limit for created time.
-	 * metadata_created_time_upper  => INT Upper limit for created time.
-	 * metadata_calculation         => STR Perform the MySQL function on the metadata values returned.
-	 *                                   The "metadata_calculation" option causes this function to
-	 *                                   return the result of performing a mathematical calculation on
-	 *                                   all metadata that match the query instead of returning
-	 *                                   \ElggMetadata objects.
-	 *
-	 * @return \ElggMetadata[]|mixed
+	 * @return ElggMetadata[]|mixed
 	 */
-	function getAll(array $options = array()) {
-	
-		// @todo remove support for count shortcut - see #4393
-		// support shortcut of 'count' => true for 'metadata_calculation' => 'count'
-		if (isset($options['count']) && $options['count']) {
-			$options['metadata_calculation'] = 'count';
-			unset($options['count']);
-		}
-	
+	public function getAll(array $options = []) {
+
 		$options['metastring_type'] = 'metadata';
-		return _elgg_get_metastring_based_objects($options);
+		$options = LegacyQueryOptionsAdapter::normalizeMetastringOptions($options);
+
+		return Metadata::find($options);
 	}
-	
+
 	/**
 	 * Deletes metadata based on $options.
 	 *
 	 * @warning Unlike elgg_get_metadata() this will not accept an empty options array!
-	 *          This requires at least one constraint: metadata_owner_guid(s),
+	 *          This requires at least one constraint:
 	 *          metadata_name(s), metadata_value(s), or guid(s) must be set.
 	 *
-	 * @param array $options An options array. {@link elgg_get_metadata()}
+	 * @see     elgg_get_metadata()
+	 * @see     elgg_get_entities()
+	 *
+	 * @param array $options Options
+	 *
 	 * @return bool|null true on success, false on failure, null if no metadata to delete.
 	 */
-	function deleteAll(array $options) {
+	public function deleteAll(array $options) {
 		if (!_elgg_is_valid_options_for_batch_operation($options, 'metadata')) {
 			return false;
 		}
-		$options['metastring_type'] = 'metadata';
-		$result = _elgg_batch_metastring_based_objects($options, 'elgg_batch_delete_callback', false);
-	
+
 		// This moved last in case an object's constructor sets metadata. Currently the batch
 		// delete process has to create the entity to delete its metadata. See #5214
-		$this->cache->invalidateByOptions($options);
-	
-		return $result;
-	}
-	
-	/**
-	 * Disables metadata based on $options.
-	 *
-	 * @warning Unlike elgg_get_metadata() this will not accept an empty options array!
-	 *
-	 * @param array $options An options array. {@link elgg_get_metadata()}
-	 * @return bool|null true on success, false on failure, null if no metadata disabled.
-	 */
-	function disableAll(array $options) {
-		if (!_elgg_is_valid_options_for_batch_operation($options, 'metadata')) {
-			return false;
-		}
-	
-		$this->cache->invalidateByOptions($options);
-	
-		// if we can see hidden (disabled) we need to use the offset
-		// otherwise we risk an infinite loop if there are more than 50
-		$inc_offset = access_get_show_hidden_status();
-	
-		$options['metastring_type'] = 'metadata';
-		return _elgg_batch_metastring_based_objects($options, 'elgg_batch_disable_callback', $inc_offset);
-	}
-	
-	/**
-	 * Enables metadata based on $options.
-	 *
-	 * @warning Unlike elgg_get_metadata() this will not accept an empty options array!
-	 *
-	 * @warning In order to enable metadata, you must first use
-	 * {@link access_show_hidden_entities()}.
-	 *
-	 * @param array $options An options array. {@link elgg_get_metadata()}
-	 * @return bool|null true on success, false on failure, null if no metadata enabled.
-	 */
-	function enableAll(array $options) {
-		if (!$options || !is_array($options)) {
-			return false;
-		}
-	
-		$this->cache->invalidateByOptions($options);
-	
-		$options['metastring_type'] = 'metadata';
-		return _elgg_batch_metastring_based_objects($options, 'elgg_batch_enable_callback');
-	}
-	
-	/**
-	 * Returns entities based upon metadata.  Also accepts all
-	 * options available to elgg_get_entities().  Supports
-	 * the singular option shortcut.
-	 *
-	 * @note Using metadata_names and metadata_values results in a
-	 * "names IN (...) AND values IN (...)" clause.  This is subtly
-	 * differently than default multiple metadata_name_value_pairs, which use
-	 * "(name = value) AND (name = value)" clauses.
-	 *
-	 * When in doubt, use name_value_pairs.
-	 *
-	 * To ask for entities that do not have a metadata value, use a custom
-	 * where clause like this:
-	 *
-	 * 	$options['wheres'][] = "NOT EXISTS (
-	 *			SELECT 1 FROM {$dbprefix}metadata md
-	 *			WHERE md.entity_guid = e.guid
-	 *				AND md.name_id = $name_metastring_id
-	 *				AND md.value_id = $value_metastring_id)";
-	 *
-	 * Note the metadata name and value has been denormalized in the above example.
-	 *
-	 * @see elgg_get_entities
-	 *
-	 * @param array $options Array in format:
-	 *
-	 * 	metadata_names => null|ARR metadata names
-	 *
-	 * 	metadata_values => null|ARR metadata values
-	 *
-	 * 	metadata_name_value_pairs => null|ARR (
-	 *                                         name => 'name',
-	 *                                         value => 'value',
-	 *                                         'operand' => '=',
-	 *                                         'case_sensitive' => true
-	 *                                        )
-	 *                               Currently if multiple values are sent via
-	 *                               an array (value => array('value1', 'value2')
-	 *                               the pair's operand will be forced to "IN".
-	 *                               If passing "IN" as the operand and a string as the value, 
-	 *                               the value must be a properly quoted and escaped string.
-	 *
-	 * 	metadata_name_value_pairs_operator => null|STR The operator to use for combining
-	 *                                        (name = value) OPERATOR (name = value); default AND
-	 *
-	 * 	metadata_case_sensitive => BOOL Overall Case sensitive
-	 *
-	 *  order_by_metadata => null|ARR array(
-	 *                                      'name' => 'metadata_text1',
-	 *                                      'direction' => ASC|DESC,
-	 *                                      'as' => text|integer
-	 *                                     )
-	 *                                Also supports array('name' => 'metadata_text1')
-	 *
-	 *  metadata_owner_guids => null|ARR guids for metadata owners
-	 *
-	 * @return \ElggEntity[]|mixed If count, int. If not count, array. false on errors.
-	 */
-	function getEntities(array $options = array()) {
-		$defaults = array(
-			'metadata_names'                     => ELGG_ENTITIES_ANY_VALUE,
-			'metadata_values'                    => ELGG_ENTITIES_ANY_VALUE,
-			'metadata_name_value_pairs'          => ELGG_ENTITIES_ANY_VALUE,
-	
-			'metadata_name_value_pairs_operator' => 'AND',
-			'metadata_case_sensitive'            => true,
-			'order_by_metadata'                  => array(),
-	
-			'metadata_owner_guids'               => ELGG_ENTITIES_ANY_VALUE,
-		);
-	
-		$options = array_merge($defaults, $options);
-	
-		$singulars = array('metadata_name', 'metadata_value',
-			'metadata_name_value_pair', 'metadata_owner_guid');
-	
-		$options = _elgg_normalize_plural_options_array($options, $singulars);
-	
-		if (!$options = _elgg_entities_get_metastrings_options('metadata', $options)) {
-			return false;
-		}
-	
-		return $this->entityTable->getEntities($options);
-	}
-	
-	/**
-	 * Returns metadata name and value SQL where for entities.
-	 * NB: $names and $values are not paired. Use $pairs for this.
-	 * Pairs default to '=' operand.
-	 *
-	 * This function is reused for annotations because the tables are
-	 * exactly the same.
-	 *
-	 * @param string     $e_table           Entities table name
-	 * @param string     $n_table           Normalized metastrings table name (Where entities,
-	 *                                    values, and names are joined. annotations / metadata)
-	 * @param array|null $names             Array of names
-	 * @param array|null $values            Array of values
-	 * @param array|null $pairs             Array of names / values / operands
-	 * @param string     $pair_operator     ("AND" or "OR") Operator to use to join the where clauses for pairs
-	 * @param bool       $case_sensitive    Case sensitive metadata names?
-	 * @param array|null $order_by_metadata Array of names / direction
-	 * @param array|null $owner_guids       Array of owner GUIDs
-	 *
-	 * @return false|array False on fail, array('joins', 'wheres')
-	 * @access private
-	 */
-	function getEntityMetadataWhereSql($e_table, $n_table, $names = null, $values = null,
-			$pairs = null, $pair_operator = 'AND', $case_sensitive = true, $order_by_metadata = null,
-			$owner_guids = null) {
-		// short circuit if nothing requested
-		// 0 is a valid (if not ill-conceived) metadata name.
-		// 0 is also a valid metadata value for false, null, or 0
-		// 0 is also a valid(ish) owner_guid
-		if ((!$names && $names !== 0)
-			&& (!$values && $values !== 0)
-			&& (!$pairs && $pairs !== 0)
-			&& (!$owner_guids && $owner_guids !== 0)
-			&& !$order_by_metadata) {
-			return '';
-		}
-	
-		// join counter for incremental joins.
-		$i = 1;
-	
-		// binary forces byte-to-byte comparision of strings, making
-		// it case- and diacritical-mark- sensitive.
-		// only supported on values.
-		$binary = ($case_sensitive) ? ' BINARY ' : '';
-	
-		$access = _elgg_get_access_where_sql(array(
-			'table_alias' => 'n_table',
-			'guid_column' => 'entity_guid',
-		));
-	
-		$return = array (
-			'joins' => array (),
-			'wheres' => array(),
-			'orders' => array()
-		);
-	
-		// will always want to join these tables if pulling metastrings.
-		$return['joins'][] = "JOIN {$this->db->prefix}{$n_table} n_table on
-			{$e_table}.guid = n_table.entity_guid";
-	
-		$wheres = array();
-	
-		// get names wheres and joins
-		$names_where = '';
-		if ($names !== null) {
-			if (!is_array($names)) {
-				$names = array($names);
-			}
-	
-			$sanitised_names = array();
-			foreach ($names as $name) {
-				// normalise to 0.
-				if (!$name) {
-					$name = '0';
-				}
-				$sanitised_names[] = '\'' . $this->db->sanitizeString($name) . '\'';
-			}
-	
-			if ($names_str = implode(',', $sanitised_names)) {
-				$return['joins'][] = "JOIN {$this->metastringsTable->getTableName()} msn on n_table.name_id = msn.id";
-				$names_where = "(msn.string IN ($names_str))";
-			}
-		}
-	
-		// get values wheres and joins
-		$values_where = '';
-		if ($values !== null) {
-			if (!is_array($values)) {
-				$values = array($values);
-			}
-	
-			$sanitised_values = array();
-			foreach ($values as $value) {
-				// normalize to 0
-				if (!$value) {
-					$value = 0;
-				}
-				$sanitised_values[] = '\'' . $this->db->sanitizeString($value) . '\'';
-			}
-	
-			if ($values_str = implode(',', $sanitised_values)) {
-				$return['joins'][] = "JOIN {$this->metastringsTable->getTableName()} msv on n_table.value_id = msv.id";
-				$values_where = "({$binary}msv.string IN ($values_str))";
-			}
-		}
-	
-		if ($names_where && $values_where) {
-			$wheres[] = "($names_where AND $values_where AND $access)";
-		} elseif ($names_where) {
-			$wheres[] = "($names_where AND $access)";
-		} elseif ($values_where) {
-			$wheres[] = "($values_where AND $access)";
-		}
-	
-		// add pairs
-		// pairs must be in arrays.
-		if (is_array($pairs)) {
-			// check if this is an array of pairs or just a single pair.
-			if (isset($pairs['name']) || isset($pairs['value'])) {
-				$pairs = array($pairs);
-			}
-	
-			$pair_wheres = array();
-	
-			// @todo when the pairs are > 3 should probably split the query up to
-			// denormalize the strings table.
-	
-			foreach ($pairs as $index => $pair) {
-				// @todo move this elsewhere?
-				// support shortcut 'n' => 'v' method.
-				if (!is_array($pair)) {
-					$pair = array(
-						'name' => $index,
-						'value' => $pair
-					);
-				}
-	
-				// must have at least a name and value
-				if (!isset($pair['name']) || !isset($pair['value'])) {
-					// @todo should probably return false.
-					continue;
-				}
-	
-				// case sensitivity can be specified per pair.
-				// default to higher level setting.
-				if (isset($pair['case_sensitive'])) {
-					$pair_binary = ($pair['case_sensitive']) ? ' BINARY ' : '';
-				} else {
-					$pair_binary = $binary;
-				}
-	
-				if (isset($pair['operand'])) {
-					$operand = $this->db->sanitizeString($pair['operand']);
-				} else {
-					$operand = ' = ';
-				}
-	
-				// for comparing
-				$trimmed_operand = trim(strtolower($operand));
-	
-				$access = _elgg_get_access_where_sql(array(
-					'table_alias' => "n_table{$i}",
-					'guid_column' => 'entity_guid',
-				));
+		$this->metadata_cache->invalidateByOptions($options);
 
-				// certain operands can't work well with strings that can be interpreted as numbers
-				// for direct comparisons like IN, =, != we treat them as strings
-				// gt/lt comparisons need to stay unencapsulated because strings '5' > '15'
-				// see https://github.com/Elgg/Elgg/issues/7009
-				$num_safe_operands = array('>', '<', '>=', '<=');
-				$num_test_operand = trim(strtoupper($operand));
-	
-				if (is_numeric($pair['value']) && in_array($num_test_operand, $num_safe_operands)) {
-					$value = $this->db->sanitizeString($pair['value']);
-				} else if (is_bool($pair['value'])) {
-					$value = (int)$pair['value'];
-				} else if (is_array($pair['value'])) {
-					$values_array = array();
-	
-					foreach ($pair['value'] as $pair_value) {
-						if (is_numeric($pair_value) && !in_array($num_test_operand, $num_safe_operands)) {
-							$values_array[] = $this->db->sanitizeString($pair_value);
-						} else {
-							$values_array[] = "'" . $this->db->sanitizeString($pair_value) . "'";
-						}
-					}
-	
-					if ($values_array) {
-						$value = '(' . implode(', ', $values_array) . ')';
-					}
-	
-					// @todo allow support for non IN operands with array of values.
-					// will have to do more silly joins.
-					$operand = 'IN';
-				} else if ($trimmed_operand == 'in') {
-					$value = "({$pair['value']})";
-				} else {
-					$value = "'" . $this->db->sanitizeString($pair['value']) . "'";
-				}
-	
-				$name = $this->db->sanitizeString($pair['name']);
-	
-				// @todo The multiple joins are only needed when the operator is AND
-				$return['joins'][] = "JOIN {$this->db->prefix}{$n_table} n_table{$i}
-					on {$e_table}.guid = n_table{$i}.entity_guid";
-				$return['joins'][] = "JOIN {$this->metastringsTable->getTableName()} msn{$i}
-					on n_table{$i}.name_id = msn{$i}.id";
-				$return['joins'][] = "JOIN {$this->metastringsTable->getTableName()} msv{$i}
-					on n_table{$i}.value_id = msv{$i}.id";
-	
-				$pair_wheres[] = "(msn{$i}.string = '$name' AND {$pair_binary}msv{$i}.string
-					$operand $value AND $access)";
-	
-				$i++;
-			}
-	
-			if ($where = implode(" $pair_operator ", $pair_wheres)) {
-				$wheres[] = "($where)";
-			}
-		}
-	
-		// add owner_guids
-		if ($owner_guids) {
-			if (is_array($owner_guids)) {
-				$sanitised = array_map('sanitise_int', $owner_guids);
-				$owner_str = implode(',', $sanitised);
-			} else {
-				$owner_str = (int)$owner_guids;
-			}
-	
-			$wheres[] = "(n_table.owner_guid IN ($owner_str))";
-		}
-	
-		if ($where = implode(' AND ', $wheres)) {
-			$return['wheres'][] = "($where)";
-		}
-	
-		if (is_array($order_by_metadata)) {
-			if ((count($order_by_metadata) > 0) && !isset($order_by_metadata[0])) {
-				// singleton, so fix
-				$order_by_metadata = array($order_by_metadata);
-			}
-			foreach ($order_by_metadata as $order_by) {
-				if (is_array($order_by) && isset($order_by['name'])) {
-					$name = $this->db->sanitizeString($order_by['name']);
-					if (isset($order_by['direction'])) {
-						$direction = $this->db->sanitizeString($order_by['direction']);
-					} else {
-						$direction = 'ASC';
-					}
-					$return['joins'][] = "JOIN {$this->db->prefix}{$n_table} n_table{$i}
-						on {$e_table}.guid = n_table{$i}.entity_guid";
-					$return['joins'][] = "JOIN {$this->metastringsTable->getTableName()} msn{$i}
-						on n_table{$i}.name_id = msn{$i}.id";
-					$return['joins'][] = "JOIN {$this->metastringsTable->getTableName()} msv{$i}
-						on n_table{$i}.value_id = msv{$i}.id";
-	
-					$access = _elgg_get_access_where_sql(array(
-						'table_alias' => "n_table{$i}",
-						'guid_column' => 'entity_guid',
-					));
-	
-					$return['wheres'][] = "(msn{$i}.string = '$name' AND $access)";
-					if (isset($order_by['as']) && $order_by['as'] == 'integer') {
-						$return['orders'][] = "CAST(msv{$i}.string AS SIGNED) $direction";
-					} else {
-						$return['orders'][] = "msv{$i}.string $direction";
-					}
-					$i++;
-				}
-			}
-		}
-	
-		return $return;
-	}
-	
-	/**
-	 * Get the URL for this metadata
-	 *
-	 * By default this links to the export handler in the current view.
-	 *
-	 * @param int $id Metadata ID
-	 *
-	 * @return mixed
-	 */
-	function getUrl($id) {
-		$extender = $this->get($id);
+		$options['batch'] = true;
+		$options['batch_size'] = 50;
+		$options['batch_inc_offset'] = false;
 
-		return $extender ? $extender->getURL() : false;
-	}
-	
-	/**
-	 * Mark entities with a particular type and subtype as having access permissions
-	 * that can be changed independently from their parent entity
-	 *
-	 * @param string $type    The type - object, user, etc
-	 * @param string $subtype The subtype; all subtypes by default
-	 *
-	 * @return void
-	 */
-	function registerMetadataAsIndependent($type, $subtype = '*') {
-		if (!isset($this->independents[$type])) {
-			$this->independents[$type] = array();
-		}
-		
-		$this->independents[$type][$subtype] = true;
-	}
-	
-	/**
-	 * Determines whether entities of a given type and subtype should not change
-	 * their metadata in line with their parent entity
-	 *
-	 * @param string $type    The type - object, user, etc
-	 * @param string $subtype The entity subtype
-	 *
-	 * @return bool
-	 */
-	function isMetadataIndependent($type, $subtype) {
-		if (empty($this->independents[$type])) {
-			return false;
+		$metadata = Metadata::find($options);
+		$count = $metadata->count();
+
+		if (!$count) {
+			return;
 		}
 
-		return !empty($this->independents[$type][$subtype])
-			|| !empty($this->independents[$type]['*']);
-	}
-	
-	/**
-	 * When an entity is updated, resets the access ID on all of its child metadata
-	 *
-	 * @param string      $event       The name of the event
-	 * @param string      $object_type The type of object
-	 * @param \ElggEntity $object      The entity itself
-	 *
-	 * @return true
-	 * @access private Set as private in 1.9.0
-	 */
-	function handleUpdate($event, $object_type, $object) {
-		if ($object instanceof \ElggEntity) {
-			if (!$this->isMetadataIndependent($object->getType(), $object->getSubtype())) {
-				$access_id = (int)$object->access_id;
-				$guid = (int)$object->getGUID();
-				$query = "update {$this->table} set access_id = {$access_id} where entity_guid = {$guid}";
-				$this->db->updateData($query);
+		$success = 0;
+		foreach ($metadata as $md) {
+			if ($md->delete()) {
+				$success++;
 			}
 		}
-		return true;
+
+		return $success == $count;
 	}
-	
+
+	/**
+	 * Returns ID(s) of metadata with a particular name attached to an entity
+	 *
+	 * @param int    $entity_guid Entity guid
+	 * @param string $name        Metadata name
+	 *
+	 * @return int[]|int|null
+	 */
+	public function getIdsByName($entity_guid, $name) {
+		if ($this->metadata_cache->isLoaded($entity_guid)) {
+			$ids = $this->metadata_cache->getSingleId($entity_guid, $name);
+		} else {
+			$qb = Select::fromTable('metadata');
+			$qb->select('id')
+				->where($qb->compare('entity_guid', '=', $entity_guid, ELGG_VALUE_INTEGER))
+				->andWhere($qb->compare('name', '=', $name, ELGG_VALUE_STRING));
+
+			$callback = function (\stdClass $row) {
+				return (int) $row->id;
+			};
+
+			$ids = $this->db->getData($qb, $callback);
+		}
+
+		if (empty($ids)) {
+			return null;
+		}
+
+		if (is_array($ids) && count($ids) === 1) {
+			return array_shift($ids);
+		}
+
+		return $ids;
+	}
 }

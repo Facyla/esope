@@ -4,12 +4,11 @@
  */
 
 $widget = elgg_extract('entity', $vars);
-
-$num_display = sanitize_int($widget->num_display, false);
-// set default value for display number
-if (!$num_display) {
-	$num_display = 5;
+if (!$widget instanceof ElggWidget) {
+	return;
 }
+
+$num_display = (int) $widget->num_display ?: 4;
 
 echo elgg_list_entities([
 	'type' => 'user',

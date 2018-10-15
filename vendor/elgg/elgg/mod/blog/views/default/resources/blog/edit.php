@@ -1,19 +1,42 @@
 <?php
 
-elgg_gatekeeper();
-
-$page_type = elgg_extract('page_type', $vars);
 $guid = elgg_extract('guid', $vars);
-$revision = elgg_extract('revision', $vars);
+elgg_entity_gatekeeper($guid, 'object', 'blog');
 
-$params = blog_get_page_content_edit('edit', $guid, $revision);
-
-if (isset($params['sidebar'])) {
-	$params['sidebar'] .= elgg_view('blog/sidebar', ['page' => $page_type]);
-} else {
-	$params['sidebar'] = elgg_view('blog/sidebar', ['page' => $page_type]);
+$blog = get_entity($guid);
+if (!$blog->canEdit()) {
+	throw new \Elgg\EntityPermissionsException();
 }
 
-$body = elgg_view_layout('content', $params);
+$vars['entity'] = $blog;
 
-echo elgg_view_page($params['title'], $body);
+elgg_push_entity_breadcrumbs($blog);
+elgg_push_breadcrumb(elgg_echo('edit'));
+
+$revision = elgg_extract('revision', $vars);
+
+$title = elgg_echo('edit:object:blog');
+
+if ($revision) {
+	$revision = elgg_get_annotation_from_id((int) $revision);
+	$vars['revision'] = $revision;
+	$title .= ' ' . elgg_echo('blog:edit_revision_notice');
+
+	if (!$revision || !($revision->entity_guid == $guid)) {
+		throw new \Elgg\EntityNotFoundException(elgg_echo('blog:error:revision_not_found'));
+	}
+}
+
+$body_vars = blog_prepare_form_vars($blog, $revision);
+$content = elgg_view_form('blog/save', $vars, $body_vars);
+
+$sidebar = elgg_view('blog/sidebar/revisions', $vars);
+
+$body = elgg_view_layout('default', [
+	'title' => $title,
+	'content' => $content,
+	'sidebar' => $sidebar,
+	'filter_id' => 'blog/edit',
+]);
+
+echo elgg_view_page($title, $body);

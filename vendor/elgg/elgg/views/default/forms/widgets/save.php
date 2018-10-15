@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Elgg widget edit settings
  *
@@ -6,36 +6,49 @@
  * @uses $vars['show_access']
  */
 
-$widget = $vars['widget'];
+$widget = elgg_extract('widget', $vars);
+if (!$widget instanceof ElggWidget) {
+	return;
+}
+
 $show_access = elgg_extract('show_access', $vars, true);
 
-$edit_view = "widgets/$widget->handler/edit";
-$custom_form_section = elgg_view($edit_view, array('entity' => $widget));
+$custom_form_section = elgg_view("widgets/$widget->handler/edit", ['entity' => $widget]);
 
 $access = '';
 if ($show_access) {
-	$access = elgg_echo('access') . ': ' . elgg_view('input/access', array(
+	$access = elgg_view_field([
+		'#type' => 'access',
+		'#label' => elgg_echo('access'),
 		'name' => 'params[access_id]',
 		'value' => $widget->access_id,
-	));
+	]);
 }
 
 if (!$custom_form_section && !$access) {
 	return true;
 }
 
-$hidden = elgg_view('input/hidden', array('name' => 'guid', 'value' => $widget->guid));
-$submit = elgg_view('input/submit', array('value' => elgg_echo('save')));
+echo $custom_form_section;
+echo $access;
 
-$body = <<<___END
-	$custom_form_section
-	<div>
-		$access
-	</div>
-	<div class="elgg-foot">
-		$hidden
-		$submit
-	</div>
-___END;
+echo elgg_view_field([
+	'#type' => 'hidden',
+	'name' => 'guid',
+	'value' => $widget->guid,
+]);
 
-echo $body;
+if (elgg_in_context('default_widgets')) {
+	echo elgg_view_field([
+		'#type' => 'hidden',
+		'name' => 'default_widgets',
+		'value' => 1,
+	]);
+}
+
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => elgg_echo('save'),
+]);
+
+elgg_set_form_footer($footer);
