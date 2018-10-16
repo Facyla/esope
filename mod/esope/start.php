@@ -2500,26 +2500,27 @@ function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
  * bool $full_tag : return full <img /> tag, or only src if false
  */
 function esope_extract_images($html, $full_tag = true) {
+	$src = array();
 	/* 
 	// Regex method : not as failsafe as we'd like to
 	preg_match_all('/<img[^>]+>/i',$html,$out); 
 	$images = $out[0];
 	*/
+	if (!empty($html)) {
+		// DOM method : most failsafe
+		if (function_exists('mb_convert_encoding')) {
+			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+		}
+		$dom = new domDocument;
+		$dom->loadHTML($html);
+		$dom->preserveWhiteSpace = false;
+		$images = $dom->getElementsByTagName('img');
+		if ($full_tag) { return $images; }
 	
-	// DOM method : most failsafe
-	if (function_exists('mb_convert_encoding')) {
-		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-	}
-	$dom = new domDocument;
-	$dom->loadHTML($html);
-	$dom->preserveWhiteSpace = false;
-	$images = $dom->getElementsByTagName('img');
-	if ($full_tag) { return $images; }
-	
-	// Extract src
-	$src = array();
-	foreach ($images as $image) {
-		$src[] = $image->getAttribute('src');
+		// Extract src
+		foreach ($images as $image) {
+			$src[] = $image->getAttribute('src');
+		}
 	}
 	return $src;
 }
