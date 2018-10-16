@@ -1,0 +1,60 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "04d3083f2255688d456f7b4a5c28082a",
+    "packages": [
+        {
+            "name": "p3k/emoji-detector",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aaronpk/emoji-detector-php.git",
+                "reference": "621473e9d00e0307aa2b7240bef7315eed307932"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aaronpk/emoji-detector-php/zipball/621473e9d00e0307aa2b7240bef7315eed307932",
+                "reference": "621473e9d00e0307aa2b7240bef7315eed307932",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Emoji.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Parecki",
+                    "email": "aaron@parecki.com",
+                    "homepage": "https://aaronparecki.com/"
+                }
+            ],
+            "description": "Detect and return all emoji found in a string",
+            "homepage": "https://github.com/aaronpk/emoji-detector-php",
+            "time": "2018-03-14T15:00:49+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

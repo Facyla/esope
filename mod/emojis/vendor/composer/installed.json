@@ -1,0 +1,46 @@
+[
+    {
+        "name": "p3k/emoji-detector",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/aaronpk/emoji-detector-php.git",
+            "reference": "621473e9d00e0307aa2b7240bef7315eed307932"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/aaronpk/emoji-detector-php/zipball/621473e9d00e0307aa2b7240bef7315eed307932",
+            "reference": "621473e9d00e0307aa2b7240bef7315eed307932",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "php": ">=5.3"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8"
+        },
+        "time": "2018-03-14T15:00:49+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "files": [
+                "src/Emoji.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Aaron Parecki",
+                "email": "aaron@parecki.com",
+                "homepage": "https://aaronparecki.com/"
+            }
+        ],
+        "description": "Detect and return all emoji found in a string",
+        "homepage": "https://github.com/aaronpk/emoji-detector-php"
+    }
+]
