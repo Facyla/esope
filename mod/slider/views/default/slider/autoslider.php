@@ -77,7 +77,7 @@ if ($entities) foreach ($entities as $ent) {
 	$container_info = '';
 	$group_icon = '';
 	if (elgg_instanceof($container, 'group')) {
-		$group_icon = '<img src="' . $container->getIconURL('topbar') . '" />';
+		$group_icon = '<img src="' . $container->getIconURL('tiny') . '" style="height: 16px !important; vertical-align: bottom;" />';
 		$container_info .= elgg_view('output/url', array(
 					'text' => $group_icon . '&nbsp;' . elgg_get_excerpt($container->name),
 					'title' => $container->name,
