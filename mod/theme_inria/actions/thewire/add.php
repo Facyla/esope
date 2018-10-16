@@ -8,8 +8,6 @@
 $body = get_input('body', '', false);
 // Iris : add our emoji conversion before unicode caracters are stripped off
 $body = theme_inria_emoji_to_html($body);
-echo htmlentities($body);
-//echo "<pre>$body</pre>"; exit;
 
 $access_id = ACCESS_PUBLIC;
 $method = 'site';

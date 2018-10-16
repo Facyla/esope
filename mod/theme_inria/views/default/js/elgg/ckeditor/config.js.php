@@ -21,7 +21,7 @@ define(function(require) {
 				['Blockquote'], 
 				['Link', 'Unlink'], 
 				// source, iframe, flash, table
-				['Image'], ['Smiley'], //['SpecialChar'], 
+				['Image'], //['Smiley'], ['SpecialChar'], 
 				['Iframe'], 
 				['Table'], 
 				['Source'], 
