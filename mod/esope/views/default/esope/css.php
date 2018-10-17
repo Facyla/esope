@@ -689,6 +689,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #file_tools_list_tree_container { max-width: 100%; padding:0; }
 #file_tools_list_tree_container li { max-width: 95%; }
 #file_tools_list_tree_container .tree li a, #file_tools_list_tree_container .tree li span { height:auto; white-space: normal; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; -o-hyphens: auto; hyphens: auto; }
+#file-tools-folder-tree ul li { padding-left: 15px; float: initial; }
 
 
 /* Group topmenu */
