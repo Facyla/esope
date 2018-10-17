@@ -2511,8 +2511,9 @@ function esope_extract_images($html, $full_tag = true) {
 		if (function_exists('mb_convert_encoding')) {
 			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 		}
-		$dom = new domDocument;
-		$dom->loadHTML($html);
+		$dom = new DOMDocument();
+		// avoid warning from libxml - see http://php.net/manual/fr/domdocument.loadhtml.php#118107
+		@$dom->loadHTML($html);
 		$dom->preserveWhiteSpace = false;
 		$images = $dom->getElementsByTagName('img');
 		if ($full_tag) { return $images; }
