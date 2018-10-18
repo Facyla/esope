@@ -36,6 +36,9 @@ img { white-space: pre; }
 /* Accordion styles */
 .ui-icon.ui-icon-triangle-1-s, .ui-icon.ui-icon-triangle-1-e { float: left; margin-right: 6px; }
 
+/* Class to create a new stacking context for z-index positionning */
+.new-stacking-context { position: relative; z-index: 0; }
+
 
 
 <?php if (!$fixedwidth) { ?>

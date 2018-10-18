@@ -736,6 +736,9 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .developers-gear:hover { background: rgba(0,0,0,1); }
 .developers-gear .elgg-icon-settings-alt::before { content: 'DEV'; color: white; }
 
+/* Slider : create a new stacking context for z-index positionning */
+.anythingSlider { position: relative; z-index: 0; overflow: hidden; }
+
 
 
 

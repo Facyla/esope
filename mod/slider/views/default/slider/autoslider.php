@@ -101,7 +101,12 @@ if ($entities) foreach ($entities as $ent) {
 	$content .= '</div></li>';
 	*/
 	
-	$content .= '<li>';
+	// Hide other slides (anythingSlider method)
+	if ($i > 1) {
+		$content .= '<li style="opacity: 0;">';
+	} else {
+		$content .= '<li>';
+	}
 		$content .= '<div style="display: flex; height: 100%;">';
 			$content .= '<div class="imageSlide" style="flex: 0 0 auto; display: flex; min-width: ' . $height . '">' . $image . '</div>';
 			$content .= '<div class="textSlide" style="flex: 1 1 auto; display: flex; flex-direction: column;">
