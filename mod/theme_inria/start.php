@@ -338,13 +338,17 @@ function theme_inria_init(){
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'theme_inria_public_pages');
 	
 	
-	require_once('vendors/EmojiDetection/Emoji.php');
-	elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_emoji_input');
-	elgg_register_plugin_hook_handler('view', 'output/longtext', 'theme_inria_emoji_output');
-	//elgg_register_event_handler("create", "object", "theme_inria_thewire_handler_event", 0);
-	elgg_unregister_action('thewire/add');
-	$thewire_action_path = elgg_get_plugins_path() . 'theme_inria/actions/thewire/';
-	elgg_register_action("thewire/add", $thewire_action_path . 'add.php');
+	// Emojis support : Emojis issue solved by new MySQL schema as of Elgg 3.0
+	// supported via theme in 1.12, then replaced by new plugin
+	if (!elgg_is_active_plugin('emojis')) {
+		require_once('vendors/EmojiDetection/Emoji.php');
+		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_emoji_input');
+		elgg_register_plugin_hook_handler('view', 'output/longtext', 'theme_inria_emoji_output');
+		//elgg_register_event_handler("create", "object", "theme_inria_thewire_handler_event", 0);
+		elgg_unregister_action('thewire/add');
+		$thewire_action_path = elgg_get_plugins_path() . 'theme_inria/actions/thewire/';
+		elgg_register_action("thewire/add", $thewire_action_path . 'add.php');
+	}
 }
 
 // Include Inria page handlers

@@ -20,7 +20,9 @@ if (empty($body)) {
 	forward(REFERER);
 }
 
-$guid = thewire_save_post($body, elgg_get_logged_in_user_guid(), $access_id, $parent_guid, $method);
+// Note : thewire's function adds an htmlentities filter, which breaks HTML emojis : needs to unhtmlentities emojis (only)
+//$guid = thewire_save_post($body, elgg_get_logged_in_user_guid(), $access_id, $parent_guid, $method);
+$guid = emojis_thewire_save_post($body, elgg_get_logged_in_user_guid(), $access_id, $parent_guid, $method);
 if (!$guid) {
 	register_error(elgg_echo("thewire:notsaved"));
 	forward(REFERER);
