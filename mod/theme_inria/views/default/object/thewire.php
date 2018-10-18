@@ -108,10 +108,18 @@ $list_body = elgg_view('object/elements/summary', $params);
 
 //echo elgg_view_image_block($owner_icon, $list_body, array('class' => 'thewire-post'));
 //$content = thewire_filter($post->description);
-$content = theme_inria_emoji_output('', '', $post->description, []);
+if (elgg_is_active_plugin('emojis')) {
+	$content = emojis_output_html($post->description, true);
+} else {
+	$content = theme_inria_emoji_output('', '', $post->description, []);
+}
 // Note : thewire_filter convertit les hashtags, ce qui pose pb avec les &#x...
 //$content = nl2br(thewire_filter($post->description));
-$content = theme_inria_thewire_filter($content);
+if (elgg_is_active_plugin('emojis')) {
+	$content = emojis_thewire_filter($content);
+} else {
+	$content = theme_inria_thewire_filter($content);
+}
 // Inria : support line breaks
 $content = nl2br($content);
 
