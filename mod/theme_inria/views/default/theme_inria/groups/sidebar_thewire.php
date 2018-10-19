@@ -21,7 +21,11 @@ if ($group->thewire_enable == 'yes') {
 					//$image = '<img src="' . $ent->getIconURL(array('size' => 'small')) . '" />';
 					$image = esope_get_fa_icon($ent, 'tiny');
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
-					$excerpt = theme_inria_emoji_output('', '', $ent->description, []);
+					if (elgg_is_active_plugin('emojis')) {
+						$excerpt = emojis_thewire_filter($ent->description);
+					} else {
+						$excerpt = theme_inria_emoji_output('', '', $ent->description, []);
+					}
 					$body .= '<p>' . elgg_get_excerpt($excerpt) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
 				$content .= '</a>';
