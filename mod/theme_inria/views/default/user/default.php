@@ -16,7 +16,11 @@ if (elgg_in_context('search')) {
 	$size = 'medium';
 	$q = elgg_extract('q', $vars);
 	$q = trim(strip_tags($q));
-	$search_words = explode(' ', $q);
+	$search_words = false;
+	if (!empty($q)) {
+		$search_words = (array)explode(' ', $q);
+	}
+	
 }
 
 //$icon = elgg_view_entity_icon($entity, $size, $vars);
@@ -33,9 +37,9 @@ if (!$title) {
 	//$title = $entity->name . ' &nbsp; <span class="username">@' . $entity->username . '</span>';
 	$title = $entity->name;
 	// Highlight found terms
-	if (elgg_is_active_plugin('search') || function_exists('search_highlight_words')) {
+	if ($search_words && (elgg_is_active_plugin('search') || function_exists('search_highlight_words'))) {
 		//$title = search_highlight_words($search_words, $entity->name) . ' &nbsp; <span class="username">@' . search_highlight_words($search_words, $entity->username) . '</span>';
-		$title = search_highlight_words($search_words, $entity->name);
+		$title = search_highlight_words($search_words, $title);
 	}
 	$link_params = array(
 		'href' => $entity->getUrl(),
@@ -100,7 +104,7 @@ if (elgg_get_context() == 'gallery') {
 		// Remove non-matching tags
 		if (elgg_in_context('search')) {
 			foreach ($user_tags as $k => $tag) {
-				if (!in_array($tag, $search_words)) { unset($user_tags[$k]); }
+				if ($search_words && !in_array($tag, $search_words)) { unset($user_tags[$k]); }
 			}
 		}
 		$tags = elgg_view("output/tags", array("value" => $user_tags));
@@ -111,7 +115,7 @@ if (elgg_get_context() == 'gallery') {
 		
 		$briefdescription = $briefdescription . $tags;
 		// Highlight found terms
-		if (!empty($q) && (elgg_is_active_plugin('search') || function_exists('search_highlight_words'))) {
+		if (!empty($search_words) && (elgg_is_active_plugin('search') || function_exists('search_highlight_words'))) {
 			$briefdescription = search_highlight_words($search_words, $briefdescription);
 		}
 		$params = array(
