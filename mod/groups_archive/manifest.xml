@@ -3,11 +3,11 @@
 	<name>Groups archive</name>
 	<id>groups_archive</id>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>0.3</version>
+	<version>1.12.0</version>
 	<blurb>Archive groups by disabling</blurb>
 	<description>Enable this plugin if you need to hide obsolete groups and their content from the site users, but do not want to erase it.</description>
-	<website>http://id.facyla.net/</website>
-	<copyright>Florian DANIEL aka Facyla 2015</copyright>
+	<website>https://facyla.fr/</website>
+	<copyright>Florian DANIEL aka Facyla 2015-2018</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<category>groups</category>
@@ -28,17 +28,4 @@
 	
 </plugin_manifest>
 
-<!--
-COMMENTS - HISTORY
-
-0.2 : 20150505 - Fully functional version
- - listing page
- - preview page (groups and objects)
- - add Archive button in group entity menu
-
-0.1 : 20150504 - Initial release
- - plugin structure
-
-
-//-->
 

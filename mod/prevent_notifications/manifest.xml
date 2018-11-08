@@ -6,8 +6,8 @@
 	<version>1.12.0</version>
 	<blurb>Prevent notifications - désactive ponctuellement les notifications</blurb>
 	<description>Permet de désactiver l'envoi de notification lors de la création de contenus (ou de toute action générant une notification), au choix de l'éditeur.</description>
-	<website>https://reseau-iris.inria.fr/</website>
-	<copyright>Items International (Facyla), Inria</copyright>
+	<website>https://facyla.fr/</website>
+	<copyright>Florian DANIEL aka Facyla, Items International, Inria</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<screenshot>
@@ -33,27 +33,4 @@
 	
 </plugin_manifest>
 
-<!--
-
-TODO :
- - hide notification setting field if notification is not available ? (eg. update event)
- - or enable handling for any event + add hook to handle them ?
-
-
-HISTORY :
-
-1.12.0 : 201602159 - operational Elgg 1.12 version
-  - rewrite blocking method : use enqueue, notification hook
-  - add README.md file
-  - add default setting to "no" in embed context
-
-0.3 : 20160129 - ported to Elgg 1.12 (not functionnal)
-
-0.2 : 20150812
-  - file tools support (folders)
-
-0.1 : avril 2013
-  - première version fonctionnelle
-
-//-->
 

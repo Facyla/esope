@@ -1,0 +1,28 @@
+{
+	"name": "facyla/qrcode",
+	"version": "1.12.0",
+	"type": "elgg-plugin",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/Facyla/qrcode"
+		}
+	],
+	"require": {
+		"composer/installers": ">=1.0.8"
+	},
+	"description": "Generates QR codes for any URL in an Elgg site",
+	"homepage": "https://facyla.fr",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "i.daniel.florian@gmail.com"
+		}
+	],
+	"keywords": [
+		"elgg", "plugin", "admin", "content"
+	],
+}
+
+
