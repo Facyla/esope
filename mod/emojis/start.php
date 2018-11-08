@@ -135,8 +135,9 @@ function emojis_input_hook($hook, $type, $input, $params) {
  * $strip_nonchars (bool) Remove Unicode Noncharacters - this is required if using a UTF8 MySQL db (full support requires utf8mb4)
  */
 function emojis_to_html($input, $strip_nonchars = true) {
-	$emojis = Emoji\detect_emoji($input);
 	if (is_array($input)) error_log("Array input DETECTED");
+	if (empty($input)) { return $input; }
+	$emojis = Emoji\detect_emoji($input);
 	$map = Emoji\_load_map();
 	if (count($emojis) > 0) {
 		//error_log("EMOJI detected : " . count($emojis));
