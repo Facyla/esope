@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:Facyla/cmspages
+	branch = elgg_1.12
+	commit = 44579e06318a1b1de62b8237087ea5d0b6a31d9f
+	parent = cb5fe80ad7afce47a9492526945538486d580467
+	method = merge
+	cmdver = 0.4.0
