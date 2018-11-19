@@ -1,0 +1,28 @@
+{
+	"name": "facyla/feedback",
+	"version": "1.12.0",
+	"type": "elgg-plugin",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/Facyla/feedback"
+		}
+	],
+	"require": {
+		"composer/installers": ">=1.0.8"
+	},
+	"description": "Provides a powerful feedback tool with communicaiton and bugtracker features",
+	"homepage": "https://facyla.fr",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "i.daniel.florian@gmail.com"
+		}
+	],
+	"keywords": [
+		"elgg", "plugin", "user", "admin", "content", "communication"
+	],
+}
+
+
