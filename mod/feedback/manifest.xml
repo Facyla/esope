@@ -10,6 +10,24 @@
 	<license>GNU Public License version 2</license>
 	
 	<category>communication</category>
+	<category>content</category>
+	
+	<screenshot>
+		<description>Plugin settings</description>
+		<path>screenshots/settings.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Feedback popup</description>
+		<path>screenshots/feedback_interface.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Feedbacks listings and menu</description>
+		<path>screenshots/main_interface.png</path>
+	</screenshot>
+	<screenshot>
+		<description>Marking feedback discussion as closed</description>
+		<path>screenshots/discussion_closed.png</path>
+	</screenshot>
 	
 	<requires>
 		<type>elgg_release</type>

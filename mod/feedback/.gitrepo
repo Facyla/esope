@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:Facyla/feedback
 	branch = elgg_1.12
-	commit = 2539d28a4d8805423c75fd62083743930d17ccfe
-	parent = f724e83ecc42df449c5125b558ad5269a129b113
+	commit = 81141e78d8b16729cf3d9c2143b0f59a6ab5568c
+	parent = e5335d41d5b1113e6f61dd4de8afac7bbf40754e
 	method = merge
 	cmdver = 0.4.0
