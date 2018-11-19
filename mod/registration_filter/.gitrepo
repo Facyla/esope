@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:Facyla/registration_filter
+	branch = elgg_1.12
+	commit = 00d0b39d29a843af5a19afa1909f0558b6ea06b8
+	parent = 64a3a872f62af50290dfbdafc598ce36a489418f
+	method = merge
+	cmdver = 0.4.0
