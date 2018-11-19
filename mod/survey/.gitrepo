@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:Facyla/survey
+	branch = elgg_1.12
+	commit = 42114d02fa4303d3ec6387ede35e3d2617867131
+	parent = 00dcdc63b4a36d70e8bfe1f9a9d5ebd45f1c3259
+	method = merge
+	cmdver = 0.4.0
