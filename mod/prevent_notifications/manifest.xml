@@ -3,7 +3,7 @@
 	<name>Prevent notifications</name>
 	<id>prevent_notifications</id>
 	<author>Florian DANIEL aka Facyla 2016-2018 ~ Items International 2013</author>
-	<version>1.12.0</version>
+	<version>1.12.1</version>
 	<blurb>Prevent notifications - désactive l'envoi de notification</blurb>
 	<description>Permet de désactiver l'envoi de notification lors de la création de contenus, au choix de l'éditeur.</description>
 	<website>https://facyla.fr/</website>

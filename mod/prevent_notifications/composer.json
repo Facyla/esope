@@ -1,11 +1,11 @@
 {
 	"name": "facyla/prevent_notifications",
-	"version": "1.12.0",
+	"version": "1.12.1",
 	"type": "elgg-plugin",
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://github.com/Facyla/TODO"
+			"url": "https://github.com/Facyla/prevent_notifications"
 		}
 	],
 	"require": {
