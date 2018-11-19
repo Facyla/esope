@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:Facyla/prevent_notifications.git
 	branch = elgg_1.12
-	commit = 803d44e7bfe652eec0bf04c58cfd5a90073c3b3e
-	parent = 8f5ae4c0bd024c5c59eef740efced656a9db960a
+	commit = 1bc8d90427b92b7e51f6fcab2759ea8b56852025
+	parent = 43dbef77502f917b5d4e74832aa2c2fe2bba246b
 	method = merge
 	cmdver = 0.4.0
