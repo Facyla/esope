@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:Facyla/socialshare
+	branch = elgg_1.12
+	commit = 916f4652ea5cebd321600a12fb3469e261db956d
+	parent = 5bdbebf3993aa61773fa60fcb465fa758bae34dd
+	method = merge
+	cmdver = 0.4.0
