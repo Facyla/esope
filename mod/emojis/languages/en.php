@@ -4,11 +4,11 @@
  */
 
 return array(
-	'emoji_detection' => "Emoji detection",
+	'emojis' => "Emojis",
 	
-	'emoji_detection:title' => "Emoji detection",
+	'emojis:index' => "Emojis",
 	
-	//'emoji_detection:sprintf' => "%2\$s %1\$s", // Manuel choice of parameters order
+	//'emojis:sprintf' => "%2\$s %1\$s", // Manuel choice of parameters order
 	
 );
 

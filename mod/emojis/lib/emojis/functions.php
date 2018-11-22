@@ -29,28 +29,44 @@ function emojis_output_hook($hook, $type, $text, $params) {
  * $strip_nonchars (bool) Remove Unicode Noncharacters - this is required if using a UTF8 MySQL db (full support requires utf8mb4)
  */
 function emojis_to_html($input, $strip_nonchars = true) {
-	
 	// Empty input does not contain emoji
 	if (empty($input)) { return $input; }
 	
 	// Input can be an array: process it recursively
 	if (is_array($input)) {
+		// Alternative optimisation traitement tableaux avec array_walk_recursive 
+		// efficace (gain de près de 50%) mais ne traite pas les clefs
+		//array_walk_recursive($input, 'emojis_to_html_callback');
+		//return $input;
+	
 		$filtered_input = [];
 		foreach($input as $k => $v) {
-			// May also keys be stored with emojis?  why not?  so we need to filter them too
+			// May also keys contain emojis?  why not?  so we need to filter them too
 			//$input[$k] = emojis_to_html($v, $strip_nonchars);
 			$k = emojis_to_html($k, $strip_nonchars);
-			$v = emojis_to_html($v, $strip_nonchars);
-			$filtered_input[$k] = $v;
+			$filtered_input[$k] = emojis_to_html($v, $strip_nonchars);
 		}
 		//error_log("\n\nINPUT hook produced \"$return\" : $hook, $type, $input, $params => INPUT = " . print_r($input, true) . "\n\n --- filtered INPUT = " . print_r($filtered_input, true) . "\n\n");
+		//return $input;
 		return $filtered_input;
 	}
 	
-	// Regular input (plain string)
+	// Regular input (plain string or int)
+	
+	// Detect if string has any emoji before loading class to gain some performance?
+	// Detect some standard bypass cases (with bypass 1.3, without 2.3)
+	if (is_int($input)) { return $input; }
+	if (is_numeric($input)) { return $input; }
+	if (!emojis_has_emojis($input)) { return $input; }
+	
+	// Check string for emojis
 	$emojis = Emoji\detect_emoji($input);
-	$map = Emoji\_load_map();
 	if (count($emojis) > 0) {
+		
+		// Load emojis map only once, and only after we've found first emoji
+		global $emojis_map;
+		if (!$emojis_map) { $emojis_map = Emoji\_load_map(); }
+		
 		//error_log("EMOJI detected : " . count($emojis));
 		foreach($emojis as $emoji) {
 			$replace_map['emojis'][] = $emoji['emoji'];
@@ -107,6 +123,54 @@ function emojis_output_html($text, $replace_shortcodes = false) {
 
 
 // HELPER FUNCTIONS
+
+// Function used by array_walk_recursive
+function emojis_to_html_callback(&$item, $key) {
+	$item = emojis_to_html($item);
+}
+
+// Detect emojis
+function emojis_has_emojis($str) {
+	//preg_match( '/[\x{1F600}-\x{1F64F}]/u', $str, $matches_emo );
+	//return !empty( $matches_emo[0] ) ? true : false;
+
+	$regexEmoticons = '/[\x{1F600}-\x{1F64F}]/u';
+	preg_match($regexEmoticons, $str, $matches_emo);
+	if (!empty($matches_emo[0])) {
+		return true;
+	}
+
+	// Match Miscellaneous Symbols and Pictographs
+	$regexSymbols = '/[\x{1F300}-\x{1F5FF}]/u';
+	preg_match($regexSymbols, $str, $matches_sym);
+	if (!empty($matches_sym[0])) {
+		return true;
+	}
+
+	// Match Transport And Map Symbols
+	$regexTransport = '/[\x{1F680}-\x{1F6FF}]/u';
+	preg_match($regexTransport, $str, $matches_trans);
+	if (!empty($matches_trans[0])) {
+		return true;
+	}
+
+	// Match Miscellaneous Symbols
+	$regexMisc = '/[\x{2600}-\x{26FF}]/u';
+	preg_match($regexMisc, $str, $matches_misc);
+	if (!empty($matches_misc[0])) {
+		return true;
+	}
+
+	// Match Dingbats
+	$regexDingbats = '/[\x{2700}-\x{27BF}]/u';
+	preg_match($regexDingbats, $str, $matches_bats);
+	if (!empty($matches_bats[0])) {
+		return true;
+	}
+
+	return false;
+	
+}
 
 // Add colon padding for unicode emoji shortcodes
 function emojis_to_text(&$text) { $text = ":$text:"; }
