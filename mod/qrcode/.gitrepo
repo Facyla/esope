@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:Facyla/qrcode
 	branch = elgg_1.12
-	commit = 266c13665f1a58ede3093749b5bea25a67ce4054
-	parent = 0bc8c8842538bd64e8e62ae451f3981fae49093e
+	commit = bb57d0a3c06f854af191bf6390c053c9958acf13
+	parent = c399e8d64aa31c6eb1e172d7ebba098784910354
 	method = merge
 	cmdver = 0.4.0
