@@ -8,10 +8,10 @@
 // Input text filter, used to validate text content, extract data, replace strings, etc.
 // Note : Wire input uses a custom getter
 function emojis_input_hook($hook, $type, $input, $params) {
-	//return emojis_to_html($input, true);
-	$return = emojis_to_html($input, true);
-	error_log("INPUT hook produced \"$return\" : $hook, $type, $input, $params => INPUT = " . print_r($input, true) . "  --- PARAMS = " . print_r($params, true));
-	return $return;
+	//$return = emojis_to_html($input, true); // debug
+	//error_log("INPUT hook produced \"$return\" : $hook, $type, $input, $params => INPUT = " . print_r($input, true) . "  --- PARAMS = " . print_r($params, true)); // debug
+	//return $return; // debug
+	return emojis_to_html($input, true);
 
 }
 
@@ -35,11 +35,19 @@ function emojis_to_html($input, $strip_nonchars = true) {
 	
 	// Input can be an array: process it recursively
 	if (is_array($input)) {
+		$filtered_input = [];
 		foreach($input as $k => $v) {
-			$input[$k] = emojis_to_html($v, $strip_nonchars);
+			// May also keys be stored with emojis?  why not?  so we need to filter them too
+			//$input[$k] = emojis_to_html($v, $strip_nonchars);
+			$k = emojis_to_html($k, $strip_nonchars);
+			$v = emojis_to_html($v, $strip_nonchars);
+			$filtered_input[$k] = $v;
 		}
+		//error_log("\n\nINPUT hook produced \"$return\" : $hook, $type, $input, $params => INPUT = " . print_r($input, true) . "\n\n --- filtered INPUT = " . print_r($filtered_input, true) . "\n\n");
+		return $filtered_input;
 	}
 	
+	// Regular input (plain string)
 	$emojis = Emoji\detect_emoji($input);
 	$map = Emoji\_load_map();
 	if (count($emojis) > 0) {
@@ -61,7 +69,7 @@ function emojis_to_html($input, $strip_nonchars = true) {
 		// Replace by HTML codepoint text
 		$input = str_replace($replace_map['emojis'], $replace_map['html'], $input);
 	}
-	
+
 	// Remove caracters that won't fit in a UTF-8 MySQL db (use UTF8MB4 to store actual Unicode data)
 	// NOTE: you should not just strip, but replace with replacement character U+FFFD to avoid unicode attacks, mostly XSS: http://unicode.org/reports/tr36/#Deletion_of_Noncharacters
 	if ($strip_nonchars) {

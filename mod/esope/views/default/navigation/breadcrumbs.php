@@ -25,7 +25,6 @@ if ($additional_class) {
 }
 
 if (is_array($breadcrumbs) && count($breadcrumbs) > 0) {
-error_log("FIL ARIANE : " . print_r($breadcrumbs, true));
 	echo "<ul class=\"$class\">";
 	foreach ($breadcrumbs as $breadcrumb) {
 		// We have to escape text (without double-encoding). Titles in core plugins are HTML escaped
