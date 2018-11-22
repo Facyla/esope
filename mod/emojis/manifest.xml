@@ -3,7 +3,7 @@
 	<name>Emojis support plugin</name>
 	<id>emojis</id>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>1.12.0</version>
+	<version>1.12.1</version>
 	<blurb>Adds Unicode Emojis support</blurb>
 	<description>You can use this plugin if you need Unicode emoji support. You should enable this plugin if you use MySQL utf8 encoding - which does NOT support Unicode emojis.</description>
 	<website>https://facyla.fr/</website>
@@ -16,8 +16,10 @@
 	</screenshot>
 
 	<category>security</category>
+	<category>user</category>
 	<category>content</category>
 	<category>library</category>
+	<category>communication</category>
 	
 	<requires>
 		<type>elgg_release</type>
@@ -45,13 +47,4 @@
 	
 </plugin_manifest>
 
-<!--
-COMMENTS - HISTORY
-
-0.1 : YYYYmmdd - Initial release
- - plugin structure
- - feature A
-
-
-//-->
 

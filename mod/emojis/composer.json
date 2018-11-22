@@ -1,16 +1,27 @@
-	{
-		"name": "facyla/emojis",
-		"description": "Adds Unicode Emojis support for Elgg",
-		"type": "elgg-plugin",
-		"license": "GPL-2.0",
-		"authors": [
-				{
-						"name": "Florian DANIEL aka Facyla",
-						"email": "admin@facyla.fr"
-				}
-		],
-		"minimum-stability": "dev",
-		"require": {
-			"p3k/emoji-detector": "*"
+{
+	"name": "facyla/emojis",
+	"version": "1.12.1",
+	"type": "elgg-plugin",
+	"description": "Adds Unicode Emojis support for Elgg",
+	"license": "GPL-2.0",
+	"homepage": "https://facyla.fr",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/Facyla/emojis"
 		}
-	}
+	],
+	"require": {
+		"composer/installers": ">=1.0.8"
+	},
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "i.daniel.florian@gmail.com"
+		}
+	],
+	"keywords": [
+		"elgg", "plugin", "emojis", "content", "user", "communication"
+	]
+}
+
