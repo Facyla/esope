@@ -16,7 +16,7 @@ function esope_tail($filepath, $lines = 1, $adaptive = true) {
 	// Open file
 	$f = @fopen($filepath, "rb");
 	if ($f === false) return false;
-echo "OK";
+//echo "OK";
 	// Sets buffer size, according to the number of lines to retrieve.
 	// This gives a performance boost when reading a few lines from the file.
 	if (!$adaptive) $buffer = 4096;
