@@ -339,7 +339,8 @@ function theme_inria_init(){
 	
 	
 	// Emojis support : Emojis issue solved by new MySQL schema as of Elgg 3.0
-	// supported via theme in 1.12, then replaced by new plugin
+	// initially supported via theme in 1.12, then replaced by standalone plugin "emojis""
+	/*
 	if (!elgg_is_active_plugin('emojis')) {
 		require_once('vendors/EmojiDetection/Emoji.php');
 		elgg_register_plugin_hook_handler('validate', 'input', 'theme_inria_emoji_input');
@@ -349,6 +350,7 @@ function theme_inria_init(){
 		$thewire_action_path = elgg_get_plugins_path() . 'theme_inria/actions/thewire/';
 		elgg_register_action("thewire/add", $thewire_action_path . 'add.php');
 	}
+	*/
 }
 
 // Include Inria page handlers
@@ -359,6 +361,8 @@ require_once(dirname(__FILE__) . '/lib/theme_inria/functions.php');
 require_once(dirname(__FILE__) . '/lib/theme_inria/events.php');
 // Include core and plugins hooks
 require_once(dirname(__FILE__) . '/lib/theme_inria/hooks.php');
+// Include Emojis support functions
+//require_once(dirname(__FILE__) . '/lib/theme_inria/emojis.php');
 
 
 

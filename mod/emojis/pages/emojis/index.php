@@ -27,7 +27,7 @@ $objects = elgg_get_entities(array(
 // 67 objects thewire / emojis_to_html(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis "]) => 1.1971s
 // avec array_walk_recursive => 0.8s  mais pas sûr que ce soit propre (et ne gère pas les clefs)
 // 67 objects thewire / emojis_to_html(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]]) => 2.35s en récursif classique, 1.27 avec array_walk_recursive
-// 67 objects thewire /  => s
+// 67 objects thewire / optimisations = global map + detect int/numeric/emojis => 0.32s
 // 67 objects thewire /  => s
 
 $content .= "Traitement de " . count($objects) . " messages<br />";
