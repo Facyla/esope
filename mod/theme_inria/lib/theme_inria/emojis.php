@@ -3,6 +3,11 @@
 
 
 if (!elgg_is_active_plugin('emojis')) {
+	
+	// Load library
+	require_once(elgg_get_plugins_path() . 'theme_inria/vendors/EmojiDetection/Emoji.php');
+	
+	
 	// 👶 👧 👦 👩👵👳 ♂ 👩⚕ 👩🌾 👨🍳 👩‍🎤
 	// Input text filter, used to validate text content, extract data, replace strings, etc.
 	// Note : Wire input uses a custom getter
