@@ -13,7 +13,7 @@ $no_yes_opt = array('no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:y
 echo '<div><label>' . elgg_echo('emojis:settings:input_hook') . elgg_view('input/select', array('name' => 'params[enable_input_hook]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->enable_input_hook)) . '</label></div>';
 
 // Output hook (output/longtext)
-echo '<div><label>' . elgg_echo('emojis:settings:output_hook') . elgg_view('input/select', array('name' => 'params[enable_input_hook]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->enable_output_hook)) . '</label></div>';
+echo '<div><label>' . elgg_echo('emojis:settings:output_hook') . elgg_view('input/select', array('name' => 'params[enable_output_hook]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->enable_output_hook)) . '</label></div>';
 
 // TheWire action
 echo '<div><label>' . elgg_echo('emojis:settings:thewire') . elgg_view('input/select', array('name' => 'params[enable_thewire]', 'options_values' => $yes_no_opt, 'value' => $vars['entity']->enable_thewire)) . '</label></div>';
