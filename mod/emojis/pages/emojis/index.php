@@ -53,9 +53,11 @@ if ($exec == "benchmark") {
 	// 67 objects thewire / optimisations = global map + detect int/numeric/emojis => 0.32s
 	 */
 
+	$content .= "Traitement de " . count($objects) . " boucles et objets<br />";
+	
 	// INPUT EMOJIS FILTER
-	$content .= "Traitement de " . count($objects) . " objets<br />";
-	$content .= esope_dev_profiling("VALIDATE,INPUT", false) . '<br />';
+	$content .= "Tests de la fonction de détection et conversion des INPUT : emojis_to_html<br />";
+	esope_dev_profiling("VALIDATE,INPUT", false) . '<br />';
 	foreach ($objects as $ent) {
 		// Testing strings and sources
 		//$string = $ent->description;
@@ -73,26 +75,31 @@ if ($exec == "benchmark") {
 	
 		//$content .= print_r($string, true) . '<br />';
 	}
-	$content .= esope_dev_profiling("VALIDATE,INPUT", false) . '<br />';
+	$content .= esope_dev_profiling("VALIDATE,INPUT", false) . '<hr />';
+
 
 	// OUTPUT EMOJIS FILTER
+	$content .= "Tests de la fonction de conversion des OUTPUT : via output/longtext (hook view,all)<br />";
 	$content .= esope_dev_profiling("OUTPUT", false) . '<br />';
+	$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true);
 	foreach ($objects as $ent) {
-		$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true);
 		$test .= elgg_view('output/longtext', ['content' => $string]);
 		$test .= elgg_view('output/longtext', ['content' => $ent->description]);
+		//$test .= elgg_trigger_plugin_hook('view', 'all', null, $string);
+		//$test .= elgg_trigger_plugin_hook('view', 'all', null, $ent->description);
 	
 	}
 	$content .= esope_dev_profiling("OUTPUT", false) . '<hr />';
 
 	// VALIDATE HOOKS
+	$content .= "Tests du hook de validation INPUT : validate,input<br />";
 	// Speed tests : no hook 0.03, htmlawed 0.03, emojis 0.05, both 0.05
 	// Speed tests (no session cache) : no hook 0.03, htmlawed 0.03, emojis 1.7, both 1.7
 	$content .= esope_dev_profiling("VALIDATE", false) . '<br />';
 	$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true);
 	foreach ($objects as $ent) {
 		$test .= elgg_trigger_plugin_hook('validate', 'input', null, $string);
-		$test .= elgg_trigger_plugin_hook('validate', 'input', null, print_r($ent, true));
+		$test .= elgg_trigger_plugin_hook('validate', 'input', null, $ent->description);
 	}
 	$content .= esope_dev_profiling("VALIDATE", false) . '<hr />';
 }
