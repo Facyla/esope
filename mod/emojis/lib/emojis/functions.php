@@ -88,18 +88,22 @@ function emojis_to_html($input, $strip_nonchars = true, $skip_cache = false, $us
 		//$filtered_input = str_replace($replace_map['emojis'], $replace_map['shortcodes'], $filtered_input);
 		// Replace by HTML codepoint text
 		$filtered_input = str_replace($replace_map['emojis'], $replace_map['html'], $filtered_input);
+		
+		if ($strip_nonchars) {
+			$filtered_input = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $filtered_input);
+		}
+		
+		// Keep computed value in session cache
+		if (!$skip_cache) {
+			//error_log("Creating new emojis cache key for $key => $filtered_input"); // debug
+			$_SESSION['emojis_known'][$key] = $filtered_input;
+		}
 	}
-
+	
 	// Remove caracters that won't fit in a UTF-8 MySQL db (use UTF8MB4 to store actual Unicode data)
 	// NOTE: you should not just strip, but replace with replacement character U+FFFD to avoid unicode attacks, mostly XSS: http://unicode.org/reports/tr36/#Deletion_of_Noncharacters
 	if ($strip_nonchars) {
 		$filtered_input = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $filtered_input);
-	}
-	
-	// Keep computed value in session cache
-	if (!$skip_cache) {
-		//error_log("Creating new emojis cache key for $key => $filtered_input"); // debug
-		$_SESSION['emojis_known'][$key] = $filtered_input;
 	}
 	
 	return $filtered_input;
