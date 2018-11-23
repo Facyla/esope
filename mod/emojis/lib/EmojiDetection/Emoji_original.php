@@ -1,8 +1,6 @@
 <?php
 namespace Emoji;
 
-// Facyla : library updated so that it avoids disk reads to get map and regexp
-
 define('LONGEST_EMOJI', 8);
 
 function detect_emoji($string) {
@@ -96,29 +94,12 @@ function is_single_emoji($string) {
   return $emoji;
 }
 
-/* Facyla : add caching
- * Speed notes
- * Global : no gain
- * Gains : input / output / hooks
- * _load_map : 0.003 / 0.2 / 0.05 with session, 0.05 / 0.2 / 0.05 without => gain 1.6 1 1
- * _load_regexp : 0.003 / 0.2 / 0.05 with session, 0.05 / 0.2 / 0.05 without => gain 16.6 1 1
- * None 0.05 / 0.2 / 0.5
- * Both : 0.003 / 0.2 / 0.05
- * None + No session in hook : 0.35 / 0.2 / 1.7
- * Both + No session in hook : 0.05 / 0.2 / 0.05 => gain 7 / 1 / 34
- */
 function _load_map() {
-//  return json_decode(file_get_contents(dirname(__FILE__).'/map.json'), true);
-	if (isset($_SESSION['emojis_Emoji_load_map'])) { return $_SESSION['emojis_Emoji_load_map']; }
-	$_SESSION['emojis_Emoji_load_map'] = json_decode(file_get_contents(dirname(__FILE__).'/map.json'), true);
-	return $_SESSION['emojis_Emoji_load_map'];
+  return json_decode(file_get_contents(dirname(__FILE__).'/map.json'), true);
 }
 
 function _load_regexp() {
-//  return '/(?:' . json_decode(file_get_contents(dirname(__FILE__).'/regexp.json')) . ')/u';
-	if (isset($_SESSION['emojis_Emoji_load_regex'])) { return $_SESSION['emojis_Emoji_load_regex']; }
-	$_SESSION['emojis_Emoji_load_regex'] = '/(?:' . json_decode(file_get_contents(dirname(__FILE__).'/regexp.json')) . ')/u';
-	return $_SESSION['emojis_Emoji_load_regex'];
+  return '/(?:' . json_decode(file_get_contents(dirname(__FILE__).'/regexp.json')) . ')/u';
 }
 
 function uniord($c) {

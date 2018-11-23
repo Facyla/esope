@@ -55,10 +55,11 @@ if (elgg_in_context('widgets')) {
 }
 
 // Emojis support + line breaks support
-$content = emojis_output_hook('', '', $post->description, []);
+$content = emojis_output_html($post->description);
 // Note : thewire_filter convertit les hashtags, ce qui pose pb avec les &#x...
 //$content = nl2br(thewire_filter($post->description));
 $content = emojis_thewire_filter($content);
+//$content = emojis_thewire_filter($post->description);
 // Add line breaks support
 $content = nl2br($content);
 
