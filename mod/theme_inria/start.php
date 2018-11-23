@@ -361,8 +361,8 @@ require_once(dirname(__FILE__) . '/lib/theme_inria/functions.php');
 require_once(dirname(__FILE__) . '/lib/theme_inria/events.php');
 // Include core and plugins hooks
 require_once(dirname(__FILE__) . '/lib/theme_inria/hooks.php');
-// Include Emojis support functions
-//require_once(dirname(__FILE__) . '/lib/theme_inria/emojis.php');
+// Include Emojis support functions - these are required only if emojis plugin is missing
+require_once(dirname(__FILE__) . '/lib/theme_inria/emojis.php');
 
 
 

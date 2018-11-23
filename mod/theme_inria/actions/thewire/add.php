@@ -7,7 +7,11 @@
 // don't filter since we strip and filter escapes some characters
 $body = get_input('body', '', false);
 // Iris : add our emoji conversion before unicode caracters are stripped off
-$body = theme_inria_emoji_to_html($body);
+if (elgg_is_active_plugin('emojis')) {
+	$body = emojis_to_html($body);
+} else if (function_exists('theme_inria_emoji_to_html')) {
+ $body = theme_inria_emoji_to_html($body);
+}
 
 $access_id = ACCESS_PUBLIC;
 $method = 'site';

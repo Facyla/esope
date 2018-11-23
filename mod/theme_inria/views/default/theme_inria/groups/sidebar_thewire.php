@@ -23,8 +23,10 @@ if ($group->thewire_enable == 'yes') {
 					$body = '<span class="elgg-river-timestamp">' . elgg_view_friendly_time($ent->time_created) . '</span><br />';
 					if (elgg_is_active_plugin('emojis')) {
 						$excerpt = emojis_thewire_filter($ent->description);
-					} else {
+					} else if (function_exists('theme_inria_emoji_output')) {
 						$excerpt = theme_inria_emoji_output('', '', $ent->description, []);
+					} else {
+						$excerpt = thewire_filter($ent->description);
 					}
 					$body .= '<p>' . elgg_get_excerpt($excerpt) . '</p>';
 					$content .= elgg_view_image_block($image, $body);
