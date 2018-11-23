@@ -244,7 +244,6 @@ function emojis_thewire_filter($text) {
 				'$1<a href="' . $url . 'thewire/tag/$2">#$2</a>',
 				$text);
 	$text = trim($text);
-error_log("  -  : $text");
 	return $text;
 }
 
