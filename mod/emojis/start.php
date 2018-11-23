@@ -30,16 +30,14 @@ function emojis_init() {
 	// Adds emojis detection support
 	require_once('lib/EmojiDetection/Emoji.php');
 	
-	$debug = elgg_get_plugin_setting('debug', 'emojis');
-	$input_hook = elgg_get_plugin_setting('enable_input_hook', 'emojis');
-	$output_hook = elgg_get_plugin_setting('enable_output_hook', 'emojis');
+	//$debug = elgg_get_plugin_setting('debug', 'emojis');
 	$thewire = elgg_get_plugin_setting('enable_thewire', 'emojis');
 	
 	// Debug
-	if ($debug == 'yes') error_log("Emojis : debug session cache : " . count($_SESSION['emojis_known']) . ' / ' . mb_strlen(json_encode($_SESSION['emojis_known']))); // debug
+	//if ($debug == 'yes') error_log("Emojis : debug session cache : " . count($_SESSION['emojis_known']) . ' / ' . mb_strlen(json_encode($_SESSION['emojis_known']))); // debug
 	// Delete session data if it becomes too big ? eg > 100k
 	if (mb_strlen(json_encode($_SESSION['emojis_known'])) > 1000000) {
-		if ($debug == 'yes') error_log("Emojis : cache clear (size > 1M)"); // debug for RC stat info
+		error_log("Emojis : cache clear (size > 1M)"); // debug for RC stat info
 		$_SESSION['emojis_known'] = null;
 	}
 	// Debug : Uncomment to clear session static cache (or use admin page on emojis/)
@@ -63,17 +61,14 @@ function emojis_init() {
 	// @TODO use this only if Database engine does not support UTF-8 (eg. mysql's utf8 does NOT, while utf8mb4 does)
 	
 	// INPUT HOOK (validates any user entry + some other entries too)
-	if ($input_hook != 'no') {
-		elgg_register_plugin_hook_handler('validate', 'input', 'emojis_input_hook');
-	}
+	elgg_register_plugin_hook_handler('validate', 'input', 'emojis_input_hook');
 	
 	// OUTPUT HOOK
 	// Convert back encoded HTML entities to HTML codepoints
 	// Note: easy when using longtext output, but use in search results, tags extraction and other string manipulations would work beter with emojis not converted to HTML entities in database
 	//elgg_register_plugin_hook_handler('view', 'output/longtext', 'emojis_output_hook'); // Handles only longtext output
-	if ($output_hook != 'no') {
-		elgg_register_plugin_hook_handler('view', 'all', 'emojis_output_hook'); // Intercepts everything
-	}
+	elgg_register_plugin_hook_handler('view', 'all', 'emojis_output_hook'); // Intercepts everything
+	
 	
 	// THE WIRE
 	// Overrides the wire action so we can change the publish function and add emojis support
