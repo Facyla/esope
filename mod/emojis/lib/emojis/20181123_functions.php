@@ -2,7 +2,6 @@
 // EMOJIS FUNCTIONS AND THEWIRE FUNCTIONS OVERRIDES
 // 👶 👧 👦 👩👵👳 ♂ 👩⚕ 👩🌾 👨🍳 👩‍🎤
 
-require_once('FacylaEmojis.php');
 
 /* Unicode Emojis detection and replacement by HTML codepoints
  * Note : emojis are not detected if they are the last caracter: 
@@ -54,26 +53,23 @@ function emojis_to_html($input, $strip_nonchars = true, $skip_cache = false, $us
 	
 	// Detect if string has any emoji before loading class to gain some performance?
 	// Detect some standard bypass cases (ts with bypass 1.3, without 2.3)
-	if (is_int($input) || is_numeric($input) || !emojis_has_unicode_special_chars($input)) { return $input; }
-	//if (is_int($input) || is_numeric($input)) { return $input; }
+	//if (is_int($input) || is_numeric($input) || !emojis_has_emojis($input)) { return $input; }
+	if (is_int($input) || is_numeric($input)) { return $input; }
 	// Speed gain : from 0.0007 0.2 0.03 to 0.0015 0.2 0.04
-	
-	
-	// Use cache only for strings with emojis
-	if ($use_cache) {
-		$key = md5(json_encode($input));
-		if (isset($_SESSION['emojis_known'][$key])) {
-			//error_log("using cached emojis for $key => $input");
-			return $_SESSION['emojis_known'][$key];
-		}
-	}
 	
 	$filtered_input = $input;
 	
 	// Check string for emojis
 	$emojis = Emoji\detect_emoji($input);
 	if (count($emojis) > 0) {
-
+		// Use cache only for strings with emojis
+		if ($use_cache) {
+			$key = md5(json_encode($input));
+			if (isset($_SESSION['emojis_known'][$key])) {
+				//error_log("using cached emojis for $key => $input");
+				return $_SESSION['emojis_known'][$key];
+			}
+		}
 	
 		//error_log("EMOJI detected : " . count($emojis));
 		foreach($emojis as $emoji) {
@@ -92,6 +88,16 @@ function emojis_to_html($input, $strip_nonchars = true, $skip_cache = false, $us
 		//$filtered_input = str_replace($replace_map['emojis'], $replace_map['shortcodes'], $filtered_input);
 		// Replace by HTML codepoint text
 		$filtered_input = str_replace($replace_map['emojis'], $replace_map['html'], $filtered_input);
+		
+		if ($strip_nonchars) {
+			$filtered_input = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $filtered_input);
+		}
+		
+		// Keep computed value in session cache
+		if (!$skip_cache) {
+			//error_log("Creating new emojis cache key for $key => $filtered_input"); // debug
+			$_SESSION['emojis_known'][$key] = $filtered_input;
+		}
 	}
 	
 	// Remaining plain strings
@@ -100,12 +106,6 @@ function emojis_to_html($input, $strip_nonchars = true, $skip_cache = false, $us
 	// NOTE: you should not just strip, but replace with replacement character U+FFFD to avoid unicode attacks, mostly XSS: http://unicode.org/reports/tr36/#Deletion_of_Noncharacters
 	if ($strip_nonchars) {
 		$filtered_input = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $filtered_input);
-	}
-	
-	// Keep computed value in session cache
-	if (!$skip_cache) {
-		//error_log("Creating new emojis cache key for $key => $filtered_input"); // debug
-		$_SESSION['emojis_known'][$key] = $filtered_input;
 	}
 	
 	return $filtered_input;
@@ -147,7 +147,7 @@ function emojis_to_html_callback(&$item, $key) {
 }
 
 // Detect emojis
-function emojis_has_unicode_special_chars($str) {
+function emojis_has_emojis($str) {
 	//preg_match( '/[\x{1F600}-\x{1F64F}]/u', $str, $matches_emo );
 	//return !empty( $matches_emo[0] ) ? true : false;
 
@@ -181,13 +181,6 @@ function emojis_has_unicode_special_chars($str) {
 	// Match Dingbats
 	$regexDingbats = '/[\x{2700}-\x{27BF}]/u';
 	preg_match($regexDingbats, $str, $matches_bats);
-	if (!empty($matches_bats[0])) {
-		return true;
-	}
-	
-	// Non-characters
-	$regexNonChars = '/[\x{10000}-\x{10FFFF}]/u';
-	preg_match($regexNonChars, $str, $matches_bats);
 	if (!empty($matches_bats[0])) {
 		return true;
 	}

@@ -16,23 +16,24 @@ elgg_admin_gatekeeper();
 
 $exec = get_input('exec');
 // Clear all plugin session caches - exec early, as we forward after that
-if ($exec == "clear") {
+if (in_array($exec, ['clearbenchmark', 'clear'])) {
 	$_SESSION['emojis_known'] = null;
 	$_SESSION['emojis_Emoji_load_map'] = null;
 	$_SESSION['emojis_Emoji_load_regex'] = null;
 	system_message('Emojis plugin session caches cleared');
-	forward('emojis');
+	if (in_array($exec, ['clear'])) { forward('emojis'); }
 }
 
 
 // Admin options links
-$content .= '<p><a href="?exec=clear" class="elgg-button elgg-button-action">Clear all emojis session caches</a></p>';
-$content .= '<p><a href="?exec=benchmark" class="elgg-button elgg-button-action">Speed tests (edit source to adjust tests)</a></p>';
-$content .= '<p><a href="?exec=session" class="elgg-button elgg-button-action">View emojis session cache (string cache, map and regex)</a></p>';
+$content .= '<p><a href="?exec=clear" class="elgg-button elgg-button-action">Clear cache</a> clears all emojis session caches (strings + map + regexp)</p>';
+$content .= '<p><a href="?exec=benchmark" class="elgg-button elgg-button-action">Speed tests</a> performs several speed tests on various involved functions and hooks, both with a new cache or with existing cache. Edit this file source to adjust tests.</p>';
+$content .= '<p><a href="?exec=clearbenchmark" class="elgg-button elgg-button-action">Clear cache and Speed tests</a> same, but clears the static cache first. As content cache is cleared frequently, this simulates the caching process, ie. initial load. It also clears the map and regex cache.</p>';
+$content .= '<p><a href="?exec=session" class="elgg-button elgg-button-action">View emojis session cache </a> displays the content of strings cache (converted emojis strings), map (static map file) and regex (static regex file). These are always displayed after a benchmark test.</p>';
 
 
 // Performs tests for benchmarking
-if ($exec == "benchmark") {
+if (in_array($exec, ['clearbenchmark', 'benchmark'])) {
 	$objects = elgg_get_entities(array(
 		'type' => 'object',
 		//'subtype' => 'thewire',
@@ -53,60 +54,116 @@ if ($exec == "benchmark") {
 	// 67 objects thewire / optimisations = global map + detect int/numeric/emojis => 0.32s
 	 */
 
-	$content .= "Traitement de " . count($objects) . " boucles et objets<br />";
+	$content .= "Pour chaque test, " . count($objects) . " itérations avec 2 contenus distincts passés dans la fonction testée : l'un avec la description de l'objet (\$ent->description), et l'autre avec un tableau imbriqué contenant des emojis (mais avec un élément variable qui le rend unique) : <br />";
+	$content .= '<q>' . print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis {\$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true) . '</q>';
+	$content .= '<br /><hr />';
 	
-	// INPUT EMOJIS FILTER
-	$content .= "Tests de la fonction de détection et conversion des INPUT : emojis_to_html<br />";
-	esope_dev_profiling("VALIDATE,INPUT", false) . '<br />';
+	
+	
+	// INPUT EMOJIS FILTER - no cache
+	$content .= "<h3>Fonction de validation (emojis_to_html)</h3><h4>sans cache</h4><p>Tests de la fonction de détection et conversion des input (get_input) utilisée par le hook validate,input</p>";
+	$_SESSION['emojis_known'] = null;
+	$content .= esope_dev_profiling("Start", false) . '<br />';
 	foreach ($objects as $ent) {
-		// Testing strings and sources
-		//$string = $ent->description;
-		//$string = emojis_to_html($ent->description);
-		//$string = print_r($ent, true);
-		//$string = emojis_to_html(print_r($ent, true));
-	
-		//$string = emojis_to_html(["text", "integers", 1345, "http://www.some.web/%20space/", "some longer text but still short"]);
-		//$string = emojis_to_html(["mixed", "content", 1345, "http://www.some.web/%20space/", "👶 👧 👦 👩👵👳 ♂ 👩⚕ 👩🌾 👨🍳 👩‍🎤"]);
-		//$string = emojis_to_html(["👶 👧 👦", " 👩👵👳 ♂", '👩⚕ 👩🌾 ', " 👨🍳 ", "👩‍🎤"]);
-		$string = emojis_to_html(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]]);
-		//$string = emojis_to_html(print_r($ent, true));
-	
-		$string = emojis_to_html($ent->description);
-	
-		//$content .= print_r($string, true) . '<br />';
+		$string = ["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]];
+		$test .= emojis_to_html($string);
+		$test .= emojis_to_html($ent->description);
+		//$test .= emojis_to_html(print_r($ent, true)); // more data to process
 	}
-	$content .= esope_dev_profiling("VALIDATE,INPUT", false) . '<hr />';
-
-
-	// OUTPUT EMOJIS FILTER
-	$content .= "Tests de la fonction de conversion des OUTPUT : via output/longtext (hook view,all)<br />";
-	$content .= esope_dev_profiling("OUTPUT", false) . '<br />';
-	$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true);
+	$content .= esope_dev_profiling("End", false) . '<br />';
+	
+	// INPUT EMOJIS FILTER - cache
+	$content .= "<h4>avec cache</h4>";
+	$content .= esope_dev_profiling("Start", false) . '<br />';
 	foreach ($objects as $ent) {
-		$test .= elgg_view('output/longtext', ['content' => $string]);
-		$test .= elgg_view('output/longtext', ['content' => $ent->description]);
-		//$test .= elgg_trigger_plugin_hook('view', 'all', null, $string);
-		//$test .= elgg_trigger_plugin_hook('view', 'all', null, $ent->description);
-	
+		$string = ["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]];
+		$test .= emojis_to_html($string);
+		$test .= emojis_to_html($ent->description);
 	}
-	$content .= esope_dev_profiling("OUTPUT", false) . '<hr />';
-
-	// VALIDATE HOOKS
-	$content .= "Tests du hook de validation INPUT : validate,input<br />";
+	$content .= esope_dev_profiling("End", false) . '<hr />';
+	
+	
+	// CLASS Emojis - idem avec la classe
+	// Speed : comparativement à procédural => un peu plus rapide avec les données de test, mais non significatif (dépend probablement fortement des données)
+	$_SESSION['emojis_known'] = null;
+	$FacylaEmojis = new \Facyla\Emojis();
+	$content .= "<h3>Test classe - Fonction de validation</h3><h4>sans cache</h4><p>Tests de la fonction de détection et conversion des input (get_input) utilisée par le hook validate,input - sous forme de classe</p>";
+	$content .= esope_dev_profiling("Start", false) . '<br />';
+	foreach ($objects as $ent) {
+		$string = ["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]];
+	
+		$test .= $FacylaEmojis->emojis_to_html($string);
+		$test .= $FacylaEmojis->emojis_to_html($ent->description);
+		//$test .= emojis_to_html(print_r($ent, true)); // more data to process
+	}
+	$content .= esope_dev_profiling("End", false) . '<br />';
+	
+	$content .= "<h4>avec cache</h4>";
+	$content .= esope_dev_profiling("Start", false) . '<br />';
+	foreach ($objects as $ent) {
+		$string = ["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]];
+		$test .= $FacylaEmojis->emojis_to_html($string);
+		$test .= $FacylaEmojis->emojis_to_html($ent->description);
+		//$test .= emojis_to_html(print_r($ent, true)); // more data to process
+	}
+	$content .= esope_dev_profiling("End", false) . '<hr />';
+	
+	
+	
+	
+	// INPUT HOOK - no cache
 	// Speed tests : no hook 0.03, htmlawed 0.03, emojis 0.05, both 0.05
 	// Speed tests (no session cache) : no hook 0.03, htmlawed 0.03, emojis 1.7, both 1.7
-	$content .= esope_dev_profiling("VALIDATE", false) . '<br />';
-	$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis ", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true);
+	$content .= "<h3>Input hook</h3><h4>sans cache</h4><p>Test du hook de validation des INPUT : validate,input</p>";
+	$_SESSION['emojis_known'] = null;
+	$content .= esope_dev_profiling("Start", false) . '<br />';
 	foreach ($objects as $ent) {
+		$string = ["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis  {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]];
 		$test .= elgg_trigger_plugin_hook('validate', 'input', null, $string);
 		$test .= elgg_trigger_plugin_hook('validate', 'input', null, $ent->description);
 	}
-	$content .= esope_dev_profiling("VALIDATE", false) . '<hr />';
+	$content .= esope_dev_profiling("End", false) . '<br />';
+	
+	// INPUT HOOK - cache
+	$content .= "<h4>avec cache</h4>";
+	// Speed tests : no hook 0.03, htmlawed 0.03, emojis 0.05, both 0.05
+	// Speed tests (no session cache) : no hook 0.03, htmlawed 0.03, emojis 1.7, both 1.7
+	$content .= esope_dev_profiling("Start", false) . '<br />';
+	foreach ($objects as $ent) {
+		$string = ["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis  {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]];
+		$test .= elgg_trigger_plugin_hook('validate', 'input', null, $string);
+		$test .= elgg_trigger_plugin_hook('validate', 'input', null, $ent->description);
+	}
+	$content .= esope_dev_profiling("End", false) . '<hr />';
+	
+	
+	
+	// OUTPUT HOOK
+	$content .= "<h3>Output hook (view,all)</h3><p>Test du hook de conversion des OUTPUT pour l'affichage, via le hook view,all</p>";
+	$content .= esope_dev_profiling("Start", false) . '</p>';
+	foreach ($objects as $ent) {
+		$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis  {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true); // has to be a string
+		$test .= elgg_trigger_plugin_hook('view', 'all', null, $string);
+		$test .= elgg_trigger_plugin_hook('view', 'all', null, $ent->description);
+	}
+	$content .= esope_dev_profiling("End", false) . '<hr />';
+	
+	// OUTPUT VIEW
+	$content .= "<h3>Affichage vue output/longtext</h3><p>Test de la fonction de conversion des OUTPUT pour l'affichage, via la vue output/longtext qui déclenche le hook view,all</p>";
+	$content .= esope_dev_profiling("Start", false) . '</p>';
+	foreach ($objects as $ent) {
+		$string = print_r(["text", 12345, "👦", '👩', " some texte 👩‍ around 🎤 emojis  {$ent->guid}", '👦' => [3 => "👦", "test" => '👩', ['👩' => '👩', '👩']]], true); // has to be a string
+		$test .= elgg_trigger_plugin_hook('view', 'all', null, $string);
+		$test .= elgg_trigger_plugin_hook('view', 'all', null, $ent->description);
+	
+	}
+	$content .= esope_dev_profiling("End", false) . '<hr />';
+	
 }
 
 
 // Display cached data
-if (in_array($exec, ['clear', 'benchmark', 'session'])) {
+if (in_array($exec, ['clear', 'benchmark', 'session', 'clearbenchmark'])) {
 	// CACHED DATA
 	$content .= 'SESSION CACHE CONTENT : ';
 	$content .= '<br />EMOJIS STRINGS CACHE : <pre>' . print_r($_SESSION['emojis_known'], true) . '</pre>';
