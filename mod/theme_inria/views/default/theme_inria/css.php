@@ -1518,6 +1518,7 @@ fieldset { min-width: initial; }
 form.elgg-form { padding: 0rem; width: initial; background: transparent; float: none; }
 fieldset > div { /* max-width: 30rem; */ }
 .ui-multiselect { max-width: 100%; }
+select { max-width: 100%; }
 .ui-multiselect-checkboxes label { font-size: 0.75rem; color: #6C6C6C !important; font-weight: normal !important; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: #F1F1F1; border: 0; }
 select[disabled], input[disabled] { color: #AAA; background: #EEE; }

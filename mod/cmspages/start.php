@@ -55,6 +55,7 @@ function cmspages_init() {
 	elgg_register_action("cmspages/edit", $actions_path . 'edit.php');
 	elgg_register_action("cmspages/delete", $actions_path . 'delete.php');
 	
+	// Register upgrades
 	elgg_register_event_handler('upgrade', 'upgrade', 'cmspages_run_upgrades');
 	
 }
@@ -1202,28 +1203,6 @@ if (!elgg_is_active_plugin('esope')) {
 }
 
 
-function cmspages_run_upgrades($event, $type, $details) {
-	$cmspages_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'cmspages');
-	if (empty($cmspages_upgrade_version)) { $cmspages_upgrade_version = '0'; }
-
-	//if (!$cmspages_upgrade_version != '1.11') {
-	if (version_compare($cmspages_upgrade_version, '1.11') < 0) {
-		 // When upgrading, check if the ElggCMSPage class has been registered as this
-		 // was added in Elgg 1.11
-		if (!update_subtype('object', 'cmspage', 'ElggCMSPage')) {
-			add_subtype('object', 'cmspage', 'ElggCMSPage');
-		}
-		elgg_set_plugin_setting('upgrade_version', '1.11', 'cmspages');
-	}
-	
-	if (version_compare($cmspages_upgrade_version, '1.12') < 0) {
-		// Perform some upgrade tasks...
-		//elgg_set_plugin_setting('upgrade_version', '1.12', 'cmspages');
-	}
-	
-}
-
-
 /**
  * Get objects that match the search parameters.
  *
@@ -1275,4 +1254,50 @@ function cmspages_search_hook($hook, $type, $value, $params) {
 	);
 }
 
+
+
+// Old version upgrade function (did nothing)
+/*
+function cmspages_run_upgrades_old($event, $type, $details) {
+	$cmspages_upgrade_version = elgg_get_plugin_setting('upgrade_version', 'cmspages');
+	if (empty($cmspages_upgrade_version)) { $cmspages_upgrade_version = '0'; }
+
+	//if (!$cmspages_upgrade_version != '1.11') {
+	if (version_compare($cmspages_upgrade_version, '1.11') < 0) {
+		 // When upgrading, check if the ElggCMSPage class has been registered as this
+		 // was added in Elgg 1.11
+		if (!update_subtype('object', 'cmspage', 'ElggCMSPage')) {
+			add_subtype('object', 'cmspage', 'ElggCMSPage');
+		}
+		elgg_set_plugin_setting('upgrade_version', '1.11', 'cmspages');
+	}
+	
+	if (version_compare($cmspages_upgrade_version, '1.12') < 0) {
+		// Perform some upgrade tasks...
+		//elgg_set_plugin_setting('upgrade_version', '1.12', 'cmspages');
+	}
+	
+}
+*/
+
+/* Upgrade to 1.12
+ * Upgrades are stored in plugin setting upgrades, as an imploded array of updates versions (e.g.: "1.12,2.3")
+ */
+function cmspages_run_upgrades($event, $type, $details) {
+	$upgrades = elgg_get_plugin_setting('upgrades', 'cmspages');
+	$upgrades = explode(',', $upgrades);
+	
+	if (!in_array('1.12', $upgrades)) {
+		// Check and update or register the class
+		if (get_subtype_id('object', 'cmspage')) {
+			update_subtype('object', 'cmspage', 'ElggCMSPage');
+		} else {
+			add_subtype('object', 'cmspage', 'ElggCMSPage');
+		}
+		
+		$upgrades[] = '1.12';
+		$upgrades = implode(',', $upgrades);
+		elgg_set_plugin_setting('upgrades', $upgrades, 'cmspages');
+	}
+}
 

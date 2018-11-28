@@ -80,7 +80,7 @@ if (elgg_is_logged_in()) {
 		</li>
 
 		<?php if (elgg_is_active_plugin('groups')) { ?>
-		<li class="groups<?php if ($selected_groups) { echo ' elgg-state-selected"'; } ?>">
+		<li class="groups <?php if ($selected_groups) { echo ' elgg-state-selected'; } ?>">
 			<a <?php if ($selected_groups) { echo 'class="active elgg-state-selected"'; } ?> href="javascript:void(0);" title="<?php echo theme_inria_get_link_title('groupes'); ?>" >
 				<?php echo $svg_groupes . elgg_echo('groups'); ?> <i class="fa fa-angle-down"></i></a>
 			<ul class="hidden">
