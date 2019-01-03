@@ -146,7 +146,7 @@ View and vote on the poll:
 	'poll:edited' => "Your poll was saved.",
 	'poll:responded' => "Thank you for responding, your vote was recorded.",
 	'poll:deleted' => "Your poll was successfully deleted.",
-	'poll:totalvotes' => "Total number of votes: %s",
+	'poll:totalvotes' => "Total number of voters: %s",
 	'poll:voted' => "Your vote has been cast for this poll. Thank you for voting on this poll.",
 	'poll:poll_reset_success' => "The poll was reset successfully.",
 	'poll:upgrade' => 'Upgrade',

@@ -7,6 +7,54 @@ $own = elgg_get_logged_in_user_entity();
 $content = '';
 
 
+// Membership action (for self)
+$actions_content = '';
+// group members
+if ($group->isMember()) {
+	if ($group->getOwnerGUID() != $own->guid) {
+		// leave
+		$actions_content .= elgg_view('output/url', array(
+				'href' => $url . "action/groups/leave?group_guid={$group->guid}",
+				'text' => '<i class="fa fa-sign-out"></i>&nbsp;' . elgg_echo('groups:leave'),
+				'class' => "elgg-button elgg-button-delete",
+				'confirm' => elgg_echo('groups:leave:confirm'),
+				'is_action' => true,
+			));
+	}
+} elseif (elgg_is_logged_in()) {
+	// join - admins can always join.
+	if ($group->isPublicMembership() || $group->canEdit()) {
+		$actions_content .= elgg_view('output/url', array(
+				'href' => $url . "action/groups/join?group_guid={$group->guid}",
+				'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:join'),
+				'class' => "elgg-button elgg-button-action",
+				'is_action' => true,
+			));
+	} else {
+		if (check_entity_relationship($own->guid, 'membership_request', $group->guid)) {
+			// request already made
+			$actions_content .= elgg_view('output/url', array(
+					'href' => "javascript:void(0);",
+					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequestmade'),
+					'class' => "elgg-button elgg-button-action",
+					'is_action' => true,
+				));
+		} else {
+			// request membership
+			$actions_content .= elgg_view('output/url', array(
+					'href' => $url . "action/groups/join?group_guid={$group->guid}",
+					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequest'),
+					'class' => "elgg-button elgg-button-action",
+					'is_action' => true,
+				));
+		}
+	}
+}
+if (!empty($actions_content)) {
+	$content .= '<div class="group-workspace-module group-workspace-membership"><h3>' . elgg_echo('theme_inria:ownmembership') . '</h3>' . $actions_content . '</div>';
+}
+
+
 // Présentation
 if (!empty($main_group->description)) {
 	$content .= '<div class="group-workspace-module group-workspace-about">';
@@ -148,54 +196,7 @@ if ($group->canEdit()) {
 
 
 
-// Membership action (for self)
-$actions_content = '';
-// group members
-if ($group->isMember()) {
-	if ($group->getOwnerGUID() != $own->guid) {
-		// leave
-		$actions_content .= elgg_view('output/url', array(
-				'href' => $url . "action/groups/leave?group_guid={$group->guid}",
-				'text' => '<i class="fa fa-sign-out"></i>&nbsp;' . elgg_echo('groups:leave'),
-				'class' => "elgg-button elgg-button-delete",
-				'confirm' => elgg_echo('groups:leave:confirm'),
-				'is_action' => true,
-			));
-	}
-} elseif (elgg_is_logged_in()) {
-	// join - admins can always join.
-	if ($group->isPublicMembership() || $group->canEdit()) {
-		$actions_content .= elgg_view('output/url', array(
-				'href' => $url . "action/groups/join?group_guid={$group->guid}",
-				'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:join'),
-				'class' => "elgg-button elgg-button-action",
-				'is_action' => true,
-			));
-	} else {
-		if (check_entity_relationship($own->guid, 'membership_request', $group->guid)) {
-			// request already made
-			$actions_content .= elgg_view('output/url', array(
-					'href' => "javascript:void(0);",
-					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequestmade'),
-					'class' => "elgg-button elgg-button-action",
-					'is_action' => true,
-				));
-		} else {
-			// request membership
-			$actions_content .= elgg_view('output/url', array(
-					'href' => $url . "action/groups/join?group_guid={$group->guid}",
-					'text' => '<i class="fa fa-sign-in"></i>&nbsp;' . elgg_echo('groups:joinrequest'),
-					'class' => "elgg-button elgg-button-action",
-					'is_action' => true,
-				));
-		}
-	}
-}
-if (!empty($actions_content)) {
-	$content .= '<div class="group-workspace-module group-workspace-membership"><h3>' . elgg_echo('theme_inria:ownmembership') . '</h3>' . $actions_content . '</div>';
-}
 
-
-
+// Render content
 echo '<div class="group-workspace-info" id="group-workspace-info-' . $group->guid . '">' . $content . '</div>';
 
