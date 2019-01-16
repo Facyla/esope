@@ -132,9 +132,13 @@ if (elgg_instanceof($page_owner, 'group')) {
 	} else {
 		$actions = elgg_view('page/components/iris_object_actions', array('entity' => $page, 'mode' => 'content', 'metadata' => $pages_actions));
 	}
-
-	$subpages = elgg_view('pages/sub-pages', array('entity' => $page));
-	if (!$full) {
+	
+	// Subpages : can generate some latency in listings - disabled in listing context
+	$subpages = false;
+	if (!elgg_in_context('listing')) {
+		$subpages = elgg_view('pages/sub-pages', array('entity' => $page));
+	}
+	if (!$full && $subpages) {
 		$subpages = '<div class="pages-subpages hidden" id="pages-subpages-' . $page->guid . '">' . $subpages . '</div>';
 	}
 

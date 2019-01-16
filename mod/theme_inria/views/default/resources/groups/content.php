@@ -127,6 +127,7 @@ $count_mine = elgg_get_entities_from_metadata($content_activity_mine_opt + ['cou
 $count_draft = elgg_get_entities_from_metadata($content_activity_draft_opt + ['count' => true]);
 
 elgg_push_context('groups-content');
+elgg_push_context('listing');
 switch($filter) {
 	case 'mine':
 		$count = $count_mine;
@@ -141,6 +142,7 @@ switch($filter) {
 		$count = $count_all;
 		$entities_list = elgg_list_entities_from_metadata($content_activity_opt);
 }
+elgg_pop_context();
 elgg_pop_context();
 
 
