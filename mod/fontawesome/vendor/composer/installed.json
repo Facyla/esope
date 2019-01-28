@@ -22,7 +22,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "4.1.*"
         },
-        "time": "2015-02-18 17:17:01",
+        "time": "2015-02-18T17:17:01+00:00",
         "type": "composer-installer",
         "extra": {
             "class": "Composer\\Installers\\Installer",
@@ -115,7 +115,7 @@
             "jekyll": "1.0.2",
             "lessc": "1.4.2"
         },
-        "time": "2015-07-28 21:55:03",
+        "time": "2015-07-28T21:55:03+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

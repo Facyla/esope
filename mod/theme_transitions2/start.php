@@ -102,7 +102,9 @@ function theme_transitions2_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'theme_transitions2_owner_block_menu', 1000);
 	
 	// Register Font Awesome
-	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
+//	elgg_register_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
+	elgg_unregister_css('font-awesome', 'vendor/fortawesome/font-awesome/css/font-awesome.min.css');
+	elgg_register_css('font-awesome', 'mod/fontawesome/vendor/fortawesome/font-awesome/css/font-awesome.min.css');
 	elgg_load_css('font-awesome');
 	// Register Lato font
 	elgg_register_css('font-lato', 'http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext');

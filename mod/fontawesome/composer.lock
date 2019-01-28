@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e4b33608ac87a8ee0c87987f4d9fa852",
-    "content-hash": "c25bd50295935bff08cce8b12c977c88",
+    "content-hash": "d2869b05ef1c90d0434a62c6d5e9e222",
     "packages": [
         {
             "name": "composer/installers",
@@ -100,7 +99,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2015-02-18 17:17:01"
+            "time": "2015-02-18T17:17:01+00:00"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -148,12 +147,12 @@
                 "font",
                 "icon"
             ],
-            "time": "2015-07-28 21:55:03"
+            "time": "2015-07-28T21:55:03+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
