@@ -25,7 +25,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "4.1.*"
         },
-        "time": "2017-08-09 07:53:48",
+        "time": "2017-08-09T07:53:48+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -116,6 +116,268 @@
             "yawik",
             "zend",
             "zikula"
+        ]
+    },
+    {
+        "name": "elgg/login_as",
+        "version": "1.9.2",
+        "version_normalized": "1.9.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Elgg/login_as.git",
+            "reference": "6cade385000e726875aba74498c28e0121222a1c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Elgg/login_as/zipball/6cade385000e726875aba74498c28e0121222a1c",
+            "reference": "6cade385000e726875aba74498c28e0121222a1c",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": ">=1.0.8"
+        },
+        "time": "2015-09-03T12:18:17+00:00",
+        "type": "elgg-plugin",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Brett Profitt",
+                "email": "brett@elgg.org"
+            }
+        ],
+        "description": "Elgg plugin that allows admin users to login as another user.",
+        "keywords": [
+            "elgg",
+            "plugin"
+        ]
+    },
+    {
+        "name": "ircmaxell/password-compat",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ircmaxell/password_compat.git",
+            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/5c5cde8822a69545767f7c7f3058cb15ff84614c",
+            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.*"
+        },
+        "time": "2014-11-20T16:49:30+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "lib/password.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Anthony Ferrara",
+                "email": "ircmaxell@php.net",
+                "homepage": "http://blog.ircmaxell.com"
+            }
+        ],
+        "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
+        "homepage": "https://github.com/ircmaxell/password_compat",
+        "keywords": [
+            "hashing",
+            "password"
+        ]
+    },
+    {
+        "name": "knplabs/gaufrette",
+        "version": "v0.1.9",
+        "version_normalized": "0.1.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/Gaufrette.git",
+            "reference": "4c73bb66ff41d7c9beb57372a82047cf5dcc6d1c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/4c73bb66ff41d7c9beb57372a82047cf5dcc6d1c",
+            "reference": "4c73bb66ff41d7c9beb57372a82047cf5dcc6d1c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "amazonwebservices/aws-sdk-for-php": "1.5.*",
+            "aws/aws-sdk-php": "~2",
+            "doctrine/dbal": ">=2.3",
+            "dropbox-php/dropbox-php": "*",
+            "google/apiclient": "~1.1",
+            "herzult/php-ssh": "*",
+            "microsoft/windowsazure": "dev-master",
+            "mikey179/vfsstream": "~1.2.0",
+            "phpseclib/phpseclib": "dev-master",
+            "phpspec/phpspec": "2.0.*",
+            "phpunit/phpunit": "3.7.*",
+            "rackspace/php-opencloud": "1.9.*"
+        },
+        "suggest": {
+            "amazonwebservices/aws-sdk-for-php": "to use the legacy Amazon S3 adapters",
+            "aws/aws-sdk-php": "to use the Amazon S3 adapter",
+            "doctrine/dbal": "to use the Doctrine DBAL adapter",
+            "dropbox-php/dropbox-php": "to use the Dropbox adapter",
+            "ext-apc": "to use the APC adapter",
+            "ext-curl": "*",
+            "ext-fileinfo": "This extension is used to automatically detect the content-type of a file in the AwsS3, OpenCloud, AzureBlogStorage and GoogleCloudStorage adapters",
+            "ext-mbstring": "*",
+            "ext-mongo": "*",
+            "ext-zip": "to use the Zip adapter",
+            "google/apiclient": "to use GoogleCloudStorage adapter",
+            "herzult/php-ssh": "to use SFtp adapter",
+            "knplabs/knp-gaufrette-bundle": "to use with Symfony2",
+            "microsoft/windowsazure": "to use Microsoft Azure Blob Storage adapter",
+            "phpseclib/phpseclib": "to use PhpseclibSftp adapter",
+            "rackspace/php-opencloud": "to use Opencloud adapter"
+        },
+        "time": "2015-03-09T08:06:57+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.2.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Gaufrette": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "The contributors",
+                "homepage": "http://github.com/knplabs/Gaufrette/contributors"
+            },
+            {
+                "name": "KnpLabs Team",
+                "homepage": "http://knplabs.com"
+            }
+        ],
+        "description": "PHP5 library that provides a filesystem abstraction layer",
+        "homepage": "http://knplabs.com",
+        "keywords": [
+            "abstraction",
+            "file",
+            "filesystem",
+            "media"
+        ]
+    },
+    {
+        "name": "mrclay/minify",
+        "version": "2.3.2",
+        "version_normalized": "2.3.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mrclay/minify.git",
+            "reference": "2c83b82bfa894180335f19141794a4de1ccd06e6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mrclay/minify/zipball/2c83b82bfa894180335f19141794a4de1ccd06e6",
+            "reference": "2c83b82bfa894180335f19141794a4de1ccd06e6",
+            "shasum": ""
+        },
+        "require": {
+            "ext-pcre": "*",
+            "php": ">=5.2.1"
+        },
+        "require-dev": {
+            "tubalmartin/cssmin": "~2.4.8"
+        },
+        "suggest": {
+            "tubalmartin/cssmin": "Support minify with CSSMin (YUI PHP port)"
+        },
+        "time": "2017-06-08T17:49:34+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "min/lib/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Stephen Clay",
+                "email": "steve@mrclay.org",
+                "role": "Developer"
+            }
+        ],
+        "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
+        "homepage": "http://code.google.com/p/minify/"
+    },
+    {
+        "name": "psr/cache",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/cache.git",
+            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-08-06T20:24:11+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Cache\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for caching libraries",
+        "keywords": [
+            "cache",
+            "psr",
+            "psr-6"
         ]
     },
     {
@@ -242,7 +504,7 @@
             "zfcampus/zf-apigility-doctrine": ">=1,<1.0.3",
             "zfr/zfr-oauth2-server-module": "<0.1.2"
         },
-        "time": "2017-09-11 12:05:25",
+        "time": "2017-09-11T12:05:25+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -256,6 +518,63 @@
             }
         ],
         "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it"
+    },
+    {
+        "name": "symfony/http-foundation",
+        "version": "v2.8.27",
+        "version_normalized": "2.8.27.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/http-foundation.git",
+            "reference": "fc4942ad82af83ac8301b68d0c9b1bbcc95a84c6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/fc4942ad82af83ac8301b68d0c9b1bbcc95a84c6",
+            "reference": "fc4942ad82af83ac8301b68d0c9b1bbcc95a84c6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.9",
+            "symfony/polyfill-mbstring": "~1.1",
+            "symfony/polyfill-php54": "~1.0",
+            "symfony/polyfill-php55": "~1.0"
+        },
+        "require-dev": {
+            "symfony/expression-language": "~2.4|~3.0.0"
+        },
+        "time": "2017-08-10T07:04:10+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.8-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\HttpFoundation\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony HttpFoundation Component",
+        "homepage": "https://symfony.com"
     },
     {
         "name": "symfony/polyfill-mbstring",
@@ -278,7 +597,7 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2017-06-14 15:44:48",
+        "time": "2017-06-14T15:44:48+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -319,108 +638,6 @@
         ]
     },
     {
-        "name": "ircmaxell/password-compat",
-        "version": "v1.0.4",
-        "version_normalized": "1.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ircmaxell/password_compat.git",
-            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ircmaxell/password_compat/zipball/5c5cde8822a69545767f7c7f3058cb15ff84614c",
-            "reference": "5c5cde8822a69545767f7c7f3058cb15ff84614c",
-            "shasum": ""
-        },
-        "require-dev": {
-            "phpunit/phpunit": "4.*"
-        },
-        "time": "2014-11-20 16:49:30",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "lib/password.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Anthony Ferrara",
-                "email": "ircmaxell@php.net",
-                "homepage": "http://blog.ircmaxell.com"
-            }
-        ],
-        "description": "A compatibility library for the proposed simplified password hashing algorithm: https://wiki.php.net/rfc/password_hash",
-        "homepage": "https://github.com/ircmaxell/password_compat",
-        "keywords": [
-            "hashing",
-            "password"
-        ]
-    },
-    {
-        "name": "symfony/polyfill-php55",
-        "version": "v1.5.0",
-        "version_normalized": "1.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/polyfill-php55.git",
-            "reference": "29b1381d66f16e0581aab0b9f678ccf073288f68"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/29b1381d66f16e0581aab0b9f678ccf073288f68",
-            "reference": "29b1381d66f16e0581aab0b9f678ccf073288f68",
-            "shasum": ""
-        },
-        "require": {
-            "ircmaxell/password-compat": "~1.0",
-            "php": ">=5.3.3"
-        },
-        "time": "2017-06-14 15:44:48",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Polyfill\\Php55\\": ""
-            },
-            "files": [
-                "bootstrap.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Nicolas Grekas",
-                "email": "p@tchwork.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony polyfill backporting some PHP 5.5+ features to lower PHP versions",
-        "homepage": "https://symfony.com",
-        "keywords": [
-            "compatibility",
-            "polyfill",
-            "portable",
-            "shim"
-        ]
-    },
-    {
         "name": "symfony/polyfill-php54",
         "version": "v1.5.0",
         "version_normalized": "1.5.0.0",
@@ -438,7 +655,7 @@
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2017-06-14 15:44:48",
+        "time": "2017-06-14T15:44:48+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -481,43 +698,38 @@
         ]
     },
     {
-        "name": "symfony/http-foundation",
-        "version": "v2.8.27",
-        "version_normalized": "2.8.27.0",
+        "name": "symfony/polyfill-php55",
+        "version": "v1.5.0",
+        "version_normalized": "1.5.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "fc4942ad82af83ac8301b68d0c9b1bbcc95a84c6"
+            "url": "https://github.com/symfony/polyfill-php55.git",
+            "reference": "29b1381d66f16e0581aab0b9f678ccf073288f68"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/fc4942ad82af83ac8301b68d0c9b1bbcc95a84c6",
-            "reference": "fc4942ad82af83ac8301b68d0c9b1bbcc95a84c6",
+            "url": "https://api.github.com/repos/symfony/polyfill-php55/zipball/29b1381d66f16e0581aab0b9f678ccf073288f68",
+            "reference": "29b1381d66f16e0581aab0b9f678ccf073288f68",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.9",
-            "symfony/polyfill-mbstring": "~1.1",
-            "symfony/polyfill-php54": "~1.0",
-            "symfony/polyfill-php55": "~1.0"
+            "ircmaxell/password-compat": "~1.0",
+            "php": ">=5.3.3"
         },
-        "require-dev": {
-            "symfony/expression-language": "~2.4|~3.0.0"
-        },
-        "time": "2017-08-10 07:04:10",
+        "time": "2017-06-14T15:44:48+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.8-dev"
+                "dev-master": "1.5-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Symfony\\Component\\HttpFoundation\\": ""
+                "Symfony\\Polyfill\\Php55\\": ""
             },
-            "exclude-from-classmap": [
-                "/Tests/"
+            "files": [
+                "bootstrap.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -526,196 +738,21 @@
         ],
         "authors": [
             {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
             },
             {
                 "name": "Symfony Community",
                 "homepage": "https://symfony.com/contributors"
             }
         ],
-        "description": "Symfony HttpFoundation Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "mrclay/minify",
-        "version": "2.3.2",
-        "version_normalized": "2.3.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/mrclay/minify.git",
-            "reference": "2c83b82bfa894180335f19141794a4de1ccd06e6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/mrclay/minify/zipball/2c83b82bfa894180335f19141794a4de1ccd06e6",
-            "reference": "2c83b82bfa894180335f19141794a4de1ccd06e6",
-            "shasum": ""
-        },
-        "require": {
-            "ext-pcre": "*",
-            "php": ">=5.2.1"
-        },
-        "require-dev": {
-            "tubalmartin/cssmin": "~2.4.8"
-        },
-        "suggest": {
-            "tubalmartin/cssmin": "Support minify with CSSMin (YUI PHP port)"
-        },
-        "time": "2017-06-08 17:49:34",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "min/lib/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Stephen Clay",
-                "email": "steve@mrclay.org",
-                "role": "Developer"
-            }
-        ],
-        "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
-        "homepage": "http://code.google.com/p/minify/"
-    },
-    {
-        "name": "knplabs/gaufrette",
-        "version": "v0.1.9",
-        "version_normalized": "0.1.9.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/KnpLabs/Gaufrette.git",
-            "reference": "4c73bb66ff41d7c9beb57372a82047cf5dcc6d1c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/4c73bb66ff41d7c9beb57372a82047cf5dcc6d1c",
-            "reference": "4c73bb66ff41d7c9beb57372a82047cf5dcc6d1c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "amazonwebservices/aws-sdk-for-php": "1.5.*",
-            "aws/aws-sdk-php": "~2",
-            "doctrine/dbal": ">=2.3",
-            "dropbox-php/dropbox-php": "*",
-            "google/apiclient": "~1.1",
-            "herzult/php-ssh": "*",
-            "microsoft/windowsazure": "dev-master",
-            "mikey179/vfsstream": "~1.2.0",
-            "phpseclib/phpseclib": "dev-master",
-            "phpspec/phpspec": "2.0.*",
-            "phpunit/phpunit": "3.7.*",
-            "rackspace/php-opencloud": "1.9.*"
-        },
-        "suggest": {
-            "amazonwebservices/aws-sdk-for-php": "to use the legacy Amazon S3 adapters",
-            "aws/aws-sdk-php": "to use the Amazon S3 adapter",
-            "doctrine/dbal": "to use the Doctrine DBAL adapter",
-            "dropbox-php/dropbox-php": "to use the Dropbox adapter",
-            "ext-apc": "to use the APC adapter",
-            "ext-curl": "*",
-            "ext-fileinfo": "This extension is used to automatically detect the content-type of a file in the AwsS3, OpenCloud, AzureBlogStorage and GoogleCloudStorage adapters",
-            "ext-mbstring": "*",
-            "ext-mongo": "*",
-            "ext-zip": "to use the Zip adapter",
-            "google/apiclient": "to use GoogleCloudStorage adapter",
-            "herzult/php-ssh": "to use SFtp adapter",
-            "knplabs/knp-gaufrette-bundle": "to use with Symfony2",
-            "microsoft/windowsazure": "to use Microsoft Azure Blob Storage adapter",
-            "phpseclib/phpseclib": "to use PhpseclibSftp adapter",
-            "rackspace/php-opencloud": "to use Opencloud adapter"
-        },
-        "time": "2015-03-09 08:06:57",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.2.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Gaufrette": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "The contributors",
-                "homepage": "http://github.com/knplabs/Gaufrette/contributors"
-            },
-            {
-                "name": "KnpLabs Team",
-                "homepage": "http://knplabs.com"
-            }
-        ],
-        "description": "PHP5 library that provides a filesystem abstraction layer",
-        "homepage": "http://knplabs.com",
+        "description": "Symfony polyfill backporting some PHP 5.5+ features to lower PHP versions",
+        "homepage": "https://symfony.com",
         "keywords": [
-            "abstraction",
-            "file",
-            "filesystem",
-            "media"
-        ]
-    },
-    {
-        "name": "psr/cache",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-fig/cache.git",
-            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
-            "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2016-08-06 20:24:11",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Psr\\Cache\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "PHP-FIG",
-                "homepage": "http://www.php-fig.org/"
-            }
-        ],
-        "description": "Common interface for caching libraries",
-        "keywords": [
-            "cache",
-            "psr",
-            "psr-6"
+            "compatibility",
+            "polyfill",
+            "portable",
+            "shim"
         ]
     },
     {
@@ -745,7 +782,7 @@
             "phpunit/phpunit": "4.8.*",
             "satooshi/php-coveralls": "1.0.*"
         },
-        "time": "2017-04-23 17:16:57",
+        "time": "2017-04-23T17:16:57+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -778,43 +815,6 @@
             "psr6",
             "redis",
             "sessions"
-        ]
-    },
-    {
-        "name": "elgg/login_as",
-        "version": "1.9.2",
-        "version_normalized": "1.9.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Elgg/login_as.git",
-            "reference": "6cade385000e726875aba74498c28e0121222a1c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Elgg/login_as/zipball/6cade385000e726875aba74498c28e0121222a1c",
-            "reference": "6cade385000e726875aba74498c28e0121222a1c",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": ">=1.0.8"
-        },
-        "time": "2015-09-03 12:18:17",
-        "type": "elgg-plugin",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Brett Profitt",
-                "email": "brett@elgg.org"
-            }
-        ],
-        "description": "Elgg plugin that allows admin users to login as another user.",
-        "keywords": [
-            "elgg",
-            "plugin"
         ]
     }
 ]
