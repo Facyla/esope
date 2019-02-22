@@ -1299,6 +1299,8 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 			'count' => false,
 			'user_profile_fields' => false,
 			'group_profile_fields' => false,
+			//'created_time_lower' => false,
+			//'created_time_upper' => false,
 		);
 	if (is_array($defaults)) { $defaults = array_merge($esearch_defaults, $defaults); } else { $defaults = $esearch_defaults; }
 	
@@ -1314,6 +1316,10 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$limit = (int) esope_extract('limit', $params, $defaults['limit']);
 	$offset = (int) esope_extract('offset', $params, $defaults['offset']);
 	$order_by = esope_extract('order_by', $params, $defaults['order_by']);
+	$created_time_lower = esope_extract('created_time_lower', $params, $defaults['created_time_lower']);
+	$created_time_upper = esope_extract('created_time_upper', $params, $defaults['created_time_upper']);
+	$modified_time_lower = esope_extract('modified_time_lower', $params, $defaults['modified_time_lower']);
+	$modified_time_upper = esope_extract('modified_time_upper', $params, $defaults['modified_time_upper']);
 	// Metadata search : $metadata[name]=value
 	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
 	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
@@ -1541,7 +1547,11 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		$search_params['relationship'] = 'friend';
 		$search_params['relationship_guid'] = elgg_get_logged_in_user_guid();
 	}
-
+	if ($created_time_lower) { $search_params['created_time_lower'] = $created_time_lower; }
+	if ($created_time_upper) { $search_params['created_time_upper'] = $created_time_upper; }
+	if ($modified_time_lower) { $search_params['modified_time_lower'] = $modified_time_lower; }
+	if ($modified_time_upper) { $search_params['modified_time_upper'] = $modified_time_upper; }
+	
 	
 	// Add additional search params (not from URL) - eg. JOIN and WHERE clauses, additional metadata filters, etc.
 	if ($params['merge_params']) {
