@@ -12,12 +12,12 @@ $esope_search_url = elgg_add_action_tokens_to_url($action_base . 'esearch');
 
 $content .= '<script type="text/javascript">
 var formdata;
-function esope_search(){
+function esope_search_objects(){
 	//var spinner = require(["elgg/spinner"]);
 	$("body").addClass("esope-search-wait");
 	//spinner.start();
 	$("#esope-search-results").html(""); // clear previous result set
-	formdata = $("#esope-search-form").serialize();
+	formdata = $("#esope-search-form-objects").serialize();
 	$.post("' . $esope_search_url . '", formdata, function(data){
 		$("#esope-search-results").html(data);
 		$("body").removeClass("esope-search-wait");
@@ -42,13 +42,13 @@ $created_time_upper = get_input('created_time_upper');
 // Préparation du formulaire : on utilise la config du thème + adaptations spécifiques pour notre cas
 // Note : on peut récupérer les résultats sur cette page plutôt qu'en AJAX, si on veut...
 
-$search_action = "javascript:esope_search();";
+$search_action = "javascript:esope_search_objects();";
 // Should be an array, so clear blanks then make it an array
 $metadata_search_fields = elgg_get_plugin_setting('metadata_contentsearch_fields', 'esope');
 // Default to general advanced fields if not set
 if (empty($metadata_search_fields)) { $metadata_search_fields = elgg_get_plugin_setting('metadata_search_fields', 'esope'); }
 // Custom setting : override => mots-clefs, types de documents, catégories, groupe, auteur, date, (voir si + ?)
-$metadata_search_fields = "tags:auto";
+//$metadata_search_fields = "tags:auto";
 if (!empty($metadata_search_fields)) {
 	$metadata_search_fields = str_replace(' ', '', $metadata_search_fields);
 	$metadata_search_fields = explode(',', $metadata_search_fields);
@@ -123,7 +123,7 @@ $metadata_search .= '<div class="esope-search-metadata esope-search-metadata-sel
 
 
 
-$search_form = '<form id="esope-search-form" method="post" action="' . $search_action . '">';
+$search_form = '<form id="esope-search-form-objects" method="post" action="' . $search_action . '">';
 $search_form .= elgg_view('input/securitytoken');
 $search_form .= elgg_view('input/hidden', array('name' => 'entity_type', 'value' => 'object'));
 // Pass URL values to search form (any URL parameter has to be passed to the form because it's JS-sent)
@@ -153,8 +153,11 @@ if (false && elgg_is_admin_logged_in()) {
 
 //$search_form .= '<p><label>' . elgg_echo('esope:search:type') . ' ' . elgg_view('input/select', array('name' => 'entity_type', 'value' => '', 'options_values' => $types_opt)) . '</label></p>';
 
-$search_form .= '<div class="esope-search-fulltext"><label>' . elgg_echo('esope:fulltextsearch:object') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
-$search_form .= '<div class="esope-search-submit"><input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" /></div>';
+$search_form .= '<div style="display: flex; flex-wrap: wrap;">';
+	//$search_form .= '<div class="esope-search-fulltext" style="flex: 1 1 12rem;"><label>' . elgg_echo('esope:fulltextsearch:object') . '<input type="text" name="q" value="' . $q . '" /></label></div>';
+	$search_form .= '<div class="esope-search-fulltext" style="flex: 1 1 12rem;"><label><span class="hidden">' . elgg_echo('esope:fulltextsearch:object') . '</span>' . elgg_view('input/text', array('name' => 'q', 'value' => $q, 'placeholder' => elgg_echo('esope:fulltextsearch:object'))) . '</label></div>';
+	$search_form .= '<div class="esope-search-submit" style="flex: 0 0 6rem;"><input type="submit" class="elgg-button elgg-button-submit elgg-button-livesearch" value="' . elgg_echo('search') . '" /></div>';
+$search_form .= '</div>';
 $search_form .= '<div class="clearfloat"></div>';
 
 $search_form .= '<fieldset>';
@@ -185,7 +188,7 @@ $content .= '<div id="esope-search-results">' . elgg_echo('esope:search:nosearch
 //echo '<pre>' . print_r($_GET, true) . '</pre>'; // debug
 //if (!empty($_GET)) {
 if (sizeof($_GET) > 1) {
-	$content .= '<script type="text/javascript">esope_search();</script>';
+	$content .= '<script type="text/javascript">esope_search_objects();</script>';
 }
 
 echo $content;
