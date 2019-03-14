@@ -2,10 +2,10 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Filtre d'inscription (Inscript-Essonne)</name>
 	<author>Florian DANIEL aka Facyla ~ Items International</author>
-	<version>0.3</version>
+	<version>1.8.0</version>
 	<blurb>Filtrage des inscriptions (Inscript-Essonne)</blurb>
 	<description>Filtrage des adresses autorisées à créer un compte. Activez ce plugin si vous souhaitez restreindre l'inscription exclusivement aux adresses email d'un ou de plusieurs noms de domaines, ou interdire la création des comptes à certains domaines.</description>
-	<website>http://departements-en-reseaux.fr/</website>
+	<website>https://departements-en-reseaux.fr/</website>
 	<copyright>Conseil Général de l'Essonne, Assemblée des Départements de France, Items International (Facyla)</copyright>
 	<license>GNU Public License version 2</license>
 	
@@ -26,6 +26,7 @@
 <!--
 Note : must be placed after "invitefriends", if both are activated
 
+1.8.0 : new versionning
 
 0.3 : 20150525 - +blacklist mode
 

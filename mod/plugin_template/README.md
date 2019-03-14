@@ -14,4 +14,9 @@ To do so, edit the main files :
 - pages/plugin_template/example_page.php to set up a custom plugin homepage
 
 
+== COMMENTS - HISTORY
+
+0.1 : YYYYmmdd - Initial release
+ - plugin structure
+ - feature A
 

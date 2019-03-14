@@ -1,5 +1,5 @@
-Slider plugin for Elgg
-======================
+# slider
+Provides a slider object and configurable slider views
 
 This plugin provides a customizable slider view.
 

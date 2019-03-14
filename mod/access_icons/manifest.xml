@@ -2,10 +2,10 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Access level details</name>
 	<author>Facyla</author>
-	<version>0.1</version>
+	<version>1.8.0</version>
 	<blurb>Access icons</blurb>
-	<description>Enable this plugin if you wish to add icons representing access levels to entities, and provides an explanation page.</description>
-	<website>http://lereseausocial.fr/</website>
+	<description>Enable this plugin if you wish to add access levels icons to entities, and provides an explanation page.</description>
+	<website>https://facyla.fr/</website>
 	<license>GNU Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
@@ -15,12 +15,3 @@
 	<activate_on_install>false</activate_on_install>
 
 </plugin_manifest>
-
-<!--
-
-0.1 : 20130917 Initial version
-	- add access icons on entities and groupes
-	- rewrites group listing menu to add proper classes for access styling
-
-//-->
-

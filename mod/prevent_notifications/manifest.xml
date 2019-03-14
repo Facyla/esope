@@ -2,11 +2,11 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Prevent notifications</name>
 	<author>Facyla ~ Items International 2013</author>
-	<version>0.2</version>
+	<version>1.8.0</version>
 	<blurb>Prevent notifications - désactive ponctuellement les notifications</blurb>
 <description>Permet de désactiver les notifications lors de la création / MAJ de contenus, au choix de l'éditeur.</description>
-	<website>https://devnet.inria.fr/</website>
-	<copyright>Items International (Facyla), Inria</copyright>
+	<website>https://facyla.fr/</website>
+	<copyright>Florian DANIEL aka Facyla, Items International, Inria</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<category>admin</category>
@@ -27,12 +27,4 @@
 	
 </plugin_manifest>
 
-<!--
-0.2 : 20150812
-  - file tools support (folders)
-
-0.1 : avril 2013
-  - première version fonctionnelle
-
-//-->
 

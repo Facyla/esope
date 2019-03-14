@@ -6,9 +6,20 @@ This plugin lets admins fully archive a group and its content :
  - admins (only) can browse archived content
  - admins can re-enable group (and content)
 
+Technically, this works the same way as user bannishment.
 
 
-ROADMAP :
+## History
+ - 1.8.0 : New versionning
+ - 0.2 : 20150505 - Fully functional version
+	 - listing page
+	 - preview page (groups and objects)
+	 - add Archive button in group entity menu
+ - 0.1 : 20150504 - Initial release
+	 - plugin structure
+
+
+## ROADMAP
  - permettre un archivage radical des groupes (désactivation totale du groupe et de son contenu)
  - réintégrer des fonctions de "marquage" du groupe comme archivé (esope)
  - permettre de bloquer l'inscription dans un groupe
