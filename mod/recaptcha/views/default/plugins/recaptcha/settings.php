@@ -22,7 +22,7 @@ echo '<p><label>' . elgg_echo('recaptcha:settings:challenge_type'). ' ' . elgg_v
 
 // Advanced option: optional source domain
 $recaptcha_urls = recaptcha_get_valid_urls();
-$recaptcha_urls_opts = array_flip($recaptcha_url);
+$recaptcha_urls_opts = array_flip($recaptcha_urls);
 
 echo '<p><label>' . elgg_echo('recaptcha:settings:recaptcha_url'). ' ' . elgg_view('input/select', array('name' => 'params[recaptcha_url]', 'value' => $vars['entity']->recaptcha_url, 'options_values' => $recaptcha_urls_opts)) . '</label><br /><em>' . elgg_echo('recaptcha:settings:recaptcha_url:details'). '</em></p>';
 
