@@ -24,7 +24,9 @@ function recaptcha_init() {
 	// Register JS script (async defer) - use with : elgg_load_js('recaptcha');
 	$valid_recaptcha_urls = recaptcha_get_valid_urls();
 	$recaptcha_url = elgg_get_plugin_setting('recaptcha_url', 'recaptcha');
-	if (in_array($recaptcha_url, $valid_recaptcha_urls)) { $recaptcha_url = $valid_recaptcha_urls[0]; }
+	if (!in_array($recaptcha_url, $valid_recaptcha_urls)) {
+		$recaptcha_url = $valid_recaptcha_urls[0];
+	}
 	elgg_register_js('google:recaptcha', $recaptcha_url, 'footer');
 	// Multiple reCaptcha on single page: must use explicit call for multiple reCAPTCHA rendering
 	// Note : seems not to work because & is converted to &amp; somewhere when loading JS scripts...
