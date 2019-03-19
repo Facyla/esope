@@ -22,8 +22,11 @@ function recaptcha_init() {
 	elgg_extend_view('page/elements/head', 'recaptcha/head');
 	
 	// Register JS script (async defer) - use with : elgg_load_js('recaptcha');
-	elgg_register_js('google:recaptcha', 'https://www.google.com/recaptcha/api.js', 'footer');
-	// Multiple : must use explicit call for multiple reCAPTCHA rendering
+	$valid_recaptcha_urls = recaptcha_get_valid_urls();
+	$recaptcha_url = elgg_get_plugin_setting('recaptcha_url', 'recaptcha');
+	if (in_array($recaptcha_url, $valid_recaptcha_urls)) { $recaptcha_url = $valid_recaptcha_urls[0]; }
+	elgg_register_js('google:recaptcha', $recaptcha_url, 'footer');
+	// Multiple reCaptcha on single page: must use explicit call for multiple reCAPTCHA rendering
 	// Note : seems not to work because & is converted to &amp; somewhere when loading JS scripts...
 	//elgg_register_js('google:recaptcha', 'https://www.google.com/recaptcha/api.js?onload=ReCaptchaCallback&render=explicit', 'footer');
 	
@@ -92,5 +95,15 @@ function recaptcha_verify($response = '', $secret = '') {
 	return false;
 }
 
+
+/* Get valid JS script source URLs
+ * Note: index 0 is default source
+ */
+function recaptcha_get_valid_urls() {
+	return [
+		'www.google.com' => 'https://www.google.com/recaptcha/api.js', 
+		'www.recaptcha.net' => 'https://www.recaptcha.net/recaptcha/api.js',
+	];
+}
 
 

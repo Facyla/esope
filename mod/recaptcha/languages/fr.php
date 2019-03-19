@@ -16,6 +16,8 @@ return array(
 	'recaptcha:settings:size:details' => "La taille du recaptcha ('normal' | 'compact')",
 	'recaptcha:settings:challenge_type' => "Type",
 	'recaptcha:settings:challenge_type:details' => "Le type de défi à résoudre ('image' | 'audio')",
+	'recaptcha:settings:recaptcha_url' => "Source du script reCaptcha",
+	'recaptcha:settings:recaptcha_url:details' => "En cas de blocage, notamment pour une utilisation depuis la Chine, veuillez choisir le domaine recaptcha.net au lieu de google.com pour charger le script reCaptcha.",
 	
 	// Errors
 	'recaptcha:error:missingkeys' => "Impossible de vérifier reCAPTCHA car les clefs sont manquantes. Veuillez demander à l'administrateur de configurer le plugin reCAPTCHA.",

@@ -1,0 +1,28 @@
+{
+	"name": "facyla/recaptcha",
+	"version": "2.3.1",
+	"type": "elgg-plugin",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/Facyla/recaptcha"
+		}
+	],
+	"require": {
+		"composer/installers": ">=1.0.8"
+	},
+	"description": "Enable reCAPTCHA plugin to add a recaptcha antispam on your site. Provides the view and action hooks that can be used to validate any action.",
+	"homepage": "https://facyla.fr",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "i.daniel.florian@gmail.com"
+		}
+	],
+	"keywords": [
+		"elgg", "plugin", "UI", "content"
+	],
+}
+
+

@@ -16,6 +16,8 @@ return array(
 	'recaptcha:settings:size:details' => "The size of the recaptcha ('normal' | 'compact')",
 	'recaptcha:settings:challenge_type' => "Type",
 	'recaptcha:settings:challenge_type:details' => "Type of challenge to perform ('image' | 'audio')",
+	'recaptcha:settings:recaptcha_url' => "reCaptcha script source",
+	'recaptcha:settings:recaptcha_url:details' => "If reCaptcha is blocked, eg. when accessed from China, please switch script source to recaptcha.net domain instead of google.com.",
 	
 	// Errors
 	'recaptcha:error:missingkeys' => "Cannot verify reCAPTCHA because keys are missing. Please ask administrator to configure the reCAPTCHA plugin.",

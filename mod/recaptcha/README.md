@@ -27,6 +27,12 @@ You can easily check new actions by extending the proper views and actions:
 	elgg_register_plugin_hook_handler("action", 'pluginname/formname', 'recaptcha_verify_hook');
 
 
+## Troubleshooting
+If reCaptcha is not displayed, there may be several causes: 
+* Users may have disabled JavaScript: it is required for reCaptcha to work
+* If accessed from China, google.com is blocked: use plugin setting option to update the script source URL and set it to www.recaptcha.net
+
+
 ## Developpers tips
 Developpers can also use an alternate method to allow the use of several public/secret keys, or get the keys from other plugins:
 
@@ -34,5 +40,17 @@ Developpers can also use an alternate method to allow the use of several public/
 	echo elgg_view('input/recaptcha', array('publickey' => 'custom_public_key'));
 2. Check the provided response into the corresponding action:
 	$verified = recaptcha_verify($response, $secretkey);
+
+
+## History
+* 2.3.1 : 20190319 - settings: add alternative script source URL option
+* 2.3 : 20171114 - use AMD for JS
+* 1.12.0 : 20160723 - Update to Elgg 1.12
+  * do not block if settings are not set
+  * alert if settings are not set
+* 0.1 : 20150710 - Initial release
+  * plugin structure
+  * views
+  * settings
 
 
