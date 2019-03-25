@@ -145,7 +145,7 @@ Afficher le sondage et voter :
 	'poll:edited' => "Votre sondage a bien été enregistré.",
 	'poll:responded' => "Merci d'avoir répondu, votre vote a bien été enregistré.",
 	'poll:deleted' => "Votre sondage a bien été supprimé.",
-	'poll:totalvotes' => "Nombre total de votants&nbsp;: ",
+	'poll:totalvotes' => "Nombre total de votants&nbsp;: %s",
 	'poll:voted' => "Votre vote a bien été enregistré. Merci d'avoir voté sur ce sondage.",
 	'poll:poll_reset_success' => "Le sondage a bien été réinitialisé.",
 	'poll:upgrade' => 'Mise à niveau',
