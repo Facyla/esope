@@ -130,6 +130,7 @@ if ($show_menu) {
 	echo elgg_view_menu('user_hover', $params);
 }
 
+// ESOPE : add target property
 if ($use_link) {
 	$class = elgg_extract('link_class', $vars, '');
 	$target = elgg_extract('target', $vars, '');

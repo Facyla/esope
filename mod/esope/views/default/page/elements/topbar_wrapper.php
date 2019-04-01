@@ -10,6 +10,7 @@ if (!elgg_is_logged_in()) {
 	return true;
 }
 
+// ESOPE : do not display an empty topbar
 $topbar = elgg_view('page/elements/topbar', $vars);
 if (empty($topbar)) { return true; }
 ?>

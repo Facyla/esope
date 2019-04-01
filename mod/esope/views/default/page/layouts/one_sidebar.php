@@ -20,8 +20,11 @@ if (isset($vars['class'])) {
 }
 
 // ESOPE : Add context class, for page differenciation
-foreach (elgg_get_context_stack() as $context) {
-	$class .= ' elgg-context-' . $context;
+$contexts = elgg_get_context_stack();
+if ($contexts) {
+	foreach ($contexts as $context) {
+		$class .= ' elgg-context-' . $context;
+	}
 }
 
 // navigation defaults to breadcrumbs

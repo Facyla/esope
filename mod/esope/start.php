@@ -224,10 +224,10 @@ function esope_init() {
 	// Gestion des notifications par mail lors de l'entrée dans un groupe
 	// @TODO join,group and leave,group
 	//elgg_register_event_handler('create','member','esope_group_join', 800);
-	elgg_register_event_handler('join','group','esope_group_join', 800);
+	elgg_register_event_handler('join', 'group', 'esope_group_join', 800);
 	// Suppression des notifications lorsqu'on quitte le groupe
 	//elgg_register_event_handler('delete','member','esope_group_leave', 800);
-	elgg_register_event_handler('leave','group','esope_group_leave', 800);
+	elgg_register_event_handler('leave', 'group', 'esope_group_leave', 800);
 	
 	// Gestion des actions post-inscription
 	elgg_register_plugin_hook_handler('register', 'user', 'esope_register_user_hook');
@@ -464,7 +464,7 @@ function esope_init() {
 		elgg_register_page_handler('likes', 'esope_likes_page_handler');
 	}
 	
-	// Amélirations embed
+	// Améliorations embed
 	if (elgg_is_active_plugin('embed')) {
 		// Page handler for the modal media embed (same behaviour for admin and members)
 		elgg_unregister_page_handler('embed', 'embed_page_handler');
@@ -491,7 +491,7 @@ function esope_init() {
 	// Group tools priority - see credits in group_tools_priority/settings view
 	$views = elgg_get_config('views');
 	$tools = $views->extensions['groups/tool_latest'];
-	foreach ($tools as $old_priority => $view) {
+	if ($tools) foreach ($tools as $old_priority => $view) {
 		elgg_unextend_view('groups/tool_latest', $view);
 		$priority = ($new_priority = elgg_get_plugin_setting("tools:$view", 'groups')) ? $new_priority : $old_priority;
 		elgg_extend_view('groups/tool_latest', $view, $priority);
@@ -502,7 +502,7 @@ function esope_init() {
 
 
 
-// Include page_handlers, hooks & events, & functions (lightens this file)
+// Include page_handlers, hooks & events functions (lightens this file)
 require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
 require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
 require_once(dirname(__FILE__) . '/lib/esope/events.php');
@@ -516,6 +516,7 @@ function esope_pagesetup(){
 	if (elgg_is_logged_in()) {
 		$own = elgg_get_logged_in_user_entity();
 		
+			/* USER MENU */
 		// ESOPE : remove personnal tools from user tools (removes creation button) - only if owner if a user !! (otherwise we would remove group tools...)
 		$remove_user_tools = elgg_get_plugin_setting('remove_user_tools', 'esope');
 		if ($remove_user_tools && elgg_instanceof(elgg_get_page_owner_entity(), 'user')) {
@@ -530,6 +531,7 @@ function esope_pagesetup(){
 		// Helps finding quickly the good name for existing menus...
 		//global $CONFIG; echo print_r($CONFIG->menus['page']); // debug
 		
+			/* PAGE MENU */
 		// Retire les demandes de contact des messages
 		if ($context == "messages") { elgg_unregister_menu_item("page", "friend_request"); }
 		
@@ -567,6 +569,7 @@ function esope_pagesetup(){
 			}
 		}
 		
+			/* FOOTER MENU */
 		// Report content link
 		elgg_unregister_menu_item('footer', 'report_this');
 		if (elgg_is_active_plugin('reportedcontent')) {
@@ -581,6 +584,7 @@ function esope_pagesetup(){
 				));
 		}
 		
+			/* ADMIN MENUS */
 		// Admin menus
 		if(elgg_in_context("admin") && elgg_is_admin_logged_in()){
 			// Remove menu builder (unused)
@@ -591,6 +595,7 @@ function esope_pagesetup(){
 		
 	}
 	
+	/* BREADCRUMBS */
 	// @TODO : better way to handle this ?
 	/* Rewrite breadcrumbs : use a more user-friendly logic
 	 * Structure du Fil : Accueil (site) > Container (group/user page owner) > Subtype > Content > action

@@ -40,6 +40,7 @@ img { white-space: pre-line; }
 .new-stacking-context { position: relative; z-index: 0; }
 
 
+.theme-sandbox-layout { display: block; }
 
 <?php if (!$fixedwidth) { ?>
 /* RESPONSIVE */

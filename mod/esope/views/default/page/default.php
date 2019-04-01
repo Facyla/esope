@@ -24,10 +24,6 @@ if (elgg_get_context() == 'admin') {
 	return true;
 }
 
-$lang = get_current_language();
-$class = 'elgg-public';
-if (elgg_is_logged_in()) { $class = 'elgg-loggedin'; }
-
 // render content before head so that JavaScript and CSS can be loaded. See #4032
 
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
@@ -35,6 +31,10 @@ $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmess
 $header = elgg_view('page/elements/header', $vars);
 $content = elgg_view('page/elements/body', $vars);
 $footer = elgg_view('page/elements/footer', $vars);
+// ESOPE : add public/loggedin class
+$lang = get_current_language();
+$class = 'elgg-public';
+if (elgg_is_logged_in()) { $class = 'elgg-loggedin'; }
 
 $body = <<<__BODY
 <div class="elgg-page elgg-page-default $class">
