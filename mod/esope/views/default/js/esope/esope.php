@@ -23,6 +23,12 @@ elgg.esope.advsearch_search_type = function(event) {
 		$("#advanced-search-form select[name='entity_type']").val('');
 		$("#advanced-search-form select[name='entity_subtype']").val('');
 		$("#advanced-search-form select[name='limit']").val('2');
+	} else if (searchtype == 'tags') {
+		$("#advanced-search-form select[name='entity_type']").val('');
+		$("#advanced-search-form select[name='entity_subtype']").val('');
+		$("#advanced-search-form select[name='limit']").val('10');
+	} else if (searchtype == 'entities') {
+		$("#advanced-search-form select[name='limit']").val('10');
 	}
 }
 

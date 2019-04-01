@@ -1,44 +1,68 @@
 {
-    "name": "facyla/esope",
-    "type": "elgg-plugin",
-    "repository": "Facyla/esope",
-    "description": "Main Elgg plugin for ESOPE distribution - handles theme base and improvements",
-    "homepage": "http://facyla.fr",
-    "license": "GPL-2.0",
-    "authors": [
-        {
-            "name": "Florian DANIEL aka Facyla",
-            "email": "i.daniel.florian@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "keywords": [
-        "elgg", "plugin", "admin", "theme"
-    ],
-    "require": {
-        "composer/installers": "~1.0",
-        
-        "ColdTrick/advanced_statistics": "*",
-        "ColdTrick/digest": "*",
-        "ColdTrick/file_tools": "*",
-        "ColdTrick/html_email_handler": "*",
-        "ColdTrick/newsletter": "*",
-        "ColdTrick/profile_manager": "^11",
-        
-        "Srokap/code_review": "^11"
-    },
-    "extra": {
-        "installer-name": "esope",
-        "installer-paths": {
-            "../advanced_statistics": ["coldtrick/advanced_statistics"],
-            "../digest": ["coldtrick/digest"],
-            "../file_tools": ["coldtrick/file_tools"],
-            "../html_email_handler": ["coldtrick/html_email_handler"],
-            "../newsletter": ["coldtrick/newsletter"],
-            "../profile_manager": ["coldtrick/profile_manager"],
-            "../code_review": ["srokap/code_review"]
-        }
-    }
+	"name": "facyla/esope",
+	"type": "elgg-plugin",
+	"repository": "Facyla/esope",
+	"description": "Main Elgg plugin for ESOPE distribution - handles theme base and improvements",
+	"homepage": "https://facyla.fr",
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "i.daniel.florian@gmail.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"keywords": [
+		"elgg", "plugin", "admin", "theme"
+	],
+	"require": {
+		"composer/installers": "~1.0",
+		
+		"Facyla/cmspages": "2.3.*",
+		"Facyla/notification_messages": "2.3.*",
+		"Facyla/survey": "2.3.*",
+		"Facyla/access_icons": "2.3.*",
+		"Facyla/plugin_template": "2.3.*",
+		"Facyla/slider": "2.3.*",
+		"Facyla/shorturls": "2.3.*",
+		"Facyla/socialshare": "2.3.*",
+		"Facyla/registration_filter": "2.3.*",
+		"Facyla/qrcode": "2.3.*",
+		"Facyla/prevent_notifications": "2.3.*",
+		
+		"ColdTrick/advanced_statistics": "*",
+		"ColdTrick/digest": "*",
+		"ColdTrick/file_tools": "*",
+		"ColdTrick/html_email_handler": "*",
+		"ColdTrick/newsletter": "*",
+		"ColdTrick/profile_manager": "^11",
+		
+		"Srokap/code_review": "^11"
+	},
+	"extra": {
+		"installer-name": "esope",
+		"installer-paths": {
+			"../cmspages": ["facyla/cmspages"],
+			"../cmspages": ["facyla/notification_messages"],
+			"../cmspages": ["facyla/survey"],
+			"../cmspages": ["facyla/access_icons"],
+			"../cmspages": ["facyla/plugin_template"],
+			"../cmspages": ["facyla/slider"],
+			"../cmspages": ["facyla/shorturls"],
+			"../cmspages": ["facyla/socialshare"],
+			"../cmspages": ["facyla/registration_filter"],
+			"../cmspages": ["facyla/qrcode"],
+			"../cmspages": ["facyla/prevent_notifications"],
+			
+			"../advanced_statistics": ["coldtrick/advanced_statistics"],
+			"../digest": ["coldtrick/digest"],
+			"../file_tools": ["coldtrick/file_tools"],
+			"../html_email_handler": ["coldtrick/html_email_handler"],
+			"../newsletter": ["coldtrick/newsletter"],
+			"../profile_manager": ["coldtrick/profile_manager"],
+			"../code_review": ["srokap/code_review"]
+		}
+	}
 }
 
 

@@ -162,7 +162,10 @@ function esope_input_livesearch_page_handler($page) {
 		$match_on = array($match_on);
 	}
 
-	$default_limit = elgg_get_config('default_limit');
+	//$default_limit = elgg_get_config('default_limit');
+	$default_limit = 0; // or very high, eg. 500 ?
+	$limit = sanitise_int(get_input('limit', $default_limit));
+	//error_log("ESOPE livesearch limit = $limit");
 	
 	// all = users and groups
 	if (in_array('all', $match_on)) {
@@ -174,8 +177,6 @@ function esope_input_livesearch_page_handler($page) {
 	if (get_input('match_owner', false)) {
 		$owner_guid = $user->getGUID();
 	}
-
-	$limit = sanitise_int(get_input('limit', $default_limit));
 	
 	// Note : it requires a custom input/autocomplete view to handle new vars
 	// Control input value
@@ -847,8 +848,9 @@ function esope_profile_page_handler($page) {
 
 	if ($action == 'edit') {
 		// use the core profile edit page
-		$base_dir = elgg_get_root_path();
-		require "{$base_dir}pages/profile/edit.php";
+		//$base_dir = elgg_get_root_path();
+		//require "{$base_dir}pages/profile/edit.php";
+		echo elgg_view_resource('profile/edit');
 		return true;
 	}
 
@@ -969,6 +971,33 @@ function esope_digest_page_handler($page) {
 	return true;
 }
 */
+/**
+ * Serves the content for the embed lightbox
+ *
+ * @param array $page URL segments
+ * 
+ * ESOPE : enable admin to use the same way as members
+ */
+function esope_embed_page_handler($page) {
+
+	$container_guid = (int)get_input('container_guid');
+	if ($container_guid) {
+		$container = get_entity($container_guid);
+
+//		if (elgg_instanceof($container, 'group') && $container->isMember()) {
+		if (elgg_instanceof($container, 'group') && ($container->isMember() || $container->canEdit())) {
+			// embedding inside a group so save file to group files
+			elgg_set_page_owner_guid($container_guid);
+		}
+	}
+
+	set_input('page', $page[1]); 
+
+	echo elgg_view('embed/layout');
+
+	// exit because this is in a modal display.
+	exit;
+}
 
 
 

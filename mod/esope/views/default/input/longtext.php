@@ -11,6 +11,19 @@
  * @uses $vars['class']    Additional CSS class
  */
 
+/* Notes Esope : éditeurs de texte :
+ * Pour démarrer sans l'éditeur :
+ *  - appeler input/longtext avec la propriété data-cke-init => true
+ * 
+ * Pour utiliser différentes configs lors de l'activation manuelle de l'éditeur :
+ *  - les définir dans js/elgg/ckeditor/config.js.php : toolbar_basic: [...] où 'basic' est le nom (libre) de la toolbar
+ *  - puis les associer aux classes CSS dans le toggle de js/elgg/ckeditor.js
+ * Note : marche bien si on démarre sans l'éditeur, mais ne charge pas le bon éditeur au démarrage automatique
+ * 
+ * Pour utiliser les configs au démarrage automatique de l'éditeur : dans ckeditor/init
+ *  - ajouter un désélecteur pour ne pas charger l'éditeur par défaut
+ *  - puis charger la bonne config d'éditeur selon la classe CSS (l'objet de config doit être cloné sans référence)
+ */
 $vars['class'] = (array) elgg_extract('class', $vars, []);
 $vars['class'][] = 'elgg-input-longtext';
 

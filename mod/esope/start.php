@@ -75,6 +75,10 @@ function esope_init() {
 	// Suppression recherche de la sidebar
 	elgg_unextend_view('page/elements/sidebar', 'search/header');
 	
+	// In 2.3, profile manager adds duplicate (+ core view is better)
+	elgg_unextend_view('core/settings/statistics', 'profile_manager/account/login_history');
+	
+	
 	// Autorefresh des discussions
 // @TODO : changements dans les discussions
 	$forum_autorefresh = elgg_get_plugin_setting('discussion_autorefresh', 'esope');
@@ -153,29 +157,34 @@ function esope_init() {
 	// Used by wysiwyg editors templates
 	elgg_register_simplecache_view('js/esope/ckeditor_templates');
 	
+	$vendors_base = 'mod/esope/vendors/';
 	// Update jQuery UI to 1.11.4 (requires jQuery 1.6+), with theme smoothness by default
 	// To use another theme, override in theme plugin with a custom jQuery UI theme
-	elgg_define_js('jquery.ui', array('src' => 'mod/esope/vendors/jquery-ui/jquery-ui.min.js', 'deps' => array('jquery')));
-	elgg_register_css('jquery.ui', 'mod/esope/vendors/jquery-ui/themes/smoothness/jquery-ui.min.css');
-	elgg_register_css('jquery.ui.theme', 'mod/esope/vendors/jquery-ui/themes/smoothness/theme.css');
+	elgg_define_js('jquery.ui', array('src' => $vendors_base . 'jquery-ui/jquery-ui.min.js', 'deps' => array('jquery')));
+	elgg_register_css('jquery.ui', $vendors_base . 'jquery-ui/themes/smoothness/jquery-ui.min.css');
+	elgg_register_css('jquery.ui.theme', $vendors_base . 'jquery-ui/themes/smoothness/theme.css');
 	elgg_require_js('jquery.ui');
 	elgg_load_css('jquery.ui');
 	elgg_load_css('jquery.ui.theme');
 	
 	// Passe le datepicker en français
-	elgg_register_js('jquery.datepicker.fr', 'mod/esope/vendors/ui.datepicker-fr.js');
+	elgg_register_js('jquery.datepicker.fr', $vendors_base . 'ui.datepicker-fr.js');
 	elgg_load_js('jquery.datepicker.fr');
 	// Webdesign : Floatable elements (.is-floatable, .floating)
-	elgg_register_js('floatable.elements', 'mod/esope/vendors/floatable-elements.js', 'footer');
+	elgg_register_js('floatable.elements', $vendors_base . 'floatable-elements.js', 'footer');
 	elgg_load_js('floatable.elements');
+	// @TODO Transform input as tags
+	//elgg_register_js('taggle.js', $vendors_base . 'taggle/taggle.min.js', 'footer');
+	//elgg_load_js('taggle.js');
+	//elgg_define_js('taggle.js', array('src' => $vendors_base . 'taggle/taggle.min.js', 'deps' => array('jquery')));
 	// Ajout un member picker avec sélection unique pour les messages
 	// @TODO : not functional yet
-	//elgg_register_js('elgg.messagesuserpicker', 'mod/esope/vendors/ui.messagesuserpicker.js');
+	//elgg_register_js('elgg.messagesuserpicker', $vendors_base . 'ui.messagesuserpicker.js');
 	
 	/* jquery colorpicker (fully featured color picker with transparency support)
 	 * See project on https://github.com/vanderlee/colorpicker
 	*/
-	$jquery_colorpicker_base = 'mod/esope/vendors/colorpicker/';
+	$jquery_colorpicker_base = $vendors_base . 'colorpicker/';
 	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'jquery.colorpicker.css');
 	elgg_define_js('jquery.colorpicker', array('src' => $jquery_colorpicker_base . 'jquery.colorpicker.js', 'deps' => array('jquery', 'jquery.ui'), 'exports' => "colorpicker"));
 	elgg_define_js('jquery.colorpicker-i18n', array('src' => $jquery_colorpicker_base . 'i18n/jquery.ui.colorpicker-fr.js', 'deps' => array('jquery.colorpicker')));
@@ -189,8 +198,16 @@ function esope_init() {
 	elgg_define_js('jquery.colorpicker-cmyk', array('src' => $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-parser.js', 'deps' => array('jquery.colorpicker')));
 	elgg_define_js('jquery.colorpicker-cmyk-percentage', array('src' => $jquery_colorpicker_base . 'parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js', 'deps' => array('jquery.colorpicker')));
 	
+	// Provides a stext comparison function (port of PHP similar_text)
+	elgg_define_js('similar_text', [
+			'src' => $vendors_base . 'similar_text.js',
+			'deps' => ['jquery'],
+			'exports' => 'similar_text',
+	]);
+	
+	
 	/* Alternate vendors/jquery-colorpicker/ : more basic and no transparency support, but nice one
-	$jquery_colorpicker_base = 'mod/esope/vendors/jquery-colorpicker/';
+	$jquery_colorpicker_base = $vendors_base . 'jquery-colorpicker/';
 	elgg_define_js('jquery.colorpicker', array('src' => $jquery_colorpicker_base . 'js/colorpicker.js', 'deps' => array('jquery'), 'exports' => "ColorPicker"));
 	elgg_register_css('jquery.colorpicker', $jquery_colorpicker_base . 'css/colorpicker.css');
 	*/
@@ -205,7 +222,7 @@ function esope_init() {
 	// REMPLACEMENT DE HOOKS DU CORE OU DE PLUGINS, et d'EVENTS
 	// Related functions are in lib/esope/hooks.php
 	
-	// Favicon
+	// Favicon and print CSS
 	elgg_register_plugin_hook_handler('head', 'page','esope_page_head_hook');
 	
 	// Affichage des dates
@@ -454,6 +471,17 @@ function esope_init() {
 	if (elgg_is_active_plugin('likes')) {
 		elgg_register_page_handler('likes', 'esope_likes_page_handler');
 	}
+	// Améliorations embed
+	if (elgg_is_active_plugin('embed')) {
+		// Page handler for the modal media embed (same behaviour for admin and members)
+		elgg_unregister_page_handler('embed', 'embed_page_handler');
+		elgg_register_page_handler('embed', 'esope_embed_page_handler');
+		
+		if (elgg_is_logged_in()) {
+			elgg_unregister_plugin_hook_handler('register', 'menu:longtext', 'embed_longtext_menu');
+			elgg_register_plugin_hook_handler('register', 'menu:longtext', 'esope_embed_longtext_menu');
+		}
+	}
 	
 	// Ajout gestionnaire pour les dossiers
 	/* @TODO : add setting + see if we want this by default or not
@@ -484,6 +512,7 @@ function esope_init() {
 require_once(dirname(__FILE__) . '/lib/esope/page_handlers.php');
 require_once(dirname(__FILE__) . '/lib/esope/hooks.php');
 require_once(dirname(__FILE__) . '/lib/esope/events.php');
+require_once(dirname(__FILE__) . '/lib/esope/functions.php');
 
 
 
@@ -677,43 +706,47 @@ function esope_alter_breadcrumb($hook, $type, $returnvalue, $params) {
 
 
 // Ajoute -ou pas- les notifications lorsqu'on rejoint un groupe
-function esope_group_join($event, $object_type, $relationship) {
-	if (elgg_is_logged_in()) {
-		if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
+function esope_group_join($event, $object_type, $object) {
+	$group = $object['group'];
+	$user = $object['user'];
+	//if (elgg_is_logged_in()) {
+	//	if (($relationship instanceof ElggRelationship) && ($event == 'create') && ($object_type == 'member')) {
 			global $NOTIFICATION_HANDLERS;
 			$groupjoin_enablenotif = elgg_get_plugin_setting('groupjoin_enablenotif', 'esope');
 			if (empty($groupjoin_enablenotif) || ($groupjoin_enablenotif != 'no')) {
 				switch($groupjoin_enablenotif) {
 					case 'site':
-						add_entity_relationship($relationship->guid_one, 'notifysite', $relationship->guid_two);
+						add_entity_relationship($user->guid, 'notifysite', $group->guid);
 						break;
 					case 'all':
 						foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-							add_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+							add_entity_relationship($user->guid, "notify{$method}", $group->guid);
 						}
 						break;
 					case 'email':
 					default:
-						add_entity_relationship($relationship->guid_one, 'notifyemail', $relationship->guid_two);
+						add_entity_relationship($user->guid, 'notifyemail', $group->guid);
 				}
 			} else if ($groupjoin_enablenotif == 'no') {
 				// loop through all notification types
 				foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-					remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+					remove_entity_relationship($user->guid, "notify{$method}", $group->guid);
 				}
 			}
-		}
-	}
+	//	}
+	//}
 	return true;
 }
 
 // Retire les notifications lorsqu'on quitte un groupe
-function esope_group_leave($event, $object_type, $relationship) {
+function esope_group_leave($event, $object_type, $object) {
+	$group = $object['group'];
+	$user = $object['user'];
 	global $NOTIFICATION_HANDLERS;
 	if (($relationship instanceof ElggRelationship) && ($event == 'delete') && ($object_type == 'member')) {
 		// loop through all notification types
 		if ($NOTIFICATION_HANDLERS) foreach($NOTIFICATION_HANDLERS as $method => $foo) {
-			remove_entity_relationship($relationship->guid_one, "notify{$method}", $relationship->guid_two);
+			remove_entity_relationship($user->guid, "notify{$method}", $group->guid);
 		}
 	}
 	return true;
@@ -864,7 +897,7 @@ function esope_sort_groups_by_grouptype($groups) {
 /* Renders a page content into a suitable page for iframe or lightbox use
  * $params = array('title' => '', 'content' => '', 'mode' => '', 'headers' => '')
  * with the following parameters
- * OR use several paramters (old way) :
+ * OR use several parameters (old way) :
  * $content = HTML content
  * $title = title override
  * $embed_mode = 
@@ -1024,11 +1057,11 @@ if (elgg_is_active_plugin('profile_manager')) {
 		return $profile_type;
 	}
 	
-	/* Returns guid for a specific profile type (false if not found) */
-	function esope_get_profiletype_guid($profiletype) {
+	/* Returns guid for a specific profile type name (false if not found) */
+	function esope_get_profiletype_guid($profiletype_name) {
 		$profile_types = esope_get_profiletypes();
 		if ($profile_types) foreach ($profile_types as $guid => $name) {
-			if ($name == $profiletype) { return $guid; }
+			if ($name == $profiletype_name) { return $guid; }
 		}
 		return false;
 	}
@@ -1054,7 +1087,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 		}
 		return false;
 	}
-	/* Returns all profile types as $profiletype_guid => $profiletype_name
+	/* Returns all profile types as array of $profiletype_guid => $profiletype_name
 	 * Can also return translated name (for use in a dropdown input)
 	 * And also use metadata name as key (only when using translated name)
 	 */
@@ -1146,7 +1179,10 @@ if (elgg_is_active_plugin('profile_manager')) {
 		$auto_options = elgg_extract('auto-options', $params, false);
 		$search_field = '';
 		
-		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => 'custom_profile_field', 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
+		$subtype = 'custom_profile_field';
+		if ($params['type'] == 'group') { $subtype = 'custom_group_field'; }
+		
+		$field_a = elgg_get_entities_from_metadata(array('types' => 'object', 'subtype' => $subtype, 'metadata_names' => 'metadata_name', 'metadata_values' => $metadata));
 		if ($field_a) {
 			$field = $field_a[0];
 			$options = $field->getOptions();
@@ -1165,6 +1201,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 				//if ($empty) { $options['empty option'] = ''; }
 				//$options = array_reverse($options);
 				// Add (always) empty entry at the beginning of the array
+				$options = array_filter($options); // Remove empty entries to avoid duplicate
 				$options = array('empty option' => '') + $options;
 			}
 			$search_field .= elgg_view("input/$valtype", array('name' => $name, 'options' => $options, 'value' => $value));
@@ -1205,6 +1242,7 @@ function esope_make_dropdown_from_metadata($params) {
 	//if ($empty) $options = array('empty option' => '') + $options;
 	if ($empty) {
 		if (is_array($options)) {
+			$options = array_filter($options); // Remove empty values before to avoid duplicate
 			$options = array_merge(array('empty option' => ''), $options);
 		} else {
 			$options = array('empty option' => '');
@@ -1223,7 +1261,7 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
 	$value = elgg_extract($key, $params, false, true);
 	// Try get_input only if nothing was set in params
 	if ($value === false) { $value = get_input($key, false); }
-	// If there is neither $params not input, use default (but don't if anything was set, event empty !)
+	// If there is neither $params not input, use default (but don't if anything was set, even empty !)
 	if ($value === false) { $value = $default; }
 	// Sanitise string
 	if ($sanitise && is_string($value)) { $value = sanitise_string($value); }
@@ -1239,22 +1277,27 @@ function esope_extract($key, $params = array(), $default = null, $sanitise = tru
  	- q : full search query
  	- entity_type : site | object | user | group
  	- entity_subtype : usually an object subtype
+ 	- friends_only : (bool) get only friends
  	- owner_guid : owner of entity
  	- container_guid : container of entity
  	- metadata : list of metadata and values
  	- merge_params : additional custom search params (will be added to the search parameters)
+ 	- returntype : default returns a listing, 'entities' return an array of entities, callback uses callback to process returns
+ 	- callback : callback function used to display the results (requires to set returntype => 'callback')
+ 	- no_result : message to display if no result found
    Note that search can be parametered both directly (params), or with URL. Params will override URL queries.
    Important : $params are NOT defaults, these are filters = if set to anything (except false), it will override GET inputs
  * $defaults : sets the defaults for any input value
- * max_results : let's override the max number of displayed results. 
+ * $max_results : let's override the max number of displayed results. 
    Note that a pagination should be implemented by any plugin using this function
  * TODO :
    - fulltext search in tags
    - fulltext search in comments
    - allow fulltext search in any metadata ? (warning !)
    - integrate (if search plugin active) search_highlight_words($words, $string)
+   - add callback function for results listing
  */
-function esope_esearch($params = array(), $defaults = array(), $max_results = 10) {
+function esope_esearch($params = array(), $defaults = array(), $max_results = 10, $callback = false) {
 	$debug = esope_extract('debug', $params, false);
 	$add_count = esope_extract('add_count', $params, $defaults['add_count']);
 	$hide_pagination = esope_extract('hide_pagination', $params, $defaults['hide_pagination']);
@@ -1264,11 +1307,17 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	$esearch_defaults = array(
 			'entity_type' => 'object', 
 			'entity_subtype' => null, 
+			'friends_only' => false, 
 			'limit' => 0,
 			'offset' => 0,
+			'order_by' => 'desc',
 			'metadata_case_sensitive' => false,
 			'metadata_name_value_pairs_operator' => 'AND',
 			'count' => false,
+			'user_profile_fields' => false,
+			'group_profile_fields' => false,
+			//'created_time_lower' => false,
+			//'created_time_upper' => false,
 		);
 	if (is_array($defaults)) { $defaults = array_merge($esearch_defaults, $defaults); } else { $defaults = $esearch_defaults; }
 	
@@ -1276,38 +1325,120 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	// Note : we use entity_type and entity_subtype for consistency with regular search
 	$type = esope_extract('entity_type', $params, $defaults['entity_type']);
 	$subtype = esope_extract('entity_subtype', $params, $defaults['entity_subtype']);
+	$friends_only = esope_extract('friends_only', $params, $defaults['friends_only']);
+	// @TODO support friends from another user than logged in ? eg. if user_guid set ?
+	if (($friends_only == 'yes') && elgg_is_logged_in()) { $friends_only = true; } else { $friends_only = false; }
 	$owner_guid = esope_extract('owner_guid', $params, $defaults['owner_guid']);
 	$container_guid = esope_extract('container_guid', $params, $defaults['container_guid']);
 	$limit = (int) esope_extract('limit', $params, $defaults['limit']);
 	$offset = (int) esope_extract('offset', $params, $defaults['offset']);
-	$sort = esope_extract('sort', $params, $defaults['sort']);
-	$order = esope_extract('order', $params, $defaults['order']);
+	$order_by = esope_extract('order_by', $params, $defaults['order_by']);
+	$created_time_lower = esope_extract('created_time_lower', $params, $defaults['created_time_lower']);
+	$created_time_upper = esope_extract('created_time_upper', $params, $defaults['created_time_upper']);
+	$modified_time_lower = esope_extract('modified_time_lower', $params, $defaults['modified_time_lower']);
+	$modified_time_upper = esope_extract('modified_time_upper', $params, $defaults['modified_time_upper']);
 	// Metadata search : $metadata[name]=value
 	$metadata = esope_extract('metadata', $params, $defaults['metadata']);
 	$metadata_case_sensitive = esope_extract('metadata_case_sensitive', $params, $defaults['metadata_case_sensitive']);
 	$metadata_name_value_pairs_operator = esope_extract('metadata_name_value_pairs_operator', $params, $defaults['metadata_name_value_pairs_operator']);
+	$metadata_names = esope_extract('metadata_names', $params, $defaults['metadata_names']);
+	$metadata_values = esope_extract('metadata_values', $params, $defaults['metadata_values']);
 	$order_by_metadata = esope_extract('order_by_metadata', $params, $defaults['order_by_metadata']);
+	$relationship = esope_extract('relationship', $params, $defaults['relationship']);
+	$relationship_guid = esope_extract('relationship_guid', $params, $defaults['relationship_guid']);
 	$count = esope_extract('count', $params, $defaults['count']);
+	$user_profile_fields = esope_extract('user_profile_fields', $params, $defaults['user_profile_fields']);
+	$group_profile_fields = esope_extract('group_profile_fields', $params, $defaults['group_profile_fields']);
+	$add_url_params = esope_extract('add_url_params', $params, '');
+	$no_result = elgg_echo('esope:search:noresult');
+	if (isset($params['no_result'])) { $no_result = $params['no_result']; }
 	
 	
-	// Build search URL query elements
+	// Control strictly order_by clause
+	switch($order_by) {
+		case 'alpha':
+			//usort($subpages, create_function('$a,$b', 'return strcmp($a->title,$b->title);'));
+			switch($type) {
+				case 'user':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)";
+					$order_by_clause = 'ue.name asc';
+					break;
+				case 'group':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "groups_entity ge USING(guid)";
+					$order_by_clause = 'ge.name asc';
+					break;
+				case 'site':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "sites_entity se USING(guid)";
+					$order_by_clause = 'se.name asc';
+					break;
+				case 'object':
+					$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "objects_entity oe USING(guid)";
+					$order_by_clause = 'oe.title asc';
+					break;
+				default:
+					//should not happen
+					$order_by_clause = 'e.guid asc';
+			}
+			break;
+		case 'popular':
+			switch($type) {
+				case 'user':
+					$relationship = 'friend';
+					$selects[] = "COUNT(e.guid) as total";
+					$order_by_clause = 'total desc';
+					$group_by = 'r.guid_two';
+					break;
+				case 'group':
+					$relationship = 'member';
+					$selects[] = "COUNT(e.guid) as total";
+					$order_by_clause = 'total desc';
+					$group_by = 'r.guid_two';
+					break;
+				case 'site':
+					$relationship = 'member';
+					$selects[] = "COUNT(e.guid) as total";
+					$order_by_clause = 'total desc';
+					$group_by = 'r.guid_two';
+					break;
+				case 'object':
+					// @TODO num likes ? or views ?
+					break;
+				default:
+			}
+			break;
+		case 'time_created asc':
+		case 'asc':
+			$order_by_clause = 'e.time_created asc';
+			break;
+		case 'time_created desc':
+		case 'desc':
+		default:
+			$order_by_clause = 'e.time_created desc';
+	}
+	
+	// Build search URL query elements (for load more link)
+	if ($hide_pagination != 'yes') {
 	$base_url = "?";
 	$url_fragment = '';
+		$url_fragment .= $add_url_params;
 	if (!empty($type)) { $url_fragment .= "&entity_type=$type"; }
 	if (!empty($subtype)) { $url_fragment .= "&entity_subtype=$subtype"; }
-	$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'limit', 'offset', 'sort', 'order');
+		if (!empty($relationship)) { $url_fragment .= "&relationship=$relationship"; }
+		if ($friends_only) { $url_fragment .= "&friends_only=yes"; }
+		$search_filters = array('q', 'owner_guid', 'container_guid', 'metadata_case_sensitive', 'metadata_name_value_pairs_operator', 'order_by_metadata', 'relationship', 'relationship_guid', 'limit', 'offset', 'order_by');
 	foreach($search_filters as $filter) {
 		// Add valid filters to search query URL
 		if (!empty($$filter)) {
 			$url_fragment .= "&$filter={$$filter}";
 		}
 	}
+	}
 	
 	
 	$result = array();
 	if ($debug) {
-		echo "Search : q=$q type=" . print_r($type, true) . " subtype=" . print_r($subtype, true) . '<br />';
-		echo "Search : owner=$owner_guid / container=$container_guid limit=$limit offset=$offset sort=$sort order=$order<br />";
+		echo "Search : q=$q type=" . print_r($type, true) . " subtype=" . print_r($subtype, true) . " friends_only=" . print_r($friends_only, true) . '<br />';
+		echo "Search : owner=$owner_guid / container=$container_guid limit=$limit offset=$offset order_by=$order_by<br />";
 		echo "Metadata : " . print_r($metadata, true) . "<br />";
 	}
 	// show hidden (unvalidated) users
@@ -1315,16 +1446,69 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	//access_show_hidden_entities(true);
 
 	// Recherche par nom / username / titre / description, selon les cas
-	// @TODO ajouter par tag
+	// @TODO ajouter par tag + briefdescription, description => peut-être liste des métadonnées dans lesquelles faire une recherche fulltext ?
 	if ($q) {
 		switch($type) {
 			case 'user':
 				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "users_entity ue USING(guid)";
+				//$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%')";
+				if ($user_profile_fields) {
+					// Also search in any (or controlled) user profile field
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metadata md on e.guid = md.entity_guid";
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metastrings msv ON n_table.value_id = msv.id";
+					// get the where clauses for the md names
+					// can't use egef_metadata() because the n_table join comes too late.
+					if (!is_array($user_profile_fields)) { $user_profile_fields = array_keys(elgg_get_config('profile_fields')); }
+					$clauses = _elgg_entities_get_metastrings_options('metadata', array(
+						'metadata_names' => $user_profile_fields,
+						// avoid notices
+						'metadata_values' => null,
+						'metadata_name_value_pairs' => null,
+						'metadata_name_value_pairs_operator' => null,
+						'metadata_case_sensitive' => null,
+						'order_by_metadata' => null,
+						'metadata_owner_guids' => null,
+					));
+					$joins = array_merge($clauses['joins'], $joins);
+					$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$q%')";
+					/*
+					$md_in = "'" . implode("','", $user_profile_fields) . "'";
+					$md_where = "((msn.string IN ($md_in) AND msv.string LIKE '%$q%')";
+					*/
+					$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%' OR ($md_where))";
+				} else {
 				$wheres[] = "(ue.name like '%" . $q . "%' OR ue.username like '%" . $q . "%')";
+				}
 				break;
 			case 'group':
 				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "groups_entity ge USING(guid)";
+				// @TODO improve default fields support
+				if (is_array($group_profile_fields)) {
+					// Also search in any (or controlled) user profile field
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metadata md on e.guid = md.entity_guid";
+					$joins[] = "JOIN " . elgg_get_config("dbprefix") . "metastrings msv ON n_table.value_id = msv.id";
+					// get the where clauses for the md names
+					//if (!is_array($group_profile_fields)) { $group_profile_fields = array_keys(elgg_get_config('profile_fields')); }
+					$clauses = _elgg_entities_get_metastrings_options('metadata', array(
+						'metadata_names' => $group_profile_fields,
+						// avoid notices
+						'metadata_values' => null,
+						'metadata_name_value_pairs' => null,
+						'metadata_name_value_pairs_operator' => null,
+						'metadata_case_sensitive' => null,
+						'order_by_metadata' => null,
+						'metadata_owner_guids' => null,
+					));
+					$joins = array_merge($clauses['joins'], $joins);
+					$md_where = "(({$clauses['wheres'][0]}) AND msv.string LIKE '%$q%')";
+					/*
+					$md_in = "'" . implode("','", $group_profile_fields) . "'";
+					$md_where = "((msn.string IN ($md_in) AND msv.string LIKE '%$q%')";
+					*/
+					$wheres[] = "(ge.name like '%" . $q . "%' OR ge.description like '%" . $q . "%' OR ($md_where))";
+				} else {
 				$wheres[] = "(ge.name like '%" . $q . "%' OR ge.description like '%" . $q . "%')";
+				}
 				break;
 			case 'site':
 				$joins[] = "INNER JOIN " . elgg_get_config("dbprefix") . "sites_entity se USING(guid)";
@@ -1350,21 +1534,40 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	// Paramètres de la recherche
 	$search_params = array(
 			'types' => $type,
-			'subtypes' => $subtype,
-			'metadata_name_value_pairs' => $metadata_name_value_pairs,
-			'metadata_case_sensitive' => $metadata_case_sensitive,
-			'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
-			'order_by_metadata' => $order_by_metadata,
+			//'subtypes' => $subtype,
+			//'metadata_name_value_pairs' => $metadata_name_value_pairs,
+			//'metadata_case_sensitive' => $metadata_case_sensitive,
+			//'metadata_name_value_pairs_operator' => $metadata_name_value_pairs_operator,
+			//'order_by_metadata' => $order_by_metadata,
 			'limit' => $limit,
 			'offset' => $offset,
-			'sort' => $sort,
-			'order' => $order,
+			'order_by' => $order_by_clause,
+			'group_by' => $group_by,
 		);
 	
+	if ($subtype) { $search_params['subtypes'] = $subtype; }
+	if ($selects) { $search_params['selects'] = $selects; }
 	if ($joins) { $search_params['joins'] = $joins; }
 	if ($wheres) { $search_params['wheres'] = $wheres; }
+	if ($relationship) { $search_params['relationship'] = $relationship; }
+	if ($relationship_guid) { $search_params['relationship_guid'] = $relationship_guid; }
+	if ($metadata_names) { $search_params['metadata_names'] = $metadata_names; }
+	if ($metadata_values) { $search_params['metadata_values'] = $metadata_values; }
+	if ($metadata_name_value_pairs) { $search_params['metadata_name_value_pairs'] = $metadata_name_value_pairs; }
+	if ($metadata_case_sensitive) { $search_params['metadata_case_sensitive'] = $metadata_case_sensitive; }
+	if ($metadata_name_value_pairs_operator) { $search_params['metadata_name_value_pairs_operator'] = $metadata_name_value_pairs_operator; }
+	if ($order_by_metadata) { $search_params['order_by_metadata'] = $order_by_metadata; }
 	if ($owner_guid) { $search_params['owner_guids'] = $owner_guid; }
 	if ($container_guid) { $search_params['container_guids'] = $container_guid; }
+	// Note : Friends only filter disables popular user count sort
+	if (($type == 'user') && $friends_only) {
+		$search_params['relationship'] = 'friend';
+		$search_params['relationship_guid'] = elgg_get_logged_in_user_guid();
+	}
+	if ($created_time_lower) { $search_params['created_time_lower'] = $created_time_lower; }
+	if ($created_time_upper) { $search_params['created_time_upper'] = $created_time_upper; }
+	if ($modified_time_lower) { $search_params['modified_time_lower'] = $modified_time_lower; }
+	if ($modified_time_upper) { $search_params['modified_time_upper'] = $modified_time_upper; }
 	
 	// Add additional search params (not from URL) - eg. JOIN and WHERE clauses, additional metadata filters, etc.
 	if ($params['merge_params']) {
@@ -1381,7 +1584,18 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	if ($debug) { echo '<pre>' . print_r($search_params, true) . '</pre>'; }
 	// Force count first (we need it to limit results)
 	$search_params['count'] = true;
+	$return_count = elgg_get_entities_from_relationship($search_params);
+	/*
+	if (isset($search_params['metadata_names']) || isset($search_params['metadata_name_value_pairs'])) {
+		if (isset($search_params['relationship'])) {
+			$return_count = elgg_get_entities_from_relationship($search_params);
+		} else {
 	$return_count = elgg_get_entities_from_metadata($search_params);
+		}
+	} else {
+		$return_count = elgg_get_entities($search_params);
+	}
+	*/
 	if ($count) { return $return_count; }
 	
 	
@@ -1395,11 +1609,26 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 	
 	// Return results entities array if asked to
 	if ($params['returntype'] == 'entities') {
-		$entities = elgg_get_entities_from_metadata($search_params);
+		//$entities = elgg_get_entities_from_metadata($search_params);
+		$entities = elgg_get_entities_from_relationship($search_params);
+		//$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
 		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
 		return $entities;
 	}
 	
+	// Return results through callback if asked to
+	if ($params['returntype'] == 'callback') {
+		if (!is_callable($params['callback'])) {
+			register_error("Callback function does not exist");
+			return false;
+		}
+		//$entities = elgg_get_entities_from_metadata($search_params);
+		//$entities = new ElggBatch('elgg_get_entities_from_metadata', $search_params);
+		$entities = new ElggBatch('elgg_get_entities_from_relationship', $search_params);
+		//if (is_array($entities)) { $entities = array_slice($entities, 0, $max_results); }
+		$params['q'] = $q;
+		return call_user_func($params['callback'], array('entities' => $entities, 'count' => $return_count, 'params' => $params, 'search_params' => $search_params));
+	}
 	// Return results listing otherwise
 	$return = '';
 	$search_params['full_view'] = false;
@@ -1427,15 +1656,25 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 		} else if ($return_count > 0) {
 			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:nbresult', array($return_count)) . '</span>';
 		} else {
-			$return .= '<span class="esope-results-count">' . elgg_echo('esope:search:noresult') . '</span>';
+			$return .= '<span class="esope-results-count esope-noresult">' . $no_result . '</span>';
 		}
 	}
-	//$return .= elgg_view_entity_list($entities, $search_params, $offset, $max_results, false, false, false);
+	// Add order and sort
+	/*
+	if ($add_order == 'yes') {
+		$return .= '<span class="esope-results-order">' . '' . '</span>';
+	}
+	*/
 	
 	elgg_push_context('search');
-	elgg_push_context('widgets');
-	$return .= elgg_list_entities_from_metadata($search_params);
-	elgg_pop_context('widgets');
+	//elgg_push_context('widgets');
+	//$return .= elgg_list_entities_from_metadata($search_params);
+	// Pass query to view so we can handle search-specific hightlighting or filtering
+	$search_params['q'] = $q;
+	$return .= elgg_list_entities_from_relationship($search_params);
+	//$batch = new ElggBatch('elgg_list_entities_from_metadata', $search_params);
+	//$return .= '<pre>'.print_r($batch).'</pre>';
+	//elgg_pop_context('widgets');
 	elgg_pop_context('search');
 	
 	// Add alerts now (more than max results, etc.)
@@ -1461,12 +1700,12 @@ function esope_esearch($params = array(), $defaults = array(), $max_results = 10
 				//'onClick' => "$.post('" . $loadmore_url . "', function(data) { $('" . $target . "').append(data); });",
 				'onClick' => "$.post('" . $loadmore_url . "', function(data) { $('#esope-esearch-loadmore').replaceWith(data); });",
 				'is_trusted' => true,
-				'is_action' => true,
+				//'is_action' => true, // tokens already added in $loadmore_url
 			));
 		$return .= '</div>';
 	}
 	
-	if (empty($return)) { $return = '<span class="esope-noresult">' . elgg_echo('esope:search:noresult') . '</span>'; }
+	if (empty($return)) { $return = '<span class="esope-noresult">' . $no_result . '</span>'; }
 	
 	return $return;
 }
@@ -1729,7 +1968,17 @@ function esope_user_profile_gatekeeper($user = false, $forward = true) {
 
 // Credits goes to rommel http://www.php.net/manual/fr/function.filesize.php
 function esope_human_filesize($filepath, $decimals = 2) {
+	if (!file_exists($filepath)) { return false; }
 	$bytes = filesize($filepath);
+	if ($bytes < 1024) { $decimals = 0; }
+	//$sz = elgg_echo('esope:filesize:units'); // Can be used for translations
+	$sz = 'BKMGTP';
+	$factor = floor((strlen($bytes) - 1) / 3);
+	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor];
+}
+// Convert bytes to friendly size
+function esope_friendly_size($bytes, $decimals = 2) {
+	if ($bytes < 1024) { $decimals = 0; }
 	//$sz = elgg_echo('esope:filesize:units'); // Can be used for translations
 	$sz = 'BKMGTP';
 	$factor = floor((strlen($bytes) - 1) / 3);
@@ -1940,6 +2189,23 @@ function esope_get_meta_values($meta_name, $sort = true) {
 	*/
 }
 
+/* Return distinct metadata values for a given metadata name
+ * Quickest method uses a direct SQL query
+ * Also default sort alphabetically
+ */
+function esope_get_object_title_values($subtype, $sort = true) {
+	$subtype_id = get_subtype_id('object', $subtype);
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT DISTINCT title FROM `" . $dbprefix . "objects_entity` as o 
+		JOIN `" . $dbprefix . "entities` as e ON e.guid = o.guid 
+		WHERE o.guid IN (SELECT guid FROM `" . $dbprefix . "entities` WHERE subtype = '$subtype_id')";
+	if ($sort) { $query .= ' ORDER BY o.title ASC;'; }
+	$query .= ';';
+		//WHERE md.name_id = (SELECT id FROM `" . $dbprefix . "metastrings` WHERE string = '$meta_name');";
+	$rows = get_data($query);
+	foreach ($rows as $row) { $results[] = $row->title; }
+	return $results;
+}
 // http://reference.elgg.org/1.8/engine_2lib_2metadata_8php.html#a1614d620ec0b0d0b9531c68070ffb33c
 // The "metadata_calculation" option causes this function to return the result of performing 
 // a mathematical calculation on all metadata that match the query instead of returning
@@ -2257,26 +2523,28 @@ function esope_get_joingroups($mode = '', $filter = false, $bypass = false) {
  * bool $full_tag : return full <img /> tag, or only src if false
  */
 function esope_extract_images($html, $full_tag = true) {
+	$src = array();
 	/* 
 	// Regex method : not as failsafe as we'd like to
 	preg_match_all('/<img[^>]+>/i',$html,$out); 
 	$images = $out[0];
 	*/
-	
-	// DOM method : most failsafe
-	if (function_exists('mb_convert_encoding')) {
-		$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-	}
-	$dom = new domDocument;
-	$dom->loadHTML($html);
-	$dom->preserveWhiteSpace = false;
-	$images = $dom->getElementsByTagName('img');
-	if ($full_tag) { return $images; }
-	
-	// Extract src
-	$src = array();
-	foreach ($images as $image) {
-		$src[] = $image->getAttribute('src');
+	if (!empty($html)) {
+		// DOM method : most failsafe
+		if (function_exists('mb_convert_encoding')) {
+			$html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+		}
+		$dom = new DOMDocument();
+		// avoid warning from libxml - see http://php.net/manual/fr/domdocument.loadhtml.php#118107
+		@$dom->loadHTML($html);
+		$dom->preserveWhiteSpace = false;
+		$images = $dom->getElementsByTagName('img');
+		if ($full_tag) { return $images; }
+		
+		// Extract src
+		foreach ($images as $image) {
+			$src[] = $image->getAttribute('src');
+		}
 	}
 	return $src;
 }
@@ -2293,9 +2561,19 @@ function esope_extract_first_image($html, $full_tag = true) {
 
 
 
-// @TODO : make this more robust and fail-safe
-// Add file to an entity (using a specific folder in datastore)
-function esope_add_file_to_entity($entity, $input_name = 'file', $plugin_prefix = 'knownledge_database') {
+/* Add files lined to entities
+ * @TODO : make this more robust and fail-safe
+ * @TODO Use standard file structure (use Locator)
+ * @TODO Optionally use relations if files are not owned by entity
+ * Add file to an entity, using a specific folder in datastore : DATA/$plugin_prefix/$input_name/$filename
+ * @TODO : use more sustainable structure, ie. DATA/{ElggDirLocator}/{prefix}/{meta_name}/$filename
+ * $entity : entity the file should be attached to (ie owner entity) - can be any entity type
+ * $input_name : name of input field in upload form
+ * $plugin_prefix : name of input field in upload form
+ * 
+ * Note : get file with esope_get_file_from_entity()
+ */
+function esope_add_file_to_entity($entity, $input_name = 'file', $plugin_prefix = 'knowledge_database') {
 	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
 		/*
 		$title = htmlspecialchars($_FILES['upload']['name'], ENT_QUOTES, 'UTF-8');
@@ -2386,6 +2664,26 @@ function esope_remove_file_from_entity($entity, $input_name = 'file') {
 	return false;
 }
 
+/* Serve the file */
+function esope_get_file_from_entity($entity, $input_name = 'file', $plugin_prefix = 'knowledge_database') {
+	if (elgg_instanceof($entity, 'object') || elgg_instanceof($entity, 'user') || elgg_instanceof($entity, 'group') || elgg_instanceof($entity, 'site')) {
+		$file_path = $entity->{$input_name};
+		$filesize = filesize($file_path);
+		$filename = explode('/', $file_path);
+		$filename = end($filename);
+		$mime = mime_content_type($file_path);
+		if (empty($mime)) { $mime = "application/octet-stream"; }
+		header("Pragma: public"); // fix for IE https issue
+		header("Content-type: $mime");
+		header("Content-Disposition: attachment; filename=\"$filename\"");
+		header("Content-Length: $filesize}");
+		while (ob_get_level()) { ob_end_clean(); }
+		flush();
+		readfile($file_path);
+		exit;
+	}
+}
+
 
 /* Return the best translation for a given metadata
  * We prefer a direct translation
@@ -2420,7 +2718,7 @@ function esope_ts_to_ical($ts = 0, $tzone = 0.0) {
 
 // Returns a list of admin tools (used in esope/tools)
 function esope_admin_tools_list() {
-	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats');
+	$tools = array('group_admins', 'users_email_search', 'group_newsletters_default', 'test_mail_notifications', 'threads_disable', 'group_updates', 'spam_users_list', 'user_updates', 'clear_cmis_credentials', 'entity_fields', 'users_stats', 'group_publication_stats', 'update_subtype');
 	return $tools;
 }
 
@@ -2617,7 +2915,7 @@ function esope_groups_get_user_membership_requests($user_guid, $return_guids = f
 		'relationship' => 'membership_request',
 		'relationship_guid' => (int) $user_guid,
 		'inverse_relationship' => false,
-		'limit' => 0,
+		'limit' => false,
 	);
 	$options = array_merge($defaults, $options);
 	$groups = elgg_get_entities_from_relationship($options);
@@ -2632,6 +2930,48 @@ function esope_groups_get_user_membership_requests($user_guid, $return_guids = f
 		return $guids;
 	}
 
+	return $groups;
+}
+
+/* Get groups where there are pending membership requests
+ * $user_guid : if false or not set, returns all site membership requests, if set, returns groups where user is admin or operator
+ * @return Groups where there are pending membership requests to examine
+ * @TODO option to return users having pending membership requests ?
+ */
+function esope_groups_get_pending_membership_requests($user_guid = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
+	
+	$defaults = array(
+		//'type' => '',
+		'relationship' => 'membership_request',
+		//'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => false,
+	);
+	
+	// Limit range to operated groups if user is set (optional)
+	if ($user_guid) {
+		$user_operated_groups = esope_get_owned_groups($user_guid);
+		$in = array();
+		if (is_array($user_operated_groups)) {
+			foreach($user_operated_groups as $ent) { $in[] = $ent->guid; }
+			$in = implode(',', $in);
+			$defaults['wheres'][] = "(r.guid_two IN ($in))";
+		}
+	}
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+	elgg_set_ignore_access($ia);
+
+	$guids = array();
+	foreach ($groups as $k => $group) {
+		if ($user_guid && !$group->canEdit($user_guid)) {
+			unset($groups[$k]);
+			continue;
+		}
+		$guids[] = $group->getGUID();
+	}
+	if ($options['return_guids']) { return $guids; }
 	return $groups;
 }
 
@@ -2661,9 +3001,9 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 	$groups = elgg_get_entities_from_relationship($options);
 	elgg_set_ignore_access($ia);
 	
-	// Esope : clean invites
+	// Esope : clean invites (if not counting !)
 	$user = get_entity($user_guid);
-	if (elgg_instanceof($user, 'user') && $groups) {
+	if (elgg_instanceof($user, 'user') && !$options['count'] && is_array($groups)) {
 		foreach($groups as $k => $group) {
 			if ($group->isMember($user)) {
 				remove_entity_relationship($group->guid, 'invited', $user->guid);
@@ -2679,7 +3019,55 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 		}
 		return $guids;
 	}
+	return $groups;
+}
+
+
+/* Removes invites if the user is already member of the group
+ * Some invites are not removed automatically, depending how the user joined the group
+ * This function should be used as a replacement for groups_get_invited_groups()
+ *
+ * Grabs groups by invitations
+ * Have to override all access until there's a way override access to getter functions.
+ *
+ * @param int   $user_guid    The user's guid
+ * @param bool  $return_guids Return guids rather than ElggGroup objects
+ * @param array $options      Additional options
+ *
+ * @return mixed ElggGroups or guids depending on $return_guids, or count
+ */
+function esope_groups_get_requested_groups($user_guid, $return_guids = false, $options = array()) {
+	$ia = elgg_set_ignore_access(true);
+	$defaults = array(
+		'relationship' => 'membership_request',
+		'relationship_guid' => (int) $user_guid,
+		'inverse_relationship' => false,
+		'limit' => false,
+	);
+	$options = array_merge($defaults, $options);
+	$groups = elgg_get_entities_from_relationship($options);
+	$ia = elgg_set_ignore_access($ia);
+
+	if ($options['count']) { return $groups; }
 	
+	// Esope : clean invites (if not counting !)
+	$user = get_entity($user_guid);
+	if (elgg_instanceof($user, 'user') && is_array($groups)) {
+		foreach($groups as $k => $group) {
+			if ($group->isMember($user)) {
+				remove_entity_relationship($user->guid, 'membership_request', $group->guid);
+				unset($groups[$k]);
+			}
+		}
+	}
+	
+	if ($return_guids) {
+		$guids = array();
+		foreach ($groups as $group) {
+			$guids[] = $group->getGUID();
+		}
+		return $guids;
+	}
 	return $groups;
 }
 
@@ -2690,6 +3078,7 @@ function esope_groups_get_invited_groups($user_guid, $return_guids = false, $opt
 function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 	static $last_ts = false;
 	static $last_mem = false;
+	static $last_num = 0;
 	
 	if (!$last_ts) { $last_ts = microtime(TRUE); }
 	if (!$last_mem) { $last_mem = memory_get_usage(); }
@@ -2703,9 +3092,11 @@ function esope_dev_profiling($prefix = 'ESOPE DEBUG', $error_log = true) {
 	if ($delta_mem > 0) { $delta_mem = "+$delta_mem"; }
 	$last_mem = $mem;
 	
-	$return = "$ts $prefix : $delta_mem MB " . round($delta_ts, 4) . " s  &nbsp; " . round($mem/1000000) . " MB";
-
-echo $return . '<br />';
+	$return = "\n$ts $prefix $last_num : $delta_mem MB " . round($delta_ts, 4) . " s  --> " . round($mem/1000000) . " MB";
+	//echo $return . '<br />';
+	
+	$last_num++;
+	
 	if ($error_log) {
 		error_log($return);
 		return true;
@@ -2723,6 +3114,208 @@ function esope_annotation_likes_cmp($a, $b) {
 		if ($a < $b) { return -1; }
 	}
 	return 0;
+}
+
+
+/* Checks if a given page exists
+ * $url : full URL to be checked
+ * $return_http_code : return HTTP code instead of boolean
+ * $timeout : max timeout, in seconds
+ * @return boolean OR HTTP return code
+ */
+function esope_is_valid_url($url = false, $return_http_code = false, $timeout = 1) {
+	static $checked_urls = array();
+	if (isset($checked_urls[$url])) {
+		if ($return_http_code) { return $checked_urls[$url]; }
+		return $checked_urls[$url];
+	}
+	
+	if (empty($url)) { return false; }
+	
+	// Socket method should be fastest
+	
+	// Curl method is very close
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_NOBODY, true);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout); // timeout in seconds
+	curl_exec($ch);
+	$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	
+	// Save result (HTTP code so we can use it afterwards)
+	$checked_urls[$url] = $http_code;
+	if ($return_http_code) { return $http_code; }
+	if (in_array($http_code, array(200, 302, 304))) { return true; }
+	
+	/* fopen method
+	// Note : use context to limit timeout to a short ping (also the timeout is doubled)
+	$context = stream_context_create(array(
+			'http'=>array('timeout' => $timeout)
+		));
+	$is_valid_url = @fopen($url, 'r', false, $context);
+	if ($is_valid_url) {
+		$checked_urls[$url] = true;
+		//$info = stream_get_meta_data($is_valid_repo);
+		return true;
+	} else {
+		$checked_urls[$url] = false;
+	}
+	*/
+	
+	return false;
+}
+
+
+
+/* Enables a plugin, and its required dependencies
+ * Recursive enable
+ * @TODO still under conception phase - params might evolve
+ * Perform this after latest plugin enabled :
+ *   elgg_regenerate_simplecache();
+ *   elgg_reset_system_cache();
+ */
+function esope_enable_plugin($name, $enable_deps = true, $simulate = true) {
+	$plugin = elgg_get_plugin_from_id($name);
+	$return = false;
+	if ($plugin->isValid()) {
+		$requires = $plugin->getManifest()->getRequires();
+	
+		if ($simulate) $return .= '<strong>' . $name . '</strong>&nbsp;: ';
+		//if ($simulate) $return .= ' => <pre>' . print_r($requires, true) . '</pre>';
+	
+		if ($simulate) $return .= '<ul>';
+		if ($requires) {
+			if ($simulate) {
+				$return .= '<li>Requires plugins&nbsp;:';
+				$return .= '<ul>';
+			}
+			foreach($requires as $require) {
+				if ($require['type'] != 'plugin') { continue; }
+				if ($simulate) {
+					$return .= '<li>';
+					//$return .= $require['name'] . '&nbsp;: ';
+					$return .= esope_enable_plugin($require['name'], $enable_deps);
+					$return .= '<li>';
+				}
+			}
+			if ($simulate) $return .= '</ul>';
+		}
+		if ($simulate) $return .= '</li>';
+		if (!$plugin->isActive()) {
+			if ($simulate) $return .= '<li>is not active</li>';
+			if ($plugin->canActivate()) {
+				$return .= '<li>can be activated</li>';
+			} else {
+				if ($simulate) $return .= '<li>can NOT be activated</li>';
+				else return false;
+			}
+			if ($plugin->activate()) {
+				if ($simulate) $return .= 'activated !';
+				else return true;
+			}
+		} else {
+			if ($simulate) $return .= '<li>is already active</li>';
+			else return true;
+		}
+		if ($simulate) $return .= '</ul>';
+	}
+	
+	if ($simulate) return $return;
+	return false;
+}
+
+/* Stopwords function
+ * string $text : input string
+ * array $stopwords : array or detected words
+ * string $mode : detect | filter | block
+ * @return : depends on mode
+ *   - detect : false if one detected | (int) number of detected matches
+ *   - filter : filtered string (stop words have been removed)
+ *   - block : $text | empty string if any stopword detected
+ */
+function esope_stopwords($text = '', $stopwords = false, $mode = 'detect') {
+	if (empty($text)) { return $text; }
+	
+	if (!$stopwords) {
+		$stopwords = elgg_get_plugin_setting('stopwords', 'esope');
+		$stopwords = esope_get_input_array($stopwords);
+	}
+	$pattern = '/(' . implode('|', $stopwords) . ')/';
+	// @TODO skip empty pattern
+	if (strlen($pattern) < 5) { return $text; }
+	
+	switch($mode) {
+		case 'detect':
+			$result = false;
+			preg_match_all($pattern, $text, $matches);
+			if ($matches) { $result = sizeof($matches[0]); }
+			//error_log(" - STOPWORDS DETECTED : found " . count($matches[0]) . " bad entries = " . print_r($matches[0], true));
+			break;
+		case 'block':
+			$result = $text;
+			if (preg_match($pattern, $text)) { $result = ''; }
+			break;
+		case 'filter':
+		default:
+			$result = preg_replace($pattern, "", $text);
+			//error_log(" - STOPWORDS FILTERED TEXT => $result");
+	}
+	
+	return $result;
+}
+
+
+
+// Get an FA image instead of a regular one
+// Note : this replaces a full HTML image, not only the image URL !
+function esope_get_fa_icon($entity, $size) {
+	$type = $entity->getType();
+	$subtype = $entity->getSubtype();
+	
+	$title = $entity->title;
+	if (empty($title)) { $title = $entity->name; }
+	if (empty($title)) { $title = elgg_get_excerpt($entity->description); }
+	$title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8', false);
+	
+	// Get size
+	$sizes = array('small', 'medium', 'large', 'tiny', 'master', 'topbar');
+	if (!in_array($size, $sizes)) { $size = "medium"; }
+	$class = "$type $subtype $size";
+	
+	if (elgg_instanceof($entity, 'object') && !empty($subtype)) {
+		return '<span class="' . $class . '" alt="' . $title . '">' . elgg_echo('esope:icon:'.$subtype) . '</span>';
+//	} else if (elgg_instanceof($entity, 'user')) {
+//	} else if (elgg_instanceof($entity, 'group')) {
+//	} else if (elgg_instanceof($entity, 'site')) {
+	} else {
+		return '<span class="' . $class . '" alt="' . $title . '">' . elgg_echo('esope:icon:'.$type) . '</span>';
+	}
+	
+	return false;
+}
+
+// Get top parent object entity (that is commentable without thread)
+// If top object, return initial object
+function esope_get_top_object_entity($entity = false) {
+	if (!elgg_instanceof($entity, 'object')) { return false; }
+	$subtype = $entity->getSubtype();
+	if (in_array($subtype, array('comment', 'discussion_reply', 'groupforumtopic'))) {
+		$container = $entity;
+		while(elgg_instanceof($container, 'object')) {
+			$entity = $container;
+			$container = $entity->getContainerEntity();
+		}
+	}
+	return $entity;
+}
+
+// Get real container (user, group, site) for special object types (forum, comments)
+function esope_get_container_entity($entity = false) {
+	if (!elgg_instanceof($entity, 'object')) { return false; }
+	$top_object = esope_get_top_object_entity($entity);
+	if ($top_object) { return $top_object->getContainerEntity(); }
+	return false;
 }
 
 

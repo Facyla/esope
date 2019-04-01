@@ -495,6 +495,8 @@ function esope_page_head_hook($hook, $type, $return, $params) {
 	unset($return['links']['icon-128']);
 	unset($return['links']['icon-vector']);
 	
+	// Set print CSS
+	$return['links']['stylesheet-print'] = array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url . 'mod/esope/print.css', 'media' => 'print');
 	return $return;
 }
 
@@ -989,6 +991,62 @@ function esope_html_email_handler_emailHandler($hook, $type, $return_value, $par
 	}
 	
 	return esope_html_email_handler_send_email($return_value);
+}
+
+
+
+// Override so admins can use it the same way as group members (container and access level)
+function esope_embed_longtext_menu($hook, $type, $items, $vars) {
+	if (elgg_get_context() == 'embed') { return $items; }
+	$url = 'embed';
+	$page_owner = elgg_get_page_owner_entity();
+	//if (elgg_instanceof($page_owner, 'group') && $page_owner->isMember()) {
+	if (elgg_instanceof($page_owner, 'group') && ($page_owner->isMember() || $page_owner->canEdit())) {
+		$url = 'embed?container_guid=' . $page_owner->getGUID();
+	}
+
+	elgg_load_js('lightbox');
+	elgg_load_css('lightbox');
+	elgg_require_js('jquery.form');
+	elgg_load_js('elgg.embed');
+
+	$text = elgg_echo('embed:media');
+
+	// if loaded through ajax (like on /activity), pull in JS libs manually
+	// hack for #6422 because we haven't converted everything to amd yet
+	if (elgg_in_context('ajax')) {
+		$externals = elgg_get_config('externals_map');
+		$embed = elgg_extract('elgg.embed', $externals['js']);
+		$lightbox_js = elgg_extract('lightbox', $externals['js']);
+		$lightbox_css = elgg_extract('lightbox', $externals['css']);
+		
+		$text .= <<<___JS
+<script>
+	require(['jquery.form']);
+	if (typeof $.fancybox === 'undefined') {
+		$.getScript('$lightbox_js->url');
+		$('head').append('<link rel="stylesheet" href="$lightbox_css->url"></link>');
+	}
+	if (typeof elgg.embed === 'undefined') {
+		$.getScript('$embed->url');
+	}
+</script>
+___JS;
+	}
+
+	$items[] = ElggMenuItem::factory(array(
+		'name' => 'embed',
+		'href' => 'javascript:void()',
+		'data-colorbox-opts' => json_encode([
+			'href' => elgg_normalize_url($url),
+		]),
+		'text' => $text,
+		'rel' => "embed-lightbox-{$vars['id']}",
+		'link_class' => "elgg-longtext-control elgg-lightbox embed-control embed-control-{$vars['id']}",
+		'priority' => 10,
+	));
+	
+	return $items;
 }
 
 

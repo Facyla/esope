@@ -21,10 +21,11 @@ if (isset($vars['class'])) {
 }
 
 // Add context class, for page differenciation
-// @TODO use context stakc instead...
-global $CONFIG;
-foreach ($CONFIG->context as $context) {
-	$class .= ' elgg-context-' . $context;
+$contexts = elgg_get_context_stack();
+if ($contexts) {
+	foreach ($contexts as $context) {
+		$class .= ' elgg-context-' . $context;
+	}
 }
 
 ?>

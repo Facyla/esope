@@ -40,7 +40,13 @@ $pages_list_subpages_opt['group'] = elgg_echo('esope:settings:pages_list_subpage
 
 $registered_objects = get_registered_entity_types('object');
 
-$group_defaultaccess_opt = array('default' => elgg_echo('esope:groupdefaultaccess:default'), 'groupvis' => elgg_echo('esope:groupdefaultaccess:groupvis'), 'group' => elgg_echo('esope:groupdefaultaccess:group'), 'members' => elgg_echo('esope:groupdefaultaccess:members'), 'public' => elgg_echo('esope:groupdefaultaccess:public'));
+$group_defaultaccess_opt = array(
+		'default' => elgg_echo('esope:groupdefaultaccess:default'), 
+		'groupvis' => elgg_echo('esope:groupdefaultaccess:groupvis'), 
+		'group' => elgg_echo('esope:groupdefaultaccess:group'), 
+		'members' => elgg_echo('esope:groupdefaultaccess:members'), 
+		'public' => elgg_echo('esope:groupdefaultaccess:public'),
+	);
 
 $group_groupjoin_enablenotif_opt = array(
 		'email' => elgg_echo('option:notify:email'),
@@ -318,6 +324,14 @@ $(function() {
 			
 			// Colonne centrale
 			echo '<fieldset>';
+			if (elgg_is_active_plugin('slider')) {
+			// à terme : permettre d'indiquer le guid ou identifiant du slider, ou yes pour contenu automatique
+			// GUID ou identifiant du slider à afficher sur l'accueil
+			// Afficher la liste des sliders disponibles
+				echo '<p><label>' . elgg_echo('esope:index_slider') . '</label>';
+					echo elgg_view('input/select', array('name' => 'params[index_slider]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_slider));
+			echo '</p>';
+			}
 			if (elgg_is_active_plugin('thewire')) {
 				echo '<p><label>' . elgg_echo('esope:index_wire') . '</label>';
 					echo elgg_view('input/select', array('name' => 'params[index_wire]', 'options_values' => $no_yes_opt, 'value' => $plugin->index_wire));

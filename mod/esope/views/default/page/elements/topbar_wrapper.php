@@ -2,6 +2,7 @@
 /**
  * Elgg topbar wrapper
  * Check if the user is logged in and display a topbar
+ * ESOPE : display topbar only if not empty (can be displayed logged out) ?
  * @since 1.10 
  */
 

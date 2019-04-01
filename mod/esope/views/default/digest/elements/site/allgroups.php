@@ -42,7 +42,8 @@ if ($groups) {
 				"pagination" => false,
 			);
 		
-			$content .= '<h4>' . elgg_view("output/url", array("text" => $group->name, "href" => $group->getURL())) . '</h4>';
+			$icon = '<img src="' . $group->getIconURL('tiny') . '" />&nbsp;';
+			$content .= '<h4 class="group-title">' . elgg_view("output/url", array("text" => $icon . $group->name, "href" => $group->getURL())) . '</h4>';
 			$content .= elgg_view("page/components/list", $options);
 			$content .= '<br /><br />';
 		}

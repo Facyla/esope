@@ -9,6 +9,10 @@
  * @uses $vars['sysmessages'] A 2d array of various message registers, passed from system_messages()
  */
 
+$url = elgg_get_site_url();
+$current_url = current_page_url();
+$reserved_urls = array($url.'login', $url.'register');
+
 $is_sticky_register = elgg_is_sticky_form('register');
 $wg_body_class = 'elgg-body-walledgarden';
 $inline_js = '';
@@ -31,12 +35,15 @@ $site = elgg_get_site_entity();
 $title = $site->name;
 $replace_public_home = elgg_get_plugin_setting('replace_public_homepage', 'esope');
 
-// Display default page content if no special content has been set before
+// Display custom home page if not asking for a special page
+if (in_array($current_url, $reserved_urls)) { $replace_public_home = 'original'; }
+
 if ($replace_public_home == 'original') {
 	// Default Elgg content
 	$content = $vars["body"];
 	
 } else if ($replace_public_home == 'cmspages') {
+	// CMSPages-based content
 	if (!elgg_is_active_plugin('cmspages')) { register_error(elgg_echo('esope:cmspages:notactivated')); }
 	define('cmspage', true);
 	$pagetype = 'homepage-public';

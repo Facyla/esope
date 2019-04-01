@@ -3,11 +3,11 @@
 	<name>Plugin Template</name>
 	<id>plugin_template</id>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>0.1</version>
-	<blurb>Template for new plugins</blurb>
-	<description>You can use this plugin as a template when developping new plugins.</description>
-	<website>http://facyla.fr/</website>
-	<copyright>Florian DANIEL aka Facyla 2016</copyright>
+	<version>2.3.0</version>
+	<blurb>Template for new Elgg plugins</blurb>
+	<description>Use this plugin as a template to kickstart ELgg plugin development</description>
+	<website>https://facyla.fr/</website>
+	<copyright>Florian DANIEL aka Facyla 2018</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<screenshot>
@@ -15,12 +15,12 @@
 		<path>graphics/screenshot.png</path>
 	</screenshot>
 
-	<category>category1</category>
-	<category>category2</category>
+	<category>developer</category>
+	<category>tools</category>
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.12</version>
+		<version>2.3</version>
 	</requires>
 	
 	<!--
@@ -44,13 +44,4 @@
 	
 </plugin_manifest>
 
-<!--
-COMMENTS - HISTORY
-
-0.1 : YYYYmmdd - Initial release
- - plugin structure
- - feature A
-
-
-//-->
 

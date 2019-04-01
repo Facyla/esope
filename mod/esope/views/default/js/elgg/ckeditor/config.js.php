@@ -21,7 +21,7 @@ define(function(require) {
 				['Blockquote'], 
 				['Link', 'Unlink'], 
 				// source, iframe, flash, table
-				['Image'], 
+				['Image'], //['Smiley'], ['SpecialChar'], 
 				['Iframe'], 
 				['Table'], 
 				['Source'], 
@@ -34,6 +34,21 @@ define(function(require) {
 				['NumberedList', 'BulletedList', 'Outdent', 'Indent'], 
 				['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 			],
+		// Add new custom toolbars
+		toolbar_basic: [
+				['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'], 
+				['NumberedList', 'BulletedList'], 
+				['Blockquote'], 
+				['Link', 'Unlink'], 
+				['Scayt'], 
+				['Maximize'], 
+			],
+		
+		// Auto-enable SCAYT (spell checker)
+		scayt_autoStartup: true,
+		// Set default language
+		/// Available languages : en_US, en_GB, pt_BR, da_DK, nl_NL, en_CA, fi_FI, fr_FR, fr_CA, de_DE, el_GR, it_IT, nb_NO, pt_PT, es_ES, sv_SE
+		scayt_sLang: 'fr_FR',
 		/*
 		toolbarGroups: [
 				{"name":"basicstyles","groups":["basicstyles"]},
@@ -52,7 +67,7 @@ define(function(require) {
 		//removePlugins: 'liststyle,contextmenu,tabletools,resize',
 		removePlugins: '',
 		extraPlugins: 'blockimagepaste,colorbutton,colordialog', //colorbutton,colordialog
-		defaultLanguage: 'en',
+		defaultLanguage: 'fr',
 		language: elgg.get_language(),
 		skin: 'moono',
 		uiColor: '#EEEEEE',

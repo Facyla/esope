@@ -163,10 +163,11 @@ if (!empty($vars['requests']) && is_array($vars['requests'])) {
 			'text' => elgg_echo('accept'),
 			'class' => 'elgg-button elgg-button-submit',
 			'is_trusted' => true,
+			'confirm' => true,
 		));
 
 		$url = 'action/groups/killrequest?user_guid=' . $user->guid . '&group_guid=' . $vars['entity']->guid;
-		$delete_button = elgg_view('output/confirmlink', array(
+		$delete_button = elgg_view('output/url', array(
 				'href' => $url,
 				'confirm' => elgg_echo('groups:joinrequest:remove:check'),
 				'text' => elgg_echo('delete'),

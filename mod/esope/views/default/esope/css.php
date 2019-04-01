@@ -105,6 +105,7 @@ html, body { word-break:break-word; word-wrap: break-word; hyphens: auto; }
 .elgg-input-rawtext { width:99%; }
 /* Tableaux */
 th { font-weight:bold; background:#CCCCCC; }
+.elgg-table-alt td:first-child { width: auto; max-width: 12.5rem; min-width: 2rem; }
 /* Access level informations */
 .elgg-access {}
 .elgg-access-group-closed {}
@@ -143,25 +144,26 @@ input:focus, textarea:focus { outline:0; }
 => remplacer par un masquage en JS
 */
 
+.ui-autocomplete { max-height: 80vh; overflow-y: auto; }
 
 /* MISE EN PAGE ET PRINCIPAUX BLOCS - LAYOUTS AND MAIN BLOCKS */
 
 /* ESOPE : bandeau */
 .elgg-page-header {
 	<?php if (!empty($headerimg)) {
-		echo 'background-image: url("' . $headerimg . '"), linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: url("' . $headerimg . '"), -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: url("' . $headerimg . '"), -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: url("' . $headerimg . '"), -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: url("' . $headerimg . '"), -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: url("' . $headerimg . '"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '))';
+		echo 'background-image: url("' . $headerimg . '"), linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: url("' . $headerimg . '"), -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: url("' . $headerimg . '"), -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: url("' . $headerimg . '"), -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: url("' . $headerimg . '"), -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: url("' . $headerimg . '"), -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '));';
 	} else {
-		echo 'background-image: linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%)';
-		echo 'background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '))';
+		echo 'background-image: linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: -o-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: -moz-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: -webkit-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: -ms-linear-gradient(top, ' . $color1 . ' 25%, ' . $color4 . ' 75%);';
+		echo 'background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, ' . $color1 . '), color-stop(0.75, ' . $color4 . '));';
 	} ?>
 	background-position: left 30px, left top;
 	background-repeat: repeat-x, repeat;
@@ -291,7 +293,7 @@ ul.elgg-list li.elgg-item ul.elgg-menu li.elgg-menu-item-members { color: <?php 
 .elgg-menu-page a:hover,
 .elgg-menu-page a:focus,
 .elgg-menu-page a:active,
-.elgg-menu-page .elgg-state-selected a,
+.elgg-menu-page .elgg-state-selected > a,
 .elgg-menu-page .elgg-state-selected a:hover,
 .elgg-menu-page .elgg-state-selected a:focus,
 .elgg-menu-page .elgg-state-selected a:active {
@@ -412,6 +414,7 @@ select#custom_profile_fields_custom_profile_type { margin-bottom: 0.5ex; }
 	padding: 6px 10px 4px;
 	text-transform: uppercase;
 }
+.elgg-sidebar #feedbacks ul li a, 
 .elgg-sidebar #site-categories ul li a { padding: 6px 10px 5px; }
 
 #feedbackDisplay a { color: <?php echo $linkcolor; ?>; }
@@ -517,12 +520,17 @@ div.entetes-tri ul li.e.elgg-module .elgg-body .mts { float: left; clear: left; 
 .blog-archives li { clear: left; font-weight: bold; padding: 0 0 4px 0; }
 .pages-nav li { clear: left; }
 .esope-subpages-menu { margin-top:2rem; }
+.elgg-pages-input-parent-picker { max-width: 100%; }
 
 
 /* Agenda à côté et non sous la liste d'événements */
 #event_list, #event_list table { width: 100%; }
-.elgg-image .date, .elgg-module-group-event-calendar p.date, .elgg-widget-instance-event_calendar p.date { background: white; width: 9ex; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 130%; font-size: 90%; }
-.elgg-image .date span { font-size: 2em; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 4px 0; }
+.elgg-image .date, .elgg-module-group-event-calendar p.date, .elgg-widget-instance-event_calendar p.date { background: white; width: 5rem; padding: 1px; text-align: center; background:<?php echo $linkcolor; ?>; color: white; line-height: 1.2rem; font-size: 0.9rem; }
+.elgg-image .date span, .elgg-image .date div { font-size: 2rem; display: block; font-weight: bold; background: white; color: <?php echo $linkcolor; ?>; padding: 0.5rem 0 0.1rem 0; line-height: 1.8rem; }
+.elgg-image .date-in-month { background-color: <?php echo $linkcolor; ?>; width: 2.25rem; height: 2.25rem; border-radius: 50%; line-height: 2.5rem; color: white; font-size: 1rem; font-weight: bold; text-align: center; }
+/* Note: requires relative positionning on parent (usually .elgg-image) */
+.elgg-image-block .elgg-image { position:relative; }
+.calendar-action { color: <?php echo $linkcolor; ?>; position: absolute; top: -0.4rem; right: -0.4rem; font-size: 1.3125rem; border-radius: 50%; height: 1.3125rem; }
 
 
 /* Formulaires : boutons radios verticaux, mais sans casser les groupes (mal construits avec les labels..) */
@@ -590,8 +598,8 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 
 /* Statuts compte utilisateur : Archive (bannière compte archivé), Pas de mail associé au compte */
 .profiletype-status { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; border: 3px solid transparent; width: 200px; height: 200px; z-index: 13; background: rgba(0,0,0,0.2); }
-.profiletype-status-closed { position: absolute; width: 200px; height: auto; line-height: 2; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white; }
-.profiletype-status-no-mail { position: absolute; text-align: center; bottom: 0; left:0; padding: 4px 6px 0px 2px; padding: 0.15rem 0.4rem 0 0.15rem; border-radius: 0 0.5rem 0 0; background: rgba(255,0,0,0.6); font-size: 0.9rem; font-weight: bold; color: white; }
+.profiletype-status-closed { position: absolute; width: 200px; height: auto; line-height: 2; margin: 70px 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; color: white !important; }
+.profiletype-status-no-mail { position: absolute; text-align: center; bottom: 0; left:0; padding: 4px 6px 0px 2px; padding: 0.15rem 0.4rem 0 0.15rem; border-radius: 0 0.5rem 0 0; background: rgba(255,0,0,0.6); font-size: 0.9rem; font-weight: bold; color: white !important; }
 
 /* Medium */
 .elgg-avatar-medium .profiletype-status { position: absolute; border: 1px solid transparent; width: 100px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
@@ -607,6 +615,10 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 .elgg-avatar-tiny .profiletype-status { position: absolute; border: 1px solid transparent; width: 25px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
 .elgg-avatar-tiny .profiletype-status-closed { position: absolute; left:0; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
 .elgg-avatar-tiny .profiletype-status-no-mail { width: 100%; padding: 1px 0; line-height: 1; border-radius:0; font-size: 0.5rem; font-weight: normal; }
+/* Topbar - too small to display anything */
+.elgg-avatar-topbar .profiletype-status { display:none; position: absolute; border: 1px solid transparent; width: 16px; height: auto; z-index: 13; background: rgba(0,0,0,0.2); }
+.elgg-avatar-topbar .profiletype-status-closed { position: absolute; left:0; width: 100%; height: auto; line-height: 1; margin: 0 0; text-align: center; background: rgba(0,0,0,0.6); font-size: 0.5rem; font-weight: normal; text-transform: initial; color: white; }
+.elgg-avatar-topbar .profiletype-status-no-mail { width: 100%; padding: 1px 0; line-height: 1; border-radius:0; font-size: 0.5rem; font-weight: normal; }
 
 /* Friendspicker */
 /* .elgg-avatar-tiny .profiletype-status { left: 0; margin: 5px 10px 5px 5px; } */
@@ -622,6 +634,11 @@ form .elgg-input-field-access label { font-size:80%; font-weight:normal; }
 */
 li .fa { display: inline-block; /* min-width: 2.5ex; */ min-width: 1em; }
 
+.topbar .fa { font-size: 16px; }
+.tiny .fa { font-size: 25px; }
+.small .fa { font-size: 40px; }
+.medium .fa { font-size: 100px; }
+.large .fa { font-size: 200px; }
 
 
 
@@ -671,6 +688,7 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 #file_tools_list_tree_container { max-width: 100%; padding:0; }
 #file_tools_list_tree_container li { max-width: 95%; }
 #file_tools_list_tree_container .tree li a, #file_tools_list_tree_container .tree li span { height:auto; white-space: normal; -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; -o-hyphens: auto; hyphens: auto; }
+#file-tools-folder-tree ul li { padding-left: 15px; float: initial; }
 
 
 /* Group topmenu */
@@ -694,6 +712,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .elgg-sidebar .elgg-module-aside .elgg-body ul.elgg-menu-newsletter-steps li { clear:left; width:100%; text-indent:4ex; }
 */
 #newsletter-embed-list { clear: both; }
+/* Corrects missing hover CSS in newsletter plugin*/
+#newsletter-edit-template-select li:hover .hidden { display: inline; }
 
 .elgg-form-alt > fieldset > .elgg-foot { clear: both; }
 
@@ -715,6 +735,8 @@ header .floating { background:<?php echo $color1; ?>; width:100%; top:0; height:
 .developers-gear:hover { background: rgba(0,0,0,1); }
 .developers-gear .elgg-icon-settings-alt::before { content: 'DEV'; color: white; }
 
+/* Slider : create a new stacking context for z-index positionning */
+.anythingSlider { position: relative; z-index: 0; overflow: hidden; }
 
 
 

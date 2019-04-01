@@ -50,6 +50,6 @@ echo $footer
 
 <div class="credits">
 	<p><a href="https://twitter.com/facyla" target="_blank">Florian DANIEL aka Facyla</a></p>
-	<p class="right"><a href="https://github.com/Facyla/esope" target="_blank" title="Elgg Social Opensource Public Environment">ESOPE</a> / <a href="http://elgg.org/about.php" target="_blank" title="Open source social framework Elgg">Elgg 1.12</a></p>
+	<p class="right"><a href="https://github.com/Facyla/esope" target="_blank" title="Elgg Social Opensource Public Environment">ESOPE</a> / <a href="https://elgg.org/about.php" target="_blank" title="Open source social framework Elgg">Elgg 2.3</a></p>
 </div>
 

@@ -19,7 +19,6 @@ if (isset($vars['class'])) {
 }
 
 // ESOPE : Add context class, for page differenciation
-// @TODO use context stakc instead...
 $contexts = elgg_get_context_stack();
 if ($contexts) {
 	foreach ($contexts as $context) {

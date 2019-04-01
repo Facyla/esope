@@ -54,7 +54,16 @@ $body = '<div class="intro">' . $static . $firststeps . $intro . '</div>';
   
 
 // BLOCS CONFIGURABLES
-$left_side = ''; $thewire = ''; $right_side = '';
+$left_side = ''; $thewire = ''; $right_side = ''; $slider = '';
+
+// ENTETE pleine largeur
+if (elgg_is_active_plugin('slider')) {
+	$index_slider = elgg_get_plugin_setting('index_slider', 'esope');
+	if ($index_slider == 'yes') {
+		$slider_entities = elgg_get_entities(['type' => 'object', 'subtypes' => ['blog']]);
+		$slider = elgg_view('slider/autoslider', ['entities' => $slider_entities, 'html_content' => '', 'height' => '250px;', 'width' => '100%', 'max' => 6]);
+	}
+}
 // BLOC GAUCHE
 // Eléments du groupe d'accueil (à partir du GUID de ce groupe)
 $homegroup_guid = elgg_get_plugin_setting('homegroup_guid', 'esope');
@@ -131,6 +140,10 @@ if (elgg_is_active_plugin('members')) {
 
 // Composition de la ligne
 $static = '';
+if (!empty($slider)) {
+	$static .= $slider;
+	$static .= '<div class="clearfloat"></div><br />';
+}
 if ($thewire && $left_side && $right_side) {
 	$static .= '<div class="home-static" style="width:32%; float:left; margin-right:3%;">' . $left_side . '</div>';
 	$static .= '<div class="home-static" style="width:40%; float:left;">' . $thewire . '</div>';

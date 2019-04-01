@@ -120,7 +120,12 @@ if (!empty($query)) {
 		}
 		$content .= '<ul>';
 		foreach ($users as $ent) {
-			$content .= '<li><label><input type="checkbox" name="user_guid[]" value="' . $ent->guid . '" class="group-invite-user" /> <img src="' . $ent->getIcon('topbar') . '" /> ' . $ent->name . '</label></li>';
+			if ($group->isMember($ent)) {
+				//$content .= '<li><img src="' . $ent->getIcon('topbar') . '" /> ' . elgg_echo('groups:add:alreadymember', array($ent->name)) . '</li>';
+				$content .= '<li><label><input type="checkbox" class="group-invite-user" disabled="disabled"/> <img src="' . $ent->getIcon('topbar') . '" /> ' . elgg_echo('groups:add:alreadymember', array($ent->name)) . '</label></li>';
+			} else {
+				$content .= '<li><label><input type="checkbox" name="user_guid[]" value="' . $ent->guid . '" class="group-invite-user" /> <img src="' . $ent->getIcon('topbar') . '" /> ' . $ent->name . '</label></li>';
+			}
 		}
 		$content .= '</ul></p>';
 		$content .= "<p><label><input type=\"checkbox\" id=\"group-invite-user-selectall\"> " . elgg_echo('select:all') . "</label></p>";

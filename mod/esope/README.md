@@ -118,3 +118,40 @@ ServerSignature Off
 
 
 
+
+# HISTORIQUE
+1.12.5.0 : 2016
+  - Migration sur la base du core Elgg 1.12.5
+
+1.11.7.0 : 2015
+  - Migration sur la base du core Elgg 1.11.4
+
+1.9.7.0 : décembre 2014
+  - Migration sur la base du core Elgg 1.9.7
+  - Nouveau versionning : version core + version Esope (incrément simple)
+
+0.7 : septembre 2014
+  - nombreuses évolutions, restructuration et design
+
+0.6 : janvier 2014
+  - ajout de nombreuses options, notamment recherche fulltext en ajax pour les groupes et membres
+
+0.5 : octobre 2013
+  - évolutions de la configuration du plugin
+  - design plus propre (respect des normes Elgg) et responsif
+  - réorganisation du code : lib, hooks, etc.
+  - gestion des plugins activés (peut fonctionner avec un minimum de plugins)
+  - divers outils, dont nettoyage si désactivation de threads
+
+0.4 : septembre 2012
+  - explicitation des pré-requis et conflits du plugin
+
+0.3 : 11 septembre 2012
+  - fusion du plugin avec le plugin accessibility développé dans le cadre de l'audit et des recommandations d'Urbilog
+
+0.2 : mai-septembre 2012
+  - intégration du thème Urbilog
+
+0.1 : décembre 2012
+  - première version fonctionnelle : adaptations diverses, page d'accueil avec bloc éditorial et widgets, etc.
+
