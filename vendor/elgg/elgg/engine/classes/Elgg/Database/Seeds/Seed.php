@@ -2,12 +2,14 @@
 
 namespace Elgg\Database\Seeds;
 
+use ElggCrypto;
 use ElggEntity;
 use ElggGroup;
 use ElggObject;
 use ElggUser;
 use Exception;
 use Faker\Factory;
+use Elgg\Database\Seeds\Providers\LocalImage;
 
 /**
  * Abstract seed
@@ -34,6 +36,8 @@ abstract class Seed {
 	 */
 	public function __construct($locale = 'en_US') {
 		$this->faker = Factory::create($locale);
+		
+		$this->faker->addProvider(new LocalImage($this->faker));
 	}
 
 	/**

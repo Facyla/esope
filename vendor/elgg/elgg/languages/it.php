@@ -247,9 +247,11 @@ return array(
 	'friend:remove' => "Rimuovi un amico",
 
 	'friends:add:successful' => "Hai aggiunto %s agli amici.",
+	'friends:add:duplicate' => "You're already friends with %s",
 	'friends:add:failure' => "Impossibile aggiungere %s agli amici.",
 
 	'friends:remove:successful' => "Hai rimosso %s dagli amici.",
+	'friends:remove:no_friend' => "You and %s are not friends",
 	'friends:remove:failure' => "Impossibile rimuovere %s dai tuoi amici.",
 
 	'friends:none' => "Ancora nessun amico.",
@@ -1144,6 +1146,7 @@ Una volta entrato/a ti invitiamo caldamente a cambiare la tua password.',
 	'installation:view' => "Specificare la vista che deve essere usata in modo predefinito per il sito, o lasciare in bianco per abilitare la vista preimpostata (nel dubbio lasciare come preimpostato):",
 
 	'installation:siteemail' => "Indirizzo email del sito (usato quando si inviano email di sistema):",
+	'installation:siteemail:help' => "Warning: Do no use an email address that you may have associated with other third-party services, such as ticketing systems, that perform inbound email parsing, as it may expose you and your users to unintentional leakage of private data and security tokens. Ideally, create a new dedicated email address that will serve only this website.",
 	'installation:default_limit' => "Numero predefinito di elementi per pagina",
 
 	'admin:site:access:warning' => "Questa è l'impostazione sulla privacy predefinita quando gli utenti creano nuovi contenuti. Il cambiamento di questa impostazione non modifica l'accesso ai contenuti.",

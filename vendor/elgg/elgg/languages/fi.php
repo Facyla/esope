@@ -247,9 +247,11 @@ return array(
 	'friend:remove' => "Poista ystävistä",
 
 	'friends:add:successful' => "Olet lisännyt käyttäjän %s ystäväksesi.",
+	'friends:add:duplicate' => "You're already friends with %s",
 	'friends:add:failure' => "Käyttäjää %s ei voitu lisätä ystäväksi.",
 
 	'friends:remove:successful' => "Olet poistanut käyttäjän %s ystävistäsi.",
+	'friends:remove:no_friend' => "You and %s are not friends",
 	'friends:remove:failure' => "Käyttäjää %s ei voitu poistaa ystävistäsi.",
 
 	'friends:none' => "Tämä käyttäjä ei ole vielä lisännyt ketään ystäväkseen.",
@@ -1145,6 +1147,7 @@ Kirjauduttuasi on suositeltavaa, että vaihdat salasanasi.
 	'installation:view' => "Syötä näkymä, jota käytetään sivustosi etusivuna. Jätä kenttä tyhjäksi käyttääksesi oletusnäkymää (jos et ole varma, jätä tämä oletukseksi):",
 
 	'installation:siteemail' => "Site email address (used when sending system emails):",
+	'installation:siteemail:help' => "Warning: Do no use an email address that you may have associated with other third-party services, such as ticketing systems, that perform inbound email parsing, as it may expose you and your users to unintentional leakage of private data and security tokens. Ideally, create a new dedicated email address that will serve only this website.",
 	'installation:default_limit' => "Listauksissa näytettävien kohteiden oletusmäärä",
 
 	'admin:site:access:warning' => "Tämä määrittää oletusasetuksen, kun ollaan luomassa uutta sisältöä. Tämän asetuksen muuttaminen ei vaikuta jo olemassa oleviin sisältöihin.",

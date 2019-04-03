@@ -247,9 +247,11 @@ return array(
 	'friend:remove' => "حذف دوست",
 
 	'friends:add:successful' => "شما با موفقیت %s  را به عنوان دوست اضافه کردید.",
+	'friends:add:duplicate' => "You're already friends with %s",
 	'friends:add:failure' => "امکان افزودن %s به عنوان دوست نیست.",
 
 	'friends:remove:successful' => "شما با موفقیت %s را از لیست دوستانتان حذف کردید",
+	'friends:remove:no_friend' => "You and %s are not friends",
 	'friends:remove:failure' => "امکان حذف %s از لیست دوستان شما نیست",
 
 	'friends:none' => "در حال حاضر هیچ دوستی ندارید",
@@ -1144,6 +1146,7 @@ return array(
 	'installation:view' => "نمایه پیش فرص سایتتان را انتخاب کنید، در صورت عدم انتخاب نمایه پیش فرض نمایش داده خواهد شد (می توانید حالت پیش فرض را نگه دارید)",
 
 	'installation:siteemail' => "ایمیل سایت (برای ارسال ایمیل های سیستمی استفاده میشود)",
+	'installation:siteemail:help' => "Warning: Do no use an email address that you may have associated with other third-party services, such as ticketing systems, that perform inbound email parsing, as it may expose you and your users to unintentional leakage of private data and security tokens. Ideally, create a new dedicated email address that will serve only this website.",
 	'installation:default_limit' => "تعداد پیش فرض موارد قابل نمایش در صفحه",
 
 	'admin:site:access:warning' => "این تنظیمات حریم شخصی است که به کاربران هنگام ایجاد محتوای جدید پیشنهاد داده می شود. تغییر دادن آن مجوز دسترسی به محتوا را تغییر نخواهد داد.",

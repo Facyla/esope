@@ -1,3 +1,72 @@
+<a name="2.3.10"></a>
+### 2.3.10  (2018-12-21)
+
+#### Contributors
+
+* Jerôme Bakker (5)
+
+#### Bug Fixes
+
+* **js:** input datepicker can be cleared using delete or backspace ([54b76928](https://github.com/Elgg/Elgg/commit/54b769286745e5e6fb0d5255645eab66144c6cc9))
+
+
+<a name="2.3.9"></a>
+### 2.3.9  (2018-11-14)
+
+#### Contributors
+
+* Jerôme Bakker (6)
+* Ismayil Khayredinov (1)
+* Jeroen Dalsem (1)
+
+#### Performance
+
+* **entities:** limit entity preloading by max entity cache size ([7619c1f7](https://github.com/Elgg/Elgg/commit/7619c1f79ee59eff5e413bb66d576159905fd1cd))
+
+
+#### Bug Fixes
+
+* **db:** improved handling of duplicate relationship creation ([418e6a81](https://github.com/Elgg/Elgg/commit/418e6a81414e420d406806e505a0f3445f7aa239))
+* **developers:** correctly register ajax view ([c188342d](https://github.com/Elgg/Elgg/commit/c188342d718201879988badea7a77bf3f88c03c0))
+* **files:** only try to generate thumbs for image uploads ([36de95f3](https://github.com/Elgg/Elgg/commit/36de95f38cc2dd2887ced951fcb1a2d03b7eafc4))
+* **output:** correctly output non string tags ([a2722ff2](https://github.com/Elgg/Elgg/commit/a2722ff268ee8966ed67e82b1c728934d708126b))
+* **security:** tokenize outgoing no-reply email address ([bed58cd7](https://github.com/Elgg/Elgg/commit/bed58cd75f43f045bdb743be9ee09159727d3307))
+
+
+<a name="2.3.8"></a>
+### 2.3.8  (2018-07-20)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+
+#### Documentation
+
+* **install:** updated installation requirements ([48de11e1](https://github.com/Elgg/Elgg/commit/48de11e130b034fe9db6ad35a3d06d99af54df0b))
+* **web_services:** removed outdated webservices documentation ([6372fa8b](https://github.com/Elgg/Elgg/commit/6372fa8b465e092a92588aa582204ff7a676456b))
+
+
+#### Bug Fixes
+
+* **core:** revert original libxml_use_internal_errors value after use (#12008) ([69c422c9](https://github.com/Elgg/Elgg/commit/69c422c9c64b55bd8c46a110ec205d73fcb91548))
+
+
+<a name="2.3.7"></a>
+### 2.3.7  (2018-05-24)
+
+#### Contributors
+
+* Jerôme Bakker (6)
+* Ismayil Khayredinov (1)
+
+#### Bug Fixes
+
+* **developers:** set correct link to simpletest suite ([b2b9c0b4](https://github.com/Elgg/Elgg/commit/b2b9c0b4ce4f0a18870f6b90a55fa926c7e2e66f))
+* **friends:** check friendship relationship before change ([ccd6fbbb](https://github.com/Elgg/Elgg/commit/ccd6fbbbb3efd628b871f2548263d0d9ff3ef7ae))
+* **pages:** order of parent page selector reflects tree ([1e22a581](https://github.com/Elgg/Elgg/commit/1e22a5811d2ea60da91d1e3a28cbe50d73f1cf57))
+* **views:** prevent unwanted information on user listing elements ([2c74c2ac](https://github.com/Elgg/Elgg/commit/2c74c2ac6e630150808fb1fc953bb06c2eeee3f0))
+
+
 <a name="2.3.6"></a>
 ### 2.3.6  (2018-03-27)
 

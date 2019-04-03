@@ -247,9 +247,11 @@ return array(
 	'friend:remove' => "Odebrat přítele",
 
 	'friends:add:successful' => "Úspěšně jste přidal/a %s jako svého přítele.",
+	'friends:add:duplicate' => "You're already friends with %s",
 	'friends:add:failure' => "Nemohu přidat %s jako přítele.",
 
 	'friends:remove:successful' => "Úspěšně jste odebral/a %s z vašich přátel.",
+	'friends:remove:no_friend' => "You and %s are not friends",
 	'friends:remove:failure' => "Nemůžu odebrat %s z vašich přátel.",
 
 	'friends:none' => "Zatím žádní přátelé.",
@@ -1144,6 +1146,7 @@ Důrazně vám doporučujeme si po přihlášení ihned změnit heslo.
 	'installation:view' => "Zadejte pohled, který bude použit jako výchozí na stránkách nebo ponechte prázdné pro výchozí pohled (jste-li na pochybách, nechte jak je):",
 
 	'installation:siteemail' => "E-mailová adresa stránek (použita při rozesílání systémových e-mailů):",
+	'installation:siteemail:help' => "Warning: Do no use an email address that you may have associated with other third-party services, such as ticketing systems, that perform inbound email parsing, as it may expose you and your users to unintentional leakage of private data and security tokens. Ideally, create a new dedicated email address that will serve only this website.",
 	'installation:default_limit' => "Výchozí počet položek na stránce",
 
 	'admin:site:access:warning' => "Toto nastavení pravidel sdílení je doporučeno uživatelům při vytváření nového obsahu. Jeho změna nezpůsobí změnu pravidel obsahu.",

@@ -6,6 +6,7 @@ return array(
 	'admin:develop_tools:inspect' => 'Inspecter',
 	'admin:inspect' => 'Inspecter',
 	'admin:develop_tools:unit_tests' => 'Tests unitaires',
+	'admin:develop_tools:entity_explorer' => 'Explorateur d\'entités',
 	'admin:developers' => 'Développement',
 	'admin:developers:settings' => 'Paramètres de développement',
 
@@ -39,6 +40,16 @@ Cela peut casser les vues non HTML de l'affichage principal. Voir developers_wra
 	'developers:debug:warning' => 'Avertissement',
 	'developers:debug:notice' => 'Avis',
 	'developers:debug:info' => 'Information',
+	
+	// entity explorer
+	'developers:entity_explorer:help' => 'Afficher des informations sur les entités et effectuer des actions basiques dessus.',
+	'developers:entity_explorer:guid:label' => 'Saisissez le GUID de l\'entité à inspecter',
+	'developers:entity_explorer:info' => 'Informations sur l\'entité',
+	'developers:entity_explorer:info:attributes' => 'Attributs',
+	'developers:entity_explorer:info:metadata' => 'Métadonnées',
+	'developers:entity_explorer:info:relationships' => 'Relations',
+	'developers:entity_explorer:info:private_settings' => 'Paramètres privés',
+	'developers:entity_explorer:delete_entity' => 'Supprimer cette entité',
 	
 	// inspection
 	'developers:inspect:help' => 'Inspecter la configuration système du framework Elgg',
@@ -84,6 +95,7 @@ Cela peut casser les vues non HTML de l'affichage principal. Voir developers_wra
 	// unit tests
 	'developers:unit_tests:description' => 'Elgg dispose de tests unitaires et d\'intégration pour détecter les bugs dans les classes et fonctions de son cœur.',
 	'developers:unit_tests:warning' => 'Attention : Ne Pas Exécuter Ces Tests sur un Site en Production. Ils peuvent corrompre votre base de données.',
+	'developers:unit_tests:warning:dependencies' => "Avertissement : Elgg n'est pas installé comme projet racine, vérifiez que toutes les dépendances dev Composer d'Elgg sont bien installées.",
 	'developers:unit_tests:run' => 'Exécuter',
 
 	// status messages

@@ -248,9 +248,11 @@ Ongeldig %s afhankelijkheid "%s" in plugin %s. Let op: plugins kunnen niet confl
 	'friend:remove' => "Verwijder vriend",
 
 	'friends:add:successful' => "Je hebt %s succesvol toegevoegd als vriend.",
+	'friends:add:duplicate' => "You're already friends with %s",
 	'friends:add:failure' => "We konden %s niet toevoegen als vriend. Probeer het nogmaals.",
 
 	'friends:remove:successful' => "Je hebt %s succesvol verwijderd als vriend.",
+	'friends:remove:no_friend' => "You and %s are not friends",
 	'friends:remove:failure' => "We konden %s niet verwijderen als vriend. Probeer het nogmaals.",
 
 	'friends:none' => "Deze gebruiker heeft nog niemand toegevoegd als vriend.",
@@ -1147,6 +1149,7 @@ Als je bent aangemeld raden we je aan om je wachtwoord direct te wijzigen.',
 	'installation:view' => "Geeft de view op die standaard wordt gebruikt binnen de site, of laat het leeg voor de standaardview. Bij twijfel, laat de standaard staan!",
 
 	'installation:siteemail' => "Site e-mailadres (dit wordt gebruikt voor het verzenden van systeem e-mails):",
+	'installation:siteemail:help' => "Warning: Do no use an email address that you may have associated with other third-party services, such as ticketing systems, that perform inbound email parsing, as it may expose you and your users to unintentional leakage of private data and security tokens. Ideally, create a new dedicated email address that will serve only this website.",
 	'installation:default_limit' => "Standaard aantal items per pagina",
 
 	'admin:site:access:warning' => "Het wijzigen van de toegangsinstellingen is alleen van toepassing op nieuwe content.",

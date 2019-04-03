@@ -11,6 +11,7 @@ return array(
     'Zend\\Mime\\' => array($vendorDir . '/zendframework/zend-mime/src'),
     'Zend\\Mail\\' => array($vendorDir . '/zendframework/zend-mail/src'),
     'Zend\\Loader\\' => array($vendorDir . '/zendframework/zend-loader/src'),
+    'TrueBV\\' => array($vendorDir . '/true/punycode/src'),
     'Symfony\\Polyfill\\Php55\\' => array($vendorDir . '/symfony/polyfill-php55'),
     'Symfony\\Polyfill\\Php54\\' => array($vendorDir . '/symfony/polyfill-php54'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
