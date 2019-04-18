@@ -391,7 +391,7 @@ function postbymail_checkandpost($config = array()) {
 					$postbymail_body .= $report;
 					if ($debug) { $postbymail_admin_message .= $report; }
 					
-					// Log in actor user so functions relyong on default logged in user will work as expected
+					// Log in actor user so functions relying on default logged in user will work as expected
 					$session = elgg_get_session();
 					if (elgg_instanceof($post_owner, 'user')) {
 						// Use direct call rather than login/logout functions to avoid hooks
@@ -422,7 +422,7 @@ function postbymail_checkandpost($config = array()) {
 					//$postbymail_admin_message .= $report;
 					//$postbymail_actor_message .= $report;
 					
-					// Log in actor user so functions relyong on default logged in user will work as expected
+					// Log in actor user so functions relying on default logged in user will work as expected
 					$session = elgg_get_session();
 					if (elgg_instanceof($actor, 'user')) {
 						// Use direct call rather than login/logout functions to avoid hooks
@@ -853,7 +853,7 @@ function postbymail_checkandpost($config = array()) {
 					} else {
 						// En cas d'erreur on intègre tous les messages de débogage
 						$admin_subject = elgg_echo('postbymail:admin:notpublished');
-						$postbymail_admin_message = elgg_echo('postbymail:adminmessage:success', array($postbymail_admin_message));
+						$postbymail_admin_message = elgg_echo('postbymail:adminmessage:error', array($postbymail_admin_message));
 						$postbymail_admin_message = elgg_echo('postbymail:admin:debuginfo', array($admin_subject, $report, $postbymail_admin_message));
 					}
 					$notifylist = elgg_get_plugin_setting('notifylist', 'postbymail');
@@ -895,7 +895,9 @@ function postbymail_checkandpost($config = array()) {
 				}
 				
 				// Clear any remaining session data
-				$session->invalidate();
+				if ($session) {
+					$session->invalidate();
+				}
 			} // END foreach - MESSAGES LOOP
 			
 			
@@ -963,11 +965,11 @@ function postbymail_checkeligible_post($params = array()) {
 			// Conteneur OK
 			$report .= elgg_echo('postbymail:validcontainer');
 			if (elgg_instanceof($container, 'user')) {
-				$report .= elgg_echo('postbymail:container:isuser') . ' ' . $container->name;
+				$report .= elgg_echo('postbymail:container:isuser') . ' ' . $container->name . " ({$container_guid})";
 			} else if (elgg_instanceof($container, 'group')) {
-				$report .= elgg_echo('postbymail:container:isgroup') . ' ' . $container->name;
+				$report .= elgg_echo('postbymail:container:isgroup') . ' ' . $container->name . " ({$container_guid})";
 			} else if (elgg_instanceof($container, 'site')) {
-				$report .= elgg_echo('postbymail:container:issite') . ' ' . $container->name;
+				$report .= elgg_echo('postbymail:container:issite') . ' ' . $container->name . " ({$container_guid})";
 			} else {
 				// Mauvais container - inconnu
 				$report .= elgg_echo('postbymail:error:unknowncontainer', array($container_guid));
@@ -1099,7 +1101,7 @@ function postbymail_checkeligible_reply($params) {
 				// Check the user is a group member, or if he is the group owner, or if he is an admin,
 				// or he can just comment because the object access level allows it
 				if (elgg_instanceof($container, 'group')) {
-					$report .= elgg_echo('postbymail:groupok', array($container->name));
+					$report .= elgg_echo('postbymail:groupok', array($container->name . " ({$container->guid})"));
 					if (
 						($container->isMember($params['member']))
 						|| ($container->owner_guid == $params['member']->guid)

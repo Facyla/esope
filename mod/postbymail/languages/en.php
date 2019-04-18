@@ -231,6 +231,7 @@ return array(
 	'postbymail:admin:notpublished' => "Failed publication by email",
 	'postbymail:adminsubject:newpublication' => "New publication by email to be checked",
 	'postbymail:adminmessage:success' => "Successful publication by email: new content to be checked\n\n%s",
+	'postbymail:adminmessage:error' => "Publication by email failed: please check debugging information\n\n%s",
 	'postbymail:adminmessage:newpublication' => "A new publication by email was sent by &laquo;&nbsp;%s&nbsp;&raquo; 
 			(member identified through sender email &laquo;&nbsp;%s&nbsp;&raquo;), 
 			on <a href=\"%s\">page &laquo;&nbsp;%s&nbsp;&raquo;</a> (%s)<br /><br />

@@ -231,6 +231,7 @@ return array(
 	'postbymail:admin:notpublished' => "Echec d'une publication par mail",
 	'postbymail:adminsubject:newpublication' => "Nouvelle publication par mail à vérifier",
 	'postbymail:adminmessage:success' => "Publication par mail réussie : nouveau contenu à vérifier\n\n%s",
+	'postbymail:adminmessage:error' => "Echec de la publication par mail : veuillez vérifier les informations de débogage\n\n%s",
 	'postbymail:adminmessage:newpublication' => "Une nouvelle publication par mail a été faite par &laquo;&nbsp;%s&nbsp;&raquo; 
 			(membre identifié via l'adresse email d'expédition &laquo;&nbsp;%s&nbsp;&raquo;), 
 			sur <a href=\"%s\">la page &laquo;&nbsp;%s&nbsp;&raquo;</a> (%s)<br /><br />

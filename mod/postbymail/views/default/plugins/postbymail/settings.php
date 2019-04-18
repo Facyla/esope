@@ -92,12 +92,12 @@ echo '<fieldset style="border:1px solid grey; padding:1ex; margin:1ex 0;">';
 	echo '<legend>' . elgg_echo('postbymail:settings:replybymail') . '</legend>';
 	echo '<p><em>' . elgg_echo('postbymail:settings:replybymail:details') . '</em></p>';
 	
-	// Forums seulement ou tous types de commentaires ? @TODO replaced by per-subtype setting
-	/*
+	// Forums seulement ou tous types de commentaires ?
+	// @TODO replaced by per-subtype setting
+	// mais ATTENTION : le réglage est utilisé dans functions.php donc à modifier aussi !
 	echo '<p><label>' . elgg_echo('postbymail:settings:scope') . ' ';
 	echo elgg_view('input/select', array('name' => 'params[scope]', 'options_values' => $scope_options, 'value' => $vars['entity']->scope));
 	echo '</label></p>';
-	*/
 	
 	// Choose enabled subtypes
 	$registered_objects = get_registered_entity_types('object');
