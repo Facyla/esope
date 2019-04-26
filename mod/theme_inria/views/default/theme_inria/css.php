@@ -873,7 +873,7 @@ input#iris-topbar-search-input:focus { width: auto; font-size: 1.2rem; }
 #iris-footer .language_selector a { display: inline; }
 #iris-footer li a.inria-intranet { color:#95C11F; }
 
-#iris-footer-main { background: <?php echo $iris_sidegrey; ?>; min-height: 5rem; clear: both; margin-top: auto; }
+#iris-footer-main { background: <?php echo $iris_sidegrey; ?>; min-height: 5rem; clear: both; margin-top: auto; flex: 0 0 100%; }
 #iris-footer-main .footer-inria { padding: 2rem 2rem; }
 #iris-footer-main li { display: inline-block; margin-right: 2rem; }
 #iris-footer-main li a { font-size: 1rem; }
