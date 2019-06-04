@@ -915,6 +915,7 @@ return array(
 	'esope:subtype:file:icon' => '<i class="fa fa-file"></i>',
 	'esope:subtype:event_calendar:icon' => '<i class="fa fa-calendar"></i>',
 	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
+	'esope:subtype:tasks' => "<i class=\"fa fa-list-alt\"></i>",
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
 
@@ -946,6 +947,7 @@ return array(
 	'esope:icon:page_top' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i>",
 	'esope:icon:poll' => "<i class=\"fa fa-pie-chart fa-fw\"></i>",
 	'esope:icon:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i>",
+	'esope:icon:tasks' => "<i class=\"fa fa-list-alt fa-fw\"></i>",
 	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
 	'esope:icon:transitions' => "<i class=\"fa fa-puzzle-piece fa-fw\"></i>",
 	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
