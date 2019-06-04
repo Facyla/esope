@@ -10,7 +10,7 @@ $site_email = $site->email;
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . $url . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Powered by Elgg" width="106" height="15" /></a></div>';
 
 return array(
-	
+
 	//Theme settings
 	'admin:appearance:esope' => "Theme configuration",
 	'admin:appearance:main_theme_config' => "Theme configuration",
@@ -92,7 +92,7 @@ return array(
 	'groups:friends' => "Friends",
 	'groups:newest' => "By date",
 	'groups:popular' => "Popular",
-	
+
 	// Group tools tooltips
 	'groups:tools:announcements:details' => "",
 	'groups:tools:blog:details' => "",
@@ -112,7 +112,7 @@ return array(
 	'groups:tools:tasks:details' => "",
 	'groups:tools:thewire:details' => "",
 	'groups:tools:transitions:details' => "",
-	
+
 	'groups:onlinenow' => "Online group members",
 	'esope:config:memberssearch' => "MEMBERS SEARCH PAGE",
 	'esope:settings:members:alpha' => "Use alphabetic tab",
@@ -127,7 +127,7 @@ return array(
 	'esope:config:styles:headerfooter' => "Header and footer gradient",
 	'esope:config:styles:groupmodules' => "Widgets and group modules gradient",
 	'esope:config:styles:buttons' => "Buttons gradient (normal then :hover)",
-	
+
 	// Import / export
 	'esope:config:saverestore' => "IMPORT / EXPORT - <i>BETA</i>",
 	'esope:config:saverestore:details' => "This functionnality lets you save/export the current theme configuration, and restore previous configurations, or import them into another site. You can use it as a config backup, to test various configuration settings, or as a deployment tool to transfer a theme configuration from a site to another.<br />Warning : this only include THIS plugin configuration.",
@@ -141,7 +141,7 @@ return array(
 	'esope:restore:report' => "Settings restore completed! %s settings read, %s settings updated, and %s settings left identical.<br />",
 	'esope:restore:error' => "Error while restoring settings: invalid restore data.",
 	'esope:restore:previousversion:success' => "Successfully imported and updated settings from previous version",
-	
+
 	// Réglages experts
 	'esope:config:expert' => "EXPERT",
 	'esope:config:security' => "SECURITY",
@@ -156,15 +156,15 @@ return array(
 		</ul>",
 	'esope:config:framekiller' => "Add frame busting code (\"frame killer\")",
 	'esope:config:framekiller:details' => "<em>Note : setting this to Yes will be the prefered choice in most cases.</em><br />Warning : by activating this code, you will not be able to embed the site into another site through an iframe (depending on used layouts). If you need to embed the site or some parts of it in iframes, please test carefully before activating on a production site !",
-	
+
 	// Group invites
 	'esope:groupinvite:standard' => "Method 1: Personal invitations",
 	'esope:groupinvite:search' => "Method 2: Search members to invite",
 	'esope:groupinvite:search:select' => "Step 1: search using available criteria",
 	'esope:groupinvite:search:invite' => "Step 2: select the members to invite or register",
-	
-	
-	
+
+
+
 	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
 	'esope:groupinvite' => "pending group invite request",
@@ -193,7 +193,7 @@ return array(
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
 	'esope:categories:tree:explanation' => "You can use tree categories: prepend your category with the name of the parent category, separated by \"/\", eg.: Resources/Learning/Online videos,",
-	
+
 	// Widgets
 	'esope:widget:bookmark:title' => 'Bookmarks',
 	'esope:widget:brainstorm:title' => 'Brainstorm ideas',
@@ -220,7 +220,7 @@ return array(
 	'<i class="fa fa-envelope"></i> Messages non lus',
 	'<i class="fa fa-user"></i> Mon profil',
 	*/
-	
+
 	'accessibility:sidebar:title' => "Secondary menu",
 	//'breadcrumb' => "Fil d'Ariane",
 	'breadcrumbs' => "Back to ",
@@ -250,18 +250,18 @@ return array(
 	'groups:topicopen' => "Open (comments allowed)",
 	// Notifications
 	'link:userprofile' => "%s's profile page",
-	
+
 	// Widgets settings
 	'onlineusers:numbertodisplay' => "Max amount of connected members to display",
 	'newusers:numbertodisplay' => "Max amount of new members to display",
 	'brainstorm:numbertodisplay' => "Max amount of new ideas to display",
 	'river:numbertodisplay' => "Max amount of activities to display",
 	'group:widget:num_display' => "Max amount of groups to display",
-	
-	'more:friends' => "More friends", 
-	
+
+	'more:friends' => "More friends",
+
 	// New group
-	// @TODO This text should definitely be adapted to your own install - HTML can be used here ; 
+	// @TODO This text should definitely be adapted to your own install - HTML can be used here ;
 	// use $url for site install URL, $site_email for site email
 	'groups:newgroup:disclaimer' => "<blockquote><strong>Group creation rules:</strong> <em>Please refer to General User Conditions.</em></blockquote>",
 	'groups:search:regular' => "Group search",
@@ -269,13 +269,13 @@ return array(
 	'search:group:go' => "Find a group",
 	'members:search' => "Find a member",
 	'group_profile' => "Group profile",
-	
-	// 
+
+	//
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> All fields are required",
 	'accessibility:requestnewpassword' => "Ask for a new password",
 	'accessibility:revert' => "Delete",
-	
-	
+
+
 	'esope:showresponses' => "Show responses",
 	'esope:showresponses:title' => "Show responses to %s",
 	'esope:moreinfoon' => "More information on %s",
@@ -289,10 +289,10 @@ return array(
 	'esope:homepage:groups' => "Featured groups",
 	'esope:homepage:login' => "Login",
 	'esope:homepage:register' => "Registration",
-	
+
 	'esope:access:public' => "Public (accessible to non-loggedin visitors)",
-	
-	
+
+
 	// Layout settings
 	'esope:settings:help' => "The configuration panels let you configure numerous elements of your site: graphical elements, interface, couleurs, stylesheets, etc., and also some behaviours.",
 	'esope:settings:layout' => "To reset to initial configuration, replace content by \"RAZ\" (in HTML mode).",
@@ -321,7 +321,7 @@ return array(
 	'esope:homegroup_index' => "Display latest group activity ?",
 	'esope:homesite_index' => "Display latest site activity ?",
 	'esope:homegroup_autojoin' => "Auto-register new members in this group ? (if forced, will also register anyone who left the group)",
-	
+
 	'esope:homeintro' => "Introduction block on public homepage (above register/login forms).",
 	'esope:settings:colors' => "Theme colors",
 	'esope:fonts' => "Fonts",
@@ -375,7 +375,7 @@ return array(
 	'esope:members:hide_directory' => "Hide members directory to non-members (no public directory)",
 	'esope:members:messages_allusers' => "Allow to message any site member",
 	'esope:members:messages_allusers:details' => "By default members can only send messages to their own friends, or they need to go through the full profile page. Admins however have the ability to message any site member directly. This setting allows any site member to message any other site member.",
-	
+
 	// Behaviour settings
 	'esope:index:url' => "Index page file URL (must be includable)",
 	'esope:settings:redirect' => "Relative redirect URL after login",
@@ -437,8 +437,8 @@ return array(
 	'esope:profile:remove_profile_widgets' => "Disable profile widgets",
 	'esope:profile:custom_profile_layout' => "Use a custom layout",
 	'esope:profile:add_profile_comments' => "Add comments",
-	
-	
+
+
 	// Widget settings
 	'esope:settings:widget:blog' => "Allow widget : Blog",
 	'esope:settings:widget:bookmarks' => "Allow widget : Bookmarks",
@@ -493,7 +493,7 @@ return array(
 	'pages:widget:description' => "Displays your pages.",
 	'event_calendar:widget:description' => "Displays your upcoming events.",
 	'messages:widget:description' => "Displays your latest unread messages.",
-	
+
 	'esope:settings:filters:friends' => "Remove \"Friends\" tab in listings ? (default : No)",
 	'esope:settings:filters:mine' => "Remove \"Mine\" tab in listings ? (default : No)",
 	'esope:settings:filters:all' => "Remove \"All\" tab in listings ? (default : No)",
@@ -502,7 +502,7 @@ return array(
 	'esope:settings:groups:allowregister' => "Allows group admins to register members in the group, instead of only inviting them.",
 	'esope:settings:members:onesearch' => "Keep only general member search ? (default : No)",
 	'esope:settings:members:online' => "Display online members on sidebar (default : no)",
-	
+
 	'esope:settings:thewire_default_access' => "Default Wire access",
 	'esope:settings:thewire_default_access:details' => "Wire access can be set to use default access (\"default\"), or use a specific value (eg. a specific group access collection). Usual values are \"2\" = public and \"1\" = members only.",
 	'esope:settings:groups:invite_picker' => "User picker type",
@@ -512,7 +512,7 @@ return array(
 	'esope:invitegroups:help' => "Please input at least 3 letters of the searched person's name.",
 	'esope:settings:groups:invite_metadata' => "Group invites by metadata search",
 	'esope:settings:groups:invite_metadata:details' => "If metadata values are set, they will be used to extend the invite form with search fields that will allow to search for members based on these criteria, and invite them (globally or one by one). Eg.: location, organisation, etc. Leave empty to disable this feature (default).",
-	
+
 	/* Social presence */
 	'esope:config:contacts' => "CONTACTS & IDENTITIES",
 	'esope:config:contacts:details' => "Note : some themes use theses information to display links to social presence in top menu (or elswhere).",
@@ -606,8 +606,8 @@ return array(
 	'esope:settings:slideshare:help' => "",
 	'esope:settings:slideshare:icon' => '<i class="fa fa-slideshare"></i>',
 	'esope:settings:slideshare:title' => "Slideshare",
-	
-	
+
+
 	// DATES
 	'date:format:friendly' => 'm/d/Y H:i',
 	'date:time:on' => "on",
@@ -632,7 +632,7 @@ return array(
 	'date:month:10' => 'October',
 	'date:month:11' => 'November',
 	'date:month:12' => 'December',
-	
+
 	'esope:dashboard:title' => "My custom homepage",
 	'esope:welcome:msg' => "Welcome on your social platform.<br />Site adminis, please edit this message through the theme configuration !",
 	'esope:firststeps:linktitle' => "First steps (click to show/hide)",
@@ -643,7 +643,7 @@ return array(
 	'esope:thewire:charleft' => "left",
 	'esope:thewire:access' => "Access : ",
 	'esope:homewire:msg' => "Would you share an idea or info ?",
-	
+
 	'grouptype:default' => "Default",
 	'grouptype:thematic' => "Thematics",
 	'grouptype:project' => "Projects",
@@ -652,7 +652,7 @@ return array(
 	'grouptype:edition' => "Edition",
 	'grouptype:region' => "Region",
 	'grouptype:publication' => "Publication",
-	
+
 	/* ESOPE search */
 	'esope:settings:groups:searchtab' => "Multi-criteria search tab",
 	'esope:settings:groups:tags' => "Add tag cloud below search",
@@ -685,7 +685,7 @@ return array(
 	'esope:search:nosearch' => "No search, please select filter(s) and hit Search.",
 	'esope:search:loadmore:next' => "<i class=\"fa fa-plus\"></i> Display the %s next results (%s remaining)",
 	'esope:search:loadmore:last' => "<i class=\"fa fa-plus\"></i> Display the %s last results",
-	
+
 	// View profile as someone else
 	'esope:viewprofileas:title' => "View your profile as",
 	'esope:viewprofileas:public' => "You are viewing your public profile (as a non-user would see it)",
@@ -697,19 +697,19 @@ return array(
 	'esope:viewprofileas:someonelse' => "Someone else",
 	'esope:viewprofileas:acontact' => "One of your contacts",
 	'esope:viewprofileas:nonuser' => "Non-user (public)",
-	
+
 	'esope:filesize:units' => "BKMGTP",
 	'esope:embed:file:download' => "open",
 	'esope:untitled' => "(untitled)",
-	
+
 	'esope:subgroups:search:overmax' => "More than %s results found: please tailor your search by using more words from the title or description of the searched group (use at least 3 letters for each word).",
 	'esope:subgroups:search:details' => "Please type a few letters or words than correspond to the group title or description to display some results.<br />Only groups you have the right to edit will show up.",
 	'esope:subgroups:tryjoiningparent' => "Trying to join parent groups to allow joining %s",
 	'esope:subgroups:access:parent' => "Parent group level %2\$s [%1\$s]",
-	
+
 	'esope:input:nogroup' => "No group selected",
 	'esope:input:donotchange' => "Do not change (%s)",
-	
+
 	// TinyMCE settings
 	'esope:tinymce:plugins' => "TinyMCE plugins",
 	'esope:tinymce:plugins:details' => "Set the list of TinyMCE plugins to be used by the editor, as you would set up them in tinyMCE JS config file. Caution: the plugins should be available in your TinyMCE plugin! If needed, deleting the whole line will revert to default setting.",
@@ -728,7 +728,7 @@ return array(
 	'esope:tinymce:templates:guids:details' => "Set the templates based on existing objects: GUID and template title, one template per line.<br />Full syntax: GUID::Template title::Template description<br />Note that only the description of the object will be used as a template.",
 	'esope:tinymce:extended_valid_elements' => "List of allowed HTML tags and properties",
 	'esope:tinymce:extended_valid_elements:details' => "Lets you control precisely the allowed HTML tags and properties in the TinyMCE editor.<br />IMPORTANT: this setting defines solely what is allowed in the TinyMCE editor, and NOT what will be further filtered by HTMLawed, or by any other filtering function that is enabled on the site. Also note that the editor can be disabled. If you wish to enable/disable specific tags, please also set HTMLawed config (or any other filter) accordingly!",
-		
+
 	// CKEditor settings
 	'esope:ckeditor:plugins' => "CKEditor plugins",
 	'esope:ckeditor:plugins:details' => "Set the list of CKEditor plugins to be used by the editor, as you would set up them in CKEditor JS config file. Caution: the plugins should be available in your CKEditor plugin! If needed, deleting the whole line will revert to default setting.",
@@ -747,7 +747,7 @@ return array(
 	'esope:ckeditor:templates:guids:details' => "Set the templates based on existing objects: GUID and template title, one template per line.<br />Full syntax: GUID::Template title::Template description<br />Note that only the description of the object will be used as a template.",
 	'esope:ckeditor:extended_valid_elements' => "List of allowed HTML tags and properties",
 	'esope:ckeditor:extended_valid_elements:details' => "Lets you control precisely the allowed HTML tags and properties in the CKEditor editor.<br />IMPORTANT: this setting defines solely what is allowed in the CKEditor editor, and NOT what will be further filtered by HTMLawed, or by any other filtering function that is enabled on the site. Also note that the editor can be disabled. If you wish to enable/disable specific tags, please also set HTMLawed config (or any other filter) accordingly!",
-	
+
 	// Htmlawed settings
 	'esope:htmlawed:settings:details' => "Htmlawed settings are very powerful to let you define in details which are the allowed or denied HTML elements. The used syntax is very strict, and the effects can be very wide, as this affects all user input filtering on the platform, before saving content.<br />Please <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">read the Documentation</a>, and double-check your settings before goind live !<br />Note : these setting go along with TinyMCE or CKEditor plugin settings, from a user point of view, please also check them !",
 	'esope:htmlawed:safe' => "Enable safe mode",
@@ -756,7 +756,7 @@ return array(
 	'esope:htmlawed:elements:details' => "This lets you define HTML tags that are allowed or disallowed, using lists and wildcards. Please read the <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3\">elements setting documentation</a> for detailed allowed syntax.<br />Valid syntax may be : \"* -script\" (blocks only script tag)",
 	'esope:htmlawed:deny_attribute' => "Denied attributes list",
 	'esope:htmlawed:deny_attribute:details' => "This lets you block some unwanted attributes, also using wildcards. Please read the <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.4\">deny_attribute setting documentation</a> for detailed allowed syntax.<br />Recommended value is : \"on*\" (blocks all JS events : onClick, onHover, etc.)",
-	
+
 	// Newsletter additions
 	'newsletter:embed:templates' => "Choose content template",
 	'newsletter:embed:template:default' => "Basic",
@@ -764,8 +764,8 @@ return array(
 	'newsletter:embed:template:fullcontentauthor' => "Content + author",
 	'newsletter:embed:search' => "Search a publication",
 	'newsletter:embed:subtype' => "Publication type",
-	
-	
+
+
 	// Nouveaux champs
 	'profile:field:plaintext' => 'Plain text (no editor)',
 	'profile:field:group_profiletypes' => 'Group types',
@@ -775,7 +775,7 @@ return array(
 	'profile:field:members_select' => 'Member select',
 	'members_select:myself' => 'Myself',
 	'profile:field:percentage' => 'Percentage',
-	
+
 	// Menu top des groupes
 	'esope:groups:home' => "Group home",
 	'esope:settings:groups:topmenu' => "Enable group top menu",
@@ -785,6 +785,7 @@ return array(
 	'esope:group_activity:notloggedin' => "(unavailable - please login to read this)",
 	'esope:settings:groups:add_wire' => "Add Wire form on group home",
 	'esope:groups:enablethewire' => "Enable the group's Wire",
+	'esope:thewire:group:add' => "Send a message",
 	'esope:thewire:group:placeholder' => "Your message for the group members",
 	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Group Wire messages",
 	'esope:thewire:none' => "No group message yet",
@@ -819,15 +820,15 @@ return array(
 	'esope:autorefresh:sortby' => "sort by",
 	'esope:autorefresh:latest' => "Latest",
 	'esope:autorefresh:likes' => "Likes",
-	
+
 	'esope:bookmarks:container' => "Publish in...",
 	'esope:container:option:own' => "%s (own)",
 	'esope:container:publishedin' => "Published in",
-	
+
 	// Messages
 	'esope:messages:allinbox' => "All incoming messages",
 	'esope:messages:unreadonly' => "Unread messages only",
-	
+
 	// Notification, digest and newsletter CSS and wrappers
 	'esope:html_email_handler:css' => "Notifications custom CSS",
 	'esope:html_email_handler:css:help' => "If set, this CSS will replace default CSS (in html_email_handler/notification/body).",
@@ -841,16 +842,16 @@ return array(
 	'esope:digest:groups' => "New groups",
 	'esope:digest:members' => "New members",
 	'esope:digest:groupactivity' => "Recent activity in your groups",
-	
+
 	// Join groups at registration
 	'esope:settings:groups:autojoin' => "List of groups (GUIDS) to join automatically after registration",
 	'esope:settings:register:joingroups' => "Allow to join groups at registration",
 	'esope:register:joingroups' => "Join groups",
 	'esope:register:joingroups:help' => "You can select a few groups to join. Note that only public and open groups display here, so you'll be able to join more groups after your registration",
 	'esope:register:morejoingroups' => "Display more groups",
-	
+
 	'readmore' => "Read more",
-	
+
 	'esope:pages:subpages' => "Sub-pages",
 	'esope:pages:summary' => "Summary",
 	'esope:pages:parent' => "Parent page: ",
@@ -864,9 +865,9 @@ return array(
 	'esope:subtype:blog' => "blog article",
 	'esope:subtype:file' => "file",
 	'esope:subtype:event_calendar' => "event",
-	
+
 	'esope:likes' => "Liked content",
-	
+
 	'esope:access_id:restricttocontainer' => "Restricted to container (group)",
 	'esope:access:userfield' => "Viewable by...",
 	'esope:access:overridenotice' => "Note: Following the group policy, this content should be accessible only by group members.",
@@ -876,7 +877,7 @@ return array(
 	'groups:content_access_mode:unrestricted' => "Unrestricted - Access depends on content-level settings",
 	'groups:content_access_mode:membersonly' => "Members only - New content is restricted to the Group Members",
 	'groups:acl' => "Group Members (%s)",
-	
+
 	'esope:group:oldactivity' => "There was no recent activity in this group since %s.",
 	'esope:group:norecentactivity' => "There was no recent activity in this group.",
 	'esope:group:inactive' => "INACTIVE",
@@ -884,11 +885,11 @@ return array(
 	'esope:group:inactive:details:never' => "No activity since the group has been created",
 	'esope:group:archive' => "ARCHIVE",
 	'esope:group:inactive:details' => "This group was archived",
-	
+
 	'esope:status:archive' => "archive",
 	'esope:user:nomail' => "<s>email</s>",
-	
-	
+
+
 	/**********************/
 	/* Font Awesome ICONS */
 	/**********************/
@@ -931,7 +932,7 @@ return array(
 	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
 	'esope:icon:transitions' => "<i class=\"fa fa-puzzle-piece fa-fw\"></i>",
 	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
-	
+
 	// Sprites icons
 	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
 	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
@@ -939,7 +940,7 @@ return array(
 	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down fa-fw\"></i>",
 	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
 	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
-	
+
 	// User tools FA icons *override* (owner block)
 	// Core tools
 	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
@@ -964,7 +965,7 @@ return array(
 	'poll' => "<i class=\"fa fa-pie-chart\"></i> Polls",
 	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Polls",
 	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> My Polls",
-	
+
 	/* Main objects and search menus */
 	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groups",
 	'item:group:icon' => '<i class="fa fa-users fa-fw" title="Groups"></i>',
@@ -1001,7 +1002,7 @@ return array(
 	'item:object:dossierdepreuve' => "<i class=\"fa fa- fa-fw\"></i> Proof file",
 	'item:object:cmspage' => "<i class=\"fa fa- fa-fw\"></i> Static page",
 	*/
-	
+
 	// Group tools : side menu entries and module titles - *override* - please update CSS accordingly
 	// Core tools
 	'blog:group' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
@@ -1035,11 +1036,11 @@ return array(
 	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sub-groups",
 	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Most recent photos",
 	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Most recent albums",
-	
+
 	// User actions and infos
 	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications enabled",
 	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications disabled",
-	
+
 	/* Widgets */
 	'esope:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Bookmarks',
 	'esope:widget:brainstorm:title' => '<i class=\"fa fa-lightbulb-o fa-fw\"></i> Brainstorm ideas',
@@ -1064,16 +1065,16 @@ return array(
 	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Free text (HTML)",
 	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> The Wire",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> My Friends",
-	
+
 	'dashboard:widget:group:noselect' => "No group selected",
-	
-	
+
+
 	/* Other interface */
 	'select:all' => 'Select all',
 	'link:view:all' => '<i class="fa fa-search-plus"></i> View all',
-	
-	
-	
+
+
+
 	// Actions
 	'esope:action:remove_user_email' => "Remove user email",
 	'esope:removeemail:areyousure' => "Warning, removing an email address cannot be undone. It is only recommended for deprecated emails. Do you confirm you want to remove %s ?",
@@ -1085,7 +1086,7 @@ return array(
 	'esope:archiveuser:error' => "User could not be archived",
 	'esope:unarchiveuser:ok' => "User successfully un-archived",
 	'esope:unarchiveuser:error' => "User could not be un-archived",
-	
+
 	// ESOPE tools
 	'esope:tools' => "Esope extended admin tools",
 	'esope:tools:details' => "A set of advanced tools that can be used to perform some unusual administration tasks. Often requires a direct access to the code to enable some of these tools.",
@@ -1115,22 +1116,22 @@ return array(
 	'esope:tools:tool:group_publication_stats:details' => "Some stats about publications in a group, per member and per publication subtype.",
 	'esope:tools:tool:update_subtype' => "Subtype update",
 	'esope:tools:tool:update_subtype:details' => "Use this if there are subtypes with invalid classes, or if you need to update a specific subtype to add a class.",
-	
+
 	// Menus
 	'esope:menu:topbar' => "My account",
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
-	
+
 	'entity:unavailable' => "unavailable entity",
-	
+
 	'river:comment:user:default' => "%s has commented %s",
-	
-	
-	
+
+
+
 	/* TRANSLATIONS OVERRIDES */
 	/* Note : these additions are made here rather than in the original plugins so that a core update won't break them */
 	'user:password:lost' => 'Lost password?',
-	
+
 	'option:notify:email' => "Enable email (default)",
 	'option:notify:site' => "Enable site (messages)",
 	'option:notify:all' => "Enable all methods",
@@ -1141,13 +1142,13 @@ return array(
 	'groups:yes' => "Enabled",
 	'groups:no' => "Disabled",
 	'group_operators:operators' => "Operator(s)",
-	
+
 	'profile_edit' => "Profile edition",
 	'event_calendar:view' => "View event",
-	
+
 	'river:comment:object:announcement' => "%s has commented %s",
 	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Complete my profile!%s",
-	
+
 	'widget:toggle' => "Show/hide %s module",
 	'widget:editmodule' => "Configure %s module",
 
@@ -1164,9 +1165,9 @@ return array(
 	'object:announcement:save:success' => "Announcement saved",
 	'item:object:category' => "Used categories",
 	'item:object:topicreply' => "Forum reply",
-	
-	
-	
+
+
+
 	// Comment notifications
 	'generic_comment:email:body' => "A new comment was published on \"%s\" by %s:
 
@@ -1181,15 +1182,15 @@ To view %s's profile, click here:
 %s
 
 This is an automated notification, please do not reply to this email.",
-	
+
 	// Logbrowser
 	'logbrowser:user_guid' => "or user GUID",
 	'logbrowser:entity_type' => "Entity type",
 	'logbrowser:entity_subtype' => "Entity subtype",
 	'logbrowser:object_guid' => "Entity GUID",
 	'logbrowser:event' => "Event",
-	
-	
+
+
 
 	'brainstorm:widget:description' => "Displays your brainstorm ideas.",
 	'bookmarks:widget:description' => "Displays your bookmarks list.",
@@ -1198,7 +1199,7 @@ This is an automated notification, please do not reply to this email.",
 	'bookmarks:mygroups' => "In my groups",
 	'bookmarks:more' => "More bookmarks",
 	'pages:widget:description' => "Displays your pages.",
-	
+
 	'event_calendar:widget:description' => "Displays your upcoming events.",
 	'event_calendar:num_display' => "Number of events to display",
 	'event_calendar:ics:notification' => "%s has created a new event :
@@ -1209,9 +1210,9 @@ This is an automated notification, please do not reply to this email.",
 View event on the site :
 %s
 
-You can add directly this event to your own calendar application through the attached iCal file. 
+You can add directly this event to your own calendar application through the attached iCal file.
 %s",
-	
+
 	'messages:widget:title' => "Unread messages",
 	'messages:widget:description' => "Displays your latest unread messages.",
 	'messages:num_display' => "Number of messages to display",
@@ -1221,11 +1222,11 @@ You can add directly this event to your own calendar application through the att
 	'messages:widget:unreadcount:singular' => '1 unread message',
 	'messages:answer' => "Reply",
 	'messages:to' => "to",
-	
+
 	'thewire:reply' => "Reply",
-	
+
 	'search:more' => '+%s more %s',
-	
-	
+
+
 );
 

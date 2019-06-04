@@ -10,7 +10,7 @@ $site_email = $site->email;
 $footer_default = '<div class="mts clearfloat right"><a href="http://elgg.org"><img src="' . $url . '_graphics/powered_by_elgg_badge_drk_bckgnd.gif" alt="Site construit avec Elgg" width="106" height="15" /></a></div>';
 
 return array(
-	
+
 	//Theme settings
 	'admin:appearance:esope' => "Configuration du thème",
 	'admin:appearance:main_theme_config' => "Configuration du thème",
@@ -92,7 +92,7 @@ return array(
 	'groups:friends' => "Contacts",
 	'groups:newest' => "Par date",
 	'groups:popular' => "Nombre de membres",
-	
+
 	// Group tools tooltips
 	'groups:tools:announcements:details' => "",
 	'groups:tools:blog:details' => "",
@@ -112,7 +112,7 @@ return array(
 	'groups:tools:tasks:details' => "",
 	'groups:tools:thewire:details' => "",
 	'groups:tools:transitions:details' => "",
-	
+
 	'groups:onlinenow' => "Membres du groupe en ligne",
 	'esope:config:memberssearch' => "PAGE DE RECHERCHE DE MEMBRES",
 	'esope:settings:members:alpha' => "Onglet tri alphabétique",
@@ -127,7 +127,7 @@ return array(
 	'esope:config:styles:headerfooter' => "Dégradé du header et du pied de page",
 	'esope:config:styles:groupmodules' => "Dégradé des widgets et modules des groupes",
 	'esope:config:styles:buttons' => "Dégradé des boutons (normal puis :hover)",
-	
+
 	// Import / export
 	'esope:config:saverestore' => "SAUVEGARDE ET RESTAURATION - <i>BETA</i>",
 	'esope:config:saverestore:details' => "Cette fonctionnalité vous permet de sauvegarder/exporter les paramètres de votre thème, et d'importer les données d'une sauvegarde précédente ou d'un autre thème. Cela peut vous servir à des fins de sauvegarde d'une version particulière de votre thème, mais aussi à tester différents thèmes ou réglages tout en conservant la possibilité de revenir à votre configuration initiale, ou encore à transférer votre thème d'un site à un autre.<br />Attention : seule la configuration de CE plugin est concernée !",
@@ -141,7 +141,7 @@ return array(
 	'esope:restore:report' => "Restauration de vos paramètres terminée ! %s paramètres lus, %s paramètres modifiés, et %s paramètres identiques.<br />",
 	'esope:restore:error' => "Erreur lors de la restauration des paramètres : données importées invalides.",
 	'esope:restore:previousversion:success' => "Import et mise à jour des paramètres réussie depuis la version précédente",
-	
+
 	// Réglages experts
 	'esope:config:expert' => "EXPERT",
 	'esope:config:security' => "SECURITÉ",
@@ -157,7 +157,7 @@ return array(
 		</ul>",
 	'esope:config:framekiller' => "Ajouter un code pour éviter l'insertion comme iframe (\"frame killer\" ou \"frame busting code\")",
 	'esope:config:framekiller:details' => "<em>Note : l'ajout d'un framekiller est préférable dans la majorité des cas.</em><br />Attention : l'activation du framekiller bloque l'intégration du site par un site tiers sous forme d'iframe (en fonction des layouts utilisés). Si vous avez besoin d'intégrer ce site ou certains de ses éléments sous forme d'iframe, veuillez tester cette fonctionnalité avec soin avant de l'activer en production, et utilisez le code de désactivation lorsque c'est nécessaire.",
-	
+
 	// Groups invites
 	'esope:groupinvite:standard' => "Méthode 1&nbsp;: Invitations personnelles",
 	'esope:groupinvite:search' => "Méthode 2&nbsp;: Recherche de membres à inviter",
@@ -170,8 +170,8 @@ return array(
 	'groups:owned:user' => 'Les groupes dont %s est propriétaire ou responsable',
 	'groups:yours' => "Mes groupes (membres)",
 
-	
-	
+
+
 	// Theme translation & other customizations
 	// Traductions du thème et autres personnalisations
 	'esope:groupinvite' => "invitation à rejoindre un groupe à examiner",
@@ -200,7 +200,7 @@ return array(
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
 	'esope:categories:tree:explanation' => "Vous pouvez utiliser des sous-catégories : pour cela, indiquez le nom de la catégorie parente, puis \"/\" et le nom de votre catégorie, par ex.: Ressources/Supports de formation/Vidéos,",
-	
+
 	// Widgets
 	'esope:widget:bookmark:title' => '<i class="fa fa-link"></i> Liens web',
 	'esope:widget:brainstorm:title' => '<i class="fa fa-lightbulb-o"></i> Idées',
@@ -227,8 +227,8 @@ return array(
 	'<i class="fa fa-envelope"></i> Messages non lus',
 	'<i class="fa fa-user"></i> Mon profil',
 	*/
-	
-	
+
+
 	'accessibility:sidebar:title' => "Menu secondaire",
 	//'breadcrumb' => "Fil d'Ariane",
 	'breadcrumbs' => "Revenir à ",
@@ -258,19 +258,19 @@ return array(
 	'groups:join:success' => "%s est désormais membre du groupe",
 	'reply:this' => "Répondre", // Mauvaise trad fr dans groups...
 	'groups:topicopen' => "Ouvert (commentaires acceptés)",
-	
+
 	// Notifications
 	'link:userprofile' => "Page de profil de %s",
-	
+
 	// Params widgets
 	'onlineusers:numbertodisplay' => "Nombre maximum de membres connectés à afficher",
 	'newusers:numbertodisplay' => "Nombre maximum de nouveaux membres à afficher",
 	'brainstorm:numbertodisplay' => "Nombre maximum d'idées à afficher",
 	'river:numbertodisplay' => "Nombre maximum d'activités à afficher",
 	'group:widget:num_display' => "Nombre maximum de groupes à afficher",
-	
-	'more:friends' => "Plus de contacts", 
-	
+
+	'more:friends' => "Plus de contacts",
+
 	// New group
 	// @TODO : Ce texte devrait être adapté à votre site !
 	// use $url for site install URL, $site_email for site email
@@ -280,13 +280,13 @@ return array(
 	'search:group:go' => "Rechercher un groupe",
 	'members:search' => "Rechercher un membre",
 	'group_profile' => "Présentation du groupe",
-	
-	// 
+
+	//
 	'accessibility:allfieldsmandatory' => "<sup class=\"required\">*</sup> Tous les champs sont obligatoires",
 	'accessibility:requestnewpassword' => "Demander la réinitialisation du mot de passe",
 	'accessibility:revert' => "Supprimer",
-	
-	
+
+
 	'esope:showresponses' => "Afficher les réponses",
 	'esope:showresponses:title' => "Afficher les réponses à %s",
 	'esope:moreinfoon' => "Plus d'informations sur %s",
@@ -300,11 +300,11 @@ return array(
 	'esope:homepage:groups' => "Quelques groupes",
 	'esope:homepage:login' => "Connexion",
 	'esope:homepage:register' => "Inscription",
-	
+
 	'esope:access:public' => "Public (accessible hors connexion)",
-	
-	
-	
+
+
+
 	// Layout settings
 	'esope:settings:help' => "Les différentes rubriques de configuration vous permettent de configurer de nombreux éléments du thème (éléments graphiques, d'interface, couleurs, feuilles de styles, etc.), ainsi que certains comportements du site.",
 	'esope:settings:layout' => "Pour retrouver la configuration initiale, remplacez le contenu par \"RAZ\" (en mode HTML).",
@@ -333,7 +333,7 @@ return array(
 	'esope:homegroup_index' => "Afficher les actualités du groupe ?",
 	'esope:homesite_index' => "Afficher les actualités du site ?",
 	'esope:homegroup_autojoin' => "Inscrire automatiquement les nouveaux membres dans ce groupe ? (si forcé, réinscrit les membres désinscrits)",
-	
+
 	'esope:homeintro' => "Bloc en introduction de la page de connexion / inscription.",
 	'esope:settings:colors' => "Couleurs du thème",
 	'esope:fonts' => "Polices de caractères",
@@ -387,7 +387,7 @@ return array(
 	'esope:members:hide_directory' => "Masquer l'annuaire des membres aux non-membres (pas d'annuaire public)",
 	'esope:members:messages_allusers' => "Permettre d'envoyer un message à tout membre du site",
 	'esope:members:messages_allusers:details' => "Par défaut chaque membre ne peut écrire qu'à ses propres contacts, à moins de passer par la page de profil de la personne. Les administrateurs ont cependant la possibilité d'écrire directement à chacun des membres du site. Ce réglage permet à tous les membres du site de contacter n'importe quel autre membre.",
-	
+
 	// Behaviour settings
 	'esope:index:url' => "URL du fichier de la page d'accueil (doit pouvoir être inclus)",
 	'esope:settings:redirect' => "URL (relative) de redirection après connexion",
@@ -449,8 +449,8 @@ return array(
 	'esope:profile:remove_profile_widgets' => "Supprimer les widgets du profil",
 	'esope:profile:custom_profile_layout' => "Utiliser un layout personnalisé",
 	'esope:profile:add_profile_comments' => "Ajouter le système de commentaires",
-	
-	
+
+
 	// Widget settings
 	'esope:settings:widget:blog' => "Activer le widget Blog",
 	'esope:settings:widget:bookmarks' => "Activer le widget Liens web",
@@ -505,7 +505,7 @@ return array(
 	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
 	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
-	
+
 	'esope:settings:filters:friends' => "Supprimer l'onglet \"Contacts\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'esope:settings:filters:mine' => "Supprimer l'onglet \"Moi\" dans les listes de publications personnelles ? (par défaut : Non)",
 	'esope:settings:filters:all' => "Supprimer l'onglet \"Tous\" dans les listes de publications personnelles ? (par défaut : Non)",
@@ -514,7 +514,7 @@ return array(
 	'esope:settings:groups:allowregister' => "Permettre aux responsables des groupes d'inscrire directement les membres dans le groupe, au lieu de simplement les inviter (il est toujours possible de les inviter).",
 	'esope:settings:members:onesearch' => "Ne garder que la recherche générale de membres ? (par défaut : Non)",
 	'esope:settings:members:online' => "Afficher les membres connectés dans la barre latérale (défaut : non)",
-	
+
 	'esope:settings:thewire_default_access' => "Accès par défaut du Fil",
 	'esope:settings:thewire_default_access:details' => "Le niveau d'accès par défaut du Fil peut être réglé de manière à utiliser l'accès par défaut (\"default\"), ou positionné sur une valeur précise (par ex. l'accès correspondant aux membres d'un groupe précis). Les valeurs habituelles sont \"2\" = public et \"1\" = membres du site seulement.",
 	'esope:settings:groups:invite_picker' => "Type de sélecteur",
@@ -524,7 +524,7 @@ return array(
 	'esope:invitegroups:help' => "Entrez les 3 premières lettres du nom ou du prénom de la personne recherchée",
 	'esope:settings:groups:invite_metadata' => "Invitations par critères de recherche",
 	'esope:settings:groups:invite_metadata:details' => "Si des métadonnées sont définies, elles seront utilisées pour étendre le formulaire d'invitation avec des champs de recherche qui permettront de rechercher des membres sur la base de ces critères, puis de les inviter (tous ou un par un). Par ex. : location, organisation, etc. Laisser vide pour ne pas utiliser cette fonctionnalité (par défaut).",
-	
+
 	/* Social presence */
 	'esope:config:contacts' => "CONTACTS ET COORDONNEES",
 	'esope:config:contacts:details' => "Certains thèmes utilisent ces coordonnées pour ajouter des liens vers les présences sociales de votre réseau, soit dans le bandeau supérieur, soit à un autre emplacement défini par le thème.",
@@ -618,8 +618,8 @@ return array(
 	'esope:settings:slideshare:help' => "",
 	'esope:settings:slideshare:icon' => '<i class="fa fa-slideshare"></i>',
 	'esope:settings:slideshare:title' => "Slideshare",
-	
-	
+
+
 	// DATES
 	'date:format:friendly' => 'd/m/Y à H:i',
 	'date:time:on' => "le",
@@ -644,7 +644,7 @@ return array(
 	'date:month:10' => 'Octobre',
 	'date:month:11' => 'Novembre',
 	'date:month:12' => 'Décembre',
-	
+
 	'esope:dashboard:title' => "Mon Accueil personnalisable",
 	'esope:welcome:msg' => "Bienvenue sur votre plateforme collaborative.<br />Administrateurs du site, pensez à éditer ce message !",
 	'esope:firststeps:linktitle' => "Premiers pas (cliquer pour afficher / masquer)",
@@ -655,7 +655,7 @@ return array(
 	'esope:thewire:charleft' => "max",
 	'esope:thewire:access' => "Accès : ",
 	'esope:homewire:msg' => "Un message ou une info à partager ?",
-	
+
 	'grouptype:default' => "Génériques",
 	'grouptype:thematic' => "Thématiques",
 	'grouptype:project' => "Projets",
@@ -664,7 +664,7 @@ return array(
 	'grouptype:edition' => "Editorial",
 	'grouptype:region' => "Géographique",
 	'grouptype:publication' => "Publications",
-	
+
 	/* ESOPE search */
 	'esope:settings:groups:searchtab' => "Onglet de recherche multi-critère",
 	'esope:settings:groups:tags' => "Ajouter un nuage de tags sous la recherche",
@@ -697,7 +697,7 @@ return array(
 	'esope:search:nosearch' => "Aucune recherche : veuillez choisir un(des) filtre(s) et cliquer sur Rechercher.",
 	'esope:search:loadmore:next' => "<i class=\"fa fa-plus\"></i> Afficher les %s résultats suivants (%s restants)",
 	'esope:search:loadmore:last' => "<i class=\"fa fa-plus\"></i> Afficher les %s derniers résultats",
-	
+
 	// View profile as someone else
 	'esope:viewprofileas:title' => "Visualisez votre profil en tant que",
 	'esope:viewprofileas:public' => "Vous visualisez votre profil public (tel qu'un non-membre peut le voir)",
@@ -709,19 +709,19 @@ return array(
 	'esope:viewprofileas:someonelse' => "Un autre membre",
 	'esope:viewprofileas:acontact' => "L'un de vos contacts",
 	'esope:viewprofileas:nonuser' => "Un non-membre (public)",
-	
+
 	'esope:filesize:units' => "OKMGTP",
 	'esope:embed:file:download' => "ouvrir",
 	'esope:untitled' => "(sans titre)",
-	
+
 	'esope:subgroups:search:overmax' => "Plus de %s résultats trouvés : veuillez affiner votre rechercher en utilisant plus de mots du titre ou de la description du groupe recherché (minimum 3 lettres par mot).",
 	'esope:subgroups:search:details' => "<small>Veuillez saisir quelques lettres ou mots correspondant au titre ou à la description du groupe recherché.<br />Note : seuls les groupes que que vous avez le droit d'éditer apparaîtront.</small>",
 	'esope:subgroups:tryjoiningparent' => "Tentative d'inscription dans les groupes parents pour vous inscrire à %s",
 	'esope:subgroups:access:parent' => "Groupe parent niveau %2\$s [%1\$s]",
-	
+
 	'esope:input:nogroup' => "Aucun groupe",
 	'esope:input:donotchange' => "Ne pas changer (%s)",
-	
+
 	// TinyMCE settings
 	'esope:tinymce:plugins' => "Plugins TinyMCE",
 	'esope:tinymce:plugins:details' => "Indiquez la liste des plugins TinyMCE à utiliser, sous la forme d'une liste utilisable dans la configuration JS. Attention : les plugins indiqués doivent être disponibles dans votre plugin TinyMCE ! En cas d'erreur, effacez la ligne pour récupérer la configuration par défaut.",
@@ -740,7 +740,7 @@ return array(
 	'esope:tinymce:templates:guids:details' => "Indiquer la liste des GUIDs des objets utilisés comme modèles HTML : GUID et titre, un seul modèle par ligne.<br />Syntaxe pour donner un nom au modèle : GUID::Titre du modèle::Description du modèle<br />Notez que seule la description de l'objet sera utilisée pour le modèle.",
 	'esope:tinymce:extended_valid_elements' => "Liste des tags et propriétés HTML autorisés",
 	'esope:tinymce:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur TinyMCE.<br />IMPORTANT : ce réglage définit uniquement le comportement de TinyMCE, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
-	
+
 	// CKEditor settings
 	'esope:ckeditor:plugins' => "Plugins CKEditor",
 	'esope:ckeditor:plugins:details' => "Indiquez la liste des plugins CKEditor à utiliser, sous la forme d'une liste utilisable dans la configuration JS. Attention : les plugins indiqués doivent être disponibles dans votre plugin CKEditor ! En cas d'erreur, effacez la ligne pour récupérer la configuration par défaut.",
@@ -759,7 +759,7 @@ return array(
 	'esope:ckeditor:templates:guids:details' => "Indiquer la liste des GUIDs des objets utilisés comme modèles HTML : GUID et titre, un seul modèle par ligne.<br />Syntaxe pour donner un nom au modèle : GUID::Titre du modèle::Description du modèle<br />Notez que seule la description de l'objet sera utilisée pour le modèle.",
 	'esope:ckeditor:extended_valid_elements' => "Liste des tags et propriétés HTML autorisés",
 	'esope:ckeditor:extended_valid_elements:details' => "Ce réglage vous permet de définir finement quelles sont les balises et les propriétés HTML autorisées, pour l'éditeur CKEditor.<br />IMPORTANT : ce réglage définit uniquement le comportement de CKEditor, et PAS ce qui sera ensuite filtré par HTMLawed ou les autres filtres activés sur le site. Veuillez également noter que l'éditeur de texte peut être désactivé. Si vous souhaitez activer ou désactiver l'utilisation de certaines balises, veuillez configurer HTMLawed (ou tout autre filtre) en conséquence !",
-	
+
 	// Htmlawed settings
 	'esope:htmlawed:settings:details' => "Les réglages de Htmlawed vous permetttent de définir de manière très détaillée les éléments HTML autorisés ou filtrés. Sa syntaxe étant stricte, et les effets de ses réglages affectant l'ensemble du système, puisqu'il s'applique à l'ensemble des saisies utilisateur, avant enregistrement.<br />Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm\">lire attentivement la Documentation</a>, et vérifier soigneusement l'impact de vos réglages avant d'utiliser sur un site en production !<br />Note : d'un point de vue utilsateur, ces réglages devraient est accordés avec ceux de TinyMCE ou CKEditor, veuillez également les vérifier !",
 	'esope:htmlawed:safe' => "Activer le mode sécurisé",
@@ -768,7 +768,7 @@ return array(
 	'esope:htmlawed:elements:details' => "Ceci vous permet de définir les éléments et propriétés HTML autorisés ou interdits, en utilsant des listes et caractères de remplacement (wildcards). Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3\">lire la documentation sur elements</a> pour les syntaxes autorisées.<br />Un exemple de syntaxe valide peut être : \"* -script\" (bloque seulement l'élément script)",
 	'esope:htmlawed:deny_attribute' => "List des attributs interdits",
 	'esope:htmlawed:deny_attribute:details' => "Ceci vous permet de bloquer certains attributs non souhiatés, en utilisant des caractères de remplacement (wildcards). Veuillez <a href=\"http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.4\">lire la documentation sur deny_attribute</a> pour les syntaxes autoriséses.<br />Une valeur recommandée peut être : \"on*\" (bloque tous les attributs JS : onClick, onHover, etc.)",
-	
+
 	// Newsletter additions
 	'newsletter:embed:templates' => "Modèle à insérer",
 	'newsletter:embed:template:default' => "Basique",
@@ -776,9 +776,9 @@ return array(
 	'newsletter:embed:template:fullcontentauthor' => "Contenu + auteur",
 	'newsletter:embed:search' => "Rechercher une publication",
 	'newsletter:embed:subtype' => "Type de publication",
-	
+
 	'embed:media' => 'Insérer une image ou un fichier',
-	
+
 	// Nouveaux champs
 	'profile:field:plaintext' => 'Texte (sans éditeur)',
 	'profile:field:group_profiletypes' => 'Types des groupes',
@@ -788,7 +788,7 @@ return array(
 	'profile:field:members_select' => 'Sélecteur de membre',
 	'profile:field:percentage' => 'Pourcentage',
 	'members_select:myself' => 'Moi-même',
-	
+
 	// Menu top des groupes
 	'esope:groups:home' => "Présentation",
 	'esope:settings:groups:topmenu' => "Activer le menu supérieur configurable  dans les groupes",
@@ -798,6 +798,7 @@ return array(
 	'esope:group_activity:notloggedin' => "(indisponible - veuillez vous connectez pour lire ceci)",
 	'esope:settings:groups:add_wire' => "Ajouter le Fil sur l'accueil du groupe",
 	'esope:groups:enablethewire' => "Activer le Fil du groupe",
+	'esope:thewire:group:add' => "Envoyer un message",
 	'esope:thewire:group:placeholder' => "Votre message pour les membres du groupe",
 	'esope:thewire:group:title' => "<i class=\"fa fa-quote-left\"></i>&nbsp;Messages du Fil du groupe",
 	'esope:thewire:none' => "Aucun message pour le moment",
@@ -832,15 +833,15 @@ return array(
 	'esope:autorefresh:sortby' => "tri par",
 	'esope:autorefresh:latest' => "Date",
 	'esope:autorefresh:likes' => "Likes",
-	
+
 	'esope:bookmarks:container' => "Publier dans...",
 	'esope:container:option:own' => "%s (personnel)",
 	'esope:container:publishedin' => "Publié dans",
-	
+
 	// Messages
 	'esope:messages:allinbox' => "Tous les messages reçus",
 	'esope:messages:unreadonly' => "Messages non lus seulement",
-	
+
 	// Notification, digest and newsletter CSS and wrappers
 	'esope:html_email_handler:css' => "CSS personnalisées des notifications",
 	'esope:html_email_handler:css:help' => "Si défini, cette feuille de style remplace celle par défaut définie dans la vue html_email_handler/notification/body.",
@@ -854,16 +855,16 @@ return array(
 	'esope:digest:groups' => "Nouveaux groupes",
 	'esope:digest:members' => "Nouveaux membres",
 	'esope:digest:groupactivity' => "Activité récente dans vos groupes",
-	
+
 	// Join groups at registration
 	'esope:settings:groups:autojoin' => "List de groupes (GUIDS) à rejoindre automatiquement après l'inscription",
 	'esope:settings:register:joingroups' => "Permettre de rejoindre des groupes dès l'inscription",
 	'esope:register:joingroups' => "Rejoindre des groupes",
 	'esope:register:joingroups:help' => "Vous pouvez choisir de rejoindre une sélection de groupes. Notez qu'il ne s'agit que de groupes publics et en libre accès : vous pourrez rejoindre davantage de groupes une fois votre inscription terminée.",
 	'esope:register:morejoingroups' => "Afficher plus de groupes",
-	
+
 	'readmore' => "Lire la suite",
-	
+
 	'esope:pages:subpages' => "Sous-pages",
 	'esope:pages:summary' => "Sommaire",
 	'esope:pages:parent' => "Page parente&nbsp;: ",
@@ -877,9 +878,9 @@ return array(
 	'esope:subtype:blog' => "article",
 	'esope:subtype:file' => "fichier",
 	'esope:subtype:event_calendar' => "événement",
-	
+
 	'esope:likes' => "Contenus appréciés",
-	
+
 	'esope:access_id:restricttocontainer' => "Réservé au conteneur (groupe)",
 	'esope:access:userfield' => "Visible par...",
 	'esope:access:overridenotice' => "Note : en accord avec la politique de confidentialité de ce groupe, ce contenu ne devrait être accessible qu'aux membres du groupe.",
@@ -889,7 +890,7 @@ return array(
 	'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir l'accès aux nouveaux contenus",
 	'groups:content_access_mode:membersonly' => "Membres seulement - Les nouveaux contenus sont réservés aux membres du groupe",
 	'groups:acl' => "Membres du groupe [%s]",
-	
+
 	'esope:group:oldactivity' => "Il n'y a eu aucune activité dans ce groupe depuis %s.",
 	'esope:group:norecentactivity' => "Il n'y a eu aucune activité récemment dans ce groupe.",
 	'esope:group:inactive' => "INACTIF",
@@ -898,12 +899,12 @@ return array(
 	'esope:group:archive' => "ARCHIVE",
 	//'esope:group:inactive:details' => "Ce groupe a été archivé",
 	'esope:group:inactive:details' => "Aucune activité depuis %s jours",
-	
+
 	'esope:status:archive' => "archivé",
 	'esope:user:nomail' => "<s>email</s>",
-	
-	
-	
+
+
+
 	/**********************/
 	/* Font Awesome ICONS */
 	/**********************/
@@ -916,8 +917,8 @@ return array(
 	'esope:subtype:groupforumtopic' => '<i class="fa fa-comments-o"></i>',
 	'esope:subtype:thewire' => '<i class="fa fa-quote-left"></i>',
 	'esope:subtype:comment' => '<i class="fa fa-comment"></i>',
-	
-	
+
+
 	/* Esope FA icons - generic usage */
 	// Tools
 	'esope:icon:album' => "<i class=\"fa fa-photo fa-fw\"></i>",
@@ -948,7 +949,7 @@ return array(
 	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
 	'esope:icon:transitions' => "<i class=\"fa fa-puzzle-piece fa-fw\"></i>",
 	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
-	
+
 	// Sprites icons
 	'esope:icon:like' => "<i class=\"fa fa-thumbs-o-up fa-fw\"></i>",
 	'esope:icon:like:selected' => "<i class=\"fa fa-thumbs-up fa-fw\"></i>",
@@ -956,7 +957,7 @@ return array(
 	'esope:icon:dislike:selected' => "<i class=\"fa fa-thumbs-down fa-fw\"></i>",
 	'esope:icon:lock' => "<i class=\"fa fa-lock fa-fw\"></i>",
 	'esope:icon:unlock' => "<i class=\"fa fa-unlock-alt fa-fw\"></i>",
-	
+
 	// User tools FA icons *override* (owner block)
 	// Core tools
 	'blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blog",
@@ -981,7 +982,7 @@ return array(
 	'poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
 	'poll:group_poll' => "<i class=\"fa fa-pie-chart\"></i> Sondages",
 	'poll:my_widget_title' => "<i class=\"fa fa-pie-chart\"></i> Mes sondages",
-	
+
 	/* Main objects and search menus */
 	'item:group' => "<i class=\"fa fa-users fa-fw\"></i> Groupes",
 	'item:group:icon' => '<i class="fa fa-users fa-fw" title="Groupes"></i>',
@@ -1052,11 +1053,11 @@ return array(
 	'au_subgroups' => "<i class=\"fa fa-users fa-fw\"></i> Sous-groupes",
 	'tidypics:mostrecent' => "<i class=\"fa fa-file-photo-o fa-fw\"></i> Images récentes",
 	'tidypics:albums_mostrecent' => "<i class=\"fa fa-photo fa-fw\"></i> Albums récents",
-	
+
 	// User actions and infos
 	'user:subscribed' => "<i class=\"fa fa-envelope-o fa-fw\"></i> Notifications activées",
 	'user:unsubscribed' => "<span class=\"fa-stack\"><i class=\"fa fa-envelope-o fa-stack-1x fa-fw\"></i><i class=\"fa fa-ban fa-stack-2x fa-fw\"></i></span> Notifications désactivées",
-	
+
 	/* Widgets */
 	'esope:widget:bookmark:title' => '<i class="fa fa-link fa-fw"></i> Liens web',
 	'esope:widget:brainstorm:title' => '<i class="fa fa-lightbulb-o fa-fw"></i> Idées',
@@ -1081,15 +1082,15 @@ return array(
 	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Texte libre",
 	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
-	
+
 	'dashboard:widget:group:noselect' => "Aucun groupe sélectionné",
-	
-	
+
+
 	/* Other interface */
 	'select:all' => 'Tout sélectionner',
 	'link:view:all' => '<i class="fa fa-search-plus"></i> Voir tout',
-	
-	
+
+
 	// Actions
 	'esope:action:remove_user_email' => "Supprimer l'email",
 	'esope:removeemail:areyousure' => "Attention, cette suppression est irréversible, et recommandée uniquement pour une adresse invalide. Confirmez-vous vouloir supprimer %s ?",
@@ -1101,7 +1102,7 @@ return array(
 	'esope:archiveuser:error' => "Le compte utilisateur n'a pas pu être archivé",
 	'esope:unarchiveuser:ok' => "Compte utilisateur dé-archivé",
 	'esope:unarchiveuser:error' => "Le compte utilisateur n'a pas pu être dé-archivé",
-	
+
 	// ESOPE tools
 	'esope:tools' => "Outils d'administration d'Esope",
 	'esope:tools:details' => "Une série d'outils avancés pour réaliser des tâches d'administration peu courantes. Nécessite souvent un accès direct au code pour activer certains outils.",
@@ -1133,22 +1134,22 @@ return array(
 	'esope:tools:tool:group_publication_stats:details' => "Quelques statistiques sur les publications dans un groupe, par membre et par type de publication.",
 	'esope:tools:tool:update_subtype' => "Mise à jour des subtypes",
 	'esope:tools:tool:update_subtype:details' => "Permet de mettre à jour un sous-type d'entité pour ajouter ou enlever une classe.",
-	
+
 	// Menus
 	'esope:menu:topbar' => "Mon compte",
 	'esope:menu:navigation' => "Navigation",
 	'esope:menu:sidebar' => "Menu",
-	
+
 	'entity:unavailable' => "entité indisponible",
-	
+
 	'river:comment:user:default' => "%s a commenté %s",
-	
-	
-	
+
+
+
 	/* TRANSLATIONS OVERRIDES */
-	/* Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions */ 
+	/* Note : ces ajouts sont faits ici plutôt que dans les plugins concernés de sorte qu'une mise à jour ait le moins d'incidence possible sur ces traductions */
 	'user:password:lost' => 'Mot de passe perdu ?',
-	
+
 	'option:notify:email' => "Activer par email (par défaut)",
 	'option:notify:site' => "Activer par le site (messages)",
 	'option:notify:all' => "Activer toutes les méthodes",
@@ -1160,16 +1161,16 @@ return array(
 	'groups:no' => "Désactivé",
 	'group_operators:operators' => "Responsable(s)",
 	'groups:my_status' => 'Mon statut',
-	
+
 	'profile_edit' => "Edition du profil",
 	'event_calendar:view' => "Voir un événement",
-	
+
 	'river:comment:object:announcement' => "%s a commenté %s",
 	'widgets:profile_completeness:view:tips:link' => "<br />%s&raquo;&nbsp;Compléter mon profil !%s",
-	
+
 	'widget:toggle' => "Montrer/masquer le module %s",
 	'widget:editmodule' => "Configurer le module %s",
-	
+
 	// Announcements: missing translation keys - Annonces : manque des clefs de trad
 	'announcements:summary' => "Titre de l'annonce",
 	'announcements:body' => "Texte de l'annonce",
@@ -1183,8 +1184,8 @@ return array(
 	'object:announcement:save:success' => "Annonce enregistrée",
 	'item:object:category' => "Thématiques utilisées",
 	'item:object:topicreply' => "Réponse dans un forum",
-	
-	
+
+
 	// Comment notifications
 	'generic_comment:email:body' => "%2\$s a publié un nouveau commentaire sur \"%1\$s\" :
 
@@ -1196,14 +1197,14 @@ Pour voir le profil de %5\$s : %6\$s
 
 Il s'agit d'un message de notification automatique, merci de ne pas répondre directement à cet email.
 ",
-	
+
 	// Logbrowser
 	'logbrowser:user_guid' => "ou GUID de l'utilisateur",
 	'logbrowser:entity_type' => "Type d'entité",
 	'logbrowser:entity_subtype' => "Subtype",
 	'logbrowser:object_guid' => "GUID de l'entité",
 	'logbrowser:event' => "Evénement",
-	
+
 
 	'brainstorm:widget:description' => "Affiche la liste de vos idées de remue-méninges.",
 	'bookmarks:widget:description' => "Affiche la liste de vos liens web.",
@@ -1212,7 +1213,7 @@ Il s'agit d'un message de notification automatique, merci de ne pas répondre di
 	'bookmarks:mygroups' => "Dans mes groupes",
 	'bookmarks:more' => "Plus de liens web",
 	'pages:widget:description' => "Affiche la liste de vos pages wikis.",
-	
+
 	'event_calendar:widget:description' => "Affiche les événements à venir de votre agenda personnel.",
 	'event_calendar:num_display' => "Nombre d'événements à afficher",
 	'event_calendar:ics:notification' => "%s a créé un nouvel événement :
@@ -1225,7 +1226,7 @@ Afficher l'événement sur le site :
 
 Vous pouvez également ajouter directement cet événement à votre agenda via le fichier iCal ci-joint.
 %s",
-	
+
 	'messages:widget:title' => "Messages non lus",
 	'messages:widget:description' => "Affiche les derniers messages non lus de votre boîte de réception.",
 	'messages:num_display' => "Nombre de messages à afficher",
@@ -1235,11 +1236,11 @@ Vous pouvez également ajouter directement cet événement à votre agenda via l
 	'messages:widget:unreadcount:singular' => '1 message non lu',
 	'messages:answer' => "Répondre",
 	'messages:to' => "à",
-	
+
 	'thewire:reply' => "Répondre",
-	
+
 	'search:more' => '+%s autres %s',
-	
-	
+
+
 );
 
