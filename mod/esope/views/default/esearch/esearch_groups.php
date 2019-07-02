@@ -9,6 +9,7 @@ $content = '';
 // Prepare JS script for forms
 $action_base = elgg_get_site_url() . 'action/esope/';
 $esope_search_url = elgg_add_action_tokens_to_url($action_base . 'esearch');
+//$unique_form_key = 'groups'; @todo
 
 $content .= '<script type="text/javascript">
 var formdata;

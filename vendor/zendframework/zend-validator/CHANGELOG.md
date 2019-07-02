@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.12.0 - 2019-01-30
+
+### Added
+
+- [#250](https://github.com/zendframework/zend-validator/pull/250) adds support for PHP 7.3.
+
+### Changed
+
+- [#251](https://github.com/zendframework/zend-validator/pull/251) updates the logic of each of the various `Zend\Validator\File` validators
+  to allow validating against PSR-7 `UploadedFileInterface` instances, expanding
+  the support originally provided in version 2.11.0.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#250](https://github.com/zendframework/zend-validator/pull/250) removes support for zend-stdlib v2 releases.
+
+### Fixed
+
+- Nothing.
+
+## 2.11.1 - 2019-01-29
+
+### Added
+
+- [#249](https://github.com/zendframework/zend-validator/pull/249) adds support in the hostname validator for the `.rs` TLD.
+
+### Changed
+
+- [#253](https://github.com/zendframework/zend-validator/pull/253) updates the list of allowed characters for a `DE` domain name to match those published by IDN.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#256](https://github.com/zendframework/zend-validator/pull/256) fixes hostname validation when omitting the TLD from verification,
+  ensuring validation of the domain segment considers all URI criteria.
+
 ## 2.11.0 - 2018-12-13
 
 ### Added

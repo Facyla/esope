@@ -1,3 +1,43 @@
+<a name="2.3.13"></a>
+### 2.3.13  (2019-06-12)
+
+#### Contributors
+
+* Jeroen Dalsem (1)
+
+#### Bug Fixes
+
+* **blog:** show correct last saved date ([b888e7e1](https://github.com/Elgg/Elgg/commit/b888e7e1a3772f205f5a7fe1de62894964ee8e0c))
+
+
+<a name="2.3.12"></a>
+### 2.3.12  (2019-04-16)
+
+#### Contributors
+
+* Jerôme Bakker (1)
+
+#### Bug Fixes
+
+* **widgets:** improved stability of widget title ([904eefc1](https://github.com/Elgg/Elgg/commit/904eefc191081fa055296e18ee22f2cc2e7b01fc))
+
+
+<a name="2.3.11"></a>
+### 2.3.11  (2019-04-04)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+* Ismayil Khayredinov (1)
+
+#### Bug Fixes
+
+* **gatekeeper:** more consistency in resource gatekeepers ([60a045a3](https://github.com/Elgg/Elgg/commit/60a045a3b72734321413830c8375e4594622b9e2))
+* **livesearch:** prevent PHP warning in switch statement ([44e671d0](https://github.com/Elgg/Elgg/commit/44e671d053b2f69b59876d942c9aeb340048337e))
+* **notifications:** fix faulty subscription list mutations ([0edb38d1](https://github.com/Elgg/Elgg/commit/0edb38d1a86c01e9b0c05911fcd7d9421dc33822))
+* **walled_garden:** allow access to webapp manifest.json ([73c36a13](https://github.com/Elgg/Elgg/commit/73c36a139c2271b5330fed60964e6a2522863c20))
+
+
 <a name="2.3.10"></a>
 ### 2.3.10  (2018-12-21)
 
@@ -1512,6 +1552,18 @@ Fixes #5729
 change them to external AMD modules and load them with `elgg_require_js`.
 
 Fixes #2718 ([c91f1f3e](https://github.com/Elgg/Elgg/commit/c91f1f3e5b0c825e34feae248a1a3ff5a5e2b640))
+
+<a name="1.12.18"></a>
+### 1.12.18  (2019-04-03)
+
+#### Contributors
+
+* Jyoti Raval (1)
+* Wouter van Os (1)
+
+#### Bug Fixes
+
+* **core:** revert original libxml_use_internal_errors value after use ([bc30e941](https://github.com/Elgg/Elgg/commit/bc30e941071b25c42101c8843b4918a171044027))
 
 <a name="1.12.17"></a>
 ### 1.12.17  (2017-09-21)
