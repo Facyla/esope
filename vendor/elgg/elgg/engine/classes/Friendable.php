@@ -52,23 +52,23 @@ interface Friendable {
 	/**
 	 * Gets this entity's friends
 	 *
-	 * @param array $options Options array. See elgg_get_entities_from_relationship()
+	 * @param array $options Options array. See elgg_get_entities()
 	 *                       for a list of options. 'relationship_guid' is set to
 	 *                       this entity, relationship name to 'friend' and type to 'user'.
 	 *
-	 * @return array|false Array of \ElggUser, or false, depending on success
+	 * @return \ElggUser[]|int|mixed
 	 */
 	public function getFriends(array $options = []);
 
 	/**
 	 * Gets users who have made this entity a friend
 	 *
-	 * @param array $options Options array. See elgg_get_entities_from_relationship()
+	 * @param array $options Options array. See elgg_get_entities()
 	 *                       for a list of options. 'relationship_guid' is set to
 	 *                       this entity, relationship name to 'friend', type to 'user'
 	 *                       and inverse_relationship to true.
 	 *
-	 * @return array|false Array of \ElggUser, or false, depending on success
+	 * @return \ElggUser[]|int|mixed
 	 */
 	public function getFriendsOf(array $options = []);
 
@@ -78,19 +78,19 @@ interface Friendable {
 	 * @param array $options Options array. See elgg_get_entities() for a list of options.
 	 *                       'type' is set to object and owner_guid to this entity.
 	 *
-	 * @return array|false
+	 * @return \ElggObject[]|int|mixed
 	 */
 	public function getObjects(array $options = []);
 
 	/**
 	 * Get an array of \ElggObjects owned by this entity's friends.
 	 *
-	 * @param array $options Options array. See elgg_get_entities_from_relationship()
+	 * @param array $options Options array. See elgg_get_entities()
 	 *                       for a list of options. 'relationship_guid' is set to
 	 *                       this entity, type to 'object', relationship name to 'friend'
 	 *                       and relationship_join_on to 'container_guid'.
 	 *
-	 * @return array|false
+	 * @return \ElggObject[]|int|mixed
 	 */
 	public function getFriendsObjects(array $options = []);
 }

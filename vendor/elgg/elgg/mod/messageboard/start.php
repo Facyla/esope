@@ -36,7 +36,7 @@ function messageboard_add($poster, $owner, $message, $access_id = ACCESS_PUBLIC)
 	$access_id = (int) $access_id;
 	
 	$result_id = $owner->annotate('messageboard', $message, $access_id, $poster->guid);
-	if (!$result_id) {
+	if (!is_int($result_id)) {
 		return false;
 	}
 
@@ -97,13 +97,11 @@ function messageboard_annotation_menu_setup($hook, $type, $return, $params) {
 		return;
 	}
 	
-	$url = elgg_http_add_url_query_elements('action/messageboard/delete', [
-		'annotation_id' => $annotation->id,
-	]);
-
 	$return[] = ElggMenuItem::factory([
 		'name' => 'delete',
-		'href' => $url,
+		'href' => elgg_generate_action_url('messageboard/delete', [
+			'annotation_id' => $annotation->id,
+		]),
 		'text' => elgg_view_icon('delete'),
 		'confirm' => elgg_echo('deleteconfirm'),
 		'encode_text' => false,

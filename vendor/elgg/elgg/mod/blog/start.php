@@ -92,7 +92,11 @@ function blog_owner_block_menu($hook, $type, $return, $params) {
 function blog_archive_menu_setup($hook, $type, $return, $params) {
 
 	$page_owner = elgg_extract('entity', $params, elgg_get_page_owner_entity());
-	$page = elgg_extract('page', $params);
+	$page = elgg_extract('page', $params, 'all');
+	if (!in_array($page, ['all', 'owner', 'friends', 'group'])) {
+		// only generate archive menu for supported pages
+		return;
+	}
 	
 	$options = [
 		'type' => 'object',
@@ -151,8 +155,8 @@ function blog_archive_menu_setup($hook, $type, $return, $params) {
 	
 	$years = [];
 	foreach ($dates as $date) {
-		$timestamplow = mktime(0, 0, 0, substr($date, 4, 2), 1, substr($date, 0, 4));
-		$timestamphigh = mktime(0, 0, 0, ((int) substr($date, 4, 2)) + 1, 1, substr($date, 0, 4));
+		$timestamplow = mktime(0, 0, 0, (int) substr($date, 4, 2), 1, (int) substr($date, 0, 4));
+		$timestamphigh = mktime(0, 0, 0, ((int) substr($date, 4, 2)) + 1, 1, (int) substr($date, 0, 4));
 
 		$year = substr($date, 0, 4);
 		if (!in_array($year, $years)) {
@@ -162,7 +166,8 @@ function blog_archive_menu_setup($hook, $type, $return, $params) {
 				'href' => '#',
 				'child_menu' => [
 					'display' => 'toggle',
-				]
+				],
+				'priority' => -(int) "{$year}00", // make negative to be sure 2019 is before 2018
 			]);
 		}
 
@@ -173,6 +178,7 @@ function blog_archive_menu_setup($hook, $type, $return, $params) {
 			'text' => $month,
 			'href' => $generate_url($timestamplow, $timestamphigh),
 			'parent_name' => $year,
+			'priority' => -(int) $date, // make negative to be sure March 2019 is before February 2019
 		]);
 	}
 
@@ -191,9 +197,7 @@ function blog_archive_menu_setup($hook, $type, $return, $params) {
 function blog_prepare_notification($hook, $type, $notification, $params) {
 	$entity = $params['event']->getObject();
 	$owner = $params['event']->getActor();
-	$recipient = $params['recipient'];
 	$language = $params['language'];
-	$method = $params['method'];
 
 	$notification->subject = elgg_echo('blog:notify:subject', [$entity->getDisplayName()], $language);
 	$notification->body = elgg_echo('blog:notify:body', [

@@ -424,7 +424,7 @@ Permission hooks
 	``$params['context']`` and with a page owner of ``$params['page_owner']``.
 
 **permissions_check:metadata, <entity_type>**
-	Return boolean for if the user ``$params['user']`` can edit the metadata ``$params['metadata']``
+	(Deprecated) Return boolean for if the user ``$params['user']`` can edit the metadata ``$params['metadata']``
 	on the entity ``$params['entity']``.
 
 **permissions_check:comment, <entity_type>**
@@ -439,8 +439,6 @@ Permission hooks
 **permissions_check:annotate, <entity_type>**
 	Return boolean for if the user ``$params['user']`` can create an annotation ``$params['annotation_name']``
 	on the entity ``$params['entity']``. if logged in, the default is true.
-
-	.. warning:: This is functions differently than the ``permissions_check:metadata`` hook by passing the annotation name instead of the metadata object.
 
 **permissions_check:annotation**
 	Return boolean for if the user in ``$params['user']`` can edit the annotation ``$params['annotation']`` on the
@@ -486,6 +484,9 @@ Note that not all hooks apply to instant notifications.
 	Applies to **subscriptions** and **instant** notifications.
 	In case of a subscription event, by default, the subscribers list consists of the users subscribed to the container entity of the event object.
 	In case of an instant notification event, the subscribers list consists of the users passed as recipients to ``notify_user()``
+
+   **IMPORTANT** Always validate the notification event, object and/or action types before adding any new recipients to ensure that you do not accidentally dispatch notifications to unintended recipients.
+   Consider a situation, where a mentions plugin sends out an instant notification to a mentioned user - any hook acting on a subject or an object without validating an event or action type (e.g. including an owner of the original wire thread) might end up sending notifications to wrong users.
 
 	``$params`` array includes:
 
@@ -679,7 +680,7 @@ Views
           'viewport' => [
              'name' => 'viewport',
              'content' => 'width=device-width',
-	      ]
+          ]
        ],
        'links' => [
           'rss' => [
@@ -692,7 +693,7 @@ Views
              'rel' => 'icon',
              'sizes' => '16x16',
              'type' => 'image/png',
-		     'href' => elgg_get_simplecache_url('graphics/favicon-16.png'),
+             'href' => elgg_get_simplecache_url('graphics/favicon-16.png'),
           ],
        ],
     ];
@@ -863,6 +864,7 @@ Other
      * ``h`` - Height of the image in pixels
      * ``square`` - Should the aspect ratio be a square (true/false)
      * ``upscale`` - Should the image be upscaled in case it is smaller than the given width and height (true/false)
+     * ``crop`` - Is cropping allowed on this image size (true/false, default: true)
 
 	If the configuration array for an image size is empty, the image will be
 	saved as an exact copy of the source without resizing or cropping.

@@ -5,8 +5,9 @@ use Elgg\Groups\Tool;
 /**
  * A group entity, used as a container for other entities.
  *
- * @property string $name        A short name that captures the purpose of the group
- * @property string $description A longer body of content that gives more details about the group
+ * @property      string $name                A short name that captures the purpose of the group
+ * @property      string $description         A longer body of content that gives more details about the group
+ * @property-read string $content_access_mode Content access mode for this group
  */
 class ElggGroup extends \ElggEntity {
 
@@ -56,12 +57,12 @@ class ElggGroup extends \ElggEntity {
 	/**
 	 * Get an array of group members.
 	 *
-	 * @param array $options Options array. See elgg_get_entities_from_relationships
+	 * @param array $options Options array. See elgg_get_entities
 	 *                       for a complete list. Common ones are 'limit', 'offset',
 	 *                       and 'count'. Options set automatically are 'relationship',
 	 *                       'relationship_guid', 'inverse_relationship', and 'type'.
 	 *
-	 * @return array
+	 * @return \ElggEntity[]|int|mixed
 	 */
 	public function getMembers(array $options = []) {
 		$options['relationship'] = 'member';
@@ -109,9 +110,9 @@ class ElggGroup extends \ElggEntity {
 	/**
 	 * Set the content access mode used by group_gatekeeper()
 	 *
-	 * @param string $mode One of CONTENT_ACCESS_MODE_* constants. If empty string, mode will not be changed.
+	 * @param string $mode One of CONTENT_ACCESS_MODE_* constants. If empty string, mode will not be changed
+	 *
 	 * @return void
-	 * @access private
 	 * @since 1.9.0
 	 */
 	public function setContentAccessMode($mode) {
@@ -234,7 +235,7 @@ class ElggGroup extends \ElggEntity {
 		}
 
 		$tool = $this->getTool($name);
-		if (!$tool) {
+		if (!$tool instanceof Tool) {
 			return false;
 		}
 
@@ -257,7 +258,8 @@ class ElggGroup extends \ElggEntity {
 	 * @since 3.0.0
 	 */
 	public function enableTool($name) {
-		if (!$tool = $this->getTool($name)) {
+		$tool = $this->getTool($name);
+		if (!$tool instanceof Tool) {
 			return false;
 		}
 
@@ -272,13 +274,14 @@ class ElggGroup extends \ElggEntity {
 	/**
 	 * Disables a tool option
 	 *
-	 * @param Tool|string $name The option to disable
+	 * @param string $name The option to disable
 	 *
 	 * @return bool
 	 * @since 3.0.0
 	 */
 	public function disableTool($name) {
-		if (!$tool = $this->getTool($name)) {
+		$tool = $this->getTool($name);
+		if (!$tool instanceof Tool) {
 			return false;
 		}
 

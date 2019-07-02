@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
@@ -42,7 +43,7 @@ class ResponseFactory {
 	private $transport;
 
 	/**
-	 * @var Response|bool
+	 * @var Response|false
 	 */
 	private $response_sent = false;
 
@@ -142,17 +143,20 @@ class ResponseFactory {
 	/**
 	 * Creates an HTTP response
 	 *
-	 * @param string  $content The response content
+	 * @param mixed   $content The response content
 	 * @param integer $status  The response status code
 	 * @param array   $headers An array of response headers
+	 *
 	 * @return Response
+	 * @throws InvalidArgumentException
 	 */
 	public function prepareResponse($content = '', $status = 200, array $headers = []) {
 		$header_bag = $this->getHeaders();
 		$header_bag->add($headers);
+		
 		$response = new Response($content, $status, $header_bag->all());
-		$response->prepare($this->request);
-		return $response;
+		
+		return $this->finalizeResponsePreparation($response, $header_bag);
 	}
 
 	/**
@@ -161,14 +165,63 @@ class ResponseFactory {
 	 * @param string  $url     URL to redirect to
 	 * @param integer $status  The status code (302 by default)
 	 * @param array   $headers An array of response headers (Location is always set to the given URL)
+	 *
 	 * @return SymfonyRedirectResponse
 	 * @throws InvalidArgumentException
 	 */
 	public function prepareRedirectResponse($url, $status = 302, array $headers = []) {
 		$header_bag = $this->getHeaders();
 		$header_bag->add($headers);
+		
 		$response = new SymfonyRedirectResponse($url, $status, $header_bag->all());
+		
+		return $this->finalizeResponsePreparation($response, $header_bag);
+	}
+	
+	/**
+	 * Creates an JSON response
+	 *
+	 * @param mixed   $content The response content
+	 * @param integer $status  The response status code
+	 * @param array   $headers An array of response headers
+	 *
+	 * @return JsonResponse
+	 * @throws InvalidArgumentException
+	 */
+	public function prepareJsonResponse($content = '', $status = 200, array $headers = []) {
+		$header_bag = $this->getHeaders();
+		$header_bag->add($headers);
+		
+		/**
+		 * Removing Content-Type header because in some cases content-type headers were already set
+		 * This is a problem when serving a cachable view (for example a .css) in ajax/view
+		 *
+		 * @see https://github.com/Elgg/Elgg/issues/9794
+		 */
+		$header_bag->remove('Content-Type');
+		
+		$response = new JsonResponse($content, $status, $header_bag->all());
+		
+		return $this->finalizeResponsePreparation($response, $header_bag);
+	}
+	
+	/**
+	 * Last preparations on a response
+	 *
+	 * @param Response          $response The response to prepare
+	 * @param ResponseHeaderBag $headers  Header container with additional content
+	 *
+	 * @return Response
+	 * @todo revisit this when upgrading to Symfony/HttpFoundation v3.3+
+	 */
+	private function finalizeResponsePreparation(Response $response, ResponseHeaderBag $headers) {
+		// Cookies aren't part of the headers, need to copy manualy
+		foreach ($headers->getCookies() as $cookie) {
+			$response->headers->setCookie($cookie);
+		}
+		
 		$response->prepare($this->request);
+		
 		return $response;
 	}
 
@@ -203,6 +256,8 @@ class ResponseFactory {
 
 			$this->events->triggerAfter('send', 'http_response', $response);
 			$this->response_sent = $response;
+			
+			$this->closeSession();
 		}
 
 		return $this->response_sent;
@@ -317,7 +372,7 @@ class ResponseFactory {
 			return $this->send($this->prepareResponse($error, $status_code, $headers));
 		}
 
-		$forward_url = $this->request->headers->get('Referer');
+		$forward_url = $this->getSiteRefererUrl();
 
 		if (!$this->isAction()) {
 			$params = [
@@ -328,7 +383,7 @@ class ResponseFactory {
 			// @see elgg_error_page_handler
 			$forward_reason = (string) $status_code;
 
-			$forward_url = $this->hooks->trigger('forward', $forward_reason, $params, $forward_url);
+			$this->hooks->trigger('forward', $forward_reason, $params, $forward_url);
 
 			if ($this->response_sent) {
 				// Response was sent from a forward hook
@@ -337,7 +392,9 @@ class ResponseFactory {
 
 			if (elgg_view_exists('resources/error')) {
 				$params['type'] = $forward_reason;
-				$params['params']['error'] = $error;
+				if (!elgg_is_empty($error)) {
+					$params['params']['error'] = $error;
+				}
 				$error_page = elgg_view_resource('error', $params);
 			} else {
 				$error_page = $error;
@@ -346,7 +403,7 @@ class ResponseFactory {
 			return $this->send($this->prepareResponse($error_page, $status_code));
 		}
 
-		$forward_url = elgg_normalize_url($forward_url);
+		$forward_url = $this->makeSecureForwardUrl($forward_url);
 		return $this->send($this->prepareRedirectResponse($forward_url));
 	}
 
@@ -386,7 +443,7 @@ class ResponseFactory {
 		$content = $this->stringify($content);
 
 		if ($forward_url === REFERRER) {
-			$forward_url = $this->request->headers->get('Referer');
+			$forward_url = $this->getSiteRefererUrl();
 		}
 
 		$params = [
@@ -412,7 +469,7 @@ class ResponseFactory {
 		$content = $this->stringify($content);
 
 		if ($forward_url === REFERRER) {
-			$forward_url = $this->request->headers->get('Referer');
+			$forward_url = $this->getSiteRefererUrl();
 		}
 
 		// always pass the full structure to avoid boilerplate JS code.
@@ -460,24 +517,25 @@ class ResponseFactory {
 	 * @throws InvalidParameterException
 	 */
 	public function redirect($forward_url = REFERRER, $status_code = ELGG_HTTP_FOUND) {
-
+		$location = $forward_url;
+		
 		if ($forward_url === REFERRER) {
-			$forward_url = $this->request->headers->get('Referer');
+			$forward_url = $this->getSiteRefererUrl();
 		}
 
-		$forward_url = elgg_normalize_url($forward_url);
+		$forward_url = $this->makeSecureForwardUrl($forward_url);
 
 		// allow plugins to rewrite redirection URL
-		$current_page = current_page_url();
 		$params = [
-			'current_url' => $current_page,
-			'forward_url' => $forward_url
+			'current_url' => current_page_url(),
+			'forward_url' => $forward_url,
+			'location' => $location,
 		];
 
 		$forward_reason = (string) $status_code;
 
 		$forward_url = $this->hooks->trigger('forward', $forward_reason, $params, $forward_url);
-
+		
 		if ($this->response_sent) {
 			// Response was sent from a forward hook
 			// Clearing handlers to void infinite loops
@@ -485,14 +543,14 @@ class ResponseFactory {
 		}
 
 		if ($forward_url === REFERRER) {
-			$forward_url = $this->request->headers->get('Referer');
+			$forward_url = $this->getSiteRefererUrl();
 		}
 
 		if (!is_string($forward_url)) {
 			throw new InvalidParameterException("'forward', '$forward_reason' hook must return a valid redirection URL");
 		}
 
-		$forward_url = elgg_normalize_url($forward_url);
+		$forward_url = $this->makeSecureForwardUrl($forward_url);
 
 		switch ($status_code) {
 			case 'system':
@@ -644,5 +702,53 @@ class ResponseFactory {
 	 */
 	public function setTransport(ResponseTransport $transport) {
 		$this->transport = $transport;
+	}
+	
+	/**
+	 * Ensures the referer header is a site url
+	 *
+	 * @return string
+	 */
+	protected function getSiteRefererUrl() {
+		$unsafe_url = $this->request->headers->get('Referer');
+		$safe_url = elgg_normalize_site_url($unsafe_url);
+		if ($safe_url !== false) {
+			return $safe_url;
+		}
+		
+		return '';
+	}
+	
+	/**
+	 * Ensure the url has a valid protocol for browser use
+	 *
+	 * @param string $url url the secure
+	 *
+	 * @return string
+	 */
+	protected function makeSecureForwardUrl($url) {
+		$url = elgg_normalize_url($url);
+		if (!preg_match('/^(http|https|ftp|sftp|ftps):\/\//', $url)) {
+			return elgg_get_site_url();
+		}
+		
+		return $url;
+	}
+	
+	/**
+	 * Closes the session
+	 *
+	 * Force closing the session so session is saved to the database before headers are sent
+	 * preventing race conditions with session data
+	 *
+	 * @see https://github.com/Elgg/Elgg/issues/12348
+	 *
+	 * @return void
+	 */
+	protected function closeSession() {
+		$session = elgg_get_session();
+		if ($session->isStarted()) {
+			$session->save();
+		}
 	}
 }

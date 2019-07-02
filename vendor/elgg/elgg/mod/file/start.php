@@ -26,9 +26,6 @@ function file_init() {
 	// add enclosure to rss item
 	elgg_extend_view('extensions/item', 'file/enclosure');
 
-	// extend group main page
-	elgg_extend_view('groups/tool_latest', 'file/group_module');
-
 	// Register URL handlers for files
 	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'file_set_icon_url');
 
@@ -117,9 +114,7 @@ function file_register_toggle() {
 function file_prepare_notification($hook, $type, $notification, $params) {
 	$entity = $params['event']->getObject();
 	$owner = $params['event']->getActor();
-	$recipient = $params['recipient'];
 	$language = $params['language'];
-	$method = $params['method'];
 
 	$descr = $entity->description;
 	$title = $entity->getDisplayName();

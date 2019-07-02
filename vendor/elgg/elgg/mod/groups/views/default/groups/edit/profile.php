@@ -12,17 +12,17 @@ $name = elgg_extract('name', $vars);
 $group_profile_fields = (array) elgg_get_config('group');
 
 echo elgg_view_field([
-	'#type' => 'file',
-	'#label' => elgg_echo('groups:icon'),
-	'name' => 'icon',
-]);
-
-echo elgg_view_field([
 	'#type' => 'text',
 	'#label' => elgg_echo('groups:name'),
 	'required' => true,
 	'name' => 'name',
 	'value' => $name,
+]);
+
+echo elgg_view('entity/edit/icon', [
+	'entity' => elgg_extract('entity', $vars),
+	'entity_type' => 'group',
+	'entity_subtype' => 'group',
 ]);
 
 // show the configured group profile fields

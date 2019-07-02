@@ -1,12 +1,12 @@
 <?php
-use Elgg\Database\Clauses\OrderByClause;
-
 /**
  * River item footer
  *
  * @uses $vars['item'] ElggRiverItem
  * @uses $vars['responses'] Alternate override for this item
  */
+
+use Elgg\Database\Clauses\OrderByClause;
 
 // allow river views to override the response content
 $responses = elgg_extract('responses', $vars);
@@ -47,6 +47,7 @@ if ($comment_count) {
 	echo elgg_view_entity_list($comments, [
 		'list_class' => 'elgg-river-comments',
 		'show_excerpt' => true,
+		'register_rss_link' => false,
 	]);
 	
 	if ($comment_count > count($comments)) {

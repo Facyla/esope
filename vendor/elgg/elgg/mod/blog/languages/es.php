@@ -1,27 +1,25 @@
 <?php
-return [
-	'blog' => 'Blogs',
-	'blog:blogs' => 'Blogs',
+return array(
+	'item:object:blog' => 'Blog',
+	'collection:object:blog' => 'Blogs',
+	'collection:object:blog:all' => 'Todos los blogs',
+	'collection:object:blog:owner' => 'Blogs de %s',
+	'collection:object:blog:group' => 'Blogs de grupo',
+	'collection:object:blog:friends' => 'Blogs de amigos',
+	'add:object:blog' => 'Añadir una entrada al blog',
+	'edit:object:blog' => 'Editar entrada del blog',
+
 	'blog:revisions' => 'Revisiones',
 	'blog:archives' => 'Archivos',
-	'blog:blog' => 'Blog',
-	'item:object:blog' => 'Blogs',
 
-	'blog:title:user_blogs' => 'Blogs de %s',
-	'blog:title:all_blogs' => 'Todos los blogs',
-	'blog:title:friends' => 'Blogs de amigos',
-
-	'blog:group' => 'Blogs de grupos',
-	'blog:enableblog' => 'Habilitar Blogs para Grupos',
+	'groups:tool:blog' => 'Activar blog de grupo',
 	'blog:write' => 'Escribir una entrada',
 
 	// Editing
-	'blog:add' => 'Publicar una entrada',
-	'blog:edit' => 'Editar entrada',
 	'blog:excerpt' => 'Extracto',
 	'blog:body' => 'Cuerpo',
 	'blog:save_status' => '&Uacute;ltimo guardado: ',
-	
+
 	'blog:revision' => 'Revisi&oacute;n',
 	'blog:auto_saved_revision' => 'Revisi&oacute;n autoguardada',
 
@@ -42,25 +40,25 @@ return [
 	'blog:error:revision_not_found' => 'No se puede encontrar esta revisi&oacute;n.',
 
 	// river
-	'river:create:object:blog' => '%s ha publicado una entrada en el blog %s',
-	'river:comment:object:blog' => '%s ha comentado en el blog %s',
+	'river:object:blog:create' => '%s Publico una entrada de blog %s',
+	'river:object:blog:comment' => '%s Comento en el blog %s',
 
 	// notifications
 	'blog:notify:summary' => 'Nueva entrada en el blog llamado: %s',
 	'blog:notify:subject' => 'Nuevo blog: %s',
 	'blog:notify:body' =>
 '
-%s publicó un nuevo blog: %s
+%s Publico una nueva entrada de blog: %s
 
 %s
 
-Ver y comentar en el blog:
+Ver y comentar en la entrada:
 %s
 ',
 
 	// widget
-	'blog:widget:description' => 'Mostrar las &uacute;ltimas entradas del Blog',
+	'widgets:blog:name' => 'Entradas del blog',
+	'widgets:blog:description' => 'Mostrar tus ultimas entradas del blog',
 	'blog:moreblogs' => 'M&aacute;s entradas',
 	'blog:numbertodisplay' => 'N&uacute;mero de entradas a mostrar',
-	'blog:noblogs' => 'No hay entradas'
-];
+);

@@ -1,0 +1,110 @@
+/* widgets */
+#widget_profile_completeness_container {
+	border: 1px solid #AAAAAA;
+	position: relative;
+}
+
+#widget_profile_completeness_progress {
+	position: absolute;
+	line-height: 20px;
+	font-weight: bold;
+	width: 100%;
+	text-align: center;
+}
+
+#widget_profile_completeness_progress_bar {
+	background: #00FF00;
+	height: 20px;
+}
+
+#custom_fields_userdetails.ui-accordion {
+	margin-bottom: 10px;
+}
+
+#custom_fields_userdetails .ui-accordion-header {
+	color: #666666;
+	background: #EEEEEE;
+	border: 2px solid #DEDEDE;
+	cursor: pointer;
+	margin-top: 5px;
+	margin-bottom: 0px;
+	padding: 5px;
+}
+
+#custom_fields_userdetails .ui-accordion-content {
+	border-style: solid;
+	border-color: #DEDEDE;
+	border-width: 0 2px 2px 2px;
+	padding: 5px;
+}
+
+#custom_fields_userdetails .ui-accordion-header:hover {
+	border-color: #CCCCCC;
+}
+
+/* fix for max-height multi-select drop down*/
+.ui-dropdownchecklist-dropcontainer {
+	max-height: 150px;
+}
+/* end fix */
+
+.profile_manager_profile_edit_tab_content,
+li.custom_fields_edit_profile_category {
+	display: none;
+}
+
+/* registration form */
+.elgg-form-register {
+	max-width: 100%;
+}
+
+.profile_manager_register_input_container {
+	white-space:nowrap; /* required for outlining in IE7 */
+}
+
+.profile_manager_register_input_container > input {
+	padding-right: 25px;
+}
+
+.elgg-icon.profile_manager_validate_icon {
+	margin-left: -22px;
+    margin-top: 8px;
+    position: absolute;
+}
+
+/* register form */
+.elgg-form-register .mandatory > label:after {
+	content: "*";
+}
+
+/* registration field */
+#profile_manager_register_left {
+	float: left;
+	width: 450px;
+}
+
+#profile_manager_register_right {
+	float: right;
+	width: 450px;
+}
+
+#profile_manager_register_right > fieldset {
+	margin-top: 10px;
+}
+
+/* registration form mandatory fields */
+
+.profile_manager_register_missing {
+	border: 1px solid red !important;
+}
+
+/* Account Username Change */
+.profile-manager-account-change-username.elgg-state-active {
+	display: none;
+}
+
+#profile_manager_username {
+	position: relative;
+}
+
+/* End Account Username Change */

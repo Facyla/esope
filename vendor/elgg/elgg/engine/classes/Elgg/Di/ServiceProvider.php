@@ -21,6 +21,7 @@ use Elgg\Project\Paths;
 use Elgg\Router\RouteRegistrationService;
 use Elgg\Security\Csrf;
 use Zend\Mail\Transport\TransportInterface as Mailer;
+use Elgg\I18n\LocaleService;
 
 /**
  * Provides common Elgg services.
@@ -78,6 +79,7 @@ use Zend\Mail\Transport\TransportInterface as Mailer;
  * @property-read \Elgg\EntityIconService                         $iconService
  * @property-read \Elgg\ImageService                              $imageService
  * @property-read \Elgg\Invoker                                   $invoker
+ * @property-read \Elgg\I18n\LocaleService                        $localeService
  * @property-read \Elgg\Logger                                    $logger
  * @property-read Mailer                                          $mailer
  * @property-read \Elgg\Menu\Service                              $menus
@@ -91,7 +93,7 @@ use Zend\Mail\Transport\TransportInterface as Mailer;
  * @property-read \Elgg\Cache\PrivateSettingsCache                $privateSettingsCache
  * @property-read \Elgg\Database\PrivateSettingsTable             $privateSettings
  * @property-read \Elgg\Application\Database                      $publicDb
- * @property-read \Elgg\Database\QueryCounter                     $queryCounter
+ * @property-read \Elgg\Cache\QueryCache                          $queryCache
  * @property-read \Elgg\RedirectService                           $redirects
  * @property-read \Elgg\Http\Request                              $request
  * @property-read \Elgg\Router\RequestContext                     $requestContext
@@ -275,7 +277,7 @@ class ServiceProvider extends DiContainer {
 		});
 
 		$this->setFactory('db', function (ServiceProvider $c) {
-			$db = new \Elgg\Database($c->dbConfig);
+			$db = new \Elgg\Database($c->dbConfig, $c->queryCache);
 			$db->setLogger($c->logger);
 
 			if ($c->config->profiling_sql) {
@@ -421,7 +423,7 @@ class ServiceProvider extends DiContainer {
 		});
 
 		$this->setFactory('iconService', function(ServiceProvider $c) {
-			return new \Elgg\EntityIconService($c->config, $c->hooks, $c->request, $c->logger, $c->entityTable, $c->uploads);
+			return new \Elgg\EntityIconService($c->config, $c->hooks, $c->request, $c->logger, $c->entityTable, $c->uploads, $c->imageService);
 		});
 
 		$this->setFactory('imageService', function(ServiceProvider $c) {
@@ -442,6 +444,10 @@ class ServiceProvider extends DiContainer {
 
 		$this->setFactory('invoker', function(ServiceProvider $c) {
 			return new Invoker($c->session, $c->dic);
+		});
+		
+		$this->setFactory('localeService', function(ServiceProvider $c) {
+			return new LocaleService($c->config);
 		});
 
 		$this->setFactory('logger', function (ServiceProvider $c) {
@@ -528,9 +534,17 @@ class ServiceProvider extends DiContainer {
 			return new \Elgg\Application\Database($c->db);
 		});
 
-		$this->setFactory('queryCounter', function(ServiceProvider $c) {
-			return new \Elgg\Database\QueryCounter($c->db);
-		}, false);
+		$this->setFactory('queryCache', function(ServiceProvider $c) {
+			// @todo maybe make this a configurable value
+			$cache_size = 50;
+			
+			$config_disabled = $c->config->db_disable_query_cache === true;
+						
+			$cache = new \Elgg\Cache\QueryCache($cache_size, $config_disabled);
+			$cache->setLogger($c->logger);
+			
+			return $cache;
+		});
 
 		$this->setFactory('redirects', function(ServiceProvider $c) {
 			$url = current_page_url();
@@ -630,11 +644,11 @@ class ServiceProvider extends DiContainer {
 		$this->setClassName('timer', \Elgg\Timer::class);
 
 		$this->setFactory('translator', function(ServiceProvider $c) {
-			return new \Elgg\I18n\Translator($c->config);
+			return new \Elgg\I18n\Translator($c->config, $c->localeService);
 		});
 
 		$this->setFactory('uploads', function(ServiceProvider $c) {
-			return new \Elgg\UploadService($c->request, $c->imageService);
+			return new \Elgg\UploadService($c->request);
 		});
 
 		$this->setFactory('upgrades', function(ServiceProvider $c) {

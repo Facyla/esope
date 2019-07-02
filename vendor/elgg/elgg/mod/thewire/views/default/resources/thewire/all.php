@@ -1,10 +1,9 @@
 <?php
 /**
  * All wire posts
- *
  */
 
-elgg_push_breadcrumb(elgg_echo('thewire'));
+elgg_push_collection_breadcrumbs('object', 'thewire');
 
 $title = elgg_echo('collection:object:thewire:all');
 
@@ -19,7 +18,6 @@ $content .= elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'thewire',
 	'limit' => get_input('limit', 15),
-	'preload_owners' => true,
 ]);
 
 $body = elgg_view_layout('content', [

@@ -14,6 +14,7 @@ use Elgg\PluginHooksService;
 use ElggBatch;
 use ElggEntity;
 use InvalidParameterException;
+use Elgg\Database\LegacyQueryOptionsAdapter;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
@@ -43,6 +44,8 @@ class SearchService {
 	 */
 	private $db;
 
+	use LegacyQueryOptionsAdapter;
+	
 	/**
 	 * Constructor
 	 *
@@ -121,6 +124,12 @@ class SearchService {
 	 * @return array
 	 */
 	public function normalizeOptions(array $options = []) {
+		
+		if (elgg_extract('_elgg_search_service_normalize_options', $options)) {
+			// already normalized once before
+			return $options;
+		}
+		
 		$search_type = elgg_extract('search_type', $options, 'entities', false);
 		$options['search_type'] = $search_type;
 
@@ -129,6 +138,9 @@ class SearchService {
 		$options = $this->normalizeQuery($options);
 		$options = $this->normalizeSearchFields($options);
 
+		// prevent duplicate normalization
+		$options['_elgg_search_service_normalize_options'] = true;
+		
 		return $options;
 	}
 
@@ -198,36 +210,64 @@ class SearchService {
 	 */
 	public function normalizeSearchFields(array $options = []) {
 
-		$fields = [
+		$default_fields = [
 			'attributes' => [],
 			'metadata' => [],
 			'annotations' => [],
 			'private_settings' => [],
 		];
 
-		$property_types = array_keys($fields);
+		$fields = $default_fields;
 
-		$entity_type = elgg_extract('type', $options);
-		$entity_subtype = elgg_extract('subtype', $options);
+		$clean_field_property_types = function ($new_fields) use ($default_fields) {
+			$property_types = array_keys($default_fields);
+			foreach ($property_types as $property_type) {
+				if (empty($new_fields[$property_type])) {
+					$new_fields[$property_type] = [];
+				}
+			}
+			
+			return $new_fields;
+		};
+
+		$merge_fields = function ($new_fields) use (&$fields, $clean_field_property_types) {
+			if (empty($new_fields) || !is_array($new_fields)) {
+				return;
+			}
+			
+			$new_fields = $clean_field_property_types($new_fields);
+			
+			$fields = array_merge_recursive($fields, $new_fields);
+		};
+
+		// normalize type/subtype to support all combinations
+		$normalized_options = $this->normalizeTypeSubtypeOptions($options);
+
+		$type_subtype_pairs = elgg_extract('type_subtype_pairs', $normalized_options);
+		if (!empty($type_subtype_pairs)) {
+			foreach ($type_subtype_pairs as $entity_type => $entity_subtypes) {
+				$result = $this->hooks->trigger('search:fields', $entity_type, $options, $default_fields);
+				$merge_fields($result);
+				
+				if (elgg_is_empty($entity_subtypes)) {
+					continue;
+				}
+				
+				foreach ($entity_subtypes as $entity_subtype) {
+					$result = $this->hooks->trigger('search:fields', "{$entity_type}:{$entity_subtype}", $options, $default_fields);
+					$merge_fields($result);
+				}
+			}
+		}
+
+		// search fields for search type
 		$search_type = elgg_extract('search_type', $options, 'entities');
-
-		if ($entity_type) {
-			$fields = $this->hooks->trigger('search:fields', $entity_type, $options, $fields);
-		}
-
-		if ($entity_subtype) {
-			$fields = $this->hooks->trigger('search:fields', "$entity_type:$entity_subtype", $options, $fields);
-		}
-
 		if ($search_type) {
 			$fields = $this->hooks->trigger('search:fields', $search_type, $options, $fields);
 		}
 
-		foreach ($property_types as $property_type) {
-			if (empty($fields[$property_type])) {
-				$fields[$property_type] = [];
-			}
-		}
+		// make sure all supported field types are available
+		$fields = $clean_field_property_types($fields);
 
 		if (empty($options['fields'])) {
 			$options['fields'] = $fields;
@@ -292,7 +332,7 @@ class SearchService {
 	 * @param array        $query_parts   Search query
 	 * @param bool         $partial_match Allow partial matches
 	 *
-	 * @return CompositeExpression
+	 * @return CompositeExpression|string
 	 * @throws InvalidParameterException
 	 */
 	public function buildSearchWhereQuery(QueryBuilder $qb, $alias, $fields, $query_parts, $partial_match = true) {

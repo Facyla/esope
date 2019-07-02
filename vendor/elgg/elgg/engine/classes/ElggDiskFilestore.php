@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A filestore that uses disk as storage.
  *
@@ -9,8 +10,9 @@
  * @subpackage FileStore.Disk
  */
 class ElggDiskFilestore extends \ElggFilestore {
+
 	/**
-	 * Directory root.
+	 * @var string Directory root
 	 */
 	protected $dir_root;
 
@@ -44,7 +46,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 * @param string    $mode read, write, or append.
 	 *
 	 * @throws InvalidParameterException
-	 * @return resource File pointer resource
+	 * @return false|resource File pointer resource or false on failure
 	 */
 	public function open(\ElggFile $file, $mode) {
 		$fullname = $this->getFilenameOnFilestore($file);
@@ -87,7 +89,6 @@ class ElggDiskFilestore extends \ElggFilestore {
 		}
 
 		return fopen($fullname, $mode);
-
 	}
 
 	/**
@@ -231,7 +232,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 *
 	 * @param \ElggFile $file File object
 	 *
-	 * @return string
+	 * @return false|string
 	 */
 	public function grabFile(\ElggFile $file) {
 		return file_get_contents($file->getFilenameOnFilestore());
@@ -255,7 +256,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 * Returns the size of all data stored under a directory in the disk store.
 	 *
 	 * @param string $prefix         The prefix to check under.
-	 * @param string $container_guid The guid of the entity whose data you want to check.
+	 * @param int    $container_guid The guid of the entity whose data you want to check.
 	 *
 	 * @return int|false
 	 */
@@ -263,9 +264,9 @@ class ElggDiskFilestore extends \ElggFilestore {
 		if ($container_guid) {
 			$dir = new \Elgg\EntityDirLocator($container_guid);
 			return get_dir_size($this->dir_root . $dir . $prefix);
-		} else {
-			return false;
 		}
+		
+		return false;
 	}
 
 	/**
@@ -278,7 +279,7 @@ class ElggDiskFilestore extends \ElggFilestore {
 	 */
 	protected function makeDirectoryRoot($dirroot) {
 		if (!file_exists($dirroot)) {
-			if (!@mkdir($dirroot, 0700, true)) {
+			if (!@mkdir($dirroot, 0755, true)) {
 				throw new \IOException("Could not make " . $dirroot);
 			}
 		}

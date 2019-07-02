@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg\Notifications;
 
 use ElggData;
@@ -11,19 +12,25 @@ use stdClass;
  *
  * @package    Elgg.Core
  * @subpackage Notifications
- * @deprecated 2.3
+ * @todo remove this class in Elgg 4.0 in favour of SubscriptionNotificationEvent (see https://github.com/Elgg/Elgg/issues/11241)
  */
 class Event implements NotificationEvent {
 
 	use EventSerialization;
 	
-	/* @var string The name of the action/event */
+	/**
+	 * @var string The name of the action/event
+	 */
 	protected $action;
 
-	/* @var string Action's object */
+	/**
+	 * @var \ElggData Action's object
+	 */
 	protected $object;
 
-	/* @var ElggEntity User who triggered the event */
+	/**
+	 * @var ElggEntity User who triggered the event
+	 */
 	protected $actor;
 
 	/**
@@ -39,9 +46,6 @@ class Event implements NotificationEvent {
 		if (get_class($this) == Event::class) {
 			_elgg_services()->deprecation->sendNotice(__CLASS__ . ' is deprecated. '
 					. 'Use ' . SubscriptionNotificationEvent::class . ' instead', '2.3');
-		}
-		if (!$object instanceof ElggData) {
-			throw new InvalidArgumentException(__METHOD__ . ' expects an object as an instance of ' . ElggData::class);
 		}
 		if (!$action) {
 			throw new InvalidArgumentException(__METHOD__ . ' expects a valid action name');
@@ -137,4 +141,3 @@ class Event implements NotificationEvent {
 		return $obj;
 	}
 }
-

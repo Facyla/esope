@@ -127,7 +127,7 @@ class ElggMenuItem implements \Elgg\Collections\CollectionItemInterface {
 	 *    child_menu  => ARR  Options for the child menu
 	 *    data        => ARR  Custom attributes stored in the menu item.
 	 *
-	 * @return ElggMenuItem or null on error
+	 * @return ElggMenuItem|null null on error
 	 */
 	public static function factory($options) {
 		if (!isset($options['name']) || !isset($options['text'])) {
@@ -265,7 +265,7 @@ class ElggMenuItem implements \Elgg\Collections\CollectionItemInterface {
 	/**
 	 * Get the URL of the menu item
 	 *
-	 * @return string
+	 * @return string|false|null
 	 */
 	public function getHref() {
 		return $this->href;
@@ -529,7 +529,7 @@ class ElggMenuItem implements \Elgg\Collections\CollectionItemInterface {
 	 * @param int $priority The smaller numbers mean higher priority (1 before 100)
 	 * @return void
 	 */
-	public function setPriority($priority) {
+	public function setPriority(int $priority) {
 		$this->data['priority'] = $priority;
 	}
 
@@ -539,7 +539,7 @@ class ElggMenuItem implements \Elgg\Collections\CollectionItemInterface {
 	 * @return int
 	 */
 	public function getPriority() {
-		return $this->data['priority'];
+		return (int) $this->data['priority'];
 	}
 
 	/**
@@ -648,13 +648,15 @@ class ElggMenuItem implements \Elgg\Collections\CollectionItemInterface {
 	 *
 	 * This is reserved for the \ElggMenuBuilder.
 	 *
-	 * @param string $sortFunction A function that is passed to usort()
+	 * @param callable $sortFunction A function that is passed to usort()
+	 *
 	 * @return void
 	 * @access private
 	 */
 	public function sortChildren($sortFunction) {
 		foreach ($this->data['children'] as $key => $node) {
-			$this->data['children'][$key]->data['original_order'] = $key;
+			$node->data['original_order'] = $key;
+			$node->sortChildren($sortFunction);
 		}
 		usort($this->data['children'], $sortFunction);
 	}

@@ -34,6 +34,11 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 	private $uploads;
 
 	/**
+	 * @var \Elgg\ImageService
+	 */
+	private $images;
+
+	/**
 	 * @var \ElggObject
 	 */
 	private $entity;
@@ -65,7 +70,8 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->logger->setHooks($this->hooks);
 
 		$this->entities = _elgg_services()->entityTable;
-		$this->uploads = new \Elgg\UploadService($this->request, _elgg_services()->imageService);
+		$this->uploads = new \Elgg\UploadService($this->request);
+		$this->images = _elgg_services()->imageService;
 
 		$this->user = $this->createUser();
 		$this->entity = $this->createObject([
@@ -107,16 +113,17 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	protected function createService() {
-		return new \Elgg\EntityIconService(_elgg_config(), $this->hooks, $this->request, $this->logger, $this->entities, $this->uploads);
+		return new \Elgg\EntityIconService(_elgg_config(), $this->hooks, $this->request, $this->logger, $this->entities, $this->uploads, $this->images);
 	}
 	
 	public static function getDefaultIconSizes() {
 		return [
 			'master' => [
-				'w' => 2048,
-				'h' => 2048,
+				'w' => 10240,
+				'h' => 10240,
 				'square' => false,
 				'upscale' => false,
+				'crop' => false,
 			],
 		];
 	}
@@ -289,10 +296,6 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
 		$this->assertTrue($service->hasIcon($this->entity, 'tiny'));
 		$this->assertTrue($service->hasIcon($this->entity, 'topbar'));
-
-		// make sure we removed temporary files
-		$dir_items = scandir($this->entity_dir_path . 'tmp');
-		$this->assertTrue(count($dir_items) <= 2);
 	}
 
 	/**
@@ -352,10 +355,6 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
 		$this->assertTrue($service->hasIcon($this->entity, 'tiny'));
 		$this->assertTrue($service->hasIcon($this->entity, 'topbar'));
-
-		// make sure we removed temporary files
-		$dir_items = scandir($this->entity_dir_path . 'tmp');
-		$this->assertTrue(count($dir_items) <= 2);
 	}
 
 	/**
@@ -386,13 +385,6 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
 		$this->assertTrue($service->hasIcon($this->entity, 'tiny'));
 		$this->assertTrue($service->hasIcon($this->entity, 'topbar'));
-
-		// make sure uploaded file is deleted
-		$this->assertFalse(file_exists($upload->getPathname()));
-
-		// make sure we removed temporary files
-		$dir_items = scandir($this->entity_dir_path . 'tmp');
-		$this->assertTrue(count($dir_items) <= 2);
 	}
 
 	/**
@@ -428,7 +420,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
 		$icon = $service->getIcon($this->entity, 'small');
 
-		$this->assertEquals(elgg_get_inline_url($icon, true), $service->getIconURL($this->entity, 'small'));
+		$this->assertEquals(elgg_get_inline_url($icon), $service->getIconURL($this->entity, 'small'));
 	}
 
 	/**

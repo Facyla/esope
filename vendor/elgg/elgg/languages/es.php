@@ -1,10 +1,13 @@
 <?php
+
 return array(
 /**
  * Sites
  */
 
-	'item:site' => 'Sitios',
+	'item:site:site' => 'Sitio',
+	'collection:site:site' => 'Sitios',
+	'index:content' => '<p>Bienvenido a tu sitio Elgg. </p><p><strong>Consejo:</strong> Muchos sitios usan el plugin de <code>actividad</code> para poner un flujo de actividad en esta pagina. </p>',
 
 /**
  * Sessions
@@ -24,6 +27,7 @@ return array(
 	'session_changed_user' => "Has ingresado como otro usuario. Deberías <a href='javascript:location.reload(true)'>recargar</a> la página.",
 
 	'loggedinrequired' => "Debe estar autenticado para poder visualizar esta p&aacute;gina",
+	'loggedoutrequired' => "Debes de cerrar sesión para ver la pagina solicitada",
 	'adminrequired' => "Debe ser un administrador para poder visualizar esta p&aacute;gina",
 	'membershiprequired' => "Debe ser miembro del grupo para poder visualizar esta p&aacute;gina",
 	'limited_access' => "No tienes permiso para ver la página solicitada",
@@ -61,10 +65,16 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'Dependencia %s inv&aacute;lida "%s" en plugin %s. Los plugins no pueden entrar en conlicto con otros requeridos!',
 	'ElggPluginPackage:InvalidPlugin:ConflictsWithPlugin' => 'Conflicto con el plugin: %s',
 	'ElggPluginPackage:InvalidPlugin:UnreadableConfig' => 'El archivo  "elgg-plugin.php" del complemento está presente, pero ilegible.',
+	'ElggPlugin:Error' => 'Error del plugin',
+	'ElggPlugin:Error:ID' => 'Error en el plugin "%s"',
+	'ElggPlugin:Error:Path' => 'Error en el directorio del plugin "%s"',
+	'ElggPlugin:Error:Unknown' => 'Error de plugin indefinido',
 	'ElggPlugin:Exception:CannotIncludeFile' => 'No puede incluirse %s para el plugin %s (guid: %s) en %s. Verifique los permisos!',
 	'ElggPlugin:Exception:IncludeFileThrew' => 'Se lanzó la excepción incluyendo %s para el complemento %s (guid: %s) en %s. ',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'No puede cargarse el directorio "views" para el plugin %s (guid: %s) en %s. Verifique los permisos!',
 	'ElggPlugin:Exception:NoID' => 'No se encontr&oacute; el ID para el plugin con guid %s!',
+	'ElggPlugin:Exception:InvalidPackage' => 'El paquete no pudo ser cargado',
+	'ElggPlugin:Exception:InvalidManifest' => 'El manifest del plugin es inexistente o invalido',
 	'PluginException:NoPluginName' => "No se pudo encontrar el nombre del plugin",
 	'PluginException:ParserError' => 'Error procesando el manifiesto con versi&oacute;n de API %s en plugin %s',
 	'PluginException:NoAvailableParser' => 'No se encuentra un procesador para el manifiesto de la versi&oacute;n de la API %s en plugin %s',
@@ -107,6 +117,14 @@ return array(
 
 	'UserFetchFailureException' => 'No se pueden revisar los permisos para el user_guid [%s] porque el usuario no existe.',
 
+	'PageNotFoundException' => 'La pagina que estas intentando ver no existe o no tienes permisos para verla',
+	'EntityNotFoundException' => 'El contenido al que intentas acceder ha sido eliminado o no tienes permiso para verlo.',
+	'EntityPermissionsException' => 'No tienes permisos suficientes para esta acción.',
+	'GatekeeperException' => 'No tienes permisos para ver la pagina a la que intentas acceder',
+	'BadRequestException' => 'Bad request',
+	'ValidationException' => 'Los datos enviados no cumplen los requerimientos, por favor comprueba los datos.',
+	'LogicException:InterfaceNotImplemented' => '%s debe de ser implementado %s',
+
 	'deprecatedfunction' => 'Precauci&oacute;n: Este c&oacute;digo utiliza la funci&oacute;n obsoleta \'%s\' que no es compatible con esta versi&oacute;n de Elgg',
 
 	'pageownerunavailable' => 'Precauci&oacute;n: El administrador de p&aacute;gina %d no se encuentra accesible!',
@@ -117,6 +135,8 @@ return array(
 	'error:missing_data' => 'Faltan datos en tu solicitud',
 	'save:fail' => 'Hubo un error guardando tus datos',
 	'save:success' => 'Tus datos fueron guardados',
+
+	'forward:error' => 'Lo sentimos. Un error ha ocurrido mientras te redirigíamos a otro sitio.',
 
 	'error:default:title' => 'Error...',
 	'error:default:content' => 'Oops... Algo salió mal',
@@ -180,11 +200,11 @@ return array(
  * Access
  */
 
-	'PRIVATE' => "Privado",
-	'LOGGED_IN' => "Usuarios logueados",
-	'PUBLIC' => "Todos",
-	'LOGGED_OUT' => "Usuarios que han cerrado sesión",
-	'access:friends:label' => "Amigos",
+	'access:label:private' => "Privado",
+	'access:label:logged_in' => "Usuarios conectados",
+	'access:label:public' => "Publico",
+	'access:label:logged_out' => "Usuarios desconectados",
+	'access:label:friends' => "Amigos",
 	'access' => "Acceso",
 	'access:overridenotice' => "Aviso: Debido a la política del grupo, este contenido solo es accesible para los miembros del grupo",
 	'access:limited:label' => "Limitado",
@@ -204,7 +224,6 @@ return array(
 
 	'widgets:add' => 'Agregar widget',
 	'widgets:add:description' => "Haga click en el bot&oacute;n de alg&uacute;n widget para agregarlo a la p&aacute;gina",
-	'widgets:panel:close' => "Cerrar el panel de widgets",
 	'widgets:position:fixed' => '(Posici&oacute;n fija en la p&aacute;gina)',
 	'widget:unavailable' => 'Ya agreg&oacute; este widget',
 	'widget:numbertodisplay' => 'Cantidad de elementos para mostrar',
@@ -215,19 +234,25 @@ return array(
 	'widgets' => "Widgets",
 	'widget' => "Widget",
 	'item:object:widget' => "Widgets",
+	'collection:object:widget' => 'Widgets',
 	'widgets:save:success' => "El widget se guard&oacute; correctamente",
 	'widgets:save:failure' => "No se pudo guardar el widget, por favor intente nuevamente",
 	'widgets:add:success' => "Se agreg&oacute; correctamente el widget",
 	'widgets:add:failure' => "No se pudo a&ntilde;adir el widget",
 	'widgets:move:failure' => "No se pudo guardar la nueva posici&oacute;n del widget",
 	'widgets:remove:failure' => "No se pudo quitar el widget",
-
+	'widgets:not_configured' => "Este widget no esta configurado todavía",
+	
 /**
  * Groups
  */
 
 	'group' => "Grupo",
 	'item:group' => "Grupos",
+	'collection:group' => 'Grupos',
+	'item:group:group' => "Grupo",
+	'collection:group:group' => 'Grupos',
+	'groups:tool_gatekeeper' => "La funcionalidad solicitada no esta activada en este grupo",
 
 /**
  * Users
@@ -235,58 +260,17 @@ return array(
 
 	'user' => "Usuario",
 	'item:user' => "Usuarios",
-
-/**
- * Friends
- */
+	'collection:user' => 'Usuarios',
+	'item:user:user' => 'Usuario',
+	'collection:user:user' => 'Usuarios',
 
 	'friends' => "Amigos",
-	'friends:yours' => "Tus Amigos",
-	'friends:owned' => "Amigos de %s",
-	'friend:add' => "Añadir a amigos",
-	'friend:remove' => "Quitar amigo",
-
-	'friends:add:successful' => "Se ha a&ntilde;adido a %s como amigo",
-	'friends:add:failure' => "No se pudo a&ntilde;adir a %s como amigo. Por favor intente nuevamente",
-
-	'friends:remove:successful' => "Se quit&oacute; a %s de sus amigos",
-	'friends:remove:failure' => "No se pudo quitar a %s de sus amigos. Por favor intente nuevamente",
-
-	'friends:none' => "Este usuario no tiene amigos a&uacute;n",
-	'friends:none:you' => "No tienes amigos a&uacute;n",
-
-	'friends:none:found' => "No se encontraron amigos",
-
-	'friends:of:none' => "Nadie ha agragado a este usuario como amigo a&uacute;n",
-	'friends:of:none:you' => "Nadie te ha agragado como amigo a&uacute;n. Comienza a a&ntilde;adir contenido y completar tu perfil para que la gente te encuentre!",
-
-	'friends:of:owned' => "Amigos de %s",
-
-	'friends:of' => "Amigos de",
-	'friends:collections' => "Colecciones de amigos",
-	'collections:add' => "Nueva colecci&oacute;n",
-	'friends:collections:add' => "Nueva colecci&oacute;n de amigos",
-	'friends:addfriends' => "Seleccionar amigos",
-	'friends:collectionname' => "Nombre de la colecci&oacute;n",
-	'friends:collectionfriends' => "Amigos en la colecci&oacute;n",
-	'friends:collectionedit' => "Editar esta colecci&oacute;n",
-	'friends:nocollections' => "No tienes colecciones a&uacute;n",
-	'friends:collectiondeleted' => "La colecci&oacute;n ha sido eliminada",
-	'friends:collectiondeletefailed' => "No se puede eliminar la colecci&oacute;n",
-	'friends:collectionadded' => "La colecci&oacute;n se ha creado correctamente",
-	'friends:nocollectionname' => "Debes ponerle un nombre a la colecci&oacute;n antes de crearla",
-	'friends:collections:members' => "Miembros de esta colecci&oacute;n",
-	'friends:collections:edit' => "Editar colecci&oacute;n",
-	'friends:collections:edited' => "Colecci&oacute;n guardada",
-	'friends:collection:edit_failed' => 'No se pudo guardar la colecci&oacute;n',
-
-	'friendspicker:chararray' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+	'collection:friends' => 'Friends\' %s',
 
 	'avatar' => 'Imagen de perfil',
 	'avatar:noaccess' => "No tienes permitido editar el avatar de este usuario",
 	'avatar:create' => 'Cree su imagen de perfil',
 	'avatar:edit' => 'Editar imagen de perfil',
-	'avatar:preview' => 'Previsualizar',
 	'avatar:upload' => 'Subir nueva imagen de perfil',
 	'avatar:current' => 'Imagen de perfil actual',
 	'avatar:remove' => 'Remove your avatar and set the default icon',
@@ -300,50 +284,16 @@ return array(
 	'avatar:crop:fail' => 'El recortado del avatar ha fallado',
 	'avatar:remove:success' => 'Se ha eliminado el avatar',
 	'avatar:remove:fail' => 'fall&oacute; al remover el avatar',
-
-	'profile:edit' => 'Editar perfil',
-	'profile:aboutme' => "Sobre mi",
-	'profile:description' => "Sobre mi",
-	'profile:briefdescription' => "Descripci&oacute;n corta",
-	'profile:location' => "Ubicaci&oacute;n",
-	'profile:skills' => "Habilidades",
-	'profile:interests' => "Intereses",
-	'profile:contactemail' => "Email de contacto",
-	'profile:phone' => "Tel&eacute;fono",
-	'profile:mobile' => "M&oacute;vil",
-	'profile:website' => "Sitio Web",
-	'profile:twitter' => "Usuario de Twitter",
-	'profile:saved' => "Su perfil ha sido guardado correctamente",
-
-	'profile:field:text' => 'Texto corto',
-	'profile:field:longtext' => 'Area de texto largo',
-	'profile:field:tags' => 'Etiquetas',
-	'profile:field:url' => 'Direcci&oacute;n Web',
-	'profile:field:email' => 'Direcci&oacute;n de email',
-	'profile:field:location' => 'Ubicaci&oacute;n',
-	'profile:field:date' => 'Fecha',
-
-	'admin:appearance:profile_fields' => 'Editar campos de perfil',
-	'profile:edit:default' => 'Editar campos de perfil',
-	'profile:label' => "Etiqueta de perfil",
-	'profile:type' => "Tipo de perfil",
-	'profile:editdefault:delete:fail' => 'Se ha producido un error al eliminar el campo del perfil',
-	'profile:editdefault:delete:success' => 'Item de perfil por defecto eliminado!',
-	'profile:defaultprofile:reset' => 'Reinicio de perfil de sistema por defecto',
-	'profile:resetdefault' => 'Reiniciar perfil de sistema por defecto',
-	'profile:resetdefault:confirm' => 'Are you sure you want to delete your custom profile fields?',
-	'profile:explainchangefields' => "Puede reemplazar los campos de perfil existentes con sus propios utilizando el formulario de abajo. \n\n Ingrese un nuevo nombre de campo de perfil, por ejemplo, 'Equipo favorito', luego seleccione el tipo de campo (eg. texto, url, tags), y haga click en el bot&oacute;n de 'Agregar'. Para re ordenar los campos arrastre el control al lado de la etiqueta del campo. Para editar la etiqueta del campo haga click en el texto de la etiqueta para volverlo editable. \n\n Puede volver a la disposici&oacute;n original del perfil en cualquier momento, pero perder&aacute; la informaci&oacute;n creada en los campos personalizados del perfil hasta el momento",
-	'profile:editdefault:success' => 'Elemento agregado al perfil por defecto correctamente',
-	'profile:editdefault:fail' => 'No se pudo guardar el perfil por defecto',
-	'profile:field_too_long' => 'No se pudo guardar la informaci&oacute;n del perfil debido a que la secci&oacute;n "%s" es demasiado larga.',
-	'profile:noaccess' => "No tienes permiso para editar este perfil.",
-	'profile:invalid_email' => '«%s» debe ser una dirección de correo electrónico válida.',
-
+	
+	'action:user:validate:already' => "%s ya ha sido validado",
+	'action:user:validate:success' => "%s ha sido validado",
+	'action:user:validate:error' => "Ocurrió un error validando %s",
 
 /**
  * Feeds
  */
 	'feed:rss' => 'Canal RSS para esta p&aacute;gina',
+	'feed:rss:title' => 'Fuente RSS para esta pagina',
 /**
  * Links
  */
@@ -355,9 +305,8 @@ return array(
  * River
  */
 	'river' => "River",
-	'river:friend:user:default' => "%s ahora es amigo de %s",
+	'river:user:friend' => "%s ahora es amigo con %s",
 	'river:update:user:avatar' => '%s tiene una nueva imagen de perfil',
-	'river:update:user:profile' => '%s ha actualizado su perfil',
 	'river:noaccess' => 'No posee permisos para visualizar este elemento',
 	'river:posted:generic' => '%s publicado',
 	'riveritem:single:user' => 'un usuario',
@@ -373,11 +322,7 @@ return array(
 	'river:subject:invalid_subject' => 'Usuario inválido',
 	'activity:owner' => 'Ver Actividad',
 
-	'river:widget:title' => "Actividad",
-	'river:widget:description' => "Mostrar la &uacute;ltima actividad",
-	'river:widget:type' => "Tipo de actividad",
-	'river:widgets:friends' => 'Actividad de amigos',
-	'river:widgets:all' => 'Toda la actividad del sitio',
+	
 
 /**
  * Notifications
@@ -433,6 +378,7 @@ return array(
 	'registerdisabled' => "La registraci&oacute;n se deshabilit&oacute; por el administrador del sistema",
 	'register:fields' => 'Todos los campos son obligatorios',
 
+	'registration:noname' => 'El nombre para mostrar es requerido.',
 	'registration:notemail' => 'No ha ingresado una direcci&oacute;n de Email v&aacute;lida',
 	'registration:userexists' => 'El nombre de usuario ya existe',
 	'registration:usernametooshort' => 'El nombre de usuario debe tener un m&iacute;nimo de %u caracteres',
@@ -452,6 +398,8 @@ return array(
 	'user:name:label' => "Mi nombre para mostrar",
 	'user:name:success' => "Se modific&oacute; correctamente su nombre en la red",
 	'user:name:fail' => "No se pudo modificar su nombre en la red. Por favor, aseg&uacute;rese de que no es demasiado largo e intente nuevamente",
+	'user:username:success' => "Nombre cambiado satisfactoriamente en el sistema",
+	'user:username:fail' => "No se pudo cambiar el nombre de usuario en el sistema.",
 
 	'user:set:password' => "Contrase&ntilde;a de la cuenta",
 	'user:current_password:label' => 'Contrase&ntilde;a actual',
@@ -471,8 +419,10 @@ return array(
 	'user:language:fail' => "No se pudo actualizar su configuraci&oacute;n de lenguaje",
 
 	'user:username:notfound' => 'No se encuentra el usuario %s',
+	'user:username:help' => 'Tenga en cuenta que cambiar un nombre de usuario cambiará todos los enlaces dinámicos relacionados con el usuario',
 
 	'user:password:lost' => 'Olvid&eacute; mi contrase&ntilde;a',
+	'user:password:hash_missing' => 'Lamentablemente, debemos pedirle que restablezca su contraseña. Hemos mejorado la seguridad de las contraseñas en el sitio, pero no hemos podido migrar todas las cuentas en el proceso.',
 	'user:password:changereq:success' => 'Solicitud de nueva contrase&ntilde;a confirmada, se le ha enviado un Email',
 	'user:password:changereq:fail' => 'No se pudo solicitar una nueva contrase&ntilde;a',
 
@@ -480,7 +430,7 @@ return array(
 
 	'user:persistent' => 'Recordarme',
 
-	'walled_garden:welcome' => 'Bienvenido a',
+	'walled_garden:home' => 'Inicio',
 
 /**
  * Administration
@@ -488,6 +438,7 @@ return array(
 	'menu:page:header:administer' => 'Administrar',
 	'menu:page:header:configure' => 'Configurar',
 	'menu:page:header:develop' => 'Desarrollar',
+	'menu:page:header:information' => 'Información',
 	'menu:page:header:default' => 'Otro',
 
 	'admin:view_site' => 'Ver sitio',
@@ -504,16 +455,16 @@ return array(
 	'admin' => "Administraci&oacute;n",
 	'admin:description' => "El panel de administraci&oacute;n le permite organizar todos los aspectos del sistema, desde la gesti&oacute;n de usuarios hasta el comportamiento de los plugins. Seleccione una opci&oacute;n debajo para comenzar",
 
-	'admin:statistics' => "Estad&iacute;sticas",
-	'admin:statistics:overview' => 'Resumen',
-	'admin:statistics:server' => 'Informaci&oacute;n del servidor',
-	'admin:statistics:cron' => 'Cron',
+	'admin:statistics' => 'Estad&iacute;sticas',
+	'admin:server' => 'Servidor',
+	'admin:cron' => 'Cron',
 	'admin:cron:record' => 'Ultimos trabajos del Cron',
 	'admin:cron:period' => 'Periodo Cron',
 	'admin:cron:friendly' => 'Ultimo completado',
 	'admin:cron:date' => 'Fecha y hora',
 	'admin:cron:msg' => 'Mensaje',
 	'admin:cron:started' => 'Los trabajos de cron para "%s" han empezado a las %s',
+	'admin:cron:started:actual' => 'Intervalo de Cron "%s" empezó a procesarse en %s',
 	'admin:cron:complete' => 'Los trabajos de cron para "%s" se han completado a las %s',
 
 	'admin:appearance' => 'Apariencia',
@@ -526,28 +477,47 @@ return array(
 	'admin:users:online' => 'Conectados actualmente',
 	'admin:users:newest' => 'Los mas nuevos',
 	'admin:users:admins' => 'Administrators',
+	'admin:users:searchuser' => 'Search user to make them admin',
+	'admin:users:existingadmins' => 'List of existing admins',
 	'admin:users:add' => 'Agregar Nuevo Usuario',
 	'admin:users:description' => "Este panel de administraci&oacute;n le permite gestionar la configuraci&oacute;n de usuarios de la red. Seleccione una opci&oacute;n debajo para comenzar",
 	'admin:users:adduser:label' => "Click aqu&iacute; para agregar un nuevo usuario..",
 	'admin:users:opt:linktext' => "Configurar usuarios..",
 	'admin:users:opt:description' => "Configurar usuarios e informaci&oacute;n de cuentas",
 	'admin:users:find' => 'Buscar',
-
-	'admin:administer_utilities:maintenance' => 'Modo de Mantenimiento',
+	'admin:users:unvalidated' => 'No validado',
+	'admin:users:unvalidated:no_results' => 'No hay usuarios sin validar.',
+	'admin:users:unvalidated:registered' => 'Registrado: %s',
+	
+	'admin:configure_utilities:maintenance' => 'Modo mantenimiento',
 	'admin:upgrades' => 'Actualizaciones',
+	'admin:upgrades:finished' => 'Completado',
+	'admin:upgrades:db' => 'Actualizaciones de base de datos',
+	'admin:upgrades:db:name' => 'Actualizar nombre',
+	'admin:upgrades:db:start_time' => 'Hora de inicio',
+	'admin:upgrades:db:end_time' => 'Hora de finalización',
+	'admin:upgrades:db:duration' => 'Duración',
+	'admin:upgrades:menu:pending' => 'Actualizaciones pendientes',
+	'admin:upgrades:menu:completed' => 'Actualizaciones completadas',
+	'admin:upgrades:menu:db' => 'Actualizaciones de base de datos',
+	'admin:upgrades:menu:run_single' => 'Ejecutar esta actualización',
+	'admin:upgrades:run' => 'Ejecutar actualizaciones ahora',
+	'admin:upgrades:error:invalid_upgrade' => 'La entidad %s no existe o no es una instancia valida de ElggUpgrade',
+	'admin:upgrades:error:invalid_batch' => 'Corredor de lotes para la actualización %s (%s) no pudo ser instanciado',
+	'admin:upgrades:completed' => 'Actualización "%s" completada el %s',
+	'admin:upgrades:completed:errors' => 'Actualización "%s" completada el %s pero encontró %s errores',
+	'admin:upgrades:failed' => 'Actualización "%s" ha fallado',
+	'admin:action:upgrade:reset:success' => 'Actualización "%s" fue reiniciada',
 
 	'admin:settings' => 'Configuraci&oacute;n',
 	'admin:settings:basic' => 'Configuraci&oacute;n B&aacute;sica',
 	'admin:settings:advanced' => 'Configuraci&oacute;n Avanzada',
+	'admin:settings:users' => 'Users',
+	'admin:site_settings' => "Site Settings",
 	'admin:site:description' => "Este panel de administraci&oacute;n le permite gestionar la configuraci&oacute;n global de la red. Selecciona una opci&oacute;n debajo para comenzar",
 	'admin:site:opt:linktext' => "Configurar sitio..",
 	'admin:settings:in_settings_file' => 'Esta opción se configura en settings.php',
 
-	'admin:legend:security' => 'Seguridad',
-	'admin:site:secret:intro' => 'Elgg usa una clave para crear tokens de seguridad para varios propósitos.',
-	'admin:site:secret_regenerated' => "La clave secreta ha sido regenerada.",
-	'admin:site:secret:regenerate' => "Regenerar clave secreta",
-	'admin:site:secret:regenerate:help' => "Nota: Puede que regenerar el secreto del sitio suponga un inconveniente para algunos usuarios, ya que invalidará códigos usados para las cookies de la función de «Recuérdame», para solicitudes de validación de la dirección de correo electrónico, para códigos de invitación, etc.",
 	'site_secret:current_strength' => 'Seguridad de la clave',
 	'site_secret:strength:weak' => "Débil",
 	'site_secret:strength_msg:weak' => "Nosotros recomendamos que regeneres tu clave secreta",
@@ -567,8 +537,11 @@ return array(
 	'admin:widget:content_stats:help' => 'Seguimiento del contenido creado por los usuarios de la red',
 	'admin:widget:cron_status' => 'Estado de Cron',
 	'admin:widget:cron_status:help' => 'Muestra el estado de la última ejecución de los trabajos de Cron',
-	'widget:content_stats:type' => 'Tipo de contenido',
-	'widget:content_stats:number' => 'N&uacute;mero',
+	'admin:statistics:numentities' => 'Estadísticas del contenido',
+	'admin:statistics:numentities:type' => 'Tipo de contenido',
+	'admin:statistics:numentities:number' => 'Numero',
+	'admin:statistics:numentities:searchable' => 'Entidades de búsqueda',
+	'admin:statistics:numentities:other' => 'Otras entidades',
 
 	'admin:widget:admin_welcome' => 'Bienvenido',
 	'admin:widget:admin_welcome:help' => "Esta es el &aacute;rea de administraci&oacute;n",
@@ -576,7 +549,15 @@ return array(
 'Bienvenido! Se encuentra viendo el panel de control de la administraci&oacute;n. Es &uacute;til para visualizar las novedades en la red',
 
 	'admin:widget:admin_welcome:admin_overview' =>
-"La navegaci&oacute;n para el &aacute;rea de administraci&oacute;n se encuentra en el men&uacute; de la derecha. El mismo se organiza en",
+"El menú a la derecha proporciona la navegación para el área de administración. Se organiza en
+tres secciones:
+	<dl>
+		<dt>Administrar</dt><dd>Tareas básicas como administrar usuarios, monitorear contenido reportado y activar complementos.</dd>
+		<dt>Configurar</dt><dd>Tareas ocasionales como configurar el nombre del sitio o configurar los ajustes de un complemento.</dd>
+		<dt>Información</dt><dd>Información sobre su sitio como estadísticas</dd>
+		<dt>Desarrollar</dt><dd>Para desarrolladores que están construyendo complementos o diseñando temas. (Requiere un complemento de desarrollador.)</dd>
+	</dl>
+",
 
 	// argh, this is ugly
 	'admin:widget:admin_welcome:outro' => '<br />Aseg&uacute;rese de verificar los recursos disponibles en los enlaces del pi&eacute; de p&aacute;gina y gracias por utilizar Elgg!',
@@ -613,11 +594,107 @@ return array(
 	'admin:plugins:markdown:unknown_plugin' => 'Plugin desconocido',
 	'admin:plugins:markdown:unknown_file' => 'Archivo desconocido',
 
+	'admin:notices:delete_all' => 'Descartar todos los %s avisos',
 	'admin:notices:could_not_delete' => 'Notificaci&oacute;n de no se pudo eliminar',
 	'item:object:admin_notice' => 'Admin notice',
+	'collection:object:admin_notice' => 'Avisos del administrador',
 
 	'admin:options' => 'Opciones de Admin',
 
+	'admin:security' => 'Seguridad',
+	'admin:security:settings' => 'Ajustes',
+	'admin:security:settings:description' => 'En esta página puede configurar algunas características de seguridad. Por favor, lea la configuración cuidadosamente.',
+	'admin:security:settings:label:hardening' => 'Hardening',
+	'admin:security:settings:label:notifications' => 'Notificaciones',
+	'admin:security:settings:label:site_secret' => 'Secreto del sitio',
+	
+	'admin:security:settings:notify_admins' => 'Notificar a todos los administradores del sitio cuando se agrega o elimina un administrador',
+	'admin:security:settings:notify_admins:help' => 'Esto enviará una notificación a todos los administradores del sitio de que uno de los administradores agregó o eliminó un administrador del sitio.',
+	
+	'admin:security:settings:notify_user_admin' => 'Notificar al usuario cuando se agrega o elimina el rol de administrador',
+	'admin:security:settings:notify_user_admin:help' => 'Esto enviará una notificación al usuario de que el rol de administrador se agregó o se eliminó de su cuenta.',
+	
+	'admin:security:settings:notify_user_ban' => 'Notificar al usuario cuando su cuenta sea suspendida/habilitada',
+	'admin:security:settings:notify_user_ban:help' => 'Esto enviara una notificación al usuario cuya cuenta ha sido suspendida/habilitada',
+	
+	'admin:security:settings:protect_upgrade' => 'Proteger upgrade.php',
+	'admin:security:settings:protect_upgrade:help' => 'This will protect upgrade.php so you require a valid token or you\'ll have to be an administrator.',
+	'admin:security:settings:protect_upgrade:token' => 'In order to be able to use the upgrade.php when logged out or as a non admin, the following URL needs to be used:',
+	
+	'admin:security:settings:protect_cron' => 'Protect the /cron URLs',
+	'admin:security:settings:protect_cron:help' => 'This will protect the /cron URLs with a token, only if a valid token is provided will the cron execute.',
+	'admin:security:settings:protect_cron:token' => 'In order to be able to use the /cron URLs the following tokens needs to be used. Please note that each interval has its own token.',
+	'admin:security:settings:protect_cron:toggle' => 'Show/hide cron URLs',
+	
+	'admin:security:settings:disable_password_autocomplete' => 'Disable autocomplete on password fields',
+	'admin:security:settings:disable_password_autocomplete:help' => 'Data entered in these fields will be cached by the browser. An attacker who can access the victim\'s browser could steal this information. This is especially important if the application is commonly used in shared computers such as cyber cafes or airport terminals. If you disable this, password management tools can no longer autofill these fields. The support for the autocomplete attribute can be browser specific.',
+	
+	'admin:security:settings:email_require_password' => 'Require password to change email address',
+	'admin:security:settings:email_require_password:help' => 'When the user wishes to change their email address, require that they provide their current password.',
+
+	'admin:security:settings:session_bound_entity_icons' => 'Session bound entity icons',
+	'admin:security:settings:session_bound_entity_icons:help' => 'Entity icons can be session bound by default. This means the URLs generated also contain information about the current session.
+Having icons session bound makes icon urls not shareable between sessions. The side effect is that caching of these urls will only help the active session.',
+	
+	'admin:security:settings:site_secret:intro' => 'Elgg uses a key to create security tokens for various purposes.',
+	'admin:security:settings:site_secret:regenerate' => "Regenerate site secret",
+	'admin:security:settings:site_secret:regenerate:help' => "Note: Regenerating your site secret may inconvenience some users by invalidating tokens used in \"remember me\" cookies, e-mail validation requests, invitation codes, etc.",
+	
+	'admin:site:secret:regenerated' => "Your site secret has been regenerated",
+	'admin:site:secret:prevented' => "The regeneration of the site secret was prevented",
+	
+	'admin:notification:make_admin:admin:subject' => 'A new site administrator was added to %s',
+	'admin:notification:make_admin:admin:body' => 'Hi %s,
+
+%s made %s a site administrator of %s.
+
+To view the profile of the new administrator, click here:
+%s
+
+To go to the site, click here:
+%s',
+	
+	'admin:notification:make_admin:user:subject' => 'You were added as a site administator of %s',
+	'admin:notification:make_admin:user:body' => 'Hi %s,
+
+%s made you a site administrator of %s.
+
+To go to the site, click here:
+%s',
+	'admin:notification:remove_admin:admin:subject' => 'A site administrator was removed from %s',
+	'admin:notification:remove_admin:admin:body' => 'Hi %s,
+
+%s removed %s as a site administrator of %s.
+
+To view the profile of the old administrator, click here:
+%s
+
+To go to the site, click here:
+%s',
+	
+	'admin:notification:remove_admin:user:subject' => 'You were removed as a site administator from %s',
+	'admin:notification:remove_admin:user:body' => 'Hi %s,
+
+%s removed you as site administrator of %s.
+
+To go to the site, click here:
+%s',
+	'user:notification:ban:subject' => 'Your account on %s was banned',
+	'user:notification:ban:body' => 'Hi %s,
+
+Your account on %s was banned.
+
+To go to the site, click here:
+%s',
+	
+	'user:notification:unban:subject' => 'Tu cuenta en %s ya no esta suspendida',
+	'user:notification:unban:body' => 'Hi %s,
+
+Your account on %s is no longer banned. You can use the site again.
+
+To go to the site, click here:
+%s',
+	
 /**
  * Plugins
  */
@@ -628,6 +705,7 @@ return array(
 	'plugins:usersettings:save:ok' => "Configuraci&oacute;n del usuario para el plugin %s guardada",
 	'plugins:usersettings:save:fail' => "Ocurri&oacute; un error al intentar guardar la configuraci&oacute;n del usuario para el plugin %s",
 	'item:object:plugin' => 'Plugins',
+	'collection:object:plugin' => 'Plugins',
 
 	'admin:plugins' => "Plugins",
 	'admin:plugins:activate_all' => 'Activar todos',
@@ -661,6 +739,7 @@ return array(
 	'admin:plugins:label:contributors:username' => 'Nombre de Usuario de la Comunidad',
 	'admin:plugins:label:contributors:description' => 'Descripci&oacute;n completa',
 	'admin:plugins:label:dependencies' => 'Dependencias',
+	'admin:plugins:label:missing_dependency' => 'Missing dependency [%s].',
 
 	'admin:plugins:warning:unmet_dependencies' => 'Este plugin tiene dependencias desconocidas y no se activar&aacute;. Consulte las dependencias debajo de mas informaci&oacute;n',
 	'admin:plugins:warning:invalid' => '%s no es un plugin Elgg v&aacute;lido. Visite <a href="http://docs.elgg.org/Invalid_Plugin">la Documentaci&oacute;n Elgg</a> para consejos de soluci&oacute;n de problemas',
@@ -695,7 +774,7 @@ return array(
 	'admin:statistics:description' => "Este es un resumen de las estad&iacute;sticas del sitio. Si necesita estad&iacute;sticas mas avanzadas, hay dispoinble una funcionalidad de administraci&oacute;n profesional",
 	'admin:statistics:opt:description' => "Ver informaci&oacute;n estad&iacute;stica sobre usuarios y objetos en el sitio",
 	'admin:statistics:opt:linktext' => "Ver estad&iacute;sticas..",
-	'admin:statistics:label:basic' => "Estad&iacute;sticas b&aacute;sicas del sitio",
+	'admin:statistics:label:user' => "Estadísticas de usuario",
 	'admin:statistics:label:numentities' => "Entidades del sitio",
 	'admin:statistics:label:numusers' => "Cantidad de usuarios",
 	'admin:statistics:label:numonline' => "Cantidad de usuarios conectados",
@@ -704,8 +783,11 @@ return array(
 	'admin:statistics:label:version' => "Versi&oacute;n de Elgg",
 	'admin:statistics:label:version:release' => "Release",
 	'admin:statistics:label:version:version' => "Versi&oacute;n",
+	'admin:statistics:label:version:code' => "Versión de Código",
 
+	'admin:server:label:elgg' => 'Elgg',
 	'admin:server:label:php' => 'PHP',
+	'admin:server:label:phpinfo' => 'Mostrar PHPInfo',
 	'admin:server:label:web_server' => 'Servidor Web',
 	'admin:server:label:server' => 'Servidor',
 	'admin:server:label:log_location' => 'Localizaci&oacute;n de los registros',
@@ -720,10 +802,22 @@ return array(
 	'admin:server:warning:post_max_too_small' => '(Nota: post_max_size debe ser mayor que el tama&ntilde; indicado aqu&iacute; para habilitar las subidas)',
 	'admin:server:label:memcache' => 'Memcache',
 	'admin:server:memcache:inactive' => '
-		Memcache no está configurado en este servidor o aún no ha sido configurado en Elgg config.
-		Para mejorar el rendimiento, se recomienda activar y configurar memcache.
-	',
+		Memcache is not setup on this server or it has not yet been configured in Elgg config.
+		For improved performance, it is recommended that you enable and configure memcache (or redis).
+',
 
+	'admin:server:label:redis' => 'Redis',
+	'admin:server:redis:inactive' => '
+		Redis is not setup on this server or it has not yet been configured in Elgg config.
+		For improved performance, it is recommended that you enable and configure redis (or memcache).
+',
+
+	'admin:server:label:opcache' => 'OPcache',
+	'admin:server:opcache:inactive' => '
+		OPcache is not available on this server or it has not yet been enabled.
+		For improved performance, it is recommended that you enable and configure OPcache.
+',
+	
 	'admin:user:label:search' => "Encontrar usuarios:",
 	'admin:user:label:searchbutton' => "Buscar",
 
@@ -746,7 +840,7 @@ return array(
 	'admin:user:removeadmin:no' => "No se pueden quitar los privilegios de administrador de este usuario",
 	'admin:user:self:removeadmin:no' => "No puede quitar sus privilegios de administrador",
 
-	'admin:appearance:menu_items' => 'Elementos del Men&uacute;',
+	'admin:configure_utilities:menu_items' => 'Menu Items',
 	'admin:menu_items:configure' => 'Configurar los elementos del men&uacute; principal',
 	'admin:menu_items:description' => 'Seleccione qu&eacute; elementos del men&uacute; desea mostrar como enlaces favoritos. Los items no utilizados se encontrar&aacute;n en el item "Mas" al final de la lista',
 	'admin:menu_items:hide_toolbar_entries' => 'Quitar enlaces del men&uacute; de la barra de herramientas?',
@@ -754,9 +848,10 @@ return array(
 	'admin:add_menu_item' => 'Agregar un elemento del men&uacute; personalizado',
 	'admin:add_menu_item:description' => 'Complete el nombre para mostrar y la direcci&oacute;n url para agregar un elemento de men&uacute; personalizado',
 
-	'admin:appearance:default_widgets' => 'Widgets por defecto',
+	'admin:configure_utilities:default_widgets' => 'Default Widgets',
 	'admin:default_widgets:unknown_type' => 'Tipo de widget desconocido',
-	'admin:default_widgets:instructions' => 'Agregar, quitar, mover y configurar los widgets por defecto en la p&aacute;gina de widget seleccionada',
+	'admin:default_widgets:instructions' => 'Add, remove, position, and configure default widgets for the selected widget page.
+These changes will only affect new users on the site.',
 
 	'admin:robots.txt:instructions' => "Editar el robots.txt de este sitio a continuación",
 	'admin:robots.txt:plugins' => "Plugins estan agregando lo siguiente al archivo robots.txt",
@@ -764,8 +859,8 @@ return array(
 	'admin:robots.txt:physical' => "La herramienta robots.txt no funcionará porque hay una archivo físico robots.txt",
 
 	'admin:maintenance_mode:default_message' => 'El sitio no está disponible por mantenimiento',
-	'admin:maintenance_mode:instructions' => 'El Modo de Mantenimiento solo debe ser usado para actualizaciones y otros cambios de importancia en el sitio.
-Cuando este modo esta activado, solo los administradores pueden ingresar y ver el sitio',
+	'admin:maintenance_mode:instructions' => 'Maintenance mode should be used for upgrades and other large changes to the site.
+		When it is on, only admins can log in and browse the site.',
 	'admin:maintenance_mode:mode_label' => 'Modo de Mantenimiento',
 	'admin:maintenance_mode:message_label' => 'Mensaje que se mostrará a los usuarios cuando el modo de mantenimiento este activado',
 	'admin:maintenance_mode:saved' => 'Las configuraciones del modo de mantenimiento fueron guardadas',
@@ -781,7 +876,7 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'usersettings:statistics' => "Sus estad&iacute;sticas",
 	'usersettings:statistics:opt:description' => "Ver informaci&oacute;n estad&iacute;stica de usuarios y objectos en la red",
 	'usersettings:statistics:opt:linktext' => "Estad&iacute;sticas de la cuenta",
-	
+
 	'usersettings:statistics:login_history' => "Historial de inicio de sesión",
 	'usersettings:statistics:login_history:date' => "Fecha",
 	'usersettings:statistics:login_history:ip' => "Dirección IP",
@@ -816,12 +911,6 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'river:comments:all' => 'Ver todos los comentarios de %u',
 	'river:generic_comment' => 'comentado en %s %s',
 
-	'friends:widget:description' => "Muestra algunos de tus amigos",
-	'friends:num_display' => "Cantidad de amigos a mostrar",
-	'friends:icon_size' => "Tama&ntilde;o del &iacute;cono",
-	'friends:tiny' => "peque&ntilde;o",
-	'friends:small' => "chico",
-
 /**
  * Icons
  */
@@ -833,12 +922,17 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'icon:size:medium' => "Mediano",
 	'icon:size:large' => "Grande",
 	'icon:size:master' => "Extra Grande",
+	
+	'entity:edit:icon:file:label' => "Upload a new icon",
+	'entity:edit:icon:file:help' => "Leave blank to keep current icon.",
+	'entity:edit:icon:remove:label' => "Remove icon",
 
 /**
  * Generic action words
  */
 
 	'save' => "Guardar",
+	'save_go' => "Save, and go to %s",
 	'reset' => 'Reiniciar',
 	'publish' => "Publicar",
 	'cancel' => "Cancelar",
@@ -889,6 +983,8 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'create' => 'Crear',
 	'remove' => 'Remover',
 	'revert' => 'Revertir',
+	'validate' => 'Validar',
+	'read_more' => 'Leer mas',
 
 	'site' => 'Sitio',
 	'activity' => 'Actividad',
@@ -918,6 +1014,8 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 
 	'active' => 'Activo',
 	'total' => 'Total',
+	'unvalidated' => 'Unvalidated',
+	'disabled' => 'Disabled',
 
 	'ok' => 'OK',
 	'any' => 'Cualquiera',
@@ -985,6 +1083,12 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 	'on' => 'Habilitado',
 	'off' => 'Deshabilitado',
 
+	'number_counter:separatorr' => ".",
+	'number_counter:view:thousand' => "%sK",
+	'number_counter:view:million' => "%sM",
+	'number_counter:view:billion' => "%sB",
+	'number_counter:view:trillion' => "%sT",
+
 /**
  * Entity actions
  */
@@ -999,27 +1103,26 @@ Cuando este modo esta activado, solo los administradores pueden ingresar y ver e
 
 	'deleteconfirm' => "Est&aacute; seguro de eliminar este item?",
 	'deleteconfirm:plural' => "&ntilde;Seguro que deseas borrar estos elementos?",
-	'fileexists' => "El archivo ya se ha subido. Para reemplazarlo, seleccione:",
+	'fileexists' => "A file has already been uploaded. To replace it, select a new one below",
+	'input:file:upload_limit' => 'Maximum allowed file size is %s',
 
 /**
  * User add
  */
 
 	'useradd:subject' => 'Cuenta de usuario creada',
-	'useradd:body' => '
- %s,
- 
-Su cuenta de usuario ha sido creada en %s. Para iniciar sesi&oacute;n visite:
- 
- %s
- 
-E inicie sesi&oacute;n con las siguientes credenciales:
- 
- Username: %s
- Password: %s
- 
-Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
- ',
+	'useradd:body' => '%s,
+
+A user account has been created for you at %s. To log in, visit:
+
+%s
+
+And log in with these user credentials:
+
+Username: %s
+Password: %s
+
+Once you have logged in, we highly recommend that you change your password.',
 
 /**
  * System messages
@@ -1027,6 +1130,15 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 
 	'systemmessages:dismiss' => "click para cerrar",
 
+
+/**
+ * Messages
+ */
+	'messages:title:success' => 'Éxito',
+	'messages:title:error' => 'Error',
+	'messages:title:warning' => 'Advertencia',
+	'messages:title:help' => 'Ayuda',
+	'messages:title:notice' => 'Aviso',
 
 /**
  * Import / export
@@ -1039,6 +1151,10 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
  * Time
  */
 
+	'input:date_format' => 'Y-m-d',
+	'input:date_format:datepicker' => 'yy-mm-dd', // jQuery UI datepicker format
+	'input:time_format' => 'g:ia',
+
 	'friendlytime:justnow' => "ahora",
 	'friendlytime:minutes' => "hace %s minutos",
 	'friendlytime:minutes:singular' => "hace un minuto",
@@ -1047,6 +1163,7 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'friendlytime:days' => "hace %s d&iacute;as",
 	'friendlytime:days:singular' => "ayer",
 	'friendlytime:date_format' => 'j F Y @ g:ia',
+	'friendlytime:date_format:short' => 'j M Y',
 
 	'friendlytime:future:minutes' => "en %s minutos",
 	'friendlytime:future:minutes:singular' => "en un minuto",
@@ -1067,7 +1184,7 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'date:month:10' => 'Octubre %s',
 	'date:month:11' => 'Noviembre %s',
 	'date:month:12' => 'Diciembre %s',
-	
+
 	'date:month:short:01' => 'Ene %s',
 	'date:month:short:02' => 'Feb %s',
 	'date:month:short:03' => 'Mar %s',
@@ -1106,7 +1223,6 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'interval:weekly' => 'Semanal',
 	'interval:monthly' => 'Mensual',
 	'interval:yearly' => 'Anual',
-	'interval:reboot' => 'Cada reinicio',
 
 /**
  * System settings
@@ -1114,6 +1230,7 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 
 	'installation:sitename' => "El nombre del sitio:",
 	'installation:sitedescription' => "Breve descripci&oacute;n del sitio (opcional):",
+	'installation:sitedescription:help' => "With bundled plugins this appears only in the description meta tag for search engine results.",
 	'installation:wwwroot' => "URL del sitio:",
 	'installation:path' => "El path completo a la instalaci&oacute;n de Elgg:",
 	'installation:dataroot' => "El path completo al directorio de datos:",
@@ -1137,6 +1254,7 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'installation:view' => "Ingrese la vista que se visualizar&aacute; por defecto en el sitio o deje esto en blanco para la vista por defecto (si tiene dudas, d&eacute;jelo por defecto):",
 
 	'installation:siteemail' => "Direcci&oacute;n de Email del sitio (utilizada para enviar mails desde el sistema):",
+	'installation:siteemail:help' => "Warning: Do no use an email address that you may have associated with other third-party services, such as ticketing systems, that perform inbound email parsing, as it may expose you and your users to unintentional leakage of private data and security tokens. Ideally, create a new dedicated email address that will serve only this website.",
 	'installation:default_limit' => "N&uacute;mero por defecto de elementos por p&aacute;gina",
 
 	'admin:site:access:warning' => "Las modificaciones en el control de accesos s&oacute;lo tendr&aacute; impacto en los accesos futuros",
@@ -1164,25 +1282,38 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 
 	'admin:legend:system' => 'Sistema',
 	'admin:legend:caching' => 'Caché',
+	'admin:legend:content' => 'Content',
 	'admin:legend:content_access' => 'Acceso del Contenido',
 	'admin:legend:site_access' => 'Acceso del Sitio',
 	'admin:legend:debug' => 'Depuración y registro',
-
+	
+	'config:users:can_change_username' => "Allow users to change their username",
+	'config:users:can_change_username:help' => "If not allowed only admins can change a users username",
+	'config:remove_branding:label' => "Eliminar marca de Elgg",
+	'config:remove_branding:help' => "Throughout the site there are various links and logo's that show this site is made using Elgg. If you remove the branding consider donating on https://elgg.org/about/supporters",
+	'config:disable_rss:label' => "Disable RSS feeds",
+	'config:disable_rss:help' => "Disable this to no longer promote the availability of RSS feeds",
+	'config:friendly_time_number_of_days:label' => "Number of days friendly time is presented",
+	'config:friendly_time_number_of_days:help' => "You can configure how many days the friendly time notation is used. After the set amount of days the friendly time will change into a regular date format. Setting this to 0 will disable the friendly time format.",
+	
 	'upgrading' => 'Actualizando..',
 	'upgrade:core' => 'La instalaci&oacute;n de Elgg ha sido actualizada',
 	'upgrade:unlock' => 'Unlock upgrade',
 	'upgrade:unlock:confirm' => "The database is locked for another upgrade. Running concurrent upgrades is dangerous. You should only continue if you know there is not another upgrade running. Unlock?",
+	'upgrade:terminated' => 'Upgrade has been terminated by an event handler',
 	'upgrade:locked' => "Cannot upgrade. Another upgrade is running. To clear the upgrade lock, visit the Admin section.",
 	'upgrade:unlock:success' => "Desbloqueo de Actualización exitoso.",
 	'upgrade:unable_to_upgrade' => 'No se puede actualizar',
-	'upgrade:unable_to_upgrade_info' =>
-		'Esta versión no se puede actualizar debido a que se detectaron vistas legadas de otras versiones en el directorio de las vistas del core de Elgg. Estas vistas son obsoletas y tienen que ser eliminadas para el correcto funcionamiento de Elgg. Si no has hecho cambios en el core de Elgg, puedes simplemente eliminar el directorio de vistas y reemplazarlo con dicho directorio de uno de los paquetes más recientes de Elgg, descargándolo de <a href="http://elgg.org">elgg.org</a>.<br /><br />
+	'upgrade:unable_to_upgrade_info' => 'This installation cannot be upgraded because legacy views
+were detected in the Elgg core views directory. These views have been deprecated and need to be
+removed for Elgg to function correctly. If you have not made changes to Elgg core, you can
+simply delete the views directory and replace it with the one from the latest
+package of Elgg downloaded from <a href="https://elgg.org">elgg.org</a>.<br /><br />
 
-		Si necesitas instrucciones detalladas, por favor visita la  <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">
-		documentación de Actualización de Elgg</a>.  Si necesitas soporte, escribe describiendo tu problema en los
-		<a href="http://community.elgg.org/pg/groups/discussion/">Foros de Soporte de la Comunidad</a>.',
+If you need detailed instructions, please visit the <a href="http://learn.elgg.org/en/stable/admin/upgrading.html">
+Upgrading Elgg documentation</a>. If you require assistance, please post to the
+<a href="https://elgg.org/discussion/all">Community Support Forums</a>.',
 
-	'update:twitter_api:deactivated' => 'La API de Twitter (anteriormente Twitter Service) se ha desactivado durante la actualizaci&oacute;n. Por favor act&iacute;vela manualmente si se requiere',
 	'update:oauth_api:deactivated' => 'La API OAuth (anteriormente OAuth Lib) se ha desactivado durante la actualizaci&oacute;n. Por favor act&iacute;vela manualmente si se requiere',
 	'upgrade:site_secret_warning:moderate' => "Te recomendamos que regeneres la clave de tu sitio para mejorar la seguridad del sistema. Ver Configuración &gt; Preferencias &gt; Avanzado",
 	'upgrade:site_secret_warning:weak' => "Te recomendamos fuertemente que regeneres la clave de tu sitio para mejorar la seguridad del sistema. Ver Configuración &gt; Preferencias &gt; Avanzado",
@@ -1192,18 +1323,19 @@ Una vez autenticado, le recomendamos que modifique su contrase&ntilde;a.
 	'admin:pending_upgrades' => 'Este sitio tiene actualizaciones pendientes que requieren tu atención inmediata',
 	'admin:view_upgrades' => 'Ver actualizaciones pendientes',
 	'item:object:elgg_upgrade' => 'Actualizaciones del sitio',
+	'collection:object:elgg_upgrade' => 'Site upgrades',
 	'admin:upgrades:none' => 'Tu instalación esta al día!',
 
 	'upgrade:item_count' => 'Hay <b>%s</b> elementos que es necesario actualizar.',
 	'upgrade:warning' => '<b>Aviso:</b> ¡En un sitio grande esta actualización puede llevar un tiempo significativo!',
 	'upgrade:success_count' => 'Actualizado:',
 	'upgrade:error_count' => 'Errores:',
-	'upgrade:river_update_failed' => 'No fue posible actualizar la entrada del River para el elemento con identificador «%s».',
-	'upgrade:timestamp_update_failed' => 'No fue posible actualizar los tiempos del elemento con identificador «%s».',
 	'upgrade:finished' => 'Se completó la actualización.',
 	'upgrade:finished_with_errors' => '<p>Ocurrieron errores durante la actualización. Actualice la página y pruebe a ejecutar la actualización de nuevo.</p></p><br />
 Si el error se repite, busque la causa en el registro de errores del servidor. Puede buscar ayuda para solucionar el problema en el <a href="http://community.elgg.org/groups/profile/179063/elgg-technical-support">grupo de asistencia técnica</a> de la comunidad de Elgg.</p>',
-
+	'upgrade:should_be_skipped' => 'No items to upgrade',
+	'upgrade:count_items' => '%d items to upgrade',
+	
 	// Strings specific for the database guid columns reply upgrade
 	'admin:upgrades:database_guid_columns' => 'Alinear columnas GUID de la base de datos',
 	
@@ -1225,38 +1357,38 @@ Si el error se repite, busque la causa en el registro de errores del servidor. P
 
 	'email:settings' => "Configuraci&oacute;n de Email",
 	'email:address:label' => "Direcci&oacute;n de Email",
+	'email:address:password' => "Contraseña",
+	'email:address:password:help' => "In order to be able to change your email address you need to provide your current password.",
 
 	'email:save:success' => "New email address saved.",
 	'email:save:fail' => "No se pudo guardar la nueva direcci&oacute;n de Email",
+	'email:save:fail:password' => "The password doesn't match your current password, could not change your email address",
 
 	'friend:newfriend:subject' => "%s te ha puesto como amigo suyo!",
-	'friend:newfriend:body' => "%s te ha puesto como amigo suyo!
- 
-Para visualizar su perfil haz click aqu&iacute;:
- 
- %s
- 
-Por favor no responda a este mail",
+	'friend:newfriend:body' => "%s has made you a friend!
+
+To view their profile, click here:
+
+%s",
 
 	'email:changepassword:subject' => "Contraseña cambiada!",
-	'email:changepassword:body' => "Hola %s,
+	'email:changepassword:body' => "Hi %s,
 
-Tu contraseña ha sido cambiada.",
+Your password has been changed.",
 
 	'email:resetpassword:subject' => "Contrase&ntilde;a restablecida!",
-	'email:resetpassword:body' => "Hola %s,
- 
-Tu contrase&ntilde;a ha sido restablecida a: %s",
+	'email:resetpassword:body' => "Hi %s,
+
+Your password has been reset to: %s",
 
 	'email:changereq:subject' => "Solicitud de cambio de contraseña.",
-	'email:changereq:body' => "Hola %s,
+	'email:changereq:body' => "Hi %s,
 
-Alguien (desde la dirección IP %s) ha solicitado un cambio de contraseña para tu cuenta.
+Somebody (from the IP address %s) has requested a password change for this account.
 
-Si has sido tu, utiliza el enlace inferior. Si no es así, puedes ignorar este mensaje.
+If you requested this, click on the link below. Otherwise ignore this email.
 
-%s
-",
+%s",
 
 /**
  * user default access
@@ -1273,8 +1405,9 @@ Si has sido tu, utiliza el enlace inferior. Si no es así, puedes ignorar este m
 
 	'comments:count' => "%s comentarios",
 	'item:object:comment' => 'Comments',
+	'collection:object:comment' => 'Comentarios',
 
-	'river:comment:object:default' => '%s commented on %s',
+	'river:object:default:comment' => '%s commented on %s',
 
 	'generic_comments:add' => "Comentar",
 	'generic_comments:edit' => "Editar comentario",
@@ -1283,33 +1416,39 @@ Si has sido tu, utiliza el enlace inferior. Si no es así, puedes ignorar este m
 	'generic_comments:latest' => "&uacute;ltimos comentarios",
 	'generic_comment:posted' => "Se ha publicado su comentario",
 	'generic_comment:updated' => "El comentario fué cambiado éxitosamente.",
-	'generic_comment:deleted' => "Se ha quitado su comentario",
+	'entity:delete:object:comment:success' => "The comment was successfully deleted.",
 	'generic_comment:blank' => "Lo sentimos, debe ingresar alg&uacute;n comentario antes de poder guardarlo",
 	'generic_comment:notfound' => "Lo sentimos. No hemos encontrado el comentario especificado.",
 	'generic_comment:notfound_fallback' => "Lo sentimos. No hemos encontrado el comentario especificado, pero te hemos redirigido a la página donde se comentó.",
-	'generic_comment:notdeleted' => "Lo sentimos, no se pudo eliminar el comentario",
 	'generic_comment:failure' => "Un error no especificado ocurrió al guardar el comentario.",
 	'generic_comment:none' => 'Sin comentarios',
 	'generic_comment:title' => 'Comentario de %s',
 	'generic_comment:on' => '%s on %s',
 	'generic_comments:latest:posted' => 'Publicó un',
 
-	'generic_comment:email:subject' => 'Tienes un nuevo comentario!',
-	'generic_comment:email:body' => "Tiene un nuevo comentario en el item \"%s\" de %s. Dice:
- 
- 
- %s
- 
- 
-Para responder o ver el item original, haga click aqu&iacute;:
- 
- %s
- 
-Para ver el prfil de %s, haga click aqu&iacute;:
- 
- %s
- 
-Por favor no responda a este correo",
+	'generic_comment:notification:owner:subject' => 'You have a new comment!',
+	'generic_comment:notification:owner:summary' => 'You have a new comment!',
+	'generic_comment:notification:owner:body' => "You have a new comment on your item \"%s\" from %s. It reads:
+
+%s
+
+To reply or view the original item, click here:
+%s
+
+To view %s's profile, click here:
+%s",
+	
+	'generic_comment:notification:user:subject' => 'A new comment on: %s',
+	'generic_comment:notification:user:summary' => 'A new comment on: %s',
+	'generic_comment:notification:user:body' => "A new comment was made on \"%s\" by %s. It reads:
+
+%s
+
+To reply or view the original item, click here:
+%s
+
+To view %s's profile, click here:
+%s",
 
 /**
  * Entities
@@ -1317,7 +1456,6 @@ Por favor no responda a este correo",
 
 	'byline' => 'Por %s',
 	'byline:ingroup' => 'en el grupo %s',
-	'entity:default:strapline' => 'Creado %s por %s',
 	'entity:default:missingsupport:popup' => 'Esta entidad no puede mostrarse correctamente. Esto puede deberse a que el soporte provisto por un plugin ya no se encuentra instalado',
 
 	'entity:delete:item' => 'Elemento',
@@ -1520,4 +1658,21 @@ Por favor no responda a este correo",
 
 	"field:required" => 'Requerido',
 
+	"core:upgrade:2017080900:title" => "Alter database encoding for multi-byte support",
+	"core:upgrade:2017080900:description" => "Alters database and table encoding to utf8mb4, in order to support multi-byte characters such as emoji",
+
+	"core:upgrade:2017080950:title" => "Update default security parameters",
+	"core:upgrade:2017080950:description" => "Installed Elgg version introduces additional security parameters. It is recommended that your run this upgrade to configure the defaults. You can later update these parameters in your site settings.",
+
+	"core:upgrade:2017121200:title" => "Create friends access collections",
+	"core:upgrade:2017121200:description" => "Migrates the friends access collection to an actual access collection",
+
+	"core:upgrade:2018041800:title" => "Activate new plugins",
+	"core:upgrade:2018041800:description" => "Certain core features have been extracted into plugins. This upgrade activates these plugins to maintain compatibility with third-party plugins that maybe dependant on these features",
+
+	"core:upgrade:2018041801:title" => "Delete old plugin entities",
+	"core:upgrade:2018041801:description" => "Deletes entities associated with plugins removed in Elgg 3.0",
+	
+	"core:upgrade:2018061401:title" => "Migrate cron log entries",
+	"core:upgrade:2018061401:description" => "Migrate the cron log entries in the database to the new location.",
 );

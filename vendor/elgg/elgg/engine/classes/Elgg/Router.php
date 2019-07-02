@@ -2,7 +2,7 @@
 
 namespace Elgg;
 
-use Elgg\Http\Request;
+use Elgg\Http\Request as HttpRequest;
 use Elgg\Http\ResponseBuilder;
 use Elgg\Http\ResponseFactory;
 use Elgg\Router\RouteCollection;
@@ -81,14 +81,14 @@ class Router {
 	 * This function triggers a plugin hook `'route', $identifier` so that plugins can
 	 * modify the routing or handle a request.
 	 *
-	 * @param Request $request The request to handle.
+	 * @param \Elgg\Http\Request $request The request to handle.
 	 *
 	 * @return boolean Whether the request was routed successfully.
 	 * @throws InvalidParameterException
 	 * @throws Exception
 	 * @access private
 	 */
-	public function route(Request $request) {
+	public function route(HttpRequest $request) {
 		if ($this->timer) {
 			$this->timer->begin(['build page']);
 		}
@@ -101,30 +101,28 @@ class Router {
 			return true;
 		}
 
-		if ($response instanceof ResponseBuilder) {
-			$this->response->respond($response);
-		}
-
+		$this->response->respond($response);
+		
 		return headers_sent();
 	}
 
 	/**
 	 * Build a response
 	 *
-	 * @param Request $request Request
+	 * @param \Elgg\Http\Request $request Request
 	 *
 	 * @return ResponseBuilder
 	 * @throws Exception
 	 * @throws PageNotFoundException
 	 */
-	public function getResponse(Request $request) {
+	public function getResponse(HttpRequest $request) {
 		$response = $this->prepareLegacyResponse($request);
 
-		if (!$response) {
+		if (!$response instanceof ResponseBuilder) {
 			$response = $this->prepareResponse($request);
 		}
 
-		if (!$response) {
+		if (!$response instanceof ResponseBuilder) {
 			throw new PageNotFoundException();
 		}
 
@@ -140,15 +138,15 @@ class Router {
 	/**
 	 * Prepare legacy response by listening to "route" hook
 	 *
-	 * @param Request $request Request
+	 * @param \Elgg\Http\Request $request Request
 	 *
 	 * @return ResponseBuilder|null
 	 * @throws Exception
 	 */
-	protected function prepareLegacyResponse(Request $request) {
+	protected function prepareLegacyResponse(HttpRequest $request) {
 
 		$segments = $request->getUrlSegments();
-		if ($segments) {
+		if (!empty($segments)) {
 			$identifier = array_shift($segments);
 		} else {
 			$identifier = '';
@@ -204,13 +202,13 @@ class Router {
 	/**
 	 * Prepare response
 	 *
-	 * @param Request $request Request
+	 * @param \Elgg\Http\Request $request Request
 	 *
 	 * @return ResponseBuilder|null
 	 * @throws Exception
 	 * @throws PageNotFoundException
 	 */
-	protected function prepareResponse(Request $request) {
+	protected function prepareResponse(HttpRequest $request) {
 
 		$segments = $request->getUrlSegments();
 		$path = '/' . implode('/', $segments);
@@ -342,14 +340,14 @@ class Router {
 	/**
 	 * Filter a request through the route:rewrite hook
 	 *
-	 * @param Request $request Elgg request
+	 * @param \Elgg\Http\Request $request Elgg request
 	 *
-	 * @return Request
+	 * @return \Elgg\Http\Request
 	 * @access private
 	 */
-	public function allowRewrite(Request $request) {
+	public function allowRewrite(HttpRequest $request) {
 		$segments = $request->getUrlSegments();
-		if ($segments) {
+		if (!empty($segments)) {
 			$identifier = array_shift($segments);
 		} else {
 			$identifier = '';

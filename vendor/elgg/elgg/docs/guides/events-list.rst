@@ -31,6 +31,8 @@ System events
 .. note:: This event is prefered above using ``register_shutdown_function`` as you may not have access
     to all the Elgg services (eg. database) in the shutdown function but you will in the event.
 
+.. note:: The Elgg session is already closed before this event. Manipulating session is not possible.
+
 **regenerate_site_secret:before, system**
     Return false to cancel regenerating the site secret. You should also provide a message
     to the user.
@@ -45,6 +47,10 @@ System events
 **upgrade, system**
 	Triggered after a system upgrade has finished. All upgrade scripts have run, but the caches 
 	are not cleared.
+
+**upgrade:execute, system**
+	Triggered as a sequence (so including ``:before`` and ``:after``) when executing an ``ElggUpgrade``. 
+	The ``$object`` of the event is the ``ElggUpgrade``.
 
 **activate, plugin**
     Return false to prevent activation of the plugin.

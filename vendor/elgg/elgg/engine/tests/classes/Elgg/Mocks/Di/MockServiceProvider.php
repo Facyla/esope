@@ -38,7 +38,7 @@ class MockServiceProvider extends \Elgg\Di\ServiceProvider {
 
 		$this->setFactory('db', function (MockServiceProvider $sp) {
 			$config = $sp->dbConfig;
-			$db = new \Elgg\Mocks\Database($config);
+			$db = new \Elgg\Mocks\Database($config, $sp->queryCache);
 			$db->setLogger($sp->logger);
 
 			return $db;
@@ -121,7 +121,7 @@ class MockServiceProvider extends \Elgg\Di\ServiceProvider {
 		});
 		
 		$this->setFactory('translator', function(MockServiceProvider $sp) {
-			return new \Elgg\Mocks\I18n\Translator($sp->config);
+			return new \Elgg\Mocks\I18n\Translator($sp->config, $sp->localeService);
 		});
 
 		$this->setFactory('usersTable', function(MockServiceProvider $sp) {

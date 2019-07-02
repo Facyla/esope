@@ -1,20 +1,22 @@
 <?php
-return [
+return array(
 
 	/**
 	 * Menu items and titles
 	 */
-	'bookmarks' => "Закладки",
-	'bookmarks:add' => "Добавить в закладки",
-	'bookmarks:edit' => "Редактировать закладку",
-	'bookmarks:owner' => "Закладки пользователя %s",
-	'bookmarks:friends' => "Закладки друзей",
-	'bookmarks:everyone' => "Все закладки",
+	'item:object:bookmarks' => 'Закладки',
+	'collection:object:bookmarks' => 'Закладки',
+	'collection:object:bookmarks:group' => 'Закладки группы',
+	'collection:object:bookmarks:all' => "Все закладки",
+	'collection:object:bookmarks:owner' => "Закладки %s",
+	'collection:object:bookmarks:friends' => "Закладки друзей",
+	'add:object:bookmarks' => "Добавить в закладки",
+	'edit:object:bookmarks' => "Редактировать закладку",
+
 	'bookmarks:this' => "Добавить в закладки",
 	'bookmarks:this:group' => "Добавить в закладки в %s",
 	'bookmarks:bookmarklet' => "Добавить закладки",
 	'bookmarks:bookmarklet:group' => "Добавить закладки группы",
-	'bookmarks:inbox' => "Ваши закладки",
 	'bookmarks:address' => "Адрес сайта",
 	'bookmarks:none' => '---',
 
@@ -31,25 +33,18 @@ return [
 %s
 ',
 
-	'bookmarks:delete:confirm' => "Вы действительно хотите удалить закладку?",
-
 	'bookmarks:numbertodisplay' => 'Число отображаемых закладок',
 
-	'river:create:object:bookmarks' => 'Пользователь %s добавил закладку',
-	'river:comment:object:bookmarks' => 'Пользователь %s оставил комментарий к закладке %s',
-	'bookmarks:river:annotate' => 'Пользователь %s сделал',
-	'bookmarks:river:item' => 'закладку',
+	'river:object:bookmarks:create' => '%s добавил в закладки %s',
+	'river:object:bookmarks:comment' => '%s прокомментировал закладку %s',
 
-	'item:object:bookmarks' => 'Закладки',
-
-	'bookmarks:group' => 'Закладки группы',
-	'bookmarks:enablebookmarks' => 'Включить закладки группы',
-	'bookmarks:nogroup' => 'В этой группе нет закладок',
+	'groups:tool:bookmarks' => 'Включить закладки группы',
 	
 	/**
 	 * Widget and bookmarklet
 	 */
-	'bookmarks:widget:description' => "Этот элемент показывает Ваши закладки.",
+	'widgets:bookmarks:name' => 'Закладки',
+	'widgets:bookmarks:description' => "Показать ваши последние закладки.",
 
 	'bookmarks:bookmarklet:description' =>
 			"A bookmarklet is a special kind of button you save to your browser's links bar. This allows you to save any resource you find on the web to your bookmarks. To set it up, drag the button below to your browser's links bar:",
@@ -65,14 +60,12 @@ return [
 	 */
 
 	'bookmarks:save:success' => "Закладка добавлена.",
-	'bookmarks:delete:success' => "Закладка удалена.",
+	'entity:delete:object:bookmarks:success' => "Закладка удалена.",
 
 	/**
 	 * Error messages
 	 */
 
 	'bookmarks:save:failed' => "Простите, Ваша закладка не может быть сохранена. Проверьте название, адрес и попробуйте снова.",
-	'bookmarks:save:invalid' => "Адрес закладки не корректный - она не будет сохранена.",
-	'bookmarks:delete:failed' => "Простите, Ваша закладка не может быть удалена. Попробуйте снова.",
 	'bookmarks:unknown_bookmark' => 'Не могу найти указанную закладку',
-];
+);

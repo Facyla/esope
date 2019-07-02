@@ -105,8 +105,8 @@ function _elgg_comment_redirect($comment_guid, $fallback_guid) {
 	$operator = elgg_comments_are_latest_first($container) ? '>' : '<';
 
 	// this won't work with threaded comments, but core doesn't support that yet
-	$condition = function(QueryBuilder $qb) use ($comment, $operator) {
-		return $qb->compare('e.guid', $operator, $comment->guid, ELGG_VALUE_INTEGER);
+	$condition = function(QueryBuilder $qb, $main_alias) use ($comment, $operator) {
+		return $qb->compare("{$main_alias}.guid", $operator, $comment->guid, ELGG_VALUE_GUID);
 	};
 	$count = elgg_get_entities([
 		'type' => 'object',
@@ -147,18 +147,15 @@ function _elgg_comment_redirect($comment_guid, $fallback_guid) {
  * @param boolean $return Can the current user write to this container?
  * @param array   $params Array of parameters (container, user, subtype)
  *
- * @return array
+ * @return void|true
  * @access private
  * @todo this doesn't seem to make a difference if a user can comment or not
  */
 function _elgg_comments_container_permissions_override($hook, $type, $return, $params) {
-
 	// is someone trying to comment, if so override permissions check
-	if ($params['subtype'] === 'comment') {
+	if (elgg_extract('subtype', $params) === 'comment') {
 		return true;
 	}
-
-	return $return;
 }
 
 /**
@@ -169,18 +166,16 @@ function _elgg_comments_container_permissions_override($hook, $type, $return, $p
  * @param boolean $return Can the given user edit the given entity?
  * @param array   $params Array of parameters (entity, user)
  *
- * @return boolean Whether the given user is allowed to edit the given comment.
+ * @return void|boolean Whether the given user is allowed to edit the given comment.
  * @access private
  */
 function _elgg_comments_permissions_override($hook, $type, $return, $params) {
-	$entity = $params['entity'];
-	$user = $params['user'];
+	$entity = elgg_extract('entity', $params);
+	$user = elgg_extract('user', $params);
 	
-	if ($entity instanceof ElggComment && $user) {
-		return $entity->getOwnerGUID() == $user->getGUID();
+	if ($entity instanceof ElggComment && $user instanceof ElggUser) {
+		return $entity->getOwnerGUID() === $user->getGUID();
 	}
-	
-	return $return;
 }
 
 /**
@@ -247,8 +242,8 @@ function _elgg_comments_access_sync($event, $type, $entity) {
 		'type' => 'object',
 		'subtype' => 'comment',
 		'container_guid' => $entity->getGUID(),
-		'wheres' => [function(\Elgg\Database\QueryBuilder $qb) use ($entity) {
-			return $qb->compare('e.access_id', '!=', $entity->access_id, 'integer');
+		'wheres' => [function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($entity) {
+			return $qb->compare("{$main_alias}.access_id", '!=', $entity->access_id, ELGG_VALUE_INTEGER);
 		}],
 		'limit' => 0,
 	];
@@ -280,7 +275,11 @@ function _elgg_comments_access_sync($event, $type, $entity) {
 function _elgg_comments_add_content_owner_to_subscriptions($hook, $type, $returnvalue, $params) {
 	
 	$event = elgg_extract('event', $params);
-	if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+	if (!$event instanceof \Elgg\Notifications\SubscriptionNotificationEvent) {
+		return;
+	}
+	
+	if ($event->getAction() !== 'create') {
 		return;
 	}
 	
@@ -290,7 +289,7 @@ function _elgg_comments_add_content_owner_to_subscriptions($hook, $type, $return
 	}
 	
 	$content_owner = $object->getContainerEntity()->getOwnerEntity();
-	if (!($content_owner instanceof ElggUser)) {
+	if (!$content_owner instanceof ElggUser) {
 		return;
 	}
 	
@@ -299,13 +298,13 @@ function _elgg_comments_add_content_owner_to_subscriptions($hook, $type, $return
 		return;
 	}
 	
-	$returnvalue[$content_owner->getGUID()] = [];
+	$returnvalue[$content_owner->guid] = [];
 	foreach ($notification_settings as $method => $enabled) {
 		if (empty($enabled)) {
 			continue;
 		}
 		
-		$returnvalue[$content_owner->getGUID()][] = $method;
+		$returnvalue[$content_owner->guid][] = $method;
 	}
 	
 	return $returnvalue;

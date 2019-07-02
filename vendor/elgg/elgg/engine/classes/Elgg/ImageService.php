@@ -79,8 +79,8 @@ class ImageService {
 
 			$resize_params = $this->normalizeResizeParameters($width, $height, $params);
 
-			$max_width = elgg_extract('w', $resize_params);
-			$max_height = elgg_extract('h', $resize_params);
+			$max_width = (int) elgg_extract('w', $resize_params);
+			$max_height = (int) elgg_extract('h', $resize_params);
 
 			$x1 = (int) elgg_extract('x1', $resize_params, 0);
 			$y1 = (int) elgg_extract('y1', $resize_params, 0);
@@ -119,7 +119,7 @@ class ImageService {
 	 *
 	 * @return bool
 	 */
-	function fixOrientation($filename) {
+	public function fixOrientation($filename) {
 		try {
 			$image = $this->imagine->open($filename);
 			$metadata = $image->metadata();
@@ -130,6 +130,9 @@ class ImageService {
 			
 			$autorotate = new Autorotate();
 			$autorotate->apply($image)->save($filename);
+			
+			$image->strip()->save($filename);
+			
 			return true;
 		} catch (Exception $ex) {
 			$logger = $this->logger ? $this->logger : _elgg_services()->logger;
@@ -186,11 +189,7 @@ class ImageService {
 		// determine cropping offsets
 		if ($square) {
 			// asking for a square image back
-			// detect case where someone is passing crop parameters that are not for a square
-			if ($cropping_mode == true && $crop_width != $crop_height) {
-				throw new \LogicException("Coordinates [$x1, $y1], [$x2, $y2] are invalid for a squared image cropping");
-			}
-
+			
 			// size of the new square image
 			$max_width = $max_height = min($max_width, $max_height);
 

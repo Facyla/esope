@@ -56,7 +56,7 @@ class AnnotationsTable {
 		$qb->addClause($where);
 
 		$row = $this->db->getDataRow($qb);
-		if ($row) {
+		if (!empty($row)) {
 			return new ElggAnnotation($row);
 		}
 
@@ -149,8 +149,6 @@ class AnnotationsTable {
 
 			return false;
 		}
-
-		$entity->updateLastAction($annotation->time_created);
 
 		$this->events->triggerAfter('create', 'annotation', $annotation);
 
@@ -419,6 +417,6 @@ class AnnotationsTable {
 
 		$result = $this->db->getDataRow($qb);
 
-		return $result && $result->id;
+		return !empty($result) && $result->id;
 	}
 }

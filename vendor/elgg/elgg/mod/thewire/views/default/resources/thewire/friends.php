@@ -4,15 +4,13 @@
  */
 
 $owner = elgg_get_page_owner_entity();
-if (!$owner) {
+if (!$owner instanceof ElggUser) {
 	forward('', '404');
 }
 
 $title = elgg_echo('collection:object:thewire:friends');
 
-elgg_push_breadcrumb(elgg_echo('thewire'), "thewire/all");
-elgg_push_breadcrumb($owner->getDisplayName(), "thewire/owner/$owner->username");
-elgg_push_breadcrumb(elgg_echo('friends'));
+elgg_push_collection_breadcrumbs('object', 'thewire', $owner, true);
 
 if (elgg_get_logged_in_user_guid() == $owner->guid) {
 	$form_vars = ['class' => 'thewire-form'];
@@ -23,11 +21,9 @@ if (elgg_get_logged_in_user_guid() == $owner->guid) {
 $content .= elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'thewire',
-	'full_view' => false,
 	'relationship' => 'friend',
 	'relationship_guid' => $owner->guid,
 	'relationship_join_on' => 'container_guid',
-	'preload_owners' => true,
 ]);
 
 $body = elgg_view_layout('content', [

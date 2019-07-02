@@ -33,13 +33,16 @@ function site_notifications_init() {
  */
 function site_notifications_set_topbar() {
 	
-	if (!elgg_is_logged_in()) {
+	$user = elgg_get_logged_in_user_entity();
+	if (empty($user)) {
 		return;
 	}
 	
 	elgg_register_menu_item('topbar', [
 		'name' => 'site_notifications',
-		'href' => 'site_notifications/owner/' . elgg_get_logged_in_user_entity()->username,
+		'href' => elgg_generate_url('collection:object:site_notification:owner', [
+			'username' => $user->username
+		]),
 		'text' => elgg_echo('site_notifications:topbar'),
 		'icon' => 'bell',
 		'priority' => 100,
@@ -79,7 +82,7 @@ function site_notifications_send($hook, $type, $result, $params) {
 	$ia = elgg_set_ignore_access(true);
 	$note = SiteNotificationFactory::create($recipient, $message, $actor, $object, $url);
 	elgg_set_ignore_access($ia);
-	if ($note) {
+	if ($note instanceof SiteNotification) {
 		return true;
 	}
 }
@@ -89,25 +92,23 @@ function site_notifications_send($hook, $type, $result, $params) {
  *
  * @param \Elgg\Hook $hook Hook
  *
- * @return void|\ElggMenuItem[]
+ * @return void|\Elgg\Menu\MenuItems
  */
 function site_notifications_register_entity_menu(\Elgg\Hook $hook) {
 	$entity = $hook->getEntityParam();
-	if (!($entity instanceof SiteNotification)) {
+	if (!$entity instanceof SiteNotification) {
 		return;
 	}
 	
+	/* @var $return \Elgg\Menu\MenuItems */
 	$return = $hook->getValue();
-	foreach ($return as $index => $menu_item) {
-		if ($menu_item->getName() === 'edit') {
-			unset($return[$index]);
-			continue;
-		}
-		
-		if ($menu_item->getName() === 'delete') {
-			$menu_item->setLinkClass('site-notifications-delete');
-			$menu_item->{"data-entity-ref"} = 'elgg-object-' . $entity->guid;
-		}
+	
+	$return->remove('edit');
+	
+	$delete = $return->get('delete');
+	if ($delete instanceof ElggMenuItem) {
+		$delete->setLinkClass('site-notifications-delete');
+		$delete->{"data-entity-ref"} = 'elgg-object-' . $entity->guid;
 	}
 	
 	return $return;

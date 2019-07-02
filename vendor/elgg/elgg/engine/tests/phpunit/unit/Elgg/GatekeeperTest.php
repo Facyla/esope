@@ -27,7 +27,7 @@ class GatekeeperTest extends UnitTestCase {
 	}
 
 	/**
-	 * @expectedException \Elgg\GatekeeperException
+	 * @expectedException \Elgg\Http\Exception\LoggedInGatekeeperException
 	 */
 	public function testGatekeeperPreventsAccessByGuestUser() {
 		$this->gatekeeper->assertAuthenticatedUser();
@@ -42,6 +42,65 @@ class GatekeeperTest extends UnitTestCase {
 	}
 
 	/**
+	 * @expectedException \Elgg\Http\Exception\LoggedOutGatekeeperException
+	 */
+	public function testGatekeeperPreventsAccessByLoggedInUser() {
+		$user = $this->createUser();
+		$this->session->setLoggedInUser($user);
+		
+		$this->gatekeeper->assertUnauthenticatedUser();
+		
+	}
+
+	public function testGatekeeperAllowsAccessToGuestUser() {
+		$this->assertNull($this->gatekeeper->assertUnauthenticatedUser());
+	}
+	
+	/**
+	 * @expectedException \Elgg\EntityNotFoundException
+	 */
+	public function testGatekeeperPreventsAccessToBannedUserByGuestUser() {
+		$user = $this->createUser([
+			'banned' => 'yes',
+		]);
+		
+		$this->gatekeeper->assertAccessibleUser($user);
+	}
+	
+	/**
+	 * @expectedException \Elgg\EntityNotFoundException
+	 */
+	public function testGatekeeperPreventsAccessToBannedUserByLoggedInUser() {
+		$user = $this->createUser([
+			'banned' => 'yes',
+		]);
+		$authenticated_user = $this->createUser();
+		$this->session->setLoggedInUser($authenticated_user);
+		
+		$this->gatekeeper->assertAccessibleUser($user);
+	}
+	
+	public function testGatekeeperAllowsAccessToNonBannedUser() {
+		$user = $this->createUser([
+			'banned' => 'no',
+		]);
+		
+		$this->gatekeeper->assertAccessibleUser($user);
+	}
+	
+	public function testGatekeeperAllowsAccessToBannedUserByAdmin() {
+		$user = $this->createUser([
+			'banned' => 'yes',
+		]);
+		$admin = $this->createUser([
+			'admin' => 'yes'
+		]);
+		$this->session->setLoggedInUser($admin);
+		
+		$this->gatekeeper->assertAccessibleUser($user);
+	}
+
+	/**
 	 * @expectedException \Elgg\GatekeeperException
 	 */
 	public function testAdminGatekeeperPreventsAccessByGuestUser() {
@@ -49,7 +108,7 @@ class GatekeeperTest extends UnitTestCase {
 	}
 
 	/**
-	 * @expectedException \Elgg\GatekeeperException
+	 * @expectedException \Elgg\Http\Exception\AdminGatekeeperException
 	 */
 	public function testAdminGatekeeperPreventsAccessByNonAdminUser() {
 		$user = $this->createUser();
@@ -81,7 +140,7 @@ class GatekeeperTest extends UnitTestCase {
 	}
 
 	/**
-	 * @expectedException \Elgg\EntityNotFoundException
+	 * @expectedException \Elgg\EntityPermissionsException
 	 */
 	public function testEntityGatekeeperPreventsAccessToNonPublicEntity() {
 		$user = $this->createUser();
@@ -140,22 +199,15 @@ class GatekeeperTest extends UnitTestCase {
 		elgg_entity_gatekeeper($object->guid, 'object', 'foo2');
 	}
 
-	/**
-	 * @expectedException \Elgg\EntityNotFoundException
-	 */
-	public function testEntityGatekeeperPreventsAccessBannedUser() {
+	public function testEntityGatekeeperAllowsAccessBannedUser() {
 		$user = $this->createUser([
 			'banned' => 'yes'
 		]);
 
 		$this->gatekeeper->assertAccessibleEntity($user);
-
 	}
 
-	/**
-	 * @expectedException \Elgg\EntityNotFoundException
-	 */
-	public function testEntityGatekeeperPreventsAccessToContentOwnedByBannedUser() {
+	public function testEntityGatekeeperAllowsAccessToContentOwnedByBannedUser() {
 		$user = $this->createUser([
 			'banned' => 'yes'
 		]);
@@ -166,13 +218,9 @@ class GatekeeperTest extends UnitTestCase {
 		]);
 
 		$this->gatekeeper->assertAccessibleEntity($object);
-
 	}
 
-	/**
-	 * @expectedException \Elgg\EntityNotFoundException
-	 */
-	public function testEntityGatekeeperPreventsAccessToContainedByBannedUser() {
+	public function testEntityGatekeeperAllowsAccessToContainedByBannedUser() {
 		$user = $this->createUser([
 			'banned' => 'yes'
 		]);
@@ -183,7 +231,6 @@ class GatekeeperTest extends UnitTestCase {
 		]);
 
 		$this->gatekeeper->assertAccessibleEntity($object);
-
 	}
 
 	/**
@@ -204,7 +251,7 @@ class GatekeeperTest extends UnitTestCase {
 	}
 
 	/**
-	 * @expectedException \Elgg\EntityNotFoundException
+	 * @expectedException \Elgg\EntityPermissionsException
 	 */
 	public function testEntityGatekeeperPreventsAccessToPublicEntityWithNonPublicParent() {
 
@@ -413,7 +460,7 @@ class GatekeeperTest extends UnitTestCase {
 		]);
 
 		$handler = function (Hook $hook) {
-			$this->assertInstanceOf(EntityNotFoundException::class, $hook->getValue());
+			$this->assertInstanceOf(EntityPermissionsException::class, $hook->getValue());
 
 			return true;
 		};
@@ -428,7 +475,7 @@ class GatekeeperTest extends UnitTestCase {
 	}
 
 	/**
-	 * @expectedException \Elgg\BadRequestException
+	 * @expectedException \Elgg\Http\Exception\AjaxGatekeeperException
 	 */
 	public function testXhrGatekeeperPreventsAccess() {
 		$this->gatekeeper->assertXmlHttpRequest();

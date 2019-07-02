@@ -1,6 +1,7 @@
 <?php
 
 use Elgg\EntityIcon;
+use Elgg\Database\QueryBuilder;
 
 /**
  * The parent class for all Elgg Entities.
@@ -252,7 +253,6 @@ abstract class ElggEntity extends \ElggData implements
 				case 'time_updated':
 				case 'last_action':
 					return;
-					break;
 				case 'access_id':
 				case 'owner_guid':
 				case 'container_guid':
@@ -438,7 +438,7 @@ abstract class ElggEntity extends \ElggData implements
 			$metadata->value_type = $value_type;
 			$metadata->value = $value_tmp;
 			$md_id = _elgg_services()->metadataTable->create($metadata, $multiple);
-			if (!$md_id) {
+			if ($md_id === false) {
 				return false;
 			}
 		}
@@ -606,6 +606,12 @@ abstract class ElggEntity extends \ElggData implements
 		if (is_bool($value)) {
 			$value = (int) $value;
 		}
+		
+		// checking if string value matches saved value (as get privatesettings does not know value type) and db column is a string
+		if (strval($value) === $this->getPrivateSetting($name)) {
+			// no need to update value
+			return true;
+		}
 
 		if (!$this->guid) {
 			$this->temp_private_settings[$name] = $value;
@@ -679,6 +685,17 @@ abstract class ElggEntity extends \ElggData implements
 		}
 
 		return _elgg_services()->privateSettings->removeAllForEntity($this);
+	}
+
+	/**
+	 * Removes all river items related to this entity
+	 *
+	 * @return void
+	 */
+	public function removeAllRelatedRiverItems() {
+		elgg_delete_river(['subject_guid' => $this->guid, 'limit' => false]);
+		elgg_delete_river(['object_guid' => $this->guid, 'limit' => false]);
+		elgg_delete_river(['target_guid' => $this->guid, 'limit' => false]);
 	}
 
 	/**
@@ -831,7 +848,7 @@ abstract class ElggEntity extends \ElggData implements
 	 *
 	 * @param array $options Array of options for elgg_get_annotations() except guid.
 	 *
-	 * @return array
+	 * @return \ElggAnnotation[]|mixed
 	 * @see elgg_get_annotations()
 	 */
 	public function getAnnotations(array $options = []) {
@@ -967,12 +984,12 @@ abstract class ElggEntity extends \ElggData implements
 	/**
 	 * Gets an array of entities with a relationship to this entity.
 	 *
-	 * @param array $options Options array. See elgg_get_entities_from_relationship()
+	 * @param array $options Options array. See elgg_get_entities()
 	 *                       for a list of options. 'relationship_guid' is set to
 	 *                       this entity.
 	 *
-	 * @return array|false An array of entities or false on failure
-	 * @see elgg_get_entities_from_relationship()
+	 * @return \ElggEntity[]|int|mixed
+	 * @see elgg_get_entities()
 	 */
 	public function getEntitiesFromRelationship(array $options = []) {
 		$options['relationship_guid'] = $this->guid;
@@ -985,7 +1002,7 @@ abstract class ElggEntity extends \ElggData implements
 	 * @param string $relationship         Relationship type (eg "friends")
 	 * @param bool   $inverse_relationship Invert relationship
 	 *
-	 * @return int|false The number of entities or false on failure
+	 * @return int
 	 */
 	public function countEntitiesFromRelationship($relationship, $inverse_relationship = false) {
 		return elgg_get_entities([
@@ -1031,14 +1048,12 @@ abstract class ElggEntity extends \ElggData implements
 	 * If no specific metadata is passed, it returns whether the user can
 	 * edit any metadata on the entity.
 	 *
-	 * @tip Can be overridden by by registering for the permissions_check:metadata
-	 * plugin hook.
-	 *
 	 * @param \ElggMetadata $metadata  The piece of metadata to specifically check or null for any metadata
 	 * @param int           $user_guid The user GUID, optionally (default: logged in user)
 	 *
 	 * @return bool
 	 * @see elgg_set_ignore_access()
+	 * @deprecated 3.0
 	 */
 	public function canEditMetadata($metadata = null, $user_guid = 0) {
 		return _elgg_services()->userCapabilities->canEditMetadata($this, $user_guid, $metadata);
@@ -1066,7 +1081,8 @@ abstract class ElggEntity extends \ElggData implements
 	 *
 	 * @param int  $user_guid User guid (default is logged in user)
 	 * @param bool $default   Default permission
-	 * @return bool
+	 *
+	 * @return bool|null
 	 */
 	public function canComment($user_guid = 0, $default = null) {
 		return _elgg_services()->userCapabilities->canComment($this, $user_guid, $default);
@@ -1150,7 +1166,7 @@ abstract class ElggEntity extends \ElggData implements
 	 *
 	 * @param int $container_guid The ID of the container.
 	 *
-	 * @return bool
+	 * @return int
 	 */
 	public function setContainerGUID($container_guid) {
 		return $this->container_guid = (int) $container_guid;
@@ -1311,7 +1327,7 @@ abstract class ElggEntity extends \ElggData implements
 			$guid = $this->update();
 		} else {
 			$guid = $this->create();
-			if ($guid && !_elgg_services()->events->trigger('create', $this->type, $this)) {
+			if ($guid !== false && !_elgg_services()->events->trigger('create', $this->type, $this)) {
 				// plugins that return false to event don't need to override the access system
 				elgg_call(ELGG_IGNORE_ACCESS, function() {
 					return $this->delete();
@@ -1333,10 +1349,7 @@ abstract class ElggEntity extends \ElggData implements
 	 * Saves the base information in the entities table for the entity.  Saving
 	 * the type-specific information is handled in the calling class method.
 	 *
-	 * @warning Entities must have an entry in both the entities table and their type table
-	 * or they will throw an exception when loaded.
-	 *
-	 * @return int The new entity's GUID
+	 * @return int|false The new entity's GUID or false on failure
 	 * @throws InvalidParameterException If the entity's type has not been set.
 	 * @throws IOException If the new row fails to write to the DB.
 	 */
@@ -1576,14 +1589,12 @@ abstract class ElggEntity extends \ElggData implements
 	 * into volatile data.
 	 *
 	 * @param stdClass $row DB row with new entity data
+	 *
 	 * @return bool
 	 * @access private
 	 */
 	public function refresh(stdClass $row) {
-		if ($row instanceof stdClass) {
-			return $this->load($row);
-		}
-		return false;
+		return $this->load($row);
 	}
 
 	/**
@@ -1639,7 +1650,9 @@ abstract class ElggEntity extends \ElggData implements
 			$callback = function () use ($guid, $reason) {
 				$base_options = [
 					'wheres' => [
-						"e.guid != $guid",
+						function(QueryBuilder $qb, $main_alias) use ($guid) {
+							return $qb->compare("{$main_alias}.guid", '!=', $guid, ELGG_VALUE_GUID);
+						},
 					],
 					'limit' => false,
 				];
@@ -1906,7 +1919,7 @@ abstract class ElggEntity extends \ElggData implements
 	 * This is used by the system log. It can be called on any Loggable object.
 	 *
 	 * @param int $id GUID.
-	 * @return int GUID
+	 * @return \ElggEntity|false
 	 */
 	public function getObjectFromID($id) {
 		return get_entity($id);
@@ -1973,7 +1986,7 @@ abstract class ElggEntity extends \ElggData implements
 
 		$result = true;
 		foreach ($collections as $collection) {
-			$result = $result & $ac->removeUser($this->guid, $collection->id);
+			$result &= $ac->removeUser($this->guid, $collection->id);
 		}
 
 		return $result;
@@ -2078,16 +2091,18 @@ abstract class ElggEntity extends \ElggData implements
 
 		_elgg_services()->entityCache->save($this);
 
-		if ($persist) {
-			$tmp = $this->volatile;
-
-			// don't store volatile data
-			$this->volatile = [];
-
-			_elgg_services()->dataCache->entities->save($this->guid, $this);
-
-			$this->volatile = $tmp;
+		if (!$persist) {
+			return;
 		}
+		
+		$tmp = $this->volatile;
+
+		// don't store volatile data
+		$this->volatile = [];
+
+		_elgg_services()->dataCache->entities->save($this->guid, $this);
+
+		$this->volatile = $tmp;
 	}
 
 	/**

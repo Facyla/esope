@@ -59,7 +59,7 @@ class ElggSite extends \ElggEntity {
 
 		$row = $db->getDataRow($qb);
 
-		if ($row) {
+		if (!empty($row)) {
 			if ($row->guid == $this->attributes['guid']) {
 				// can save active site
 				return parent::save();
@@ -179,7 +179,9 @@ class ElggSite extends \ElggEntity {
 	public function getEmailAddress() {
 		$email = $this->email;
 		if (empty($email)) {
-			$email = "noreply@{$this->getDomain()}";
+			// If all else fails, use the domain of the site.
+			$token = _elgg_services()->crypto->getRandomString(24);
+			$email = "noreply-{$token}@{$this->getDomain()}";
 		}
 
 		return $email;

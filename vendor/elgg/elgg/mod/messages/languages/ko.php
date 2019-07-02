@@ -24,6 +24,7 @@ return array(
 	'messages:error' => '쪽지를 저장하는데 문제가 있었습니다. 다시 시도해 보세요.',
 
 	'item:object:messages' => '쪽지',
+	'collection:object:messages' => '쪽지',
 
 	/**
 	* Status messages
@@ -53,9 +54,7 @@ return array(
 
 	 %s 에게 쪽지를 보내려면 누르세요:
 
-	%s
-
-	이 이메일에 답장하지 마세요.",
+	%s",
 
 	/**
 	* Error messages

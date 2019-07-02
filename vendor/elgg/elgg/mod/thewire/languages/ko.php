@@ -22,6 +22,8 @@ return array(
 	'thewire:previous:help' => "지난 글 보기",
 	'thewire:hide:help' => "지난글 감추기",
 
+	'thewire:form:body:placeholder' => "무슨 일이 있나요?",
+	
 	/**
 	 * The wire river
 	 */
@@ -31,7 +33,8 @@ return array(
 	/**
 	 * Wire widget
 	 */
-	'thewire:widget:desc' => '최근의 쪽글을 표시합니다',
+	
+	'widgets:thewire:description' => '최근의 쪽글을 표시합니다',
 	'thewire:num' => '표시할 글의 수',
 	'thewire:moreposts' => '쪽글 더보기',
 

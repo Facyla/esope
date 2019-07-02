@@ -4,13 +4,17 @@ namespace Elgg;
 
 use Elgg\Database\AccessCollections;
 use Elgg\Database\EntityTable;
-use Elgg\Http\Request;
+use Elgg\Http\Request as HttpRequest;
 use Elgg\I18n\Translator;
 use ElggEntity;
 use ElggGroup;
 use ElggSession;
 use ElggUser;
 use Exception;
+use Elgg\Http\Exception\AdminGatekeeperException;
+use Elgg\Http\Exception\LoggedInGatekeeperException;
+use Elgg\Http\Exception\LoggedOutGatekeeperException;
+use Elgg\Http\Exception\AjaxGatekeeperException;
 
 /**
  * Gatekeeper
@@ -25,7 +29,7 @@ class Gatekeeper {
 	protected $session;
 
 	/**
-	 * @var Request
+	 * @var \Elgg\Http\Request
 	 */
 	protected $request;
 
@@ -53,7 +57,7 @@ class Gatekeeper {
 	 * Constructor
 	 *
 	 * @param ElggSession       $session    Session
-	 * @param Request           $request    HTTP Request
+	 * @param HttpRequest       $request    HTTP Request
 	 * @param RedirectService   $redirects  Redirects Service
 	 * @param EntityTable       $entities   Entity table
 	 * @param AccessCollections $access     Access collection table
@@ -64,7 +68,7 @@ class Gatekeeper {
 	 */
 	public function __construct(
 		ElggSession $session,
-		Request $request,
+		HttpRequest $request,
 		RedirectService $redirects,
 		EntityTable $entities,
 		AccessCollections $access,
@@ -81,7 +85,7 @@ class Gatekeeper {
 	/**
 	 * Require a user to be authenticated to with code execution
 	 * @return void
-	 * @throws GatekeeperException
+	 * @throws LoggedInGatekeeperException
 	 */
 	public function assertAuthenticatedUser() {
 		if ($this->session->isLoggedIn()) {
@@ -90,14 +94,30 @@ class Gatekeeper {
 
 		$this->redirects->setLastForwardFrom();
 
-		$msg = $this->translator->translate('loggedinrequired');
-		throw new GatekeeperException($msg);
+		throw new LoggedInGatekeeperException();
+	}
+
+	/**
+	 * Require a user to be not authenticated (logged out) to with code execution
+	 * @return void
+	 * @throws LoggedOutGatekeeperException
+	 */
+	public function assertUnauthenticatedUser() {
+		if (!$this->session->isLoggedIn()) {
+			return;
+		}
+
+		$exception = new LoggedOutGatekeeperException();
+		$exception->setRedirectUrl(elgg_get_site_url());
+		
+		throw $exception;
 	}
 
 	/**
 	 * Require an admin user to be authenticated to proceed with code execution
 	 * @return void
 	 * @throws GatekeeperException
+	 * @throws AdminGatekeeperException
 	 */
 	public function assertAuthenticatedAdmin() {
 		$this->assertAuthenticatedUser();
@@ -109,8 +129,7 @@ class Gatekeeper {
 
 		$this->redirects->setLastForwardFrom();
 
-		$msg = $this->translator->translate('adminrequired');
-		throw new GatekeeperException($msg);
+		throw new AdminGatekeeperException();
 	}
 
 	/**
@@ -119,9 +138,9 @@ class Gatekeeper {
 	 * @warning Returned entity has been retrieved with ignored access, as well including disabled entities.
 	 *          You must validate entity access on the return of this method.
 	 *
-	 * @param int  $guid    GUID of the entity
-	 * @param null $type    Entity type
-	 * @param null $subtype Entity subtype
+	 * @param int    $guid    GUID of the entity
+	 * @param string $type    Entity type
+	 * @param string $subtype Entity subtype
 	 *
 	 * @return ElggEntity
 	 * @throws EntityNotFoundException
@@ -133,7 +152,14 @@ class Gatekeeper {
 		});
 
 		if (!$entity) {
-			throw new EntityNotFoundException();
+			$exception = new EntityNotFoundException();
+			$exception->setParams([
+				'guid' => $guid,
+				'type' => $type,
+				'subtype' => $subtype,
+				'route' => $this->request->get('_route'),
+			]);
+			throw $exception;
 		}
 
 		return $entity;
@@ -156,7 +182,7 @@ class Gatekeeper {
 			if (!$this->session->getIgnoreAccess() && !$this->access->hasAccessToEntity($entity, $user)) {
 				// user is logged in but still does not have access to it
 				$msg = $this->translator->translate('limited_access');
-				$exception = new EntityNotFoundException($msg);
+				$exception = new EntityPermissionsException($msg);
 				$exception->setParams([
 					'entity' => $entity,
 					'user' => $user,
@@ -166,6 +192,7 @@ class Gatekeeper {
 			}
 
 			if (!$entity->isEnabled() && !$this->session->getDisabledEntityVisibility()) {
+				// entity exists, but is disabled
 				$exception = new EntityNotFoundException();
 				$exception->setParams([
 					'entity' => $entity,
@@ -173,10 +200,6 @@ class Gatekeeper {
 					'route' => $this->request->get('_route'),
 				]);
 				throw $exception;
-			}
-
-			if ($entity instanceof ElggUser) {
-				$this->assertAccessibleUser($entity, $user);
 			}
 
 			if ($entity instanceof ElggGroup) {
@@ -220,20 +243,22 @@ class Gatekeeper {
 	 * @throws EntityNotFoundException
 	 */
 	public function assertAccessibleUser(ElggUser $user, ElggUser $viewer = null) {
-		if ($user->isBanned()) {
-			if (!isset($viewer)) {
-				$viewer = $this->session->getLoggedInUser();
-			}
+		if (!$user->isBanned()) {
+			return;
+		}
+		
+		if (!isset($viewer)) {
+			$viewer = $this->session->getLoggedInUser();
+		}
 
-			if (!$viewer || !$viewer->isAdmin()) {
-				$exception = new EntityNotFoundException();
-				$exception->setParams([
-					'entity' => $user,
-					'user' => $viewer,
-					'route' => $this->request->get('_route'),
-				]);
-				throw $exception;
-			}
+		if (!$viewer || !$viewer->isAdmin()) {
+			$exception = new EntityNotFoundException();
+			$exception->setParams([
+				'entity' => $user,
+				'user' => $viewer,
+				'route' => $this->request->get('_route'),
+			]);
+			throw $exception;
 		}
 	}
 
@@ -248,35 +273,36 @@ class Gatekeeper {
 	 * @throws GatekeeperException
 	 */
 	public function assertAccessibleGroup(ElggGroup $group, ElggUser $user = null) {
-		if (!$group->canAccessContent($user)) {
-			$this->assertAuthenticatedUser();
-
-			$this->redirects->setLastForwardFrom();
-
-			$exception = new GroupGatekeeperException();
-			$exception->setParams([
-				'entity' => $group,
-				'user' => $user,
-				'route' => $this->request->get('_route'),
-			]);
-			$exception->setRedirectUrl($group->getURL());
-			throw $exception;
+		if ($group->canAccessContent($user)) {
+			return;
 		}
+		
+		$this->assertAuthenticatedUser();
+
+		$this->redirects->setLastForwardFrom();
+
+		$exception = new GroupGatekeeperException();
+		$exception->setParams([
+			'entity' => $group,
+			'user' => $user,
+			'route' => $this->request->get('_route'),
+		]);
+		$exception->setRedirectUrl($group->getURL());
+		throw $exception;
 	}
 
 	/**
 	 * Require XmlHttpRequest
 	 *
 	 * @return void
-	 * @throws BadRequestException
+	 * @throws AjaxGatekeeperException
 	 */
 	public function assertXmlHttpRequest() {
 		if ($this->request->isXmlHttpRequest()) {
 			return;
 		}
 
-		$msg = $this->translator->translate('ajax:not_is_xhr');
-		throw new BadRequestException($msg);
+		throw new AjaxGatekeeperException();
 	}
 
 }

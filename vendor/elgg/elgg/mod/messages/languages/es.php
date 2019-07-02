@@ -23,7 +23,8 @@ return array(
 
 	'messages:error' => 'Ocurri&oacute; un problema al guardar el mensaje. Por favor intenta de nuevo.',
 
-	'item:object:messages' => 'Mensajes',
+	'item:object:messages' => 'Message',
+	'collection:object:messages' => 'Messages',
 
 	/**
 	* Status messages
@@ -41,21 +42,17 @@ return array(
 	*/
 
 	'messages:email:subject' => 'Tienes un nuevo mensaje',
-	'messages:email:body' => "You have a new message from %s. It reads:
+	'messages:email:body' => "You have a new message from %s.
 
+It reads:
 
-	%s
+%s
 
+To view your messages, click here:
+%s
 
-	To view your messages, click here:
-
-	%s
-
-	To send %s a message, click here:
-
-	%s
-
-	Please do not reply to this email.",
+To send %s a message, click here:
+%s",
 
 	/**
 	* Error messages

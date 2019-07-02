@@ -1,7 +1,6 @@
 <?php
 
-use Elgg\Filesystem\Directory;
-use Elgg\Application;
+use Elgg\Filesystem\Directory as ElggDirectory;
 use Elgg\Project\Paths;
 use Elgg\Http\Request;
 
@@ -26,19 +25,19 @@ class ElggRewriteTester {
 	 * Run the rewrite test and return a status array
 	 *
 	 * @param string $url  URL of rewrite test
-	 * @param string $path Root directory of Elgg with trailing slash
+	 * @param string $path Obsolete, don't use
 	 *
 	 * @return array
 	 */
-	public function run($url, $path) {
+	public function run($url, $path = null) {
 
 		$this->webserver = \ElggRewriteTester::guessWebServer();
 
 		$this->rewriteTestPassed = $this->runRewriteTest($url);
 
-		if ($this->rewriteTestPassed == false) {
+		if ($this->rewriteTestPassed === false) {
 			if ($this->webserver == 'apache' || $this->webserver == 'unknown') {
-				if ($this->createHtaccess($url, $path)) {
+				if ($this->createHtaccess($url)) {
 					$this->rewriteTestPassed = $this->runRewriteTest($url);
 				}
 			}
@@ -77,15 +76,16 @@ class ElggRewriteTester {
 	 */
 	public function guessSubdirectory($url) {
 		$elements = parse_url($url);
-		if (!$elements || !isset($elements['path'])) {
+		if (!is_array($elements) || !isset($elements['path'])) {
 			return false;
 		}
+		
 		$subdir = trim(dirname($elements['path']), '/');
 		if (!$subdir) {
 			return false;
-		} else {
-			return "/$subdir/";
 		}
+		
+		return "/$subdir/";
 	}
 
 	/**
@@ -151,13 +151,13 @@ class ElggRewriteTester {
 	 * @return bool
 	 */
 	public function createHtaccess($url) {
-		$root = Directory\Local::projectRoot();
+		$root = ElggDirectory\Local::projectRoot();
 		$file = $root->getFile(".htaccess");
 
 		if ($file->exists()) {
 			// check that this is the Elgg .htaccess
 			$data = $file->getContents();
-			if ($data === false) {
+			if (empty($data)) {
 				// don't have permission to read the file
 				$this->htaccessIssue = 'read_permission';
 				return false;
@@ -169,7 +169,7 @@ class ElggRewriteTester {
 			}
 
 			// check if this is an old Elgg htaccess
-			if (strpos($data, 'RewriteRule ^rewrite.php$ install.php') == false) {
+			if (strpos($data, 'RewriteRule ^rewrite.php$ install.php') === false) {
 				$this->htaccessIssue = 'old_elgg_htaccess';
 				return false;
 			}

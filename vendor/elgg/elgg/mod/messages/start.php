@@ -12,18 +12,23 @@
 function messages_init() {
 
 	// add page menu items
-	if (elgg_is_logged_in()) {
+	$user = elgg_get_logged_in_user_entity();
+	if (!empty($user)) {
 		elgg_register_menu_item('page', [
 			'name' => 'messages:inbox',
 			'text' => elgg_echo('messages:inbox'),
-			'href' => "messages/inbox/" . elgg_get_logged_in_user_entity()->username,
+			'href' => elgg_generate_url('collection:object:messages:owner', [
+				'username' => $user->username,
+			]),
 			'context' => 'messages',
 		]);
 		
 		elgg_register_menu_item('page', [
 			'name' => 'messages:sentmessages',
 			'text' => elgg_echo('messages:sentmessages'),
-			'href' => "messages/sent/" . elgg_get_logged_in_user_entity()->username,
+			'href' => elgg_generate_url('collection:object:messages:sent', [
+				'username' => $user->username,
+			]),
 			'context' => 'messages',
 		]);
 	}
@@ -31,9 +36,6 @@ function messages_init() {
 	// Extend system CSS with our own styles, which are defined in the messages/css view
 	elgg_extend_view('elgg.css', 'messages/css');
 	elgg_extend_view('elgg.js', 'messages/js');
-
-	// Register a URL handler
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'messages_set_url');
 
 	// Extend avatar hover menu
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'messages_user_hover_menu');
@@ -46,7 +48,6 @@ function messages_init() {
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'messages_ecml_views_hook');
 
 	// permission overrides
-	elgg_register_plugin_hook_handler('permissions_check:metadata', 'object', 'messages_can_edit_metadata');
 	elgg_register_plugin_hook_handler('permissions_check', 'object', 'messages_can_edit');
 	elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'messages_can_edit_container');
 
@@ -82,7 +83,9 @@ function messages_register_topbar($hook, $type, $items, $params) {
 
 	$items[] = ElggMenuItem::factory([
 		'name' => 'messages',
-		'href' => "messages/inbox/$user->username",
+		'href' => elgg_generate_url('collection:object:messages:owner', [
+			'username' => $user->username,
+		]),
 		'text' => $text,
 		'priority' => 600,
 		'title' => $title,
@@ -91,30 +94,6 @@ function messages_register_topbar($hook, $type, $items, $params) {
 	]);
 
 	return $items;
-}
-
-/**
- * Override the canEditMetadata function to return true for messages
- *
- * @param string $hook         'permissions_check:metadata'
- * @param string $type         'object'
- * @param bool   $return_value current return value
- * @param array  $parameters   supplied params
- *
- * @return void|true
- */
-function messages_can_edit_metadata($hook, $type, $return_value, $parameters) {
-
-	global $messagesendflag;
-
-	if ($messagesendflag !== 1) {
-		return;
-	}
-	
-	$entity = elgg_extract('entity', $parameters);
-	if ($entity instanceof ElggObject && $entity->getSubtype() == 'messages') {
-		return true;
-	}
 }
 
 /**
@@ -243,8 +222,8 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 		add_entity_relationship($message_sent->guid, "reply", $original_msg_guid);
 	}
 
-	$message_contents = strip_tags($body);
 	if (($recipient_guid != elgg_get_logged_in_user_guid()) && $notify) {
+		$message_contents = $body;
 		$recipient = get_user($recipient_guid);
 		$sender = get_user($sender_guid);
 		
@@ -252,9 +231,13 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
 		$body = elgg_echo('messages:email:body', [
 				$sender->getDisplayName(),
 				$message_contents,
-				elgg_get_site_url() . "messages/inbox/" . $recipient->username,
+				elgg_generate_url('collection:object:messages:owner', [
+					'username' => $recipient->username,
+				]),
 				$sender->getDisplayName(),
-				elgg_get_site_url() . "messages/add?send_to=" . $sender_guid,
+				elgg_generate_url('add:object:messages', [
+					'send_to' => $sender_guid,
+				]),
 			],
 			$recipient->language
 		);
@@ -279,7 +262,8 @@ function messages_send($subject, $body, $recipient_guid, $sender_guid = 0, $orig
  * @param string $url    current return value
  * @param array  $params supplied params
  *
- * @return void|string
+ * @return void|string|false
+ * @deprecated 3.0 use ElggEntity::getURL()
  */
 function messages_set_url($hook, $type, $url, $params) {
 	
@@ -288,7 +272,9 @@ function messages_set_url($hook, $type, $url, $params) {
 		return;
 	}
 	
-	return "messages/read/{$entity->getGUID()}";
+	elgg_deprecated_notice(__METHOD__ . ' is deprecated please use ElggEntity::getURL()', '3.0');
+	
+	return elgg_generate_entity_url($entity);
 }
 
 /**
@@ -299,7 +285,7 @@ function messages_set_url($hook, $type, $url, $params) {
  * @param int  $offset    Start at a defined offset (for listings)
  * @param bool $count     Switch between entities array or count mode
  *
- * @return ElggObject[]|int
+ * @return ElggMessage[]|int|false
  * @since 1.9
  */
 function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count = false) {
@@ -330,7 +316,7 @@ function messages_get_unread($user_guid = 0, $limit = null, $offset = 0, $count 
  * @return int
  */
 function messages_count_unread($user_guid = 0) {
-	return messages_get_unread($user_guid, 10, 0, true);
+	return (int) messages_get_unread($user_guid, 10, 0, true);
 }
 
 /**
@@ -385,7 +371,9 @@ function messages_user_hover_menu($hook, $type, $return, $params) {
 		'name' => 'send',
 		'text' => elgg_echo('messages:sendmessage'),
 		'icon' => 'mail',
-		'href' => "messages/add?send_to={$user->guid}",
+		'href' => elgg_generate_url('add:object:messages', [
+			'send_to' => $user->guid,
+		]),
 	];
 	
 	if ($type == 'menu:user_hover') {
@@ -428,7 +416,7 @@ function messages_purge($event, $type, $user) {
 		],
 		'limit' => false,
 	];
-	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options);
+	$batch = new ElggBatch('elgg_get_entities', $options);
 	$batch->setIncrementOffset(false);
 	foreach ($batch as $e) {
 		$e->delete();
@@ -443,7 +431,7 @@ function messages_purge($event, $type, $user) {
  *
  * @param string $hook         'get_views'
  * @param string $type         'ecml'
- * @param string $return_value current return value
+ * @param array  $return_value current return value
  * @param array  $params       supplied params
  *
  * @return array

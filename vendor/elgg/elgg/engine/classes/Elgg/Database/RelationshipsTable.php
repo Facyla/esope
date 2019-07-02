@@ -6,6 +6,7 @@ use Elgg\Database\Clauses\GroupByClause;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\Clauses\SelectClause;
 use Elgg\EventsService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
@@ -141,7 +142,6 @@ class RelationshipsTable {
 			INSERT INTO {$this->db->prefix}entity_relationships
 			       (guid_one, relationship, guid_two, time_created)
 			VALUES (:guid1, :relationship, :guid2, :time)
-				ON DUPLICATE KEY UPDATE time_created = :time
 		";
 		$params = [
 			':guid1' => (int) $guid_one,
@@ -150,9 +150,18 @@ class RelationshipsTable {
 			':time' => $this->getCurrentTime()->getTimestamp(),
 		];
 
-		$id = $this->db->insertData($sql, $params);
-		if (!$id) {
-			return false;
+		try {
+			$id = $this->db->insertData($sql, $params);
+			if (!$id) {
+				return false;
+			}
+		} catch (\DatabaseException $e) {
+			$prev = $e->getPrevious();
+			if ($prev instanceof UniqueConstraintViolationException) {
+				// duplicate key error see https://github.com/Elgg/Elgg/issues/9179
+				return false;
+			}
+			throw $e;
 		}
 
 		$obj = $this->get($id);
@@ -211,7 +220,7 @@ class RelationshipsTable {
 	 */
 	public function remove($guid_one, $relationship, $guid_two) {
 		$obj = $this->check($guid_one, $relationship, $guid_two);
-		if (!$obj) {
+		if (!$obj instanceof \ElggRelationship) {
 			return false;
 		}
 
@@ -275,11 +284,14 @@ class RelationshipsTable {
 	 * @return \ElggRelationship[]
 	 */
 	public function getAll($guid, $inverse_relationship = false) {
-		$params[':guid'] = (int) $guid;
-
 		$where = ($inverse_relationship ? "guid_two = :guid" : "guid_one = :guid");
 
-		$query = "SELECT * from {$this->db->prefix}entity_relationships WHERE {$where}";
+		$query = "SELECT *
+			FROM {$this->db->prefix}entity_relationships
+			WHERE {$where}";
+		$params = [
+			':guid' => (int) $guid,
+		];
 
 		return $this->db->getData($query, [$this, 'rowToElggRelationship'], $params);
 	}

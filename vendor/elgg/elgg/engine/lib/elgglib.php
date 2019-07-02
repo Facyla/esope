@@ -436,10 +436,10 @@ function elgg_set_system_messages(\Elgg\SystemMessages\RegisterSet $set) {
  *
  * @tip When referring to events, the preferred syntax is "event, type".
  *
- * @param string $event       The event type
- * @param string $object_type The object type
- * @param string $callback    The handler callback
- * @param int    $priority    The priority - 0 is default, negative before, positive after
+ * @param string   $event       The event type
+ * @param string   $object_type The object type
+ * @param callable $callback    The handler callback
+ * @param int      $priority    The priority - 0 is default, negative before, positive after
  *
  * @return bool
  * @example documentation/events/basic.php
@@ -453,9 +453,9 @@ function elgg_register_event_handler($event, $object_type, $callback, $priority 
 /**
  * Unregisters a callback for an event.
  *
- * @param string $event       The event type
- * @param string $object_type The object type
- * @param string $callback    The callback. Since 1.11, static method callbacks will match dynamic methods
+ * @param string   $event       The event type
+ * @param string   $object_type The object type
+ * @param callable $callback    The callback. Since 1.11, static method callbacks will match dynamic methods
  *
  * @return bool true if a handler was found and removed
  * @since 1.7
@@ -989,6 +989,10 @@ function elgg_http_add_url_query_elements($url, array $elements) {
  * @since 1.8.0
  */
 function elgg_http_url_is_identical($url1, $url2, $ignore_params = ['offset', 'limit']) {
+	if (!is_string($url1) || !is_string($url2)) {
+		return false;
+	}
+	
 	$url1 = elgg_normalize_url($url1);
 	$url2 = elgg_normalize_url($url2);
 
@@ -1298,7 +1302,7 @@ function _elgg_services() {
  * /ajax/form/<action_name>?<key/value params>
  *
  * @param string[] $segments URL segments (not including "ajax")
- * @return ResponseBuilder
+ * @return false|ResponseBuilder
  *
  * @see elgg_register_ajax_view()
  * @elgg_pagehandler ajax
@@ -1385,37 +1389,17 @@ function _elgg_ajax_page_handler($segments) {
 }
 
 /**
- * Handle requests for /favicon.ico
- *
- * @param string[] $segments The URL segments
- * @return bool
- * @access private
- * @since 1.10
- */
-function _elgg_favicon_page_handler($segments) {
-	header("HTTP/1.1 404 Not Found", true, 404);
-
-	header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime("+1 week")), true);
-	header("Pragma: public", true);
-	header("Cache-Control: public", true);
-
-	header('Content-Type: image/x-icon');
-	echo elgg_view('graphics/favicon.ico');
-
-	return true;
-}
-
-/**
  * Checks if there are some constraints on the options array for
  * potentially dangerous operations.
  *
  * @param array  $options Options array
  * @param string $type    Options type: metadata, annotation or river
+ *
  * @return bool
  * @access private
  */
 function _elgg_is_valid_options_for_batch_operation($options, $type) {
-	if (!$options || !is_array($options)) {
+	if (empty($options) || !is_array($options)) {
 		return false;
 	}
 

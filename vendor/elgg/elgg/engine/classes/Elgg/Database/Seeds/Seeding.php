@@ -13,6 +13,7 @@ use ElggUser;
 use Exception;
 use Faker\Factory;
 use Psr\Log\LogLevel;
+use Elgg\Database\Seeds\Providers\LocalImage;
 
 /**
  * Seeding trait
@@ -43,6 +44,8 @@ trait Seeding {
 		if (!isset($this->faker)) {
 			$this->faker = Factory::create($locale);
 		}
+		
+		$this->faker->addProvider(new LocalImage($this->faker));
 
 		return $this->faker;
 	}
@@ -278,10 +281,10 @@ trait Seeding {
 
 			$group->save();
 
-			if ($group->access_id == ACCESS_PRIVATE) {
-				$acls = $group->getOwnedAccessCollections(['subtype' => 'group_acl']);
-				if ($acls) {
-					$group->access_id = $acls[0]->id;
+			if ($group->access_id === ACCESS_PRIVATE) {
+				$acl = $group->getOwnedAccessCollection('group_acl');
+				if ($acl instanceof \ElggAccessCollection) {
+					$group->access_id = $acl->id;
 					$group->save();
 				}
 			}
@@ -422,7 +425,7 @@ trait Seeding {
 	 * @param array $attributes Object entity attributes
 	 * @param array $metadata   Object entity metadata
 	 *
-	 * @return ElggObject
+	 * @return \ElggSite
 	 */
 	public function createSite(array $attributes = [], array $metadata = []) {
 		// We don't want to create more than one site
@@ -696,7 +699,7 @@ trait Seeding {
 		$tries = 0;
 		$success = 0;
 
-		if (!$limit) {
+		if ($limit === null) {
 			$limit = $this->faker()->numberBetween(1, 20);
 		}
 
@@ -732,7 +735,7 @@ trait Seeding {
 
 		$success = 0;
 
-		if (!$limit) {
+		if ($limit === null) {
 			$limit = $this->faker()->numberBetween(1, 20);
 		}
 
@@ -759,5 +762,4 @@ trait Seeding {
 	public function log($msg, $level = LogLevel::NOTICE) {
 		elgg_log($msg, $level);
 	}
-
 }

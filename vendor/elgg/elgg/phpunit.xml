@@ -30,6 +30,8 @@
         <env name="ELGG_REDIS_SERVER1_PORT" value="6379"/>
 
         <env name="ELGG_WWWROOT" value="http://localhost/"/>
+        
+        <env name="ELGG_SEEDER_LOCAL_IMAGE_FOLDER" value=""/>
         -->
 
         <ini name="memory_limit" value="-1"/>
@@ -44,8 +46,10 @@
         <testsuite name="integration">
             <directory>./engine/tests/phpunit/integration/</directory>
         </testsuite>
-        <testsuite name="plugins">
+        <testsuite name="plugins-unit">
             <directory>./mod/*/tests/phpunit/unit/</directory>
+        </testsuite>
+        <testsuite name="plugins-integration">
             <directory>./mod/*/tests/phpunit/integration/</directory>
         </testsuite>
     </testsuites>

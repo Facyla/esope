@@ -81,7 +81,8 @@ abstract class BaseTestCase extends TestCase implements Seedable, Testable {
 			'dataroot' => Paths::elgg() . 'engine/tests/test_files/dataroot/',
 			'cacheroot' => Paths::elgg() . 'engine/tests/test_files/cacheroot/',
 			'assetroot' => Paths::elgg() . 'engine/tests/test_files/assetroot/',
-
+			'seeder_local_image_folder' => getenv('ELGG_SEEDER_LOCAL_IMAGE_FOLDER') ? : Paths::elgg() . '.scripts/seeder/images/',
+			
 			'system_cache_enabled' => false,
 			'simplecache_enabled' => false,
 			'boot_cache_ttl' => 0,
@@ -125,10 +126,11 @@ abstract class BaseTestCase extends TestCase implements Seedable, Testable {
 					'upscale' => true
 				],
 				'master' => [
-					'w' => 2048,
-					'h' => 2048,
+					'w' => 10240,
+					'h' => 10240,
 					'square' => false,
-					'upscale' => false
+					'upscale' => false,
+					'crop' => false,
 				],
 			],
 			'debug' => LogLevel::ERROR,

@@ -4,7 +4,7 @@ namespace Elgg;
 
 use Elgg\Database\EntityTable;
 use Elgg\Filesystem\MimeTypeDetector;
-use Elgg\Http\Request;
+use Elgg\Http\Request as HttpRequest;
 use ElggEntity;
 use ElggFile;
 use ElggIcon;
@@ -37,7 +37,7 @@ class EntityIconService {
 	private $hooks;
 
 	/**
-	 * @var Request
+	 * @var \Elgg\Http\Request
 	 */
 	private $request;
 
@@ -52,22 +52,29 @@ class EntityIconService {
 	private $uploads;
 
 	/**
+	 * @var ImageService
+	 */
+	private $images;
+
+	/**
 	 * Constructor
 	 *
 	 * @param Config             $config   Config
 	 * @param PluginHooksService $hooks    Hook registration service
-	 * @param Request            $request  Http request
+	 * @param HttpRequest        $request  Http request
 	 * @param LoggerInterface    $logger   Logger
 	 * @param EntityTable        $entities Entity table
 	 * @param UploadService      $uploads  Upload service
+	 * @param ImageService       $images   Image service
 	 */
 	public function __construct(
 		Config $config,
 		PluginHooksService $hooks,
-		Request $request,
+		HttpRequest $request,
 		LoggerInterface $logger,
 		EntityTable $entities,
-		UploadService $uploads
+		UploadService $uploads,
+		ImageService $images
 	) {
 		$this->config = $config;
 		$this->hooks = $hooks;
@@ -75,6 +82,7 @@ class EntityIconService {
 		$this->logger = $logger;
 		$this->entities = $entities;
 		$this->uploads = $uploads;
+		$this->images = $images;
 	}
 
 	/**
@@ -91,22 +99,27 @@ class EntityIconService {
 		if (empty($input)) {
 			return false;
 		}
+				
+		// auto detect cropping coordinates
+		if (empty($coords)) {
+			$auto_coords = $this->detectCroppingCoordinates();
+			if (!empty($auto_coords)) {
+				$coords = $auto_coords;
+			}
+		}
 
-		$tmp_filename = time() . $input->getClientOriginalName();
-		$tmp = new ElggFile();
-		$tmp->owner_guid = $entity->guid;
-		$tmp->setFilename("tmp/$tmp_filename");
+		$tmp = new \ElggTempFile();
+		$tmp->setFilename(uniqid() . $input->getClientOriginalName());
 		$tmp->open('write');
 		$tmp->close();
-		// not using move_uploaded_file() for testing purposes
+		
 		copy($input->getPathname(), $tmp->getFilenameOnFilestore());
 
-		$tmp->mimetype = (new MimeTypeDetector())->getType($tmp_filename, $input->getClientMimeType());
+		$tmp->mimetype = (new MimeTypeDetector())->getType($tmp->getFilenameOnFilestore(), $input->getClientMimeType());
 		$tmp->simpletype = elgg_get_file_simple_type($tmp->mimetype);
 
 		$result = $this->saveIcon($entity, $tmp, $type, $coords);
 
-		unlink($input->getPathname());
 		$tmp->delete();
 
 		return $result;
@@ -126,13 +139,12 @@ class EntityIconService {
 		if (!file_exists($filename) || !is_readable($filename)) {
 			throw new InvalidParameterException(__METHOD__ . " expects a readable local file. $filename is not readable");
 		}
-
-		$tmp_filename = time() . pathinfo($filename, PATHINFO_BASENAME);
-		$tmp = new ElggFile();
-		$tmp->owner_guid = $entity->guid;
-		$tmp->setFilename("tmp/$tmp_filename");
+				
+		$tmp = new \ElggTempFile();
+		$tmp->setFilename(uniqid() . basename($filename));
 		$tmp->open('write');
 		$tmp->close();
+		
 		copy($filename, $tmp->getFilenameOnFilestore());
 
 		$tmp->mimetype = (new MimeTypeDetector())->getType($tmp->getFilenameOnFilestore());
@@ -159,13 +171,12 @@ class EntityIconService {
 		if (!$file->exists()) {
 			throw new InvalidParameterException(__METHOD__ . ' expects an instance of ElggFile with an existing file on filestore');
 		}
-
-		$tmp_filename = time() . pathinfo($file->getFilenameOnFilestore(), PATHINFO_BASENAME);
-		$tmp = new ElggFile();
-		$tmp->owner_guid = $entity->guid;
-		$tmp->setFilename("tmp/$tmp_filename");
+		
+		$tmp = new \ElggTempFile();
+		$tmp->setFilename(uniqid() . basename($file->getFilenameOnFilestore()));
 		$tmp->open('write');
 		$tmp->close();
+		
 		copy($file->getFilenameOnFilestore(), $tmp->getFilenameOnFilestore());
 
 		$tmp->mimetype = (new MimeTypeDetector())->getType($tmp->getFilenameOnFilestore(), $file->getMimeType());
@@ -206,6 +217,8 @@ class EntityIconService {
 			$this->logger->error('Source file passed to ' . __METHOD__ . ' can not be resolved to a valid image');
 			return false;
 		}
+		
+		$this->prepareIcon($file->getFilenameOnFilestore());
 		
 		$x1 = (int) elgg_extract('x1', $coords);
 		$y1 = (int) elgg_extract('y1', $coords);
@@ -266,6 +279,30 @@ class EntityIconService {
 	}
 	
 	/**
+	 * Prepares an icon
+	 *
+	 * @param string $filename the file to prepare
+	 *
+	 * @return void
+	 */
+	protected function prepareIcon($filename) {
+		
+		// fix orientation
+		$temp_file = new \ElggTempFile();
+		$temp_file->setFilename(uniqid() . basename($filename));
+		
+		copy($filename, $temp_file->getFilenameOnFilestore());
+		
+		$rotated = $this->images->fixOrientation($temp_file->getFilenameOnFilestore());
+
+		if ($rotated) {
+			copy($temp_file->getFilenameOnFilestore(), $filename);
+		}
+		
+		$temp_file->delete();
+	}
+	
+	/**
 	 * Generate an icon for the given entity
 	 *
 	 * @param ElggEntity $entity    Temporary ElggFile instance
@@ -288,8 +325,6 @@ class EntityIconService {
 		$x2 = (int) elgg_extract('x2', $coords);
 		$y2 = (int) elgg_extract('y2', $coords);
 		
-		$cropping_mode = ($x2 > $x1) && ($y2 > $y1);
-		
 		$sizes = $this->getSizes($entity->getType(), $entity->getSubtype(), $type);
 		
 		if (!empty($icon_size) && !isset($sizes[$icon_size])) {
@@ -303,19 +338,14 @@ class EntityIconService {
 				continue;
 			}
 			
-			$square = (bool) elgg_extract('square', $opts);
-
-			if ($type === 'icon' && $cropping_mode) {
-				$cropping_ratio = ($x2 - $x1) / ($y2 - $y1);
-				if ($cropping_ratio == 1 && $square === false) {
-					// Do not crop out non-square icons if cropping coordinates are a square
-					$coords = [
-						'x1' => 0,
-						'y1' => 0,
-						'x2' => 0,
-						'y2' => 0,
-					];
-				}
+			// check if the icon config allows cropping
+			if (!(bool) elgg_extract('crop', $opts, true)) {
+				$coords = [
+					'x1' => 0,
+					'y1' => 0,
+					'x2' => 0,
+					'y2' => 0,
+				];
 			}
 
 			$icon = $this->getIcon($entity, $size, $type, false);
@@ -434,8 +464,10 @@ class EntityIconService {
 		], true);
 
 		if ($delete === false) {
-			return;
+			return false;
 		}
+		
+		$result = true;
 
 		$sizes = array_keys($this->getSizes($entity->getType(), $entity->getSubtype(), $type));
 		foreach ($sizes as $size) {
@@ -444,7 +476,7 @@ class EntityIconService {
 			}
 			
 			$icon = $this->getIcon($entity, $size, $type, false);
-			$icon->delete();
+			$result &= $icon->delete();
 		}
 
 		if ($type == 'icon') {
@@ -453,7 +485,11 @@ class EntityIconService {
 			unset($entity->y1);
 			unset($entity->x2);
 			unset($entity->y2);
+		} else {
+			unset($entity->{"{$type}_coords"});
 		}
+		
+		return $result;
 	}
 
 	/**
@@ -486,7 +522,8 @@ class EntityIconService {
 		if ($url == null) {
 			if ($this->hasIcon($entity, $size, $type)) {
 				$icon = $this->getIcon($entity, $size, $type);
-				$url = $icon->getInlineURL((bool) elgg_extract('use_cookie', $params, true));
+				$default_use_cookie = (bool) elgg_get_config('session_bound_entity_icons', false);
+				$url = $icon->getInlineURL((bool) elgg_extract('use_cookie', $params, $default_use_cookie));
 			} else {
 				$url = $this->getFallbackIconUrl($entity, $params);
 			}
@@ -592,11 +629,16 @@ class EntityIconService {
 		// lazy generation of icons requires a 'master' size
 		// this ensures a default config for 'master' size
 		$sizes['master'] = elgg_extract('master', $sizes, [
-			'w' => 2048,
-			'h' => 2048,
+			'w' => 10240,
+			'h' => 10240,
 			'square' => false,
 			'upscale' => false,
+			'crop' => false,
 		]);
+		
+		if (!isset($sizes['master']['crop'])) {
+			$sizes['master']['crop'] = false;
+		}
 		
 		return $sizes;
 	}
@@ -668,6 +710,38 @@ class EntityIconService {
 			->setMaxAge(86400);
 
 		return $response;
+	}
+	
+	/**
+	 * Automagicly detect cropping coordinates
+	 *
+	 * Based in the input names x1, x2, y1 and y2
+	 *
+	 * @return false|array
+	 */
+	protected function detectCroppingCoordinates() {
+		
+		$auto_coords = [
+			'x1' => get_input('x1'),
+			'x2' => get_input('x2'),
+			'y1' => get_input('y1'),
+			'y2' => get_input('y2'),
+		];
+		
+		$auto_coords = array_filter($auto_coords, function($value) {
+			return !elgg_is_empty($value) && is_numeric($value);
+		});
+		
+		if (count($auto_coords) !== 4) {
+			return false;
+		}
+		
+		// make ints
+		array_walk($auto_coords, function (&$value) {
+			$value = (int) $value;
+		});
+		
+		return $auto_coords;
 	}
 
 }

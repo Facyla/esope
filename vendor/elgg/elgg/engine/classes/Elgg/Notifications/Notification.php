@@ -13,28 +13,44 @@ class Notification {
 	const ORIGIN_SUBSCRIPTIONS = 'subscriptions_service';
 	const ORIGIN_INSTANT = 'instant_notifications';
 	
-	/** @var \ElggEntity The entity causing or creating the notification */
+	/**
+	 * @var \ElggEntity The entity causing or creating the notification
+	 */
 	protected $from;
 
-	/** @var \ElggUser The user receiving the notification */
+	/**
+	 * @var \ElggEntity The user receiving the notification
+	 */
 	protected $to;
 
-	/** @var string A single sentence summary string */
+	/**
+	 * @var string A single sentence summary string
+	 */
 	public $summary;
 
-	/** @var string The subject of the notification. Email subject is one use. */
+	/**
+	 * @var string The subject of the notification. Email subject is one use.
+	 */
 	public $subject;
 
-	/** @var string The body of the notification. Email body is one use. */
+	/**
+	 * @var string The body of the notification. Email body is one use.
+	 */
 	public $body;
 
-	/** @var string The language of the notification */
+	/**
+	 * @var string The language of the notification
+	 */
 	public $language;
 
-	/** @var array Additional parameters */
+	/**
+	 * @var array Additional parameters
+	 */
 	public $params;
 
-	/** @var string Target URL */
+	/**
+	 * @var string Target URL
+	 */
 	public $url;
 
 	/**
@@ -47,15 +63,10 @@ class Notification {
 	 * @param string      $body     The body of the notification
 	 * @param string      $summary  Optional summary of the notification
 	 * @param array       $params   Optional array of parameters
+	 *
 	 * @throws \InvalidArgumentException
 	 */
 	public function __construct(\ElggEntity $from, \ElggEntity $to, $language, $subject, $body, $summary = '', array $params = []) {
-		if (!$from) {
-			throw new \InvalidArgumentException('$from is not a valid \ElggEntity');
-		}
-		if (!$to) {
-			throw new \InvalidArgumentException('$to is not a valid \ElggEntity');
-		}
 		$this->from = $from;
 		$this->to = $to;
 		$this->language = $language;

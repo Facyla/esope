@@ -2,9 +2,8 @@
 namespace Elgg;
 
 use Elgg\Di\DiContainer;
-use Elgg\HooksRegistrationService\Event;
-use Elgg\HooksRegistrationService\Hook;
-use Elgg\Request;
+use Elgg\HooksRegistrationService\Event as HrsEvent;
+use Elgg\HooksRegistrationService\Hook as HrsHook;
 
 /**
  * Helpers for providing callable-based APIs
@@ -22,9 +21,9 @@ class HandlersService {
 	/**
 	 * Call the handler with the hook/event object
 	 *
-	 * @param callable          $callable Callable
-	 * @param string|Hook|Event $object   Event object
-	 * @param array             $args     Arguments for legacy events/hooks
+	 * @param callable $callable Callable
+	 * @param mixed    $object   Event object
+	 * @param array    $args     Arguments for legacy events/hooks
 	 *
 	 * @return array [success, result, object]
 	 */
@@ -46,11 +45,11 @@ class HandlersService {
 			if (is_string($object)) {
 				switch ($object) {
 					case 'hook' :
-						$object = new Hook(elgg(), $args[0], $args[1], $args[2], $args[3]);
+						$object = new HrsHook(elgg(), $args[0], $args[1], $args[2], $args[3]);
 						break;
 
 					case 'event' :
-						$object = new Event(elgg(), $args[0], $args[1], $args[2]);
+						$object = new HrsEvent(elgg(), $args[0], $args[1], $args[2]);
 						break;
 
 					case 'middleware' :

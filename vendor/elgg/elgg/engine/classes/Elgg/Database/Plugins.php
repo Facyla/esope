@@ -150,14 +150,22 @@ class Plugins {
 	/**
 	 * Set the list of active plugins according to the boot data cache
 	 *
-	 * @param ElggPlugin[]|null $plugins Set of active plugins
+	 * @param ElggPlugin[]|null $plugins       Set of active plugins
+	 * @param bool              $order_plugins Make sure plugins are saved in the correct order (set to false if provided plugins are already sorted)
 	 *
 	 * @return void
 	 */
-	public function setBootPlugins($plugins) {
+	public function setBootPlugins($plugins, $order_plugins = true) {
 		if (!is_array($plugins)) {
 			unset($this->boot_plugins);
 			return;
+		}
+		
+		// Always (re)set the boot_plugins. This makes sure that even if you have no plugins active this is known to the system.
+		$this->boot_plugins = [];
+		
+		if ($order_plugins) {
+			$plugins = $this->orderPluginsByPriority($plugins);
 		}
 		
 		foreach ($plugins as $plugin) {
@@ -170,6 +178,8 @@ class Plugins {
 				continue;
 			}
 
+			$plugin->registerLanguages();
+			
 			$this->boot_plugins[$plugin_id] = $plugin;
 			$this->cache->save($plugin_id, $plugin);
 		}
@@ -198,15 +208,20 @@ class Plugins {
 			$dir = $this->getPath();
 		}
 
-		$plugin_dirs = [];
+		if (!is_dir($dir)) {
+			return [];
+		}
+		
 		$handle = opendir($dir);
-
-		if ($handle) {
-			while ($plugin_dir = readdir($handle)) {
-				// must be directory and not begin with a .
-				if (substr($plugin_dir, 0, 1) !== '.' && is_dir($dir . $plugin_dir)) {
-					$plugin_dirs[] = $plugin_dir;
-				}
+		if ($handle === false) {
+			return [];
+		}
+		
+		$plugin_dirs = [];
+		while (($plugin_dir = readdir($handle)) !== false) {
+			// must be directory and not begin with a .
+			if (substr($plugin_dir, 0, 1) !== '.' && is_dir($dir . $plugin_dir)) {
+				$plugin_dirs[] = $plugin_dir;
 			}
 		}
 
@@ -237,9 +252,7 @@ class Plugins {
 		$old_access = $this->session->setDisabledEntityVisibility(true);
 
 		$known_plugins = $this->find('all');
-		/* @var \ElggPlugin[] $known_plugins */
-
-		if (!$known_plugins) {
+		if (empty($known_plugins)) {
 			$known_plugins = [];
 		}
 
@@ -258,7 +271,7 @@ class Plugins {
 		}
 
 		$physical_plugins = $this->getDirsInDir($mod_dir);
-		if (!$physical_plugins) {
+		if (empty($physical_plugins)) {
 			$this->session->setIgnoreAccess($old_ia);
 			$this->session->setDisabledEntityVisibility($old_access);
 
@@ -291,19 +304,27 @@ class Plugins {
 		// everything remaining in $known_plugins needs to be disabled
 		// because they are entities, but their dirs were removed.
 		// don't delete the entities because they hold settings.
+		$reindex = false;
 		foreach ($known_plugins as $plugin) {
+			if (!$plugin->isEnabled()) {
+				continue;
+			}
+			
+			$reindex = true;
+			
 			if ($plugin->isActive()) {
 				$plugin->deactivate();
 			}
 			// remove the priority.
 			$name = $this->namespacePrivateSetting('internal', 'priority');
-			remove_private_setting($plugin->guid, $name);
-			if ($plugin->isEnabled()) {
-				$plugin->disable();
-			}
+			$plugin->removePrivateSetting($name);
+			
+			$plugin->disable();
 		}
-
-		$this->reindexPriorities();
+		
+		if ($reindex) {
+			$this->reindexPriorities();
+		}
 
 		$this->session->setIgnoreAccess($old_ia);
 		$this->session->setDisabledEntityVisibility($old_access);
@@ -420,13 +441,11 @@ class Plugins {
 			->andWhere($qb->compare('e.subtype', '=', 'plugin', ELGG_VALUE_STRING));
 
 		$data = $this->db->getDataRow($qb);
-
-		$max = 1;
-		if ($data) {
-			$max = (int) $data->max;
+		if (empty($data)) {
+			return 1;
 		}
 
-		return max(1, $max);
+		return max(1, (int) $data->max);
 	}
 
 	/**
@@ -504,7 +523,7 @@ class Plugins {
 
 		foreach ($plugins as $plugin) {
 			try {
-				$setup = $plugin->register();
+				$plugin->register();
 			} catch (Exception $ex) {
 				$this->disable($plugin, $ex);
 			}
@@ -773,66 +792,98 @@ class Plugins {
 			return [];
 		}
 
-		$loaded_from_cache = false;
 		if ($status === 'active' && isset($this->boot_plugins)) {
-			$plugins = $this->boot_plugins;
-			$loaded_from_cache = true;
-		} else {
-			$priority = $this->namespacePrivateSetting('internal', 'priority');
-			$site_guid = 1;
+			// boot_plugins is an already ordered list of plugins
+			return array_values($this->boot_plugins);
+		}
+		
+		$volatile_data_name = null;
+		$site_guid = 1;
 
-			// grab plugins
-			$options = [
-				'type' => 'object',
-				'subtype' => 'plugin',
-				'limit' => 0,
-				'selects' => ['ps.value'],
-				'private_setting_names' => [$priority],
-				// ORDER BY CAST(ps.value) is super slow. We usort() below.
-				'order_by' => false,
-			];
+		// grab plugins
+		$options = [
+			'type' => 'object',
+			'subtype' => 'plugin',
+			'limit' => false,
+			// ORDER BY CAST(ps.value) is super slow. We custom sorting below.
+			'order_by' => false,
+			// preload private settings because private settings will probably be used, at least priority
+			'preload_private_settings' => true,
+		];
 
-			switch ($status) {
-				case 'active':
-					$options['relationship'] = 'active_plugin';
-					$options['relationship_guid'] = $site_guid;
-					$options['inverse_relationship'] = true;
-					break;
+		switch ($status) {
+			case 'active':
+				$options['relationship'] = 'active_plugin';
+				$options['relationship_guid'] = $site_guid;
+				$options['inverse_relationship'] = true;
+				
+				// shorten callstack
+				$volatile_data_name = 'select:value';
+				$options['select'] = ['ps.value'];
+				$options['private_setting_names'] = [
+					$this->namespacePrivateSetting('internal', 'priority'),
+				];
+				break;
 
-				case 'inactive':
-					$options['wheres'][] = function (QueryBuilder $qb) use ($site_guid) {
-						$subquery = $qb->subquery('entity_relationships', 'active_er');
-						$subquery->select('*')
-							->where($qb->compare('active_er.guid_one', '=', 'e.guid'))
-							->andWhere($qb->compare('active_er.relationship', '=', 'active_plugin', ELGG_VALUE_STRING))
-							->andWhere($qb->compare('active_er.guid_two', '=', 1));
+			case 'inactive':
+				$options['wheres'][] = function (QueryBuilder $qb, $main_alias) use ($site_guid) {
+					$subquery = $qb->subquery('entity_relationships', 'active_er');
+					$subquery->select('active_er.guid_one')
+						->where($qb->compare('active_er.relationship', '=', 'active_plugin', ELGG_VALUE_STRING))
+						->andWhere($qb->compare('active_er.guid_two', '=', $site_guid, ELGG_VALUE_GUID));
 
-						return "NOT EXISTS ({$subquery->getSQL()})";
-					};
-					break;
+					return $qb->compare("{$main_alias}.guid", 'NOT IN', $subquery->getSQL());
+				};
+				break;
 
-				case 'all':
-				default:
-					break;
-			}
-
-			$old_ia = $this->session->setIgnoreAccess(true);
-			$plugins = elgg_get_entities($options) ? : [];
-			$this->session->setIgnoreAccess($old_ia);
+			case 'all':
+			default:
+				break;
 		}
 
-		usort($plugins, function (ElggPlugin $a, ElggPlugin $b) use ($loaded_from_cache) {
-			$a_value = $loaded_from_cache ? $a->getPriority() : $a->getVolatileData('select:value');
-			$b_value = $loaded_from_cache ? $b->getPriority() : $b->getVolatileData('select:value');
+		$old_ia = $this->session->setIgnoreAccess(true);
+		$plugins = elgg_get_entities($options) ? : [];
+		$this->session->setIgnoreAccess($old_ia);
 
-			if ($b_value !== $a_value) {
-				return $a_value - $b_value;
-			} else {
-				return $a->guid - $b->guid;
+		$result = $this->orderPluginsByPriority($plugins, $volatile_data_name);
+		
+		if ($status === 'active' && !isset($this->boot_plugins)) {
+			// populate local cache if for some reason this is not set yet
+			$this->setBootPlugins($result, false);
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Sorts plugins by priority
+	 *
+	 * @param \ElggPlugin[] $plugins            Array of plugins
+	 * @param string        $volatile_data_name Use an optional volatile data name to retrieve priority
+	 *
+	 * @return ElggPlugin[]
+	 */
+	protected function orderPluginsByPriority($plugins = [], $volatile_data_name = null) {
+		$priorities = [];
+		$sorted_plugins = [];
+				
+		foreach ($plugins as $plugin) {
+			$priority = null;
+			if (!empty($volatile_data_name)) {
+				$priority = $plugin->getVolatileData($volatile_data_name);
 			}
-		});
-
-		return $plugins;
+			
+			if (!isset($priority)) {
+				$priority = $plugin->getPriority();
+			}
+			
+			$priorities[$plugin->guid] = (int) $priority;
+			$sorted_plugins[$plugin->guid] = $plugin;
+		}
+		
+		asort($priorities);
+		
+		return array_values(array_replace($priorities, $sorted_plugins));
 	}
 
 	/**
@@ -849,11 +900,11 @@ class Plugins {
 	 * @return bool
 	 * @access private
 	 */
-	function setPriorities(array $order) {
+	public function setPriorities(array $order) {
 		$name = $this->namespacePrivateSetting('internal', 'priority');
 
 		$plugins = $this->find('any');
-		if (!$plugins) {
+		if (empty($plugins)) {
 			return false;
 		}
 
@@ -901,7 +952,7 @@ class Plugins {
 	 * @return bool
 	 * @access private
 	 */
-	function reindexPriorities() {
+	public function reindexPriorities() {
 		return $this->setPriorities([]);
 	}
 
@@ -920,7 +971,7 @@ class Plugins {
 	 * @return string
 	 * @access private
 	 */
-	function namespacePrivateSetting($type, $name, $id = null) {
+	public function namespacePrivateSetting($type, $name, $id = null) {
 		switch ($type) {
 			case 'user_setting':
 				if (!$id) {
@@ -1058,7 +1109,7 @@ class Plugins {
 	 *
 	 * @param array $dep An \ElggPluginPackage dependency array
 	 *
-	 * @return array
+	 * @return false|array
 	 * @access private
 	 */
 	public function getDependencyStrings($dep) {
@@ -1267,7 +1318,7 @@ class Plugins {
 	 * @return bool
 	 * @see \ElggPlugin::setUserSetting()
 	 */
-	function setUserSetting($name, $value, $user_guid = 0, $plugin_id = null) {
+	public function setUserSetting($name, $value, $user_guid = 0, $plugin_id = null) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;
@@ -1286,7 +1337,7 @@ class Plugins {
 	 * @return bool
 	 * @see \ElggPlugin::unsetUserSetting()
 	 */
-	function unsetUserSetting($name, $user_guid = 0, $plugin_id = null) {
+	public function unsetUserSetting($name, $user_guid = 0, $plugin_id = null) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;
@@ -1306,7 +1357,7 @@ class Plugins {
 	 * @return mixed
 	 * @see \ElggPlugin::getUserSetting()
 	 */
-	function getUserSetting($name, $user_guid = 0, $plugin_id = null, $default = null) {
+	public function getUserSetting($name, $user_guid = 0, $plugin_id = null, $default = null) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;
@@ -1325,7 +1376,7 @@ class Plugins {
 	 * @return bool
 	 * @see \ElggPlugin::setSetting()
 	 */
-	function setSetting($name, $value, $plugin_id) {
+	public function setSetting($name, $value, $plugin_id) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;
@@ -1344,7 +1395,7 @@ class Plugins {
 	 * @return mixed
 	 * @see \ElggPlugin::getSetting()
 	 */
-	function getSetting($name, $plugin_id, $default = null) {
+	public function getSetting($name, $plugin_id, $default = null) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;
@@ -1362,7 +1413,7 @@ class Plugins {
 	 * @return bool
 	 * @see \ElggPlugin::unsetSetting()
 	 */
-	function unsetSetting($name, $plugin_id) {
+	public function unsetSetting($name, $plugin_id) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;
@@ -1379,7 +1430,7 @@ class Plugins {
 	 * @return bool
 	 * @see \ElggPlugin::unsetAllSettings()
 	 */
-	function unsetAllSettings($plugin_id) {
+	public function unsetAllSettings($plugin_id) {
 		$plugin = $this->get($plugin_id);
 		if (!$plugin) {
 			return false;

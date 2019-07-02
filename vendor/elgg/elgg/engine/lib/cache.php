@@ -29,7 +29,8 @@ function elgg_reset_system_cache() {
  * Saves a system cache.
  *
  * @param string $type The type or identifier of the cache
- * @param string $data The data to be saved
+ * @param mixed  $data The data to be saved
+ *
  * @return bool
  */
 function elgg_save_system_cache($type, $data) {
@@ -40,7 +41,8 @@ function elgg_save_system_cache($type, $data) {
  * Retrieve the contents of a system cache.
  *
  * @param string $type The type of cache to load
- * @return string
+ *
+ * @return mixed null if key not found in cache
  */
 function elgg_load_system_cache($type) {
 	return _elgg_services()->systemCache->load($type);
@@ -186,7 +188,7 @@ function elgg_disable_simplecache() {
  * @access private
  */
 function _elgg_rmdir($dir, $empty = false) {
-	if (!$dir) {
+	if (empty($dir)) {
 		// realpath can return false
 		_elgg_services()->logger->warning(__FUNCTION__ . ' called with empty $dir');
 		return true;
@@ -276,7 +278,7 @@ function _elgg_symlink_cache() {
 
 	if (!is_dir($simplecache_path)) {
 		// Views simplecache directory has not yet been created
-		mkdir($simplecache_path, 0700, true);
+		mkdir($simplecache_path, 0755, true);
 	}
 
 	symlink($simplecache_path, $symlink_path);
@@ -340,6 +342,21 @@ function _elgg_clear_caches() {
 }
 
 /**
+ * Resets OPcache
+ *
+ * @return void
+ * @internal
+ * @access private
+ */
+function _elgg_reset_opcache() {
+	if (!function_exists('opcache_reset')) {
+		return;
+	}
+	
+	opcache_reset();
+}
+
+/**
  * Enable all caches
  *
  * @return void
@@ -389,6 +406,7 @@ return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hoo
 
 	$events->registerHandler('cache:flush:before', 'system', '_elgg_disable_caches');
 	$events->registerHandler('cache:flush', 'system', '_elgg_clear_caches');
+	$events->registerHandler('cache:flush', 'system', '_elgg_reset_opcache');
 	$events->registerHandler('cache:flush:after', 'system', '_elgg_enable_caches');
 	$events->registerHandler('cache:flush:after', 'system', '_elgg_rebuild_public_container');
 };

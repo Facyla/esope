@@ -1,25 +1,31 @@
 <?php
 
-$group = elgg_get_page_owner_entity();
+use Elgg\Activity\GroupRiverFilter;
+use Elgg\Database\QueryBuilder;
 
-elgg_entity_gatekeeper($group->guid, 'group');
+$group_guid = elgg_extract('guid', $vars);
+
+elgg_entity_gatekeeper($group_guid, 'group');
+
+/* @var $group ElggGroup */
+$group = get_entity($group_guid);
+
+elgg_set_page_owner_guid($group->guid);
 
 elgg_group_tool_gatekeeper('activity');
 
 $title = elgg_echo('collection:river:group');
 
-elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
+elgg_push_breadcrumb(elgg_echo('groups'), elgg_generate_url('collection:group:group:all'));
 elgg_push_breadcrumb($group->getDisplayName(), $group->getURL());
 
-$db_prefix = elgg_get_config('dbprefix');
-
 $options = [
-	'joins' => [
-		"JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid",
-		"LEFT JOIN {$db_prefix}entities e2 ON e2.guid = rv.target_guid",
-	],
 	'wheres' => [
-		"(e1.container_guid = $group->guid OR e2.container_guid = $group->guid)",
+		function (QueryBuilder $qb, $main_alias) use ($group) {
+			$group = new GroupRiverFilter($group);
+			
+			return $group($qb, $main_alias);
+		},
 	],
 	'no_results' => elgg_echo('river:none'),
 ];
@@ -39,7 +45,7 @@ if ($type != 'all') {
 	}
 }
 
-$content = elgg_view('core/river/filter', ['selector' => $selector]);
+$content = elgg_view('river/filter', ['selector' => $selector]);
 $content .= elgg_list_river($options);
 
 $body = elgg_view_layout('content', [

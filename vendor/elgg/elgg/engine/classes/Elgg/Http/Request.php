@@ -29,6 +29,11 @@ class Request extends SymfonyRequest {
 	 * @var Route
 	 */
 	protected $route;
+	
+	/**
+	 * @ var array
+	 */
+	protected $request_overrides;
 
 	/**
 	 * {@inheritdoc}
@@ -45,6 +50,8 @@ class Request extends SymfonyRequest {
 		parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
 
 		$this->initializeContext();
+
+		$this->request_overrides = [];
 	}
 
 	/**
@@ -95,13 +102,18 @@ class Request extends SymfonyRequest {
 	 *
 	 * Note: this function does not handle nested arrays (ex: form input of param[m][n])
 	 *
-	 * @param string          $key   The name of the variable
-	 * @param string|string[] $value The value of the variable
+	 * @param string          $key              The name of the variable
+	 * @param string|string[] $value            The value of the variable
+	 * @param bool            $override_request The variable should override request values (default: false)
 	 *
 	 * @return static
 	 */
-	public function setParam($key, $value) {
-		$this->request->set($key, $value);
+	public function setParam($key, $value, $override_request = false) {
+		if ((bool) $override_request) {
+			$this->request_overrides[$key] = $value;
+		} else {
+			$this->request->set($key, $value);
+		}
 
 		return $this;
 	}
@@ -126,17 +138,12 @@ class Request extends SymfonyRequest {
 	public function getParam($key, $default = null, $filter_result = true) {
 		$result = $default;
 
-		$this->getContextStack()->push('input');
+		$values = $this->getParams($filter_result);
 
-		$value = $this->get($key);
+		$value = elgg_extract($key, $values, $default);
 		if ($value !== null) {
 			$result = $value;
-			if ($filter_result) {
-				$result = filter_tags($result);
-			}
 		}
-
-		$this->getContextStack()->pop();
 
 		return $result;
 	}
@@ -149,14 +156,19 @@ class Request extends SymfonyRequest {
 	 * @return array
 	 */
 	public function getParams($filter_result = true) {
+		$request_overrides = $this->request_overrides;
 		$query = $this->query->all();
 		$attributes = $this->attributes->all();
 		$post = $this->request->all();
 
-		$result = array_merge($query, $attributes, $post);
+		$result = array_merge($post, $attributes, $query, $request_overrides);
 
 		if ($filter_result) {
+			$this->getContextStack()->push('input');
+			
 			$result = filter_tags($result);
+			
+			$this->getContextStack()->pop();
 		}
 
 		return $result;
@@ -226,11 +238,11 @@ class Request extends SymfonyRequest {
 	 */
 	public function getFirstUrlSegment() {
 		$segments = $this->getUrlSegments();
-		if ($segments) {
+		if (!empty($segments)) {
 			return array_shift($segments);
-		} else {
-			return '';
 		}
+		
+		return '';
 	}
 
 	/**
@@ -356,7 +368,11 @@ class Request extends SymfonyRequest {
 	 * @return UploadedFile[]
 	 */
 	public function getFiles($input_name) {
-		$files = $this->files->get($input_name, []);
+		$files = $this->files->get($input_name);
+		if (empty($files)) {
+			return [];
+		}
+
 		if (!is_array($files)) {
 			$files = [$files];
 		}
@@ -399,25 +415,26 @@ class Request extends SymfonyRequest {
 	public function validate() {
 
 		$reported_bytes = $this->server->get('CONTENT_LENGTH');
-		$actual_bytes = strlen($this->getContent());
-		$query_elements = count($this->request->all());
-
-		$is_valid = function() use ($reported_bytes, $actual_bytes, $query_elements) {
+		$post_data_count = count($this->request->all());
+		$file_count = count($this->files->all());
+		
+		$is_valid = function() use ($reported_bytes, $post_data_count, $file_count) {
 			if (empty($reported_bytes)) {
 				// Content length is set for POST requests only
 				return true;
 			}
 
-			if (empty($actual_bytes) && empty($query_elements)) {
-				// The size of $_POST or uploaded file has exceed the size limit
+			if (empty($post_data_count) && empty($file_count)) {
+				// The size of $_POST or uploaded files has exceed the size limit
 				// and the request body/query has been truncated
+				// thus the request reported bytes is set, but no postdata is found
 				return false;
 			}
 
 			return true;
 		};
 
-		if (!$is_valid) {
+		if (!$is_valid()) {
 			$error_msg = elgg_trigger_plugin_hook('action_gatekeeper:upload_exceeded_msg', 'all', [
 				'post_size' => $reported_bytes,
 				'visible_errors' => true,

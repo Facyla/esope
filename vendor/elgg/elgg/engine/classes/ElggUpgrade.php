@@ -16,10 +16,13 @@ use Elgg\Upgrade\Batch;
  * @package Elgg.Admin
  * @access private
  *
- * @property int $is_completed
- * @property int $processed
- * @property int $offset
- * @property int $has_errors
+ * @property      bool   $is_completed   Is the upgrade completed yet
+ * @property      int    $processed      Number of items processed
+ * @property      int    $offset         Offset for batch
+ * @property      int    $has_errors     Number of errors
+ * @property      int    $completed_time Time when the upgrade finished
+ * @property-read string $id             The ID of the upgrade
+ * @property-read string $class          The class which will handle the upgrade
  */
 class ElggUpgrade extends ElggObject {
 
@@ -113,7 +116,10 @@ class ElggUpgrade extends ElggObject {
 		try {
 			$batch = _elgg_services()->upgradeLocator->getBatch($this->class);
 		} catch (InvalidArgumentException $ex) {
-			elgg_log($ex->getMessage(), 'ERROR');
+			// only report error if the upgrade still needs to run
+			$loglevel = $this->isCompleted() ? 'INFO' : 'ERROR';
+			elgg_log($ex->getMessage(), $loglevel);
+			
 			return false;
 		}
 
@@ -132,11 +138,12 @@ class ElggUpgrade extends ElggObject {
 	/**
 	 * Sets the timestamp for when the upgrade completed.
 	 *
-	 * @param int $time Timestamp when upgrade finished. Defaults to now.
-	 * @return bool
+	 * @param int $time Timestamp when upgrade finished. Defaults to now
+	 *
+	 * @return int
 	 */
 	public function setCompletedTime($time = null) {
-		if (!$time) {
+		if (!is_int($time)) {
 			$time = $this->getCurrentTime()->getTimestamp();
 		}
 
@@ -160,7 +167,7 @@ class ElggUpgrade extends ElggObject {
 	 */
 	public function save() {
 		if (!isset($this->is_completed)) {
-			$this->is_completed = 0;
+			$this->is_completed = false;
 		}
 
 		foreach ($this->requiredProperties as $prop) {
@@ -202,6 +209,31 @@ class ElggUpgrade extends ElggObject {
 		}
 
 		return $this->getPrivateSetting($name);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see ElggData::__isset()
+	 */
+	public function __isset($name) {
+		if (array_key_exists($name, $this->attributes)) {
+			return parent::__isset($name);
+		}
+		
+		$private_setting = $this->getPrivateSetting($name);
+		return !is_null($private_setting);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see ElggEntity::__unset()
+	 */
+	public function __unset($name) {
+		if (array_key_exists($name, $this->attributes)) {
+			parent::__unset($name);
+		}
+		
+		$this->removePrivateSetting($name);
 	}
 
 	/**

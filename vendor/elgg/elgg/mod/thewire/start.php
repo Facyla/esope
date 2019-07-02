@@ -28,7 +28,7 @@ function thewire_init() {
 		'name' => 'thewire',
 		'icon' => 'comments-o',
 		'text' => elgg_echo('thewire'),
-		'href' => 'thewire/all',
+		'href' => elgg_generate_url('collection:object:thewire:all'),
 	]);
 
 	// owner block menu
@@ -40,9 +40,6 @@ function thewire_init() {
 	// Extend system CSS with our own styles, which are defined in the thewire/css view
 	elgg_extend_view('elgg.css', 'thewire/css');
 
-	// Register a URL handler for thewire posts
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'thewire_set_url');
-
 	// Register for notifications
 	elgg_register_notification_event('object', 'thewire');
 	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'thewire_prepare_notification');
@@ -52,26 +49,6 @@ function thewire_init() {
 	elgg_register_plugin_hook_handler('likes:is_likable', 'object:thewire', 'Elgg\Values::getTrue');
 
 	elgg_register_plugin_hook_handler('unit_test', 'system', 'thewire_test');
-}
-
-/**
- * Override the url for a wire post to return the thread
- *
- * @param string $hook   'entity:url'
- * @param string $type   'object'
- * @param string $url    current return value
- * @param array  $params supplied params
- *
- * @return void|string
- */
-function thewire_set_url($hook, $type, $url, $params) {
-	
-	$entity = elgg_extract('entity', $params);
-	if (!$entity instanceof ElggWire) {
-		return;
-	}
-	
-	return "thewire/view/{$entity->guid}";
 }
 
 /**
@@ -88,12 +65,11 @@ function thewire_prepare_notification($hook, $type, $notification, $params) {
 
 	$entity = $params['event']->getObject();
 	$owner = $params['event']->getActor();
-	$recipient = $params['recipient'];
 	$language = $params['language'];
-	$method = $params['method'];
 	$descr = $entity->description;
 
 	$subject = elgg_echo('thewire:notify:subject', [$owner->getDisplayName()], $language);
+	$body = '';
 	if ($entity->reply) {
 		$parent = thewire_get_parent($entity->guid);
 		if ($parent) {
@@ -193,7 +169,7 @@ function thewire_save_post($text, $userid, $access_id, $parent_guid = 0, $method
 	$post->method = $method; //method: site, email, api, ...
 
 	$tags = thewire_get_hashtags($text);
-	if ($tags) {
+	if (!empty($tags)) {
 		$post->tags = $tags;
 	}
 
@@ -252,8 +228,16 @@ function thewire_save_post($text, $userid, $access_id, $parent_guid = 0, $method
  */
 function thewire_add_original_poster($hook, $type, $subscriptions, $params) {
 	$event = elgg_extract('event', $params);
+	if (!$event instanceof \Elgg\Notifications\SubscriptionNotificationEvent) {
+		return;
+	}
+
+	if ($event->getAction() !== 'create') {
+		return;
+	}
+	
 	$entity = $event->getObject();
-	if (!($entity instanceof ElggWire)) {
+	if (!$entity instanceof ElggWire) {
 		return;
 	}
 	
@@ -269,11 +253,11 @@ function thewire_add_original_poster($hook, $type, $subscriptions, $params) {
 	/* @var $parent ElggWire */
 	$parent = $parents[0];
 	// do not add a subscription if reply was to self
-	if ($parent->getOwnerGUID() === $entity->getOwnerGUID()) {
+	if ($parent->owner_guid === $entity->owner_guid) {
 		return;
 	}
 	
-	if (array_key_exists($parent->getOwnerGUID(), $subscriptions)) {
+	if (array_key_exists($parent->owner_guid, $subscriptions)) {
 		// already in the list
 		return;
 	}
@@ -292,7 +276,7 @@ function thewire_add_original_poster($hook, $type, $subscriptions, $params) {
 		return;
 	}
 	
-	$subscriptions[$parent->getOwnerGUID()] = $methods;
+	$subscriptions[$parent->owner_guid] = $methods;
 	return $subscriptions;
 }
 
@@ -358,7 +342,7 @@ function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
 			'name' => 'reply',
 			'icon' => 'reply',
 			'text' => elgg_echo('reply'),
-			'href' => "thewire/reply/{$entity->guid}",
+			'href' => elgg_generate_entity_url($entity, 'reply'),
 		]));
 	}
 
@@ -367,7 +351,7 @@ function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
 			'name' => 'previous',
 			'icon' => 'arrow-left',
 			'text' => elgg_echo('previous'),
-			'href' => "thewire/previous/{$entity->guid}",
+			'href' => elgg_generate_entity_url($entity, 'previous'),
 			'link_class' => 'thewire-previous',
 			'title' => elgg_echo('thewire:previous:help'),
 		]));
@@ -377,7 +361,9 @@ function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
 		'name' => 'thread',
 		'icon' => 'comments-o',
 		'text' => elgg_echo('thewire:thread'),
-		'href' => "thewire/thread/{$entity->wire_thread}",
+		'href' => elgg_generate_url('collection:object:thewire:thread', [
+			'guid' => $entity->wire_thread,
+		]),
 	]));
 
 	return $menu;
@@ -403,7 +389,9 @@ function thewire_owner_block_menu($hook, $type, $return, $params) {
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'thewire',
 		'text' => elgg_echo('item:object:thewire'),
-		'href' => "thewire/owner/{$params['entity']->username}",
+		'href' => elgg_generate_url('collection:object:thewire:owner', [
+			'username' => $user->username,
+		]),
 	]);
 	
 	return $return;

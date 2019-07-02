@@ -5,12 +5,10 @@ namespace Elgg;
 use Elgg\Cli\Progress;
 use Elgg\Database\Mutex;
 use Elgg\i18n\Translator;
-use Elgg\Upgrade\Batch;
 use Elgg\Upgrade\Locator;
 use Elgg\Upgrade\Loop;
 use Elgg\Upgrade\Result;
 use ElggUpgrade;
-use Psr\Log\LogLevel;
 use function React\Promise\all;
 use React\Promise\Deferred;
 use React\Promise\Promise;
@@ -377,17 +375,21 @@ class UpgradeService {
 			$upgrade_path = elgg_get_engine_path() . '/lib/upgrades/';
 		}
 		$upgrade_path = \Elgg\Project\Paths::sanitize($upgrade_path);
+		
+		if (!is_dir($upgrade_path)) {
+			return false;
+		}
+		
 		$handle = opendir($upgrade_path);
-
 		if (!$handle) {
 			return false;
 		}
 
 		$upgrade_files = [];
 
-		while ($upgrade_file = readdir($handle)) {
+		while (($upgrade_file = readdir($handle)) !== false) {
 			// make sure this is a wellformed upgrade.
-			if (is_dir($upgrade_path . '$upgrade_file')) {
+			if (!is_file($upgrade_path . $upgrade_file)) {
 				continue;
 			}
 			$upgrade_version = $this->getUpgradeFileVersion($upgrade_file);
@@ -417,6 +419,10 @@ class UpgradeService {
 			$upgrade_files = $this->getUpgradeFiles();
 		}
 
+		if (empty($upgrade_files)) {
+			return [];
+		}
+		
 		if ($processed_upgrades === null) {
 			$processed_upgrades = $this->config->processed_upgrades;
 			if (!is_array($processed_upgrades)) {
@@ -481,6 +487,46 @@ class UpgradeService {
 
 		return $pending;
 	}
+	
+	/**
+	 * Get completed (async) upgrades
+	 *
+	 * @param bool $async Include async upgrades
+	 *
+	 * @return ElggUpgrade[]
+	 */
+	public function getCompletedUpgrades($async = true) {
+		$completed = [];
+		
+		$upgrades = elgg_get_entities([
+			'type' => 'object',
+			'subtype' => 'elgg_upgrade',
+			'private_setting_name' => 'class', // filters old upgrades
+			'private_setting_name_value_pairs' => [
+				'name' => 'is_completed',
+				'value' => true,
+			],
+			'limit' => false,
+			'batch' => true,
+		]);
+		/* @var $upgrade \ElggUpgrade */
+		foreach ($upgrades as $upgrade) {
+			$batch = $upgrade->getBatch();
+			if (!$batch) {
+				continue;
+			}
+
+			$completed[] = $upgrade;
+		}
+
+		if (!$async) {
+			$completed = array_filter($completed, function(ElggUpgrade $upgrade) {
+				return !$upgrade->isAsynchronous();
+			});
+		}
+
+		return $completed;
+	}
 
 	/**
 	 * Call the upgrade's run() for a specified period of time, or until it completes
@@ -498,18 +544,20 @@ class UpgradeService {
 		return elgg_call(
 			ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES,
 			function () use ($upgrade, $max_duration) {
-				$result = new Result();
-
-				$loop = new Loop(
-					$upgrade,
-					$result,
-					$this->progress,
-					$this->logger
-				);
-
-				$loop->loop($max_duration);
-
-				return $result;
+				return $this->events->triggerSequence('upgrade:execute', 'system', $upgrade, function() use ($upgrade, $max_duration) {
+					$result = new Result();
+					
+					$loop = new Loop(
+						$upgrade,
+						$result,
+						$this->progress,
+						$this->logger
+					);
+					
+					$loop->loop($max_duration);
+					
+					return $result;
+				});
 			}
 		);
 	}

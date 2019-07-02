@@ -151,10 +151,10 @@ class ElggWidget extends \ElggObject {
 	 *
 	 * @return string
 	 * @since 1.8.0
+	 * @deprecated 3.0 use \ElggWidget::getDisplayName()
 	 */
 	public function getTitle() {
-		_elgg_services()->deprecation->sendNotice(__CLASS__ . '::' . __FUNCTION__ . ' is deprecated. '
-					. 'Use getDisplayName() instead', '3.0');
+		_elgg_services()->deprecation->sendNotice(__METHOD__ . ' is deprecated. Use \ElggWidget::getDisplayName() instead', '3.0');
 		return $this->getDisplayName();
 	}
 	
@@ -189,15 +189,16 @@ class ElggWidget extends \ElggObject {
 				['name' => 'column', 'value' => $column]
 			]
 		];
+		/* @var $widgets \ElggWidget[] */
 		$widgets = elgg_get_entities($options);
-		if (!$widgets) {
+		if (empty($widgets)) {
 			$this->column = (int) $column;
 			$this->order = 0;
 			return;
 		}
 
-		usort($widgets, function($a, $b) {return (int) $a->order > (int) $b->order;
-
+		usort($widgets, function($a, $b) {
+			return (int) $a->order > (int) $b->order;
 		});
 
 		// remove widgets from inactive plugins

@@ -93,7 +93,7 @@ class UsersTable {
 	 * Get an array of users from an email address
 	 *
 	 * @param string $email Email address
-	 * @return array
+	 * @return \ElggUser[]
 	 */
 	public function getByEmail($email) {
 		if (!$email) {
@@ -160,8 +160,8 @@ class UsersTable {
 			'limit' => $options['limit'],
 			'offset' => $options['offset'],
 			'count' => $options['count'],
-			'wheres' => function(QueryBuilder $qb) use ($time) {
-				return $qb->compare('e.last_action', '>=', $time, ELGG_VALUE_INTEGER);
+			'wheres' => function(QueryBuilder $qb, $main_alias) use ($time) {
+				return $qb->compare("{$main_alias}.last_action", '>=', $time, ELGG_VALUE_INTEGER);
 			},
 			'order_by' => new OrderByClause('e.last_action', 'DESC'),
 		]);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg;
 
 /**
@@ -10,7 +11,6 @@ namespace Elgg;
  *
  * @access private
  * @deprecated 3.0 Use ElggGroup::canAccessContent or Gatekeeper::assertAccessibleGroup
- *
  */
 class GroupItemVisibility {
 
@@ -27,6 +27,15 @@ class GroupItemVisibility {
 	 * @var string
 	 */
 	public $reasonHidden = '';
+	
+	/**
+	 * Added for deprecated notice
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+		elgg_deprecated_notice('The usage of \Elgg\GroupItemVisibility is deprecated, use ElggGroup::canAccessContent', '3.0', 2);
+	}
 
 	/**
 	 * Determine visibility of items within a container for the current user
@@ -38,7 +47,7 @@ class GroupItemVisibility {
 	 *
 	 * @deprecated 3.0 Use ElggGroup::canAccessContent
 	 */
-	static public function factory($container_guid, $use_cache = true) {
+	public static function factory($container_guid, $use_cache = true) {
 		// cache because this may be called repeatedly during river display, and
 		// due to need to check group visibility, cache will be disabled for some
 		// get_entity() calls
@@ -103,4 +112,3 @@ class GroupItemVisibility {
 		return $return;
 	}
 }
-

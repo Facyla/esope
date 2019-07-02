@@ -11,52 +11,56 @@ define(function (require) {
 	var Ajax = require('elgg/Ajax');
 	var ajax = new Ajax(false);
 
-	function changeTab($tab) {
+	function changeTab($link_item) {
 
-		$tab.siblings().andSelf().removeClass('elgg-state-selected');
-		$tab.addClass('elgg-state-selected');
-
-		var $target = $tab.data('target');
+		var $target = $link_item.data('target');
 		if (!$target || !$target.length) {
 			return false;
 		}
 
+		// find the tabs that have the selected state and remove that state
+		$target.closest('.elgg-tabs-component').find('.elgg-tabs').eq(0).find('.elgg-state-selected').removeClass('elgg-state-selected');
+		
+		$link_item.addClass('elgg-state-selected');
+		
 		$target.siblings().addClass('hidden').removeClass('elgg-state-active');
 		$target.removeClass('hidden').addClass('elgg-state-active');
 
+		// trigger scroll to close potential open menus
+		// see elgg/popup.js open function
+		$(document).trigger('scroll');
+		
 		return true;
-	}
-
-	$(document).on('click', '.elgg-tabs-component .elgg-tabs > li > a', function (e) {
-		e.preventDefault();
+	};
+	
+	var clickLink = function (event) {
 
 		var $link = $(this);
+		if ($link.hasClass('elgg-non-link')) {
+			return;
+		}
+
+		event.preventDefault();
+		
 		var $tab = $(this).parent();
-		var $component = $(this).closest('.elgg-tabs-component');
-		var $content = $component.find('.elgg-tabs-content');
+		var $content = $('.elgg-tabs-content');
 
 		var href = $link.data('ajaxHref') || $link.attr('href');
 		var $target = $tab.data('target');
-
+		if (!$target || !$target.length) {
+			// store $tagret for future use
+			$target = $($link.data('target'));
+			$tab.data('target', $target);
+		}
+		
 		if (href.indexOf('#') === 0) {
 			// Open inline tab
-			if (!$target || !$target.length) {
-				var $target = $content.find(href);
-				$tab.data('target', $target);
-			}
-
 			if (changeTab($tab)) {
 				$tab.trigger('open');
 				return;
 			}
 		} else {
 			// Load an ajax tab
-			if (!$target || !$target.length) {
-				var $target = $('<div>').addClass('elgg-content hidden');
-				$content.append($target);
-				$tab.data('target', $target);
-			}
-
 			if ($tab.data('loaded') && !$link.data('ajaxReload')) {
 				if (changeTab($tab)) {
 					$tab.trigger('open');
@@ -68,6 +72,7 @@ define(function (require) {
 				data: $link.data('ajaxQuery') || {},
 				beforeSend: function () {
 					changeTab($tab);
+					$target.html('');
 					$target.addClass('elgg-ajax-loader');
 				}
 			}).done(function (output, statusText, jqXHR) {
@@ -85,11 +90,12 @@ define(function (require) {
 				}
 			});
 		}
-	});
+	};
+
+	// register click event
+	$(document).on('click', '.elgg-components-tab > a', clickLink);
 
 	// Open selected tabs
 	// This will load any selected tabs that link to ajax views
-	$('.elgg-tabs-component .elgg-tabs > li.elgg-state-selected > a').trigger('click');
+	$('.elgg-tabs-component .elgg-components-tab.elgg-state-selected > a').trigger('click');
 });
-
-

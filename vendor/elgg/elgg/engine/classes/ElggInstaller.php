@@ -342,7 +342,7 @@ class ElggInstaller {
 		$this->checkRewriteRules($report);
 
 		// check for existence of settings file
-		if ($this->checkSettingsFile($report) != true) {
+		if ($this->checkSettingsFile($report) !== true) {
 			// no file, so check permissions on engine directory
 			$this->isInstallDirWritable($report);
 		}
@@ -734,7 +734,7 @@ class ElggInstaller {
 		try {
 			// check that the config table has been created
 			$result = $db->getData("SHOW TABLES");
-			if (!$result) {
+			if (empty($result)) {
 				return;
 			}
 			foreach ($result as $table) {
@@ -751,8 +751,8 @@ class ElggInstaller {
 			$qb = \Elgg\Database\Select::fromTable('config');
 			$qb->select('COUNT(*) AS total');
 
-			$result = $db->getData($qb);
-			if ($result && $result[0]->total > 0) {
+			$result = $db->getDataRow($qb);
+			if (!empty($result) && $result->total > 0) {
 				$this->has_completed['settings'] = true;
 			} else {
 				return;
@@ -763,8 +763,8 @@ class ElggInstaller {
 			$qb->select('COUNT(*) AS total')
 				->where($qb->compare('type', '=', 'user', ELGG_VALUE_STRING));
 
-			$result = $db->getData($qb);
-			if ($result && $result[0]->total > 0) {
+			$result = $db->getDataRow($qb);
+			if (!empty($result) && $result->total > 0) {
 				$this->has_completed['admin'] = true;
 			} else {
 				return;
@@ -1084,7 +1084,7 @@ class ElggInstaller {
 		$url .= Request::REWRITE_TEST_TOKEN . '?' . http_build_query([
 				Request::REWRITE_TEST_TOKEN => '1',
 			]);
-		$report['rewrite'] = [$tester->run($url, Paths::project())];
+		$report['rewrite'] = [$tester->run($url)];
 	}
 
 	/**
@@ -1223,7 +1223,7 @@ class ElggInstaller {
 			'dbname' => $dbname,
 			'dbencoding' => 'utf8mb4',
 		]);
-		$db = new Database($config);
+		$db = new Database($config, $app->_services->queryCache);
 
 		try {
 			$db->getDataRow("SELECT 1");
@@ -1356,7 +1356,7 @@ class ElggInstaller {
 		}
 
 		$dir = \Elgg\Project\Paths::sanitize($submissionVars['path']) . 'data';
-		if (file_exists($dir) || mkdir($dir, 0700)) {
+		if (file_exists($dir) || mkdir($dir, 0755)) {
 			$submissionVars['dataroot'] = $dir;
 			if (!file_exists("$dir/.htaccess")) {
 				$htaccess = "Order Deny,Allow\nDeny from All\n";
@@ -1432,16 +1432,15 @@ class ElggInstaller {
 
 		$app->_services->config->site = $site;
 
-		// new installations have run all the upgrades
-		$upgrades = elgg_get_upgrade_files(Paths::elgg() . "engine/lib/upgrades/");
-
 		$sets = [
 			'installed' => time(),
 			'version' => elgg_get_version(),
 			'simplecache_enabled' => 1,
 			'system_cache_enabled' => 1,
+			'simplecache_minify_js' => true,
+			'simplecache_minify_css' => true,
 			'simplecache_lastupdate' => time(),
-			'processed_upgrades' => $upgrades,
+			'processed_upgrades' => [],
 			'language' => 'en',
 			'default_access' => $submissionVars['siteaccess'],
 			'allow_registration' => false,
@@ -1569,7 +1568,7 @@ class ElggInstaller {
 			return false;
 		}
 
-		if (!$guid) {
+		if ($guid === false) {
 			$app->_services->systemMessages->addErrorMessage(elgg_echo('install:admin:cannot_create'));
 
 			return false;
@@ -1586,7 +1585,7 @@ class ElggInstaller {
 		$app = $this->getApp();
 
 		$ia = $app->_services->session->setIgnoreAccess(true);
-		if ($user->makeAdmin() == false) {
+		if (!$user->makeAdmin()) {
 			$app->_services->systemMessages->addErrorMessage(elgg_echo('install:error:adminaccess'));
 		} else {
 			$app->_services->configTable->set('admin_registered', 1);
@@ -1594,7 +1593,7 @@ class ElggInstaller {
 		$app->_services->session->setIgnoreAccess($ia);
 
 		// add validation data to satisfy user validation plugins
-		$user->validated = 1;
+		$user->validated = true;
 		$user->validated_method = 'admin_user';
 
 		if (!$login) {
@@ -1603,10 +1602,10 @@ class ElggInstaller {
 
 		$this->createSessionFromDatabase();
 		try {
-			if (login($user) == false) {
-				$app->_services->systemMessages->addErrorMessage(elgg_echo('install:error:adminlogin'));
-			}
+			login($user);
 		} catch (LoginException $ex) {
+			$app->_services->systemMessages->addErrorMessage(elgg_echo('install:error:adminlogin'));
+			
 			return false;
 		}
 

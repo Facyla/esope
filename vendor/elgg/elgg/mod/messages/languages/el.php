@@ -23,7 +23,8 @@ return array(
 
 	'messages:error' => 'Παρουσιάστηκε πρόβλημα κατά την αποθήκευση του μηνύματος σας. Παρακαλούμε προσπαθήστε ξανά.',
 
-	'item:object:messages' => 'Μηνύματα',
+	'item:object:messages' => 'Message',
+	'collection:object:messages' => 'Messages',
 
 	/**
 	* Status messages
@@ -41,21 +42,17 @@ return array(
 	*/
 
 	'messages:email:subject' => 'Έχετε ένα νέο μήνυμα!',
-	'messages:email:body' => "You have a new message from %s. It reads:
+	'messages:email:body' => "You have a new message from %s.
 
+It reads:
 
-	%s
+%s
 
+To view your messages, click here:
+%s
 
-	To view your messages, click here:
-
-	%s
-
-	To send %s a message, click here:
-
-	%s
-
-	Please do not reply to this email.",
+To send %s a message, click here:
+%s",
 
 	/**
 	* Error messages

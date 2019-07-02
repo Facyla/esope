@@ -1297,8 +1297,8 @@ function elgg_batch_disable_callback($object) {
  * Requests not handled are forwarded to the front page with a reason of 404.
  * Plugins can register for the 'forward', '404' plugin hook. @see forward()
  *
- * @param string $identifier The page type identifier
- * @param string $function   Your function name
+ * @param string   $identifier The page type identifier
+ * @param callable $function   Your function name
  *
  * @return bool Depending on success
  * @deprecated 3.0 Use elgg_register_route() to register a named route
@@ -1653,17 +1653,20 @@ function elgg_get_upgrade_files($upgrade_path = null) {
 		$upgrade_path = elgg_get_engine_path() . '/lib/upgrades/';
 	}
 	$upgrade_path = \Elgg\Project\Paths::sanitize($upgrade_path);
+	
+	if (!is_dir($upgrade_path)) {
+		return false;
+	}
 	$handle = opendir($upgrade_path);
-
 	if (!$handle) {
 		return false;
 	}
 
 	$upgrade_files = [];
 
-	while ($upgrade_file = readdir($handle)) {
+	while (($upgrade_file = readdir($handle)) !== false) {
 		// make sure this is a well formed upgrade.
-		if (is_dir($upgrade_path . '$upgrade_file')) {
+		if (!is_file($upgrade_path . $upgrade_file)) {
 			continue;
 		}
 		$upgrade_version = elgg_get_upgrade_file_version($upgrade_file);

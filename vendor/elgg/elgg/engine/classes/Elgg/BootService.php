@@ -4,9 +4,7 @@ namespace Elgg;
 
 use Elgg\Database\SiteSecret;
 use Elgg\Di\ServiceProvider;
-use Elgg\Project\Paths;
 use ElggCache;
-use Stash\Invalidation;
 
 /**
  * Boots Elgg and manages a cache of data needed during boot
@@ -67,7 +65,7 @@ class BootService {
 			$config->bootdata_plugin_settings_limit = self::DEFAULT_BOOTDATA_PLUGIN_SETTINGS_LIMIT;
 		}
 		if ($config->simplecache_enabled === null) {
-			$config->simplecache_enabled = 0;
+			$config->simplecache_enabled = false;
 		}
 		if ($config->system_cache_enabled === null) {
 			$config->system_cache_enabled = false;
@@ -136,7 +134,7 @@ class BootService {
 			$services->dataCache->metadata->save($guid, $metadata);
 		}
 
-		$services->plugins->setBootPlugins($data->getActivePlugins());
+		$services->plugins->setBootPlugins($data->getActivePlugins(), false);
 
 		// use value in settings.php if available
 		$debug = $config->hasInitialValue('debug') ? $config->getInitialValue('debug') : $config->debug;
@@ -151,14 +149,7 @@ class BootService {
 		}
 
 		// we don't store langs in boot data because it varies by user
-		$services->translator->loadTranslations();
-
-		// invalidate on some actions just in case other invalidation triggers miss something
-		$services->hooks->registerHandler('action', 'all', function ($action) {
-			if (0 === strpos($action, 'admin/' || $action === 'plugins/settings/save')) {
-				$this->invalidateCache();
-			}
-		}, 1);
+		$services->translator->bootTranslations();
 	}
 
 	/**

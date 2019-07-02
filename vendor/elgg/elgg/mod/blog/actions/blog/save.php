@@ -73,12 +73,6 @@ foreach ($values as $name => $default) {
 			$values[$name] = string_to_tag_array($value);
 			break;
 
-		case 'excerpt':
-			if ($value) {
-				$values[$name] = elgg_get_excerpt($value);
-			}
-			break;
-
 		case 'container_guid':
 			// this can't be empty or saving the base entity fails
 			if (!empty($value)) {
@@ -100,7 +94,7 @@ foreach ($values as $name => $default) {
 }
 
 // if preview, force status to be draft
-if ($save == false) {
+if (!$save) {
 	$values['status'] = 'draft';
 }
 
@@ -160,7 +154,7 @@ if (($new_post || $old_status == 'draft') && $status == 'published') {
 	]);
 }
 
-if ($blog->status == 'published' || $save == false) {
+if ($blog->status == 'published' || !$save) {
 	$forward_url = $blog->getURL();
 } else {
 	$forward_url = elgg_generate_url('edit:object:blog', [

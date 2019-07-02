@@ -5,7 +5,7 @@
  * @property string $status      The published status of the blog post (published, draft)
  * @property string $comments_on Whether commenting is allowed (Off, On)
  * @property string $excerpt     An excerpt of the blog post used when displaying the post
- * @property string $new_post    Whether this is an auto-save (not fully saved) ("1" = yes, "" = no)
+ * @property int    $new_post    Whether this is an auto-save (not fully saved) (1 = yes, "" = no)
  */
 class ElggBlog extends ElggObject {
 
@@ -32,7 +32,7 @@ class ElggBlog extends ElggObject {
 	 */
 	public function canComment($user_guid = 0, $default = null) {
 		$result = parent::canComment($user_guid, $default);
-		if ($result == false) {
+		if (!$result) {
 			return $result;
 		}
 
@@ -51,11 +51,9 @@ class ElggBlog extends ElggObject {
 	 * @since 1.9.0
 	 */
 	public function getExcerpt($length = 250) {
-		if ($this->excerpt) {
-			return $this->excerpt;
-		} else {
-			return elgg_get_excerpt($this->description, $length);
-		}
+		$excerpt = $this->excerpt ?: $this->description;
+		
+		return elgg_get_excerpt($excerpt, $length);
 	}
 
 }

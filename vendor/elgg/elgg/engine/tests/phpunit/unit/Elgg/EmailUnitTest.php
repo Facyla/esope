@@ -3,6 +3,7 @@
 namespace Elgg;
 
 use Elgg\Email\Address;
+use Zend\Mime\Mime;
 
 /**
  * @group EmailService
@@ -11,11 +12,19 @@ use Elgg\Email\Address;
 class EmailUnitTest extends UnitTestCase {
 
 	public function up() {
-
+		// set site email address to avoid random string test errors
+		$site = elgg_get_site_entity();
+		if (!isset($site->email)) {
+			$site->email = "unittest@{$site->getDomain()}";
+		}
 	}
 
 	public function down() {
-
+		// restore site email address
+		$site = elgg_get_site_entity();
+		if ($site->email === "unittest@{$site->getDomain()}") {
+			unset($site->email);
+		}
 	}
 
 	public function testFactoryFromElggUser() {
@@ -229,7 +238,8 @@ class EmailUnitTest extends UnitTestCase {
 		$email_parts = $email->getAttachments();
 		$email_part = $email_parts[0];
 		
-		$this->assertEquals($file->grabFile(), $email_part->getContent());
+		$this->assertEquals(Mime::ENCODING_BASE64, $email_part->getEncoding());
+		$this->assertEquals($file->grabFile(), base64_decode($email_part->getContent()));
 		$this->assertEquals($file->getMimeType(), $email_part->getType());
 		$this->assertEquals($file->getFilename(), $email_part->getFileName());
 	}

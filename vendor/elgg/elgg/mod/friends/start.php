@@ -147,7 +147,9 @@ function _elgg_friends_topbar_menu($hook, $type, $return, $params) {
 		
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'friends',
-		'href' => "friends/{$viewer->username}",
+		'href' => elgg_generate_url('collection:friends:owner', [
+			'username' => $viewer->username,
+		]),
 		'text' => elgg_echo('friends'),
 		'icon' => 'users',
 		'title' => elgg_echo('friends'),
@@ -182,14 +184,18 @@ function _elgg_friends_page_menu($hook, $type, $return, $params) {
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'friends',
 		'text' => elgg_echo('friends'),
-		'href' => 'friends/' . $owner->username,
+		'href' => elgg_generate_url('collection:friends:owner', [
+			'username' => $owner->username,
+		]),
 		'contexts' => ['friends'],
 	]);
 
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'friends:of',
 		'text' => elgg_echo('friends:of'),
-		'href' => 'friendsof/' . $owner->username,
+		'href' => elgg_generate_url('collection:friends_of:owner', [
+			'username' => $owner->username,
+		]),
 		'contexts' => ['friends'],
 	]);
 
@@ -203,20 +209,21 @@ function _elgg_friends_page_menu($hook, $type, $return, $params) {
  * @param string            $type   'relationship'
  * @param \ElggRelationship $object Object
  *
- * @return bool
+ * @return void
  * @access private
  */
 function _elgg_send_friend_notification($event, $type, $object) {
-	if ($object->relationship != 'friend') {
-		return true;
+	
+	if (!$object instanceof ElggRelationship) {
+		return;
+	}
+	
+	if ($object->relationship !== 'friend') {
+		return;
 	}
 
 	$user_one = get_entity($object->guid_one);
-	/* @var \ElggUser $user_one */
-
 	$user_two = get_entity($object->guid_two);
-	/* @var ElggUser $user_two */
-
 	if (!$user_one instanceof ElggUser || !$user_two instanceof ElggUser) {
 		return;
 	}
@@ -240,7 +247,7 @@ function _elgg_send_friend_notification($event, $type, $object) {
 		'url' => $user_two->getURL(),
 	];
 
-	return notify_user($user_two->guid, $object->guid_one, $subject, $body, $params);
+	notify_user($user_two->guid, $object->guid_one, $subject, $body, $params);
 }
 
 /**
@@ -281,12 +288,13 @@ function _elgg_friends_filter_tabs($hook, $type, $items, $params) {
  * @param string $type   Hook type
  * @param string $result URL
  * @param array  $params Parameters
- * @return string|null
+ *
+ * @return void|string
  * @access private
  */
 function _elgg_friends_widget_urls($hook, $type, $result, $params) {
 	$widget = elgg_extract('entity', $params);
-	if (!($widget instanceof \ElggWidget)) {
+	if (!$widget instanceof \ElggWidget) {
 		return;
 	}
 	
@@ -295,11 +303,17 @@ function _elgg_friends_widget_urls($hook, $type, $result, $params) {
 	}
 	
 	$owner = $widget->getOwnerEntity();
-	if (!($owner instanceof \ElggUser)) {
+	if (!$owner instanceof \ElggUser) {
 		return;
 	}
-			
-	return "friends/{$owner->username}";
+	
+	$url = elgg_generate_url('collection:friends:owner', [
+		'username' => $owner->username,
+	]);
+	if (empty($url)) {
+		return;
+	}
+	return $url;
 }
 
 return function() {

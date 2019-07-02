@@ -39,7 +39,7 @@ function get_input($variable, $default = null, $filter_result = true) {
  * @return void
  */
 function set_input($variable, $value) {
-	_elgg_services()->request->setParam($variable, $value);
+	_elgg_services()->request->setParam($variable, $value, true);
 }
 
 /**
@@ -190,6 +190,21 @@ function elgg_get_sticky_values($form_name, $filter_result = true) {
  */
 function elgg_clear_sticky_value($form_name, $variable) {
 	_elgg_services()->stickyForms->clearStickyValue($form_name, $variable);
+}
+
+/**
+ * Check if a value isn't empty, but allow 0 and '0'
+ *
+ * @param mixed $value the value to check
+ *
+ * @see empty()
+ * @see Elgg\Values::isEmpty()
+ *
+ * @return bool
+ * @since 3.0.0
+ */
+function elgg_is_empty($value) {
+	return Elgg\Values::isEmpty($value);
 }
 
 /**

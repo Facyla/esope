@@ -2,9 +2,9 @@
 
 namespace Elgg;
 
+use Elgg\I18n\DateTime as ElggDateTime;
 use DataFormatException;
-use DateTime;
-use DateTimeZone;
+use DateTime as PHPDateTime;
 use Exception;
 
 
@@ -56,7 +56,7 @@ class Values {
 	/**
 	 * Returns timestamp value of the time representation
 	 *
-	 * @param DateTime|string|int $time Time
+	 * @param \DateTime|\Elgg\I18n\DateTime|string|int $time Time
 	 *
 	 * @return int
 	 * @throws DataFormatException
@@ -68,20 +68,22 @@ class Values {
 	/**
 	 * Returns DateTime object based on time representation
 	 *
-	 * @param DateTime|string|int $time Time
+	 * @param \DateTime|\Elgg\I18n\DateTime|string|int $time Time
 	 *
-	 * @return DateTime
+	 * @return \Elgg\I18n\DateTime
 	 * @throws DataFormatException
 	 */
 	public static function normalizeTime($time) {
 		try {
-			if ($time instanceof DateTime) {
+			if ($time instanceof ElggDateTime) {
 				$dt = $time;
+			} elseif ($time instanceof PHPDateTime) {
+				$dt = new ElggDateTime($time->format(PHPDateTime::RFC3339_EXTENDED));
 			} else if (is_numeric($time)) {
-				$dt = new DateTime(null, new DateTimeZone('UTC'));
+				$dt = new ElggDateTime();
 				$dt->setTimestamp((int) $time);
 			} else {
-				$dt = new DateTime($time);
+				$dt = new ElggDateTime($time);
 			}
 		} catch (Exception $e) {
 			throw new DataFormatException($e->getMessage());
@@ -172,5 +174,24 @@ class Values {
 	 */
 	public static function preventViewOutput() {
 		return ['__view_output' => ''];
+	}
+	
+	/**
+	 * Check if a value isn't empty, but allow 0 and '0'
+	 *
+	 * @param mixed $value the value to check
+	 *
+	 * @see empty()
+	 *
+	 * @return bool
+	 * @since 3.0.0
+	 */
+	public static function isEmpty($value) {
+		
+		if ($value === 0 || $value === '0' || $value === 0.0) {
+			return false;
+		}
+		
+		return empty($value);
 	}
 }

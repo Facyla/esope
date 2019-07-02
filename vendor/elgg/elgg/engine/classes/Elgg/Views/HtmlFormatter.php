@@ -142,12 +142,15 @@ class HtmlFormatter {
 	 **/
 	public function addParagaraphs($string) {
 		try {
-			return $this->autop->process($string);
+			$result = $this->autop->process($string);
+			if ($result !== false) {
+				return $result;
+			}
 		} catch (\RuntimeException $e) {
 			$this->logger->warning('ElggAutoP failed to process the string: ' . $e->getMessage());
-
-			return $string;
 		}
+		
+		return $string;
 	}
 
 	/**
@@ -174,7 +177,7 @@ class HtmlFormatter {
 	 * @see elgg_format_element()
 	 */
 	public function formatAttributes(array $attrs = []) {
-		if (!is_array($attrs) || empty($attrs)) {
+		if (empty($attrs)) {
 			return '';
 		}
 
@@ -196,6 +199,11 @@ class HtmlFormatter {
 				$val = $attr; //e.g. checked => true ==> checked="checked"
 			}
 
+			if (is_array($val) && empty($val)) {
+				//e.g. ['class' => []]
+				continue;
+			}
+			
 			if (is_scalar($val)) {
 				$val = [$val];
 			}
@@ -292,20 +300,19 @@ class HtmlFormatter {
 			$text = htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $double_encode);
 		}
 
-		if ($attributes) {
+		$attrs = '';
+		if (!empty($attributes)) {
 			$attrs = $this->formatAttributes($attributes);
 			if ($attrs !== '') {
 				$attrs = " $attrs";
 			}
-		} else {
-			$attrs = '';
 		}
 
 		if ($is_void) {
 			return empty($options['is_xml']) ? "<{$tag_name}{$attrs}>" : "<{$tag_name}{$attrs} />";
-		} else {
-			return "<{$tag_name}{$attrs}>$text</$tag_name>";
 		}
+		
+		return "<{$tag_name}{$attrs}>$text</$tag_name>";
 	}
 
 	/**
@@ -319,8 +326,10 @@ class HtmlFormatter {
 	 * @return string String run through strip_tags() and any plugin hooks.
 	 */
 	public function stripTags($string, $allowable_tags = null) {
-		$params['original_string'] = $string;
-		$params['allowable_tags'] = $allowable_tags;
+		$params = [
+			'original_string' => $string,
+			'allowable_tags' => $allowable_tags,
+		];
 
 		$string = strip_tags($string, $allowable_tags);
 		$string = $this->hooks->trigger('format', 'strip_tags', $params, $string);

@@ -2,6 +2,8 @@
 /**
  * Display user's bookmarks
  *
+ * Note: this view has a corresponding view in the rss view type, changes should be reflected
+ *
  * @uses $vars['entity']
  */
 
@@ -13,9 +15,6 @@ if (!$entity instanceof ElggUser) {
 echo elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'bookmarks',
-	'full_view' => false,
 	'owner_guids' => $entity->guid,
 	'no_results' => elgg_echo('bookmarks:none'),
-	'preload_owners' => true,
-	'preload_containers' => true,
 ]);

@@ -16,3 +16,9 @@
 /mod/market/
 /mod/hypeMapsOpen/
 
+# Not ready for release
+/mod/esope/
+/mod/cmspages/
+/mod/czd_data/
+/mod/theme_test/
+

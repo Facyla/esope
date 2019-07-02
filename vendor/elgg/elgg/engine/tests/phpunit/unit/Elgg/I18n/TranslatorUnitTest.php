@@ -2,8 +2,6 @@
 
 namespace Elgg\I18n;
 
-use Elgg\Logger;
-use Elgg\Project\Paths;
 use Psr\Log\LogLevel;
 
 /**
@@ -20,7 +18,10 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 	public $translator;
 
 	public function up() {
-		$this->translator = new Translator(_elgg_config());
+		$config = elgg()->config;
+		$localeService = elgg()->locale;
+		
+		$this->translator = new Translator($config, $localeService);
 		$this->translator->loadTranslations('en');
 
 		$this->translator->addTranslation('en', [$this->key => 'Dummy']);
@@ -107,11 +108,14 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 	public function testIssuesNoticeOnMissingKey() {
 		// key is missing from all checked translations
 		$logger = _elgg_services()->logger;
+		
 		$logger->disable();
 
 		$this->assertEquals("{$this->key}b", $this->translator->translate("{$this->key}b"));
+		
 		$logged = $logger->enable();
-
+		
+		// expecting translation about missing key
 		$this->assertEquals(1, count($logged));
 
 		$message = "Missing English translation for \"{$this->key}b\" language key";
@@ -128,9 +132,9 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals([
 			[
 				'message' => "Missing es translation for \"{$this->key}b\" language key",
-				'level' => LogLevel::NOTICE,
+				'level' => LogLevel::INFO,
 			]
-				], $logged);
+		], $logged);
 	}
 
 	public function testDoesNotProcessArgsOnKey() {

@@ -9,7 +9,7 @@
  * @param string $username The username
  * @param int    $expire   Minutes until token expires (default is 60 minutes)
  *
- * @return bool
+ * @return false|string
  */
 function create_user_token($username, $expire = 60) {
 	$dbprefix = elgg_get_config('dbprefix');
@@ -25,7 +25,7 @@ function create_user_token($username, $expire = 60) {
 	if (elgg()->db->insertData("INSERT into {$dbprefix}users_apisessions
 				(user_guid, token, expires) values
 				({$user->guid}, '$token', '$time')
-				on duplicate key update token='$token', expires='$time'")) {
+				on duplicate key update token = VALUES(token), expires = VALUES(expires)")) {
 		return $token;
 	}
 
@@ -37,7 +37,7 @@ function create_user_token($username, $expire = 60) {
  *
  * @param int $user_guid The user GUID
  *
- * @return false if none available or array of stdClass objects
+ * @return false|stdClass[] false if none available or array of stdClass objects
  * 		(see users_apisessions schema for available variables in objects)
  * @since 1.7.0
  */
@@ -59,18 +59,23 @@ function get_user_tokens($user_guid) {
  *
  * @param string $token The Token.
  *
- * @return mixed The user id attached to the token if not expired or false.
+ * @return false|int The user id attached to the token if not expired or false.
  */
 function validate_user_token($token) {
 	$dbprefix = elgg_get_config('dbprefix');
-	$token = sanitise_string($token);
-	$time = time();
-
-	$user = elgg()->db->getDataRow("SELECT * from {$dbprefix}users_apisessions
-		where token='$token' and $time < expires");
-
-	if ($user) {
-		return $user->user_guid;
+	
+	$query = "SELECT *
+		FROM {$dbprefix}users_apisessions
+		WHERE token = :token
+		AND :time < expires";
+	$params = [
+		':token' => $token,
+		':time' => time(),
+	];
+	
+	$user = elgg()->db->getDataRow($query, null, $params);
+	if (!empty($user)) {
+		return (int) $user->user_guid;
 	}
 
 	return false;
@@ -86,16 +91,20 @@ function validate_user_token($token) {
  */
 function remove_user_token($token) {
 	$dbprefix = elgg_get_config('dbprefix');
-	$token = sanitise_string($token);
+	
+	$query = "DELETE FROM {$dbprefix}users_apisessions
+		WHERE token = :token";
+	$params = [
+		':token' => $token,
+	];
 
-	return elgg()->db->deleteData("DELETE from {$dbprefix}users_apisessions
-		where token='$token'");
+	return (bool) elgg()->db->deleteData($query, $params);
 }
 
 /**
  * Remove expired tokens
  *
- * @return bool
+ * @return int Number of rows removed
  * @since 1.7.0
  */
 function remove_expired_user_tokens() {
@@ -133,7 +142,7 @@ function auth_gettoken($username, $password) {
 	// validate username and password
 	if (true === elgg_authenticate($username, $password)) {
 		$token = create_user_token($username);
-		if ($token) {
+		if ($token !== false) {
 			return $token;
 		}
 	}

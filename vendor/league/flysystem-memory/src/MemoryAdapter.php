@@ -23,13 +23,20 @@ class MemoryAdapter implements AdapterInterface
      */
     protected $storage = ['' => ['type' => 'dir']];
 
+    public function __construct(Config $config = null)
+    {
+        $config = $config ?: new Config();
+
+        $this->storage['']['timestamp'] = $config->get('timestamp', time());
+    }
+
     /**
      * @inheritdoc
      */
     public function copy($path, $newpath)
     {
         // Make sure all the destination sub-directories exist.
-        if ( ! $this->doCreateDir(Util::dirname($newpath))) {
+        if ( ! $this->doCreateDir(Util::dirname($newpath), new Config())) {
             return false;
         }
 
@@ -43,7 +50,7 @@ class MemoryAdapter implements AdapterInterface
      */
     public function createDir($dirname, Config $config)
     {
-        if ( ! $this->doCreateDir($dirname)) {
+        if ( ! $this->doCreateDir($dirname, $config)) {
             return false;
         }
 
@@ -98,7 +105,8 @@ class MemoryAdapter implements AdapterInterface
      */
     public function getMimetype($path)
     {
-        $mimetype = Util::guessMimeType($path, $this->storage[$path]['contents']);
+        $mimetype = isset($this->storage[$path]['mimetype']) ? $this->storage[$path]['mimetype'] :
+            Util::guessMimeType($path, $this->storage[$path]['contents']);
 
         return [
             'mimetype' => $mimetype,
@@ -166,6 +174,10 @@ class MemoryAdapter implements AdapterInterface
     {
         $stream = fopen('php://memory', 'w+b');
 
+        if ( ! is_resource($stream)) {
+            throw new \RuntimeException('Unable to create memory stream.'); // @codeCoverageIgnore
+        }
+
         fwrite($stream, $this->storage[$path]['contents']);
         rewind($stream);
 
@@ -212,6 +224,9 @@ class MemoryAdapter implements AdapterInterface
         $this->storage[$path]['timestamp'] = $config->get('timestamp', time());
         $this->storage[$path]['size'] = Util::contentSize($contents);
         $this->storage[$path]['visibility'] = $config->get('visibility', $this->storage[$path]['visibility']);
+        if ($config->has('mimetype')) {
+            $this->storage[$path]['mimetype'] = $config->get('mimetype');
+        }
 
         return $this->getMetadata($path);
     }
@@ -222,7 +237,7 @@ class MemoryAdapter implements AdapterInterface
     public function write($path, $contents, Config $config)
     {
         // Make sure all the destination sub-directories exist.
-        if ( ! $this->doCreateDir(Util::dirname($path))) {
+        if ( ! $this->doCreateDir(Util::dirname($path), $config)) {
             return false;
         }
 
@@ -236,10 +251,11 @@ class MemoryAdapter implements AdapterInterface
      * Creates a directory.
      *
      * @param string $dirname
+     * @param Config $config
      *
      * @return bool
      */
-    protected function doCreateDir($dirname)
+    protected function doCreateDir($dirname, Config $config)
     {
         if ($this->hasDirectory($dirname)) {
             return true;
@@ -250,11 +266,12 @@ class MemoryAdapter implements AdapterInterface
         }
 
         // Make sure all the sub-directories exist.
-        if ( ! $this->doCreateDir(Util::dirname($dirname))) {
+        if ( ! $this->doCreateDir(Util::dirname($dirname), $config)) {
             return false;
         }
 
         $this->storage[$dirname]['type'] = 'dir';
+        $this->storage[$dirname]['timestamp'] = $config->get('timestamp', time());
 
         return true;
     }

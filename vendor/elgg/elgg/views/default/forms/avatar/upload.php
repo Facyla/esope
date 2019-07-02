@@ -6,15 +6,9 @@
  */
 
 $entity = elgg_extract('entity', $vars);
-if (!$entity instanceof \ElggEntity) {
+if (!$entity instanceof \ElggUser) {
 	return;
 }
-
-echo elgg_view_field([
-	'#type' => 'file',
-	'#label' => elgg_echo('avatar:upload'),
-	'name' => 'avatar',
-]);
 
 echo elgg_view_field([
 	'#type' => 'hidden',
@@ -22,9 +16,14 @@ echo elgg_view_field([
 	'value' => $entity->guid,
 ]);
 
+echo elgg_view('entity/edit/icon', [
+	'entity' => $entity,
+	'name' => 'avatar',
+]);
+
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('upload'),
+	'value' => elgg_echo('save'),
 ]);
 
 elgg_set_form_footer($footer);

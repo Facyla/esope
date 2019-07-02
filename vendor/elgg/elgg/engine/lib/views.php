@@ -742,9 +742,8 @@ function _elgg_normalize_content_layout_vars(array $vars = []) {
  *                              items => an array of unprepared menu items
  *                                       as ElggMenuItem or menu item factory options
  *                              sort_by => string or php callback
- *                                  string options: 'name', 'priority', 'title' (default),
- *                                  'register' (registration order) or a
- *                                  php callback (a compare function for usort)
+ *                                  string options: 'name', 'priority' (default), 'text'
+ *                                  or a php callback (a compare function for usort)
  *                              handler: string the page handler to build action URLs
  *                              entity: \ElggEntity to use to build action URLs
  *                              class: string the class for the entire menu.
@@ -834,26 +833,24 @@ function elgg_view_menu_item(\ElggMenuItem $item, array $vars = []) {
  *
  * @param \ElggEntity $entity The entity to display
  * @param array       $vars   Array of variables to pass to the entity view.
- *      'full_view'        Whether to show a full or condensed view. (Default: true)
- *      'item_view'        Alternative view used to render this entity
+ *      'full_view'           Whether to show a full or condensed view. (Default: true)
+ *      'item_view'           Alternative view used to render this entity
+ *      'register_rss_link'   Register the rss link availability (default: depending on full_view)
  *
- * @return string HTML to display or false
+ * @return false|string HTML to display or false
  * @todo The annotation hook might be better as a generic plugin hook to append content.
  */
 function elgg_view_entity(\ElggEntity $entity, array $vars = []) {
-
-	// No point continuing if entity is null
-	if (!$entity || !($entity instanceof \ElggEntity)) {
-		return false;
-	}
-
-	elgg_register_rss_link();
 
 	$defaults = [
 		'full_view' => true,
 	];
 
 	$vars = array_merge($defaults, $vars);
+	
+	if (elgg_extract('register_rss_link', $vars, elgg_extract('full_view', $vars))) {
+		elgg_register_rss_link();
+	}
 
 	$vars['entity'] = $entity;
 
@@ -902,11 +899,6 @@ function elgg_view_entity(\ElggEntity $entity, array $vars = []) {
  */
 function elgg_view_entity_icon(\ElggEntity $entity, $size = 'medium', $vars = []) {
 
-	// No point continuing if entity is null
-	if (!$entity || !($entity instanceof \ElggEntity)) {
-		return false;
-	}
-
 	$vars['entity'] = $entity;
 	$vars['size'] = $size;
 
@@ -918,7 +910,7 @@ function elgg_view_entity_icon(\ElggEntity $entity, $size = 'medium', $vars = []
 	if (elgg_view_exists("icon/$entity_type/$subtype")) {
 		$contents = elgg_view("icon/$entity_type/$subtype", $vars);
 	}
-	if (empty($contents)) {
+	if (empty($contents) && elgg_view_exists("icon/$entity_type/default")) {
 		$contents = elgg_view("icon/$entity_type/default", $vars);
 	}
 	if (empty($contents)) {
@@ -944,11 +936,9 @@ function elgg_view_entity_icon(\ElggEntity $entity, $size = 'medium', $vars = []
  * @param array           $vars       Variable array for view.
  *      'item_view'  Alternative view used to render an annotation
  *
- * @return string/false Rendered annotation
+ * @return string|false Rendered annotation
  */
 function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = []) {
-	elgg_register_rss_link();
-
 	$defaults = [
 		'full_view' => true,
 	];
@@ -992,7 +982,8 @@ function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = []) {
  *      'full_view'        Display the full view of the entities?
  *      'list_class'       CSS class applied to the list
  *      'item_class'       CSS class applied to the list items
- *      'item_view'        Alternative view to render list items
+ *      'item_view'        Alternative view to render list items content
+ *      'list_item_view'   Alternative view to render list items
  *      'pagination'       Display pagination?
  *      'base_url'         Base URL of list (optional)
  *      'url_fragment'     URL fragment to add to links if not present in base_url (optional)
@@ -1027,13 +1018,12 @@ function elgg_view_entity_list($entities, array $vars = []) {
 		$vars["pagination"] = false;
 	}
 
-	if ($vars['list_type'] == 'table') {
-		return elgg_view('page/components/table', $vars);
-	} elseif ($vars['list_type'] == 'list') {
-		return elgg_view('page/components/list', $vars);
-	} else {
-		return elgg_view('page/components/gallery', $vars);
+	$view = "page/components/{$vars['list_type']}";
+	if (!elgg_view_exists($view)) {
+		$view = 'page/components/list';
 	}
+	
+	return elgg_view($view, $vars);
 }
 
 /**
@@ -1089,10 +1079,7 @@ function elgg_view_annotation_list($annotations, array $vars = []) {
  * @todo Change the hook name.
  */
 function elgg_view_entity_annotations(\ElggEntity $entity, $full_view = true) {
-	if (!($entity instanceof \ElggEntity)) {
-		return false;
-	}
-
+	
 	$entity_type = $entity->getType();
 
 	$annotations = elgg_trigger_plugin_hook('entity:annotate', $entity_type,
@@ -1153,7 +1140,8 @@ function elgg_view_friendly_time($time) {
  * @return string|false Rendered comments or false on failure
  */
 function elgg_view_comments($entity, $add_comment = true, array $vars = []) {
-	if (!($entity instanceof \ElggEntity)) {
+	
+	if (!$entity instanceof \ElggEntity) {
 		return false;
 	}
 
@@ -1164,9 +1152,9 @@ function elgg_view_comments($entity, $add_comment = true, array $vars = []) {
 	$output = elgg_trigger_plugin_hook('comments', $entity->getType(), $vars, false);
 	if ($output !== false) {
 		return $output;
-	} else {
-		return elgg_view('page/elements/comments', $vars);
 	}
+	
+	return elgg_view('page/elements/comments', $vars);
 }
 
 /**
@@ -1240,7 +1228,8 @@ function elgg_view_message($type, $body, array $vars = []) {
  *
  * @param \ElggRiverItem $item A river item object
  * @param array          $vars An array of variables for the view
- *      'item_view'  Alternative view to render the item
+ *      'item_view'         Alternative view to render the item
+ *      'register_rss_link' Register the rss link availability (default: false)
  * @return string returns empty string if could not be rendered
  */
 function elgg_view_river_item($item, array $vars = []) {
@@ -1257,6 +1246,10 @@ function elgg_view_river_item($item, array $vars = []) {
 	if (!$subject || !$object) {
 		// subject is disabled or subject/object deleted
 		return '';
+	}
+	
+	if (elgg_extract('register_rss_link', $vars)) {
+		elgg_register_rss_link();
 	}
 
 	$vars['item'] = $item;
@@ -1524,7 +1517,7 @@ function elgg_view_tagcloud(array $options = []) {
  *                    'item_view' - Alternative view used to render list items
  *                                  This parameter is required if rendering
  *                                  list items that are not entity, annotation or river
- * @return string
+ * @return false|string
  * @since 1.8.0
  * @access private
  */
@@ -1600,14 +1593,10 @@ function elgg_unregister_rss_link() {
  * @access private
  */
 function _elgg_has_rss_link() {
-	if (!_elgg_config()->disable_rss) {
+	if (_elgg_config()->disable_rss) {
 		return false;
 	}
 
-	if (isset($GLOBALS['autofeed']) && is_bool($GLOBALS['autofeed'])) {
-		elgg_deprecated_notice('Do not set the global $autofeed. Use elgg_register_rss_link()', '2.1');
-		return $GLOBALS['autofeed'];
-	}
 	return (bool) _elgg_config()->_elgg_autofeed;
 }
 
@@ -1781,7 +1770,7 @@ function elgg_views_boot() {
 	elgg_register_js('elgg', elgg_get_simplecache_url('elgg.js'), 'head');
 	elgg_load_js('elgg');
 
-	elgg_register_css('font-awesome', elgg_get_simplecache_url('font-awesome/css/font-awesome.css'));
+	elgg_register_css('font-awesome', elgg_get_simplecache_url('font-awesome/css/all.min.css'));
 	elgg_load_css('font-awesome');
 
 	elgg_register_css('elgg', elgg_get_simplecache_url('elgg.css'));
@@ -1830,14 +1819,14 @@ function elgg_views_boot() {
 	elgg_register_plugin_hook_handler('head', 'page', '_elgg_views_prepare_favicon_links', 1);
 
 	// set default icon sizes - can be overridden with plugin
-	if (!_elgg_config()->icon_sizes) {
+	if (!_elgg_config()->hasValue('icon_sizes')) {
 		$icon_sizes = [
 			'topbar' => ['w' => 16, 'h' => 16, 'square' => true, 'upscale' => true],
 			'tiny' => ['w' => 25, 'h' => 25, 'square' => true, 'upscale' => true],
 			'small' => ['w' => 40, 'h' => 40, 'square' => true, 'upscale' => true],
 			'medium' => ['w' => 100, 'h' => 100, 'square' => true, 'upscale' => true],
 			'large' => ['w' => 200, 'h' => 200, 'square' => true, 'upscale' => true],
-			'master' => ['w' => 2048, 'h' => 2048, 'square' => false, 'upscale' => false],
+			'master' => ['w' => 10240, 'h' => 10240, 'square' => false, 'upscale' => false, 'crop' => false],
 		];
 		elgg_set_config('icon_sizes', $icon_sizes);
 	}
@@ -1936,15 +1925,16 @@ function _elgg_get_js_page_data() {
  * @access private
  */
 function _elgg_view_under_viewtype($view, $vars, $viewtype) {
+	$current_view_type = null;
 	if ($viewtype) {
-		$old = elgg_get_viewtype();
+		$current_view_type = elgg_get_viewtype();
 		elgg_set_viewtype($viewtype);
 	}
 
 	$ret = elgg_view($view, $vars);
 
-	if ($viewtype) {
-		elgg_set_viewtype($old);
+	if (isset($current_view_type)) {
+		elgg_set_viewtype($current_view_type);
 	}
 
 	return $ret;
@@ -2709,14 +2699,27 @@ function _elgg_map_icon_glyph_class(array $classes, $map_sprites = true) {
 
 				$base_icon = elgg_extract($base_icon, $legacy_sprites, $base_icon);
 			}
-
-			if (array_key_exists($base_icon, $fa5)) {
-				$classes[] = $fa5[$base_icon][1];
-				$base_icon = $fa5[$base_icon][0];
-			} else if (in_array($base_icon, $brands)) {
-				$classes[] = 'fab';
-			} else {
+			
+			// map solid/regular/light iconnames to correct classes
+			if (preg_match('/.*-solid$/', $base_icon)) {
+				$base_icon = preg_replace('/(.*)-solid$/', '$1', $base_icon);
 				$classes[] = 'fas';
+			} elseif (preg_match('/.*-regular$/', $base_icon)) {
+				$base_icon = preg_replace('/(.*)-regular$/', '$1', $base_icon);
+				$classes[] = 'far';
+			} elseif (preg_match('/.*-light$/', $base_icon)) {
+				// currently light is only available in FontAwesome 5 Pro
+				$base_icon = preg_replace('/(.*)-light$/', '$1', $base_icon);
+				$classes[] = 'fal';
+			} else {
+				if (array_key_exists($base_icon, $fa5)) {
+					$classes[] = $fa5[$base_icon][1];
+					$base_icon = $fa5[$base_icon][0];
+				} else if (in_array($base_icon, $brands)) {
+					$classes[] = 'fab';
+				} else {
+					$classes[] = 'fas';
+				}
 			}
 
 			$classes[] = "fa-{$base_icon}";
@@ -2726,5 +2729,4 @@ function _elgg_map_icon_glyph_class(array $classes, $map_sprites = true) {
 	$classes = array_unique($classes);
 
 	return elgg_trigger_plugin_hook('classes', 'icon', null, $classes);
-
 }

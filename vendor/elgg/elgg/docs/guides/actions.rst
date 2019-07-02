@@ -172,7 +172,7 @@ This is done as follows:
      if (($token) && (captcha_verify_captcha($input, $token))) {
        return true;
      }
-  
+
      register_error(elgg_echo('captcha:captchafail'));
 
      return false;
@@ -258,7 +258,7 @@ Now when you call ``elgg_view_form('example')``, Elgg will produce:
      <fieldset>
        <input type="hidden" name="__elgg_ts" value="...">
        <input type="hidden" name="__elgg_token" value="...">
- 
+
        <input type="text" class="elgg-input-text" name="example">
        <div class="elgg-foot elgg-form-footer">
            <input type="submit" class="elgg-button elgg-button-submit" value="Submit">
@@ -322,7 +322,7 @@ The above will generate the following markup:
    <div class="elgg-field elgg-field-required">
       <label for="elgg-field-1" class="elgg-field-label">Blog status<span title="Required" class="elgg-required-indicator">*</span></label>
       <div class="elgg-field-input">
-      	 <select required="required" name="status" data-rel="blog" id="elgg-field-1" class="elgg-input-select">
+         <select required="required" name="status" data-rel="blog" id="elgg-field-1" class="elgg-input-select">
             <option value="draft">Draft</option>
             <option value="published">Published</option>
          </select>
@@ -374,6 +374,33 @@ Use the input/file view in your form’s content view.
    // /mod/example/views/default/forms/example.php
    echo elgg_view('input/file', array('name' => 'icon'));
 
+
+If you wish to upload an icon for entity you can use the helper view ``entity/edit/icon``.
+This view shows a file input for uploading a new icon for the entity, an thumbnail of the current icon and the option to remove the current icon.
+
+The view supports some variables to control the output
+
+* ``entity`` - the entity to add/remove the icon for. If provided based on this entity the thumbnail and remove option wil be shown
+* ``entity_type`` - the entity type for which the icon will be uploaded. Plugins could find this usefull, maybe to validate icon sizes
+* ``entity_subtype`` - the entity subtype for which the icon will be uploaded. Plugins could find this usefull, maybe to validate icon sizes
+* ``icon_type`` - the type of the icon (default: icon)
+* ``name`` - name of the input/file (default: icon)
+* ``remove_name`` - name of the remove icon toggle (default: $vars['name'] . '_remove')
+* ``required`` - is icon upload required (default: false)
+* ``show_remove`` - show the remove icon option (default: true)
+* ``show_thumb`` - show the thumb of the entity if available (default: true)
+* ``thumb_size`` - the icon size to use as the thumb (default: medium)
+
+If using the helper view you can use the following code in you action to save the icon to the entity or remove the current icon.
+
+.. code-block:: php
+
+   if (get_input('icon_remove')) {
+      $entity->deleteIcon();
+   } else {
+      $entity->saveIconFromUploadedFile('icon');
+   }
+
 Set the enctype of the form to multipart/form-data:
 
 .. code-block:: php
@@ -382,11 +409,15 @@ Set the enctype of the form to multipart/form-data:
      'enctype' => 'multipart/form-data'
    ));
 
-In your action file, use the ``$_FILES`` global to access the uploaded file:
+.. note::
+
+   The ``enctype`` of all forms that use the method ``POST`` defaults to ``multipart/form-data``. 
+
+In your action file, use ``elgg_get_uploaded_file('your-input-name')`` to access the uploaded file:
 
 .. code-block:: php
 
-   $icon = $_FILES['icon']
+   $icon = elgg_get_uploaded_file('icon');
 
 Sticky forms
 ============
@@ -432,10 +463,10 @@ The registration form view first sets default values for inputs, then checks if 
    $username = get_input('u');
    $email = get_input('e');
    $name = get_input('n');
- 
+
    if (elgg_is_sticky_form('register')) {
-	extract(elgg_get_sticky_values('register'));
-	elgg_clear_sticky_form('register');
+      extract(elgg_get_sticky_values('register'));
+      elgg_clear_sticky_form('register');
    }
 
 The registration action sets creates the sticky form and clears it once the action is completed:
@@ -444,14 +475,14 @@ The registration action sets creates the sticky form and clears it once the acti
 
    // actions/register.php
    elgg_make_sticky_form('register');
- 
+
    ...
- 
+
    $guid = register_user($username, $password, $name, $email, false, $friend_guid, $invitecode);
- 
+
    if ($guid) {
-	elgg_clear_sticky_form('register');
-	....
+      elgg_clear_sticky_form('register');
+      ....
    }
 
 Example: Bookmarks
@@ -489,7 +520,7 @@ Similarly, ``mod/bookmarks/pages/edit.php`` uses the same function, but passes t
    $bookmark = get_entity($bookmark_guid);
 
    ...
- 
+
    $vars = bookmarks_prepare_form_vars($bookmark);
    $content = elgg_view_form('bookmarks/save', array(), $vars);
 
@@ -505,37 +536,37 @@ TODO: Include directly from lib/bookmarks.php
 
    // mod/bookmarks/lib/bookmarks.php
    function bookmarks_prepare_form_vars($bookmark = null) {
-   	// input names => defaults
-     $values = array(
-       'title' => get_input('title', ''), // bookmarklet support
-       'address' => get_input('address', ''),
-       'description' => '',
-       'access_id' => ACCESS_DEFAULT,
-       'tags' => '',
-       'shares' => array(),
-       'container_guid' => elgg_get_page_owner_guid(),
-       'guid' => null,
-       'entity' => $bookmark,
-     );
- 
-     if ($bookmark) {
-	  foreach (array_keys($values) as $field) {
-          if (isset($bookmark->$field)) {
-            $values[$field] = $bookmark->$field;
-          }
-       }
-     }
+      // input names => defaults
+      $values = array(
+         'title' => get_input('title', ''), // bookmarklet support
+         'address' => get_input('address', ''),
+         'description' => '',
+         'access_id' => ACCESS_DEFAULT,
+         'tags' => '',
+         'shares' => array(),
+         'container_guid' => elgg_get_page_owner_guid(),
+         'guid' => null,
+         'entity' => $bookmark,
+      );
 
-     if (elgg_is_sticky_form('bookmarks')) {
-	  $sticky_values = elgg_get_sticky_values('bookmarks');
-	  foreach ($sticky_values as $key => $value) {
-         $values[$key] = $value;
-       }
-     }
+      if ($bookmark) {
+         foreach (array_keys($values) as $field) {
+            if (isset($bookmark->$field)) {
+               $values[$field] = $bookmark->$field;
+            }
+         }
+      }
 
-     elgg_clear_sticky_form('bookmarks');
- 
-     return $values;
+      if (elgg_is_sticky_form('bookmarks')) {
+         $sticky_values = elgg_get_sticky_values('bookmarks');
+         foreach ($sticky_values as $key => $value) {
+            $values[$key] = $value;
+         }
+      }
+
+      elgg_clear_sticky_form('bookmarks');
+
+      return $values;
    }
 
 The save action checks the input, then clears the sticky form upon success:
@@ -545,9 +576,9 @@ The save action checks the input, then clears the sticky form upon success:
    // mod/bookmarks/actions/bookmarks/save.php
    elgg_make_sticky_form('bookmarks');
    ...
- 
+
    if ($bookmark->save()) {
-	elgg_clear_sticky_form('bookmarks');
+      elgg_clear_sticky_form('bookmarks');
    }
 
 
@@ -644,7 +675,7 @@ URLs a signed with an unguessable SHA-256 HMAC key. See `Security Tokens`_ for m
     ]);
 
     $url = elgg_http_get_signed_url($url);
- 
+
     notify_user($user_guid, $site->guid, 'Confirm', "Please confirm by clicking this link: $url");
 
 

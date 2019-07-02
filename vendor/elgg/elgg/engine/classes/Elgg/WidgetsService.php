@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg;
 
 use Elgg\Database\EntityTable\UserFetchFailureException;
@@ -61,19 +62,36 @@ class WidgetsService {
 		]);
 		
 		if (!$widgets) {
+			$this->widgetCache[$widget_cache_key] = [];
 			return [];
 		}
 
 		$sorted_widgets = [];
 		foreach ($widgets as $widget) {
-			if (!isset($sorted_widgets[(int) $widget->column])) {
-				$sorted_widgets[(int) $widget->column] = [];
+			$widget_column = (int) $widget->column;
+			
+			if (!isset($sorted_widgets[$widget_column])) {
+				$sorted_widgets[$widget_column] = [];
 			}
-			$sorted_widgets[(int) $widget->column][$widget->order] = $widget;
+			
+			if (!isset($sorted_widgets[$widget_column][$widget->order])) {
+				$sorted_widgets[$widget_column][$widget->order] = [];
+			}
+			
+			$sorted_widgets[$widget_column][$widget->order][] = $widget;
 		}
 
-		foreach ($sorted_widgets as $col => $widgets) {
-			ksort($sorted_widgets[$col]);
+		foreach ($sorted_widgets as $col => $orders) {
+			ksort($orders);
+			$sorted_col = [];
+			
+			foreach ($orders as $widgets) {
+				foreach ($widgets as $widget) {
+					$sorted_col[] = $widget;
+				}
+			}
+			
+			$sorted_widgets[$col] = $sorted_col;
 		}
 
 		$this->widgetCache[$widget_cache_key] = $sorted_widgets;
@@ -143,18 +161,21 @@ class WidgetsService {
 			return false;
 		}
 
-		if ($user) {
-			$return = ($user->isAdmin() || (elgg_get_page_owner_guid() == $user->guid));
-		} else {
-			$return = false;
+		$page_owner = elgg_get_page_owner_entity();
+		$default = false;
+		
+		if ($page_owner) {
+			$default = $page_owner->canEdit($user_guid);
+		} elseif ($user) {
+			$default = $user->isAdmin();
 		}
-
+		
 		$params = [
 			'user' => $user,
 			'context' => $context,
-			'page_owner' => elgg_get_page_owner_entity(),
+			'page_owner' => $page_owner,
 		];
-		return _elgg_services()->hooks->trigger('permissions_check', 'widget_layout', $params, $return);
+		return _elgg_services()->hooks->trigger('permissions_check', 'widget_layout', $params, $default);
 	}
 
 	/**
@@ -169,12 +190,8 @@ class WidgetsService {
 	 * @since 1.9.0
 	 */
 	public function registerType(WidgetDefinition $definition) {
-		if (!($definition instanceof WidgetDefinition)) {
-			return false;
-		}
-		
 		$id = $definition->id;
-		if (!$id) {
+		if (empty($id)) {
 			return false;
 		}
 		
@@ -195,11 +212,12 @@ class WidgetsService {
 	 * @since 1.9.0
 	 */
 	public function unregisterType($id) {
-		if (isset($this->widgets[$id])) {
-			unset($this->widgets[$id]);
-			return true;
+		if (!isset($this->widgets[$id])) {
+			return false;
 		}
-		return false;
+		
+		unset($this->widgets[$id]);
+		return true;
 	}
 
 	/**
@@ -311,4 +329,3 @@ class WidgetsService {
 		return $widgets;
 	}
 }
-

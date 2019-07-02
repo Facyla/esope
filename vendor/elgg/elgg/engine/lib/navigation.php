@@ -100,8 +100,8 @@ use Elgg\Menu\UnpreparedMenu;
 function elgg_register_menu_item($menu_name, $menu_item) {
 	if (is_array($menu_item)) {
 		$options = $menu_item;
-		$menu_item = \ElggMenuItem::factory($options);
-		if (!$menu_item) {
+		$menu_item = ElggMenuItem::factory($options);
+		if (!$menu_item instanceof ElggMenuItem) {
 			$menu_item_name = elgg_extract('name', $options, 'MISSING NAME');
 			elgg_log("Unable to add menu item '{$menu_item_name}' to '$menu_name' menu", 'WARNING');
 			return false;
@@ -115,7 +115,7 @@ function elgg_register_menu_item($menu_name, $menu_item) {
 	}
 
 	$menus = _elgg_config()->menus;
-	if (!$menus) {
+	if (empty($menus)) {
 		$menus = [];
 	}
 
@@ -136,7 +136,11 @@ function elgg_register_menu_item($menu_name, $menu_item) {
  */
 function elgg_unregister_menu_item($menu_name, $item_name) {
 	$menus = _elgg_config()->menus;
-	if (!$menus) {
+	if (empty($menus)) {
+		return null;
+	}
+	
+	if (!isset($menus[$menu_name])) {
 		return null;
 	}
 
@@ -164,7 +168,7 @@ function elgg_unregister_menu_item($menu_name, $item_name) {
  */
 function elgg_is_menu_item_registered($menu_name, $item_name) {
 	$menus = _elgg_config()->menus;
-	if (!$menus) {
+	if (empty($menus)) {
 		return false;
 	}
 
@@ -193,7 +197,7 @@ function elgg_is_menu_item_registered($menu_name, $item_name) {
  */
 function elgg_get_menu_item($menu_name, $item_name) {
 	$menus = _elgg_config()->menus;
-	if (!$menus) {
+	if (empty($menus)) {
 		return null;
 	}
 
@@ -262,8 +266,10 @@ function elgg_register_title_button($handler = null, $name = 'add', $entity_type
 	
 	if (elgg_language_key_exists("$name:$entity_type:$entity_subtype")) {
 		$text = elgg_echo("$name:$entity_type:$entity_subtype");
-	} else {
+	} elseif (elgg_language_key_exists("$handler:$name")) {
 		$text = elgg_echo("$handler:$name");
+	} else {
+		$text = elgg_echo($name);
 	}
 	
 	// register the title menu item
@@ -281,15 +287,15 @@ function elgg_register_title_button($handler = null, $name = 'add', $entity_type
  *
  * See elgg_get_breadcrumbs() and the navigation/breadcrumbs view.
  *
- * @param string $text The title to display. During rendering this is HTML encoded.
- * @param string $href Optional. The href for the title. During rendering links are
- *                     normalized via elgg_normalize_url().
+ * @param string       $text The title to display. During rendering this is HTML encoded.
+ * @param false|string $href Optional. The href for the title. During rendering links are
+ *                           normalized via elgg_normalize_url().
  *
  * @return void
  * @since 1.8.0
  * @see elgg_get_breadcrumbs()
  */
-function elgg_push_breadcrumb($text, $href = null) {
+function elgg_push_breadcrumb($text, $href = false) {
 	$breadcrumbs = (array) _elgg_config()->breadcrumbs;
 	
 	$breadcrumbs[] = [
@@ -343,11 +349,6 @@ function elgg_get_breadcrumbs(array $breadcrumbs = null) {
 	if (!isset($breadcrumbs)) {
 		// if no crumbs set, still allow hook to populate it
 		$breadcrumbs = (array) _elgg_config()->breadcrumbs;
-	}
-
-	if (!is_array($breadcrumbs)) {
-		_elgg_services()->logger->error(__FUNCTION__ . ' expects breadcrumbs as an array');
-		$breadcrumbs = [];
 	}
 	
 	$params = [
@@ -427,7 +428,7 @@ function elgg_push_entity_breadcrumbs(ElggEntity $entity, $link_self = true) {
 	$container = $entity->getContainerEntity() ? : null;
 	elgg_push_collection_breadcrumbs($entity->type, $entity->subtype, $container);
 
-	$entity_url = $link_self ? $entity->getURL() : null;
+	$entity_url = $link_self ? $entity->getURL() : false;
 	elgg_push_breadcrumb($entity->getDisplayName(), $entity_url);
 }
 
@@ -444,7 +445,9 @@ function elgg_push_entity_breadcrumbs(ElggEntity $entity, $link_self = true) {
 function elgg_push_collection_breadcrumbs($entity_type, $entity_subtype, ElggEntity $container = null, $friends = false) {
 
 	if ($container) {
-		elgg_push_breadcrumb($container->getDisplayName(), $container->getURL());
+		if (!$container instanceof \ElggSite) {
+			elgg_push_breadcrumb($container->getDisplayName(), $container->getURL());
+		}
 
 		if ($friends) {
 			$collection_route = "collection:$entity_type:$entity_subtype:friends";
@@ -452,12 +455,14 @@ function elgg_push_collection_breadcrumbs($entity_type, $entity_subtype, ElggEnt
 			$collection_route = "collection:$entity_type:$entity_subtype:owner";
 		} else if ($container instanceof ElggGroup) {
 			$collection_route = "collection:$entity_type:$entity_subtype:group";
+		} else if ($container instanceof ElggSite) {
+			$collection_route = "collection:$entity_type:$entity_subtype:all";
 		} else {
 			$collection_route = "collection:$entity_type:$entity_subtype:container";
 		}
 
 		$parameters = _elgg_services()->routes->resolveRouteParameters($collection_route, $container);
-		if ($parameters) {
+		if ($parameters !== false) {
 			$label = elgg_echo("collection:$entity_type:$entity_subtype");
 			if ($friends) {
 				if (elgg_language_key_exists("collection:$entity_type:$entity_subtype:friends")) {
@@ -497,14 +502,15 @@ function elgg_get_filter_tabs($context = null, $selected = null, ElggUser $user 
 	}
 
 	$items = [];
+	$items[] = ElggMenuItem::factory([
+		'name' => 'all',
+		'text' => elgg_echo('all'),
+		'href' => (isset($vars['all_link'])) ? $vars['all_link'] : "$context/all",
+		'selected' => ($selected == 'all'),
+		'priority' => 200,
+	]);
+	
 	if ($user) {
-		$items[] = ElggMenuItem::factory([
-			'name' => 'all',
-			'text' => elgg_echo('all'),
-			'href' => (isset($vars['all_link'])) ? $vars['all_link'] : "$context/all",
-			'selected' => ($selected == 'all'),
-			'priority' => 200,
-		]);
 		$items[] = ElggMenuItem::factory([
 			'name' => 'mine',
 			'text' => elgg_echo('mine'),
@@ -693,6 +699,7 @@ function _elgg_setup_vertical_menu(\Elgg\Hook $hook) {
 		$parent = $selected_item->getParent();
 		while ($parent instanceof \ElggMenuItem) {
 			$parent->setSelected();
+			$parent->addItemClass('elgg-has-selected-child');
 			$parent = $parent->getParent();
 		}
 	}
@@ -838,16 +845,21 @@ function _elgg_entity_navigation_menu_setup(\Elgg\Hook $hook) {
 		'type' => $entity->getType(),
 		'subtype' => $entity->getSubtype(),
 		'container_guid' => $entity->container_guid,
-		'wheres' => [
-			function (\Elgg\Database\QueryBuilder $qb, $main_alias) use ($entity) {
-				return $qb->compare("{$main_alias}.guid", '!=', $entity->guid, ELGG_VALUE_INTEGER);
-			},
-		],
 		'limit' => 1,
 	];
 
 	$previous_options = $options;
-	$previous_options['created_before'] = $entity->time_created;
+	$previous_options['wheres'] = [
+		function (\Elgg\Database\QueryBuilder $qb, $main_alias) use ($entity) {
+			return $qb->merge([
+				$qb->compare("{$main_alias}.time_created", '<', $entity->time_created, ELGG_VALUE_INTEGER),
+				$qb->merge([
+					$qb->compare("{$main_alias}.time_created", '=', $entity->time_created, ELGG_VALUE_INTEGER),
+					$qb->compare("{$main_alias}.guid", '<', $entity->guid, ELGG_VALUE_GUID),
+				], 'AND'),
+			], 'OR');
+		},
+	];
 	$previous_options['order_by'] = [
 		new \Elgg\Database\Clauses\OrderByClause('time_created', 'DESC'),
 		new \Elgg\Database\Clauses\OrderByClause('guid', 'DESC'),
@@ -869,7 +881,17 @@ function _elgg_entity_navigation_menu_setup(\Elgg\Hook $hook) {
 	}
 	
 	$next_options = $options;
-	$next_options['created_after'] = $entity->time_created;
+	$next_options['wheres'] = [
+		function (\Elgg\Database\QueryBuilder $qb, $main_alias) use ($entity) {
+			return $qb->merge([
+				$qb->compare("{$main_alias}.time_created", '>', $entity->time_created, ELGG_VALUE_INTEGER),
+				$qb->merge([
+					$qb->compare("{$main_alias}.time_created", '=', $entity->time_created, ELGG_VALUE_INTEGER),
+					$qb->compare("{$main_alias}.guid", '>', $entity->guid, ELGG_VALUE_GUID),
+				], 'AND'),
+			], 'OR');
+		},
+	];
 	$next_options['order_by'] = [
 		new \Elgg\Database\Clauses\OrderByClause('time_created', 'ASC'),
 		new \Elgg\Database\Clauses\OrderByClause('guid', 'ASC'),
@@ -994,10 +1016,6 @@ function _elgg_rss_menu_setup($hook, $type, $return, $params) {
 	}
 	
 	if (!_elgg_has_rss_link()) {
-		return;
-	}
-	
-	if (_elgg_config()->disable_rss) {
 		return;
 	}
 

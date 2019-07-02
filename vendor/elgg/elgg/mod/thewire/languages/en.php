@@ -22,6 +22,8 @@ return array(
 	'thewire:previous:help' => "View previous post",
 	'thewire:hide:help' => "Hide previous post",
 
+	'thewire:form:body:placeholder' => "What's happening?",
+	
 	/**
 	 * The wire river
 	 */
@@ -31,7 +33,8 @@ return array(
 	/**
 	 * Wire widget
 	 */
-	'thewire:widget:desc' => 'Display your latest wire posts',
+	
+	'widgets:thewire:description' => 'Display your latest wire posts',
 	'thewire:num' => 'Number of posts to display',
 	'thewire:moreposts' => 'More wire posts',
 

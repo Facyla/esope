@@ -94,7 +94,7 @@ class Loop {
 	/**
 	 * Run upgrade loop for a preset number of seconds
 	 *
-	 * @param int|false $max_duration Maximum loop duration
+	 * @param int $max_duration Maximum loop duration
 	 *
 	 * @return void
 	 */
@@ -217,8 +217,8 @@ class Loop {
 	/**
 	 * Check if the loop cand and should continue
 	 *
-	 * @param int  $started      Timestamp of the loop initiation
-	 * @param null $max_duration Maximum loop duration
+	 * @param float $started      Timestamp of the loop initiation
+	 * @param int   $max_duration Maximum loop duration
 	 *
 	 * @return bool
 	 */

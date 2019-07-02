@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg\Application;
 
 use Elgg\Application;
@@ -214,7 +215,7 @@ class CacheHandler {
 	 */
 	protected function isCacheableView($view) {
 		if (preg_match('~^languages/(.*)\.js$~', $view, $m)) {
-			return in_array($m[1],  _elgg_services()->translator->getAllLanguageCodes());
+			return in_array($m[1],  _elgg_services()->localeService->getLanguageCodes());
 		}
 		return _elgg_services()->views->isCacheableView($view);
 	}
@@ -378,4 +379,3 @@ class CacheHandler {
 		return Response::create($msg, 403);
 	}
 }
-

@@ -5,7 +5,7 @@ namespace Elgg;
 use Elgg\Application\CacheHandler;
 use Elgg\Cache\SystemCache;
 use Elgg\Filesystem\Directory;
-use Elgg\Http\Request;
+use Elgg\Http\Request as HttpRequest;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,7 +27,7 @@ class ViewsService {
 	const BASE_VIEW_PRIORITY = 500;
 
 	/**
-	 * @see fileExists
+	 * @see ViewsService::fileExists()
 	 * @var array
 	 */
 	protected $file_exists_cache = [];
@@ -76,7 +76,7 @@ class ViewsService {
 	private $cache;
 
 	/**
-	 * @var Request
+	 * @var \Elgg\Http\Request
 	 */
 	private $request;
 
@@ -90,9 +90,9 @@ class ViewsService {
 	 *
 	 * @param PluginHooksService $hooks   The hooks service
 	 * @param LoggerInterface    $logger  Logger
-	 * @param Request            $request Http Request
+	 * @param \Elgg\Http\Request $request Http Request
 	 */
-	public function __construct(PluginHooksService $hooks, LoggerInterface $logger, Request $request = null) {
+	public function __construct(PluginHooksService $hooks, LoggerInterface $logger, HttpRequest $request = null) {
 		$this->hooks = $hooks;
 		$this->logger = $logger;
 		$this->request = $request;
@@ -417,11 +417,6 @@ class ViewsService {
 			return '';
 		}
 		$extensions_tree[] = $view;
-
-		if (!is_array($vars)) {
-			$this->logger->error("Vars in views must be an array: $view");
-			$vars = [];
-		}
 
 		// Get the current viewtype
 		if ($viewtype === '' || !$this->isValidViewtype($viewtype)) {
@@ -835,8 +830,8 @@ class ViewsService {
 
 		if ($this->cache) {
 			$data = $this->cache->load('view_overrides');
-			if ($data) {
-				$overrides = unserialize($data);
+			if (is_array($data)) {
+				$overrides = $data;
 			}
 		}
 
@@ -858,14 +853,14 @@ class ViewsService {
 	 */
 	public function configureFromCache(SystemCache $cache) {
 		$data = $cache->load('view_locations');
-		if (!is_string($data)) {
+		if (!is_array($data)) {
 			return false;
 		}
 		// format changed, check version
-		$data = unserialize($data);
 		if (empty($data['version']) || $data['version'] !== '2.0') {
 			return false;
 		}
+		
 		$this->locations = $data['locations'];
 		$this->cache = $cache;
 
@@ -881,13 +876,13 @@ class ViewsService {
 	 * @access private
 	 */
 	public function cacheConfiguration(SystemCache $cache) {
-		$cache->save('view_locations', serialize([
+		$cache->save('view_locations', [
 			'version' => '2.0',
 			'locations' => $this->locations,
-		]));
+		]);
 
 		// this is saved just for the inspector and is not loaded in loadAll()
-		$cache->save('view_overrides', serialize($this->overrides));
+		$cache->save('view_overrides', $this->overrides);
 	}
 
 	/**

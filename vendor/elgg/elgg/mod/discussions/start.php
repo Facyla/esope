@@ -154,7 +154,11 @@ function discussion_prepare_comment_notification($hook, $type, $notification, $p
 function discussion_get_subscriptions($hook, $type, $subscriptions, $params) {
 	
 	$event = elgg_extract('event', $params);
-	if (!$event instanceof Elgg\Notifications\NotificationEvent) {
+	if (!$event instanceof \Elgg\Notifications\SubscriptionNotificationEvent) {
+		return;
+	}
+	
+	if ($event->getAction() !== 'create') {
 		return;
 	}
 	
@@ -257,7 +261,9 @@ function discussion_setup_groups_filter_tabs($hook, $type, $return, $params) {
 	$return[] = ElggMenuItem::factory([
 		'name' => 'discussion',
 		'text' => elgg_echo('discussion:latest'),
-		'href' => 'groups/all?filter=discussion',
+		'href' => elgg_generate_url('collection:group:group:all', [
+			'filter' => 'discussion',
+		]),
 		'priority' => 500,
 		'selected' => $filter_value == 'discussion',
 	]);

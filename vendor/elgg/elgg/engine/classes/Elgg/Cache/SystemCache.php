@@ -38,7 +38,7 @@ class SystemCache {
 	 *
 	 * @return void
 	 */
-	function reset() {
+	public function reset() {
 		$this->cache->clear();
 	}
 	
@@ -46,14 +46,15 @@ class SystemCache {
 	 * Saves a system cache.
 	 *
 	 * @param string $type The type or identifier of the cache
-	 * @param string $data The data to be saved
+	 * @param mixed  $data The data to be saved
+	 *
 	 * @return bool
 	 */
-	function save($type, $data) {
+	public function save($type, $data) {
 		if ($this->isEnabled()) {
 			return $this->cache->save($type, $data);
 		}
-	
+
 		return false;
 	}
 	
@@ -61,26 +62,27 @@ class SystemCache {
 	 * Retrieve the contents of a system cache.
 	 *
 	 * @param string $type The type of cache to load
-	 * @return string
+	 *
+	 * @return mixed null if key not found in cache
 	 */
-	function load($type) {
-		if ($this->isEnabled()) {
-			$cached_data = $this->cache->load($type);
-			if ($cached_data) {
-				return $cached_data;
-			}
+	public function load($type) {
+		if (!$this->isEnabled()) {
+			return;
 		}
-	
-		return null;
+		
+		$cached_data = $this->cache->load($type);
+		if (isset($cached_data)) {
+			return $cached_data;
+		}
 	}
 	
 	/**
 	 * Deletes the contents of a system cache.
 	 *
 	 * @param string $type The type of cache to delete
-	 * @return string
+	 * @return bool
 	 */
-	function delete($type) {
+	public function delete($type) {
 		return $this->cache->delete($type);
 	}
 	
@@ -89,7 +91,7 @@ class SystemCache {
 	 *
 	 * @return bool
 	 */
-	function isEnabled() {
+	public function isEnabled() {
 		return (bool) $this->config->system_cache_enabled;
 	}
 	
@@ -101,7 +103,7 @@ class SystemCache {
 	 *
 	 * @return void
 	 */
-	function enable() {
+	public function enable() {
 		$this->config->save('system_cache_enabled', 1);
 		$this->reset();
 	}
@@ -114,7 +116,7 @@ class SystemCache {
 	 *
 	 * @return void
 	 */
-	function disable() {
+	public function disable() {
 		$this->config->save('system_cache_enabled', 0);
 		$this->reset();
 	}
@@ -127,7 +129,7 @@ class SystemCache {
 	 *
 	 * @access private
 	 */
-	function init() {
+	public function init() {
 		if (!$this->isEnabled()) {
 			return;
 		}
@@ -135,14 +137,6 @@ class SystemCache {
 		// cache system data if enabled and not loaded
 		if (!$this->config->system_cache_loaded) {
 			_elgg_services()->views->cacheConfiguration($this);
-		}
-	
-		if (!_elgg_services()->translator->wasLoadedFromCache()) {
-			_elgg_services()->translator->reloadAllTranslations();
-
-			foreach (_elgg_services()->translator->getLoadedTranslations() as $lang => $map) {
-				$this->save("$lang.lang", serialize($map));
-			}
 		}
 	}
 }

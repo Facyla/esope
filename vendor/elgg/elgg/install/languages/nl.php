@@ -68,7 +68,7 @@ Als je klaar bent on verder te gaan, klik op de Volgende knop.",
 	'install:database:help:dbprefix' => "Het voorvoegsel dat voor alle tabellen van Elgg gebruikt wordt (meestal elgg_)",
 	'install:database:help:timezone' => "De standaard tijdzone waarin de site zal werken",
 
-	'install:settings:instructions' => 'We hebben wat informatie nodig over de site terwijl we Elgg configureren. Als je nog geen <a href="http://learn.elgg.org/en/1.x/intro/install.html#create-a-data-folder" target="_blank">datamap hebt aangemaakt</a> voor Elgg, moet je dit nu doen.',
+	'install:settings:instructions' => 'We hebben wat informatie nodig over de site terwijl we Elgg configureren. Als je nog geen <a href="http://learn.elgg.org/en/stable/intro/install.html#create-a-data-folder" target="_blank">datamap hebt aangemaakt</a> voor Elgg, moet je dit nu doen.',
 
 	'install:settings:label:sitename' => 'Sitenaam',
 	'install:settings:label:siteemail' => 'Site e-mailadres',
@@ -146,8 +146,7 @@ Als je klaar bent on verder te gaan, klik op de Volgende knop.",
 	'install:error:rewrite:nginx' => 'We denken dat je server op Nginx draait.',
 	'install:error:rewrite:lighttpd' => 'We denken dat je server op Lighttpd draait.',
 	'install:error:rewrite:iis' => 'We denken dat je server op IIS draait.',
-	'install:error:rewrite:allowoverride' => "De rewrite test is mislukt, de meest voorkomende fout is dat AllowOverride niet is ingesteld op All voor de Elgg hoofdmap. Dit voorkomt dat Apache het .htaccess bestand mag inlezen weke de rewrite regels bevat.
-\n\nEen minder voorkomende fout is dat Apache is geconfigureerd met een alias voor je Elgg map. Dan moet dit nog worden ingesteld in de RewriteBase instelling in de .htaccess",
+	'install:error:rewrite:allowoverride' => "De rewrite test is mislukt en de meest waarschijnlijke reden is dat AllowOverride niet op All is ingesteld voor de map van Elgg. Dit weerhoudt Apache ervan om het .htaccess bestand te verwerken. Hierin staat de rewrite regels.				\n\nEen minder waarschijnlijke reden is dat Apache geconfigureerd is met een alias voor de Elgg map and dat je RewriteBase in het .htaccess bestand moet instellen. Aanvullende instructies kun je in het .htaccess bestand in de Elgg map terugvinden.",
 	'install:error:rewrite:htaccess:write_permission' => 'Je webserver heeft onvoldoende rechten om een .htaccess-bestand in de hoofdmap van Elgg te plaatsen. Je zult handmatig het bestand vanuit install/config/htaccess.dist naar .htaccess moeten kopiëren of je moet de rechten op de installatie map aanpassen.',
 	'install:error:rewrite:htaccess:read_permission' => 'Er is een .htaccess bestand in de Elgg map, maar de webserver mag het niet lezen.',
 	'install:error:rewrite:htaccess:non_elgg_htaccess' => 'Er is een .htaccess bestand in de Elgg map, maar die is niet door Elgg aangemaakt. Verwijder het bestand.',

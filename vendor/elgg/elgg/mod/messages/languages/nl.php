@@ -23,7 +23,8 @@ return array(
 
 	'messages:error' => 'Er was een probleem tijdens het opslaan van je bericht. Probeer het nogmaals.',
 
-	'item:object:messages' => 'Berichten',
+	'item:object:messages' => 'Bericht',
+	'collection:object:messages' => 'Berichten',
 
 	/**
 	* Status messages
@@ -41,16 +42,16 @@ return array(
 	*/
 
 	'messages:email:subject' => 'Je hebt een nieuw bericht!',
-	'messages:email:body' => "Je hebt een nieuw bericht van %s
+	'messages:email:body' => "Je hebt een nieuw bericht ontvangen van %s.
 
-Bericht:
+Het bericht is:
 
 %s
 
-Om al je berichten te bekijken, klik hier:
+Om naar jou berichten te gaan, klik hier:
 %s
 
-Om een bericht te sturen naar %s, klik hier:
+Om %s een bericht te sturen, klik hier:
 %s",
 
 	/**
