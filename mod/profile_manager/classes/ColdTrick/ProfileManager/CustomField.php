@@ -15,8 +15,8 @@ abstract class CustomField extends \ElggObject {
 		parent::initializeAttributes();
 		
 		$this->attributes['access_id'] = ACCESS_PUBLIC;
-		$this->attributes['owner_guid'] = elgg_get_site_entity()->getGUID();
-		$this->attributes['container_guid'] = elgg_get_site_entity()->getGUID();
+		$this->attributes['owner_guid'] = elgg_get_site_entity()->guid;
+		$this->attributes['container_guid'] = elgg_get_site_entity()->guid;
 	}
 	
 	/**
@@ -24,14 +24,11 @@ abstract class CustomField extends \ElggObject {
 	 *
 	 * @param boolean $add_blank_option optional boolean if there should be an extra empty option added
 	 *
-	 * @return string
+	 * @return array|null
 	 */
 	public function getOptions($add_blank_option = false) {
-		$options = '';
-		
-		// get options
 		if (empty($this->metadata_options)) {
-			return $options;
+			return null;
 		}
 			
 		$options = explode(',', $this->metadata_options);
@@ -77,5 +74,27 @@ abstract class CustomField extends \ElggObject {
 			$result = elgg_echo("profile:placeholder:{$this->metadata_name}");
 		}
 		return $result;
+	}
+
+	/**
+	 * Checks if can show on profile
+	 *
+	 * @return bool
+	 */
+	public function showOnProfile() {
+		return $this->show_on_profile !== 'no';
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public function delete($recursive = true) {
+		$deleted = parent::delete($recursive);
+		if ($deleted) {
+			elgg_delete_system_cache('profile_manager_profile_fields');
+			elgg_delete_system_cache('profile_manager_group_fields');
+		}
+		
+		return $deleted;
 	}
 }

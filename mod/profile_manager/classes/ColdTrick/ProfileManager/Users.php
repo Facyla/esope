@@ -2,6 +2,8 @@
 
 namespace ColdTrick\ProfileManager;
 
+use Elgg\Http\OkResponse;
+
 /**
  * Users
  */
@@ -27,117 +29,16 @@ class Users {
 	}
 
 	/**
-	 * Adds uploaded files to your profile
+	 * Saves extra user information when user registers on the site
 	 *
-	 * @param string   $event       Event name
-	 * @param string   $object_type Event type
-	 * @param ElggUser $user        User being updated
+	 * @param \Elgg\Event $event event
 	 *
 	 * @return void
 	 */
-	public static function updateProfile($event, $object_type, $user) {
-		if (!elgg_instanceof($user, 'user')) {
-			return;
-		}
-
-		// upload a file to your profile
-		$accesslevel = get_input('accesslevel');
-		if (!is_array($accesslevel)) {
-			$accesslevel = [];
-		}
-
-		$configured_fields = elgg_get_entities_from_metadata([
-			'type' => 'object',
-			'subtype' => CUSTOM_PROFILE_FIELDS_PROFILE_SUBTYPE,
-			'limit' => false,
-			'metadata_name_value_pairs' => [
-				'name' => 'metadata_type',
-				'value' => 'pm_file',
-			],
-		]);
-
-		if (empty($configured_fields)) {
-			return;
-		}
-		
-		foreach ($configured_fields as $field) {
-			// check for uploaded files
-			$metadata_name = $field->metadata_name;
-			$current_file_guid = $user->$metadata_name;
-
-			if (isset($accesslevel[$metadata_name])) {
-				$access_id = (int) $accesslevel[$metadata_name];
-			} else {
-				// this should never be executed since the access level should always be set
-				$access_id = ACCESS_PRIVATE;
-			}
-
-			if (isset($_FILES[$metadata_name]) && $_FILES[$metadata_name]['error'] == 0) {
-				// uploaded file exists so, save it to an ElggFile object
-				// use current_file_guid to overwrite previously uploaded files
-				$filehandler = new ElggFile($current_file_guid);
-				$filehandler->owner_guid = $user->getGUID();
-				$filehandler->container_guid = $user->getGUID();
-				$filehandler->subtype = "file";
-				$filehandler->access_id = $access_id;
-				$filehandler->title = $field->getTitle();
-					
-				$filehandler->setFilename("profile_manager/" .  $_FILES[$metadata_name]["name"]);
-				$filehandler->setMimeType($_FILES[$metadata_name]["type"]);
-					
-				$filehandler->open("write");
-				$filehandler->write(get_uploaded_file($metadata_name));
-				$filehandler->close();
-					
-				if ($filehandler->save()) {
-					$filehandler->profile_manager_metadata_name = $metadata_name; // used to retrieve user file when deleting
-					$filehandler->originalfilename = $_FILES[$metadata_name]["name"];
-						
-					create_metadata($user->guid, $metadata_name, $filehandler->getGUID(), 'text', $user->guid, $access_id);
-				}
-			} else {
-				// if file not uploaded should it be deleted???
-				if (empty($current_file_guid)) {
-					// find the previously uploaded file and if exists... delete it
-					$files = elgg_get_entities_from_metadata([
-						"type" => "object",
-						"subtype" => "file",
-						"owner_guid" => $user->getGUID(),
-						"limit" => 1,
-						"metadata_name_value_pairs" => [
-							"name" => "profile_manager_metadata_name",
-							"value" => $metadata_name,
-						],
-					]);
-					
-					if ($files) {
-						$file = $files[0];
-						$file->delete();
-					}
-				} else {
-					if ($file = get_entity($current_file_guid)) {
-						// maybe we need to update the access id
-						$file->access_id = $access_id;
-						$file->save();
-					}
-				}
-			}
-		}
-		// update profile completeness
-		profile_manager_profile_completeness($user);
-	}
-	
-	/**
-	 * Function to add custom profile fields to user on register
-	 *
-	 * @param string   $event       Event name
-	 * @param string   $object_type Event type
-	 * @param ElggUser $object      User being created
-	 *
-	 * @return array
-	 */
-	public static function create($event, $object_type, $object) {
+	public static function createUserByRegister(\Elgg\Event $event) {
 		$custom_profile_fields = [];
+		
+		$user = $event->getObject();
 	
 		// retrieve all field that were on the register page
 		foreach ($_POST as $key => $value) {
@@ -154,8 +55,9 @@ class Users {
 			// set ignore access
 			$ia = elgg_set_ignore_access(true);
 			
+			$user_default_access = get_default_access($user);
+			
 			foreach ($custom_profile_fields as $shortname => $value) {
-					
 				// determine if $value should be an array
 				if (!is_array($value) && !empty($configured_fields)) {
 					foreach ($configured_fields as $configured_field_category) {
@@ -175,31 +77,29 @@ class Users {
 						}
 					}
 				}
-					
-				// use create_metadata to listen to default access
-				if (is_array($value)) {
-					$i = 0;
-					foreach ($value as $interval) {
-						$i++;
-						if ($i == 1) {
-							$multiple = false;
-						} else {
-							$multiple = true;
-						}
-						create_metadata($object->guid, $shortname, $interval, 'text', $object->guid, get_default_access($object), $multiple);
-					}
-				} else {
-					create_metadata($object->guid, $shortname, $value, 'text', $object->guid, get_default_access($object));
+				
+				if (empty($value) && $value !== 0) {
+					continue;
 				}
+				
+				if (!is_array($value)) {
+					$value = [$value];
+				}
+				foreach ($value as $interval) {
+					$user->annotate("profile:$shortname", $interval, $user_default_access, $user->guid, 'text');
+				}
+		
+				// for BC, keep storing fields in MD, but we'll read annotations only
+				$user->$shortname = $value;
 			}
 	
 			// restore ignore access
 			elgg_set_ignore_access($ia);
 		}
 	
-		if (isset($_FILES['profile_icon'])) {
-			if (!$object->saveIconFromUploadedFile('profile_icon')) {
-				register_error(elgg_echo('avatar:resize:fail'));
+		if (elgg_get_uploaded_file('profile_icon')) {
+			if (!$user->saveIconFromUploadedFile('profile_icon')) {
+				register_error(elgg_echo('avatar:upload:fail'));
 				// return false to delete the user
 				return false;
 			}
@@ -207,119 +107,177 @@ class Users {
 	
 		$terms = elgg_get_plugin_setting('registration_terms', 'profile_manager');
 		if ($terms) {
-			$object->setPrivateSetting('general_terms_accepted', time());
+			// already checked for acceptance in middleware
+			$user->setPrivateSetting('general_terms_accepted', time());
 		}
 	
 		elgg_clear_sticky_form('profile_manager_register');
 	}
-	
+
 	/**
-	 * Function to check if custom fields on register have been filled (if required)
-	 * Also generates a username if needed
+	 * Saves extra user information when user is created with admin useradd form
 	 *
-	 * @param string  $hook_name    name of the hook
-	 * @param string  $entity_type  type of the hook
-	 * @param unknown $return_value return value
-	 * @param unknown $parameters   hook parameters
+	 * @param \Elgg\Event $event event
 	 *
 	 * @return void
 	 */
-	public static function actionRegister($hook_name, $entity_type, $return_value, $parameters) {
-	
-		elgg_make_sticky_form('register');
-		elgg_make_sticky_form('profile_manager_register');
-	
-		// validate mandatory profile fields
-		$profile_icon = elgg_get_plugin_setting('profile_icon_on_register', 'profile_manager');
-	
-		// general terms
-		$terms = elgg_get_plugin_setting('registration_terms', 'profile_manager');
-	
-		// new
-		$profile_type_guid = get_input('custom_profile_fields_custom_profile_type', false);
-		$fields = profile_manager_get_categorized_fields(null, true, true, true, $profile_type_guid);
-		$required_fields = [];
-	
-		if (!empty($fields['categories'])) {
-			foreach ($fields['categories'] as $cat_guid => $cat) {
-				$cat_fields = $fields['fields'][$cat_guid];
-				foreach ($cat_fields as $field) {
-					if ($field->show_on_register == 'yes' && $field->mandatory == 'yes') {
-						$required_fields[] = $field;
-					}
+	public static function createUserByAdmin(\Elgg\Event $event) {
+		
+		$user = $event->getObject();
+		
+		$custom_profile_fields = get_input('custom_profile_fields');
+		
+		if (!is_array($custom_profile_fields)) {
+			return;
+		}
+		
+		$user_default_access = get_default_access($user);
+		
+		foreach ($custom_profile_fields as $shortname => $value) {
+			if (!empty($value) || $value === 0) {
+				if (!is_array($value)) {
+					$value = [$value];
 				}
+				foreach ($value as $interval) {
+					$user->annotate("profile:$shortname", $interval, $user_default_access, $user->guid, 'text');
+				}
+		
+				// for BC, keep storing fields in MD, but we'll read annotations only
+				$user->$shortname = $value;
 			}
 		}
+	}
 	
-		if ($terms || $required_fields || $profile_icon == 'yes') {
-	
-			$custom_profile_fields = [];
-	
-			foreach ($_POST as $key => $value) {
-				if (strpos($key, 'custom_profile_fields_') == 0) {
-					$key = substr($key, 22);
-					$custom_profile_fields[$key] = $value;
-				}
-			}
-	
-			foreach ($required_fields as $entity) {
-				$passed_value = $custom_profile_fields[$entity->metadata_name];
-				if (is_array($passed_value)) {
-					if (!count($passed_value)) {
-						register_error(elgg_echo('profile_manager:register_pre_check:missing', [$entity->getTitle()]));
-						forward(REFERER);
-					}
-				} else {
-					$passed_value = trim($passed_value);
-					if (strlen($passed_value) < 1) {
-						register_error(elgg_echo('profile_manager:register_pre_check:missing', [$entity->getTitle()]));
-						forward(REFERER);
-					}
-				}
-			}
-	
-			if ($profile_icon == 'yes') {
-				$error = false;
-				
-				$profile_icons = elgg_get_uploaded_files('profile_icon');
-				if (empty($profile_icons)) {
-					register_error(elgg_echo('profile_manager:register_pre_check:missing', ['profile_icon']));
-					$error = true;
-				} else {
-					
-					$profile_icon = $profile_icons[0];
-					if (!$profile_icon->isValid()) {
-						register_error(elgg_echo('profile_manager:register_pre_check:profile_icon:error'));
-						$error = true;
-					} else {
-						// test if we can handle the image
-						if (strpos($profile_icon->getMimeType(), 'image/') !== 0) {
-							register_error(elgg_echo('profile_manager:register_pre_check:profile_icon:nosupportedimage'));
-							$error = true;
-						}
-					}
-				}
-					
-				if ($error) {
-					forward(REFERER);
-				}
-			}
-	
-			if ($terms) {
-				$terms_accepted = get_input('accept_terms');
-				if ($terms_accepted !== 'yes') {
-					register_error(elgg_echo('profile_manager:register_pre_check:terms'));
-					forward(REFERER);
-				}
-			}
+	/**
+	 * Validates the register action
+	 *
+	 * @param \Elgg\Request $request request
+	 * @return void|\Elgg\Http\OkResponse
+	 */
+	public static function validateRegisterAction(\Elgg\Request $request) {
+		elgg_make_sticky_form('register');
+		elgg_make_sticky_form('profile_manager_register');
+		
+		$valid_icon = self::validateRegisterProfileIcon($request);
+		if ($valid_icon instanceof OkResponse) {
+			return $valid_icon;
+		}
+		
+		$valid_terms = self::validateRegisterTerms($request);
+		if ($valid_terms instanceof OkResponse) {
+			return $valid_terms;
 		}
 	
 		// generate username
-		$username = get_input('username');
-		$email = get_input('email');
-		if (empty($username) && (elgg_get_plugin_setting('generate_username_from_email', 'profile_manager') == 'yes')) {
-			set_input('username', self::generateUsernameFromEmail($email));
+		if (empty(get_input('username')) && (elgg_get_plugin_setting('generate_username_from_email', 'profile_manager') == 'yes')) {
+			set_input('username', self::generateUsernameFromEmail(get_input('email')));
 		}
+	}
+	
+	/**
+	 * Validates the existence of a required profile icon when a user registers
+	 *
+	 * @param \Elgg\Request $request request
+	 * @return \Elgg\Http\OkResponse
+	 */
+	protected static function validateRegisterProfileIcon(\Elgg\Request $request) {
+		
+		$profile_icon = elgg_get_plugin_setting('profile_icon_on_register', 'profile_manager');
+		
+		if ($profile_icon !== 'yes') {
+			return;
+		}
+		
+		$file = elgg_get_uploaded_file('profile_icon', false);
+		
+		if (empty($file)) {
+			return elgg_error_response(elgg_echo('profile_manager:register_pre_check:missing', ['profile_icon']));
+		}
+		
+		if (!$file->isValid()) {
+			return elgg_error_response(elgg_echo('profile_manager:register_pre_check:profile_icon:error'));
+		}
+	
+		// test if we can handle the image
+		if (strpos($file->getMimeType(), 'image/') !== 0) {
+			return elgg_error_response(elgg_echo('profile_manager:register_pre_check:profile_icon:nosupportedimage'));
+		}
+	}
+	
+	/**
+	 * Validates if terms are required to be accepted when a user registers
+	 *
+	 * @param \Elgg\Request $request request
+	 * @return \Elgg\Http\OkResponse
+	 */
+	protected static function validateRegisterTerms(\Elgg\Request $request) {
+		
+		$terms = elgg_get_plugin_setting('registration_terms', 'profile_manager');
+		
+		if (empty($terms)) {
+			return;
+		}
+		
+		if (get_input('accept_terms') === 'yes') {
+			return;
+		}
+		
+		return elgg_error_response(elgg_echo('profile_manager:register_pre_check:terms'));
+	}
+	
+	/**
+	 * Validates if required fields are submitted on the user registration form
+	 *
+	 * @param \Elgg\Request $request request
+	 * @return \Elgg\Http\OkResponse
+	 */
+	protected static function validateRegisterRequiredFields(\Elgg\Request $request) {
+
+		$profile_type_guid = get_input('custom_profile_fields_custom_profile_type', false);
+		$categorized_fields = profile_manager_get_categorized_fields(null, true, true, true, $profile_type_guid);
+		
+		$fields = elgg_extract('fields', $categorized_fields);
+		$categories = elgg_extract('categories', $categorized_fields);
+		if (empty($categories)) {
+			return;
+		}
+		
+		foreach ($categories as $cat_guid => $cat) {
+			$cat_fields = elgg_extract($cat_guid, $fields, []);
+			foreach ($cat_fields as $field) {
+				if ($field->show_on_register !== 'yes' || $field->mandatory !== 'yes') {
+					continue;
+				}
+				
+				$value = get_input("custom_profile_fields_{$field->metadata_name}");
+				if (!empty($value)) {
+					continue;
+				}
+				
+				return elgg_error_response(elgg_echo('profile_manager:register_pre_check:missing', [$field->getDisplayName()]));
+			}
+		}
+	}
+		
+	/**
+	 * Adds a river event when a user is created
+	 *
+	 * @param \Elgg\Event $event event
+	 *
+	 * @return void
+	 */
+	public static function createUserRiverItem(\Elgg\Event $event) {
+		
+		$enable_river_event = elgg_get_plugin_setting('enable_site_join_river_event', 'profile_manager');
+		if ($enable_river_event == 'no') {
+			return;
+		}
+
+		elgg_create_river_item([
+			'action_type' => 'join',
+			'subject_guid' => $event->getObject()->guid,
+			'object_guid' => elgg_get_site_entity()->guid,
+		]);
 	}
 	
 	/**
@@ -347,6 +305,12 @@ class Users {
 			$username = str_replace($unwanted_character, '', $username);
 		}
 		
+		// check if minimal length is matched
+		$min_length = elgg_get_config('minusername') ?: 4;
+		if ($min_length) {
+			$username = str_pad($username, $min_length, 0);
+		}
+	
 		// show hidden entities (unvalidated users)
 		$hidden = access_show_hidden_entities(true);
 		
@@ -363,102 +327,5 @@ class Users {
 		access_show_hidden_entities($hidden);
 		
 		return $username;
-	}
-	
-	/**
-	 * If possible change the username of a user
-	 *
-	 * @param string  $hook_name    name of the hook
-	 * @param string  $entity_type  type of the hook
-	 * @param unknown $return_value return value
-	 * @param unknown $parameters   hook parameters
-	 *
-	 * @return void
-	 */
-	public static function usernameChange($hook_name, $entity_type, $return_value, $parameters) {
-		$user_guid = (int) get_input('guid');
-		$new_username = get_input('username');
-	
-		if (empty($user_guid) || empty($new_username)) {
-			return;
-		}
-		
-		$enable_username_change = elgg_get_plugin_setting('enable_username_change', 'profile_manager', 'no');
-		if ($enable_username_change == 'no' || ($enable_username_change == 'admin' && !elgg_is_admin_logged_in())) {
-			return;
-		}
-		
-		if (!self::validateUsername($new_username)) {
-			return;
-		}
-		
-		$user = get_user($user_guid);
-		if (empty($user)) {
-			return;
-		}
-
-		if (!$user->canEdit()) {
-			return;
-		}
-		
-		if ($user->username == $new_username) {
-			return;
-		}
-		
-		$user->username = $new_username;
-		if ($user->save()) {
-			elgg_register_plugin_hook_handler('forward', 'system', '\ColdTrick\ProfileManager\Users::usernameChangeForward');
-
-			system_message(elgg_echo('profile_manager:action:username:change:succes'));
-		}
-	}
-	
-	/**
-	 * Validates a username
-	 *
-	 * @param string $username Username
-	 *
-	 * @return boolean
-	 */
-	protected static function validateUsername($username) {
-		$result = false;
-		if (empty($username)) {
-			return $result;
-		}
-		
-		// make sure we can check every user (even unvalidated)
-		$access_status = access_show_hidden_entities(true);
-		
-		// check if username exists
-		try {
-			if (validate_username($username)) {
-				if (!get_user_by_username($username)) {
-					$result = true;
-				}
-			}
-		} catch (Exception $e) {
-		}
-		
-		// restore access settings
-		access_show_hidden_entities($access_status);
-		
-		return $result;
-	}
-	
-	/**
-	 * Directs user to correct settings links after changing a username
-	 *
-	 * @param string  $hook_name    name of the hook
-	 * @param string  $entity_type  type of the hook
-	 * @param unknown $return_value return value
-	 * @param unknown $parameters   hook parameters
-	 *
-	 * @return string
-	 */
-	public static function usernameChangeForward($hook_name, $entity_type, $return_value, $parameters) {
-		$username = get_input('username');
-		if (!empty($username)) {
-			return elgg_normalize_url("settings/user/{$username}");
-		}
 	}
 }

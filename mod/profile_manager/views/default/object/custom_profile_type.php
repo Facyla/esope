@@ -1,40 +1,37 @@
 <?php
 /**
-* Profile Manager
-*
-* Object view of a custom profile field type
-*
-* @package profile_manager
-* @author ColdTrick IT Solutions
-* @copyright Coldtrick IT Solutions 2009
-* @link http://www.coldtrick.com/
+* Object view of a custom profile type
 */
 
-elgg_load_js('lightbox');
-elgg_load_css('lightbox');
-
-$entity = $vars['entity'];
+$entity = elgg_extract('entity', $vars);
+if (!$entity instanceof \ColdTrick\ProfileManager\CustomProfileType) {
+	return;
+}
 
 // get title
-$content = $entity->getTitle();
+$content = $entity->getDisplayName();
 
 // edit link
 $content .= elgg_view('output/url', [
-	'href' => 'ajax/view/forms/profile_manager/type?guid=' .  $entity->guid,
-	'class' => 'elgg-lightbox',
-	'title' => elgg_echo('edit'),
-	'text' => elgg_view_icon('settings-alt'),
-	'data-colorbox-opts' => json_encode([
-		'trapFocus' => false,
+	'href' => elgg_http_add_url_query_elements('ajax/view/forms/profile_manager/type', [
+		'guid' => $entity->guid,
 	]),
+	'class' => ['elgg-lightbox', 'mls'],
+	'title' => elgg_echo('edit'),
+	'text' => false,
+	'icon' => 'settings-alt',
 ]);
 
 // delete link
 $content .= elgg_view('output/url', [
-	'href' => 'action/profile_manager/profile_types/delete?guid=' . $entity->guid,
+	'href' => elgg_generate_action_url('entity/delete', [
+		'guid' => $entity->guid,
+	]),
 	'title' => elgg_echo('delete'),
-	'text' => elgg_view_icon('delete'),
-	'confirm' => elgg_echo('profile_manager:profile_types:delete:confirm'),
+	'text' => false,
+	'class' => ['mls'],
+	'icon' => 'delete-alt',
+	'confirm' => true,
 ]);
 
 echo elgg_format_element('div', [

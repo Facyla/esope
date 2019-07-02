@@ -7,23 +7,33 @@ if ($date > 0) {
 	$last_login = $date;
 }
 
-$form_body = elgg_echo('profile_manager:admin:users:inactive:last_login') . ': ';
-$form_body .= elgg_view('input/date', [
-	'name' => 'last_login',
-	'value' => $last_login,
-	'timestamp' => true,
-	'readonly' => true,
+$form_body = elgg_view_field([
+	'#type' => 'fieldset',
+	'align' => 'horizontal',
+	'fields' => [
+		[
+			'#type' => 'date',
+			'#label' => elgg_echo('profile_manager:admin:users:inactive:last_login'),
+			'name' => 'last_login',
+			'value' => $last_login,
+			'timestamp' => true,
+			'readonly' => true,
+		],
+		[
+			'#type' => 'submit',
+			'value' => elgg_echo('search'),
+		],
+	],
 ]);
-$form_body .= elgg_view('input/submit', ['value' => elgg_echo('search')]);
 
-echo elgg_view('input/form', [
+$form = elgg_view('input/form', [
 	'disable_security' => true,
 	'action' => '/admin/users/inactive',
 	'method' => 'GET',
 	'body' => $form_body,
 ]);
 
-$dbprefix = elgg_get_config('dbprefix');
+echo elgg_view_module('inline', null, $form);
 
 $limit = max((int) get_input('limit', 50), 0);
 $offset = sanitise_int(get_input('offset', 0), false);
@@ -32,28 +42,34 @@ $options = [
 	'type' => 'user',
 	'limit' => $limit,
 	'offset' => $offset,
-	'relationship' => 'member_of_site',
-	'relationship_guid' => elgg_get_site_entity()->getGUID(),
-	'inverse_relationship' => true,
-	'site_guids' => false,
-	'joins' => ['JOIN ' . $dbprefix . 'users_entity ue ON e.guid = ue.guid'],
-	'wheres' => ['ue.last_login <= ' . $last_login],
-	'order_by' => 'ue.last_login',
+	'metadata_name_value_pairs' => [
+		[
+			'name' => 'last_login',
+			'operand' => '<=',
+			'value' => $last_login,
+		],
+	],
+	'order_by_metadata' => [
+		'last_login',
+	],
 ];
 
-$users = elgg_get_entities_from_relationship($options);
+$users = elgg_get_entities($options);
 
 if (!empty($users)) {
 	$content = '<table class="elgg-table">';
-	$content .= '<tr>';
+	$content .= '<thead><tr>';
 	$content .= '<th>' . elgg_echo('user') . '</th>';
 	$content .= '<th>' . elgg_echo('usersettings:statistics:label:lastlogin') . '</th>';
 	$content .= '<th>' . elgg_echo('banned') . '</th>';
-	$content .= '</tr>';
+	$content .= '</tr></thead>';
 	
 	foreach ($users as $user) {
 		$content .= '<tr>';
-		$content .= '<td>' . elgg_view('output/url', array('text' => $user->name, 'href' => $user->getURL())) . '</td>';
+		$content .= '<td>' . elgg_view('output/url', [
+			'text' => $user->name,
+			'href' => $user->getURL(),
+		]) . '</td>';
 		$user_last_login = $user->last_login;
 		if (empty($user_last_login)) {
 			$content .= '<td>' . elgg_echo('never') . '</td>';
@@ -67,25 +83,15 @@ if (!empty($users)) {
 	$content .= '</table>';
 	
 	$options['count'] = true;
-	$count = elgg_get_entities_from_relationship($options);
+	$count = elgg_get_entities($options);
 	
 	$content .= elgg_view('navigation/pagination', [
 		'offset' => $offset,
 		'limit' => $limit,
 		'count' => $count,
 	]);
-	
-	$content .= '<br /><div class="mbm">';
-	$content .= elgg_view('output/url', [
-		'text' => elgg_echo('download'),
-		'href' => "action/profile_manager/users/export_inactive?last_login={$last_login}",
-		'is_action' => true,
-		'class' => 'elgg-button elgg-button-action',
-	]);
-	$content .= '</div>';
-	
 } else {
 	$content = elgg_echo('notfound');
 }
 
-echo elgg_view_module('inline', elgg_echo('profile_manager:admin:users:inactive:list'), $content);
+echo elgg_view_module('info', elgg_echo('profile_manager:admin:users:inactive:list'), $content);

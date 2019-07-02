@@ -10,43 +10,51 @@
 * @link http://www.coldtrick.com/
 */
 
-elgg_load_js('lightbox');
-elgg_load_css('lightbox');
-
-$options = [
+$categories = elgg_list_entities([
 	'type' => 'object',
 	'subtype' => CUSTOM_PROFILE_FIELDS_CATEGORY_SUBTYPE,
 	'limit' => false,
 	'pagination' => false,
-	'owner_guid' => elgg_get_site_entity()->getGUID(),
-	'order_by_metadata' => ['name' => 'order', 'as' => 'integer'],
-];
-
-$categories = elgg_list_entities_from_metadata($options);
-
-$list = $categories ?: elgg_echo('profile_manager:categories:list:no_categories');
-
-$all_link = elgg_view('output/url', [
-	'href' => '#',
-	'text' => elgg_echo('all'),
-	'class' => 'category-filter',
+	'owner_guid' => elgg_get_site_entity()->guid,
+	'order_by_metadata' => [
+		'name' => 'order',
+		'as' => 'integer',
+	],
 ]);
-$all = elgg_format_element('div', ['id' => 'custom_profile_field_category_all', 'class' => 'custom_fields_category'], $all_link);
 
-$default_link = elgg_view('output/url', [
-	'href' => '#',
-	'text' => elgg_echo('profile_manager:categories:list:default'),
-	'class' => 'category-filter',
-	'data-guid' => 0,
-]);
-$default = elgg_format_element('div', ['id' => 'custom_profile_field_category_0', 'class' => 'custom_fields_category'], $default_link);
+if (empty($categories)) {
+	$list = elgg_view('page/components/no_results', ['no_results' => elgg_echo('profile_manager:categories:list:no_categories')]);
+} else {
 
-$body = elgg_format_element('div', ['id' => 'custom_fields_category_list_custom'], $all . $default . $list);
+	$list = elgg_format_element('div', [
+		'id' => 'custom_profile_field_category_all',
+		'class' => 'custom_fields_category',
+	], elgg_view('output/url', [
+		'href' => false,
+		'text' => elgg_echo('all'),
+		'class' => 'category-filter',
+	]));
+	
+	$list .= elgg_format_element('div', [
+		'id' => 'custom_profile_field_category_0',
+		'class' => 'custom_fields_category',
+	], elgg_view('output/url', [
+		'href' => false,
+		'text' => elgg_echo('profile_manager:categories:list:default'),
+		'class' => 'category-filter',
+		'data-guid' => 0,
+	]));
+	
+	$list .= $categories;
+}
 
-$head = elgg_view('output/url', [
+$body = elgg_format_element('div', ['id' => 'custom_fields_category_list_custom'], $list);
+
+$menu = elgg_view('output/url', [
 	'text' => elgg_echo('add'),
+	'icon' => 'plus',
 	'href' => 'ajax/view/forms/profile_manager/category',
-	'class' => 'elgg-button elgg-button-action man pvn float-alt elgg-lightbox',
+	'class' => 'elgg-lightbox',
 ]);
 
 $title = elgg_echo('profile_manager:categories:list:title');
@@ -55,6 +63,4 @@ $title .= elgg_view('output/pm_hint', [
 	'text' => elgg_echo('profile_manager:tooltips:category_list'),
 ]);
 
-$head .= elgg_format_element('h3', [], $title);
-
-echo elgg_view_module('inline', '', $body, ['header' => $head]);
+echo elgg_view_module('info', $title, $body, ['menu' => $menu]);

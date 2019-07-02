@@ -18,11 +18,12 @@ if (!elgg_is_admin_logged_in()) {
 $guid = (int) get_input('guid');
 
 $entity = get_entity($guid);
-if (!($entity instanceof \ColdTrick\ProfileManager\CustomField)) {
+if (!($entity instanceof \ColdTrick\ProfileManager\CustomProfileField)) {
 	$entity = null;
 }
 
 $form_title = elgg_echo('profile_manager:profile_fields:add');
+$formbody = '';
 
 $options_values = [];
 $option_classes = [];
@@ -33,7 +34,7 @@ if ($types) {
 		$options_values[$type->type] = $type->name;
 		foreach ($type->options as $option_name => $option_value) {
 			if ($option_value) {
-				$option_classes[$option_name] .= ' field_option_enable_' . $type->type;
+				$option_classes[$option_name][] = "field_option_enable_{$type->type}";
 			}
 		}
 	}
@@ -50,6 +51,7 @@ $metadata_options = null;
 $show_on_register = null;
 $mandatory = null;
 $user_editable = null;
+$show_on_profile = null;
 $output_as_tags = null;
 $blank_available = null;
 $admin_only = null;
@@ -70,6 +72,7 @@ if ($entity) {
 	$show_on_register = $entity->show_on_register;
 	$mandatory = $entity->mandatory;
 	$user_editable = $entity->user_editable;
+	$show_on_profile = $entity->show_on_profile;
 	$output_as_tags = $entity->output_as_tags;
 	$blank_available = $entity->blank_available;
 	$admin_only = $entity->admin_only;
@@ -78,9 +81,6 @@ if ($entity) {
 		$options_values[$metadata_type] = $metadata_type;
 	}
 }
-
-$yes_no_options = ['yes' => elgg_echo('option:yes'),'no' => elgg_echo('option:no')];
-$no_yes_options = array_reverse($yes_no_options);
 
 $formbody .= elgg_view_field([
 	'#type' => 'text',
@@ -135,27 +135,35 @@ $formbody .= elgg_view_field([
 	'value' => $metadata_options,
 ]);
 
-$options_table = '';
+$options_content = '';
 
-$options = ['show_on_register', 'mandatory', 'user_editable', 'output_as_tags', 'blank_available', 'admin_only'];
+$options = [
+	'show_on_register',
+	'mandatory',
+	'user_editable',
+	'show_on_profile',
+	'output_as_tags',
+	'blank_available',
+	'admin_only',
+];
 foreach ($options as $option) {
-	$class = elgg_extract($option, $option_classes, '');
+	$checked = ($$option === 'yes');
+	if (in_array($option, ['user_editable', 'show_on_profile'])) {
+		$checked = ($$option !== 'no');
+	}
 	
-	$options_table .= '<tr>';
-	$options_table .= '<td>' . elgg_echo("profile_manager:admin:{$option}") . ':</td>';
-	$options_table .= '<td>';
-	$options_table .=  elgg_view('input/dropdown', [
+	$options_content .= elgg_view_field([
+		'#type' => 'checkbox',
+		'#label' => elgg_echo("profile_manager:admin:{$option}"),
+		'#help' => elgg_echo("profile_manager:admin:{$option}:description"),
 		'name' => $option,
-		'options_values' => $no_yes_options ,
-		'value' => $$option,
-		'class' => 'mhs custom_fields_form_field_option' . $class,
+		'class' => elgg_extract_class($option_classes, ['custom_fields_form_field_option'], $option),
+		'checked' => $checked,
+		'switch' => true,
+		'default' => 'no',
+		'value' => 'yes',
 	]);
-	$options_table .= '</td>';
-	$options_table .= elgg_format_element('td', [], elgg_echo("profile_manager:admin:{$option}:description"));
-	$options_table .= '</tr>';
 }
-
-$options_table = elgg_format_element('table', [], $options_table);
 
 $options_title = elgg_echo('profile_manager:admin:additional_options');
 $options_title .= elgg_view('output/pm_hint', [
@@ -163,7 +171,7 @@ $options_title .= elgg_view('output/pm_hint', [
 	'text' => elgg_echo('profile_manager:tooltips:profile_field_additional'),
 ]);
 
-$formbody .= elgg_view_module('inline', $options_title, $options_table);
+$formbody .= elgg_view_module('info', $options_title, $options_content);
 
 $formbody .= elgg_view('input/hidden', ['name' => 'guid', 'value' => $guid]);
 $formbody .= elgg_view('input/submit', ['value' => elgg_echo('save')]);
@@ -175,6 +183,6 @@ $form_title .= elgg_view('output/pm_hint', [
 	'text' => elgg_echo('profile_manager:tooltips:profile_field'),
 ]);
 
-echo elgg_view_module('inline', $form_title, $form, ['class' => 'mvn', 'id' => 'custom_fields_form']);
+echo elgg_view_module('info', $form_title, $form, ['class' => 'mvn', 'id' => 'custom_fields_form']);
 
 echo elgg_format_element('script', [], 'elgg.profile_manager.change_field_type();');

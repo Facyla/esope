@@ -15,7 +15,7 @@ if (!elgg_is_admin_logged_in()) {
 	return;
 }
 
-$guid = get_input('guid');
+$guid = (int) get_input('guid');
 
 $entity = get_entity($guid);
 if (!($entity instanceof \ColdTrick\ProfileManager\CustomGroupField)) {
@@ -23,6 +23,7 @@ if (!($entity instanceof \ColdTrick\ProfileManager\CustomGroupField)) {
 }
 
 $form_title = elgg_echo('profile_manager:group_fields:add');
+$formbody = '';
 
 $options_values = [];
 $option_classes = [];
@@ -45,6 +46,7 @@ $metadata_hint = null;
 $metadata_placeholder = null;
 $metadata_type = null;
 $metadata_options = null;
+$show_on_profile = null;
 $output_as_tags = null;
 $blank_available = null;
 $admin_only = null;
@@ -61,6 +63,7 @@ if ($entity) {
 	$metadata_type = $entity->metadata_type;
 	$metadata_options = $entity->metadata_options;
 	
+	$show_on_profile = $entity->show_on_profile;
 	$output_as_tags = $entity->output_as_tags;
 	$blank_available = $entity->blank_available;
 	$admin_only = $entity->admin_only;
@@ -70,47 +73,87 @@ if ($entity) {
 	}
 }
 
-$no_yes_options = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_name'),
+	'name' => 'metadata_name',
+	'value' => $metadata_name,
+	'required' => true,
+]);
 
-$formbody .= elgg_echo('profile_manager:admin:metadata_name') . '*:' . elgg_view('input/text', ['name' => 'metadata_name', 'value' => $metadata_name, 'required' => true]);
-$formbody .= elgg_echo('profile_manager:admin:metadata_label') . ':' . elgg_view('input/text', ['name' => 'metadata_label', 'value' => $metadata_label]);
-$formbody .= elgg_echo('profile_manager:admin:metadata_hint') . ':' . elgg_view('input/text', ['name' => 'metadata_hint', 'value' => $metadata_hint]);
-$formbody .= elgg_echo('profile_manager:admin:metadata_placeholder') . ':' . elgg_view('input/text', ['name' => 'metadata_placeholder', 'value' => $metadata_placeholder]);
-$formbody .= elgg_echo('profile_manager:admin:field_type') . ': ' . elgg_view('input/dropdown', [
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_label'),
+	'name' => 'metadata_label',
+	'value' => $metadata_label,
+]);
+
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_hint'),
+	'name' => 'metadata_hint',
+	'value' => $metadata_hint,
+]);
+
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_placeholder'),
+	'name' => 'metadata_placeholder',
+	'value' => $metadata_placeholder,
+]);
+
+$formbody .= elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('profile_manager:admin:field_type'),
 	'name' => 'metadata_type',
 	'options_values' => $options_values,
-	'onchange' => 'elgg.profile_manager.change_field_type();',
 	'value' => $metadata_type,
+	'onchange' => 'elgg.profile_manager.change_field_type();',
 ]);
-$formbody .= '<div>' . elgg_echo('profile_manager:admin:metadata_options') . ':' . elgg_view('input/text', ['name' => 'metadata_options', 'value' => $metadata_options]) . '</div>';
 
-$options_table = '';
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_options'),
+	'name' => 'metadata_options',
+	'value' => $metadata_options,
+]);
 
-$options = ['output_as_tags', 'admin_only', 'blank_available'];
+$options_content = '';
+
+$options = [
+	'show_on_profile',
+	'output_as_tags',
+	'admin_only',
+	'blank_available',
+];
 foreach ($options as $option) {
-	$class = elgg_extract($option, $option_classes, '');
-
-	$options_table .= '<tr>';
-	$options_table .= '<td>' . elgg_echo("profile_manager:admin:{$option}") . ':</td>';
-	$options_table .= '<td>';
-	$options_table .=  elgg_view('input/dropdown', [
+	$class = 'custom_fields_form_field_option'. elgg_extract($option, $option_classes, '');
+	
+	$checked = ($$option === 'yes');
+	if (in_array($option, ['show_on_profile'])) {
+		$checked = ($$option !== 'no');
+	}
+	
+	$options_content .= elgg_view_field([
+		'#type' => 'checkbox',
+		'#label' => elgg_echo("profile_manager:admin:{$option}"),
+		'#help' => elgg_echo("profile_manager:admin:{$option}:description"),
 		'name' => $option,
-		'options_values' => $no_yes_options ,
-		'value' => $$option,
-		'class' => 'mhs custom_fields_form_field_option' . $class,
+		'class' => $class,
+		'checked' => $checked,
+		'switch' => true,
+		'default' => 'no',
+		'value' => 'yes',
 	]);
-	$options_table .= '</td>';
-	$options_table .= elgg_format_element('td', [], elgg_echo("profile_manager:admin:{$option}:description"));
-	$options_table .= '</tr>';
 }
 
-$options_table = elgg_format_element('table', [], $options_table);
-
 $options_title = elgg_echo('profile_manager:admin:additional_options');
+$options_title .= elgg_view('output/pm_hint', [
+	'id' => 'more_info_profile_field_additional',
+	'text' => elgg_echo('profile_manager:tooltips:profile_field_additional'),
+]);
 
-$formbody .= elgg_view_module('inline', $options_title, $options_table);
-
-$formbody .= '<br />';
+$formbody .= elgg_view_module('info', $options_title, $options_content);
 
 $formbody .= elgg_view('input/hidden', ['name' => 'type', 'value' => 'group']);
 $formbody .= elgg_view('input/hidden', ['name' => 'guid', 'value' => $guid]);
@@ -118,4 +161,4 @@ $formbody .= elgg_view('input/submit', ['value' => elgg_echo('save')]);
 
 $form = elgg_view('input/form', ['body' => $formbody, 'action' => 'action/profile_manager/new']);
 
-echo elgg_view_module('inline', $form_title, $form, ['class' => 'mvn', 'id' => 'custom_fields_form']);
+echo elgg_view_module('info', $form_title, $form, ['class' => 'mvn', 'id' => 'custom_fields_form']);

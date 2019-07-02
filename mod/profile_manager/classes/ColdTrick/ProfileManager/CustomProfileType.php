@@ -18,8 +18,8 @@ class CustomProfileType extends \ElggObject {
 		
 		$this->attributes['subtype'] = self::SUBTYPE;
 		$this->attributes['access_id'] = ACCESS_PUBLIC;
-		$this->attributes['owner_guid'] = elgg_get_site_entity()->getGUID();
-		$this->attributes['container_guid'] = elgg_get_site_entity()->getGUID();
+		$this->attributes['owner_guid'] = elgg_get_site_entity()->guid;
+		$this->attributes['container_guid'] = elgg_get_site_entity()->guid;
 	}
 
 	/**
@@ -29,7 +29,7 @@ class CustomProfileType extends \ElggObject {
 	 *
 	 * @return string
 	 */
-	public function getTitle($plural = false) {
+	public function getDisplayName($plural = false) {
 		if ($plural) {
 			$result = $this->getPluralTitle();
 			if ($result !== false) {
@@ -77,5 +77,32 @@ class CustomProfileType extends \ElggObject {
 		}
 		
 		return $description;
+	}
+	
+	public function delete($recursive = true) {
+		$guid = $this->guid;
+		
+		$deleted = parent::delete($recursive);
+		
+		if ($deleted) {
+			// remove corresponding profile type metadata from userobjects
+			$entities = elgg_get_entities([
+				'type' => 'user',
+				'limit' => false,
+				'batch' => true,
+				'batch_inc_offset' => false,
+				'metadata_name_value_pairs' => [
+					'name' => 'custom_profile_type',
+					'value' => $guid,
+				],
+			]);
+			
+			foreach ($entities as $entity) {
+				// unset currently deleted profile type for user
+				unset($entity->custom_profile_type);
+			}
+		}
+		
+		return $deleted;
 	}
 }

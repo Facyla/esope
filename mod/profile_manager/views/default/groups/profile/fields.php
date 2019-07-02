@@ -3,49 +3,60 @@
  * Group profile fields
  */
 
-$group = $vars['entity'];
-
-$group_fields = profile_manager_get_categorized_group_fields();
-		
-$group_fields = elgg_extract('fields', $group_fields);
-
-if (empty($group_fields)) {
+$group = elgg_extract('entity', $vars);
+if (!$group instanceof ElggGroup) {
 	return;
 }
 
-$even_odd = 'odd';
+$profile_fields = elgg_extract('fields', profile_manager_get_categorized_group_fields($group));
+if (empty($profile_fields) || !is_array($profile_fields)) {
+	return;
+}
 
-foreach ($group_fields as $field) {
-	$metadata_name = $field->metadata_name;
-	$value = $group->$metadata_name;
+$output = '';
+foreach ($profile_fields as $field) {
 	
-	if (is_null($value)) {
+	if (!$field->showOnProfile()) {
 		continue;
 	}
 	
-	// make title
-	$title = $field->getTitle();
+	$key = $field->metadata_name;
 	
-	// adjust output type
-	if ($field->output_as_tags == 'yes') {
-		$output_type = 'tags';
-		$value = string_to_tag_array($value);
-	} else {
-		$output_type = $field->metadata_type;
-	}
-	
-	if ($field->metadata_type == 'url') {
-		$target = '_blank';
-	} else {
-		$target = null;
+	// do not show the name
+	if ($key == 'name') {
+		continue;
 	}
 
-	echo "<div class='{$even_odd}'>";
-	echo '<b>';
-	echo $title;
-	echo ': </b>';
-	echo elgg_view("output/{$output_type}",  ['value' => $value, 'target' => $target]);
-	echo '</div>';
+	$value = $group->$key;
+	if (elgg_is_empty($value)) {
+		continue;
+	}
 	
-	$even_odd = ($even_odd == 'even') ? 'odd' : 'even';
+	$valtype = $field->metadata_type;
+	if ($field->output_as_tags == 'yes') {
+		$valtype = 'tags';
+		$value = string_to_tag_array($value);
+	}
+	
+	$options = ['value' => $value];
+	if ($valtype == 'tags') {
+		$options['tag_names'] = $key;
+	}
+
+	$field_title = $field->getDisplayName();
+	$field_value = elgg_view("output/$valtype", $options);
+	$field_value = elgg_format_element('span', [], $field_value);
+
+	$output .= elgg_view('object/elements/field', [
+		'label' => $field_title,
+		'value' => $field_value,
+		'class' => 'group-profile-field',
+		'name' => $key,
+	]);
+}
+
+if ($output) {
+	echo elgg_format_element('div', [
+		'class' => 'elgg-profile-fields',
+	], $output);
 }

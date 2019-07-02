@@ -41,11 +41,11 @@ if ($entity) {
 	$metadata_label_plural = $entity->metadata_label_plural;
 	$metadata_description = $entity->metadata_description;
 	
-	$cats = elgg_get_entities_from_relationship([
+	$cats = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => CUSTOM_PROFILE_FIELDS_CATEGORY_SUBTYPE,
 		'limit' => false,
-		'owner_guid' => elgg_get_site_entity()->getGUID(),
+		'owner_guid' => elgg_get_site_entity()->guid,
 		'relationship' => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_CATEGORY_RELATIONSHIP,
 		'relationship_guid' => $guid,
 		'inverse_relationship' => false,
@@ -103,12 +103,12 @@ if (!empty($categories)) {
 	$checkbox_options = [];
 	
 	foreach ($categories as $cat) {
-		$title = $cat->getTitle();
+		$title = $cat->getDisplayName();
 		$checkbox_options[$title] = $cat->guid;
 	}
 	
 	$formbody .= elgg_view_field([
-		'#type' => 'checkboxes', 
+		'#type' => 'checkboxes',
 		'#label' => elgg_echo('profile_manager:profile_types:edit:related_categories'),
 		'name' => 'categories',
 		'options' => $checkbox_options,
@@ -129,4 +129,4 @@ $form_title .= elgg_view('output/pm_hint', [
 	'text' => elgg_echo('profile_manager:tooltips:profile_type'),
 ]);
 
-echo elgg_view_module('inline', $form_title, $form, ['class' => 'mvn', 'id' => 'custom_fields_profile_type_form']);
+echo elgg_view_module('info', $form_title, $form, ['class' => 'mvn', 'id' => 'custom_fields_profile_type_form']);
