@@ -997,6 +997,7 @@ class ComposerStaticInit8164d593505e2ead9327aa3cd20a4c13
         'Elgg\\Database\\Plugins' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/Plugins.php',
         'Elgg\\Database\\PrivateSettingsTable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/PrivateSettingsTable.php',
         'Elgg\\Database\\QueryBuilder' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryBuilder.php',
+        'Elgg\\Database\\QueryCounter' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryCounter.php',
         'Elgg\\Database\\QueryExecuting' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryExecuting.php',
         'Elgg\\Database\\QueryFiltering' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryFiltering.php',
         'Elgg\\Database\\QueryOptions' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryOptions.php',

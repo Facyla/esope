@@ -694,6 +694,7 @@ return array(
     'Elgg\\Database\\Plugins' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/Plugins.php',
     'Elgg\\Database\\PrivateSettingsTable' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/PrivateSettingsTable.php',
     'Elgg\\Database\\QueryBuilder' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/QueryBuilder.php',
+    'Elgg\\Database\\QueryCounter' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/QueryCounter.php',
     'Elgg\\Database\\QueryExecuting' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/QueryExecuting.php',
     'Elgg\\Database\\QueryFiltering' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/QueryFiltering.php',
     'Elgg\\Database\\QueryOptions' => $vendorDir . '/elgg/elgg/engine/classes/Elgg/Database/QueryOptions.php',
