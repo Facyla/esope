@@ -5,6 +5,8 @@
  * @package Blog
  */
 
+elgg_deprecated_notice("The action 'blog/delete' is deprecated. Use 'entity/delete'.", '3.1');
+
 $blog_guid = (int) get_input('guid');
 $blog = get_entity($blog_guid);
 
@@ -23,12 +25,9 @@ if ($container instanceof \ElggGroup) {
 		'subpage' => 'all',
 	]);
 } else {
-	$foward_url = elgg_generate_url('collection:object:blog:owner', [
+	$forward_url = elgg_generate_url('collection:object:blog:owner', [
 		'username' => $container->username,
 	]);
 }
 
 return elgg_ok_response('', elgg_echo('blog:message:deleted_post'), $forward_url);
-
-$message = elgg_echo('blog:message:deleted_post');
-return elgg_ok_response($data, $message, $forward_url);

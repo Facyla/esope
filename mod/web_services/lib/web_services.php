@@ -13,7 +13,7 @@
  * @return true or throws an exception
  * @throws APIException
  * @since 1.7.0
- * @access private
+ * @internal
  */
 function authenticate_method($method) {
 	global $API_METHODS;
@@ -36,7 +36,7 @@ function authenticate_method($method) {
 
 	// check if user authentication is required
 	if ($API_METHODS[$method]["require_user_auth"] == true) {
-		if ($user_auth_result == false) {
+		if (!$user_auth_result) {
 			throw new APIException($user_pam->getFailureMessage(), ErrorResult::$RESULT_FAIL_AUTHTOKEN);
 		}
 	}
@@ -52,7 +52,7 @@ function authenticate_method($method) {
  *
  * @return GenericResult The result of the execution.
  * @throws APIException|CallException
- * @access private
+ * @internal
  */
 function execute_method($method) {
 	global $API_METHODS;
@@ -127,7 +127,7 @@ function execute_method($method) {
  * Get the request method.
  *
  * @return string HTTP request method
- * @access private
+ * @internal
  */
 function get_call_method() {
 	return _elgg_services()->request->server->get('REQUEST_METHOD');
@@ -142,7 +142,7 @@ function get_call_method() {
  * @param string $method The method
  *
  * @return array containing parameters as key => value
- * @access private
+ * @internal
  */
 function get_parameters_for_method($method) {
 	global $API_METHODS;
@@ -171,14 +171,11 @@ function get_parameters_for_method($method) {
  * Get POST data
  * Since this is called through a handler, we need to manually get the post data
  *
- * @return POST data as string encoded as multipart/form-data
- * @access private
+ * @return false|string POST data as string encoded as multipart/form-data
+ * @internal
  */
 function get_post_data() {
-
-	$postdata = file_get_contents('php://input');
-
-	return $postdata;
+	return file_get_contents('php://input');
 }
 
 /**
@@ -190,7 +187,7 @@ function get_post_data() {
  * @return true on success or exception
  * @throws APIException
  * @since 1.7.0
- * @access private
+ * @internal
  */
 function verify_parameters($method, $parameters) {
 	global $API_METHODS;
@@ -223,7 +220,7 @@ function verify_parameters($method, $parameters) {
  *
  * @param string $method the api method to get the params for
  * @return string[]
- * @access private
+ * @internal
  */
 function _elgg_ws_get_parameter_names($method) {
 	global $API_METHODS;
@@ -250,7 +247,7 @@ function _elgg_ws_get_parameter_names($method) {
  * @return string or exception E.g. ',"foo",2.1'
  * @throws APIException
  * @since 1.7.0
- * @access private
+ * @internal
  *
  * @todo in 3.0 this should return an array of parameter values instead of a string of code.
  */
@@ -337,7 +334,7 @@ function serialise_parameters($method, $parameters) {
  * @return bool true if good API key - otherwise throws exception
  * @throws APIException
  * @since 1.7.0
- * @access private
+ * @internal
  */
 function api_auth_key() {
 	// check that an API key is present
@@ -347,7 +344,7 @@ function api_auth_key() {
 	}
 
 	// check that it is active
-	$api_user = get_api_user(elgg_get_site_entity()->guid, $api_key);
+	$api_user = get_api_user($api_key);
 	if (!$api_user) {
 		// key is not active or does not exist
 		throw new APIException(elgg_echo('APIException:BadAPIKey'));
@@ -365,14 +362,14 @@ function api_auth_key() {
  *
  * @throws SecurityException
  * @since 1.7.0
- * @access private
+ * @internal
  */
 function api_auth_hmac() {
 	// Get api header
 	$api_header = get_and_validate_api_headers();
 
 	// Pull API user details
-	$api_user = get_api_user(elgg_get_site_entity()->guid, $api_header->api_key);
+	$api_user = get_api_user($api_header->api_key);
 
 	if (!$api_user) {
 		throw new SecurityException(elgg_echo('SecurityException:InvalidAPIKey'),
@@ -428,7 +425,7 @@ function api_auth_hmac() {
  *
  * @return stdClass Containing all the values.
  * @throws APIException Detailing any error.
- * @access private
+ * @internal
  */
 function get_and_validate_api_headers() {
 	$result = new stdClass;
@@ -503,7 +500,7 @@ function get_and_validate_api_headers() {
  *
  * @return string The php algorithm
  * @throws APIException if an algorithm is not supported.
- * @access private
+ * @internal
  */
 function map_api_hash($algo) {
 	$algo = strtolower(sanitise_string($algo));
@@ -536,7 +533,7 @@ function map_api_hash($algo) {
  * @param string $post_hash     Optional sha1 hash of the post data.
  *
  * @return string The HMAC signature
- * @access private
+ * @internal
  */
 function calculate_hmac($algo, $time, $nonce, $api_key, $secret_key,
 $get_variables, $post_hash = "") {
@@ -565,7 +562,7 @@ $get_variables, $post_hash = "") {
  * @param string $algo     The algorithm used.
  *
  * @return string The hash.
- * @access private
+ * @internal
  */
 function calculate_posthash($postdata, $algo) {
 	$ctx = hash_init(map_api_hash($algo));
@@ -582,7 +579,7 @@ function calculate_posthash($postdata, $algo) {
  * @param string $hmac The hmac string.
  *
  * @return bool True if replay detected, false if not.
- * @access private
+ * @internal
  */
 function cache_hmac_check_replay($hmac) {
 	// cache lifetime is 25 hours (this should be related to the time drift
@@ -605,7 +602,7 @@ function cache_hmac_check_replay($hmac) {
  * session code of Elgg, that user will be logged out of all other sessions.
  *
  * @return bool
- * @access private
+ * @internal
  */
 function pam_auth_usertoken() {
 	$token = get_input('auth_token');
@@ -613,7 +610,7 @@ function pam_auth_usertoken() {
 		return false;
 	}
 	
-	$validated_userid = validate_user_token($token, elgg_get_site_entity()->guid);
+	$validated_userid = validate_user_token($token);
 
 	if ($validated_userid) {
 		$u = get_entity($validated_userid);
@@ -648,7 +645,7 @@ function pam_auth_usertoken() {
  * See if the user has a valid login sesson
  *
  * @return bool
- * @access private
+ * @internal
  */
 function pam_auth_session() {
 	return elgg_is_logged_in();
@@ -667,7 +664,7 @@ function pam_auth_session() {
  * @param array  $vars     Vars
  *
  * @return void
- * @access private
+ * @internal
  *
  * @throws Exception
  */
@@ -707,7 +704,7 @@ function _php_api_error_handler($errno, $errmsg, $filename, $linenum, $vars) {
  * @param Exception $exception Exception
  *
  * @return void
- * @access private
+ * @internal
  */
 function _php_api_exception_handler($exception) {
 
@@ -728,7 +725,7 @@ function _php_api_exception_handler($exception) {
  * @param array  $request Request string
  *
  * @return void
- * @access private
+ * @internal
  */
 function service_handler($handler, $request) {
 	elgg_set_context('api');

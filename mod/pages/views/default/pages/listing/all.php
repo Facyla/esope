@@ -1,6 +1,8 @@
 <?php
 /**
  * Display pages
+ *
+ * Note: this view has a corresponding view in the rss view type, changes should be reflected
  */
 
 echo elgg_list_entities([
@@ -9,8 +11,5 @@ echo elgg_list_entities([
 	'metadata_name_value_pairs' => [
 		'parent_guid' => 0,
 	],
-	'full_view' => false,
 	'no_results' => elgg_echo('pages:none'),
-	'preload_owners' => true,
-	'preload_containers' => true,
 ]);

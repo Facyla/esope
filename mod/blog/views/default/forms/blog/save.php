@@ -100,7 +100,7 @@ foreach ($fields as $field) {
 
 $save_status = elgg_echo('blog:save_status');
 if ($blog) {
-	$saved = date('F j, Y @ H:i', $blog->time_created);
+	$saved = date('F j, Y @ H:i', $blog->time_updated);
 } else {
 	$saved = elgg_echo('never');
 }
@@ -128,7 +128,9 @@ if (!$blog || $blog->status != 'published') {
 if ($blog) {
 	// add a delete button if editing
 	$footer .= elgg_view('output/url', [
-		'href' => "action/blog/delete?guid={$vars['guid']}",
+		'href' => elgg_generate_action_url('entity/delete', [
+			'guid' => $blog->guid,
+		]),
 		'text' => elgg_echo('delete'),
 		'class' => 'elgg-button elgg-button-delete float-alt',
 		'confirm' => true,

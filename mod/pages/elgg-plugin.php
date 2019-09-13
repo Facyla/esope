@@ -29,14 +29,23 @@ return [
 		'collection:object:page:friends' => [
 			'path' => '/pages/friends/{username}',
 			'resource' => 'pages/friends',
+			'required_plugins' => [
+				'friends',
+			],
 		],
 		'collection:object:page:group' => [
 			'path' => '/pages/group/{guid}/{subpage?}',
 			'resource' => 'pages/group',
+			'required_plugins' => [
+				'groups',
+			],
 		],
 		'add:object:page' => [
 			'path' => '/pages/add/{guid}',
 			'resource' => 'pages/new',
+			'middleware' => [
+				\Elgg\Router\Middleware\Gatekeeper::class,
+			],
 		],
 		'view:object:page' => [
 			'path' => '/pages/view/{guid}/{title?}',
@@ -45,6 +54,9 @@ return [
 		'edit:object:page' => [
 			'path' => '/pages/edit/{guid}',
 			'resource' => 'pages/edit',
+			'middleware' => [
+				\Elgg\Router\Middleware\Gatekeeper::class,
+			],
 		],
 		'history:object:page' => [
 			'path' => '/pages/history/{guid}',
@@ -57,7 +69,6 @@ return [
 	],
 	'widgets' => [
 		'pages' => [
-			'description' => elgg_echo('widgets:pages:description'),
 			'context' => ['profile', 'dashboard'],
 		],
 	],

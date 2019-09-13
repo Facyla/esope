@@ -23,7 +23,8 @@ return array(
 
 	'messages:error' => 'メッセージの保存の際に問題が発生しました。もう一度やり直してください。',
 
-	'item:object:messages' => 'メッセージ',
+	'item:object:messages' => 'Message',
+	'collection:object:messages' => 'Messages',
 
 	/**
 	* Status messages
@@ -41,21 +42,17 @@ return array(
 	*/
 
 	'messages:email:subject' => '新しいメッセージが届きました！',
-	'messages:email:body' => "You have a new message from %s. It reads:
+	'messages:email:body' => "You have a new message from %s.
 
+It reads:
 
-	%s
+%s
 
+To view your messages, click here:
+%s
 
-	To view your messages, click here:
-
-	%s
-
-	To send %s a message, click here:
-
-	%s
-
-	Please do not reply to this email.",
+To send %s a message, click here:
+%s",
 
 	/**
 	* Error messages

@@ -19,9 +19,10 @@ function bookmarks_init() {
 		'text' => elgg_echo('collection:object:bookmarks'),
 		'href' => elgg_generate_url('default:object:bookmarks'),
 	]);
-
+	
 	elgg_register_plugin_hook_handler('register', 'menu:page', 'bookmarks_page_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'bookmarks_owner_block_menu');
+	elgg_register_plugin_hook_handler('register', 'menu:footer', 'bookmarks_footer_menu');
 
 	elgg_extend_view('elgg.js', 'bookmarks.js');
 
@@ -45,16 +46,14 @@ function bookmarks_init() {
 /**
  * Add a menu item to an ownerblock
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:owner_block'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:owner_block'
  *
  * @return ElggMenuItem[]
  */
-function bookmarks_owner_block_menu($hook, $type, $return, $params) {
+function bookmarks_owner_block_menu(\Elgg\Hook $hook) {
 
-	$entity = elgg_extract('entity', $params);
+	$entity = $hook->getEntityParam();
+	$return = $hook->getValue();
 	
 	if ($entity instanceof ElggUser) {
 		$url = elgg_generate_url('collection:object:bookmarks:owner', ['username' => $entity->username]);
@@ -74,22 +73,20 @@ function bookmarks_owner_block_menu($hook, $type, $return, $params) {
 /**
  * Prepare a notification message about a new bookmark
  *
- * @param string                          $hook         Hook name
- * @param string                          $type         Hook type
- * @param Elgg\Notifications\Notification $notification The notification to prepare
- * @param array                           $params       Hook parameters
+ * @param \Elgg\Hook $hook 'prepare', 'notification:create:object:bookmarks'
+ *
  * @return Elgg\Notifications\Notification
  */
-function bookmarks_prepare_notification($hook, $type, $notification, $params) {
-	$entity = $params['event']->getObject();
-	$owner = $params['event']->getActor();
-	$recipient = $params['recipient'];
-	$language = $params['language'];
-	$method = $params['method'];
+function bookmarks_prepare_notification(\Elgg\Hook $hook) {
+	$entity = $hook->getParam('event')->getObject();
+	$owner = $hook->getParam('event')->getActor();
+	$language = $hook->getParam('language');
 
 	$descr = $entity->description;
 	$title = $entity->getDisplayName();
 
+	$notification = $hook->getValue();
+	
 	$notification->subject = elgg_echo('bookmarks:notify:subject', [$title], $language);
 	$notification->body = elgg_echo('bookmarks:notify:body', [
 		$owner->getDisplayName(),
@@ -106,14 +103,11 @@ function bookmarks_prepare_notification($hook, $type, $notification, $params) {
 /**
  * Add a page menu menu
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:page'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:page'
  *
  * @return void|ElggMenuItem[]
  */
-function bookmarks_page_menu($hook, $type, $return, $params) {
+function bookmarks_page_menu(\Elgg\Hook $hook) {
 	if (!elgg_is_logged_in()) {
 		return;
 	}
@@ -132,7 +126,9 @@ function bookmarks_page_menu($hook, $type, $return, $params) {
 	} else {
 		$title = elgg_echo('bookmarks:bookmarklet');
 	}
-
+	
+	$return = $hook->getValue();
+	
 	$return[] = ElggMenuItem::factory([
 		'name' => 'bookmarklet',
 		'text' => $title,
@@ -143,16 +139,44 @@ function bookmarks_page_menu($hook, $type, $return, $params) {
 }
 
 /**
+ * Adds a add bookmark link to the footer menu
+ *
+ * @param \Elgg\Hook $hook 'register', 'menu:footer'
+ *
+ * @return \Elgg\Menu\MenuItems
+ */
+function bookmarks_footer_menu(\Elgg\Hook $hook) {
+
+	if (!elgg_is_logged_in()) {
+		return;
+	}
+	
+	$result = $hook->getValue();
+	
+	$result[] = \ElggMenuitem::factory([
+		'name' => 'bookmark',
+		'text' => elgg_echo('bookmarks:this'),
+		'icon' => 'push-pin-alt',
+		'href' => elgg_generate_url('add:object:bookmarks', [
+			'guid' => elgg_get_logged_in_user_guid(),
+			'address' => current_page_url(),
+		]),
+		'title' => elgg_echo('bookmarks:this'),
+		'rel' => 'nofollow',
+	]);
+
+	return $result;
+}
+
+/**
  * Return bookmarks views to parse for ecml
  *
- * @param string $hook   'get_views'
- * @param string $type   'ecml'
- * @param array  $return current return value
- * @param array  $params supplied params
+ * @param \Elgg\Hook $hook 'get_views', 'ecml'
  *
  * @return array
  */
-function bookmarks_ecml_views_hook($hook, $type, $return, $params) {
+function bookmarks_ecml_views_hook(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
 	$return['object/bookmarks'] = elgg_echo('item:object:bookmarks');
 	return $return;
 }
@@ -199,9 +223,8 @@ function bookmarks_prepare_form_vars($bookmark = null) {
 /**
  * Register database seed
  *
- * @elgg_plugin_hook seeds database
+ * @param \Elgg\Hook $hook 'seeds', 'database'
  *
- * @param \Elgg\Hook $hook Hook
  * @return array
  */
 function bookmarks_register_db_seeds(\Elgg\Hook $hook) {

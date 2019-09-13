@@ -55,15 +55,20 @@ class SystemLogEntry {
 
 		if (isset($getters[$class]) && is_callable($getters[$class])) {
 			$object = call_user_func($getters[$class], $id);
-		} else if (preg_match('~^Elgg[A-Z]~', $class)) {
+		} elseif (is_subclass_of($class, \ElggEntity::class)) {
 			$object = get_entity($id);
 		} else {
 			// surround with try/catch because object could be disabled
 			try {
-				$object = new $class($this->object_id);
+				// assuming the object is a custom entity class
+				$object = get_entity($id);
 
 				return $object;
 			} catch (\Exception $e) {
+				return false;
+			} catch (\Error $e) {
+				elgg_log("SystemLogEntry is unable to construct '{$class}' with ID: '{$this->object_id}': {$e->getMessage()}", 'ERROR');
+				return false;
 			}
 		}
 

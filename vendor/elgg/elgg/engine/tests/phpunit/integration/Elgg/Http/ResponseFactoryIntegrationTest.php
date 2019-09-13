@@ -6,6 +6,8 @@ use Elgg\IntegrationTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class ResponseFactoryIntegrationTest extends IntegrationTestCase {
 	
@@ -62,9 +64,10 @@ class ResponseFactoryIntegrationTest extends IntegrationTestCase {
 		$response = $this->service->prepareResponse();
 		$this->assertInstanceOf(Response::class, $response);
 		
-		$response_cookies = $response->headers->getCookies();
+		$cookie = $this->findCookie($response->headers, 'foo');
 		
-		$this->assertEquals($factory_cookies, $response_cookies);
+		$this->assertInstanceOf(Cookie::class, $cookie);
+		$this->assertEquals('bar', $cookie->getValue());
 	}
 	
 	public function testPrepareRedirectResponseContainsFactoryCookies() {
@@ -78,9 +81,10 @@ class ResponseFactoryIntegrationTest extends IntegrationTestCase {
 		$response = $this->service->prepareRedirectResponse('foo/bar');
 		$this->assertInstanceOf(RedirectResponse::class, $response);
 		
-		$response_cookies = $response->headers->getCookies();
+		$cookie = $this->findCookie($response->headers, 'foo');
 		
-		$this->assertEquals($factory_cookies, $response_cookies);
+		$this->assertInstanceOf(Cookie::class, $cookie);
+		$this->assertEquals('bar', $cookie->getValue());
 	}
 	
 	public function testPrepareJsonResponseContainsFactoryCookies() {
@@ -94,9 +98,20 @@ class ResponseFactoryIntegrationTest extends IntegrationTestCase {
 		$response = $this->service->prepareJsonResponse();
 		$this->assertInstanceOf(JsonResponse::class, $response);
 		
-		$response_cookies = $response->headers->getCookies();
+		$cookie = $this->findCookie($response->headers, 'foo');
 		
-		$this->assertEquals($factory_cookies, $response_cookies);
+		$this->assertInstanceOf(Cookie::class, $cookie);
+		$this->assertEquals('bar', $cookie->getValue());
+	}
+	
+	private function findCookie(ResponseHeaderBag $headerbag, string $cookie_name) {
+		foreach ($headerbag->getCookies() as $cookie) {
+			if ($cookie->getName() === $cookie_name) {
+				return $cookie;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -105,7 +120,8 @@ class ResponseFactoryIntegrationTest extends IntegrationTestCase {
 	public function testRespondWithErrorDefaultContentText($status_code, $elgg_echo_part) {
 		
 		ob_start();
-		$response = $this->service->respondWithError('', $status_code);
+		$response = new ErrorResponse('', $status_code);
+		$response = $this->service->respondWithError($response);
 		ob_end_clean();
 		
 		$this->assertInstanceOf(Response::class, $response);
@@ -123,5 +139,24 @@ class ResponseFactoryIntegrationTest extends IntegrationTestCase {
 			[ELGG_HTTP_NOT_FOUND, 404],
 			[ELGG_HTTP_UNAUTHORIZED, 'default'],
 		];
+	}
+	
+	public function testRespondWithErrorPassesException() {
+		
+		$exception_found = false;
+		
+		elgg_register_plugin_hook_handler('view_vars', 'resources/error', function (\Elgg\Hook $hook) use (&$exception_found) {
+			if (elgg_extract('exception', $hook->getValue()) instanceof \Exception) {
+				$exception_found = true;
+			}
+		});
+		
+		ob_start();
+		$response = new ErrorResponse('');
+		$response->setException(new \Exception('foo'));
+		$this->service->respondWithError($response);
+		ob_end_clean();
+		
+		$this->assertTrue($exception_found, 'No exception found in view vars of resource/error');
 	}
 }

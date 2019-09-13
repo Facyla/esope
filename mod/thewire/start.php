@@ -28,7 +28,7 @@ function thewire_init() {
 		'name' => 'thewire',
 		'icon' => 'comments-o',
 		'text' => elgg_echo('thewire'),
-		'href' => 'thewire/all',
+		'href' => elgg_generate_url('collection:object:thewire:all'),
 	]);
 
 	// owner block menu
@@ -40,9 +40,6 @@ function thewire_init() {
 	// Extend system CSS with our own styles, which are defined in the thewire/css view
 	elgg_extend_view('elgg.css', 'thewire/css');
 
-	// Register a URL handler for thewire posts
-	elgg_register_plugin_hook_handler('entity:url', 'object', 'thewire_set_url');
-
 	// Register for notifications
 	elgg_register_notification_event('object', 'thewire');
 	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:thewire', 'thewire_prepare_notification');
@@ -50,50 +47,24 @@ function thewire_init() {
 
 	// allow to be liked
 	elgg_register_plugin_hook_handler('likes:is_likable', 'object:thewire', 'Elgg\Values::getTrue');
-
-	elgg_register_plugin_hook_handler('unit_test', 'system', 'thewire_test');
-}
-
-/**
- * Override the url for a wire post to return the thread
- *
- * @param string $hook   'entity:url'
- * @param string $type   'object'
- * @param string $url    current return value
- * @param array  $params supplied params
- *
- * @return void|string
- */
-function thewire_set_url($hook, $type, $url, $params) {
-	
-	$entity = elgg_extract('entity', $params);
-	if (!$entity instanceof ElggWire) {
-		return;
-	}
-	
-	return "thewire/view/{$entity->guid}";
 }
 
 /**
  * Prepare a notification message about a new wire post
  *
- * @param string                          $hook         Hook name
- * @param string                          $type         Hook type
- * @param Elgg\Notifications\Notification $notification The notification to prepare
- * @param array                           $params       Hook parameters
+ * @param \Elgg\Hook $hook 'prepare', 'notification:create:object:thewire'
  *
  * @return Elgg\Notifications\Notification
  */
-function thewire_prepare_notification($hook, $type, $notification, $params) {
+function thewire_prepare_notification(\Elgg\Hook $hook) {
 
-	$entity = $params['event']->getObject();
-	$owner = $params['event']->getActor();
-	$recipient = $params['recipient'];
-	$language = $params['language'];
-	$method = $params['method'];
+	$entity = $hook->getParam('event')->getObject();
+	$owner = $hook->getParam('event')->getActor();
+	$language = $hook->getParam('language');
 	$descr = $entity->description;
 
 	$subject = elgg_echo('thewire:notify:subject', [$owner->getDisplayName()], $language);
+	$body = '';
 	if ($entity->reply) {
 		$parent = thewire_get_parent($entity->guid);
 		if ($parent) {
@@ -106,6 +77,7 @@ function thewire_prepare_notification($hook, $type, $notification, $params) {
 	$body .= "\n\n" . $descr . "\n\n";
 	$body .= elgg_echo('thewire:notify:footer', [$entity->getURL()], $language);
 
+	$notification = $hook->getValue();
 	$notification->subject = $subject;
 	$notification->body = $body;
 	$notification->summary = elgg_echo('thewire:notify:summary', [$descr], $language);
@@ -193,7 +165,7 @@ function thewire_save_post($text, $userid, $access_id, $parent_guid = 0, $method
 	$post->method = $method; //method: site, email, api, ...
 
 	$tags = thewire_get_hashtags($text);
-	if ($tags) {
+	if (!empty($tags)) {
 		$post->tags = $tags;
 	}
 
@@ -243,17 +215,22 @@ function thewire_save_post($text, $userid, $access_id, $parent_guid = 0, $method
  * Add temporary subscription for original poster if not already registered to
  * receive a notification of reply
  *
- * @param string $hook          Hook name
- * @param string $type          Hook type
- * @param array  $subscriptions Subscriptions for a notification event
- * @param array  $params        Parameters including the event
+ * @param \Elgg\Hook $hook 'get', 'subscriptions'
  *
  * @return void|array
  */
-function thewire_add_original_poster($hook, $type, $subscriptions, $params) {
-	$event = elgg_extract('event', $params);
+function thewire_add_original_poster(\Elgg\Hook $hook) {
+	$event = $hook->getParam('event');
+	if (!$event instanceof \Elgg\Notifications\SubscriptionNotificationEvent) {
+		return;
+	}
+
+	if ($event->getAction() !== 'create') {
+		return;
+	}
+	
 	$entity = $event->getObject();
-	if (!($entity instanceof ElggWire)) {
+	if (!$entity instanceof ElggWire) {
 		return;
 	}
 	
@@ -269,11 +246,11 @@ function thewire_add_original_poster($hook, $type, $subscriptions, $params) {
 	/* @var $parent ElggWire */
 	$parent = $parents[0];
 	// do not add a subscription if reply was to self
-	if ($parent->getOwnerGUID() === $entity->getOwnerGUID()) {
+	if ($parent->owner_guid === $entity->owner_guid) {
 		return;
 	}
-	
-	if (array_key_exists($parent->getOwnerGUID(), $subscriptions)) {
+	$subscriptions = $hook->getValue();
+	if (array_key_exists($parent->owner_guid, $subscriptions)) {
 		// already in the list
 		return;
 	}
@@ -292,7 +269,7 @@ function thewire_add_original_poster($hook, $type, $subscriptions, $params) {
 		return;
 	}
 	
-	$subscriptions[$parent->getOwnerGUID()] = $methods;
+	$subscriptions[$parent->owner_guid] = $methods;
 	return $subscriptions;
 }
 
@@ -337,20 +314,18 @@ function thewire_get_parent($post_guid) {
  *
  * Adds reply, thread, and view previous links. Removes edit and access.
  *
- * @param string     $hook   'register'
- * @param string     $type   'menu:entity'
- * @param Collection $menu   Array of menu items
- * @param array      $params Array with the entity
+ * @param \Elgg\Hook $hook 'register', 'menu:entity'
  *
  * @return void|Collection
  */
-function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
+function thewire_setup_entity_menu_items(\Elgg\Hook $hook) {
 	
-	$entity = elgg_extract('entity', $params);
-	if (!($entity instanceof \ElggWire)) {
+	$entity = $hook->getEntityParam();
+	if (!$entity instanceof \ElggWire) {
 		return;
 	}
 	
+	$menu = $hook->getValue();
 	$menu->remove('edit');
 
 	if (elgg_is_logged_in()) {
@@ -358,18 +333,7 @@ function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
 			'name' => 'reply',
 			'icon' => 'reply',
 			'text' => elgg_echo('reply'),
-			'href' => "thewire/reply/{$entity->guid}",
-		]));
-	}
-
-	if ($entity->reply) {
-		$menu->add(ElggMenuItem::factory([
-			'name' => 'previous',
-			'icon' => 'arrow-left',
-			'text' => elgg_echo('previous'),
-			'href' => "thewire/previous/{$entity->guid}",
-			'link_class' => 'thewire-previous',
-			'title' => elgg_echo('thewire:previous:help'),
+			'href' => elgg_generate_entity_url($entity, 'reply'),
 		]));
 	}
 
@@ -377,7 +341,9 @@ function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
 		'name' => 'thread',
 		'icon' => 'comments-o',
 		'text' => elgg_echo('thewire:thread'),
-		'href' => "thewire/thread/{$entity->wire_thread}",
+		'href' => elgg_generate_url('collection:object:thewire:thread', [
+			'guid' => $entity->wire_thread,
+		]),
 	]));
 
 	return $menu;
@@ -386,42 +352,27 @@ function thewire_setup_entity_menu_items($hook, $type, $menu, $params) {
 /**
  * Add a menu item to an ownerblock
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:owner_block'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:owner_block'
  *
  * @return void|ElggMenuItem[]
  */
-function thewire_owner_block_menu($hook, $type, $return, $params) {
+function thewire_owner_block_menu(\Elgg\Hook $hook) {
 	
-	$user = elgg_extract('entity', $params);
+	$user = $hook->getEntityParam();
 	if (!$user instanceof \ElggUser) {
 		return;
 	}
 
+	$return = $hook->getValue();
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'thewire',
 		'text' => elgg_echo('item:object:thewire'),
-		'href' => "thewire/owner/{$params['entity']->username}",
+		'href' => elgg_generate_url('collection:object:thewire:owner', [
+			'username' => $user->username,
+		]),
 	]);
 	
 	return $return;
-}
-
-/**
- * Runs unit tests for the wire
- *
- * @param string $hook   'unit_test'
- * @param string $type   'system'
- * @param array  $value  current return value
- * @param array  $params supplied params
- *
- * @return array
- */
-function thewire_test($hook, $type, $value, $params) {
-	$value[] = elgg_get_plugins_path() . 'thewire/tests/regex.php';
-	return $value;
 }
 
 return function() {

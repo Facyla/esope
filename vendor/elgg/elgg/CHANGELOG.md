@@ -1,3 +1,225 @@
+<a name="3.1.2"></a>
+### 3.1.2  (2019-08-28)
+
+#### Contributors
+
+* Jerôme Bakker (7)
+* Esha Upadhyay (1)
+
+#### Bug Fixes
+
+* **admin:** prevent fatal error on non Apache servers ([3da30342](https://github.com/Elgg/Elgg/commit/3da303427bdcc30f094d4142277fdfdb9130820d))
+* **cache:** invalidating simplecache could break symlinked cache ([c8a41062](https://github.com/Elgg/Elgg/commit/c8a41062705b3c0f3f58d8c44577f02746f6d418))
+* **comments:** block comments on group content for non members ([6482879a](https://github.com/Elgg/Elgg/commit/6482879af8a79eadd4be2acc36f191d04e1f5858))
+* **developers:** link to site settings section ([330676bb](https://github.com/Elgg/Elgg/commit/330676bbb9cb8cd5f4b613241a71454bbf80d59a))
+* **discussions:** no more filter menu on discussion detail page ([e8d60f6c](https://github.com/Elgg/Elgg/commit/e8d60f6c562bb2c56aa53e66eb47dda172cffe72))
+* **installer:** link to site settings section ([f0e3dbe5](https://github.com/Elgg/Elgg/commit/f0e3dbe5c5c8c18a4fa62adf1c443550f043893e))
+
+
+<a name="3.1.1"></a>
+### 3.1.1  (2019-08-02)
+
+#### Contributors
+
+* Jeroen Dalsem (2)
+
+<a name="3.1.0"></a>
+## 3.1.0  (2019-07-25)
+
+#### Contributors
+
+* Jeroen Dalsem (81)
+* Jerôme Bakker (23)
+* Rohit Gupta (9)
+* Ismayil Khayredinov (1)
+* Joe Bordes (1)
+
+#### Features
+
+* **admin:**
+  * added requirements information about database server ([d9c92dab](https://github.com/Elgg/Elgg/commit/d9c92dabe99a5a3f8723cd9d2f9c8a1872c8c329))
+  * add email change option to unvalidated users ([f09ba7ee](https://github.com/Elgg/Elgg/commit/f09ba7ee48fd869a275dbfded004537ecbdda532))
+  * add server requirements page ([4e5cd057](https://github.com/Elgg/Elgg/commit/4e5cd057a5e72abf3d84e880d0e3f16f8e6baa77))
+  * moved Elgg release to page header ([f55d0f1d](https://github.com/Elgg/Elgg/commit/f55d0f1d705d68ee791dbc7796647b1011f26ca8))
+  * add security recommendations page ([e129b307](https://github.com/Elgg/Elgg/commit/e129b307e5d71b5c6f5f8fc8a63e76d07cc0f75c))
+  * add performance overview page ([f1321a2f](https://github.com/Elgg/Elgg/commit/f1321a2f688b3953f630edc005208a87f46ba11b))
+  * admin user lists now have the ability to search by email ([c34789f4](https://github.com/Elgg/Elgg/commit/c34789f4c8c5e208047d3cab3309846887400746))
+  * add admins directly from the administrators page ([78027dda](https://github.com/Elgg/Elgg/commit/78027dda9ebc940a8a9a8728af172f36924d8b5b))
+  * basic and advanced settings are merged into one form ([aedaa0e1](https://github.com/Elgg/Elgg/commit/aedaa0e1578f07f34fab0c7fe3356e3800b191be))
+* **ckeditor:**
+  * updated to ckeditor v4.12.x ([33b44604](https://github.com/Elgg/Elgg/commit/33b446047e106562ecbe0a8c8d538a8e949a12da))
+  * updated ckeditor version to 4.11.x ([d6061b3f](https://github.com/Elgg/Elgg/commit/d6061b3f639c01aba56ecf7b611db78205103c56))
+* **core:**
+  * error resources now have access to the exception ([fac3141e](https://github.com/Elgg/Elgg/commit/fac3141e502bd36148064eb0d072436ff10391af))
+  * added function to convert large numbers into short form ([de9d2ef8](https://github.com/Elgg/Elgg/commit/de9d2ef8eb3412e70d5125aff317925c2ad6a4d9))
+  * admin notices now have their own class ([a627d4ef](https://github.com/Elgg/Elgg/commit/a627d4ef2fbd081211b09afe392d6f0a4fd448b8))
+  * manifest.json is now a cacheable simplecache resource ([ef98f420](https://github.com/Elgg/Elgg/commit/ef98f420e34fac37f9b4bdf859ddad6bf33d3997))
+* **db:** allow configuration of the database port number ([058db755](https://github.com/Elgg/Elgg/commit/058db7550fae54f50e38be893912bc46f04c887e))
+* **developers:**
+  * wrap input and output views ([cafdb455](https://github.com/Elgg/Elgg/commit/cafdb45507c4c631125ec50bc0eb756491c4e9a3))
+  * display view location in view wrapping ([e6ba1ecf](https://github.com/Elgg/Elgg/commit/e6ba1ecf1650f65485167e2545e0fd83268ad8c3))
+  * added acl information to entity explorer ([9c465a1a](https://github.com/Elgg/Elgg/commit/9c465a1a714327521d3828372e79dca5939f83dd))
+* **entities:** added helper function elgg_count_entities ([7e00cbc7](https://github.com/Elgg/Elgg/commit/7e00cbc775d8459478d4af8d5fc66178e129e53f))
+* **gatekeeper:** flag to validate user edit access ([8becf0ea](https://github.com/Elgg/Elgg/commit/8becf0eacb3ba8749a84696c147dfc26722b16b1))
+* **groups:** support content based on type/subtype in tool module ([fa897bcb](https://github.com/Elgg/Elgg/commit/fa897bcbff02d18441f48065d3e621370da1896b))
+* **icons:** add icon cropper ([deb5d212](https://github.com/Elgg/Elgg/commit/deb5d21288ae7d15dd37f1d3f31db8dd4841d6bf))
+* **input:** add support for more input types ([048704e2](https://github.com/Elgg/Elgg/commit/048704e20b6b39e6e89eb259c42ff16e6c0ceb7d))
+* **menus:** added menu param to set a selected menu item ([74d50561](https://github.com/Elgg/Elgg/commit/74d505614b3130d8c3b1220b6c2505edd8f663ba))
+* **notifications:** Elgg\Email knows about sender and recipient ([539437b0](https://github.com/Elgg/Elgg/commit/539437b0379bdb9db5fd8741ac1712489c6a73c7))
+* **page_owner:** moved page owner logic to a service ([bc35cf5a](https://github.com/Elgg/Elgg/commit/bc35cf5a71301f45a6454c0b8bc660bf8cd6160d))
+* **pages:**
+  * page navigation now uses default page menu behaviour ([89976121](https://github.com/Elgg/Elgg/commit/899761219347ac411525f329e971ae250c47275f))
+  * replaced treeview js and css with default menu behaviour ([18be2699](https://github.com/Elgg/Elgg/commit/18be2699139feccdfc5cb1fd5d89185872283e75))
+* **phinx:** updated phinx version to 0.10.x ([52ebe588](https://github.com/Elgg/Elgg/commit/52ebe5885ece97df257c1cd927c8f4d46e3a364b))
+* **plugins:** hooks and events can be declared in elgg-plugin.php ([c1cc12c4](https://github.com/Elgg/Elgg/commit/c1cc12c49049b553d61d54f1b8d78b8f38bb6b11))
+* **profile:** new input types for custom profile fields ([59c1a4ba](https://github.com/Elgg/Elgg/commit/59c1a4baaa14602d12a66fab1ff71a20f6464128))
+* **router:** add SignedRequestGatekeeper middleware ([54e050a3](https://github.com/Elgg/Elgg/commit/54e050a32094b222adaf54a4d90662814b47c686))
+* **routes:**
+  * added required plugins param to route config ([8f4c1957](https://github.com/Elgg/Elgg/commit/8f4c195729b7725cb06b5ad0af4052728c8a4960))
+  * added route config to mark route as deprecated ([53d8f433](https://github.com/Elgg/Elgg/commit/53d8f433a26a5515ce7f2b5ca3f7ec78b636413a))
+* **security:**
+  * request confirmation on email change ([53017104](https://github.com/Elgg/Elgg/commit/53017104cc5283179a474b8fb63e7ccb652f8ec8))
+  * notify the user about a password change ([8692ac32](https://github.com/Elgg/Elgg/commit/8692ac32c93dc80ee4313ec3a1723bd850c894e8))
+* **site_notifications:** topbar menu item now has a unread count badge ([a1d1fddc](https://github.com/Elgg/Elgg/commit/a1d1fddc15c7f4059e48aff8d5ca04f84a05ff38))
+* **upgrades:** completed upgrades are sorted by completion time ([beebaecd](https://github.com/Elgg/Elgg/commit/beebaecdacb45e096e57b8a45db83ffc9f8f4c29))
+* **users:**
+  * unify set/get/delete profile data functions ([906c25b7](https://github.com/Elgg/Elgg/commit/906c25b743575d522b48731b067f4ac66613fc7e))
+  * added a site setting to allow users to change the username ([3e2a476e](https://github.com/Elgg/Elgg/commit/3e2a476e5d10feedfc60ea611c019ec8ed15310b))
+* **views:**
+  * add additional page menu and owner block controls ([5cf80c8c](https://github.com/Elgg/Elgg/commit/5cf80c8c0b55ee87073af61deae50f7e1d98dd43))
+  * password inputs now set correct autocomplete behaviour ([929f7bc5](https://github.com/Elgg/Elgg/commit/929f7bc5ef76a848fa57a1fa1743633a453ac31e))
+  * show_add_form view var is now supported in responses ([7bd0f0da](https://github.com/Elgg/Elgg/commit/7bd0f0da6e040471a588de11ac4bda8f9340492c))
+
+
+#### Performance
+
+* **db:** added some extra indexes to the entities table ([0395d99b](https://github.com/Elgg/Elgg/commit/0395d99bb8bed7f16b2f29d4af5b11caf96899ff))
+
+
+#### Documentation
+
+* **core:**
+  * added a spam guide ([2ac20105](https://github.com/Elgg/Elgg/commit/2ac20105e3c5a14e7b88e8c2c2b310981d45eacc))
+  * added documentation about the usage of elgg_call ([8beef28f](https://github.com/Elgg/Elgg/commit/8beef28f77afcc136b961741e5df9eb87b6691f0))
+  * added upgrade notices page for 3.0 to 3.x ([456e4fba](https://github.com/Elgg/Elgg/commit/456e4fbaf002a59a6a6c75fd435e9c93061c0a69))
+
+
+#### Bug Fixes
+
+* **admin:** different user counters in admin stats ([73c86726](https://github.com/Elgg/Elgg/commit/73c867262da86b0e7bb23c2e2a80ec9ff3bb94eb))
+* **core:**
+  * updated PHP version checks to check correct version ([dbb02710](https://github.com/Elgg/Elgg/commit/dbb02710d5e2671cf51c40e3ca94cdeab80f98c0))
+  * elgg_call will now also restore when an error is thrown ([54964f59](https://github.com/Elgg/Elgg/commit/54964f59f0f65068ff533c9ee4680ce42405ec6e))
+* **css:**
+  * spacing between profile-field and widgets ([a281ac45](https://github.com/Elgg/Elgg/commit/a281ac4584ac56f1a313c37774ac323f218c1032))
+  * prevent jquery-ui bug related to sortables ([fa840b53](https://github.com/Elgg/Elgg/commit/fa840b532c1c0c65e440ab25852fdf674c2430ff))
+* **discussions:** no longer call unavailable sidebar views ([afe83c96](https://github.com/Elgg/Elgg/commit/afe83c96241e38c644bad177b00bdb7444440789))
+* **forms:** added missing entity info in widget access input ([8f1770d1](https://github.com/Elgg/Elgg/commit/8f1770d169c995794beec120a45cb8d29eec7623))
+* **pages:**
+  * no longer register page_nav menu if there is just one item ([a7f7359d](https://github.com/Elgg/Elgg/commit/a7f7359d03db0aabf8d017ef28e47c8206d6105a))
+  * removed the pages navigation sidebar from some resources ([08f3df26](https://github.com/Elgg/Elgg/commit/08f3df267ec0c7aac0a32f59d2e728fd943fa958))
+  * no longer show history sidebar on revision page ([3c91022d](https://github.com/Elgg/Elgg/commit/3c91022d4c57c13bed61908df766f55890a8d01b))
+* **system_log:** correctly fetch non default object classes ([3f0a10d4](https://github.com/Elgg/Elgg/commit/3f0a10d44952c00b048a54b161b9a0032f44ba7a))
+
+
+#### Deprecations
+
+* **access:**
+  * elgg_set_ignore_access is deprecated ([6d0d99ec](https://github.com/Elgg/Elgg/commit/6d0d99ecf79a838ae4827e70c14c3f32af6de4ef))
+  * access_show_hidden_entities is deprecated ([33b3e5ac](https://github.com/Elgg/Elgg/commit/33b3e5ac7c80396583e60cab46997f1d3b40665a))
+* **actions:** replaced several delete actions with entity/delete ([192d01ac](https://github.com/Elgg/Elgg/commit/192d01ac12e22e50835eeadae2e8cca1b5745ae1))
+* **core:**
+  * legacy hook/event callback arguments are deprecated ([563f4492](https://github.com/Elgg/Elgg/commit/563f4492e10107f0fbebbb7f7585bd9f905a14e5))
+  * various unused lib functions have been deprecated ([792bd362](https://github.com/Elgg/Elgg/commit/792bd362838a100b4a8366707749d7725ea06a03))
+  * elgg_instanceof is now deprecated ([2602c801](https://github.com/Elgg/Elgg/commit/2602c801f3241329130e6e90a55662752f29b64d))
+  * replaced delete_directory with elgg_delete_directory ([f61471dc](https://github.com/Elgg/Elgg/commit/f61471dc9931cb39c352e0757711e05784c9a160))
+* **css:** use elgg_require_css instead of elgg_register_css ([b0c014f3](https://github.com/Elgg/Elgg/commit/b0c014f321cf602b8d395adc14ec6366b8a24ff2))
+* **js:** use elgg_require_js instead of elgg_register_js ([e3d4a13c](https://github.com/Elgg/Elgg/commit/e3d4a13c3d24025fb6336887d3f5cf8449743ba7))
+* **page_owner:** don't set page_owner via elgg_get_page_owner_guid ([b1089824](https://github.com/Elgg/Elgg/commit/b1089824a63ab4217cf2535ad880c371bfb570c5))
+* **plugins:**
+  * usage of the views.php file in plugins is deprecated ([95592b04](https://github.com/Elgg/Elgg/commit/95592b048948c96d06bba82f76f1159f843f8163))
+  * no longer use the (de)activate.php plugin files ([d89c2474](https://github.com/Elgg/Elgg/commit/d89c24745a52a3f51f04f7d280578a3004d42b3d))
+  * plugin screenshots are no longer supported ([0f7fe379](https://github.com/Elgg/Elgg/commit/0f7fe3796ca9a6563599fac734fdc5e1165f8007))
+* **tests:** the simpletest cli command is deprecated ([f17a8cd9](https://github.com/Elgg/Elgg/commit/f17a8cd9c6d02455716d9a27dd2606302606676a))
+* **thewire:** the route previous:object:thewire is now deprecated ([677d9129](https://github.com/Elgg/Elgg/commit/677d9129cf075405bd0da9394b129b837dcae051))
+
+
+<a name="3.0.7"></a>
+### 3.0.7  (2019-08-02)
+
+#### Contributors
+
+* Jerôme Bakker (2)
+* Jeroen Dalsem (1)
+
+#### Bug Fixes
+
+* **js:** improved elgg.normalize_url to handle more site cases ([57af9e2b](https://github.com/Elgg/Elgg/commit/57af9e2bc83091790172eb736477b5483dd0c4b2))
+* **routes:** use absolute url as base for route url generation ([244854af](https://github.com/Elgg/Elgg/commit/244854afea723dfbecea94af919e11e448942722))
+
+
+<a name="3.0.6"></a>
+### 3.0.6  (2019-07-24)
+
+#### Contributors
+
+* Jeroen Dalsem (11)
+* Jerôme Bakker (9)
+* Ismayil Khayredinov (1)
+
+#### Documentation
+
+* **code:** added note about low-level functions that should throw ([03417897](https://github.com/Elgg/Elgg/commit/034178975619dd60697019bd3e5cf0216512c5be))
+* **composer:** document composer autoloader optimization ([fee62f05](https://github.com/Elgg/Elgg/commit/fee62f05c8e3d9b568db00e9cbedd159cd6d2bf3))
+* **css:** added some best practices about css files and classnaming ([daa55646](https://github.com/Elgg/Elgg/commit/daa55646067a772e76036a4831f85f84ea329c55))
+
+
+#### Bug Fixes
+
+* **cache:**
+  * improved handling of values ([db7c8864](https://github.com/Elgg/Elgg/commit/db7c8864c37ce7d231ef2b2c80fa76e7cbcc7843))
+  * prevent timeout during cache flush ([ab8c759b](https://github.com/Elgg/Elgg/commit/ab8c759b865014a477656d0801fd01b6dcbdc32c))
+* **ckeditor:** no need to remove plugins as they are not loaded ([55b95e7a](https://github.com/Elgg/Elgg/commit/55b95e7a9dd454e95cb132ffa8fa28ab4d852605))
+* **comments:** popup menu will close itself when inline editing comments ([9a7ecc73](https://github.com/Elgg/Elgg/commit/9a7ecc73c8efd3dd3332db68c9e865fec2887874))
+* **core:**
+  * literal order by clauses are no longer deprecated ([e77e4898](https://github.com/Elgg/Elgg/commit/e77e4898fd0206c7358673c30f44502a3d675fd5))
+  * unset on ElggData will always use magic setter ([a0b442ad](https://github.com/Elgg/Elgg/commit/a0b442ad6d4b0538b0302f28dba7c167e52ec16e))
+  * always show success message when upgrade has finished ([0afb29d8](https://github.com/Elgg/Elgg/commit/0afb29d8fbf6b89e2082285b19f645ea128a84c4))
+* **http:** request validation now correctly reads payload ([c5e18f45](https://github.com/Elgg/Elgg/commit/c5e18f45781ba4feea4f40a2c6f6cfd9518df147))
+* **js:** validate arguments in elgg.get_simplecache_url ([91f7c143](https://github.com/Elgg/Elgg/commit/91f7c143c79cfc29c2078c2dd5c38f929378b162))
+* **pages:** correctly check who can edit (write) access ([a87ec78f](https://github.com/Elgg/Elgg/commit/a87ec78f4c71d02cdb8975afc8eaea90195ba25c))
+* **routes:** route url generation will always return a normalized url ([d0b2503a](https://github.com/Elgg/Elgg/commit/d0b2503a36bfa0a0ed7addddffa6a901bdc7bb7b))
+
+
+<a name="3.0.5"></a>
+### 3.0.5  (2019-07-08)
+
+#### Contributors
+
+* Jerôme Bakker (8)
+* Jeroen Dalsem (2)
+* Ismayil Khayredinov (1)
+
+#### Documentation
+
+* **compatibility:** explain @internal implications ([5c7b52e5](https://github.com/Elgg/Elgg/commit/5c7b52e5abc503eab2a3f17830005d7363d4a4d1))
+* **plugins:** document plugin bootstrap usage ([02ea7a0d](https://github.com/Elgg/Elgg/commit/02ea7a0d4cedac0c1027362bf69cef671eace297))
+
+
+#### Bug Fixes
+
+* **core:** correctly remove annotations on non saved entities ([20af166e](https://github.com/Elgg/Elgg/commit/20af166e6815b38e1771542cac69b7c3883e004a))
+* **http:** non-multipart requests should not fail validation ([c59ae7aa](https://github.com/Elgg/Elgg/commit/c59ae7aa095e663a57ec52e479264296a523297d), closes [#12654](https://github.com/Elgg/Elgg/issues/12654))
+* **notifications:** correctly sort the notifiable users ([583fb67f](https://github.com/Elgg/Elgg/commit/583fb67f8038741607f426efd5227880610b0ca1))
+* **search:** highlighter no longer messes up output when searching ints ([e3499498](https://github.com/Elgg/Elgg/commit/e34994983dba7de51eb5815e9746cd9e9d40c124))
+* **thewire:** full view uses correct entity layout ([64143d58](https://github.com/Elgg/Elgg/commit/64143d58e80bbbaec204727d88575691707f4599))
+
+
+#### Deprecations
+
+* **groups:** group_acl metadata has been deprecated ([380cfa24](https://github.com/Elgg/Elgg/commit/380cfa249a6d8d57838f2de911dcb0f4c6677588))
+
+
 <a name="3.0.4"></a>
 ### 3.0.4  (2019-06-12)
 
@@ -1181,6 +1403,21 @@ keyword `all` no longer has any effect on calling order. ([1b0cc64d](https://git
 var `$DEFAULT_FILE_STORE`.
  ([618c79d3](https://github.com/Elgg/Elgg/commit/618c79d301eda1b265441b14f3bfbda2235ee3fd))
 * The `resources/file/download` view is no longer used. ([1e736aeb](https://github.com/Elgg/Elgg/commit/1e736aebb953051ec1b8a2c165ab3c9595e72b40))
+
+
+<a name="2.3.14"></a>
+### 2.3.14  (2019-07-24)
+
+#### Contributors
+
+* Jerôme Bakker (3)
+* Jeroen Dalsem (1)
+
+#### Bug Fixes
+
+* **groups:** no error on notification failure during membership request ([2bd72ffc](https://github.com/Elgg/Elgg/commit/2bd72ffcf2e156d6b3e0fd18ded72846279c37d9))
+* **http:** check object for toString function ([1cd0809e](https://github.com/Elgg/Elgg/commit/1cd0809eb7c9c31547b69cb306058dee7bfe3ae1))
+* **installer:** detect more https scenarios ([05648781](https://github.com/Elgg/Elgg/commit/056487810a7dccfc524c7c0aa8e0183424842307))
 
 
 <a name="2.3.13"></a>

@@ -27,18 +27,30 @@ return [
 		'collection:object:file:friends' => [
 			'path' => '/file/friends/{username}',
 			'resource' => 'file/friends',
+			'required_plugins' => [
+				'friends',
+			],
 		],
 		'collection:object:file:group' => [
 			'path' => '/file/group/{guid}',
 			'resource' => 'file/owner',
+			'required_plugins' => [
+				'groups',
+			],
 		],
 		'add:object:file' => [
 			'path' => '/file/add/{guid}',
 			'resource' => 'file/upload',
+			'middleware' => [
+				\Elgg\Router\Middleware\Gatekeeper::class,
+			],
 		],
 		'edit:object:file' => [
 			'path' => '/file/edit/{guid}',
 			'resource' => 'file/edit',
+			'middleware' => [
+				\Elgg\Router\Middleware\Gatekeeper::class,
+			],
 		],
 		'view:object:file' => [
 			'path' => '/file/view/{guid}/{title?}',
@@ -47,8 +59,6 @@ return [
 	],
 	'widgets' => [
 		'filerepo' => [
-			'name' => elgg_echo('collection:object:file'),
-			'description' => elgg_echo('file:widget:description'),
 			'context' => ['profile', 'dashboard'],
 		],
 	],

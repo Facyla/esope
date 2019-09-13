@@ -1,6 +1,10 @@
 <?php
 /**
  * Display user's pages
+ *
+ * Note: this view has a corresponding view in the rss view type, changes should be reflected
+ *
+ * @uses $vars['entity'] the user
  */
 
 $entity = elgg_extract('entity', $vars);
@@ -15,7 +19,5 @@ echo elgg_list_entities([
 		'parent_guid' => 0,
 	],
 	'owner_guid' => $entity->guid,
-	'full_view' => false,
 	'no_results' => elgg_echo('pages:none'),
-	'preload_owners' => true,
 ]);

@@ -8,7 +8,7 @@ use ElggUser;
 /**
  * Populates volatile data with details needed to render a search view
  *
- * @access private
+ * @internal
  */
 class Formatter {
 
@@ -151,6 +151,7 @@ class Formatter {
 						continue;
 					}
 
+					$property_values = '';
 					switch ($property_type) {
 						case 'attributes' :
 						case 'metadata' :

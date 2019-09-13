@@ -3,8 +3,6 @@
  * Create a new page
  */
 
-elgg_gatekeeper();
-
 $container = false;
 
 $parent_guid = (int) elgg_extract('guid', $vars);
@@ -51,9 +49,6 @@ $body = elgg_view_layout('content', [
 	'filter' => '',
 	'content' => $content,
 	'title' => $title,
-	'sidebar' => elgg_view('pages/sidebar/navigation', [
-		'page' => $parent,
-	]),
 ]);
 
 echo elgg_view_page($title, $body);

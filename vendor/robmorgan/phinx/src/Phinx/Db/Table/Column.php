@@ -42,7 +42,7 @@ class Column
     protected $name;
 
     /**
-     * @var string
+     * @var string|\Phinx\Util\Literal
      */
     protected $type;
 
@@ -65,11 +65,6 @@ class Column
      * @var boolean
      */
     protected $identity = false;
-
-    /**
-     * @var integer
-     */
-    protected $precision;
 
     /**
      * @var integer
@@ -104,7 +99,7 @@ class Column
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * @var string
@@ -125,18 +120,19 @@ class Column
      * Sets the column name.
      *
      * @param string $name
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * Gets the column name.
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -146,19 +142,20 @@ class Column
     /**
      * Sets the column type.
      *
-     * @param string $type
-     * @return Column
+     * @param string|\Phinx\Util\Literal $type Column type
+     * @return \Phinx\Db\Table\Column
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
     /**
      * Gets the column type.
      *
-     * @return string
+     * @return string|\Phinx\Util\Literal
      */
     public function getType()
     {
@@ -168,19 +165,20 @@ class Column
     /**
      * Sets the column limit.
      *
-     * @param integer $limit
-     * @return Column
+     * @param int $limit
+     * @return \Phinx\Db\Table\Column
      */
     public function setLimit($limit)
     {
         $this->limit = $limit;
+
         return $this;
     }
 
     /**
      * Gets the column limit.
      *
-     * @return integer
+     * @return int
      */
     public function getLimit()
     {
@@ -190,19 +188,20 @@ class Column
     /**
      * Sets whether the column allows nulls.
      *
-     * @param boolean $null
-     * @return Column
+     * @param bool $null
+     * @return \Phinx\Db\Table\Column
      */
     public function setNull($null)
     {
-        $this->null = (bool) $null;
+        $this->null = (bool)$null;
+
         return $this;
     }
 
     /**
      * Gets whether the column allows nulls.
      *
-     * @return boolean
+     * @return bool
      */
     public function getNull()
     {
@@ -212,7 +211,7 @@ class Column
     /**
      * Does the column allow nulls?
      *
-     * @return boolean
+     * @return bool
      */
     public function isNull()
     {
@@ -223,11 +222,12 @@ class Column
      * Sets the default column value.
      *
      * @param mixed $default
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setDefault($default)
     {
         $this->default = $default;
+
         return $this;
     }
 
@@ -244,19 +244,20 @@ class Column
     /**
      * Sets whether or not the column is an identity column.
      *
-     * @param boolean $identity
-     * @return Column
+     * @param bool $identity
+     * @return \Phinx\Db\Table\Column
      */
     public function setIdentity($identity)
     {
         $this->identity = $identity;
+
         return $this;
     }
 
     /**
      * Gets whether or not the column is an identity column.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIdentity()
     {
@@ -266,7 +267,7 @@ class Column
     /**
      * Is the column an identity column?
      *
-     * @return boolean
+     * @return bool
      */
     public function isIdentity()
     {
@@ -277,11 +278,12 @@ class Column
      * Sets the name of the column to add this column after.
      *
      * @param string $after After
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setAfter($after)
     {
         $this->after = $after;
+
         return $this;
     }
 
@@ -299,11 +301,12 @@ class Column
      * Sets the 'ON UPDATE' mysql column function.
      *
      * @param  string $update On Update function
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setUpdate($update)
     {
         $this->update = $update;
+
         return $this;
     }
 
@@ -318,43 +321,57 @@ class Column
     }
 
     /**
-     * Sets the column precision for decimal.
+     * Sets the number precision for decimal or float column.
      *
-     * @param integer $precision
-     * @return Column
+     * For example `DECIMAL(5,2)`, 5 is the precision and 2 is the scale,
+     * and the column could store value from -999.99 to 999.99.
+     *
+     * @param int $precision Number precision
+     * @return \Phinx\Db\Table\Column
      */
     public function setPrecision($precision)
     {
-        $this->precision = $precision;
+        $this->setLimit($precision);
+
         return $this;
     }
 
     /**
-     * Gets the column precision for decimal.
+     * Gets the number precision for decimal or float column.
      *
-     * @return integer
+     * For example `DECIMAL(5,2)`, 5 is the precision and 2 is the scale,
+     * and the column could store value from -999.99 to 999.99.
+     *
+     * @return int
      */
     public function getPrecision()
     {
-        return $this->precision;
+        return $this->limit;
     }
 
     /**
-     * Sets the column scale for decimal.
+     * Sets the number scale for decimal or float column.
      *
-     * @param integer $scale
-     * @return Column
+     * For example `DECIMAL(5,2)`, 5 is the precision and 2 is the scale,
+     * and the column could store value from -999.99 to 999.99.
+     *
+     * @param int $scale Number scale
+     * @return \Phinx\Db\Table\Column
      */
     public function setScale($scale)
     {
         $this->scale = $scale;
+
         return $this;
     }
 
     /**
-     * Gets the column scale for decimal.
+     * Gets the number scale for decimal or float column.
      *
-     * @return integer
+     * For example `DECIMAL(5,2)`, 5 is the precision and 2 is the scale,
+     * and the column could store value from -999.99 to 999.99.
+     *
+     * @return int
      */
     public function getScale()
     {
@@ -362,14 +379,33 @@ class Column
     }
 
     /**
+     * Sets the number precision and scale for decimal or float column.
+     *
+     * For example `DECIMAL(5,2)`, 5 is the precision and 2 is the scale,
+     * and the column could store value from -999.99 to 999.99.
+     *
+     * @param int $precision Number precision
+     * @param int $scale Number scale
+     * @return \Phinx\Db\Table\Column
+     */
+    public function setPrecisionAndScale($precision, $scale)
+    {
+        $this->setLimit($precision);
+        $this->scale = $scale;
+
+        return $this;
+    }
+
+    /**
      * Sets the column comment.
      *
      * @param string $comment
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
+
         return $this;
     }
 
@@ -387,18 +423,19 @@ class Column
      * Sets whether field should be signed.
      *
      * @param bool $signed
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setSigned($signed)
     {
-        $this->signed = (bool) $signed;
+        $this->signed = (bool)$signed;
+
         return $this;
     }
 
     /**
      * Gets whether field should be signed.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSigned()
     {
@@ -408,7 +445,7 @@ class Column
     /**
      * Should the column be signed?
      *
-     * @return boolean
+     * @return bool
      */
     public function isSigned()
     {
@@ -420,18 +457,19 @@ class Column
      * Used for date/time columns only!
      *
      * @param bool $timezone
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setTimezone($timezone)
     {
-        $this->timezone = (bool) $timezone;
+        $this->timezone = (bool)$timezone;
+
         return $this;
     }
 
     /**
      * Gets whether field has a timezone identifier.
      *
-     * @return boolean
+     * @return bool
      */
     public function getTimezone()
     {
@@ -441,7 +479,7 @@ class Column
     /**
      * Should the column have a timezone?
      *
-     * @return boolean
+     * @return bool
      */
     public function isTimezone()
     {
@@ -453,11 +491,12 @@ class Column
      *
      * @param array $properties
      *
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setProperties($properties)
     {
         $this->properties = $properties;
+
         return $this;
     }
 
@@ -474,9 +513,9 @@ class Column
     /**
      * Sets field values.
      *
-     * @param mixed (array|string) $values
+     * @param array|string $values
      *
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setValues($values)
     {
@@ -484,6 +523,7 @@ class Column
             $values = preg_split('/,\s*/', $values);
         }
         $this->values = $values;
+
         return $this;
     }
 
@@ -507,13 +547,14 @@ class Column
      */
     public function setCollation($collation)
     {
-        $allowedTypes = array(
+        $allowedTypes = [
             AdapterInterface::PHINX_TYPE_CHAR,
             AdapterInterface::PHINX_TYPE_STRING,
             AdapterInterface::PHINX_TYPE_TEXT,
-        );
-        if (!in_array($this->getType(), $allowedTypes))
+        ];
+        if (!in_array($this->getType(), $allowedTypes)) {
             throw new \UnexpectedValueException('Collation may be set only for types: ' . implode(', ', $allowedTypes));
+        }
 
         $this->collation = $collation;
 
@@ -540,13 +581,14 @@ class Column
      */
     public function setEncoding($encoding)
     {
-        $allowedTypes = array(
+        $allowedTypes = [
             AdapterInterface::PHINX_TYPE_CHAR,
             AdapterInterface::PHINX_TYPE_STRING,
             AdapterInterface::PHINX_TYPE_TEXT,
-        );
-        if (!in_array($this->getType(), $allowedTypes))
+        ];
+        if (!in_array($this->getType(), $allowedTypes)) {
             throw new \UnexpectedValueException('Character set may be set only for types: ' . implode(', ', $allowedTypes));
+        }
 
         $this->encoding = $encoding;
 
@@ -570,12 +612,11 @@ class Column
      */
     protected function getValidOptions()
     {
-        return array(
+        return [
             'limit',
             'default',
             'null',
             'identity',
-            'precision',
             'scale',
             'after',
             'update',
@@ -586,7 +627,7 @@ class Column
             'values',
             'collation',
             'encoding',
-        );
+        ];
     }
 
     /**
@@ -596,16 +637,17 @@ class Column
      */
     protected function getAliasedOptions()
     {
-        return array(
+        return [
             'length' => 'limit',
-        );
+            'precision' => 'limit',
+        ];
     }
 
     /**
      * Utility method that maps an array of column options to this objects methods.
      *
      * @param array $options Options
-     * @return Column
+     * @return \Phinx\Db\Table\Column
      */
     public function setOptions($options)
     {
@@ -625,6 +667,7 @@ class Column
             $method = 'set' . ucfirst($option);
             $this->$method($value);
         }
+
         return $this;
     }
 }

@@ -20,8 +20,7 @@ function site_notifications_init() {
 
 	elgg_extend_view('elgg.css', 'site_notifications/css');
 
-	$js = elgg_get_simplecache_url('site_notifications.js');
-	elgg_register_js('elgg.site_notifications', $js, 'footer');
+	elgg_register_external_file('js', 'elgg.site_notifications', elgg_get_simplecache_url('site_notifications.js'), 'footer');
 
 	site_notifications_set_topbar();
 }
@@ -38,6 +37,15 @@ function site_notifications_set_topbar() {
 		return;
 	}
 	
+	$count = elgg_count_entities([
+		'type' => 'object',
+		'subtype' => 'site_notification',
+		'owner_guid' => $user->guid,
+		'metadata_name_value_pairs' => [
+			'read' => false,
+		],
+	]);
+	
 	elgg_register_menu_item('topbar', [
 		'name' => 'site_notifications',
 		'href' => elgg_generate_url('collection:object:site_notification:owner', [
@@ -45,6 +53,7 @@ function site_notifications_set_topbar() {
 		]),
 		'text' => elgg_echo('site_notifications:topbar'),
 		'icon' => 'bell',
+		'badge' => $count ?: null,
 		'priority' => 100,
 	]);
 }
@@ -52,36 +61,33 @@ function site_notifications_set_topbar() {
 /**
  * Create a site notification
  *
- * @param string $hook   Hook name
- * @param string $type   Hook type
- * @param bool   $result Has the notification been sent
- * @param array  $params Hook parameters
+ * @param \Elgg\Hook $hook 'send', 'notification:site'
  *
  * @return void|true
  */
-function site_notifications_send($hook, $type, $result, $params) {
+function site_notifications_send(\Elgg\Hook $hook) {
 	/* @var Elgg\Notifications\Notification */
-	$notification = elgg_extract('notification', $params);
+	$notification = $hook->getParam('notification');
 	if ($notification->summary) {
 		$message = $notification->summary;
 	} else {
 		$message = $notification->subject;
 	}
 
-	if (isset($params['event'])) {
-		$event = $params['event'];
+	$object = null;
+	$event = $hook->getParam('event');
+	if (isset($event)) {
 		$object = $event->getObject();
-	} else {
-		$object = null;
 	}
 
 	$actor = $notification->getSender();
 	$recipient = $notification->getRecipient();
 	$url = $notification->url;
 	
-	$ia = elgg_set_ignore_access(true);
-	$note = SiteNotificationFactory::create($recipient, $message, $actor, $object, $url);
-	elgg_set_ignore_access($ia);
+	$note = elgg_call(ELGG_IGNORE_ACCESS, function() use ($recipient, $message, $actor, $object, $url) {
+		return SiteNotificationFactory::create($recipient, $message, $actor, $object, $url);
+	});
+	
 	if ($note instanceof SiteNotification) {
 		return true;
 	}

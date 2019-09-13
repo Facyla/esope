@@ -22,15 +22,16 @@ return array(
 	'likes:notifications:body' =>
 'Beste %1$s,
 
-%2$s vind je bericht "%3$s" op %4$s leuk
+%2$s vond je item "%3$s" op %4$s leuk.
 
-Bekijk je originele bericht hier:
+Om naar je item te gaan, klik hier:
 %5$s
 
-of bekijk het profiel van %2$s hier:
+of bekijk %2$s\'s profiel hier:
+
 %6$s
 
-Bedank,
+Bedankt,
 %4$s',
 	'likes:upgrade:2017120700:title' => "Publieke Likes annotaties",
 	'likes:upgrade:2017120700:description' => "Dit update het toegangsniveau van alle likes annotaties naar publiek",

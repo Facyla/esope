@@ -1,7 +1,5 @@
 <?php
 
-elgg_gatekeeper();
-
 $guid = elgg_extract('guid', $vars);
 
 elgg_entity_gatekeeper($guid);
@@ -21,12 +19,9 @@ elgg_push_breadcrumb($title);
 $body_vars = discussion_prepare_form_vars();
 $content = elgg_view_form('discussion/save', [], $body_vars);
 
-$params = [
-	'content' => $content,
+$body = elgg_view_layout('default', [
 	'title' => $title,
-	'sidebar' => elgg_view('discussion/sidebar/edit'),
-	'filter' => '',
-];
-$body = elgg_view_layout('content', $params);
+	'content' => $content,
+]);
 
 echo elgg_view_page($title, $body);

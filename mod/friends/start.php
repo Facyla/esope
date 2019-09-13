@@ -25,7 +25,7 @@ function elgg_friends_plugin_init() {
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  */
 function _elgg_friends_setup_title_menu(\Elgg\Hook $hook) {
 	
@@ -75,18 +75,15 @@ function _elgg_friends_setup_title_menu(\Elgg\Hook $hook) {
 /**
  * Adds friending to user hover menu
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:user_hover'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:user_hover'
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  */
-function _elgg_friends_setup_user_hover_menu($hook, $type, $return, $params) {
+function _elgg_friends_setup_user_hover_menu(\Elgg\Hook $hook) {
 	
-	$user = elgg_extract('entity', $params);
+	$user = $hook->getEntityParam();
 	if (!$user instanceof ElggUser || !elgg_is_logged_in()) {
 		return;
 	}
@@ -96,7 +93,8 @@ function _elgg_friends_setup_user_hover_menu($hook, $type, $return, $params) {
 	}
 	
 	$isFriend = $user->isFriend();
-
+	$return = $hook->getValue();
+	
 	// Always emit both to make it super easy to toggle with ajax
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'remove_friend',
@@ -128,26 +126,26 @@ function _elgg_friends_setup_user_hover_menu($hook, $type, $return, $params) {
 /**
  * Register menu items for the topbar menu
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:topbar'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:topbar'
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  * @since 3.0
  */
-function _elgg_friends_topbar_menu($hook, $type, $return, $params) {
+function _elgg_friends_topbar_menu(\Elgg\Hook $hook) {
 
 	$viewer = elgg_get_logged_in_user_entity();
 	if (!$viewer) {
 		return;
 	}
 		
+	$return = $hook->getValue();
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'friends',
-		'href' => "friends/{$viewer->username}",
+		'href' => elgg_generate_url('collection:friends:owner', [
+			'username' => $viewer->username,
+		]),
 		'text' => elgg_echo('friends'),
 		'icon' => 'users',
 		'title' => elgg_echo('friends'),
@@ -162,34 +160,36 @@ function _elgg_friends_topbar_menu($hook, $type, $return, $params) {
 /**
  * Register menu items for the friends page menu
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:page'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:page'
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  * @since 3.0
  */
-function _elgg_friends_page_menu($hook, $type, $return, $params) {
+function _elgg_friends_page_menu(\Elgg\Hook $hook) {
 
 	$owner = elgg_get_page_owner_entity();
 	if (!$owner instanceof ElggUser) {
 		return;
 	}
 
+	$return = $hook->getValue();
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'friends',
 		'text' => elgg_echo('friends'),
-		'href' => 'friends/' . $owner->username,
+		'href' => elgg_generate_url('collection:friends:owner', [
+			'username' => $owner->username,
+		]),
 		'contexts' => ['friends'],
 	]);
 
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'friends:of',
 		'text' => elgg_echo('friends:of'),
-		'href' => 'friendsof/' . $owner->username,
+		'href' => elgg_generate_url('collection:friends_of:owner', [
+			'username' => $owner->username,
+		]),
 		'contexts' => ['friends'],
 	]);
 
@@ -199,24 +199,23 @@ function _elgg_friends_page_menu($hook, $type, $return, $params) {
 /**
  * Notify user that someone has friended them
  *
- * @param string            $event  'create'
- * @param string            $type   'relationship'
- * @param \ElggRelationship $object Object
+ * @param \Elgg\Event $event 'create', 'relationship'
  *
- * @return bool
- * @access private
+ * @return void
+ * @internal
  */
-function _elgg_send_friend_notification($event, $type, $object) {
-	if ($object->relationship != 'friend') {
-		return true;
+function _elgg_send_friend_notification(\Elgg\Event $event) {
+	$object = $event->getObject();
+	if (!$object instanceof ElggRelationship) {
+		return;
+	}
+	
+	if ($object->relationship !== 'friend') {
+		return;
 	}
 
 	$user_one = get_entity($object->guid_one);
-	/* @var \ElggUser $user_one */
-
 	$user_two = get_entity($object->guid_two);
-	/* @var ElggUser $user_two */
-
 	if (!$user_one instanceof ElggUser || !$user_two instanceof ElggUser) {
 		return;
 	}
@@ -240,29 +239,29 @@ function _elgg_send_friend_notification($event, $type, $object) {
 		'url' => $user_two->getURL(),
 	];
 
-	return notify_user($user_two->guid, $object->guid_one, $subject, $body, $params);
+	notify_user($user_two->guid, $object->guid_one, $subject, $body, $params);
 }
 
 /**
  * Add "Friends" tab to common filter
  *
- * @param string $hook   "filter_tabs"
- * @param string $type   Context
- * @param array  $items  Menu items to render as tabs
- * @param array  $params Hook params
+ * @param \Elgg\Hook $hook "filter_tabs", "all"
  *
  * @return array
+ * @internal
  */
-function _elgg_friends_filter_tabs($hook, $type, $items, $params) {
+function _elgg_friends_filter_tabs(\Elgg\Hook $hook) {
 
-	$user = elgg_extract('user', $params);
+	$user = $hook->getUserParam();
 	if (!$user instanceof ElggUser) {
 		return;
 	}
 
-	$vars = elgg_extract('vars', $params);
-	$selected = elgg_extract('selected', $params);
+	$vars = $hook->getParam('vars');
+	$selected = $hook->getParam('selected');
+	$type = $hook->getType();
 
+	$items = $hook->getValue();
 	$items[] = ElggMenuItem::factory([
 		'name' => 'friend',
 		'text' => elgg_echo('friends'),
@@ -277,16 +276,14 @@ function _elgg_friends_filter_tabs($hook, $type, $items, $params) {
 /**
  * Returns widget URLS used in widget titles
  *
- * @param string $hook   Hook name
- * @param string $type   Hook type
- * @param string $result URL
- * @param array  $params Parameters
- * @return string|null
- * @access private
+ * @param \Elgg\Hook $hook 'entity:url', 'object'
+ *
+ * @return void|string
+ * @internal
  */
-function _elgg_friends_widget_urls($hook, $type, $result, $params) {
-	$widget = elgg_extract('entity', $params);
-	if (!($widget instanceof \ElggWidget)) {
+function _elgg_friends_widget_urls(\Elgg\Hook $hook) {
+	$widget = $hook->getEntityParam();
+	if (!$widget instanceof \ElggWidget) {
 		return;
 	}
 	
@@ -295,11 +292,17 @@ function _elgg_friends_widget_urls($hook, $type, $result, $params) {
 	}
 	
 	$owner = $widget->getOwnerEntity();
-	if (!($owner instanceof \ElggUser)) {
+	if (!$owner instanceof \ElggUser) {
 		return;
 	}
-			
-	return "friends/{$owner->username}";
+	
+	$url = elgg_generate_url('collection:friends:owner', [
+		'username' => $owner->username,
+	]);
+	if (empty($url)) {
+		return;
+	}
+	return $url;
 }
 
 return function() {

@@ -39,8 +39,8 @@ return array(
 	'groups:owner' => "Owner",
 	'groups:owner:warning' => "Warning: if you change this value, you will no longer be the owner of this group.",
 	'groups:widget:num_display' => 'Number of groups to display',
-	'groups:widget:membership' => 'Group membership',
-	'groups:widgets:description' => 'Display the groups you are a member of on your profile',
+	'widgets:a_users_groups:name' => 'Group membership',
+	'widgets:a_users_groups:description' => 'Display the groups you are a member of on your profile',
 
 	'groups:noaccess' => 'No access to group',
 	'groups:cantcreate' => 'You can not create a group. Only admins can.',
@@ -176,7 +176,7 @@ or click below to view the group's join requests:
 	/**
 	 * Upgrades
 	 */
-	'groups:upgrade:2016101900:title' => 'Transfer group icons to new location',
+	'groups:upgrade:2016101900:title' => 'Transfer group icons to a new location',
 	'groups:upgrade:2016101900:description' => 'New entity icon API stores icons in a predictable location on the filestore
-relative to the entity\'s filestore directory. This upgrade aligns will align group plugin with the requirements of the new API.',
+relative to the entity\'s filestore directory. This upgrade will align the group plugin with the requirements of the new API.',
 );

@@ -12,7 +12,7 @@ function dashboard_init() {
 	if (elgg_is_logged_in()) {
 		elgg_register_menu_item('topbar', [
 			'name' => 'dashboard',
-			'href' => 'dashboard',
+			'href' => elgg_generate_url('default:dashboard'),
 			'text' => elgg_echo('dashboard'),
 			'icon' => 'th-large',
 			'priority' => 100,
@@ -27,14 +27,12 @@ function dashboard_init() {
 /**
  * Register user dashboard with default widgets
  *
- * @param string $hook   'get_list',
- * @param string $type   'default_widgets'
- * @param array  $return current return value
- * @param mixed  $params supplied params
+ * @param \Elgg\Hook $hook 'get_list', 'default_widgets'
  *
  * @return array
  */
-function dashboard_default_widgets($hook, $type, $return, $params) {
+function dashboard_default_widgets(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
 	$return[] = [
 		'name' => elgg_echo('dashboard'),
 		'widget_context' => 'dashboard',

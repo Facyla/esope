@@ -23,7 +23,8 @@ return array(
 
 	'messages:error' => 'Wystąpił problem w trakcie zapisu wiadomości. Proszę spróbować ponownie.',
 
-	'item:object:messages' => 'Wiadomości',
+	'item:object:messages' => 'Message',
+	'collection:object:messages' => 'Messages',
 
 	/**
 	* Status messages
@@ -41,21 +42,17 @@ return array(
 	*/
 
 	'messages:email:subject' => 'Masz nową wiadomość!',
-	'messages:email:body' => "You have a new message from %s. It reads:
+	'messages:email:body' => "You have a new message from %s.
 
+It reads:
 
-	%s
+%s
 
+To view your messages, click here:
+%s
 
-	To view your messages, click here:
-
-	%s
-
-	To send %s a message, click here:
-
-	%s
-
-	Please do not reply to this email.",
+To send %s a message, click here:
+%s",
 
 	/**
 	* Error messages

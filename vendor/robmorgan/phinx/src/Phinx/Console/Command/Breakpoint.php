@@ -44,13 +44,15 @@ class Breakpoint extends AbstractCommand
 
         $this->addOption('--environment', '-e', InputOption::VALUE_REQUIRED, 'The target environment.');
 
-        $this->setName('breakpoint')
-             ->setDescription('Manage breakpoints')
-             ->addOption('--target', '-t', InputOption::VALUE_REQUIRED, 'The version number to set or clear a breakpoint against')
-             ->addOption('--remove-all', '-r', InputOption::VALUE_NONE, 'Remove all breakpoints')
-             ->setHelp(
-<<<EOT
-The <info>breakpoint</info> command allows you to set or clear a breakpoint against a specific target to inhibit rollbacks beyond a certain target.
+        $this->setName($this->getName() ?: 'breakpoint')
+            ->setDescription('Manage breakpoints')
+            ->addOption('--target', '-t', InputOption::VALUE_REQUIRED, 'The version number to target for the breakpoint')
+            ->addOption('--set', '-s', InputOption::VALUE_NONE, 'Set the breakpoint')
+            ->addOption('--unset', '-u', InputOption::VALUE_NONE, 'Unset the breakpoint')
+            ->addOption('--remove-all', '-r', InputOption::VALUE_NONE, 'Remove all breakpoints')
+            ->setHelp(
+                <<<EOT
+The <info>breakpoint</info> command allows you to toggle, set, or unset a breakpoint against a specific target to inhibit rollbacks beyond a certain target.
 If no target is supplied then the most recent migration will be used.
 You cannot specify un-migrated targets
 
@@ -58,14 +60,14 @@ You cannot specify un-migrated targets
 <info>phinx breakpoint -e development -t 20110103081132</info>
 <info>phinx breakpoint -e development -r</info>
 EOT
-             );
+            );
     }
 
     /**
      * Toggle the breakpoint.
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -75,21 +77,33 @@ EOT
         $environment = $input->getOption('environment');
         $version = $input->getOption('target');
         $removeAll = $input->getOption('remove-all');
+        $set = $input->getOption('set');
+        $unset = $input->getOption('unset');
 
-        if (null === $environment) {
+        if ($environment === null) {
             $environment = $this->getConfig()->getDefaultEnvironment();
             $output->writeln('<comment>warning</comment> no environment specified, defaulting to: ' . $environment);
         } else {
             $output->writeln('<info>using environment</info> ' . $environment);
         }
 
-        if ($version && $removeAll){
+        if ($version && $removeAll) {
             throw new \InvalidArgumentException('Cannot toggle a breakpoint and remove all breakpoints at the same time.');
         }
 
-        // Remove all breakpoints
-        if ($removeAll){
+        if (($set && $unset) || ($set && $removeAll) || ($unset && $removeAll)) {
+            throw new \InvalidArgumentException('Cannot use more than one of --set, --clear, or --remove-all at the same time.');
+        }
+
+        if ($removeAll) {
+            // Remove all breakpoints.
             $this->getManager()->removeBreakpoints($environment);
+        } elseif ($set) {
+            // Set the breakpoint.
+            $this->getManager()->setBreakpoint($environment, $version);
+        } elseif ($unset) {
+            // Unset the breakpoint.
+            $this->getManager()->unsetBreakpoint($environment, $version);
         } else {
             // Toggle the breakpoint.
             $this->getManager()->toggleBreakpoint($environment, $version);

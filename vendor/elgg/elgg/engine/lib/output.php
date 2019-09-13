@@ -187,7 +187,12 @@ function elgg_normalize_url($url) {
 	$url = str_replace(' ', '%20', $url);
 
 	if (_elgg_sane_validate_url($url)) {
-		return $url;
+		// fix invalid scheme in site url
+		$protocol_less_site_url = preg_replace('/^https?:/i', ':', elgg_get_site_url());
+		$protocol_less_site_url = rtrim($protocol_less_site_url, '/');
+		$protocol_less_site_url = str_replace('/', '\/', $protocol_less_site_url);
+
+		return preg_replace("/^https?{$protocol_less_site_url}\/?/i", elgg_get_site_url(), $url);
 	}
 
 	if (preg_match("#^([a-z]+)\\:#", $url, $m)) {
@@ -421,7 +426,7 @@ function elgg_html_decode($string) {
  * @param string $string string to prepare
  * @return string
  *
- * @access private
+ * @internal
  */
 function _elgg_get_display_query($string) {
 	//encode <,>,&, quotes and characters above 127
@@ -439,7 +444,7 @@ function _elgg_get_display_query($string) {
  *
  * @param string $url URL to validate
  * @return string|false
- * @access private
+ * @internal
  */
 function _elgg_sane_validate_url($url) {
 	// based on http://php.net/manual/en/function.filter-var.php#104160

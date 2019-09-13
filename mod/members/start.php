@@ -14,7 +14,7 @@ function members_init() {
 		'name' => 'members',
 		'icon' => 'address-book-o',
 		'text' => elgg_echo('members'),
-		'href' => 'members',
+		'href' => elgg_generate_url('collection:user:user'),
 	]);
 
 	if (elgg_is_admin_logged_in()) {
@@ -42,31 +42,26 @@ function members_init() {
  */
 function members_register_filter_menu(\Elgg\Hook $hook) {
 	$result = $hook->getValue();
-	$filter_value = $hook->getParam('filter_value');
 	
 	$result['newest'] = \ElggMenuItem::factory([
 		'name' => 'newest',
 		'text' => elgg_echo('sort:newest'),
-		'href' => 'members/newest',
-		'selected' => $filter_value === 'newest',
+		'href' => elgg_generate_url('collection:user:user:newest'),
 	]);
 	$result['alpha'] =\ElggMenuItem::factory([
 		'name' => 'alpha',
 		'text' => elgg_echo('sort:alpha'),
-		'href' => 'members/alpha',
-		'selected' => $filter_value === 'alpha',
+		'href' => elgg_generate_url('collection:user:user:alpha'),
 	]);
 	$result['popular'] = \ElggMenuItem::factory([
 		'name' => 'popular',
 		'text' => elgg_echo('sort:popular'),
-		'href' => 'members/popular',
-		'selected' => $filter_value === 'popular',
+		'href' => elgg_generate_url('collection:user:user:popular'),
 	]);
 	$result['online'] = \ElggMenuItem::factory([
 		'name' => 'online',
 		'text' => elgg_echo('members:label:online'),
-		'href' => 'members/online',
-		'selected' => $filter_value === 'online',
+		'href' => elgg_generate_url('collection:user:user:online'),
 	]);
 	
 	return $result;

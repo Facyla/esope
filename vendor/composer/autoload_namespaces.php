@@ -7,8 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
-    'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib'),
-    'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
     'CssCrush' => array($vendorDir . '/css-crush/css-crush/lib'),
     '' => array($vendorDir . '/elgg/elgg/engine/classes'),
 );

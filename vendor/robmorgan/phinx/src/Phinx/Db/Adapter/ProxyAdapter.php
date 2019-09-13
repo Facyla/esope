@@ -28,10 +28,19 @@
  */
 namespace Phinx\Db\Adapter;
 
-use Phinx\Db\Table;
-use Phinx\Db\Table\Column;
-use Phinx\Db\Table\Index;
-use Phinx\Db\Table\ForeignKey;
+use Phinx\Db\Action\AddColumn;
+use Phinx\Db\Action\AddForeignKey;
+use Phinx\Db\Action\AddIndex;
+use Phinx\Db\Action\CreateTable;
+use Phinx\Db\Action\DropForeignKey;
+use Phinx\Db\Action\DropIndex;
+use Phinx\Db\Action\DropTable;
+use Phinx\Db\Action\RemoveColumn;
+use Phinx\Db\Action\RenameColumn;
+use Phinx\Db\Action\RenameTable;
+use Phinx\Db\Plan\Intent;
+use Phinx\Db\Plan\Plan;
+use Phinx\Db\Table\Table;
 use Phinx\Migration\IrreversibleMigrationException;
 
 /**
@@ -46,7 +55,7 @@ class ProxyAdapter extends AdapterWrapper
     /**
      * @var array
      */
-    protected $commands;
+    protected $commands = [];
 
     /**
      * {@inheritdoc}
@@ -55,202 +64,71 @@ class ProxyAdapter extends AdapterWrapper
     {
         return 'ProxyAdapter';
     }
-    /**
-     * {@inheritdoc}
-     */
-    public function createTable(Table $table)
-    {
-        $this->recordCommand('createTable', array($table->getName()));
-    }
 
     /**
      * {@inheritdoc}
      */
-    public function renameTable($tableName, $newTableName)
+    public function createTable(Table $table, array $columns = [], array $indexes = [])
     {
-        $this->recordCommand('renameTable', array($tableName, $newTableName));
+        $this->commands[] = new CreateTable($table);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function dropTable($tableName)
+    public function executeActions(Table $table, array $actions)
     {
-        $this->recordCommand('dropTable', array($tableName));
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function truncateTable($tableName)
-    {
-        $this->recordCommand('truncateTable', array($tableName));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addColumn(Table $table, Column $column)
-    {
-        $this->recordCommand('addColumn', array($table, $column));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function renameColumn($tableName, $columnName, $newColumnName)
-    {
-        $this->recordCommand('renameColumn', array($tableName, $columnName, $newColumnName));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function changeColumn($tableName, $columnName, Column $newColumn)
-    {
-        $this->recordCommand('changeColumn', array($tableName, $columnName, $newColumn));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dropColumn($tableName, $columnName)
-    {
-        $this->recordCommand('dropColumn', array($tableName, $columnName));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addIndex(Table $table, Index $index)
-    {
-        $this->recordCommand('addIndex', array($table, $index));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dropIndex($tableName, $columns, $options = array())
-    {
-        $this->recordCommand('dropIndex', array($tableName, $columns, $options));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dropIndexByName($tableName, $indexName)
-    {
-        $this->recordCommand('dropIndexByName', array($tableName, $indexName));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addForeignKey(Table $table, ForeignKey $foreignKey)
-    {
-        $this->recordCommand('addForeignKey', array($table, $foreignKey));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dropForeignKey($tableName, $columns, $constraint = null)
-    {
-        $this->recordCommand('dropForeignKey', array($columns, $constraint));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createDatabase($name, $options = array())
-    {
-        $this->recordCommand('createDatabase', array($name, $options));
-    }
-
-    /**
-     * Record a command for execution later.
-     *
-     * @param string $name Command Name
-     * @param array $arguments Command Arguments
-     * @return void
-     */
-    public function recordCommand($name, $arguments)
-    {
-        $this->commands[] = array(
-            'name'      => $name,
-            'arguments' => $arguments
-        );
-    }
-
-    /**
-     * Sets an array of recorded commands.
-     *
-     * @param array $commands Commands
-     * @return ProxyAdapter
-     */
-    public function setCommands($commands)
-    {
-        $this->commands = $commands;
-        return $this;
-    }
-
-    /**
-     * Gets an array of the recorded commands.
-     *
-     * @return array
-     */
-    public function getCommands()
-    {
-        return $this->commands;
+        $this->commands = array_merge($this->commands, $actions);
     }
 
     /**
      * Gets an array of the recorded commands in reverse.
      *
-     * @throws IrreversibleMigrationException if a command cannot be reversed.
-     * @return array
+     * @throws \Phinx\Migration\IrreversibleMigrationException if a command cannot be reversed.
+     * @return \Phinx\Db\Plan\Intent
      */
     public function getInvertedCommands()
     {
-        if (null === $this->getCommands()) {
-            return array();
-        }
+        $inverted = new Intent();
 
-        $invCommands = array();
-        $supportedCommands = array(
-            'createTable', 'renameTable', 'addColumn',
-            'renameColumn', 'addIndex', 'addForeignKey'
-        );
-        foreach (array_reverse($this->getCommands()) as $command) {
-            if (!in_array($command['name'], $supportedCommands)) {
-                throw new IrreversibleMigrationException(sprintf(
-                    'Cannot reverse a "%s" command',
-                    $command['name']
-                ));
+        foreach (array_reverse($this->commands) as $com) {
+            switch (true) {
+                case $com instanceof CreateTable:
+                    $inverted->addAction(new DropTable($com->getTable()));
+                    break;
+
+                case $com instanceof RenameTable:
+                    $inverted->addAction(new RenameTable(new Table($com->getNewName()), $com->getTable()->getName()));
+                    break;
+
+                case $com instanceof AddColumn:
+                    $inverted->addAction(new RemoveColumn($com->getTable(), $com->getColumn()));
+                    break;
+
+                case $com instanceof RenameColumn:
+                    $column = clone $com->getColumn();
+                    $name = $column->getName();
+                    $column->setName($com->getNewName());
+                    $inverted->addAction(new RenameColumn($com->getTable(), $column, $name));
+                    break;
+
+                case $com instanceof AddIndex:
+                    $inverted->addAction(new DropIndex($com->getTable(), $com->getIndex()));
+                    break;
+
+                case $com instanceof AddForeignKey:
+                    $inverted->addAction(new DropForeignKey($com->getTable(), $com->getForeignKey()));
+                    break;
+
+                default:
+                    throw new IrreversibleMigrationException(sprintf(
+                        'Cannot reverse a "%s" command',
+                        get_class($com)
+                    ));
             }
-            $invertMethod = 'invert' . ucfirst($command['name']);
-            $invertedCommand = $this->$invertMethod($command['arguments']);
-            $invCommands[] = array(
-                'name'      => $invertedCommand['name'],
-                'arguments' => $invertedCommand['arguments']
-            );
         }
 
-        return $invCommands;
-    }
-
-    /**
-     * Execute the recorded commands.
-     *
-     * @return void
-     */
-    public function executeCommands()
-    {
-        $commands = $this->getCommands();
-        foreach ($commands as $command) {
-            call_user_func_array(array($this->getAdapter(), $command['name']), $command['arguments']);
-        }
+        return $inverted;
     }
 
     /**
@@ -260,75 +138,7 @@ class ProxyAdapter extends AdapterWrapper
      */
     public function executeInvertedCommands()
     {
-        $commands = $this->getInvertedCommands();
-        foreach ($commands as $command) {
-            call_user_func_array(array($this->getAdapter(), $command['name']), $command['arguments']);
-        }
-    }
-
-    /**
-     * Returns the reverse of a createTable command.
-     *
-     * @param array $args Method Arguments
-     * @return array
-     */
-    public function invertCreateTable($args)
-    {
-        return array('name' => 'dropTable', 'arguments' => array($args[0]));
-    }
-
-    /**
-     * Returns the reverse of a renameTable command.
-     *
-     * @param array $args Method Arguments
-     * @return array
-     */
-    public function invertRenameTable($args)
-    {
-        return array('name' => 'renameTable', 'arguments' => array($args[1], $args[0]));
-    }
-
-    /**
-     * Returns the reverse of a addColumn command.
-     *
-     * @param array $args Method Arguments
-     * @return array
-     */
-    public function invertAddColumn($args)
-    {
-        return array('name' => 'dropColumn', 'arguments' => array($args[0]->getName(), $args[1]->getName()));
-    }
-
-    /**
-     * Returns the reverse of a renameColumn command.
-     *
-     * @param array $args Method Arguments
-     * @return array
-     */
-    public function invertRenameColumn($args)
-    {
-        return array('name' => 'renameColumn', 'arguments' => array($args[0], $args[2], $args[1]));
-    }
-
-    /**
-     * Returns the reverse of a addIndex command.
-     *
-     * @param array $args Method Arguments
-     * @return array
-     */
-    public function invertAddIndex($args)
-    {
-        return array('name' => 'dropIndex', 'arguments' => array($args[0]->getName(), $args[1]->getColumns()));
-    }
-
-    /**
-     * Returns the reverse of a addForeignKey command.
-     *
-     * @param array $args Method Arguments
-     * @return array
-     */
-    public function invertAddForeignKey($args)
-    {
-        return array('name' => 'dropForeignKey', 'arguments' => array($args[0]->getName(), $args[1]->getColumns()));
+        $plan = new Plan($this->getInvertedCommands());
+        $plan->executeInverse($this->getAdapter());
     }
 }

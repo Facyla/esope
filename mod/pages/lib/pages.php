@@ -106,7 +106,7 @@ function pages_get_navigation_tree($container) {
 	$tree = [];
 	
 	$get_children = function($parent_guid, $depth = 0) use (&$tree, &$get_children) {
-		$children = new ElggBatch('elgg_get_entities_from_metadata', [
+		$children = new ElggBatch('elgg_get_entities', [
 			'type' => 'object',
 			'subtype' => 'page',
 			'metadata_name_value_pairs' => [
@@ -150,8 +150,11 @@ function pages_get_navigation_tree($container) {
  * @param ElggPage   $selected  Selected page
  *
  * @return void
+ *
+ * @deprecated
  */
 function pages_register_navigation_tree($container, $selected = null) {
+	elgg_deprecated_notice(__METHOD__ . ' is deprecated. Menu items for a page now come from a hook callback.', '3.1');
 	
 	$pages = pages_get_navigation_tree($container);
 	if (empty($pages)) {

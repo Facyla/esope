@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Router\Middleware\Gatekeeper;
+
 return [
 	'entities' => [
 		[
@@ -32,6 +34,9 @@ return [
 		'collection:object:thewire:friends' => [
 			'path' => '/thewire/friends/{username}',
 			'resource' => 'thewire/friends',
+			'required_plugins' => [
+				'friends',
+			],
 		],
 		'collection:object:thewire:thread' => [
 			'path' => '/thewire/thread/{guid}',
@@ -48,15 +53,18 @@ return [
 		'reply:object:thewire' => [
 			'path' => '/thewire/reply/{guid}',
 			'resource' => 'thewire/reply',
+			'middleware' => [
+				Gatekeeper::class,
+			],
 		],
 		'previous:object:thewire' => [
 			'path' => '/thewire/previous/{guid}',
 			'resource' => 'thewire/previous',
+			'deprecated' => '3.1',
 		],
 	],
 	'widgets' => [
 		'thewire' => [
-			'description' => elgg_echo('thewire:widget:desc'),
 			'context' => ['profile', 'dashboard'],
 		],
 	],

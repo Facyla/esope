@@ -1,4 +1,11 @@
 <?php
+/**
+ * List all user files
+ *
+ * Note: this view has a corresponding view in the rss view type, changes should be reflected
+ *
+ * @uses $vars['entity'] the user or group to list for
+ */
 
 $owner = elgg_extract('entity', $vars);
 
@@ -6,9 +13,7 @@ $owner = elgg_extract('entity', $vars);
 $options = [
 	'type' => 'object',
 	'subtype' => 'file',
-	'full_view' => false,
 	'no_results' => elgg_echo("file:none"),
-	'preload_owners' => true,
 	'distinct' => false,
 ];
 

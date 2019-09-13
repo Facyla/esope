@@ -188,12 +188,31 @@ class MenuServiceTest extends UnitTestCase {
 		$this->assertEquals(["t:100", "t:200", "t:300", "t:400"], $sorts);
 
 	}
+	
+	public function testSetSelectedMenuItem() {
+		$items = $this->buildMenu();
+		
+		foreach ($items as $item) {
+			elgg_register_menu_item('test', $item);
+		}
+		
+		$menu = elgg()->menus->getMenu('test', [
+			'selected_item_name' => 'n:200',
+		]);
+		
+		$params = $menu->getParams();
+		$selected_item = elgg_extract('selected_item', $params);
+		
+		$this->assertInstanceOf(\ElggMenuItem::class, $selected_item);
+		$this->assertEquals('n:200', $selected_item->getName());
+	}
 
 	public function buildMenu() {
 		$items = [
 			[
 				'name' => 'root',
 				'text' => 'root',
+				'href' => '#root',
 			],
 		];
 
@@ -201,6 +220,7 @@ class MenuServiceTest extends UnitTestCase {
 			$items[] = [
 				'name' => "n:$priority",
 				'text' => "t:$priority",
+				'href' => "#t:$priority",
 				'parent_name' => 'root',
 				'priority' => $priority,
 			];
@@ -210,6 +230,7 @@ class MenuServiceTest extends UnitTestCase {
 				$items[] = [
 					'name' => "n:$priority:$priority2",
 					'text' => "t:$priority:$priority2",
+					'href' => "#t:$priority:$priority2",
 					'parent_name' => "n:$priority",
 					'priority' => $priority2,
 				];
@@ -218,6 +239,7 @@ class MenuServiceTest extends UnitTestCase {
 					$items[] = [
 						'name' => "n:$priority:$priority2:$priority3",
 						'text' => "t:$priority:$priority2:$priority3",
+						'href' => "#t:$priority:$priority2:$priority3",
 						'parent_name' => "n:$priority:$priority2",
 						'priority' => $priority3,
 					];

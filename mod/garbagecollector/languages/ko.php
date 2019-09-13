@@ -6,7 +6,8 @@ return array(
 	'garbagecollector:monthly' => '매월',
 	'garbagecollector:yearly' => '매년',
 
-	'garbagecollector' => "찌꺼기 처리기\n",
-	'garbagecollector:done' => "완료\n",
+	'garbagecollector' => '청소기',
+	'garbagecollector:start' => "청소기 시작됨",
+	'garbagecollector:done' => "청소 끝",
 	'garbagecollector:optimize' => "최적화중 %s ",
 );

@@ -13,7 +13,6 @@
 function reportedcontent_init() {
 
 	// Extend CSS
-	elgg_extend_view('elgg.css', 'reportedcontent/css');
 	elgg_extend_view('admin.css', 'reportedcontent/admin_css');
 
 	elgg_register_ajax_view('forms/reportedcontent/add');
@@ -48,20 +47,17 @@ function reportedcontent_init() {
 /**
  * Add report user link to hover menu
  *
- * @param string         $hook   'register'
- * @param string         $type   'menu:user_hover'
- * @param ElggMenuItem[] $return current return value
- * @param array          $params supplied params
+ * @param \Elgg\Hook $hook 'register', 'menu:user_hover'
  *
  * @return void|ElggMenuItem[]
  */
-function reportedcontent_user_hover_menu($hook, $type, $return, $params) {
+function reportedcontent_user_hover_menu(\Elgg\Hook $hook) {
 	
 	if (!elgg_is_logged_in()) {
 		return;
 	}
 	
-	$user = elgg_extract('entity', $params);
+	$user = $hook->getEntityParam();
 	if (!$user instanceof ElggUser) {
 		return;
 	}
@@ -75,6 +71,7 @@ function reportedcontent_user_hover_menu($hook, $type, $return, $params) {
 		'title' => $user->getDisplayName(),
 	]);
 	
+	$return = $hook->getValue();
 	$return[] = \ElggMenuItem::factory([
 		'name' => 'reportuser',
 		'text' => elgg_echo('reportedcontent:user'),

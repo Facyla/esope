@@ -5,8 +5,6 @@
  * @package ElggMessages
 */
 
-elgg_gatekeeper();
-
 $page_owner = elgg_get_page_owner_entity();
 if (!$page_owner instanceof ElggUser || !$page_owner->canEdit()) {
 	throw new \Elgg\EntityPermissionsException();
@@ -24,9 +22,7 @@ $list = elgg_list_entities([
 	'metadata_name' => 'toId',
 	'metadata_value' => elgg_get_page_owner_guid(),
 	'owner_guid' => elgg_get_page_owner_guid(),
-	'full_view' => false,
-	'preload_owners' => true,
-	'bulk_actions' => true
+	'bulk_actions' => true,
 ]);
 
 $body_vars = [

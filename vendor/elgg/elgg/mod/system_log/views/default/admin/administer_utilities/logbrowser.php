@@ -61,6 +61,7 @@ $options = [
 	'ip_address' => $ip_address,
 ];
 $log = system_log_get_log($options);
+
 $options['count'] = true;
 $count = system_log_get_log($options);
 

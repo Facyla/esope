@@ -26,33 +26,31 @@ function profile_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:page', '_profile_admin_page_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:page', '_profile_user_page_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', '_profile_user_hover_menu');
+	elgg_register_plugin_hook_handler('search:fields', 'user', \Elgg\Search\UserSearchProfileFieldsHandler::class);
 }
 
 /**
  * Parse ECML on parts of the profile
  *
- * @param string $hook         'get_views'
- * @param string $type         'ecml'
- * @param array  $return_value current return value
+ * @param \Elgg\Hook $hook 'get_views', 'ecml'
  *
  * @return array
  */
-function profile_ecml_views_hook($hook, $type, $return_value) {
+function profile_ecml_views_hook(\Elgg\Hook $hook) {
+	$return_value = $hook->getValue();
 	$return_value['profile/profile_content'] = elgg_echo('profile');
-
 	return $return_value;
 }
 
 /**
  * Register profile widgets with default widgets
  *
- * @param string $hook   'get_list'
- * @param string $type   'default_widgets'
- * @param array  $return current return value
+ * @param \Elgg\Hook $hook 'get_list', 'default_widgets'
  *
  * @return array
  */
-function profile_default_widgets_hook($hook, $type, $return) {
+function profile_default_widgets_hook(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
 	$return[] = [
 		'name' => elgg_echo('profile'),
 		'widget_context' => 'profile',
@@ -75,7 +73,7 @@ function profile_default_widgets_hook($hook, $type, $return) {
  *
  * @return void
  *
- * @access private
+ * @internal
  */
 function _profile_fields_setup() {
 	$profile_defaults =  [
@@ -85,8 +83,8 @@ function _profile_fields_setup() {
 		'interests' => 'tags',
 		'skills' => 'tags',
 		'contactemail' => 'email',
-		'phone' => 'text',
-		'mobile' => 'text',
+		'phone' => 'tel',
+		'mobile' => 'tel',
 		'website' => 'url',
 		'twitter' => 'text',
 	];
@@ -129,7 +127,7 @@ function _profile_fields_setup() {
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  * @since 3.0
  */
 function _profile_topbar_menu(\Elgg\Hook $hook) {
@@ -160,7 +158,7 @@ function _profile_topbar_menu(\Elgg\Hook $hook) {
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  * @since 3.0
  */
 function _profile_user_hover_menu(\Elgg\Hook $hook) {
@@ -193,7 +191,7 @@ function _profile_user_hover_menu(\Elgg\Hook $hook) {
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  * @since 3.0
  */
 function _profile_admin_page_menu(\Elgg\Hook $hook) {
@@ -222,7 +220,7 @@ function _profile_admin_page_menu(\Elgg\Hook $hook) {
  *
  * @return void|ElggMenuItem
  *
- * @access private
+ * @internal
  * @since 3.0
  */
 function _profile_user_page_menu(\Elgg\Hook $hook) {
@@ -252,7 +250,7 @@ function _profile_user_page_menu(\Elgg\Hook $hook) {
  *
  * @return void|ElggMenuItem[]
  *
- * @access private
+ * @internal
  * @since 3.0
  */
 function _profile_title_menu(\Elgg\Hook $hook) {

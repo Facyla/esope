@@ -229,7 +229,7 @@ function elgg_ws_unexpose_function($method) {
  * Simple api to return a list of all api's installed on the system.
  *
  * @return array
- * @access private
+ * @internal
  */
 function list_all_apis() {
 	global $API_METHODS;
@@ -283,7 +283,7 @@ function elgg_ws_unregister_service_handler($handler) {
  * REST API handler
  *
  * @return void
- * @access private
+ * @internal
  *
  * @throws SecurityException|APIException
  */
@@ -325,7 +325,6 @@ function ws_rest_handler() {
 
 	// Get parameter variables
 	$method = get_input('method');
-	$result = null;
 
 	// this will throw an exception if authentication fails
 	authenticate_method($method);
@@ -344,14 +343,12 @@ function ws_rest_handler() {
 /**
  * Filters system API list to remove PHP internal function names
  *
- * @param string $hook   "rest:output"
- * @param string $type   "system.api.list"
- * @param array  $return API list
- * @param array  $params Method params
+ * @param \Elgg\Hook $hook "rest:output", "system.api.list"
+ *
  * @return array
  */
-function ws_system_api_list_hook($hook, $type, $return, $params) {
-
+function ws_system_api_list_hook(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
 	if (!empty($return) && is_array($return)) {
 		foreach ($return as $method => $settings) {
 			unset($return[$method]['function']);

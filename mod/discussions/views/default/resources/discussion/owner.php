@@ -34,13 +34,9 @@ $content = elgg_view('discussion/listing/owner', [
 	'entity' => $target,
 ]);
 
-$params = [
-	'content' => $content,
+$body = elgg_view_layout('default', [
 	'title' => $title,
-	'sidebar' => elgg_view('discussion/sidebar'),
-	'filter' => '',
-];
-
-$body = elgg_view_layout('content', $params);
+	'content' => $content,
+]);
 
 echo elgg_view_page($title, $body);

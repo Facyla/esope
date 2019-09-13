@@ -45,41 +45,55 @@ function elgg_group_tool_gatekeeper($option, $group_guid = null) {
 /**
  * Allow group members to write to the group container
  *
- * @param string $hook   Hook name
- * @param string $type   Hook type
- * @param bool   $result The value of the hook
- * @param array  $params Parameters related to the hook
+ * @param \Elgg\Hook $hook 'container_permissions_check', 'all'
+ *
  * @return bool
- * @access private
+ * @internal
  */
-function _elgg_groups_container_override($hook, $type, $result, $params) {
-	$container = $params['container'];
-	$user = $params['user'];
+function _elgg_groups_container_override(\Elgg\Hook $hook) {
+	$container = $hook->getParam('container');
+	$user = $hook->getUserParam();
 
 	if ($container instanceof ElggGroup && $user) {
-		/* @var \ElggGroup $container */
 		if ($container->isMember($user)) {
 			return true;
 		}
 	}
-
-	return $result;
 }
 
 /**
- * Runs unit tests for the group entities.
+ * Don't allow users to comment on content in a group they aren't a member of
  *
- * @param string $hook  Hook name
- * @param string $type  Hook type
- * @param array  $value Array of unit test locations
+ * @param \Elgg\Hook $hook 'permissions_check:comment', 'object'
  *
- * @return array
- * @access private
- * @codeCoverageIgnore
+ * @return void|false
+ * @internal
+ * @since 3.1
  */
-function _elgg_groups_test($hook, $type, $value) {
-	$value[] = ElggCoreGroupTest::class;
-	return $value;
+function _elgg_groups_comment_permissions_override(\Elgg\Hook $hook) {
+	
+	if ($hook->getValue() === false) {
+		// already not allowed, no need to check further
+		return;
+	}
+	
+	$entity = $hook->getEntityParam();
+	$user = $hook->getUserParam();
+	
+	if (!$entity instanceof ElggObject || !$user instanceof ElggUser) {
+		return;
+	}
+	
+	$container = $entity->getContainerEntity();
+	if (!$container instanceof ElggGroup) {
+		return;
+	}
+	
+	if ($container->isMember($user)) {
+		return;
+	}
+	
+	return false;
 }
 
 /**
@@ -87,11 +101,11 @@ function _elgg_groups_test($hook, $type, $value) {
  *
  * @return void
  *
- * @access private
+ * @internal
  */
 function _elgg_groups_init() {
 	elgg_register_plugin_hook_handler('container_permissions_check', 'all', '_elgg_groups_container_override');
-	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_groups_test');
+	elgg_register_plugin_hook_handler('permissions_check:comment', 'object', '_elgg_groups_comment_permissions_override', 999);
 }
 
 /**

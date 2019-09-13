@@ -10,6 +10,7 @@ $guid = (int) get_input('guid');
 $title = elgg_get_title_input();
 $description = get_input('description');
 $excerpt = get_input('excerpt');
+$container_guid = get_input('container_guid');
 
 if (empty($title)) {
 	return elgg_error_response(elgg_echo('blog:error:missing:title'));
@@ -36,7 +37,8 @@ if ($guid) {
 	$blog->access_id = ACCESS_PRIVATE;
 	$blog->title = $title;
 	$blog->description = $description;
-	$blog->excerpt = $excerpt ? elgg_get_excerpt($excerpt) : null;
+	$blog->excerpt = $excerpt;
+	$blog->container_guid = $container_guid;
 
 	// mark this as a brand new post so we can work out the
 	// river / revision logic in the real save action.

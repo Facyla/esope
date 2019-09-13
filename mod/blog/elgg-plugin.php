@@ -30,6 +30,9 @@ return [
 				'lower' => '\d+',
 				'upper' => '\d+',
 			],
+			'required_plugins' => [
+				'friends',
+			],
 		],
 		'collection:object:blog:archive' => [
 			'path' => '/blog/archive/{username?}/{lower?}/{upper?}',
@@ -71,6 +74,9 @@ return [
 				'lower' => '\d+',
 				'upper' => '\d+',
 			],
+			'required_plugins' => [
+				'groups',
+			],
 		],
 		'collection:object:blog:all' => [
 			'path' => '/blog/all/{lower?}/{upper?}',
@@ -87,7 +93,6 @@ return [
 	],
 	'widgets' => [
 		'blog' => [
-			'description' => elgg_echo('widgets:blog:description'),
 			'context' => ['profile', 'dashboard'],
 		],
 	],
