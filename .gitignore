@@ -1,6 +1,6 @@
 # ignore Elgg configuration
-/elgg-config/settings.php
-/.htaccess
+/elgg-config/*settings*.php
+/*.htaccess
 /composer-update.sh
 /.gitignore
 

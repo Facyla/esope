@@ -223,17 +223,17 @@
     },
     {
         "name": "cakephp/cache",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/cache.git",
-            "reference": "c5b9075f2a7b53176fb2f9329088671e85d309ba"
+            "reference": "34f8a4c3585c0177438880728668d3a9c5a5c9f0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/cache/zipball/c5b9075f2a7b53176fb2f9329088671e85d309ba",
-            "reference": "c5b9075f2a7b53176fb2f9329088671e85d309ba",
+            "url": "https://api.github.com/repos/cakephp/cache/zipball/34f8a4c3585c0177438880728668d3a9c5a5c9f0",
+            "reference": "34f8a4c3585c0177438880728668d3a9c5a5c9f0",
             "shasum": ""
         },
         "require": {
@@ -241,7 +241,7 @@
             "php": ">=5.6.0",
             "psr/simple-cache": "^1.0.0"
         },
-        "time": "2019-08-08T09:05:06+00:00",
+        "time": "2019-08-29T13:28:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -269,23 +269,23 @@
     },
     {
         "name": "cakephp/collection",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/collection.git",
-            "reference": "5f22678fc2d151082e331b20677d9696563af549"
+            "reference": "7491c4e1f04af5186a0e77f34406e2e40a8a857e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/collection/zipball/5f22678fc2d151082e331b20677d9696563af549",
-            "reference": "5f22678fc2d151082e331b20677d9696563af549",
+            "url": "https://api.github.com/repos/cakephp/collection/zipball/7491c4e1f04af5186a0e77f34406e2e40a8a857e",
+            "reference": "7491c4e1f04af5186a0e77f34406e2e40a8a857e",
             "shasum": ""
         },
         "require": {
             "php": ">=5.6.0"
         },
-        "time": "2019-02-26T20:10:41+00:00",
+        "time": "2019-08-29T13:17:59+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -317,17 +317,17 @@
     },
     {
         "name": "cakephp/core",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
-            "url": "git@github.com:cakephp/core.git",
-            "reference": "856ebb75e3cef6068444185e3dd54e98dfe888b3"
+            "url": "https://github.com/cakephp/core.git",
+            "reference": "4f7710dab6f9bf0483e42e189942b1941c070b72"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/core/zipball/856ebb75e3cef6068444185e3dd54e98dfe888b3",
-            "reference": "856ebb75e3cef6068444185e3dd54e98dfe888b3",
+            "url": "https://api.github.com/repos/cakephp/core/zipball/4f7710dab6f9bf0483e42e189942b1941c070b72",
+            "reference": "4f7710dab6f9bf0483e42e189942b1941c070b72",
             "shasum": ""
         },
         "require": {
@@ -338,7 +338,7 @@
             "cakephp/cache": "To use Configure::store() and restore().",
             "cakephp/event": "To use PluginApplicationInterface or plugin applications."
         },
-        "time": "2019-08-06T03:36:04+00:00",
+        "time": "2019-08-29T13:17:59+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -369,17 +369,17 @@
     },
     {
         "name": "cakephp/database",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/database.git",
-            "reference": "f0ff1a57c89f1e4370a946be21e2d33ba15777bb"
+            "reference": "1e249fa8b2b82313bb7db51a39fa6491fd638e53"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/database/zipball/f0ff1a57c89f1e4370a946be21e2d33ba15777bb",
-            "reference": "f0ff1a57c89f1e4370a946be21e2d33ba15777bb",
+            "url": "https://api.github.com/repos/cakephp/database/zipball/1e249fa8b2b82313bb7db51a39fa6491fd638e53",
+            "reference": "1e249fa8b2b82313bb7db51a39fa6491fd638e53",
             "shasum": ""
         },
         "require": {
@@ -389,7 +389,7 @@
             "cakephp/log": "^3.6.0",
             "php": ">=5.6.0"
         },
-        "time": "2019-08-08T09:05:06+00:00",
+        "time": "2019-08-29T13:36:23+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -419,17 +419,17 @@
     },
     {
         "name": "cakephp/datasource",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
-            "url": "git@github.com:cakephp/datasource.git",
-            "reference": "c46eff4f12fd72f01dd6987d5bfa0d7e5c92af70"
+            "url": "https://github.com/cakephp/datasource.git",
+            "reference": "c8ff35ec1c49618d4ace994a90e968b51d6315d7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/datasource/zipball/c46eff4f12fd72f01dd6987d5bfa0d7e5c92af70",
-            "reference": "c46eff4f12fd72f01dd6987d5bfa0d7e5c92af70",
+            "url": "https://api.github.com/repos/cakephp/datasource/zipball/c8ff35ec1c49618d4ace994a90e968b51d6315d7",
+            "reference": "c8ff35ec1c49618d4ace994a90e968b51d6315d7",
             "shasum": ""
         },
         "require": {
@@ -441,7 +441,7 @@
             "cakephp/collection": "If you decide to use ResultSetInterface.",
             "cakephp/utility": "If you decide to use EntityTrait."
         },
-        "time": "2019-07-09T14:11:51+00:00",
+        "time": "2019-08-29T13:35:39+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -471,11 +471,11 @@
     },
     {
         "name": "cakephp/log",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
-            "url": "git@github.com:cakephp/log.git",
+            "url": "https://github.com/cakephp/log.git",
             "reference": "ed6398ae8c2e8a5630e8dea24dda34b102ec65e2"
         },
         "dist": {
@@ -489,7 +489,7 @@
             "php": ">=5.6.0",
             "psr/log": "^1.0.0"
         },
-        "time": "2019-05-27T20:26:47+00:00",
+        "time": "2019-05-27T20:32:25+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -518,17 +518,17 @@
     },
     {
         "name": "cakephp/utility",
-        "version": "3.8.2",
-        "version_normalized": "3.8.2.0",
+        "version": "3.8.3",
+        "version_normalized": "3.8.3.0",
         "source": {
             "type": "git",
-            "url": "git@github.com:cakephp/utility.git",
-            "reference": "1b9d956aa81c2db720bd2cd9fa05079f44ad923c"
+            "url": "https://github.com/cakephp/utility.git",
+            "reference": "0dcddfbc2d63335c5bce7cca6790fa434e4a8790"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/utility/zipball/1b9d956aa81c2db720bd2cd9fa05079f44ad923c",
-            "reference": "1b9d956aa81c2db720bd2cd9fa05079f44ad923c",
+            "url": "https://api.github.com/repos/cakephp/utility/zipball/0dcddfbc2d63335c5bce7cca6790fa434e4a8790",
+            "reference": "0dcddfbc2d63335c5bce7cca6790fa434e4a8790",
             "shasum": ""
         },
         "require": {
@@ -539,7 +539,7 @@
             "ext-intl": "To use Text::transliterate() or Text::slug()",
             "lib-ICU": "To use Text::transliterate() or Text::slug()"
         },
-        "time": "2019-08-08T09:05:06+00:00",
+        "time": "2019-08-29T13:43:27+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1073,17 +1073,17 @@
     },
     {
         "name": "elgg/elgg",
-        "version": "3.1.2",
-        "version_normalized": "3.1.2.0",
+        "version": "3.1.3",
+        "version_normalized": "3.1.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Elgg/Elgg.git",
-            "reference": "f20eb7f57b74652064724f81d6f72e6fa1ba9d3d"
+            "reference": "d0ae1448f2893bf5a2d0204476d856152eb39813"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Elgg/Elgg/zipball/f20eb7f57b74652064724f81d6f72e6fa1ba9d3d",
-            "reference": "f20eb7f57b74652064724f81d6f72e6fa1ba9d3d",
+            "url": "https://api.github.com/repos/Elgg/Elgg/zipball/d0ae1448f2893bf5a2d0204476d856152eb39813",
+            "reference": "d0ae1448f2893bf5a2d0204476d856152eb39813",
             "shasum": ""
         },
         "require": {
@@ -1124,7 +1124,7 @@
             "php-di/php-di": "^5.4",
             "react/promise": "^2.5",
             "roave/security-advisories": "dev-master",
-            "robmorgan/phinx": "^0.10.1",
+            "robmorgan/phinx": "^0.11.1",
             "symfony/console": "~3.3",
             "symfony/http-foundation": "~3.4",
             "symfony/polyfill-php71": "^1.7",
@@ -1145,7 +1145,7 @@
         "suggest": {
             "ext-mbstring": "*"
         },
-        "time": "2019-08-28T14:34:01+00:00",
+        "time": "2019-09-13T13:38:08+00:00",
         "bin": [
             "elgg-cli"
         ],
@@ -1441,8 +1441,8 @@
         "authors": [
             {
                 "name": "Chris Leppanen",
-                "role": "Developer",
-                "email": "chris.leppanen@gmail.com"
+                "email": "chris.leppanen@gmail.com",
+                "role": "Developer"
             }
         ],
         "description": "An in-memory adapter for Flysystem.",
@@ -1550,17 +1550,17 @@
     },
     {
         "name": "monolog/monolog",
-        "version": "1.24.0",
-        "version_normalized": "1.24.0.0",
+        "version": "1.25.1",
+        "version_normalized": "1.25.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266"
+            "reference": "70e65a5470a42cfec1a7da00d30edb6e617e8dcf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
-            "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
+            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/70e65a5470a42cfec1a7da00d30edb6e617e8dcf",
+            "reference": "70e65a5470a42cfec1a7da00d30edb6e617e8dcf",
             "shasum": ""
         },
         "require": {
@@ -1596,7 +1596,7 @@
             "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
             "sentry/sentry": "Allow sending log messages to a Sentry server"
         },
-        "time": "2018-11-05T09:00:11+00:00",
+        "time": "2019-09-06T13:49:17+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1668,8 +1668,8 @@
         "authors": [
             {
                 "name": "Stephen Clay",
-                "role": "Developer",
-                "email": "steve@mrclay.org"
+                "email": "steve@mrclay.org",
+                "role": "Developer"
             }
         ],
         "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
@@ -1878,9 +1878,9 @@
             },
             {
                 "name": "Carsten Windler",
-                "role": "Contributor",
                 "email": "carsten@carstenwindler.de",
-                "homepage": "http://carstenwindler.de"
+                "homepage": "http://carstenwindler.de",
+                "role": "Contributor"
             }
         ],
         "description": "PHP Cron Job Scheduler",
@@ -2502,33 +2502,35 @@
     },
     {
         "name": "robmorgan/phinx",
-        "version": "0.10.8",
-        "version_normalized": "0.10.8.0",
+        "version": "0.11.1",
+        "version_normalized": "0.11.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/phinx.git",
-            "reference": "1960e93169707096fdfde04904a204970077f4be"
+            "reference": "a6cced878695d26396b26dfd62ce300aea07de05"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/phinx/zipball/1960e93169707096fdfde04904a204970077f4be",
-            "reference": "1960e93169707096fdfde04904a204970077f4be",
+            "url": "https://api.github.com/repos/cakephp/phinx/zipball/a6cced878695d26396b26dfd62ce300aea07de05",
+            "reference": "a6cced878695d26396b26dfd62ce300aea07de05",
             "shasum": ""
         },
         "require": {
             "cakephp/collection": "^3.6",
+            "cakephp/core": "^3.6",
             "cakephp/database": "^3.6",
+            "cakephp/datasource": "^3.6",
             "php": ">=5.6",
-            "symfony/config": "^2.8|^3.0|^4.0",
-            "symfony/console": "^2.8|^3.0|^4.0",
-            "symfony/yaml": "^2.8|^3.0|^4.0"
+            "symfony/config": "^3.4|^4.0",
+            "symfony/console": "^3.4|^4.0",
+            "symfony/yaml": "^3.4|^4.0"
         },
         "require-dev": {
             "cakephp/cakephp-codesniffer": "^3.0",
-            "phpunit/phpunit": ">=5.7,<7.0",
+            "phpunit/phpunit": ">=5.7,<8.0",
             "sebastian/comparator": ">=1.2.3"
         },
-        "time": "2019-07-08T16:59:55+00:00",
+        "time": "2019-08-28T12:24:19+00:00",
         "bin": [
             "bin/phinx"
         ],
@@ -2545,25 +2547,26 @@
         ],
         "authors": [
             {
-                "name": "Woody Gilk",
-                "role": "Developer",
-                "email": "woody.gilk@gmail.com",
-                "homepage": "http://shadowhand.me"
+                "name": "Rob Morgan",
+                "email": "robbym@gmail.com",
+                "homepage": "https://robmorgan.id.au",
+                "role": "Lead Developer"
             },
             {
-                "name": "Rob Morgan",
-                "role": "Lead Developer",
-                "email": "robbym@gmail.com",
-                "homepage": "https://robmorgan.id.au"
+                "name": "Woody Gilk",
+                "email": "woody.gilk@gmail.com",
+                "homepage": "https://shadowhand.me",
+                "role": "Developer"
             },
             {
                 "name": "Richard Quadling",
-                "role": "Developer",
-                "email": "rquadling@gmail.com"
+                "email": "rquadling@gmail.com",
+                "role": "Developer"
             },
             {
                 "name": "CakePHP Community",
-                "homepage": "https://github.com/cakephp/phinx/graphs/contributors"
+                "homepage": "https://github.com/cakephp/phinx/graphs/contributors",
+                "role": "Developer"
             }
         ],
         "description": "Phinx makes it ridiculously easy to manage the database migrations for your PHP app.",
@@ -3541,17 +3544,17 @@
     },
     {
         "name": "zendframework/zend-loader",
-        "version": "2.6.0",
-        "version_normalized": "2.6.0.0",
+        "version": "2.6.1",
+        "version_normalized": "2.6.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/zendframework/zend-loader.git",
-            "reference": "78f11749ea340f6ca316bca5958eef80b38f9b6c"
+            "reference": "91da574d29b58547385b2298c020b257310898c6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/78f11749ea340f6ca316bca5958eef80b38f9b6c",
-            "reference": "78f11749ea340f6ca316bca5958eef80b38f9b6c",
+            "url": "https://api.github.com/repos/zendframework/zend-loader/zipball/91da574d29b58547385b2298c020b257310898c6",
+            "reference": "91da574d29b58547385b2298c020b257310898c6",
             "shasum": ""
         },
         "require": {
@@ -3561,7 +3564,7 @@
             "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4",
             "zendframework/zend-coding-standard": "~1.0.0"
         },
-        "time": "2018-04-30T15:20:54+00:00",
+        "time": "2019-09-04T19:38:14+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
