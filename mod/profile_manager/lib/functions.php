@@ -116,10 +116,9 @@ function profile_manager_get_categorized_fields($user = null, $edit = false, $re
 			
 			if (!$edit || $profile_type_limit) {
 				
-				$rel_count = elgg_get_entities([
+				$rel_count = elgg_count_entities([
 					'type' => 'object',
 					'subtype' => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE,
-					'count' => true,
 					'owner_guid' => $cat->getOwnerGUID(),
 					'relationship' => CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_CATEGORY_RELATIONSHIP,
 					'relationship_guid' => $cat->getGUID(),
@@ -246,56 +245,54 @@ function profile_manager_profile_completeness($user = null) {
 	if (!$user instanceof \ElggUser) {
 		return false;
 	}
+	
+	return elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
+		$required_fields = [];
+		$missing_fields = [];
+		$avatar_missing = false;
 		
-	$required_fields = [];
-	$missing_fields = [];
-	$avatar_missing = false;
-	
-	$ia = elgg_set_ignore_access(true);
-	
-	$fields = profile_manager_get_categorized_fields($user, true, false, true);
-	$categories = (array) elgg_extract('categories', $fields, []);
-	
-	foreach ($categories as $cat_guid => $cat) {
-		$cat_fields = $fields['fields'][$cat_guid];
+		$fields = profile_manager_get_categorized_fields($user, true, false, true);
+		$categories = (array) elgg_extract('categories', $fields, []);
 		
-		foreach ($cat_fields as $field) {
+		foreach ($categories as $cat_guid => $cat) {
+			$cat_fields = $fields['fields'][$cat_guid];
 			
-			if ($field->count_for_completeness !== 'yes') {
-				continue;
-			}
-			
-			$required_fields[] = $field;
-			$metaname = $field->metadata_name;
-			if (empty($user->$metaname) && ($user->$metaname !== 0)) {
-				$missing_fields[] = $field;
+			foreach ($cat_fields as $field) {
+				
+				if ($field->count_for_completeness !== 'yes') {
+					continue;
+				}
+				
+				$required_fields[] = $field;
+				$metaname = $field->metadata_name;
+				if (empty($user->$metaname) && ($user->$metaname !== 0)) {
+					$missing_fields[] = $field;
+				}
 			}
 		}
-	}
-	
-	$avatar_percentage = (int) elgg_get_plugin_setting('profile_completeness_avatar', 'profile_manager');
-	if ($avatar_percentage && empty($user->icontime)) {
-		$avatar_missing = true;
-	}
-	
-	$percentage_completeness = 100;
 		
-	if (count($required_fields)) {
-		$percentage_completeness -= (count($missing_fields) / count($required_fields)) * (100 - $avatar_percentage);
-	}
-	
-	if ($avatar_missing) {
-		$percentage_completeness -= $avatar_percentage;
-	}
-	
-	$percentage_completeness = round($percentage_completeness);
-
-	elgg_set_ignore_access($ia);
-	
-	return [
-		'required_fields' => $required_fields,
-		'missing_fields' => $missing_fields,
-		'avatar_missing' => $avatar_missing,
-		'percentage_completeness' => $percentage_completeness,
-	];
+		$avatar_percentage = (int) elgg_get_plugin_setting('profile_completeness_avatar', 'profile_manager');
+		if ($avatar_percentage && empty($user->icontime)) {
+			$avatar_missing = true;
+		}
+		
+		$percentage_completeness = 100;
+			
+		if (count($required_fields)) {
+			$percentage_completeness -= (count($missing_fields) / count($required_fields)) * (100 - $avatar_percentage);
+		}
+		
+		if ($avatar_missing) {
+			$percentage_completeness -= $avatar_percentage;
+		}
+		
+		$percentage_completeness = round($percentage_completeness);
+		
+		return [
+			'required_fields' => $required_fields,
+			'missing_fields' => $missing_fields,
+			'avatar_missing' => $avatar_missing,
+			'percentage_completeness' => $percentage_completeness,
+		];
+	});
 }

@@ -3,6 +3,7 @@
 /*.htaccess
 /composer-update.sh
 /.gitignore
+/mod/_*
 
 # Non-public devs
 /mod/theme_ecogestion
