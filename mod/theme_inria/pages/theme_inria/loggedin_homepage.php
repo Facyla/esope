@@ -45,18 +45,21 @@ $action_types = array('create', 'comment', 'reply', 'update', 'edit');
 $thewire_subtype_id = get_subtype_id('object', 'thewire');
 $feedback_subtype_id = get_subtype_id('object', 'feedback');
 $all_groups_guid_sql = "SELECT `guid` FROM `{$dbprefix}groups_entity`";
-$site_activity .= elgg_list_river(array(
+$site_activity_params = array(
 		'action_types' => $action_types, 
 		// This is for subtype filtering only, can be removed if no filtering
 		"joins" => array("INNER JOIN " . $dbprefix . "entities AS e ON rv.object_guid = e.guid"),
 		// filter some subtypes: exclude Wire and Feedback, and user update (avatar & profile))
-		"wheres" => array("e.subtype NOT IN ($thewire_subtype_id,$feedback_subtype_id) AND (e.type != 'user' AND rv.action_type != 'update')"),
+		"wheres" => array("e.subtype NOT IN ($thewire_subtype_id,$feedback_subtype_id)"),
 		// @TODO n'enlever que les messages du Fil hors groupe (lister guid des groupes avant)
 		// exclude thewire objects, except those in groups
 		//"wheres" => array("(e.subtype != " . $thewire_subtype_id . ") OR (e.container_guid IN ($all_groups_guid_sql))"),
 		'limit' => 5, 
 		'pagination' => true, 
-));
+);
+$profile_type = esope_get_user_profile_type($ent);
+if ($profile_type != 'inria') { $site_activity_params['wheres'] = array("e.subtype NOT IN ($thewire_subtype_id,$feedback_subtype_id) AND (e.type != 'user' AND rv.action_type != 'update')"); }
+$site_activity .= elgg_list_river($site_activity_params);
 elgg_pop_context();
 $site_activity  .= '<div class="clearfloat"></div>';
 $site_activity .= '</div>';
