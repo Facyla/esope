@@ -98,7 +98,7 @@ function theme_inria_init(){
 	// see theme_inria/views/default/groups/sidebar/online_groupmembers.php
 	//elgg_unextend_view('page/elements/header', 'group_chat/groupchat_extend');
 	
-	elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
+	//elgg_extend_view('forms/profile/edit', 'theme_inria/profile_linkedin_import', 200);
 	
 	// Add group profile banner : more control directly in views
 	//elgg_extend_view('groups/edit/profile', 'theme_inria/groups/extend_edit_profile', 400);
