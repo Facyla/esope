@@ -30,6 +30,7 @@ class ComposerStaticInit720883da384e540fb20e9e980447f92d
         'PhpOffice\\Common\\File' => __DIR__ . '/../..' . '/src/Common/File.php',
         'PhpOffice\\Common\\Font' => __DIR__ . '/../..' . '/src/Common/Font.php',
         'PhpOffice\\Common\\Microsoft\\OLERead' => __DIR__ . '/../..' . '/src/Common/Microsoft/OLERead.php',
+        'PhpOffice\\Common\\Microsoft\\PasswordEncoder' => __DIR__ . '/../..' . '/src/Common/Microsoft/PasswordEncoder.php',
         'PhpOffice\\Common\\Text' => __DIR__ . '/../..' . '/src/Common/Text.php',
         'PhpOffice\\Common\\XMLReader' => __DIR__ . '/../..' . '/src/Common/XMLReader.php',
         'PhpOffice\\Common\\XMLWriter' => __DIR__ . '/../..' . '/src/Common/XMLWriter.php',

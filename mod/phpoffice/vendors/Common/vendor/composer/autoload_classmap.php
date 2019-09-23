@@ -15,6 +15,7 @@ return array(
     'PhpOffice\\Common\\File' => $baseDir . '/src/Common/File.php',
     'PhpOffice\\Common\\Font' => $baseDir . '/src/Common/Font.php',
     'PhpOffice\\Common\\Microsoft\\OLERead' => $baseDir . '/src/Common/Microsoft/OLERead.php',
+    'PhpOffice\\Common\\Microsoft\\PasswordEncoder' => $baseDir . '/src/Common/Microsoft/PasswordEncoder.php',
     'PhpOffice\\Common\\Text' => $baseDir . '/src/Common/Text.php',
     'PhpOffice\\Common\\XMLReader' => $baseDir . '/src/Common/XMLReader.php',
     'PhpOffice\\Common\\XMLWriter' => $baseDir . '/src/Common/XMLWriter.php',

@@ -14,7 +14,7 @@
             "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
             "shasum": ""
         },
-        "time": "2014-06-05 11:42:24",
+        "time": "2014-06-05T11:42:24+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
