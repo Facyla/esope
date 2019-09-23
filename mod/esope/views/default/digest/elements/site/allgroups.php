@@ -42,6 +42,15 @@ if ($groups) {
 				"pagination" => false,
 			);
 			
+			// Note: we need direct access so images can be generated and inlined into email (because of walled garden)
+			// @TODO use timestamped URLs so images inliner car work properly
+			/*
+			$icon_url = $group->getIconURL(['size' => 'tiny']);
+			if (strpos($icon_url, 'default_icons') === false) {
+				$icon_url = elgg_get_site_url() . 'SOMEURL/' . $group->guid . '/tiny/' . $group->icontime;
+			}
+			$icon = '<img src="' . $icon_url . '" />';
+			*/
 			$icon = '<img src="' . $group->getIconURL('tiny') . '" />&nbsp;';
 			$content .= '<h4 class="group-title">' . elgg_view("output/url", array("text" => $icon . $group->name, "href" => $group->getURL())) . '</h4>';
 			$content .= elgg_view("page/components/list", $options);

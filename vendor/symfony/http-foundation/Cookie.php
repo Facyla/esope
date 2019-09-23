@@ -27,8 +27,6 @@ class Cookie
     protected $httpOnly;
 
     /**
-     * Constructor.
-     *
      * @param string                                  $name     The name of the cookie
      * @param string                                  $value    The value of the cookie
      * @param int|string|\DateTime|\DateTimeInterface $expire   The time the cookie expires
@@ -185,6 +183,6 @@ class Cookie
      */
     public function isCleared()
     {
-        return $this->expire < time();
+        return 0 !== $this->expire && $this->expire < time();
     }
 }

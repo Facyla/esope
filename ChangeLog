@@ -1,3 +1,40 @@
+2019-04-03  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,
+  docs/locale/pot/admin.pot, docs/locale/pot/appendix.pot,
+  docs/locale/pot/contribute.pot, docs/locale/pot/design.pot,
+  docs/locale/pot/guides.pot, docs/locale/pot/index.pot,
+  docs/locale/pot/intro.pot, docs/locale/pot/plugins.pot,
+  docs/locale/pot/tutorials.pot: chore(release): v1.12.18
+
+  	* actions/admin/plugins/activate.php, engine/lib/elgglib.php,
+  engine/lib/output.php, mod/blog/actions/blog/save.php,
+  .../actions/reportedcontent/add.php: security(forward): prevent open redirect
+  exploits  Thanks to Jyoti Raval for reporting a potential exploit whereby
+  manipulating the Referer header could result in unwanted results.
+
+2018-01-19  Jerome Bakker <jeabakker@coldtrick.com>
+
+  	* composer.json, mod/aalborg_theme/composer.json, mod/blog/composer.json,
+  mod/bookmarks/composer.json, mod/categories/composer.json,
+  mod/ckeditor/composer.json, mod/custom_index/composer.json,
+  mod/dashboard/composer.json, mod/developers/composer.json,
+  mod/diagnostics/composer.json, mod/embed/composer.json,
+  mod/externalpages/composer.json, mod/file/composer.json,
+  mod/garbagecollector/composer.json, mod/groups/composer.json,
+  mod/htmlawed/composer.json, mod/invitefriends/composer.json,
+  mod/legacy_urls/composer.json, mod/likes/composer.json,
+  mod/logbrowser/composer.json, mod/logrotate/composer.json,
+  mod/members/composer.json, mod/messageboard/composer.json,
+  mod/messages/composer.json, mod/notifications/composer.json,
+  mod/pages/composer.json, mod/profile/composer.json,
+  mod/reportedcontent/composer.json, mod/search/composer.json,
+  mod/site_notifications/composer.json, mod/tagcloud/composer.json,
+  mod/thewire/composer.json, mod/twitter_api/composer.json,
+  mod/uservalidationbyemail/composer.json, mod/web_services/composer.json,
+  mod/zaudio/composer.json, package.json: chore(composer): use correct license
+  string  fixes #11610
+
 2017-09-21  Jerome Bakker <jeabakker@coldtrick.com>
 
   	* CHANGELOG.md, composer.json, docs/locale/pot/about.pot,

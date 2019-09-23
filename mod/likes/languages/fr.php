@@ -11,7 +11,7 @@ return array(
 	'likes:notfound' => 'L\'élément que vous essayez d\'apprécier ne peut être trouvé',
 	'likes:likethis' => 'Aime',
 	'likes:userlikedthis' => '%s aime',
-	'likes:userslikedthis' => '%s aime',
+	'likes:userslikedthis' => '%s aiment',
 	'likes:river:annotate' => 'aime',
 	'likes:delete:confirm' => 'Confirmez-vous vouloir supprimer cette appréciation ?',
 
@@ -19,7 +19,8 @@ return array(
 
 	// notifications. yikes.
 	'likes:notifications:subject' => '%s aime votre publication "%s"',
-	'likes:notifications:body' => 'Bonjour %1$s,
+	'likes:notifications:body' =>
+'Bonjour %1$s,
 
 %2$s aime votre publication "%3$s" sur %4$s
 

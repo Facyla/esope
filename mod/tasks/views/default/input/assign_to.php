@@ -23,7 +23,7 @@ $batch->rewind();
 if ($batch->valid()) {
 	$add_friends = false;
 	$friends_block = "<optgroup label='" . htmlspecialchars(elgg_echo("friends"), ENT_QUOTES, "UTF-8", false) . "'>";
-	
+
 	foreach ($batch as $friend) {
 		if ($user->getGUID() != $friend->getGUID()) {
 			$add_friends = true;
@@ -34,9 +34,9 @@ if ($batch->valid()) {
 			}
 		}
 	}
-	
+
 	$friends_block .= "</optgroup>";
-	
+
 	if ($add_friends) {
 		$result .= $friends_block;
 	}
@@ -45,7 +45,7 @@ if ($batch->valid()) {
 // check for group, so we can add members
 $container = elgg_get_page_owner_entity();
 if (elgg_instanceof($container, "group")) {
-	
+
 	$member_options = array(
 		"type" => "user",
 		"limit" => false,
@@ -55,18 +55,18 @@ if (elgg_instanceof($container, "group")) {
 		"joins" => array("JOIN " . elgg_get_config("dbprefix") . "users_entity ue ON e.guid = ue.guid"),
 		"order_by" => "ue.name"
 	);
-	
+
 	$batch = new ElggBatch("elgg_get_entities_from_relationship", $member_options);
 	$batch->rewind();
 	if ($batch->valid()) {
 		$add_members = false;
-		
+
 		$members_block = "<optgroup label='" . htmlspecialchars(elgg_echo("groups:members"), ENT_QUOTES, "UTF-8", false) . "'>";
-		
+
 		foreach ($batch as $member) {
 			if (($container->getOwnerGUID() != $member->getGUID()) && ($user->getGUID() != $member->getGUID())) {
 				$add_members = true;
-				
+
 				if ($value == $member->getGUID()) {
 					$members_block .= "<option selected='selected' value='" . $member->getGUID() . "'>" . $member->name . "</option>";
 				} else {
@@ -74,14 +74,14 @@ if (elgg_instanceof($container, "group")) {
 				}
 			}
 		}
-		
+
 		$members_block .= "</optgroup>";
-		
+
 		if ($add_members) {
 			$result .= $members_block;
 		}
 	}
-	
+
 }
 
 $result .= "</select>";

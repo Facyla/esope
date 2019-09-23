@@ -31,11 +31,11 @@ class MongoDbSessionHandlerTest extends TestCase
     {
         parent::setUp();
 
-        if (extension_loaded('mongodb')) {
+        if (\extension_loaded('mongodb')) {
             if (!class_exists('MongoDB\Client')) {
                 $this->markTestSkipped('The mongodb/mongodb package is required.');
             }
-        } elseif (!extension_loaded('mongo')) {
+        } elseif (!\extension_loaded('mongo')) {
             $this->markTestSkipped('The Mongo or MongoDB extension is required.');
         }
 
@@ -291,7 +291,7 @@ class MongoDbSessionHandlerTest extends TestCase
 
         $that = $this;
 
-        $methodName = phpversion('mongodb') ? 'deleteOne' : 'remove';
+        $methodName = phpversion('mongodb') ? 'deleteMany' : 'remove';
 
         $collection->expects($this->once())
             ->method($methodName)

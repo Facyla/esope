@@ -948,7 +948,7 @@ return array(
 	'esope:icon:poll' => "<i class=\"fa fa-pie-chart fa-fw\"></i>",
 	'esope:icon:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i>",
 	'esope:icon:tasks' => "<i class=\"fa fa-list-alt fa-fw\"></i>",
-	'esope:icon:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i>",
+	'esope:icon:thewire' => "<i class=\"fa fa-commenting-o fa-fw\"></i>",
 	'esope:icon:transitions' => "<i class=\"fa fa-puzzle-piece fa-fw\"></i>",
 	'esope:icon:webinar' => "<i class=\"fa fa-video-camera fa-fw\"></i>",
 
@@ -966,7 +966,7 @@ return array(
 	'bookmarks' => "<i class=\"fa fa-link fa-fw\"></i> Liens web",
 	'file' => "<i class=\"fa fa-file-o fa-fw\"></i> Fichiers",
 	'user:activity' => "<i class=\"fa fa-flash fa-fw\"></i> Activité",
-	'item:object:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i> Le Fil",
+	'item:object:thewire' => "<i class=\"fa fa-commenting-o fa-fw\"></i> Le Fil",
 	'pages' => "<i class=\"fa fa-pencil-square-o fa-fw\"></i> Wiki",
 	// Plugins tools
 	'au_sets:sets' => "<i class=\"fa fa-thumb-tack fa-fw\"></i> Pinboards",
@@ -999,7 +999,7 @@ return array(
 	'esope:search:filtered' => " (%s)",
 	'esope:search:unfiltered' => " (tout)",
 	//'all' => "",
-	'item:object:thewire' => "<i class=\"fa fa-comment-o fa-fw\"></i> Le Fil",
+	'item:object:thewire' => "<i class=\"fa fa-commenting-o fa-fw\"></i> Le Fil",
 	'item:object:announcement' => '<i class="fa fa-info-circle fa-fw"></i> Annonces',
 	'item:object:album' => "<i class=\"fa fa-photo fa-fw\"></i> Albums",
 	'item:object:blog' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Blogs",
@@ -1082,7 +1082,7 @@ return array(
 	'osm_maps:widget:title' => "<i class=\"fa fa-map-marker fa-fw\"></i> Carte", // ou : globe ?
 	'esope:widget:searchresults' => "<i class=\"fa fa-search fa-fw\"></i> Recherche configurée",
 	'esope:widget:freehtml' => "<i class=\"fa fa-file-text-o fa-fw\"></i> Texte libre",
-	'thewire' => "<i class=\"fa fa-comments-o fa-fw\"></i> Le Fil",
+	'thewire' => "<i class=\"fa fa-commenting-o fa-fw\"></i> Le Fil",
 	'friends' => "<i class=\"fa fa-user fa-fw\"></i> Mes Contacts",
 
 	'dashboard:widget:group:noselect' => "Aucun groupe sélectionné",

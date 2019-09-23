@@ -11,7 +11,7 @@ $ts_upper = (int) elgg_extract("ts_upper", $vars);
 
 $group_options = array(
 	"type" => "group",
-	"limit" => 0,
+	"limit" => false,
 	"created_time_lower" => $ts_lower,
 	"created_time_upper" => $ts_upper
 );
@@ -29,6 +29,13 @@ if (!empty($newest_groups)) {
 	foreach($newest_groups as $key => $group){
 		$group_items .= '<div class="table-item">';
 		$group_items .= elgg_view_entity_icon($group, "medium");
+		/* @TODO utiliser une URL qui permette d'intégrer les images en mode Walled Garden
+		$icon_url = $group->getIconURL(['size' => 'medium']);
+		if (strpos($icon_url, 'default_icons') === false) {
+			$icon_url = elgg_get_site_url() . 'inria/groupicon/' . $group->guid . '/medium/' . $group->icontime;
+		}
+		$group_items .= '<img src="' . $icon_url . '" />';
+		*/
 		$group_items .= '<a href="' . $group->getURL() . '">' . $group->name . '</a>';
 		$group_items .= '</div>';
 	}

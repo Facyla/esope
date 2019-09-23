@@ -27,7 +27,7 @@ return array(
 	/**
 	 * Wire widget
 	 */
-	'thewire:widget:desc' => 'Affiche vos derniers messages du Fil',
+	'thewire:widget:desc' => 'Affiche vos derniers messages sur le Fil',
 	'thewire:num' => 'Nombre de messages à afficher',
 	'thewire:moreposts' => 'Plus de messages du Fil',
 
@@ -53,6 +53,6 @@ return array(
 	/**
 	 * Settings
 	 */
-	'thewire:settings:limit' => "Nombre maximum de caractères pour chaque message :",
+	'thewire:settings:limit' => "Nombre maximum de caractères pour chaque commentaire :",
 	'thewire:settings:limit:none' => "Pas de limite",
 );
