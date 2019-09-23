@@ -49,8 +49,8 @@ $site_activity .= elgg_list_river(array(
 		'action_types' => $action_types, 
 		// This is for subtype filtering only, can be removed if no filtering
 		"joins" => array("INNER JOIN " . $dbprefix . "entities AS e ON rv.object_guid = e.guid"),
-		// filter some subtypes
-		"wheres" => array("e.subtype NOT IN ($thewire_subtype_id,$feedback_subtype_id)"),
+		// filter some subtypes: exclude Wire and Feedback, and user update (avatar & profile))
+		"wheres" => array("e.subtype NOT IN ($thewire_subtype_id,$feedback_subtype_id) AND (e.type != 'user' AND rv.action_type != 'update')"),
 		// @TODO n'enlever que les messages du Fil hors groupe (lister guid des groupes avant)
 		// exclude thewire objects, except those in groups
 		//"wheres" => array("(e.subtype != " . $thewire_subtype_id . ") OR (e.container_guid IN ($all_groups_guid_sql))"),
