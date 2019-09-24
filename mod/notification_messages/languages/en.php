@@ -100,7 +100,8 @@ return array(
 	'notification_messages:objects:subject:nocontainer:update' => "[Update %s] %s",
 	'notification_messages:objects:subject:nocontainer:delete' => "[Delete %s] %s",
 	'notification_messages:untitled' => "(untitled)",
-	
+
+	// Notification body
 	'notification_messages:objects:body' => "%s has published %s in %s:
 
 %s
@@ -144,6 +145,11 @@ Read and comment online:
 Read and comment online:
 %s
 ",
+	
+
+	// Special message body
+	'poll:voting_ended:closed' => "Votes for this poll are closed (since %s).
+	<a href=\"%s\">View the results</a>",
 	
 	// Messages
 	'notification_messages:email:subject' => "[%s] Message from %s: %s",
