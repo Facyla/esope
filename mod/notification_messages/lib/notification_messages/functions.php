@@ -363,12 +363,12 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 				$date_day = gmdate('j', $entity->close_date);
 				$date_month = gmdate('m', $entity->close_date);
 				$date_year = gmdate('Y', $entity->close_date);
-				$friendly_time = $date_day . '. ' . elgg_echo("poll:month:$date_month") . ' ' . $date_year;
+				$friendly_time = $date_day . ' ' . elgg_echo("poll:month:$date_month") . ' ' . $date_year;
 				if ($entity->isOpen()) {
-					$descr .= '<p><em>' . elgg_echo('poll:voting_ended', array($friendly_time)) . '</em></p>';
+					$descr .= '<p><em>' . elgg_echo('poll:voting_ended', array($friendly_time)) . '</em></p><br />';
 				} else {
 					$poll_results = $entity->getUrl();
-					$descr .= '<p><em>' . elgg_echo('poll:voting_ended:closed', array($friendly_time, $poll_results)) . '</em></p>';
+					$descr .= '<p><em>' . elgg_echo('poll:voting_ended:closed', array($friendly_time, $poll_results)) . '</em></p><br />';
 				}
 			}
 		}
