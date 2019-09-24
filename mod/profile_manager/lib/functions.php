@@ -29,6 +29,9 @@ function profile_manager_register_custom_field_types() {
 	$radio_options = $profile_options;
 	$radio_options['blank_available'] = true;
 	
+	$tel_options = $profile_options;
+	$tel_options['output_as_tags'] = false;
+	
 	//$file_options = array(
 	//	'user_editable' => true,
 	//	'admin_only' => true
@@ -46,6 +49,7 @@ function profile_manager_register_custom_field_types() {
 	profile_manager_add_custom_field_type('custom_profile_field_types', 'location', elgg_echo('profile:field:location'), $location_options);
 	profile_manager_add_custom_field_type('custom_profile_field_types', 'url', elgg_echo('profile:field:url'), $profile_options);
 	profile_manager_add_custom_field_type('custom_profile_field_types', 'email', elgg_echo('profile:field:email'), $profile_options);
+	profile_manager_add_custom_field_type('custom_profile_field_types', 'tel', elgg_echo('profile_manager:admin:options:tel'), $tel_options);
 	profile_manager_add_custom_field_type('custom_profile_field_types', 'date', elgg_echo('profile:field:date'), $profile_options);
 	profile_manager_add_custom_field_type('custom_profile_field_types', 'dropdown', elgg_echo('profile_manager:admin:options:dropdown'), $dropdown_options);
 	profile_manager_add_custom_field_type('custom_profile_field_types', 'radio', elgg_echo('profile_manager:admin:options:radio'), $radio_options);
@@ -71,11 +75,15 @@ function profile_manager_register_custom_field_types() {
 	$location_options = $group_options;
 	unset($location_options['output_as_tags']);
 	
+	$tel_options = $group_options;
+	$tel_options['output_as_tags'] = false;
+	
 	profile_manager_add_custom_field_type('custom_group_field_types', 'text', elgg_echo('profile:field:text'), $group_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'longtext', elgg_echo('profile:field:longtext'), $group_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'tags', elgg_echo('profile:field:tags'), $group_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'url', elgg_echo('profile:field:url'), $group_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'email', elgg_echo('profile:field:email'), $group_options);
+	profile_manager_add_custom_field_type('custom_group_field_types', 'tel', elgg_echo('profile_manager:admin:options:tel'), $tel_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'date', elgg_echo('profile:field:date'), $group_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'location', elgg_echo('profile:field:location'), $location_options);
 	profile_manager_add_custom_field_type('custom_group_field_types', 'dropdown', elgg_echo('profile_manager:admin:options:dropdown'), $dropdown_options);
@@ -126,49 +134,6 @@ function profile_manager_get_custom_field_types($register_name) {
 	}
 	
 	return false;
-}
-
-/**
- * Function to upload a profile icon on register of a user
- *
- * @param ElggUser $user The user to add the profile icons to
- *
- * @return boolean
- */
-function profile_manager_add_profile_icon($user) {
-	
-	$icon_sizes = elgg_get_config('icon_sizes');
-	
-	// get the images and save their file handlers into an array
-	// so we can do clean up if one fails.
-	$files = [];
-	
-	foreach ($icon_sizes as $name => $size_info) {
-		$resized = get_resized_image_from_uploaded_file('profile_icon', $size_info['w'], $size_info['h'], $size_info['square'], $size_info['upscale']);
-	
-		if ($resized) {
-			$file = new ElggFile();
-			$file->owner_guid = $user->guid;
-			$file->setFilename("profile/{$user->guid}{$name}.jpg");
-			$file->open('write');
-			$file->write($resized);
-			$file->close();
-			$files[] = $file;
-		} else {
-			// cleanup on fail
-			foreach ($files as $file) {
-				$file->delete();
-			}
-	
-			register_error(elgg_echo('avatar:resize:fail'));
-			
-			return false;
-		}
-	}
-	
-	$user->icontime = time();
-	
-	return true;
 }
 
 /**
@@ -369,13 +334,15 @@ function profile_manager_profile_completeness($user = null) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	
-	if (!elgg_instanceof($user, 'user')) {
+	if (!$user instanceof \ElggUser) {
 		return false;
 	}
 		
 	$required_fields = [];
 	$missing_fields = [];
-	$percentage_completeness = 100;
+	$avatar_missing = false;
+	
+	$ia = elgg_set_ignore_access(true);
 	
 	$fields = profile_manager_get_categorized_fields($user, true, false, true);
 	
@@ -397,13 +364,31 @@ function profile_manager_profile_completeness($user = null) {
 		}
 	}
 	
-	if (count($required_fields) > 0) {
-		$percentage_completeness = 100 - round(((count($missing_fields) / count($required_fields)) * 100));
+	$avatar_percentage = (int) elgg_get_plugin_setting('profile_completeness_avatar', 'profile_manager');
+	if ($avatar_percentage) {
+		if (!$user->icontime) {
+			$avatar_missing = true;
+		}
 	}
+	
+	$percentage_completeness = 100;
+		
+	if (count($required_fields)) {
+		$percentage_completeness -= (count($missing_fields) / count($required_fields)) * (100 - $avatar_percentage);
+	}
+	
+	if ($avatar_missing) {
+		$percentage_completeness -= $avatar_percentage;
+	}
+	
+	$percentage_completeness = round($percentage_completeness);
 
+	elgg_set_ignore_access($ia);
+	
 	return [
 		'required_fields' => $required_fields,
 		'missing_fields' => $missing_fields,
+		'avatar_missing' => $avatar_missing,
 		'percentage_completeness' => $percentage_completeness,
 	];
 }

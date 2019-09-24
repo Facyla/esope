@@ -52,7 +52,13 @@ class Menus {
 		}
 
 		$page_owner = elgg_get_page_owner_entity();
-		if (!elgg_is_admin_logged_in() && (!empty($page_owner) && !$page_owner->canEdit())) {
+		if (empty($page_owner) && !elgg_is_admin_logged_in()) {
+			// site newsletters
+			return [];
+		}
+		
+		if (!empty($page_owner) && !$page_owner->canEdit()) {
+			// group newsletters
 			return [];
 		}
 			
@@ -398,6 +404,29 @@ class Menus {
 			}
 		}
 	
+		return $returnvalue;
+	}
+	
+	/**
+	 * Registers menu items to the site menu
+	 *
+	 * @param string $hook        name of the hook
+	 * @param string $type        type of the hook
+	 * @param array  $returnvalue Default menu items
+	 * @param array  $params      params for the hook
+	 *
+	 * @return array Menu items
+	 */
+	public static function siteRegister($hook, $type, $returnvalue, $params) {
+
+		// link to your subscriptions
+		$returnvalue[] = \ElggMenuItem::factory([
+			'name' => 'newsletter',
+			'href' => 'newsletter/site',
+			'text' => elgg_echo('newsletter:menu:site'),
+			'is_trusted' => true,
+		]);
+
 		return $returnvalue;
 	}
 }

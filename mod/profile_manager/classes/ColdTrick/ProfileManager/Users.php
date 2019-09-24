@@ -152,21 +152,26 @@ class Users {
 			$configured_fields = $categorized_fields['fields'];
 	
 			// set ignore access
-			$ia = elgg_get_ignore_access();
-			elgg_set_ignore_access(true);
-	
+			$ia = elgg_set_ignore_access(true);
+			
 			foreach ($custom_profile_fields as $shortname => $value) {
 					
 				// determine if $value should be an array
 				if (!is_array($value) && !empty($configured_fields)) {
-					// only do something if it not is already an array
-					foreach ($configured_fields as $configured_field) {
-						if ($configured_field->metadata_name == $shortname) {
-							if ($configured_field->metadata_type == 'tags' || $configured_field->output_as_tags == 'yes') {
-								$value = string_to_tag_array($value);
-								// no need to continue this foreach
-								break;
+					foreach ($configured_fields as $configured_field_category) {
+						foreach ($configured_field_category as $configured_field) {
+							if ($configured_field->metadata_name !== $shortname) {
+								continue;
 							}
+							
+							if ($configured_field->metadata_type !== 'tags' && $configured_field->output_as_tags !== 'yes') {
+								continue;
+							}
+							
+							$value = string_to_tag_array($value);
+							
+							// no need to continue this foreach
+							break(2);
 						}
 					}
 				}
@@ -193,7 +198,8 @@ class Users {
 		}
 	
 		if (isset($_FILES['profile_icon'])) {
-			if (!profile_manager_add_profile_icon($object)) {
+			if (!$object->saveIconFromUploadedFile('profile_icon')) {
+				register_error(elgg_echo('avatar:resize:fail'));
 				// return false to delete the user
 				return false;
 			}
@@ -273,24 +279,27 @@ class Users {
 			}
 	
 			if ($profile_icon == 'yes') {
-				$profile_icon = $_FILES['profile_icon'];
-	
 				$error = false;
-				if (empty($profile_icon['name'])) {
+				
+				$profile_icons = elgg_get_uploaded_files('profile_icon');
+				if (empty($profile_icons)) {
 					register_error(elgg_echo('profile_manager:register_pre_check:missing', ['profile_icon']));
 					$error = true;
-				} elseif ($profile_icon['error'] != 0) {
-					register_error(elgg_echo('profile_manager:register_pre_check:profile_icon:error'));
-					$error = true;
 				} else {
-					// test if we can handle the image
-					$image = get_resized_image_from_uploaded_file('profile_icon', '10', '10', true, false);
-					if (!$image) {
-						register_error(elgg_echo('profile_manager:register_pre_check:profile_icon:nosupportedimage'));
+					
+					$profile_icon = $profile_icons[0];
+					if (!$profile_icon->isValid()) {
+						register_error(elgg_echo('profile_manager:register_pre_check:profile_icon:error'));
 						$error = true;
+					} else {
+						// test if we can handle the image
+						if (strpos($profile_icon->getMimeType(), 'image/') !== 0) {
+							register_error(elgg_echo('profile_manager:register_pre_check:profile_icon:nosupportedimage'));
+							$error = true;
+						}
 					}
 				}
-	
+					
 				if ($error) {
 					forward(REFERER);
 				}

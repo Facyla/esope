@@ -1,0 +1,38 @@
+Version history
+===============
+
+4.0.2 (2019-09-03):
+
+- several small chores/fixes
+
+4.0.1 (2019-09-03):
+
+- fixed: notify_user call now works on Elgg 2.x
+
+4.0 (2016-09-15):
+
+- changed: admin JS now an amd module
+- fixed: users not validated by email show up in admin approval list
+- fixed: uservalidationbyemail should not enable users on email validation
+
+3.0:
+
+- changes for Elgg 1.10
+
+2.0:
+
+- changes for Elgg 1.9
+
+1.1 (2014-08-27):
+
+- applied coding standards
+- added: options for admin to opt-out of notifications #1
+- fixed: confirmation email not sending
+- fixed: serious security issue with authentication
+- fixed: missing translation key
+- fixed: direct admin notification doesn't work
+- changed: README.txt to README.md for GitHub readability
+
+1.0 (2012-06-05):
+
+- initial release
