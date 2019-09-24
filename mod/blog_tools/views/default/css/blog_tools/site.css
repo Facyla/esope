@@ -1,0 +1,54 @@
+/** BlogTools CSS */
+.blog-tools-blog-image {
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid $(border-color-soft);
+}
+
+.blog-tools-blog-image-master {
+	margin: 0;
+	padding: 0;
+	border: none;
+	
+	img {
+		width: 100%;
+	}
+}
+
+.blog-tools-widget-items-container { 
+	> ul.elgg-list-entity {
+		> li.elgg-item {
+			display: none;
+			border: none;
+		}
+		
+		> li:first-child {
+			display: list-item;
+		}
+	}
+}
+
+.blog-tools-widget-items-navigator {
+	padding-top: 5px;
+	text-align: center;
+	border-top: 1px solid $(border-color-mild);
+	
+	> li {
+		display: inline-block;
+		border: 1px solid $(border-color-mild);
+		padding: 0.2rem 0.5rem;
+		cursor: pointer;
+		
+		&.elgg-state-selected {
+			color: $(text-color-highlight);
+			border-color: $(border-color-highlight);
+		}
+	}
+}
+
+.blog-tools-river-item .blog-tools-blog-image {
+	margin: 0 5px 0 0;
+	padding: 0;
+	border: none;
+	float: left;
+}

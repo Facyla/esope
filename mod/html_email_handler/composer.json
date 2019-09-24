@@ -1,0 +1,23 @@
+{
+	"name": "coldtrick/html_email_handler",
+	"description": "Allows to send out full HTML mails / notifications",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "notification", "email"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/html_email_handler",
+		"issues": "https://github.com/ColdTrick/html_email_handler/issues"
+	},
+	"require": {
+		"composer/installers": "^1.0.8",
+		"guzzlehttp/guzzle": "~6.0",
+		"pelago/emogrifier": "^2.1.0"
+	},
+	"require-dev": {
+		"coldtrick/sniffs": "dev-master",
+		"coldtrick/releases": "dev-master"
+	},
+	"conflict": {
+		"elgg/elgg": "<3.0"
+	}
+}
