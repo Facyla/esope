@@ -353,10 +353,29 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 		
 		// Add container message ?
 		$msg_container = notification_messages_message_add_container($entity);
+		$descr = '';
 		
+
+		// Poll: add custom message (closing dates)
+		if ($subtype == 'poll') {
+			$allow_close_date = elgg_get_plugin_setting('allow_close_date','poll');
+			if (($allow_close_date == 'yes') && (isset($poll->close_date))) {
+				$date_day = gmdate('j', $poll->close_date);
+				$date_month = gmdate('m', $poll->close_date);
+				$date_year = gmdate('Y', $poll->close_date);
+				$friendly_time = $date_day . '. ' . elgg_echo("poll:month:$date_month") . ' ' . $date_year;
+				if ($entity->isOpen()) {
+					$descr .= '<p><em>' . elgg_echo('poll:voting_ended', array($friendly_time)) . '</em></p>';
+				} else {
+					$poll_results = $poll->getUrl();
+					$descr .= '<p><em>' . elgg_echo('poll:voting_ended:closed', array($friendly_time, $poll_results)) . '</em></p>';
+				}
+			}
+		}
+
+
 		switch($subtype) {
 			case 'blog':
-				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
 				//$descr .= strip_tags($entity->description, $allowed_tags);
 				$descr .= notification_messages_filter_text($entity->description);
@@ -371,7 +390,6 @@ function notification_messages_build_body($entity, $params = array(), $action = 
 				break;
 				
 			default:
-				$descr = '';
 				if (!empty($entity->excerpt)) { $descr .= '<p><em>' . $entity->excerpt . '</em></p>'; }
 				//$descr .= strip_tags($entity->description, $allowed_tags);
 				$descr .= notification_messages_filter_text($entity->description);

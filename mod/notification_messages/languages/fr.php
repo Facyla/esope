@@ -100,7 +100,8 @@ return array(
 	'notification_messages:objects:subject:nocontainer:update' => "[Edition %s] %s",
 	'notification_messages:objects:subject:nocontainer:delete' => "[Suppression %s] %s",
 	'notification_messages:untitled' => "(sans titre)",
-	
+
+	// Notification body
 	'notification_messages:objects:body' => "%s a publié %s dans %s :
 
 %s
@@ -144,6 +145,11 @@ Voir et commenter en ligne :
 Voir et commenter en ligne :
 %s
 ",
+
+	// Special message body
+	'poll:voting_ended:closed' => "Les votes pour ce sondage sont terminés (depuis le %s).
+	<a href=\"%s\">Voir les résultats</a>",
+	
 	// Messages
 	'notification_messages:email:subject' => "[%s] Message de %s : %s",
 	
