@@ -19,6 +19,7 @@ use RuntimeException;
  */
 class Exception extends RuntimeException
 {
+
     /**
      * Array of attributes that are passed in from the constructor, and
      * made available in the view when a development error is displayed.

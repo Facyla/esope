@@ -22,6 +22,7 @@ use Cake\Database\Schema\TableSchema;
  */
 class SqliteSchema extends BaseSchema
 {
+
     /**
      * Array containing the foreign keys constraints names
      * Necessary for composite foreign keys to be handled
@@ -60,14 +61,9 @@ class SqliteSchema extends BaseSchema
         }
 
         $col = strtolower($matches[2]);
-        $length = $precision = null;
+        $length = null;
         if (isset($matches[3])) {
-            $length = $matches[3];
-            if (strpos($length, ',') !== false) {
-                list($length, $precision) = explode(',', $length);
-            }
-            $length = (int)$length;
-            $precision = (int)$precision;
+            $length = (int)$matches[3];
         }
 
         if ($col === 'bigint') {
@@ -83,10 +79,10 @@ class SqliteSchema extends BaseSchema
             return ['type' => TableSchema::TYPE_INTEGER, 'length' => $length, 'unsigned' => $unsigned];
         }
         if (strpos($col, 'decimal') !== false) {
-            return ['type' => TableSchema::TYPE_DECIMAL, 'length' => $length, 'precision' => $precision, 'unsigned' => $unsigned];
+            return ['type' => TableSchema::TYPE_DECIMAL, 'length' => null, 'unsigned' => $unsigned];
         }
         if (in_array($col, ['float', 'real', 'double'])) {
-            return ['type' => TableSchema::TYPE_FLOAT, 'length' => $length, 'precision' => $precision, 'unsigned' => $unsigned];
+            return ['type' => TableSchema::TYPE_FLOAT, 'length' => null, 'unsigned' => $unsigned];
         }
 
         if (strpos($col, 'boolean') !== false) {

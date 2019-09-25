@@ -24,6 +24,7 @@ use Cake\Collection\CollectionInterface;
  */
 class ReplaceIterator extends Collection
 {
+
     /**
      * The callback function to be used to transform values
      *

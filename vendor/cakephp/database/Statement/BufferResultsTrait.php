@@ -21,6 +21,7 @@ namespace Cake\Database\Statement;
  */
 trait BufferResultsTrait
 {
+
     /**
      * Whether or not to buffer results in php
      *

@@ -26,6 +26,7 @@ use PDOException;
  */
 class Collection
 {
+
     /**
      * Connection object
      *

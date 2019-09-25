@@ -24,6 +24,7 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  */
 trait QueryTrait
 {
+
     /**
      * Instance of a table object this query is bound to
      *
@@ -178,7 +179,7 @@ trait QueryTrait
      * $query->cache(false);
      * ```
      *
-     * @param \Closure|string|false $key Either the cache key or a function to generate the cache key.
+     * @param false|string|\Closure $key Either the cache key or a function to generate the cache key.
      *   When using a function, this query instance will be supplied as an argument.
      * @param string|\Cake\Cache\CacheEngine $config Either the name of the cache config to use, or
      *   a cache config instance.

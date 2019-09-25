@@ -22,6 +22,7 @@ namespace Cake\Database\Statement;
  */
 class CallbackStatement extends StatementDecorator
 {
+
     /**
      * A callback function to be applied to results.
      *

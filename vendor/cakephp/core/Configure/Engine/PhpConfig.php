@@ -44,6 +44,7 @@ use Cake\Core\Exception\Exception;
  */
 class PhpConfig implements ConfigEngineInterface
 {
+
     use FileConfigTrait;
 
     /**

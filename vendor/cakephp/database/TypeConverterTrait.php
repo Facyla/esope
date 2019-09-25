@@ -19,6 +19,7 @@ namespace Cake\Database;
  */
 trait TypeConverterTrait
 {
+
     /**
      * Converts a give value to a suitable database value based on type
      * and return relevant internal statement type

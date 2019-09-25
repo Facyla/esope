@@ -23,6 +23,7 @@ use Cake\Database\ValueBinder;
  */
 class TupleComparison extends Comparison
 {
+
     /**
      * Constructor
      *

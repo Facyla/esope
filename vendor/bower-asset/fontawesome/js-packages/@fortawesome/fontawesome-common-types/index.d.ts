@@ -70,7 +70,6 @@ export type IconName = '500px' |
   'btc' | 
   'buffer' | 
   'buromobelexperte' | 
-  'buy-n-large' | 
   'buysellads' | 
   'canadian-maple-leaf' | 
   'cc-amazon-pay' | 
@@ -261,7 +260,6 @@ export type IconName = '500px' |
   'markdown' | 
   'mastodon' | 
   'maxcdn' | 
-  'mdb' | 
   'medapps' | 
   'medium' | 
   'medium-m' | 
@@ -290,7 +288,6 @@ export type IconName = '500px' |
   'openid' | 
   'opera' | 
   'optin-monster' | 
-  'orcid' | 
   'osi' | 
   'page4' | 
   'pagelines' | 
@@ -382,7 +379,6 @@ export type IconName = '500px' |
   'superpowers' | 
   'supple' | 
   'suse' | 
-  'swift' | 
   'symfony' | 
   'teamspeak' | 
   'telegram' | 
@@ -404,7 +400,6 @@ export type IconName = '500px' |
   'uber' | 
   'ubuntu' | 
   'uikit' | 
-  'umbraco' | 
   'uniregistry' | 
   'untappd' | 
   'ups' | 
@@ -1037,8 +1032,6 @@ export type IconName = '500px' |
   'hanukiah' | 
   'hard-hat' | 
   'hashtag' | 
-  'hat-cowboy' | 
-  'hat-cowboy-side' | 
   'hat-wizard' | 
   'haykal' | 
   'hdd' | 
@@ -1183,7 +1176,6 @@ export type IconName = '500px' |
   'mosque' | 
   'motorcycle' | 
   'mountain' | 
-  'mouse' | 
   'mouse-pointer' | 
   'mug-hot' | 
   'music' | 
@@ -1277,7 +1269,6 @@ export type IconName = '500px' |
   'rainbow' | 
   'random' | 
   'receipt' | 
-  'record-vinyl' | 
   'recycle' | 
   'redo' | 
   'redo-alt' | 

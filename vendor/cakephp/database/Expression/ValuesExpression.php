@@ -29,6 +29,7 @@ use Cake\Database\ValueBinder;
  */
 class ValuesExpression implements ExpressionInterface
 {
+
     use ExpressionTypeCasterTrait;
     use TypeMapTrait;
 

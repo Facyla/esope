@@ -19,6 +19,7 @@ namespace Cake\Datasource;
  */
 interface SchemaInterface
 {
+
     /**
      * Get the name of the table.
      *

@@ -29,6 +29,7 @@ use LogicException;
  */
 class OpenSsl
 {
+
     /**
      * Not implemented
      *

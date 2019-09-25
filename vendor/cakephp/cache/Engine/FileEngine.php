@@ -33,6 +33,7 @@ use SplFileObject;
  */
 class FileEngine extends CacheEngine
 {
+
     /**
      * Instance of SplFileObject class
      *

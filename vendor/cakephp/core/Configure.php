@@ -32,6 +32,7 @@ use RuntimeException;
  */
 class Configure
 {
+
     /**
      * Array of values currently stored in Configure.
      *

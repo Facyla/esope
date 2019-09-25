@@ -33,6 +33,7 @@ use PDO;
  */
 trait SqlserverDialectTrait
 {
+
     use SqlDialectTrait;
     use TupleComparisonTranslatorTrait;
 

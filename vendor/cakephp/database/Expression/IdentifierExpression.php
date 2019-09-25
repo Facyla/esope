@@ -27,6 +27,7 @@ use Cake\Database\ValueBinder;
  */
 class IdentifierExpression implements ExpressionInterface
 {
+
     /**
      * Holds the identifier string
      *

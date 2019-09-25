@@ -39,6 +39,7 @@ use RuntimeException;
  */
 abstract class ObjectRegistry implements Countable, IteratorAggregate
 {
+
     /**
      * Map of loaded objects.
      *

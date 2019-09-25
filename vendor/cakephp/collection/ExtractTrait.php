@@ -22,6 +22,7 @@ use Traversable;
  */
 trait ExtractTrait
 {
+
     /**
      * Returns a callable that can be used to extract a property or column from
      * an array or object based on a dot separated path.
@@ -121,7 +122,7 @@ trait ExtractTrait
      * @param array $conditions A key-value list of conditions to match where the
      * key is the property path to get from the current item and the value is the
      * value to be compared the item with.
-     * @return \Closure
+     * @return callable
      */
     protected function _createMatcherFilter(array $conditions)
     {

@@ -24,6 +24,7 @@ use Cake\Log\Log;
  */
 class QueryLogger
 {
+
     /**
      * Writes a LoggedQuery into a log
      *

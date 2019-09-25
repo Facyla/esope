@@ -26,6 +26,7 @@ use Cake\Database\ValueBinder;
  */
 class Comparison implements ExpressionInterface, FieldInterface
 {
+
     use ExpressionTypeCasterTrait;
     use FieldTrait;
 

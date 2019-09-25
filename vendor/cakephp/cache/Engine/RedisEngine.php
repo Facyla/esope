@@ -24,6 +24,7 @@ use RedisException;
  */
 class RedisEngine extends CacheEngine
 {
+
     /**
      * Redis wrapper.
      *
@@ -168,7 +169,7 @@ class RedisEngine extends CacheEngine
      *
      * @param string $key Identifier for the data
      * @param int $offset How much to increment
-     * @return int|false New incremented value, false otherwise
+     * @return bool|int New incremented value, false otherwise
      */
     public function increment($key, $offset = 1)
     {
@@ -188,7 +189,7 @@ class RedisEngine extends CacheEngine
      *
      * @param string $key Identifier for the data
      * @param int $offset How much to subtract
-     * @return int|false New decremented value, false otherwise
+     * @return bool|int New decremented value, false otherwise
      */
     public function decrement($key, $offset = 1)
     {
@@ -257,7 +258,7 @@ class RedisEngine extends CacheEngine
      * @param string $key Identifier for the data.
      * @param mixed $value Data to be cached.
      * @return bool True if the data was successfully cached, false on failure.
-     * @link https://github.com/phpredis/phpredis#set
+     * @link https://github.com/phpredis/phpredis#setnx
      */
     public function add($key, $value)
     {
@@ -268,8 +269,9 @@ class RedisEngine extends CacheEngine
             $value = serialize($value);
         }
 
-        if ($this->_Redis->set($key, $value, ['nx', 'ex' => $duration])) {
-            return true;
+        // setNx() doesn't have an expiry option, so follow up with an expiry
+        if ($this->_Redis->setNx($key, $value)) {
+            return $this->_Redis->expire($key, $duration);
         }
 
         return false;

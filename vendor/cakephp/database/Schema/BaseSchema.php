@@ -24,6 +24,7 @@ use Cake\Database\Driver;
  */
 abstract class BaseSchema
 {
+
     /**
      * The driver instance being used.
      *

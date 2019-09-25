@@ -28,6 +28,7 @@ use RuntimeException;
  */
 class SchemaCache
 {
+
     /**
      * Schema
      *

@@ -19,6 +19,7 @@ namespace Cake\Database\Expression;
  */
 trait FieldTrait
 {
+
     /**
      * The field name or expression to be used in the left hand side of the operator
      *

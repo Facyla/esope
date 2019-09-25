@@ -25,6 +25,7 @@ use SplDoublyLinkedList;
  */
 class BufferedIterator extends Collection implements Countable, Serializable
 {
+
     /**
      * The in-memory cache containing results from previous iterators
      *

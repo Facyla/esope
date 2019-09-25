@@ -22,6 +22,7 @@ use Cake\Database\ValueBinder;
  */
 class UnaryExpression implements ExpressionInterface
 {
+
     /**
      * Indicates that the operation is in pre-order
      *

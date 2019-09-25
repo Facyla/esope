@@ -26,6 +26,7 @@ use JsonSerializable;
  */
 interface CollectionInterface extends Iterator, JsonSerializable
 {
+
     /**
      * Executes the passed callable for each of the elements in this collection
      * and passes both the value and key for them on each step.

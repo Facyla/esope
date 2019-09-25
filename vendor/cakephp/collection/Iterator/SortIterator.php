@@ -39,6 +39,7 @@ use DateTimeInterface;
  */
 class SortIterator extends Collection
 {
+
     /**
      * Wraps this iterator around the passed items so when iterated they are returned
      * in order.

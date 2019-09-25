@@ -25,6 +25,7 @@ namespace Cake\Datasource;
  */
 interface RepositoryInterface
 {
+
     /**
      * Returns the table alias or sets a new one
      *

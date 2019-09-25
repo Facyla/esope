@@ -24,6 +24,7 @@ use Exception;
  */
 class LoggingStatement extends StatementDecorator
 {
+
     /**
      * Logger instance responsible for actually doing the logging task
      *

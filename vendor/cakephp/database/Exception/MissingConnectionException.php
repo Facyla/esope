@@ -21,6 +21,7 @@ use Cake\Core\Exception\Exception;
  */
 class MissingConnectionException extends Exception
 {
+
     /**
      * {@inheritDoc}
      */

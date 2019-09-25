@@ -25,6 +25,7 @@ namespace Cake\Utility\Crypto;
  */
 class Mcrypt
 {
+
     /**
      * Encrypts/Decrypts a text using the given key using rijndael method.
      *

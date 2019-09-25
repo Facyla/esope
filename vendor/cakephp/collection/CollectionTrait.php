@@ -39,6 +39,7 @@ use Traversable;
  */
 trait CollectionTrait
 {
+
     use ExtractTrait;
 
     /**

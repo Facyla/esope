@@ -19,6 +19,7 @@ namespace Cake\Database;
  */
 trait TypedResultTrait
 {
+
     /**
      * The type name this expression will return when executed
      *

@@ -19,6 +19,7 @@ namespace Cake\Database\Schema;
  */
 interface TableSchemaAwareInterface
 {
+
     /**
      * Get and set the schema for this fixture.
      *

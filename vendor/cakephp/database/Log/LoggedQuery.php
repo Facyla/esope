@@ -22,6 +22,7 @@ namespace Cake\Database\Log;
  */
 class LoggedQuery
 {
+
     /**
      * Query string that was executed
      *

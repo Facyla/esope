@@ -22,6 +22,7 @@ use InvalidArgumentException;
  */
 class ConsoleLog extends BaseLog
 {
+
     /**
      * Default config for this class
      *

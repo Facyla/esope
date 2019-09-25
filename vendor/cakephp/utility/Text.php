@@ -21,6 +21,7 @@ use InvalidArgumentException;
  */
 class Text
 {
+
     /**
      * Default transliterator.
      *

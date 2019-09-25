@@ -25,6 +25,7 @@ use Cake\Datasource\Exception\MissingDatasourceException;
  */
 class ConnectionRegistry extends ObjectRegistry
 {
+
     /**
      * Resolve a datasource classname.
      *

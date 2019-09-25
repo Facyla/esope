@@ -26,6 +26,7 @@ use RuntimeException;
  */
 class CacheRegistry extends ObjectRegistry
 {
+
     /**
      * Resolve a cache engine classname.
      *

@@ -23,6 +23,7 @@ use Countable;
  */
 class ResultSetDecorator extends Collection implements ResultSetInterface
 {
+
     /**
      * Make this object countable.
      *

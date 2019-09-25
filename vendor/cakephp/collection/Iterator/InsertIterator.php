@@ -24,6 +24,7 @@ use Cake\Collection\Collection;
  */
 class InsertIterator extends Collection
 {
+
     /**
      * The collection from which to extract the values to be inserted
      *

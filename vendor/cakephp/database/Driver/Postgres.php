@@ -23,6 +23,7 @@ use PDO;
  */
 class Postgres extends Driver
 {
+
     use PostgresDialectTrait;
 
     /**

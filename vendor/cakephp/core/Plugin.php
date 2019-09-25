@@ -26,6 +26,7 @@ use DirectoryIterator;
  */
 class Plugin
 {
+
     /**
      * Holds a list of all loaded plugins and their configuration
      *

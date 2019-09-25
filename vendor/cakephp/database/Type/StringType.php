@@ -27,6 +27,7 @@ use PDO;
  */
 class StringType extends Type implements OptionalConvertInterface, TypeInterface
 {
+
     /**
      * Convert string data into the database format.
      *

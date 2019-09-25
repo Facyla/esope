@@ -24,6 +24,7 @@ use RuntimeException;
  */
 class LogEngineRegistry extends ObjectRegistry
 {
+
     /**
      * Resolve a logger classname.
      *

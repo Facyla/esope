@@ -22,6 +22,7 @@ namespace Cake\Database;
  */
 trait TypeMapTrait
 {
+
     /**
      * @var \Cake\Database\TypeMap
      */

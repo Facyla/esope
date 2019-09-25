@@ -24,6 +24,7 @@ use Exception;
  */
 class CommandRetry
 {
+
     /**
      * The strategy to follow should the executed action fail.
      *

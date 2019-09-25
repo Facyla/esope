@@ -26,6 +26,7 @@ use Traversable;
  */
 class Collection extends IteratorIterator implements CollectionInterface, Serializable
 {
+
     use CollectionTrait;
 
     /**

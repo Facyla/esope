@@ -31,6 +31,7 @@ use Cake\Database\Type;
  */
 class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
 {
+
     /**
      * The name of the table
      *

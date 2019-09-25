@@ -26,6 +26,7 @@ use Cake\Database\SqlDialectTrait;
  */
 trait PostgresDialectTrait
 {
+
     use SqlDialectTrait;
 
     /**

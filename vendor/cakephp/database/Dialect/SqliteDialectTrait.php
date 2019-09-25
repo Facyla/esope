@@ -26,6 +26,7 @@ use Cake\Database\SqliteCompiler;
  */
 trait SqliteDialectTrait
 {
+
     use SqlDialectTrait;
     use TupleComparisonTranslatorTrait;
 

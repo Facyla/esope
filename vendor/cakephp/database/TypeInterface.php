@@ -20,6 +20,7 @@ namespace Cake\Database;
  */
 interface TypeInterface
 {
+
     /**
      * Casts given value from a PHP type to one acceptable by a database.
      *

@@ -21,6 +21,7 @@ use Cake\Core\Exception\Exception;
  */
 class InvalidPrimaryKeyException extends Exception
 {
+
     /**
      * {@inheritDoc}
      */

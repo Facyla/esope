@@ -21,4 +21,5 @@ use Cake\Core\Exception\Exception as CakeException;
  */
 class Exception extends CakeException
 {
+
 }

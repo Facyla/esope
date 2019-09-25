@@ -26,6 +26,7 @@ use RecursiveIterator;
  */
 class UnfoldIterator extends IteratorIterator implements RecursiveIterator
 {
+
     /**
      * A function that is passed each element in this iterator and
      * must return an array or Traversable object.
