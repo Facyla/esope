@@ -1,0 +1,539 @@
+Version history
+===============
+
+9.2 (2018-05-03):
+
+- added: event->getRelationships now supports changing time order
+- added: Event function for getting supported relationships
+- added: search on event attendees page
+- added: seperate page for event attendees
+- changed: limited ordering of members on event detail page
+- changed: removed the attendees search feature from event view page
+- fix: allow users to unsubscribe from full events
+
+9.1.1 (2018-03-22):
+
+- changed: fetch entities in bulk in highlighted events widget
+
+9.1 (2018-03-08):
+
+- added: plugin setting to control different zoom level for event details
+
+9.0.3 (2018-02-22):
+
+- changed: free text contact details now use output/longtext
+
+9.0.2 (2018-02-12):
+
+- added: address search field gets focus on lightbox open
+- fixed: open location input on focus instead of on click
+
+9.0.1 (2018-01-25):
+
+- fixed: correct show end day for allday events on the calendar
+- fixed: event calendar not showing all events
+- fixed: length of description in addthisevent data could cause URL issues
+
+9.0 (2018-01-11):
+
+- added: ability to change some event data during copy action
+- added: ability to set default location of OSM map view
+- added: maps data can now come from OpenStreetMap
+- added: plugin setting to disable maps integration
+- changed: all actions have been updated to return correct http responses
+- changed: moved googlemaps specific code to own views
+- fixed: show correct icon for logged out user registrations
+- fixed: use output/longtext on event registration view page
+
+8.2 (2017-09-06):
+
+- added: more information in Event->toObject()
+- added: option to disable addthis event features
+- added: option to set map location without pin
+- fixed: addthisevent links not working in email
+- fixed: attending events on the map don't have correct pin
+- fixed: solved timing issue where maps not opened on location edit form
+
+8.1.1 (2017-05-11):
+
+- fixed: correctly set the default starting time of an event in the future
+
+8.1 (2017-03-24):
+
+- added: custom text for objectpicker
+- added: event helper function getExcerpt()
+- added: export of attendees is now hookable
+- changed: entity time in content_by_tags widget changed to startdate
+- changed: only show event completed text when attending (site and mail)
+- changed: ordered attendees / waitinglist based on rsvp timestamp
+- fixed: do not show input clear action on date inputs in IE/Edge
+- fixed: event start/end date are now required on the form
+- fixed: events widget title url not working
+- fixed: restored user_hover menu actions
+
+8.0 (2017-02-27):
+
+- changed: removed the need for the pagesetup event
+- changed: updated min Elgg requirent to 2.3
+- fixed: makes sure there is a source directory when copying files
+
+7.2.2 (2017-02-02):
+
+- fixed: bug when uploading image to a new event
+
+7.2.1 (2017-01-26):
+
+- changed: use new Elgg api for icon handling
+- fixed: show undo waitinglist rsvp option
+- updates Spanish translation
+
+7.2 (2016-11-18):
+
+- added: support for EntityTools plugin
+- added: you can configure if 'interested' is an available RSVP option
+- changed: moved event access update actions to object update event hook
+- changed: rsvp actions are 'toggle' buttons, no more special undo button
+
+7.1 (2016-10-27):
+
+- added: event completed message is added to registration emails
+
+7.0 (2016-10-06):
+
+- changed: 'add to calendar' description now is longer
+- changed: replaced icon size retrieval with new elgg_get_icon_sizes func
+- fixed: correctly use license key in addevent js
+- fixed: link to view registration in rsvp mail now points to correct url
+- fixed: use correct gmtime in search queries listing events
+
+6.0.1 (2016-09-15):
+
+- changed: user listing in event sidebar now has name clickable
+- fixed: addevent buttons in mail look better in various emailclients
+- fixed: image in registration view and pdf was not showing
+- fixed: incorrect positioned more link on events list
+
+6.0-beta (2016-08-29):
+
+- added: addevent links to registration confirmation mail body
+- added: after event create/edit if program is needed go to special page
+- added: calendar views for event listings
+- added: configure contact persons and organizers directly from event edit
+- added: event_banner icon size for display on full view
+- added: fee details field
+- added: new widget to highlight events (requires objectpicker plugin)
+- added: notice for logged out users to log in to be able to register
+- added: optional help texts on event edit form
+- added: parts of event edit form now show collapsed if no values set
+- added: started working on calendar features
+- added: upgrade to migrate event files to event folder in dataroot
+- added: user owner and attending page is now available
+- added: you now have the ability to copy an event
+- changed: actions and resource views now use generic entity gatekeeper
+- changed: better described some questions on the event edit form
+- changed: default listing of events now include running events
+- changed: event day edit form uses timestamp in datepicker
+- changed: event edit form is now a vertical form instead of tabbed
+- changed: event edit form now has a special section for contact info
+- changed: event file downloads use serve-file api
+- changed: event location selection now also uses new maps js
+- changed: event timestamp metadata has been moved to new fields
+- changed: highlighted events can be sorted
+- changed: highlighted events widget has flag to autohide past events
+- changed: map search now works with new gmaps.js library
+- changed: move boilerplate event edit tab code to module
+- changed: moved addthisevent to views
+- changed: moved all registration related pages to resource views
+- changed: moved canEdit hook to EventRegistration object class function
+- changed: moved comments checkbox to general edit section
+- changed: moved event edit form vars preparation to a function
+- changed: moved event related pages to resource views
+- changed: moved event search form to correct elgg forms view location
+- changed: moved Event update event to class function
+- changed: moved event_sort_menu view to a menu hook
+- changed: moved gmaps to AMD modules and improving full view
+- changed: moved logged out rsvp action to rsvp view
+- changed: moved menu hooks to class functions
+- changed: moved pagehandler to class function
+- changed: moved registrationform related resources to new locations
+- changed: moved registration questions config to event edit form
+- changed: moved settings cache reset hook to class function
+- changed: moved unsubscribe pages to resource views
+- changed: moved widgets and notification hooks to class functions
+- changed: move some more fields around on the event edit form
+- changed: namespaced event day and slot classes
+- changed: refactored the event/edit action
+- changed: refactored the event search form to use elgg-cols
+- changed: register form now uses elgg sticky form methods
+- changed: registration part of event edit form streamlined
+- changed: removed organizer data from addtocalendar feature
+- changed: replaced the language key 'to' with 'event_manager:date:to'
+- changed: replaced thumbnail url with elgg_get_inline_url
+- changed: selecting an address forces you to search for a location first
+- changed: started using elgg_view_input for forms
+- changed: twitter hash usage is now meant as general twitter search
+- changed: updated all languages file to only provide original keys
+- changed: updated styling of registration page
+- changed: update version to 6.0-beta in manifest
+- changed: use icons instead of labels for contact details
+- fixed: Event::deleteIcon declaration now matches ElggEntity::deleteIcon
+- fixed: added correct gatekeepers to various resource views
+- fixed: admins should be able to add events to any group
+- fixed: also copy event files when copying an event
+- fixed: autodetect composer installed dependencies or bundled
+- fixed: cannot declare defaults in function parameters
+- fixed: correct event delete system message
+- fixed: correct forward url after delete of group event
+- fixed: correctly delete uploaded file from file system
+- fixed: correctly fetch new date format saving program days
+- fixed: correctly get the event start date for new program days
+- fixed: correctly link views from composer dependencies
+- fixed: default slot for new event with program now has correct times set
+- fixed: do not show event related river menu items on relationship create
+- fixed: highlighted events are listed using elgg_view_entity_list
+- fixed: incorrect translations for event_manager:date:to
+- fixed: initial program day and slot texts are now translatable
+- fixed: no longer encode from address as Elgg does this now
+- fixed: notification on RSVP not sent to registering user
+- fixed: pass int to canEdit function instead of ElggUser
+- fixed: present correct sticky value for endregistration_day
+- fixed: prevent empty string tags to end up in the database
+- fixed: RSVP site notifications now show correct summary
+- fixed: set page owner guid in search action
+- fixed: show excerpt of description in event listings
+- fixed: sidebar contact details are now translatable
+- removed: checkbox to create owner as organizer on edit form is removed
+- removed: no longer show markers in the sidebar when looking at the map
+- removed: replaced event_manager_time_pad with anonymous function
+- removed: special RSVP options can no longer be configured
+- removed: the twitter_hash field has been removed from the event form
+- removed: unused icon.php file
+- removed: unused registration/approve action
+- removed: users can no longer select organizing as an RSVP option
+
+x.x:
+
+- added: map is now showing on the detail page of an event
+- removed: no longer support a setting to hide the owner block in the sidebar
+- changed: restructured the event view page
+- changed: now using the google maps API as an AMD module
+- changed: clicking on an address no longer shows a routeplanner but brings you to the event
+
+5.0.1 (2016-04-13):
+
+- added: german translation
+- changed: replaced the add link with a more link in the widget footer
+- fixed: changed widget more span into div
+- fixed: correct path to dompdf lib
+- fixed: events aren't likeable
+- fixed: inline image to prevent dompdf complaining about remote embed
+- fixed: using correct jquery function
+
+5.0 (2016-02-09):
+
+- changed: dompdf now is a composer dependency
+- changed: increased Elgg version requirement to 2.0
+- changed: moved css to new location and removed the use of a custom icon
+- fixed: correctly check for full_view
+- fixed: correctly include the settings for Elgg 2.0
+- fixed: correctly set default limit for listing upcomming events
+- fixed: don't use translatable date format for registration enddate input
+
+4.0 (2015-12-14):
+
+- added: function documentation
+- added: composer support
+- added: updated addthisevent to v1.6.0
+- added: Adds .gitignore that ignores all files beginning with a dot
+- added: Adds Finnish translations file
+- added: Adds Spanish translations file
+
+- changed: change sender of notifications to owner of event
+- changed: changed how the googlemaps.js file is loaded
+- changed: Event->getFirstWaitingUser is now a protected function
+- changed: moved a few pages to ajax views
+- changed: moved fee and attendee fields to registration tab
+- changed: moved maps setting queries to js file
+- changed: moved out html output to view instead of class function
+- changed: moved registration of js to page setup to save db call in init
+- changed: namespaced javascript functions
+- changed: reduced complexity of notifyOnRSVP function
+- changed: refactored and cleaned up a lot of code
+- changed: refactored js into multiple modules that get loaded on demand
+- changed: registration options now has its own language key
+- changed: replaced custom js and pages with ajaxed views
+- changed: replaced custom loading indicator with elgg/spinner
+- changed: replaced date format define with a language key
+- changed: replaced day/delete procedure with action
+- changed: replaced inline css with a global page class
+- changed: replaced md5 + sitesecret code generation with elgg_build_hmac
+- changed: replaced the deprecated jquery live function usage with .on()
+- changed: rewrote procedures into actions and ajax views
+- changed: updated to newest DOMPDF library
+- changed: Format English and Finnish translation files to the Elgg 1.9 syntax
+- changed: moved Event edit form under views/default/forms
+- changed: moved page handler to own lib file
+- changed: moved slot/delete procedure to regular action
+- changed: replaced event_manager_get_form_pulldown_* functions with input/time view
+- changed: refactoring for the event editing form
+- changed: got rid of the HTML tables
+- changed: refactored the slot saving procedure
+- changed: replaced the slot edit file with an action file
+- changed: separated javascript from the form HTML
+- changed: register object classes on plugin activation and unregister them on deactivation
+
+- fixed: current icon label was showing even if there was no icon
+- fixed: do not show attendee count if not open for registration and count is 0
+- fixed: location selection on edit form no longer working
+- fixed: replaced deprecated class parameter in ElggMenu::factory
+- fixed: replaced deprecated functions with alternatives
+- fixed: set correct enctype in event edit form to allow icon upload
+- fixed: update thumbnail page to new Entity DirLocator
+- fixed: correctly set ignore access for handling private events
+- fixed: deprecation notices for output/confirmlink
+- fixed: 0 values were mistaken for empty values on registration form
+- fixed: export attendees now uses ElggBatch to prevent OOM issues
+- fixed: send correct notifications when moving pending users to attendee
+- fixed: deprecated use of getEntitiesFromRelationship() method
+- fixed: missing values from the event editing form
+- fixed: replace deprecated add_to_river() with elgg_create_river_item()
+
+- removed: unused procedure and function
+- removed: unused views
+- removed: event class function getEventLocation
+- removed: Event->exportAttendees function
+- removed: Event->getRegistrationData function
+- removed: Event->isAttending function
+- removed: unused Event->isUserRegistered function
+- removed: unused EventSlot->isUserWaiting function
+- removed: unused function getRegistrationsByUser
+- removed: unused isWaiting and getWaitingUsers functions
+
+3.0 (2014-11-17):
+
+- added: direct unsubscribe link in notifications
+- added: always show attendees if you can edit the event
+- added: tabbed edit form
+- added: registration date to export of attendees
+- added: events widget now has option to filter by group
+- changed: updated for Elgg 1.9
+- changed: updated to latest addthisevent library
+- changed: consolidated export attendees actions/functions
+- changed: replaced generateRegistrationForm function with form view
+- changed: custom tools dropdown actions are moved to better/standard locations
+- fixed: group tool option respects plugin settings
+- fixed: friends events only checked for 10 friends
+- fixed: added slashes to csv export
+- fixed: only show user hover actions if event->canEdit()
+- fixed: incorrect breadcrumb on participation page
+- fixed: #46 profile widget should show events for owner instead of viewer
+- fixed: location click not working with special chars
+- fixed: route click not working with special chars
+- fixed: #34 only show rsvp button if there are options
+- removed: unused icons
+- removed: support for importing Event Calendar Events
+
+2.7.1 (2013-12-24):
+
+- fixed: using incorrect end ts for determining end date/time of event for addthisevent script
+- fixed: using date_add (a php 5.3 function) breaks usage for 5.2
+
+2.7 (2013-12-10):
+
+- added: add to calendar functionality (iCal export) 
+- added: end date/time for events
+- added: action to move waiting users to attendees
+- added: events are now notification objects (will generate some more default notification mails)
+- added: event owner listing of pending event registrations
+- added: action to resend event registration validation mail to pending registrations
+- added: action to add pending registrations directly to attendees
+- changed: event owner can also be removed from event with user hover menu 
+- changed: export column separator is now a semicolon
+- changed: default rsvp options is now only attending
+- changed: only show attendees if useful
+- changed: thumbnail generation uses default elgg sizes
+- changed: logged out registration is now possible with email adresses of registered users
+- changed: logged out registration requires email validation of registration
+- removed: twitter sidebar widget because twitter doesn't support this anymore
+- fixed: correctly check if a user can edit an event
+- fixed: non logged in users requires custom questions to register
+- fixed: register button showing even if not possible to register
+- fixed: register form showing even if there are no further questions required to register
+
+
+2.6 (2013-04-19):
+
+- added: required field information added to registration form
+- added: event days now can have a custom title
+- added: option to hide owner block for an event
+- changed: registration pdf download moved to title button
+- changed: a lot of code cleanup
+- fixed: check if user is member of site when registering as a non logged in user
+- fixed: invalid unsubscribe link in email message
+- fixed: incorrect pdf downloaf link for registration
+- fixed: show only registration specific content in pdf download
+- fixed: registration object was not deleted correctly on unsubscribe
+
+2.5.1 (2013-03-25):
+
+- fixed: issue with simplecache googlemaps js
+
+2.5 (2013-03-21):
+
+- added: event tags in full view strapline
+- added: twitter search feed in sidebar based on twitter hash
+- added: use of elgg entity menu
+- added: attendee count to entity menu
+- added: attendee search/filter for event owners
+- added: unsubscribe option for logged out users (without an account)
+- added: elgg_view_entity_icon("date") shows calendar representation of event date
+- added: event slot sets (user can only attend 1 slot per set)
+- added: 'thanks for registering' page with optional thank you text
+- changed: twitter hash is clickable
+- changed: event full view now uses content layout
+- changed: attendees + interested + waitinglist shown as list on event page, organizers, presenters and exhibitors moved to sidebar
+- changed: position of register for event button for logged out users
+- removed: herobrine
+- fixed: logged out users can register full slot with no available seats
+- fixed: duplicate registration for same emailaddress
+
+2.4 (2013-03-11):
+
+- added: export waitinglist
+- changed: make use of elgg metadatacaching instead of own mechanisme
+- removed: some deprecated code
+- fixed: bug in expanding max attendees
+- fixed: wrong image url in attendee listing
+
+2.3 (2012-10-31):
+
+- added: 4 new event fields (website, contact details, fee and twitter hash)
+- added: javascript validation of required fields on event registration form
+- added: french translation
+- changed: new events create a "created" river event and creaters have the option to be directly added as organisator
+- changed: owners now can change rsvp
+- changed: new events create a "created" river event and creaters have the option to be directly added as organisator
+- changed: owners now can change rsvp
+- changed: moved search button to bottom of search events form
+- changed: layout of group events module now looks like widget contents
+- changed: now showing max attendees on full view
+- fixed: venue not shown on full view
+- fixed: title not represented correctly when editing an exisiting registration question
+- fixed: invalid event url in html emails
+- fixed: some invalid urls with subfolder elgg installations
+- fixed: count and export functions not giving correct results
+- fixed: event class now returns correct event url
+- fixed: file download issue on IE7 with https
+- fixed: correct order of registration form fields
+- fixed: input radio and checkbox require non-numeric keys
+- fixed: region and type dropdown now have a max width
+- fixed: translation errors
+- fixed: invalid download link for event files
+- fixed: invalid query for migrating events when migrated metastring does not exists
+- fixed: map markers now have different colors
+- fixed: map info window not showing on correct marker
+- fixed: class loader issues since Elgg 1.8.4
+
+2.2 (2012-05-02):
+
+- added: a direct add link to events widget
+- added: widget title link (requires widget manager)
+- changed: handling of RSVP notifications
+- changed: reduced the event info in the widgets
+- changed: updated translations
+- fixed: event_type and region search now working
+- fixed: widget showing for groups that have events disabled
+- fixed: correct group link in widget listing
+- fixed: imported event_calendar events are now anti dated
+- fixed: limiting events by container guid, so group events work again
+- fixed: list order of events and some search logic improvements
+- fixed: event type and region search
+- fixed: export of attendees not exporting non-logged in registrations
+
+2.1 (2012-04-13):
+
+- added: when increasing the available slots, user on the waiting list will auto join
+- changed: showing waitinglist in event full view to event owners
+- changed: short description no longer required
+- changed: now using Google Maps API v3
+- changed: group listing now has group gatekeeper
+- fixed: several widget bugs
+- fixed: export of attendees
+- fixed: unable to kick a user, leave an event
+- fixed: list not handling no events correctly
+- fixed: correct listing of migratable event calendar events
+- fixed: potential error in Event->generateAttendee()
+- fixed: error in listing which disabled searching 
+- fixed: error in search procedure
+- fixed: event fill from waiting list not correctly handling unlimited slots
+- fixed: better check for Open Registration 
+
+2.0.2 (2011-12-6):
+- fixed: event search
+- fixed: js bugs
+
+2.0.1 (2011-11-01):
+
+- fixed: layout of event details table in Opera 
+- fixed: positioning of tools and rsvp menu in browser that use top as a reserved word in javascript
+- fixed: event manager group module
+- fixed: event_waitinglist relationship will not be posted to the wire
+
+2.0 beta (2011-10-28):
+
+- changed: plugin now Elgg 1.8 compatible
+- removed: captcha support
+
+0.3.3 (2011-09-27)
+
+- fixed lijst aanvullen
+
+0.3.2 (2011-08-16):
+
+- fixed: JS bugs
+- changed: Google maps default geolocation is editable in the plugin settings.
+- changed: Performance update
+		
+0.3.1 (2011-07-22):
+
+- fixed: Event url
+- fixed: When the geolocation can't lookup your location/country, the maps is showing the whole worldmap (a quick hot fix, a better one will be implemented later)
+
+0.3 (2011-07-21):
+
+- added: Waiting list per event. When an event is full, and the waiting list is enabled, people get the option to register to get on the waiting list. Waiting list is automatically updated if an attendee leaves the event.
+- added: Logged out people can now register for an event (if enabled).
+- added: Default RSS View
+- added: Admins can set an event to take over the website.
+- added: You can now export your registration to PDF
+- fixed: Some minor bugs/updates
+	
+0.2 (2011-06-23):
+
+- added: customizable registration form per event
+- added: registration to event (using the custom event registration form)
+- added: during registration you can now 'participate' on each activity slot (if daily program specified)
+- added: registration-notification mail now contains a link to the registration data of the attending person
+- changed: activity slot, start/end-time data type
+- fixed: if ip-geolocation fails to get an exact lat/long location, the map centers on your country
+- fixed: IE z-index on dropdown menu's
+- fixed: IE Fancybox popup width
+
+0.1.3 (2011-06-20):
+
+- fixed: event search in groups
+- fixed: google maps key check (google maps functions disabled when no key is specified in the plugin settings)
+	
+0.1.2 (2011-06-20):
+
+- fixed: event calender migration
+- fixed: RSVP -> attending, error in notification function
+- fixed: some minor things
+		
+0.1.1 (2011-06-17):
+
+- fixed: fancybox include
+	
+0.1 (2011-06-17):
+
+- initial version

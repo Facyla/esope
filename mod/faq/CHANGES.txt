@@ -1,0 +1,142 @@
+Changelog
+=========
+
+2.0.2 (by iionly)
+-----------------
+
+- French translation added (thanks to Facyla),
+- Added missing id tag in manifest.xml.
+
+2.0.1 (by iionly)
+-----------------
+
+- Correction of url for ajax_loader.gif in usage on search page.
+
+2.0.0 (by iionly)
+-----------------
+
+- Updated for Elgg 2.0 (should also work on future Elgg 2.X versions).
+
+1.9.11 (by iionly)
+------------------
+
+- composer.json added.
+
+1.9.10 (by iionly)
+------------------
+
+- JS code moved into AMD modules,
+- Overhaul of code of views and forms,
+- Sending of on-site notifications, on-site messages and notification emails about new questions asked and answered in receiving user's language,
+- Notification of admins when a new question has been asked with user who asked the question as sender.
+
+1.9.9 (by iionly)
+-----------------
+
+- Admin site-notification summary on new question being asked is now a link to "User submitted questions" page,
+- Notification of a user who asked a question is now done using a private message (therefore Messages plugin is now required) instead of site-notification to allow for adding a message body,
+- When answering a user question and adding this question to the FAQs the access level gets correctly set,
+- Spanish translation added (thanks to Francisco).
+
+1.9.8 (by iionly)
+-----------------
+
+- No longer requires a Tinymce-based editor to be used,
+- Works also on Elgg 1.10.
+
+1.9.7 (by iionly)
+-----------------
+
+- Same changes as version 1.8.7 to work on Elgg 1.9.
+
+1.8.7 (by iionly)
+-----------------
+
+- Changed pages layout of FAQ pages (breadcrumps and title section) to better blend in with the other Elgg pages,
+- Some code cleanup.
+
+1.9.6 (by iionly)
+-----------------
+
+- Same changes as version 1.8.6 to work on Elgg 1.9.
+
+1.8.6 (by iionly)
+-----------------
+
+- Added 3 language strings to the language files that were missing (thanks to PixelPop for reporting).
+
+1.9.5 (by iionly)
+-----------------
+
+- Same changes as version 1.8.5 to work on Elgg 1.9.
+
+1.8.5 (by iionly)
+-----------------
+
+- Fix to get answering of user questions working again on Elgg 1.8.19 (thanks to Brett for helping me to sort this out),
+- Added a missing language string in the German language file,
+- Minor code cleanup.
+
+1.9.4 (by iionly)
+-----------------
+
+- Updated for Elgg 1.9.
+
+1.8.4 (by iionly)
+-----------------
+
+- Fixed error in activate.php.
+
+1.8.3 (by iionly)
+-----------------
+
+- Some general code cleanup,
+- FAQ answer output in html instead of plain text (so formatting on input should show up on output),
+- FAQs to show up in site search results if matching seach query,
+- Fixed bug on answering user questions form that made category selection dropdown input behaving awkward (due to a missing </label>).
+
+1.8.2 (by iionly)
+-----------------
+
+- Getting FAQ plugin to work for logged-out site visitors when walled-garden option is enabled,
+- Added German translation.
+
+1.8.1 (by iionly)
+-----------------
+
+- FAQ site menu entry and footer link optionally visible when not logged in (plugin settings)
+
+1.8.0 (by iionly)
+-----------------
+
+- Updated to work in Elgg 1.8,
+- Fixed errors of earlier version,
+- Revision of UI.
+
+1.5
+---
+
+- Added: better category management
+- Added: simple stats on start page
+- Added: notification to the admins when a new question is asked
+- Changed: Notification to user when question/answer is added to FAQ
+- User will now receive a link to the answer
+- Changed: Category list view (including how it links)
+- Changed: Search display
+
+1.1
+---
+
+- Added: Users can now ask a question
+- Admins can enable this function
+- Admins can answer only to the user or also add to the FAQ
+
+1.0.1
+---
+
+- Fixed: Plugin not working when using subdirectories
+
+1.0
+---
+
+- First release to the public

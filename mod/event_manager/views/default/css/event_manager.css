@@ -1,0 +1,296 @@
+/* Event global */
+.event-manager-forms-label-100 label:not(.elgg-field-label) {
+	font-size: 100%;
+}
+.event-manager-forms-label-normal label:not(.elgg-field-label) {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+/* Event View */
+.event-manager-event-banner img {
+	max-width: 100%;
+	max-height: 300px;
+	display: block;
+	margin: 0 auto;
+}
+
+/* Event Edit */
+.event-manager-forms-label-inline .elgg-field-label {
+	display: inline-block;
+}
+
+.event-manager-contact-userpicker .elgg-user-picker > label, 
+.event-manager-contact-userpicker .elgg-user-picker > input[type="checkbox"] {
+	display: none;
+}
+
+.event_manager_event_edit_date {
+	width: 100px;
+	height: 20px;
+	padding: 0 5px;
+}
+
+#event-manager-maps-location-search {
+	height: 400px;
+	width: 600px;
+}
+
+/* Event listing  */
+.event_manager_event_list_search_input {
+	width: 300px;
+}
+.event_manager_event_list_owner,
+.event_manager_event_view_owner {
+	color: #808080;
+	font-size: 11px;
+	border-bottom: 1px solid #CCCCCC;
+	padding: 0 0 2px;
+}
+
+.event_manager_event_list_icon {
+	text-align: center;
+	width: 40px;
+	padding: 1px;
+	
+	background: #4787b8;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    
+    border-radius: 3px;
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.event_manager_event_list_icon_day {
+	font-size: 15px;
+    font-weight: bold;
+    line-height: 23px;
+    background: #FFFFFF;    
+	border-radius: 0 0 2px 2px;
+}
+.event_manager_event_list_icon_month {
+	color: #FFFFFF;
+	font-size: 11px;
+    line-height: 11px;
+    padding: 2px 0;
+}
+
+#event_manager_event_listing div.pagination {
+	margin: 0;
+}
+
+#event_manager_event_listing .elgg-list {
+	border-top: none;
+}
+
+#event_manager_event_list_search_more {
+	border: 1px solid #CCCCCC;
+    cursor: pointer;
+    line-height: 31px;
+    padding: 5px;
+    text-align: center;
+    width: auto;
+    
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#event_manager_event_list_search_more:hover {
+	border-color: #4690D6;
+}
+
+/* Event Search */
+#event_manager_search_form label {
+	font-weight: normal;
+	font-size: 100%;
+}
+#event_manager_search_form .elgg-field {
+	margin: 0;
+}
+
+#event-manager-search-form-past-events  {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+#event_manager_event_search_advanced_container .elgg-input-dropdown,
+#event_manager_event_search_advanced_container .elgg-input-date {
+	width: 200px;
+}
+
+/* Event view */
+
+.event-manager-event-view-attendees .elgg-head h3 a {
+	font-size: 1em;
+}
+
+.event-manager-event-view-attendees-more {
+	line-height: 40px;
+	height: 40px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.event-manager-event-when {
+	margin-bottom: 15px;
+}
+
+.event-manager-event-when .elgg-icon-calendar {
+	font-size: 3em;
+	margin: 0 10px;
+}
+
+.event-manager-event-when-title {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.event-manager-event-when-subtitle {
+	color: #CCC;
+	font-size: 18px;
+	margin-top: 10px;
+}
+
+.elgg-module-event {
+	border-top: 1px solid #ebebeb;
+	padding-top: 20px;
+}
+
+.elgg-module-event label {
+	font-size: 100%;
+}
+
+.event-manager-event-view-maps {
+	width: 100%;
+	height: 400px;
+}
+
+.event-manager-contact-details .elgg-output {
+	margin: 0;
+}
+
+/* Event tool links */
+.event_manager_event_actions_drop_down {
+    background: #FFFFFF;
+    padding: 5px 2px 5px 0;
+    position: absolute;
+    white-space: nowrap;
+    border-color: #CCCCCC;
+    border-style: solid;
+	z-index: 10;
+    border-width: 1px 1px 1px 1px;
+    list-style-type: none;
+    display: none;
+}
+
+.event_manager_event_actions_drop_down li {
+	padding: 0 0 0 10px;
+}
+.event_manager_event_actions_drop_down li .elgg-icon-checkmark-hover {
+	visibility: hidden;
+}
+.event_manager_event_actions_drop_down li:hover .elgg-icon-checkmark-hover {
+	visibility: visible;
+}
+
+/* Event Program Day */
+
+#event-manager-program-day-lightbox {
+	width: 300px;
+	margin-bottom: 0px;
+}
+
+/* Event Program Slot */
+#event-manager-program-slot-lightbox {
+	width: 600px;
+	height: 500px;
+	overflow: auto;
+}
+
+#event_manager_form_program_slot label {
+	white-space: nowrap;
+	padding-right: 10px;
+}
+
+#event-manager-new-slot-set-name {
+	width: 150px;
+	margin-right: 10px;
+}
+
+.event-manager-program-slot-set {
+	padding: 2px 4px;
+	color: white;
+	margin-left: 5px;
+	
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+.event_manager_program_slot_time {
+	padding: 0px 5px;
+	white-space: nowrap;
+	font-weight: bold;
+}
+
+.event_manager_program_slot_attending {
+	width: 20px;
+}
+
+.event_manager_program_slot_description{
+	word-wrap: break-word;
+	width: 100%;
+}
+
+/* event copy form */
+.elgg-form-event-manager-event-copy {
+	width: 600px;
+}
+
+.maps_infowindow {
+	font-size: 11px;
+	display: flex;
+}
+.maps_infowindow_text div.event_manager_event_view_owner {
+	font-size: 11px;
+}
+
+.maps_infowindow_text {
+	width: 250px;
+}
+
+.maps_infowindow_icon {
+	height: 100px;
+	width: 100px;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+
+.leaflet-container .elgg-button {
+	color: white; /* fix for leaflet taking over color of links */
+}
+
+#event_manager_onthemap_canvas {
+	height: 650px;
+	margin-bottom: 20px;
+}
+
+/* google maps */
+#event_manager_onthemap_legend {
+	padding: 5px 0px;
+	text-align: center;
+	height: 32px;
+}
+
+#event_manager_onthemap_legend img {
+	vertical-align: middle;
+}
+
+/* hack to hide clear button on input/date fields for IE/Edge */
+.elgg-input-date::-ms-clear {
+	display: none;
+}
