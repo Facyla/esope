@@ -1,17 +1,17 @@
 [
     {
         "name": "bower-asset/fontawesome",
-        "version": "5.10.2",
-        "version_normalized": "5.10.2.0",
+        "version": "5.11.2",
+        "version_normalized": "5.11.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/FortAwesome/Font-Awesome.git",
-            "reference": "090e6148d3f63a45b40e7cd8679bd4d64e58d75d"
+            "reference": "1c1b102b2ba19518d77e60e97cf1b4ebf133bba0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/090e6148d3f63a45b40e7cd8679bd4d64e58d75d",
-            "reference": "090e6148d3f63a45b40e7cd8679bd4d64e58d75d",
+            "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/1c1b102b2ba19518d77e60e97cf1b4ebf133bba0",
+            "reference": "1c1b102b2ba19518d77e60e97cf1b4ebf133bba0",
             "shasum": null
         },
         "type": "bower-asset",
@@ -223,17 +223,17 @@
     },
     {
         "name": "cakephp/cache",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/cache.git",
-            "reference": "34f8a4c3585c0177438880728668d3a9c5a5c9f0"
+            "reference": "4866fa8afd31604f58336758ddcdf97bf54ebbeb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/cache/zipball/34f8a4c3585c0177438880728668d3a9c5a5c9f0",
-            "reference": "34f8a4c3585c0177438880728668d3a9c5a5c9f0",
+            "url": "https://api.github.com/repos/cakephp/cache/zipball/4866fa8afd31604f58336758ddcdf97bf54ebbeb",
+            "reference": "4866fa8afd31604f58336758ddcdf97bf54ebbeb",
             "shasum": ""
         },
         "require": {
@@ -241,7 +241,7 @@
             "php": ">=5.6.0",
             "psr/simple-cache": "^1.0.0"
         },
-        "time": "2019-08-29T13:28:40+00:00",
+        "time": "2019-09-09T19:30:50+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -269,23 +269,23 @@
     },
     {
         "name": "cakephp/collection",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/collection.git",
-            "reference": "7491c4e1f04af5186a0e77f34406e2e40a8a857e"
+            "reference": "460f4e84de9e2761e8216359022581c7d43e80ae"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/collection/zipball/7491c4e1f04af5186a0e77f34406e2e40a8a857e",
-            "reference": "7491c4e1f04af5186a0e77f34406e2e40a8a857e",
+            "url": "https://api.github.com/repos/cakephp/collection/zipball/460f4e84de9e2761e8216359022581c7d43e80ae",
+            "reference": "460f4e84de9e2761e8216359022581c7d43e80ae",
             "shasum": ""
         },
         "require": {
             "php": ">=5.6.0"
         },
-        "time": "2019-08-29T13:17:59+00:00",
+        "time": "2019-09-09T13:08:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -317,17 +317,17 @@
     },
     {
         "name": "cakephp/core",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/core.git",
-            "reference": "4f7710dab6f9bf0483e42e189942b1941c070b72"
+            "reference": "47c3045326c92adbecd14cc92a2b7515dd9a30b9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/core/zipball/4f7710dab6f9bf0483e42e189942b1941c070b72",
-            "reference": "4f7710dab6f9bf0483e42e189942b1941c070b72",
+            "url": "https://api.github.com/repos/cakephp/core/zipball/47c3045326c92adbecd14cc92a2b7515dd9a30b9",
+            "reference": "47c3045326c92adbecd14cc92a2b7515dd9a30b9",
             "shasum": ""
         },
         "require": {
@@ -338,7 +338,7 @@
             "cakephp/cache": "To use Configure::store() and restore().",
             "cakephp/event": "To use PluginApplicationInterface or plugin applications."
         },
-        "time": "2019-08-29T13:17:59+00:00",
+        "time": "2019-09-09T19:30:50+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -369,17 +369,17 @@
     },
     {
         "name": "cakephp/database",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/database.git",
-            "reference": "1e249fa8b2b82313bb7db51a39fa6491fd638e53"
+            "reference": "f3f7f8c8da67064667a88681cbd856da4e96cade"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/database/zipball/1e249fa8b2b82313bb7db51a39fa6491fd638e53",
-            "reference": "1e249fa8b2b82313bb7db51a39fa6491fd638e53",
+            "url": "https://api.github.com/repos/cakephp/database/zipball/f3f7f8c8da67064667a88681cbd856da4e96cade",
+            "reference": "f3f7f8c8da67064667a88681cbd856da4e96cade",
             "shasum": ""
         },
         "require": {
@@ -389,7 +389,7 @@
             "cakephp/log": "^3.6.0",
             "php": ">=5.6.0"
         },
-        "time": "2019-08-29T13:36:23+00:00",
+        "time": "2019-09-10T00:18:05+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -419,17 +419,17 @@
     },
     {
         "name": "cakephp/datasource",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/datasource.git",
-            "reference": "c8ff35ec1c49618d4ace994a90e968b51d6315d7"
+            "reference": "91411f37aac7bf29f7a1b73a1b99e1ecf490bda3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/datasource/zipball/c8ff35ec1c49618d4ace994a90e968b51d6315d7",
-            "reference": "c8ff35ec1c49618d4ace994a90e968b51d6315d7",
+            "url": "https://api.github.com/repos/cakephp/datasource/zipball/91411f37aac7bf29f7a1b73a1b99e1ecf490bda3",
+            "reference": "91411f37aac7bf29f7a1b73a1b99e1ecf490bda3",
             "shasum": ""
         },
         "require": {
@@ -441,7 +441,7 @@
             "cakephp/collection": "If you decide to use ResultSetInterface.",
             "cakephp/utility": "If you decide to use EntityTrait."
         },
-        "time": "2019-08-29T13:35:39+00:00",
+        "time": "2019-09-09T19:30:50+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -471,17 +471,17 @@
     },
     {
         "name": "cakephp/log",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/log.git",
-            "reference": "ed6398ae8c2e8a5630e8dea24dda34b102ec65e2"
+            "reference": "3572db7b054819d918f1de1a743ae0c0786e238e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/log/zipball/ed6398ae8c2e8a5630e8dea24dda34b102ec65e2",
-            "reference": "ed6398ae8c2e8a5630e8dea24dda34b102ec65e2",
+            "url": "https://api.github.com/repos/cakephp/log/zipball/3572db7b054819d918f1de1a743ae0c0786e238e",
+            "reference": "3572db7b054819d918f1de1a743ae0c0786e238e",
             "shasum": ""
         },
         "require": {
@@ -489,7 +489,7 @@
             "php": ">=5.6.0",
             "psr/log": "^1.0.0"
         },
-        "time": "2019-05-27T20:32:25+00:00",
+        "time": "2019-09-09T13:08:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -518,17 +518,17 @@
     },
     {
         "name": "cakephp/utility",
-        "version": "3.8.3",
-        "version_normalized": "3.8.3.0",
+        "version": "3.8.4",
+        "version_normalized": "3.8.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/cakephp/utility.git",
-            "reference": "0dcddfbc2d63335c5bce7cca6790fa434e4a8790"
+            "reference": "a90e4da0bd61fe2febcd68e6246bc974dcc43773"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/cakephp/utility/zipball/0dcddfbc2d63335c5bce7cca6790fa434e4a8790",
-            "reference": "0dcddfbc2d63335c5bce7cca6790fa434e4a8790",
+            "url": "https://api.github.com/repos/cakephp/utility/zipball/a90e4da0bd61fe2febcd68e6246bc974dcc43773",
+            "reference": "a90e4da0bd61fe2febcd68e6246bc974dcc43773",
             "shasum": ""
         },
         "require": {
@@ -539,7 +539,7 @@
             "ext-intl": "To use Text::transliterate() or Text::slug()",
             "lib-ICU": "To use Text::transliterate() or Text::slug()"
         },
-        "time": "2019-08-29T13:43:27+00:00",
+        "time": "2019-09-09T13:08:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1073,17 +1073,17 @@
     },
     {
         "name": "elgg/elgg",
-        "version": "3.1.3",
-        "version_normalized": "3.1.3.0",
+        "version": "3.1.4",
+        "version_normalized": "3.1.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/Elgg/Elgg.git",
-            "reference": "d0ae1448f2893bf5a2d0204476d856152eb39813"
+            "reference": "cb395f24241913cf54393be75ce1905644f6d0be"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Elgg/Elgg/zipball/d0ae1448f2893bf5a2d0204476d856152eb39813",
-            "reference": "d0ae1448f2893bf5a2d0204476d856152eb39813",
+            "url": "https://api.github.com/repos/Elgg/Elgg/zipball/cb395f24241913cf54393be75ce1905644f6d0be",
+            "reference": "cb395f24241913cf54393be75ce1905644f6d0be",
             "shasum": ""
         },
         "require": {
@@ -1145,7 +1145,7 @@
         "suggest": {
             "ext-mbstring": "*"
         },
-        "time": "2019-09-13T13:38:08+00:00",
+        "time": "2019-09-27T11:42:56+00:00",
         "bin": [
             "elgg-cli"
         ],
@@ -1486,9 +1486,9 @@
         "authors": [
             {
                 "name": "Michel Fortin",
-                "role": "Developer",
                 "email": "michel.fortin@michelf.ca",
-                "homepage": "https://michelf.ca/"
+                "homepage": "https://michelf.ca/",
+                "role": "Developer"
             },
             {
                 "name": "John Gruber",
@@ -2001,17 +2001,17 @@
     },
     {
         "name": "php-di/phpdoc-reader",
-        "version": "2.1.0",
-        "version_normalized": "2.1.0.0",
+        "version": "2.1.1",
+        "version_normalized": "2.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHP-DI/PhpDocReader.git",
-            "reference": "7d0de60b9341933c8afd172a6255cd7557601e0e"
+            "reference": "15678f7451c020226807f520efb867ad26fbbfcf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/7d0de60b9341933c8afd172a6255cd7557601e0e",
-            "reference": "7d0de60b9341933c8afd172a6255cd7557601e0e",
+            "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/15678f7451c020226807f520efb867ad26fbbfcf",
+            "reference": "15678f7451c020226807f520efb867ad26fbbfcf",
             "shasum": ""
         },
         "require": {
@@ -2020,7 +2020,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.6"
         },
-        "time": "2018-02-18T17:39:01+00:00",
+        "time": "2019-09-26T11:24:58+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -2291,12 +2291,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Roave/SecurityAdvisories.git",
-            "reference": "ea693fa060702164985511acc3ceb5389c9ac761"
+            "reference": "3a9ab646603efdccb4f7c4acbb3b36974ef257d8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ea693fa060702164985511acc3ceb5389c9ac761",
-            "reference": "ea693fa060702164985511acc3ceb5389c9ac761",
+            "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3a9ab646603efdccb4f7c4acbb3b36974ef257d8",
+            "reference": "3a9ab646603efdccb4f7c4acbb3b36974ef257d8",
             "shasum": ""
         },
         "conflict": {
@@ -2320,6 +2320,7 @@
             "contao/core-bundle": ">=4,<4.4.39|>=4.5,<4.7.5",
             "contao/listing-bundle": ">=4,<4.4.8",
             "contao/newsletter-bundle": ">=4,<4.1",
+            "datadog/dd-trace": ">=0.30,<0.30.2",
             "david-garcia/phpwhois": "<=4.3.1",
             "doctrine/annotations": ">=1,<1.2.7",
             "doctrine/cache": ">=1,<1.3.2|>=1.4,<1.4.2",
@@ -2407,6 +2408,7 @@
             "spoonity/tcpdf": "<6.2.22",
             "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
             "stormpath/sdk": ">=0,<9.9.99",
+            "studio-42/elfinder": "<2.1.48",
             "swiftmailer/swiftmailer": ">=4,<5.4.5",
             "sylius/admin-bundle": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
             "sylius/grid": ">=1,<1.1.19|>=1.2,<1.2.18|>=1.3,<1.3.13|>=1.4,<1.4.5|>=1.5,<1.5.1",
@@ -2485,7 +2487,7 @@
             "zfcampus/zf-apigility-doctrine": ">=1,<1.0.3",
             "zfr/zfr-oauth2-server-module": "<0.1.2"
         },
-        "time": "2019-07-18T15:17:58+00:00",
+        "time": "2019-09-26T17:56:56+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -2494,8 +2496,8 @@
         "authors": [
             {
                 "name": "Marco Pivetta",
-                "role": "maintainer",
-                "email": "ocramius@gmail.com"
+                "email": "ocramius@gmail.com",
+                "role": "maintainer"
             }
         ],
         "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it"
