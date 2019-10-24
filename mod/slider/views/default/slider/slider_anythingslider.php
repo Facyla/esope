@@ -105,20 +105,22 @@ $('#slider').anythingSlider({
 echo <<<HTML
 <!-- AnythingSlider #$id -->
 <script type="text/javascript">
-$(function(){
-	$('#$id').anythingSlider({
-		theme : '$slider_theme', // default, cs-portfolio, metallic, etc.
-		autoPlay : true,
-		mode : 'f',
-		resizeContents : true,
-		expand : true,
-		buildNavigation : true,
-		buildStartStop : false,
-		//toggleControls : true,
-		//toggleArrows : true,
-		hashTags : false,
-		delay : 5000,
-		$js_params
+require(['jquery'], function ($) {
+	$(function(){
+		$('#$id').anythingSlider({
+			theme : '$slider_theme', // default, cs-portfolio, metallic, etc.
+			autoPlay : true,
+			mode : 'f',
+			resizeContents : true,
+			expand : true,
+			buildNavigation : true,
+			buildStartStop : false,
+			//toggleControls : true,
+			//toggleArrows : true,
+			hashTags : false,
+			delay : 5000,
+			$js_params
+		});
 	});
 });
 </script>
