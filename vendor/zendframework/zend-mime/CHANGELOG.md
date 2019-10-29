@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.7.2 - 2019-10-16
+
+### Added
+
+- [#37](https://github.com/zendframework/zend-mime/pull/37) adds support for PHP 7.3.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#36](https://github.com/zendframework/zend-mime/pull/36) fixes
+  `Zend\Mime\Decode::splitMessage` to set `Zend\Mail\Headers`
+  instance always for `$headers` parameter. Before, when messages
+  without headers was provided, `$headers` was an empty array.
+
 ## 2.7.1 - 2018-05-14
 
 ### Added

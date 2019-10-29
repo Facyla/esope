@@ -29,11 +29,14 @@ class ConfirmController {
 				return elgg_error_response(elgg_echo('email:confirm:fail'));
 			}
 			
-			$user->setValidationStatus(true, 'email');
-			
-			elgg_push_context('uservalidationbyemail_validate_user');
-			$user->enable();
-			elgg_pop_context();
+			elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
+				elgg_set_plugin_user_setting('email_validated', true, $user->guid, 'uservalidationbyemail');
+				
+				if (!(bool) elgg_get_config('require_admin_validation')) {
+					// user doesn't have to be validated by admin after this
+					$user->setValidationStatus(true, 'email');
+				}
+			});
 			
 			try {
 				login($user);
