@@ -8,8 +8,6 @@
 # Non-public devs
 /mod/theme_ecogestion
 /mod/dossiers_inscriptions
-/mod/naturalbox_garden
-/mod/ni_jardins
 /mod/requests
 /mod/reservations
 
@@ -17,10 +15,19 @@
 /mod/market/
 /mod/hypeMapsOpen/
 
+# @TODO Check before release
+/mod/translation_editor
+
+
 # Not ready for release
 /mod/esope/
 /mod/cmspages/
 /mod/czd_data/
 /mod/senx_interface/
 /mod/theme_test/
+
+# Natural idées
+/mod/naturalbox_garden
+/mod/ni_jardins
+/mod/naturalconnect
 
