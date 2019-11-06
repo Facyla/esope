@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
+class ComposerStaticInitf26f36d3873026be1a8f01f5757ff7be
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -79,10 +79,6 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         array (
             'Invoker\\' => 8,
             'Interop\\Container\\' => 18,
-        ),
-        'H' => 
-        array (
-            'Hackzilla\\PasswordGenerator\\' => 28,
         ),
         'G' => 
         array (
@@ -249,10 +245,6 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         'Interop\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
-        ),
-        'Hackzilla\\PasswordGenerator\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/hackzilla/password-generator',
         ),
         'GO\\' => 
         array (
@@ -1169,7 +1161,6 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         'Elgg\\Database\\QueryExecuting' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryExecuting.php',
         'Elgg\\Database\\QueryFiltering' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryFiltering.php',
         'Elgg\\Database\\QueryOptions' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/QueryOptions.php',
-        'Elgg\\Database\\Relationships' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/Relationships.php',
         'Elgg\\Database\\RelationshipsTable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/RelationshipsTable.php',
         'Elgg\\Database\\Repository' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/Repository.php',
         'Elgg\\Database\\River' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Database/River.php',
@@ -1212,8 +1203,6 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         'Elgg\\Entity\\ProfileData' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Entity/ProfileData.php',
         'Elgg\\Event' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Event.php',
         'Elgg\\EventsService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/EventsService.php',
-        'Elgg\\Exceptions\\Security\\InvalidPasswordCharacterRequirementsException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Exceptions/Security/InvalidPasswordCharacterRequirementsException.php',
-        'Elgg\\Exceptions\\Security\\InvalidPasswordLengthException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Exceptions/Security/InvalidPasswordLengthException.php',
         'Elgg\\Export\\AccessCollection' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Export/AccessCollection.php',
         'Elgg\\Export\\Data' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Export/Data.php',
         'Elgg\\Export\\Entity' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Export/Entity.php',
@@ -1317,13 +1306,10 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         'Elgg\\Router\\Middleware\\AjaxGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/AjaxGatekeeper.php',
         'Elgg\\Router\\Middleware\\CsrfFirewall' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/CsrfFirewall.php',
         'Elgg\\Router\\Middleware\\Gatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/Gatekeeper.php',
-        'Elgg\\Router\\Middleware\\GroupPageOwnerCanEditGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/GroupPageOwnerCanEditGatekeeper.php',
         'Elgg\\Router\\Middleware\\LoggedOutGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/LoggedOutGatekeeper.php',
-        'Elgg\\Router\\Middleware\\PageOwnerCanEditGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/PageOwnerCanEditGatekeeper.php',
         'Elgg\\Router\\Middleware\\RewriteTest' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/RewriteTest.php',
         'Elgg\\Router\\Middleware\\SignedRequestGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/SignedRequestGatekeeper.php',
         'Elgg\\Router\\Middleware\\UpgradeGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/UpgradeGatekeeper.php',
-        'Elgg\\Router\\Middleware\\UserPageOwnerCanEditGatekeeper' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/UserPageOwnerCanEditGatekeeper.php',
         'Elgg\\Router\\Middleware\\WalledGarden' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Middleware/WalledGarden.php',
         'Elgg\\Router\\RequestContext' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/RequestContext.php',
         'Elgg\\Router\\Route' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Router/Route.php',
@@ -1342,7 +1328,6 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         'Elgg\\Security\\Csrf' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Security/Csrf.php',
         'Elgg\\Security\\Hmac' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Security/Hmac.php',
         'Elgg\\Security\\HmacFactory' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Security/HmacFactory.php',
-        'Elgg\\Security\\PasswordGeneratorService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Security/PasswordGeneratorService.php',
         'Elgg\\Security\\UrlSigner' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Security/UrlSigner.php',
         'Elgg\\Services\\AjaxResponse' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Services/AjaxResponse.php',
         'Elgg\\Structs\\Collection' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Structs/Collection.php',
@@ -1838,51 +1823,6 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
         'GO\\Traits\\Mailer' => __DIR__ . '/..' . '/peppeocchi/php-cron-scheduler/src/GO/Traits/Mailer.php',
         'HTTP_ConditionalGet' => __DIR__ . '/..' . '/mrclay/minify/min/lib/HTTP/ConditionalGet.php',
         'HTTP_Encoder' => __DIR__ . '/..' . '/mrclay/minify/min/lib/HTTP/Encoder.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\CharactersNotFoundException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/CharactersNotFoundException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\FileNotFoundException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/FileNotFoundException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\ImpossibleMinMaxLimitsException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/ImpossibleMinMaxLimitsException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\ImpossiblePasswordLengthException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/ImpossiblePasswordLengthException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\InvalidOptionException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/InvalidOptionException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\InvalidOptionTypeException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/InvalidOptionTypeException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\NotEnoughWordsException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/NotEnoughWordsException.php',
-        'Hackzilla\\PasswordGenerator\\Exception\\WordsNotFoundException' => __DIR__ . '/..' . '/hackzilla/password-generator/Exception/WordsNotFoundException.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\AbstractPasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/AbstractPasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\ComputerPasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/ComputerPasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\DummyPasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/DummyPasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\HumanPasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/HumanPasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\HybridPasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/HybridPasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\PasswordGeneratorInterface' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/PasswordGeneratorInterface.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\PronounceablePasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/PronounceablePasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Generator\\RequirementPasswordGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/Generator/RequirementPasswordGenerator.php',
-        'Hackzilla\\PasswordGenerator\\Model\\CharacterSet' => __DIR__ . '/..' . '/hackzilla/password-generator/Model/CharacterSet.php',
-        'Hackzilla\\PasswordGenerator\\Model\\Option\\BooleanOption' => __DIR__ . '/..' . '/hackzilla/password-generator/Model/Option/BooleanOption.php',
-        'Hackzilla\\PasswordGenerator\\Model\\Option\\IntegerOption' => __DIR__ . '/..' . '/hackzilla/password-generator/Model/Option/IntegerOption.php',
-        'Hackzilla\\PasswordGenerator\\Model\\Option\\Option' => __DIR__ . '/..' . '/hackzilla/password-generator/Model/Option/Option.php',
-        'Hackzilla\\PasswordGenerator\\Model\\Option\\OptionInterface' => __DIR__ . '/..' . '/hackzilla/password-generator/Model/Option/OptionInterface.php',
-        'Hackzilla\\PasswordGenerator\\Model\\Option\\StringOption' => __DIR__ . '/..' . '/hackzilla/password-generator/Model/Option/StringOption.php',
-        'Hackzilla\\PasswordGenerator\\RandomGenerator\\NoRandomGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/RandomGenerator/NoRandomGenerator.php',
-        'Hackzilla\\PasswordGenerator\\RandomGenerator\\Php5RandomGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/RandomGenerator/Php5RandomGenerator.php',
-        'Hackzilla\\PasswordGenerator\\RandomGenerator\\Php7RandomGenerator' => __DIR__ . '/..' . '/hackzilla/password-generator/RandomGenerator/Php7RandomGenerator.php',
-        'Hackzilla\\PasswordGenerator\\RandomGenerator\\RandomGeneratorInterface' => __DIR__ . '/..' . '/hackzilla/password-generator/RandomGenerator/RandomGeneratorInterface.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\AbstractPasswordGeneratorClass' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/AbstractPasswordGeneratorClass.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\AbstractPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/AbstractPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\ComputerPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/ComputerPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\DummyPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/DummyPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\HumanPasswordGeneratorClass' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/HumanPasswordGeneratorClass.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\HumanPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/HumanPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\HybridPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/HybridPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\PronounceablePasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/PronounceablePasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Generator\\RequirementPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Generator/RequirementPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Model\\CharacterSetTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/CharacterSetTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\BooleanOptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/BooleanOptionTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\IntegerOptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/IntegerOptionTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionClass' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionClass.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\StringOptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/StringOptionTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\HybridPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/NoPasswordGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php5RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php5RandomGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php7RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php7RandomGeneratorTest.php',
-        'Hackzilla\\PasswordGenerator\\Tests\\ReadMeTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/ReadMeTest.php',
         'Htmlawed' => __DIR__ . '/..' . '/vanilla/htmlawed/src/Htmlawed.php',
         'IOException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/IOException.php',
         'Imagine\\Draw\\DrawerInterface' => __DIR__ . '/..' . '/imagine/imagine/lib/Imagine/Draw/DrawerInterface.php',
@@ -2974,11 +2914,11 @@ class ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitc6b2989e134b6b95c893b9ff2d478ca0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf26f36d3873026be1a8f01f5757ff7be::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf26f36d3873026be1a8f01f5757ff7be::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitf26f36d3873026be1a8f01f5757ff7be::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitf26f36d3873026be1a8f01f5757ff7be::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitf26f36d3873026be1a8f01f5757ff7be::$classMap;
 
         }, null, ClassLoader::class);
     }

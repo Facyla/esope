@@ -45,12 +45,7 @@ function get_api_user($api_key) {
 		':api_key' => $api_key,
 	];
 
-	$row = elgg()->db->getDataRow($query, null, $params);
-	if (empty($row)) {
-		return false;
-	}
-	
-	return $row;
+	return elgg()->db->getDataRow($query, null, $params);
 }
 
 /**

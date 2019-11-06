@@ -48,7 +48,7 @@ echo elgg_view('page/components/tabs', [
 				'content' => 'This tab has events attached to it.',
 			]),
 			'data-ajax-reload' => false,
-			'item_class' => 'theme-sandbox-tab-callback',
+			'class' => 'theme-sandbox-tab-callback',
 		]
 	],
 ]);

@@ -10,8 +10,6 @@ To activate Walled Garden mode in Elgg, go to the Administration section. On the
 
 From the Advanced Settings page, find the option labelled "Restrict pages to logged-in users." Enable this option, then click "Save" to switch your site into Walled Garden mode.
 
-.. _guides/walled-garden#expose:
-
 Exposing pages through Walled Gardens
 -------------------------------------
 

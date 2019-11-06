@@ -30,7 +30,7 @@ use Cake\Core\Exception\Exception;
  * ```
  * <?php
  * return [
- *     'debug' => false,
+ *     'debug' => 0,
  *     'Security' => [
  *         'salt' => 'its-secret'
  *     ],

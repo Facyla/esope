@@ -42,14 +42,12 @@ if ($timeupper) {
 }
 
 $ip_address = get_input('ip_address');
-$object_id = get_input('object_id');
 
 $refine = elgg_view('logbrowser/refine', [
 	'timeupper' => $timeupper,
 	'timelower' => $timelower,
 	'ip_address' => $ip_address,
 	'username' => $search_username,
-	'object_id' => $object_id,
 ]);
 
 // Get log entries
@@ -61,7 +59,6 @@ $options = [
 	'created_before' => $timeupper,
 	'created_after' => $timelower,
 	'ip_address' => $ip_address,
-	'object_id' => $object_id,
 ];
 $log = system_log_get_log($options);
 

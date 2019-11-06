@@ -5,7 +5,6 @@
 !/autop/
 !/class_scanner/
 !/commit_messages
-!/database/
 /dataroot/*
 !/dataroot/1
 !/dataroot/1/1

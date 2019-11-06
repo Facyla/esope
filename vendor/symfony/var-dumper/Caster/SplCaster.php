@@ -90,12 +90,6 @@ class SplCaster
 
         $prefix = Caster::PREFIX_VIRTUAL;
 
-        if (false === $c->getPathname()) {
-            $a[$prefix.'⚠'] = 'The parent constructor was not called: the object is in an invalid state';
-
-            return $a;
-        }
-
         foreach ($map as $key => $accessor) {
             try {
                 $a[$prefix.$key] = $c->$accessor();

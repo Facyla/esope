@@ -10,7 +10,6 @@ Elgg comes with a set of plugins. These provide the basic functionality for your
    dashboard
    diagnostics
    file
-   friends
    groups
    messageboard
    messages
@@ -29,6 +28,7 @@ The following plugins are also bundled with Elgg, but are not (yet) documented
 - discussions
 - embed
 - externalpages
+- friends
 - friends_collections
 - garbagecollector
 - invitefriends

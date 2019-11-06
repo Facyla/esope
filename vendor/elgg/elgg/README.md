@@ -1,10 +1,10 @@
 Elgg
 ====
 
-[![Build Status](https://secure.travis-ci.org/Elgg/Elgg.svg?branch=3.2)](https://travis-ci.org/Elgg/Elgg) 
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=3.2)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.2) 
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=3.2)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.2) 
-[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?version=3.2)](http://learn.elgg.org/en/3.2/)
+[![Build Status](https://secure.travis-ci.org/Elgg/Elgg.svg?branch=3.0)](https://travis-ci.org/Elgg/Elgg) 
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=3.0)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.0) 
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=3.0)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.0) 
+[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?version=3.0)](http://learn.elgg.org/en/3.0/)
 
 Elgg is an open source rapid development framework for socially aware web applications.
 

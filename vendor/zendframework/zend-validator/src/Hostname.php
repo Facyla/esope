@@ -69,7 +69,7 @@ class Hostname extends AbstractValidator
 
     /**
      * Array of valid top-level-domains
-     * IanaVersion 2019081200
+     * IanaVersion 2019012900
      *
      * @see ftp://data.iana.org/TLD/tlds-alpha-by-domain.txt  List of all TLDs by domain
      * @see http://www.iana.org/domains/root/db/ Official list of supported TLDs
@@ -92,6 +92,7 @@ class Hostname extends AbstractValidator
         'accountant',
         'accountants',
         'aco',
+        'active',
         'actor',
         'ad',
         'adac',
@@ -221,6 +222,7 @@ class Hostname extends AbstractValidator
         'bj',
         'black',
         'blackfriday',
+        'blanco',
         'blockbuster',
         'blog',
         'bloomberg',
@@ -229,6 +231,7 @@ class Hostname extends AbstractValidator
         'bms',
         'bmw',
         'bn',
+        'bnl',
         'bnpparibas',
         'bo',
         'boats',
@@ -435,6 +438,7 @@ class Hostname extends AbstractValidator
         'doctor',
         'dodge',
         'dog',
+        'doha',
         'domains',
         'dot',
         'download',
@@ -464,6 +468,7 @@ class Hostname extends AbstractValidator
         'engineer',
         'engineering',
         'enterprises',
+        'epost',
         'epson',
         'equipment',
         'er',
@@ -559,7 +564,6 @@ class Hostname extends AbstractValidator
         'games',
         'gap',
         'garden',
-        'gay',
         'gb',
         'gbiz',
         'gd',
@@ -652,6 +656,7 @@ class Hostname extends AbstractValidator
         'homes',
         'homesense',
         'honda',
+        'honeywell',
         'horse',
         'hospital',
         'host',
@@ -705,6 +710,7 @@ class Hostname extends AbstractValidator
         'ir',
         'irish',
         'is',
+        'iselect',
         'ismaili',
         'ist',
         'istanbul',
@@ -1228,11 +1234,11 @@ class Hostname extends AbstractValidator
         'sr',
         'srl',
         'srt',
-        'ss',
         'st',
         'stada',
         'staples',
         'star',
+        'starhub',
         'statebank',
         'statefarm',
         'stc',
@@ -1521,7 +1527,6 @@ class Hostname extends AbstractValidator
         'اتصالات',
         'امارات',
         'بازار',
-        'موريتانيا',
         'پاکستان',
         'الاردن',
         'موبايلي',
@@ -1600,6 +1605,7 @@ class Hostname extends AbstractValidator
         'zara',
         'zero',
         'zip',
+        'zippo',
         'zm',
         'zone',
         'zuerich',

@@ -262,11 +262,10 @@ class CompositeCache extends ElggCache {
 		if (!$this->config->redis || empty($this->config->redis_servers)) {
 			return null;
 		}
-		
-		$options = $this->config->redis_options ?: [];
-		$options['servers'] = $this->config->redis_servers;
-		
-		return new Redis($options);
+
+		return new Redis([
+			'servers' => $this->config->redis_servers,
+		]);
 	}
 
 	/**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Group edit form
  *
@@ -13,11 +14,7 @@ $membership = elgg_extract('membership', $vars);
 $visibility = elgg_extract('vis', $vars);
 $owner_guid = elgg_extract('owner_guid', $vars);
 $content_access_mode = elgg_extract('content_access_mode', $vars);
-$show_content_default_access = (bool) elgg_extract('show_content_default_access', $vars, true);
-$content_default_access = elgg_extract('content_default_access', $vars);
-$show_group_owner_transfer = (bool) elgg_extract('show_group_owner_transfer', $vars, true);
 
-// group membership
 echo elgg_view_field([
 	'#type' => 'select',
 	'#label' => elgg_echo('groups:membership'),
@@ -30,7 +27,6 @@ echo elgg_view_field([
 	],
 ]);
 
-// group access (hidden groups)
 if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 	$visibility_options = [
 		ACCESS_PRIVATE => elgg_echo('groups:access:group'),
@@ -54,7 +50,6 @@ if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 	]);
 }
 
-// group content access mode
 $access_mode_params = [
 	'#type' => 'select',
 	'#label' => elgg_echo('groups:content_access_mode'),
@@ -84,29 +79,7 @@ if ($entity instanceof \ElggGroup) {
 
 echo elgg_view_field($access_mode_params);
 
-// group default access
-if ($show_content_default_access) {
-	$content_default_access_options = [
-		'' => elgg_echo('groups:content_default_access:not_configured'),
-		ACCESS_PRIVATE => elgg_echo('groups:access:group'),
-		ACCESS_LOGGED_IN => elgg_echo('access:label:logged_in'),
-	];
-	if (!elgg_get_config('walled_garden')) {
-		$content_default_access_options[ACCESS_PUBLIC] = elgg_echo('access:label:public');
-	}
-	
-	echo elgg_view_field([
-		'#type' => 'select',
-		'#label' => elgg_echo('groups:content_default_access'),
-		'#help' => elgg_echo('groups:content_default_access:help'),
-		'name' => 'content_default_access',
-		'value' => $content_default_access,
-		'options_values' => $content_default_access_options,
-	]);
-}
-
-// group owner transfer
-if ($show_group_owner_transfer && $entity && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_logged_in())) {
+if ($entity && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_logged_in())) {
 	$owner_guid_options = [
 		'#type' => 'userpicker',
 		'#label' => elgg_echo('groups:owner'),

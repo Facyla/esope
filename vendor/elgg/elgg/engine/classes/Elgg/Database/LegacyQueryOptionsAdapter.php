@@ -619,14 +619,6 @@ trait LegacyQueryOptionsAdapter {
 			$options["{$type}_name_value_pairs"] = [];
 		}
 
-		/**
-		 * transforming root pair to array
-		 *
-		 * '_name_value_pairs' => [
-		 * 		'name' => 'foo',
-		 * 		'value' => 'bar'
-		 * ]
-		 */
 		if (isset($options["{$type}_name_value_pairs"]['name'])) {
 			$options["{$type}_name_value_pairs"][] = [
 				'name' => $options["{$type}_name_value_pairs"]['name'],
@@ -640,21 +632,10 @@ trait LegacyQueryOptionsAdapter {
 			unset($options["{$type}_name_value_pairs"]['case_sensitive']);
 		}
 
-		/**
-		 * transforming pair level short notation
-		 *
-		 * @note: short notation for name and value are not supported
-		 *
-		 * '_name_value_pairs' => [
-		 * 		[
-		 * 			'foo' => 'bar'
-		 * 		]
-		 * ]
-		 */
 		foreach ($options["{$type}_name_value_pairs"] as $index => $pair) {
 			if (is_array($pair)) {
 				$keys = array_keys($pair);
-				if (sizeof($keys) === 1 && is_string($keys[0]) && $keys[0] !== 'name' && $keys[0] !== 'value') {
+				if (sizeof($keys) === 1 && is_string($keys[0])) {
 					$options["{$type}_name_value_pairs"][$index] = [
 						'name' => $keys[0],
 						'value' => $pair[$keys[0]],
@@ -664,20 +645,13 @@ trait LegacyQueryOptionsAdapter {
 			}
 		}
 
-		/**
-		 * transforming root level short notation
-		 *
-		 * '_name_value_pairs' => [
-		 * 		'foo' => 'bar'
-		 * ]
-		 */
 		foreach ($options["{$type}_name_value_pairs"] as $index => $values) {
 			if ($values instanceof Clause) {
 				continue;
 			}
 
 			if (is_array($values)) {
-				if (isset($values['name']) || isset($values['value'])) {
+				if (isset($values['name'])) {
 					continue;
 				}
 			}
@@ -705,10 +679,10 @@ trait LegacyQueryOptionsAdapter {
 				$value['case_sensitive'] = elgg_extract("{$type}_case_sensitive", $options, true);
 			}
 			if (!isset($value['type'])) {
-				if (isset($value['value']) && is_bool($value['value'])) {
+				if (is_bool($value['value'])) {
 					$value['value'] = (int) $value['value'];
 				}
-				if (isset($value['value']) && is_int($value['value'])) {
+				if (is_int($value['value'])) {
 					$value['type'] = ELGG_VALUE_INTEGER;
 				} else {
 					$value['type'] = ELGG_VALUE_STRING;

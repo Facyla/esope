@@ -8,7 +8,7 @@ use Elgg\Values;
 /**
  * Utility class for building composite comparison expression
  */
-class ComparisonClause extends Clause {
+class ComparisonClause implements Clause {
 
 	/**
 	 * @var string

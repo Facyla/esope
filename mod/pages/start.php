@@ -237,7 +237,7 @@ function pages_write_permission_check(\Elgg\Hook $hook) {
 }
 
 /**
- * Extend container permissions checking to extend container write access for write users, needed for personal pages
+ * Extend container permissions checking to extend container write access for write users.
  *
  * @param \Elgg\Hook $hook 'container_permissions_check', 'object'
  *
@@ -245,38 +245,45 @@ function pages_write_permission_check(\Elgg\Hook $hook) {
  */
 function pages_container_permission_check(\Elgg\Hook $hook) {
 	
-	if ($hook->getValue()) {
-		// already have access
-		return;
-	}
-	
+	$subtype = $hook->getParam('subtype');
 	// check type/subtype
-	if ($hook->getType() !== 'object' || $hook->getParam('subtype') !== 'page') {
+	if ($hook->getType() !== 'object' || $subtype !== 'page') {
 		return;
 	}
 	
+	$container = $hook->getParam('container');
 	$user = $hook->getUserParam();
+	
 	if (!$user instanceof ElggUser) {
 		return;
 	}
 	
+	// OK if you can write to the container
+	if ($container instanceof ElggEntity && $container->canWriteToContainer($user->guid)) {
+		return true;
+	}
+
 	// look up a page object given via input
-	$page_guid = (int) get_input('guid'); // defined by route
-	if (empty($page_guid)) {
-		// try the parent guid for use in the action
-		$page_guid = (int) get_input('parent_guid');
+	$page = false;
+	if ($page_guid = get_input('page_guid', 0)) {
+		$page = get_entity($page_guid);
+	} elseif ($parent_guid = get_input('parent_guid', 0)) {
+		$page = get_entity($parent_guid);
 	}
-	if (empty($page_guid)) {
-		return;
-	}
-	
-	$page = get_entity($page_guid);
 	if (!$page instanceof ElggPage) {
 		return;
 	}
-	
-	// check if the page write access is in the users read access array
-	return in_array($page->write_access_id, get_access_array($user->guid));
+
+	// try the page's container
+	$page_container = $page->getContainerEntity();
+	if ($page_container && $page_container->canWriteToContainer($user->guid)) {
+		return true;
+	}
+
+	// I don't understand this but it's old - mrclay
+	if (in_array($page->write_access_id, get_access_array($user->guid))) {
+		return true;
+	}
 }
 
 /**

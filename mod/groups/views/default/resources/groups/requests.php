@@ -1,33 +1,37 @@
 <?php
 
-use Elgg\Database\Clauses\OrderByClause;
+$guid = elgg_extract('guid', $vars);
+elgg_set_page_owner_guid($guid);
 
-$group = elgg_get_page_owner_entity();
+$group = get_entity($guid);
+if (!$group instanceof ElggGroup || !$group->canEdit()) {
+	register_error(elgg_echo('groups:noaccess'));
+	forward(REFERER);
+}
+
+$title = elgg_echo('groups:membershiprequests');
 
 elgg_push_breadcrumb(elgg_echo('groups'), "groups/all");
 elgg_push_breadcrumb($group->getDisplayName(), $group->getURL());
+elgg_push_breadcrumb($title);
 
-// build page elements
-$title = elgg_echo('groups:membershiprequests');
-
-$content = elgg_list_relationships([
+$requests = elgg_get_entities([
+	'type' => 'user',
 	'relationship' => 'membership_request',
-	'relationship_guid' => $group->guid,
+	'relationship_guid' => $guid,
 	'inverse_relationship' => true,
-	'order_by' => new OrderByClause('er.time_created', 'ASC'),
+	'limit' => 0,
 ]);
-
-$tabs = elgg_view_menu('groups_members', [
+$content = elgg_view('groups/membershiprequests', [
+	'requests' => $requests,
 	'entity' => $group,
-	'class' => 'elgg-tabs'
 ]);
 
-// build page
-$body = elgg_view_layout('content', [
-	'title' => $title,
+$params = [
 	'content' => $content,
-	'filter' => $tabs,
-]);
+	'title' => $title,
+	'filter' => '',
+];
+$body = elgg_view_layout('content', $params);
 
-// draw page
 echo elgg_view_page($title, $body);

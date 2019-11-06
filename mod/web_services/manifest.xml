@@ -14,11 +14,6 @@
 		<version>3.0</version>
 	</requires>
 
-	<conflicts>
-		<type>plugin</type>
-		<name>apiadmin</name>
-	</conflicts>
-
 	<category>web_services</category>
 	<category>bundled</category>
 

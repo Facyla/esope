@@ -163,8 +163,6 @@ System hooks
 **languages, translations**
    Allows plugins to add/remove languages from the configurable languages in the system.
 
-**generate, password**
-	Allows plugins to generate new random cleartext passwords. 
 
 User hooks
 ==========
@@ -243,9 +241,6 @@ Object hooks
 **likes:count, <entity_type>**
 	Return the number of likes for ``$params['entity']``.
 
-
-.. _guides/hooks-list#access-hooks:
-
 Access hooks
 ============
 
@@ -278,9 +273,6 @@ Access hooks
 
 	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
 
-**access:collections:write:subtypes, user**
-	Returns an array of access collection subtypes to be used when retrieving access collections owned by a user as part of the ``get_write_access_array()`` function.
-	
 **access:collections:addcollection, collection**
 	Triggered after an access collection ``$params['collection_id']`` is created.
 

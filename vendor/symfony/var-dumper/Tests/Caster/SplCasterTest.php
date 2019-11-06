@@ -50,12 +50,12 @@ SplFileInfo {
 %A}
 EOTXT
             ],
-            ['https://example.com/about', <<<'EOTXT'
+            ['https://google.com/about', <<<'EOTXT'
 SplFileInfo {
-%Apath: "https://example.com"
+%Apath: "https://google.com"
   filename: "about"
   basename: "about"
-  pathname: "https://example.com/about"
+  pathname: "https://google.com/about"
   extension: ""
   realPath: false
 %A}
@@ -205,28 +205,9 @@ Symfony\Component\VarDumper\Tests\Caster\MyArrayIterator {
 EOTXT;
         $this->assertDumpEquals($expected, $var);
     }
-
-    public function testBadSplFileInfo()
-    {
-        $var = new BadSplFileInfo();
-
-        $expected = <<<EOTXT
-Symfony\Component\VarDumper\Tests\Caster\BadSplFileInfo {
-  ⚠: "The parent constructor was not called: the object is in an invalid state"
-}
-EOTXT;
-        $this->assertDumpEquals($expected, $var);
-    }
 }
 
 class MyArrayIterator extends \ArrayIterator
 {
     private $foo = 123;
-}
-
-class BadSplFileInfo extends \SplFileInfo
-{
-    public function __construct()
-    {
-    }
 }

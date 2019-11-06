@@ -20,7 +20,6 @@ class InputDefinitionTest extends TestCase
 {
     protected static $fixtures;
 
-    protected $multi;
     protected $foo;
     protected $bar;
     protected $foo1;
