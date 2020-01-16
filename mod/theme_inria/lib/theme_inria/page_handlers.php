@@ -53,6 +53,9 @@ function inria_page_handler($page) {
 		case "animation":
 			include($base . 'admin_tools.php');
 			break;
+		case "statistiques":
+			include($base . 'stats.php');
+			break;
 		case "share_url_generator":
 			include($base . 'share_url_generator.php');
 			break;
