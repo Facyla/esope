@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.13.0 - 2019-12-27
+
+### Added
+
+- [#275](https://github.com/zendframework/zend-validator/pull/275) adds a new `strict` option to `Zend\Validator\Date`; when `true`, the value being validated must both be a date AND in the same format as provided via the `format` option.
+
+- [#264](https://github.com/zendframework/zend-validator/pull/264) adds `Zend\Validator\UndisclosedPassword`, which can be used to determine if a password has been exposed in a known data breach as reported on the [Have I Been Pwned?](https://www.haveibeenpwned.com) website. [Documentation](https://docs.zendframework.com/zend-validator/validators/undisclosed-password/)
+
+- [#266](https://github.com/zendframework/zend-validator/pull/266) adds a new option to the `File\Extension` and `File\ExcludeExtension` validators, `allowNonExistentFile`. When set to `true`, the validators will continue validating the extension of the filename given even if the file does not exist. The default is `false`, to preserve backwards compatibility with previous versions.
+
+### Changed
+
+- [#264](https://github.com/zendframework/zend-validator/pull/264) bumps the minimum supported PHP version to 7.1.0.
+
+- [#279](https://github.com/zendframework/zend-validator/pull/279) updates the `magic.mime` file used for file validations.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#264](https://github.com/zendframework/zend-validator/pull/264) removes support for PHP versions prior to 7.1.0.
+
+### Fixed
+
+- Nothing.
+
+## 2.12.2 - 2019-10-29
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#277](https://github.com/zendframework/zend-validator/pull/277) fixes `File\Hash` validator in case
+  when the file hash contains only digits.
+
+- [#277](https://github.com/zendframework/zend-validator/pull/277) fixes `File\Hash` validator to match 
+  hash with the given hashing algorithm.
+
 ## 2.12.1 - 2019-10-12
 
 ### Added

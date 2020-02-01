@@ -133,7 +133,7 @@ class FloatType extends Type implements TypeInterface, BatchCastingInterface
      * Marshals request data into PHP floats.
      *
      * @param mixed $value The value to convert.
-     * @return float|null Converted value.
+     * @return float|string|null Converted value.
      */
     public function marshal($value)
     {
@@ -167,7 +167,8 @@ class FloatType extends Type implements TypeInterface, BatchCastingInterface
 
             return $this;
         }
-        if (static::$numberClass === 'Cake\I18n\Number' ||
+        if (
+            static::$numberClass === 'Cake\I18n\Number' ||
             is_subclass_of(static::$numberClass, 'Cake\I18n\Number')
         ) {
             $this->_useLocaleParser = $enable;

@@ -63,7 +63,7 @@ $scheduler->php('path/to/my/script.php');
 The `php` method accepts 4 arguments:
 - The path to your php script
 - The PHP binary to use
-- Arguments to be passed to the script
+- Arguments to be passed to the script (**NOTE**: You need to have **register_argc_argv** enable in your php.ini for this to work ([ref](https://github.com/peppeocchi/php-cron-scheduler/issues/88)). Don't worry it's enabled by default, so unlessy you've intentionally disabled it or your host has it disabled by default, you can ignore it.)
 - Identifier
 ```php
 $scheduler->php(
@@ -129,9 +129,10 @@ If you don't call any of this method, the job will run every minute (* * * * *).
     ```php
     $scheduler->php('script.php')->at('* * * * *');
     ```
-- `everyMinute` - Run every minute
+- `everyMinute` - Run every minute. You can optionally pass a `$minute` to specify the job runs every `$minute` minutes.
     ```php
     $scheduler->php('script.php')->everyMinute();
+    $scheduler->php('script.php')->everyMinute(5);
     ```
 - `hourly` - Run once per hour. You can optionally pass the `$minute` you want to run, by default it will run every hour at minute '00'.
     ```php

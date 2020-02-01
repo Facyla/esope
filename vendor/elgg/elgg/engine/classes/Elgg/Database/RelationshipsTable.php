@@ -13,9 +13,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
  *
  * @internal
  *
- * @package    Elgg.Core
- * @subpackage Database
- * @since      1.10.0
+ * @since 1.10.0
  */
 class RelationshipsTable {
 
@@ -179,7 +177,7 @@ class RelationshipsTable {
 			->setMaxResults(1);
 		
 		$row = $this->db->getDataRow($select, [$this, 'rowToElggRelationship']);
-		if ($row) {
+		if ($row instanceof \ElggRelationship) {
 			return $row;
 		}
 

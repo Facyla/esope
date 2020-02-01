@@ -1,8 +1,6 @@
 <?php
 /**
  * Elgg groups plugin
- *
- * @package ElggGroups
  */
 
 /**
@@ -1263,7 +1261,7 @@ function _groups_relationship_membership_request_menu(\Elgg\Hook $hook) {
 				'user_guid' => $user->guid,
 				'group_guid' => $group->guid,
 			]),
-			'class' => 'elgg-button elgg-button-submit',
+			'link_class' => 'elgg-button elgg-button-submit',
 			'section' => 'actions',
 		]);
 		
@@ -1275,7 +1273,7 @@ function _groups_relationship_membership_request_menu(\Elgg\Hook $hook) {
 				'group_guid' => $group->guid,
 			]),
 			'confirm' => elgg_echo('groups:joinrequest:remove:check'),
-			'class' => 'elgg-button elgg-button-delete',
+			'link_class' => 'elgg-button elgg-button-delete',
 			'section' => 'actions',
 		]);
 	}
