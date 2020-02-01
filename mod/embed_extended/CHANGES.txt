@@ -1,0 +1,39 @@
+Version history
+===============
+
+3.0.1 (2019-08-22):
+
+- several small chores/fixes
+
+3.0 (2019-03-27):
+
+- added: Spanish translation
+- changed: increased Elgg requirement to 3.0
+- changed: updated for Elgg 3
+
+2.0.2 (2017-02-27):
+
+- fixed: groups were not include in the search results
+- fixed: updated for AMD module elgg/embed
+
+2.0.1 (2016-04-14):
+
+- fixed: prevent double inserting of content in ckeditor
+
+2.0 (2016-03-07):
+
+- changed: updated for Elgg 2.0
+- changed: upped Elgg requirement to 2.0
+
+1.1 (2016-03-01):
+
+- added: composer support
+- changed: refactoring of the code
+- changed: replace deprecated jquery function with the new versions
+- changed: moved all js to asynchronous loaded module
+- fixed: correctly load the js when the embed menu is ajax loaded
+- fixed: use correct url for non image links when embedding
+
+1.0 (2014-11-18):
+
+- initial release
