@@ -6,7 +6,7 @@ define(function(require) {
 	var $ = require('jquery');
 	
 	/** Initialize the slider editing javascript */
-	var init = function() {
+	var moduleInit = function() {
 		// Add slide
 		$(document).on('click', '#slider-edit-add-slide', addSlide);
 		
@@ -60,25 +60,31 @@ define(function(require) {
 	
 	// Toggle edit mode basic|advanced
 	var editMode = function(e) {
-		if (e.data.mode == 'basic') {
+		switchMode(e.data.mode);
+		e.preventDefault();
+	};
+	// Toggle edit mode basic|advanced
+	var switchMode = function(mode) {
+		if (mode == 'basic') {
 			$(".slider-mode-full").addClass('hidden');
 			$(".slider-mode-basic").removeClass('hidden');
-		} else if (e.data.mode == 'full') {
+		} else if (mode == 'full') {
 			$(".slider-mode-full").removeClass('hidden');
 			$(".slider-mode-basic").addClass('hidden');
 		}
-		$("input[name=edit_mode]").val(e.data.mode);
-		e.preventDefault();
+		$("input[name=edit_mode]").val(mode);
 	};
 	
 	
 	// Init module
-	elgg.register_hook_handler('init', 'system', init);
+	elgg.register_hook_handler('init', 'system', moduleInit);
 	
 	
-	// Return value
+	// return a module (can be used as slider.switchMode)
 	return {
-		//saveDraft: saveDraft
+		editMode: editMode,
+		switchMode: switchMode,
+		addSlide: addSlide
 	};
 });
 

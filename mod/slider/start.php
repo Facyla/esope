@@ -19,7 +19,8 @@ function slider_init() {
 	// Integration with shortcodes plugin
 	elgg_extend_view('shortcodes/embed/extend', 'slider/extend_shortcodes_embed');
 	
-	// register the JavaScript (autoloaded in 1.10)
+	// register the JavaScript
+	// note : cannot use resqire_js() as we need to insert a (static) php view into JS code // AMD modules do not accept .js.php files
 	elgg_register_simplecache_view('js/slider/edit');
 	
 	// Register a URL handler for sliders

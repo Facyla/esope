@@ -1,6 +1,6 @@
 <?php
 //elgg_load_js('elgg.slider.edit');
-//elgg_require_js("slider/edit");
+elgg_require_js("slider/edit");
 
 // Advanced editor mode by default for admins only
 $advanced_mode = get_input('edit_mode', '');
@@ -21,17 +21,18 @@ $edit_mode_toggle = '<p>' . elgg_echo('slider:edit_mode') . '&nbsp;:
 
 $edit_mode_toggle .= '<script>';
 if ($advanced_mode) {
-	$edit_mode_toggle .= '
-		require([\'jquery\', \'slider/edit\'], function ($, slider) {
-//			slider.editMode(\'full\');
+	$edit_mode_toggle .= "
+		require(['jquery', 'slider/edit'], function ($, slider) {
+			slider.switchMode('full');
 		});
-		';
+		";
 } else {
-	$edit_mode_toggle .= '
-		require([\'jquery\', \'slider/edit\'], function ($, slider) {
-//			slider.editMode(\'basic\');
+	$edit_mode_toggle .= "
+		require(['jquery', 'slider/edit'], function ($, slider) {
+console.log(slider);
+			slider.switchMode('basic');
 		});
-		';
+		";
 }
 $edit_mode_toggle .= '</script>';
 
