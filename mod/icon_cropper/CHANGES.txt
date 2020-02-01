@@ -1,0 +1,34 @@
+Version history
+===============
+
+1.0.4 (2019-07-24):
+
+- fixed: fatal errors with invalid cropping coordinates
+
+1.0.3 (2019-05-29):
+
+- fixed: correctly check cropping coords in action validation
+
+1.0.2 (2019-05-02):
+
+- fixed: min width warning not showing
+- fixed: only show size warnings for icons
+
+1.0.1 (2019-04-17):
+
+- fixed: cropping with auto rotating images
+- fixed: img orientation during edit/upload
+
+1.0 (2019-03-27):
+
+- added: besic plugin structure
+- added: custom styling
+- added: edit icon based on current icon
+- added: external influence over cropper config
+- added: option to disable dimension warnings
+- added: option to set recommended width/height of an image
+- changed: prevented avatar cropper core cropping tool
+- changed: recommended image messages
+- changed: remove icon will hide icon upload and cropper
+- fixed: js failures in IE
+- fixed: use correct cropping coordinates

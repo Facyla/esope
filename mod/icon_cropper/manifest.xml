@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+	<name>Icon cropper</name>
+	<author>ColdTrick IT Solutions</author>
+	<version>1.0.4</version>
+	<description>Adds icon cropping to entity icon upload</description>
+	<id>icon_cropper</id>
+	<website>http://www.coldtrick.com/</website>
+	<repository>https://github.com/ColdTrick/icon_cropper</repository>
+	<bugtracker>https://github.com/ColdTrick/icon_cropper/issues</bugtracker>
+	<copyright>(C) ColdTrick IT Solutions 2018</copyright>
+	<license>GNU General Public License version 2</license>
+ 	
+ 	<requires>
+		<type>elgg_release</type>
+		<version>3.0</version>
+	</requires>
+
+	<category>ColdTrick</category>
+ 	<category>content</category>
+</plugin_manifest>

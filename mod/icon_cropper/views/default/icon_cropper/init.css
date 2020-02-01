@@ -1,0 +1,7 @@
+.icon-cropper-wrapper {
+	max-height: 400px;
+	
+	> img {
+		max-width: 100%;
+	}
+}

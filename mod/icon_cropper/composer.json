@@ -1,0 +1,34 @@
+{
+	"name": "coldtrick/icon_cropper",
+	"description": "Adds icon cropping to entity icon upload",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "cropper"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/icon_cropper",
+		"issues": "https://github.com/ColdTrick/icon_cropper/issues"
+	},
+	"require": {
+		"composer/installers": "^1.0.8",
+		"npm-asset/cropperjs": "~1.4.3",
+		"npm-asset/jquery-cropper": "~1.0.0"
+	},
+	"require-dev": {
+		"coldtrick/sniffs": "dev-master",
+		"coldtrick/releases": "dev-master"
+	},
+	"conflict": {
+		"elgg/elgg": "<3.0"
+	},
+	"repositories": [
+		{
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+		}
+	],
+	"config": {
+		"fxp-asset": {
+            "enabled": false
+		}
+	}
+}
