@@ -59,7 +59,9 @@ class ElggContentFacets {
 	/* Extract information from entity
 	 * Construct from entity (using ->description or custom metadata name) OR from text
 	 */
-	function __construct($params = ['entity' => false, 'text' => false, 'meta_name' => 'description']) {
+	function __construct($params = []) {
+		$defaults = ['entity' => false, 'text' => false, 'meta_name' => 'description'];
+		$params = $params + $defaults;
 		if ($params['entity'] instanceof ElggEntity) {
 			$this->entity = $params['entity'];
 			$this->text = $params['entity']->{$params['meta_name']};
@@ -88,6 +90,7 @@ class ElggContentFacets {
 				$this->{$name} = unserialize($this->entity->{"facets_$name"});
 				//echo " - $name = {$this->entity->{"facets_$name"}}<br>";
 			}
+			return true;
 		}
 		
 		// Compute all resources
@@ -178,7 +181,9 @@ class ElggContentFacets {
 	// RENDERERS: render converted / extended content
 	
 	// Renders the text with enriched links / media (inlined)
-	public function renderConvertedText($processors = ['url' => true, 'mention' => true, 'hashtag' => true, 'video' => true, 'image' => true, 'preview' => false]) {
+	public function renderConvertedText($processors = []) {
+		$defaults = ['url' => true, 'mention' => true, 'hashtag' => true, 'video' => true, 'image' => true, 'preview' => false];
+		$processors = $processors + $defaults;
 		if (!$processors) {
 			// Use plugin setting
 			$processors = [
@@ -200,6 +205,7 @@ class ElggContentFacets {
 		if ($processors['hashtag']) {
 			$text = $this->renderHashtags($text);
 		}
+		// @TODO use better parser
 		if ($processors['url']) {
 			$text = parse_urls($text);
 		}
@@ -534,17 +540,20 @@ PREVIEW;
 	/* Wrapper function that extracts all links from text, using various methods
 	 */
 	private function extractUrls() {
+		$this->links = array();
+		
 		// Get site host from site url (without trailing slash)
 		$p_site_url = explode('/', elgg_get_site_url());
 		$site_host = $p_site_url[0] . '//' . $p_site_url[2];
 		
-		$this->links = array();
+		
 		// This extracts only URI that are not HTML links (plain text URI)
 		$nonlinks = $this->getPlaintextLinks();
 		if (sizeof($nonlinks) > 0) {
 			foreach($nonlinks as $link) {
 				// Normalize relative URL
 				$link = elgg_normalize_url($link);
+				echo $link; 
 				if (!in_array($link, $this->links)) { $this->links[] = $link; }
 			}
 		}
@@ -609,7 +618,6 @@ PREVIEW;
 		// By default htmlawed rewrites tags to this format.
 		// if PHP supported conditional negative lookbehinds we could use this:
 		// $r = preg_replace_callback('/(?<!=)(?<![ ])?(?<!["\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\'\!\(\),]+)/i',
-		
 		$pattern = '/(?<![=\/"\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\']+)/i';
 		preg_match_all($pattern, $this->text, $matches, PREG_PATTERN_ORDER);
 		foreach($matches[0] as $href) {

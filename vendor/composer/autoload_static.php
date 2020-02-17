@@ -4,22 +4,22 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit445a1fd51477599cef63bae08e88c5f7
+class ComposerStaticInit31f1fe5cf387564aab8830b3187cbda6
 {
     public static $files = array (
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '72142d7b40a3a0b14e91825290b5ad82' => __DIR__ . '/..' . '/cakephp/core/functions.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         '028fdea3165c4ba1ecccc83b7fec69fc' => __DIR__ . '/..' . '/cakephp/collection/functions.php',
         '948ad5488880985ff1c06721a4e447fe' => __DIR__ . '/..' . '/cakephp/utility/bootstrap.php',
         'bc8d758335d4e980187df1bfef1c8f49' => __DIR__ . '/..' . '/css-crush/css-crush/lib/functions.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'bbf73f3db644d3dced353b837903e74c' => __DIR__ . '/..' . '/php-di/php-di/src/DI/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         'e277be14c90068cf94faed2c43dbe6d8' => __DIR__ . '/..' . '/symfony/polyfill-php71/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -129,8 +129,8 @@ class ComposerStaticInit445a1fd51477599cef63bae08e88c5f7
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Zend\\Validator\\' => 
         array (
@@ -615,6 +615,7 @@ class ComposerStaticInit445a1fd51477599cef63bae08e88c5f7
         'Composer\\Installers\\MagentoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MagentoInstaller.php',
         'Composer\\Installers\\MajimaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MajimaInstaller.php',
         'Composer\\Installers\\MakoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MakoInstaller.php',
+        'Composer\\Installers\\MantisBTInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MantisBTInstaller.php',
         'Composer\\Installers\\MauticInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MauticInstaller.php',
         'Composer\\Installers\\MayaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MayaInstaller.php',
         'Composer\\Installers\\MediaWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MediaWikiInstaller.php',
@@ -646,6 +647,7 @@ class ComposerStaticInit445a1fd51477599cef63bae08e88c5f7
         'Composer\\Installers\\SilverStripeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SilverStripeInstaller.php',
         'Composer\\Installers\\SiteDirectInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SiteDirectInstaller.php',
         'Composer\\Installers\\SyDESInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyDESInstaller.php',
+        'Composer\\Installers\\SyliusInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyliusInstaller.php',
         'Composer\\Installers\\Symfony1Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Symfony1Installer.php',
         'Composer\\Installers\\TYPO3CmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3CmsInstaller.php',
         'Composer\\Installers\\TYPO3FlowInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3FlowInstaller.php',
@@ -3741,11 +3743,11 @@ class ComposerStaticInit445a1fd51477599cef63bae08e88c5f7
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Deprecated' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Deprecated.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Example' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Example.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Factory\\StaticMethod' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Factory/StaticMethod.php',
-        'phpDocumentor\\Reflection\\DocBlock\\Tags\\Factory\\Strategy' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Factory/Strategy.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Formatter' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Formatter.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Formatter\\AlignFormatter' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Formatter/AlignFormatter.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Formatter\\PassthroughFormatter' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Formatter/PassthroughFormatter.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Generic' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Generic.php',
+        'phpDocumentor\\Reflection\\DocBlock\\Tags\\InvalidTag' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/InvalidTag.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Link' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Link.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Method' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Method.php',
         'phpDocumentor\\Reflection\\DocBlock\\Tags\\Param' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock/Tags/Param.php',
@@ -3801,11 +3803,11 @@ class ComposerStaticInit445a1fd51477599cef63bae08e88c5f7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit445a1fd51477599cef63bae08e88c5f7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit445a1fd51477599cef63bae08e88c5f7::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit445a1fd51477599cef63bae08e88c5f7::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit445a1fd51477599cef63bae08e88c5f7::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit445a1fd51477599cef63bae08e88c5f7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit31f1fe5cf387564aab8830b3187cbda6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit31f1fe5cf387564aab8830b3187cbda6::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit31f1fe5cf387564aab8830b3187cbda6::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit31f1fe5cf387564aab8830b3187cbda6::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit31f1fe5cf387564aab8830b3187cbda6::$classMap;
 
         }, null, ClassLoader::class);
     }
