@@ -1,7 +1,22 @@
 <?php
+/**
+ * Slider
+ * 
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @author Facyla
+ * @copyright Facyla 2013-2020
+ * @link https://facyla.fr/
+ */
+
+//require_once(__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/lib/slider/functions.php');
+
+// @TODO Use AMD for JS scripts
 
 $url = elgg_get_site_url();
 $vendor_url = $url . 'mod/slider/vendors/anythingslider/';
+
+
 
 return [
 	// Plugin settings
@@ -178,7 +193,14 @@ onSlideComplete : function(slider){
 			
 		],
 	],
-
+	
+	'hooks' => [
+		'entity:url' => [
+			'object' => [
+				'slider_url' => [],
+			],
+		],
+	],
 	
 	// Widgets
 	/*

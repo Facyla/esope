@@ -2,7 +2,9 @@
 
 return array(
 	'slider' => "Slider",
-
+	
+	'item:object:slider' => "Diaporama",
+	
 	/* Settings */
 	'slider:settings:description' => "Configuration du diaporama",
 	'slider:settings:defaultslider' => "Contenu par défaut du diaporama",

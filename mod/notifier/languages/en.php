@@ -1,0 +1,57 @@
+<?php
+
+return array(
+	'notifier:' => '',
+	'notifier:notification' => 'Notification',
+	'notifier:notifications' => 'Notifications',
+	'notifier:view:all' => 'View all notifications',
+	'notifier:all' => 'All notifications',
+	'notifier:none' => 'No notifications',
+	'notifier:unreadcount' => 'Unread notifications (%s)',
+	'notification:method:notifier' => 'Notifier',
+	'notifier:dismiss_all' => 'Dismiss all',
+	'notifier:clear_all' => 'Clear all',
+	'notifier:deleteconfirm' => 'This removes all notifications including the unread ones. Are you sure you want to continue?',
+
+	'item:object:notification' => 'Notifier items',
+
+	// System messages
+	'notifier:message:dismissed_all' => 'All notifications dismissed successfully',
+	'notifier:message:deleted_all' => 'All notifications cleared successfully',
+	'notifier:message:deleted' => 'Notification deleted successfully',
+
+	// Error messages
+	'notifier:error:not_found' => 'This notification was not found',
+	'notifier:error:target_not_found' => 'The content was not found, so it has propably been deleted.',
+	'notifier:error:cannot_delete' => 'Cannot delete notification',
+
+	// River strings that are not available in Elgg core
+	'river:comment:object:groupforumtopic' => '%s replied on the discussion topic %s',
+	'river:mention:object:comment' => '%s mentioned you in %s',
+
+	// This is used to create messages like "Lisa and George like your post"
+	'notifier:two_subjects' => '%s and %s',
+	// This is used to create messages like "Lisa and 5 others like your post"
+	'notifier:multiple_subjects' => '%s and %s other users',
+
+	// Likes plugin
+	'likes:notifications:summary' => '%s likes your post %s',
+	'likes:notifications:summary:2' => '%s and %s like your post %s',
+	'likes:notifications:summary:n' => '%s like your post %s',
+
+	// Friends
+	'friend:notifications:summary' => '%s has made you a friend',
+	'friend:notifications:summary:2' => '%s and %s have made you a friend',
+	'friend:notifications:summary:n' => '%s have made you a friend',
+
+	// Comments
+	'comment:notifications:summary' => '%s commented %s',
+	'comment:notifications:summary:2' => '%s and %s commented %s',
+	'comment:notifications:summary:n' => '%s commented %s',
+
+	// Groups
+	'groups:notifications:invitation' => '%s has invited you to the group %s',
+	'groups:notifications:invitation:hidden' => 'You have a new %s from %s',
+	'groups:notifications:membership_request' => '%s has requested membership in group %s',
+	'groups:invitation' => 'group invitation',
+);

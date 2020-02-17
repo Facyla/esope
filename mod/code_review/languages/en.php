@@ -1,5 +1,5 @@
 <?php
-$result = array(
+return [
 	'admin:code' => 'Code',
 	'admin:code:diagnostic' => 'Code diagnostic',
 	'admin:code:diagnostic:deprecated_list' => 'Deprecated functions list',
@@ -43,7 +43,6 @@ $result = array(
 	'code_review:fix_problems:warning' => 'Code analyzer will attempt to fix problem it encounters. Changes will be irreversible and do not guarantee compatibility with previous versions.
 		Make sure that you have backup version of the code. Using this feature requires write access to the whole installation directory. DO NOT USE ON PRODUCTION SITE!',
 	'code_review:js:confirm_changes' => 'Are you sure you want to modify source code? That\'s the last chance to reconsider!',
+	
+];
 
-);
-add_translation('en', $result);//let's be nice for 1.8 users
-// return $result;//1.9 standard
