@@ -52,6 +52,10 @@ function default_icons_init() {
 	elgg_register_page_handler('default_icons', 'default_icons_page_handler');
 	
 	
+	// Public pages - permet d'intégrer les icônes dans les digest
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'default_icons_public_pages');
+	
+	
 }
 
 
