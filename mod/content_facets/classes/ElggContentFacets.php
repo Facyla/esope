@@ -553,7 +553,6 @@ PREVIEW;
 			foreach($nonlinks as $link) {
 				// Normalize relative URL
 				$link = elgg_normalize_url($link);
-				echo $link; 
 				if (!in_array($link, $this->links)) { $this->links[] = $link; }
 			}
 		}

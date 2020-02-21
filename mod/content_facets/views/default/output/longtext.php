@@ -20,7 +20,7 @@ unset($vars['value']);
 // Use custom parser
 // @TODO better operate at another level (eg. create/update event) so we don't compute all at every display
 if (elgg_get_plugin_setting('convert_longtext', 'content_facets') == 'yes') {
-	$facets = new ElggContentFacets($text);
+	$facets = new ElggContentFacets(['text' => $text]);
 	$params = [
 		'url' => (elgg_get_plugin_setting('render_urls', 'content_facets') == 'yes' ? true : false),
 		'mention' => (elgg_get_plugin_setting('render_mentions', 'content_facets') == 'yes' ? true : false),

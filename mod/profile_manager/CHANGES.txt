@@ -1,6 +1,16 @@
 Version history
 ===============
 
+15.0.2 (2020-02-18):
+
+- fixed: register action validation middleware
+- fixed: no longer need to register fields as tag fields in search
+
+15.0.1 (2019-11-26):
+
+- fixed: correctly download backup of profile fields
+- fixed: correctly show extra fields on admin add form
+
 15.0 (2019-08-22):
 
 - changed: minimal Elgg requirement increased to Elgg 3.1
