@@ -19,7 +19,8 @@
         "essence/essence": "*",
         "fg/multiplayer": "*",
         "embed/embed": "*",
-        "duzun/hquery": "*"
+        "duzun/hquery": "*",
+        "misd/linkify": "*"
     }
 }
 

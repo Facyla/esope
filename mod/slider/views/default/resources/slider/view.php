@@ -32,8 +32,6 @@ if ($slider instanceof ElggSlider) {
 	$page_title = $slider->title;
 	elgg_push_breadcrumb($page_title);
 }
-// Note : some plugins (such as metatags) rely on a defined title, so we need to set it
-$CONFIG->title = $page_title;
 
 
 // EMBED MODE - Determine pageshell depending on optional embed type
@@ -50,7 +48,7 @@ if ($embed) {
 
 
 // Wrap into default, full-page layout
-$content = elgg_view_layout('one_column', array('content' => $content));
+$content = elgg_view_layout('default', array('content' => $content));
 
 
 // Display page (using default pageshell)

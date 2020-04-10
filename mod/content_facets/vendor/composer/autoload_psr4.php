@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'duzun\\' => array($vendorDir . '/duzun/hquery/src'),
     'Parkour\\' => array($vendorDir . '/fg/parkour/lib'),
+    'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
     'Essence\\Http\\' => array($vendorDir . '/essence/http/src'),
     'Essence\\Dom\\' => array($vendorDir . '/essence/dom/src'),
     'Essence\\' => array($vendorDir . '/essence/essence/lib/Essence'),

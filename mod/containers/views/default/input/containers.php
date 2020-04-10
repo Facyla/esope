@@ -10,21 +10,20 @@
 $logged_in_user = elgg_get_logged_in_user_entity();
 $page_owner = elgg_get_page_owner_entity();
 
-if (!$page_owner)
-    $page_owner = $logged_in_user;
+if (!$page_owner) $page_owner = $logged_in_user;
 elgg_require_js("containers/container_access");
 
 if (isset($vars['entity']) && $vars['entity'] instanceof ElggEntity) {
-    $in_container = $vars['entity']->getContainerEntity();
-    $entity_owner = $vars['entity']->getOwnerEntity();
+	$in_container = $vars['entity']->getContainerEntity();
+	$entity_owner = $vars['entity']->getOwnerEntity();
 }
 else {
-    // set defaults if entity is a new one
-    $in_container = $page_owner;
-    $entity_owner = $logged_in_user;
+	// set defaults if entity is a new one
+	$in_container = $page_owner;
+	$entity_owner = $logged_in_user;
 }
 
-$groups = elgg_get_entities_from_relationship(array(
+$groups = elgg_get_entities(array(
 	'type' => 'group',
 	'relationship' => 'member',
 	'relationship_guid' => $entity_owner->guid,
@@ -56,7 +55,15 @@ $vars = [
 $container_selector = elgg_view('input/select',$vars);
 ?>
 
-<div class="elgg-containers">
-	<label><?php echo elgg_echo('container'); ?></label><br/>
-	<?php echo $container_selector; ?>
-</div>
+
+<?php
+// Enable a shorter version without label
+if ($vars['hide_label']) {
+	echo '<span class="elgg-containers">' . $container_selector . '</span>';
+} else {
+	echo 'TTTTT<div class="elgg-containers">
+		<label>' . elgg_echo('container') . '</label><br/>
+		' . $container_selector . '
+	</div>';
+}
+

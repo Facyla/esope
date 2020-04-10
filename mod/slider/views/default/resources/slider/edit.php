@@ -43,7 +43,7 @@ if (!$slider || (($slider instanceof ElggSlider) && $slider->canEdit())) {
 
 
 // Wrap into default, full-page layout
-$content = elgg_view_layout('one_column', array('content' => $content));
+$content = elgg_view_layout('default', array('content' => $content));
 
 
 // Display page (using default pageshell)

@@ -60,6 +60,7 @@ class ElggContentFacets {
 	 * Construct from entity (using ->description or custom metadata name) OR from text
 	 */
 	function __construct($params = []) {
+		if ($params && !is_array($params)) { $params = ['text' => $params]; }
 		$defaults = ['entity' => false, 'text' => false, 'meta_name' => 'description'];
 		$params = $params + $defaults;
 		if ($params['entity'] instanceof ElggEntity) {
@@ -208,6 +209,10 @@ class ElggContentFacets {
 		// @TODO use better parser
 		if ($processors['url']) {
 			$text = parse_urls($text);
+			/*
+			$Essence = new Essence\Essence();
+			$text = $Essence->replace($text);
+			*/
 		}
 		
 		// Extended content (added after main content)
@@ -292,7 +297,7 @@ class ElggContentFacets {
 		
 		$slideshow = '';
 			// Add images from ElggFile array
-			foreach ($elgg_files as $file) {
+			if ($elgg_files) foreach ($elgg_files as $file) {
 				$slideshow .= '<li class="pam">';
 					$slideshow .= elgg_view('output/url', [
 						'text' => elgg_view('output/img', ['src' => $file->getIconURL('small'), 'alt' => $file->getDisplayName()]),
@@ -302,7 +307,7 @@ class ElggContentFacets {
 				$slideshow .= '</li>';
 			}
 			// Add images from images SRC array
-			foreach ($images as $url) {
+			if ($images) foreach ($images as $url) {
 				$slideshow .= '<li class="pam">';
 					$slideshow .= elgg_view('output/url', [
 						'text' => elgg_view('output/img', ['src' => $url, 'alt' => '']),
@@ -380,7 +385,7 @@ class ElggContentFacets {
 		//if (getimagesize($url)) { return false; }
 		$headers = get_headers($url, 1);
 		$content_types = implode($headers['Content-Type']); // note: can be an array
-		if (strpos($content_types['Content-Type'], 'image') !== false) { return false; }
+		if ($content_types && strpos($content_types, 'image') !== false) { return false; }
 		
 		$content = '';
 		while(!feof($file)) { $content .= fgets($file,1024); }
@@ -591,7 +596,7 @@ PREVIEW;
 		$nodes = $dom->getElementsByTagName('a');
 		
 		//Iterate over the extracted links and display their URLs
-		foreach ($nodes as $node){
+		if ($nodes) foreach ($nodes as $node){
 			//Extract and show the "href" attribute.
 			$links[] = $node->getAttribute("href");
 		}
@@ -619,7 +624,7 @@ PREVIEW;
 		// $r = preg_replace_callback('/(?<!=)(?<![ ])?(?<!["\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\'\!\(\),]+)/i',
 		$pattern = '/(?<![=\/"\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\']+)/i';
 		preg_match_all($pattern, $this->text, $matches, PREG_PATTERN_ORDER);
-		foreach($matches[0] as $href) {
+		if ($matches) foreach($matches[0] as $href) {
 			$urls[] = $href;
 		}
 
@@ -763,7 +768,8 @@ PREVIEW;
 			return '<a href="' . $user->getURL() . '" title="' . $user->name . '" class="facets-mention">' . $icon . '@' . $user->username . '</a>';
 		}
 		// Default link to profile
-		return '<a href="' . elgg_get_site_url() . 'profile/' . $matches[1] . '">' . $matches[0] . '</a>';
+		//return '<a href="' . elgg_get_site_url() . 'profile/' . $matches[1] . '">' . $matches[0] . '</a>';
+		return $matches[0];
 	}
 	
 	

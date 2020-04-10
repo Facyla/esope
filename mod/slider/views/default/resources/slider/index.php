@@ -48,7 +48,7 @@ if ($slider_count > 0) {
 }
 
 
-$page = elgg_view_layout('one_column', array('title' => $title, 'content' => $content));
+$page = elgg_view_layout('default', array('title' => $title, 'content' => $content));
 
 echo elgg_view_page($title, $page);
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "460ca2e237add404ab650109e1bbfe1d",
+    "content-hash": "434a557f002f154cabb3f1b9de5ae43c",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -138,17 +138,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/Embed.git",
-                "reference": "dc1dc3c126f8a78acdae06b83f591c0728ea131d"
+                "reference": "0f3c9857f338d36eab17801a8cca088487c721ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/dc1dc3c126f8a78acdae06b83f591c0728ea131d",
-                "reference": "dc1dc3c126f8a78acdae06b83f591c0728ea131d",
+                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/0f3c9857f338d36eab17801a8cca088487c721ad",
+                "reference": "0f3c9857f338d36eab17801a8cca088487c721ad",
                 "shasum": ""
             },
             "require": {
                 "composer/ca-bundle": "^1.0",
                 "ext-curl": "*",
+                "ext-dom": "*",
                 "ext-mbstring": "*",
                 "php": "^5.6|^7.0"
             },
@@ -183,7 +184,7 @@
                 "opengraph",
                 "twitter cards"
             ],
-            "time": "2019-09-16T19:34:02+00:00"
+            "time": "2020-02-20T12:16:07+00:00"
         },
         {
             "name": "essence/dom",
@@ -408,6 +409,51 @@
                 "traversing"
             ],
             "time": "2015-10-03T10:39:22+00:00"
+        },
+        {
+            "name": "misd/linkify",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misd-service-development/php-linkify.git",
+                "reference": "3481b148806a23b4001712de645247a1a4dcc10a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misd-service-development/php-linkify/zipball/3481b148806a23b4001712de645247a1a4dcc10a",
+                "reference": "3481b148806a23b4001712de645247a1a4dcc10a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Misd\\Linkify\\": "src/Misd/Linkify"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Converts URLs and email addresses in text into HTML links",
+            "homepage": "https://github.com/misd-service-development/php-linkify",
+            "keywords": [
+                "convert",
+                "email address",
+                "link",
+                "url"
+            ],
+            "time": "2017-08-17T08:33:35+00:00"
         }
     ],
     "packages-dev": [],

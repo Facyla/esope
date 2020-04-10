@@ -15,6 +15,10 @@ class ComposerStaticInit4b81ccf1675a60396bde17426322973c
         array (
             'Parkour\\' => 8,
         ),
+        'M' => 
+        array (
+            'Misd\\Linkify\\' => 13,
+        ),
         'E' => 
         array (
             'Essence\\Http\\' => 13,
@@ -36,6 +40,10 @@ class ComposerStaticInit4b81ccf1675a60396bde17426322973c
         'Parkour\\' => 
         array (
             0 => __DIR__ . '/..' . '/fg/parkour/lib',
+        ),
+        'Misd\\Linkify\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/misd/linkify/src/Misd/Linkify',
         ),
         'Essence\\Http\\' => 
         array (

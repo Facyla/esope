@@ -28,7 +28,7 @@ if (elgg_is_active_plugin('file_tools')) {
 		
 		// get current parent_guid
 		$file = get_entity($guid);
-		$folders = $file->getEntitiesFromRelationship([
+		$folders = $file->getEntities([
 			'relationship' => FILE_TOOLS_RELATIONSHIP,
 			'inverse_relationship' => true,
 			'limit' => 1,

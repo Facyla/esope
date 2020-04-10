@@ -18,7 +18,7 @@ $sidebar = "";
 
 $content = '';
 
-$guids = [169, 181, 182];
+$guids = [257, 169, 181, 182];
 
 foreach($guids as $guid) {
 	$entity = get_entity($guid);
@@ -53,7 +53,16 @@ foreach($guids as $guid) {
 	
 	// Content facets parser
 	//$text .= "<hr>CF render: " . $facets->renderConvertedText();
-	$text = $facets->renderConvertedText();
+	//$text = $facets->renderConvertedText();
+	
+	//$Essence = new Essence\Essence();
+	//$text = $Essence->replace($text);
+	
+	// Marche mais pas mieux que la méthode de base
+	//require_once(dirname(__FILE__) . '/../../../../vendor/misd/linkify/src/Misd/Linkify/Linkify.php');
+	//$linkify = new \Misd\Linkify\Linkify();
+	//$text = $linkify->process($text);
+	
 	
 	// Tags
 	//if ($hashtags) { $text .= '<p>Tags&nbsp;: #' . implode(' #', $hashtags). '</p>'; }
@@ -80,7 +89,7 @@ foreach($guids as $guid) {
 	*/
 	
 	
-	$content .= $text;
+	$content .= '<div class="" style="border: 1px dotted; padding: .5rem; margin: .5rem;">' . $text . '</div>';
 }
 
 
