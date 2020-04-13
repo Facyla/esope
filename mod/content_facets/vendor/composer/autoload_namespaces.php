@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'hQuery' => array($vendorDir . '/duzun/hquery/src'),
     'Multiplayer' => array($vendorDir . '/fg/multiplayer/lib'),
+    'ML\\IRI' => array($vendorDir . '/ml/iri'),
 );

@@ -7,8 +7,12 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'duzun\\' => array($vendorDir . '/duzun/hquery/src'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
+    'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Parkour\\' => array($vendorDir . '/fg/parkour/lib'),
     'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
+    'ML\\JsonLD\\' => array($vendorDir . '/ml/json-ld'),
+    'HtmlParser\\' => array($vendorDir . '/oscarotero/html-parser/src'),
     'Essence\\Http\\' => array($vendorDir . '/essence/http/src'),
     'Essence\\Dom\\' => array($vendorDir . '/essence/dom/src'),
     'Essence\\' => array($vendorDir . '/essence/essence/lib/Essence'),

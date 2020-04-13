@@ -1,3 +1,31 @@
+<a name="3.3.3"></a>
+### 3.3.3  (2020-03-27)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+* Jeroen Dalsem (2)
+
+#### Bug Fixes
+
+* **livesearch:** use correct relationship options to find groups ([dc82fd9e](https://github.com/Elgg/Elgg/commit/dc82fd9e92a141b27b97a0149d8289764eb45fd8))
+* **mail:** additional library for SMTP e-mail support ([d69b90df](https://github.com/Elgg/Elgg/commit/d69b90dfba56e166ddbb255ac2f3a9e9ce433772))
+
+
+<a name="3.3.2"></a>
+### 3.3.2  (2020-03-13)
+
+#### Contributors
+
+* Jeroen Dalsem (6)
+* Jerôme Bakker (4)
+
+#### Bug Fixes
+
+* **notifications:** listing of settings now contain a link to the item ([4a2ae1de](https://github.com/Elgg/Elgg/commit/4a2ae1dee0539fabc20a1ad9ebb6b3bff8133021))
+* **webservices:** use correct query string for hmac authorisation ([1dc4cae9](https://github.com/Elgg/Elgg/commit/1dc4cae94c8fb0dc43a1930e1995d4c51c186420))
+
+
 <a name="3.3.1"></a>
 ### 3.3.1  (2020-02-14)
 

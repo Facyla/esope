@@ -1,3 +1,8 @@
+### Login As 2.1.0 - March 11, 2020 ###
+* feat(i18n): added Dutch translation
+* fix(action): remove empty register_error() call
+* fix(menus): do not add login_as menu item for banned users
+
 ### Login As 2.0.0 - December, 2017 ###
  * Updated for Elgg 3.0
 

@@ -48,7 +48,7 @@ abstract class BaseNode implements NodeInterface
     public function __construct(?string $name, NodeInterface $parent = null, string $pathSeparator = self::DEFAULT_PATH_SEPARATOR)
     {
         if (false !== strpos($name = (string) $name, $pathSeparator)) {
-            throw new \InvalidArgumentException('The name must not contain "'.$pathSeparator.'".');
+            throw new \InvalidArgumentException('The name must not contain ".'.$pathSeparator.'".');
         }
 
         $this->name = $name;
@@ -438,7 +438,7 @@ abstract class BaseNode implements NodeInterface
 
                 throw $e;
             } catch (\Exception $e) {
-                throw new InvalidConfigurationException(sprintf('Invalid configuration for path "%s": %s', $this->getPath(), $e->getMessage()), $e->getCode(), $e);
+                throw new InvalidConfigurationException(sprintf('Invalid configuration for path "%s": %s.', $this->getPath(), $e->getMessage()), $e->getCode(), $e);
             }
         }
 
@@ -524,7 +524,7 @@ abstract class BaseNode implements NodeInterface
     private function doValidateType($value): void
     {
         if (null !== $this->handlingPlaceholder && !$this->allowPlaceholders()) {
-            $e = new InvalidTypeException(sprintf('A dynamic value is not compatible with a "%s" node type at path "%s".', \get_class($this), $this->getPath()));
+            $e = new InvalidTypeException(sprintf('A dynamic value is not compatible with a "%s" node type at path "%s".', static::class, $this->getPath()));
             $e->setPath($this->getPath());
 
             throw $e;

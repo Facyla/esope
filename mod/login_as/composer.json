@@ -2,7 +2,7 @@
     "name": "elgg/login_as",
     "type": "elgg-plugin",
     "description": "Elgg plugin that allows admin users to login as another user.",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "keywords": ["elgg", "plugin"],
     "support": {
 		"source": "https://github.com/elgg/login_as",

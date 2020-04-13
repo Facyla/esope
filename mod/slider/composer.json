@@ -1,7 +1,17 @@
 {
 	"name": "facyla/slider",
-	"version": "3.2.0",
+	"description": "Integrates sliders for admins and members : provides a slider object and configurable slider views",
+	"version": "3.3.0",
 	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "admin", "content"],
+	"license": "GPL-2.0-only",
+	"homepage": "https://facyla.fr",
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "i.daniel.florian@gmail.com"
+		}
+	],
 	"repositories": [
 		{
 			"type": "vcs",
@@ -9,19 +19,7 @@
 		}
 	],
 	"require": {
-		"composer/installers": ">=1.0.8"
-	},
-	"description": "Provides a slider object and configurable slider views",
-	"homepage": "https://facyla.fr",
-	"license": "GPL-2.0-only",
-	"authors": [
-		{
-			"name": "Florian DANIEL aka Facyla",
-			"email": "i.daniel.florian@gmail.com"
-		}
-	],
-	"keywords": [
-		"elgg", "plugin", "admin", "content"
-	],
+		"composer/installers": "^1.0.8"
+	}
 }
 

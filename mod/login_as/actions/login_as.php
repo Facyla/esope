@@ -36,8 +36,6 @@ try {
 	$session->remove('login_as_original_user_guid');
 	$session->remove('login_as_original_persistent');
 
-	register_error();
-
 	try {
 		login($original_user);
 	} catch (Exception $ex) {

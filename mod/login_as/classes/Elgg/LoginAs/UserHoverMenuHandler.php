@@ -23,6 +23,11 @@ class UserHoverMenuHandler {
 			return;
 		}
 
+		if ($user->isBanned()) {
+			// banned users are unable to login
+			return;
+		}
+
 		if (!$logged_in_user || !$logged_in_user->isAdmin()) {
 			return;
 		}
