@@ -97,9 +97,9 @@ if ($feedback->save()) {
 // Get feedback text info now, before we potentially lose access to entity (public mode)
 $feedback_url = $feedback->getURL();
 $details = $feedback->about;
-if (!empty($details)) $details .= ', ';
+if (!empty($details)) { $details .= ', '; }
 $details .= $feedback->mood;
-if (!empty($details)) $details = " ($details)";
+if (!empty($details)) { $details = " ($details)"; }
 $feedback_title = $feedback->title . $details;
 
 elgg_set_ignore_access($ia);

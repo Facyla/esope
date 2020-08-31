@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Elgg Feedback plugin
  * Feedback interface for Elgg sites
@@ -72,6 +71,7 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 						}
 					}
 					
+					// About / topic
 					if (feedback_is_about_enabled()) {
 						$about_values = feedback_about_values();
 						if (sizeof($about_values) > 1) {
@@ -122,7 +122,7 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 					</div>
 				
 					<?php
-					// only use captcha when logged out
+					// Captcha : only when logged out
 					if (!elgg_is_logged_in()) {
 						// if captcha functions are loaded, then use captcha
 						if (function_exists("captcha_generate_token")) {
