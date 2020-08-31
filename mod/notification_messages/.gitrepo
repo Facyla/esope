@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:Facyla/notification_messages
+	branch = elgg_1.12
+	commit = 81b0dd04dcfd3d1c9d9daf97994b9f58333021f0
+	parent = 04695706cec4e277de92e1e705c505b4e20ab771
+	method = merge
+	cmdver = 0.4.0

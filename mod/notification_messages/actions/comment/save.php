@@ -16,6 +16,13 @@ if (empty($comment_text)) {
 	forward(REFERER);
 }
 
+// Convert to HTML if input did not use wysiwyg editor
+if($comment_text == strip_tags($comment_text)) {
+	$comment_text = elgg_autop($comment_text);
+}
+// Remove any remaining \n or \r in HTML ? (useless because wysiwyg editor adds CR anyway on edition)
+//$comment_text = str_replace(["\n", "\r", PHP_EOL], '', $comment_text);
+
 if ($comment_guid) {
 	// Edit an existing comment
 	$comment = get_entity($comment_guid);
@@ -66,13 +73,20 @@ if ($comment_guid) {
 		forward(REFERER);
 	}
 
+	// Note : notification should now be sent through the plugin hooks, even to self, so no need for this
+	// @TODO : remove this action override and use the send:before hook instead
+	/*
+	// Notify if poster wasn't owner
+	//if ($entity->owner_guid != $user->guid) {
 	// Always notify owner if poster is not owner, use setting otherwise
 	$notify_owner = false;
 	if ($user->guid != $entity->owner_guid) {
-		$notify_owner = true;
+		//$notify_owner = true;
+		// Note : this is handled afterwards (through hooks)
 	} else {
-		// Also notify owner if it is set so
-		$notify_owner = notification_messages_notify_owner();
+		// Also notify owner (self) if it is set so (required to notify the author itself)
+		//$notify_owner = notification_messages_notify_owner();
+		$notify_owner = notification_messages_notify_self();
 	}
 
 	if ($notify_owner) {
@@ -95,9 +109,14 @@ if ($comment_guid) {
 		// Trigger a hook to enable integration with other plugins
 		//$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $entity, 'to_entity' => $user), $message);
 		$hook_message = notification_messages_build_body($comment, array('language' => $user->language));
+		
+		// Support adding postbymail button
+		if (elgg_is_active_plugin('postbymail')) {
+			$hook_message = postbymail_add_to_message($hook_message, $entity->guid);
+		}
 		// Failsafe backup if hook as returned empty content but not false (= stop)
 		if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
-
+		//error_log("NOTIFICATION SHOULD BE SENT TO {$user->guid}  {$user->username} {$user->name}  {$user->email}");
 		// Send notifications
 		notify_user($owner->guid,
 			$user->guid,
@@ -109,6 +128,7 @@ if ($comment_guid) {
 			)
 		);
 	}
+	*/
 
 	// Add to river
 	elgg_create_river_item(array(
@@ -127,3 +147,4 @@ if ($is_edit_page) {
 }
 
 forward(REFERER);
+
