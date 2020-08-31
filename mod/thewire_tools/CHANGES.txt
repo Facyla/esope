@@ -1,0 +1,134 @@
+Version history
+===============
+
+7.0.2 (2018-01-25):
+
+- changed: use Elgg default by_line in object view
+
+7.0.1 (2017-11-29):
+
+- fix: ie not submitting form if container not set to a non null value
+
+7.0 (2017-11-01):
+
+- added: access control on group wire posts
+- changed: updated minimal Elgg requirement to 2.3
+- fixed: do not show public access in walled garden mode
+
+6.1 (2017-05-30):
+
+- added: support for entity tools migration of group wire threads
+- changed: unaccessable reshared source entity now is always visible
+
+6.0 (2017-03-24):
+
+- changed: increased Elgg requirement to 2.2
+- changed: moved group widget deregistration to plugin hook
+- changed: moved page menu item registration to plugin hook
+
+5.2 (2016-09-01):
+
+- added: option to feature wire posts
+- changed: display of wire posts with longer content
+- changed: do not forward to thread when replying
+- changed: mention urls now point to user profile instead of thewire
+- fixed: always check for valid username replacements
+- fixed: pagination links to parent thread
+
+5.1 (2016-05-26):
+
+- added: plugin hook to influence resharing options
+- changed: all and owner page now listen to default limit
+
+5.0.1 (2016-04-14):
+
+- fixed: incorrect type hint check
+- fixed: removed the deprecated view_type_toggle list_entities var
+- fixed: use correct language key when reporting an error saving a post
+- fixed: using correct jquery function
+
+5.0 (2016-03-02):
+
+- changed: plugin now support Elgg 2.0
+- removed: Elgg 1.7 to 1.8 (or higher) runonce function
+- removed: upgrade script to migrate notification settings
+
+4.0.1 (2016-03-01):
+
+- fixed: added trusted flags to the widget more links
+- fixed: autocomplete now works at any location in the text input
+- fixed: only check for double reshare if it is a wire post
+- fixed: only extend group activity with wire post form if applicable
+- fixed: only show groups sidebar menu if user is member of the group
+- fixed: reshare button visible for logged out users
+- fixed: wrong encoding when resharing quotes
+
+4.0 (2015-07-08):
+
+- Elgg requirement set to 1.10
+- added: composer support
+- added: option to view who shared content on thewire
+- fixed: only check for double reshare if it is a wire post
+- fixed: potential sql query error
+
+3.1 (2014-11-17):
+
+- added: ajax loaded thread
+- added: support for group to be shared on thewire
+- fixed: no thread link if in thread #8
+- changed: autocomplete for site no longer limited to friends
+- changed: moved mention settings to notification page #7
+- changed: don't reshare comments and discussion replies
+- removed: previous entity menu item
+
+3.0 (2014-09-25):
+
+- made compatible with Elgg 1.9
+- added: option to share content on TheWire
+- added: support for widget_manager group tool based widgets
+- added: admin option how to show mentions in wire posts
+
+2.2 (2013-03-18):
+
+- added: plugin setting to change the max length of a wire post
+- added: wire add form to the group activity page #4
+- changed: README.txt to README.md for better layout in GitHub
+- Applied Elgg coding standards
+
+2.1 (2013-04-05):
+
+- added: plugin setting to extend the activity page with a wire post form
+- added: widget title url for default thewire widget
+- added: runonce for migration Elgg 1.7 -> 1.8
+- changed: thewire reply link now visible in river events
+- changed: entity menu for wire post will show up in widgets
+- changed: setting page_owner on reply and thread page in case of group
+- fixed: problem with object notifications
+- fixed: possible SQL injection in widgets
+- fixed: not correctly presenting user setting
+
+2.0 (2012-04-10):
+
+- changed: updated for Elgg 1.8
+
+1.2 (2011-12-05):
+
+- added: group tool option to disable The Wire on a group
+- changed: moved changelog to CHANGES.txt in preparation for Elgg 1.8
+- changed: moved features and todo to README.txt in preparation for Elgg 1.8
+
+1.1.1 (2011-09-16):
+
+- fixed: potential multiple loading of autocomplete js
+- fixed: user autocomplete showed friends of all sites instead of this site (only in multi site setup)
+- fixed: coding error in widgets views
+- fixed: access pulldown layout error in widgets
+
+1.1 (2011-08-17):
+
+- added: filtering to index, group and default wire widget
+- changed: add form submit button
+
+1.0:
+
+- initial version
