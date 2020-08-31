@@ -976,7 +976,7 @@ Bekijk hier de volledige lijst van gebruikers:
 
 	'admin:configure_utilities:menu_items' => 'Menu items',
 	'admin:menu_items:configure' => 'Configureer items in het hoofdmenu',
-	'admin:menu_items:description' => 'Selecteer welke menu-items je als hoofditems wilt zien. Ongebruikte items zullen worden toegevoegd aan "Meer" aan het einde van de lijst.',
+	'admin:menu_items:description' => 'Selecteer de volgorde van de menu items. Niet geconfigureerde items zullen aan het einde van de lijst worden toegevoegd.',
 	'admin:menu_items:hide_toolbar_entries' => 'Verwijder links uit het menu?',
 	'admin:menu_items:saved' => 'Menu-items opgeslagen.',
 	'admin:add_menu_item' => 'Voeg een eigen menu-item toe',
@@ -1745,6 +1745,7 @@ Om naar het profiel van %s te gaan, klik hier:
 	
 	'cli:plugins:list:description' => "Toon alle geïnstalleerde plugins op de site",
 	'cli:plugins:list:option:status' => "Plugin status ( %s )",
+	'cli:plugins:list:option:refresh' => "Ververs de plugin lijst met recentelijk geïnstalleerde plugins",
 	'cli:plugins:list:error:status' => "%s is geen valide status. Toegestane opties zijn: %s",
 	
 	'cli:simpletest:description' => "Voer simpletest test suite uit (verouderd)",

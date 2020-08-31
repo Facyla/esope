@@ -615,7 +615,7 @@ class Inline
                             throw new ParseException(sprintf('The constant "%s" is not defined.', $const), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
                         if (self::$exceptionOnInvalidType) {
-                            throw new ParseException(sprintf('The string "%s" could not be parsed as a constant. Have you forgotten to pass the "Yaml::PARSE_CONSTANT" flag to the parser?', $scalar), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
+                            throw new ParseException(sprintf('The string "%s" could not be parsed as a constant. Did you forget to pass the "Yaml::PARSE_CONSTANT" flag to the parser?', $scalar), self::$parsedLineNumber + 1, $scalar, self::$parsedFilename);
                         }
 
                         return null;
@@ -636,15 +636,21 @@ class Inline
 
                 switch (true) {
                     case ctype_digit($scalar):
-                        $raw = $scalar;
+                        if ('0' === $scalar[0]) {
+                            return octdec(preg_replace('/[^0-7]/', '', $scalar));
+                        }
+
                         $cast = (int) $scalar;
 
-                        return '0' == $scalar[0] ? octdec($scalar) : (((string) $raw == (string) $cast) ? $cast : $raw);
+                        return ($scalar === (string) $cast) ? $cast : $scalar;
                     case '-' === $scalar[0] && ctype_digit(substr($scalar, 1)):
-                        $raw = $scalar;
+                        if ('0' === $scalar[1]) {
+                            return -octdec(preg_replace('/[^0-7]/', '', substr($scalar, 1)));
+                        }
+
                         $cast = (int) $scalar;
 
-                        return '0' == $scalar[1] ? -octdec(substr($scalar, 1)) : (($raw === (string) $cast) ? $cast : $raw);
+                        return ($scalar === (string) $cast) ? $cast : $scalar;
                     case is_numeric($scalar):
                     case Parser::preg_match(self::getHexRegex(), $scalar):
                         $scalar = str_replace('_', '', $scalar);

@@ -1,3 +1,126 @@
+<a name="3.3.9"></a>
+### 3.3.9  (2020-08-17)
+
+#### Contributors
+
+* Jerôme Bakker (14)
+* Jeroen Dalsem (1)
+
+#### Bug Fixes
+
+* **db:** handle empty dbprefix in join normalization ([fe3d1684](https://github.com/Elgg/Elgg/commit/fe3d1684f2f736fab22ccb034ac0cecef00b13e0))
+* **search:** allow only unique field names to be searched ([4e540518](https://github.com/Elgg/Elgg/commit/4e5405188ddb6422784490e381350b790e0c3832))
+* **tests:**
+  * set config value in correct location ([05c0ff6e](https://github.com/Elgg/Elgg/commit/05c0ff6eba27abca8b94d67c3e9d160f619ce21f))
+  * improved access array testing in walled garden mode ([c58a1543](https://github.com/Elgg/Elgg/commit/c58a15432cf42d667162c47c648c2352eb0e0b4e))
+  * validate correct widget id for active plugin ([7ddc7743](https://github.com/Elgg/Elgg/commit/7ddc77434c800dc9df33e2a36a74e1d7668a22d5))
+  * get correct plugin for deactivation testing ([f058db5d](https://github.com/Elgg/Elgg/commit/f058db5d6cbdff13b28efe74743349956a2a1331))
+  * use language keys to validate ([e16b0166](https://github.com/Elgg/Elgg/commit/e16b0166a8ffc83fe16e4cf57e08cf61c38c5221))
+
+
+<a name="3.3.8"></a>
+### 3.3.8  (2020-07-10)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+* iionly (1)
+
+#### Bug Fixes
+
+* **cache:** support javascript source map files ([5ec82f20](https://github.com/Elgg/Elgg/commit/5ec82f204e9a9830655dd337d77d355171605633))
+* **uservalidationbyemail:** corrected error in EN language file ([5e5adca4](https://github.com/Elgg/Elgg/commit/5e5adca4fa63c94da6dad2c9f403a1cae3ae6c77))
+* **webservices:** implement missing cache functions ([deba4203](https://github.com/Elgg/Elgg/commit/deba42037777a4c6d34a62bb882012e7a98fdc2c))
+
+
+<a name="3.3.7"></a>
+### 3.3.7  (2020-06-30)
+
+#### Contributors
+
+* Jeroen Dalsem (2)
+* Jerôme Bakker (2)
+* RiverVanRain (1)
+* Team Webgalli (1)
+
+#### Documentation
+
+* **webservices:** how to generate HMAC headers for authentication ([1a74457f](https://github.com/Elgg/Elgg/commit/1a74457fc5e6a2ef70cb2a563b2b2476b2c68d0e))
+
+
+#### Bug Fixes
+
+* **comments:**
+  * allow group owners to edit comments in their group ([835478f8](https://github.com/Elgg/Elgg/commit/835478f8d6e0ed4f00437bf6f1a9d5c885b2a473))
+  * use correct logic to apply default comments list length ([c556969e](https://github.com/Elgg/Elgg/commit/c556969e29f41977163a775a192f7bf939804740))
+* **css:** admin menu header ([01e72dd1](https://github.com/Elgg/Elgg/commit/01e72dd1cf49c4ba8eb3c57e126efa9be8d2253a))
+* **navigation:** allow configuration of max display items site menu ([cbede32e](https://github.com/Elgg/Elgg/commit/cbede32e168b9a309c133274b3d70de81a7afe78))
+
+
+<a name="3.3.6"></a>
+### 3.3.6  (2020-05-29)
+
+#### Contributors
+
+* Jerôme Bakker (5)
+* Jeroen Dalsem (3)
+
+#### Performance
+
+* **likes:** bulk delete likes annotations on entity delete ([0b1d536c](https://github.com/Elgg/Elgg/commit/0b1d536c12b07e9c5dc7976c01344415ebf9790d))
+
+
+#### Bug Fixes
+
+* **db:** default case_sensitive not applied for single pair in root ([1ecd214c](https://github.com/Elgg/Elgg/commit/1ecd214c7668459688223c00faa60c0c6e5a87c0))
+* **notifications:** only register group menu item if member of group ([a3a707ef](https://github.com/Elgg/Elgg/commit/a3a707efdcc2b77c63e7101090f3cdb89801025a))
+* **redis:** admin information page now works if authorized ([7db8bbd8](https://github.com/Elgg/Elgg/commit/7db8bbd8854cfc07c48cec74e296dbabf6fd8e91))
+
+
+<a name="3.3.5"></a>
+### 3.3.5  (2020-05-15)
+
+#### Contributors
+
+* Jerôme Bakker (6)
+* RiverVanRain (2)
+* Dennis Ploeger (1)
+* Jeroen Dalsem (1)
+
+#### Features
+
+* **cli:** Adds a --refresh option to the list command (#13201) ([eed99bfa](https://github.com/Elgg/Elgg/commit/eed99bfa660b03875de21fe4780a2a1e688beabf))
+
+
+#### Bug Fixes
+
+* **file:**
+  * validate uploaded file for new files ([a3f4ed52](https://github.com/Elgg/Elgg/commit/a3f4ed52b8305d9e7ad40cd1d282333354a67b32))
+  * correctly remove icons when updating a file ([d215defa](https://github.com/Elgg/Elgg/commit/d215defaface1cb4748209b69cd09c6ccee92b5b))
+* **friends_collection:** display menu items correctly in full view ([b170b1f4](https://github.com/Elgg/Elgg/commit/b170b1f48928059884defc4ced71b9bc525cfac4))
+* **input:** no longer use double submit prevention on widget edit forms ([ced827d5](https://github.com/Elgg/Elgg/commit/ced827d51126918126bd26a0214b7e28c5531d17))
+* **mail:** improved handling of email recipients name formatting ([ff8a425a](https://github.com/Elgg/Elgg/commit/ff8a425ac5d3ddb6942d9d8026d0a8f294c4f89a))
+* **plugins:** disabled plugins should not get a priority ([b856c449](https://github.com/Elgg/Elgg/commit/b856c4496f3d72b5b3f3cd9be20fe6764a5235ba))
+* **views:** prevent PHP notice during registering views ([6b1bf6e4](https://github.com/Elgg/Elgg/commit/6b1bf6e4242bd150669116eeaaa675e94fa8aaaa))
+
+
+<a name="3.3.4"></a>
+### 3.3.4  (2020-04-24)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+* Jeroen Dalsem (1)
+
+#### Bug Fixes
+
+* **core:**
+  * use correct input for password reset ([5ceaed52](https://github.com/Elgg/Elgg/commit/5ceaed5210b2270f234c74c44a30df824162eba1))
+  * log exceptions by default ([3d085449](https://github.com/Elgg/Elgg/commit/3d0854490bd7e1a20e6a1ab72dc04bf5822ae692))
+* **developers:** remove entity button in explorer now works ([fed4809a](https://github.com/Elgg/Elgg/commit/fed4809ac389eab149bf4dc3f2ed2bde052367d6))
+* **logger:** correctly support legacy value 'OFF' ([df80433c](https://github.com/Elgg/Elgg/commit/df80433c6a6f64066ad7dcb5b4b002bdf3be7fc0))
+
+
 <a name="3.3.3"></a>
 ### 3.3.3  (2020-03-27)
 
@@ -1780,6 +1903,13 @@ var `$DEFAULT_FILE_STORE`.
  ([618c79d3](https://github.com/Elgg/Elgg/commit/618c79d301eda1b265441b14f3bfbda2235ee3fd))
 * The `resources/file/download` view is no longer used. ([1e736aeb](https://github.com/Elgg/Elgg/commit/1e736aebb953051ec1b8a2c165ab3c9595e72b40))
 
+
+<a name="2.3.15"></a>
+### 2.3.15  (2020-06-25)
+
+#### Contributors
+
+* Jerôme Bakker (2)
 
 <a name="2.3.14"></a>
 ### 2.3.14  (2019-07-24)

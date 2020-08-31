@@ -983,7 +983,7 @@ See the full list of users here:
 
 	'admin:configure_utilities:menu_items' => 'Menyobjekt',
 	'admin:menu_items:configure' => 'Configure main menu items',
-	'admin:menu_items:description' => 'Select which menu items you want to show as featured links.  Unused items will be added as "More" at the end of the list.',
+	'admin:menu_items:description' => 'Select the order of site menu items. Unconfigured items will be added to the end of the list.',
 	'admin:menu_items:hide_toolbar_entries' => 'Remove links from tool bar menu?',
 	'admin:menu_items:saved' => 'Menu items saved.',
 	'admin:add_menu_item' => 'Add a custom menu item',
@@ -1757,6 +1757,7 @@ För att visa %ss profil, tryck här:
 	
 	'cli:plugins:list:description' => "List all plugins installed on the site",
 	'cli:plugins:list:option:status' => "Plugin status ( %s )",
+	'cli:plugins:list:option:refresh' => "Refresh plugin list with recently installed plugins",
 	'cli:plugins:list:error:status' => "%s är inte en giltig status. Tillåtna alternativ är: %s",
 	
 	'cli:simpletest:description' => "Run simpletest test suite (deprecated)",

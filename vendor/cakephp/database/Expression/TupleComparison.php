@@ -24,6 +24,13 @@ use Cake\Database\ValueBinder;
 class TupleComparison extends Comparison
 {
     /**
+     * The type to be used for casting the value to a database representation
+     *
+     * @var array
+     */
+    protected $_type;
+
+    /**
      * Constructor
      *
      * @param string|array|\Cake\Database\ExpressionInterface $fields the fields to use to form a tuple
@@ -134,19 +141,19 @@ class TupleComparison extends Comparison
      *
      * Callback function receives as its only argument an instance of an ExpressionInterface
      *
-     * @param callable $callable The callable to apply to sub-expressions
+     * @param callable $visitor The callable to apply to sub-expressions
      * @return void
      */
-    public function traverse(callable $callable)
+    public function traverse(callable $visitor)
     {
         foreach ($this->getField() as $field) {
-            $this->_traverseValue($field, $callable);
+            $this->_traverseValue($field, $visitor);
         }
 
         $value = $this->getValue();
         if ($value instanceof ExpressionInterface) {
-            $callable($value);
-            $value->traverse($callable);
+            $visitor($value);
+            $value->traverse($visitor);
 
             return;
         }
@@ -154,10 +161,10 @@ class TupleComparison extends Comparison
         foreach ($value as $i => $val) {
             if ($this->isMulti()) {
                 foreach ($val as $v) {
-                    $this->_traverseValue($v, $callable);
+                    $this->_traverseValue($v, $visitor);
                 }
             } else {
-                $this->_traverseValue($val, $callable);
+                $this->_traverseValue($val, $visitor);
             }
         }
     }

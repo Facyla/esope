@@ -8,6 +8,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and this 
 repository that is by invitation only. You will get a 404 - Not Found if you do
 not have access**
 
+## [5.14.0](https://github.com/FortAwesome/Font-Awesome/releases/tag/5.14.0) - 2020-07-15
+
+**Minor version upgrade notice: there are some backward-incompatible changes to this release. See the
+[UPGRADING.md guide](https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/UPGRADING.md) for more
+information.**
+
+### Fixed
+
+* Corrected rendering issue with the tripadvisor brand icon in Windows 10 FortAwesome/Font-Awesome#16817
+* Corrected unicode values that were outside the Unicode Private Use Area (PUA) FortAwesome/Font-Awesome#16804
+
+---
+
+## [5.13.1](https://github.com/FortAwesome/Font-Awesome/releases/tag/5.13.1) - 2020-06-18
+
+### Added
+
+* New brand icons deezer, edge-legacy, google-pay, rust, tiktok, and unsplash
+* Icons sink, users-slash, bacteria, and bacterium added to Font Awesome Free
+
+### Changed
+
+* Updated brand icons bandcamp, google-plus, tripadvisor, and yahoo
+
+### Fixed
+
+* Icon hand-holding-water missing 5.13.0 in its versions
+
+---
+
 ## [5.13.0](https://github.com/FortAwesome/Font-Awesome/releases/tag/5.13.0) - 2020-03-23
 
 ### Added
