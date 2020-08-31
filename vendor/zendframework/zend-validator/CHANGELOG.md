@@ -2,6 +2,59 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.12.2 - 2019-10-29
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#277](https://github.com/zendframework/zend-validator/pull/277) fixes `File\Hash` validator in case
+  when the file hash contains only digits.
+
+- [#277](https://github.com/zendframework/zend-validator/pull/277) fixes `File\Hash` validator to match 
+  hash with the given hashing algorithm.
+
+## 2.12.1 - 2019-10-12
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#272](https://github.com/zendframework/zend-validator/pull/272) changes
+  curly braces in array and string offset access to square brackets
+  in order to prevent issues under the upcoming PHP 7.4 release.
+
+- [#231](https://github.com/zendframework/zend-validator/pull/231) fixes validation of input hashes in `Zend\Validator\File\Hash` validator when provided as array.
+  Only string hashes are allowed. If different type is provided `Zend\Validator\Exception\InvalidArgumentException` is thrown.
+
 ## 2.12.0 - 2019-01-30
 
 ### Added

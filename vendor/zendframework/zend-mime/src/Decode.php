@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-mime for the canonical source repository
+ * @copyright Copyright (c) 2005-2019 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-mime/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Mime;
@@ -72,7 +70,7 @@ class Decode
     public static function splitMessageStruct($message, $boundary, $EOL = Mime::LINEEND)
     {
         $parts = static::splitMime($message, $boundary);
-        if (count($parts) <= 0) {
+        if (! $parts) {
             return;
         }
         $result = [];
@@ -80,8 +78,10 @@ class Decode
         $body    = null; // "Declare" variable before the first usage "for reading"
         foreach ($parts as $part) {
             static::splitMessage($part, $headers, $body, $EOL);
-            $result[] = ['header' => $headers,
-                              'body'   => $body    ];
+            $result[] = [
+                'header' => $headers,
+                'body'   => $body,
+            ];
         }
         return $result;
     }
@@ -96,7 +96,7 @@ class Decode
      * @param  Headers         $headers output param, headers container
      * @param  string          $body    output param, content of message
      * @param  string          $EOL EOL string; defaults to {@link Zend\Mime\Mime::LINEEND}
-     * @param  bool         $strict  enable strict mode for parsing message
+     * @param  bool            $strict  enable strict mode for parsing message
      * @return null
      */
     public static function splitMessage($message, &$headers, &$body, $EOL = Mime::LINEEND, $strict = false)
@@ -108,7 +108,7 @@ class Decode
         $firstlinePos = strpos($message, "\n");
         $firstline = $firstlinePos === false ? $message : substr($message, 0, $firstlinePos);
         if (! preg_match('%^[^\s]+[^:]*:%', $firstline)) {
-            $headers = [];
+            $headers = new Headers();
             // TODO: we're ignoring \r for now - is this function fast enough and is it safe to assume noone needs \r?
             $body = str_replace(["\r", "\n"], ['', $EOL], $message);
             return;
