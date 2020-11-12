@@ -4,20 +4,18 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
+class ComposerStaticInit83a91e3dcbb616a511a71ea6fb9e1654
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '72142d7b40a3a0b14e91825290b5ad82' => __DIR__ . '/..' . '/cakephp/core/functions.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         '028fdea3165c4ba1ecccc83b7fec69fc' => __DIR__ . '/..' . '/cakephp/collection/functions.php',
         '948ad5488880985ff1c06721a4e447fe' => __DIR__ . '/..' . '/cakephp/utility/bootstrap.php',
         'bc8d758335d4e980187df1bfef1c8f49' => __DIR__ . '/..' . '/css-crush/css-crush/lib/functions.php',
         'bbf73f3db644d3dced353b837903e74c' => __DIR__ . '/..' . '/php-di/php-di/src/DI/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
-        'e277be14c90068cf94faed2c43dbe6d8' => __DIR__ . '/..' . '/symfony/polyfill-php71/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
     );
@@ -40,8 +38,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Php72\\' => 23,
-            'Symfony\\Polyfill\\Php71\\' => 23,
-            'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
@@ -94,6 +90,10 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'F' => 
         array (
             'Faker\\' => 6,
+        ),
+        'E' => 
+        array (
+            'Elgg\\' => 5,
         ),
         'D' => 
         array (
@@ -152,14 +152,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Symfony\\Polyfill\\Php72\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
-        ),
-        'Symfony\\Polyfill\\Php71\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php71',
-        ),
-        'Symfony\\Polyfill\\Php70\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php70',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -273,6 +265,10 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
         ),
+        'Elgg\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg',
+        ),
         'Doctrine\\DBAL\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL',
@@ -344,13 +340,8 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         ),
     );
 
-    public static $fallbackDirsPsr0 = array (
-        0 => __DIR__ . '/..' . '/elgg/elgg/engine/classes',
-    );
-
     public static $classMap = array (
-        'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
-        'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'CSSmin' => __DIR__ . '/..' . '/mrclay/minify/min/lib/CSSmin.php',
         'Cake\\Cache\\Cache' => __DIR__ . '/..' . '/cakephp/cache/Cache.php',
         'Cake\\Cache\\CacheEngine' => __DIR__ . '/..' . '/cakephp/cache/CacheEngine.php',
@@ -748,7 +739,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'DI\\Scope' => __DIR__ . '/..' . '/php-di/php-di/src/DI/Scope.php',
         'DataFormatException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/DataFormatException.php',
         'DatabaseException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/DatabaseException.php',
-        'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
         'Doctrine\\Common\\Cache\\ApcCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ApcCache.php',
         'Doctrine\\Common\\Cache\\ApcuCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ApcuCache.php',
         'Doctrine\\Common\\Cache\\ArrayCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ArrayCache.php',
@@ -774,7 +764,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Doctrine\\Common\\Cache\\PhpFileCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/PhpFileCache.php',
         'Doctrine\\Common\\Cache\\PredisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/PredisCache.php',
         'Doctrine\\Common\\Cache\\RedisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RedisCache.php',
-        'Doctrine\\Common\\Cache\\RiakCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RiakCache.php',
         'Doctrine\\Common\\Cache\\SQLite3Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/SQLite3Cache.php',
         'Doctrine\\Common\\Cache\\Version' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Version.php',
         'Doctrine\\Common\\Cache\\VoidCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/VoidCache.php',
@@ -804,6 +793,7 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Doctrine\\DBAL\\Driver\\AbstractPostgreSQLDriver' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractPostgreSQLDriver.php',
         'Doctrine\\DBAL\\Driver\\AbstractSQLAnywhereDriver' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractSQLAnywhereDriver.php',
         'Doctrine\\DBAL\\Driver\\AbstractSQLServerDriver' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractSQLServerDriver.php',
+        'Doctrine\\DBAL\\Driver\\AbstractSQLServerDriver\\PortWithoutHost' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractSQLServerDriver/PortWithoutHost.php',
         'Doctrine\\DBAL\\Driver\\AbstractSQLiteDriver' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractSQLiteDriver.php',
         'Doctrine\\DBAL\\Driver\\Connection' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/Connection.php',
         'Doctrine\\DBAL\\Driver\\DriverException' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/DriverException.php',
@@ -814,6 +804,7 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Doctrine\\DBAL\\Driver\\IBMDB2\\DB2Driver' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/IBMDB2/DB2Driver.php',
         'Doctrine\\DBAL\\Driver\\IBMDB2\\DB2Exception' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/IBMDB2/DB2Exception.php',
         'Doctrine\\DBAL\\Driver\\IBMDB2\\DB2Statement' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/IBMDB2/DB2Statement.php',
+        'Doctrine\\DBAL\\Driver\\IBMDB2\\DataSourceName' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/IBMDB2/DataSourceName.php',
         'Doctrine\\DBAL\\Driver\\Mysqli\\Driver' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/Mysqli/Driver.php',
         'Doctrine\\DBAL\\Driver\\Mysqli\\MysqliConnection' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/Mysqli/MysqliConnection.php',
         'Doctrine\\DBAL\\Driver\\Mysqli\\MysqliException' => __DIR__ . '/..' . '/doctrine/dbal/lib/Doctrine/DBAL/Driver/Mysqli/MysqliException.php',
@@ -1328,7 +1319,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Elgg\\PluginHooksService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/PluginHooksService.php',
         'Elgg\\Profilable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profilable.php',
         'Elgg\\Profiler' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profiler.php',
-        'Elgg\\Project\\CodeStyle' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/CodeStyle.php',
         'Elgg\\Project\\Paths' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/Paths.php',
         'Elgg\\Queue\\DatabaseQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/DatabaseQueue.php',
         'Elgg\\Queue\\MemoryQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/MemoryQueue.php',
@@ -1409,7 +1399,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Elgg\\WalledGardenException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/WalledGardenException.php',
         'Elgg\\WidgetDefinition' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/WidgetDefinition.php',
         'Elgg\\WidgetsService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/WidgetsService.php',
-        'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Inn.php',
@@ -2226,7 +2215,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'MrClay\\Cli' => __DIR__ . '/..' . '/mrclay/minify/min/lib/MrClay/Cli.php',
         'MrClay\\Cli\\Arg' => __DIR__ . '/..' . '/mrclay/minify/min/lib/MrClay/Cli/Arg.php',
         'NotificationException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/NotificationException.php',
-        'ParseError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
         'Phinx\\Config\\Config' => __DIR__ . '/..' . '/robmorgan/phinx/src/Phinx/Config/Config.php',
         'Phinx\\Config\\ConfigInterface' => __DIR__ . '/..' . '/robmorgan/phinx/src/Phinx/Config/ConfigInterface.php',
         'Phinx\\Config\\NamespaceAwareInterface' => __DIR__ . '/..' . '/robmorgan/phinx/src/Phinx/Config/NamespaceAwareInterface.php',
@@ -2335,7 +2323,6 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'React\\Promise\\UnhandledRejectionException' => __DIR__ . '/..' . '/react/promise/src/UnhandledRejectionException.php',
         'RegistrationException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/RegistrationException.php',
         'SecurityException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/SecurityException.php',
-        'SessionUpdateTimestampHandlerInterface' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
         'Stash\\DriverList' => __DIR__ . '/..' . '/tedivm/stash/src/Stash/DriverList.php',
         'Stash\\Driver\\AbstractDriver' => __DIR__ . '/..' . '/tedivm/stash/src/Stash/Driver/AbstractDriver.php',
         'Stash\\Driver\\Apc' => __DIR__ . '/..' . '/tedivm/stash/src/Stash/Driver/Apc.php',
@@ -2721,15 +2708,12 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
         'Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
         'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
-        'Symfony\\Polyfill\\Php70\\Php70' => __DIR__ . '/..' . '/symfony/polyfill-php70/Php70.php',
-        'Symfony\\Polyfill\\Php71\\Php71' => __DIR__ . '/..' . '/symfony/polyfill-php71/Php71.php',
         'Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/..' . '/symfony/polyfill-php72/Php72.php',
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'TrueBV\\Exception\\DomainOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/DomainOutOfBoundsException.php',
         'TrueBV\\Exception\\LabelOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/LabelOutOfBoundsException.php',
         'TrueBV\\Exception\\OutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/OutOfBoundsException.php',
         'TrueBV\\Punycode' => __DIR__ . '/..' . '/true/punycode/src/Punycode.php',
-        'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'Zend\\Loader\\AutoloaderFactory' => __DIR__ . '/..' . '/zendframework/zend-loader/src/AutoloaderFactory.php',
@@ -3046,11 +3030,10 @@ class ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit9c92a4b88aeff600e92b05daca9b20ed::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit83a91e3dcbb616a511a71ea6fb9e1654::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit83a91e3dcbb616a511a71ea6fb9e1654::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit83a91e3dcbb616a511a71ea6fb9e1654::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit83a91e3dcbb616a511a71ea6fb9e1654::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,3 +1,59 @@
+<a name="3.3.12"></a>
+### 3.3.12  (2020-10-30)
+
+#### Contributors
+
+* Jeroen Dalsem (4)
+* Jerôme Bakker (1)
+* Nikolai Shcherbin (1)
+* RiverVanRain (1)
+
+#### Bug Fixes
+
+* **admin:** invalid admin section should report 404 not found ([bd4eb40f](https://github.com/Elgg/Elgg/commit/bd4eb40f7c6c9de10c057ff8c2b60b7d36047cd9))
+* **developers:** do not log to screen in cli ([b1a06491](https://github.com/Elgg/Elgg/commit/b1a06491ff17e4246e781f0b49a43c62821b9570))
+* **github:** make sure we use composer v1 during codecoverage tests ([25022dfd](https://github.com/Elgg/Elgg/commit/25022dfda1b66eda9420191db314f2ffd9d02503))
+* **river:** "created", "river" event trigger regression ([718d79c8](https://github.com/Elgg/Elgg/commit/718d79c8d2f82e2333b48c461a71d6823bb65b26))
+* **widgets:** content widget shows correct owner content ([c3c663d3](https://github.com/Elgg/Elgg/commit/c3c663d3de152e8cc7607be5af2ba84730e83dda))
+
+
+<a name="3.3.11"></a>
+### 3.3.11  (2020-10-02)
+
+#### Contributors
+
+* Jeroen Dalsem (3)
+* Jerôme Bakker (1)
+
+#### Bug Fixes
+
+* **core:** do not save session for serve-file and CLI requests ([cf8ee303](https://github.com/Elgg/Elgg/commit/cf8ee30333d99f3ede516bd54fca135094332fbc))
+* **database:** use compatible DBAL version ([c5ca05f1](https://github.com/Elgg/Elgg/commit/c5ca05f1bb3300b41dfaff181f531468cd606a30))
+* **likes:** comment listings are now correctly preloaded with likes info ([f348802a](https://github.com/Elgg/Elgg/commit/f348802a2452284d632d5ecfcbf6ffc21e3d8e35))
+* **session:** correctly set httponly flag for remember_me cookie ([91034947](https://github.com/Elgg/Elgg/commit/910349475b0c626c42156fcfeccb17ccec1f99b1))
+
+
+<a name="3.3.10"></a>
+### 3.3.10  (2020-09-04)
+
+#### Contributors
+
+* Jerôme Bakker (12)
+* Team Webgalli (1)
+
+#### Features
+
+* **htaccess:** added hardening rules to prevent file access ([08ea7f7a](https://github.com/Elgg/Elgg/commit/08ea7f7a8ec41c9a844187b5209822236c8aafe2))
+
+
+#### Bug Fixes
+
+* **comments:** validate canComment in comments save action ([883be474](https://github.com/Elgg/Elgg/commit/883be4742d33e79f8bf05d8df4b56e9218c84fca))
+* **composer:** define correct autoload namespace ([6f874ae2](https://github.com/Elgg/Elgg/commit/6f874ae2bf43b3f9751fe34d4e1d8eba509372c6))
+* **developers:** inspect annotations menu no longer crashes ([096118a7](https://github.com/Elgg/Elgg/commit/096118a7a57151715c01a3af30aa5c35fd15c05b))
+* **uservalidationbyemail:** show correct login error message ([db3cddd6](https://github.com/Elgg/Elgg/commit/db3cddd6c7a186ed661efbdd11e4364dc723a1c9))
+
+
 <a name="3.3.9"></a>
 ### 3.3.9  (2020-08-17)
 
