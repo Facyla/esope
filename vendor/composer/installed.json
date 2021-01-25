@@ -1302,7 +1302,7 @@
                 "elgg",
                 "plugin"
             ],
-            "install-path": "../elgg/login_as"
+            "install-path": "../../mod/login_as"
         },
         {
             "name": "fzaninotto/faker",

@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'adfcd447eb7ecb89edaf93e2c5faab178f1580eb',
+    'reference' => '5077004aef9666abc1dc774110d2427d2aa1d9ed',
     'name' => 'elgg/starter-project',
   ),
   'versions' => 
@@ -282,7 +282,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'adfcd447eb7ecb89edaf93e2c5faab178f1580eb',
+      'reference' => '5077004aef9666abc1dc774110d2427d2aa1d9ed',
     ),
     'fzaninotto/faker' => 
     array (
