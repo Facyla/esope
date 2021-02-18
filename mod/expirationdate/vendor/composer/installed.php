@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5077004aef9666abc1dc774110d2427d2aa1d9ed',
+    'reference' => 'e1eeaf13eddf31a98daf39df05ce2ff5fa0f90fb',
     'name' => 'iionly/expirationdate',
   ),
   'versions' => 
@@ -27,7 +27,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5077004aef9666abc1dc774110d2427d2aa1d9ed',
+      'reference' => 'e1eeaf13eddf31a98daf39df05ce2ff5fa0f90fb',
     ),
     'roundcube/plugin-installer' => 
     array (

@@ -1,15 +1,5 @@
 <?php
 
-
-
-
-
-
-
-
-
-
-
 namespace Composer;
 
 use Composer\Semver\VersionParser;
@@ -24,24 +14,24 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => 'v5.0.2',
-    'version' => '5.0.2.0',
+    'pretty_version' => 'dev-esope_3.3',
+    'version' => 'dev-esope_3.3',
     'aliases' => 
     array (
     ),
-    'reference' => '6cc7efdd793705107a78511d1d2dc2adb94ad03a',
+    'reference' => 'e1eeaf13eddf31a98daf39df05ce2ff5fa0f90fb',
     'name' => 'coldtrick/poll',
   ),
   'versions' => 
   array (
     'coldtrick/poll' => 
     array (
-      'pretty_version' => 'v5.0.2',
-      'version' => '5.0.2.0',
+      'pretty_version' => 'dev-esope_3.3',
+      'version' => 'dev-esope_3.3',
       'aliases' => 
       array (
       ),
-      'reference' => '6cc7efdd793705107a78511d1d2dc2adb94ad03a',
+      'reference' => 'e1eeaf13eddf31a98daf39df05ce2ff5fa0f90fb',
     ),
     'composer/installers' => 
     array (
