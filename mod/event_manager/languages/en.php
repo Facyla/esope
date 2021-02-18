@@ -38,6 +38,10 @@ return array(
 	'event_manager:calendar:week' => 'Week',
 	'event_manager:calendar:day' => 'Day',
 	
+	'event_manager:list:filter:tags' => 'Filtered by tag %s',
+	'event_manager:list:more' => 'More events',
+	'event_manager:list:more:with_tag' => 'More events with tag %s',
+
 	'event_manager:list:live' => 'Live events',
 	'event_manager:list:upcoming' => 'Upcoming events',
 	'event_manager:list:group:title' => 'Group events',
@@ -46,9 +50,6 @@ return array(
 	'event_manager:list:navigation:live' => 'Live',
 	'event_manager:list:navigation:upcoming' => 'Upcoming',
 	'event_manager:list:navigation:calendar' => 'Calendar',
-	'event_manager:list:navigation:other' => 'Other events',
-	'event_manager:list:navigation:your' => 'Your events',
-	'event_manager:list:navigation:attending' => 'Attending events',
 	'event_manager:list:navigation:onthemap' => 'On the map',
 	
 	'event_manager:owner:title' => '%s\'s events',
@@ -320,6 +321,8 @@ Someone signed off from the '%s' event (%s). You are moved from the waiting list
 	// widgets
 	'widgets:events:name' => 'Events',
 	'widgets:events:description' => 'Show upcoming events',
+	'widgets:events:tag_filter' => 'Tag filter',
+	'widgets:events:tag_filter:help' => 'Enter a optional tag to filter the contents',
 
 	'widgets:events:showevents:status' => 'Event status',
 	'widgets:events:showevents' => 'Show events',
@@ -386,8 +389,11 @@ Someone signed off from the '%s' event (%s). You are moved from the waiting list
 	'event_manager:settings:migration:group:whocancreate:members' => 'any group member',
 	'event_manager:settings:migration:group:whocancreate:no_one' => 'no one',
 	
+	'event_manager:settings:add_event' => 'AddEvent settings',
 	'event_manager:settings:add_event_to_calendar' => 'Show "add to calendar" button on event page',
 	'event_manager:settings:add_event_to_calendar:help' => 'This will also include the links in notification e-mails',
+	'event_manager:settings:add_event_to_calendar:attendee_only' => 'Only for attendees',
+	'event_manager:settings:add_event:service' => 'Enable the service: %s',
 
 	// unsubscribe from event
 	'event_manager:unsubscribe:title' => "Unsubscribe from: %s",
@@ -455,7 +461,10 @@ If you didn't register for this event, you can ignore this email or click on the
 	'event_manager:addevent:mail:title' => 'Add to calendar',
 	'event_manager:addevent:mail:service:appleical' => 'Apple',
 	'event_manager:addevent:mail:service:google' => 'Google',
+	'event_manager:addevent:mail:service:office365' => 'Office365',
 	'event_manager:addevent:mail:service:outlook' => 'Outlook',
 	'event_manager:addevent:mail:service:outlookcom' => 'Outlook.com',
 	'event_manager:addevent:mail:service:yahoo' => 'Yahoo',
+	
+	'event_manager:popup:event_link' => 'Go to the event',
 );

@@ -1,6 +1,22 @@
 Version history
 ===============
 
+8.2.2 (2020-11-11):
+
+- fixed: blog widget content
+
+8.2.1 (2020-04-22):
+
+- fixed: blog tag page is now case insensitive
+
+8.2 (2019-11-26):
+
+- added: blog tag listing page
+
+8.1.1 (2019-09-30):
+
+- several small chores/fixes
+
 8.1 (2019-08-22):
 
 - added: re-enabled publication options

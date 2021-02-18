@@ -1,8 +1,28 @@
-define(['jquery', 'elgg', 'fullcalendar'], function($, elgg) {
-
+define(function(require) {
+	var $ = require('jquery');
+	var elgg = require('elgg');
+	var Ajax = require('elgg/Ajax');
+	
+	require('fullcalendar');
+	
 	var init = function() {
 		$('#event-manager-event-calendar').fullCalendar({
-			events: elgg.normalize_url('ajax/view/event_manager/calendar?view=json&container_guid=' + elgg.get_page_owner_guid()),
+			events: function(start, end, timezone, callback) {
+				var ajax = new Ajax();
+				var wrapper_data = $('#event-manager-event-calendar-wrapper').data();
+				
+				var events = ajax.view('event_manager/calendar', {
+					data: {
+						view: 'json',
+						start: start.toString(),
+						end: end.toString(),
+						...wrapper_data
+					},
+					success: function(result) {
+						callback(result);
+					}
+				});
+			},
 			header: {
 				left: 'prev,next today',
 				center: 'title',
@@ -16,6 +36,19 @@ define(['jquery', 'elgg', 'fullcalendar'], function($, elgg) {
 				month: elgg.echo('event_manager:calendar:month'),
 				week: elgg.echo('event_manager:calendar:week'),
 				day: elgg.echo('event_manager:calendar:day')
+			},
+			eventClick: function(info) {
+				if (!info.guid) {
+					return;
+				}
+				
+				require(['elgg/lightbox'], function(lightbox) {
+					lightbox.open({
+						'href': elgg.normalize_url('ajax/view/event_manager/event/popup?guid=' + info.guid),
+					});
+				});
+				
+				return false;
 			}
 		});
 	};

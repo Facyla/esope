@@ -1,24 +1,33 @@
 {
-    "name": "iionly/poll",
-    "description": "Poll plugin for site-wide and group-specific polls.",
-    "type": "elgg-plugin",
-    "keywords": [
-        "elgg",
-        "plugin"
-    ],
-    "homepage": "https://github.com/iionly/poll",
-    "license": "GPL-2.0",
-    "authors": [
-        {
-            "name": "iionly",
-            "homepage": "https://github.com/iionly",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-            "issues": "https://github.com/iionly/poll/issues"
-    },
-    "require": {
-        "composer/installers": ">=1.0.8"
-    }
+	"name": "coldtrick/poll",
+	"description": "Adds basic poll functionality to your Elgg website",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "poll"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/poll",
+		"issues": "https://github.com/ColdTrick/poll/issues"
+	},
+	"require": {
+		"composer/installers": "^1.0.8",
+		"npm-asset/chart.js": "~2.7.3"
+	},
+	"require-dev": {
+		"coldtrick/sniffs": "dev-master",
+		"coldtrick/releases": "dev-master"
+	},
+	"conflict": {
+		"elgg/elgg": "<3.3"
+	},
+	"repositories": [
+		{
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+		}
+	],
+	"config": {
+		"fxp-asset": {
+            "enabled": false
+		}
+	}
 }

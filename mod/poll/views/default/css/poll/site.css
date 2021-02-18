@@ -1,0 +1,44 @@
+.poll-edit-answers > li > table {
+	width: 100%;
+}
+
+.poll-edit-answers-name {
+	width: 200px;
+}
+
+.poll-edit-answers-icon {
+	width: 20px;
+	vertical-align: middle;
+}
+
+.poll-edit-answers-icon .elgg-icon {
+	cursor: pointer;
+}
+
+.poll-edit-answers-blank .poll-edit-answers-icon .elgg-icon {
+	display: none;
+}
+
+.poll-content {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.poll-result-chart-wrapper {
+	position: relative;
+}
+
+.poll-bar-legend .elgg-image-block {
+	padding: 0;
+}
+.poll-bar-legend-item {
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+}
+
+.poll-result-chart {
+	max-width: 600px;
+	max-height: 300px;
+	margin: 0 auto;
+}

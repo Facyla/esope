@@ -1,8 +1,10 @@
 <?php
 
+use Elgg\EntityNotFoundException;
+
 $user = elgg_get_page_owner_entity();
 if (!$user instanceof \ElggUser) {
-	forward('', '404');
+	throw new EntityNotFoundException();
 }
 
 elgg_register_title_button('event', 'add', 'object', \Event::SUBTYPE);
@@ -16,18 +18,18 @@ if ($user->guid === elgg_get_logged_in_user_guid()) {
 	$filter_value = 'mine';
 }
 
-$content = elgg_list_entities([
-	'type' => 'object',
-	'subtype' => \Event::SUBTYPE,
+$list_type = get_input('list_type', 'list');
+$options = [
 	'owner_guid' => $user->guid,
-	'no_results' => true,
+];
+$content = elgg_view("event_manager/listing/{$list_type}", [
+	'options' => $options,
+	'resource' => 'owner',
+	'page_owner' => $user,
 ]);
 
-$body = elgg_view_layout('default', [
+echo elgg_view_page($title, [
 	'content' => $content,
-	'title' => $title,
 	'filter_value' => $filter_value,
 	'filter_id' => 'events',
 ]);
-
-echo elgg_view_page($title, $body);

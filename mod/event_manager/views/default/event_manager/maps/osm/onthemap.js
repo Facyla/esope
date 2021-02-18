@@ -18,13 +18,15 @@ define(['jquery', 'elgg', 'elgg/Ajax'], function($, elgg, Ajax) {
 			distance_longitude = 360 + distance_longitude;
 		}
 		
+		var canvas_data = $('#event_manager_onthemap_canvas').data();
+		
 		ajax.action('event_manager/maps/data', {
 			data: {
+				...canvas_data,
 				latitude: latitude,
 				longitude: longitude,
 				distance_latitude: distance_latitude,
-				distance_longitude: distance_longitude,
-				container_guid: elgg.get_page_owner_guid()
+				distance_longitude: distance_longitude
 			},
 			success: function(data) {
 				if (!data.markers) {
@@ -36,14 +38,51 @@ define(['jquery', 'elgg', 'elgg/Ajax'], function($, elgg, Ajax) {
 						// already added, so return
 						return;
 					}
+					
+					var custom_icon_options = {
+						iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+						shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+						iconSize: [25, 41],
+						iconAnchor: [12, 41],
+						popupAnchor: [1, -34],
+						shadowSize: [41, 41],
+						...elgg.data.event_manager_osm_icon_default
+					}
+					
+					if (event.iscreator) {
+						custom_icon_options = {
+							...custom_icon_options,
+							...{
+								iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png'
+							},
+							...elgg.data.event_manager_osm_icon_owned
+						}
+					} else {
+						if (event.has_relation) {
+							custom_icon_options = {
+								...custom_icon_options,
+								...{
+									iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png'
+								},
+								...elgg.data.event_manager_osm_icon_attending
+							}
+						}
+					}
 
 					var markerOptions = {
 						lat: event.lat, 
 						lng: event.lng,
+						icon: custom_icon_options
 					};
-					
-					event_map.addMarker(markerOptions).bindPopup(event.html);
-					
+										
+					var marker = event_map.addMarker(markerOptions).on('click', function() {
+						require(['elgg/lightbox'], function(lightbox) {
+							lightbox.open({
+								'href': elgg.normalize_url('ajax/view/event_manager/event/popup?guid=' + event.guid),
+							});
+						});
+					});
+										
 					current_markers[event.guid] = true;
 				});
 			}

@@ -1,10 +1,11 @@
 <?php
-/**
- * Poll river view
- */
 
-$object = $vars['item']->getObjectEntity();
+$item = elgg_extract('item', $vars);
+$entity = $item->getObjectEntity();
+if (!($entity instanceof Poll)) {
+	return;
+}
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $vars['item'],
-));
+$vars['message'] = elgg_get_excerpt($entity->description);
+
+echo elgg_view('river/elements/layout', $vars);

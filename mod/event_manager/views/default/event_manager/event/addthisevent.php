@@ -10,7 +10,7 @@ $location = $event->location ?: $event->venue;
 $start = $event->getStartDate('d/m/Y H:i:00');
 $end = $event->getEndDate('d/m/Y H:i:00');
 
-$title = $event->getDisplayName();
+$title = html_entity_decode($event->getDisplayName());
 
 $description = '';
 if (!empty($event->location)) {
@@ -23,7 +23,7 @@ $description .= $event->getExcerpt(500) . PHP_EOL . PHP_EOL;
 $description .= $event->getURL();
 
 ?>
-<span class="addthisevent">
+<span class="addeventatc" data-styling="none">
 	<?php echo elgg_echo('event_manager:event:menu:title:add_to_calendar'); ?>
 	<div class='hidden'>
 		<span class="start"><?php echo $start; ?></span>

@@ -1,50 +1,40 @@
 <?php
-/**
- * Poll voting form
- */
 
-$poll = $vars['entity'];
-$multiple_hint = "";
-
-if ($poll->max_votes > 1) {
-	$input_type = 'input/checkboxes';
-	$multiple_hint = elgg_echo('poll:max_votes:info', array($poll->max_votes));
-} else {
-	$input_type = 'input/radio';
+$entity = elgg_extract('entity', $vars);
+if (!($entity instanceof Poll)) {
+	return;
 }
 
-$response_input = elgg_view($input_type, array(
-	'name' => 'response',
-	'options' => poll_get_choice_array($poll),
-));
+$answer_options = $entity->getAnswersOptions();
+if (empty($answer_options)) {
+	return;
+}
 
-$submit_input = elgg_view('input/submit', array(
-	'name' => 'submit_vote',
-	'value' => elgg_echo('poll:vote'),
-	'class' => 'elgg-button-submit poll-vote-button',
-	'rel' => $poll->guid,
-));
+// in case the user already voted
+$answer_value = null;
+$vote = $entity->getVote();
+if ($vote !== false) {
+	$answer_value = $vote;
+}
 
-$guid_input = elgg_view('input/hidden', array(
+// voting options
+echo elgg_view_field([
+	'#type' => 'radio',
+	'#label' => elgg_echo('poll:vote:title'),
+	'name' => 'vote',
+	'options' => $answer_options,
+	'value' => $answer_value,
+]);
+
+echo elgg_view_field([
+	'#type' => 'hidden',
 	'name' => 'guid',
-	'value' => $poll->guid,
-));
+	'value' => $entity->guid,
+]);
 
-$callback_input = elgg_view('input/hidden', array(
-	'name' => 'callback',
-	'value' => $vars['callback'],
-));
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => elgg_echo('poll:vote'),
+]);
 
-echo <<<HTML
-	<div>
-		$response_input
-	</div>
-	<div>
-		$multiple_hint
-	</div>
-	<div>
-		$guid_input
-		$submit_input
-		$callback_input
-	</div>
-HTML;
+elgg_set_form_footer($footer);

@@ -27,7 +27,12 @@ $event_options = [
 	],
 ];
 
-$more_link = elgg_generate_url('collection:object:event:upcoming');
+$tag_filter = $widget->tag ? string_to_tag_array($widget->tag)[0]: null;
+
+$more_link = elgg_generate_url('collection:object:event:upcoming', [
+	'tag' => $tag_filter,
+]);
+
 $group_route_name = 'collection:object:event:group';
 
 if ($widget->event_status === 'live') {
@@ -48,6 +53,14 @@ if ($widget->event_status === 'live') {
 	$group_route_name = 'collection:object:event:live';
 }
 
+if (!empty($tag_filter)) {
+	$event_options['metadata_name_value_pairs'][] = [
+		'name' => 'tags',
+		'value' => $tag_filter,
+		'case_sensitive' => false,
+	];
+}
+
 $owner = $widget->getOwnerEntity();
 
 switch ($widget->context) {
@@ -55,6 +68,7 @@ switch ($widget->context) {
 		$event_options['container_guid'] = $owner->guid;
 		$more_link = elgg_generate_url($group_route_name, [
 			'guid' => $owner->guid,
+			'tag' => $tag_filter,
 		]);
 		break;
 	case 'profile':
@@ -65,6 +79,7 @@ switch ($widget->context) {
 				$event_options['owner_guid'] = $owner->guid;
 				$more_link = elgg_generate_url('collection:object:event:owner', [
 					'username' => $owner->username,
+					'tag' => $tag_filter,
 				]);
 				break;
 			case 'attending':
@@ -74,6 +89,7 @@ switch ($widget->context) {
 				
 				$more_link = elgg_generate_url('collection:object:event:attending', [
 					'username' => $owner->username,
+					'tag' => $tag_filter,
 				]);
 				break;
 		}
@@ -93,7 +109,12 @@ if (empty($content)) {
 
 echo $content;
 
+$more_text = elgg_echo('event_manager:list:more');
+if (!empty($tag_filter)) {
+	$more_text = elgg_echo('event_manager:list:more:with_tag', [$tag_filter]);
+}
+
 echo elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
-	'text' => elgg_echo('event_manager:group:more'),
+	'text' => $more_text,
 	'href' => $more_link,
 ]));

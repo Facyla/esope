@@ -1,309 +1,357 @@
 <?php
-/**
- * Class that represents an object of subtype poll
- */
-class Poll extends ElggObject {
-	const SUBTYPE = "poll";
 
+class Poll extends \ElggObject {
+	
+	const SUBTYPE = 'poll';
+	
 	/**
-	 * @var array $responses Cache for number of responses for each voting choice
-	 */
-	private $responses_by_choice = array();
-
-	/**
-	 * @var int $response_count Total amount of responses
-	 */
-	private $response_count = 0;
-
-	/**
-	 * @var int $voter_count Total amount of voted users
-	 */
-	private $voter_count = 0;
-
-	/**
-	 * Set subtype
+	 * (non-PHPdoc)
+	 * @see ElggObject::initializeAttributes()
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
-
-		$this->attributes['subtype'] = $this::SUBTYPE;
+		
+		$this->attributes['subtype'] = self::SUBTYPE;
 	}
-
+	
 	/**
-	 * Check whether the user has voted in this poll
-	 *
-	 * @param ElggUser $user
-	 * @return boolean
+	 * (non-PHPdoc)
+	 * @see ElggEntity::getURL()
 	 */
-	public function hasVoted($user) {
-		$votes = elgg_get_annotations(array(
-			'guid' => $this->guid,
-			'type' => "object",
-			'subtype' => "poll",
-			'annotation_name' => "vote",
-			'annotation_owner_guid' => $user->guid,
-			'limit' => 1
-		));
-
-		if ($votes) {
-			return true;
-		} else {
+	public function getURL() {
+		return elgg_normalize_url("poll/view/{$this->getGUID()}");
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see ElggObject::canComment()
+	 */
+	public function canComment($user_guid = 0, $default = null) {
+		
+		if ($this->comments_allowed !== 'yes') {
 			return false;
-		}
-	}
-
-	/**
-	 * Get choice objects
-	 *
-	 * @return ElggObject[] $choices
-	 */
-	public function getChoices() {
-		$choices = $this->getEntitiesFromRelationship(array(
-			'relationship' => 'poll_choice',
-			'inverse_relationship' => true,
-			'limit' => false,
-			'order_by_metadata' => array(
-				'name' => 'display_order',
-				'direction' => 'ASC',
-				'as' => 'integer',
-			),
-		));
-
-		if (!$choices) {
-			$choices = array();
-		}
-
-		return $choices;
-	}
-
-	/**
-	 * Delete all choices associated with this poll
-	 */
-	public function deleteChoices() {
-		foreach ($this->getChoices() as $choice) {
-			$choice->delete();
-		}
-	}
-
-	/**
-	 * Delete all votes associated with this poll, reset vote counters and delete associated vote river items
-	 */
-	public function deleteVotes() {
-		$access = elgg_set_ignore_access(true);
-		$access_status = access_get_show_hidden_status();
-		access_show_hidden_entities(true);
-
-		$river_items = new ElggBatch('elgg_get_river', array(
-			'action_type' => 'vote',
-			'object_guid' => $this->guid,
-			'limit' => false,
-			'wheres' => array("rv.view = \"river/object/poll/vote\""),
-		));
-
-		$river_items->setIncrementOffset(false);
-		foreach ($river_items as $river_item) {
-			$river_item->delete();
-		}
-
-		access_show_hidden_entities($access_status);
-		elgg_set_ignore_access($access);
-
-		elgg_delete_annotations(array(
-			'guid' => $this->guid,
-			'type' => "object",
-			'subtype' => "poll",
-			'annotation_name' => "vote",
-		));
-
-		$this->responses_by_choice = array();
-		$this->response_count = 0;
-		$this->voter_count = 0;
-	}
-
-	/**
-	 * Adds poll choices
-	 *
-	 * @param array $choices
-	 */
-	public function setChoices(array $choices) {
-		if (empty($choices)) {
-			return false;
-		}
-
-		$this->deleteChoices();
-
-		// Ignore access (necessary in case a group admin is editing the poll of another group member)
-		$ia = elgg_set_ignore_access(true);
-
-		$i = 0;
-		foreach ($choices as $choice) {
-			$poll_choice = new ElggObject();
-			$poll_choice->owner_guid = $this->owner_guid;
-			$poll_choice->container_guid = $this->container_guid;
-			$poll_choice->subtype = "poll_choice";
-			$poll_choice->text = $choice;
-			$poll_choice->display_order = $i*10;
-			$poll_choice->access_id = $this->access_id;
-			$poll_choice->save();
-
-			add_entity_relationship($poll_choice->guid, 'poll_choice', $this->guid);
-			$i += 1;
-		}
-
-		elgg_set_ignore_access($ia);
-	}
-
-	/**
-	 * Update acccess_id of poll choices to match (changed) access_id of poll
-	 *
-	 */
-	public function updateChoicesAccessID() {
-		// Ignore access (necessary in case a group admin is editing the poll of another group member)
-		$ia = elgg_set_ignore_access(true);
-
-		$choices = $this->getChoices();
-
-		foreach ($choices as $choice) {
-			$choice->access_id = $this->access_id;
-			$choice->save();
-		}
-
-		elgg_set_ignore_access($ia);
-	}
-
-	/**
-	 * Check for changes in poll choices on editing of a poll and update choices if necessary
-	 * If an update is necessary the existing votes get deleted and the vote counters get reset
-	 *
-	 * @param array $choices
-	 */
-	public function updateChoices(array $choices, $former_access_id) {
-		if (empty($choices)) {
-			return false;
-		}
-
-		$choices_changed = false;
-		$old_choices = $this->getChoices();
-
-		if (count($choices) != count($old_choices)) {
-			$choices_changed = true;
-		} else {
-			$i = 0;
-			foreach ($old_choices as $old_choice) {
-				if ($old_choice->text != $choices[$i]) {
-					$choices_changed = true;
-				}
-				$i += 1;
-			}
-		}
-
-		if ($choices_changed) {
-			$this->deleteVotes();
-			$this->setChoices($choices);
-		} else if ($former_access_id != $this->access_id) {
-			$this->updateChoicesAccessID();
 		}
 		
-		return $choices_changed;
+		return parent::canComment($user_guid, $default);
 	}
-
+	
 	/**
-	 * Is the poll open for new votes?
+	 * Get the stored answers
 	 *
-	 * @return boolean
+	 * @return void|array
 	 */
-	public function isOpen() {
-		if (empty($this->close_date)) {
-			// There is no closing date so this poll is always open
-			return true;
-		}
-
-		$now = time();
-
-		// input/date saves beginning of day and we want to include closing date day in poll
-		$deadline = $this->close_date + 86400;
-
-		return $deadline > $now;
+	public function getAnswers() {
+		return @json_decode($this->answers, true);
 	}
-
+	
 	/**
-	 * Fetch and cache amount of responses for each choice
+	 * Get the answers in a way to use in input/radios
 	 *
-	 * Caches the data in form:
-	 *     array(
-	 *         'choice 1' => 5,
-	 *         'choice 2' => 13,
-	 *         'choice 3' => 2,
-	 *     )
+	 * @return array
 	 */
-	private function fetchResponses() {
-		if ($this->responses_by_choice) {
-			return;
+	public function getAnswersOptions() {
+		
+		$answers = $this->getAnswers();
+		if (empty($answers)) {
+			return [];
 		}
-
-		// Make sure choices without responses are included in the result
-		foreach ($this->getChoices() as $choice) {
-			$this->responses_by_choice[$choice->text] = 0;
+		
+		$result = [];
+		foreach ($answers as $answer) {
+			$name = elgg_extract('name', $answer);
+			$label = elgg_extract('label', $answer);
+			
+			$result[$label] = $name;
 		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Get the label assosiated with a answer-name
+	 *
+	 * @param string $answer the answer name
+	 *
+	 * @return false|string
+	 */
+	public function getAnswerLabel($answer) {
+		
+		$answers = $this->getAnswers();
+		if (empty($answers)) {
+			return false;
+		}
+		
+		foreach ($answers as $stored_answer) {
+			$name = elgg_extract('name' , $stored_answer);
+			if ($name !== $answer) {
+				continue;
+			}
+			
+			return elgg_extract('label', $stored_answer);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Check if a user can vote for this poll
+	 *
+	 * @param int $user_guid (optional) user_guid to check, defaults to current user
+	 *
+	 * @return bool
+	 */
+	public function canVote($user_guid = 0) {
+		
+		$user_guid = sanitise_int($user_guid, false);
+		if (empty($user_guid)) {
+			$user_guid = elgg_get_logged_in_user_guid();
+		}
+		
+		if (empty($user_guid)) {
+			return false;
+		}
+		
+		if (!$this->getAnswers()) {
+			return false;
+		}
+		
 
-		// Get responses
-		$responses = new ElggBatch('elgg_get_annotations', array(
-			'guid' => $this->guid,
+		if ($this->getVote() && (elgg_get_plugin_setting('vote_change_allowed', 'poll') !== 'yes')) {
+			return false;
+		}
+		// check close date
+		if ($this->close_date) {
+			$close_date = (int) $this->close_date;
+			if ($close_date < time()) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Register a vote for a user
+	 *
+	 * @param string $answer    the answer
+	 * @param int    $user_guid (optional) the user who is voting, defaults to current user
+	 *
+	 * @return bool
+	 */
+	public function vote($answer, $user_guid = 0) {
+		
+		$user_guid = sanitise_int($user_guid, false);
+		if (empty($user_guid)) {
+			$user_guid = elgg_get_logged_in_user_guid();
+		}
+		
+		if (empty($user_guid)) {
+			return false;
+		}
+		
+		$answer_options = $this->getAnswersOptions();
+		if (!in_array($answer, $answer_options)) {
+			return false;
+		}
+		
+		$existing_vote = $this->getVote(false, $user_guid);
+		if (!empty($existing_vote)) {
+			$existing_vote->value = $answer;
+			return (bool) $existing_vote->save();
+		}
+		
+		$annotation_id = $this->annotate('vote', $answer, $this->access_id, $user_guid);
+		if (empty($annotation_id)) {
+			return false;
+		}
+		
+		if (elgg_get_plugin_setting('add_vote_to_river', 'poll') === 'yes') {
+			elgg_create_river_item([
+				'view' => 'river/object/poll/vote',
+				'action_type' => 'vote',
+				'subject_guid' => $user_guid,
+				'object_guid' => $this->getGUID(),
+				'target_guid' => $this->getContainerGUID(),
+				'annotation_id' => $annotation_id,
+				'access_id' => $this->access_id,
+			]);
+		}
+		return true;
+	}
+	
+	/**
+	 * Get the vote of a user
+	 * @param int $user_guid the user to get the vote for, defaults to current user
+	 *
+	 * @return false|string|\ElggAnnotation
+	 */
+	public function getVote($value_only = true, $user_guid = 0) {
+		
+		$value_only = (bool) $value_only;
+		$user_guid = sanitise_int($user_guid, false);
+		if (empty($user_guid)) {
+			$user_guid = elgg_get_logged_in_user_guid();
+		}
+		
+		if (empty($user_guid)) {
+			return false;
+		}
+		
+		$annotations = $this->getAnnotations([
+			'annotation_name' => 'vote',
+			'annotation_owner_guid' => $user_guid,
+			'limit' => 1,
+		]);
+		if (empty($annotations)) {
+			return false;
+		}
+		
+		if ($value_only) {
+			return $annotations[0]->value;
+		}
+		
+		return $annotations[0];
+	}
+	
+	/**
+	 * Get all the votes in a count array
+	 *
+	 * @return array
+	 */
+	public function getVotes() {
+		
+		$answers = $this->getAnswers();
+		if (empty($answers)) {
+			return [];
+		}
+		
+		$results = [];
+		foreach ($answers as $answer) {
+			$name = elgg_extract('name', $answer);
+			$label = elgg_extract('label', $answer);
+			$short_label = elgg_get_excerpt($label, 20);
+			
+			$results[$name] = [
+				'label' => $short_label,
+				'full_label' => $label,
+				'value' => 0,
+				'color' => '#' . substr(md5($name), 0, 6),
+			];
+		}
+		
+		$votes = $this->getAnnotations([
 			'annotation_name' => 'vote',
 			'limit' => false,
-		));
-
-		$users = array();
-
-		// Cache the amount of results for each choice
-		foreach ($responses as $response) {
-			$users[] = $response->owner_guid;
-
-			$this->responses_by_choice[$response->value] += 1;
+		]);
+		
+		if (empty($votes)) {
+			return [];
 		}
-
-		$this->voter_count = count(array_unique($users));
-
-		// Cache the total amount of responses
-		$this->response_count = array_sum($this->responses_by_choice);
+		
+		foreach ($votes as $vote) {
+			$name = $vote->value;
+			if (!isset($results[$name])) {
+				// no longer an option
+				continue;
+			}
+			
+			$results[$name]['value']++;
+		}
+		
+		return array_values($results);
 	}
-
+	
 	/**
-	 * Get amount of responses for the given choice
+	 * Notify the owner of the poll that it's closed
 	 *
-	 * @param string $choice
-	 * @return int Response count
+	 * @return array
 	 */
-	public function getResponseCountForChoice($choice) {
-		// Make sure the values have been populated
-		$this->fetchResponses();
-
-		return $this->responses_by_choice[$choice];
+	public function notifyOwnerOnClose() {
+		
+		$owner = $this->getOwnerEntity();
+		
+		// make notification subject / body
+		$subject = elgg_echo('poll:notification:close:owner:subject', [$this->title]);
+		$summary = elgg_echo('poll:notification:close:owner:summary', [$this->title]);
+		$message = elgg_echo('poll:notification:close:owner:body', [
+			$owner->name,
+			$this->title,
+			$this->getURL(),
+		]);
+		
+		// prepare some params
+		$params = [
+			'object' => $this,
+			'action' => 'close',
+			'summary' => $summary,
+		];
+		return notify_user($owner->getGUID(), $owner->getGUID(), $subject, $message, $params);
 	}
-
+	
 	/**
-	 * Get total amount of responses
+	 * Notify the participants of the poll that it's closed
 	 *
-	 * @todo Save the total amount as poll metadata in the voting action
-	 *
-	 * @return int
+	 * @return array
 	 */
-	public function getResponseCount() {
-		// Make sure the values have been populated
-		$this->fetchResponses();
-
-		return $this->response_count;
+	public function notifyParticipantsOnClose() {
+	
+		// this could take a while
+		set_time_limit(0);
+				
+		$participants = elgg_call(ELGG_IGNORE_ACCESS, function() {
+			return elgg_get_annotations([
+				'guid' => $this->guid,
+				'limit' => false,
+				'annotation_name' => 'vote',
+				'callback' => function($row) {
+					return (int) $row->owner_guid;
+				},
+			]);
+		});
+		
+		if (empty($participants)) {
+			// nobody voted :(
+			return [];
+		}
+		
+		$participants = array_unique($participants);
+		
+		// make notification subject / body
+		$subject = elgg_echo('poll:notification:close:participant:subject', [$this->title]);
+		$summary = elgg_echo('poll:notification:close:participant:summary', [$this->title]);
+		$message = elgg_echo('poll:notification:close:participant:body', [
+			$this->title,
+			$this->getURL(),
+		]);
+		
+		// prepare some params
+		$params = [
+			'object' => $this,
+			'action' => 'close',
+			'summary' => $summary,
+		];
+		return notify_user($participants, $this->getOwnerGUID(), $subject, $message, $params);
 	}
-
+	
 	/**
-	 * Get amount of people who have voted
+	 * Is the poll closed for voting
 	 *
-	 * @return int
+	 * @return bool
 	 */
-	public function getVoterCount() {
-		// Make sure the values have been populated
-		$this->fetchResponses();
-
-		return $this->voter_count;
+	public function isClosed() {
+		
+		$close_date = $this->close_date;
+		if (!isset($close_date)) {
+			// no close date
+			return false;
+		}
+		
+		$close_date = (int) $close_date;
+		if ($close_date > time()) {
+			// in the future
+			return false;
+		}
+		
+		return true;
 	}
 }

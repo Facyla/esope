@@ -5,8 +5,6 @@ use Elgg\Router\Middleware\Gatekeeper;
 use ColdTrick\EventManager\Event\Day;
 use ColdTrick\EventManager\Event\Slot;
 
-define('DOMPDF_ENABLE_AUTOLOAD', false);
-
 define('EVENT_MANAGER_RELATION_ATTENDING', 'event_attending');
 define('EVENT_MANAGER_RELATION_ATTENDING_WAITINGLIST', 'event_waitinglist');
 define('EVENT_MANAGER_RELATION_ATTENDING_PENDING', 'event_pending');
@@ -43,6 +41,12 @@ return [
 		'who_create_group_events' => 'members',
 		'rsvp_interested' => 'yes',
 		'add_event_to_calendar' => 'yes',
+		'show_service_google' => 1,
+		'show_service_yahoo' => 1,
+		'show_service_office365' => 1,
+		'show_service_outlookcom' => 1,
+		'show_service_outlook' => 1,
+		'show_service_appleical' => 1,
 	],
 	'entities' => [
 		[
@@ -147,14 +151,6 @@ return [
 		'collection:object:event:upcoming' => [
 			'path' => '/event/upcoming/{guid?}',
 			'resource' => 'event/upcoming',
-		],
-		'collection:object:event:map' => [
-			'path' => '/event/map/{guid?}',
-			'resource' => 'event/map',
-		],
-		'collection:object:event:calendar' => [
-			'path' => '/event/calendar/{guid?}',
-			'resource' => 'event/calendar',
 		],
 		'collection:object:event:owner' => [
 			'path' => '/event/owner/{username?}',

@@ -67,7 +67,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 	
 		// register ajax views
 		elgg_register_ajax_view('event_manager/event/attendees_list');
-		elgg_register_ajax_view('event_manager/event/maps/route');
+		elgg_register_ajax_view('event_manager/event/popup');
 		elgg_register_ajax_view('event_manager/forms/program/day');
 		elgg_register_ajax_view('event_manager/forms/program/slot');
 		elgg_register_ajax_view('event_manager/calendar');
@@ -100,6 +100,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('entity:icon:sizes', 'object', '\ColdTrick\EventManager\Icons::getIconSizes');
 		$hooks->registerHandler('entity:icon:file', 'object', '\ColdTrick\EventManager\Icons::getIconFile');
 		$hooks->registerHandler('entity:icon:url', 'object', '\ColdTrick\EventManager\Icons::getEventRegistrationIconURL');
+		$hooks->registerHandler('entity_types', 'content_subscriptions', '\ColdTrick\EventManager\Plugins\ContentSubscriptions::registerContentType');
 		$hooks->registerHandler('export_attendee', 'event', '\ColdTrick\EventManager\Attendees::exportBaseAttributes', 100);
 		$hooks->registerHandler('export_attendee', 'event', '\ColdTrick\EventManager\Attendees::exportQuestionData', 200);
 		$hooks->registerHandler('export_attendee', 'event', '\ColdTrick\EventManager\Attendees::exportProgramData', 300);
@@ -107,7 +108,9 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('handlers', 'widgets', '\ColdTrick\EventManager\Widgets::registerHandlers');
 		$hooks->registerHandler('likes:is_likable', 'object:' . \Event::SUBTYPE, '\Elgg\Values::getTrue');
 		$hooks->registerHandler('prepare', 'notification:create:object:' . Event::SUBTYPE, '\ColdTrick\EventManager\Notifications::prepareCreateEventNotification');
+		$hooks->registerHandler('prepare', 'system:email', '\ColdTrick\EventManager\Notifications::prepareEventRegistrationSender');
 		$hooks->registerHandler('register', 'menu:filter:events', '\ColdTrick\EventManager\Menus::registerEventsList');
+		$hooks->registerHandler('register', 'menu:filter:events', '\ColdTrick\EventManager\Menus\Filter::registerViewTypes');
 		$hooks->registerHandler('register', 'menu:entity', '\ColdTrick\EventManager\Menus::registerAttendeeActions');
 		$hooks->registerHandler('register', 'menu:entity', '\ColdTrick\EventManager\Menus::registerEntity', 600);
 		$hooks->registerHandler('register', 'menu:event:rsvp', '\ColdTrick\EventManager\Menus::registerRsvp');
@@ -117,8 +120,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('register', 'menu:river', '\ColdTrick\EventManager\Menus::stripEventRelationshipRiverMenuItems', 99999);
 		$hooks->registerHandler('register', 'menu:event_attendees', '\ColdTrick\EventManager\Menus::registerEventAttendees');
 		$hooks->registerHandler('search:fields', 'object:event', '\ColdTrick\EventManager\Search::addFields');
-		$hooks->registerHandler('setting', 'plugin', '\ColdTrick\EventManager\Settings::clearCache');
 		$hooks->registerHandler('supported_types', 'entity_tools', '\ColdTrick\EventManager\MigrateEvents::supportedSubtypes');
+		$hooks->registerHandler('view_vars', 'event_manager/listing/map', '\ColdTrick\EventManager\Views::loadLeafletCss');
 		$hooks->registerHandler('view_vars', 'widgets/content_by_tag/display/simple', '\ColdTrick\EventManager\Widgets::contentByTagEntityTimestamp');
 		$hooks->registerHandler('view_vars', 'widgets/content_by_tag/display/slim', '\ColdTrick\EventManager\Widgets::contentByTagEntityTimestamp');
 		$hooks->registerHandler('view_vars', 'input/objectpicker/item', '\ColdTrick\EventManager\ObjectPicker::customText');

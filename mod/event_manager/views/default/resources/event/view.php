@@ -7,7 +7,8 @@ elgg_entity_gatekeeper($guid, 'object', Event::SUBTYPE);
 /* @var $event Event */
 $event = get_entity($guid);
 
-if (elgg_get_plugin_setting('add_event_to_calendar', 'event_manager') === 'yes') {
+$show_add_to_calendar = elgg_get_plugin_setting('add_event_to_calendar', 'event_manager');
+if ($show_add_to_calendar === 'yes' || ($show_add_to_calendar === 'attendee_only' && !empty($event->getRelationshipByUser()))) {
 	elgg_register_menu_item('title', ElggMenuItem::factory([
 		'name' => 'addthisevent',
 		'href' => false,
@@ -20,14 +21,8 @@ if (elgg_get_plugin_setting('add_event_to_calendar', 'event_manager') === 'yes')
 
 elgg_push_entity_breadcrumbs($event, false);
 
-$title_text = $event->getDisplayName();
-
-$body = elgg_view_layout('default', [
-	'filter' => false,
+echo elgg_view_page($event->getDisplayName(), [
 	'content' => elgg_view_entity($event),
-	'title' => $title_text,
 	'sidebar' => elgg_view('event_manager/event/sidebar', ['entity' => $event]),
 	'entity' => $event,
 ]);
-
-echo elgg_view_page($title_text, $body, 'default');

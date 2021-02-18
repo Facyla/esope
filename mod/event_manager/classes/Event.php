@@ -593,7 +593,40 @@ class Event extends ElggObject {
 			}
 			
 			$user_message .= $registrationLink . $unsubscribeLink;
-	
+			
+			$attachment = [];
+			if ($type == EVENT_MANAGER_RELATION_ATTENDING) {
+				// prepare attachment url
+				$description = '';
+				if (!empty($this->location)) {
+					// add venue to description
+					$description .= $this->venue . PHP_EOL;
+				}
+				
+				// removing HTML and shorter because of URL length limitations
+				$description .= $this->getExcerpt(500) . PHP_EOL . PHP_EOL;
+				$description .= $this->getURL();
+				
+				$attachment_url = elgg_http_add_url_query_elements('https://www.addevent.com/dir/', [
+					'client' => 'ak1qmrp10zvwxx2cimhv206',
+					'service' => 'stream',
+					
+					'start' => $this->getStartDate('d/m/Y H:i:00'),
+					'end' => $this->getEndDate('d/m/Y H:i:00'),
+					'title' => html_entity_decode($this->getDisplayName()),
+					'description' => $description,
+					'location' => $this->location ?: $this->venue,
+					'date_format' => 'DD/MM/YYYY',
+				]);
+				
+				$attachment_contents = file_get_contents($attachment_url);
+				if (!empty($attachment_contents)) {
+					$attachment['filename'] = 'event.ics';
+					$attachment['type'] = 'text/calendar';
+					$attachment['content'] = $attachment_contents;
+				}
+			}
+			
 			if ($to_entity instanceof ElggUser) {
 				// use notification system for real users
 				$summary = elgg_echo('event_manager:event:registration:notification:user:summary:' . $type, [$this->getDisplayName()]);
@@ -605,14 +638,24 @@ class Event extends ElggObject {
 					'action' => 'rsvp',
 				];
 				
+				if (!empty($attachment)) {
+					$params['attachments'] = [$attachment];
+				}
+				
 				notify_user($to, $this->getOwnerGUID(), $user_subject, $user_message, $params);
 			} else {
 				// send e-mail for non users
-				elgg_send_email(\Elgg\Email::factory([
+				$options = [
 					'to' => $to_entity,
 					'subject' => $user_subject,
 					'body' => $user_message,
-				]));
+				];
+				
+				if (!empty($attachment)) {
+					$options['attachments'] = [$attachment];
+				}
+				
+				elgg_send_email(\Elgg\Email::factory($options));
 			}
 		});
 	}
@@ -621,13 +664,13 @@ class Event extends ElggObject {
 	 * Notifies an owner of the event
 	 *
 	 * @param string     $type              type of the RSVP
-	 * @param ElggEntity $to                registering entity
+	 * @param ElggEntity $rsvp_entity       registering entity
 	 * @param string     $event_title_link  title of the event
 	 * @param string     $registration_link registration link of the event
 	 *
 	 * @return void
 	 */
-	protected function notifyOwnerOnRSVP($type, ElggEntity $to, $event_title_link, $registration_link = '') {
+	protected function notifyOwnerOnRSVP($type, ElggEntity $rsvp_entity, $event_title_link, $registration_link = '') {
 		
 		if (!$this->notify_onsignup) {
 			return;
@@ -637,12 +680,12 @@ class Event extends ElggObject {
 
 		$owner_message = elgg_echo('event_manager:event:registration:notification:owner:text:' . $type, [
 			$this->getOwnerEntity()->getDisplayName(),
-			$to->getDisplayName(),
+			$rsvp_entity->getDisplayName(),
 			$event_title_link,
 		]) . $registration_link;
 		
 		$summary = elgg_echo('event_manager:event:registration:notification:owner:summary:' . $type, [
-			$to->getDisplayName(),
+			$rsvp_entity->getDisplayName(),
 			$this->getDisplayName(),
 		]);
 		
@@ -653,7 +696,7 @@ class Event extends ElggObject {
 			'action' => 'rsvp_owner',
 		];
 		
-		notify_user($this->getOwnerGUID(), $this->getOwnerGUID(), $owner_subject, $owner_message, $params);
+		notify_user($this->owner_guid, $rsvp_entity->guid, $owner_subject, $owner_message, $params);
 	}
 
 	/**
@@ -1014,14 +1057,15 @@ class Event extends ElggObject {
 	public function getRegisteredSlotsForEntity($guid, $slot_relationship) {
 		$slots = [];
 
-		$dbprefix = elgg_get_config('dbprefix');
+		$qb = Select::fromTable('entities', 'slot');
+		$qb->select('slot.guid');
+		$qb->joinEntitiesTable('slot', 'owner_guid', 'inner', 'event');
+		$qb->joinRelationshipTable('slot', 'guid', $slot_relationship, false, 'inner', 'slot_user_relation');
+		$qb->joinEntitiesTable('slot_user_relation', 'guid_one', 'inner', 'entity');
+		$qb->where($qb->compare('entity.guid', '=', $guid, ELGG_VALUE_INTEGER));
 
-		$data = elgg()->db->getData("SELECT slot.guid FROM {$dbprefix}entities AS slot
-			INNER JOIN {$dbprefix}entities AS event ON event.guid = slot.owner_guid
-			INNER JOIN {$dbprefix}entity_relationships AS slot_user_relation ON slot.guid = slot_user_relation.guid_two
-			INNER JOIN {$dbprefix}entities AS entity ON entity.guid = slot_user_relation.guid_one
-			WHERE entity.guid = $guid AND slot_user_relation.relationship='{$slot_relationship}'");
-
+		$data = elgg()->db->getData($qb);
+		
 		foreach ($data as $slot) {
 			$slots[] = get_entity($slot->guid);
 		}

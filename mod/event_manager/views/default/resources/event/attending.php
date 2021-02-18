@@ -1,33 +1,47 @@
 <?php
 
+use Elgg\EntityNotFoundException;
+
 $user = elgg_get_page_owner_entity();
 if (!$user instanceof \ElggUser) {
-	forward('', '404');
+	throw new EntityNotFoundException();
 }
 
 elgg_push_collection_breadcrumbs('object', 'event', $user, false);
 
-$filter_context = '';
+$filter_value = '';
 
 $title = elgg_echo('event_manager:attending:title', [$user->getDisplayName()]);
 if ($user->guid === elgg_get_logged_in_user_guid()) {
-	$filter_context = 'attending';
+	$filter_value = 'attending';
 }
 
-$content = elgg_list_entities([
-	'type' => 'object',
-	'subtype' => \Event::SUBTYPE,
+$list_type = get_input('list_type', 'list');
+$options = [
+	'metadata_name_value_pairs' => [
+		[
+			'name' => 'event_start',
+			'value' => time(),
+			'operand' => '>=',
+		],
+	],
+	'order_by_metadata' => [
+		'name' => 'event_start',
+		'direction' => 'ASC',
+		'as' => 'integer'
+	],
 	'relationship' => EVENT_MANAGER_RELATION_ATTENDING,
 	'relationship_guid' => $user->guid,
 	'inverse_relationship' => true,
-	'no_results' => true,
+];
+$content = elgg_view("event_manager/listing/{$list_type}", [
+	'options' => $options,
+	'resource' => 'attending',
+	'page_owner' => $user,
 ]);
 
-$body = elgg_view_layout('default', [
+echo elgg_view_page($title, [
 	'content' => $content,
-	'title' => $title,
-	'filter_context' => $filter_context,
+	'filter_value' => $filter_value,
 	'filter_id' => 'events',
 ]);
-
-echo elgg_view_page($title, $body);

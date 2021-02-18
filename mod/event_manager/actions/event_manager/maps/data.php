@@ -7,13 +7,15 @@ $latitude = get_input('latitude');
 $longitude = get_input('longitude');
 $lat_distance = get_input('distance_latitude');
 $long_distance = get_input('distance_longitude');
-$container_guid = (int) get_input('container_guid');
+$guid = (int) get_input('guid');
+$resource = get_input('resource');
+$tag = get_input('tag');
 
 if (!isset($latitude) || !isset($longitude) || !isset($lat_distance) || !isset($long_distance)) {
 	return [];
 }
 
-$container = get_entity($container_guid);
+$entity = get_entity($guid);
 
 $latitude = (float) $latitude;
 $longitude = (float) $longitude;
@@ -25,11 +27,11 @@ $lat_max = $latitude + $lat_distance;
 $long_min = $longitude - $long_distance;
 $long_max = $longitude + $long_distance;
 
-$entities = elgg_get_entities([
-	'limit' => 50,
+$options = [
 	'type' => 'object',
-	'subtype' => 'event',
-	'container_guid' => ($container instanceof ElggGroup) ? $container->guid : ELGG_ENTITIES_ANY_VALUE,
+	'subtype' => \Event::SUBTYPE,
+	'limit' => 50,
+	'container_guid' => ($entity instanceof ElggGroup) ? $entity->guid : ELGG_ENTITIES_ANY_VALUE,
 	'wheres' => [
 		function (QueryBuilder $qb, $main_alias) use ($lat_min, $lat_max, $long_min, $long_max) {
 			
@@ -46,17 +48,72 @@ $entities = elgg_get_entities([
 		}
 	],
 	'metadata_name_value_pairs' => [
-		[
+		'upcoming' => [
 			'name' => 'event_start',
 			'value' => time(),
 			'operand' => '>=',
 		],
 	],
-]);
+	'batch' => true,
+];
 
-if (empty($entities)) {
-	return elgg_ok_response();
+// resource specific options
+switch ($resource) {
+	case 'live':
+		unset($options['metadata_name_value_pairs']['upcoming']);
+		
+		$options['metadata_name_value_pairs'][] = [
+			'name' => 'event_start',
+			'value' => time(),
+			'operand' => '<=',
+		];
+		$options['metadata_name_value_pairs'][] = [
+			'name' => 'event_end',
+			'value' => time(),
+			'operand' => '>=',
+		];
+		break;
+	case 'owner':
+		if (!$entity instanceof ElggUser) {
+			return elgg_error_response();
+		}
+		
+		unset($options['metadata_name_value_pairs']['upcoming']);
+		
+		$options['owner_guid'] = $entity->guid;
+		break;
+	case 'attending':
+		if (!$entity instanceof ElggUser) {
+			return elgg_error_response();
+		}
+		
+		$options['relationship'] = EVENT_MANAGER_RELATION_ATTENDING;
+		$options['relationship_guid'] = $entity->guid;
+		$options['inverse_relationship'] = true;
+		break;
 }
+
+if (!empty($tag)) {
+	$options['metadata_name_value_pairs'][] = [
+		'name' => 'tags',
+		'value' => $tag,
+		'case_sensitive' => false,
+	];
+}
+
+// let others extend this
+$params = [
+	'resource' => $resource,
+	'guid' => $guid,
+	'latitude' => $latitude,
+	'longitude' => $longitude,
+	'distance_latitude' => $lat_distance,
+	'distance_longitude' => $long_distance,
+];
+$options = elgg_trigger_plugin_hook('maps_data:options', 'event_manager', $params, $options);
+
+// fetch data
+$entities = elgg_get_entities($options);
 
 $result = [];
 foreach ($entities as $event) {
@@ -65,7 +122,6 @@ foreach ($entities as $event) {
 		'lat' => $event->getLatitude(),
 		'lng' => $event->getLongitude(),
 		'title' => $event->title,
-		'html' => elgg_view('event_manager/event/infowindow', ['entity' => $event]),
 		'has_relation' => $event->getRelationshipByUser(),
 		'iscreator' => (($event->getOwnerGUID() == elgg_get_logged_in_user_guid()) ? 'owner' : null)
 	];

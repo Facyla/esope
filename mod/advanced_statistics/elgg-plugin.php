@@ -20,6 +20,14 @@ return [
 			'resource' => 'advanced_statistics/group',
 		],
 	],
+	'view_extensions' => [
+		'advanced_statistics/account/statistics/likes' => [
+			'advanced_statistics/account/statistics/likes_graph' => [],
+		],
+		'core/settings/statistics' => [
+			'advanced_statistics/account/statistics/likes' => [],
+		],
+	],
 	'widgets' => [
 		'advanced_statistics' => [
 			'context' => ['admin'],

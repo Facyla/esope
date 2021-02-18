@@ -1,10 +1,15 @@
 <?php
-/**
- * Poll river view
- */
 
-$object = $vars['item']->getObjectEntity();
+$item = elgg_extract('item', $vars);
+$entity = $item->getObjectEntity();
+if (!($entity instanceof Poll)) {
+	return;
+}
 
-echo elgg_view('river/elements/layout', array(
-	'item' => $vars['item'],
-));
+$annotation = $item->getAnnotation();
+if ($annotation instanceof ElggAnnotation) {
+	$label = $entity->getAnswerLabel($annotation->value);
+	$vars['message'] = $label;
+}
+
+echo elgg_view('river/elements/layout', $vars);

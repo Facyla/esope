@@ -121,6 +121,9 @@ function newsletter_process($entity_guid) {
 		return;
 	}
 	
+	// sending could take a while
+	set_time_limit(0);
+	
 	elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity) {
 		
 		$logging = ['start_time' => time()];
@@ -453,7 +456,9 @@ function newsletter_process($entity_guid) {
 				// replace the online link for logged out users to add an emailadres
 				if ($type !== 'users') {
 					$online_link = $entity->getURL();
-					$new_online_link = $online_link . '?e=' . $recipient;
+					$new_online_link = elgg_http_add_url_query_elements($online_link, [
+						'e' => $recipient,
+					]);
 					
 					$message_html_content_user = str_ireplace($online_link, $new_online_link, $message_html_content_user);
 				}
@@ -1238,7 +1243,7 @@ function newsletter_get_available_templates($container_guid, $entity = null) {
 	$result = [];
 	
 	// detect templates provided by themes/plugins
-	$locations = elgg_list_views();
+	$locations = _elgg_services()->views->listViews();
 	$pattern = '/^newsletter\/templates\/(?P<name>\w+)\/(body|css)$/';
 	
 	foreach ($locations as $view) {
@@ -1522,25 +1527,17 @@ function newsletter_embed_available() {
  *
  * @return bool|string
  */
-function newsletter_view_embed_content(ElggEntity $entity, $vars = array()) {
-	
-	if (!$entity instanceof \ElggEntity) {
-		return false;
-	}
-	
-	if (!is_array($vars)) {
-		$vars = [];
-	}
+function newsletter_view_embed_content(ElggEntity $entity, array $vars = []) {
 	
 	$vars['entity'] = $entity;
 	
 	$type = $entity->getType();
 	$subtype = $entity->getSubtype();
 	
-	if (!empty($subtype) && elgg_view_exists("newsletter/embed/" . $type . "/" . $subtype)) {
-		return elgg_view("newsletter/embed/" . $type . "/" . $subtype, $vars);
-	} elseif (elgg_view_exists("newsletter/embed/" . $type . "/default")) {
-		return elgg_view("newsletter/embed/" . $type . "/default", $vars);
+	if (elgg_view_exists("newsletter/embed/{$type}/{$subtype}")) {
+		return elgg_view("newsletter/embed/{$type}/{$subtype}", $vars);
+	} elseif (elgg_view_exists("newsletter/embed/{$type}/default")) {
+		return elgg_view("newsletter/embed/{$type}/default", $vars);
 	} elseif (elgg_view_exists("newsletter/embed/default")) {
 		return elgg_view("newsletter/embed/default", $vars);
 	}

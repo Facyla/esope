@@ -1,142 +1,140 @@
-Changelog
-=========
+Version history
+===============
 
-2.3.5
------
+5.0.2 (2020-12-08):
 
-- Fix: correct usage of 'integer' constant with apostrophes in function call instead of without as this would fail otherwise on future versions of PHP (deprecation warning).
+- fixed: use correct sender during notification
 
-2.3.4
------
+5.0.1 (2020-08-18):
 
-- Important(!): fixed fetching of old river items to be deleted on editing of existing polls (with version 2.3.3 the updated code that replaced elgg_delete_river() could fetch more and complete unrelated river items that got deleted, too ---> UPDATE!).
+- several small chores/fixes
 
-2.3.3
------
+5.0 (2020-05-26):
 
-- Increased minimum required Elgg version to 2.3.0,
-- Fixed deprecation issue with $autofeed by using elgg_register_rss_link(),
-- Populate 'entity' attribute on calling object/elements/full view,
-- No longer use deprecated elgg_delete_river(),
-- Prevent duplicate element ids to be used when adding/removing poll choices on editing a poll,
-- Allow for removal of existing poll choices when editing a poll,
-- Display correct closing date in info text in widgets after a poll is closed,
-- Add alt attribute within img tag in widget view (strictly speaking necessary by html standard but as the image is purely decoration it's just been an empty alt attribute value that has been missing...).
+- added: german translation
+- changed: increased minimal Elgg version to 3.3
+- fixed: replaced deprecated function call
+- fixed: use asset-packagist for NPM assets
 
-2.0.2
------
+4.2 (2019-08-22):
 
-- Finnish translation updated.
+- changed: poll->getVotes now will always return an array
+- fixed: return a no results text if there are no votes on poll details
 
-2.0.1
------
+4.1 (2019-04-17):
 
-- Feature: multiple-answer polls (users can select more than a single choice on voting). Poll creator can decide on the maximum number of choices selectable (thanks to Beaufort8 and Juho Jaakkola for implementing this feature),
-- Multiple-answer polls can be allowed/prevented by a new poll plugin settings,
-- Fixed: keep access_id of poll choices in sync with access_id of their poll when the poll's access_id is changed (to fix possible discrepancies in existing polls an update script that can be executed via the poll plugin settings page has been added - if the Upgrade button shows up, run the upgrade),
-- Feature: plugin option added to allow for notification of poll creators on new votes made in their polls (the creator will receive notifications depending on his/her user-specific, site-wide notification settings, i.e. email notifications and/or site-notifications or none),
-- Fixed: no longer use the $closing_date variable in the poll object view before intializing it (had resulted in a warning),
-- Fixed: internal poll choice counter on input form counts correctly (by also decrementing removed choices),
-- Rework on plugin settings page layout,
-- French translation added (thanks to Facyla).
+- added: function to check if the poll is closed
 
-2.0.0
------
+4.0 (2019-03-27):
 
-- Updated for Elgg 2.0 (should also work on future Elgg 2.X versions).
+- changed: always show custom legend
+- changed: group module registration
+- changed: manage chart width with css now
+- changed: mapping js now happens in elgg-plugin
+- changed: moved plugin initialisation to elgg-plugin
+- changed: toggle tabs now use a page component
+- changed: unified breadcrumbs
+- changed: updated action responses
+- changed: updated chartjs to 2.7.3
+- changed: updated settings form
+- changed: upped minimal requirement to Elgg 3
+- fixed: EntityTools support
+- fixed: only show tabs if usefull
 
-1.10.5
-------
+3.2.1 (2018-10-18):
 
-- Reset option added (allows removal of all given votes on a poll; permission for resetting is given to admins and optionally also poll owners by a new Poll plugin settings option),
-- Usage of Elgg's default delete icon instead of custom icon,
-- composer.json added.
+- fixed: bar chart should start yAxis at zero
 
-1.10.4
-------
+3.2 (2017-11-29):
 
-- Updated version 1.9.4 for Elgg 1.10/1.11.
+- added: option to export poll votes to CSV
+- added: Spanish translation
 
-1.9.4
-------
+3.1 (2017-10-04):
 
-- Updated version 1.8.4 for Elgg 1.9.
-And:
-- Removal of mod/poll/everyone.php (I believe this file is no longer necessary as a user should be directed to it anymore - if I'm wrong and you get issues by the file missing please tell me),
-- Add remaining inline script element JS code to AMD module.
+- changed: no longer misuse object/poll view for single poll widget output
 
-1.8.4
------
+3.0.2 (2017-09-06):
 
-- Total reset of votes when editing a poll (adding/removing choices or modifying existing choices). Problem was that users who already voted were unable to re-vote after poll choices had been changed. This could have been quite annoying for them if they wanted to change their vote based on the updated choices (a mischievous person would have even been able to switch the choices to contradict the poll results completely!). The only way to make it fair seemed to me to reset the votes to allow everyone a re-vote. Downside is that even correcting a typo in a poll choice text will reset the poll but his is unavoidable unfortunately,
-- Fixed bug where poll choices of a group poll got lost when poll was edited by the group admin but the poll is owned by another group member,
-- Fixed bug that prevented the description of a poll to be completely removed.
+- several small chores/fixes
 
-1.10.3
-------
+3.0.1 (2017-03-24):
 
-- Updated version 1.9.3 for Elgg 1.9.
+- several small chores/fixes
 
-1.9.3
------
+3.0 (2017-01-26):
 
-- Updated version 1.8.3 for Elgg 1.9.
-And:
-- Correctly handle polls with more than 10 choices.
+- changed: increased Elgg version requirement to 2.3
+- fixed: incompatible function declaration
 
-1.8.3
------
+2.1 (2016-11-18):
 
-- Fixed: admins can no longer see who voted for which choice if "Allow open polls" plugin setting is set to "No".
+- added: support for entity_tools
 
-1.8.2
------
+2.0.1 (2016-06-16):
 
-skipped.
+- changed: updated to 2.1.5 version of Chartjs and made it an npm install
 
-1.10.2
------
+2.0 (2016-05-26):
 
-- Based on version 1.9.2,
-- Fix of deprecation issues occuring on Elgg 1.10 (namely changing output/confirmlink view to output/url view).
+- changed: set Elgg requirement to 2.0
+- changed: use generic by_line format
 
-1.9.2 (thanks to Juho Jaakkola!!!)
-----------------------------------
+1.1 (2016-05-04):
 
-- Major cleanup / simplification / restructuring / updating / move to more object oriented code,
-- Conversion of javascript code into an AMD module,
-- Finnish translations added.
+- added: a setting to control if vote activity is added to the river
 
-1.9.1.1
--------
+1.0.1 (2016-04-14):
 
-- Fixed a deprecation issue (with the hopefully soon to be released Widget Manager plugin for Elgg 1.9) with widgets urls (clickable title link).
+- fixed: issues with long labels in tooltip and barchart labels
+- fixed: mine tab incorrectly set as selected in some cases
+- fixed: polls can't be liked
+- fixed: providing wrong language keys for river events
 
-1.9.1
------
+1.0 (2016-03-10):
 
-- Updated version 1.8.1 for Elgg 1.9.
-
-1.8.1
------
-
-- Optional time limitation on polls (poll results are still shown afterwards but voting is no longer possible). Time limitation on polls can be enabled/disabled by plugin setting. Thanks to Jerome Bakker for the inspiration to this feature (and some initial code for implementing it, too),
-- Optionally make a poll an open poll (it's visible who voted for which poll choice). Thanks to tacid for the inspiration to this feature (and most of the code for implementing it, too),
-- Latest comments made on polls in sidebar on "All" and "Mine" poll pages,
-- Consistent display of poll creator, poll creation date, number of votes, number of comments and tags in all widgets, the list view and full view,
-- Removal of files no longer in use (that's why you should remove the plugin folder of any previous version to get rid of them, too).
-
-1.9.0
------
-
-- Updated version 1.8.0 for Elgg 1.9.
-
-1.8.0
------
-
-- Some general code cleanup,
-- Fix remaining issues of deprecated function usage,
-- Fixed widgets (both with and without usage of Widget Manager plugin),
-- Fixed notification sending,
-- Added (optional) description field,
-- Added convert script for existing polls that have the old response data structure of the original poll plugin.
+- added: basic pages and menu items
+- added: basic poll add form and view page
+- added: beginning of results view
+- added: Chart.js library is now available
+- added: delete action
+- added: Dutch translation
+- added: javascript check to see if at least 2 answers are entered
+- added: listing view and comment support
+- added: notifications on poll create
+- added: notification to owner and participants when a poll closes
+- added: option for group admins to disallow members to create polls
+- added: plugin setting to allow users to change their vote
+- added: plugin setting to control default right to create polls in group
+- added: plugin setting to control if close date is required for a poll
+- added: poll close date
+- added: poll edit now has answers
+- added: polls are now searchable
+- added: result charts
+- added: river item on vote
+- added: river view
+- added: setting per poll to control which chart result is shown
+- added: show (future) close date in all poll views
+- added: show close date info when poll is closed
+- added: single poll widget now supports the object picker
+- added: summary of poll is now shown in single poll widget
+- added: support for content_subscriptions
+- added: vote form
+- added: widgets/group_module with support for widget_manager
+- basic plugin structure
+- changed: answer names are now autogenerated
+- changed: reduced default height of piecharts canvas to 200px
+- changed: show entity menu controllable by view_vars hook
+- fixed: always show datepicker on edit form above the field
+- fixed: close date field no longer is readonly to allowed required check
+- fixed: don't show vote results if no votes
+- fixed: full view in widget
+- fixed: get correct vote counts
+- fixed: incorrect check on annotation owner guid in getVote
+- fixed: missing language keys
+- fixed: Poll->getURL() returns normalized url
+- fixed: register correct context for group widgets
+- fixed: set correct guid for edit
+- fixed: show comments correctly
+- fixed: spacing issue
+- fixed: toggle correct tab content if multiple widgets are present

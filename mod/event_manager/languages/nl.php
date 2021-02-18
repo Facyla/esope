@@ -1,13 +1,23 @@
 <?php
 /**
- * This file was created by Translation Editor v7.0.3
- * On 2019-07-11 17:31
+ * This file was created by Translation Editor v7.0.4
+ * On 2020-09-21 11:04
  */
 
 return array (
+  'event_manager:list:more' => 'Meer evenementen',
+  'event_manager:list:more:with_tag' => 'Meer evenementen met tag %s',
+  'widgets:events:tag_filter' => 'Tag filter',
+  'widgets:events:tag_filter:help' => 'Voer een optionele tag in om de inhoud te filteren',
+  'event_manager:popup:event_link' => 'Naar het evenement',
+  'collection:object:eventslot' => 'Event Manager - Evenementsloten',
+  'collection:object:eventday' => 'Event Manager - Evenementdagen',
+  'collection:object:eventregistration' => 'Event Manager - Evenementregistraties',
+  'collection:object:eventregistrationquestion' => 'Event Manager - Evenement Registratie Vragen',
   'widgets:events:showevents:status' => 'Evenement status',
   'river:object:event:comment' => '% reageerde op het evenement %s',
   'collection:object:event' => 'Evenementen',
+  'event_manager:list:filter:tags' => 'Gefilterd met de tag %s',
   'event_manager:list:upcoming' => 'Aankomende evenementen',
   'event_manager:edit:form:spots_left:full' => 'Evenement is vol',
   'event_manager:form:program:slot' => 'Evenement slot toevoegen',
@@ -34,6 +44,7 @@ return array (
   'event_manager:action:attendees:export:no_data' => 'Geen deelnemers beschikbaar voor export',
   'event_manager:settings:add_event_to_calendar' => 'Toon de "Toevoegen aan kalender" knop op de evenement pagina',
   'event_manager:settings:add_event_to_calendar:help' => 'Dit heeft ook betrekking op de links in de notificatie e-mails',
+  'event_manager:settings:add_event_to_calendar:attendee_only' => 'Alleen voor deelnemers',
   'event_manager:edit:form:tabs:registration:toggle' => 'Configureer hier registratie specifieke details',
   'event_manager:event:initial:day:title' => 'Dag 1',
   'event_manager:settings:rsvp:interested' => 'De RSVP optie "geïnteresseerd" is beschikbaar',
@@ -200,7 +211,7 @@ Iemand heeft zich afgemeld van het \'%s\' evenement (%s). Je bent van de wachtli
   'event_manager:group:more' => 'Meer evenementen',
   'item:object:event' => 'Evenement',
   'item:object:eventslot' => 'Event Manager - Evenementslot',
-  'item:object:eventday' => 'Event Manager - Evenementday',
+  'item:object:eventday' => 'Event Manager - Evenementdag',
   'item:object:eventregistration' => 'Event Manager - Evenementregistratie',
   'item:object:eventregistrationquestion' => 'Event Manager - Evenement Registratie Vraag',
   'item:object:eventquestions' => 'Event Manager - Evenement Vraag',
@@ -210,9 +221,6 @@ Iemand heeft zich afgemeld van het \'%s\' evenement (%s). Je bent van de wachtli
   'event_manager:list:live' => 'Live evenementen',
   'event_manager:list:group:title' => 'Groeps evenementen',
   'event_manager:list:noresults' => 'Geen evenementen gevonden',
-  'event_manager:list:navigation:other' => 'Andere evenementen',
-  'event_manager:list:navigation:your' => 'Jouw evenementen',
-  'event_manager:list:navigation:attending' => 'Evenementen waar je aan deelneemt',
   'event_manager:list:navigation:onthemap' => 'Op de kaart',
   'event_manager:full' => 'vol',
   'event_manager:personwaitinglist' => 'persoon op de wachtlijst',

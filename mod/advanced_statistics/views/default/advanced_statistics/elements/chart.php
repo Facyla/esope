@@ -8,10 +8,10 @@ $title = elgg_extract('title', $vars);
 
 $page = elgg_extract('page', $vars);
 
-$url_elements = [
-	'section' => elgg_extract('section', $vars),
-	'chart' => elgg_extract('chart', $vars),
-];
+$url_elements = (array) elgg_extract('url_elements', $vars, []);
+
+$url_elements['section'] = elgg_extract('section', $vars);
+$url_elements['chart'] = elgg_extract('chart', $vars);
 
 if (elgg_extract('date_limited', $vars)) {
 	$date_part = '';
@@ -41,6 +41,14 @@ $body = elgg_format_element('div', [
 	'id' => $id,
 	'class' => 'advanced-statistics-plot-container',
 	'data-chart-href' => elgg_http_add_url_query_elements("advanced_statistics/{$page}", $url_elements),
-]);
+], elgg_view('graphics/ajax_loader', ['hidden' => false]));
 
 echo elgg_view_module('info', $title, $body);
+?>
+<script>
+	require(['advanced_statistics/charts'], function (advancedStatistics) {
+		setTimeout(function() {
+			advancedStatistics.init('#<?php echo $id; ?>');
+		}, 500);
+	});
+</script>

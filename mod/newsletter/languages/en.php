@@ -66,6 +66,7 @@ return array(
 	'newsletter:received:title:mine' => "My received newsletters",
 	
 	// embed
+	'newsletter:embed:subtype_filter:all' => "Filter embedded content",
 	'newsletter:embed:show_all' => "Show all content, not just group content",
 	'newsletter:embed:format:description:title' => "Show description",
 	'newsletter:embed:format:description:option:full' => "Full",
@@ -174,6 +175,9 @@ return array(
 	'newsletter:settings:url_postfix:setting' => "Postfix settings",
 	'newsletter:settings:url_postfix:setting:description' => "There are certain placeholders you can use in your postfix values: %s",
 	
+	'newsletter:settings:embed' => "Content embed settings",
+	'newsletter:settings:embed:description' => "Below you can configure which content types can be embedded in a newsletter.",
+	
 	// entity view
 	'newsletter:entity:scheduled' => "Scheduled",
 	'newsletter:entity:sent' => "Sent",
@@ -262,6 +266,14 @@ To view the newsletter click here:
 	// widget
 	'widgets:newsletter_subscribe:name' => "Newsletter subscription",
 	'widgets:newsletter_subscribe:description' => "Show a quick widget to subscribe to the newsletter",
+	
+	// CSV Exporter
+	'newsletter:csv_exporter:from' => "Sending e-mail address",
+	'newsletter:csv_exporter:status' => "Status",
+	'newsletter:csv_exporter:scheduled' => "Scheduled delivery time",
+	'newsletter:csv_exporter:scheduled:readable' => "Scheduled delivery time (readable)",
+	'newsletter:csv_exporter:endtime' => "Proccessing finished time",
+	'newsletter:csv_exporter:endtime:readable' => "Proccessing finished time (readable)",
 	
 	// actions
 	// edit
