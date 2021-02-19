@@ -1,0 +1,208 @@
+<?php
+
+// Pour configurer les widgets par défaut
+/**
+ * Register user dashboard with default widgets
+ *
+ * @param unknown_type $hook
+ * @param unknown_type $type
+ * @param unknown_type $return
+ * @param unknown_type $params
+ * @return array
+ */
+/*
+function theme_adf_default_widgets(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	
+	$return[] = array(
+		'name' => elgg_echo('naturalconnect:index:title'),
+		'widget_context' => 'naturalconnect',
+		'widget_columns' => 7,
+		'event' => 'create',
+		'entity_type' => 'user',
+		'entity_subtype' => ELGG_ENTITIES_ANY_VALUE,
+	);
+
+	return $return;
+}
+*/
+
+
+
+// Head - Définition des link et meta
+/*
+function theme_adf_head_page_hook(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	
+	// Favicon
+	$favicon = elgg_get_site_url() . 'mod/theme_adf/graphics/favicon.png';
+	
+	// Remove unused favicon definitions
+	unset($return['links']['icon-16']);
+	unset($return['links']['icon-32']);
+	unset($return['links']['icon-64']);
+	unset($return['links']['icon-128']);
+	unset($return['links']['icon-vector']);
+	unset($return['links']['apple-touch-icon']);
+	
+		// Set main favicon
+	$return['links']['shortcut-icon'] = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $favicon);
+	$return['links']['icon-ico'] = array('rel' => 'icon', 'href' => $favicon);
+	// Set apple touch icon
+	$return['links']['apple-touch-icon'] = array('rel' => 'apple-touch-icon', 'href' => $favicon);
+	
+	//$return['metas']['og:image'] = array('name' => 'og:image', 'content' => elgg_get_site_url() . 'mod/naturalconnect/graphics/naturalconnect-favicon.png');
+	//$return['metas']['description'] = array('name' => 'description', 'content' => ""));
+	
+	
+	// Custom fonts
+	//$return['links']['google-font-open-sans'] = array(
+	//		'rel' => 'stylesheet', 'type' => 'text/css',
+	//		'href' => 'https://fonts.googleapis.com/css?family=Open+Sans:300,600',
+	//	);
+	
+	return $return;
+}
+*/
+
+
+// Set topbar elements (user menu)
+function theme_adf_topbar_menu(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	
+	//echo '<pre>' . print_r($return, true) . '</pre>';
+	
+	$user = elgg_get_logged_in_user_entity();
+
+	// Modification des éléments existants
+	foreach($return as $k => $item) {
+		
+		// @TODO site_notifications : remplacer lien par popup (cf. plugin notifier) 
+		// avec liste des notifs + lien réglages + lien toutes les notifications
+		//echo "{$item->getName()} / ";
+		
+		
+		// No submenu
+		/*
+		$return[$k]->setSection('default');
+		$return[$k]->setParentName('');
+		*/
+		// All in submenu
+		//if ($item->getName() != 'account') { $return[$k]->setSection('default'); $return[$k]->setParentName('account'); }
+		
+		// Remove unwanted entries
+		//if (in_array($return[$k]->getName(), ['account', 'friends', 'messages'])) { unset($return[$k]); continue; }
+		
+		switch($item->getName()) {
+			/*
+			case 'profile':
+				$return[$k]->setTooltip(elgg_echo('profile'));
+				$return[$k]->setLinkClass('');
+				$return[$k]->setText('<span class="ni-icon-menu-title">' . $own->name . '</span>');
+				$return[$k]->setPriority(0);
+				break;
+			*/
+			
+			default:
+				//$return[$k]->setText($item->getWeight() . ' - ' . $item->getName() . ' - ' . $item->getText());
+		}
+	}
+	
+	return $return;
+}
+
+
+// Site : Menu de navigation
+function theme_adf_site_menu(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	//$return = []; // Start a new, clear menu
+	$new_menu = [];
+	
+	$allowed_items = ['groups', 'members'];
+	// groups / members / activity
+	// survey / blog / bookmarks / file / pages / thewire / newsletter / discussions / event / 
+	// thinkcities / Les Petites Annonces / chat / senx_interface / senx_warp10 / 
+	
+	// Modification des éléments existants
+	foreach($return as $k => $item) {
+		//echo "{$item->getName()} $k / ";
+		
+		// Remove unwanted items
+		if (!in_array($item->getName(), $allowed_items)) {
+			continue;
+		}
+		
+		switch($item->getName()) {
+			case 'groups':
+				$item->setPriority(200);
+				break;
+			case 'members':
+				$item->setPriority(600);
+				break;
+		}
+		
+		$new_menu[$k] = $item;
+	}
+	
+	// Annuaire - Membres du site
+	/*
+	$item = new ElggMenuItem('network', elgg_echo('naturalconnect:network'), '/network');
+	if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
+	$return[] = $item;
+	*/
+	
+	// Accueil : page de présentation et recherche de contenus
+	$item = new ElggMenuItem('home', elgg_echo('theme_adf:menu:home'), '/');
+	//if (current_page_url() = elgg_get_site_url()) { $item->setSelected(); }
+	$item->setPriority(0);
+	$new_menu[] = $item;
+	
+	// Contributions : page de présentation et recherche de contenus
+	$item = new ElggMenuItem('contributions', elgg_echo('theme_adf:menu:contributions'), '/contributions');
+	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
+	$item->setPriority(500);
+	$new_menu[] = $item;
+	
+	return $new_menu;
+}
+
+
+// Footer menu - unused (static view)
+/*
+function theme_adf_footer_menu(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	$return = []; // Clear menu
+	// Crédits
+	$return[] = new ElggMenuItem('credits', elgg_echo('naturalconnect:credits'), '/p/credits');
+	
+	// Mentions légales
+	$return[] = new ElggMenuItem('terms', elgg_echo('naturalconnect:terms'), '/p/terms');
+	
+	// Lien naturalidees.com
+	$return[] = new ElggMenuItem('naturalidees', 'natural idées,', '//naturalidees.com/');
+	
+	// Lien Facebook
+	$return[] = new ElggMenuItem('facebook', '<i class="fa fa-fw fa-facebook"></i>', '//www.facebook.com/naturalidees');
+	// Lien Twitter
+	$return[] = new ElggMenuItem('twitter', '<i class="fa fa-fw fa-twitter"></i>', '//twitter.com/naturalidees');
+	// Lien Linkedin
+	$return[] = new ElggMenuItem('linkedin', '<i class="fa fa-fw fa-linkedin"></i>', '//www.linkedin.com/company/natural-id%C3%A9es');
+	// Lien Pinterest
+	$return[] = new ElggMenuItem('pinterest', '<i class="fa fa-fw fa-pinterest"></i>', '//www.pinterest.fr/naturalidees/');
+	// Lien Youtube
+	$return[] = new ElggMenuItem('youtube', '<i class="fa fa-fw fa-youtube"></i>', '//www.youtube.com/channel/UCrdYA4twMOPbHUUMJboSKoA');
+	
+	// Open external links in new tab/window
+	foreach($return as $k => $item) {
+		if (substr($item->getHref(), 0, 2) == '//') {
+			$return[$k]->setData('target', '_blank');
+		}
+	}
+	//echo '<pre>'.print_r($return, true).'</pre>'; exit; // dev/debug
+	return $return;
+}
+*/
+
+
+
+
