@@ -22,7 +22,7 @@ $info = '';
 
 $info .= elgg_view_menu('entity', array(
 	'entity' => $vars['entity'],
-	'handler' => 'slider',
+	//'handler' => 'slider',
 	'sort_by' => 'priority',
 	'class' => 'elgg-menu-hz',
 ));

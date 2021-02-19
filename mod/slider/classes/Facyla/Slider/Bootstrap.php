@@ -4,6 +4,8 @@ namespace Facyla\Slider;
 
 use Elgg\DefaultPluginBootstrap;
 
+use Menus;
+
 class Bootstrap extends DefaultPluginBootstrap {
 	
 	/**
@@ -50,15 +52,11 @@ class Bootstrap extends DefaultPluginBootstrap {
 		// Note : CSS we will be output directly into the view, so we can embed sliders on other sites (without the whole interface)
 		elgg_extend_view('elgg.css', 'slider/main.css');
 		
+		// JS
+		elgg_require_js('slider/edit');
+		
 		// Integration with shortcodes plugin
 		elgg_extend_view('shortcodes/embed/extend', 'slider/extend_shortcodes_embed');
-		
-		// register the JavaScript
-		// note : cannot use resqire_js() as we need to insert a (static) php view into JS code // AMD modules do not accept .js.php files
-		elgg_register_simplecache_view('js/slider/edit');
-		
-		// Register a URL handler for sliders
-		//elgg_register_plugin_hook_handler('entity:url', 'object', 'slider_url');
 		
 	}
 	
@@ -68,8 +66,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 	 * @return void
 	 */
 	protected function registerHooks() {
-		//$hooks = $this->elgg()->hooks;
-		
+		$hooks = $this->elgg()->hooks;
+		$hooks->registerHandler('register', 'menu:site', __NAMESPACE__ . '\Menus::siteMenu');
 		//$hooks->registerHandler('prepare', 'system:email', __NAMESPACE__ . '\Email::limitSubjectLength');
 	}
 	

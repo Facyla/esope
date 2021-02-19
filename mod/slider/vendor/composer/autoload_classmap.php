@@ -103,4 +103,7 @@ return array(
     'Composer\\Installers\\YawikInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
     'Composer\\Installers\\ZendInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
     'Composer\\Installers\\ZikulaInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
+    'ElggSlider' => $baseDir . '/classes/ElggSlider.php',
+    'Facyla\\Slider\\Bootstrap' => $baseDir . '/classes/Facyla/Slider/Bootstrap.php',
+    'Facyla\\Slider\\Menus' => $baseDir . '/classes/Facyla/Slider/Menus.php',
 );

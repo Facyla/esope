@@ -2,6 +2,7 @@
 
 return array(
 	'slider' => "Slider",
+	'slider:index' => "Diaporamas",
 	
 	'item:object:slider' => "Diaporama",
 	

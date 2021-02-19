@@ -20,6 +20,10 @@ class ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1
         ),
     );
 
+    public static $fallbackDirsPsr0 = array (
+        0 => __DIR__ . '/../..' . '/classes',
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
@@ -118,6 +122,9 @@ class ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1
         'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
         'Composer\\Installers\\ZendInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
         'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
+        'ElggSlider' => __DIR__ . '/../..' . '/classes/ElggSlider.php',
+        'Facyla\\Slider\\Bootstrap' => __DIR__ . '/../..' . '/classes/Facyla/Slider/Bootstrap.php',
+        'Facyla\\Slider\\Menus' => __DIR__ . '/../..' . '/classes/Facyla/Slider/Menus.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -125,6 +132,7 @@ class ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInitc06de8ea8b54a9ca750a9ccd8bb51df1::$classMap;
 
         }, null, ClassLoader::class);

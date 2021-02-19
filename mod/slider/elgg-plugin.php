@@ -15,10 +15,13 @@ require_once(__DIR__ . '/lib/slider/functions.php');
 
 $url = elgg_get_site_url();
 $vendor_url = $url . 'mod/slider/vendors/anythingslider/';
+$vendors_path = 'mod/slider/vendors/';
 
-
+use Facyla\Slider\Bootstrap;
 
 return [
+	'bootstrap' => Bootstrap::class,
+	
 	// Plugin settings
 	'settings' => [
 		'css_main' => 'width:100%; height:300px;',
@@ -113,7 +116,7 @@ onSlideComplete : function(slider){
 	
 	// Routes
 	'routes' => [
-		'default:object:slider' => [
+		'slider:index' => [
 			'path' => '/slider',
 			'resource' => 'slider/index',
 		],
@@ -151,45 +154,58 @@ onSlideComplete : function(slider){
 			//'underscore.js' => __DIR__ . '/bower_components/underscore/underscore.min.js',
 			//'js/jqplot/' => __DIR__ . '/vendors/jqplot',
 			
+			// Dossier complet : utile pour charger toutes les dépendances
+			/*
+			'/' => [
+				$vendors_path . 'anythingslider/',
+				$vendors_path . 'coinslider/',
+				$vendors_path . 'flexslider/',
+				$vendors_path . 'nivoslider/',
+				$vendors_path . 'responsiveslides/',
+				$vendors_path . 'glide-3.4.1/',
+				$vendors_path . 'swiper-5.2.0/package/',
+			],
+			*/
+			
 			// AnythingSlider
-			'slider.anythingslider.js' => 'mod/slider/vendors/anythingslider/js/jquery.anythingslider.min.js', 
-			'slider.anythingslider.easing.js' => 'mod/slider/vendors/anythingslider/js/jquery.easing.1.2.js', 
-			'slider.anythingslider.swf.js' => 'mod/slider/vendors/anythingslider/js/swfobject.js', 
-			'slider.anythingslider.video.js' => 'mod/slider/vendors/anythingslider/js/jquery.anythingslider.video.js', 
+			'slider.anythingslider.js' => $vendors_path . 'anythingslider/js/jquery.anythingslider.min.js', 
+			'slider.anythingslider.easing.js' => $vendors_path . 'anythingslider/js/jquery.easing.1.2.js', 
+			'slider.anythingslider.swf.js' => $vendors_path . 'anythingslider/js/swfobject.js', 
+			'slider.anythingslider.video.js' => $vendors_path . 'anythingslider/js/jquery.anythingslider.video.js', 
 			// CSS
-			'slider.anythingslider.css' => 'mod/slider/vendors/anythingslider/css/anythingslider.css', 
-			'slider.anythingslider.css' => 'mod/slider/vendors/anythingslider/css/animate.css', 
+			'slider.anythingslider.css' => $vendors_path . 'anythingslider/css/anythingslider.css', 
+			'slider.anythingslider.css' => $vendors_path . 'anythingslider/css/animate.css', 
 			// Themes
-			'slider.anythingslider.theme-construction.css' => 'mod/slider/vendors/anythingslider/css/theme-construction.css', 
-			'slider.anythingslider.theme-cs-portfolio.css' => 'mod/slider/vendors/anythingslider/css/theme-cs-portfolio.css', 
-			'slider.anythingslider.theme-metallic.css' => 'mod/slider/vendors/anythingslider/css/theme-metallic.css', 
-			'slider.anythingslider.theme-minimalist-round.css' => 'mod/slider/vendors/anythingslider/css/theme-minimalist-round.css', 
-			'slider.anythingslider.theme-minimalist-square.css' => 'mod/slider/vendors/anythingslider/css/theme-minimalist-square.css', 
+			'slider.anythingslider.theme-construction.css' => $vendors_path . 'anythingslider/css/theme-construction.css', 
+			'slider.anythingslider.theme-cs-portfolio.css' => $vendors_path . 'anythingslider/css/theme-cs-portfolio.css', 
+			'slider.anythingslider.theme-metallic.css' => $vendors_path . 'anythingslider/css/theme-metallic.css', 
+			'slider.anythingslider.theme-minimalist-round.css' => $vendors_path . 'anythingslider/css/theme-minimalist-round.css', 
+			'slider.anythingslider.theme-minimalist-square.css' => $vendors_path . 'anythingslider/css/theme-minimalist-square.css', 
 			
 			// Coinslider
-			'slider.coinslider.js' => 'mod/slider/vendors/coinslider/coin-slider.min.js', 
-			'slider.coinslider.css' => 'mod/slider/vendors/coinslider/coin-slider-styles.css', 
+			'slider.coinslider.js' => $vendors_path . 'coinslider/coin-slider.min.js', 
+			'slider.coinslider.css' => $vendors_path . 'coinslider/coin-slider-styles.css', 
 			
 			// FlexSlider
-			'slider.flexslider.js' => 'mod/slider/vendors/flexslider/jquery.flexslider-min.js', 
-			'slider.flexslider.css' => 'mod/slider/vendors/flexslider/flexslider.css', 
+			'slider.flexslider.js' => $vendors_path . 'flexslider/jquery.flexslider-min.js', 
+			'slider.flexslider.css' => $vendors_path . 'flexslider/flexslider.css', 
 			
 			// NivoSlider
-			'slider.nivoslider.js' => 'mod/slider/vendors/nivoslider/jquery.nivo.slider.pack.js', 
-			'slider.nivoslider.css' => 'mod/slider/vendors/nivoslider/nivo-slider.css', 
+			'slider.nivoslider.js' => $vendors_path . 'nivoslider/jquery.nivo.slider.pack.js', 
+			'slider.nivoslider.css' => $vendors_path . 'nivoslider/nivo-slider.css', 
 			
 			// ResponsiveSlides
-			'slider.responsiveslides.js' => 'mod/slider/vendors/responsiveslides/responsiveslides.min.js', 
-			'slider.responsiveslides.css' => 'mod/slider/vendors/responsiveslides/responsiveslides.css', 
+			'slider.responsiveslides.js' => $vendors_path . 'responsiveslides/responsiveslides.min.js', 
+			'slider.responsiveslides.css' => $vendors_path . 'responsiveslides/responsiveslides.css', 
 			
 			// Glide
-			'slider.glide.js' => 'mod/slider/vendors/glide-3.4.1/glide.min.js',
-			'slider.glide.css' => 'mod/slider/vendors/glide-3.4.1/glide.core.min.css',
-			'slider.glide.theme.css' => 'mod/slider/vendors/glide-3.4.1/glide.theme.min.css',
+			'slider.glide.js' => $vendors_path . 'glide-3.4.1/glide.min.js',
+			'slider.glide.css' => $vendors_path . 'glide-3.4.1/glide.core.min.css',
+			'slider.glide.theme.css' => $vendors_path . 'glide-3.4.1/glide.theme.min.css',
 			
 			// Swiper
-			'slider.swiper.js' => 'mod/slider/vendors/swiper-5.2.0/package/js/swiper.min.js',
-			'slider.swiper.css' => 'mod/slider/vendors/swiper-5.2.0/package/css/swiper.min.css',
+			'slider.swiper.js' => $vendors_path . 'swiper-5.2.0/package/js/swiper.min.js',
+			'slider.swiper.css' => $vendors_path . 'swiper-5.2.0/package/css/swiper.min.css',
 			
 		],
 	],
@@ -198,6 +214,12 @@ onSlideComplete : function(slider){
 		'entity:url' => [
 			'object' => [
 				'slider_url' => [],
+			],
+		],
+		
+		'register' => [
+			'menu:site' => [
+				'Facyla\Slider\Menus::siteMenu' => [],
 			],
 		],
 	],
