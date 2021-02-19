@@ -4,6 +4,7 @@ Uploadify v3.1.0
 Copyright (c) 2012 Reactive Apps, Ronnie Garcia
 Released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
 */
+exit; // Block any file transfer - known vulnerability
 
 // Define a destination
 $targetFolder = '/uploads'; // Relative to the root
