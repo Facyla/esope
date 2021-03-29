@@ -27,10 +27,13 @@ function theme_adf_default_widgets(\Elgg\Hook $hook) {
 }
 */
 
-
+/*
+function stripe_load_stripe_js(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	$return[] = '<script src="https://js.stripe.com/v3/"></script>';
+}
 
 // Head - Définition des link et meta
-/*
 function theme_adf_head_page_hook(\Elgg\Hook $hook) {
 	$return = $hook->getValue();
 	
@@ -117,8 +120,10 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	$return = $hook->getValue();
 	//$return = []; // Start a new, clear menu
 	$new_menu = [];
+	$own = elgg_get_logged_in_user_entity();
 	
-	$allowed_items = ['groups', 'members'];
+	
+	$allowed_items = ['groups', 'members', 'event'];
 	// groups / members / activity
 	// survey / blog / bookmarks / file / pages / thewire / newsletter / discussions / event / 
 	// thinkcities / Les Petites Annonces / chat / senx_interface / senx_warp10 / 
@@ -135,9 +140,14 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 		switch($item->getName()) {
 			case 'groups':
 				$item->setPriority(200);
+				$item->setText($item->getText() . '&nbsp;<i class="fa fa-caret-down"></i>');
 				break;
 			case 'members':
 				$item->setPriority(600);
+				$item->setText($item->getText() . '&nbsp;<i class="fa fa-caret-down"></i>');
+				break;
+			case 'event':
+				$item->setPriority(800);
 				break;
 		}
 		
@@ -162,6 +172,59 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 	$item->setPriority(500);
 	$new_menu[] = $item;
+	
+	// Aide : page de présentation et recherche de contenus
+	$item = new ElggMenuItem('help', "Aide" . '&nbsp;<i class="fa fa-caret-down"></i>', '/aide');
+	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
+	$item->setPriority(900);
+	$new_menu[] = $item;
+	// Add submenus
+	$item = new ElggMenuItem('help-group', "Groupe d'aide", '/somegroup');
+	$item->setParentName('help');
+	$new_menu[] = $item;
+	
+	// Evénements
+	/*
+	if (elgg_is_active_plugin('event_manager')) {
+		$item = new ElggMenuItem('contributions', elgg_echo('theme_adf:menu:contributions'), '/contributions');
+		//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
+		$item->setPriority(500);
+		$new_menu[] = $item;
+	}
+	*/
+	
+	// Groups sub-menus : accès à tous les groupes => classement par type + recherche + ceux mis en avant + ceux recommandés)
+	// all groups
+	$item = new ElggMenuItem("groups-directory", "Rechercher un espace de travail", "groups/all");
+	$item->setParentName('groups');
+	$new_menu[] = $item;
+	// my groups
+	$mygroups_ents = elgg_get_entities([
+		'type' => 'group', 
+		'relationship' => 'member',
+		'relationship_guid' => $own->guid,
+		'limit' => false,
+		]);
+	foreach($mygroups_ents as $group) {
+		$item = new ElggMenuItem("group-{$group->guid}", $group->name, $group->getURL());
+		$item->setParentName('groups');
+		$new_menu[] = $item;
+	}
+	
+	// Members sub-menu :
+	// members directory
+	$item = new ElggMenuItem("members-directory", "Annuaire des départements en réseau", "members");
+	$item->setParentName('members');
+	$new_menu[] = $item;
+	// invitation
+	$item = new ElggMenuItem("invitation", "Inviter des collègues", "friends/{$own->username}/invite");
+	$item->setParentName('members');
+	$new_menu[] = $item;
+	
+	
+	// Note submenu : setParentName('MenuItemName')
+	
+	
 	
 	return $new_menu;
 }

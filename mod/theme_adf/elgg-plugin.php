@@ -35,6 +35,10 @@ return [
 	
 	// Routes
 	'routes' => [
+		'contributions:index' => [
+			'path' => '/contributions/{container_guid?}',
+			'resource' => 'contributions',
+		],
 		/*
 		'groups:files' => [
 			'path' => '/groups/file/{guid?}/{title?}',

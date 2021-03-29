@@ -66,6 +66,8 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 .elgg-menu-item-entity-menu-toggle .elgg-menu-content { min-width: 1.5em; text-align: center; }
 
+.elgg-menu-item-help { background: #e57b5f; }
+
 
 /* FOOTER */
 .elgg-page-footer { background: #0b2d51; border-top: 1px solid #e6e6ea; color: #969696; font-size: .9rem; }
@@ -76,8 +78,17 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 /* Accueil */
 .elgg-layout-header .elgg-form-thewire-add { flex: 1; }
 
-.elgg-module-home-mygroups { justify-content: flex-start; }
+.elgg-module-home-mygroups { border: 5px solid #5ba2d9; padding: 1rem; border-radius: 2rem; }
+.elgg-module-home-mygroups ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(6rem,1fr)); grid-gap: .5rem 0.25rem; }
 .elgg-module-home-mygroups li { list-style: none; }
+
+.elgg-module-home-recommandations { background: #e57b5f; padding: 1rem; border-radius:2rem; }
+.elgg-module-discussions-global { flex: 1 0 12rem; }
+.elgg-module-discussions-my-groups { flex: 1 0 12rem; }
+
+
+.groups-mine { width: 100%; }
+.groups-mine ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(6rem,1fr)); grid-gap: .5rem 0.25rem; }
 
 
 /* ANNUAIRE */
