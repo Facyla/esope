@@ -3,28 +3,28 @@
 namespace Sabre\VObject\ITip;
 
 /**
- * This class represents an iTip message
+ * This class represents an iTip message.
  *
  * A message holds all the information relevant to the message, including the
  * object itself.
  *
  * It should for the most part be treated as immutable.
  *
- * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-class Message {
-
+class Message
+{
     /**
-     * The object's UID
+     * The object's UID.
      *
      * @var string
      */
     public $uid;
 
     /**
-     * The component type, such as VEVENT
+     * The component type, such as VEVENT.
      *
      * @var string
      */
@@ -123,19 +123,14 @@ class Message {
      *
      * @return mixed bool|string
      */
-    public function getScheduleStatus() {
-
-        if(!$this->scheduleStatus) {
-
+    public function getScheduleStatus()
+    {
+        if (!$this->scheduleStatus) {
             return false;
-
         } else {
-
             list($scheduleStatus) = explode(';', $this->scheduleStatus);
+
             return $scheduleStatus;
-
         }
-
     }
-
 }

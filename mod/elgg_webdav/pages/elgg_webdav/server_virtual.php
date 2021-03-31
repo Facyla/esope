@@ -53,6 +53,15 @@ $base_uri = parse_url(elgg_get_site_url() . 'webdav/virtual');
 $base_uri = $base_uri['path'];
 
 
+// Force HTTP Auth if not already logged in
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header('WWW-Authenticate: Basic realm="' . elgg_echo('elgg_webdav:httpauth') . '"');
+	header('HTTP/1.0 401 Unauthorized');
+	echo elgg_echo('elgg_webdav:httpauth:cancel');
+	exit;
+}
+
+
 /*************************************/
 /* Load (and define) lib and classes */
 /*************************************/
@@ -60,10 +69,13 @@ $base_uri = $base_uri['path'];
 // Define auth plugin : authentication through Elgg
 $authBackend = new Sabre\DAV\Auth\Backend\BasicCallBack(function($username, $password) {
 	$debug = elgg_get_plugin_setting('debug', 'elgg_webdav', false);
+	if ($debug == 'yes') { $debug = true; } else { $debug = false; }
 	// Return result quickly if already logged in
 	if (elgg_is_logged_in()) {
 		if ($debug) { error_log("WebDAV : $username authenticated"); }
 		return true;
+	} else {
+		if ($debug) { error_log("WebDAV : not authenticated"); }
 	}
 	// check the username and password here, and then just return true or false.
 	if ($debug) { error_log("WebDAV : authenticating $username"); }
@@ -132,7 +144,7 @@ $server->setBaseUri($base_uri);
 
 // ADD PLUGINS
 
-// Add authentication
+// Add authentication plugin to the server
 $server->addPlugin($authPlugin);
 
 // Support for LOCK and UNLOCK

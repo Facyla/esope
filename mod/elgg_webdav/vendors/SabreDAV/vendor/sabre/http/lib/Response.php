@@ -5,7 +5,7 @@ namespace Sabre\HTTP;
 /**
  * This class represents a single HTTP response.
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -100,7 +100,6 @@ class Response extends Message implements ResponseInterface {
      * @param string|int $status
      * @param array $headers
      * @param resource $body
-     * @return void
      */
     function __construct($status = null, array $headers = null, $body = null) {
 
@@ -145,7 +144,7 @@ class Response extends Message implements ResponseInterface {
      * added.
      *
      * @param string|int $status
-     * @throws \InvalidArgumentExeption
+     * @throws \InvalidArgumentException
      * @return void
      */
     function setStatus($status) {

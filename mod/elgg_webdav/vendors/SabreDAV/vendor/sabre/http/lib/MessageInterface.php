@@ -6,7 +6,7 @@ namespace Sabre\HTTP;
  * The MessageInterface is the base interface that's used by both
  * the RequestInterface and ResponseInterface.
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -44,7 +44,7 @@ interface MessageInterface {
     /**
      * Updates the body resource with a new stream.
      *
-     * @param resource $body
+     * @param resource|string $body
      * @return void
      */
     function setBody($body);
@@ -153,6 +153,7 @@ interface MessageInterface {
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
      *
+     * @param string $name
      * @return bool
      */
     function removeHeader($name);

@@ -78,8 +78,18 @@ $server->setBaseUri($base_uri);
 
 
 // ADD PLUGINS
+
+// Force HTTP Auth if not already logged in
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header('WWW-Authenticate: Basic realm="' . elgg_echo('elgg_webdav:httpauth') . '"');
+	header('HTTP/1.0 401 Unauthorized');
+	echo elgg_echo('elgg_webdav:httpauth:cancel');
+	exit;
+}
+
 // Add authentication
 $server->addPlugin($authPlugin);
+
 // The lock manager is reponsible for making sure users don't overwrite each others changes.
 $lockBackend = new DAV\Locks\Backend\File($locks_path);
 $lockPlugin = new DAV\Locks\Plugin($lockBackend);

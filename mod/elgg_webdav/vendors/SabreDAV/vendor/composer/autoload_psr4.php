@@ -11,8 +11,9 @@ return array(
     'Sabre\\Uri\\' => array($vendorDir . '/sabre/uri/lib'),
     'Sabre\\HTTP\\' => array($vendorDir . '/sabre/http/lib'),
     'Sabre\\Event\\' => array($vendorDir . '/sabre/event/lib'),
-    'Sabre\\DAV\\' => array($vendorDir . '/sabre/dav/lib/DAV'),
-    'Sabre\\DAVACL\\' => array($vendorDir . '/sabre/dav/lib/DAVACL'),
-    'Sabre\\CardDAV\\' => array($vendorDir . '/sabre/dav/lib/CardDAV'),
-    'Sabre\\CalDAV\\' => array($vendorDir . '/sabre/dav/lib/CalDAV'),
+    'Sabre\\DAV\\' => array($baseDir . '/lib/DAV'),
+    'Sabre\\DAVACL\\' => array($baseDir . '/lib/DAVACL'),
+    'Sabre\\CardDAV\\' => array($baseDir . '/lib/CardDAV'),
+    'Sabre\\CalDAV\\' => array($baseDir . '/lib/CalDAV'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
 );

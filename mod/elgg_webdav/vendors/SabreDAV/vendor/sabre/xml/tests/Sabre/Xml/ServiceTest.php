@@ -2,6 +2,8 @@
 
 namespace Sabre\Xml;
 
+use Sabre\Xml\Element\KeyValue;
+
 class ServiceTest extends \PHPUnit_Framework_TestCase {
 
     function testGetReader() {
@@ -124,6 +126,40 @@ XML;
     }
 
     /**
+     * @expectedException \Sabre\Xml\LibXMLException
+     */
+    function testInvalidNameSpace()
+    {
+        $xml = '<D:propfind xmlns:D="DAV:"><D:prop><bar:foo xmlns:bar=""/></D:prop></D:propfind>';
+
+        $util = new Service();
+        $util->elementMap = [
+            '{DAV:}propfind' => PropFindTestAsset::class,
+        ];
+        $util->namespaceMap = [
+            'http://sabre.io/ns' => 's',
+        ];
+        $result = $util->expect('{DAV:}propfind', $xml);
+    }
+
+    /**
+     * @dataProvider providesEmptyPropfinds
+     */
+    function testEmptyPropfind($xml)
+    {
+        $util = new Service();
+        $util->elementMap = [
+            '{DAV:}propfind' => PropFindTestAsset::class,
+        ];
+        $util->namespaceMap = [
+            'http://sabre.io/ns' => 's',
+        ];
+        $result = $util->expect('{DAV:}propfind', $xml);
+        $this->assertEquals(false, $result->allProp);
+        $this->assertEquals([], $result->properties);
+    }
+
+    /**
      * @depends testGetReader
      */
     function testExpectStream() {
@@ -198,6 +234,93 @@ XML;
 
     }
 
+    function testMapValueObject() {
+
+        $input = <<<XML
+<?xml version="1.0"?>
+<order xmlns="http://sabredav.org/ns">
+ <id>1234</id>
+ <amount>99.99</amount>
+ <description>black friday deal</description>
+ <status>
+  <id>5</id>
+  <label>processed</label>
+ </status>
+</order>
+
+XML;
+
+        $ns = 'http://sabredav.org/ns';
+        $orderService = new \Sabre\Xml\Service();
+        $orderService->mapValueObject('{' . $ns . '}order', 'Sabre\Xml\Order');
+        $orderService->mapValueObject('{' . $ns . '}status', 'Sabre\Xml\OrderStatus');
+        $orderService->namespaceMap[$ns] = null;
+
+        $order = $orderService->parse($input);
+        $expected = new Order();
+        $expected->id = 1234;
+        $expected->amount = 99.99;
+        $expected->description = 'black friday deal';
+        $expected->status = new OrderStatus();
+        $expected->status->id = 5;
+        $expected->status->label = 'processed';
+
+        $this->assertEquals($expected, $order);
+
+        $writtenXml = $orderService->writeValueObject($order);
+        $this->assertEquals($input, $writtenXml);
+    }
+
+    function testMapValueObjectArrayProperty() {
+
+        $input = <<<XML
+<?xml version="1.0"?>
+<order xmlns="http://sabredav.org/ns">
+ <id>1234</id>
+ <amount>99.99</amount>
+ <description>black friday deal</description>
+ <status>
+  <id>5</id>
+  <label>processed</label>
+ </status>
+ <link>http://example.org/</link>
+ <link>http://example.com/</link>
+</order>
+
+XML;
+
+        $ns = 'http://sabredav.org/ns';
+        $orderService = new \Sabre\Xml\Service();
+        $orderService->mapValueObject('{' . $ns . '}order', 'Sabre\Xml\Order');
+        $orderService->mapValueObject('{' . $ns . '}status', 'Sabre\Xml\OrderStatus');
+        $orderService->namespaceMap[$ns] = null;
+
+        $order = $orderService->parse($input);
+        $expected = new Order();
+        $expected->id = 1234;
+        $expected->amount = 99.99;
+        $expected->description = 'black friday deal';
+        $expected->status = new OrderStatus();
+        $expected->status->id = 5;
+        $expected->status->label = 'processed';
+        $expected->link = ['http://example.org/', 'http://example.com/'];
+
+        $this->assertEquals($expected, $order);
+
+        $writtenXml = $orderService->writeValueObject($order);
+        $this->assertEquals($input, $writtenXml);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testWriteVoNotFound() {
+
+        $service = new Service();
+        $service->writeValueObject(new \StdClass());
+
+    }
+
     function testParseClarkNotation() {
 
         $this->assertEquals([
@@ -216,4 +339,71 @@ XML;
 
     }
 
+    function providesEmptyPropfinds()
+    {
+        return [
+            ['<D:propfind xmlns:D="DAV:"><D:prop></D:prop></D:propfind>'],
+            ['<D:propfind xmlns:D="DAV:"><D:prop xmlns:s="http://sabredav.org/ns"></D:prop></D:propfind>'],
+            ['<D:propfind xmlns:D="DAV:"><D:prop/></D:propfind>'],
+            ['<D:propfind xmlns:D="DAV:"><D:prop xmlns:s="http://sabredav.org/ns"/></D:propfind>'],
+            ['<D:propfind xmlns:D="DAV:"><D:prop>     </D:prop></D:propfind>'],
+        ];
+    }
+}
+
+/**
+ * asset for testMapValueObject()
+ * @internal
+ */
+class Order {
+    public $id;
+    public $amount;
+    public $description;
+    public $status;
+    public $empty;
+    public $link = [];
+}
+
+/**
+ * asset for testMapValueObject()
+ * @internal
+ */
+class OrderStatus {
+    public $id;
+    public $label;
+}
+
+
+/**
+ * asset for testInvalidNameSpace.
+ *
+ * @internal
+ */
+class PropFindTestAsset implements XmlDeserializable
+{
+    public $allProp = false;
+
+    public $properties;
+
+    static function xmlDeserialize(Reader $reader)
+    {
+        $self = new self();
+
+        $reader->pushContext();
+        $reader->elementMap['{DAV:}prop'] = 'Sabre\Xml\Element\Elements';
+
+        foreach (KeyValue::xmlDeserialize($reader) as $k => $v) {
+            switch ($k) {
+                case '{DAV:}prop':
+                    $self->properties = $v;
+                    break;
+                case '{DAV:}allprop':
+                    $self->allProp = true;
+            }
+        }
+
+        $reader->popContext();
+
+        return $self;
+    }
 }

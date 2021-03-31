@@ -11,7 +11,7 @@ namespace Sabre\HTTP\Auth;
  * 2. Call getCredentials (this will return null or a user/pass pair)
  * 3. If you didn't get valid credentials, call 'requireLogin'
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -55,7 +55,7 @@ class Basic extends AbstractAuth {
      */
     function requireLogin() {
 
-        $this->response->addHeader('WWW-Authenticate', 'Basic realm="' . $this->realm . '"');
+        $this->response->addHeader('WWW-Authenticate', 'Basic realm="' . $this->realm . '", charset="UTF-8"');
         $this->response->setStatus(401);
 
     }

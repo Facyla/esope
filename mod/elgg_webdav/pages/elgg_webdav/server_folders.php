@@ -79,7 +79,16 @@ $authPlugin = new Sabre\DAV\Auth\Plugin($authBackend, '');
 $rootDirectory = new DAV\FS\Directory($public_path);
 // The server object is responsible for making sense out of the WebDAV protocol
 $server = new DAV\Server($rootDirectory);
+
+
 // Add authentication
+// Force HTTP Auth if not already logged in
+if (!isset($_SERVER['PHP_AUTH_USER'])) {
+	header('WWW-Authenticate: Basic realm="' . elgg_echo('elgg_webdav:httpauth') . '"');
+	header('HTTP/1.0 401 Unauthorized');
+	echo elgg_echo('elgg_webdav:httpauth:cancel');
+	exit;
+}
 $server->addPlugin($authPlugin);
 
 

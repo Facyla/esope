@@ -46,6 +46,10 @@ return array(
 	'elgg_webdav:types:principal' => "Principal",
 	'elgg_webdav:types:collection' => "Collection",
 	
+	// HTTP Auth
+	'elgg_webdav:httpauth' => "Veuillez saisir votre identifiant et mot de passe",
+	'elgg_webdav:httpauth:cancel' => "L'accès aux dossiers WebDAV est impossible sans vous identifier",
+	
 	// SabreDAV Exceptions and errors
 	'elgg_webdav:error:file:create' => "Une erreur est survenue lors de la création du fichier",
 	'elgg_webdav:error:file:permissiondenied' => "Permission refusée de créer un fichier dans ce dossier",

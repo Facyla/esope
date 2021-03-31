@@ -59,22 +59,26 @@ class Reader extends XMLReader {
         $previousEntityState = libxml_disable_entity_loader(true);
         $previousSetting = libxml_use_internal_errors(true);
 
-        // Really sorry about the silence operator, seems like I have no
-        // choice. See:
-        //
-        // https://bugs.php.net/bug.php?id=64230
-        while ($this->nodeType !== self::ELEMENT && @$this->read()) {
-            // noop
-        }
-        $result = $this->parseCurrentElement();
+        try {
 
-        $errors = libxml_get_errors();
-        libxml_clear_errors();
-        libxml_use_internal_errors($previousSetting);
-        libxml_disable_entity_loader($previousEntityState);
+            // Really sorry about the silence operator, seems like I have no
+            // choice. See:
+            //
+            // https://bugs.php.net/bug.php?id=64230
+            while ($this->nodeType !== self::ELEMENT && @$this->read()) {
+                // noop
+            }
+            $result = $this->parseCurrentElement();
 
-        if ($errors) {
-            throw new LibXMLException($errors);
+            $errors = libxml_get_errors();
+            libxml_clear_errors();
+            if ($errors) {
+                throw new LibXMLException($errors);
+            }
+
+        } finally {
+            libxml_use_internal_errors($previousSetting);
+            libxml_disable_entity_loader($previousEntityState);
         }
 
         return $result;
@@ -124,11 +128,8 @@ class Reader extends XMLReader {
      */
     function parseInnerTree(array $elementMap = null) {
 
-        $previousDepth = $this->depth;
-
         $text = null;
         $elements = [];
-        $attributes = [];
 
         if ($this->nodeType === self::ELEMENT && $this->isEmptyElement) {
             // Easy!
@@ -141,49 +142,62 @@ class Reader extends XMLReader {
             $this->elementMap = $elementMap;
         }
 
-        // Really sorry about the silence operator, seems like I have no
-        // choice. See:
-        //
-        // https://bugs.php.net/bug.php?id=64230
-        if (!@$this->read()) return false;
+        try {
 
-        while (true) {
-
-            if (!$this->isValid()) {
-
+            // Really sorry about the silence operator, seems like I have no
+            // choice. See:
+            //
+            // https://bugs.php.net/bug.php?id=64230
+            if (!@$this->read()) {
                 $errors = libxml_get_errors();
-
+                libxml_clear_errors();
                 if ($errors) {
-                    libxml_clear_errors();
                     throw new LibXMLException($errors);
                 }
+                throw new ParseException('This should never happen (famous last words)');
             }
 
-            switch ($this->nodeType) {
-                case self::ELEMENT :
-                    $elements[] = $this->parseCurrentElement();
-                    break;
-                case self::TEXT :
-                case self::CDATA :
-                    $text .= $this->value;
-                    $this->read();
-                    break;
-                case self::END_ELEMENT :
-                    // Ensuring we are moving the cursor after the end element.
-                    $this->read();
-                    break 2;
-                case self::NONE :
-                    throw new ParseException('We hit the end of the document prematurely. This likely means that some parser "eats" too many elements. Do not attempt to continue parsing.');
-                default :
-                    // Advance to the next element
-                    $this->read();
-                    break;
+            while (true) {
+
+                if (!$this->isValid()) {
+
+                    $errors = libxml_get_errors();
+
+                    if ($errors) {
+                        libxml_clear_errors();
+                        throw new LibXMLException($errors);
+                    }
+                }
+
+                switch ($this->nodeType) {
+                    case self::ELEMENT :
+                        $elements[] = $this->parseCurrentElement();
+                        break;
+                    case self::TEXT :
+                    case self::CDATA :
+                        $text .= $this->value;
+                        $this->read();
+                        break;
+                    case self::END_ELEMENT :
+                        // Ensuring we are moving the cursor after the end element.
+                        $this->read();
+                        break 2;
+                    case self::NONE :
+                        throw new ParseException('We hit the end of the document prematurely. This likely means that some parser "eats" too many elements. Do not attempt to continue parsing.');
+                    default :
+                        // Advance to the next element
+                        $this->read();
+                        break;
+                }
+
             }
 
-        }
+        } finally {
 
-        if (!is_null($elementMap)) {
-            $this->popContext();
+            if (!is_null($elementMap)) {
+                $this->popContext();
+            }
+
         }
         return ($elements ? $elements : $text);
 
@@ -228,24 +242,10 @@ class Reader extends XMLReader {
             $attributes = $this->parseAttributes();
         }
 
-        if (array_key_exists($name, $this->elementMap)) {
-            $deserializer = $this->elementMap[$name];
-            if (is_subclass_of($deserializer, 'Sabre\\Xml\\XmlDeserializable')) {
-                $value = call_user_func([ $deserializer, 'xmlDeserialize' ], $this);
-            } elseif (is_callable($deserializer)) {
-                $value = call_user_func($deserializer, $this);
-            } else {
-                $type = gettype($deserializer);
-                if ($type === 'string') {
-                    $type .= ' (' . $deserializer . ')';
-                } elseif ($type === 'object') {
-                    $type .= ' (' . get_class($deserializer) . ')';
-                }
-                throw new \LogicException('Could not use this type as a deserializer: ' . $type);
-            }
-        } else {
-            $value = Element\Base::xmlDeserialize($this);
-        }
+        $value = call_user_func(
+            $this->getDeserializerForElementName($name),
+            $this
+        );
 
         return [
             'name'       => $name,
@@ -253,6 +253,7 @@ class Reader extends XMLReader {
             'attributes' => $attributes,
         ];
     }
+
 
     /**
      * Grabs all the attributes from the current element, and returns them as a
@@ -262,7 +263,7 @@ class Reader extends XMLReader {
      * short keys. If they are defined on a different namespace, the attribute
      * name will be retured in clark-notation.
      *
-     * @return void
+     * @return array
      */
     function parseAttributes() {
 
@@ -286,6 +287,43 @@ class Reader extends XMLReader {
         $this->moveToElement();
 
         return $attributes;
+
+    }
+
+    /**
+     * Returns the function that should be used to parse the element identified
+     * by it's clark-notation name.
+     *
+     * @param string $name
+     * @return callable
+     */
+    function getDeserializerForElementName($name) {
+
+
+        if (!array_key_exists($name, $this->elementMap)) {
+            if (substr($name, 0, 2) == '{}' && array_key_exists(substr($name, 2), $this->elementMap)) {
+                $name = substr($name, 2);
+            } else {
+                return ['Sabre\\Xml\\Element\\Base', 'xmlDeserialize'];
+            }
+        }
+
+        $deserializer = $this->elementMap[$name];
+        if (is_subclass_of($deserializer, 'Sabre\\Xml\\XmlDeserializable')) {
+            return [$deserializer, 'xmlDeserialize'];
+        }
+
+        if (is_callable($deserializer)) {
+            return $deserializer;
+        }
+
+        $type = gettype($deserializer);
+        if ($type === 'string') {
+            $type .= ' (' . $deserializer . ')';
+        } elseif ($type === 'object') {
+            $type .= ' (' . get_class($deserializer) . ')';
+        }
+        throw new \LogicException('Could not use this type as a deserializer: ' . $type . ' for element: ' . $name);
 
     }
 

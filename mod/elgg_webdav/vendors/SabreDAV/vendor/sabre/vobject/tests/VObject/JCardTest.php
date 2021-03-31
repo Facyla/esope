@@ -2,194 +2,193 @@
 
 namespace Sabre\VObject;
 
-class JCardTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
 
-    function testToJCard() {
+class JCardTest extends TestCase
+{
+    public function testToJCard()
+    {
+        $card = new Component\VCard([
+            'VERSION' => '4.0',
+            'UID' => 'foo',
+            'BDAY' => '19850407',
+            'REV' => '19951031T222710Z',
+            'LANG' => 'nl',
+            'N' => ['Last', 'First', 'Middle', '', ''],
+            'item1.TEL' => '+1 555 123456',
+            'item1.X-AB-LABEL' => 'Walkie Talkie',
+            'ADR' => [
+                '',
+                '',
+                ['My Street', 'Left Side', 'Second Shack'],
+                'Hometown',
+                'PA',
+                '18252',
+                'U.S.A',
+            ],
+        ]);
 
-        $card = new Component\VCard(array(
-            "VERSION" => "4.0",
-            "UID" => "foo",
-            "BDAY" => "19850407",
-            "REV"  => "19951031T222710Z",
-            "LANG" => "nl",
-            "N" => array("Last", "First", "Middle", "", ""),
-            "item1.TEL" => "+1 555 123456",
-            "item1.X-AB-LABEL" => "Walkie Talkie",
-            "ADR" => array(
-                "",
-                "",
-                array("My Street", "Left Side", "Second Shack"),
-                "Hometown",
-                "PA",
-                "18252",
-                "U.S.A",
-            ),
-        ));
+        $card->add('BDAY', '1979-12-25', ['VALUE' => 'DATE', 'X-PARAM' => [1, 2]]);
+        $card->add('BDAY', '1979-12-25T02:00:00', ['VALUE' => 'DATE-TIME']);
 
-        $card->add('BDAY', '1979-12-25', array('VALUE' => 'DATE', 'X-PARAM' => array(1,2)));
-        $card->add('BDAY', '1979-12-25T02:00:00', array('VALUE' => 'DATE-TIME'));
+        $card->add('X-TRUNCATED', '--1225', ['VALUE' => 'DATE']);
+        $card->add('X-TIME-LOCAL', '123000', ['VALUE' => 'TIME']);
+        $card->add('X-TIME-UTC', '12:30:00Z', ['VALUE' => 'TIME']);
+        $card->add('X-TIME-OFFSET', '12:30:00-08:00', ['VALUE' => 'TIME']);
+        $card->add('X-TIME-REDUCED', '23', ['VALUE' => 'TIME']);
+        $card->add('X-TIME-TRUNCATED', '--30', ['VALUE' => 'TIME']);
 
+        $card->add('X-KARMA-POINTS', '42', ['VALUE' => 'INTEGER']);
+        $card->add('X-GRADE', '1.3', ['VALUE' => 'FLOAT']);
 
-        $card->add('X-TRUNCATED', '--1225', array('VALUE' => 'DATE'));
-        $card->add('X-TIME-LOCAL', '123000', array('VALUE' => 'TIME'));
-        $card->add('X-TIME-UTC', '12:30:00Z', array('VALUE' => 'TIME'));
-        $card->add('X-TIME-OFFSET', '12:30:00-08:00', array('VALUE' => 'TIME'));
-        $card->add('X-TIME-REDUCED', '23', array('VALUE' => 'TIME'));
-        $card->add('X-TIME-TRUNCATED', '--30', array('VALUE' => 'TIME'));
+        $card->add('TZ', '-0500', ['VALUE' => 'UTC-OFFSET']);
 
-        $card->add('X-KARMA-POINTS', '42', array('VALUE' => 'INTEGER'));
-        $card->add('X-GRADE', '1.3', array('VALUE' => 'FLOAT'));
-
-        $card->add('TZ', '-05:00', array('VALUE' => 'UTC-OFFSET'));
-
-        $expected = array(
-            "vcard",
-            array(
-                array(
-                    "version",
-                    new \StdClass(),
-                    "text",
-                    "4.0"
-                ),
-                array(
-                    "prodid",
-                    new \StdClass(),
-                    "text",
-                    "-//Sabre//Sabre VObject " . Version::VERSION . "//EN",
-                ),
-                array(
-                    "uid",
-                    new \StdClass(),
-                    "text",
-                    "foo",
-                ),
-                array(
-                    "bday",
-                    new \StdClass(),
-                    "date-and-or-time",
-                    "1985-04-07",
-                ),
-                array(
-                    "rev",
-                    new \StdClass(),
-                    "timestamp",
-                    "1995-10-31T22:27:10Z",
-                ),
-                array(
-                    "lang",
-                    new \StdClass(),
-                    "language-tag",
-                    "nl",
-                ),
-                array(
-                    "n",
-                    new \StdClass(),
-                    "text",
-                    array("Last", "First", "Middle", "", ""),
-                ),
-                array(
-                    "tel",
-                    (object)array(
-                        "group" => "item1",
-                    ),
-                    "text",
-                    "+1 555 123456",
-                ),
-                array(
-                    "x-ab-label",
-                    (object)array(
-                        "group" => "item1",
-                    ),
-                    "unknown",
-                    "Walkie Talkie",
-                ),
-                array(
-                    "adr",
-                    new \StdClass(),
-                    "text",
-                        array(
-                            "",
-                            "",
-                            array("My Street", "Left Side", "Second Shack"),
-                            "Hometown",
-                            "PA",
-                            "18252",
-                            "U.S.A",
-                        ),
-                ),
-                array(
-                    "bday",
-                    (object)array(
-                        'x-param' => array(1,2),
-                    ),
-                    "date",
-                    "1979-12-25",
-                ),
-                array(
-                    "bday",
-                    new \StdClass(),
-                    "date-time",
-                    "1979-12-25T02:00:00",
-                ),
-                array(
-                    "x-truncated",
-                    new \StdClass(),
-                    "date",
-                    "--12-25",
-                ),
-                array(
-                    "x-time-local",
-                    new \StdClass(),
-                    "time",
-                    "12:30:00"
-                ),
-                array(
-                    "x-time-utc",
-                    new \StdClass(),
-                    "time",
-                    "12:30:00Z"
-                ),
-                array(
-                    "x-time-offset",
-                    new \StdClass(),
-                    "time",
-                    "12:30:00-08:00"
-                ),
-                array(
-                    "x-time-reduced",
-                    new \StdClass(),
-                    "time",
-                    "23"
-                ),
-                array(
-                    "x-time-truncated",
-                    new \StdClass(),
-                    "time",
-                    "--30"
-                ),
-                array(
-                    "x-karma-points",
-                    new \StdClass(),
-                    "integer",
-                    42
-                ),
-                array(
-                    "x-grade",
-                    new \StdClass(),
-                    "float",
-                    1.3
-                ),
-                array(
-                    "tz",
-                    new \StdClass(),
-                    "utc-offset",
-                    "-05:00",
-                ),
-            ),
-        );
+        $expected = [
+            'vcard',
+            [
+                [
+                    'version',
+                    new \stdClass(),
+                    'text',
+                    '4.0',
+                ],
+                [
+                    'prodid',
+                    new \stdClass(),
+                    'text',
+                    '-//Sabre//Sabre VObject '.Version::VERSION.'//EN',
+                ],
+                [
+                    'uid',
+                    new \stdClass(),
+                    'text',
+                    'foo',
+                ],
+                [
+                    'bday',
+                    new \stdClass(),
+                    'date-and-or-time',
+                    '1985-04-07',
+                ],
+                [
+                    'bday',
+                    (object) [
+                        'x-param' => [1, 2],
+                    ],
+                    'date',
+                    '1979-12-25',
+                ],
+                [
+                    'bday',
+                    new \stdClass(),
+                    'date-time',
+                    '1979-12-25T02:00:00',
+                ],
+                [
+                    'rev',
+                    new \stdClass(),
+                    'timestamp',
+                    '1995-10-31T22:27:10Z',
+                ],
+                [
+                    'lang',
+                    new \stdClass(),
+                    'language-tag',
+                    'nl',
+                ],
+                [
+                    'n',
+                    new \stdClass(),
+                    'text',
+                    ['Last', 'First', 'Middle', '', ''],
+                ],
+                [
+                    'tel',
+                    (object) [
+                        'group' => 'item1',
+                    ],
+                    'text',
+                    '+1 555 123456',
+                ],
+                [
+                    'x-ab-label',
+                    (object) [
+                        'group' => 'item1',
+                    ],
+                    'unknown',
+                    'Walkie Talkie',
+                ],
+                [
+                    'adr',
+                    new \stdClass(),
+                    'text',
+                        [
+                            '',
+                            '',
+                            ['My Street', 'Left Side', 'Second Shack'],
+                            'Hometown',
+                            'PA',
+                            '18252',
+                            'U.S.A',
+                        ],
+                ],
+                [
+                    'x-truncated',
+                    new \stdClass(),
+                    'date',
+                    '--12-25',
+                ],
+                [
+                    'x-time-local',
+                    new \stdClass(),
+                    'time',
+                    '12:30:00',
+                ],
+                [
+                    'x-time-utc',
+                    new \stdClass(),
+                    'time',
+                    '12:30:00Z',
+                ],
+                [
+                    'x-time-offset',
+                    new \stdClass(),
+                    'time',
+                    '12:30:00-08:00',
+                ],
+                [
+                    'x-time-reduced',
+                    new \stdClass(),
+                    'time',
+                    '23',
+                ],
+                [
+                    'x-time-truncated',
+                    new \stdClass(),
+                    'time',
+                    '--30',
+                ],
+                [
+                    'x-karma-points',
+                    new \stdClass(),
+                    'integer',
+                    42,
+                ],
+                [
+                    'x-grade',
+                    new \stdClass(),
+                    'float',
+                    1.3,
+                ],
+                [
+                    'tz',
+                    new \stdClass(),
+                    'utc-offset',
+                    '-05:00',
+                ],
+            ],
+        ];
 
         $this->assertEquals($expected, $card->jsonSerialize());
-
     }
-
 }

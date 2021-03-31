@@ -8,7 +8,7 @@ use DateTime;
  * A collection of useful helpers for parsing or generating various HTTP
  * headers.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -79,7 +79,7 @@ function toDate(DateTime $dateTime) {
     // We need to clone it, as we don't want to affect the existing
     // DateTime.
     $dateTime = clone $dateTime;
-    $dateTime->setTimeZone(new \DateTimeZone('GMT'));
+    $dateTime->setTimezone(new \DateTimeZone('GMT'));
     return $dateTime->format('D, d M Y H:i:s \G\M\T');
 
 }
@@ -216,7 +216,7 @@ function negotiateContentType($acceptHeaderValue, array $availableOptions) {
  * Parameters are currently discarded. There's no known prefer value that
  * uses them.
  *
- * @param string|string[] $header
+ * @param string|string[] $input
  * @return array
  */
 function parsePrefer($input) {

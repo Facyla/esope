@@ -58,11 +58,28 @@ If this solution does not work, you might try these other options mentionned her
 	RewriteEngine on
 	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 	</IfModule>
-And this into PHP scripts ; for this plugin we would add it to in the webdav page_handler function) :
+And this into PHP scripts ; for this plugin we would add it to in the webdav page_handler function :
 	list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
 
 2) Add to .htaccess file or virtual host :
 	AuthType Digest
 
+
+## HISTORY
+
+2.3 : 20210331 - Updated to Elgg 2.3
+	- work in progress
+	- SabreDAV 3.2.3
+
+1.12.0 : 20160511 - Updated to Elgg 1.12 + improvements
+	- support au_subgroups (subgroups appear as special group folders)
+	- support file_tools (folders) : folders tree view + new folders (and rename) + move folders
+
+0.3 : 20151023 - Implement virtual folder + file edit
+
+0.2 : 20151023 - Updated SabreDAV to 3.0.5
+
+0.1 : 20150205 - initial version
+	- SabreDAV 2.1.2
 
 

@@ -24,7 +24,7 @@ namespace Sabre\HTTP;
  * You can choose to either call all these methods statically, but you can also
  * instantiate this as an object to allow for polymorhpism.
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -75,7 +75,15 @@ class Sapi {
         if ($contentLength !== null) {
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && get_resource_type($body) == 'stream') {
-                stream_copy_to_stream($body, $output, $contentLength);
+                if (PHP_INT_SIZE !== 4){
+                    // use the dedicated function on 64 Bit systems
+                    stream_copy_to_stream($body, $output, $contentLength);
+                } else {
+                    // workaround for 32 Bit systems to avoid stream_copy_to_stream
+                    while (!feof($body)) {
+                        fwrite($output, fread($body, 8192));
+                    }
+                }
             } else {
                 fwrite($output, $body, $contentLength);
             }
@@ -122,7 +130,7 @@ class Sapi {
                     $url = $value;
                     break;
 
-                // These sometimes should up without a HTTP_ prefix
+                // These sometimes show up without a HTTP_ prefix
                 case 'CONTENT_TYPE' :
                     $headers['Content-Type'] = $value;
                     break;

@@ -3,7 +3,7 @@
 namespace Sabre\VObject\Splitter;
 
 /**
- * VObject splitter
+ * VObject splitter.
  *
  * The splitter is responsible for reading a large vCard or iCalendar object,
  * and splitting it into multiple objects.
@@ -11,16 +11,16 @@ namespace Sabre\VObject\Splitter;
  * This is for example for Card and CalDAV, which require every event and vcard
  * to exist in their own objects, instead of one large one.
  *
- * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
- * @author Dominik Tobschall
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
+ * @author Dominik Tobschall (http://tobschall.de/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-interface SplitterInterface {
-
+interface SplitterInterface
+{
     /**
-     * Constructor
+     * Constructor.
      *
-     * The splitter should receive an readable file stream as it's input.
+     * The splitter should receive an readable file stream as its input.
      *
      * @param resource $input
      */
@@ -32,8 +32,7 @@ interface SplitterInterface {
      *
      * When the end is reached, null will be returned.
      *
-     * @return Sabre\VObject\Component|null
+     * @return \Sabre\VObject\Component|null
      */
     public function getNext();
-
 }

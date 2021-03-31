@@ -2,15 +2,15 @@
 
 namespace Sabre\VObject\ITip;
 
-class EvolutionTest extends BrokerTester {
-
+class EvolutionTest extends BrokerTester
+{
     /**
      * Evolution does things as usual a little bit differently.
      *
-     * We're adding a seprate test just for it.
+     * We're adding a separate test just for it.
      */
-    function testNewEvolutionEvent() {
-
+    public function testNewEvolutionEvent()
+    {
         $ics = <<<ICS
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -844,7 +844,6 @@ END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:20140813T153116Z-12176-1000-1065-6@johnny-lubuntu
-DTSTAMP:20140813T142829Z
 DTSTART;TZID=/freeassociation.sourceforge.net/Tzfile/America/Toronto:201408
  15T110000
 DTEND;TZID=/freeassociation.sourceforge.net/Tzfile/America/Toronto:20140815
@@ -866,7 +865,7 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-        $version = \Sabre\VObject\Version::VERSION; 
+        $version = \Sabre\VObject\Version::VERSION;
         $expectedICS = <<<ICS
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -1701,7 +1700,6 @@ END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:20140813T153116Z-12176-1000-1065-6@johnny-lubuntu
-DTSTAMP:20140813T142829Z
 DTSTART;TZID=/freeassociation.sourceforge.net/Tzfile/America/Toronto:201408
  15T110000
 DTEND;TZID=/freeassociation.sourceforge.net/Tzfile/America/Toronto:20140815
@@ -1719,12 +1717,13 @@ ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
  TRUE;LANGUAGE=en:MAILTO:dominik@fruux.com
 CREATED:20140813T153211Z
 LAST-MODIFIED:20140813T155353Z
+DTSTAMP:**ANY**
 END:VEVENT
 END:VCALENDAR
 ICS;
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'uid' => '20140813T153116Z-12176-1000-1065-6@johnny-lubuntu',
                 'method' => 'REQUEST',
                 'sender' => 'mailto:martin@fruux.com',
@@ -1732,10 +1731,9 @@ ICS;
                 'recipient' => 'mailto:dominik@fruux.com',
                 'recipientName' => null,
                 'message' => $expectedICS,
-            )
-        ); 
+            ],
+        ];
         $this->parse(null, $ics, $expected, 'mailto:martin@fruux.com');
-
     }
 
     /**
@@ -1743,8 +1741,8 @@ ICS;
      * again mangled by iCal. This triggered a few bugs related to email
      * address scheme casing.
      */
-    public function testAttendeeModify() {
-
+    public function testAttendeeModify()
+    {
         $old = <<<ICS
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -2644,10 +2642,6 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-        $this->parse($old, $new, array(), 'mailto:a1@example.org');
-
-
+        $this->parse($old, $new, [], 'mailto:a1@example.org');
     }
-
-
 }

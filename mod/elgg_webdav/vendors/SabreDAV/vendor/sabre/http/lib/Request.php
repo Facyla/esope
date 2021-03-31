@@ -11,7 +11,7 @@ use Sabre\Uri;
  * You can either simply construct the object from scratch, or if you need
  * access to the current HTTP request, use Sapi::getRequest.
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -301,7 +301,7 @@ class Request extends Message implements RequestInterface {
             foreach ($value as $v) {
                 if ($key === 'Authorization') {
                     list($v) = explode(' ', $v, 2);
-                    $v  .= ' REDACTED';
+                    $v .= ' REDACTED';
                 }
                 $out .= $key . ": " . $v . "\r\n";
             }
