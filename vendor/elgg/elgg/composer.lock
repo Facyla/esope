@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9aa45efc11c09b21af9427eff9a555a4",
+    "content-hash": "9572b1582d1871a79947d3f3a02f10e5",
     "packages": [
         {
             "name": "bower-asset/fontawesome",
@@ -213,12 +213,12 @@
             "version": "2.3.6",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jrburke/requirejs-bower.git",
+                "url": "https://github.com/requirejs/requirejs-bower.git",
                 "reference": "3596b04fa67953d2fb06456ecb92cf833b462b82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jrburke/requirejs-bower/zipball/3596b04fa67953d2fb06456ecb92cf833b462b82",
+                "url": "https://api.github.com/repos/requirejs/requirejs-bower/zipball/3596b04fa67953d2fb06456ecb92cf833b462b82",
                 "reference": "3596b04fa67953d2fb06456ecb92cf833b462b82"
             },
             "type": "bower-asset",

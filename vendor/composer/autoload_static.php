@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc8648cde643525b1fc75941e441c9761
+class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -536,7 +536,6 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'CallException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/CallException.php',
         'ClassException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/ClassException.php',
         'ClassNotFoundException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/ClassNotFoundException.php',
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
         'Composer\\Installers\\AimeosInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
         'Composer\\Installers\\AnnotateCmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
@@ -605,6 +604,7 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'Composer\\Installers\\Plugin' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Plugin.php',
         'Composer\\Installers\\PortoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PortoInstaller.php',
         'Composer\\Installers\\PrestashopInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PrestashopInstaller.php',
+        'Composer\\Installers\\ProcessWireInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ProcessWireInstaller.php',
         'Composer\\Installers\\PuppetInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PuppetInstaller.php',
         'Composer\\Installers\\PxcmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PxcmsInstaller.php',
         'Composer\\Installers\\RadPHPInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RadPHPInstaller.php',
@@ -616,6 +616,7 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'Composer\\Installers\\ShopwareInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ShopwareInstaller.php',
         'Composer\\Installers\\SilverStripeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SilverStripeInstaller.php',
         'Composer\\Installers\\SiteDirectInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SiteDirectInstaller.php',
+        'Composer\\Installers\\StarbugInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/StarbugInstaller.php',
         'Composer\\Installers\\SyDESInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyDESInstaller.php',
         'Composer\\Installers\\SyliusInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyliusInstaller.php',
         'Composer\\Installers\\Symfony1Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Symfony1Installer.php',
@@ -765,7 +766,6 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'Doctrine\\Common\\Cache\\PhpFileCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/PhpFileCache.php',
         'Doctrine\\Common\\Cache\\PredisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/PredisCache.php',
         'Doctrine\\Common\\Cache\\RedisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RedisCache.php',
-        'Doctrine\\Common\\Cache\\RiakCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RiakCache.php',
         'Doctrine\\Common\\Cache\\SQLite3Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/SQLite3Cache.php',
         'Doctrine\\Common\\Cache\\Version' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Version.php',
         'Doctrine\\Common\\Cache\\VoidCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/VoidCache.php',
@@ -1321,7 +1321,6 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'Elgg\\PluginHooksService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/PluginHooksService.php',
         'Elgg\\Profilable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profilable.php',
         'Elgg\\Profiler' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profiler.php',
-        'Elgg\\Project\\CodeStyle' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/CodeStyle.php',
         'Elgg\\Project\\Paths' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/Paths.php',
         'Elgg\\Queue\\DatabaseQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/DatabaseQueue.php',
         'Elgg\\Queue\\MemoryQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/MemoryQueue.php',
@@ -1903,6 +1902,7 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionClass' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionClass.php',
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\StringOptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/StringOptionTest.php',
+        'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\HybridPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/NoPasswordGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php5RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php5RandomGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php7RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php7RandomGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\ReadMeTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/ReadMeTest.php',
@@ -2632,6 +2632,7 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
         'Symfony\\Component\\Routing\\Loader\\GlobFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/GlobFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\ObjectRouteLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/ObjectRouteLoader.php',
         'Symfony\\Component\\Routing\\Loader\\PhpFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/PhpFileLoader.php',
+        'Symfony\\Component\\Routing\\Loader\\ProtectedPhpFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/PhpFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\XmlFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/XmlFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\YamlFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/YamlFileLoader.php',
         'Symfony\\Component\\Routing\\Matcher\\Dumper\\DumperCollection' => __DIR__ . '/..' . '/symfony/routing/Matcher/Dumper/DumperCollection.php',
@@ -3031,10 +3032,10 @@ class ComposerStaticInitc8648cde643525b1fc75941e441c9761
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc8648cde643525b1fc75941e441c9761::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc8648cde643525b1fc75941e441c9761::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc8648cde643525b1fc75941e441c9761::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitc8648cde643525b1fc75941e441c9761::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$classMap;
 
         }, null, ClassLoader::class);
     }

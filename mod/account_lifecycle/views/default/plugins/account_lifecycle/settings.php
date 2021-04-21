@@ -1,7 +1,7 @@
 <?php
 $plugin = elgg_extract('entity', $vars);
 
-// Dropdown values
+// Select values
 $yes_no_opt = ['yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no')];
 $no_yes_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
 

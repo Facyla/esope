@@ -4,10 +4,10 @@
 	<id>account_lifecycle</id>
 	<author>Florian DANIEL aka Facyla</author>
 	<version>3.3.0</version>
-	<blurb>Filtrage des inscriptions</blurb>
-	<description>Gestion du cycle de vie des comptes : re-validation périodique.</description>
+	<blurb>Vérification périodique des comptes utilisateurs</blurb>
+	<description>Vérification périodique et Gestion du cycle de vie des comptes utilisateurs.</description>
 	<website>https://facyla.fr/</website>
-	<copyright>Florain DANIEL aka (Facyla)</copyright>
+	<copyright>Florian DANIEL aka (Facyla)</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<requires>

@@ -1,3 +1,49 @@
+<a name="3.3.17"></a>
+### 3.3.17  (2021-04-16)
+
+#### Contributors
+
+* Jeroen Dalsem (2)
+* Jerôme Bakker (2)
+* Nikolai Shcherbin (1)
+
+#### Bug Fixes
+
+* **groups:** don't show 'Invite friends' menu item on the group's members page when 'Friends' plugin is deactivated ([5d2f8a32](https://github.com/Elgg/Elgg/commit/5d2f8a320f6d1a078bcb6f9648ba158358a302b0))
+* **river:** river options annotation_ids now work as expected ([e1d61594](https://github.com/Elgg/Elgg/commit/e1d61594d278befae6d1edc300c33f13ccd6c40f))
+* **thewire:** do not put unlimited description in notification summary ([657be642](https://github.com/Elgg/Elgg/commit/657be6420180d5638d219cbac5f621df4d1ff18e))
+
+
+<a name="3.3.16"></a>
+### 3.3.16  (2021-02-12)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+* Jeroen Dalsem (1)
+* Nikolai Shcherbin (1)
+
+#### Bug Fixes
+
+* **cache:** disable filecache if path isn't writeable ([dc807d44](https://github.com/Elgg/Elgg/commit/dc807d44f971470bb29f00404a89c567d91f478f))
+* **likes:** don't provide likes data in non default type ajax requests ([07d63d43](https://github.com/Elgg/Elgg/commit/07d63d437ac4bcba1e5b2c2e49d8bbd7175abb22))
+* **menu:** don't show 'invite friends' menu item on the group profile when 'Friends' plugin is deactivated ([2783492a](https://github.com/Elgg/Elgg/commit/2783492aaa5b19a8f17e6dfec68a9903112cad16))
+
+
+<a name="3.3.15"></a>
+### 3.3.15  (2021-01-15)
+
+#### Contributors
+
+* Jerôme Bakker (4)
+
+#### Bug Fixes
+
+* **db:** pass previous database exception ([20e07d23](https://github.com/Elgg/Elgg/commit/20e07d238f110a6ae28a9fbaf488ebb3054dcedc))
+* **icon:** use different icon size to check in icon remove ([8c42bf4f](https://github.com/Elgg/Elgg/commit/8c42bf4f53a93ce50b817df5be711d903ca37791))
+* **icons:** prevent auto generation of icons during entity updates ([918a1193](https://github.com/Elgg/Elgg/commit/918a1193986ee0e689f8c823f0039100e92a8466))
+
+
 <a name="3.3.14"></a>
 ### 3.3.14  (2020-12-18)
 
@@ -1995,6 +2041,14 @@ keyword `all` no longer has any effect on calling order. ([1b0cc64d](https://git
 var `$DEFAULT_FILE_STORE`.
  ([618c79d3](https://github.com/Elgg/Elgg/commit/618c79d301eda1b265441b14f3bfbda2235ee3fd))
 * The `resources/file/download` view is no longer used. ([1e736aeb](https://github.com/Elgg/Elgg/commit/1e736aebb953051ec1b8a2c165ab3c9595e72b40))
+
+
+<a name="2.3.17"></a>
+### 2.3.17  (2021-04-16)
+
+#### Contributors
+
+* Jerôme Bakker (2)
 
 
 <a name="2.3.16"></a>

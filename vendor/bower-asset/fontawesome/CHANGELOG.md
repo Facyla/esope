@@ -10,6 +10,22 @@ not have access**
 
 ---
 
+## [5.15.3](https://github.com/FortAwesome/Font-Awesome/releases/tag/5.15.3) - 2021-03-16
+
+### Changed
+
+* Updated air-freshener's design due to trademark violation notice
+
+---
+
+## [5.15.2](https://github.com/FortAwesome/Font-Awesome/releases/tag/5.15.2) - 2021-01-13
+
+### Changed
+
+* Support release to improve Font Awesome Kits performance
+
+---
+
 ## [5.15.1](https://github.com/FortAwesome/Font-Awesome/releases/tag/5.15.1) - 2020-10-05
 
 ### Changed

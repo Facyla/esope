@@ -4,7 +4,7 @@
 function account_lifecycle_direct_rule_options() {
 	return [
 		'email_validation' => elgg_echo('account_lifecycle:rule:email_validation'),
-		'confirm_button' => elgg_echo('account_lifecycle:rule:confirm_button'),
+		//'confirm_button' => elgg_echo('account_lifecycle:rule:confirm_button'),
 		//'archive' => elgg_echo('account_lifecycle:rule:archive'),
 		//'ban' => elgg_echo('account_lifecycle:rule:ban'),
 	];
