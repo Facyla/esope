@@ -140,7 +140,8 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 		switch($item->getName()) {
 			case 'groups':
 				$item->setPriority(200);
-				$item->setText($item->getText() . '&nbsp;<i class="fa fa-caret-down"></i>');
+				//$item->setText($item->getText() . '&nbsp;<i class="fa fa-caret-down"></i>');
+				$item->setText('Espaces de travail&nbsp;<i class="fa fa-caret-down"></i>');
 				break;
 			case 'members':
 				$item->setPriority(600);

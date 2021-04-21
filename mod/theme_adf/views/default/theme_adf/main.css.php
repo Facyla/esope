@@ -69,6 +69,10 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-menu-item-help { background: #e57b5f; }
 
 
+/* LAYOUTS & SIDEBARS */
+.elgg-layout-columns > .elgg-sidebar { order: -1; margin-left: 0; margin-right: 2rem; }
+
+
 /* FOOTER */
 .elgg-page-footer { background: #0b2d51; border-top: 1px solid #e6e6ea; color: #969696; font-size: .9rem; }
 .elgg-page-footer a { color: #DFDFDF; }
@@ -123,6 +127,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	
 	.elgg-page-topbar > .elgg-inner { position: relative; }
 	.elgg-nav-logo { position: absolute; top: 0; left: -10vw; width: calc(10vw + 1rem); height: 7.5rem; border-radius: 0 0 3rem 0; margin-left: 0; padding: 1rem 1rem 1rem 1rem; }
+	.elgg-nav-logo { position: fixed; top: 0; left: 0; z-index: 1; }
 	.elgg-nav-logo h1 { position: initial; padding: initial; background: initial; border-radius: initial; }
 	.elgg-nav-logo h1 a { background-image: url('<?php echo $url; ?>mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france.png'); background-position: center; }
 }
