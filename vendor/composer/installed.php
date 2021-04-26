@@ -6,19 +6,19 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'e1eeaf13eddf31a98daf39df05ce2ff5fa0f90fb',
+    'reference' => '7406d5faf7895b4ce0e32faad7f330cb7892109c',
     'name' => 'elgg/starter-project',
   ),
   'versions' => 
   array (
     'bower-asset/fontawesome' => 
     array (
-      'pretty_version' => '5.15.1',
-      'version' => '5.15.1.0',
+      'pretty_version' => '5.15.3',
+      'version' => '5.15.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => '57005cea6da7d1c67f3466974aecd25485f60452',
+      'reference' => 'd79d85c3fad85ad1885e87ed558f4afd6fce8289',
     ),
     'bower-asset/jquery' => 
     array (
@@ -112,66 +112,66 @@
     ),
     'cakephp/cache' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'bde82c6692f03351d113d010e1a4d7f69359144d',
+      'reference' => '3368c641c25893f5f5ab64554d29ea50c039b533',
     ),
     'cakephp/collection' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'ddfff69d7bfa8b9b03eb7150097b0b06258fcaa3',
+      'reference' => '125154fec507d0f1afd0c8913b1cf919dff1da92',
     ),
     'cakephp/core' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4b45635d6be8a98be175fea9c9f575de29d515b3',
+      'reference' => 'eadccd407141ea8ef8afac5e01467110543d6484',
     ),
     'cakephp/database' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => '6f4cd60f53e8b6559cc6782ff288cc6d2b8fe1d3',
+      'reference' => 'dfff5ed68e5c0c27df5045e685e9970a0f3025a8',
     ),
     'cakephp/datasource' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c1c5e06c38dc61b997703d38fc704917f39b4dd8',
+      'reference' => 'a2a4154cf9e384410fb4a49cc0e8cefdf38014dc',
     ),
     'cakephp/log' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b5b97154b8e63f41e206021901e49397e2f4ca90',
+      'reference' => 'cf10bdcce4e78430a780edb2cc5b4b2b4719a65d',
     ),
     'cakephp/utility' => 
     array (
-      'pretty_version' => '3.9.4',
-      'version' => '3.9.4.0',
+      'pretty_version' => '3.9.8',
+      'version' => '3.9.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'e655b399b7492e517caef52fb87af9db10543112',
+      'reference' => '51b0af31af3239f6141006bbd7cbc7b16aba40d6',
     ),
     'ckeditor/ckeditor' => 
     array (
@@ -184,12 +184,12 @@
     ),
     'composer/installers' => 
     array (
-      'pretty_version' => 'v1.9.0',
-      'version' => '1.9.0.0',
+      'pretty_version' => 'v1.10.0',
+      'version' => '1.10.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b93bcf0fa1fccb0b7d176b0967d969691cd74cca',
+      'reference' => '1a0357fccad9d1cc1ea0c9a05b8847fbccccb78d',
     ),
     'container-interop/container-interop' => 
     array (
@@ -246,12 +246,12 @@
     ),
     'elgg/elgg' => 
     array (
-      'pretty_version' => '3.3.14',
-      'version' => '3.3.14.0',
+      'pretty_version' => '3.3.17',
+      'version' => '3.3.17.0',
       'aliases' => 
       array (
       ),
-      'reference' => '79a5a9e778e0356ba7d3937b7116e818e6656109',
+      'reference' => 'a2edc275e1f4c841487ac84f64fba5e9f5565a36',
     ),
     'elgg/login_as' => 
     array (
@@ -269,7 +269,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'e1eeaf13eddf31a98daf39df05ce2ff5fa0f90fb',
+      'reference' => '7406d5faf7895b4ce0e32faad7f330cb7892109c',
     ),
     'fzaninotto/faker' => 
     array (
@@ -458,12 +458,12 @@
     ),
     'psr/container' => 
     array (
-      'pretty_version' => '1.0.0',
-      'version' => '1.0.0.0',
+      'pretty_version' => '1.1.1',
+      'version' => '1.1.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'b7ce3b176482dbbc1245ebf52b181af44c2cf55f',
+      'reference' => '8622567409010282b7aeebe4bb841fe98b58dcaf',
     ),
     'psr/container-implementation' => 
     array (
@@ -514,7 +514,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'd5961914bf7f90e81af509b81e51450bff419815',
+      'reference' => '6c88e3fbd5e56eaf1869ec290db225b5c5dbe322',
     ),
     'robmorgan/phinx' => 
     array (
@@ -541,12 +541,12 @@
     ),
     'symfony/config' => 
     array (
-      'pretty_version' => 'v4.4.17',
-      'version' => '4.4.17.0',
+      'pretty_version' => 'v4.4.20',
+      'version' => '4.4.20.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4da4a6b07cc7d8d7d3e29842bc9c20401d555065',
+      'reference' => '98606c6fa1a8f55ff964ccdd704275bf5b9f71b3',
     ),
     'symfony/console' => 
     array (
@@ -559,21 +559,21 @@
     ),
     'symfony/debug' => 
     array (
-      'pretty_version' => 'v4.4.17',
-      'version' => '4.4.17.0',
+      'pretty_version' => 'v4.4.20',
+      'version' => '4.4.20.0',
       'aliases' => 
       array (
       ),
-      'reference' => '65fe7b49868378319b82da3035fb30801b931c47',
+      'reference' => '157bbec4fd773bae53c5483c50951a5530a2cc16',
     ),
     'symfony/filesystem' => 
     array (
-      'pretty_version' => 'v4.4.17',
-      'version' => '4.4.17.0',
+      'pretty_version' => 'v4.4.21',
+      'version' => '4.4.21.0',
       'aliases' => 
       array (
       ),
-      'reference' => '17b83e36a911aefa2cfe04bbf6328ec4c040c1b2',
+      'reference' => '940826c465be2690c9fae91b2793481e5cbd6834',
     ),
     'symfony/http-foundation' => 
     array (
@@ -586,21 +586,21 @@
     ),
     'symfony/polyfill-ctype' => 
     array (
-      'pretty_version' => 'v1.20.0',
-      'version' => '1.20.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f4ba089a5b6366e453971d3aad5fe8e897b37f41',
+      'reference' => 'c6c942b1ac76c82448322025e084cadc56048b4e',
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.20.0',
-      'version' => '1.20.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '39d483bdf39be819deabf04ec872eb0b2410b531',
+      'reference' => '5232de97ee3b75b0360528dae24e73db49566ab1',
     ),
     'symfony/polyfill-php70' => 
     array (
@@ -622,21 +622,21 @@
     ),
     'symfony/polyfill-php72' => 
     array (
-      'pretty_version' => 'v1.20.0',
-      'version' => '1.20.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'cede45fcdfabdd6043b3592e83678e42ec69e930',
+      'reference' => 'cc6e6f9b39fe8075b3dabfbaf5b5f645ae1340c9',
     ),
     'symfony/polyfill-php80' => 
     array (
-      'pretty_version' => 'v1.20.0',
-      'version' => '1.20.0.0',
+      'pretty_version' => 'v1.22.1',
+      'version' => '1.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'e70aa8b064c5b72d3df2abd5ab1e90464ad009de',
+      'reference' => 'dc3063ba22c2a1fd2f45ed856374d79114998f91',
     ),
     'symfony/routing' => 
     array (
@@ -658,12 +658,12 @@
     ),
     'symfony/yaml' => 
     array (
-      'pretty_version' => 'v4.4.17',
-      'version' => '4.4.17.0',
+      'pretty_version' => 'v4.4.21',
+      'version' => '4.4.21.0',
       'aliases' => 
       array (
       ),
-      'reference' => '7531361cf38e4816821b4a12a42542b3c6143ad1',
+      'reference' => '3871c720871029f008928244e56cf43497da7e9d',
     ),
     'tedivm/stash' => 
     array (

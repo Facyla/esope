@@ -22,5 +22,5 @@ echo elgg_view_page(elgg_echo('groups:all'), [
 	'sidebar' => $sidebar,
 	'filter_id' => 'groups/all',
 	'filter_value' => $selected_tab,
-	'header' => '<h2>' . elgg_echo('groups:all') . '</h2>' . '<div class="groups-mine">' . elgg_view('theme_adf/my-groups') . '</div>',
+	//'header' => '<h2>' . elgg_echo('groups:all') . '</h2>' . '<div class="groups-mine">' . elgg_view('theme_adf/my-groups') . '</div>',
 ]);

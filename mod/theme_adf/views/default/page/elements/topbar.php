@@ -32,3 +32,4 @@ elgg_require_js('page/elements/topbar');
 	echo elgg_view_menu('topbar');
 	?>
 </div>
+

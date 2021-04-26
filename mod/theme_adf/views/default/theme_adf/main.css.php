@@ -54,20 +54,31 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-topbar .elgg-menu li .elgg-child-menu { background: #0b2d51; }
 .elgg-page-body { padding-top: 3rem; }
 
+.elgg-nav-collapse { flex-wrap: wrap; }
+
 .elgg-nav-collapsed .elgg-nav-collapse { margin-top: 2rem; }
 
-.elgg-nav-logo { display: flex; width: 11rem; background: #0b2d51; padding: .5rem; /* border-radius: 0 0 3rem 0; padding: 1rem; */ }
-.elgg-nav-logo h1 { flex: 1; display: flex; position: absolute; top: 0; left: 0; padding: 1rem 1rem; background: #0b2d51; border-radius: 0 0 2rem 0; }
+.elgg-nav-logo { align-self: start; display: flex; width: 11rem; background: #0b2d51; padding: 0 .5rem; /* border-radius: 0 0 3rem 0; padding: 1rem; */ }
+.elgg-nav-logo h1 { flex: 1; display: flex; /* position: absolute; */ top: 0; left: 0; padding: 0rem 1rem; background: #0b2d51; border-radius: 0 0 2rem 0; }
 .elgg-nav-logo h1 a { flex: 1; width: 10rem; background: transparent url('<?php echo $url; ?>mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png') 0% 50%/contain no-repeat; }
 .elgg-heading-site .elgg-anchor-label { text-indent: -9999px; display: inline-block; }
 .elgg-heading-site a { flex: 1; }
 
-.elgg-page-topbar .elgg-form-search [type="text"] {  background: #1b3b5d; }
+.elgg-nav-search { display: none; max-width: 24rem; }
+.elgg-nav-search .elgg-form-search { /* border: 1px solid #fff; */ background: rgba(255,255,255,0.1); }
+.elgg-page-topbar .elgg-form-search [type="text"] { background: #1b3b5d; }
+.elgg-page-topbar .elgg-form-search fieldset { width: 100%; display: inline-block; }
+.elgg-page-topbar .elgg-form-search fieldset > .elgg-field { max-width: calc(100% - 10rem); }
 
 .elgg-menu-item-entity-menu-toggle .elgg-menu-content { min-width: 1.5em; text-align: center; }
+.elgg-page-topbar .elgg-menu li.elgg-menu-item-groups .elgg-child-menu { width: 20rem; max-width: 100vw; }
+.elgg-page-topbar .elgg-menu li.elgg-menu-item-members .elgg-child-menu { width: 20rem; max-width: 100vw; }
 
 .elgg-menu-item-help { background: #e57b5f; }
 
+.group-header { max-width: 100vw; /* width: 100vw; margin: -2rem calc(-10vw - 1rem) 0; padding: .5rem 10vw; */ background: #fff; border-bottom: 1px solid #0b2d51; min-height: 3.5rem; display: flex; }
+.group-header .group-image { width: 2.5rem; height: 2.5rem; margin: 0 1rem; }
+.group-header .group-search { align-self: center; flex: 1 1 auto; }
 
 /* LAYOUTS & SIDEBARS */
 .elgg-layout-columns > .elgg-sidebar { order: -1; margin-left: 0; margin-right: 2rem; }
@@ -96,8 +107,8 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 
 /* ANNUAIRE */
-.elgg-context-members .elgg-layout-content .elgg-list-entity { display: flex; flex-wrap: wrap; }
-.elgg-context-members .elgg-layout-content .elgg-list-entity > li { flex: 0 0 24rem; border-bottom: 0; box-shadow: 0 0 2px -1px #0b2d51; margin: .5rem; border-radius: .25rem; display: flex; flex-direction: column; }
+.elgg-context-members .elgg-layout-content .elgg-list-entity { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); grid-gap: 1rem 1rem; }
+.elgg-context-members .elgg-layout-content .elgg-list-entity > li { /* flex: 0 0 24rem; */ border-bottom: 0; box-shadow: 0 0 2px -1px #0b2d51; margin: .5rem; border-radius: .25rem; display: flex; flex-direction: column; }
 
 .elgg-item-user .elgg-image-block { flex: 1; }
 /*
@@ -119,18 +130,68 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-context-profile .elgg-layout-header h2 { order: 3; }
 
 
+/* DEBUT TEST PLEINE LARGEUR */
+.elgg-page-default .elgg-page-section > .elgg-inner { max-width: 100vw; padding: 0; }
+.elgg-page-body { padding-top: 0rem; }
+/*
+.elgg-layout-columns > .elgg-body { padding-left: 24rem; }
+.elgg-layout-sidebar { z-index: 1; width: 24rem; background: #244263; position: fixed; top: 0rem; bottom: 0; overflow: auto; padding: 4rem 1rem 1rem 2.5rem; }
+.elgg-page-topbar { background: #0b2d51; z-index: 2; position: fixed; left: 0; right: 0; }
+*/
 
+.elgg-layout-breadcrumbs { display: none; }
+.elgg-layout-header { background: #244263; border-bottom: 1px solid #0b2d51; color: white; margin-bottom: 0; padding: 0.25rem 2rem 0.25rem 2rem; }
+.elgg-page-footer { border-top: 1px solid #0b2d51; }
+.elgg-layout-columns > .elgg-sidebar { background: #fafafa; background: white; background: #0b2d5122; padding: 0 0 1rem 0rem; /* border-right: 1px solid #244263; */ margin-right: 0rem; }
+.elgg-sidebar .elgg-module > .elgg-head, .elgg-sidebar .elgg-module > .elgg-body { padding-left: 2rem; }
+.elgg-layout-header > h2, .elgg-layout-header > h3 { font-size: 1.5rem; }
+.elgg-layout-columns > .elgg-body { margin: 1rem 2rem; }
+.elgg-layout-one-column .elgg-layout-columns > .elgg-body { margin-left: 2rem; margin-right: 2rem; }
+
+.elgg-sidebar .elgg-menu, .elgg-sidebar .elgg-menu li { border: 0; }
+.facets-video iframe { margin: 1rem 0 -1rem 0; }
+@media (min-width: 80rem) {
+	.elgg-layout-columns > .elgg-sidebar { width: 20rem; }
+}
+@media (max-width: 80rem) {
+	.elgg-layout-columns > .elgg-sidebar { border-right: 0; /* border-bottom: 1px solid #244263; box-shadow: 0px 0px 3px #244263; */ }
+}
+
+.elgg-layout-header > .elgg-heading-main { padding: .25rem 1rem;; }
+.elgg-layout-header > .elgg-menu-container { padding: .25rem 1rem;; }
+.elgg-nav-collapsed .elgg-nav-collapse { display: flex; flex-direction: row; flex-wrap: wrap; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container > ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 1rem 1rem; border-top: 1px solid rgba(255,255,255,.3); }
+
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container { flex: 0 1 auto; flex: 1 0 100%; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 1rem 1rem; }
+
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container { flex: 1 1 auto; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul { display: block; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(14rem,1fr)); grid-gap: 0rem 0rem; padding-left: 1rem; width: auto; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul .elgg-child-menu li a {  }
+
+.elgg-menu-page, .elgg-menu-owner-block { background: transparent; }
+.elgg-menu-page li.elgg-state-selected > a, .elgg-menu-owner-block li.elgg-state-selected > a { background-color: #fff; }
+
+/* FIN TEST PLEINE LARGEUR */
+
+
+/*
 @media (min-width: 105rem) {
 	.elgg-page-default .elgg-page-section > .elgg-inner { max-width: 80vw; }
 	
 	.elgg-page-body { padding-top: 1rem; }
 	
 	.elgg-page-topbar > .elgg-inner { position: relative; }
-	.elgg-nav-logo { position: absolute; top: 0; left: -10vw; width: calc(10vw + 1rem); height: 7.5rem; border-radius: 0 0 3rem 0; margin-left: 0; padding: 1rem 1rem 1rem 1rem; }
+	.elgg-nav-logo { position: absolute; top: 0; left: -10vw; width: calc(9vw + 1rem); height: 7.5rem; border-radius: 0 0 3rem 0; margin-left: 0; padding: 1rem 1rem 1rem 0rem; }
 	.elgg-nav-logo { position: fixed; top: 0; left: 0; z-index: 1; }
 	.elgg-nav-logo h1 { position: initial; padding: initial; background: initial; border-radius: initial; }
 	.elgg-nav-logo h1 a { background-image: url('<?php echo $url; ?>mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france.png'); background-position: center; }
 }
+@media (max-width: 105rem) {
+	.elgg-nav-collapse { max-width: calc(100% - 12rem); margin-left: auto; }
+}
+*/
 
 @media (min-width: 80rem) {
 	.elgg-layout-sidebar { width: 24rem; }
