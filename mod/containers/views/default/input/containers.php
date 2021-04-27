@@ -61,7 +61,7 @@ $container_selector = elgg_view('input/select',$vars);
 if ($vars['hide_label']) {
 	echo '<span class="elgg-containers">' . $container_selector . '</span>';
 } else {
-	echo 'TTTTT<div class="elgg-containers">
+	echo '<div class="elgg-containers">
 		<label>' . elgg_echo('container') . '</label><br/>
 		' . $container_selector . '
 	</div>';

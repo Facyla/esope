@@ -19,7 +19,9 @@
 function access_collections_get_collection_by_name($name) {
 	$dbprefix = elgg_get_config('dbprefix');
 	$query = "SELECT * FROM {$dbprefix}access_collections WHERE name = '{$name}'";
-	$collection = get_data_row($query);
+	//$collection = get_data_row($query);
+	$collection = elgg()->db($query);
+	
 	return $collection;
 }
 
@@ -62,7 +64,8 @@ function access_collections_get_profile_types_acls($include_disabled = false) {
 		// Get all existing profilteype collections by using prefix filter
 		$dbprefix = elgg_get_config('dbprefix');
 		$query = "SELECT * FROM {$dbprefix}access_collections WHERE name LIKE 'profiletype:%'";
-		$collections = get_data($query);
+		//$collections = get_data($query);
+		$collections = elgg()->db($query);
 		if ($collections) {
 			$profiletypes_all_acls = array();
 			foreach($collections as $collection) {
@@ -164,7 +167,10 @@ function access_collections_create_custom_acl($criteria = array(), $collection_n
  *
  * @return array An array of ACLs : array($collection_id)
  */
-function access_collections_add_read_acl($hook, $type, $access_array, $params) {
+function access_collections_add_read_acl(\Elgg\Hook $hook) {
+	$access_array = $hook->getValue();
+	$params = $hook->getParams();
+	
 	static $custom_collections = false;
 	$user_guid = sanitize_int($params['user_id']);
 	$dbprefix = elgg_get_config('dbprefix');
@@ -188,6 +194,7 @@ function access_collections_add_read_acl($hook, $type, $access_array, $params) {
 			// Ensure that user is a member of that collection before adding to read access list
 			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
 			$result = get_data_row($query);
+			$result = elgg()->db($query);
 			if ($result) {
 				$custom_collections[$user_guid][] = $collection->id;
 			}
@@ -223,7 +230,10 @@ function access_collections_add_read_acl($hook, $type, $access_array, $params) {
  *
  * @return array An array of ACLs : array($collection_id => $collection_name)
  */
-function access_collections_add_write_acl($hook, $type, $access_array, $params) {
+function access_collections_add_write_acl(\Elgg\Hook $hook) {
+	$access_array = $hook->getValue();
+	$params = $hook->getParams();
+	
 	static $custom_collections = false;
 	$user_guid = sanitize_int($params['user_id']);
 	// Use cached results if already computed
@@ -243,7 +253,8 @@ function access_collections_add_write_acl($hook, $type, $access_array, $params) 
 		foreach($profile_types_acls as $collection) {
 			// Ensure that user is a member of that collection before adding to write access select
 			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
-			$result = get_data_row($query);
+			//$result = get_data_row($query);
+			$result = elgg()->db($query);
 			if ($result) {
 				$custom_collections[$user_guid][$collection->id] = elgg_echo($collection->name);
 			}
