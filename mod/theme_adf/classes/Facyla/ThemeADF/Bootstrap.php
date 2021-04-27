@@ -23,6 +23,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 		elgg_extend_view('elgg.css', 'theme_adf/main.css', 900);
 		elgg_extend_view('admin.css', 'theme_adf/admin.css', 900);
 		
+		elgg_extend_view('page/elements/owner_block', 'theme_adf/groups/sidebar/search', 0);
+		
 		//elgg_extend_view('page/elements/body', 'page/elements/group-header', 0);
 		//elgg_extend_view('page/elements/owner_block', 'page/elements/group-search', 0);
 		

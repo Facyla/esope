@@ -17,17 +17,24 @@ elgg_push_context('owner_block');
 $header = elgg_view_entity($owner, [
 	'item_view' => 'object/elements/chip',
 ]);
-// Group search
-if ($owner instanceof ElggGroup) {
-	if (elgg_is_active_plugin('search')) {
-	$header .= '<div class="group-search">
-		<a href="' . $url . 'search?container_guid=' . $owner->guid . '" class="search float-alt"><i class="fa fa-search"></i></a>
-	</div>';
-	}
-}
 
 $extra_class = '';
 $body = '';
+
+// Group search
+if ($owner instanceof ElggGroup) {
+	if (elgg_is_active_plugin('search')) {
+		// Search for content in this group
+		$group_search = elgg_view_form('groups/search', [
+			'action' => 'search',
+			'method' => 'get',
+			'disable_security' => true,
+			'prevent_double_submit' => true,
+		], ['entity' => $owner] + $vars);
+		$body .= '<h4>' . elgg_echo('groups:search_in_group') . '</h4>' . $group_search;
+	}
+}
+
 if (elgg_extract('show_owner_block_menu', $vars, true)) {
 	$menu_params = elgg_extract('owner_block_menu_params', $vars, []);
 	$menu_params['entity'] = $owner;

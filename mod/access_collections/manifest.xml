@@ -3,7 +3,7 @@
 	<name>Access collections</name>
 	<id>access_collections</id>
 	<author>Florian DANIEL aka Facyla</author>
-	<version>3.0</version>
+	<version>3.3.0</version>
 	<blurb>Add custom access collections</blurb>
 	<description>You can use this plugin if you need top-level access collections (similar to members, private,e tc.) based on various criteria.</description>
 	<website>https://facyla.fr/</website>
