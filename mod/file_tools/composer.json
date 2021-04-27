@@ -2,22 +2,21 @@
 	"name": "coldtrick/file_tools",
 	"description": "Extend the functionality of the core file plugin",
 	"type": "elgg-plugin",
-	"keywords": ["elgg", "plugin", "tools"],
-	"license": "GPL-2.0",
+	"keywords": ["elgg", "plugin", "files"],
+	"license": "GPL-2.0-only",
 	"support": {
 		"source": "https://github.com/ColdTrick/file_tools",
 		"issues": "https://github.com/ColdTrick/file_tools/issues"
 	},
 	"require": {
 		"composer/installers": "^1.0.8",
-		"bower-asset/jquery.serializeJSON": "~2.7.2",
-		"bower-asset/jstree": "~3.3.3"
+		"bower-asset/jquery.serializejson": "~2.9.0"
 	},
 	"require-dev": {
 		"coldtrick/sniffs": "dev-master",
 		"coldtrick/releases": "dev-master"
 	},
 	"conflict": {
-		"elgg/elgg": "<2.2"
+		"elgg/elgg": "<3.2.1"
 	}
 }

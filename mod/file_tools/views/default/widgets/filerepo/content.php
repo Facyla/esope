@@ -17,18 +17,9 @@ $options = [
 	'full_view' => false,
 ];
 
-// show only featured files
-if ($widget->featured_only == 'yes') {
-	$options['metadata_name_value_pairs'] = [
-		'name' => 'show_in_widget',
-		'value' => '0',
-		'operand' => '>',
-	];
-}
-
 // how to display the files
 if ($widget->gallery_list == 2) {
-	$files = elgg_get_entities_from_metadata($options);
+	$files = elgg_get_entities($options);
 	if (empty($files)) {
 		echo elgg_echo('file:none');
 		return;
@@ -41,7 +32,7 @@ if ($widget->gallery_list == 2) {
 		$list .= elgg_view('output/url', [
 			'text' => elgg_view_entity_icon($file, 'small'),
 			'href' => $file->getURL(),
-			'title' => $file->title,
+			'title' => $file->getDisplayName(),
 		]);
 		$list .= '</li>';
 	}
@@ -52,9 +43,13 @@ if ($widget->gallery_list == 2) {
 	$more_link = '';
 	$owner = $widget->getOwnerEntity();
 	if ($owner instanceof ElggUser) {
-		$more_link = "file/owner/{$owner->username}";
+		$more_link = elgg_generate_url('collection:object:file:owner', [
+			'username' => $owner->username,
+		]);
 	} elseif ($owner instanceof ElggGroup) {
-		$more_link = "file/group/{$owner->getGUID()}/all";
+		$more_link = elgg_generate_url('collection:object:file:group', [
+			'guid' => $owner->guid,
+		]);
 	}
 	
 	if (empty($more_link)) {
@@ -70,7 +65,7 @@ if ($widget->gallery_list == 2) {
 	return;
 }
 
-$list = elgg_list_entities_from_metadata($options);
+$list = elgg_list_entities($options);
 if (empty($list)) {
 	echo elgg_echo('file:none');
 	return;
@@ -81,9 +76,13 @@ echo $list;
 $more_link = '';
 $owner = $widget->getOwnerEntity();
 if ($owner instanceof ElggUser) {
-	$more_link = "file/owner/{$owner->username}";
+	$more_link = elgg_generate_url('collection:object:file:owner', [
+		'username' => $owner->username,
+	]);
 } elseif ($owner instanceof ElggGroup) {
-	$more_link = "file/group/{$owner->getGUID()}/all";
+	$more_link = elgg_generate_url('collection:object:file:group', [
+		'guid' => $owner->guid,
+	]);
 }
 
 if (empty($more_link)) {

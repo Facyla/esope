@@ -6,7 +6,7 @@
  */
 
 $entity = elgg_extract('entity', $vars);
-if (!($entity instanceof ElggObject) || $entity->getSubtype() !== FILE_TOOLS_SUBTYPE) {
+if (!$entity instanceof \FileToolsFolder) {
 	return;
 }
 
@@ -17,13 +17,13 @@ if (empty($sub_folders)) {
 }
 
 // get the containing files
-$files = elgg_get_entities_from_relationship([
+$files = elgg_get_entities([
 	'type' => 'object',
 	'subtype' => 'file',
 	'limit' => false,
 	'container_guid' => $entity->getContainerGUID(),
-	'relationship' => FILE_TOOLS_RELATIONSHIP,
-	'relationship_guid' => $entity->getGUID(),
+	'relationship' => FileToolsFolder::RELATIONSHIP,
+	'relationship_guid' => $entity->guid,
 	'inverse_relationship' => false,
 ]);
 
@@ -36,19 +36,4 @@ $params['list_class'] = 'mlm';
 $params['full_view'] = false;
 $params['pagination'] = false;
 
-if (elgg_is_xhr()) {
-	// ajax view, set some additional params
-	$params['show_toggle_content'] = true;
-	
-	$context = false;
-	if (!elgg_in_context('widgets')) {
-		$context = true;
-		elgg_push_context('widgets');
-	}
-}
-
 echo elgg_view_entity_list($entities, $params);
-
-if ($context) {
-	elgg_pop_context();
-}

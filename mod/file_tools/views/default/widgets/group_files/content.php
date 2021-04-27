@@ -12,7 +12,7 @@ if ($number < 1) {
 echo elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'file',
-	'container_guid' => $group->getGUID(),
+	'container_guid' => $group->guid,
 	'limit' => $number,
 	'pagination' => false,
 	'full_view' => false,
@@ -20,7 +20,9 @@ echo elgg_list_entities([
 ]);
 
 echo elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
-	'href' => "file/add/{$group->getGUID()}",
-	'text' => elgg_echo('file:add'),
+	'href' => elgg_generate_url('add:object:file', [
+		'guid' => $group->guid,
+	]),
+	'text' => elgg_echo('add:object:file'),
 	'is_trusted' => true,
 ]));
