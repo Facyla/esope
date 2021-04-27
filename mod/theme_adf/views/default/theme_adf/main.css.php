@@ -95,6 +95,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-footer { background: #0b2d51; border-top: 1px solid #e6e6ea; color: #969696; font-size: .9rem; }
 .elgg-page-footer a { color: #DFDFDF; }
 .elgg-page-footer a:hover { color: #FFFFFF; }
+.elgg-page-footer .elgg-inner { display: flex; align-items: center; }
 
 
 /* Accueil */
