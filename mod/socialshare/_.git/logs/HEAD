@@ -1,0 +1,15 @@
+0000000000000000000000000000000000000000 401c3c70afe284dc9081cbe692626c9e6e419cd9 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540900137 +0100	clone: from git@github.com:Facyla/socialshare.git
+401c3c70afe284dc9081cbe692626c9e6e419cd9 401c3c70afe284dc9081cbe692626c9e6e419cd9 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540913752 +0100	checkout: moving from master to elgg_1.8
+401c3c70afe284dc9081cbe692626c9e6e419cd9 496e0cdf8da5102a2ff22f4f999fef3aaa21e13a Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540913774 +0100	commit: Production version for Elgg 1.8
+496e0cdf8da5102a2ff22f4f999fef3aaa21e13a 496e0cdf8da5102a2ff22f4f999fef3aaa21e13a Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540913823 +0100	checkout: moving from elgg_1.8 to elgg_1.12
+496e0cdf8da5102a2ff22f4f999fef3aaa21e13a cd130c7c172624834845b9100fc996dd89ce4d1b Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540913851 +0100	commit: Production version for Elgg 1.12
+cd130c7c172624834845b9100fc996dd89ce4d1b 425685178b04ad02656e912430ea572bfac43116 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914136 +0100	commit: Updated README
+425685178b04ad02656e912430ea572bfac43116 916f4652ea5cebd321600a12fb3469e261db956d Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914579 +0100	commit: Updated README
+916f4652ea5cebd321600a12fb3469e261db956d 916f4652ea5cebd321600a12fb3469e261db956d Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914592 +0100	checkout: moving from elgg_1.12 to elgg_2.3
+916f4652ea5cebd321600a12fb3469e261db956d 904197d2a3eb9dc2d5041b96783245fee83d777b Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914688 +0100	commit: New branch for Elgg 2.3
+904197d2a3eb9dc2d5041b96783245fee83d777b 904197d2a3eb9dc2d5041b96783245fee83d777b Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914707 +0100	checkout: moving from elgg_2.3 to elgg_3.0
+904197d2a3eb9dc2d5041b96783245fee83d777b aefc41c8b4ce2a89e610d454b3cdf5546692e171 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914759 +0100	commit: New branch for Elgg 3.0
+aefc41c8b4ce2a89e610d454b3cdf5546692e171 401c3c70afe284dc9081cbe692626c9e6e419cd9 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914902 +0100	checkout: moving from elgg_3.0 to master
+401c3c70afe284dc9081cbe692626c9e6e419cd9 aefc41c8b4ce2a89e610d454b3cdf5546692e171 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1540914909 +0100	merge elgg_3.0: Fast-forward
+aefc41c8b4ce2a89e610d454b3cdf5546692e171 916f4652ea5cebd321600a12fb3469e261db956d Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1542642678 +0100	checkout: moving from master to elgg_1.12
+916f4652ea5cebd321600a12fb3469e261db956d aefc41c8b4ce2a89e610d454b3cdf5546692e171 Florian DANIEL ~ Facyla <i.daniel.florian@gmail.com> 1580821783 +0100	checkout: moving from elgg_1.12 to elgg_3.0
