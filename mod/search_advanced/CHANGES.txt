@@ -1,0 +1,248 @@
+Version history
+===============
+
+6.0 (2020-05-26):
+
+- changed: increased minimal Elgg requirement to v3.3
+- changed: layouts now use default layout
+
+5.0.5 (2020-04-22):
+
+- fix: show correct user filter view in search_user widget
+
+5.0.4 (2019-10-15):
+
+- fixed: use a normalized url in the autocomplete
+
+5.0.3 (2019-06-12):
+
+- fixed: do not retain profile fields filter when using search form
+
+5.0.2 (2019-05-29):
+
+- fixed: using widget_search only return body contents
+
+5.0.1 (2019-04-18):
+
+- several small chores/fixes
+
+5.0 (2019-04-17):
+
+- added: allowed pagination on combined search pages
+- added: apply pluginsettings about not searching profile fields
+- added: autocomplete search helpers based on context
+- added: option to allow empty query searches by search params
+- added: search_filter params added to default search params
+- added: settings to control autocomplete features
+- added: setting to control availability type selection menu
+- added: Spanish translation
+- added: view var to control if menu items are registered on search page
+- changed: allow passing of variables in search result view
+- changed: autocomplete data now all comes from hooks
+- changed: autocomplete helpers show instant
+- changed: autocomplete suggestions always show on result pages
+- changed: browserstate js now is loaded by composer
+- changed: minimal requirements now Elgg 3.0
+- changed: more intelligent loading of ajax_submit js
+- changed: moved search title output to its own view
+- changed: moved start to bootstrap class
+- changed: moved widget registration to elgg-plugin
+- changed: search_user widget is now also available in groups context
+- changed: user profile search filter
+- changed: use settings defaults in the new way
+- fixed: php warning
+- fixed: search on user profile field works
+- fixed: set group container search helper if looking at a group
+- fixed: title count should only count current results listed
+- removed: obsolete features that are now part of core
+
+4.1 (2018-02-12):
+
+- added: option to disable ajax submit in forms searchbox
+- changed: container search no longer limited to groups
+
+4.0 (2017-10-03):
+
+- added: placeholder text to search form
+- added: plugin setting to control if a query is required
+- changed: moved pages to resource views
+- changed: updated minimal Elgg requirement to 2.3
+- fixed: select filters in sidebar retain value
+- fixed: tag matching in objects and combined search hook case insensitive
+- fixed: type_subtype menu item always should show a number
+
+3.1 (2017-02-27):
+
+- added: added a flag to track searchresults shown in the searchwidget
+
+3.0 (2016-05-26):
+
+- changed: Elgg version requirement set to 2.1
+- fixed: deprecated notice
+- fixed: search limit now uses default_limit as default value
+- fixed: use correct default limit for combined listing
+
+2.1.1 (2016-04-14):
+
+- fixed: correctly search through discussion_replies in Elgg 2.x
+- fixed: using correct jquery function
+
+2.1 (2016-02-17):
+
+- added: plugin hook to change search params for combined search
+
+2.0 (2016-01-12):
+
+- added: ajax submitted search form from any page
+- added: allow class to be passed to the vars of search/layout view
+- added: auto submit on type selection if query is not empty
+- added: basic support for history.js when browsing search results
+- added: combine all feature
+- added: container filter is now showing above search results
+- added: count added as data attribute to search type menu items
+- added: custom hook to influence search params
+- added: german translation thanks to @Beaufort8
+- added: list type is added as a css class to the search results
+- added: members sidebar default field now has a placeholder text
+- added: page title now contains the number of items found
+- added: search page title now is its own view
+- added: search params to search menu
+- added: seperated search results error page check and html to a view
+- added: setting introduced to control where the search filters show
+- added: setting to enable/disable search advanced to take over search hooks
+- added: settings notice to inform about settings that could not work
+- added: sidebar filters are now applied when searching
+- added: support for enclosed search words
+- added: switch between menu or dropdown for sidebar search types selection
+- added: the ability to switch between different result layouts
+- added: user profile field search on members page
+- added: you can now control sidebar menu sorting with a view var
+- changed: additional search filters now use a generic approach
+- changed: allowing pagination on combined:all search
+- changed: always show sidebar menu item for current specific search
+- changed: cleanup of search index page code
+- changed: code beautification
+- changed: improved default search list view
+- changed: improved functionality of the ajax_submit feature
+- changed: move type selection js to own file
+- changed: moved page search to a custom hook
+- changed: moved search autocomplete js to own file and made it toggleable
+- changed: moved search widget related js to own file
+- changed: no longer filter out page_top in search page as it is unregistered in start as searchable
+- changed: reinstated the tags search as a custom type
+- changed: scroll top top of page after ajax search
+- changed: search input field is now a required field
+- changed: search param name for returning count is now named count
+- changed: search type refinement is now shown in a sidebar module
+- changed: sidebar type selection now support parent menu items and no longer shows sections as optgroups
+- changed: simplified the way menu items are added to the search sidebar
+- changed: split logic in multiple parts and started using the layout view
+- changed: updated dutch language
+- changed: use new 1.11 language key exist function
+- changed: user search form is no longer a table
+- fixed: always make sure the searched type menu item is available
+- fixed: always show quotes in search title around search words
+- fixed: combined search for discussions and pages
+- fixed: combined:all listing did not have the correct title
+- fixed: correctly destroy/recreate autocompletes when needed
+- fixed: correctly reset menu label to fetch correct item count
+- fixed: correctly reset to all when changing type selection
+- fixed: correctly set selected sidebar menu item
+- fixed: count param not set correctly for custom search types
+- fixed: css and js issue with search_list menu
+- fixed: custom search types dissapearing from sidebar menu on entity pages
+- fixed: do not fetch results html for non entity searches
+- fixed: do not query metastring ids per metastring but query in bulk
+- fixed: do not show empty double quotes on result page
+- fixed: do not show menu items with an empty count
+- fixed: escape function with return instead of continue
+- fixed: line endings
+- fixed: load ajax loaded content into correct html element
+- fixed: menu items disappearing on search pages with offset
+- fixed: no longer lose container_guid when switching to all content
+- fixed: non entity searches now have correct menu item url query params
+- fixed: only set combined content title if all else fails
+- fixed: php typehint warning
+- fixed: replaced deprecated jquery .live functions with .on
+- fixed: respect profile field order showing user search fields
+- fixed: search box input has no need for forced cell width
+- fixed: set correct base url for pagination
+- fixed: show submit button on top of search results if there is a filter
+- fixed: some minor z-index issues with the search_list menu
+- fixed: soundex filter now also has correct field name
+- fixed: subtype should be NULL for non object searches
+- fixed: use count if hook for all:combined search instead of menu total
+- fixed: user profile field filter is not working correctly
+- fixed: user profile field filter not showing up on members page
+- fixed: wordwrap added to search_list child menu items
+- fixed: you can now submit filters in the sidebar using enter key
+- removed: multisite features are no longer part of this plugin
+- removed: no longer provide custom discussion_reply search view
+- removed: no longer support global_tags and site_categories plugins
+
+1.1 (2015-08-04):
+
+- added: composer support
+- fixed: remove the correct pages subtype for search
+- fixed: custom search types do not show up in type selection
+- fixed: layout issues of searchbox and added more control vars to the view
+- fixed: comments do not show up in the results
+
+1.0 (2014-12-12):
+
+- added: site categories to be also searched
+- added: multitag search by splitting query based on comma or space
+- added: hook to influence autocomplete results
+- added: ability to return content instead of entities in search hooks
+- added: only show search menu items if result count > 0
+- added: search widget setting to show result in search page
+- added: user profile search
+- added: sounds like feature for profile fields
+- added: hook to sort listing results
+- added: option to exclude metadata from the global search
+- added: widget to search for users with the designated user search fields
+- added: search-list-more class to more link for styling purposes
+- added: plugin setting to use delayed ajax based search
+- changed: type selection is now a hook
+- changed: updated for Elgg 1.9
+- changed: autocomplete now uses generic search hooks
+- changed: use () instead of [] for counters
+- fixed: correctly sort comments
+- fixed: all entities should use the correct entity view in combined listing
+- fixed: hide more link on normal entity listing
+- fixed: keep container_guid intact when moving through results
+- fixed: do not show x more link on combined listing
+- fixed: always show result menu item count on all pages
+- fixed: allow case insensitive object metadata search
+- fixed: do not search for banned users
+
+0.6 (2013-06-27):
+
+- added: last updated / create text to default search results
+- added: optional combined search features to merge object results
+- changed: merged tag search in entity search
+
+0.5 (2013-05-06):
+
+- added: comments search
+- fixed: user search now also search profile fields (like core search does also)
+- fixed: duplicate result set if object type was specified
+- fixed: correct check for multisite flag
+
+0.4 (2013-04-05):
+
+- added: multiple tags search
+- fixed: some php notices
+
+0.3 (2012-12-11):
+
+- added: keyword autocompletion for global tags and site categories plugin
+
+0.2 (2012-08-07):
+
+- added: multisite search features
+- fixed: some search fixes
+
+0.1 (2012-04-12):
+
+- first release
