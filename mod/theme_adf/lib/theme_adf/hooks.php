@@ -105,6 +105,9 @@ function theme_adf_topbar_menu(\Elgg\Hook $hook) {
 				$return[$k]->setPriority(0);
 				break;
 			*/
+			case 'account':
+				$return[$k]->setText($user->name);
+				break;
 			
 			default:
 				//$return[$k]->setText($item->getWeight() . ' - ' . $item->getName() . ' - ' . $item->getText());
