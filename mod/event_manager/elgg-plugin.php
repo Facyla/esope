@@ -40,6 +40,7 @@ return [
 		'who_create_site_events' => 'everyone',
 		'who_create_group_events' => 'members',
 		'rsvp_interested' => 'yes',
+		'event_mail' => 0,
 		'add_event_to_calendar' => 'yes',
 		'show_service_google' => 1,
 		'show_service_yahoo' => 1,
@@ -75,6 +76,11 @@ return [
 			'subtype' => 'eventslot',
 			'class' => Slot::class,
 		],
+		[
+			'type' => 'object',
+			'subtype' => 'eventmail',
+			'class' => EventMail::class,
+		],
 	],
 	'views' => [
 		'default' => [
@@ -85,7 +91,7 @@ return [
 	],
 	'routes' => [
 		'add:object:event' => [
-			'path' => '/event/add/{guid?}',
+			'path' => '/event/add/{guid}',
 			'resource' => 'event/add',
 			'middleware' => [
 				Gatekeeper::class,
@@ -115,6 +121,10 @@ return [
 		'view:object:event' => [
 			'path' => '/event/view/{guid}/{title?}',
 			'resource' => 'event/view',
+		],
+		'mail:object:event' => [
+			'path' => '/event/mail/{guid}',
+			'resource' => 'event/mail',
 		],
 		'collection:object:event:waitinglist' => [
 			'path' => '/event/waitinglist/{guid}',
@@ -187,6 +197,7 @@ return [
 		'event_manager/event/unsubscribe_confirm' => ['access' => 'public'],
 		'event_manager/event/resend_confirmation' => [],
 		'event_manager/event/register' => ['access' => 'public'],
+		'event_manager/event/mail' => [],
 		
 		'event_manager/attendees/export' => [],
 		'event_manager/attendees/move_to_attendees' => [],

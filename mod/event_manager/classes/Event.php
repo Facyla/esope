@@ -10,33 +10,35 @@ use Elgg\Database\Select;
  *
  * @package EventManager
  *
- * @property bool   $comments_on            comments enabled
- * @property string $contact_details        contact details
- * @property int[]  $contact_guids          additional contact persons
- * @property int    $endregistration_day    date until which registration is allowed
- * @property string $event_type             admin controlled event type
- * @property int    $event_start            start date
- * @property int    $event_end              end date
- * @property string $fee                    fee for the event
- * @property string $fee_details            information about the fee
- * @property bool   $notify_onsignup        event owner receives notification on new registration
- * @property string $organizer              organizer
- * @property int[]  $organizer_guids        additional organizers
- * @property string $region                 admin controlled event region
- * @property string $registration_completed text to show after registration is completed
- * @property bool   $registration_ended     is registration closed
- * @property bool   $registration_needed    is registration needed
- * @property bool   $register_nologin       registration is enabled for non site users
- * @property string $shortdescription       short event description
- * @property bool   $show_attendees         show attendees to users
- * @property string $venue                  venue of the event
- * @property bool   $waiting_list_enabled   is a waitling list enabled
- * @property string $website                event website
- * @property bool   $with_program           has a program
+ * @property bool   $comments_on               comments enabled
+ * @property string $contact_details           contact details
+ * @property int[]  $contact_guids             additional contact persons
+ * @property int    $endregistration_day       date until which registration is allowed
+ * @property string $event_type                admin controlled event type
+ * @property int    $event_start               start date
+ * @property int    $event_end                 end date
+ * @property string $fee                       fee for the event
+ * @property string $fee_details               information about the fee
+ * @property bool   $notify_onsignup           event owner receives notification on new registration
+ * @property bool   $notify_onsignup_organizer event organizers receive notification on new registration
+ * @property bool   $notify_onsignup_contact   event contacts receive notification on new registration
+ * @property string $organizer                 organizer
+ * @property int[]  $organizer_guids           additional organizers
+ * @property string $region                    admin controlled event region
+ * @property string $registration_completed    text to show after registration is completed
+ * @property bool   $registration_ended        is registration closed
+ * @property bool   $registration_needed       is registration needed
+ * @property bool   $register_nologin          registration is enabled for non site users
+ * @property string $shortdescription          short event description
+ * @property bool   $show_attendees            show attendees to users
+ * @property string $venue                     venue of the event
+ * @property bool   $waiting_list_enabled      is a waitling list enabled
+ * @property string $website                   event website
+ * @property bool   $with_program              has a program
  */
 class Event extends ElggObject {
 	
-	const SUBTYPE = "event";
+	const SUBTYPE = 'event';
 
 	/**
 	 * initializes the default class attributes
@@ -46,7 +48,7 @@ class Event extends ElggObject {
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
 
-		$this->attributes["subtype"] = self::SUBTYPE;
+		$this->attributes['subtype'] = self::SUBTYPE;
 	}
 	
 	/**
@@ -221,12 +223,7 @@ class Event extends ElggObject {
 	 */
 	public function rsvp($type = EVENT_MANAGER_RELATION_UNDO, $user_guid = 0, $reset_program = true, $add_to_river = true, $notify_on_rsvp = true) {
 		
-		$user_guid = sanitise_int($user_guid, false);
-
-		if (empty($user_guid)) {
-			$user_guid = elgg_get_logged_in_user_guid();
-		}
-
+		$user_guid = sanitise_int($user_guid, false) ?: elgg_get_logged_in_user_guid();
 		if (empty($user_guid)) {
 			return false;
 		}
@@ -253,7 +250,7 @@ class Event extends ElggObject {
 			elgg_delete_river([
 				'subject_guid' => $user_guid,
 				'object_guid' => $event_guid,
-				'action_type' => 'event_relationship'
+				'action_type' => 'event_relationship',
 			]);
 		}
 
@@ -261,17 +258,15 @@ class Event extends ElggObject {
 		if ($type && ($type != EVENT_MANAGER_RELATION_UNDO) && (in_array($type, event_manager_event_get_relationship_options()))) {
 			$result = $this->addRelationship($user_guid, $type);
 
-			if ($result && $add_to_river) {
-				if ($user_entity) {
-					// add river events
-					if (($type != 'event_waitinglist') && ($type != 'event_pending')) {
-						elgg_create_river_item([
-							'view' => 'river/event_relationship/create',
-							'action_type' => 'event_relationship',
-							'subject_guid' => $user_guid,
-							'object_guid' => $event_guid,
-						]);
-					}
+			if ($result && $add_to_river && $user_entity) {
+				// add river events
+				if (($type !== 'event_waitinglist') && ($type !== 'event_pending')) {
+					elgg_create_river_item([
+						'view' => 'river/event_relationship/create',
+						'action_type' => 'event_relationship',
+						'subject_guid' => $user_guid,
+						'object_guid' => $event_guid,
+					]);
 				}
 			}
 		} else {
@@ -330,7 +325,7 @@ class Event extends ElggObject {
 		if ($this->max_attendees != '') {
 			$attendees = $this->countAttendees();
 
-			if (($this->max_attendees > $attendees)) {
+			if ($this->max_attendees > $attendees) {
 				return true;
 			}
 		} else {
@@ -462,7 +457,7 @@ class Event extends ElggObject {
 	 *
 	 * @return false|string
 	 */
-	public function getProgramData($user_guid = null, $participate = false, $register_type = "register") {
+	public function getProgramData($user_guid = null, $participate = false, $register_type = 'register') {
 		if ($user_guid === null) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
@@ -476,7 +471,7 @@ class Event extends ElggObject {
 
 			$result = elgg_view('event_manager/program/view', [
 				'entity' => $this,
-				'member' => $user_guid
+				'member' => $user_guid,
 			]);
 
 			elgg_pop_context();
@@ -484,7 +479,7 @@ class Event extends ElggObject {
 			$result = elgg_view('event_manager/program/edit', [
 				'entity' => $this,
 				'register_type' => $register_type,
-				'member' => $user_guid
+				'member' => $user_guid,
 			]);
 		}
 
@@ -516,11 +511,12 @@ class Event extends ElggObject {
 			}
 	
 			// can we make nice links in the emails
-			$html_email_handler_enabled = elgg_is_active_plugin("html_email_handler");
+			$html_email_handler_enabled = elgg_is_active_plugin('html_email_handler');
 	
 			// do we have a registration link
-			$registrationLink = "";
-			$unsubscribeLink = "";
+			$registrationLink = '';
+			$unsubscribeLink = '';
+			$addevent = '';
 	
 			if ($type == EVENT_MANAGER_RELATION_ATTENDING) {
 				if ($this->registration_needed) {
@@ -533,7 +529,10 @@ class Event extends ElggObject {
 					$registrationLink .= elgg_echo('event_manager:event:registration:notification:program:linktext');
 					$registrationLink .= PHP_EOL . PHP_EOL;
 					if ($html_email_handler_enabled) {
-						$registrationLink .= elgg_view("output/url", array("text" => $link, "href" => $link));
+						$registrationLink .= elgg_view('output/url', [
+							'text' => $link,
+							'href' => $link,
+						]);
 					} else {
 						$registrationLink .= $link;
 					}
@@ -549,7 +548,10 @@ class Event extends ElggObject {
 					$unsubscribeLink .= elgg_echo('event_manager:event:registration:notification:unsubscribe:linktext');
 					$unsubscribeLink .= PHP_EOL . PHP_EOL;
 					if ($html_email_handler_enabled) {
-						$unsubscribeLink .= elgg_view("output/url", array("text" => $link, "href" => $link));
+						$unsubscribeLink .= elgg_view('output/url', [
+							'text' => $link,
+							'href' => $link,
+						]);
 					} else {
 						$unsubscribeLink .= $link;
 					}
@@ -557,16 +559,16 @@ class Event extends ElggObject {
 				
 				if ($html_email_handler_enabled) {
 					// add addthisevent banners in footer
-					$registrationLink .= elgg_view('event_manager/email/addevent', ['entity' => $this]);
+					$addevent = elgg_view('event_manager/email/addevent', ['entity' => $this]);
 				}
 			}
 	
 			// make the event title for in the e-mail
 			if ($html_email_handler_enabled) {
-				$event_title_link = elgg_view("output/url", array(
-					"text" => $this->getDisplayName(),
-					"href" => $this->getURL(),
-				));
+				$event_title_link = elgg_view('output/url', [
+					'text' => $this->getDisplayName(),
+					'href' => $this->getURL(),
+				]);
 			} else {
 				$event_title_link = $this->getDisplayName();
 			}
@@ -592,7 +594,7 @@ class Event extends ElggObject {
 				}
 			}
 			
-			$user_message .= $registrationLink . $unsubscribeLink;
+			$user_message .= $registrationLink . $addevent . $unsubscribeLink;
 			
 			$attachment = [];
 			if ($type == EVENT_MANAGER_RELATION_ATTENDING) {
@@ -676,27 +678,44 @@ class Event extends ElggObject {
 			return;
 		}
 		
-		$owner_subject = elgg_echo('event_manager:event:registration:notification:owner:subject');
-
-		$owner_message = elgg_echo('event_manager:event:registration:notification:owner:text:' . $type, [
-			$this->getOwnerEntity()->getDisplayName(),
-			$rsvp_entity->getDisplayName(),
-			$event_title_link,
-		]) . $registration_link;
-		
-		$summary = elgg_echo('event_manager:event:registration:notification:owner:summary:' . $type, [
-			$rsvp_entity->getDisplayName(),
-			$this->getDisplayName(),
-		]);
-		
 		// set params for site notifications
 		$params = [
-			'summary' => $summary,
+			'summary' => elgg_echo('event_manager:event:registration:notification:owner:summary:' . $type, [
+				$rsvp_entity->getDisplayName(),
+				$this->getDisplayName(),
+			]),
 			'object' => $this,
 			'action' => 'rsvp_owner',
 		];
 		
-		notify_user($this->owner_guid, $rsvp_entity->guid, $owner_subject, $owner_message, $params);
+		$owner_subject = elgg_echo('event_manager:event:registration:notification:owner:subject');
+
+		$recipients = [
+			$this->owner_guid => $this->getOwnerEntity(),
+		];
+		
+		if ($this->notify_onsignup_contact) {
+			foreach ($this->getContacts() as $recipient) {
+				$recipients[$recipient->guid] = $recipient;
+			}
+		}
+		
+		if ($this->notify_onsignup_organizer) {
+			foreach ($this->getOrganizers() as $recipient) {
+				$recipients[$recipient->guid] = $recipient;
+			}
+		}
+		
+		foreach ($recipients as $user) {
+			$owner_message = elgg_echo('event_manager:event:registration:notification:owner:text:' . $type, [
+				$user->getDisplayName(),
+				$rsvp_entity->getDisplayName(),
+				$event_title_link,
+			]) . $registration_link;
+					
+			
+			notify_user($user->guid, $rsvp_entity->guid, $owner_subject, $owner_message, $params);
+		}
 	}
 
 	/**
@@ -1134,5 +1153,47 @@ class Event extends ElggObject {
 				'inverse_relationship' => false,
 			]);
 		});
+	}
+	
+	/**
+	 * Returns an array of entities based on the contact_guids metadata
+	 *
+	 * @param array $options additional options for elgg_get_entities()
+	 *
+	 * @return \ElggEntity[]|int
+	 * @see elgg_get_entities()
+	 */
+	public function getContacts(array $options = []) {
+		if (empty($this->contact_guids)) {
+			return [];
+		}
+		
+		$options['guids'] = $this->contact_guids;
+		$options['type'] = 'user';
+		$options['subtype'] = 'user';
+		$options['limit'] = false;
+		
+		return elgg_get_entities($options);
+	}
+	
+	/**
+	 * Returns an array of entities based on the organizer_guids metadata
+	 *
+	 * @param array $options additional options for elgg_get_entities()
+	 *
+	 * @return \ElggEntity[]|int
+	 * @see elgg_get_entities()
+	 */
+	public function getOrganizers(array $options = []) {
+		if (empty($this->organizer_guids)) {
+			return [];
+		}
+		
+		$options['guids'] = $this->organizer_guids;
+		$options['type'] = 'user';
+		$options['subtype'] = 'user';
+		$options['limit'] = false;
+		
+		return elgg_get_entities($options);
 	}
 }

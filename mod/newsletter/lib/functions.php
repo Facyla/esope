@@ -151,13 +151,17 @@ function newsletter_process($entity_guid) {
 			],
 			'callback' => false,
 			'wheres' => [],
-			'metadata_name_value_pairs' => [
-				[
-					'name' => 'banned',
-					'value' => 'no',
-				],
-			],
+			'metadata_name_value_pairs' => [],
 		];
+		
+		// include banned users?
+		if ((bool) !elgg_get_plugin_setting('include_banned_users', 'newsletter')) {
+			$basic_user_options['metadata_name_value_pairs'][] = [
+				'name' => 'banned',
+				'value' => 'no',
+			];
+		}
+		
 		// include users without settings
 		if (elgg_get_plugin_setting('include_existing_users', 'newsletter') === 'yes') {
 			// yes, so exclude blocked
@@ -296,10 +300,6 @@ function newsletter_process($entity_guid) {
 						'value' => $emails,
 						'case_sensitive' => false,
 					],
-					[
-						'name' => 'banned',
-						'value' => 'no',
-					],
 				],
 				'wheres' => [
 					function (QueryBuilder $qb, $main_alias) use ($site, $container) {
@@ -326,6 +326,14 @@ function newsletter_process($entity_guid) {
 				],
 				'callback' => false,
 			];
+			
+			// include banned users?
+			if ((bool) !elgg_get_plugin_setting('include_banned_users', 'newsletter')) {
+				$options['metadata_name_value_pairs'][] = [
+					'name' => 'banned',
+					'value' => 'no',
+				];
+			}
 			
 			$blocked_emails = [];
 			
@@ -426,6 +434,39 @@ function newsletter_process($entity_guid) {
 			'body' => $message_plaintext_content,
 		];
 		
+		$save_recipient_logging = function ($recipient_log) use ($entity, &$logging) {
+			$logging['recipients'][] = $recipient_log;
+			
+			$entity->saveLogging($logging);
+		};
+		
+		$is_banned = function (int $guid) use ($filtered_recipients) {
+			static $cache;
+			
+			if (elgg_get_plugin_setting('include_banned_users', 'newsletter')) {
+				// banned users are allowed
+				return false;
+			}
+			
+			if (!isset($cache)) {
+				$cache = elgg_get_metadata([
+					'type' => 'user',
+					'guids' => array_keys($filtered_recipients['users']),
+					'metadata_name_value_pairs' => [
+						[
+							'name' => 'banned',
+							'value' => 'yes',
+						],
+					],
+					'callback' => function($row) {
+						return (int) $row->entity_guid;
+					},
+				]);
+			}
+			
+			return in_array($guid, $cache);
+		};
+		
 		foreach ($filtered_recipients as $type => $recipients) {
 			if (empty($recipients)) {
 				continue;
@@ -443,6 +484,11 @@ function newsletter_process($entity_guid) {
 				// create individual footer for unsubscribe link
 				if ($type == 'users') {
 					$recipient_log['guid'] = $id;
+					
+					if ($is_banned($id)) {
+						$save_recipient_logging($recipient_log);
+						continue;
+					}
 					
 					$unsubscribe_link = newsletter_generate_unsubscribe_link($container, $id);
 				} else {
@@ -483,9 +529,7 @@ function newsletter_process($entity_guid) {
 				}
 				
 				// add to logging
-				$logging['recipients'][] = $recipient_log;
-				
-				$entity->saveLogging($logging);
+				$save_recipient_logging($recipient_log);
 			}
 		}
 		
