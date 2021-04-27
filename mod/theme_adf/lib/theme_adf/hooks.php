@@ -94,7 +94,7 @@ function theme_adf_topbar_menu(\Elgg\Hook $hook) {
 		//if ($item->getName() != 'account') { $return[$k]->setSection('default'); $return[$k]->setParentName('account'); }
 		
 		// Remove unwanted entries
-		//if (in_array($return[$k]->getName(), ['account', 'friends', 'messages'])) { unset($return[$k]); continue; }
+		if (in_array($return[$k]->getName(), ['friends'])) { unset($return[$k]); continue; }
 		
 		switch($item->getName()) {
 			/*
@@ -123,7 +123,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	$own = elgg_get_logged_in_user_entity();
 	
 	
-	$allowed_items = ['groups', 'members', 'event'];
+	$allowed_items = ['groups', 'members'];
 	// groups / members / activity
 	// survey / blog / bookmarks / file / pages / thewire / newsletter / discussions / event / 
 	// thinkcities / Les Petites Annonces / chat / senx_interface / senx_warp10 / 
@@ -163,13 +163,16 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	*/
 	
 	// Accueil : page de présentation et recherche de contenus
+	/*
 	$item = new ElggMenuItem('home', elgg_echo('theme_adf:menu:home'), '/');
 	//if (current_page_url() = elgg_get_site_url()) { $item->setSelected(); }
 	$item->setPriority(0);
 	$new_menu[] = $item;
+	*/
 	
 	// Contributions : page de présentation et recherche de contenus
-	$item = new ElggMenuItem('contributions', elgg_echo('theme_adf:menu:contributions'), '/contributions');
+	//$item = new ElggMenuItem('contributions', elgg_echo('theme_adf:menu:contributions'), '/contributions');
+	$item = new ElggMenuItem('search', elgg_echo('theme_adf:menu:search'), '/search');
 	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 	$item->setPriority(500);
 	$new_menu[] = $item;
@@ -195,6 +198,10 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	*/
 	
 	// Groups sub-menus : accès à tous les groupes => classement par type + recherche + ceux mis en avant + ceux recommandés)
+	// Global view
+	$item = new ElggMenuItem("home-dashboard", "Accueil général", "/");
+	$item->setParentName('groups');
+	$new_menu[] = $item;
 	// all groups
 	$item = new ElggMenuItem("groups-directory", "Rechercher un espace de travail", "groups/all");
 	$item->setParentName('groups');
@@ -215,6 +222,10 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	// Members sub-menu :
 	// members directory
 	$item = new ElggMenuItem("members-directory", "Annuaire des départements en réseau", "members");
+	$item->setParentName('members');
+	$new_menu[] = $item;
+	// contacts
+	$item = new ElggMenuItem("friends", "Mes contacts", "friends/{$own->username}");
 	$item->setParentName('members');
 	$new_menu[] = $item;
 	// invitation

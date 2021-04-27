@@ -10,6 +10,7 @@ return [
 	'theme_adf:backtohome' => "Retour à l'accueil du site",
 	'theme_adf:menu:home' => "Accueil",
 	'theme_adf:menu:contributions' => "Contributions",
+	'theme_adf:menu:search' => "Recherche",
 	
 ];
 

@@ -46,7 +46,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 
 /* Topbar et menus */
-.elgg-page-topbar { background: #0b2d51; /* position: fixed; left: 0; right: 0; top: 0; z-index: 5; */ }
+.elgg-page-topbar { background: #0b2d51; box-shadow: 0 -.25rem 1rem 0 #fff; /* position: fixed; left: 0; right: 0; top: 0; z-index: 5; */ }
 .elgg-page-topbar a, .elgg-page-topbar a:visited { color: #FFFFFF; }
 .elgg-page-topbar a:hover, .elgg-page-topbar a:focus { color: #FFFFFF; text-decoration: none; }
 
@@ -60,7 +60,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 .elgg-nav-logo { align-self: start; display: flex; width: 11rem; background: #0b2d51; padding: 0 .5rem; /* border-radius: 0 0 3rem 0; padding: 1rem; */ }
 .elgg-nav-logo h1 { flex: 1; display: flex; /* position: absolute; */ top: 0; left: 0; padding: 0rem 1rem; background: #0b2d51; border-radius: 0 0 2rem 0; }
-.elgg-nav-logo h1 a { flex: 1; width: 10rem; background: transparent url('<?php echo $url; ?>mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png') 0% 50%/contain no-repeat; }
+.elgg-nav-logo h1 a { flex: 1; width: 10rem; background: transparent url('<?php echo $url; ?>mod/theme_adf/graphics/titre-departements-en-reseaux-France-ADF.png') 0% 50%/contain no-repeat; }
 .elgg-heading-site .elgg-anchor-label { text-indent: -9999px; display: inline-block; }
 .elgg-heading-site a { flex: 1; }
 
@@ -79,6 +79,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .group-header { max-width: 100vw; /* width: 100vw; margin: -2rem calc(-10vw - 1rem) 0; padding: .5rem 10vw; */ background: #fff; border-bottom: 1px solid #0b2d51; min-height: 3.5rem; display: flex; }
 .group-header .group-image { width: 2.5rem; height: 2.5rem; margin: 0 1rem; }
 .group-header .group-search { align-self: center; flex: 1 1 auto; }
+
+#feedBackTogglerLink { background: #e57b5f; }
+
 
 /* LAYOUTS & SIDEBARS */
 .elgg-layout-columns > .elgg-sidebar { order: -1; margin-left: 0; margin-right: 2rem; }
@@ -142,7 +145,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-layout-breadcrumbs { display: none; }
 .elgg-layout-header { background: #244263; border-bottom: 1px solid #0b2d51; color: white; margin-bottom: 0; padding: 0.25rem 2rem 0.25rem 2rem; }
 .elgg-page-footer { border-top: 1px solid #0b2d51; }
-.elgg-layout-columns > .elgg-sidebar { background: #fafafa; background: white; background: #0b2d5122; padding: 0 0 1rem 0rem; /* border-right: 1px solid #244263; */ margin-right: 0rem; }
+.elgg-layout-columns > .elgg-sidebar { background: #fafafa; background: white; background: #0b2d5122; padding: 1rem 0 1rem 0rem; /* border-right: 1px solid #244263; */ margin-right: 0rem; }
 .elgg-sidebar .elgg-module > .elgg-head, .elgg-sidebar .elgg-module > .elgg-body { padding-left: 2rem; }
 .elgg-layout-header > h2, .elgg-layout-header > h3 { font-size: 1.5rem; }
 .elgg-layout-columns > .elgg-body { margin: 1rem 2rem; }
@@ -155,6 +158,12 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 }
 @media (max-width: 80rem) {
 	.elgg-layout-columns > .elgg-sidebar { border-right: 0; /* border-bottom: 1px solid #244263; box-shadow: 0px 0px 3px #244263; */ }
+}
+
+.elgg-layout-columns > .elgg-sidebar-alt { order: 1; padding: 1rem .5rem; /* background: #e57b5f33; */ }
+.elgg-layout-columns > .elgg-sidebar-alt .elgg-module { background: white; }
+@media (min-width: 50rem) {
+	.elgg-layout-sidebar-alt { width: 20rem; margin-right: 0; }
 }
 
 .elgg-layout-header > .elgg-heading-main { padding: .25rem 1rem;; }
@@ -173,6 +182,21 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-menu-page, .elgg-menu-owner-block { background: transparent; }
 .elgg-menu-page li.elgg-state-selected > a, .elgg-menu-owner-block li.elgg-state-selected > a { background-color: #fff; }
 
+
+/* sous-menu (fixe) en pleine largeur */
+.elgg-page-topbar { position: fixed; top: 0; width: 100vw; z-index: 1; }
+.elgg-page-body { margin-top: 4rem; }
+.elgg-page-topbar .elgg-menu li .elgg-child-menu { position: fixed; left: 0; right: 0; padding: 2rem 3rem; width: auto; z-index: 2; background: #5ba2d9F6; }
+
+.elgg-page-topbar .elgg-menu li:hover > .elgg-child-menu::before { color: #5ba2d9; right: 50%; }
+.elgg-page-topbar .elgg-menu li:hover > .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 0rem 0rem; }
+.elgg-page-topbar .elgg-menu li.elgg-menu-item-members .elgg-child-menu, 
+.elgg-page-topbar .elgg-menu li.elgg-menu-item-groups .elgg-child-menu { width: auto; }
+.elgg-page-topbar .elgg-menu.elgg-child-menu > li > a { border: 0; }
+
+
+.elgg-page-topbar .elgg-menu.elgg-child-menu > li { width: auto; }
+
 /* FIN TEST PLEINE LARGEUR */
 
 
@@ -186,7 +210,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-nav-logo { position: absolute; top: 0; left: -10vw; width: calc(9vw + 1rem); height: 7.5rem; border-radius: 0 0 3rem 0; margin-left: 0; padding: 1rem 1rem 1rem 0rem; }
 	.elgg-nav-logo { position: fixed; top: 0; left: 0; z-index: 1; }
 	.elgg-nav-logo h1 { position: initial; padding: initial; background: initial; border-radius: initial; }
-	.elgg-nav-logo h1 a { background-image: url('<?php echo $url; ?>mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france.png'); background-position: center; }
+	.elgg-nav-logo h1 a { background-image: url('<?php echo $url; ?>mod/theme_adf/graphics/titre-departements-en-reseaux-France-ADF.png'); background-position: center; }
 }
 @media (max-width: 105rem) {
 	.elgg-nav-collapse { max-width: calc(100% - 12rem); margin-left: auto; }
@@ -205,6 +229,6 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 
 @media (min-width: 50rem) {
-	.elgg-layout-sidebar-alt { /* max-width: 24vw; */ max-width: 30%; }
+	
 }
 
