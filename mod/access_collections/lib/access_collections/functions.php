@@ -20,8 +20,7 @@ function access_collections_get_collection_by_name($name) {
 	$dbprefix = elgg_get_config('dbprefix');
 	$query = "SELECT * FROM {$dbprefix}access_collections WHERE name = '{$name}'";
 	//$collection = get_data_row($query);
-	$collection = elgg()->db($query);
-	
+	$collection = elgg()->db->getDataRow($query);
 	return $collection;
 }
 
@@ -65,7 +64,7 @@ function access_collections_get_profile_types_acls($include_disabled = false) {
 		$dbprefix = elgg_get_config('dbprefix');
 		$query = "SELECT * FROM {$dbprefix}access_collections WHERE name LIKE 'profiletype:%'";
 		//$collections = get_data($query);
-		$collections = elgg()->db($query);
+		$collections = elgg()->db->getData($query);
 		if ($collections) {
 			$profiletypes_all_acls = array();
 			foreach($collections as $collection) {
@@ -125,8 +124,8 @@ function access_collections_create_custom_acl($criteria = array(), $collection_n
 	// Create collection (params name, owner GUID, site GUID)
 	if (!$collection) {
 		$owner_guid = elgg_get_site_entity()->guid;
-		$site_guid = elgg_get_site_entity()->guid;
-		$collection_id = create_access_collection($collection_name, $owner_guid, $site_guid);
+		$collection_subtype = 'profiletype';
+		$collection_id = create_access_collection($collection_name, $owner_guid, $collection_subtype);
 		$update_members = true;
 	} else {
 		$collection_id = $collection->id;
@@ -140,7 +139,7 @@ function access_collections_create_custom_acl($criteria = array(), $collection_n
 			);
 		// Add custom criteria
 		foreach($criteria as $name => $value) { $params[$name] = $value; }
-		$members = elgg_get_entities_from_relationship($params);
+		$members = elgg_get_entities($params);
 		$member_guids = array();
 		if ($members) {
 			foreach ($members as $m) {
@@ -157,7 +156,7 @@ function access_collections_create_custom_acl($criteria = array(), $collection_n
 
 
 
-/** Allow read access to entities that have a custom cACL
+/** Allow read access to entities that have a custom ACL
  * 
  * @param string $hook Equals 'access:collections:read'
  * @param string $type Equals 'all'
@@ -194,7 +193,7 @@ function access_collections_add_read_acl(\Elgg\Hook $hook) {
 			// Ensure that user is a member of that collection before adding to read access list
 			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
 			$result = get_data_row($query);
-			$result = elgg()->db($query);
+			$result = elgg()->db->getDataRow($query);
 			if ($result) {
 				$custom_collections[$user_guid][] = $collection->id;
 			}
@@ -254,7 +253,7 @@ function access_collections_add_write_acl(\Elgg\Hook $hook) {
 			// Ensure that user is a member of that collection before adding to write access select
 			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
 			//$result = get_data_row($query);
-			$result = elgg()->db($query);
+			$result = elgg()->db->getDataRow($query);
 			if ($result) {
 				$custom_collections[$user_guid][$collection->id] = elgg_echo($collection->name);
 			}
@@ -341,7 +340,7 @@ function access_collections_get_sql($hook, $type, $return, $params) {
 function access_collections_create_profile_type_acl($custom_profile_type_id = false) {
 	if (elgg_is_active_plugin('profile_manager')) {
 		$profiletype = get_entity($custom_profile_type_id);
-		if (elgg_instanceof($profiletype, 'object', CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE)) {
+		if ($profiletype instanceof ElggObject && $profiletype->getSubtype() == CUSTOM_PROFILE_FIELDS_PROFILE_TYPE_SUBTYPE) {
 			return access_collections_create_custom_acl(
 					array(
 							'metadata_name_value_pairs' => array('name' => 'custom_profile_type', 'value' => $custom_profile_type_id)
@@ -360,26 +359,27 @@ function access_collections_create_profile_type_acl($custom_profile_type_id = fa
 
 
 // Adds or removes members from collections based on metadata changes
-function access_collections_metadata_update($event, $type, $metadata) {
-	$entity = get_entity($metadata->entity_guid);
-	if (elgg_instanceof($entity, 'user')) {
-		
+function access_collections_metadata_update(\Elgg\Event $event) {
+	$metadata = $event->getObject();
+	$entity = get_entity($metadata->entity_guid); // user
+	$new_value = $metadata->value; // new profile type value
+	if ($metadata->name == 'custom_profile_type') {
 		// Update all profiletype-based collections on custom_profile_type update
-		if ($metadata->name == 'custom_profile_type') {
+		if ($entity instanceof ElggUser) {
 			// Apply collection membership rules on updated entity
 			// Check (all existing) profiletype-based ACLs
 			$profiletype_acls = access_collections_get_profile_types_acls(true);
 			foreach($profiletype_acls as $profiletype_guid => $collection) {
-				if ($entity->custom_profile_type == $profiletype_guid) {
+				// Note : for some reason, $user->custom_profile_type is not accessible anymore from here ; we don't need it anyway, as new metadata value is already known
+				if ($profiletype_guid == $new_value) {
 					//error_log("ACL : add user {$metadata->entity_guid} to ".$collection->id);
 					add_user_to_access_collection($metadata->entity_guid, $collection->id);
 				} else {
-					//error_log("ACL : remove user from ".$collection->id);
+					//error_log("ACL : remove user {{$metadata->entity_guid}} from ".$collection->id);
 					remove_user_from_access_collection($metadata->entity_guid, $collection->id);
 				}
 			}
 		}
-		
 	}
 }
 
@@ -416,5 +416,15 @@ if (elgg_is_active_plugin('profile_manager') && !elgg_is_active_plugin('esope'))
 		}
 		return $profiletypes;
 	}
+	
+	/* Returns guid for a specific profile type name (false if not found) */
+	function esope_get_profiletype_guid($profiletype_name) {
+		$profile_types = esope_get_profiletypes();
+		if ($profile_types) foreach ($profile_types as $guid => $name) {
+			if ($name == $profiletype_name) { return $guid; }
+		}
+		return false;
+	}
+	
 }
 

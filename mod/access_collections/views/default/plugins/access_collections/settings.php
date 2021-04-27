@@ -6,7 +6,7 @@
  * Custom ACL based on criteria : selection criteria through settings
 */
 
-
+$plugin = elgg_extract('entity', $vars);
 $url = elgg_get_site_url();
 
 // Define dropdown options
@@ -15,9 +15,9 @@ $ny_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
 
 
 // Set default value
-//if (!isset($vars['entity']->setting_name)) { $vars['entity']->setting_name = 'default'; }
+//if (!isset($plugin->setting_name)) { $plugin->setting_name = 'default'; }
 
-if ($vars['entity']->allow_delete == 'yes') { $allow_deletion = true; } else { $allow_deletion = false; }
+if ($plugin->allow_delete == 'yes') { $allow_deletion = true; } else { $allow_deletion = false; }
 
 
 echo '<div class="elgg-output">';
@@ -25,9 +25,6 @@ echo '<div class="elgg-output">';
 // View existing profile types and create collections for them
 if (elgg_is_active_plugin('profile_manager')) {
 	echo '<h3>' . elgg_echo('access_collections:collections:profiletypes') . '</h3>';
-	// Always force again to 'no' (enable once for immediate modifications)
-	echo '<p><label>' . elgg_echo('access_collections:delete:enable') . elgg_view('input/select', ['name' => 'params[allow_delete]', 'value' => 'no', 'options_values' => $ny_opt]) . '</label></p>';
-	echo '<p><em>' . elgg_echo('access_collections:delete:enable:details') . '</em></p>';
 	
 	echo '<h4>' . elgg_echo('access_collections:profiletypes') . '</h4>';
 	echo '<p>' . elgg_echo('access_collections:profiletypes:select') . '</p>';
@@ -40,19 +37,20 @@ if (elgg_is_active_plugin('profile_manager')) {
 		foreach($custom_profile_types as $guid => $custom_profile_type_name) {
 			// Get existing collection based by name
 			$collection = access_collections_get_collection_by_name('profiletype:'.$custom_profile_type_name);
-			if ($vars['entity']->{'profiletype_'.$guid} == 'yes') {
-				echo '<li class="enabled">';
+			//echo print_r("COLLECTION : profiletype:{$custom_profile_type_name} " . print_r($collection, true));
+			if ($plugin->{'profiletype_'.$guid} == 'yes') {
+				echo '<li class="enabled profile-type-' . $guid . '">';
 			} else {
 				if ($collection) {
-					echo '<li class="existing">';
+					echo '<li class="existing profile-type-' . $guid . ' collection-' . $collection . '">';
 				} else {
-					echo '<li class="disabled">';
+					echo '<li class="disabled profile-type-' . $guid . '">';
 				}
 			}
 			// Display information and select
-			echo '<label>' . $custom_profile_type_name . ' (' . $guid . ')' . elgg_view('input/select', array('name' => 'params[profiletype_'.$guid.']', 'value' => $vars['entity']->{'profiletype_'.$guid}, 'options_values' => $ny_opt)) . '</label> &nbsp; ';
+			echo '<label>' . $custom_profile_type_name . ' (id type de profil = ' . $guid . ')' . elgg_view('input/select', ['name' => 'params[profiletype_'.$guid.']', 'value' => $plugin->{'profiletype_'.$guid}, 'options_values' => $ny_opt]) . '</label> &nbsp; ';
 			// Update corresponding collections (create or remove)
-			if ($vars['entity']->{'profiletype_'.$guid} == 'yes') {
+			if ($plugin->{'profiletype_'.$guid} == 'yes') {
 				if (!$collection) {
 					// Create collection
 					$new_collection_id = access_collections_create_profile_type_acl($guid);
@@ -64,7 +62,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 					// Add some protection to avoid accidental ACL removal
 					if ($allow_deletion) {
 						delete_access_collection($collection->id);
-						$colelction = false;
+						$collection = false;
 						system_message(elgg_echo('access_collections:acl:removed'));
 					} else {
 						echo elgg_echo('access_collections:acl:delete:locked');
@@ -80,6 +78,12 @@ if (elgg_is_active_plugin('profile_manager')) {
 		}
 		echo '</ul>';
 	}
+	
+	// Delete access collections
+	// Always force again to 'no' (enable once for immediate modifications)
+	echo '<p><label>' . elgg_echo('access_collections:delete:enable') . elgg_view('input/select', ['name' => 'params[allow_delete]', 'value' => 'no', 'options_values' => $ny_opt]) . '</label></p>';
+	echo '<p><em>' . elgg_echo('access_collections:delete:enable:details') . '</em></p>';
+	
 	echo '<div class="clearfloat"></div><br />';
 }
 
