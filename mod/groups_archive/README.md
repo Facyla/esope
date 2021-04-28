@@ -10,6 +10,7 @@ Technically, this works the same way as user bannishment.
 
 
 ## History
+ - 3.3.0 : 20210428 Upgrade to Elgg 3.3
  - 1.12.0 : New versionning
  - 0.2 : 20150505 - Fully functional version
 	 - listing page

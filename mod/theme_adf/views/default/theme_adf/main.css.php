@@ -109,6 +109,14 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-module-discussions-global { flex: 1 0 12rem; }
 .elgg-module-discussions-my-groups { flex: 1 0 12rem; }
 
+/*
+.elgg-module-home-editorial, .elgg-module-home-infos, .elgg-module-home-thewire-global, .elgg-module-home-my-groups { flex: 1 1 50%; }
+*/
+.elgg-context-main .elgg-page-body .elgg-module { flex: 1 1 50%; }
+.elgg-context-main .elgg-page-body .elgg-module > .elgg-head { padding: .5rem 1rem; }
+.elgg-context-main .elgg-page-body .elgg-module > .elgg-body { padding: .5rem 1rem; }
+.elgg-module-home-editorial .elgg-head, .elgg-module-home-infos .elgg-head { background: #5ba2d9; color: white; font-size: 1.5rem font-weight: normal; }
+.elgg-module-home-thewire-global > .elgg-head, .elgg-module-home-my-groups > .elgg-head { color: #e57b5f; font-weight: bold; }
 
 .groups-mine { width: 100%; }
 .groups-mine ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(6rem,1fr)); grid-gap: .5rem 0.25rem; }

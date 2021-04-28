@@ -164,11 +164,27 @@ $content .= $activity;
 */
 
 
+// Bloc éditorial
+$editorial = '<p>Bienvenue sur Départements-en-Réseaux ! <br />
+Vous êtes actuellement sur votre tableau de bord personnel. <br />
+Il vous permet de suivre ce qui se passe sur le site.<br />
+</p>';
+// Mes informations : actions, alertes et statistiques
+$infos = '<p>Nombre de personnes connectées<br />
+Invitations à rejoindre un espace de travail<br />
+Contacts à valider<br />
+Valider les adhésions aux groupes<br />
+</p>';
+
+$content .= '<div style="display:flex; flex-wrap: wrap;">';
+$content .= elgg_view_module('home-editorial', elgg_echo("Bloc éditorial"), $editorial);
+$content .= elgg_view_module('home-infos', elgg_echo("Mes informations"), $infos);
+$content .= '</div>';
+
 
 
 
 // Discussions : Fil global et Activité des groupes
-$content .= '<h3>Discussions en cours</h3>';
 
 // Fil global
 $thewire_global = elgg_view('thewire_tools/activity_post', $vars);
@@ -188,11 +204,26 @@ $thewire_global .= elgg_list_entities($options);
 // Activité des groupes
 $discussions_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
 
+$content .= '<h3 style="background: #e57b5f; padding: .5rem 1rem; color: white; font-size: 1.5rem; margin-bottom: 1rem;">Discussions en cours</h3>';
 $content .= '<div style="display:flex; flex-wrap: wrap;">';
-$content .= elgg_view_module('discussions-global', elgg_echo("Au fil du réseau"), $thewire_global);
-$content .= elgg_view_module('discussions-my-groups', elgg_echo("Activités dans mes espaces de travail"), $discussions_my_groups);
+$content .= elgg_view_module('home-thewire-global', elgg_echo("Au fil du réseau"), $thewire_global);
+$content .= elgg_view_module('home-my-groups', elgg_echo("Activités dans mes espaces de travail"), $discussions_my_groups);
 $content .= '</div>';
 
+
+// Widgets
+elgg_set_page_owner_guid($user->guid);
+$widgets_intro = '<h3 style="padding: .5rem 1rem; border: 1px solid; font-size: 1.5rem; font-weight: normal; margin-bottom: 1rem;">Personnalisez votre tableau de bord</h3>';
+$content .= elgg_view_layout('widgets', [
+	'content' => $widgets_intro, // Texte en intro des widgets (avant les 3 colonnes)
+	'num_columns' => 1, 
+	'show_access' => false, 
+	'owner_guid'=> $user->guid,
+	'no_widgets' => function () use ($widgets_intro) {
+		echo elgg_view('dashboard/blurb');
+		echo $widgets_intro;
+	},
+]);
 
 
 
