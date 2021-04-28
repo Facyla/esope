@@ -8,12 +8,13 @@
 * @link http://id.facyla.fr/
 */
 
-admin_gatekeeper();
+elgg_admin_gatekeeper();
 
-access_show_hidden_entities(true);
-$ia = elgg_set_ignore_access(true);
-
-$enable_opts = array('' => '', 'yes' => elgg_echo('groups_archive:option:enabled'), 'no' => elgg_echo('groups_archive:option:disabled') );
+$enable_opts = [
+	'' => '', 
+	//'yes' => elgg_echo('groups_archive:option:enabled'), 
+	'no' => elgg_echo('groups_archive:option:disabled')
+];
 
 $title = elgg_echo('groups_archive:index');
 
@@ -32,23 +33,25 @@ $base_url = elgg_get_site_url() . 'groups-archive';
 
 // Process form, or set form defaults based on group status
 if ($guid) {
-	$group = get_entity($guid);
-	if (elgg_instanceof($group, 'group')) {
-		
-		if (in_array($enabled, array('yes', 'no'))) {
+	$group = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () use ($guid) {
+		return get_entity($guid);
+	});
+	
+	if ($group instanceof ElggGroup) {
+		if (in_array($enabled, ['yes', 'no'])) {
 			// Disable group
 			if ($enabled == 'no') {
 				if ($group->disable()) {
-					system_message(elgg_echo('groups_archive:disable:success'), array($group->name));
+					system_message(elgg_echo('groups_archive:disable:success', [$group->name]));
 				} else {
-					register_error(elgg_echo('groups_archive:disable:success'), array($group->name));
+					register_error(elgg_echo('groups_archive:disable:success', [$group->name]));
 				}
 			} else if ($enabled == 'yes') {
 				// Enable group
 				if ($group->enable()) {
-					system_message(elgg_echo('groups_archive:enable:success'), array($group->name));
+					system_message(elgg_echo('groups_archive:enable:success', [$group->name]));
 				} else {
-					register_error(elgg_echo('groups_archive:enable:error'), array($group->name));
+					register_error(elgg_echo('groups_archive:enable:error', [$group->name]));
 				}
 			}
 			// Clear form fields
@@ -58,22 +61,8 @@ if ($guid) {
 			//if ($group->isEnabled()) $enabled = 'yes'; else $enabled = 'no';
 			//register_error(elgg_echo('groups_archive:error:noaction'));
 		}
-		
 	}
 }
-
-
-
-// FORMULAIRE DE DESACTIVATION D'UN GROUPE ET DE SES CONTENUS
-$sidebar .= '<p><em>' . elgg_echo('groups_archive:information') . '</em></p>';
-
-$sidebar .= '<h3>' . elgg_echo('groups_archive:form:title') . '</h3>';
-$sidebar .= '<form method="POST" class="elgg-form" id="groups-archive-form">';
-//$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/text', array('name' => "guid", 'value' => $guid, 'placeholder' => elgg_echo('groups_archive:groupguid'))) . '</label></p>';
-$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/groups_select', array('name' => "guid", 'value' => $guid, 'style' => "max-width:90%;")) . '</label></p>';
-$sidebar .= '<p><label>' . elgg_echo('groups_archive:grouparchive') . ' ' . elgg_view('input/dropdown', array('name' => 'enabled', 'options_values' => $enable_opts, 'value' => $enabled)) . '</label></p>';
-$sidebar .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('groups_archive:proceed'), 'class' => "elgg-button elgg-button-submit")) . '</p>';
-$sidebar .= '</form>';
 
 
 
@@ -120,11 +109,28 @@ if ($disabled_groups_count > 0) {
 }
 
 
-$body = elgg_view_layout('one_sidebar', array('title' => $title, 'content' => $content, 'sidebar' => $sidebar));
 
-elgg_set_ignore_access($ia);
+// FORMULAIRE DE DESACTIVATION D'UN GROUPE ET DE SES CONTENUS
+$sidebar .= '<p><em>' . elgg_echo('groups_archive:information') . '</em></p>';
+
+$sidebar .= '<h3>' . elgg_echo('groups_archive:form:title') . '</h3>';
+$sidebar .= '<form method="POST" class="elgg-form" id="groups-archive-form">';
+//$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/text', array('name' => "guid", 'value' => $guid, 'placeholder' => elgg_echo('groups_archive:groupguid'))) . '</label></p>';
+$sidebar .= '<p><label>' . elgg_echo('groups_archive:groupguid') . ' ' . elgg_view('input/groups_select', array('name' => "guid", 'value' => '', 'style' => "max-width:90%;")) . '</label></p>';
+$sidebar .= '<p><label>' . elgg_echo('groups_archive:grouparchive') . ' ' . elgg_view('input/select', array('name' => 'enabled', 'options_values' => $enable_opts, 'value' => $enabled)) . '</label></p>';
+$sidebar .= '<p>' . elgg_view('input/submit', array('value' => elgg_echo('groups_archive:proceed'), 'class' => "elgg-button elgg-button-submit")) . '</p>';
+$sidebar .= '</form>';
+
+
+
+elgg_push_breadcrumb(elgg_echo('groups_archive:index'), 'groups_archive');
 
 // Render the page
-echo elgg_view_page($title, $body);
+echo elgg_view_page($title, [
+	'title' => $title,
+	'content' =>  $content,
+	'sidebar' => '<div class="elgg-module elgg-module-info"><div class="elgg-body">' . $sidebar . '</div></div>',
+	//'sidebar_alt' => $sidebar_alt,
+]);
 
 

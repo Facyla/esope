@@ -202,7 +202,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	
 	// Groups sub-menus : accès à tous les groupes => classement par type + recherche + ceux mis en avant + ceux recommandés)
 	// Global view
-	$item = new ElggMenuItem("home-dashboard", "Accueil général", "/");
+	$item = new ElggMenuItem("home-dashboard", "Tableau de bord", "/");
 	$item->setParentName('groups');
 	$new_menu[] = $item;
 	// all groups

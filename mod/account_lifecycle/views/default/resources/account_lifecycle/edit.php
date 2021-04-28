@@ -27,7 +27,7 @@ $sidebar_alt .= '';
 
 
 $title = elgg_echo('account_lifecycle:edit');
-if (!$entity instanceof ElggDeliveryMode) {
+if (!$entity instanceof ElggAccountLifeCycle) {
 	$title = elgg_echo('account_lifecycle:add');
 }
 

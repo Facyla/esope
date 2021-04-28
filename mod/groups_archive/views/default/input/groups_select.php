@@ -5,7 +5,7 @@
 
 $content ='';
 $scope = $vars["scope"]; // default = all, member
-if (!elgg_instanceof($vars["entity"], 'group')) { $scope = 'all'; }
+if (!$vars["entity"] instanceof ElggGroup) { $scope = 'all'; }
 
 switch($scope) {
 	case 'member':
@@ -13,7 +13,7 @@ switch($scope) {
 			"type" => "group", "limit" => false,
 			"relationship" => "member", "relationship_guid" => $group->guid,
 		);
-		$groups = elgg_get_entities_from_relationship($group_options);
+		$groups = elgg_get_entities($group_options);
 		break;
 	case 'all':
 	default:
@@ -44,8 +44,8 @@ $content .= '<select name="' . $vars['name'] . '" id="' . $vars['name'] . '" cla
 
 // Add empty value option
 if ($vars["empty_value"] || !isset($vars["empty_value"])) {
-	if (!empty($vars['value'])) $content .= '<option value="0">' . elgg_echo('esope:input:nogroup') .'</option>';
-	else $content .= '<option selected="selected" value="0">' . elgg_echo('esope:input:nogroup') .'</option>';
+	if (!empty($vars['value'])) $content .= '<option value="0"> </option>';
+	else $content .= '<option selected="selected" value="0"> </option>';
 }
 // Add current value (= don't change option)
 if (isset($vars['value'])) {

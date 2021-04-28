@@ -1,8 +1,8 @@
 <?php
-use Facyla\AccountLifeCycle\Bootstrap;
+use Facyla\GroupsArchive\Bootstrap;
 
 // Required libs & custom functions
-require_once(__DIR__ . '/lib/account_lifecycle/functions.php');
+require_once(__DIR__ . '/lib/groups_archive/functions.php');
 
 
 return [
@@ -12,49 +12,33 @@ return [
 	
 	// Entities: register entity types for search
 	'entities' => [
-		[
-			'type' => 'object',
-			'subtype' => 'account_lifecycle',
-			'class' => 'ElggAccountLifeCycle',
-			'searchable' => false,
-		],
 	],
 	
 	
 	// Actions
 	'actions' => [
-		'account_lifecycle/edit' => [],
 	],
 	
 	
 	// Routes
 	'routes' => [
-		'default:account_lifecycle' => [
-			'path' => '/account_lifecycle',
-			'resource' => 'account_lifecycle/index',
+		// Register a page handler on "groups_archive/"
+		'default:groups_archive' => [
+			'path' => '/groups-archive',
+			'resource' => 'groups_archive/index',
 		],
-		'account_lifecycle:add' => [
-			'path' => '/account_lifecycle/add/{container_guid?}',
-			'resource' => 'account_lifecycle/edit',
-		],
-		'account_lifecycle:edit' => [
-			'path' => '/account_lifecycle/edit/{guid?}',
-			'resource' => 'account_lifecycle/edit',
+		'groups_archive:view' => [
+			'path' => '/groups-archive/view/{guid?}',
+			'resource' => 'groups_archive/view',
 		],
 	],
 	
 	
 	'hooks' => [
-		'registeruser:validate:email' => [
-			'all' => [
-				'account_lifecycle_validate_email_hook' => [
-					'priority' => 1,
-				],
-			],
-		],
-		'cron' => [
-			'daily' => [
-				'account_lifecycle_cron' => [],
+		// group entity menu
+		'register' => [
+			'menu:entity' => [
+				'groups_archive_entity_menu_setup' => [],
 			],
 		],
 	],
@@ -64,7 +48,9 @@ return [
 	
 	
 	// Widgets
-	'widgets' => [],
+	'widgets' => [
+		// @TODO : archived groups (for admins)
+	],
 	
 ];
 
