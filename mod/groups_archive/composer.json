@@ -1,0 +1,28 @@
+{
+	"name": "facyla/groups_archive",
+	"version": "groups_archive",
+	"type": "elgg-plugin",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/Facyla/groups_archive"
+		}
+	],
+	"require": {
+		"composer/installers": ">=1.0.8"
+	},
+	"description": "This plugin lets admins fully archive a group and its content.",
+	"homepage": "https://facyla.fr",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Florian DANIEL aka Facyla",
+			"email": "facyla@gmail.com"
+		}
+	],
+	"keywords": [
+		"elgg", "plugin", "admin", "content"
+	],
+}
+
+
