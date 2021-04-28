@@ -28,9 +28,6 @@ $content = '';
 $content .= "<h1 style=\"color:#e57b5f;\">Départements en Réseaux</h1>";
 
 
-// Micromessages
-$thewire_form = elgg_view('thewire_tools/activity_post', $vars);
-
 
 // Mes groupes
 elgg_push_context('widgets');
@@ -170,12 +167,13 @@ $content .= $activity;
 
 
 
-// Discussions : Discussions en cours
+// Discussions : Fil global et Activité des groupes
 $content .= '<h3>Discussions en cours</h3>';
 
-
+// Fil global
+$thewire_global = elgg_view('thewire_tools/activity_post', $vars);
 $options = [
-	'type' => 'object', 'subtype' => 'discussion', 
+	'type' => 'object', 'subtype' => 'the_wire', 
 	//'container_guids' => $user_groups_guids_list,
 	'limit' => max(20, elgg_get_config('default_limit')),
 	//'order_by' => ['e.time_created', 'desc'],
@@ -185,17 +183,15 @@ $options['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($container_t
 		$c_join = $qb->joinEntitiesTable($main_alias, 'container_guid');
 		return $qb->compare("{$c_join}.type", '!=', 'group', ELGG_VALUE_STRING);
 	};
-$discussions_global .= elgg_list_entities($options);
+$thewire_global .= elgg_list_entities($options);
 
+// Activité des groupes
 $discussions_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
 
 $content .= '<div style="display:flex; flex-wrap: wrap;">';
-$content .= elgg_view_module('discussions-global', elgg_echo("Questions au réseau"), $discussions_global);
-$content .= elgg_view_module('discussions-my-groups', elgg_echo("Dans mes groupes"), $discussions_my_groups);
+$content .= elgg_view_module('discussions-global', elgg_echo("Au fil du réseau"), $thewire_global);
+$content .= elgg_view_module('discussions-my-groups', elgg_echo("Activités dans mes espaces de travail"), $discussions_my_groups);
 $content .= '</div>';
-
-
-
 
 
 
@@ -205,6 +201,6 @@ echo elgg_view_page(null, [
 	'header' => false,
 	'content' => $content,
 	//'filter_value' => $page_filter,
-	'sidebar' => $mygroups . $recommandations,
+	//'sidebar' => $mygroups . $recommandations,
 ]);
 
