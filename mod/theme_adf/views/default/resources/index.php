@@ -176,7 +176,7 @@ Contacts à valider<br />
 Valider les adhésions aux groupes<br />
 </p>';
 
-$content .= '<div style="display:flex; flex-wrap: wrap;">';
+$content .= '<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); grid-gap: 1rem 2rem;">';
 $content .= elgg_view_module('home-editorial', elgg_echo("Bloc éditorial"), $editorial);
 $content .= elgg_view_module('home-infos', elgg_echo("Mes informations"), $infos);
 $content .= '</div>';
@@ -187,9 +187,11 @@ $content .= '</div>';
 // Discussions : Fil global et Activité des groupes
 
 // Fil global
+// Formulaire
 $thewire_global = elgg_view('thewire_tools/activity_post', $vars);
+// Liste des messages
 $options = [
-	'type' => 'object', 'subtype' => 'the_wire', 
+	'type' => 'object', 'subtype' => 'thewire', 
 	//'container_guids' => $user_groups_guids_list,
 	'limit' => max(20, elgg_get_config('default_limit')),
 	//'order_by' => ['e.time_created', 'desc'],
@@ -204,10 +206,12 @@ $thewire_global .= elgg_list_entities($options);
 // Activité des groupes
 $discussions_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
 
-$content .= '<h3 style="background: #e57b5f; padding: .5rem 1rem; color: white; font-size: 1.5rem; margin-bottom: 1rem;">Discussions en cours</h3>';
-$content .= '<div style="display:flex; flex-wrap: wrap;">';
-$content .= elgg_view_module('home-thewire-global', elgg_echo("Au fil du réseau"), $thewire_global);
-$content .= elgg_view_module('home-my-groups', elgg_echo("Activités dans mes espaces de travail"), $discussions_my_groups);
+$content .= '<div style="border: 1px solid #e57b5f;">';
+	$content .= '<h3 style="background: #e57b5f; padding: .5rem 1rem; color: white; font-size: 1.5rem; margin-bottom: 1rem;">Discussions en cours</h3>';
+	$content .= '<div style="display:flex; flex-wrap: wrap;">';
+	$content .= elgg_view_module('home-thewire-global', elgg_echo("Au fil du réseau"), $thewire_global);
+	$content .= elgg_view_module('home-my-groups', elgg_echo("Activités dans mes espaces de travail"), $discussions_my_groups);
+	$content .= '</div>';
 $content .= '</div>';
 
 
@@ -224,13 +228,14 @@ $content .= elgg_view_layout('widgets', [
 		echo $widgets_intro;
 	},
 ]);
-
+//elgg_set_page_owner_guid(1); // on évite de se retrouver avec une sidebar...
 
 
 echo elgg_view_page(null, [
 	'title' => $title,
 	'header' => false,
 	'content' => $content,
+	'sidebar' => false,
 	//'filter_value' => $page_filter,
 	//'sidebar' => $mygroups . $recommandations,
 ]);

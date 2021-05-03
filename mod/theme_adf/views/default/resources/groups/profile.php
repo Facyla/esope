@@ -22,7 +22,9 @@ if ($group->canAccessContent()) {
 	$sidebar .= elgg_view('groups/sidebar/owner', ['entity' => $group]);
 }
 
-echo elgg_view_page($group->getDisplayName(), [
+// Facyla : aucun titre pour la page d'accueil du groupe : on favorise l'owner_block pour se situer
+//echo elgg_view_page($group->getDisplayName(), [
+echo elgg_view_page('', [
 	'content' => elgg_view('groups/profile/layout', ['entity' => $group]),
 	'sidebar' => $sidebar,
 	'entity' => $group,
