@@ -31,6 +31,19 @@ function survey_owner_block_menu(\Elgg\Hook $hook) {
 }
 
 
+// Owner block menu
+function survey_entity_menu(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	$entity = $hook->getEntityParam();
+	if ($entity instanceof ElggSurvey && $entity->canEdit()) {
+		$url = "survey/edit/{$entity->guid}";
+		$item = new ElggMenuItem('survey', '<span class="elgg-icon elgg-icon-edit elgg-anchor-icon fas fa-edit"></span>' . elgg_echo('edit'), $url);
+		$return[] = $item;
+	}
+	return $return;
+}
+
+
 // Register title urls for widgets
 function survey_widget_urls(\Elgg\Hook $hook) {
 	$return = $hook->getValue();

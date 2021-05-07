@@ -1,5 +1,5 @@
-Account Lifecycle Registration / Cycle de vie des comptes utilisateurs
-=======================================
+Account Lifecycle / Cycle de vie des comptes utilisateurs
+=========================================================
 
 Activez ce plugin si vous souhaitez effectuer une vérification périodique des comptes. 
 

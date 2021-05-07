@@ -87,6 +87,9 @@ return [
 			'menu:owner_block' => [
 				'survey_owner_block_menu' => [],
 			],
+			'menu:entity' => [
+				'survey_entity_menu' => [],
+			],
 		],
 		// Register a URL handler for survey posts
 		'entity:url' => [
