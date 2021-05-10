@@ -3,6 +3,8 @@
 use Elgg\Database\QueryBuilder;
 
 $user = elgg_get_logged_in_user_entity();
+elgg_push_context('index'); // basic context for widgets
+elgg_push_context('dashboard'); // much more widgets
 
 // PAGE D'ACCUEIL PUBLIQUE
 if (!$user) {
@@ -220,7 +222,7 @@ elgg_set_page_owner_guid($user->guid);
 $widgets_intro = '<h3 style="padding: .5rem 1rem; border: 1px solid; font-size: 1.5rem; font-weight: normal; margin-bottom: 1rem;">Personnalisez votre tableau de bord</h3>';
 $content .= elgg_view_layout('widgets', [
 	'content' => $widgets_intro, // Texte en intro des widgets (avant les 3 colonnes)
-	'num_columns' => 1, 
+	'num_columns' => 3, 
 	'show_access' => false, 
 	'owner_guid'=> $user->guid,
 	'no_widgets' => function () use ($widgets_intro) {
