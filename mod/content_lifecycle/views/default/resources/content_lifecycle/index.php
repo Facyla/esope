@@ -19,28 +19,21 @@ elgg_push_breadcrumb(elgg_echo('content_lifecycle:index'), 'content_lifecycle');
 
 $content = '';
 
+// Select options
 $yes_no_opt = ['yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no')];
 $no_yes_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
-
-$rule_default_opt = ['' => '', 'transfer' => elgg_echo('option:transfer'), 'delete' => elgg_echo('option:delete')];
-$rule_groups_opt = ['' => '', 'transfer' => elgg_echo('option:transfer'), 'delete' => elgg_echo('option:delete')];
-$rule_objects_opt = ['' => '', 'transfer' => elgg_echo('option:transfer'), 'delete' => elgg_echo('option:delete')];
-
-$action_mode_opt = ['' => 'Ne rien faire (conserve les options choisies)', 'simulate' => "Simulation", 'execute' => "Applique les options et supprime le compte"];
-
-$entity_types = get_registered_entity_types();
-$object_subtypes_opt = [];
-foreach($entity_types as $type => $entity_subtypes) {
-	if ($type == 'object') {
-		$object_subtypes = $entity_subtypes;
-		break;
-	}
-}
+$action_mode_opt = content_lifecycle_action_mode_options();
+$rule_default_opt = content_lifecycle_rule_options();
+$rule_groups_opt = content_lifecycle_rule_options();
+$rule_objects_opt = content_lifecycle_rule_options();
 $new_owner_opt = [];
+$object_subtypes = get_registered_entity_types('object');
 
 
 // PARAMETRES */
+
 // Mode de fonctionnement
+$default_action_mode = elgg_get_plugin_setting('action_mode', 'content_lifecycle'); // Config plugin (valeur par défaut)
 $action_mode = get_input('action_mode');
 
 // User to delete
@@ -48,21 +41,32 @@ $guid = get_input('guid');
 if (is_array($guid)) { $guid = $guid[0]; }
 
 // Nouveau propriétaire : du général ou particulier
-$new_owner_default = get_input('new_owner_default'); // Par défaut
-if (is_array($new_owner_default)) { $new_owner_default = $new_owner_default[0]; }
+$default_new_owner_default = elgg_get_plugin_setting('new_owner_default', 'content_lifecycle'); // Config plugin
+$new_owner_default = get_input('new_owner_default'); // Global - par défaut
+if (is_array($new_owner_default)) { $new_owner_default = $new_owner_default[0]; } // userpicker always returns an array
+if (empty($new_owner_default)) { $new_owner_default = $default_new_owner_default; }
 $new_owner_groups = get_input('new_owner_groups'); // (int) Pour les groupes (GUID)
 $new_owner_objects = get_input('new_owner_objects'); // (array) Par subtype d'object (array of GUID)
 $new_owner_entities = get_input('new_owner_entities'); // (array) entité par entité (GUID uniquement : peut être un groupe comme un objet)
 
 // Règles : du général ou particulier
-$rule_default = get_input('rule_default'); // Par défaut
+$default_rule_default = elgg_get_plugin_setting('rule_default', 'content_lifecycle'); // Config plugin
+$rule_default = get_input('rule_default'); // Global - par défaut
+if (empty($rule_default)) { $rule_default = $default_rule_default; }
 $rule_groups = get_input('rule_groups'); // Pour les groupes
 $rule_objects = get_input('rule_objects'); // Par subtype d'object
+// Set defaults for each object subtype
+foreach($object_subtypes as $subtype) {
+	if (empty($rule_objects[$subtype])) {
+		$rule_objects[$subtype] = elgg_get_plugin_setting("rule_objects_default_$subtype", 'content_lifecycle');
+	}
+}
 $rule_entities = get_input('rule_entities'); // entité par entité (GUID uniquement : peut être un groupe comme un objet)
 
 
 
 // EXECUTION DES ACTIONS
+// @TODO en faire des fonctions ou des méthodes
 if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 	$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
 		return get_user($guid);
@@ -76,9 +80,11 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 		//$content .= '<pre>' . print_r($rule_objects, true) . '</pre>'; // debug
 		//$content .= '<pre>' . print_r($rule_objects, true) . '</pre>'; // debug
 		if ($guid === elgg_get_logged_in_user_guid()) {
-			$content .= elgg_error_response(elgg_echo('admin:user:self:delete:no'));
-		} else if (!$user || !$user->canDelete()) {
-				$content .= elgg_error_response(elgg_echo('admin:user:delete:no'));
+			$content .= elgg_echo('admin:user:self:delete:no');
+		} else if (!$user) {
+				$content .= "Ce GUID n'est pas celui d'un compte utilisateur valide&nbsp;: $guid";
+		} else if (!$user->canDelete()) {
+				$content .= elgg_echo('admin:user:delete:no');
 		} else if (!in_array($rule_default, ['transfer','delete']) || !($new_owner_default_entity instanceof ElggUser || $new_owner_default_entity instanceof ElggGroup || $new_owner_default_entity instanceof ElggSite)) {
 		} else {
 			$content .= '<ul>';
@@ -99,25 +105,13 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 						$content .= '<a href="' . $group->getUrl() . '" target="_blank">' . elgg_view_entity_icon($group, 'tiny', ['use_link' => false, 'class' => 'float']) . '&nbsp;' . $group->name . ' <i class="fas fa-external-link-alt"></i></a>';
 						
 						// action
-						$content .= " => <strong>action&nbsp;:</strong> (default {$rule_default}, groups {$rule_groups}, this group {$rule_entities[$group->guid]})";
-						if (!empty($rule_entities[$group->guid])) {
-							$selected_rule = $rule_entities[$group->guid];
-						} else if (!empty($rule_groups)) {
-							$selected_rule = $rule_groups;
-						} else {
-							$selected_rule = $rule_default;
-						}
+						//$content .= " => <strong>action&nbsp;:</strong> (default {$rule_default}, groups {$rule_groups}, this group {$rule_entities[$group->guid]})"; // debug
+						$selected_rule = content_lifecycle_select_rule($default_rule_default, $rule_default, $rule_groups, $rule_entities[$group->guid]);
 						$content .= " <strong>$selected_rule</strong> => ";
 						
 						// new owner
 						$content .= " => <strong>nouveau propriétaire&nbsp;:</strong> (default {$new_owner_default}, groups {$new_owner_groups}, this group {$new_owner_entities[$group->guid]})";
-						if (!empty($new_owner_entities[$group->guid])) {
-							$selected_new_owner = $new_owner_entities[$group->guid];
-						} else if (!empty($new_owner_groups)) {
-							$selected_new_owner = $new_owner_groups;
-						} else {
-							$selected_new_owner = $new_owner_default;
-						}
+						$selected_new_owner = content_lifecycle_select_new_owner($default_new_owner_default, $new_owner_default, $new_owner_groups, $new_owner_entities[$group->guid]);
 						$selected_new_owner_entity = get_entity($selected_new_owner);
 						if (!($selected_new_owner_entity instanceof ElggUser || $selected_new_owner_entity instanceof ElggGroup || $selected_new_owner_entity instanceof ElggSite)) {
 							$content .= " => <strong>nouveau propriétaire&nbsp;: invalide</strong>";
@@ -173,25 +167,13 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 									$content .= '<li>';
 										$content .= "<strong>{$object->guid} {$object->title}</strong> ";
 										// action
-										$content .= " => <strong>action&nbsp;:</strong> (default {$rule_default}, this subtype {$rule_objects[$subtype]}, this object {$rule_entities[$object->guid]})";
-										if (!empty($rule_entities[$object->guid])) {
-											$selected_rule = $rule_entities[$object->guid];
-										} else if (!empty($rule_objects[$subtype])) {
-											$selected_rule = $rule_objects[$subtype];
-										} else {
-											$selected_rule = $rule_default;
-										}
+										//$content .= " => <strong>action&nbsp;:</strong> (default {$rule_default}, this subtype {$rule_objects[$subtype]}, this object {$rule_entities[$object->guid]})"; // debug
+										$selected_rule = content_lifecycle_select_rule($default_rule_default, $rule_default, $rule_objects[$subtype], $rule_entities[$object->guid]);
 										$content .= " <strong>$selected_rule</strong> => "; // action
 										
 										// new owner
 										$content .= " => <strong>nouveau propriétaire&nbsp;:</strong> (default {$new_owner_default}, this subtype {$new_owner_objects[$subtype][0]}, this object {$new_owner_entities[$object->guid]})";
-										if (!empty($new_owner_entities[$object->guid])) {
-											$selected_new_owner = $new_owner_entities[$object->guid];
-										} else if (!empty($new_owner_objects[$subtype][0])) {
-											$selected_new_owner = $new_owner_objects[$subtype][0];
-										} else {
-											$selected_new_owner = $new_owner_default;
-										}
+										$selected_new_owner = content_lifecycle_select_new_owner($default_new_owner_default, $new_owner_default, $new_owner_objects[$subtype][0], $new_owner_entities[$object->guid]);
 										$selected_new_owner_entity = get_entity($selected_new_owner);
 										if (!($selected_new_owner_entity instanceof ElggUser || $selected_new_owner_entity instanceof ElggGroup || $selected_new_owner_entity instanceof ElggSite)) {
 											$content .= " => <strong>nouveau propriétaire&nbsp;: invalide</strong>"; // new owner
@@ -242,149 +224,139 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 			}
 			
 		}
-	$content .= '<div>';
+	$content .= '</div>';
 }
 
 
 
 /* FORMULAIRE */
+$can_proceed = false;
 if ($guid) {
 	$content .= '<h2>Gestion des contenus lors de la suppression du compte</h2>';
-	$content .= '<p>' . "GUID : $guid" . '</p>';
 	//$content .= '<pre>' . print_r($rule_objects, true) . '</pre>'; // debug
 	//$content .= '<pre>' . print_r($rule_objects, true) . '</pre>'; // debug
+	$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+		return get_user($guid);
+	});
 	if ($guid === elgg_get_logged_in_user_guid()) {
-		$content .= elgg_error_response(elgg_echo('admin:user:self:delete:no'));
+		$content .= elgg_echo('admin:user:self:delete:no');
+	} else if (!$user) {
+			$content .= "Ce GUID n'est pas celui d'un compte utilisateur valide&nbsp;: $guid";
+	} else if (!$user->canDelete()) {
+		$content .= elgg_echo('admin:user:delete:no');
 	} else {
-		$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
-			return get_user($guid);
-		});
-		if (!$user || !$user->canDelete()) {
-			$content .= elgg_error_response(elgg_echo('admin:user:delete:no'));
-		} else {
-			// User groups
-			$user_owned_groups_count = $user->getGroups(['owner_guid' => $user->guid, 'count' => true]);
-			$user_owned_groups = $user->getGroups(['owner_guid' => $user->guid, 'limit' => false]);
-			
-			$content .= '<div style="display: flex; flex-wrap: wrap;">';
-				
-				$content .= '<div style="flex: 1 1 30rem; margin: 0 1rem 1rem 1rem;">';
-					// Informations générales
-					$content .= elgg_view('content_lifecycle/user_delete_notice', ['user' => $user]);
-					
-					// Formulaire de sélection
-					
-					// MODE SIMPLE ET GLOBAL - PARAMETRES PAR DEFAUT
-					$content .= '<form method="GET", action="">';
-						
-						$content .= '<p><label>Mode de fonctionnement<br />' . elgg_view('input/select', ['name' => "action_mode", 'value' => $action_mode, 'options_values' => $action_mode_opt, 'required' => true]) . '</label></p>';
-						$content .= '<br />';
-						
-						// Origin
-						$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;">';
-							$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Utilisateur à supprimer" . '</legend>';
-							$content .= '<div>' . elgg_view('input/userpicker', ['name' => "guid", 'value' => $guid, 'limit' => 1, 'required' => true]) . '</div>';
-						$content .= '</fieldset>';
-						
-						// Default Action
-						$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;">';
-							$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Action par défaut" . '</legend>';
-							$content .= '<div><label>Action à effectuer par défaut<br />' . elgg_view('input/select', ['name' => "rule_default", 'value' => $rule_default, 'options_values' => $rule_default_opt, 'required' => true]) . '</label></div>';
-						$content .= '</fieldset>';
-						
-						// Default Destination : par défaut, si non overridé dans les réglages suivants
-						$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;">';
-							$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Nouveau propriétaire par défaut" . '</legend>';
-							$content .= '<div>' . elgg_view('input/userpicker', ['name' => "new_owner_default", 'value' => $new_owner_default, 'limit' => 1, 'required' => true]) . '<em>' . "Tous les transferts seront faits vers ce compte utilisateur. Il est possible de définir d'autres comptes utilisateurs pour chacun des types de contenu." . '</em></div>';
-						$content .= '</fieldset>';
-						
-						$content .= '<p>' . elgg_view('input/submit', ['value' => "MODE SIMPLE - Appliquer ces actions"]) . '</p>';
-						$content .= '<p><em>' . "Le mode simple permet d'appliquer les options de transfert prédéfinies. Si vous le souhaitez, vous pouvez utiliser les réglages ci-après pour définir de manière plus fine ce qui doit être transféré ou supprimer, et à qui." . '</em></p>';
-						$content .= '<br />';
-						
-						
-						// MODE AVANCE - PARAMETRES POUR LES GROUPES ET PAR TYPE DE CONTENU
-						// Owned groups
-						$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;" class="elgg-output">';
-							$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Groupes (propriétaire)" . '</legend>';
-							// Action
-							$content .= '<p><label>Action à effectuer ' . elgg_view('input/select', ['name' => "rule_groups", 'value' => $rule_groups, 'options_values' => $rule_groups_opt]) . '</label></p>';
-							
-								// MODE MANUEL - ENTITE PAR ENTITE
-							// Liste des groupes
-							if ($user_owned_groups_count > 0) {
-								if ($user_owned_groups_count > 1) {
-									$user_groups_title = '<p>' . $user_owned_groups_count . ' groupes concernés</p>';
-								} else {
-									$user_groups_title = '<p>' . $user_owned_groups_count . ' groupe concerné</p>';
-								}
-								$user_groups .= '<p><em>Pour transférer chaque groupe à un compte utilisateur différent, veuillez utiliser les liens ci-dessous pour modifier le propriétaire du groupe.</em></p>';
-								$user_groups .= '<ul>';
-								foreach($user_owned_groups as $group) {
-									//$content .= '<li><a href="' . $group->getUrl() . '" target="_blank">' . elgg_view_entity_icon($group, 'tiny', ['use_link' => false, 'class' => 'float']) . '&nbsp;' . $group->name . ' <i class="fas fa-external-link-alt"></i></a></li>';
-									$user_groups .= '<li><a href="' . elgg_get_site_url() . 'groups/edit/' . $group->guid . '" target="_blank">' . elgg_view_entity_icon($group, 'tiny', ['use_link' => false, 'class' => 'float']) . '&nbsp;' . $group->name . ' <i class="fas fa-external-link-alt"></i></a></li>';
-								}
-								$user_groups .= '</ul>';
-								$content .= elgg_view_module('info', $user_groups_title, $user_groups);
-							} else {
-								$content .= '<p>Aucun groupe&nbsp;: sans objet</p>';
-							}
-						$content .= '</fieldset>';
-						
-						// Owned objects
-						// 1 selector for each subtype, with the desired action and targets (in groups / outside group)
-						foreach($object_subtypes as $subtype) {
-							//$content .= "$type > $subtype<br />";
-							$object_subtypes_opt[$subtype] = $subtype;
-							$user_objects_count = $user->getObjects(['type' => 'object', 'subtype' => $subtype, 'count' => true]);
-							
-							$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0; display: flex; flex-wrap: wrap; justify-content: space-around;">';
-								$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . $subtype . '</legend>';
-								if ($user_objects_count > 0) {
-									// Stats
-									if ($user_objects_count > 1) {
-										$user_objects_title = $user_objects_count . ' éléments concernés';
-									} else {
-										$user_objects_title = $user_objects_count . ' élément concerné';
-									}
-									
-									// Action
-									$content .= '<div><label>Action à effectuer<br />' . elgg_view('input/select', ['name' => "rule_objects[{$subtype}]", 'value' => $rule_objects[$subtype], 'options_values' => $rule_objects_opt]) . '</label></div>';
-									
-									// New owner
-									//$content .= '<p><label>Nouveau propriétaire ' . elgg_view('input/select', ['name' => "new_owner[{$subtype}]", 'value' => $new_owner_objects[$subtype], 'options_values' => $new_owner_opt]) . '</label></p>';
-									$content .= '<div><label>Nouveau propriétaire</label> ' . elgg_view('input/userpicker', ['name' => "new_owner_objects[{$subtype}]", 'value' => $new_owner_objects[$subtype], 'limit' => 1]) . '</div>';
-									
-									$content .= '<div style="flex: 1 1 100%;">';
-										$user_objects = elgg_list_entities(['type' => 'object', 'subtype' => $subtype, 'owner_guid' => $guid]);
-										$content .= elgg_view_module('info', $user_objects_title, $user_objects);
-									$content .= '</div>';
-								} else {
-									$content .= 'Aucun élément&nbsp;: sans objet';
-								}
-							$content .= '</fieldset>';
-						}
-
-						// Owned objects : specify 2 targets, as may be contained in groups (options : specific user, group owner, group itself), or outside groups (options : specific user, specific group, site itself?)
-						/*
-						$content .= '<p><label>Types de Contenus à transférer (le cas échéant) ' . elgg_view('input/select', ['name' => "object_subtypes", 'value' => $object_subtypes, 'options_values' => $object_subtypes_opt, 'multiple' => true]) . '</label><br /><em>Maintenir la touche Ctrl appuyée pour sélectionner plusieurs types de contenus.</em></p>';
-						$content .= '<p><label>Action à effectuer pour les Contenus ' . elgg_view('input/select', ['name' => "rule_objects", 'value' => $rule_objects, 'options_values' => $rule_objects_opt]) . '</label></p>';
-						*/
-						
-						$content .= '<p>' . elgg_view('input/submit', ['value' => elgg_echo('execute')]) . '</p>';
-					$content .= '</form>';
-					
-				$content .= '</div>';
-				
-				
-				// Informations détaillées sur le compte utilisateur
-				$content .= '<div style="flex: 1 1 30rem; margin: 0 1rem 1rem 1rem;">';
-					$content .= elgg_view('content_lifecycle/user_details', ['user' => $user]);
-				$content .= '</div>';
-				
-			$content .= '</div>';
-		}
+		$can_proceed = true;
 	}
+}
+if ($can_proceed) {
+	// User groups
+	$user_owned_groups_count = $user->getGroups(['owner_guid' => $user->guid, 'count' => true]);
+	$user_owned_groups = $user->getGroups(['owner_guid' => $user->guid, 'limit' => false]);
+	
+	$content .= '<div style="display: flex; flex-wrap: wrap;">';
+		
+		$content .= '<div style="flex: 1 1 30rem; margin: 0 1rem 1rem 1rem;">';
+			// Informations générales
+			$content .= elgg_view('content_lifecycle/user_delete_notice', ['user' => $user]);
+			
+			// Formulaire de sélection
+			
+			$content .= '<form method="GET", action="">';
+				
+				$content .= '<p><label>Mode de fonctionnement<br />' . elgg_view('input/select', ['name' => "action_mode", 'value' => $action_mode, 'options_values' => $action_mode_opt, 'required' => true]) . '</label></p>';
+				$content .= '<br />';
+				
+				// MODE SIMPLE ET GLOBAL - PARAMETRES PAR DEFAUT
+				$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;">';
+					$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Mode simple - réglages globaux" . '</legend>';
+					$content .= '<p><em>' . "Le mode simple permet d'appliquer les options de transfert prédéfinies. Si vous le souhaitez, vous pouvez utiliser les réglages ci-après pour définir de manière plus fine ce qui doit être transféré ou supprimé, et à qui." . '</em></p>';
+					// Origin
+					$content .= '<div><label>Utilisateur à supprimer</label>' . elgg_view('input/userpicker', ['name' => "guid", 'value' => $guid, 'limit' => 1, 'required' => true]) . '</div>';
+				
+					// Default Action
+					$content .= '<div><label>Action par défaut<br />' . elgg_view('input/select', ['name' => "rule_default", 'value' => $rule_default, 'options_values' => $rule_default_opt, 'required' => true]) . '</label></div>';
+					
+				// Default Destination : par défaut, si non overridé dans les réglages suivants
+					$content .= '<div><label>Nouveau propriétaire</label>' . elgg_view('input/userpicker', ['name' => "new_owner_default", 'value' => $new_owner_default, 'limit' => 1, 'required' => true]) . '<em>' . "Tous les transferts seront faits vers ce compte utilisateur. Il est possible de définir d'autres comptes utilisateurs pour chacun des types de contenu." . '</em></div>';
+					
+					$content .= '<p>' . elgg_view('input/submit', ['value' => "MODE SIMPLE - Appliquer ces actions"]) . '</p>';
+				$content .= '</fieldset>';
+				$content .= '<br />';
+				
+				
+				// MODE AVANCE - PARAMETRES POUR LES GROUPES ET PAR TYPE DE CONTENU
+				// Owned groups
+				$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;" class="elgg-output">';
+					$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Groupes (propriétaire)" . '</legend>';
+					// Action
+					$content .= '<p><label>Action à effectuer ' . elgg_view('input/select', ['name' => "rule_groups", 'value' => $rule_groups, 'options_values' => $rule_groups_opt]) . '</label></p>';
+					
+					// MODE MANUEL - ENTITE PAR ENTITE
+					// Liste des groupes
+					if ($user_owned_groups_count > 0) {
+						if ($user_owned_groups_count > 1) {
+							$user_groups_title = '<p>' . $user_owned_groups_count . ' groupes concernés</p>';
+						} else {
+							$user_groups_title = '<p>' . $user_owned_groups_count . ' groupe concerné</p>';
+						}
+						$user_groups .= '<p><em>Pour transférer chaque groupe à un compte utilisateur différent, veuillez utiliser les liens ci-dessous pour modifier le propriétaire du groupe.</em></p>';
+						$user_groups .= '<ul>';
+						foreach($user_owned_groups as $group) {
+							//$content .= '<li><a href="' . $group->getUrl() . '" target="_blank">' . elgg_view_entity_icon($group, 'tiny', ['use_link' => false, 'class' => 'float']) . '&nbsp;' . $group->name . ' <i class="fas fa-external-link-alt"></i></a></li>';
+							$user_groups .= '<li><a href="' . elgg_get_site_url() . 'groups/edit/' . $group->guid . '" target="_blank">' . elgg_view_entity_icon($group, 'tiny', ['use_link' => false, 'class' => 'float']) . '&nbsp;' . $group->name . ' <i class="fas fa-external-link-alt"></i></a></li>';
+						}
+						$user_groups .= '</ul>';
+						$content .= elgg_view_module('info', $user_groups_title, $user_groups);
+					} else {
+						$content .= '<p>Aucun groupe&nbsp;: sans objet</p>';
+					}
+				$content .= '</fieldset>';
+				
+				// Owned objects
+				// @TODO : specify 2 rules and targets, as may be contained in groups (options : specific user, group owner, group itself), or outside groups (options : specific user, specific group, site itself?)
+				// 1 selector for each subtype, with the desired action and targets (in groups / outside group)
+				foreach($object_subtypes as $subtype) {
+					//$content .= "$type > $subtype<br />";
+					$user_objects_count = $user->getObjects(['type' => 'object', 'subtype' => $subtype, 'count' => true]);
+					
+					$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0; display: flex; flex-wrap: wrap; justify-content: space-around;">';
+						$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . $subtype . '</legend>';
+						if (true || $user_objects_count > 0) {
+							// Stats
+							if ($user_objects_count > 1) {
+								$user_objects_title = $user_objects_count . ' éléments concernés';
+							} else {
+								$user_objects_title = $user_objects_count . ' élément concerné';
+							}
+							
+							// Action
+							$content .= '<div><label>Action à effectuer<br />' . elgg_view('input/select', ['name' => "rule_objects[{$subtype}]", 'value' => $rule_objects[$subtype], 'options_values' => $rule_objects_opt]) . '</label></div>';
+							
+							// New owner
+							//$content .= '<p><label>Nouveau propriétaire ' . elgg_view('input/select', ['name' => "new_owner[{$subtype}]", 'value' => $new_owner_objects[$subtype], 'options_values' => $new_owner_opt]) . '</label></p>';
+							$content .= '<div><label>Nouveau propriétaire</label> ' . elgg_view('input/userpicker', ['name' => "new_owner_objects[{$subtype}]", 'value' => $new_owner_objects[$subtype], 'limit' => 1]) . '</div>';
+							
+							$content .= '<div style="flex: 1 1 100%;">';
+								$user_objects = elgg_list_entities(['type' => 'object', 'subtype' => $subtype, 'owner_guid' => $guid]);
+								$content .= elgg_view_module('info', $user_objects_title, $user_objects);
+							$content .= '</div>';
+						} else {
+							$content .= 'Aucun élément&nbsp;: sans objet';
+						}
+					$content .= '</fieldset>';
+				}
+				$content .= '<p>' . elgg_view('input/submit', ['value' => elgg_echo('execute')]) . '</p>';
+			$content .= '</form>';
+			
+		$content .= '</div>';
+		
+		
+		// Informations détaillées sur le compte utilisateur
+		$content .= '<div style="flex: 1 1 30rem; margin: 0 1rem 1rem 1rem;">';
+			$content .= elgg_view('content_lifecycle/user_details', ['user' => $user]);
+		$content .= '</div>';
+		
+	$content .= '</div>';
 } else {
 	// Formulaire de sélection initial (équivalent de User > Admin > Supprimer)
 	$content .= '<p>' . "Pas de compte sélectionné." . '</p>';
@@ -392,7 +364,7 @@ if ($guid) {
 		// Origin
 		$content .= '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0;">';
 			$content .= '<legend style="border: 1px solid #CCC; padding: 0 .5rem;">' . "Utilisateur à supprimer" . '</legend>';
-			$content .= '<div><label>Utilisateur à supprimer</label>' . elgg_view('input/userpicker', ['name' => "guid", 'value' => $guid, 'limit' => 1]) . '</div>';
+			$content .= '<div><label>Utilisateur à supprimer</label>' . elgg_view('input/userpicker', ['name' => "guid", 'value' => '', 'limit' => 1]) . '</div>';
 		$content .= '</fieldset>';
 		$content .= '<p>' . elgg_view('input/submit', ['value' => "Sélectionner ce compte"]) . '</p>';
 	$content .= '</form>';
