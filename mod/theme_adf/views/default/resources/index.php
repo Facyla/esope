@@ -172,20 +172,74 @@ Vous êtes actuellement sur votre tableau de bord personnel. <br />
 Il vous permet de suivre ce qui se passe sur le site.<br />
 </p>';
 // Mes informations : actions, alertes et statistiques
-$infos = '<p>Nombre de personnes connectées<br />
-Invitations à rejoindre un espace de travail<br /> http://php73.local/PHP7/esope_3.3/groups/invitations/admin
-Contacts à valider<br />http://php73.local/PHP7/esope_3.3/friend_request/admin
-Valider les adhésions aux groupes<br />
-</p>';
-$infos .= "Connectés : " . find_active_users(['seconds' => 600, 'count' => true]) . ' personnes';
-$infos .= "Nombre de membres actifs : " . get_number_users(false) . ' personnes (total ' . get_number_users(true) . ')';
-
 elgg_set_page_owner_guid($user->guid);
+$infos = '';
+$infos .= "<p>Nombre de personnes connectés : " . find_active_users(['seconds' => 600, 'count' => true]) . ' personnes<br />';
+$infos .= "Nombre de membres actifs : " . get_number_users(false) . ' personnes (total ' . get_number_users(true) . ')</p>';
+
+$group_invitations = elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
+	return elgg_get_relationships([
+		'relationship' => 'invited',
+		'relationship_guid' => $user->guid,
+		'inverse_relationship' => true,
+		'no_results' => elgg_echo('groups:invitations:none'),
+		'count' => true,
+	]);
+});
+$infos .= '<a href="' . elgg_get_site_url() . 'groups/invitations/' . $user->username . '">' . "$group_invitations invitations à rejoindre un espace de travail" . '</a>';
+if ($group_invitations > 0) {
+	$infos .= elgg_view('groups/invitationrequests') . '</p>';
+}
+
+$infos .= "Valider les demandes d'adhésion aux groupes : @TODO";
+// @TODO faire une vue pour chaque groupe dont on est propriétaire ou co-administrateur
+/* elgg_list_relationships([
+	'relationship' => 'membership_request',
+	'relationship_guid' => $group->guid,
+	'inverse_relationship' => true,
+	'order_by' => new OrderByClause('er.time_created', 'ASC'),
+	'no_results' => elgg_echo('groups:requests:none'),
+]);
+*/
+//$infos .= elgg_view('groups/membershiprequests') . '</p>';
+$infos .= '</p>';
+
 // set the correct context and page owner
+elgg_set_page_owner_guid($user->guid);
 elgg_push_context('friends');
-$infos .= "Demandes de contact reçues : " . elgg_view('friend_request/received');
-$infos .= "Demandes de contact envoyées : " . elgg_view('friend_request/sent');
-elgg_pop_context('friends');
+
+$friend_requests_sent = elgg_get_entities_from_relationship([
+	'type' => 'user',
+	'relationship' => 'friendrequest',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => false,
+	'offset_key' => 'offset_sent',
+	'no_results' => elgg_echo('friend_request:sent:none'),
+	'item_view' => 'friend_request/item',
+	'count' => true,
+]);
+$friend_requests_received = elgg_get_entities_from_relationship([
+	'type' => 'user',
+	'relationship' => 'friendrequest',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => true,
+	'offset_key' => 'offset_received',
+	'no_results' => elgg_echo('friend_request:received:none'),
+	'item_view' => 'friend_request/item',
+	'count' => true,
+]);
+$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_received demandes de contact reçues" . '</a></p>';
+if ($friend_requests_received > 0) {
+	$infos .= elgg_view('friend_request/received');
+}
+$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
+if ($friend_requests_sent > 0) {
+	$infos .= elgg_view('friend_request/sent');
+}
+elgg_pop_context();
+
+
+
 
 
 $content .= '<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); grid-gap: 1rem 2rem;">';
