@@ -55,7 +55,7 @@ Les versions d'ESOPE suivent la politique de versions de Elgg, avec au moins le 
 
 
 ### Principaux contributeurs
-* Florian DANIEL, aka Facyla
+* Facyla SAS
 * Assemblée des Départements de France (ADF)
 * Conseil Général de l'Essonne
 * ITEMS International
@@ -82,6 +82,12 @@ Guide d'installation de Elgg : http://learn.elgg.org/fr/3.3/intro/install.html
 - MySQL 5.5+
 - URL rewriting
 
+
+### Sécurisation
+Il est recommandé de ne permettre l'accès qu'à travers une connexion HTTPS (nécesite un certificat valide, par ex. avec LetsEncrypt). 
+En savoir plus sur les options de sécurité dans Elgg : http://learn.elgg.org/fr/3.3/admin/security.html?highlight=s%C3%A9curit%C3%A9
+
+
 ### Procédure d'installation
 L'installation et les mises à jour ou changements de version d'ESOPE peuvent être gérés via Git : c'est la méthode privilégiée afin faciliter les mises à jour. Il est cependant possible de copier les fichiers source. 
 1. Création des dossiers et bases pour accueillir l'application : 
@@ -101,11 +107,5 @@ L'installation et les mises à jour ou changements de version d'ESOPE peuvent ê
 
 Note : Si vous n'avez accès qu'à la racine web (par ex. sur un hébergement mutualisé), vous pouvez créer le dossier "data" dans ce répertoire et ajouter dans data/ un fichier .htaccess avec pour contenu : deny from all. 
 
-
-
-
-### Sécurisation
-Il est recommandé de ne permettre l'accès qu'à travers une connexion HTTPS (nécesite un certificat valide, par ex. avec LetsEncrypt). 
-En savoir plus sur les options de sécurité dans Elgg : http://learn.elgg.org/fr/3.3/admin/security.html?highlight=s%C3%A9curit%C3%A9
 
 

@@ -15,15 +15,6 @@ class ElggContentLifeCycle extends ElggObject {
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
 		$this->attributes['subtype'] = "content_lifecycle";
-		
-		// Initial values
-		/*
-		$this->owner_guid = elgg_get_logged_in_user_guid();
-		$this->container_guid = elgg_get_logged_in_user_guid();
-		$this->title = date('Y-m-d-H-i');
-		$this->position = 500;
-		*/
-		
 	}
 	
 	

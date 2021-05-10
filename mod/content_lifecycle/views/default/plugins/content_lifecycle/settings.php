@@ -25,9 +25,12 @@ echo '<div class="elgg-output"><em>' . "Principe de fonctionnement : ce plugin i
 echo '<p class="float-alt">' . elgg_view('output/url', ['text' => "Page de contrôle et d'exécution", 'href' => elgg_get_site_url() . "content_lifecycle/", 'class' => "elgg-button elgg-button-action", 'target' => "_blank"]) . '</p>';
 
 
-// Default Action mode
+// Default Action mode : non proposé à moins d'avoir un mode automatique
+// car on a besoin de voir la page intermédiaire avant d'exécuter les actions
+/*
 echo '<p><label>Mode de fonctionnement<br />' . elgg_view('input/select', ['name' => "params[action_mode]", 'value' => $plugin->action_mode, 'options_values' => $action_mode_opt]) . '</label></p>';
 echo '<br />';
+*/
 
 // Mode simple : configuration globale par défaut
 echo '<fieldset style="border: 1px solid #CCC; padding: .5rem; margin: 0 0 .5rem 0; display: flex; justify-content: space-between; flex-wrap: wrap;">';

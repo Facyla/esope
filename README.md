@@ -55,7 +55,7 @@ Les versions d'ESOPE suivent la politique de versions de Elgg, avec au moins le 
 
 
 ### Principaux contributeurs
-* Florian DANIEL, aka Facyla
+* Facyla SAS
 * Assemblée des Départements de France (ADF)
 * Conseil Général de l'Essonne
 * ITEMS International
