@@ -173,10 +173,20 @@ Il vous permet de suivre ce qui se passe sur le site.<br />
 </p>';
 // Mes informations : actions, alertes et statistiques
 $infos = '<p>Nombre de personnes connectées<br />
-Invitations à rejoindre un espace de travail<br />
-Contacts à valider<br />
+Invitations à rejoindre un espace de travail<br /> http://php73.local/PHP7/esope_3.3/groups/invitations/admin
+Contacts à valider<br />http://php73.local/PHP7/esope_3.3/friend_request/admin
 Valider les adhésions aux groupes<br />
 </p>';
+$infos .= "Connectés : " . find_active_users(['seconds' => 600, 'count' => true]) . ' personnes';
+$infos .= "Nombre de membres actifs : " . get_number_users(false) . ' personnes (total ' . get_number_users(true) . ')';
+
+elgg_set_page_owner_guid($user->guid);
+// set the correct context and page owner
+elgg_push_context('friends');
+$infos .= "Demandes de contact reçues : " . elgg_view('friend_request/received');
+$infos .= "Demandes de contact envoyées : " . elgg_view('friend_request/sent');
+elgg_pop_context('friends');
+
 
 $content .= '<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); grid-gap: 1rem 2rem;">';
 $content .= elgg_view_module('home-editorial', elgg_echo("Bloc éditorial"), $editorial);

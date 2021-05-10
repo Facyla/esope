@@ -179,6 +179,13 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 	$item->setPriority(500);
 	$new_menu[] = $item;
+	// Add submenus
+	//$search_form = elgg_view_form('search', [], []);
+	$q = get_input('q');
+	$search_form = '<form action="search" method="GET" style="display: flex; font-size: 1.4em; font-weight: 600;"><input type="text" name="q" value="' . $q . '" placeholder="Rechercher un contenu..." style="flex: 1 1 auto;"><input type="submit" value="Rechercher" style="flex: 0 0 10rem;"></form>';
+	$item = new ElggMenuItem('search-form', $search_form, false);
+	$item->setParentName('search');
+	$new_menu[] = $item;
 	
 	// Aide : page de présentation et recherche de contenus
 	$item = new ElggMenuItem('help', "Aide" . '&nbsp;<i class="fa fa-caret-down"></i>', '/aide');

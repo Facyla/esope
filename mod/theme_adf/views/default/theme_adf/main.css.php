@@ -71,8 +71,17 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-nav-search { display: none; max-width: 24rem; }
 .elgg-nav-search .elgg-form-search { /* border: 1px solid #fff; */ background: rgba(255,255,255,0.1); }
 .elgg-page-topbar .elgg-form-search [type="text"] { background: #1b3b5d; }
+.elgg-form-search [type="submit"] { display: inline-block; }
+.elgg-page-body .elgg-form-search { background: #dee3e8; margin: -1rem -2rem 1rem -2rem; padding: 1rem 2rem 0 2rem; }
+.elgg-form-search fieldset { display: flex; }
 .elgg-page-topbar .elgg-form-search fieldset { width: 100%; display: inline-block; }
 .elgg-page-topbar .elgg-form-search fieldset > .elgg-field { max-width: calc(100% - 10rem); }
+
+.elgg-menu-item-search-form {  }
+.elgg-menu-item-search-form .elgg-form-search fieldset { display: flex; }
+.elgg-menu-item-search-form .elgg-form-search fieldset > div.elgg-field { flex: 0 1 20rem; }
+.elgg-menu-item-search-form .elgg-form-search fieldset > nav { flex: 1 1 12rem; }
+.elgg-menu-item-search-form .elgg-form-search fieldset > div:last-of-type { flex: 0 1 4rem; }
 
 .elgg-menu-item-entity-menu-toggle .elgg-menu-content { min-width: 1.5em; text-align: center; }
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-groups .elgg-child-menu { width: 20rem; max-width: 100vw; }

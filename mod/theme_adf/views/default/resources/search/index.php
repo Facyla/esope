@@ -16,7 +16,8 @@ elgg_register_rss_link();
 set_input('q', get_input('q', elgg_extract('route_query', $vars, null, false)));
 
 // setting list_type input so elgg_view_entity_list can use it
-set_input('list_type', get_input('list_type', search_advanced_get_list_type()));
+//set_input('list_type', get_input('list_type', search_advanced_get_list_type()));
+set_input('list_type', get_input('list_type', 'compact'));
 
 $service = new \ColdTrick\SearchAdvanced\SearchHelper();
 $params = $service->getParams();
@@ -229,12 +230,21 @@ $title = elgg_view('search/title', [
 	'count' => $result_total,
 ]);
 
-$sidebar_alt = $results_groups . $results_users;
+
+//$sidebar_alt = $results_users . $results_groups;
+/*
+$results = '<div style="display: flex; flex-wrap: wrap;">
+		<div style="flex: 1 1 calc(60% - 2rem); min-width: 30rem; margin: 0 .5rem;">' . $results . '</div>
+		<div style="flex: 1 1 calc(40% - 2rem); min-width: 30rem; margin: 0 .5rem;">' . $results_users . $results_groups . '</div>
+	</div>';
+*/
+
+
 
 echo elgg_view_page(elgg_echo('search'), [
 	'title' => $title,
 	'content' => $results,
 	'filter' => $form . $filter,
 	'filter_id' => 'search',
-	'sidebar_alt' => $sidebar_alt,
+	//'sidebar_alt' => $sidebar_alt,
 ]);
