@@ -16,7 +16,11 @@ Suite à ses évolutions, elle permet également de proposer des réseaux public
 * esope_2.0 : branche intermédiaire - mises à jour seulement
 * esope_2.1 : branche intermédiaire - mises à jour seulement
 * esope_2.2 : branche intermédiaire - mises à jour seulement
-* esope_2.3 : branche de production - future version LTS
+* esope_2.3 : branche de production - version LTS
+* esope_3.0 : branche intermédiaire - mises à jour seulement
+* esope_3.1 : branche intermédiaire - mises à jour seulement
+* esope_3.2 : branche intermédiaire - mises à jour seulement
+* esope_3.3 : branche de production - version LTS
 
 
 
