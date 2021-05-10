@@ -16,8 +16,8 @@ elgg_register_rss_link();
 set_input('q', get_input('q', elgg_extract('route_query', $vars, null, false)));
 
 // setting list_type input so elgg_view_entity_list can use it
-//set_input('list_type', get_input('list_type', search_advanced_get_list_type()));
-set_input('list_type', get_input('list_type', 'compact'));
+set_input('list_type', get_input('list_type', search_advanced_get_list_type()));
+//set_input('list_type', get_input('list_type', 'compact'));
 
 $service = new \ColdTrick\SearchAdvanced\SearchHelper();
 $params = $service->getParams();

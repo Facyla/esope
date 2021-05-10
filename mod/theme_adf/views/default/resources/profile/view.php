@@ -43,12 +43,12 @@ if ($self) {
 $content .= elgg_list_river($options);
 
 
-
-echo elgg_view_page($user->getDisplayName(), [
+$title = '<span class="hidden">' . $user->getDisplayName() . '</span>';
+echo elgg_view_page($title, [
 	//'header' => '',
 	'content' => $content,
 	'entity' => $user,
 	//'sidebar' => elgg_view('profile/owner_block', ['entity' => $user,]),
 	'class' => 'profile',
-	//'sidebar' => false,
+	'sidebar' => false,
 ]);

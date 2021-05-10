@@ -148,7 +148,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 				break;
 			case 'members':
 				$item->setPriority(600);
-				$item->setText($item->getText() . '&nbsp;<i class="fa fa-caret-down"></i>');
+				$item->setText('Annuaire&nbsp;<i class="fa fa-caret-down"></i>');
 				break;
 			case 'event':
 				$item->setPriority(800);
@@ -208,12 +208,12 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	*/
 	
 	// Groups sub-menus : accès à tous les groupes => classement par type + recherche + ceux mis en avant + ceux recommandés)
-	// Global view
-	$item = new ElggMenuItem("home-dashboard", "Tableau de bord", "/");
-	$item->setParentName('groups');
-	$new_menu[] = $item;
 	// all groups
 	$item = new ElggMenuItem("groups-directory", "Rechercher un espace de travail", "groups/all");
+	$item->setParentName('groups');
+	$new_menu[] = $item;
+	// Global view
+	$item = new ElggMenuItem("home-dashboard", "Tableau de bord", "/");
 	$item->setParentName('groups');
 	$new_menu[] = $item;
 	// my groups
@@ -231,7 +231,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	
 	// Members sub-menu :
 	// members directory
-	$item = new ElggMenuItem("members-directory", "Annuaire des départements en réseau", "members");
+	$item = new ElggMenuItem("members-directory", "Membres de Départements en Réseaux", "members");
 	$item->setParentName('members');
 	$new_menu[] = $item;
 	// contacts

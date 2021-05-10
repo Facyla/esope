@@ -12,5 +12,8 @@ return [
 	'theme_adf:menu:contributions' => "Contributions",
 	'theme_adf:menu:search' => "Recherche",
 	
+	// Overrides
+	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
+	
 ];
 

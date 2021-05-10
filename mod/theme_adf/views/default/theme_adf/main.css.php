@@ -133,6 +133,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .groups-mine { width: 100%; }
 .groups-mine ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(6rem,1fr)); grid-gap: .5rem 0.25rem; }
 
+.elgg-menu-title-widgets-container { justify-content: initial; }
+.elgg-menu-title-widgets-container .elgg-more { font-size: 1.25rem; font-weight: 500;}
+
 
 /* ANNUAIRE */
 .elgg-context-members .elgg-layout-content .elgg-list-entity { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); grid-gap: 1rem 1rem; }

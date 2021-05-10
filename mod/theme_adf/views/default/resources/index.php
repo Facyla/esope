@@ -186,12 +186,12 @@ $group_invitations = elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
 		'count' => true,
 	]);
 });
-$infos .= '<a href="' . elgg_get_site_url() . 'groups/invitations/' . $user->username . '">' . "$group_invitations invitations à rejoindre un espace de travail" . '</a>';
 if ($group_invitations > 0) {
-	$infos .= elgg_view('groups/invitationrequests') . '</p>';
+	$infos .= '<p><a href="' . elgg_get_site_url() . 'groups/invitations/' . $user->username . '">' . "$group_invitations invitations à rejoindre un espace de travail" . '</a></p>';
 }
+//if ($group_invitations > 0) { $infos .= elgg_view('groups/invitationrequests') . '</p>'; }
 
-$infos .= "Valider les demandes d'adhésion aux groupes : @TODO";
+$infos .= "<p>Valider les demandes d'adhésion aux groupes : @TODO</p>";
 // @TODO faire une vue pour chaque groupe dont on est propriétaire ou co-administrateur
 /* elgg_list_relationships([
 	'relationship' => 'membership_request',
@@ -207,17 +207,6 @@ $infos .= '</p>';
 // set the correct context and page owner
 elgg_set_page_owner_guid($user->guid);
 elgg_push_context('friends');
-
-$friend_requests_sent = elgg_get_entities_from_relationship([
-	'type' => 'user',
-	'relationship' => 'friendrequest',
-	'relationship_guid' => $user->guid,
-	'inverse_relationship' => false,
-	'offset_key' => 'offset_sent',
-	'no_results' => elgg_echo('friend_request:sent:none'),
-	'item_view' => 'friend_request/item',
-	'count' => true,
-]);
 $friend_requests_received = elgg_get_entities_from_relationship([
 	'type' => 'user',
 	'relationship' => 'friendrequest',
@@ -228,14 +217,24 @@ $friend_requests_received = elgg_get_entities_from_relationship([
 	'item_view' => 'friend_request/item',
 	'count' => true,
 ]);
-$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_received demandes de contact reçues" . '</a></p>';
 if ($friend_requests_received > 0) {
-	$infos .= elgg_view('friend_request/received');
+	$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_received demandes de contact reçues" . '</a></p>';
 }
-$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
+//if ($friend_requests_received > 0) { $infos .= elgg_view('friend_request/received'); }
+$friend_requests_sent = elgg_get_entities_from_relationship([
+	'type' => 'user',
+	'relationship' => 'friendrequest',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => false,
+	'offset_key' => 'offset_sent',
+	'no_results' => elgg_echo('friend_request:sent:none'),
+	'item_view' => 'friend_request/item',
+	'count' => true,
+]);
 if ($friend_requests_sent > 0) {
-	$infos .= elgg_view('friend_request/sent');
+	$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
 }
+//if ($friend_requests_sent > 0) { $infos .= elgg_view('friend_request/sent'); }
 elgg_pop_context();
 
 
@@ -243,7 +242,7 @@ elgg_pop_context();
 
 
 $content .= '<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); grid-gap: 1rem 2rem;">';
-$content .= elgg_view_module('home-editorial', elgg_echo("Bloc éditorial"), $editorial);
+$content .= elgg_view_module('home-editorial', elgg_echo("Bienvenue !"), $editorial);
 $content .= elgg_view_module('home-infos', elgg_echo("Mes informations"), $infos);
 $content .= '</div>';
 
@@ -285,13 +284,12 @@ $content .= '</div>';
 elgg_set_page_owner_guid($user->guid);
 $widgets_intro = '<h3 style="padding: .5rem 1rem; border: 1px solid; font-size: 1.5rem; font-weight: normal; margin-bottom: 1rem;">Personnalisez votre tableau de bord</h3>';
 $content .= elgg_view_layout('widgets', [
-	'content' => $widgets_intro, // Texte en intro des widgets (avant les 3 colonnes)
+	'content' => 'test', //$widgets_intro, // Texte en intro des widgets (avant les 3 colonnes)
 	'num_columns' => 3, 
 	'show_access' => false, 
 	'owner_guid'=> $user->guid,
 	'no_widgets' => function () use ($widgets_intro) {
-		echo elgg_view('dashboard/blurb');
-		echo $widgets_intro;
+		//echo elgg_view('dashboard/blurb') . $widgets_intro;
 	},
 ]);
 //elgg_set_page_owner_guid(1); // on évite de se retrouver avec une sidebar...
