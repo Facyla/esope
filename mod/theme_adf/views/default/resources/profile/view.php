@@ -43,7 +43,8 @@ if ($self) {
 $content .= elgg_list_river($options);
 
 
-$title = '<span class="hidden">' . $user->getDisplayName() . '</span>';
+//$title = '<span class="hidden">' . $user->getDisplayName() . '</span>';
+$title = $user->getDisplayName();
 echo elgg_view_page($title, [
 	//'header' => '',
 	'content' => $content,

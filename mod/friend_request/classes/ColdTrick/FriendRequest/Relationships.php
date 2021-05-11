@@ -2,6 +2,9 @@
 
 namespace ColdTrick\FriendRequest;
 
+use Elgg\Event;
+use NotificationException;
+
 class Relationships {
 	
 	/**
@@ -13,9 +16,11 @@ class Relationships {
 	 *
 	 * @return void
 	 */
-	public static function createFriendRequest($event, $type, $relationship) {
+	public static function createFriendRequest(Event $event) {
 		
-		if (!($relationship instanceof \ElggRelationship)) {
+		$relationship = $event->getObject();
+		
+		if (!$relationship instanceof \ElggRelationship) {
 			return;
 		}
 		
@@ -30,19 +35,17 @@ class Relationships {
 			return;
 		}
 		
-		$view_friends_url = elgg_normalize_url("friend_request/{$new_friend->username}");
-		
 		// Notify target user
-		$subject = elgg_echo('friend_request:newfriend:subject', [$requester->name], $new_friend->language);
+		$subject = elgg_echo('friend_request:newfriend:subject', [$requester->getDisplayName()], $new_friend->language);
 		$message = elgg_echo('friend_request:newfriend:body', [
-			$requester->name,
-			$view_friends_url
+			$requester->getDisplayName(),
+			elgg_generate_url('collection:user:user:friend_request', ['username' => $new_friend->username]),
 		], $new_friend->language);
 		
 		$params = [
 			'action' => 'friend_request',
 			'object' => $requester,
 		];
-		notify_user($new_friend->getGUID(), $requester->getGUID(), $subject, $message, $params);
+		notify_user($new_friend->guid, $requester->guid, $subject, $message, $params);
 	}
 }

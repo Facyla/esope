@@ -26,6 +26,11 @@ $body_attrs = elgg_extract('body_attrs', $vars, []);
 $class = 'elgg-public';
 if (elgg_is_logged_in()) { $class = 'elgg-loggedin'; }
 foreach (elgg_get_context_stack() as $context) { $class .= ' elgg-context-' . str_replace(['/', '_', ' '], '-', $context); }
+// Add page owner type
+$owner = elgg_get_page_owner_entity();
+if ($owner instanceof ElggEntity) {
+	$class .= ' elgg-owner-' . str_replace(['/', '_', ' '], '-', $owner->getType());
+}
 $body_attrs['class'] .= " $class";
 
 ?>

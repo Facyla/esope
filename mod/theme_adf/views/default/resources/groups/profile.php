@@ -14,6 +14,7 @@ elgg_push_context('group_profile');
 elgg_push_breadcrumb(elgg_echo('groups'), elgg_generate_url('collection:group:group:all'));
 
 $sidebar = '';
+/*
 if ($group->canAccessContent()) {
 	//$sidebar .= elgg_view('groups/sidebar/search', ['entity' => $group]); // Facyla : available on all group pages
 	$sidebar .= elgg_view('groups/sidebar/owner', ['entity' => $group]);
@@ -21,6 +22,7 @@ if ($group->canAccessContent()) {
 } else {
 	$sidebar .= elgg_view('groups/sidebar/owner', ['entity' => $group]);
 }
+*/
 
 // Facyla : aucun titre pour la page d'accueil du groupe : on favorise l'owner_block pour se situer
 //echo elgg_view_page($group->getDisplayName(), [

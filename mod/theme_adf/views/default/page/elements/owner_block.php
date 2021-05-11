@@ -14,15 +14,17 @@ if (!($owner instanceof ElggGroup || $owner instanceof ElggUser)) {
 
 elgg_push_context('owner_block');
 
+// @TODO : Autant le refaire avec image de fond ?
 $header = elgg_view_entity($owner, [
 	'item_view' => 'object/elements/chip',
+	'icon' => elgg_view_entity_icon($owner, 'large'),
 ]);
 
 $extra_class = '';
 $body = '';
 
 // Group search
-if ($owner instanceof ElggGroup) {
+if ($owner instanceof ElggGroup && !elgg_in_context('group_profile')) {
 	if (elgg_is_active_plugin('search')) {
 		// Search for content in this group
 		$group_search = elgg_view_form('groups/search', [

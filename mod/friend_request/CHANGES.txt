@@ -1,6 +1,9 @@
 Version history
 ===============
 
+- moved lib/functions.php to lib/friend_request/functions.php
+- updated composer.json composer installer : "^1.0.8" to ">=1.0.8"
+
 5.0 (2016-09-15):
 
 - changed: friend request action can now be performed by admin
