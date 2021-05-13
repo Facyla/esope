@@ -161,11 +161,15 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 
 /* PROFIL */
-.elgg-context-profile .elgg-layout-header { background: #e6eaed; }
+.elgg-context-profile .elgg-layout-header { /* background: #e6eaed; */ background: white;  }
 .elgg-context-profile .elgg-layout-header .elgg-avatar { order: -1; margin-right: 1rem; }
 .elgg-context-profile .elgg-layout-header .profile-actions-menu-wrapper { order: 0; }
 .elgg-context-profile .elgg-layout-header .profile-admin-menu-wrapper { order: 1; }
 .elgg-context-profile .elgg-layout-header h2 { display: none; /* order: 3; */ }
+
+#widget_profile_completeness_container { border: 1px solid #0b2d51; }
+#widget_profile_completeness_progress { color: white; }
+#widget_profile_completeness_progress_bar { background: #5ba2d9; }
 
 
 /* GROUPES */
@@ -181,11 +185,17 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .groups-profile-fields .elgg-profile-fields { padding: 0; }
 
 .group-details { display: flex; flex-wrap: wrap; justify-content: space-between; margin: 1rem 0; grid-gap: 1rem 1rem; }
-.group-details > .elgg-module { flex: 0 1 16rem; min-width: 16rem; max-width: 24rem; /* background: #e57b5f; */ border: 2px dotted #e57b5f; }
+.group-details > .elgg-module { flex: 1 1 16rem; min-width: 16rem; /* background: #e57b5f; */ border: 2px dotted #e57b5f; }
+/*
+.group-details > .elgg-module { flex: 0 1 16rem; min-width: 16rem; max-width: 24rem; border: 2px dotted #e57b5f; }
 .group-details > .elgg-module:first-of-type { flex: 10 1 20rem; max-width: 48rem; background: initial; border-color: transparent; }
+*/
 .group-details .elgg-gallery { /* grid-template-columns: repeat(auto-fit,minmax(3rem,1fr)); margin: 0rem 0; */ grid-gap: .5rem .5rem; margin: 0; display: flex; flex-wrap: wrap; justify-content: initial; }
 
 .group-details .elgg-form-groups-search fieldset { display: flex; }
+
+.group-sidebar-pages-nav .elgg-menu-pages-nav { margin: 0; }
+.group-sidebar-pages-nav nav:last-of-type { margin-bottom: 2rem; }
 
 
 /* DEBUT TEST PLEINE LARGEUR */

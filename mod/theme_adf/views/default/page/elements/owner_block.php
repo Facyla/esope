@@ -24,7 +24,8 @@ $extra_class = '';
 $body = '';
 
 // Group search
-if ($owner instanceof ElggGroup && !elgg_in_context('group_profile')) {
+//if ($owner instanceof ElggGroup && !elgg_in_context('group_profile')) {
+if ($owner instanceof ElggGroup) {
 	if (elgg_is_active_plugin('search')) {
 		// Search for content in this group
 		$group_search = elgg_view_form('groups/search', [

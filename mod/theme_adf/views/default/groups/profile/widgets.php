@@ -7,7 +7,7 @@ $group = elgg_extract('entity', $vars);
 
 echo '<div class="group-details">';
 if ($group->canAccessContent()) {
-	echo elgg_view('groups/sidebar/search', ['entity' => $group]);
+	//echo elgg_view('groups/sidebar/search', ['entity' => $group]);
 	echo elgg_view('groups/sidebar/owner', ['entity' => $group]);
 	echo elgg_view('groups/sidebar/members', ['entity' => $group]);
 } else {

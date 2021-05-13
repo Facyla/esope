@@ -11,7 +11,7 @@ $tools = elgg()->group_tools->group($entity)
 	})
 	->sort();
 
-$keep_modules = ['forum', 'blog', 'pages'];
+$keep_modules = []; // 'forum', 'blog', 'pages'
 foreach ($tools as $tool) {
 	if (!in_array($tool->name, $keep_modules)) { continue; }
 	if (elgg_view_exists("groups/profile/module/{$tool->name}")) {

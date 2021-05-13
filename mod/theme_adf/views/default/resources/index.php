@@ -175,7 +175,7 @@ Il vous permet de suivre ce qui se passe sur le site.<br />
 elgg_set_page_owner_guid($user->guid);
 $infos = '';
 $infos .= "<p>Nombre de personnes connectés : " . find_active_users(['seconds' => 600, 'count' => true]) . ' personnes<br />';
-$infos .= "Nombre de membres actifs : " . get_number_users(false) . ' personnes (total ' . get_number_users(true) . ')</p>';
+$infos .= "Nombre de membres : " . elgg_count_entities(['type' => 'user']) . ' personnes</p>';
 
 $group_invitations = elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
 	return elgg_get_relationships([
@@ -207,7 +207,7 @@ $infos .= '</p>';
 // set the correct context and page owner
 elgg_set_page_owner_guid($user->guid);
 elgg_push_context('friends');
-$friend_requests_received = elgg_get_entities_from_relationship([
+$friend_requests_received = elgg_get_entities([
 	'type' => 'user',
 	'relationship' => 'friendrequest',
 	'relationship_guid' => $user->guid,
@@ -221,7 +221,7 @@ if ($friend_requests_received > 0) {
 	$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request">' . "$friend_requests_received demandes de contact reçues" . '</a></p>';
 }
 //if ($friend_requests_received > 0) { $infos .= elgg_view('friend_request/received'); }
-$friend_requests_sent = elgg_get_entities_from_relationship([
+$friend_requests_sent = elgg_get_entities([
 	'type' => 'user',
 	'relationship' => 'friendrequest',
 	'relationship_guid' => $user->guid,
