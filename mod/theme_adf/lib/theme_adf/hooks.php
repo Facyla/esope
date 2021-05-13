@@ -193,7 +193,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	$item->setPriority(900);
 	$new_menu[] = $item;
 	// Add submenus
-	$item = new ElggMenuItem('help-group', "Groupe d'aide", '/somegroup');
+	$item = new ElggMenuItem('help-feedback', "Feedbacks", '/feedback');
 	$item->setParentName('help');
 	$new_menu[] = $item;
 	
