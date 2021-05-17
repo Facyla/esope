@@ -244,24 +244,9 @@ function access_collections_add_write_acl(\Elgg\Hook $hook) {
 	
 	// Add custom collections to ACL select
 	// @TODO Get collections that user can access to (member of or owner)
-	$collections = array();
-	
+	$user_custom_collections = access_collections_get_custom_collections($user_guid);
 	// Add custom profile types collections
-	$profile_types_acls = access_collections_get_profile_types_acls();
-	if ($profile_types_acls) {
-		foreach($profile_types_acls as $guid => $collection) {
-			// Ensure that user is a member of that collection before adding to write access select
-			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
-			//$result = get_data_row($query);
-			$result = elgg()->db->getDataRow($query);
-			if ($result) {
-				$collection_label = elgg_echo($collection->name);
-				if ($collection_label == $collection->name) { $collection_label = $collection->name; }
-				$collection_label = elgg_get_plugin_setting("profiletype_label_$guid", 'access_collections');
-				$custom_collections[$user_guid][$collection->id] = $collection_label;
-			}
-		}
-	}
+	$custom_collections[$user_guid] = $user_custom_collections;
 	
 	/* Same as read : no need to add if user is member of collection
 	
@@ -284,7 +269,46 @@ function access_collections_add_write_acl(\Elgg\Hook $hook) {
 	return $access_array;
 }
 
+function access_collections_get_custom_collections($user_guid) {
+	// Add custom collections to ACL select
+	// @TODO Get collections that user can access to (member of or owner)
+	$collections = [];
+	$dbprefix = elgg_get_config('dbprefix');
+	
+	// Add custom profile types collections
+	$profile_types_acls = access_collections_get_profile_types_acls();
+	if ($profile_types_acls) {
+		foreach($profile_types_acls as $guid => $collection) {
+			// Ensure that user is a member of that collection before adding to write access select
+			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
+			//$result = get_data_row($query);
+			$result = elgg()->db->getDataRow($query);
+			if ($result) {
+				$collection_label = elgg_echo($collection->name);
+				if ($collection_label == $collection->name) { $collection_label = $collection->name; }
+				$collection_label = elgg_get_plugin_setting("profiletype_label_$guid", 'access_collections');
+				$custom_collections[$collection->id] = $collection_label;
+			}
+		}
+	}
+	return $custom_collections;
+}
 
+// Adds the access collections to an existing access options array
+function access_collections_add_custom_collections_options($access_options = [], $user_guid = false) {
+	if (!$user_guid) {
+		if (!elgg_is_logged_in()) { return $access_options; }
+		$user_guid = elgg_get_logged_in_user_guid();
+	}
+	
+	$custom_collections = access_collections_get_custom_collections($user_guid);
+	foreach($custom_collections as $collection_id => $collection_name) {
+		if (!isset($access_options[$collection_id])) {
+			$access_options[$collection_id] = $collection_name;
+		}
+	}
+	return $access_options;
+}
 
 
 /**
