@@ -170,7 +170,7 @@ $content .= $activity;
 // Bloc éditorial
 $editorial = elgg_get_plugin_setting('home_text', 'theme_adf');
 if (!empty($editorial)) {
-	$editorial = elgg_view('output/longtext', ['content' => $editorial]);
+	$editorial = elgg_view('output/longtext', ['value' => $editorial]);
 } else {
 	$editorial = '<p>Bienvenue sur Départements-en-Réseaux ! <br />
 	Vous êtes actuellement sur votre tableau de bord personnel. <br />
