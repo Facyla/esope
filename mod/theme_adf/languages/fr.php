@@ -6,6 +6,9 @@
 return [
 	'theme_adf' => "Thème Départements en réseaux",
 	
+	// Paramètres
+	'theme_adf:settings:home_text' => "Texte de la page d'accueil",
+	
 	// Menus
 	'theme_adf:backtohome' => "Retour à l'accueil du site",
 	'theme_adf:menu:home' => "Accueil",
