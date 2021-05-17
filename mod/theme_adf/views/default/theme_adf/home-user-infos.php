@@ -100,14 +100,16 @@ $friend_requests_sent = elgg_get_entities([
 ]);
 if ($friend_requests_sent > 0) {
 	if ($friend_requests_sent > 1) {
-			$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/sent"><i class="fa fa-user"></i>&nbsp;' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
+			$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/sent"><i class="fa fa-user-plus"></i>&nbsp;' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
 	} else {
-		$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/sent"><i class="fa fa-user"></i>&nbsp;' . "$friend_requests_sent demande de contact envoyée" . '</a></p>';
+		$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/sent"><i class="fa fa-user-plus"></i>&nbsp;' . "$friend_requests_sent demande de contact envoyée" . '</a></p>';
 	}
 }
 //if ($friend_requests_sent > 0) { $infos .= elgg_view('friend_request/sent'); }
 elgg_pop_context();
 
+
+$infos .= '<p>' . elgg_view('output/url', ['href' => "friends/{$user->username}/invite", 'text' => '<i class="fa fa-user-plus"></i>&nbsp;' . "Inviter des collègues à rejoindre Départements en Réseaux", 'class' => "", 'is_action' => true]) . '</p>';
 
 elgg_set_page_owner_guid($page_owner->guid);
 

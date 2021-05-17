@@ -175,12 +175,13 @@ Il vous permet de suivre ce qui se passe sur le site.<br />
 
 // Mes informations
 $infos = elgg_view('theme_adf/home-user-infos', ['user' => $user]);
-
+//$infos_title = elgg_echo("Mes informations") . elgg_view('output/url', ['href' => "friends/{$user->username}/invite", 'text' => "Inviter des collègues", 'class' => "elgg-button elgg-button-action float-alt", 'is_action' => true]);
+$infos_title = elgg_echo("Mes informations");
 
 
 $content .= '<div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); grid-gap: 1rem 2rem;">';
 $content .= elgg_view_module('home-editorial', elgg_echo("Bienvenue !"), $editorial);
-$content .= elgg_view_module('home-infos', elgg_echo("Mes informations"), $infos);
+$content .= elgg_view_module('home-infos', $infos_title, $infos);
 $content .= '</div>';
 
 
