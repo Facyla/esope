@@ -249,13 +249,16 @@ function access_collections_add_write_acl(\Elgg\Hook $hook) {
 	// Add custom profile types collections
 	$profile_types_acls = access_collections_get_profile_types_acls();
 	if ($profile_types_acls) {
-		foreach($profile_types_acls as $collection) {
+		foreach($profile_types_acls as $guid => $collection) {
 			// Ensure that user is a member of that collection before adding to write access select
 			$query = "SELECT * FROM {$dbprefix}access_collection_membership WHERE user_guid = '{$user_guid}' AND access_collection_id = '{$collection->id}'";
 			//$result = get_data_row($query);
 			$result = elgg()->db->getDataRow($query);
 			if ($result) {
-				$custom_collections[$user_guid][$collection->id] = elgg_echo($collection->name);
+				$collection_label = elgg_echo($collection->name);
+				if ($collection_label == $collection->name) { $collection_label = $collection->name; }
+				$collection_label = elgg_get_plugin_setting("profiletype_label_$guid", 'access_collections');
+				$custom_collections[$user_guid][$collection->id] = $collection_label;
 			}
 		}
 	}

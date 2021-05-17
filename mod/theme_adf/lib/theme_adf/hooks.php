@@ -182,7 +182,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	// Add submenus
 	//$search_form = elgg_view_form('search', [], []);
 	$q = get_input('q');
-	$search_form = '<form action="search" method="GET" style="display: flex; font-size: 1.4em; font-weight: 600;"><input type="text" name="q" value="' . $q . '" placeholder="Rechercher un contenu..." style="flex: 1 1 auto;"><input type="submit" value="Rechercher" style="flex: 0 0 10rem;"></form>';
+	$search_form = '<form action="' . elgg_get_site_url() . 'search" method="GET" style="display: flex; font-size: 1.4em; font-weight: 600;"><input type="text" name="q" value="' . $q . '" placeholder="Rechercher un contenu..." style="flex: 1 1 auto;"><input type="submit" value="Rechercher" style="flex: 0 0 10rem;"></form>';
 	$item = new ElggMenuItem('search-form', $search_form, false);
 	$item->setParentName('search');
 	$new_menu[] = $item;

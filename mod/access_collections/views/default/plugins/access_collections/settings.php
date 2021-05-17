@@ -74,6 +74,7 @@ if (elgg_is_active_plugin('profile_manager')) {
 			if ($collection) {
 				echo '<br />' . elgg_echo('access_collections:acl', [$collection->name, $collection->id]);
 			}
+			echo ' &nbsp; <label>Label ' . elgg_view('input/text', ['name' => 'params[profiletype_label_'.$guid.']', 'value' => $plugin->{'profiletype_label_'.$guid}, 'style' => "max-width: 12rem;"]) . '</label>';
 			echo '</li>';
 		}
 		echo '</ul>';
