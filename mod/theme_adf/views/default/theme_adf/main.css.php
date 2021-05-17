@@ -105,6 +105,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-layout-columns { flex-direction: row; }
 }
 .elgg-layout-columns > .elgg-sidebar { order: -1; margin-left: 0; margin-right: 2rem; }
+@media screen and (min-width: 80rem) {
+	.elgg-layout-sidebar, .elgg-layout-sidebar-alt, .elgg-layout-body { min-height: calc(100vh - 14rem); }
+}
 
 
 /* FOOTER */
