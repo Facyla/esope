@@ -168,10 +168,15 @@ $content .= $activity;
 
 
 // Bloc éditorial
-$editorial = '<p>Bienvenue sur Départements-en-Réseaux ! <br />
-Vous êtes actuellement sur votre tableau de bord personnel. <br />
-Il vous permet de suivre ce qui se passe sur le site.<br />
-</p>';
+$editorial = elgg_get_plugin_setting('home_text', 'theme_adf');
+if (!empty($editorial)) {
+	$editorial = elgg_view('output/longtext', ['content' => $editorial]);
+} else {
+	$editorial = '<p>Bienvenue sur Départements-en-Réseaux ! <br />
+	Vous êtes actuellement sur votre tableau de bord personnel. <br />
+	Il vous permet de suivre ce qui se passe sur le site.<br />
+	</p>';
+}
 
 // Mes informations
 $infos = elgg_view('theme_adf/home-user-infos', ['user' => $user]);
