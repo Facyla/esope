@@ -4,13 +4,14 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
+class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '72142d7b40a3a0b14e91825290b5ad82' => __DIR__ . '/..' . '/cakephp/core/functions.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         '028fdea3165c4ba1ecccc83b7fec69fc' => __DIR__ . '/..' . '/cakephp/collection/functions.php',
         '948ad5488880985ff1c06721a4e447fe' => __DIR__ . '/..' . '/cakephp/utility/bootstrap.php',
         'bc8d758335d4e980187df1bfef1c8f49' => __DIR__ . '/..' . '/css-crush/css-crush/lib/functions.php',
@@ -36,6 +37,7 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php81\\' => 23,
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -144,6 +146,10 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'TrueBV\\' => 
         array (
             0 => __DIR__ . '/..' . '/true/punycode/src',
+        ),
+        'Symfony\\Polyfill\\Php81\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php81',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
@@ -536,7 +542,6 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'CallException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/CallException.php',
         'ClassException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/ClassException.php',
         'ClassNotFoundException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/ClassNotFoundException.php',
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
         'Composer\\Installers\\AimeosInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
         'Composer\\Installers\\AnnotateCmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
@@ -589,6 +594,7 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Composer\\Installers\\MauticInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MauticInstaller.php',
         'Composer\\Installers\\MayaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MayaInstaller.php',
         'Composer\\Installers\\MediaWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MediaWikiInstaller.php',
+        'Composer\\Installers\\MiaoxingInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MiaoxingInstaller.php',
         'Composer\\Installers\\MicroweberInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MicroweberInstaller.php',
         'Composer\\Installers\\ModxInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ModxInstaller.php',
         'Composer\\Installers\\MoodleInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MoodleInstaller.php',
@@ -624,12 +630,14 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Composer\\Installers\\TYPO3CmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3CmsInstaller.php',
         'Composer\\Installers\\TYPO3FlowInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3FlowInstaller.php',
         'Composer\\Installers\\TaoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TaoInstaller.php',
+        'Composer\\Installers\\TastyIgniterInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TastyIgniterInstaller.php',
         'Composer\\Installers\\TheliaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TheliaInstaller.php',
         'Composer\\Installers\\TuskInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TuskInstaller.php',
         'Composer\\Installers\\UserFrostingInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/UserFrostingInstaller.php',
         'Composer\\Installers\\VanillaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/VanillaInstaller.php',
         'Composer\\Installers\\VgmcpInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/VgmcpInstaller.php',
         'Composer\\Installers\\WHMCSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WHMCSInstaller.php',
+        'Composer\\Installers\\WinterInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WinterInstaller.php',
         'Composer\\Installers\\WolfCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WolfCMSInstaller.php',
         'Composer\\Installers\\WordPressInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WordPressInstaller.php',
         'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
@@ -766,8 +774,11 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Doctrine\\Common\\Cache\\MultiPutCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/MultiPutCache.php',
         'Doctrine\\Common\\Cache\\PhpFileCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/PhpFileCache.php',
         'Doctrine\\Common\\Cache\\PredisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/PredisCache.php',
+        'Doctrine\\Common\\Cache\\Psr6\\CacheAdapter' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/CacheAdapter.php',
+        'Doctrine\\Common\\Cache\\Psr6\\CacheItem' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/CacheItem.php',
+        'Doctrine\\Common\\Cache\\Psr6\\DoctrineProvider' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/DoctrineProvider.php',
+        'Doctrine\\Common\\Cache\\Psr6\\InvalidArgument' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/InvalidArgument.php',
         'Doctrine\\Common\\Cache\\RedisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RedisCache.php',
-        'Doctrine\\Common\\Cache\\RiakCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RiakCache.php',
         'Doctrine\\Common\\Cache\\SQLite3Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/SQLite3Cache.php',
         'Doctrine\\Common\\Cache\\Version' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Version.php',
         'Doctrine\\Common\\Cache\\VoidCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/VoidCache.php',
@@ -1323,7 +1334,6 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Elgg\\PluginHooksService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/PluginHooksService.php',
         'Elgg\\Profilable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profilable.php',
         'Elgg\\Profiler' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profiler.php',
-        'Elgg\\Project\\CodeStyle' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/CodeStyle.php',
         'Elgg\\Project\\Paths' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/Paths.php',
         'Elgg\\Queue\\DatabaseQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/DatabaseQueue.php',
         'Elgg\\Queue\\MemoryQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/MemoryQueue.php',
@@ -1905,6 +1915,7 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionClass' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionClass.php',
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\StringOptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/StringOptionTest.php',
+        'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\HybridPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/NoPasswordGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php5RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php5RandomGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php7RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php7RandomGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\ReadMeTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/ReadMeTest.php',
@@ -2326,6 +2337,7 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'React\\Promise\\RejectedPromise' => __DIR__ . '/..' . '/react/promise/src/RejectedPromise.php',
         'React\\Promise\\UnhandledRejectionException' => __DIR__ . '/..' . '/react/promise/src/UnhandledRejectionException.php',
         'RegistrationException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/RegistrationException.php',
+        'ReturnTypeWillChange' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/ReturnTypeWillChange.php',
         'SecurityException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/SecurityException.php',
         'Stash\\DriverList' => __DIR__ . '/..' . '/tedivm/stash/src/Stash/DriverList.php',
         'Stash\\Driver\\AbstractDriver' => __DIR__ . '/..' . '/tedivm/stash/src/Stash/Driver/AbstractDriver.php',
@@ -2634,6 +2646,7 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Symfony\\Component\\Routing\\Loader\\GlobFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/GlobFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\ObjectRouteLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/ObjectRouteLoader.php',
         'Symfony\\Component\\Routing\\Loader\\PhpFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/PhpFileLoader.php',
+        'Symfony\\Component\\Routing\\Loader\\ProtectedPhpFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/PhpFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\XmlFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/XmlFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\YamlFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/YamlFileLoader.php',
         'Symfony\\Component\\Routing\\Matcher\\Dumper\\DumperCollection' => __DIR__ . '/..' . '/symfony/routing/Matcher/Dumper/DumperCollection.php',
@@ -2713,6 +2726,7 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/..' . '/symfony/polyfill-php72/Php72.php',
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
+        'Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
         'TrueBV\\Exception\\DomainOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/DomainOutOfBoundsException.php',
         'TrueBV\\Exception\\LabelOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/LabelOutOfBoundsException.php',
         'TrueBV\\Exception\\OutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/OutOfBoundsException.php',
@@ -3033,10 +3047,10 @@ class ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit0e9d3b289f03caa3fa5754538b49778c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -6,7 +6,7 @@
 	"prefer-stable": true,
 	"minimum-stability": "dev",
 	"require": {
-		"elgg/elgg": "3.3.17"
+		"elgg/elgg": "3.3.19"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~8.5"
