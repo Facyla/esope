@@ -201,7 +201,14 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .group-sidebar-pages-nav nav:last-of-type { margin-bottom: 2rem; }
 
 
-/* DEBUT TEST PLEINE LARGEUR */
+/* Points de contribution */
+.userpoints_profile { background: rgba(255, 215, 0, .8); position: absolute; top: .25rem; left: calc(100% - 9.75rem); padding: .25rem; border-radius: .5rem; min-width: 3rem; text-align: center; height: 1.25rem; font-size: .75rem; display: flex; align-items: center; margin: 0; }
+.userpoints_profile > div { text-align: center; width: 100%; }
+.userpoints_profile .userpoints-count { display: none; }
+
+
+
+/* DEBUT DESIGN PLEINE LARGEUR */
 .elgg-page-default .elgg-page-section > .elgg-inner { max-width: 100vw; padding: 0; }
 .elgg-page-body { padding-top: 0rem; }
 /*
@@ -272,7 +279,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-topbar .elgg-menu.elgg-child-menu > li > a { border: 0; }
 
 
-/* FIN TEST PLEINE LARGEUR */
+/* FIN DESIGN PLEINE LARGEUR */
 
 
 /*

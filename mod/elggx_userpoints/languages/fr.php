@@ -101,7 +101,7 @@ return [
 	'userpoints_standard:profileicon' => "Points pour l'ajout d'une icône de profil :",
 	'userpoints_standard:profileiconupdate_threshold' => "Temps avant d'attribuer à nouveau des points pour l'ajout d'une icône de profil :",
 	'userpoints_standard:messageboard' => "Points pour la publication sur le Tableau de messages d'un utilisateur :",
-	'userpoints_standard:page_top' => "Points pour l'ajout d'un page :",
+	'userpoints_standard:page_top' => "Points pour l'ajout d'une page :",
 	'userpoints_standard:likes' => "Points pour avoir aimé un élément :",
 	'userpoints_standard:create_album' => "Points pour la création d'un album photo :",
 	'userpoints_standard:upload_photo' => "Points pour la publication d'un photo :",

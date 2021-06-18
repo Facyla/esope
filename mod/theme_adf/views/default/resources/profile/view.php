@@ -55,10 +55,10 @@ $user_icon = elgg_view_entity_icon($user, 'large', [
 	'img_class' => 'photo u-photo',
 ]);
 $sidebar .= '<div class="" style="display: flex; justify-content: center; margin: 0 0 2rem 0;">' . $user_icon . '</div>';
-$sidebar .= '<div class="">' . elgg_view('profile_manager/profile_completeness', ['entity' => $user]) . '</div>';
+//$sidebar .= '<div class="">' . elgg_view('profile_manager/profile_completeness', ['entity' => $user]) . '</div>';
 
 $content = '<div class="" style="display: flex; flex-wrap: wrap;">
-	<div class="" style="flex: 0 1 24rem; min-width; 16rem; padding: 0 2rem;">
+	<div class="" style="flex: 0 1 24rem; position: relative; min-width; 16rem; padding: 0 2rem;">
 		' . $sidebar . '
 	</div>
 	<div class="" style="flex: 1 1 32rem; min-width; 24rem;">

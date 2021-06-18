@@ -25,10 +25,11 @@ $ts_lower = get_input('ts_lower');
 $ts_upper = get_input('ts_upper');
 if (!empty($ts_lower) || !empty($ts_upper)) { $date_limited = true; }
 $interval = get_input('interval', 'month'); // year|month
+$list_entities = get_input('list_entities', 'no'); // no|yes
 
 // Formulaire séleciton de dates : inutile car aucun effet sur les graphes par défaut...
 $content .= '<form method="GET" action="">';
-$content .= '<p><label>Intervale des statistiques ' . elgg_view('input/select', ['name' => 'interval', 'value' => $interval, 'options_values' => ['month' => "Par mois", 'year' => "Par année"]]) . '</label></p>';
+$content .= '<p><label>Intervalle des statistiques ' . elgg_view('input/select', ['name' => 'interval', 'value' => $interval, 'options_values' => ['month' => "Par mois", 'year' => "Par année"]]) . '</label></p>';
 /*
 $content .= '<label>Entre le ' . elgg_view('input/date', ['name' => 'ts_lower', 'value' => $ts_lower, 'timestamp' => false, 'style' => "max-width: 12rem"]) . '</label>';
 $content .= '<label> et le ' . elgg_view('input/date', ['name' => 'ts_upper', 'value' => $ts_upper, 'timestamp' => false, 'style' => "max-width: 12rem"]) . '</label>';
@@ -36,6 +37,7 @@ $content .= '<label> et le ' . elgg_view('input/date', ['name' => 'ts_upper', 'v
 //$content .= '<label> et le ' . elgg_view('input/date', ['name' => 'ts_upper', 'value' => $ts_upper, 'timestamp' => true, 'style' => "max-width: 12rem"]) . '</label>';
 $content .= elgg_view('input/submit', ['value' => "Filtrer sur cette période"]);
 */
+$content .= '<p><label>Lister les contenus correspondants ' . elgg_view('input/select', ['name' => 'list_entities', 'value' => $list_entities, 'options_values' => ['no' => "Non (statistiques seules)", 'yes' => "Oui"]]) . '</label></p>';
 $content .= '<p>' . elgg_view('input/submit', ['value' => "Rafraîchir"]) . '</p>';
 $content .= '</form>';
 
@@ -107,9 +109,10 @@ $query_result = $qb->execute()->fetchAll();
 $data = [];
 //$content .= '<pre>' . print_r($query_result, true) . '</pre>';
 
-
+elgg_push_context('list');
 $t_head = '';
 $t_body = '';
+$list_body = '';
 if ($query_result) {
 	// Headers
 	$t_head .= '<tr style="border: 1px solid;">';
@@ -118,17 +121,21 @@ if ($query_result) {
 			$t_head .= '<th style="border-left: 1px solid; padding: .25rem .5rem;">' . $period['label'] . '</th>';
 		}
 	$t_head .= '</tr>';
-	// Body
 	
+	// Body
 	foreach ($query_result as $row) {
 	//foreach ($tools as $tool) {
 		$t_body .= '<tr style="border: 1px solid;">';
 			$t_body .= '<th style="padding: .25rem .5rem;">' . elgg_echo("item:object:{$row->subtype}") . '</th>';
+			if ($list_entities == 'yes') {
+				$list_body .= '<h4>' . elgg_echo("item:object:{$row->subtype}") . '</h4>';
+			}
 			//$t_body .= '<th style="padding: .25rem .5rem;">' . elgg_echo("item:object:{$tool}") . '</th>';
 			//$t_body .= '<td style="border-left: 1px solid; padding: .25rem .5rem;">' . (int) $row->total . '</td>';
+			
 			foreach($periods as $period) {
 				$t_body .= '<td style="border-left: 1px solid; padding: .25rem .5rem;">';
-					$t_body .= elgg_get_entities([
+					$new_entities = elgg_get_entities([
 						'type' => 'object', 'subtype' => $row->subtype, 
 						//'type' => 'object', 'subtype' => $tool, 
 						'container_guid' => $group->guid, 
@@ -136,11 +143,27 @@ if ($query_result) {
 						'created_before' => $period['end_ts'],
 						'count' => true
 					]);
+					$t_body .= $new_entities;
 				$t_body .= '</td>';
+				
+				// Liste des publications par date
+				if ($list_entities == 'yes') {
+					$list_body .= '<h5>' . $period['label'] . ' : ' . $new_entities . '</h5>';
+					$list_body .= elgg_list_entities([
+						'type' => 'object', 'subtype' => $row->subtype, 
+						//'type' => 'object', 'subtype' => $tool, 
+						'container_guid' => $group->guid, 
+						'created_after' => $period['start_ts'],
+						'created_before' => $period['end_ts'],
+						'list_type_toggle' => true,
+						'list_type' => 'table',
+					]);
+				}
 			}
 		$t_body .= '</tr>';
 	}
 }
+$content .= '<h3>Statistiques de publication par date</h3>';
 $content .= '<table style="border: 1px solid; width: 100%;">';
 	$content .= '<thead>';
 		$content .= '<tr style="border: 1px solid;">';
@@ -151,6 +174,13 @@ $content .= '<table style="border: 1px solid; width: 100%;">';
 			$content .= $t_body;
 	$content .= '</tbody>';
 $content .= '</table>';
+$content .= '<br /><br />';
+
+if ($list_entities == 'yes') {
+	$content .= '<h3>Liste des publications par type de contenu et par date</h3>';
+	$content .= $list_body;
+	$content .= '<br /><br />';
+}
 
 
 
