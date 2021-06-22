@@ -82,6 +82,7 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 				$content .= elgg_echo('account_lifecycle:user:cannotdelete');
 		} else if (!in_array($rule_default, ['transfer','delete']) || !($new_owner_default_entity instanceof ElggUser || $new_owner_default_entity instanceof ElggGroup || $new_owner_default_entity instanceof ElggSite)) {
 		} else {
+			$errors = false; // Blocage suppression sur toute erreur de transfert
 			$content .= '<ul>';
 				$content .= '<li>' . elgg_echo('account_lifecycle:guid', [$guid]) . '</li>';
 				$content .= '<li>' . elgg_echo('account_lifecycle:user:valid', [$user->username]) . '</li>';
@@ -109,6 +110,7 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 						$selected_new_owner = content_lifecycle_select_new_owner($default_new_owner_default, $new_owner_default, $new_owner_groups, $new_owner_entities[$group->guid]);
 						$selected_new_owner_entity = get_entity($selected_new_owner);
 						if (!($selected_new_owner_entity instanceof ElggUser || $selected_new_owner_entity instanceof ElggGroup || $selected_new_owner_entity instanceof ElggSite)) {
+							$errors = true;
 							$content .= " => <strong>nouveau propriétaire&nbsp;: invalide</strong>";
 						} else {
 							$content .= " => <strong>nouveau propriétaire&nbsp;:</strong> {$selected_new_owner_entity->username} (guid {$selected_new_owner_entity->guid}) => ";
@@ -135,11 +137,16 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 										}
 										if ($group->save()) {
 											$content .= elgg_echo('account_lifecycle:group:transfered');
+										} else {
+											$errors = true;
+											$content .= elgg_echo('account_lifecycle:group:cannotsave');
 										}
 									} else {
+										$errors = true;
 										$content .= elgg_echo('account_lifecycle:error:notgroupmember');
 									}
 								} else {
+									$errors = true;
 									$content .= elgg_echo('account_lifecycle:error:cannottransferself');
 								}
 							} else {
@@ -171,6 +178,7 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 										$selected_new_owner = content_lifecycle_select_new_owner($default_new_owner_default, $new_owner_default, $new_owner_objects[$subtype][0], $new_owner_entities[$object->guid]);
 										$selected_new_owner_entity = get_entity($selected_new_owner);
 										if (!($selected_new_owner_entity instanceof ElggUser || $selected_new_owner_entity instanceof ElggGroup || $selected_new_owner_entity instanceof ElggSite)) {
+											$errors = true;
 											$content .= " => <strong>nouveau propriétaire&nbsp;: invalide</strong>"; // new owner
 										} else {
 											$content .= " => <strong>nouveau propriétaire&nbsp;:</strong> {$selected_new_owner_entity->username} (guid {$selected_new_owner_entity->guid}) => ";
@@ -184,6 +192,9 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 												}
 												if ($object->save()) {
 													$content .= elgg_echo('account_lifecycle:object:transfered');
+												} else {
+													$errors = true;
+													$content .= elgg_echo('account_lifecycle:object:cannotsave');
 												}
 											} else {
 												$content .= elgg_echo('account_lifecycle:error:simulating');
@@ -206,13 +217,17 @@ if ($guid && in_array($action_mode, ['simulate', 'execute'])) {
 			$content .= " <strong>$action_mode</strong>";
 			$user->account_lifecycle = "delete_now"; // Add flag to avoid hook from intercepting delete action
 			if ($action_mode == 'execute') {
-				$deleted = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($user) {
-					return $user->delete();
-				});
-				if (!$deleted) {
-					$content .= elgg_echo('admin:user:delete:no');
+				if ($errors) {
+						$content .= elgg_echo('admin:user:delete:stoppedonerrors');
 				} else {
-					$content .= " => <strong>OK !</strong>";
+					$deleted = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($user) {
+						return $user->delete();
+					});
+					if (!$deleted) {
+						$content .= elgg_echo('admin:user:delete:no');
+					} else {
+						$content .= " => <strong>OK !</strong>";
+					}
 				}
 			} else {
 				$content .= " => <strong>Aucune action effectuée !</strong>";

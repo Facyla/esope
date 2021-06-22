@@ -168,11 +168,11 @@ function account_lifecycle_get_next_date(/*$entity = false, $offset = 0*/) {
 function account_lifecycle_get_interval() {
 	$direct_interval = elgg_get_plugin_setting('direct_interval', 'account_lifecycle');
 	if (empty($direct_interval)) {
-		register_error("Intervale manquant.");
+		register_error("Intervalle manquant.");
 		return false;
 	}
 	if ($direct_interval < 1) {
-		register_error("Intervale invalide (doit être un entier supérieur à 0).");
+		register_error("Intervalle invalide (doit être un entier supérieur à 0).");
 		return false;
 	}
 	return $direct_interval;
