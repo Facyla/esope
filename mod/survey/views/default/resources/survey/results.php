@@ -28,6 +28,14 @@ if (!$survey instanceof ElggSurvey) {
 	forward(REFERER);
 }
 
+// Set the page owner
+$page_owner = $survey->getContainerEntity();
+if ($page_owner instanceof ElggGroup) {
+	elgg_set_page_owner_guid($page_owner->guid);
+} else {
+	elgg_set_page_owner_guid(elgg_get_site_entity()->guid);
+}
+
 // Access control
 if (!$survey->canEdit($user->guid) && !elgg_is_admin_logged_in()) {
 	elgg_echo('survey:no_access');
