@@ -23,10 +23,10 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'gr
 
 
 
-//$all_feedback_count = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
-//$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => $all_feedback_count));
-$all_feedback = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
-$feedbacks = array();
+//$all_feedback_count = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'count' => true]);
+//$all_feedback = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'limit' => $all_feedback_count]);
+$all_feedback = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'limit' => false]);
+$feedbacks = [];
 $open = 0;
 $closed = 0;
 $other = 0; // Non défini
@@ -81,7 +81,7 @@ $count = count($feedbacks);
 
 // Paginate feedbacks
 $displayed_feedbacks = array_slice($feedbacks, $offset, $limit);
-$content .= elgg_view_entity_list($displayed_feedbacks, array('count' => $count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true));
+$content .= elgg_view_entity_list($displayed_feedbacks, ['count' => $count, 'offset' => $offset, 'limit' => $limit, 'full_view' => false, 'list_type_toggle' => false, 'pagination' => true]);
 $content .= '<div class="clearfloat"></div>';
 
 echo $content;

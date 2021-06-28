@@ -73,7 +73,8 @@ return [
 	'feedback:settings:usernames' => "Vous pouvez définir jusqu'à 5 membres qui recevront des notifications à chaque nouveau feedback. Saisissez leurs identifiants ci-dessous : ",
 
 	'feedback:email:subject' => '[Feedback] %s',
-	'feedback:email:body' => "%1\$s a fait un feedback sur la page %5\$s : \"%2\$s\"
+	'feedback:email:body' => "%1\$s a fait un feedback sur la page %5\$s : 
+	<strong>\"%2\$s\"</strong>
 	
 	%3\$s
 	

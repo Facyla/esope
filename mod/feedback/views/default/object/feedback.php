@@ -19,7 +19,7 @@ if (elgg_in_context('admin')) { $full = false; }
 $status_mark = elgg_echo ( "feedback:status:" . $status );
 $mood_mark = elgg_echo ( "feedback:mood:" . $mood );
 $about_mark = elgg_echo ( "feedback:about:" . $about );
-$access_mark = elgg_view('output/access', array('entity' => $feedback, 'hide_text' => !$full));
+$access_mark = elgg_view('output/access', ['entity' => $feedback, 'hide_text' => !$full]);
 
 // Actions
 $controls = '';
@@ -28,8 +28,8 @@ switch ($status) {
 	case 'closed':
 		// Only admins can reopen feedbacks
 		if (elgg_is_admin_logged_in) {
-			//$controls .= elgg_view("output/confirmlink",array('href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'class' => 'elgg-icon elgg-icon-redo'));
-			$controls .= elgg_view("output/url", array('href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:reopen'), 'confirm' => elgg_echo('feedback:reopenconfirm'), 'is_action' => true));
+			//$controls .= elgg_view("output/confirmlink",['href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'class' => 'elgg-icon elgg-icon-redo']);
+			$controls .= elgg_view("output/url", ['href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:reopen'), 'confirm' => elgg_echo('feedback:reopenconfirm'), 'is_action' => true]);
 		} else {
 			//$controls .= '<span class="elgg-icon elgg-icon-round-checkmark" title="' . $status_mark . '"></span>';
 			$controls .= '<i class="fa fa-check-square-o" title="' . $status_mark . '"></i>&nbsp;';
@@ -39,14 +39,14 @@ switch ($status) {
 	default:
 		// Only admins can close feedbacks
 		if (elgg_is_admin_logged_in()) {
-			//$controls .= elgg_view("output/confirmlink",array('href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark'));
-			$controls .= elgg_view("output/url", array('href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:close'), 'confirm' => elgg_echo('feedback:closeconfirm'), 'is_action' => true));
+			//$controls .= elgg_view("output/confirmlink", ['href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:closeconfirm'), 'class' => 'elgg-icon elgg-icon-checkmark']);
+			$controls .= elgg_view("output/url", ['href' => $url . "action/feedback/close?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:close'), 'confirm' => elgg_echo('feedback:closeconfirm'), 'is_action' => true]);
 		}
 }
 // Only admins can delete feedbacks
 if (elgg_is_admin_logged_in()) {
-	//$controls .= elgg_view("output/confirmlink",array('href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'class' => 'elgg-icon elgg-icon-trash'));
-	$controls .= elgg_view("output/url", array('href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:delete'), 'confirm' => elgg_echo('deleteconfirm'), 'is_action' => true));
+	//$controls .= elgg_view("output/confirmlink",['href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'confirm' => elgg_echo('deleteconfirm'), 'class' => 'elgg-icon elgg-icon-trash']);
+	$controls .= elgg_view("output/url", ['href' => $url . "action/feedback/delete?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:delete'), 'confirm' => elgg_echo('deleteconfirm'), 'is_action' => true]);
 }
 
 // Classes for status-aware styles
@@ -86,7 +86,7 @@ if ($comment == 'yes') {
 			$num_comments_feedback = $feedback->countComments();
 			$info .= '<div class="clearfloat"></div>';
 			$info .= '<a href="' . $feedback->getURL() . '">' . elgg_echo('feedback:viewfull') . '</a>';
-			$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_' . $feedback->guid . '\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', array($num_comments_feedback)) . '</a>';
+			$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_' . $feedback->guid . '\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', [$num_comments_feedback)] . '</a>';
 			return $info;
 		});
 		$hidden .= ' hidden';
@@ -96,16 +96,16 @@ if ($comment == 'yes') {
 
 
 // On n'affiche l'icône que si on a qqch de joli, inutile pour le moment
-//$icon = elgg_view('icon/default', array('entity' => $feedback, 'size' => 'small'));
+//$icon = elgg_view('icon/default', ['entity' => $feedback, 'size' => 'small']);
 $owner = $feedback->getOwnerEntity();
 if ($owner instanceof ElggUser) {
-	//$icon = elgg_view('icon/default', array('entity' => $owner, 'size' => 'small'));
-	$icon = '<img src="' . $owner->getIconURL(array('size' => 'small')) . '" />';
+	//$icon = elgg_view('icon/default', ['entity' => $owner, 'size' => 'small']);
+	$icon = '<img src="' . $owner->getIconURL(['size' => 'small']) . '" />';
 } else {
-	$icon = '<img src="' . $feedback->getIconURL(array('size' => 'small')) . '" />';
+	$icon = '<img src="' . $feedback->getIconURL(['size' => 'small']) . '" />';
 }
-echo elgg_view('page/components/image_block', array('image' => $icon, 'body' => $info, 'class' => 'submitted-feedback ' . $class));
-//echo elgg_view('page/components/image_block', array('body' => $info, 'class' => 'submitted-feedback ' . $class));
+echo elgg_view('page/components/image_block', ['image' => $icon, 'body' => $info, 'class' => 'submitted-feedback ' . $class]);
+//echo elgg_view('page/components/image_block', ['body' => $info, 'class' => 'submitted-feedback ' . $class]);
 
 
 // Search listing view

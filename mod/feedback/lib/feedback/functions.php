@@ -46,7 +46,7 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 				$comment_sender = '<a href="' . $comment_owner->getURL() . '">' . $comment_owner->name . '</a>';
 				$comment_content = $annotation->value;
 				// Notify admins
-				$user_guids = array();
+				$user_guids = [];
 				for ( $idx=1; $idx<=5; $idx++ ) {
 					$name = elgg_get_plugin_setting( 'user_'.$idx, 'feedback' );
 					if ( !empty($name) ) {
@@ -56,11 +56,11 @@ function feedback_create_annotation_event_handler($event, $type, $annotation){
 					}
 				}
 				if (count($user_guids) > 0) {
-					$subject = elgg_echo('feedback:email:reply:subject', array($feedback_title));
+					$subject = elgg_echo('feedback:email:reply:subject', [$feedback_title]);
 					foreach ($user_guids as $user_guid => $user) {
-						$message = elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $comment_content, $entity->getURL()));
+						$message = elgg_echo('feedback:email:reply:body', [$comment_sender, $feedback_title, $comment_content, $entity->getURL()]);
 						// Trigger a hook to enable integration with other plugins
-						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', array('entity' => $feedback, 'to_entity' => $user), $message);
+						$hook_message = elgg_trigger_plugin_hook('notify:annotation:message', 'comment', ['entity' => $feedback, 'to_entity' => $user], $message);
 						// Failsafe backup if hook as returned empty content but not false (= stop)
 						if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 						notify_user($user_guids, elgg_get_site_entity()->guid, $subject, $message, null, 'email');
@@ -93,14 +93,14 @@ function feedback_comment_get_subscriptions_hook($hook, $type, $subscriptions, $
 		
 		// Add feedback owner
 		$owner = $feedback->getOwnerEntity();
-		$subscriptions[$owner->guid] = array('email');
+		$subscriptions[$owner->guid] = ['email'];
 		
 		// Add configured admins
 		for ($i=1; $i<=5; $i++) {
 			$name = elgg_get_plugin_setting('user_'.$i, 'feedback');
 			if (!empty($name)) {
 				if ($user = get_user_by_username($name)) {
-					$subscriptions[$user->guid] = array('email');
+					$subscriptions[$user->guid] = ['email'];
 				}
 			}
 		}
@@ -139,9 +139,9 @@ function feedback_prepare_comment_notification($hook, $type, $notification, $par
 		if (!empty($details)) { $feedback_title .= " ($details)"; }
 		$comment_sender = '<a href="' . $actor->getURL() . '">' . $actor->name . '</a>';
 		
-		$notification->subject = elgg_echo('feedback:email:reply:subject', array($feedback_title), $language);
-		$notification->summary = elgg_echo('feedback:email:reply:subject', array($comment_sender, $feedback_title), $language);
-		$notification->body = elgg_echo('feedback:email:reply:body', array($comment_sender, $feedback_title, $feedback->value, $feedback->getURL()), $language);
+		$notification->subject = elgg_echo('feedback:email:reply:subject', [$feedback_title], $language);
+		$notification->summary = elgg_echo('feedback:email:reply:subject', [$comment_sender, $feedback_title], $language);
+		$notification->body = elgg_echo('feedback:email:reply:body', [$comment_sender, $feedback_title, $feedback->value, $feedback->getURL()], $language);
 	}
 	
 	return $notification;
@@ -165,7 +165,7 @@ function feedback_mood_values() {
 		$mood_values = array_filter($mood_values, 'strlen');
 	}
 	// Set default
-	if (!$mood_values || sizeof($mood_values) < 1) { $mood_values = array('happy', 'neutral', 'angry'); }
+	if (!$mood_values || sizeof($mood_values) < 1) { $mood_values = ['happy', 'neutral', 'angry']; }
 	return $mood_values;
 }
 
@@ -190,7 +190,7 @@ function feedback_about_values() {
 	}
 	// Set default
 	if (sizeof($about_values) < 1) {
-		$about_values = array('bug_report', 'content', 'question', 'suggestions', 'compliment', 'other');
+		$about_values = ['bug_report', 'content', 'question', 'suggestions', 'compliment', 'other'];
 	}
 	return $about_values;
 }

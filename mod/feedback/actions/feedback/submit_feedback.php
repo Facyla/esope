@@ -86,7 +86,8 @@ $feedback->mood = $feedback_mood;
 $feedback->about = $feedback_about;
 
 // save the feedback now
-if ($feedback->save()) {
+$guid = $feedback->save();
+if ($guid) {
 	// Success message
 	echo '<div id="feedbackSuccess">' . elgg_echo("feedback:submit:success") . '</div>';
 } else {
@@ -96,6 +97,10 @@ if ($feedback->save()) {
 
 // Get feedback text info now, before we potentially lose access to entity (public mode)
 $feedback_url = $feedback->getURL();
+// Failsafe version (getURL() should be sufficient...)
+if (empty($feedback_url)) {
+	$feedback_url = elgg_get_site_url() . 'feedback/view/' . $guid;
+}
 $details = $feedback->about;
 if (!empty($details)) { $details .= ', '; }
 $details .= $feedback->mood;
@@ -105,7 +110,7 @@ $feedback_title = $feedback->title . $details;
 elgg_set_ignore_access($ia);
 
 // now email if required - note: we'll email anyway, on success or error
-$user_guids = array();
+$user_guids = [];
 // Notify up to 5 configured users
 // @TODO : use a unique input text field instead ?
 for ($idx=1; $idx<=5; $idx++) {
@@ -119,15 +124,15 @@ for ($idx=1; $idx<=5; $idx++) {
 
 // Notify admins
 if (count($user_guids) > 0) {
-	$subject = elgg_echo('feedback:email:subject', array($feedback_title));
+	$subject = elgg_echo('feedback:email:subject', [$feedback_title]);
 	foreach ($user_guids as $user_guid => $user) {
-		$message = elgg_echo('feedback:email:body', array($feedback_sender, $feedback_title, $feedback_description, $feedback_url, $feedback->page));
+		$message = elgg_echo('feedback:email:body', [$feedback_sender, $feedback_title, $feedback_description, $feedback_url, $feedback->page]);
 		// Trigger a hook to enable integration with other plugins
-		$hook_message = elgg_trigger_plugin_hook('notify:entity:message', 'object', array('entity' => $feedback, 'to_entity' => $user), $message);
+		$hook_message = elgg_trigger_plugin_hook('notify:entity:message', 'object', ['entity' => $feedback, 'to_entity' => $user], $message);
 		// Failsafe backup if hook as returned empty content but not false (= stop)
 		if (!empty($hook_message) && ($hook_message !== false)) { $message = $hook_message; }
 		// Notify user
-		notify_user($user_guid, $site->guid, $subject, $message, array(), 'email');
+		notify_user($user_guid, $site->guid, $subject, $message, [], 'email');
 	}
 }
 

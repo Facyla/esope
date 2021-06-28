@@ -63,7 +63,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		
 		// Interception des commentaires
 		// Set core notifications system to track the creation of new comments (might also have been enabled by other plugins)
-		elgg_register_notification_event('object', 'comment', array('create'));
+		elgg_register_notification_event('object', 'comment', ['create']);
 	}
 	
 }

@@ -13,7 +13,7 @@ if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && elgg_is_logged_in()) {
 						echo '<h3><i class="fa fa-bullhorn"></i> ' . elgg_echo('feedback:admin:title') . '</h3>';
 					echo '</div>';
 					echo '<div class="elgg-body">';
-						echo elgg_view('feedback/list_feedbacks', array());
+						echo elgg_view('feedback/list_feedbacks', []);
 					echo '</div>';
 				echo '</div>';
 			}

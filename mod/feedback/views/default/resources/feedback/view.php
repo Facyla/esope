@@ -26,13 +26,13 @@ elgg_push_breadcrumb($title);
 feedback_set_page_owner($feedback);
 
 
-$content = elgg_view_entity($feedback, array('full_view' => true));
+$content = elgg_view_entity($feedback, ['full_view' => true]);
 
-$body = elgg_view_layout('default', array(
+$body = elgg_view_layout('default', [
 	'content' => $content,
 	'title' => $title,
 	'sidebar' => elgg_view('feedback/sidebar'),
-));
+]);
 
 echo elgg_view_page($title, $body);
 

@@ -200,6 +200,8 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .group-sidebar-pages-nav .elgg-menu-pages-nav { margin: 0; }
 .group-sidebar-pages-nav nav:last-of-type { margin-bottom: 2rem; }
 
+.object-subtype { font-family: monospace; padding: 0.125rem .25rem; background: cornsilk; border-radius: .25rem; }
+
 
 /* Points de contribution */
 .userpoints_profile { background: rgba(255, 215, 0, .8); position: absolute; top: .25rem; left: calc(100% - 9.75rem); padding: .25rem; border-radius: .5rem; min-width: 3rem; text-align: center; height: 1.25rem; font-size: .75rem; display: flex; align-items: center; margin: 0; }

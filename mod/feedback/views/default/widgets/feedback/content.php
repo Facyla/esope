@@ -10,7 +10,7 @@ $status = $vars['entity']->status;
 switch($vars['entity']->status) {
 	
 	case 'closed':
-		$list = elgg_list_entities(['types' => 'object', 'subtypes' => 'feedback', 'metadata_name_value_pairs' => array('name' => 'status', 'value' => 'closed'), 'limit' => $num, 'pagination' => false, 'full_view' => false]);
+		$list = elgg_list_entities(['types' => 'object', 'subtypes' => 'feedback', 'metadata_name_value_pairs' => ['name' => 'status', 'value' => 'closed'], 'limit' => $num, 'pagination' => false, 'full_view' => false]);
 		if (!$list) {
 			$list = '<p class="mtm">' . elgg_echo('feedback:list:nofeedback') . '</p>';
 		}
@@ -25,7 +25,7 @@ switch($vars['entity']->status) {
 	
 	case 'open':
 	default:
-		$list = elgg_list_entities(['types' => 'object', 'subtypes' => 'feedback', 'metadata_name_value_pairs' => array('name' => 'status', 'value' => 'open'), 'limit' => $num, 'pagination' => false, 'full_view' => false]);
+		$list = elgg_list_entities(['types' => 'object', 'subtypes' => 'feedback', 'metadata_name_value_pairs' => ['name' => 'status', 'value' => 'open'], 'limit' => $num, 'pagination' => false, 'full_view' => false]);
 		if (!$list) {
 			$list = '<p class="mtm">' . elgg_echo('feedback:list:noopenfeedback') . '</p>';
 		}

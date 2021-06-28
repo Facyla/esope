@@ -37,7 +37,7 @@ $limit = get_input('limit', 10);
 
 // Status
 $status = get_input('status', ''); // Status filter
-$allowed_status_values = array('open', 'closed');
+$allowed_status_values = ['open', 'closed'];
 foreach ($allowed_status_values as $name) {
 	$counts[$name] = 0;
 	$status_opt[$name] = elgg_echo("feedback:status:$name");
@@ -148,7 +148,7 @@ if ($about) {
 $title .= " ($count)";
 
 
-$body = elgg_view_layout('default', array('content' => $content, 'sidebar' => $sidebar, 'title' => $title, 'filter' => ''));
+$body = elgg_view_layout('default', ['content' => $content, 'sidebar' => $sidebar, 'title' => $title, 'filter' => '']);
 
 echo elgg_view_page(strip_tags($title), $body);
 

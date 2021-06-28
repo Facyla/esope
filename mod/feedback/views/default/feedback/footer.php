@@ -67,7 +67,7 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 						} else {
 							// We only have one value (not indexed)
 							$unique_value = implode('', $mood_values);
-							echo elgg_view('input/hidden', array('name' => 'mood', 'value' => $unique_value));
+							echo elgg_view('input/hidden', ['name' => 'mood', 'value' => $unique_value]);
 						}
 					}
 					
@@ -88,7 +88,7 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 						} else {
 							// We only have one value (not indexed)
 							$unique_value = implode('', $about_values);
-							echo elgg_view('input/hidden', array('name' => 'about', 'value' => $unique_value));
+							echo elgg_view('input/hidden', ['name' => 'about', 'value' => $unique_value]);
 						}
 					}
 					
@@ -108,7 +108,7 @@ if ($memberview == 'yes') { $memberview = true; } else { $memberview = false; }
 						}
 						?>
 						<div id="feedbackAccess">
-							<label><?php echo elgg_echo('access') . ' ' . elgg_view('input/access', array('name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt)); ?></label>
+							<label><?php echo elgg_echo('access') . ' ' . elgg_view('input/access', ['name' => 'feedback_access_id', 'value' => $default_access, 'options_values' => $access_opt]); ?></label>
 						</div>
 					<?php } else { ?>
 						<input type="hidden" name="feedback_access_id" value="0" />

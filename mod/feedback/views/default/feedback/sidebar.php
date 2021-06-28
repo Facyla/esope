@@ -4,10 +4,10 @@
 $base_url = elgg_get_site_url() . 'feedback/';
 
 // Base vars
-$status_values = array('open', 'closed', 'total');
+$status_values = ['open', 'closed', 'total'];
 foreach ($status_values as $status) { $$status = 0; }
-$all_feedbacks = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'limit' => false));
-//$total = elgg_get_entities(array('type' => 'object', 'subtype' => 'feedback', 'count' => true));
+$all_feedbacks = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'limit' => false]);
+//$total = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'count' => true]);
 $total = count($all_feedbacks);
 // Catégories de feedback
 $about_enabled = feedback_is_about_enabled();
@@ -18,7 +18,7 @@ foreach ($about_values as $about) {
 	${"feedback_closed_$about"} = 0;
 }
 // Catégorie de feedback non définie
-$undefined_values = array('other', 'feedback', 'undefined');
+$undefined_values = ['other', 'feedback', 'undefined'];
 $other = 0;
 $other_closed = 0;
 
@@ -75,9 +75,9 @@ foreach ($status_values as $status) {
 		$selected = ' class="elgg-state-selected"';
 	}
 	if ($$status > 1) {
-		$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/' . $status . '">' . elgg_echo("feedback:menu:$status", array($$status)) . '</a></li>';
+		$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/' . $status . '">' . elgg_echo("feedback:menu:$status", [$$status]) . '</a></li>';
 	} else {
-		$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/' . $status . '">' . elgg_echo("feedback:menu:$status:singular", array($$status)) . '</a></li>';
+		$sidebar .= '<li' . $selected . '><a href="'.$base_url . 'status/' . $status . '">' . elgg_echo("feedback:menu:$status:singular", [$$status]) . '</a></li>';
 	}
 }
 $sidebar .= '</ul>';
@@ -93,9 +93,9 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 			if (($status_filter == 'open') && ($about == $about_filter)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
 			$sidebar .= '<a href="'.$base_url . 'about/' . $about . '">';
 			if (${"feedback_$about"} > 1) {
-				$sidebar .= elgg_echo("feedback:menu:$about", array(${"feedback_$about"}));
+				$sidebar .= elgg_echo("feedback:menu:$about", [${"feedback_$about"}]);
 			} else {
-				$sidebar .= elgg_echo("feedback:menu:$about:singular", array(${"feedback_$about"}));
+				$sidebar .= elgg_echo("feedback:menu:$about:singular", [${"feedback_$about"}]);
 			}
 			$sidebar .= '</a></li>';
 		}
@@ -104,9 +104,9 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 	if (($status_filter == 'open') && in_array($about_filter, $undefined_values)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
 	$sidebar .= '<a href="'.$base_url . 'about/other">';
 	if ($other > 1) {
-		$sidebar .= elgg_echo("feedback:menu:other", array($other));
+		$sidebar .= elgg_echo("feedback:menu:other", [$other]);
 	} else {
-		$sidebar .= elgg_echo("feedback:menu:other:singular", array($other));
+		$sidebar .= elgg_echo("feedback:menu:other:singular", [$other]);
 	}
 	$sidebar .= '</a></li></ul>';
 	
@@ -118,9 +118,9 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 			if (($status_filter == 'closed') && ($about == $about_filter)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
 			$sidebar .= '<a href="'.$base_url . 'about/' . $about . '/closed">';
 			if (${"feedback_closed_$about"} > 1) {
-				$sidebar .= elgg_echo("feedback:menu:$about", array(${"feedback_closed_$about"}));
+				$sidebar .= elgg_echo("feedback:menu:$about", [${"feedback_closed_$about"}]);
 			} else {
-				$sidebar .= elgg_echo("feedback:menu:$about:singular", array(${"feedback_closed_$about"}));
+				$sidebar .= elgg_echo("feedback:menu:$about:singular", [${"feedback_closed_$about"}]);
 			}
 			$sidebar .= '</a></li>';
 		}
@@ -129,9 +129,9 @@ if ($about_enabled && (sizeof($about_values) > 1)) {
 	if (($status_filter == 'closed') && in_array($about_filter, $undefined_values)) { $sidebar .= '<li class="elgg-state-selected">'; } else { $sidebar .= '<li>'; }
 	$sidebar .= '<a href="'.$base_url . 'about/other/closed">';
 	if ($other_closed > 1) {
-		$sidebar .= elgg_echo("feedback:menu:other", array($other_closed));
+		$sidebar .= elgg_echo("feedback:menu:other", [$other_closed]);
 	} else {
-		$sidebar .= elgg_echo("feedback:menu:other:singular", array($other_closed));
+		$sidebar .= elgg_echo("feedback:menu:other:singular", [$other_closed]);
 	}
 	$sidebar .= '</a></li></ul>';
 	
