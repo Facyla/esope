@@ -13,17 +13,19 @@ $content = '';
 
 $guid = get_input('guid');
 $group = get_entity($guid);
-if (!$group instanceof ElggGroup || !survey_activated_for_group($group)) { forward(); }
+//if (!$group instanceof ElggGroup || !survey_activated_for_group($group)) { forward(); }
+if (($group->getType() != 'group') || !survey_activated_for_group($group)) { forward(); }
+
 
 $container_guid = $group->guid;
 
 $user = elgg_get_logged_in_user_entity();
-$options = array(
+$options = [
 	'type'=>'object',
 	'subtype'=>'survey',
 	'full_view' => false,
 	'limit' => 15
-);
+];
 
 $crumbs_title = $group->name;
 

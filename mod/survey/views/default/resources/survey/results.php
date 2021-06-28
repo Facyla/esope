@@ -30,7 +30,8 @@ if (!$survey instanceof ElggSurvey) {
 
 // Set the page owner
 $page_owner = $survey->getContainerEntity();
-if ($page_owner instanceof ElggGroup) {
+//if ($page_owner instanceof ElggGroup) {
+if ($page_owner->getType() == 'group') {
 	elgg_set_page_owner_guid($page_owner->guid);
 } else {
 	elgg_set_page_owner_guid(elgg_get_site_entity()->guid);

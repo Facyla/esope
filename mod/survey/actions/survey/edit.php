@@ -76,8 +76,9 @@ $user = elgg_get_logged_in_user_entity();
 $survey_site_access = elgg_get_plugin_setting('site_access', 'survey');
 if ($survey_site_access == 'admins' && !$user->isAdmin()) {
 	$container = get_entity($container_guid);
-	// Regular users are allowed to create surveys only inside groups
-	if (!$container instanceof ElggGroup) {
+	// Regular users are allowed to create surveys only inside groups (any group subtype)
+	//if (!$container instanceof ElggGroup) {
+	if ($container->getType() != 'group') {
 		register_error(elgg_echo('survey:can_not_create'));
 		elgg_clear_sticky_form('survey');
 		forward('survey/all');

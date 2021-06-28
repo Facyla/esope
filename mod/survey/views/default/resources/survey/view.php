@@ -18,13 +18,14 @@ $survey = get_entity($guid);
 if ($survey instanceof ElggSurvey) {
 	// Set the page owner
 	$page_owner = $survey->getContainerEntity();
-	if ($page_owner instanceof ElggGroup) {
+	//if ($page_owner instanceof ElggGroup) {
+	if ($page_owner->getType() == 'group') {
 		elgg_set_page_owner_guid($page_owner->guid);
 	} else {
 		elgg_set_page_owner_guid(elgg_get_site_entity()->guid);
 	}
 	
-	$title =  $survey->title;
+	$title = $survey->title;
 	$content .= elgg_view_entity($survey, array('full_view' => true));
 	
 	//check to see if comments are on
@@ -32,7 +33,8 @@ if ($survey instanceof ElggSurvey) {
 		$content .= elgg_view_comments($survey);
 	}
 
-	if ($page_owner instanceof ElggGroup) {
+	//if ($page_owner instanceof ElggGroup) {
+	if ($page_owner->getType() == 'group') {
 		elgg_push_breadcrumb($page_owner->name, "survey/group/{$page_owner->guid}");
 	} else {
 		//elgg_push_breadcrumb($page_owner->name, "survey/owner/{$page_owner->username}");
