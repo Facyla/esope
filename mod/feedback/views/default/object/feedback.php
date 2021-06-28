@@ -86,7 +86,7 @@ if ($comment == 'yes') {
 			$num_comments_feedback = $feedback->countComments();
 			$info .= '<div class="clearfloat"></div>';
 			$info .= '<a href="' . $feedback->getURL() . '">' . elgg_echo('feedback:viewfull') . '</a>';
-			$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_' . $feedback->guid . '\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', [$num_comments_feedback)] . '</a>';
+			$info .= '<a href="javascript:void(0);" onClick="javascript:$(\'#feedback_' . $feedback->guid . '\').toggle()" style="float:right;">' . elgg_echo('feedback:commentsreply', [$num_comments_feedback]) . '</a>';
 			return $info;
 		});
 		$hidden .= ' hidden';
