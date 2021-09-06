@@ -37,6 +37,7 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
     'Michelf\\' => array($vendorDir . '/michelf/php-markdown/Michelf'),
+    'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Flysystem\\Memory\\' => array($vendorDir . '/league/flysystem-memory/src'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
     'Invoker\\' => array($vendorDir . '/php-di/invoker/src'),

@@ -2,6 +2,7 @@
 
 return [
 	'item:object:survey' => "<i class=\"fa fa-bar-chart fa-rotate-90 fa-fw\"></i> Sondages",
+	'item:object:survey_question' => "Question d'un sondage",
 	
 	'survey:index' => "Sondages",
 	'survey:group' => "Sondages du groupe",

@@ -154,12 +154,12 @@ input#feedback_id { width: 100%; }
 .feedback-about-compliment { border-left:12px solid #070; }
 .feedback-about-question { border-left:12px solid #00F; }
 .feedback-about-other { border-left:12px solid #666; }
-.content { color:#A00; }
-.bug_report { color:#930; }
-.suggestions { color:#066; }
-.compliment { color:#070; }
-.question { color:#00F; }
-.other { color:#666; }
+.feedback .content { color:#A00; }
+.feedback .bug_report { color:#930; }
+.feedback .suggestions { color:#066; }
+.feedback .compliment { color:#070; }
+.feedback .question { color:#00F; }
+.feedback .other { color:#666; }
 
 /* listings and full view */
 .feedback-mood { float:left; max-width:25%; margin-right: 1em; }

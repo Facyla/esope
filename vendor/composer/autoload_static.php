@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
+class ComposerStaticInit01f5e9a8284a4a27599977454053238c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -73,6 +73,7 @@ class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
         ),
         'L' => 
         array (
+            'League\\MimeTypeDetection\\' => 25,
             'League\\Flysystem\\Memory\\' => 24,
             'League\\Flysystem\\' => 17,
         ),
@@ -242,6 +243,10 @@ class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
         'Michelf\\' => 
         array (
             0 => __DIR__ . '/..' . '/michelf/php-markdown/Michelf',
+        ),
+        'League\\MimeTypeDetection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
         ),
         'League\\Flysystem\\Memory\\' => 
         array (
@@ -778,6 +783,7 @@ class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
         'Doctrine\\Common\\Cache\\Psr6\\CacheItem' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/CacheItem.php',
         'Doctrine\\Common\\Cache\\Psr6\\DoctrineProvider' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/DoctrineProvider.php',
         'Doctrine\\Common\\Cache\\Psr6\\InvalidArgument' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/InvalidArgument.php',
+        'Doctrine\\Common\\Cache\\Psr6\\TypedCacheItem' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/TypedCacheItem.php',
         'Doctrine\\Common\\Cache\\RedisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RedisCache.php',
         'Doctrine\\Common\\Cache\\SQLite3Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/SQLite3Cache.php',
         'Doctrine\\Common\\Cache\\Version' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Version.php',
@@ -2055,6 +2061,7 @@ class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
         'League\\Flysystem\\ConfigAwareTrait' => __DIR__ . '/..' . '/league/flysystem/src/ConfigAwareTrait.php',
         'League\\Flysystem\\ConnectionErrorException' => __DIR__ . '/..' . '/league/flysystem/src/ConnectionErrorException.php',
         'League\\Flysystem\\ConnectionRuntimeException' => __DIR__ . '/..' . '/league/flysystem/src/ConnectionRuntimeException.php',
+        'League\\Flysystem\\CorruptedPathDetected' => __DIR__ . '/..' . '/league/flysystem/src/CorruptedPathDetected.php',
         'League\\Flysystem\\Directory' => __DIR__ . '/..' . '/league/flysystem/src/Directory.php',
         'League\\Flysystem\\Exception' => __DIR__ . '/..' . '/league/flysystem/src/Exception.php',
         'League\\Flysystem\\File' => __DIR__ . '/..' . '/league/flysystem/src/File.php',
@@ -2088,6 +2095,12 @@ class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
         'League\\Flysystem\\Util\\ContentListingFormatter' => __DIR__ . '/..' . '/league/flysystem/src/Util/ContentListingFormatter.php',
         'League\\Flysystem\\Util\\MimeType' => __DIR__ . '/..' . '/league/flysystem/src/Util/MimeType.php',
         'League\\Flysystem\\Util\\StreamHasher' => __DIR__ . '/..' . '/league/flysystem/src/Util/StreamHasher.php',
+        'League\\MimeTypeDetection\\EmptyExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/EmptyExtensionToMimeTypeMap.php',
+        'League\\MimeTypeDetection\\ExtensionMimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/ExtensionMimeTypeDetector.php',
+        'League\\MimeTypeDetection\\ExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/ExtensionToMimeTypeMap.php',
+        'League\\MimeTypeDetection\\FinfoMimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/FinfoMimeTypeDetector.php',
+        'League\\MimeTypeDetection\\GeneratedExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/GeneratedExtensionToMimeTypeMap.php',
+        'League\\MimeTypeDetection\\MimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/MimeTypeDetector.php',
         'Locatable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Locatable.php',
         'Loggable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Loggable.php',
         'LoginException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/LoginException.php',
@@ -3047,10 +3060,10 @@ class ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8aec0e57b4ea91e10f8abe63650245ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$classMap;
 
         }, null, ClassLoader::class);
     }

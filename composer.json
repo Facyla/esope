@@ -6,7 +6,7 @@
 	"prefer-stable": true,
 	"minimum-stability": "dev",
 	"require": {
-		"elgg/elgg": "3.3.19"
+		"elgg/elgg": "3.3.21"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~8.5"
@@ -19,7 +19,7 @@
 	"config": {
 		"process-timeout": 0,
 		"platform": {
-			"php": "7.2"
+			"php": "7.2.5"
 		},
 		"fxp-asset": {
 			"enabled": false
