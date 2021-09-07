@@ -19,19 +19,19 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'c9a35ed167815c23a1dc9bfddfa20e92e2bbd0fd',
+    'reference' => '57c4c1e648b9d7b38c7601726bbbec649997ca12',
     'name' => 'elgg/starter-project',
   ),
   'versions' => 
   array (
     'bower-asset/fontawesome' => 
     array (
-      'pretty_version' => '5.15.3',
-      'version' => '5.15.3.0',
+      'pretty_version' => '5.15.4',
+      'version' => '5.15.4.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'd79d85c3fad85ad1885e87ed558f4afd6fce8289',
+      'reference' => '7d3d774145ac38663f6d1effc6def0334b68ab7e',
     ),
     'bower-asset/jquery' => 
     array (
@@ -282,7 +282,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'c9a35ed167815c23a1dc9bfddfa20e92e2bbd0fd',
+      'reference' => '57c4c1e648b9d7b38c7601726bbbec649997ca12',
     ),
     'fzaninotto/faker' => 
     array (
@@ -313,12 +313,12 @@ private static $installed = array (
     ),
     'league/flysystem' => 
     array (
-      'pretty_version' => '1.1.4',
-      'version' => '1.1.4.0',
+      'pretty_version' => '1.1.5',
+      'version' => '1.1.5.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f3ad69181b8afed2c9edf7be5a2918144ff4ea32',
+      'reference' => '18634df356bfd4119fe3d6156bdb990c414c14ea',
     ),
     'league/flysystem-memory' => 
     array (
@@ -536,7 +536,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '52a126190a36bc9236846f5d42e10bff9ff60d72',
+      'reference' => '05f521f12b6e072bc77aaa78191907987d0454ff',
     ),
     'robmorgan/phinx' => 
     array (
@@ -563,12 +563,12 @@ private static $installed = array (
     ),
     'symfony/config' => 
     array (
-      'pretty_version' => 'v4.4.27',
-      'version' => '4.4.27.0',
+      'pretty_version' => 'v4.4.30',
+      'version' => '4.4.30.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8132e8d645d703e9b7c9c4f25067b93638683a35',
+      'reference' => 'd9ea72de055cd822e5228ff898e2aad2f52f76b0',
     ),
     'symfony/console' => 
     array (
