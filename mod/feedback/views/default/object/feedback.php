@@ -27,7 +27,7 @@ $controls .= $access_mark;
 switch ($status) {
 	case 'closed':
 		// Only admins can reopen feedbacks
-		if (elgg_is_admin_logged_in) {
+		if (elgg_is_admin_logged_in()) {
 			//$controls .= elgg_view("output/confirmlink",['href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'confirm' => elgg_echo('feedback:reopenconfirm'), 'class' => 'elgg-icon elgg-icon-redo']);
 			$controls .= elgg_view("output/url", ['href' => $url . "action/feedback/reopen?guid=" . $feedback->guid, 'text' => elgg_echo('feedback:reopen'), 'confirm' => elgg_echo('feedback:reopenconfirm'), 'is_action' => true]);
 		} else {

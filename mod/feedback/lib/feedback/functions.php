@@ -189,7 +189,7 @@ function feedback_about_values() {
 		$about_values = array_filter($about_values, 'strlen');
 	}
 	// Set default
-	if (sizeof($about_values) < 1) {
+	if (!$about_values || sizeof($about_values) < 1) {
 		$about_values = ['bug_report', 'content', 'question', 'suggestions', 'compliment', 'other'];
 	}
 	return $about_values;
