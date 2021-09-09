@@ -16,6 +16,8 @@ echo '<p><a href="' . elgg_get_site_url() . 'feedback" target="_new" class="elgg
 
 // @dev Force upgrade
 if (feedback_upgrade_to_elgg3_check()) {
+	echo '<h4>' . elgg_echo('feedback:upgrade:toelgg3') . '</h4>';
+	echo '<p>' . elgg_echo('feedback:upgrade:toelgg3:details') . '</p>';
 	echo '<p>' . elgg_view('output/url', ['href' => "?upgrade=yes", 'text' => elgg_echo('feedback:upgrade'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
 	if (elgg_is_admin_logged_in() && get_input('upgrade') == 'yes') {
 		feedback_upgrade();

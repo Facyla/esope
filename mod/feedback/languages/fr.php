@@ -100,6 +100,8 @@ return [
 	
 	// Admin view
 	'feedback:upgrade' => "Mettre à niveau les feedbacks",
+	'feedback:upgrade:toelgg3' => "Mettre à niveau la structure des données de feedback",
+	'feedback:upgrade:toelgg3:details' => "La structure des données des feedbacks a évolué. Dans le cas d'une migration d'une installation antérieure à Elgg 3.x, cette mise à jour est nécessaire pour un affichage correct des feedbacks.",
 	
 	// Feedback status
 	'feedback:status' => "Statut des feedbacks",
