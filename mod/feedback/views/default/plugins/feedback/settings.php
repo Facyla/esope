@@ -14,6 +14,14 @@ if (!isset($vars['entity']->about_values)) { $vars['entity']->about_values = 'bu
 // Link to feedbacks page
 echo '<p><a href="' . elgg_get_site_url() . 'feedback" target="_new" class="elgg-button">&raquo;&nbsp;' . elgg_echo('feedback:admin:title') . '</a></p>';
 
+// @dev Force upgrade
+if (feedback_upgrade_to_elgg3_check()) {
+	echo '<p>' . elgg_view('output/url', ['href' => "?upgrade=yes", 'text' => elgg_echo('feedback:upgrade'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
+	if (elgg_is_admin_logged_in() && get_input('upgrade') == 'yes') {
+		feedback_upgrade();
+	}
+}
+
 // Publicly available?
 echo '<p><label>' . elgg_echo("feedback:settings:public") . elgg_view('input/select', ['name' => 'params[publicAvailable_feedback]', 'options_values' => $yesno_opt, 'value' => $vars['entity']->publicAvailable_feedback]) . '</label></p>';
 ?>

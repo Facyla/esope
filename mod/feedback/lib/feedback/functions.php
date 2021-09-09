@@ -229,28 +229,64 @@ function feedback_set_page_owner($feedback) {
 }
 
 
+// Upgrade feedback entities
 function feedback_upgrade() {
 	echo "FEEDBACK UPGRADE : <br />";
+	if (feedback_upgrade_to_elgg3_check()) {
+		$result = feedback_upgrade_to_elgg3();
+	}
+	return true;
+}
+// Check data structure for potential required upgrade
+function feedback_upgrade_to_elgg3_check() {
+	$feedbacks_count = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'metadata_names' => "txt", 'count' => true]);
+	if ($feedbacks_count > 0) { return true; }
+	return false;
+}
+// Update data structure for better Elgg entities compatibility
+function feedback_upgrade_to_elgg3() {
+	echo "<h3>Upgrade data structure for Elgg 3.x</<h3>";
 	$feedbacks = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'metadata_names' => "txt", 'limit' => false]);
+	$feedbacks_count = elgg_get_entities(['type' => 'object', 'subtype' => 'feedback', 'metadata_names' => "txt", 'count' => true]);
+	$processed_count = 0;
 	foreach($feedbacks as $entity) {
+		$processed = false;
+		if (!empty($entity->description)) { continue; }
 		// Replace "txt" metadata by standard "description" metadata
 		if (empty($entity->description)) {
 			$entity->description = $entity->txt;
 			$entity->txt = null;
+			$processed = true;
 		}
 		// Ensure title is not empty
-		if (empty($entity->title)) { $entity->title = elgg_get_excerpt($entity->txt, 32); }
+		if (empty($entity->title)) {
+			$entity->title = elgg_get_excerpt($entity->txt, 32);
+			$processed = true;
+		}
 		// Set default status (cannot be empty)
-		if (empty($entity->status)) { $entity->status = 'open'; }
+		if (empty($entity->status)) {
+			$entity->status = 'open';
+			$processed = true;
+		}
 		// About: Remove undefined values (default = no value)
-		if (in_array($entity->about, ['other', 'undefined', 'feedback'])) { $entity->about = null; }
+		if (in_array($entity->about, ['other', 'undefined', 'feedback'])) {
+			$entity->about = null;
+			$processed = true;
+		}
 		// Mood: Remove undefined values (default = no value)
-		if (in_array($entity->mood, ['other'])) { $entity->mood = null; }
+		if (in_array($entity->mood, ['other'])) {
+			$entity->mood = null;
+			$processed = true;
+		}
 		echo "{$entity->guid} {$entity->title} : OK<br />";
+		// Only changes should be count as processed
+		if ($processed) { $processed++; }
 	}
+	echo "<p>$feedbacks_count objets feedback traités ($feedbacks_count total).</p>";
 	echo "Terminé.";
 	return true;
 }
+
 
 
 
