@@ -18,7 +18,10 @@ echo elgg_view('user/elements/imprint/location', $vars);
 echo elgg_view('user/elements/imprint/briefdescription', $vars);
 
 if (!empty($entity->interests)) echo '<p class="">' . elgg_view('output/tags', ['value' => $entity->interests]) . '</p>';
-if (!empty($entity->organisation)) echo '<p class=""><strong>' . implode(', ', $entity->organisation) . '</strong></p>';
+if (!empty($entity->organisation)) {
+	$organisation_content = (is_array($entity->organisation)) ? implode(', ', $entity->organisation) : $entity->organisation;
+	echo '<p class=""><strong>' . $organisation_content . '</strong></p>';
+}
 
 $imprint = elgg_extract('imprint', $vars);
 if (!empty($imprint)) {
