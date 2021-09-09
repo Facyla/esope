@@ -69,44 +69,46 @@ $infos .= '</p>';
 
 // set the correct context and page owner
 elgg_set_page_owner_guid($user->guid);
-elgg_push_context('friends');
-$friend_requests_received = elgg_get_entities([
-	'type' => 'user',
-	'relationship' => 'friendrequest',
-	'relationship_guid' => $user->guid,
-	'inverse_relationship' => true,
-	'offset_key' => 'offset_received',
-	'no_results' => elgg_echo('friend_request:received:none'),
-	'item_view' => 'friend_request/item',
-	'count' => true,
-]);
-if ($friend_requests_received > 0) {
-	if ($friend_requests_received > 1) {
-		$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/pending"><i class="fa fa-user"></i>&nbsp;' . "$friend_requests_received demandes de contact reçues" . '</a></p>';
-	} else {
-		$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/pending"><i class="fa fa-user"></i>&nbsp;' . "$friend_requests_received demande de contact reçue" . '</a></p>';
+if (elgg_is_active_plugin('friend_request')) {
+	elgg_push_context('friends');
+	$friend_requests_received = elgg_get_entities([
+		'type' => 'user',
+		'relationship' => 'friendrequest',
+		'relationship_guid' => $user->guid,
+		'inverse_relationship' => true,
+		'offset_key' => 'offset_received',
+		'no_results' => elgg_echo('friend_request:received:none'),
+		'item_view' => 'friend_request/item',
+		'count' => true,
+	]);
+	if ($friend_requests_received > 0) {
+		if ($friend_requests_received > 1) {
+			$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '"><i class="fa fa-user"></i>&nbsp;' . "$friend_requests_received demandes de contact reçues" . '</a></p>';
+		} else {
+			$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '"><i class="fa fa-user"></i>&nbsp;' . "$friend_requests_received demande de contact reçue" . '</a></p>';
+		}
 	}
-}
-//if ($friend_requests_received > 0) { $infos .= elgg_view('friend_request/received'); }
-$friend_requests_sent = elgg_get_entities([
-	'type' => 'user',
-	'relationship' => 'friendrequest',
-	'relationship_guid' => $user->guid,
-	'inverse_relationship' => false,
-	'offset_key' => 'offset_sent',
-	'no_results' => elgg_echo('friend_request:sent:none'),
-	'item_view' => 'friend_request/item',
-	'count' => true,
-]);
-if ($friend_requests_sent > 0) {
-	if ($friend_requests_sent > 1) {
-			$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/sent"><i class="fa fa-user-plus"></i>&nbsp;' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
-	} else {
-		$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '/sent"><i class="fa fa-user-plus"></i>&nbsp;' . "$friend_requests_sent demande de contact envoyée" . '</a></p>';
+	//if ($friend_requests_received > 0) { $infos .= elgg_view('friend_request/received'); }
+	$friend_requests_sent = elgg_get_entities([
+		'type' => 'user',
+		'relationship' => 'friendrequest',
+		'relationship_guid' => $user->guid,
+		'inverse_relationship' => false,
+		'offset_key' => 'offset_sent',
+		'no_results' => elgg_echo('friend_request:sent:none'),
+		'item_view' => 'friend_request/item',
+		'count' => true,
+	]);
+	if ($friend_requests_sent > 0) {
+		if ($friend_requests_sent > 1) {
+				$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '"><i class="fa fa-user-plus"></i>&nbsp;' . "$friend_requests_sent demandes de contact envoyées" . '</a></p>';
+		} else {
+			$infos .= '<p><a href="' . elgg_get_site_url() . 'friend_request/' . $user->username . '"><i class="fa fa-user-plus"></i>&nbsp;' . "$friend_requests_sent demande de contact envoyée" . '</a></p>';
+		}
 	}
+	//if ($friend_requests_sent > 0) { $infos .= elgg_view('friend_request/sent'); }
+	elgg_pop_context();
 }
-//if ($friend_requests_sent > 0) { $infos .= elgg_view('friend_request/sent'); }
-elgg_pop_context();
 
 
 $infos .= '<p>' . elgg_view('output/url', ['href' => "friends/{$user->username}/invite", 'text' => '<i class="fa fa-user-plus"></i>&nbsp;' . "Inviter des collègues à rejoindre Départements en Réseaux", 'class' => "", 'is_action' => true]) . '</p>';
