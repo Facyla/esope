@@ -39,20 +39,6 @@ return [
 			'path' => '/contributions/{container_guid?}',
 			'resource' => 'contributions',
 		],
-		/*
-		'groups:files' => [
-			'path' => '/groups/file/{guid?}/{title?}',
-			'resource' => 'groups/file',
-		],
-		
-		'naturalconnect:places:add' => [
-			'path' => '/places/add/{guid?}/{title?}',
-			'resource' => 'naturalconnect/places/edit',
-			'middleware' => [
-				\Elgg\Router\Middleware\Gatekeeper::class,
-			],
-		],
-		*/
 		
 	],
 	
@@ -75,58 +61,6 @@ return [
 				'theme_adf_site_menu' => ['priority' => 1000],
 			],
 		],
-		/*
-		// Remove "more" submenu
-		'prepare' => [
-			'menu:site' => [
-				'naturalconnect_prepare_site_menu' => ['priority' => 1000],
-			],
-			'menu:topbar' => [
-				'naturalconnect_prepare_topbar_menu' => ['priority' => 1000],
-			],
-		],
-		'head' => [
-			'page' => [
-				'naturalconnect_head_page_hook' => ['priority' => 1000],
-			],
-		],
-		// Set URL handler for 'organisations', 'hubs' and 'services' objects
-		'entity:url' => [
-			'object' => [
-				'naturalconnect_entities_url' => [],
-			],
-			'group' => [
-				'naturalconnect_places_url' => ['priority' => 600],
-			],
-		],
-		'register' => [
-			// Set up topbar menu
-			'menu:topbar' => [
-				'naturalconnect_topbar_menu' => ['priority' => 1000],
-			],
-			'menu:notifications' => [
-				'naturalconnect_notifications_menu' => ['priority' => 1000],
-			],
-			// Set up main menu
-			'menu:site' => [
-				'naturalconnect_site_menu' => ['priority' => 1000],
-			],
-			// Set up footer menu => static view
-			//'menu:footer' => [
-			//	'naturalconnect_footer_menu' => ['priority' => 1000],
-			//],
-			// Set object edit menu URL
-			'menu:entity' => [
-				'naturalconnect_entities_menu' => [],
-			],
-		],
-		// Set icons for custom entities
-		'entity:icon:url' => [
-			'object' => [
-				'naturalconnect_set_icon_url' => [],
-			],
-		],
-		*/
 	],
 	
 	
@@ -136,26 +70,6 @@ return [
 				'theme_adf_init' => [],
 			],
 		],
-		/*
-		// Handle group subtypes and custom fields
-		'create' => [
-			'group' => [
-				'naturalconnect_groups_edit_event_listener' => [],
-			],
-		],
-		'update' => [
-			'group' => [
-				'naturalconnect_groups_edit_event_listener' => [],
-			],
-		],
-		// Determines and sets the current environment
-		'pagesetup' => [
-			'system' => [
-				'naturalconnect_pagesetup' => ['priority' => 0],
-			],
-		],
-		*/
-		
 	],
 	
 	
@@ -166,6 +80,43 @@ return [
 		'naturalconnect_generic' => ['context' => $widgets_context, 'multiple' => true],
 		*/
 	],
+	
+	/* Pourrait être intéressant pour gérer les dépendances mais n'apparaît pas dans la page des plugins 
+	'plugin' => [
+		'name' => 'Thème ADF - Départements en Réseaux', // readable plugin name
+		'activate_on_install' => false, // only used on a fresh install
+		'version' => '3.3.0', // version of the plugin
+		'dependencies' => [
+			// optional list of plugin dependencies
+			'groups' => [
+				'position' => 'after',
+				'must_be_active' => true,
+			],
+			'members' => [
+				'position' => 'after',
+				'must_be_active' => true,
+			],
+			'profile' => [
+				'position' => 'after',
+				'must_be_active' => true,
+			],
+			'search' => [
+				'position' => 'after',
+				'must_be_active' => true,
+			],
+			'notifications' => [],
+//			'blog' => [],
+//			'activity' => [
+//				'position' => 'after',
+//				'must_be_active' => false,
+//			],
+//			'file' => [
+//				'position' => 'before',
+//				'version' => '>2', // composer notation of required version constraint
+//			],
+		],
+	],
+	*/
 	
 ];
 

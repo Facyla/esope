@@ -9,6 +9,14 @@ return [
 	// Paramètres
 	'theme_adf:settings:home_text' => "Texte de la page d'accueil",
 	
+	// Dépendances
+	'theme_adf:requisites' => "Pré-requis et dépendances",
+	'theme_adf:requisites:details' => "Pour une installation standard, il est recommandé d'utiliser les plugins suivants. Si l'un des plugins n'est pas activé, cliquez sur son lien pour l'activer sur la page de gestion des Plugins.",
+	'theme_adf:requisites:required' => "Plugins indispensables",
+	'theme_adf:requisites:required:details' => "Ces plugins sont indispensables au bon fonctionnement de la plateforme ; ils doivent être activés pour pouvoir utiliser ce thème.",
+	'theme_adf:requisites:suggested' => "Plugins recommandés",
+	'theme_adf:requisites:suggested:details' => "Ces plugins sont recommandés et habituellement activés, néanmoins ils peuvent être désactivés sans si les fonctionnalités correspondantes ne sont pas souhaitées.",
+	
 	// Menus
 	'theme_adf:backtohome' => "Retour à l'accueil du site",
 	'theme_adf:menu:home' => "Accueil",
