@@ -29,6 +29,11 @@ return [
 	'theme_adf:menu:contributions' => "Contributions",
 	'theme_adf:menu:search' => "Recherche",
 	
+	// Digest
+	'theme_adf:digest:groupactivity' => "Activité dans mes espaces de travail",
+	'theme_adf:digest:thewire' => "Au fil du réseau",
+	'theme_adf:digest:own_infos' => "Mes informations",
+	
 	// Overrides
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
 	

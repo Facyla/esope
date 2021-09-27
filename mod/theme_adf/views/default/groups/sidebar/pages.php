@@ -35,10 +35,16 @@ if (count($top_pages) > 0) {
 	foreach($top_pages as $entity) {
 		// Navigation du wiki
 		//$content .= elgg_view('pages/sidebar/navigation', ['page' => $entity]);
-		$content .= elgg_view_menu('pages_nav', [
+		// Note : si elle n'a 'pas de sous-page, la page ne sera pas listée du tout
+		$page_menu = elgg_view_menu('pages_nav', [
 			'class' => ['pages-nav', 'elgg-menu-page'],
 			'entity' => $entity,
 		]);
+		if ($page_menu) {
+			$content .= $page_menu;
+		} else {
+			$content .= elgg_view('output/url', ['href' => $entity->getURL(), 'text' => $entity->title]);
+		}
 	}
 	if ($count_top_pages > $max_top_pages) {
 		$remaining = $count_top_pages - $max_top_pages;

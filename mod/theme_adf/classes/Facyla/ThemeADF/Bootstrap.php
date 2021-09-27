@@ -28,6 +28,16 @@ class Bootstrap extends DefaultPluginBootstrap {
 		//elgg_extend_view('page/elements/owner_block/extend', 'groups/sidebar/pages', 1000);
 		elgg_extend_view('page/elements/page_menu', 'groups/sidebar/pages', 1000);
 		
+	// Digest
+	// Add all groups excerpt to digest
+	elgg_unextend_view('digest/elements/site', 'digest/elements/site/blog');
+	elgg_unextend_view('digest/elements/site', 'digest/elements/site/groups');
+	elgg_unextend_view('digest/elements/site', 'digest/elements/site/river');
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/own_infos', 100);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 800);
+	//elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
+
 		//elgg_extend_view('page/elements/body', 'page/elements/group-header', 0);
 		//elgg_extend_view('page/elements/owner_block', 'page/elements/group-search', 0);
 		

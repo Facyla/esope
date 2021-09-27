@@ -6,7 +6,11 @@ $page_owner = elgg_get_page_owner_entity();
 elgg_set_page_owner_guid($user->guid);
 
 $infos = '';
-$infos .= "<p>Actuellement &nbsp;: " . elgg_count_entities(['type' => 'user']) . ' membres, ' . find_active_users(['seconds' => 1800, 'count' => true]) . ' connectés</p>';
+if (!elgg_in_context('digest') && !elgg_in_context('cron')) {
+	$infos .= "<p>Actuellement &nbsp;: " . elgg_count_entities(['type' => 'user']) . ' membres';
+	$infos .= ', ' . find_active_users(['seconds' => 1800, 'count' => true]) . ' connectés';
+	$infos .= '</p>';
+}
 
 // Invitations : groupes, contacts
 $group_invitations = elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
@@ -111,7 +115,7 @@ if (elgg_is_active_plugin('friend_request')) {
 }
 
 
-$infos .= '<p>' . elgg_view('output/url', ['href' => "friends/{$user->username}/invite", 'text' => '<i class="fa fa-user-plus"></i>&nbsp;' . "Inviter des collègues à rejoindre Départements en Réseaux", 'class' => "", 'is_action' => true]) . '</p>';
+$infos .= '<p>' . elgg_view('output/url', ['href' => "friends/{$user->username}/invite", 'text' => '<i class="fa fa-user-plus"></i>&nbsp;' . "Inviter des collègues à rejoindre Départements en Réseaux", 'class' => ""]) . '</p>';
 
 elgg_set_page_owner_guid($page_owner->guid);
 
