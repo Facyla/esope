@@ -60,6 +60,8 @@ if ($groups) {
 		unset($items);
 		*/
 		
+		$icon = '<img src="' . $group->getIconURL('tiny') . '" />&nbsp;';
+		$content .= '<h4 class="group-title">' . elgg_view("output/url", array("text" => $icon . $group->name, "href" => $group->getURL())) . '</h4>';
 		$content .= elgg_list_river([
 			'limit' => 4,
 			'pagination' => false,
