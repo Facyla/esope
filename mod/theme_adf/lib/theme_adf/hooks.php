@@ -314,5 +314,46 @@ function theme_adf_footer_menu(\Elgg\Hook $hook) {
 */
 
 
+// Head - Définition des link et meta
+function theme_adf_head_page_hook(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	
+	// Favicon
+	$favicon_base = elgg_get_site_url() . 'mod/theme_adf/graphics/';
+	$favicon = $favicon_base . 'favicon-128.png';
+	
+	// Remove unused favicon definitions
+	unset($return['links']['icon-16']);
+	unset($return['links']['icon-32']);
+	unset($return['links']['icon-64']);
+	unset($return['links']['icon-128']);
+	unset($return['links']['icon-vector']);
+	unset($return['links']['apple-touch-icon']);
+	
+	// Set main favicon
+	$return['links']['shortcut-icon'] = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $favicon_base . 'favicon-64.ico');
+	$return['links']['icon-ico'] = array('rel' => 'icon', 'href' => $favicon_base . 'favicon.ico');
+	// Set apple touch icon
+	$return['links']['apple-touch-icon'] = array('rel' => 'apple-touch-icon', 'href' => $favicon);
+	// Set alternate sizes
+	$return['links']['icon-16'] = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $favicon_base . 'favicon-16.png');
+	$return['links']['icon-32'] = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $favicon_base . 'favicon-32.png');
+	$return['links']['icon-64'] = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $favicon_base . 'favicon-64.png');
+	$return['links']['icon-128'] = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $favicon_base . 'favicon-128.png');
+	
+	//$return['metas']['og:image'] = array('name' => 'og:image', 'content' => elgg_get_site_url() . 'mod/naturalconnect/graphics/naturalconnect-favicon.png');
+	//$return['metas']['description'] = array('name' => 'description', 'content' => ""));
+	
+	/*
+	// Custom fonts
+	$return['links']['google-font-open-sans'] = array(
+			'rel' => 'stylesheet', 'type' => 'text/css',
+			'href' => 'https://fonts.googleapis.com/css?family=Open+Sans:300,600',
+		);
+	*/
+	
+	return $return;
+}
+
 
 

@@ -44,6 +44,11 @@ return [
 	
 	
 	'hooks' => [
+		'head' => [
+			'page' => [
+				'theme_adf_head_page_hook' => ['priority' => 1000],
+			],
+		],
 		// Public pages - permet d'intégrer les icônes dans les digest
 		'public_pages' => [
 			'walled_garden' => [

@@ -25,7 +25,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 		
 		elgg_extend_view('page/elements/owner_block', 'theme_adf/groups/sidebar/search', 0);
 		
-		elgg_extend_view('page/elements/owner_block/extend', 'groups/sidebar/pages', 0);
+		//elgg_extend_view('page/elements/owner_block/extend', 'groups/sidebar/pages', 1000);
+		elgg_extend_view('page/elements/page_menu', 'groups/sidebar/pages', 1000);
 		
 		//elgg_extend_view('page/elements/body', 'page/elements/group-header', 0);
 		//elgg_extend_view('page/elements/owner_block', 'page/elements/group-search', 0);
