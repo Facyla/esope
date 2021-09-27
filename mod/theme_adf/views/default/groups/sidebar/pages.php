@@ -29,7 +29,7 @@ $top_pages_params = [
 	'pagination' => false,
 	'no_results' => elgg_echo('pages:none'),
 ];
-$count_top_pages = $top_pages_params + ['count' => true];
+$count_top_pages = elgg_get_entities($top_pages_params + ['count' => true]);
 $top_pages = elgg_get_entities($top_pages_params);
 if (count($top_pages) > 0) {
 	foreach($top_pages as $entity) {
