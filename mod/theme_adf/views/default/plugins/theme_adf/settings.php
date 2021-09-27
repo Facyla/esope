@@ -71,8 +71,12 @@ echo '<div><label>' . elgg_echo('theme_adf:settings:home_text') . ' ' . elgg_vie
 // Pied de page
 echo '<div><label>' . elgg_echo('theme_adf:settings:footer_text') . ' ' . elgg_view('input/longtext', ['name' => 'params[footer_text]', 'value' => $plugin->footer_text]) . '</label></div>';
 
-// Accueil des pges d'aide (URL)
+// Accueil des pages d'aide (URL)
+echo '<h3>' . elgg_echo('theme_adf:settings:help') . '</h3>';
+echo '<p><em>' . elgg_echo('theme_adf:settings:help:details') . '</em></p>';
 echo '<div><label>' . elgg_echo('theme_adf:settings:help_url') . ' ' . elgg_view('input/url', ['name' => 'params[help_url]', 'value' => $plugin->help_url]) . '</label></div>';
+echo '<div><label>' . elgg_echo('theme_adf:settings:help_faq') . ' ' . elgg_view('input/url', ['name' => 'params[help_faq]', 'value' => $plugin->help_faq]) . '</label></div>';
+echo '<div><label>' . elgg_echo('theme_adf:settings:help_firststeps') . ' ' . elgg_view('input/url', ['name' => 'params[help_firststeps]', 'value' => $plugin->help_firststeps]) . '</label></div>';
 
 
 

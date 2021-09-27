@@ -15,7 +15,7 @@ if (!empty($custom_footer)) {
 	$custom_footer = elgg_view('output/longtext', ['value' => $custom_footer]);
 } else {
 	if (elgg_is_admin_logged_in()) {
-		$custom_footer = '<p><a href="' . $url. '">Admin, vous pouvez intégrer ici un texte et des liens, via la configuration du thème.</a></p>';
+		$custom_footer = '<p>Admin, vous pouvez <a href="' . $url . 'admin/plugin_settings/theme_adf">intégrer ici un texte et des liens, via la configuration du thème</a>.</p>';
 	}
 }
 echo '<div class="footer-adf">' . $custom_footer . '</div>';

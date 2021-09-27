@@ -188,21 +188,39 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	$new_menu[] = $item;
 	
 	// Aide : page de présentation et recherche de contenus
-	$item = new ElggMenuItem('help', "Aide" . '&nbsp;<i class="fa fa-caret-down"></i>', '/aide');
-	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
-	$item->setPriority(900);
-	$new_menu[] = $item;
 	$help_url = elgg_get_plugin_setting('help_url', 'theme_adf');
 	if (!empty($help_url)) {
+		$item = new ElggMenuItem('help', "Aide" . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
+		//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
+		$item->setPriority(900);
+		$new_menu[] = $item;
+		
 		// Add submenus
 		$item = new ElggMenuItem('help-home', "Aide et documentation", $help_url);
 		$item->setParentName('help');
 		$new_menu[] = $item;
+		
+		$help_url = elgg_get_plugin_setting('help_faq', 'theme_adf');
+		if (!empty($help_url)) {
+			$item = new ElggMenuItem('help', "F.A.Q." . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
+			$item->setParentName('help');
+			$new_menu[] = $item;
+		}
+		
+		$help_url = elgg_get_plugin_setting('help_firststeps', 'theme_adf');
+		if (!empty($help_url)) {
+			$item = new ElggMenuItem('help', "Premiers Pas" . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
+			$item->setParentName('help');
+			$new_menu[] = $item;
+		}
+		
+		if (elgg_is_active_plugin('feedback')) {
+			// Add submenus
+			$item = new ElggMenuItem('help-feedback', "Feedbacks", '/feedback');
+			$item->setParentName('help');
+			$new_menu[] = $item;
+		}
 	}
-	// Add submenus
-	$item = new ElggMenuItem('help-feedback', "Feedbacks", '/feedback');
-	$item->setParentName('help');
-	$new_menu[] = $item;
 	
 	// Evénements
 	/*

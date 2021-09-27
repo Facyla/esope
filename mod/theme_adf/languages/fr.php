@@ -9,7 +9,11 @@ return [
 	// Paramètres
 	'theme_adf:settings:home_text' => "Texte de la page d'accueil",
 	'theme_adf:settings:footer_text' => "Texte du pied de page",
-	'theme_adf:settings:help_url' => "Accueil des pages d'aide",
+	'theme_adf:settings:help' => "Menu d'aide",
+	'theme_adf:settings:help:details' => "Le menu d'Aide s'affiche dès lors que l'URL de la page d'accueil de l'aide est configurée. Les autres URL sont facultatives.",
+	'theme_adf:settings:help_url' => "Accueil des pages d'aide (URL complète ou commençant par \"/\")",
+	'theme_adf:settings:help_faq' => "URL de la FAQ",
+	'theme_adf:settings:help_firststeps' => "URL de la page des premiers pas / tutoriels",
 	
 	// Dépendances
 	'theme_adf:requisites' => "Pré-requis et dépendances",

@@ -277,7 +277,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-topbar .elgg-menu.elgg-child-menu > li { width: auto; }
 .elgg-page-topbar .elgg-menu li:hover > .elgg-child-menu::before { color: #5ba2d9; right: 50%; /* content: "\25bc"; padding: 0; top: 0; color: #0b2d51; */ display: none; }
 .elgg-page-topbar .elgg-menu li:hover > a.elgg-menu-parent::after { content: " "; display: block; width: 0; height: 0; border-top: .75rem solid #0b2d51; border-bottom: 0; border-right: 1rem solid transparent; border-left: 1rem solid transparent; position: absolute; bottom: calc(3px - 0.75rem); left: calc(50% - 1rem); z-index: 3; }
-.elgg-page-topbar .elgg-menu li:hover > .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-template-columns: repeat(auto-fit,minmax(12rem, 24rem)); grid-gap: 1rem 1rem; }
+.elgg-page-topbar .elgg-menu li:hover > .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-template-columns: repeat(auto-fit,minmax(12rem, 24rem)); grid-gap: .5rem .5rem; }
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-search:hover > .elgg-child-menu { display: block; }
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-members .elgg-child-menu, 
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-groups .elgg-child-menu { width: auto; }
