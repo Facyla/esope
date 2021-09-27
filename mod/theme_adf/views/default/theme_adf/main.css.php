@@ -33,12 +33,14 @@ Dégradés du noir au blanc :
 ?>
 
 /* Layouts */
+.elgg-layout-body { max-width: 100%; overflow: auto; }
 
 
 /* Eléments et styles génériques */
 a, a:visited { color: #0b2d51; }
 a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
+.scroll-hz { max-width: 100%; overflow: auto; }
 
 .elgg-button-action, .elgg-button-action:visited { background: #5ba2d9; color: #fff; }
 .elgg-button-submit { background: #1b3b5d; color: #fff; }
@@ -96,6 +98,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .group-header { max-width: 100vw; /* width: 100vw; margin: -2rem calc(-10vw - 1rem) 0; padding: .5rem 10vw; */ background: #fff; border-bottom: 1px solid #0b2d51; min-height: 3.5rem; display: flex; }
 .group-header .group-image { width: 2.5rem; height: 2.5rem; margin: 0 1rem; }
 .group-header .group-search { align-self: center; flex: 1 1 auto; }
+
+.group-statistics {  }
+.group-statistics table th { min-width: 10ex; word-break: keep-all; word-wrap: break-word; white-space: break-spaces; }
 
 #feedBackTogglerLink { background: #e57b5f; }
 

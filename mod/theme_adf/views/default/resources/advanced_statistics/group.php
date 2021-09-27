@@ -208,17 +208,19 @@ if ($query_result) {
 		$t_body .= '</tr>';
 	}
 }
-$content .= '<h3>Statistiques de publication par période</h3>';
-$content .= '<table style="border: 1px solid; width: 100%;">';
-	$content .= '<thead>';
-		$content .= '<tr style="border: 1px solid;">';
-			$content .= $t_head;
-		$content .= '</tr>';
-	$content .= '</thead>';
-	$content .= '<tbody>';
-			$content .= $t_body;
-	$content .= '</tbody>';
-$content .= '</table>';
+$content .= '<div class="group-statistics scroll-hz">';
+	$content .= '<h3>Statistiques de publication par période</h3>';
+	$content .= '<table style="border: 1px solid; width: 100%;">';
+		$content .= '<thead>';
+			$content .= '<tr style="border: 1px solid;">';
+				$content .= $t_head;
+			$content .= '</tr>';
+		$content .= '</thead>';
+		$content .= '<tbody>';
+				$content .= $t_body;
+		$content .= '</tbody>';
+	$content .= '</table>';
+$content .= '</div>';
 $content .= '<br /><br />';
 // Histogramme
 if (elgg_is_active_plugin('dataviz')) {
