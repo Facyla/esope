@@ -34,8 +34,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 	elgg_unextend_view('digest/elements/site', 'digest/elements/site/groups');
 	elgg_unextend_view('digest/elements/site', 'digest/elements/site/river');
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/own_infos', 100);
+	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 300);
 	elgg_extend_view('digest/elements/site', 'digest/elements/site/allgroups', 600);
-	elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 800);
 	//elgg_extend_view('digest/elements/site', 'digest/elements/site/thewire', 503);
 
 		//elgg_extend_view('page/elements/body', 'page/elements/group-header', 0);
