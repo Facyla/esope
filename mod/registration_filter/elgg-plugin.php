@@ -19,7 +19,12 @@ return [
 	
 	
 	// Routes
-	'routes' => [],
+	'routes' => [
+		'default:registration_filter' => [
+			'path' => '/registration_filter',
+			'resource' => 'registration_filter/index',
+		],
+	],
 	
 	
 	'hooks' => [

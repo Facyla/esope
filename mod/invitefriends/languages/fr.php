@@ -22,7 +22,7 @@ return array(
 	'invitefriends:already_members' => 'Les invités suivants sont déjà membres : %s',
 	'invitefriends:noemails' => 'Aucune adresse email n\'a été renseignée.',
 	
-	'invitefriends:message:default' => 'BonjourJe,
+	'invitefriends:message:default' => 'Bonjour,
 
 Je vous invite à rejoindre mon réseau sur %s.',
 

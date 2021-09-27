@@ -51,12 +51,16 @@ foreach($owned_groups as $group) {
 		if ($requests > 1) {
 			$owned_groups_requests .= '<li>' . elgg_view('output/url', ['href' => "groups/requests/{$group->guid}", 'text' => '<i class="fa fa-cogs"></i>&nbsp;' . "<strong>{$group->name}&nbsp;:</strong> $requests demandes d'adhésion"]) . '</li>';
 		} else {
-			$owned_groups_requests .= '<li>' . elgg_view('output/url', ['href' => "groups/requests/{$group->guid}", 'text' => '<i class="fa fa-cogs"></i>&nbsp;' . "<strong>{$group->name}&nbsp;:</strong> $requests demande d'adhésion"]) . '</li>';
+			$owned_groups_requests .= '<p>' . elgg_view('output/url', ['href' => "groups/requests/{$group->guid}", 'text' => '<i class="fa fa-cogs"></i>&nbsp;' . "<strong>{$group->name}&nbsp;:</strong> $requests demande d'adhésion"]) . '</p>';
 		}
 	}
 }
 if (!empty($owned_groups_requests)) {
-	$infos .= '<ul>' . $owned_groups_requests . '</ul>';
+	if ($requests > 1) {
+		$infos .= '<ul>' . $owned_groups_requests . '</ul>';
+	} else {
+		$infos .= $owned_groups_requests;
+	}
 }
 // @TODO faire une vue pour chaque groupe dont on est propriétaire ou co-administrateur
 /* elgg_list_relationships([

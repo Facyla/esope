@@ -2,6 +2,7 @@
 /**
  * French strings
  */
+$url = elgg_get_site_url();
 
 return [
 	'registration_filter' => "Filtre d'inscription",
@@ -21,14 +22,14 @@ return [
 	'registration_filter:whitelist:default' => "",
 	'registration_filter:register:whitelist' => "Pour pouvoir vous inscrire, le nom de domaine de votre adresse email doit faire partie de la liste suivante : ",
 	
-	'registration_filter:blacklist' => "List des noms de domaines interdits.",
+	'registration_filter:blacklist' => "Liste des noms de domaines interdits.",
 	'registration_filter:blacklist:details' => "",
 	'registration_filter:blacklist:default' => "", // Enables themes defaults
 	
 	
 	// Overrides
 	'invitefriends:introduction' => "Pour inviter d'autres personnes à vous rejoindre sur ce réseau, entrez leurs adresses mail ci-dessous (une par ligne).<br />
-	Attention : l'inscription est réservée à certains noms de domaines, veillez à n'inviter que des adresses autorisées (cette liste peut être consultée sur la page d'accueil ou d'inscription au site).",
+	Attention : l'inscription est réservée à certains noms de domaines, veuillez en <a href=\"{$url}registration_filter\">consulter sur cette page la liste des noms de domaine autorisés</a>. Les adresses d'autres noms de domaine seront filtrées et ne recevront aucune invitation.",
 	
 	'RegistrationException:NotAllowedEmail' => "Domaine invalide. Le nom de domaine utilisé ne fait pas partie de la liste des noms de domaines autorisés, et ne vous permet pas de créer un compte sur cette plateforme.",
 	

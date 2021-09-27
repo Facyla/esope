@@ -32,7 +32,7 @@ return [
 	// Digest
 	'theme_adf:digest:groupactivity' => "Activité dans mes espaces de travail",
 	'theme_adf:digest:thewire' => "Au fil du réseau",
-	'theme_adf:digest:own_infos' => "Mes informations",
+	'theme_adf:digest:own_infos' => "Mes informations personnelles",
 	
 	// Overrides
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
