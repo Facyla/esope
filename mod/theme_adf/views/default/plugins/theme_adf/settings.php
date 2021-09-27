@@ -24,9 +24,9 @@ foreach($dependencies['requires'] as $plugin_dep) {
 	$dependencies_content .= '<li>';
 		$dependencies_content .= "<a href=\"{$url}admin/plugins#{$plugin_dep}\" target=\"_blank\">{$plugin_dep}</a>&nbsp;: <strong>";
 		if (elgg_is_active_plugin($plugin_dep)) {
-			$dependencies_content .= "activé";
+			$dependencies_content .= '<span style="color: #0A0;">activé</span>';
 		} else {
-			$dependencies_content .= "désactivé";
+			$dependencies_content .= '<span style="color: #A00;">désactivé</span>';
 			$missing_required = true;
 		}
 	$dependencies_content .= '</strong></li>';
@@ -40,9 +40,9 @@ foreach($dependencies['suggests'] as $plugin_dep) {
 	$dependencies_content .= '<li>';
 		$dependencies_content .= "<a href=\"{$url}admin/plugins#{$plugin_dep}\" target=\"_blank\">{$plugin_dep}</a>&nbsp;: <strong>";
 		if (elgg_is_active_plugin($plugin_dep)) {
-			$dependencies_content .= "activé";
+			$dependencies_content .= '<span style="color: #0A0;">activé</span>';
 		} else {
-			$dependencies_content .= "désactivé";
+			$dependencies_content .= '<span style="color: #E80;">désactivé</span>';
 			$missing_optional = true;
 		}
 	$dependencies_content .= '</strong></li>';
@@ -50,17 +50,22 @@ foreach($dependencies['suggests'] as $plugin_dep) {
 $dependencies_content .= '</ul>';
 $dependencies_content .= '</div>';
 
+$hidden_space = 'hidden';
 if ($missing_required || $missing_optional) {
+	$hidden_space = '';
 	if ($missing_required) {
 		echo "<p><strong>Des plugins obligatoires ne sont pas activés.</strong></p>";
 	}
 	if ($missing_optional) {
 		echo "<p><strong>Des plugins optionnels ne sont pas activés.</strong></p>";
 	}
-	echo $dependencies_content;
 } else {
 	echo "<p><strong>Tous les plugins obligatoires et recommandés sont activés.</strong></p>";
 }
+echo '<p><a href="javacript: void(0);" onClick="$(\'#theme-adf-dependencies\').slideToggle();" class="elgg-button -elgg-button-action">Afficher/masquer les plugins obligatoires et recommandés</a></p>';
+echo '<div id="theme-adf-dependencies" class="' . $hidden_space . '">';
+	echo $dependencies_content;
+echo '</div>';
 
 
 echo '<h3>Paramètres de configuration</h3>';

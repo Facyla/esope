@@ -201,8 +201,9 @@ $thewire_global = elgg_view('thewire_tools/activity_post', $vars);
 $options = [
 	'type' => 'object', 'subtype' => 'thewire', 
 	//'container_guids' => $user_groups_guids_list,
-	'limit' => max(20, elgg_get_config('default_limit')),
+	'limit' => max(2, elgg_get_config('default_limit')),
 	//'order_by' => ['e.time_created', 'desc'],
+	'pagination' => false, 
 	];
 // Exclude group containers
 $options['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($container_type) {
@@ -210,6 +211,12 @@ $options['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($container_t
 		return $qb->compare("{$c_join}.type", '!=', 'group', ELGG_VALUE_STRING);
 	};
 $thewire_global .= elgg_list_entities($options);
+$thewire_global .= '<p>' . elgg_view('output/url', [
+	'href' => elgg_get_site_url() . 'thewire/all',
+	'text' => elgg_echo('thewire:moreposts'),
+	'is_trusted' => true,
+	'class' => "elgg-button elgg-pagination",
+]) . '</p>';
 
 // Activité des groupes
 $discussions_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);

@@ -20,7 +20,7 @@ function theme_adf_plugin_dependencies() {
 		// enabling these should be an option - though recommended, may be disabled
 		'suggests' => [
 			// content
-			'file', 'pages', 'blog', 'bookmarks', 'discussions', 'event_manager', 'thewire', 
+			'file', 'pages', 'blog', 'bookmarks', 'discussions', 'event_manager', 'thewire', 'thewire_tools', 
 			'digest', 'feedback', 'survey', 'leaflet', 
 			// profile & social / registration / custom ACL
 			'profile_manager', 'friends', 'friend_request', 'elggx_userpoints', 
