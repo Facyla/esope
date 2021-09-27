@@ -8,6 +8,8 @@ return [
 	
 	// Paramètres
 	'theme_adf:settings:home_text' => "Texte de la page d'accueil",
+	'theme_adf:settings:footer_text' => "Texte du pied de page",
+	'theme_adf:settings:help_url' => "Accueil des pages d'aide",
 	
 	// Dépendances
 	'theme_adf:requisites' => "Pré-requis et dépendances",

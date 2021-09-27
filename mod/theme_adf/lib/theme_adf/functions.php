@@ -16,7 +16,7 @@ function theme_adf_public_pages($hook, $type, $return, $params) {
 function theme_adf_plugin_dependencies() {
 	$plugin_deps = [
 		// not enabling causes missing/unusable features or break functionnality
-		'requires' => ['groups', 'members', 'profile', 'notifications', 'search', 'activity', 'dashboard'],
+		'requires' => ['groups', 'members', 'profile', 'notifications', 'search', 'search_advanced', 'activity', 'dashboard'],
 		// enabling these should be an option - though recommended, may be disabled
 		'suggests' => [
 			// content

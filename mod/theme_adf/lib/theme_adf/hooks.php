@@ -192,6 +192,13 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 	$item->setPriority(900);
 	$new_menu[] = $item;
+	$help_url = elgg_get_plugin_setting('help_url', 'theme_adf');
+	if (!empty($help_url)) {
+		// Add submenus
+		$item = new ElggMenuItem('help-home', "Aide et documentation", $help_url);
+		$item->setParentName('help');
+		$new_menu[] = $item;
+	}
 	// Add submenus
 	$item = new ElggMenuItem('help-feedback', "Feedbacks", '/feedback');
 	$item->setParentName('help');

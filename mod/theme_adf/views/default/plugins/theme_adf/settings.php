@@ -64,7 +64,15 @@ if ($missing_required || $missing_optional) {
 
 
 echo '<h3>Paramètres de configuration</h3>';
+
 // Texte sur l'accueil
 echo '<div><label>' . elgg_echo('theme_adf:settings:home_text') . ' ' . elgg_view('input/longtext', ['name' => 'params[home_text]', 'value' => $plugin->home_text]) . '</label></div>';
+
+// Pied de page
+echo '<div><label>' . elgg_echo('theme_adf:settings:footer_text') . ' ' . elgg_view('input/longtext', ['name' => 'params[footer_text]', 'value' => $plugin->footer_text]) . '</label></div>';
+
+// Accueil des pges d'aide (URL)
+echo '<div><label>' . elgg_echo('theme_adf:settings:help_url') . ' ' . elgg_view('input/url', ['name' => 'params[help_url]', 'value' => $plugin->help_url]) . '</label></div>';
+
 
 

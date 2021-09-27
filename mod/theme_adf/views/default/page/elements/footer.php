@@ -6,8 +6,19 @@
 
 $url = elgg_get_site_url();
 
-echo '<img src="' . $url . 'mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png" style="padding: 1rem 2rem; max-height: 6rem;" />';
+echo '<img class="footer-logo" src="' . $url . 'mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png" />';
+
 echo elgg_view_menu('footer');
+
+$custom_footer = elgg_get_plugin_setting('footer_text', 'theme_adf');
+if (!empty($custom_footer)) {
+	$custom_footer = elgg_view('output/longtext', ['value' => $custom_footer]);
+} else {
+	if (elgg_is_admin_logged_in()) {
+		$custom_footer = '<p><a href="' . $url. '">Admin, vous pouvez intégrer ici un texte et des liens, via la configuration du thème.</a></p>';
+	}
+}
+echo '<div class="footer-adf">' . $custom_footer . '</div>';
 
 /*  
 Twitter https://twitter.com/adepartementsf
