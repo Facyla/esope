@@ -54,7 +54,12 @@ $user_icon = elgg_view_entity_icon($user, 'large', [
 	'use_link' => false,
 	'img_class' => 'photo u-photo',
 ]);
-$sidebar .= '<div class="" style="display: flex; justify-content: center; margin: 0 0 2rem 0;">' . $user_icon . '</div>';
+$sidebar .= '<div class="" style="display: flex; justify-content: center; margin: 0 0 0rem 0;">';
+$sidebar .= $user_icon;
+$sidebar .= '</div>';
+$sidebar .= '<div class="" style="text-align: center; margin: 0 0 2rem 0;">';
+$sidebar .= elgg_view_title($user->getDisplayName());
+$sidebar .= '</div>';
 //$sidebar .= '<div class="">' . elgg_view('profile_manager/profile_completeness', ['entity' => $user]) . '</div>';
 
 $content = '<div class="" style="display: flex; flex-wrap: wrap;">
@@ -73,7 +78,7 @@ echo elgg_view_page($title, [
 	//'header' => '',
 	'content' => $content,
 	'entity' => $user,
-	//'sidebar' => elgg_view('profile/owner_block', ['entity' => $user,]),
+	//'sidebar_alt' => elgg_view('profile/owner_block', ['entity' => $user,]),
 	'class' => 'profile',
 	'sidebar' => false,
 ]);
