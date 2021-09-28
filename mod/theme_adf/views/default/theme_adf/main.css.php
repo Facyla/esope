@@ -89,6 +89,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-menu-item-search-form [type="text"] { border-radius: .25rem 0 0 .25rem; }
 .elgg-menu-item-search-form [type="submit"] { background: #e57b5f; color: white; font-weight: bold; border-color: #e57b5f; border-radius: 0 .25rem .25rem 0; }
 
+.elgg-page-body .elgg-form-search { background: transparent; margin-bottom: 0; }
+.elgg-page-body .elgg-form-search .elgg-field { margin-bottom: 0; }
+
 .elgg-menu-item-entity-menu-toggle .elgg-menu-content { min-width: 1.5em; text-align: center; }
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-groups .elgg-child-menu { width: 20rem; max-width: 100vw; }
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-members .elgg-child-menu { width: 20rem; max-width: 100vw; }

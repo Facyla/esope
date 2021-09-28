@@ -57,14 +57,20 @@ if ($revision) {
 }
 
 if (elgg_extract('full_view', $vars)) {
-	$body = elgg_view('output/longtext', ['value' => $annotation->value]);
-
+	$body = '';
+	// Ajout lien d'édition
+	if ($entity->canEdit()) {
+		$body .= elgg_view('output/url', ['href' => elgg_get_site_url() . 'pages/edit/' . $entity->guid, 'text' => elgg_echo('theme_adf:page:edit'), 'class' => 'elgg-button elgg-button-action']);
+	}
+	$body .= elgg_view('output/longtext', ['value' => $annotation->value]);
 	$params = [
 		'metadata' => $metadata,
 		'show_summary' => true,
 		'icon_entity' => $icon_entity,
 		'body' => $body,
 		'show_responses' => elgg_extract('show_responses', $vars, false),
+		'time' => $entity->time_updated, // date de dernière mise à jour
+		'byline_owner_entity' => $owner,
 	];
 
 	$params = $params + $vars;

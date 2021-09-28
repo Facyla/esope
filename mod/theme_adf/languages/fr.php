@@ -34,6 +34,9 @@ return [
 	'theme_adf:digest:thewire' => "Au fil du réseau",
 	'theme_adf:digest:own_infos' => "Mes informations personnelles",
 	
+	// Pages wiki
+	'theme_adf:page:edit' => "Modifier cette page",
+	
 	// Overrides
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
 	
