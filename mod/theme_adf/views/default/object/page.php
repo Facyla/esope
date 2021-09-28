@@ -62,16 +62,24 @@ if (elgg_extract('full_view', $vars)) {
 	if ($entity->canEdit()) {
 		$body .= elgg_view('output/url', ['href' => elgg_get_site_url() . 'pages/edit/' . $entity->guid, 'text' => elgg_echo('theme_adf:page:edit'), 'class' => 'elgg-button elgg-button-action']);
 	}
-	$body .= elgg_view('output/longtext', ['value' => $annotation->value]);
+	// Ajout lien vers l'historique - s'il existe plus d'une version
+		$body .= elgg_view('output/url', ['href' => elgg_get_site_url() . 'pages/history/' . $entity->guid, 'text' => elgg_echo('theme_adf:page:history'), 'class' => 'elgg-button float-alt']);
+	if ($annotation) {
+		$body .= elgg_view('output/longtext', ['value' => $annotation->value]);
+	}
 	$params = [
 		'metadata' => $metadata,
 		'show_summary' => true,
 		'icon_entity' => $icon_entity,
 		'body' => $body,
 		'show_responses' => elgg_extract('show_responses', $vars, false),
-		'time' => $entity->time_updated, // date de dernière mise à jour
-		'byline_owner_entity' => $owner,
 	];
+	// date de dernière mise à jour - ne doit pas s'appliquer aux révisions sinon on affiche la date de dernière MAJ
+	if (!$revision) {
+		$params['time'] = $entity->time_updated;
+	}
+	// dernier auteur (au lieu du propriétaire)
+	$params['byline_owner_entity'] = $owner;
 
 	$params = $params + $vars;
 	echo elgg_view('object/elements/full', $params);
