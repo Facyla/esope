@@ -37,6 +37,7 @@ return [
 	// Pages wiki
 	'theme_adf:page:edit' => "Modifier cette page",
 	'theme_adf:page:history' => "Historique des versions",
+	'theme_adf:page:remove_parent' => "(aucune)",
 	
 	// Overrides
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',

@@ -23,14 +23,12 @@ return [
 			'searchable' => true,
 		],
 	],
+	*/
 
 	// Actions
 	'actions' => [
-		'naturalconnect/register' => [
-			'access' => 'public',
-		],
+		'pages/edit' => [],
 	],
-	*/
 	
 	
 	// Routes
