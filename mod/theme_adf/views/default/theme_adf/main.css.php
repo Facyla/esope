@@ -387,12 +387,13 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-nav-collapsed .elgg-nav-collapse { margin-top: 0; flex-direction: column; }
 	.elgg-nav-collapsed .elgg-nav-collapse nav { order: initial; height: auto; flex: 0 0 auto; position: relative; }
 	
-	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; }
+	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; min-width: 20rem; }
+
 	
 }
 
 
 @media (min-width: 50rem) {
-	
+	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; min-width: initial; }
 }
 
