@@ -68,6 +68,6 @@ return [
 	
 	// Overrides
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
-	
+	'profile_manager:register:mandatory' => "",
 ];
 
