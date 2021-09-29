@@ -117,6 +117,20 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-layout-sidebar, .elgg-layout-sidebar-alt, .elgg-layout-body { min-height: calc(100vh - 14rem); }
 }
 
+.elgg-sidebar-nav { height: 2.5rem; }
+.elgg-sidebar-alt-nav { height: 2.5rem; }
+.elgg-sidebar-button { width: 1.75rem; height: 1.35rem; margin: .825rem 1rem; position: relative; margin: .5rem .5rem; -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); transform: rotate(0deg); -moz-transition: ease-in-out .5s; -o-transition: ease-in-out .5s; -webkit-transition: ease-in-out .5s; transition: ease-in-out .5s; cursor: pointer; display: block; -webkit-order: 3; -ms-flex-order: 3; order: 3; -webkit-flex-grow: 0; flex-grow: 0; }
+@media only screen and (min-width: 80rem) {
+	.elgg-sidebar-button, .elgg-sidebar-alt-button { display: none; }
+}
+.elgg-sidebar-button span { display: block; position: absolute; height: .25rem; width: 100%; background: #2d3047; border-radius: 2px; opacity: 1; left: 0; -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); transform: rotate(0deg); -moz-transition: ease-in-out .25s; -o-transition: ease-in-out .25s; -webkit-transition: ease-in-out .25s; transition: ease-in-out .25s; }
+.elgg-sidebar-button span:nth-child(1) { top: 0; }
+.elgg-sidebar-button span:nth-child(2) { top: .55rem;; }
+.elgg-sidebar-button span:nth-child(3) { top: 1.1rem;; }
+.elgg-sidebar-collapsed .elgg-sidebar-button span:nth-child(1) { top: 6px; -moz-transform: rotate(135deg); -ms-transform: rotate(135deg); -webkit-transform: rotate(135deg); transform: rotate(135deg); }
+.elgg-sidebar-collapsed .elgg-sidebar-button span:nth-child(2) { opacity: 0; left: -60px; }
+.elgg-sidebar-collapsed .elgg-sidebar-button span:nth-child(3) { top: 6px; -moz-transform: rotate(-135deg); -ms-transform: rotate(-135deg); -webkit-transform: rotate(-135deg); transform: rotate(-135deg); }
+
 
 /* FOOTER */
 .elgg-page-footer { background: #0b2d51; border-top: 1px solid #e6e6ea; color: #cccccc; font-size: .9rem; }
@@ -244,7 +258,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-owner-group .elgg-layout-columns > .elgg-sidebar { padding-top: 0; }
 .elgg-sidebar .elgg-module > .elgg-head, .elgg-sidebar .elgg-module > .elgg-body { padding-left: 2rem; padding-right: 2rem; }
 .elgg-layout-header > h2, .elgg-layout-header > h3 { font-size: 1.5rem; }
-.elgg-layout-columns > .elgg-body { margin: 1rem 2rem; }
+.elgg-layout-columns > .elgg-body { margin: 1rem 2rem; min-width: 24rem; }
 .elgg-layout-one-column .elgg-layout-columns > .elgg-body { margin-left: 2rem; margin-right: 2rem; }
 
 .elgg-sidebar .elgg-menu, .elgg-sidebar .elgg-menu li { border: 0; }
@@ -259,7 +273,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-layout-columns > .elgg-sidebar-alt { order: 1; padding: 1rem .5rem; /* background: #e57b5f33; */ }
 .elgg-layout-columns > .elgg-sidebar-alt .elgg-module { background: white; }
 @media (min-width: 50rem) {
-	.elgg-layout-sidebar-alt { width: 20rem; margin-right: 0; }
+	.elgg-layout-sidebar-alt { width: auto; max-width: 20rem; margin-right: 0; }
 }
 
 .elgg-layout-header > .elgg-heading-main { padding: .25rem 1rem;; }
@@ -354,6 +368,8 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 }
 
 @media (max-width: 80rem) {
+	.elgg-page-topbar { position: initial; }
+	.elgg-page-body { margin-top: 0rem; }
 	.elgg-page-topbar > .elgg-inner { justify-content: space-between; }
 	.elgg-nav-logo { left: 0; margin-left: 0; }
 	.elgg-nav-logo h1 { padding: 0.5rem 1rem; line-height: 2rem; }
@@ -362,11 +378,15 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-nav-button span { height: .25rem; }
 	.elgg-nav-button span:nth-child(2) { top: .55rem; }
 	.elgg-nav-button span:nth-child(3) { top: 1.1rem; }
-
+	
 	.elgg-heading-site a { flex: 1; width: 8rem; }
+	
+	.elgg-layout-header { padding: 0rem 1rem .25rem 1rem; }
 	
 	.elgg-nav-collapsed .elgg-nav-collapse { margin-top: 0; flex-direction: column; }
 	.elgg-nav-collapsed .elgg-nav-collapse nav { order: initial; height: auto; flex: 0 0 auto; position: relative; }
+	
+	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; }
 	
 }
 

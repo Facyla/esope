@@ -205,8 +205,10 @@ input#feedback_id { width: 100%; }
 @media (max-width:700px) {
 	#feedbackWrapper { position: initial; margin-top: 12px; }
 	#feedBackToggler { position: initial; transform: rotate(90deg); margin-left: 70px; transform-origin: bottom right; height: 30px;  }
+	#feedBackTogglerLink { border-radius: 8px 0 0 0; }
 	#feedBackContentWrapper { background: white; left:0; }
 	#feedBackContent { width: auto; max-width: 94%; margin-top: 1rem; }
+	
 	
 	/* pour changer l'ordre des champs
 	#feedBackForm { display: flex; flex-direction: column; }

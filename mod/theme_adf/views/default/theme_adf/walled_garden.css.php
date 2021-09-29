@@ -31,4 +31,5 @@ $url = elgg_get_site_url();
 .elgg-page-footer .elgg-inner { display: flex; flex-wrap: wrap; }
 .elgg-page-footer .footer-logo { flex: 0 0 auto; margin-right: 3rem; }
 .footer-adf { flex: 1 1 0; }
+.footer-adf p { min-width: 12rem; }
 
