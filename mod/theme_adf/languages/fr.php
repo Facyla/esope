@@ -32,7 +32,7 @@ return [
 	'theme_adf:menu:groups:search' => "Rechercher un espace de travail",
 	'theme_adf:menu:groups:join' => "Rejoignez un espace de travail",
 	'theme_adf:menu:members' => "Annuaire",
-	'theme_adf:menu:help' => "Aide et documentation",
+	'theme_adf:menu:help' => "Aide",
 	'theme_adf:menu:dashboard' => "Tableau de bord",
 	'theme_adf:menu:members_adf' => "Membres de Départements en Réseaux",
 	'theme_adf:menu:friends' => "Mes contacts",
