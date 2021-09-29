@@ -22,8 +22,10 @@ $url = elgg_get_site_url();
 .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 40vw; min-width: 30rem; max-width: calc(100% - 4rem); }
 .elgg-page-body { margin: 2rem 3rem; }
 
-.elgg-page-footer { width: 100%; background: #0b2d51; color: #ffffff; padding: 1.5rem 3rem; }
-.elgg-page-footer .elgg-inner { display: flex; }
+.elgg-page-footer { width: 100%; padding: 1.5rem 3rem; background: #0b2d51; border-top: 1px solid #e6e6ea; color: #cccccc; font-size: .9rem; }
+.elgg-page-footer a { color: #F0F0F0; }
+.elgg-page-footer a:hover { color: #FFFFFF; }
+.elgg-page-footer .elgg-inner { display: flex; flex-wrap: wrap; }
 .elgg-page-footer .footer-logo { flex: 0 0 auto; margin-right: 3rem; }
-.elgg-page-footer {  }
+.footer-adf { flex: 1 1 0; }
 
