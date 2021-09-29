@@ -394,7 +394,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 }
 
 
-@media (min-width: 50rem) {
+@media (max-width: 50rem) {
 	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; min-width: initial; }
+	.elgg-image-block { flex-direction: column; }
+	.elgg-image-block > .elgg-body { /* display: flex; flex-direction: column; */ }
 }
 
