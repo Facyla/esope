@@ -398,5 +398,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; min-width: initial; }
 	.elgg-image-block { flex-direction: column; }
 	.elgg-image-block > .elgg-body { /* display: flex; flex-direction: column; */ }
+	.elgg-module-home-thewire-global .elgg-list-entity, .elgg-module-home-my-groups .elgg-list-entity, .elgg-module-home-my-groups .elgg-list-river { max-height: initial; }
+	
 }
 
