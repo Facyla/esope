@@ -20,7 +20,7 @@ $url = elgg_get_site_url();
 .elgg-page-walled-garden > .elgg-inner { width: 40vw; min-width: 30rem; max-width: calc(100% - 4rem); }
 .elgg-page-body { margin: 2rem 3rem; }
 
-.elgg-page-footer { background: #0b2d51; color: #ffffff; padding: 1.5rem 3rem; }
+.elgg-page-footer { width: 100%; background: #0b2d51; color: #ffffff; padding: 1.5rem 3rem; }
 .elgg-page-footer .elgg-inner { display: flex; }
 .elgg-page-footer .footer-logo { flex: 0 0 auto; margin-right: 3rem; }
 .elgg-page-footer {  }
