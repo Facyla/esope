@@ -20,6 +20,7 @@ $url = elgg_get_site_url();
 #register-link a { color: #2d3047; }
 
 .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 70vw; min-width: 30rem; max-width: calc(100% - 4rem); }
+.elgg-context-main .elgg-page-walled-garden > .elgg-inner, 
 .elgg-context-login .elgg-page-walled-garden > .elgg-inner, 
 .elgg-context-register .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 40vw; min-width: 30rem; max-width: calc(100% - 4rem); }
 .elgg-page-body { margin: 2rem 3rem; }
