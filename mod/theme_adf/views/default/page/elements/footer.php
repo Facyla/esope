@@ -9,7 +9,7 @@ $url = elgg_get_site_url();
 echo '<div class="footer-logo"><img class="logo" src="' . $url . 'mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png" /></div>';
 
 // Menu du footer
-//echo elgg_view_menu('footer');
+echo elgg_view_menu('footer');
 
 $custom_footer = elgg_get_plugin_setting('footer_text', 'theme_adf');
 if (!empty($custom_footer)) {
