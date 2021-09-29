@@ -304,6 +304,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul .elgg-child-menu li a {  }
 
 /* Menu compte utilisateur */
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu li .elgg-child-menu { position: initial; }
 .elgg-nav-collapsed .elgg-page-topbar .elgg-menu-topbar .elgg-menu-item-account > .elgg-menu-parent { display: block; }
 .elgg-nav-collapsed .elgg-page-topbar .elgg-menu-topbar .elgg-menu-item-account > a > .elgg-icon { display: none; }
 .elgg-nav-collapsed .elgg-page-topbar .elgg-menu-topbar .elgg-menu-item-account > .elgg-child-menu { display: flex; }
