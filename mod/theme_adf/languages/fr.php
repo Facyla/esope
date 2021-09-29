@@ -43,6 +43,8 @@ return [
 	'theme_adf:menu:search:submit' => "Rechercher",
 	'theme_adf:menu:search:placeholder' => "Rechercher un contenu...",
 	
+	'theme_adf:login' => "S'identifier",
+	'theme_adf:register' => "S'inscrire",
 	
 	// Accueil
 	'theme_adf:my_groups:noactivity' => "Aucune activité dans vos espaces de travail.",

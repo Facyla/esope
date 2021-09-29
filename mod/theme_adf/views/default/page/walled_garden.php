@@ -18,9 +18,12 @@ $content = elgg_extract('body', $vars);
 
 $header_logo = elgg_view('page/elements/header_logo');
 $header = '';
-$header .= elgg_view('core/account/login_dropdown');
-if (elgg_get_config('allow_registration')) {
-	$header .= '<div id="register-link">' . elgg_view('output/url', ['href' => "{$url}register", 'text' => elgg_echo('register')]) . '</div>';
+if (elgg_get_config('allow_registration') && !elgg_in_context('register')) {
+	$header .= '<div id="register-link">' . elgg_view('output/url', ['href' => "{$url}register", 'text' => elgg_echo('theme_adf:register')]) . '</div>';
+}
+if (!elgg_in_context('login')) {
+	$header .= '<div id="login-link">' . elgg_view('output/url', ['href' => "{$url}login", 'text' => elgg_echo('theme_adf:login')]) . '</div>';
+	//$header .= elgg_view('core/account/login_dropdown');
 }
 
 //$footer = elgg_view('page/elements/walled_garden/footer', $vars);
