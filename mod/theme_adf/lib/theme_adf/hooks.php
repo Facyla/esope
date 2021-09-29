@@ -178,6 +178,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	$item = new ElggMenuItem('search', elgg_echo('theme_adf:menu:search'), '/search');
 	//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 	$item->setPriority(500);
+	$item->icon = 'search';
 	$new_menu[] = $item;
 	// Add submenus
 	//$search_form = elgg_view_form('search', [], []);
@@ -196,6 +197,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 		$item = new ElggMenuItem('help', elgg_echo('theme_adf:menu:help') . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
 		//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 		$item->setPriority(900);
+		$item->icon = 'info-circle';
 		$new_menu[] = $item;
 		
 		// Add submenus

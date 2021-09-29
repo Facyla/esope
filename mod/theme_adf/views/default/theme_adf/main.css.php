@@ -263,17 +263,46 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 }
 
 .elgg-layout-header > .elgg-heading-main { padding: .25rem 1rem;; }
-.elgg-layout-header > .elgg-menu-container { padding: .25rem 1rem;; }
-.elgg-nav-collapsed .elgg-nav-collapse { display: flex; flex-direction: row; flex-wrap: wrap; }
+.elgg-layout-header > .elgg-menu-container { padding: .25rem 1rem; }
+
+/* Menu mobile */
+.elgg-nav-collapsed .elgg-nav-collapse { /* display: flex; flex-direction: row; flex-wrap: wrap; */ Display: block; }
+.elgg-nav-collapsed .elgg-nav-collapse nav {  }
+.elgg-nav-collapsed .elgg-nav-collapse nav > ul { display: flex; flex-wrap: nowrap; flex-direction: row; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul { display: flex; justify-content: space-evenly; }
+.elgg-nav-collapsed .elgg-nav-collapse nav > ul > li { display: inline-block; width: auto; }
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu li:hover > a.elgg-menu-parent::after { display: none !important; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-site-container > ul > li > a { padding: .25rem .25rem; text-align: center; }
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu-site-container .elgg-menu-site .elgg-anchor-icon { display: block; margin: 0 auto; font-size: 2rem; }
+.elgg-nav-collapsed .elgg-nav-collapse nav > ul > li > a .elgg-anchor-label { font-size: .75rem; word-break: initial; }
+.elgg-nav-collapsed .elgg-nav-collapse nav > ul > li > a .elgg-anchor-label i.fa { display: none !important; }
+
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-site-container ul li ul.elgg-child-menu { display: none !important; }
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu li.elgg-state-selected > a { border-bottom: 0; }
+
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container > ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 1rem 1rem; border-top: 1px solid rgba(255,255,255,.3); }
 
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container { flex: 0 1 auto; flex: 1 0 100%; }
-.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 1rem 1rem; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 0 0; }
 
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container { flex: 1 1 auto; }
-.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul { display: block; }
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(14rem,1fr)); grid-gap: 0rem 0rem; padding-left: 1rem; width: auto; }
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul .elgg-child-menu li a {  }
+
+/* Menu compte utilisateur */
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu-topbar .elgg-menu-item-account > .elgg-menu-parent { display: block; }
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu-topbar .elgg-menu-item-account > a > .elgg-icon { display: none; }
+.elgg-nav-collapsed .elgg-page-topbar .elgg-menu-topbar .elgg-menu-item-account > .elgg-child-menu { display: flex; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-topbar-container ul li ul.elgg-child-menu { padding: 0; background: #0b2d51; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-topbar-container ul li ul.elgg-child-menu a { padding: .25rem .25rem; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-topbar-container ul li ul.elgg-child-menu a .elgg-badge { display: inline; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-topbar-container ul li ul.elgg-child-menu a .elgg-anchor-label { font-size: .75rem; }
+
+/* Menu topbar outils utilisateur */
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container > ul.elgg-menu-topbar-default { order: -1; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-topbar-container > ul > li > a { padding: .25rem .25rem; }
+.elgg-nav-collapsed .elgg-nav-collapse nav.elgg-menu-topbar-container > ul { grid-gap: 0rem 0rem; }
+
 
 .elgg-menu-page, .elgg-menu-owner-block { background: transparent; }
 .elgg-menu-page li.elgg-state-selected > a, .elgg-menu-owner-block li.elgg-state-selected > a { background-color: #fff; }
