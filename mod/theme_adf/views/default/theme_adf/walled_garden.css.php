@@ -21,7 +21,8 @@ $url = elgg_get_site_url();
 
 .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 70vw; min-width: 30rem; max-width: calc(100% - 4rem); }
 .elgg-context-main .elgg-page-walled-garden > .elgg-inner, 
-.elgg-context-login .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 40vw; min-width: 30rem; max-wi.elgg-context-register .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 50vw; min-width: 30rem; max-width: calc(100% - 4rem); }
+.elgg-context-login .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 40vw; min-width: 30rem; max-width: calc(100% - 4rem); }
+.elgg-context-register .elgg-page-walled-garden > .elgg-inner { flex: 1 0 auto; width: 50vw; min-width: 30rem; max-width: calc(100% - 4rem); }
 .elgg-page-body { margin: 2rem 3rem; }
 
 .elgg-page-footer { width: 100%; padding: 1.5rem 3rem; background: #0b2d51; border-top: 1px solid #e6e6ea; color: #cccccc; font-size: .9rem; }
