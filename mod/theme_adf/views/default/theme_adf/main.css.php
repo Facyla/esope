@@ -128,6 +128,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-footer .footer-adf { padding: 0 2rem 2rem 2rem; margin: 0 0 0 0; align-self: flex-end; }
 
 
+/* Accueil public (walled garden) : cf. walled_garden.css extensions */
+
+
 /* Accueil */
 .elgg-layout-header .elgg-form-thewire-add { flex: 1; }
 .elgg-context-index .elgg-form-thewire-add .elgg-input-access { visibility: hidden; }
@@ -158,6 +161,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 .elgg-menu-title-widgets-container { justify-content: initial; }
 .elgg-menu-title-widgets-container .elgg-more { font-size: 1.25rem; font-weight: 500;}
+.elgg-widget-content > ul.elgg-list-river > li { padding: 0; }
 
 
 /* ANNUAIRE */

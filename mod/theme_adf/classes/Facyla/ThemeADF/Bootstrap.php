@@ -22,6 +22,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		// Extend CSS with custom styles
 		elgg_extend_view('elgg.css', 'theme_adf/main.css', 900);
 		elgg_extend_view('admin.css', 'theme_adf/admin.css', 900);
+		elgg_extend_view('walled_garden.css', 'theme_adf/walled_garden.css', 900);
 		
 		elgg_extend_view('page/elements/owner_block', 'theme_adf/groups/sidebar/search', 0);
 		

@@ -6,7 +6,7 @@
 
 $url = elgg_get_site_url();
 
-echo '<img class="footer-logo" src="' . $url . 'mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png" />';
+echo '<div class="footer-logo"><img class="logo" src="' . $url . 'mod/theme_adf/graphics/logo-ADF-assemblee-des-departements-de-france_long.png" /></div>';
 
 echo elgg_view_menu('footer');
 
