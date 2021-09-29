@@ -30,7 +30,7 @@ return [
 	'theme_adf:menu:search' => "Recherche",
 	'theme_adf:menu:groups' => "Espaces de travail",
 	'theme_adf:menu:groups:search' => "Rechercher un espace de travail",
-	'theme_adf:menu:groups:join' => "Rejoigner un espace de travail",
+	'theme_adf:menu:groups:join' => "Rejoignez un espace de travail",
 	'theme_adf:menu:members' => "Annuaire",
 	'theme_adf:menu:help' => "Aide et documentation",
 	'theme_adf:menu:dashboard' => "Tableau de bord",
@@ -54,6 +54,10 @@ return [
 	'theme_adf:digest:groupactivity' => "Activité dans mes espaces de travail",
 	'theme_adf:digest:thewire' => "Au fil du réseau",
 	'theme_adf:digest:own_infos' => "Mes informations personnelles",
+	
+	// Activity
+	'theme_adf:activity:groups' => "Activité dans mes Groupes",
+	'theme_adf:activity:groups:tab' => "Groupes",
 	
 	// Pages wiki
 	'theme_adf:page:edit' => "Modifier cette page",

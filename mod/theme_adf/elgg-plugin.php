@@ -37,7 +37,13 @@ return [
 			'path' => '/contributions/{container_guid?}',
 			'resource' => 'contributions',
 		],
-		
+		'collection:river:groups' => [
+			'path' => '/activity/groups',
+			'resource' => 'river',
+			'required_plugins' => [
+				'groups',
+			],
+		],
 	],
 	
 	
@@ -62,6 +68,11 @@ return [
 			// Set up site menu
 			'menu:site' => [
 				'theme_adf_site_menu' => ['priority' => 1000],
+			],
+		],
+		'filter_tabs' => [
+			'all' => [
+				'theme_adf_activity_groups_tab' => [],
 			],
 		],
 	],

@@ -224,12 +224,7 @@ $thewire_global .= '<p>' . elgg_view('output/url', [
 // Activité dans mes groupes
 //$activity_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
 // check of the user is a member of any groups
-$user_groups = $user->getGroups([
-	'limit' => false,
-	'callback' => function ($row) {
-		return (int) $row->guid;
-	},
-]);
+$user_groups = theme_adf_get_user_groups_guids();
 if ($user_groups) {
 	/*
 	$activity_my_groups = elgg_list_entities([

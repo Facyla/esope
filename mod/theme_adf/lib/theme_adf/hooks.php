@@ -241,7 +241,7 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	$item->setParentName('groups');
 	$new_menu[] = $item;
 	// Global view
-	$item = new ElggMenuItem("home-dashboard", elgg_echo('theme_adf:menu:groups:dashboard'), "/");
+	$item = new ElggMenuItem("home-dashboard", elgg_echo('theme_adf:menu:dashboard'), "/");
 	$item->setParentName('groups');
 	$new_menu[] = $item;
 	// my groups
@@ -358,5 +358,23 @@ function theme_adf_head_page_hook(\Elgg\Hook $hook) {
 	return $return;
 }
 
+// Ajout d'un onglet avec l'activité dans mes groupes
+function theme_adf_activity_groups_tab(\Elgg\Hook $hook) {
+	$user = $hook->getUserParam();
+	if (!$user instanceof ElggUser) { return; }
+	$vars = $hook->getParam('vars');
+	$selected = $hook->getParam('selected');
+	$type = $hook->getType();
+
+	$items = $hook->getValue();
+	$items[] = ElggMenuItem::factory([
+		'name' => 'groups',
+		'text' => elgg_echo('theme_adf:activity:groups:tab'),
+		'href' => (isset($vars['groups_link'])) ? $vars['groups_link'] : "$type/groups",
+		'selected' => ($selected == 'groups'),
+		'priority' => 200,
+	]);
+	return $items;
+}
 
 

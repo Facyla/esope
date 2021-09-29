@@ -36,3 +36,16 @@ function theme_adf_plugin_dependencies() {
 	return $plugin_deps;
 }
 
+// Liste des GUIDs des groupes d'un user
+function theme_adf_get_user_groups_guids() {
+	if (!elgg_is_logged_in()) { return false; }
+	$user = elgg_get_logged_in_user_entity();
+	return $user->getGroups([
+		'limit' => false,
+		'callback' => function ($row) {
+			return (int) $row->guid;
+		},
+	]);
+}
+
+
