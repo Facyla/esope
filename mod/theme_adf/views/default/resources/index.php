@@ -207,12 +207,12 @@ $options = [
 	'limit' => max(2, $default_limit),
 	//'order_by' => ['e.time_created', 'desc'],
 	'pagination' => false, 
-	];
+];
 // Exclude group containers
 $options['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($container_type) {
-		$c_join = $qb->joinEntitiesTable($main_alias, 'container_guid');
-		return $qb->compare("{$c_join}.type", '!=', 'group', ELGG_VALUE_STRING);
-	};
+	$c_join = $qb->joinEntitiesTable($main_alias, 'container_guid');
+	return $qb->compare("{$c_join}.type", '!=', 'group', ELGG_VALUE_STRING);
+};
 $thewire_global .= elgg_list_entities($options);
 $thewire_global .= '<p>' . elgg_view('output/url', [
 	'href' => elgg_get_site_url() . 'thewire/all',
@@ -225,6 +225,8 @@ $thewire_global .= '<p>' . elgg_view('output/url', [
 //$activity_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
 // check of the user is a member of any groups
 $user_groups = theme_adf_get_user_groups_guids();
+$user_groups_sql_in = theme_adf_get_user_groups_guids('sql_in');
+$user_groups_clauses = theme_adf_get_user_groups_guids('where_clause');
 if ($user_groups) {
 	/*
 	$activity_my_groups = elgg_list_entities([
@@ -242,9 +244,40 @@ if ($user_groups) {
 		'limit' => max(2, $default_limit),
 		'pagination' => false,
 		//'wheres' => [new GroupRiverFilter($group)],
-		'container_guids' => $user_groups,
+		'wheres' => [
+			/*
+		function(QueryBuilder $qb, $main_alias) {
+				$user_groups_clauses = theme_adf_get_user_groups_guids('where_clause');
+				return $qb->merge($user_groups_clauses, 'AND'); 
+			},
+			// marche si 1 seul groupe, pas avec plusieurs (à cause du AND : comment le  changer en OR ?)
+			$user_groups_clauses,   // utiliser : 'wheres' => $user_groups_clauses  (et PAS dans un array)
+			
+			function(QueryBuilder $qb, $main_alias) {
+				$user_groups_clauses = theme_adf_get_user_groups_guids('where_clause');
+				return $qb->merge([$user_groups_clauses], 'AND'); 
+			},
+			*/
+			// Filtre uniquement les éléments de la rivière dont le container est un groupe dont l'user est membre
+			// note : ne liste donc pas les commentaires
+			function(QueryBuilder $qb, $main_alias) use ($container_type) {
+				$c_join = $qb->joinEntitiesTable($main_alias, 'object_guid');
+				$user_groups_sql_in = theme_adf_get_user_groups_guids('array');
+				return $qb->compare("{$c_join}.container_guid", 'IN', $user_groups_sql_in, ELGG_VALUE_STRING);
+			},
+		],
+//		'container_guids' => $user_groups,
 		'no_results' => elgg_echo('theme_adf:my_groups:noactivity'),
 	];
+	// @TODO Exclude comments on feedbacks
+	//$river_params['wheres'][] = "subtype != 'feedback'";
+	/*
+	$river_params['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($container_type) {
+		$c_join = $qb->joinEntitiesTable($main_alias, 'container_guid');
+		return $qb->compare("{$c_join}.type", '!=', 'group', ELGG_VALUE_STRING);
+	};
+	*/
+	
 	$activity_my_groups_count = elgg_get_river($river_params + ['count' => true]);
 	$activity_my_groups = elgg_list_river($river_params);
 	// Add button if more content
@@ -264,14 +297,14 @@ if ($user_groups) {
 		'text' => elgg_echo('theme_adf:menu:groups:join'),
 		'class' => "elgg-button elgg-button-action",
 	]);
+	// Liens vers plus toute l'activité du site
+	$activity_my_groups .= elgg_view('output/url', [
+		'href' => elgg_get_site_url() . 'activity/all',
+		'text' => elgg_echo('theme_adf:activity:viewall'),
+		'is_trusted' => true,
+		'class' => "elgg-button elgg-pagination",
+	]);
 }
-// Liens vers plus d'activités dans mes groupes + toute l'activité du site
-$activity_my_groups .= elgg_view('output/url', [
-	'href' => elgg_get_site_url() . 'activity/all',
-	'text' => elgg_echo('theme_adf:activity:viewall'),
-	'is_trusted' => true,
-	'class' => "elgg-button elgg-pagination",
-]);
 
 $content .= '<div style="border: 1px solid #e57b5f;">';
 	$content .= '<h3 style="background: #e57b5f; padding: .5rem 1rem; color: white; font-size: 1.5rem; margin-bottom: 1rem;">Discussions en cours</h3>';

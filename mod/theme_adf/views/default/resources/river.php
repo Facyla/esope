@@ -2,6 +2,9 @@
 /**
  * Main activity stream list page
  */
+use Elgg\Database\QueryBuilder;
+use Elgg\Database\Clauses\OrderByClause;
+use Elgg\Activity\GroupRiverFilter;
 
 $options = [
 	'distinct' => false,
@@ -61,7 +64,12 @@ switch ($request->getRoute()) {
 			$title = elgg_echo('theme_adf:activity:groups');
 			$user_groups = theme_adf_get_user_groups_guids();
 			$page_filter = 'groups';
-			$options['container_guids'] = $user_groups;
+			//$options['container_guids'] = $user_groups;
+			$options['wheres'] = function(QueryBuilder $qb, $main_alias) use ($container_type) {
+				$c_join = $qb->joinEntitiesTable($main_alias, 'object_guid');
+				$user_groups_sql_in = theme_adf_get_user_groups_guids('array');
+				return $qb->compare("{$c_join}.container_guid", 'IN', $user_groups_sql_in, ELGG_VALUE_STRING);
+			};
 			break;
 		}
 	default:

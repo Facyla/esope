@@ -4,6 +4,10 @@
  *
 */
 
+use Elgg\Database\QueryBuilder;
+use Elgg\Database\Clauses\OrderByClause;
+use Elgg\Activity\GroupRiverFilter;
+
 // Permet l'accès à diverses pages en mode "walled garden"
 function theme_adf_public_pages($hook, $type, $return, $params) {
 	// Digest
@@ -37,15 +41,40 @@ function theme_adf_plugin_dependencies() {
 }
 
 // Liste des GUIDs des groupes d'un user
-function theme_adf_get_user_groups_guids() {
+// @param $return_type : array | where_clause
+function theme_adf_get_user_groups_guids($return_type = 'array') {
 	if (!elgg_is_logged_in()) { return false; }
 	$user = elgg_get_logged_in_user_entity();
-	return $user->getGroups([
-		'limit' => false,
-		'callback' => function ($row) {
-			return (int) $row->guid;
-		},
-	]);
+	switch($return_type) {
+		case "where_clause":
+			$return = [];
+			$user_groups = $user->getGroups(['limit' => false]);
+			if ($user_groups) {
+				foreach($user_groups as $group) {
+					$return[] = new GroupRiverFilter($group);
+					break;
+				}
+			}
+			break;
+		case "sql_in":
+			$guids = $user->getGroups([
+				'limit' => false,
+				'callback' => function ($row) {
+					return (int) $row->guid;
+				},
+			]);
+			$return  = implode(',', $guids);
+			break;
+		case "array":
+		default:
+			$return = $user->getGroups([
+				'limit' => false,
+				'callback' => function ($row) {
+					return (int) $row->guid;
+				},
+			]);
+	}
+	return $return;
 }
 
 
