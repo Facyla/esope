@@ -149,6 +149,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-layout-header .elgg-form-thewire-add { flex: 1; }
 .elgg-context-index .elgg-form-thewire-add .elgg-input-access { visibility: hidden; }
 
+.elgg-module { max-width: 100%; }
 .elgg-module-home-mygroups { border: 5px solid #5ba2d9; padding: 1rem; border-radius: 2rem; }
 .elgg-module-home-mygroups ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(6rem,1fr)); grid-gap: .5rem 0.25rem; }
 .elgg-module-home-mygroups li { list-style: none; }
