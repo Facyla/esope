@@ -30,6 +30,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		// extend the site CSS
 		elgg_extend_view('elgg.css', 'feedback/main.css');
 		elgg_extend_view('admin.css', 'feedback/admin.css');
+		elgg_extend_view('walled_garden.css', 'feedback/main.css');
 		
 		//elgg_require_js('feedback/feedback');
 		
