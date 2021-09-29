@@ -152,6 +152,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-module-home-thewire-global .elgg-list-entity { max-height: calc(80vh - 12rem); overflow: auto; }
 
 .elgg-module-home-my-groups .elgg-list-entity { max-height: 80vh; overflow: auto; }
+.elgg-module-home-my-groups .elgg-list-river { max-height: calc(80vh - 2rem); overflow: auto; }
 .groups-mine { width: 100%; }
 .groups-mine ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(6rem,1fr)); grid-gap: .5rem 0.25rem; }
 
@@ -190,11 +191,12 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 /* GROUPES */
 .elgg-module-info > .elgg-head { background: initial; }
 .elgg-sidebar .elgg-module.elgg-owner-block > .elgg-head { padding: 0 0 1rem 0; }
-.elgg-owner-block .elgg-chip { position: relative; margin: 0 auto; /* width: 100%; */ }
+.elgg-owner-block .elgg-chip { position: relative; margin: 0 auto; width: 100%; display: flex; flex-direction: column-reverse; }
 .elgg-owner-block .elgg-chip .elgg-image { margin: 0; }
-.elgg-owner-block .elgg-chip .elgg-body { position: absolute; padding: 1rem; text-align: center; left: 0; right: 0; top: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,.1); text-shadow: 1px 1px 1px #000; }
+.elgg-owner-block .elgg-chip .elgg-body { /* position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: rgba(0,0,0,.1); text-shadow: 1px 1px 1px #000; */ padding: .5rem 1rem .75rem 1rem; text-align: center; display: flex; justify-content: center; align-items: center; background: transparent; text-shadow: none; width: 100%; }
 .elgg-owner-block .elgg-chip .elgg-body:hover { background: rgba(0,0,0,.7); transition-duration: .5s; }
-.elgg-owner-block .elgg-chip .elgg-body h3 a { color: white; }
+.elgg-owner-block .elgg-chip .elgg-body h3 a { color: #2d3047; }
+.elgg-owner-block .elgg-chip .elgg-body:hover h3 a { color: #ffffff; }
 
 .groups-profile-fields { border: 0; }
 .groups-profile-fields .elgg-profile-fields { padding: 0; }
@@ -232,6 +234,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 */
 
 .elgg-layout-breadcrumbs { display: none; }
+.elgg-owner-group .elgg-layout-breadcrumbs { display: block; }
 .elgg-layout-header { background: #dee3e8; border: 0; /* background: #244263; border-bottom: 1px solid #0b2d51; color: white; */ margin-bottom: 0; padding: 1rem 2rem 0.25rem 2rem; }
 .elgg-layout-columns > .elgg-sidebar { background: #fafafa; background: white; background: #0b2d5122; padding: 1rem 0 1rem 0rem; /* border-right: 1px solid #244263; */ margin-right: 0rem; }
 .elgg-owner-group .elgg-layout-columns > .elgg-sidebar { padding-top: 0; }
@@ -318,9 +321,20 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 }
 
 @media (max-width: 80rem) {
+	.elgg-page-topbar > .elgg-inner { justify-content: space-between; }
 	.elgg-nav-logo { left: 0; margin-left: 0; }
-	.elgg-nav-logo h1 { padding: 0.5rem 1rem; line-height: 2.5rem; }
+	.elgg-nav-logo h1 { padding: 0.5rem 1rem; line-height: 2rem; }
+	.elgg-nav-logo h1 a { padding: 0; }
+	.elgg-nav-button { width: 1.75rem; height: 1.35rem; margin: 0.825rem 1rem; }
+	.elgg-nav-button span { height: .25rem; }
+	.elgg-nav-button span:nth-child(2) { top: .55rem; }
+	.elgg-nav-button span:nth-child(3) { top: 1.1rem; }
+
 	.elgg-heading-site a { flex: 1; width: 8rem; }
+	
+	.elgg-nav-collapsed .elgg-nav-collapse { margin-top: 0; flex-direction: column; }
+	.elgg-nav-collapsed .elgg-nav-collapse nav { order: initial; height: auto; flex: 0 0 auto; position: relative; }
+	
 }
 
 

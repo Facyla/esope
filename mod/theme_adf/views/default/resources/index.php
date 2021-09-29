@@ -2,6 +2,8 @@
 // Page d'accueil
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Clauses\OrderByClause;
+//use Elgg\Activity\GroupRiverFilter;
+
 
 $user = elgg_get_logged_in_user_entity();
 elgg_push_context('index'); // basic context for widgets
@@ -26,6 +28,7 @@ if (!$user) {
 // @TODO ajouter filtre par type de contenus
 $title = elgg_echo('welcome:user', [$user->getDisplayName()]);
 $sidebar = null;
+$default_limit = elgg_get_config('default_limit');
 
 $content = '';
 $content .= "<h1 style=\"color:#e57b5f;\">Départements en Réseaux</h1>";
@@ -201,7 +204,7 @@ $thewire_global = elgg_view('thewire_tools/activity_post', $vars);
 $options = [
 	'type' => 'object', 'subtype' => 'thewire', 
 	//'container_guids' => $user_groups_guids_list,
-	'limit' => max(2, elgg_get_config('default_limit')),
+	'limit' => max(2, $default_limit),
 	//'order_by' => ['e.time_created', 'desc'],
 	'pagination' => false, 
 	];
@@ -218,14 +221,68 @@ $thewire_global .= '<p>' . elgg_view('output/url', [
 	'class' => "elgg-button elgg-pagination",
 ]) . '</p>';
 
-// Activité des groupes
-$discussions_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
+// Activité dans mes groupes
+//$activity_my_groups = elgg_view('discussion/listing/my_groups', ['entity' => $user]);
+// check of the user is a member of any groups
+$user_groups = $user->getGroups([
+	'limit' => false,
+	'callback' => function ($row) {
+		return (int) $row->guid;
+	},
+]);
+if ($user_groups) {
+	/*
+	$activity_my_groups = elgg_list_entities([
+		'type' => 'object',
+		'subtype' => 'discussion',
+		'container_guids' => $user_groups,
+		'limit' => max(20, $default_limit),
+		'order_by' => new OrderByClause('e.last_action', 'desc'),
+		'no_results' => elgg_echo('discussion:none'),
+	]);
+	*/
+	// Activité dans mes groupes : devrait permettre renvoi sur page de suivi/filtrage de l'activité
+	$river_params = [
+		//'limit' => 4,
+		'limit' => max(2, $default_limit),
+		'pagination' => false,
+		//'wheres' => [new GroupRiverFilter($group)],
+		'container_guids' => $user_groups,
+		'no_results' => elgg_echo('theme_adf:my_groups:noactivity'),
+	];
+	$activity_my_groups_count = elgg_get_river($river_params + ['count' => true]);
+	$activity_my_groups = elgg_list_river($river_params);
+	// Add button if more content
+	if ($activity_my_groups_count > $default_limit) {
+		$activity_my_groups .= '<br />' . elgg_view('output/url', [
+			'href' => elgg_get_site_url() . 'activity/groups',
+			'text' => elgg_echo('theme_adf:my_groups:viewall'),
+			'is_trusted' => true,
+			'class' => "elgg-button elgg-pagination",
+		]);
+	}
+} else {
+	// Aucun groupe : inviter à rejoindre
+	$activity_my_groups = '<p>' . elgg_echo('theme_adf:my_groups:nogroup') . '</p>';
+	$activity_my_groups .= elgg_view('output/url', [
+		'href' => elgg_get_site_url() . "groups/all",
+		'text' => elgg_echo('theme_adf:menu:groups:join'),
+		'class' => "elgg-button elgg-button-action",
+	]);
+}
+// Liens vers plus d'activités dans mes groupes + toute l'activité du site
+$activity_my_groups .= elgg_view('output/url', [
+	'href' => elgg_get_site_url() . 'activity/all',
+	'text' => elgg_echo('theme_adf:activity:viewall'),
+	'is_trusted' => true,
+	'class' => "elgg-button elgg-pagination",
+]);
 
 $content .= '<div style="border: 1px solid #e57b5f;">';
 	$content .= '<h3 style="background: #e57b5f; padding: .5rem 1rem; color: white; font-size: 1.5rem; margin-bottom: 1rem;">Discussions en cours</h3>';
 	$content .= '<div style="display:flex; flex-wrap: wrap;">';
 	$content .= elgg_view_module('home-thewire-global', elgg_echo("Au fil du réseau"), $thewire_global);
-	$content .= elgg_view_module('home-my-groups', elgg_echo("Activités dans mes espaces de travail"), $discussions_my_groups);
+	$content .= elgg_view_module('home-my-groups', elgg_echo("Activités dans mes espaces de travail"), $activity_my_groups);
 	$content .= '</div>';
 $content .= '</div>';
 

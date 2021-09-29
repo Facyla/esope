@@ -144,11 +144,11 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 			case 'groups':
 				$item->setPriority(200);
 				//$item->setText($item->getText() . '&nbsp;<i class="fa fa-caret-down"></i>');
-				$item->setText('Espaces de travail&nbsp;<i class="fa fa-caret-down"></i>');
+				$item->setText(elgg_echo('theme_adf:menu:groups') . '&nbsp;<i class="fa fa-caret-down"></i>');
 				break;
 			case 'members':
 				$item->setPriority(600);
-				$item->setText('Annuaire&nbsp;<i class="fa fa-caret-down"></i>');
+				$item->setText(elgg_echo('theme_adf:menu:members') . '&nbsp;<i class="fa fa-caret-down"></i>');
 				break;
 			case 'event':
 				$item->setPriority(800);
@@ -182,7 +182,10 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	// Add submenus
 	//$search_form = elgg_view_form('search', [], []);
 	$q = get_input('q');
-	$search_form = '<form action="' . elgg_get_site_url() . 'search" method="GET" style="display: flex; font-size: 1.4em; font-weight: 600;"><input type="text" name="q" value="' . $q . '" placeholder="Rechercher un contenu..." style="flex: 1 1 auto;"><input type="submit" value="Rechercher" style="flex: 0 0 10rem;"></form>';
+	$search_form = '<form action="' . elgg_get_site_url() . 'search" method="GET" style="display: flex; font-size: 1.4em; font-weight: 600;">
+		<input type="text" name="q" value="' . $q . '" placeholder="' . elgg_echo('theme_adf:menu:search:placeholder') . '" style="flex: 1 1 auto;">
+		<input type="submit" value="' . elgg_echo('theme_adf:menu:search:submit') . '" style="flex: 0 0 10rem;">
+	</form>';
 	$item = new ElggMenuItem('search-form', $search_form, false);
 	$item->setParentName('search');
 	$new_menu[] = $item;
@@ -190,33 +193,33 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	// Aide : page de présentation et recherche de contenus
 	$help_url = elgg_get_plugin_setting('help_url', 'theme_adf');
 	if (!empty($help_url)) {
-		$item = new ElggMenuItem('help', "Aide" . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
+		$item = new ElggMenuItem('help', elgg_echo('theme_adf:menu:help') . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
 		//if (elgg_in_context('members') || elgg_in_context('groups') || elgg_in_context('group_chat')) { $item->setSelected(); }
 		$item->setPriority(900);
 		$new_menu[] = $item;
 		
 		// Add submenus
-		$item = new ElggMenuItem('help-home', "Aide et documentation", $help_url);
+		$item = new ElggMenuItem('help-home', elgg_echo('theme_adf:menu:help'), $help_url);
 		$item->setParentName('help');
 		$new_menu[] = $item;
 		
 		$help_url = elgg_get_plugin_setting('help_faq', 'theme_adf');
 		if (!empty($help_url)) {
-			$item = new ElggMenuItem('help', "F.A.Q." . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
+			$item = new ElggMenuItem('help', elgg_echo('theme_adf:menu:help') . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
 			$item->setParentName('help');
 			$new_menu[] = $item;
 		}
 		
 		$help_url = elgg_get_plugin_setting('help_firststeps', 'theme_adf');
 		if (!empty($help_url)) {
-			$item = new ElggMenuItem('help', "Premiers Pas" . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
+			$item = new ElggMenuItem('help', elgg_echo('theme_adf:menu:firststeps') . '&nbsp;<i class="fa fa-caret-down"></i>', $help_url);
 			$item->setParentName('help');
 			$new_menu[] = $item;
 		}
 		
 		if (elgg_is_active_plugin('feedback')) {
 			// Add submenus
-			$item = new ElggMenuItem('help-feedback', "Feedbacks", '/feedback');
+			$item = new ElggMenuItem('help-feedback', elgg_echo('theme_adf:menu:feedback'), '/feedback/');
 			$item->setParentName('help');
 			$new_menu[] = $item;
 		}
@@ -234,11 +237,11 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	
 	// Groups sub-menus : accès à tous les groupes => classement par type + recherche + ceux mis en avant + ceux recommandés)
 	// all groups
-	$item = new ElggMenuItem("groups-directory", "Rechercher un espace de travail", "groups/all");
+	$item = new ElggMenuItem("groups-directory", elgg_echo('theme_adf:menu:groups:search'), "groups/all");
 	$item->setParentName('groups');
 	$new_menu[] = $item;
 	// Global view
-	$item = new ElggMenuItem("home-dashboard", "Tableau de bord", "/");
+	$item = new ElggMenuItem("home-dashboard", elgg_echo('theme_adf:menu:groups:dashboard'), "/");
 	$item->setParentName('groups');
 	$new_menu[] = $item;
 	// my groups
@@ -256,15 +259,15 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 	
 	// Members sub-menu :
 	// members directory
-	$item = new ElggMenuItem("members-directory", "Membres de Départements en Réseaux", "members");
+	$item = new ElggMenuItem("members-directory", elgg_echo('theme_adf:menu:members_adf'), "members");
 	$item->setParentName('members');
 	$new_menu[] = $item;
 	// contacts
-	$item = new ElggMenuItem("friends", "Mes contacts", "friends/{$own->username}");
+	$item = new ElggMenuItem("friends", elgg_echo('theme_adf:menu:friends'), "friends/{$own->username}");
 	$item->setParentName('members');
 	$new_menu[] = $item;
 	// invitation
-	$item = new ElggMenuItem("invitation", "Inviter des collègues", "friends/{$own->username}/invite");
+	$item = new ElggMenuItem("invitation", elgg_echo('theme_adf:menu:friends:invite'), "friends/{$own->username}/invite");
 	$item->setParentName('members');
 	$new_menu[] = $item;
 	

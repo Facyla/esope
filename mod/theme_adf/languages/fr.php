@@ -28,6 +28,27 @@ return [
 	'theme_adf:menu:home' => "Accueil",
 	'theme_adf:menu:contributions' => "Contributions",
 	'theme_adf:menu:search' => "Recherche",
+	'theme_adf:menu:groups' => "Espaces de travail",
+	'theme_adf:menu:groups:search' => "Rechercher un espace de travail",
+	'theme_adf:menu:groups:join' => "Rejoigner un espace de travail",
+	'theme_adf:menu:members' => "Annuaire",
+	'theme_adf:menu:help' => "Aide et documentation",
+	'theme_adf:menu:dashboard' => "Tableau de bord",
+	'theme_adf:menu:members_adf' => "Membres de Départements en Réseaux",
+	'theme_adf:menu:friends' => "Mes contacts",
+	'theme_adf:menu:friends:invite' => "Inviter des collègues",
+	'theme_adf:menu:feedback' => "Feedbacks",
+	'theme_adf:menu:firststeps' => "Premiers Pas",
+	'theme_adf:menu:faq' => "F.A.Q.",
+	'theme_adf:menu:search:submit' => "Rechercher",
+	'theme_adf:menu:search:placeholder' => "Rechercher un contenu...",
+	
+	
+	// Accueil
+	'theme_adf:my_groups:noactivity' => "Aucune activité dans vos espaces de travail.",
+	'theme_adf:my_groups:nogroup' => "Vous n'êtes membre d'aucun groupe de travail.",
+	'theme_adf:my_groups:viewall' => "Plus d'activités dans mes groupes",
+	'theme_adf:activity:viewall' => "Afficher toute l'activité du site",
 	
 	// Digest
 	'theme_adf:digest:groupactivity' => "Activité dans mes espaces de travail",
