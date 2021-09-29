@@ -298,7 +298,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container > ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 1rem 1rem; border-top: 1px solid rgba(255,255,255,.3); }
 
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container { flex: 0 1 auto; flex: 1 0 100%; }
-.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-gap: 0 0; }
+.elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-topbar-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(10rem,1fr)); grid-gap: 0 0; }
 
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container { flex: 1 1 auto; }
 .elgg-nav-collapsed .elgg-nav-collapse .elgg-menu-container.elgg-menu-site-container ul .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(14rem,1fr)); grid-gap: 0rem 0rem; padding-left: 1rem; width: auto; }
