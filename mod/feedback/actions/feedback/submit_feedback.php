@@ -101,9 +101,22 @@ $feedback_url = $feedback->getURL();
 if (empty($feedback_url)) {
 	$feedback_url = elgg_get_site_url() . 'feedback/view/' . $guid;
 }
-$details = $feedback->about;
-if (!empty($details)) { $details .= ', '; }
-$details .= $feedback->mood;
+$details = '';
+if (feedback_is_about_enabled()) {
+	if (elgg_echo("feedback:about:{$feedback->about}") == "feedback:about:{$feedback->about}") {
+		$details .= elgg_echo("feedback:about:{$feedback->about}");
+	} else {
+		$details .= $feedback->about;
+	}
+}
+if (feedback_is_mood_enabled()) {
+	if (!empty($details)) { $details .= ', '; }
+	if (elgg_echo("feedback:about:{$feedback->mood}") == "feedback:about:{$feedback->mood}") {
+		$details .= elgg_echo("feedback:about:{$feedback->mood}");
+	} else {
+		$details .= $feedback->mood;
+	}
+}
 if (!empty($details)) { $details = " ($details)"; }
 $feedback_title = $feedback->title . $details;
 
