@@ -35,7 +35,6 @@ Dégradés du noir au blanc :
 /* Layouts */
 .elgg-layout-body { max-width: 100%; overflow: auto; }
 
-
 /* Eléments et styles génériques */
 a, a:visited { color: #0b2d51; }
 a:hover, a:focus { color: #02080e; text-decoration: underline; }
@@ -261,7 +260,8 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-owner-group .elgg-layout-columns > .elgg-sidebar { padding-top: 0; }
 .elgg-sidebar .elgg-module > .elgg-head, .elgg-sidebar .elgg-module > .elgg-body { padding-left: 2rem; padding-right: 2rem; }
 .elgg-layout-header > h2, .elgg-layout-header > h3 { font-size: 1.5rem; }
-.elgg-layout-columns > .elgg-body { margin: 1rem 2rem; min-width: 24rem; }
+.elgg-layout-columns > .elgg-body { margin: 1rem 2rem; min-width: 24rem; margin: 1rem 0rem; padding: 0 2rem; }
+
 .elgg-layout-one-column .elgg-layout-columns > .elgg-body { margin-left: 2rem; margin-right: 2rem; }
 
 .elgg-sidebar .elgg-menu, .elgg-sidebar .elgg-menu li { border: 0; }
