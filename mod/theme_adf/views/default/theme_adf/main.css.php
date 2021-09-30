@@ -140,6 +140,8 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-footer { border-top: 1px solid #0b2d51; }
 .elgg-page-footer .footer-logo { padding: 0rem 2rem; margin: 1rem 0; max-height: 6rem; }
 .elgg-page-footer .footer-adf { padding: 0 2rem 2rem 2rem; margin: 0 0 0 0; align-self: flex-end; }
+.elgg-menu-footer-default { margin-bottom: 0; }
+.elgg-menu-footer-default .elgg-menu-item-bookmark { display: none; }
 
 
 /* Accueil public (walled garden) : cf. walled_garden.css extensions */
