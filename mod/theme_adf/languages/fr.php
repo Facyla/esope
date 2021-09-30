@@ -68,6 +68,8 @@ return [
 	
 	// Overrides
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
-	'profile_manager:register:mandatory' => "",
+	//'profile_manager:register:mandatory' => "",
+	'theme_adf:discussion-reply:redirect' => "L'URL indiquée n'est plus valide, redirection vers la nouvelle adresse : <strong>%s</strong>",
+	
 ];
 

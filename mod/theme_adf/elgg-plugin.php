@@ -44,6 +44,13 @@ return [
 				'groups',
 			],
 		],
+		'discussions:redirect_old_urls' => [
+			'path' => '/discussion/reply/view/{guid?}/{container_guid?}',
+			'resource' => 'discussions/reply-redirect',
+			'required_plugins' => [
+				'discussions',
+			],
+		],
 	],
 	
 	
