@@ -103,9 +103,8 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 						elgg_set_plugin_user_setting('email_validated', false, $user->guid, 'uservalidationbyemail');
 						
 						// send out validation email
-						// @note : marche pas? on le fait plus directement
-						uservalidationbyemail_request_validation($user->guid);
-						
+						//uservalidationbyemail_request_validation($user->guid);
+						// @note : dans ce cas, il est préférable d'avoir un message plus personnalisé
 						// Envoi manuel du mail de validation
 						// Work out validate link
 						$link = elgg_generate_url('account:validation:email:confirm', ['u' => $user->guid]);
