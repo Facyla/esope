@@ -91,6 +91,7 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 		//
 		
 		// Execute rule action
+		$site = elgg_get_site_entity();
 		if ($simulation) { $return .= elgg_echo('account_lifecycle:cron:simulation'); }
 		switch($action) {
 			case 'email_validation':   // OK
@@ -100,8 +101,37 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 						$user->setValidationStatus(false);
 						// set flag for tracking validation status
 						elgg_set_plugin_user_setting('email_validated', false, $user->guid, 'uservalidationbyemail');
+						
 						// send out validation email
+						// @note : marche pas? on le fait plus directement
 						uservalidationbyemail_request_validation($user->guid);
+						
+						// Envoi manuel du mail de validation
+						// Work out validate link
+						$link = elgg_generate_url('account:validation:email:confirm', ['u' => $user->guid]);
+						$link = elgg_http_get_signed_url($link);
+						$subject = elgg_echo('account_lifecycle:email_validation:email:validate:subject', [
+								$user->getDisplayName(),
+								$site->getDisplayName()
+							], $user->language
+						);
+						$body = elgg_echo('account_lifecycle:email_validation:email:validate:body', [
+								$user->getDisplayName(),
+								$interval,
+								$site->getDisplayName(),
+								$link,
+								$site->getDisplayName(),
+								$site->getURL(),
+							], $user->language
+						);
+						$params = [
+							'action' => 'uservalidationbyemail',
+							'object' => $user,
+							'link' => $link,
+						];
+						// Send validation email
+						notify_user($user->guid, $site->guid, $subject, $body, $params, 'email');
+						
 					}
 					$return .= elgg_echo('account_lifecycle:cron:require_validation');
 				} else {

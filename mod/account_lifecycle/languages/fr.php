@@ -67,6 +67,26 @@ return [
 	'account_lifecycle:rule:ban' => "Désactiver le compte (ban)",
 	'account_lifecycle:criteria:all' => "Tous les comptes correspondant aux critères",
 	'account_lifecycle:criteria:inactive' => "Seulement les comptes inactifs depuis X jours (date de dernière connexion)",
+	
+	// Email
+		'account_lifecycle:email_validation:email:validate:subject' => "Action requise : validation de votre compte %s sur %s",
+		'account_lifecycle:email_validation:email:validate:body' => "Bonjour %s,
+
+Une vérification périodique de votre compte utilisateur est effectuée tous les %s jours. 
+
+Afin de pouvoir continuer à utiliser %s, vous devez confirmer votre adresse email. 
+
+Veuillez confirmer votre adresse email en cliquant sur le lien ci-dessous :
+%s
+
+Si vous ne pouvez pas cliquer sur le lien, copiez-le et collez -le manuellement dans votre navigateur.
+
+Si le lien n'est plus valide, un nouveau lien vous sera envoyé si vous essayez de vous connecter. 
+
+%s
+%s",
+	
+	
 	// Cron log
 	'account_lifecycle:cron:never_ran' => " jamais exécuté ", // " never ran"
 	'account_lifecycle:cron:latest_run' => " dernière vérification le ", // " latest "

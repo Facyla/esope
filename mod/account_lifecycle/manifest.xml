@@ -14,6 +14,11 @@
 		<type>elgg_release</type>
 		<version>3.3</version>
 	</requires>
+	
+	<requires>
+		<type>plugin</type>
+		<name>uservalidationbyemail</name>
+	</requires>
 
 	<category>admin</category>
 	<category>account</category>
