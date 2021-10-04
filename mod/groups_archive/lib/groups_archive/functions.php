@@ -20,7 +20,7 @@ function groups_archive_entity_menu_setup(\Elgg\Hook $hook) {
 	$entity = $hook->getEntityParam();
 	
 	// feature link
-	if (elgg_is_admin_logged_in()) {
+	if ($entity instanceof ElggEntity && $entity->getType() == 'group' && elgg_is_admin_logged_in()) {
 		$url = elgg_get_site_url() . "groups-archive?guid={$entity->guid}&enabled=no";
 		$text = elgg_echo('groups_archive:archive');
 		$return->add(\ElggMenuItem::factory([
