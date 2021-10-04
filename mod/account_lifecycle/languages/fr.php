@@ -75,8 +75,8 @@ return [
 	'account_lifecycle:criteria:inactive' => "Seulement les comptes inactifs depuis X jours (date de dernière connexion)",
 	
 	// Email
-	'account_lifecycle:email_validation:email:sent' => "Mail envoyé",
-	'account_lifecycle:email_validation:email:sent' => "ERREUR mail non envoyé",
+	'account_lifecycle:email_validation:email:sent' => " => Mail envoyé",
+	'account_lifecycle:email_validation:email:sent' => " => ERREUR mail non envoyé",
 	'account_lifecycle:email_validation:email:validate:subject' => "Action requise : validation de votre compte %s sur %s",
 	'account_lifecycle:email_validation:email:validate:body' => "Bonjour %s,
 
