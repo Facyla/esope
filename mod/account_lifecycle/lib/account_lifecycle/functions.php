@@ -130,8 +130,12 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 							'link' => $link,
 						];
 						// Send validation email
-						notify_user($user->guid, $site->guid, $subject, $body, $params, 'email');
-						
+						$result = notify_user($user->guid, $site->guid, $subject, $body, $params, 'email');
+						if ($result) {
+							$return .= elgg_echo('account_lifecycle:email_validation:email:sent');
+						} else {
+							$return .= elgg_echo('account_lifecycle:email_validation:email:error');
+						}
 					}
 					$return .= elgg_echo('account_lifecycle:cron:require_validation');
 				} else {
