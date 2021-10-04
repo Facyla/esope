@@ -1,9 +1,9 @@
 <?php
-
 use Facyla\Feedback\Bootstrap;
 
 //require_once(__DIR__ . '/vendor/autoload.php');
 require_once(__DIR__ . '/lib/feedback/functions.php');
+require_once(__DIR__ . '/lib/feedback/hooks.php');
 
 return [
 	'bootstrap' => Bootstrap::class,
