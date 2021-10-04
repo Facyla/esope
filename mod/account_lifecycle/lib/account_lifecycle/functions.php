@@ -28,8 +28,14 @@ function account_lifecycle_cron(\Elgg\Hook $hook) {
 	return "account_lifecycle: CRON done";   // "$value ($annotation_guid)";
 }
 
-// Cron batch action
-function account_lifecycle_execute_rules($force_run = false, $simulation = false, $verbose = true) {
+/* Cron batch action
+ * $force_run bool Force run without consideration for last run date
+ * $simulation bool Simulates without any action
+ * $verbose bool Displays details on planned actions
+ * $users_guids array Overrides the default automatic users selection with a custom list 
+ *              Note : this will not override admin setting
+ */
+function account_lifecycle_execute_rules($force_run = false, $simulation = false, $verbose = true, $users_guids = false) {
 	$return = '';
 	$interval = elgg_get_plugin_setting('direct_interval', 'account_lifecycle');
 	if (!isset($interval) || empty($interval) || $interval < 1) { return false; }
@@ -48,21 +54,25 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 	$interval_ts = $interval * 24 * 3600;
 	$now = time();
 	
-	// Select entities (select + tempo)
-	$users = elgg_get_entities([
-		'type' => 'user',
-		//'subtype' => 'page',
-		/*
-		'metadata_name_value_pairs' => [
-			'name' => 'some_meta',
-			'value' => some_meta_value,
-			//'operator' => '>=',
-		],
-		*/
-		'limit' => false,
-		'batch' => true,
-		'batch_inc_offset' => true,
-	]);
+	// Select entities (select + tempo) or use provided users GUIDs
+	if (!$users_guids) {
+		$users = elgg_get_entities([
+			'type' => 'user',
+			//'subtype' => 'page',
+			/*
+			'metadata_name_value_pairs' => [
+				'name' => 'some_meta',
+				'value' => some_meta_value,
+				//'operator' => '>=',
+			],
+			*/
+			'limit' => false,
+			'batch' => true,
+			'batch_inc_offset' => true,
+		]);
+	} else {
+		$users = elgg_get_entities(['guids' => $users_guids]);
+	}
 	
 	foreach ($users as $user) {
 		$return .= '<li>';
@@ -170,6 +180,7 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 	if ($verbose) { return '<ul class="account-lifecycle-log-item">' . $return . '</ul>'; }
 	return true;
 }
+
 
 
 // Indique la/les prochaines dates d'exécution (ts)

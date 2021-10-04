@@ -8,13 +8,6 @@ return [
 	'account_lifecycle:index' => "Contrôle du cycle de vie des comptes utilisateurs",
 	'account_lifecycle:noresult' => "Aucune règle de gestion du cycle de vie des comptes.",
 	
-	'account_lifecycle:force_run' => "Forcer l'exécution (sans tenir dompte des dates)",
-	'account_lifecycle:simulation' => "Simulation (pas d'action)",
-	'account_lifecycle:verbose' => "Mode bavard (verbose)",
-	'account_lifecycle:run_now' => "Exécuter maintenant",
-	'account_lifecycle:mode_direct' => "MODE DIRECT : vérification simple des comptes",
-	'account_lifecycle:mode_full' => "MODE COMPLET : règles multiples de gestion des cycles de vie des comptes",
-	
 	// Plugin settings
 	// Direct mode
 	'account_lifecycle:settings:direct_mode' => "Mode simple",
@@ -43,6 +36,19 @@ return [
 	'account_lifecycle:settings:full_mode:enable' => "Activer le Mode simple",
 	'account_lifecycle:settings:full_mode:details' => "Pour définir plusieurs jeux de critères de sélection et de règles d'action.",
 	
+	
+	// Direct mode form
+	'account_lifecycle:parameters' => "Paramètres de configuration qui seront utilisés",
+	'account_lifecycle:force_run' => "Forcer l'exécution (sans tenir dompte des dates)",
+	'account_lifecycle:simulation' => "Simulation (pas d'action)",
+	'account_lifecycle:verbose' => "Mode bavard (verbose)",
+	'account_lifecycle:run_now' => "Exécuter maintenant",
+	'account_lifecycle:mode_direct' => "MODE DIRECT : vérification simple des comptes",
+	'account_lifecycle:mode_full' => "MODE COMPLET : règles multiples de gestion des cycles de vie des comptes",
+	
+	// Cherrypicking mode
+	'account_lifecycle:cherrypicking' => "Mode manuel",
+	'account_lifecycle:cherrypicking:description' => "Permet de choisir quels comptes utilisateurs re-valider",
 	
 	// Full mode form
 	'account_lifecycle:field:title' => "Titre",

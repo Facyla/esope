@@ -7,4 +7,7 @@
 
 .account-lifecycle-log-item { list-style: initial; margin-left: 1rem; }
 
+#account_lifecycle-direct-form { border: 1px solid; margin: 1rem 0; padding: .5rem 1rem; }
+#account_lifecycle-cherrypicking-form .elgg-user-picker .elgg-user-picker-list { display: grid; grid-template-columns: repeat(auto-fill,minmax(16rem,1fr)); grid-gap: .5rem .5rem; }
+
 
