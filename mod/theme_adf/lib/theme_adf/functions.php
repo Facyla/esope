@@ -8,13 +8,6 @@ use Elgg\Database\QueryBuilder;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Activity\GroupRiverFilter;
 
-// Permet l'accès à diverses pages en mode "walled garden"
-function theme_adf_public_pages($hook, $type, $return, $params) {
-	// Digest
-	$return[] = 'digest/.*';
-	
-	return $return;
-}
 
 // Affichage clair des dépendances dans la config du plugin
 function theme_adf_plugin_dependencies() {

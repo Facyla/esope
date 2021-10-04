@@ -1,5 +1,32 @@
 <?php
 
+
+// Permet l'accès à diverses pages en mode "walled garden"
+function theme_adf_public_pages(\Elgg\Hook $hook) {
+	$return = $hook->getValue();
+	// Digest
+	$return[] = 'digest/.*';
+	
+	return $return;
+}
+
+
+// Compose $user->name from first + last name
+function theme_adf_register_name(\Elgg\Hook $hook) {
+	$user = $hook->getUserParam();
+	if (!$user instanceof \ElggUser) { return; }
+	
+	$firstname = $hook->getParam('firstname');
+	$lastname = $hook->getParam('lastname');
+	if (!empty($firstname) && !empty($lastname)) {
+		$name = "$firstname $lastname";
+		$user->name = $name;
+		set_input('name', $name);
+	}
+}
+
+
+
 // Pour configurer les widgets par défaut
 /**
  * Register user dashboard with default widgets

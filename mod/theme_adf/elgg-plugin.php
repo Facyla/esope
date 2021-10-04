@@ -76,6 +76,9 @@ return [
 			'menu:site' => [
 				'theme_adf_site_menu' => ['priority' => 1000],
 			],
+			'user' => [
+				'theme_adf_register_name' => ['priority' => 1],
+			],
 		],
 		'filter_tabs' => [
 			'all' => [

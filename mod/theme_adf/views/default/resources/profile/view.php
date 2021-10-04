@@ -72,7 +72,7 @@ if ($user->isValidated()) {
 } else {
 	// Account not validated : disable some stuff
 	$user = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
-	$content = '<blockquote class="account-unvalidated-notice">' . elgg_echo('theme_adf:uservalidation:disabled:notice') . '</blockquote>' . $content;
+	$content = '<blockquote class="account-unvalidated-notice">' . elgg_echo('theme_adf:uservalidation:disabled:notice') . '</blockquote>';
 }
 
 
