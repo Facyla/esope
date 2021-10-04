@@ -76,8 +76,10 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 	
 	foreach ($users as $user) {
 		$return .= '<li>';
+		$return .= '<a href="' . $user->getURL() . '" target="_blank">';
 		$return .= '<img src="' . $user->getIconURL('tiny') . '" /> ';
 		$return .= "{$user->name} ({$user->guid}, {$user->username}) ";
+		$return .= '</a>';
 		$return .= " => $action : ";
 		if (!empty($user->account_lifecycle_direct_last_ts)) {
 			$return .= elgg_echo('account_lifecycle:cron:latest_run') . ' <span title="' . date("Y-m-d H:i:s", $user->account_lifecycle_direct_last_ts) . '">' . date("Y-m-d", $user->account_lifecycle_direct_last_ts) . '</span>';

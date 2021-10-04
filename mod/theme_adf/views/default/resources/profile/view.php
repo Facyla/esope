@@ -62,6 +62,20 @@ $sidebar .= elgg_view_title($user->getDisplayName());
 $sidebar .= '</div>';
 //$sidebar .= '<div class="">' . elgg_view('profile_manager/profile_completeness', ['entity' => $user]) . '</div>';
 
+
+//$title = '<span class="hidden">' . $user->getDisplayName() . '</span>';
+$title = $user->getDisplayName();
+
+
+if ($user->isValidated()) {
+	// email address already validated, or not required by this plugin
+} else {
+	// Account not validated : disable some stuff
+	$user = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
+	$content = '<blockquote class="account-unvalidated-notice">' . elgg_echo('theme_adf:uservalidation:disabled:notice') . '</blockquote>' . $content;
+}
+
+
 $content = '<div class="" style="display: flex; flex-wrap: wrap;">
 	<div class="" style="flex: 0 1 24rem; position: relative; min-width; 16rem; padding: 0 2rem;">
 		' . $sidebar . '
@@ -72,8 +86,6 @@ $content = '<div class="" style="display: flex; flex-wrap: wrap;">
 </div>';
 
 
-//$title = '<span class="hidden">' . $user->getDisplayName() . '</span>';
-$title = $user->getDisplayName();
 echo elgg_view_page($title, [
 	//'header' => '',
 	'content' => $content,

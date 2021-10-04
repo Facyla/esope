@@ -43,14 +43,23 @@ $content .= '<p class="">' . elgg_view('output/tags', ['value' => $entity->inter
 */
 
 
-// Coordonnées, contacts
-if (!empty($entity->email)) 
-$contacts .= '<i class="far fa-fw fa-envelope"></i> <a href="mailto:' . $entity->email . '">' . $entity->email . '</a><br />';
-if (!empty($entity->phone)) 
-$contacts .= '<i class="fas fa-fw fa-phone"></i> ' . $entity->phone . '<br />';
-if (!empty($entity->mobile)) 
-$contacts .= '<i class="fas fa-fw fa-mobile"></i> ' . $entity->mobile . '<br />';
+if ($entity->isValidated()) {
+	// email address already validated, or not required by this plugin
+} else {
+	// Account not validated : disable some stuff
+	$title = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
+}
 
+// Coordonnées, contacts
+if (!empty($entity->email)) {
+	$contacts .= '<i class="far fa-fw fa-envelope"></i> <a href="mailto:' . $entity->email . '">' . $entity->email . '</a><br />';
+}
+if (!empty($entity->phone)) {
+	$contacts .= '<i class="fas fa-fw fa-phone"></i> ' . $entity->phone . '<br />';
+}
+if (!empty($entity->mobile)) {
+	$contacts .= '<i class="fas fa-fw fa-mobile"></i> ' . $entity->mobile . '<br />';
+}
 $contacts = '<div class="contacts">' . $contacts . '</div>';
 
 
