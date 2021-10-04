@@ -74,6 +74,10 @@ return [
 	'account_lifecycle:criteria:all' => "Tous les comptes correspondant aux critères",
 	'account_lifecycle:criteria:inactive' => "Seulement les comptes inactifs depuis X jours (date de dernière connexion)",
 	
+	// Front-end texts for unvalidated users
+	'account_lifecycle:uservalidation:disabled' => "[Compte désactivé, en attente de vérification]",
+	'account_lifecycle:uservalidation:disabled:notice' => "Ce compte a été temporairement désactivé. Il sera réactivé si son propriétaire confirme à nouveau son accès, ou archivé à l'issue d'une période d'inactivité prolongée.",
+	
 	// Email
 	'account_lifecycle:email_validation:email:sent' => " => Mail envoyé",
 	'account_lifecycle:email_validation:email:sent' => " => ERREUR mail non envoyé",

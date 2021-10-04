@@ -45,9 +45,11 @@ $content .= '<p class="">' . elgg_view('output/tags', ['value' => $entity->inter
 
 if ($entity->isValidated()) {
 	// email address already validated, or not required by this plugin
+	$class = "uservalidation-validated";
 } else {
 	// Account not validated : disable some stuff
 	$title = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
+	$class = "uservalidation-unvalidated";
 }
 
 // Coordonnées, contacts
@@ -70,6 +72,7 @@ $params = [
 	'icon_size' => $size,
 	'tags' => false,
 	'content' => $content,
+	'class' => $class,
 ];
 $params = $params + $vars;
 
