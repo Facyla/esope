@@ -1,5 +1,6 @@
 <?php
 use Facyla\ThemeADF\Bootstrap;
+use Facyla\ThemeADF\FileGroupToolContainerLogicCheck;
 
 // Required libs & custom functions
 //require_once(__DIR__ . '/vendor/autoload.php');
@@ -83,6 +84,11 @@ return [
 		'filter_tabs' => [
 			'all' => [
 				'theme_adf_activity_groups_tab' => [],
+			],
+		],
+		'container_logic_check' => [
+			'object' => [
+				FileGroupToolContainerLogicCheck::class => [],
 			],
 		],
 	],

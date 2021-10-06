@@ -50,6 +50,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 		// Suppression des signets en footer
 		elgg_unregister_plugin_hook_handler('register', 'menu:footer', 'bookmarks_footer_menu');
 		
+		elgg_unregister_plugin_hook_handler('container_logic_check', 'object', \Elgg\File\GroupToolContainerLogicCheck::class);
+		
 	}
 	
 	public function activate() {
