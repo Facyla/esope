@@ -67,12 +67,12 @@ $sidebar .= '</div>';
 $title = $user->getDisplayName();
 
 
-if ($user->isValidated()) {
-	// email address already validated, or not required by this plugin
-} else {
+if ($user->isValidated() === false) {
 	// Account not validated : disable some stuff
 	$user = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
 	$content = '<blockquote class="account-unvalidated-notice">' . elgg_echo('theme_adf:uservalidation:disabled:notice') . '</blockquote>';
+} else {
+	// email address already validated (true), or not required (null)
 }
 
 

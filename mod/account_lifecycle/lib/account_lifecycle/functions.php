@@ -257,6 +257,33 @@ function account_lifecycle_get_reminders_dates($date_format = 'U') {
 	return $reminders_dates;
 }
 
+// Tells if a given user is validated or not.
+// Note : basically $user->isValidated( works fine, beware of testing === false to ensure valid behaviour)
+/*
+function account_lifecycle_is_validated($user = false) {
+	if (!$user) { $user = elgg_get_logged_in_user_entity(); }
+	if (!$user instanceof ElggUser) { return false; }
+	
+	// This returns null or bool
+	$is_validated = $user->isValidated();
+	//$status .= "{$user->name} {$user->username} {$user->guid} ";
+	if ($is_validated === true) {
+		$status .= " isValidated - ";
+	} else if ($is_validated === false) {
+		$status .= " NOT isValidated - ";
+	} else {
+		// Not concerned
+		$status .= " NOTSET isValidated - ";
+	}
+	
+	// get flag for tracking validation status
+	$validation_status = elgg_get_plugin_user_setting('email_validated', $user->guid, 'uservalidationbyemail');
+	$status .= " validation status $validation_status";
+	
+	error_log("Account lifecyle validation status : $status");
+	return $status;
+}
+*/
 
 
 /*

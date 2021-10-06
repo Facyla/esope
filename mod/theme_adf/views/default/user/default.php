@@ -43,13 +43,19 @@ $content .= '<p class="">' . elgg_view('output/tags', ['value' => $entity->inter
 */
 
 
-if ($entity->isValidated()) {
-	// email address already validated, or not required by this plugin
-	$class = "uservalidation-validated";
-} else {
-	// Account not validated : disable some stuff
-	$title = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
-	$class = "uservalidation-unvalidated";
+if (elgg_is_active_plugin('account_lifecycle')) {
+	$is_validated = $entity->isValidated();
+	if ($is_validated === true) {
+		// email address already validated, or not required by this plugin
+		$class = "uservalidation-validated";
+	} else if ($is_validated === false) {
+		// Account not validated : disable some stuff
+		$title = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
+		$class = "uservalidation-unvalidated";
+	} else {
+		// Not concerned
+		$class = "uservalidation-notset";
+	}
 }
 
 // Coordonnées, contacts
