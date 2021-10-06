@@ -37,11 +37,11 @@ $wrapper_class = [
 $wrapper_class = elgg_extract_class($vars, $wrapper_class);
 
 
-if ($user->isValidated()) {
-	$wrapper_class[] = "uservalidation-validated";
-} else {
+if ($user->isValidated() === false) {
 	$wrapper_class[] = "uservalidation-unvalidated";
 	$name = elgg_echo('account_lifecycle:uservalidation:disabled');
+} else {
+	$wrapper_class[] = "uservalidation-validated";
 }
 
 if ($user->isBanned()) {
