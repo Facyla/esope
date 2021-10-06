@@ -67,12 +67,17 @@ $sidebar .= '</div>';
 $title = $user->getDisplayName();
 
 
-if ($user->isValidated() === false) {
-	// Account not validated : disable some stuff
-	$user = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
-	$content = '<blockquote class="account-unvalidated-notice">' . elgg_echo('theme_adf:uservalidation:disabled:notice') . '</blockquote>';
-} else {
-	// email address already validated (true), or not required (null)
+if (elgg_is_active_plugin('account_lifecycle')) {
+	$is_validated = $user->isValidated();
+	if ($is_validated === false) {
+		// Account not validated : disable some stuff
+		//$user = '<span class="account-unvalidated">' . elgg_echo('theme_adf:uservalidation:disabled') . '</span>';
+		$content = '<blockquote class="account-unvalidated-notice">' . elgg_echo('theme_adf:uservalidation:disabled:notice') . '</blockquote>' . $content;
+		// Disabled user actions for non-admins
+		if (!elgg_is_admin_logged_in()) { $user = false; }
+	} else {
+		// email address already validated (true), or not required (null)
+	}
 }
 
 
