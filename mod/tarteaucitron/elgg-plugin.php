@@ -30,6 +30,7 @@ return [
 	
 	
 	'hooks' => [
+		/*
 		'head' => [
 			'page' => [
 				'tarteaucitron_head_page_hook' => [],
@@ -41,6 +42,7 @@ return [
 				'tarteaucitron_public_pages' => [],
 			],
 		],
+		*/
 	],
 	
 	// VIEWS
@@ -48,11 +50,13 @@ return [
 		'default' => [
 			// Dossier complet : utile pour charger toutes les dépendances
 			'/' => [$vendors_path],
+			/*
 			
 			// Fichier par fichier ('name' => 'path/file') ou l'ensemble du dossier ('/' => 'path/')
-			//'tarteaucitron.js' => $vendors_path . 'tarteaucitron.js',
-			//'tarteaucitron.css' => $vendors_path . 'css/tarteaucitron.css',
+			'tarteaucitron.js' => $vendors_path . 'tarteaucitron.js',
+			'tarteaucitron.css' => $vendors_path . 'css/tarteaucitron.css',
 			//'lang/' => $vendors_path . 'lang/',
+			*/
 		],
 	],
 	

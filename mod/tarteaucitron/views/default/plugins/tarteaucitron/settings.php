@@ -17,12 +17,12 @@ if (empty($plugin->js_config)) {
 
 	"orientation": "bottom", /* Banner position (top - bottom) */
 
-	"groupServices": false, /* Group services by category */
+	"groupServices": true, /* Group services by category */
 	
-	"showAlertSmall": true, /* Show the small banner on bottom right */
+	"showAlertSmall": false, /* Show the small banner on bottom right */
 	"cookieslist": false, /* Show the cookie list */
 	
-	"closePopup": false, /* Show a close X on the banner */
+	"closePopup": true, /* Show a close X on the banner */
 
 	"showIcon": true, /* Show cookie icon to manage cookies */
 	//"iconSrc": "", /* Optionnal: URL or base64 encoded image */
@@ -30,11 +30,11 @@ if (empty($plugin->js_config)) {
 
 	"adblocker": false, /* Show a Warning if an adblocker is detected */
 	
-	"DenyAllCta" : true, /* Show the deny all button */
-	"AcceptAllCta" : true, /* Show the accept all button when highPrivacy on */
+	"DenyAllCta" : false, /* Show the deny all button */
+	"AcceptAllCta" : false, /* Show the accept all button when highPrivacy on */
 	"highPrivacy": true, /* HIGHLY RECOMMANDED Disable auto consent */
 	
-	"handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
+	"handleBrowserDNTRequest": true, /* If Do Not Track == 1, disallow all */
 
 	"removeCredit": true, /* Remove credit link */
 	"moreInfoLink": true, /* Show more info link */

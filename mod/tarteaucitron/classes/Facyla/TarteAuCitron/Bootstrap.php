@@ -25,6 +25,13 @@ class Bootstrap extends DefaultPluginBootstrap {
 		
 		elgg_extend_view('page/elements/head', 'tarteaucitron/extend_head', 600);
 		
+		/*
+				elgg_define_js('leaflet-draw', [
+			'src' => elgg_get_simplecache_url('leaflet.draw.js'),
+			'deps' => ['leaflet'],
+		]);
+		*/
+		
 	}
 	
 }
