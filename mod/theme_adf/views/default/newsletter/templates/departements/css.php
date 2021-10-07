@@ -70,8 +70,17 @@ h4 {
 
 #newsletter_header h1{
 	color: #FFFFFF;
+	display: inline-block;
+	line-height: 3rem;
 }
-#newsletter_header img { height: 2rem; width: auto; display: inline-block; line-height: calc(2rem + 10px); margin: 0 10px 10px 1rem; }
+#newsletter_header img {
+	height: 2rem;
+	width: auto;
+	display: inline-block;
+	line-height: 3rem;
+	margin: 0rem 1rem .5rem 0rem;
+	vertical-align: middle;
+}
 
 #newsletter_container {
 	padding: 20px 0;
@@ -87,6 +96,7 @@ h4 {
 }
 
 #newsletter_footer {
+	display: none;
 	padding: 30px;
 	background: #F0F0F0;
 	
