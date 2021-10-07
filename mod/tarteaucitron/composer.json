@@ -1,0 +1,34 @@
+{
+	"name": "facyla/tarteaucitron",
+	"description": "Comply to the european cookie law is simple with the french tarte au citron.",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "gdpr", "cookies"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/Facyla/esope",
+		"issues": "https://github.com/Facyla/esope/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<3.3"
+	},
+	"require": {
+		"amauric/tarteaucitron": "^1.9.4"
+	},
+	"repositories": {
+		"tarteaucitron": {
+			"type": "package",
+			"package": {
+				"name": "AmauriC/tarteaucitron",
+				"version": "1.9.4",
+				"type": "elgg-library",
+				"dist": {
+						"url": "https://github.com/AmauriC/tarteaucitron.js/archive/refs/tags/v1.9.4.zip",
+						"type": "zip"
+				},
+				"require": {
+						"composer/installers": "^1.2.0"
+				}
+			}
+		}
+	}
+}
