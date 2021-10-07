@@ -11,6 +11,10 @@ elgg_push_breadcrumb('feedback', $base_url);
 $memberview = elgg_get_plugin_setting("memberview", "feedback");
 if ($memberview != 'yes') { admin_gatekeeper(); }
 
+// Add a new feedback button
+elgg_register_title_button('feedback', 'add', 'object', 'feedback');
+
+
 // Group gatekeeper
 $feedbackgroup = elgg_get_plugin_setting('feedbackgroup', 'feedback');
 if (!empty($feedbackgroup) && ($feedbackgroup != 'no') && ($feedbackgroup != 'grouptool')) {
