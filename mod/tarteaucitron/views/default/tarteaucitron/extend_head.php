@@ -3,8 +3,11 @@
 $enable_banner = elgg_get_plugin_setting('enable_banner', 'tarteaucitron');
 $js_config = elgg_get_plugin_setting('js_config', 'tarteaucitron');
 
+$tarteaucitron_js = elgg_get_simplecache_url('tarteaucitron/tarteaucitron.js');
+$tarteaucitron_css = elgg_get_simplecache_url('tarteaucitron/tarteaucitron.css');
+
 if ($enable_banner) {
-	echo '<script type="text/javascript" src="' . elgg_get_site_url() . 'mod/tarteaucitron/vendor/AmauriC/tarteaucitron/tarteaucitron.js"></script>';
+	echo '<script type="text/javascript" src="' . $tarteaucitron_js . '"></script>';
 	echo "<script type=\"text/javascript\">
 tarteaucitron.init({
 $js_config

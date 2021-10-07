@@ -49,7 +49,7 @@ return [
 	'views' => [
 		'default' => [
 			// Dossier complet : utile pour charger toutes les dépendances
-			'/' => [$vendors_path],
+			'tarteaucitron/' => [$vendors_path],
 			/*
 			
 			// Fichier par fichier ('name' => 'path/file') ou l'ensemble du dossier ('/' => 'path/')
