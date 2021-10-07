@@ -349,6 +349,11 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 
 /* FIN DESIGN PLEINE LARGEUR */
 
+/* Cookies banner */
+
+/* GDPR consent */
+.gdpr-consent-overlay { position: fixed; top: 4rem; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); padding: 10vh 10vw; }
+.gdpr-consent-banner { }
 
 /*
 @media (min-width: 105rem) {
