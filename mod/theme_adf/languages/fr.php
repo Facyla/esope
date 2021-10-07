@@ -14,6 +14,7 @@ return [
 	'theme_adf:settings:help_url' => "Accueil des pages d'aide (URL complète ou commençant par \"/\")",
 	'theme_adf:settings:help_faq' => "URL de la FAQ",
 	'theme_adf:settings:help_firststeps' => "URL de la page des premiers pas / tutoriels",
+	'theme_adf:settings:contact_email' => "Email de contact",
 	
 	// Dépendances
 	'theme_adf:requisites' => "Pré-requis et dépendances",
@@ -40,6 +41,7 @@ return [
 	'theme_adf:menu:feedback' => "Feedbacks",
 	'theme_adf:menu:firststeps' => "Premiers Pas",
 	'theme_adf:menu:faq' => "F.A.Q.",
+	'theme_adf:menu:contact_email' => "Contact par email",
 	'theme_adf:menu:search:submit' => "Rechercher",
 	'theme_adf:menu:search:placeholder' => "Rechercher un contenu...",
 	
@@ -66,6 +68,16 @@ return [
 	'theme_adf:page:history' => "Historique des versions",
 	'theme_adf:page:remove_parent' => "(aucune)",
 	
+	// Newsletter
+	'newsletter:edit:template:select:departements' => "Départements en Réseaux",
+	
+	// Redirects
+	'theme_adf:discussion-reply:redirect' => "L'URL indiquée n'est plus valide, redirection vers la nouvelle adresse : <strong>%s</strong>",
+	
+	// Account lifecycle
+	'theme_adf:uservalidation:disabled' => "[Compte désactivé, en attente de vérification]",
+	'theme_adf:uservalidation:disabled:notice' => "Ce compte a été temporairement désactivé. Il sera réactivé si son propriétaire confirme à nouveau son accès, ou archivé à l'issue d'une période d'inactivité prolongée.",
+	
 	// Overrides
 	'name' => "Prénom + Nom",
 	'firstname' => "Prénom",
@@ -74,9 +86,6 @@ return [
 	'profile_manager:register:hints:lastname' => "Entrez votre nom de famille",
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
 	//'profile_manager:register:mandatory' => "",
-	'theme_adf:discussion-reply:redirect' => "L'URL indiquée n'est plus valide, redirection vers la nouvelle adresse : <strong>%s</strong>",
-	'theme_adf:uservalidation:disabled' => "[Compte désactivé, en attente de vérification]",
-	'theme_adf:uservalidation:disabled:notice' => "Ce compte a été temporairement désactivé. Il sera réactivé si son propriétaire confirme à nouveau son accès, ou archivé à l'issue d'une période d'inactivité prolongée.",
 	
 ];
 

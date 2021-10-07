@@ -51,9 +51,10 @@ $dependencies_content .= '</ul>';
 $dependencies_content .= '</div>';
 
 $hidden_space = 'hidden';
+//if ($missing_required || $missing_optional) {
 if ($missing_required || $missing_optional) {
-	$hidden_space = '';
 	if ($missing_required) {
+		$hidden_space = '';
 		echo "<p><strong>Des plugins obligatoires ne sont pas activés.</strong></p>";
 	}
 	if ($missing_optional) {
@@ -82,6 +83,7 @@ echo '<p><em>' . elgg_echo('theme_adf:settings:help:details') . '</em></p>';
 echo '<div><label>' . elgg_echo('theme_adf:settings:help_url') . ' ' . elgg_view('input/url', ['name' => 'params[help_url]', 'value' => $plugin->help_url]) . '</label></div>';
 echo '<div><label>' . elgg_echo('theme_adf:settings:help_faq') . ' ' . elgg_view('input/url', ['name' => 'params[help_faq]', 'value' => $plugin->help_faq]) . '</label></div>';
 echo '<div><label>' . elgg_echo('theme_adf:settings:help_firststeps') . ' ' . elgg_view('input/url', ['name' => 'params[help_firststeps]', 'value' => $plugin->help_firststeps]) . '</label></div>';
+echo '<div><label>' . elgg_echo('theme_adf:settings:contact_email') . ' ' . elgg_view('input/email', ['name' => 'params[contact_email]', 'value' => $plugin->contact_email]) . '</label></div>';
 
 
 

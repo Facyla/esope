@@ -252,6 +252,14 @@ function theme_adf_site_menu(\Elgg\Hook $hook) {
 			$item->setParentName('help');
 			$new_menu[] = $item;
 		}
+		
+		$contact_email = elgg_get_plugin_setting('contact_email', 'theme_adf');
+		if (!empty($contact_email) && validate_email_address($contact_email)) {
+			// Add submenus
+			$item = new ElggMenuItem('help-email', elgg_echo('theme_adf:menu:contact_email'), "mailto:$contact_email");
+			$item->setParentName('help');
+			$new_menu[] = $item;
+		}
 	}
 	
 	// Evénements
