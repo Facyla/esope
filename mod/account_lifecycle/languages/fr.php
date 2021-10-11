@@ -22,6 +22,7 @@ return [
 	'account_lifecycle:settings:direct_interval' => "Intervale de vérification (jours)",
 	'account_lifecycle:settings:direct_rule' => "Action à effectuer à l'échéance",
 	'account_lifecycle:settings:direct_reminders' => "Notifications de rappel",
+	'account_lifecycle:settings:adminlink' => "Page de statistiques",
 	
 	// Full mode
 	'account_lifecycle:settings:full_mode' => "Mode complet",

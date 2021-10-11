@@ -23,8 +23,7 @@ Devrait conserver pour chaque utilisateur (plugin user setting) la nature + la v
 Config plugin : liste des documents (type + URL + titre + version).
 */
 
-
-
+// Lien vers la page de statistiques
 echo '<p>' . elgg_view('output/url', ['href' => "{$url}gdpr_consent", 'text' => elgg_echo('gdpr_consent:settings:adminlink'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
 
 

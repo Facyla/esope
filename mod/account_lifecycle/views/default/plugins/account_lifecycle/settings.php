@@ -51,7 +51,11 @@ echo '<fieldset style="border: 1px solid; padding: 1rem;"><legend><h3>' . elgg_e
 	echo '</div>';
 	*/
 	
+	// Page de contrôle et d'exécution
 	echo '<p>' . elgg_view('output/url', ['text' => "Page de contrôle et d'exécution", 'href' => elgg_get_site_url() . "account_lifecycle/", 'class' => "elgg-button elgg-button-action", 'target' => "_blank"]) . '</p>';
+	
+	// Lien vers la page de statistiques
+	echo '<p>' . elgg_view('output/url', ['href' => "{$url}account_lifecycle/statistics", 'text' => elgg_echo('account_lifecycle:settings:adminlink'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
 	
 echo '</fieldset>';
 echo '<br /><br />';
