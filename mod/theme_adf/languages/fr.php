@@ -88,7 +88,7 @@ return [
 	//'profile_manager:register:mandatory' => "",
 	
 	'expages:about' => "À propos",
-	'expages:terms' => "Charte",
+	'expages:terms' => "Charte d'utilisation",
 	'expages:privacy' => "Informations personnelles",
 	'expages:contact' => "Contact",
 	
