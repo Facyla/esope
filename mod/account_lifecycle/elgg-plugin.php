@@ -1,5 +1,6 @@
 <?php
 use Facyla\AccountLifeCycle\Bootstrap;
+use Elgg\Router\Middleware\AdminGatekeeper;
 
 // Required libs & custom functions
 require_once(__DIR__ . '/lib/account_lifecycle/functions.php');
@@ -32,14 +33,30 @@ return [
 		'default:account_lifecycle' => [
 			'path' => '/account_lifecycle',
 			'resource' => 'account_lifecycle/index',
+			'middleware' => [
+				AdminGatekeeper::class,
+			],
+		],
+		'account_lifecycle:statistics' => [
+			'path' => '/account_lifecycle/statistics',
+			'resource' => 'account_lifecycle/statistics',
+			'middleware' => [
+				AdminGatekeeper::class,
+			],
 		],
 		'account_lifecycle:add' => [
 			'path' => '/account_lifecycle/add/{container_guid?}',
 			'resource' => 'account_lifecycle/edit',
+			'middleware' => [
+				AdminGatekeeper::class,
+			],
 		],
 		'account_lifecycle:edit' => [
 			'path' => '/account_lifecycle/edit/{guid?}',
 			'resource' => 'account_lifecycle/edit',
+			'middleware' => [
+				AdminGatekeeper::class,
+			],
 		],
 	],
 	

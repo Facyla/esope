@@ -41,11 +41,12 @@ $direct_simulate = get_input('direct_simulate');
 $direct_verbose = get_input('direct_verbose');
 
 $content .= "<h3>" . elgg_echo('account_lifecycle:mode_direct') . "</h3>";
+$content .= '<em>' . elgg_echo('account_lifecycle:mode_direct:details') . '</em>';
 //$content .= '<p>' . elgg_view('output/url', ['text' => "Vérifier maintenant", 'href' => "?direct_mode=yes", 'class' => "elgg-button elgg-button-action"]) . '</p>';
 $content .= '<form id="account_lifecycle-direct-form" action="" method="GET">';
-	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/select', ['name' => 'direct_force_run', 'options_values' => $no_yes_opt, 'value' => $direct_force_run]) . "</label><br />";
 	$content .= "<label>" . elgg_echo('account_lifecycle:simulation') . ' ' . elgg_view('input/select', ['name' => 'direct_simulate', 'options_values' => $yes_no_opt, 'value' => $direct_simulate]) . "</label><br />";
 	$content .= "<label>" . elgg_echo('account_lifecycle:verbose') . ' ' . elgg_view('input/select', ['name' => 'direct_verbose', 'options_values' => $yes_no_opt, 'value' => $direct_verbose]) . "</label><br />";
+	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/select', ['name' => 'direct_force_run', 'options_values' => $no_yes_opt, 'value' => $direct_force_run]) . "</label><br />" . elgg_echo('account_lifecycle:force_run:details');
 	$content .= elgg_view('input/hidden', ['name' => "direct_mode", 'value' => "yes"]);
 	$content .= elgg_view('input/submit', ['value' => elgg_echo('account_lifecycle:run_now'), 'class' => "elgg-button elgg-button-action"]);
 $content .= '</form>';

@@ -6,6 +6,7 @@
 return [
 	'account_lifecycle' => "Filtre d'inscription",
 	'account_lifecycle:index' => "Contrôle du cycle de vie des comptes utilisateurs",
+	'account_lifecycle:statistics' => "Statistiques liées au cycle de vie des comptes utilisateurs",
 	'account_lifecycle:noresult' => "Aucune règle de gestion du cycle de vie des comptes.",
 	
 	// Plugin settings
@@ -40,10 +41,12 @@ return [
 	// Direct mode form
 	'account_lifecycle:parameters' => "Paramètres de configuration qui seront utilisés",
 	'account_lifecycle:force_run' => "Forcer l'exécution (sans tenir dompte des dates)",
-	'account_lifecycle:simulation' => "Simulation (pas d'action)",
-	'account_lifecycle:verbose' => "Mode bavard (verbose)",
+	'account_lifecycle:force_run:details' => "ATTENTION : NE PAS ACTIVER EN PRODUCTION !!  cela générerait des envois successifs à chaque nouveau chargement de page en cas de timeout, car cette option bypasse la date de dernière vérification.<br />L'utilité de cette option est de permettre de tester les fonctionnalités à plusieurs reprises sans devoir supprimer les métadonnées de contrôle à chaque test.",
+	'account_lifecycle:simulation' => "Simulation (aucune action ne sera effectuée)",
+	'account_lifecycle:verbose' => "Mode bavard (affiche les informations pour chaque compte utilisateur)",
 	'account_lifecycle:run_now' => "Exécuter maintenant",
 	'account_lifecycle:mode_direct' => "MODE DIRECT : vérification simple des comptes",
+	'account_lifecycle:mode_direct:details' => "Permet la mise en place initiale de la vérification des comptes : pour effectuer une simulation, activer le mode simulation et le mode bavard. <br />Pour une première mise en place, activer le mode simple dans les paramètres du plugin, puis exécuter avec simulation = non, bavard = oui, et forcer = non.<br />En cas de timeout, recharger la page jusqu'à la fin du script.",
 	'account_lifecycle:mode_full' => "MODE COMPLET : règles multiples de gestion des cycles de vie des comptes",
 	
 	// Cherrypicking mode
