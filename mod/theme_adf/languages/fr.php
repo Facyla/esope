@@ -87,5 +87,10 @@ return [
 	'widgets:add' => 'Ajoutez des widgets pour personnaliser votre tableau de bord',
 	//'profile_manager:register:mandatory' => "",
 	
+	'expages:about' => "À propos",
+	'expages:terms' => "Charte",
+	'expages:privacy' => "Informations personnelles",
+	'expages:contact' => "Contact",
+	
 ];
 

@@ -1,8 +1,13 @@
 <?php
 
-function gdpr_consent_get_current_config() {
+// Convert plaintext settings into a usable configuration array
+// Use current settings by default
+// @param string $consent_config override plaintext settings
+function gdpr_consent_get_current_config($consent_config = false) {
 	$config = [];
-	$consent_config = elgg_get_plugin_setting('consent_config', 'gdpr_consent');
+	if (!$consent_config) {
+		$consent_config = elgg_get_plugin_setting('consent_config', 'gdpr_consent');
+	}
 	
 	// Lines split
 	$lines = str_replace("\r", "\n", $consent_config);
@@ -24,5 +29,15 @@ function gdpr_consent_get_current_config() {
 	}
 	return $config;
 }
+
+// Convert back the configuration array to plaintext settings (cleaned up !)
+function gdpr_consent_get_settings_from_config($config = []) {
+	$lines = [];
+	foreach($config as $element) {
+		$lines[] = $element['key'] . ' | ' . $element['href'] . ' | ' . $element['text'] . ' | ' . $element['version'];
+	}
+	return implode("\n", $lines);
+}
+
 
 
