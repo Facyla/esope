@@ -22,7 +22,12 @@ if (count($config) > 0) {
 		
 		$content .= '<p>';
 			// Document link
-			$content .= elgg_view('output/url', ['href' => $consent['href'], 'text' => $consent['text'], 'target' => '_blank', 'class' => ""]) . "&nbsp;: ";
+			$content .= elgg_view('output/url', [
+				'href' => $consent['href'], 
+				'text' => $consent['text'] . elgg_echo('gdpr_consent:banner:openlink'), 
+				'target' => '_blank', 
+				'class' => ""
+			]) . "&nbsp;: ";
 			
 			if ($validated) {
 				$validation_date = elgg_get_friendly_time($validated);

@@ -18,6 +18,7 @@ return [
 	// Banner
 	'gdpr_consent:banner:details' => "L'utilisation de ce site est conditionnée à l'acceptation des documents suivants. Veuillez en prendre connaissance et les accepter pour pouvoir utiliser le site.",
 	'gdpr_consent:banner:button' => "Je déclare avoir lu et accepte sans réserve&nbsp;: %s",
+	'gdpr_consent:banner:openlink' => " (ouvrir ce document dans une nouvelle fenêtre)",
 	
 	// Messages
 	'gdpr_consent:error' => "Une erreur est survenue lors de l'acceptation du document %s",
