@@ -14,11 +14,15 @@ return [
 	Chaque élément est obligatoire. Les preuves sont conservées pour chaque couple clef+version : tout changement d'une clef ou d'une version va nécessiter un nouveau recueil du consentement par les utilisateurs.<br />
 	Le changement du titre ou de l'URL d'un document n'a aucune incidence sur leur validation.<br />
 	Par exemple : privacy | https://mysite.com/privacy | Politique de confidentialité | 0.1",
+	'gdpr_consent:settings:adminlink' => "Page de suivi du recueil du consentement",
 	
 	// Banner
 	'gdpr_consent:banner:details' => "L'utilisation de ce site est conditionnée à l'acceptation des documents suivants. Veuillez en prendre connaissance et les accepter pour pouvoir utiliser le site.",
 	'gdpr_consent:banner:button' => "Je déclare avoir lu et accepte sans réserve&nbsp;: %s",
 	'gdpr_consent:banner:openlink' => " (ouvrir ce document dans une nouvelle fenêtre)",
+	
+	// Admin page
+	'gdpr_consent:index:title' => "Recueil du consentement",
 	
 	// Messages
 	'gdpr_consent:error' => "Une erreur est survenue lors de l'acceptation du document %s",

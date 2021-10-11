@@ -23,7 +23,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		elgg_extend_view('elgg.css', 'gdpr_consent/main.css');
 		elgg_extend_view('walled_garden.css', 'gdpr_consent/main.css');
 		
-		elgg_extend_view('page/elements/footer', 'gdpr_consent/extend_footer', 400);
+		elgg_extend_view('page/elements/footer', 'gdpr_consent/gdpr_consent_banner', 400);
 		
 	}
 	

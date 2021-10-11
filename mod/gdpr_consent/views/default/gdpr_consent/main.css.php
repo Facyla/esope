@@ -15,4 +15,9 @@ $url = elgg_get_site_url();
 .gdpr-consent-banner:not(.gdpr_consent-document) {  }
 
 
+#gdpr_consent-statistics {  }
+#gdpr_consent-statistics th, #gdpr_consent-statistics td { border: 1px solid #333; padding: .125rem .5rem; }
+#gdpr_consent-statistics th { font-weight: bold; }
+#gdpr_consent-statistics td {  }
+
 

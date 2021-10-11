@@ -5,25 +5,34 @@ $url = elgg_get_site_url();
 $user_guid = elgg_get_logged_in_user_guid();
 $config = gdpr_consent_get_current_config();
 
-// Option that enables displaying previously validated consent proofs
-// note : the banner displays only if there is at least 1 unvalidated consent
-$show_validated = elgg_extract('show_validated', false);
-
 // Note : mark differently with a special class the consent document pages (otherwise they are not readable)
 $add_consent_document_class = false;
 $current_url = current_page_url();
+
+// Option that enables displaying previously validated consent proofs
+// note : the banner displays only if there is at least 1 unvalidated consent
+$show_validated = elgg_extract('show_validated', $vars, false);
+$anonymous = elgg_extract('anonymous', $vars, false); // allows to display this view for a generic user (all unvalidated)
+if ($anonymous) { 	$add_consent_document_class = true; }
 
 if (count($config) > 0) {
 	$unvalidated = 0;
 	$content = '';
 	
 	foreach($config as $consent) {
+		// Add special class for documents that should be read
 		if ($consent['href'] == $current_url) {
 			$add_consent_document_class = true;
 		}
+		
 		$proof_name = "{$consent['key']}_{$consent['version']}"; // eg. privacy_0.1
+		
 		// Show only if not validated yet - get plugin usersetting, which returns validation timestamp
-		$validated = elgg_get_plugin_user_setting($proof_name, $user_guid, 'gdpr_consent');
+		if ($anonymous) {
+			$validated = false;
+		} else {
+			$validated = elgg_get_plugin_user_setting($proof_name, $user_guid, 'gdpr_consent');
+		}
 		if (!$validated) { $unvalidated++; }
 		
 		$content .= '<p>';
@@ -53,6 +62,7 @@ if (count($config) > 0) {
 	if ($add_consent_document_class) {
 		$add_consent_document_class = 'gdpr_consent-document';
 	}
+	
 	// Display unvalidated documents (or all if using display option)
 	if ($unvalidated > 0 || $show_validated) {
 		echo '<div class="gdpr-consent-overlay ' . $add_consent_document_class . '">';

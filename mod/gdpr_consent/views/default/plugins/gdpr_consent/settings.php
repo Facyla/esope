@@ -25,12 +25,13 @@ Config plugin : liste des documents (type + URL + titre + version).
 
 
 
-//echo '<p>' . elgg_view('output/url', ['href' => "https://tarteaucitron.io/fr/install/", 'text' => elgg_echo('tarteaucitron:settings:url_install')]) . '</p>';
+echo '<p>' . elgg_view('output/url', ['href' => "{$url}gdpr_consent", 'text' => elgg_echo('gdpr_consent:settings:adminlink'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
 
 
 // Configuration des documents à valider : key|URL|Title|Version, eg. privacy|https://mysite.com/privacy|Politique de confidentialité|0.1
-echo '<div><label>' . elgg_echo('gdpr_consent:settings:consent_config') . ' ' . elgg_view('input/plaintext', ['name' => 'params[consent_config]', 'value' => $plugin->consent_config]) . '</label>';
-echo '<p>' . elgg_echo('gdpr_consent:settings:consent_config:details') . '</p>';
+echo '<div><label for="consent_config">' . elgg_echo('gdpr_consent:settings:consent_config') . '</label><br />';
+echo '<p><em>' . elgg_echo('gdpr_consent:settings:consent_config:details') . '</em>';
+echo elgg_view('input/plaintext', ['name' => 'params[consent_config]', 'id' => 'consent_config', 'value' => $plugin->consent_config]);
 echo '</div>';
 
 

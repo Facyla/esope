@@ -1,5 +1,6 @@
 <?php
 use Facyla\GdprConsent\Bootstrap;
+use Elgg\Router\Middleware\AdminGatekeeper;
 
 // Required libs & custom functions
 //require_once(__DIR__ . '/vendor/autoload.php');
@@ -18,12 +19,13 @@ return [
 	
 	// Routes
 	'routes' => [
-		/*
-		'contributions:index' => [
-			'path' => '/contributions/{container_guid?}',
-			'resource' => 'contributions',
+		'gdpr_consent:index' => [
+			'path' => '/gdpr_consent',
+			'resource' => 'gdpr_consent/index',
+			'middleware' => [
+				AdminGatekeeper::class,
+			],
 		],
-		*/
 	],
 	
 	
