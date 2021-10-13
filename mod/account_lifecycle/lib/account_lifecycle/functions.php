@@ -110,7 +110,8 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 				if (elgg_is_active_plugin('uservalidationbyemail')) {
 					if (!$simulation) {
 						// set user as unvalidated
-						$user->setValidationStatus(false);
+						$user->validated = false;
+						$user->setValidationStatus(false, 'account_lifecycle');
 						// set flag for tracking validation status
 						elgg_set_plugin_user_setting('email_validated', false, $user->guid, 'uservalidationbyemail');
 						
