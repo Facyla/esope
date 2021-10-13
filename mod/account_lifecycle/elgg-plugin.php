@@ -37,6 +37,13 @@ return [
 				AdminGatekeeper::class,
 			],
 		],
+		'account_lifecycle:anonymize' => [
+			'path' => '/account_lifecycle/anonymize',
+			'resource' => 'account_lifecycle/anonymize',
+			'middleware' => [
+				AdminGatekeeper::class,
+			],
+		],
 		'account_lifecycle:statistics' => [
 			'path' => '/account_lifecycle/statistics',
 			'resource' => 'account_lifecycle/statistics',

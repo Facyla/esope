@@ -22,7 +22,9 @@ return [
 	'account_lifecycle:settings:direct_interval' => "Intervale de vérification (jours)",
 	'account_lifecycle:settings:direct_rule' => "Action à effectuer à l'échéance",
 	'account_lifecycle:settings:direct_reminders' => "Notifications de rappel",
-	'account_lifecycle:settings:adminlink' => "Page de statistiques",
+	'account_lifecycle:settings:adminlink' => "Page de contrôle et d'exécution",
+	'account_lifecycle:settings:anonymizelink' => "Page d'anonymisation",
+	'account_lifecycle:settings:statslink' => "Page de statistiques",
 	
 	// Full mode
 	'account_lifecycle:settings:full_mode' => "Mode complet",
@@ -30,7 +32,10 @@ return [
 		- sélection : comptes admin non/oui, série de metadata => comparaison (==, !=, IN, NOT IN, >, <, <=, >=...), valeur<br />
 		- règles : exiger une nouvelle validation par email / sur le site, archiver, désactiver (ban)<br />
 		- fréquence : X mois après dernière connexion, tous les X mois<br />
-		<br />
+		<br />account_lifecycle:remove_email
+account_lifecycle:remove_profile_data
+account_lifecycle:remove_messages
+account_lifecycle:anonymize:remove_publications
 		Date limite : si pas d'action avant, on désactive le compte (ou autre action de type changement d'une ou plusieurs métadonnée'). <br />
 		Doit permettre des rappels avant une date limite : <br />
 		<br />
@@ -41,10 +46,12 @@ return [
 	
 	// Direct mode form
 	'account_lifecycle:parameters' => "Paramètres de configuration qui seront utilisés",
-	'account_lifecycle:force_run' => "Forcer l'exécution (sans tenir dompte des dates)",
-	'account_lifecycle:force_run:details' => "ATTENTION : NE PAS ACTIVER EN PRODUCTION !!  cela générerait des envois successifs à chaque nouveau chargement de page en cas de timeout, car cette option bypasse la date de dernière vérification.<br />L'utilité de cette option est de permettre de tester les fonctionnalités à plusieurs reprises sans devoir supprimer les métadonnées de contrôle à chaque test.",
+	'account_lifecycle:force_run' => "Forcer l'exécution (ré-applique l'action sans tenir dompte des dates)",
+	'account_lifecycle:force_run:details' => "ATTENTION : NE PAS FORCER L'EXECUTION EN PRODUCTION !!  cela générerait des envois successifs à chaque nouveau chargement de page en cas de timeout, car cette option bypasse la date de dernière vérification.<br />L'utilité de cette option est de permettre de tester les fonctionnalités à plusieurs reprises sans devoir supprimer les métadonnées de contrôle à chaque test, ou de forcer ponctuellement - et une seule fois - une nouvelle validation.",
 	'account_lifecycle:simulation' => "Simulation (aucune action ne sera effectuée)",
-	'account_lifecycle:verbose' => "Mode bavard (affiche les informations pour chaque compte utilisateur)",
+	'account_lifecycle:simulation:details' => "Utilisez la simulation pour déterminer quelles actions seront effectuées pour chaque compte.",
+	'account_lifecycle:verbose' => "Mode bavard",
+	'account_lifecycle:verbose:details' => "Affiche les informations sur les actions effectuées pour chaque compte utilisateur",
 	'account_lifecycle:run_now' => "Exécuter maintenant",
 	'account_lifecycle:mode_direct' => "MODE DIRECT : vérification simple des comptes",
 	'account_lifecycle:mode_direct:details' => "Permet la mise en place initiale de la vérification des comptes : pour effectuer une simulation, activer le mode simulation et le mode bavard. <br />Pour une première mise en place, activer le mode simple dans les paramètres du plugin, puis exécuter avec simulation = non, bavard = oui, et forcer = non.<br />En cas de timeout, recharger la page jusqu'à la fin du script.",
@@ -53,6 +60,15 @@ return [
 	// Cherrypicking mode
 	'account_lifecycle:cherrypicking' => "Mode manuel",
 	'account_lifecycle:cherrypicking:description' => "Permet de choisir quels comptes utilisateurs re-valider",
+	'account_lifecycle:select_users' => "Sélectionner les comptes utilisateurs",
+	
+	// Anonymize mode
+	'account_lifecycle:anonymize' => "Anonymisation de comptes utilisateurs",
+	'account_lifecycle:anonymize:description' => "Permet de supprimer les données personnelles de comptes utilisateurs",
+	'account_lifecycle:remove_email' => "Supprimer l'adresse email du compte",
+	'account_lifecycle:remove_profile_data' => "Supprimer les données du profil",
+	'account_lifecycle:remove_messages' => "Supprimer les messages privés",
+	'account_lifecycle:anonymize:remove_publications' => "Supprimer les publications",
 	
 	// Full mode form
 	'account_lifecycle:field:title' => "Titre",

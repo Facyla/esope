@@ -15,6 +15,16 @@ elgg_push_breadcrumb(elgg_echo('account_lifecycle:index'), 'account_lifecycle');
 $content = '';
 
 
+$include_admin = elgg_get_plugin_setting('direct_include_admin', 'account_lifecycle');
+$interval = elgg_get_plugin_setting('direct_interval', 'account_lifecycle');
+$action = elgg_get_plugin_setting('direct_rule', 'account_lifecycle');
+//$notifications = elgg_get_plugin_setting('direct_rule', 'account_lifecycle');
+
+$direct_rule_opt = account_lifecycle_direct_rule_options();
+$yes_no_opt = ['yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no')];
+$no_yes_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
+
+
 // Plugin parameters
 $content .= "<h3>" . elgg_echo('account_lifecycle:parameters') . "</h3>";
 $content .= '<ul style="list-style: initial; margin-left: 1rem;">' . "
@@ -26,15 +36,6 @@ $content .= '<ul style="list-style: initial; margin-left: 1rem;">' . "
 
 
 // Direct mode run
-$include_admin = elgg_get_plugin_setting('direct_include_admin', 'account_lifecycle');
-$interval = elgg_get_plugin_setting('direct_interval', 'account_lifecycle');
-$action = elgg_get_plugin_setting('direct_rule', 'account_lifecycle');
-$notifications = elgg_get_plugin_setting('direct_rule', 'account_lifecycle');
-
-$direct_rule_opt = account_lifecycle_direct_rule_options();
-$yes_no_opt = ['yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no')];
-$no_yes_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
-
 $direct_mode = get_input('direct_mode');
 $direct_force_run = get_input('direct_force_run');
 $direct_simulate = get_input('direct_simulate');
@@ -44,11 +45,11 @@ $content .= "<h3>" . elgg_echo('account_lifecycle:mode_direct') . "</h3>";
 $content .= '<em>' . elgg_echo('account_lifecycle:mode_direct:details') . '</em>';
 //$content .= '<p>' . elgg_view('output/url', ['text' => "Vérifier maintenant", 'href' => "?direct_mode=yes", 'class' => "elgg-button elgg-button-action"]) . '</p>';
 $content .= '<form id="account_lifecycle-direct-form" action="" method="GET">';
-	$content .= "<label>" . elgg_echo('account_lifecycle:simulation') . ' ' . elgg_view('input/select', ['name' => 'direct_simulate', 'options_values' => $yes_no_opt, 'value' => $direct_simulate]) . "</label><br />";
-	$content .= "<label>" . elgg_echo('account_lifecycle:verbose') . ' ' . elgg_view('input/select', ['name' => 'direct_verbose', 'options_values' => $yes_no_opt, 'value' => $direct_verbose]) . "</label><br />";
-	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/select', ['name' => 'direct_force_run', 'options_values' => $no_yes_opt, 'value' => $direct_force_run]) . "</label><br />" . elgg_echo('account_lifecycle:force_run:details');
+	$content .= "<label>" . elgg_echo('account_lifecycle:simulation') . ' ' . elgg_view('input/select', ['name' => 'direct_simulate', 'options_values' => $yes_no_opt, 'value' => $direct_simulate]) . "</label><br /><em>" . elgg_echo('account_lifecycle:simulation:details') . '</em><br />';
+	$content .= "<label>" . elgg_echo('account_lifecycle:verbose') . ' ' . elgg_view('input/select', ['name' => 'direct_verbose', 'options_values' => $yes_no_opt, 'value' => $direct_verbose]) . "</label><br /><em>" . elgg_echo('account_lifecycle:verbose:details') . '</em><br />';
+	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/select', ['name' => 'direct_force_run', 'options_values' => $no_yes_opt, 'value' => $direct_force_run]) . "</label><br /><em>" . elgg_echo('account_lifecycle:force_run:details') . '</em><br />';
 	$content .= elgg_view('input/hidden', ['name' => "direct_mode", 'value' => "yes"]);
-	$content .= elgg_view('input/submit', ['value' => elgg_echo('account_lifecycle:run_now'), 'class' => "elgg-button elgg-button-action"]);
+	$content .= '<p>' . elgg_view('input/submit', ['value' => elgg_echo('account_lifecycle:run_now'), 'class' => "elgg-button elgg-button-action"]);
 $content .= '</form>';
 
 // Exécution
@@ -77,12 +78,12 @@ $content .= '<ul style="list-style: initial; margin-left: 1rem;">' . "
 	<li>" . elgg_echo('account_lifecycle:settings:direct_rule') . " : <strong>{$direct_rule_opt[$action]}</strong></li>
 </ul>";
 $content .= '<form id="account_lifecycle-cherrypicking-form" action="" method="GET">';
-	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/userpicker', ['name' => 'cherry_users', 'value' => $cherry_users]) . "</label><br />";
-	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/select', ['name' => 'cherry_force_run', 'options_values' => $no_yes_opt, 'value' => $cherry_force_run]) . "</label><br />";
+	$content .= "<label>" . elgg_echo('account_lifecycle:select_users') . ' ' . elgg_view('input/userpicker', ['name' => 'cherry_users', 'value' => $cherry_users]) . "</label><br />";
 	$content .= "<label>" . elgg_echo('account_lifecycle:simulation') . ' ' . elgg_view('input/select', ['name' => 'cherry_simulate', 'options_values' => $yes_no_opt, 'value' => $cherry_simulate]) . "</label><br />";
 	$content .= "<label>" . elgg_echo('account_lifecycle:verbose') . ' ' . elgg_view('input/select', ['name' => 'cherry_verbose', 'options_values' => $yes_no_opt, 'value' => $cherry_verbose]) . "</label><br />";
+	$content .= "<label>" . elgg_echo('account_lifecycle:force_run') . ' ' . elgg_view('input/select', ['name' => 'cherry_force_run', 'options_values' => $no_yes_opt, 'value' => $cherry_force_run]) . "</label><br />";
 	$content .= elgg_view('input/hidden', ['name' => "cherrypicking_mode", 'value' => "yes"]);
-	$content .= elgg_view('input/submit', ['value' => elgg_echo('account_lifecycle:run_now'), 'class' => "elgg-button elgg-button-action"]);
+	$content .= '<p>' . elgg_view('input/submit', ['value' => elgg_echo('account_lifecycle:run_now'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
 $content .= '</form>';
 
 // Exécution

@@ -6,7 +6,7 @@ Activez ce plugin si vous souhaitez effectuer une vérification périodique des 
 Cette extension propose un mode "direct" et un mode "complet". Le mode "direct" est opérationnel, tantdis que l'autre vise à dessiner la future roadmap du plugin. 
 
 # Mode direct
-Vérification des comptes tous les X jours, avec envoi d'un email de validaiton du compte à la date d'chéance. 
+Vérification des comptes tous les X jours, avec envoi d'un email de re-vérification du compte à la date d'échéance. Lors de la re-vérification, les comptes sont désactivés - et le restent jusqu'à leur vérification. 
 Options : 
  - inclure ou non les comptes admin
  - intervale entre 2 vérifications en jours
@@ -31,6 +31,9 @@ Et actions ponctuelles :
 
 
 ## ROADMAP
+ * introduction de plusieurs types de délais et types d'actions liées à un cycle de vie : 
+   * J+X : désactivation et revalidation
+   * J+X+Y : anonymisation des comptes (suppression email et données personnelles)
  * poursuite du développement du mode "complet"
  * des suggestions ?
 
