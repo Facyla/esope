@@ -176,7 +176,10 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 				$return .= elgg_echo('account_lifecycle:cron:ban');
 				break;
 		}
-		$user->account_lifecycle_direct_last_ts = $now;
+		// Save last run only if not simulating
+		if (!$simulation) {
+			$user->account_lifecycle_direct_last_ts = $now;
+		}
 		$return .= elgg_echo('account_lifecycle:cron:saved_lastrun', [date("Y-m-d H:i:s", $now)]);;
 		$return .= '</li>';
 	}
