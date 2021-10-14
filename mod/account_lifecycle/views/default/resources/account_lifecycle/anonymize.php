@@ -39,6 +39,8 @@ $anonymize_simulate = get_input('anonymize_simulate');
 $anonymize_verbose = get_input('anonymize_verbose');
 $anonymize_users = get_input('anonymize_users');
 $remove_email = get_input('remove_email');
+$replace_name = get_input('replace_name');
+$replace_username = get_input('replace_username');
 $remove_profile_data = get_input('remove_profile_data');
 $remove_messages = get_input('remove_messages');
 $anonymize_verbose = get_input('anonymize_verbose');
@@ -59,6 +61,10 @@ $content .= '<form id="account_lifecycle-anonymize-form" action="" method="GET">
 	$content .= "<label>" . elgg_echo('account_lifecycle:select_users') . ' ' . elgg_view('input/userpicker', ['name' => 'anonymize_users', 'value' => $anonymize_users]) . "</label><br />";
 	// Remove email
 	$content .= "<label>" . elgg_echo('account_lifecycle:remove_email') . ' ' . elgg_view('input/select', ['name' => 'remove_email', 'options_values' => $no_yes_opt, 'value' => $remove_email]) . "</label><br />";
+	// Replace name
+	$content .= "<label>" . elgg_echo('account_lifecycle:replace_name') . ' ' . elgg_view('input/select', ['name' => 'replace_name', 'options_values' => $no_yes_opt, 'value' => $replace_name]) . "</label><br />";
+	// Replace username => userGUID
+	$content .= "<label>" . elgg_echo('account_lifecycle:replace_username') . ' ' . elgg_view('input/select', ['name' => 'replace_username', 'options_values' => $no_yes_opt, 'value' => $replace_username]) . "</label><br />";
 	// Remove personal data : @TODO clear profile + user settings ?
 	$content .= "<label>" . elgg_echo('account_lifecycle:remove_profile_data') . ' ' . elgg_view('input/select', ['name' => 'remove_profile_data', 'options_values' => $no_yes_opt, 'value' => $remove_profile_data]) . "</label><br />";
 	// Remove messages
@@ -74,6 +80,12 @@ $content .= '</form>';
 if ($anonymize_mode == 'yes') {
 	$anonymize_simulate = ($anonymize_simulate == 'yes') ? true : false;
 	$anonymize_verbose = ($anonymize_verbose == 'no') ? false : true;
+	$remove_email = ($remove_email == 'yes') ? true : false;
+	$replace_name = ($replace_name == 'yes') ? true : false;
+	$replace_username = ($replace_username == 'yes') ? true : false;
+	$remove_profile_data = ($remove_profile_data == 'yes') ? true : false;
+	$remove_messages = ($remove_messages == 'yes') ? true : false;
+	$remove_publications = ($remove_publications == 'yes') ? true : false;
 	$users = elgg_get_entities(['guids' => $anonymize_users]);
 	
 	$content .= '<ul class="elgg-output">';
@@ -83,15 +95,33 @@ if ($anonymize_mode == 'yes') {
 		$content .= '<img src="' . $user->getIconURL('tiny') . '" /> ';
 		$content .= "{$user->name} ({$user->guid}, {$user->username}) ";
 		$content .= '</a><ul>';
-		$remove_email = ($remove_email == 'yes') ? true : false;
+		
+		// Remove email (along with password reinit, blocks any attempt to connect)
 		if ($remove_email) {
 			$user->email = false;
+			// Reset password to prevent any further login with (username+password)
+			$new_random_password = generate_random_cleartext_password();
+			$user->setPassword($new_random_password);
+			// set user as unvalidated
+			$user->validated = false;
+			$user->setValidationStatus(false, 'account_lifecycle anonymize');
 			$content .= "<li>email supprimé</li>";
 		}
 		
-		$remove_profile_data = ($remove_profile_data == 'yes') ? true : false;
+		// Remplacement nom du compte
+		if ($replace_name) {
+			$user->name = elgg_echo('account_lifecycle:replace_name:replacement');
+			$content .= "<li>nom du compte supprimé</li>";
+		}
+		
+		// Remplacement identifiant (nom d'utilisateur)
+		if ($replace_username) {
+			$user->username = "user{$user->guid}";
+			$content .= "<li>identifiant du compte anonymisé</li>";
+		}
+		
+		// Suppression des données du profil
 		if ($remove_profile_data) {
-			
 			$categorized_fields = profile_manager_get_categorized_fields($user);
 			$cats = elgg_extract('categories', $categorized_fields);
 			$fields = elgg_extract('fields', $categorized_fields);
@@ -108,20 +138,22 @@ if ($anonymize_mode == 'yes') {
 			$content .= '<li>' . "$fields_count champs du profil supprimés" . '</li>';
 		}
 		
-		$remove_messages = ($remove_messages == 'yes') ? true : false;
+		// Suppression des messages privés
 		if ($remove_messages) {
 			$messages = elgg_get_entities(['type' => 'object', 'subtype' => 'messages', 'owner_guid' => $user->guid, 'limit' => false]);
 			foreach($messages as $ent) {
-				if ($ent->delete()) {
-					$messages_count++;
-				}
+				if ($ent->delete()) { $messages_count++; }
 			}
 			$content .= '<li>' . "$messages_count messages privés sur " . count($messages) . " supprimés" . '</li>';
 		}
 		
-		$remove_publications = ($remove_publications == 'yes') ? true : false;
+		/* Note : if we have to remove publications, we probably also want to remove the account itself, 
+		 * which is handled by content_lifecycle (which enables transfering publicaitons before account removal) 
+		 * -> this feature should be focused on anonymising or removing some objects without removing the account itself
+		 * @TODO : merge plugins for a unified account and content lifecycle control
+		 */
 		if ($remove_publications) {
-			
+			// not implemented yet
 		}
 		
 		$content .= '</ul></li>';

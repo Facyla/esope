@@ -65,7 +65,12 @@ account_lifecycle:anonymize:remove_publications
 	// Anonymize mode
 	'account_lifecycle:anonymize' => "Anonymisation de comptes utilisateurs",
 	'account_lifecycle:anonymize:description' => "Permet de supprimer les données personnelles de comptes utilisateurs",
-	'account_lifecycle:remove_email' => "Supprimer l'adresse email du compte",
+	'account_lifecycle:remove_email' => "Désactiver définitivement le compte",
+	'account_lifecycle:remove_email:details' => "Ceci bloque toute possibilité d'utiliser ce compte en supprimant l'adresse email du compte et en réinitialisant le mot de passe, et en retirant la validation du compte.",
+	'account_lifecycle:replace_name' => "Anonymiser le nom du compte",
+	'account_lifecycle:replace_name:details' => "Remplace le nom par&nbsp;: %s",
+	'account_lifecycle:replace_name:replacement' => "[ compte supprimé ]",
+	'account_lifecycle:replace_username' => "Anonymiser l'identitiant (<b>user<em>GUID</em></b>)",
 	'account_lifecycle:remove_profile_data' => "Supprimer les données du profil",
 	'account_lifecycle:remove_messages' => "Supprimer les messages privés",
 	'account_lifecycle:anonymize:remove_publications' => "Supprimer les publications",
