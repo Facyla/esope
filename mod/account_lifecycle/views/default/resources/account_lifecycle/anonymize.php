@@ -14,13 +14,12 @@ elgg_push_breadcrumb(elgg_echo('account_lifecycle:anonymize'), 'account_lifecycl
 
 $content = '';
 
-
+// Plugin parameters
+/*
 $include_admin = elgg_get_plugin_setting('direct_include_admin', 'account_lifecycle');
 $interval = elgg_get_plugin_setting('direct_interval', 'account_lifecycle');
 $action = elgg_get_plugin_setting('direct_rule', 'account_lifecycle');
 
-
-// Plugin parameters
 $content .= "<h3>" . elgg_echo('account_lifecycle:parameters') . "</h3>";
 $content .= '<ul style="list-style: initial; margin-left: 1rem;">' . "
 	<li>" . elgg_echo('account_lifecycle:settings:direct_include_admin') . " : <strong>" . elgg_echo("option:$include_admin") . "</strong></li>
@@ -28,8 +27,8 @@ $content .= '<ul style="list-style: initial; margin-left: 1rem;">' . "
 	<li>" . elgg_echo('account_lifecycle:settings:direct_rule') . " : <strong>{$direct_rule_opt[$action]}</strong></li>
 </ul>
 <br />";
+*/
 
-$direct_rule_opt = account_lifecycle_direct_rule_options();
 $yes_no_opt = ['yes' => elgg_echo('option:yes'), 'no' => elgg_echo('option:no')];
 $no_yes_opt = ['no' => elgg_echo('option:no'), 'yes' => elgg_echo('option:yes')];
 
@@ -46,31 +45,31 @@ $remove_messages = get_input('remove_messages');
 $anonymize_verbose = get_input('anonymize_verbose');
 $remove_publications = get_input('remove_publications');
 
-$content .= '<br /><br />';
+
 $content .= "<h3>" . elgg_echo('account_lifecycle:anonymize') . "</h3>";
 $content .= "<em>" . elgg_echo('account_lifecycle:anonymize:description') . "</em>";
-$content .= '<ul style="list-style: initial; margin-left: 1rem;">' . "
-	<li>" . elgg_echo('account_lifecycle:settings:direct_include_admin') . " : <strong>" . elgg_echo("option:$include_admin") . "</strong></li>
-	<li>" . elgg_echo('account_lifecycle:settings:direct_interval') . " : <strong>tous les $interval jours</strong></li>
-	<li>" . elgg_echo('account_lifecycle:settings:direct_rule') . " : <strong>{$direct_rule_opt[$action]}</strong></li>
-</ul>";
+$content .= '<br /><br />';
+
 $content .= '<form id="account_lifecycle-anonymize-form" action="" method="GET">';
 	$content .= "<label>" . elgg_echo('account_lifecycle:simulation') . ' ' . elgg_view('input/select', ['name' => 'anonymize_simulate', 'options_values' => $yes_no_opt, 'value' => $anonymize_simulate]) . "</label><br />";
 	$content .= "<label>" . elgg_echo('account_lifecycle:verbose') . ' ' . elgg_view('input/select', ['name' => 'anonymize_verbose', 'options_values' => $yes_no_opt, 'value' => $anonymize_verbose]) . "</label><br />";
 	
 	$content .= "<label>" . elgg_echo('account_lifecycle:select_users') . ' ' . elgg_view('input/userpicker', ['name' => 'anonymize_users', 'value' => $anonymize_users]) . "</label><br />";
 	// Remove email
-	$content .= "<label>" . elgg_echo('account_lifecycle:remove_email') . ' ' . elgg_view('input/select', ['name' => 'remove_email', 'options_values' => $no_yes_opt, 'value' => $remove_email]) . "</label><br />";
-	// Replace name
-	$content .= "<label>" . elgg_echo('account_lifecycle:replace_name') . ' ' . elgg_view('input/select', ['name' => 'replace_name', 'options_values' => $no_yes_opt, 'value' => $replace_name]) . "</label><br />";
+	$content .= "<p><label>" . elgg_echo('account_lifecycle:remove_email') . ' ' . elgg_view('input/select', ['name' => 'remove_email', 'options_values' => $no_yes_opt, 'value' => $remove_email]) . "</label><br /><em>" . elgg_echo('account_lifecycle:remove_email:details') . "</em></p>";
 	// Replace username => userGUID
-	$content .= "<label>" . elgg_echo('account_lifecycle:replace_username') . ' ' . elgg_view('input/select', ['name' => 'replace_username', 'options_values' => $no_yes_opt, 'value' => $replace_username]) . "</label><br />";
-	// Remove personal data : @TODO clear profile + user settings ?
-	$content .= "<label>" . elgg_echo('account_lifecycle:remove_profile_data') . ' ' . elgg_view('input/select', ['name' => 'remove_profile_data', 'options_values' => $no_yes_opt, 'value' => $remove_profile_data]) . "</label><br />";
+	$content .= "<p><label>" . elgg_echo('account_lifecycle:replace_username') . ' ' . elgg_view('input/select', ['name' => 'replace_username', 'options_values' => $no_yes_opt, 'value' => $replace_username]) . "</label><br /><em>" . elgg_echo('account_lifecycle:replace_username:details') . "</em></p>";
+	// Replace name
+	$replacement = elgg_echo('account_lifecycle:replace_name:replacement');
+	$content .= "<p><label>" . elgg_echo('account_lifecycle:replace_name') . ' ' . elgg_view('input/select', ['name' => 'replace_name', 'options_values' => $no_yes_opt, 'value' => $replace_name]) . "</label><br /><em>" . elgg_echo('account_lifecycle:replace_name:details', [$replacement]) . "</em></p>";
+	// Remove personal data
+	$content .= "<p><label>" . elgg_echo('account_lifecycle:remove_profile_data') . ' ' . elgg_view('input/select', ['name' => 'remove_profile_data', 'options_values' => $no_yes_opt, 'value' => $remove_profile_data]) . "</label><br /><em>" . elgg_echo('account_lifecycle:remove_profile_data:details') . "</em></p>";
+	// @TODO also clear user settings ? 
+	// => no because they are designed to store admin data and settings, and not personal data
 	// Remove messages
-	$content .= "<label>" . elgg_echo('account_lifecycle:remove_messages') . ' ' . elgg_view('input/select', ['name' => 'remove_messages', 'options_values' => $no_yes_opt, 'value' => $remove_messages]) . "</label><br />";
-	// Keep posts data
-	//$content .= "<label>" . elgg_echo('account_lifecycle:anonymize:remove_publications') . ' ' . elgg_view('input/select', ['name' => 'remove_publications', 'options_values' => $no_yes_opt, 'value' => $remove_publications]) . "</label><br />";
+	$content .= "<p><label>" . elgg_echo('account_lifecycle:remove_messages') . ' ' . elgg_view('input/select', ['name' => 'remove_messages', 'options_values' => $no_yes_opt, 'value' => $remove_messages]) . "</label><br /><em>" . elgg_echo('account_lifecycle:remove_messages:details') . "</em></p>";
+	// Remove some objects data - based on subtype and container
+	//$content .= "<p><label>" . elgg_echo('account_lifecycle:anonymize:remove_publications') . ' ' . elgg_view('input/select', ['name' => 'remove_publications', 'options_values' => $no_yes_opt, 'value' => $remove_publications]) . "</label></p>";
 	
 	$content .= elgg_view('input/hidden', ['name' => "anonymize_mode", 'value' => "yes"]);
 	$content .= '<p>' . elgg_view('input/submit', ['value' => elgg_echo('account_lifecycle:run_now'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
@@ -78,16 +77,21 @@ $content .= '</form>';
 
 // Exécution
 if ($anonymize_mode == 'yes') {
-	$anonymize_simulate = ($anonymize_simulate == 'yes') ? true : false;
-	$anonymize_verbose = ($anonymize_verbose == 'no') ? false : true;
-	$remove_email = ($remove_email == 'yes') ? true : false;
-	$replace_name = ($replace_name == 'yes') ? true : false;
-	$replace_username = ($replace_username == 'yes') ? true : false;
-	$remove_profile_data = ($remove_profile_data == 'yes') ? true : false;
-	$remove_messages = ($remove_messages == 'yes') ? true : false;
-	$remove_publications = ($remove_publications == 'yes') ? true : false;
-	$users = elgg_get_entities(['guids' => $anonymize_users]);
+	// Build parameters for action function
+	$params = [
+		'simulation' => ($anonymize_simulate == 'no') ? false : true,   // default true
+		'verbose' => ($anonymize_verbose == 'no') ? false : true,   // default true
+		'remove_email' => ($remove_email == 'yes') ? true : false,   // default false
+		'replace_name' => ($replace_name == 'yes') ? true : false,   // default false
+		'replace_username' => ($replace_username == 'yes') ? true : false,   // default false
+		'remove_profile_data' => ($remove_profile_data == 'yes') ? true : false,   // default false
+		'remove_messages' => ($remove_messages == 'yes') ? true : false,   // default false
+		'remove_publications' => ($remove_publications == 'yes') ? true : false,   // default false
+	];
 	
+	$content .= account_lifecycle_execute_anonymization($anonymize_users, $params);
+	
+	/*
 	$content .= '<ul class="elgg-output">';
 	foreach($users as $user) {
 		$content .= '<li>';
@@ -110,14 +114,16 @@ if ($anonymize_mode == 'yes') {
 		
 		// Remplacement nom du compte
 		if ($replace_name) {
-			$user->name = elgg_echo('account_lifecycle:replace_name:replacement');
-			$content .= "<li>nom du compte supprimé</li>";
+			$replacement = elgg_echo('account_lifecycle:replace_name:replacement');
+			$user->name = $replacement;
+			$content .= "<li>nom du compte supprimé et remplacé par : $replacement</li>";
 		}
 		
 		// Remplacement identifiant (nom d'utilisateur)
 		if ($replace_username) {
-			$user->username = "user{$user->guid}";
-			$content .= "<li>identifiant du compte anonymisé</li>";
+			$new_username = "user{$user->guid}";
+			$user->username = $new_username;
+			$content .= "<li>identifiant du compte anonymisé : $new_username</li>";
 		}
 		
 		// Suppression des données du profil
@@ -147,20 +153,21 @@ if ($anonymize_mode == 'yes') {
 			$content .= '<li>' . "$messages_count messages privés sur " . count($messages) . " supprimés" . '</li>';
 		}
 		
-		/* Note : if we have to remove publications, we probably also want to remove the account itself, 
-		 * which is handled by content_lifecycle (which enables transfering publicaitons before account removal) 
-		 * -> this feature should be focused on anonymising or removing some objects without removing the account itself
-		 * @TODO : merge plugins for a unified account and content lifecycle control
-		 */
+		// Note : if we have to remove publications, we probably also want to remove the account itself, 
+		// which is handled by content_lifecycle (which enables transfering publicaitons before account removal) 
+		// -> this feature should be focused on anonymising or removing some objects without removing the account itself
+		// @TODO : merge plugins for a unified account and content lifecycle control
 		if ($remove_publications) {
 			// not implemented yet
 		}
 		
 		$content .= '</ul></li>';
+		$user->account_lifecycle_anonymize_last_ts = time();
 	}
 	$content .= '</ul>';
 	
 	//$content .= account_lifecycle_execute_rules($anonymize_force_run, $anonymize_simulate, $anonymize_verbose, $anonymize_users);
+	*/
 }
 
 

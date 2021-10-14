@@ -188,6 +188,137 @@ function account_lifecycle_execute_rules($force_run = false, $simulation = false
 }
 
 
+/* Procédure d'anonymisation de comptes utilisateurs
+ */
+function account_lifecycle_execute_anonymization($users_guids = false, $params = []) {
+	if (!$users_guids) { return false; }
+	
+	$content = '';
+	$errors = 0;
+	$users = elgg_get_entities(['guids' => $users_guids]);
+	
+	$content .= '<ul class="elgg-output">';
+	foreach($users as $user) {
+		$result = account_lifecycle_anonymize_account($user, $params);
+		if ($result !== false) {
+			$content .= $result;
+		} else {
+			$errors++;
+		}
+	}
+	$content .= '</ul>';
+	
+	return $content;
+}
+
+/* Anonymisation d'un compte utilisateur
+ * bool params['simulation'] : simulate, don't act, default true
+		'verbose' => ($anonymize_verbose == 'no') ? false : true,   // default true
+		'remove_email' => ($remove_email == 'yes') ? true : false,   // default false
+		'replace_name' => ($replace_name == 'yes') ? true : false,   // default false
+		'replace_username' => ($replace_username == 'yes') ? true : false,   // default false
+		'remove_profile_data' => ($remove_profile_data == 'yes') ? true : false,   // default false
+		'remove_messages' => ($remove_messages == 'yes') ? true : false,   // default false
+		'remove_publications' => ($remove_publications == 'yes') ? true : false,   // default false
+ */
+function account_lifecycle_anonymize_account($user = false, $params = []) {
+	if (!$user instanceof ElggUser) { return false; }
+	
+	$return = '';
+	$return .= '<li>';
+	$return .= '<a href="' . $user->getURL() . '" target="_blank">';
+	$return .= '<img src="' . $user->getIconURL('tiny') . '" /> ';
+	$return .= "{$user->name} ({$user->guid}, {$user->username}) ";
+	$return .= '</a>';
+	if ($params['simulation']) { $return .= elgg_echo('account_lifecycle:cron:simulation'); }
+	$return .= '<ul>';
+	
+	// Remove email (along with password reinit, blocks any attempt to connect)
+	if ($params['remove_email']) {
+		if (!$params['simulation']) {
+			$user->email = false;
+			// Reset password to prevent any further login with (username+password)
+			$new_random_password = generate_random_cleartext_password();
+			$user->setPassword($new_random_password);
+			// set user as unvalidated
+			$user->validated = false;
+			$user->setValidationStatus(false, 'account_lifecycle anonymize');
+		}
+		$return .= "<li>email supprimé</li>";
+	}
+	
+	// Remplacement nom du compte
+	if ($params['replace_name']) {
+		$replacement = elgg_echo('account_lifecycle:replace_name:replacement');
+		if (!$params['simulation']) {
+			$user->name = $replacement;
+		}
+		$return .= "<li>nom du compte supprimé et remplacé par : $replacement</li>";
+	}
+	
+	// Remplacement identifiant (nom d'utilisateur)
+	if ($params['replace_username']) {
+		$new_username = "user{$user->guid}";
+		if (!$params['simulation']) {
+			$user->username = $new_username;
+		}
+		$return .= "<li>identifiant du compte anonymisé : $new_username</li>";
+	}
+	
+	// Suppression des données du profil
+	if ($params['remove_profile_data']) {
+		$categorized_fields = profile_manager_get_categorized_fields($user);
+		$cats = elgg_extract('categories', $categorized_fields);
+		$fields = elgg_extract('fields', $categorized_fields);
+		$fields_count = 0;
+		foreach ($cats as $cat_guid => $cat) {
+			if ($cat_guid == -1) { continue; }
+			//$return .= "CAT $cat <pre>" . print_r($field, true) . '</pre>';
+			foreach($fields[$cat_guid] as $field) {
+				$meta_name = $field->metadata_name;
+				if (!$params['simulation']) {
+					$user->$meta_name = null;
+				}
+				$fields_count++;
+			}
+		}
+		$return .= '<li>' . "$fields_count champs du profil supprimés" . '</li>';
+	}
+	
+	// Suppression des messages privés
+	if ($params['remove_messages']) {
+		$messages = elgg_get_entities(['type' => 'object', 'subtype' => 'messages', 'owner_guid' => $user->guid, 'limit' => false]);
+		foreach($messages as $ent) {
+			if (!$params['simulation']) {
+				if ($ent->delete()) { $messages_count++; }
+			}
+		}
+		$return .= '<li>' . "$messages_count messages privés sur " . count($messages) . " supprimés" . '</li>';
+	}
+	
+	/* Note : if we have to remove publications, we probably also want to remove the account itself, 
+	 * which is handled by content_lifecycle (which enables transfering publicaitons before account removal) 
+	 * -> this feature should be focused on anonymising or removing some objects without removing the account itself
+	 * @TODO : merge plugins for a unified account and content lifecycle control
+	 */
+	if ($params['remove_publications']) {
+		if (!$params['simulation']) {
+			// not implemented yet
+		}
+	}
+	
+	$return .= '</ul></li>';
+	
+	// Save last action TS
+	if (!$params['simulation']) {
+		$user->account_lifecycle_anonymize_last_ts = time();
+	}
+	
+	// Return detailled information is asked to
+	if ($params['verbose']) { return $return; }
+	return true;
+}
+
 
 // Indique la/les prochaines dates d'exécution (ts)
 function account_lifecycle_get_next_date(/*$entity = false, $offset = 0*/) {

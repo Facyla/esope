@@ -32,10 +32,7 @@ return [
 		- sélection : comptes admin non/oui, série de metadata => comparaison (==, !=, IN, NOT IN, >, <, <=, >=...), valeur<br />
 		- règles : exiger une nouvelle validation par email / sur le site, archiver, désactiver (ban)<br />
 		- fréquence : X mois après dernière connexion, tous les X mois<br />
-		<br />account_lifecycle:remove_email
-account_lifecycle:remove_profile_data
-account_lifecycle:remove_messages
-account_lifecycle:anonymize:remove_publications
+		<br />
 		Date limite : si pas d'action avant, on désactive le compte (ou autre action de type changement d'une ou plusieurs métadonnée'). <br />
 		Doit permettre des rappels avant une date limite : <br />
 		<br />
@@ -65,15 +62,20 @@ account_lifecycle:anonymize:remove_publications
 	// Anonymize mode
 	'account_lifecycle:anonymize' => "Anonymisation de comptes utilisateurs",
 	'account_lifecycle:anonymize:description' => "Permet de supprimer les données personnelles de comptes utilisateurs",
-	'account_lifecycle:remove_email' => "Désactiver définitivement le compte",
-	'account_lifecycle:remove_email:details' => "Ceci bloque toute possibilité d'utiliser ce compte en supprimant l'adresse email du compte et en réinitialisant le mot de passe, et en retirant la validation du compte.",
+	'account_lifecycle:remove_email' => "Désactiver définitivement le compte (email, mot de passe, validation)",
+	'account_lifecycle:remove_email:details' => "Ceci bloque toute possibilité d'utiliser ce compte (1) en supprimant l'adresse email du compte, (2) en réinitialisant le mot de passe, et (3) en retirant la validation du compte.",
 	'account_lifecycle:replace_name' => "Anonymiser le nom du compte",
-	'account_lifecycle:replace_name:details' => "Remplace le nom par&nbsp;: %s",
+	'account_lifecycle:replace_name:details' => "Remplace le nom affiché par&nbsp;: %s",
 	'account_lifecycle:replace_name:replacement' => "[ compte supprimé ]",
-	'account_lifecycle:replace_username' => "Anonymiser l'identitiant (<b>user<em>GUID</em></b>)",
+	'account_lifecycle:replace_username' => "Anonymiser l'identifiant",
+	'account_lifecycle:replace_username:details' => "Anonymise l'identifiant de connexion en le remplaçant par un identifiant générique de la forme : <b>user<em>GUID</em></b>.",
 	'account_lifecycle:remove_profile_data' => "Supprimer les données du profil",
+	'account_lifecycle:remove_profile_data:details' => "Supprime toutes les données du profil personnel, c'est-à-dire tous les champs définis via le gestionnaire de champs du profil, qu'ils aient été renseignés par l'utilisateur, par un administrateur ou par le système.",
 	'account_lifecycle:remove_messages' => "Supprimer les messages privés",
-	'account_lifecycle:anonymize:remove_publications' => "Supprimer les publications",
+	'account_lifecycle:remove_messages:details' => "Supprime tous les messages privés envoyés et reçus par ce compte.",
+	'account_lifecycle:anonymize:remove_publications' => "Supprimer les objets / publications",
+	'account_lifecycle:anonymize:remove_publications:details' => "Supprime tous les objets ou publications correspondant à certains sous-types d'objets. Cela permet de supprimer de manière sélective certains types de contenus considérés comme personnels, selon leur type et leur lieu de publication.",
+	
 	
 	// Full mode form
 	'account_lifecycle:field:title' => "Titre",
@@ -100,8 +102,8 @@ account_lifecycle:anonymize:remove_publications
 	'account_lifecycle:criteria:inactive' => "Seulement les comptes inactifs depuis X jours (date de dernière connexion)",
 	
 	// Front-end texts for unvalidated users
-	'account_lifecycle:uservalidation:disabled' => "[Compte désactivé, en attente de vérification]",
-	'account_lifecycle:uservalidation:disabled:notice' => "Ce compte a été temporairement désactivé. Il sera réactivé si son propriétaire confirme à nouveau son accès, ou archivé à l'issue d'une période d'inactivité prolongée.",
+	'account_lifecycle:uservalidation:disabled' => "[Compte désactivé]",
+	'account_lifecycle:uservalidation:disabled:notice' => "Ce compte est désactivé. Il peut être réactivé si son propriétaire le confirme, ou archivé à l'issue d'une période d'inactivité prolongée.",
 	
 	// Email
 	'account_lifecycle:email_validation:email:sent' => " => Mail envoyé",

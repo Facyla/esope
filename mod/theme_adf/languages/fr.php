@@ -75,8 +75,8 @@ return [
 	'theme_adf:discussion-reply:redirect' => "L'URL indiquée n'est plus valide, redirection vers la nouvelle adresse : <strong>%s</strong>",
 	
 	// Account lifecycle
-	'theme_adf:uservalidation:disabled' => "[Compte désactivé, en attente de vérification]",
-	'theme_adf:uservalidation:disabled:notice' => "Ce compte a été temporairement désactivé. Il sera réactivé si son propriétaire confirme à nouveau son accès, ou archivé à l'issue d'une période d'inactivité prolongée.",
+	'theme_adf:uservalidation:disabled' => "[Compte désactivé]",
+	'theme_adf:uservalidation:disabled:notice' => "Ce compte a été désactivé. Il sera réactivé si son propriétaire le confirme, ou archivé à l'issue d'une période d'inactivité prolongée.",
 	
 	// Overrides
 	'name' => "Prénom + Nom",
