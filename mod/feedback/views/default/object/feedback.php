@@ -8,6 +8,7 @@ if (elgg_get_context() == 'view') {
 }
 
 $feedback = elgg_extract('entity', $vars);
+$owner = $feedback->getOwnerEntity();
 
 $about = $feedback->about; if (empty($about)) { $about = "feedback"; }
 $status = $feedback->status; if (empty($status)) { $status = "open"; }
@@ -70,7 +71,12 @@ if (feedback_is_mood_enabled()) {
 }
 //$info .= '<div class="clearfloat"></div>';
 $info .= '<p style="display:inline-block;">';
-$info .= '<strong>' . elgg_echo('feedback:list:from') . '&nbsp;:</strong> ' . $feedback->id . ' ';
+$from = '<strong>' . elgg_echo('feedback:list:from') . '&nbsp;:</strong> ' . $feedback->id . ' ';
+if ($owner instanceof ElggUser) {
+	$info .= elgg_view('output/url', ['href' => $owner->getURL(), 'text' => $from, 'target' => '_blank']);
+} else {
+	$info .= $from;
+}
 //$info .= '<span style="float:right;">' . elgg_view_friendly_time($feedback->time_created) . '</span><br />';
 $info .= elgg_view_friendly_time($feedback->time_created) . '<br />';
 $info .= '<strong>' . elgg_echo('feedback:list:page') . '&nbsp;:</strong> ' . $page;
@@ -97,10 +103,10 @@ if ($comment == 'yes') {
 
 // On n'affiche l'icône que si on a qqch de joli, inutile pour le moment
 //$icon = elgg_view('icon/default', ['entity' => $feedback, 'size' => 'small']);
-$owner = $feedback->getOwnerEntity();
 if ($owner instanceof ElggUser) {
 	//$icon = elgg_view('icon/default', ['entity' => $owner, 'size' => 'small']);
 	$icon = '<img src="' . $owner->getIconURL(['size' => 'small']) . '" />';
+	$icon = elgg_view('output/url', ['href' => $owner->getURL(), 'text' => $icon, 'target' => '_blank']);
 } else {
 	$icon = '<img src="' . $feedback->getIconURL(['size' => 'small']) . '" />';
 }
