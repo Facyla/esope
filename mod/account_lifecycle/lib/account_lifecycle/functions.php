@@ -18,6 +18,32 @@ function account_lifecycle_direct_criteria_options() {
 }
 
 
+function account_lifecycle_anonymize_user_hook(\Elgg\Hook $hook) {
+		$user = $hook->getEntityParam();
+		$logged_in_user = elgg_get_logged_in_user_entity();
+
+		if (!$user instanceof ElggUser) { return; }
+
+		if (!$logged_in_user || !$logged_in_user->isAdmin()) { return; }
+
+		// Don't show menu on self.
+		if ($logged_in_user == $user) { return; }
+
+		$menu = $hook->getValue();
+		$menu[] = ElggMenuItem::factory([
+			'name' => 'account_lifecycle_anonymize_account',
+			'icon' => 'user-secret',
+			'text' => elgg_echo('account_lifecycle:anonymize_user'),
+			'href' => elgg_http_add_url_query_elements('account_lifecycle/anonymize', [
+				'anonymize_users' => $user->guid,
+			]),
+			'is_action' => false,
+			'section' => 'admin',
+		]);
+
+		return $menu;
+}
+
 
 // Cron hook (daily)
 function account_lifecycle_cron(\Elgg\Hook $hook) {

@@ -105,7 +105,7 @@ $content .= elgg_list_entities(['type' => 'object', 'subtype' => 'account_lifecy
 
 
 // SIDEBAR
-//$sidebar .= '<div></div>';
+$sidebar .= elgg_view('account_lifecycle/sidebar', ['selected' => 'check']);
 
 
 // Sidebar droite
@@ -116,7 +116,7 @@ $sidebar_alt .= '';
 echo elgg_view_page($title, [
 	'title' => elgg_echo('account_lifecycle:index'),
 	'content' =>  $content,
-	//'sidebar' => $sidebar,
+	'sidebar' => $sidebar,
 	//'sidebar_alt' => $sidebar_alt,
 	'class' => 'elgg-chat-layout',
 ]);

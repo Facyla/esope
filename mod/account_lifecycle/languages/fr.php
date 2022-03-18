@@ -61,6 +61,7 @@ return [
 	
 	// Anonymize mode
 	'account_lifecycle:anonymize' => "Anonymisation de comptes utilisateurs",
+	'account_lifecycle:anonymize_user' => "Anonymiser ce compte",
 	'account_lifecycle:anonymize:description' => "Permet de supprimer les données personnelles de comptes utilisateurs",
 	'account_lifecycle:remove_email' => "Désactiver définitivement le compte (email, mot de passe, validation)",
 	'account_lifecycle:remove_email:details' => "Ceci bloque toute possibilité d'utiliser ce compte (1) en supprimant l'adresse email du compte, (2) en réinitialisant le mot de passe, et (3) en retirant la validation du compte.",

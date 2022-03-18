@@ -81,6 +81,11 @@ return [
 				'account_lifecycle_cron' => [],
 			],
 		],
+		'register' => [
+			'menu:user_hover' => [
+				'account_lifecycle_anonymize_user_hook' => [],
+			],
+		],
 	],
 	
 	
