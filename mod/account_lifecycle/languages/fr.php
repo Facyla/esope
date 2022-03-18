@@ -26,6 +26,9 @@ return [
 	'account_lifecycle:settings:anonymizelink' => "Page d'anonymisation",
 	'account_lifecycle:settings:statslink' => "Page de statistiques",
 	
+	'account_lifecycle:settings:user_anonymisation' => "Réglages par défaut de la page d'anonymisation",
+	'account_lifecycle:settings:user_anonymisation:description' => "Ces réglages permettent de gagner du temps lors de l'anonymisaiton manuelle d'un compte, en pré-sélectionnant les options les plus couramment utilisées.",
+	
 	// Full mode
 	'account_lifecycle:settings:full_mode' => "Mode complet",
 	'account_lifecycle:settings:full_mode:description' => "Création de batches de gestion du cycle de vie = sélection de comptes + règles de gestion<br />

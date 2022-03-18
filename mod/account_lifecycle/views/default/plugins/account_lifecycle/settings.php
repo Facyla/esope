@@ -51,23 +51,44 @@ echo '<fieldset style="border: 1px solid; padding: 1rem;"><legend><h3>' . elgg_e
 	echo '</div>';
 	*/
 	
-	// Page de contrôle et d'exécution
-	echo '<p>' . elgg_view('output/url', ['text' => elgg_echo('account_lifecycle:settings:statslink'), 'href' => elgg_get_site_url() . "account_lifecycle/", 'class' => "elgg-button elgg-button-action", 'target' => "_blank"]) . '</p>';
-	
-	// Lien vers la page d'anonymisation
-	echo '<p>' . elgg_view('output/url', ['href' => "{$url}account_lifecycle/anonymize", 'text' => elgg_echo('account_lifecycle:settings:anonymizelink'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
-	
-	// Lien vers la page de statistiques
-	echo '<p>' . elgg_view('output/url', ['href' => "{$url}account_lifecycle/statistics", 'text' => elgg_echo('account_lifecycle:settings:statslink'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
+	// Direct mode logs
+	echo '<div class="account-lifecyle-direct-log">';
+	$logs = elgg_list_annotations(['guid' => $plugin->guid, 'name' => 'direct_mode_log']);
+	echo "<h4>Historique des exécutions périodiques</h4>" . $logs;
+	echo '</div>';
 	
 echo '</fieldset>';
+echo '<p>';
+// Lien vers la page de statistiques
+echo elgg_view('output/url', ['href' => "{$url}account_lifecycle/statistics", 'text' => elgg_echo('account_lifecycle:settings:statslink'), 'class' => "elgg-button elgg-button-action float-alt"]);
+// Page de contrôle et d'exécution
+echo elgg_view('output/url', ['text' => elgg_echo('account_lifecycle:settings:adminlink'), 'href' => elgg_get_site_url() . "account_lifecycle/", 'class' => "elgg-button elgg-button-action", 'target' => "_blank"]) . '</p>';
+echo '</p>';
 echo '<br /><br />';
-// Direct mode logs
-echo '<div class="account-lifecyle-direct-log">';
-$logs = elgg_list_annotations(['guid' => $plugin->guid, 'name' => 'direct_mode_log']);
-echo "<h4>Historique</h4>" . $logs;
-echo '</div>';
 
+
+// Paramètres d'anonymisation par utilisateur
+echo '<fieldset style="border: 1px solid; padding: 1rem;"><legend><h3>' . elgg_echo('account_lifecycle:settings:user_anonymisation') . '</h3></legend>';
+	echo '<p>' . elgg_echo('account_lifecycle:settings:user_anonymisation:description') . '</p>';
+	
+	// Remove email
+	echo "<p><label>" . elgg_echo('account_lifecycle:remove_email') . ' ' . elgg_view('input/select', ['name' => 'params[remove_email]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_email]) . "</label><br /><em>" . elgg_echo('account_lifecycle:remove_email:details') . "</em></p>";
+	// Replace username => userGUID
+	echo "<p><label>" . elgg_echo('account_lifecycle:replace_username') . ' ' . elgg_view('input/select', ['name' => 'params[replace_username]', 'options_values' => $no_yes_opt, 'value' => $plugin->replace_username]) . "</label><br /><em>" . elgg_echo('account_lifecycle:replace_username:details') . "</em></p>";
+	// Replace name
+	$replacement = elgg_echo('account_lifecycle:replace_name:replacement');
+	echo "<p><label>" . elgg_echo('account_lifecycle:replace_name') . ' ' . elgg_view('input/select', ['name' => 'params[replace_name]', 'options_values' => $no_yes_opt, 'value' => $plugin->replace_name]) . "</label><br /><em>" . elgg_echo('account_lifecycle:replace_name:details', [$replacement]) . "</em></p>";
+	// Remove personal data
+	echo "<p><label>" . elgg_echo('account_lifecycle:remove_profile_data') . ' ' . elgg_view('input/select', ['name' => 'params[remove_profile_data]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_profile_data]) . "</label><br /><em>" . elgg_echo('account_lifecycle:remove_profile_data:details') . "</em></p>";
+	// Note on also clear user settings ? 
+	// => no because they are designed to store admin data and settings, and not personal data
+	// Remove messages
+	echo "<p><label>" . elgg_echo('account_lifecycle:remove_messages') . ' ' . elgg_view('input/select', ['name' => 'params[remove_messages]', 'options_values' => $no_yes_opt, 'value' => $plugin->remove_messages]) . "</label><br /><em>" . elgg_echo('account_lifecycle:remove_messages:details') . "</em></p>";
+	
+echo '</fieldset>';
+// Lien vers la page d'anonymisation
+echo '<p>' . elgg_view('output/url', ['href' => "{$url}account_lifecycle/anonymize", 'text' => elgg_echo('account_lifecycle:settings:anonymizelink'), 'class' => "elgg-button elgg-button-action"]) . '</p>';
+echo '<br /><br />';
 
 
 

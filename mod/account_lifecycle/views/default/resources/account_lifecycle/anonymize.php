@@ -37,13 +37,15 @@ $anonymize_mode = get_input('anonymize_mode');
 $anonymize_simulate = get_input('anonymize_simulate');
 $anonymize_verbose = get_input('anonymize_verbose');
 $anonymize_users = get_input('anonymize_users');
-$remove_email = get_input('remove_email');
-$replace_name = get_input('replace_name');
-$replace_username = get_input('replace_username');
-$remove_profile_data = get_input('remove_profile_data');
-$remove_messages = get_input('remove_messages');
-$anonymize_verbose = get_input('anonymize_verbose');
-$remove_publications = get_input('remove_publications');
+// Anonymisation settings
+// Use plugin-defined defaults or presets for more convenient use
+$remove_email = get_input('remove_email', elgg_get_plugin_setting('remove_email', 'account_lifecycle'));
+$replace_name = get_input('replace_name', elgg_get_plugin_setting('replace_name', 'account_lifecycle'));
+$replace_username = get_input('replace_username', elgg_get_plugin_setting('replace_username', 'account_lifecycle'));
+$remove_profile_data = get_input('remove_profile_data', elgg_get_plugin_setting('remove_profile_data', 'account_lifecycle'));
+$remove_messages = get_input('remove_messages', elgg_get_plugin_setting('remove_messages', 'account_lifecycle'));
+$anonymize_verbose = get_input('anonymize_verbose', elgg_get_plugin_setting('anonymize_verbose', 'account_lifecycle'));
+$remove_publications = get_input('remove_publications', elgg_get_plugin_setting('remove_publications', 'account_lifecycle'));
 
 
 $content .= "<h3>" . elgg_echo('account_lifecycle:anonymize') . "</h3>";
