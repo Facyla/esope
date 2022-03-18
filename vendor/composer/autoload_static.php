@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit01f5e9a8284a4a27599977454053238c
+class ComposerStaticInit74edd62b178f204bae2047fbad59fee6
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -547,7 +547,6 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'CallException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/CallException.php',
         'ClassException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/ClassException.php',
         'ClassNotFoundException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/ClassNotFoundException.php',
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
         'Composer\\Installers\\AimeosInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
         'Composer\\Installers\\AnnotateCmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
@@ -609,6 +608,7 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'Composer\\Installers\\OsclassInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OsclassInstaller.php',
         'Composer\\Installers\\OxidInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OxidInstaller.php',
         'Composer\\Installers\\PPIInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PPIInstaller.php',
+        'Composer\\Installers\\PantheonInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PantheonInstaller.php',
         'Composer\\Installers\\PhiftyInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PhiftyInstaller.php',
         'Composer\\Installers\\PhpBBInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PhpBBInstaller.php',
         'Composer\\Installers\\PimcoreInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PimcoreInstaller.php',
@@ -786,7 +786,6 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'Doctrine\\Common\\Cache\\Psr6\\InvalidArgument' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/InvalidArgument.php',
         'Doctrine\\Common\\Cache\\Psr6\\TypedCacheItem' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Psr6/TypedCacheItem.php',
         'Doctrine\\Common\\Cache\\RedisCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RedisCache.php',
-        'Doctrine\\Common\\Cache\\RiakCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/RiakCache.php',
         'Doctrine\\Common\\Cache\\SQLite3Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/SQLite3Cache.php',
         'Doctrine\\Common\\Cache\\Version' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Version.php',
         'Doctrine\\Common\\Cache\\VoidCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/VoidCache.php',
@@ -1342,7 +1341,6 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'Elgg\\PluginHooksService' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/PluginHooksService.php',
         'Elgg\\Profilable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profilable.php',
         'Elgg\\Profiler' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Profiler.php',
-        'Elgg\\Project\\CodeStyle' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/CodeStyle.php',
         'Elgg\\Project\\Paths' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Project/Paths.php',
         'Elgg\\Queue\\DatabaseQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/DatabaseQueue.php',
         'Elgg\\Queue\\MemoryQueue' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Elgg/Queue/MemoryQueue.php',
@@ -1924,6 +1922,7 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionClass' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionClass.php',
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\OptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/OptionTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\Model\\Option\\StringOptionTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/Model/Option/StringOptionTest.php',
+        'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\HybridPasswordGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/NoPasswordGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php5RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php5RandomGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\RandomGenerator\\Php7RandomGeneratorTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/RandomGenerator/Php7RandomGeneratorTest.php',
         'Hackzilla\\PasswordGenerator\\Tests\\ReadMeTest' => __DIR__ . '/..' . '/hackzilla/password-generator/Tests/ReadMeTest.php',
@@ -2103,6 +2102,7 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'League\\MimeTypeDetection\\FinfoMimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/FinfoMimeTypeDetector.php',
         'League\\MimeTypeDetection\\GeneratedExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/GeneratedExtensionToMimeTypeMap.php',
         'League\\MimeTypeDetection\\MimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/MimeTypeDetector.php',
+        'League\\MimeTypeDetection\\OverridingExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/OverridingExtensionToMimeTypeMap.php',
         'Locatable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Locatable.php',
         'Loggable' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/Loggable.php',
         'LoginException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/LoginException.php',
@@ -2561,7 +2561,9 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'Symfony\\Component\\Filesystem\\Exception\\IOException' => __DIR__ . '/..' . '/symfony/filesystem/Exception/IOException.php',
         'Symfony\\Component\\Filesystem\\Exception\\IOExceptionInterface' => __DIR__ . '/..' . '/symfony/filesystem/Exception/IOExceptionInterface.php',
         'Symfony\\Component\\Filesystem\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/filesystem/Exception/InvalidArgumentException.php',
+        'Symfony\\Component\\Filesystem\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/filesystem/Exception/RuntimeException.php',
         'Symfony\\Component\\Filesystem\\Filesystem' => __DIR__ . '/..' . '/symfony/filesystem/Filesystem.php',
+        'Symfony\\Component\\Filesystem\\Path' => __DIR__ . '/..' . '/symfony/filesystem/Path.php',
         'Symfony\\Component\\HttpFoundation\\AcceptHeader' => __DIR__ . '/..' . '/symfony/http-foundation/AcceptHeader.php',
         'Symfony\\Component\\HttpFoundation\\AcceptHeaderItem' => __DIR__ . '/..' . '/symfony/http-foundation/AcceptHeaderItem.php',
         'Symfony\\Component\\HttpFoundation\\ApacheRequest' => __DIR__ . '/..' . '/symfony/http-foundation/ApacheRequest.php',
@@ -2661,6 +2663,7 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
         'Symfony\\Component\\Routing\\Loader\\GlobFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/GlobFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\ObjectRouteLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/ObjectRouteLoader.php',
         'Symfony\\Component\\Routing\\Loader\\PhpFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/PhpFileLoader.php',
+        'Symfony\\Component\\Routing\\Loader\\ProtectedPhpFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/PhpFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\XmlFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/XmlFileLoader.php',
         'Symfony\\Component\\Routing\\Loader\\YamlFileLoader' => __DIR__ . '/..' . '/symfony/routing/Loader/YamlFileLoader.php',
         'Symfony\\Component\\Routing\\Matcher\\Dumper\\DumperCollection' => __DIR__ . '/..' . '/symfony/routing/Matcher/Dumper/DumperCollection.php',
@@ -3061,10 +3064,10 @@ class ComposerStaticInit01f5e9a8284a4a27599977454053238c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit01f5e9a8284a4a27599977454053238c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$classMap;
 
         }, null, ClassLoader::class);
     }

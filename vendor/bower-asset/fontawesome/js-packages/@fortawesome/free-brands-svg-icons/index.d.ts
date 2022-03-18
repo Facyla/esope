@@ -390,6 +390,7 @@ export const faThinkPeaks: IconDefinition;
 export const faTiktok: IconDefinition;
 export const faTradeFederation: IconDefinition;
 export const faTrello: IconDefinition;
+export const faTripadvisor: IconDefinition;
 export const faTumblr: IconDefinition;
 export const faTumblrSquare: IconDefinition;
 export const faTwitch: IconDefinition;

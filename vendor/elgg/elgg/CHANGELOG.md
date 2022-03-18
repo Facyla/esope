@@ -1,3 +1,39 @@
+<a name="3.3.24"></a>
+### 3.3.24  (2021-12-23)
+
+#### Contributors
+
+* Jerôme Bakker (1)
+
+#### Bug Fixes
+
+* **reported_content:** sanitize report URLs ([c30b17bf](https://github.com/Elgg/Elgg/commit/c30b17bf75256ed3fcc84e2083147cc3951423d0))
+
+
+<a name="3.3.23"></a>
+### 3.3.23  (2021-12-03)
+
+#### Contributors
+
+* Jerôme Bakker (1)
+
+#### Bug Fixes
+
+* **ajax:** forms in the admin namespace are protected ([572d210e](https://github.com/Elgg/Elgg/commit/572d210e2392f1fdf47ff2f38665372a6535c126))
+
+
+<a name="3.3.22"></a>
+### 3.3.22  (2021-11-19)
+
+#### Contributors
+
+* Jerôme Bakker (3)
+
+#### Bug Fixes
+
+* **groups:** prevent misuse of group membership actions ([d9fcad76](https://github.com/Elgg/Elgg/commit/d9fcad76ee380ea17edd61d13d0f87828ea3f744))
+
+
 <a name="3.3.21"></a>
 ### 3.3.21  (2021-08-03)
 
