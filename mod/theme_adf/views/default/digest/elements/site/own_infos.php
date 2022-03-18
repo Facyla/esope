@@ -1,7 +1,6 @@
 <?php
 /**
-* Shows the latests thewires in the Digest
-*
+* Affiche des informations propres à l'utilisateur : contacts, invitations, demandes...
 */
 
 $user = elgg_extract("user", $vars, elgg_get_logged_in_user_entity());

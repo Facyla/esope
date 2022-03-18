@@ -30,15 +30,21 @@ if (isset($digest_site_profile_body[$key])) {
 	$ts_lower = (int) elgg_extract("ts_lower", $vars);
 	$ts_upper = (int) elgg_extract("ts_upper", $vars);
 
-	$member_options = array(
+	$member_options = [
 			"type" => "user",
 			"limit" => 6,
 			"relationship" => "member_of_site",
 			"relationship_guid" => elgg_get_site_entity()->getGUID(),
 			"inverse_relationship" => true,
 			"order_by" => "r.time_created DESC",
-			"wheres" => array("(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")"), // @todo rewrite for 3.3+
-	);
+			"wheres" => ["(r.time_created BETWEEN " . $ts_lower . " AND " . $ts_upper . ")"], // @todo rewrite for 3.3+
+	];
+	/* @TODO
+	$member_options['wheres'] = function(\Elgg\Database\QueryBuilder $qb, $alias) {
+		$joined_alias = $qb->joinMetadataTable($alias, 'guid', 'time_created');
+		return $qb->between("$joined_alias.time_created", $ts_lower, $ts_upper, ELGG_VALUE_STRING);
+	};
+	*/
 	
 	$newest_members = elgg_get_entities($member_options);
 	if (!empty($newest_members)) {
