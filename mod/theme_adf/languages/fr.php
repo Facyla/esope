@@ -78,6 +78,8 @@ return [
 	'theme_adf:uservalidation:disabled' => "[Compte désactivé]",
 	'theme_adf:uservalidation:disabled:notice' => "Ce compte a été désactivé. Il sera réactivé si son propriétaire le confirme, ou archivé à l'issue d'une période d'inactivité prolongée.",
 	
+	'item:object:commenton' => "Commentaire sur ",
+	
 	// Overrides
 	'name' => "Prénom + Nom",
 	'firstname' => "Prénom",

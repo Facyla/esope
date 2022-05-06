@@ -95,13 +95,14 @@ while($time_created_group < time()) {
 
 // @TODO : utiliser plutôt cette requête, a priori plus précise 
 // (ssi != entre entités actuelles et celles de la river ou pcq plus efficace)
+$entity_types = get_registered_entity_types('object');
 use Elgg\Database\Select;
 $qb = Select::fromTable('entities', 'e');
 $qb->select('e.subtype as subtype');
 $qb->addSelect('count(*) AS total');
 $qb->join('e', 'river', 'r', 'e.guid = r.object_guid');
 $qb->where("e.type = 'object'");
-$qb->andWhere($qb->compare('e.subtype', '=', get_registered_entity_types('object'), ELGG_VALUE_STRING));
+$qb->andWhere($qb->compare('e.subtype', '=', $entity_types, ELGG_VALUE_STRING));
 $qb->andWhere("e.container_guid = {$group->guid}");
 $qb->groupBy('e.subtype');
 $qb->orderBy('total', 'desc');
@@ -208,6 +209,57 @@ if ($query_result) {
 		$t_body .= '</tr>';
 	}
 }
+// Count comments
+$t_body .= '<tr style="border: 1px solid;">';
+	$t_body .= '<th style="padding: .25rem .5rem;">' . elgg_echo("item:object:comment") . '</th>';
+	foreach($periods as $period) {
+		// Statistiques seules (tableau)
+		$t_body .= '<td style="border-left: 1px solid; padding: .25rem .5rem;">';
+			$new_comments = elgg_get_river([
+				'type' => 'object', 'subtype' => 'comment', 
+				'container_guid' => $group->guid, 
+				'created_after' => $period['start_ts'],
+				'created_before' => $period['end_ts'],
+				'count' => true
+			]);
+			$t_body .= $new_comments;
+		$t_body .= '</td>';
+		$datasets['comment']['data'][] = $new_comments;
+		$dataviz_backgroundColor['comment'][] = $dataviz_colors_set[$i+1];
+		$dataviz_borderColor['comment'][] = $dataviz_colors_set[$i+1];
+		
+		// Liste des publications par date
+		if ($list_entities == 'yes') {
+			$period_publications = elgg_get_river([
+				'type' => 'object', 'subtype' => 'comment', 
+				'container_guid' => $group->guid, 
+				'created_after' => $period['start_ts'],
+				'created_before' => $period['end_ts'],
+				'limit' => false,
+			]);
+			if ($period_publications) {
+				$list_body .= '<h5>' . $period['label'] . ' : ' . $new_comments . ' réponses / commentaires</h5>';
+				$list_body .= '<ul>';
+				foreach ($period_publications as $river_element) {
+					$ent = get_entity($river_element->target_guid);
+					$comment = get_entity($river_element->object_guid);
+					$ent_topic = (!empty($ent->title)) ? $ent->title : $ent->name;
+					$ent_topic = "&laquo;&nbsp;$ent_topic&nbsp;&raquo;";
+					if (!empty($comment->briefdescription)) {
+						$comment_content = elgg_get_excerpt($comment->briefdescription);
+					} else {
+						$comment_content = elgg_get_excerpt($comment->description);
+					}
+					$list_body .= '<li><span class="object-subtype">' . elgg_echo("item:object:commenton") . $ent_topic . '&nbsp;: </span> <a href="' . $comment->getURL() . '">' . $comment_content . '</a></li>';
+				}
+				$list_body .= '</ul>';
+			}
+		}
+	}
+	
+$t_body .= '</tr>';
+
+
 $content .= '<div class="group-statistics scroll-hz">';
 	$content .= '<h3>Statistiques de publication par période</h3>';
 	$content .= '<table style="border: 1px solid; width: 100%;">';
