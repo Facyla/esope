@@ -2,6 +2,8 @@
 use Elgg\EntityPermissionsException;
 use Elgg\EntityNotFoundException;
 
+use Elgg\Activity\GroupRiverFilter;
+
 $debug = false;
 
 $group = elgg_get_page_owner_entity();
@@ -220,6 +222,9 @@ $t_body .= '<tr style="border: 1px solid;">';
 				'container_guid' => $group->guid, 
 				'created_after' => $period['start_ts'],
 				'created_before' => $period['end_ts'],
+				'wheres' => [
+					new GroupRiverFilter($group),
+				],
 				'count' => true
 			]);
 			$t_body .= $new_comments;
@@ -232,9 +237,11 @@ $t_body .= '<tr style="border: 1px solid;">';
 		if ($list_entities == 'yes') {
 			$period_publications = elgg_get_river([
 				'type' => 'object', 'subtype' => 'comment', 
-				'container_guid' => $group->guid, 
 				'created_after' => $period['start_ts'],
 				'created_before' => $period['end_ts'],
+				'wheres' => [
+					new GroupRiverFilter($group),
+				],
 				'limit' => false,
 			]);
 			if ($period_publications) {
@@ -250,7 +257,7 @@ $t_body .= '<tr style="border: 1px solid;">';
 					} else {
 						$comment_content = elgg_get_excerpt($comment->description);
 					}
-					$list_body .= '<li><span class="object-subtype">' . elgg_echo("item:object:commenton") . $ent_topic . '&nbsp;: </span> <a href="' . $comment->getURL() . '">' . $comment_content . '</a></li>';
+					$list_body .= '<li><span class="object-subtype">' . elgg_echo("item:object:commenton") . $ent_topic . '&nbsp;: </span> <a href="' . $comment->getURL() . '">' . $comment_content . '</a>' . print_r($river_element, true) . '</li>';
 				}
 				$list_body .= '</ul>';
 			}
