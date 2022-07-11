@@ -23,7 +23,7 @@ if (empty($offset)) {
 	$folder_content = elgg_view('file_tools/breadcrumb', [
 		'entity' => $folder,
 	]);
-	
+
 	$sub_folders = file_tools_get_sub_folders($folder);
 	if (empty($sub_folders)) {
 		$sub_folders = [];
@@ -42,7 +42,7 @@ if (!empty($entities)) {
 		'file_tools_selector' => true,
 		'list_class' => 'file-tools-file-list',
 	];
-	
+
 	$files_content = elgg_view_entity_list($entities, $params);
 }
 
@@ -70,7 +70,7 @@ if (empty($files_content)) {
 				'value' => '0',
 			]);
 		}
-		
+
 		$files_content .= elgg_format_element('div', [
 			'id' => 'file-tools-show-more-wrapper',
 			'class' => 'center',
@@ -80,7 +80,7 @@ if (empty($files_content)) {
 	// only show selectors on the first load
 	if (empty($offset)) {
 		$selector = '';
-		
+
 		if (elgg_get_page_owner_entity()->canWriteToContainer(0, 'object', 'file')) {
 			$selector = elgg_view('output/url', [
 				'id' => 'file_tools_action_bulk_delete',
@@ -89,13 +89,13 @@ if (empty($files_content)) {
 			]);
 			$selector .= ' | ';
 		}
-		
+
 		$selector .= elgg_view('output/url', [
 			'id' => 'file_tools_action_bulk_download',
 			'text' => elgg_echo('file_tools:list:download_selected'),
 			'href' => false,
 		]);
-		
+
 		$selector .= elgg_view('output/url', [
 			'id' => 'file_tools_select_all',
 			'text' => elgg_format_element('span', [], elgg_echo('file_tools:list:select_all')) .
@@ -103,7 +103,7 @@ if (empty($files_content)) {
 			'href' => false,
 			'class' => 'float-alt',
 		]);
-				
+
 		$files_content .= elgg_format_element('div', ['class' => 'clearfix mtm'], $selector);
 	}
 }

@@ -10,17 +10,22 @@
  *
  * @return bool|ElggObject[]
  */
+
+use Elgg\Database\Select;
+use Elgg\Database\QueryBuilder;
+use Elgg\Database\Clauses\OrderByClause;
+
 function file_tools_get_folders($container_guid = 0) {
-	
+
 	$container_guid = (int) $container_guid;
 	if (empty($container_guid)) {
 		$container_guid = elgg_get_page_owner_guid();
 	}
-	
+
 	if (empty($container_guid)) {
 		return false;
 	}
-	
+
 	$folders = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => \FileToolsFolder::SUBTYPE,
@@ -30,27 +35,27 @@ function file_tools_get_folders($container_guid = 0) {
 	if (empty($folders)) {
 		return false;
 	}
-	
+
 	$parents = array();
-	
+
 	/* @var $folder ElggObject */
 	foreach ($folders as $folder) {
 		$parent_guid = (int) $folder->parent_guid;
-		
+
 		if (!empty($parent_guid)) {
 			$temp = get_entity($parent_guid);
 			if (!$temp instanceof \FileToolsFolder) {
 				$parent_guid = 0;
 			}
 		}
-		
+
 		if (!array_key_exists($parent_guid, $parents)) {
 			$parents[$parent_guid] = [];
 		}
-		
+
 		$parents[$parent_guid][] = $folder;
 	}
-	
+
 	return file_tools_sort_folders($parents, 0);
 }
 
@@ -64,11 +69,11 @@ function file_tools_get_folders($container_guid = 0) {
  */
 function file_tools_build_select_options($folders, $depth = 0) {
 	$result = [];
-	
+
 	if (empty($folders)) {
 		return [];
 	}
-	
+
 	foreach ($folders as $index => $level) {
 		/**
 		 * $level contains
@@ -80,13 +85,13 @@ function file_tools_build_select_options($folders, $depth = 0) {
 		if (!empty($folder)) {
 			$result[$folder->guid] = str_repeat('-', $depth) . ' ' . $folder->title;
 		}
-		
+
 		$childen = elgg_extract('children', $level);
 		if (!empty($childen)) {
 			$result += file_tools_build_select_options($childen, $depth + 1);
 		}
 	}
-	
+
 	return $result;
 }
 
@@ -101,16 +106,16 @@ function file_tools_build_select_options($folders, $depth = 0) {
  */
 function file_tools_build_widget_options($folder, $internalname = "", $selected = []) {
 	$result = '';
-	
+
 	if (is_array($folder) && !array_key_exists('children', $folder)) {
 		foreach ($folder as $folder_item) {
 			$content = file_tools_build_widget_options($folder_item, $internalname, $selected);
-			
+
 			$result .= elgg_format_element('ul', [], $content);
 		}
 	} else {
 		$folder_item = $folder['folder'];
-		
+
 		$content = elgg_view('input/checkbox', [
 			'default' => false,
 			'name' => $internalname,
@@ -119,14 +124,14 @@ function file_tools_build_widget_options($folder, $internalname = "", $selected 
 			'value' => $folder_item->guid,
 			'checked' => in_array($folder_item->guid, $selected),
 		]);
-		
+
 		if (!empty($folder['children'])) {
 			$content .= file_tools_build_widget_options($folder['children'], $internalname, $selected);
 		}
-		
+
 		$result .= elgg_format_element('li', [], $content);
 	}
-	
+
 	return $result;
 }
 
@@ -139,34 +144,34 @@ function file_tools_build_widget_options($folder, $internalname = "", $selected 
  * @return false|array
  */
 function file_tools_sort_folders($folders, $parent_guid = 0) {
-	
+
 	if (!array_key_exists($parent_guid, $folders)) {
 		return false;
 	}
-	
+
 	$result = [];
-	
+
 	/* @var $subfolder ElggObject */
 	foreach ($folders[$parent_guid] as $subfolder) {
 		$children = file_tools_sort_folders($folders, $subfolder->guid);
-		
+
 		$order = (int) $subfolder->order;
 		if (empty($order)) {
 			$order = $subfolder->time_created;
 		}
-		
+
 		while (array_key_exists($order, $result)) {
 			$order++;
 		}
-		
+
 		$result[$order] = [
 			'folder' => $subfolder,
 			'children' => $children,
 		];
 	}
-	
+
 	ksort($result);
-	
+
 	return $result;
 }
 
@@ -179,7 +184,7 @@ function file_tools_sort_folders($folders, $parent_guid = 0) {
  * @return bool|array|string
  */
 function file_tools_get_sub_folders($folder = false, $list = false) {
-	
+
 	$options = [
 		'type' => 'object',
 		'subtype' => \FileToolsFolder::SUBTYPE,
@@ -194,7 +199,7 @@ function file_tools_get_sub_folders($folder = false, $list = false) {
 		// Each group has its own sorting settings
 		$order_by = $page_owner->file_tools_sort;
 		$order_direction = $page_owner->file_tools_sort_direction;
-		
+
 		switch ($order_by) {
 			case 'simpletype':
 				$options['order_by_metadata'] = [
@@ -236,7 +241,7 @@ function file_tools_get_sub_folders($folder = false, $list = false) {
 	if ($list) {
 		return elgg_list_entities($options);
 	}
-	
+
 	return elgg_get_entities($options);
 }
 
@@ -248,22 +253,22 @@ function file_tools_get_sub_folders($folder = false, $list = false) {
  * @return bool|string
  */
 function file_tools_allowed_extensions($zip = false) {
-	
+
 	$allowed_extensions_settings = elgg_get_plugin_setting('allowed_extensions', 'file_tools');
 	$allowed_extensions_settings = string_to_tag_array($allowed_extensions_settings);
-	
+
 	if (!empty($allowed_extensions_settings)) {
 		$result = $allowed_extensions_settings;
 	} else {
 		$result = ['txt','jpg','jpeg','png','bmp','gif','pdf','doc','docx','xls','xlsx','ppt','pptx','odt','ods','odp'];
 	}
-	
+
 	if (!$zip) {
 		return $result;
 	}
-	
+
 	$result = implode(";*.", $result);
-	
+
 	return "*." . $result;
 }
 
@@ -277,7 +282,7 @@ function file_tools_allowed_extensions($zip = false) {
  * @return false|ElggObject
  */
 function file_tools_check_foldertitle_exists($title, $container_guid, $parent_guid = 0) {
-	
+
 	$entities_options = [
 		'type' => 'object',
 		'subtype' => \FileToolsFolder::SUBTYPE,
@@ -292,18 +297,18 @@ function file_tools_check_foldertitle_exists($title, $container_guid, $parent_gu
 			'as' => 'integer'
 		],
 	];
-	
+
 	if (!empty($parent_guid)) {
 		$entities_options['metadata_name_value_pairs'] = [
 			'parent_guid' => $parent_guid,
 		];
 	}
-	
+
 	$entities = elgg_get_entities($entities_options);
 	if (!empty($entities)) {
 		return $entities[0];
 	}
-	
+
 	return false;
 }
 
@@ -317,24 +322,24 @@ function file_tools_check_foldertitle_exists($title, $container_guid, $parent_gu
  * @return void
  */
 function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0) {
-	
+
 	$zip_entry_name = zip_entry_name($zip_entry);
 	$filename = basename($zip_entry_name);
-	
+
 	if (substr($zip_entry_name, -1) != '/') {
 		$zip_base = str_replace($filename, '', $zip_entry_name);
 	} else {
 		$zip_base = $zip_entry_name;
 	}
-	
+
 	$zdir = substr($zip_base, 0, -1);
 	if (empty($zdir)) {
 		return;
 	}
-	
+
 	$parent_guid = (int) $parent_guid;
 	$container_entity = get_entity($container_guid);
-	
+
 	$access_id = get_input('access_id', false);
 	if ($access_id === false) {
 		if ($parent_guid !== 0) {
@@ -347,21 +352,21 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 			}
 		}
 	}
-	
+
 	$sub_folders = explode('/', $zdir);
 	if (count($sub_folders) == 1) {
 		$entity = file_tools_check_foldertitle_exists($zdir, $container_guid, $parent_guid);
-		
+
 		if (!$entity) {
 			$directory = new FileToolsFolder();
 			$directory->owner_guid = elgg_get_logged_in_user_guid();
 			$directory->container_guid = $container_guid;
-			
+
 			$directory->access_id = $access_id;
-			
+
 			$directory->title = $zdir;
 			$directory->parent_guid = $parent_guid;
-			
+
 			$order = elgg_count_entities([
 				'type' => 'object',
 				'subtype' => \FileToolsFolder::SUBTYPE,
@@ -370,14 +375,14 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 					'value' => $parent_guid,
 				],
 			]);
-			
+
 			$directory->order = $order;
-			
+
 			$directory->save();
 		}
 	} else {
 		$parent = $parent_guid;
-		
+
 		foreach ($sub_folders as $folder) {
 			$entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent);
 			if (!empty($entity)) {
@@ -386,12 +391,12 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 				$directory = new FileToolsFolder();
 				$directory->owner_guid = elgg_get_logged_in_user_guid();
 				$directory->container_guid = $container_guid;
-				
+
 				$directory->access_id = $access_id;
-				
+
 				$directory->title = $folder;
 				$directory->parent_guid = $parent;
-				
+
 				$order = elgg_count_entities([
 					'type' => 'object',
 					'subtype' => \FileToolsFolder::SUBTYPE,
@@ -400,9 +405,9 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
 						'value' => $parent,
 					],
 				]);
-				
+
 				$directory->order = $order;
-				
+
 				$parent = $directory->save();
 			}
 		}
@@ -419,24 +424,24 @@ function file_tools_create_folders($zip_entry, $container_guid, $parent_guid = 0
  * @return bool
  */
 function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
-	
+
 	$container_guid = (int) $container_guid;
 	$parent_guid = (int) $parent_guid;
-	
+
 	if (empty($file) || empty($container_guid)) {
 		return false;
 	}
-	
+
 	$container_entity = get_entity($container_guid);
 	if (empty($container_entity)) {
 		return false;
 	}
-	
+
 	$extracted = false;
 	$allowed_extensions = file_tools_allowed_extensions();
-	
+
 	$zipfile = elgg_extract('tmp_name', $file);
-	
+
 	$access_id = get_input('access_id', false);
 	if ($access_id === false) {
 		$parent_folder = get_entity($parent_guid);
@@ -450,33 +455,33 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 			}
 		}
 	}
-	
+
 	// open the zip file
 	$zip = zip_open($zipfile);
 	while ($zip_entry = zip_read($zip)) {
 		// open the zip entry
 		zip_entry_open($zip, $zip_entry);
-		
+
 		// set some variables
 		$zip_entry_name = zip_entry_name($zip_entry);
 		$filename = basename($zip_entry_name);
-		
+
 		error_log($zip_entry_name);
 		error_log($filename);
-		
+
 		// check for folder structure
 		if (strlen($zip_entry_name) != strlen($filename)) {
 			// there is a folder structure, check it and create missing items
 			file_tools_create_folders($zip_entry, $container_guid, $parent_guid);
 		}
-		
+
 		// extract the folder structure from the zip entry
 		$folder_array = explode('/', $zip_entry_name);
-		
+
 		$parent = $parent_guid;
 		foreach ($folder_array as $folder) {
 			$folder = utf8_encode($folder);
-			
+
 			$entity = file_tools_check_foldertitle_exists($folder, $container_guid, $parent);
 			if (!empty($entity)) {
 				$parent = $entity->guid;
@@ -484,41 +489,41 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 				if ($folder !== end($folder_array)) {
 					continue;
 				}
-				
+
 				$prefix = 'file/';
 				$extension_array = explode('.', $folder);
-				
+
 				$file_extension	= end($extension_array);
-				
+
 				if (!in_array(strtolower($file_extension), $allowed_extensions)) {
 					continue;
 				}
-				
+
 				$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
-				
+
 				$filestorename = elgg_strtolower(time() . $folder);
-				
+
 				// create the file
 				$filehandler = new ElggFile();
 				$filehandler->setFilename($prefix . $filestorename);
-				
+
 				$filehandler->title 			= $folder;
 				$filehandler->originalfilename 	= $folder;
 				$filehandler->owner_guid		= elgg_get_logged_in_user_guid();
-				
+
 				$filehandler->container_guid 	= $container_guid;
 				$filehandler->access_id			= $access_id;
-				
+
 				if (!$filehandler->save()) {
 					continue;
 				}
-				
+
 				$filehandler->open('write');
 				$filehandler->write($buf);
 				$filehandler->close();
-				
+
 				$mime_type = $filehandler->detectMimeType($filehandler->getFilenameOnFilestore());
-				
+
 				// hack for Microsoft zipped formats
 				$info = pathinfo($folder);
 				$office_formats = ['docx', 'xlsx', 'pptx'];
@@ -535,43 +540,43 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
 							break;
 					}
 				}
-				
+
 				// check for bad ppt detection
 				if ($mime_type == 'application/vnd.ms-office' && $info['extension'] == 'ppt') {
 					$mime_type = 'application/vnd.ms-powerpoint';
 				}
-				
+
 				$simple_type = elgg_get_file_simple_type($mime_type);
-				
+
 				$filehandler->setMimeType($mime_type);
 				$filehandler->simpletype = $simple_type;
-				
+
 				if ($simple_type == 'image') {
-					
+
 					if ($filehandler->saveIconFromElggFile($filehandler)) {
 						$filehandler->thumbnail = $filehandler->getIcon('small')->getFilename();
 						$filehandler->smallthumb = $filehandler->getIcon('medium')->getFilename();
 						$filehandler->largethumb = $filehandler->getIcon('large')->getFilename();
 					}
 				}
-				
+
 				set_input('folder_guid', $parent);
-				
+
 				$filehandler->save();
-				
+
 				$extracted = true;
-				
+
 				if (!empty($parent)) {
 					add_entity_relationship($parent, FileToolsFolder::RELATIONSHIP, $filehandler->guid);
 				}
 			}
 		}
-		
+
 		zip_entry_close($zip_entry);
 	}
-	
+
 	zip_close($zip);
-	
+
 	return $extracted;
 }
 
@@ -585,16 +590,16 @@ function file_tools_unzip($file, $container_guid, $parent_guid = 0) {
  * @return void
  */
 function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $folder, $folder_path = '') {
-	
+
 	if (!($zip_archive instanceof ZipArchive) || !$folder instanceof \FileToolsFolder) {
 		return;
 	}
-	
+
 	$folder_title = elgg_get_friendly_title($folder->title);
-	
+
 	$zip_archive->addEmptyDir($folder_path . $folder_title);
 	$folder_path .= $folder_title . DIRECTORY_SEPARATOR;
-	
+
 	// add files from this folder to the zip
 	$files = elgg_get_entities([
 		'type' => 'object',
@@ -613,11 +618,11 @@ function file_tools_add_folder_to_zip(ZipArchive &$zip_archive, ElggObject $fold
 			// file name exists, so create a new one
 			$ext_pos = strrpos($file->originalfilename, '.');
 			$file_name = substr($file->originalfilename, 0, $ext_pos) . '_' . $file->guid . substr($file->originalfilename, $ext_pos);
-			
+
 			$zip_archive->addFile($file->getFilenameOnFilestore(), $folder_path . $file_name);
 		}
 	}
-	
+
 	// check if there are subfolders
 	$sub_folders = elgg_get_entities([
 		'type' => 'object',
