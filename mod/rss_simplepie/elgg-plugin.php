@@ -42,6 +42,7 @@ return [
 	'widgets' => [
 		'rss_feed_reader' => [
 			'context' => ['profile', 'dashboard'],
+			'multiple' => true,
 			'name' => elgg_echo('rss_simplepie:widget:title'),
 			'description' => elgg_echo('rss_simplepie:widget:description'),
 		],
