@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit74edd62b178f204bae2047fbad59fee6
+class ComposerStaticInit4f31e725e8d57c2ba0c9d168b8264d7e
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2317,6 +2317,7 @@ class ComposerStaticInit74edd62b178f204bae2047fbad59fee6
         'PhpDocReader\\PhpDocReader' => __DIR__ . '/..' . '/php-di/phpdoc-reader/src/PhpDocReader/PhpDocReader.php',
         'PhpDocReader\\PhpParser\\TokenParser' => __DIR__ . '/..' . '/php-di/phpdoc-reader/src/PhpDocReader/PhpParser/TokenParser.php',
         'PhpDocReader\\PhpParser\\UseStatementParser' => __DIR__ . '/..' . '/php-di/phpdoc-reader/src/PhpDocReader/PhpParser/UseStatementParser.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'PluginException' => __DIR__ . '/..' . '/elgg/elgg/engine/classes/PluginException.php',
         'Psr\\Cache\\CacheException' => __DIR__ . '/..' . '/psr/cache/src/CacheException.php',
         'Psr\\Cache\\CacheItemInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemInterface.php',
@@ -2743,6 +2744,7 @@ class ComposerStaticInit74edd62b178f204bae2047fbad59fee6
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/..' . '/symfony/polyfill-php72/Php72.php',
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
+        'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
         'TrueBV\\Exception\\DomainOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/DomainOutOfBoundsException.php',
         'TrueBV\\Exception\\LabelOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/LabelOutOfBoundsException.php',
@@ -3064,10 +3066,10 @@ class ComposerStaticInit74edd62b178f204bae2047fbad59fee6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit74edd62b178f204bae2047fbad59fee6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4f31e725e8d57c2ba0c9d168b8264d7e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4f31e725e8d57c2ba0c9d168b8264d7e::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4f31e725e8d57c2ba0c9d168b8264d7e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4f31e725e8d57c2ba0c9d168b8264d7e::$classMap;
 
         }, null, ClassLoader::class);
     }
