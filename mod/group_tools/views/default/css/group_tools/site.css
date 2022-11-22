@@ -1,0 +1,76 @@
+/** Group tools CSS */
+#invite_to_group .ui-helper-hidden-accessible {
+	display: none;
+}
+
+.elgg-form-group-tools-related-groups .elgg-fieldset-horizontal {
+	display: flex;
+	align-items: stretch;
+	
+	> .elgg-field:first-child {
+		flex-grow: 1;
+	}
+}
+
+#group-tools-invite-email .elgg-fieldset-horizontal {
+	display: flex;
+	align-items: flex-end;
+	
+	> .elgg-field {
+		flex-grow: 1;
+		
+		&:first-child {
+			width: 100%;
+		}
+		
+		&:last-child {
+			margin: 0;
+		}
+	}
+}
+
+/* groups simplified options */
+.group-tools-simplified-options {
+	display: flex;
+	flex-wrap: wrap;
+	
+	> div {
+		flex-basis: 45%;
+		flex-grow: 1;
+	}
+}
+	
+.group-tools-simplified-option {
+	background: #f0f0f0;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	color: #333;
+	padding: 20px;
+	margin: 20px;
+	cursor: pointer;
+	
+	border-radius: 3px;
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);
+	
+	> h3 {
+		display: block;
+	}
+	
+	&.elgg-state-active {
+		color: #FFF;
+		background: #4787b8;
+		
+		h3 {
+			color: inherit;
+		}
+	}
+}
+
+#group-tools-stale-message.elgg-message {
+	cursor: default;
+}
+
+.elgg-menu-filter-groups-all {	
+	.group-tools-listing-sorting {
+		margin-left: auto;
+	}
+}
