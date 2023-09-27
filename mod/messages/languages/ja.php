@@ -18,14 +18,11 @@ return array(
 	'messages:message' => "メッセージ",
 	'messages:title' => "タイトル",
 	'messages:to:help' => "受取人のユーザ名を入力してください。",
-	'messages:inbox' => "受信箱",
 	'messages:sendmessage' => "メッセージの送信",
 	'messages:add' => "メッセージの作成",
 	'messages:sentmessages' => "送信済みメッセージ",
 	'messages:toggle' => '全てを選択',
 	'messages:markread' => '既読マーク',
-
-	'notification:method:site' => 'サイト',
 
 	'messages:error' => 'メッセージの保存の際に問題が発生しました。もう一度やり直してください。',
 
@@ -37,27 +34,25 @@ return array(
 	*/
 
 	'messages:posted' => "メッセージを送信しました。",
-	'messages:success:delete:single' => 'メッセージを削除しました',
 	'messages:success:delete' => 'メッセージを削除しました',
 	'messages:success:read' => 'メッセージを「既読」にしました',
 	'messages:error:messages_not_selected' => '選択されてるメッセージはありません。',
-	'messages:error:delete:single' => 'メッセージを削除できませんでした。',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => '新しいメッセージが届きました！',
-	'messages:email:body' => "You have a new message from %s.
+	'messages:email:body' => " %s さんからのメッセージがあります。
 
-It reads:
+内容:
 
 %s
 
-To view your messages, click here:
+めっせーじをみるには:
 %s
 
-To send %s a message, click here:
+%s さんにメッセージを送るには:
 %s",
 
 	/**
@@ -69,7 +64,14 @@ To send %s a message, click here:
 	'messages:user:nonexist' => "ユーザー一覧にその送信先がありません。",
 	'messages:user:blank' => "送信先を指定してください。",
 	'messages:user:self' => "自分宛にメールを送ることはできません。",
+	'messages:user:notfriend' => "友達以外のユーザにメッセージを送ることはできません。",
 
 	'messages:deleted_sender' => '削除されたユーザ',
+	
+	/**
+	* Settings
+	*/
+	'messages:settings:friends_only:label' => 'メッセージは友達宛のみに送ることができます。',
+	'messages:settings:friends_only:help' => 'ユーザは友達宛以外にメッセージを送ることができません。',
 
 );

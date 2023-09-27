@@ -18,6 +18,7 @@ return array(
 	'widgets:group_activity:content:noactivity' => 'Det finns ingen aktivitet i denna grupp',
 	'widgets:group_activity:content:noselect' => 'Redigera denna widget för att välja en grupp',
 	
+	'collection:river' => "Aktivitet",
 	'collection:river:group' => "Gruppaktivitet",
 	'groups:tool:activity' => 'Aktivera gruppaktivtet',
 	

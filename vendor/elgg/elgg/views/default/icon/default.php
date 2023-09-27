@@ -19,13 +19,14 @@ $icon_sizes = elgg_get_icon_sizes($entity->type, $entity->getSubtype());
 // Get size
 $size = elgg_extract('size', $vars, 'medium');
 if (!array_key_exists($size, $icon_sizes)) {
-	$size = "medium";
+	$size = 'medium';
 }
+
 $vars['size'] = $size;
 
-$class = elgg_extract('img_class', $vars, '');
+$img_class = elgg_extract_class($vars, [], 'img_class');
 
-$title = htmlspecialchars($entity->getDisplayName(), ENT_QUOTES, 'UTF-8', false);
+$title = htmlspecialchars($entity->getDisplayName() ?? '', ENT_QUOTES, 'UTF-8', false);
 
 $url = false;
 if (elgg_extract('use_link', $vars, true)) {
@@ -35,6 +36,7 @@ if (elgg_extract('use_link', $vars, true)) {
 if (!isset($vars['width'])) {
 	$vars['width'] = $size != 'master' ? $icon_sizes[$size]['w'] : null;
 }
+
 if (!isset($vars['height'])) {
 	$vars['height'] = $size != 'master' ? $icon_sizes[$size]['h'] : null;
 }
@@ -44,8 +46,8 @@ $img_params = [
 	'alt' => $title,
 ];
 
-if (!empty($class)) {
-	$img_params['class'] = $class;
+if (!empty($img_class)) {
+	$img_params['class'] = $img_class;
 }
 
 if (!empty($vars['width'])) {
@@ -65,11 +67,12 @@ if ($url) {
 	$params = [
 		'href' => $url,
 		'text' => $img,
+		'title' => $entity->getDisplayName(),
 		'is_trusted' => true,
 	];
-	$class = elgg_extract('link_class', $vars, '');
-	if ($class) {
-		$params['class'] = $class;
+	$link_class = elgg_extract_class($vars, [], 'link_class');
+	if (!empty($link_class)) {
+		$params['class'] = $link_class;
 	}
 
 	echo elgg_view('output/url', $params);

@@ -4,11 +4,11 @@ namespace Elgg;
 
 use Elgg\Cli\Application as CliApplication;
 use Elgg\Cli\BaseCommand;
-use Exception;
+use Elgg\Cli\Command;
+use Elgg\Traits\Loggable;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Elgg\Cli\Command;
 
 /**
  * CLI bootstrap
@@ -23,9 +23,9 @@ class Cli {
 	protected $console;
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	protected $hooks;
+	protected $events;
 
 	/**
 	 * @var InputInterface
@@ -40,30 +40,33 @@ class Cli {
 	/**
 	 * Constructor
 	 *
-	 * @param CliApplication     $console Console application instance
-	 * @param PluginHooksService $hooks   Hooks registration service
-	 * @param InputInterface     $input   Console input
-	 * @param OutputInterface    $output  Console output
+	 * @param EventsService   $events Events service
+	 * @param InputInterface  $input  Console input
+	 * @param OutputInterface $output Console output
 	 */
 	public function __construct(
-		CliApplication $console,
-		PluginHooksService $hooks,
+		EventsService $events,
 		InputInterface $input,
 		OutputInterface $output
 	) {
+		
+		$console = new \Elgg\Cli\Application('Elgg', elgg_get_release());
+		$console->setup($input, $output);
+
 		$this->console = $console;
-		$this->hooks = $hooks;
+		$this->events = $events;
 		$this->input = $input;
 		$this->output = $output;
 	}
 
 	/**
 	 * Add CLI tools to the console application
+	 *
 	 * @return void
 	 */
 	protected function bootstrap() {
 		$commands = array_merge($this->getCoreCommands(), $this->getPluginCommands());
-		$commands = $this->hooks->trigger('commands', 'cli', null, $commands);
+		$commands = $this->events->triggerResults('commands', 'cli', [], $commands);
 
 		foreach ($commands as $command) {
 			$this->add($command);
@@ -72,6 +75,7 @@ class Cli {
 
 	/**
 	 * Returns the core cli commands
+	 *
 	 * @return array
 	 */
 	protected function getCoreCommands() {
@@ -81,6 +85,7 @@ class Cli {
 
 	/**
 	 * Returns the cli commands registered in plugins
+	 *
 	 * @return array
 	 */
 	protected function getPluginCommands() {
@@ -117,11 +122,8 @@ class Cli {
 		}
 
 		$command = new $command();
-		/* @var $command BaseCommand */
-
-		if ($this->logger) {
-			$command->setLogger($this->logger);
-		}
+		
+		$command->setLogger($this->getLogger());
 		
 		if (!is_subclass_of($command, Command::class)) {
 			$this->console->add($command);
@@ -147,17 +149,18 @@ class Cli {
 	 * @param bool $bootstrap Is bootstrap needed?
 	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	public function run(bool $bootstrap = true) {
 		if ($bootstrap) {
 			$this->bootstrap();
 		}
+		
 		$this->console->run($this->input, $this->output);
 	}
 
 	/**
 	 * Returns console input
+	 *
 	 * @return InputInterface
 	 */
 	public function getInput() {
@@ -166,6 +169,7 @@ class Cli {
 
 	/**
 	 * Returns console output
+	 *
 	 * @return OutputInterface
 	 */
 	public function getOutput() {

@@ -31,7 +31,10 @@ class IO
     {
         $options = $this->process->options;
 
-        $inputBasename = basename($this->process->input->filename, '.css');
+        $inputBasename = $this->process->input->filename
+            ? basename($this->process->input->filename, '.css')
+            : 'styles';
+
         $outputBasename = $inputBasename;
 
         if (! empty($options->output_file)) {
@@ -84,7 +87,7 @@ class IO
         $path = "$dir/$filename";
 
         if (! file_exists($path)) {
-            debug('No file cached.');
+            debug("File '$path' not cached.");
 
             return false;
         }
@@ -98,7 +101,7 @@ class IO
         $data =& $process->cacheData[$filename];
 
         // Make stack of file mtimes starting with the input file.
-        $file_sums = array($input->mtime);
+        $file_sums = [$input->mtime];
         foreach ($data['imports'] as $import_file) {
 
             // Check if this is docroot relative or input dir relative.
@@ -158,7 +161,7 @@ class IO
 
         $cache_data_exists = file_exists($process->cacheFile);
         $cache_data_file_is_writable = $cache_data_exists ? is_writable($process->cacheFile) : false;
-        $cache_data = array();
+        $cache_data = [];
 
         if (
             $cache_data_exists &&
@@ -178,7 +181,7 @@ class IO
             else {
                 debug('Creating cache data file.');
             }
-            Util::filePutContents($process->cacheFile, json_encode(array()), __METHOD__);
+            Util::filePutContents($process->cacheFile, json_encode([]), __METHOD__);
         }
 
         return $cache_data;
@@ -190,8 +193,7 @@ class IO
 
         debug('Saving config.');
 
-        $flags = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0;
-        Util::filePutContents($process->cacheFile, json_encode($process->cacheData, $flags), __METHOD__);
+        Util::filePutContents($process->cacheFile, json_encode($process->cacheData, JSON_PRETTY_PRINT), __METHOD__);
     }
 
     public function write(StringObject $string)
@@ -208,11 +210,9 @@ class IO
 
         if (Util::filePutContents("$dir/$filename", $string, __METHOD__)) {
 
-            $jsonFlags = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0;
-
             if ($process->sourceMap) {
                 Util::filePutContents("$dir/$sourcemapFilename",
-                    json_encode($process->sourceMap, $jsonFlags), __METHOD__);
+                    json_encode($process->sourceMap, JSON_PRETTY_PRINT), __METHOD__);
             }
 
             if ($process->options->stat_dump) {
@@ -220,7 +220,7 @@ class IO
                     $process->options->stat_dump : "$dir/$filename.json";
 
                 $GLOBALS['CSSCRUSH_STAT_FILE'] = $statFile;
-                Util::filePutContents($statFile, json_encode(csscrush_stat(), $jsonFlags), __METHOD__);
+                Util::filePutContents($statFile, json_encode(csscrush_stat(), JSON_PRETTY_PRINT), __METHOD__);
             }
 
             return true;

@@ -6,30 +6,15 @@ use Elgg\IntegrationTestCase;
 
 class ControllerIntegrationTest extends IntegrationTestCase {
 
-	/**
-	 * @var \ElggUser
-	 */
-	protected $user;
-	
-	public function up() {
-		$this->registerViews();
-	}
-
-	public function down() {
-		elgg_get_session()->removeLoggedInUser();
-		
-		if (isset($this->user)) {
-			elgg_call(ELGG_IGNORE_ACCESS, function() {
-				$this->user->delete();
-			});
-		}
-	}
-	
 	protected function prepareService(\Elgg\Http\Request $request) {
 		$this->createApplication([
 			'isolate' => true,
 			'request' => $request,
 		]);
+		
+		// make sure the tests run in a non walled garden environment
+		elgg_set_config('walled_garden', false);
+		$this->assertFalse(elgg_get_config('walled_garden'));
 		
 		$this->registerViews();
 	}
@@ -63,11 +48,16 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 	public function testCantLoadRegisteredAjaxViewWithNonAjaxRequest() {
 		$request = $this->prepareHttpRequest('ajax/view/ajax_test/registered');
 		
-		$this->expectException(\Elgg\Http\Exception\AjaxGatekeeperException::class);
+		$this->expectException(\Elgg\Exceptions\Http\Gatekeeper\AjaxGatekeeperException::class);
 		$this->executeRequest($request);
 	}
 	
 	public function testCantLoadNonRegisteredAjaxView() {
+		$this->createApplication([
+			'isolate' => true,
+		]);
+		$this->registerViews();
+		
 		$this->assertTrue(elgg_view_exists('ajax_test/not_registered'));
 		$request = $this->prepareHttpRequest('ajax/view/ajax_test/not_registered', 'GET', [], 1);
 		
@@ -78,7 +68,7 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 	public function testCantAccessAdminAjaxViewLoggedOut() {
 		$request = $this->prepareHttpRequest('ajax/view/admin/ajax_test/registered', 'GET', [], 1);
 		
-		$this->expectException(\Elgg\Http\Exception\LoggedInGatekeeperException::class);
+		$this->expectException(\Elgg\Exceptions\Http\Gatekeeper\LoggedInGatekeeperException::class);
 		$this->executeRequest($request);
 	}
 	
@@ -87,10 +77,10 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 		
 		$this->prepareService($request);
 		
-		$this->user = $user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($user);
+		$user = $this->createUser();
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
-		$this->expectException(\Elgg\Http\Exception\AdminGatekeeperException::class);
+		$this->expectException(\Elgg\Exceptions\Http\Gatekeeper\AdminGatekeeperException::class);
 		$this->executeRequest($request, false);
 	}
 	
@@ -100,7 +90,7 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 		$this->prepareService($request);
 		
 		$user = $this->getAdmin();
-		elgg_get_session()->setLoggedInUser($user);
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
 		$response = $this->executeRequest($request, false);
 		$this->assertInstanceOf(\Elgg\Http\OkResponse::class, $response);
@@ -118,11 +108,16 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 	public function testCantLoadRegisteredAjaxFormWithNonAjaxRequest() {
 		$request = $this->prepareHttpRequest('ajax/form/ajax_test/registered');
 		
-		$this->expectException(\Elgg\Http\Exception\AjaxGatekeeperException::class);
+		$this->expectException(\Elgg\Exceptions\Http\Gatekeeper\AjaxGatekeeperException::class);
 		$this->executeRequest($request);
 	}
 	
 	public function testCantLoadNonRegisteredAjaxForm() {
+		$this->createApplication([
+			'isolate' => true,
+		]);
+		$this->registerViews();
+		
 		$this->assertTrue(elgg_view_exists('ajax_test/not_registered'));
 		$request = $this->prepareHttpRequest('ajax/form/ajax_test/not_registered', 'GET', [], 1);
 		
@@ -133,7 +128,7 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 	public function testCantAccessAdminAjaxFormLoggedOut() {
 		$request = $this->prepareHttpRequest('ajax/form/admin/ajax_test/registered', 'GET', [], 1);
 		
-		$this->expectException(\Elgg\Http\Exception\LoggedInGatekeeperException::class);
+		$this->expectException(\Elgg\Exceptions\Http\Gatekeeper\LoggedInGatekeeperException::class);
 		$this->executeRequest($request);
 	}
 	
@@ -142,10 +137,10 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 		
 		$this->prepareService($request);
 		
-		$this->user = $user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($user);
+		$user = $this->createUser();
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
-		$this->expectException(\Elgg\Http\Exception\AdminGatekeeperException::class);
+		$this->expectException(\Elgg\Exceptions\Http\Gatekeeper\AdminGatekeeperException::class);
 		$this->executeRequest($request, false);
 	}
 	
@@ -155,7 +150,7 @@ class ControllerIntegrationTest extends IntegrationTestCase {
 		$this->prepareService($request);
 		
 		$user = $this->getAdmin();
-		elgg_get_session()->setLoggedInUser($user);
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
 		$response = $this->executeRequest($request, false);
 		$this->assertInstanceOf(\Elgg\Http\OkResponse::class, $response);

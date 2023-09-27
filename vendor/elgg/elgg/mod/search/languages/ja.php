@@ -7,9 +7,8 @@
 
 return array(
 	'search:results' => '%s の検索結果',
-	'search:more' => '+%s more %s',
 
 	'search:comment_on' => '「%s」へのコメント',
 	'search:unknown_entity' => '不明なエンティティ型です。',
-	'search:empty_query' => 'Please provide a valid search query',
+	'search:empty_query' => '検索クエリが正しくありません',
 );

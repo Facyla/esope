@@ -76,6 +76,11 @@
     <td>Rewrite relative URLs inside inlined imported files.
 </tr>
 <tr>
+    <td class="option">import_paths
+    <td class="values">Array
+    <td>Additional paths to search when resolving relative import URLs.
+</tr>
+<tr>
     <td class="option">plugins
     <td class="values">Array
     <td>An array of plugin names to enable.
@@ -95,10 +100,4 @@
     <td class="values">Path
     <td>Specify an alternative server document root for situations where the CSS is being served behind an alias or url rewritten path.
 </tr>
-<tr>
-    <td class="option">settings
-    <td class="values">Array
-    <td>An associative array of plugin and environment settings. Used primarily for plugin configuration.
-</tr>
 </table>
-

@@ -8,24 +8,16 @@ use Elgg\Database;
 use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\AttributeWhereClause;
 use Elgg\Database\Clauses\MetadataWhereClause;
-use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\QueryBuilder;
-use Elgg\PluginHooksService;
-use ElggBatch;
-use ElggEntity;
-use InvalidParameterException;
-use Elgg\Database\LegacyQueryOptionsAdapter;
+use Elgg\EventsService;
+use Elgg\Exceptions\DomainException;
+use Elgg\Traits\Database\LegacyQueryOptionsAdapter;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use elgg_search() instead.
- *
- * @todo   Implement type/subtype normalization into types => subtypes pairs and add logic to search for multiple
- *         subtypes
+ * Search service
  *
  * @internal
- * @since  3.0
+ * @since 3.0
  */
 class SearchService {
 
@@ -35,9 +27,9 @@ class SearchService {
 	private $config;
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	private $hooks;
+	private $events;
 
 	/**
 	 * @var Database
@@ -49,13 +41,13 @@ class SearchService {
 	/**
 	 * Constructor
 	 *
-	 * @param \Elgg\Config             $config Config
-	 * @param \Elgg\PluginHooksService $hooks  Hook registration service
-	 * @param Database                 $db     Database
+	 * @param \Elgg\Config        $config Config
+	 * @param \Elgg\EventsService $events Events service
+	 * @param Database            $db     Database
 	 */
-	public function __construct(Config $config, PluginHooksService $hooks, Database $db) {
+	public function __construct(Config $config, EventsService $events, Database $db) {
 		$this->config = $config;
-		$this->hooks = $hooks;
+		$this->events = $events;
 		$this->db = $db;
 	}
 
@@ -75,16 +67,16 @@ class SearchService {
 	 * @option bool   $tokenize      Break down search query into tokens,
 	 *                               e.g. find 'elgg has been released' when searching for 'elgg released'
 	 *
-	 * @return ElggBatch|ElggEntity[]|int|false
-	 * @throws InvalidParameterException
+	 * @return \ElggBatch|\ElggEntity[]|int|false
+	 * @throws DomainException
 	 *
-	 * @see    elgg_get_entities()
+	 * @see elgg_get_entities()
 	 */
 	public function search(array $options = []) {
 		$options = $this->prepareSearchOptions($options);
 
 		$query_parts = elgg_extract('query_parts', $options);
-		$fields = elgg_extract('fields', $options);
+		$fields = (array) elgg_extract('fields', $options);
 
 		if (empty($query_parts) || empty(array_filter($fields))) {
 			return false;
@@ -94,21 +86,21 @@ class SearchService {
 		$entity_subtype = elgg_extract('subtype', $options);
 		$search_type = elgg_extract('search_type', $options, 'entities');
 
-		if ($entity_type !== 'all' && !in_array($entity_type, Config::getEntityTypes())) {
-			throw new InvalidParameterException("'$entity_type' is not a valid entity type");
+		if ($entity_type !== 'all' && !in_array($entity_type, Config::ENTITY_TYPES)) {
+			throw new DomainException("'{$entity_type}' is not a valid entity type");
 		}
 
-		$options = $this->hooks->trigger('search:options', $entity_type, $options, $options);
+		$options = $this->events->triggerResults('search:options', $entity_type, $options, $options);
 		if (!empty($entity_subtype) && is_string($entity_subtype)) {
-			$options = $this->hooks->trigger('search:options', "{$entity_type}:{$entity_subtype}", $options, $options);
+			$options = $this->events->triggerResults('search:options', "{$entity_type}:{$entity_subtype}", $options, $options);
 		}
 
-		$options = $this->hooks->trigger('search:options', $search_type, $options, $options);
+		$options = $this->events->triggerResults('search:options', $search_type, $options, $options);
 
-		if ($this->hooks->hasHandler('search:results', $search_type)) {
-			$results = $this->hooks->trigger('search:results', $search_type, $options);
+		if ($this->events->hasHandler('search:results', $search_type)) {
+			$results = $this->events->triggerResults('search:results', $search_type, $options);
 			if (isset($results)) {
-				// allow hooks to conditionally replace the result set
+				// allow events to conditionally replace the result set
 				return $results;
 			}
 		}
@@ -133,7 +125,7 @@ class SearchService {
 		$search_type = elgg_extract('search_type', $options, 'entities', false);
 		$options['search_type'] = $search_type;
 
-		$options = $this->hooks->trigger('search:params', $search_type, $options, $options);
+		$options = $this->events->triggerResults('search:params', $search_type, $options, $options);
 
 		$options = $this->normalizeQuery($options);
 		$options = $this->normalizeSearchFields($options);
@@ -162,8 +154,6 @@ class SearchService {
 			return $this->buildSearchWhereQuery($qb, $alias, $fields, $query_parts, $partial);
 		};
 
-		$options = $this->prepareSortOptions($options);
-
 		return $options;
 	}
 
@@ -176,8 +166,9 @@ class SearchService {
 	 */
 	public function normalizeQuery(array $options = []) {
 
-		$query = elgg_extract('query', $options);
-		$query = filter_var($query, FILTER_SANITIZE_STRING);
+		$query = elgg_extract('query', $options, '');
+		$query = strip_tags($query);
+		$query = htmlspecialchars($query, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 		$query = trim($query);
 
 		$words = preg_split('/\s+/', $query);
@@ -214,7 +205,6 @@ class SearchService {
 			'attributes' => [],
 			'metadata' => [],
 			'annotations' => [],
-			'private_settings' => [],
 		];
 
 		$fields = $default_fields;
@@ -248,7 +238,7 @@ class SearchService {
 		$type_subtype_pairs = elgg_extract('type_subtype_pairs', $normalized_options);
 		if (!empty($type_subtype_pairs)) {
 			foreach ($type_subtype_pairs as $entity_type => $entity_subtypes) {
-				$result = $this->hooks->trigger('search:fields', $entity_type, $options, $default_fields);
+				$result = $this->events->triggerResults('search:fields', $entity_type, $options, $default_fields);
 				$merge_fields($result);
 				
 				if (elgg_is_empty($entity_subtypes)) {
@@ -256,7 +246,7 @@ class SearchService {
 				}
 				
 				foreach ($entity_subtypes as $entity_subtype) {
-					$result = $this->hooks->trigger('search:fields', "{$entity_type}:{$entity_subtype}", $options, $default_fields);
+					$result = $this->events->triggerResults('search:fields', "{$entity_type}:{$entity_subtype}", $options, $default_fields);
 					$merge_fields($result);
 				}
 			}
@@ -265,7 +255,7 @@ class SearchService {
 		// search fields for search type
 		$search_type = elgg_extract('search_type', $options, 'entities');
 		if ($search_type) {
-			$fields = $this->hooks->trigger('search:fields', $search_type, $options, $fields);
+			$fields = $this->events->triggerResults('search:fields', $search_type, $options, $fields);
 		}
 
 		// make sure all supported field types are available
@@ -290,42 +280,6 @@ class SearchService {
 	}
 
 	/**
-	 * Normalizes sort options
-	 *
-	 * @param array $options Search parameters
-	 *
-	 * @return array
-	 */
-	public function prepareSortOptions(array $options = []) {
-
-		$sort = elgg_extract('sort', $options);
-		if (is_string($sort)) {
-			$sort = [
-				'property' => $sort,
-				'direction' => elgg_extract('order', $options)
-			];
-		}
-
-		if (!isset($sort['property'])) {
-			$sort = [
-				'property' => 'time_created',
-				'property_type' => 'attribute',
-				'direction' => 'desc',
-			];
-		}
-
-		$clause = new Database\Clauses\EntitySortByClause();
-		$clause->property = elgg_extract('property', $sort);
-		$clause->property_type = elgg_extract('property_type', $sort);
-		$clause->direction = elgg_extract('direction', $sort, 'asc');
-		$clause->signed = elgg_extract('signed', $sort, false);
-
-		$options['order_by'] = [$clause];
-
-		return $options;
-	}
-
-	/**
 	 * Builds search clause
 	 *
 	 * @param QueryBuilder $qb            Query builder
@@ -335,14 +289,12 @@ class SearchService {
 	 * @param bool         $partial_match Allow partial matches
 	 *
 	 * @return CompositeExpression|string
-	 * @throws InvalidParameterException
 	 */
 	public function buildSearchWhereQuery(QueryBuilder $qb, $alias, $fields, $query_parts, $partial_match = true) {
 
 		$attributes = elgg_extract('attributes', $fields, [], false);
 		$metadata = elgg_extract('metadata', $fields, [], false);
 		$annotations = elgg_extract('annotations', $fields, [], false);
-		$private_settings = elgg_extract('private_settings', $fields, [], false);
 
 		$ors = [];
 
@@ -362,6 +314,7 @@ class SearchService {
 					$populate_where($where, $part);
 					$attribute_ands[] = $where->prepare($qb, $alias);
 				}
+				
 				$ors[] = $qb->merge($attribute_ands, 'AND');
 			}
 		}
@@ -374,6 +327,7 @@ class SearchService {
 				$populate_where($where, $part);
 				$metadata_ands[] = $where->prepare($qb, $md_alias);
 			}
+			
 			$ors[] = $qb->merge($metadata_ands, 'AND');
 		}
 
@@ -385,21 +339,10 @@ class SearchService {
 				$populate_where($where, $part);
 				$annotations_ands[] = $where->prepare($qb, $an_alias);
 			}
+			
 			$ors[] = $qb->merge($annotations_ands, 'AND');
-		}
-
-		if (!empty($private_settings)) {
-			$private_settings_ands = [];
-			$ps_alias = $qb->joinPrivateSettingsTable($alias, 'guid', $private_settings, 'left');
-			foreach ($query_parts as $part) {
-				$where = new PrivateSettingWhereClause();
-				$populate_where($where, $part);
-				$private_settings_ands[] = $where->prepare($qb, $ps_alias);
-			}
-			$ors[] = $qb->merge($private_settings_ands, 'AND');
 		}
 
 		return $qb->merge($ors, 'OR');
 	}
-
 }

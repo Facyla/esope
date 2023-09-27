@@ -20,6 +20,7 @@ for ($den = 2; $den <= 6; $den++) {
 		if ($num > 1 && isset($percentages[$rounded_percentage])) {
 			continue;
 		}
+
 		$percentages[$rounded_percentage] = [$num, $den];
 		$units[$den][] = $num;
 	}
@@ -44,6 +45,7 @@ for ($den = 1; $den <= count($units); $den++) {
 				unset($units[$den][$index]);
 			}
 		}
+		
 		$rows[] = $row;
 		$total = 0;
 	}
@@ -58,7 +60,7 @@ for ($den = 1; $den <= count($units); $den++) {
 	<?php foreach ($rows as $row) : ?>
 		<div class="elgg-grid theme-sandbox-grid-demo-solid">
 			<?php foreach ($row as $col) :
-				$class = "elgg-col elgg-col-" . str_replace('/', 'of', $col);
+				$class = 'elgg-col elgg-col-' . str_replace('/', 'of', $col);
 				$text = str_replace(' ', '<br/>', $class);
 				?>
 				<div class="<?php echo $class ?>">
@@ -81,7 +83,7 @@ for ($den = 1; $den <= count($units); $den++) {
 			</div>
 		</div>
 		<div class="elgg-col elgg-col-3of5">
-			<div class="elgg-inner clearfix elgg-border-plain elgg-justify-center pam mtl">
+			<div class="elgg-inner elgg-border-plain elgg-justify-center pam mtl">
 				<h3>3/5</h3>
 				<div class="elgg-grid theme-sandbox-grid-demo-outline">
 					<div class="elgg-col elgg-col-1of2">

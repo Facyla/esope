@@ -13,6 +13,7 @@ class AccessWhereClause extends WhereClause {
 	 * @var string
 	 */
 	public $access_column = 'access_id';
+
 	/**
 	 * @var string
 	 */
@@ -47,13 +48,12 @@ class AccessWhereClause extends WhereClause {
 	 * {@inheritdoc}
 	 */
 	public function prepare(QueryBuilder $qb, $table_alias = null) {
-
 		$alias = function ($column) use ($table_alias) {
 			return $table_alias ? "{$table_alias}.{$column}" : $column;
 		};
 
 		if (!isset($this->viewer_guid)) {
-			$this->viewer_guid = _elgg_services()->session->getLoggedInUserGuid();
+			$this->viewer_guid = _elgg_services()->session_manager->getLoggedInUserGuid();
 		}
 
 		if (!isset($this->ignore_access)) {
@@ -61,7 +61,7 @@ class AccessWhereClause extends WhereClause {
 		}
 
 		if (!isset($this->use_enabled_clause)) {
-			$this->use_enabled_clause = !_elgg_services()->session->getDisabledEntityVisibility();
+			$this->use_enabled_clause = !_elgg_services()->session_manager->getDisabledEntityVisibility();
 		}
 
 		$ors = [];
@@ -84,7 +84,7 @@ class AccessWhereClause extends WhereClause {
 			$ands[] = $qb->compare($alias($this->enabled_column), '=', 'yes', ELGG_VALUE_STRING);
 		}
 
-		$hook_params = [
+		$params = [
 			'table_alias' => $table_alias,
 			'user_guid' => $this->viewer_guid,
 			'ignore_access' => $this->ignore_access,
@@ -96,7 +96,7 @@ class AccessWhereClause extends WhereClause {
 			'query_builder' => $qb,
 		];
 
-		$clauses = _elgg_services()->hooks->trigger('get_sql', 'access', $hook_params, [
+		$clauses = _elgg_services()->events->triggerResults('get_sql', 'access', $params, [
 			'ors' => $ors,
 			'ands' => $ands,
 		]);
@@ -110,5 +110,4 @@ class AccessWhereClause extends WhereClause {
 
 		return $qb->merge($ands);
 	}
-
 }

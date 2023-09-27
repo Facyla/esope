@@ -2,135 +2,84 @@
 
 namespace Elgg\Database;
 
-use ClassException;
-use DatabaseException;
 use Elgg\Cache\EntityCache;
 use Elgg\Cache\MetadataCache;
 use Elgg\Config;
 use Elgg\Database;
 use Elgg\Database\Clauses\EntityWhereClause;
-use Elgg\Database\EntityTable\UserFetchFailureException;
 use Elgg\EntityPreloader;
 use Elgg\EventsService;
+use Elgg\Exceptions\ClassException;
+use Elgg\Exceptions\Database\UserFetchFailureException;
+use Elgg\Exceptions\DomainException;
 use Elgg\I18n\Translator;
-use Elgg\Logger;
-use ElggBatch;
-use ElggEntity;
-use ElggGroup;
-use ElggObject;
-use ElggSession;
-use ElggSite;
-use ElggUser;
-use InvalidParameterException;
-use Psr\Log\LoggerInterface;
-use stdClass;
-use Elgg\Cache\PrivateSettingsCache;
+use Elgg\SessionManagerService;
+use Elgg\Traits\Loggable;
+use Elgg\Traits\TimeUsing;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * Entity table database service
  *
  * @internal
- *
  * @since 1.10.0
  */
 class EntityTable {
 
-	use \Elgg\TimeUsing;
+	use Loggable;
+	use TimeUsing;
 
 	/**
-	 * @var Config
+	 * @var string name of the entities database table
 	 */
-	protected $config;
+	const TABLE_NAME = 'entities';
 
-	/**
-	 * @var Database
-	 */
-	protected $db;
+	protected Config $config;
 
-	/**
-	 * @var string
-	 */
-	protected $table;
+	protected Database $db;
 
-	/**
-	 * @var array
-	 */
-	protected $entity_classes;
+	protected EntityCache $entity_cache;
 
-	/**
-	 * @var EntityCache
-	 */
-	protected $entity_cache;
+	protected EntityPreloader $entity_preloader;
 
-	/**
-	 * @var EntityPreloader
-	 */
-	protected $entity_preloader;
+	protected MetadataCache $metadata_cache;
 
-	/**
-	 * @var MetadataCache
-	 */
-	protected $metadata_cache;
+	protected EventsService $events;
 
-	/**
-	 * @var PrivateSettingsCache
-	 */
-	protected $private_settings_cache;
+	protected SessionManagerService $session_manager;
 
-	/**
-	 * @var EventsService
-	 */
-	protected $events;
+	protected Translator $translator;
 
-	/**
-	 * @var ElggSession
-	 */
-	protected $session;
-
-	/**
-	 * @var Translator
-	 */
-	protected $translator;
-
-	/**
-	 * @var Logger
-	 */
-	protected $logger;
+	protected array $deleted_guids = [];
+	
+	protected array $entity_classes = [];
 
 	/**
 	 * Constructor
 	 *
-	 * @param Config               $config                 Config
-	 * @param Database             $db                     Database
-	 * @param EntityCache          $entity_cache           Entity cache
-	 * @param MetadataCache        $metadata_cache         Metadata cache
-	 * @param PrivateSettingsCache $private_settings_cache Private Settings cache
-	 * @param EventsService        $events                 Events service
-	 * @param ElggSession          $session                Session
-	 * @param Translator           $translator             Translator
-	 * @param LoggerInterface      $logger                 Logger
+	 * @param Config                $config          Config
+	 * @param Database              $db              Database
+	 * @param EntityCache           $entity_cache    Entity cache
+	 * @param MetadataCache         $metadata_cache  Metadata cache
+	 * @param EventsService         $events          Events service
+	 * @param SessionManagerService $session_manager Session manager
+	 * @param Translator            $translator      Translator
 	 */
 	public function __construct(
 		Config $config,
 		Database $db,
 		EntityCache $entity_cache,
 		MetadataCache $metadata_cache,
-		PrivateSettingsCache $private_settings_cache,
 		EventsService $events,
-		ElggSession $session,
-		Translator $translator,
-		LoggerInterface $logger
+		SessionManagerService $session_manager,
+		Translator $translator
 	) {
 		$this->config = $config;
 		$this->db = $db;
-		$this->table = $this->db->prefix . 'entities';
 		$this->entity_cache = $entity_cache;
 		$this->metadata_cache = $metadata_cache;
-		$this->private_settings_cache = $private_settings_cache;
 		$this->events = $events;
-		$this->session = $session;
+		$this->session_manager = $session_manager;
 		$this->translator = $translator;
-		$this->logger = $logger;
 	}
 
 	/**
@@ -141,11 +90,11 @@ class EntityTable {
 	 * @param string $class   Entity class
 	 *
 	 * @return void
-	 * @throws InvalidParameterException
+	 * @throws DomainException
 	 */
-	public function setEntityClass($type, $subtype, $class = '') {
-		if (!in_array($type, Config::getEntityTypes())) {
-			throw new InvalidParameterException("$type is not a valid entity type");
+	public function setEntityClass(string $type, string $subtype, string $class = ''): void {
+		if (!in_array($type, Config::ENTITY_TYPES)) {
+			throw new DomainException("{$type} is not a valid entity type");
 		}
 
 		$this->entity_classes[$type][$subtype] = $class;
@@ -159,109 +108,85 @@ class EntityTable {
 	 *
 	 * @return string
 	 */
-	public function getEntityClass($type, $subtype) {
-		if (isset($this->entity_classes[$type][$subtype])) {
-			return $this->entity_classes[$type][$subtype];
-		}
-
-		return '';
+	public function getEntityClass(string $type, string $subtype): string {
+		return $this->entity_classes[$type][$subtype] ?? '';
 	}
 
 	/**
 	 * Returns a database row from the entities table.
 	 *
-	 * @see     entity_row_to_elggstar()
-	 *
 	 * @tip     Use get_entity() to return the fully loaded entity.
 	 *
 	 * @warning This will only return results if a) it exists, b) you have access to it.
-	 * see {@link _elgg_get_access_where_sql()}.
 	 *
 	 * @param int $guid      The GUID of the object to extract
 	 * @param int $user_guid GUID of the user accessing the row
 	 *                       Defaults to logged in user if null
 	 *                       Builds an access query for a logged out user if 0
 	 *
-	 * @return stdClass|false
+	 * @return \stdClass|null
 	 */
-	public function getRow($guid, $user_guid = null) {
-
-		if (!$guid) {
-			return false;
+	public function getRow(int $guid, int $user_guid = null): ?\stdClass {
+		if ($guid < 0) {
+			return null;
 		}
 
 		$where = new EntityWhereClause();
-		$where->guids = (int) $guid;
+		$where->guids = $guid;
 		$where->viewer_guid = $user_guid;
 
-		$select = Select::fromTable('entities', 'e');
+		$select = Select::fromTable(self::TABLE_NAME, 'e');
 		$select->select('e.*');
 		$select->addClause($where);
 
-		return $this->db->getDataRow($select);
+		return $this->db->getDataRow($select) ?: null;
 	}
 
 	/**
 	 * Adds a new row to the entity table
 	 *
-	 * @param stdClass $row        Entity base information
-	 * @param array    $attributes All primary table attributes
-	 *                             Used by database mock services to allow mocking
-	 *                             entities that were instantiated using new keyword
-	 *                             and calling ElggEntity::save()
+	 * @param \stdClass $row        Entity base information
+	 * @param array     $attributes All primary table attributes
+	 *                              Used by database mock services to allow mocking
+	 *                              entities that were instantiated using new keyword
+	 *                              and calling ElggEntity::save()
 	 *
-	 * @return int|false
+	 * @return int
 	 */
-	public function insertRow(stdClass $row, array $attributes = []) {
-
-		$sql = "
-			INSERT INTO {$this->db->prefix}entities
-			(type, subtype, owner_guid, container_guid, access_id, time_created, time_updated, last_action)
-			VALUES
-			(:type, :subtype, :owner_guid, :container_guid, :access_id, :time_created, :time_updated, :last_action)
-		";
-
-		return $this->db->insertData($sql, [
-			':type' => $row->type,
-			':subtype' => $row->subtype,
-			':owner_guid' => $row->owner_guid,
-			':container_guid' => $row->container_guid,
-			':access_id' => $row->access_id,
-			':time_created' => $row->time_created,
-			':time_updated' => $row->time_updated,
-			':last_action' => $row->last_action,
+	public function insertRow(\stdClass $row, array $attributes = []): int {
+		$insert = Insert::intoTable(self::TABLE_NAME);
+		$insert->values([
+			'type' => $insert->param($row->type, ELGG_VALUE_STRING),
+			'subtype' => $insert->param($row->subtype, ELGG_VALUE_STRING),
+			'owner_guid' => $insert->param($row->owner_guid, ELGG_VALUE_GUID),
+			'container_guid' => $insert->param($row->container_guid, ELGG_VALUE_GUID),
+			'access_id' => $insert->param($row->access_id, ELGG_VALUE_ID),
+			'time_created' => $insert->param($row->time_created, ELGG_VALUE_TIMESTAMP),
+			'time_updated' => $insert->param($row->time_updated, ELGG_VALUE_TIMESTAMP),
+			'last_action' => $insert->param($row->last_action, ELGG_VALUE_TIMESTAMP),
 		]);
+
+		return $this->db->insertData($insert);
 	}
 
 	/**
 	 * Update entity table row
 	 *
-	 * @param int      $guid Entity guid
-	 * @param stdClass $row  Updated data
+	 * @param int       $guid Entity guid
+	 * @param \stdClass $row  Updated data
 	 *
-	 * @return int|false
+	 * @return bool
 	 */
-	public function updateRow($guid, stdClass $row) {
-		$sql = "
-			UPDATE {$this->db->prefix}entities
-			SET owner_guid = :owner_guid,
-			    access_id = :access_id,
-				container_guid = :container_guid,
-				time_created = :time_created,
-				time_updated = :time_updated
-			WHERE guid = :guid
-		";
+	public function updateRow(int $guid, \stdClass $row): bool {
+		$update = Update::table(self::TABLE_NAME);
+		$update->set('owner_guid', $update->param($row->owner_guid, ELGG_VALUE_GUID))
+			->set('container_guid', $update->param($row->container_guid, ELGG_VALUE_GUID))
+			->set('access_id', $update->param($row->access_id, ELGG_VALUE_ID))
+			->set('time_created', $update->param($row->time_created, ELGG_VALUE_TIMESTAMP))
+			->set('time_updated', $update->param($row->time_updated, ELGG_VALUE_TIMESTAMP))
+			->where($update->compare('guid', '=', $guid, ELGG_VALUE_GUID));
 
-		$params = [
-			':owner_guid' => $row->owner_guid,
-			':access_id' => $row->access_id,
-			':container_guid' => $row->container_guid,
-			':time_created' => $row->time_created,
-			':time_updated' => $row->time_updated,
-			':guid' => $guid,
-		];
-
-		return $this->db->updateData($sql, false, $params);
+		return $this->db->updateData($update);
 	}
 
 	/**
@@ -269,44 +194,41 @@ class EntityTable {
 	 *
 	 * Handles loading all tables into the correct class.
 	 *
-	 * @see    get_entity_as_row()
-	 * @see    get_entity()
+	 * @param \stdClass $row The row of the entry in the entities table.
 	 *
-	 * @param stdClass $row The row of the entry in the entities table.
-	 *
-	 * @return ElggEntity|false
+	 * @return \ElggEntity|null
 	 * @throws ClassException
-	 * @throws InvalidParameterException
+	 * @throws DomainException
 	 */
-	public function rowToElggStar(stdClass $row) {
+	public function rowToElggStar(\stdClass $row): ?\ElggEntity {
 		if (!isset($row->guid) || !isset($row->subtype)) {
-			return false;
+			return null;
 		}
 
 		$class_name = $this->getEntityClass($row->type, $row->subtype);
 		if ($class_name && !class_exists($class_name)) {
-			$this->logger->error("Class '$class_name' was not found, missing plugin?");
+			$this->getLogger()->error("Class '{$class_name}' was not found, missing plugin?");
 			$class_name = '';
 		}
 
 		if (!$class_name) {
 			$map = [
-				'object' => ElggObject::class,
-				'user' => ElggUser::class,
-				'group' => ElggGroup::class,
-				'site' => ElggSite::class,
+				'object' => \ElggObject::class,
+				'user' => \ElggUser::class,
+				'group' => \ElggGroup::class,
+				'site' => \ElggSite::class,
 			];
 
 			if (isset($map[$row->type])) {
 				$class_name = $map[$row->type];
 			} else {
-				throw new InvalidParameterException("Entity type {$row->type} is not supported.");
+				throw new DomainException("Entity type {$row->type} is not supported.");
 			}
 		}
 
 		$entity = new $class_name($row);
-		if (!$entity instanceof ElggEntity) {
-			throw new ClassException("$class_name must extend " . ElggEntity::class);
+		if (!$entity instanceof \ElggEntity) {
+			throw new ClassException("{$class_name} must extend " . \ElggEntity::class);
 		}
 
 		return $entity;
@@ -317,23 +239,22 @@ class EntityTable {
 	 *
 	 * @param int $guid GUID
 	 *
-	 * @return \ElggEntity|false
+	 * @return \ElggEntity|null
 	 */
-	public function getFromCache($guid) {
+	public function getFromCache(int $guid): ?\ElggEntity {
 		$entity = $this->entity_cache->load($guid);
 		if ($entity) {
 			return $entity;
 		}
 
-		$cache = _elgg_services()->dataCache->entities;
-		$entity = $cache->load($guid);
-		if (!$entity instanceof ElggEntity) {
-			return false;
+		$entity = _elgg_services()->sessionCache->entities->load($guid);
+		if (!$entity instanceof \ElggEntity) {
+			return null;
 		}
 
 		// Validate accessibility if from cache
-		if (!elgg_get_ignore_access() && !has_access_to_entity($entity)) {
-			return false;
+		if (!elgg_get_ignore_access() && !$entity->hasAccess()) {
+			return null;
 		}
 
 		$entity->cache(false);
@@ -345,18 +266,16 @@ class EntityTable {
 	 * Invalidate cache for entity
 	 *
 	 * @param int $guid GUID
+	 *
 	 * @return void
 	 */
-	public function invalidateCache($guid) {
-		$ia = $this->session->setIgnoreAccess(true);
-		$ha = $this->session->getDisabledEntityVisibility();
-		$this->session->setDisabledEntityVisibility(true);
-		$entity = $this->get($guid);
-		if ($entity) {
-			$entity->invalidateCache();
-		}
-		$this->session->setDisabledEntityVisibility($ha);
-		$this->session->setIgnoreAccess($ia);
+	public function invalidateCache(int $guid): void {
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+			$entity = $this->get($guid);
+			if ($entity instanceof \ElggEntity) {
+				$entity->invalidateCache();
+			}
+		});
 	}
 
 	/**
@@ -370,23 +289,11 @@ class EntityTable {
 	 *                        If given, even an existing entity with the given GUID
 	 *                        will not be returned unless its subtype matches
 	 *
-	 * @return ElggEntity|false The correct Elgg or custom object based upon entity type and subtype
-	 * @throws ClassException
-	 * @throws InvalidParameterException
+	 * @return \ElggEntity|null The correct Elgg or custom object based upon entity type and subtype
 	 */
-	public function get($guid, $type = null, $subtype = null) {
-		// We could also use: if (!(int) $guid) { return false },
-		// but that evaluates to a false positive for $guid = true.
-		// This is a bit slower, but more thorough.
-		if (!is_numeric($guid) || $guid === 0 || $guid === '0') {
-			return false;
-		}
-
-		$guid = (int) $guid;
-
+	public function get(int $guid, string $type = null, string $subtype = null): ?\ElggEntity {
 		$entity = $this->getFromCache($guid);
-		if (
-			$entity instanceof \ElggEntity &&
+		if ($entity instanceof \ElggEntity &&
 			(!isset($type) || $entity->type === $type) &&
 			(!isset($subtype) || $entity->subtype === $subtype)
 		) {
@@ -394,21 +301,22 @@ class EntityTable {
 		}
 
 		$row = $this->getRow($guid);
-		if (!$row) {
-			return false;
+		if (empty($row)) {
+			return null;
 		}
 
 		if (isset($type) && $row->type !== $type) {
-			return false;
+			return null;
 		}
 
 		if (isset($subtype) && $row->subtype !== $subtype) {
-			return false;
+			return null;
 		}
 
 		$entity = $row;
 
 		if ($entity instanceof \stdClass) {
+			// Need to check for \stdClass because the unit test mocker returns \ElggEntity classes
 			$entity = $this->rowToElggStar($entity);
 		}
 
@@ -429,43 +337,11 @@ class EntityTable {
 	 *
 	 * @return bool
 	 */
-	public function exists($guid) {
-
-		// need to ignore access and show hidden entities to check existence
-		$ia = $this->session->setIgnoreAccess(true);
-		$show_hidden = $this->session->setDisabledEntityVisibility(true);
-
-		$result = $this->getRow($guid);
-
-		$this->session->setIgnoreAccess($ia);
-		$this->session->setDisabledEntityVisibility($show_hidden);
-
-		return !empty($result);
-	}
-
-	/**
-	 * Enable an entity.
-	 *
-	 * @param int  $guid      GUID of entity to enable
-	 * @param bool $recursive Recursively enable all entities disabled with the entity?
-	 *
-	 * @return bool
-	 */
-	public function enable($guid, $recursive = true) {
-
-		// Override access only visible entities
-		$old_access_status = $this->session->getDisabledEntityVisibility();
-		$this->session->setDisabledEntityVisibility(true);
-
-		$result = false;
-		$entity = get_entity($guid);
-		if ($entity) {
-			$result = $entity->enable($recursive);
-		}
-
-		$this->session->setDisabledEntityVisibility($old_access_status);
-
-		return $result;
+	public function exists(int $guid): bool {
+		return elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+			// need to ignore access and show hidden entities to check existence
+			return !empty($this->getRow($guid));
+		});
 	}
 
 	/**
@@ -479,36 +355,31 @@ class EntityTable {
 	 * @param QueryBuilder $query   Query
 	 * @param array        $options Options
 	 *
-	 * @return ElggEntity[]
-	 * @throws DatabaseException
+	 * @return \ElggEntity[]
 	 */
-	public function fetch(QueryBuilder $query, array $options = []) {
+	public function fetch(QueryBuilder $query, array $options = []): array {
 		$results = $this->db->getData($query, $options['callback']);
-
 		if (empty($results)) {
 			return [];
 		}
 
+		/* @var $preload \ElggEntity[] */
 		$preload = array_filter($results, function ($e) {
-			return $e instanceof ElggEntity;
+			return $e instanceof \ElggEntity;
 		});
-		/* @var $preload ElggEntity[] */
-
-		$this->metadata_cache->populateFromEntities($preload);
 		
-		if (elgg_extract('preload_private_settings', $options, false)) {
-			$this->private_settings_cache->populateFromEntities($preload);
-		}
+		$this->metadata_cache->populateFromEntities($preload);
 		
 		$props_to_preload = [];
 		if (elgg_extract('preload_owners', $options, false)) {
 			$props_to_preload[] = 'owner_guid';
 		}
+		
 		if (elgg_extract('preload_containers', $options, false)) {
 			$props_to_preload[] = 'container_guid';
 		}
 
-		if ($props_to_preload) {
+		if (!empty($props_to_preload)) {
 			_elgg_services()->entityPreloader->preload($preload, $props_to_preload);
 		}
 
@@ -516,34 +387,26 @@ class EntityTable {
 	}
 
 	/**
-	 * Update the last_action column in the entities table for $guid.
+	 * Update the last_action column in the entities table for $entity.
 	 *
 	 * @warning This is different to time_updated.  Time_updated is automatically set,
 	 * while last_action is only set when explicitly called.
 	 *
-	 * @param ElggEntity $entity Entity annotation|relationship action carried out on
-	 * @param int        $posted Timestamp of last action
+	 * @param \ElggEntity $entity Entity annotation|relationship action carried out on
+	 * @param int         $posted Timestamp of last action
 	 *
 	 * @return int
 	 */
-	public function updateLastAction(ElggEntity $entity, $posted = null) {
-
+	public function updateLastAction(\ElggEntity $entity, int $posted = null): int {
 		if ($posted === null) {
 			$posted = $this->getCurrentTime()->getTimestamp();
 		}
 
-		$query = "
-			UPDATE {$this->db->prefix}entities
-			SET last_action = :last_action
-			WHERE guid = :guid
-		";
+		$update = Update::table(self::TABLE_NAME);
+		$update->set('last_action', $update->param($posted, ELGG_VALUE_TIMESTAMP))
+			->where($update->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
 
-		$params = [
-			':last_action' => (int) $posted,
-			':guid' => (int) $entity->guid,
-		];
-
-		$this->db->updateData($query, true, $params);
+		$this->db->updateData($update);
 
 		return (int) $posted;
 	}
@@ -553,32 +416,23 @@ class EntityTable {
 	 *
 	 * @param int $guid User GUID. Default is logged in user
 	 *
-	 * @return ElggUser|false
-	 * @throws ClassException
-	 * @throws InvalidParameterException
+	 * @return \ElggUser|null
+	 * @throws UserFetchFailureException
 	 */
-	public function getUserForPermissionsCheck($guid = 0) {
-		if (!$guid) {
-			return $this->session->getLoggedInUser();
+	public function getUserForPermissionsCheck(int $guid = null): ?\ElggUser {
+		if (empty($guid) || $guid === $this->session_manager->getLoggedInUserGuid()) {
+			return $this->session_manager->getLoggedInUser();
 		}
 
-		// need to ignore access and show hidden entities for potential hidden/disabled users
-		$ia = $this->session->setIgnoreAccess(true);
-		$show_hidden = $this->session->setDisabledEntityVisibility(true);
+		$user = elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+			// need to ignore access and show hidden entities for potential hidden/disabled users
+			return $this->get($guid, 'user');
+		});
 
-		$user = $this->get($guid, 'user');
-		if ($user) {
-			$this->metadata_cache->populateFromEntities([$user->guid]);
-		}
-
-		$this->session->setIgnoreAccess($ia);
-		$this->session->setDisabledEntityVisibility($show_hidden);
-
-		if (!$user) {
+		if (!$user instanceof \ElggUser) {
 			// requested to check access for a specific user_guid, but there is no user entity, so the caller
 			// should cancel the check and return false
 			$message = $this->translator->translate('UserFetchFailureException', [$guid]);
-			// $this->logger->warn($message);
 
 			throw new UserFetchFailureException($message);
 		}
@@ -587,76 +441,75 @@ class EntityTable {
 	}
 
 	/**
-	 * Disables all entities owned and contained by a user (or another entity)
+	 * Enables entity
 	 *
-	 * @param ElggEntity $entity Owner/container entity
+	 * @param \ElggEntity $entity Entity to enable
 	 *
 	 * @return bool
-	 * @throws DatabaseException
 	 */
-	public function disableEntities(ElggEntity $entity) {
-		if (!$entity->canEdit()) {
-			return false;
-		}
+	public function enable(\ElggEntity $entity): bool {
+		$qb = Update::table(self::TABLE_NAME);
+		$qb->set('enabled', $qb->param('yes', ELGG_VALUE_STRING))
+			->where($qb->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
 
-		if (!$this->events->trigger('disable', $entity->type, $entity)) {
-			return false;
-		}
+		return $this->db->updateData($qb);
+	}
 
-		$qb = Update::table('entities');
+	/**
+	 * Disables entity
+	 *
+	 * @param \ElggEntity $entity Entity to disable
+	 *
+	 * @return bool
+	 */
+	public function disable(\ElggEntity $entity): bool {
+		$qb = Update::table(self::TABLE_NAME);
 		$qb->set('enabled', $qb->param('no', ELGG_VALUE_STRING))
-			->where($qb->compare('owner_guid', '=', $entity->guid, ELGG_VALUE_INTEGER))
-			->orWhere($qb->compare('container_guid', '=', $entity->guid, ELGG_VALUE_INTEGER));
-
-		$this->db->updateData($qb, true);
-
-		$entity->invalidateCache();
-
-		return true;
+			->where($qb->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
+		
+		return $this->db->updateData($qb);
 	}
 
 	/**
 	 * Delete entity and all of its properties
 	 *
-	 * @param ElggEntity $entity    Entity
-	 * @param bool       $recursive Delete all owned and contained entities
+	 * @param \ElggEntity $entity    Entity
+	 * @param bool        $recursive Delete all owned and contained entities
 	 *
 	 * @return bool
-	 * @throws DatabaseException
 	 */
-	public function delete(\ElggEntity $entity, $recursive = true) {
+	public function delete(\ElggEntity $entity, bool $recursive = true): bool {
 		$guid = $entity->guid;
 		if (!$guid) {
 			return false;
 		}
 
-		if (!_elgg_services()->events->triggerBefore('delete', $entity->type, $entity)) {
+		if (!$this->events->triggerBefore('delete', $entity->type, $entity)) {
 			return false;
 		}
+		
+		$this->events->trigger('delete', $entity->type, $entity);
 
-		// now trigger an event to let others know this entity is about to be deleted
-		// so they can prevent it or take their own actions
-		if (!_elgg_services()->events->triggerDeprecated('delete', $entity->type, $entity)) {
-			return false;
-		}
-
-		if ($entity instanceof ElggUser) {
+		if ($entity instanceof \ElggUser) {
 			// ban to prevent using the site during delete
 			$entity->ban();
 		}
 
+		// we're going to delete this entity, log the guid to prevent deadloops
+		$this->deleted_guids[] = $entity->guid;
+		
 		if ($recursive) {
 			$this->deleteRelatedEntities($entity);
 		}
 
 		$this->deleteEntityProperties($entity);
 
-		$qb = Delete::fromTable('entities');
-		$qb->where($qb->compare('guid', '=', $guid, ELGG_VALUE_INTEGER));
+		$qb = Delete::fromTable(self::TABLE_NAME);
+		$qb->where($qb->compare('guid', '=', $guid, ELGG_VALUE_GUID));
 
 		$this->db->deleteData($qb);
 
-		_elgg_services()->events->triggerAfter('delete', $entity->type, $entity);
+		$this->events->triggerAfter('delete', $entity->type, $entity);
 
 		return true;
 	}
@@ -664,66 +517,71 @@ class EntityTable {
 	/**
 	 * Deletes entities owned or contained by the entity being deletes
 	 *
-	 * @param ElggEntity $entity Entity
+	 * @param \ElggEntity $entity Entity
 	 *
 	 * @return void
-	 * @throws DatabaseException
 	 */
-	protected function deleteRelatedEntities(ElggEntity $entity) {
+	protected function deleteRelatedEntities(\ElggEntity $entity): void {
 		// Temporarily overriding access controls
-		$entity_disable_override = $this->session->getDisabledEntityVisibility();
-		$this->session->setDisabledEntityVisibility(true);
-		$ia = $this->session->setIgnoreAccess(true);
-
-		$options = [
-			'wheres' => function (QueryBuilder $qb, $main_alias) use ($entity) {
-				$ors = $qb->merge([
-					$qb->compare("{$main_alias}.owner_guid", '=', $entity->guid, ELGG_VALUE_GUID),
-					$qb->compare("{$main_alias}.container_guid", '=', $entity->guid, ELGG_VALUE_GUID),
-				], 'OR');
-
-				return $qb->merge([
-					$ors,
-					$qb->compare("{$main_alias}.guid", 'neq', $entity->guid, ELGG_VALUE_GUID),
-				]);
-			},
-			'limit' => false,
-		];
-
-		$batch = new ElggBatch('elgg_get_entities', $options);
-		$batch->setIncrementOffset(false);
-
-		/* @var $e \ElggEntity */
-		foreach ($batch as $e) {
-			$this->delete($e, true);
-		}
-
-		$this->session->setDisabledEntityVisibility($entity_disable_override);
-		$this->session->setIgnoreAccess($ia);
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($entity) {
+			/* @var $batch \ElggBatch */
+			$batch = elgg_get_entities([
+				'wheres' => function (QueryBuilder $qb, $main_alias) use ($entity) {
+					$ors = $qb->merge([
+						$qb->compare("{$main_alias}.owner_guid", '=', $entity->guid, ELGG_VALUE_GUID),
+						$qb->compare("{$main_alias}.container_guid", '=', $entity->guid, ELGG_VALUE_GUID),
+					], 'OR');
+					
+					return $qb->merge([
+						$ors,
+						$qb->compare("{$main_alias}.guid", 'neq', $entity->guid, ELGG_VALUE_GUID),
+					]);
+				},
+				'limit' => false,
+				'batch' => true,
+				'batch_inc_offset' => false,
+			]);
+			
+			/* @var $e \ElggEntity */
+			foreach ($batch as $e) {
+				if (in_array($e->guid, $this->deleted_guids)) {
+					// prevent deadloops, doing this here in case of large deletes which could cause query length issues
+					$batch->reportFailure();
+					continue;
+				}
+				
+				if (!$this->delete($e, true)) {
+					$batch->reportFailure();
+				}
+			}
+		});
 	}
 
 	/**
 	 * Clear data from secondary tables
 	 *
-	 * @param ElggEntity $entity Entity
+	 * @param \ElggEntity $entity Entity
 	 *
 	 * @return void
 	 */
-	protected function deleteEntityProperties(ElggEntity $entity) {
-		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($entity) {
+	protected function deleteEntityProperties(\ElggEntity $entity): void {
+		// Temporarily overriding access controls and disable system_log to save performance
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_DISABLE_SYSTEM_LOG, function() use ($entity) {
 			$entity->removeAllRelatedRiverItems();
-			$entity->removeAllPrivateSettings();
 			$entity->deleteOwnedAccessCollections();
 			$entity->deleteAccessCollectionMemberships();
-			$entity->deleteRelationships();
+			// remove relationships without events
+			// can't use DI provided service because of circular reference
+			_elgg_services()->relationshipsTable->removeAll($entity->guid, '', false, '', false);
+			_elgg_services()->relationshipsTable->removeAll($entity->guid, '', true, '', false);
 			$entity->deleteOwnedAnnotations();
 			$entity->deleteAnnotations();
 			$entity->deleteMetadata();
+			_elgg_services()->delayedEmailQueueTable->deleteAllRecipientRows($entity->guid);
 		});
 		
 		$dir = new \Elgg\EntityDirLocator($entity->guid);
-		$file_path = _elgg_config()->dataroot . $dir;
+		$file_path = _elgg_services()->config->dataroot . $dir;
 		elgg_delete_directory($file_path);
-
 	}
 }

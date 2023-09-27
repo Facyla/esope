@@ -36,7 +36,7 @@ echo elgg_view_field([
 echo elgg_view_field([
 	'#type' => 'number',
 	'min' => 0,
-	'#label' => elgg_echo('logbrowser:object:guid'),
+	'#label' => elgg_echo('logbrowser:object:id'),
 	'name' => 'object_id',
 	'value' => elgg_extract('object_id', $vars),
 ]);
@@ -55,9 +55,16 @@ echo elgg_view_field([
 	'value' => $upperval,
 ]);
 
+echo elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('logbrowser:action'),
+	'name' => 'event',
+	'value' => elgg_extract('event', $vars),
+]);
+
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('search'),
+	'text' => elgg_echo('search'),
 ]);
 
 elgg_set_form_footer($footer);

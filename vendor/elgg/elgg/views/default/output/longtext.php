@@ -12,7 +12,7 @@
 
 $vars['class'] = elgg_extract_class($vars, 'elgg-output');
 
-$text = elgg_extract('value', $vars);
+$text = (string) elgg_extract('value', $vars);
 unset($vars['value']);
 
 $text = elgg_format_html($text, $vars);
@@ -21,6 +21,6 @@ if (empty($text)) {
 	return;
 }
 
-unset($vars['parse_urls'], $vars['parse_emails'], $vars['sanitize'], $vars['autop']);
+unset($vars['parse_urls'], $vars['parse_emails'], $vars['parse_mentions'], $vars['sanitize'], $vars['autop']);
 
 echo elgg_format_element('div', $vars, $text);

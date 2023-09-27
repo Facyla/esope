@@ -2,7 +2,8 @@
 
 namespace Elgg\Filesystem;
 
-use Elgg\PluginHooksService;
+use Elgg\EventsService;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * Public service related to MIME type detection
@@ -11,15 +12,15 @@ use Elgg\PluginHooksService;
  */
 class MimeTypeService {
 
-	protected $hooks;
+	protected $events;
 	
 	/**
 	 * Constructor
 	 *
-	 * @param PluginHooksService $hooks Plugin hooks service
+	 * @param EventsService $events Events service
 	 */
-	public function __construct(PluginHooksService $hooks) {
-		$this->hooks = $hooks;
+	public function __construct(EventsService $events) {
+		$this->events = $events;
 	}
 	
 	/**
@@ -28,12 +29,12 @@ class MimeTypeService {
 	 * @param string $filename Filename to check
 	 * @param string $default  Default mimetype if not detected (default: application/octet-stream)
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 * @return string
 	 */
 	public function getMimeType(string $filename, string $default = MimeTypeDetector::DEFAULT_TYPE): string {
 		if (!is_file($filename) || !is_readable($filename)) {
-			throw new \InvalidArgumentException("The file '{$filename}' is not a valid file or is not readable");
+			throw new InvalidArgumentException("The file '{$filename}' is not a valid file or is not readable");
 		}
 		
 		$detector = new MimeTypeDetector();
@@ -46,7 +47,7 @@ class MimeTypeService {
 			'default' => $default,
 		];
 		
-		return $this->hooks->trigger('mime_type', 'file', $params, $mime);
+		return $this->events->triggerResults('mime_type', 'file', $params, $mime);
 	}
 	
 	/**
@@ -76,14 +77,14 @@ class MimeTypeService {
 			$result = $matches[1];
 		}
 		
-		if (0 === strpos($mimetype, 'text/') || false !== strpos($mimetype, 'opendocument')) {
+		if (str_starts_with($mimetype, 'text/') || str_contains($mimetype, 'opendocument')) {
 			$result = 'document';
 		}
 		
 		$params = [
 			'mime_type' => $mimetype,
 		];
-		return $this->hooks->trigger('simple_type', 'file', $params, $result);
+		return $this->events->triggerResults('simple_type', 'file', $params, $result);
 	}
 	
 	/**

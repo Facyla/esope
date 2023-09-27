@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Displays information the time of the post
  *
@@ -19,21 +18,20 @@ if (!$entity instanceof ElggEntity) {
 }
 
 $time = elgg_extract('time', $vars);
+$time_updated = null;
 if (!isset($time)) {
 	$time = $entity->time_created;
+	$time_updated = $entity->time_updated;
 }
+
 if (!$time) {
 	return;
 }
 
-$content = elgg_view_friendly_time($time);
+$content = elgg_view_friendly_time($time, $time_updated);
 $time_href = elgg_extract('time_href', $vars);
 if (!empty($time_href)) {
-	$content = elgg_view('output/url', [
-		'href' => $time_href,
-		'text' => $content,
-		'is_trusted' => true,
-	]);
+	$content = elgg_view_url($time_href, $content);
 }
 
 echo elgg_view('object/elements/imprint/element', [

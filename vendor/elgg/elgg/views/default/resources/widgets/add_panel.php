@@ -2,8 +2,10 @@
 /**
  * Widget add panel
  *
- * @uses $vars['context']     The context for this widget layout
- * @uses $vars['owner_guid']  Container limit widgets for
+ * @uses $vars['context']             (string) The context for this widget layout
+ * @uses $vars['owner_guid']          (int) Container limit widgets for
+ * @uses $vars['new_widget_column']   (int) The target column for new widgets
+ * @uses $vars['new_widget_position'] (string) The target position for new widgets ('top' | 'bottom')
  */
 
 elgg_ajax_gatekeeper();
@@ -16,8 +18,11 @@ if (!empty($context_stack) && is_array($context_stack)) {
 
 elgg_require_js('resources/widgets/add_panel');
 
-$context = elgg_extract('context', $vars, get_input('context'));
+$context = (string) elgg_extract('context', $vars, get_input('context'));
 $owner_guid = (int) elgg_extract('owner_guid', $vars, (int) get_input('owner_guid'));
+$new_widget_column = elgg_extract('new_widget_column', $vars, get_input('new_widget_column'));
+$new_widget_position = elgg_extract('new_widget_position', $vars, get_input('new_widget_position'));
+
 elgg_entity_gatekeeper($owner_guid);
 
 $owner = get_entity($owner_guid);
@@ -53,31 +58,31 @@ foreach ($widget_types as $handler => $widget_type) {
 	} else {
 		$class[] = 'elgg-state-available';
 	}
-
+	
 	$class[] = $widget_type->multiple ? 'elgg-widget-multiple' : 'elgg-widget-single';
-
+	
 	$action = '<div class="elgg-widgets-add-actions elgg-level">';
 	if (!$widget_type->multiple) {
 		$action .= elgg_format_element('span', ['class' => 'elgg-quiet'], elgg_echo('widget:unavailable'));
 	}
-	$add_link = elgg_http_add_url_query_elements('action/widgets/add', [
-		'handler' => $handler,
-		'page_owner_guid' => $owner_guid,
-		'context' => $context,
-		'show_access' => elgg_extract('show_access', $vars),
-		'default_widgets' => elgg_in_context('default_widgets'),
-	]);
-
+	
 	$action .= elgg_view('output/url', [
-		'class' => 'elgg-button elgg-button-submit elgg-size-small',
+		'class' => ['elgg-button', 'elgg-button-submit', 'elgg-size-small'],
 		'text' => elgg_echo('add'),
-		'href' => $add_link,
-		'is_action' => true,
+		'href' => elgg_generate_action_url('widgets/add', [
+			'handler' => $handler,
+			'page_owner_guid' => $owner_guid,
+			'context' => $context,
+			'show_access' => elgg_extract('show_access', $vars, get_input('show_access')),
+			'default_widgets' => elgg_in_context('default_widgets'),
+			'new_widget_column' => $new_widget_column,
+			'new_widget_position' => $new_widget_position,
+		]),
 	]);
 	$action .= '</div>';
-
-	$description = "<h4>{$widget_type->name}</h4>";
-
+	
+	$description = elgg_format_element('h4', [], $widget_type->name);
+	
 	if ($widget_type->description) {
 		$description .= elgg_format_element('div', ['class' => 'elgg-quiet'], $widget_type->description);
 	}
@@ -96,6 +101,15 @@ foreach ($widget_types as $handler => $widget_type) {
 	], $item_content);
 }
 
-$result .= "<ul>$list_items</ul>";
+$result .= elgg_format_element('ul', [], $list_items);
 
-echo elgg_view_module('aside', elgg_echo('widgets:add'), $result, ['class' => 'elgg-widgets-add-panel']);
+$search_box = elgg_view('input/text', [
+	'name' => 'widget_search',
+	'title' => elgg_echo('search'),
+	'placeholder' => elgg_echo('search'),
+]);
+
+echo elgg_view_module('info', elgg_echo('widgets:add'), $result, [
+	'class' => 'elgg-widgets-add-panel',
+	'menu' => $search_box,
+]);

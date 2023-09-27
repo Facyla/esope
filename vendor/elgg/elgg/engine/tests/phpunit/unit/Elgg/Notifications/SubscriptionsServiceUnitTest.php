@@ -2,63 +2,101 @@
 
 namespace Elgg\Notifications;
 
+use Elgg\Database;
+use Elgg\Database\Select;
+use Elgg\Exceptions\InvalidArgumentException;
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * @group NotificationsService
  * @group UnitTests
  */
 class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 
-	private $containerGuid;
+	/**
+	 * @var \ElggObject
+	 */
+	protected $object;
+	
+	/**
+	 * @var SubscriptionsService
+	 */
+	protected $service;
+	
+	/**
+	 * @var Database
+	 */
+	protected $db;
+	
+	/**
+	 * @var MockObject
+	 */
+	protected $event;
 
 	public function up() {
-		$this->containerGuid = 42;
-
-		// mock ElggObject that has a container guid
-		$object = $this->createMock('\ElggObject');
-
-		$object->expects($this->any())
-			->method('getContainerGUID')
-			->will($this->returnValue($this->containerGuid));
+		$this->object = $this->createObject();
 
 		// mock event that holds the mock object
-		$this->event = $this->createMock('\Elgg\Notifications\Event');
+		$this->event = $this->createMock('\Elgg\Notifications\SubscriptionNotificationEvent');
 
 		$this->event->expects($this->any())
 			->method('getObject')
-			->will($this->returnValue($object));
+			->will($this->returnValue($this->object));
+		
+		$this->event->expects($this->any())
+			->method('getActorGUID')
+			->will($this->returnValue(0));
 
 		$this->db = $this->createMock('\Elgg\Database');
-
-		$this->db->expects($this->any())
-			->method('sanitizeString')
-			->will($this->returnArgument(0));
-
-		$this->db->expects($this->any())
-			->method('sanitizeInt')
-			->will($this->returnArgument(0));
+		
+		$this->service = $this->setupService();
+	}
+	
+	/**
+	 * Create a SubscriptionService
+	 *
+	 * @return \Elgg\Notifications\SubscriptionsService
+	 */
+	protected function setupService() {
+		return new SubscriptionsService(
+			$this->db,
+			_elgg_services()->relationshipsTable,
+			_elgg_services()->events
+		);
+	}
+	
+	/**
+	 * Convert an array to an object
+	 *
+	 * @param array $data the array with data
+	 *
+	 * @return \stdClass
+	 */
+	protected function createObjectFromArray(array $data) {
+		$obj = new \stdClass();
+		foreach ($data as $key => $value) {
+			$obj->$key = $value;
+		}
+		
+		return $obj;
 	}
 
-	public function down() {
-
-	}
-
-	public function testGetSubscriptionsWithNoMethodsRegistered() {
-		$service = new \Elgg\Notifications\SubscriptionsService($this->db);
-		$this->assertEquals([], $service->getSubscriptions($this->event));
+	public function testGetSubscriptionsWithNoMethodsProvided() {
+		$this->assertEquals([], $this->service->getNotificationEventSubscriptions($this->event, []));
 	}
 
 	public function testGetSubscriptionsWithBadObject() {
 		$this->event = $this->createMock(
-			'\Elgg\Notifications\Event', ['getObject'], [], '', false);
+			'\Elgg\Notifications\SubscriptionNotificationEvent', ['getObject'], [], '', false);
 		$this->event->expects($this->any())
 			->method('getObject')
 			->will($this->returnValue(null));
-		$service = new \Elgg\Notifications\SubscriptionsService($this->db);
-		$service->methods = [
+		
+		$methods = [
 			'one',
 			'two'
 		];
-		$this->assertEquals([], $service->getSubscriptions($this->event));
+		$this->assertEquals([], $this->service->getNotificationEventSubscriptions($this->event, $methods));
 	}
 
 	public function testQueryGenerationForRetrievingSubscriptionRelationships() {
@@ -67,20 +105,20 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'bananas'
 		];
 
-		$query = "SELECT guid_one AS guid, GROUP_CONCAT(relationship SEPARATOR ',') AS methods
-			FROM {$this->db->prefix}entity_relationships
-			WHERE guid_two = $this->containerGuid AND
-					relationship IN ('notifyapples','notifybananas') GROUP BY guid_one";
-
+		$guids = array_unique(array_filter([$this->object->container_guid, $this->object->guid]));
+		$select = Select::fromTable('entity_relationships');
+		$select->select('guid_one AS guid')
+			->addSelect("GROUP_CONCAT(relationship SEPARATOR ',') AS methods")
+			->where($select->compare('guid_two', 'in', $guids, ELGG_VALUE_GUID))
+			->andWhere($select->compare('relationship', 'in', ['notify:apples', 'notify:bananas'], ELGG_VALUE_STRING))
+			->groupBy('guid_one');
+		
 		$this->db->expects($this->once())
 			->method('getData')
-			->with($this->equalTo($query))
+			->with($this->equalTo($select))
 			->will($this->returnValue([]));
 
-		$service = new \Elgg\Notifications\SubscriptionsService($this->db);
-
-		$service->methods = $methods;
-		$this->assertEquals([], $service->getSubscriptions($this->event));
+		$this->assertEquals([], $this->service->getNotificationEventSubscriptions($this->event, $methods));
 	}
 
 	public function testGetSubscriptionsWithProperInput() {
@@ -91,11 +129,11 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$queryResult = [
 			$this->createObjectFromArray([
 				'guid' => '22',
-				'methods' => 'notifyapples'
+				'methods' => 'notify:apples'
 			]),
 			$this->createObjectFromArray([
 				'guid' => '567',
-				'methods' => 'notifybananas,notifyapples'
+				'methods' => 'notify:bananas,notify:apples'
 			]),
 		];
 		$subscriptions = [
@@ -110,16 +148,13 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 			->method('getData')
 			->will($this->returnValue($queryResult));
 
-		$service = new \Elgg\Notifications\SubscriptionsService($this->db);
-
-		$service->methods = $methods;
-		$this->assertEquals($subscriptions, $service->getSubscriptions($this->event));
+		$this->assertEquals($subscriptions, $this->service->getNotificationEventSubscriptions($this->event, $methods));
 	}
 
-	public function testGetSubscriptionsForContainerWithNoMethodsRegistered() {
+	public function testGetSubscriptionsForContainerWithNoMethodsProvided() {
 		$container_guid = 132;
-		$service = new \Elgg\Notifications\SubscriptionsService($this->db);
-		$this->assertEquals([], $service->getSubscriptionsForContainer($container_guid));
+		
+		$this->assertEquals([], $this->service->getSubscriptionsForContainer($container_guid, []));
 	}
 
 	public function testGetSubscriptionsForContainerWithProperInput() {
@@ -132,11 +167,11 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$queryResult = [
 			$this->createObjectFromArray([
 				'guid' => '22',
-				'methods' => 'notifyapples'
+				'methods' => 'notify:apples'
 			]),
 			$this->createObjectFromArray([
 				'guid' => '567',
-				'methods' => 'notifybananas,notifyapples'
+				'methods' => 'notify:bananas,notify:apples'
 			]),
 		];
 		$subscriptions = [
@@ -149,19 +184,50 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->db->expects($this->once())
 			->method('getData')
 			->will($this->returnValue($queryResult));
-		$service = new \Elgg\Notifications\SubscriptionsService($this->db);
-
-		$service->methods = $methods;
-		$this->assertEquals($subscriptions, $service->getSubscriptionsForContainer($container_guid));
+		
+		$this->assertEquals($subscriptions, $this->service->getSubscriptionsForContainer($container_guid, $methods));
 	}
-
-	protected function createObjectFromArray(array $data) {
-		$obj = new \stdClass();
-		foreach ($data as $key => $value) {
-			$obj->$key = $value;
-		}
-
-		return $obj;
+	
+	/**
+	 * @dataProvider invalidTypeSubtypeActionProvider
+	 */
+	public function testAddSubscriptionThrowsExceptionWithInvalidTypeSubtypeActionInput($type, $subtype, $action) {
+		$this->expectException(InvalidArgumentException::class);
+		$this->service->addSubscription($this->object->owner_guid, 'apples', $this->object->guid, $type, $subtype, $action);
 	}
-
+	
+	/**
+	 * @dataProvider invalidTypeSubtypeActionProvider
+	 */
+	public function testHasSubscriptionThrowsExceptionWithInvalidTypeSubtypeActionInput($type, $subtype, $action) {
+		$this->expectException(InvalidArgumentException::class);
+		$this->service->hasSubscription($this->object->owner_guid, 'apples', $this->object->guid, $type, $subtype, $action);
+	}
+	
+	/**
+	 * @dataProvider invalidTypeSubtypeActionProvider
+	 */
+	public function testRemoveSubscriptionThrowsExceptionWithInvalidTypeSubtypeActionInput($type, $subtype, $action) {
+		$this->expectException(InvalidArgumentException::class);
+		$this->service->removeSubscription($this->object->owner_guid, 'apples', $this->object->guid, $type, $subtype, $action);
+	}
+	
+	/**
+	 * @dataProvider invalidTypeSubtypeActionProvider
+	 */
+	public function testGetEntitySubscriptionsThrowsExceptionWithInvalidTypeSubtypeActionInput($type, $subtype, $action) {
+		$this->expectException(InvalidArgumentException::class);
+		$this->service->getEntitySubscriptions($this->object->guid, $this->object->owner_guid, ['apples'], $type, $subtype, $action);
+	}
+	
+	public function invalidTypeSubtypeActionProvider() {
+		return [
+			['foo', null, null],
+			[null, 'foo', null],
+			[null, null, 'foo'],
+			['foo', 'bar', null],
+			['foo', null, 'bar'],
+			[null, 'foo', 'bar'],
+		];
+	}
 }

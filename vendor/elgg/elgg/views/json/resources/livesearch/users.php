@@ -1,20 +1,21 @@
 <?php
 
+use Elgg\Exceptions\Http\EntityPermissionsException;
+
 elgg_gatekeeper();
 
-$limit = (int) elgg_extract('limit', $vars, elgg_get_config('default_limit'));
-$query = elgg_extract('term', $vars, elgg_extract('q', $vars));
-$input_name = elgg_extract('name', $vars);
-
 $options = [
-	'query' => $query,
+	'query' => elgg_extract('term', $vars),
 	'type' => 'user',
-	'limit' => $limit,
-	'sort' => 'name',
-	'order' => 'ASC',
+	'limit' => elgg_extract('limit', $vars),
+	'sort_by' => [
+		'property_type' => 'metadata',
+		'property' => 'name',
+		'direction' => 'ASC',
+	],
 	'fields' => ['metadata' => ['name', 'username']],
 	'item_view' => elgg_extract('item_view', $vars, 'search/entity'),
-	'input_name' => $input_name,
+	'input_name' => elgg_extract('name', $vars),
 ];
 
 if (elgg_extract('friends_only', $vars, false)) {
@@ -26,7 +27,7 @@ if (elgg_extract('friends_only', $vars, false)) {
 	}
 	
 	if (!$target || !$target->canEdit()) {
-		throw new \Elgg\EntityPermissionsException();
+		throw new EntityPermissionsException();
 	}
 	
 	$options['relationship'] = 'friend';

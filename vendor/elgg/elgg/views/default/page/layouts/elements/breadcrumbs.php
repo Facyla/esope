@@ -20,17 +20,15 @@ $breadcrumbs = elgg_extract('breadcrumbs', $vars);
 if ($breadcrumbs === false) {
 	return;
 }
+
 if (is_string($breadcrumbs)) {
 	echo $breadcrumbs;
 	return;
 }
 
 $breadcrumbs = elgg_view('navigation/breadcrumbs', $vars);
-if (!$breadcrumbs) {
+if (empty($breadcrumbs)) {
 	return;
 }
-?>
-<div class="elgg-layout-breadcrumbs clearfix">
-	<?= $breadcrumbs ?>
-</div>
 
+echo elgg_format_element('div', ['class' => 'elgg-layout-breadcrumbs'], $breadcrumbs);

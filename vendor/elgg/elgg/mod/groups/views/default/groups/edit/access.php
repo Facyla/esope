@@ -6,6 +6,8 @@
  * eg: how can people join this group, who can see the group, etc
  */
 
+elgg_require_js('groups/edit/access');
+
 $entity = elgg_extract('entity', $vars, false);
 $membership = elgg_extract('membership', $vars);
 $visibility = elgg_extract('vis', $vars);
@@ -68,8 +70,8 @@ $access_mode_params = [
 if ($entity instanceof \ElggGroup) {
 	// Disable content_access_mode field for hidden groups because the setting
 	// will be forced to members_only regardless of the entered value
-	$acl = _groups_get_group_acl($entity);
-	if ($acl && ($entity->access_id === $acl->id)) {
+	$acl = $entity->getOwnedAccessCollection('group_acl');
+	if ($acl instanceof ElggAccessCollection && ($entity->access_id === $acl->id)) {
 		$access_mode_params['disabled'] = 'disabled';
 	}
 	
@@ -109,7 +111,7 @@ if ($show_group_owner_transfer && $entity && ($owner_guid == elgg_get_logged_in_
 		'#type' => 'userpicker',
 		'#label' => elgg_echo('groups:owner'),
 		'name' => 'owner_guid',
-		'value' =>  $owner_guid,
+		'value' => $owner_guid,
 		'limit' => 1,
 		'match_on' => 'group_members',
 		'show_friends' => false,

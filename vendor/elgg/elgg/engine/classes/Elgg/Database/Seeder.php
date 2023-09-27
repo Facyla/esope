@@ -4,7 +4,8 @@ namespace Elgg\Database;
 
 use Elgg\Cli\Progress;
 use Elgg\Database\Seeds\Seed;
-use Elgg\PluginHooksService;
+use Elgg\EventsService;
+use Elgg\Invoker;
 
 /**
  * Seeder class
@@ -15,110 +16,143 @@ use Elgg\PluginHooksService;
  */
 class Seeder {
 
-	/**
-	 * @var PluginHooksService
-	 */
-	protected $hooks;
+	protected EventsService $events;
 
-	/**
-	 * @var Progress
-	 */
-	protected $progress;
+	protected Progress $progress;
+	
+	protected Invoker $invoker;
 
 	/**
 	 * Seeder constructor.
 	 *
-	 * @param PluginHooksService $hooks    Hooks registration service
-	 * @param Progress           $progress Progress helper
+	 * @param EventsService $events   Events service
+	 * @param Progress      $progress Progress helper
+	 * @param Invoker       $invoker  Invoker service
 	 */
 	public function __construct(
-		PluginHooksService $hooks,
-		Progress $progress
+		EventsService $events,
+		Progress $progress,
+		Invoker $invoker
 	) {
-		$this->hooks = $hooks;
+		$this->events = $events;
 		$this->progress = $progress;
+		$this->invoker = $invoker;
 	}
 
 	/**
 	 * Load seed scripts
 	 *
-	 * @param int $limit the max number of entities to seed
+	 * @param array $options options for seeding
+	 *                       - limit: the max number of entities to seed
+	 *                       - image_folder: a global (local) image folder to use for image seeding (user/group profile icon, etc)
+	 *                       - type: only seed this content type
+	 *                       - create: create new entities (default: false)
+	 *                       - create_since: lower bound creation time (default: now)
+	 *                       - create_until: upper bound creation time (default: now)
 	 *
 	 * @return void
 	 */
-	public function seed($limit = null) {
-		if (!is_numeric($limit)) {
-			$limit = max(elgg_get_config('default_limit'), 20);
-		}
+	public function seed(array $options = []): void {
+		$this->invoker->call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_DISABLE_SYSTEM_LOG, function() use ($options) {
+			$defaults = [
+				'limit' => max(elgg_get_config('default_limit'), 20),
+				'image_folder' => elgg_get_config('seeder_local_image_folder'),
+				'type' => '',
+				'create' => false,
+				'create_since' => 'now',
+				'create_until' => 'now',
+			];
+			$options = array_merge($defaults, $options);
 
-		$ia = _elgg_services()->session->setIgnoreAccess(true);
+			$seeds = $this->getSeederClasses();
 
-		$ha = _elgg_services()->session->getDisabledEntityVisibility();
-		_elgg_services()->session->setDisabledEntityVisibility(true);
-
-		$seeds = $this->hooks->trigger('seeds', 'database', null, []);
-
-		foreach ($seeds as $seed) {
-			if (!class_exists($seed)) {
-				elgg_log("Seeding class $seed not found", 'ERROR');
-				continue;
+			// set global configuration
+			if ($options['image_folder'] !== $defaults['image_folder']) {
+				elgg_set_config('seeder_local_image_folder', $options['image_folder']);
 			}
-			if (!is_subclass_of($seed, Seed::class)) {
-				elgg_log("Seeding class $seed does not extend " . Seed::class, 'ERROR');
-				continue;
+			
+			unset($options['image_folder']);
+
+			foreach ($seeds as $seed) {
+				// check for type limitation
+				if (!empty($options['type']) && $options['type'] !== $seed::getType()) {
+					continue;
+				}
+
+				/* @var $seeder Seed */
+				$seeder = new $seed($options);
+
+				$progress_bar = $this->progress->start($seed, $options['limit']);
+
+				$seeder->setProgressBar($progress_bar);
+
+				$seeder->seed();
+
+				$this->progress->finish($progress_bar);
 			}
-
-			$seeder = new $seed($limit);
-			/* @var $seeder Seed */
-
-			$progress_bar = $this->progress->start($seed, $limit);
-
-			$seeder->setProgressBar($progress_bar);
-
-			$seeder->seed();
-
-			$this->progress->finish($progress_bar);
-		}
-
-		_elgg_services()->session->setDisabledEntityVisibility($ha);
-		_elgg_services()->session->setIgnoreAccess($ia);
+		});
 	}
 
 	/**
 	 * Remove all seeded entities
+	 *
+	 * @param array $options unseeding options
+	 *                       - type: only unseed this content type
+	 *
 	 * @return void
 	 */
-	public function unseed() {
+	public function unseed(array $options = []): void {
+		$this->invoker->call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_DISABLE_SYSTEM_LOG, function() use ($options) {
+			$defaults = [
+				'type' => '',
+			];
+			$options = array_merge($defaults, $options);
 
-		$ia = _elgg_services()->session->setIgnoreAccess(true);
+			$seeds = $this->getSeederClasses();
 
-		$ha = _elgg_services()->session->getDisabledEntityVisibility();
-		_elgg_services()->session->setDisabledEntityVisibility(true);
+			foreach ($seeds as $seed) {
+				// check for type limitation
+				if (!empty($options['type']) && $options['type'] !== $seed::getType()) {
+					continue;
+				}
 
-		$seeds = $this->hooks->trigger('seeds', 'database', null, []);
+				/* @var $seeder Seed */
+				$seeder = new $seed();
 
+				$progress_bar = $this->progress->start($seed, $seeder->getCount());
+
+				$seeder->setProgressBar($progress_bar);
+
+				$seeder->unseed();
+
+				$this->progress->finish($progress_bar);
+			}
+		});
+	}
+	
+	/**
+	 * Get the class names of all registered seeders (verified to work for seeding)
+	 *
+	 * @return string[]
+	 */
+	public function getSeederClasses(): array {
+		$result = [];
+		
+		$seeds = $this->events->triggerResults('seeds', 'database', [], []);
 		foreach ($seeds as $seed) {
 			if (!class_exists($seed)) {
-				elgg_log("Seeding class $seed not found", 'ERROR');
+				elgg_log("Seeding class {$seed} not found", 'ERROR');
 				continue;
 			}
+			
 			if (!is_subclass_of($seed, Seed::class)) {
-				elgg_log("Seeding class $seed does not extend " . Seed::class, 'ERROR');
+				elgg_log("Seeding class {$seed} does not extend " . Seed::class, 'ERROR');
 				continue;
 			}
-			$seeder = new $seed();
-			/* @var $seeder Seed */
-
-			$progress_bar = $this->progress->start($seed);
-
-			$seeder->setProgressBar($progress_bar);
-
-			$seeder->unseed();
-
-			$this->progress->finish($progress_bar);
+			
+			$result[] = $seed;
 		}
-
-		_elgg_services()->session->setDisabledEntityVisibility($ha);
-		_elgg_services()->session->setIgnoreAccess($ia);
+		
+		return $result;
 	}
 }

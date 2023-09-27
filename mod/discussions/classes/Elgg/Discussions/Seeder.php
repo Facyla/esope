@@ -3,6 +3,7 @@
 namespace Elgg\Discussions;
 
 use Elgg\Database\Seeds\Seed;
+use Elgg\Exceptions\Seeding\MaxAttemptsException;
 
 /**
  * Add database seed
@@ -11,7 +12,7 @@ use Elgg\Database\Seeds\Seed;
  */
 class Seeder extends Seed {
 
-	private $status = [
+	protected array $status = [
 		'open',
 		'closed',
 	];
@@ -20,34 +21,22 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function seed() {
+		$this->advance($this->getCount());
 
-		$count_discussions = function () {
-			return elgg_count_entities([
-				'types' => 'object',
-				'subtypes' => 'discussion',
-				'metadata_names' => '__faker',
-			]);
-		};
-
-		$this->advance($count_discussions());
-
-		while ($count_discussions() < $this->limit) {
-			$metadata = [
-				'status' => $this->getRandomStatus(),
-				'excerpt' => $this->faker()->sentence(),
-			];
-
-			$attributes = [
-				'subtype' => 'discussion',
-				'container_guid' => $this->getRandomGroup()->guid,
-			];
-
-			$discussion = $this->createObject($attributes, $metadata);
-
-			if (!$discussion) {
+		while ($this->getCount() < $this->limit) {
+			try {
+				/* @var $discussion \ElggDiscussion */
+				$discussion = $this->createObject([
+					'subtype' => 'discussion',
+					'container_guid' => $this->getRandomGroup()->guid,
+					'status' => $this->getRandomStatus(),
+					'excerpt' => $this->faker()->sentence(),
+				]);
+			} catch (MaxAttemptsException $e) {
+				// unable to create a discussion with the given options
 				continue;
 			}
-
+			
 			$this->createComments($discussion);
 			$this->createLikes($discussion);
 
@@ -56,9 +45,8 @@ class Seeder extends Seed {
 				'subject_guid' => $discussion->owner_guid,
 				'object_guid' => $discussion->guid,
 				'target_guid' => $discussion->container_guid,
+				'posted' => $discussion->time_created,
 			]);
-
-			elgg_trigger_event('publish', 'object', $discussion);
 
 			$this->advance();
 		}
@@ -68,24 +56,24 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function unseed() {
-
+		/* @var $discussions \ElggBatch */
 		$discussions = elgg_get_entities([
-			'types' => 'object',
-			'subtypes' => 'discussion',
-			'metadata_names' => '__faker',
-			'limit' => 0,
+			'type' => 'object',
+			'subtype' => 'discussion',
+			'metadata_name' => '__faker',
+			'limit' => false,
 			'batch' => true,
+			'batch_inc_offset' => false,
 		]);
 
-		/* @var $discussions \ElggBatch */
-
-		$discussions->setIncrementOffset(false);
-
+		/* @var $discussion \ElggDiscussion */
 		foreach ($discussions as $discussion) {
 			if ($discussion->delete()) {
-				$this->log("Deleted discussion $discussion->guid");
+				$this->log("Deleted discussion {$discussion->guid}");
 			} else {
-				$this->log("Failed to delete discussion $discussion->guid");
+				$this->log("Failed to delete discussion {$discussion->guid}");
+				$discussions->reportFailure();
+				continue;
 			}
 
 			$this->advance();
@@ -93,12 +81,30 @@ class Seeder extends Seed {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public static function getType() : string {
+		return 'discussion';
+	}
+
+	/**
 	 * Returns random discussion status
+	 *
 	 * @return string
 	 */
-	public function getRandomStatus() {
-		$key = array_rand($this->status, 1);
+	public function getRandomStatus(): string {
+		$key = array_rand($this->status);
 
 		return $this->status[$key];
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function getCountOptions() : array {
+		return [
+			'type' => 'object',
+			'subtype' => 'discussion',
+		];
 	}
 }

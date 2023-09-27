@@ -96,6 +96,12 @@ To restrict an action to only administrators, pass ``"admin"`` for the last para
 
    elgg_register_action("example", $filepath, "admin");
 
+To restrict an action to only logged out users, pass ``"logged_out"`` for the last parameter:
+
+.. code-block:: php
+
+   elgg_register_action("example", $filepath, "logged_out");
+
 Writing action files
 --------------------
 
@@ -118,7 +124,11 @@ to the client for XHR calls (this data will be ignored for non-XHR calls)
    $action_data = [
       'entity' => $user,
       'stats' => [
-          'friends' => $user->getFriends(['count' => true]);
+          'friends_count' => $user->getEntitiesFromRelationship([
+              'type' => 'user',
+              'relationship' => 'friend',
+              'count' => true,
+          ]);
       ],
    ];
 
@@ -145,13 +155,13 @@ To indicate an error, use ``elgg_error_response()``
 Customizing actions
 -------------------
 
-Before executing any action, Elgg triggers a hook:
+Before executing any action, Elgg triggers an event:
 
 .. code-block:: php
 
-   $result = elgg_trigger_plugin_hook('action:validate', $action, null, true);
+   $result = elgg_trigger_event_results('action:validate', $action, [], true);
 
-Where ``$action`` is the action being called. If the hook returns ``false`` then the action will not be executed. Don't return anything 
+Where ``$action`` is the action being called. If the event returns ``false`` then the action will not be executed. Don't return anything 
 if your validation passes.
 
 Example: Captcha
@@ -165,12 +175,12 @@ This is done as follows:
 
 .. code-block:: php
 
-   elgg_register_plugin_hook_handler("action:validate", "register", "captcha_verify_action_hook");
-   elgg_register_plugin_hook_handler("action:validate", "user/requestnewpassword", "captcha_verify_action_hook");
+   elgg_register_event_handler("action:validate", "register", "captcha_verify_action_event");
+   elgg_register_event_handler("action:validate", "user/requestnewpassword", "captcha_verify_action_event");
 
    ...
 
-   function captcha_verify_action_hook(\Elgg\Hook $hook) {
+   function captcha_verify_action_event(\Elgg\Event $event) {
      $token = get_input('captcha_token');
      $input = get_input('captcha_input');
 
@@ -178,7 +188,7 @@ This is done as follows:
        return;
      }
 
-     register_error(elgg_echo('captcha:captchafail'));
+     elgg_register_error_message(elgg_echo('captcha:captchafail'));
 
      return false;
    }
@@ -387,12 +397,13 @@ current icon.
 The view supports some variables to control the output
 
 * ``entity`` - the entity to add/remove the icon for. If provided based on this entity the thumbnail and remove option wil be shown
-* ``entity_type`` - the entity type for which the icon will be uploaded. Plugins could find this usefull, maybe to validate icon sizes
-* ``entity_subtype`` - the entity subtype for which the icon will be uploaded. Plugins could find this usefull, maybe to validate icon sizes
+* ``entity_type`` - the entity type for which the icon will be uploaded. Plugins could find this useful, maybe to validate icon sizes
+* ``entity_subtype`` - the entity subtype for which the icon will be uploaded. Plugins could find this useful, maybe to validate icon sizes
 * ``icon_type`` - the type of the icon (default: icon)
 * ``name`` - name of the input/file (default: icon)
 * ``remove_name`` - name of the remove icon toggle (default: $vars['name'] . '_remove')
 * ``required`` - is icon upload required (default: false)
+* ``cropper_enabled`` - is icon cropping allowed (default: true)
 * ``show_remove`` - show the remove icon option (default: true)
 * ``show_thumb`` - show the thumb of the entity if available (default: true)
 * ``thumb_size`` - the icon size to use as the thumb (default: medium)
@@ -451,6 +462,17 @@ The basic flow of using sticky forms is:
 2. Use ``elgg_is_sticky_form($name)`` and ``elgg_get_sticky_values($name)`` to get sticky values when rendering a form view.
 3. Call ``elgg_clear_sticky_form($name)`` after the action has completed successfully or after data has been loaded by ``elgg_get_sticky_values($name)``.
 
+.. note::
+
+	As of Elgg 5.0 forms rendered with ``elgg_view_form()`` can set the ``$form_vars['sticky_enabled'] = true`` flag to automatically
+	get sticky form support. The submitted values to the action will automatically be filled in the ``$body_vars`` when an error occured in the action.
+
+``elgg_view_form()`` supports the following ``$form_vars`` to help with sticky form support:
+
+* ``sticky_enabled``: a ``bool`` to enable automatic sticky form support
+* ``sticky_form_name``: an optional ``string`` to set where the sticky form values are saved. This defaults to the ``$action_name`` and should only be changed if the ``$action_name`` is different from the actual action
+* ``sticky_ignored_fields: an ``array`` with the names fo the form fields that should be saved. For example password fields
+
 Example: User registration
 --------------------------
 
@@ -478,16 +500,21 @@ The registration action sets creates the sticky form and clears it once the acti
 .. code-block:: php
 
    // actions/register.php
-   elgg_make_sticky_form('register');
+   elgg_make_sticky_form('register', ['password', 'password2']);
 
-   ...
+   elgg_register_user([
+      'username' => $username,
+      'password' => $password,
+      'name' => $name,
+      'email' => $email,
+   ]);
+   
+   elgg_clear_sticky_form('register');
 
-   $guid = register_user($username, $password, $name, $email, false, $friend_guid, $invitecode);
+.. tip::
 
-   if ($guid) {
-      elgg_clear_sticky_form('register');
-      ....
-   }
+	The function ``elgg_make_sticky_form()`` supports an optional second argument ``$ignored_field_names``. This needs to be an ``array`` of the 
+	field names you don't wish to be made sticky. This is usefull for fields which contain sensitive data, like passwords.
 
 Example: Bookmarks
 ------------------
@@ -508,15 +535,14 @@ The form view for the save bookmark action uses ``elgg_extract()`` to pull value
    $guid = elgg_extract('guid', $vars, null);
    $shares = elgg_extract('shares', $vars, array());
 
-The page handler scripts prepares the form variables and calls ``elgg_view_form()`` passing the correct values:
+The page handler scripts enables sticky form support by passing the correct values to ``elgg_view_form()``:
 
 .. code-block:: php
 
    // mod/bookmarks/pages/add.php
-   $vars = bookmarks_prepare_form_vars();
-   $content = elgg_view_form('bookmarks/save', array(), $vars);
+   $content = elgg_view_form('bookmarks/save', ['sticky_enabled' => true]);
    
-Similarly, ``mod/bookmarks/pages/edit.php`` uses the same function, but passes the entity that is being edited as an argument:
+Similarly, ``mod/bookmarks/pages/edit.php`` uses the same sticky support, but passes the entity that is being edited:
 
 .. code-block:: php
 
@@ -525,64 +551,59 @@ Similarly, ``mod/bookmarks/pages/edit.php`` uses the same function, but passes t
 
    ...
 
-   $vars = bookmarks_prepare_form_vars($bookmark);
-   $content = elgg_view_form('bookmarks/save', array(), $vars);
+   $content = elgg_view_form('bookmarks/save', ['sticky_enabled' => true], ['entity' => $bookmark]);
 
-The library file defines ``bookmarks_prepare_form_vars()``. This function accepts an ``ElggEntity`` as an argument and does 3 things:
+The plugin has an event listener on the ``'form:prepare:fields', 'bookmarks/save'`` event and the handler does 2 things:
 
  1. Defines the input names and default values for form inputs.
  2. Extracts the values from a bookmark object if it's passed. 
- 3. Extracts the values from a sticky form if it exists.
 
 .. code-block:: php
 
-   // mod/bookmarks/lib/bookmarks.php
-   function bookmarks_prepare_form_vars($bookmark = null) {
-      // input names => defaults
-      $values = array(
-         'title' => get_input('title', ''), // bookmarklet support
-         'address' => get_input('address', ''),
-         'description' => '',
-         'access_id' => ACCESS_DEFAULT,
-         'tags' => '',
-         'shares' => array(),
-         'container_guid' => elgg_get_page_owner_guid(),
-         'guid' => null,
-         'entity' => $bookmark,
-      );
+   // mod/bookmarks/classes/Elgg/Bookmarks/Forms/PrepareFields.php
+   /**
+	 * Prepare the fields for the bookmarks/save form
+	 *
+	 * @since 5.0
+	 */
+	class PrepareFields {
+		
+		/**
+		 * Prepare fields
+		 *
+		 * @param \Elgg\Event $event 'form:prepare:fields', 'bookmarks/save'
+		 *
+		 * @return array|null
+		 */
+		public function __invoke(\Elgg\Event $event): ?array {
+			$vars = $event->getValue();
+			
+			// input names => defaults
+			$values = [
+				'title' => get_input('title', ''), // bookmarklet support
+				'address' => get_input('address', ''),
+				'description' => '',
+				'access_id' => ACCESS_DEFAULT,
+				'tags' => '',
+				'container_guid' => elgg_get_page_owner_guid(),
+				'guid' => null,
+			];
+			
+			$bookmark = elgg_extract('entity', $vars);
+			if ($bookmark instanceof \ElggBookmark) {
+				// load current bookmark values
+				foreach (array_keys($values) as $field) {
+					if (isset($bookmark->$field)) {
+						$values[$field] = $bookmark->$field;
+					}
+				}
+			}
+			
+			return array_merge($vars, $values);
+		}
+	}
 
-      if ($bookmark) {
-         foreach (array_keys($values) as $field) {
-            if (isset($bookmark->$field)) {
-               $values[$field] = $bookmark->$field;
-            }
-         }
-      }
-
-      if (elgg_is_sticky_form('bookmarks')) {
-         $sticky_values = elgg_get_sticky_values('bookmarks');
-         foreach ($sticky_values as $key => $value) {
-            $values[$key] = $value;
-         }
-      }
-
-      elgg_clear_sticky_form('bookmarks');
-
-      return $values;
-   }
-
-The save action checks the input, then clears the sticky form upon success:
-
-.. code-block:: php
-
-   // mod/bookmarks/actions/bookmarks/save.php
-   elgg_make_sticky_form('bookmarks');
-   
-   ...
-
-   if ($bookmark->save()) {
-      elgg_clear_sticky_form('bookmarks');
-   }
+The save action doesn't need to do anything with sticky form support as this is all handled by the system.
 
 Ajax
 ====

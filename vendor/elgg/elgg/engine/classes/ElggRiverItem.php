@@ -1,63 +1,79 @@
 <?php
+
+use Elgg\Exceptions\RuntimeException as ElggRuntimeException;
+
 /**
- * River item class.
+ * River item class
  *
  * @property-read int    $id            The unique identifier (read-only)
- * @property-read int    $subject_guid  The GUID of the actor
- * @property-read int    $object_guid   The GUID of the object
- * @property-read int    $target_guid   The GUID of the object's container
- * @property-read int    $annotation_id The ID of the annotation involved in the action
- * @property-read string $type          The type of one of the entities involved in the action
- * @property-read string $subtype       The subtype of one of the entities involved in the action
- * @property-read string $action_type   The name of the action
- * @property-read string $view          The view for displaying this river item
- * @property-read int    $access_id     The visibility of the river item
- * @property-read int    $posted        UNIX timestamp when the action occurred
- * @property-read string $enabled       Is the river item enabled yes|no
+ * @property      int    $subject_guid  The GUID of the actor
+ * @property      int    $object_guid   The GUID of the object
+ * @property      int    $target_guid   The GUID of the object's container
+ * @property      int    $annotation_id The ID of the annotation involved in the action
+ * @property      string $action_type   The name of the action
+ * @property      string $view          The view for displaying this river item
+ * @property      int    $posted        UNIX timestamp when the action occurred
+ * @property      int    $last_action   UNIX timestamp when the river item was bumped
  */
 class ElggRiverItem {
-	public $id;
-	public $subject_guid;
-	public $object_guid;
-	public $target_guid;
-	public $annotation_id;
-	public $action_type;
-	public $access_id;
-	public $view;
-	public $posted;
-	protected $enabled;
-
+	
 	/**
-	 * Construct a river item object given a database row.
-	 *
-	 * @param \stdClass $object Object obtained from database
+	 * @var string[] attributes that are integers
 	 */
-	public function __construct($object) {
-		if (!($object instanceof \stdClass)) {
-			throw new \InvalidParameterException("Invalid input to \ElggRiverItem constructor");
+	protected const INTEGER_ATTR_NAMES = [
+		'id',
+		'subject_guid',
+		'object_guid',
+		'target_guid',
+		'annotation_id',
+		'access_id',
+		'posted',
+		'last_action',
+	];
+	
+	protected array $attributes = [];
+	
+	/**
+	 * Construct a river item object
+	 *
+	 * @param \stdClass $row (optional) object obtained from database
+	 */
+	public function __construct(\stdClass $row = null) {
+		$this->initializeAttributes();
+		
+		if (empty($row)) {
+			return;
 		}
-
-		// the casting is to support typed serialization like json
-		$int_types = ['id', 'subject_guid', 'object_guid', 'target_guid', 'annotation_id', 'access_id', 'posted'];
-		foreach ($object as $key => $value) {
-			if (in_array($key, $int_types)) {
-				$this->$key = (int) $value;
-			} else {
-				$this->$key = $value;
+		
+		// build from database
+		foreach ($row as $key => $value) {
+			if (!array_key_exists($key, $this->attributes)) {
+				continue;
 			}
+			
+			if (in_array($key, static::INTEGER_ATTR_NAMES)) {
+				$value = (int) $value;
+			}
+			
+			$this->attributes[$key] = $value;
 		}
 	}
 	
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @throws \Elgg\Exceptions\RuntimeException
 	 */
 	public function __set(string $name, $value) {
-		if ($name == 'enabled') {
-			elgg_deprecated_notice('The use of the enabled state for river items is deprecated.', '3.2');
-			return;
+		if (!array_key_exists($name, $this->attributes)) {
+			throw new ElggRuntimeException("It's not allowed to set {$name} on " . get_class($this));
 		}
 		
-		$this->$name = $value;
+		if (in_array($name, static::INTEGER_ATTR_NAMES)) {
+			$value = (int) $value;
+		}
+		
+		$this->attributes[$name] = $value;
 	}
 
 	/**
@@ -65,54 +81,90 @@ class ElggRiverItem {
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'enabled':
-				elgg_deprecated_notice('The use of the enabled state for river items is deprecated.', '3.2');
-				return $this->enabled;
-				
-			case 'type' :
-			case 'subtype' :
-				$object = get_entity($this->object_guid);
+			case 'type':
+			case 'subtype':
+				$object = $this->getObjectEntity();
 				if ($object) {
 					return $object->$name;
 				}
 				break;
+			default:
+				if (array_key_exists($name, $this->attributes)) {
+					return $this->attributes[$name];
+				}
+				break;
 		}
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __isset($name) : bool {
+		return isset($this->attributes[$name]);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __unset($name): void {
+		if (!array_key_exists($name, $this->attributes)) {
+			return;
+		}
+		
+		$this->attributes[$name] = null;
+	}
+	
+	/**
+	 * Initialize the attributes array
+	 *
+	 * @return void
+	 */
+	protected function initializeAttributes(): void {
+		$this->attributes['id'] = null;
+		$this->attributes['action_type'] = null;
+		$this->attributes['view'] = null;
+		$this->attributes['subject_guid'] = null;
+		$this->attributes['object_guid'] = null;
+		$this->attributes['target_guid'] = null;
+		$this->attributes['annotation_id'] = null;
+		$this->attributes['posted'] = null;
+		$this->attributes['last_action'] = null;
 	}
 
 	/**
 	 * Get the subject of this river item
 	 *
-	 * @return \ElggEntity
+	 * @return \ElggEntity|null
 	 */
-	public function getSubjectEntity() {
-		return get_entity($this->subject_guid);
+	public function getSubjectEntity(): ?\ElggEntity {
+		return $this->subject_guid ? get_entity($this->subject_guid) : null;
 	}
 
 	/**
 	 * Get the object of this river item
 	 *
-	 * @return \ElggEntity
+	 * @return \ElggEntity|null
 	 */
-	public function getObjectEntity() {
-		return get_entity($this->object_guid);
+	public function getObjectEntity(): ?\ElggEntity {
+		return $this->object_guid ? get_entity($this->object_guid) : null;
 	}
 
 	/**
 	 * Get the target of this river item
 	 *
-	 * @return \ElggEntity
+	 * @return \ElggEntity|null
 	 */
-	public function getTargetEntity() {
-		return get_entity($this->target_guid);
+	public function getTargetEntity(): ?\ElggEntity {
+		return $this->target_guid ? get_entity($this->target_guid) : null;
 	}
 
 	/**
 	 * Get the Annotation for this river item
 	 *
-	 * @return \ElggAnnotation|false
+	 * @return \ElggAnnotation|null
 	 */
-	public function getAnnotation() {
-		return elgg_get_annotation_from_id($this->annotation_id);
+	public function getAnnotation(): ?\ElggAnnotation {
+		return $this->annotation_id ? elgg_get_annotation_from_id($this->annotation_id) : null;
 	}
 
 	/**
@@ -120,8 +172,8 @@ class ElggRiverItem {
 	 *
 	 * @return string
 	 */
-	public function getView() {
-		return $this->view;
+	public function getView(): string {
+		return (string) $this->view;
 	}
 
 	/**
@@ -129,8 +181,21 @@ class ElggRiverItem {
 	 *
 	 * @return int
 	 */
-	public function getTimePosted() {
+	public function getTimePosted(): int {
 		return (int) $this->posted;
+	}
+
+	/**
+	 * Update the last_action column in the river table.
+	 *
+	 * @param int $last_action Timestamp of last action
+	 *
+	 * @return int
+	 */
+	public function updateLastAction(int $last_action = null): int {
+		$this->last_action = _elgg_services()->riverTable->updateLastAction($this, $last_action);
+
+		return $this->last_action;
 	}
 
 	/**
@@ -141,7 +206,7 @@ class ElggRiverItem {
 	 *
 	 * @return string 'river'
 	 */
-	public function getType() {
+	public function getType(): string {
 		return 'river';
 	}
 
@@ -152,21 +217,21 @@ class ElggRiverItem {
 	 *
 	 * @return string 'item'
 	 */
-	public function getSubtype() {
+	public function getSubtype(): string {
 		return 'item';
 	}
 
 	/**
 	 * Can a user delete this river item?
 	 *
-	 * @tip Can be overridden by registering for the "permissions_check:delete", "river" plugin hook.
+	 * @tip Can be overridden by registering for the "permissions_check:delete", "river" event.
 	 *
 	 * @param int $user_guid The user GUID, optionally (default: logged in user)
 	 *
 	 * @return bool Whether this river item should be considered deletable by the given user.
 	 * @since 2.3
 	 */
-	public function canDelete($user_guid = 0) {
+	public function canDelete(int $user_guid = 0): bool {
 		return _elgg_services()->userCapabilities->canDeleteRiverItem($this, $user_guid);
 	}
 
@@ -176,23 +241,12 @@ class ElggRiverItem {
 	 * @return bool False if the user lacks permission or the before event is cancelled
 	 * @since 2.3
 	 */
-	public function delete() {
+	public function delete(): bool {
 		if (!$this->canDelete()) {
 			return false;
 		}
 
-		$events = _elgg_services()->events;
-		if (!$events->triggerBefore('delete', 'river', $this)) {
-			return false;
-		}
-
-		$db = _elgg_services()->db;
-		$prefix = $db->prefix;
-		_elgg_services()->db->deleteData("DELETE FROM {$prefix}river WHERE id = ?", [$this->id]);
-
-		$events->triggerAfter('delete', 'river', $this);
-
-		return true;
+		return _elgg_services()->riverTable->delete($this);
 	}
 
 	/**
@@ -200,17 +254,33 @@ class ElggRiverItem {
 	 *
 	 * @return \stdClass
 	 */
-	public function toObject() {
+	public function toObject(): \stdClass {
 		$object = new \stdClass();
 		$object->id = $this->id;
 		$object->subject_guid = $this->subject_guid;
+		$object->target_guid = $this->target_guid;
 		$object->object_guid = $this->object_guid;
 		$object->annotation_id = $this->annotation_id;
-		$object->read_access = $this->access_id;
 		$object->action = $this->action_type;
+		$object->view = $this->view;
 		$object->time_posted = date('c', $this->getTimePosted());
+		$object->last_action = date('c', $this->last_action);
+		
 		$params = ['item' => $this];
-		return _elgg_services()->hooks->trigger('to:object', 'river_item', $params, $object);
+		return _elgg_services()->events->triggerResults('to:object', 'river_item', $params, $object);
 	}
-
+	
+	/**
+	 * Save the river item to the database
+	 *
+	 * @return bool
+	 */
+	public function save(): bool {
+		if ($this->id) {
+			// update (not supported)
+			return true;
+		}
+		
+		return (bool) _elgg_services()->riverTable->create($this);
+	}
 }

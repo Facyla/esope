@@ -2,25 +2,18 @@
 
 namespace Elgg\Database;
 
-use Closure;
 use Doctrine\DBAL\Query\Expression\CompositeExpression;
 use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\EntityWhereClause;
 use Elgg\Database\Clauses\MetadataWhereClause;
-use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
-use ElggData;
-use ElggEntity;
-use ElggMetadata;
-use InvalidArgumentException;
-use InvalidParameterException;
-use LogicException;
+use Elgg\Exceptions\DomainException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\LogicException;
 
 /**
  * Metadata repository contains methods for fetching metadata from database or performing
  * calculations on entity properties.
- *
- * API IN FLUX Do not access the methods directly, use elgg_get_metadata() instead
  *
  * @internal
  */
@@ -32,7 +25,7 @@ class Metadata extends Repository {
 	public function count() {
 		$qb = Select::fromTable('metadata', 'n_table');
 
-		$count_expr = $this->options->distinct ? "DISTINCT n_table.id" : "*";
+		$count_expr = $this->options->distinct ? 'DISTINCT n_table.id' : '*';
 		$qb->select("COUNT({$count_expr}) AS total");
 
 		$qb = $this->buildQuery($qb);
@@ -51,15 +44,14 @@ class Metadata extends Repository {
 	 *
 	 * @param string $function      Valid numeric function
 	 * @param string $property      Property name
-	 * @param string $property_type 'attribute'|'metadata'|'annotation'|'private_setting'
+	 * @param string $property_type 'attribute'|'metadata'|'annotation'
 	 *
 	 * @return int|float
-	 * @throws InvalidParameterException
+	 * @throws DomainException
 	 */
 	public function calculate($function, $property, $property_type = null) {
-
-		if (!in_array(strtolower($function), QueryBuilder::$calculations)) {
-			throw new InvalidArgumentException("'$function' is not a valid numeric function");
+		if (!in_array(strtolower($function), QueryBuilder::CALCULATIONS)) {
+			throw new DomainException("'{$function}' is not a valid numeric function");
 		}
 
 		if (!isset($property_type)) {
@@ -70,8 +62,8 @@ class Metadata extends Repository {
 
 		switch ($property_type) {
 			case 'attribute':
-				if (!in_array($property, ElggEntity::$primary_attr_names)) {
-					throw new InvalidParameterException("'$property' is not a valid attribute");
+				if (!in_array($property, \ElggEntity::PRIMARY_ATTR_NAMES)) {
+					throw new DomainException("'{$property}' is not a valid attribute");
 				}
 
 				/**
@@ -81,21 +73,17 @@ class Metadata extends Repository {
 				$qb->addSelect("{$function}({$alias}.{$property}) AS calculation");
 				break;
 
-			case 'metadata' :
+			case 'metadata':
 				$alias = 'n_table';
 				if (!empty($this->options->metadata_name_value_pairs) && $this->options->metadata_name_value_pairs[0]->names != $property) {
 					$alias = $qb->joinMetadataTable('n_table', 'entity_guid', $property);
 				}
+				
 				$qb->addSelect("{$function}($alias.value) AS calculation");
 				break;
 
-			case 'annotation' :
+			case 'annotation':
 				$alias = $qb->joinAnnotationTable('n_table', 'entity_guid', $property);
-				$qb->addSelect("{$function}({$alias}.value) AS calculation");
-				break;
-
-			case 'private_setting' :
-				$alias = $qb->joinPrivateSettingsTable('n_table', 'entity_guid', $property);
 				$qb->addSelect("{$function}({$alias}.value) AS calculation");
 				break;
 		}
@@ -104,11 +92,7 @@ class Metadata extends Repository {
 
 		$result = _elgg_services()->db->getDataRow($qb);
 
-		if (empty($result)) {
-			return 0;
-		}
-
-		return (int) $result->calculation;
+		return $result ? (int) $result->calculation : 0;
 	}
 
 	/**
@@ -118,14 +102,13 @@ class Metadata extends Repository {
 	 * @param int      $offset   Offset
 	 * @param callable $callback Custom callback
 	 *
-	 * @return ElggMetadata[]
+	 * @return \ElggMetadata[]
 	 */
 	public function get($limit = null, $offset = null, $callback = null) {
-
 		$qb = Select::fromTable('metadata', 'n_table');
 
-		$distinct = $this->options->distinct ? "DISTINCT" : "";
-		$qb->select("$distinct n_table.*");
+		$distinct = $this->options->distinct ? 'DISTINCT' : '';
+		$qb->select("{$distinct} n_table.*");
 
 		$this->expandInto($qb, 'n_table');
 
@@ -143,10 +126,10 @@ class Metadata extends Repository {
 			$qb->setFirstResult((int) $offset);
 		}
 
-		$callback = $callback ? : $this->options->callback;
+		$callback = $callback ?: $this->options->callback;
 		if (!isset($callback)) {
 			$callback = function ($row) {
-				return new ElggMetadata($row);
+				return new \ElggMetadata($row);
 			};
 		}
 
@@ -156,15 +139,14 @@ class Metadata extends Repository {
 	/**
 	 * Execute the query resolving calculation, count and/or batch options
 	 *
-	 * @return array|ElggData[]|ElggMetadata[]|false|int
+	 * @return array|\ElggData[]|\ElggMetadata[]|false|int
 	 * @throws LogicException
 	 */
 	public function execute() {
-
 		if ($this->options->annotation_calculation) {
 			$clauses = $this->options->annotation_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->annotation_name_value_pairs_operator !== 'OR') {
-				throw new LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
+				throw new LogicException('Annotation calculation can not be performed on multiple annotation name value pairs merged with AND');
 			}
 
 			$clause = array_shift($clauses);
@@ -173,7 +155,7 @@ class Metadata extends Repository {
 		} else if ($this->options->metadata_calculation) {
 			$clauses = $this->options->metadata_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->metadata_name_value_pairs_operator !== 'OR') {
-				throw new LogicException("Metadata calculation can not be performed on multiple metadata name value pairs merged with AND");
+				throw new LogicException('Metadata calculation can not be performed on multiple metadata name value pairs merged with AND');
 			}
 
 			$clause = array_shift($clauses);
@@ -191,12 +173,11 @@ class Metadata extends Repository {
 	/**
 	 * Build a database query
 	 *
-	 * @param QueryBuilder $qb
+	 * @param QueryBuilder $qb the Elgg QueryBuilder
 	 *
 	 * @return QueryBuilder
 	 */
 	protected function buildQuery(QueryBuilder $qb) {
-
 		$ands = [];
 
 		foreach ($this->options->joins as $join) {
@@ -211,7 +192,6 @@ class Metadata extends Repository {
 		$ands[] = $this->buildEntityWhereClause($qb);
 		$ands[] = $this->buildPairedMetadataClause($qb, $this->options->search_name_value_pairs, 'OR');
 		$ands[] = $this->buildPairedAnnotationClause($qb, $this->options->annotation_name_value_pairs, $this->options->annotation_name_value_pairs_operator);
-		$ands[] = $this->buildPairedPrivateSettingsClause($qb, $this->options->private_setting_name_value_pairs, $this->options->private_setting_name_value_pairs_operator);
 		$ands[] = $this->buildPairedRelationshipClause($qb, $this->options->relationship_pairs);
 
 		$ands = $qb->merge($ands);
@@ -229,13 +209,11 @@ class Metadata extends Repository {
 	 *
 	 * @param QueryBuilder $qb Query builder
 	 *
-	 * @return Closure|CompositeExpression|mixed|null|string
+	 * @return \Closure|CompositeExpression|mixed|null|string
 	 */
 	protected function buildEntityWhereClause(QueryBuilder $qb) {
-
 		// Even if all of these properties are empty, we want to add this clause regardless,
 		// to ensure that entity access clauses are appended to the query
-
 		$joined_alias = $qb->joinEntitiesTable('n_table', 'entity_guid', 'inner', 'e');
 		return EntityWhereClause::factory($this->options)->prepare($qb, $joined_alias);
 	}
@@ -252,7 +230,6 @@ class Metadata extends Repository {
 	 */
 	protected function buildPairedMetadataClause(QueryBuilder $qb, $clauses, $boolean = 'AND') {
 		$parts = [];
-
 
 		foreach ($clauses as $clause) {
 			$parts[] = $clause->prepare($qb, 'n_table');
@@ -280,31 +257,7 @@ class Metadata extends Repository {
 			} else {
 				$joined_alias = $qb->joinAnnotationTable('n_table', 'entity_guid', $clause->names);
 			}
-			$parts[] = $clause->prepare($qb, $joined_alias);
-		}
-
-		return $qb->merge($parts, $boolean);
-	}
-
-	/**
-	 * Process private settings name value pairs
-	 * Joins private settings table on entity_guid in the metadata table and applies where clauses
-	 *
-	 * @param QueryBuilder                $qb      Query builder
-	 * @param PrivateSettingWhereClause[] $clauses Where clauses
-	 * @param string                      $boolean Merge boolean
-	 *
-	 * @return CompositeExpression|string
-	 */
-	protected function buildPairedPrivateSettingsClause(QueryBuilder $qb, $clauses, $boolean = 'AND') {
-		$parts = [];
-
-		foreach ($clauses as $clause) {
-			if (strtoupper($boolean) === 'OR' || count($clauses) > 1) {
-				$joined_alias = $qb->joinPrivateSettingsTable('n_table', 'entity_guid');
-			} else {
-				$joined_alias = $qb->joinPrivateSettingsTable('n_table', 'entity_guid', $clause->names);
-			}
+			
 			$parts[] = $clause->prepare($qb, $joined_alias);
 		}
 
@@ -332,6 +285,7 @@ class Metadata extends Repository {
 			} else {
 				$joined_alias = $qb->joinRelationshipTable('n_table', 'entity_guid', $clause->names, $clause->inverse);
 			}
+			
 			$parts[] = $clause->prepare($qb, $joined_alias);
 		}
 

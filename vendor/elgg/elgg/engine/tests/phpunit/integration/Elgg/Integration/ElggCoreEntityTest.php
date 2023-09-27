@@ -2,19 +2,12 @@
 
 namespace Elgg\Integration;
 
-use Elgg\Hook;
-use ElggObject;
-use ElggUser;
+use Elgg\Database\Select;
 
-/**
- * @group IntegrationTests
- * @group Entities
- * @group EntityPrivateSettings
- */
 class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 	/**
-	 * @var ElggObject
+	 * @var \ElggObject
 	 */
 	protected $entity;
 	
@@ -25,31 +18,16 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 	public function up() {
 		$this->owner = $this->createUser();
-		elgg()->session->setLoggedInUser($this->owner);
+		elgg()->session_manager->setLoggedInUser($this->owner);
 		
-		// use \ElggObject since \ElggEntity is an abstract class
-		$this->entity = new ElggObject();
-		$this->entity->subtype = 'elgg_entity_test_subtype';
+		$this->entity = $this->createObject(['subtype' => 'elgg_entity_test_subtype']);
 
-		// Add temporary metadata, annotation and private settings
+		// Add temporary metadata and annotation
 		// to extend the scope of tests and catch issues with save operations
 		$this->entity->test_metadata = 'bar';
 		$this->entity->annotate('test_annotation', 'baz');
-		$this->entity->setPrivateSetting('test_setting', 'foo');
 
 		$this->entity->save();
-	}
-
-	public function down() {
-		if ($this->entity) {
-			$this->entity->delete();
-		}
-		
-		if ($this->owner) {
-			$this->owner->delete();
-		}
-		
-		elgg()->session->removeLoggedInUser();
 	}
 
 	public function testSubtypePropertyReads() {
@@ -69,8 +47,8 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function testUnsavedEntitiesDontRecordAttributeSets() {
-		$entity = new ElggObject();
-		$entity->subtype = 'elgg_entity_test_subtype';
+		$entity = new \ElggObject();
+		$entity->setSubtype('elgg_entity_test_subtype');
 		$entity->title = 'Foo';
 		$entity->description = 'Bar';
 		$entity->container_guid = elgg_get_logged_in_user_guid();
@@ -189,24 +167,22 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function testElggEntityDisableAndEnable() {
-		$CONFIG = _elgg_config();
-
 		// add annotations and metadata to check if they're disabled.
 		$annotation_id = $this->entity->annotate('test_annotation_' . rand(), 'test_value_' . rand());
 		
 		$this->assertTrue($this->entity->disable());
 
 		// ensure disabled by comparing directly with database
-		$entity = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}entities
-			WHERE guid = '{$this->entity->guid}'
-		");
+		$select_entity = Select::fromTable('entities')->select('*');
+		$select_entity->where($select_entity->compare('guid', '=', $this->entity->guid, ELGG_VALUE_GUID));
+		
+		$entity = elgg()->db->getDataRow($select_entity);
 		$this->assertEquals('no', $entity->enabled);
 
-		$annotation = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}annotations
-			WHERE id = '$annotation_id'
-		");
+		$select_annotation = Select::fromTable('annotations')->select('*');
+		$select_annotation->where($select_annotation->compare('id', '=', $annotation_id, ELGG_VALUE_ID));
+		
+		$annotation = elgg()->db->getDataRow($select_annotation);
 		$this->assertEquals('no', $annotation->enabled);
 
 		// re-enable for deletion to work
@@ -214,16 +190,10 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 		// check enabled
 		// check annotations and metadata enabled.
-		$entity = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}entities
-			WHERE guid = '{$this->entity->guid}'
-		");
+		$entity = elgg()->db->getDataRow($select_entity);
 		$this->assertEquals('yes', $entity->enabled);
 
-		$annotation = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}annotations
-			WHERE id = '$annotation_id'
-		");
+		$annotation = elgg()->db->getDataRow($select_annotation);
 		$this->assertEquals('yes', $annotation->enabled);
 
 		$this->assertTrue($this->entity->delete());
@@ -231,14 +201,14 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function testElggEntityRecursiveDisableAndEnable() {
-		$CONFIG = _elgg_config();
+		$CONFIG = _elgg_services()->config;
 
-		$obj1 = new ElggObject();
-		$obj1->subtype = $this->getRandomSubtype();
+		$obj1 = new \ElggObject();
+		$obj1->setSubtype($this->getRandomSubtype());
 		$obj1->container_guid = $this->entity->getGUID();
 		$obj1->save();
-		$obj2 = new ElggObject();
-		$obj2->subtype = $this->getRandomSubtype();
+		$obj2 = new \ElggObject();
+		$obj2->setSubtype($this->getRandomSubtype());
 		$obj2->container_guid = $this->entity->getGUID();
 		$obj2->save();
 
@@ -247,23 +217,22 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 		// disable entities container by $this->entity
 		$this->assertTrue($this->entity->disable());
-		$entity = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}entities
-			WHERE guid = '{$obj1->guid}'
-		");
+		
+		$select_entity = Select::fromTable('entities')->select('*');
+		$select_entity->where($select_entity->compare('guid', '=', $obj1->guid, ELGG_VALUE_GUID));
+		
+		$entity = elgg()->db->getDataRow($select_entity);
 		$this->assertEquals('no', $entity->enabled);
 
 		// enable entities that were disabled with the container (but not $obj2)
 		$this->assertTrue($this->entity->enable());
-		$entity = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}entities
-			WHERE guid = '{$obj1->guid}'
-		");
+		$entity = elgg()->db->getDataRow($select_entity);
 		$this->assertEquals('yes', $entity->enabled);
-		$entity = elgg()->db->getDataRow("SELECT *
-			FROM {$CONFIG->dbprefix}entities
-			WHERE guid = '{$obj2->guid}'
-		");
+		
+		$select_sub_entity = Select::fromTable('entities')->select('*');
+		$select_sub_entity->where($select_sub_entity->compare('guid', '=', $obj2->guid, ELGG_VALUE_GUID));
+		
+		$entity = elgg()->db->getDataRow($select_sub_entity);
 		$this->assertEquals('no', $entity->enabled);
 
 		// cleanup
@@ -274,16 +243,16 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 	public function testElggEntityGetIconURL() {
 
-		$handler = function(\Elgg\Hook $hook) {
-			$size = (string) $hook->getParam('size');
+		$handler = function(\Elgg\Event $event) {
+			$size = (string) $event->getParam('size');
 
 			return "$size.jpg";
 		};
 
-		elgg_register_plugin_hook_handler('entity:icon:url', 'object', $handler, 99999);
+		elgg_register_event_handler('entity:icon:url', 'object', $handler, 99999);
 
-		$obj = new ElggObject();
-		$obj->subtype = $this->getRandomSubtype();
+		$obj = new \ElggObject();
+		$obj->setSubtype($this->getRandomSubtype());
 		$obj->save();
 
 		// Test default size
@@ -292,24 +261,22 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 		$this->assertEquals(elgg_normalize_url('small.jpg'), $obj->getIconURL('small'));
 		// Test mixed params
 		$this->assertEquals($obj->getIconURL('small'), $obj->getIconURL(['size' => 'small']));
-		// Test bad param
-		$this->assertEquals(elgg_normalize_url('medium.jpg'), $obj->getIconURL(new \stdClass));
 
-		elgg_unregister_plugin_hook_handler('entity:icon:url', 'object', $handler, 99999);
+		elgg_unregister_event_handler('entity:icon:url', 'object', $handler, 99999);
 	}
 
 	public function testCreateWithContainerGuidEqualsZero() {
 		$user = $this->owner;
 
-		$object = new ElggObject();
-		$object->subtype = $this->getRandomSubtype();
+		$object = new \ElggObject();
+		$object->setSubtype($this->getRandomSubtype());
 		$object->owner_guid = $user->guid;
 		$object->container_guid = 0;
 
 		// If container_guid attribute is not updated with owner_guid attribute
 		// ElggEntity::getContainerEntity() would return false
 		// thus terminating save()
-		$this->assertIsInt($object->save());
+		$this->assertTrue($object->save());
 
 		$this->assertEquals($user->guid, $object->getContainerGUID());
 	}
@@ -319,34 +286,34 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 		$this->assertTrue($this->entity->save());
 
-		$user = $this->createOne('user');
+		$user = $this->createUser();
 
-		$old_user = elgg()->session->getLoggedInUser();
-		elgg()->session->setLoggedInUser($user);
+		$old_user = elgg()->session_manager->getLoggedInUser();
+		elgg()->session_manager->setLoggedInUser($user);
 		
 		// even owner can't bypass permissions
-		elgg_register_plugin_hook_handler('permissions_check', 'object', [
+		elgg_register_event_handler('permissions_check', 'object', [
 			\Elgg\Values::class,
 			'getFalse'
 		], 999);
 		$this->assertFalse($this->entity->save());
-		elgg_unregister_plugin_hook_handler('permissions_check', 'object', [
+		elgg_unregister_event_handler('permissions_check', 'object', [
 			\Elgg\Values::class,
 			'getFalse'
 		]);
 
 		$this->assertFalse($this->entity->save());
 
-		elgg_register_plugin_hook_handler('permissions_check', 'object', [
+		elgg_register_event_handler('permissions_check', 'object', [
 			\Elgg\Values::class,
 			'getTrue'
 		]);
 
 		// even though this user can't look up the entity via the DB, permission allows update.
-		$this->assertFalse(has_access_to_entity($this->entity, $user));
+		$this->assertFalse($this->entity->hasAccess($user->guid));
 		$this->assertTrue($this->entity->save());
 
-		elgg_unregister_plugin_hook_handler('permissions_check', 'object', [
+		elgg_unregister_event_handler('permissions_check', 'object', [
 			\Elgg\Values::class,
 			'getTrue'
 		]);
@@ -356,8 +323,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 			$this->assertTrue($this->entity->save());
 		});
 		
-		elgg()->session->setLoggedInUser($old_user);
-		$user->delete();
+		elgg()->session_manager->setLoggedInUser($old_user);
 	}
 
 	/**
@@ -366,14 +332,13 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	 */
 	public function testNewObjectLoadedFromCacheDuringSaveOperations() {
 
-		$object = new ElggObject();
-		$object->subtype = 'elgg_entity_test_subtype';
+		$object = new \ElggObject();
+		$object->setSubtype('elgg_entity_test_subtype');
 
-		// Add temporary metadata, annotation and private settings
+		// Add temporary metadata and annotation
 		// to extend the scope of tests and catch issues with save operations
 		$object->test_metadata = 'bar';
 		$object->annotate('test_annotation', 'baz');
-		$object->setPrivateSetting('test_setting', 'foo');
 
 		$metadata_called = false;
 		$metadata_event_handler = function (\Elgg\Event $event) use (&$metadata_called) {
@@ -413,14 +378,13 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	 */
 	public function testNewUserLoadedFromCacheDuringSaveOperations() {
 
-		$user = new ElggUser();
+		$user = new \ElggUser();
 		$user->username = $this->getRandomUsername();
 
-		// Add temporary metadata, annotation and private settings
+		// Add temporary metadata and annotation
 		// to extend the scope of tests and catch issues with save operations
 		$user->test_metadata = 'bar';
 		$user->annotate('test_annotation', 'baz');
-		$user->setPrivateSetting('test_setting', 'foo');
 
 		$metadata_called = false;
 		$metadata_event_handler = function (\Elgg\Event $event) use (&$metadata_called) {
@@ -461,13 +425,12 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	public function testNewGroupLoadedFromCacheDuringSaveOperations() {
 
 		$group = new \ElggGroup();
-		$group->subtype = 'test_group_subtype';
+		$group->setSubtype('test_group_subtype');
 
-		// Add temporary metadata, annotation and private settings
+		// Add temporary metadata and annotation
 		// to extend the scope of tests and catch issues with save operations
 		$group->test_metadata = 'bar';
 		$group->annotate('test_annotation', 'baz');
-		$group->setPrivateSetting('test_setting', 'foo');
 
 		$metadata_called = false;
 		$metadata_event_handler = function (\Elgg\Event $event) use (&$metadata_called) {
@@ -502,21 +465,48 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	}
 
 	/**
+	 * Checks if you can return false from a create:before event to prevent entity being saved to the database
+	 */
+	public function testBeforeEventCanStopEntityCreation() {
+
+		$object = new \ElggObject();
+		$object->setSubtype('elgg_entity_test_subtype_prevent');
+		
+		$prevent_create = function(\Elgg\Event $event) {
+			$entity = $event->getObject();
+			if ($entity->subtype === 'elgg_entity_test_subtype_prevent') {
+				return false;
+			}
+		};
+		
+		elgg_register_event_handler('create:before', 'object', $prevent_create);
+				
+		$this->assertFalse($object->save());
+		
+		elgg_unregister_event_handler('create:before', 'object', $prevent_create);
+	}
+
+	/**
+	 * @see https://github.com/Elgg/Elgg/pull/11998
+	 *
 	 * @group AccessSQL
 	 * @group Access
 	 */
 	public function testDatabaseRowContainsCorrectParametersWhenJoined() {
 
-		_elgg_services()->hooks->backup();
+		_elgg_services()->events->backup();
 
-		$handler = function(Hook $hook) {
+		$handler = function(\Elgg\Event $event) {
+			if ($event->getParam('ignore_access')) {
+				return;
+			}
+			
+			$value = $event->getValue();
 
-			$value = $hook->getValue();
+			$alias = $event->getParam('table_alias');
+			$guid_column = $event->getParam('guid_column');
 
-			$alias = $hook->getParam('table_alias');
-			$guid_column = $hook->getParam('guid_column');
-
-			$qb = $hook->getParam('query_builder');
+			$qb = $event->getParam('query_builder');
 			/* @var $qb \Elgg\Database\QueryBuilder */
 
 			$qb->joinMetadataTable($alias, $guid_column, 'foo', 'inner', 'md');
@@ -528,7 +518,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 		$entity = $this->createObject();
 
-		$hook = $this->registerTestingHook('get_sql', 'access', $handler);
+		$event = $this->registerTestingEvent('get_sql', 'access', $handler);
 
 		elgg_call(ELGG_ENFORCE_ACCESS, function() use ($entity) {
 			$row = _elgg_services()->entityTable->getRow($entity->guid);
@@ -550,9 +540,9 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 			$this->assertEquals($entity->time_created, $row->time_created);
 		});
 
-		$hook->unregister();
+		$event->unregister();
 
-		_elgg_services()->hooks->restore();
+		_elgg_services()->events->restore();
 	}
 
 	public function testContainerTimeUpdatedChangesOnEntityCreate() {
@@ -587,7 +577,9 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	 * @dataProvider entitiesFromCacheProvider
 	 */
 	public function testEntityGetReturnedFromCache($type, $subtype, $check_type, $check_subtype) {
-		$entity = $this->createOne($type, ['subtype' => $subtype]);
+		$entity = $this->createOne($type, [
+			'subtype' => $subtype,
+		]);
 		
 		$guid = $entity->guid;
 		$this->assertNotEmpty($guid);
@@ -608,15 +600,9 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 		$not_cached_entity = _elgg_services()->entityTable->get($guid, $check_type, $check_subtype);
 		$this->assertEmpty($not_cached_entity->getVolatileData('temp_cache_data'));
 		
-		if (!empty($check_type) || !empty($check_subtype)) {
-			if (!empty($check_type)) {
-				$not_cached_entity->type = "{$type}_alt";
-				$this->assertEquals("{$type}_alt", $not_cached_entity->type);
-			}
-			if (!empty($check_subtype)) {
-				$not_cached_entity->subtype = "{$subtype}_alt";
-				$this->assertEquals("{$subtype}_alt", $not_cached_entity->subtype);
-			}
+		if (!empty($check_subtype)) {
+			$not_cached_entity->setSubtype("{$subtype}_alt");
+			$this->assertEquals("{$subtype}_alt", $not_cached_entity->subtype);
 			
 			$not_cached_entity->setVolatileData('alt_types', true);
 			$not_cached_entity->cache();
@@ -624,11 +610,9 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 			
 			// if cache type does not match requested type, return from database if type matches
 			$from_db_entity = _elgg_services()->entityTable->get($guid, $check_type, $check_subtype);
+			$this->assertInstanceOf(\ElggEntity::class, $from_db_entity);
 			$this->assertEmpty($from_db_entity->getVolatileData('alt_types'));
 		}
-				
-		// cleanup
-		$entity->delete();
 	}
 	
 	public function entitiesFromCacheProvider() {
@@ -639,6 +623,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 			['object', 'foo', null, 'foo'],
 			['user', null, null, null],
 			['user', null, 'user', null],
+			['user', 'foo', 'user', 'foo'],
 		];
 	}
 	
@@ -652,10 +637,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 		$this->assertNotEmpty($guid);
 		
 		// entity should not be returned from db or cache
-		$this->assertFalse(_elgg_services()->entityTable->get($guid, $check_type, $check_subtype));
-				
-		// cleanup
-		$entity->delete();
+		$this->assertNull(_elgg_services()->entityTable->get($guid, $check_type, $check_subtype));
 	}
 	
 	public function entitiesNotTypesMatch() {
@@ -669,5 +651,65 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 			['object', 'foo', 'object', 'false'],
 			['object', 'foo', null, 'false'],
 		];
+	}
+	
+	/**
+	 * @dataProvider emptyValues
+	 */
+	public function testSetMetadataEmpty($empty_value) {
+		$object = $this->createObject();
+		
+		$object->setMetadata('foo', 'bar');
+		$this->assertEquals('bar', $object->getMetadata('foo'));
+		$this->assertEquals('bar', $object->foo);
+		
+		// remove metadata by setting to empty value
+		$this->assertTrue($object->setMetadata('foo', $empty_value));
+		$this->assertNull($object->foo);
+		$this->assertNull($object->getMetadata('foo'));
+		
+		// removing unexisting data should also return true
+		$this->assertTrue($object->setMetadata('foo', $empty_value));
+	}
+	
+	public function emptyValues() {
+		return [
+			[''],
+			[null],
+		];
+	}
+	
+	public function testDeleteDeadloopPrevented() {
+		$user = $this->getAdmin();
+		
+		_elgg_services()->session_manager->setLoggedInUser($user);
+		
+		$object1 = $this->createObject([
+			'owner_guid' => $user->guid,
+		]);
+		$object2 = $this->createObject([
+			'owner_guid' => $user->guid,
+			'container_guid' => $object1->guid,
+		]);
+		$object3 = $this->createObject([
+			'owner_guid' => $user->guid,
+			'container_guid' => $object2->guid,
+		]);
+		
+		$object1->container_guid = $object3->guid;
+		$object1->save();
+		
+		$called_guids = [];
+		$testing_event = $this->registerTestingEvent('delete:before', 'object', function(\Elgg\Event $event) use (&$called_guids) {
+			$object = $event->getObject();
+			$this->assertNotContains($object->guid, $called_guids, 'Deadloop detected during entity delete');
+			
+			$called_guids[] = $object->guid;
+		});
+		
+		$object1->delete();
+		
+		$testing_event->assertNumberOfCalls(3);
+		$testing_event->unregister();
 	}
 }

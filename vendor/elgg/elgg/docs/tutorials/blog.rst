@@ -18,7 +18,7 @@ Prerequisites:
 
  - :doc:`Install Elgg</intro/install>`
 
-Create the plugin's directory and manifest file
+Create the plugin's directory and composer file
 ===============================================
 
 First, choose a simple and descriptive name for your plugin.
@@ -29,26 +29,11 @@ in ``/mod/``. In this case, the name of the directory should
 be ``/mod/my_blog/``. This directory is the root of your plugin and all the
 files that you create for the new plugin will go somewhere under it.
 
-Next, in the root of the plugin, create the plugin's manifest file,
-``manifest.xml``:
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
-        <name>My Blog</name>
-        <id>my_blog</id>
-        <author>Your Name Here</author>
-        <version>0.1</version>
-        <description>Adds blogging capabilities.</description>
-        <requires>
-            <type>elgg_release</type>
-            <version>2.0</version>
-        </requires>
-    </plugin_manifest>
+Next, in the root of the plugin, create the plugin's composer file,
+``composer.json``.
 
 See :doc:`Plugins</guides/plugins>` for more information
-about the manifest file.
+about the composer file.
 
 Create the form for creating a new blog post
 ============================================
@@ -108,9 +93,7 @@ This page will view the form you created in the above section.
 .. code-block:: php
 
     <?php
-    // make sure only logged in users can see this page 
-    gatekeeper();
-                    
+                   
     // set the title
     $title = "Create a new my_blog post";
 
@@ -143,9 +126,9 @@ Create the file ``/mod/my_blog/actions/my_blog/save.php``:
 
     <?php
     // get the form inputs
-    $title = get_input('title');
+    $title = elgg_get_title_input('title');
     $body = get_input('body');
-    $tags = string_to_tag_array(get_input('tags'));
+    $tags = elgg_string_to_array((string) get_input('tags'));
 
     // create a new my_blog object and put the content in it
     $blog = new ElggObject();
@@ -154,7 +137,7 @@ Create the file ``/mod/my_blog/actions/my_blog/save.php``:
     $blog->tags = $tags;
 
     // the object can and should have a subtype
-    $blog->subtype = 'my_blog';
+    $blog->setSubtype('my_blog');
     
     // for now, make all my_blog posts public
     $blog->access_id = ACCESS_PUBLIC;
@@ -162,17 +145,13 @@ Create the file ``/mod/my_blog/actions/my_blog/save.php``:
     // owner is logged in user
     $blog->owner_guid = elgg_get_logged_in_user_guid();
 
-    // save to database and get id of the new my_blog
-    $blog_guid = $blog->save();
-
+    // save to database
     // if the my_blog was saved, we want to display the new post
     // otherwise, we want to register an error and forward back to the form
-    if ($blog_guid) {
-       system_message("Your blog post was saved.");
-       forward($blog->getURL());
+    if ($blog->save()) {
+       return elgg_ok_response('', "Your blog post was saved.", $blog->getURL());
     } else {
-       register_error("The blog post could not be saved.");
-       forward(REFERER); // REFERER is a global variable that defines the previous page
+       return elgg_error_response("The blog post could not be saved.");
     }
 
 As you can see in the above code, Elgg objects have several fields built
@@ -189,10 +168,6 @@ In this tutorial, the subtype "``my_blog``\ " identifies a my\_blog post,
 but any alphanumeric string can be a valid subtype.
 When picking subtypes, be sure to pick ones that make sense for your plugin.
 
-The ``getURL`` method fetches the URL of the new post. It is recommended
-that you override this method. The overriding will be done in the
-``start.php`` file.
-
 Create elgg-plugin.php
 ======================
 
@@ -208,7 +183,9 @@ It can, for example, be used to configure entities, actions, widgets and routes.
 			[
 				'type' => 'object',
 				'subtype' => 'my_blog',
-				'searchable' => true,
+				'capabilities' => [
+					'searchable' => true,
+				],
 			],
 		],
 		'actions' => [
@@ -233,76 +210,10 @@ It can, for example, be used to configure entities, actions, widgets and routes.
 		],
 	];
 
-
-Create start.php
-================
-
-The ``/mod/my_blog/start.php`` file needs to register a hook to override the URL generation.
-
-.. code-block:: php
-
-    <?php
-
-    function my_blog_init() {
-        // register a hook handler to override urls
-        elgg_register_plugin_hook_handler('entity:url', 'object', 'my_blog_set_url');
-    }
-
-    return function() {
-        // register an initializer
-        elgg_register_event_handler('init', 'system', 'my_blog_init');
-    }
-
 Registering the save action will make it available as ``/action/my_blog/save``.
 By default, all actions are available only to logged in users.
 If you want to make an action available to only admins or open it up to unauthenticated users,
-you can pass 'admin' or 'public' as the third parameter of ``elgg_register_action``.
-
-The URL overriding function will extract the ID of the given entity and use it to make
-a simple URL for the page that is supposed to view the entity. In this case
-the entity should of course be a my_blog post. Add this function to your
-``start.php`` file:
-
-.. code-block:: php
-
-    function my_blog_set_url($hook, $type, $url, $params) {
-        $entity = $params['entity'];
-        if ($entity->getSubtype() === 'my_blog') {
-            return "my_blog/view/{$entity->guid}";
-        }
-    }
-
-The page handler makes it possible to serve the page that generates the form
-and the page that views the post. The next section will show how to create
-the page that views the post. Add this function to your ``start.php`` file:
-
-.. code-block:: php
-
-    function my_blog_page_handler($segments) {
-        if ($segments[0] == 'add') {
-            echo elgg_view_resource('my_blog/add');
-            return true;
-        }
-
-        else if ($segments[0] == 'view') {
-            $resource_vars['guid'] = elgg_extract(1, $segments);
-            echo elgg_view_resource('my_blog/view', $resource_vars);
-            return true;
-        }
-
-        return false;
-    }
-
-The ``$segments`` variable contains the different parts of the URL as separated by /.
-
-Page handling functions need to return ``true`` or ``false``. ``true``
-means the page exists and has been handled by the page handler.
-``false`` means that the page does not exist and the user will be
-forwarded to the site's 404 page (requested page does not exist or not found).
-In this particular example, the URL must contain either ``/my_blog/add`` or
-``/my_blog/view/id`` where id is a valid ID of an entity with the ``my_blog`` subtype.
-More information about page handling is at
-:doc:`Page handler</guides/routing>`.
+you can pass ``['access' => 'admin']`` or ``['access' => 'public']`` when registering the action.
 
 .. _tutorials/blog#view:
 
@@ -412,36 +323,20 @@ IDentifier (GUID) of the logged in user, and by giving that to
         'owner_guid' => elgg_get_logged_in_user_guid()
     ));
 
-Next, you will need to modify your my\_blog page handler to grab the new
-page when the URL is set to ``/my_blog/all``. Change the
-``my_blog_page_handler`` function in ``start.php`` to look like this:
+Next, you will need to register your route to return the new
+page when the URL is set to ``/my_blog/all``. Configure the ``routes`` section
+in ``elgg-plugin.php`` to contain the following:
 
 .. code-block:: php
 
-    function my_blog_page_handler($segments) {
-        switch ($segments[0]) {
-            case 'add':
-               echo elgg_view_resource('my_blog/add');
-               break;
-
-            case 'view':
-                $resource_vars['guid'] = elgg_extract(1, $segments);
-                echo elgg_view_resource('my_blog/view', $resource_vars);
-                break;
-
-            case 'all':
-            default:
-               echo elgg_view_resource('my_blog/all');
-               break;
-        }
-        
-        return true;
-    }
-
-Now, if the URL contains ``/my_blog/all``, the user will see an
-"All Site My_Blogs" page. Because of the default case, the list of all my_blogs
-will also be shown if the URL is something invalid,
-like ``/my_blog`` or ``/my_blog/xyz``.
+	'routes' => [
+		'collection:object:my_blog:all' => [
+			'path' => '/my_blog/all',
+			'resource' => 'my_blog/all',
+		],
+	],
+    
+Now, if the URL contains ``/my_blog/all``, the user will see an "All Site My_Blogs" page.
 
 You might also want to update the object view to handle different kinds of viewing,
 because otherwise the list of all my_blogs will also show the full content of all my_blogs.

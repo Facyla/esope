@@ -2,6 +2,7 @@
 
 namespace Elgg\Cli;
 
+use Elgg\Traits\Cli\PluginsHelper;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -51,6 +52,6 @@ class PluginsDeactivateCommand extends Command {
 
 		$helper->finish($progress);
 
-		return 0;
+		return self::SUCCESS;
 	}
 }

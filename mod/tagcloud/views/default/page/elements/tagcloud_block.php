@@ -27,25 +27,19 @@ $title = elgg_echo('tagcloud');
 if (is_array($options['subtype']) && count($options['subtype']) > 1) {
 	// we cannot provide links to tagged objects with multiple types
 	$tag_data = elgg_get_tags($options);
-	$cloud = elgg_view("output/tagcloud", [
+	$cloud = elgg_view('output/tagcloud', [
 		'value' => $tag_data,
 		'type' => $type,
 	]);
 } else {
 	$cloud = elgg_view_tagcloud($options);
 }
-if (!$cloud) {
-	return true;
+
+if (empty($cloud)) {
+	return;
 }
 
 // add a link to all site tags
-$cloud .= '<p class="small">';
-$cloud .= elgg_view_icon('tag');
-$cloud .= elgg_view('output/url', [
-	'href' => elgg_generate_url('tagcloud'),
-	'text' => elgg_echo('tagcloud:allsitetags'),
-	'is_trusted' => true,
-]);
-$cloud .= '</p>';
+$cloud .= elgg_format_element('p', ['class' => 'small'], elgg_view_url(elgg_generate_url('tagcloud'), elgg_echo('tagcloud:allsitetags'), ['icon' => 'tag']));
 
 echo elgg_view_module('aside', $title, $cloud);

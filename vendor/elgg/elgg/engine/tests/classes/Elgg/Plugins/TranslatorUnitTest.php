@@ -3,6 +3,7 @@
 namespace Elgg\Plugins;
 
 use Elgg\I18n\Translator;
+use Elgg\Includer;
 
 abstract class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
@@ -18,29 +19,31 @@ abstract class TranslatorUnitTest extends \Elgg\UnitTestCase {
 		$this->translator->reloadAllTranslations();
 	}
 
-	public function down() {
-
-	}
-
 	/**
 	 * Provides registered languages
+	 *
 	 * @return array
 	 */
 	public function languageProvider() {
 		self::createApplication();
-
-		$provides = [];
-
-		$codes = elgg()->locale->getLanguageCodes();
-
+		
 		$path = $this->getPath();
-		if (!$path) {
-			return $provides;
+		if (!$path || !is_dir("{$path}/languages/")) {
+			return [];
 		}
-
-		foreach ($codes as $code) {
-			if (file_exists($path . "/languages/$code.php")) {
-				$provides[] = [$code];
+		
+		$provides = [];
+		$codes = elgg()->locale->getLanguageCodes();
+		$dh = new \DirectoryIterator("{$path}/languages/");
+		/* @var $file_info \DirectoryIterator */
+		foreach ($dh as $file_info) {
+			if (!$file_info->isFile() || $file_info->getExtension() !== 'php') {
+				continue;
+			}
+			
+			$plugin_language_code = $file_info->getBasename('.php');
+			if (in_array($plugin_language_code, $codes)) {
+				$provides[] = [$plugin_language_code];
 			}
 		}
 
@@ -79,7 +82,7 @@ abstract class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
 		$this->translator->registerTranslations($this->getPath() . 'languages/', false, $language);
 
-		$completeness = get_language_completeness($language);
+		$completeness = $this->translator->getLanguageCompleteness($language);
 
 		$translations = $this->translator->getLoadedTranslations();
 
@@ -91,7 +94,7 @@ abstract class TranslatorUnitTest extends \Elgg\UnitTestCase {
 					continue;
 				}
 
-				if ($string == $translations['en'][$key]) {
+				if ($string === $translations['en'][$key]) {
 					// Translation is identical to 'en'
 					unset($translations[$language][$key]);
 					continue;
@@ -100,9 +103,27 @@ abstract class TranslatorUnitTest extends \Elgg\UnitTestCase {
 		}
 
 		if (empty($translations[$language])) {
-			$this->assertTrue($completeness == 0);
+			$this->assertEquals(0, $completeness);
 		} else {
-			$this->assertTrue($completeness > 0);
+			$this->assertGreaterThan(0, $completeness);
 		}
+	}
+	
+	/**
+	 * Elgg uses Transifex, which sometimes produces language files with syntax errors
+	 * We will try to catch those
+	 *
+	 * @dataProvider languageProvider
+	 */
+	public function testCanEncodeTranslations($language) {
+		$translations = Includer::includeFile("{$this->getPath()}/languages/{$language}.php");
+		$this->assertIsArray($translations);
+		// the JS translations are encoded to JSON, so try that
+		$encoded = json_encode($translations);
+		$this->assertNotEmpty($encoded);
+		$this->assertIsString($encoded);
+		
+		$decoded = json_decode($encoded, true);
+		$this->assertEquals($translations, $decoded);
 	}
 }

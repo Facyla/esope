@@ -13,11 +13,10 @@ return array(
 	'thewire' => "The Wire",
 
 	'item:object:thewire' => "Posts",
-	'collection:object:thewire' => 'Wire posts',
 	'collection:object:thewire:all' => "Todos los post",
 	'collection:object:thewire:owner' => "los posts de %s",
 	'collection:object:thewire:friends' => "Los post de tus amigos",
-
+	
 	'thewire:replying' => "Responder a %s (@%s) quien escribi&oacute;",
 	'thewire:thread' => "Hilo",
 	'thewire:charleft' => "caracteres restantes",
@@ -25,15 +24,10 @@ return array(
 	'thewire:noposts' => "No hay posts",
 
 	'thewire:by' => 'Post publicado por %s',
-	'thewire:previous:help' => "Ver posts anteriores",
-	'thewire:hide:help' => "Ocultar posts anteriores",
-
-	'thewire:form:body:placeholder' => "What's happening?",
 	
 	/**
 	 * The wire river
 	 */
-	'river:object:thewire:create' => "%s posted to %s",
 	'thewire:wire' => 'wire',
 
 	/**
@@ -65,6 +59,4 @@ return array(
 	/**
 	 * Settings
 	 */
-	'thewire:settings:limit' => "Maximum number of characters for wire messages:",
-	'thewire:settings:limit:none' => "No limit",
 );

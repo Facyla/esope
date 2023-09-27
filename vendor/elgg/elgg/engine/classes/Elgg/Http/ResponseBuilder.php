@@ -2,7 +2,8 @@
 
 namespace Elgg\Http;
 
-use InvalidArgumentException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\RangeException;
 
 /**
  * HTTP response builder interface
@@ -31,9 +32,9 @@ interface ResponseBuilder {
 	 *
 	 * @param int $status_code Status code
 	 * @return self
-	 * @throws InvalidArgumentException
+	 * @throws RangeException
 	 */
-	public function setStatusCode($status_code = ELGG_HTTP_OK);
+	public function setStatusCode(int $status_code);
 
 	/**
 	 * Returns status code
@@ -48,13 +49,13 @@ interface ResponseBuilder {
 	 * @return self
 	 * @throws InvalidArgumentException
 	 */
-	public function setForwardURL($forward_url = REFERRER);
+	public function setForwardURL(string $forward_url = REFERRER);
 
 	/**
 	 * Returns redirect URL
-	 * @return string|int|null string the forward url, null when no url was set or the constant REFERER
+	 * @return string|null string the forward url, null when no url was set or the constant REFERRER
 	 */
-	public function getForwardURL();
+	public function getForwardURL(): ?string;
 
 	/**
 	 * Sets additional response headers
@@ -111,4 +112,20 @@ interface ResponseBuilder {
 	 * @return bool
 	 */
 	public function isNotModified();
+	
+	/**
+	 * Set an exception for this response
+	 *
+	 * @param \Exception $e the exception for this response
+	 *
+	 * @return self
+	 */
+	public function setException(\Exception $e);
+	
+	/**
+	 * Get the exception for this reponse
+	 *
+	 * @return \Exception|null
+	 */
+	public function getException();
 }

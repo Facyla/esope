@@ -28,46 +28,39 @@ foreach ($periods as $period) {
 
 	// cron output
 	$msg = $cron_service->getLog('output', $period);
-	if ($msg) {
+	$msg_class = [];
+	if (!empty($msg)) {
 		$msg = nl2br($msg);
+		
+		if (elgg_in_context('widgets')) {
+			$msg = elgg_format_element('div', [], $msg);
+			$msg = elgg_view('output/url', [
+				'href' => false,
+				'text' => false,
+				'title' => elgg_echo('more_info'),
+				'icon' => 'info',
+				'class' => ['elgg-lightbox'],
+				'data-colorbox-opts' => json_encode(['html' => $msg]),
+			]);
+			
+			$msg_class[] = 'center';
+		}
 	}
 	
-	if (!empty($msg) && elgg_in_context('widgets')) {
-		$wrapped_message = elgg_format_element('div', [
-			'id' => "cron_{$period}",
-			'class' => 'hidden',
-		], $msg);
-		
-		$msg = elgg_view('output/url', [
-			'href' => "#cron_{$period}",
-			'text' => elgg_echo('show'),
-			'rel' => 'toggle',
-		]) . $wrapped_message;
-	}
-	$row[] = elgg_format_element('td', [], $msg);
+	$row[] = elgg_format_element('td', ['class' => $msg_class], $msg);
 	
 	$table_content .= elgg_format_element('tr', [], implode(PHP_EOL, $row));
 }
 
-$period_hd = elgg_echo('admin:cron:period');
-$friendly_hd = elgg_echo('admin:cron:friendly');
-$date_hd = elgg_echo('admin:cron:date');
-$msg_hd = elgg_echo('admin:cron:msg');
+$header = elgg_format_element('th', [], elgg_echo('admin:cron:period'));
+$header .= elgg_format_element('th', [], elgg_echo('admin:cron:friendly'));
+$header .= elgg_format_element('th', [], elgg_echo('admin:cron:date'));
+$header .= elgg_format_element('th', [], elgg_echo('admin:cron:msg'));
+$header = elgg_format_element('tr', [], $header);
+$header = elgg_format_element('thead', [], $header);
 
-$table = <<<HTML
-<table class="elgg-table">
-	<thead>
-		<tr>
-			<th>$period_hd</th>
-			<th>$friendly_hd</th>
-			<th>$date_hd</th>
-			<th>$msg_hd</th>
-		</tr>
-	</thead>
-	<tbody>
-		$table_content
-	</tbody>
-</table>
-HTML;
+$table_content = elgg_format_element('tbody', [], $table_content);
+
+$table = elgg_format_element('table', ['class' => 'elgg-table'], $header . $table_content);
 
 echo elgg_view_module('info', elgg_echo('admin:cron:record'), $table);

@@ -1,15 +1,16 @@
 {
 	"type": "project",
 	"name": "elgg/starter-project",
-	"description": "This is a quickstart skeleton for building a site based on Elgg 3.x.",
+	"description": "This is a quickstart skeleton for building a site based on Elgg 5.x.",
 	"license": "MIT",
 	"prefer-stable": true,
 	"minimum-stability": "dev",
 	"require": {
-		"elgg/elgg": "3.3.25"
+		"elgg/elgg": "5.0.6"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~8.5"
+		"phpunit/phpunit": "~9.5",
+		"phpdocumentor/reflection-docblock": "^5.2"
 	},
 	"scripts": {
 		"post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
@@ -19,13 +20,18 @@
 	"config": {
 		"process-timeout": 0,
 		"platform": {
-			"php": "7.2.5"
+			"php": "8.0"
 		},
 		"fxp-asset": {
 			"enabled": false
 		},
+		"apcu-autoloader": true,
+		"classmap-authoritative": true,
 		"optimize-autoloader": true,
-		"apcu-autoloader": true
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true,
+			"composer/installers": true
+		}
 	},
 	"repositories": [
 		{

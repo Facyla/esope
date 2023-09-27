@@ -5,6 +5,8 @@
 /mod/*
 /composer.phar
 /cache
+/caches/
+/phpunit.xml
 
 # don't ignore example settings
 !/elgg-config/settings.example.php
@@ -17,12 +19,10 @@
 !/mod/activity
 !/mod/blog/
 !/mod/bookmarks/
-!/mod/categories/
 !/mod/ckeditor/
 !/mod/custom_index/
 !/mod/dashboard/
 !/mod/developers/
-!/mod/diagnostics/
 !/mod/discussions/
 !/mod/embed/
 !/mod/externalpages/
@@ -47,7 +47,6 @@
 !/mod/thewire/
 !/mod/uservalidationbyemail/
 !/mod/web_services/
-!/mod/zaudio/
 
 # ignore IDE/hidden/testing/OS cache files
 .*

@@ -1,5 +1,8 @@
 <?php
+
 namespace Elgg;
+
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * WidgetDefinition
@@ -43,10 +46,12 @@ class WidgetDefinition {
 	 * WidgetDefinition constructor
 	 *
 	 * @param string $id Identifier of the widget
+	 *
+	 * @throws InvalidArgumentException
 	 */
 	public function __construct($id) {
 		if (empty($id)) {
-			throw new \InvalidParameterException('Id missing for WidgetDefinition');
+			throw new InvalidArgumentException('"id" missing for ' . __CLASS__);
 		}
 		
 		$this->id = $id;
@@ -56,19 +61,17 @@ class WidgetDefinition {
 	 * Create an WidgetDefinition from an associative array. Required key is id.
 	 *
 	 * @param array $options Option array of key value pairs
+	 *                       - id => STR Widget identifier (required)
+	 *                       - name => STR Name of the widget
+	 *                       - description => STR Description of the widget
+	 *                       - context => ARRAY contexts in which the widget is available
+	 *                       - multiple => BOOL can the widget be added multiple times
 	 *
-	 *    id => STR Widget identifier (required)
-	 *    name => STR Name of the widget
-	 *    description => STR Description of the widget
-	 *    context => ARRAY contexts in which the widget is available
-	 *    multiple => BOOL can the widget be added multiple times
-	 *
-	 * @throws \InvalidParameterException
 	 * @return \Elgg\WidgetDefinition
 	 */
 	public static function factory(array $options) {
 
-		$id = elgg_extract('id', $options);
+		$id = (string) elgg_extract('id', $options);
 		$definition = new WidgetDefinition($id);
 		
 		$name = elgg_extract('name', $options);
@@ -93,17 +96,7 @@ class WidgetDefinition {
 			$definition->description = $description;
 		}
 		
-		$context = (array) elgg_extract('context', $options, ['all']);
-		if (in_array('all', $context)) {
-			$context[] = 'profile';
-			$context[] = 'dashboard';
-			
-			_elgg_services()->logger->warning("The widget '{$id}' need to be registered for explicit contexts");
-			$pos = array_search('all', $context);
-			unset($context[$pos]);
-			
-			$context = array_unique($context);
-		}
+		$context = (array) elgg_extract('context', $options, ['profile', 'dashboard']);
 		$definition->context = $context;
 		
 		$definition->multiple = (bool) elgg_extract('multiple', $options, false);
@@ -139,21 +132,5 @@ class WidgetDefinition {
 		}
 		
 		return true;
-	}
-	
-	/**
-	 * Magic getter to return the deprecated attribute 'handler'
-	 *
-	 * @param string $name attribute to get
-	 *
-	 * @return mixed
-	 */
-	public function __get($name) {
-		if ($name === 'handler') {
-			// before Elgg 2.2 the widget definitions had the handler attribute as the id
-			return $this->id;
-		}
-		
-		return $this->$name;
 	}
 }

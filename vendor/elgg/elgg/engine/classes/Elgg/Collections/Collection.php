@@ -2,19 +2,16 @@
 
 namespace Elgg\Collections;
 
-use ArrayAccess;
-use Countable;
-use InvalidArgumentException;
-use InvalidParameterException;
-use SeekableIterator;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\OutOfBoundsException;
 
 /**
  * A collection of unique items
  */
 class Collection implements CollectionInterface,
-							ArrayAccess,
-							SeekableIterator,
-							Countable {
+							\ArrayAccess,
+							\SeekableIterator,
+							\Countable {
 
 	/**
 	 * @var CollectionItemInterface[]
@@ -25,6 +22,11 @@ class Collection implements CollectionInterface,
 	 * @var string
 	 */
 	protected $item_class;
+	
+	/**
+	 * @var int positition of the SeekableIterator
+	 */
+	protected $position;
 
 	/**
 	 * Constructor
@@ -53,12 +55,13 @@ class Collection implements CollectionInterface,
 	 * @param mixed $item Item
 	 *
 	 * @return void
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 */
 	protected function assertValidItem($item) {
-		$class = $this->item_class ? : CollectionItemInterface::class;
+		$class = $this->item_class ?? CollectionItemInterface::class;
 
 		if (!$item instanceof $class) {
-			throw new InvalidParameterException('Collection ' . __CLASS__ . ' only accepts instances of ' . $class);
+			throw new InvalidArgumentException('Collection ' . __CLASS__ . ' only accepts instances of ' . $class);
 		}
 	}
 
@@ -72,6 +75,7 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function count() {
 		return count($this->items);
 	}
@@ -150,8 +154,8 @@ class Collection implements CollectionInterface,
 	public function sort(callable $callback = null) {
 		if (!$callback) {
 			$callback = function (CollectionItemInterface $f1, CollectionItemInterface $f2) {
-				$p1 = $f1->getPriority() ? : 500;
-				$p2 = $f2->getPriority() ? : 500;
+				$p1 = $f1->getPriority() ?: 500;
+				$p2 = $f2->getPriority() ?: 500;
 				if ($p1 === $p2) {
 					return 0;
 				}
@@ -201,8 +205,13 @@ class Collection implements CollectionInterface,
 	}
 
 	/**
+	 * ArrayAccess interface functions
+	 */
+	
+	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetExists($offset) {
 		return $this->has($offset);
 	}
@@ -210,6 +219,7 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet($offset) {
 		return $this->get($offset);
 	}
@@ -217,6 +227,7 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet($offset, $value) {
 		$this->assertValidItem($value);
 
@@ -227,58 +238,77 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($offset) {
+		if (isset($this->items[$offset]) && isset($this->position)) {
+			// handle unset during iteration
+			$this->position--;
+		}
+		
 		unset($this->items[$offset]);
 	}
 
 	/**
+	 * SeekableIterator interface functions
+	 */
+	
+	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function current() {
-		return current($this->items);
+		$keys = array_keys($this->items);
+		
+		return $this->get($keys[$this->position]);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function next() {
-		next($this->items);
+		$this->position++;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function key() {
-		return key($this->items);
+		$keys = array_keys($this->items);
+		
+		return $keys[$this->position];
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function valid() {
-		return key($this->items) !== null;
+		$keys = array_keys($this->items);
+		
+		return isset($keys[$this->position]);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function rewind() {
-		reset($this->items);
+		$this->position = 0;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function seek($position) {
+	#[\ReturnTypeWillChange]
+	public function seek($offset) {
 		$keys = array_keys($this->items);
 
-		if (isset($keys[$position])) {
-			throw new \OutOfBoundsException();
+		if (!isset($keys[$offset])) {
+			throw new OutOfBoundsException();
 		}
 
-		$key = $keys[$position];
-
-		return $this->items[$key];
+		$this->position = $offset;
 	}
-
 }

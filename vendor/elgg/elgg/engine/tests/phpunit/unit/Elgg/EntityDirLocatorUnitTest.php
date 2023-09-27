@@ -2,6 +2,8 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\RangeException;
+
 /**
  * @group UnitTests
  */
@@ -18,14 +20,6 @@ class EntityDirLocatorUnitTest extends \Elgg\UnitTestCase {
 		17234
 	];
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testConstructorGUIDs() {
 		// good guids
 		foreach ($this->guids as $guid) {
@@ -38,16 +32,13 @@ class EntityDirLocatorUnitTest extends \Elgg\UnitTestCase {
 	 * @dataProvider badGuidsProvider
 	 */
 	public function testConstructorThrowsWithBadGuid($guid) {
-		$this->expectException(\InvalidArgumentException::class);
-		$this->expectExceptionMessage('GUIDs must be integers > 0.');
+		$this->expectException(RangeException::class);
+		$this->expectExceptionMessage('"guid" must be greater than 0');
 		new \Elgg\EntityDirLocator($guid);
 	}
 
 	public function badGuidsProvider() {
 		return [
-			["abc"],
-			[null],
-			[false],
 			[0],
 			[-123]
 		];
@@ -79,5 +70,4 @@ class EntityDirLocatorUnitTest extends \Elgg\UnitTestCase {
 		$root = "/tmp/elgg/";
 		$this->assertSame($root . '1/431/', $root . $path);
 	}
-
 }

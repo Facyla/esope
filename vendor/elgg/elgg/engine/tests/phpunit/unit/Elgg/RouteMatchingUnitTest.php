@@ -2,6 +2,7 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\Http\PageNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -12,31 +13,31 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 
+	public function testMostSpecificRouteWins() {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
-	public function testCanRegisterSpecificRouteWithGlobalPagehandler() {
-
-		$route_calls = 0;
-		$page_handler_calls = 0;
+		$specific_calls = 0;
+		$non_specific_calls = 0;
 
 		elgg_register_route('foo:bar', [
 			'path' => '/foo/{bar}',
 			'requirements' => ['bar' => '\w+'],
-			'handler' => function () use (&$route_calls) {
-				$route_calls++;
+			'handler' => function () use (&$specific_calls) {
+				$specific_calls++;
 			}
 		]);
 
-		elgg_register_page_handler('foo', function () use (&$page_handler_calls) {
-			$page_handler_calls++;
-		});
+		elgg_register_route('foo', [
+			'path' => '/foo/{segments}',
+			'defaults' => [
+				'segments' => '',
+			],
+			'requirements' => [
+				'segments' => '.+',
+			],
+			'handler' => function () use (&$non_specific_calls) {
+				$non_specific_calls++;
+			}
+		]);
 
 		$request = $this->prepareHttpRequest('foo');
 		_elgg_services()->router->route($request);
@@ -47,11 +48,11 @@ class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 		$request = $this->prepareHttpRequest('foo/baz/bar');
 		_elgg_services()->router->route($request);
 
-		$this->assertEquals(1, $route_calls);
-		$this->assertEquals(2, $page_handler_calls);
+		$this->assertEquals(1, $specific_calls);
+		$this->assertEquals(2, $non_specific_calls);
 
 		elgg_unregister_route('foo:bar');
-		elgg_unregister_page_handler('foo');
+		elgg_unregister_route('foo');
 	}
 
 	/**
@@ -171,13 +172,13 @@ class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 	}
 	
 	public function testGenerateURLForUnknownRoute() {
-		$this->assertFalse(elgg_generate_url('unknown:route'));
+		$this->assertNull(elgg_generate_url('unknown:route'));
 	}
 
 	public function testResourceParameterIsNotReplaceableByQueryElements() {
 
-		$this->viewsDir = $this->normalizeTestFilePath('views');
-		_elgg_services()->views->autoregisterViews('', "$this->viewsDir/default", 'default');
+		$viewsDir = $this->normalizeTestFilePath('views');
+		_elgg_services()->views->autoregisterViews('', "{$viewsDir}/default", 'default');
 
 		elgg_register_route('foo:bar', [
 			'path' => '/foo/{bar}',
@@ -207,8 +208,8 @@ class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 
 	public function testHandlerParameterIsNotReplaceableByQueryElements() {
 
-		$this->viewsDir = $this->normalizeTestFilePath('views');
-		_elgg_services()->views->autoregisterViews('', "$this->viewsDir/default", 'default');
+		$viewsDir = $this->normalizeTestFilePath('views');
+		_elgg_services()->views->autoregisterViews('', "{$viewsDir}/default", 'default');
 
 		$calls = 0;
 		elgg_register_route('foo:bar', [
@@ -220,7 +221,7 @@ class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 		]);
 
 		$request = $this->prepareHttpRequest('foo/baz', 'GET', [
-			'_handler' => '_elgg_init',
+			'_handler' => 'elgg_echo',
 		]);
 
 		ob_start();
@@ -278,7 +279,7 @@ class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 			'foo2' => 'right',
 		]);
 		
-		$this->assertFalse($url);
+		$this->assertNull($url);
 	}
 
 	public function testCanGenerateActionUrl() {

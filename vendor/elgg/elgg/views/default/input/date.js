@@ -1,15 +1,10 @@
-define(function (require) {
-
-	var elgg = require('elgg');
-	var $ = require('jquery');
-	require('jquery-ui');
-
+define(['jquery', 'elgg', 'jquery-ui/widgets/datepicker'], function ($, elgg) {
 	// the language module may need loading
 	var i18n_ready = $.Deferred();
-	if (elgg.get_language() === 'en') {
+	if (elgg.config.current_language === 'en') {
 		i18n_ready.resolve();
 	} else {
-		require(['jquery-ui/i18n/datepicker-' + elgg.get_language() + '.min'], function () {
+		require(['jquery-ui/i18n/datepicker-' + elgg.config.current_language], function () {
 			i18n_ready.resolve();
 		}, function () {
 			// if load fails (e.g. lang code mismatch), carry on with English
@@ -37,10 +32,11 @@ define(function (require) {
 			if (!$(selector).length) {
 				return;
 			}
+			
 			var defaults = {
 				dateFormat: 'yy-mm-dd',
-				nextText: '&#xBB;',
-				prevText: '&#xAB;',
+				nextText: '»',
+				prevText: '«',
 				changeMonth: true,
 				changeYear: true
 			};
@@ -58,6 +54,7 @@ define(function (require) {
 							var timestamp = Date.UTC(instance.selectedYear, instance.selectedMonth, instance.selectedDay);
 							timestamp = timestamp / 1000;
 						}
+						
 						$('input[rel="' + this.id + '"]').val(timestamp);
 					}
 				};
@@ -80,4 +77,3 @@ define(function (require) {
 
 	return datepicker;
 });
-

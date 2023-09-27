@@ -3,7 +3,7 @@
 namespace Elgg;
 
 use Elgg\Email\Address;
-use Zend\Mime\Mime;
+use Laminas\Mime\Mime;
 
 /**
  * @group EmailService
@@ -29,12 +29,12 @@ class EmailUnitTest extends UnitTestCase {
 
 	public function testFactoryFromElggUser() {
 
-		$from = $this->createUser([], [
+		$from = $this->createUser([
 			'email' => 'from@elgg.org',
 			'name' => 'From',
 		]);
 		
-		$to = $this->createUser([], [
+		$to = $this->createUser([
 			'email' => 'to@elgg.org',
 			'name' => 'To',
 		]);
@@ -48,14 +48,12 @@ class EmailUnitTest extends UnitTestCase {
 
 		// We never send email from users
 		$site = elgg_get_site_entity();
-		$this->assertEquals(new Address($site->getEmailAddress(), $site->getDisplayName()), $email->getFrom());
-		$this->assertEquals(new Address($to->email, $to->getDisplayName()), $email->getTo());
+		$from_display = elgg_echo('notification:method:email:from', [$from->getDisplayName(), $site->getDisplayName()]);
+		$this->assertEquals(new Address($site->getEmailAddress(), $from_display), $email->getFrom());
+		$this->assertEquals(Address::fromEntity($to), $email->getTo()[0]);
 		
 		$this->assertInstanceOf(\ElggUser::class, $email->getSender());
 		$this->assertEquals($from->guid, $email->getSender()->guid);
-		
-		$this->assertInstanceOf(\ElggUser::class, $email->getRecipient());
-		$this->assertEquals($to->guid, $email->getRecipient()->guid);
 	}
 
 	public function testFactoryFromEmailString() {
@@ -68,7 +66,7 @@ class EmailUnitTest extends UnitTestCase {
 		]);
 
 		$this->assertEquals(Address::fromString('from@elgg.org'), $email->getFrom());
-		$this->assertEquals(Address::fromString('to@elgg.org'), $email->getTo());
+		$this->assertEquals(Address::fromString('to@elgg.org'), $email->getTo()[0]);
 	}
 
 	public function testFactoryFromContactString() {
@@ -81,7 +79,7 @@ class EmailUnitTest extends UnitTestCase {
 		]);
 
 		$this->assertEquals(new Address('from@elgg.org', 'From'), $email->getFrom());
-		$this->assertEquals(new Address('to@elgg.org', 'To'), $email->getTo());
+		$this->assertEquals(new Address('to@elgg.org', 'To'), $email->getTo()[0]);
 	}
 
 	public function testFactory() {
@@ -105,7 +103,7 @@ class EmailUnitTest extends UnitTestCase {
 		$email->addHeader('Foo2', 'Bar2');
 
 		$this->assertEquals($from, $email->getFrom());
-		$this->assertEquals($to, $email->getTo());
+		$this->assertEquals($to, $email->getTo()[0]);
 		$this->assertEquals('Subject', $email->getSubject());
 		$this->assertEquals('Body', $email->getBody());
 		$this->assertEquals('Subject', $email->getSubject());
@@ -113,7 +111,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertEquals(['Baz' => 1], $email->getParams());
 	}
 
-	function testFactoryAddAttachmentFromParams() {
+	public function testFactoryAddAttachmentFromParams() {
 		
 		$email = Email::factory([
 			'from' => 'from@elgg.org',
@@ -135,7 +133,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertCount(1, $email->getAttachments());
 	}
 	
-	function testFactoryAddAttachmentsFromParams() {
+	public function testFactoryAddAttachmentsFromParams() {
 		
 		$file = new \ElggFile();
 		$file->owner_guid = 1;
@@ -164,7 +162,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertCount(2, $email->getAttachments());
 	}
 	
-	function testFactoryAddAttachments() {
+	public function testFactoryAddAttachments() {
 		
 		$file = new \ElggFile();
 		$file->owner_guid = 1;
@@ -204,11 +202,11 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertCount(3, $email->getAttachments());
 	}
 	
-	function testAddAttachmentFromPart() {
+	public function testAddAttachmentFromPart() {
 		
 		$email = new Email();
 		
-		$part = new \Zend\Mime\Part('Test file content');
+		$part = new \Laminas\Mime\Part('Test file content');
 		$part->type = 'text/plain';
 		$part->disposition = 'attachment';
 		
@@ -226,7 +224,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertEquals($part->getDisposition(), $email_part->getDisposition());
 	}
 	
-	function testAddAttachmentFromElggFile() {
+	public function testAddAttachmentFromElggFile() {
 		
 		$file = new \ElggFile();
 		$file->owner_guid = 1;
@@ -250,7 +248,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertEquals($file->getFilename(), $email_part->getFileName());
 	}
 	
-	function testAddAttachmentFromArray() {
+	public function testAddAttachmentFromArray() {
 		
 		$attachment = [
 			'content' => 'Test file content',
@@ -273,7 +271,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertEquals($attachment['filename'], $email_part->getFileName());
 	}
 	
-	function testAddInvalidAttachmentFromArray() {
+	public function testAddInvalidAttachmentFromArray() {
 		
 		$attachment = [
 			'filename' => 'test.txt',
@@ -292,7 +290,7 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertCount(0, $email->getAttachments());
 	}
 	
-	function testSenderSetAndGet() {
+	public function testSenderSetAndGet() {
 		
 		$email = new Email();
 		$this->assertNull($email->getSender());
@@ -301,12 +299,24 @@ class EmailUnitTest extends UnitTestCase {
 		$this->assertEquals('bar', $email->getSender());
 	}
 	
-	function testRecipientSetAndGet() {
-		
+	public function testSubjectIsLimited() {
+		_elgg_services()->config->email_subject_limit = 7;
 		$email = new Email();
-		$this->assertNull($email->getRecipient());
+		$email->setSubject('too long text');
 		
-		$email->setRecipient('bar');
-		$this->assertEquals('bar', $email->getRecipient());
+		$this->assertEquals('too lon', $email->getSubject());
+	}
+	
+	public function testCreateEntityMessageID() {
+		$email = new Email();
+		$entity = $this->createObject();
+		
+		// without microtime
+		$result = $email->createEntityMessageID($entity);
+		$this->assertMatchesRegularExpression('/\S+\.entity\.[0-9]+@\S+/', $result);
+		
+		// with microtime
+		$result = $email->createEntityMessageID($entity, true);
+		$this->assertMatchesRegularExpression('/\S+\.entity\.[0-9]+\.[0-9\.]+@\S+/', $result);
 	}
 }

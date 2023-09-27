@@ -6,14 +6,14 @@ use Elgg\Ajax\Service;
 use Elgg\Amd\Config;
 use Elgg\Config as Config2;
 use Elgg\EventsService;
-use Elgg\PluginHooksService;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\HandlersService;
 use Elgg\SystemMessagesService;
 use ElggSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Elgg\HandlersService;
 
 /**
  * @group HttpService
@@ -32,11 +32,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	 * @var Config2
 	 */
 	private $config;
-
-	/**
-	 * @var PluginHooksService
-	 */
-	private $hooks;
 
 	/**
 	 * @var Request
@@ -74,40 +69,31 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	private $events;
 
 	public function up() {
-		$this->session = ElggSession::getMock();
-		$this->session->start();
-
-		$this->config = _elgg_config();
+		$this->session = _elgg_services()->session;
+		$this->config = _elgg_services()->config;
 		$this->events = new EventsService(new HandlersService());
-		$this->hooks = new PluginHooksService($this->events);
 		$this->request = $this->createRequest('', 'GET');
 
-		$this->amd_config = new Config($this->hooks);
+		$this->amd_config = new Config($this->events);
 		$this->system_messages = new SystemMessagesService($this->session);
-		$this->ajax = new Service($this->hooks, $this->system_messages, $this->request, $this->amd_config);
+		$this->ajax = new Service($this->events, $this->system_messages, $this->request, $this->amd_config);
 
 		_elgg_services()->logger->disable();
-	}
-
-	public function down() {
-		_elgg_services()->logger->enable();
 	}
 
 	public function createService() {
 		$svc = _elgg_services();
 		
-		$svc->setValue('session', $this->session);
-		$svc->setValue('config', $this->config);
-		$svc->setValue('events', $this->events);
-		$svc->setValue('hooks', $this->hooks);
-		$svc->setValue('request', $this->request);
-		$svc->setValue('amd_config', $this->amd_config);
-		$svc->setValue('system_messages', $this->system_messages);
-		$svc->setValue('ajax', $this->ajax);
+		$svc->set('session', $this->session);
+		$svc->set('config', $this->config);
+		$svc->set('events', $this->events);
+		$svc->set('request', $this->request);
+		$svc->set('amd_config', $this->amd_config);
+		$svc->set('system_messages', $this->system_messages);
+		$svc->set('ajax', $this->ajax);
 
-		$transport = new \Elgg\Http\OutputBufferTransport();
-		$this->response_factory = new ResponseFactory($this->request, $this->hooks, $this->ajax, $transport, $this->events);
-		$svc->setValue('responseFactory', $this->response_factory);
+		$this->response_factory = new ResponseFactory($this->request, $this->ajax, $this->events);
+		$svc->set('responseFactory', $this->response_factory);
 		return $this->response_factory;
 	}
 

@@ -8,17 +8,18 @@ namespace CssCrush;
 
 class Options
 {
-    protected $computedOptions = array();
-    protected $inputOptions = array();
+    protected $computedOptions = [];
+    protected $inputOptions = [];
 
-    protected static $standardOptions = array(
+    protected static $standardOptions = [
         'minify' => true,
         'formatter' => null,
         'versioning' => true,
         'boilerplate' => true,
-        'vars' => array(),
+        'vars' => [],
         'cache' => true,
         'context' => null,
+        'import_path' => null,
         'output_file' => null,
         'output_dir' => null,
         'asset_dir' => null,
@@ -26,13 +27,13 @@ class Options
         'vendor_target' => 'all',
         'rewrite_import_urls' => true,
         'plugins' => null,
-        'settings' => array(),
+        'settings' => [],
         'stat_dump' => false,
         'source_map' => false,
         'newlines' => 'use-platform',
-    );
+    ];
 
-    public function __construct(array $options = array(), Options $defaults = null)
+    public function __construct(array $options = [], Options $defaults = null)
     {
         $options = array_change_key_case($options, CASE_LOWER);
 
@@ -57,14 +58,6 @@ class Options
         $this->inputOptions[$name] = $value;
 
         switch ($name) {
-
-            // Legacy option.
-            case 'debug':
-                if (! array_key_exists('minify', $this->inputOptions)) {
-                    $name = 'minify';
-                    $value = ! $value;
-                }
-                break;
 
             case 'formatter':
                 if (is_string($value) && isset(Crush::$config->formatters[$value])) {
@@ -96,7 +89,7 @@ class Options
                 if (is_string($value)) {
                     $value = Util::resolveUserPath($value, function ($path) use ($name) {
                         if (! @mkdir($path, 0755, true)) {
-                            notice("Could not create directory $path (setting `$name` option).");
+                            warning("Could not create directory $path (setting `$name` option).");
                         }
                         else {
                             debug("Created directory $path (setting `$name` option).");
@@ -111,6 +104,17 @@ class Options
             case 'doc_root':
                 if (is_string($value)) {
                     $value = Util::normalizePath(realpath($value));
+                }
+                break;
+
+            case 'import_path':
+                if ($value) {
+                    if (is_string($value)) {
+                        $value = preg_split('~\s*,\s*~', trim($value));
+                    }
+                    $value = array_filter(array_map(function ($path) {
+                        return Util::normalizePath(realpath($path));
+                    }, $value));
                 }
                 break;
 

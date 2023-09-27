@@ -17,7 +17,7 @@ return array(
 	'collection:object:thewire:all' => "모든 쪽글",
 	'collection:object:thewire:owner' => "%s의 쪽글",
 	'collection:object:thewire:friends' => "친구들의 쪽글",
-
+	
 	'thewire:replying' => "%s (@%s) 의 쪽글에 답변",
 	'thewire:thread' => "글모음",
 	'thewire:charleft' => "글자 남음",
@@ -25,8 +25,6 @@ return array(
 	'thewire:noposts' => "쪽글이 없습니다",
 
 	'thewire:by' => '%s의 쪽글',
-	'thewire:previous:help' => "지난 글 보기",
-	'thewire:hide:help' => "지난글 감추기",
 
 	'thewire:form:body:placeholder' => "무슨 일이 있나요?",
 	

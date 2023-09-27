@@ -2,8 +2,6 @@
 
 namespace Elgg\Search;
 
-use Elgg\Hook;
-
 /**
  * @internal
  * @since  3.0
@@ -13,15 +11,13 @@ class UserSearchProfileFieldsHandler {
 	/**
 	 * Search through the user profile fields
 	 *
-	 * @elgg_plugin_hook search:fields user
-	 *
-	 * @param Hook $hook Hook
+	 * @param \Elgg\Event $event 'search:fields', 'user'
 	 *
 	 * @return array
 	 */
-	public function __invoke(Hook $hook) {
+	public function __invoke(\Elgg\Event $event) {
 
-		$value = (array) $hook->getValue();
+		$value = (array) $event->getValue();
 
 		$defaults = [
 			'annotations' => [],
@@ -29,12 +25,10 @@ class UserSearchProfileFieldsHandler {
 
 		$value = array_merge($defaults, $value);
 
-		$profile_fields = array_keys((array) elgg_get_config('profile_fields'));
-		array_walk($profile_fields, function(&$value) {
-			$value = "profile:{$value}";
-		});
-
-		$value['annotations'] = array_merge($value['annotations'], $profile_fields);
+		$profile_fields = _elgg_services()->fields->get('user', 'user');
+		foreach ($profile_fields as $field) {
+			$value['annotations'][] = "profile:{$field['name']}";
+		}
 
 		return $value;
 	}

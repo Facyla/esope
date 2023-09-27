@@ -3,20 +3,23 @@
  * View a revision of page
  */
 
-$id = elgg_extract('id', $vars);
+use Elgg\Exceptions\Http\EntityNotFoundException;
+use Elgg\Exceptions\Http\EntityPermissionsException;
+
+$id = (int) elgg_extract('id', $vars);
 $annotation = elgg_get_annotation_from_id($id);
-if (!$annotation instanceof ElggAnnotation) {
-	throw new \Elgg\EntityNotFoundException();
+if (!$annotation instanceof \ElggAnnotation) {
+	throw new EntityNotFoundException();
 }
 
-$page = get_entity($annotation->entity_guid);
-if (!$page instanceof ElggPage) {
-	throw new \Elgg\EntityNotFoundException();
+$page = $annotation->getEntity();
+if (!$page instanceof \ElggPage || !$page->canEdit()) {
+	throw new EntityPermissionsException();
 }
 
 elgg_entity_gatekeeper($page->container_guid);
 
-elgg_set_page_owner_guid($page->getContainerGUID());
+elgg_set_page_owner_guid($page->container_guid);
 
 $title = "{$page->getDisplayName()}: " . elgg_echo('pages:revision');
 
@@ -30,4 +33,6 @@ echo elgg_view_page($title, [
 	'content' => elgg_view_entity($page, [
 		'revision' => $annotation,
 	]),
+	'filter_id' => 'pages/history',
+	'filter_value' => 'revision',
 ]);

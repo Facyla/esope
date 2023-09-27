@@ -41,14 +41,15 @@ $fields = [
 		'#type' => 'access',
 		'name' => 'access_id',
 		'value' => elgg_extract('access_id', $vars, ACCESS_DEFAULT),
-		'entity' => get_entity(elgg_extract('guid', $vars)),
+		'entity' => elgg_extract('entity', $vars),
 		'entity_type' => 'object',
 		'entity_subtype' => 'bookmarks',
 	],
 	[
-		'#type' => 'hidden',
-		'name' => 'container_guid',
+		'#type' => 'container_guid',
 		'value' => elgg_extract('container_guid', $vars),
+		'entity_type' => 'object',
+		'entity_subtype' => 'bookmarks',
 	],
 	[
 		'#type' => 'hidden',
@@ -63,6 +64,6 @@ foreach ($fields as $field) {
 
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('save'),
+	'text' => elgg_echo('save'),
 ]);
 elgg_set_form_footer($footer);

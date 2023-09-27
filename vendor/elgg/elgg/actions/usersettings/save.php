@@ -2,16 +2,12 @@
 /**
  * Aggregate action for saving settings
  *
- * To see the individual action methods, enable the developers plugin, visit Admin > Inspect > Plugin Hooks
- * and search for "usersettings:save". The default methods are listed below:
- *
- * @see _elgg_set_user_language
- * @see _elgg_set_user_password
- * @see _elgg_set_user_default_access
- * @see _elgg_set_user_name
- * @see _elgg_set_user_username
- * @see _elgg_set_user_email
+ * To see the individual action methods, enable the developers plugin, visit Admin > Inspect > Events
+ * and search for "usersettings:save".
  */
+
+use Elgg\Exceptions\Http\EntityNotFoundException;
+use Elgg\Exceptions\Http\EntityPermissionsException;
 
 /* @var $request \Elgg\Request */
 
@@ -23,40 +19,40 @@ if (isset($guid)) {
 }
 
 if (!$user instanceof ElggUser) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new EntityNotFoundException();
 }
 
 if (!$user->canEdit()) {
-	throw new \Elgg\EntityPermissionsException();
+	throw new EntityPermissionsException();
 }
 
-elgg_make_sticky_form('usersettings');
+elgg_make_sticky_form('usersettings', ['password', 'password2']);
 
-$hooks_params = [
+$event_params = [
 	'user' => $user,
 	'request' => $request,
 ];
 
 // callbacks should return false to indicate that the sticky form should not be cleared
-if (elgg_trigger_plugin_hook('usersettings:save', 'user', $hooks_params, true)) {
+if (elgg_trigger_event_results('usersettings:save', 'user', $event_params, true)) {
 	elgg_clear_sticky_form('usersettings');
 }
 
 foreach ($request->validation()->all() as $item) {
 	if ($item->isValid()) {
-		if ($message = $item->getMessage()) {
-			system_message($message);
+		$message = $item->getMessage();
+		if (!elgg_is_empty($message)) {
+			elgg_register_success_message($message);
 		}
 	} else {
-		if ($error = $item->getError()) {
-			register_error($error);
+		$error = $item->getError();
+		if (!elgg_is_empty($error)) {
+			elgg_register_error_message($error);
 		}
 	}
 }
 
-$data = [
+return elgg_ok_response([
 	'user' => $user,
 	'validation' => $request->validation(),
-];
-
-return elgg_ok_response($data);
+]);

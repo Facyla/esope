@@ -1,9 +1,4 @@
-define(function (require) {
-
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	require('jquery.ui.autocomplete.html');
-
+define(['jquery', 'jquery-ui/widgets/autocomplete', 'jquery.ui.autocomplete.html'], function ($) {
 	return {
 		init: function () {
 			$('.elgg-input-autocomplete').each(function () {
@@ -26,4 +21,3 @@ define(function (require) {
 		}
 	};
 });
-

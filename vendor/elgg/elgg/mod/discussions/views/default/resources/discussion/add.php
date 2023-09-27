@@ -1,20 +1,15 @@
 <?php
 
-$guid = elgg_extract('guid', $vars);
+use Elgg\Exceptions\Http\EntityPermissionsException;
 
-elgg_entity_gatekeeper($guid);
-
-$container = get_entity($guid);
-
-// Make sure user has permissions to add a topic to container
+$container = elgg_get_page_owner_entity();
 if (!$container->canWriteToContainer(0, 'object', 'discussion')) {
-	throw new \Elgg\EntityPermissionsException();
+	throw new EntityPermissionsException();
 }
 
 elgg_push_collection_breadcrumbs('object', 'discussion', $container);
 
-$body_vars = discussion_prepare_form_vars();
-
 echo elgg_view_page(elgg_echo('add:object:discussion'), [
-	'content' => elgg_view_form('discussion/save', ['prevent_double_submit' => true], $body_vars),
+	'content' => elgg_view_form('discussion/save', ['sticky_enabled' => true]),
+	'filter_id' => 'discussion/edit',
 ]);

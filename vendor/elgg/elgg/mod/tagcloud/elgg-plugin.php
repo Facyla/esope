@@ -1,6 +1,9 @@
 <?php
 
 return [
+	'plugin' => [
+		'name' => 'Tag Cloud',
+	],
 	'routes' => [
 		'tagcloud' => [
 			'path' => '/tags',
@@ -10,6 +13,14 @@ return [
 	'widgets' => [
 		'tagcloud' => [
 			'context' => ['profile', 'dashboard'],
+		],
+	],
+	'view_extensions' => [
+		'elgg.css' => [
+			'elgg/tagcloud.css' => [],
+		],
+		'theme_sandbox/components' => [
+			'tagcloud/theme_sandbox/component' => [],
 		],
 	],
 ];

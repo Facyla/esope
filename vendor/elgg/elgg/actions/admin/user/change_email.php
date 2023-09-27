@@ -4,13 +4,13 @@
  */
 
 $guid = (int) get_input('user_guid');
-$email = get_input('email');
+$email = (string) get_input('email');
 
 if (empty($guid) || empty($email)) {
 	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
-if (!is_email_address($email)) {
+if (!elgg_is_valid_email($email)) {
 	return elgg_error_response(elgg_echo('registration:emailnotvalid'));
 }
 
@@ -22,7 +22,7 @@ if (!$user instanceof ElggUser) {
 }
 
 $users = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($email) {
-	return get_user_by_email($email);
+	return elgg_get_user_by_email($email);
 });
 
 if (count($users) > 1) {

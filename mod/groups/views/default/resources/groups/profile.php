@@ -1,13 +1,9 @@
 <?php
 
-$guid = elgg_extract('guid', $vars);
-
 elgg_register_rss_link();
 
-elgg_entity_gatekeeper($guid, 'group');
-
-$group = get_entity($guid);
 /* @var $group ElggGroup */
+$group = elgg_get_page_owner_entity();
 
 elgg_push_context('group_profile');
 
@@ -26,4 +22,5 @@ echo elgg_view_page($group->getDisplayName(), [
 	'content' => elgg_view('groups/profile/layout', ['entity' => $group]),
 	'sidebar' => $sidebar,
 	'entity' => $group,
+	'filter' => false,
 ]);

@@ -18,14 +18,11 @@ return array(
 	'messages:message' => "Wiadomość",
 	'messages:title' => "Tytuł",
 	'messages:to:help' => "Wpisz nazwę adresata.",
-	'messages:inbox' => "Skrzynka odbiorcza",
 	'messages:sendmessage' => "Wyślij wiadomość",
 	'messages:add' => "Utwórz wiadomość",
 	'messages:sentmessages' => "Wysłane wiadomości",
 	'messages:toggle' => 'Przełącz wszystkie',
 	'messages:markread' => 'Oznacz jako przeczytane',
-
-	'notification:method:site' => 'Strona',
 
 	'messages:error' => 'Wystąpił problem w trakcie zapisu wiadomości. Proszę spróbować ponownie.',
 
@@ -37,28 +34,15 @@ return array(
 	*/
 
 	'messages:posted' => "Twoja wiadomość została wysłana.",
-	'messages:success:delete:single' => 'Usunięto wiadomość',
 	'messages:success:delete' => 'Usunięto wiadomości',
 	'messages:success:read' => 'Oznaczono wiadomości jako przeczytane',
 	'messages:error:messages_not_selected' => 'Nie zaznaczono wiadomości',
-	'messages:error:delete:single' => 'Nie można usunąć tej wiadomości',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Masz nową wiadomość!',
-	'messages:email:body' => "You have a new message from %s.
-
-It reads:
-
-%s
-
-To view your messages, click here:
-%s
-
-To send %s a message, click here:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +55,9 @@ To send %s a message, click here:
 	'messages:user:self' => "Nie można wysłać wiadomości do samego siebie.",
 
 	'messages:deleted_sender' => 'Usunięty użytkownik',
+	
+	/**
+	* Settings
+	*/
 
 );

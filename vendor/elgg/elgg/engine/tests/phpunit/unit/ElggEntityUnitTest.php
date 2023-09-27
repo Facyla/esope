@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\InvalidArgumentException;
+
 /**
  * This requires elgg_get_logged_in_user_guid() in session.php, the access
  * constants defined in entities.php, and elgg_normalize_url() in output.php
@@ -13,7 +15,6 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 	protected $obj;
 
 	public function up() {
-		_elgg_services()->setValue('session', \ElggSession::getMock());
 		$this->obj = $this->getMockForAbstractClass('\ElggObject');
 		$reflection = new ReflectionClass('\ElggObject');
 		$method = $reflection->getMethod('initializeAttributes');
@@ -21,10 +22,6 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 			$method->setAccessible(true);
 			$method->invokeArgs($this->obj, array());
 		}
-	}
-
-	public function down() {
-
 	}
 
 	public function testDefaultAttributes() {
@@ -40,23 +37,71 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals('yes', $this->obj->enabled);
 	}
 
-	public function testSettingAndGettingAttribute() {
-		$this->obj->subtype = 'foo';
+	/**
+	 * @dataProvider protectedAttributeProvider
+	 */
+	public function testMagicSettingAndGettingProtectedAttributeThrowsException($attribute) {
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessageMatches("/{$attribute}/");
+		$this->obj->$attribute = 'foo';
+		$this->assertNotEquals('foo', $this->obj->$attribute);
+	}
+	
+	/**
+	 * @dataProvider protectedAttributeProvider
+	 */
+	public function testUnsettingProtectedAttributeThrowsException($attribute) {
+		$this->obj->setSubtype('foo'); // needed for subtype test
+		
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessageMatches("/{$attribute}/");
+		unset($this->obj->$attribute);
+	}
+	
+	public function protectedAttributeProvider() {
+		return [
+			['subtype'],
+			['enabled'],
+		];
+	}
+	
+	public function testSetSubtypeUsingFunction() {
+		$this->obj->setSubtype('foo');
 		$this->assertEquals('foo', $this->obj->subtype);
+		$this->assertEquals('foo', $this->obj->getSubtype());
+	}
+	
+	/**
+	 * @dataProvider integerAttributeProvider
+	 */
+	public function testSettingIntegerAttributes($attribute) {
+		$this->obj->$attribute = '77';
+		$this->assertSame(77, $this->obj->$attribute);
+	}
+	
+	public function integerAttributeProvider() {
+		return [
+			['access_id'],
+			['owner_guid'],
+			['container_guid'],
+		];
 	}
 
-	public function testSettingIntegerAttributes() {
-		foreach (array('access_id', 'owner_guid', 'container_guid') as $name) {
-			$this->obj->$name = '77';
-			$this->assertSame(77, $this->obj->$name);
-		}
+	/**
+	 * @dataProvider unsettableAttributeProvider
+	 */
+	public function testSettingUnsettableAttributes($attribute) {
+		$this->obj->$attribute = 'foo';
+		$this->assertNotEquals('foo', $this->obj->$attribute);
 	}
-
-	public function testSettingUnsettableAttributes() {
-		foreach (array('guid', 'time_updated', 'last_action') as $name) {
-			$this->obj->$name = 'foo';
-			$this->assertNotEquals('foo', $this->obj->$name);
-		}
+	
+	public function unsettableAttributeProvider() {
+		return [
+			['guid'],
+			['last_action'],
+			['time_updated'],
+			['type'],
+		];
 	}
 
 	public function testSettingMetadataNoDatabase() {
@@ -79,20 +124,13 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testSimpleGetters() {
-		$this->obj->subtype = 'subtype';
 		$this->obj->owner_guid = 77;
-		$this->obj->access_id = 2;
 		$this->obj->time_created = 123456789;
 
 		$this->assertEquals($this->obj->getGUID(), $this->obj->guid);
 		$this->assertEquals($this->obj->getType(), $this->obj->type);
-
-		// Note: before save() subtype returns string, int after
-		// see https://github.com/Elgg/Elgg/issues/5920#issuecomment-25246298
 		$this->assertEquals($this->obj->getSubtype(), $this->obj->subtype);
-
 		$this->assertEquals($this->obj->getOwnerGUID(), $this->obj->owner_guid);
-		$this->assertEquals($this->obj->getAccessID(), $this->obj->access_id);
 		$this->assertEquals($this->obj->getTimeCreated(), $this->obj->time_created);
 		$this->assertEquals($this->obj->getTimeUpdated(), $this->obj->time_updated);
 	}
@@ -110,14 +148,10 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 	public function unsetSuccessfullProvider() {
 		return [
 			['access_id', 2],
-
-			['type', 'foo'],
-			['subtype', 'foo'],
-	
+			
 			['owner_guid', 1234],
 			['container_guid', 1234],
- 			['enabled', 6],
-		];
+ 		];
 	}
 
 	/**
@@ -135,6 +169,7 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 			['guid', 123456],
 			['last_action', 1234],
 			['time_updated', 1234],
+			['type', 1234],
 		];
 	}
 
@@ -170,17 +205,26 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertEquals($keys, $object_keys);
 	}
-
-	public function testLatLong() {
-
-		// Coordinates for Elgg, Switzerland
-		$lat = 47.483333;
-		$long = 8.866667;
-
+	
+	/**
+	 * @dataProvider latLongProvider
+	 */
+	public function testSetLatLong($lat, $long) {
 		$this->obj->setLatLong($lat, $long);
-
-		$this->assertEquals($this->obj->getLatitude(), $lat);
-		$this->assertEquals($this->obj->getLongitude(), $long);
+		
+		$this->assertEquals($lat, $this->obj->{"geo:lat"});
+		$this->assertEquals($long, $this->obj->{"geo:long"});
+		
+		$this->assertEquals($lat, $this->obj->getLatitude());
+		$this->assertEquals($long, $this->obj->getLongitude());
 	}
-
+	
+	public function latLongProvider() {
+		return [
+			[1, 2],
+			[1.13, 222.132],
+			[-1.13, -0.132],
+			[47.483333, 8.866667], // Coordinates for Elgg, Switzerland
+		];
+	}
 }

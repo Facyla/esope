@@ -2,6 +2,8 @@
 
 namespace Elgg;
 
+use Elgg\Traits\Cacheable;
+
 /**
  * Manages core autoloading and caching of class maps
  *
@@ -33,10 +35,17 @@ class AutoloadManager {
 	/**
 	 * Constructor
 	 *
-	 * @param \Elgg\ClassLoader $loader Class loader object
+	 * @param \Elgg\ClassLoader     $loader Class loader object
+	 * @param \Elgg\Config          $config Config
+	 * @param \Elgg\Cache\BaseCache $cache  local file cache
 	 */
-	public function __construct(\Elgg\ClassLoader $loader) {
+	public function __construct(\Elgg\ClassLoader $loader, \Elgg\Config $config, \Elgg\Cache\BaseCache $cache) {
 		$this->loader = $loader;
+		
+		if (!$config->AutoloaderManager_skip_storage) {
+			$this->setCache($cache);
+			$this->loadCache();
+		}
 	}
 
 	/**
@@ -47,6 +56,7 @@ class AutoloadManager {
 	 * rescan unless the cache is emptied.
 	 *
 	 * @param string $dir Directory of classes
+	 *
 	 * @return \Elgg\AutoloadManager
 	 */
 	public function addClasses($dir) {
@@ -56,6 +66,7 @@ class AutoloadManager {
 			$this->scannedDirs[] = $dir;
 			$this->altered = true;
 		}
+		
 		$this->loader->addFallback($dir);
 		return $this;
 	}
@@ -67,6 +78,7 @@ class AutoloadManager {
 	 * the autoloader is PSR-0 compatible.
 	 *
 	 * @param string $dir Directory of classes
+	 *
 	 * @return array
 	 */
 	protected function scanClassesDir($dir) {
@@ -92,6 +104,7 @@ class AutoloadManager {
 			$class = $file->getBasename('.php');
 			$map[$class] = $path;
 		}
+		
 		return $map;
 	}
 
@@ -141,6 +154,7 @@ class AutoloadManager {
 			$this->scannedDirs = $cache[self::KEY_SCANNED_DIRS];
 			return true;
 		}
+		
 		$this->altered = true;
 		return false;
 	}
@@ -169,10 +183,7 @@ class AutoloadManager {
 	 * @return \Elgg\AutoloadManager
 	 */
 	public function deleteCache() {
-		if ($this->cache) {
-			$this->cache->delete(self::FILENAME);
-		}
-		
+		$this->cache?->delete(self::FILENAME);
 		$this->loader->getClassMap()->setMap([])->setAltered(true);
 		$this->scannedDirs = [];
 		$this->altered = true;

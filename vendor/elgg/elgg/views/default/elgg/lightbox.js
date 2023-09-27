@@ -20,15 +20,8 @@
  * -------------------------------------
  * In a plugin, override this view and override the registration for the
  * lightbox JavaScript and CSS (@see elgg_views_boot()).
- *
- * @module elgg/lightbox
  */
-define(function (require) {
-
-	var elgg = require('elgg');
-	var $ = require('jquery');
-	require('elgg/init');
-	require('jquery.colorbox');
+define(['jquery', 'elgg', 'elgg/Ajax', 'elgg/hooks', 'jquery.colorbox'], function ($, elgg, Ajax, hooks) {
 
 	var lightbox = {
 
@@ -36,6 +29,7 @@ define(function (require) {
 		 * Returns lightbox settings
 		 *
 		 * @param {Object} opts Additional options
+		 *
 		 * @return {Object}
 		 */
 		getOptions: function (opts) {
@@ -50,12 +44,10 @@ define(function (require) {
 				// don't move colorbox on small viewports https://github.com/Elgg/Elgg/issues/5312
 				defaults.reposition = $(window).height() > 600;
 			}
-
-			elgg.provide('elgg.ui.lightbox');
 			
 			var settings = $.extend({}, defaults, opts);
 
-			return elgg.trigger_hook('getOptions', 'ui.lightbox', null, settings);
+			return hooks.trigger('getOptions', 'ui.lightbox', null, settings);
 		},
 
 		/**
@@ -64,6 +56,7 @@ define(function (require) {
 		 * @param {Object}  selector         CSS selector matching colorbox openers
 		 * @param {Object}  opts             Colorbox options. These are overridden by data-colorbox-opts options
 		 * @param {Boolean} use_element_data If set to false, selector will be bound directly as `$(selector).colorbox()`
+		 *
 		 * @return void
 		 */
 		bind: function (selector, opts, use_element_data) {
@@ -111,25 +104,9 @@ define(function (require) {
 						lightbox.open(currentOpts);
 						return;
 					}
-						
-					href = currentOpts.href;
-					currentOpts.href = false;
-					var data = currentOpts.data;
-					currentOpts.data = undefined;
 					
-					// open lightbox without a href so we get a loader
+					currentOpts.ajaxLoadWithDependencies = true;
 					lightbox.open(currentOpts);
-					
-					require(['elgg/Ajax'], function(Ajax) {
-						var ajax = new Ajax(false);
-						ajax.path(href, {data: data}).done(function(output) {
-							currentOpts.html = output;
-							lightbox.open(currentOpts);
-							
-							// clear data so next fetch will refresh contents
-							currentOpts.html = undefined;
-						});
-					});
 				});
 
 			$(window)
@@ -144,20 +121,47 @@ define(function (require) {
 		 * Open the colorbox
 		 *
 		 * @param {object} opts Colorbox options
+		 *
 		 * @return void
 		 */
 		open: function (opts) {
-			$.colorbox(lightbox.getOptions(opts));
+			var currentOpts = lightbox.getOptions(opts);
+			
+			if (!currentOpts.ajaxLoadWithDependencies) {
+				$.colorbox(currentOpts);
+				return;
+			}
+			
+			var href = currentOpts.href;
+			currentOpts.href = false;
+			var data = currentOpts.data;
+			currentOpts.data = undefined;
+			
+			// open lightbox without a href so we get a loader
+			$.colorbox(currentOpts);
+
+			var ajax = new Ajax(false);
+			ajax.path(href, {
+				data: data
+			}).done(function(output) {
+				currentOpts.html = output;
+				$.colorbox(currentOpts);
+				
+				// clear data so next fetch will refresh contents
+				currentOpts.html = undefined;
+			});
 		},
 
 		/**
 		 * Close the colorbox
+		 *
 		 * @return void
 		 */
 		close: $.colorbox.close,
 		
 		/**
 		 * Resizes the colorbox
+		 *
 		 * @return void
 		 */
 		resize: $.colorbox.resize

@@ -1,94 +1,108 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- * Copyright (c) 2015 Rob Morgan
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- * @package    Phinx
- * @subpackage Phinx\Db\Adapter
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
+
 namespace Phinx\Db\Adapter;
 
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql as MysqlDriver;
+use InvalidArgumentException;
+use PDO;
 use Phinx\Db\Table\Column;
 use Phinx\Db\Table\ForeignKey;
 use Phinx\Db\Table\Index;
 use Phinx\Db\Table\Table;
 use Phinx\Db\Util\AlterInstructions;
 use Phinx\Util\Literal;
+use RuntimeException;
 
 /**
  * Phinx MySQL Adapter.
  *
  * @author Rob Morgan <robbym@gmail.com>
  */
-class MysqlAdapter extends PdoAdapter implements AdapterInterface
+class MysqlAdapter extends PdoAdapter
 {
-    protected $signedColumnTypes = [
-        'integer' => true,
-        'biginteger' => true,
-        'float' => true,
-        'decimal' => true,
-        'double' => true,
-        'boolean' => true,
+    /**
+     * @var string[]
+     */
+    protected static $specificColumnTypes = [
+        self::PHINX_TYPE_ENUM,
+        self::PHINX_TYPE_SET,
+        self::PHINX_TYPE_YEAR,
+        self::PHINX_TYPE_JSON,
+        self::PHINX_TYPE_BINARYUUID,
+        self::PHINX_TYPE_TINYBLOB,
+        self::PHINX_TYPE_MEDIUMBLOB,
+        self::PHINX_TYPE_LONGBLOB,
+        self::PHINX_TYPE_MEDIUM_INTEGER,
     ];
 
-    const TEXT_TINY = 255;
-    const TEXT_SMALL = 255; /* deprecated, alias of TEXT_TINY */
-    const TEXT_REGULAR = 65535;
-    const TEXT_MEDIUM = 16777215;
-    const TEXT_LONG = 4294967295;
+    /**
+     * @var bool[]
+     */
+    protected $signedColumnTypes = [
+        self::PHINX_TYPE_INTEGER => true,
+        self::PHINX_TYPE_TINY_INTEGER => true,
+        self::PHINX_TYPE_SMALL_INTEGER => true,
+        self::PHINX_TYPE_MEDIUM_INTEGER => true,
+        self::PHINX_TYPE_BIG_INTEGER => true,
+        self::PHINX_TYPE_FLOAT => true,
+        self::PHINX_TYPE_DECIMAL => true,
+        self::PHINX_TYPE_DOUBLE => true,
+        self::PHINX_TYPE_BOOLEAN => true,
+    ];
+
+    public const TEXT_TINY = 255;
+    public const TEXT_SMALL = 255; /* deprecated, alias of TEXT_TINY */
+    public const TEXT_REGULAR = 65535;
+    public const TEXT_MEDIUM = 16777215;
+    public const TEXT_LONG = 4294967295;
 
     // According to https://dev.mysql.com/doc/refman/5.0/en/blob.html BLOB sizes are the same as TEXT
-    const BLOB_TINY = 255;
-    const BLOB_SMALL = 255; /* deprecated, alias of BLOB_TINY */
-    const BLOB_REGULAR = 65535;
-    const BLOB_MEDIUM = 16777215;
-    const BLOB_LONG = 4294967295;
+    public const BLOB_TINY = 255;
+    public const BLOB_SMALL = 255; /* deprecated, alias of BLOB_TINY */
+    public const BLOB_REGULAR = 65535;
+    public const BLOB_MEDIUM = 16777215;
+    public const BLOB_LONG = 4294967295;
 
-    const INT_TINY = 255;
-    const INT_SMALL = 65535;
-    const INT_MEDIUM = 16777215;
-    const INT_REGULAR = 4294967295;
-    const INT_BIG = 18446744073709551615;
+    public const INT_TINY = 255;
+    public const INT_SMALL = 65535;
+    public const INT_MEDIUM = 16777215;
+    public const INT_REGULAR = 4294967295;
+    public const INT_BIG = 18446744073709551615;
 
-    const BIT = 64;
+    public const INT_DISPLAY_TINY = 4;
+    public const INT_DISPLAY_SMALL = 6;
+    public const INT_DISPLAY_MEDIUM = 8;
+    public const INT_DISPLAY_REGULAR = 11;
+    public const INT_DISPLAY_BIG = 20;
 
-    const TYPE_YEAR = 'year';
+    public const BIT = 64;
+
+    public const TYPE_YEAR = 'year';
+
+    public const FIRST = 'FIRST';
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     * @return void
      */
     public function connect()
     {
         if ($this->connection === null) {
-            if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers(), true)) {
+            if (!class_exists('PDO') || !in_array('mysql', PDO::getAvailableDrivers(), true)) {
                 // @codeCoverageIgnoreStart
-                throw new \RuntimeException('You need to enable the PDO_Mysql extension for Phinx to run properly.');
+                throw new RuntimeException('You need to enable the PDO_Mysql extension for Phinx to run properly.');
                 // @codeCoverageIgnoreEnd
             }
 
-            $db = null;
             $options = $this->getOptions();
 
             $dsn = 'mysql:';
@@ -111,31 +125,38 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                 $dsn .= ';charset=' . $options['charset'];
             }
 
-            $driverOptions = [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION];
+            $driverOptions = [];
+
+            // use custom data fetch mode
+            if (!empty($options['fetch_mode'])) {
+                $driverOptions[PDO::ATTR_DEFAULT_FETCH_MODE] = constant('\PDO::FETCH_' . strtoupper($options['fetch_mode']));
+            }
+
+            // pass \PDO::ATTR_PERSISTENT to driver options instead of useless setting it after instantiation
+            if (isset($options['attr_persistent'])) {
+                $driverOptions[PDO::ATTR_PERSISTENT] = $options['attr_persistent'];
+            }
 
             // support arbitrary \PDO::MYSQL_ATTR_* driver options and pass them to PDO
             // http://php.net/manual/en/ref.pdo-mysql.php#pdo-mysql.constants
             foreach ($options as $key => $option) {
                 if (strpos($key, 'mysql_attr_') === 0) {
-                    $driverOptions[constant('\PDO::' . strtoupper($key))] = $option;
+                    $pdoConstant = '\PDO::' . strtoupper($key);
+                    if (!defined($pdoConstant)) {
+                        throw new \UnexpectedValueException('Invalid PDO attribute: ' . $key . ' (' . $pdoConstant . ')');
+                    }
+                    $driverOptions[constant($pdoConstant)] = $option;
                 }
             }
 
-            try {
-                $db = new \PDO($dsn, $options['user'], $options['pass'], $driverOptions);
-            } catch (\PDOException $exception) {
-                throw new \InvalidArgumentException(sprintf(
-                    'There was a problem connecting to the database: %s',
-                    $exception->getMessage()
-                ));
-            }
+            $db = $this->createPdoConnection($dsn, $options['user'] ?? null, $options['pass'] ?? null, $driverOptions);
 
             $this->setConnection($db);
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function disconnect()
     {
@@ -143,7 +164,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasTransactions()
     {
@@ -151,7 +172,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function beginTransaction()
     {
@@ -159,7 +180,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function commitTransaction()
     {
@@ -167,7 +188,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function rollbackTransaction()
     {
@@ -175,7 +196,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function quoteTableName($tableName)
     {
@@ -183,7 +204,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function quoteColumnName($columnName)
     {
@@ -191,7 +212,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasTable($tableName)
     {
@@ -199,28 +220,47 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             return true;
         }
 
+        if (strpos($tableName, '.') !== false) {
+            [$schema, $table] = explode('.', $tableName);
+            $exists = $this->hasTableWithSchema($schema, $table);
+            // Only break here on success, because it is possible for table names to contain a dot.
+            if ($exists) {
+                return true;
+            }
+        }
+
         $options = $this->getOptions();
 
-        $exists = $this->fetchRow(sprintf(
-            "SELECT TABLE_NAME
-            FROM INFORMATION_SCHEMA.TABLES
-            WHERE TABLE_SCHEMA = '%s' AND TABLE_NAME = '%s'",
-            $options['name'],
-            $tableName
-        ));
-
-        return !empty($exists);
+        return $this->hasTableWithSchema($options['name'], $tableName);
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $schema The table schema
+     * @param string $tableName The table name
+     * @return bool
+     */
+    protected function hasTableWithSchema($schema, $tableName)
+    {
+        $result = $this->fetchRow(sprintf(
+            "SELECT TABLE_NAME
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA = '%s' AND TABLE_NAME = '%s'",
+            $schema,
+            $tableName
+        ));
+
+        return !empty($result);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function createTable(Table $table, array $columns = [], array $indexes = [])
     {
         // This method is based on the MySQL docs here: http://dev.mysql.com/doc/refman/5.1/en/create-index.html
         $defaultOptions = [
             'engine' => 'InnoDB',
-            'collation' => 'utf8_general_ci'
+            'collation' => 'utf8_general_ci',
         ];
 
         $options = array_merge(
@@ -239,14 +279,21 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             $column = new Column();
             $column->setName($options['id'])
                    ->setType('integer')
-                   ->setSigned(isset($options['signed']) ? $options['signed'] : true)
+                   ->setSigned($options['signed'] ?? true)
                    ->setIdentity(true);
 
+            if (isset($options['limit'])) {
+                $column->setLimit($options['limit']);
+            }
+
             array_unshift($columns, $column);
+            if (isset($options['primary_key']) && (array)$options['id'] !== (array)$options['primary_key']) {
+                throw new InvalidArgumentException('You cannot enable an auto incrementing ID field and a primary key');
+            }
             $options['primary_key'] = $options['id'];
         }
 
-        // TODO - process table options like collation etc
+        // open: process table options like collation etc
 
         // process table engine (default to InnoDB)
         $optionsStr = 'ENGINE = InnoDB';
@@ -263,12 +310,12 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
 
         // set the table comment
         if (isset($options['comment'])) {
-            $optionsStr .= sprintf(" COMMENT=%s ", $this->getConnection()->quote($options['comment']));
+            $optionsStr .= sprintf(' COMMENT=%s ', $this->getConnection()->quote($options['comment']));
         }
 
         // set the table row format
         if (isset($options['row_format'])) {
-            $optionsStr .= sprintf(" ROW_FORMAT=%s ", $options['row_format']);
+            $optionsStr .= sprintf(' ROW_FORMAT=%s ', $options['row_format']);
         }
 
         $sql = 'CREATE TABLE ';
@@ -306,7 +353,9 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException
      */
     protected function getChangePrimaryKeyInstructions(Table $table, $newColumns)
     {
@@ -326,8 +375,8 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             } elseif (is_array($newColumns)) { // handle primary_key => array('tag_id', 'resource_id')
                 $sql .= implode(',', array_map([$this, 'quoteColumnName'], $newColumns));
             } else {
-                throw new \InvalidArgumentException(sprintf(
-                    "Invalid value for primary key: %s",
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid value for primary key: %s',
                     json_encode($newColumns)
                 ));
             }
@@ -339,24 +388,22 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getChangeCommentInstructions(Table $table, $newComment)
     {
         $instructions = new AlterInstructions();
 
         // passing 'null' is to remove table comment
-        $newComment = ($newComment !== null)
-            ? $newComment
-            : '';
-        $sql = sprintf(" COMMENT=%s ", $this->getConnection()->quote($newComment));
+        $newComment = $newComment ?? '';
+        $sql = sprintf(' COMMENT=%s ', $this->getConnection()->quote($newComment));
         $instructions->addAlter($sql);
 
         return $instructions;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getRenameTableInstructions($tableName, $newTableName)
     {
@@ -371,7 +418,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getDropTableInstructions($tableName)
     {
@@ -382,7 +429,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function truncateTable($tableName)
     {
@@ -395,7 +442,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getColumns($tableName)
     {
@@ -407,7 +454,6 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             $column = new Column();
             $column->setName($columnInfo['Field'])
                    ->setNull($columnInfo['Null'] !== 'NO')
-                   ->setDefault($columnInfo['Default'])
                    ->setType($phinxType['name'])
                    ->setSigned(strpos($columnInfo['Type'], 'unsigned') === false)
                    ->setLimit($phinxType['limit'])
@@ -421,6 +467,25 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                 $column->setValues($phinxType['values']);
             }
 
+            $default = $columnInfo['Default'];
+            if (
+                is_string($default) &&
+                in_array(
+                    $column->getType(),
+                    array_merge(
+                        static::PHINX_TYPES_GEOSPATIAL,
+                        [static::PHINX_TYPE_BLOB, static::PHINX_TYPE_JSON, static::PHINX_TYPE_TEXT]
+                    )
+                )
+            ) {
+                // The default that comes back from MySQL for these types prefixes the collation type and
+                // surrounds the value with escaped single quotes, for example "_utf8mbf4\'abc\'", and so
+                // this converts that then down to the default value of "abc" to correspond to what the user
+                // would have specified in a migration.
+                $default = preg_replace("/^_(?:[a-zA-Z0-9]+?)\\\'(.*)\\\'$/", '\1', $default);
+            }
+            $column->setDefault($default);
+
             $columns[] = $column;
         }
 
@@ -428,7 +493,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasColumn($tableName, $columnName)
     {
@@ -443,7 +508,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getAddColumnInstructions(Table $table, Column $column)
     {
@@ -453,15 +518,35 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             $this->getColumnSqlDefinition($column)
         );
 
-        if ($column->getAfter()) {
-            $alter .= ' AFTER ' . $this->quoteColumnName($column->getAfter());
-        }
+        $alter .= $this->afterClause($column);
 
         return new AlterInstructions([$alter]);
     }
 
     /**
-     * {@inheritdoc}
+     * Exposes the MySQL syntax to arrange a column `FIRST`.
+     *
+     * @param \Phinx\Db\Table\Column $column The column being altered.
+     * @return string The appropriate SQL fragment.
+     */
+    protected function afterClause(Column $column)
+    {
+        $after = $column->getAfter();
+        if (empty($after)) {
+            return '';
+        }
+
+        if ($after === self::FIRST) {
+            return ' FIRST';
+        }
+
+        return ' AFTER ' . $this->quoteColumnName($after);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException
      */
     protected function getRenameColumnInstructions($tableName, $columnName, $newColumnName)
     {
@@ -469,10 +554,10 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
 
         foreach ($rows as $row) {
             if (strcasecmp($row['Field'], $columnName) === 0) {
-                $null = ($row['Null'] == 'NO') ? 'NOT NULL' : 'NULL';
+                $null = $row['Null'] === 'NO' ? 'NOT NULL' : 'NULL';
                 $comment = isset($row['Comment']) ? ' COMMENT ' . '\'' . addslashes($row['Comment']) . '\'' : '';
                 $extra = ' ' . strtoupper($row['Extra']);
-                if (!is_null($row['Default'])) {
+                if (($row['Default'] !== null)) {
                     $extra .= $this->getDefaultValueDefinition($row['Default']);
                 }
                 $definition = $row['Type'] . ' ' . $null . $extra . $comment;
@@ -488,31 +573,30 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             }
         }
 
-        throw new \InvalidArgumentException(sprintf(
-            'The specified column doesn\'t exist: ' .
+        throw new InvalidArgumentException(sprintf(
+            "The specified column doesn't exist: " .
             $columnName
         ));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getChangeColumnInstructions($tableName, $columnName, Column $newColumn)
     {
-        $after = $newColumn->getAfter() ? ' AFTER ' . $this->quoteColumnName($newColumn->getAfter()) : '';
         $alter = sprintf(
             'CHANGE %s %s %s%s',
             $this->quoteColumnName($columnName),
             $this->quoteColumnName($newColumn->getName()),
             $this->getColumnSqlDefinition($newColumn),
-            $after
+            $this->afterClause($newColumn)
         );
 
         return new AlterInstructions([$alter]);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getDropColumnInstructions($tableName, $columnName)
     {
@@ -524,7 +608,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     /**
      * Get an array of indexes from a particular table.
      *
-     * @param string $tableName Table Name
+     * @param string $tableName Table name
      * @return array
      */
     protected function getIndexes($tableName)
@@ -542,7 +626,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasIndex($tableName, $columns)
     {
@@ -563,7 +647,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasIndexByName($tableName, $indexName)
     {
@@ -579,13 +663,13 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getAddIndexInstructions(Table $table, Index $index)
     {
         $instructions = new AlterInstructions();
 
-        if ($index->getType() == Index::FULLTEXT) {
+        if ($index->getType() === Index::FULLTEXT) {
             // Must be executed separately
             // SQLSTATE[HY000]: General error: 1795 InnoDB presently supports one FULLTEXT index creation at a time
             $alter = sprintf(
@@ -608,7 +692,9 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException
      */
     protected function getDropIndexByColumnsInstructions($tableName, $columns)
     {
@@ -628,18 +714,19 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             }
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             "The specified index on columns '%s' does not exist",
             implode(',', $columns)
         ));
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException
      */
     protected function getDropIndexByNameInstructions($tableName, $indexName)
     {
-
         $indexes = $this->getIndexes($tableName);
 
         foreach ($indexes as $name => $index) {
@@ -651,14 +738,14 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             }
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             "The specified index name '%s' does not exist",
             $indexName
         ));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasPrimaryKey($tableName, $columns, $constraint = null)
     {
@@ -669,7 +756,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         }
 
         if ($constraint) {
-            return ($primaryKey['constraint'] === $constraint);
+            return $primaryKey['constraint'] === $constraint;
         } else {
             if (is_string($columns)) {
                 $columns = [$columns]; // str to array
@@ -683,20 +770,23 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     /**
      * Get the primary key from a particular table.
      *
-     * @param string $tableName Table Name
+     * @param string $tableName Table name
      * @return array
      */
     public function getPrimaryKey($tableName)
     {
+        $options = $this->getOptions();
         $rows = $this->fetchAll(sprintf(
             "SELECT
-                k.constraint_name,
-                k.column_name
-            FROM information_schema.table_constraints t
-            JOIN information_schema.key_column_usage k
-                USING(constraint_name,table_name)
-            WHERE t.constraint_type='PRIMARY KEY'
-                AND t.table_name='%s'",
+                k.CONSTRAINT_NAME,
+                k.COLUMN_NAME
+            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS t
+            JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE k
+                USING(CONSTRAINT_NAME,TABLE_SCHEMA,TABLE_NAME)
+            WHERE t.CONSTRAINT_TYPE='PRIMARY KEY'
+                AND t.TABLE_SCHEMA='%s'
+                AND t.TABLE_NAME='%s'",
+            $options['name'],
             $tableName
         ));
 
@@ -704,15 +794,15 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             'columns' => [],
         ];
         foreach ($rows as $row) {
-            $primaryKey['constraint'] = $row['constraint_name'];
-            $primaryKey['columns'][] = $row['column_name'];
+            $primaryKey['constraint'] = $row['CONSTRAINT_NAME'];
+            $primaryKey['columns'][] = $row['COLUMN_NAME'];
         }
 
         return $primaryKey;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasForeignKey($tableName, $columns, $constraint = null)
     {
@@ -726,38 +816,43 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             }
 
             return false;
-        } else {
-            foreach ($foreignKeys as $key) {
-                if ($columns == $key['columns']) {
-                    return true;
-                }
-            }
-
-            return false;
         }
+
+        foreach ($foreignKeys as $key) {
+            if ($columns == $key['columns']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      * Get an array of foreign keys from a particular table.
      *
-     * @param string $tableName Table Name
+     * @param string $tableName Table name
      * @return array
      */
     protected function getForeignKeys($tableName)
     {
+        if (strpos($tableName, '.') !== false) {
+            [$schema, $tableName] = explode('.', $tableName);
+        }
+
         $foreignKeys = [];
         $rows = $this->fetchAll(sprintf(
             "SELECT
               CONSTRAINT_NAME,
-              TABLE_NAME,
+              CONCAT(TABLE_SCHEMA, '.', TABLE_NAME) AS TABLE_NAME,
               COLUMN_NAME,
-              REFERENCED_TABLE_NAME,
+              CONCAT(REFERENCED_TABLE_SCHEMA, '.', REFERENCED_TABLE_NAME) AS REFERENCED_TABLE_NAME,
               REFERENCED_COLUMN_NAME
             FROM information_schema.KEY_COLUMN_USAGE
-            WHERE REFERENCED_TABLE_SCHEMA = DATABASE()
-              AND REFERENCED_TABLE_NAME IS NOT NULL
+            WHERE REFERENCED_TABLE_NAME IS NOT NULL
+              AND TABLE_SCHEMA = %s
               AND TABLE_NAME = '%s'
             ORDER BY POSITION_IN_UNIQUE_CONSTRAINT",
+            empty($schema) ? 'DATABASE()' : "'$schema'",
             $tableName
         ));
         foreach ($rows as $row) {
@@ -771,7 +866,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getAddForeignKeyInstructions(Table $table, ForeignKey $foreignKey)
     {
@@ -784,7 +879,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function getDropForeignKeyInstructions($tableName, $constraint)
     {
@@ -797,7 +892,9 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException
      */
     protected function getDropForeignKeyByColumnsInstructions($tableName, $columns)
     {
@@ -823,7 +920,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         }
 
         if (empty($instructions->getAlterParts())) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 "Not foreign key on columns '%s' exist",
                 implode(',', $columns)
             ));
@@ -833,7 +930,9 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \Phinx\Db\Adapter\UnsupportedColumnTypeException
      */
     public function getSqlType($type, $limit = null)
     {
@@ -877,30 +976,83 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
 
                 return ['name' => 'text'];
             case static::PHINX_TYPE_BINARY:
-                return ['name' => 'binary', 'limit' => $limit ?: 255];
+                if ($limit === null) {
+                    $limit = 255;
+                }
+
+                if ($limit > 255) {
+                    return $this->getSqlType(static::PHINX_TYPE_BLOB, $limit);
+                }
+
+                return ['name' => 'binary', 'limit' => $limit];
+            case static::PHINX_TYPE_BINARYUUID:
+                return ['name' => 'binary', 'limit' => 16];
             case static::PHINX_TYPE_VARBINARY:
-                return ['name' => 'varbinary', 'limit' => $limit ?: 255];
+                if ($limit === null) {
+                    $limit = 255;
+                }
+
+                if ($limit > 255) {
+                    return $this->getSqlType(static::PHINX_TYPE_BLOB, $limit);
+                }
+
+                return ['name' => 'varbinary', 'limit' => $limit];
             case static::PHINX_TYPE_BLOB:
-                if ($limit) {
+                if ($limit !== null) {
+                    // Rework this part as the choosen types were always UNDER the required length
                     $sizes = [
-                        // Order matters! Size must always be tested from longest to shortest!
-                        'longblob' => static::BLOB_LONG,
-                        'mediumblob' => static::BLOB_MEDIUM,
-                        'blob' => static::BLOB_REGULAR,
                         'tinyblob' => static::BLOB_SMALL,
+                        'blob' => static::BLOB_REGULAR,
+                        'mediumblob' => static::BLOB_MEDIUM,
                     ];
+
                     foreach ($sizes as $name => $length) {
-                        if ($limit >= $length) {
+                        if ($limit <= $length) {
                             return ['name' => $name];
                         }
                     }
+
+                    // For more length requirement, the longblob is used
+                    return ['name' => 'longblob'];
                 }
 
+                // If not limit is provided, fallback on blob
                 return ['name' => 'blob'];
+            case static::PHINX_TYPE_TINYBLOB:
+                // Automatically reprocess blob type to ensure that correct blob subtype is selected given provided limit
+                return $this->getSqlType(static::PHINX_TYPE_BLOB, $limit ?: static::BLOB_TINY);
+            case static::PHINX_TYPE_MEDIUMBLOB:
+                // Automatically reprocess blob type to ensure that correct blob subtype is selected given provided limit
+                return $this->getSqlType(static::PHINX_TYPE_BLOB, $limit ?: static::BLOB_MEDIUM);
+            case static::PHINX_TYPE_LONGBLOB:
+                // Automatically reprocess blob type to ensure that correct blob subtype is selected given provided limit
+                return $this->getSqlType(static::PHINX_TYPE_BLOB, $limit ?: static::BLOB_LONG);
             case static::PHINX_TYPE_BIT:
                 return ['name' => 'bit', 'limit' => $limit ?: 64];
+            case static::PHINX_TYPE_BIG_INTEGER:
+                if ($limit === static::INT_BIG) {
+                    $limit = static::INT_DISPLAY_BIG;
+                }
+
+                return ['name' => 'bigint', 'limit' => $limit ?: 20];
+            case static::PHINX_TYPE_MEDIUM_INTEGER:
+                if ($limit === static::INT_MEDIUM) {
+                    $limit = static::INT_DISPLAY_MEDIUM;
+                }
+
+                return ['name' => 'mediumint', 'limit' => $limit ?: 8];
             case static::PHINX_TYPE_SMALL_INTEGER:
+                if ($limit === static::INT_SMALL) {
+                    $limit = static::INT_DISPLAY_SMALL;
+                }
+
                 return ['name' => 'smallint', 'limit' => $limit ?: 6];
+            case static::PHINX_TYPE_TINY_INTEGER:
+                if ($limit === static::INT_TINY) {
+                    $limit = static::INT_DISPLAY_TINY;
+                }
+
+                return ['name' => 'tinyint', 'limit' => $limit ?: 4];
             case static::PHINX_TYPE_INTEGER:
                 if ($limit && $limit >= static::INT_TINY) {
                     $sizes = [
@@ -912,9 +1064,11 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                         'tinyint' => static::INT_TINY,
                     ];
                     $limits = [
-                        'smallint' => 6,
-                        'int' => 11,
-                        'bigint' => 20,
+                        'tinyint' => static::INT_DISPLAY_TINY,
+                        'smallint' => static::INT_DISPLAY_SMALL,
+                        'mediumint' => static::INT_DISPLAY_MEDIUM,
+                        'int' => static::INT_DISPLAY_REGULAR,
+                        'bigint' => static::INT_DISPLAY_BIG,
                     ];
                     foreach ($sizes as $name => $length) {
                         if ($limit >= $length) {
@@ -927,17 +1081,15 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
                         }
                     }
                 } elseif (!$limit) {
-                    $limit = 11;
+                    $limit = static::INT_DISPLAY_REGULAR;
                 }
 
                 return ['name' => 'int', 'limit' => $limit];
-            case static::PHINX_TYPE_BIG_INTEGER:
-                return ['name' => 'bigint', 'limit' => 20];
             case static::PHINX_TYPE_BOOLEAN:
                 return ['name' => 'tinyint', 'limit' => 1];
             case static::PHINX_TYPE_UUID:
                 return ['name' => 'char', 'limit' => 36];
-            case static::TYPE_YEAR:
+            case static::PHINX_TYPE_YEAR:
                 if (!$limit || in_array($limit, [2, 4])) {
                     $limit = 4;
                 }
@@ -951,9 +1103,9 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     /**
      * Returns Phinx type by SQL type
      *
-     * @param string $sqlTypeDef
-     * @throws UnsupportedColumnTypeException
      * @internal param string $sqlType SQL type
+     * @param string $sqlTypeDef SQL Type definition
+     * @throws \Phinx\Db\Adapter\UnsupportedColumnTypeException
      * @return array Phinx type
      */
     public function getPhinxType($sqlTypeDef)
@@ -961,132 +1113,187 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         $matches = [];
         if (!preg_match('/^([\w]+)(\(([\d]+)*(,([\d]+))*\))*(.+)*$/', $sqlTypeDef, $matches)) {
             throw new UnsupportedColumnTypeException('Column type "' . $sqlTypeDef . '" is not supported by MySQL.');
-        } else {
-            $limit = null;
-            $scale = null;
-            $type = $matches[1];
-            if (count($matches) > 2) {
-                $limit = $matches[3] ? (int)$matches[3] : null;
-            }
-            if (count($matches) > 4) {
-                $scale = (int)$matches[5];
-            }
-            if ($type === 'tinyint' && $limit === 1) {
-                $type = static::PHINX_TYPE_BOOLEAN;
-                $limit = null;
-            }
-            switch ($type) {
-                case 'varchar':
-                    $type = static::PHINX_TYPE_STRING;
-                    if ($limit === 255) {
-                        $limit = null;
-                    }
-                    break;
-                case 'char':
-                    $type = static::PHINX_TYPE_CHAR;
-                    if ($limit === 255) {
-                        $limit = null;
-                    }
-                    if ($limit === 36) {
-                        $type = static::PHINX_TYPE_UUID;
-                    }
-                    break;
-                case 'tinyint':
-                    $type = static::PHINX_TYPE_INTEGER;
-                    $limit = static::INT_TINY;
-                    break;
-                case 'smallint':
-                    $type = static::PHINX_TYPE_SMALL_INTEGER;
-                    $limit = static::INT_SMALL;
-                    break;
-                case 'mediumint':
-                    $type = static::PHINX_TYPE_INTEGER;
-                    $limit = static::INT_MEDIUM;
-                    break;
-                case 'int':
-                    $type = static::PHINX_TYPE_INTEGER;
-                    if ($limit === 11) {
-                        $limit = null;
-                    }
-                    break;
-                case 'bigint':
-                    if ($limit === 20) {
-                        $limit = null;
-                    }
-                    $type = static::PHINX_TYPE_BIG_INTEGER;
-                    break;
-                case 'bit':
-                    $type = static::PHINX_TYPE_BIT;
-                    if ($limit === 64) {
-                        $limit = null;
-                    }
-                    break;
-                case 'blob':
-                    $type = static::PHINX_TYPE_BINARY;
-                    break;
-                case 'tinyblob':
-                    $type = static::PHINX_TYPE_BINARY;
-                    $limit = static::BLOB_TINY;
-                    break;
-                case 'mediumblob':
-                    $type = static::PHINX_TYPE_BINARY;
-                    $limit = static::BLOB_MEDIUM;
-                    break;
-                case 'longblob':
-                    $type = static::PHINX_TYPE_BINARY;
-                    $limit = static::BLOB_LONG;
-                    break;
-                case 'tinytext':
-                    $type = static::PHINX_TYPE_TEXT;
-                    $limit = static::TEXT_TINY;
-                    break;
-                case 'mediumtext':
-                    $type = static::PHINX_TYPE_TEXT;
-                    $limit = static::TEXT_MEDIUM;
-                    break;
-                case 'longtext':
-                    $type = static::PHINX_TYPE_TEXT;
-                    $limit = static::TEXT_LONG;
-                    break;
-            }
-
-            try {
-                // Call this to check if parsed type is supported.
-                $this->getSqlType($type, $limit);
-            } catch (UnsupportedColumnTypeException $e) {
-                $type = Literal::from($type);
-            }
-
-            $phinxType = [
-                'name' => $type,
-                'limit' => $limit,
-                'scale' => $scale
-            ];
-
-            if (static::PHINX_TYPE_ENUM == $type || static::PHINX_TYPE_SET == $type) {
-                $phinxType['values'] = explode("','", trim($matches[6], "()'"));
-            }
-
-            return $phinxType;
         }
+
+        $limit = null;
+        $scale = null;
+        $type = $matches[1];
+        if (count($matches) > 2) {
+            $limit = $matches[3] ? (int)$matches[3] : null;
+        }
+        if (count($matches) > 4) {
+            $scale = (int)$matches[5];
+        }
+        if ($type === 'tinyint' && $limit === 1) {
+            $type = static::PHINX_TYPE_BOOLEAN;
+            $limit = null;
+        }
+        switch ($type) {
+            case 'varchar':
+                $type = static::PHINX_TYPE_STRING;
+                if ($limit === 255) {
+                    $limit = null;
+                }
+                break;
+            case 'char':
+                $type = static::PHINX_TYPE_CHAR;
+                if ($limit === 255) {
+                    $limit = null;
+                }
+                if ($limit === 36) {
+                    $type = static::PHINX_TYPE_UUID;
+                }
+                break;
+            case 'tinyint':
+                $type = static::PHINX_TYPE_TINY_INTEGER;
+                break;
+            case 'smallint':
+                $type = static::PHINX_TYPE_SMALL_INTEGER;
+                break;
+            case 'mediumint':
+                $type = static::PHINX_TYPE_MEDIUM_INTEGER;
+                break;
+            case 'int':
+                $type = static::PHINX_TYPE_INTEGER;
+                break;
+            case 'bigint':
+                $type = static::PHINX_TYPE_BIG_INTEGER;
+                break;
+            case 'bit':
+                $type = static::PHINX_TYPE_BIT;
+                if ($limit === 64) {
+                    $limit = null;
+                }
+                break;
+            case 'blob':
+                $type = static::PHINX_TYPE_BLOB;
+                $limit = static::BLOB_REGULAR;
+                break;
+            case 'tinyblob':
+                $type = static::PHINX_TYPE_TINYBLOB;
+                $limit = static::BLOB_TINY;
+                break;
+            case 'mediumblob':
+                $type = static::PHINX_TYPE_MEDIUMBLOB;
+                $limit = static::BLOB_MEDIUM;
+                break;
+            case 'longblob':
+                $type = static::PHINX_TYPE_LONGBLOB;
+                $limit = static::BLOB_LONG;
+                break;
+            case 'tinytext':
+                $type = static::PHINX_TYPE_TEXT;
+                $limit = static::TEXT_TINY;
+                break;
+            case 'mediumtext':
+                $type = static::PHINX_TYPE_TEXT;
+                $limit = static::TEXT_MEDIUM;
+                break;
+            case 'longtext':
+                $type = static::PHINX_TYPE_TEXT;
+                $limit = static::TEXT_LONG;
+                break;
+            case 'binary':
+                if ($limit === null) {
+                    $limit = 255;
+                }
+
+                if ($limit > 255) {
+                    $type = static::PHINX_TYPE_BLOB;
+                    break;
+                }
+
+                if ($limit === 16) {
+                    $type = static::PHINX_TYPE_BINARYUUID;
+                }
+                break;
+        }
+
+        try {
+            // Call this to check if parsed type is supported.
+            $this->getSqlType($type, $limit);
+        } catch (UnsupportedColumnTypeException $e) {
+            $type = Literal::from($type);
+        }
+
+        $phinxType = [
+            'name' => $type,
+            'limit' => $limit,
+            'scale' => $scale,
+        ];
+
+        if ($type === static::PHINX_TYPE_ENUM || $type === static::PHINX_TYPE_SET) {
+            $values = trim($matches[6], '()');
+            $phinxType['values'] = [];
+            $opened = false;
+            $escaped = false;
+            $wasEscaped = false;
+            $value = '';
+            $valuesLength = strlen($values);
+            for ($i = 0; $i < $valuesLength; $i++) {
+                $char = $values[$i];
+                if ($char === "'" && !$opened) {
+                    $opened = true;
+                } elseif (
+                    !$escaped
+                    && ($i + 1) < $valuesLength
+                    && (
+                        $char === "'" && $values[$i + 1] === "'"
+                        || $char === '\\' && $values[$i + 1] === '\\'
+                    )
+                ) {
+                    $escaped = true;
+                } elseif ($char === "'" && $opened && !$escaped) {
+                    $phinxType['values'][] = $value;
+                    $value = '';
+                    $opened = false;
+                } elseif (($char === "'" || $char === '\\') && $opened && $escaped) {
+                    $value .= $char;
+                    $escaped = false;
+                    $wasEscaped = true;
+                } elseif ($opened) {
+                    if ($values[$i - 1] === '\\' && !$wasEscaped) {
+                        if ($char === 'n') {
+                            $char = "\n";
+                        } elseif ($char === 'r') {
+                            $char = "\r";
+                        } elseif ($char === 't') {
+                            $char = "\t";
+                        }
+                        if ($values[$i] !== $char) {
+                            $value = substr($value, 0, strlen($value) - 1);
+                        }
+                    }
+                    $value .= $char;
+                    $wasEscaped = false;
+                }
+            }
+        }
+
+        return $phinxType;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function createDatabase($name, $options = [])
     {
-        $charset = isset($options['charset']) ? $options['charset'] : 'utf8';
+        $charset = $options['charset'] ?? 'utf8';
 
         if (isset($options['collation'])) {
-            $this->execute(sprintf('CREATE DATABASE `%s` DEFAULT CHARACTER SET `%s` COLLATE `%s`', $name, $charset, $options['collation']));
+            $this->execute(sprintf(
+                'CREATE DATABASE `%s` DEFAULT CHARACTER SET `%s` COLLATE `%s`',
+                $name,
+                $charset,
+                $options['collation']
+            ));
         } else {
             $this->execute(sprintf('CREATE DATABASE `%s` DEFAULT CHARACTER SET `%s`', $name, $charset));
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasDatabase($name)
     {
@@ -1107,11 +1314,12 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function dropDatabase($name)
     {
         $this->execute(sprintf('DROP DATABASE IF EXISTS `%s`', $name));
+        $this->createdTables = [];
     }
 
     /**
@@ -1133,15 +1341,48 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         } elseif (isset($sqlType['limit'])) {
             $def .= '(' . $sqlType['limit'] . ')';
         }
-        if (($values = $column->getValues()) && is_array($values)) {
-            $def .= "('" . implode("', '", $values) . "')";
+
+        $values = $column->getValues();
+        if ($values && is_array($values)) {
+            $def .= '(' . implode(', ', array_map(function ($value) {
+                // we special case NULL as it's not actually allowed an enum value,
+                // and we want MySQL to issue an error on the create statement, but
+                // quote coerces it to an empty string, which will not error
+                return $value === null ? 'NULL' : $this->getConnection()->quote($value);
+            }, $values)) . ')';
         }
+
         $def .= $column->getEncoding() ? ' CHARACTER SET ' . $column->getEncoding() : '';
         $def .= $column->getCollation() ? ' COLLATE ' . $column->getCollation() : '';
-        $def .= (!$column->isSigned() && isset($this->signedColumnTypes[$column->getType()])) ? ' unsigned' : '';
-        $def .= ($column->isNull() == false) ? ' NOT NULL' : ' NULL';
+        $def .= !$column->isSigned() && isset($this->signedColumnTypes[$column->getType()]) ? ' unsigned' : '';
+        $def .= $column->isNull() ? ' NULL' : ' NOT NULL';
+
+        if (
+            version_compare($this->getAttribute(\PDO::ATTR_SERVER_VERSION), '8', '>=')
+            && in_array($column->getType(), static::PHINX_TYPES_GEOSPATIAL)
+            && !is_null($column->getSrid())
+        ) {
+            $def .= " SRID {$column->getSrid()}";
+        }
+
         $def .= $column->isIdentity() ? ' AUTO_INCREMENT' : '';
-        $def .= $this->getDefaultValueDefinition($column->getDefault(), $column->getType());
+
+        $default = $column->getDefault();
+        // MySQL 8 supports setting default for the following tested types, but only if they are "cast as expressions"
+        if (
+            version_compare($this->getAttribute(\PDO::ATTR_SERVER_VERSION), '8', '>=') &&
+            is_string($default) &&
+            in_array(
+                $column->getType(),
+                array_merge(
+                    static::PHINX_TYPES_GEOSPATIAL,
+                    [static::PHINX_TYPE_BLOB, static::PHINX_TYPE_JSON, static::PHINX_TYPE_TEXT]
+                )
+            )
+        ) {
+            $default = Literal::from('(' . $this->getConnection()->quote($column->getDefault()) . ')');
+        }
+        $def .= $this->getDefaultValueDefinition($default, $column->getType());
 
         if ($column->getComment()) {
             $def .= ' COMMENT ' . $this->getConnection()->quote($column->getComment());
@@ -1165,11 +1406,11 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
         $def = '';
         $limit = '';
 
-        if ($index->getType() == Index::UNIQUE) {
+        if ($index->getType() === Index::UNIQUE) {
             $def .= ' UNIQUE';
         }
 
-        if ($index->getType() == Index::FULLTEXT) {
+        if ($index->getType() === Index::FULLTEXT) {
             $def .= ' FULLTEXT';
         }
 
@@ -1179,18 +1420,30 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
             $def .= ' `' . $index->getName() . '`';
         }
 
+        $columnNames = $index->getColumns();
+        $order = $index->getOrder() ?? [];
+        $columnNames = array_map(function ($columnName) use ($order) {
+            $ret = '`' . $columnName . '`';
+            if (isset($order[$columnName])) {
+                $ret .= ' ' . $order[$columnName];
+            }
+
+            return $ret;
+        }, $columnNames);
+
         if (!is_array($index->getLimit())) {
             if ($index->getLimit()) {
                 $limit = '(' . $index->getLimit() . ')';
             }
-            $def .= ' (`' . implode('`,`', $index->getColumns()) . '`' . $limit . ')';
+            $def .= ' (' . implode(',', $columnNames) . $limit . ')';
         } else {
             $columns = $index->getColumns();
             $limits = $index->getLimit();
             $def .= ' (';
             foreach ($columns as $column) {
                 $limit = !isset($limits[$column]) || $limits[$column] <= 0 ? '' : '(' . $limits[$column] . ')';
-                $def .= '`' . $column . '`' . $limit . ', ';
+                $columnSort = isset($order[$column]) ?? '';
+                $def .= '`' . $column . '`' . $limit . ' ' . $columnSort . ', ';
             }
             $def = rtrim($def, ', ');
             $def .= ' )';
@@ -1202,7 +1455,7 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
     /**
      * Gets the MySQL Foreign Key Definition for an ForeignKey object.
      *
-     * @param \Phinx\Db\Table\ForeignKey $foreignKey
+     * @param \Phinx\Db\Table\ForeignKey $foreignKey Foreign key
      * @return string
      */
     protected function getForeignKeySqlDefinition(ForeignKey $foreignKey)
@@ -1256,33 +1509,29 @@ class MysqlAdapter extends PdoAdapter implements AdapterInterface
 
     /**
      * Returns MySQL column types (inherited and MySQL specified).
-     * @return array
+     *
+     * @return string[]
      */
     public function getColumnTypes()
     {
-        return array_merge(parent::getColumnTypes(), ['enum', 'set', 'year', 'json']);
+        return array_merge(parent::getColumnTypes(), static::$specificColumnTypes);
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * @inheritDoc
      */
     public function getDecoratedConnection()
     {
         $options = $this->getOptions();
         $options = [
-            'username' => $options['user'],
-            'password' => $options['pass'],
+            'username' => $options['user'] ?? null,
+            'password' => $options['pass'] ?? null,
             'database' => $options['name'],
             'quoteIdentifiers' => true,
         ] + $options;
 
         $driver = new MysqlDriver($options);
-        if (method_exists($driver, 'setConnection')) {
-            $driver->setConnection($this->connection);
-        } else {
-            $driver->connection($this->connection);
-        }
+        $driver->setConnection($this->connection);
 
         return new Connection(['driver' => $driver] + $options);
     }

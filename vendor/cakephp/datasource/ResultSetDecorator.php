@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -32,10 +34,11 @@ class ResultSetDecorator extends Collection implements ResultSetInterface
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
-        if ($this->getInnerIterator() instanceof Countable) {
-            return $this->getInnerIterator()->count();
+        $iterator = $this->getInnerIterator();
+        if ($iterator instanceof Countable) {
+            return $iterator->count();
         }
 
         return count($this->toArray());

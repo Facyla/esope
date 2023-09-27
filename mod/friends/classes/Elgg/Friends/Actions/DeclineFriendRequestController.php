@@ -25,7 +25,7 @@ class DeclineFriendRequestController {
 			return elgg_error_response(elgg_echo('error:missing_data'));
 		}
 		
-		$relationship = get_relationship($id);
+		$relationship = elgg_get_relationship($id);
 		if (!$relationship instanceof \ElggRelationship || $relationship->relationship !== 'friendrequest') {
 			return elgg_error_response(elgg_echo('error:missing_data'));
 		}
@@ -44,7 +44,6 @@ class DeclineFriendRequestController {
 		if ($requesting_user instanceof \ElggUser) {
 			$subject = elgg_echo('friends:notification:request:decline:subject', [$receiving_user->getDisplayName()], $requesting_user->getLanguage());
 			$message = elgg_echo('friends:notification:request:decline:message', [
-				$requesting_user->getDisplayName(),
 				$receiving_user->getDisplayName(),
 			], $requesting_user->getLanguage());
 			

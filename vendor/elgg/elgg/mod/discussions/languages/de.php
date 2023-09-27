@@ -13,6 +13,8 @@ return array(
 	'collection:object:discussion' => 'Diskussionen',
 	'collection:object:discussion:group' => 'Gruppen-Diskussionen',
 	'collection:object:discussion:my_groups' => 'Diskussionen in meinen Gruppen',
+	'notification:object:discussion:create' => "Sende eine Benachrichtigung bei Start einer neuen Diskussion",
+	'notifications:mute:object:discussion' => "über die Diskussion '%s'",
 	
 	'discussion:settings:enable_global_discussions' => 'Diskussionen allgemein aktivieren',
 	'discussion:settings:enable_global_discussions:help' => 'Erlaube Diskussionen ausserhalb von Gruppen.',
@@ -42,28 +44,24 @@ return array(
 	 */
 	'discussion:topic:notify:summary' => 'Neue Diskussion namens %s',
 	'discussion:topic:notify:subject' => 'Neue Diskussion: %s',
-	'discussion:topic:notify:body' =>
-'%s hat die neue Diskussion "%s" gestartet:
+	'discussion:topic:notify:body' => '%s hat die neue Diskussion "%s" gestartet:
 
 %s
 
 Schau Dir die neue Diskussion an und antworte darauf:
-%s
-',
+%s',
 
 	'discussion:comment:notify:summary' => 'Neue Antwort in Diskussion %s',
 	'discussion:comment:notify:subject' => 'Neue Antwort in Diskussion: %s',
-	'discussion:comment:notify:body' =>
-'%s hat in der Diskussion "%s" geantwortet:
+	'discussion:comment:notify:body' => '%s hat in der Diskussion "%s" geantwortet:
 
 %s
 
 Schau Dir die Diskussion an und antworte selbst darauf:
-%s
-',
+%s',
 
 	'groups:tool:forum' => 'Gruppen-Diskussionen aktivieren',
-
+	
 	/**
 	 * Discussion status
 	 */
@@ -72,10 +70,10 @@ Schau Dir die Diskussion an und antworte selbst darauf:
 	'discussion:topic:closed:desc' => 'Diese Diskussion ist geschlossen und es können keine neuen Antworten mehr hinzugefügt werden.',
 
 	'discussion:topic:description' => 'Textinhalt der Diskussion',
-
-	// upgrades
-	'discussions:upgrade:2017112800:title' => "Wandle den Subtyp von existierenden Diskussions-Antwort-Entitäten in Kommentar-Subtyp um",
-	'discussions:upgrade:2017112800:description' => "Diskussions-Antworten hatten bisher einen eigenen Entitäts-Subtyp. Aus Gründen der Vereinfachung wird dieser separate Subtyp nicht mehr verwendet und stattdessen für die Diskussions-Antworten der gleiche Subtyp wie für Kommentar-Entitäten verwendet.",
-	'discussions:upgrade:2017112801:title' => "Aktualisiere River-Einträge von Diskussions-Antworten",
-	'discussions:upgrade:2017112801:description' => "Diskussions-Antworten hatten bisher einen eigenen Entitäts-Subtyp. Aus Gründen der Vereinfachung wird dieser separate Subtyp nicht mehr verwendet und stattdessen für die Diskussions-Antworten der gleiche Subtyp wie für Kommentar-Entitäten verwendet. Als Folge dessen müssen auch die zugehörigen River-Einträge aktualisiert werden.",
+	'discussion:topic:toggle_status:open' => 'Die Diskussion wurde wiedereröffnet.',
+	'discussion:topic:toggle_status:open:confirm' => 'Bist Du sicher, daß Du diese Diskussion wiedereröffnen willst?',
+	'discussion:topic:toggle_status:closed' => 'Die Diskussion wurde geschlossen.',
+	'discussion:topic:toggle_status:closed:confirm' => 'Bist Du sicher, daß Du diese Diskussion schließen willst?',
+	
+	// widgets
 );

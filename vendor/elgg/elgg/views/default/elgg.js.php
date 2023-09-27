@@ -3,45 +3,13 @@
  * Core Elgg JavaScript file
  */
 
-// We use named AMD modules and inline them here in order to save HTTP requests,
-// as these modules will be required on each page
-echo elgg_view('elgg/popup.js');
-
-$core_js_views = [
-	// these must come first
-	'elgglib.js',
-	
-	// class definitions
-	'ElggEntity.js',
-	'ElggUser.js',
-	'ElggPriorityList.js',
-	
-	//libraries
-	'prototypes.js',
-	'hooks.js',
-	'security.js',
-	'languages.js',
-	'ajax.js',
-	'session.js',
-	'pageowner.js',
-	'configuration.js',
-	
-	//ui
-	'ui.js',
-];
-
-foreach ($core_js_views as $view) {
-	echo elgg_view("core/js/{$view}");
-	// putting a new line between the files to address https://github.com/elgg/elgg/issues/3081
-	echo PHP_EOL;
-}
+echo elgg_view('core/js/elgglib.js');
 
 foreach (_elgg_get_js_site_data() as $expression => $value) {
 	$value = json_encode($value);
 	echo "{$expression} = {$value};" . PHP_EOL;
 }
 ?>
-//<script>
 
 // page data overrides site data
 elgg.data = $.extend(true, {}, elgg.data, elgg._data);
@@ -51,15 +19,34 @@ delete elgg._data;
 define('jquery', function () {
 	return jQuery;
 });
-define('jquery-ui');
 
-// The datepicker language modules depend on "../datepicker", so to avoid RequireJS from
-// trying to load that, we define it manually here. The lang modules have names like
-// "jquery-ui/i18n/datepicker-LANG.min" and these views are mapped in /views.php
-define('jquery-ui/datepicker', jQuery.datepicker);
+define('elgg', ['jquery'], function($) {
 
-define('elgg', ['sprintf', 'jquery', 'languages/' + elgg.get_language(), 'weakmap-polyfill', 'formdata-polyfill'], function(vsprintf, $, translations) {
-	elgg.add_translation(elgg.get_language(), translations);
+	// @todo we need better documentation for this hack
+	// iOS Hover Event Class Fix
+	$('.elgg-page').attr('onclick', 'return true');
+	
+	// Allow element to be highlighted using CSS if its id is found from the URL
+	var elementId = elgg.getSelectorFromUrlFragment(document.URL);
+	$(elementId).addClass('elgg-state-highlight');
+	
+	/**
+	 * Calls a confirm() and returns false if denied.
+	 *
+	 * @param {Object} e
+	 * @return void
+	 */
+	function requiresConfirmation(e) {
+		var confirmText = $(this).data('confirm');
+		if (!confirm(confirmText)) {
+			e.preventDefault();
+			e.stopPropagation();
+			e.stopImmediatePropagation();
+			return false;
+		}
+	};
+
+	$(document).on('click', '*[data-confirm]', requiresConfirmation);
 
 	return elgg;
 });
@@ -79,6 +66,4 @@ if (!window._require_queue) {
 	delete window._require_queue;
 }
 
-elgg.trigger_hook('boot', 'system');
-
-require(['elgg/init', 'elgg/ready', 'elgg/lightbox']);
+require(['elgg/lightbox', 'elgg/security']);

@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\Filesystem\IOException;
+
 /**
  * This class represents a physical file (by default in the system temp directory).
  *
@@ -30,45 +32,46 @@ class ElggTempFile extends ElggFile {
 	/**
 	 * Return the system temp filestore based on the system temp directory.
 	 *
-	 * @return \ElggTempDiskFilestore
+	 * @return \Elgg\Filesystem\Filestore\TempDiskFilestore
 	 */
-	protected function getFilestore() {
+	protected function getFilestore(): \Elgg\Filesystem\Filestore\TempDiskFilestore {
 		return _elgg_services()->temp_filestore;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function transfer($owner_guid, $filename = null) {
+	public function transfer(int $owner_guid, string $filename = null): bool {
 		return false;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canDownload($user_guid = 0, $default = false) {
+	public function canDownload(int $user_guid = 0, bool $default = false): bool {
 		return false;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDownloadURL($use_cookie = true, $expires = '+2 hours') {
+	public function getDownloadURL(bool $use_cookie = true, string $expires = '+2 hours'): ?string {
 		return '';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getInlineURL($use_cookie = false, $expires = '') {
+	public function getInlineURL(bool $use_cookie = false, string $expires = ''): ?string {
 		return '';
 	}
 	
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @throws \Elgg\Exceptions\Filesystem\IOException
 	 */
-	public function save() {
-		throw new \IOException("Temp files can't be saved to the database");
+	public function save(): bool {
+		throw new IOException("Temp files can't be saved to the database");
 	}
-
 }

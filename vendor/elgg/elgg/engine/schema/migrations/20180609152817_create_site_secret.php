@@ -12,7 +12,7 @@ class CreateSiteSecret extends AbstractMigration {
 	 */
 	public function change() {
 
-		$config_key = \Elgg\Database\SiteSecret::CONFIG_KEY;
+		$config_key = \Elgg\Security\SiteSecret::CONFIG_KEY;
 
 		$prefix = $this->getAdapter()->getOption('table_prefix');
 
@@ -23,7 +23,7 @@ class CreateSiteSecret extends AbstractMigration {
 		");
 
 		if (empty($secret) || empty($secret['value'])) {
-			$crypto = new ElggCrypto();
+			$crypto = new \Elgg\Security\Crypto();
 			$hash = 'z' . $crypto->getRandomString(31);
 
 			$this->table('config')->insert([[

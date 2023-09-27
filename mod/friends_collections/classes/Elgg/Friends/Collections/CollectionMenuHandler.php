@@ -2,7 +2,6 @@
 
 namespace Elgg\Friends\Collections;
 
-use Elgg\Hook;
 use ElggAccessCollection;
 use ElggMenuItem;
 
@@ -14,13 +13,12 @@ class CollectionMenuHandler {
 	/**
 	 * Setup collection menu
 	 *
-	 * @param \Elgg\Hook $hook 'register' 'menu:friends:collection'
+	 * @param \Elgg\Event $event 'register' 'menu:friends:collection'
 	 *
 	 * @return void|\ElggMenuItem[]
 	 */
-	public function __invoke(Hook $hook) {
-
-		$collection = $hook->getParam('collection');
+	public function __invoke(\Elgg\Event $event) {
+		$collection = $event->getParam('collection');
 		if (!$collection instanceof ElggAccessCollection) {
 			return;
 		}
@@ -29,7 +27,7 @@ class CollectionMenuHandler {
 			return;
 		}
 
-		$return = $hook->getValue();
+		$return = $event->getValue();
 		
 		$return[] = ElggMenuItem::factory([
 			'name' => 'edit',
@@ -54,5 +52,4 @@ class CollectionMenuHandler {
 
 		return $return;
 	}
-
 }

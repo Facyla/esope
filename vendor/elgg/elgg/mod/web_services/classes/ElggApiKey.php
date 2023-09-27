@@ -32,17 +32,18 @@ class ElggApiKey extends ElggObject {
 	 * {@inheritDoc}
 	 * @see ElggEntity::delete()
 	 */
-	public function delete($recursive = true) {
+	public function delete(bool $recursive = true): bool {
 		$public_key = $this->public_key;
 		
-		$result = parent::delete($recursive);
-		if (!$result) {
-			return $result;
+		if (!parent::delete($recursive)) {
+			return false;
 		}
 		
-		remove_api_user($public_key);
+		if (isset($public_key)) {
+			_elgg_services()->apiUsersTable->removeApiUser($public_key);
+		}
 		
-		return $result;
+		return true;
 	}
 	
 	/**
@@ -56,7 +57,7 @@ class ElggApiKey extends ElggObject {
 			return false;
 		}
 		
-		return get_api_user($this->public_key);
+		return _elgg_services()->apiUsersTable->getApiUser($this->public_key, false);
 	}
 	
 	/**
@@ -64,7 +65,7 @@ class ElggApiKey extends ElggObject {
 	 *
 	 * @return null|string
 	 */
-	public function getPublicKey() {
+	public function getPublicKey(): ?string {
 		return $this->public_key;
 	}
 	
@@ -87,9 +88,9 @@ class ElggApiKey extends ElggObject {
 	 *
 	 * @return bool
 	 */
-	public function generateKeys() {
+	public function generateKeys(): bool {
 		
-		$keys = create_api_user();
+		$keys = _elgg_services()->apiUsersTable->createApiUser();
 		if (empty($keys)) {
 			return false;
 		}
@@ -107,7 +108,7 @@ class ElggApiKey extends ElggObject {
 	 *
 	 * @return bool
 	 */
-	public function regenerateKeys() {
+	public function regenerateKeys(): bool {
 		$current_public = $this->getPublicKey();
 		
 		if (!$this->generateKeys()) {
@@ -115,8 +116,40 @@ class ElggApiKey extends ElggObject {
 		}
 		
 		// remove old keys from DB
-		remove_api_user($current_public);
+		_elgg_services()->apiUsersTable->removeApiUser($current_public);
 		
 		return true;
+	}
+	
+	/**
+	 * Check if the API keys are active
+	 *
+	 * @return bool
+	 */
+	public function hasActiveKeys(): bool {
+		$keys = $this->getKeys();
+		if (empty($keys)) {
+			return false;
+		}
+		
+		return (bool) $keys->active;
+	}
+	
+	/**
+	 * Enables the API key for use by API requests
+	 *
+	 * @return bool
+	 */
+	public function enableKeys(): bool {
+		return _elgg_services()->apiUsersTable->enableAPIUser($this->getPublicKey());
+	}
+	
+	/**
+	 * Disables the API key for use by API requests
+	 *
+	 * @return bool
+	 */
+	public function disableKeys(): bool {
+		return _elgg_services()->apiUsersTable->disableAPIUser($this->getPublicKey());
 	}
 }

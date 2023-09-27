@@ -19,7 +19,6 @@ return array(
 	'blog:archives' => 'Arkiv',
 
 	'groups:tool:blog' => 'Aktivera gruppblogg',
-	'blog:write' => 'Skriv ett blogginlägg',
 
 	// Editing
 	'blog:excerpt' => 'Utdrag',
@@ -27,21 +26,15 @@ return array(
 	'blog:save_status' => 'Senast sparat:',
 
 	'blog:revision' => 'Utgåva',
-	'blog:auto_saved_revision' => 'Automatiskt Sparad Utgåva',
-
+	
 	// messages
 	'blog:message:saved' => 'Blogginlägg sparat.',
 	'blog:error:cannot_save' => 'Kan inte spara blogginlägg.',
-	'blog:error:cannot_auto_save' => 'Kan inte automatiskt spara blogginlägg.',
 	'blog:error:cannot_write_to_container' => 'Otillräcklig åtkomst för att spara blogg till grupp.',
-	'blog:messages:warning:draft' => 'Det finns ett osparat utkast av detta inlägg!',
 	'blog:edit_revision_notice' => '(Gammal version)',
-	'blog:message:deleted_post' => 'Blogginlägg borttaget.',
-	'blog:error:cannot_delete_post' => 'Kan inte ta bort blogginlägg.',
 	'blog:none' => 'Inga blogginlägg',
 	'blog:error:missing:title' => 'Vänligen ange en titel på bloggen!',
 	'blog:error:missing:description' => 'Vänligen ange innehåll av din blogg!',
-	'blog:error:cannot_edit_post' => 'Detta inlägg kanske inte existerar eller så har du inte tillräcklig behörighet att redigera det.',
 	'blog:error:post_not_found' => 'Kan inte hitta det angivna blogginlägget.',
 	'blog:error:revision_not_found' => 'Kan inte hitta denna utgåva.',
 
@@ -52,15 +45,6 @@ return array(
 	// notifications
 	'blog:notify:summary' => 'Nytt blogginlägg kallat %s',
 	'blog:notify:subject' => 'Nytt blogginlägg: %s',
-	'blog:notify:body' =>
-'
-%s publicerade ett nytt blogginlägg: %s
-
-%s
-
-Visa och kommentera blogginlägget:
-%s
-',
 
 	// widget
 	'widgets:blog:name' => 'Blogginlägg',

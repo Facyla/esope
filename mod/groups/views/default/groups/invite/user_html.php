@@ -22,11 +22,11 @@ $delete_icon = elgg_view_icon('delete', ['class' => 'elgg-autocomplete-item-remo
 
 $title = $entity->getDisplayName();
 
-$group = get_entity(elgg_extract('group_guid', $vars));
+$group = get_entity((int) elgg_extract('group_guid', $vars));
 if ($group instanceof ElggGroup) {
 	if ($group->isMember($entity)) {
 		$title .= elgg_format_element('span', ['class' => ['mls', 'elgg-subtext']], elgg_echo('groups:invite:member'));
-	} elseif (check_entity_relationship($group->guid, 'invited', $entity->guid)) {
+	} elseif ($group->hasRelationship($entity->guid, 'invited')) {
 		$title .= elgg_format_element('span', ['class' => ['mls', 'elgg-subtext']], elgg_echo('groups:invite:invited'));
 	}
 }

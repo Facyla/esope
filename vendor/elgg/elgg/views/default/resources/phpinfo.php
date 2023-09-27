@@ -3,9 +3,11 @@
  * Show phpinfo page
  */
 
-if (elgg_get_config('allow_phpinfo') !== true) {
+use Elgg\Exceptions\Http\PageNotFoundException;
+
+if (!elgg_get_config('allow_phpinfo')) {
 	// page is not allowed in elgg-config/settings.php
-	throw new \Elgg\PageNotFoundException();
+	throw new PageNotFoundException();
 }
 
 phpinfo();

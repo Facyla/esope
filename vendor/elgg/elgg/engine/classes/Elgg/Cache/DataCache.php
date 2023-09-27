@@ -4,11 +4,9 @@ namespace Elgg\Cache;
 
 /**
  * Persistent data cache
- * Used for caching entities, metadata and private settings
+ * Used for caching metadata
  *
- * @property-read CompositeCache $entities
  * @property-read CompositeCache $metadata
- * @property-read CompositeCache $private_settings
  */
 class DataCache extends CacheCollection {
 
@@ -20,7 +18,6 @@ class DataCache extends CacheCollection {
 	 * @return CompositeCache
 	 */
 	protected function create($namespace) {
-		return new CompositeCache($namespace, $this->config, ELGG_CACHE_PERSISTENT | ELGG_CACHE_RUNTIME);
+		return new CompositeCache($namespace, $this->config, ELGG_CACHE_RUNTIME);
 	}
-
 }

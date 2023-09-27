@@ -17,6 +17,9 @@
  * @uses $vars['datepicker_options'] An array of options to pass to the jQuery UI datepicker
  * @uses $vars['format']    Date format, default Y-m-d (2018-01-30)
  */
+
+use Elgg\Exceptions\DataFormatException;
+
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-date');
 
 $defaults = [
@@ -57,6 +60,7 @@ if ($timestamp) {
 	if (!isset($vars['id'])) {
 		$vars['id'] = $name;
 	}
+	
 	echo elgg_view('input/hidden', [
 		'name' => $name,
 		'value' => $value_timestamp,

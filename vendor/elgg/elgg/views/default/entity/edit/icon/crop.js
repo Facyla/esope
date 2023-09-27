@@ -1,9 +1,4 @@
-define(function(require) {
-	
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	require('jquery-cropper/jquery-cropper');
-	
+define(['jquery', 'jquery-cropper/jquery-cropper'], function($) {
 	function Cropper() {
 		var $field;
 		var $fieldWrapper;
@@ -24,12 +19,35 @@ define(function(require) {
 			
 			$field.on('change', this.replaceImg);
 			
-			$remove = $fieldWrapper.siblings('.elgg-entity-edit-icon-remove').find('input[type="checkbox"]');
+			var $remove = $fieldWrapper.siblings('.elgg-entity-edit-icon-remove').find('input[type="checkbox"]');
 			$remove.on('change', this.checkRemoveState);
 			
 			if ($img[0].hasAttribute('src')) {
 				this.reload();
 			}
+			
+			$img.on('ready', function() {
+				// enable/disable on tab changes
+				if ($field.not(':visible')) {
+					$field.data('resetNeeded', true);
+				}
+			
+				$field.parents('.elgg-tabs-component').find(' > .elgg-body > .elgg-menu-navigation-tabs-container > ul > li').on('open', function() {
+					if ($field.is(':visible')) {
+						$img.cropper('enable');
+						$img.cropper('resize');
+						
+						if ($field.data('resetNeeded')) {
+							$img.cropper('reset');
+							
+							// only need a reset once
+							$field.data('resetNeeded', false);
+						}
+					} else {
+						$img.cropper('disable');
+					}
+				});
+			});
 		};
 	
 		this.replaceImg = function() {
@@ -42,6 +60,9 @@ define(function(require) {
 			$img.cropper('destroy');
 			$img.attr('src', '');
 			
+			var data = $img.data().iconCropper;
+			data.aspectRatio = data.initialAspectRatio;
+						
 			that.resetMessages();
 			
 			// validate image
@@ -82,15 +103,16 @@ define(function(require) {
 			if (minWidth > 0 && cropDetails.width < minWidth) {
 				that.showMessage('width');
 			}
+			
 			var minHeight = $messagesWrapper.find('.elgg-entity-edit-icon-crop-error-height').data('minHeight');
 			if (minHeight > 0 && cropDetails.height < minHeight) {
 				that.showMessage('height');
 			}
 			
-			$inputWrapper.find('input[name="x1"]').val(cropDetails.x);
-			$inputWrapper.find('input[name="y1"]').val(cropDetails.y);
-			$inputWrapper.find('input[name="x2"]').val(cropDetails.x + cropDetails.width);
-			$inputWrapper.find('input[name="y2"]').val(cropDetails.y + cropDetails.height);
+			$inputWrapper.find('input[name$="x1"]').val(cropDetails.x);
+			$inputWrapper.find('input[name$="y1"]').val(cropDetails.y);
+			$inputWrapper.find('input[name$="x2"]').val(cropDetails.x + cropDetails.width);
+			$inputWrapper.find('input[name$="y2"]').val(cropDetails.y + cropDetails.height);
 		};
 		
 		this.resetMessages = function() {

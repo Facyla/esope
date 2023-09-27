@@ -3,11 +3,9 @@
 namespace Elgg\Security;
 
 use Elgg\Config;
-use Elgg\CsrfException;
+use Elgg\Exceptions\Http\CsrfException;
 use Elgg\Request;
-use Elgg\TimeUsing;
-use ElggCrypto;
-use ElggSession;
+use Elgg\Traits\TimeUsing;
 
 /**
  * CSRF Protection
@@ -22,12 +20,12 @@ class Csrf {
 	protected $config;
 
 	/**
-	 * @var ElggSession
+	 * @var \ElggSession
 	 */
 	protected $session;
 
 	/**
-	 * @var ElggCrypto
+	 * @var Crypto
 	 */
 	protected $crypto;
 
@@ -39,15 +37,15 @@ class Csrf {
 	/**
 	 * Constructor
 	 *
-	 * @param Config      $config  Elgg config
-	 * @param ElggSession $session Session
-	 * @param ElggCrypto  $crypto  Crypto service
-	 * @param HmacFactory $hmac    HMAC service
+	 * @param Config       $config  Elgg config
+	 * @param \ElggSession $session Session
+	 * @param Crypto       $crypto  Crypto service
+	 * @param HmacFactory  $hmac    HMAC service
 	 */
 	public function __construct(
 		Config $config,
-		ElggSession $session,
-		ElggCrypto $crypto,
+		\ElggSession $session,
+		Crypto $crypto,
 		HmacFactory $hmac
 	) {
 
@@ -76,7 +74,7 @@ class Csrf {
 				if ($this->validateTokenTimestamp($ts)) {
 					// We have already got this far, so unless anything
 					// else says something to the contrary we assume we're ok
-					$returnval = $request->elgg()->hooks->trigger('action_gatekeeper:permissions:check', 'all', [
+					$returnval = $request->elgg()->events->triggerResults('action_gatekeeper:permissions:check', 'all', [
 						'token' => $token,
 						'time' => $ts
 					], true);
@@ -84,30 +82,30 @@ class Csrf {
 					if ($returnval) {
 						return;
 					} else {
-						throw new CsrfException($request->elgg()->echo('actiongatekeeper:pluginprevents'));
+						throw new CsrfException($request->elgg()->translator->translate('actiongatekeeper:pluginprevents'));
 					}
 				} else {
 					// this is necessary because of #5133
 					if ($request->isXhr()) {
-						throw new CsrfException($request->elgg()->echo(
+						throw new CsrfException($request->elgg()->translator->translate(
 							'js:security:token_refresh_failed',
 							[$this->config->wwwroot]
 						));
 					} else {
-						throw new CsrfException($request->elgg()->echo('actiongatekeeper:timeerror'));
+						throw new CsrfException($request->elgg()->translator->translate('actiongatekeeper:timeerror'));
 					}
 				}
 			} else {
 				// this is necessary because of #5133
 				if ($request->isXhr()) {
-					throw new CsrfException($request->elgg()->echo('js:security:token_refresh_failed', [$this->config->wwwroot]));
+					throw new CsrfException($request->elgg()->translator->translate('js:security:token_refresh_failed', [$this->config->wwwroot]));
 				} else {
-					throw new CsrfException($request->elgg()->echo('actiongatekeeper:tokeninvalid'));
+					throw new CsrfException($request->elgg()->translator->translate('actiongatekeeper:tokeninvalid'));
 				}
 			}
 		} else {
-			$error_msg = $request->elgg()->echo('actiongatekeeper:missingfields');
-			throw new CsrfException($request->elgg()->echo($error_msg));
+			$error_msg = $request->elgg()->translator->translate('actiongatekeeper:missingfields');
+			throw new CsrfException($error_msg);
 		}
 	}
 
@@ -198,5 +196,4 @@ class Csrf {
 			->getHmac([(int) $timestamp, $session_token], 'md5')
 			->getToken();
 	}
-
 }

@@ -2,25 +2,73 @@
 
 namespace Elgg\Assets;
 
-use ElggPriorityList;
+use Elgg\Cache\SimpleCache;
+use Elgg\Cache\SystemCache;
+use Elgg\Config;
+use Elgg\Http\Urls;
+use Elgg\ViewsService;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * External files service
  *
  * @internal
- * @since  1.10.0
+ * @since 1.10.0
  */
 class ExternalFiles {
 
 	/**
-	 * @var ElggPriorityList[]
-	 */
-	protected $externals = [];
-
-	/**
 	 * @var array
 	 */
-	protected $externals_map = [];
+	protected $files = [];
+
+	/**
+	 * Subresource integrity data (loaded on first use)
+	 *
+	 * @var array
+	 */
+	protected $sri;
+	
+	/**
+	 * @var Config
+	 */
+	protected $config;
+	
+	/**
+	 * @var Urls
+	 */
+	protected $urls;
+	
+	/**
+	 * @var ViewsService
+	 */
+	protected $views;
+	
+	/**
+	 * @var SimpleCache
+	 */
+	protected $simpleCache;
+	
+	/**
+	 * @var SystemCache
+	 */
+	protected $serverCache;
+	
+	/**
+	 * Constructor
+	 *
+	 * @param Config       $config      config
+	 * @param Urls         $urls        urls service
+	 * @param ViewsService $views       views service
+	 * @param SimpleCache  $simpleCache simplecache
+	 * @param SystemCache  $serverCache server cache
+	 */
+	public function __construct(Config $config, Urls $urls, ViewsService $views, SimpleCache $simpleCache, SystemCache $serverCache) {
+		$this->config = $config;
+		$this->urls = $urls;
+		$this->views = $views;
+		$this->simpleCache = $simpleCache;
+		$this->serverCache = $serverCache;
+	}
 
 	/**
 	 * Core registration function for external files
@@ -29,55 +77,37 @@ class ExternalFiles {
 	 * @param string $name     Identifier used as key
 	 * @param string $url      URL
 	 * @param string $location Location in the page to include the file
-	 * @param int    $priority Loading priority of the file
 	 *
 	 * @return bool
 	 */
-	public function register($type, $name, $url, $location, $priority = 500) {
+	public function register(string $type, string $name, string $url, string $location): bool {
+		$name = trim(strtolower($name));
 		if (empty($name) || empty($url)) {
 			return false;
 		}
 	
-		$url = elgg_normalize_url($url);
+		$url = $this->urls->normalizeUrl($url);
 
 		$this->setupType($type);
 	
-		$name = trim(strtolower($name));
-	
-		// normalize bogus priorities, but allow empty, null, and false to be defaults.
-		if (!is_numeric($priority)) {
-			$priority = 500;
-		}
-	
-		// no negative priorities right now.
-		$priority = max((int) $priority, 0);
-	
-		$item = elgg_extract($name, $this->externals_map[$type]);
+		$item = elgg_extract($name, $this->files[$type]);
 	
 		if ($item) {
 			// updating a registered item
 			// don't update loaded because it could already be set
 			$item->url = $url;
 			$item->location = $location;
-	
-			// if loaded before registered, that means it hasn't been added to the list yet
-			if ($this->externals[$type]->contains($item)) {
-				$priority = $this->externals[$type]->move($item, $priority);
-			} else {
-				$priority = $this->externals[$type]->add($item, $priority);
-			}
 		} else {
 			$item = (object) [
 				'loaded' => false,
 				'url' => $url,
 				'location' => $location,
 			];
-			$priority = $this->externals[$type]->add($item, $priority);
 		}
 
-		$this->externals_map[$type][$name] = $item;
+		$this->files[$type][$name] = $item;
 	
-		return $priority !== false;
+		return true;
 	}
 	
 	/**
@@ -88,46 +118,19 @@ class ExternalFiles {
 	 *
 	 * @return bool
 	 */
-	public function unregister($type, $name) {
+	public function unregister(string $type, string $name): bool {
 		$this->setupType($type);
-	
+		
 		$name = trim(strtolower($name));
-		$item = elgg_extract($name, $this->externals_map[$type]);
 	
-		if ($item) {
-			unset($this->externals_map[$type][$name]);
-			return $this->externals[$type]->remove($item);
+		if (!isset($this->files[$type][$name])) {
+			return false;
 		}
-	
-		return false;
+		
+		unset($this->files[$type][$name]);
+		return true;
 	}
 
-	/**
-	 * Get metadata for a registered file
-	 *
-	 * @param string $type Type of file: js or css
-	 * @param string $name The identifier of the file
-	 *
-	 * @return \stdClass|null
-	 */
-	public function getFile($type, $name) {
-		$this->setupType($type);
-
-		$name = trim(strtolower($name));
-		if (!isset($this->externals_map[$type][$name])) {
-			return null;
-		}
-
-		$item = $this->externals_map[$type][$name];
-		$priority = $this->externals[$type]->getPriority($item);
-
-		// don't allow internal properties to be altered
-		$clone = clone $item;
-		$clone->priority = $priority;
-
-		return $clone;
-	}
-	
 	/**
 	 * Load an external resource for use on this page
 	 *
@@ -136,12 +139,12 @@ class ExternalFiles {
 	 *
 	 * @return void
 	 */
-	public function load($type, $name) {
+	public function load(string $type, string $name): void {
 		$this->setupType($type);
 	
 		$name = trim(strtolower($name));
 	
-		$item = elgg_extract($name, $this->externals_map[$type]);
+		$item = elgg_extract($name, $this->files[$type]);
 	
 		if ($item) {
 			// update a registered item
@@ -152,14 +155,13 @@ class ExternalFiles {
 				'url' => '',
 				'location' => '',
 			];
-			if (elgg_view_exists($name)) {
-				$item->url = elgg_get_simplecache_url($name);
-				$item->location = ($type == 'js') ? 'foot' : 'head';
+			if ($this->views->viewExists($name)) {
+				$item->url = $this->simpleCache->getUrl($name);
+				$item->location = ($type === 'js') ? 'footer' : 'head';
 			}
-
-			$this->externals[$type]->add($item);
-			$this->externals_map[$type][$name] = $item;
 		}
+		
+		$this->files[$type][$name] = $item;
 	}
 	
 	/**
@@ -168,50 +170,30 @@ class ExternalFiles {
 	 * @param string $type     Type of file: js or css
 	 * @param string $location Page location
 	 *
-	 * @return string[] URLs of files to load
+	 * @return string[] Resources to load
 	 */
-	public function getLoadedFiles($type, $location) {
-		if (!isset($this->externals[$type])) {
+	public function getLoadedResources(string $type, string $location): array {
+		if (!isset($this->files[$type])) {
 			return [];
 		}
 
-		$items = $this->externals[$type]->getElements();
+		$items = $this->files[$type];
 
+		// only return loaded files for this location
 		$items = array_filter($items, function($v) use ($location) {
 			return $v->loaded == true && $v->location == $location;
 		});
-		if (!empty($items)) {
-			array_walk($items, function(&$v, $k){
-				$v = $v->url;
-			});
-		}
-		return $items;
-	}
-
-	/**
-	 * Get registered file objects
-	 *
-	 * @param string $type     Type of file: js or css
-	 * @param string $location Page location
-	 *
-	 * @return \stdClass[]
-	 */
-	public function getRegisteredFiles($type, $location) {
-		if (!isset($this->externals[$type])) {
-			return [];
-		}
-
-		$ret = [];
-		$items = $this->externals[$type]->getElements();
-		$items = array_filter($items, function($v) use ($location) {
-			return ($v->location == $location);
+		
+		$cache_ts = $this->config->lastcache;
+		$cache_url = $this->config->wwwroot . "cache/{$cache_ts}/default/";
+		
+		// check if SRI data is available
+		array_walk($items, function(&$v, $k) use ($type, $cache_url) {
+			$view = str_replace($cache_url, '', $v->url);
+			$v->integrity = $this->getSubResourceIntegrity($type, $view);
 		});
-
-		foreach ($items as $item) {
-			$ret[] = clone $item;
-		}
-
-		return $ret;
+		
+		return $items;
 	}
 
 	/**
@@ -219,9 +201,8 @@ class ExternalFiles {
 	 *
 	 * @return void
 	 */
-	public function reset() {
-		$this->externals = [];
-		$this->externals_map = [];
+	public function reset(): void {
+		$this->files = [];
 	}
 	
 	/**
@@ -230,13 +211,28 @@ class ExternalFiles {
 	 * @param string $type The type of external, js or css.
 	 * @return void
 	 */
-	protected function setupType($type) {
-		if (!isset($this->externals[$type])) {
-			$this->externals[$type] = new \ElggPriorityList();
+	protected function setupType(string $type): void {
+		if (!isset($this->files[$type])) {
+			$this->files[$type] = [];
 		}
+	}
 	
-		if (!isset($this->externals_map[$type])) {
-			$this->externals_map[$type] = [];
+	/**
+	 * Returns the integrity related to the resource file
+	 *
+	 * @param string $type     type of resource
+	 * @param string $resource name of resource
+	 * @return string|NULL
+	 */
+	protected function getSubResourceIntegrity(string $type, string $resource): ?string {
+		if (!$this->config->subresource_integrity_enabled) {
+			return null;
 		}
+		
+		if (!isset($this->sri)) {
+			$this->sri = $this->serverCache->load('sri') ?? [];
+		}
+		
+		return $this->sri[$type][$resource] ?? null;
 	}
 }

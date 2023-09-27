@@ -3,8 +3,7 @@
 namespace Elgg\Groups;
 
 use Elgg\Collections\Collection;
-use Elgg\PluginHooksService;
-use ElggGroup;
+use Elgg\EventsService;
 
 /**
  * Group tools service
@@ -19,18 +18,18 @@ class Tools {
 	protected $tools;
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	protected $hooks;
+	protected $events;
 
 	/**
 	 * Constructor
 	 *
-	 * @param PluginHooksService $hooks Hooks
+	 * @param EventsService $events Events
 	 */
-	public function __construct(PluginHooksService $hooks) {
+	public function __construct(EventsService $events) {
 		$this->tools = new Collection([], Tool::class);
-		$this->hooks = $hooks;
+		$this->events = $events;
 	}
 
 	/**
@@ -70,7 +69,7 @@ class Tools {
 	 * @return Tool|null
 	 */
 	public function get($name) {
-		return $this->tools->get($name);
+		return $this->all()->get($name);
 	}
 
 	/**
@@ -81,17 +80,17 @@ class Tools {
 	public function all() {
 		$tool_options = clone $this->tools;
 		
-		return $this->hooks->trigger('tool_options', 'group', [], $tool_options);
+		return $this->events->triggerResults('tool_options', 'group', [], $tool_options);
 	}
 
 	/**
 	 * Returns group specific tools
 	 *
-	 * @param ElggGroup $group Group
+	 * @param \ElggGroup $group Group
 	 *
 	 * @return Collection|Tool[]
 	 */
-	public function group(ElggGroup $group) {
+	public function group(\ElggGroup $group) {
 
 		$tool_options = clone $this->tools;
 
@@ -99,6 +98,6 @@ class Tools {
 			'entity' => $group,
 		];
 
-		return $this->hooks->trigger('tool_options', 'group', $params, $tool_options);
+		return $this->events->triggerResults('tool_options', 'group', $params, $tool_options);
 	}
 }

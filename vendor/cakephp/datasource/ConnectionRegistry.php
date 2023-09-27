@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,6 +24,7 @@ use Cake\Datasource\Exception\MissingDatasourceException;
  * A registry object for connection instances.
  *
  * @see \Cake\Datasource\ConnectionManager
+ * @extends \Cake\Core\ObjectRegistry<\Cake\Datasource\ConnectionInterface>
  */
 class ConnectionRegistry extends ObjectRegistry
 {
@@ -31,14 +34,11 @@ class ConnectionRegistry extends ObjectRegistry
      * Part of the template method for Cake\Core\ObjectRegistry::load()
      *
      * @param string $class Partial classname to resolve.
-     * @return string|false Either the correct classname or false.
+     * @return string|null Either the correct class name or null.
+     * @psalm-return class-string|null
      */
-    protected function _resolveClassName($class)
+    protected function _resolveClassName(string $class): ?string
     {
-        if (is_object($class)) {
-            return $class;
-        }
-
         return App::className($class, 'Datasource');
     }
 
@@ -52,7 +52,7 @@ class ConnectionRegistry extends ObjectRegistry
      * @return void
      * @throws \Cake\Datasource\Exception\MissingDatasourceException
      */
-    protected function _throwMissingClassError($class, $plugin)
+    protected function _throwMissingClassError(string $class, ?string $plugin): void
     {
         throw new MissingDatasourceException([
             'class' => $class,
@@ -68,12 +68,12 @@ class ConnectionRegistry extends ObjectRegistry
      * If a callable is passed as first argument, The returned value of this
      * function will be the result of the callable.
      *
-     * @param string|object|callable $class The classname or object to make.
+     * @param \Cake\Datasource\ConnectionInterface|callable|string $class The classname or object to make.
      * @param string $alias The alias of the object.
-     * @param array $settings An array of settings to use for the datasource.
-     * @return object A connection with the correct settings.
+     * @param array<string, mixed> $config An array of settings to use for the datasource.
+     * @return \Cake\Datasource\ConnectionInterface A connection with the correct settings.
      */
-    protected function _create($class, $alias, $settings)
+    protected function _create($class, string $alias, array $config)
     {
         if (is_callable($class)) {
             return $class($alias);
@@ -83,9 +83,10 @@ class ConnectionRegistry extends ObjectRegistry
             return $class;
         }
 
-        unset($settings['className']);
+        unset($config['className']);
 
-        return new $class($settings);
+        /** @var \Cake\Datasource\ConnectionInterface */
+        return new $class($config);
     }
 
     /**
@@ -94,7 +95,7 @@ class ConnectionRegistry extends ObjectRegistry
      * @param string $name The adapter name.
      * @return $this
      */
-    public function unload($name)
+    public function unload(string $name)
     {
         unset($this->_loaded[$name]);
 

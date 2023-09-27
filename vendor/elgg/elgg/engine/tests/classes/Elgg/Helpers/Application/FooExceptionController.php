@@ -2,8 +2,8 @@
 
 namespace Elgg\Helpers\Application;
 
+use Elgg\Exceptions\HttpException;
 use Elgg\Request;
-use Elgg\HttpException;
 
 /**
  * @see Elgg\ApplicationUnitTest

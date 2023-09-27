@@ -8,6 +8,22 @@
 return array(
 
 	'item:object:file' => 'Bestanden',
+	'item:object:file:application' => 'Applicatie',
+	'item:object:file:archive' => 'Archief',
+	'item:object:file:excel' => 'Excel',
+	'item:object:file:image' => 'Afbeelding',
+	'item:object:file:music' => 'Muziek',
+	'item:object:file:openoffice' => 'OpenOffice',
+	'item:object:file:pdf' => 'PDF',
+	'item:object:file:ppt' => 'PowerPoint',
+	'item:object:file:text' => 'Tekst',
+	'item:object:file:vcard' => 'vCard',
+	'item:object:file:video' => 'Video',
+	'item:object:file:word' => 'Word',
+	
+	'file:upgrade:2022092801:title' => 'Verplaats bestanden',
+	'file:upgrade:2022092801:description' => 'Verplaatst bestand die middels de file plugin zijn geüpload bij de eigenaar van de content naar de bestandslocatie van de entiteit zelf.',
+	
 	'collection:object:file' => 'Bestanden',
 	'collection:object:file:all' => "Alle bestanden",
 	'collection:object:file:owner' => "%s's bestanden",
@@ -15,6 +31,8 @@ return array(
 	'collection:object:file:group' => "Groepsbestanden",
 	'add:object:file' => "Upload een bestand",
 	'edit:object:file' => "Bewerk bestand",
+	'notification:object:file:create' => "Stuur een notificatie wanneer een bestand is geupload",
+	'notifications:mute:object:file' => "over het bestand '%s'",
 
 	'file:more' => "Meer bestanden",
 	'file:list' => "lijstweergave",
@@ -22,14 +40,11 @@ return array(
 	'file:num_files' => "Aantal bestanden om weer te geven",
 	'file:replace' => 'Vervang bestandsinhoud (laat dit leeg om het bestand <em>niet</em> te vervangen)',
 	'file:list:title' => "Van %s: %s en %s",
-	'file:title:friends' => "Vrienden",
 
 	'file:file' => "Bestand",
 
 	'file:list:list' => 'Toon in lijstweergave',
 	'file:list:gallery' => 'Toon in galerijweergave',
-
-	'file:types' => "Geplaatste bestandstypen",
 
 	'file:type:' => 'Bestanden',
 	'file:type:all' => "Alle bestanden",
@@ -55,6 +70,7 @@ return array(
 	'widgets:filerepo:description' => "Laat je laatst geüploade bestanden zien",
 
 	'groups:tool:file' => 'Schakel groepsbestanden in',
+	'groups:tool:file:description' => 'Laat groepsleden bestanden delen in deze groep.',
 
 	'river:object:file:create' => '%s heeft het bestand %s geüpload',
 	'river:object:file:comment' => '%s reageerde op het bestand %s',
@@ -67,6 +83,8 @@ return array(
 
 Om het bestand te bekijken en te reageren, klik hier:
 %s',
+	
+	'notification:mentions:object:file:subject' => '%s heeft je vermeld bij een bestand',
 
 	/**
 	 * Status messages

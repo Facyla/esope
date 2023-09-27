@@ -1,8 +1,11 @@
 <?php
+use Elgg\WebServices\Di\RestApiErrorHandler;
+
 /**
  * GenericResult Result superclass.
  */
 abstract class GenericResult {
+	
 	/**
 	 * The status of the result.
 	 * @var int
@@ -32,7 +35,7 @@ abstract class GenericResult {
 	 *
 	 * @return void
 	 */
-	protected function setStatusCode($status, $message = "") {
+	protected function setStatusCode($status, $message = '') {
 		$this->status_code = $status;
 		$this->message = $message;
 	}
@@ -90,15 +93,13 @@ abstract class GenericResult {
 	 * if ELGG_DEBUG is set then additional information about the runtime environment and
 	 * authentication will be returned.
 	 *
-	 * @return stdClass Object containing the serialised result.
+	 * @return \stdClass Object containing the serialised result.
 	 */
 	public function export() {
-		global $ERRORS, $_PAM_HANDLERS_MSG;
-		
-		$result = new stdClass;
+		$result = new \stdClass;
 
 		$result->status = $this->getStatusCode();
-		if ($this->getStatusMessage() != "") {
+		if ($this->getStatusMessage() != '') {
 			$result->message = $this->getStatusMessage();
 		}
 
@@ -108,12 +109,9 @@ abstract class GenericResult {
 		}
 
 		if (elgg_get_config('debug')) {
-			if (!empty($ERRORS)) {
-				$result->runtime_errors = $ERRORS;
-			}
-
-			if (!empty($_PAM_HANDLERS_MSG)) {
-				$result->pam = $_PAM_HANDLERS_MSG;
+			$errors = RestApiErrorHandler::instance()->getErrors();
+			if (!empty($errors)) {
+				$result->runtime_errors = $errors;
 			}
 		}
 

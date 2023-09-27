@@ -1,4 +1,7 @@
 <?php
+
+use Elgg\Exceptions\UnexpectedValueException as ElggUnexpectedValueException;
+
 /**
  * The base class for \ElggEntity extenders.
  *
@@ -23,12 +26,15 @@
  */
 abstract class ElggExtender extends \ElggData {
 
-	protected $int_columns = [
+	/**
+	 * @var string[] attributes that are integers
+	 */
+	protected const INTEGER_ATTR_NAMES = [
 		'id',
 		'entity_guid',
 		'owner_guid',
-		'time_created',
 		'access_id',
+		'time_created',
 	];
 
 	/**
@@ -56,14 +62,13 @@ abstract class ElggExtender extends \ElggData {
 		if ($name === 'access_id' && $this instanceof ElggMetadata) {
 			$value = ACCESS_PUBLIC;
 		}
-		if (isset($value) && in_array($name, $this->int_columns)) {
+		
+		if (isset($value) && in_array($name, static::INTEGER_ATTR_NAMES)) {
 			$value = (int) $value;
 		}
+		
 		$this->attributes[$name] = $value;
 		if ($name == 'value') {
-			if (is_bool($value)) {
-				$value = (int) $value;
-			}
 			$this->attributes['value_type'] = self::detectValueType($value);
 		}
 	}
@@ -76,7 +81,7 @@ abstract class ElggExtender extends \ElggData {
 	 * @return void
 	 * @since 1.9
 	 */
-	public function setValue($value, $value_type = '') {
+	public function setValue($value, string $value_type = ''): void {
 		$this->attributes['value'] = $value;
 		$this->attributes['value_type'] = self::detectValueType($value, $value_type);
 	}
@@ -85,20 +90,23 @@ abstract class ElggExtender extends \ElggData {
 	 * Gets an attribute
 	 *
 	 * @param string $name Name
+	 *
 	 * @return mixed
+	 * @throws \Elgg\Exceptions\UnexpectedValueException
 	 */
 	public function __get($name) {
 		if (array_key_exists($name, $this->attributes)) {
 			if ($name == 'value') {
 				switch ($this->attributes['value_type']) {
-					case 'integer' :
+					case 'bool':
+						return (bool) $this->attributes['value'];
+					case 'integer':
 						return (int) $this->attributes['value'];
-					case 'text' :
+					case 'text':
 						return $this->attributes['value'];
-					default :
+					default:
 						$msg = "{$this->attributes['value_type']} is not a supported \ElggExtender value type.";
-						throw new \UnexpectedValueException($msg);
-						break;
+						throw new ElggUnexpectedValueException($msg);
 				}
 			}
 
@@ -117,37 +125,37 @@ abstract class ElggExtender extends \ElggData {
 	 *
 	 * @return int The owner GUID
 	 */
-	public function getOwnerGUID() {
+	public function getOwnerGUID(): int {
 		return $this->owner_guid;
 	}
 
 	/**
 	 * Get the entity that owns this extender
 	 *
-	 * @return \ElggEntity
+	 * @return \ElggEntity|null
 	 */
-	public function getOwnerEntity() {
-		return get_entity($this->owner_guid);
+	public function getOwnerEntity(): ?\ElggEntity {
+		return $this->owner_guid ? get_entity($this->owner_guid) : null;
 	}
 
 	/**
 	 * Get the entity this describes.
 	 *
-	 * @return \ElggEntity The entity
+	 * @return \ElggEntity|null
 	 */
-	public function getEntity() {
-		return get_entity($this->entity_guid);
+	public function getEntity(): ?\ElggEntity {
+		return $this->entity_guid ? get_entity($this->entity_guid) : null;
 	}
 
 	/**
 	 * Returns if a user can edit this entity extender.
 	 *
 	 * @param int $user_guid The GUID of the user doing the editing
-	 *                      (defaults to currently logged in user)
+	 *                       (defaults to currently logged in user)
 	 *
 	 * @return bool
 	 */
-	abstract public function canEdit($user_guid = 0);
+	abstract public function canEdit(int $user_guid = 0): bool;
 
 	/**
 	 * {@inheritdoc}
@@ -163,15 +171,9 @@ abstract class ElggExtender extends \ElggData {
 		$object->time_created = date('c', $this->getTimeCreated());
 		$object->read_access = $this->access_id;
 
-		$params[$this->getSubtype()] = $this; // deprecated use
 		$params[$this->getType()] = $this;
-		
-		// deprecated toObject hook
-		$deprecated_msg = "Triggering 'to:object' hook by extender name '{$this->getSubtype()}' has been deprecated. "
-			. "Use the generic 'to:object','{$this->getType()}' hook instead.";
-		$object = _elgg_services()->hooks->triggerDeprecated('to:object', $this->getSubtype(), $params, $object, $deprecated_msg, '2.3');
-		
-		return _elgg_services()->hooks->trigger('to:object', $this->getType(), $params, $object);
+				
+		return _elgg_services()->events->triggerResults('to:object', $this->getType(), $params, $object);
 	}
 
 	/*
@@ -179,13 +181,10 @@ abstract class ElggExtender extends \ElggData {
 	 */
 
 	/**
-	 * Return an identification for the object for storage in the system log.
-	 * This id must be an integer.
-	 *
-	 * @return int
+	 * {@inheritdoc}
 	 */
-	public function getSystemLogID() {
-		return $this->id;
+	public function getSystemLogID(): int {
+		return (int) $this->id;
 	}
 
 	/**
@@ -193,7 +192,7 @@ abstract class ElggExtender extends \ElggData {
 	 *
 	 * @return string
 	 */
-	public function getType() {
+	public function getType(): string {
 		return $this->type;
 	}
 
@@ -203,22 +202,22 @@ abstract class ElggExtender extends \ElggData {
 	 *
 	 * @return string
 	 */
-	public function getSubtype() {
+	public function getSubtype(): string {
 		return $this->name;
 	}
 
 	/**
 	 * Get a url for this extender.
 	 *
-	 * Plugins can register for the 'extender:url', <type> plugin hook to
+	 * Plugins can register for the 'extender:url', '<type>' event to
 	 * customize the url for an annotation or metadata.
 	 *
 	 * @return string
 	 */
-	public function getURL() {
+	public function getURL(): string {
 
 		$params = ['extender' => $this];
-		$url = _elgg_services()->hooks->trigger('extender:url', $this->getType(), $params, '');
+		$url = _elgg_services()->events->triggerResults('extender:url', $this->getType(), $params, '');
 
 		return elgg_normalize_url($url);
 	}
@@ -232,11 +231,17 @@ abstract class ElggExtender extends \ElggData {
 	 * @return string
 	 * @internal
 	 */
-	public static function detectValueType($value, $value_type = "") {
-		if ($value_type === 'integer' || $value_type === 'text') {
+	public static function detectValueType($value, string $value_type = ''): string {
+		if (in_array($value_type, ['integer', 'text', 'bool'])) {
 			return $value_type;
 		}
 
-		return is_int($value) ? 'integer' : 'text';
+		if (is_int($value)) {
+			return 'integer';
+		} elseif (is_bool($value)) {
+			return 'bool';
+		}
+		
+		return 'text';
 	}
 }

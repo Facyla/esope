@@ -4,70 +4,56 @@ namespace Elgg\Database;
 
 use Elgg\BootService;
 use Elgg\Database;
-use Psr\Log\LoggerInterface;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Traits\Loggable;
 
 /**
  * Manipulates values in the dbprefix_config table. Do not use to read/write $CONFIG.
- *
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
  * @internal
  * @since 1.10.0
  */
 class ConfigTable {
-		
-	/**
-	 * @var Database
-	 */
-	protected $db;
+	
+	use Loggable;
 	
 	/**
-	 * @var BootService
+	 * @var string name of the config database table
 	 */
-	protected $boot;
+	const TABLE_NAME = 'config';
 	
-	/**
-	 * @var \Elgg\Logger
-	 */
-	protected $logger;
-
+	protected Database $db;
+	
+	protected BootService $boot;
+	
 	/**
 	 * Constructor
 	 *
-	 * @param Database        $db     Database
-	 * @param BootService     $boot   BootService
-	 * @param LoggerInterface $logger Logger
+	 * @param Database    $db   Database
+	 * @param BootService $boot BootService
 	 */
 	public function __construct(
 		Database $db,
-		BootService $boot,
-		LoggerInterface $logger
+		BootService $boot
 	) {
 		$this->db = $db;
 		$this->boot = $boot;
-		$this->logger = $logger;
 	}
 
 	/**
-	 * Removes a config setting.
+	 * Removes a config setting
 	 *
 	 * @param string $name The name of the field.
 	 *
-	 * @return bool Success or failure
+	 * @return bool
 	 */
-	public function remove($name) {
-		$query = "
-			DELETE FROM {$this->db->prefix}config
-			WHERE name = :name
-		";
-
-		$params = [
-			':name' => $name,
-		];
+	public function remove(string $name): bool {
+		$delete = Delete::fromTable(self::TABLE_NAME);
+		$delete->where($delete->compare('name', '=', $name, ELGG_VALUE_STRING));
 		
 		$this->boot->clearCache();
-	
-		return $this->db->deleteData($query, $params) !== false;
+		
+		return $this->db->deleteData($delete) !== false;
 	}
 	
 	/**
@@ -82,34 +68,38 @@ class ConfigTable {
 	 *
 	 * @note Internal: The value is serialized so we maintain type information.
 	 *
-	 * @param string $name  The name of the configuration value
+	 * @param string $name  The name of the configuration value (cannot be greater than 255 characters)
 	 * @param mixed  $value Its value
 	 *
 	 * @return bool
+	 * @throws InvalidArgumentException
 	 */
-	public function set($name, $value) {
-		// cannot store anything longer than 255 characters in db, so catch before we set
-		if (strlen($name) > 255) {
-			$this->logger->error("The name length for configuration variables cannot be greater than 255");
-			return false;
+	public function set(string $name, $value): bool {
+		if ($value === null) {
+			// don't save null values to the DB
+			throw new InvalidArgumentException(__METHOD__ . ' $value needs to be set');
 		}
-	
-		$sql = "
-			INSERT INTO {$this->db->prefix}config
-			SET name = :name,
-				value = :value
-			ON DUPLICATE KEY UPDATE value = :value
-		";
 		
-		$params = [
-			':name' => $name,
-			':value' => serialize($value),
-		];
-				
-		$result = $this->db->insertData($sql, $params);
-
+		if ($this->get($name) === null) {
+			// $name doesn't exist yet
+			$insert = Insert::intoTable(self::TABLE_NAME);
+			$insert->values([
+				'name' => $insert->param($name, ELGG_VALUE_STRING),
+				'value' => $insert->param(serialize($value), ELGG_VALUE_STRING),
+			]);
+			
+			$result = $this->db->insertData($insert);
+		} else {
+			// $name already exist, so update
+			$update = Update::table(self::TABLE_NAME);
+			$update->set('value', $update->param(serialize($value), ELGG_VALUE_STRING))
+				->where($update->compare('name', '=', $name, ELGG_VALUE_STRING));
+			
+			$result = $this->db->updateData($update);
+		}
+		
 		$this->boot->clearCache();
-	
+		
 		return $result !== false;
 	}
 	
@@ -125,41 +115,35 @@ class ConfigTable {
 	 *
 	 * @return mixed|null
 	 */
-	public function get($name) {
-		$sql = "
-			SELECT value
-			FROM {$this->db->prefix}config
-			WHERE name = :name
-		";
-		$params = [
-			':name' => $name,
-		];
+	public function get(string $name) {
+		$select = Select::fromTable(self::TABLE_NAME);
+		$select->select('*')
+			->where($select->compare('name', '=', $name, ELGG_VALUE_STRING));
 		
-		$result = $this->db->getDataRow($sql, null, $params);
+		$result = $this->db->getDataRow($select);
 		if (!empty($result)) {
 			return unserialize($result->value);
 		}
-	
+		
 		return null;
 	}
 
 	/**
 	 * Load all config values from the config table
+	 *
 	 * @return array
-	 * @throws \DatabaseException
 	 */
-	public function getAll() {
+	public function getAll(): array {
 		$values = [];
-
-		$qb = Select::fromTable('config');
+		
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('*');
-
+		
 		$data = $this->db->getData($qb);
-
 		foreach ($data as $row) {
 			$values[$row->name] = unserialize($row->value);
 		}
-
+		
 		// don't pull in old config values
 		/**
 		 * @see \Elgg\Config::__construct sets this
@@ -167,7 +151,7 @@ class ConfigTable {
 		unset($values['path']);
 		unset($values['dataroot']);
 		unset($values['default_site']);
-
+		
 		return $values;
 	}
 }

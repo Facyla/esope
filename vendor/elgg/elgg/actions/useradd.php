@@ -1,9 +1,9 @@
 <?php
 /**
- * Elgg add action
+ * Elgg user add action
  */
 
-elgg_make_sticky_form('useradd');
+use Elgg\Exceptions\Configuration\RegistrationException;
 
 // Get variables
 $username = get_input('username');
@@ -21,7 +21,7 @@ $admin = is_array($admin) ? $admin[0] : $admin;
 
 $autogen_password = get_input('autogen_password');
 if ($autogen_password) {
-	$password = generate_random_cleartext_password();
+	$password = elgg_generate_password();
 	$password2 = $password;
 }
 
@@ -36,40 +36,35 @@ if (strcmp($password, $password2) != 0) {
 
 // For now, just try and register the user
 try {
-	$guid = register_user($username, $password, $name, $email, true);
-	if ($guid === false) {
-		return elgg_error_response(elgg_echo('adduser:bad'));
-	}
-
-	$new_user = get_user($guid);
-	if ($new_user && $admin && elgg_is_admin_logged_in()) {
+	$new_user = elgg_register_user([
+		'username' => $username,
+		'password' => $password,
+		'name' => $name,
+		'email' => $email,
+		'language' => $language,
+	]);
+	
+	if ($admin && elgg_is_admin_logged_in()) {
 		$new_user->makeAdmin();
 	}
 
-	elgg_clear_sticky_form('useradd');
-
 	$new_user->admin_created = true;
-	// @todo ugh, saving a guid as metadata!
 	$new_user->created_by_guid = elgg_get_logged_in_user_guid();
 
-	// The user language is set also by register_user(), but it defaults to
-	// language of the current user (admin), so we need to fix it here.
-	$new_user->language = $language;
-
-	$subject = elgg_echo('useradd:subject', [], $new_user->language);
+	$subject = elgg_echo('useradd:subject', [], $new_user->getLanguage());
 	$body = elgg_echo('useradd:body', [
-		$name,
 		elgg_get_site_entity()->getDisplayName(),
 		elgg_get_site_entity()->getURL(),
 		$username,
 		$password,
-	], $new_user->language);
+	], $new_user->getLanguage());
 
 	notify_user($new_user->guid, elgg_get_site_entity()->guid, $subject, $body, [
 		'action' => 'useradd',
 		'object' => $new_user,
 		'password' => $password,
-	]);
+		'apply_muting' => false,
+	], ['email']);
 
 	return elgg_ok_response('', elgg_echo('adduser:ok', [elgg_get_site_entity()->getDisplayName()]));
 } catch (RegistrationException $r) {

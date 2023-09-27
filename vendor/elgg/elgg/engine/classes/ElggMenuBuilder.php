@@ -1,5 +1,6 @@
 <?php
 
+use Elgg\Exceptions\InvalidArgumentException as ElggInvalidArgumentException;
 use Elgg\Menu\MenuItems;
 use Elgg\Menu\PreparedMenu;
 
@@ -25,7 +26,7 @@ class ElggMenuBuilder {
 	 *
 	 * @param ElggMenuItem[]|MenuItems $items Array of \ElggMenuItem objects
 	 *
-	 * @throws InvalidParameterException
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 */
 	public function __construct($items) {
 		if (is_array($items)) {
@@ -33,7 +34,7 @@ class ElggMenuBuilder {
 		}
 
 		if (!$items instanceof MenuItems) {
-			throw new InvalidParameterException(__CLASS__ . ' expects an instanceof of ' . MenuItems::class);
+			throw new ElggInvalidArgumentException(__CLASS__ . ' expects an instanceof of ' . MenuItems::class);
 		}
 
 		$this->items = $items;
@@ -102,9 +103,8 @@ class ElggMenuBuilder {
 	protected function prepare(MenuItems $items, $sort_by = 'priority') {
 		$menu = $this->setupSections($items);
 		$menu = $this->setupTrees($menu);
-		$menu = $this->sort($menu, $sort_by);
-
-		return $menu;
+		
+		return $this->sort($menu, $sort_by);
 	}
 
 	/**
@@ -206,10 +206,9 @@ class ElggMenuBuilder {
 					// menu item already existed in parents children, report the duplicate registration
 					$message = _elgg_services()->translator->translate('ElggMenuBuilder:Trees:DuplicateChild', [$menu_item_name]);
 					_elgg_services()->logger->notice($message);
-
-					continue;
 				}
 			}
+			
 			// convert keys to indexes for first level of tree
 			$parents = array_values($parents);
 
@@ -272,13 +271,13 @@ class ElggMenuBuilder {
 	protected function getSortCallback($sort_by = null) {
 		switch ($sort_by) {
 			case 'text':
-				return [\ElggMenuBuilder::class, 'compareByText'];
+				return [self::class, 'compareByText'];
 
 			case 'name':
-				return [\ElggMenuBuilder::class, 'compareByName'];
+				return [self::class, 'compareByName'];
 
 			case 'priority':
-				return [\ElggMenuBuilder::class, 'compareByPriority'];
+				return [self::class, 'compareByPriority'];
 		}
 
 		return $sort_by && is_callable($sort_by) ? $sort_by : null;

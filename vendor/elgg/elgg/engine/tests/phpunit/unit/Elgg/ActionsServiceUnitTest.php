@@ -2,12 +2,15 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\Http\CsrfException;
+use Elgg\Exceptions\Http\GatekeeperException;
+use Elgg\Exceptions\Http\PageNotFoundException;
+use Elgg\Exceptions\Http\ValidationException;
+use Elgg\Exceptions\DomainException;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
 use Elgg\Http\Request;
-use Elgg\I18n\Translator;
 use Elgg\Project\Paths;
-use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,29 +21,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
+	use MessageTesting;
+	
 	/**
-	 * @var ActionsService
+	 * @var string
 	 */
-	private $actions;
-
-	/**
-	 * @var Request
-	 */
-	private $request;
-
-	/**
-	 * @var PluginHooksService
-	 */
-	private $hooks;
-
-	/**
-	 * @var Translator
-	 */
-	private $translator;
+	protected $actionsDir;
 
 	public function up() {
-		$svc = _elgg_services();
-
 		$this->actionsDir = $this->normalizeTestFilePath('actions');
 
 		$request = $this->prepareHttpRequest();
@@ -48,8 +36,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function down() {
-		_elgg_services()->hooks->restore();
-		_elgg_services()->logger->enable();
+		_elgg_services()->events->restore();
 	}
 
 	function createService(Request $request) {
@@ -58,17 +45,14 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'request' => $request,
 		]);
 
-		$svc = $app->_services;
+		$svc = $app->internal_services;
 
 		$svc->session->start();
 
-		$svc->hooks->backup();
+		$svc->events->backup();
 		$svc->logger->disable();
 
 		_elgg_services()->translator->addTranslation('en', ['__test__' => 'Test']);
-
-		_elgg_register_routes();
-
 	}
 
 	function addCsrfTokens(Request $request) {
@@ -104,8 +88,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	function registerActions() {
-		$this->assertTrue(_elgg_services()->actions->register('test/output', "$this->actionsDir/output.php", 'public'));
-		$this->assertTrue(_elgg_services()->actions->register('test/non_ex_file', "$this->actionsDir/non_existing_file.php", 'public'));
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output.php", 'public');
+		_elgg_services()->actions->register('test/non_ex_file', "{$this->actionsDir}/non_existing_file.php", 'public');
 	}
 
 	/**
@@ -125,7 +109,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$actions = _elgg_services()->actions->getAllActions();
 		$this->assertArrayHasKey('test/output', $actions);
 		$this->assertEquals([
-			'file' => "$this->actionsDir/output.php",
+			'file' => "{$this->actionsDir}/output.php",
 			'access' => 'public',
 		], $actions['test/output']);
 
@@ -136,9 +120,9 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->registerActions();
 
-		$this->assertTrue(_elgg_services()->actions->unregister('test/output'));
-		$this->assertTrue(_elgg_services()->actions->unregister('test/non_ex_file'));
-		$this->assertFalse(_elgg_services()->actions->unregister('test/not_registered'));
+		_elgg_services()->actions->unregister('test/output');
+		_elgg_services()->actions->unregister('test/non_ex_file');
+		_elgg_services()->actions->unregister('test/not_registered');
 
 		$this->assertFalse(_elgg_services()->actions->exists('test/output'));
 		$this->assertFalse(_elgg_services()->actions->exists('test/non_ex_file'));
@@ -149,11 +133,11 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertFalse(_elgg_services()->actions->exists('test/output'));
 
-		$this->assertTrue(_elgg_services()->actions->register('test/output', "$this->actionsDir/output.php", 'public'));
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output.php", 'public');
 
 		$this->assertTrue(_elgg_services()->actions->exists('test/output'));
 
-		$this->assertTrue(_elgg_services()->actions->register('test/output', "$this->actionsDir/output2.php", 'public'));
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output2.php", 'public');
 
 		$this->assertTrue(_elgg_services()->actions->exists('test/output'));
 	}
@@ -163,35 +147,36 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertFalse(_elgg_services()->actions->exists('test/output'));
 		$this->assertFalse(_elgg_services()->actions->exists('test/not_registered'));
 
-		$this->assertTrue(_elgg_services()->actions->register('test/output', "$this->actionsDir/output.php", 'public'));
-		$this->assertTrue(_elgg_services()->actions->register('test/output_logged_in', "$this->actionsDir/output.php", 'logged_in'));
-		$this->assertTrue(_elgg_services()->actions->register('test/output_admin', "$this->actionsDir/output.php", 'admin'));
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output.php", 'public');
+		_elgg_services()->actions->register('test/output_logged_in', "{$this->actionsDir}/output.php", 'logged_in');
+		_elgg_services()->actions->register('test/output_logged_out', "{$this->actionsDir}/output.php", 'logged_out');
+		_elgg_services()->actions->register('test/output_admin', "{$this->actionsDir}/output.php", 'admin');
 	}
 
-	public function testCanRegisterActionWithUnknownAccessLevel() {
+	public function testCanNotRegisterActionWithUnknownAccessLevel() {
 
-		// Access level will fall back to admin
-		_elgg_services()->logger->disable();
-		$this->assertTrue(_elgg_services()->actions->register('test/output', "$this->actionsDir/output.php", 'pblc'));
-		$logged = _elgg_services()->logger->enable();
-
-		$this->assertEquals([
-			[
-				'message' => 'Unrecognized value \'pblc\' for $access in Elgg\\ActionsService::register',
-				'level' => LogLevel::ERROR,
-			]
-		], $logged);
-
-		$actions = _elgg_services()->actions->getAllActions();
-		$this->assertArrayHasKey('test/output', $actions);
-		$this->assertEquals([
-			'file' => "$this->actionsDir/output.php",
-			'access' => 'admin',
-		], $actions['test/output']);
+		$this->expectException(DomainException::class);
+		$this->expectExceptionMessage('Unrecognized value \'pblc\' for $access in Elgg\\ActionsService::register');
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output.php", 'pblc');
+	}
+	
+	public function testCanRegisterActionWithAdditionalMiddleware() {
+		$this->assertFalse(_elgg_services()->actions->exists('test/output'));
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output.php", 'public', [
+			'middleware' => \Elgg\Router\Middleware\AjaxGatekeeper::class,
+		]);
+		
+		$this->assertTrue(_elgg_services()->actions->exists('test/output'));
+		$route = _elgg_services()->routes->get('action:test/output');
+		$this->assertInstanceOf(\Elgg\Router\Route::class, $route);
+		
+		$middleware = $route->getDefault('_middleware');
+		$this->assertIsArray($middleware);
+		$this->assertContains(\Elgg\Router\Middleware\AjaxGatekeeper::class, $middleware);
 	}
 
 	public function testCanRegisterActionWithoutFilename() {
-		$this->assertTrue(_elgg_services()->actions->register('login'));
+		_elgg_services()->actions->register('login');
 
 		$actions = _elgg_services()->actions->getAllActions();
 		$this->assertArrayHasKey('login', $actions);
@@ -207,7 +192,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	 */
 	public function testCanCheckActionNamesForSanity($name) {
 		$this->markTestSkipped();
-		$this->assertFalse(_elgg_services()->actions->register($name, "$this->actionsDir/output.php", 'public'));
+		_elgg_services()->actions->register($name, "{$this->actionsDir}/output.php", 'public');
 	}
 
 	public function invalidActionNamesDataProvider() {
@@ -230,7 +215,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output6', "$this->actionsDir/output6.php", 'public'));
+		_elgg_services()->actions->register('output6', "{$this->actionsDir}/output6.php", 'public');
 
 		ob_start();
 		$response = _elgg_services()->router->getResponse($request);
@@ -268,7 +253,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	public function testCanNotValidateTokenAfterSessionExpiry() {
 		$dt = new \DateTime();
 		_elgg_services()->csrf->setCurrentTime($dt);
-		$timeout = _elgg_services()->csrf->getActionTokenTimeout();
 		$timestamp = $dt->getTimestamp();
 		$token = _elgg_services()->csrf->generateActionToken($timestamp);
 		_elgg_services()->session->invalidate();
@@ -287,7 +271,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 
@@ -311,7 +295,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->createService($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		_elgg_services()->csrf->setCurrentTime($dt);
 
@@ -342,7 +326,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php"));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php");
 
 		$this->expectException(GatekeeperException::class);
 		_elgg_services()->router->getResponse($request);
@@ -354,7 +338,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'admin'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'admin');
 
 		$this->expectException(GatekeeperException::class);
 		_elgg_services()->router->getResponse($request);
@@ -365,43 +349,22 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('no_file', "$this->actionsDir/no_file.php", 'public'));
+		_elgg_services()->actions->register('no_file', "{$this->actionsDir}/no_file.php", 'public');
 
 		$this->expectException(PageNotFoundException::class);
 		_elgg_services()->router->getResponse($request);
 	}
 
-	public function testActionHookIsTriggered() {
+	public function testValidateEventIsTriggered() {
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], false);
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler('action', 'output3', function ($hook, $type, $return, $params) {
-			echo 'hello';
-
-			return false;
-		});
-
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
-
-		$result = _elgg_services()->router->getResponse($request);
-
-		$this->assertInstanceOf(OkResponse::class, $result);
-		$this->assertEquals(ELGG_HTTP_OK, $result->getStatusCode());
-		$this->assertEquals(REFERRER, $result->getForwardURL());
-		$this->assertEquals('hello', $result->getContent());
-	}
-
-	public function testValidateHookIsTriggered() {
-		$request = $this->prepareHttpRequest('action/output3', 'POST', [], false);
-		$this->createService($request);
-		$this->addCsrfTokens($request);
-
-		_elgg_services()->hooks->registerHandler('action:validate', 'output3', function ($hook, $type, $return, $params) {
+		_elgg_services()->events->registerHandler('action:validate', 'output3', function (\Elgg\Event $event) {
 			throw new ValidationException('Invalid');
 		});
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		$this->expectException(ValidationException::class);
 		_elgg_services()->router->route($request);
@@ -412,7 +375,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('no_file', "$this->actionsDir/no_file.php", 'public'));
+		_elgg_services()->actions->register('no_file', "{$this->actionsDir}/no_file.php", 'public');
 
 		$this->expectException(PageNotFoundException::class);
 		_elgg_services()->router->getResponse($request);
@@ -431,14 +394,14 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	/**
 	 * Non-xhr call to an action must always result in a redirect
-	 * This test will implement the flow without triggering ajax forward hook
+	 * This test will implement the flow without triggering ajax forward event
 	 */
 	public function testCanRespondToNonAjaxRequest() {
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], false);
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('system_message', 'success');
@@ -454,7 +417,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	/**
-	 * This test will implement the flow without triggering ajax forward hook
+	 * This test will implement the flow without triggering ajax forward event
 	 */
 	public function testCanRespondToAjaxRequest() {
 
@@ -462,7 +425,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('system_message', 'success');
@@ -475,15 +438,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsStringIgnoringCase('charset=utf-8', $response->headers->get('Content-Type'));
 		$output = json_encode([
-			'output' => 'output3',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => [
-					'success',
-				]
-			],
-			'current_url' => current_page_url(),
+			'value' => 'output3',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => $request->headers->get('Referer'),
 		]);
 
@@ -491,7 +447,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	/**
-	 * This test will implement the flow without triggering ajax forward hook
+	 * This test will implement the flow without triggering ajax forward event
 	 * @group AjaxService
 	 */
 	public function testCanRespondToAjax2Request() {
@@ -500,7 +456,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('system_message', 'success');
@@ -538,15 +494,17 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', function ($hook, $type, $api_response) {
+		_elgg_services()->events->registerHandler(Services\AjaxResponse::RESPONSE_EVENT, 'action:output3', function (\Elgg\Event $event) {
 			/* @var $api_response Services\AjaxResponse */
+			$api_response = $event->getValue();
+			
 			$api_response->setTtl(1000);
 			$api_response->setData((object) ['value' => 'output3_modified']);
 
 			return $api_response;
 		});
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('system_message', 'success');
@@ -588,12 +546,14 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', function ($hook, $type, $api_response) {
+		_elgg_services()->events->registerHandler(Services\AjaxResponse::RESPONSE_EVENT, 'action:output3', function (\Elgg\Event $event) {
 			/* @var $api_response Services\AjaxResponse */
+			$api_response = $event->getValue();
+			
 			return $api_response->cancel();
 		});
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('system_message', 'success');
@@ -621,12 +581,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', [
+		_elgg_services()->events->registerHandler(Services\AjaxResponse::RESPONSE_EVENT, 'action:output3', [
 			Values::class,
 			'getFalse'
 		]);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		$this->expectException(\RuntimeException::class);
 		$this->route($request);
@@ -640,7 +600,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('error_message', 'error');
@@ -661,7 +621,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('error_message', 'error');
@@ -674,13 +634,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
 		$output = json_encode([
-			'output' => 'output3',
-			'status' => -1,
-			'system_messages' => [
-				'error' => ['error'],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
+			'value' => 'output3',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => $request->headers->get('Referer'),
 		]);
 
@@ -696,7 +651,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
+		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
 
 		set_input('output', 'output3');
 		set_input('error_message', 'error');
@@ -727,7 +682,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('system_message', 'success');
@@ -740,7 +695,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $response);
 		$this->assertEquals(ELGG_HTTP_FOUND, $response->getStatusCode());
 		$this->assertEquals(elgg_normalize_url('index'), $response->getTargetURL());
-		$this->assertContains('success', _elgg_services()->systemMessages->dumpRegister()['success']);
+		
+		$this->assertSystemMessageEmitted('success');
 	}
 
 	public function testCanRespondToNonAjaxRequestFromErrorResponseBuilder() {
@@ -749,7 +705,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('error_message', 'error');
@@ -762,7 +718,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $response);
 		$this->assertEquals(ELGG_HTTP_FOUND, $response->getStatusCode());
 		$this->assertEquals(elgg_normalize_url('index'), $response->getTargetURL());
-		$this->assertContains('error', _elgg_services()->systemMessages->dumpRegister()['error']);
+		
+		$this->assertErrorMessageEmitted('error');
 	}
 
 	public function testCanRespondToNonAjaxRequestFromRedirectResponseBuilder() {
@@ -771,7 +728,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('forward_url', 'index');
@@ -791,7 +748,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('system_message', 'success');
@@ -806,13 +763,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
 		$output = json_encode([
-			'output' => ['foo', 'bar'],
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => ['success']
-			],
-			'current_url' => current_page_url(),
+			'value' => ['foo', 'bar'],
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => elgg_normalize_url('index'),
 		]);
 
@@ -825,7 +777,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('error_message', 'error');
@@ -836,21 +788,11 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$response = _elgg_services()->responseFactory->getSentResponse();
 		$this->assertInstanceOf(Response::class, $response);
-		$this->assertEquals(ELGG_HTTP_OK, $response->getStatusCode());
+		$this->assertEquals(ELGG_HTTP_BAD_REQUEST, $response->getStatusCode());
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
-		$output = json_encode([
-			'output' => 'error', // registered error message
-			'status' => -1,
-			'system_messages' => [
-				'error' => ['error'],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
-			'forward_url' => elgg_normalize_url('index'),
-		]);
 
-		$this->assertEquals($output, $response->getContent());
+		$this->assertEquals('error', $response->getContent());
 	}
 
 	public function testCanRespondToAjaxRequestFromRedirectResponseBuilder() {
@@ -859,7 +801,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('forward_reason', ELGG_HTTP_FOUND);
@@ -872,18 +814,17 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals(ELGG_HTTP_OK, $response->getStatusCode());
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
+		
 		$output = json_encode([
-			'output' => '',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
+			'value' => '',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => elgg_normalize_url('index'),
 		]);
 
 		$this->assertEquals($output, $response->getContent());
+		
+		// compensate for fact that ResponseFactory::redirect closes a buffer it didn't open
+		ob_start();
 	}
 
 	/**
@@ -895,7 +836,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('system_message', 'success');
@@ -931,7 +872,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('error_message', 'error');
@@ -967,7 +908,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('error_message', 'error');
@@ -997,7 +938,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('forward_reason', ELGG_HTTP_FOUND);
 		set_input('forward_url', 'index');
@@ -1028,7 +969,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output5', "$this->actionsDir/output5.php", 'public'));
+		_elgg_services()->actions->register('output5', "{$this->actionsDir}/output5.php", 'public');
 
 		set_input('output', 'foo');
 
@@ -1044,7 +985,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output5', "$this->actionsDir/output5.php", 'public'));
+		_elgg_services()->actions->register('output5', "{$this->actionsDir}/output5.php", 'public');
 
 		set_input('output', 'foo');
 
@@ -1055,13 +996,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
 		$output = json_encode([
-			'output' => 'foo',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
+			'value' => 'foo',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => $request->headers->get('Referer'),
 		]);
 
@@ -1079,7 +1015,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		$this->assertTrue(_elgg_services()->actions->register('output5', "$this->actionsDir/output5.php", 'public'));
+		_elgg_services()->actions->register('output5', "{$this->actionsDir}/output5.php", 'public');
 
 		set_input('output', 'foo');
 
@@ -1110,10 +1046,11 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler('response', 'action:output4', function ($hook, $type, $response, $params) {
-			$this->assertEquals('response', $hook);
-			$this->assertEquals('action:output4', $type);
-			$this->assertEquals($response, $params);
+		_elgg_services()->events->registerHandler('response', 'action:output4', function (\Elgg\Event $event) {
+			$response = $event->getValue();
+			
+			$this->assertEquals('response', $event->getName());
+			$this->assertEquals('action:output4', $event->getType());
 			$this->assertInstanceOf(OkResponse::class, $response);
 
 			$response->setContent('good bye');
@@ -1122,7 +1059,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			return $response;
 		});
 
-		$this->assertTrue(_elgg_services()->actions->register('output4', "$this->actionsDir/output4.php", 'public'));
+		_elgg_services()->actions->register('output4', "{$this->actionsDir}/output4.php", 'public');
 
 		set_input('output', ['foo', 'bar']);
 		set_input('system_message', 'success');

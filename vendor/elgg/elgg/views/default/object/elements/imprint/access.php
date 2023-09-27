@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Displays information about access of the post
  *
@@ -11,6 +10,7 @@
  *                            Set to false to not render an icon
  *                            Default is determined by access level ('user', 'globe', 'lock', or 'cog')
  */
+
 $entity = elgg_extract('entity', $vars);
 if (!$entity instanceof ElggEntity) {
 	return;
@@ -25,18 +25,19 @@ if ($access === false || !elgg_is_logged_in()) {
 	return;
 }
 
+$access = (int) $access;
 switch ($access) {
-	case ACCESS_PUBLIC :
-	case ACCESS_LOGGED_IN :
+	case ACCESS_PUBLIC:
+	case ACCESS_LOGGED_IN:
 		$icon_name = 'globe';
 		break;
-	case ACCESS_PRIVATE :
+	case ACCESS_PRIVATE:
 		$icon_name = 'lock';
 		break;
 	default:
 		$icon_name = 'cog';
-		$collection = get_access_collection($access);
-		if ($collection && ($collection->getSubtype() == 'friends')) {
+		$collection = elgg_get_access_collection($access);
+		if ($collection instanceof \ElggAccessCollection && $collection->getSubtype() === 'friends') {
 			$icon_name = 'user';
 		}
 		break;

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Object full view
  *
@@ -14,12 +13,13 @@
  * @uses $vars['header_params']   Vars to pass to the header image block wrapper
  * @uses $vars['body_params']     Attributes to pass to the body wrapper
  */
+
 $entity = elgg_extract('entity', $vars);
 if (!$entity instanceof ElggEntity) {
 	return;
 }
 
-$class = elgg_extract_class($vars, ['elgg-listing-full', 'elgg-content', 'clearfix']);
+$class = elgg_extract_class($vars, ['elgg-listing-full', 'elgg-content']);
 unset($vars['class']);
 
 $content = elgg_view('object/elements/full/header', $vars);
@@ -28,6 +28,7 @@ $content .= elgg_view('object/elements/full/attachments', $vars);
 if (elgg_extract('show_navigation', $vars, false)) {
 	$content .= elgg_view('object/elements/full/navigation', $vars);
 }
+
 $content .= elgg_view('object/elements/full/responses', $vars);
 
 echo elgg_format_element('div', [

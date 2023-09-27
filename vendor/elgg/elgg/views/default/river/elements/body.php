@@ -10,7 +10,7 @@
  */
 
 $item = elgg_extract('item', $vars);
-if (!($item instanceof \ElggRiverItem)) {
+if (!$item instanceof \ElggRiverItem) {
 	return;
 }
 
@@ -19,6 +19,7 @@ $metadata = elgg_extract('metadata', $vars);
 if (!isset($metadata)) {
 	$metadata = elgg_view_menu('river', [
 		'item' => $item,
+		'prepare_dropdown' => true,
 	]);
 	
 	$object = $item->getObjectEntity();
@@ -51,12 +52,7 @@ if (!isset($summary)) {
 if ($summary === false) {
 	$subject = $item->getSubjectEntity();
 	if ($subject instanceof ElggEntity) {
-		$summary = elgg_view('output/url', [
-			'href' => $subject->getURL(),
-			'text' => $subject->getDisplayName(),
-			'class' => 'elgg-river-subject',
-			'is_trusted' => true,
-		]);
+		$summary = elgg_view_entity_url($subject, ['class' => 'elgg-river-subject']);
 	}
 }
 
@@ -74,12 +70,7 @@ if (!empty($message)) {
 // attachments
 $attachments = elgg_extract('attachments', $vars);
 if (!empty($attachments)) {
-	echo elgg_format_element('div', [
-		'class' => [
-			'elgg-river-attachments',
-			'clearfix',
-		],
-	], $attachments);
+	echo elgg_format_element('div', ['class' => 'elgg-river-attachments'], $attachments);
 }
 
 // responses (eg. comments)

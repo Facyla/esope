@@ -2,7 +2,7 @@
 
 namespace Elgg\Cache;
 
-use Elgg\Loggable;
+use Elgg\Traits\Loggable;
 
 /**
  * Volatile cache for select queries
@@ -15,6 +15,7 @@ use Elgg\Loggable;
  * @internal
  */
 class QueryCache extends LRUCache {
+	
 	use Loggable;
 	
 	/**
@@ -57,12 +58,16 @@ class QueryCache extends LRUCache {
 	 * This is useful for special scripts that pull large amounts of data back
 	 * in single queries.
 	 *
+	 * @param bool $clear also clear the cache (default: true)
+	 *
 	 * @return void
 	 */
-	public function disable() {
+	public function disable(bool $clear = true) {
 		$this->runtime_enabled = false;
 		
-		$this->clear();
+		if ($clear) {
+			$this->clear();
+		}
 	}
 	
 	/**
@@ -84,9 +89,7 @@ class QueryCache extends LRUCache {
 	public function clear() {
 		parent::clear();
 		
-		if ($this->logger) {
-			$this->logger->info('Query cache invalidated');
-		}
+		$this->getLogger()->info('Query cache invalidated');
 	}
 	
 	/**
@@ -99,10 +102,8 @@ class QueryCache extends LRUCache {
 		
 		$result = parent::get($key, $default);
 		
-		if ($this->logger) {
-			$this->logger->info("DB query results returned from cache (hash: $key)");
-		}
-			
+		$this->getLogger()->info("DB query results returned from cache (hash: {$key})");
+		
 		return $result;
 	}
 	
@@ -116,9 +117,7 @@ class QueryCache extends LRUCache {
 		
 		parent::set($key, $value);
 		
-		if ($this->logger) {
-			$this->logger->info("DB query results cached (hash: $key)");
-		}
+		$this->getLogger()->info("DB query results cached (hash: {$key})");
 	}
 	
 	/**
@@ -131,7 +130,6 @@ class QueryCache extends LRUCache {
 	 * @return string
 	 */
 	public function getHash(string $sql, array $params = [], string $extras = '') {
-		
 		$query_id = $sql . '|';
 		if (!empty($params)) {
 			$query_id .= serialize($params) . '|';
@@ -142,5 +140,4 @@ class QueryCache extends LRUCache {
 		// MD5 yields smaller mem usage for cache and cleaner logs
 		return md5($query_id);
 	}
-	
 }

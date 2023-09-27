@@ -8,6 +8,7 @@
 return array(
 
 	'item:object:file' => 'Filer',
+	
 	'collection:object:file' => 'Filer',
 	'collection:object:file:all' => "Alle filer",
 	'collection:object:file:owner' => "%s's filer",
@@ -22,14 +23,8 @@ return array(
 	'file:num_files' => "Antal viste filer",
 	'file:replace' => 'Erstat fil indhold (lad være tom for ikke at ændre i fil)',
 	'file:list:title' => "%s's %s %s",
-	'file:title:friends' => "Venner'",
 
 	'file:file' => "Fil",
-
-	'file:list:list' => 'Switch to the list view',
-	'file:list:gallery' => 'Switch to the gallery view',
-
-	'file:types' => "Tilføjede filtyper",
 
 	'file:type:' => 'Filer',
 	'file:type:all' => "Alle filer",
@@ -56,24 +51,12 @@ return array(
 
 	'groups:tool:file' => 'Aktiver gruppefiler',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Ny fil kaldt %s',
 	'file:notify:subject' => 'Ny fil: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages
@@ -82,5 +65,4 @@ View and comment on the file:
 	'file:none' => "Vi kan ikke finde nogle filer i øjeblikket",
 	'file:uploadfailed' => "Beklager, vi kunne ikke gemme din fil.",
 	'file:noaccess' => "Du har ikke tilladelse ti at ændre denne fil",
-	'file:cannotload' => "There was an error uploading the file",
 );

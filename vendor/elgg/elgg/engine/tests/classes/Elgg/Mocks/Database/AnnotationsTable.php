@@ -15,23 +15,23 @@ class AnnotationsTable extends DbAnnotations {
 	/**
 	 * @var \stdClass[]
 	 */
-	public $rows = [];
+	protected $rows = [];
 
 	/**
 	 * DB query query_specs
 	 * @var array
 	 */
-	public $query_specs = [];
+	protected $query_specs = [];
 
 	/**
 	 * @var int
 	 */
-	static $iterator = 100;
+	protected static $iterator = 100;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get($id) {
+	public function get(int $id): ?\ElggAnnotation {
 		if (empty($this->rows[$id])) {
 			return false;
 		}
@@ -43,7 +43,7 @@ class AnnotationsTable extends DbAnnotations {
 			return $annotation;
 		}
 
-		$user_guid = isset($user_guid) ? (int) $user_guid : elgg_get_logged_in_user_guid();
+		$user_guid = elgg_get_logged_in_user_guid();
 
 		if (_elgg_services()->userCapabilities->canBypassPermissionsCheck($user_guid)) {
 			return $annotation;
@@ -65,10 +65,13 @@ class AnnotationsTable extends DbAnnotations {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function create(ElggAnnotation $annotation, \ElggEntity $entity) {
-		static::$iterator++;
-		$id = static::$iterator;
+	public function create(ElggAnnotation $annotation, \ElggEntity $entity): int|bool {
+		self::$iterator++;
+		$id = self::$iterator;
 
+		// lock the time to prevent testing issues
+		$this->setCurrentTime();
+		
 		$row = (object) [
 			'type' => 'annotation',
 			'id' => $id,
@@ -86,13 +89,18 @@ class AnnotationsTable extends DbAnnotations {
 
 		$this->addQuerySpecs($row);
 
-		return parent::create($annotation, $entity);
+		$result = parent::create($annotation, $entity);
+		
+		// reset the time
+		$this->resetCurrentTime();
+		
+		return $result;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function update(ElggAnnotation $annotation) {
+	public function update(ElggAnnotation $annotation): bool {
 		$id = $annotation->id;
 		if (!isset($this->rows[$id])) {
 			return false;
@@ -117,7 +125,7 @@ class AnnotationsTable extends DbAnnotations {
 		$guids = elgg_extract('guids', $options, (array) elgg_extract('guid', $options));
 
 		$rows = [];
-		foreach ($this->rows as $id => $row) {
+		foreach ($this->rows as $row) {
 			if (empty($guids) || in_array($row->entity_guid, $guids)) {
 				$rows[] = new ElggAnnotation($row);
 			}
@@ -129,7 +137,7 @@ class AnnotationsTable extends DbAnnotations {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function delete(ElggAnnotation $annotation) {
+	public function delete(ElggAnnotation $annotation): bool {
 		parent::delete($annotation);
 
 		if (!isset($this->rows[$annotation->id])) {
@@ -149,7 +157,7 @@ class AnnotationsTable extends DbAnnotations {
 	 * @param \stdClass $row Data row
 	 * @return void
 	 */
-	public function clearQuerySpecs(\stdClass $row) {
+	protected function clearQuerySpecs(\stdClass $row) {
 		if (!isset($this->query_specs[$row->id])) {
 			return;
 		}
@@ -165,7 +173,7 @@ class AnnotationsTable extends DbAnnotations {
 	 *
 	 * @return void
 	 */
-	public function addQuerySpecs(\stdClass $row) {
+	protected function addQuerySpecs(\stdClass $row) {
 
 		$this->clearQuerySpecs($row);
 
@@ -242,15 +250,5 @@ class AnnotationsTable extends DbAnnotations {
 				return [];
 			}
 		]);
-	}
-
-	/**
-	 * Iterate ID
-	 * @return int
-	 */
-	public function iterate() {
-		static::$iterator++;
-
-		return static::$iterator;
 	}
 }

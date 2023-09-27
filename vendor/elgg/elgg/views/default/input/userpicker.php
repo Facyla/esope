@@ -11,6 +11,7 @@
  * @uses $vars['only_friends'] If enabled, will turn the input into a friends picker (default: false)
  * @uses $vars['show_friends'] Show the option to limit the search to friends (default: true)
  * @uses $vars['include_banned'] Include banned users in the search results (default: false)
+ * @uses $vars['placeholder'] Optional placeholder text for the input
  *
  * Defaults to lazy load user lists in alphabetical order. User needs
  * to type two characters before seeing the user popup list.
@@ -44,14 +45,20 @@ if (!empty($params)) {
 
 $handler = elgg_extract('handler', $vars, 'livesearch');
 $params['view'] = 'json'; // force json viewtype
-$handler = elgg_http_add_url_query_elements($handler, $params);
 
-$limit = (int) elgg_extract('limit', $vars, 0);
+$wrapper_options = [
+	'class' => elgg_extract_class($vars, ['elgg-user-picker']),
+	'data-limit' => (int) elgg_extract('limit', $vars, 0),
+	'data-name' => $name,
+	'data-handler' => elgg_http_add_url_query_elements($handler, $params),
+];
 
 $picker = elgg_format_element('input', [
 	'type' => 'text',
 	'class' => 'elgg-input-user-picker',
 	'size' => 30,
+	'id' => elgg_extract('id', $vars),
+	'placeholder' => elgg_extract('placeholder', $vars),
 ]);
 
 $picker .= elgg_view('input/hidden', ['name' => $name]);
@@ -64,36 +71,27 @@ if ($show_friends) {
 		'label' => elgg_echo('userpicker:only_friends'),
 	]);
 } elseif ($friends_only) {
-	$picker .= elgg_view('input/hidden', [
-		'name' => 'match_on',
-		'value' => 'friends',
-	]);
+	$wrapper_options['data-match-on'] = 'friends';
 } else {
-	$picker .= elgg_view('input/hidden', [
-		'name' => 'match_on',
-		'value' => elgg_extract('match_on', $vars, 'users', false),
-	]);
+	$wrapper_options['data-match-on'] = elgg_extract('match_on', $vars, 'users', false);
 }
 
 $items = '';
 foreach ($guids as $guid) {
-	$entity = get_entity($guid);
-	if ($entity) {
-		$items .= elgg_view('input/autocomplete/item', [
-			'entity' => $entity,
-			'input_name' => $name,
-		]);
+	$entity = get_entity((int) $guid);
+	if (!$entity instanceof \ElggEntity) {
+		continue;
 	}
+	
+	$items .= elgg_view('input/autocomplete/item', [
+		'entity' => $entity,
+		'input_name' => $name,
+	]);
 }
 
 $picker .= elgg_format_element('ul', ['class' => 'elgg-list elgg-user-picker-list'], $items);
 
-echo elgg_format_element('div', [
-	'class' => elgg_extract_class($vars, ['elgg-user-picker']),
-	'data-limit' => $limit,
-	'data-name' => $name,
-	'data-handler' => $handler,
-], $picker);
+echo elgg_format_element('div', $wrapper_options, $picker);
 
 ?>
 <script>

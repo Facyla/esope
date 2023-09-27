@@ -29,9 +29,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 	 */
 	public function up() {
 		$this->user = $this->createUser();
-		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($this->user);
+		_elgg_services()->session_manager->setLoggedInUser($this->user);
 		
 		// create a top page
 		$top_page = new ElggPage();
@@ -40,7 +38,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$top_page->title = 'Test ElggPage top';
 		$top_page->description = 'This is a test for ElggPage';
 		
-		$this->assertNotFalse($top_page->save());
+		$this->assertTrue($top_page->save());
 		$this->top_page = $top_page;
 		
 		$page = new ElggPage();
@@ -50,7 +48,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$page->description = 'This is a test for ElggPage which is a sub page';
 		$page->parent_guid = $this->top_page->guid;
 		
-		$this->assertNotFalse($page->save());
+		$this->assertTrue($page->save());
 		$this->page = $page;
 	}
 
@@ -66,15 +64,6 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		if (isset($this->page)) {
 			$this->page->delete();
 		}
-		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($this->getAdmin());
-		
-		if (isset($this->user)) {
-			$this->user->delete();
-		}
-		
-		$session->removeLoggedInUser();
 	}
 
 	public function testCreateObjectToClass() {
@@ -116,26 +105,26 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$this->assertInstanceOf(ElggPage::class, $top_page);
 		$this->assertInstanceOf(ElggPage::class, $page);
 		
-		$this->assertFalse($top_page->getParentEntity());
+		$this->assertNull($top_page->getParentEntity());
 		$this->assertEquals($page->getParentEntity()->guid, $top_page->guid);
 		
 		// invalid parent page (non ElggPage guid)
 		$page->parent_guid = $this->user->guid;
 		
 		$this->assertEquals($this->user->guid, $page->parent_guid);
-		$this->assertFalse($page->getParentEntity());
+		$this->assertNull($page->getParentEntity());
 		
 		// invalid parent page (non guid)
 		$page->parent_guid = 'a';
 		
 		$this->assertEquals('a', $page->parent_guid);
-		$this->assertFalse($page->getParentEntity());
+		$this->assertNull($page->getParentEntity());
 		
 		// invalid parent page (no metadata)
 		$page->parent_guid = null;
 		
 		$this->assertNull($page->parent_guid);
-		$this->assertFalse($page->getParentEntity());
+		$this->assertNull($page->getParentEntity());
 	}
 	
 	public function testGetParentGUID() {
@@ -185,8 +174,8 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$this->assertEquals($top_page->guid, $page->getParentGUID());
 		
 		// set to non ElggPage
-		$this->assertFalse($page->setParentByGUID($this->user->guid));
-		$this->assertNotEquals($this->user->guid, $page->getParentGUID());
+		$this->expectException(\TypeError::class);
+		$page->setParentByGUID($this->user->guid);
 	}
 	
 	public function testSetParentEntity() {
@@ -206,7 +195,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$this->assertEquals($top_page->guid, $page->getParentGUID());
 		
 		// set to non ElggPage
-		$this->assertFalse($page->setParentEntity($this->user));
-		$this->assertNotEquals($this->user->guid, $page->getParentGUID());
+		$this->expectException(\TypeError::class);
+		$page->setParentEntity($this->user);
 	}
 }

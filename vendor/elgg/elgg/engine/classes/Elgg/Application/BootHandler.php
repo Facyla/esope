@@ -3,7 +3,6 @@
 namespace Elgg\Application;
 
 use Elgg\Application;
-use Elgg\Event;
 
 /**
  * Handles application boot sequence
@@ -31,16 +30,9 @@ class BootHandler {
 	 * Boots services, plugins and trigger init/ready events
 	 *
 	 * @return void
-	 * @throws \ClassException
-	 * @throws \DatabaseException
-	 * @throws \InstallationException
-	 * @throws \InvalidParameterException
-	 * @throws \SecurityException
 	 */
-	public function __invoke() {
-		$config = $this->app->_services->config;
-
-		if ($config->boot_complete) {
+	public function __invoke(): void {
+		if ($this->app->getBootStatus('full_boot_completed')) {
 			return;
 		}
 
@@ -51,80 +43,71 @@ class BootHandler {
 
 	/**
 	 * Boot core services
+	 *
 	 * @return void
-	 * @throws \ClassException
-	 * @throws \DatabaseException
-	 * @throws \InstallationException
-	 * @throws \InvalidParameterException
-	 * @throws \SecurityException
 	 */
-	public function bootServices() {
-		$config = $this->app->_services->config;
-
-		if ($config->_service_boot_complete) {
+	public function bootServices(): void {
+		if ($this->app->getBootStatus('service_boot_completed')) {
 			return;
 		}
 
 		// in case not loaded already
-		$setups = $this->app->loadCore();
+		$this->app->loadCore();
 
-		$hooks = $this->app->_services->hooks;
-		$events = $this->app->_services->events;
-
-		foreach ($setups as $setup) {
-			if ($setup instanceof \Closure) {
-				$setup($events, $hooks);
-			}
-		}
-
-		if (!$this->app->_services->db) {
+		if (!$this->app->internal_services->db) {
 			// no database boot!
 			elgg_views_boot();
-			$this->app->_services->session->start();
-			$this->app->_services->translator->bootTranslations();
+			$this->app->internal_services->session->start();
+			$this->app->internal_services->translator->bootTranslations();
 
-			_elgg_init();
-			_elgg_input_init();
-			_elgg_nav_init();
+			\Elgg\Application\SystemEventHandlers::init();
 
-			$config->boot_complete = true;
-			$config->lock('boot_complete');
+			$this->app->setBootStatus('full_boot_completed', true);
 
 			return;
 		}
 
 		$this->setEntityClasses();
+		
+		// need to be registered as part of services, because partial boots do at least include the services
+		// the system relies on the existence of some of the event
+		$this->registerEvents();
 
 		// Connect to database, load language files, load configuration, init session
-		$this->app->_services->boot->boot($this->app->_services);
-
-		$config->_service_boot_complete = true;
-		$config->lock('_service_boot_complete');
+		$this->app->internal_services->boot->boot($this->app->internal_services);
+		
+		// we don't store langs in boot data because it varies by user
+		$this->app->internal_services->translator->bootTranslations();
+		
+		$this->app->setBootStatus('service_boot_completed', true);
 	}
 
 	/**
 	 * Boot plugins
+	 *
 	 * @return void
 	 */
-	public function bootPlugins() {
-		$config = $this->app->_services->config;
-
-		if ($config->_plugins_boot_complete || !$this->app->_services->db) {
+	public function bootPlugins(): void {
+		if ($this->app->getBootStatus('plugins_boot_completed') || !$this->app->internal_services->db) {
 			return;
 		}
 
-		$events = $this->app->_services->events;
+		$events = $this->app->internal_services->events;
 
 		$events->registerHandler('plugins_load:before', 'system', 'elgg_views_boot');
 		$events->registerHandler('plugins_load:after', 'system', function() {
-			_elgg_session_boot($this->app->_services);
+			$this->app->internal_services->session->boot();
 		});
 
-		$events->registerHandler('plugins_boot', 'system', '_elgg_register_routes');
-		$events->registerHandler('plugins_boot', 'system', '_elgg_register_actions');
+		$events->registerHandler('plugins_boot', 'system', function() {
+			$this->registerRoutes();
+		});
+		$events->registerHandler('plugins_boot', 'system', function() {
+			$this->registerActions();
+		});
 
 		// Setup all boot sequence handlers for active plugins
-		$this->app->_services->plugins->build();
+		$this->app->internal_services->plugins->build();
 
 		// Register plugin classes, entities etc
 		// Call PluginBootstrap::load()
@@ -132,48 +115,48 @@ class BootHandler {
 		$events->triggerSequence('plugins_load', 'system');
 
 		// Boot plugin, setup languages and views
-		// Include start.php
 		// Call PluginBootstrap::boot()
 		$events->triggerSequence('plugins_boot', 'system');
 
-		$config->_plugins_boot_complete = true;
-		$config->lock('_plugins_boot_complete');
+		$this->app->setBootStatus('plugins_boot_completed', true);
 	}
 
 	/**
 	 * Finish bootstrapping the application
+	 *
 	 * @return void
 	 */
-	public function bootApplication() {
-		$config = $this->app->_services->config;
-
-		if ($config->_application_boot_complete || !$this->app->_services->db) {
+	public function bootApplication(): void {
+		if ($this->app->getBootStatus('application_boot_completed') || !$this->app->internal_services->db) {
 			return;
 		}
 
-		$events = $this->app->_services->events;
+		$events = $this->app->internal_services->events;
 
-		$this->app->_services->views->clampViewtypeToPopulatedViews();
+		$this->app->internal_services->views->clampViewtypeToPopulatedViews();
 		$this->app->allowPathRewrite();
 
 		// Complete the boot process for both engine and plugins
 		$events->triggerSequence('init', 'system');
 
-		$config->boot_complete = true;
-		$config->lock('boot_complete');
+		$this->app->setBootStatus('full_boot_completed', true);
 
+		// Tell the access functions the system has booted, plugins are loaded,
+		// and the user is logged in so it can start caching
+		$this->app->internal_services->accessCollections->markInitComplete();
+		
 		// System loaded and ready
 		$events->triggerSequence('ready', 'system');
 
-		$config->_application_boot_complete = true;
-		$config->lock('_application_boot_complete');
+		$this->app->setBootStatus('application_boot_completed', true);
 	}
 
 	/**
 	 * Set core entity classes
+	 *
 	 * @return void
 	 */
-	public function setEntityClasses() {
+	public function setEntityClasses(): void {
 		elgg_set_entity_class('user', 'user', \ElggUser::class);
 		elgg_set_entity_class('group', 'group', \ElggGroup::class);
 		elgg_set_entity_class('site', 'site', \ElggSite::class);
@@ -183,5 +166,77 @@ class BootHandler {
 		elgg_set_entity_class('object', 'comment', \ElggComment::class);
 		elgg_set_entity_class('object', 'elgg_upgrade', \ElggUpgrade::class);
 		elgg_set_entity_class('object', 'admin_notice', \ElggAdminNotice::class);
+	}
+	
+	/**
+	 * Register core events
+	 *
+	 * @return void
+	 */
+	protected function registerEvents(): void {
+		$conf = \Elgg\Project\Paths::elgg() . 'engine/events.php';
+		$spec = \Elgg\Includer::includeFile($conf);
+		
+		$events = $this->app->internal_services->events;
+		
+		foreach ($spec as $name => $types) {
+			foreach ($types as $type => $callbacks) {
+				foreach ($callbacks as $callback => $event_spec) {
+					if (!is_array($event_spec)) {
+						continue;
+					}
+					
+					$unregister = (bool) elgg_extract('unregister', $event_spec, false);
+					
+					if ($unregister) {
+						$events->unregisterHandler($name, $type, $callback);
+					} else {
+						$priority = (int) elgg_extract('priority', $event_spec, 500);
+						
+						$events->registerHandler($name, $type, $callback, $priority);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Register core routes
+	 *
+	 * @return void
+	 */
+	protected function registerRoutes(): void {
+		$conf = \Elgg\Project\Paths::elgg() . 'engine/routes.php';
+		$routes = \Elgg\Includer::includeFile($conf);
+	
+		foreach ($routes as $name => $def) {
+			$this->app->internal_services->routes->register($name, $def);
+		}
+	}
+	
+	/**
+	 * Register core actions
+	 *
+	 * @return void
+	 */
+	protected function registerActions(): void {
+		$conf = \Elgg\Project\Paths::elgg() . 'engine/actions.php';
+		$actions = \Elgg\Includer::includeFile($conf);
+		
+		$root_path = \Elgg\Project\Paths::elgg();
+	
+		foreach ($actions as $action => $action_spec) {
+			if (!is_array($action_spec)) {
+				continue;
+			}
+			
+			$access = elgg_extract('access', $action_spec, 'logged_in');
+			$handler = elgg_extract('controller', $action_spec);
+			if (!$handler) {
+				$handler = elgg_extract('filename', $action_spec) ?: "{$root_path}/actions/{$action}.php";
+			}
+			
+			$this->app->internal_services->actions->register($action, $handler, $access);
+		}
 	}
 }

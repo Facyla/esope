@@ -8,58 +8,45 @@ use Elgg\IntegrationTestCase;
  */
 class ElggObjectIntegrationTest extends IntegrationTestCase {
 	
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::up()
-	 */
-	public function up() {
-		_elgg_services()->hooks->backup();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::down()
-	 */
-	public function down() {
-		_elgg_services()->hooks->restore();
-	}
-	
 	public function testCantCommentLoggedOut() {
-		
-		$object = $this->createObject();
+		$user = $this->createUser();
+		$object = $this->createObject(['subtype' => 'commentable']);
+		$object2 = $this->createObject(['subtype' => 'commentable']);
 		
 		$this->assertFalse($object->canComment());
+		$this->assertTrue($object->canComment($user->guid));
+		$this->assertFalse($object->canComment(-1));
+		$this->assertFalse($object->canComment($object2->guid));
 	}
 	
 	public function testCanCommentLoggedIn() {
 		
 		$user = $this->createUser();
+		$other_user = $this->createUser();
 		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($user);
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
-		$object = $this->createObject();
+		$object = $this->createObject(['subtype' => 'commentable']);
+		$object2 = $this->createObject(['subtype' => 'commentable']);
 				
 		$this->assertTrue($object->canComment());
-		
-		$session->removeLoggedInUser();
+		$this->assertTrue($object->canComment($other_user->guid));
+		$this->assertFalse($object->canComment(-1));
+		$this->assertFalse($object->canComment($object2->guid));
 	}
 	
 	public function testCanCommentOnGroupContent() {
-		
-		_elgg_groups_init();
-		
 		$user = $this->createUser();
 		$user2 = $this->createUser();
 		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($user);
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
 		$group = $this->createGroup([
 			'owner_guid' => $user2->guid,
 		]);
 		
 		$object = $this->createObject([
+			'subtype' => 'commentable',
 			'owner_guid' => $user2->guid,
 			'container_guid' => $group->guid,
 		]);
@@ -72,7 +59,13 @@ class ElggObjectIntegrationTest extends IntegrationTestCase {
 		
 		// now comment is allowed
 		$this->assertTrue($object->canComment());
+	}
+	
+	public function testEntityHasCapability() {
+		$object = $this->createObject();
+		$this->assertFalse($object->hasCapability('foo'));
 		
-		$session->removeLoggedInUser();
+		elgg_entity_enable_capability($object->getType(), $object->getSubtype(), 'foo');
+		$this->assertTrue($object->hasCapability('foo'));
 	}
 }

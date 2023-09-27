@@ -2,6 +2,7 @@
 
 namespace Elgg\Filesystem;
 
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\UnitTestCase;
 
 /**
@@ -20,13 +21,6 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 	public function up() {
 		$this->service = _elgg_services()->mimetype;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function down() {
-		
-	}
 	
 	/**
 	 * @dataProvider validFilenameProvider
@@ -44,18 +38,18 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 	}
 	
 	public function testGetMimeTypeWithInvalidFileCausesException() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->service->getMimeType($this->normalizeTestFilePath('file_not_found.txt'));
 	}
 	
-	public function testGetMimeTypeFiresHook() {
+	public function testGetMimeTypeFiresEvent() {
 		$calls = 0;
 		$value = null;
-		$handler = function(\Elgg\Hook $hook) use (&$calls, &$value) {
+		$handler = function(\Elgg\Event $event) use (&$calls, &$value) {
 			$calls++;
-			$value = $hook->getValue();
+			$value = $event->getValue();
 		};
-		elgg_register_plugin_hook_handler('mime_type', 'file', $handler);
+		elgg_register_event_handler('mime_type', 'file', $handler);
 		
 		$mimetype = $this->service->getMimeType($this->normalizeTestFilePath('dataroot/1/1/300x300.jpg'));
 		
@@ -63,7 +57,7 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 		$this->assertEquals('image/jpeg', $mimetype);
 		$this->assertEquals($mimetype, $value);
 		
-		elgg_unregister_plugin_hook_handler('mime_type', 'file', $handler);
+		elgg_unregister_event_handler('mime_type', 'file', $handler);
 	}
 	
 	public function testGetMimeTypeFromUnknownFileType() {
@@ -91,14 +85,14 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 		];
 	}
 	
-	public function testGetSimpleTypeFiresHook() {
+	public function testGetSimpleTypeFiresEvent() {
 		$calls = 0;
 		$value = null;
-		$handler = function(\Elgg\Hook $hook) use (&$calls, &$value) {
+		$handler = function(\Elgg\Event $event) use (&$calls, &$value) {
 			$calls++;
-			$value = $hook->getValue();
+			$value = $event->getValue();
 		};
-		elgg_register_plugin_hook_handler('simple_type', 'file', $handler);
+		elgg_register_event_handler('simple_type', 'file', $handler);
 		
 		$simpletype = $this->service->getSimpleType('image/jpeg');
 		
@@ -106,7 +100,7 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 		$this->assertEquals('image', $simpletype);
 		$this->assertEquals($simpletype, $value);
 		
-		elgg_unregister_plugin_hook_handler('simple_type', 'file', $handler);
+		elgg_unregister_event_handler('simple_type', 'file', $handler);
 	}
 	
 	/**

@@ -7,24 +7,11 @@
 
 return array(
 	'email:validate:subject' => "%s por favor confirma tu dirección de email para %s!",
-	'email:validate:body' => "Hi %s,
-
-Before you can start using %s, you must confirm your email address.
-
-Please confirm your email address by clicking on the link below:
-
-%s
-
-If you can't click on the link, copy and paste it to your browser manually.
-
-%s
-%s",
 	'email:confirm:success' => "Has confirmado tu dirección de email!",
 	'email:confirm:fail' => "Tu direcci&oacute;n de email no pudo ser verificada...",
 
 	'uservalidationbyemail:emailsent' => "Correo electrónico enviado a <em> %s </em>",
 	'uservalidationbyemail:registerok' => "Para activar tu cuenta, por favor confirma tu dirección de email a trav&eacute;s del enlace que se te ha enviado.",
-	'uservalidationbyemail:login:fail' => "Tu cuenta no ha sido validada debido a intentos fallidos anteriores. Otra confirmación de dirección de email ha sido enviada.",
 
 	'uservalidationbyemail:admin:resend_validation' => 'Reeniar validaci&oacute;n',
 	'uservalidationbyemail:confirm_resend_validation' => '&iquest;Reenviar confirmaci&oacute;n de email a %s?',
@@ -36,7 +23,4 @@ If you can't click on the link, copy and paste it to your browser manually.
 
 	'uservalidationbyemail:messages:resent_validation' => 'Solicitud devalidaci&oacute;n reenviada.',
 	'uservalidationbyemail:messages:resent_validations' => 'Solicitud devalidaci&oacute;n reenviada a todos los usuarios marcados.',
-	
-	'uservalidationbyemail:upgrade:2019090600:title' => 'Track user e-mail validation status',
-	'uservalidationbyemail:upgrade:2019090600:description' => 'The e-mail validation status is tracked in a new way. Make sure all pending users are updated to the new tracking in order to still require e-mail validation.',
 );

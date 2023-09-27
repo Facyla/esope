@@ -16,12 +16,19 @@ class Declaration
     public $index;
     public $skip = false;
     public $important = false;
+    public $custom = false;
     public $valid = true;
 
     public function __construct($property, $value, $contextIndex = 0)
     {
-        // Normalize the property name.
-        $property = strtolower($property);
+        // Normalize, but preserve case if a custom property.
+        if (strpos($property, '--') === 0) {
+            $this->custom = true;
+            $this->skip = true;
+        }
+        else {
+            $property = strtolower($property);
+        }
 
         if ($this->skip = strpos($property, '~') === 0) {
             $property = substr($property, 1);
@@ -44,7 +51,7 @@ class Declaration
             $this->important = true;
         }
 
-        Crush::$process->hooks->run('declaration_preprocess', array('property' => &$property, 'value' => &$value));
+        Crush::$process->emit('declaration_preprocess', ['property' => &$property, 'value' => &$value]);
 
         // Reject declarations with empty CSS values.
         if ($value === false || $value === '') {
@@ -79,23 +86,25 @@ class Declaration
     {
         static $thisFunction;
         if (! $thisFunction) {
-            $thisFunction = new Functions(array('this' => 'CssCrush\fn__this'));
+            $thisFunction = new Functions(['this' => 'CssCrush\fn__this']);
         }
 
         if (! $this->skip) {
 
             // this() function needs to be called exclusively because it is self referencing.
-            $context = (object) array(
+            $context = (object) [
                 'rule' => $parentRule
-            );
+            ];
             $this->value = $thisFunction->apply($this->value, $context);
 
-            $parentRule->declarations->data += array($this->property => $this->value);
+            if (isset($parentRule->declarations->data)) {
+                $parentRule->declarations->data += [$this->property => $this->value];
+            }
 
-            $context = (object) array(
+            $context = (object) [
                 'rule' => $parentRule,
                 'property' => $this->property
-            );
+            ];
             $this->value = Crush::$process->functions->apply($this->value, $context);
         }
 
@@ -115,7 +124,7 @@ class Declaration
     public function indexFunctions()
     {
         // Create an index of all regular functions in the value.
-        $functions = array();
+        $functions = [];
         if (preg_match_all(Regex::$patt->functionTest, $this->value, $m)) {
             foreach ($m['func_name'] as $fn_name) {
                 $functions[strtolower($fn_name)] = true;

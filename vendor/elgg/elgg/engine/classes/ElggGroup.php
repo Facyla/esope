@@ -1,6 +1,7 @@
 <?php
 
 use Elgg\Groups\Tool;
+use Elgg\Traits\Entity\PluginSettings;
 
 /**
  * A group entity, used as a container for other entities.
@@ -14,6 +15,8 @@ class ElggGroup extends \ElggEntity {
 	const CONTENT_ACCESS_MODE_UNRESTRICTED = 'unrestricted';
 	const CONTENT_ACCESS_MODE_MEMBERS_ONLY = 'members_only';
 
+	use PluginSettings;
+	
 	/**
 	 * {@inheritdoc}
 	 */
@@ -25,58 +28,8 @@ class ElggGroup extends \ElggEntity {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getType() {
+	public function getType(): string {
 		return 'group';
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see ElggEntity::getMetadata()
-	 */
-	public function getMetadata($name) {
-		if ($name === 'group_acl') {
-			elgg_deprecated_notice("Getting 'group_acl' metadata has been deprecated, use ElggGroup::getOwnedAccessCollection('group_acl')", '3.0');
-		}
-		
-		return parent::getMetadata($name);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see ElggEntity::setMetadata()
-	 */
-	public function setMetadata($name, $value, $value_type = '', $multiple = false) {
-		if ($name === 'group_acl') {
-			elgg_deprecated_notice("Setting 'group_acl' metadata has been deprecated, use ElggGroup::getOwnedAccessCollection('group_acl')", '3.0');
-			return false;
-		}
-		
-		return parent::setMetadata($name, $value, $value_type, $multiple);
-	}
-
-	/**
-	 * Add an \ElggObject to this group.
-	 *
-	 * @param \ElggObject $object The object.
-	 *
-	 * @return bool
-	 */
-	public function addObjectToGroup(\ElggObject $object) {
-		$object->container_guid = $this->guid;
-		return (bool) $object->save();
-	}
-
-	/**
-	 * Remove an object from this containing group and sets the container to be
-	 * object's owner
-	 *
-	 * @param \ElggObject $object The object.
-	 *
-	 * @return bool
-	 */
-	public function removeObjectFromGroup(ElggObject $object) {
-		$object->container_guid = $object->owner_guid;
-		return (bool) $object->save();
 	}
 
 	/**
@@ -103,17 +56,17 @@ class ElggGroup extends \ElggEntity {
 	 *
 	 * @return bool
 	 */
-	public function isPublicMembership() {
+	public function isPublicMembership(): bool {
 		return ($this->membership == ACCESS_PUBLIC);
 	}
 
 	/**
-	 * Return the content access mode used by group_gatekeeper()
+	 * Return the content access mode
 	 *
 	 * @return string One of CONTENT_ACCESS_MODE_* constants
 	 * @since 1.9.0
 	 */
-	public function getContentAccessMode() {
+	public function getContentAccessMode(): string {
 		$mode = $this->content_access_mode;
 
 		if (!isset($mode)) {
@@ -128,18 +81,19 @@ class ElggGroup extends \ElggEntity {
 		if ($mode === self::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {
 			return $mode;
 		}
+		
 		return self::CONTENT_ACCESS_MODE_UNRESTRICTED;
 	}
 
 	/**
-	 * Set the content access mode used by group_gatekeeper()
+	 * Set the content access mode
 	 *
 	 * @param string $mode One of CONTENT_ACCESS_MODE_* constants. If empty string, mode will not be changed
 	 *
 	 * @return void
 	 * @since 1.9.0
 	 */
-	public function setContentAccessMode($mode) {
+	public function setContentAccessMode(string $mode): void {
 		if (!$mode && $this->content_access_mode) {
 			return;
 		}
@@ -159,21 +113,16 @@ class ElggGroup extends \ElggEntity {
 	 *
 	 * @return bool
 	 */
-	public function isMember(\ElggUser $user = null) {
-		if ($user == null) {
-			$user = _elgg_services()->session->getLoggedInUser();
+	public function isMember(\ElggUser $user = null): bool {
+		if ($user === null) {
+			$user = _elgg_services()->session_manager->getLoggedInUser();
 		}
-		if (!$user) {
+		
+		if (!$user instanceof \ElggUser) {
 			return false;
 		}
 
-		$result = (bool) check_entity_relationship($user->guid, 'member', $this->guid);
-
-		$params = [
-			'user' => $user,
-			'group' => $this,
-		];
-		return _elgg_services()->hooks->trigger('is_member', 'group', $params, $result);
+		return $user->hasRelationship($this->guid, 'member');
 	}
 
 	/**
@@ -184,24 +133,16 @@ class ElggGroup extends \ElggEntity {
 	 *
 	 * @return bool Whether joining was successful.
 	 */
-	public function join(\ElggUser $user, $params = []) {
-		$result = add_entity_relationship($user->guid, 'member', $this->guid);
-	
-		if (!$result) {
+	public function join(\ElggUser $user, array $params = []): bool {
+		if (!$user->addRelationship($this->guid, 'member')) {
 			return false;
 		}
 		
-		$event_params = [
-			'group' => $this,
-			'user' => $user,
-		];
+		$params['group'] = $this;
+		$params['user'] = $user;
 		
-		if (is_array($params)) {
-			$event_params = array_merge($params, $event_params);
-		}
+		_elgg_services()->events->trigger('join', 'group', $params);
 		
-		_elgg_services()->events->trigger('join', 'group', $event_params);
-	
 		return true;
 	}
 
@@ -212,12 +153,15 @@ class ElggGroup extends \ElggEntity {
 	 *
 	 * @return bool Whether the user was removed from the group.
 	 */
-	public function leave(\ElggUser $user) {
+	public function leave(\ElggUser $user): bool {
 		// event needs to be triggered while user is still member of group to have access to group acl
-		$params = ['group' => $this, 'user' => $user];
+		$params = [
+			'group' => $this,
+			'user' => $user,
+		];
 		_elgg_services()->events->trigger('leave', 'group', $params);
 
-		return remove_entity_relationship($user->guid, 'member', $this->guid);
+		return $user->removeRelationship($this->guid, 'member');
 	}
 
 	/**
@@ -230,20 +174,6 @@ class ElggGroup extends \ElggEntity {
 		unset($object->read_access);
 		return $object;
 	}
-
-	/**
-	 * Can a user comment on this group?
-	 *
-	 * @see \ElggEntity::canComment()
-	 *
-	 * @param int  $user_guid User guid (default is logged in user)
-	 * @param bool $default   Default permission
-	 * @return bool
-	 * @since 1.8.0
-	 */
-	public function canComment($user_guid = 0, $default = null) {
-		return false;
-	}
 	
 	/**
 	 * Checks if a tool option is enabled
@@ -253,7 +183,7 @@ class ElggGroup extends \ElggEntity {
 	 * @return bool
 	 * @since 3.0.0
 	 */
-	public function isToolEnabled($name) {
+	public function isToolEnabled(string $name): bool {
 		if (empty($name)) {
 			return false;
 		}
@@ -281,7 +211,7 @@ class ElggGroup extends \ElggEntity {
 	 * @return bool
 	 * @since 3.0.0
 	 */
-	public function enableTool($name) {
+	public function enableTool(string $name): bool {
 		$tool = $this->getTool($name);
 		if (!$tool instanceof Tool) {
 			return false;
@@ -303,7 +233,7 @@ class ElggGroup extends \ElggEntity {
 	 * @return bool
 	 * @since 3.0.0
 	 */
-	public function disableTool($name) {
+	public function disableTool(string $name): bool {
 		$tool = $this->getTool($name);
 		if (!$tool instanceof Tool) {
 			return false;
@@ -323,21 +253,9 @@ class ElggGroup extends \ElggEntity {
 	 * @param string $name Tool name
 	 *
 	 * @return Tool|null
-	 * @deprecated 3.0 Use ElggGroup::getTool
 	 */
-	protected function getToolConfig($name) {
-		return $this->getTool($name);
-	}
-
-	/**
-	 * Returns the registered tool configuration
-	 *
-	 * @param string $name Tool name
-	 *
-	 * @return Tool|null
-	 */
-	protected function getTool($name) {
-		return elgg()->group_tools->group($this)->get($name);
+	protected function getTool(string $name): ?Tool {
+		return _elgg_services()->group_tools->group($this)->get($name);
 	}
 
 	/**
@@ -347,9 +265,9 @@ class ElggGroup extends \ElggEntity {
 	 * @param ElggUser|null $user User
 	 * @return bool
 	 */
-	public function canAccessContent(ElggUser $user = null) {
+	public function canAccessContent(ElggUser $user = null): bool {
 		if (!isset($user)) {
-			$user = _elgg_services()->session->getLoggedInUser();
+			$user = _elgg_services()->session_manager->getLoggedInUser();
 		}
 
 		if ($this->getContentAccessMode() == self::CONTENT_ACCESS_MODE_MEMBERS_ONLY) {

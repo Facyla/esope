@@ -10,17 +10,11 @@
 $owner = elgg_extract('entity', $vars);
 
 // List files
-$options = [
+echo elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'file',
+	'owner_guid' => $owner->guid,
+	'no_results' => elgg_echo('file:none'),
 	'distinct' => false,
 	'pagination' => false,
-];
-
-if ($owner instanceof ElggGroup) {
-	$options['container_guid'] = $owner->guid;
-} else {
-	$options['owner_guid'] = $owner->guid;
-}
-
-echo elgg_list_entities($options);
+]);

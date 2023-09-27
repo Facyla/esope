@@ -8,15 +8,11 @@
 return array(
 	'profile' => 'Profile',
 	'profile:notfound' => 'Sorry. We could not find the requested profile.',
-	'profile:upgrade:2017040700:title' => 'Migrate schema of profile fields',
-	'profile:upgrade:2017040700:description' => 'This migration converts profile fields from metadata to annotations with each name
-prefixed with "profile:". <strong>Note:</strong> If you have "inactive" profile fields you want migrated, re-create those fields
-and re-load this page to make sure they get migrated.',
 	
 	'admin:configure_utilities:profile_fields' => 'Edit Profile Fields',
 	
 	'profile:edit' => 'Edit profile',
-	'profile:aboutme' => "About me",
+	'profile:edit:header' => 'Edit profile header',
 	'profile:description' => "About me",
 	'profile:briefdescription' => "Brief description",
 	'profile:location' => "Location",
@@ -42,7 +38,6 @@ and re-load this page to make sure they get migrated.',
 	'profile:field:week' => 'Week',
 	'profile:field:color' => 'Color',
 
-	'profile:edit:default' => 'Edit profile fields',
 	'profile:label' => "Profile label",
 	'profile:type' => "Profile type",
 	'profile:editdefault:delete:fail' => 'Removing profile field failed',

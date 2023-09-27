@@ -211,10 +211,25 @@ AjaxGatekeeper
 
 This gatekeeper will prevent access with non-xhr requests.
 
+PageOwnerGatekeeper
+~~~~~~~~~~~~~~~~~~~
+
+This gatekeeper will prevent access if there is no pageowner entity.
+
+GroupPageOwnerGatekeeper
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+This gatekeeper extends the ``PageOwnerGatekeeper`` but also requires the pageowner to be a ``ElggGroup`` entity.
+
+UserPageOwnerGatekeeper
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This gatekeeper extends the ``PageOwnerGatekeeper`` but also requires the pageowner to be an ``ElggUser`` entity.
+
 PageOwnerCanEditGatekeeper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This gatekeeper will prevent access if there is a pageowner detected and the pageowner can't be editted.
+This gatekeeper will prevent access if there is no pageowner detected and the pageowner can't be editted.
 
 GroupPageOwnerCanEditGatekeeper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -257,7 +272,7 @@ Custom Middleware
 ~~~~~~~~~~~~~~~~~
 
 Middleware handlers can be set to any callable that receives an instance of ``\Elgg\Request``:
-The handler should throw an instance of ``HttpException`` to prevent route access.
+The handler should throw an instance of ``\Elgg\Exceptions\HttpException`` to prevent route access.
 The handler can return an instance of ``\Elgg\Http\ResponseBuilder`` to prevent further implementation of the routing sequence (a redirect response can be returned to re-route the request).
 
 .. code-block:: php
@@ -310,27 +325,29 @@ that receives an instance of ``\Elgg\Request``:
 	]);
 
 
-The ``route:rewrite`` Plugin Hook
-=================================
+The ``route:rewrite`` event
+===========================
 
-For URL rewriting, the ``route:rewrite`` hook (with similar arguments as ``route``) is triggered very early,
+For URL rewriting, the ``route:rewrite`` event (with similar arguments as ``route``) is triggered very early,
 and allows modifying the request URL path (relative to the Elgg site).
 
 Here we rewrite requests for ``news/*`` to ``blog/*``:
 
 .. code-block:: php
 
-    function myplugin_rewrite_handler($hook, $type, $value, $params) {
+    function myplugin_rewrite_handler(\Elgg\Event $event) {
+        $value = $event->getValue();
+        
         $value['identifier'] = 'blog';
+        
         return $value;
     }
 
-    elgg_register_plugin_hook_handler('route:rewrite', 'news', 'myplugin_rewrite_handler');
+    elgg_register_event_handler('route:rewrite', 'news', 'myplugin_rewrite_handler');
 
 .. warning::
 
-	The hook must be registered directly in your plugin ``start.php`` (the ``[init, system]`` event
-	is too late).
+	The event must be registered directly in your plugin Bootstrap ``boot`` function. The ``init`` function is too late.
 
 Routing overview
 ================
@@ -340,8 +357,7 @@ For regular pages, Elgg's program flow is something like this:
 #. A user requests ``http://example.com/news/owner/jane``.
 #. Plugins are initialized.
 #. Elgg parses the URL to identifier ``news`` and segments ``['owner', 'jane']``.
-#. Elgg triggers the plugin hook ``route:rewrite, news`` (see above).
-#. Elgg triggers the plugin hook ``route, blog`` (was rewritten in the rewrite hook).
+#. Elgg triggers the event ``route:rewrite, news`` (see above).
 #. Elgg finds a registered route that matches the final route path, and renders a resource view associated with it.
    It calls ``elgg_view_resource('blog/owner', $vars)`` where ``$vars`` contains the username.
 #. The ``resources/blog/owner`` view gets the username via ``$vars['username']``, and uses many other views and

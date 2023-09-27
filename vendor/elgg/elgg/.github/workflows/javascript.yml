@@ -9,7 +9,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: none
           extensions: gd,pdo,xml,json,mysqli,pdo_mysql,libxml,mbstring
       
@@ -18,14 +18,11 @@ jobs:
         with:
           node-version: 8
         
-      - name: Install Composer v1
-        run: composer self-update --1
-        
       - name: Code checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore NPM cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -33,10 +30,10 @@ jobs:
                 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> ${GITHUB_OUTPUT}
         
       - name: Restore Composer Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}

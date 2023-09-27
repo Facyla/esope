@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,7 +33,7 @@ class ReconnectStrategy implements RetryStrategyInterface
      *
      * This is a static variable to enable opcache to inline the values.
      *
-     * @var array
+     * @var array<string>
      */
     protected static $causes = [
         'gone away',
@@ -53,7 +55,7 @@ class ReconnectStrategy implements RetryStrategyInterface
     /**
      * The connection to check for validity
      *
-     * @var Connection
+     * @var \Cake\Database\Connection
      */
     protected $connection;
 
@@ -70,14 +72,12 @@ class ReconnectStrategy implements RetryStrategyInterface
     }
 
     /**
-     * Checks whether or not the exception was caused by a lost connection,
-     * and returns true if it was able to successfully reconnect.
+     * {@inheritDoc}
      *
-     * @param Exception $exception The exception to check for its message
-     * @param int $retryCount The number of times the action has been already called
-     * @return bool Whether or not it is OK to retry the action
+     * Checks whether the exception was caused by a lost connection,
+     * and returns true if it was able to successfully reconnect.
      */
-    public function shouldRetry(Exception $exception, $retryCount)
+    public function shouldRetry(Exception $exception, int $retryCount): bool
     {
         $message = $exception->getMessage();
 
@@ -93,9 +93,9 @@ class ReconnectStrategy implements RetryStrategyInterface
     /**
      * Tries to re-establish the connection to the server, if it is safe to do so
      *
-     * @return bool Whether or not the connection was re-established
+     * @return bool Whether the connection was re-established
      */
-    protected function reconnect()
+    protected function reconnect(): bool
     {
         if ($this->connection->inTransaction()) {
             // It is not safe to blindly reconnect in the middle of a transaction
@@ -110,7 +110,9 @@ class ReconnectStrategy implements RetryStrategyInterface
 
         try {
             $this->connection->connect();
-            $this->connection->log('[RECONNECT]');
+            if ($this->connection->isQueryLoggingEnabled()) {
+                $this->connection->log('[RECONNECT]');
+            }
 
             return true;
         } catch (Exception $e) {

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Renders a <button>
  *
@@ -15,6 +14,8 @@ $vars['class'] = elgg_extract_class($vars, 'elgg-button');
 if (!isset($vars['text']) && isset($vars['value'])) {
 	// Keeping this to ease the transition to 3.0
 	$vars['text'] = elgg_extract('value', $vars);
+	
+	elgg_deprecated_notice('Only providing a value to a button is deprecated, please also provide a text: ' . $vars['value'], '5.0');
 }
 
 if (!empty($vars['confirm'])) {
@@ -29,26 +30,32 @@ if (!empty($vars['confirm'])) {
 $type = elgg_extract('type', $vars, 'button', false);
 $vars['type'] = $type;
 
-$text = elgg_extract('text', $vars);
+$text = (string) elgg_extract('text', $vars);
 unset($vars['text']);
 
-$text = elgg_format_element('span', [
-	'class' => 'elgg-button-label',
-], $text);
+if (!isset($vars['aria-label']) && !isset($vars['aria-labelledby']) && !isset($vars['title']) && empty(elgg_strip_tags($text))) {
+	elgg_log('An input/button should have a discernible text (text, title, aria-label or aria-labelledby)', 'NOTICE');
+}
 
-$icon = elgg_extract('icon', $vars, '');
+if (!elgg_is_empty($text)) {
+	$text = elgg_format_element('span', [
+		'class' => 'elgg-button-label',
+	], $text);
+}
+
+$icon = (string) elgg_extract('icon', $vars);
 unset($vars['icon']);
 
-if ($icon && !preg_match('/^</', $icon)) {
+if (!elgg_is_empty($icon) && !str_starts_with($icon, '<')) {
 	$icon = elgg_view_icon($icon, [
 		'class' => 'elgg-button-icon',
 	]);
 }
 
-$icon_alt = elgg_extract('icon_alt', $vars, '');
+$icon_alt = (string) elgg_extract('icon_alt', $vars);
 unset($vars['icon_alt']);
 
-if ($icon_alt && !preg_match('/^</', $icon_alt)) {
+if (!elgg_is_empty($icon_alt) && !str_starts_with($icon_alt, '<')) {
 	$icon_alt = elgg_view_icon($icon_alt, [
 		'class' => 'elgg-button-icon-alt',
 	]);

@@ -1,5 +1,4 @@
 define(['jquery', 'elgg'], function ($, elgg) {
-
 	/* Autofocuses first text input in a comment form when toggled */
 	$(document).on('elgg_ui_toggle', function (e, data) {
 		var $toggle = $(e.target);
@@ -55,7 +54,7 @@ define(['jquery', 'elgg'], function ($, elgg) {
 						$container.find('.elgg-pagination a').each(function () {
 							if (normalize(this.href) === base_url) {
 								$(this).on('click', function () {
-									location.reload(true);
+									location.reload();
 								});
 							}
 						});
@@ -70,7 +69,11 @@ define(['jquery', 'elgg'], function ($, elgg) {
 								$container.html($(result).filter('.elgg-comments').html());
 							}
 							
-							$container.find('#elgg-object-' + comment_guid).addClass('elgg-state-highlight');
+							var $comment = $container.find('#elgg-object-' + comment_guid);
+							$comment.addClass('elgg-state-highlight');
+							
+							$comment[0].scrollIntoView({behavior: 'smooth'});
+		
 							fix_pagination($container);
 						}
 					});
@@ -96,10 +99,12 @@ define(['jquery', 'elgg'], function ($, elgg) {
 			dc = new Comment(guid, $trigger.closest('.elgg-item-object-comment'));
 			$(this).data('Comment', dc);
 		}
+		
 		dc.toggleEdit();
 		
-		// trick the popup menu to close itself
-		$(document).trigger('scroll');
+		require(['elgg/popup'], function(popup) {
+			popup.close();
+		});
 		
 		return false;
 	});
@@ -116,7 +121,7 @@ define(['jquery', 'elgg'], function ($, elgg) {
 		 * @returns {jQuery} note: may be empty
 		 */
 		getForm: function () {
-			return this.$item.find('.elgg-form-comment-save');
+			return this.$item.find('#edit-comment-' + this.guid);
 		},
 
 		hideForm: function () {
@@ -191,6 +196,7 @@ define(['jquery', 'elgg'], function ($, elgg) {
 			} else {
 				this.loadForm();
 			}
+			
 			return false;
 		}
 	};

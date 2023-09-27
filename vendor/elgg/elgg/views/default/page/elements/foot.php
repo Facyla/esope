@@ -1,18 +1,19 @@
 <?php
 
-$elgg_init = elgg_view('initialize_elgg.js');
-echo "<script>$elgg_init</script>";
+echo elgg_format_element('script', [], elgg_view('initialize_elgg.js', $vars));
 
-// TODO(evan): "head" JS and "footer" JS distinction doesn't make sense anymore
-// TODO(evan): Introduce new "async" location for scripts allowed in head?
-$js = elgg_get_loaded_js('head');
-foreach ($js as $url) {
-	echo elgg_format_element('script', ['src' => $url]);
-}
-
-$js = elgg_get_loaded_js('footer');
-foreach ($js as $url) {
-	echo elgg_format_element('script', ['src' => $url]);
+$js = elgg_get_loaded_external_resources('js', 'footer');
+foreach ($js as $resource) {
+	$options = [
+		'src' => $resource->url,
+	];
+	
+	if (!empty($resource->integrity)) {
+		$options['integrity'] = $resource->integrity;
+		$options['crossorigin'] = 'anonymous';
+	}
+	
+	echo elgg_format_element('script', $options);
 }
 
 $deps = _elgg_services()->amdConfig->getDependencies();

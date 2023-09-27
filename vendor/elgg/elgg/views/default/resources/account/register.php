@@ -9,17 +9,17 @@
  * front page.
  */
 
-// check new registration allowed
-if (elgg_get_config('allow_registration') == false) {
-	throw new \Elgg\GatekeeperException(elgg_echo('registerdisabled'));
-}
-
 $friend_guid = (int) get_input('friend_guid', 0);
 $invitecode = get_input('invitecode');
 
 $form_params = [
 	'class' => 'elgg-form-account',
 	'ajax' => true,
+	'sticky_enabled' => true,
+	'sticky_ignored_fields' => [
+		'password',
+		'password2',
+	],
 ];
 
 $body_params = [
@@ -35,4 +35,5 @@ $shell = elgg_get_config('walled_garden') ? 'walled_garden' : 'default';
 echo elgg_view_page(elgg_echo('register'), [
 	'content' => $content,
 	'sidebar' => false,
+	'filter' => false,
 ], $shell);

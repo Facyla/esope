@@ -2,10 +2,10 @@
 
 namespace Elgg\Email;
 
-use Zend\Mail\Address as ZendAddress;
-use Zend\Mail\Exception\InvalidArgumentException;
-use Zend\Validator\EmailAddress as EmailAddressValidator;
-use Zend\Validator\Hostname;
+use Elgg\Exceptions\InvalidArgumentException;
+use Laminas\Mail\Address as ZendAddress;
+use Laminas\Validator\EmailAddress as EmailAddressValidator;
+use Laminas\Validator\Hostname;
 
 /**
  * Email address
@@ -15,6 +15,11 @@ use Zend\Validator\Hostname;
 class Address extends ZendAddress {
 	
 	/**
+	 * @var \ElggEntity The related entity
+	 */
+	protected $entity = null;
+	
+	/**
 	 * {@inheritdoc}
 	 */
 	public function __construct($email, $name = null, $comment = null) {
@@ -22,7 +27,11 @@ class Address extends ZendAddress {
 			$name = html_entity_decode($name, ENT_QUOTES | ENT_XHTML, 'UTF-8');
 		}
 		
-		parent::__construct($email, $name, $comment);
+		try {
+			parent::__construct($email, $name, $comment);
+		} catch (\Laminas\Mail\Exception\InvalidArgumentException $e) {
+			throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 	
 	/**
@@ -31,7 +40,7 @@ class Address extends ZendAddress {
 	 * @param string $email the new email address
 	 *
 	 * @return void
-	 * @throws \Zend\Mail\Exception\InvalidArgumentException
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 * @since 3.0
 	 */
 	public function setEmail($email) {
@@ -59,7 +68,7 @@ class Address extends ZendAddress {
 	 * @param string $name the new name
 	 *
 	 * @return void
-	 * @throws \Zend\Mail\Exception\InvalidArgumentException
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 * @since 3.0
 	 */
 	public function setName($name) {
@@ -86,25 +95,64 @@ class Address extends ZendAddress {
 	}
 	
 	/**
+	 * Store the ElggEntity related to this Address
+	 *
+	 * @param \ElggEntity $entity The entity
+	 *
+	 * @return void
+	 *
+	 * @since 4.0
+	 */
+	public function setEntity(\ElggEntity $entity): void {
+		$this->entity = $entity;
+	}
+	
+	/**
+	 * Returns the saved entity
+	 *
+	 * @return \ElggEntity|null
+	 *
+	 * @since 4.0
+	 */
+	public function getEntity(): ?\ElggEntity {
+		return $this->entity;
+	}
+	
+	/**
 	 * Parses strings like "Evan <evan@elgg.org>" into name/email objects.
 	 *
 	 * This is not very sophisticated and only used to provide a light BC effort.
 	 *
-	 * @param string $contact e.g. "Evan <evan@elgg.org>"
-	 * @param string $ignored Ignored
+	 * @param string $address e.g. "Evan <evan@elgg.org>"
+	 * @param string $comment Ignored (required for Laminas\Mail\Address)
 	 *
 	 * @return \Elgg\Email\Address
-	 * @throws \Zend\Mail\Exception\InvalidArgumentException
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 * @since 3.0
 	 */
-	public static function fromString($contact, $ignored = null) {
-		$containsName = preg_match('/<(.*)>/', $contact, $matches) == 1;
+	public static function fromString($address, $comment = null): Address {
+		$containsName = preg_match('/<(.*)>/', $address, $matches) == 1;
 		if ($containsName) {
-			$name = trim(elgg_substr($contact, 0, elgg_strpos($contact, '<')));
-			return new self($matches[1], $name);
-		} else {
-			return new self(trim($contact));
+			$name = trim(elgg_substr($address, 0, elgg_strpos($address, '<')));
+			return new static($matches[1], $name);
 		}
+		
+		return new static(trim($address));
+	}
+	
+	/**
+	 * Create an Address based on a Entity
+	 *
+	 * @param \ElggEntity $entity the entity to create the address for
+	 *
+	 * @return \Elgg\Email\Address
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
+	 * @since 4.0
+	 */
+	public static function fromEntity(\ElggEntity $entity): Address {
+		$address = new static($entity->email, $entity->getDisplayName());
+		$address->setEntity($entity);
+		return $address;
 	}
 	
 	/**
@@ -116,11 +164,11 @@ class Address extends ZendAddress {
 	 * @param string $name  the name
 	 *
 	 * @return string
-	 * @throws \Zend\Mail\Exception\InvalidArgumentException
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 * @since 3.0
 	 */
 	public static function getFormattedEmailAddress($email, $name = null) {
-		$mail = new self($email, $name);
+		$mail = new static($email, $name);
 		return $mail->toString();
 	}
 }

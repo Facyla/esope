@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -43,11 +45,11 @@ class ValueBinder
      * @param string|int $param placeholder to be replaced with quoted version
      * of $value
      * @param mixed $value The value to be bound
-     * @param string|int $type the mapped type name, used for casting when sending
+     * @param string|int|null $type the mapped type name, used for casting when sending
      * to database
      * @return void
      */
-    public function bind($param, $value, $type = 'string')
+    public function bind($param, $value, $type = null): void
     {
         $this->_bindings[$param] = compact('value', 'type') + [
             'placeholder' => is_int($param) ? $param : substr($param, 1),
@@ -63,7 +65,7 @@ class ValueBinder
      * if it starts with a colon, then the same string is returned
      * @return string to be used as a placeholder in a query expression
      */
-    public function placeholder($token)
+    public function placeholder(string $token): string
     {
         $number = $this->_bindingsCount++;
         if ($token[0] !== ':' && $token !== '?') {
@@ -77,11 +79,11 @@ class ValueBinder
      * Creates unique named placeholders for each of the passed values
      * and binds them with the specified type.
      *
-     * @param array|\Traversable $values The list of values to be bound
-     * @param string $type The type with which all values will be bound
+     * @param iterable $values The list of values to be bound
+     * @param string|int|null $type The type with which all values will be bound
      * @return array with the placeholders to insert in the query
      */
-    public function generateManyNamed($values, $type = 'string')
+    public function generateManyNamed(iterable $values, $type = null): array
     {
         $placeholders = [];
         foreach ($values as $k => $value) {
@@ -103,7 +105,7 @@ class ValueBinder
      *
      * @return array
      */
-    public function bindings()
+    public function bindings(): array
     {
         return $this->_bindings;
     }
@@ -113,7 +115,7 @@ class ValueBinder
      *
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->_bindings = [];
         $this->_bindingsCount = 0;
@@ -124,7 +126,7 @@ class ValueBinder
      *
      * @return void
      */
-    public function resetCount()
+    public function resetCount(): void
     {
         $this->_bindingsCount = 0;
     }
@@ -135,7 +137,7 @@ class ValueBinder
      * @param \Cake\Database\StatementInterface $statement The statement to add parameters to.
      * @return void
      */
-    public function attachTo($statement)
+    public function attachTo(StatementInterface $statement): void
     {
         $bindings = $this->bindings();
         if (empty($bindings)) {

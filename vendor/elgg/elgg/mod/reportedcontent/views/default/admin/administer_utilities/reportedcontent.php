@@ -1,17 +1,26 @@
 <?php
 /**
- * Elgg Reported content admin page
+ * Elgg Reported content admin page (new reports)
  */
 
-elgg_require_js('elgg/reportedcontent');
+echo elgg_view('navigation/tabs', [
+	'tabs' => [
+		[
+			'text' => elgg_echo('reportedcontent:new'),
+			'href' => 'admin/administer_utilities/reportedcontent',
+		],
+		[
+			'text' => elgg_echo('reportedcontent:archived_reports'),
+			'href' => 'admin/administer_utilities/reportedcontent/archive',
+		],
+	],
+]);
 
 echo elgg_list_entities([
 	'type' => 'object',
 	'subtype' => 'reported_content',
-	'order_by_metadata' => [
-		'name' => 'state',
-		'direction' => 'ASC',
-		'as' => 'text',
+	'metadata_name_value_pairs' => [
+		'state' => 'active',
 	],
 	'no_results' => elgg_echo('reportedcontent:none'),
 ]);

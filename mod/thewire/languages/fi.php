@@ -13,11 +13,10 @@ return array(
 	'thewire' => "Tila",
 
 	'item:object:thewire' => "Tilapäivitykset",
-	'collection:object:thewire' => 'Wire posts',
 	'collection:object:thewire:all' => "Kaikki tilapäivitykset",
 	'collection:object:thewire:owner' => "Käyttäjän %s tilapäivitykset",
 	'collection:object:thewire:friends' => "Ystävien tilapäivitykset",
-
+	
 	'thewire:replying' => "Vastataan käyttäjälle %s (@%s), joka kirjoitti",
 	'thewire:thread' => "Aihe",
 	'thewire:charleft' => "merkkiä jäljellä",
@@ -25,15 +24,10 @@ return array(
 	'thewire:noposts' => "Ei tilapäivityksiä",
 
 	'thewire:by' => 'Käyttäjän %s tilapäivitys',
-	'thewire:previous:help' => "Näytä edellinen viesti",
-	'thewire:hide:help' => "Piilota edellinen viesti",
-
-	'thewire:form:body:placeholder' => "What's happening?",
 	
 	/**
 	 * The wire river
 	 */
-	'river:object:thewire:create' => "%s posted to %s",
 	'thewire:wire' => 'tilansa',
 
 	/**

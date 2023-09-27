@@ -26,8 +26,17 @@ $body .= elgg_view_field([
 	'#label' => elgg_echo('config:friendly_time_number_of_days:label'),
 	'#help' => elgg_echo('config:friendly_time_number_of_days:help'),
 	'name' => 'friendly_time_number_of_days',
-	'value' => (int) elgg_get_config('friendly_time_number_of_days', 30),
+	'value' => (int) elgg_get_config('friendly_time_number_of_days'),
 	'min' => 0,
+]);
+
+$body .= elgg_view_field([
+	'#type' => 'number',
+	'#label' => elgg_echo('config:message_delay:label'),
+	'#help' => elgg_echo('config:message_delay:help'),
+	'name' => 'message_delay',
+	'value' => (int) elgg_get_config('message_delay'),
+	'min' => 1,
 ]);
 
 echo elgg_view_module('info', elgg_echo('other'), $body, ['id' => 'elgg-settings-advanced-other']);

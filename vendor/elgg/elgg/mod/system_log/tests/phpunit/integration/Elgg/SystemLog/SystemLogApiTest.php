@@ -3,7 +3,7 @@
 namespace Elgg\SystemLog;
 
 use Elgg\IntegrationTestCase;
-use Elgg\HooksRegistrationService\Event;
+use Elgg\Event;
 
 /**
  * @group Plugins
@@ -20,24 +20,20 @@ class SystemLogApiTest extends IntegrationTestCase {
 		$log->setCurrentTime();
 	}
 
-	public function down() {
-
-	}
-
 	public function testLogsObjectEvent() {
 
 		$object = $this->createObject();
 
 		$event = 'SystemLogApiTest' . rand();
 
-		system_log_default_logger(new Event(elgg(), 'log', 'systemlog', [
+		\Elgg\SystemLog\Logger::log(new Event(elgg(), 'log', 'systemlog', null, ['object' => [
 			'object' => $object,
 			'event' => $event,
-		]));
+		]]));
 
 		_elgg_services()->db->executeDelayedQueries();
 
-		$log = system_log_get_log([
+		$log = SystemLog::instance()->getAll([
 			'event' => $event,
 		]);
 
@@ -59,18 +55,16 @@ class SystemLogApiTest extends IntegrationTestCase {
 		$this->assertEquals($object->getSubtype(), $entry->object_subtype);
 		$this->assertEquals($event, $entry->event);
 		$this->assertEquals($object->owner_guid, $entry->owner_guid);
-		$this->assertRegExp('/\d+\.\d+\.\d+\.\d+/', $entry->ip_address);
+		$this->assertMatchesRegularExpression('/\d+\.\d+\.\d+\.\d+/', $entry->ip_address);
 		$this->assertEquals(elgg()->system_log->getCurrentTime()->getTimestamp(), $entry->time_created);
 		
-		$loaded_entry = system_log_get_log_entry($entry->id);
+		$loaded_entry = SystemLog::instance()->get($entry->id);
 
 		$this->assertEquals($entry, $loaded_entry);
 
-		$loaded_object = system_log_get_object_from_log_entry($entry->id);
+		$loaded_object = $loaded_entry->getObject();
 
 		$this->assertEquals($object->guid, $loaded_object->guid);
-
-		$object->delete();
 	}
 
 	public function testCanDeleteArchivedLog() {
@@ -79,14 +73,14 @@ class SystemLogApiTest extends IntegrationTestCase {
 
 		$event = 'SystemLogApiTest' . rand();
 
-		system_log_default_logger(new Event(elgg(), 'log', 'systemlog', [
+		\Elgg\SystemLog\Logger::log(new Event(elgg(), 'log', 'systemlog', null, ['object' => [
 			'object' => $object,
 			'event' => $event,
-		]));
+		]]));
 
 		_elgg_services()->db->executeDelayedQueries();
 
-		$log = system_log_get_log([]);
+		$log = SystemLog::instance()->getAll();
 
 		if (empty($log)) {
 			// We are seeing intermittent issues with tests on different systems
@@ -95,13 +89,38 @@ class SystemLogApiTest extends IntegrationTestCase {
 			$this->markTestSkipped();
 		}
 
-		$this->assertTrue(system_log_archive_log(-1)); // using -1 to make sure all entries are archived
-		$this->assertTrue(system_log_browser_delete_log(0));
+		$cron_class = new \Elgg\SystemLog\Cron();
+		$reflector = new \ReflectionClass(\Elgg\SystemLog\Cron::class);
+		$method = $reflector->getMethod('archiveLog');
+		$method->setAccessible(true);
+		
+		$this->assertTrue($method->invokeArgs($cron_class, [-1])); // using -1 to make sure all entries are archived
 
-		$entries = system_log_get_log([]);
+		$method = $reflector->getMethod('deleteLog');
+		$method->setAccessible(true);
+		
+		$this->assertTrue($method->invokeArgs($cron_class, [0]));
+		
+		$entries = SystemLog::instance()->getAll();
 
 		$this->assertEmpty($entries);
-
-		$object->delete();
+	}
+	
+	public function testCanDisableEnableSystemLogLogging() {
+		
+		$service = SystemLog::instance();
+		
+		$this->assertTrue($service->isLoggingEnabled());
+		
+		$service->disableLogging();
+		$this->assertFalse($service->isLoggingEnabled());
+		
+		$service->enableLogging();
+		$this->assertTrue($service->isLoggingEnabled());
+	}
+	
+	public function testDisabledSystemLogLoggingDoesntInsertRow() {
+		// @todo find a way to test this, because of the delayed queries which can be tricky to test
+		$this->markTestIncomplete();
 	}
 }

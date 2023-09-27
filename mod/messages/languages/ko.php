@@ -18,14 +18,11 @@ return array(
 	'messages:message' => "쪽지",
 	'messages:title' => "주제",
 	'messages:to:help' => "받는이의 사용자이름을 적으세요.",
-	'messages:inbox' => "수신함",
 	'messages:sendmessage' => "쪽지 보내기",
 	'messages:add' => "쪽지 쓰기",
 	'messages:sentmessages' => "쪽지 보내기",
 	'messages:toggle' => '모두 선택',
 	'messages:markread' => '읽은 것으로 표시',
-
-	'notification:method:site' => '누리집',
 
 	'messages:error' => '쪽지를 저장하는데 문제가 있었습니다. 다시 시도해 보세요.',
 
@@ -37,30 +34,15 @@ return array(
 	*/
 
 	'messages:posted' => "쪽지를 성공적으로 보냈습니다.",
-	'messages:success:delete:single' => '쪽지가 삭제되었습니다.',
 	'messages:success:delete' => '삭제된 쪽지',
 	'messages:success:read' => '읽은 것으로 표시된 쪽지',
 	'messages:error:messages_not_selected' => '선택된 쪽지 없슴',
-	'messages:error:delete:single' => '쪽지를 삭제할 수 없슴',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => '새 쪽지가 있습니다.',
-	'messages:email:body' => "%s에게서 새 쪽지가 왔습니다. 내용은:
-
-
-	%s
-
-
-	쪽지를 보려면 누르세요:
-
-	%s
-
-	 %s 에게 쪽지를 보내려면 누르세요:
-
-	%s",
 
 	/**
 	* Error messages
@@ -73,5 +55,9 @@ return array(
 	'messages:user:self' => "자신에게 쪽지를 보낼 수 없습니다.",
 
 	'messages:deleted_sender' => '삭제된 사용자',
+	
+	/**
+	* Settings
+	*/
 
 );

@@ -25,7 +25,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.2'
+          php-version: '7.4'
           coverage: none
           extensions: gd,pdo,xml,json,mysqli,pdo_mysql,libxml,mbstring
       
@@ -33,17 +33,17 @@ jobs:
         run: composer self-update --1
         
       - name: Code checkout Elgg 2.3
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: 'Elgg/Elgg'
           ref: '2.3'
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> ${GITHUB_OUTPUT}
         
       - name: Restore Composer Cache for 2.3
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -65,13 +65,54 @@ jobs:
       - name: Seed Elgg 2.3 database
         run: php -f ./.scripts/seeder/seed.php
       
+      - name: Code checkout Elgg 3.3
+        uses: actions/checkout@v3
+        with:
+          repository: 'Elgg/Elgg'
+          ref: '3.3'
+          clean: false
+      
+      - name: Composer install Elgg 3.3 dependencies
+        run: composer install --prefer-dist --no-suggest
+        
+      - name: Elgg CLI upgrade to 3.3
+        run: php ./elgg-cli upgrade async --verbose
+ 
+      - name: Install Composer v2
+        # make sure to remove the global fxp/composer-asset-plugin package as it's no longer needed
+        # also remove the elgg/login_as plugin because after the Composer update it has a hard time removing it
+        run: |
+          composer global remove fxp/composer-asset-plugin
+          composer remove elgg/login_as
+          composer self-update --2
+             
+      - name: Code checkout Elgg 4.3
+        uses: actions/checkout@v3
+        with:
+          repository: 'Elgg/Elgg'
+          ref: '4.3'
+          clean: false
+      
+      - name: Composer install Elgg 4.3 dependencies
+        run: composer install --prefer-dist --no-suggest
+        
+      - name: Elgg CLI upgrade to 4.3
+        run: php ./elgg-cli upgrade async --verbose
+        
+      - name: Update PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          coverage: none
+          extensions: gd,pdo,xml,json,mysqli,pdo_mysql,libxml,mbstring
+        
       - name: Code checkout PR
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           clean: false
       
       - name: Restore Composer Cache for PR
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -79,7 +120,7 @@ jobs:
       
       - name: Composer update
         # using composer update to make sure we have latest dependencies like in the starter project (zip)
-        run: composer update --prefer-dist --no-suggest
+        run: composer update --prefer-dist
       
       - name: Elgg CLI upgrade
         run: php ./elgg-cli upgrade async --verbose

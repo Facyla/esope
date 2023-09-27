@@ -18,6 +18,7 @@ class Url
     public $noRewrite;
     public $convertToData;
     public $value;
+    public $originalValue;
 
     public function __construct($raw_value)
     {
@@ -28,6 +29,7 @@ class Url
             $this->value = $raw_value;
         }
 
+        $this->originalValue = $this->value;
         $this->evaluate();
     }
 
@@ -41,9 +43,13 @@ class Url
             $this->simplify();
         }
 
+        if ($this->isData) {
+            return 'url("' . preg_replace('~(?<!\x5c)"~', '\\"', $this->value) . '")';
+        }
+
         // Only wrap url with quotes if it contains tricky characters.
         $quote = '';
-        if ($this->isData || preg_match('~[()*\s]~S', $this->value)) {
+        if (preg_match('~[()*\s]~S', $this->value)) {
             $quote = '"';
         }
 
@@ -59,8 +65,8 @@ class Url
 
     public function evaluate()
     {
-        // Protocol or protocol-relative (//) based URL.
-        if (preg_match('~^(?: (?<protocol>[a-z]+)\: | \/{2} )~ix', $this->value, $m)) {
+        // Protocol, protocol-relative (//) or fragment URL.
+        if (preg_match('~^(?: (?<protocol>[a-z]+)\: | \/{2} | \# )~ix', $this->value, $m)) {
 
             $this->protocol = ! empty($m['protocol']) ? strtolower($m['protocol']) : 'relative';
 
@@ -94,6 +100,11 @@ class Url
         return $this;
     }
 
+    public function isRelativeImplicit()
+    {
+        return $this->isRelative && preg_match('~^([\w$-]|\.[^\/.])~', $this->originalValue);
+    }
+
     public function getAbsolutePath()
     {
         $path = false;
@@ -110,7 +121,9 @@ class Url
     public function prepend($path_fragment)
     {
         if ($this->isRelative) {
-            $this->value = $path_fragment . $this->value;
+            $this->value = rtrim($path_fragment, DIRECTORY_SEPARATOR)
+                . DIRECTORY_SEPARATOR
+                . ltrim($this->value, DIRECTORY_SEPARATOR);
         }
 
         return $this;
@@ -142,7 +155,7 @@ class Url
         $file_ext = pathinfo($file, PATHINFO_EXTENSION);
 
         // Only allow certain extensions
-        static $allowed_file_extensions = array(
+        static $allowed_file_extensions = [
             'woff' => 'application/x-font-woff;charset=utf-8',
             'ttf'  => 'font/truetype;charset=utf-8',
             'svg'  => 'image/svg+xml',
@@ -151,7 +164,7 @@ class Url
             'jpeg' => 'image/jpg',
             'jpg'  => 'image/jpg',
             'png'  => 'image/png',
-        );
+        ];
 
         if (! isset($allowed_file_extensions[$file_ext])) {
 
@@ -159,8 +172,16 @@ class Url
         }
 
         $mime_type = $allowed_file_extensions[$file_ext];
-        $base64 = base64_encode(file_get_contents($file));
-        $this->value = "data:$mime_type;base64,$base64";
+        $file_contents = file_get_contents($file);
+
+        if ($file_ext === 'svg') {
+            $string = preg_replace('/\R/', '%0A', trim($file_contents));
+            $this->value = "data:$mime_type;utf8,$string";
+        }
+        else {
+            $base64 = base64_encode($file_contents);
+            $this->value = "data:$mime_type;base64,$base64";
+        }
 
         $this->setType('data')->protocol = 'data';
 

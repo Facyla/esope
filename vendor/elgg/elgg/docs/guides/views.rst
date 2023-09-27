@@ -154,7 +154,7 @@ If you check your assets into source control, point to them like this:
             // viewtype
             'default' => [
                 // view => /path/from/filesystem/root
-                'js/jquery-ui.js' => __DIR__ . '/bower_components/jquery-ui/jquery-ui.min.js',
+                'js/jquery-ui.js' => __DIR__ . '/node_modules/components-jqueryui/jquery-ui.min.js',
             ],
         ],
     ];
@@ -168,7 +168,7 @@ To point to assets installed with composer, use install-root-relative paths by l
         'views' => [
             'default' => [
                 // view => path/from/install/root
-                'js/jquery-ui.js' => 'vendor/bower-asset/jquery-ui/jquery-ui.min.js',
+                'js/jquery-ui.js' => 'vendor/npm-asset/components-jqueryui/jquery-ui.min.js',
             ],
         ],
     ];
@@ -177,7 +177,7 @@ Elgg core uses this feature extensively, though the value is returned directly f
 
 .. note::
 
-    You don't have to use Bower, Composer Asset Plugin, or any other script for
+    You don't have to use NPM, Composer Asset Plugin or any other script for
     managing your plugin's assets, but we highly recommend using a package manager
     of some kind because it makes upgrading so much easier.
 
@@ -261,8 +261,8 @@ Without modifying Elgg's core, Elgg provides several ways to customize almost al
 
 * You can `override a view <#overriding-views>`_, completely changing the file used to render it.
 * You can `extend a view <#extending-views>`_ by prepending or appending the output of another view to it.
-* You can `alter a view's inputs <#altering-view-input>`_ by plugin hook.
-* You can `alter a view's output <#altering-view-output>`_ by plugin hook.
+* You can `alter a view's inputs <#altering-view-input>`_ by event.
+* You can `alter a view's output <#altering-view-output>`_ by event.
 
 Overriding views
 ----------------
@@ -284,7 +284,7 @@ instead of an ``h1``, we could create a file at ``/mod/example/views/default/hel
 	Upgrades may bring changes in views, and if you have overridden them, you will not get those changes.
 	
 	You may instead want to alter :ref:`the input <guides/views#altering-view-input>`
-	or :ref:`the output <guides/views#altering-view-output>` of the view via plugin hooks.
+	or :ref:`the output <guides/views#altering-view-output>` of the view via events.
 
 .. note::
 
@@ -326,7 +326,7 @@ You can prepend views by passing a value to the 3rd parameter that is less than 
 	// prepends 'hello/greeting' to every occurrence of 'hello/world'
 	elgg_extend_view('hello/world', 'hello/greeting', 450);
 
-All view extensions should be registered in your plugin's ``init,system`` event handler in ``start.php``.
+All view extensions should be registered in your plugin's ``elgg-plugin.php``.
 
 .. _guides/views#altering-view-input:
 
@@ -336,10 +336,10 @@ Altering view input
 It may be useful to alter a view's ``$vars`` array before the view is rendered.
 
 Before each view rendering the ``$vars`` array is filtered by the
-:ref:`plugin hook <guides/hooks-list#views>` ``["view_vars", $view_name]``.
+:ref:`event <guides/events-list#views>` ``["view_vars", $view_name]``.
 Each registered handler function is passed these arguments:
 
-* ``$hook`` - the string ``"view_vars"``
+* ``$event`` - the string ``"view_vars"``
 * ``$view_name`` - the view name being rendered (the first argument passed to ``elgg_view()``)
 * ``$returnvalue`` - the modified ``$vars`` array
 * ``$params`` - an array containing:
@@ -355,11 +355,14 @@ Here we'll alter the default pagination limit for the comments view:
 
 .. code-block:: php
 
-	elgg_register_plugin_hook_handler('view_vars', 'page/elements/comments', 'myplugin_alter_comments_limit');
+	elgg_register_event_handler('view_vars', 'page/elements/comments', 'myplugin_alter_comments_limit');
 
-	function myplugin_alter_comments_limit($hook, $type, $vars, $params) {
+	function myplugin_alter_comments_limit(\Elgg\Event $event) {
+	    $vars = $event->getValue();
+	    
 	    // only 10 comments per page
 	    $vars['limit'] = elgg_extract('limit', $vars, 10);
+	    
 	    return $vars;
 	}
 
@@ -370,11 +373,11 @@ Altering view output
 
 Sometimes it is preferable to alter the output of a view instead of overriding it.
 
-The output of each view is run through the :ref:`plugin hook <guides/hooks-list#views>`
+The output of each view is run through the :ref:`event <guides/events-list#views>`
 ``["view", $view_name]`` before being returned by ``elgg_view()``.
 Each registered handler function is passed these arguments:
 
-* ``$hook`` - the string ``"view"``
+* ``$event`` - the string ``"view"``
 * ``$view_name`` - the view name being rendered (the first argument passed to ``elgg_view()``)
 * ``$result`` - the modified output of the view
 * ``$params`` - an array containing:
@@ -390,9 +393,9 @@ Here we'll eliminate breadcrumbs that don't have at least one link.
 
 .. code-block:: php
 
-	elgg_register_plugin_hook_handler('view', 'navigation/breadcrumbs', 'myplugin_alter_breadcrumb');
+	elgg_register_event_handler('view', 'navigation/breadcrumbs', 'myplugin_alter_breadcrumb');
 
-	function myplugin_alter_breadcrumb($hook, $type, $returnvalue, $params) {
+	function myplugin_alter_breadcrumb($event, $type, $returnvalue, $params) {
 	    // we only want to alter when viewtype is "default"
 	    if ($params['viewtype'] !== 'default') {
 	        return $returnvalue;
@@ -410,13 +413,13 @@ Replacing view output completely
 --------------------------------
 
 You can pre-set the view output by setting ``$vars['__view_output']``. The value will be returned as a
-string. View extensions will not be used and the ``view`` hook will not be triggered.
+string. View extensions will not be used and the ``view`` event will not be triggered.
 
 .. code-block:: php
 
-    elgg_register_plugin_hook_handler('view_vars', 'navigation/breadcrumbs', 'myplugin_no_page_breadcrumbs');
+    elgg_register_event_handler('view_vars', 'navigation/breadcrumbs', 'myplugin_no_page_breadcrumbs');
 
-    function myplugin_no_page_breadcrumbs($hook, $type, $vars, $params) {
+    function myplugin_no_page_breadcrumbs(\Elgg\Event $event) {
         if (elgg_in_context('pages')) {
             return ['__view_output' => ""];
         }
@@ -424,7 +427,7 @@ string. View extensions will not be used and the ``view`` hook will not be trigg
     
 .. note::
 
-	For ease of use you can also use a already existing default hook callback to prevent output ``\Elgg\Values::preventViewOutput``
+	For ease of use you can also use a already existing default event callback to prevent output ``\Elgg\Values::preventViewOutput``
 
 Displaying entities
 ===================
@@ -489,7 +492,7 @@ Note that ``elgg_list_entities`` allows the URL to set its ``limit`` and ``offse
 so set those explicitly if you need particular values (e.g. if you're not using it for pagination).
 
 Elgg knows that it can automatically supply an RSS feed on pages that use ``elgg_list_entities``.
-It initializes the ``["head","page"]`` plugin hook (which is used by the header)
+It initializes the ``["head","page"]`` event (which is used by the header)
 in order to provide RSS autodiscovery, which is why you can see the orange RSS
 icon on those pages in some browsers.
 
@@ -603,7 +606,7 @@ As of Elgg 2.0 the generic icons are based on the FontAwesome_ library. You can 
 * ``$vars`` is optional, for example you can set an additional class
 
 ``elgg_view_icon()`` calls the view ``output/icon`` with the given icon name and outputs all the correct classes to render the FontAwesome icon.
-If you wish to replace an icon with another icon you can write a ``view_vars``, ``output/icon`` hook to replace the icon name with your replacement.
+If you wish to replace an icon with another icon you can write a ``view_vars``, ``output/icon`` event to replace the icon name with your replacement.
 
 For backwards compatibility some older Elgg icon names are translated to a corresponding FontAwesome icon.
 

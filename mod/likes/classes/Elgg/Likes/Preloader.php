@@ -36,7 +36,7 @@ class Preloader {
 
 		$this->preloadCurrentUserLikes($guids);
 
-		$guids_remaining = $this->preloadCountsFromHook($this->getEntities($guids));
+		$guids_remaining = $this->preloadCountsFromEvent($this->getEntities($guids));
 		if (!empty($guids_remaining)) {
 			$this->preloadCountsFromQuery($guids_remaining);
 		}
@@ -61,6 +61,7 @@ class Preloader {
 		foreach ($guids as $guid) {
 			$this->data->setNumLikes($guid, 0);
 		}
+		
 		foreach ($count_rows as $row) {
 			$this->data->setNumLikes($row->guid, $row->cnt);
 		}
@@ -73,15 +74,15 @@ class Preloader {
 	 *
 	 * @return int[]
 	 */
-	protected function preloadCountsFromHook(array $entities) {
+	protected function preloadCountsFromEvent(array $entities) {
 		$guids_not_loaded = [];
 
 		foreach ($entities as $entity) {
-			// BC with likes_count(). If this hook is used this preloader may not be of much help.
+			// BC with likes_count(). If this event is used this preloader may not be of much help.
 			$type = $entity->getType();
 			$params = ['entity' => $entity];
 
-			$num_likes = elgg_trigger_plugin_hook('likes:count', $type, $params, false);
+			$num_likes = elgg_trigger_event_results('likes:count', $type, $params, false);
 			if ($num_likes) {
 				$this->data->setNumLikes($entity->guid, $num_likes);
 			} else {
@@ -116,6 +117,7 @@ class Preloader {
 		foreach ($guids as $guid) {
 			$this->data->setLikedByCurrentUser($guid, false);
 		}
+		
 		foreach ($annotation_rows as $row) {
 			$this->data->setLikedByCurrentUser($row->entity_guid, true);
 		}
@@ -133,15 +135,17 @@ class Preloader {
 
 		foreach ($items as $item) {
 			if ($item instanceof \ElggRiverItem) {
-				// only like group creation #3958
-				if ($item->type == "group" && $item->view != "river/group/create") {
+				$object = $item->getObjectEntity();
+				if (!$object instanceof \ElggEntity) {
 					continue;
 				}
 
-				$type = $item->type;
-				$subtype = $item->subtype;
-				$likable = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
-				if (!$likable) {
+				// only like group creation #3958
+				if ($object instanceof \ElggGroup && $item->view != 'river/group/create') {
+					continue;
+				}
+
+				if (!$object->hasCapability('likable')) {
 					continue;
 				}
 
@@ -153,14 +157,12 @@ class Preloader {
 					$guids[$item->object_guid] = true;
 				}
 			} elseif ($item instanceof \ElggEntity) {
-				$type = $item->type;
-				$subtype = $item->getSubtype();
-				$likable = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
-				if ($likable) {
+				if ($item->hasCapability('likable')) {
 					$guids[$item->guid] = true;
 				}
 			}
 		}
+		
 		return array_keys($guids);
 	}
 
@@ -184,6 +186,7 @@ class Preloader {
 				$fetch_guids[] = $guid;
 			}
 		}
+		
 		if ($fetch_guids) {
 			$fetched = elgg_get_entities([
 				'guids' => $fetch_guids,
@@ -191,6 +194,36 @@ class Preloader {
 			]);
 			array_splice($entities, count($entities), 0, $fetched);
 		}
+		
 		return $entities;
+	}
+	
+	/**
+	 * Event handler for listings to determine if preloading is needed
+	 *
+	 * @param \Elgg\Event $event 'view_vars', 'page/components/list'
+	 *
+	 * @return void
+	 */
+	public static function preload(\Elgg\Event $event) {
+		$vars = $event->getValue();
+		
+		$items = (array) elgg_extract('items', $vars, []);
+		if (!elgg_is_logged_in() || count($items) < 3) {
+			return;
+		}
+		
+		$preload = elgg_extract('preload_likes', $vars);
+		if (!isset($preload)) {
+			$list_class = elgg_extract('list_class', $vars);
+			$preload = !elgg_in_context('widgets') && in_array($list_class, ['elgg-list-river', 'elgg-list-entity', 'comments-list']);
+		}
+		
+		if (!$preload) {
+			return;
+		}
+		
+		$preloader = new self(\Elgg\Likes\DataService::instance());
+		$preloader->preloadForList($items);
 	}
 }

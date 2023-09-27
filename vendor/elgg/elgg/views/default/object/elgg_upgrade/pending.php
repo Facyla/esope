@@ -21,15 +21,14 @@ if (!$batch || $batch->shouldBeSkipped()) {
 $count = $batch->countItems();
 
 $data = elgg_format_element('span', [
-		'class' => 'upgrade-data hidden',
-		'data-total' => $count,
-	]
-);
+	'class' => 'upgrade-data hidden',
+	'data-total' => $count,
+]);
 
 $timer = elgg_format_element('span', ['class' => 'upgrade-timer'], '00:00:00');
 
 $counter = elgg_format_element('span', ['class' => 'upgrade-counter float-alt'],
-	$count === Batch::UNKNOWN_COUNT ? "0/???" : "0/$count"
+	$count === Batch::UNKNOWN_COUNT ? '0/???' : "0/{$count}"
 );
 
 $progressbar = elgg_format_element('div', [
@@ -39,8 +38,7 @@ $progressbar = elgg_format_element('div', [
 $errors_link = elgg_view('output/url', [
 	'href' => "#upgrade-errors-{$entity->guid}",
 	'text' => elgg_echo('upgrade:error_count', [0]),
-	'rel' => 'toggle',
-	'class' => 'upgrade-error-counter',
+	'class' => ['elgg-toggle', 'upgrade-error-counter'],
 ]);
 
 $errors = elgg_format_element('ul', [

@@ -36,10 +36,6 @@ class ElggEntityMetadataTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function down() {
-		if ($this->entity) {
-			$this->entity->delete();
-		}
-		
 		unset($this->unsaved_entity);
 		unset($this->entities);
 	}
@@ -242,13 +238,13 @@ class ElggEntityMetadataTest extends \Elgg\IntegrationTestCase {
 		
 	public function testDeleteMetadataNonExistingMetadata() {
 		// let's delete a non-existent metadata
-		$this->assertNull($this->entity->deleteMetadata('non-existing'));
+		$this->assertTrue($this->entity->deleteMetadata('non-existing'));
 	}
 		
 	public function testDeleteMetadataNonExistingMetadataNotDeletingOtherMetadata() {
 		// @link https://github.com/elgg/elgg/issues/2273
 		$this->assertTrue($this->entity->setMetadata('foo', 'bar'));
-		$this->assertNull($this->entity->deleteMetadata('notfoo'));
+		$this->assertTrue($this->entity->deleteMetadata('notfoo'));
 		$this->assertEquals($this->entity->getMetadata('foo'), 'bar');
 	}
 

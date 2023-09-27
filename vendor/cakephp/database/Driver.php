@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,9 +16,14 @@
  */
 namespace Cake\Database;
 
-use Cake\Database\Query;
+use Cake\Core\App;
+use Cake\Core\Retry\CommandRetry;
+use Cake\Database\Exception\MissingConnectionException;
+use Cake\Database\Retry\ErrorCodeWaitStrategy;
+use Cake\Database\Schema\SchemaDialect;
 use Cake\Database\Schema\TableSchema;
 use Cake\Database\Statement\PDOStatement;
+use Closure;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
@@ -28,16 +35,26 @@ use PDOException;
 abstract class Driver implements DriverInterface
 {
     /**
+     * @var int|null Maximum alias length or null if no limit
+     */
+    protected const MAX_ALIAS_LENGTH = null;
+
+    /**
+     * @var array<int>  DB-specific error codes that allow connect retry
+     */
+    protected const RETRY_ERROR_CODES = [];
+
+    /**
      * Instance of PDO.
      *
-     * @var \PDO|null
+     * @var \PDO
      */
     protected $_connection;
 
     /**
      * Configuration data.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $_config;
 
@@ -45,12 +62,12 @@ abstract class Driver implements DriverInterface
      * Base configuration that is merged into the user
      * supplied configuration data.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $_baseConfig = [];
 
     /**
-     * Indicates whether or not the driver is doing automatic identifier quoting
+     * Indicates whether the driver is doing automatic identifier quoting
      * for all queries
      *
      * @var bool
@@ -58,12 +75,26 @@ abstract class Driver implements DriverInterface
     protected $_autoQuoting = false;
 
     /**
+     * The server version
+     *
+     * @var string|null
+     */
+    protected $_version;
+
+    /**
+     * The last number of connection retry attempts.
+     *
+     * @var int
+     */
+    protected $connectRetries = 0;
+
+    /**
      * Constructor
      *
-     * @param array $config The configuration for the driver.
+     * @param array<string, mixed> $config The configuration for the driver.
      * @throws \InvalidArgumentException
      */
-    public function __construct($config = [])
+    public function __construct(array $config = [])
     {
         if (empty($config['username']) && !empty($config['login'])) {
             throw new InvalidArgumentException(
@@ -81,55 +112,67 @@ abstract class Driver implements DriverInterface
      * Establishes a connection to the database server
      *
      * @param string $dsn A Driver-specific PDO-DSN
-     * @param array $config configuration to be used for creating connection
+     * @param array<string, mixed> $config configuration to be used for creating connection
      * @return bool true on success
      */
-    protected function _connect($dsn, array $config)
+    protected function _connect(string $dsn, array $config): bool
     {
-        $connection = new PDO(
-            $dsn,
-            $config['username'],
-            $config['password'],
-            $config['flags']
-        );
-        $this->setConnection($connection);
+        $action = function () use ($dsn, $config) {
+            $this->setConnection(new PDO(
+                $dsn,
+                $config['username'] ?: null,
+                $config['password'] ?: null,
+                $config['flags']
+            ));
+        };
+
+        $retry = new CommandRetry(new ErrorCodeWaitStrategy(static::RETRY_ERROR_CODES, 5), 4);
+        try {
+            $retry->run($action);
+        } catch (PDOException $e) {
+            throw new MissingConnectionException(
+                [
+                    'driver' => App::shortName(static::class, 'Database/Driver'),
+                    'reason' => $e->getMessage(),
+                ],
+                null,
+                $e
+            );
+        } finally {
+            $this->connectRetries = $retry->getRetries();
+        }
 
         return true;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    abstract public function connect();
+    abstract public function connect(): bool;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function disconnect()
+    public function disconnect(): void
     {
+        /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
         $this->_connection = null;
+        $this->_version = null;
     }
 
     /**
-     * Returns correct connection resource or object that is internally used
-     * If first argument is passed, it will set internal connection object or
-     * result to the value passed.
+     * Returns connected server version.
      *
-     * @param mixed $connection The PDO connection instance.
-     * @return mixed Connection object used internally.
-     * @deprecated 3.6.0 Use getConnection()/setConnection() instead.
+     * @return string
      */
-    public function connection($connection = null)
+    public function version(): string
     {
-        deprecationWarning(
-            get_called_class() . '::connection() is deprecated. ' .
-            'Use setConnection()/getConnection() instead.'
-        );
-        if ($connection !== null) {
-            $this->_connection = $connection;
+        if ($this->_version === null) {
+            $this->connect();
+            $this->_version = (string)$this->_connection->getAttribute(PDO::ATTR_SERVER_VERSION);
         }
 
-        return $this->_connection;
+        return $this->_version;
     }
 
     /**
@@ -139,6 +182,13 @@ abstract class Driver implements DriverInterface
      */
     public function getConnection()
     {
+        if ($this->_connection === null) {
+            throw new MissingConnectionException([
+                'driver' => App::shortName(static::class, 'Database/Driver'),
+                'reason' => 'Unknown',
+            ]);
+        }
+
         return $this->_connection;
     }
 
@@ -147,6 +197,7 @@ abstract class Driver implements DriverInterface
      *
      * @param \PDO $connection PDO instance.
      * @return $this
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
     public function setConnection($connection)
     {
@@ -156,26 +207,25 @@ abstract class Driver implements DriverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    abstract public function enabled();
+    abstract public function enabled(): bool;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function prepare($query)
+    public function prepare($query): StatementInterface
     {
         $this->connect();
-        $isObject = $query instanceof Query;
-        $statement = $this->_connection->prepare($isObject ? $query->sql() : $query);
+        $statement = $this->_connection->prepare($query instanceof Query ? $query->sql() : $query);
 
         return new PDOStatement($statement, $this);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         $this->connect();
         if ($this->_connection->inTransaction()) {
@@ -186,9 +236,9 @@ abstract class Driver implements DriverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function commitTransaction()
+    public function commitTransaction(): bool
     {
         $this->connect();
         if (!$this->_connection->inTransaction()) {
@@ -199,9 +249,9 @@ abstract class Driver implements DriverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function rollbackTransaction()
+    public function rollbackTransaction(): bool
     {
         $this->connect();
         if (!$this->_connection->inTransaction()) {
@@ -212,84 +262,82 @@ abstract class Driver implements DriverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Returns whether a transaction is active for connection.
+     *
+     * @return bool
      */
-    abstract public function releaseSavePointSQL($name);
-
-    /**
-     * {@inheritDoc}
-     */
-    abstract public function savePointSQL($name);
-
-    /**
-     * {@inheritDoc}
-     */
-    abstract public function rollbackSavePointSQL($name);
-
-    /**
-     * {@inheritDoc}
-     */
-    abstract public function disableForeignKeySQL();
-
-    /**
-     * {@inheritDoc}
-     */
-    abstract public function enableForeignKeySQL();
-
-    /**
-     * {@inheritDoc}
-     */
-    abstract public function supportsDynamicConstraints();
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supportsSavePoints()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function quote($value, $type)
+    public function inTransaction(): bool
     {
         $this->connect();
 
-        return $this->_connection->quote($value, $type);
+        return $this->_connection->inTransaction();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function supportsSavePoints(): bool
+    {
+        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+
+        return $this->supports(static::FEATURE_SAVEPOINT);
+    }
+
+    /**
+     * Returns true if the server supports common table expressions.
+     *
+     * @return bool
+     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_QUOTE)` instead
+     */
+    public function supportsCTEs(): bool
+    {
+        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+
+        return $this->supports(static::FEATURE_CTE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function quote($value, $type = PDO::PARAM_STR): string
+    {
+        $this->connect();
+
+        return $this->_connection->quote((string)$value, $type);
     }
 
     /**
      * Checks if the driver supports quoting, as PDO_ODBC does not support it.
      *
      * @return bool
+     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_QUOTE)` instead
      */
-    public function supportsQuoting()
+    public function supportsQuoting(): bool
     {
-        $this->connect();
+        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
 
-        return $this->_connection->getAttribute(PDO::ATTR_DRIVER_NAME) !== 'odbc';
+        return $this->supports(static::FEATURE_QUOTE);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    abstract public function queryTranslator($type);
+    abstract public function queryTranslator(string $type): Closure;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    abstract public function schemaDialect();
+    abstract public function schemaDialect(): SchemaDialect;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    abstract public function quoteIdentifier($identifier);
+    abstract public function quoteIdentifier(string $identifier): string;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function schemaValue($value)
+    public function schemaValue($value): string
     {
         if ($value === null) {
             return 'NULL';
@@ -303,29 +351,37 @@ abstract class Driver implements DriverInterface
         if (is_float($value)) {
             return str_replace(',', '.', (string)$value);
         }
+        /** @psalm-suppress InvalidArgument */
         if (
-            (is_int($value) || $value === '0') || (
-            is_numeric($value) && strpos($value, ',') === false &&
-            $value[0] !== '0' && strpos($value, 'e') === false)
+            (
+                is_int($value) ||
+                $value === '0'
+            ) ||
+            (
+                is_numeric($value) &&
+                strpos($value, ',') === false &&
+                substr($value, 0, 1) !== '0' &&
+                strpos($value, 'e') === false
+            )
         ) {
             return (string)$value;
         }
 
-        return $this->_connection->quote($value, PDO::PARAM_STR);
+        return $this->_connection->quote((string)$value, PDO::PARAM_STR);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function schema()
+    public function schema(): string
     {
         return $this->_config['schema'];
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function lastInsertId($table = null, $column = null)
+    public function lastInsertId(?string $table = null, ?string $column = null)
     {
         $this->connect();
 
@@ -333,41 +389,39 @@ abstract class Driver implements DriverInterface
             return $this->_connection->lastInsertId($table);
         }
 
-        return $this->_connection->lastInsertId($table, $column);
+        return $this->_connection->lastInsertId($table);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         if ($this->_connection === null) {
             $connected = false;
         } else {
             try {
-                $connected = $this->_connection->query('SELECT 1');
+                $connected = (bool)$this->_connection->query('SELECT 1');
             } catch (PDOException $e) {
                 $connected = false;
             }
         }
 
-        return (bool)$connected;
+        return $connected;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function enableAutoQuoting($enable = true)
+    public function enableAutoQuoting(bool $enable = true)
     {
-        $this->_autoQuoting = (bool)$enable;
+        $this->_autoQuoting = $enable;
 
         return $this;
     }
 
     /**
-     * Disable auto quoting of identifiers in queries.
-     *
-     * @return $this
+     * @inheritDoc
      */
     public function disableAutoQuoting()
     {
@@ -377,68 +431,61 @@ abstract class Driver implements DriverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function isAutoQuotingEnabled()
+    public function isAutoQuotingEnabled(): bool
     {
         return $this->_autoQuoting;
     }
 
     /**
-     * Returns whether or not this driver should automatically quote identifiers
-     * in queries
+     * Returns whether the driver supports the feature.
      *
-     * If called with a boolean argument, it will toggle the auto quoting setting
-     * to the passed value
+     * Defaults to true for FEATURE_QUOTE and FEATURE_SAVEPOINT.
      *
-     * @deprecated 3.4.0 use enableAutoQuoting()/isAutoQuotingEnabled() instead.
-     * @param bool|null $enable Whether to enable auto quoting
+     * @param string $feature Driver feature name
      * @return bool
      */
-    public function autoQuoting($enable = null)
+    public function supports(string $feature): bool
     {
-        deprecationWarning(
-            'Driver::autoQuoting() is deprecated. ' .
-            'Use Driver::enableAutoQuoting()/isAutoQuotingEnabled() instead.'
-        );
-        if ($enable !== null) {
-            $this->enableAutoQuoting($enable);
+        switch ($feature) {
+            case static::FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION:
+            case static::FEATURE_QUOTE:
+            case static::FEATURE_SAVEPOINT:
+                return true;
         }
 
-        return $this->isAutoQuotingEnabled();
+        return false;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function compileQuery(Query $query, ValueBinder $generator)
+    public function compileQuery(Query $query, ValueBinder $binder): array
     {
         $processor = $this->newCompiler();
         $translator = $this->queryTranslator($query->type());
         $query = $translator($query);
 
-        return [$query, $processor->compile($query, $generator)];
+        return [$query, $processor->compile($query, $binder)];
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function newCompiler()
+    public function newCompiler(): QueryCompiler
     {
         return new QueryCompiler();
     }
 
     /**
-     * Constructs new TableSchema.
-     *
-     * @param string $table The table name.
-     * @param array $columns The list of columns for the schema.
-     * @return \Cake\Database\Schema\TableSchemaInterface
+     * @inheritDoc
      */
-    public function newTableSchema($table, array $columns = [])
+    public function newTableSchema(string $table, array $columns = []): TableSchema
     {
         $className = TableSchema::class;
         if (isset($this->_config['tableSchema'])) {
+            /** @var class-string<\Cake\Database\Schema\TableSchema> $className */
             $className = $this->_config['tableSchema'];
         }
 
@@ -446,10 +493,32 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * Returns the maximum alias length allowed.
+     * This can be different from the maximum identifier length for columns.
+     *
+     * @return int|null Maximum alias length or null if no limit
+     */
+    public function getMaxAliasLength(): ?int
+    {
+        return static::MAX_ALIAS_LENGTH;
+    }
+
+    /**
+     * Returns the number of connection retry attempts made.
+     *
+     * @return int
+     */
+    public function getConnectRetries(): int
+    {
+        return $this->connectRetries;
+    }
+
+    /**
      * Destructor
      */
     public function __destruct()
     {
+        /** @psalm-suppress PossiblyNullPropertyAssignmentValue */
         $this->_connection = null;
     }
 
@@ -457,9 +526,9 @@ abstract class Driver implements DriverInterface
      * Returns an array that can be used to describe the internal state of this
      * object.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
         return [
             'connected' => $this->_connection !== null,

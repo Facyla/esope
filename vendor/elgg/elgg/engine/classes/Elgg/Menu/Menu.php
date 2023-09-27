@@ -3,7 +3,7 @@
 namespace Elgg\Menu;
 
 /**
- * A complete menu, sorted, filtered by the "prepare" hook, and split into sections.
+ * A complete menu, sorted, filtered by the "prepare" event, and split into sections.
  *
  * This also encapsulates parameters to be passed to views.
  */
@@ -43,7 +43,7 @@ class Menu {
 	 * @return MenuSection|null
 	 */
 	public function getSection($name, $default = null) {
-		return isset($this->params['menu'][$name]) ? $this->params['menu'][$name] : $default;
+		return $this->params['menu'][$name] ?? $default;
 	}
 
 	/**

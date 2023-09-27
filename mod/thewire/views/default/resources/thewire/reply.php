@@ -3,7 +3,7 @@
  * Reply page
  */
 
-$guid = elgg_extract('guid', $vars);
+$guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($guid, 'object', 'thewire');
 
 /* @var $post ElggWire */
@@ -15,12 +15,12 @@ $content = elgg_view('thewire/reply', ['post' => $post]);
 
 $content .= elgg_view_form('thewire/add', [
 	'class' => 'thewire-form',
-	'prevent_double_submit' => true,
 ], [
 	'post' => $post,
 ]);
-$content .= elgg_view('input/urlshortener');
 
 echo elgg_view_page(elgg_echo('reply'), [
 	'content' => $content,
+	'filter_id' => 'thewire/edit',
+	'filter_value' => 'reply',
 ]);

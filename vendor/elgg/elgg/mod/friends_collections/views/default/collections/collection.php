@@ -19,7 +19,7 @@ $subtitle = elgg_echo('friends:collection:member_count', [$count]);
 
 if ($full_view) {
 	$title = false;
-	$content = elgg_view('collections/members', [
+	$members_list = elgg_view('collections/members', [
 		'collection' => $collection,
 	]);
 
@@ -33,17 +33,16 @@ if ($full_view) {
 		} else {
 			$item->addLinkClass('elgg-button elgg-button-action');
 		}
+		
 		elgg_register_menu_item('title', $item);
 	}
 } else {
-	$title = elgg_view('output/url', [
-		'text' => $collection->name,
-		'href' => $collection->getURL(),
-	]);
+	$title = elgg_view_url($collection->getURL(), $collection->name);
+	
 	$members = $collection->getMembers([
 		'limit' => 10,
 	]);
-	$content = elgg_view_entity_list($members, [
+	$members_list = elgg_view_entity_list($members, [
 		'list_type' => 'gallery',
 		'size' => 'tiny',
 		'gallery_class' => 'elgg-gallery-fluid elgg-gallery-users',
@@ -60,13 +59,11 @@ $params = [
 	'metadata' => $metadata,
 	'title' => $title,
 	'subtitle' => $subtitle,
-	'content' => $content,
+	'content' => $members_list,
 ];
 
 echo elgg_view('object/elements/summary/metadata', $params);
 echo elgg_view('object/elements/summary/title', $params);
 echo elgg_view('object/elements/summary/subtitle', $params);
 
-echo elgg_format_element('div', [
-	'class' => 'elgg-body clearfix',
-], $content);
+echo $members_list;

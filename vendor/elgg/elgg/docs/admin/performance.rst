@@ -136,9 +136,6 @@ Elgg has the ability to cache numerous resources created and fetched during
 the boot process. To configure how long this cache is valid you must set a TTL in your ``settings.php``
 file: ``$CONFIG->boot_cache_ttl = 3600;``
 
-Look at the `Stash <http://www.stashphp.com/index.html>`_ documentation for more info about the TTL. 
-
-
 Database query cache
 --------------------
 
@@ -191,8 +188,14 @@ Uncomment and populate the following sections in ``settings.php``
     $CONFIG->memcache = true;
     
     $CONFIG->memcache_servers = array (
-        array('server1', 11211),
-        array('server2', 11211)
+        array (
+            'host' => 'server1',
+            'port' => 11211
+        ),
+        array (
+            'host' => 'server2',
+            'port' => 11211
+        )
     );
 
 Optionaly if you run multiple Elgg installations but use ony one Memcache server, you may want 

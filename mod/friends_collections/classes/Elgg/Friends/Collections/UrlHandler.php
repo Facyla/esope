@@ -10,17 +10,19 @@ class UrlHandler {
 	/**
 	 * Rewrite access collection URL
 	 *
-	 * @param \Elgg\Hook $hook 'access_collection:url' 'access_collection'
+	 * @param \Elgg\Event $event 'access_collection:url' 'access_collection'
 	 *
 	 * @return void|string
 	 */
-	public function __invoke(\Elgg\Hook $hook) {
+	public function __invoke(\Elgg\Event $event) {
 
-		$collection = $hook->getParam('access_collection');
+		$collection = $event->getParam('access_collection');
 		if (!$collection instanceof \ElggAccessCollection) {
 			return;
 		}
 
-		return elgg_normalize_url("friends/collections/view/{$collection->id}");
+		return elgg_generate_url('view:access_collection:friends', [
+			'collection_id' => $collection->id,
+		]);
 	}
 }

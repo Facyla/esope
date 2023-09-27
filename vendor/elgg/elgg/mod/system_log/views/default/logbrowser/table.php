@@ -20,73 +20,44 @@ if (empty($log_entries)) {
 			<th><?php echo elgg_echo('logbrowser:user:name'); ?></th>
 			<th><?php echo elgg_echo('logbrowser:user:guid'); ?></th>
 			<th><?php echo elgg_echo('logbrowser:object'); ?></th>
-			<th><?php echo elgg_echo('logbrowser:object:guid'); ?></th>
+			<th><?php echo elgg_echo('logbrowser:object:id'); ?></th>
 			<th><?php echo elgg_echo('logbrowser:action'); ?></th>
 		</tr>
 	</thead>
+	<tbody>
 <?php
-	$alt = '';
+
+/** @var $entry Elgg\SystemLog\SystemLogEntry */
 foreach ($log_entries as $entry) {
-	if ($entry->ip_address) {
-		$ip_address = $entry->ip_address;
+	$user = $entry->performed_by_guid ? get_entity($entry->performed_by_guid) : null;
+	if ($user instanceof \ElggUser) {
+		$user_link = elgg_view_entity_url($user);
+		$user_guid_link = elgg_view_url("admin/administer_utilities/logbrowser?user_guid={$user->guid}", $user->guid);
 	} else {
-		$ip_address = '&nbsp;';
+		$user_link = '&nbsp;';
+		$user_guid_link = '&nbsp;';
 	}
 
-	$user = get_entity($entry->performed_by_guid);
-	if ($user) {
-		$user_link = elgg_view('output/url', [
-			'href' => $user->getURL(),
-			'text' => $user->getDisplayName(),
-			'is_trusted' => true,
-		]);
-		$user_guid_link = elgg_view('output/url', [
-			'href' => "admin/administer_utilities/logbrowser?user_guid={$user->guid}",
-			'text' => $user->getGUID(),
-			'is_trusted' => true,
-		]);
-	} else {
-		$user_guid_link = $user_link = '&nbsp;';
-	}
-
-	$object = system_log_get_object_from_log_entry($entry);
+	$object = $entry->getObject();
 	if (is_callable([$object, 'getURL'])) {
-		$object_link = elgg_view('output/url', [
-			'href' => $object->getURL(),
-			'text' => $entry->object_class,
-			'is_trusted' => true,
-		]);
+		$object_link = elgg_view_url($object->getURL(), $entry->object_class);
 	} else {
 		$object_link = $entry->object_class;
 	}
-?>
-<tr <?php echo $alt; ?>>
-<td class="log-entry-time">
-	<?php echo date('r', $entry->time_created); ?>
-</td>
-<td class="log-entry-ip-address">
-	<?php echo $ip_address; ?>
-</td>
-<td class="log-entry-user">
-	<?php echo $user_link; ?>
-</td>
-<td class="log-entry-guid">
-	<?php echo $user_guid_link; ?>
-</td>
-<td class="log-entry-object">
-	<?php echo $object_link; ?>
-</td>
-<td class="log-entry-guid">
-	<?php echo $entry->object_id; ?>
-</td>
-<td class="log-entry-action">
-	<?php echo $entry->event; ?>
-</td>
-</tr>
-<?php
-
-$alt = $alt ? '' : 'class="alt"';
+	
+	$object_id_link = elgg_view_url(elgg_http_add_url_query_elements('admin/administer_utilities/logbrowser', ['object_id' => $entry->object_id]), $entry->object_id);
+	
+	$row = elgg_format_element('td', ['class' => 'log-entry-time'], date('r', $entry->time_created));
+	$row .= elgg_format_element('td', ['class' => 'log-entry-ip-address'], $entry->ip_address ?: '&nbsp;');
+	$row .= elgg_format_element('td', ['class' => 'log-entry-user'], $user_link);
+	$row .= elgg_format_element('td', ['class' => 'log-entry-guid'], $user_guid_link);
+	$row .= elgg_format_element('td', ['class' => 'log-entry-object'], $object_link);
+	$row .= elgg_format_element('td', ['class' => 'log-entry-guid'], $object_id_link);
+	$row .= elgg_format_element('td', ['class' => 'log-entry-action'], $entry->event);
+	
+	echo elgg_format_element('tr', [], $row);
 }
 ?>
+	</tbody>
 </table>
 <?php

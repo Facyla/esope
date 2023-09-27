@@ -13,6 +13,8 @@ return array(
 	'collection:object:discussion' => 'Discussion topics',
 	'collection:object:discussion:group' => 'Group discussions',
 	'collection:object:discussion:my_groups' => 'Discussions in my groups',
+	'notification:object:discussion:create' => "Send a notification when a discussion is created",
+	'notifications:mute:object:discussion' => "about the discussion '%s'",
 	
 	'discussion:settings:enable_global_discussions' => 'Enable global discussions',
 	'discussion:settings:enable_global_discussions:help' => 'Allow discussions to be created outside of groups',
@@ -42,40 +44,45 @@ return array(
 	 */
 	'discussion:topic:notify:summary' => 'New discussion topic called %s',
 	'discussion:topic:notify:subject' => 'New discussion topic: %s',
-	'discussion:topic:notify:body' =>
-'%s added a new discussion topic "%s":
+	'discussion:topic:notify:body' => '%s added a new discussion topic "%s":
 
 %s
 
 View and reply to the discussion topic:
-%s
-',
+%s',
 
 	'discussion:comment:notify:summary' => 'New comment in topic: %s',
 	'discussion:comment:notify:subject' => 'New comment in topic: %s',
-	'discussion:comment:notify:body' =>
-'%s commented on the discussion topic "%s":
+	'discussion:comment:notify:body' => '%s commented on the discussion topic "%s":
 
 %s
 
 View and comment on the discussion:
-%s
-',
+%s',
+	
+	'notification:mentions:object:discussion:subject' => '%s mentioned you in a discussion',
 
 	'groups:tool:forum' => 'Enable group discussions',
+	'groups:tool:forum:description' => 'Allow group members to start a discussion in this group.',
 
+	'discussions:groups:edit:add_group_subscribers_to_discussion_comments' => 'Add group subscriber to discussion comment notifications',
+	
 	/**
 	 * Discussion status
 	 */
 	'discussion:topic:status' => 'Topic status',
 	'discussion:topic:closed:title' => 'This discussion is closed.',
 	'discussion:topic:closed:desc' => 'This discussion is closed and is not accepting new comments.',
+	'discussion:topic:container' => 'Select an optional group to start this discussion',
+	'discussion:topic:container:help' => 'Starting a discussion in a group will limit the access to group members by default',
 
 	'discussion:topic:description' => 'Topic message',
-
-	// upgrades
-	'discussions:upgrade:2017112800:title' => "Migrate discussion replies to comments",
-	'discussions:upgrade:2017112800:description' => "Discussion replies used to have their own subtype, this has been unified into comments.",
-	'discussions:upgrade:2017112801:title' => "Migrate river activity related to discussion replies",
-	'discussions:upgrade:2017112801:description' => "Discussion replies used to have their own subtype, this has been unified into comments.",
+	'discussion:topic:toggle_status:open' => 'The discussion topic was successfully reopened',
+	'discussion:topic:toggle_status:open:confirm' => 'Are you sure you wish to reopen this topic?',
+	'discussion:topic:toggle_status:closed' => 'The discussion topic was successfully closed',
+	'discussion:topic:toggle_status:closed:confirm' => 'Are you sure you wish to close this topic?',
+	
+	// widgets
+	'widgets:discussions:name' => 'Discussions',
+	'widgets:discussions:description' => 'Shows recent discussions',
 );

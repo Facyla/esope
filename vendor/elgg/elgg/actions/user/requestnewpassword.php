@@ -4,19 +4,16 @@
  */
 
 $username = get_input('username');
-
-// allow email addresses
-if (elgg_strpos($username, '@') !== false && ($users = get_user_by_email($username))) {
-	$username = $users[0]->username;
+if (empty($username)) {
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
-$user = get_user_by_username($username);
-if (!$user) {
+// also allow by email addresses
+$user = elgg_get_user_by_username($username, true);
+if (!$user instanceof \ElggUser) {
 	return elgg_error_response(elgg_echo('user:username:notfound', [$username]));
 }
 
-if (!send_new_password_request($user->guid)) {
-	return elgg_error_response(elgg_echo('user:password:changereq:fail'));
-}
+elgg_request_new_password($user);
 
 return elgg_ok_response('', elgg_echo('user:password:changereq:success'), '');

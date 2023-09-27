@@ -4,31 +4,31 @@
  * The error result class.
  */
 class ErrorResult extends GenericResult {
-	// Fail with no specific code
-	public static $RESULT_FAIL = -1 ;
 
-	public static $RESULT_FAIL_APIKEY_DISABLED = -30;
-	public static $RESULT_FAIL_APIKEY_INACTIVE = -31;
-	public static $RESULT_FAIL_APIKEY_INVALID = -32;
+	public const RESULT_FAIL = -1;
+
+	public const RESULT_FAIL_APIKEY_DISABLED = -30;
+	public const RESULT_FAIL_APIKEY_INACTIVE = -31;
+	public const RESULT_FAIL_APIKEY_INVALID = -32;
 
 	// Invalid, expired or missing auth token
-	public static $RESULT_FAIL_AUTHTOKEN = -20;
+	public const RESULT_FAIL_AUTHTOKEN = -20;
 
 	/**
 	 * A new error result
 	 *
 	 * @param string    $message   Message
 	 * @param int       $code      Error Code
-	 * @param Exception $exception Exception object
+	 * @param Throwable $exception Exception object
 	 *
 	 * @return void
 	 */
-	public function __construct($message, $code = null, Exception $exception = null) {
+	public function __construct($message, $code = null, Throwable $exception = null) {
 		if (!isset($code)) {
-			$code = ErrorResult::$RESULT_FAIL;
+			$code = self::RESULT_FAIL;
 		}
 
-		if ($exception != null) {
+		if ($exception instanceof Throwable) {
 			$this->setResult($exception->__toString());
 		}
 
@@ -40,11 +40,11 @@ class ErrorResult extends GenericResult {
 	 *
 	 * @param string    $message   Message
 	 * @param int       $code      Code
-	 * @param Exception $exception Optional exception for generating a stack trace.
+	 * @param Throwable $exception Optional exception for generating a stack trace.
 	 *
 	 * @return ErrorResult
 	 */
-	public static function getInstance($message, $code = null, Exception $exception = null) {
+	public static function getInstance($message, $code = null, Throwable $exception = null) {
 		// Return a new error object.
 		return new ErrorResult($message, $code, $exception);
 	}

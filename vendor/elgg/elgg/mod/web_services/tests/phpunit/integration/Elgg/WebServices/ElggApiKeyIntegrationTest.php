@@ -8,23 +8,7 @@ use Elgg\IntegrationTestCase;
  * @group WebServices
  */
 class ElggApiKeyIntegrationTest extends IntegrationTestCase {
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::up()
-	 */
-	public function up() {
-		
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::down()
-	 */
-	public function down() {
-		
-	}
-	
+
 	public function testGetKeyFunctions() {
 		
 		/* @var $entity \ElggApiKey */
@@ -64,14 +48,13 @@ class ElggApiKeyIntegrationTest extends IntegrationTestCase {
 		$this->assertNotEquals($keys->api_key, $entity->getPublicKey());
 		$this->assertNotEquals($keys->secret, $entity->getSecretKey());
 		
-		$this->assertFalse(get_api_user($keys->api_key));
+		$this->assertFalse(_elgg_services()->apiUsersTable->getApiUser($keys->api_key));
 	}
 	
 	public function testDelete() {
 		
 		$admin = $this->getAdmin();
-		$session = elgg_get_session();
-		$session->setLoggedInUser($admin);
+		_elgg_services()->session_manager->setLoggedInUser($admin);
 		
 		/* @var $entity \ElggApiKey */
 		$entity = $this->createObject([
@@ -85,8 +68,24 @@ class ElggApiKeyIntegrationTest extends IntegrationTestCase {
 		
 		$this->assertTrue($entity->delete());
 		
-		$this->assertFalse(get_api_user($keys->api_key));
+		$this->assertFalse(_elgg_services()->apiUsersTable->getApiUser($keys->api_key));
+	}
+	
+	public function testEnableDisableKeys() {
 		
-		$session->removeLoggedInUser();
+		/* @var $entity \ElggApiKey */
+		$entity = $this->createObject([
+			'subtype' => \ElggApiKey::SUBTYPE,
+		]);
+		
+		$this->assertInstanceOf(\ElggApiKey::class, $entity);
+		
+		$this->assertTrue($entity->hasActiveKeys());
+		
+		$this->assertTrue($entity->disableKeys());
+		$this->assertFalse($entity->hasActiveKeys());
+		
+		$this->assertTrue($entity->enableKeys());
+		$this->assertTrue($entity->hasActiveKeys());
 	}
 }

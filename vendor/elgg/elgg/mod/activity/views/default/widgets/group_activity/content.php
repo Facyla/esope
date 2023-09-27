@@ -3,9 +3,7 @@
  * Group activity widget
  */
 
-use Elgg\Activity\GroupRiverFilter;
-use Elgg\Database\QueryBuilder;
-
+/* @var $widget \ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
 $num = (int) $widget->num_display ?: 8;
@@ -18,11 +16,11 @@ if (!$group instanceof ElggGroup) {
 	return;
 }
 
-echo elgg_list_river([
-	'limit' => $num,
-	'pagination' => false,
-	'wheres' => [
-		new GroupRiverFilter($group),
+echo elgg_view('river/listing/group', [
+	'entity' => $group,
+	'options' => [
+		'limit' => $num,
+		'pagination' => false,
+		'no_results' => elgg_echo('widgets:group_activity:content:noactivity'),
 	],
-	'no_results' => elgg_echo('widgets:group_activity:content:noactivity'),
 ]);

@@ -9,7 +9,7 @@ See the :doc:`/guides/index` for tutorials or the :doc:`/design/index` for in-de
 Database and Persistence
 ========================
 
-Elgg uses MySQL 5.5 or higher for data persistence, and maps database values into Entities (a
+Elgg uses MySQL 5.7 or higher for data persistence, and maps database values into Entities (a
 representation of an atomic unit of information) and Extenders (additional information and
 descriptions about Entities). Elgg supports additional information such as relationships between
 Entities, activity streams, and various types of settings.
@@ -17,7 +17,7 @@ Entities, activity streams, and various types of settings.
 Plugins
 =======
 
-Plugins change the behavior or appearance of Elgg by overriding views, or by handling events and plugin hooks.
+Plugins change the behavior or appearance of Elgg by overriding views, or by handling events.
 All changes to an Elgg site should be implemented through plugins to ensure upgrading core is easy.
 
 Actions
@@ -25,11 +25,11 @@ Actions
 
 Actions are the primary way users interact with an Elgg site. Actions are registered by plugins.
 
-Events and Plugin Hooks
-=======================
+Events
+======
 
-Events and Plugin Hooks are used in Elgg Plugins to interact with the Elgg engine under certain
-circumstances. Events and hooks are triggered at strategic times throughout Elgg's boot and execution
+Events are used in Elgg Plugins to interact with the Elgg engine under certain
+circumstances. Events are triggered at strategic times throughout Elgg's boot and execution
 process, and allows plugins to modify or cancel the default behavior.
 
 Views
@@ -61,7 +61,7 @@ Elgg uses two caches to improve performance: a system cache and SimpleCache.
 ===================
 
 The use of 3rd party libraries in Elgg is managed by using `Composer`_ dependencies. Examples of 3rd party libraries are
-jQuery, RequireJs or Zend mail.
+jQuery, RequireJs or Laminas mail.
 
 To get a list of all the Elgg dependencies check out the `Packagist`_ page for Elgg.
 
@@ -85,5 +85,5 @@ You can run the following commands to seed and unseed the database.
     vendor/bin/elgg-cli database:unseed
 
 
-Plugins can register their own seeds via ``'seeds', 'database'`` hook. The handler must return the class name of the seed,
+Plugins can register their own seeds via ``'seeds', 'database'`` event. The handler must return the class name of the seed,
 which must extend ``\Elgg\Database\Seeder\Seed`` class.

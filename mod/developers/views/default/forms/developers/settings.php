@@ -26,13 +26,14 @@ foreach ($vars['data'] as $name => $info) {
 	if (empty($info['#help'])) {
 		$info['#help'] = elgg_echo("developers:help:$name");
 	}
+	
 	echo elgg_view_field($info);
 }
 
 // form footer
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('developers:label:submit'),
+	'text' => elgg_echo('developers:label:submit'),
 ]);
 
 elgg_set_form_footer($footer);

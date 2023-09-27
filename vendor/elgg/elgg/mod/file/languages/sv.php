@@ -8,6 +8,7 @@
 return array(
 
 	'item:object:file' => 'Fil',
+	
 	'collection:object:file' => 'Filer',
 	'collection:object:file:all' => "Alla filer på webbplatsen",
 	'collection:object:file:owner' => "%ss filer",
@@ -22,14 +23,11 @@ return array(
 	'file:num_files' => "Antalet filer att visa",
 	'file:replace' => 'Ersätt innehåll i fil (lämna tomt för att inte ändra fil)',
 	'file:list:title' => "%ss %s %s",
-	'file:title:friends' => "Vänners",
 
 	'file:file' => "Fil",
 
 	'file:list:list' => 'Växla till listvyn',
 	'file:list:gallery' => 'Växla till gallerivy',
-
-	'file:types' => "Uppladdade filtyper",
 
 	'file:type:' => 'Filer',
 	'file:type:all' => "Alla filer",
@@ -61,12 +59,6 @@ return array(
 
 	'file:notify:summary' => 'Ny fil med namnet %s',
 	'file:notify:subject' => 'Ny fil: %s',
-	'file:notify:body' => '%s laddade upp en ny fil: %s
-
-%s
-
-Visa och kommentera filen:
-%s',
 
 	/**
 	 * Status messages

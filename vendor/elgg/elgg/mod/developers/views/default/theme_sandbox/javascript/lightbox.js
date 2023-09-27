@@ -1,7 +1,4 @@
-define(function(require) {
-	require('elgg/ready');
-	
-	var lightbox = require('elgg/lightbox');
+define(['jquery', 'elgg/lightbox'], function($, lightbox) {
 	var opts = {
 		photo: true,
 		width: 600
@@ -11,7 +8,7 @@ define(function(require) {
 	
 	$(document).on('click', '#elgg-lightbox-test-resize', function(event) {
 		event.preventDefault();
-		$body = $('#elgg-lightbox-test').find('.elgg-body');
+		var $body = $('#elgg-lightbox-test').find('.elgg-body');
 		$body.append($body.html());
 		
 		lightbox.resize();

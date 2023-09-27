@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 namespace Elgg;
 
@@ -12,7 +9,6 @@ use RuntimeException;
 
 /**
  * Testing trait that provides utility methods agnostic to testing framework
- * This trait can be shared e.g. between PHPUnit and Simpletest test cases
  */
 trait Testing {
 
@@ -57,7 +53,7 @@ trait Testing {
 
 		$request = Request::create($path, $method, $parameters);
 
-		$cookie_name = _elgg_config()->getCookieConfig()['session']['name'];
+		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
 		$session_id = _elgg_services()->session->getID();
 		$request->cookies->set($cookie_name, $session_id);
 
@@ -74,7 +70,7 @@ trait Testing {
 	}
 
 	/**
-	 * Returns an admin user
+	 * Returns an admin user. This user will persist within a test case.
 	 * @return ElggUser
 	 * @throws RuntimeException
 	 */
@@ -93,15 +89,16 @@ trait Testing {
 			}
 
 			if (!$admin) {
-				$admin = $this->createUser([
-					'admin' => 'yes',
-				]);
+				// not using createUser() as the user need to persist between tests
+				$admin = new \ElggUser();
+				$admin->makeAdmin();
+				$admin->save();
 			}
 
 			$this->_testing_admin = $admin;
 		}
 
-		if (!$admin instanceof ElggUser || !$admin->isAdmin()) {
+		if (!$admin instanceof \ElggUser || !$admin->isAdmin()) {
 			throw new RuntimeException("Unable to load an administrator user entity to perform tests.");
 		}
 

@@ -9,7 +9,7 @@ return array(
 	'annotation:delete:likes:fail' => "There was a problem removing your like",
 	'annotation:delete:likes:success' => "Your like has been removed",
 	
-	'likes:this' => 'liked this',
+	'likes:this' => '%s liked this',
 	'likes:deleted' => 'Your like has been removed',
 	'likes:see' => 'See who liked this',
 	'likes:remove' => 'Unlike this',
@@ -22,28 +22,16 @@ return array(
 	'likes:userlikedthis' => '%s like',
 	'likes:userslikedthis' => '%s likes',
 	'likes:river:annotate' => 'likes',
-	'likes:delete:confirm' => 'Are you sure you want to delete this like?',
-
-	'river:likes' => 'likes %s %s',
 
 	// notifications. yikes.
 	'likes:notifications:subject' => '%s likes your post "%s"',
-	'likes:notifications:body' =>
-'Hi %1$s,
-
-%2$s likes your post "%3$s" on %4$s
+	'likes:notifications:body' => '%1$s likes your post "%2$s" on %3$s
 
 See your original post here:
 
-%5$s
+%4$s
 
-or view %2$s\'s profile here:
+or view %1$s\'s profile here:
 
-%6$s
-
-Thanks,
-%4$s',
-	'likes:upgrade:2017120700:title' => "Public Likes Annotations",
-	'likes:upgrade:2017120700:description' => "This updates the access id of likes annotations to public",
-	
+%5$s',
 );

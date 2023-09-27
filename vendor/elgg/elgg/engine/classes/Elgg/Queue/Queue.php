@@ -5,13 +5,11 @@ namespace Elgg\Queue;
 /**
  * Queue interface
  *
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
  * @internal
- *
  * @since 1.9.0
  */
 interface Queue {
+
 	/**
 	 * Add an item to the queue
 	 *

@@ -6,7 +6,13 @@
  */
 
 return array(
-	'ckeditor:html' => "Bewerk HTML",
-	'ckeditor:visual' => "Visuele editor",
-	'ckeditor:blockimagepaste' => "Direct plakken van afbeeldingen is niet toegestaan.",
+	
+	'ckeditor:settings:toolbar_default' => "Editor standaard toolbar",
+	'ckeditor:settings:toolbar_default:help' => "Configureer hier de knoppen die getoond moeten worden in de standaard editor",
+	'ckeditor:settings:toolbar_simple' => "Editor eenvoudige toolbar",
+	'ckeditor:settings:toolbar_simple:help' => "Configureer hier de knoppen die getoond moeten worden in de eenvoudige editor",
+	
+	'ckeditor:upload:missing_upload' => "Er ontbreekt een geüploade afbeelding",
+	'ckeditor:upload:invalid_type' => "De geüploade afbeelding is geen geldige afbeelding",
+	'ckeditor:upload:resize_failed' => "De afbeelding kon niet worden verkleind",
 );

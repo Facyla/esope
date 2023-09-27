@@ -8,6 +8,7 @@
 return array(
 
 	'item:object:file' => 'Archivo',
+	
 	'collection:object:file' => 'Archivos',
 	'collection:object:file:all' => "Archivos de todo el sitio",
 	'collection:object:file:owner' => "Archivos de %s",
@@ -22,14 +23,11 @@ return array(
 	'file:num_files' => "N&uacute;mero de archivos a mostrar",
 	'file:replace' => 'Reemplazar los contenidos del archivo (deja en blanco para no cambiar el archivo)',
 	'file:list:title' => "%s's %s %s",
-	'file:title:friends' => "Amigos'",
 
 	'file:file' => "Archivo",
 
 	'file:list:list' => 'Cambiar a vista de lista',
 	'file:list:gallery' => 'Cambiar a vista de galer&iacute;a',
-
-	'file:types' => "Tipos de archivos subidos",
 
 	'file:type:' => 'Archivos',
 	'file:type:all' => "Todos los archivos",
@@ -56,24 +54,12 @@ return array(
 
 	'groups:tool:file' => 'Habilitar Archivos para los Grupos',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Nuevo archivo llamado %s',
 	'file:notify:subject' => 'Nuevo archivo: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

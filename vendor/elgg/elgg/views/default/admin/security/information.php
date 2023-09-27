@@ -14,7 +14,7 @@ echo elgg_view('output/longtext', [
 	'value' => elgg_echo('admin:security:information:description'),
 ]);
 
-$icon_ok = elgg_view_icon('checkmark');
+$icon_ok = elgg_view_icon('check');
 $icon_warning = elgg_view_icon('exclamation-triangle');
 $icon_error = elgg_view_icon('times');
 
@@ -59,13 +59,13 @@ if (is_writable(Paths::project())) {
 
 echo $view_module($icon, $title, $value, $subtext);
 
-// hooks on 'validate', 'input' (eg htmlawed)
+// hooks on 'sanitize', 'input' (eg htmlawed)
 $icon = $icon_ok;
 $title = elgg_echo('admin:security:information:validate_input');
 $value = elgg_echo('status:enabled');
 $subtext = '';
 
-if (!(bool) elgg()->hooks->getOrderedHandlers('validate', 'input')) {
+if (!(bool) elgg()->events->getOrderedHandlers('sanitize', 'input')) {
 	$icon = $icon_error;
 	$value = elgg_echo('status:disabled');
 	$subtext = elgg_echo('admin:security:information:validate_input:error');
@@ -110,7 +110,7 @@ $title = elgg_view('output/url', [
 ]);
 $subtext = '';
 
-$strength = _elgg_get_site_secret_strength();
+$strength = _elgg_services()->siteSecret->getStrength();
 $value = elgg_echo("site_secret:strength:$strength");
 
 if ($strength !== 'strong') {
@@ -135,7 +135,8 @@ if ($probability > 0 && $divisor > 0) {
 	$icon = $icon_ok;
 	$value = elgg_echo('status:enabled');
 	
-	$chance = $probability / $divisor;
+	// https://www.php.net/manual/en/session.configuration.php#ini.session.gc-probability
+	$chance = ($probability / $divisor) * 100;
 	$subtext = elgg_echo('admin:security:information:php:session_gc:chance', [$chance]);
 	$subtext .= ' ' . elgg_echo('admin:security:information:php:session_gc:lifetime', [$maxlifetime]);
 }

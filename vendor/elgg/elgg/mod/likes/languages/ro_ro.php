@@ -8,8 +8,6 @@
 return array(
 	'annotation:delete:likes:fail' => "A fost o problemă la îndepărtarea aprecierii tale",
 	'annotation:delete:likes:success' => "Aprecierea ta a fost îndepărtată",
-	
-	'likes:this' => 'au apreciat asta',
 	'likes:deleted' => 'Aprecierea ta a fost îndepărtată',
 	'likes:see' => 'Vezi cine a apreciat asta',
 	'likes:remove' => 'Nu mai aprecia asta',
@@ -22,28 +20,16 @@ return array(
 	'likes:userlikedthis' => '%s apreciere',
 	'likes:userslikedthis' => '%s aprecieri',
 	'likes:river:annotate' => 'aprecieri',
-	'likes:delete:confirm' => 'Sigur dorești să ștergi această apreciere?',
-
-	'river:likes' => 'aprecieri %s %s',
 
 	// notifications. yikes.
 	'likes:notifications:subject' => '%s ți-a apreciat postarea "%s"',
-	'likes:notifications:body' =>
-'Salutare %1$s,
-
-%2$s ți-a apreciat postarea "%3$s" de pe %4$s
+	'likes:notifications:body' => '%1$s ți-a apreciat postarea "%2$s" de pe %3$s
 
 Vezi postarea ta originală de aici:
 
-%5$s
+%4$s
 
-sau vezi profilul utilizatorului %2$s de aici:
+sau vezi profilul utilizatorului %1$s de aici:
 
-%6$s
-
-Mulțumim,
-%4$s',
-	'likes:upgrade:2017120700:title' => "Adnotări Publice de Aprecieri",
-	'likes:upgrade:2017120700:description' => "Acest lucru actualizează ID-ul de acces al adnotărilor de aprecieri către public",
-	
+%5$s',
 );

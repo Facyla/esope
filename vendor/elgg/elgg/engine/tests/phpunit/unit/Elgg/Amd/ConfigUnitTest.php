@@ -2,7 +2,8 @@
 
 namespace Elgg\Amd;
 
-use Elgg\PluginHooksService;
+use Elgg\EventsService;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * @group UnitTests
@@ -10,9 +11,9 @@ use Elgg\PluginHooksService;
 class ConfigUnitTest extends \Elgg\UnitTestCase {
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	protected $hooks;
+	protected $events;
 	
 	/**
 	 * @var Config
@@ -20,13 +21,13 @@ class ConfigUnitTest extends \Elgg\UnitTestCase {
 	protected $amdConfig;
 
 	public function up() {
-		$this->hooks = new PluginHooksService(_elgg_services()->events);
+		$this->events = new EventsService(_elgg_services()->handlers);
 		
-		$this->amdConfig = new Config($this->hooks);
+		$this->amdConfig = new Config($this->events);
 	}
 
 	public function down() {
-		unset($this->hooks);
+		unset($this->events);
 		unset($this->amdConfig);
 	}
 
@@ -95,7 +96,7 @@ class ConfigUnitTest extends \Elgg\UnitTestCase {
 	public function testThrowsOnBadShim() {
 		$amdConfig = $this->amdConfig;
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$amdConfig->addShim('bad_shim', array('invalid' => 'config'));
 
 		$configArray = $amdConfig->getConfig();
@@ -139,12 +140,12 @@ class ConfigUnitTest extends \Elgg\UnitTestCase {
 		$this->assertFalse($amdConfig->hasShim('jquery.form'));
 	}
 
-	public function testGetConfigTriggersTheConfigAmdPluginHook() {
+	public function testGetConfigTriggersTheConfigAmdEvent() {
 		$amdConfig = $this->amdConfig;
 
 		$test_input = ['test' => 'test_' . time()];
 
-		$this->hooks->registerHandler('config', 'amd', function() use ($test_input) {
+		$this->events->registerHandler('config', 'amd', function(\Elgg\Event $event) use ($test_input) {
 			return $test_input;
 		});
 

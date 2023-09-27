@@ -9,10 +9,24 @@ if (!$notification_guids) {
 	return elgg_error_response(elgg_echo('site_notifications:error:notifications_not_selected'));
 }
 
-foreach ($notification_guids as $guid) {
-	$notification = get_entity($guid);
-	if ($notification instanceof SiteNotification && $notification->canDelete()) {
-		$notification->delete();
+/* @var $batch \ElggBatch */
+$batch = elgg_get_entities([
+	'type' => 'object',
+	'subtype' => 'site_notification',
+	'guids' => $notification_guids,
+	'limit' => false,
+	'batch' => true,
+	'batch_inc_offset' => false,
+]);
+/* @var $entity \SiteNotification */
+foreach ($batch as $entity) {
+	if (!$entity->canDelete()) {
+		$batch->reportFailure();
+		continue;
+	}
+	
+	if (!$entity->delete()) {
+		$batch->reportFailure();
 	}
 }
 

@@ -3,12 +3,13 @@
 echo elgg_view_field([
 	'#type' => 'text',
 	'name' => 'member_query',
+	'value' => get_input('member_query'),
 	'required' => true,
 ]);
 
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('search'),
+	'text' => elgg_echo('search'),
 ]);
 
 $footer .= elgg_format_element('p', [

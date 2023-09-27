@@ -2,28 +2,21 @@
 
 namespace Elgg\Security;
 
-use Elgg\HttpException;
+use Elgg\Exceptions\HttpException;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * @group Security
  * @group UnitTests
  */
-class UrlSignerUnitTest extends \Elgg\UnitTestCase {
+class SignedUrlUnitTest extends \Elgg\UnitTestCase {
 
-	/**
-	 * @var UrlSigner
-	 */
-	private $service;
+	protected UrlSigner $service;
+	protected string $url;
 
 	public function up() {
 		$this->service = new UrlSigner();
 		$this->url = '/foo?a=b&c[]=1&c[]=2&c[]=0,5&_d=@username&e=%20';
-
-		_elgg_services()->setValue('session', \ElggSession::getMock());
-	}
-
-	public function down() {
-
 	}
 	
 	public function testCanSignUrl() {
@@ -42,7 +35,7 @@ class UrlSignerUnitTest extends \Elgg\UnitTestCase {
 	public function testCanNotDoubleSignUrl() {
 		$signed_url = $this->service->sign($this->url);
 		
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->service->sign($signed_url);
 	}
 

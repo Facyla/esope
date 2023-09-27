@@ -2,9 +2,11 @@
 
 namespace Elgg;
 
-use Elgg\Database\SiteSecret;
-use Elgg\Di\ServiceProvider;
-use ElggCache;
+use Elgg\Cache\BaseCache;
+use Elgg\Di\InternalContainer;
+use Elgg\Exceptions\RuntimeException;
+use Elgg\Traits\Cacheable;
+use Elgg\Traits\Debug\Profilable;
 use Psr\Log\LogLevel;
 
 /**
@@ -19,75 +21,24 @@ class BootService {
 	use Cacheable;
 
 	/**
-	 * The default TTL if not set in settings.php
-	 */
-	const DEFAULT_BOOT_CACHE_TTL = 3600;
-
-	/**
-	 * The default limit for the number of plugin settings a plugin can have before it won't be loaded into bootdata
+	 * Constructs the bootservice
 	 *
-	 * Can be set in settings.php
+	 * @param BaseCache $cache Cache
 	 */
-	const DEFAULT_BOOTDATA_PLUGIN_SETTINGS_LIMIT = 40;
-
-	/**
-	 * Cache
-	 *
-	 * @param ElggCache $cache Cache
-	 */
-	public function __construct(ElggCache $cache) {
+	public function __construct(BaseCache $cache) {
 		$this->cache = $cache;
 	}
 
 	/**
 	 * Boots the engine
 	 *
-	 * @param ServiceProvider $services Services
+	 * @param InternalContainer $services Internal services
 	 *
 	 * @return void
-	 * @throws \ClassException
-	 * @throws \DatabaseException
-	 * @throws \InstallationException
-	 * @throws \InvalidParameterException
-	 * @throws \SecurityException
+	 * @throws RuntimeException
 	 */
-	public function boot(ServiceProvider $services) {
-		$db = $services->db;
+	public function boot(InternalContainer $services) {
 		$config = $services->config;
-
-		// set cookie values for session and remember me
-		$config->getCookieConfig();
-
-		// defaults in case these aren't in config table
-		if ($config->boot_cache_ttl === null) {
-			$config->boot_cache_ttl = self::DEFAULT_BOOT_CACHE_TTL;
-		}
-		if ($config->bootdata_plugin_settings_limit === null) {
-			$config->bootdata_plugin_settings_limit = self::DEFAULT_BOOTDATA_PLUGIN_SETTINGS_LIMIT;
-		}
-		if ($config->simplecache_enabled === null) {
-			$config->simplecache_enabled = false;
-		}
-		if ($config->system_cache_enabled === null) {
-			$config->system_cache_enabled = false;
-		}
-		// needs to be set before [init, system] for links in html head
-		if ($config->lastcache === null) {
-			$config->lastcache = 0;
-		}
-		if (!$config->hasValue('simplecache_lastupdate')) {
-			// @todo remove in Elgg 4.0
-			$config->simplecache_lastupdate = $config->lastcache;
-		}
-		if ($config->min_password_length === null) {
-			$config->min_password_length = 6;
-		}
-		if ($config->minusername === null) {
-			$config->minusername = 4;
-		}
-		if ($config->batch_run_time_in_secs === null) {
-			$config->batch_run_time_in_secs = 4;
-		}
 
 		// we were using NOTICE temporarily so we can't just check for null
 		if (!$config->hasInitialValue('debug') && !$config->debug) {
@@ -95,48 +46,27 @@ class BootService {
 		}
 
 		// copy all table values into config
-		$config->mergeValues($services->configTable->getAll());
+		foreach ($services->configTable->getAll() as $name => $value) {
+			$config->$name = $value;
+		}
 		
-		if (empty($config->lastcache)) {
-			// for backwards compatibility
-			// @todo remove in Elgg 4.0
-			$config->lastcache = $config->simplecache_lastupdate;
-		}
-
-		if (!$config->elgg_config_set_secret) {
-			$site_secret = SiteSecret::fromConfig($config);
-			if ($site_secret) {
-				$services->setValue('siteSecret', $site_secret);
-			} else {
-				throw new \RuntimeException('The site secret is not set.');
-			}
-		}
-
-		$installed = isset($config->installed);
-
-		if ($this->timer) {
-			$this->timer->begin([__CLASS__ . '::getBootData']);
+		// prevent some data showing up in $config
+		foreach ($config::SENSITIVE_PROPERTIES as $name) {
+			unset($config->{$name});
 		}
 
 		// early config is done, now get the core boot data
-		$data = $this->getBootData($config, $db, $installed);
+		$data = $this->getBootData($config, $config->hasValue('installed'));
 
 		$site = $data->getSite();
-		if (!$site) {
+		if ($site) {
+			$config->site = $site;
+		} else {
 			// must be set in config
 			$site = $config->site;
 			if (!$site instanceof \ElggSite) {
-				throw new \RuntimeException('Before installation, config->site must have an unsaved ElggSite.');
+				throw new RuntimeException('Before installation, config->site must have an unsaved ElggSite.');
 			}
-		}
-
-		$config->site = $site;
-		$config->sitename = $site->name;
-		$config->sitedescription = $site->description;
-
-		$settings = $data->getPluginSettings();
-		foreach ($settings as $guid => $entity_settings) {
-			$services->privateSettingsCache->save($guid, $entity_settings);
 		}
 
 		foreach ($data->getPluginMetadata() as $guid => $metadata) {
@@ -146,19 +76,12 @@ class BootService {
 		$services->plugins->setBootPlugins($data->getActivePlugins(), false);
 
 		// use value in settings.php if available
-		$debug = $config->hasInitialValue('debug') ? $config->getInitialValue('debug') : ($config->debug ?: LogLevel::CRITICAL);
+		$debug = $config->getInitialValue('debug') ?? ($config->debug ?: LogLevel::CRITICAL);
 		$services->logger->setLevel($debug);
 
 		if ($config->system_cache_enabled) {
-			$config->system_cache_loaded = false;
-
-			if ($services->views->configureFromCache($services->serverCache)) {
-				$config->system_cache_loaded = true;
-			}
+			$config->system_cache_loaded = $services->views->configureFromCache($services->serverCache);
 		}
-
-		// we don't store langs in boot data because it varies by user
-		$services->translator->bootTranslations();
 	}
 
 	/**
@@ -169,34 +92,21 @@ class BootService {
 	public function clearCache() {
 		$this->cache->clear();
 		_elgg_services()->plugins->setBootPlugins(null);
-		_elgg_config()->system_cache_loaded = false;
-		_elgg_config()->_boot_cache_hit = false;
-	}
-	
-	/**
-	 * Get the boot cache
-	 *
-	 * @return ElggCache
-	 */
-	public function getCache() {
-		return $this->cache;
+		_elgg_services()->config->system_cache_loaded = false;
+		_elgg_services()->config->_boot_cache_hit = false;
 	}
 
 	/**
 	 * Get the boot data
 	 *
-	 * @param Config   $config    Elgg config object
-	 * @param Database $db        Elgg database
-	 * @param bool     $installed Is the site installed?
+	 * @param Config $config    Elgg config object
+	 * @param bool   $installed Is the site installed?
 	 *
 	 * @return BootData
-	 *
-	 * @throws \ClassException
-	 * @throws \DatabaseException
-	 * @throws \InstallationException
-	 * @throws \InvalidParameterException
 	 */
-	private function getBootData(Config $config, Database $db, $installed) {
+	private function getBootData(Config $config, bool $installed) {
+		$this->beginTimer([__METHOD__]);
+		
 		$config->_boot_cache_hit = false;
 
 		$data = null;
@@ -206,7 +116,7 @@ class BootService {
 
 		if (!isset($data)) {
 			$data = new BootData();
-			$data->populate($config, $db, _elgg_services()->entityTable, _elgg_services()->plugins, $installed);
+			$data->populate(_elgg_services()->entityTable, _elgg_services()->plugins, $installed);
 			if ($config->boot_cache_ttl && $installed) {
 				$this->cache->save('boot_data', $data, $config->boot_cache_ttl);
 			}
@@ -214,7 +124,8 @@ class BootService {
 			$config->_boot_cache_hit = true;
 		}
 
+		$this->endTimer([__METHOD__]);
+		
 		return $data;
 	}
-
 }

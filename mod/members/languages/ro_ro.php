@@ -6,10 +6,9 @@
  */
 
 return array(
-	'members:label:online' => 'Online',
 	'members:search' => 'Caută membri',
-	'members:title:search' => 'Căutare membru după %s',
 	'members:total' => 'Total membri: %s',
+	'members:title:all' => 'Toți membri',
 	'members:title:newest' => 'Cei mai noi membri',
 	'members:title:popular' => 'Cei mai populari membri',
 	'members:title:online' => 'Membri online',

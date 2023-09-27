@@ -15,19 +15,16 @@ class RegistrationIntegrationTest extends ActionResponseTestCase {
 	public function up() {
 		parent::up();
 		
-		self::createApplication(['isolate' => true]);
-		_elgg_config()->min_password_length = 3;
-		_elgg_config()->minusername = 4;
-		_elgg_config()->allow_registration = true;
+		elgg()->config->min_password_length = 3;
+		elgg()->config->minusername = 4;
+		elgg()->config->allow_registration = true;
+		
+		elgg_register_event_handler('register', 'user', 'Elgg\UserValidationByEmail\User::disableUserOnRegistration');
 	}
-	
-	public function down() {
-		parent::down();
-	}
-	
+
 	public function testRegistrationWithoutAdminValidation() {
 		
-		_elgg_config()->require_admin_validation = false;
+		elgg()->config->require_admin_validation = false;
 		
 		// Register new user
 		$username = $this->getRandomUsername();
@@ -44,7 +41,7 @@ class RegistrationIntegrationTest extends ActionResponseTestCase {
 		
 		/* @var $user \ElggUser */
 		$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () use ($username) {
-			return get_user_by_username($username);
+			return elgg_get_user_by_username($username);
 		});
 		$this->assertInstanceOf(\ElggUser::class, $user);
 		$this->assertFalse($user->isValidated());
@@ -63,12 +60,12 @@ class RegistrationIntegrationTest extends ActionResponseTestCase {
 		$link = elgg_http_get_signed_url($link);
 		
 		$request = $this->prepareHttpRequest($link);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 		
 		$response = _elgg_services()->router->getResponse($request);
 		
 		$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () use ($username) {
-			return get_user_by_username($username);
+			return elgg_get_user_by_username($username);
 		});
 		
 		$this->assertTrue($user->isEnabled());
@@ -78,13 +75,11 @@ class RegistrationIntegrationTest extends ActionResponseTestCase {
 		
 		$plugin_tracking = elgg_get_plugin_user_setting('email_validated', $user->guid, 'uservalidationbyemail');
 		$this->assertNotEmpty($plugin_tracking);
-		
-		elgg_get_session()->removeLoggedInUser();
 	}
 	
 	public function testRegistrationWithAdminValidation() {
 		
-		_elgg_config()->require_admin_validation = true;
+		elgg()->config->require_admin_validation = true;
 		
 		// Register new user
 		$username = $this->getRandomUsername();
@@ -101,7 +96,7 @@ class RegistrationIntegrationTest extends ActionResponseTestCase {
 		
 		/* @var $user \ElggUser */
 		$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () use ($username) {
-			return get_user_by_username($username);
+			return elgg_get_user_by_username($username);
 		});
 		$this->assertInstanceOf(\ElggUser::class, $user);
 		$this->assertFalse($user->isValidated());
@@ -120,12 +115,12 @@ class RegistrationIntegrationTest extends ActionResponseTestCase {
 		$link = elgg_http_get_signed_url($link);
 		
 		$request = $this->prepareHttpRequest($link);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 		
 		$response = _elgg_services()->router->getResponse($request);
 		
 		$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () use ($username) {
-			return get_user_by_username($username);
+			return elgg_get_user_by_username($username);
 		});
 		
 		$this->assertFalse($user->isEnabled());

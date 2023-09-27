@@ -1,7 +1,4 @@
-define(function (require) {
-	var spinner = require('elgg/spinner'),
-		$ = require('jquery'),
-		elgg = require('elgg');
+define(['jquery', 'elgg/spinner', 'elgg/system_messages'], function ($, spinner, system_messages) {
 
 	$('.theme-sandbox-content-spinner a').on('click', function () {
 		spinner[ $(this).data('method') ]($(this).data('spinnerText'));
@@ -9,11 +6,10 @@ define(function (require) {
 	});
 
 	$('#developers-system-message').click(function() {
-		elgg.system_message('Elgg System Message');
+		system_messages.success('Elgg System Message');
 	});
 
 	$('#developers-error-message').click(function() {
-		elgg.register_error('Elgg Error Message');
+		system_messages.error('Elgg Error Message');
 	});
 });
-

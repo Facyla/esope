@@ -2,20 +2,25 @@
 
 elgg_gatekeeper();
 
-$limit = (int) elgg_extract('limit', $vars, elgg_get_config('default_limit'));
-$query = elgg_extract('term', $vars, elgg_extract('q', $vars));
-$input_name = elgg_extract('name', $vars);
+$subtype = elgg_extract('subtype', $vars);
+if (empty($subtype)) {
+	$searchable = elgg_entity_types_with_capability('searchable');
+	$subtype = elgg_extract('object', $searchable);
+}
 
 $options = [
-	'query' => $query,
+	'query' => elgg_extract('term', $vars),
 	'type' => 'object',
-	'subtype' => elgg_extract('subtype', $vars),
-	'limit' => $limit,
-	'sort' => 'title',
-	'order' => 'ASC',
+	'subtype' => $subtype,
+	'limit' => elgg_extract('limit', $vars),
+	'sort_by' => [
+		'property_type' => 'metadata',
+		'property' => 'title',
+		'direction' => 'ASC',
+	],
 	'fields' => ['metadata' => ['title']],
 	'item_view' => elgg_extract('item_view', $vars, 'search/entity'),
-	'input_name' => $input_name,
+	'input_name' => elgg_extract('name', $vars),
 ];
 
 $body = elgg_list_entities($options, 'elgg_search');

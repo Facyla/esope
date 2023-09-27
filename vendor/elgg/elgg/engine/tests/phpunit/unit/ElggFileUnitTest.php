@@ -1,5 +1,9 @@
 <?php
 
+use Elgg\Exceptions\DomainException;
+use Elgg\Exceptions\Filesystem\IOException;
+use Elgg\Project\Paths;
+
 /**
  * @group UnitTests
  * @group FileService
@@ -12,26 +16,20 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	protected $file;
 
 	public function up() {
-		_elgg_filestore_init();
-
-		$session = \ElggSession::getMock();
-		_elgg_services()->setValue('session', $session);
-		_elgg_services()->session->start();
-
 		$file = new \ElggFile();
 		$file->owner_guid = 1;
 		$file->setFilename("foobar.txt");
 
 		$this->file = $file;
 
-		$dataroot = _elgg_config()->dataroot;
+		$dataroot = _elgg_services()->config->dataroot;
 		
 		// we use this for writing new files
 		elgg_delete_directory($dataroot . '1/2/');
 	}
 
 	public function down() {
-		$dataroot = _elgg_config()->dataroot;
+		$dataroot = _elgg_services()->config->dataroot;
 		
 		// we use this for writing new files
 		elgg_delete_directory($dataroot . '1/2/');
@@ -49,17 +47,6 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 		$mimetype = 'application/plain';
 		$this->file->setMimeType($mimetype);
 		$this->assertEquals($mimetype, $this->file->getMimeType());
-	}
-
-	public function testCanDetectMimeType() {
-		$mime = $this->file->detectMimeType(null, 'text/plain');
-
-		// mime should not be null if default is set
-		$this->assertNotNull($mime);
-
-		// mime of a file object should match mime of a file path that represents this file on filestore
-		$resource_mime = $this->file->detectMimeType($this->file->getFilenameOnFilestore(), 'text/plain');
-		$this->assertEquals($mime, $resource_mime);
 	}
 
 	/**
@@ -140,17 +127,17 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testExceptionThrownForMissingFilenameOnOpen() {
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		
 		$this->expectException(IOException::class);
 		$file->open('read');
 	}
 
 	public function testExceptionThrownForUnknownModeOnOpen() {
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->setFilename('foo.txt');
 		
-		$this->expectException(InvalidParameterException::class);
+		$this->expectException(DomainException::class);
 		$file->open('foo');
 	}
 
@@ -159,14 +146,14 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 		$contents = $this->file->grabFile();
 		$this->assertTrue($this->file->close());
 
-		$dataroot = _elgg_config()->dataroot;
+		$dataroot = _elgg_services()->config->dataroot;
 		$expected = file_get_contents("{$dataroot}1/1/foobar.txt");
 
 		$this->assertEquals($expected, $contents);
 	}
 
 	public function testCanCreateEmptyFile() {
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = 2;
 		$file->setFilename('write-test.md');
 
@@ -189,7 +176,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 		$contents = 'Hello world!';
 		$contents2 = 'Sunny day outside!';
 
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = 2;
 		$file->setFilename('write-test.md');
 
@@ -239,24 +226,27 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 		$filename = "foo/bar.txt";
 
-		$dataroot = _elgg_config()->dataroot;
+		$dataroot = _elgg_services()->config->dataroot;
 		$dir = new \Elgg\EntityDirLocator(123);
 
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = 123;
 		$file->setFilename($filename);
 
 		$this->assertEquals($filename, $file->getFilename());
 
-		$filestorename = "$dataroot$dir$filename";
+		$filestorename = Paths::sanitize("{$dataroot}{$dir}{$filename}", false);
 		$this->assertEquals($filestorename, $file->getFilenameOnFilestore());
 	}
 
 	public function testCanCreateAndReadSymlinks() {
+		if (stripos(PHP_OS, 'WIN') !== false) {
+			$this->markTestSkipped('Unable to test symlinks on Windows');
+		}
 
 		$symlink_name = "symlink.txt";
 
-		$dataroot = _elgg_config()->dataroot;
+		$dataroot = _elgg_services()->config->dataroot;
 		$dir = new \Elgg\EntityDirLocator(2);
 
 		// Remove symlink in case it exists
@@ -264,14 +254,14 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 			unlink("$dataroot$dir$symlink_name");
 		}
 
-		$target = new ElggFile();
+		$target = new \ElggFile();
 		$target->owner_guid = 2;
 		$target->setFilename('symlink-target.txt');
 		$target->open('write');
 		$target->write('Testing!');
 		$target->close();
 
-		$symlink = new ElggFile();
+		$symlink = new \ElggFile();
 		$symlink->owner_guid = 2;
 		$symlink->setFilename($symlink_name);
 
@@ -280,7 +270,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertTrue(symlink($to, $from));
 
-		$this->assertEquals("$dataroot$dir$symlink_name", $from);
+		$this->assertEquals("{$dataroot}{$dir}{$symlink_name}", $from);
 
 		$this->assertTrue($symlink->exists());
 
@@ -294,19 +284,22 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertEquals($file_contents, $symlink_contents);
 
-		$this->assertTrue(unlink("$dataroot$dir$symlink_name"));
+		$this->assertTrue(unlink("{$dataroot}{$dir}{$symlink_name}"));
 		$this->assertFalse($symlink->exists());
 	}
 
 	public function testCanDeleteSymlinkAndKeepTarget() {
+		if (stripos(PHP_OS, 'WIN') !== false) {
+			$this->markTestSkipped('Unable to test symlinks on Windows');
+		}
 
-		$to = new ElggFile();
+		$to = new \ElggFile();
 		$to->owner_guid = 2;
 		$to->setFilename('symlink-target.txt');
 		$to->open('write');
 		$to->close();
 
-		$from = new ElggFile();
+		$from = new \ElggFile();
 		$from->owner_guid = 2;
 		$from->setFilename('symlink.txt');
 
@@ -322,14 +315,17 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanDeleteSymlinkAndTarget() {
+		if (stripos(PHP_OS, 'WIN') !== false) {
+			$this->markTestSkipped('Unable to test symlinks on Windows');
+		}
 
-		$to = new ElggFile();
+		$to = new \ElggFile();
 		$to->owner_guid = 2;
 		$to->setFilename('symlink-target.txt');
 		$to->open('write');
 		$to->close();
 
-		$from = new ElggFile();
+		$from = new \ElggFile();
 		$from->owner_guid = 2;
 		$from->setFilename('symlink.txt');
 
@@ -345,14 +341,17 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanDeleteSymlinkWithMissingTarget() {
+		if (stripos(PHP_OS, 'WIN') !== false) {
+			$this->markTestSkipped('Unable to test symlinks on Windows');
+		}
 
-		$to = new ElggFile();
+		$to = new \ElggFile();
 		$to->owner_guid = 2;
 		$to->setFilename('symlink-target.txt');
 		$to->open('write');
 		$to->close();
 
-		$from = new ElggFile();
+		$from = new \ElggFile();
 		$from->owner_guid = 2;
 		$from->setFilename('symlink.txt');
 
@@ -370,7 +369,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 	public function testCanTransferFile() {
 
-		$dataroot = _elgg_config()->dataroot;
+		$dataroot = _elgg_services()->config->dataroot;
 
 		$file = new \ElggFile();
 		$file->owner_guid = 3;
@@ -387,16 +386,16 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($file->transfer(4));
 		$this->assertEquals(4, $file->owner_guid);
 		$this->assertEquals("file-to-transfer.txt", $file->getFilename());
-		$this->assertEquals("{$dataroot}1/4/file-to-transfer.txt", $file->getFilenameOnFilestore());
+		$this->assertEquals(Paths::sanitize("{$dataroot}1/4/file-to-transfer.txt", false), $file->getFilenameOnFilestore());
 		$this->assertTrue($file->exists());
-		$this->assertFalse(file_exists("{$dataroot}1/3/file-to-transfer.txt"));
+		$this->assertFileDoesNotExist("{$dataroot}1/3/file-to-transfer.txt");
 
 		$this->assertTrue($file->transfer(3, 'tmp/transferred-file.txt'));
 		$this->assertEquals(3, $file->owner_guid);
 		$this->assertEquals("tmp/transferred-file.txt", $file->getFilename());
-		$this->assertEquals("{$dataroot}1/3/tmp/transferred-file.txt", $file->getFilenameOnFilestore());
+		$this->assertEquals(Paths::sanitize("{$dataroot}1/3/tmp/transferred-file.txt", false), $file->getFilenameOnFilestore());
 		$this->assertTrue($file->exists());
-		$this->assertFalse(file_exists("{$dataroot}1/4/file-to-transfer.txt"));
+		$this->assertFileDoesNotExist("{$dataroot}1/4/file-to-transfer.txt");
 
 		// cleanup
 		elgg_delete_directory("{$dataroot}1/3/");
@@ -405,9 +404,9 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 	public function testCanGetDownloadUrl() {
 
-		_elgg_services()->hooks->backup();
+		_elgg_services()->events->backup();
 
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = 2;
 		$file->setFilename('download-url.txt');
 		$file->open('write');
@@ -415,26 +414,26 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertEquals(elgg_get_download_url($file), $file->getDownloadURL());
 		$this->assertEquals(elgg_get_download_url($file, false), $file->getDownloadURL(false));
-		$this->assertEquals(elgg_get_download_url($file, null, strtotime('+2 minutes')), $file->getDownloadURL(false, strtotime('+2 minutes')));
+		$this->assertEquals(elgg_get_download_url($file, false, strtotime('+2 minutes')), $file->getDownloadURL(false, strtotime('+2 minutes')));
 
-		_elgg_services()->hooks->registerHandler('download:url', 'file', function (\Elgg\Hook $hook) {
-			$file = $hook->getEntityParam();
+		_elgg_services()->events->registerHandler('download:url', 'file', function (\Elgg\Event $event) {
+			$file = $event->getEntityParam();
 
 			return elgg_normalize_url("download/{$file->originalfilename}");
 		});
 
 		$this->assertEquals(elgg_normalize_url("download/{$file->originalfilename}"), $file->getDownloadURL());
 
-		_elgg_services()->hooks->restore();
+		_elgg_services()->events->restore();
 
 		$file->delete();
 	}
 
 	public function testCanGetInlineUrl() {
 
-		_elgg_services()->hooks->backup();
+		_elgg_services()->events->backup();
 
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = 2;
 		$file->setFilename('inline-url.txt');
 		$file->open('write');
@@ -442,18 +441,69 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertEquals(elgg_get_inline_url($file), $file->getInlineURL());
 		$this->assertEquals(elgg_get_inline_url($file, false), $file->getInlineURL(false));
-		$this->assertEquals(elgg_get_inline_url($file, null, strtotime('+2 minutes')), $file->getInlineURL(false, strtotime('+2 minutes')));
+		$this->assertEquals(elgg_get_inline_url($file, false, strtotime('+2 minutes')), $file->getInlineURL(false, strtotime('+2 minutes')));
 
-		_elgg_services()->hooks->registerHandler('inline:url', 'file', function (\Elgg\Hook $hook) {
-			$file = $hook->getEntityParam();
+		_elgg_services()->events->registerHandler('inline:url', 'file', function (\Elgg\Event $event) {
+			$file = $event->getEntityParam();
 
 			return elgg_normalize_url("download/{$file->originalfilename}");
 		});
 
 		$this->assertEquals(elgg_normalize_url("download/{$file->originalfilename}"), $file->getInlineUrl());
 
-		_elgg_services()->hooks->restore();
+		_elgg_services()->events->restore();
 
 		$file->delete();
+	}
+	
+	/**
+	 * @dataProvider pathTraversalProvider
+	 */
+	public function testPathTraversal($filename, $expected_filename, $expected_path) {
+		$file = new \ElggFile();
+		$file->owner_guid = elgg_get_site_entity()->guid;
+		
+		$file->setFilename($filename);
+		$this->assertEquals($expected_filename, $file->getFilename());
+		$this->assertEquals($expected_filename, $file->filename);
+		$this->assertEquals($expected_path, $file->getFilenameOnFilestore());
+		
+		// test magic setter
+		$file->filename = $filename;
+		$this->assertEquals($expected_filename, $file->getFilename());
+		$this->assertEquals($expected_filename, $file->filename);
+		$this->assertEquals($expected_path, $file->getFilenameOnFilestore());
+	}
+	
+	public function pathTraversalProvider() {
+		$dataroot = elgg_get_data_path();
+		
+		return [
+			['foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			['../foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			['./foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			['./../foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			['.././foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			['././foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			['../../foobar.txt', 'foobar.txt', Paths::sanitize("{$dataroot}/1/1/foobar.txt", false)],
+			// with sub-folder
+			['bar/foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['../bar/foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['bar/../foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['bar/./foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['./bar/foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['bar/./foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['./bar/../foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['../bar/./foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['./bar/./foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+			['../bar/../foobar.txt', 'bar/foobar.txt', Paths::sanitize("{$dataroot}/1/1/bar/foobar.txt", false)],
+		];
+	}
+	
+	public function testFileExistsWithoutOwnerGuid() {
+		$file = new \ElggFile();
+		$file->setFilename('foobar.txt');
+		
+		$this->assertFalse($file->exists());
 	}
 }

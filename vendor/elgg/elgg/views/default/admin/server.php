@@ -20,16 +20,24 @@ $tabs = [
 ];
 
 // Show phpinfo page
-if (elgg_get_config('allow_phpinfo') === true) {
+if (elgg_get_config('allow_phpinfo')) {
 	$tabs[] = [
 		'text' => elgg_echo('admin:server:label:phpinfo'),
 		'content' => elgg_view('output/iframe', [
 			'src' => elgg_generate_url('phpinfo'),
-			'width' => '100%',
+			'style' => 'width: 100%;',
 			'height' => '2000px',
 		]),
 	];
 }
+
+elgg_register_menu_item('title', [
+	'name' => 'diagnostics',
+	'text' => elgg_echo('diagnostics:report'),
+	'icon' => 'download',
+	'href' => elgg_generate_action_url('diagnostics/download'),
+	'class' => 'elgg-button elgg-button-action',
+]);
 
 echo elgg_view('page/components/tabs', [
 	'tabs' => $tabs,

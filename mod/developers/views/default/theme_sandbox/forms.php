@@ -16,6 +16,17 @@ $ipsum = elgg_view('developers/ipsum');
 		]);
 
 		echo elgg_view_field([
+			'#type' => 'text',
+			'required' => true,
+			'disabled' => true,
+			'name' => 'f1.1',
+			'id' => 'f1.2',
+			'placeholder' => 'placeholder text',
+			'#label' => 'Text input (.elgg-field-disabled):',
+			'#help' => 'This is how help text looks',
+		]);
+
+		echo elgg_view_field([
 			'#type' => 'password',
 			'name' => 'f2',
 			'id' => 'f2',
@@ -33,6 +44,19 @@ $ipsum = elgg_view('developers/ipsum');
 			],
 			'value' => 2,
 			'#label' => 'Radio input (.elgg-input-radios):',
+		]);
+
+		echo elgg_view_field([
+			'#type' => 'radio',
+			'name' => 'f3.1',
+			'id' => 'f3.1',
+			'disabled' => true,
+			'options' => [
+				'a (.elgg-input-radio)' => 1,
+				'b (.elgg-input-radio)' => 2
+			],
+			'value' => 2,
+			'#label' => 'Radio input (.elgg-field-disabled):',
 		]);
 
 		echo elgg_view_field([
@@ -128,16 +152,6 @@ $ipsum = elgg_view('developers/ipsum');
 			'#label' => 'a (.elgg-input-checkbox) - Field label',
 			'label' => 'a (.elgg-input-checkbox) - Input label',
 			'#help' => 'Single checkbox .elgg-input-checkbox wrapped in .elgg-input-single-checkbox (label and #label)',
-		]);
-
-		echo elgg_view_input('checkbox', [
-			'name' => 'f4s3',
-			'id' => 'f4s3',
-			'value' => 1,
-			'default' => false,
-			'required' => true,
-			'label' => 'a (.elgg-input-checkbox)',
-			'help' => 'Single checkbox .elgg-input-checkbox wrapped in .elgg-input-single-checkbox using elgg_view_input',
 		]);
 
 		echo elgg_view_field([
@@ -338,6 +352,14 @@ $ipsum = elgg_view('developers/ipsum');
 		]);
 
 		echo elgg_view_field([
+			'#type' => 'tags',
+			'name' => 'f9b',
+			'id' => 'f9b',
+			'data-tagify-opts' => json_encode(['whitelist' => ['one', 'two', 'three'], 'dropdown' => ['enabled' => 0]]),
+			'#label' => 'Tags input (.elgg-input-tags) with custom options:',
+		]);
+
+		echo elgg_view_field([
 			'#type' => 'email',
 			'name' => 'f101-email',
 			'id' => 'f101-email',
@@ -358,6 +380,7 @@ $ipsum = elgg_view('developers/ipsum');
 			'name' => 'f11a',
 			'id' => 'f11a',
 			'match_on' => 'groups',
+			'placeholder' => 'Placeholder text',
 			'#label' => 'Groups autocomplete input (.elgg-input-autocomplete):',
 		]);
 
@@ -470,6 +493,7 @@ $ipsum = elgg_view('developers/ipsum');
 			'name' => 'f13',
 			'id' => 'f13',
 			'#label' => 'User picker input (.elgg-user-picker):',
+			'placeholder' => 'start typing...',
 		]);
 
 		echo elgg_view_field([
@@ -502,6 +526,7 @@ $ipsum = elgg_view('developers/ipsum');
 			'name' => 'f13b',
 			'id' => 'f13b',
 			'#label' => 'Groups picker input (.elgg-input-grouppicker):',
+			'placeholder' => 'Start searching for a group...',
 		]);
 		
 		echo elgg_view_field([
@@ -565,7 +590,7 @@ $ipsum = elgg_view('developers/ipsum');
 			'#help' => 'Enter an integer number larger than zero',
 		]);
 
-		$dt = new \DateTime(null, new \DateTimeZone('UTC'));
+		$dt = new \DateTime('now', new \DateTimeZone('UTC'));
 		$hour_options = [];
 		$hour_options_ts = range(0, 24 * 60 * 60, 900); // step of 15 minutes
 		foreach ($hour_options_ts as $ts) {
@@ -611,6 +636,46 @@ $ipsum = elgg_view('developers/ipsum');
 				],
 				[
 					'#type' => 'fieldset',
+					'#label' => 'Date and time fieldset - horizontal labels',
+					'align' => 'horizontal',
+					'fields' => [
+						[
+							'#type' => 'date',
+							'#class' => 'elgg-field-horizontal',
+							'value' => time(),
+							'timestamp' => true,
+							'#label' => 'Date',
+						],
+						[
+							'#type' => 'select',
+							'#class' => 'elgg-field-horizontal',
+							'#label' => 'Time',
+							'options' => $hour_options,
+						],
+					],
+				],
+				[
+					'#type' => 'fieldset',
+					'#label' => 'Date and time fieldset - horizontal labels - stretched first field',
+					'align' => 'horizontal',
+					'fields' => [
+						[
+							'#type' => 'date',
+							'#class' => ['elgg-field-horizontal', 'elgg-field-stretch'],
+							'value' => time(),
+							'timestamp' => true,
+							'#label' => 'Date',
+						],
+						[
+							'#type' => 'select',
+							'#class' => 'elgg-field-horizontal',
+							'#label' => 'Time',
+							'options' => $hour_options,
+						],
+					],
+				],
+				[
+					'#type' => 'fieldset',
 					'#label' => 'Nested fieldset',
 					'#help' => 'Fieldset with horizontal alignment of fields',
 					'align' => 'horizontal',
@@ -619,6 +684,13 @@ $ipsum = elgg_view('developers/ipsum');
 							'#type' => 'button',
 							'type' => 'submit',
 							'text' => 'Save',
+							'icon' => 'save',
+						],
+						[
+							'#type' => 'button',
+							'disabled' => true,
+							'type' => 'submit',
+							'text' => 'Save (disabled)',
 							'icon' => 'save',
 						],
 						[
@@ -650,11 +722,10 @@ $body .= elgg_view_field([
 ]);
 $body .= elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('submit'),
+	'text' => elgg_echo('submit'),
 ]);
 
 echo elgg_view('input/form', [
 	'body' => $body,
 	'action' => '#',
-	'prevent_double_submit' => true,
 ]);

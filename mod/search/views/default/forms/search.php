@@ -5,7 +5,7 @@
  * @uses $vars['value'] Current search query
  */
 
-$value = elgg_extract('value', $vars, get_input('q', get_input('tag')));
+$value = (string) elgg_extract('value', $vars, get_input('q', get_input('tag')));
 
 echo elgg_view_field([
 	'#type' => 'text',
@@ -13,7 +13,8 @@ echo elgg_view_field([
 	'size' => '21',
 	'name' => 'q',
 	'autocapitalize' => 'off',
-	'autocorrect' => 'off',
+	'autocomplete' => 'off',
+	'spellcheck' => 'false',
 	'required' => true,
 	'value' => _elgg_get_display_query($value),
 	'placeholder' => elgg_echo('search'),
@@ -21,7 +22,8 @@ echo elgg_view_field([
 
 echo elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_view_icon('search'),
+	'icon' => 'search',
+	'aria-label' => elgg_echo('search'),
 ]);
 
 $values = [
@@ -33,9 +35,10 @@ $values = [
 ];
 
 foreach ($values as $name => $value) {
-	if (!$value) {
+	if (empty($value)) {
 		continue;
 	}
+	
 	echo elgg_view_field([
 		'#type' => 'hidden',
 		'name' => $name,

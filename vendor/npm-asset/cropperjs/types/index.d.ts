@@ -1,22 +1,8 @@
 declare namespace Cropper {
-  enum DragMode {
-    Crop = 'crop',
-    Move = 'move',
-    None = 'none',
-  }
-
-  enum ViewMode {
-    Free = 0,
-    CanvasWidthAndHeightShouldNotBeLessThanCropBoxSize = 1,
-    CanvasWidthOrHeightShouldNotBeLessThanContainerSize = 2,
-    CanvasWidthAndHeightShouldNotBeLessThanContainerSize = 3,
-  }
-
-  enum ImageSmoothingQuality {
-    Low = 'low',
-    Medium = 'medium',
-    High = 'high',
-  }
+  export type Action = 'crop' | 'move' | 'zoom' | 'e' | 's' | 'w' | 'n' | 'ne' | 'nw' | 'se' | 'sw' | 'all';
+  export type DragMode = 'crop' | 'move' | 'none';
+  export type ImageSmoothingQuality = 'low' | 'medium' | 'high';
+  export type ViewMode = 0 | 1 | 2 | 3;
 
   export interface Data {
     x: number;
@@ -98,7 +84,44 @@ declare namespace Cropper {
     height?: number;
   }
 
-  export interface Options {
+  interface CropperEvent<T extends EventTarget = EventTarget> extends CustomEvent {
+    currentTarget: T & { cropper: Cropper };
+  }
+
+  export type ReadyEvent<T extends EventTarget> = CropperEvent<T>
+
+  export interface CropEvent<T extends EventTarget = EventTarget> extends CropperEvent<T> {
+    detail: Data;
+  }
+
+  export interface CropEventData {
+    originalEvent: PointerEvent | TouchEvent | MouseEvent;
+    action: Action;
+  }
+
+  export interface CropStartEvent<T extends EventTarget = EventTarget> extends CropperEvent<T> {
+    detail: CropEventData;
+  }
+
+  export interface CropMoveEvent<T extends EventTarget = EventTarget> extends CropperEvent<T> {
+    detail: CropEventData;
+  }
+
+  export interface CropEndEvent<T extends EventTarget = EventTarget> extends CropperEvent<T> {
+    detail: CropEventData;
+  }
+
+  export interface ZoomEventData {
+    originalEvent: WheelEvent | PointerEvent | TouchEvent | MouseEvent;
+    oldRatio: number;
+    ratio: number;
+  }
+
+  export interface ZoomEvent<T extends EventTarget = EventTarget> extends CropperEvent<T> {
+    detail: ZoomEventData;
+  }
+
+  export interface Options<T extends EventTarget = EventTarget> {
     aspectRatio?: number;
     autoCrop?: boolean;
     autoCropArea?: number;
@@ -106,13 +129,9 @@ declare namespace Cropper {
     center?: boolean;
     checkCrossOrigin?: boolean;
     checkOrientation?: boolean;
-    crop?(event: CustomEvent): void;
     cropBoxMovable?: boolean;
     cropBoxResizable?: boolean;
-    cropend?(event: CustomEvent): void;
-    cropmove?(event: CustomEvent): void;
-    cropstart?(event: CustomEvent): void;
-    data?: Data;
+    data?: SetDataOptions;
     dragMode?: DragMode;
     guides?: boolean;
     highlight?: boolean;
@@ -125,8 +144,7 @@ declare namespace Cropper {
     minCropBoxWidth?: number;
     modal?: boolean;
     movable?: boolean;
-    preview?: Element | Element[] | NodeList | string;
-    ready?(event: CustomEvent): void;
+    preview?: HTMLElement | HTMLElement[] | NodeListOf<HTMLElement> | string;
     responsive?: boolean;
     restore?: boolean;
     rotatable?: boolean;
@@ -134,15 +152,21 @@ declare namespace Cropper {
     toggleDragModeOnDblclick?: boolean;
     viewMode?: ViewMode;
     wheelZoomRatio?: number;
-    zoom?(event: CustomEvent): void;
     zoomOnTouch?: boolean;
     zoomOnWheel?: boolean;
     zoomable?: boolean;
+    ready?(event: ReadyEvent<T>): void;
+    crop?(event: CropEvent<T>): void;
+    cropend?(event: CropEndEvent<T>): void;
+    cropmove?(event: CropMoveEvent<T>): void;
+    cropstart?(event: CropStartEvent<T>): void;
+    zoom?(event: ZoomEvent<T>): void;
   }
 }
 
 declare class Cropper {
-  constructor(element: HTMLImageElement | HTMLCanvasElement, options?: Cropper.Options);
+  constructor(element: HTMLImageElement, options?: Cropper.Options<HTMLImageElement>);
+  constructor(element: HTMLCanvasElement, options?: Cropper.Options<HTMLCanvasElement>);
   clear(): Cropper;
   crop(): Cropper;
   destroy(): Cropper;
@@ -169,9 +193,9 @@ declare class Cropper {
   setData(data: Cropper.SetDataOptions): Cropper;
   setDragMode(dragMode: Cropper.DragMode): Cropper;
   zoom(ratio: number): Cropper;
-  zoomTo(ratio: number, pivot?: {x: number; y: number}): Cropper;
+  zoomTo(ratio: number, pivot?: { x: number; y: number }): Cropper;
   static noConflict(): Cropper;
-  static setDefaults(options: Cropper.Options): void;
+  static setDefaults(options: Cropper.Options<EventTarget>): void;
 }
 
 declare module 'cropperjs' {

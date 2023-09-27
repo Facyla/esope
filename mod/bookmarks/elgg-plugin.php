@@ -1,14 +1,24 @@
 <?php
 
+use Elgg\Bookmarks\Forms\PrepareFields;
 use Elgg\Bookmarks\GroupToolContainerLogicCheck;
+use Elgg\Bookmarks\Notifications\CreateBookmarksEventHandler;
 
 return [
+	'plugin' => [
+		'name' => 'Bookmarks',
+		'activate_on_install' => true,
+	],
 	'entities' => [
 		[
 			'type' => 'object',
 			'subtype' => 'bookmarks',
 			'class' => 'ElggBookmark',
-			'searchable' => true,
+			'capabilities' => [
+				'commentable' => true,
+				'searchable' => true,
+				'likable' => true,
+			],
 		],
 	],
 	'actions' => [
@@ -26,12 +36,18 @@ return [
 		'collection:object:bookmarks:owner' => [
 			'path' => '/bookmarks/owner/{username}',
 			'resource' => 'bookmarks/owner',
+			'middleware' => [
+				\Elgg\Router\Middleware\UserPageOwnerGatekeeper::class,
+			],
 		],
 		'collection:object:bookmarks:friends' => [
 			'path' => '/bookmarks/friends/{username}',
 			'resource' => 'bookmarks/friends',
 			'required_plugins' => [
 				'friends',
+			],
+			'middleware' => [
+				\Elgg\Router\Middleware\UserPageOwnerGatekeeper::class,
 			],
 		],
 		'collection:object:bookmarks:group' => [
@@ -43,12 +59,16 @@ return [
 			'required_plugins' => [
 				'groups',
 			],
+			'middleware' => [
+				\Elgg\Router\Middleware\GroupPageOwnerGatekeeper::class,
+			],
 		],
 		'add:object:bookmarks' => [
 			'path' => '/bookmarks/add/{guid}',
 			'resource' => 'bookmarks/add',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
+				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
 			],
 		],
 		'view:object:bookmarks' => [
@@ -70,16 +90,65 @@ return [
 			],
 		],
 	],
-	'hooks' => [
+	'events' => [
 		'container_logic_check' => [
 			'object' => [
 				GroupToolContainerLogicCheck::class => [],
+			],
+		],
+		'entity:url' => [
+			'object' => [
+				'Elgg\Bookmarks\Widgets::widgetURL' => [],
+			],
+		],
+		'form:prepare:fields' => [
+			'bookmarks/save' => [
+				PrepareFields::class => [],
+			],
+		],
+		'register' => [
+			'menu:footer' => [
+				'Elgg\Bookmarks\Menus\Footer::register' => [],
+			],
+			'menu:owner_block' => [
+				'Elgg\Bookmarks\Menus\OwnerBlock::registerUserItem' => [],
+				'Elgg\Bookmarks\Menus\OwnerBlock::registerGroupItem' => [],
+			],
+			'menu:page' => [
+				'Elgg\Bookmarks\Menus\Page::register' => [],
+			],
+			'menu:site' => [
+				'Elgg\Bookmarks\Menus\Site::register' => [],
+			],
+			'menu:title:object:bookmarks' => [
+				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
+			],
+		],
+		'seeds' => [
+			'database' => [
+				'Elgg\Bookmarks\Seeder::register' => [],
 			],
 		],
 	],
 	'widgets' => [
 		'bookmarks' => [
 			'context' => ['profile', 'dashboard'],
+		],
+	],
+	'group_tools' => [
+		'bookmarks' => [],
+	],
+	'view_extensions' => [
+		'elgg.js' => [
+			'bookmarks.js' => [],
+		],
+	],
+	'notifications' => [
+		'object' => [
+			'bookmarks' => [
+				'create' => CreateBookmarksEventHandler::class,
+				'mentions' => \Elgg\Notifications\MentionsEventHandler::class,
+			],
 		],
 	],
 ];

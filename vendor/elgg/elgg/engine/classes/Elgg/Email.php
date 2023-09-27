@@ -2,12 +2,10 @@
 
 namespace Elgg;
 
-use ElggEntity;
-use ElggUser;
-use InvalidParameterException;
 use Elgg\Email\Address;
 use Elgg\Email\Attachment;
-use Zend\Mime\Part;
+use Elgg\Exceptions\InvalidArgumentException;
+use Laminas\Mime\Part;
 
 /**
  * Email message
@@ -20,19 +18,24 @@ final class Email {
 	protected $from;
 
 	/**
-	 * @var \Elgg\Email\Address
+	 * @var \Elgg\Email\Address[]
 	 */
-	protected $to;
+	protected $to = [];
+
+	/**
+	 * @var \Elgg\Email\Address[]
+	 */
+	protected $cc = [];
+
+	/**
+	 * @var \Elgg\Email\Address[]
+	 */
+	protected $bcc = [];
 
 	/**
 	 * @var mixed
 	 */
 	protected $sender;
-
-	/**
-	 * @var mixed
-	 */
-	protected $recipient;
 
 	/**
 	 * @var string
@@ -64,16 +67,21 @@ final class Email {
 	 *
 	 * @param array $options Options
 	 *                       'from' - ElggEntity, or email string, or \Elgg\Email\Address
-	 *                       'to' - ElggEntity, or email string, or \Elgg\Email\Address
+	 *                       'to' - ElggEntity, or email string, or \Elgg\Email\Address, or an array of one of these types
+	 *                       'cc' - ElggEntity, or email string, or \Elgg\Email\Address, or an array of one of these types
+	 *                       'bcc' - ElggEntity, or email string, or \Elgg\Email\Address, or an array of one of these types
 	 *                       'subject' - subject string
 	 *                       'body' - body string
 	 *                       'params' - additional parameters
 	 *                       'headers' - HTTP/IMF headers
+	 *
 	 * @return \Elgg\Email
 	 */
 	public static function factory(array $options = []) {
 		$from = elgg_extract('from', $options);
 		$to = elgg_extract('to', $options);
+		$cc = elgg_extract('cc', $options);
+		$bcc = elgg_extract('bcc', $options);
 		$subject = elgg_extract('subject', $options);
 		$body = elgg_extract('body', $options);
 		$params = elgg_extract('params', $options, []);
@@ -82,8 +90,9 @@ final class Email {
 		$email = new self();
 		$email->setSender($from);
 		$email->setFrom(self::prepareFrom($from));
-		$email->setRecipient($to);
-		$email->setTo(self::prepareTo($to));
+		$email->setTo($to);
+		$email->setCc($cc);
+		$email->setBcc($bcc);
 		$email->setSubject($subject);
 		$email->setBody($body);
 		$email->setParams($params);
@@ -102,6 +111,7 @@ final class Email {
 	 * Sets email sender
 	 *
 	 * @param mixed $sender Original sender of the Email
+	 *
 	 * @return self
 	 */
 	public function setSender($sender) {
@@ -119,29 +129,10 @@ final class Email {
 	}
 
 	/**
-	 * Sets email recipient
-	 *
-	 * @param mixed $recipient Original recipient of the Email
-	 * @return self
-	 */
-	public function setRecipient($recipient) {
-		$this->recipient = $recipient;
-		return $this;
-	}
-
-	/**
-	 * Returns recipient
-	 *
-	 * @return mixed
-	 */
-	public function getRecipient() {
-		return $this->recipient;
-	}
-
-	/**
 	 * Sets sender address
 	 *
 	 * @param \Elgg\Email\Address $from Sender address
+	 *
 	 * @return self
 	 */
 	public function setFrom(Address $from) {
@@ -151,6 +142,7 @@ final class Email {
 
 	/**
 	 * Returns sender address
+	 *
 	 * @return \Elgg\Email\Address
 	 */
 	public function getFrom() {
@@ -160,26 +152,71 @@ final class Email {
 	/**
 	 * Sets recipient address
 	 *
-	 * @param \Elgg\Email\Address $to Recipient address
+	 * @param mixed $recipient ElggEntity, or email string, or \Elgg\Email\Address, or an array of one of these types
+	 *
 	 * @return self
 	 */
-	public function setTo(Address $to) {
-		$this->to = $to;
+	public function setTo($recipient): self {
+		$this->to = $this->prepareRecipients($recipient);
 		return $this;
 	}
 
 	/**
 	 * Returns recipient address
-	 * @return \Elgg\Email\Address
+	 *
+	 * @return \Elgg\Email\Address[]
 	 */
-	public function getTo() {
+	public function getTo(): array {
 		return $this->to;
+	}
+
+	/**
+	 * Sets recipient address in cc
+	 *
+	 * @param mixed $recipient ElggEntity, or email string, or \Elgg\Email\Address, or an array of one of these types
+	 *
+	 * @return self
+	 */
+	public function setCc($recipient): self {
+		$this->cc = $this->prepareRecipients($recipient);
+		return $this;
+	}
+
+	/**
+	 * Returns recipient address from cc
+	 *
+	 * @return \Elgg\Email\Address[]
+	 */
+	public function getCc(): array {
+		return $this->cc;
+	}
+	
+	/**
+	 * Sets recipient address in bcc
+	 *
+	 * @param mixed $recipient ElggEntity, or email string, or \Elgg\Email\Address, or an array of one of these types
+	 *
+	 * @return self
+	 */
+	public function setBcc($recipient): self {
+		$this->bcc = $this->prepareRecipients($recipient);
+		return $this;
+	}
+
+	/**
+	 * Returns recipient address from bcc
+	 *
+	 * @return \Elgg\Email\Address[]
+	 */
+	public function getBcc(): array {
+		return $this->bcc;
 	}
 
 	/**
 	 * Sets email subject
 	 *
 	 * @param string $subject Subject
+	 *
 	 * @return self
 	 */
 	public function setSubject($subject = '') {
@@ -189,16 +226,20 @@ final class Email {
 
 	/**
 	 * Returns the subject
+	 *
+	 * It is possible to limit the length of the subject string. This is sometimes needed for certain mail servers / clients.
+	 *
 	 * @return string
 	 */
 	public function getSubject() {
-		return $this->subject;
+		return elgg_substr($this->subject, 0, (int) _elgg_services()->config->email_subject_limit);
 	}
 
 	/**
 	 * Sets the email message body
 	 *
 	 * @param string $body Body
+	 *
 	 * @return self
 	 */
 	public function setBody($body = '') {
@@ -208,6 +249,7 @@ final class Email {
 
 	/**
 	 * Returns email body
+	 *
 	 * @return string
 	 */
 	public function getBody() {
@@ -218,6 +260,7 @@ final class Email {
 	 * Sets additional params
 	 *
 	 * @param array $params Params
+	 *
 	 * @return self
 	 */
 	public function setParams(array $params = []) {
@@ -227,6 +270,7 @@ final class Email {
 
 	/**
 	 * Returns additional params
+	 *
 	 * @return array
 	 */
 	public function getParams() {
@@ -238,6 +282,7 @@ final class Email {
 	 *
 	 * @param string $name  Header name
 	 * @param mixed  $value Header value
+	 *
 	 * @return self
 	 */
 	public function addHeader($name, $value) {
@@ -249,6 +294,7 @@ final class Email {
 	 * Replaces header bag
 	 *
 	 * @param array $headers Headers
+	 *
 	 * @return self
 	 */
 	public function setHeaders(array $headers = []) {
@@ -258,6 +304,7 @@ final class Email {
 
 	/**
 	 * Returns headers
+	 *
 	 * @return array
 	 */
 	public function getHeaders() {
@@ -267,7 +314,7 @@ final class Email {
 	/**
 	 * Add an attachment
 	 *
-	 * @param mixed $attachment \Zend\Mime\Part or \Elgg\Email\Attachment or \ElggFile or an array
+	 * @param mixed $attachment \Laminas\Mime\Part or \Elgg\Email\Attachment or \ElggFile or an array
 	 *
 	 * @see \Elgg\Email\Attachment::factory()
 	 *
@@ -296,62 +343,109 @@ final class Email {
 	/**
 	 * Get all attachments
 	 *
-	 * @return \Zend\Mime\Part[]
+	 * @return \Laminas\Mime\Part[]
 	 */
 	public function getAttachments() {
 		return $this->attachments;
 	}
+	
+	/**
+	 * Create a Message-ID header string for the given entity
+	 *
+	 * @param \ElggEntity $entity        The entity to generate the header for
+	 * @param bool        $add_microtime Add a microtime to the header (used for non create events)
+	 *
+	 * @return string
+	 * @since 4.2
+	 */
+	public function createEntityMessageID(\ElggEntity $entity, bool $add_microtime = false): string {
+		$microtime = '';
+		if ($add_microtime) {
+			$microtime = '.' . microtime(true);
+		}
+		
+		$hostname = parse_url(elgg_get_site_url(), PHP_URL_HOST);
+		$urlPath = parse_url(elgg_get_site_url(), PHP_URL_PATH);
+		
+		return "{$urlPath}.entity.{$entity->guid}{$microtime}@{$hostname}";
+	}
 
 	/**
-	 * Converts mixed input to an instance of Zend addres
+	 * Converts mixed input to an instance of Laminas addres
 	 *
 	 * @param mixed $from From input
+	 *
 	 * @return Address
-	 * @throws InvalidParameterException
+	 *
+	 * @throws InvalidArgumentException
 	 */
 	protected static function prepareFrom($from) {
 		if (empty($from)) {
 			// get the site email address
 			$site = elgg_get_site_entity();
 			$from = new Address($site->getEmailAddress(), $site->getDisplayName());
-		} else if ($from instanceof ElggEntity) {
+		} elseif ($from instanceof \ElggSite) {
+			// use site email address
+			$from = new Address($from->getEmailAddress(), $from->getDisplayName());
+		} elseif ($from instanceof \ElggEntity) {
 			// If there's an email address, use it - but only if it's not from a user.
-			if (!$from instanceof ElggUser && $from->email) {
-				$from = new Address($from->email, $from->getDisplayName());
+			if (!$from instanceof \ElggUser && $from->email) {
+				$from = Address::fromEntity($from);
 			} else {
 				// get the site email address
 				$site = elgg_get_site_entity();
-				$from = new Address($site->getEmailAddress(), $site->getDisplayName());
+				$from_display = elgg_echo('notification:method:email:from', [$from->getDisplayName(), $site->getDisplayName()]);
+				$from = new Address($site->getEmailAddress(), $from_display);
 			}
 		} elseif (is_string($from)) {
 			$from = Address::fromString($from);
 		}
 		
 		if (!$from instanceof Address) {
-			throw new InvalidParameterException("From address is not in a valid format");
+			throw new InvalidArgumentException('From address is not in a valid format');
 		}
 
 		return $from;
 	}
 
 	/**
-	 * Converts mixed input to an instance of Zend addres
+	 * Converts mixed input to an array of Laminas address instances
 	 *
-	 * @param mixed $to To input
-	 * @return Address
-	 * @throws InvalidParameterException
+	 * @param mixed $recipients recipients input
+	 *
+	 * @return Address[]
+	 *
+	 * @throws InvalidArgumentException
 	 */
-	protected static function prepareTo($to) {
-		if ($to instanceof ElggEntity) {
-			$to = new Address($to->email, $to->getDisplayName());
-		} elseif (is_string($to)) {
-			$to = Address::fromString($to);
+	protected function prepareRecipients($recipients) {
+		if (empty($recipients)) {
+			return [];
 		}
-
-		if (!$to instanceof Address) {
-			throw new InvalidParameterException("To address is not in a valid format");
+		
+		if (!is_array($recipients)) {
+			$recipients = [$recipients];
 		}
-
-		return $to;
+		
+		$result = [];
+		foreach ($recipients as $recipient) {
+			if ($recipient instanceof Address) {
+				$result[] = $recipient;
+				continue;
+			}
+			
+			if ($recipient instanceof \ElggEntity) {
+				$recipient = Address::fromEntity($recipient);
+			} elseif (is_string($recipient)) {
+				$recipient = Address::fromString($recipient);
+			}
+	
+			if (!$recipient instanceof Address) {
+				throw new InvalidArgumentException('Recipient address is not in a valid format');
+			}
+			
+			$result[] = $recipient;
+		}
+		
+		return $result;
 	}
 }

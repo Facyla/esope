@@ -1,33 +1,13 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- * Copyright (c) 2015 Rob Morgan
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- * @package    Phinx
- * @subpackage Phinx\Db
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
+
 namespace Phinx\Db;
 
+use InvalidArgumentException;
 use Phinx\Db\Action\AddColumn;
 use Phinx\Db\Action\AddForeignKey;
 use Phinx\Db\Action\AddIndex;
@@ -46,9 +26,9 @@ use Phinx\Db\Plan\Intent;
 use Phinx\Db\Plan\Plan;
 use Phinx\Db\Table\Column;
 use Phinx\Db\Table\Table as TableValue;
+use RuntimeException;
 
 /**
- *
  * This object is based loosely on: http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/Table.html.
  */
 class Table
@@ -59,7 +39,7 @@ class Table
     protected $table;
 
     /**
-     * @var \Phinx\Db\Adapter\AdapterInterface
+     * @var \Phinx\Db\Adapter\AdapterInterface|null
      */
     protected $adapter;
 
@@ -74,13 +54,11 @@ class Table
     protected $data = [];
 
     /**
-     * Class Constructor.
-     *
      * @param string $name Table Name
      * @param array $options Options
-     * @param \Phinx\Db\Adapter\AdapterInterface $adapter Database Adapter
+     * @param \Phinx\Db\Adapter\AdapterInterface|null $adapter Database Adapter
      */
-    public function __construct($name, $options = [], AdapterInterface $adapter = null)
+    public function __construct($name, $options = [], ?AdapterInterface $adapter = null)
     {
         $this->table = new TableValue($name, $options);
         $this->actions = new Intent();
@@ -124,7 +102,7 @@ class Table
      * Sets the database adapter.
      *
      * @param \Phinx\Db\Adapter\AdapterInterface $adapter Database Adapter
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function setAdapter(AdapterInterface $adapter)
     {
@@ -136,12 +114,13 @@ class Table
     /**
      * Gets the database adapter.
      *
+     * @throws \RuntimeException
      * @return \Phinx\Db\Adapter\AdapterInterface|null
      */
     public function getAdapter()
     {
         if (!$this->adapter) {
-            throw new \RuntimeException('There is no database adapter set yet, cannot proceed');
+            throw new RuntimeException('There is no database adapter set yet, cannot proceed');
         }
 
         return $this->adapter;
@@ -170,7 +149,7 @@ class Table
     /**
      * Drops the database table.
      *
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function drop()
     {
@@ -183,7 +162,7 @@ class Table
      * Renames the database table.
      *
      * @param string $newTableName New Table Name
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function rename($newTableName)
     {
@@ -195,7 +174,7 @@ class Table
     /**
      * Changes the primary key of the database table.
      *
-     * @param string|array|null $columns Column name(s) to belong to the primary key, or null to drop the key
+     * @param string|string[]|null $columns Column name(s) to belong to the primary key, or null to drop the key
      * @return $this
      */
     public function changePrimaryKey($columns)
@@ -203,6 +182,18 @@ class Table
         $this->actions->addAction(new ChangePrimaryKey($this->table, $columns));
 
         return $this;
+    }
+
+    /**
+     * Checks to see if a primary key exists.
+     *
+     * @param string|string[] $columns Column(s)
+     * @param string|null $constraint Constraint names
+     * @return bool
+     */
+    public function hasPrimaryKey($columns, $constraint = null)
+    {
+        return $this->getAdapter()->hasPrimaryKey($this->getName(), $columns, $constraint);
     }
 
     /**
@@ -250,7 +241,7 @@ class Table
      * Sets an array of data to be inserted.
      *
      * @param array $data Data
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function setData($data)
     {
@@ -299,11 +290,10 @@ class Table
      * Valid options can be: limit, default, null, precision or scale.
      *
      * @param string|\Phinx\Db\Table\Column $columnName Column Name
-     * @param string|\Phinx\Util\Literal $type Column Type
+     * @param string|\Phinx\Util\Literal|null $type Column Type
      * @param array $options Column Options
-     * @throws \RuntimeException
      * @throws \InvalidArgumentException
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function addColumn($columnName, $type = null, $options = [])
     {
@@ -315,7 +305,7 @@ class Table
 
         // Delegate to Adapters to check column type
         if (!$this->getAdapter()->isValidColumnType($action->getColumn())) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'An invalid column type "%s" was specified for column "%s".',
                 $type,
                 $action->getColumn()->getName()
@@ -331,7 +321,7 @@ class Table
      * Remove a table column.
      *
      * @param string $columnName Column Name
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function removeColumn($columnName)
     {
@@ -346,7 +336,7 @@ class Table
      *
      * @param string $oldName Old Column Name
      * @param string $newName New Column Name
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function renameColumn($oldName, $newName)
     {
@@ -359,10 +349,10 @@ class Table
     /**
      * Change a table column type.
      *
-     * @param string        $columnName    Column Name
+     * @param string $columnName Column Name
      * @param string|\Phinx\Db\Table\Column|\Phinx\Util\Literal $newColumnType New Column Type
-     * @param array         $options       Options
-     * @return \Phinx\Db\Table
+     * @param array $options Options
+     * @return $this
      */
     public function changeColumn($columnName, $newColumnType, array $options = [])
     {
@@ -390,11 +380,11 @@ class Table
     /**
      * Add an index to a database table.
      *
-     * In $options you can specific unique = true/false or name (index name).
+     * In $options you can specify unique = true/false, and name (index name).
      *
      * @param string|array|\Phinx\Db\Table\Index $columns Table Column(s)
      * @param array $options Index Options
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function addIndex($columns, array $options = [])
     {
@@ -407,8 +397,8 @@ class Table
     /**
      * Removes the given index from a table.
      *
-     * @param string|array $columns Columns
-     * @return \Phinx\Db\Table
+     * @param string|string[] $columns Columns
+     * @return $this
      */
     public function removeIndex($columns)
     {
@@ -422,7 +412,7 @@ class Table
      * Removes the given index identified by its name from a table.
      *
      * @param string $name Index name
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function removeIndexByName($name)
     {
@@ -435,7 +425,7 @@ class Table
     /**
      * Checks to see if an index exists.
      *
-     * @param string|array $columns Columns
+     * @param string|string[] $columns Columns
      * @return bool
      */
     public function hasIndex($columns)
@@ -446,7 +436,7 @@ class Table
     /**
      * Checks to see if an index specified by name exists.
      *
-     * @param string $indexName
+     * @param string $indexName Index name
      * @return bool
      */
     public function hasIndexByName($indexName)
@@ -460,11 +450,11 @@ class Table
      * In $options you can specify on_delete|on_delete = cascade|no_action ..,
      * on_update, constraint = constraint name.
      *
-     * @param string|array $columns Columns
-     * @param string|\Phinx\Db\Table $referencedTable   Referenced Table
-     * @param string|array $referencedColumns Referenced Columns
+     * @param string|string[] $columns Columns
+     * @param string|\Phinx\Db\Table\Table $referencedTable Referenced Table
+     * @param string|string[] $referencedColumns Referenced Columns
      * @param array $options Options
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function addForeignKey($columns, $referencedTable, $referencedColumns = ['id'], $options = [])
     {
@@ -481,11 +471,11 @@ class Table
      * on_update, constraint = constraint name.
      *
      * @param string $name The constraint name
-     * @param string|array $columns Columns
-     * @param string|\Phinx\Db\Table $referencedTable   Referenced Table
-     * @param string|array $referencedColumns Referenced Columns
+     * @param string|string[] $columns Columns
+     * @param string|\Phinx\Db\Table\Table $referencedTable Referenced Table
+     * @param string|string[] $referencedColumns Referenced Columns
      * @param array $options Options
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function addForeignKeyWithName($name, $columns, $referencedTable, $referencedColumns = ['id'], $options = [])
     {
@@ -505,9 +495,9 @@ class Table
     /**
      * Removes the given foreign key from the table.
      *
-     * @param string|array $columns    Column(s)
-     * @param null|string  $constraint Constraint names
-     * @return \Phinx\Db\Table
+     * @param string|string[] $columns Column(s)
+     * @param string|null $constraint Constraint names
+     * @return $this
      */
     public function dropForeignKey($columns, $constraint = null)
     {
@@ -520,8 +510,8 @@ class Table
     /**
      * Checks to see if a foreign key exists.
      *
-     * @param  string|array $columns    Column(s)
-     * @param  null|string  $constraint Constraint names
+     * @param string|string[] $columns Column(s)
+     * @param string|null $constraint Constraint names
      * @return bool
      */
     public function hasForeignKey($columns, $constraint = null)
@@ -532,39 +522,46 @@ class Table
     /**
      * Add timestamp columns created_at and updated_at to the table.
      *
-     * @param string|null $createdAt    Alternate name for the created_at column
-     * @param string|null $updatedAt    Alternate name for the updated_at column
-     * @param bool        $withTimezone Whether to set the timezone option on the added columns
-     *
-     * @return \Phinx\Db\Table
+     * @param string|false|null $createdAt Alternate name for the created_at column
+     * @param string|false|null $updatedAt Alternate name for the updated_at column
+     * @param bool $withTimezone Whether to set the timezone option on the added columns
+     * @return $this
      */
     public function addTimestamps($createdAt = 'created_at', $updatedAt = 'updated_at', $withTimezone = false)
     {
-        $createdAt = is_null($createdAt) ? 'created_at' : $createdAt;
-        $updatedAt = is_null($updatedAt) ? 'updated_at' : $updatedAt;
+        $createdAt = $createdAt ?? 'created_at';
+        $updatedAt = $updatedAt ?? 'updated_at';
 
-        $this->addColumn($createdAt, 'timestamp', [
-                   'default' => 'CURRENT_TIMESTAMP',
-                   'update' => '',
-                   'timezone' => $withTimezone,
-             ])
-             ->addColumn($updatedAt, 'timestamp', [
-                 'null' => true,
-                 'default' => null,
-                 'timezone' => $withTimezone,
-             ]);
+        if (!$createdAt && !$updatedAt) {
+            throw new \RuntimeException('Cannot set both created_at and updated_at columns to false');
+        }
+
+        if ($createdAt) {
+            $this->addColumn($createdAt, 'timestamp', [
+                'default' => 'CURRENT_TIMESTAMP',
+                'update' => '',
+                'timezone' => $withTimezone,
+            ]);
+        }
+        if ($updatedAt) {
+            $this->addColumn($updatedAt, 'timestamp', [
+                'null' => true,
+                'default' => null,
+                'update' => 'CURRENT_TIMESTAMP',
+                'timezone' => $withTimezone,
+            ]);
+        }
 
         return $this;
     }
 
     /**
      * Alias that always sets $withTimezone to true
-     * @see addTimestamps
      *
+     * @see addTimestamps
      * @param string|null $createdAt Alternate name for the created_at column
      * @param string|null $updatedAt Alternate name for the updated_at column
-     *
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function addTimestampsWithTimezone($createdAt = null, $updatedAt = null)
     {
@@ -582,8 +579,7 @@ class Table
      *                  array("col2" => "value2", "col2" => "anotherValue2"),
      *              )
      *              or array("col1" => "value1", "col2" => "anotherValue1")
-     *
-     * @return \Phinx\Db\Table
+     * @return $this
      */
     public function insert($data)
     {
@@ -620,7 +616,6 @@ class Table
     /**
      * Updates a table from the object instance.
      *
-     * @throws \RuntimeException
      * @return void
      */
     public function update()
@@ -701,14 +696,13 @@ class Table
         // Renaming a table is tricky, specially when running a reversible migration
         // down. We will just assume the table already exists if the user commands a
         // table rename.
-        $renamed = collection($this->actions->getActions())
-            ->filter(function ($action) {
-                return $action instanceof RenameTable;
-            })
-            ->first();
-
-        if ($renamed) {
-            $exists = true;
+        if (!$exists) {
+            foreach ($this->actions->getActions() as $action) {
+                if ($action instanceof RenameTable) {
+                    $exists = true;
+                    break;
+                }
+            }
         }
 
         // If the table does not exist, the last command in the chain needs to be

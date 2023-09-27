@@ -2,7 +2,7 @@
 
 namespace Elgg\Cli;
 
-use RuntimeException;
+use Elgg\Exceptions\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -15,7 +15,6 @@ abstract class Command extends BaseCommand {
 	 * {@inheritdoc}
 	 */
 	final public function execute(InputInterface $input, OutputInterface $output) {
-
 		$this->input = $input;
 		$this->output = $output;
 
@@ -34,7 +33,7 @@ abstract class Command extends BaseCommand {
 		} catch (\Exception $ex) {
 			$this->error($ex);
 
-			$result = $ex->getCode() ? : 1;
+			$result = $ex->getCode() ?: 1;
 		}
 
 		$this->dumpRegisters();
@@ -65,17 +64,19 @@ abstract class Command extends BaseCommand {
 		if (!$this->getDefinition()->hasOption('as')) {
 			return;
 		}
+		
 		$username = $this->option('as');
 		if (!$username) {
 			return;
 		}
-		$user = get_user_by_username($username);
+		
+		$user = elgg_get_user_by_username($username);
 		if (!$user) {
 			throw new RuntimeException(elgg_echo('user:username:notfound', [$username]));
 		}
-		if (!login($user)) {
-			throw new RuntimeException(elgg_echo('cli:login:error:unknown', [$username]));
-		}
+		
+		elgg_login($user);
+		
 		elgg_log(elgg_echo('cli:login:success:log', [$username, $user->guid]));
 	}
 
@@ -85,7 +86,7 @@ abstract class Command extends BaseCommand {
 	 */
 	final protected function logout() {
 		if (elgg_is_logged_in()) {
-			logout();
+			elgg_logout();
 		}
 	}
 	
@@ -105,6 +106,6 @@ abstract class Command extends BaseCommand {
 			return;
 		}
 		
-		elgg()->translator->setCurrentLanguage($language);
+		_elgg_services()->translator->setCurrentLanguage($language);
 	}
 }

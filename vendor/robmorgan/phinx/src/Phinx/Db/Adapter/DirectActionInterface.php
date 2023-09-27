@@ -1,27 +1,10 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
+
 namespace Phinx\Db\Adapter;
 
 use Phinx\Db\Table\Column;
@@ -32,15 +15,14 @@ use Phinx\Db\Table\Table;
 /**
  * Represents an adapter that is capable of directly executing alter
  * instructions, without having to plan them first.
- *
  */
 interface DirectActionInterface
 {
     /**
      * Renames the specified database table.
      *
-     * @param string $tableName Table Name
-     * @param string $newName   New Name
+     * @param string $tableName Table name
+     * @param string $newName New Name
      * @return void
      */
     public function renameTable($tableName, $newName);
@@ -48,7 +30,7 @@ interface DirectActionInterface
     /**
      * Drops the specified database table.
      *
-     * @param string $tableName Table Name
+     * @param string $tableName Table name
      * @return void
      */
     public function dropTable($tableName);
@@ -56,8 +38,8 @@ interface DirectActionInterface
     /**
      * Changes the primary key of the specified database table.
      *
-     * @param Table $table Table
-     * @param string|array|null $newColumns Column name(s) to belong to the primary key, or null to drop the key
+     * @param \Phinx\Db\Table\Table $table Table
+     * @param string|string[]|null $newColumns Column name(s) to belong to the primary key, or null to drop the key
      * @return void
      */
     public function changePrimaryKey(Table $table, $newColumns);
@@ -65,7 +47,7 @@ interface DirectActionInterface
     /**
      * Changes the comment of the specified database table.
      *
-     * @param Table $table Table
+     * @param \Phinx\Db\Table\Table $table Table
      * @param string|null $newComment New comment string, or null to drop the comment
      * @return void
      */
@@ -83,7 +65,7 @@ interface DirectActionInterface
     /**
      * Renames the specified column.
      *
-     * @param string $tableName Table Name
+     * @param string $tableName Table name
      * @param string $columnName Column Name
      * @param string $newColumnName New Column Name
      * @return void
@@ -93,9 +75,9 @@ interface DirectActionInterface
     /**
      * Change a table column type.
      *
-     * @param string $tableName  Table Name
+     * @param string $tableName Table name
      * @param string $columnName Column Name
-     * @param \Phinx\Db\Table\Column $newColumn  New Column
+     * @param \Phinx\Db\Table\Column $newColumn New Column
      * @return void
      */
     public function changeColumn($tableName, $columnName, Column $newColumn);
@@ -103,7 +85,7 @@ interface DirectActionInterface
     /**
      * Drops the specified column.
      *
-     * @param string $tableName Table Name
+     * @param string $tableName Table name
      * @param string $columnName Column Name
      * @return void
      */
@@ -122,7 +104,7 @@ interface DirectActionInterface
      * Drops the specified index from a database table.
      *
      * @param string $tableName the name of the table
-     * @param mixed  $columns Column(s)
+     * @param mixed $columns Column(s)
      * @return void
      */
     public function dropIndex($tableName, $columns);
@@ -139,7 +121,7 @@ interface DirectActionInterface
     /**
      * Adds the specified foreign key to a database table.
      *
-     * @param \Phinx\Db\Table\Table      $table The table to add the foreign key to
+     * @param \Phinx\Db\Table\Table $table The table to add the foreign key to
      * @param \Phinx\Db\Table\ForeignKey $foreignKey The foreign key to add
      * @return void
      */

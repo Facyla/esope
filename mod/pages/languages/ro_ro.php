@@ -19,23 +19,22 @@ return array(
 	'collection:object:page:group' => "Paginile grupului",
 	'add:object:page' => "Adaugă o pagină",
 	'edit:object:page' => "Editează această pagină",
+	'notification:object:page:create' => "Trimite o notificare atunci când o pagină este creată",
+	'notifications:mute:object:page' => "despre pagina '%s'",
 
 	'groups:tool:pages' => 'Activează paginile de grup',
 	
 	'annotation:delete:page:success' => 'Revizuirea paginii a fost ștearsă cu succes',
 	'annotation:delete:page:fail' => 'Revizuirea paginii nu a putut fi ștearsă',
 
-	'pages:delete' => "Șterge această pagină",
 	'pages:history' => "Istoric",
-	'pages:view' => "Vezi pagina",
 	'pages:revision' => "Revizuire",
 
 	'pages:navigation' => "Navigare",
 
 	'pages:notify:summary' => 'Pagină nouă numită %s',
 	'pages:notify:subject' => "O pagină nouă: %s",
-	'pages:notify:body' =>
-'%s a adăugat o pagină nouă: %s
+	'pages:notify:body' => '%s a adăugat o pagină nouă: %s
 
 %s
 
@@ -61,8 +60,6 @@ Vezi și comentează pe pagină:
 	'pages:description' => 'Textul paginii',
 	'pages:tags' => 'Etichete',
 	'pages:parent_guid' => 'Pagina principală',
-	'pages:access_id' => 'Acces citire',
-	'pages:write_access_id' => 'Acces scriere',
 
 	/**
 	 * Status and error messages
@@ -70,10 +67,7 @@ Vezi și comentează pe pagină:
 	'pages:cantedit' => 'Nu poți edita această pagină',
 	'pages:saved' => 'Pagină salvată',
 	'pages:notsaved' => 'Pagina nu a putut fi salvată',
-	'pages:error:no_title' => 'Trebuie să specifici un titlu acestei pagini.',
 	'entity:delete:object:page:success' => 'Pagina a fost ștearsă cu succes.',
-	'pages:revision:delete:success' => 'Revizuirea paginii a fost ștearsă cu succes.',
-	'pages:revision:delete:failure' => 'Revizuirea paginii nu a putut fi ștearsă.',
 
 	/**
 	 * History
@@ -88,21 +82,5 @@ Vezi și comentează pe pagină:
 	'widgets:pages:name' => 'Pagini',
 	'widgets:pages:description' => "Aceasta este o listă cu paginile tale.",
 
-	/**
-	 * Submenu items
-	 */
-	'pages:label:view' => "Vezi pagina",
-	'pages:label:edit' => "Editează pagina",
-	'pages:label:history' => "Istoricul paginii",
-
 	'pages:newchild' => "Creează o sub-pagină",
-	
-	/**
-	 * Upgrades
-	 */
-	'pages:upgrade:2017110700:title' => "Migrează page_top la entitățile paginii",
-	'pages:upgrade:2017110700:description' => "Schimbă subtipul al tuturor paginilor de top în 'pagină' și setează datele meta pentru a asigura o listare corectă.",
-	
-	'pages:upgrade:2017110701:title' => "Migrează entitățile de flux page_top",
-	'pages:upgrade:2017110701:description' => "Schimbă subtipul tuturor elementelor de flux pentru paginile de top în 'pagină'.",
 );

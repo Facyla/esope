@@ -1,6 +1,5 @@
 <?php
 
-
 $anchor1 = elgg_view('output/url', [
 	'text' => 'Simple anchor',
 	'href' => '#anchor',
@@ -14,12 +13,12 @@ $anchor2 = elgg_view('output/url', [
 ]);
 
 $query = [];
-for ($i=0; $i<50; $i++) {
-	$query['q'][$i] = generate_random_cleartext_password();
+for ($i = 0; $i < 50; $i++) {
+	$query['q'][$i] = elgg_generate_password();
 }
 
 $anchor3 = elgg_view('output/url', [
-	'href' => elgg_http_add_url_query_elements(current_page_url(), $query),
+	'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), $query),
 	'icon' => 'globe',
 	'title' => 'Very long URL',
 ]);
@@ -50,5 +49,3 @@ volutpat enim diam eget metus. Maecenas ornare tortor. Donec sed tellus
 eget sapien <?= $anchor3 ?> nonummy. Mauris a ante. Suspendisse quam sem,
 consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue
 quis tellus <?= $anchor4 ?>.</p>
-
-

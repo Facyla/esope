@@ -15,9 +15,11 @@ $num_featured_items = elgg_extract('num_featured_items', $vars, count($menu_item
 $featured_menu_names = elgg_get_config('site_featured_menu_names');
 
 $dropdown_values = [];
+/* @var $item \ElggMenuItem */
 foreach ($menu_items as $item) {
 	$dropdown_values[$item->getName()] = $item->getText();
 }
+
 $dropdown_values[' '] = elgg_echo('none');
 
 $configure = elgg_view('output/longtext', [
@@ -35,7 +37,6 @@ for ($i = 0; $i < $num_featured_items; $i++) {
 
 	$fields[] = [
 		'#type' => 'select',
-		'#class' => 'is-3',
 		'options_values' => $dropdown_values,
 		'name' => 'featured_menu_names[]',
 		'value' => $current_value,
@@ -44,6 +45,7 @@ for ($i = 0; $i < $num_featured_items; $i++) {
 
 $configure .= elgg_view_field([
 	'#type' => 'fieldset',
+	'class' => 'elgg-fieldset-wrap',
 	'align' => 'horizontal',
 	'fields' => $fields,
 ]);
@@ -86,7 +88,7 @@ echo elgg_view_module('info', elgg_echo('admin:add_menu_item'), $add_menu);
 
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('save'),
+	'text' => elgg_echo('save'),
 ]);
 
 elgg_set_form_footer($footer);

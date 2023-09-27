@@ -3,18 +3,8 @@
  * Groups plugin settings
  */
 
-$plugin = elgg_extract('entity', $vars);
 /* @var ElggPlugin $plugin */
-
-// set default value
-if (!isset($plugin->hidden_groups)) {
-	$plugin->hidden_groups = 'no';
-}
-
-// set default value
-if (!isset($plugin->limited_groups)) {
-	$plugin->limited_groups = 'no';
-}
+$plugin = elgg_extract('entity', $vars);
 
 $fields = [
 	[

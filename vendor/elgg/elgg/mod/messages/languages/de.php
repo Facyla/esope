@@ -18,14 +18,11 @@ return array(
 	'messages:message' => "Nachricht",
 	'messages:title' => "Betreff",
 	'messages:to:help' => "Gebe hier den Benutzernamen des Empfängers der Nachricht ein.",
-	'messages:inbox' => "Inbox",
 	'messages:sendmessage' => "Nachricht senden",
 	'messages:add' => "Nachricht verfassen",
 	'messages:sentmessages' => "Gesendete Nachrichten",
 	'messages:toggle' => 'Alle auswählen',
 	'messages:markread' => 'Als gelesen markieren',
-
-	'notification:method:site' => 'Seite',
 
 	'messages:error' => 'Beim Speichern Deiner Nachricht ist ein Problem aufgetreten. Bitte versuche es noch einmal.',
 
@@ -37,11 +34,9 @@ return array(
 	*/
 
 	'messages:posted' => "Deine Nachricht wurde gesendet.",
-	'messages:success:delete:single' => 'Die Nachricht wurde gelöscht.',
 	'messages:success:delete' => 'Die Nachrichten wurden gelöscht.',
 	'messages:success:read' => 'Die Nachrichten wurden als gelesen markiert.',
 	'messages:error:messages_not_selected' => 'Es wurden keine Nachrichten ausgewählt.',
-	'messages:error:delete:single' => 'Die Nachricht konnte nicht gelöscht werden.',
 
 	/**
 	* Email messages
@@ -56,11 +51,9 @@ Die Nachricht lautet:
 
 
 Um zu Deiner Inbox zu kommen, folge dem Link:
-
 %s
 
 und um %s eine Nachricht zu schicken, folge dem Link:
-
 %s",
 
 	/**
@@ -72,7 +65,14 @@ und um %s eine Nachricht zu schicken, folge dem Link:
 	'messages:user:nonexist' => "Wir konnten den Empfänger der Nachricht nicht in der Datenbank der Community-Seite finden.",
 	'messages:user:blank' => "Du hast keinen Empfänger für Deine Nachricht ausgewählt.",
 	'messages:user:self' => "Du kannst keine Nachricht an Dich selbst senden.",
+	'messages:user:notfriend' => "Du kannst keine Nachricht an ein Mitglied senden, mit dem Du nicht befreundet bist.",
 
 	'messages:deleted_sender' => 'Ehemaliges Mitglied',
+	
+	/**
+	* Settings
+	*/
+	'messages:settings:friends_only:label' => 'Nachrichten können nur an Freunde gesendet werden',
+	'messages:settings:friends_only:help' => 'Mitglieder können eine Nachricht nicht an ein anderes Mitglied senden, wenn sie nicht befreundet sind.',
 
 );

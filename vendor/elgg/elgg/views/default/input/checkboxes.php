@@ -1,16 +1,11 @@
 <?php
 /**
- * Elgg checkbox input
  * Displays a checkbox input field
  *
  * @note This also includes a hidden input with the same name as the checkboxes
  * to make sure something is sent to the server.  The default value is 0.
  * If using JS, be specific to avoid selecting the hidden default value:
  * 	$('input[type=checkbox][name=name]')
- *
- * @warning Passing integers as labels does not currently work due to a
- * deprecated hack that will be removed in Elgg 1.9. To use integer labels,
- * the labels must be character codes: 1 would be &#0049;
  *
  * @uses string $vars['name']           The name of the input fields
  *                                      (Forced to an array by appending [])
@@ -23,7 +18,6 @@
  * @uses string $vars['value']          The current value. Single value or array. Optional.
  * @uses string $vars['class']          Additional class of the list. Optional.
  * @uses string $vars['align']          'horizontal' or 'vertical' Default: 'vertical'
- *
  */
 
 $defaults = [
@@ -51,6 +45,7 @@ foreach ($options_values as $key => $value) {
 			'value' => $key,
 		];
 	}
+	
 	$input_options[$key] = $value;
 }
 
@@ -79,7 +74,7 @@ unset($vars['id']);
 if (is_array(elgg_extract('value', $vars))) {
 	$values = array_map('elgg_strtolower', elgg_extract('value', $vars));
 } else {
-	$values = [elgg_strtolower(elgg_extract('value', $vars))];
+	$values = [elgg_strtolower((string) elgg_extract('value', $vars))];
 }
 
 // include a default value so if nothing is checked 0 will be passed.
@@ -97,18 +92,19 @@ $input_vars['default'] = false;
 if (elgg_extract('name', $vars)) {
 	$input_vars['name'] = "{$vars['name']}[]";
 }
+
 unset($input_vars['align']);
 
 $checkboxes = '';
 foreach ($input_options as $label => $option) {
 	$checkbox_input_options = array_merge($input_vars, $option);
-	$checkbox_input_options['checked'] = in_array(elgg_strtolower(elgg_extract('value', $option)), $values);
+	$checkbox_input_options['checked'] = in_array(elgg_strtolower((string) elgg_extract('value', $option)), $values);
 	$checkbox_input_options['label'] = elgg_extract('text', $checkbox_input_options, $label);
 	unset($checkbox_input_options['text']);
 
 	$input = elgg_view('input/checkbox', $checkbox_input_options);
 
-	$checkboxes .= "<li>$input</li>";
+	$checkboxes .= elgg_format_element('li', [], $input);
 }
 
 echo elgg_format_element('ul', ['class' => $list_class, 'id' => $id], $checkboxes);

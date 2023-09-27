@@ -8,8 +8,6 @@
  *
  * The Elgg installation attempts to populate this file with the correct settings
  * and then rename it to settings.php.
- *
- * @todo Turn this into something we handle more automatically.
  */
 
 date_default_timezone_set('{{timezone}}');
@@ -150,11 +148,17 @@ $CONFIG->dbencoding = 'utf8mb4';
 //$CONFIG->memcache = true;
 //
 //$CONFIG->memcache_servers = array (
-//	array('server1', 11211),
-//	array('server2', 11211)
+//	array(
+// 		'host' => 'server1',
+//		'port' => 11211,
+// 	),
+//	array(
+// 		'host' => 'server2',
+//		'port' => 11211,
+// 	),
 //);
 
-// namespace prefix
+// namespace prefix (can only be used with memcached)
 // $CONFIG->memcache_namespace_prefix = '';
 
 /**
@@ -168,9 +172,12 @@ $CONFIG->dbencoding = 'utf8mb4';
 //	'password' => '', // The "password" option is used for clusters which required authentication.
 //);
 //
+// Only one server can be configured
 //$CONFIG->redis_servers = array (
-//	array('server1', 6379),
-//	array('server2', 6379)
+//	array(
+//		'host' => 'server1',
+//		'port' => 6379,
+//	),
 //);
 
 /**
@@ -220,16 +227,6 @@ $CONFIG->dbencoding = 'utf8mb4';
  * Using this config value, you can change the default behavior
  */
 //$CONFIG->assetroot = "";
-
-/**
- * Plugins with more than the configured number of plugin settings won't be loaded into
- * bootdata cache. This is done to prevent memory issues.
- *
- * If set to < 1 all plugins will be loaded into the bootdata cache
- *
- * Default: 40
- */
-//$CONFIG->bootdata_plugin_settings_limit = 0;
 
 /**
  * Enable SendFile file serving
@@ -310,6 +307,14 @@ $CONFIG->db_disable_query_cache = false;
 $CONFIG->auto_disable_plugins = true;
 
 /**
+ * Control if Elgg should always validate classes previously stored in the ClassMap.
+ * You can disable this for performance reasons (less disk checks) but you need to make sure the class map will never get stale data.
+ *
+ * @global bool $CONFIG->class_loader_verify_file_existence
+ */
+//$CONFIG->class_loader_verify_file_existence = false;
+
+/**
  * This is an optional script used to override Elgg's default handling of
  * uncaught exceptions.
  *
@@ -374,11 +379,27 @@ $CONFIG->allow_phpinfo = false;
  */
 //$CONFIG->image_processor = 'imagick';
 
+/**
+ * Control if webp images are allowed to be served for icons (if supported by server and browser).
+ * Default enabled
+ *
+ * @global bool $CONFIG->webp_enabled
+ */
+//$CONFIG->webp_enabled = false;
+
+/**
+ * Email subject length limit
+ *
+ * The length limit for email subjects, defaults to 998 as described in http://www.faqs.org/rfcs/rfc2822.html
+ *
+ * @global int $CONFIG->emailer_transport
+ */
+//$CONFIG->email_subject_limit = 998;
 
 /**
  * Configure emailer transport
  *
- * This setting can be used to select a different emailer transport. By default the Zend Sendmail Transport is used.
+ * This setting can be used to select a different emailer transport. By default the Laminas Sendmail Transport is used.
  * Currently only 'smtp' and 'sendmail' are supported as a different configuration.
  * For 'smtp', the SMTP server's settings must be set, while 'sendmail' requires no configuration.
  *
@@ -387,11 +408,16 @@ $CONFIG->allow_phpinfo = false;
 //$CONFIG->emailer_transport = 'sendmail';
 
 /**
+ * Configure sendmail related settings
+ */
+//$CONFIG->emailer_sendmail_settings = '';
+
+/**
  * Configure emailer SMTP settings
  *
  * This setting is only necessary if the above emailer transport is set to 'smtp'.
- * Please refer to https://docs.zendframework.com/zend-mail/transport/smtp-options/#configuration-options
- * and https://docs.zendframework.com/zend-mail/transport/smtp-authentication/#examples
+ * Please refer to https://docs.laminas.dev/laminas-mail/transport/smtp-options/#configuration-options
+ * and https://docs.laminas.dev/laminas-mail/transport/smtp-authentication/#examples
  */
 //$CONFIG->emailer_smtp_settings = array(
 //	'name'              => 'localhost.localdomain',
@@ -406,6 +432,30 @@ $CONFIG->allow_phpinfo = false;
 //		'use_complete_quit' => '', // OPTIONAL
 //	],
 //);
+
+/**
+ * Configure notification queue delay
+ *
+ * This setting can be used to delay the processing of queued notifications. This can help when users create content and
+ * quickly remove the content. A notification could be send out to subscribers about content which will be removed quickly
+ *
+ * The setting needs to be the number of seconds to delay the notification queue processing (eg. 3 minutes => 180 seconds)
+ * Default: 0 (no delay)
+ */
+//$CONFIG->notifications_queue_delay = 180;
+
+/**
+ * Proxy configuration
+ *
+ * These settings can be used whenever there is the need to (optionally) configure a proxy
+ */
+$CONFIG->proxy = [
+// 	'host' => '127.0.0.1',
+// 	'port' => 25,
+// 	'verify_ssl' => false,
+// 	'username' => 'user',
+// 	'password' => 'pass',
+];
 
 /**
  * Logging level
@@ -443,6 +493,11 @@ $CONFIG->allow_phpinfo = false;
  * @see https://secure.php.net/manual/en/function.setlocale.php
  */
 //$CONFIG->language_to_locale_mapping = [];
+
+/**
+ * Control if you want site language to be detected by browser language.
+ */
+//$CONFIG->language_detect_from_browser = true;
 
 /**
  * When your webserver is behind a loadbalancer or reverse proxy server some client information (IP, protocol, etc) is

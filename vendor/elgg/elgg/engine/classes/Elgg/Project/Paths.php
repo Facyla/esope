@@ -22,14 +22,14 @@ class Paths {
 	 *
 	 * @return string
 	 */
-	public static function project() {
+	public static function project(): string {
 		static $path;
 		if ($path === null) {
 			$path = self::elgg();
 
 			// Assumes composer vendor location hasn't been customized...
 			if (!is_file("{$path}vendor/autoload.php")) {
-				$path = dirname(dirname(dirname($path))) . DIRECTORY_SEPARATOR;
+				$path = dirname($path, 3) . DIRECTORY_SEPARATOR;
 			}
 		}
 
@@ -41,8 +41,8 @@ class Paths {
 	 *
 	 * @return string
 	 */
-	public static function elgg() {
-		return dirname(dirname(dirname(dirname(__DIR__)))) . DIRECTORY_SEPARATOR;
+	public static function elgg(): string {
+		return dirname(__DIR__, 4) . DIRECTORY_SEPARATOR;
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Paths {
 	 *
 	 * @return string
 	 */
-	public static function projectConfig() {
+	public static function projectConfig(): string {
 		return self::project() . self::PATH_TO_CONFIG . DIRECTORY_SEPARATOR;
 	}
 
@@ -61,25 +61,27 @@ class Paths {
 	 *
 	 * @return string
 	 */
-	public static function settingsFile($file = self::SETTINGS_PHP) {
+	public static function settingsFile($file = self::SETTINGS_PHP): string {
 		return self::projectConfig() . $file;
 	}
 
 	/**
-	 * Sanitise file paths ensuring that they begin and end with slashes etc.
+	 * Sanitize file paths ensuring that they begin and end with slashes etc.
 	 *
 	 * @param string $path         The path
-	 * @param bool   $append_slash Add tailing slash
+	 * @param bool   $append_slash Add trailing slash
 	 *
 	 * @return string
 	 */
-	public static function sanitize($path, $append_slash = true) {
+	public static function sanitize($path, $append_slash = true): string {
+		$path = (string) $path;
+		
 		// Convert to correct UNIX paths
 		$path = str_replace('\\', '/', $path);
 		// replace ./ to / to prevent directory traversal
-		$path = preg_replace("/[.]+\//", '/', $path);
+		$path = preg_replace('/[.]+\//', '/', $path);
 		// replace // with / except when preceeded by :
-		$path = preg_replace("/([^:])[\/]{2,}/", "$1/", $path);
+		$path = preg_replace('/([^:])[\/]{2,}/', '$1/', $path);
 
 		// Sort trailing slash
 		$path = trim($path);

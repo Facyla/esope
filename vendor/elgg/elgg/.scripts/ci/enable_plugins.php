@@ -3,12 +3,14 @@
  * Enables all core plugins
  */
 
-$root = dirname(dirname(__DIR__));
+use Elgg\Exceptions\PluginException;
+
+$root = dirname(__DIR__, 2);
 require_once "$root/autoloader.php";
 
 \Elgg\Application::start();
 
-_elgg_generate_plugin_entities();
+_elgg_services()->plugins->generateEntities();
 
 $ordered_plugins = [
 	'activity',
@@ -17,7 +19,6 @@ $ordered_plugins = [
 	'ckeditor',
 	'dashboard',
 	'developers',
-	'diagnostics',
 	'discussions',
 	'externalpages',
 	'file',
@@ -30,7 +31,6 @@ $ordered_plugins = [
 	'members',
 	'messageboard',
 	'messages',
-	'notifications',
 	'pages',
 	'profile',
 	'reportedcontent',
@@ -44,7 +44,6 @@ $ordered_plugins = [
 	
 	// these plugins need to be activated after a previous activated plugin
 	'custom_index',
-	'embed',
 ];
 
 foreach ($ordered_plugins as $priority => $plugin_id) {
@@ -60,9 +59,13 @@ foreach ($ordered_plugins as $priority => $plugin_id) {
 		exit(1);
 	}
 	
-	if (!$plugin->isActive() && !$plugin->activate()) {
-		echo "Unable to activate plugin {$plugin_id}";
-		exit(1);
+	if (!$plugin->isActive()) {
+		try {
+			$plugin->activate();
+		} catch (PluginException $e) {
+			echo "Unable to activate plugin {$plugin_id}";
+			exit(1);
+		}
 	}
 }
 

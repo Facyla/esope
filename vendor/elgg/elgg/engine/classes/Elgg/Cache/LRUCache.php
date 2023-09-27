@@ -2,6 +2,8 @@
 
 namespace Elgg\Cache;
 
+use Elgg\Exceptions\RangeException;
+
 /**
  * Least Recently Used Cache
  *
@@ -13,7 +15,10 @@ namespace Elgg\Cache;
  * @internal
  */
 class LRUCache implements \ArrayAccess {
-	/** @var int */
+	
+	/**
+	 * @var int
+	 */
 	protected $maximumSize;
 
 	/**
@@ -27,12 +32,14 @@ class LRUCache implements \ArrayAccess {
 	 * Create a LRU Cache
 	 *
 	 * @param int $size The size of the cache
-	 * @throws \InvalidArgumentException
+	 *
+	 * @throws RangeException
 	 */
-	public function __construct($size) {
-		if (!is_int($size) || $size <= 0) {
-			throw new \InvalidArgumentException();
+	public function __construct(int $size) {
+		if ($size <= 0) {
+			throw new RangeException('"size" must be greater than 0');
 		}
+		
 		$this->maximumSize = $size;
 	}
 
@@ -41,6 +48,7 @@ class LRUCache implements \ArrayAccess {
 	 *
 	 * @param int|string $key     The key. Strings that are ints are cast to ints.
 	 * @param mixed      $default The value to be returned if key not found. (Optional)
+	 *
 	 * @return mixed
 	 */
 	public function get($key, $default = null) {
@@ -58,6 +66,7 @@ class LRUCache implements \ArrayAccess {
 	 *
 	 * @param int|string $key   The key. Strings that are ints are cast to ints.
 	 * @param mixed      $value The value to cache
+	 *
 	 * @return void
 	 */
 	public function set($key, $value) {
@@ -87,6 +96,7 @@ class LRUCache implements \ArrayAccess {
 	 * Does the cache contain an element with this key
 	 *
 	 * @param int|string $key The key
+	 *
 	 * @return boolean
 	 */
 	public function containsKey($key) {
@@ -97,6 +107,7 @@ class LRUCache implements \ArrayAccess {
 	 * Remove the element with this key.
 	 *
 	 * @param int|string $key The key
+	 *
 	 * @return mixed Value or null if not set
 	 */
 	public function remove($key) {
@@ -122,6 +133,7 @@ class LRUCache implements \ArrayAccess {
 	 * Moves the element from current position to end of array
 	 *
 	 * @param int|string $key The key
+	 *
 	 * @return void
 	 */
 	protected function recordAccess($key) {
@@ -133,49 +145,53 @@ class LRUCache implements \ArrayAccess {
 	/**
 	 * Assigns a value for the specified key
 	 *
-	 * @see \ArrayAccess::offsetSet()
+	 * @param int|string $offset The key to assign the value to.
+	 * @param mixed      $value  The value to set.
 	 *
-	 * @param int|string $key   The key to assign the value to.
-	 * @param mixed      $value The value to set.
 	 * @return void
+	 * @see \ArrayAccess::offsetSet()
 	 */
-	public function offsetSet($key, $value) {
-		$this->set($key, $value);
+	#[\ReturnTypeWillChange]
+	public function offsetSet($offset, $value) {
+		$this->set($offset, $value);
 	}
 
 	/**
 	 * Get the value for specified key
 	 *
-	 * @see \ArrayAccess::offsetGet()
+	 * @param int|string $offset The key to retrieve.
 	 *
-	 * @param int|string $key The key to retrieve.
 	 * @return mixed
+	 * @see \ArrayAccess::offsetGet()
 	 */
-	public function offsetGet($key) {
-		return $this->get($key);
+	#[\ReturnTypeWillChange]
+	public function offsetGet($offset) {
+		return $this->get($offset);
 	}
 
 	/**
 	 * Unsets a key.
 	 *
-	 * @see \ArrayAccess::offsetUnset()
+	 * @param int|string $offset The key to unset.
 	 *
-	 * @param int|string $key The key to unset.
 	 * @return void
+	 * @see \ArrayAccess::offsetUnset()
 	 */
-	public function offsetUnset($key) {
-		$this->remove($key);
+	#[\ReturnTypeWillChange]
+	public function offsetUnset($offset) {
+		$this->remove($offset);
 	}
 
 	/**
 	 * Does key exist?
 	 *
-	 * @see \ArrayAccess::offsetExists()
+	 * @param int|string $offset A key to check for.
 	 *
-	 * @param int|string $key A key to check for.
 	 * @return boolean
+	 * @see \ArrayAccess::offsetExists()
 	 */
-	public function offsetExists($key) {
-		return $this->containsKey($key);
+	#[\ReturnTypeWillChange]
+	public function offsetExists($offset) {
+		return $this->containsKey($offset);
 	}
 }

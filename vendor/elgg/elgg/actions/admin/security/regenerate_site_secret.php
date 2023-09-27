@@ -5,7 +5,7 @@ if (!elgg_trigger_before_event('regenerate_site_secret', 'system')) {
 	return elgg_ok_response('', elgg_echo('admin:site:secret:prevented'));
 }
 
-init_site_secret();
+_elgg_services()->siteSecret->regenerate();
 elgg_reset_system_cache();
 
 elgg_trigger_after_event('regenerate_site_secret', 'system');

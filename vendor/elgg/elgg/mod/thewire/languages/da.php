@@ -13,27 +13,19 @@ return array(
 	'thewire' => "The wire",
 
 	'item:object:thewire' => "Wire indlæg",
-	'collection:object:thewire' => 'Wire posts',
 	'collection:object:thewire:all' => "Alle wire indlæg",
 	'collection:object:thewire:owner' => "%s's wire indlæg",
 	'collection:object:thewire:friends' => "Dine venner på the wire",
-
+	
 	'thewire:replying' => "Svar til %s (@%s) som skrev",
 	'thewire:thread' => "Tråd",
 	'thewire:charleft' => "tegn tilbage",
 	'thewire:tags' => "Wire indlæg tagged med '%s'",
 	'thewire:noposts' => "Ingen wire indlæg endnu",
-
-	'thewire:by' => 'Wire post by %s',
-	'thewire:previous:help' => "Se tidligere indlæg",
-	'thewire:hide:help' => "Gem tidligere indlæg",
-
-	'thewire:form:body:placeholder' => "What's happening?",
 	
 	/**
 	 * The wire river
 	 */
-	'river:object:thewire:create' => "%s posted to %s",
 	'thewire:wire' => 'wire',
 
 	/**
@@ -65,6 +57,4 @@ return array(
 	/**
 	 * Settings
 	 */
-	'thewire:settings:limit' => "Maximum number of characters for wire messages:",
-	'thewire:settings:limit:none' => "No limit",
 );

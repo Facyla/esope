@@ -138,21 +138,23 @@ By default you can only add one widget of the same type on the page. If you want
     ]);
 
 
-Register widgets in a hook
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-If, for example, you wish to conditionally register widgets you can also use a hook to register widgets.
+Register widgets in an event
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If, for example, you wish to conditionally register widgets you can also use an event to register widgets.
 
 .. code-block:: php
 
     function my_plugin_init() {
-        elgg_register_plugin_hook_handler('handlers', 'widgets', 'my_plugin_conditional_widgets_hook');
+        elgg_register_event_handler('handlers', 'widgets', 'my_plugin_conditional_widgets_event');
     }
 
-    function my_plugin_conditional_widgets_hook($hook, $type, $return, $params) {
+    function my_plugin_conditional_widgets_event(\Elgg\Event $event) {
         if (!elgg_is_active_plugin('file')) {
             return;
         }
 
+        $return = $event->getValue();
+		
         $return[] = \Elgg\WidgetDefinition::factory([
             'id' => 'filerepo',
         ]);
@@ -162,15 +164,17 @@ If, for example, you wish to conditionally register widgets you can also use a h
 
 Modify widget properties of existing widget registration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If, for example, you wish to change the allowed contexts of an already registered widget you can do so by re-registering the widget with ``elgg_register_widget_type`` as it will override an already existing widget definition. If you want even more control you can also use the ``handlers, widgets`` hook to change the widget definition.
+If, for example, you wish to change the allowed contexts of an already registered widget you can do so by re-registering the widget with ``elgg_register_widget_type`` as it will override an already existing widget definition. If you want even more control you can also use the ``handlers, widgets`` event to change the widget definition.
 
 .. code-block:: php
 
     function my_plugin_init() {
-        elgg_register_plugin_hook_handler('handlers', 'widgets', 'my_plugin_change_widget_definition_hook');
+        elgg_register_event_handler('handlers', 'widgets', 'my_plugin_change_widget_definition_event');
     }
 
-    function my_plugin_change_widget_definition_hook($hook, $type, $return, $params) {
+    function my_plugin_change_widget_definition_event(\Elgg\Event $event) {
+        $return = $event->getValue();
+    	
         foreach ($return as $key => $widget) {
             if ($widget->id === 'filerepo') {
                 $return[$key]->multiple = false;
@@ -185,35 +189,43 @@ Default widgets
 
 If your plugin uses the widget canvas, you can register default widget support with Elgg core, which will handle everything else.
 
-To announce default widget support in your plugin, register for the ``get_list, default_widgets`` plugin hook:
+To announce default widget support in your plugin, register for the ``get_list, default_widgets`` event:
 
 .. code-block:: php
 
-    elgg_register_plugin_hook_handler('get_list', 'default_widgets', 'my_plugin_default_widgets_hook');
-
-In the plugin hook handler, push an array into the return value defining your default widget support and when to create default widgets. Arrays require the following keys to be defined:
-
--  name - The name of the widgets page. This is displayed on the tab in the admin interface.
--  widget\_context - The context the widgets page is called from. (If not explicitly set, this is your plugin's id.)
--  widget\_columns - How many columns the widgets page will use.
--  event - The Elgg event to create new widgets for. This is usually ``create``.
--  entity\_type - The entity type to create new widgets for.
--  entity\_subtype - The entity subtype to create new widgets for. The can be ELGG\_ENTITIES\_ANY\_VALUE to create for all entity types.
-
-When an object triggers an event that matches the event, entity\_type, and entity\_subtype parameters passed, Elgg core will look for default widgets that match the widget\_context and will copy them to that object's owner\_guid and container\_guid. All widget settings will also be copied.
-
-.. code-block:: php
-
-    function my_plugin_default_widgets_hook($hook, $type, $return, $params) {
-        $return[] = array(
+    elgg_register_event_handler('get_list', 'default_widgets', 'my_plugin_default_widgets_event');
+    
+    function my_plugin_default_widgets_event(\Elgg\Event $event) {
+    	$return = $event->getValue();
+    	
+        $return[] = [
             'name' => elgg_echo('my_plugin'),
             'widget_context' => 'my_plugin',
             'widget_columns' => 3,
 
-            'event' => 'create',
+            'event_name' => 'create',
+            'event_type' => 'user',
             'entity_type' => 'user',
             'entity_subtype' => ELGG_ENTITIES_ANY_VALUE,
-        );
+        ];
 
         return $return;
     }
+
+In the event handler, push an array into the return value defining your default widget support and when to create default widgets. Arrays require the following keys to be defined:
+
+-  name - The name of the widgets page. This is displayed on the tab in the admin interface.
+-  widget\_context - The context the widgets page is called from. (If not explicitly set, this is your plugin's id.)
+-  widget\_columns - How many columns the widgets page will use.
+-  event\_name - The Elgg event name to create new widgets for. This is usually ``create``.
+-  event\_type - The Elgg event type to create new widgets for. 
+-  entity\_type - The entity type to create new widgets for.
+-  entity\_subtype - The entity subtype to create new widgets for. The can be ELGG\_ENTITIES\_ANY\_VALUE to create for all entity types.
+
+To have widgets be created you need to register the following event:
+
+.. code-block:: php
+
+    elgg_register_event_handler('create:after', 'object', 'Elgg\Widgets\CreateDefaultWidgetsHandler');
+
+When an object triggers an event that matches the event, entity\_type, and entity\_subtype parameters passed, Elgg core will look for default widgets that match the widget\_context and will copy them to that object's owner\_guid and container\_guid. All widget settings will also be copied.

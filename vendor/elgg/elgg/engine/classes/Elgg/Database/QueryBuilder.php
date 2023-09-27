@@ -3,25 +3,21 @@
 namespace Elgg\Database;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\Expression\CompositeExpression;
 use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 use Elgg\Database\Clauses\Clause;
 use Elgg\Database\Clauses\ComparisonClause;
 use Elgg\Database\Clauses\JoinClause;
 use Elgg\Database\Clauses\WhereClause;
+use Elgg\Values;
 
 /**
  * Database abstraction query builder
  */
 abstract class QueryBuilder extends DbalQueryBuilder {
-
-	const TABLE_ENTITIES = 'entities';
-	const TABLE_METADATA = 'metadata';
-	const TABLE_ANNOTATIONS = 'annotations';
-	const TABLE_RELATIONSHIPS = 'entity_relationships';
-	const TABLE_PRIVATE_SETTINGS = 'private_settings';
-
-	static $calculations = [
+	
+	const CALCULATIONS = [
 		'avg',
 		'count',
 		'greatest',
@@ -30,26 +26,18 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		'min',
 		'sum',
 	];
+	const TABLE_ANNOTATIONS = 'annotations';
+	const TABLE_ENTITIES = 'entities';
+	const TABLE_METADATA = 'metadata';
+	const TABLE_RELATIONSHIPS = 'entity_relationships';
 
-	/**
-	 * @var array
-	 */
-	protected $joins = [];
+	protected array $joins = [];
 
-	/**
-	 * @var int
-	 */
-	protected $join_index = 0;
+	protected int $join_index = 0;
 
-	/**
-	 * @var string
-	 */
-	protected $table_name;
+	protected ?string $table_name;
 
-	/**
-	 * @var string
-	 */
-	protected $table_alias;
+	protected ?string $table_alias;
 
 	/**
 	 * Creates a new SelectQueryBuilder for join/where subqueries using the DB connection of the primary QueryBuilder
@@ -78,6 +66,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		if (!isset($alias)) {
 			$alias = $this->getTableAlias();
 		}
+		
 		$expr = $clause->prepare($this, $alias);
 		if ($clause instanceof WhereClause && ($expr instanceof CompositeExpression || is_string($expr))) {
 			$this->andWhere($expr);
@@ -89,7 +78,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	/**
 	 * Prefixes the table name with installation DB prefix
 	 *
-	 * @param string $table
+	 * @param string $table the table to prefix
 	 *
 	 * @return string
 	 */
@@ -99,7 +88,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 			return $table;
 		}
 		
-		if (strpos($table, $prefix) !== 0) {
+		if (!str_starts_with($table, $prefix)) {
 			return "{$prefix}{$table}";
 		}
 
@@ -136,20 +125,54 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	public function param($value, $type = null, $key = null) {
 		if (!$key) {
 			$parameters = $this->getParameters();
-			$key = ":qb" . (count($parameters) + 1);
+			$key = ':qb' . (count($parameters) + 1);
 		}
 
+		switch ($type) {
+			case ELGG_VALUE_GUID:
+				$value = Values::normalizeGuids($value);
+				$type = ParameterType::INTEGER;
+				
+				break;
+			case ELGG_VALUE_ID:
+				$value = Values::normalizeIds($value);
+				$type = ParameterType::INTEGER;
+				
+				break;
+			case ELGG_VALUE_INTEGER:
+				$type = ParameterType::INTEGER;
+				
+				break;
+			case ELGG_VALUE_BOOL:
+				$type = ParameterType::INTEGER;
+				$value = (int) $value;
+				
+				break;
+			case ELGG_VALUE_STRING:
+				$type = ParameterType::STRING;
+				
+				break;
+			case ELGG_VALUE_TIMESTAMP:
+				$value = Values::normalizeTimestamp($value);
+				$type = ParameterType::INTEGER;
+				
+				break;
+		}
+		
+		// convert array value or type based on array
 		if (is_array($value)) {
-			if ($type === ELGG_VALUE_INTEGER) {
-				$type = Connection::PARAM_INT_ARRAY;
-			} else if ($type === ELGG_VALUE_STRING) {
-				$type = Connection::PARAM_STR_ARRAY;
+			if (count($value) === 1) {
+				$value = array_shift($value);
+			} else {
+				if ($type === ParameterType::INTEGER) {
+					$type = Connection::PARAM_INT_ARRAY;
+				} elseif ($type === ParameterType::STRING) {
+					$type = Connection::PARAM_STR_ARRAY;
+				}
 			}
 		}
 
-		$this->setParameter($key, $value, $type);
-
-		return $key;
+		return $this->createNamedParameter($value, $type, $key);
 	}
 
 	/**
@@ -160,11 +183,19 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	public function execute(bool $track_query = true) {
 		
 		if (!$track_query) {
-			return parent::execute();
+			if ($this instanceof Select) {
+				return parent::executeQuery();
+			} else {
+				return parent::executeStatement();
+			}
 		}
 		
-		return _elgg_services()->db->trackQuery($this, [], function() {
-			return parent::execute();
+		return _elgg_services()->db->trackQuery($this, function() {
+			if ($this instanceof Select) {
+				return parent::executeQuery();
+			} else {
+				return parent::executeStatement();
+			}
 		});
 	}
 	
@@ -173,11 +204,11 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function from($table, $alias = null) {
-		$this->table_name = $table;
+	public function from($from, $alias = null) {
+		$this->table_name = $from;
 		$this->table_alias = $alias;
 
-		return parent::from($this->prefix($table), $alias);
+		return parent::from($this->prefix($from), $alias);
 	}
 
 	/**
@@ -196,11 +227,11 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function update($table = null, $alias = null) {
-		$this->table_name = $table;
+	public function update($update = null, $alias = null) {
+		$this->table_name = $update;
 		$this->table_alias = $alias;
 
-		return parent::update($this->prefix($table), $alias);
+		return parent::update($this->prefix($update), $alias);
 	}
 
 	/**
@@ -208,11 +239,11 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function delete($table = null, $alias = null) {
-		$this->table_name = $table;
+	public function delete($delete = null, $alias = null) {
+		$this->table_name = $delete;
 		$this->table_alias = $alias;
 
-		return parent::delete($this->prefix($table), $alias);
+		return parent::delete($this->prefix($delete), $alias);
 	}
 
 	/**
@@ -262,6 +293,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 			if (empty($e)) {
 				return false;
 			}
+			
 			if (!$e instanceof CompositeExpression && !is_string($e)) {
 				return false;
 			}
@@ -276,10 +308,13 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 			return array_shift($parts);
 		}
 
+		// PHP 8 can use named arguments in call_user_func_array(), this causes issues
+		// @see: https://www.php.net/manual/en/function.call-user-func-array.php#125953
+		$parts = array_values($parts);
 		if (strtoupper($boolean) === 'OR') {
-			return $this->expr()->orX()->addMultiple($parts);
+			return call_user_func_array([$this->expr(), 'or'], $parts);
 		} else {
-			return $this->expr()->andX()->addMultiple($parts);
+			return call_user_func_array([$this->expr(), 'and'], $parts);
 		}
 	}
 
@@ -309,6 +344,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * @param string $x     Comparison value (e.g. prefixed column name)
 	 * @param mixed  $lower Lower bound
 	 * @param mixed  $upper Upper bound
+	 * @param string $type  Value type for sanitization/casting
 	 *
 	 * @return CompositeExpression|null|string
 	 */
@@ -317,6 +353,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		if ($lower) {
 			$wheres[] = $this->compare($x, '>=', $lower, $type);
 		}
+		
 		if ($upper) {
 			$wheres[] = $this->compare($x, '<=', $upper, $type);
 		}
@@ -470,53 +507,6 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	}
 
 	/**
-	 * Join private settings table from alias and return joined table alias
-	 *
-	 * @param string          $from_alias   Main table alias
-	 * @param string          $from_column  Guid column name in the main table
-	 * @param string|string[] $name         Private setting name
-	 * @param string          $join_type    JOIN type
-	 * @param string          $joined_alias Joined table alias
-	 *
-	 * @return string
-	 */
-	public function joinPrivateSettingsTable($from_alias = '', $from_column = 'guid', $name = null, $join_type = 'inner', $joined_alias = null) {
-		if (in_array($joined_alias, $this->joins)) {
-			return $joined_alias;
-		}
-
-		if ($from_alias) {
-			$from_column = "$from_alias.$from_column";
-		}
-
-		$hash = sha1(serialize([
-			$join_type,
-			self::TABLE_PRIVATE_SETTINGS,
-			$from_column,
-			(array) $name,
-		]));
-
-		if (!isset($joined_alias) && !empty($this->joins[$hash])) {
-			return $this->joins[$hash];
-		}
-
-		$condition = function (QueryBuilder $qb, $joined_alias) use ($from_column, $name) {
-			return $qb->merge([
-				$qb->compare("$joined_alias.entity_guid", '=', $from_column),
-				$qb->compare("$joined_alias.name", '=', $name, ELGG_VALUE_STRING),
-			]);
-		};
-
-		$clause = new JoinClause(self::TABLE_PRIVATE_SETTINGS, $joined_alias, $condition, $join_type);
-
-		$joined_alias = $clause->prepare($this, $from_alias);
-
-		$this->joins[$hash] = $joined_alias;
-
-		return $joined_alias;
-	}
-
-	/**
 	 * Join relationship table from alias and return joined table alias
 	 *
 	 * @param string $from_alias   Main table alias
@@ -527,7 +517,6 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * @param string $joined_alias Joined table alias
 	 *
 	 * @return string
-	 * @throws \InvalidParameterException
 	 */
 	public function joinRelationshipTable($from_alias = '', $from_column = 'guid', $name = null, $inverse = false, $join_type = 'inner', $joined_alias = null) {
 		if (in_array($joined_alias, $this->joins)) {
@@ -553,11 +542,12 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		$condition = function (QueryBuilder $qb, $joined_alias) use ($from_column, $name, $inverse) {
 			$parts = [];
 			if ($inverse) {
-				$parts[] = $qb->compare("$joined_alias.guid_one", '=', $from_column);
+				$parts[] = $qb->compare("{$joined_alias}.guid_one", '=', $from_column);
 			} else {
-				$parts[] = $qb->compare("$joined_alias.guid_two", '=', $from_column);
+				$parts[] = $qb->compare("{$joined_alias}.guid_two", '=', $from_column);
 			}
-			$parts[] = $qb->compare("$joined_alias.relationship", '=', $name, ELGG_VALUE_STRING);
+			
+			$parts[] = $qb->compare("{$joined_alias}.relationship", '=', $name, ELGG_VALUE_STRING);
 			return $qb->merge($parts);
 		};
 

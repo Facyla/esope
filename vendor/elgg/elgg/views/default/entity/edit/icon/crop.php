@@ -5,7 +5,7 @@
  * @uses $vars['entity']                    the entity being edited
  * @uses $vars['entity_type']               the type of the entity
  * @uses $vars['entity_subtype']            the subtype of the entity
- * @uses $vars['cropper_enabled']           enable cropper features (default: false)
+ * @uses $vars['cropper_enabled']           enable cropper features (default: true)
  * @uses $vars['cropper_config']            configuration for CropperJS
  * @uses $vars['cropper_aspect_ratio_size'] the icon size to use to detect cropping aspact ratio (default: master) pass 'false' to disable
  * @uses $vars['cropper_show_messages']     show messages (default: true for icon_type = 'icon', false otherwise)
@@ -13,7 +13,7 @@
  * @uses $vars['cropper_min_height']        the minimal height of the cropped image
  */
 
-if (elgg_extract('cropper_enabled', $vars, false) === false) {
+if (elgg_extract('cropper_enabled', $vars, true) === false) {
 	return;
 }
 
@@ -32,7 +32,7 @@ $default_config = [
 
 $cropper_data = array_merge($default_config, (array) elgg_extract('cropper_config', $vars, []));
 
-// determin current cropping coordinates
+// determine current cropping coordinates
 $entity_coords = [];
 if ($entity instanceof ElggEntity) {
 	if ($icon_type === 'icon') {
@@ -50,6 +50,7 @@ if ($entity instanceof ElggEntity) {
 	array_walk($entity_coords, function(&$value) {
 		$value = (int) $value;
 	});
+	
 	// remove invalid values
 	$entity_coords = array_filter($entity_coords, function($value) {
 		return $value >= 0;
@@ -63,6 +64,10 @@ if ($entity instanceof ElggEntity) {
 			'width' => $entity_coords['x2'] - $entity_coords['x1'],
 			'height' => $entity_coords['y2'] - $entity_coords['y1'],
 		];
+		
+		if (!empty($cropper_data['data']['width']) && $cropper_data['data']['height']) {
+			$cropper_data['existingAspectRatio'] = $cropper_data['data']['width'] / $cropper_data['data']['height'];
+		}
 	}
 }
 
@@ -102,6 +107,7 @@ if (!isset($cropper_data['aspectRatio'])) {
 		}
 		
 		$cropper_data['aspectRatio'] = $width / $height;
+		$cropper_data['initialAspectRatio'] = $cropper_data['aspectRatio'];
 	};
 	$detect_aspect_ratio($vars);
 }
@@ -114,18 +120,25 @@ if ($entity instanceof ElggEntity && $entity->hasIcon('master', $icon_type)) {
 	]);
 }
 
+if (isset($cropper_data['existingAspectRatio'], $cropper_data['aspectRatio'])) {
+	// prevents math rounding issues with non square aspect ratios when showing existing cropped area
+	$cropper_data['aspectRatio'] = $cropper_data['existingAspectRatio'];
+	unset($cropper_data['existingAspectRatio']);
+}
+
 $img = elgg_format_element('img', [
 	'data-icon-cropper' => json_encode($cropper_data),
 	'src' => $img_url,
+	'alt' => elgg_echo('entity:edit:icon:crop:img:alt'),
 ]);
 
 echo elgg_format_element('div', ['class' => ['elgg-entity-edit-icon-crop-wrapper', 'hidden', 'mbm']], $img);
 
-$input ='';
+$input = '';
 foreach (['x1', 'y1', 'x2', 'y2'] as $coord) {
 	$input .= elgg_view_field([
 		'#type' => 'hidden',
-		'name' => $coord,
+		'name' => "{$input_name}_{$coord}",
 		'value' => elgg_extract($coord, $entity_coords),
 	]);
 }
@@ -133,18 +146,13 @@ foreach (['x1', 'y1', 'x2', 'y2'] as $coord) {
 if (!empty($img_url)) {
 	$input .= elgg_view_field([
 		'#type' => 'hidden',
-		'name' => '_entity_edit_icon_crop_guid',
+		'name' => "_entity_edit_icon_crop[{$input_name}][guid]",
 		'value' => $entity->guid,
 	]);
 	$input .= elgg_view_field([
 		'#type' => 'hidden',
-		'name' => '_entity_edit_icon_crop_type',
+		'name' => "_entity_edit_icon_crop[{$input_name}][type]",
 		'value' => $icon_type,
-	]);
-	$input .= elgg_view_field([
-		'#type' => 'hidden',
-		'name' => '_entity_edit_icon_crop_input',
-		'value' => $input_name,
 	]);
 }
 

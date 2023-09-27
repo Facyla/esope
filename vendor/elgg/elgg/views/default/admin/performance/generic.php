@@ -8,7 +8,7 @@ echo elgg_view('output/longtext', [
 	'value' => elgg_echo('admin:performance:generic:description'),
 ]);
 
-$icon_ok = elgg_view_icon('checkmark');
+$icon_ok = elgg_view_icon('check');
 $icon_warning = elgg_view_icon('exclamation-triangle');
 $icon_error = elgg_view_icon('times');
 
@@ -29,7 +29,7 @@ $view_module = function($icon, $title, $value = '', $subtext = '') {
 // Check if the function exists before callling it else it may fail in case of Nginx or other Non Apache servers
 if (function_exists('apache_get_version')) {
 	if (apache_get_version() !== false) {
-		$icon =  $icon_warning;
+		$icon = $icon_warning;
 		$title = elgg_echo('admin:performance:apache:mod_cache');
 		$value = elgg_echo('status:unavailable');
 		$subtext = '';
@@ -58,7 +58,7 @@ if (!empty($open_basedirs)) {
 	
 	$separator = ':';
 	if (stripos(PHP_OS, 'WIN') === 0) {
-		$open_basedirs = $separator = ';';
+		$separator = ';';
 	}
 	
 	$parsed_open_basedirs = explode($separator, $open_basedirs);
@@ -102,7 +102,7 @@ $title = elgg_echo('admin:server:label:memcache');
 $value = elgg_echo('status:unavailable');
 $subtext = '';
 
-if (\Stash\Driver\Memcache::isAvailable()) {
+if (\Elgg\Cache\CompositeCache::isMemcacheAvailable()) {
 	$icon = $icon_warning;
 	
 	if (elgg_get_config('memcache') && !empty(elgg_get_config('memcache_servers'))) {
@@ -122,7 +122,7 @@ $title = elgg_echo('admin:server:label:redis');
 $value = elgg_echo('status:unavailable');
 $subtext = '';
 
-if (\Stash\Driver\Redis::isAvailable()) {
+if (\Elgg\Cache\CompositeCache::isRedisAvailable()) {
 	$icon = $icon_warning;
 	
 	if (elgg_get_config('redis') && !empty(elgg_get_config('redis_servers'))) {
@@ -152,7 +152,7 @@ if (elgg_is_simplecache_enabled()) {
 	$icon = $icon_ok;
 	$value = elgg_echo('status:enabled');
 	
-	if (!_elgg_config()->hasInitialValue('simplecache_enabled')) {
+	if (!elgg()->config->hasInitialValue('simplecache_enabled')) {
 		$icon = $icon_warning;
 		$subtext = elgg_echo('admin:performance:simplecache:settings:warning');
 	}

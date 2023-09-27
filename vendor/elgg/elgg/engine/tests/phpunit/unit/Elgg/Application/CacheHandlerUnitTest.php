@@ -13,12 +13,12 @@ class CacheHandlerUnitTest extends \Elgg\UnitTestCase {
 	protected $handler;
 
 	public function up() {
-		$request = _elgg_services()->request;
-		$this->handler = new CacheHandler(_elgg_config(), $request, true);
-	}
-
-	public function down() {
-
+		$this->handler = new CacheHandler(
+			_elgg_services()->config,
+			_elgg_services()->request,
+			_elgg_services()->simpleCache,
+			_elgg_services()->configTable,
+		);
 	}
 
 	protected function _testParseFail($input) {
@@ -26,11 +26,11 @@ class CacheHandlerUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanParseValidRequest() {
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'ts' => '1234',
 			'viewtype' => 'default',
 			'view' => 'hel/8lo-wo_rl.d.js',
-				), $this->handler->parsePath('/cache/1234/default/hel/8lo-wo_rl.d.js'));
+		], $this->handler->parsePath('/cache/1234/default/hel/8lo-wo_rl.d.js'));
 	}
 
 	public function testCantParseDoubleDot() {

@@ -1,21 +1,30 @@
 <?php
 
 return [
+	'plugin' => [
+		'name' => 'Site Pages',
+	],
 	'entities' => [
 		[
 			'type' => 'object',
 			'subtype' => 'about',
-			'searchable' => false,
+			'capabilities' => [
+				'commentable' => false,
+			],
 		],
 		[
 			'type' => 'object',
 			'subtype' => 'terms',
-			'searchable' => false,
+			'capabilities' => [
+				'commentable' => false,
+			],
 		],
 		[
 			'type' => 'object',
 			'subtype' => 'privacy',
-			'searchable' => false,
+			'capabilities' => [
+				'commentable' => false,
+			],
 		],
 	],
 	'routes' => [
@@ -47,6 +56,22 @@ return [
 	'actions' => [
 		'expages/edit' => [
 			'access' => 'admin',
+		],
+	],
+	'events' => [
+		'register' => [
+			'menu:admin_header' => [
+				'Elgg\ExternalPages\Menus\AdminHeader::register' => [],
+			],
+			'menu:expages' => [
+				'Elgg\ExternalPages\Menus\ExPages::register' => [],
+			],
+			'menu:footer' => [
+				'Elgg\ExternalPages\Menus\Footer::register' => [],
+			],
+			'menu:walled_garden' => [
+				'Elgg\ExternalPages\Menus\WalledGarden::register' => [],
+			],
 		],
 	],
 ];

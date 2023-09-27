@@ -9,17 +9,11 @@ use Elgg\Http\OkResponse;
 class ValidateIntegrationTest extends ActionResponseTestCase {
 	
 	public function up() {
+		parent::up();
 		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($this->getAdmin());
+		_elgg_services()->session_manager->setLoggedInUser($this->getAdmin());
 	}
-	
-	public function down() {
-		
-		$session = elgg_get_session();
-		$session->removeLoggedInUser();
-	}
-	
+
 	public function testValidateSingleUserWithoutParams() {
 		
 		$response = $this->executeAction('admin/user/validate');

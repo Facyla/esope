@@ -20,25 +20,18 @@ foreach ($categories as $key => $category) {
 	}
 
 	$key = preg_replace('/[^a-z0-9-]/i', '-', elgg_strtolower($key));
-	$link = elgg_view('output/url', [
-		'text' => $category,
-		'href' => '#',
-		'rel' => $key
-	]);
-
 	
 	$options = [];
 	if ($key === $input_filter) {
 		$options['class'] = 'elgg-state-selected';
 	}
-	$list_items .= elgg_format_element('li', $options, $link);
+	
+	$list_items .= elgg_format_element('li', $options, elgg_view_url('#', $category, ['rel' => $key]));
 }
 
-$body = elgg_format_element([
-	'#tag_name' => 'ul',
-	'class' => 'elgg-admin-plugins-categories elgg-admin-sidebar-menu elgg-menu-hz',
-	'#text' => $list_items,
-]);
+$body = elgg_format_element('ul', [
+	'class' => ['elgg-admin-plugins-categories', 'elgg-admin-sidebar-menu', 'elgg-menu-hz'],
+], $list_items);
 
 echo elgg_view_module('', elgg_echo('filter'), $body, [
 	'id' => 'plugins-filter',

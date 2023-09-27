@@ -1,26 +1,20 @@
 <?php
 
+use Elgg\Exceptions\RuntimeException as ElggRuntimeException;
+
 /**
  * @group Functions
  */
 class ElggCallUnitTest extends \Elgg\UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	/**
 	 * @dataProvider flagsDataProvider
 	 */
 	public function testCanCallWithFlags($access_before, $disabled_before, $ignore_access, $show_disabled) {
 
-		$ia = elgg()->session->setIgnoreAccess($access_before);
-		$ha = access_get_show_hidden_status();
-		elgg()->session->setDisabledEntityVisibility($disabled_before);
+		$ia = elgg()->session_manager->setIgnoreAccess($access_before);
+		$ha = elgg()->session_manager->getDisabledEntityVisibility();
+		elgg()->session_manager->setDisabledEntityVisibility($disabled_before);
 		
 		$flags = null;
 		if ($ignore_access === true) {
@@ -41,15 +35,15 @@ class ElggCallUnitTest extends \Elgg\UnitTestCase {
 
 		$exception_function = function() use ($ignore_access, $show_disabled) {
 			$this->assertEquals($ignore_access, elgg_get_ignore_access());
-			$this->assertEquals($show_disabled, access_get_show_hidden_status());
+			$this->assertEquals($show_disabled, elgg()->session_manager->getDisabledEntityVisibility());
 
-			throw new RuntimeException();
+			throw new ElggRuntimeException();
 		};
 
 		$exception_thrown = false;
 		try {
 			elgg_call($flags, $exception_function);
-		} catch (\RuntimeException $ex) {
+		} catch (ElggRuntimeException $ex) {
 			$exception_thrown = true;
 		}
 
@@ -57,7 +51,7 @@ class ElggCallUnitTest extends \Elgg\UnitTestCase {
 
 		$error_function = function() use ($ignore_access, $show_disabled) {
 			$this->assertEquals($ignore_access, elgg_get_ignore_access());
-			$this->assertEquals($show_disabled, access_get_show_hidden_status());
+			$this->assertEquals($show_disabled, elgg()->session_manager->getDisabledEntityVisibility());
 
 			throw new ParseError();
 		};
@@ -72,10 +66,10 @@ class ElggCallUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($error_thrown);
 
 		$this->assertEquals($access_before, elgg_get_ignore_access());
-		$this->assertEquals($disabled_before, access_get_show_hidden_status());
+		$this->assertEquals($disabled_before, elgg()->session_manager->getDisabledEntityVisibility());
 
-		elgg()->session->setIgnoreAccess($ia);
-		elgg()->session->setDisabledEntityVisibility($ha);
+		elgg()->session_manager->setIgnoreAccess($ia);
+		elgg()->session_manager->setDisabledEntityVisibility($ha);
 	}
 
 	public function flagsDataProvider() {
@@ -103,5 +97,4 @@ class ElggCallUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertTrue($result);
 	}
-
 }

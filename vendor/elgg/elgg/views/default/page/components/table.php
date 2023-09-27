@@ -1,7 +1,4 @@
 <?php
-
-use Elgg\Views\TableColumn;
-
 /**
  * View a table of items
  *
@@ -21,30 +18,22 @@ use Elgg\Views\TableColumn;
  * @uses $vars['list_class']   Additional CSS class for the <table> element
  * @uses $vars['item_class']   Additional CSS class for the <td> elements
  * @uses $vars['item_view']    Alternative view to render list items
- * @uses $vars['no_results']   Message to display if no results (string|Closure)
  */
+
+use Elgg\Views\TableColumn;
+
 $items = elgg_extract('items', $vars);
-$count = elgg_extract('count', $vars);
 $pagination = elgg_extract('pagination', $vars, true);
 $position = elgg_extract('position', $vars, 'after');
-$no_results = elgg_extract('no_results', $vars, '');
-$cell_views = elgg_extract('cell_views', $vars, ['page/components/table/cell/default']);
 
-$columns = elgg_extract('columns', $vars);
 /* @var TableColumn[] $columns */
-
+$columns = elgg_extract('columns', $vars);
 if (empty($columns) || !is_array($columns)) {
 	return;
 }
 
 if (!is_array($items) || count($items) == 0) {
-	if ($no_results) {
-		if ($no_results instanceof Closure) {
-			echo $no_results();
-			return;
-		}
-		echo "<p class='elgg-no-results'>$no_results</p>";
-	}
+	echo elgg_view('page/components/no_results', $vars);
 	return;
 }
 
@@ -58,10 +47,12 @@ foreach ($columns as $column) {
 
 	$cell = trim($column->renderHeading());
 	if (!preg_match('~^<t[dh]~i', $cell)) {
-		$cell = "<th>$cell</th>";
+		$cell = elgg_format_element('th', [], $cell);
 	}
+	
 	$headings .= $cell;
 }
+
 $headings = "<thead><tr>$headings</tr></thead>";
 
 $table_classes = elgg_extract_class($vars, ['elgg-list', 'elgg-table'], 'list_class');
@@ -75,10 +66,7 @@ foreach ($items as $item) {
 	];
 
 	$type = '';
-	$entity = null;
-
 	if ($item instanceof \ElggEntity) {
-		$entity = $item;
 		$guid = $item->guid;
 		$type = $item->type;
 		$subtype = $item->getSubtype();
@@ -103,8 +91,9 @@ foreach ($items as $item) {
 	foreach ($columns as $column) {
 		$cell = trim($column->renderCell($item, $type, $vars));
 		if (!preg_match('~^<t[dh]~i', $cell)) {
-			$cell = "<td>$cell</td>";
+			$cell = elgg_format_element('td', [], $cell);
 		}
+		
 		$row .= $cell;
 	}
 
@@ -121,4 +110,9 @@ echo elgg_format_element('table', ['class' => $table_classes], $body);
 
 if ($position == 'after' || $position == 'both') {
 	echo $nav;
+}
+
+$limit = elgg_extract('limit', $vars);
+if (!$pagination && $limit !== false && !empty($items) && count($items) >= $limit) {
+	echo elgg_view('page/components/list/widget_more', $vars);
 }

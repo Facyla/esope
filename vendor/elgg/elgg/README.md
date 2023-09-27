@@ -1,19 +1,19 @@
 Elgg
 ====
 
-[![Build status](https://github.com/Elgg/Elgg/workflows/Run%20PHPUnit%20test%20suites/badge.svg?branch=3.3)](https://github.com/Elgg/Elgg)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=3.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.3) 
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=3.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.3) 
-[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?version=3.3)](http://learn.elgg.org/en/3.3/)
+[![PHPUnit test suites](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml/badge.svg?branch=5.0)](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=5.0)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=5.0) 
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=5.0)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=5.0) 
+[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?badge=5.0)](http://learn.elgg.org/en/5.0/)
 
 Elgg is an open source rapid development framework for socially aware web applications.
 
 Features
 --------
 
-- **Well-documented core API** that allows developers to kick start their new project with a simple learning curve
-- **Composer** is the package manager of choice that greatly simplifes installation and maintenance of Elgg core and plugins
-- **Flexible system of hooks and events** that allows plugins to extend and modify most aspects of application's functionality and behavior
+- **Well-documented core API** that allows developers to kick-start their new project with a simple learning curve
+- **Composer** is the package manager of choice that greatly simplifies installation and maintenance of Elgg core and plugins
+- **Flexible system of events** that allows plugins to extend and modify most aspects of application's functionality and behavior
 - **Extendable system of views** that allows plugins to collaborate on application's presentation layer and built out complex custom themes
 - **Cacheable system of static assets** that allows themes and plugins to serve images, stylesheets, fonts and scripts bypassing the engine
 - **User authentication** is powered by pluggable auth modules, which allow applications to implement custom authentication protocols
@@ -35,7 +35,7 @@ Under the hood:
 - NGINX or Apache compatible
 - Symfony2 HTTP Foundation handles requests and responses
 - RequireJS handles AMD
-- Zend Mail handles outgoing email
+- Laminas Mail handles outgoing email
 - htmLawed XSS filters
 - DBAL
 - Phinx database migrations
@@ -60,7 +60,7 @@ The Elgg project was started in 2004 by
 License
 -------
 
-Copyright (c) 2008-2020, see COPYRIGHT.txt
+Copyright (c) 2008-2023, see COPYRIGHT.txt
 
 Elgg is released under the GNU General Public License (GPL) Version 2 and the
 Massachusetts Institute of Technology (MIT-X11) License. 

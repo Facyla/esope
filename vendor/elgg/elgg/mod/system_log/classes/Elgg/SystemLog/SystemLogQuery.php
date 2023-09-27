@@ -6,6 +6,7 @@ use Doctrine\DBAL\Query\Expression\CompositeExpression;
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Repository;
 use Elgg\Database\Select;
+use Elgg\Exceptions\Exception;
 use Elgg\Values;
 
 /**
@@ -52,14 +53,17 @@ class SystemLogQuery extends Repository {
 	 * @var int[]
 	 */
 	public $owner_guid;
+	
 	/**
 	 * @var int[]
 	 */
 	public $access_id;
+	
 	/**
 	 * @var string
 	 */
 	public $enabled;
+	
 	/**
 	 * @var int|string|\DateTime
 	 */
@@ -92,9 +96,10 @@ class SystemLogQuery extends Repository {
 
 	/**
 	 * Count rows
+	 *
 	 * @return int
 	 */
-	public function count() {
+	public function count(): int {
 		$this->normalizeOptions();
 
 		$qb = Select::fromTable('system_log');
@@ -120,9 +125,10 @@ class SystemLogQuery extends Repository {
 	 * @param string $property_type Property type
 	 *
 	 * @return int|float
+	 * @throws Exception
 	 */
 	public function calculate($function, $property, $property_type = null) {
-		throw new \LogicException(__METHOD__ . ' not implemented');
+		throw new Exception(__METHOD__ . ' not implemented');
 	}
 
 	/**
@@ -148,16 +154,18 @@ class SystemLogQuery extends Repository {
 		$limit = (int) $limit;
 		if ($limit > 0) {
 			$qb->setMaxResults($limit);
-			$qb->setFirstResult($offset);
+			$qb->setFirstResult((int) $offset);
 		}
 
 		$qb->orderBy('time_created', 'DESC');
+		$qb->addOrderBy('id', 'DESC');
 
 		return _elgg_services()->db->getData($qb, $this->callback);
 	}
 
 	/**
 	 * Apply correct execution method based on calculation, count or other criteria
+	 *
 	 * @return mixed
 	 */
 	public function execute() {
@@ -171,9 +179,10 @@ class SystemLogQuery extends Repository {
 
 	/**
 	 * Normalizes options
+	 *
 	 * @return void
 	 */
-	protected function normalizeOptions() {
+	protected function normalizeOptions(): void {
 		$defaults = [
 			'limit' => elgg_get_config('default_limit'),
 			'offset' => 0,
@@ -188,18 +197,23 @@ class SystemLogQuery extends Repository {
 		if (!elgg_is_empty($this->performed_by_guid)) {
 			$this->performed_by_guid = Values::normalizeGuids($this->performed_by_guid);
 		}
+		
 		if (!elgg_is_empty($this->owner_guid)) {
 			$this->owner_guid = Values::normalizeGuids($this->owner_guid);
 		}
+		
 		if (!elgg_is_empty($this->object_id)) {
 			$this->object_id = Values::normalizeIds($this->object_id);
 		}
+		
 		if (!elgg_is_empty($this->access_id)) {
 			$this->access_id = Values::normalizeIds($this->access_id);
 		}
+		
 		if (!elgg_is_empty($this->created_after)) {
 			$this->created_after = Values::normalizeTimestamp($this->created_after);
 		}
+		
 		if (!elgg_is_empty($this->created_before)) {
 			$this->created_before = Values::normalizeTimestamp($this->created_before);
 		}
@@ -219,33 +233,43 @@ class SystemLogQuery extends Repository {
 		if (!elgg_is_empty($this->performed_by_guid)) {
 			$wheres[] = $qb->compare('performed_by_guid', '=', $this->performed_by_guid, ELGG_VALUE_INTEGER);
 		}
+		
 		if (!elgg_is_empty($this->event)) {
 			$wheres[] = $qb->compare('event', '=', $this->event, ELGG_VALUE_STRING);
 		}
+		
 		if (!elgg_is_empty($this->object_id)) {
 			$wheres[] = $qb->compare('object_id', '=', $this->object_id, ELGG_VALUE_INTEGER);
 		}
+		
 		if (!elgg_is_empty($this->object_class)) {
 			$wheres[] = $qb->compare('object_class', '=', $this->object_class, ELGG_VALUE_STRING);
 		}
+		
 		if (!elgg_is_empty($this->object_type)) {
 			$wheres[] = $qb->compare('object_type', '=', $this->object_type, ELGG_VALUE_STRING);
 		}
+		
 		if (!elgg_is_empty($this->object_subtype)) {
 			$wheres[] = $qb->compare('object_subtype', '=', $this->object_subtype, ELGG_VALUE_STRING);
 		}
+		
 		if (!elgg_is_empty($this->ip_address)) {
 			$wheres[] = $qb->compare('ip_address', '=', $this->ip_address, ELGG_VALUE_STRING);
 		}
+		
 		if (!elgg_is_empty($this->owner_guid)) {
 			$wheres[] = $qb->compare('owner_guid', '=', $this->owner_guid, ELGG_VALUE_INTEGER);
 		}
+		
 		if (!elgg_is_empty($this->access_id)) {
 			$wheres[] = $qb->compare('access_id', '=', $this->access_id, ELGG_VALUE_INTEGER);
 		}
+		
 		if (!elgg_is_empty($this->enabled)) {
 			$wheres[] = $qb->compare('enabled', '=', $this->enabled, ELGG_VALUE_STRING);
 		}
+		
 		if (!elgg_is_empty($this->created_before) || !elgg_is_empty($this->created_after)) {
 			$wheres[] = $qb->between('time_created', $this->created_after, $this->created_before, ELGG_VALUE_INTEGER);
 		}
@@ -260,7 +284,7 @@ class SystemLogQuery extends Repository {
 	 *
 	 * @return void
 	 */
-	public function setCallback(callable $callback) {
+	public function setCallback(callable $callback): void {
 		$this->callback = $callback;
 	}
 }

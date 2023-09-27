@@ -6,7 +6,7 @@
 $widget = elgg_extract('entity', $vars);
 
 $owner = $widget->getOwnerEntity();
-if (!($owner instanceof \ElggUser)) {
+if (!$owner instanceof \ElggUser) {
 	return;
 }
 
@@ -21,4 +21,7 @@ echo elgg_list_entities([
 	'list_type' => 'gallery',
 	'pagination' => false,
 	'no_results' => elgg_echo('friends:none'),
+	'widget_more' => elgg_view_url(elgg_generate_url('collection:friends:owner', [
+		'username' => $owner->username,
+	]), elgg_echo('more')),
 ]);

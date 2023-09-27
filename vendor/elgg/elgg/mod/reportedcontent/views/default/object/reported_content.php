@@ -3,72 +3,48 @@
  * Elgg reported content object view
  */
 
-$report = $vars['entity'];
-/* @var ElggObject $report */
-$reporter = $report->getOwnerEntity();
-
-//find out if the report is current or archive
-if ($report->state == 'archived') {
-	$reportedcontent_background = "reported-content-archived";
-} else {
-	$reportedcontent_background = "reported-content-active";
+$entity = elgg_extract('entity', $vars);
+if (!$entity instanceof \ElggReportedContent) {
+	return;
 }
 
-?>
+$report_address = elgg_view_url($entity->getAddress());
 
-<div class="reported-content <?php echo $reportedcontent_background; ?>">
-	<div class="clearfix">
-		<div class="clearfix controls">
-<?php
-if ($report->state != 'archived') {
-	$attrs = [
-	'class' => 'elgg-button elgg-button-action',
-	'data-elgg-action' => json_encode([
-		'name' => 'reportedcontent/archive',
-		'data' => [
-			'guid' => $report->guid,
-		]
-	]),
+$vars['imprint'] = (array) elgg_extract('imprint', $vars, []);
+$vars['access'] = false;
+
+if (!empty($report_address)) {
+	$vars['imprint'][] = [
+		'icon_name' => 'globe',
+		'content' => $report_address,
 	];
-	echo elgg_format_element('button', $attrs, elgg_echo('reportedcontent:archive'));
 }
-	$attrs = [
-		'class' => 'elgg-button elgg-button-action',
-		'data-elgg-action' => json_encode([
-			'name' => 'reportedcontent/delete',
-			'data' => [
-				'guid' => $report->guid,
-			]
-		]),
+
+if (!elgg_extract('full_view', $vars)) {
+	$vars['content'] = elgg_get_excerpt((string) $entity->description);
+	
+	echo elgg_view('object/elements/summary', $vars);
+	
+	return;
+}
+
+$body = elgg_view('output/longtext', ['value' => $entity->description, 'class' => 'mbm']);
+
+if (!empty($report_address)) {
+	$body .= elgg_format_element('b', [], elgg_echo('reportedcontent:address')) . ': ' . $report_address;
+}
+
+$body .= elgg_view_message('info', elgg_echo('reportedcontent:comments:message'), ['title' => false, 'class' => ['mtl', 'mbn']]);
+
+if ($entity->state !== 'active') {
+	$vars['imprint'][] = [
+		'icon_name' => 'archive',
+		'content' => elgg_echo('reportedcontent:archived_reports'),
 	];
-	echo elgg_format_element('button', $attrs, elgg_echo('reportedcontent:delete'));
-?>
-		</div>
-		<h3 class="mbm">
-			<?php echo elgg_view('output/url', [
-				'text' => $report->getDisplayName(),
-				'href' => $report->address,
-				'is_trusted' => true,
-				'class' => 'elgg-reported-content-address elgg-lightbox',
-				'data-colorbox-opts' => json_encode([
-					'width' => '85%',
-					'height' => '85%',
-					'iframe' => true,
-				]),
-			]);
-			?>
-		</h3>
-		<p><b><?php echo elgg_echo('reportedcontent:by') ?></b>
-			<?php echo elgg_view('output/url', [
-				'href' => $reporter->getURL(),
-				'text' => $reporter->getDisplayName(),
-				'is_trusted' => true,
-			]);
-			echo " " . elgg_view_friendly_time($report->time_created);
-			?>
-		</p>
-		<?php if ($report->description) : ?>
-			<p><?php echo $report->description; ?></p>
-		<?php endif; ?>
-	</div>
-</div>
+}
+
+$vars['metadata'] = false;
+$vars['body'] = $body;
+$vars['show_summary'] = true;
+
+echo elgg_view('object/elements/full', $vars);

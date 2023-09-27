@@ -18,14 +18,11 @@ return array(
 	'messages:message' => "Messaggio",
 	'messages:title' => "Oggetto",
 	'messages:to:help' => "Scrivi il nome utente del destinatario qui.",
-	'messages:inbox' => "In arrivo",
 	'messages:sendmessage' => "Invia un messaggio",
 	'messages:add' => "Scrivi un messaggio",
 	'messages:sentmessages' => "Messaggi inviati",
 	'messages:toggle' => 'Inverti selezione a tutti',
 	'messages:markread' => 'Segna come già letto',
-
-	'notification:method:site' => 'Sito',
 
 	'messages:error' => 'Si è verificato un errore salvando il messaggio. Per favore riprova.',
 
@@ -37,28 +34,15 @@ return array(
 	*/
 
 	'messages:posted' => "Il messaggio è stato inviato.",
-	'messages:success:delete:single' => 'Messaggio eliminato',
 	'messages:success:delete' => 'Messaggi eliminati',
 	'messages:success:read' => 'Messaggi contrassegnati come letti',
 	'messages:error:messages_not_selected' => 'Nessun messaggio selezionato',
-	'messages:error:delete:single' => 'Impossibile cancellare il messaggio',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Hai un nuovo messaggio!',
-	'messages:email:body' => "You have a new message from %s.
-
-It reads:
-
-%s
-
-To view your messages, click here:
-%s
-
-To send %s a message, click here:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +55,9 @@ To send %s a message, click here:
 	'messages:user:self' => "Non puoi inviare un messaggio a te stesso/a.",
 
 	'messages:deleted_sender' => 'Utente eliminato',
+	
+	/**
+	* Settings
+	*/
 
 );

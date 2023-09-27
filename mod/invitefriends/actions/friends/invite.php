@@ -5,17 +5,11 @@
 
 use Elgg\Email;
 
-elgg_make_sticky_form('invitefriends');
-
-if (!elgg_get_config('allow_registration')) {
-	return elgg_error_response(elgg_echo('invitefriends:registration_disabled'));
-}
-
 $site = elgg_get_site_entity();
 // create the from address
 $from = \Elgg\Email\Address::getFormattedEmailAddress($site->getEmailAddress(), $site->getDisplayName());
 
-$emails = get_input('emails');
+$emails = (string) get_input('emails');
 $emailmessage = get_input('emailmessage');
 
 $emails = trim($emails);
@@ -40,21 +34,21 @@ foreach ($emails as $email_address) {
 	}
 
 	// send out other email addresses
-	if (!is_email_address($email_address)) {
+	if (!elgg_is_valid_email($email_address)) {
 		$error = true;
 		$bad_emails[] = $email_address;
 		continue;
 	}
 
-	if (get_user_by_email($email_address)) {
+	if (elgg_get_user_by_email($email_address)) {
 		$error = true;
 		$already_members[] = $email_address;
 		continue;
 	}
 
-	$link = elgg_get_registration_url([
+	$invite_link = elgg_get_registration_url([
 		'friend_guid' => $current_user->guid,
-		'invitecode' => generate_invite_code($current_user->username),
+		'invitecode' => elgg_generate_invite_code($current_user->username),
 	]);
 	
 	$email = Email::factory([
@@ -65,7 +59,7 @@ foreach ($emails as $email_address) {
 			$site->getDisplayName(),
 			$current_user->getDisplayName(),
 			$emailmessage,
-			$link,
+			$invite_link,
 		]),
 	]);
 	
@@ -74,19 +68,17 @@ foreach ($emails as $email_address) {
 }
 
 if ($error) {
-	register_error(elgg_echo('invitefriends:invitations_sent', [$sent_total]));
+	elgg_register_error_message(elgg_echo('invitefriends:invitations_sent', [$sent_total]));
 
 	if (count($bad_emails) > 0) {
-		register_error(elgg_echo('invitefriends:email_error', [implode(', ', $bad_emails)]));
+		elgg_register_error_message(elgg_echo('invitefriends:email_error', [implode(', ', $bad_emails)]));
 	}
 
 	if (count($already_members) > 0) {
-		register_error(elgg_echo('invitefriends:already_members', [implode(', ', $already_members)]));
+		elgg_register_error_message(elgg_echo('invitefriends:already_members', [implode(', ', $already_members)]));
 	}
 	
 	return elgg_error_response();
 }
-
-elgg_clear_sticky_form('invitefriends');
 
 return elgg_ok_response('', elgg_echo('invitefriends:success'));

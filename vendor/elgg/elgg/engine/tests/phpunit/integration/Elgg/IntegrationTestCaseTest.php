@@ -18,15 +18,7 @@ class IntegrationTestCaseTest extends IntegrationTestCase {
 	public function up() {
 		_elgg_services()->boot->clearCache();
 		
-		$this->entity = $this->createOne('object', [
-			'access_id' => ACCESS_PUBLIC,
-		]);
-	}
-
-	public function down() {
-		elgg_call(ELGG_IGNORE_ACCESS, function() {
-			$this->entity->delete();
-		});
+		$this->entity = $this->createObject();
 	}
 
 	public function testCanLoadEntityFromTestingApplicationDatabase() {
@@ -39,20 +31,20 @@ class IntegrationTestCaseTest extends IntegrationTestCase {
 	}
 
 	/**
-	 * Parent class will also make assertions that hooks and events
+	 * Parent class will also make assertions that events
 	 * are identical after multiple bootstraps, which will indicate
 	 * that plugins can start multiple times
 	 */
 	public function testCanResetTestingApplicationAfterMultipleInstantiations() {
 		$app1 = self::createApplication(['isolate' => true]);
-		$dbConfig = $app1->getDbConfig();
+		$dbConfig = $app1->internal_services->dbConfig;
 
 		$app2 = self::createApplication(['isolate' => true]);
 
 		$this->assertNotSame($app1, $app2);
 		$this->assertSame(Application::$_instance, $app2);
 
-		$this->assertEquals($dbConfig, $app2->getDbConfig());
+		$this->assertEquals($dbConfig, $app2->internal_services->dbConfig);
 	}
 
 	public function testCanResetTestingApplicationAfterPluginStackChanges() {
@@ -86,11 +78,10 @@ class IntegrationTestCaseTest extends IntegrationTestCase {
 		$this->assertInstanceOf(\ElggPlugin::class, $plugin); // we need a plugin to test with
 
 		$inspector = new Inspector();
-		$hooks = $inspector->getPluginHooks();
 		$events = $inspector->getEvents();
 		$views = $inspector->getViews();
 		$actions = $inspector->getActions();
-		$entity_types = get_registered_entity_types();
+		$entity_types = elgg_entity_types_with_capability('searchable');
 		$widget_types = elgg_get_widget_types();
 		
 		$this->assertTrue($plugin->deactivate());
@@ -109,23 +100,19 @@ class IntegrationTestCaseTest extends IntegrationTestCase {
 
 		$this->assertEquals($map($plugins), $map(elgg_get_plugins('active')));
 
-		$this->assertEquals($hooks, $inspector->getPluginHooks());
 		$this->assertEquals($events, $inspector->getEvents());
 		$this->assertEquals($views, $inspector->getViews());
 		$this->assertEquals($actions, $inspector->getActions());
-		$this->assertEquals($entity_types, get_registered_entity_types());
+		$this->assertEquals($entity_types, elgg_entity_types_with_capability('searchable'));
 		$this->assertEquals($widget_types, elgg_get_widget_types());
 	}
 
 	public function testCanReplaceSessionUser() {
 
-		$user = $this->createOne('user');
+		$user = $this->createUser();
 
-		_elgg_services()->session->setLoggedInUser($user);
+		_elgg_services()->session_manager->setLoggedInUser($user);
 
 		$this->assertEquals(elgg_get_logged_in_user_entity(), $user);
-
-		_elgg_services()->session->removeLoggedInUser();
-
 	}
 }

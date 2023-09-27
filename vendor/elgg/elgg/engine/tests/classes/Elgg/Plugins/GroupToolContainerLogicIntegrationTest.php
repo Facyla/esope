@@ -27,25 +27,9 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 	 */
 	public function up() {
 		$this->owner = $this->createUser();
-		elgg()->session->setLoggedInUser($this->owner);
+		elgg()->session_manager->setLoggedInUser($this->owner);
 		
 		$this->group = $this->createGroup();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::down()
-	 */
-	public function down() {
-		if ($this->group) {
-			$this->group->delete();
-		}
-		
-		if ($this->owner) {
-			$this->owner->delete();
-		}
-		
-		elgg()->session->removeLoggedInUser();
 	}
 	
 	/**
@@ -88,8 +72,6 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->enableTool($this->getGroupToolOption()));
 		
 		$this->assertFalse($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 	
 	public function testUserCantWriteContentWithToolDisabled() {
@@ -98,8 +80,6 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->disableTool($this->getGroupToolOption()));
 		
 		$this->assertFalse($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 	
 	public function testGroupMemberCanWriteContentWithToolEnabled() {
@@ -109,8 +89,6 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->enableTool($this->getGroupToolOption()));
 		
 		$this->assertTrue($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 	
 	public function testGroupMemberCantWriteContentWithToolDisabled() {
@@ -120,8 +98,6 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->disableTool($this->getGroupToolOption()));
 		
 		$this->assertFalse($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 	
 	public function testAdminCanWriteContentWithToolEnabled() {
@@ -130,8 +106,6 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->enableTool($this->getGroupToolOption()));
 		
 		$this->assertTrue($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 	
 	public function testAdminCantWriteContentWithToolDisabled() {
@@ -140,8 +114,6 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->disableTool($this->getGroupToolOption()));
 		
 		$this->assertFalse($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 	
 	public function testAdminMemberCantWriteContentWithToolDisabled() {
@@ -151,7 +123,5 @@ abstract class GroupToolContainerLogicIntegrationTest extends IntegrationTestCas
 		$this->assertTrue($this->group->disableTool($this->getGroupToolOption()));
 		
 		$this->assertFalse($this->group->canWriteToContainer($user->guid, $this->getContentType(), $this->getContentSubtype()));
-		
-		$user->delete();
 	}
 }

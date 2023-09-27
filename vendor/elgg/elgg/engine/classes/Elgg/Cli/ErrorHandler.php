@@ -9,12 +9,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Monolog\Formatter\FormatterInterface;
 
 /**
  * Console handler
  */
 class ErrorHandler extends AbstractProcessingHandler {
-
+	
+	const VERBOSITY_LEVEL_MAP = [
+		OutputInterface::VERBOSITY_QUIET => Logger::OFF,
+		OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
+		OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
+		OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
+		OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
+	];
+	
 	/**
 	 * @var OutputInterface
 	 */
@@ -24,17 +33,6 @@ class ErrorHandler extends AbstractProcessingHandler {
 	 * @var OutputInterface
 	 */
 	protected $stderr;
-
-	/**
-	 * @var array
-	 */
-	static $verbosityLevelMap = [
-		OutputInterface::VERBOSITY_QUIET => Logger::OFF,
-		OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
-		OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
-		OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-		OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
-	];
 
 	/**
 	 * Constructor
@@ -48,13 +46,12 @@ class ErrorHandler extends AbstractProcessingHandler {
 		OutputInterface $stderr = null,
 		$bubble = true
 	) {
-
 		$this->stdout = $stdout;
-		$this->stderr = $stderr ? : $stdout;
+		$this->stderr = $stderr ?: $stdout;
 
-		$verbosity = $this->stdout->getVerbosity() ? : OutputInterface::VERBOSITY_NORMAL;
+		$verbosity = $this->stdout->getVerbosity() ?: OutputInterface::VERBOSITY_NORMAL;
 
-		$level = self::$verbosityLevelMap[$verbosity];
+		$level = self::VERBOSITY_LEVEL_MAP[$verbosity];
 
 		parent::__construct($level, $bubble);
 	}
@@ -62,7 +59,7 @@ class ErrorHandler extends AbstractProcessingHandler {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function write(array $record) {
+	public function write(array $record): void {
 		$stream = $record['level'] >= Logger::ERROR ? $this->stderr : $this->stdout;
 
 		$stream->write($record['formatted'], true);
@@ -84,14 +81,14 @@ class ErrorHandler extends AbstractProcessingHandler {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDefaultFormatter() {
+	public function getDefaultFormatter(): FormatterInterface {
 		return new ErrorFormatter();
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function close() {
+	public function close(): void {
 		$this->stdout = new NullOutput();
 		$this->stderr = new NullOutput();
 	}

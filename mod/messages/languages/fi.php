@@ -18,14 +18,11 @@ return array(
 	'messages:message' => "Viesti",
 	'messages:title' => "Aihe",
 	'messages:to:help' => "Kirjoita vastaanottajan nimi.",
-	'messages:inbox' => "Saapuneet",
 	'messages:sendmessage' => "Lähetä viesti",
 	'messages:add' => "Kirjoita uusi viesti",
 	'messages:sentmessages' => "Lähetetyt",
 	'messages:toggle' => 'Valitse kaikki',
 	'messages:markread' => 'Merkitse luetuksi',
-
-	'notification:method:site' => 'Viestit',
 
 	'messages:error' => 'Viestisi tallentaminen epäonnistui. Yritä uudelleen.',
 
@@ -37,28 +34,15 @@ return array(
 	*/
 
 	'messages:posted' => "Viesti lähetetty.",
-	'messages:success:delete:single' => 'Viesti poistettu',
 	'messages:success:delete' => 'Viestit poistettu',
 	'messages:success:read' => 'Viestit merkitty luetuiksi',
 	'messages:error:messages_not_selected' => 'Ei viestejä valittuna',
-	'messages:error:delete:single' => 'Viestin poistaminen epäonnistui',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Sinulla on uusi viesti!',
-	'messages:email:body' => "You have a new message from %s.
-
-It reads:
-
-%s
-
-To view your messages, click here:
-%s
-
-To send %s a message, click here:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +55,9 @@ To send %s a message, click here:
 	'messages:user:self' => "Et voi lähettää viestiä itsellesi.",
 
 	'messages:deleted_sender' => 'Poistettu käyttäjä',
+	
+	/**
+	* Settings
+	*/
 
 );

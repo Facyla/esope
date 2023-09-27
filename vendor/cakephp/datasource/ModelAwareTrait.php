@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,6 +17,8 @@
 namespace Cake\Datasource;
 
 use Cake\Datasource\Exception\MissingModelException;
+use Cake\Datasource\Locator\LocatorInterface;
+use InvalidArgumentException;
 use UnexpectedValueException;
 
 /**
@@ -23,6 +27,8 @@ use UnexpectedValueException;
  *
  * Example users of this trait are Cake\Controller\Controller and
  * Cake\Console\Shell.
+ *
+ * @deprecated 4.3.0 Use `Cake\ORM\Locator\LocatorAwareTrait` instead.
  */
 trait ModelAwareTrait
 {
@@ -34,17 +40,18 @@ trait ModelAwareTrait
      * Plugin classes should use `Plugin.Comments` style names to correctly load
      * models from the correct plugin.
      *
-     * Use false to not use auto-loading on this object. Null auto-detects based on
+     * Use empty string to not use auto-loading on this object. Null auto-detects based on
      * controller name.
      *
-     * @var string|false|null
+     * @var string|null
+     * @deprecated 4.3.0 Use `Cake\ORM\Locator\LocatorAwareTrait::$defaultTable` instead.
      */
-    public $modelClass;
+    protected $modelClass;
 
     /**
      * A list of overridden model factory functions.
      *
-     * @var array
+     * @var array<callable|\Cake\Datasource\Locator\LocatorInterface>
      */
     protected $_modelFactories = [];
 
@@ -56,14 +63,14 @@ trait ModelAwareTrait
     protected $_modelType = 'Table';
 
     /**
-     * Set the modelClass and modelKey properties based on conventions.
+     * Set the modelClass property based on conventions.
      *
-     * If the properties are already set they will not be overwritten
+     * If the property is already set it will not be overwritten
      *
      * @param string $name Class name.
      * @return void
      */
-    protected function _setModelClass($name)
+    protected function _setModelClass(string $name): void
     {
         if ($this->modelClass === null) {
             $this->modelClass = $name;
@@ -81,31 +88,27 @@ trait ModelAwareTrait
      *
      * @param string|null $modelClass Name of model class to load. Defaults to $this->modelClass.
      *  The name can be an alias like `'Post'` or FQCN like `App\Model\Table\PostsTable::class`.
-     * @param string|null $modelType The type of repository to load. Defaults to the modelType() value.
+     * @param string|null $modelType The type of repository to load. Defaults to the getModelType() value.
      * @return \Cake\Datasource\RepositoryInterface The model instance created.
      * @throws \Cake\Datasource\Exception\MissingModelException If the model class cannot be found.
-     * @throws \InvalidArgumentException When using a type that has not been registered.
-     * @throws \UnexpectedValueException If no model type has been defined
+     * @throws \UnexpectedValueException If $modelClass argument is not provided
+     *   and ModelAwareTrait::$modelClass property value is empty.
+     * @deprecated 4.3.0 Use `LocatorAwareTrait::fetchTable()` instead.
      */
-    public function loadModel($modelClass = null, $modelType = null)
+    public function loadModel(?string $modelClass = null, ?string $modelType = null): RepositoryInterface
     {
-        if ($modelClass === null) {
-            $modelClass = $this->modelClass;
+        $modelClass = $modelClass ?? $this->modelClass;
+        if (empty($modelClass)) {
+            throw new UnexpectedValueException('Default modelClass is empty');
         }
-        if ($modelType === null) {
-            $modelType = $this->getModelType();
+        $modelType = $modelType ?? $this->getModelType();
 
-            if ($modelType === null) {
-                throw new UnexpectedValueException('No model type has been defined');
-            }
-        }
-
-        $alias = null;
         $options = [];
         if (strpos($modelClass, '\\') === false) {
-            list(, $alias) = pluginSplit($modelClass, true);
+            [, $alias] = pluginSplit($modelClass, true);
         } else {
             $options['className'] = $modelClass;
+            /** @psalm-suppress PossiblyFalseOperand */
             $alias = substr(
                 $modelClass,
                 strrpos($modelClass, '\\') + 1,
@@ -118,13 +121,13 @@ trait ModelAwareTrait
             return $this->{$alias};
         }
 
-        if (isset($this->_modelFactories[$modelType])) {
-            $factory = $this->_modelFactories[$modelType];
+        $factory = $this->_modelFactories[$modelType] ?? FactoryLocator::get($modelType);
+        if ($factory instanceof LocatorInterface) {
+            $this->{$alias} = $factory->get($modelClass, $options);
+        } else {
+            $this->{$alias} = $factory($modelClass, $options);
         }
-        if (!isset($factory)) {
-            $factory = FactoryLocator::get($modelType);
-        }
-        $this->{$alias} = $factory($modelClass, $options);
+
         if (!$this->{$alias}) {
             throw new MissingModelException([$modelClass, $modelType]);
         }
@@ -136,11 +139,19 @@ trait ModelAwareTrait
      * Override a existing callable to generate repositories of a given type.
      *
      * @param string $type The name of the repository type the factory function is for.
-     * @param callable $factory The factory function used to create instances.
+     * @param \Cake\Datasource\Locator\LocatorInterface|callable $factory The factory function used to create instances.
      * @return void
      */
-    public function modelFactory($type, callable $factory)
+    public function modelFactory(string $type, $factory): void
     {
+        if (!$factory instanceof LocatorInterface && !is_callable($factory)) {
+            throw new InvalidArgumentException(sprintf(
+                '`$factory` must be an instance of Cake\Datasource\Locator\LocatorInterface or a callable.'
+                . ' Got type `%s` instead.',
+                getTypeName($factory)
+            ));
+        }
+
         $this->_modelFactories[$type] = $factory;
     }
 
@@ -149,7 +160,7 @@ trait ModelAwareTrait
      *
      * @return string
      */
-    public function getModelType()
+    public function getModelType(): string
     {
         return $this->_modelType;
     }
@@ -160,30 +171,8 @@ trait ModelAwareTrait
      * @param string $modelType The model type
      * @return $this
      */
-    public function setModelType($modelType)
+    public function setModelType(string $modelType)
     {
-        $this->_modelType = $modelType;
-
-        return $this;
-    }
-
-    /**
-     * Set or get the model type to be used by this class
-     *
-     * @deprecated 3.5.0 Use getModelType()/setModelType() instead.
-     * @param string|null $modelType The model type or null to retrieve the current
-     * @return string|$this
-     */
-    public function modelType($modelType = null)
-    {
-        deprecationWarning(
-            get_called_class() . '::modelType() is deprecated. ' .
-            'Use setModelType()/getModelType() instead.'
-        );
-        if ($modelType === null) {
-            return $this->_modelType;
-        }
-
         $this->_modelType = $modelType;
 
         return $this;

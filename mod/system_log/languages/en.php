@@ -7,7 +7,6 @@
 
 return array(
 	'admin:administer_utilities:logbrowser' => 'Log browser',
-	'logbrowser' => 'Log browser',
 	'logbrowser:search' => 'Refine results',
 	'logbrowser:user' => 'Username to search by',
 	'logbrowser:starttime' => 'Beginning time (for example "last monday", "1 hour ago")',
@@ -20,21 +19,16 @@ return array(
 	'logbrowser:user:name' => 'User',
 	'logbrowser:user:guid' => 'User GUID',
 	'logbrowser:object' => 'Object type',
-	'logbrowser:object:guid' => 'Object GUID',
+	'logbrowser:object:id' => 'Object ID',
 	'logbrowser:action' => 'Action',
 
 	'logrotate:period' => 'How often should the system log be archived?',
+	'logrotate:retention' => 'Delete archived logs older x days',
+	'logrotate:retention:help' => 'The number of days you wish to keep the archived logs in the database. Leave empty in order not to cleanup the archived logs.',
 
-	'logrotate:logrotated' => "Log rotated\n",
-	'logrotate:lognotrotated' => "Error rotating log\n",
+	'logrotate:logrotated' => "Log rotated",
+	'logrotate:lognotrotated' => "Error rotating log",
 
-	'logrotate:delete' => 'Delete archived logs older than a',
-
-	'logrotate:week' => 'week',
-	'logrotate:month' => 'month',
-	'logrotate:year' => 'year',
-
-	'logrotate:logdeleted' => "Log deleted\n",
-	'logrotate:lognotdeleted' => "No logs deleted\n",
-	
+	'logrotate:logdeleted' => "Log deleted",
+	'logrotate:lognotdeleted' => "No logs deleted",
 );

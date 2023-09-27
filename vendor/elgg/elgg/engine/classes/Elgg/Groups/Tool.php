@@ -47,10 +47,10 @@ class Tool implements CollectionItemInterface {
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'label' :
+			case 'label':
 				return $this->getLabel();
 
-			case 'default_on' :
+			case 'default_on':
 				return $this->isEnabledByDefault();
 		}
 
@@ -58,7 +58,7 @@ class Tool implements CollectionItemInterface {
 	}
 
 	/**
-	 *
+	 * {@inheritdoc}
 	 */
 	public function __set($name, $value) {
 		$this->options[$name] = $value;
@@ -79,7 +79,8 @@ class Tool implements CollectionItemInterface {
 	}
 
 	/**
-	 * Get module title
+	 * Get tool label
+	 *
 	 * @return string
 	 */
 	public function getLabel() {
@@ -89,6 +90,20 @@ class Tool implements CollectionItemInterface {
 		}
 
 		return elgg_echo("groups:tool:{$this->name}");
+	}
+
+	/**
+	 * Get tool description
+	 *
+	 * @return string|null
+	 */
+	public function getDescription(): ?string {
+		$lan_key = "groups:tool:{$this->name}:description";
+		if (!elgg_language_key_exists($lan_key)) {
+			return null;
+		}
+		
+		return elgg_echo($lan_key);
 	}
 
 	/**

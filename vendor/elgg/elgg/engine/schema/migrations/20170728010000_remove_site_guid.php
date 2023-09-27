@@ -1,5 +1,6 @@
 <?php
 
+use Elgg\Exceptions\Configuration\InstallationException;
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
@@ -52,7 +53,7 @@ class RemoveSiteGuid extends AbstractMigration {
 		if ($this->hasTable('access_collections')) {
 			$table = $this->table('access_collections');
 
-			if ($table->hasIndex('site_guid')) {
+			if ($table->hasIndexByName('site_guid')) {
 				$table->removeIndexByName('site_guid')->save();
 			}
 
@@ -74,7 +75,7 @@ class RemoveSiteGuid extends AbstractMigration {
 			$this->query("ALTER TABLE {$prefix}config DROP PRIMARY KEY, ADD PRIMARY KEY(name)");
 			$table = $this->table('config');
 
-			if ($table->hasIndex('site_guid')) {
+			if ($table->hasIndexByName('site_guid')) {
 				$table->removeIndexByName('site_guid')->save();
 			}
 
@@ -86,7 +87,7 @@ class RemoveSiteGuid extends AbstractMigration {
 		if ($this->hasTable('entities')) {
 			$table = $this->table('entities');
 
-			if ($table->hasIndex('site_guid')) {
+			if ($table->hasIndexByName('site_guid')) {
 				$table->removeIndexByName('site_guid')->save();
 			}
 
@@ -98,7 +99,7 @@ class RemoveSiteGuid extends AbstractMigration {
 		if ($this->hasTable('users_apisessions')) {
 			$table = $this->table('users_apisessions');
 
-			if ($table->hasIndex('site_guid')) {
+			if ($table->hasIndexByName('site_guid')) {
 				$table->removeIndexByName('site_guid')->save();
 			}
 
@@ -109,7 +110,7 @@ class RemoveSiteGuid extends AbstractMigration {
 				$table->removeColumn('site_guid')->save();
 			}
 
-			if ($table->hasIndex('user_guid')) {
+			if ($table->hasIndexByName('user_guid')) {
 				$table->removeIndexByName('user_guid')->save();
 			}
 
@@ -147,7 +148,7 @@ class RemoveSiteGuid extends AbstractMigration {
 				])->save();
 			}
 
-			if (!$table->hasIndex('site_guid')) {
+			if (!$table->hasIndexByName('site_guid')) {
 				$table->addIndex(['site_guid'], [
 					'name' => 'site_guid',
 					'unique' => false,
@@ -199,7 +200,7 @@ class RemoveSiteGuid extends AbstractMigration {
 				])->save();
 			}
 
-			if (!$table->hasIndex('site_guid')) {
+			if (!$table->hasIndexByName('site_guid')) {
 				$table->addIndex(['site_guid'], [
 					'name' => 'site_guid',
 					'unique' => false,
@@ -227,7 +228,7 @@ class RemoveSiteGuid extends AbstractMigration {
 				])->save();
 			}
 
-			if (!$table->hasIndex('site_guid')) {
+			if (!$table->hasIndexByName('site_guid')) {
 				$table->addIndex(['site_guid'], [
 					'name' => 'site_guid',
 					'unique' => false,
@@ -262,7 +263,7 @@ class RemoveSiteGuid extends AbstractMigration {
 			// remove site guid from users_apisessions
 			$table = $this->table('users_apisessions');
 
-			if ($table->hasIndex('site_guid')) {
+			if ($table->hasIndexByName('site_guid')) {
 				$table->removeIndexByName('site_guid')->save();
 			}
 
@@ -275,7 +276,7 @@ class RemoveSiteGuid extends AbstractMigration {
 				])->save();
 			}
 
-			if ($table->hasIndex('user_guid')) {
+			if ($table->hasIndexByName('user_guid')) {
 				$table->removeIndexByName('user_guid')->save();
 			}
 

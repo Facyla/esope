@@ -3,9 +3,7 @@
  * Save the developer settings
  */
 
-$site = elgg_get_site_entity();
-
-if (!_elgg_config()->hasInitialValue('simplecache_enabled')) {
+if (!elgg()->config->hasInitialValue('simplecache_enabled')) {
 	if (get_input('simple_cache')) {
 		elgg_enable_simplecache();
 	} else {
@@ -19,7 +17,7 @@ if (get_input('system_cache')) {
 	elgg_disable_system_cache();
 }
 
-if (!_elgg_config()->hasInitialValue('debug')) {
+if (!elgg()->config->hasInitialValue('debug')) {
 	$debug = get_input('debug_level');
 	if ($debug) {
 		elgg_save_config('debug', $debug);
@@ -40,10 +38,12 @@ $simple_settings = [
 	'forward_email',
 	'enable_error_log',
 ];
+
+$plugin = elgg_get_plugin_from_id('developers');
 foreach ($simple_settings as $setting) {
-	elgg_set_plugin_setting($setting, get_input($setting), 'developers');
+	$plugin->setSetting($setting, get_input($setting));
 }
 
-elgg_flush_caches();
+elgg_invalidate_caches();
 
 return elgg_ok_response('', elgg_echo('developers:settings:success'));

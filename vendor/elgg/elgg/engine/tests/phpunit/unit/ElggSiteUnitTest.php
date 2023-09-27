@@ -6,14 +6,6 @@
  */
 class ElggSiteUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testCanConstructWithoutArguments() {
 		$this->assertNotNull(new \ElggSite());
 	}
@@ -55,7 +47,7 @@ class ElggSiteUnitTest extends \Elgg\UnitTestCase {
 	public function testNoreplyEmailAddressBasedOnUrl() {
 		$site = new \ElggSite();
 		$domain = $site->getDomain();
-		$this->assertRegExp("/noreply[\w-]+@{$domain}/", $site->getEmailAddress());
+		$this->assertMatchesRegularExpression("/noreply[\w-]+@{$domain}/", $site->getEmailAddress());
 	}
 	
 	public function testGetEmailAddress() {
@@ -101,6 +93,9 @@ class ElggSiteUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testIsLoggable() {
+		$unsaved = new \ElggSite();
+		$this->assertEmpty($unsaved->getSystemLogID());
+		
 		$site = elgg_get_site_entity();
 
 		$this->assertEquals($site->guid, $site->getSystemLogID());
@@ -114,12 +109,17 @@ class ElggSiteUnitTest extends \Elgg\UnitTestCase {
 		$this->assertFalse($site->canComment());
 		
 		$user = $this->createUser();
-		$session = _elgg_services()->session;
 		
-		$session->setLoggedInUser($user);
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
 		$this->assertFalse($site->canComment());
+	}
+	
+	public function testGetDisplaynameReturnsString() {
+		$site = new ElggSite();
+		$this->assertEquals('', $site->getDisplayName());
 		
-		$session->removeLoggedInUser();
+		$site->name = 'foo';
+		$this->assertEquals('foo', $site->getDisplayName());
 	}
 }

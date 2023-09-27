@@ -3,12 +3,8 @@
  *
  * @module elgg/menus/toggle
  */
-define(function (require) {
-
-	var elgg = require('elgg');
-
+define(['jquery', 'elgg'], function ($, elgg) {
 	var toggle = {
-
 		init: function () {
 			// handles clicking on a menu item that has toggleable childmenu
 			$(document).on('click', '.elgg-menu-item-has-toggle > a', function (e) {
@@ -49,7 +45,7 @@ define(function (require) {
 				e.stopImmediatePropagation();
 			});
 
-			toggle.init = elgg.nullFunction;
+			toggle.init = function() {};
 		}
 	};
 
@@ -57,4 +53,3 @@ define(function (require) {
 
 	return toggle;
 });
-

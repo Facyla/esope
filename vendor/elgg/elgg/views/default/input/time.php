@@ -13,12 +13,14 @@
  * @uses $vars['min']       Min available time in seconds (e.g. 2*60*60 for 2am)
  * @uses $vars['max']       Max available time in seconds (e.g. 23*60*60 for 11pm)
  */
+
+use Elgg\Exceptions\DataFormatException;
+
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-time');
 
 $defaults = [
 	'value' => '',
 	'timestamp' => false,
-	'type' => 'select',
 	'format' => elgg_get_config('time_format', elgg_echo('input:time_format')),
 ];
 
@@ -66,7 +68,7 @@ if ($timestamp) {
 $hour_options = [];
 $hour_options_ts = range($min, $max, $step);
 
-$dt = new DateTime(null, new DateTimeZone('UTC'));
+$dt = new DateTime('now', new DateTimeZone('UTC'));
 
 foreach ($hour_options_ts as $ts) {
 	$dt->setTimestamp($ts);

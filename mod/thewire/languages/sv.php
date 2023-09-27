@@ -17,7 +17,7 @@ return array(
 	'collection:object:thewire:all' => "Alla nyhetsinlägg",
 	'collection:object:thewire:owner' => "%ss nyhetsinlägg",
 	'collection:object:thewire:friends' => "Vänners nyhetsinlägg",
-
+	
 	'thewire:replying' => "Svara %s (@%s) som skrev",
 	'thewire:thread' => "Tråd",
 	'thewire:charleft' => "Tecken kvar",
@@ -25,8 +25,6 @@ return array(
 	'thewire:noposts' => "Inga nyhetsinlägg än",
 
 	'thewire:by' => 'Nyhetsinlägg av %s',
-	'thewire:previous:help' => "Visa föregående inlägg",
-	'thewire:hide:help' => "Göm föregående inlägg",
 
 	'thewire:form:body:placeholder' => "Vad händer?",
 	

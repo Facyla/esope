@@ -13,10 +13,6 @@
  * Wildcard requirements for common named variables such as 'guid' and 'username'
  * will be set automatically.
  *
- * @warning If you are registering a route in the path of a route registered by
- *          deprecated {@link elgg_register_page_handler}, your registration must
- *          preceed the call to elgg_register_page_handler() in the boot sequence.
- *
  * @param string $name   Unique route name
  *                       This name can later be used to generate route URLs
  * @param array  $params Route parameters
@@ -27,9 +23,8 @@
  *                       - methods : HTTP methods
  *
  * @return \Elgg\Router\Route
- * @throws InvalidParameterException
  */
-function elgg_register_route($name, array $params = []) {
+function elgg_register_route(string $name, array $params = []): \Elgg\Router\Route {
 	return _elgg_services()->routes->register($name, $params);
 }
 
@@ -40,8 +35,91 @@ function elgg_register_route($name, array $params = []) {
  *
  * @return void
  */
-function elgg_unregister_route($name) {
+function elgg_unregister_route(string $name): void {
 	_elgg_services()->routes->unregister($name);
+}
+
+/**
+ * Get a registered route by it's name
+ *
+ * @param string $name the route name
+ *
+ * @return \Elgg\Router\Route|null
+ * @since 4.0
+ */
+function elgg_get_route(string $name): ?\Elgg\Router\Route {
+	return _elgg_services()->routes->get($name);
+}
+
+/**
+ * Find a registered route based on an url/path
+ *
+ * @param string $url the full url or an url path to find a route for
+ *
+ * @return \Elgg\Router\Route|null
+ * @since 4.1
+ */
+function elgg_get_route_for_url(string $url): ?\Elgg\Router\Route {
+	$url = elgg_normalize_url($url);
+	
+	$path = parse_url($url, PHP_URL_PATH);
+	try {
+		$route_info = _elgg_services()->urlMatcher->match($path);
+		if (!isset($route_info['_route'])) {
+			return null;
+		}
+		
+		$route = _elgg_services()->routes->get($route_info['_route']);
+		$route->setMatchedParameters($route_info);
+		
+		return $route;
+	} catch (\Symfony\Component\Routing\Exception\ExceptionInterface $e) {
+		// route matcher exception
+		return null;
+	}
+}
+
+/**
+ * Get the route for the current request
+ *
+ * @return \Elgg\Router\Route|null
+ * @since 4.0
+ */
+function elgg_get_current_route(): ?\Elgg\Router\Route {
+	return _elgg_services()->request->getRoute();
+}
+
+/**
+ * Get the route name for the current request
+ *
+ * @return string Will be an empty string if no current route is found
+ * @since 4.1
+ */
+function elgg_get_current_route_name(): string {
+	$route = _elgg_services()->request->getRoute();
+	return isset($route) ? $route->getName() : '';
+}
+
+/**
+ * Check if a route is registered
+ *
+ * @param string $name route name
+ *
+ * @return bool
+ * @since 4.0
+ */
+function elgg_route_exists(string $name): bool {
+	return _elgg_services()->routes->get($name) instanceof \Elgg\Router\Route;
+}
+
+/**
+ * Returns the current page's complete URL.
+ *
+ * @return string
+ * @since 4.3
+ */
+function elgg_get_current_url(): string {
+	return _elgg_services()->request->getCurrentURL();
 }
 
 /**
@@ -50,9 +128,9 @@ function elgg_unregister_route($name) {
  * @param string $name       Route name
  * @param array  $parameters Parameters
  *
- * @return false|string
+ * @return string|null
  */
-function elgg_generate_url($name, array $parameters = []) {
+function elgg_generate_url(string $name, array $parameters = []): ?string {
 	return _elgg_services()->routes->generateUrl($name, $parameters);
 }
 
@@ -76,9 +154,9 @@ function elgg_generate_url($name, array $parameters = []) {
  * @param string     $subresource Subresource name
  * @param array      $parameters  URL query elements
  *
- * @return false|string
+ * @return string|null
  */
-function elgg_generate_entity_url(ElggEntity $entity, $resource = 'view', $subresource = null, array $parameters = []) {
+function elgg_generate_entity_url(ElggEntity $entity, string $resource = 'view', string $subresource = null, array $parameters = []): ?string {
 
 	$make_route_name = function ($type, $subtype) use ($resource, $subresource) {
 		$route_parts = [
@@ -104,7 +182,7 @@ function elgg_generate_entity_url(ElggEntity $entity, $resource = 'view', $subre
 		}
 	}
 
-	return false;
+	return null;
 }
 
 /**
@@ -116,10 +194,9 @@ function elgg_generate_entity_url(ElggEntity $entity, $resource = 'view', $subre
  *
  * @return string
  */
-function elgg_generate_action_url($action, array $query = [], $add_csrf_tokens = true) {
+function elgg_generate_action_url(string $action, array $query = [], bool $add_csrf_tokens = true): string {
 
-	$url = "action/$action";
-	$url = elgg_http_add_url_query_elements($url, $query);
+	$url = elgg_http_add_url_query_elements("action/{$action}", $query);
 	$url = elgg_normalize_url($url);
 
 	if ($add_csrf_tokens) {
@@ -130,110 +207,50 @@ function elgg_generate_action_url($action, array $query = [], $add_csrf_tokens =
 }
 
 /**
- * Used at the top of a page to mark it as logged in users only.
- *
- * @return void
- * @throws \Elgg\Http\Exception\LoggedInGatekeeperException
- * @since 1.9.0
- */
-function elgg_gatekeeper() {
-	_elgg_services()->gatekeeper->assertAuthenticatedUser();
-}
-
-/**
- * Used at the top of a page to mark it as admin only.
- *
- * @return void
- * @throws \Elgg\Http\Exception\AdminGatekeeperException
- * @since 1.9.0
- */
-function elgg_admin_gatekeeper() {
-	_elgg_services()->gatekeeper->assertAuthenticatedAdmin();
-}
-
-/**
- * Can the viewer see this entity?
- *
- * Tests if the entity exists and whether the viewer has access to the entity
- * if it does. If the viewer cannot view this entity, it forwards to an
- * appropriate page.
- *
- * @param int    $guid              Entity GUID
- * @param string $type              Optional required entity type
- * @param string $subtype           Optional required entity subtype
- * @param bool   $validate_can_edit flag to check canEdit access
- *
- * @return void
- *
- * @throws Exception
- * @throws \Elgg\EntityNotFoundException
- * @throws \Elgg\EntityPermissionsException
- * @throws \Elgg\HttpException
- * @since 1.9.0
- */
-function elgg_entity_gatekeeper($guid, $type = null, $subtype = null, $validate_can_edit = false) {
-	$entity = _elgg_services()->gatekeeper->assertExists($guid, $type, $subtype);
-	_elgg_services()->gatekeeper->assertAccessibleEntity($entity, null, $validate_can_edit);
-}
-
-/**
- * Require that the current request be an XHR. If not, execution of the current function
- * will end and a 400 response page will be sent.
- *
- * @return void
- * @throws \Elgg\Http\Exception\AjaxGatekeeperException
- * @since 1.12.0
- */
-function elgg_ajax_gatekeeper() {
-	_elgg_services()->gatekeeper->assertXmlHttpRequest();
-}
-
-/**
  * Prepares a successful response to be returned by a page or an action handler
  *
- * @param mixed  $content     Response content
- *                            In page handlers, response content should contain an HTML string
- *                            In action handlers, response content can contain either a JSON string or an array of data
- * @param string $message     System message visible to the client
- *                            Can be used by handlers to display a system message
- * @param string $forward_url Forward URL
- *                            Can be used by handlers to redirect the client on non-ajax requests
- * @param int    $status_code HTTP status code
- *                            Status code of the HTTP response (defaults to 200)
+ * @param mixed        $content     Response content
+ *                                  In page handlers, response content should contain an HTML string
+ *                                  In action handlers, response content can contain either a JSON string or an array of data
+ * @param string|array $message     System message visible to the client
+ *                                  Can be used by handlers to display a system message
+ * @param string       $forward_url Forward URL
+ *                                  Can be used by handlers to redirect the client on non-ajax requests
+ * @param int          $status_code HTTP status code
+ *                                  Status code of the HTTP response (defaults to 200)
  *
  * @return \Elgg\Http\OkResponse
  */
-function elgg_ok_response($content = '', $message = '', $forward_url = null, $status_code = ELGG_HTTP_OK) {
+function elgg_ok_response($content = '', string|array $message = '', string $forward_url = null, int $status_code = ELGG_HTTP_OK): \Elgg\Http\OkResponse {
 	if ($message) {
-		system_message($message);
+		elgg_register_success_message($message);
 	}
 
 	return new \Elgg\Http\OkResponse($content, $status_code, $forward_url);
-
 }
 
 /**
  * Prepare an error response to be returned by a page or an action handler
  *
- * @param string $error       Error message
- *                            Can be used by handlers to display an error message
- *                            For certain requests this error message will also be used as the response body
- * @param string $forward_url URL to redirect the client to
- *                            Can be used by handlers to redirect the client on non-ajax requests
- * @param int    $status_code HTTP status code
- *                            Status code of the HTTP response
- *                            For BC reasons and due to the logic in the client-side AJAX API,
- *                            this defaults to 200. Note that the Router and AJAX API will
- *                            treat these responses as error in spite of the HTTP code assigned
+ * @param string|array $message     Error message
+ *                                  Can be used by handlers to display an error message
+ *                                  For certain requests this error message will also be used as the response body
+ * @param string       $forward_url URL to redirect the client to
+ *                                  Can be used by handlers to redirect the client on non-ajax requests
+ * @param int          $status_code HTTP status code
+ *                                  Status code of the HTTP response
  *
  * @return \Elgg\Http\ErrorResponse
  */
-function elgg_error_response($error = '', $forward_url = REFERRER, $status_code = ELGG_HTTP_OK) {
-	if ($error) {
-		register_error($error);
+function elgg_error_response(string|array $message = '', string $forward_url = REFERRER, int $status_code = ELGG_HTTP_BAD_REQUEST): \Elgg\Http\ErrorResponse {
+	if ($message) {
+		elgg_register_error_message($message);
+		
+		// needed to convert the error message back to a string as the ErrorResponse does not support an array of \ElggSystemMessage options
+		$message = is_array($message) ? $message['message'] : $message;
 	}
 
-	return new \Elgg\Http\ErrorResponse($error, $status_code, $forward_url);
+	return new \Elgg\Http\ErrorResponse($message, $status_code, $forward_url);
 }
 
 /**
@@ -248,44 +265,26 @@ function elgg_error_response($error = '', $forward_url = REFERRER, $status_code 
  *                            Note that non-redirection HTTP codes will throw an exception
  *
  * @return \Elgg\Http\RedirectResponse
- * @throws \InvalidArgumentException
  */
-function elgg_redirect_response($forward_url = REFERRER, $status_code = ELGG_HTTP_FOUND) {
+function elgg_redirect_response(string $forward_url = REFERRER, int $status_code = ELGG_HTTP_FOUND): \Elgg\Http\RedirectResponse {
 	return new Elgg\Http\RedirectResponse($forward_url, $status_code);
 }
 
 /**
- * /cron handler
+ * Prepare a download response
  *
- * @param array $segments URL segments
+ * @param string $content  The content of the download
+ * @param string $filename The filename when downloaded
+ * @param bool   $inline   Is this an inline download (default: false, determines the 'Content-Disposition' header)
+ * @param array  $headers  (optional) additional headers for the response
  *
- * @return bool
- * @internal
+ * @return \Elgg\Http\DownloadResponse
+ * @since 5.0
  */
-function _elgg_cron_page_handler($segments) {
+function elgg_download_response(string $content, string $filename = '', bool $inline = false, array $headers = []): \Elgg\Http\DownloadResponse {
+	$response = new \Elgg\Http\DownloadResponse($content);
+	$response->setHeaders($headers);
+	$response->setFilename($filename, $inline);
 	
-	if (_elgg_config()->security_protect_cron) {
-		elgg_signed_request_gatekeeper();
-	}
-	
-	$interval = elgg_strtolower(array_shift($segments));
-	
-	$intervals = null;
-	if ($interval !== 'run') {
-		$intervals = [$interval];
-	}
-	
-	$output = '';
-	try {
-		$force = (bool) get_input('force');
-		$jobs = _elgg_services()->cron->run($intervals, $force);
-		foreach ($jobs as $job) {
-			$output .= $job->getOutput() . PHP_EOL;
-		}
-	} catch (CronException $ex) {
-		$output .= "Exception: {$ex->getMessage()}";
-	}
-	
-	echo nl2br($output);
-	return true;
+	return $response;
 }

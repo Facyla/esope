@@ -6,15 +6,17 @@
 	z-index: 10;
 }
 
-
 .elgg-page-walled-garden > .elgg-inner {
 	z-index: 20;
 }
 
 .elgg-comments .elgg-list:before,
 .elgg-river-comments:before {
-	
 	z-index: 30;
+}
+
+.elgg-page-topbar {
+	z-index: 35;
 }
 
 #login-dropdown-box {
@@ -29,7 +31,6 @@
 .elgg-module-dropdown {
 	z-index: 60;
 }
-
 
 @media only $(media-desktop-up) {
 	.elgg-page-topbar .elgg-menu li .elgg-child-menu {
@@ -59,7 +60,6 @@
 .elgg-spinner {
 	z-index: 2000;
 }
-
 
 .elgg-menu.elgg-state-popped {
 	z-index: 3000;

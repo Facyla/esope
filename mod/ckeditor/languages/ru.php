@@ -6,7 +6,13 @@
  */
 
 return array(
-	'ckeditor:html' => "Редактировать HTML",
-	'ckeditor:visual' => "Визуальный редактор",
-	'ckeditor:blockimagepaste' => "Редактор не поддерживает вставку изображений напрямую",
+	
+	'ckeditor:settings:toolbar_default' => "Панель инструментов редактора по умолчанию",
+	'ckeditor:settings:toolbar_default:help' => "Вы можете настроить кнопки для отображения на панели инструментов редактора по умолчанию.",
+	'ckeditor:settings:toolbar_simple' => "Простая панель инструментов редактора",
+	'ckeditor:settings:toolbar_simple:help' => "Вы можете настроить отображение кнопок на панели инструментов простого редактора.",
+	
+	'ckeditor:upload:missing_upload' => "Отсутствует загруженное изображение",
+	'ckeditor:upload:invalid_type' => "Загруженное изображение не является допустимым типом изображения",
+	'ckeditor:upload:resize_failed' => "Изображение не может быть изменено",
 );

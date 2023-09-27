@@ -47,23 +47,20 @@ After enabling friendship requests when user A wants to be friends with user B, 
 	'widgets:friends:name' => "Friends",
 	'widgets:friends:description' => "Displays some of your friends.",
 	
+	'widgets:friends_of:name' => "Friends of",
+	'widgets:friends_of:description' => "Show who made you a friend",
+	
 	'friends:notification:request:subject' => "%s wants to be your friend!",
-	'friends:notification:request:message' => "Hi %s,
-
-%s has requested to be your friend on %s.
+	'friends:notification:request:message' => "%s has requested to be your friend on %s.
 
 To view the friendship request, click here:
 %s",
 	
 	'friends:notification:request:decline:subject' => "%s has declined your friendship request",
-	'friends:notification:request:decline:message' => "Hi %s,
-
-%s has declined your friendship request.",
+	'friends:notification:request:decline:message' => "%s has declined your friendship request.",
 	
 	'friends:notification:request:accept:subject' => "%s has accepted your friendship request",
-	'friends:notification:request:accept:message' => "Hi %s,
-
-%s has accepted your friendship request.",
+	'friends:notification:request:accept:message' => "%s has accepted your friendship request.",
 	
 	'friends:action:friendrequest:revoke:fail' => "An error occured while revoking the friendship request, please try again",
 	'friends:action:friendrequest:revoke:success' => "The friendship request has been revoked",
@@ -71,6 +68,8 @@ To view the friendship request, click here:
 	'friends:action:friendrequest:decline:fail' => "An error occured while declining the friendship request, please try again",
 	'friends:action:friendrequest:decline:success' => "The friendship request has been declined",
 	
-	'friends:action:friendrequest:accept:fail' => "An error occured while accepting the friendship request, please try again",
 	'friends:action:friendrequest:accept:success' => "The friendship request has been accepted",
+	
+	// notification settings
+	'friends:notification:settings:description' => 'Default notification settings for users you add as a friend',
 );

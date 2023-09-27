@@ -51,13 +51,13 @@ if (elgg_is_admin_logged_in() && !empty($admin)) {
 		'icon' => 'ellipsis-v',
 		'href' => false,
 		'data-toggle-selector' => ".hover_toggle_admin_{$user->guid}",
-		'rel' => 'toggle',
+		'class' => 'elgg-toggle',
 	]);
 }
 
 if (!empty($combined_actions)) {
 	$card .= elgg_view('navigation/menu/elements/section', [
-		'class' => "elgg-menu elgg-menu-hover-actions",
+		'class' => 'elgg-menu elgg-menu-hover-actions',
 		'items' => $combined_actions,
 	]);
 }

@@ -1,8 +1,9 @@
 <?php
-
-global $BOOTSTRAP_PLUGIN_TEST;
-$BOOTSTRAP_PLUGIN_TEST++;
-
 return [
+	'plugin' => [
+		'name' => 'Bootstrap Plugin',
+		'version' => '1.9',
+		'activate_on_install' => true,
+	],
 	'bootstrap' => BootstrapPluginTestBootstrap::class,
 ];

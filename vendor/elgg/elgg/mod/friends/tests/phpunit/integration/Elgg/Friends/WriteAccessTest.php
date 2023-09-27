@@ -17,18 +17,11 @@ class WriteAccessTest extends \Elgg\IntegrationTestCase {
 	
 	public function up() {
 		$this->user = $this->createUser();
-		_elgg_services()->session->setLoggedInUser($this->user);
-	}
-
-	public function down() {
-		if ($this->user) {
-			$this->user->delete();
-		}
-		_elgg_services()->session->removeLoggedInUser();
+		_elgg_services()->session_manager->setLoggedInUser($this->user);
 	}
 
 	public function testFriendsInWriteAccessArray() {
-		$write_access = get_write_access_array($this->user->guid);
+		$write_access = elgg_get_write_access_array($this->user->guid);
 		
 		$acl = $this->user->getOwnedAccessCollection('friends');
 		$this->assertNotEmpty($acl);

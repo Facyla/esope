@@ -20,12 +20,13 @@ $briefdescription = elgg_extract('briefdescription', $vars);
 if (!isset($briefdescription)) {
 	$briefdescription = $entity->getProfileData('briefdescription');
 }
+
 if (elgg_is_empty($briefdescription) || !is_string($briefdescription)) {
 	return;
 }
 
 echo elgg_view('object/elements/imprint/element', [
-	'icon_name' => elgg_extract('briefdescription_icon', $vars, ''),
+	'icon_name' => elgg_extract('briefdescription_icon', $vars, false),
 	'content' => $briefdescription,
 	'class' => 'elgg-listing-briefdescription',
 ]);

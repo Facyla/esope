@@ -40,13 +40,20 @@ Available commands
     vendor/bin/elgg-cli install [-c|--config CONFIG]
 
     # Seed the database with fake entities
-    vendor/bin/elgg-cli database:seed [-l|--limit LIMIT]
+    # limit: (int) number of items to seed
+    # type: (string) only seed given entity type
+    # create_since: (string) a compatible PHP date/time string to set the lower bound entity time created (eg, '-5 months')
+    # create_until: (string) a compatible PHP date/time string to set the upper bound entity time created (eg, 'yesterday')
+    # image_folder: (string) a folder where the seeder can find images to use as icons, etc.
+    # create: This is an argument, it'll force the creation of entities instead of building up to the limit
+    vendor/bin/elgg-cli database:seed [-l|--limit LIMIT] [-t|--type TYPE] [--create_since DATE/TIME] [--create_until DATE/TIME] [--image_folder FOLDER] [create]
 
     # Remove seeded faked entities
-    vendor/bin/elgg-cli database:unseed
+    # type: (string) only unseed given entity type
+    vendor/bin/elgg-cli database:unseed [-t|--type TYPE]
 
     # Optimize database tables
-    # Request garbagecollector plugin
+    # Requires garbagecollector plugin
     vendor/bin/elgg-cli database:optimize
 
     # Run cron jobs
@@ -86,7 +93,7 @@ Available commands
 Adding custom commands
 ======================
 
-Plugins can add their commands to the CLI application, by adding command class name via a configuration in ``elgg-plugin.php`` or via the ``'commands','cli'`` hook.
+Plugins can add their commands to the CLI application, by adding command class name via a configuration in ``elgg-plugin.php`` or via the ``'commands','cli'`` event.
 Command class must extend ``\Elgg\CLI\Command``.
 
 .. code-block:: php
@@ -95,7 +102,8 @@ Command class must extend ``\Elgg\CLI\Command``.
 
     }
 
-    elgg_register_plugin_hook_handler('commands', 'cli', function($hook, $type, $return) {
+    elgg_register_event_handler('commands', 'cli', function(\Elgg\Event $event) {
+        $return = $event->getValue();
 
         $return[] = MyCommand::class;
 

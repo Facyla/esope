@@ -15,7 +15,7 @@ In addition to all parameters accepted by ``elgg_get_entities()``, ``elgg_search
 
  * ``query``         Search query
  * ``fields``        An array of names by property type to search in (see example below)
- * ``sort``          An array containing sorting options, including `property`, `property_type` and `direction`
+ * ``sort_by``       An array containing sorting options, including `property`, `property_type` and `direction`
  * ``type``          Entity type to search
  * ``subtype``       Optional entity subtype to search
  * ``search_type``   Custom search type (required if no ``type`` is provided)
@@ -36,11 +36,11 @@ In addition to all parameters accepted by ``elgg_get_entities()``, ``elgg_search
             'metadata' => ['description'],
             'annotations' => ['location'],
         ],
-        'sort' => [
+        'sort_by' => [
             'property' => 'zipcode',
             'property_type' => 'annotation',
             'direction' => 'asc',
-        ]
+        ],
     ];
 
     echo elgg_list_entities($options, 'elgg_search');
@@ -49,15 +49,15 @@ In addition to all parameters accepted by ``elgg_get_entities()``, ``elgg_search
 Search fields
 -------------
 
-You can customize search fields for each entity type/subtype, using ``search:fields`` hook:
+You can customize search fields for each entity type/subtype, using ``search:fields`` event:
 
 .. code-block:: php
 
     // Let's remove search in location and add address field instead
-    elgg_register_plugin_hook_handler('search:fields', 'user', 'my_plugin_search_user_fields');
+    elgg_register_event_handler('search:fields', 'user', 'my_plugin_search_user_fields');
 
-    function my_plugin_search_user_fields(\Elgg\Hook $hook) {
-        $fields = $hook->getValue();
+    function my_plugin_search_user_fields(\Elgg\Event $event) {
+        $fields = $event->getValue();
         $location_key = array_search('location', $fields['annotations']);
         if ($location_key) {
             unset($fields[$location_key]['annotations']);
@@ -72,26 +72,28 @@ You can customize search fields for each entity type/subtype, using ``search:fie
 Searchable types
 ----------------
 
-To register an entity type for search, use ``elgg_register_entity_type()``, or do so when defining an entity type in ``elgg-plugin.php``.
-To combine search results or filter how search results are presented in the search plugin, use ``'search:config', 'type_subtype_pairs'`` hook.
+To register an entity type for search, use ``elgg_entity_enable_capability($type, $subtype, 'searchable')``, or do so when defining an entity type in ``elgg-plugin.php``.
+
+.. note::
+
+   The search plugin uses the entity capability `searchable`. This capability defines if an entity is searchable.
+
+To combine search results or filter how search results are presented in the search plugin, use ``'search:config', 'type_subtype_pairs'`` event.
 
 .. code-block:: php
 
     // Let's add places and place reviews as public facing entities
-    elgg_register_entity_type('object', 'place');
-    elgg_register_entity_type('object', 'place_review');
+    elgg_entity_enable_capability('object', 'place', 'searchable');
+    elgg_entity_enable_capability('object', 'place_review', 'searchable');
 
     // Now let's include place reviews in the search results for places
-    elgg_register_plugin_hook_handler('search:options', 'object:place', 'my_plugin_place_search_options');
-    elgg_register_plugin_hook_handler('search:config', 'type_subtype_pairs', 'my_plugin_place_search_config');
+    elgg_register_event_handler('search:options', 'object:place', 'my_plugin_place_search_options');
+    elgg_register_event_handler('search:config', 'type_subtype_pairs', 'my_plugin_place_search_config');
 
     // Add place review to search options as a subtype
-    function my_plugin_place_search_options($hook, $type, $value, $params) {
+    function my_plugin_place_search_options(\Elgg\Event $event) {
 
-        if (empty($params) || !is_array($params)) {
-            return;
-        }
-
+        $params = $event->getParams();
         if (isset($params['subtypes'])) {
             $subtypes = (array) $params['subtypes'];
         } else {
@@ -111,9 +113,9 @@ To combine search results or filter how search results are presented in the sear
     }
 
     // Remove place reviews as a separate entry in search sections
-    function my_plugin_place_search_config(\Elgg\Hook $hook) {
+    function my_plugin_place_search_config(\Elgg\Event $event) {
 
-        $types = $hook->getValue();
+        $types = $event->getValue();
 
         if (empty($types['object'])) {
             return;
@@ -138,18 +140,18 @@ Elgg core only supports entity search. You can implement custom searches, e.g. u
 .. code-block:: php
 
     // Let's added proximity search type
-    elgg_register_plugin_hook_handler('search:config', 'search_types', function (\Elgg\Hook $hook) {
-        $search_types = $hook->getValue();
+    elgg_register_event_handler('search:config', 'search_types', function (\Elgg\Event $event) {
+        $search_types = $event->getValue();
         $search_types[] = 'promimity';
 
         return $search_types;
     });
 
     // Let's add search options that will look for entities that have geo coordinates and order them by proximity to the query location
-    elgg_register_plugin_hook_handler('search:options', 'proximity', function (\Elgg\Hook $hook) {
+    elgg_register_event_handler('search:options', 'proximity', function (\Elgg\Event $event) {
 
-        $query = $hook->getParam('query');
-        $options = $hook->getValue();
+        $query = $event->getParam('query');
+        $options = $event->getValue();
 
         // Let's presume we have a geocoding API
         $coords = geocode($query);
@@ -225,7 +227,7 @@ You can add custom search types, by adding a corresponding resource view:
     $hmac = elgg_build_hmac($data);
     if (!$hmac->matchesToken(get_input('mac'))) {
          // request does not originate from our input view
-         forward('', '403');
+         throw new \Elgg\Exceptions\Http\EntityPermissionsException(); 
     }
 
     elgg_set_http_header("Content-Type: application/json;charset=utf-8");

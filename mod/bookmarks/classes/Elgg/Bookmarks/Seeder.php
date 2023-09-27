@@ -3,6 +3,7 @@
 namespace Elgg\Bookmarks;
 
 use Elgg\Database\Seeds\Seed;
+use Elgg\Exceptions\Seeding\MaxAttemptsException;
 
 /**
  * Add bookmarks seed
@@ -15,32 +16,20 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function seed() {
+		$this->advance($this->getCount());
 
-		$count_bookmarks = function () {
-			return elgg_count_entities([
-				'types' => 'object',
-				'subtypes' => 'bookmarks',
-				'metadata_names' => '__faker',
-			]);
-		};
-
-		$this->advance($count_bookmarks());
-
-		while ($count_bookmarks() < $this->limit) {
-			$metadata = [
-				'address' => $this->faker()->url,
-			];
-
-			$attributes = [
-				'subtype' => 'bookmarks',
-			];
-
-			$bookmark = $this->createObject($attributes, $metadata);
-
-			if (!$bookmark) {
+		while ($this->getCount() < $this->limit) {
+			try {
+				/* @var $bookmark \ElggBookmark */
+				$bookmark = $this->createObject([
+					'subtype' => 'bookmarks',
+					'address' => $this->faker()->url,
+				]);
+			} catch (MaxAttemptsException $e) {
+				// unable to create a bookmark with the given options
 				continue;
 			}
-
+			
 			$this->createComments($bookmark);
 			$this->createLikes($bookmark);
 
@@ -50,6 +39,7 @@ class Seeder extends Seed {
 				'subject_guid' => $bookmark->owner_guid,
 				'object_guid' => $bookmark->guid,
 				'target_guid' => $bookmark->container_guid,
+				'posted' => $bookmark->time_created,
 			]);
 
 			$this->advance();
@@ -60,27 +50,44 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function unseed() {
-
+		/* @var $bookmarks \ElggBatch */
 		$bookmarks = elgg_get_entities([
-			'types' => 'object',
-			'subtypes' => 'bookmarks',
-			'metadata_names' => '__faker',
-			'limit' => 0,
+			'type' => 'object',
+			'subtype' => 'bookmarks',
+			'metadata_name' => '__faker',
+			'limit' => false,
 			'batch' => true,
+			'batch_inc_offset' => false,
 		]);
 
-		/* @var $bookmarks \ElggBatch */
-
-		$bookmarks->setIncrementOffset(false);
-
+		/* @var $boolmark \ElggBookmark */
 		foreach ($bookmarks as $bookmark) {
 			if ($bookmark->delete()) {
-				$this->log("Deleted bookmark $bookmark->guid");
+				$this->log("Deleted bookmark {$bookmark->guid}");
 			} else {
-				$this->log("Failed to delete bookmark $bookmark->guid");
+				$this->log("Failed to delete bookmark {$bookmark->guid}");
+				$bookmarks->reportFailure();
+				continue;
 			}
 
 			$this->advance();
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function getType() : string {
+		return 'bookmarks';
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function getCountOptions() : array {
+		return [
+			'type' => 'object',
+			'subtype' => 'bookmarks',
+		];
 	}
 }

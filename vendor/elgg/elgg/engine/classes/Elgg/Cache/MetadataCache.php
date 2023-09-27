@@ -1,11 +1,11 @@
 <?php
+
 namespace Elgg\Cache;
 
-use Elgg\Database\Clauses\OrderByClause;
-use Elgg\Values;
-use ElggCache;
-use ElggMetadata;
 use Elgg\Database\Clauses\GroupByClause;
+use Elgg\Database\Clauses\OrderByClause;
+use Elgg\Exceptions\DataFormatException;
+use Elgg\Values;
 
 /**
  * In memory cache of known metadata values stored by entity.
@@ -15,16 +15,16 @@ use Elgg\Database\Clauses\GroupByClause;
 class MetadataCache {
 
 	/**
-	 * @var ElggCache
+	 * @var BaseCache
 	 */
 	protected $cache;
 
 	/**
 	 * Constructor
 	 *
-	 * @param ElggCache $cache Cache
+	 * @param BaseCache $cache Cache
 	 */
-	public function __construct(ElggCache $cache) {
+	public function __construct(BaseCache $cache) {
 		$this->cache = $cache;
 	}
 
@@ -43,10 +43,10 @@ class MetadataCache {
 	public function inject($entity_guid, array $values = []) {
 		$metadata = [];
 		foreach ($values as $key => $value) {
-			if ($value instanceof ElggMetadata) {
+			if ($value instanceof \ElggMetadata) {
 				$md = $value;
 			} else {
-				$md = new ElggMetadata();
+				$md = new \ElggMetadata();
 				$md->name = $key;
 				$md->value = $value;
 				$md->entity_guid = $entity_guid;
@@ -115,7 +115,6 @@ class MetadataCache {
 		}
 
 		return count($values) > 1 ? $values : $values[0];
-
 	}
 
 	/**
@@ -229,17 +228,11 @@ class MetadataCache {
 	public function populateFromEntities(...$guids) {
 		try {
 			$guids = Values::normalizeGuids($guids);
-		} catch (\DataFormatException $e) {
+		} catch (DataFormatException $e) {
 			return null;
 		}
 
 		if (empty($guids)) {
-			return null;
-		}
-
-		$version = (int) _elgg_config()->version;
-		if (!empty($version) && ($version < 2016110900)) {
-			// can't use this during upgrade from 2.x to 3.0
 			return null;
 		}
 
@@ -260,9 +253,7 @@ class MetadataCache {
 		$data = _elgg_services()->metadataTable->getRowsForGuids($guids);
 		
 		$values = [];
-		
-		foreach ($data as $i => $row) {
-			$row->value = ($row->value_type === 'text') ? $row->value : (int) $row->value;
+		foreach ($data as $row) {
 			$values[$row->entity_guid][] = $row;
 		}
 
@@ -288,10 +279,9 @@ class MetadataCache {
 	 * @return array
 	 */
 	public function filterMetadataHeavyEntities(array $guids, $limit = 1024000) {
-
 		$guids = _elgg_services()->metadataTable->getAll([
 			'guids' => $guids,
-			'limit' => 0,
+			'limit' => false,
 			'callback' => function($e) {
 				return (int) $e->entity_guid;
 			},
@@ -308,6 +298,6 @@ class MetadataCache {
 			]
 		]);
 
-		return $guids ? : [];
+		return $guids ?: [];
 	}
 }

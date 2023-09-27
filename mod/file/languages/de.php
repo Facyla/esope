@@ -8,6 +8,7 @@
 return array(
 
 	'item:object:file' => 'Dateien',
+	
 	'collection:object:file' => 'Dateien',
 	'collection:object:file:all' => "Alle Dateien der Community",
 	'collection:object:file:owner' => "Dateien von %s",
@@ -15,6 +16,8 @@ return array(
 	'collection:object:file:group' => "Gruppen-Dateien",
 	'add:object:file' => "Datei hochladen",
 	'edit:object:file' => "Datei-Eintrag bearbeiten",
+	'notification:object:file:create' => "Sende eine Benachrichtigung beim Hochladen einer Datei",
+	'notifications:mute:object:file' => "über die Datei '%s'",
 
 	'file:more' => "Weitere Dateien",
 	'file:list' => "Listen-Ansicht",
@@ -22,14 +25,11 @@ return array(
 	'file:num_files' => "Anzahl der anzuzeigenden Dateien",
 	'file:replace' => 'Ersetzen der Datei (leer lassen, um Datei nicht zu ändern)',
 	'file:list:title' => "%s's %s %s",
-	'file:title:friends' => "Freunde",
 
 	'file:file' => "Datei",
 
 	'file:list:list' => 'Zur Listen-Ansicht wechseln',
 	'file:list:gallery' => 'Zur Gallerie-Ansicht wechseln',
-
-	'file:types' => "Hochgeladene Dateitypen",
 
 	'file:type:' => 'Dateien',
 	'file:type:all' => "Alle Dateien",
@@ -66,8 +66,7 @@ return array(
 %s
 
 Schau Dir die Datei an und schreibe einen Kommentar:
-%s
-',
+%s',
 
 	/**
 	 * Status messages

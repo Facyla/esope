@@ -36,7 +36,7 @@ building a simple forum. Therefore, the subtype will be *forum*:
 .. code-block:: php
 
     $object = new ElggObject();
-    $object->subtype = "forum";
+    $object->setSubtype('forum');
     $object->access_id = 2;
     $object->save();
     
@@ -116,7 +116,7 @@ By properties
 ~~~~~~~~~~~~~
 
 You can fetch entities by their properties using ``elgg_get_entities``. Using specific parameters passed to ``$options``
-array, you can retrieve entities by their attributes, metadata, annotations, private settings and relationships.
+array, you can retrieve entities by their attributes, metadata, annotations and relationships.
 
 
 Displaying entities
@@ -173,14 +173,14 @@ The following sizes exist by default:
  * ``topbar`` - 16px square
 
 Use ``elgg_get_icon_sizes()`` to get all possible icon sizes for a specific entity type and subtype.
-The function triggers the ``entity:icon:sizes`` :ref:`hook <guides/hooks-list#other>`.
+The function triggers the ``entity:icon:sizes`` :ref:`event <guides/events-list#other>`.
 
 To check if an icon is set, use ``$object->hasIcon($size)``.
 
 You can retrieve the URL of the generated icon with ``ElggEntity::getIconURL($params)`` method.
 This method accepts a ``$params`` argument as an array that specifies the size, type, and provide 
-additional context for the hook to determine the icon to serve. 
-The method triggers the ``entity:icon:url`` :ref:`hook <guides/hooks-list#other>`.
+additional context for the event to determine the icon to serve. 
+The method triggers the ``entity:icon:url`` :ref:`event <guides/events-list#other>`.
 
 Use ``elgg_view_entity_icon($entity, $size, $vars)`` to render an icon. This will scan the following
 locations for a view and include the first match to .
@@ -198,7 +198,7 @@ $type
 $subtype
 	Entity subtype, e.g. ``'blog'`` or ``'page'``.
 
-You do not have to return a fallback icon from the hook handler. If no uploaded icon is found,
+You do not have to return a fallback icon from the event handler. If no uploaded icon is found,
 the view system will scan the views (in this specific order):
 
 #. views/$viewtype/$icon_type/$entity_type/$entity_subtype.svg
@@ -235,10 +235,10 @@ might have an avatar and a cover photo icon. You would pass ``'cover_photo'`` as
 .. note::
 	
 	Custom icon types (e.g. cover photos) only have a preset for `master` size, to add custom sizes
-	use ``entity:<icon_type>:url`` :ref:`hook <guides/hooks-list#other>` to configure them.
+	use ``entity:<icon_type>:url`` :ref:`event <guides/events-list#other>` to configure them.
 
 By default icons will be stored in ``/icons/<icon_type>/<size>.jpg`` relative to entity's directory on filestore.
-To provide an alternative location, use the ``entity:<icon_type>:file`` :ref:`hook <guides/hooks-list#other>`.
+To provide an alternative location, use the ``entity:<icon_type>:file`` :ref:`event <guides/events-list#other>`.
 
 Adding, reading and deleting annotations
 ----------------------------------------
@@ -297,7 +297,9 @@ In your plugins ``elgg-plugin.php`` file add the ``entities`` section.
 				'type' => 'group',
 				'subtype' => 'committee',
 				'class' => 'Committee',
-				'searchable' => true, 
+				'capabilities' => [
+					'searchable' => true,
+				], 
 			],
 		],
     ];
@@ -342,41 +344,7 @@ The internals of Elgg entity queries is a complex subject and it's recommended t
 Custom database functionality
 =============================
 
-It is strongly recommended to use entities wherever possible. However, Elgg
-supports custom SQL queries using the database API.
-
-Example: Run SQL script on plugin activation
---------------------------------------------
-
-This example shows how you can populate your database on plugin activation.
-
-.. code-block:: php
-
-    if (!elgg_get_plugin_setting('database_version', 'my_plugin') {
-        run_sql_script(__DIR__ . '/sql/activate.sql');
-        elgg_set_plugin_setting('database_version', 1, 'my_plugin');
-    }
-
-my_plugin/sql/activate.sql:
-
-.. code-block:: sql
-
-    -- Create some table
-    CREATE TABLE prefix_custom_table(
-        id INTEGER AUTO_INCREMENT,
-        name VARCHAR(32),
-        description VARCHAR(32),
-        PRIMARY KEY (id)
-    );
-
-    -- Insert initial values for table
-    INSERT INTO prefix_custom_table (name, description)
-    VALUES ('Peter', 'Some guy'), ('Lisa', 'Some girl');
-
-Note that Elgg execute statements through PHPs built-in functions and have
-limited support for comments. I.e. only single line comments are supported
-and must be prefixed by "-- " or "# ". A comment must start at the very beginning
-of a line.
+It is strongly recommended to use entities wherever possible. However, Elgg supports custom SQL queries using the database API.
 
 Systemlog
 =========

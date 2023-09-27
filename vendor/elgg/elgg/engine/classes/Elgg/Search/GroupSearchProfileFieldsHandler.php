@@ -2,8 +2,6 @@
 
 namespace Elgg\Search;
 
-use Elgg\Hook;
-
 /**
  * @internal
  * @since  3.0
@@ -13,15 +11,12 @@ class GroupSearchProfileFieldsHandler {
 	/**
 	 * Search through the group profile fields
 	 *
-	 * @elgg_plugin_hook search:fields group
-	 *
-	 * @param Hook $hook Hook
+	 * @param \Elgg\Event $event 'search:fields', 'group'
 	 *
 	 * @return array
 	 */
-	public function __invoke(Hook $hook) {
-
-		$value = (array) $hook->getValue();
+	public function __invoke(\Elgg\Event $event) {
+		$value = (array) $event->getValue();
 
 		$defaults = [
 			'metadata' => [],
@@ -29,9 +24,10 @@ class GroupSearchProfileFieldsHandler {
 
 		$value = array_merge($defaults, $value);
 
-		$profile_fields = array_keys((array) elgg_get_config('group'));
-
-		$value['metadata'] = array_merge($value['metadata'], $profile_fields);
+		$profile_fields = _elgg_services()->fields->get('group', 'group');
+		foreach ($profile_fields as $field) {
+			$value['metadata'][] = $field['name'];
+		}
 
 		return $value;
 	}

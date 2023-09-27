@@ -2,7 +2,6 @@
 
 namespace Elgg\Database;
 
-use ArrayObject;
 use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\EntitySortByClause;
 use Elgg\Database\Clauses\GroupByClause;
@@ -10,10 +9,10 @@ use Elgg\Database\Clauses\HavingClause;
 use Elgg\Database\Clauses\JoinClause;
 use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Clauses\OrderByClause;
-use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
 use Elgg\Database\Clauses\SelectClause;
 use Elgg\Database\Clauses\WhereClause;
+use Elgg\Traits\Database\LegacyQueryOptionsAdapter;
 
 /**
  * This class aggregates and standardizes various parameters that have been added to
@@ -58,9 +57,6 @@ use Elgg\Database\Clauses\WhereClause;
  *
  * @property RelationshipWhereClause[]   $relationship_pairs
  *
- * @property PrivateSettingWhereClause[] $private_setting_name_value_pairs
- * @property string                      $private_setting_name_value_pairs_operator
- *
  * @property boolean                     $preload_owners
  * @property boolean                     $preload_containers
  * @property callable                    $callback
@@ -69,14 +65,14 @@ use Elgg\Database\Clauses\WhereClause;
  * @property boolean                     $batch_inc_offset
  * @property int                         $batch_size
  */
-class QueryOptions extends ArrayObject implements QueryFiltering {
+class QueryOptions extends \ArrayObject {
 
 	use LegacyQueryOptionsAdapter;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function __construct($input = [], $flags = 0, $iterator_class = "ArrayIterator") {
+	public function __construct($input = [], $flags = 0, $iterator_class = 'ArrayIterator') {
 		$input = $this->normalizeOptions($input);
 		parent::__construct($input, $flags, $iterator_class);
 	}
@@ -112,7 +108,11 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Return DISTINCT rows
+	 *
+	 * @param bool $distinct Distinct
+	 *
+	 * @return static
 	 */
 	public function distinct($distinct = true) {
 		$this->distinct = $distinct;
@@ -121,7 +121,11 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Add where statement
+	 *
+	 * @param WhereClause $clause Clause
+	 *
+	 * @return static
 	 */
 	public function where(WhereClause $clause) {
 		$this->wheres[] = $clause;
@@ -130,7 +134,11 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Add a select statement
+	 *
+	 * @param SelectClause $clause Clause
+	 *
+	 * @return $this
 	 */
 	public function select(SelectClause $clause) {
 		$this->selects[] = $clause;
@@ -139,7 +147,11 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Add a join callback
+	 *
+	 * @param JoinClause $clause Clause
+	 *
+	 * @return static
 	 */
 	public function join(JoinClause $clause) {
 		$this->joins[] = $clause;
@@ -148,7 +160,11 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Add group by statement
+	 *
+	 * @param GroupByClause $clause Clause
+	 *
+	 * @return static
 	 */
 	public function groupBy(GroupByClause $clause) {
 		$this->group_by[] = $clause;
@@ -157,7 +173,11 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Add having statement
+	 *
+	 * @param HavingClause $clause Clause
+	 *
+	 * @return static
 	 */
 	public function having(HavingClause $clause) {
 		$this->having[] = $clause;
@@ -166,12 +186,15 @@ class QueryOptions extends ArrayObject implements QueryFiltering {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Add order by statement
+	 *
+	 * @param OrderByClause $clause Clause
+	 *
+	 * @return static
 	 */
 	public function orderBy(OrderByClause $clause) {
 		$this->order_by[] = $clause;
 
 		return $this;
 	}
-
 }

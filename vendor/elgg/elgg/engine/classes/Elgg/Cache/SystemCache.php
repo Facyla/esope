@@ -1,34 +1,32 @@
 <?php
+
 namespace Elgg\Cache;
 
-use Elgg\Cacheable;
 use Elgg\Config;
-use Elgg\Profilable;
-use ElggCache;
+use Elgg\Traits\Cacheable;
 
 /**
  * System Cache
  *
  * @internal
- * @since  1.10.0
+ * @since 1.10.0
  */
 class SystemCache {
 
-	use Profilable;
 	use Cacheable;
 
 	/**
 	 * @var Config
 	 */
-	private $config;
+	protected $config;
 
 	/**
 	 * Constructor
 	 *
-	 * @param ElggCache $cache  Elgg disk cache
+	 * @param BaseCache $cache  Elgg disk cache
 	 * @param Config    $config Elgg config
 	 */
-	public function __construct(ElggCache $cache, Config $config) {
+	public function __construct(BaseCache $cache, Config $config) {
 		$this->cache = $cache;
 		$this->config = $config;
 	}
@@ -45,14 +43,15 @@ class SystemCache {
 	/**
 	 * Saves a system cache.
 	 *
-	 * @param string $type The type or identifier of the cache
-	 * @param mixed  $data The data to be saved
+	 * @param string $type         The type or identifier of the cache
+	 * @param mixed  $data         The data to be saved
+	 * @param int    $expire_after Number of seconds to expire the cache after
 	 *
 	 * @return bool
 	 */
-	public function save($type, $data) {
+	public function save(string $type, $data, int $expire_after = null): bool {
 		if ($this->isEnabled()) {
-			return $this->cache->save($type, $data);
+			return $this->cache->save($type, $data, $expire_after);
 		}
 
 		return false;
@@ -65,7 +64,7 @@ class SystemCache {
 	 *
 	 * @return mixed null if key not found in cache
 	 */
-	public function load($type) {
+	public function load(string $type) {
 		if (!$this->isEnabled()) {
 			return;
 		}
@@ -82,7 +81,7 @@ class SystemCache {
 	 * @param string $type The type of cache to delete
 	 * @return bool
 	 */
-	public function delete($type) {
+	public function delete(string $type) {
 		return $this->cache->delete($type);
 	}
 	

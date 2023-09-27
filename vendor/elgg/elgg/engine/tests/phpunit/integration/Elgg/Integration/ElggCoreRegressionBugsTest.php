@@ -2,8 +2,6 @@
 
 namespace Elgg\Integration;
 
-use ElggXMLElement;
-
 /**
  * Elgg Regression Tests -- GitHub Bugfixes
  * Any bugfixes from GitHub that require testing belong here.
@@ -12,12 +10,17 @@ use ElggXMLElement;
  */
 class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 
+	/**
+	 * @var bool previous IgnoreAccess state
+	 */
+	protected $ia;
+	
 	public function up() {
-		$this->ia = elgg()->session->setIgnoreAccess(true);
+		$this->ia = elgg()->session_manager->setIgnoreAccess(true);
 	}
 
 	public function down() {
-		elgg()->session->setIgnoreAccess($this->ia);
+		elgg()->session_manager->setIgnoreAccess($this->ia);
 	}
 
 	/**
@@ -31,62 +34,6 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 		$entity->deleteAnnotations('does not exist');
 
 		$this->assertEquals(1, $entity->countAnnotations('test'));
-
-		// clean up
-		$entity->delete();
-	}
-
-	/**
-	 * get_resized_image_from_existing_file() fails asked for image larger than selection and not scaling an
-	 * image up Test get_image_resize_parameters().
-	 *
-	 * @see https://github.com/Elgg/Elgg/issues/2063
-	 */
-	public function testElggResizeImage() {
-		$orig_width = 100;
-		$orig_height = 150;
-
-		// test against selection > max
-		$options = [
-			'maxwidth' => 50,
-			'maxheight' => 50,
-			'square' => true,
-			'upscale' => false,
-
-			'x1' => 25,
-			'y1' => 75,
-			'x2' => 100,
-			'y2' => 150,
-		];
-
-		// should get back the same x/y offset == x1, y1 and an image of 50x50
-		$params = get_image_resize_parameters($orig_width, $orig_height, $options);
-
-		$this->assertEquals($options['maxwidth'], $params['newwidth']);
-		$this->assertEquals($options['maxheight'], $params['newheight']);
-		$this->assertEquals($options['x1'], $params['xoffset']);
-		$this->assertEquals($options['y1'], $params['yoffset']);
-
-		// test against selection < max
-		$options = [
-			'maxwidth' => 50,
-			'maxheight' => 50,
-			'square' => true,
-			'upscale' => false,
-
-			'x1' => 75,
-			'y1' => 125,
-			'x2' => 100,
-			'y2' => 150,
-		];
-
-		// should get back the same x/y offset == x1, y1 and an image of 25x25 because no upscale
-		$params = get_image_resize_parameters($orig_width, $orig_height, $options);
-
-		$this->assertEquals(25, $params['newwidth']);
-		$this->assertEquals(25, $params['newheight']);
-		$this->assertEquals($options['x1'], $params['xoffset']);
-		$this->assertEquals($options['y1'], $params['yoffset']);
 	}
 
 	/**
@@ -106,29 +53,24 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 
 		// disable access overrides because we're admin.
 		elgg_call(ELGG_ENFORCE_ACCESS, function() use ($user, $object, $group) {
-			$this->assertFalse($object->canWriteToContainer($user->guid));
+			$this->assertFalse($object->canWriteToContainer($user->guid, 'object', 'foo'));
 	
-			// register hook to allow access
-			$handler = function (\Elgg\Hook $hook) use ($user) {
-				$hook_user = $hook->getUserParam();
-				if ($hook_user->guid === $user->guid) {
+			// register event to allow access
+			$handler = function (\Elgg\Event $event) use ($user) {
+				$event_user = $event->getUserParam();
+				if ($event_user->guid === $user->guid) {
 					return true;
 				}
 			};
 	
-			elgg_register_plugin_hook_handler('container_permissions_check', 'all', $handler, 600);
-			$this->assertTrue($object->canWriteToContainer($user->guid));
-			elgg_unregister_plugin_hook_handler('container_permissions_check', 'all', $handler);
+			elgg_register_event_handler('container_permissions_check', 'object', $handler, 600);
+			$this->assertTrue($object->canWriteToContainer($user->guid, 'object', 'foo'));
+			elgg_unregister_event_handler('container_permissions_check', 'object', $handler);
 	
-			$this->assertFalse($group->canWriteToContainer($user->guid));
+			$this->assertFalse($group->canWriteToContainer($user->guid, $object->getType(), $object->getSubtype()));
 			$group->join($user);
-			$this->assertTrue($group->canWriteToContainer($user->guid));
+			$this->assertTrue($group->canWriteToContainer($user->guid, $object->getType(), $object->getSubtype()));
 		});
-		
-		$user->delete();
-		$owner->delete();
-		$object->delete();
-		$group->delete();
 	}
 
 	/**
@@ -167,13 +109,13 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 	}
 
 	/**
-	 * Test #5369 -- parse_urls()
+	 * Test #5369 -- elgg_parse_urls()
 	 * @see https://github.com/Elgg/Elgg/issues/5369
 	 *
 	 * @dataProvider parseUrlsProvider
 	 */
 	public function testParseUrls($input, $expected) {
-		$this->assertEquals($expected, parse_urls($input));
+		$this->assertEquals($expected, elgg_parse_urls($input));
 	}
 	
 	public function parseUrlsProvider() {
@@ -262,11 +204,6 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 		
 		$entity = $entities[0];
 		$this->assertNull($entity->_nonexistent_test_column, "Additional select columns are leaking to attributes for '$type'");
-		
-		// cleanup
-		if ($seed_entity) {
-			$seed_entity->delete();
-		}
 	}
 	
 	public function extraColumnsDontAppearInAttributesProvider() {
@@ -309,33 +246,6 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 		foreach ($annotations as $annotation) {
 			$this->assertEquals('no', $annotation->enabled);
 		}
-
-		// delete group and annotations
-		$group->delete();
-	}
-
-	/**
-	 * @group XML
-	 */
-	public function testElggXMLElementDoesNotLoadExternalEntities() {
-		$elLast = libxml_disable_entity_loader(false);
-
-		// build payload that should trigger loading of external entity
-		$payload = file_get_contents($this->normalizeTestFilePath('xxe/request.xml'));
-		$path = realpath($this->normalizeTestFilePath('xxe/external_entity.txt'));
-		$path = str_replace('\\', '/', $path);
-		if ($path[0] != '/') {
-			$path = '/' . $path;
-		}
-		$path = 'file://' . $path;
-		$payload = sprintf($payload, $path);
-
-		$el = new ElggXMLElement($payload);
-		$chidren = $el->getChildren();
-		$content = $chidren[0]->getContent();
-		$this->assertNotRegExp('/secret/', $content);
-
-		libxml_disable_entity_loader($elLast);
 	}
 
 	/**
@@ -364,8 +274,6 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 
 		$object = get_entity($guid);
 		$this->assertEquals(ACCESS_PRIVATE, $object->access_id);
-
-		$object->delete();
 	}
 
 	public static function handleUpdateForIssue6225test(\Elgg\Event $event) {
@@ -374,7 +282,7 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 	}
 
 	/**
-	 * Tests get_entity_statistics() without owner
+	 * Tests elgg_get_entity_statistics() without owner
 	 *
 	 * @see https://github.com/Elgg/Elgg/pull/7845
 	 */
@@ -382,25 +290,23 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 
 		$subtype = 'issue7845' . rand(0, 100);
 
-		$object = $this->createObject([
+		$this->createObject([
 			'subtype' => $subtype,
 		]);
 
-		$stats = get_entity_statistics();
+		$stats = elgg_get_entity_statistics();
 
 		$this->assertEquals(1, $stats['object'][$subtype]);
-
-		$object->delete();
 	}
 
 	/**
-	 * Tests get_entity_statistics() with an owner
+	 * Tests elgg_get_entity_statistics() with an owner
 	 *
 	 * @see https://github.com/Elgg/Elgg/pull/7845
 	 */
 	function testOwnedGetEntityStatistics() {
 
-		$user = $this->createOne('user');
+		$user = $this->createUser();
 
 		$subtype = 'issue7845' . rand(0, 100);
 
@@ -409,11 +315,8 @@ class ElggCoreRegressionBugsTest extends \Elgg\IntegrationTestCase {
 			'owner_guid' => $user->guid,
 		]);
 
-		$stats = get_entity_statistics($user->guid);
+		$stats = elgg_get_entity_statistics($user->guid);
 
 		$this->assertEquals(1, $stats['object'][$subtype]);
-
-		$user->delete();
 	}
-
 }

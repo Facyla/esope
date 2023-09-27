@@ -10,18 +10,17 @@ use Elgg\IntegrationTestCase;
 class SearchServiceIntegrationTest extends IntegrationTestCase {
 
 	public function up() {
-		elgg_register_plugin_hook_handler('search:fields', 'entities', [$this, 'setupFields']);
+		elgg_register_event_handler('search:fields', 'entities', [$this, 'setupFields']);
 	}
 
 	public function down() {
-		elgg_unregister_plugin_hook_handler('search:fields', 'entities', [$this, 'setupFields']);
+		elgg_unregister_event_handler('search:fields', 'entities', [$this, 'setupFields']);
 	}
 
-	public function setupFields(\Elgg\Hook $hook) {
+	public function setupFields(\Elgg\Event $event) {
 		return [
 			'metadata' => ['haystack'],
 			'annotations' => ['haystack'],
-			'private_settings' => ['haystack'],
 		];
 	}
 	/**
@@ -44,13 +43,6 @@ class SearchServiceIntegrationTest extends IntegrationTestCase {
 					'annotations' => ['haystack']
 				];
 				break;
-
-			case 'private_setting' :
-				$entity->setPrivateSetting('haystack', $haystack);
-				$fields = [
-					'private_settings' => ['haystack']
-				];
-				break;
 		}
 
 		$results = elgg_search([
@@ -63,8 +55,6 @@ class SearchServiceIntegrationTest extends IntegrationTestCase {
 		]);
 
 		$this->assertEquals($count, $results);
-
-		$entity->delete();
 	}
 
 	public function searchDataProvider() {
@@ -100,7 +90,7 @@ class SearchServiceIntegrationTest extends IntegrationTestCase {
 
 		$provider = [];
 		foreach (['user', 'object', 'group'] as $type) {
-			foreach (['metadata', 'annotation', 'private_setting'] as $prop) {
+			foreach (['metadata', 'annotation'] as $prop) {
 				foreach ($tests as $test) {
 					$provider[] = array_merge($test, [$type, $prop]);
 				}

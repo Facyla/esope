@@ -43,13 +43,13 @@ class UpgradeBatchCommand extends Command {
 				continue;
 			}
 			
-			_elgg_services()->upgrades->executeUpgrade($upgrade);
+			_elgg_services()->upgrades->executeUpgrade($upgrade, 0);
 		}
 		
 		if (!$this->option('quiet')) {
 			$this->write(elgg_echo('cli:upgrade:batch:finished'));
 		}
 
-		return 0;
+		return self::SUCCESS;
 	}
 }

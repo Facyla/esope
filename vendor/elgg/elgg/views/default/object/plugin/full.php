@@ -11,25 +11,41 @@ if (!elgg_is_admin_logged_in()) {
 	return;
 }
 
-/* @var ElggPlugin $plugin */
 $plugin = elgg_extract('entity', $vars);
+if (!$plugin instanceof \ElggPlugin) {
+	return;
+}
+
 $reordering = elgg_extract('display_reordering', $vars, false);
 $active = $plugin->isActive();
 
 $classes = ['elgg-plugin'];
 $classes[] = $reordering ? 'elgg-state-draggable' : 'elgg-state-undraggable';
 
+$error = '';
 if ($active) {
 	$can_activate = false;
-	$can_deactivate = $plugin->canDeactivate();
+	try {
+		$plugin->assertCanDeactivate();
+		$can_deactivate = true;
+	} catch (\Elgg\Exceptions\PluginException $e) {
+		$error = $e->getMessage();
+		$can_deactivate = false;
+	}
 } else {
 	$can_deactivate = false;
-	$can_activate = $plugin->canActivate();
+	try {
+		$plugin->assertCanActivate();
+		$can_activate = true;
+	} catch (\Elgg\Exceptions\PluginException $e) {
+		$error = $e->getMessage();
+		$can_activate = false;
+	}
 }
 
 // activate / deactivate button
 $options = [
-	'is_action' => true,
+	'href' => false,
 ];
 
 if ($active) {
@@ -44,8 +60,7 @@ if ($active) {
 		$classes[] = 'elgg-state-cannot-deactivate';
 		
 		$options['title'] = elgg_echo('admin:plugins:cannot_deactivate');
-		$options['class'] = 'elgg-button elgg-button-cancel';
-		$options['disabled'] = true;
+		$options['class'] = 'elgg-button elgg-button-cancel elgg-state-disabled';
 	}
 } else if ($can_activate) {
 	$classes[] = 'elgg-state-inactive';
@@ -59,15 +74,14 @@ if ($active) {
 	$classes[] = 'elgg-state-cannot-activate';
 	
 	$options['title'] = elgg_echo('admin:plugins:cannot_activate');
-	$options['class'] = 'elgg-button elgg-button-submit';
+	$options['class'] = 'elgg-button elgg-button-submit elgg-state-disabled';
 	$options['text'] = elgg_echo('admin:plugins:activate');
-	$options['disabled'] = true;
 }
 
-$action_button = elgg_trigger_plugin_hook('action_button', 'plugin', ['entity' => $plugin], elgg_view('output/url', $options));
+$action_button = elgg_trigger_event_results('action_button', 'plugin', ['entity' => $plugin], elgg_view('output/url', $options));
 
 // Display categories and make category classes
-$categories = $plugin->getManifest()->getCategories();
+$categories = array_keys($plugin->getCategories());
 
 $categories[] = 'all';
 $categories[] = $active ? 'active' : 'inactive';
@@ -89,14 +103,13 @@ foreach ($categories as $category) {
 }
 
 $title = elgg_view('output/url', [
-	'href' => "ajax/view/object/plugin/details?guid={$plugin->getGUID()}",
+	'href' => "ajax/view/object/plugin/details?guid={$plugin->guid}",
 	'text' => $plugin->getDisplayName(),
 	'class' => 'elgg-lightbox',
 ]);
 
 $content = '';
 
-$error = $plugin->getError();
 if ($error) {
 	$type = $active ? 'notice' : 'error';
 
@@ -114,7 +127,7 @@ echo elgg_view('object/elements/summary', [
 	'icon' => $action_button,
 	'title' => $title,
 	'subtitle' => elgg_view('output/longtext', [
-		'value' => $plugin->getManifest()->getDescription(),
+		'value' => $plugin->getDescription(),
 	]),
 	'content' => $content,
 	'display_reordering' => $reordering,

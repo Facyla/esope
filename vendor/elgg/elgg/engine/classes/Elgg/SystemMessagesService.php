@@ -2,7 +2,7 @@
 
 namespace Elgg;
 
-use Elgg\SystemMessages\RegisterSet;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * System messages service
@@ -40,7 +40,7 @@ class SystemMessagesService {
 	 * @return array The array of registers dumped
 	 * @internal
 	 */
-	public function dumpRegister($register_name = '') {
+	public function dumpRegister(string $register_name = ''): array {
 		$set = $this->loadRegisters();
 		$return = [];
 
@@ -50,7 +50,7 @@ class SystemMessagesService {
 					$return[$prop] = $values;
 				}
 
-				$set->{$prop} = [];
+				$set[$prop] = [];
 			}
 		}
 
@@ -70,7 +70,7 @@ class SystemMessagesService {
 	 *
 	 * @return integer The number of messages
 	 */
-	public function count($register_name = "") {
+	public function count(string $register_name = ''): int {
 		$set = $this->loadRegisters();
 		$count = 0;
 
@@ -86,45 +86,59 @@ class SystemMessagesService {
 	/**
 	 * Display a system message on next page load.
 	 *
-	 * @param string|string[] $message Message or messages to add
+	 * @param string $message Message or messages to add
 	 *
 	 * @return void
 	 */
-	public function addSuccessMessage($message) {
-		$set = $this->loadRegisters();
-		foreach ((array) $message as $str) {
-			$set->success[] = $str;
-		}
-		$this->saveRegisters($set);
+	public function addSuccessMessage(string $message): void {
+		$this->addMessage(new \ElggSystemMessage($message, 'success'));
 	}
 
 	/**
 	 * Display an error on next page load.
 	 *
-	 * @param string|string[] $error Error or errors to add
+	 * @param string $message Error or errors to add
 	 *
 	 * @return void
 	 */
-	public function addErrorMessage($error) {
-		$set = $this->loadRegisters();
-		foreach ((array) $error as $str) {
-			$set->error[] = $str;
+	public function addErrorMessage(string $message): void {
+		$this->addMessage(new \ElggSystemMessage($message, 'error'));
+	}
+
+	/**
+	 * Adds a message to the registry
+	 *
+	 * @param \ElggSystemMessage|array $message Error or errors to add
+	 *
+	 * @see \ElggSystemMessage::factory()
+	 *
+	 * @return void
+	 *
+	 * @throws InvalidArgumentException
+	 *
+	 * @since 4.2.0
+	 */
+	public function addMessage($message): void {
+		if (is_array($message)) {
+			$message = \ElggSystemMessage::factory($message);
 		}
+		
+		if (!$message instanceof \ElggSystemMessage) {
+			throw new InvalidArgumentException(__METHOD__ . ' $message needs to be an \ElggSystemMessage or an array of options');
+		}
+		
+		$set = $this->loadRegisters();
+		$set[$message->getType()][] = $message;
 		$this->saveRegisters($set);
 	}
 
 	/**
 	 * Load the registers from the session
 	 *
-	 * @return RegisterSet
+	 * @return array
 	 */
-	public function loadRegisters() {
-		$registers = $this->session->get(self::SESSION_KEY, []);
-		$set = new RegisterSet();
-		foreach ($registers as $key => $register) {
-			$set->{$key} = $register;
-		}
-		return $set;
+	public function loadRegisters(): array {
+		return $this->session->get(self::SESSION_KEY, []);
 	}
 
 	/**
@@ -137,12 +151,12 @@ class SystemMessagesService {
 	 *
 	 * Messages are stored as strings in the Elgg session as ['msg'][$register] array.
 	 *
-	 * @param RegisterSet $set The set of registers
+	 * @param array $set The set of registers
 	 * @return void
 	 */
-	public function saveRegisters(RegisterSet $set) {
+	public function saveRegisters(array $set): void {
 		$filter = function ($el) {
-			return is_string($el) && $el !== "";
+			return ($el instanceof \ElggSystemMessage) && $el->getMessage() !== '';
 		};
 
 		$data = [];
@@ -150,6 +164,7 @@ class SystemMessagesService {
 			if (!is_array($values)) {
 				continue;
 			}
+			
 			$arr = array_filter($values, $filter);
 			if (!empty($arr)) {
 				$data[$prop] = array_values($arr);

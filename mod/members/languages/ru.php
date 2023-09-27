@@ -7,12 +7,14 @@
 
 return array(
 	'members:label:online' => 'Онлайн',
+	'members:label:search' => 'Результаты поиска',
 	'members:search' => 'Найти пользователей',
-	'members:title:search' => 'Поиск пользователя %s',
+	'members:title:search' => "Поиск пользователя '%s'",
 	'members:total' => 'Всего пользователей: %s',
+	'members:title:all' => 'Все участники',
 	'members:title:newest' => 'Новые',
 	'members:title:popular' => 'Популярные',
 	'members:title:online' => 'Онлайн',
-	'members:title:alpha' => 'All members',
+	'members:title:alpha' => 'Все участники',
 	'members:list:popular:none' => 'Пользователи не имеют друзей.',
 );

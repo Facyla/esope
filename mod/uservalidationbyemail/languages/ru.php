@@ -6,37 +6,30 @@
  */
 
 return array(
-	'email:validate:subject' => "%s пожалуйста, подтвердите свой email для %s!",
-	'email:validate:body' => "Hi %s,
+	'email:validate:subject' => "%s подтвердите свой email для %s!",
+	'email:validate:body' => "Перед тем, как начать пользоваться %s, вы должны подтвердить email адрес.
 
-Before you can start using %s, you must confirm your email address.
-
-Please confirm your email address by clicking on the link below:
+Подтвердите ваш email адрес, нажав на эту ссылку:
 
 %s
 
-If you can't click on the link, copy and paste it to your browser manually.
-
-%s
-%s",
-	'email:confirm:success' => "Вы подтвердили свой email адрес!",
+Если вы не можете перейти по ссылке, то вручную скопируйте и вставьте ее в браузер.",
+	'email:confirm:success' => "Вы подтвердили свой email адрес",
 	'email:confirm:fail' => "Ваш email адрес не может быть проверен...",
 
 	'uservalidationbyemail:emailsent' => "Email отправлен <em>%s</em>",
-	'uservalidationbyemail:registerok' => "Для активации вашего аккаунта, пожалуйста подтвердите ваш email адрес нажав на ссылку в письме, которое мы вам только что отправили.",
-	'uservalidationbyemail:login:fail' => "Ваш аккаунт не подтвержден поэтому вы не можете войти. Проверьте почту, мы отправили вам запрос на подтверждение повторно.",
+	'uservalidationbyemail:registerok' => "Чтобы активировать ваш аккаунта, подтвердите ваш email адрес, нажав на ссылку, которую мы вам только что отправили.",
+	'uservalidationbyemail:change_email' => "Отправить повторно проверку email",
+	'uservalidationbyemail:change_email:info' => "Ваша учетная запись не подтверждена, поэтому попытка входа не удалась. Вы можете запросить новую ссылку для подтверждения или обновить адрес электронной почты, связанный с вашей учетной записью.",
 
-	'uservalidationbyemail:admin:resend_validation' => 'Отправить повторно подтверждение',
-	'uservalidationbyemail:confirm_resend_validation' => 'Повторно отправить проверку email %s?',
+	'uservalidationbyemail:admin:resend_validation' => 'Повторно отправить подтверждение',
+	'uservalidationbyemail:confirm_resend_validation' => 'Отправить повторно проверку email %s?',
 	'uservalidationbyemail:confirm_resend_validation_checked' => 'Переслать подтверждение отмеченным пользователям?',
 	
 	'uservalidationbyemail:errors:unknown_users' => 'Неизвестные пользователи',
-	'uservalidationbyemail:errors:could_not_resend_validation' => 'Не могу повторно отправить запрос на подтверждение.',
-	'uservalidationbyemail:errors:could_not_resend_validations' => 'Не могу повторно отправить запрос на подтверждение отмеченным пользователям.',
+	'uservalidationbyemail:errors:could_not_resend_validation' => 'Не удается повторно отправить запрос на подтверждение.',
+	'uservalidationbyemail:errors:could_not_resend_validations' => 'Не удается повторно отправить запросы на подтверждение отмеченным пользователям.',
 
 	'uservalidationbyemail:messages:resent_validation' => 'Запрос на подтверждение переслан.',
-	'uservalidationbyemail:messages:resent_validations' => 'Запрос отправлен всем отмеченным пользователям.',
-	
-	'uservalidationbyemail:upgrade:2019090600:title' => 'Track user e-mail validation status',
-	'uservalidationbyemail:upgrade:2019090600:description' => 'The e-mail validation status is tracked in a new way. Make sure all pending users are updated to the new tracking in order to still require e-mail validation.',
+	'uservalidationbyemail:messages:resent_validations' => 'Запросы отправлены всем отмеченным пользователям.',
 );

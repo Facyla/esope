@@ -2,6 +2,7 @@
 
 use GO\Job;
 use DateTime;
+use GO\FailedJob;
 use GO\Scheduler;
 use PHPUnit\Framework\TestCase;
 
@@ -61,11 +62,10 @@ class SchedulerTest extends TestCase
         $this->assertEquals(PHP_BINARY . ' ' . $script, $job->compile());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testShouldThrowExceptionIfScriptIsNotAString()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $scheduler = new Scheduler();
         $scheduler->php(function () {
             return false;
@@ -82,7 +82,7 @@ class SchedulerTest extends TestCase
         $scheduler->run();
         $fail = $scheduler->getFailedJobs();
         $this->assertCount(1, $fail);
-        $this->assertContainsOnlyInstancesOf(Job::class, $fail);
+        $this->assertContainsOnlyInstancesOf(FailedJob::class, $fail);
     }
 
     public function testShouldQueueAShellCommand()
@@ -152,8 +152,9 @@ class SchedulerTest extends TestCase
     {
         $scheduler = new Scheduler();
 
-        $scheduler->call(function () {
-            throw new \Exception('Something failed');
+        $exception = new \Exception('Something failed');
+        $scheduler->call(function () use ($exception) {
+            throw $exception;
         });
 
         $this->assertEquals(count($scheduler->getFailedJobs()), 0);
@@ -162,6 +163,10 @@ class SchedulerTest extends TestCase
 
         $this->assertEquals(count($scheduler->getExecutedJobs()), 0);
         $this->assertEquals(count($scheduler->getFailedJobs()), 1);
+        $failedJob = $scheduler->getFailedJobs()[0];
+        $this->assertInstanceOf(FailedJob::class, $failedJob);
+        $this->assertSame($exception, $failedJob->getException());
+        $this->assertInstanceOf(Job::class, $failedJob->getJob());
     }
 
     public function testShouldKeepExecutingJobsIfOneFails()
@@ -228,8 +233,8 @@ class SchedulerTest extends TestCase
 
         $scheduler->run();
 
-        $this->assertRegexp('/ Executing Closure$/', $scheduler->getVerboseOutput());
-        $this->assertRegexp('/ Executing Closure$/', $scheduler->getVerboseOutput('text'));
+        $this->assertMatchesRegularExpression('/ Executing Closure$/', $scheduler->getVerboseOutput());
+        $this->assertMatchesRegularExpression('/ Executing Closure$/', $scheduler->getVerboseOutput('text'));
     }
 
     public function testShouldShowClosuresVerboseOutputAsHtml()
@@ -248,7 +253,7 @@ class SchedulerTest extends TestCase
 
         $scheduler->run();
 
-        $this->assertRegexp('/<br>/', $scheduler->getVerboseOutput('html'));
+        $this->assertMatchesRegularExpression('/<br>/', $scheduler->getVerboseOutput('html'));
     }
 
     public function testShouldShowClosuresVerboseOutputAsArray()
@@ -271,11 +276,10 @@ class SchedulerTest extends TestCase
         $this->assertEquals(count($scheduler->getVerboseOutput('array')), 2);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testShouldThrowExceptionWithInvalidOutputType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $scheduler = new Scheduler();
 
         $scheduler->call(function ($phrase) {

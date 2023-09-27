@@ -3,20 +3,16 @@
 namespace Elgg;
 
 use Elgg\Database\EntityTable;
-use Elgg\Http\Request as HttpRequest;
-use ElggEntity;
-use ElggFile;
-use ElggIcon;
-use InvalidParameterException;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Elgg\Exceptions\ExceptionInterface;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\UnexpectedValueException;
 use Elgg\Filesystem\MimeTypeService;
+use Elgg\Http\Request as HttpRequest;
+use Elgg\Traits\Loggable;
+use Elgg\Traits\TimeUsing;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * Entity icon service
  *
  * @internal
  * @since 2.2
@@ -32,14 +28,9 @@ class EntityIconService {
 	private $config;
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	private $hooks;
-
-	/**
-	 * @var \Elgg\Http\Request
-	 */
-	private $request;
+	private $events;
 
 	/**
 	 * @var EntityTable
@@ -60,49 +51,52 @@ class EntityIconService {
 	 * @var MimeTypeService
 	 */
 	protected $mimetype;
+	
+	/**
+	 * @var HttpRequest
+	 */
+	protected $request;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Config             $config   Config
-	 * @param PluginHooksService $hooks    Hook registration service
-	 * @param HttpRequest        $request  Http request
-	 * @param LoggerInterface    $logger   Logger
-	 * @param EntityTable        $entities Entity table
-	 * @param UploadService      $uploads  Upload service
-	 * @param ImageService       $images   Image service
-	 * @param MimeTypeService    $mimetype MimeType service
+	 * @param Config          $config   Config
+	 * @param EventsService   $events   Events service
+	 * @param EntityTable     $entities Entity table
+	 * @param UploadService   $uploads  Upload service
+	 * @param ImageService    $images   Image service
+	 * @param MimeTypeService $mimetype MimeType service
+	 * @param Request         $request  Http Request service
 	 */
 	public function __construct(
 		Config $config,
-		PluginHooksService $hooks,
-		HttpRequest $request,
-		LoggerInterface $logger,
+		EventsService $events,
 		EntityTable $entities,
 		UploadService $uploads,
 		ImageService $images,
-		MimeTypeService $mimetype
+		MimeTypeService $mimetype,
+		HttpRequest $request
 	) {
 		$this->config = $config;
-		$this->hooks = $hooks;
-		$this->request = $request;
-		$this->logger = $logger;
+		$this->events = $events;
 		$this->entities = $entities;
 		$this->uploads = $uploads;
 		$this->images = $images;
 		$this->mimetype = $mimetype;
+		$this->request = $request;
 	}
 
 	/**
 	 * Saves icons using an uploaded file as the source.
 	 *
-	 * @param ElggEntity $entity     Entity to own the icons
-	 * @param string     $input_name Form input name
-	 * @param string     $type       The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param array      $coords     An array of cropping coordinates x1, y1, x2, y2
+	 * @param \ElggEntity $entity     Entity to own the icons
+	 * @param string      $input_name Form input name
+	 * @param string      $type       The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param array       $coords     An array of cropping coordinates x1, y1, x2, y2
+	 *
 	 * @return bool
 	 */
-	public function saveIconFromUploadedFile(ElggEntity $entity, $input_name, $type = 'icon', array $coords = []) {
+	public function saveIconFromUploadedFile(\ElggEntity $entity, $input_name, $type = 'icon', array $coords = []) {
 		$input = $this->uploads->getFile($input_name);
 		if (empty($input)) {
 			return false;
@@ -110,7 +104,7 @@ class EntityIconService {
 				
 		// auto detect cropping coordinates
 		if (empty($coords)) {
-			$auto_coords = $this->detectCroppingCoordinates();
+			$auto_coords = $this->detectCroppingCoordinates($input_name);
 			if (!empty($auto_coords)) {
 				$coords = $auto_coords;
 			}
@@ -136,16 +130,17 @@ class EntityIconService {
 	/**
 	 * Saves icons using a local file as the source.
 	 *
-	 * @param ElggEntity $entity   Entity to own the icons
-	 * @param string     $filename The full path to the local file
-	 * @param string     $type     The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param array      $coords   An array of cropping coordinates x1, y1, x2, y2
+	 * @param \ElggEntity $entity   Entity to own the icons
+	 * @param string      $filename The full path to the local file
+	 * @param string      $type     The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param array       $coords   An array of cropping coordinates x1, y1, x2, y2
+	 *
 	 * @return bool
-	 * @throws InvalidParameterException
+	 * @throws InvalidArgumentException
 	 */
-	public function saveIconFromLocalFile(ElggEntity $entity, $filename, $type = 'icon', array $coords = []) {
+	public function saveIconFromLocalFile(\ElggEntity $entity, $filename, $type = 'icon', array $coords = []) {
 		if (!file_exists($filename) || !is_readable($filename)) {
-			throw new InvalidParameterException(__METHOD__ . " expects a readable local file. $filename is not readable");
+			throw new InvalidArgumentException(__METHOD__ . " expects a readable local file. {$filename} is not readable");
 		}
 				
 		$tmp = new \ElggTempFile();
@@ -168,16 +163,17 @@ class EntityIconService {
 	/**
 	 * Saves icons using a file located in the data store as the source.
 	 *
-	 * @param ElggEntity $entity Entity to own the icons
-	 * @param ElggFile   $file   An ElggFile instance
-	 * @param string     $type   The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param array      $coords An array of cropping coordinates x1, y1, x2, y2
+	 * @param \ElggEntity $entity Entity to own the icons
+	 * @param \ElggFile   $file   An ElggFile instance
+	 * @param string      $type   The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param array       $coords An array of cropping coordinates x1, y1, x2, y2
+	 *
 	 * @return bool
-	 * @throws InvalidParameterException
+	 * @throws InvalidArgumentException
 	 */
-	public function saveIconFromElggFile(ElggEntity $entity, ElggFile $file, $type = 'icon', array $coords = []) {
+	public function saveIconFromElggFile(\ElggEntity $entity, \ElggFile $file, $type = 'icon', array $coords = []) {
 		if (!$file->exists()) {
-			throw new InvalidParameterException(__METHOD__ . ' expects an instance of ElggFile with an existing file on filestore');
+			throw new InvalidArgumentException(__METHOD__ . ' expects an instance of ElggFile with an existing file on filestore');
 		}
 		
 		$tmp = new \ElggTempFile();
@@ -200,29 +196,30 @@ class EntityIconService {
 	/**
 	 * Saves icons using a created temporary file
 	 *
-	 * @param ElggEntity $entity Temporary ElggFile instance
-	 * @param ElggFile   $file   Temporary ElggFile instance
-	 * @param string     $type   The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param array      $coords An array of cropping coordinates x1, y1, x2, y2
+	 * @param \ElggEntity $entity Temporary ElggFile instance
+	 * @param \ElggFile   $file   Temporary ElggFile instance
+	 * @param string      $type   The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param array       $coords An array of cropping coordinates x1, y1, x2, y2
+	 *
 	 * @return bool
 	 */
-	public function saveIcon(ElggEntity $entity, ElggFile $file, $type = 'icon', array $coords = []) {
+	public function saveIcon(\ElggEntity $entity, \ElggFile $file, $type = 'icon', array $coords = []) {
 
 		$type = (string) $type;
 		if (!strlen($type)) {
-			$this->logger->error('Icon type passed to ' . __METHOD__ . ' can not be empty');
+			$this->getLogger()->error('Icon type passed to ' . __METHOD__ . ' can not be empty');
 			return false;
 		}
 		
 		$entity_type = $entity->getType();
 		
-		$file = $this->hooks->trigger("entity:$type:prepare", $entity_type, [
+		$file = $this->events->triggerResults("entity:{$type}:prepare", $entity_type, [
 			'entity' => $entity,
 			'file' => $file,
 		], $file);
 		
-		if (!$file instanceof ElggFile || !$file->exists() || $file->getSimpleType() !== 'image') {
-			$this->logger->error('Source file passed to ' . __METHOD__ . ' can not be resolved to a valid image');
+		if (!$file instanceof \ElggFile || !$file->exists() || $file->getSimpleType() !== 'image') {
+			$this->getLogger()->error('Source file passed to ' . __METHOD__ . ' can not be resolved to a valid image');
 			return false;
 		}
 		
@@ -233,7 +230,7 @@ class EntityIconService {
 		$x2 = (int) elgg_extract('x2', $coords);
 		$y2 = (int) elgg_extract('y2', $coords);
 		
-		$created = $this->hooks->trigger("entity:$type:save", $entity_type, [
+		$created = $this->events->triggerResults("entity:{$type}:save", $entity_type, [
 			'entity' => $entity,
 			'file' => $file,
 			'x1' => $x1,
@@ -254,8 +251,30 @@ class EntityIconService {
 				$this->deleteIcon($entity, $type);
 				return false;
 			}
+			
+			// validate cropping coords to prevent out-of-bounds issues
+			$sizes = $this->getSizes($entity->getType(), $entity->getSubtype(), $type);
+			$coords = array_merge($sizes['master'], $coords);
+			
+			$icon = $this->getIcon($entity, 'master', $type, false);
+			
+			try {
+				$this->images->normalizeResizeParameters($icon->getFilenameOnFilestore(), $coords);
+			} catch (ExceptionInterface $e) {
+				// cropping coords are wrong, reset to 0
+				$x1 = 0;
+				$x2 = 0;
+				$y1 = 0;
+				$y2 = 0;
+			}
 		}
 
+		// first invalidate entity metadata cache, because of a high risk of racing condition to save the coordinates
+		// the racing condition occurs with 2 (or more) icon save calls and the time between clearing
+		// the coordinates in deleteIcon() and the new save here
+		$entity->invalidateCache();
+		
+		// save cropping coordinates
 		if ($type == 'icon') {
 			$entity->icontime = time();
 			if ($x1 || $y1 || $x2 || $y2) {
@@ -275,7 +294,7 @@ class EntityIconService {
 			}
 		}
 		
-		$this->hooks->trigger("entity:$type:saved", $entity->getType(), [
+		$this->events->triggerResults("entity:{$type}:saved", $entity->getType(), [
 			'entity' => $entity,
 			'x1' => $x1,
 			'y1' => $y1,
@@ -313,18 +332,18 @@ class EntityIconService {
 	/**
 	 * Generate an icon for the given entity
 	 *
-	 * @param ElggEntity $entity    Temporary ElggFile instance
-	 * @param ElggFile   $file      Temporary ElggFile instance
-	 * @param string     $type      The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param array      $coords    An array of cropping coordinates x1, y1, x2, y2
-	 * @param string     $icon_size The icon size to generate (leave empty to generate all supported sizes)
+	 * @param \ElggEntity $entity    Temporary ElggFile instance
+	 * @param \ElggFile   $file      Temporary ElggFile instance
+	 * @param string      $type      The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param array       $coords    An array of cropping coordinates x1, y1, x2, y2
+	 * @param string      $icon_size The icon size to generate (leave empty to generate all supported sizes)
 	 *
 	 * @return bool
 	 */
-	protected function generateIcon(ElggEntity $entity, ElggFile $file, $type = 'icon', $coords = [], $icon_size = '') {
+	protected function generateIcon(\ElggEntity $entity, \ElggFile $file, $type = 'icon', $coords = [], $icon_size = '') {
 		
 		if (!$file->exists()) {
-			$this->logger->error('Trying to generate an icon from a non-existing file');
+			$this->getLogger()->error('Trying to generate an icon from a non-existing file');
 			return false;
 		}
 		
@@ -336,7 +355,7 @@ class EntityIconService {
 		$sizes = $this->getSizes($entity->getType(), $entity->getSubtype(), $type);
 		
 		if (!empty($icon_size) && !isset($sizes[$icon_size])) {
-			$this->logger->warning("The provided icon size '{$icon_size}' doesn't exist for icon type '{$type}'");
+			$this->getLogger()->warning("The provided icon size '{$icon_size}' doesn't exist for icon type '{$type}'");
 			return false;
 		}
 		
@@ -377,10 +396,10 @@ class EntityIconService {
 			$resize_params = array_merge($opts, $coords);
 
 			$image_service = _elgg_services()->imageService;
-			$image_service->setLogger($this->logger);
+			$image_service->setLogger($this->getLogger());
 
 			if (!_elgg_services()->imageService->resize($source, $destination, $resize_params)) {
-				$this->logger->error("Failed to create {$size} icon from
+				$this->getLogger()->error("Failed to create {$size} icon from
 					{$file->getFilenameOnFilestore()} with coords [{$x1}, {$y1}],[{$x2}, {$y2}]");
 				return false;
 			}
@@ -395,16 +414,16 @@ class EntityIconService {
 	 *
 	 * @note Returned ElggIcon object may be a placeholder. Use ElggIcon::exists() to validate if file has been written to filestore
 	 *
-	 * @param ElggEntity $entity   Entity that owns the icon
-	 * @param string     $size     Size of the icon
-	 * @param string     $type     The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param bool       $generate Try to generate an icon based on master if size doesn't exists
+	 * @param \ElggEntity $entity   Entity that owns the icon
+	 * @param string      $size     Size of the icon
+	 * @param string      $type     The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param bool        $generate Try to generate an icon based on master if size doesn't exists
 	 *
-	 * @return ElggIcon
+	 * @return \ElggIcon
 	 *
-	 * @throws InvalidParameterException
+	 * @throws UnexpectedValueException
 	 */
-	public function getIcon(ElggEntity $entity, $size, $type = 'icon', $generate = true) {
+	public function getIcon(\ElggEntity $entity, $size, $type = 'icon', $generate = true) {
 
 		$size = elgg_strtolower($size);
 
@@ -416,13 +435,19 @@ class EntityIconService {
 
 		$entity_type = $entity->getType();
 
-		$default_icon = new ElggIcon();
+		$default_icon = new \ElggIcon();
 		$default_icon->owner_guid = $entity->guid;
-		$default_icon->setFilename("icons/$type/$size.jpg");
+		$default_icon->setFilename("icons/{$type}/{$size}.jpg");
 
-		$icon = $this->hooks->trigger("entity:$type:file", $entity_type, $params, $default_icon);
-		if (!$icon instanceof ElggIcon) {
-			throw new InvalidParameterException("'entity:$type:file', $entity_type hook must return an instance of ElggIcon");
+		$icon = $this->events->triggerResults("entity:{$type}:file", $entity_type, $params, $default_icon);
+		if (!$icon instanceof \ElggIcon) {
+			throw new UnexpectedValueException("'entity:{$type}:file', {$entity_type} event must return an instance of \ElggIcon");
+		}
+		
+		if ($size !== 'master' && $this->hasWebPSupport()) {
+			if (pathinfo($icon->getFilename(), PATHINFO_EXTENSION) === 'jpg') {
+				$icon->setFilename(substr($icon->getFilename(), 0, -3) . 'webp');
+			}
 		}
 		
 		if ($icon->exists() || !$generate) {
@@ -460,14 +485,14 @@ class EntityIconService {
 	/**
 	 * Removes all icon files and metadata for the passed type of icon.
 	 *
-	 * @param ElggEntity $entity        Entity that owns icons
-	 * @param string     $type          The name of the icon. e.g., 'icon', 'cover_photo'
-	 * @param bool       $retain_master Keep the master icon (default: false)
+	 * @param \ElggEntity $entity        Entity that owns icons
+	 * @param string      $type          The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param bool        $retain_master Keep the master icon (default: false)
 	 *
 	 * @return bool
 	 */
-	public function deleteIcon(ElggEntity $entity, $type = 'icon', $retain_master = false) {
-		$delete = $this->hooks->trigger("entity:$type:delete", $entity->getType(), [
+	public function deleteIcon(\ElggEntity $entity, $type = 'icon', $retain_master = false) {
+		$delete = $this->events->triggerResults("entity:{$type}:delete", $entity->getType(), [
 			'entity' => $entity,
 		], true);
 
@@ -476,6 +501,12 @@ class EntityIconService {
 		}
 		
 		$result = true;
+		$supported_extensions = [
+			'jpg',
+		];
+		if ($this->images->hasWebPSupport()) {
+			$supported_extensions[] = 'webp';
+		}
 
 		$sizes = array_keys($this->getSizes($entity->getType(), $entity->getSubtype(), $type));
 		foreach ($sizes as $size) {
@@ -485,6 +516,25 @@ class EntityIconService {
 			
 			$icon = $this->getIcon($entity, $size, $type, false);
 			$result &= $icon->delete();
+			
+			// make sure we remove all supported images (jpg and webp)
+			$current_extension = pathinfo($icon->getFilename(), PATHINFO_EXTENSION);
+			$extensions = $supported_extensions;
+			foreach ($extensions as $extension) {
+				if ($current_extension === $extension) {
+					// already removed
+					continue;
+				}
+				
+				// replace the extension
+				$parts = explode('.', $icon->getFilename());
+				array_pop($parts);
+				$parts[] = $extension;
+				
+				// set new filename and remove the file
+				$icon->setFilename(implode('.', $parts));
+				$result &= $icon->delete();
+			}
 		}
 
 		if ($type == 'icon') {
@@ -503,14 +553,15 @@ class EntityIconService {
 	/**
 	 * Get the URL for this entity's icon
 	 *
-	 * Plugins can register for the 'entity:icon:url', <type> plugin hook to customize the icon for an entity.
+	 * Plugins can register for the 'entity:icon:url', <type> event to customize the icon for an entity.
 	 *
-	 * @param ElggEntity $entity Entity that owns the icon
-	 * @param mixed      $params A string defining the size of the icon (e.g. tiny, small, medium, large)
-	 *                           or an array of parameters including 'size'
-	 * @return string|void
+	 * @param \ElggEntity $entity Entity that owns the icon
+	 * @param mixed       $params A string defining the size of the icon (e.g. tiny, small, medium, large)
+	 *                            or an array of parameters including 'size'
+	 *
+	 * @return string
 	 */
-	public function getIconURL(ElggEntity $entity, $params = []) {
+	public function getIconURL(\ElggEntity $entity, string|array $params = []): string {
 		if (is_array($params)) {
 			$size = elgg_extract('size', $params, 'medium');
 		} else {
@@ -523,36 +574,38 @@ class EntityIconService {
 		$params['entity'] = $entity;
 		$params['size'] = $size;
 
-		$type = elgg_extract('type', $params) ? : 'icon';
+		$type = elgg_extract('type', $params, 'icon', false);
 		$entity_type = $entity->getType();
 
-		$url = $this->hooks->trigger("entity:$type:url", $entity_type, $params, null);
-		if ($url == null) {
+		$url = $this->events->triggerResults("entity:{$type}:url", $entity_type, $params, null);
+		if (!isset($url)) {
 			if ($this->hasIcon($entity, $size, $type)) {
 				$icon = $this->getIcon($entity, $size, $type);
-				$default_use_cookie = (bool) elgg_get_config('session_bound_entity_icons', false);
+				$default_use_cookie = (bool) elgg_get_config('session_bound_entity_icons');
 				$url = $icon->getInlineURL((bool) elgg_extract('use_cookie', $params, $default_use_cookie));
 			} else {
 				$url = $this->getFallbackIconUrl($entity, $params);
 			}
 		}
 
-		if ($url) {
+		if (!empty($url)) {
 			return elgg_normalize_url($url);
 		}
+		
+		return '';
 	}
 
 	/**
 	 * Returns default/fallback icon
 	 *
-	 * @param ElggEntity $entity Entity
-	 * @param array      $params Icon params
+	 * @param \ElggEntity $entity Entity
+	 * @param array       $params Icon params
+	 *
 	 * @return string
 	 */
-	public function getFallbackIconUrl(ElggEntity $entity, array $params = []) {
-
-		$type = elgg_extract('type', $params) ? : 'icon';
-		$size = elgg_extract('size', $params) ? : 'medium';
+	public function getFallbackIconUrl(\ElggEntity $entity, array $params = []) {
+		$type = elgg_extract('type', $params, 'icon', false);
+		$size = elgg_extract('size', $params, 'medium', false);
 		
 		$entity_type = $entity->getType();
 		$entity_subtype = $entity->getSubtype();
@@ -561,30 +614,31 @@ class EntityIconService {
 
 		foreach ($exts as $ext) {
 			foreach ([$entity_subtype, 'default'] as $subtype) {
-				if ($ext == 'svg' && elgg_view_exists("$type/$entity_type/$subtype.svg", 'default')) {
-					return elgg_get_simplecache_url("$type/$entity_type/$subtype.svg");
+				if ($ext == 'svg' && elgg_view_exists("{$type}/{$entity_type}/{$subtype}.svg", 'default')) {
+					return elgg_get_simplecache_url("{$type}/{$entity_type}/{$subtype}.svg");
 				}
-				if (elgg_view_exists("$type/$entity_type/$subtype/$size.$ext", 'default')) {
-					return elgg_get_simplecache_url("$type/$entity_type/$subtype/$size.$ext");
+				
+				if (elgg_view_exists("{$type}/{$entity_type}/{$subtype}/{$size}.{$ext}", 'default')) {
+					return elgg_get_simplecache_url("{$type}/{$entity_type}/{$subtype}/{$size}.{$ext}");
 				}
 			}
 		}
 
-		if (elgg_view_exists("$type/default/$size.png", 'default')) {
-			return elgg_get_simplecache_url("$type/default/$size.png");
+		if (elgg_view_exists("{$type}/default/{$size}.png", 'default')) {
+			return elgg_get_simplecache_url("{$type}/default/{$size}.png");
 		}
 	}
 
 	/**
 	 * Returns the timestamp of when the icon was changed.
 	 *
-	 * @param ElggEntity $entity Entity that owns the icon
-	 * @param string     $size   The size of the icon
-	 * @param string     $type   The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param \ElggEntity $entity Entity that owns the icon
+	 * @param string      $size   The size of the icon
+	 * @param string      $type   The name of the icon. e.g., 'icon', 'cover_photo'
 	 *
 	 * @return int|null A unix timestamp of when the icon was last changed, or null if not set.
 	 */
-	public function getIconLastChange(ElggEntity $entity, $size, $type = 'icon') {
+	public function getIconLastChange(\ElggEntity $entity, $size, $type = 'icon') {
 		$icon = $this->getIcon($entity, $size, $type);
 		if ($icon->exists()) {
 			return $icon->getModifiedTime();
@@ -594,13 +648,15 @@ class EntityIconService {
 	/**
 	 * Returns if the entity has an icon of the passed type.
 	 *
-	 * @param ElggEntity $entity Entity that owns the icon
-	 * @param string     $size   The size of the icon
-	 * @param string     $type   The name of the icon. e.g., 'icon', 'cover_photo'
+	 * @param \ElggEntity $entity Entity that owns the icon
+	 * @param string      $size   The size of the icon
+	 * @param string      $type   The name of the icon. e.g., 'icon', 'cover_photo'
+	 *
 	 * @return bool
 	 */
 	public function hasIcon(\ElggEntity $entity, $size, $type = 'icon') {
-		return $this->getIcon($entity, $size, $type)->exists();
+		$icon = $this->getIcon($entity, $size, $type);
+		return $icon->exists() && $icon->getSize() > 0;
 	}
 
 	/**
@@ -609,29 +665,30 @@ class EntityIconService {
 	 * @param string $entity_type    Entity type
 	 * @param string $entity_subtype Entity subtype
 	 * @param string $type           The name of the icon. e.g., 'icon', 'cover_photo'
+	 *
 	 * @return array
-	 * @throws InvalidParameterException
+	 * @throws InvalidArgumentException
 	 */
-	public function getSizes($entity_type = null, $entity_subtype = null, $type = 'icon') {
+	public function getSizes(string $entity_type = null, string $entity_subtype = null, $type = 'icon'): array {
 		$sizes = [];
-		if (!$type) {
-			$type = 'icon';
-		}
+		$type = $type ?: 'icon';
 		if ($type == 'icon') {
 			$sizes = $this->config->icon_sizes;
 		}
+		
 		$params = [
 			'type' => $type,
 			'entity_type' => $entity_type,
 			'entity_subtype' => $entity_subtype,
 		];
 		if ($entity_type) {
-			$sizes = $this->hooks->trigger("entity:$type:sizes", $entity_type, $params, $sizes);
+			$sizes = $this->events->triggerResults("entity:{$type}:sizes", $entity_type, $params, $sizes);
 		}
 
 		if (!is_array($sizes)) {
-			throw new InvalidParameterException("The icon size configuration for image type '$type' " .
-				"must be an associative array of image size names and their properties");
+			$msg = "The icon size configuration for image type '{$type}'";
+			$msg .= ' must be an associative array of image size names and their properties';
+			throw new InvalidArgumentException($msg);
 		}
 
 		// lazy generation of icons requires a 'master' size
@@ -650,95 +707,27 @@ class EntityIconService {
 		
 		return $sizes;
 	}
-
-	/**
-	 * Handle request to /serve-icon handler
-	 *
-	 * @param bool $allow_removing_headers Alter PHP's global headers to allow caching
-	 * @return BinaryFileResponse
-	 */
-	public function handleServeIconRequest($allow_removing_headers = true) {
-
-		$response = new Response();
-		$response->setExpires($this->getCurrentTime('-1 day'));
-		$response->prepare($this->request);
-
-		if ($allow_removing_headers) {
-			// clear cache-boosting headers set by PHP session
-			header_remove('Cache-Control');
-			header_remove('Pragma');
-			header_remove('Expires');
-		}
-
-		$path = implode('/', $this->request->getUrlSegments());
-		if (!preg_match('~serve-icon/(\d+)/(.*+)$~', $path, $m)) {
-			return $response->setStatusCode(400)->setContent('Malformatted request URL');
-		}
-
-		list(, $guid, $size) = $m;
-
-		$entity = $this->entities->get($guid);
-		if (!$entity instanceof \ElggEntity) {
-			return $response->setStatusCode(404)->setContent('Item does not exist');
-		}
-
-		$thumbnail = $entity->getIcon($size);
-		if (!$thumbnail->exists()) {
-			return $response->setStatusCode(404)->setContent('Icon does not exist');
-		}
-
-		$if_none_match = $this->request->headers->get('if_none_match');
-		if (!empty($if_none_match)) {
-			// strip mod_deflate suffixes
-			$this->request->headers->set('if_none_match', str_replace('-gzip', '', $if_none_match));
-		}
-
-		$filenameonfilestore = $thumbnail->getFilenameOnFilestore();
-		$last_updated = filemtime($filenameonfilestore);
-		$etag = '"' . $last_updated . '"';
-
-		$response->setPrivate()
-			->setEtag($etag)
-			->setExpires($this->getCurrentTime('+1 day'))
-			->setMaxAge(86400);
-
-		if ($response->isNotModified($this->request)) {
-			return $response;
-		}
-
-		$headers = [
-			'Content-Type' => $this->mimetype->getMimeType($filenameonfilestore),
-			'X-Content-Type-Options' => 'nosniff',
-		];
-		$response = new BinaryFileResponse($filenameonfilestore, 200, $headers, false, 'inline');
-		$response->prepare($this->request);
-
-		$response->setPrivate()
-			->setEtag($etag)
-			->setExpires($this->getCurrentTime('+1 day'))
-			->setMaxAge(86400);
-
-		return $response;
-	}
 	
 	/**
 	 * Automagicly detect cropping coordinates
 	 *
 	 * Based in the input names x1, x2, y1 and y2
 	 *
+	 * @param string $input_name the file input name which is the prefix for the cropping coordinates
+	 *
 	 * @return false|array
 	 */
-	protected function detectCroppingCoordinates() {
+	protected function detectCroppingCoordinates(string $input_name) {
 		
 		$auto_coords = [
-			'x1' => get_input('x1'),
-			'x2' => get_input('x2'),
-			'y1' => get_input('y1'),
-			'y2' => get_input('y2'),
+			'x1' => get_input("{$input_name}_x1", get_input('x1')), // x1 is BC fallback
+			'x2' => get_input("{$input_name}_x2", get_input('x2')), // x2 is BC fallback
+			'y1' => get_input("{$input_name}_y1", get_input('y1')), // y1 is BC fallback
+			'y2' => get_input("{$input_name}_y2", get_input('y2')), // y2 is BC fallback
 		];
 		
 		$auto_coords = array_filter($auto_coords, function($value) {
-			return !elgg_is_empty($value) && is_numeric($value);
+			return !elgg_is_empty($value) && is_numeric($value) && (int) $value >= 0;
 		});
 		
 		if (count($auto_coords) !== 4) {
@@ -750,7 +739,20 @@ class EntityIconService {
 			$value = (int) $value;
 		});
 		
+		// make sure coords make sense x2 > x1 && y2 > y1
+		if ($auto_coords['x2'] <= $auto_coords['x1'] || $auto_coords['y2'] <= $auto_coords['y1']) {
+			return false;
+		}
+		
 		return $auto_coords;
 	}
 
+	/**
+	 * Checks if browser has WebP support and if the webserver is able to generate
+	 *
+	 * @return bool
+	 */
+	protected function hasWebPSupport(): bool {
+		return in_array('image/webp', $this->request->getAcceptableContentTypes()) && $this->images->hasWebPSupport();
+	}
 }

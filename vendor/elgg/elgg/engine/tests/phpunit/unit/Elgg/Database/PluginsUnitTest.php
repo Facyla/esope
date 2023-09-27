@@ -7,14 +7,6 @@ namespace Elgg\Database;
  */
 class PluginsUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testAfterPluginLoadActiveCheckIsFree() {
 		$this->markTestIncomplete();
 	}
@@ -38,9 +30,9 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 		]);
 		$this->assertInstanceOf('ElggPlugin', $plugin_high_priority);
 		
-		$priority_name = $plugins->namespacePrivateSetting('internal', 'priority');
+		$priority_name = \ElggPlugin::PRIORITY_SETTING_NAME;
 		// because of mocking issues don't use ->setPriority()
-		$plugin_high_priority->setPrivateSetting($priority_name, 100);
+		$plugin_high_priority->setMetadata($priority_name, 100);
 		
 		/* @var $plugin_low_priority \ElggPlugin */
 		$plugin_low_priority = $this->createObject([
@@ -49,7 +41,7 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 		]);
 		$this->assertInstanceOf('ElggPlugin', $plugin_low_priority);
 		
-		$plugin_low_priority->setPrivateSetting($priority_name, 10);
+		$plugin_low_priority->setMetadata($priority_name, 10);
 		
 		// fallback ordering is based on guid, so make sure guid order is 'wrong'
 		$this->assertGreaterThan($plugin_high_priority->guid, $plugin_low_priority->guid);
@@ -83,19 +75,16 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 	protected function getNonMockedPluginService() {
 		$sp = _elgg_services();
 		
-		$plugins = new Plugins(
+		return new Plugins(
 			$sp->dataCache->plugins,
 			$sp->db,
-			$sp->session,
+			$sp->session_manager,
 			$sp->events,
 			$sp->translator,
 			$sp->views,
-			$sp->privateSettingsCache,
 			$sp->config,
-			$sp->systemMessages,
-			$sp->request->getContextStack()
+			$sp->system_messages,
+			$sp->request
 		);
-		
-		return $plugins;
 	}
 }

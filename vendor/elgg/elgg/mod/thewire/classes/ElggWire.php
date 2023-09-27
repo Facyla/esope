@@ -18,20 +18,29 @@ class ElggWire extends ElggObject {
 
 		$this->attributes['subtype'] = 'thewire';
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see ElggObject::canComment()
-	 */
-	public function canComment($user_guid = 0, $default = null) {
-		return false;
-	}
 	
 	/**
 	 * {@inheritDoc}
 	 * @see ElggObject::getDisplayName()
 	 */
-	public function getDisplayName() {
-		return elgg_get_excerpt($this->description, 25);
+	public function getDisplayName(): string {
+		return elgg_get_excerpt((string) $this->description, 25);
+	}
+	
+	/**
+	 * Returns the parent entity if available
+	 *
+	 * @return \ElggWire|null
+	 */
+	public function getParent(): ?\ElggWire {
+		$parents = elgg_get_entities([
+			'type' => 'object',
+			'subtype' => $this->subtype,
+			'relationship' => 'parent',
+			'relationship_guid' => $this->guid,
+			'limit' => 1,
+		]);
+		
+		return $parents ? $parents[0] : null;
 	}
 }

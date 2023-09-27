@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg\Services;
 
 /**
@@ -8,7 +9,7 @@ namespace Elgg\Services;
  */
 interface AjaxResponse {
 
-	const RESPONSE_HOOK = 'ajax_response';
+	const RESPONSE_EVENT = 'ajax_response';
 
 	/**
 	 * Set the max-age for client caching

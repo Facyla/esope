@@ -3,8 +3,6 @@
 namespace Elgg\I18n;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
  * A translator that does nothing except return the key that was requested.
  *
  * This translator is useful during development if you want to be able to
@@ -18,7 +16,7 @@ final class NullTranslator extends Translator {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function translate($key, $args = [], $lang = '') {
-		return $key;
+	public function translate($message_key, $args = [], $language = ''): string {
+		return $message_key;
 	}
 }

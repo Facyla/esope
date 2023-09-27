@@ -5,43 +5,30 @@ namespace Elgg\Database;
 use Elgg\Cache\MetadataCache;
 use Elgg\Database;
 use Elgg\Database\Clauses\MetadataWhereClause;
-use Elgg\EventsService as Events;
-use Elgg\TimeUsing;
-use ElggMetadata;
 use Elgg\Database\Clauses\OrderByClause;
+use Elgg\EventsService as Events;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\LogicException;
+use Elgg\Traits\TimeUsing;
 
 /**
  * This class interfaces with the database to perform CRUD operations on metadata
- *
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
  * @internal
  */
 class MetadataTable {
 
 	use TimeUsing;
-
-	/**
-	 * @var MetadataCache
-	 */
-	protected $metadata_cache;
-
-	/**
-	 * @var Database
-	 */
-	protected $db;
-
-	/**
-	 * @var Events
-	 */
-	protected $events;
-
-	/**
-	 * @var string[]
-	 */
-	protected $tag_names = [];
-
+	
 	const MYSQL_TEXT_BYTE_LIMIT = 65535;
+	
+	protected MetadataCache $metadata_cache;
+
+	protected Database $db;
+
+	protected Events $events;
+	
+	protected EntityTable $entityTable;
 
 	/**
 	 * Constructor
@@ -49,57 +36,18 @@ class MetadataTable {
 	 * @param MetadataCache $metadata_cache A cache for this table
 	 * @param Database      $db             The Elgg database
 	 * @param Events        $events         The events registry
+	 * @param EntityTable   $entityTable    The EntityTable database wrapper
 	 */
 	public function __construct(
 		MetadataCache $metadata_cache,
 		Database $db,
-		Events $events
+		Events $events,
+		EntityTable $entityTable
 	) {
 		$this->metadata_cache = $metadata_cache;
 		$this->db = $db;
 		$this->events = $events;
-	}
-
-	/**
-	 * Registers a metadata name as containing tags for an entity.
-	 *
-	 * @param string $name Tag name
-	 *
-	 * @return bool
-	 */
-	public function registerTagName($name) {
-		if (!in_array($name, $this->tag_names)) {
-			$this->tag_names[] = $name;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Unregisters a metadata tag name
-	 *
-	 * @param string $name Tag name
-	 *
-	 * @return bool
-	 */
-	public function unregisterTagName($name) {
-		$index = array_search($name, $this->tag_names);
-		if ($index >= 0) {
-			unset($this->tag_names[$index]);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns an array of valid metadata names for tags.
-	 *
-	 * @return string[]
-	 */
-	public function getTagNames() {
-		return $this->tag_names;
+		$this->entityTable = $entityTable;
 	}
 
 	/**
@@ -109,17 +57,12 @@ class MetadataTable {
 	 *
 	 * Returns an array of objects that include "tag" and "total" properties
 	 *
-	 * @todo   When updating this function for 3.0, I have noticed that docs explicitly mention
-	 *       that tags must be registered, but it was not really checked anywhere in code
-	 *       So, either update the docs or decide what the behavior should be
-	 *
 	 * @param array $options Options
 	 *
 	 * @option int      $threshold Minimum number of tag occurrences
-	 * @option string[] $tag_names Names of registered tag names to include in search
+	 * @option string[] $tag_names tag names to include in search
 	 *
 	 * @return \stdClass[]|false
-	 * @throws \DatabaseException
 	 */
 	public function getTags(array $options = []) {
 		$defaults = [
@@ -130,12 +73,9 @@ class MetadataTable {
 		$options = array_merge($defaults, $options);
 
 		$singulars = ['tag_name'];
-		$options = LegacyQueryOptionsAdapter::normalizePluralOptions($options, $singulars);
+		$options = QueryOptions::normalizePluralOptions($options, $singulars);
 
-		$tag_names = elgg_extract('tag_names', $options);
-		if (empty($tag_names)) {
-			$tag_names = elgg_get_registered_tag_metadata_names();
-		}
+		$tag_names = elgg_extract('tag_names', $options, ['tags'], false);
 
 		$threshold = elgg_extract('threshold', $options, 1, false);
 
@@ -200,10 +140,9 @@ class MetadataTable {
 	 *
 	 * @param int $id The id of the metadata object being retrieved.
 	 *
-	 * @return ElggMetadata|false  false if not found
-	 * @throws \DatabaseException
+	 * @return \ElggMetadata|null
 	 */
-	public function get($id) {
+	public function get(int $id): ?\ElggMetadata {
 		$qb = Select::fromTable('metadata');
 		$qb->select('*');
 
@@ -212,22 +151,17 @@ class MetadataTable {
 		$qb->addClause($where);
 
 		$row = $this->db->getDataRow($qb);
-		if (!empty($row)) {
-			return new ElggMetadata($row);
-		}
-
-		return false;
+		return $row ? new \ElggMetadata($row) : null;
 	}
 
 	/**
 	 * Deletes metadata using its ID
 	 *
-	 * @param ElggMetadata $metadata Metadata
+	 * @param \ElggMetadata $metadata Metadata
 	 *
 	 * @return bool
-	 * @throws \DatabaseException
 	 */
-	public function delete(ElggMetadata $metadata) {
+	public function delete(\ElggMetadata $metadata): bool {
 		if (!$metadata->id) {
 			return false;
 		}
@@ -254,20 +188,25 @@ class MetadataTable {
 	 * Metadata can be an array by setting allow_multiple to true, but it is an
 	 * indexed array with no control over the indexing
 	 *
-	 * @param ElggMetadata $metadata       Metadata
-	 * @param bool         $allow_multiple Allow multiple values for one key. Default is false
+	 * @param \ElggMetadata $metadata       Metadata
+	 * @param bool          $allow_multiple Allow multiple values for one key. Default is false
 	 *
 	 * @return int|false id of metadata or false if failure
-	 * @throws \DatabaseException
+	 * @throws LogicException
 	 */
-	public function create(ElggMetadata $metadata, $allow_multiple = false) {
+	public function create(\ElggMetadata $metadata, bool $allow_multiple = false): int|false {
 		if (!isset($metadata->value) || !isset($metadata->entity_guid)) {
-			elgg_log("Metadata must have a value and entity guid", 'ERROR');
+			elgg_log('Metadata must have a value and entity guid', 'ERROR');
 			return false;
 		}
 
+		if (!$this->entityTable->exists($metadata->entity_guid)) {
+			elgg_log("Can't create metadata on a non-existing entity_guid", 'ERROR');
+			return false;
+		}
+		
 		if (!is_scalar($metadata->value)) {
-			elgg_log("To set multiple metadata values use ElggEntity::setMetadata", 'ERROR');
+			elgg_log('To set multiple metadata values use ElggEntity::setMetadata', 'ERROR');
 			return false;
 		}
 
@@ -285,7 +224,7 @@ class MetadataTable {
 			$id = $this->getIDsByName($metadata->entity_guid, $metadata->name);
 
 			if (is_array($id)) {
-				throw new \LogicException("
+				throw new LogicException("
 					Multiple '{$metadata->name}' metadata values exist for entity [guid: {$metadata->entity_guid}].
 					Use ElggEntity::setMetadata()
 				");
@@ -310,7 +249,7 @@ class MetadataTable {
 		$qb->values([
 			'name' => $qb->param($metadata->name, ELGG_VALUE_STRING),
 			'entity_guid' => $qb->param($metadata->entity_guid, ELGG_VALUE_INTEGER),
-			'value' => $qb->param($metadata->value, $metadata->value_type === 'integer' ? ELGG_VALUE_INTEGER : ELGG_VALUE_STRING),
+			'value' => $qb->param($metadata->value, $metadata->value_type === 'text' ? ELGG_VALUE_STRING : ELGG_VALUE_INTEGER),
 			'value_type' => $qb->param($metadata->value_type, ELGG_VALUE_STRING),
 			'time_created' => $qb->param($time_created, ELGG_VALUE_INTEGER),
 		]);
@@ -324,29 +263,32 @@ class MetadataTable {
 		$metadata->id = (int) $id;
 		$metadata->time_created = $time_created;
 
-		if ($this->events->trigger('create', 'metadata', $metadata)) {
-			$this->metadata_cache->clear($metadata->entity_guid);
-
-			$this->events->triggerAfter('create', 'metadata', $metadata);
-
-			return $id;
-		} else {
+		if (!$this->events->trigger('create', 'metadata', $metadata)) {
 			$this->delete($metadata);
-
+			
 			return false;
 		}
+		
+		$this->metadata_cache->clear($metadata->entity_guid);
+
+		$this->events->triggerAfter('create', 'metadata', $metadata);
+
+		return $id;
 	}
 
 	/**
 	 * Update a specific piece of metadata
 	 *
-	 * @param ElggMetadata $metadata Updated metadata
+	 * @param \ElggMetadata $metadata Updated metadata
 	 *
 	 * @return bool
-	 * @throws \DatabaseException
 	 */
-	public function update(ElggMetadata $metadata) {
-
+	public function update(\ElggMetadata $metadata): bool {
+		if (!$this->entityTable->exists($metadata->entity_guid)) {
+			elgg_log("Can't update metadata to a non-existing entity_guid", 'ERROR');
+			return false;
+		}
+		
 		if (!$this->events->triggerBefore('update', 'metadata', $metadata)) {
 			return false;
 		}
@@ -384,12 +326,11 @@ class MetadataTable {
 	 *
 	 * @param array $options Options
 	 *
-	 * @return ElggMetadata[]|mixed
+	 * @return \ElggMetadata[]|mixed
 	 */
 	public function getAll(array $options = []) {
-
 		$options['metastring_type'] = 'metadata';
-		$options = LegacyQueryOptionsAdapter::normalizeMetastringOptions($options);
+		$options = QueryOptions::normalizeMetastringOptions($options);
 
 		return Metadata::find($options);
 	}
@@ -401,12 +342,11 @@ class MetadataTable {
 	 *
 	 * @param array $guids Array of guids to fetch metadata rows for
 	 *
-	 * @return \stdClass[]
+	 * @return \ElggMetadata[]
 	 *
 	 * @internal
 	 */
-	public function getRowsForGuids(array $guids) {
-
+	public function getRowsForGuids(array $guids): array {
 		$qb = Select::fromTable('metadata');
 		$qb->select('*')
 			->where($qb->compare('entity_guid', 'IN', $guids, ELGG_VALUE_GUID))
@@ -414,7 +354,9 @@ class MetadataTable {
 			->addOrderBy('time_created', 'asc')
 			->addOrderBy('id', 'asc');
 		
-		return $qb->execute()->fetchAll();
+		return $this->db->getData($qb, function ($row) {
+			return new \ElggMetadata($row);
+		});
 	}
 
 	/**
@@ -429,11 +371,28 @@ class MetadataTable {
 	 *
 	 * @param array $options Options
 	 *
-	 * @return bool|null true on success, false on failure, null if no metadata to delete.
+	 * @return bool
+	 * @throws InvalidArgumentException
 	 */
-	public function deleteAll(array $options) {
-		if (!_elgg_is_valid_options_for_batch_operation($options, 'metadata')) {
-			return false;
+	public function deleteAll(array $options): bool {
+		$required = [
+			'guid', 'guids',
+			'metadata_name', 'metadata_names',
+			'metadata_value', 'metadata_values',
+		];
+
+		$found = false;
+		foreach ($required as $key) {
+			// check that it exists and is something.
+			if (isset($options[$key]) && !elgg_is_empty($options[$key])) {
+				$found = true;
+				break;
+			}
+		}
+
+		if (!$found) {
+			// requirements not met
+			throw new InvalidArgumentException(__METHOD__ . ' requires at least one of the following keys in $options: ' . implode(', ', $required));
 		}
 
 		// This moved last in case an object's constructor sets metadata. Currently the batch
@@ -448,7 +407,7 @@ class MetadataTable {
 		$count = $metadata->count();
 
 		if (!$count) {
-			return;
+			return true;
 		}
 
 		$success = 0;
@@ -459,7 +418,7 @@ class MetadataTable {
 			}
 		}
 
-		return $success == $count;
+		return $success === $count;
 	}
 
 	/**
@@ -470,7 +429,7 @@ class MetadataTable {
 	 *
 	 * @return int[]|int|null
 	 */
-	public function getIDsByName($entity_guid, $name) {
+	protected function getIDsByName(int $entity_guid, string $name) {
 		if ($this->metadata_cache->isLoaded($entity_guid)) {
 			$ids = $this->metadata_cache->getSingleId($entity_guid, $name);
 		} else {

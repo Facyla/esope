@@ -8,11 +8,10 @@
  * Send email out to the address and request a confirmation.
  *
  * @param int $user_guid The user's GUID
- * @return mixed
+ * @return array|bool
  */
-function uservalidationbyemail_request_validation($user_guid) {
+function uservalidationbyemail_request_validation(int $user_guid): array|bool {
 
-	$user_guid = (int) $user_guid;
 	$user = get_user($user_guid);
 	if (!$user instanceof ElggUser) {
 		return false;
@@ -36,24 +35,20 @@ function uservalidationbyemail_request_validation($user_guid) {
 	elgg_get_session()->set('emailsent', $user->email);
 
 	$subject = elgg_echo('email:validate:subject', [
-			$user->getDisplayName(),
-			$site->getDisplayName()
-		], $user->language
-	);
+		$user->getDisplayName(),
+		$site->getDisplayName(),
+	], $user->language);
 
 	$body = elgg_echo('email:validate:body', [
-			$user->getDisplayName(),
-			$site->getDisplayName(),
-			$link,
-			$site->getDisplayName(),
-			$site->getURL(),
-		], $user->language
-	);
+		$site->getDisplayName(),
+		$link,
+	], $user->language);
 
 	$params = [
 		'action' => 'uservalidationbyemail',
 		'object' => $user,
 		'link' => $link,
+		'apply_muting' => false,
 	];
 	
 	// Send validation email

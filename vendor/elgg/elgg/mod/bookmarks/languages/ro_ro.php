@@ -18,6 +18,8 @@ return array(
 	'collection:object:bookmarks:friends' => "Marcajele prietenilor",
 	'add:object:bookmarks' => "Adaugă un marcaj",
 	'edit:object:bookmarks' => "Editează marcajul",
+	'notification:object:bookmarks:create' => "Trimite o notificare atunci când un marcaj este creat",
+	'notifications:mute:object:bookmarks' => "despre marcajul '%s'",
 
 	'bookmarks:this' => "Marchează această pagină",
 	'bookmarks:this:group' => "Marcaj în %s",
@@ -28,17 +30,15 @@ return array(
 
 	'bookmarks:notify:summary' => 'Marcaj nou numit %s',
 	'bookmarks:notify:subject' => 'Marcaj nou: %s',
-	'bookmarks:notify:body' =>
-'%s a adăugat un marcaj nou: %s 
+	'bookmarks:notify:body' => '%s a adăugat un marcaj nou: %s
 
 Adresă: %s
 
 %s
 
-Vezi și comentează marcajul:
-%s
-',
-
+Vezi și comentează la acest marcaj:
+%s',
+	
 	'bookmarks:numbertodisplay' => 'Numărul de marcaje pentru afișare',
 
 	'river:object:bookmarks:create' => '%s a marcat %s',
@@ -52,14 +52,9 @@ Vezi și comentează marcajul:
 	'widgets:bookmarks:name' => 'Marcaje',
 	'widgets:bookmarks:description' => "Afișează-ți ultimele marcaje.",
 
-	'bookmarks:bookmarklet:description' =>
-			"Un marcator este un buton special pe care î-l salvezi în bara de legături a navigatorului tău. Acest lucru îți permite să salvezi orice resursă găsită pe internet la marcajele tale. Pentru a-l seta, trage butonul de mai jos în bara de legături a navigatorului tău:",
-
-	'bookmarks:bookmarklet:descriptionie' =>
-			"Dacă folosești Internet Explorer, va trebui să dai clic dreapta pe pictograma de marcator, selectează apoi 'adaugă la favorite', și apoi bara de Legături.",
-
-	'bookmarks:bookmarklet:description:conclusion' =>
-			"Poți apoi să marchezi oricând orice pagină pe care o vizitezi apăsând pe butonul din navigatorul tău.",
+	'bookmarks:bookmarklet:description' => "Un marcator este un buton special pe care î-l salvezi în bara de legături a navigatorului tău. Acest lucru îți permite să salvezi orice resursă găsită pe internet la marcajele tale. Pentru a-l seta, trage butonul de mai jos în bara de legături a navigatorului tău:",
+	'bookmarks:bookmarklet:descriptionie' => "Dacă folosești Internet Explorer, va trebui să dai clic dreapta pe pictograma de marcator, selectează apoi 'adaugă la favorite', și apoi bara de Legături.",
+	'bookmarks:bookmarklet:description:conclusion' => "Poți apoi să marchezi oricând orice pagină pe care o vizitezi apăsând pe butonul din navigatorul tău.",
 
 	/**
 	 * Status messages
@@ -73,5 +68,4 @@ Vezi și comentează marcajul:
 	 */
 
 	'bookmarks:save:failed' => "Marcajul tău nu a putut fi salvat. Asigură-te că ai introdus un titlu și o adresă apoi încearcă din nou.",
-	'bookmarks:unknown_bookmark' => 'Nu s-a putut găsi marcajul specificat',
 );

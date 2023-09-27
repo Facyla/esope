@@ -31,9 +31,10 @@
  *                        </code>
  */
 $id = elgg_extract('id', $vars);
-if (!isset($vars['id'])) {
-	$id = "elgg-tabs-" . base_convert(mt_rand(), 10, 36);
+if (!isset($id)) {
+	$id = 'elgg-tabs-' . base_convert(mt_rand(), 10, 36);
 }
+
 $vars['id'] = $id;
 
 $vars['class'] = elgg_extract_class($vars, 'elgg-tabs-component');
@@ -51,7 +52,7 @@ foreach ($tabs as $index => $tab) {
 		continue;
 	}
 
-	$selected = elgg_extract('selected', $tab);
+	$selected = (bool) elgg_extract('selected', $tab, false);
 
 	$class = ['elgg-content'];
 	$tab_content = '';
@@ -59,7 +60,7 @@ foreach ($tabs as $index => $tab) {
 	if (isset($tab['content'])) {
 		$class[] = $selected ? 'elgg-state-active' : 'hidden';
 
-		$tab_content = elgg_extract('content', $tab);
+		$tab_content = (string) elgg_extract('content', $tab);
 		unset($tab['content']);
 
 		$tab['href'] = "#{$tab_id}";
@@ -97,9 +98,9 @@ $content = elgg_format_element('div', [
 	'class' => 'elgg-tabs-content',
 ], $content);
 
-$module = elgg_extract('module', $vars, 'tabs');
+$module = (string) elgg_extract('module', $vars, 'tabs');
 unset($vars['module']);
 
-echo elgg_view_module($module, elgg_extract('title', $vars), $tabs . $content, $vars);
+echo elgg_view_module($module, (string) elgg_extract('title', $vars), $tabs . $content, $vars);
 
 elgg_require_js('page/components/tabs');

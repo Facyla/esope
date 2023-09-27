@@ -6,12 +6,9 @@
  */
 namespace CssCrush {
 
-    Plugin::register('property-sorter', array(
-        'enable' => function ($process) {
-            $process->hooks->add('rule_prealias', 'CssCrush\property_sorter');
-        }
-    ));
-
+    \csscrush_plugin('property-sorter', function ($process) {
+        $process->on('rule_prealias', 'CssCrush\property_sorter');
+    });
 
     function property_sorter(Rule $rule) {
 
@@ -109,7 +106,7 @@ namespace CssCrush {
             return $GLOBALS['CSSCRUSH_PROPERTY_SORT_ORDER_CACHE'];
         }
 
-        $table = array();
+        $table = [];
 
         // Nothing cached, check for a user-defined table.
         if (isset($GLOBALS['CSSCRUSH_PROPERTY_SORT_ORDER'])) {

@@ -2,25 +2,20 @@
 
 namespace Elgg\Cache;
 
-use DateTime;
-use ElggCache;
 use Elgg\Config;
+use Elgg\Exceptions\ConfigurationException;
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\Values;
-use Stash\Pool;
-use Stash\Driver\Apc;
-use Stash\Driver\BlackHole;
-use Stash\Driver\Composite;
-use Stash\Driver\Ephemeral;
-use Stash\Driver\FileSystem;
-use Stash\Driver\Memcache;
-use Stash\Driver\Redis;
+use Phpfastcache\CacheManager;
+use Phpfastcache\Cluster\ClusterAggregator;
+use Phpfastcache\Core\Pool\ExtendedCacheItemPoolInterface;
 
 /**
  * Composite cache pool
  *
  * @internal
  */
-class CompositeCache extends ElggCache {
+class CompositeCache extends BaseCache {
 
 	/**
 	 * TTL of saved items (default timeout after a day to prevent anything getting too stale)
@@ -38,7 +33,7 @@ class CompositeCache extends ElggCache {
 	protected $flags;
 
 	/**
-	 * @var Pool
+	 * @var ExtendedCacheItemPoolInterface
 	 */
 	protected $pool;
 
@@ -59,8 +54,6 @@ class CompositeCache extends ElggCache {
 	 * @param Config $config             Elgg config
 	 * @param int    $flags              Start flags
 	 * @param bool   $validate_lastcache During load validate ElggConfig::lastcache
-	 *
-	 * @throws \ConfigurationException
 	 */
 	public function __construct($namespace, Config $config, $flags, bool $validate_lastcache = true) {
 		parent::__construct();
@@ -73,135 +66,95 @@ class CompositeCache extends ElggCache {
 	}
 
 	/**
-	 * Returns cache pool
-	 * @return Pool
-	 */
-	public function getPool() {
-		return $this->pool;
-	}
-
-	/**
 	 * Save data in a cache.
 	 *
-	 * @param string       $key  Name
-	 * @param mixed        $data Value
-	 * @param int|DateTime $ttl  Expire value after
+	 * @param string        $key          Name
+	 * @param mixed         $data         Value
+	 * @param int|\DateTime $expire_after Expire value after
 	 *
 	 * @return bool
 	 */
-	public function save($key, $data, $ttl = null) {
+	public function save($key, $data, $expire_after = null) {
 		if ($this->disabled) {
 			return false;
 		}
+		
+		$expire_after = $expire_after ?: $this->ttl;
 
-		if (!is_string($key) && !is_int($key)) {
-			throw new \InvalidArgumentException('key must be string or integer');
+		$item = $this->pool->getItem($this->sanitizeItemKey($key));
+		$item->set($data);
+		
+		if (is_int($expire_after)) {
+			$item->expiresAfter($expire_after);
+		} elseif ($expire_after instanceof \DateTime) {
+			$item->expiresAt($expire_after);
 		}
-
-		$item = $this->pool->getItem($this->namespaceKey($key));
-		$item->lock();
-
-		$item->setTTL($ttl ? : $this->ttl);
-
-		return $item->set($data)->save();
+			
+		return $this->pool->save($item);
 	}
 
 	/**
 	 * Load data from the cache using a given key.
 	 *
-	 * @param string $key                 Name
-	 * @param array  $invalidation_method Stash invalidation method arguments
+	 * @param string $key Name
 	 *
 	 * @return mixed The stored data or false.
 	 */
-	public function load($key, $invalidation_method = null) {
+	public function load($key) {
 		if ($this->disabled) {
 			return null;
 		}
 
-		if (!is_string($key) && !is_int($key)) {
-			throw new \InvalidArgumentException('key must be string or integer');
-		}
-
-		$item = $this->pool->getItem($this->namespaceKey($key));
-	
-		if (is_array($invalidation_method)) {
-			call_user_func_array([$item, 'setInvalidationMethod'], $invalidation_method);
+		$item = $this->pool->getItem($this->sanitizeItemKey($key));
+		if (!$item->isHit()) {
+			return null;
 		}
 		
-		try {
-			if ($item->isMiss()) {
+		if ($this->validate_lastcache && $this->config->lastcache) {
+			$expiration_date = Values::normalizeTime($this->config->lastcache);
+			
+			if ($item->getCreationDate()->getTimestamp() < $expiration_date->getTimestamp()) {
+				$this->delete($key);
 				return null;
 			}
-			
-			if ($this->validate_lastcache && $this->config->lastcache) {
-				$expiration_date = Values::normalizeTime($this->config->lastcache);
-				$creation = $item->getCreation();
-				if ($creation instanceof \DateTime) {
-					if ($creation->getTimestamp() < $expiration_date->getTimestamp()) {
-						$this->delete($key);
-						return null;
-					}
-				}
-			}
-			
-			return $item->get();
-		} catch (\Error $e) {
-			// catching parsing errors in file driver, because of potential race conditions during write
-			// this will cause corrupted data in the file and will crash the site when reading the file
-			elgg_log(__METHOD__ . " failed for key: {$this->getNamespace()}/{$key} with error: {$e->getMessage()}", 'ERROR');
-			
-			// remove the item from the cache so it can try to generate this item again
-			$this->delete($key);
 		}
-
-		return null;
+		
+		return $item->get();
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ElggCache::delete()
 	 */
 	public function delete($key) {
 		if ($this->disabled) {
 			return false;
 		}
 
-		if (!is_string($key) && !is_int($key)) {
-			throw new \InvalidArgumentException('key must be string or integer');
-		}
-
-		$this->pool->deleteItem($this->namespaceKey($key));
-
-		return true;
+		return $this->pool->deleteItem($this->sanitizeItemKey($key));
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @see ElggCache::clear()
 	 */
 	public function clear() {
-		$this->pool->deleteItems([$this->namespaceKey('')]);
-
-		return true;
+		return $this->pool->clear();
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * @see ElggCache::invalidate()
 	 */
 	public function invalidate() {
-		// Stash doesn't have invalidation as an action.
+		// Phpfastcache doesn't have invalidation as an action.
 		// This is handled during load
 		return true;
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * @see ElggCache::purge()
 	 */
 	public function purge() {
-		return $this->pool->purge();
+		// Phpfastcache doesn't have purge as an action
+		return true;
 	}
 
 	/**
@@ -213,7 +166,7 @@ class CompositeCache extends ElggCache {
 	 *
 	 * @return void
 	 */
-	public function setNamespace($namespace = "default") {
+	public function setNamespace($namespace = 'default') {
 		$this->namespace = $namespace;
 	}
 
@@ -225,134 +178,149 @@ class CompositeCache extends ElggCache {
 	public function getNamespace() {
 		return $this->namespace;
 	}
-
+	
 	/**
-	 * Namespace the key
+	 * Prefixes instance ids with namespace
 	 *
-	 * @param string $key Value name
+	 * @param string $id instance id
 	 *
 	 * @return string
+	 *
+	 * @since 4.2
 	 */
-	public function namespaceKey($key) {
-		return "/{$this->getNamespace()}/$key";
+	protected function prefixInstanceId(string $id): string {
+		return "{$this->getNamespace()}_{$id}";
+	}
+	
+	/**
+	 * Sanitizes item key for cache
+	 *
+	 * @param mixed $key input key
+	 *
+	 * @return string
+	 *
+	 * @throws InvalidArgumentException
+	 *
+	 * @since 4.2
+	 */
+	protected function sanitizeItemKey($key): string {
+		if (!is_string($key) && !is_int($key)) {
+			throw new InvalidArgumentException('key must be string or integer');
+		}
+		
+		return str_replace(['{', '}', '(', ')', '/', '\\', '@', ':'], '_', "{$key}");
 	}
 
 	/**
-	 * Create a new composite stash pool
-	 * @return Pool
-	 * @throws \ConfigurationException
+	 * Create a new cluster/pool of drivers
+	 *
+	 * @return ExtendedCacheItemPoolInterface
+	 * @throws ConfigurationException
 	 */
 	protected function createPool() {
+		
 		$drivers = [];
-		$drivers[] = $this->buildEphemeralDriver();
-		$drivers[] = $this->buildApcDriver();
 		$drivers[] = $this->buildRedisDriver();
 		$drivers[] = $this->buildMemcachedDriver();
 		$drivers[] = $this->buildFileSystemDriver();
 		$drivers[] = $this->buildLocalFileSystemDriver();
 		$drivers[] = $this->buildBlackHoleDriver();
 		$drivers = array_filter($drivers);
-
+		
 		if (empty($drivers)) {
-			throw new \ConfigurationException("Unable to initialize composite cache without drivers");
+			// the memory driver can only be used as a stand-alone driver (not combined in a cluster)
+			// other drivers already have a built in memory storage (default allowed in config)
+			$ephemeral = $this->buildEphemeralDriver();
+			if (!empty($ephemeral)) {
+				$drivers[] = $ephemeral;
+			}
 		}
-
-		if (count($drivers) > 1) {
-			$driver = new Composite([
-				'drivers' => $drivers,
-			]);
-		} else {
-			$driver = array_shift($drivers);
+		
+		if (empty($drivers)) {
+			throw new ConfigurationException('Unable to initialize composite cache without drivers');
 		}
-
-		return new Pool($driver);
-	}
-
-	/**
-	 * Builds APC driver
-	 * @return null|Apc
-	 */
-	protected function buildApcDriver() {
-		if (!($this->flags & ELGG_CACHE_APC)) {
-			return null;
+				
+		if (count($drivers) === 1) {
+			return array_shift($drivers);
 		}
-
-		if (!extension_loaded('apc') || !ini_get('apc.enabled')) {
-			return null;
+		
+		$cluster = new ClusterAggregator($this->getNamespace());
+		foreach ($drivers as $driver) {
+			$cluster->aggregateDriver($driver);
 		}
-
-		return new Apc();
+		
+		$cluster_driver = $cluster->getCluster();
+		
+		$cluster_driver->getConfig()->setPreventCacheSlams(true);
+		$cluster_driver->getConfig()->setDefaultChmod(0770);
+		$cluster_driver->getConfig()->setUseStaticItemCaching(true);
+		$cluster_driver->getConfig()->setItemDetailedDate(true);
+		
+		return $cluster_driver;
 	}
 
 	/**
 	 * Builds Redis driver
-	 * @return null|Redis
+	 * @return null|ExtendedCacheItemPoolInterface
 	 */
 	protected function buildRedisDriver() {
 		if (!($this->flags & ELGG_CACHE_PERSISTENT)) {
 			return null;
 		}
 
-		if (!$this->config->redis || empty($this->config->redis_servers)) {
+		if (!self::isRedisAvailable()) {
 			return null;
 		}
 		
-		$options = $this->config->redis_options ?: [];
-		$options['servers'] = $this->config->redis_servers;
-		
-		return new Redis($options);
+		$config = \Elgg\Cache\Config\Redis::fromElggConfig($this->namespace, $this->config);
+		if (empty($config)) {
+			return null;
+		}
+				
+		return CacheManager::getInstance('Redis', $config, $this->prefixInstanceId('redis'));
 	}
 
 	/**
 	 * Builds Memcached driver
-	 * @return null|Memcache
+	 * @return null|ExtendedCacheItemPoolInterface
 	 */
 	protected function buildMemcachedDriver() {
 		if (!($this->flags & ELGG_CACHE_PERSISTENT)) {
 			return null;
 		}
-
-		if (!$this->config->memcache || empty($this->config->memcache_servers)) {
-			return null;
-		}
 			
-		$has_class = class_exists('Memcache') || class_exists('Memcached');
-		if (!$has_class) {
+		if (!self::isMemcacheAvailable()) {
 			return null;
 		}
-
-		return new Memcache([
-			'servers' => $this->config->memcache_servers,
-			'options' => [
-				'prefix_key' => $this->config->memcache_namespace_prefix,
-			]
-		]);
+		
+		$config = \Elgg\Cache\Config\Memcached::fromElggConfig($this->namespace, $this->config);
+		if (empty($config)) {
+			return null;
+		}
+		
+		return CacheManager::getInstance('Memcached', $config, $this->prefixInstanceId('memcache'));
 	}
 
 	/**
 	 * Builds file system driver
-	 * @return null|FileSystem
+	 * @return null|ExtendedCacheItemPoolInterface
 	 */
 	protected function buildFileSystemDriver() {
 		if (!($this->flags & ELGG_CACHE_FILESYSTEM)) {
 			return null;
 		}
-
-		$path = $this->config->cacheroot ? : $this->config->dataroot;
-		if (!$path) {
+		
+		$config = \Elgg\Cache\Config\Files::fromElggConfig($this->namespace, $this->config);
+		if (empty($config)) {
 			return null;
 		}
 		
-		// make a sepatate folder for Stash caches
-		// because Stash assumes all files/folders are made by Stash
-		$path .= 'stash' . DIRECTORY_SEPARATOR;
-
 		try {
-			return new FileSystem([
-				'path' => $path,
-			]);
-		} catch (\Exception $e) {
-			elgg_log(__METHOD__ . " {$e->getMessage()}: {$path}", 'ERROR');
+			return CacheManager::getInstance('Files', $config, $this->prefixInstanceId('files'));
+		} catch (\Phpfastcache\Exceptions\PhpfastcacheIOException $e) {
+			if (!$this->config->installer_running) {
+				elgg_log($e, 'ERROR');
+			}
 		}
 		
 		return null;
@@ -360,28 +328,24 @@ class CompositeCache extends ElggCache {
 	
 	/**
 	 * Builds local file system driver
-	 * @return null|FileSystem
+	 * @return null|ExtendedCacheItemPoolInterface
 	 */
 	protected function buildLocalFileSystemDriver() {
 		if (!($this->flags & ELGG_CACHE_LOCALFILESYSTEM)) {
 			return null;
 		}
 
-		$path = $this->config->localcacheroot ? : ($this->config->cacheroot ? : $this->config->dataroot);
-		if (!$path) {
+		$config = \Elgg\Cache\Config\LocalFiles::fromElggConfig($this->namespace, $this->config);
+		if (empty($config)) {
 			return null;
 		}
-
-		// make a sepatate folder for Stash caches
-		// because Stash assumes all files/folders are made by Stash
-		$path .= 'localstash' . DIRECTORY_SEPARATOR;
 		
 		try {
-			return new FileSystem([
-				'path' => $path,
-			]);
-		} catch (\Exception $e) {
-			elgg_log(__METHOD__ . " {$e->getMessage()}: {$path}", 'ERROR');
+			return CacheManager::getInstance('Files', $config, $this->prefixInstanceId('local_files'));
+		} catch (\Phpfastcache\Exceptions\PhpfastcacheIOException $e) {
+			if (!$this->config->installer_running) {
+				elgg_log($e, 'ERROR');
+			}
 		}
 		
 		return null;
@@ -389,25 +353,54 @@ class CompositeCache extends ElggCache {
 
 	/**
 	 * Builds in-memory driver
-	 * @return null|Ephemeral
+	 * @return null|ExtendedCacheItemPoolInterface
 	 */
 	protected function buildEphemeralDriver() {
 		if (!($this->flags & ELGG_CACHE_RUNTIME)) {
 			return null;
 		}
-
-		return new Ephemeral();
+		
+		$config = new \Phpfastcache\Drivers\Memstatic\Config();
+		
+		$config->setUseStaticItemCaching(true);
+		$config->setItemDetailedDate(true);
+		
+		return CacheManager::getInstance('Memstatic', $config, $this->prefixInstanceId('memstatic'));
 	}
 
 	/**
 	 * Builds null cache driver
-	 * @return null|BlackHole
+	 * @return null|ExtendedCacheItemPoolInterface
 	 */
 	protected function buildBlackHoleDriver() {
 		if (!($this->flags & ELGG_CACHE_BLACK_HOLE)) {
 			return null;
 		}
-
-		return new BlackHole();
+		
+		$config = new \Phpfastcache\Drivers\Devnull\Config();
+		
+		return CacheManager::getInstance('Devnull', $config, $this->prefixInstanceId('devnull'));
+	}
+	
+	/**
+	 * Helper function to check if memcache is available
+	 *
+	 * @return bool
+	 *
+	 * @since 4.2
+	 */
+	public static function isMemcacheAvailable(): bool {
+		return class_exists('Memcached');
+	}
+	
+	/**
+	 * Helper function to check if Redis is available
+	 *
+	 * @return bool
+	 *
+	 * @since 4.2
+	 */
+	public static function isRedisAvailable(): bool {
+		return extension_loaded('Redis');
 	}
 }

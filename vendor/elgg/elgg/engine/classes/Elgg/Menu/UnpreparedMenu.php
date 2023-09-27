@@ -2,13 +2,13 @@
 
 namespace Elgg\Menu;
 
+use Elgg\Exceptions\InvalidArgumentException;
 use ElggMenuItem;
-use InvalidArgumentException;
 
 /**
- * Linear set of menu items collected from configuration and the "register" hook.
+ * Linear set of menu items collected from configuration and the "register" event.
  *
- * This also encapsulates parameters to be passed to hooks and views.
+ * This also encapsulates parameters to be passed to events and views.
  */
 class UnpreparedMenu {
 
@@ -25,7 +25,7 @@ class UnpreparedMenu {
 	/**
 	 * Constructor
 	 *
-	 * @param array                    $params Parameters to be passed to the "prepare" hook and views.
+	 * @param array                    $params Parameters to be passed to the "prepare" event and views.
 	 *                                         Must include value for "name".
 	 * @param ElggMenuItem[]|MenuItems $items  Menu items
 	 */
@@ -37,15 +37,16 @@ class UnpreparedMenu {
 		}
 
 		if (!$items instanceof MenuItems) {
-			throw new InvalidArgumentException("Items collection must implement " . MenuItems::class);
+			throw new InvalidArgumentException('Items collection must implement ' . MenuItems::class);
 		}
+		
 		$this->items = $items;
 	}
 
 	/**
 	 * Set how this menu should be sorted
 	 *
-	 * @see ElggMenuBuilder::sort
+	 * @see \ElggMenuBuilder::sort()
 	 *
 	 * @param string|callable $sort_by Sort strategy "text", "name", "priority", or callback
 	 *
@@ -58,8 +59,8 @@ class UnpreparedMenu {
 	/**
 	 * Get the designated (or default) sort strategy
 	 *
-	 * @see setSortBy
-	 * @see ElggMenuBuilder::sort
+	 * @see self::setSortBy()
+	 * @see \ElggMenuBuilder::sort()
 	 *
 	 * @return string|callable
 	 */

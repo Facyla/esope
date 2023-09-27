@@ -5,34 +5,18 @@
  * This view contains the group profile field configuration
  */
 
-$name = elgg_extract('name', $vars);
-$group_profile_fields = (array) elgg_get_config('group');
-
 echo elgg_view_field([
 	'#type' => 'text',
 	'#label' => elgg_echo('groups:name'),
 	'required' => true,
 	'name' => 'name',
-	'value' => $name,
-]);
-
-echo elgg_view('entity/edit/icon', [
-	'entity' => elgg_extract('entity', $vars),
-	'entity_type' => 'group',
-	'entity_subtype' => 'group',
+	'value' => elgg_extract('name', $vars),
 ]);
 
 // show the configured group profile fields
-foreach ($group_profile_fields as $shortname => $valtype) {
-	$options = [
-		'#type' => $valtype,
-		'name' => $shortname,
-		'value' => elgg_extract($shortname, $vars),
-	];
+$group_profile_fields = elgg()->fields->get('group', 'group');
+foreach ($group_profile_fields as $field) {
+	$field['value'] = elgg_extract($field['name'], $vars);
 	
-	if ($valtype !== 'hidden') {
-		$options['#label'] = elgg_echo("groups:{$shortname}");
-	}
-	
-	echo elgg_view_field($options);
+	echo elgg_view_field($field);
 }

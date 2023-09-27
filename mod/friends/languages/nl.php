@@ -47,23 +47,20 @@ Na het inschakelen van de vriendschapsverzoeken moet indien gebruiker A vriend w
 	'widgets:friends:name' => "Vrienden",
 	'widgets:friends:description' => "Toon een aantal van je vrienden",
 	
+	'widgets:friends_of:name' => "Vrienden van",
+	'widgets:friends_of:description' => "Toon wie jou volgen",
+	
 	'friends:notification:request:subject' => "%s wil je vriend worden!",
-	'friends:notification:request:message' => "Beste %s,
+	'friends:notification:request:message' => "%s heeft een vriendschapsverzoek ingediend op %s.
 
-%s heeft een vriendschapsverzoek ingediend op %s.
-
-On het vriendschapsverzoek te bekijken, klik hier:
+Om het vriendschapsverzoek te bekijken, klik hier:
 %s",
 	
 	'friends:notification:request:decline:subject' => "%s heeft je vriendschapsverzoek afgewezen",
-	'friends:notification:request:decline:message' => "Beste %s,
-
-%s heeft je vriendschapsverzoek afgewezen.",
+	'friends:notification:request:decline:message' => "%s heeft je vriendschapsverzoek afgewezen.",
 	
 	'friends:notification:request:accept:subject' => "%s heeft je vriendschapsverzoek geaccepteerd",
-	'friends:notification:request:accept:message' => "Beste %s,
-
-%s heeft je vriendschapsverzoek geaccepteerd.",
+	'friends:notification:request:accept:message' => "%s heeft je vriendschapsverzoek geaccepteerd.",
 	
 	'friends:action:friendrequest:revoke:fail' => "Er is een fout opgetreden tijdens het intrekken van het vriendschapsverzoek, probeer het nogmaals",
 	'friends:action:friendrequest:revoke:success' => "Het vriendschapsverzoek is ingetrokken",
@@ -71,6 +68,8 @@ On het vriendschapsverzoek te bekijken, klik hier:
 	'friends:action:friendrequest:decline:fail' => "Er is een fout opgetreden tijdens het afwijzen van het vriendschapsverzoek, probeer het nogmaals",
 	'friends:action:friendrequest:decline:success' => "Het vriendschapsverzoek is afgewezen",
 	
-	'friends:action:friendrequest:accept:fail' => "Er is een fout opgetreden tijdens het accepteren van het vriendschapsverzoek, probeer het nogmaals",
 	'friends:action:friendrequest:accept:success' => "Het vriendschapsverzoek is geaccepteerd",
+	
+	// notification settings
+	'friends:notification:settings:description' => 'Standaard notificatie instellingen voor mensen die je gaat volgen',
 );

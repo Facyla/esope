@@ -1,7 +1,8 @@
 <?php
 
 namespace Elgg\Views;
-use Elgg\Hook;
+
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\UnitTestCase;
 
 /**
@@ -12,11 +13,7 @@ use Elgg\UnitTestCase;
 class HtmlFormatterUnitTest extends UnitTestCase {
 
 	public function up() {
-		_elgg_input_init();
-	}
-
-	public function down() {
-
+		elgg_register_event_handler('sanitize', 'input', \Elgg\Input\ValidateInputHandler::class);
 	}
 
 	/**
@@ -36,7 +33,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 
 	public function htmlBlockProvider() {
 
-		$attrs = elgg_format_attributes([
+		$attrs = _elgg_services()->html_formatter->formatAttributes([
 			'foo' => 'http://example.com',
 			'bar' => 'me@example.com',
 			'href' => 'http://example.com',
@@ -80,12 +77,13 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 	public function testCanFilterHtmlBlock() {
 		$html = 'Hello, http://world';
 
-		$hook = $this->registerTestingHook('prepare', 'html', function(Hook $hook) use ($html) {
-			$value = $hook->getValue();
+		$event = $this->registerTestingEvent('prepare', 'html', function(\Elgg\Event $event) use ($html) {
+			$value = $event->getValue();
 
 			$this->assertEquals([
 				'parse_urls' => true,
 				'parse_emails' => true,
+				'parse_mentions' => true,
 				'autop' => true,
 				'sanitize' => true,
 			], $value['options']);
@@ -99,22 +97,23 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 
 		$actual = elgg_format_html($html);
 
-		$hook->assertNumberOfCalls(1);
+		$event->assertNumberOfCalls(1);
 
 		$this->assertXmlStringEqualsXmlString('<p>Hello, world!!!</p>', $actual);
 
-		$hook->unregister();
+		$event->unregister();
 	}
 
 	public function testCanFilterHtmlBlockFormattingOptions() {
 		$html = 'Hello, http://world <script></script>';
 
-		$hook = $this->registerTestingHook('prepare', 'html', function(Hook $hook) use ($html) {
-			$value = $hook->getValue();
+		$event = $this->registerTestingEvent('prepare', 'html', function(\Elgg\Event $event) use ($html) {
+			$value = $event->getValue();
 
 			$this->assertEquals([
 				'parse_urls' => true,
 				'parse_emails' => true,
+				'parse_mentions' => true,
 				'autop' => true,
 				'sanitize' => true,
 			], $value['options']);
@@ -128,11 +127,11 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 
 		$actual = elgg_format_html($html);
 
-		$hook->assertNumberOfCalls(1);
+		$event->assertNumberOfCalls(1);
 
 		$this->assertEquals('Hello, http://world <script></script>', $actual);
 
-		$hook->unregister();
+		$event->unregister();
 	}
 
 	/**
@@ -140,23 +139,18 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 	 */
 	public function testElggFormatElement($expected, $vars) {
 		$tag_name = $vars['tag_name'];
-		$text = isset($vars['text']) ? $vars['text'] : null;
-		$opts = isset($vars['opts']) ? $vars['opts'] : array();
-		$attrs = isset($vars['attrs']) ? $vars['attrs'] : array();
-		$message = isset($vars['_msg']) ? $vars['_msg'] : null;
+		$text = $vars['text'] ?? '';
+		$opts = $vars['opts'] ?? [];
+		$attrs = $vars['attrs'] ?? [];
+		$message = $vars['_msg'] ?? null;
 		unset($vars['tag_name'], $vars['text'], $vars['_msg']);
 
 		$this->assertSame($expected, elgg_format_element($tag_name, $attrs, $text, $opts), $message);
-
-		$attrs['#tag_name'] = $tag_name;
-		$attrs['#text'] = $text;
-		$attrs['#options'] = $opts;
-		$this->assertSame($expected, elgg_format_element($attrs), $message);
 	}
 
 	public function testElggFormatElementThrows() {
-		$this->expectException(\InvalidArgumentException::class);
-		elgg_format_element(array());
+		$this->expectException(InvalidArgumentException::class);
+		elgg_format_element('');
 	}
 
 	function providerElggFormatElement() {
@@ -249,7 +243,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 		];
 		$expected = 'a="Hello &amp; &amp; &lt; &lt;" c="c" e="&amp; &amp; &lt; &lt;" g="bar 1 1.5 2"';
 
-		$this->assertEquals($expected, elgg_format_attributes($attrs));
+		$this->assertEquals($expected, _elgg_services()->html_formatter->formatAttributes($attrs));
 	}
 
 	public function testFiltersUnderscoreKeysExceptDataAttributes() {
@@ -259,7 +253,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 		];
 		$expected = 'data-foo_bar="b"';
 
-		$this->assertEquals($expected, elgg_format_attributes($attrs));
+		$this->assertEquals($expected, _elgg_services()->html_formatter->formatAttributes($attrs));
 	}
 
 	public function testLowercasesAllAttributes() {
@@ -269,6 +263,21 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 		];
 		$expected = 'a-b="a-b" c-d="C-D"';
 
-		$this->assertEquals($expected, elgg_format_attributes($attrs));
+		$this->assertEquals($expected, _elgg_services()->html_formatter->formatAttributes($attrs));
+	}
+	
+	public function testInlineCss() {
+		$html = '<p>test</p>';
+		$css = 'p { color: red; }';
+		$expected = '<p style="color: red;">test</p>';
+		
+		$this->assertEquals($expected, _elgg_services()->html_formatter->inlineCss($html, $css, true));
+	}
+	
+	public function testNormalizeUrls() {
+		$text = 'foo <a href="/blog">link</a> /bar.php <img src="/link_to_image.jpg"/>';
+		$expected = 'foo <a href="' . elgg_get_site_url() . 'blog">link</a> /bar.php <img src="' . elgg_get_site_url() . 'link_to_image.jpg"/>';
+		
+		$this->assertEquals($expected, _elgg_services()->html_formatter->normalizeUrls($text));
 	}
 }

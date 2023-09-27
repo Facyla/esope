@@ -3,11 +3,11 @@
 namespace Elgg\Ajax;
 
 use Elgg\Amd\Config;
+use Elgg\EventsService;
+use Elgg\Exceptions\RuntimeException;
 use Elgg\Http\Request;
-use Elgg\PluginHooksService;
 use Elgg\Services\AjaxResponse;
 use Elgg\SystemMessagesService;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -19,9 +19,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class Service {
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	private $hooks;
+	private $events;
 
 	/**
 	 * @var SystemMessagesService
@@ -51,19 +51,19 @@ class Service {
 	/**
 	 * Constructor
 	 *
-	 * @param PluginHooksService    $hooks     Hooks service
+	 * @param EventsService         $events    Events service
 	 * @param SystemMessagesService $msgs      System messages service
 	 * @param Request               $request   Http Request
 	 * @param Config                $amdConfig AMD config
 	 */
-	public function __construct(PluginHooksService $hooks, SystemMessagesService $msgs, Request $request, Config $amdConfig) {
-		$this->hooks = $hooks;
+	public function __construct(EventsService $events, SystemMessagesService $msgs, Request $request, Config $amdConfig) {
+		$this->events = $events;
 		$this->msgs = $msgs;
 		$this->request = $request;
 		$this->amd_config = $amdConfig;
 
 		$message_filter = [$this, 'prepareResponse'];
-		$this->hooks->registerHandler(AjaxResponse::RESPONSE_HOOK, 'all', $message_filter, 999);
+		$this->events->registerHandler(AjaxResponse::RESPONSE_EVENT, 'all', $message_filter, 999);
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Service {
 	 *
 	 * @return bool
 	 */
-	public function isAjax2Request() {
+	public function isAjax2Request(): bool {
 		$version = $this->request->headers->get('X-Elgg-Ajax-API');
 		return ($version === '2');
 	}
@@ -85,7 +85,7 @@ class Service {
 	 *
 	 * @return bool
 	 */
-	public function isReady() {
+	public function isReady(): bool {
 		return !$this->response_sent && $this->isAjax2Request();
 	}
 
@@ -93,12 +93,14 @@ class Service {
 	 * Attempt to JSON decode the given string
 	 *
 	 * @param mixed $string Output string
+	 *
 	 * @return mixed
 	 */
 	public function decodeJson($string) {
 		if (!is_string($string)) {
 			return $string;
 		}
+		
 		$object = json_decode($string);
 		return ($object === null) ? $string : $object;
 	}
@@ -107,11 +109,12 @@ class Service {
 	 * Send a JSON HTTP response with the given output
 	 *
 	 * @param mixed  $output     Output from a page/action handler
-	 * @param string $hook_type  The hook type. If given, the response will be filtered by hook
+	 * @param string $event_type The event type. If given, the response will be filtered by event
 	 * @param bool   $try_decode Try to convert a JSON string back to an abject
-	 * @return JsonResponse
+	 *
+	 * @return JsonResponse|false
 	 */
-	public function respondFromOutput($output, $hook_type = '', $try_decode = true) {
+	public function respondFromOutput($output, string $event_type = '', bool $try_decode = true) {
 		if ($try_decode) {
 			$output = $this->decodeJson($output);
 		}
@@ -119,12 +122,13 @@ class Service {
 		$api_response = new Response();
 		if (is_object($output) && isset($output->value)) {
 			$api_response->setData($output);
-		} else if (is_array($output) && isset($output['value'])) {
+		} elseif (is_array($output) && isset($output['value'])) {
 			$api_response->setData((object) $output);
 		} else {
 			$api_response->setData((object) ['value' => $output]);
 		}
-		$api_response = $this->filterApiResponse($api_response, $hook_type);
+		
+		$api_response = $this->filterApiResponse($api_response, $event_type);
 		$response = $this->buildHttpResponse($api_response);
 
 		$this->response_sent = true;
@@ -135,11 +139,12 @@ class Service {
 	 * Send a JSON HTTP response based on the given API response
 	 *
 	 * @param AjaxResponse $api_response API response
-	 * @param string       $hook_type    The hook type. If given, the response will be filtered by hook
-	 * @return JsonResponse
+	 * @param string       $event_type   The event type. If given, the response will be filtered by event
+	 *
+	 * @return JsonResponse|false
 	 */
-	public function respondFromApiResponse(AjaxResponse $api_response, $hook_type = '') {
-		$api_response = $this->filterApiResponse($api_response, $hook_type);
+	public function respondFromApiResponse(AjaxResponse $api_response, string $event_type = '') {
+		$api_response = $this->filterApiResponse($api_response, $event_type);
 		$response = $this->buildHttpResponse($api_response);
 
 		$this->response_sent = true;
@@ -151,9 +156,10 @@ class Service {
 	 *
 	 * @param string $msg    The error message (not displayed to the user)
 	 * @param int    $status The HTTP status code
-	 * @return JsonResponse
+	 *
+	 * @return JsonResponse|false
 	 */
-	public function respondWithError($msg = '', $status = 400) {
+	public function respondWithError(string $msg = '', int $status = 400) {
 		$response = new JsonResponse(['error' => $msg], $status);
 		
 		// clear already set system messages as we respond directly with an error as message body
@@ -164,21 +170,22 @@ class Service {
 	}
 
 	/**
-	 * Filter an AjaxResponse through a plugin hook
+	 * Filter an AjaxResponse through a event
 	 *
 	 * @param AjaxResponse $api_response The API Response
-	 * @param string       $hook_type    The hook type. If given, the response will be filtered by hook
+	 * @param string       $event_type   The event type. If given, the response will be filtered by event
 	 *
 	 * @return AjaxResponse
+	 * @throws RuntimeException
 	 */
-	private function filterApiResponse(AjaxResponse $api_response, $hook_type = '') {
+	private function filterApiResponse(AjaxResponse $api_response, string $event_type = ''): AjaxResponse {
 		$api_response->setTtl($this->request->getParam('elgg_response_ttl', 0, false));
 
-		if ($hook_type) {
-			$hook = AjaxResponse::RESPONSE_HOOK;
-			$api_response = $this->hooks->trigger($hook, $hook_type, null, $api_response);
+		if ($event_type) {
+			$event_name = AjaxResponse::RESPONSE_EVENT;
+			$api_response = $this->events->triggerResults($event_name, $event_type, [], $api_response);
 			if (!$api_response instanceof AjaxResponse) {
-				throw new RuntimeException("The value returned by hook [$hook, $hook_type] was not an ApiResponse");
+				throw new RuntimeException("The value returned by event [{$event_name}, {$event_type}] was not an ApiResponse");
 			}
 		}
 
@@ -188,28 +195,20 @@ class Service {
 	/**
 	 * Build a JsonResponse based on an API response object
 	 *
-	 * @param AjaxResponse $api_response           The API Response
-	 * @param bool         $allow_removing_headers Alter PHP's global headers to allow caching
+	 * @param AjaxResponse $api_response The API Response
 	 *
 	 * @return JsonResponse
 	 * @throws RuntimeException
 	 */
-	private function buildHttpResponse(AjaxResponse $api_response, $allow_removing_headers = null) {
+	private function buildHttpResponse(AjaxResponse $api_response): JsonResponse {
 		if ($api_response->isCancelled()) {
-			return new JsonResponse(['error' => "The response was cancelled"], 400);
+			return new JsonResponse(['error' => 'The response was cancelled'], 400);
 		}
 
 		$response = _elgg_services()->responseFactory->prepareJsonResponse($api_response->getData());
 
 		$ttl = $api_response->getTtl();
 		if ($ttl > 0) {
-			// Required to remove headers set by PHP session
-			if ($allow_removing_headers) {
-				header_remove('Expires');
-				header_remove('Pragma');
-				header_remove('Cache-Control');
-			}
-
 			// JsonRequest sets a default Cache-Control header we don't want
 			$response->headers->remove('Cache-Control');
 
@@ -225,19 +224,26 @@ class Service {
 	/**
 	 * Prepare the response with additional metadata, like system messages and required AMD modules
 	 *
-	 * @param \Elgg\Hook $hook "ajax_response", "all"
+	 * @param \Elgg\Event $event "ajax_response", "all"
 	 *
 	 * @return AjaxResponse
 	 * @internal
 	 */
-	public function prepareResponse(\Elgg\Hook $hook) {
-		$response = $hook->getValue();
+	public function prepareResponse(\Elgg\Event $event) {
+		$response = $event->getValue();
 		if (!$response instanceof AjaxResponse) {
 			return;
 		}
 
 		if ($this->request->getParam('elgg_fetch_messages', true)) {
-			$response->getData()->_elgg_msgs = (object) $this->msgs->dumpRegister();
+			$messages = $this->msgs->dumpRegister();
+			foreach ($messages as $type => $msgs) {
+				$messages[$type] = array_map(function($value) {
+					return (string) $value;
+				}, $msgs);
+			}
+			
+			$response->getData()->_elgg_msgs = (object) $messages;
 		}
 
 		if ($this->request->getParam('elgg_fetch_deps', true)) {
@@ -251,9 +257,10 @@ class Service {
 	 * Register a view to be available for ajax calls
 	 *
 	 * @param string $view The view name
+	 *
 	 * @return void
 	 */
-	public function registerView($view) {
+	public function registerView(string $view): void {
 		$this->allowed_views[$view] = true;
 	}
 
@@ -261,18 +268,19 @@ class Service {
 	 * Unregister a view for ajax calls
 	 *
 	 * @param string $view The view name
+	 *
 	 * @return void
 	 */
-	public function unregisterView($view) {
+	public function unregisterView(string $view): void {
 		unset($this->allowed_views[$view]);
 	}
 
 	/**
 	 * Returns an array of views allowed for ajax calls
+	 *
 	 * @return string[]
 	 */
-	public function getViews() {
+	public function getViews(): array {
 		return array_keys($this->allowed_views);
 	}
-	
 }

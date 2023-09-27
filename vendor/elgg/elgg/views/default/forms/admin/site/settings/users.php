@@ -18,6 +18,14 @@ $result .= elgg_view_field([
 	'switch' => true,
 ]);
 
+$result .= elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => elgg_echo('config:users:user_joined_river'),
+	'name' => 'user_joined_river',
+	'checked' => (bool) elgg_get_config('user_joined_river'),
+	'switch' => true,
+]);
+
 $classes = ['elgg-divide-left', 'plm', 'elgg-admin-users-admin-validation-notification'];
 if (!(bool) elgg_get_config('require_admin_validation')) {
 	$classes[] = 'hidden';
@@ -36,6 +44,15 @@ $result .= elgg_view_field([
 		'daily' => elgg_echo('interval:daily'),
 		'weekly' => elgg_echo('interval:weekly'),
 	],
+]);
+
+$result .= elgg_view_field([
+	'#type' => 'number',
+	'#label' => elgg_echo('config:users:remove_unvalidated_users_days'),
+	'#help' => elgg_echo('config:users:remove_unvalidated_users_days:help'),
+	'name' => 'remove_unvalidated_users_days',
+	'value' => elgg_get_config('remove_unvalidated_users_days'),
+	'min' => 0,
 ]);
 
 $result .= elgg_view_field([

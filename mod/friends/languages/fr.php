@@ -7,12 +7,13 @@
 
 return array(
 	
-	'relationship:friendrequest' => "%s a demandé à être en contact avec %s",
+	'relationship:friendrequest' => "%s a demandé à faire partie des contact de %s",
 	'relationship:friendrequest:pending' => "%s souhaite faire partie de vos contacts",
-	'relationship:friendrequest:sent' => "Vous avez demandé à être en contact avec %s",
+	'relationship:friendrequest:sent' => "Vous avez demandé à faire partie des contacts de %s",
 	
 	// plugin settings
-	'friends:settings:request:description' => "Après avoir activé les demandes de contact en tant que fonctionnalité du plugin Friends, lorsque l’utilisateur A veut être en contact avec l’utilisateur B, l’utilisateur B doit approuver la demande. Lors de l’approbation, l’utilisateur A sera en contact avec l’utilisateur B et l’utilisateur B sera en contact avec l’utilisateur A.",
+	'friends:settings:request:description' => "Par défaut tout utilisateur peut être en contact avec n'importe quel autre utilisateur, cela revient à s'abonner à l'activité de l'autre utilisateur.
+Après avoir activé les demandes de contact, quand A veut être en contact avec B, B doit approuver la demande. En cas d'approbation, A fera partie des contacts de B et B fera partie des contacts de A.",
 	'friends:settings:request:label' => "Activer les demandes de contacts",
 	'friends:settings:request:help' => "Les membres doivent approuver les demandes de contact et les contacts deviennent réciproques",
 	
@@ -38,7 +39,7 @@ return array(
 	
 	'friends:request:pending' => "Demandes de contact en attente",
 	'friends:request:pending:none' => "Aucune demande de contact en attente trouvée.",
-	'friends:request:sent' => "Envoyer des demandes de contact",
+	'friends:request:sent' => "Demandes de contact envoyées",
 	'friends:request:sent:none' => "Aucune demande de contact n'a été envoyée.",
 	
 	'friends:num_display' => "Nombre de contacts à afficher",
@@ -46,30 +47,29 @@ return array(
 	'widgets:friends:name' => "Contacts",
 	'widgets:friends:description' => "Affiche une partie de vos contacts.",
 	
+	'widgets:friends_of:name' => "Contacts de",
+	'widgets:friends_of:description' => "Montrer qui vous a ajouté comme contact",
+	
 	'friends:notification:request:subject' => "%s souhaite faire partie de vos contacts !",
-	'friends:notification:request:message' => "Bonjour %s,
+	'friends:notification:request:message' => "%s a demandé à être en contact avec vous sur %s.
 
-%s a demandé à être en contact avec vous sur %s.
-
-Pour voir cette demande de contact, cliquez ici :
+Cliquez ci-dessous pour voir cette demande de contact :
 %s",
 	
 	'friends:notification:request:decline:subject' => "%s a décliné votre demande de contact",
-	'friends:notification:request:decline:message' => "Bonjour %s,
-
-%s a décliné votre demande de contact.",
+	'friends:notification:request:decline:message' => "%s a décliné votre demande de contact.",
 	
 	'friends:notification:request:accept:subject' => "%s a accepté votre demande de contact",
-	'friends:notification:request:accept:message' => "Bonjour %s,
-
-%s a accepté votre demande de contact.",
+	'friends:notification:request:accept:message' => "%s a accepté votre demande de contact.",
 	
 	'friends:action:friendrequest:revoke:fail' => "Une erreur s'est produite lors de l'annulation de la demande de contact, veuillez réessayer",
 	'friends:action:friendrequest:revoke:success' => "La demande de contact a été annulée",
 	
-	'friends:action:friendrequest:decline:fail' => "Une erreur s'est produite lors du refus de la demande de contact, veuillez réessayer",
+	'friends:action:friendrequest:decline:fail' => "Une erreur s'est produite lors du rejet de la demande de contact, veuillez réessayer",
 	'friends:action:friendrequest:decline:success' => "La demande de contact a été déclinée",
 	
-	'friends:action:friendrequest:accept:fail' => "Une erreur s'est produite lors de l'acceptation de la demande de contact, veuillez réessayer",
 	'friends:action:friendrequest:accept:success' => "La demande de contact a été acceptée",
+	
+	// notification settings
+	'friends:notification:settings:description' => 'Paramètres de notification par défaut pour les utilisateurs que vous ajoutez comme contact',
 );

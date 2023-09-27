@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,17 +24,17 @@ trait FieldTrait
     /**
      * The field name or expression to be used in the left hand side of the operator
      *
-     * @var string|\Cake\Database\ExpressionInterface
+     * @var \Cake\Database\ExpressionInterface|array|string
      */
     protected $_field;
 
     /**
      * Sets the field name
      *
-     * @param string|\Cake\Database\ExpressionInterface $field The field to compare with.
+     * @param \Cake\Database\ExpressionInterface|array|string $field The field to compare with.
      * @return void
      */
-    public function setField($field)
+    public function setField($field): void
     {
         $this->_field = $field;
     }
@@ -40,7 +42,7 @@ trait FieldTrait
     /**
      * Returns the field name
      *
-     * @return string|\Cake\Database\ExpressionInterface
+     * @return \Cake\Database\ExpressionInterface|array|string
      */
     public function getField()
     {

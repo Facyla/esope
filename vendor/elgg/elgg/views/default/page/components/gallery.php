@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Gallery view
  *
@@ -15,19 +14,13 @@
  * @uses $vars['gallery_class'] Additional CSS class for the <ul> element
  * @uses $vars['item_class']    Additional CSS class for the <li> elements
  * @uses $vars['item_view']     Alternative view to render list items
- * @uses $vars['no_results']    Message to display if no results (string|Closure)
  */
+
 $items = elgg_extract('items', $vars);
-$count = elgg_extract('count', $vars);
 $pagination = elgg_extract('pagination', $vars, true);
 $position = elgg_extract('position', $vars, 'after');
-$no_results = elgg_extract('no_results', $vars, '');
 
-if ($no_results === true) {
-	$no_results = elgg_echo('notfound');
-}
-
-if (!$items && $no_results) {
+if (!$items) {
 	echo elgg_view('page/components/no_results', $vars);
 	return;
 }
@@ -50,7 +43,7 @@ foreach ($items as $item) {
 	$item_view_vars = $vars;
 	$item_view_vars['list_item_index'] = $index;
 	$item_view = elgg_view_list_item($item, $item_view_vars);
-	if (!$item_view) {
+	if (empty($item_view)) {
 		continue;
 	}
 
@@ -70,7 +63,7 @@ if ($position == 'before' || $position == 'both') {
 	echo $nav;
 }
 
-if (empty($list_items) && $no_results) {
+if (empty($list_items)) {
 	// there are scenarios where item views do not output html. In those cases show the no results info
 	echo elgg_view('page/components/no_results', $vars);
 } else {
@@ -82,3 +75,8 @@ if ($position == 'after' || $position == 'both') {
 }
 
 elgg_pop_context();
+
+$limit = elgg_extract('limit', $vars);
+if (!$pagination && $limit !== false && !empty($items) && count($items) >= $limit) {
+	echo elgg_view('page/components/list/widget_more', $vars);
+}

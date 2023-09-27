@@ -2,11 +2,10 @@
 
 namespace Elgg;
 
-use Elgg\Mocks\Di\MockServiceProvider;
+use Elgg\Mocks\Di\InternalContainer;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Tests\Output\TestOutput;
 
 /**
  * Unit test abstraction class
@@ -23,44 +22,45 @@ abstract class UnitTestCase extends BaseTestCase {
 		Application::setInstance(null);
 
 		$config = self::getTestingConfig();
-		$sp = new MockServiceProvider($config);
 
 		// persistentLogin service needs this set to instantiate without calling DB
-		$sp->config->getCookieConfig();
-		$sp->config->boot_complete = false;
-		$sp->config->system_cache_enabled = elgg_extract('system_cache_enabled', $params, true);
-		$sp->config->plugins_path = elgg_extract('plugins_path', $params);
-		$sp->config->site = new \ElggSite((object) [
+		$config->getCookieConfig();
+		$config->system_cache_enabled = elgg_extract('system_cache_enabled', $params, true);
+		$config->plugins_path = elgg_extract('plugins_path', $params);
+		$config->site = new \ElggSite((object) [
 			'guid' => 1,
 		]);
 
+		$sp = InternalContainer::factory(['config' => $config]);
+
 		$app = Application::factory(array_merge([
-			'service_provider' => $sp,
+			'internal_services' => $sp,
 			'handle_exceptions' => false,
 			'handle_shutdown' => false,
 			'set_start_time' => false,
 		], $params));
 
+		$app->setGlobalConfig($app);
+
 		Application::setInstance($app);
 
 		$cli_output = new NullOutput();
 		$cli_output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-		$app->_services->setValue('cli_output', $cli_output);
+		$app->internal_services->set('cli_output', $cli_output);
 
 		if (in_array('--verbose', $_SERVER['argv'])) {
-			$app->_services->logger->setLevel(LogLevel::DEBUG);
+			$app->internal_services->logger->setLevel(LogLevel::DEBUG);
 		} else {
-			$app->_services->logger->setLevel(LogLevel::ERROR);
+			$app->internal_services->logger->setLevel(LogLevel::ERROR);
 		}
 
 		// Invalidate caches
-		$app->_services->dataCache->clear();
-		$app->_services->sessionCache->clear();
-		$app->_services->dic_cache->flushAll();
+		$app->internal_services->dataCache->clear();
+		$app->internal_services->sessionCache->clear();
 
 		// turn off system log
-		$app->_services->events->unregisterHandler('all', 'all', 'system_log_listener');
-		$app->_services->events->unregisterHandler('log', 'systemlog', 'system_log_default_logger');
+		$app->internal_services->events->unregisterHandler('all', 'all', 'Elgg\SystemLog\Logger::listen');
+		$app->internal_services->events->unregisterHandler('log', 'systemlog', 'Elgg\SystemLog\Logger::log');
 
 		return $app;
 	}
@@ -94,8 +94,8 @@ abstract class UnitTestCase extends BaseTestCase {
 		$this->down();
 
 		$app = Application::getInstance();
-		if ($app && $app->_services instanceof MockServiceProvider) {
-			$app->_services->db->clearQuerySpecs();
+		if ($app && $app->internal_services instanceof InternalContainer) {
+			$app->internal_services->db->clearQuerySpecs();
 		}
 
 		parent::tearDown();
@@ -104,7 +104,7 @@ abstract class UnitTestCase extends BaseTestCase {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function createUser(array $attributes = [], array $metadata = []) {
+	public function createUser(array $properties = []): \ElggUser {
 		$unique_id = uniqid('user');
 
 		$defaults = [
@@ -113,44 +113,38 @@ abstract class UnitTestCase extends BaseTestCase {
 			'email' => "john_doe_{$unique_id}@example.com",
 		];
 
-		$attributes = array_merge($defaults, $metadata, $attributes);
+		$properties = array_merge($defaults, $properties);
 
-		$subtype = isset($attributes['subtype']) ? $attributes['subtype'] : 'foo_user';
+		$subtype = elgg_extract('subtype', $properties, 'foo_user');
 
-		return _elgg_services()->entityTable->setup(null, 'user', $subtype, $attributes);
+		return _elgg_services()->entityTable->setup(null, 'user', $subtype, $properties);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function createObject(array $attributes = [], array $metadata = []) {
-		$attributes = array_merge($metadata, $attributes);
+	public function createObject(array $properties = []): \ElggObject {
+		$subtype = elgg_extract('subtype', $properties, 'foo_object');
 
-		$subtype = isset($attributes['subtype']) ? $attributes['subtype'] : 'foo_object';
-
-		return _elgg_services()->entityTable->setup(null, 'object', $subtype, $attributes);
+		return _elgg_services()->entityTable->setup(null, 'object', $subtype, $properties);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function createGroup(array $attributes = [], array $metadata = []) {
-		$attributes = array_merge($metadata, $attributes);
+	public function createGroup(array $properties = []): \ElggGroup {
+		$subtype = elgg_extract('subtype', $properties, 'foo_group');
 
-		$subtype = isset($attributes['subtype']) ? $attributes['subtype'] : 'foo_group';
-
-		return _elgg_services()->entityTable->setup(null, 'group', $subtype, $attributes);
+		return _elgg_services()->entityTable->setup(null, 'group', $subtype, $properties);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function createSite(array $attributes = [], array $metadata = []) {
-		$attributes = array_merge($metadata, $attributes);
+	public function createSite(array $properties = []): \ElggSite {
+		$subtype = elgg_extract('subtype', $properties, 'foo_site');
 
-		$subtype = isset($attributes['subtype']) ? $attributes['subtype'] : 'foo_site';
-
-		return _elgg_services()->entityTable->setup(null, 'site', $subtype, $attributes);
+		return _elgg_services()->entityTable->setup(null, 'site', $subtype, $properties);
 	}
 
 }

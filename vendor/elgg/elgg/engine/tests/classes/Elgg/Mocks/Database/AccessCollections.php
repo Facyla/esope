@@ -3,55 +3,55 @@
 namespace Elgg\Mocks\Database;
 
 use Elgg\Database\AccessCollections as DbAccessCollections;
-use stdClass;
+use Elgg\Database\Insert;
 
 class AccessCollections extends DbAccessCollections {
 
 	/**
-	 * @var stdClass[]
+	 * @var \stdClass[]
 	 */
-	public $rows = [];
+	protected $rows = [];
 	
 	/**
 	 * @var int
 	 */
-	private $iterator = 100;
+	protected static $iterator = 100;
 	
 	/**
-	 *
-	 * @var type@var array
+	 * @var array
 	 */
-	private $query_specs;
+	protected $query_specs;
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public function create($name, $owner_guid = 0, $subtype = null) {
+	public function create(\ElggAccessCollection $acl): bool {
 
-		$this->iterator++;
-		$id = $this->iterator;
+		static::$iterator++;
+		$id = static::$iterator;
 		
 		$row = (object) [
 			'id' => $id,
-			'name' => $name,
-			'owner_guid' => $owner_guid,
-			'subtype' => $subtype,
+			'name' => $acl->name,
+			'owner_guid' => $acl->owner_guid,
+			'subtype' => $acl->subtype,
 		];
 
 		$this->rows[$id] = $row;
 
 		$this->addQuerySpecs($row);
 
-		return parent::create($name, $owner_guid, $subtype);
+		return parent::create($acl);
 	}
 	
 	/**
 	 * Clear query specs
 	 *
 	 * @param int $id access collection ID
+	 *
 	 * @return void
 	 */
-	public function clearQuerySpecs($id) {
+	protected function clearQuerySpecs(int $id): void {
 		if (!empty($this->query_specs[$id])) {
 			foreach ($this->query_specs[$id] as $spec) {
 				$this->db->removeQuerySpec($spec);
@@ -62,29 +62,24 @@ class AccessCollections extends DbAccessCollections {
 	/**
 	 * Add query specs for a access collection data row
 	 *
-	 * @param stdClass $row Data row
+	 * @param \stdClass $row Data row
+	 *
 	 * @return void
 	 */
-	public function addQuerySpecs(stdClass $row) {
+	protected function addQuerySpecs(\stdClass $row): void {
 
 		$this->clearQuerySpecs($row->id);
 
-		$query = "
-			INSERT INTO {$this->table}
-			SET name = :name,
-				subtype = :subtype,
-				owner_guid = :owner_guid
-		";
-
-		$params = [
-			':name' => $row->name,
-			':subtype' => $row->subtype,
-			':owner_guid' => (int) $row->owner_guid,
-		];
+		$insert = Insert::intoTable(self::TABLE_NAME);
+		$insert->values([
+			'name' => $insert->param($row->name, ELGG_VALUE_STRING),
+			'subtype' => $insert->param($row->subtype, ELGG_VALUE_STRING),
+			'owner_guid' => $insert->param($row->owner_guid, ELGG_VALUE_GUID),
+		]);
 		
 		$this->query_specs[$row->id][] = $this->db->addQuerySpec([
-			'sql' => $query,
-			'params' => $params,
+			'sql' => $insert->getSQL(),
+			'params' => $insert->getParameters(),
 			'insert_id' => $row->id,
 		]);
 	}

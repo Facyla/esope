@@ -5,13 +5,11 @@
 
 $title = elgg_get_title_input();
 $desc = get_input('description');
-$status = get_input('status');
-$access_id = (int) get_input('access_id');
+$status = get_input('status', 'open');
+$access_id = get_input('access_id');
 $container_guid = (int) get_input('container_guid');
 $guid = (int) get_input('topic_guid');
-$tags = get_input('tags');
-
-elgg_make_sticky_form('topic');
+$tags = (string) get_input('tags');
 
 // validation of inputs
 if (!$title || !$desc) {
@@ -22,6 +20,17 @@ $container = get_entity($container_guid);
 if (!$container || !$container->canWriteToContainer(0, 'object', 'discussion')) {
 	return elgg_error_response(elgg_echo('discussion:error:permissions'));
 }
+
+if ($container instanceof \ElggGroup && $access_id === null) {
+	// access is null when a group is selected from the container_guid select
+	$acl = $container->getOwnedAccessCollection('group_acl');
+	if ($acl instanceof \ElggAccessCollection) {
+		$access_id = $acl->getID();
+	}
+}
+
+// sanitize access id
+$access_id = (int) $access_id;
 
 // check whether this is a new topic or an edit
 $new_topic = !($guid > 0);
@@ -42,14 +51,11 @@ $topic->status = $status;
 $topic->access_id = $access_id;
 $topic->container_guid = $container_guid;
 
-$topic->tags = string_to_tag_array($tags);
+$topic->tags = elgg_string_to_array($tags);
 
 if (!$topic->save()) {
 	return elgg_error_response(elgg_echo('discussion:error:notsaved'));
 }
-
-// topic saved so clear sticky form
-elgg_clear_sticky_form('topic');
 
 // handle results differently for new topics and topic edits
 if (!$new_topic) {

@@ -4,7 +4,6 @@ namespace Elgg\Application;
 
 use DateTime;
 use Elgg\Config;
-use Elgg\Filesystem\MimeTypeDetector;
 use Elgg\Filesystem\MimeTypeService;
 use Elgg\Http\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -51,6 +50,7 @@ class ServeFileHandler {
 	 * Handle a request for a file
 	 *
 	 * @param Request $request HTTP request
+	 *
 	 * @return Response
 	 */
 	public function getResponse(Request $request) {
@@ -83,6 +83,7 @@ class ServeFileHandler {
 		if ((bool) $use_cookie) {
 			$hmac_data['cookie'] = $this->getCookieValue($request);
 		}
+		
 		ksort($hmac_data);
 
 		$hmac = $this->hmac->getHmac($hmac_data);
@@ -91,7 +92,7 @@ class ServeFileHandler {
 		}
 
 		// Path may have been encoded to avoid problems with special chars in URLs
-		if (0 === strpos($path_from_dataroot, ':')) {
+		if (str_starts_with($path_from_dataroot, ':')) {
 			$path_from_dataroot = Base64Url::decode(substr($path_from_dataroot, 1));
 		}
 
@@ -118,7 +119,7 @@ class ServeFileHandler {
 			return $response;
 		}
 
-		$public = $use_cookie ? false : true;
+		$public = !(bool) $use_cookie;
 		$content_disposition = $disposition == 'i' ? 'inline' : 'attachment';
 
 		$headers = [
@@ -142,6 +143,7 @@ class ServeFileHandler {
 		if (empty($expires)) {
 			$expires = strtotime('+1 year');
 		}
+		
 		$expires_dt = (new DateTime())->setTimestamp($expires);
 		$response->setExpires($expires_dt);
 
@@ -153,6 +155,7 @@ class ServeFileHandler {
 	 * Get the session ID from the cookie
 	 *
 	 * @param Request $request Elgg request
+	 *
 	 * @return string
 	 */
 	private function getCookieValue(Request $request) {

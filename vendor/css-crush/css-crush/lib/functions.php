@@ -5,18 +5,16 @@
   *
   */
 use CssCrush\Crush;
-class_alias('CssCrush\Crush', 'CssCrush\CssCrush');
-
 
 /**
  * Process CSS file and return a new compiled file.
  *
  * @see docs/api/functions.md
  */
-function csscrush_file($file, $options = array()) {
+function csscrush_file($file, $options = []) {
 
     try {
-        Crush::$process = new CssCrush\Process($options, array('type' => 'file', 'data' => $file));
+        Crush::$process = new CssCrush\Process($options, ['type' => 'file', 'data' => $file]);
     }
     catch (\Exception $e) {
         CssCrush\warning($e->getMessage());
@@ -33,16 +31,16 @@ function csscrush_file($file, $options = array()) {
  *
  * @see docs/api/functions.md
  */
-function csscrush_tag($file, $options = array(), $tag_attributes = array()) {
+function csscrush_tag($file, $options = [], $tag_attributes = []) {
 
     $file = csscrush_file($file, $options);
     if ($file && $file->url) {
         $tag_attributes['href'] = $file->url;
-        $tag_attributes += array(
+        $tag_attributes += [
             'rel' => 'stylesheet',
             'media' => 'all',
-        );
-        $attrs = CssCrush\Util::htmlAttributes($tag_attributes, array('rel', 'href', 'media'));
+        ];
+        $attrs = CssCrush\Util::htmlAttributes($tag_attributes, ['rel', 'href', 'media']);
 
         return "<link$attrs />\n";
     }
@@ -54,10 +52,10 @@ function csscrush_tag($file, $options = array(), $tag_attributes = array()) {
  *
  * @see docs/api/functions.md
  */
-function csscrush_inline($file, $options = array(), $tag_attributes = array()) {
+function csscrush_inline($file, $options = [], $tag_attributes = []) {
 
     if (! is_array($options)) {
-        $options = array();
+        $options = [];
     }
     if (! isset($options['boilerplate'])) {
         $options['boilerplate'] = false;
@@ -82,13 +80,13 @@ function csscrush_inline($file, $options = array(), $tag_attributes = array()) {
  *
  * @see docs/api/functions.md
  */
-function csscrush_string($string, $options = array()) {
+function csscrush_string($string, $options = []) {
 
     if (! isset($options['boilerplate'])) {
         $options['boilerplate'] = false;
     }
 
-    Crush::$process = new CssCrush\Process($options, array('type' => 'filter', 'data' => $string));
+    Crush::$process = new CssCrush\Process($options, ['type' => 'filter', 'data' => $string]);
 
     return Crush::$process->compile()->__toString();
 }
@@ -101,7 +99,7 @@ function csscrush_string($string, $options = array()) {
  */
 function csscrush_set($object_name, $modifier) {
 
-    if (in_array($object_name, array('options', 'config'))) {
+    if (in_array($object_name, ['options', 'config'])) {
 
         $pointer = $object_name === 'options' ? Crush::$config->options : Crush::$config;
 
@@ -124,7 +122,7 @@ function csscrush_set($object_name, $modifier) {
  */
 function csscrush_get($object_name, $property = null) {
 
-    if (in_array($object_name, array('options', 'config'))) {
+    if (in_array($object_name, ['options', 'config'])) {
 
         $pointer = $object_name === 'options' ? Crush::$config->options : Crush::$config;
 
@@ -140,49 +138,13 @@ function csscrush_get($object_name, $property = null) {
 
 
 /**
- * Add custom CSS functions.
+ * Add plugin.
  *
  * @see docs/api/functions.md
  */
-function csscrush_add_function($function_name = null, $callback = null) {
+function csscrush_plugin($name, callable $callback) {
 
-    static $stack = array();
-
-    if (! func_num_args()) {
-        return $stack;
-    }
-
-    if (! $function_name) {
-        $stack = array();
-        return;
-    }
-
-    $function_name = strtolower($function_name);
-    if (! $callback) {
-        if (isset($stack[$function_name])) {
-            unset($stack[$function_name]);
-        }
-    }
-    else {
-        $stack[$function_name] = array(
-            'callback' => $callback,
-            'parse_args' => true,
-        );
-    }
-}
-
-
-/**
- * Get version information.
- *
- * @see docs/api/functions.md
- */
-function csscrush_version($use_git = false) {
-
-    if ($use_git && $version = \CssCrush\Version::gitDescribe()) {
-        return $version;
-    }
-    return Crush::$config->version;
+    Crush::plugin($name, $callback);
 }
 
 
@@ -199,7 +161,7 @@ function csscrush_stat() {
     // Get logged errors as late as possible.
     $stats['errors'] = $process->errors;
     $stats['warnings'] = $process->warnings;
-    $stats += array('compile_time' => 0);
+    $stats += ['compile_time' => 0];
 
     return $stats;
 }

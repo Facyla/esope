@@ -6,8 +6,9 @@
  */
 
 return array(
-	// menu
 	'admin:develop_tools' => 'Tools',
+	
+	// menu
 	'admin:develop_tools:sandbox' => 'Theme Sandbox',
 	'admin:develop_tools:inspect' => 'Inspect',
 	'admin:inspect' => 'Inspect',
@@ -28,6 +29,9 @@ return array(
 	'developers:help:display_errors' => "By default, Elgg's .htaccess file supresses the display of fatal errors.",
 	'developers:label:screen_log' => "Log to the screen",
 	'developers:help:screen_log' => "This displays elgg_log() and elgg_dump() output and a DB query count.",
+	'developers:show_strings:default' => "Normal translation",
+	'developers:show_strings:key_append' => "Translation key appended",
+	'developers:show_strings:key_only' => "Show translation key only",
 	'developers:label:show_strings' => "Show raw translation strings",
 	'developers:help:show_strings' => "This displays the translation strings used by elgg_echo().",
 	'developers:label:show_modules' => "Show AMD modules loaded in console",
@@ -35,8 +39,8 @@ return array(
 	'developers:label:wrap_views' => "Wrap views",
 	'developers:help:wrap_views' => "This wraps almost every view with HTML comments. Useful for finding the view creating particular HTML.
 									This can break non-HTML views in the default viewtype. See developers_wrap_views() for details.",
-	'developers:label:log_events' => "Log events and plugin hooks",
-	'developers:help:log_events' => "Write events and plugin hooks to the log. Warning: there are many of these per page.",
+	'developers:label:log_events' => "Log events",
+	'developers:help:log_events' => "Write events to the log. Warning: there are many of these per page.",
 	'developers:label:show_gear' => "Use %s outside admin area",
 	'developers:help:show_gear' => "An icon on the bottom right of the viewport that gives admins access to developer settings and links.",
 	'developers:label:block_email' => "Block all outgoing e-mails",
@@ -65,27 +69,25 @@ return array(
 	'developers:entity_explorer:info:attributes' => 'Attributes',
 	'developers:entity_explorer:info:metadata' => 'Metadata',
 	'developers:entity_explorer:info:relationships' => 'Relationships',
-	'developers:entity_explorer:info:private_settings' => 'Private Settings',
 	'developers:entity_explorer:info:owned_acls' => 'Owned Access Collections',
 	'developers:entity_explorer:info:acl_memberships' => 'Access Collections Memberships',
 	'developers:entity_explorer:delete_entity' => 'Remove this entity',
 	'developers:entity_explorer:inspect_entity' => 'Inspect this entity',
+	'developers:entity_explorer:view_entity' => 'View this entity on the site',
 	
 	// inspection
 	'developers:inspect:help' => 'Inspect configuration of the Elgg framework.',
 	'developers:inspect:actions' => 'Actions',
 	'developers:inspect:events' => 'Events',
 	'developers:inspect:menus' => 'Menus',
-	'developers:inspect:pluginhooks' => 'Plugin Hooks',
 	'developers:inspect:priority' => 'Priority',
 	'developers:inspect:simplecache' => 'Simple Cache',
 	'developers:inspect:routes' => 'Routes',
 	'developers:inspect:views' => 'Views',
-	'developers:inspect:views:all_filtered' => "<b>Note!</b> All view input/output is filtered through these Plugin Hooks:",
-	'developers:inspect:views:input_filtered' => "(input filtered by plugin hook: %s)",
-	'developers:inspect:views:filtered' => "(filtered by plugin hook: %s)",
+	'developers:inspect:views:all_filtered' => "<b>Note!</b> All view input/output is filtered through these Events:",
+	'developers:inspect:views:input_filtered' => "(input filtered by event handler: %s)",
+	'developers:inspect:views:filtered' => "(filtered by event handler: %s)",
 	'developers:inspect:widgets' => 'Widgets',
-	'developers:inspect:webservices' => 'Webservices',
 	'developers:inspect:widgets:context' => 'Context',
 	'developers:inspect:functions' => 'Functions',
 	'developers:inspect:file_location' => 'File path from Elgg root or controller',
@@ -114,6 +116,7 @@ return array(
 	'theme_sandbox:breakout' => 'Break out of iframe',
 	'theme_sandbox:buttons' => 'Buttons',
 	'theme_sandbox:components' => 'Components',
+	'theme_sandbox:email' => 'Email',
 	'theme_sandbox:forms' => 'Forms',
 	'theme_sandbox:grid' => 'Grid',
 	'theme_sandbox:icons' => 'Icons',
@@ -124,6 +127,9 @@ return array(
 	'theme_sandbox:typography' => 'Typography',
 
 	'theme_sandbox:icons:blurb' => 'Use <em>elgg_view_icon($name)</em> to display icons.',
+	
+	'theme_sandbox:test_email:button' => "Send Test Mail",
+	'theme_sandbox:test_email:success' => "Test mail sent to: %s",
 
 	// status messages
 	'developers:settings:success' => 'Settings saved and caches flushed',

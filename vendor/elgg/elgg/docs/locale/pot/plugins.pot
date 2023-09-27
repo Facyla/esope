@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Elgg master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 09:52+0200\n"
+"POT-Creation-Date: 2023-06-19 13:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,58 @@ msgstr ""
 msgid "`Blogging on Wikipedia <http://en.wikipedia.org/wiki/Blog>`_"
 msgstr ""
 
+#: ../../plugins/ckeditor.rst:2
+msgid "CKEditor"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:4
+msgid "With this plugin enabled the longtext input fields will get a WYSIWYG editor which allows for some additional markup options for your text."
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:6
+msgid "Depending on the configuration the editor can be enriched with various text style markup options. Have a look at the CKEditor website for a full featured editor."
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:10
+msgid "Images"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:11
+msgid "Elgg also supports uploading images in the editor. You can upload images using a file dialog or just drag/drop or copy/paste the image into the editor."
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:15
+msgid "Mentions"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:16
+msgid "With the CKEditor plugin you also enable mention capabilities. By default you can mention:"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:18
+msgid "Users: use `@` to start autocompleting users"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:19
+msgid "Groups: use `!` to start autocompleting groups"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:20
+msgid "Searchable content: use `[` to start autocompleting content"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:22
+msgid "When you select something from the autocomplete list a link to the selected user/group/content will be added to the content. Based on the mentioned users preference they will also be notified they have been mentioned."
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:26
+msgid "Toolbar configuration"
+msgstr ""
+
+#: ../../plugins/ckeditor.rst:27
+msgid "This plugin provides a standard toolbar configuration for the default and simple editor. The plugin settings allow you to configure a custom toolbar config. Almost all CKEditor plugins are available for use. Information on how to configure a toolbar can be found here: https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html"
+msgstr ""
+
 #: ../../plugins/dashboard.rst:2
 msgid "Dashboard"
 msgstr ""
@@ -44,88 +96,24 @@ msgstr ""
 msgid "The dashboard is bundled with both the full and core-only Elgg packages. This is a users portal to activity that is important to them both from within the site and from external sources. Using Elgg's powerful widget API, it is possible to build widgets that pull out relevant content from within an Elgg powered site as well as grab information from third party sources such as Twitter or Flickr (providing those widgets exist). A users dashboard is not the same as their profile, whereas the profile is for consumption by others, the dashboard is a space for users to use for their own needs."
 msgstr ""
 
-#: ../../plugins/diagnostics.rst:2
-msgid "Diagnostics"
+#: ../../plugins/discussions.rst:2
+msgid "Discussions"
 msgstr ""
 
-#: ../../plugins/diagnostics.rst:4
-msgid "For the technically savvy user, system diagnostics enables you to quickly evaluate the server environment, Elgg code, and plugins of an Elgg install. Diagnostics is a core system plugin that comes turned on by default with Elgg. To download the diagnostics file, follow the steps below. The file is a dump of all sorts of useful information."
+#: ../../plugins/discussions.rst:4
+msgid "Add a forum like place to start a discussion. This feature is mainly meant to used in groups. The group owners can enable/disable this feature for their group."
 msgstr ""
 
-#: ../../plugins/diagnostics.rst:6
-msgid "To use:"
+#: ../../plugins/discussions.rst:7
+msgid "There is a plugin setting to enable global discussions (so outside of a group). This setting is disabled by default but can be enabled by a site administrator."
 msgstr ""
 
-#: ../../plugins/diagnostics.rst:8
-msgid "Log in as Administrator"
+#: ../../plugins/discussions.rst:11
+msgid "Notifications"
 msgstr ""
 
-#: ../../plugins/diagnostics.rst:9
-msgid "Go to Administration -> Administer -> Utilities ->System Diagnostics"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:10
-msgid "Click 'Download'"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:12
-msgid "System diagnostics dump file contents:"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:14
-msgid "List of all Elgg files along with a hash for each file"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:15
-msgid "List of all the plugins"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:16
-msgid "PHP superglobals"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:17
-msgid "PHP settings"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:18
-msgid "Apache settings"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:26
-msgid "Elgg CONFIG values"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:20
-msgid "language strings"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:21
-msgid "site settings"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:22
-msgid "database settings"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:23
-msgid "plugin hooks"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:24
-msgid "actions"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:25
-msgid "views"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:26
-msgid "page handlers"
-msgstr ""
-
-#: ../../plugins/diagnostics.rst:27
-msgid "much more"
+#: ../../plugins/discussions.rst:13
+msgid "In order to encourage discussion in a group all group members will receive notifications about comments on a discussion topic. This will follow the notification preferences of the group member based on the global group preference or the specific group preference for new discussions."
 msgstr ""
 
 #: ../../plugins/file.rst:2
@@ -169,6 +157,7 @@ msgid "It is possible for other plugins to add to the players available for diff
 msgstr ""
 
 #: ../../plugins/file.rst:32
+#: ../../plugins/site_notifications.rst:16
 msgid "Note for developers"
 msgstr ""
 
@@ -232,36 +221,24 @@ msgstr ""
 msgid "Elgg comes with a set of plugins. These provide the basic functionality for your social network."
 msgstr ""
 
-#: ../../plugins/index.rst:22
+#: ../../plugins/index.rst:25
 msgid "The following plugins are also bundled with Elgg, but are not (yet) documented"
 msgstr ""
 
-#: ../../plugins/index.rst:24
+#: ../../plugins/index.rst:27
 msgid "activity"
 msgstr ""
 
-#: ../../plugins/index.rst:25
+#: ../../plugins/index.rst:28
 msgid "bookmarks"
 msgstr ""
 
-#: ../../plugins/index.rst:26
-msgid "ckeditor"
-msgstr ""
-
-#: ../../plugins/index.rst:27
+#: ../../plugins/index.rst:29
 msgid "custom_index"
 msgstr ""
 
-#: ../../plugins/index.rst:28
-msgid "developers"
-msgstr ""
-
-#: ../../plugins/index.rst:29
-msgid "discussions"
-msgstr ""
-
 #: ../../plugins/index.rst:30
-msgid "embed"
+msgid "developers"
 msgstr ""
 
 #: ../../plugins/index.rst:31
@@ -281,39 +258,39 @@ msgid "invitefriends"
 msgstr ""
 
 #: ../../plugins/index.rst:35
-msgid "likes"
-msgstr ""
-
-#: ../../plugins/index.rst:36
 msgid "members"
 msgstr ""
 
-#: ../../plugins/index.rst:37
-msgid "notifications"
-msgstr ""
-
-#: ../../plugins/index.rst:38
+#: ../../plugins/index.rst:36
 msgid "reportedcontent"
 msgstr ""
 
-#: ../../plugins/index.rst:39
+#: ../../plugins/index.rst:37
 msgid "search"
 msgstr ""
 
-#: ../../plugins/index.rst:40
-msgid "site_notifications"
-msgstr ""
-
-#: ../../plugins/index.rst:41
+#: ../../plugins/index.rst:38
 msgid "system_log"
 msgstr ""
 
-#: ../../plugins/index.rst:42
+#: ../../plugins/index.rst:39
 msgid "tagcloud"
 msgstr ""
 
-#: ../../plugins/index.rst:43
+#: ../../plugins/index.rst:40
 msgid "web_services"
+msgstr ""
+
+#: ../../plugins/likes.rst:2
+msgid "Likes"
+msgstr ""
+
+#: ../../plugins/likes.rst:4
+msgid "Allow users to like content on your site. If content supports being likable a 'thumbs up' will appear as a social interaction with this content. Liking content will also notify the content owner about the new like. A counter will show next to the like action reporting about the amount of likes the content has. Clicking on the counter will show a list of users who recently liked the content."
+msgstr ""
+
+#: ../../plugins/likes.rst:10
+msgid "The likes plugin uses the entity capability `likable`. This capability defines if an entity is likable."
 msgstr ""
 
 #: ../../plugins/messageboard.rst:2
@@ -393,7 +370,7 @@ msgid "User details"
 msgstr ""
 
 #: ../../plugins/profile.rst:17
-msgid "This provides information about a user, which is configurable from within the plugin's start.php file. You can change the available profile fields form the admin panel. Each profile field has its own access restriction, so users can choose exactly who can see each individual element. Some of the fields contain tags (for example *skills*) limiting access to a field will also limit who can find you by that tag."
+msgid "This provides information about a user, which is configurable with the ``fields, user:user`` event. You can change the available profile fields from the admin panel. Each profile field has its own access restriction, so users can choose exactly who can see each individual element. Some of the fields contain tags (for example *skills*) limiting access to a field will also limit who can find you by that tag."
 msgstr ""
 
 #: ../../plugins/profile.rst:21
@@ -425,7 +402,7 @@ msgid "Adding to the context menu"
 msgstr ""
 
 #: ../../plugins/profile.rst:39
-msgid "The context menu can be expanded by registering a :ref:`plugin hook <design/events#plugin-hooks>` for 'register' 'menu:user_hover', the following sections have special meaning:"
+msgid "The context menu can be expanded by registering a :doc:`event </design/events>` for 'register' 'menu:user_hover', the following sections have special meaning:"
 msgstr ""
 
 #: ../../plugins/profile.rst:41
@@ -438,6 +415,38 @@ msgstr ""
 
 #: ../../plugins/profile.rst:44
 msgid "In each case, the user in question will be passed as ``$params['entity']``."
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:2
+msgid "Site Notifications"
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:4
+msgid "The Site notifications plugin offers a way for your users to keep up to date with what's happening on your community by sending a on-site notification."
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:8
+msgid "Features"
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:10
+msgid "Get a notification when content is posted on the community"
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:11
+msgid "Unread notifications will automatically be marked as read when you view the content it relates to"
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:12
+msgid "Notifications will automatically be removed if the content it relates to is removed"
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:13
+msgid "Plugin settings are available to automatically cleanup unread/read notifications"
+msgstr ""
+
+#: ../../plugins/site_notifications.rst:18
+msgid "The cron based cleanup of (un)read site notifications removes the entities directly from the database. It isn't using ``$entity->delete()`` to help with performance. This means that no events are triggered for the entities which are removed during the cleanup."
 msgstr ""
 
 #: ../../plugins/thewire.rst:2

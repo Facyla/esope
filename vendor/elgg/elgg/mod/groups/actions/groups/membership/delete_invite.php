@@ -13,7 +13,7 @@ $group = elgg_call(ELGG_IGNORE_ACCESS, function() use ($group_guid) {
 	return get_entity($group_guid);
 });
 
-if (!$user && !$group instanceof \ElggGroup) {
+if (!$user || !$group instanceof \ElggGroup) {
 	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
@@ -23,7 +23,7 @@ if (!$user->canEdit() && !$group->canEdit()) {
 
 // If join request made
 $message = '';
-if (remove_entity_relationship($group->guid, 'invited', $user->guid)) {
+if ($group->removeRelationship($user->guid, 'invited')) {
 	$message = elgg_echo('groups:invitekilled');
 }
 

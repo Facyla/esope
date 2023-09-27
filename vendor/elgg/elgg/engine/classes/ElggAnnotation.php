@@ -35,19 +35,23 @@ class ElggAnnotation extends \ElggExtender {
 	/**
 	 * Save this instance and returns an annotation ID
 	 *
-	 * @return int|bool
+	 * @return bool
 	 */
-	public function save() {
+	public function save(): bool {
 		if (!isset($this->access_id)) {
 			$this->access_id = ACCESS_PRIVATE;
 		}
 
 		if (!isset($this->owner_guid)) {
-			$this->owner_guid = _elgg_services()->session->getLoggedInUserGuid();
+			$this->owner_guid = _elgg_services()->session_manager->getLoggedInUserGuid();
 		}
 
 		if ($this->id) {
 			return _elgg_services()->annotationsTable->update($this);
+		}
+
+		if (!isset($this->entity_guid)) {
+			return false;
 		}
 
 		$entity = get_entity($this->entity_guid);
@@ -56,7 +60,7 @@ class ElggAnnotation extends \ElggExtender {
 		}
 
 		if (_elgg_services()->annotationsTable->create($this, $entity)) {
-			return $this->id;
+			return true;
 		}
 
 		return false;
@@ -67,7 +71,7 @@ class ElggAnnotation extends \ElggExtender {
 	 *
 	 * @return bool
 	 */
-	public function delete() {
+	public function delete(): bool {
 		return _elgg_services()->annotationsTable->delete($this);
 	}
 
@@ -77,7 +81,7 @@ class ElggAnnotation extends \ElggExtender {
 	 * @return bool
 	 * @since 1.8
 	 */
-	public function disable() {
+	public function disable(): bool {
 		return _elgg_services()->annotationsTable->disable($this);
 	}
 
@@ -87,7 +91,7 @@ class ElggAnnotation extends \ElggExtender {
 	 * @return bool
 	 * @since 1.8
 	 */
-	public function enable() {
+	public function enable(): bool {
 		return _elgg_services()->annotationsTable->enable($this);
 	}
 
@@ -98,16 +102,14 @@ class ElggAnnotation extends \ElggExtender {
 	 *
 	 * @return bool
 	 */
-	public function canEdit($user_guid = 0) {
-		$entity = $this->getEntity();
-
-		return _elgg_services()->userCapabilities->canEditAnnotation($entity, $user_guid, $this);
+	public function canEdit(int $user_guid = 0): bool {
+		return _elgg_services()->userCapabilities->canEditAnnotation($this->getEntity(), $user_guid, $this);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getObjectFromID($id) {
+	public function getObjectFromID(int $id) {
 		return elgg_get_annotation_from_id($id);
 	}
 }

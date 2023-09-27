@@ -10,9 +10,9 @@ use Elgg\Project\Paths;
 class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	protected $hooks;
+	protected $events;
 
 	/**
 	 * @var ViewsService
@@ -23,18 +23,12 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 	public function up() {
 		$this->viewsDir = $this->normalizeTestFilePath("views");
 
-		$this->hooks = new PluginHooksService(_elgg_services()->events);
+		$this->events = new EventsService(_elgg_services()->handlers);
 		$logger = $this->createMock('\Elgg\Logger', array(), array(), '', false);
 
-		$this->views = new ViewsService($this->hooks, $logger);
+		$this->views = new ViewsService($this->events, _elgg_services()->request);
+		$this->views->setLogger($logger);
 		$this->views->autoregisterViews('', "$this->viewsDir/default", 'default');
-
-		// supports deprecation wrapper for $vars['user']
-		_elgg_services()->setValue('session', \ElggSession::getMock());
-	}
-
-	public function down() {
-
 	}
 
 	public function testCanExtendViews() {
@@ -73,11 +67,6 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->views->extendView('output/3', 'output/4');
 		
 		$this->assertEquals('41234', $this->views->renderView('output/1'));
-	}
-
-	public function testViewCanOnlyExistIfString() {
-		$this->assertFalse($this->views->viewExists(1));
-		$this->assertFalse($this->views->viewExists(new \stdClass));
 	}
 
 	public function testRegistersPhpFilesAsViews() {
@@ -151,16 +140,17 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanAlterViewInput() {
-		$this->hooks->registerHandler('view_vars', 'js/interpreted.js', function ($h, $t, $v, $p) {
-			$v['in'] = 'out';
-			return $v;
+		$this->events->registerHandler('view_vars', 'js/interpreted.js', function (\Elgg\Event $event) {
+			$vars = $event->getValue();
+			$vars['in'] = 'out';
+			return $vars;
 		});
 
 		$this->assertEquals("// PHPout", $this->views->renderView('js/interpreted.js'));
 	}
 
 	public function testCanAlterViewOutput() {
-		$this->hooks->registerHandler('view', 'js/interpreted.js', function ($h, $t, $v, $p) {
+		$this->events->registerHandler('view', 'js/interpreted.js', function (\Elgg\Event $event) {
 			return '// Hello';
 		});
 
@@ -168,12 +158,12 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanReplaceViews() {
-		$this->hooks->registerHandler('view_vars', 'js/interpreted.js', function ($h, $t, $v, $p) {
+		$this->events->registerHandler('view_vars', 'js/interpreted.js', function (\Elgg\Event $event) {
 			return ['__view_output' => 123];
 		});
 
-		$this->hooks->registerHandler('view', 'js/interpreted.js', function ($h, $t, $v, $p) {
-			$this->fail('view hook was called though __view_output was set.');
+		$this->events->registerHandler('view', 'js/interpreted.js', function (\Elgg\Event $event) {
+			$this->fail('view event was called though __view_output was set.');
 		});
 
 		$this->assertSame("123", $this->views->renderView('js/interpreted.js'));
@@ -266,5 +256,4 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 			['view.jpg', 'css/view.jpg'],
 		];
 	}
-
 }

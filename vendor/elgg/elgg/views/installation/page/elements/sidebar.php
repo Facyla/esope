@@ -14,7 +14,7 @@ if (empty($steps)) {
 
 $current_step_index = array_search($current_step, $steps);
 
-echo '<ol>';
+$list_items = '';
 foreach ($steps as $index => $step) {
 	if ($index < $current_step_index) {
 		$class = 'past';
@@ -23,14 +23,15 @@ foreach ($steps as $index => $step) {
 	} else {
 		$class = 'future';
 	}
-	$text = elgg_echo("install:$step");
-	echo "<li class=\"$class\">$text</li>";
+	
+	$list_items .= elgg_format_element('li', ['class' => $class], elgg_echo("install:{$step}"));
 }
-echo '</ol>';
+
+echo elgg_format_element('ol', [], $list_items);
 
 $options_values = [];
-foreach (get_installed_translations() as $key => $value) {
-	$options_values[elgg_http_add_url_query_elements(current_page_url(), ['hl' => $key])] = $value;
+foreach (_elgg_services()->translator->getInstalledTranslations() as $key => $value) {
+	$options_values[elgg_http_add_url_query_elements(elgg_get_current_url(), ['hl' => $key])] = $value;
 }
 
 echo elgg_view_field([
@@ -38,6 +39,6 @@ echo elgg_view_field([
 	'#label' => elgg_echo('install:change_language'),
 	'class' => 'elgg-install-language',
 	'name' => 'installer_language',
-	'value' => elgg_http_add_url_query_elements(current_page_url(), ['hl' => get_current_language()]),
+	'value' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['hl' => elgg_get_current_language()]),
 	'options_values' => $options_values,
 ]);

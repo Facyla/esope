@@ -9,8 +9,6 @@ return array(
 
 	'friends:invite' => '友達を招待する',
 	
-	'invitefriends:registration_disabled' => 'このサイトでは新規ユーザ登録はできないように設定されていまので、新しいユーザを招待することはできません。',
-	
 	'invitefriends:introduction' => '記入力欄にEメールアドレスと招待のメッセージを入力して、このネットワークに友達を招待しましょう。',
 	'invitefriends:emails' => 'Eメールアドレス (一行に一件ずつ)',
 	'invitefriends:message' => 'メッセージ',
@@ -22,19 +20,19 @@ return array(
 	'invitefriends:already_members' => '以下の方は、すでにメンバです。: %s',
 	'invitefriends:noemails' => '電子メールアドレスが入力されていません。',
 	
-	'invitefriends:message:default' => 'Hi,
+	'invitefriends:message:default' => 'こんにちは。
 
-I want to invite you to join my network here on %s.',
+ %s への参加をご招待いたします。',
 
-	'invitefriends:email' => 'You have been invited to join %s by %s.
+	'invitefriends:email' => '%s への参加のご招待を %s より案内いたします。
 
-They included the following message:
+内容:
 
 %s
 
-To join, click the following link:
+ご参加いただけるのであれば、下のリンクをクリックしてください:
 %s
 
-You will automatically add them as a friend when you create your account.',
+あなたがアカウントを作成すると自動的に友達登録されます。',
 	
 );

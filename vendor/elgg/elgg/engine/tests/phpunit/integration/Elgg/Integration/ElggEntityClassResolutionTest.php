@@ -9,14 +9,20 @@ use Elgg\IntegrationTestCase;
  */
 class ElggEntityClassResolutionTest extends IntegrationTestCase {
 
+	/**
+	 * @inheritdoc
+	 */
 	public function up() {
-
+		_elgg_services()->events->backup();
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public function down() {
-
+		_elgg_services()->events->restore();
 	}
-
+	
 	/**
 	 * @dataProvider entityClasses
 	 */
@@ -29,8 +35,9 @@ class ElggEntityClassResolutionTest extends IntegrationTestCase {
 		$entity->invalidateCache();
 
 		$entity = get_entity($entity->guid);
-
-		$this->assertTrue(elgg_instanceof($entity, $type, $subtype));
+		
+		$this->assertEquals($type, $entity->getType());
+		$this->assertEquals($subtype, $entity->getSubtype());
 		$this->assertInstanceOf($class, $entity);
 	}
 

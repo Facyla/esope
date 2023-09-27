@@ -28,17 +28,7 @@ return array(
 
 	'bookmarks:notify:summary' => '新的书签是 %s',
 	'bookmarks:notify:subject' => '新的书签：%s',
-	'bookmarks:notify:body' =>
-'%s 添加了一个：%s
-
-地址： %s
-
-%s
-
-查看本书签的评论:
-%s
-',
-
+	
 	'bookmarks:numbertodisplay' => '显示的书签数量',
 
 	'river:object:bookmarks:create' => '%s 添加了书签 %s',
@@ -52,14 +42,9 @@ return array(
 	'widgets:bookmarks:name' => '书签',
 	'widgets:bookmarks:description' => "显示你的最新书签",
 
-	'bookmarks:bookmarklet:description' =>
-			"书签小工具是一种在浏览器的地址栏旁特殊的按钮。它允许你在任何网页添加书签。启用它，只需要把按钮拖到浏览器的地址栏旁。",
-
-	'bookmarks:bookmarklet:descriptionie' =>
-			"如果你正在使用Internet Explorer（IE浏览器），你需要右键书签小工具按钮，点击添加到收藏栏。",
-
-	'bookmarks:bookmarklet:description:conclusion' =>
-			"你可以在任何时候点击按钮添加当前网页到书签。",
+	'bookmarks:bookmarklet:description' => "书签小工具是一种在浏览器的地址栏旁特殊的按钮。它允许你在任何网页添加书签。启用它，只需要把按钮拖到浏览器的地址栏旁。",
+	'bookmarks:bookmarklet:descriptionie' => "如果你正在使用Internet Explorer（IE浏览器），你需要右键书签小工具按钮，点击添加到收藏栏。",
+	'bookmarks:bookmarklet:description:conclusion' => "你可以在任何时候点击按钮添加当前网页到书签。",
 
 	/**
 	 * Status messages
@@ -73,5 +58,4 @@ return array(
 	 */
 
 	'bookmarks:save:failed' => "书签无法被保存，确保你输入了标题与地址。",
-	'bookmarks:unknown_bookmark' => '没有找到特定的书签',
 );

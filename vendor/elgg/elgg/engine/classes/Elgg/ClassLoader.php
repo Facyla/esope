@@ -48,9 +48,16 @@ namespace Elgg;
 class ClassLoader {
 
 	protected $namespaces = [];
+	
 	protected $prefixes = [];
+	
 	protected $fallbacks = [];
 
+	/**
+	 * @var Config
+	 */
+	protected $config;
+	
 	/**
 	 * @var \Elgg\ClassMap Map of classes to files
 	 */
@@ -64,10 +71,13 @@ class ClassLoader {
 	/**
 	 * Constructor
 	 *
-	 * @param \Elgg\ClassMap $map Class map
+	 * @param \Elgg\Config $config Site config
 	 */
-	public function __construct(\Elgg\ClassMap $map) {
-		$this->map = $map;
+	public function __construct(Config $config) {
+		$this->map = new \Elgg\ClassMap();
+		$this->config = $config;
+		
+		$this->register();
 	}
 
 	/**
@@ -101,6 +111,7 @@ class ClassLoader {
 	 * Registers an array of namespaces
 	 *
 	 * @param array $namespaces An array of namespaces (namespaces as keys and locations as values)
+	 *
 	 * @return void
 	 */
 	public function registerNamespaces(array $namespaces) {
@@ -114,6 +125,7 @@ class ClassLoader {
 	 *
 	 * @param string       $namespace The namespace
 	 * @param array|string $paths     The location(s) of the namespace
+	 *
 	 * @return void
 	 */
 	public function registerNamespace($namespace, $paths) {
@@ -124,6 +136,7 @@ class ClassLoader {
 	 * Registers an array of classes using the PEAR naming convention.
 	 *
 	 * @param array $classes An array of classes (prefixes as keys and locations as values)
+	 *
 	 * @return void
 	 */
 	public function registerPrefixes(array $classes) {
@@ -137,6 +150,7 @@ class ClassLoader {
 	 *
 	 * @param string       $prefix The classes prefix
 	 * @param array|string $paths  The location(s) of the classes
+	 *
 	 * @return void
 	 */
 	public function registerPrefix($prefix, $paths) {
@@ -147,6 +161,7 @@ class ClassLoader {
 	 * Add a directory to search if no registered directory is found.
 	 *
 	 * @param string $path The directory
+	 *
 	 * @return void
 	 */
 	public function addFallback($path) {
@@ -166,22 +181,23 @@ class ClassLoader {
 	 * Loads the given class or interface, possibly updating the class map.
 	 *
 	 * @param string $class The name of the class
+	 *
 	 * @return void
 	 */
 	public function loadClass($class) {
-		$file = $this->map->getPath($class);
-		if ($file && is_readable($file)) {
-			require $file;
-			return;
-		}
-		
 		// is missing? return
 		if (isset($this->missing[$class])) {
 			return;
 		}
+		
+		$file = $this->map->getPath($class);
+		if (!empty($file) && (!$this->config->class_loader_verify_file_existence || is_file($file))) {
+			require $file;
+			return;
+		}
 
 		$file = $this->findFile($class);
-		if ($file && is_readable($file)) {
+		if (!empty($file)) {
 			$this->map->setPath($class, $file);
 			$this->map->setAltered(true);
 			require $file;
@@ -199,12 +215,12 @@ class ClassLoader {
 	 * @return string|null The path, if found
 	 */
 	public function findFile($class) {
-		if ('\\' == $class[0]) {
+		if ($class[0] === '\\') {
 			$class = substr($class, 1);
 		}
 
 		$pos = strrpos($class, '\\');
-		if (false !== $pos) {
+		if ($pos !== false) {
 			// namespaced class name
 			$namespace = substr($class, 0, $pos);
 			$className = substr($class, $pos + 1);
@@ -212,7 +228,7 @@ class ClassLoader {
 				. DIRECTORY_SEPARATOR
 				. str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 			foreach ($this->namespaces as $ns => $dirs) {
-				if (0 !== strpos($namespace, $ns)) {
+				if (!str_starts_with($namespace, $ns)) {
 					continue;
 				}
 
@@ -227,7 +243,7 @@ class ClassLoader {
 			// PEAR-like class name
 			$normalizedClass = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
 			foreach ($this->prefixes as $prefix => $dirs) {
-				if (0 !== strpos($class, $prefix)) {
+				if (!str_starts_with($class, $prefix)) {
 					continue;
 				}
 

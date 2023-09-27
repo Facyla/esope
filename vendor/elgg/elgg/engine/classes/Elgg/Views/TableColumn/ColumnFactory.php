@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg\Views\TableColumn;
 
 use Elgg\Values;
@@ -13,17 +14,21 @@ use Elgg\Views\TableColumn;
  * like `page/components/column/*`, properties, or methods.
  *
  * Numerous pre-existing methods are provided via `__call()` magic. See this method to find out how
- * to add your own methods, override the existing ones, or completely replace a method via hook.
+ * to add your own methods, override the existing ones, or completely replace a method via event.
  *
  * @internal Use elgg()->table_columns to access the instance of this.
  *
  * @method TableColumn admin($heading = null, $vars = [])
  * @method TableColumn banned($heading = null, $vars = [])
+ * @method TableColumn checkbox($heading = null, $vars = [])
  * @method TableColumn container($heading = null, $vars = [])
+ * @method TableColumn entity_menu($heading = null, $vars = [])
  * @method TableColumn excerpt($heading = null, $vars = [])
  * @method TableColumn icon($heading = null, $vars = [])
  * @method TableColumn item($heading = null, $vars = [])
  * @method TableColumn language($heading = null, $vars = [])
+ * @method TableColumn last_action($heading = null, $vars = [])
+ * @method TableColumn last_login($heading = null, $vars = [])
  * @method TableColumn link($heading = null, $vars = [])
  * @method TableColumn owner($heading = null, $vars = [])
  * @method TableColumn time_created($heading = null, $vars = [])
@@ -32,6 +37,7 @@ use Elgg\Views\TableColumn;
  * @method TableColumn email($heading = null)
  * @method TableColumn name($heading = null)
  * @method TableColumn type($heading = null)
+ * @method TableColumn unvalidated_menu($heading = null, $vars = [])
  * @method TableColumn user($heading = null, $vars = [])
  * @method TableColumn username($heading = null)
  * @method TableColumn getSubtype($heading = null)
@@ -117,9 +123,9 @@ class ColumnFactory {
 	}
 
 	/**
-	 * Provide additional methods via hook and specified language keys.
+	 * Provide additional methods via events and specified language keys.
 	 *
-	 * First, the hook `table_columns:call` is called. Details in `docs/guides/hooks-list.rst`.
+	 * First, the event `table_columns:call` is called. Details in `docs/guides/events-list.rst`.
 	 *
 	 * Then it checks existence of 3 language keys in order to defer processing to a local method:
 	 *
@@ -135,8 +141,8 @@ class ColumnFactory {
 	 * @return TableColumn
 	 */
 	public function __call($name, $arguments) {
-		// allow hook to hijack magic methods
-		$column = _elgg_services()->hooks->trigger('table_columns:call', $name, [
+		// allow event to hijack magic methods
+		$column = _elgg_services()->events->triggerResults('table_columns:call', $name, [
 			'arguments' => $arguments,
 		]);
 		if ($column instanceof TableColumn) {

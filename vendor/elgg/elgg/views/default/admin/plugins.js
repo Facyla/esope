@@ -1,23 +1,4 @@
-define(function(require) {
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	var spinner = require('elgg/spinner');
-	var Ajax = require('elgg/Ajax');
-
-	var ajax = new Ajax();
-
-	function init () {
-
-		initPluginReordering();
-	
-		// plugin category filtering
-		$(document).on('click', '.elgg-admin-plugins-categories a', filterPluginCategory);
-		
-		$(document).on('click', '.elgg-plugins-toggle', toggleAllPlugins);
-
-		$(document).on('click', '.elgg-plugin-state-change', toggleSinglePlugin);
-	};
-
+define(['jquery', 'elgg/spinner', 'elgg/Ajax', 'elgg/system_messages', 'elgg/security', 'elgg/i18n', 'jquery-ui/widgets/sortable'], function($, spinner, Ajax, system_messages, security, i18n) {
 	function freezePlugins() {
 		$('#elgg-plugin-list-cover').css('display', 'block');
 	};
@@ -26,56 +7,32 @@ define(function(require) {
 	};
 
 	function initPluginReordering() {
-		$('#elgg-plugin-list > ul').sortable({
-			items:                'li:has(> .elgg-state-draggable)',
-			handle:               '.elgg-body',
+		$('#elgg-plugin-list > .elgg-list-container > ul').sortable({
+			items: 'li:has(> .elgg-state-draggable)',
+			handle: '.elgg-body',
 			forcePlaceholderSize: true,
-			placeholder:          'elgg-plugin-placeholder',
-			opacity:              0.8,
-			revert:               500,
-			stop:                 movePlugin
+			placeholder: 'elgg-plugin-placeholder',
+			opacity: 0.8,
+			revert: 500,
+			stop: movePlugin
 		});
 	};
 
-	function toggleSinglePlugin(e) {
+	function toggleSinglePlugin() {
+		spinner.start();
 		freezePlugins();
-
-		e.preventDefault();
-
-		ajax.action(this.href)
-			.done(function (output, statusText, jqXHR) {
-				if (jqXHR.AjaxData.status == -1) {
-					// don't know status :/
-					location.reload();
-					return;
-				}
-
-				// second request because views list must be rebuilt and this can't be done
-				// within the first.
-				ajax.path('admin_plugins_refresh')
-					.done(function (output) {
-
-						$('#elgg-plugin-list').html(output.list);
-						$('.elgg-sidebar').html(output.sidebar);
-
-						// reapply category filtering
-						$(".elgg-admin-plugins-categories > li.elgg-state-selected > a").trigger('click');
-						initPluginReordering();
-						unfreezePlugins();
-					});
-			});
 	};
 
 	/**
 	 * Active or deactivate all the visible plugins
 	 *
-	 * @param {Event} e click event
+	 * @param {Event} event click event
 	 * @return void
 	 */
-	function toggleAllPlugins(e) {
-		e.preventDefault();
+	function toggleAllPlugins(event) {
+		event.preventDefault();
 
-		if (!confirm(elgg.echo('question:areyousure'))) {
+		if (!confirm(i18n.echo('question:areyousure'))) {
 			return;
 		}
 
@@ -93,7 +50,7 @@ define(function(require) {
 		});
 
 		if (!guids.length) {
-			elgg.register_error(elgg.echo('admin:plugins:already:' + state));
+			system_messages.error(i18n.echo('admin:plugins:already:' + state));
 			unfreezePlugins();
 			return;
 		}
@@ -105,7 +62,7 @@ define(function(require) {
 		// the new page. Using ajax leads to complexity because Elgg wants to send the error
 		// messages back to the client.
 		var $form = $('<form method="post" />');
-		$form.prop('action', elgg.security.addToken(this.href));
+		$form.prop('action', security.addToken(this.href));
 		$form.append('<input type="hidden" name="guids" value="' + guids.join(',') + '" />');
 		$form.appendTo("body").submit();
 	};
@@ -117,55 +74,22 @@ define(function(require) {
 	 * @param {Object} ui jQueryUI object
 	 * @return void
 	 */
-	function movePlugin (e, ui) {
+	function movePlugin(e, ui) {
 		freezePlugins();
 
 		// get guid from id like elgg-object-<guid>
 		var pluginGuid = ui.item.attr('id');
 		pluginGuid = pluginGuid.replace('elgg-object-', '');
 
-		elgg.action('admin/plugins/set_priority', {
+		var ajax = new Ajax();
+		ajax.action('admin/plugins/set_priority', {
 			data: {
 				plugin_guid: pluginGuid,
 				// we start at priority 1
 				priority: ui.item.index() + 1
 			},
 			success: function() {
-				// update plugins with priority dependences
-				var priorityDep = new RegExp(elgg.echo('ElggPlugin:Dependencies:Priority'));
-				ui.item.siblings().andSelf().each(function() {
-					if (priorityDep.test($(this).find('.elgg-dependency-requires').text())) {
-						updatePluginView($(this));
-					}
-				});
 				unfreezePlugins();
-			}
-		});
-	};
-
-	/**
-	 * Update the plugin view.
-	 *
-	 * @param {Object} pluginView Plugin view element to update
-	 * @return void
-	 */
-	function updatePluginView (pluginView) {
-		// get guid from id like elgg-object-<guid>
-		var pluginGuid = pluginView.attr('id');
-		pluginGuid = pluginGuid.replace('elgg-object-', '');
-
-		elgg.get({
-			url: elgg.config.wwwroot + "ajax/view/object/plugin/full",
-			dataType: "html",
-			cache: false,
-			data: {
-				guid: pluginGuid,
-				display_reordering: true
-			},
-			success: function(htmlData) {
-				if (htmlData.length > 0) {
-					pluginView.html(htmlData);
-				}
 			}
 		});
 	};
@@ -175,8 +99,8 @@ define(function(require) {
 	 *
 	 * @return void
 	 */
-	function filterPluginCategory (e) {
-		e.preventDefault();
+	function filterPluginCategory(event) {
+		event.preventDefault();
 		
 		// remove selected state from all buttons
 		$(".elgg-admin-plugins-categories > li").removeClass("elgg-state-selected");
@@ -187,5 +111,9 @@ define(function(require) {
 		$(this).closest('li').addClass("elgg-state-selected");
 	};
 
-	init();
+	initPluginReordering();
+	
+	$(document).on('click', '.elgg-admin-plugins-categories a', filterPluginCategory);
+	$(document).on('click', '.elgg-plugins-toggle', toggleAllPlugins);
+	$(document).on('click', '.elgg-plugin-state-change', toggleSinglePlugin);
 });

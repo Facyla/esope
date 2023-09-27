@@ -19,10 +19,13 @@ class UpgradeCommand extends BaseCommand {
 	 */
 	protected function configure() {
 		$this->setName('upgrade')
-			->addArgument('async', InputOption::VALUE_OPTIONAL,
-				'Execute pending asynchronous upgrades'
+			->setDescription(elgg_echo('cli:upgrade:description'))
+			->addOption('force', 'f', InputOption::VALUE_NONE,
+				elgg_echo('cli:upgrade:option:force')
 			)
-			->setDescription('Run system upgrade');
+			->addArgument('async', InputOption::VALUE_OPTIONAL,
+				elgg_echo('cli:upgrade:argument:async')
+			);
 	}
 
 	/**
@@ -33,9 +36,11 @@ class UpgradeCommand extends BaseCommand {
 		$this->output = $output;
 
 		$async = (bool) $this->argument('async');
+		$force = $this->option('force');
 
-		$return = 0;
+		$return = self::SUCCESS;
 
+		// run Phinx (database) migrations
 		ElggApplication::migrate();
 
 		$app = ElggApplication::getInstance();
@@ -43,16 +48,30 @@ class UpgradeCommand extends BaseCommand {
 
 		$boot = new BootHandler($app);
 		$boot->bootServices();
+		$boot->bootPlugins();
 
+		// check if upgrade is locked
+		$is_locked = _elgg_services()->mutex->isLocked('upgrade');
+		if ($is_locked && !$force) {
+			$this->error(elgg_echo('upgrade:locked'));
+			
+			return 1;
+		} elseif ($is_locked && $force) {
+			_elgg_services()->mutex->unlock('upgrade');
+			
+			$this->notice(elgg_echo('upgrade:unlock:success'));
+		}
+
+		// run system upgrades
 		$upgrades = _elgg_services()->upgrades->getPendingUpgrades(false);
 		$job = _elgg_services()->upgrades->run($upgrades);
 
 		$job->done(
 			function () {
-				$this->notice('System has been upgraded');
+				$this->notice(elgg_echo('cli:upgrade:system:upgraded'));
 			},
 			function ($errors) use (&$return) {
-				$this->error('System upgrade has failed');
+				$this->error(elgg_echo('cli:upgrade:system:failed'));
 
 				if (!is_array($errors)) {
 					$errors = [$errors];
@@ -61,24 +80,32 @@ class UpgradeCommand extends BaseCommand {
 				foreach ($errors as $error) {
 					$this->error($error);
 				}
-				$return = 1;
+				
+				$return = self::FAILURE;
 			}
 		);
+
+		_elgg_services()->plugins->generateEntities();
+		
+		if ($return !== self::SUCCESS || !$async) {
+			return $return;
+		}
 
 		// We want to reboot the application, because some of the services (e.g. dic) can bootstrap themselves again
 		$app = $initial_app;
 		ElggApplication::setInstance($initial_app);
 		$app->start();
 
-		$upgrades = _elgg_services()->upgrades->getPendingUpgrades($async);
+		// run async upgrades
+		$upgrades = _elgg_services()->upgrades->getPendingUpgrades(true);
 		$job = _elgg_services()->upgrades->run($upgrades);
 
 		$job->done(
 			function () {
-				$this->notice('Plugins have been upgraded');
+				$this->notice(elgg_echo('cli:upgrade:async:upgraded'));
 			},
 			function ($errors) use (&$return) {
-				$this->error('Plugin upgrade has failed');
+				$this->error(elgg_echo('cli:upgrade:aysnc:failed'));
 
 				if (!is_array($errors)) {
 					$errors = [$errors];
@@ -87,7 +114,8 @@ class UpgradeCommand extends BaseCommand {
 				foreach ($errors as $error) {
 					$this->error($error);
 				}
-				$return = 1;
+				
+				$return = self::FAILURE;
 			}
 		);
 

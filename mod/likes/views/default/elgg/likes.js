@@ -1,10 +1,7 @@
 /**
  * Likes module
  */
-define(function (require) {
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	var Ajax = require('elgg/Ajax');
+define(['jquery', 'elgg', 'elgg/Ajax', 'elgg/hooks'], function ($, elgg, Ajax, hooks) {
 
 	var ajax = new Ajax();
 
@@ -21,9 +18,8 @@ define(function (require) {
 		var li_modifier = num_likes > 0 ? 'removeClass' : 'addClass';
 
 		$('.elgg-menu-item-likes-count > a[data-likes-guid=' + guid + ']').each(function () {
-			$(this)
-				.replaceWith(new_value)
-				.parent()[li_modifier]('hidden');
+			$(this).parent()[li_modifier]('hidden');
+			$(this).replaceWith(new_value);
 		});
 	}
 
@@ -41,7 +37,7 @@ define(function (require) {
 	});
 
 	// Any Ajax operation can return likes data
-	elgg.register_hook_handler(Ajax.RESPONSE_DATA_HOOK, 'all', function (hook, type, params, value) {
+	hooks.register(Ajax.RESPONSE_DATA_HOOK, 'all', function (hook, type, params, value) {
 		if (value.likes_status) {
 			var status = value.likes_status;
 			update_like_menu_item(status.guid, status.like_menu_item);

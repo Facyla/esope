@@ -2,14 +2,13 @@
 
 namespace Elgg;
 
-use Elgg\I18n\DateTime as ElggDateTime;
-use DataFormatException;
 use DateTime as PHPDateTime;
+use Elgg\I18n\DateTime as ElggDateTime;
+use Elgg\Exceptions\DataFormatException;
 use Exception;
 
-
 /**
- * Functions for use as plugin hook/event handlers or other situations where you need a
+ * Functions for use as event handlers or other situations where you need a
  * globally accessible callable.
  */
 class Values {
@@ -79,11 +78,13 @@ class Values {
 				$dt = $time;
 			} elseif ($time instanceof PHPDateTime) {
 				$dt = new ElggDateTime($time->format(PHPDateTime::RFC3339_EXTENDED));
-			} else if (is_numeric($time)) {
+			} elseif (is_numeric($time)) {
 				$dt = new ElggDateTime();
 				$dt->setTimestamp((int) $time);
-			} else {
+			} elseif (is_string($time)) {
 				$dt = new ElggDateTime($time);
+			} else {
+				$dt = new ElggDateTime();
 			}
 		} catch (Exception $e) {
 			throw new DataFormatException($e->getMessage());
@@ -110,14 +111,15 @@ class Values {
 			if (!isset($arg)) {
 				continue;
 			}
+			
 			if (is_object($arg) && isset($arg->id)) {
 				$ids[] = (int) $arg->id;
-			} else if (is_array($arg)) {
+			} elseif (is_array($arg)) {
 				foreach ($arg as $a) {
 					$el_ids = self::normalizeIds($a);
 					$ids = array_merge($ids, $el_ids);
 				}
-			} else if (is_numeric($arg)) {
+			} elseif (is_numeric($arg)) {
 				$ids[] = (int) $arg;
 			} else {
 				$arg = print_r($arg, true);
@@ -146,14 +148,15 @@ class Values {
 			if (!isset($arg)) {
 				continue;
 			}
+			
 			if (is_object($arg) && isset($arg->guid)) {
 				$guids[] = (int) $arg->guid;
-			} else if (is_array($arg)) {
+			} elseif (is_array($arg)) {
 				foreach ($arg as $a) {
 					$el_guids = self::normalizeGuids($a);
 					$guids = array_merge($guids, $el_guids);
 				}
-			} else if (is_numeric($arg)) {
+			} elseif (is_numeric($arg)) {
 				$guids[] = (int) $arg;
 			} else {
 				$arg = print_r($arg, true);
@@ -165,7 +168,7 @@ class Values {
 	}
 
 	/**
-	 * Return array with __view_output set to prevent view output during view_vars hook
+	 * Return array with __view_output set to prevent view output during view_vars event
 	 *
 	 * @see   ViewsService->renderView()
 	 *
@@ -186,7 +189,7 @@ class Values {
 	 * @return bool
 	 * @since 3.0.0
 	 */
-	public static function isEmpty($value) {
+	public static function isEmpty($value): bool {
 		
 		if ($value === 0 || $value === '0' || $value === 0.0) {
 			return false;
@@ -217,20 +220,30 @@ class Values {
 		
 		if ($n < 1000000) {
 			// 1.5K, 999.5K
-			$n = (float) number_format($n / 1000, $precision, $decimal_separator, $thousands_separator);
-			return elgg_echo('number_counter:view:thousand', [$n]);
+			$n = number_format($n / 1000, $precision, $decimal_separator, $thousands_separator);
+			$text_key = 'number_counter:view:thousand';
 		} else if ($n < 1000000000) {
 			// 1.5M, 999.5M
-			$n = (float) number_format($n / 1000000, $precision, $decimal_separator, $thousands_separator);
-			return elgg_echo('number_counter:view:million', [$n]);
+			$n = number_format($n / 1000000, $precision, $decimal_separator, $thousands_separator);
+			$text_key = 'number_counter:view:million';
 		} else if ($n < 1000000000000) {
 			// 1.5B, 999.5B
-			$n = (float) number_format($n / 1000000000, $precision, $decimal_separator, $thousands_separator);
-			return elgg_echo('number_counter:view:billion', [$n]);
+			$n = number_format($n / 1000000000, $precision, $decimal_separator, $thousands_separator);
+			$text_key = 'number_counter:view:billion';
 		} else {
 			// 1.5T
-			$n = (float) number_format($n / 1000000000000, $precision, $decimal_separator, $thousands_separator);
-			return elgg_echo('number_counter:view:trillion', [$n]);
+			$n = number_format($n / 1000000000000, $precision, $decimal_separator, $thousands_separator);
+			$text_key = 'number_counter:view:trillion';
 		}
+		
+		if (stristr($n, $decimal_separator) !== false) {
+			// strip trailing zero's after decimal separator
+			$parts = explode($decimal_separator, $n);
+			$parts[1] = rtrim($parts[1], 0);
+			
+			$n = implode($decimal_separator, array_filter($parts));
+		}
+		
+		return elgg_echo($text_key, [$n]);
 	}
 }

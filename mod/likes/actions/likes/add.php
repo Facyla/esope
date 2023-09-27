@@ -16,7 +16,7 @@ if (elgg_annotation_exists($entity_guid, 'likes')) {
 	return elgg_ok_response('', elgg_echo('likes:alreadyliked'));
 }
 
-// limit likes through a plugin hook (to prevent liking your own content for example)
+// limit likes through an event (to prevent liking your own content for example)
 if (!$entity->canAnnotate(0, 'likes')) {
 	// plugins should register the error message to explain why liking isn't allowed
 	return elgg_error_response();
@@ -43,38 +43,31 @@ $annotation = elgg_get_annotation_from_id($annotation_id);
 
 $title_str = $entity->getDisplayName();
 if (!$title_str) {
-	$title_str = elgg_get_excerpt($entity->description, 80);
+	$title_str = elgg_get_excerpt((string) $entity->description, 80);
 }
 
 $site = elgg_get_site_entity();
 
 // summary for site_notifications
 $summary = elgg_echo('likes:notifications:subject', [
-		$user->getDisplayName(),
-		$title_str,
-	],
-	$owner->language
-);
+	$user->getDisplayName(),
+	$title_str,
+], (string) $owner->language);
 
 // prevent long subjects in mail
 $title_str = elgg_get_excerpt($title_str, 80);
 $subject = elgg_echo('likes:notifications:subject', [
-		$user->getDisplayName(),
-		$title_str,
-	],
-	$owner->language
-);
+	$user->getDisplayName(),
+	$title_str,
+], (string) $owner->language);
 
 $body = elgg_echo('likes:notifications:body', [
-		$owner->getDisplayName(),
-		$user->getDisplayName(),
-		$title_str,
-		$site->getDisplayName(),
-		$entity->getURL(),
-		$user->getURL(),
-	],
-	$owner->language
-);
+	$user->getDisplayName(),
+	$title_str,
+	$site->getDisplayName(),
+	$entity->getURL(),
+	$user->getURL(),
+], (string) $owner->language);
 
 notify_user(
 	$entity->owner_guid,

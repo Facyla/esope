@@ -3,7 +3,7 @@
  * View individual wire post
  */
 
-$guid = elgg_extract('guid', $vars);
+$guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($guid, 'object', 'thewire');
 
 /* @var $post ElggWire */
@@ -16,4 +16,5 @@ elgg_push_entity_breadcrumbs($post, false);
 echo elgg_view_page($title, [
 	'content' => elgg_view_entity($post),
 	'entity' => $post,
+	'filter_id' => 'thewire/view',
 ]);

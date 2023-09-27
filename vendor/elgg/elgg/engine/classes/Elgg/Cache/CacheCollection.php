@@ -2,7 +2,6 @@
 
 namespace Elgg\Cache;
 
-use Elgg\Cacheable;
 use Elgg\Config;
 
 /**
@@ -63,6 +62,7 @@ abstract class CacheCollection {
 
 	/**
 	 * Clear all persistent caches
+	 *
 	 * @return void
 	 */
 	public function clear() {
@@ -95,6 +95,7 @@ abstract class CacheCollection {
 
 	/**
 	 * Disable all persistent caches
+	 *
 	 * @return void
 	 */
 	public function disable() {
@@ -105,6 +106,7 @@ abstract class CacheCollection {
 
 	/**
 	 * Enable all persistent caches
+	 *
 	 * @return void
 	 */
 	public function enable() {
@@ -112,5 +114,4 @@ abstract class CacheCollection {
 			$cache->enable();
 		}
 	}
-
 }

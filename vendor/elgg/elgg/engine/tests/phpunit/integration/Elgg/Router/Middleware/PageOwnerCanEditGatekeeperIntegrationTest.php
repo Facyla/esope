@@ -2,378 +2,106 @@
 
 namespace Elgg\Router\Middleware;
 
+use Elgg\Exceptions\Http\EntityPermissionsException;
+use Elgg\Exceptions\Http\Gatekeeper\LoggedInGatekeeperException;
 use Elgg\IntegrationTestCase;
-use Elgg\EntityPermissionsException;
 
 class PageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase {
 
 	/**
-	 * @var \ElggUser test user
-	 */
-	protected $user;
-	
-	/**
-	 * @var \ElggUser test user
-	 */
-	protected $loggedin_user;
-	
-	/**
-	 * @var \ElggGroup test group
-	 */
-	protected $group;
-	
-	/**
-	 * @var \ElggObject test object, owned by test user
-	 */
-	protected $object;
-	
-	/**
 	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::up()
 	 */
-	public function up() {
+	public static function prepareHttpRequest($uri = '', $method = 'GET', $parameters = [], $ajax = 0, $add_csrf_tokens = false) {
+		$request = parent::prepareHttpRequest($uri, $method, $parameters, $ajax, $add_csrf_tokens);
 		
+		_elgg_services()->set('request', $request);
+		_elgg_services()->reset('pageOwner');
+		
+		return $request;
+	}
+	
+	/**
+	 * @dataProvider getGatekeepers
+	 */
+	public function testUserNotLoggedIn($middleware) {
+		$user = $this->createUser();
+		
+		elgg_register_route('add:object:foo', [
+			'path' => '/foo/edit/{guid}',
+			'handler' => '\Elgg\Values::getTrue',
+			'middleware' => [
+				$middleware,
+			],
+			'walled' => false,
+		]);
+		
+		$http_request = $this->prepareHttpRequest(elgg_generate_url('add:object:foo', [
+			'guid' => $user->guid,
+		]));
+		
+		$this->expectException(LoggedInGatekeeperException::class);
+		_elgg_services()->router->route($http_request);
+	}
+	
+	/**
+	 * @dataProvider getGatekeepers
+	 */
+	public function testPageOwnerCantEdit($middleware, $content_type) {
+		$owner = $this->createUser();
+		
+		$entity = $this->createOne($content_type, ['owner_guid' => $owner->guid]);
+		
+		$logged_in_user = $this->createUser();
+		_elgg_services()->session_manager->setLoggedInUser($logged_in_user);
+		
+		elgg_register_route('add:object:foo', [
+			'path' => '/foo/edit/{guid}',
+			'handler' => '\Elgg\Values::getTrue',
+			'middleware' => [
+				$middleware,
+			],
+			'walled' => false,
+		]);
+		
+		$http_request = $this->prepareHttpRequest(elgg_generate_url('add:object:foo', [
+			'guid' => $entity->guid,
+		]));
+		
+		$this->expectException(EntityPermissionsException::class);
+		_elgg_services()->router->route($http_request);
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::down()
+	 * @dataProvider getGatekeepers
 	 */
-	public function down() {
+	public function testPageOwnerCanEdit($middleware, $content_type) {
 		
-		if ($this->object instanceof \ElggObject) {
-			$this->object->delete();
-		}
+		$owner = $this->createUser();
+		$entity = $this->createOne($content_type, ['owner_guid' => $owner->guid]);
+		_elgg_services()->session_manager->setLoggedInUser($owner);
 		
-		if ($this->group instanceof \ElggGroup) {
-			$this->group->delete();
-		}
-		
-		if ($this->user instanceof \ElggUser) {
-			$this->user->delete();
-		}
-		
-		if ($this->loggedin_user instanceof \ElggUser) {
-			elgg_get_session()->removeLoggedInUser();
-			$this->loggedin_user->delete();
-		}
-	}
-	
-	/**
-	 * @dataProvider routeUserDataProvider
-	 */
-	public function testLoggedOutCantAccessUserPage(string $route_name, array $route_params) {
-		
-		$this->user = $this->createUser();
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'username' => $this->user->username,
-			'guid' => $this->user->guid,
+		elgg_register_route('add:object:foo', [
+			'path' => '/foo/edit/{guid}',
+			'handler' => '\Elgg\Values::getTrue',
+			'middleware' => [
+				$middleware,
+			],
+			'walled' => false,
 		]);
 		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$this->expectException(EntityPermissionsException::class);
-		_elgg_services()->router->route($http_request);
-	}
-	
-	/**
-	 * @dataProvider routeGroupDataProvider
-	 */
-	public function testLoggedOutCantAccessGroupPage(string $route_name, array $route_params) {
-		
-		$this->user = $this->createUser();
-		$this->group = $this->createGroup([
-			'owner_guid' => $this->user->guid,
-			'container_guid' => $this->user->guid,
-		]);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'guid' => $this->group->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$this->expectException(EntityPermissionsException::class);
-		_elgg_services()->router->route($http_request);
-	}
-	
-	/**
-	 * @dataProvider routeEntityDataProvider
-	 */
-	public function testLoggedOutCantAccessEntityPage(string $route_name, array $route_params) {
-		
-		$this->user = $this->createUser();
-		$this->group = $this->createGroup([
-			'owner_guid' => $this->user->guid,
-			'container_guid' => $this->user->guid,
-		]);
-		$this->object = $this->createObject([
-			'owner_guid' => $this->user->guid,
-			'container_guid' => $this->group->guid,
-		]);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'guid' => $this->object->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$this->expectException(EntityPermissionsException::class);
-		_elgg_services()->router->route($http_request);
-	}
-	
-	/**
-	 * @dataProvider routeUserDataProvider
-	 */
-	public function testLoggedInOtherCantAccessUserPage(string $route_name, array $route_params) {
-		
-		$this->loggedin_user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($this->loggedin_user);
-		
-		$this->user = $this->createUser();
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'username' => $this->user->username,
-			'guid' => $this->user->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$this->expectException(EntityPermissionsException::class);
-		_elgg_services()->router->route($http_request);
-	}
-	
-	/**
-	 * @dataProvider routeGroupDataProvider
-	 */
-	public function testLoggedInOtherCantAccessGroupPage(string $route_name, array $route_params) {
-		
-		$this->loggedin_user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($this->loggedin_user);
-		
-		$this->user = $this->createUser();
-		$this->group = $this->createGroup([
-			'owner_guid' => $this->user->guid,
-			'container_guid' => $this->user->guid,
-		]);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'guid' => $this->group->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$this->expectException(EntityPermissionsException::class);
-		_elgg_services()->router->route($http_request);
-	}
-	
-	/**
-	 * @dataProvider routeEntityDataProvider
-	 */
-	public function testLoggedInOtherCantAccessEntityPage(string $route_name, array $route_params) {
-		
-		$this->loggedin_user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($this->loggedin_user);
-		
-		$this->user = $this->createUser();
-		$this->group = $this->createGroup([
-			'owner_guid' => $this->user->guid,
-			'container_guid' => $this->user->guid,
-		]);
-		$this->object = $this->createObject([
-			'owner_guid' => $this->user->guid,
-			'container_guid' => $this->group->guid,
-		]);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'guid' => $this->object->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$this->expectException(EntityPermissionsException::class);
-		_elgg_services()->router->route($http_request);
-	}
-	
-	/**
-	 * @dataProvider routeUserDataProvider
-	 */
-	public function testLoggedInCanAccessUserPage(string $route_name, array $route_params) {
-		
-		$this->loggedin_user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($this->loggedin_user);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'username' => $this->loggedin_user->username,
-			'guid' => $this->loggedin_user->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
+		$http_request = $this->prepareHttpRequest(elgg_generate_url('add:object:foo', [
+			'guid' => $entity->guid,
+		]));
 		
 		$response = _elgg_services()->router->route($http_request);
 		$this->assertTrue($response);
 	}
 	
-	/**
-	 * @dataProvider routeGroupDataProvider
-	 */
-	public function testLoggedInCanAccessGroupPage(string $route_name, array $route_params) {
-		
-		$this->loggedin_user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($this->loggedin_user);
-		
-		$this->group = $this->createGroup([
-			'owner_guid' => $this->loggedin_user->guid,
-			'container_guid' => $this->loggedin_user->guid,
-		]);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'guid' => $this->group->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$response = _elgg_services()->router->route($http_request);
-		$this->assertTrue($response);
-	}
-	
-	/**
-	 * @dataProvider routeEntityDataProvider
-	 */
-	public function testLoggedInCanAccessEntityPage(string $route_name, array $route_params) {
-		
-		$this->loggedin_user = $this->createUser();
-		elgg_get_session()->setLoggedInUser($this->loggedin_user);
-		
-		$this->group = $this->createGroup([
-			'owner_guid' => $this->loggedin_user->guid,
-			'container_guid' => $this->loggedin_user->guid,
-		]);
-		$this->object = $this->createObject([
-			'owner_guid' => $this->loggedin_user->guid,
-			'container_guid' => $this->group->guid,
-		]);
-		
-		elgg_register_route($route_name, $route_params);
-		$url = elgg_generate_url($route_name, [
-			'guid' => $this->object->guid,
-		]);
-		
-		$http_request = $this->prepareHttpRequest($url);
-		
-		_elgg_services()->setValue('request', $http_request);
-		
-		$response = _elgg_services()->router->route($http_request);
-		$this->assertTrue($response);
-	}
-	
-	public function routeUserDataProvider() {
+	public function getGatekeepers() {
 		return [
-			[
-				'collection:object:foo:owner',
-				[
-					'path' => '/foo/owner/{username}',
-					'handler' => [$this, 'routeHandler'],
-					'middleware' => [
-						PageOwnerCanEditGatekeeper::class,
-					],
-					'walled' => false,
-				],
-			],
-			[
-				'add:object:foo',
-				[
-					'path' => '/foo/add/{guid}',
-					'handler' => [$this, 'routeHandler'],
-					'middleware' => [
-						PageOwnerCanEditGatekeeper::class,
-					],
-					'walled' => false,
-				],
-			],
+			[PageOwnerCanEditGatekeeper::class, 'object'],
+			[UserPageOwnerCanEditGatekeeper::class, 'user'],
+			[GroupPageOwnerCanEditGatekeeper::class, 'group'],
 		];
-	}
-	
-	public function routeGroupDataProvider() {
-		return [
-			[
-				'collection:object:foo:group',
-				[
-					'path' => '/foo/group/{guid}',
-					'handler' => [$this, 'routeHandler'],
-					'middleware' => [
-						PageOwnerCanEditGatekeeper::class,
-					],
-					'walled' => false,
-				],
-			],
-			[
-				'add:object:foo',
-				[
-					'path' => '/foo/add/{guid}',
-					'handler' => [$this, 'routeHandler'],
-					'middleware' => [
-						PageOwnerCanEditGatekeeper::class,
-					],
-					'walled' => false,
-				],
-			],
-		];
-	}
-	
-	public function routeEntityDataProvider() {
-		return [
-			[
-				'view:object:foo',
-				[
-					'path' => '/foo/view/{guid}',
-					'handler' => [$this, 'routeHandler'],
-					'middleware' => [
-						PageOwnerCanEditGatekeeper::class,
-					],
-					'walled' => false,
-				],
-			],
-			[
-				'edit:object:foo',
-				[
-					'path' => '/foo/edit/{guid}',
-					'handler' => [$this, 'routeHandler'],
-					'middleware' => [
-						PageOwnerCanEditGatekeeper::class,
-					],
-					'walled' => false,
-				],
-			],
-		];
-	}
-	
-	public function routeHandler(array $page_segments = []) {
-		return true;
 	}
 }

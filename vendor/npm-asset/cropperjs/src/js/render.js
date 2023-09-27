@@ -4,6 +4,8 @@ import {
   CLASS_HIDDEN,
   DATA_ACTION,
   EVENT_CROP,
+  MIN_CONTAINER_HEIGHT,
+  MIN_CONTAINER_WIDTH,
 } from './constants';
 import {
   addClass,
@@ -36,6 +38,8 @@ export default {
       container,
       cropper,
     } = this;
+    const minWidth = Number(options.minContainerWidth);
+    const minHeight = Number(options.minContainerHeight);
 
     addClass(cropper, CLASS_HIDDEN);
     removeClass(element, CLASS_HIDDEN);
@@ -43,11 +47,11 @@ export default {
     const containerData = {
       width: Math.max(
         container.offsetWidth,
-        Number(options.minContainerWidth) || 200,
+        minWidth >= 0 ? minWidth : MIN_CONTAINER_WIDTH,
       ),
       height: Math.max(
         container.offsetHeight,
-        Number(options.minContainerHeight) || 100,
+        minHeight >= 0 ? minHeight : MIN_CONTAINER_HEIGHT,
       ),
     };
 
@@ -93,15 +97,21 @@ export default {
       height: canvasHeight,
     };
 
-    canvasData.left = (containerData.width - canvasWidth) / 2;
-    canvasData.top = (containerData.height - canvasHeight) / 2;
-    canvasData.oldLeft = canvasData.left;
-    canvasData.oldTop = canvasData.top;
-
     this.canvasData = canvasData;
     this.limited = (viewMode === 1 || viewMode === 2);
     this.limitCanvas(true, true);
-    this.initialImageData = assign({}, imageData);
+    canvasData.width = Math.min(
+      Math.max(canvasData.width, canvasData.minWidth),
+      canvasData.maxWidth,
+    );
+    canvasData.height = Math.min(
+      Math.max(canvasData.height, canvasData.minHeight),
+      canvasData.maxHeight,
+    );
+    canvasData.left = (containerData.width - canvasData.width) / 2;
+    canvasData.top = (containerData.height - canvasData.height) / 2;
+    canvasData.oldLeft = canvasData.left;
+    canvasData.oldTop = canvasData.top;
     this.initialCanvasData = assign({}, canvasData);
   },
 

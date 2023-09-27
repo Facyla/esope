@@ -5,8 +5,9 @@
 
 elgg_gatekeeper();
 
-$title = get_input('title', "");
-$address = get_input('address', "");
+$title = get_input('title', '');
+$address = get_input('address', '');
+$entity_guid = (int) get_input('entity_guid');
 
 $description = '';
 
@@ -32,6 +33,11 @@ $fields = [
 		'name' => 'description',
 		'value' => $description,
 	],
+	[
+		'#type' => 'hidden',
+		'name' => 'entity_guid',
+		'value' => $entity_guid,
+	],
 ];
 
 foreach ($fields as $field) {
@@ -39,11 +45,11 @@ foreach ($fields as $field) {
 }
 
 $footer = elgg_view('input/submit', [
-	'value' => elgg_echo('reportedcontent:report'),
+	'text' => elgg_echo('reportedcontent:report'),
 ]);
 $footer .= elgg_view('input/button', [
 	'class' => 'elgg-button-cancel',
-	'value' => elgg_echo('cancel'),
+	'text' => elgg_echo('cancel'),
 ]);
 
 elgg_set_form_footer($footer);

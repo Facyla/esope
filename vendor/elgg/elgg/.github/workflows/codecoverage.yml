@@ -2,15 +2,30 @@ name: Code Coverage
 on: [push]
 env:
   ELGG_DB_USER: root
-  ELGG_DB_PASS: root
+  ELGG_DB_PASS: password
   ELGG_DB_NAME: elgg
   ELGG_DB_PREFIX: elgg_
+  ELGG_DB_HOST: 127.0.0.1
   
 jobs:
   scrutinizer:
-    name: Scrutinizer
-    runs-on: ubuntu-latest
-        
+    name: Scrutinizer - ${{ matrix.testsuite }}
+    runs-on: ubuntu-20.04
+    services:
+      elggdb:
+        image: 'mysql:5.7'
+        env:
+          MYSQL_DATABASE: elgg
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        # Keep number of suites inline with scrutinizer waiting for the same amount of coverage runs
+        testsuite: ['unit', 'integration-a-to-d', 'integration-e-to-s', 'integration-t-to-all', 'plugins-unit', 'plugins-integration']
+
     steps:
       - name: Check if run on the Elgg repo
         if: github.repository != 'Elgg/Elgg'
@@ -19,22 +34,24 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: xdebug
-          extensions: gd,pdo,xml,json,mysqli,pdo_mysql,libxml,mbstring
-      
-      - name: Install Composer v1
-        run: composer self-update --1
+          extensions: gd,pdo,xml,json,mysqli,pdo_mysql,libxml,mbstring,intl
+          ini-values: max_execution_time=180
         
       - name: Code checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents. If you use a shallow git checkout, please checkout at least a depth of one."), see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
+          # 10 commits is an arbitrary value that is more than 1 commit
+          fetch-depth: 10
         
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> ${GITHUB_OUTPUT}
         
       - name: Restore Composer Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -44,14 +61,14 @@ jobs:
         run: composer install
       
       - name: Install Elgg
-        run: |
-          sudo systemctl start mysql
-          mysql -u root -proot -e 'SET GLOBAL max_connections = 1000;'
-          mysql -u root -proot -e 'create database elgg;'
-          php ./elgg-cli install --config ./install/cli/testing_app.php --verbose
+        run: php ./elgg-cli install --config ./install/cli/testing_app.php --verbose --no-ansi
       
-      - name: Test and publish code coverage
-        run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          ./vendor/bin/phpunit --coverage-clover=coverage.clover
-          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+      - name: Enable Elgg plugins
+        run: php -f ./.scripts/ci/enable_plugins.php
+      
+      - name: Generate code coverage
+        continue-on-error: true
+        run: ./vendor/bin/phpunit --testsuite ${{ matrix.testsuite }} --coverage-clover=coverage.clover
+
+      - name: Upload to scrutinizer
+        run: ./vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover

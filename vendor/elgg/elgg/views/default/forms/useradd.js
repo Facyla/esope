@@ -1,7 +1,4 @@
-define(function(require) {
-
-	var $ = require('jquery');
-
+define(['jquery'], function($) {
 	var checkbox_selector = 'input[type="checkbox"][name="autogen_password"]';
 
 	/**
@@ -16,6 +13,7 @@ define(function(require) {
 		if (!$form.length) {
 			return;
 		}
+		
 		if ($checkbox.is(':checked')) {
 			$('[name="password"],[name="password2"]', $form).each(function() {
 				$(this).prop('required', false);
@@ -33,10 +31,5 @@ define(function(require) {
 		togglePasswordInput($(this));
 	});
 
-	require(['elgg/ready'], function() {
-		togglePasswordInput($(checkbox_selector));
-	});
+	togglePasswordInput($(checkbox_selector));
 });
-
-
-

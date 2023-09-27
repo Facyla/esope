@@ -5,32 +5,24 @@
 $title = get_input('title');
 $description = get_input('description');
 $address = get_input('address');
-$access = ACCESS_PRIVATE; //this is private and only admins can see it
-
-$fail = function () use ($address) {
-	return elgg_error_response(elgg_echo('reportedcontent:failed'), $address);
-};
+$entity_guid = (int) get_input('entity_guid');
 
 if (!$title || !$address) {
-	$fail();
+	return elgg_error_response(elgg_echo('reportedcontent:failed'), $address ?? REFERRER);
 }
 
-$report = new ElggReportedContent();
-$report->owner_guid = elgg_get_logged_in_user_guid();
+$report = new \ElggReportedContent();
 $report->title = $title;
 $report->address = elgg_normalize_site_url($address);
 $report->description = $description;
-$report->access_id = $access;
+$report->state = 'active';
 
 if (!$report->save()) {
-	$fail();
+	return elgg_error_response(elgg_echo('reportedcontent:failed'), $address);
 }
 
-if (!elgg_trigger_plugin_hook('reportedcontent:add', 'system', ['report' => $report], true)) {
-	$report->delete();
-	$fail();
+if (!empty($entity_guid)) {
+	$report->addRelationship($entity_guid, 'reportedcontent');
 }
-
-$report->state = 'active';
 
 return elgg_ok_response('', elgg_echo('reportedcontent:success'), $address);

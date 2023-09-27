@@ -5,23 +5,38 @@ namespace Elgg\Helpers\Cli;
 use Elgg\Database\Seeds\Seed;
 
 /**
- * @see \Elgg\Cli\DatabaseSeedCommandTest
+ * @see \Elgg\Cli\DatabaseSeedCommandUnitTest
  */
 class CliSeeder extends Seed {
 	
 	/**
-	 * Populate database
-	 * @return mixed
+	 * {@inheritDoc}
 	 */
-	function seed() {
-		system_message(__METHOD__);
+	public function seed() {
+		elgg_register_success_message(__METHOD__);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function unseed() {
+		elgg_register_success_message(__METHOD__);
 	}
 	
 	/**
-	 * Removed seeded rows from database
-	 * @return mixed
+	 * {@inheritDoc}
 	 */
-	function unseed() {
-		system_message(__METHOD__);
+	public static function getType(): string {
+		return 'testing';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function getCountOptions(): array {
+		return [
+			'type' => 'object',
+			'subtype' => 'dummy',
+		];
 	}
 }

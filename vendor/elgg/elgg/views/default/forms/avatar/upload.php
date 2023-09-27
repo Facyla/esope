@@ -19,12 +19,11 @@ echo elgg_view_field([
 echo elgg_view('entity/edit/icon', [
 	'entity' => $entity,
 	'name' => 'avatar',
-	'cropper_enabled' => true,
 ]);
 
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('save'),
+	'text' => elgg_echo('save'),
 ]);
 
 elgg_set_form_footer($footer);

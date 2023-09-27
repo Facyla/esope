@@ -14,14 +14,12 @@ button {
 	transition: background-color 0.5s, color 0.5s;
 	border: none;
 	white-space: nowrap;
-}
-
-.elgg-button:hover,
-.elgg-button:focus,
-button:hover,
-button:focus {
-	background-color: $(background-color-mild);
-	text-decoration: none;
+	
+	&:hover,
+	&:focus {
+		background-color: $(background-color-mild);
+		text-decoration: none;
+	}
 }
 
 .elgg-button + .elgg-button {
@@ -31,52 +29,56 @@ button:focus {
 .elgg-button-submit {
 	background: $(button-submit-background-color);
 	color: $(button-submit-font-color);
-}
-
-.elgg-button-submit:hover,
-.elgg-button-submit:focus {
-	background: $(button-submit-background-color-hover);
-	color: $(button-submit-font-color-hover);
+	
+	&:hover,
+	&:focus {
+		background: $(button-submit-background-color-hover);
+		color: $(button-submit-font-color-hover);
+	}
 }
 
 .elgg-button-cancel {
 	background: $(button-cancel-background-color);
 	color: $(button-cancel-font-color);
-}
-
-.elgg-button-cancel:hover,
-.elgg-button-cancel:focus {
-	background: $(button-cancel-background-color-hover);
-	color: $(button-cancel-font-color-hover);
+	
+	&:hover,
+	&:focus {
+		background: $(button-cancel-background-color-hover);
+		color: $(button-cancel-font-color-hover);
+	}
 }
 
 .elgg-button-action {
 	background: $(button-action-background-color);
 	color: $(button-action-font-color);
+	
+	&:hover,
+	&:focus {
+		background: $(button-action-background-color-hover);
+		color: $(button-action-font-color-hover);
+	}
 }
 
-.elgg-button-action:hover,
-.elgg-button-action:focus {
+.elgg-button-action-done {
 	background: $(button-action-background-color-hover);
 	color: $(button-action-font-color-hover);
-}
-
-.elgg-button-action-done,
-.elgg-button-action-done:hover,
-.elgg-button-action-done:focus {
-	background: $(button-action-background-color-hover);
-	color: $(button-action-font-color-hover);
+		
+	&:hover,
+	&:focus {
+		background: $(button-action-background-color-hover);
+		color: $(button-action-font-color-hover);
+	}
 }
 
 .elgg-button-delete {
 	background: $(button-delete-background-color);
 	color: $(button-delete-font-color);
-}
-
-.elgg-button-delete:hover,
-.elgg-button-delete:focus {
-	background: $(button-delete-background-color-hover);
-	color: $(button-delete-font-color-hover);
+	
+	&:hover,
+	&:focus {
+		background: $(button-delete-background-color-hover);
+		color: $(button-delete-font-color-hover);
+	}
 }
 
 .elgg-button-outline {
@@ -93,23 +95,23 @@ button:focus {
 	border: none;
 	box-shadow: none;
 	border-radius: 0;
-}
-
-.elgg-button-dropdown:hover,
-.elgg-button-dropdown:focus,
-.elgg-button-dropdown.elgg-state-active {
-	color: #ffffff;
-	background: #60B8F7;
-	text-decoration: none;
+	
+	&:hover,
+	&:focus,
+	&.elgg-state-active {
+		color: #ffffff;
+		background: #60B8F7;
+		text-decoration: none;
+	}
 }
 
 .elgg-button-special {
 	background: #42C5B8;
-}
-
-.elgg-button-special:hover,
-.elgg-button-special:focus {
-	background: #5ED9CD;
+	
+	&:hover,
+	&:focus {
+		background: #5ED9CD;
+	}
 }
 
 .elgg-button:disabled,
@@ -121,6 +123,7 @@ button:focus {
 
 /* Use .elgg-size-small or .elgg-size-large for additional sizes */
 .elgg-module-menu .elgg-button,
+.elgg-message-menu .elgg-button,
 .elgg-button.elgg-size-small {
 	padding: 0.25rem 0.5rem;
 	line-height: 1.5rem;

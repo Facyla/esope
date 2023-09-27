@@ -12,12 +12,12 @@ body {
 
 a {
 	color: $(anchor-color);
-}
-
-a:hover,
-a.selected {
-	color: $(anchor-color-hover);
-	text-decoration: underline;
+	
+	&:hover,
+	&.selected {
+		color: $(anchor-color-hover);
+		text-decoration: underline;
+	}
 }
 
 pre, code {
@@ -27,8 +27,6 @@ pre, code {
 	background: #EBF5FF;
 	color: #000;
 	overflow: auto;
-
-	overflow-x: auto; /* Use horizontal scroller if needed; for Firefox 2, not needed in Firefox 3 */
 
 	white-space: pre-wrap;
 	word-wrap: break-word; /* IE 5.5-7 */

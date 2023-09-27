@@ -2,9 +2,10 @@
 
 namespace Elgg\Assets;
 
+use CssCrush\Crush;
 use Elgg\Config;
+use Elgg\EventsService;
 use Elgg\Includer;
-use Elgg\PluginHooksService;
 use Elgg\Project\Paths;
 
 /**
@@ -20,19 +21,19 @@ class CssCompiler {
 	protected $config;
 
 	/**
-	 * @var PluginHooksService
+	 * @var EventsService
 	 */
-	protected $hooks;
+	protected $events;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Config             $config Config
-	 * @param PluginHooksService $hooks  Hooks service
+	 * @param Config        $config Config
+	 * @param EventsService $events Events service
 	 */
-	public function __construct(Config $config, PluginHooksService $hooks) {
+	public function __construct(Config $config, EventsService $events) {
 		$this->config = $config;
-		$this->hooks = $hooks;
+		$this->events = $events;
 	}
 
 	/**
@@ -45,10 +46,11 @@ class CssCompiler {
 	 */
 	public function compile($css, array $options = []) {
 		$defaults = [
-			'minify' => false, // minify handled by _elgg_views_minify
+			'minify' => false, // minify handled by \Elgg\Views\MinifyHandler::class
 			'formatter' => 'single-line', // shows lowest byte size
 			'versioning' => false, // versioning done by Elgg
 			'rewrite_import_urls' => false,
+			'boilerplate' => false,
 		];
 
 		$config = (array) $this->config->css_compiler_options;
@@ -59,9 +61,10 @@ class CssCompiler {
 		$custom_vars = (array) elgg_extract('vars', $options, []);
 		$vars = array_merge($default_vars, $custom_vars);
 
-		$options['vars'] = $this->hooks->trigger('vars:compiler', 'css', $options, $vars);
-
-		return csscrush_string($css, $options);
+		$options['vars'] = $this->events->triggerResults('vars:compiler', 'css', $options, $vars);
+	
+		Crush::$process = new CssCrushProcess($options, ['type' => 'filter', 'data' => $css]);
+		return Crush::$process->compile()->__toString();
 	}
 
 	/**

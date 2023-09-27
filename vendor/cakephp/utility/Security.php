@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,7 +16,6 @@
  */
 namespace Cake\Utility;
 
-use Cake\Utility\Crypto\Mcrypt;
 use Cake\Utility\Crypto\OpenSsl;
 use InvalidArgumentException;
 use RuntimeException;
@@ -42,7 +43,7 @@ class Security
     /**
      * The crypto implementation to use.
      *
-     * @var object
+     * @var object|null
      */
     protected static $_instance;
 
@@ -53,13 +54,13 @@ class Security
      * @param string|null $algorithm Hashing algo to use (i.e. sha1, sha256 etc.).
      *   Can be any valid algo included in list returned by hash_algos().
      *   If no value is passed the type specified by `Security::$hashType` is used.
-     * @param mixed $salt If true, automatically prepends the application's salt
-     *   value to $string (Security.salt).
+     * @param mixed $salt If true, automatically prepends the value returned by
+     *   Security::getSalt() to $string.
      * @return string Hash
      * @throws \RuntimeException
-     * @link https://book.cakephp.org/3/en/core-libraries/security.html#hashing-data
+     * @link https://book.cakephp.org/4/en/core-libraries/security.html#hashing-data
      */
-    public static function hash($string, $algorithm = null, $salt = false)
+    public static function hash(string $string, ?string $algorithm = null, $salt = false): string
     {
         if (empty($algorithm)) {
             $algorithm = static::$hashType;
@@ -77,7 +78,7 @@ class Security
 
         if ($salt) {
             if (!is_string($salt)) {
-                $salt = static::$_salt;
+                $salt = static::getSalt();
             }
             $string = $salt . $string;
         }
@@ -93,7 +94,7 @@ class Security
      * @return void
      * @see \Cake\Utility\Security::hash()
      */
-    public static function setHash($hash)
+    public static function setHash(string $hash): void
     {
         static::$hashType = $hash;
     }
@@ -107,30 +108,10 @@ class Security
      * @param int $length The number of bytes you want.
      * @return string Random bytes in binary.
      */
-    public static function randomBytes($length)
+    public static function randomBytes(int $length): string
     {
-        if (function_exists('random_bytes')) {
-            return random_bytes($length);
-        }
-        if (!function_exists('openssl_random_pseudo_bytes')) {
-            throw new RuntimeException(
-                'You do not have a safe source of random data available. ' .
-                'Install either the openssl extension, or paragonie/random_compat. ' .
-                'Or use Security::insecureRandomBytes() alternatively.'
-            );
-        }
-
-        $bytes = openssl_random_pseudo_bytes($length, $strongSource);
-        if (!$strongSource) {
-            trigger_error(
-                'openssl was unable to use a strong source of entropy. ' .
-                'Consider updating your system libraries, or ensuring ' .
-                'you have more available entropy.',
-                E_USER_WARNING
-            );
-        }
-
-        return $bytes;
+        /** @psalm-suppress ArgumentTypeCoercion */
+        return random_bytes($length);
     }
 
     /**
@@ -138,12 +119,11 @@ class Security
      *
      * @param int $length String length. Default 64.
      * @return string
-     * @since 3.6.0
      */
-    public static function randomString($length = 64)
+    public static function randomString(int $length = 64): string
     {
         return substr(
-            bin2hex(Security::randomBytes(ceil($length / 2))),
+            bin2hex(Security::randomBytes((int)ceil($length / 2))),
             0,
             $length
         );
@@ -156,14 +136,14 @@ class Security
      * @return string Random bytes in binary.
      * @see \Cake\Utility\Security::randomBytes()
      */
-    public static function insecureRandomBytes($length)
+    public static function insecureRandomBytes(int $length): string
     {
         $length *= 2;
 
         $bytes = '';
         $byteLength = 0;
         while ($byteLength < $length) {
-            $bytes .= static::hash(Text::uuid() . uniqid(mt_rand(), true), 'sha512', true);
+            $bytes .= static::hash(Text::uuid() . uniqid((string)mt_rand(), true), 'sha512', true);
             $byteLength = strlen($bytes);
         }
         $bytes = substr($bytes, 0, $length);
@@ -174,61 +154,29 @@ class Security
     /**
      * Get the crypto implementation based on the loaded extensions.
      *
-     * You can use this method to forcibly decide between mcrypt/openssl/custom implementations.
+     * You can use this method to forcibly decide between openssl/custom implementations.
      *
-     * @param \Cake\Utility\Crypto\OpenSsl|\Cake\Utility\Crypto\Mcrypt|null $instance The crypto instance to use.
-     * @return \Cake\Utility\Crypto\OpenSsl|\Cake\Utility\Crypto\Mcrypt Crypto instance.
+     * @param \Cake\Utility\Crypto\OpenSsl|null $instance The crypto instance to use.
+     * @return \Cake\Utility\Crypto\OpenSsl Crypto instance.
      * @throws \InvalidArgumentException When no compatible crypto extension is available.
+     * @psalm-suppress MoreSpecificReturnType
      */
     public static function engine($instance = null)
     {
-        if ($instance === null && static::$_instance === null) {
-            if (extension_loaded('openssl')) {
-                $instance = new OpenSsl();
-            } elseif (extension_loaded('mcrypt')) {
-                $instance = new Mcrypt();
-            }
-        }
         if ($instance) {
-            static::$_instance = $instance;
+            return static::$_instance = $instance;
         }
         if (isset(static::$_instance)) {
+            /** @psalm-suppress LessSpecificReturnStatement */
             return static::$_instance;
+        }
+        if (extension_loaded('openssl')) {
+            return static::$_instance = new OpenSsl();
         }
         throw new InvalidArgumentException(
             'No compatible crypto engine available. ' .
-            'Load either the openssl or mcrypt extensions'
+            'Load the openssl extension.'
         );
-    }
-
-    /**
-     * Encrypts/Decrypts a text using the given key using rijndael method.
-     *
-     * @param string $text Encrypted string to decrypt, normal string to encrypt
-     * @param string $key Key to use as the encryption key for encrypted data.
-     * @param string $operation Operation to perform, encrypt or decrypt
-     * @throws \InvalidArgumentException When there are errors.
-     * @return string Encrypted/Decrypted string.
-     * @deprecated 3.6.3 This method relies on functions provided by mcrypt
-     *   extension which has been deprecated in PHP 7.1 and removed in PHP 7.2.
-     *   There's no 1:1 replacement for this method.
-     *   Upgrade your code to use Security::encrypt()/Security::decrypt() with
-     *   OpenSsl engine instead.
-     */
-    public static function rijndael($text, $key, $operation)
-    {
-        if (empty($key)) {
-            throw new InvalidArgumentException('You cannot use an empty key for Security::rijndael()');
-        }
-        if (empty($operation) || !in_array($operation, ['encrypt', 'decrypt'])) {
-            throw new InvalidArgumentException('You must specify the operation for Security::rijndael(), either encrypt or decrypt');
-        }
-        if (mb_strlen($key, '8bit') < 32) {
-            throw new InvalidArgumentException('You must use a key larger than 32 bytes for Security::rijndael()');
-        }
-        $crypto = static::engine();
-
-        return $crypto->rijndael($text, $key, $operation);
     }
 
     /**
@@ -240,16 +188,17 @@ class Security
      *
      * @param string $plain The value to encrypt.
      * @param string $key The 256 bit/32 byte key to use as a cipher key.
-     * @param string|null $hmacSalt The salt to use for the HMAC process. Leave null to use Security.salt.
+     * @param string|null $hmacSalt The salt to use for the HMAC process.
+     *   Leave null to use value of Security::getSalt().
      * @return string Encrypted data.
      * @throws \InvalidArgumentException On invalid data or key.
      */
-    public static function encrypt($plain, $key, $hmacSalt = null)
+    public static function encrypt(string $plain, string $key, ?string $hmacSalt = null): string
     {
         self::_checkKey($key, 'encrypt()');
 
         if ($hmacSalt === null) {
-            $hmacSalt = static::$_salt;
+            $hmacSalt = static::getSalt();
         }
         // Generate the encryption and hmac key.
         $key = mb_substr(hash('sha256', $key . $hmacSalt), 0, 32, '8bit');
@@ -269,7 +218,7 @@ class Security
      * @return void
      * @throws \InvalidArgumentException When key length is not 256 bit/32 bytes
      */
-    protected static function _checkKey($key, $method)
+    protected static function _checkKey(string $key, string $method): void
     {
         if (mb_strlen($key, '8bit') < 32) {
             throw new InvalidArgumentException(
@@ -283,18 +232,19 @@ class Security
      *
      * @param string $cipher The ciphertext to decrypt.
      * @param string $key The 256 bit/32 byte key to use as a cipher key.
-     * @param string|null $hmacSalt The salt to use for the HMAC process. Leave null to use Security.salt.
-     * @return string|false Decrypted data. Any trailing null bytes will be removed.
+     * @param string|null $hmacSalt The salt to use for the HMAC process.
+     *   Leave null to use value of Security::getSalt().
+     * @return string|null Decrypted data. Any trailing null bytes will be removed.
      * @throws \InvalidArgumentException On invalid data or key.
      */
-    public static function decrypt($cipher, $key, $hmacSalt = null)
+    public static function decrypt(string $cipher, string $key, ?string $hmacSalt = null): ?string
     {
         self::_checkKey($key, 'decrypt()');
         if (empty($cipher)) {
             throw new InvalidArgumentException('The data to decrypt cannot be empty.');
         }
         if ($hmacSalt === null) {
-            $hmacSalt = static::$_salt;
+            $hmacSalt = static::getSalt();
         }
 
         // Generate the encryption and hmac key.
@@ -307,7 +257,7 @@ class Security
 
         $compareHmac = hash_hmac('sha256', $cipher, $key);
         if (!static::constantEquals($hmac, $compareHmac)) {
-            return false;
+            return null;
         }
 
         $crypto = static::engine();
@@ -318,31 +268,14 @@ class Security
     /**
      * A timing attack resistant comparison that prefers native PHP implementations.
      *
-     * @param string $original The original value.
-     * @param string $compare The comparison value.
+     * @param mixed $original The original value.
+     * @param mixed $compare The comparison value.
      * @return bool
-     * @see https://github.com/resonantcore/php-future/
      * @since 3.6.2
      */
-    public static function constantEquals($original, $compare)
+    public static function constantEquals($original, $compare): bool
     {
-        if (!is_string($original) || !is_string($compare)) {
-            return false;
-        }
-        if (function_exists('hash_equals')) {
-            return hash_equals($original, $compare);
-        }
-        $originalLength = mb_strlen($original, '8bit');
-        $compareLength = mb_strlen($compare, '8bit');
-        if ($originalLength !== $compareLength) {
-            return false;
-        }
-        $result = 0;
-        for ($i = 0; $i < $originalLength; $i++) {
-            $result |= (ord($original[$i]) ^ ord($compare[$i]));
-        }
-
-        return $result === 0;
+        return is_string($original) && is_string($compare) && hash_equals($original, $compare);
     }
 
     /**
@@ -351,7 +284,7 @@ class Security
      *
      * @return string The currently configured salt
      */
-    public static function getSalt()
+    public static function getSalt(): string
     {
         if (static::$_salt === null) {
             throw new RuntimeException(
@@ -369,29 +302,8 @@ class Security
      * @param string $salt The salt to use for encryption routines.
      * @return void
      */
-    public static function setSalt($salt)
+    public static function setSalt(string $salt): void
     {
-        static::$_salt = (string)$salt;
-    }
-
-    /**
-     * Gets or sets the HMAC salt to be used for encryption/decryption
-     * routines.
-     *
-     * @deprecated 3.5.0 Use getSalt()/setSalt() instead.
-     * @param string|null $salt The salt to use for encryption routines. If null returns current salt.
-     * @return string The currently configured salt
-     */
-    public static function salt($salt = null)
-    {
-        deprecationWarning(
-            'Security::salt() is deprecated. ' .
-            'Use Security::getSalt()/setSalt() instead.'
-        );
-        if ($salt === null) {
-            return static::$_salt;
-        }
-
-        return static::$_salt = (string)$salt;
+        static::$_salt = $salt;
     }
 }

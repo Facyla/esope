@@ -3,8 +3,6 @@
  * Elgg Actions
  */
 
-use Elgg\Database\SiteSecret;
-
 /**
  * Registers an action.
  *
@@ -14,7 +12,7 @@ use Elgg\Database\SiteSecret;
  * $filename must be the full path of the file to register or a path relative
  * to the core actions/ dir.
  *
- * Actions should be namedspaced for your plugin.  Example:
+ * Actions should be namespaced for your plugin.  Example:
  * <code>
  * elgg_register_action('myplugin/save_settings', ...);
  * </code>
@@ -28,22 +26,24 @@ use Elgg\Database\SiteSecret;
  *                         will assume the action is in elgg/actions/<action>.php
  * @param string $access   Who is allowed to execute this action: public, logged_in, admin.
  *                         (default: logged_in)
+ * @param array  $params   Additional params for the action route registration:
+ *                         - middleware: additional middleware on the action route
  *
- * @return bool
+ * @return void
  */
-function elgg_register_action($action, $filename = "", $access = 'logged_in') {
-	return _elgg_services()->actions->register($action, $filename, $access);
+function elgg_register_action(string $action, string $filename = '', string $access = 'logged_in', array $params = []): void {
+	_elgg_services()->actions->register($action, $filename, $access, $params);
 }
 
 /**
  * Unregisters an action
  *
  * @param string $action Action name
- * @return bool
+ * @return void
  * @since 1.8.1
  */
-function elgg_unregister_action($action) {
-	return _elgg_services()->actions->unregister($action);
+function elgg_unregister_action(string $action): void {
+	_elgg_services()->actions->unregister($action);
 }
 
 /**
@@ -53,30 +53,8 @@ function elgg_unregister_action($action) {
  * @return \Elgg\Security\Hmac
  * @since 1.11
  */
-function elgg_build_hmac($data) {
+function elgg_build_hmac($data): \Elgg\Security\Hmac {
 	return _elgg_services()->hmac->getHmac($data);
-}
-
-/**
- * Regenerate a new site key (32 bytes: "z" to indicate format + 186-bit key in Base64 URL).
- *
- * @return mixed The site secret hash
- * @internal
- */
-function init_site_secret() {
-	$secret = SiteSecret::regenerate(_elgg_services()->crypto, _elgg_services()->configTable);
-	_elgg_services()->setValue('siteSecret', $secret);
-	return $secret->get();
-}
-
-/**
- * Get the strength of the site secret
- *
- * @return string "strong", "moderate", or "weak"
- * @internal
- */
-function _elgg_get_site_secret_strength() {
-	return _elgg_services()->siteSecret->getStrength();
 }
 
 /**
@@ -87,7 +65,7 @@ function _elgg_get_site_secret_strength() {
  * @return bool
  * @since 1.8.0
  */
-function elgg_action_exists($action) {
+function elgg_action_exists(string $action): bool {
 	return _elgg_services()->actions->exists($action);
 }
 
@@ -97,10 +75,6 @@ function elgg_action_exists($action) {
  * @return bool whether page was requested via ajax
  * @since 1.8.0
  */
-function elgg_is_xhr() {
+function elgg_is_xhr(): bool {
 	return _elgg_services()->request->isXmlHttpRequest();
 }
-
-return function (\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$hooks->registerHandler('action:validate', 'all', \Elgg\Entity\CropIcon::class);
-};

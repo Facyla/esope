@@ -2,7 +2,8 @@
 
 use Elgg\Config;
 use Elgg\Database;
-use Elgg\Http\DatabaseSessionHandler;
+use Elgg\Database\SessionHandler as ElggSessionHandler;
+use Elgg\Traits\Debug\Profilable;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -16,26 +17,13 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
  * @see elgg_get_session()
  */
 class ElggSession {
+	
+	use Profilable;
 
 	/**
 	 * @var SessionInterface
 	 */
 	protected $storage;
-
-	/**
-	 * @var \ElggUser|null
-	 */
-	protected $logged_in_user;
-
-	/**
-	 * @var bool
-	 */
-	protected $ignore_access = false;
-
-	/**
-	 * @var bool
-	 */
-	protected $show_disabled_entities = false;
 
 	/**
 	 * Constructor
@@ -44,6 +32,50 @@ class ElggSession {
 	 */
 	public function __construct(SessionInterface $storage) {
 		$this->storage = $storage;
+	}
+	
+	/**
+	 * Initializes the session and checks for the remember me cookie
+	 *
+	 * @return void
+	 *
+	 * @internal
+	 */
+	public function boot(): void {
+	
+		$this->beginTimer([__METHOD__]);
+	
+		$this->start();
+	
+		// test whether we have a user session
+		if ($this->has('guid')) {
+			$user = _elgg_services()->entityTable->get($this->get('guid'), 'user');
+			if (!$user instanceof ElggUser) {
+				// OMG user has been deleted.
+				$this->invalidate();
+				
+				// redirect to homepage
+				$this->endTimer([__METHOD__]);
+				_elgg_services()->responseFactory->redirect('');
+			}
+		} else {
+			$user = _elgg_services()->persistentLogin->bootSession();
+			if ($user instanceof ElggUser) {
+				_elgg_services()->persistentLogin->updateTokenUsage($user);
+			}
+		}
+	
+		if ($user instanceof ElggUser) {
+			_elgg_services()->session_manager->setLoggedInUser($user);
+			$user->setLastAction();
+	
+			// logout a user with open session who has been banned
+			if ($user->isBanned()) {
+				_elgg_services()->session_manager->logout();
+			}
+		}
+	
+		$this->endTimer([__METHOD__]);
 	}
 
 	/**
@@ -85,7 +117,6 @@ class ElggSession {
 	 */
 	public function invalidate() {
 		$this->storage->clear();
-		$this->logged_in_user = null;
 		$result = $this->migrate(true);
 		$this->generateSessionToken();
 		_elgg_services()->sessionCache->clear();
@@ -199,186 +230,6 @@ class ElggSession {
 	}
 
 	/**
-	 * Sets the logged in user
-	 *
-	 * @param \ElggUser $user The user who is logged in
-	 * @return void
-	 * @since 1.9
-	 */
-	public function setLoggedInUser(\ElggUser $user) {
-		$current_user = $this->getLoggedInUser();
-		if ($current_user != $user) {
-			$this->set('guid', $user->guid);
-			$this->logged_in_user = $user;
-			_elgg_services()->sessionCache->clear();
-			_elgg_services()->translator->setCurrentLanguage($user->language);
-		}
-	}
-
-	/**
-	 * Gets the logged in user
-	 *
-	 * @return \ElggUser|null
-	 * @since 1.9
-	 */
-	public function getLoggedInUser() {
-		return $this->logged_in_user;
-	}
-
-	/**
-	 * Return the current logged in user by guid.
-	 *
-	 * @see elgg_get_logged_in_user_entity()
-	 * @return int
-	 */
-	public function getLoggedInUserGuid() {
-		$user = $this->getLoggedInUser();
-		return $user ? $user->guid : 0;
-	}
-	
-	/**
-	 * Returns whether or not the viewer is currently logged in and an admin user.
-	 *
-	 * @return bool
-	 */
-	public function isAdminLoggedIn() {
-		$user = $this->getLoggedInUser();
-	
-		return $user && $user->isAdmin();
-	}
-	
-	/**
-	 * Returns whether or not the user is currently logged in
-	 *
-	 * @return bool
-	 */
-	public function isLoggedIn() {
-		return (bool) $this->getLoggedInUser();
-	}
-
-	/**
-	 * Remove the logged in user
-	 *
-	 * @return void
-	 * @since 1.9
-	 */
-	public function removeLoggedInUser() {
-		$this->logged_in_user = null;
-		$this->remove('guid');
-		_elgg_services()->sessionCache->clear();
-	}
-	
-	/**
-	 * Set a user specific token in the session for the currently logged in user
-	 *
-	 * This will invalidate the session on a password change of the logged in user
-	 *
-	 * @param \ElggUser $user the user to set the token for (default: logged in user)
-	 *
-	 * @return void
-	 * @since 3.3.25
-	 */
-	public function setUserToken(\ElggUser $user = null): void {
-		if (!$user instanceof \ElggUser) {
-			$user = $this->getLoggedInUser();
-		}
-		if (!$user instanceof \ElggUser) {
-			return;
-		}
-		
-		$this->set('__user_token', $this->generateUserToken($user));
-	}
-	
-	/**
-	 * Validate the user token stored in the session
-	 *
-	 * @param \ElggUser $user the user to check for
-	 *
-	 * @return void
-	 * @throws SecurityException
-	 * @since 3.3.25
-	 */
-	public function validateUserToken(\ElggUser $user): void {
-		$session_token = $this->get('__user_token');
-		$user_token = $this->generateUserToken($user);
-		
-		if ($session_token !== $user_token) {
-			throw new SecurityException(elgg_echo('session_expired'));
-		}
-	}
-	
-	/**
-	 * Generate a token for a specific user
-	 *
-	 * @param \ElggUser $user the user to generate the token for
-	 *
-	 * @return string
-	 * @since 3.3.25
-	 */
-	protected function generateUserToken(\ElggUser $user): string {
-		$hmac = _elgg_services()->hmac->getHmac([
-			$user->time_created,
-			$user->guid,
-		], 'sha256', $user->password_hash);
-		
-		return $hmac->getToken();
-	}
-
-	/**
-	 * Get current ignore access setting.
-	 *
-	 * @return bool
-	 */
-	public function getIgnoreAccess() {
-		return $this->ignore_access;
-	}
-
-	/**
-	 * Set ignore access.
-	 *
-	 * @param bool $ignore Ignore access
-	 *
-	 * @return bool Previous setting
-	 */
-	public function setIgnoreAccess($ignore = true) {
-		$prev = $this->ignore_access;
-		$this->ignore_access = $ignore;
-
-		return $prev;
-	}
-
-	/**
-	 * Are disabled entities shown?
-	 *
-	 * @return bool
-	 */
-	public function getDisabledEntityVisibility() {
-		global $ENTITY_SHOW_HIDDEN_OVERRIDE;
-		if (isset($ENTITY_SHOW_HIDDEN_OVERRIDE)) {
-			return $ENTITY_SHOW_HIDDEN_OVERRIDE;
-		}
-
-		return $this->show_disabled_entities;
-	}
-
-	/**
-	 * Include disabled entities in queries
-	 *
-	 * @param bool $show Visibility status
-	 *
-	 * @return bool Previous setting
-	 */
-	public function setDisabledEntityVisibility($show = true) {
-		global $ENTITY_SHOW_HIDDEN_OVERRIDE;
-		$ENTITY_SHOW_HIDDEN_OVERRIDE = $show;
-
-		$prev = $this->show_disabled_entities;
-		$this->show_disabled_entities = $show;
-
-		return $prev;
-	}
-
-	/**
 	 * Adds a token to the session
 	 *
 	 * This is used in creation of CSRF token, and is passed to the client to allow validating tokens
@@ -431,7 +282,7 @@ class ElggSession {
 			'cookie_lifetime' => $params['lifetime'],
 		];
 
-		$handler = new DatabaseSessionHandler($db);
+		$handler = new ElggSessionHandler($db);
 		$storage = new NativeSessionStorage($options, $handler);
 		$session = new Session($storage);
 		return new self($session);

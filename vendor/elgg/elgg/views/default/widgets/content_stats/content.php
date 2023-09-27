@@ -3,12 +3,9 @@
  * Content stats widget
  */
 
-/* @var $widget \ElggWidget */
-$widget = elgg_extract('entity', $vars);
+$entity_stats = elgg_get_entity_statistics();
 
-$entity_stats = get_entity_statistics();
-
-$registered_entity_types = get_registered_entity_types();
+$registered_entity_types = elgg_entity_types_with_capability('searchable');
 if (empty($registered_entity_types)) {
 	echo elgg_view('output/longtext', [
 		'value' => elgg_echo('notfound'),
@@ -18,17 +15,10 @@ if (empty($registered_entity_types)) {
 $stats = [];
 
 foreach ($registered_entity_types as $type => $subtypes) {
-	if (!empty($subtypes)) {
-		foreach ($subtypes as $subtype) {
-			$value = elgg_extract($subtype, elgg_extract($type, $entity_stats), false);
-			if ($value !== false) {
-				$stats[elgg_echo("collection:$type:$subtype")] = $value;
-			}
-		}
-	} else {
-		$value = elgg_extract('__base__', elgg_extract($type, $entity_stats), false);
+	foreach ($subtypes as $subtype) {
+		$value = elgg_extract($subtype, elgg_extract($type, $entity_stats), false);
 		if ($value !== false) {
-			$stats[elgg_echo("collection:$type")] = $value;
+			$stats[elgg_echo("collection:{$type}:{$subtype}")] = $value;
 		}
 	}
 }
@@ -36,17 +26,19 @@ foreach ($registered_entity_types as $type => $subtypes) {
 arsort($stats);
 
 echo '<table class="elgg-table">';
-echo '<thead><tr><th>' . elgg_echo('admin:statistics:numentities:type') . '</th>';
-echo '<th>' . elgg_echo('admin:statistics:numentities:number') . '</th></tr></thead>';
+echo '<thead><tr>';
+echo elgg_format_element('th', [], elgg_echo('admin:statistics:numentities:type'));
+echo elgg_format_element('th', [], elgg_echo('admin:statistics:numentities:number'));
+echo '</tr></thead>';
+echo '<tbody>';
+
 foreach ($stats as $name => $num) {
-	echo "<tr><td>$name</td><td>$num</td></tr>";
+	echo "<tr><td>{$name}</td><td>{$num}</td></tr>";
 }
+
+echo '</tbody>';
 echo '</table>';
 
-echo '<div class="mtm elgg-widget-more">';
-echo elgg_view('output/url', [
-	'href' => 'admin/statistics/numentities',
-	'text' => elgg_echo('more'),
-	'is_trusted' => true,
+echo elgg_view('page/components/list/widget_more', [
+	'widget_more' => elgg_view_url('admin/statistics/numentities', elgg_echo('more')),
 ]);
-echo '</div>';

@@ -11,6 +11,7 @@ use Elgg\Structs\Collection;
  * @internal
  */
 final class InMemory implements Collection {
+	
 	/** @var array */
 	private $items;
 	
@@ -33,6 +34,7 @@ final class InMemory implements Collection {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function count() {
 		return count($this->items);
 	}
@@ -40,6 +42,7 @@ final class InMemory implements Collection {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function current() {
 		return current($this->items);
 	}
@@ -62,6 +65,7 @@ final class InMemory implements Collection {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function key() {
 		return key($this->items);
 	}
@@ -74,12 +78,14 @@ final class InMemory implements Collection {
 		foreach ($this->items as $item) {
 			$results[] = $mapper($item);
 		}
+		
 		return self::fromArray($results);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function next() {
 		return next($this->items);
 	}
@@ -87,6 +93,7 @@ final class InMemory implements Collection {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 		reset($this->items);
 	}
@@ -94,6 +101,7 @@ final class InMemory implements Collection {
 	/**
 	 * {@inheritDoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function valid() {
 		return key($this->items) !== null;
 	}

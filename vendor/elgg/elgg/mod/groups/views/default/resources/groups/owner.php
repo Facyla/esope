@@ -11,14 +11,14 @@ if ($page_owner->guid == elgg_get_logged_in_user_guid()) {
 elgg_push_breadcrumb(elgg_echo('groups'), elgg_generate_url('collection:group:group:all'));
 
 if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admin_logged_in()) {
-	elgg_register_title_button('groups', 'add', 'group', 'group');
+	elgg_register_title_button('add', 'group', 'group');
 }
 
 $content = elgg_list_entities([
 	'type' => 'group',
 	'owner_guid' => elgg_get_page_owner_guid(),
-	'order_by_metadata' => [
-		'name' => 'name',
+	'sort_by' => [
+		'property' => 'name',
 		'direction' => 'ASC',
 	],
 	'full_view' => false,
@@ -27,4 +27,6 @@ $content = elgg_list_entities([
 
 echo elgg_view_page($title, [
 	'content' => $content,
+	'filter_id' => 'groups/owner',
+	'filter_value' => 'owner',
 ]);

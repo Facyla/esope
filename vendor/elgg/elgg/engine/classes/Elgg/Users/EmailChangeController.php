@@ -2,10 +2,11 @@
 
 namespace Elgg\Users;
 
-use Elgg\Request;
-use Elgg\Http\ResponseBuilder;
 use Elgg\Email;
 use Elgg\Email\Address;
+use Elgg\Exceptions\Configuration\RegistrationException;
+use Elgg\Http\ResponseBuilder;
+use Elgg\Request;
 
 /**
  * Controller to handle confirmation of a user e-mail address change
@@ -29,16 +30,16 @@ class EmailChangeController {
 			return elgg_error_response($translator->translate('error:missing_data'));
 		}
 		
-		$new_email = $user->getPrivateSetting('new_email');
+		$new_email = $user->new_email;
 		if (empty($new_email)) {
 			return elgg_error_response($translator->translate('account:email:request:error:no_new_email'));
 		}
 		
-		$user->removePrivateSetting('new_email');
+		unset($user->new_email);
 		
 		try {
 			$request->elgg()->accounts->assertValidEmail($new_email, true);
-		} catch (\RegistrationException $e) {
+		} catch (RegistrationException $e) {
 			return elgg_error_response($e->getMessage());
 		}
 		
@@ -51,6 +52,7 @@ class EmailChangeController {
 		$notification_params = [
 			'object' => $user,
 			'action' => 'email_change',
+			'apply_muting' => false,
 		];
 		
 		$notification = Email::factory([
@@ -58,7 +60,6 @@ class EmailChangeController {
 			'to' => new Address($old_email, $user->getDisplayName()),
 			'subject' => $translator->translate('email:confirm:email:old:subject', [], $user->getLanguage()),
 			'body' => $translator->translate('email:confirm:email:old:body', [
-				$user->getDisplayName(),
 				$site->getDisplayName(),
 				$new_email,
 				$site->getURL(),
@@ -69,7 +70,6 @@ class EmailChangeController {
 		
 		$subject = $translator->translate('email:confirm:email:new:subject', [], $user->getLanguage());
 		$body = $translator->translate('email:confirm:email:new:body', [
-			$user->getDisplayName(),
 			$site->getDisplayName(),
 			$site->getURL(),
 		], $user->getLanguage());

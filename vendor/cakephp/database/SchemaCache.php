@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,10 +16,7 @@
  */
 namespace Cake\Database;
 
-use Cake\Cache\Cache;
-use Cake\Database\Connection;
-use Cake\Log\Log;
-use RuntimeException;
+use Cake\Database\Schema\CachedCollection;
 
 /**
  * Schema Cache.
@@ -41,9 +40,9 @@ class SchemaCache
     /**
      * Constructor
      *
-     * @param string|\Cake\Datasource\ConnectionInterface $connection Connection name to get the schema for or a connection instance
+     * @param \Cake\Database\Connection $connection Connection name to get the schema for or a connection instance
      */
-    public function __construct($connection)
+    public function __construct(Connection $connection)
     {
         $this->_schema = $this->getSchema($connection);
     }
@@ -52,16 +51,18 @@ class SchemaCache
      * Build metadata.
      *
      * @param string|null $name The name of the table to build cache data for.
-     * @return array Returns a list build table caches
+     * @return array<string> Returns a list build table caches
      */
-    public function build($name = null)
+    public function build(?string $name = null): array
     {
-        $tables = [$name];
-        if (empty($name)) {
+        if ($name) {
+            $tables = [$name];
+        } else {
             $tables = $this->_schema->listTables();
         }
 
         foreach ($tables as $table) {
+            /** @psalm-suppress PossiblyNullArgument */
             $this->_schema->describe($table, ['forceRefresh' => true]);
         }
 
@@ -72,19 +73,22 @@ class SchemaCache
      * Clear metadata.
      *
      * @param string|null $name The name of the table to clear cache data for.
-     * @return array Returns a list of cleared table caches
+     * @return array<string> Returns a list of cleared table caches
      */
-    public function clear($name = null)
+    public function clear(?string $name = null): array
     {
-        $tables = [$name];
-        if (empty($name)) {
+        if ($name) {
+            $tables = [$name];
+        } else {
             $tables = $this->_schema->listTables();
         }
-        $configName = $this->_schema->getCacheMetadata();
+
+        $cacher = $this->_schema->getCacher();
 
         foreach ($tables as $table) {
+            /** @psalm-suppress PossiblyNullArgument */
             $key = $this->_schema->cacheKey($table);
-            Cache::delete($key, $configName);
+            $cacher->delete($key);
         }
 
         return $tables;
@@ -94,21 +98,19 @@ class SchemaCache
      * Helper method to get the schema collection.
      *
      * @param \Cake\Database\Connection $connection Connection object
-     * @return \Cake\Database\Schema\Collection|\Cake\Database\Schema\CachedCollection
+     * @return \Cake\Database\Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
-    public function getSchema(Connection $connection)
+    public function getSchema(Connection $connection): CachedCollection
     {
-        if (!method_exists($connection, 'schemaCollection')) {
-            throw new RuntimeException('The given connection object is not compatible with schema caching, as it does not implement a "schemaCollection()" method.');
-        }
-
         $config = $connection->config();
         if (empty($config['cacheMetadata'])) {
-            Log::info(sprintf('Metadata cache was disabled in config for `%s`. Enabling to clear cache.', $connection->configName()));
             $connection->cacheMetadata(true);
         }
 
-        return $connection->getSchemaCollection();
+        /** @var \Cake\Database\Schema\CachedCollection $schemaCollection */
+        $schemaCollection = $connection->getSchemaCollection();
+
+        return $schemaCollection;
     }
 }

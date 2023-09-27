@@ -19,7 +19,7 @@ Arkadaşlar aktivitesi',
 	'widgets:group_activity:content:noactivity' => 'Bu grupta herhangi bir activite yok',
 	'widgets:group_activity:content:noselect' => 'Bir grup seçmek için widget\'i düzenleyin',
 	
+	'collection:river' => "Aktivite",
 	'collection:river:group' => "Grup ativitesi",
-	'groups:tool:activity' => 'Enable group activity',
 	
 );

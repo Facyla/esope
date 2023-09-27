@@ -2,10 +2,10 @@
 
 namespace Elgg\Upgrade;
 
+use Elgg\Exceptions\HttpException;
 use Elgg\Http\ResponseBuilder;
-use Elgg\HttpException;
-use Elgg\Loggable;
 use Elgg\Request;
+use Elgg\Traits\Loggable;
 use Psr\Log\LogLevel;
 
 /**
@@ -45,6 +45,8 @@ class UpgradeController {
 				throw $exception;
 			}
 		);
+		
+		_elgg_services()->plugins->generateEntities();
 
 		return $response;
 	}

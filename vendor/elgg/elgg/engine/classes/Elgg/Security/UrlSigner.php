@@ -2,7 +2,8 @@
 
 namespace Elgg\Security;
 
-use Elgg\HttpException;
+use Elgg\Exceptions\HttpException;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * Component for creating signed URLs
@@ -22,11 +23,11 @@ class UrlSigner {
 	 * @param string $url     URL to sign
 	 * @param string $expires Expiration time
 	 *                        Accepts a string suitable for strtotime()
-	 *                        Falsey values indicate non-expiring URL
+	 *                        Null value indicate non-expiring URL
 	 * @return string
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
-	public function sign($url, $expires = false) {
+	public function sign(string $url, string $expires = null): string {
 		$url = elgg_normalize_url($url);
 		
 		$parts = parse_url($url);
@@ -38,10 +39,10 @@ class UrlSigner {
 		}
 
 		if (isset($query[self::KEY_MAC])) {
-			throw new \InvalidArgumentException('URL has already been signed');
+			throw new InvalidArgumentException('URL has already been signed');
 		}
 
-		if ($expires) {
+		if (!empty($expires)) {
 			$query[self::KEY_EXPIRES] = strtotime($expires);
 		}
 
@@ -64,7 +65,7 @@ class UrlSigner {
 	 * @param string $url URL to validate
 	 * @return bool
 	 */
-	public function isValid($url) {
+	public function isValid(string $url): bool {
 
 		$parts = parse_url($url);
 

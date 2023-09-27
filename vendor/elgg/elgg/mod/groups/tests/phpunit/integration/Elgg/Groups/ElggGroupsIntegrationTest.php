@@ -2,26 +2,22 @@
 
 namespace Elgg\Groups;
 
+use Elgg\Plugins\PluginTesting;
+
 /**
  * @group IntegrationTests
  */
 class ElggGroupsIntegrationTest extends \Elgg\IntegrationTestCase {
 
+	use PluginTesting;
+	
 	/**
 	 * @var \ElggGroup
 	 */
 	private $group;
 
 	public function up() {
-		if (!elgg_is_active_plugin('groups')) {
-			$this->markTestSkipped();
-		}
-
 		$this->group = $this->createGroup();
-	}
-
-	public function down() {
-		$this->group->delete();
 	}
 
 	public function testCanLoadGroup() {
@@ -43,7 +39,5 @@ class ElggGroupsIntegrationTest extends \Elgg\IntegrationTestCase {
 		$this->assertTrue((bool) $this->group->isMember($user));
 		$this->assertTrue((bool) $this->group->leave($user));
 		$this->assertFalse((bool) $this->group->isMember($user));
-
-		$user->delete();
 	}
 }

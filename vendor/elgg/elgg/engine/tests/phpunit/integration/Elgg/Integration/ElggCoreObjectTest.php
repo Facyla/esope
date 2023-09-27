@@ -2,6 +2,7 @@
 
 namespace Elgg\Integration;
 
+use Elgg\Database\Select;
 use Elgg\Helpers\ElggObjectWithExposableAttributes;
 
 /**
@@ -31,24 +32,17 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 
 	public function up() {
 		$this->user = $this->createUser();
-		elgg()->session->setLoggedInUser($this->user);
+		elgg()->session_manager->setLoggedInUser($this->user);
 		
 		$this->subtype = $this->getRandomSubtype();
 		$this->entity = new ElggObjectWithExposableAttributes();
-		$this->entity->subtype = $this->subtype;
+		$this->entity->setSubtype($this->subtype);
 	}
 
 	public function down() {
-		
 		if ($this->entity) {
 			$this->entity->delete();
 		}
-		
-		if ($this->user) {
-			$this->user->delete();
-		}
-		
-		elgg()->session->removeLoggedInUser();
 	}
 
 	public function testElggObjectConstructor() {
@@ -74,16 +68,16 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 	public function testElggObjectSave() {
 		// new object
 		$this->assertEquals(0, $this->entity->guid);
-		$guid = $this->entity->save();
-		$this->assertGreaterThan(0, $guid);
+		$this->assertTrue($this->entity->save());
+		$this->assertGreaterThan(0, $this->entity->guid);
 
-		$entity_row = $this->get_entity_row($guid);
+		$entity_row = $this->get_entity_row($this->entity->guid);
 		$this->assertInstanceOf(\stdClass::class, $entity_row);
 
 		// update existing object
 		$this->entity->title = 'testing';
 		$this->entity->description = '\ElggObject';
-		$this->assertEquals($guid, $this->entity->save());
+		$this->assertTrue($this->entity->save());
 	}
 
 	public function testElggObjectClone() {
@@ -96,7 +90,7 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 
 		// add tag array
 		$tag_string = 'tag1, tag2, tag3';
-		$tagarray = string_to_tag_array($tag_string);
+		$tagarray = elgg_string_to_array($tag_string);
 		$this->entity->tags = $tagarray;
 
 		// a cloned \ElggEntity has the guid reset
@@ -107,9 +101,9 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 		$this->assertEquals('testing', $object->title);
 		$this->assertEquals('\ElggObject', $object->description);
 
-		$guid = $object->save();
-		$this->assertGreaterThan(0, $guid);
-		$this->assertNotEquals($this->entity->guid, $guid);
+		$this->assertTrue($object->save());
+		$this->assertGreaterThan(0, $object->guid);
+		$this->assertNotEquals($this->entity->guid, $object->guid);
 
 		// test that metadata was transfered
 		$this->assertEquals($this->entity->var1, $object->var1);
@@ -125,16 +119,13 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 		$this->assertEquals($this->entity->getContainerGUID(), elgg_get_logged_in_user_guid());
 
 		// create and save to group
-		$group = new \ElggGroup();
-		$guid = $group->save();
-		$this->assertIsInt($this->entity->setContainerGUID($guid));
+		$group = $this->createGroup();
+		$guid = $group->guid;
+		$this->entity->setContainerGUID($guid);
 
 		// check container
 		$this->assertEquals($guid, $this->entity->getContainerGUID());
 		$this->assertEquals($group, $this->entity->getContainerEntity());
-
-		// clean up
-		$group->delete();
 	}
 
 	public function testElggObjectToObject() {
@@ -165,66 +156,58 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 	 * @see https://github.com/elgg/elgg/issues/1196
 	 */
 	public function testElggEntityRecursiveDisableWhenLoggedOut() {
-		$e1 = new \ElggObject();
-		$e1->subtype = $this->getRandomSubtype();
-		$e1->access_id = ACCESS_PUBLIC;
-		$e1->save();
+		$e1 = $this->createObject();
 		$guid1 = $e1->guid;
 
-		$e2 = new \ElggObject();
-		$e2->subtype = $this->getRandomSubtype();
-		$e2->container_guid = $guid1;
-		$e2->access_id = ACCESS_PUBLIC;
-		$e2->owner_guid = 0;
-		$e2->save();
+		$e2 = $this->createObject([
+			'container_guid' => $guid1,
+		]);
+
 		$guid2 = $e2->guid;
 
 		// fake being logged out
-		elgg()->session->removeLoggedInUser();
+		elgg()->session_manager->removeLoggedInUser();
 		
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($e1) {
-			$this->assertTrue($e1->disable(null, true));
+			$this->assertTrue($e1->disable('', true));
 		});
 		
 		// restore logged in user
-		elgg()->session->setLoggedInUser($this->user);
+		elgg()->session_manager->setLoggedInUser($this->user);
 		
 		$this->assertEmpty(get_entity($guid1));
 		$this->assertEmpty(get_entity($guid2));
 
-		$db_prefix = _elgg_config()->dbprefix;
-		$q = "SELECT * FROM {$db_prefix}entities WHERE guid = $guid1";
-		$r = elgg()->db->getDataRow($q);
+		$select1 = Select::fromTable('entities')->select('*');
+		$select1->where($select1->compare('guid', '=', $guid1, ELGG_VALUE_GUID));
+		
+		$r = elgg()->db->getDataRow($select1);
 		$this->assertEquals('no', $r->enabled);
 
-		$q = "SELECT * FROM {$db_prefix}entities WHERE guid = $guid2";
-		$r = elgg()->db->getDataRow($q);
+		$select2 = Select::fromTable('entities')->select('*');
+		$select2->where($select2->compare('guid', '=', $guid2, ELGG_VALUE_GUID));
+		
+		$r = elgg()->db->getDataRow($select2);
 		$this->assertEquals('no', $r->enabled);
-
-		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($e1, $e2) {
-			$e1->delete();
-			$e2->delete();
-		});
 	}
 
 	public function testElggRecursiveDelete() {
 		$types = ['group', 'object', 'user'];
-		$db_prefix = _elgg_config()->dbprefix;
-
+		
 		foreach ($types as $type) {
 			$parent = $this->createOne($type);
 			
-			$child = $this->createOne('object', [
+			$child = $this->createObject([
 				'owner_guid' => $parent->guid,
 				'container_guid' => 1,
 			]);
 
-			$child2 = $this->createOne('object', [
+			$child2 = $this->createObject([
 				'owner_guid' => $parent->guid,
 				'container_guid' => $parent->guid,
 			]);
 
-			$grandchild = $this->createOne('object', [
+			$grandchild = $this->createObject([
 				'container_guid' => $child->guid,
 				'owner_guid' => 1,
 			]);
@@ -233,40 +216,29 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 				$this->assertTrue($parent->delete(true));
 			});
 
-			$q = "SELECT * FROM {$db_prefix}entities WHERE guid = {$parent->guid}";
-			$r = elgg()->db->getData($q);
-			$this->assertEmpty($r);
-
-			$q = "SELECT * FROM {$db_prefix}entities WHERE guid = {$child->guid}";
-			$r = elgg()->db->getData($q);
-			$this->assertEmpty($r);
-
-			$q = "SELECT * FROM {$db_prefix}entities WHERE guid = {$child2->guid}";
-			$r = elgg()->db->getData($q);
-			$this->assertEmpty($r);
-
-			$q = "SELECT * FROM {$db_prefix}entities WHERE guid = {$grandchild->guid}";
-			$r = elgg()->db->getData($q);
-			$this->assertEmpty($r);
+			foreach ([$parent->guid, $child->guid, $child2->guid, $grandchild->guid] as $guid) {
+				$entities = Select::fromTable('entities')->select('*');
+				$entities->where($entities->compare('guid', '=', $guid, ELGG_VALUE_GUID));
+				
+				$this->assertEmpty(elgg()->db->getData($entities));
+			}
 		}
 
 		// object that owns itself
 		// can't check container_guid because of infinite loops in can_edit_entity()
-		$obj = new \ElggObject();
-		$obj->subtype = $this->getRandomSubtype();
-		$obj->save();
+		$obj = $this->createObject();
 		$obj->owner_guid = $obj->guid;
 		$obj->save();
 
-		$q = "SELECT * FROM {$db_prefix}entities WHERE guid = {$obj->guid}";
-		$r = elgg()->db->getDataRow($q);
+		$entities = Select::fromTable('entities')->select('*');
+		$entities->where($entities->compare('guid', '=', $obj->guid, ELGG_VALUE_GUID));
+				
+		$r = elgg()->db->getDataRow($entities);
 		$this->assertEquals($obj->guid, $r->owner_guid);
 
 		$this->assertTrue($obj->delete(true));
 
-		$q = "SELECT * FROM {$db_prefix}entities WHERE guid = {$obj->guid}";
-		$r = elgg()->db->getDataRow($q);
-		$this->assertEmpty($r);
+		$this->assertEmpty(elgg()->db->getDataRow($entities));
 	}
 
 	public function testCanGetTags() {
@@ -275,10 +247,6 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 		$objects = $this->createMany('object', 3, [
 			'subtype' => $subtype,
 		]);
-
-		elgg_register_tag_metadata_name('foo1');
-		elgg_register_tag_metadata_name('foo2');
-		elgg_register_tag_metadata_name('foo3');
 
 		$objects[0]->foo1 = 'one';
 		$objects[0]->foo2 = 'two';
@@ -316,19 +284,12 @@ class ElggCoreObjectTest extends \Elgg\IntegrationTestCase {
 		]);
 
 		$this->assertEquals($expected, $actual);
-
-		elgg_unregister_tag_metadata_name('foo1');
-		elgg_unregister_tag_metadata_name('foo2');
-		elgg_unregister_tag_metadata_name('foo3');
-
-		foreach ($objects as $object) {
-			$object->delete();
-		}
 	}
 
 	protected function get_entity_row($guid) {
-		$CONFIG = _elgg_config();
+		$select = Select::fromTable('entities')->select('*');
+		$select->where($select->compare('guid', '=', $guid, ELGG_VALUE_GUID));
 
-		return elgg()->db->getDataRow("SELECT * FROM {$CONFIG->dbprefix}entities WHERE guid='{$guid}'");
+		return elgg()->db->getDataRow($select);
 	}
 }

@@ -1,25 +1,23 @@
 <?php
 
-	$getAnchor = function(array $options = []) {
-		
-		$vars = [
-			'class' => elgg_extract_class($options, ['elgg-button']),
-			'href' => '#',
-			'text' => 'anchor',
-		];
-		unset($options['class']);
-		
-		return elgg_view('output/url', array_merge($vars, $options));
-	};
+$getAnchor = function(array $options = []) {
+	$vars = [
+		'class' => elgg_extract_class($options, ['elgg-button']),
+		'href' => '#',
+		'text' => 'anchor',
+	];
+	unset($options['class']);
+	
+	return elgg_view('output/url', array_merge($vars, $options));
+};
 
-	$getButton = function(array $options = []) {
-		
-		$vars = [
-			'value' => elgg_echo('submit'),
-		];
-		
-		return elgg_view('input/button', array_merge($vars, $options));
-	};
+$getButton = function(array $options = []) {
+	$vars = [
+		'text' => elgg_echo('submit'),
+	];
+	
+	return elgg_view('input/button', array_merge($vars, $options));
+};
 
 ?>
 <table class="elgg-table">
@@ -44,6 +42,12 @@
 			<td><?= $getAnchor(['class' => 'elgg-button-action']) ?></td>
 			<td><?= $getAnchor(['class' => 'elgg-button-action', 'icon' => 'plus', 'icon_alt' => 'remove']) ?></td>
 			<td><?= $getAnchor(['class' => 'elgg-button-action elgg-state-disabled']) ?>
+		</tr>
+		<tr>
+			<th>Action Done (.elgg-button-action-done)</th>
+			<td><?= $getAnchor(['class' => 'elgg-button-action-done']) ?></td>
+			<td><?= $getAnchor(['class' => 'elgg-button-action-done', 'icon' => 'plus', 'icon_alt' => 'remove']) ?></td>
+			<td><?= $getAnchor(['class' => 'elgg-button-action-done elgg-state-disabled']) ?>
 		</tr>
 		<tr>
 			<th>Cancel (.elgg-button-cancel)</th>
@@ -96,6 +100,13 @@
 			<td><?= $getButton(['class' => 'elgg-button-action', 'icon' => 'plus', 'icon_alt' => 'remove']) ?></td>
 			<td><?= $getButton(['class' => 'elgg-button-action elgg-state-disabled']) ?>
 			<td><?= $getButton(['class' => 'elgg-button-action', 'disabled' => true]) ?>
+		</tr>
+		<tr>
+			<th>Action Done (.elgg-button-action-done)</th>
+			<td><?= $getButton(['class' => 'elgg-button-action-done']) ?></td>
+			<td><?= $getButton(['class' => 'elgg-button-action-done', 'icon' => 'plus', 'icon_alt' => 'remove']) ?></td>
+			<td><?= $getButton(['class' => 'elgg-button-action-done elgg-state-disabled']) ?>
+			<td><?= $getButton(['class' => 'elgg-button-action-done', 'disabled' => true]) ?>
 		</tr>
 		<tr>
 			<th>Cancel (.elgg-button-cancel)</th>

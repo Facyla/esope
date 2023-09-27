@@ -2,18 +2,13 @@
 
 namespace Elgg\Cache;
 
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\RangeException;
+
 /**
  * @group UnitTests
  */
 class LRUCacheUnitTest extends \Elgg\UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	public function testOldestItemsGetDroppedWhenUnused() {
 		$pool = new LRUCache(4);
@@ -72,15 +67,10 @@ class LRUCacheUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testThrowExceptionOnNegativeSize() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(RangeException::class);
 		new LRUCache(-2);
 	}
 
-	public function testThrowExceptionOnNonIntSize() {
-		$this->expectException(\InvalidArgumentException::class);
-		new LRUCache("abc");
-	}
-	
 	/**
 	 * @dataProvider setGetRemoveProvider
 	 */
@@ -103,5 +93,4 @@ class LRUCacheUnitTest extends \Elgg\UnitTestCase {
 			['foo', null, 'bar'],
 		];
 	}
-
 }

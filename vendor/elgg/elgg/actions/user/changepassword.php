@@ -3,13 +3,16 @@
  * Action to reset a password, send success email, and log the user in.
  */
 
-$password = get_input('password1', null, false);
-$password_repeat = get_input('password2', null, false);
+use Elgg\Exceptions\Configuration\RegistrationException;
+use Elgg\Exceptions\LoginException;
+
+$password = (string) get_input('password1', '', false);
+$password_repeat = (string) get_input('password2', '', false);
 $user_guid = (int) get_input('u');
-$code = get_input('c');
+$code = (string) get_input('c');
 
 try {
-	validate_password($password);
+	elgg()->accounts->assertValidPassword($password);
 } catch (RegistrationException $e) {
 	return elgg_error_response($e->getMessage());
 }
@@ -18,12 +21,13 @@ if ($password !== $password_repeat) {
 	return elgg_error_response(elgg_echo('RegistrationException:PasswordMismatch'));
 }
 
-if (!execute_new_password_request($user_guid, $code, $password)) {
+$user = get_user($user_guid);
+if (!$user instanceof \ElggUser || !elgg_save_new_password($user, $code, $password)) {
 	return elgg_error_response(elgg_echo('user:password:fail'));
 }
 
 try {
-	login(get_user($user_guid));
+	elgg_login($user);
 } catch (LoginException $e) {
 	return elgg_error_response($e->getMessage());
 }

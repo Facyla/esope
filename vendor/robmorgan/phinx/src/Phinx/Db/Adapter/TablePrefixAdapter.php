@@ -1,33 +1,14 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- * Copyright (c) 2015 Rob Morgan
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- * @package    Phinx
- * @subpackage Phinx\Db\Adapter
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
+
 namespace Phinx\Db\Adapter;
 
+use BadMethodCallException;
+use InvalidArgumentException;
 use Phinx\Db\Action\AddColumn;
 use Phinx\Db\Action\AddForeignKey;
 use Phinx\Db\Action\AddIndex;
@@ -55,7 +36,7 @@ use Phinx\Db\Table\Table;
 class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAdapterType()
     {
@@ -63,7 +44,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasTable($tableName)
     {
@@ -73,7 +54,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function createTable(Table $table, array $columns = [], array $indexes = [])
     {
@@ -85,13 +66,16 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function changePrimaryKey(Table $table, $newColumns)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
 
         $adapterTable = new Table(
@@ -102,13 +86,16 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function changeComment(Table $table, $newComment)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
 
         $adapterTable = new Table(
@@ -119,13 +106,16 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function renameTable($tableName, $newTableName)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
 
         $adapterTableName = $this->getAdapterTableName($tableName);
@@ -134,20 +124,23 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function dropTable($tableName)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->dropTable($adapterTableName);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function truncateTable($tableName)
     {
@@ -156,7 +149,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getColumns($tableName)
     {
@@ -166,7 +159,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasColumn($tableName, $columnName)
     {
@@ -176,13 +169,16 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function addColumn(Table $table, Column $column)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($table->getName());
         $adapterTable = new Table($adapterTableName, $table->getOptions());
@@ -190,46 +186,55 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function renameColumn($tableName, $columnName, $newColumnName)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->renameColumn($adapterTableName, $columnName, $newColumnName);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function changeColumn($tableName, $columnName, Column $newColumn)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->changeColumn($adapterTableName, $columnName, $newColumn);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function dropColumn($tableName, $columnName)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->dropColumn($adapterTableName, $columnName);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasIndex($tableName, $columns)
     {
@@ -239,7 +244,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasIndexByName($tableName, $indexName)
     {
@@ -249,46 +254,55 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function addIndex(Table $table, Index $index)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTable = new Table($table->getName(), $table->getOptions());
         $adapter->addIndex($adapterTable, $index);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function dropIndex($tableName, $columns)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->dropIndex($adapterTableName, $columns);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function dropIndexByName($tableName, $indexName)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->dropIndexByName($adapterTableName, $indexName);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasPrimaryKey($tableName, $columns, $constraint = null)
     {
@@ -298,7 +312,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function hasForeignKey($tableName, $columns, $constraint = null)
     {
@@ -308,13 +322,16 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function addForeignKey(Table $table, ForeignKey $foreignKey)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($table->getName());
         $adapterTable = new Table($adapterTableName, $table->getOptions());
@@ -322,20 +339,23 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \BadMethodCallException
+     * @return void
      */
     public function dropForeignKey($tableName, $columns, $constraint = null)
     {
         $adapter = $this->getAdapter();
         if (!$adapter instanceof DirectActionInterface) {
-            throw new \BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
+            throw new BadMethodCallException('The underlying adapter does not implement DirectActionInterface');
         }
         $adapterTableName = $this->getAdapterTableName($tableName);
         $adapter->dropForeignKey($adapterTableName, $columns, $constraint);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function insert(Table $table, $row)
     {
@@ -345,7 +365,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function bulkinsert(Table $table, $rows)
     {
@@ -377,7 +397,7 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     /**
      * Applies the prefix and suffix to the table name.
      *
-     * @param string $tableName
+     * @param string $tableName Table name
      * @return string
      */
     public function getAdapterTableName($tableName)
@@ -386,7 +406,10 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \InvalidArgumentException
+     * @return void
      */
     public function executeActions(Table $table, array $actions)
     {
@@ -395,15 +418,15 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
 
         foreach ($actions as $k => $action) {
             switch (true) {
-                case ($action instanceof AddColumn):
+                case $action instanceof AddColumn:
                     $actions[$k] = new AddColumn($adapterTable, $action->getColumn());
                     break;
 
-                case ($action instanceof AddIndex):
+                case $action instanceof AddIndex:
                     $actions[$k] = new AddIndex($adapterTable, $action->getIndex());
                     break;
 
-                case ($action instanceof AddForeignKey):
+                case $action instanceof AddForeignKey:
                     $foreignKey = clone $action->getForeignKey();
                     $refTable = $foreignKey->getReferencedTable();
                     $refTableName = $this->getAdapterTableName($refTable->getName());
@@ -411,44 +434,44 @@ class TablePrefixAdapter extends AdapterWrapper implements DirectActionInterface
                     $actions[$k] = new AddForeignKey($adapterTable, $foreignKey);
                     break;
 
-                case ($action instanceof ChangeColumn):
+                case $action instanceof ChangeColumn:
                     $actions[$k] = new ChangeColumn($adapterTable, $action->getColumnName(), $action->getColumn());
                     break;
 
-                case ($action instanceof DropForeignKey):
+                case $action instanceof DropForeignKey:
                     $actions[$k] = new DropForeignKey($adapterTable, $action->getForeignKey());
                     break;
 
-                case ($action instanceof DropIndex):
+                case $action instanceof DropIndex:
                     $actions[$k] = new DropIndex($adapterTable, $action->getIndex());
                     break;
 
-                case ($action instanceof DropTable):
+                case $action instanceof DropTable:
                     $actions[$k] = new DropTable($adapterTable);
                     break;
 
-                case ($action instanceof RemoveColumn):
+                case $action instanceof RemoveColumn:
                     $actions[$k] = new RemoveColumn($adapterTable, $action->getColumn());
                     break;
 
-                case ($action instanceof RenameColumn):
+                case $action instanceof RenameColumn:
                     $actions[$k] = new RenameColumn($adapterTable, $action->getColumn(), $action->getNewName());
                     break;
 
-                case ($action instanceof RenameTable):
-                    $actions[$k] = new RenameTable($adapterTable, $action->getNewName());
+                case $action instanceof RenameTable:
+                    $actions[$k] = new RenameTable($adapterTable, $this->getAdapterTableName($action->getNewName()));
                     break;
 
-                case ($action instanceof ChangePrimaryKey):
+                case $action instanceof ChangePrimaryKey:
                     $actions[$k] = new ChangePrimaryKey($adapterTable, $action->getNewColumns());
                     break;
 
-                case ($action instanceof ChangeComment):
+                case $action instanceof ChangeComment:
                     $actions[$k] = new ChangeComment($adapterTable, $action->getNewComment());
                     break;
 
                 default:
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         sprintf("Forgot to implement table prefixing for action: '%s'", get_class($action))
                     );
             }

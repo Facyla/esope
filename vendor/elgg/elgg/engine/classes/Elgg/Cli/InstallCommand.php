@@ -3,6 +3,7 @@
 namespace Elgg\Cli;
 
 use ElggInstaller;
+use Elgg\Exceptions\Configuration\InstallationException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,7 +28,6 @@ class InstallCommand extends BaseCommand {
 	 * {@inheritdoc}
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
-
 		$this->input = $input;
 		$this->output = $output;
 
@@ -67,23 +67,23 @@ class InstallCommand extends BaseCommand {
 			$installer = new ElggInstaller();
 			$htaccess = !is_file(\Elgg\Application::projectDir()->getPath('.htaccess'));
 			$installer->batchInstall($params, $htaccess);
-		} catch (\InstallationException $ex) {
+		} catch (InstallationException $ex) {
 			$this->dumpRegisters();
 			$this->error($ex);
 
-			return 1;
+			return self::FAILURE;
 		}
 
 		\Elgg\Application::start();
 
-		$version = elgg_get_version(true);
+		$release = elgg_get_release();
 
-		$this->notice("Elgg $version install successful");
-		$this->notice("wwwroot: " . elgg_get_site_url());
-		$this->notice("dataroot: " . elgg_get_data_path());
-		$this->notice("cacheroot: " . elgg_get_cache_path());
-		$this->notice("assetroot: " . elgg_get_asset_path());
+		$this->notice("Elgg {$release} install successful");
+		$this->notice('wwwroot: ' . elgg_get_site_url());
+		$this->notice('dataroot: ' . elgg_get_data_path());
+		$this->notice('cacheroot: ' . elgg_get_cache_path());
+		$this->notice('assetroot: ' . elgg_get_asset_path());
 
-		return 0;
+		return self::SUCCESS;
 	}
 }

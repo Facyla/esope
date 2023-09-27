@@ -5,7 +5,7 @@ namespace Elgg\Database;
 use Elgg\Config;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * Database configuration service
  *
  * @internal
  * @since 1.9.0
@@ -15,32 +15,63 @@ class DbConfig {
 	const READ = 'read';
 	const WRITE = 'write';
 	const READ_WRITE = 'readwrite';
-
-	protected $db;
-	protected $dbprefix;
-	protected $dbhost;
-	protected $dbport;
-	protected $dbuser;
-	protected $dbpass;
-	protected $dbname;
-	protected $dbencoding;
+	
+	/**
+	 * @var array|null Multiple database configuration
+	 */
+	protected ?array $db;
+	
+	/**
+	 * @var string|null Database table prefix
+	 */
+	protected ?string $dbprefix;
+	
+	/**
+	 * @var string|null Database host
+	 */
+	protected ?string $dbhost;
+	
+	/**
+	 * @var int|null Database port
+	 */
+	protected ?int $dbport;
+	
+	/**
+	 * @var string|null Database username
+	 */
+	protected ?string $dbuser;
+	
+	/**
+	 * @var string|null Database password
+	 */
+	protected ?string $dbpass;
+	
+	/**
+	 * @var string|null Database name
+	 */
+	protected ?string $dbname;
+	
+	/**
+	 * @var string|null Database encoding
+	 */
+	protected ?string $dbencoding;
 
 	/**
 	 * Constructor
 	 *
 	 * @param \stdClass $config Object with keys:
-	 *  db
-	 *  dbprefix
-	 *  dbhost
-	 *  dbport
-	 *  dbuser
-	 *  dbpass
-	 *  dbname
-	 *  dbencoding
+	 *                          - db
+	 *                          - dbprefix
+	 *                          - dbhost
+	 *                          - dbport
+	 *                          - dbuser
+	 *                          - dbpass
+	 *                          - dbname
+	 *                          - dbencoding
 	 */
 	public function __construct(\stdClass $config) {
 		foreach (array_keys(get_class_vars(__CLASS__)) as $prop) {
-			$this->{$prop} = isset($config->{$prop}) ? $config->{$prop} : null;
+			$this->{$prop} = $config->{$prop} ?? null;
 		}
 	}
 
@@ -51,11 +82,12 @@ class DbConfig {
 	 *
 	 * @return DbConfig
 	 */
-	public static function fromElggConfig(Config $config) {
+	public static function fromElggConfig(Config $config): DbConfig {
 		$obj = new \stdClass();
 		foreach (array_keys(get_class_vars(__CLASS__)) as $prop) {
 			$obj->{$prop} = $config->{$prop};
 		}
+		
 		return new self($obj);
 	}
 
@@ -64,7 +96,7 @@ class DbConfig {
 	 *
 	 * @return string
 	 */
-	public function getTablePrefix() {
+	public function getTablePrefix(): string {
 		return (string) $this->dbprefix;
 	}
 
@@ -73,17 +105,8 @@ class DbConfig {
 	 *
 	 * @return bool
 	 */
-	public function isDatabaseSplit() {
-		if (isset($this->db['split'])) {
-			return $this->db['split'];
-		}
-
-		// this was the recommend structure from Elgg 1.0 to 1.8
-		if (isset($this->db->split)) {
-			return $this->db->split;
-		}
-
-		return false;
+	public function isDatabaseSplit(): bool {
+		return $this->db['split'] ?? false;
 	}
 
 	/**
@@ -102,9 +125,10 @@ class DbConfig {
 	 * )
 	 *
 	 * @param string $type The connection type: READ, WRITE, READ_WRITE
+	 *
 	 * @return array
 	 */
-	public function getConnectionConfig($type = self::READ_WRITE) {
+	public function getConnectionConfig(string $type = self::READ_WRITE): array {
 		switch ($type) {
 			case self::READ:
 			case self::WRITE:
@@ -115,7 +139,7 @@ class DbConfig {
 				break;
 		}
 
-		$config['encoding'] = $this->dbencoding ? $this->dbencoding : 'utf8';
+		$config['encoding'] = $this->dbencoding ?: 'utf8';
 		$config['prefix'] = $this->dbprefix;
 
 		return $config;
@@ -126,7 +150,7 @@ class DbConfig {
 	 *
 	 * @return array
 	 */
-	protected function getGeneralConnectionConfig() {
+	protected function getGeneralConnectionConfig(): array {
 		return [
 			'host' => $this->dbhost,
 			'port' => $this->dbport,
@@ -140,49 +164,29 @@ class DbConfig {
 	 * Get connection information for reading or writing
 	 *
 	 * @param string $type Connection type: 'write' or 'read'
+	 *
 	 * @return array
 	 */
-	protected function getParticularConnectionConfig($type) {
-		if (is_object($this->db[$type])) {
-			// old style single connection (Elgg < 1.9)
-			$config = [
-				'host' => $this->db[$type]->dbhost,
-				'port' => $this->db[$type]->dbport,
-				'user' => $this->db[$type]->dbuser,
-				'password' => $this->db[$type]->dbpass,
-				'database' => $this->db[$type]->dbname,
-			];
-		} else if (array_key_exists('dbhost', $this->db[$type])) {
-			// new style single connection
-			$config = [
+	protected function getParticularConnectionConfig(string $type): array {
+		if (array_key_exists('dbhost', $this->db[$type])) {
+			// single connection
+			return [
 				'host' => $this->db[$type]['dbhost'],
 				'port' => $this->db[$type]['dbport'],
 				'user' => $this->db[$type]['dbuser'],
 				'password' => $this->db[$type]['dbpass'],
 				'database' => $this->db[$type]['dbname'],
 			];
-		} else if (is_object(current($this->db[$type]))) {
-			// old style multiple connections
-			$index = array_rand($this->db[$type]);
-			$config = [
-				'host' => $this->db[$type][$index]->dbhost,
-				'port' => $this->db[$type][$index]->dbport,
-				'user' => $this->db[$type][$index]->dbuser,
-				'password' => $this->db[$type][$index]->dbpass,
-				'database' => $this->db[$type][$index]->dbname,
-			];
-		} else {
-			// new style multiple connections
-			$index = array_rand($this->db[$type]);
-			$config = [
-				'host' => $this->db[$type][$index]['dbhost'],
-				'port' => $this->db[$type][$index]['dbport'],
-				'user' => $this->db[$type][$index]['dbuser'],
-				'password' => $this->db[$type][$index]['dbpass'],
-				'database' => $this->db[$type][$index]['dbname'],
-			];
 		}
-
-		return $config;
+		
+		// new style multiple connections
+		$index = array_rand($this->db[$type]);
+		return [
+			'host' => $this->db[$type][$index]['dbhost'],
+			'port' => $this->db[$type][$index]['dbport'],
+			'user' => $this->db[$type][$index]['dbuser'],
+			'password' => $this->db[$type][$index]['dbpass'],
+			'database' => $this->db[$type][$index]['dbname'],
+		];
 	}
 }

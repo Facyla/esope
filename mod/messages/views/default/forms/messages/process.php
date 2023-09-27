@@ -6,22 +6,21 @@
  *
  * @uses $vars['list']   List of messages
  * @uses $vars['folder'] The folder currently looking at
- *
  */
 
-$list = elgg_extract('list', $vars);
-if (!$list) {
-	echo elgg_echo('messages:nomessages');
-	return true;
-}
+elgg_require_js('forms/messages/process');
 
-echo "<div class='messages-container'>{$list}</div>";
+$list = (string) elgg_extract('list', $vars);
 
+echo elgg_format_element('div', ['class' => 'messages-container'], $list);
+
+// create footer
 $buttons = [];
 $buttons[] = [
 	'#type' => 'submit',
-	'value' => elgg_echo('delete'),
 	'name' => 'delete',
+	'value' => 1,
+	'text' => elgg_echo('delete'),
 	'class' => 'elgg-button-delete',
 	'title' => elgg_echo('deleteconfirm:plural'),
 	'data-confirm' => elgg_echo('deleteconfirm:plural'),
@@ -30,14 +29,14 @@ $buttons[] = [
 if (elgg_extract('folder', $vars) == 'inbox') {
 	$buttons[] = [
 		'#type' => 'submit',
-		'value' => elgg_echo('messages:markread'),
 		'name' => 'read',
+		'text' => elgg_echo('messages:markread'),
 	];
 }
 
 $buttons[] = [
 	'#type' => 'button',
-	'value' => elgg_echo('messages:toggle'),
+	'text' => elgg_echo('messages:toggle'),
 	'class' => 'elgg-button-cancel',
 	'id' => 'messages-toggle',
 ];

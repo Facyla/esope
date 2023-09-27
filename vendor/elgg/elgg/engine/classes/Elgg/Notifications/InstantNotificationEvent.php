@@ -2,14 +2,13 @@
 
 namespace Elgg\Notifications;
 
-use ElggData;
-use ElggEntity;
-use stdClass;
+use Elgg\Traits\Notifications\EventSerialization;
 
 /**
  * Instant notification event
  *
  * @since 2.3
+ * @internal
  */
 class InstantNotificationEvent implements NotificationEvent {
 
@@ -28,27 +27,27 @@ class InstantNotificationEvent implements NotificationEvent {
 	protected $object;
 
 	/**
-	 * @var ElggEntity User who triggered the event
+	 * @var \ElggEntity User who triggered the event
 	 */
 	protected $actor;
 
 	/**
 	 * Constructor
 	 *
-	 * @param ElggData   $object The object of the event (ElggEntity)
-	 * @param string     $action The name of the action (default: create)
-	 * @param ElggEntity $actor  The entity that caused the event (default: logged in user)
+	 * @param \ElggData   $object The object of the event (ElggEntity)
+	 * @param string      $action The name of the action (default: create)
+	 * @param \ElggEntity $actor  The entity that caused the event (default: logged in user)
 	 */
-	public function __construct(ElggData $object = null, $action = null, ElggEntity $actor = null) {
+	public function __construct(\ElggData $object = null, string $action = null, \ElggEntity $actor = null) {
 
 		$this->object = $object;
 
 		$this->actor = $actor;
 		if (!isset($actor)) {
-			$this->actor = _elgg_services()->session->getLoggedInUser();
+			$this->actor = _elgg_services()->session_manager->getLoggedInUser();
 		}
 
-		$this->action = $action ? : self::DEFAULT_ACTION_NAME;
+		$this->action = $action ?: self::DEFAULT_ACTION_NAME;
 	}
 
 	/**
@@ -58,7 +57,7 @@ class InstantNotificationEvent implements NotificationEvent {
 	 * may have been deleted/disabled since the event was serialized and
 	 * stored in the database.
 	 *
-	 * @return ElggEntity|false|null
+	 * @return \ElggEntity|false|null
 	 */
 	public function getActor() {
 		return $this->actor;
@@ -84,7 +83,7 @@ class InstantNotificationEvent implements NotificationEvent {
 	 * may have been deleted/disabled since the event was serialized and
 	 * stored in the database.
 	 *
-	 * @return ElggData|false|null
+	 * @return \ElggData|false|null
 	 */
 	public function getObject() {
 		return $this->object;
@@ -120,10 +119,11 @@ class InstantNotificationEvent implements NotificationEvent {
 	 * Export the notification event into a serializable object
 	 * This method is mainly used for logging purposes
 	 *
-	 * @return stdClass
+	 * @return \stdClass
 	 */
 	public function toObject() {
-		$obj = new stdClass();
+		$obj = new \stdClass();
+		
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value) && is_callable([$value, 'toObject'])) {
@@ -132,6 +132,7 @@ class InstantNotificationEvent implements NotificationEvent {
 				$obj->$key = $value;
 			}
 		}
+		
 		return $obj;
 	}
 }

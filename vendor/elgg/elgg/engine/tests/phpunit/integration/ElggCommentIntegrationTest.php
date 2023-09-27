@@ -3,36 +3,15 @@
 use Elgg\IntegrationTestCase;
 
 class ElggCommentIntegrationTest extends IntegrationTestCase {
-
-	/**
-	 * @var \ElggEntity[]
-	 */
-	protected $entities = [];
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public function up() {
-		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function down() {
-		// cleanup created entities
-		foreach ($this->entities as $entity) {
-			$entity->delete();
-		}
-	}
 	
 	public function testCommentOwnerCanEditContentOwnerCant() {
-		$this->entities[] = $owner = $this->createUser();
-		$this->entities[] = $content_owner = $this->createUser();
-		$this->entities[] = $content = $this->createObject([
+		$owner = $this->createUser();
+		$content_owner = $this->createUser();
+		$content = $this->createObject([
+			'subtype' => 'commentable',
 			'owner_guid' => $content_owner->guid,
 		]);
-		$this->entities[] = $comment = $this->createObject([
+		$comment = $this->createObject([
 			'subtype' => 'comment',
 			'owner_guid' => $owner->guid,
 			'container_guid' => $content->guid,
@@ -44,17 +23,18 @@ class ElggCommentIntegrationTest extends IntegrationTestCase {
 	}
 	
 	public function testCommentOwnerCanEditContentOwnerCantGroupOwnerCanEdit() {
-		$this->entities[] = $owner = $this->createUser();
-		$this->entities[] = $content_owner = $this->createUser();
-		$this->entities[] = $group_owner = $this->createUser();
-		$this->entities[] = $group = $this->createGroup([
+		$owner = $this->createUser();
+		$content_owner = $this->createUser();
+		$group_owner = $this->createUser();
+		$group = $this->createGroup([
 			'owner_guid' => $group_owner->guid,
 		]);
-		$this->entities[] = $content = $this->createObject([
+		$content = $this->createObject([
+			'subtype' => 'commentable',
 			'owner_guid' => $content_owner->guid,
 			'container_guid' => $group->guid,
 		]);
-		$this->entities[] = $comment = $this->createObject([
+		$comment = $this->createObject([
 			'subtype' => 'comment',
 			'owner_guid' => $owner->guid,
 			'container_guid' => $content->guid,

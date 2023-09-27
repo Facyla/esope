@@ -10,13 +10,14 @@ General
 This error is usually accompanied by more details explaining why the plugin is invalid. This is usually
 caused by an incorrectly installed plugin.
 
-If you are installing a plugin called "test", there will be a test directory under mod. In that test directory there needs to be a manifest.xml file ``/mod/test/manifest.xml``.
+If you are installing a plugin called "test", there will be a test directory under mod. In that test directory there needs to be a ``composer.json`` file ``/mod/test/composer.json``.
 
 If this file does not exist, it could be caused by:
 	* installing a plugin to the wrong directory
 	* creating a directory under /mod that does not contain a plugin
 	* a bad ftp transfer
 	* unzipping a plugin into an extra directory (myplugin.zip unzips to ``myplugin/myplugin``)
+	* incompatible plugin
 
 If you are on a Unix-based host and the files exist in the correct directory, check the permissions. Elgg must have read access to the files and read + execute access on the directories.
 
@@ -59,13 +60,17 @@ Login token mismatch
 
 If you have to log in twice to your site and the error message after the first attempt says there was a token mismatch error, the URL in Elgg's settings does not match the URL used to access it. The most common cause for this is adding or removing the "www" when accessing the site. For example, www.elgg.org vs elgg.org. This causes a problem with session handling because of the way that web browsers save cookies.
 
-To fix this, you can add rewrite rules. To redirect from www.elgg.org to elgg.org in Apache, the rules might look like::
+To fix this, you can add rewrite rules. To redirect from www.elgg.org to elgg.org in Apache, the rules might look like:
+
+.. code-block:: apache
 
 	RewriteCond %{HTTP_HOST} .
 	RewriteCond %{HTTP_HOST} !^elgg\.org
 	RewriteRule (.*) http://elgg.org/$1 [R=301,L]
 
-Redirecting from non-www to www could look like this::
+Redirecting from non-www to www could look like this:
+
+.. code-block:: apache
 
 	RewriteCond %{HTTP_HOST} ^elgg\.org
 	RewriteRule ^(.*)$ http://www.elgg.org/$1 [R=301,L]

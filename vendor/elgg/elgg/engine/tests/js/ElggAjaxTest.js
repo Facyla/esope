@@ -3,7 +3,11 @@ define(function(require) {
 	var elgg = require('elgg');
 	var $ = require('jquery');
 	require('jquery-mockjax');
+	var security = require('elgg/security');
+	var i18n = require('elgg/i18n');
 	var Ajax = require('elgg/Ajax');
+	var hooks = require('elgg/hooks');
+	var system_messages = require('elgg/system_messages');
 	var ajax = new Ajax();
 
 	$.mockjaxSettings.responseTime = 10;
@@ -18,10 +22,10 @@ define(function(require) {
 			$.mockjaxSettings.logging = false;
 			$.mockjax.clear();
 
-			elgg.config.hooks = {};
+			hooks.reset();
 
 			// note, "all" type > always higher priority than specific types
-			elgg.register_hook_handler(Ajax.REQUEST_DATA_HOOK, 'all', function (h, t, p, v) {
+			hooks.register(Ajax.REQUEST_DATA_HOOK, 'all', function (h, t, p, v) {
 				captured_hook = {
 					t: t,
 					p: p,
@@ -67,7 +71,7 @@ define(function(require) {
 
 			var hook_calls = 0;
 
-			elgg.register_hook_handler(Ajax.RESPONSE_DATA_HOOK, 'path:foo', function (h, t, p, v) {
+			hooks.register(Ajax.RESPONSE_DATA_HOOK, 'path:foo', function (h, t, p, v) {
 				hook_calls++;
 				expect(v).toEqual({
 					value: 1,
@@ -161,7 +165,7 @@ define(function(require) {
 		});
 
 		it("allows altering value via hook", function(done) {
-			elgg.register_hook_handler(Ajax.REQUEST_DATA_HOOK, 'path:foo/bar', function (h, t, p, v) {
+			hooks.register(Ajax.REQUEST_DATA_HOOK, 'path:foo/bar', function (h, t, p, v) {
 				v.arg3 = 3;
 				return v;
 			}, 900);
@@ -250,7 +254,7 @@ define(function(require) {
 		it("does not add tokens if already in action URL", function() {
 			var ts = elgg.security.token.__elgg_ts;
 
-			var url = elgg.security.addToken(root + 'action/foo');
+			var url = security.addToken(root + 'action/foo');
 
 			ajax.action(url);
 			expect(ajax._ajax_options.data.__elgg_ts).toBe(undefined);
@@ -269,15 +273,15 @@ define(function(require) {
 		});
 
 		it("handles server-sent messages and dependencies", function(done) {
-			var tmp_system_message = elgg.system_message;
-			var tmp_register_error = elgg.register_error;
+			var tmp_system_message = system_messages.success;
+			var tmp_register_error = system_messages.error;
 			var tmp_require = Ajax._require;
 			var captured = {};
 
-			elgg.system_message = function (arg) {
+			system_messages.success = function (arg) {
 				captured.msg = arg;
 			};
-			elgg.register_error = function (arg) {
+			system_messages.error = function (arg) {
 				captured.error = arg;
 			};
 			Ajax._require = function (arg) {
@@ -304,8 +308,8 @@ define(function(require) {
 					deps: ['foo']
 				});
 
-				elgg.system_message = tmp_system_message;
-				elgg.register_error = tmp_register_error;
+				system_messages.success = tmp_system_message;
+				system_messages.error = tmp_register_error;
 				Ajax._require = tmp_require;
 
 				done();
@@ -313,15 +317,15 @@ define(function(require) {
 		});
 		
 		it("can prevent output of server-sent messages and dependencies", function(done) {
-			var tmp_system_message = elgg.system_message;
-			var tmp_register_error = elgg.register_error;
+			var tmp_system_message = system_messages.success;
+			var tmp_register_error = system_messages.error;
 			var tmp_require = Ajax._require;
 			var captured = {};
 			
-			elgg.system_message = function (arg) {
+			system_messages.success = function (arg) {
 				captured.msg = arg;
 			};
-			elgg.register_error = function (arg) {
+			system_messages.error = function (arg) {
 				captured.error = arg;
 			};
 			Ajax._require = function (arg) {
@@ -346,8 +350,8 @@ define(function(require) {
 					deps: ['foo']
 				});
 				
-				elgg.system_message = tmp_system_message;
-				elgg.register_error = tmp_register_error;
+				system_messages.success = tmp_system_message;
+				system_messages.error = tmp_register_error;
 				Ajax._require = tmp_require;
 				
 				done();
@@ -355,15 +359,15 @@ define(function(require) {
 		});
 
 		it("error handler still handles server-sent messages and dependencies", function (done) {
-			var tmp_system_message = elgg.system_message;
-			var tmp_register_error = elgg.register_error;
+			var tmp_system_message = system_messages.success;
+			var tmp_register_error = system_messages.error;
 			var tmp_require = Ajax._require;
 			var captured = {};
 
-			elgg.system_message = function (arg) {
+			system_messages.success = function (arg) {
 				captured.msg = arg;
 			};
-			elgg.register_error = function (arg) {
+			system_messages.error = function (arg) {
 				captured.error = arg;
 			};
 			Ajax._require = function (arg) {
@@ -391,8 +395,8 @@ define(function(require) {
 					deps: ['foo']
 				});
 
-				elgg.system_message = tmp_system_message;
-				elgg.register_error = tmp_register_error;
+				system_messages.success = tmp_system_message;
+				system_messages.error = tmp_register_error;
 				Ajax._require = tmp_require;
 
 				done();
@@ -400,10 +404,10 @@ define(function(require) {
 		});
 
 		it("outputs the generic error if no server-sent message", function (done) {
-			var tmp_register_error = elgg.register_error;
+			var tmp_register_error = system_messages.error;
 			var captured = {};
 
-			elgg.register_error = function (arg) {
+			system_messages.error = function (arg) {
 				captured.error = arg;
 			};
 
@@ -416,20 +420,20 @@ define(function(require) {
 
 			ajax.path('foo').fail(function () {
 				expect(captured).toEqual({
-					error: elgg.echo('ajax:error')
+					error: i18n.echo('ajax:error')
 				});
 
-				elgg.register_error = tmp_register_error;
+				system_messages.error = tmp_register_error;
 
 				done();
 			});
 		});
 
 		it("outputs the error message of the non-200 response", function (done) {
-			var tmp_register_error = elgg.register_error;
+			var tmp_register_error = system_messages.error;
 			var captured = {};
 
-			elgg.register_error = function (arg) {
+			system_messages.error = function (arg) {
 				captured.error = arg;
 			};
 
@@ -447,7 +451,7 @@ define(function(require) {
 					error: 'Server throws'
 				});
 
-				elgg.register_error = tmp_register_error;
+				system_messages.error = tmp_register_error;
 
 				done();
 			});

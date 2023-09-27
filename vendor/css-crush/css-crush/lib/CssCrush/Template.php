@@ -9,7 +9,7 @@ namespace CssCrush;
 class Template
 {
     // Positional argument default values.
-    public $defaults = array();
+    public $defaults = [];
 
     // The number of expected arguments.
     public $argCount = 0;
@@ -56,7 +56,6 @@ class Template
         };
 
         $templateFunctions->register['#'] = $captureCallback;
-        $templateFunctions->register['arg'] = $captureCallback;
 
         $this->string = $templateFunctions->apply($str);
     }
@@ -108,8 +107,8 @@ class Template
     public function prepare(array $args, $persist = true)
     {
         // Create table of substitutions.
-        $find = array();
-        $replace = array();
+        $find = [];
+        $replace = [];
 
         if ($this->argCount) {
 
@@ -121,7 +120,7 @@ class Template
             }
         }
 
-        $substitutions = array($find, $replace);
+        $substitutions = [$find, $replace];
 
         // Persist substitutions by default.
         if ($persist) {
@@ -141,7 +140,7 @@ class Template
 
     public static function unTokenize($str)
     {
-        $str = Crush::$process->tokens->restore($str, array('u', 's'), true);
+        $str = Crush::$process->tokens->restore($str, ['u', 's']);
 
         return $str;
     }

@@ -3,7 +3,7 @@
 namespace Elgg\Router\Middleware;
 
 use Elgg\Http\ResponseBuilder;
-use Elgg\Http\Exception\UpgradeGatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\UpgradeGatekeeperException;
 
 /**
  * Protect upgrade.php from unauthorized execution
@@ -24,7 +24,7 @@ class UpgradeGatekeeper {
 			return null;
 		}
 
-		if (!_elgg_config()->security_protect_upgrade) {
+		if (!_elgg_services()->config->security_protect_upgrade) {
 			return null;
 		}
 
@@ -33,5 +33,4 @@ class UpgradeGatekeeper {
 			throw new UpgradeGatekeeperException();
 		}
 	}
-
 }

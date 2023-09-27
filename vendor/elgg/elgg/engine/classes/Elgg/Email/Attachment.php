@@ -2,8 +2,8 @@
 
 namespace Elgg\Email;
 
-use Zend\Mime\Part;
-use Zend\Mime\Mime;
+use Laminas\Mime\Part;
+use Laminas\Mime\Mime;
 
 /**
  * Email attachment
@@ -11,15 +11,7 @@ use Zend\Mime\Mime;
 class Attachment extends Part {
 	
 	/**
-	 * create a new Mime Part.
-	 * The (unencoded) content of the Part as passed
-	 * as a string or stream
-	 *
-	 * @param mixed $content String or Stream containing the content
-	 *
-	 * @throws \Zend\Mime\Exception\InvalidArgumentException
-	 *
-	 * @see Part::__construct()
+	 * {@inheritDoc}
 	 */
 	public function __construct($content = '') {
 		parent::__construct($content);
@@ -32,15 +24,15 @@ class Attachment extends Part {
 	 * Create an attachment
 	 *
 	 * @param mixed $options an array or an ElggFile, supported array keys are:
-	 * 		content:     (string) the file contents of the attachment
-	 *		filepath:    (string) if content isn't provided, a filepath can be given to fetch the content from
-	 *		filename:    (string) the name of the attachment
-	 *		type:        (string) the mimetype
-	 *		encoding:    (string) the content encoding
-	 *		disposition: (string) the attachment disposition (default: attachment)
-	 *		charset:     (string) the charset
+	 * 		                 - content:     (string) the file contents of the attachment
+	 *		                 - filepath:    (string) if content isn't provided, a filepath can be given to fetch the content from
+	 *		                 - filename:    (string) the name of the attachment
+	 *		                 - type:        (string) the mimetype
+	 *		                 - encoding:    (string) the content encoding
+	 *		                 - disposition: (string) the attachment disposition (default: attachment)
+	 *		                 - charset:     (string) the charset
 	 *
-	 * @see \Zend\Mime\Part
+	 * @see \Laminas\Mime\Part
 	 *
 	 * @return false|\Elgg\Email\Attachment return the attachment or false on error
 	 */
@@ -78,7 +70,7 @@ class Attachment extends Part {
 			}
 			
 			if (!isset($options['type'])) {
-				$options['type'] = elgg()->mimetype->getMimeType($filepath);
+				$options['type'] = _elgg_services()->mimetype->getMimeType($filepath);
 			}
 		}
 		

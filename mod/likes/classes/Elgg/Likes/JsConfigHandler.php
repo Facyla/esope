@@ -2,22 +2,20 @@
 
 namespace Elgg\Likes;
 
-use Elgg\Hook;
-
 /**
- * Javascript confif handler
+ * Javascript config handler
  */
 class JsConfigHandler {
 
 	/**
 	 * Send config data to the likes module
 	 *
-	 * @param \Elgg\Hook $hook Hook info
+	 * @param \Elgg\Event $event 'elgg.data', 'site'
 	 *
 	 * @return array
 	 */
-	public function __invoke(Hook $hook) {
-		$value = $hook->getValue();
+	public function __invoke(\Elgg\Event $event) {
+		$value = $event->getValue();
 
 		$value['likes_states'] = [
 			'unliked' => [

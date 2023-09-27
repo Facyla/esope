@@ -11,14 +11,6 @@ use Elgg\IntegrationTestCase;
  */
 class ElggCoreConfigTest extends IntegrationTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testSetConfigWithTooLongName() {
 		_elgg_services()->logger->disable();
 
@@ -27,8 +19,6 @@ class ElggCoreConfigTest extends IntegrationTestCase {
 			$name .= 'a';
 		}
 		$this->assertFalse(elgg_save_config($name, 'foo'));
-
-		_elgg_services()->logger->enable();
 	}
 
 	public function testSetConfigWithNewName() {
@@ -63,7 +53,7 @@ class ElggCoreConfigTest extends IntegrationTestCase {
 	}
 
 	public function testSetConfigWithCurrentSite() {
-		$CONFIG = _elgg_config();
+		$CONFIG = _elgg_services()->config;
 		$name = 'foo' . rand(0, 1000);
 		$value = 99;
 		$this->assertTrue(elgg_save_config($name, $value));
@@ -73,9 +63,9 @@ class ElggCoreConfigTest extends IntegrationTestCase {
 	}
 
 	public function testGetConfigAlreadyLoadedForCurrentSite() {
-		$CONFIG = _elgg_config();
+		$CONFIG = _elgg_services()->config;
 		$CONFIG->foo_unit_test = 35;
-		$this->assertEquals(35, _elgg_config()->foo_unit_test);
+		$this->assertEquals(35, _elgg_services()->config->foo_unit_test);
 		unset($CONFIG->foo_unit_test);
 	}
 
@@ -84,14 +74,14 @@ class ElggCoreConfigTest extends IntegrationTestCase {
 	}
 
 	public function testUnsetConfigClearsGlobalForCurrentSite() {
-		$CONFIG = _elgg_config();
+		$CONFIG = _elgg_services()->config;
 		$CONFIG->foo_unit_test = 35;
 		$this->assertTrue(elgg_remove_config('foo_unit_test'));
 		$this->assertNull($CONFIG->foo_unit_test);
 	}
 
 	public function testElggSaveConfigForCurrentSiteConfig() {
-		$CONFIG = _elgg_config();
+		$CONFIG = _elgg_services()->config;
 		$name = 'foo' . rand(0, 1000);
 		$value = 'test';
 		$this->assertTrue(elgg_save_config($name, $value));

@@ -12,13 +12,14 @@ $container_guid = elgg_extract('container_guid', $vars);
 if (!$container_guid) {
 	$container_guid = elgg_get_logged_in_user_guid();
 }
-$guid = elgg_extract('guid', $vars, null);
 
-if ($guid) {
-	$file_label = elgg_echo("file:replace");
+$guid = (int) elgg_extract('guid', $vars);
+
+if (!empty($guid)) {
+	$file_label = elgg_echo('file:replace');
 	$submit_label = elgg_echo('save');
 } else {
-	$file_label = elgg_echo("file:file");
+	$file_label = elgg_echo('file:file');
 	$submit_label = elgg_echo('upload');
 }
 
@@ -58,14 +59,15 @@ $fields = [
 		'#label' => elgg_echo('access'),
 		'name' => 'access_id',
 		'value' => $access_id,
-		'entity' => get_entity($guid),
+		'entity' => elgg_extract('entity', $vars),
 		'entity_type' => 'object',
 		'entity_subtype' => 'file',
 	],
 	[
-		'#type' => 'hidden',
-		'name' => 'container_guid',
+		'#type' => 'container_guid',
 		'value' => $container_guid,
+		'entity_type' => 'object',
+		'entity_subtype' => 'file',
 	],
 	[
 		'#type' => 'hidden',
@@ -80,6 +82,6 @@ foreach ($fields as $field) {
 
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => $submit_label,
+	'text' => $submit_label,
 ]);
 elgg_set_form_footer($footer);

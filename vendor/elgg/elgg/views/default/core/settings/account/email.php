@@ -25,8 +25,8 @@ if (elgg_get_config('security_email_require_password') && ($user->getGUID() === 
 }
 
 $email_help = '';
-if (elgg_get_config('security_email_require_confirmation') && ($new_email = $user->getPrivateSetting('new_email'))) {
-	$email_help = elgg_echo('email:address:help:confirm', [$new_email]);
+if (elgg_get_config('security_email_require_confirmation') && isset($user->new_email)) {
+	$email_help = elgg_echo('email:address:help:confirm', [$user->new_email]);
 }
 
 $content .= elgg_view_field([
@@ -40,7 +40,7 @@ $content .= elgg_view_field([
 if ($user->isAdmin()) {
 	// check is unvalidated e-mail notifications are sent
 	if ((bool) elgg_get_config('require_admin_validation') && !empty(elgg_get_config('admin_validation_notification'))) {
-		$user_setting = $user->getPrivateSetting('admin_validation_notification');
+		$user_setting = $user->admin_validation_notification;
 		
 		$content .= elgg_view_field([
 			'#type' => 'checkbox',

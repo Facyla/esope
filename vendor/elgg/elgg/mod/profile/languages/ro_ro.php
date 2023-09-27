@@ -8,15 +8,10 @@
 return array(
 	'profile' => 'Profil',
 	'profile:notfound' => 'Scuze. Nu am putut găsi profilul cerut.',
-	'profile:upgrade:2017040700:title' => 'Migrează schema câmpurilor de profil',
-	'profile:upgrade:2017040700:description' => 'Această migrare transformă câmpurile de profil din date meta în adnotații cu fiecare nume
-prefixat cu "profil:". <strong>Notă:</strong> Dacă ai câmpuri de profil "inactive" pe care le dorești migrate, recreează aceste câmpuri
-și reîncarcă această pagină pentru a te asigura că vor fi migrate.',
 	
 	'admin:configure_utilities:profile_fields' => 'Editează Câmpurile de Profil',
 	
 	'profile:edit' => 'Editează profilul',
-	'profile:aboutme' => "Despre mine",
 	'profile:description' => "Despre mine",
 	'profile:briefdescription' => "Descriere scurtă",
 	'profile:location' => "Locație",
@@ -42,7 +37,6 @@ prefixat cu "profil:". <strong>Notă:</strong> Dacă ai câmpuri de profil "inac
 	'profile:field:week' => 'Săptămână',
 	'profile:field:color' => 'Culoare',
 
-	'profile:edit:default' => 'Editează câmpurile de profil',
 	'profile:label' => "Eticheta profilului",
 	'profile:type' => "Tipul profilului",
 	'profile:editdefault:delete:fail' => 'Îndepărtarea câmpului de profil a eșuat',
@@ -50,12 +44,12 @@ prefixat cu "profil:". <strong>Notă:</strong> Dacă ai câmpuri de profil "inac
 	'profile:defaultprofile:reset' => 'Câmpurile de profil au fost resetate la starea inițială de sistem',
 	'profile:resetdefault' => 'Resetează câmpurile de profil la starea inițială de sistem',
 	'profile:resetdefault:confirm' => 'Sigur dorești să ștergi câmpurile tale personalizate de profil?',
-	'profile:explainchangefields' => "You can replace the existing profile fields with your own.
-Click the 'Add' button and give the new profile field a label, for example, 'Favorite team', then select the field type (eg. text, url, tags).
-To re-order the fields drag on the handle next to the field label.
-To edit a field label - click on the edit icon.
+	'profile:explainchangefields' => "Puteți înlocui câmpurile de profil existente cu ale dvs.
+Faceți clic pe butonul „Adăugați” și dați noului câmp de profil o etichetă, de exemplu, „Echipa preferată”, apoi selectați tipul câmpului (de exemplu, text, adresă URL, etichete).
+Pentru a reordona câmpurile glisați pe mânerul de lângă eticheta câmpului.
+Pentru a edita o etichetă de câmp - faceți clic pe pictograma de editare.
 
-At any time you can revert back to the default profile set up, but you will lose any information already entered into custom fields on profile pages.",
+În orice moment puteți reveni la configurarea profilului implicit, dar veți pierde orice informație deja introdusă în câmpurile personalizate de pe paginile de profil.",
 	'profile:editdefault:success' => 'Câmp nou de profil adăugat',
 	'profile:editdefault:fail' => 'Profilul inițial nu a putut fi salvat',
 	'profile:noaccess' => "Nu ai permisiunea de a edita acest profil.",

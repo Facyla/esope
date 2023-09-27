@@ -8,30 +8,28 @@ namespace CssCrush;
 
 class Functions
 {
-    protected static $builtins = array(
+    protected static $builtins = [
 
         // These functions must come first in this order.
         'query' => 'CssCrush\fn__query',
 
         // These functions can be any order.
         'math' => 'CssCrush\fn__math',
-        'percent' => 'CssCrush\fn__percent',
-        'pc' => 'CssCrush\fn__percent',
         'hsla-adjust' => 'CssCrush\fn__hsla_adjust',
         'hsl-adjust' => 'CssCrush\fn__hsl_adjust',
         'h-adjust' => 'CssCrush\fn__h_adjust',
         's-adjust' => 'CssCrush\fn__s_adjust',
         'l-adjust' => 'CssCrush\fn__l_adjust',
         'a-adjust' => 'CssCrush\fn__a_adjust',
-    );
+    ];
 
-    public $register = array();
+    public $register = [];
 
     protected $pattern;
 
     protected $patternOptions;
 
-    public function __construct($register = array())
+    public function __construct($register = [])
     {
         $this->register = $register;
     }
@@ -49,7 +47,7 @@ class Functions
     public function setPattern($useAll = false)
     {
         if ($useAll) {
-            $this->register = self::$builtins + $this->register + csscrush_add_function();
+            $this->register = self::$builtins + $this->register;
         }
 
         $this->pattern = Functions::makePattern(array_keys($this->register));
@@ -73,7 +71,12 @@ class Functions
 
         while ($match = array_pop($matches)) {
 
-            list($function, $offset) = $match['function'];
+            if (isset($match['function']) && $match['function'][1] !== -1) {
+                list($function, $offset) = $match['function'];
+            }
+            else {
+                list($function, $offset) = $match['simple_function'];
+            }
 
             if (! preg_match(Regex::$patt->parens, $str, $parens, PREG_OFFSET_CAPTURE, $offset)) {
                 continue;
@@ -99,7 +102,9 @@ class Functions
                 }
             }
 
-            $str = substr_replace($str, $returns, $offset, $closingParen - $offset);
+            if (! is_null($returns)) {
+                $str = substr_replace($str, $returns, $offset, $closingParen - $offset);
+            }
         }
 
         return $str;
@@ -111,7 +116,7 @@ class Functions
 
     public static function parseArgs($input, $allowSpaceDelim = false)
     {
-        $options = array();
+        $options = [];
         if ($allowSpaceDelim) {
             $options['regex'] = Regex::$patt->argListSplit;
         }
@@ -130,8 +135,8 @@ class Functions
 
     public static function makePattern($functionNames)
     {
-        $idents = array();
-        $nonIdents = array();
+        $idents = [];
+        $nonIdents = [];
 
         foreach ($functionNames as $functionName) {
             if (preg_match(Regex::$patt->ident, $functionName[0])) {
@@ -142,16 +147,24 @@ class Functions
             }
         }
 
-        $flatList = '';
-        if (! $idents) {
-            $flatList = implode('|', $nonIdents);
+        if ($idents) {
+            $idents = '{{ LB }}-?(?<function>' . implode('|', $idents) . ')';
         }
-        else {
-            $idents = '{{ LB }}(?:' . implode('|', $idents) . ')';
-            $flatList = $nonIdents ? '(?:' . implode('|', $nonIdents) . "|$idents)" : $idents;
+        if ($nonIdents) {
+            $nonIdents = '(?<simple_function>' . implode('|', $nonIdents) . ')';
         }
 
-        return Regex::make("~(?<function>$flatList)\(~iS");
+        if ($idents && $nonIdents) {
+            $patt = "(?:$idents|$nonIdents)";
+        }
+        elseif ($idents) {
+            $patt = $idents;
+        }
+        elseif ($nonIdents) {
+            $patt = $nonIdents;
+        }
+
+        return Regex::make("~$patt\(~iS");
     }
 }
 
@@ -165,88 +178,65 @@ function fn__math($input) {
 
     // Swap in math constants.
     $expression = preg_replace(
-        array('~\bpi\b~i'),
-        array(M_PI),
+        ['~\bpi\b~i'],
+        [M_PI],
         $expression);
 
-    // Strip blacklisted characters.
-    $expression = preg_replace('~[^\.0-9\*\/\+\-\(\)]~S', '', $expression);
+    // If no unit is specified scan expression.
+    if (! $unit) {
+        $numPatt = Regex::$classes->number;
+        if (preg_match("~\b{$numPatt}(?<unit>[A-Za-z]{2,4}\b|%)~", $expression, $m)) {
+            $unit = $m['unit'];
+        }
+    }
 
-    $result = @eval("return $expression;");
+    // Filter expression so it's just characters necessary for simple math.
+    $expression = preg_replace("~[^.0-9/*()+-]~S", '', $expression);
+
+    $evalExpression = "return $expression;";
+    $result = false;
+
+    if (class_exists('\\ParseError')) {
+        try {
+            $result = @eval($evalExpression);
+        }
+        catch (\Error $e) {}
+    }
+    else {
+        $result = @eval($evalExpression);
+    }
 
     return ($result === false ? 0 : round($result, 5)) . $unit;
 }
 
-function fn__percent($input) {
-
-    // Strip non-numeric and non delimiter characters
-    $input = preg_replace('~[^\d\.\s,]~S', '', $input);
-
-    $args = preg_split(Regex::$patt->argListSplit, $input, -1, PREG_SPLIT_NO_EMPTY);
-
-    // Use precision argument if it exists, use default otherwise
-    $precision = isset($args[2]) ? $args[2] : 5;
-
-    // Output zero on failure
-    $result = 0;
-
-    // Need to check arguments or we may see divide by zero errors
-    if (count($args) > 1 && ! empty($args[0]) && ! empty($args[1])) {
-
-        // Use bcmath if it's available for higher precision
-
-        // Arbitary high precision division
-        if (function_exists('bcdiv')) {
-            $div = bcdiv($args[0], $args[1], 25);
-        }
-        else {
-            $div = $args[0] / $args[1];
-        }
-
-        // Set precision percentage value
-        if (function_exists('bcmul')) {
-            $result = bcmul((string) $div, '100', $precision);
-        }
-        else {
-            $result = round($div * 100, $precision);
-        }
-
-        // Trim unnecessary zeros and decimals
-        $result = trim((string) $result, '0');
-        $result = rtrim($result, '.');
-    }
-
-    return $result . '%';
-}
-
 function fn__hsla_adjust($input) {
     list($color, $h, $s, $l, $a) = array_pad(Functions::parseArgs($input, true), 5, 0);
-    return Color::test($color) ? Color::colorAdjust($color, array($h, $s, $l, $a)) : '';
+    return Color::test($color) ? Color::colorAdjust($color, [$h, $s, $l, $a]) : '';
 }
 
 function fn__hsl_adjust($input) {
     list($color, $h, $s, $l) = array_pad(Functions::parseArgs($input, true), 4, 0);
-    return Color::test($color) ? Color::colorAdjust($color, array($h, $s, $l, 0)) : '';
+    return Color::test($color) ? Color::colorAdjust($color, [$h, $s, $l, 0]) : '';
 }
 
 function fn__h_adjust($input) {
     list($color, $h) = array_pad(Functions::parseArgs($input, true), 2, 0);
-    return Color::test($color) ? Color::colorAdjust($color, array($h, 0, 0, 0)) : '';
+    return Color::test($color) ? Color::colorAdjust($color, [$h, 0, 0, 0]) : '';
 }
 
 function fn__s_adjust($input) {
     list($color, $s) = array_pad(Functions::parseArgs($input, true), 2, 0);
-    return Color::test($color) ? Color::colorAdjust($color, array(0, $s, 0, 0)) : '';
+    return Color::test($color) ? Color::colorAdjust($color, [0, $s, 0, 0]) : '';
 }
 
 function fn__l_adjust($input) {
     list($color, $l) = array_pad(Functions::parseArgs($input, true), 2, 0);
-    return Color::test($color) ? Color::colorAdjust($color, array(0, 0, $l, 0)) : '';
+    return Color::test($color) ? Color::colorAdjust($color, [0, 0, $l, 0]) : '';
 }
 
 function fn__a_adjust($input) {
     list($color, $a) = array_pad(Functions::parseArgs($input, true), 2, 0);
-    return Color::test($color) ? Color::colorAdjust($color, array(0, 0, 0, $a)) : '';
+    return Color::test($color) ? Color::colorAdjust($color, [0, 0, 0, $a]) : '';
 }
 
 function fn__this($input, $context) {
@@ -285,7 +275,7 @@ function fn__query($input, $context) {
         return '';
     }
 
-    list($target, $property, $fallback) = $args + array(null, $context->property, null);
+    list($target, $property, $fallback) = $args + [null, $context->property, null];
 
     if (strtolower($property) === 'default') {
         $property = $context->property;
@@ -321,7 +311,7 @@ function fn__query($input, $context) {
 
     $result = '';
     if ($targetRule) {
-        $targetRule->declarations->process($targetRule);
+        $targetRule->declarations->process();
         $targetRule->declarations->expandData('queryData', $property);
         if (isset($targetRule->declarations->queryData[$property])) {
             $result = $targetRule->declarations->queryData[$property];

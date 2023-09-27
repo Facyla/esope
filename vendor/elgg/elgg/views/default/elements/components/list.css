@@ -14,25 +14,22 @@
 	padding-top: 1rem;
 }
 
-.elgg-item h3 a {
-	padding-bottom: 0.25rem;
-}
-
-.elgg-item > .elgg-subtext {
-	margin-bottom: 0.25rem;
-}
-
-.elgg-item .elgg-content {
-	margin: 0.5rem 0;
+.elgg-item {
+	h3 a {
+		padding-bottom: 0.25rem;
+	}
+	
+	.elgg-content {
+		margin: 0.5rem 0;
+	}
+	
+	> .elgg-subtext {
+		margin-bottom: 0.25rem;
+	}
 }
 
 .elgg-content {
 	clear: both;
-}
-
-.elgg-module > .elgg-body > .elgg-list, /* margin for group modules */
-.elgg-module .elgg-widget-content > .elgg-list { /* margin for profile and dashboard widgets */
-	margin-top: 0;
 }
 
 .elgg-no-results {
@@ -51,15 +48,19 @@
 	margin-bottom: 2rem;
 }
 
+.elgg-listing-full-responses {
+	padding-top: 1rem;
+}
+
 .elgg-listing-imprint {
 	display: flex;
 	flex-wrap: wrap;
-}
-
-.elgg-listing-imprint > span {
-	margin-right: 1rem;
-}
-
-.elgg-listing-imprint .elgg-icon {
-	margin-right: 0.5rem;
+	
+	.elgg-icon {
+		margin-right: 0.5rem;
+	}
+	
+	> span {
+		margin-right: 1rem;
+	}
 }

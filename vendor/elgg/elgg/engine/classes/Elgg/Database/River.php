@@ -7,15 +7,11 @@ use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\EntityWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
 use Elgg\Database\Clauses\RiverWhereClause;
-use ElggEntity;
-use ElggRiverItem;
-use InvalidArgumentException;
-use InvalidParameterException;
+use Elgg\Exceptions\DomainException;
+use Elgg\Exceptions\LogicException;
 
 /**
  * River repository contains methods for fetching/counting river items
- *
- * API IN FLUX Do not access the methods directly, use elgg_get_river() instead
  *
  * @internal
  */
@@ -37,7 +33,7 @@ class River extends Repository {
 			'view',
 		];
 
-		$options = LegacyQueryOptionsAdapter::normalizePluralOptions($options, $singulars);
+		$options = QueryOptions::normalizePluralOptions($options, $singulars);
 
 		$defaults = [
 			'ids' => null,
@@ -67,7 +63,7 @@ class River extends Repository {
 	 *
 	 * @param array $options Options
 	 *
-	 * @return ElggRiverItem[]|int|mixed
+	 * @return \ElggRiverItem[]|int|mixed
 	 */
 	public static function find(array $options = []) {
 		return parent::find($options);
@@ -79,18 +75,14 @@ class River extends Repository {
 	public function count() {
 		$qb = Select::fromTable('river', 'rv');
 
-		$count_expr = $this->options->distinct ? "DISTINCT rv.id" : "*";
+		$count_expr = $this->options->distinct ? 'DISTINCT rv.id' : '*';
 		$qb->select("COUNT({$count_expr}) AS total");
 
 		$qb = $this->buildQuery($qb);
 
 		$result = _elgg_services()->db->getDataRow($qb);
 
-		if (empty($result)) {
-			return 0;
-		}
-
-		return (int) $result->total;
+		return $result ? (int) $result->total : 0;
 	}
 
 	/**
@@ -101,12 +93,11 @@ class River extends Repository {
 	 * @param string $property_type 'annotation'
 	 *
 	 * @return int|float
-	 * @throws InvalidParameterException
+	 * @throws DomainException
 	 */
 	public function calculate($function, $property, $property_type = 'annotation') {
-
-		if (!in_array(strtolower($function), QueryBuilder::$calculations)) {
-			throw new InvalidArgumentException("'$function' is not a valid numeric function");
+		if (!in_array(strtolower($function), QueryBuilder::CALCULATIONS)) {
+			throw new DomainException("'{$function}' is not a valid numeric function");
 		}
 
 		$qb = Select::fromTable('river', 'rv');
@@ -120,18 +111,14 @@ class River extends Repository {
 			$qb->addClause($annotation, $alias);
 		}
 
-		$qb->join('rv', 'annotations', $alias, "rv.annotation_id = $alias.id");
+		$qb->join('rv', 'annotations', $alias, "rv.annotation_id = {$alias}.id");
 		$qb->select("{$function}(n_table.value) AS calculation");
 
 		$qb = $this->buildQuery($qb);
 
 		$result = _elgg_services()->db->getDataRow($qb);
 
-		if (empty($result)) {
-			return 0;
-		}
-
-		return (int) $result->calculation;
+		return $result ? (int) $result->calculation : 0;
 	}
 
 	/**
@@ -141,15 +128,13 @@ class River extends Repository {
 	 * @param int      $offset   Offset
 	 * @param callable $callback Custom callback
 	 *
-	 * @return ElggEntity[]
-	 * @throws \DatabaseException
+	 * @return \ElggEntity[]
 	 */
 	public function get($limit = null, $offset = null, $callback = null) {
-
 		$qb = Select::fromTable('river', 'rv');
 
-		$distinct = $this->options->distinct ? "DISTINCT" : "";
-		$qb->select("$distinct rv.*");
+		$distinct = $this->options->distinct ? 'DISTINCT' : '';
+		$qb->select("{$distinct} rv.*");
 
 		$this->expandInto($qb, 'rv');
 
@@ -166,10 +151,10 @@ class River extends Repository {
 			$qb->setFirstResult((int) $offset);
 		}
 
-		$callback = $callback ? : $this->options->callback;
+		$callback = $callback ?: $this->options->callback;
 		if (!isset($callback)) {
 			$callback = function ($row) {
-				return new ElggRiverItem($row);
+				return new \ElggRiverItem($row);
 			};
 		}
 
@@ -177,7 +162,7 @@ class River extends Repository {
 
 		if (!empty($items)) {
 			$preload = array_filter($items, function($e) {
-				return $e instanceof ElggRiverItem;
+				return $e instanceof \ElggRiverItem;
 			});
 
 			_elgg_services()->entityPreloader->preload($preload, [
@@ -193,23 +178,22 @@ class River extends Repository {
 	/**
 	 * Execute the query resolving calculation, count and/or batch options
 	 *
-	 * @return array|\ElggData[]|ElggEntity[]|false|int
-	 * @throws \LogicException
+	 * @return array|\ElggData[]|\ElggEntity[]|false|int
+	 * @throws LogicException
 	 */
 	public function execute() {
-
 		if ($this->options->annotation_calculation) {
 			$clauses = $this->options->annotation_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->annotation_name_value_pairs_operator !== 'OR') {
-				throw new \LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
+				throw new LogicException('Annotation calculation can not be performed on multiple annotation name value pairs merged with AND');
 			}
 
 			$clause = array_shift($clauses);
 
 			return $this->calculate($this->options->annotation_calculation, $clause->names, 'annotation');
-		} else if ($this->options->count) {
+		} elseif ($this->options->count) {
 			return $this->count();
-		} else if ($this->options->batch) {
+		} elseif ($this->options->batch) {
 			return $this->batch($this->options->limit, $this->options->offset, $this->options->callback);
 		} else {
 			return $this->get($this->options->limit, $this->options->offset, $this->options->callback);
@@ -219,12 +203,11 @@ class River extends Repository {
 	/**
 	 * Build a database query
 	 *
-	 * @param QueryBuilder $qb
+	 * @param QueryBuilder $qb the Elgg QueryBuilder
 	 *
 	 * @return QueryBuilder
 	 */
 	protected function buildQuery(QueryBuilder $qb) {
-
 		$ands = [];
 
 		foreach ($this->options->joins as $join) {
@@ -280,7 +263,6 @@ class River extends Repository {
 	 * @return CompositeExpression|mixed|null|string
 	 */
 	public function buildEntityClauses($qb) {
-
 		$use_access_clause = !_elgg_services()->userCapabilities->canBypassPermissionsCheck();
 
 		$ands = [];
@@ -333,6 +315,7 @@ class River extends Repository {
 			} else {
 				$joined_alias = $qb->getNextJoinAlias();
 			}
+			
 			$joins = $qb->getQueryPart('join');
 			$is_joined = false;
 			if (!empty($joins['rv'])) {
@@ -372,6 +355,7 @@ class River extends Repository {
 			} else {
 				$joined_alias = $qb->joinRelationshipTable('rv', $join_on, $clause->names, $clause->inverse);
 			}
+			
 			$parts[] = $clause->prepare($qb, $joined_alias);
 		}
 

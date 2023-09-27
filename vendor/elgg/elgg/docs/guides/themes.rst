@@ -97,7 +97,6 @@ Theming Principles and Best Practices
 
 **Flexbox driven**
 	Flexbox provides simplicity in stacking elements into grids. Flexbox is used for everything from menus to layout elements.
-	We avoid ``float`` and ``clearfix`` as they are hard to collaborate on and create lots of room for failure and distortion.
 
 .. code-block:: css
 
@@ -216,8 +215,8 @@ Create your plugin
 Create your plugin as described in the :doc:`developer guide </guides/index>`.
 
 -  Create a new directory under mod/
--  Create a new start.php
--  Create a manifest.xml file describing your theme.
+-  Create a new elgg-plugin.php
+-  Create a composer.json file describing your theme.
 
 Customize the CSS
 =================
@@ -241,7 +240,6 @@ Here is a list of the existing CSS views:
  * rtl.css: Custom rules for users viewing your site in a right-to-left language.
  * admin.css: A completely separate theme for the admin area (usually not overridden).
  * elgg.css: Compiles all the core elements/\* files into one file (DO NOT OVERRIDE).
- * elements/core.css: Contains base styles for the more complicated “css objects”. If you find yourself wanting to override this, you probably need to report a bug to Elgg core instead (DO NOT OVERRIDE).
  * elements/reset.css: Contains a reset stylesheet that forces elements to have the same default
 
 CSS variables
@@ -251,7 +249,7 @@ Elgg uses CssCrush for preprocessing CSS files. This gives us the flexibility of
 Plugins should, wherever possible, use global CSS variables, and extend the core theme with their plugin variables, so they
 can be simply altered by other plugins.
 
-To add or alter variables, use the ``vars:compiler, css`` hook. Note that you may need to flush the cache to see your
+To add or alter variables, use the ``vars:compiler, css`` event. Note that you may need to flush the cache to see your
 changes in action.
 
 For a list of default core variables, see ``engine/theme.php``.
@@ -263,22 +261,21 @@ View extension
 
 There are two ways you can modify views:
 
-The first way is to add extra stuff to an existing view via the extend
-view function from within your start.php’s initialization function.
+The first way is to add extra stuff to an existing view via the ``views_extensions``
+section within your elgg-plugin.php definition.
 
-For example, the following start.php will add mytheme/css to Elgg's core
-css file:
+For example, the following configuration will add mytheme/css to Elgg's core css file:
 
 .. code-block:: php
 
 	<?php
-
-		function mytheme_init() {
-			elgg_extend_view('elgg.css', 'mytheme/css');
-		}
-
-		elgg_register_event_handler('init', 'system', 'mytheme_init');
-	?>
+		return [
+			'view_extensions' => [
+				'elgg.css' => [
+					'mytheme/css' => [],
+				],
+			],
+		];
 
 View overloading
 ----------------
@@ -324,41 +321,6 @@ Preview” page to start tracking your theme's progress.
 
 Customizing the front page
 ==========================
-The main Elgg index page runs a plugin hook called 'index,system'. If this
-returns true, it assumes that another front page has been drawn and
-doesn't display the default page.
+The main Elgg index page is served via a resource view.
 
-Therefore, you can override it by registering a function to the
-'index,system' plugin hook and then returning true from that function.
-
-Here's a quick overview:
-
--  Create your new plugin
-
--  In the start.php you will need something like the following:
-
-.. code-block:: php
-
-	<?php
-
-	function pluginname_init() {
-		// Replace the default index page
-		elgg_register_plugin_hook_handler('index', 'system', 'new_index');
-	}
-
-	function new_index() {
-		if (!include_once(dirname(dirname(__FILE__)) . "/pluginname/pages/index.php"))
-			return false;
-		
-		return true;
-	}
-
-	// register for the init, system event when our plugin start.php is loaded
-	elgg_register_event_handler('init', 'system', 'pluginname_init');
-	?>
-
--  Then, create an index page (/pluginname/pages/index.php) and use that
-	to put the content you would like on the front page of your Elgg
-	site.
-
-
+Therefore, you can override it by providing your own resource file in ``your_plugin/views/default/resources/index.php``.

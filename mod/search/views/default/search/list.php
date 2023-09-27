@@ -18,7 +18,7 @@
 
 $results = elgg_extract('results', $vars);
 $entities = elgg_extract('entities', $results, []);
-$params = elgg_extract('params', $vars, []);
+$params = (array) elgg_extract('params', $vars, []);
 if (!is_array($entities) || empty($entities) || empty($params)) {
 	return;
 }
@@ -46,7 +46,7 @@ foreach ($keys as $key) {
 	}
 }
 
-$base_url = elgg_http_add_url_query_elements(current_page_url(), [
+$base_url = elgg_http_add_url_query_elements(elgg_get_current_url(), [
 	'q' => elgg_extract('query', $params),
 	'entity_type' => $type,
 	'entity_subtype' => $subtype,
@@ -68,7 +68,7 @@ if (elgg_extract('pagination', $params)) {
 	]);
 } else if ($more_items > 0) {
 	$pagination = elgg_view('output/url', [
-		'class' => 'elgg-widget-more',
+		'class' => 'elgg-more',
 		'href' => elgg_http_remove_url_query_element($base_url, 'limit'),
 		'text' => elgg_echo('search:more', [$count - count($entities), $type_label]),
 	]);

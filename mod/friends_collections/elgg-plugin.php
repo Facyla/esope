@@ -1,6 +1,19 @@
 <?php
+use Elgg\Friends\Collections\CollectionMenuHandler;
+use Elgg\Friends\Collections\DeleteRelationshipHandler;
+use Elgg\Friends\Collections\EntityMenuHandler;
+use Elgg\Friends\Collections\PageMenuHandler;
+use Elgg\Friends\Collections\UrlHandler;
+use Elgg\Friends\Collections\WriteAccess;
 
 return [
+	'plugin' => [
+		'name' => 'Friend Collections',
+		'activate_on_install' => true,
+		'dependencies' => [
+			'friends' => [],
+		],
+	],
 	'actions' => [
 		'friends/collections/edit' => [],
 		'friends/collections/delete' => [],
@@ -8,10 +21,10 @@ return [
 	],
 	'routes' => [
 		'add:access_collection:friends' => [
-			'path' => '/friends/collections/add/{username?}',
+			'path' => '/friends/collections/add/{username}',
 			'resource' => 'friends/collections/add',
 			'middleware' => [
-				\Elgg\Router\Middleware\Gatekeeper::class,
+				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
 			],
 		],
 		'edit:access_collection:friends' => [
@@ -35,10 +48,38 @@ return [
 			],
 		],
 		'collection:access_collection:friends:owner' => [
-			'path' => '/friends/collections/owner/{username?}',
+			'path' => '/friends/collections/owner/{username}',
 			'resource' => 'friends/collections/owner',
 			'middleware' => [
-				\Elgg\Router\Middleware\Gatekeeper::class,
+				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
+			],
+		],
+	],
+	'events' => [
+		'access_collection:url' => [
+			'access_collection' => [
+				UrlHandler::class => [],
+			],
+		],
+		'access:collections:write:subtypes' => [
+			'user' => [
+				WriteAccess::class => [],
+			],
+		],
+		'delete' => [
+			'relationship' => [
+				DeleteRelationshipHandler::class => [],
+			],
+		],
+		'register' => [
+			'menu:entity:user:user' => [
+				EntityMenuHandler::class => [],
+			],
+			'menu:friends:collection' => [
+				CollectionMenuHandler::class => [],
+			],
+			'menu:page' => [
+				PageMenuHandler::class => [],
 			],
 		],
 	],

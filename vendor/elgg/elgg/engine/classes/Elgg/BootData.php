@@ -5,6 +5,7 @@ namespace Elgg;
 use Elgg\Database\EntityTable;
 use Elgg\Database\Plugins;
 use Elgg\Database\Select;
+use Elgg\Exceptions\Configuration\InstallationException;
 
 /**
  * Serializable collection of data used to boot Elgg
@@ -27,34 +28,23 @@ class BootData {
 	/**
 	 * @var array
 	 */
-	private $plugin_settings = [];
-
-	/**
-	 * @var array
-	 */
 	private $plugin_metadata = [];
 
 	/**
 	 * Populate the boot data
 	 *
-	 * @param Config      $config    Elgg config
-	 * @param Database    $db        Elgg database
 	 * @param EntityTable $entities  Entities service
 	 * @param Plugins     $plugins   Plugins service
 	 * @param bool        $installed Is the site installed?
 	 *
 	 * @return void
-	 * @throws \InstallationException
-	 * @throws \InvalidParameterException
-	 * @throws \DatabaseException
-	 * @throws \ClassException
+	 * @throws InstallationException
 	 */
-	public function populate(Config $config, Database $db, EntityTable $entities, Plugins $plugins, $installed) {
-
+	public function populate(EntityTable $entities, Plugins $plugins, bool $installed) {
 		// get site entity
 		$this->site = $entities->get(1, 'site');
 		if (!$this->site && $installed) {
-			throw new \InstallationException("Unable to handle this request. This site is not configured or the database is down.");
+			throw new InstallationException('Unable to handle this request. This site is not configured or the database is down.');
 		}
 
 		// get plugins
@@ -65,7 +55,7 @@ class BootData {
 			return;
 		}
 
-		// find GUIDs with not too many private settings
+		// find GUIDs with not too many settings
 		$guids = array_map(function (\ElggPlugin $plugin) {
 			return $plugin->guid;
 		}, $this->active_plugins);
@@ -74,40 +64,6 @@ class BootData {
 
 		foreach ($guids as $guid) {
 			$this->plugin_metadata[$guid] = _elgg_services()->metadataCache->getEntityMetadata($guid);
-		}
-
-		// find plugin GUIDs with not too many settings
-		$limit = $config->bootdata_plugin_settings_limit;
-		if ($limit > 0) {
-			$qb = Select::fromTable('private_settings');
-			$qb->select('entity_guid')
-				->where($qb->compare('entity_guid', 'in', $guids, ELGG_VALUE_GUID))
-				->andWhere($qb->compare('name', 'not like', 'plugin:user_setting:%', ELGG_VALUE_STRING))
-				->groupBy('entity_guid')
-				->having("count(*) > {$limit}");
-
-			$unsuitable_guids = $db->getData($qb, function ($row) {
-				return (int) $row->entity_guid;
-			});
-			
-			$guids = array_values($guids);
-			$guids = array_diff($guids, $unsuitable_guids);
-		}
-
-		if (!empty($guids)) {
-			// get the settings
-			$qb = Select::fromTable('private_settings');
-			$qb->select('entity_guid', 'name', 'value')
-				->where($qb->compare('entity_guid', 'in', $guids, ELGG_VALUE_GUID))
-				->andWhere($qb->compare('name', 'not like', 'plugin:user_setting:%', ELGG_VALUE_STRING));
-
-			$rows = $db->getData($qb);
-
-			// make sure we show all entities as loaded
-			$this->plugin_settings = array_fill_keys($guids, []);
-			foreach ($rows as $row) {
-				$this->plugin_settings[$row->entity_guid][$row->name] = $row->value;
-			}
 		}
 	}
 
@@ -127,15 +83,6 @@ class BootData {
 	 */
 	public function getActivePlugins() {
 		return $this->active_plugins;
-	}
-
-	/**
-	 * Get the plugin settings (may not include all active plugins)
-	 *
-	 * @return array
-	 */
-	public function getPluginSettings() {
-		return $this->plugin_settings;
 	}
 
 	/**

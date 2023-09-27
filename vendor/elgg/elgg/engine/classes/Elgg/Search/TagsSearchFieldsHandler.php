@@ -2,8 +2,6 @@
 
 namespace Elgg\Search;
 
-use Elgg\Hook;
-
 /**
  * @internal
  * @since  3.0
@@ -13,15 +11,13 @@ class TagsSearchFieldsHandler {
 	/**
 	 * Populate default search fields for entities
 	 *
-	 * @elgg_plugin_hook search:fields group|user|object
-	 *
-	 * @param Hook $hook Hook
+	 * @param \Elgg\Event $event 'search:fields', 'group|user|object'
 	 *
 	 * @return array
 	 */
-	public function __invoke(Hook $hook) {
+	public function __invoke(\Elgg\Event $event) {
 
-		$value = (array) $hook->getValue();
+		$value = (array) $event->getValue();
 
 		$defaults = [
 			'metadata' => [],
@@ -29,9 +25,7 @@ class TagsSearchFieldsHandler {
 
 		$value = array_merge($defaults, $value);
 
-		$tags = (array) elgg_get_registered_tag_metadata_names();
-
-		$value['metadata'] = array_merge($value['metadata'], $tags);
+		$value['metadata'] = array_merge($value['metadata'], ['tags']);
 
 		return $value;
 	}

@@ -37,10 +37,7 @@
 $layout_attrs = elgg_extract('layout_attrs', $vars, []);
 unset($vars['layout_attrs']);
 
-$class = elgg_extract_class($vars, [
-	'elgg-layout',
-	'clearfix'
-]);
+$class = elgg_extract_class($vars, ['elgg-layout']);
 unset($vars['class']);
 
 // Prepare layout sidebar
@@ -50,6 +47,7 @@ if ($vars['sidebar'] !== false) {
 	// sidebar navigation items
 	$vars['sidebar'] = elgg_view('page/elements/sidebar', $vars);
 }
+
 $sidebar = elgg_view('page/layouts/elements/sidebar', $vars);
 
 // Prepare second layout sidebar
@@ -59,6 +57,7 @@ if ($vars['sidebar_alt'] !== false) {
 	// sidebar navigation items
 	$vars['sidebar_alt'] = elgg_view('page/elements/sidebar_alt', $vars);
 }
+
 $sidebar_alt = elgg_view('page/layouts/elements/sidebar_alt', $vars);
 
 if ($sidebar && $sidebar_alt) {

@@ -2,8 +2,9 @@
 
 namespace Elgg\Integration;
 
-use ElggTempFile;
+use Elgg\Exceptions\Filesystem\IOException;
 use Elgg\IntegrationTestCase;
+use ElggTempFile;
 
 /**
  * Elgg Test Skeleton
@@ -97,28 +98,30 @@ class ElggTempFileTest extends IntegrationTestCase {
 		
 		$temp_file = $this->temp_file;
 		
-		$user = $this->createUser([
-			'admin' => 'yes',
-			'banned' => 'no',
-		]);
-		_elgg_services()->session->setLoggedInUser($user);
+		$user = $this->createUser();
+		_elgg_services()->session_manager->setLoggedInUser($user);
 		
 		$this->assertFalse($temp_file->canDownload());
 		$this->assertFalse($temp_file->transfer($user->guid));
 		$this->assertEquals('', $temp_file->getDownloadURL());
 		$this->assertEquals('', $temp_file->getInlineURL());
-		
-		_elgg_services()->session->removeLoggedInUser();
-		$user->delete();
 	}
 	
 	public function testSaveThrowsException() {
-		$this->expectException(\IOException::class);
+		$this->expectException(IOException::class);
 		$this->temp_file->save();
 	}
 	
 	public function testLibFunctionToGetTempFile() {
-		
 		$this->assertInstanceOf(ElggTempFile::class, elgg_get_temp_file());
+	}
+	
+	public function testTempFilestore() {
+		$filestore = _elgg_services()->temp_filestore;
+		
+		$this->assertFalse($filestore->setParameters(['unique_sub_dir' => 'foo']));
+		
+		$params = $filestore->getParameters();
+		$this->assertEquals('foo', $params['unique_sub_dir']);
 	}
 }

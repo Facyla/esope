@@ -23,7 +23,7 @@ class Scheduler
     /**
      * Failed jobs.
      *
-     * @var array
+     * @var FailedJob[]
      */
     private $failedJobs = [];
 
@@ -256,7 +256,7 @@ class Scheduler
      */
     private function pushFailedJob(Job $job, Exception $e)
     {
-        $this->failedJobs[] = $job;
+        $this->failedJobs[] = new FailedJob($job, $e);
 
         $compiled = $job->compile();
 
@@ -273,7 +273,7 @@ class Scheduler
     /**
      * Get the failed jobs.
      *
-     * @return array
+     * @return FailedJob[]
      */
     public function getFailedJobs()
     {
@@ -308,5 +308,20 @@ class Scheduler
         $this->jobs = [];
 
         return $this;
+    }
+
+    /**
+     * Start a worker.
+     *
+     * @param  array  $seconds - When the scheduler should run
+     */
+    public function work(array $seconds = [0])
+    {
+        while (true) {
+            if (in_array((int) date('s'), $seconds)) {
+                $this->run();
+                sleep(1);
+            }
+        }
     }
 }

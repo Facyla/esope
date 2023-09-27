@@ -2,14 +2,18 @@
 
 namespace Elgg;
 
-use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Elgg\Database\DbConfig;
-use Psr\Log\LogLevel;
 use Elgg\Cache\QueryCache;
+use Elgg\Database\DbConfig;
+use Elgg\Exceptions\DatabaseException;
+use Elgg\Exceptions\RuntimeException;
+use Elgg\Traits\Debug\Profilable;
+use Elgg\Traits\Loggable;
+use Psr\Log\LogLevel;
 
 /**
  * The Elgg database
@@ -19,13 +23,12 @@ use Elgg\Cache\QueryCache;
  * @property-read string $prefix Elgg table prefix (read only)
  */
 class Database {
+	
 	use Profilable;
 	use Loggable;
 
 	const DELAYED_QUERY = 'q';
-	const DELAYED_TYPE = 't';
 	const DELAYED_HANDLER = 'h';
-	const DELAYED_PARAMS = 'p';
 
 	/**
 	 * @var string $table_prefix Prefix for database tables
@@ -61,18 +64,22 @@ class Database {
 	/**
 	 * @var \Elgg\Database\DbConfig $config Database configuration
 	 */
-	private $config;
+	private $db_config;
+	
+	protected Config $config;
 
 	/**
 	 * Constructor
 	 *
-	 * @param DbConfig   $config      DB configuration
+	 * @param DbConfig   $db_config   DB configuration
 	 * @param QueryCache $query_cache Query Cache
+	 * @param Config     $config      Elgg config
 	 */
-	public function __construct(DbConfig $config, QueryCache $query_cache) {
+	public function __construct(DbConfig $db_config, QueryCache $query_cache, Config $config) {
 		$this->query_cache = $query_cache;
+		$this->config = $config;
 		
-		$this->resetConnections($config);
+		$this->resetConnections($db_config);
 	}
 
 	/**
@@ -83,12 +90,28 @@ class Database {
 	 * @return void
 	 */
 	public function resetConnections(DbConfig $config) {
-		$this->connections = [];
-		$this->config = $config;
+		$this->closeConnections();
+		
+		$this->db_config = $config;
 		$this->table_prefix = $config->getTablePrefix();
 		$this->query_cache->enable();
 		$this->query_cache->clear();
+	}
+	
+	/**
+	 * Close all database connections
+	 *
+	 * Note: this is only meant to be used in the PHPUnit test suites
+	 *
+	 * @return void
+	 * @since 4.1
+	 */
+	public function closeConnections(): void {
+		foreach ($this->connections as $connection) {
+			$connection->close();
+		}
 		
+		$this->connections = [];
 	}
 
 	/**
@@ -97,17 +120,17 @@ class Database {
 	 * @param string $type The type of link we want: "read", "write" or "readwrite".
 	 *
 	 * @return Connection
-	 * @throws \DatabaseException
 	 */
-	public function getConnection($type) {
+	public function getConnection(string $type): Connection {
 		if (isset($this->connections[$type])) {
 			return $this->connections[$type];
 		} else if (isset($this->connections['readwrite'])) {
 			return $this->connections['readwrite'];
-		} else {
-			$this->setupConnections();
-			return $this->getConnection($type);
 		}
+		
+		$this->setupConnections();
+		
+		return $this->getConnection($type);
 	}
 
 	/**
@@ -117,10 +140,9 @@ class Database {
 	 * links up separately; otherwise just create the one database link.
 	 *
 	 * @return void
-	 * @throws \DatabaseException
 	 */
-	public function setupConnections() {
-		if ($this->config->isDatabaseSplit()) {
+	public function setupConnections(): void {
+		if ($this->db_config->isDatabaseSplit()) {
 			$this->connect('read');
 			$this->connect('write');
 		} else {
@@ -136,10 +158,10 @@ class Database {
 	 * @param string $type The type of database connection. "read", "write", or "readwrite".
 	 *
 	 * @return void
-	 * @throws \DatabaseException
+	 * @throws DatabaseException
 	 */
-	public function connect($type = "readwrite") {
-		$conf = $this->config->getConnectionConfig($type);
+	public function connect(string $type = 'readwrite'): void {
+		$conf = $this->db_config->getConnectionConfig($type);
 
 		$params = [
 			'dbname' => $conf['database'],
@@ -153,22 +175,21 @@ class Database {
 
 		try {
 			$this->connections[$type] = DriverManager::getConnection($params);
-			$this->connections[$type]->setFetchMode(\PDO::FETCH_OBJ);
 
 			// https://github.com/Elgg/Elgg/issues/8121
 			$sub_query = "SELECT REPLACE(@@SESSION.sql_mode, 'ONLY_FULL_GROUP_BY', '')";
-			$this->connections[$type]->exec("SET SESSION sql_mode=($sub_query);");
+			$this->connections[$type]->executeStatement("SET SESSION sql_mode=($sub_query);");
 		} catch (\Exception $e) {
 			// http://dev.mysql.com/doc/refman/5.1/en/error-messages-server.html
 			$this->log(LogLevel::ERROR, $e);
 
 			if ($e->getCode() == 1102 || $e->getCode() == 1049) {
-				$msg = "Elgg couldn't select the database '{$conf['database']}'. "
-					. "Please check that the database is created and you have access to it.";
+				$msg = "Elgg couldn't select the database '{$conf['database']}'. Please check that the database is created and you have access to it.";
 			} else {
 				$msg = "Elgg couldn't connect to the database using the given credentials. Check the settings file.";
 			}
-			throw new \DatabaseException($msg);
+			
+			throw new DatabaseException($msg);
 		}
 	}
 
@@ -181,16 +202,14 @@ class Database {
 	 * argument to $callback.  If no callback function is defined, the
 	 * entire result set is returned as an array.
 	 *
-	 * @param QueryBuilder|string $query    The query being passed.
-	 * @param callable            $callback Optionally, the name of a function to call back to on each row
-	 * @param array               $params   Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query    The query being passed.
+	 * @param callable     $callback Optionally, the name of a function to call back to on each row
 	 *
 	 * @return array An array of database result objects or callback function results. If the query
 	 *               returned nothing, an empty array.
-	 * @throws \DatabaseException
 	 */
-	public function getData($query, $callback = null, array $params = []) {
-		return $this->getResults($query, $callback, false, $params);
+	public function getData(QueryBuilder $query, $callback = null) {
+		return $this->getResults($query, $callback, false);
 	}
 
 	/**
@@ -200,15 +219,13 @@ class Database {
 	 * matched.  If a callback function $callback is specified, the row will be passed
 	 * as the only argument to $callback.
 	 *
-	 * @param QueryBuilder|string $query    The query to execute.
-	 * @param callable            $callback A callback function to apply to the row
-	 * @param array               $params   Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query    The query to execute.
+	 * @param callable     $callback A callback function to apply to the row
 	 *
 	 * @return mixed A single database result object or the result of the callback function.
-	 * @throws \DatabaseException
 	 */
-	public function getDataRow($query, $callback = null, array $params = []) {
-		return $this->getResults($query, $callback, true, $params);
+	public function getDataRow(QueryBuilder $query, $callback = null) {
+		return $this->getResults($query, $callback, true);
 	}
 
 	/**
@@ -216,30 +233,21 @@ class Database {
 	 *
 	 * @note Altering the DB invalidates all queries in the query cache.
 	 *
-	 * @param QueryBuilder|string $query  The query to execute.
-	 * @param array               $params Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query The query to execute.
 	 *
-	 * @return int|false The database id of the inserted row if a AUTO_INCREMENT field is
-	 *                   defined, 0 if not, and false on failure.
-	 * @throws \DatabaseException
+	 * @return int The database id of the inserted row if a AUTO_INCREMENT field is defined, 0 if not
 	 */
-	public function insertData($query, array $params = []) {
+	public function insertData(QueryBuilder $query): int {
 
-		if ($query instanceof QueryBuilder) {
-			$params = $query->getParameters();
-			$query = $query->getSQL();
-		}
-
-		if ($this->logger) {
-			$this->logger->info("DB insert query $query (params: " . print_r($params, true) . ")");
-		}
-
-		$connection = $this->getConnection('write');
+		$params = $query->getParameters();
+		$sql = $query->getSQL();
+		
+		$this->getLogger()->info("DB insert query {$sql} (params: " . print_r($params, true) . ')');
 
 		$this->query_cache->clear();
 
-		$this->executeQuery($query, $connection, $params);
-		return (int) $connection->lastInsertId();
+		$this->executeQuery($query);
+		return (int) $query->getConnection()->lastInsertId();
 	}
 
 	/**
@@ -247,34 +255,25 @@ class Database {
 	 *
 	 * @note Altering the DB invalidates all queries in the query cache.
 	 *
-	 * @note WARNING! update_data() has the 2nd and 3rd arguments reversed.
-	 *
-	 * @param QueryBuilder|string $query        The query to run.
-	 * @param bool                $get_num_rows Return the number of rows affected (default: false).
-	 * @param array               $params       Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query        The query to run.
+	 * @param bool         $get_num_rows Return the number of rows affected (default: false).
 	 *
 	 * @return bool|int
-	 * @throws \DatabaseException
 	 */
-	public function updateData($query, $get_num_rows = false, array $params = []) {
-
-		if ($query instanceof QueryBuilder) {
-			$params = $query->getParameters();
-			$query = $query->getSQL();
-		}
-
-		if ($this->logger) {
-			$this->logger->info("DB update query $query (params: " . print_r($params, true) . ")");
-		}
+	public function updateData(QueryBuilder $query, bool $get_num_rows = false) {
+		$params = $query->getParameters();
+		$sql = $query->getSQL();
+	
+		$this->getLogger()->info("DB update query {$sql} (params: " . print_r($params, true) . ')');
 
 		$this->query_cache->clear();
 
-		$stmt = $this->executeQuery($query, $this->getConnection('write'), $params);
-		if ($get_num_rows) {
-			return $stmt->rowCount();
-		} else {
+		$result = $this->executeQuery($query);
+		if (!$get_num_rows) {
 			return true;
 		}
+
+		return ($result instanceof Result) ? $result->rowCount() : $result;
 	}
 
 	/**
@@ -282,29 +281,20 @@ class Database {
 	 *
 	 * @note Altering the DB invalidates all queries in query cache.
 	 *
-	 * @param QueryBuilder|string $query  The SQL query to run
-	 * @param array               $params Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query The SQL query to run
 	 *
 	 * @return int The number of affected rows
-	 * @throws \DatabaseException
 	 */
-	public function deleteData($query, array $params = []) {
+	public function deleteData(QueryBuilder $query): int {
+		$params = $query->getParameters();
+		$sql = $query->getSQL();
 
-		if ($query instanceof QueryBuilder) {
-			$params = $query->getParameters();
-			$query = $query->getSQL();
-		}
-
-		if ($this->logger) {
-			$this->logger->info("DB delete query $query (params: " . print_r($params, true) . ")");
-		}
-
-		$connection = $this->getConnection('write');
+		$this->getLogger()->info("DB delete query {$sql} (params: " . print_r($params, true) . ')');
 
 		$this->query_cache->clear();
 
-		$stmt = $this->executeQuery("$query", $connection, $params);
-		return (int) $stmt->rowCount();
+		$result = $this->executeQuery($query);
+		return ($result instanceof Result) ? $result->rowCount() : $result;
 	}
 
 	/**
@@ -318,44 +308,42 @@ class Database {
 	 * @return string A string that is unique for each callable passed in
 	 * @since 1.9.4
 	 */
-	protected function fingerprintCallback($callback) {
+	protected function fingerprintCallback($callback): string {
 		if (is_string($callback)) {
 			return $callback;
 		}
+
 		if (is_object($callback)) {
-			return spl_object_hash($callback) . "::__invoke";
+			return spl_object_hash($callback) . '::__invoke';
 		}
+
 		if (is_array($callback)) {
 			if (is_string($callback[0])) {
 				return "{$callback[0]}::{$callback[1]}";
 			}
+
 			return spl_object_hash($callback[0]) . "::{$callback[1]}";
 		}
+
 		// this should not happen
-		return "";
+		return '';
 	}
 
 	/**
 	 * Handles queries that return results, running the results through a
 	 * an optional callback function. This is for R queries (from CRUD).
 	 *
-	 * @param QueryBuilder|string $query    The select query to execute
-	 * @param callable            $callback An optional callback function to run on each row
-	 * @param bool                $single   Return only a single result?
-	 * @param array               $params   Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query    The select query to execute
+	 * @param callable     $callback An optional callback function to run on each row
+	 * @param bool         $single   Return only a single result?
 	 *
-	 * @return array An array of database result objects or callback function results. If the query
+	 * @return array|\stdClass An array of database result objects or callback function results. If the query
 	 *               returned nothing, an empty array.
-	 * @throws \DatabaseException
+	 * @throws RuntimeException
 	 */
-	protected function getResults($query, $callback = null, $single = false, array $params = []) {
-
-		if ($query instanceof QueryBuilder) {
-			$params = $query->getParameters();
-			$sql = $query->getSQL();
-		} else {
-			$sql = $query;
-		}
+	protected function getResults(QueryBuilder $query, $callback = null, bool $single = false) {
+		$params = $query->getParameters();
+		$sql = $query->getSQL();
 		
 		// Since we want to cache results of running the callback, we need to
 		// namespace the query with the callback and single result request.
@@ -363,9 +351,9 @@ class Database {
 		$extras = (int) $single . '|';
 		if ($callback) {
 			if (!is_callable($callback)) {
-				throw new \RuntimeException('$callback must be a callable function. Given '
-											. _elgg_services()->handlers->describeCallable($callback));
+				throw new RuntimeException('$callback must be a callable function. Given ' . _elgg_services()->handlers->describeCallable($callback));
 			}
+			
 			$extras .= $this->fingerprintCallback($callback);
 		}
 		
@@ -376,28 +364,23 @@ class Database {
 			return $cached_results;
 		}
 		
-		if ($this->logger) {
-			$this->logger->info("DB select query $sql (params: " . print_r($params, true) . ")");
-		}
+		$this->getLogger()->info("DB select query {$sql} (params: " . print_r($params, true) . ')');
 		
 		$return = [];
 
-		if ($query instanceof QueryBuilder) {
-			$stmt = $this->executeQuery($query, $query->getConnection());
-		} else {
-			$stmt = $this->executeQuery($query, $this->getConnection('read'), $params);
-		}
+		$stmt = $this->executeQuery($query);
 		
-		while ($row = $stmt->fetch()) {
+		while ($row = $stmt->fetchAssociative()) {
+			$row_obj = (object) $row;
 			if ($callback) {
-				$row = call_user_func($callback, $row);
+				$row_obj = call_user_func($callback, $row_obj);
 			}
 
 			if ($single) {
-				$return = $row;
+				$return = $row_obj;
 				break;
 			} else {
-				$return[] = $row;
+				$return[] = $row_obj;
 			}
 		}
 
@@ -413,77 +396,52 @@ class Database {
 	 * $query is executed via {@link Connection::query}. If there is an SQL error,
 	 * a {@link DatabaseException} is thrown.
 	 *
-	 * @param QueryBuilder|string $query      The query
-	 * @param Connection          $connection The DB connection
-	 * @param array               $params     Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query The query
 	 *
-	 * @return Statement|int The result of the query
-	 * @throws \DatabaseException
+	 * @return Result|int The result of the query
+	 * @throws DatabaseException
 	 */
-	protected function executeQuery($query, Connection $connection, array $params = []) {
-		if ($query == null) {
-			throw new \DatabaseException("Query cannot be null");
-		}
-
-		$sql = $query;
-		if ($query instanceof QueryBuilder) {
-			$params = $query->getParameters();
-			$sql = $query->getSQL();
-		}
-				
+	protected function executeQuery(QueryBuilder $query) {
+		
 		try {
-			$value = $this->trackQuery($sql, $params, function() use ($query, $params, $connection, $sql) {
-				if ($query instanceof \Elgg\Database\QueryBuilder) {
-					return $query->execute(false);
-				} elseif ($query instanceof QueryBuilder) {
-					return $query->execute();
-				} elseif (!empty($params)) {
-					return $connection->executeQuery($sql, $params);
+			$result = $this->trackQuery($query, function() use ($query) {
+				if ($query instanceof \Elgg\Database\Select) {
+					return $query->executeQuery();
 				} else {
-					// faster
-					return $connection->query($sql);
+					return $query->executeStatement();
 				}
 			});
 		} catch (\Exception $e) {
-			$ex = new \DatabaseException($e->getMessage(), null, $e);
-			$ex->setParameters($params);
-			$ex->setQuery($sql);
+			$ex = new DatabaseException($e->getMessage(), 0, $e);
+			$ex->setParameters($query->getParameters());
+			$ex->setQuery($query->getSQL());
 
 			throw $ex;
 		}
 
-		return $value;
+		return $result;
 	}
 	
 	/**
 	 * Tracks the query count and timers for a given query
 	 *
-	 * @param QueryBuilder|string $query    The query
-	 * @param array               $params   Optional query params
-	 * @param callable            $callback Callback to execyte during query execution
+	 * @param QueryBuilder $query    The query
+	 * @param callable     $callback Callback to execyte during query execution
 	 *
 	 * @return mixed
 	 */
-	public function trackQuery($query, array $params, callable $callback) {
-	
-		$sql = $query;
-		if ($query instanceof QueryBuilder) {
-			$params = $query->getParameters();
-			$sql = $query->getSQL();
-		}
+	public function trackQuery(QueryBuilder $query, callable $callback) {
+
+		$params = $query->getParameters();
+		$sql = $query->getSQL();
 
 		$this->query_count++;
 
-		$timer_key = false;
-		if ($this->timer) {
-			$timer_key = preg_replace('~\\s+~', ' ', trim($sql . '|' . serialize($params)));
-			$this->timer->begin(['SQL', $timer_key]);
-		}
+		$timer_key = preg_replace('~\\s+~', ' ', trim($sql . '|' . serialize($params)));
+		$this->beginTimer(['SQL', $timer_key]);
 		
 		$stop_timer = function() use ($timer_key) {
-			if ($timer_key) {
-				$this->timer->end(['SQL', $timer_key]);
-			}
+			$this->endTimer(['SQL', $timer_key]);
 		};
 		
 		try {
@@ -500,92 +458,39 @@ class Database {
 	}
 
 	/**
-	 * Runs a full database script from disk.
-	 *
-	 * The file specified should be a standard SQL file as created by
-	 * mysqldump or similar.  Statements must be terminated with ;
-	 * and a newline character (\n or \r\n).
-	 *
-	 * The special string 'prefix_' is replaced with the database prefix
-	 * as defined in {@link $this->tablePrefix}.
-	 *
-	 * @warning Only single line comments are supported. A comment
-	 * must start with '-- ' or '# ', where the comment sign is at the
-	 * very beginning of each line.
-	 *
-	 * @warning Errors do not halt execution of the script.  If a line
-	 * generates an error, the error message is saved and the
-	 * next line is executed.  After the file is run, any errors
-	 * are displayed as a {@link DatabaseException}
-	 *
-	 * @param string $scriptlocation The full path to the script
-	 *
-	 * @return void
-	 * @throws \DatabaseException
-	 */
-	public function runSqlScript($scriptlocation) {
-		$script = file_get_contents($scriptlocation);
-		if ($script) {
-			$errors = [];
-
-			// Remove MySQL '-- ' and '# ' style comments
-			$script = preg_replace('/^(?:--|#) .*$/m', '', $script);
-
-			// Statements must end with ; and a newline
-			$sql_statements = preg_split('/;[\n\r]+/', "$script\n");
-
-			foreach ($sql_statements as $statement) {
-				$statement = trim($statement);
-				$statement = str_replace("prefix_", $this->table_prefix, $statement);
-				if (!empty($statement)) {
-					try {
-						$this->updateData($statement);
-					} catch (\DatabaseException $e) {
-						$errors[] = $e->getMessage();
-					}
-				}
-			}
-			if (!empty($errors)) {
-				$errortxt = "";
-				foreach ($errors as $error) {
-					$errortxt .= " {$error};";
-				}
-
-				$msg = "There were a number of issues: " . $errortxt;
-				throw new \DatabaseException($msg);
-			}
-		} else {
-			$msg = "Elgg couldn't find the requested database script at " . $scriptlocation . ".";
-			throw new \DatabaseException($msg);
-		}
-	}
-
-	/**
 	 * Queue a query for execution upon shutdown.
 	 *
 	 * You can specify a callback if you care about the result. This function will always
 	 * be passed a \Doctrine\DBAL\Driver\Statement.
 	 *
-	 * @param string   $query    The query to execute
-	 * @param string   $type     The query type ('read' or 'write')
-	 * @param callable $callback A callback function to pass the results array to
-	 * @param array    $params   Query params. E.g. [1, 'steve'] or [':id' => 1, ':name' => 'steve']
+	 * @param QueryBuilder $query    The query to execute
+	 * @param callable     $callback A callback function to pass the results array to
 	 *
-	 * @return boolean Whether registering was successful
+	 * @return void
 	 */
-	public function registerDelayedQuery($query, $type, $callback = null, array $params = []) {
-		if ($type != 'read' && $type != 'write') {
-			return false;
+	public function registerDelayedQuery(QueryBuilder $query, $callback = null): void {
+		if (Application::isCli() && !$this->config->testing_mode) {
+			// during CLI execute delayed queries immediately (unless in testing mode, during PHPUnit)
+			// this should prevent OOM during long-running jobs
+			// @see Database::executeDelayedQueries()
+			try {
+				$stmt = $this->executeQuery($query);
+				
+				if (is_callable($callback)) {
+					call_user_func($callback, $stmt);
+				}
+			} catch (\Throwable $t) {
+				// Suppress all exceptions to not allow the application to crash
+				$this->getLogger()->error($t);
+			}
+			
+			return;
 		}
-
+		
 		$this->delayed_queries[] = [
 			self::DELAYED_QUERY => $query,
-			self::DELAYED_TYPE => $type,
 			self::DELAYED_HANDLER => $callback,
-			self::DELAYED_PARAMS => $params,
 		];
-
-		return true;
 	}
 
 	/**
@@ -593,27 +498,22 @@ class Database {
 	 * called by the system automatically on shutdown.
 	 *
 	 * @return void
-	 * @todo make protected once this class is part of public API
 	 */
-	public function executeDelayedQueries() {
+	public function executeDelayedQueries(): void {
 
 		foreach ($this->delayed_queries as $set) {
 			$query = $set[self::DELAYED_QUERY];
-			$type = $set[self::DELAYED_TYPE];
 			$handler = $set[self::DELAYED_HANDLER];
-			$params = $set[self::DELAYED_PARAMS];
 
 			try {
-				$stmt = $this->executeQuery($query, $this->getConnection($type), $params);
+				$stmt = $this->executeQuery($query);
 
 				if (is_callable($handler)) {
 					call_user_func($handler, $stmt);
 				}
-			} catch (\Exception $e) {
-				if ($this->logger) {
-					// Suppress all exceptions since page already sent to requestor
-					$this->logger->error($e);
-				}
+			} catch (\Throwable $t) {
+				// Suppress all exceptions since page already sent to requestor
+				$this->getLogger()->error($t);
 			}
 		}
 
@@ -627,7 +527,7 @@ class Database {
 	 *
 	 * @return void
 	 */
-	public function enableQueryCache() {
+	public function enableQueryCache(): void {
 		$this->query_cache->enable();
 	}
 
@@ -639,7 +539,7 @@ class Database {
 	 *
 	 * @return void
 	 */
-	public function disableQueryCache() {
+	public function disableQueryCache(): void {
 		$this->query_cache->disable();
 	}
 
@@ -648,47 +548,8 @@ class Database {
 	 *
 	 * @return int
 	 */
-	public function getQueryCount() {
+	public function getQueryCount(): int {
 		return $this->query_count;
-	}
-
-	/**
-	 * Sanitizes an integer value for use in a query
-	 *
-	 * @param int  $value  Value to sanitize
-	 * @param bool $signed Whether negative values are allowed (default: true)
-	 * @return int
-	 * @deprecated Use query parameters where possible
-	 */
-	public function sanitizeInt($value, $signed = true) {
-		$value = (int) $value;
-
-		if ($signed === false) {
-			if ($value < 0) {
-				$value = 0;
-			}
-		}
-
-		return $value;
-	}
-
-	/**
-	 * Sanitizes a string for use in a query
-	 *
-	 * @param string $value Value to escape
-	 * @return string
-	 * @throws \DatabaseException
-	 * @deprecated Use query parameters where possible
-	 */
-	public function sanitizeString($value) {
-		if (is_array($value)) {
-			throw new \DatabaseException(__METHOD__ . '() and serialize_string() cannot accept arrays.');
-		}
-		$quoted = $this->getConnection('read')->quote($value);
-		if ($quoted[0] !== "'" || substr($quoted, -1) !== "'") {
-			throw new \DatabaseException("PDO::quote did not return surrounding single quotes.");
-		}
-		return substr($quoted, 1, -1);
 	}
 
 	/**
@@ -698,27 +559,55 @@ class Database {
 	 *
 	 * @return string Empty if version cannot be determined
 	 */
-	public function getServerVersion($type) {
+	public function getServerVersion(string $type = DbConfig::READ_WRITE): string {
 		$driver = $this->getConnection($type)->getWrappedConnection();
 		if ($driver instanceof ServerInfoAwareConnection) {
-			return $driver->getServerVersion();
+			$version = $driver->getServerVersion();
+			
+			if ($this->isMariaDB($type)) {
+				if (str_starts_with($version, '5.5.5-')) {
+					$version = substr($version, 6);
+				}
+			}
+			
+			return $version;
 		}
 
-		return null;
+		return '';
 	}
 
+	/**
+	 * Is the database MariaDB
+	 *
+	 * @param string $type Connection type (Config constants, e.g. Config::READ_WRITE)
+	 *
+	 * @return bool if MariaDB is detected
+	 */
+	public function isMariaDB(string $type = DbConfig::READ_WRITE): bool {
+		$driver = $this->getConnection($type)->getWrappedConnection();
+		if ($driver instanceof ServerInfoAwareConnection) {
+			$version = $driver->getServerVersion();
+			
+			return stristr($version, 'mariadb') !== false;
+		}
+
+		return false;
+	}
+	
 	/**
 	 * Handle magic property reads
 	 *
 	 * @param string $name Property name
+	 *
 	 * @return mixed
+	 * @throws RuntimeException
 	 */
 	public function __get($name) {
 		if ($name === 'prefix') {
 			return $this->table_prefix;
 		}
 
-		throw new \RuntimeException("Cannot read property '$name'");
+		throw new RuntimeException("Cannot read property '{$name}'");
 	}
 
 	/**
@@ -726,9 +615,11 @@ class Database {
 	 *
 	 * @param string $name  Property name
 	 * @param mixed  $value Value
+	 *
 	 * @return void
+	 * @throws RuntimeException
 	 */
-	public function __set($name, $value) {
-		throw new \RuntimeException("Cannot write property '$name'");
+	public function __set($name, $value): void {
+		throw new RuntimeException("Cannot write property '{$name}'");
 	}
 }

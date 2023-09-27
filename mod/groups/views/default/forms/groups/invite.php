@@ -8,7 +8,11 @@ if (!$group instanceof \ElggGroup) {
 	return;
 }
 
-$friends_count = elgg_get_logged_in_user_entity()->getFriends(['count' => true]);
+$friends_count = elgg_count_entities([
+	'type' => 'user',
+	'relationship' => 'friend',
+	'relationship_guid' => elgg_get_logged_in_user_guid(),
+]);
 if (empty($friends_count)) {
 	echo elgg_echo('groups:nofriendsatall');
 	return;
@@ -46,7 +50,7 @@ echo elgg_view_field([
 
 $footer = elgg_view_field([
 	'#type' => 'submit',
-	'value' => elgg_echo('invite'),
+	'text' => elgg_echo('invite'),
 ]);
 
 elgg_set_form_footer($footer);

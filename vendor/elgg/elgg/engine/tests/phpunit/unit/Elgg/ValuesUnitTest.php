@@ -10,14 +10,6 @@ use Elgg\I18n\DateTime as ElggDateTime;
  */
 class ValuesUnitTest extends UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	/**
 	 * @dataProvider timeProvider
 	 */
@@ -27,7 +19,6 @@ class ValuesUnitTest extends UnitTestCase {
 
 		$this->assertInstanceOf(ElggDateTime::class, $dt);
 		$this->assertEquals($dt->getTimestamp(), Values::normalizeTimestamp($time));
-
 	}
 
 	public function timeProvider() {
@@ -36,6 +27,9 @@ class ValuesUnitTest extends UnitTestCase {
 			[1515496794],
 			[new PHPDateTime('+2 days')],
 			[new ElggDateTime('-2 days')],
+			[null],
+			[''],
+			[0],
 		];
 	}
 	
@@ -89,7 +83,7 @@ class ValuesUnitTest extends UnitTestCase {
 	 * @dataProvider shortNumberProvider
 	 */
 	public function testCanShortenNumber($number, $precision, $expected) {
-		$this->assertEquals(Values::shortFormatOutput($number, $precision), $expected);
+		$this->assertEquals($expected, Values::shortFormatOutput($number, $precision));
 	}
 	
 	public function shortNumberProvider() {
@@ -98,12 +92,17 @@ class ValuesUnitTest extends UnitTestCase {
 			[1, 1, 1],
 			[1000, 0, '1K'],
 			[1000, 1, '1K'],
+			[1000, 3, '1K'],
 			[1201, 0, '1K'],
 			[1201, 2, '1.2K'],
+			[1201, 3, '1.201K'],
 			[1230, 2, '1.23K'],
 			[1100000, 2, '1.1M'],
 			[1100000000, 2, '1.1B'],
-			[1100000000000, 2, '1.1T']
+			[1100000000000, 2, '1.1T'],
+			[1123039000000000, 2, '1,123.04T'],
+			[1120000000000000, 0, '1,120T'],
+			[1120000000000000, 2, '1,120T']
 		];
 	}
 }

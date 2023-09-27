@@ -10,6 +10,8 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
+	'add:group:group' => "Skapa en ny grupp",
+	
 	'groups' => "Grupper",
 	'groups:owned' => "Grupper jag äger",
 	'groups:owned:user' => 'Grupper %s äger',
@@ -18,7 +20,9 @@ return array(
 	'groups:all' => "Alla grupper",
 	'groups:add' => "Skapa en ny grupp",
 	'groups:edit' => "Redigera grupp",
-	'groups:delete' => 'Ta bort grupp',
+	'groups:edit:profile' => "Profil",
+	'groups:edit:tools' => "Verktyg",
+	'groups:edit:settings' => "Inställningar",
 	'groups:membershiprequests' => 'Hantera begäranden att gå med',
 	'groups:membershiprequests:pending' => 'Hantera begäranden att gå med (%s)',
 	'groups:invitedmembers' => "Hantera inbjudningar",
@@ -28,12 +32,10 @@ return array(
 	'relationship:invited' => '%2$s blev inbjuden att gå med i %1$s',
 	'relationship:membership_request' => '%s begärde att gå med i %s',
 
-	'groups:icon' => 'Gruppikon (lämna tomt för att inte gör någon ändring)',
 	'groups:name' => 'Gruppnamn',
 	'groups:description' => 'Beskrivning',
 	'groups:briefdescription' => 'Kort beskrivning',
 	'groups:interests' => 'Taggar',
-	'groups:website' => 'Webbplats',
 	'groups:members' => 'Gruppmedlemmar',
 
 	'groups:members_count' => '%s medlemmar',
@@ -45,21 +47,17 @@ return array(
 	'groups:content_access_mode:warning' => "Varning: Ändring av dessa inställningar kommer inte ändra åtkomstbehörigheten för existerande innehåll i grupp.",
 	'groups:content_access_mode:unrestricted' => "Obegränsat - Åtkomst beror på inställningar på innehållsnivå.",
 	'groups:content_access_mode:membersonly' => "Endast medlemmar - Icke medlemmar kan aldrig komma åt gruppens innehåll",
-	'groups:access' => "Åtkomstbehörigheter",
 	'groups:owner' => "Ägare",
 	'groups:owner:warning' => "Varning: Om du ändrar det här värdet, kommer du inte längre vara ägaren av den här gruppen.",
 	'groups:widget:num_display' => 'Antalet grupper att visa',
 	'widgets:a_users_groups:name' => 'Medlemskap i grupp',
 	'widgets:a_users_groups:description' => 'Visa grupperna du är medlem i på din profil',
 
-	'groups:noaccess' => 'Inget åtkomst till grupp',
 	'groups:cantcreate' => 'Du kan inte skapa en grupp- Bara admins kan göra det. ',
 	'groups:cantedit' => 'Du kan inte redigera den här gruppen',
 	'groups:saved' => 'Gruppen sparad',
 	'groups:save_error' => 'Grupp kunde inte sparas',
 	'groups:featured' => 'Utvalda grupper',
-	'groups:makeunfeatured' => 'Ta bort utvald',
-	'groups:makefeatured' => 'Gör till utvald',
 	'groups:featuredon' => '%s är nu en utvald grupp.',
 	'groups:unfeatured' => '%s har tagits bort från de utvalda grupperna.',
 	'groups:featured_error' => 'Ogiltig grupp.',
@@ -76,7 +74,6 @@ return array(
 
 	'groups:nofriendsatall' => 'Du har inga vänner att bjuda in!',
 	'groups:group' => "Grupp",
-	'groups:search:tags' => "tagg",
 	'groups:search:title' => "Sök efter grupper med '%s'",
 	'groups:search:none' => "Inga matchande grupper hittades",
 	'groups:search_in_group' => "Sök i den här gruppen",
@@ -91,7 +88,6 @@ return array(
 
 	'groups:open' => "öppen grupp",
 	'groups:closed' => "stängd grupp",
-	'groups:member' => "medlemmar",
 	'groups:search' => "Sök efter grupper",
 
 	'groups:more' => 'Fler grupper',
@@ -139,31 +135,10 @@ return array(
 	'groups:invite:subject' => "%s du har blivit inbjuden att gå med i %s!",
 	'groups:joinrequest:remove:check' => 'Är du säker på att du vill ta bort den här begäran om att gå med?',
 	'groups:invite:remove:check' => 'Är du säker på att du vill ta bort den här inbjudan?',
-	'groups:invite:body' => "Hej %s,
-
-%s bjöd in dig att gå med i gruppen '%s'.
-
-Tryck nedan för att visa dina inbjudningar:
-%s",
 
 	'groups:welcome:subject' => "Välkommen till gruppen %s!",
-	'groups:welcome:body' => "Hej %s!
-
-Du är nu medlem i gruppen '%s'.
-
-Tryck nedan för att börja skriva inlägg!
-%s",
 
 	'groups:request:subject' => "%s har begärt att gå med i %s",
-	'groups:request:body' => "Hej %s,
-
-%s har begärt att gå med i gruppen '%s'.
-
-Tryck nedan för att visa deras profil:
-%s
-
-eller tryck nedan för att visa gruppen förfrågningar om att gå med:
-%s",
 
 	'river:group:create' => '%s skapade gruppen %s',
 	'river:group:join' => '%s gick med i gruppen %s',
@@ -174,24 +149,11 @@ eller tryck nedan för att visa gruppen förfrågningar om att gå med:
 	/**
 	 * Action messages
 	 */
-	'groups:deleted' => 'Grupp och gruppinnehåll har tagits bort',
-	'groups:notdeleted' => 'Grupp kunde inte tas bort',
-	'groups:deletewarning' => "Är du säker på att du vill ta bort den här gruppen? Det går inte ångra!",
 
 	'groups:invitekilled' => 'Inbjudan har tagits bort.',
 	'groups:joinrequestkilled' => 'Begäran om att gå med har tagits bort.',
 	'groups:error:addedtogroup' => "Kunde inte lägga till %s i gruppen",
 	'groups:add:alreadymember' => "%s är redan medlem i den här gruppen",
-
-	/**
-	 * ecml
-	 */
-	'groups:ecml:groupprofile' => 'Gruppens profiler',
-
-	/**
-	 * Upgrades
-	 */
-	'groups:upgrade:2016101900:title' => 'Överför gruppikoner till en ny plats',
-	'groups:upgrade:2016101900:description' => 'Ny enhetsikon API lagrar ikoner på en förutbestämd plats i fillagringen
-relativt till mappen för enhetens fillagring. Den här uppgraderingen kommer att anpassa grupp-tillägget med kraven för det nya API:et.',
+	
+	// Notification settings
 );

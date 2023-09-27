@@ -5,8 +5,7 @@
  * @module elgg/popup
  * @since 2.2
  */
-define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
-
+define('elgg/popup', ['jquery', 'elgg', 'elgg/hooks', 'jquery-ui/position', 'jquery-ui/unique-id'], function ($, elgg, hooks) {
 	var popup = {
 		/**
 		 * Initializes a popup module and binds an event to hide visible popup
@@ -21,14 +20,16 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 				if (e.isDefaultPrevented()) {
 					return;
 				}
-				var $eventTargets = $(e.target).parents().andSelf();
+				
+				var $eventTargets = $(e.target).parents().addBack();
 				if ($eventTargets.is('.elgg-state-popped')) {
 					return;
 				}
+				
 				popup.close();
 			});
 			// Bind events only once
-			popup.init = elgg.nullFunction;
+			popup.init = function() {};
 		},
 		/**
 		 * Shortcut to bind a click event on a set of $triggers.
@@ -40,6 +41,7 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 		 * but can be called by plugins to bind other triggers.
 		 *
 		 * @param {jQuery} $triggers A set of triggers to bind
+		 *
 		 * @return void
 		 */
 		bind: function ($triggers) {
@@ -48,6 +50,7 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 						if (e.isDefaultPrevented()) {
 							return;
 						}
+						
 						e.preventDefault();
 						e.stopPropagation();
 						popup.open($(this));
@@ -69,6 +72,7 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 		 * @param {jQuery} $trigger Trigger element
 		 * @param {jQuery} $target  Target popup module
 		 * @param {object} position Positioning data of the $target module
+		 *
 		 * @return void
 		 */
 		open: function ($trigger, $target, position) {
@@ -105,7 +109,7 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 
 			$.extend(position, $trigger.data('position'));
 
-			position = elgg.trigger_hook('getOptions', 'ui.popup', params, position);
+			position = hooks.trigger('getOptions', 'ui.popup', params, position);
 
 			if (!position) {
 				return;
@@ -127,11 +131,6 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 
 			if (!$trigger.is('.elgg-popup-inline')) {
 				$target.appendTo('body');
-
-				// when a popup is absolutely positioned, close the popup on scroll
-				$(document).one('scroll', function() {
-					popup.close();
-				});
 			}
 			
 			// need to do a double position because of positioning issues during fadeIn() in Opera
@@ -148,15 +147,18 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 		 * Hides a set of $targets. If not defined, closes all visible popup modules.
 		 *
 		 * @param {jQuery} $targets Popup modules to hide
+		 *
 		 * @return void
 		 */
 		close: function ($targets) {
 			if (typeof $targets === 'undefined') {
 				$targets = $('.elgg-state-popped');
 			}
+			
 			if (!$targets.length) {
 				return;
 			}
+			
 			$targets.each(function () {
 				var $target = $(this);
 				if (!$target.is(':visible')) {
@@ -168,13 +170,14 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 					$trigger.removeClass('elgg-state-active');
 				}
 
-				// @todo: use css transitions instead of $.fadeOut()
 				$target.fadeOut().removeClass('elgg-state-active elgg-state-popped');
 
 				$target.trigger('close');
 			});
 		}
 	};
-
+	
+	popup.bind($('.elgg-popup'));
+	
 	return popup;
 });

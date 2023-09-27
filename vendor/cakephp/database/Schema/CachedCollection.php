@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,55 +16,81 @@
  */
 namespace Cake\Database\Schema;
 
-use Cake\Cache\Cache;
-use Cake\Datasource\ConnectionInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
- * Extends the schema collection class to provide caching
+ * Decorates a schema collection and adds caching
  */
-class CachedCollection extends Collection
+class CachedCollection implements CollectionInterface
 {
     /**
-     * The name of the cache config key to use for caching table metadata,
-     * of false if disabled.
+     * Cacher instance.
      *
-     * @var string|bool
+     * @var \Psr\SimpleCache\CacheInterface
      */
-    protected $_cache = false;
+    protected $cacher;
+
+    /**
+     * The decorated schema collection
+     *
+     * @var \Cake\Database\Schema\CollectionInterface
+     */
+    protected $collection;
+
+    /**
+     * The cache key prefix
+     *
+     * @var string
+     */
+    protected $prefix;
 
     /**
      * Constructor.
      *
-     * @param \Cake\Datasource\ConnectionInterface $connection The connection instance.
-     * @param string|bool $cacheKey The cache key or boolean false to disable caching.
+     * @param \Cake\Database\Schema\CollectionInterface $collection The collection to wrap.
+     * @param string $prefix The cache key prefix to use. Typically the connection name.
+     * @param \Psr\SimpleCache\CacheInterface $cacher Cacher instance.
      */
-    public function __construct(ConnectionInterface $connection, $cacheKey = true)
+    public function __construct(CollectionInterface $collection, string $prefix, CacheInterface $cacher)
     {
-        parent::__construct($connection);
-        $this->setCacheMetadata($cacheKey);
+        $this->collection = $collection;
+        $this->prefix = $prefix;
+        $this->cacher = $cacher;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function describe($name, array $options = [])
+    public function listTablesWithoutViews(): array
+    {
+        return $this->collection->listTablesWithoutViews();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function listTables(): array
+    {
+        return $this->collection->listTables();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function describe(string $name, array $options = []): TableSchemaInterface
     {
         $options += ['forceRefresh' => false];
-        $cacheConfig = $this->getCacheMetadata();
         $cacheKey = $this->cacheKey($name);
 
-        if (!empty($cacheConfig) && !$options['forceRefresh']) {
-            $cached = Cache::read($cacheKey, $cacheConfig);
-            if ($cached !== false) {
+        if (!$options['forceRefresh']) {
+            $cached = $this->cacher->get($cacheKey);
+            if ($cached !== null) {
                 return $cached;
             }
         }
 
-        $table = parent::describe($name, $options);
-
-        if (!empty($cacheConfig)) {
-            Cache::write($cacheKey, $table, $cacheConfig);
-        }
+        $table = $this->collection->describe($name, $options);
+        $this->cacher->set($cacheKey, $table);
 
         return $table;
     }
@@ -73,64 +101,31 @@ class CachedCollection extends Collection
      * @param string $name The name to get a cache key for.
      * @return string The cache key.
      */
-    public function cacheKey($name)
+    public function cacheKey(string $name): string
     {
-        $cachePrefix = $this->_connection->configName();
-        $config = $this->_connection->config();
-        if (isset($config['cacheKeyPrefix'])) {
-            $cachePrefix = $config['cacheKeyPrefix'];
-        }
-
-        return $cachePrefix . '_' . $name;
+        return $this->prefix . '_' . $name;
     }
 
     /**
-     * Sets the cache config name to use for caching table metadata, or
-     * disables it if false is passed.
+     * Set a cacher.
      *
-     * @param bool $enable Whether or not to enable caching
+     * @param \Psr\SimpleCache\CacheInterface $cacher Cacher object
      * @return $this
      */
-    public function setCacheMetadata($enable)
+    public function setCacher(CacheInterface $cacher)
     {
-        if ($enable === true) {
-            $enable = '_cake_model_';
-        }
-
-        $this->_cache = $enable;
+        $this->cacher = $cacher;
 
         return $this;
     }
 
     /**
-     * Gets the cache config name to use for caching table metadata, false means disabled.
+     * Get a cacher.
      *
-     * @return string|bool
+     * @return \Psr\SimpleCache\CacheInterface $cacher Cacher object
      */
-    public function getCacheMetadata()
+    public function getCacher(): CacheInterface
     {
-        return $this->_cache;
-    }
-
-    /**
-     * Sets the cache config name to use for caching table metadata, or
-     * disables it if false is passed.
-     * If called with no arguments it returns the current configuration name.
-     *
-     * @deprecated 3.4.0 Use setCacheMetadata()/getCacheMetadata()
-     * @param bool|null $enable Whether or not to enable caching
-     * @return string|bool
-     */
-    public function cacheMetadata($enable = null)
-    {
-        deprecationWarning(
-            'CachedCollection::cacheMetadata() is deprecated. ' .
-            'Use CachedCollection::setCacheMetadata()/getCacheMetadata() instead.'
-        );
-        if ($enable !== null) {
-            $this->setCacheMetadata($enable);
-        }
-
-        return $this->getCacheMetadata();
+        return $this->cacher;
     }
 }

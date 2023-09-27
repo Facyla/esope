@@ -15,29 +15,10 @@ class ElggUpgradeUnitTest extends \Elgg\UnitTestCase {
 		$this->obj = $this->getMockBuilder('\ElggUpgrade')
 			->setMethods(null)
 			->getMock();
-
-		$this->obj->_callable_egefps = array($this, 'mock_egefps');
-
-	}
-
-	public function down() {
-
-	}
-
-	public function mock_egefps($options) {
-		return array();
 	}
 
 	public function mock_egefps_with_entities() {
 		return array(new \stdClass());
-	}
-
-	public function mock_egefps_for_path($options) {
-		if ($options['private_setting_value'] === 'test') {
-			return array(new \stdClass());
-		} else {
-			return array();
-		}
 	}
 
 	public function testDefaultAttrs() {
@@ -93,13 +74,11 @@ class ElggUpgradeUnitTest extends \Elgg\UnitTestCase {
 		$this->obj->setClass('\InvalidClass');
 		$this->assertFalse($this->obj->getBatch());
 
-		$this->obj->setClass(\Elgg\Upgrade\InvalidBatch::class);
+		$this->obj->setClass(\Elgg\Helpers\Upgrade\InvalidBatch::class);
 		$this->assertFalse($this->obj->getBatch());
 
-		$this->obj->setClass(\Elgg\Upgrade\TestBatch::class);
-		$this->assertInstanceOf(\Elgg\Upgrade\TestBatch::class, $this->obj->getBatch());
-
-		_elgg_services()->logger->enable();
+		$this->obj->setClass(\Elgg\Helpers\Upgrade\TestBatch::class);
+		$this->assertInstanceOf(\Elgg\Helpers\Upgrade\TestBatch::class, $this->obj->getBatch());
 	}
 	
 	public function testSetCompleted() {
@@ -120,16 +99,16 @@ class ElggUpgradeUnitTest extends \Elgg\UnitTestCase {
 	public function testSetStarttime() {
 		$upgrade = new ElggUpgrade();
 		
-		$started = $upgrade->setStartTime();
+		$upgrade->setStartTime();
 		
+		$started = $upgrade->getStartTime();
 		$this->assertNotEmpty($started);
-		$this->assertEquals($started, $upgrade->getStartTime());
 		$this->assertEquals($started, $upgrade->start_time);
 		
 		// try to override the start time, this is not allowed
-		$override = $upgrade->setStartTime($started + 3600);
+		$upgrade->setStartTime($started + 3600);
+		$override = $upgrade->getStartTime();
 		$this->assertEquals($started, $override);
-		$this->assertEquals($started, $upgrade->getStartTime());
 		$this->assertEquals($started, $upgrade->start_time);
 	}
 	

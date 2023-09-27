@@ -12,7 +12,7 @@ for (var i = 0; i < lightbox_links.length; i++) {
 	};
 }
 
-var toggle_links = document.querySelectorAll('a[rel="toggle"]');
+var toggle_links = document.querySelectorAll('a[class*="elgg-toggle"]');
 
 for (var i = 0; i < toggle_links.length; i++) {
 	toggle_links[i].onclick = function () {

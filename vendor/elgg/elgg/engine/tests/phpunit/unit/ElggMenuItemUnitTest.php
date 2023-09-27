@@ -7,19 +7,14 @@
  */
 class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
+	public function testFactoryNoName() {
+		$this->expectException(\Elgg\Exceptions\InvalidArgumentException::class);
+		\ElggMenuItem::factory(array('name' => 'test'));
 	}
-
-	public function down() {
-
-	}
-
-	public function testFactoryNoNameOrText() {
-		_elgg_services()->logger->disable();
-		$this->assertNull(\ElggMenuItem::factory(array('name' => 'test')));
-		$this->assertNull(\ElggMenuItem::factory(array('text' => 'test')));
-		_elgg_services()->logger->enable();
+	
+	public function testFactoryNoText() {
+		$this->expectException(\Elgg\Exceptions\InvalidArgumentException::class);
+		\ElggMenuItem::factory(array('text' => 'test'));
 	}
 
 	public function testFactoryNoHref() {
@@ -41,6 +36,7 @@ class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 			'priority' => 50,
 			'selected' => true,
 			'parent_name' => 'node',
+			'item_contents_view' => 'some_view_name',
 		);
 		$item = \ElggMenuItem::factory($params);
 
@@ -56,6 +52,7 @@ class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($params['priority'], $item->getPriority());
 		$this->assertEquals($params['selected'], $item->getSelected());
 		$this->assertEquals($params['parent_name'], $item->getParentName());
+		$this->assertEquals($params['item_contents_view'], $item->getItemContentsView());
 	}
 
 	public function testFactorySetData() {
@@ -68,6 +65,7 @@ class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 				'priority' => 50,
 				'selected' => true,
 				'parent_name' => 'node',
+				'item_contents_view' => 'some_view_name',
 			),
 		);
 		$item = \ElggMenuItem::factory($params);
@@ -76,6 +74,7 @@ class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($params['data']['priority'], $item->getPriority());
 		$this->assertEquals($params['data']['selected'], $item->getSelected());
 		$this->assertEquals($params['data']['parent_name'], $item->getParentName());
+		$this->assertEquals($params['data']['item_contents_view'], $item->getItemContentsView());
 	}
 
 	public function testFactoryContextShortcut() {
@@ -206,42 +205,23 @@ class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testArgumentTypeValidationOnItemRegistration() {
-		_elgg_services()->logger->disable();
-
-		$this->assertTrue(elgg_register_menu_item('foo', new \ElggMenuItem('foo', 'bar', 'url')));
-		$this->assertTrue(elgg_register_menu_item('foo', array('name' => 'foo', 'text' => 'bar')));
-		$this->assertFalse(elgg_register_menu_item('foo', array()));
-		$this->assertFalse(elgg_register_menu_item('foo', array('text' => 'bar')));
-		$this->assertFalse(elgg_register_menu_item('foo', 'bar'));
-		$this->assertFalse(elgg_register_menu_item('foo', new stdClass()));
-
-		$logged = _elgg_services()->logger->enable();
-		$this->assertEquals([
-			[
-				'message' => 'ElggMenuItem::factory: $options "name" and "text" are required.',
-				'level' => 'error',
-			],
-			[
-				'message' => 'Unable to add menu item \'MISSING NAME\' to \'foo\' menu',
-				'level' => 'warning',
-			],
-			[
-				'message' => 'ElggMenuItem::factory: $options "name" and "text" are required.',
-				'level' => 'error',
-			],
-			[
-				'message' => 'Unable to add menu item \'MISSING NAME\' to \'foo\' menu',
-				'level' => 'warning',
-			],
-			[
-				'message' => 'Second argument of elgg_register_menu_item() must be an instance of ElggMenuItem or an array of menu item factory options',
-				'level' => 'error',
-			],
-			[
-				'message' => 'Second argument of elgg_register_menu_item() must be an instance of ElggMenuItem or an array of menu item factory options',
-				'level' => 'error',
-			],
-				], $logged);
+		$this->assertEmpty(elgg_register_menu_item('foo', new \ElggMenuItem('foo', 'bar', 'url')));
+		$this->assertEmpty(elgg_register_menu_item('foo', array('name' => 'foo', 'text' => 'bar')));
+	}
+	
+	/**
+	 * @dataProvider invalidMenuRegistrationOptions
+	 */
+	public function testArgumentTypeValidationOnItemRegistrationWithFails($options) {
+		$this->expectException(\Elgg\Exceptions\InvalidArgumentException::class);
+		elgg_register_menu_item('foo', $options);
+	}
+	
+	public function invalidMenuRegistrationOptions() {
+		return [
+			[[]],
+			[['text' => 'bar']],
+		];
 	}
 	
 	public function testAutoDetectSelectedState() {
@@ -257,10 +237,21 @@ class ElggMenuItemUnitTest extends \Elgg\UnitTestCase {
 		$should_be_selected = \ElggMenuItem::factory([
 			'name' => 'test',
 			'text' => 'test',
-			'href' => current_page_url(),
+			'href' => elgg_get_current_url(),
 		]);
 		
 		$this->assertTrue($should_be_selected->getSelected());
 	}
-
+	
+	public function testItemContentsView() {
+		$menu_item = new ElggMenuItem('name', 'text', 'url');
+		
+		$this->assertFalse($menu_item->hasItemContentsView());
+		$this->assertEmpty($menu_item->getItemContentsView());
+		
+		$menu_item->setItemContentsView('some_view');
+		
+		$this->assertTrue($menu_item->hasItemContentsView());
+		$this->assertEquals('some_view', $menu_item->getItemContentsView());
+	}
 }

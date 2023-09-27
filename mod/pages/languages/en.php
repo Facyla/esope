@@ -19,28 +19,30 @@ return array(
 	'collection:object:page:group' => "Group pages",
 	'add:object:page' => "Add a page",
 	'edit:object:page' => "Edit this page",
+	'notification:object:page:create' => "Send a notification when a page is created",
+	'notifications:mute:object:page' => "about the page '%s'",
 
 	'groups:tool:pages' => 'Enable group pages',
+	'groups:tool:pages:description' => 'Allow group members to work together on pages in this group.',
 	
 	'annotation:delete:page:success' => 'The page revision was successfully deleted',
 	'annotation:delete:page:fail' => 'The page revision could not be deleted',
 
-	'pages:delete' => "Delete this page",
 	'pages:history' => "History",
-	'pages:view' => "View page",
 	'pages:revision' => "Revision",
 
 	'pages:navigation' => "Navigation",
 
 	'pages:notify:summary' => 'New page called %s',
 	'pages:notify:subject' => "A new page: %s",
-	'pages:notify:body' =>
-'%s added a new page: %s
+	'pages:notify:body' => '%s added a new page: %s
 
 %s
 
 View and comment on the page:
 %s',
+	
+	'notification:mentions:object:page:subject' => '%s mentioned you in a page',
 
 	'pages:more' => 'More pages',
 	'pages:none' => 'No pages created yet',
@@ -61,8 +63,6 @@ View and comment on the page:
 	'pages:description' => 'Page text',
 	'pages:tags' => 'Tags',
 	'pages:parent_guid' => 'Parent page',
-	'pages:access_id' => 'Read access',
-	'pages:write_access_id' => 'Write access',
 
 	/**
 	 * Status and error messages
@@ -70,10 +70,7 @@ View and comment on the page:
 	'pages:cantedit' => 'You cannot edit this page',
 	'pages:saved' => 'Page saved',
 	'pages:notsaved' => 'Page could not be saved',
-	'pages:error:no_title' => 'You must specify a title for this page.',
 	'entity:delete:object:page:success' => 'The page was successfully deleted.',
-	'pages:revision:delete:success' => 'The page revision was successfully deleted.',
-	'pages:revision:delete:failure' => 'The page revision could not be deleted.',
 
 	/**
 	 * History
@@ -88,21 +85,5 @@ View and comment on the page:
 	'widgets:pages:name' => 'Pages',
 	'widgets:pages:description' => "This is a list of your pages.",
 
-	/**
-	 * Submenu items
-	 */
-	'pages:label:view' => "View page",
-	'pages:label:edit' => "Edit page",
-	'pages:label:history' => "Page history",
-
 	'pages:newchild' => "Create a sub-page",
-	
-	/**
-	 * Upgrades
-	 */
-	'pages:upgrade:2017110700:title' => "Migrate page_top to page entities",
-	'pages:upgrade:2017110700:description' => "Changes the subtype of all top pages to 'page' and sets metadata to ensure correct listing.",
-	
-	'pages:upgrade:2017110701:title' => "Migrate page_top river entries",
-	'pages:upgrade:2017110701:description' => "Changes the subtype of all river items for top pages to 'page'.",
 );

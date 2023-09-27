@@ -3,13 +3,8 @@
 namespace Elgg\Application;
 
 use Elgg\Application;
-use Elgg\Http\Request;
-use Elgg\Loggable;
-use Exception;
+use Elgg\Traits\Loggable;
 use Psr\Log\LogLevel;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Shutdown handler
@@ -52,7 +47,7 @@ class ShutdownHandler {
 	 * @return void
 	 */
 	public function shutdownDatabase() {
-		$services = $this->app->_services;
+		$services = $this->app->internal_services;
 
 		if ($services->db) {
 			$services->db->executeDelayedQueries();
@@ -78,7 +73,7 @@ class ShutdownHandler {
 	 * @return void
 	 */
 	public function shutdownApplication() {
-		$services = $this->app->_services;
+		$services = $this->app->internal_services;
 
 		if (!$services->events->triggerBefore('shutdown', 'system')) {
 			return;
@@ -101,6 +96,6 @@ class ShutdownHandler {
 	 * @return void
 	 */
 	public function persistCaches() {
-		$this->app->_services->autoloadManager->saveCache();
+		$this->app->internal_services->autoloadManager->saveCache();
 	}
 }

@@ -3,7 +3,7 @@
 namespace Elgg\File;
 
 use Elgg\Database\Seeds\Seed;
-use Elgg\Project\Paths;
+use Elgg\Exceptions\Seeding\MaxAttemptsException;
 
 /**
  * Add file seed
@@ -16,43 +16,27 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function seed() {
-
-		$count_files = function () {
-			return elgg_count_entities([
-				'types' => 'object',
-				'subtypes' => 'file',
-				'metadata_names' => '__faker',
-			]);
-		};
-
-		while ($count_files() < $this->limit) {
-			$path = $this->faker()->image();
-
-			$filename = pathinfo($path, PATHINFO_FILENAME);
-
-			$attributes = [
-				'subtype' => 'file',
-			];
-
-			$file = $this->createObject($attributes, [], ['save' => false]);
-			/* @var $file \ElggFile */
-
-			if (!$file) {
+		$this->advance($this->getCount());
+		
+		while ($this->getCount() < $this->limit) {
+			try {
+				/* @var $file \ElggFile */
+				$file = $this->createObject([
+					'subtype' => 'file',
+				]);
+			} catch (MaxAttemptsException $e) {
+				// unable to create file with the given options
 				continue;
 			}
 
-			$file->setFilename("file/$filename");
+			$path = $this->faker()->image();
+			$filename = pathinfo($path, PATHINFO_FILENAME);
+
+			$file->setFilename("file/{$filename}");
 			$file->open('write');
 			$file->close();
 
 			copy($path, $file->getFilenameOnFilestore());
-
-			if (!$file->save()) {
-				$file->delete();
-				continue;
-			}
-
-			$file->saveIconFromElggFile($file);
 
 			$this->createComments($file);
 			$this->createLikes($file);
@@ -62,6 +46,7 @@ class Seeder extends Seed {
 				'subject_guid' => $file->owner_guid,
 				'object_guid' => $file->guid,
 				'target_guid' => $file->container_guid,
+				'posted' => $file->time_created,
 			]);
 
 			$this->advance();
@@ -72,28 +57,44 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function unseed() {
-
+		/* @var $files \ElggBatch */
 		$files = elgg_get_entities([
-			'types' => 'object',
-			'subtypes' => 'file',
-			'metadata_names' => '__faker',
-			'limit' => 0,
+			'type' => 'object',
+			'subtype' => 'file',
+			'metadata_name' => '__faker',
+			'limit' => false,
 			'batch' => true,
+			'batch_inc_offset' => false,
 		]);
 
-		/* @var $files \ElggBatch */
-
-		$files->setIncrementOffset(false);
-
+		/* @var $file \ElggFile */
 		foreach ($files as $file) {
 			if ($file->delete()) {
-				$this->log("Deleted file $file->guid");
+				$this->log("Deleted file {$file->guid}");
 			} else {
-				$this->log("Failed to delete file $file->guid");
+				$this->log("Failed to delete file {$file->guid}");
+				$files->reportFailure();
+				continue;
 			}
 
 			$this->advance();
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function getType() : string {
+		return 'file';
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function getCountOptions() : array {
+		return [
+			'type' => 'object',
+			'subtype' => 'file',
+		];
+	}
 }

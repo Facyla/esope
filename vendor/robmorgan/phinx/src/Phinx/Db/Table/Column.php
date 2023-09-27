@@ -1,41 +1,60 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- * Copyright (c) 2015 Rob Morgan
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- * @package    Phinx
- * @subpackage Phinx\Db
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
+
 namespace Phinx\Db\Table;
 
 use Phinx\Db\Adapter\AdapterInterface;
+use RuntimeException;
 
 /**
- *
  * This object is based loosely on: http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/Table.html.
  */
 class Column
 {
+    public const BIGINTEGER = AdapterInterface::PHINX_TYPE_BIG_INTEGER;
+    public const SMALLINTEGER = AdapterInterface::PHINX_TYPE_SMALL_INTEGER;
+    public const TINYINTEGER = AdapterInterface::PHINX_TYPE_TINY_INTEGER;
+    public const BINARY = AdapterInterface::PHINX_TYPE_BINARY;
+    public const BOOLEAN = AdapterInterface::PHINX_TYPE_BOOLEAN;
+    public const CHAR = AdapterInterface::PHINX_TYPE_CHAR;
+    public const DATE = AdapterInterface::PHINX_TYPE_DATE;
+    public const DATETIME = AdapterInterface::PHINX_TYPE_DATETIME;
+    public const DECIMAL = AdapterInterface::PHINX_TYPE_DECIMAL;
+    public const FLOAT = AdapterInterface::PHINX_TYPE_FLOAT;
+    public const INTEGER = AdapterInterface::PHINX_TYPE_INTEGER;
+    public const STRING = AdapterInterface::PHINX_TYPE_STRING;
+    public const TEXT = AdapterInterface::PHINX_TYPE_TEXT;
+    public const TIME = AdapterInterface::PHINX_TYPE_TIME;
+    public const TIMESTAMP = AdapterInterface::PHINX_TYPE_TIMESTAMP;
+    public const UUID = AdapterInterface::PHINX_TYPE_UUID;
+    public const BINARYUUID = AdapterInterface::PHINX_TYPE_BINARYUUID;
+    /** MySQL-only column type */
+    public const MEDIUMINTEGER = AdapterInterface::PHINX_TYPE_MEDIUM_INTEGER;
+    /** MySQL-only column type */
+    public const ENUM = AdapterInterface::PHINX_TYPE_ENUM;
+    /** MySQL-only column type */
+    public const SET = AdapterInterface::PHINX_TYPE_STRING;
+    /** MySQL-only column type */
+    public const BLOB = AdapterInterface::PHINX_TYPE_BLOB;
+    /** MySQL-only column type */
+    public const YEAR = AdapterInterface::PHINX_TYPE_YEAR;
+    /** MySQL/Postgres-only column type */
+    public const JSON = AdapterInterface::PHINX_TYPE_JSON;
+    /** Postgres-only column type */
+    public const JSONB = AdapterInterface::PHINX_TYPE_JSONB;
+    /** Postgres-only column type */
+    public const CIDR = AdapterInterface::PHINX_TYPE_CIDR;
+    /** Postgres-only column type */
+    public const INET = AdapterInterface::PHINX_TYPE_INET;
+    /** Postgres-only column type */
+    public const MACADDR = AdapterInterface::PHINX_TYPE_MACADDR;
+    /** Postgres-only column type */
+    public const INTERVAL = AdapterInterface::PHINX_TYPE_INTERVAL;
+
     /**
      * @var string
      */
@@ -47,27 +66,37 @@ class Column
     protected $type;
 
     /**
-     * @var integer
+     * @var int
      */
-    protected $limit = null;
+    protected $limit;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $null = false;
 
     /**
-     * @var mixed
+     * @var mixed|null
      */
-    protected $default = null;
+    protected $default;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $identity = false;
 
     /**
-     * @var integer
+     * @var int
+     */
+    protected $seed;
+
+    /**
+     * @var int
+     */
+    protected $increment;
+
+    /**
+     * @var int
      */
     protected $scale;
 
@@ -87,12 +116,12 @@ class Column
     protected $comment;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $signed = true;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $timezone = false;
 
@@ -112,6 +141,11 @@ class Column
     protected $encoding;
 
     /**
+     * @var int|null
+     */
+    protected $srid;
+
+    /**
      * @var array
      */
     protected $values;
@@ -119,8 +153,8 @@ class Column
     /**
      * Sets the column name.
      *
-     * @param string $name
-     * @return \Phinx\Db\Table\Column
+     * @param string $name Name
+     * @return $this
      */
     public function setName($name)
     {
@@ -143,7 +177,7 @@ class Column
      * Sets the column type.
      *
      * @param string|\Phinx\Util\Literal $type Column type
-     * @return \Phinx\Db\Table\Column
+     * @return $this
      */
     public function setType($type)
     {
@@ -165,8 +199,8 @@ class Column
     /**
      * Sets the column limit.
      *
-     * @param int $limit
-     * @return \Phinx\Db\Table\Column
+     * @param int $limit Limit
+     * @return $this
      */
     public function setLimit($limit)
     {
@@ -188,8 +222,8 @@ class Column
     /**
      * Sets whether the column allows nulls.
      *
-     * @param bool $null
-     * @return \Phinx\Db\Table\Column
+     * @param bool $null Null
+     * @return $this
      */
     public function setNull($null)
     {
@@ -221,8 +255,8 @@ class Column
     /**
      * Sets the default column value.
      *
-     * @param mixed $default
-     * @return \Phinx\Db\Table\Column
+     * @param mixed $default Default
+     * @return $this
      */
     public function setDefault($default)
     {
@@ -244,8 +278,8 @@ class Column
     /**
      * Sets whether or not the column is an identity column.
      *
-     * @param bool $identity
-     * @return \Phinx\Db\Table\Column
+     * @param bool $identity Identity
+     * @return $this
      */
     public function setIdentity($identity)
     {
@@ -278,7 +312,7 @@ class Column
      * Sets the name of the column to add this column after.
      *
      * @param string $after After
-     * @return \Phinx\Db\Table\Column
+     * @return $this
      */
     public function setAfter($after)
     {
@@ -300,8 +334,8 @@ class Column
     /**
      * Sets the 'ON UPDATE' mysql column function.
      *
-     * @param  string $update On Update function
-     * @return \Phinx\Db\Table\Column
+     * @param string $update On Update function
+     * @return $this
      */
     public function setUpdate($update)
     {
@@ -327,7 +361,7 @@ class Column
      * and the column could store value from -999.99 to 999.99.
      *
      * @param int $precision Number precision
-     * @return \Phinx\Db\Table\Column
+     * @return $this
      */
     public function setPrecision($precision)
     {
@@ -350,13 +384,59 @@ class Column
     }
 
     /**
+     * Gets the column identity seed.
+     *
+     * @return int
+     */
+    public function getSeed()
+    {
+        return $this->seed;
+    }
+
+    /**
+     * Gets the column identity increment.
+     *
+     * @return int
+     */
+    public function getIncrement()
+    {
+        return $this->increment;
+    }
+
+    /**
+     * Sets the column identity seed.
+     *
+     * @param int $seed Number seed
+     * @return $this
+     */
+    public function setSeed($seed)
+    {
+        $this->seed = $seed;
+
+        return $this;
+    }
+
+    /**
+     * Sets the column identity increment.
+     *
+     * @param int $increment Number increment
+     * @return $this
+     */
+    public function setIncrement($increment)
+    {
+        $this->increment = $increment;
+
+        return $this;
+    }
+
+    /**
      * Sets the number scale for decimal or float column.
      *
      * For example `DECIMAL(5,2)`, 5 is the precision and 2 is the scale,
      * and the column could store value from -999.99 to 999.99.
      *
      * @param int $scale Number scale
-     * @return \Phinx\Db\Table\Column
+     * @return $this
      */
     public function setScale($scale)
     {
@@ -386,7 +466,7 @@ class Column
      *
      * @param int $precision Number precision
      * @param int $scale Number scale
-     * @return \Phinx\Db\Table\Column
+     * @return $this
      */
     public function setPrecisionAndScale($precision, $scale)
     {
@@ -399,8 +479,8 @@ class Column
     /**
      * Sets the column comment.
      *
-     * @param string $comment
-     * @return \Phinx\Db\Table\Column
+     * @param string $comment Comment
+     * @return $this
      */
     public function setComment($comment)
     {
@@ -422,8 +502,8 @@ class Column
     /**
      * Sets whether field should be signed.
      *
-     * @param bool $signed
-     * @return \Phinx\Db\Table\Column
+     * @param bool $signed Signed
+     * @return $this
      */
     public function setSigned($signed)
     {
@@ -456,8 +536,8 @@ class Column
      * Sets whether the field should have a timezone identifier.
      * Used for date/time columns only!
      *
-     * @param bool $timezone
-     * @return \Phinx\Db\Table\Column
+     * @param bool $timezone Timezone
+     * @return $this
      */
     public function setTimezone($timezone)
     {
@@ -489,9 +569,8 @@ class Column
     /**
      * Sets field properties.
      *
-     * @param array $properties
-     *
-     * @return \Phinx\Db\Table\Column
+     * @param array $properties Properties
+     * @return $this
      */
     public function setProperties($properties)
     {
@@ -513,9 +592,8 @@ class Column
     /**
      * Sets field values.
      *
-     * @param array|string $values
-     *
-     * @return \Phinx\Db\Table\Column
+     * @param string[]|string $values Value(s)
+     * @return $this
      */
     public function setValues($values)
     {
@@ -540,22 +618,11 @@ class Column
     /**
      * Sets the column collation.
      *
-     * @param string $collation
-     *
-     * @throws \UnexpectedValueException If collation not allowed for type
+     * @param string $collation Collation
      * @return $this
      */
     public function setCollation($collation)
     {
-        $allowedTypes = [
-            AdapterInterface::PHINX_TYPE_CHAR,
-            AdapterInterface::PHINX_TYPE_STRING,
-            AdapterInterface::PHINX_TYPE_TEXT,
-        ];
-        if (!in_array($this->getType(), $allowedTypes)) {
-            throw new \UnexpectedValueException('Collation may be set only for types: ' . implode(', ', $allowedTypes));
-        }
-
         $this->collation = $collation;
 
         return $this;
@@ -574,22 +641,11 @@ class Column
     /**
      * Sets the column character set.
      *
-     * @param string $encoding
-     *
-     * @throws \UnexpectedValueException If character set not allowed for type
+     * @param string $encoding Encoding
      * @return $this
      */
     public function setEncoding($encoding)
     {
-        $allowedTypes = [
-            AdapterInterface::PHINX_TYPE_CHAR,
-            AdapterInterface::PHINX_TYPE_STRING,
-            AdapterInterface::PHINX_TYPE_TEXT,
-        ];
-        if (!in_array($this->getType(), $allowedTypes)) {
-            throw new \UnexpectedValueException('Character set may be set only for types: ' . implode(', ', $allowedTypes));
-        }
-
         $this->encoding = $encoding;
 
         return $this;
@@ -603,6 +659,29 @@ class Column
     public function getEncoding()
     {
         return $this->encoding;
+    }
+
+    /**
+     * Sets the column SRID.
+     *
+     * @param int $srid SRID
+     * @return \Phinx\Db\Table\Column
+     */
+    public function setSrid($srid)
+    {
+        $this->srid = $srid;
+
+        return $this;
+    }
+
+    /**
+     * Gets the column SRID.
+     *
+     * @return int|null
+     */
+    public function getSrid()
+    {
+        return $this->srid;
     }
 
     /**
@@ -627,6 +706,9 @@ class Column
             'values',
             'collation',
             'encoding',
+            'srid',
+            'seed',
+            'increment',
         ];
     }
 
@@ -647,7 +729,8 @@ class Column
      * Utility method that maps an array of column options to this objects methods.
      *
      * @param array $options Options
-     * @return \Phinx\Db\Table\Column
+     * @throws \RuntimeException
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -661,7 +744,7 @@ class Column
             }
 
             if (!in_array($option, $validOptions, true)) {
-                throw new \RuntimeException(sprintf('"%s" is not a valid column option.', $option));
+                throw new RuntimeException(sprintf('"%s" is not a valid column option.', $option));
             }
 
             $method = 'set' . ucfirst($option);
