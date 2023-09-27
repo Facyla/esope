@@ -1,10 +1,10 @@
 Elgg
 ====
 
-[![Build status](https://github.com/Elgg/Elgg/workflows/Run%20PHPUnit%20test%20suites/badge.svg?branch=3.3)](https://github.com/Elgg/Elgg)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=3.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.3) 
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=3.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=3.3) 
-[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?version=3.3)](http://learn.elgg.org/en/3.3/)
+[![PHPUnit test suites](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml/badge.svg?branch=4.3)](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=4.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=4.3) 
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=4.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=4.3) 
+[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?badge=4.3)](http://learn.elgg.org/en/4.3/)
 
 Elgg is an open source rapid development framework for socially aware web applications.
 
@@ -35,7 +35,7 @@ Under the hood:
 - NGINX or Apache compatible
 - Symfony2 HTTP Foundation handles requests and responses
 - RequireJS handles AMD
-- Zend Mail handles outgoing email
+- Laminas Mail handles outgoing email
 - htmLawed XSS filters
 - DBAL
 - Phinx database migrations
@@ -60,7 +60,7 @@ The Elgg project was started in 2004 by
 License
 -------
 
-Copyright (c) 2008-2020, see COPYRIGHT.txt
+Copyright (c) 2008-2022, see COPYRIGHT.txt
 
 Elgg is released under the GNU General Public License (GPL) Version 2 and the
 Massachusetts Institute of Technology (MIT-X11) License. 

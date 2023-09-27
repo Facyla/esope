@@ -1,5 +1,6 @@
 <?php
 
+use Elgg\Exceptions\Configuration\InstallationException;
 use Phinx\Migration\AbstractMigration;
 
 class DenormalizeEntitySubtypes extends AbstractMigration {
@@ -106,13 +107,6 @@ class DenormalizeEntitySubtypes extends AbstractMigration {
 		}
 
 		$table->removeColumn('subtype_id');
-		
-		// need to restore index that was dropped when renaming the column
-		$table->addIndex(['subtype'], [
-			'name' => "subtype",
-			'unique' => false,
-			'limit' => 50,
-		]);
 		
 		$table->save();
 

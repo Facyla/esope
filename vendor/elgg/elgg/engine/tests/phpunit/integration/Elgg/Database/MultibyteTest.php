@@ -29,11 +29,9 @@ class MultibyteTest extends IntegrationTestCase {
 
 		$object->save();
 
-		elgg_flush_caches();
-
 		$object = get_entity($object->guid);
 
-		$this->assertRegExp('/\\x{1f600}/u', $object->title);
+		$this->assertMatchesRegularExpression('/\\x{1f600}/u', $object->title);
 		$this->assertEquals($title, $object->title);
 	}
 
@@ -46,8 +44,6 @@ class MultibyteTest extends IntegrationTestCase {
 		$object->title = $title;
 
 		$object->save();
-
-		elgg_flush_caches();
 
 		$entities = elgg_get_entities([
 			'guids' => $object->guid,
@@ -62,17 +58,11 @@ class MultibyteTest extends IntegrationTestCase {
 
 		$object = array_shift($entities);
 
-		$this->assertRegExp('/\\x{1f600}/u', $object->title);
+		$this->assertMatchesRegularExpression('/\\x{1f600}/u', $object->title);
 		$this->assertEquals($title, $object->title);
 	}
 
 	public function testDatabaseCollactionAllowsSearchForMultibyteCharactersByExactMatch() {
-
-		// @todo : does this work on all mysql versions?
-		//$mysql_version = elgg()->db
-		//->getConnection(DbConfig::READ_WRITE)
-		//->getWrappedConnection()
-		//->getAttribute(\PDO::ATTR_SERVER_VERSION);
 
 		$grinning_face = $this->createObject([
 			'title' => "😀 Grinning Face",
@@ -95,13 +85,13 @@ class MultibyteTest extends IntegrationTestCase {
 				],
 			],
 			'order_by' => new OrderByClause('e.guid', 'DESC'),
-			'limit' => 0,
+			'limit' => false,
 		]);
 
 		$this->assertCount(1, $entities);
 
 		$grinning_face = array_shift($entities);
 
-		$this->assertRegExp('/\\x{1f600}/u', $grinning_face->title);
+		$this->assertMatchesRegularExpression('/\\x{1f600}/u', $grinning_face->title);
 	}
 }

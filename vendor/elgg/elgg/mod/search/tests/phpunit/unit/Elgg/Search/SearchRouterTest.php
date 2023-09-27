@@ -17,23 +17,16 @@ class SearchRouterTest extends UnitTestCase {
 	public function up() {
 		$this->startPlugin();
 
-		elgg_register_entity_type('object', 'custom');
+		elgg_entity_enable_capability('object', 'custom', 'searchable');
 		_elgg_services()->views->registerPluginViews($this->getPath());
-
-		search_init();
 	}
 
-	public function down() {
-
-	}
-
-	public function testPageHanlder() {
-		$params = [
+	public function testPageHandler() {
+		$request = BaseTestCase::prepareHttpRequest('search', 'GET', [
 			'q' => 'lorem ipsum',
-		];
-
-		$request = BaseTestCase::prepareHttpRequest("search", 'GET', $params);
-		_elgg_services()->setValue('request', $request);
+		]);
+		
+		_elgg_services()->set('request', $request);
 
 		_elgg_services()->router->route($request);
 

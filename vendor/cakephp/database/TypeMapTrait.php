@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,14 +25,14 @@ namespace Cake\Database;
 trait TypeMapTrait
 {
     /**
-     * @var \Cake\Database\TypeMap
+     * @var \Cake\Database\TypeMap|null
      */
     protected $_typeMap;
 
     /**
      * Creates a new TypeMap if $typeMap is an array, otherwise exchanges it for the given one.
      *
-     * @param array|\Cake\Database\TypeMap $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
+     * @param \Cake\Database\TypeMap|array $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      * @return $this
      */
     public function setTypeMap($typeMap)
@@ -45,34 +47,13 @@ trait TypeMapTrait
      *
      * @return \Cake\Database\TypeMap
      */
-    public function getTypeMap()
+    public function getTypeMap(): TypeMap
     {
         if ($this->_typeMap === null) {
             $this->_typeMap = new TypeMap();
         }
 
         return $this->_typeMap;
-    }
-
-    /**
-     * Creates a new TypeMap if $typeMap is an array, otherwise returns the existing type map
-     * or exchanges it for the given one.
-     *
-     * @deprecated 3.4.0 Use setTypeMap()/getTypeMap() instead.
-     * @param array|\Cake\Database\TypeMap|null $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
-     * @return $this|\Cake\Database\TypeMap
-     */
-    public function typeMap($typeMap = null)
-    {
-        deprecationWarning(
-            'TypeMapTrait::typeMap() is deprecated. ' .
-            'Use TypeMapTrait::setTypeMap()/getTypeMap() instead.'
-        );
-        if ($typeMap !== null) {
-            return $this->setTypeMap($typeMap);
-        }
-
-        return $this->getTypeMap();
     }
 
     /**
@@ -85,7 +66,7 @@ trait TypeMapTrait
      * To add a default without overwriting existing ones
      * use `getTypeMap()->addDefaults()`
      *
-     * @param array $types The array of types to set.
+     * @param array<int|string, string> $types The array of types to set.
      * @return $this
      * @see \Cake\Database\TypeMap::setDefaults()
      */
@@ -99,30 +80,10 @@ trait TypeMapTrait
     /**
      * Gets default types of current type map.
      *
-     * @return array
+     * @return array<int|string, string>
      */
-    public function getDefaultTypes()
+    public function getDefaultTypes(): array
     {
         return $this->getTypeMap()->getDefaults();
-    }
-
-    /**
-     * Allows setting default types when chaining query
-     *
-     * @deprecated 3.4.0 Use setDefaultTypes()/getDefaultTypes() instead.
-     * @param array|null $types The array of types to set.
-     * @return $this|array
-     */
-    public function defaultTypes(array $types = null)
-    {
-        deprecationWarning(
-            'TypeMapTrait::defaultTypes() is deprecated. ' .
-            'Use TypeMapTrait::setDefaultTypes()/getDefaultTypes() instead.'
-        );
-        if ($types !== null) {
-            return $this->setDefaultTypes($types);
-        }
-
-        return $this->getDefaultTypes();
     }
 }

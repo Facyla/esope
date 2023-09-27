@@ -63,31 +63,21 @@ function elgg_get_request_data($filter_result = true) {
  */
 function elgg_get_title_input($variable = 'title', $default = '') {
 	$raw_input = get_input($variable, $default, false);
-	return htmlspecialchars($raw_input, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+	return htmlspecialchars($raw_input ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 /**
- * Filter tags from a given string based on registered hooks.
+ * Filter input from a given string based on registered hooks.
  *
- * @param mixed $var Anything that does not include an object (strings, ints, arrays)
- *					 This includes multi-dimensional arrays.
+ * @param mixed $input Anything that does not include an object (strings, ints, arrays)
+ *					   This includes multi-dimensional arrays.
  *
- * @return mixed The filtered result - everything will be strings
+ * @return mixed The filtered result
+ * @since 4.3
  */
-function filter_tags($var) {
-	return elgg_trigger_plugin_hook('validate', 'input', null, $var);
-}
-
-/**
- * Returns the current page's complete URL.
- *
- * It uses the configured site URL for the hostname rather than depending on
- * what the server uses to populate $_SERVER.
- *
- * @return string The current page URL.
- */
-function current_page_url() {
-	return _elgg_services()->request->getCurrentURL();
+function elgg_sanitize_input($input) {
+	$input = elgg_trigger_deprecated_plugin_hook('validate', 'input', null, $input, "Use the 'sanitize', 'input' hook.", '4.3');
+	return elgg_trigger_plugin_hook('sanitize', 'input', null, $input);
 }
 
 /**
@@ -96,9 +86,10 @@ function current_page_url() {
  * @param string $address Email address.
  *
  * @return bool
+ * @since 4.3
  */
-function is_email_address($address) {
-	return elgg()->accounts->isValidEmail($address);
+function elgg_is_valid_email(string $address): bool {
+	return _elgg_services()->accounts->isValidEmail($address);
 }
 
 /**
@@ -107,13 +98,14 @@ function is_email_address($address) {
  * Call this from an action when you want all your submitted variables
  * available if the submission fails validation and is sent back to the form
  *
- * @param string $form_name Name of the sticky form
+ * @param string   $form_name           Name of the sticky form
+ * @param string[] $ignored_field_names Field names which shouldn't be made sticky in this form
  *
  * @return void
  * @since 1.8.0
  */
-function elgg_make_sticky_form($form_name) {
-	_elgg_services()->stickyForms->makeStickyForm($form_name);
+function elgg_make_sticky_form($form_name, array $ignored_field_names = []): void {
+	_elgg_services()->stickyForms->makeStickyForm((string) $form_name, $ignored_field_names);
 }
 
 /**
@@ -128,8 +120,8 @@ function elgg_make_sticky_form($form_name) {
  * @return void
  * @since 1.8.0
  */
-function elgg_clear_sticky_form($form_name) {
-	_elgg_services()->stickyForms->clearStickyForm($form_name);
+function elgg_clear_sticky_form($form_name): void {
+	_elgg_services()->stickyForms->clearStickyForm((string) $form_name);
 }
 
 /**
@@ -140,8 +132,8 @@ function elgg_clear_sticky_form($form_name) {
  * @return boolean
  * @since 1.8.0
  */
-function elgg_is_sticky_form($form_name) {
-	return _elgg_services()->stickyForms->isStickyForm($form_name);
+function elgg_is_sticky_form($form_name): bool {
+	return _elgg_services()->stickyForms->isStickyForm((string) $form_name);
 }
 
 /**
@@ -154,11 +146,10 @@ function elgg_is_sticky_form($form_name) {
  *
  * @return mixed
  *
- * @todo should this filter the default value?
  * @since 1.8.0
  */
 function elgg_get_sticky_value($form_name, $variable = '', $default = null, $filter_result = true) {
-	return _elgg_services()->stickyForms->getStickyValue($form_name, $variable, $default, $filter_result);
+	return _elgg_services()->stickyForms->getStickyValue((string) $form_name, (string) $variable, $default, (bool) $filter_result);
 }
 
 /**
@@ -170,21 +161,8 @@ function elgg_get_sticky_value($form_name, $variable = '', $default = null, $fil
  * @return array
  * @since 1.8.0
  */
-function elgg_get_sticky_values($form_name, $filter_result = true) {
-	return _elgg_services()->stickyForms->getStickyValues($form_name, $filter_result);
-}
-
-/**
- * Remove one value of form submission data from the session
- *
- * @param string $form_name The name of the form
- * @param string $variable  The name of the variable to clear
- *
- * @return void
- * @since 1.8.0
- */
-function elgg_clear_sticky_value($form_name, $variable) {
-	_elgg_services()->stickyForms->clearStickyValue($form_name, $variable);
+function elgg_get_sticky_values($form_name, $filter_result = true): array {
+	return _elgg_services()->stickyForms->getStickyValues((string) $form_name, (bool) $filter_result);
 }
 
 /**
@@ -203,67 +181,6 @@ function elgg_is_empty($value) {
 }
 
 /**
- * htmLawed filtering of data
- *
- * Called on the 'validate', 'input' plugin hook
- *
- * htmLawed's $config argument is filtered by the [config, htmlawed] hook.
- * htmLawed's $spec argument is filtered by the [spec, htmlawed] hook.
- *
- * For information on these arguments, see
- * http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s2.2
- *
- * @param \Elgg\Hook $hook 'validate', 'input'
- *
- * @return mixed
- */
-function _elgg_htmlawed_filter_tags(\Elgg\Hook $hook) {
-	$var = $hook->getValue();
-
-	$config = [
-		// seems to handle about everything we need.
-		'safe' => true,
-
-		// remove comments/CDATA instead of converting to text
-		'comment' => 1,
-		'cdata' => 1,
-		
-		// do not check for unique ids as the full input stack could be checked multiple times
-		// @see https://github.com/Elgg/Elgg/issues/12934
-		'unique_ids' => 0,
-
-		'elements' => '*-applet-button-form-input-textarea-iframe-script-style-embed-object',
-		'deny_attribute' => 'class, on*, formaction',
-		'hook_tag' => '_elgg_htmlawed_tag_post_processor',
-
-		'schemes' => '*:http,https,ftp,news,mailto,rtsp,teamspeak,gopher,mms,callto',
-		// apparent this doesn't work.
-		// 'style:color,cursor,text-align,font-size,font-weight,font-style,border,margin,padding,float'
-	];
-
-	// add nofollow to all links on output
-	if (!elgg_in_context('input')) {
-		$config['anti_link_spam'] = ['/./', ''];
-	}
-
-	$config = elgg_trigger_plugin_hook('config', 'htmlawed', null, $config);
-	$spec = elgg_trigger_plugin_hook('spec', 'htmlawed', null, '');
-
-	if (!is_array($var)) {
-		return Htmlawed::filter($var, $config, $spec);
-	} else {
-		$callback = function (&$v, $k, $config_spec) {
-			list ($config, $spec) = $config_spec;
-			$v = Htmlawed::filter($v, $config, $spec);
-		};
-		
-		array_walk_recursive($var, $callback, [$config, $spec]);
-		
-		return $var;
-	}
-}
-
-/**
  * Post processor for tags in htmlawed
  *
  * This runs after htmlawed has filtered. It runs for each tag and filters out
@@ -273,12 +190,14 @@ function _elgg_htmlawed_filter_tags(\Elgg\Hook $hook) {
  *
  * @param string $element    The tag element name
  * @param array  $attributes An array of attributes
+ *
  * @return string
+ * @internal
  */
 function _elgg_htmlawed_tag_post_processor($element, $attributes = false) {
 	if ($attributes === false) {
 		// This is a closing tag. Prevent further processing to avoid inserting a duplicate tag
-		return "</${element}>";
+		return "</{$element}>";
 	}
 
 	// this list should be coordinated with the WYSIWYG editor used (tinymce, ckeditor, etc.)
@@ -302,7 +221,7 @@ function _elgg_htmlawed_tag_post_processor($element, $attributes = false) {
 
 			$style_str = '';
 			foreach ($styles as $style) {
-				if (!trim($style)) {
+				if (!trim($style) || strpos($style, ':') === false) {
 					continue;
 				}
 				list($style_attr, $style_value) = explode(':', trim($style));
@@ -310,65 +229,47 @@ function _elgg_htmlawed_tag_post_processor($element, $attributes = false) {
 				$style_value = trim($style_value);
 
 				if (in_array($style_attr, $allowed_styles)) {
-					$style_str .= "$style_attr: $style_value; ";
+					$style_str .= "{$style_attr}: {$style_value}; ";
 				}
 			}
 
 			if ($style_str) {
 				$style_str = trim($style_str);
-				$string .= " style=\"$style_str\"";
+				$string .= " style=\"{$style_str}\"";
 			}
 		} else {
-			$string .= " $attr=\"$value\"";
+			$string .= " {$attr}=\"{$value}\"";
 		}
 	}
 
 	// Some WYSIWYG editors do not like tags like <p > so only add a space if needed.
 	if ($string = trim($string)) {
-		$string = " $string";
+		$string = " {$string}";
 	}
 
-	$r = "<$element$string>";
+	$r = "<{$element}{$string}>";
 	return $r;
 }
 
 /**
- * Disable the autocomplete feature on password fields
+ * Takes in a comma-separated string and returns an array of uniquely trimmed and stripped strings
  *
- * @param \Elgg\Hook $hook 'view_vars', 'input/password'
+ * @param string $string Comma-separated string
  *
- * @return void|array
+ * @return array
+ * @since 4.3
  */
-function _elgg_disable_password_autocomplete(\Elgg\Hook $hook) {
+function elgg_string_to_array(string $string): array {
+	$ar = explode(',', $string);
+	$ar = array_map('trim', $ar);
+	$ar = array_map('strip_tags', $ar);
 	
-	if (!_elgg_config()->security_disable_password_autocomplete) {
-		return;
-	}
+	$ar = array_filter($ar, function($string) {
+		return !elgg_is_empty($string);
+	});
 	
-	$return_value = $hook->getValue();
+	$ar = array_unique($ar);
 	
-	$return_value['autocomplete'] = 'off';
-	
-	return $return_value;
+	// reset keys
+	return array_values($ar);
 }
-
-/**
- * Initialize the input library
- *
- * @return void
- * @internal
- */
-function _elgg_input_init() {
-
-	elgg_register_plugin_hook_handler('validate', 'input', '_elgg_htmlawed_filter_tags', 1);
-	
-	elgg_register_plugin_hook_handler('view_vars', 'input/password', '_elgg_disable_password_autocomplete');
-	elgg_register_plugin_hook_handler('view_vars', 'input/password', [_elgg_services()->passwordGenerator, 'addInputRequirements']);
-}
-
-/**
- * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
- */
-return function(\Elgg\EventsService $events) {
-	$events->registerHandler('init', 'system', '_elgg_input_init');
-};

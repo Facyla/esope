@@ -5,12 +5,15 @@ namespace Elgg\Mocks\Database;
 use Elgg\BaseTestCase;
 use Elgg\Database\Plugins as DbPlugins;
 use ElggPlugin;
+use Elgg\Testing;
 
 /**
  * @group Plugins
  */
 class Plugins extends DbPlugins {
 
+	use Testing;
+	
 	/**
 	 * @var ElggPlugin[]
 	 */
@@ -23,7 +26,6 @@ class Plugins extends DbPlugins {
 		'ckeditor',
 		'dashboard',
 		'developers',
-		'diagnostics',
 		'discussions',
 		'externalpages',
 		'file',
@@ -53,7 +55,7 @@ class Plugins extends DbPlugins {
 		'embed',
 	];
 
-	public function get($plugin_id) {
+	public function get(string $plugin_id): ?\ElggPlugin {
 		$plugin = parent::get($plugin_id);
 		if ($plugin) {
 			return $plugin;
@@ -69,21 +71,21 @@ class Plugins extends DbPlugins {
 		return $plugin;
 	}
 
-	public function find($status = 'active') {
+	public function find(string $status = 'active'): array {
 		return $this->_plugins;
 	}
 
-	public function generateEntities() {
+	public function generateEntities(): bool {
 		parent::generateEntities();
-		$this->addTestingPlugin(ElggPlugin::fromId('test_plugin', ''));
+		$this->addTestingPlugin(ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/')));
 		return true;
 	}
 
-	public function addTestingPlugin(ElggPlugin $plugin) {
+	public function addTestingPlugin(\ElggPlugin $plugin): void {
 		$this->_plugins[$plugin->getID()] = $plugin;
 	}
 
-	public function isActive($plugin_id) {
+	public function isActive(string $plugin_id): bool {
 		return array_key_exists($plugin_id, $this->_plugins);
 	}
 
@@ -110,5 +112,4 @@ class Plugins extends DbPlugins {
 
 		return $priority;
 	}
-
 }

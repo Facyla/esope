@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,7 +33,7 @@ trait TypedResultTrait
      *
      * @return string
      */
-    public function getReturnType()
+    public function getReturnType(): string
     {
         return $this->_returnType;
     }
@@ -42,33 +44,10 @@ trait TypedResultTrait
      * @param string $type The name of the type that is to be returned
      * @return $this
      */
-    public function setReturnType($type)
+    public function setReturnType(string $type)
     {
         $this->_returnType = $type;
 
         return $this;
-    }
-
-    /**
-     * Sets the type of the value this object will generate.
-     * If called without arguments, returns the current known type
-     *
-     * @deprecated 3.5.0 Use getReturnType()/setReturnType() instead.
-     * @param string|null $type The name of the type that is to be returned
-     * @return string|$this
-     */
-    public function returnType($type = null)
-    {
-        deprecationWarning(
-            'TypedResultTrait::returnType() is deprecated. ' .
-            'Use TypedResultTrait::setReturnType()/getReturnType() instead.'
-        );
-        if ($type !== null) {
-            $this->_returnType = $type;
-
-            return $this;
-        }
-
-        return $this->_returnType;
     }
 }

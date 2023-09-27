@@ -3,8 +3,6 @@
  * Profile fields list
  */
 
-$items = [];
-
 $fieldlist = elgg_get_config('profile_custom_fields');
 if (empty($fieldlist) && $fieldlist !== '0') {
 	return;
@@ -30,7 +28,7 @@ foreach ($fieldlistarray as $name) {
 		'confirm' => elgg_echo('deleteconfirm'),
 	]);
 	$type = elgg_echo("profile:field:$type");
-	$drag_arrow = elgg_view_icon("drag-arrow", "elgg-state-draggable");
+	$drag_arrow = elgg_view_icon('arrows-alt', 'elgg-state-draggable');
 	
 	$text = "<b>{$title}</b> [$type] $url";
 	$item_list .= elgg_format_element('li', [

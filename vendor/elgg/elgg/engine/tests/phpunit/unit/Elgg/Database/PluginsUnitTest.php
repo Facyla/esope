@@ -7,14 +7,6 @@ namespace Elgg\Database;
  */
 class PluginsUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testAfterPluginLoadActiveCheckIsFree() {
 		$this->markTestIncomplete();
 	}
@@ -38,7 +30,7 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 		]);
 		$this->assertInstanceOf('ElggPlugin', $plugin_high_priority);
 		
-		$priority_name = $plugins->namespacePrivateSetting('internal', 'priority');
+		$priority_name = \ElggPlugin::PRIORITY_SETTING_NAME;
 		// because of mocking issues don't use ->setPriority()
 		$plugin_high_priority->setPrivateSetting($priority_name, 100);
 		
@@ -92,8 +84,8 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 			$sp->views,
 			$sp->privateSettingsCache,
 			$sp->config,
-			$sp->systemMessages,
-			$sp->request->getContextStack()
+			$sp->system_messages,
+			$sp->request
 		);
 		
 		return $plugins;

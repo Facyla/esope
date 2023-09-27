@@ -22,14 +22,11 @@ return array(
 	'file:num_files' => "Número de ficheiros para mostrar",
 	'file:replace' => 'Substituír o contido do ficheiro (deixar baleiro para non cambiar o ficheiro)',
 	'file:list:title' => "%s: %s %s",
-	'file:title:friends' => "Dos contactos",
 
 	'file:file' => "Ficheir",
 
 	'file:list:list' => 'Cambiar á vista de lista',
 	'file:list:gallery' => 'Cambiar á vista de galería',
-
-	'file:types' => "Tipo de ficheiros enviados",
 
 	'file:type:' => 'Ficheiros',
 	'file:type:all' => "Todos os ficheiros",
@@ -56,24 +53,12 @@ return array(
 
 	'groups:tool:file' => 'Activar os ficheiros de grupo',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Novo ficheiro: «%s»',
 	'file:notify:subject' => 'Novo ficheiro: «%s»',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

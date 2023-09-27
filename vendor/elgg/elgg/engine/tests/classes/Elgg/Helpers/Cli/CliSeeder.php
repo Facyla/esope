@@ -10,18 +10,33 @@ use Elgg\Database\Seeds\Seed;
 class CliSeeder extends Seed {
 	
 	/**
-	 * Populate database
-	 * @return mixed
+	 * {@inheritDoc}
 	 */
-	function seed() {
+	public function seed() {
+		system_message(__METHOD__);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function unseed() {
 		system_message(__METHOD__);
 	}
 	
 	/**
-	 * Removed seeded rows from database
-	 * @return mixed
+	 * {@inheritDoc}
 	 */
-	function unseed() {
-		system_message(__METHOD__);
+	public static function getType() : string {
+		return 'testing';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function getCountOptions() : array {
+		return [
+			'type' => 'object',
+			'subtype' => 'dummy',
+		];
 	}
 }

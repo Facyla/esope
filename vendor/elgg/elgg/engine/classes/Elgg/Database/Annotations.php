@@ -2,23 +2,19 @@
 
 namespace Elgg\Database;
 
-use Closure;
 use Doctrine\DBAL\Query\Expression\CompositeExpression;
 use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\EntityWhereClause;
 use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
-use ElggAnnotation;
-use ElggEntity;
-use InvalidArgumentException;
-use InvalidParameterException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\InvalidParameterException;
+use Elgg\Exceptions\LogicException;
 
 /**
  * Annotation repository contains methods for fetching annotations from database or performing
  * calculations on entity properties.
- *
- * API IN FLUX Do not access the methods directly, use elgg_get_annotations() instead
  *
  * @internal
  */
@@ -68,7 +64,7 @@ class Annotations extends Repository {
 
 		switch ($property_type) {
 			case 'attribute':
-				if (!in_array($property, ElggEntity::$primary_attr_names)) {
+				if (!in_array($property, \ElggEntity::PRIMARY_ATTR_NAMES)) {
 					throw new InvalidParameterException("'$property' is not a valid attribute");
 				}
 
@@ -113,7 +109,7 @@ class Annotations extends Repository {
 	 * @param int      $offset   Offset
 	 * @param callable $callback Custom callback
 	 *
-	 * @return ElggAnnotation[]
+	 * @return \ElggAnnotation[]
 	 */
 	public function get($limit = null, $offset = null, $callback = null) {
 
@@ -141,7 +137,7 @@ class Annotations extends Repository {
 		$callback = $callback ? : $this->options->callback;
 		if (!isset($callback)) {
 			$callback = function ($row) {
-				return new ElggAnnotation($row);
+				return new \ElggAnnotation($row);
 			};
 		}
 
@@ -156,15 +152,15 @@ class Annotations extends Repository {
 	/**
 	 * Execute the query resolving calculation, count and/or batch options
 	 *
-	 * @return array|\ElggData[]|ElggAnnotation[]|false|int
-	 * @throws \LogicException
+	 * @return array|\ElggData[]|\ElggAnnotation[]|false|int
+	 * @throws LogicException
 	 */
 	public function execute() {
 
 		if ($this->options->annotation_calculation) {
 			$clauses = $this->options->annotation_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->annotation_name_value_pairs_operator !== 'OR') {
-				throw new \LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
+				throw new LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
 			}
 
 			$clause = array_shift($clauses);
@@ -173,7 +169,7 @@ class Annotations extends Repository {
 		} else if ($this->options->metadata_calculation) {
 			$clauses = $this->options->metadata_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->metadata_name_value_pairs_operator !== 'OR') {
-				throw new \LogicException("Metadata calculation can not be performed on multiple metadata name value pairs merged with AND");
+				throw new LogicException("Metadata calculation can not be performed on multiple metadata name value pairs merged with AND");
 			}
 
 			$clause = array_shift($clauses);
@@ -229,7 +225,7 @@ class Annotations extends Repository {
 	 *
 	 * @param QueryBuilder $qb Query builder
 	 *
-	 * @return Closure|CompositeExpression|mixed|null|string
+	 * @return \Closure|CompositeExpression|mixed|null|string
 	 */
 	protected function buildEntityWhereClause(QueryBuilder $qb) {
 		$joined_alias = $qb->joinEntitiesTable('n_table', 'entity_guid', 'inner', 'e');

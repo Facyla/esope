@@ -17,6 +17,8 @@ return array(
 	'collection:object:thewire:all' => "Alle Wire berichten",
 	'collection:object:thewire:owner' => "%s's Wire berichten",
 	'collection:object:thewire:friends' => "Wire berichten van vrienden",
+	'notification:object:thewire:create' => "Stuur een notificatie wanneer een wire-bericht is gemaakt",
+	'notifications:mute:object:thewire' => "over het wire-bericht '%s'",
 
 	'thewire:replying' => "Antwoord op %s (@%s), die schreef",
 	'thewire:thread' => "Conversatie",
@@ -25,8 +27,6 @@ return array(
 	'thewire:noposts' => "Nog geen Wire-berichten",
 
 	'thewire:by' => 'Wire-bericht van %s',
-	'thewire:previous:help' => "Bekijk vorige bericht",
-	'thewire:hide:help' => "Verberg vorige bericht",
 
 	'thewire:form:body:placeholder' => "Wat gebeurt er?",
 	

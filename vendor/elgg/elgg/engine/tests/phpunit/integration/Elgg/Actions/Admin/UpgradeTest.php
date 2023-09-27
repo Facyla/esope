@@ -3,11 +3,9 @@
 namespace Elgg\Actions\Admin;
 
 use Elgg\ActionResponseTestCase;
-use Elgg\EntityNotFoundException;
-use Elgg\Http\OkResponse;
-use Elgg\Upgrade\AsynchronousUpgrade;
-use Elgg\Upgrade\Result;
 use Elgg\Helpers\Actions\Admin\UpgradeTestBatch;
+use Elgg\Http\ErrorResponse;
+use Elgg\Http\OkResponse;
 
 /**
  * @group UpgradeService
@@ -17,18 +15,17 @@ use Elgg\Helpers\Actions\Admin\UpgradeTestBatch;
 class UpgradeTest extends ActionResponseTestCase {
 
 	public function up() {
+		parent::up();
+		
 		_elgg_services()->session->setLoggedInUser($this->getAdmin());
 	}
-
-	public function down() {
-		_elgg_services()->session->removeLoggedInUser();
-	}
-
+	
 	public function testUpgradeFailsWithInvalidUpgradeEntity() {
-		$this->expectException(EntityNotFoundException::class);
-		$this->executeAction('admin/upgrade', [
+		$response = $this->executeAction('admin/upgrade', [
 			'guid' => -5,
 		]);
+		
+		$this->assertInstanceOf(ErrorResponse::class, $response);
 	}
 
 	public function testUpgradeSucceeds() {

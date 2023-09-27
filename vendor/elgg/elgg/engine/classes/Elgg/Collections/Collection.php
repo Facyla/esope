@@ -4,8 +4,9 @@ namespace Elgg\Collections;
 
 use ArrayAccess;
 use Countable;
-use InvalidArgumentException;
-use InvalidParameterException;
+use Elgg\Exceptions\InvalidParameterException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\OutOfBoundsException;
 use SeekableIterator;
 
 /**
@@ -25,6 +26,11 @@ class Collection implements CollectionInterface,
 	 * @var string
 	 */
 	protected $item_class;
+	
+	/**
+	 * @var int positition of the SeekableIterator
+	 */
+	protected $position;
 
 	/**
 	 * Constructor
@@ -53,6 +59,7 @@ class Collection implements CollectionInterface,
 	 * @param mixed $item Item
 	 *
 	 * @return void
+	 * @throws \Elgg\Exceptions\InvalidParameterException
 	 */
 	protected function assertValidItem($item) {
 		$class = $this->item_class ? : CollectionItemInterface::class;
@@ -72,6 +79,7 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function count() {
 		return count($this->items);
 	}
@@ -201,8 +209,13 @@ class Collection implements CollectionInterface,
 	}
 
 	/**
+	 * ArrayAccess interface functions
+	 */
+	
+	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetExists($offset) {
 		return $this->has($offset);
 	}
@@ -210,6 +223,7 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet($offset) {
 		return $this->get($offset);
 	}
@@ -217,6 +231,7 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet($offset, $value) {
 		$this->assertValidItem($value);
 
@@ -227,58 +242,77 @@ class Collection implements CollectionInterface,
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($offset) {
+		if (isset($this->items[$offset]) && isset($this->position)) {
+			// handle unset during iteration
+			$this->position--;
+		}
+		
 		unset($this->items[$offset]);
 	}
 
 	/**
+	 * SeekableIterator interface functions
+	 */
+	
+	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function current() {
-		return current($this->items);
+		$keys = array_keys($this->items);
+		
+		return $this->get($keys[$this->position]);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function next() {
-		next($this->items);
+		$this->position++;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function key() {
-		return key($this->items);
+		$keys = array_keys($this->items);
+		
+		return $keys[$this->position];
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function valid() {
-		return key($this->items) !== null;
+		$keys = array_keys($this->items);
+		
+		return isset($keys[$this->position]);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function rewind() {
-		reset($this->items);
+		$this->position = 0;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\ReturnTypeWillChange]
 	public function seek($position) {
 		$keys = array_keys($this->items);
 
-		if (isset($keys[$position])) {
-			throw new \OutOfBoundsException();
+		if (!isset($keys[$position])) {
+			throw new OutOfBoundsException();
 		}
 
-		$key = $keys[$position];
-
-		return $this->items[$key];
+		$this->position = $position;
 	}
-
 }

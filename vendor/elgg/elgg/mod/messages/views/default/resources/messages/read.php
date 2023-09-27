@@ -31,7 +31,6 @@ if ($inbox) {
 		'id' => 'messages-reply-form',
 		'class' => 'hidden mtl',
 		'action' => 'action/messages/send',
-		'prevent_double_submit' => true,
 	];
 	$body_params = ['message' => $message];
 	$content .= elgg_view_form('messages/reply', $form_params, $body_params);
@@ -42,13 +41,14 @@ if ($inbox) {
 			'name' => 'reply',
 			'href' => '#messages-reply-form',
 			'text' => elgg_echo('reply'),
-			'link_class' => 'elgg-button elgg-button-action',
-			'rel' => 'toggle',
+			'link_class' => ['elgg-button', 'elgg-button-action', 'elgg-toggle'],
 		]);
 	}
 }
 
 echo elgg_view_page($message->getDisplayName(), [
 	'content' => $content,
+	'entity' => $message,
 	'show_owner_block_menu' => false,
+	'filter_id' => 'messages/view',
 ]);

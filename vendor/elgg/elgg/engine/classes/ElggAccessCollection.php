@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\RuntimeException as ElggRuntimeException;
+
 /**
  * Access collection class
  *
@@ -13,7 +15,6 @@ class ElggAccessCollection extends ElggData {
 	 * Create an access collection object
 	 *
 	 * @param stdClass $row Database row
-	 * @throws InvalidArgumentException
 	 */
 	public function __construct(stdClass $row = null) {
 		$this->initializeAttributes();
@@ -43,12 +44,13 @@ class ElggAccessCollection extends ElggData {
 	 *
 	 * @param string $name  Name
 	 * @param mixed  $value Value
+	 *
 	 * @return void
-	 * @throws RuntimeException
+	 * @throws \Elgg\Exceptions\RuntimeException
 	 */
 	public function __set($name, $value) {
 		if (in_array($name, ['id', 'owner_guid', 'subtype'])) {
-			throw new RuntimeException("$name can not be set at runtime");
+			throw new ElggRuntimeException("$name can not be set at runtime");
 		}
 		$this->attributes[$name] = $value;
 	}
@@ -88,7 +90,7 @@ class ElggAccessCollection extends ElggData {
 			$params = [
 				'access_collection' => $this,
 			];
-			return _elgg_services()->hooks->trigger('access_collection:name', $this->getType(), $params, $name);
+			return (string) _elgg_services()->hooks->trigger('access_collection:name', $this->getType(), $params, $name);
 		};
 
 		$user = _elgg_services()->session->getLoggedInUser();
@@ -109,7 +111,7 @@ class ElggAccessCollection extends ElggData {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function save() {
+	public function save() : bool {
 		if ($this->id > 0) {
 			return _elgg_services()->accessCollections->rename($this->id, $this->name);
 		} else {
@@ -125,13 +127,14 @@ class ElggAccessCollection extends ElggData {
 	}
 
 	/**
-	 * Check if user can this collection
+	 * Check if user can edit this collection
 	 *
 	 * @param int $user_guid GUID of the user
+	 *
 	 * @return bool
 	 */
 	public function canEdit($user_guid = null) {
-		return _elgg_services()->accessCollections->canEdit($this->id, $user_guid);
+		return _elgg_services()->accessCollections->canEdit($this->id, (int) $user_guid);
 	}
 
 	/**
@@ -155,7 +158,7 @@ class ElggAccessCollection extends ElggData {
 	}
 
 	/**
-	 * Adds a new member to access collection
+	 * Adds a user to access collection
 	 *
 	 * @param int $member_guid GUID of the user
 	 * @return bool

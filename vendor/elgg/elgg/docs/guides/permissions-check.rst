@@ -24,7 +24,7 @@ Note that this function can return 3 values: true if the entity has write access
 
 .. code-block:: php
 
-   function myplugin_permissions_check($hook_name, $entity_type, $return_value, $parameters) {
+   function myplugin_permissions_check(\Elgg\Hook $hook) {
       $has_access = determine_access_somehow();
 
       if ($has_access === true) {
@@ -46,21 +46,17 @@ This is a full example using the context to determine if the entity has write ac
    <?php
 
    function myaccess_init() {
-      // Register cron hook
-      if (!elgg_get_plugin_setting('period', 'myaccess')) {
-         elgg_set_plugin_setting('period', 'fiveminute', 'myaccess');
-      }
-
       // override permissions for the myaccess context
       elgg_register_plugin_hook_handler('permissions_check', 'all', 'myaccess_permissions_check');
 
-      elgg_register_plugin_hook_handler('cron', elgg_get_plugin_setting('period', 'myaccess'), 'myaccess_cron');
+      // Register cron hook
+      elgg_register_plugin_hook_handler('cron', elgg_get_plugin_setting('period', 'myaccess', 'fiveminute'), 'myaccess_cron');
    }
 
    /**
     * Hook for cron event. 
     */
-   function myaccess_cron($event, $object_type, $object) {
+   function myaccess_cron(\Elgg\Hook $hook) {
 
       elgg_push_context('myaccess_cron');
 
@@ -74,7 +70,7 @@ This is a full example using the context to determine if the entity has write ac
    /**
     * Overrides default permissions for the myaccess context
     */
-   function myaccess_permissions_check($hook_name, $entity_type, $return_value, $parameters) {	
+   function myaccess_permissions_check(\Elgg\Hook $hook) {	
       if (elgg_in_context('myaccess_cron')) {
          return true;
       }
@@ -84,4 +80,3 @@ This is a full example using the context to determine if the entity has write ac
 
    // Initialise plugin
    register_elgg_event_handler('init', 'system', 'myaccess_init');
-   ?>

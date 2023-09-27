@@ -257,7 +257,7 @@ Custom Middleware
 ~~~~~~~~~~~~~~~~~
 
 Middleware handlers can be set to any callable that receives an instance of ``\Elgg\Request``:
-The handler should throw an instance of ``HttpException`` to prevent route access.
+The handler should throw an instance of ``\Elgg\Exceptions\HttpException`` to prevent route access.
 The handler can return an instance of ``\Elgg\Http\ResponseBuilder`` to prevent further implementation of the routing sequence (a redirect response can be returned to re-route the request).
 
 .. code-block:: php
@@ -320,8 +320,11 @@ Here we rewrite requests for ``news/*`` to ``blog/*``:
 
 .. code-block:: php
 
-    function myplugin_rewrite_handler($hook, $type, $value, $params) {
+    function myplugin_rewrite_handler(\Elgg\Hook $hook) {
+        $value = $hook->getValue();
+        
         $value['identifier'] = 'blog';
+        
         return $value;
     }
 
@@ -329,8 +332,7 @@ Here we rewrite requests for ``news/*`` to ``blog/*``:
 
 .. warning::
 
-	The hook must be registered directly in your plugin ``start.php`` (the ``[init, system]`` event
-	is too late).
+	The hook must be registered directly in your plugin Bootstrap ``boot`` function. The ``init`` function is too late.
 
 Routing overview
 ================
@@ -341,7 +343,6 @@ For regular pages, Elgg's program flow is something like this:
 #. Plugins are initialized.
 #. Elgg parses the URL to identifier ``news`` and segments ``['owner', 'jane']``.
 #. Elgg triggers the plugin hook ``route:rewrite, news`` (see above).
-#. Elgg triggers the plugin hook ``route, blog`` (was rewritten in the rewrite hook).
 #. Elgg finds a registered route that matches the final route path, and renders a resource view associated with it.
    It calls ``elgg_view_resource('blog/owner', $vars)`` where ``$vars`` contains the username.
 #. The ``resources/blog/owner`` view gets the username via ``$vars['username']``, and uses many other views and

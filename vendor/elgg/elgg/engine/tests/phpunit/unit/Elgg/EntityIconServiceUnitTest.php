@@ -2,6 +2,8 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\InvalidParameterException;
+
 /**
  * @group EntityIconService
  * @group UnitTests
@@ -68,12 +70,8 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->hooks = new PluginHooksService(_elgg_services()->events);
 		
-		// we will need simpletype hook to work
-		_elgg_filestore_init();
-		
 		$this->request = \Elgg\Http\Request::create("/action/upload");
 		$this->logger = _elgg_services()->logger;
-		$this->logger->setHooks($this->hooks);
 
 		$this->entities = _elgg_services()->entityTable;
 		$this->uploads = new \Elgg\UploadService($this->request);
@@ -87,42 +85,49 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		]);
 
 		$dir = (new \Elgg\EntityDirLocator($this->entity->guid))->getPath();
-		$this->entity_dir_path = _elgg_config()->dataroot . $dir;
+		$this->entity_dir_path = _elgg_services()->config->dataroot . $dir;
 		elgg_delete_directory($this->entity_dir_path);
 		
 		$dir = (new \Elgg\EntityDirLocator($this->entity->owner_guid))->getPath();
-		$this->owner_dir_path = _elgg_config()->dataroot . $dir;
+		$this->owner_dir_path = _elgg_services()->config->dataroot . $dir;
 		elgg_delete_directory($this->owner_dir_path);
 		
 		// Needed to test elgg_get_inline_url()
 		$session = \ElggSession::getMock();
-		_elgg_services()->setValue('session', $session);
+		_elgg_services()->set('session', $session);
 		_elgg_services()->session->start();
 	}
 
 	public function down() {
-		$this->assertTrue(file_exists(_elgg_config()->dataroot . '1/1/75x125.jpg'));
-		$this->assertTrue(file_exists(_elgg_config()->dataroot . '1/1/300x300.jpg'));
-		$this->assertTrue(file_exists(_elgg_config()->dataroot . '1/1/600x300.jpg'));
-		$this->assertTrue(file_exists(_elgg_config()->dataroot . '1/1/300x600.jpg'));
-		$this->assertTrue(file_exists(_elgg_config()->dataroot . '1/1/400x300.gif'));
-		$this->assertTrue(file_exists(_elgg_config()->dataroot . '1/1/400x300.png'));
+		$this->assertTrue(file_exists(_elgg_services()->config->dataroot . '1/1/75x125.jpg'));
+		$this->assertTrue(file_exists(_elgg_services()->config->dataroot . '1/1/300x300.jpg'));
+		$this->assertTrue(file_exists(_elgg_services()->config->dataroot . '1/1/600x300.jpg'));
+		$this->assertTrue(file_exists(_elgg_services()->config->dataroot . '1/1/300x600.jpg'));
+		$this->assertTrue(file_exists(_elgg_services()->config->dataroot . '1/1/400x300.gif'));
+		$this->assertTrue(file_exists(_elgg_services()->config->dataroot . '1/1/400x300.png'));
 		
 		elgg_delete_directory($this->entity_dir_path);
 		elgg_delete_directory($this->owner_dir_path);
 	}
 
+	/**
+	 * Create a service for testing
+	 *
+	 * @return \Elgg\EntityIconService
+	 */
 	protected function createService() {
-		return new \Elgg\EntityIconService(
-			_elgg_config(),
+		$service = new \Elgg\EntityIconService(
+			_elgg_services()->config,
 			$this->hooks,
-			$this->request,
-			$this->logger,
 			$this->entities,
 			$this->uploads,
 			$this->images,
-			$this->mimetype
+			$this->mimetype,
+			$this->request
 		);
+		$service->setLogger($this->logger);
+		
+		return $service;
 	}
 	
 	public static function getDefaultIconSizes() {
@@ -151,10 +156,10 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		return array_merge($cover_sizes, self::getDefaultIconSizes());
 	}
 
-	public static function getIconSizesForSubtype($hook, $type, $sizes, $params) {
-		$subtype = elgg_extract('entity_subtype', $params);
-		$icon_type = elgg_extract('type', $params);
-		if ($type == 'object' && $subtype == 'foo' && $icon_type == 'icon') {
+	public static function getIconSizesForSubtype(\Elgg\Hook $hook) {
+		$subtype = $hook->getParam('entity_subtype');
+		$icon_type = $hook->getParam('type');
+		if ($hook->getType() == 'object' && $subtype == 'foo' && $icon_type == 'icon') {
 			return self::getTestSizes();
 		}
 	}
@@ -180,12 +185,11 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$service = $this->createService();
 
 		// Should return config values, as we do not have any registered hook
-		$this->assertEquals(_elgg_config()->icon_sizes, $service->getSizes());
+		$this->assertEquals(_elgg_services()->config->icon_sizes, $service->getSizes());
 
 		// If type is not 'icon', should return an default array with only 'master' size present
 		$this->logger->disable();
 		$this->assertEquals(self::getDefaultIconSizes(), $service->getSizes(null, null, 'foo'));
-		$this->logger->enable();
 	}
 
 	public function testCanSetSizesForCustomIconType() {
@@ -221,10 +225,12 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanReplaceIconFile() {
-		$callback = function($hook, $type, $icon, $params) {
-			$size = elgg_extract('size', $params);
-			$type = elgg_extract('type', $params);
-			$entity = elgg_extract('entity', $params);
+		$callback = function(\Elgg\Hook $hook) {
+			$size = $hook->getParam('size');
+			$type = $hook->getParam('type');
+			$icon = $hook->getValue();
+			
+			$entity = $hook->getEntityParam();
 			if ($entity->getSubtype() == 'foo') {
 				$icon->owner_guid = $entity->owner_guid;
 				$icon->setFilename("foo/bar/$type/$size.jpg");
@@ -244,7 +250,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testThrowsExceptionOnInvalidHookHandlerReturnForIconFile() {
-		$callback = function($hook, $type, $icon, $params) {
+		$callback = function(\Elgg\Hook $hook) {
 			return '/path/to/foo.jpg';
 		};
 
@@ -252,14 +258,14 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$service = $this->createService();
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		$service->getIcon($this->entity, 'small');
 	}
 
 	public function testThrowsExceptionOnSaveIconFromNonExistentElggFile() {
 		$service = $this->createService();
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		$service->saveIconFromElggFile($this->entity, new \ElggFile());
 	}
 
@@ -312,9 +318,9 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 	public function testThrowsExceptionIfLocalFileIsNotReadable() {
 		$service = $this->createService();
-		$local_file = _elgg_config()->dataroot . '_______empty';
+		$local_file = _elgg_services()->config->dataroot . '_______empty';
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		$service->saveIconFromLocalFile($this->entity, $local_file);
 	}
 
@@ -322,7 +328,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$service = $this->createService();
 
-		$local_file = _elgg_config()->dataroot . '1/1/400x300.png';
+		$local_file = _elgg_services()->config->dataroot . '1/1/400x300.png';
 		$service->saveIconFromLocalFile($this->entity, $local_file);
 
 		$this->assertTrue($service->hasIcon($this->entity, 'master'));
@@ -342,12 +348,12 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$tmp->owner_guid = $this->user->guid;
 		$tmp->setFilename('tmp.gif');
 		$tmp->open('write');
-		$tmp->write(file_get_contents(_elgg_config()->dataroot . '1/1/400x300.gif'));
+		$tmp->write(file_get_contents(_elgg_services()->config->dataroot . '1/1/400x300.gif'));
 		$tmp->close();
 
 		$uploaded_file = $tmp->getFilenameOnFilestore();
 
-		$upload = new \Symfony\Component\HttpFoundation\File\UploadedFile($uploaded_file, 'tmp.gif', 'image/gif', filesize($uploaded_file), UPLOAD_ERR_OK, true);
+		$upload = new \Symfony\Component\HttpFoundation\File\UploadedFile($uploaded_file, 'tmp.gif', 'image/gif', UPLOAD_ERR_OK, true);
 		$this->request->files->set('icon', $upload);
 
 		$service->saveIconFromUploadedFile($this->entity, 'icon');
@@ -364,7 +370,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$service = $this->createService();
 
-		$local_file = _elgg_config()->dataroot . '1/1/400x300.png';
+		$local_file = _elgg_services()->config->dataroot . '1/1/400x300.png';
 		$service->saveIconFromLocalFile($this->entity, $local_file);
 
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
@@ -381,7 +387,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$service = $this->createService();
 
-		$local_file = _elgg_config()->dataroot . '1/1/400x300.png';
+		$local_file = _elgg_services()->config->dataroot . '1/1/400x300.png';
 		$service->saveIconFromLocalFile($this->entity, $local_file);
 
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
@@ -392,13 +398,13 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 
 	public function testCanReplaceDefaultIconURL() {
 
-		$this->hooks->registerHandler('entity:icon:url', 'object', function() {
+		$this->hooks->registerHandler('entity:icon:url', 'object', function(\Elgg\Hook $hook) {
 			return '/path/to/icon.png';
 		});
 
 		$service = $this->createService();
 
-		$local_file = _elgg_config()->dataroot . '1/1/400x300.png';
+		$local_file = _elgg_services()->config->dataroot . '1/1/400x300.png';
 		$service->saveIconFromLocalFile($this->entity, $local_file);
 
 		$this->assertTrue($service->hasIcon($this->entity, 'small'));
@@ -502,7 +508,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	/**
-	 * @todo test _elgg_filestore_touch_icons() does it's job
+	 * @todo test \Elgg\Icons\TouchIconsOnAccessChangeHandler does it's job
 	 */
 	public function testIconURLInvalidatedOnAccessIdChange() {
 		$this->markTestIncomplete();
@@ -532,9 +538,10 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		// make sure we have a wide master
 		$this->assertTrue($size[0] > $size[1]);
 
-		$this->hooks->registerHandler('entity:icon:prepare', 'object', function($hook, $type, $file, $params) {
+		$this->hooks->registerHandler('entity:icon:prepare', 'object', function(\Elgg\Hook $hook) {
 			// make sure we passed in documented params
-			if (!$params['entity'] instanceof \ElggEntity || !$params['file'] instanceof \ElggFile || !$file instanceof \ElggFile) {
+			$file = $hook->getValue();
+			if (!$hook->getEntityParam() instanceof \ElggEntity || !$hook->getParam('file') instanceof \ElggFile || !$file instanceof \ElggFile) {
 				return;
 			}
 			$new_source = new \ElggFile();
@@ -542,7 +549,7 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 			$new_source->setFilename('300x600.jpg');
 
 			// replace with tall image
-			$file->owner_guid = $params['entity']->guid;
+			$file->owner_guid = $hook->getEntityParam()->guid;
 			$file->setFilename('tmp/tmp.jpg');
 			$file->open('write');
 			$file->close();
@@ -579,17 +586,21 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$file->owner_guid = 1;
 		$file->setFilename('600x300.jpg');
 
-		$this->hooks->registerHandler('entity:icon:save', 'object', function($hook, $type, $return, $params) {
-			if ($return) {
+		$this->hooks->registerHandler('entity:icon:save', 'object', function(\Elgg\Hook $hook) {
+			if ($hook->getValue()) {
 				return;
 			}
 
 			// make sure we passed in documented params
-			if (!$params['entity'] instanceof \ElggEntity || !$params['file'] instanceof \ElggFile) {
+			if (!$hook->getEntityParam() instanceof \ElggEntity || !$hook->getParam('file') instanceof \ElggFile) {
 				return;
 			}
 
-			if (!isset($params['x1']) || !isset($params['y1']) || !isset($params['x2']) || !isset($params['y2'])) {
+			$x1 = $hook->getParam('x1');
+			$x2 = $hook->getParam('x2');
+			$y1 = $hook->getParam('y1');
+			$y2 = $hook->getParam('y2');
+			if (!isset($x1) || !isset($x2) || !isset($y1) || !isset($y2)) {
 				return;
 			}
 
@@ -623,13 +634,13 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$file->owner_guid = 1;
 		$file->setFilename('600x300.jpg');
 
-		$this->hooks->registerHandler('entity:icon:delete', 'object', function($hook, $type, $return, $params) {
-			if ($return === false) {
+		$this->hooks->registerHandler('entity:icon:delete', 'object', function(\Elgg\Hook $hook) {
+			if ($hook->getValue() === false) {
 				return;
 			}
 
 			// make sure we passed in documented params
-			if (!$params['entity'] instanceof \ElggEntity) {
+			if (!$hook->getEntityParam() instanceof \ElggEntity) {
 				return;
 			}
 
@@ -663,24 +674,28 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 		$file->owner_guid = 1;
 		$file->setFilename('600x300.jpg');
 
-		$this->hooks->registerHandler('entity:icon:saved', 'object', function($hook, $type, $return, $params) {
+		$this->hooks->registerHandler('entity:icon:saved', 'object', function(\Elgg\Hook $hook) {
 
 			// make sure we passed in documented params
-			if (!$params['entity'] instanceof \ElggEntity) {
+			if (!$hook->getEntityParam() instanceof \ElggEntity) {
 				return;
 			}
 
-			if (!isset($params['x1']) || !isset($params['y1']) || !isset($params['x2']) || !isset($params['y2'])) {
+			$x1 = $hook->getParam('x1');
+			$x2 = $hook->getParam('x2');
+			$y1 = $hook->getParam('y1');
+			$y2 = $hook->getParam('y2');
+			if (!isset($x1) || !isset($x2) || !isset($y1) || !isset($y2)) {
 				return;
 			}
 
-			_elgg_services()->iconService->deleteIcon($params['entity']);
+			_elgg_services()->iconService->deleteIcon($hook->getEntityParam());
 		});
 
 		$this->assertTrue($this->hooks->hasHandler('entity:icon:saved', 'object'));
 
 		$service = $this->createService();
-		_elgg_services()->setValue('iconService', $service);
+		_elgg_services()->set('iconService', $service);
 
 		$service->saveIconFromElggFile($this->entity, $file);
 
@@ -787,97 +802,6 @@ class EntityIconServiceUnitTest extends \Elgg\UnitTestCase {
 			[75, 125, 'topbar', 16, 16, true],
 			[75, 125, 'large', 200, 200, true, 200, 200],
 		];
-	}
-
-	/**
-	 * @group IconService
-	 */
-	public function testServeIconSends400ForMalformattedRequest() {
-
-		$this->request = \Elgg\Http\Request::create("/serve-icon/x/large");
-
-		$service = $this->createService();
-		$service->setCurrentTime();
-
-		$response = $service->handleServeIconRequest(false);
-
-		$this->assertEquals(400, $response->getStatusCode());
-
-		// We can't compare two DateTime objects here, because Symfony parses the date from string, where as our TimeUsing trait
-		// uses DateTime constructor, which in 7.1 adds microseconds
-		// http://php.net/manual/en/migration71.incompatible.php#migration71.incompatible.datetime-microseconds
-		$this->assertEquals($service->getCurrentTime('-1 day')->format('U'), $response->getExpires()->format('U'));
-	}
-
-	/**
-	 * @group IconService
-	 */
-	public function testServeIconSends404ForNonExistentGuid() {
-
-		$this->request = \Elgg\Http\Request::create("/serve-icon/55/small");
-
-		$service = $this->createService();
-		$service->setCurrentTime();
-
-		$response = $service->handleServeIconRequest(false);
-
-		$this->assertEquals(404, $response->getStatusCode());
-
-		// We can't compare two DateTime objects here, because Symfony parses the date from string, where as our TimeUsing trait
-		// uses DateTime constructor, which in 7.1 adds microseconds
-		// http://php.net/manual/en/migration71.incompatible.php#migration71.incompatible.datetime-microseconds
-		$this->assertEquals($service->getCurrentTime('-1 day')->format('U'), $response->getExpires()->format('U'));
-	}
-
-	/**
-	 * @group IconService
-	 */
-	public function testCanHandleServeIconRequest() {
-
-		$file = new \ElggFile();
-		$file->owner_guid = 1;
-		$file->setFilename('600x300.jpg');
-
-		$this->request = \Elgg\Http\Request::create("/serve-icon/{$this->entity->guid}/small");
-
-		$service = $this->createService();
-		$service->setCurrentTime();
-
-		$service->saveIconFromElggFile($this->entity, $file);
-
-		$response = $service->handleServeIconRequest(false);
-
-		$icon = $service->getIcon($this->entity, 'small');
-
-		$this->assertInstanceOf(\Symfony\Component\HttpFoundation\BinaryFileResponse::class, $response);
-		$this->assertEquals(200, $response->getStatusCode());
-
-		$this->assertEquals('image/jpeg', $response->headers->get('Content-Type'));
-
-		$filesize = filesize($icon->getFilenameOnFilestore());
-		$this->assertEquals($filesize, $response->headers->get('Content-Length'));
-
-		$this->assertStringContainsString('inline', $response->headers->get('Content-Disposition'));
-
-		$this->assertEquals('"' . $icon->getModifiedTime() . '"', $response->headers->get('Etag'));
-
-		// We can't compare two DateTime objects he	re, because Symfony parses the date from string, where as our TimeUsing trait
-		// uses DateTime constructor, which in 7.1 adds microseconds
-		// http://php.net/manual/en/migration71.incompatible.php#migration71.incompatible.datetime-microseconds
-		$this->assertEquals($service->getCurrentTime('+1 day')->format('U'), $response->getExpires()->format('U'));
-
-		$this->assertEquals('max-age=86400, private', $response->headers->get('cache-control'));
-
-		// now try conditional request
-
-		$this->request->headers->set('if-none-match', '"' . $icon->getModifiedTime() . '"');
-		$response = $service->handleServeIconRequest(false);
-
-		$this->assertEquals(304, $response->getStatusCode());
-
-		$this->assertEquals($service->getCurrentTime('+1 day')->format('U'), $response->getExpires()->format('U'));
-
-		$this->assertEquals('max-age=86400, private', $response->headers->get('cache-control'));
 	}
 	
 	public function testDelayedCreationOfIcon() {

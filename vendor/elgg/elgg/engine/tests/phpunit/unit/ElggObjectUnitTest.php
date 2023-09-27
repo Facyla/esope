@@ -56,7 +56,7 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 		_elgg_services()->session->setLoggedInUser($user);
 		
 		$object = new \ElggObject();
-		$object->subtype = $subtype;
+		$object->setSubtype($subtype);
 		$object->title = 'Foo';
 		$object->description = 'Bar';
 		$object->owner_guid = $user->guid;
@@ -65,13 +65,12 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 		$object->time_created = time();
 
 		$object->setCurrentTime(); // We should be able to match timestamps
-		$now = $object->getCurrentTime()->getTimestamp();
+		
+		$this->assertTrue($object->save());
+		
+		$object = get_entity($object->guid);
 
-		$guid = $object->save();
-		$this->assertNotFalse($guid);
-
-		$object = get_entity($guid);
-
+		$this->assertInstanceOf(\ElggObject::class, $object);
 		$this->assertEquals('object', $object->type);
 		$this->assertEquals($subtype, $object->subtype);
 
@@ -84,8 +83,6 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($user->guid, $object->getContainerGUID());
 		$this->assertEquals($user, $object->getContainerEntity());
 		$this->assertEquals(ACCESS_LOGGED_IN, $object->access_id);
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testCanUpdateObject() {
@@ -102,7 +99,7 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 		$object->setCurrentTime();
 
 		// Update river
-		$dbprefix = _elgg_config()->dbprefix;
+		$dbprefix = _elgg_services()->config->dbprefix;
 		$query = "
 			UPDATE {$dbprefix}river
 				SET access_id = :access_id
@@ -110,8 +107,8 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 		";
 
 		$params = [
-			':access_id' => (int) $object->access_id,
-			':object_guid' => (int) $object->guid,
+			'access_id' => (int) $object->access_id,
+			'object_guid' => (int) $object->guid,
 		];
 
 		_elgg_services()->db->addQuerySpec([
@@ -120,14 +117,10 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 			'row_count' => 1,
 		]);
 
-
-
 		$this->assertTrue($object->save());
 
 		$object = get_entity($object->guid);
 		$this->assertEquals(ACCESS_PUBLIC, $object->access_id);
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testCanCloneObject() {
@@ -187,14 +180,17 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanCommentWhenLoggedIn() {
-
+		
 		$user = $this->createUser();
 		_elgg_services()->session->setLoggedInUser($user);
 
 		$object = $this->createObject();
+		$this->assertFalse($object->canComment());
+		
+		// canComment relies on container permissions hook
+		_elgg_services()->hooks->registerHandler('container_permissions_check', 'object', \Elgg\Comments\ContainerPermissionsHandler::class);
+		
 		$this->assertTrue($object->canComment());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testCanAddRelationship() {
@@ -202,15 +198,15 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 		$object = $this->createObject();
 		$target = $this->createObject();
 
-		$this->assertFalse(check_entity_relationship($object->guid, 'related', $target->guid));
+		$this->assertFalse($object->hasRelationship($target->guid, 'related'));
 
 		$object->addRelationship($target->guid, 'related');
 
-		$this->assertInstanceOf(\ElggRelationship::class, check_entity_relationship($object->guid, 'related', $target->guid));
+		$this->assertTrue($object->hasRelationship($target->guid, 'related'));
 
 		$object->removeRelationship($target->guid, 'related');
 
-		$this->assertFalse(check_entity_relationship($object->guid, 'related', $target->guid));
+		$this->assertFalse($object->hasRelationship($target->guid, 'related'));
 	}
 
 	public function testCanSerialize() {
@@ -240,5 +236,13 @@ class ElggObjectUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertEquals($object->guid, $object->getSystemLogID());
 		$this->assertEquals($object, $object->getObjectFromID($object->guid));
+	}
+	
+	public function testGetDisplaynameReturnsString() {
+		$object = new ElggObject();
+		$this->assertEquals('', $object->getDisplayName());
+		
+		$object->title = 'foo';
+		$this->assertEquals('foo', $object->getDisplayName());
 	}
 }

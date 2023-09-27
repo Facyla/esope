@@ -3,6 +3,8 @@
  * Create a new page
  */
 
+use Elgg\Exceptions\Http\EntityPermissionsException;
+
 $container = false;
 
 $parent_guid = (int) elgg_extract('guid', $vars);
@@ -23,11 +25,11 @@ if (!$parent_guid) {
 }
 
 if ($parent && !$parent->canEdit()) {
-	throw new \Elgg\EntityPermissionsException();
+	throw new EntityPermissionsException();
 }
 
 if (!$container || !$container->canWriteToContainer(0, 'object', 'page')) {
-	throw new \Elgg\EntityPermissionsException();
+	throw new EntityPermissionsException();
 }
 
 elgg_set_page_owner_guid($container->guid);
@@ -42,5 +44,6 @@ if ($parent instanceof ElggPage) {
 $vars = pages_prepare_form_vars(null, $parent_guid);
 
 echo elgg_view_page(elgg_echo('add:object:page'), [
-	'content' => elgg_view_form('pages/edit', ['prevent_double_submit' => true], $vars),
+	'content' => elgg_view_form('pages/edit', [], $vars),
+	'filter_id' => 'pages/edit',
 ]);

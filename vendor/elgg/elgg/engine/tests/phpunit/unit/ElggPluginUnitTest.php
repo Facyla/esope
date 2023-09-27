@@ -1,6 +1,8 @@
 <?php
 
 use Elgg\Application;
+use Elgg\Exceptions\ConfigurationException;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * @group Plugins
@@ -10,10 +12,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 
 	public function up() {
 		_elgg_services()->boot->clearCache();
-	}
-
-	public function down() {
-
 	}
 
 	public function testConstructorThrowsWithEmptyId() {
@@ -75,7 +73,9 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 					'type' => 'object',
 					'subtype' => 'test_plugin',
 					'class' => 'TestPluginObject',
-					'searchable' => true,
+					'capabilities' => [
+						'searchable' => true,
+					],
 				],
 			],
 			'actions' => [
@@ -112,31 +112,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 		$plugin->delete();
 	}
 
-	public function testCanGetTextFiles() {
-		$plugin = ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/'));
-
-		$files = $plugin->getAvailableTextFiles();
-
-		$this->assertEquals([
-			'CHANGES.txt' => $this->normalizeTestFilePath('mod/test_plugin/CHANGES.txt'),
-			'README' => $this->normalizeTestFilePath('mod/test_plugin/README'),
-		], $files);
-
-		$plugin->delete();
-	}
-
-	public function testCanReadManifest() {
-
-		$plugin = ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/'));
-
-		$manifest = $plugin->getManifest();
-		$this->assertInstanceOf(ElggPluginManifest::class, $manifest);
-
-		$this->assertEquals('Test Plugin', $plugin->getDisplayName());
-
-		$plugin->delete();
-	}
-
 	public function testUsesBootstrapOnActivate() {
 
 		$plugin = ElggPlugin::fromId('bootstrap_plugin', $this->normalizeTestFilePath('mod/'));
@@ -154,10 +129,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 			$prop = BootstrapPluginTestBootstrap::class . '::' . $method . '_calls';
 			$this->assertEquals(1, $plugin->$prop, "Method $method was called {$plugin->$prop} instead of expected 1 times");
 		}
-
-		// elgg-plugin.php should only be included once
-		global $BOOTSTRAP_PLUGIN_TEST;
-		$this->assertEquals(1, $BOOTSTRAP_PLUGIN_TEST);
 	}
 
 	public function testUsesBootstrapOnDeactivate() {
@@ -176,10 +147,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 			$prop = BootstrapPluginTestBootstrap::class . '::' . $method . '_calls';
 			$this->assertEquals(1, $plugin->$prop, "Method $method was called {$plugin->$prop} instead of expected 1 times");
 		}
-
-		// elgg-plugin.php should only be included once
-		global $BOOTSTRAP_PLUGIN_TEST;
-		$this->assertEquals(1, $BOOTSTRAP_PLUGIN_TEST);
 	}
 
 	public function testUsesBootstrapOnBoot() {
@@ -190,8 +157,8 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 
 		$plugin = ElggPlugin::fromId('bootstrap_plugin', $this->normalizeTestFilePath('mod/'));
 
-		$app->_services->config->boot_cache_ttl = 0;
-		$app->_services->plugins->addTestingPlugin($plugin);
+		$app->internal_services->config->boot_cache_ttl = 0;
+		$app->internal_services->plugins->addTestingPlugin($plugin);
 
 		$app->bootCore();
 
@@ -206,10 +173,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 			$prop = BootstrapPluginTestBootstrap::class . '::' . $method . '_calls';
 			$this->assertEquals(1, $plugin->$prop, "Method $method was called {$plugin->$prop} instead of expected 1 times");
 		}
-
-		// elgg-plugin.php should only be included once
-		global $BOOTSTRAP_PLUGIN_TEST;
-		$this->assertEquals(1, $BOOTSTRAP_PLUGIN_TEST);
 	}
 
 	/**
@@ -230,14 +193,14 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 		$locator->method('locate')
 			->willReturn([]);
 
-		$app->_services->setValue('upgradeLocator', $locator);
+		$app->internal_services->set('upgradeLocator', $locator);
 
 		$app->bootCore();
 
 		$plugin = ElggPlugin::fromId('bootstrap_plugin', $this->normalizeTestFilePath('mod/'));
 		$plugin->activate();
 
-		$prefix = _elgg_config()->dbprefix;
+		$prefix = _elgg_services()->config->dbprefix;
 
 		_elgg_services()->db->addQuerySpec([
 			'sql' => "SHOW TABLES LIKE '{$prefix}upgrade_lock'",
@@ -271,10 +234,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 				$this->assertEquals(1, $plugin->$prop, "Method $method was called {$plugin->$prop} instead of expected 1 times");
 			}
 
-			// elgg-plugin.php should only be included once
-			global $BOOTSTRAP_PLUGIN_TEST;
-			$this->assertEquals(1, $BOOTSTRAP_PLUGIN_TEST);
-
 			$assertions++;
 		};
 
@@ -297,5 +256,11 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 	public function testUsesBootstrapOnShutdown() {
 		// @todo Test that bootstrap handlers are called during the shutdown event
 		$this->markTestIncomplete();
+	}
+	
+	public function testGetVersion() {
+		$plugin = ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/'));
+		
+		$this->assertEquals('1.9', $plugin->getVersion());
 	}
 }

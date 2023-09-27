@@ -27,16 +27,21 @@ if (!empty($item->annotation_id) || !$object instanceof ElggEntity || $object in
 	return;
 }
 
+if (!$object->hasCapability('commentable')) {
+	return;
+}
+
 $comment_count = $object->countComments();
 
 if ($comment_count) {
 	$comments = elgg_get_entities([
 		'type' => 'object',
 		'subtype' => 'comment',
-		'container_guid' => $object->getGUID(),
+		'container_guid' => $object->guid,
 		'limit' => 3,
 		'order_by' => [new OrderByClause('time_created', 'DESC')],
 		'distinct' => false,
+		'metadata_name_value_pairs' => ['level' => 1],
 	]);
 
 	// why is this reversing it? because we're asking for the 3 latest
@@ -48,14 +53,12 @@ if ($comment_count) {
 		'list_class' => 'elgg-river-comments',
 		'show_excerpt' => true,
 		'register_rss_link' => false,
+		'show_responses' => false,
 	]);
 	
 	if ($comment_count > count($comments)) {
-		echo elgg_format_element('div', ['class' => 'elgg-river-more'], elgg_view('output/url', [
-			'href' => $object->getURL(),
-			'text' => elgg_echo('river:comments:all', [$comment_count]),
-			'is_trusted' => true,
-		]));
+		$all_link = elgg_view_url($object->getURL(), elgg_echo('river:comments:all', [$comment_count]));
+		echo elgg_format_element('div', ['class' => 'elgg-river-more'], $all_link);
 	}
 }
 

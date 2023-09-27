@@ -3,11 +3,9 @@
 namespace Elgg\Security;
 
 use Elgg\Config;
-use Elgg\CsrfException;
+use Elgg\Exceptions\Http\CsrfException;
 use Elgg\Request;
-use Elgg\TimeUsing;
-use ElggCrypto;
-use ElggSession;
+use Elgg\Traits\TimeUsing;
 
 /**
  * CSRF Protection
@@ -22,12 +20,12 @@ class Csrf {
 	protected $config;
 
 	/**
-	 * @var ElggSession
+	 * @var \ElggSession
 	 */
 	protected $session;
 
 	/**
-	 * @var ElggCrypto
+	 * @var Crypto
 	 */
 	protected $crypto;
 
@@ -39,15 +37,15 @@ class Csrf {
 	/**
 	 * Constructor
 	 *
-	 * @param Config      $config  Elgg config
-	 * @param ElggSession $session Session
-	 * @param ElggCrypto  $crypto  Crypto service
-	 * @param HmacFactory $hmac    HMAC service
+	 * @param Config       $config  Elgg config
+	 * @param \ElggSession $session Session
+	 * @param Crypto       $crypto  Crypto service
+	 * @param HmacFactory  $hmac    HMAC service
 	 */
 	public function __construct(
 		Config $config,
-		ElggSession $session,
-		ElggCrypto $crypto,
+		\ElggSession $session,
+		Crypto $crypto,
 		HmacFactory $hmac
 	) {
 
@@ -84,30 +82,30 @@ class Csrf {
 					if ($returnval) {
 						return;
 					} else {
-						throw new CsrfException($request->elgg()->echo('actiongatekeeper:pluginprevents'));
+						throw new CsrfException($request->elgg()->translator->translate('actiongatekeeper:pluginprevents'));
 					}
 				} else {
 					// this is necessary because of #5133
 					if ($request->isXhr()) {
-						throw new CsrfException($request->elgg()->echo(
+						throw new CsrfException($request->elgg()->translator->translate(
 							'js:security:token_refresh_failed',
 							[$this->config->wwwroot]
 						));
 					} else {
-						throw new CsrfException($request->elgg()->echo('actiongatekeeper:timeerror'));
+						throw new CsrfException($request->elgg()->translator->translate('actiongatekeeper:timeerror'));
 					}
 				}
 			} else {
 				// this is necessary because of #5133
 				if ($request->isXhr()) {
-					throw new CsrfException($request->elgg()->echo('js:security:token_refresh_failed', [$this->config->wwwroot]));
+					throw new CsrfException($request->elgg()->translator->translate('js:security:token_refresh_failed', [$this->config->wwwroot]));
 				} else {
-					throw new CsrfException($request->elgg()->echo('actiongatekeeper:tokeninvalid'));
+					throw new CsrfException($request->elgg()->translator->translate('actiongatekeeper:tokeninvalid'));
 				}
 			}
 		} else {
-			$error_msg = $request->elgg()->echo('actiongatekeeper:missingfields');
-			throw new CsrfException($request->elgg()->echo($error_msg));
+			$error_msg = $request->elgg()->translator->translate('actiongatekeeper:missingfields');
+			throw new CsrfException($error_msg);
 		}
 	}
 

@@ -33,7 +33,7 @@ jobs:
       - name: Check type
         uses: gsactions/commit-message-checker@v1
         with:
-          pattern: '^((Merge )|(Revert )|(feat(ure)?|fix(es|ed)?|doc(s)?|chore|perf(ormance)?|security|deprecate(s)?)?\()'
+          pattern: '^((Merge )|(Revert )|(feat(ure)?|fix(es|ed)?|doc(s)?|chore|perf(ormance)?|security|deprecate(s|d)?|break(s)?|removed)?\()'
           flags: 'is'
           error: 'Invalid commit message type'
           excludeTitle: true
@@ -51,10 +51,7 @@ jobs:
           php-version: '7.4'
           coverage: none
           extensions: gd,pdo,xml,json,mysqli,pdo_mysql
-          
-      - name: Install Composer v1
-        run: composer self-update --1
-        
+      
       - name: Code checkout
         uses: actions/checkout@v2
       

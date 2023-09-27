@@ -5,7 +5,7 @@
  * @module elgg/popup
  * @since 2.2
  */
-define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
+define('elgg/popup', ['elgg', 'jquery', 'jquery-ui/position', 'jquery-ui/unique-id'], function (elgg, $) {
 
 	var popup = {
 		/**
@@ -21,14 +21,14 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 				if (e.isDefaultPrevented()) {
 					return;
 				}
-				var $eventTargets = $(e.target).parents().andSelf();
+				var $eventTargets = $(e.target).parents().addBack();
 				if ($eventTargets.is('.elgg-state-popped')) {
 					return;
 				}
 				popup.close();
 			});
 			// Bind events only once
-			popup.init = elgg.nullFunction;
+			popup.init = function() {};
 		},
 		/**
 		 * Shortcut to bind a click event on a set of $triggers.
@@ -127,11 +127,6 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 
 			if (!$trigger.is('.elgg-popup-inline')) {
 				$target.appendTo('body');
-
-				// when a popup is absolutely positioned, close the popup on scroll
-				$(document).one('scroll', function() {
-					popup.close();
-				});
 			}
 			
 			// need to do a double position because of positioning issues during fadeIn() in Opera
@@ -168,13 +163,15 @@ define('elgg/popup', ['elgg', 'jquery', 'jquery-ui'], function (elgg, $) {
 					$trigger.removeClass('elgg-state-active');
 				}
 
-				// @todo: use css transitions instead of $.fadeOut()
 				$target.fadeOut().removeClass('elgg-state-active elgg-state-popped');
 
 				$target.trigger('close');
 			});
 		}
 	};
-
+	
+	popup.bind($('.elgg-popup'));
+	popup.bind($('[rel="popup"]')); // deprecated
+	
 	return popup;
 });

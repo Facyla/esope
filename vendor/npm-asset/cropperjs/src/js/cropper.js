@@ -87,7 +87,7 @@ class Cropper {
         return;
       }
 
-      // e.g.: "http://example.com/img/picture.jpg"
+      // e.g.: "https://example.com/img/picture.jpg"
       url = element.src;
     } else if (tagName === 'canvas' && window.HTMLCanvasElement) {
       url = element.toDataURL();
@@ -116,27 +116,38 @@ class Cropper {
       return;
     }
 
-    // XMLHttpRequest disallows to open a Data URL in some browsers like IE11 and Safari
+    // Detect the mime type of the image directly if it is a Data URL
     if (REGEXP_DATA_URL.test(url)) {
+      // Read ArrayBuffer from Data URL of JPEG images directly for better performance
       if (REGEXP_DATA_URL_JPEG.test(url)) {
         this.read(dataURLToArrayBuffer(url));
       } else {
+        // Only a JPEG image may contains Exif Orientation information,
+        // the rest types of Data URLs are not necessary to check orientation at all.
         this.clone();
       }
 
       return;
     }
 
+    // 1. Detect the mime type of the image by a XMLHttpRequest.
+    // 2. Load the image as ArrayBuffer for reading orientation if its a JPEG image.
     const xhr = new XMLHttpRequest();
     const clone = this.clone.bind(this);
 
     this.reloading = true;
     this.xhr = xhr;
-    xhr.ontimeout = clone;
+
+    // 1. Cross origin requests are only supported for protocol schemes:
+    // http, https, data, chrome, chrome-extension.
+    // 2. Access to XMLHttpRequest from a Data URL will be blocked by CORS policy
+    // in some browsers as IE11 and Safari.
     xhr.onabort = clone;
     xhr.onerror = clone;
+    xhr.ontimeout = clone;
 
     xhr.onprogress = () => {
+      // Abort the request directly if it not a JPEG image for better performance
       if (xhr.getResponseHeader('content-type') !== MIME_TYPE_JPEG) {
         xhr.abort();
       }
@@ -156,7 +167,8 @@ class Cropper {
       url = addTimestamp(url);
     }
 
-    xhr.open('GET', url);
+    // The third parameter is required for avoiding side-effect (#682)
+    xhr.open('GET', url, true);
     xhr.responseType = 'arraybuffer';
     xhr.withCredentials = element.crossOrigin === 'use-credentials';
     xhr.send();
@@ -164,14 +176,16 @@ class Cropper {
 
   read(arrayBuffer) {
     const { options, imageData } = this;
+
+    // Reset the orientation value to its default value 1
+    // as some iOS browsers will render image with its orientation
     const orientation = resetAndGetOrientation(arrayBuffer);
     let rotate = 0;
     let scaleX = 1;
     let scaleY = 1;
 
     if (orientation > 1) {
-      // Generate a new Data URL with the orientation value set to 1
-      // as some iOS browsers will render image with its orientation
+      // Generate a new URL which has the default orientation value
       this.url = arrayBufferToDataURL(arrayBuffer, MIME_TYPE_JPEG);
       ({ rotate, scaleX, scaleY } = parseOrientation(orientation));
     }
@@ -190,20 +204,16 @@ class Cropper {
 
   clone() {
     const { element, url } = this;
-    let crossOrigin;
-    let crossOriginUrl;
+    let { crossOrigin } = element;
+    let crossOriginUrl = url;
 
     if (this.options.checkCrossOrigin && isCrossOriginURL(url)) {
-      ({ crossOrigin } = element);
-
-      if (crossOrigin) {
-        crossOriginUrl = url;
-      } else {
+      if (!crossOrigin) {
         crossOrigin = 'anonymous';
-
-        // Bust cache when there is not a "crossOrigin" property
-        crossOriginUrl = addTimestamp(url);
       }
+
+      // Bust cache when there is not a "crossOrigin" property (#519)
+      crossOriginUrl = addTimestamp(url);
     }
 
     this.crossOrigin = crossOrigin;
@@ -216,6 +226,7 @@ class Cropper {
     }
 
     image.src = crossOriginUrl || url;
+    image.alt = element.alt || 'The image to crop';
     this.image = image;
     image.onload = this.start.bind(this);
     image.onerror = this.stop.bind(this);
@@ -224,26 +235,29 @@ class Cropper {
   }
 
   start() {
-    const image = this.isImg ? this.element : this.image;
+    const { image } = this;
 
     image.onload = null;
     image.onerror = null;
     this.sizing = true;
 
-    const IS_SAFARI = WINDOW.navigator && /(Macintosh|iPhone|iPod|iPad).*AppleWebKit/i.test(WINDOW.navigator.userAgent);
+    // Match all browsers that use WebKit as the layout engine in iOS devices,
+    // such as Safari for iOS, Chrome for iOS, and in-app browsers.
+    const isIOSWebKit = WINDOW.navigator && /(?:iPad|iPhone|iPod).*?AppleWebKit/i.test(WINDOW.navigator.userAgent);
     const done = (naturalWidth, naturalHeight) => {
       assign(this.imageData, {
         naturalWidth,
         naturalHeight,
         aspectRatio: naturalWidth / naturalHeight,
       });
+      this.initialImageData = assign({}, this.imageData);
       this.sizing = false;
       this.sized = true;
       this.build();
     };
 
-    // Modern browsers (except Safari)
-    if (image.naturalWidth && !IS_SAFARI) {
+    // Most modern browsers (excepts iOS WebKit)
+    if (image.naturalWidth && !isIOSWebKit) {
       done(image.naturalWidth, image.naturalHeight);
       return;
     }
@@ -256,16 +270,16 @@ class Cropper {
     sizingImage.onload = () => {
       done(sizingImage.width, sizingImage.height);
 
-      if (!IS_SAFARI) {
+      if (!isIOSWebKit) {
         body.removeChild(sizingImage);
       }
     };
 
     sizingImage.src = image.src;
 
-    // iOS Safari will convert the image automatically
+    // iOS WebKit will convert the image automatically
     // with its orientation once append it into DOM (#279)
-    if (!IS_SAFARI) {
+    if (!isIOSWebKit) {
       sizingImage.style.cssText = (
         'left:0;'
         + 'max-height:none!important;'
@@ -325,10 +339,8 @@ class Cropper {
     // Inserts the cropper after to the current image
     container.insertBefore(cropper, element.nextSibling);
 
-    // Show the image if is hidden
-    if (!this.isImg) {
-      removeClass(image, CLASS_HIDE);
-    }
+    // Show the hidden image
+    removeClass(image, CLASS_HIDE);
 
     this.initPreview();
     this.bind();
@@ -392,7 +404,13 @@ class Cropper {
     this.ready = false;
     this.unbind();
     this.resetPreview();
-    this.cropper.parentNode.removeChild(this.cropper);
+
+    const { parentNode } = this.cropper;
+
+    if (parentNode) {
+      parentNode.removeChild(this.cropper);
+    }
+
     removeClass(this.element, CLASS_HIDDEN);
   }
 

@@ -2,15 +2,12 @@
 
 namespace Elgg;
 
-use Elgg\Database\EntityTable\UserFetchFailureException;
+use Elgg\Exceptions\Database\UserFetchFailureException;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * Widgets service
  *
  * @internal
- *
  * @since 1.9.0
  */
 class WidgetsService {
@@ -53,7 +50,7 @@ class WidgetsService {
 			'owner_guid' => $owner_guid,
 			'private_setting_name' => 'context',
 			'private_setting_value' => $context,
-			'limit' => 0,
+			'limit' => false,
 			'preload_private_settings' => true,
 		]);
 		
@@ -120,10 +117,10 @@ class WidgetsService {
 			return false;
 		}
 
-		$widget = new \ElggWidget;
+		$widget = new \ElggWidget();
 		$widget->owner_guid = $owner_guid;
 		$widget->container_guid = $owner_guid;
-		$widget->access_id = isset($access_id) ? $access_id : get_default_access();
+		$widget->access_id = $access_id ?? elgg_get_default_access();
 		
 		if (!$widget->save()) {
 			return false;
@@ -133,7 +130,7 @@ class WidgetsService {
 		$widget->handler = $handler;
 		$widget->context = $context;
 
-		return $widget->getGUID();
+		return $widget->guid;
 	}
 
 	/**
@@ -266,12 +263,15 @@ class WidgetsService {
 	}
 
 	/**
-	 * @param array $params Associative array of params used to determine what to return
+	 * Returns the registered widget types.
 	 *
-	 * array (
+	 * Use params to limit the result:
+	 * [
 	 *     'context' => string (defaults to elgg_get_context()),
 	 *     'container' => \ElggEntity (defaults to null)
-	 * )
+	 * ]
+	 *
+	 * @param array $params Associative array of params used to determine what to return
 	 *
 	 * @return \Elgg\WidgetDefinition[]
 	 */
@@ -290,7 +290,7 @@ class WidgetsService {
 		$widgets = [];
 		/* @var $widget_definition \Elgg\WidgetDefinition */
 		foreach ($available_widgets as $widget_definition) {
-			if (!($widget_definition instanceof WidgetDefinition)) {
+			if (!$widget_definition instanceof WidgetDefinition) {
 				continue;
 			}
 

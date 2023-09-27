@@ -121,18 +121,6 @@ define('ELGG_HTTP_NETWORK_AUTHENTICATION_REQUIRED', 511); // RFC6585
 define('ELGG_JSON_ENCODING', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 
 /**
- * Prefix for plugin user setting names
- */
-define('ELGG_PLUGIN_USER_SETTING_PREFIX', 'plugin:user_setting:');
-
-/**
- * Internal settings prefix
- *
- * @todo This could be resolved by promoting \ElggPlugin to a 5th type.
- */
-define('ELGG_PLUGIN_INTERNAL_PREFIX', 'elgg:internal:');
-
-/**
  * Value types
  */
 define('ELGG_VALUE_INTEGER', 'integer');
@@ -140,6 +128,7 @@ define('ELGG_VALUE_STRING', 'string');
 define('ELGG_VALUE_GUID', 'guid');
 define('ELGG_VALUE_ID', 'id');
 define('ELGG_VALUE_TIMESTAMP', 'timestamp');
+define('ELGG_VALUE_BOOL', 'bool');
 
 /**
  * Cache init values
@@ -148,7 +137,7 @@ define('ELGG_CACHE_BLACK_HOLE', 1);
 define('ELGG_CACHE_RUNTIME', 2);
 define('ELGG_CACHE_FILESYSTEM', 4);
 define('ELGG_CACHE_PERSISTENT', 8);
-define('ELGG_CACHE_APC', 16);
+define('ELGG_CACHE_APC', 16); // deprecated in Elgg 4.2
 define('ELGG_CACHE_LOCALFILESYSTEM', 32);
 
 /**
@@ -158,3 +147,5 @@ define('ELGG_IGNORE_ACCESS', 1);
 define('ELGG_ENFORCE_ACCESS', 2);
 define('ELGG_SHOW_DISABLED_ENTITIES', 4);
 define('ELGG_HIDE_DISABLED_ENTITIES', 8);
+define('ELGG_DISABLE_SYSTEM_LOG', 16);
+define('ELGG_ENABLE_SYSTEM_LOG', 32);

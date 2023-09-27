@@ -3,6 +3,8 @@
  * History of revisions of a page
  */
 
+use Elgg\Exceptions\Http\EntityNotFoundException;
+
 $page_guid = elgg_extract('guid', $vars);
 
 elgg_entity_gatekeeper($page_guid, 'object', 'page');
@@ -11,7 +13,7 @@ $page = get_entity($page_guid);
 
 $container = $page->getContainerEntity();
 if (!$container) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new EntityNotFoundException();
 }
 
 elgg_set_page_owner_guid($container->getGUID());
@@ -37,4 +39,6 @@ $content = elgg_list_annotations([
 
 echo elgg_view_page($title, [
 	'content' => $content,
+	'filter_id' => 'pages/history',
+	'filter_value' => 'history',
 ]);

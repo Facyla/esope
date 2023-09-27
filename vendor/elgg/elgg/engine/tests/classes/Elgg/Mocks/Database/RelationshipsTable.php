@@ -22,31 +22,41 @@ class RelationshipsTable extends DbRelationshipsTable {
 	/**
 	 * @var stdClass[]
 	 */
-	public $rows = [];
+	protected $rows = [];
 
 	/**
 	 * @var int
 	 */
-	static $iterator = 100;
+	protected static $iterator = 100;
 
 	/**
 	 *
 	 * @var array
 	 */
-	private $query_specs;
+	protected $query_specs = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function add($guid_one, $relationship, $guid_two, $return_id = false) {
-		$rel = $this->check($guid_one, $relationship, $guid_two);
-		if ($rel) {
+		// Check for duplicates
+		// note: escape $relationship after this call, we don't want to double-escape
+		if ($this->check($guid_one, $relationship, $guid_two)) {
+			return false;
+		}
+		
+		// Check if the related entities exist
+		if (!$this->entities->exists($guid_one) || !$this->entities->exists($guid_two)) {
+			// one or both of the guids doesn't exist
 			return false;
 		}
 
-		static::$iterator++;
-		$id = static::$iterator;
+		self::$iterator++;
+		$id = self::$iterator;
 
+		// lock the time to prevent testing issues
+		$this->setCurrentTime();
+		
 		$row = (object) [
 			'id' => $id,
 			'guid_one' => (int) $guid_one,
@@ -59,7 +69,12 @@ class RelationshipsTable extends DbRelationshipsTable {
 
 		$this->addQuerySpecs($row);
 
-		return parent::add($row->guid_one, $row->relationship, $row->guid_two, $return_id);
+		$result = parent::add($row->guid_one, $row->relationship, $row->guid_two, $return_id);
+		
+		// reset the time
+		$this->resetCurrentTime();
+		
+		return $result;
 	}
 
 	/**
@@ -68,7 +83,7 @@ class RelationshipsTable extends DbRelationshipsTable {
 	 * @param int $id Relationship ID
 	 * @return void
 	 */
-	public function clearQuerySpecs($id) {
+	protected function clearQuerySpecs($id) {
 		if (!empty($this->query_specs[$id])) {
 			foreach ($this->query_specs[$id] as $spec) {
 				$this->db->removeQuerySpec($spec);
@@ -82,7 +97,7 @@ class RelationshipsTable extends DbRelationshipsTable {
 	 * @param stdClass $row Data row
 	 * @return void
 	 */
-	public function addQuerySpecs(stdClass $row) {
+	protected function addQuerySpecs(stdClass $row) {
 
 		$this->clearQuerySpecs($row->id);
 
@@ -154,5 +169,4 @@ class RelationshipsTable extends DbRelationshipsTable {
 			},
 		]);
 	}
-
 }

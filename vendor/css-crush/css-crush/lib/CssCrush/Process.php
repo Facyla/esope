@@ -8,38 +8,38 @@ namespace CssCrush;
 
 class Process
 {
-    public function __construct($user_options = array(), $context = array())
+    use EventEmitter;
+
+    public function __construct($user_options = [], $context = [])
     {
         $config = Crush::$config;
 
         Crush::loadAssets();
 
         // Initialize properties.
-        $this->cacheData = array();
-        $this->mixins = array();
-        $this->fragments = array();
-        $this->references = array();
-        $this->absoluteImports = array();
+        $this->cacheData = [];
+        $this->mixins = [];
+        $this->fragments = [];
+        $this->references = [];
+        $this->absoluteImports = [];
         $this->charset = null;
-        $this->sources = array();
-        $this->vars = array();
-        $this->plugins = array();
-        $this->settings = array();
+        $this->sources = [];
+        $this->vars = [];
+        $this->plugins = [];
         $this->misc = new \stdClass();
         $this->input = new \stdClass();
         $this->output = new \stdClass();
         $this->tokens = new Tokens();
         $this->functions = new Functions();
-        $this->hooks = new Hooks();
         $this->sourceMap = null;
-        $this->selectorAliases = array();
+        $this->selectorAliases = [];
         $this->selectorAliasesPatt = null;
         $this->io = new Crush::$config->io($this);
 
-        $this->errors = array();
-        $this->warnings = array();
-        $this->debugLog = array();
-        $this->stat = array();
+        $this->errors = [];
+        $this->warnings = [];
+        $this->debugLog = [];
+        $this->stat = [];
 
         // Copy config values.
         $this->aliases = $config->aliases;
@@ -48,7 +48,7 @@ class Process
         $this->options = new Options($user_options, $config->options);
 
         // Context options.
-        $context += array('type' => 'filter', 'data' => '');
+        $context += ['type' => 'filter', 'data' => ''];
         $this->ioContext = $context['type'];
 
         // Keep track of global vars to maintain cache integrity.
@@ -61,16 +61,22 @@ class Process
         $this->minifyOutput = $this->options->__get('minify');
         $this->newline = $this->options->__get('newlines');
 
+        $useContextOption = ! empty($this->options->context)
+            && (php_sapi_name() === 'cli' || $context['type'] === 'filter');
+
         if ($context['type'] === 'file') {
             $file = $context['data'];
             $this->input->raw = $file;
             if (! ($inputFile = Util::resolveUserPath($file, null, $this->docRoot))) {
                 throw new \Exception('Input file \'' . basename($file) . '\' not found.');
             }
-            $this->resolveContext(dirname($inputFile), $inputFile);
+            $inputDir = $useContextOption
+                ? $this->options->context
+                : dirname($inputFile);
+            $this->resolveContext($inputDir, $inputFile);
         }
         elseif ($context['type'] === 'filter') {
-            if (! empty($this->options->context)) {
+            if ($useContextOption) {
                 $this->resolveContext($this->options->context);
             }
             else {
@@ -107,8 +113,7 @@ class Process
         }
 
         $this->input->dir = $input_dir ?: $this->docRoot;
-        $this->input->dirUrl = substr($input_dir, strlen($this->docRoot));
-
+        $this->input->dirUrl = substr($this->input->dir, strlen($this->docRoot));
         $this->output->dir = $this->io->getOutputDir();
         $this->output->filename = $this->io->getOutputFileName();
         $this->output->dirUrl = substr($this->output->dir, strlen($this->docRoot));
@@ -176,20 +181,19 @@ class Process
                 $commandArgs = 'csscrush ' . implode(' ', $argv);
             }
 
-            $tags = array(
+            $tags = [
                 'datetime' => @date('Y-m-d H:i:s O'),
                 'year' => @date('Y'),
                 'command' => $commandArgs,
                 'plugins' => implode(',', $this->plugins),
-                'version' => csscrush_version(),
-                'git_version' => function ()  {
-                    return csscrush_version(true);
+                'version' => function ()  {
+                    return Version::detect();
                 },
                 'compile_time' => function () {
                     $now = microtime(true) - Crush::$process->stat['compile_start_time'];
                     return round($now, 4) . ' seconds';
                 },
-            );
+            ];
 
             foreach (array_keys($boilerplateMatches[0]) as $index) {
                 $tagName = trim($boilerplateMatches[1][$index]);
@@ -269,7 +273,7 @@ class Process
         foreach ($vendor_names as &$vendor_name) {
             $vendor_name = trim($vendor_name, '-');
         }
-        $vendor_patt = '~^\-(' . implode($vendor_names, '|') . ')\-~i';
+        $vendor_patt = '~^\-(' . implode('|', $vendor_names) . ')\-~i';
 
 
         // Loop the aliases array, filter down to the target vendor.
@@ -321,7 +325,7 @@ class Process
                         continue;
                     }
 
-                    $result = array();
+                    $result = [];
 
                     foreach ($prefix_array as $prefix) {
                         if (preg_match($vendor_patt, $prefix)) {
@@ -350,7 +354,7 @@ class Process
         $this->plugins = array_unique($this->options->plugins);
 
         foreach ($this->plugins as $plugin) {
-            Plugin::enable($plugin);
+            Crush::enablePlugin($plugin);
         }
     }
 
@@ -360,10 +364,10 @@ class Process
 
     protected function captureVars()
     {
-        Crush::$process->vars = Crush::$process->string->captureDirectives(array('set', 'define'), array(
+        Crush::$process->vars = Crush::$process->string->captureDirectives(['set', 'define'], [
             'singles' => true,
             'lowercase_keys' => false,
-        )) + Crush::$process->vars;
+        ]) + Crush::$process->vars;
 
         // For convenience adding a runtime variable for cache busting linked resources.
         $this->vars['timestamp'] = (int) $this->stat['compile_start_time'];
@@ -407,15 +411,15 @@ class Process
         static $varFunction, $varFunctionSimple;
         if (! $varFunction) {
             $varFunctionSimple = Regex::make('~\$\( \s* ({{ ident }}) \s* \)~xS');
-            $varFunction = new Functions(array('$' => function ($rawArgs) {
-                list($name, $defaultValue) = Functions::parseArgsSimple($rawArgs);
-                if (isset(Crush::$process->vars[$name])) {
-                    return Crush::$process->vars[$name];
+            $varFunction = new Functions(['$' => function ($rawArgs) {
+                $args = Functions::parseArgsSimple($rawArgs);
+                if (isset(Crush::$process->vars[$args[0]])) {
+                    return Crush::$process->vars[$args[0]];
                 }
                 else {
-                    return $defaultValue;
+                    return isset($args[1]) ? $args[1] : '';
                 }
-            }));
+            }]);
         }
 
         // Variables with no default value.
@@ -440,17 +444,85 @@ class Process
         return $varsPlaced;
     }
 
-
     #############################
-    #  @settings blocks.
+    #  @for..in blocks.
 
-    protected function resolveSettings()
+    protected function resolveLoops()
     {
-        $captured_settings = $this->string->captureDirectives('settings', array('singles' => true));
+        $LOOP_VAR_PATT = '~\#\( \s* (?<arg>[a-zA-Z][\.a-zA-Z0-9-_]*) \s* \)~x';
+        $LOOP_PATT = Regex::make('~
+            (?<expression>
+                @for \s+ (?<var>{{ident}}) \s+ in \s+ (?<list>[^{]+)
+            ) \s*
+            {{ block }}
+        ~xiS');
 
-        $this->settings = new Settings($this->options->settings + $captured_settings);
+        $apply_scope = function ($str, $context) use ($LOOP_VAR_PATT, $LOOP_PATT) {
+            // Need to temporarily hide child block scopes.
+            $child_scopes = [];
+            $str = preg_replace_callback($LOOP_PATT, function ($m) use (&$child_scopes) {
+                $label = '?B' . count($child_scopes) . '?';
+                $child_scopes[$label] = $m['block'];
+                return $m['expression'] . $label;
+            }, $str);
+
+            $str = preg_replace_callback($LOOP_VAR_PATT, function ($m) use ($context) {
+                // Normalize casing of built-in loop variables.
+                // User variables are case-sensitive.
+                $arg = preg_replace_callback('~^loop\.(parent\.)?counter0?$~i', function ($m) {
+                    return strtolower($m[0]);
+                }, $m['arg']);
+
+                return isset($context[$arg]) ? $context[$arg] : '';
+            }, $str);
+
+            return str_replace(array_keys($child_scopes), array_values($child_scopes), $str);
+        };
+
+        $resolve_list = function ($list) {
+            // Resolve the list of items for iteration.
+            // Either a generator function or a plain list.
+            $items = [];
+            $this->placeVars($list);
+            $list = $this->functions->apply($list);
+            if (preg_match(Regex::make('~(?<func>range){{ parens }}~ix'), $list, $m)) {
+                $func = strtolower($m['func']);
+                $args = Functions::parseArgs($m['parens_content']);
+                switch ($func) {
+                    case 'range':
+                        $items = range(...$args);
+                        break;
+                }
+            }
+            else {
+                $items = Util::splitDelimList($list);
+            }
+
+            return $items;
+        };
+
+        $unroll = function ($str, $context = []) use (&$unroll, $LOOP_PATT, $apply_scope, $resolve_list) {
+            $str = $apply_scope($str, $context);
+            while (preg_match($LOOP_PATT, $str, $m, PREG_OFFSET_CAPTURE)) {
+                $str = substr_replace($str, '', $m[0][1], strlen($m[0][0]));
+                $context['loop.parent.counter'] = isset($context['loop.counter']) ? $context['loop.counter'] : -1;
+                $context['loop.parent.counter0'] = isset($context['loop.counter0']) ? $context['loop.counter0'] : -1;
+                foreach ($resolve_list($m['list'][0]) as $index => $value) {
+                    $str .= $unroll($m['block_content'][0], [
+                        $m['var'][0] => $value,
+                        'loop.counter' => $index + 1,
+                        'loop.counter0' => $index,
+                    ] + $context);
+                }
+            }
+
+            return $str;
+        };
+
+        $this->string->pregReplaceCallback($LOOP_PATT, function ($m) use ($unroll) {
+            return Template::tokenize($unroll(Template::unTokenize($m[0])));
+        });
     }
-
 
     #############################
     #  @ifdefine blocks.
@@ -516,7 +588,7 @@ class Process
         $this->string->pregReplaceCallback(Regex::$patt->fragmentCapture, function ($m) use (&$fragments) {
             $fragments[$m['name']] = new Fragment(
                     $m['block_content'],
-                    array('name' => strtolower($m['name']))
+                    ['name' => strtolower($m['name'])]
                 );
             return '';
         });
@@ -524,7 +596,7 @@ class Process
         $this->string->pregReplaceCallback(Regex::$patt->fragmentInvoke, function ($m) use (&$fragments) {
             $fragment = isset($fragments[$m['name']]) ? $fragments[$m['name']] : null;
             if ($fragment) {
-                $args = array();
+                $args = [];
                 if (isset($m['parens'])) {
                     $args = Functions::parseArgs($m['parens_content']);
                 }
@@ -556,7 +628,7 @@ class Process
 
             $traceOffset = $traceMatches[0][$count][1];
 
-            preg_match($rulePatt, $this->string->raw, $ruleMatch, null, $traceOffset);
+            preg_match($rulePatt, $this->string->raw, $ruleMatch, PREG_UNMATCHED_AS_NULL, $traceOffset);
 
             $selector = trim($ruleMatch['selector']);
             $block = trim($ruleMatch['block_content']);
@@ -611,7 +683,7 @@ class Process
     protected function processRules()
     {
         // Create table of name/selector to rule references.
-        $namedReferences = array();
+        $namedReferences = [];
 
         $previousRule = null;
         foreach ($this->tokens->store->r as $rule) {
@@ -633,48 +705,21 @@ class Process
 
         foreach ($this->tokens->store->r as $rule) {
 
-            $rule->declarations->flatten($rule);
-            $rule->declarations->process($rule);
+            $rule->declarations->flatten();
+            $rule->declarations->process();
 
-            $this->hooks->run('rule_prealias', $rule);
+            $this->emit('rule_prealias', $rule);
 
             $rule->declarations->aliasProperties($rule->vendorContext);
             $rule->declarations->aliasFunctions($rule->vendorContext);
             $rule->declarations->aliasDeclarations($rule->vendorContext);
 
-            $this->hooks->run('rule_postalias', $rule);
+            $this->emit('rule_postalias', $rule);
 
             $rule->selectors->expand();
             $rule->applyExtendables();
 
-            $this->hooks->run('rule_postprocess', $rule);
-        }
-    }
-
-
-    #############################
-    #  @in blocks.
-
-    protected function resolveInBlocks()
-    {
-        $matches = $this->string->matchAll('~@in\s+(?<selectors>[^{]+)\{~iS');
-
-        while ($match = array_pop($matches)) {
-
-            $selectorsMatch = trim($match['selectors'][0]);
-            $curlyMatch = new BalancedMatch($this->string, $match[0][1]);
-
-            if (! $curlyMatch->match || empty($selectorsMatch)) {
-                continue;
-            }
-
-            $rawSelectors = Util::splitDelimList($selectorsMatch);
-
-            foreach (Regex::matchAll(Regex::$patt->r_token, $curlyMatch->inside()) as $ruleMatch) {
-                Crush::$process->tokens->get($ruleMatch[0][0])->selectors->merge($rawSelectors);
-            }
-
-            $curlyMatch->unWrap();
+            $this->emit('rule_postprocess', $rule);
         }
     }
 
@@ -708,7 +753,7 @@ class Process
 
                 // Build up string with aliased blocks for splicing.
                 $original_block = $curly_match->whole();
-                $new_blocks = array();
+                $new_blocks = [];
 
                 foreach ($at_rule_aliases as $alias) {
 
@@ -723,8 +768,8 @@ class Process
                     // Duplicate rules.
                     if (preg_match_all($regex->r_token, $copy_block, $copy_matches)) {
 
-                        $originals = array();
-                        $replacements = array();
+                        $originals = [];
+                        $replacements = [];
 
                         foreach ($copy_matches[0] as $rule_label) {
 
@@ -767,7 +812,7 @@ class Process
 
         // Formatting replacements.
         // Strip newlines added during processing.
-        $regex_replacements = array();
+        $regex_replacements = [];
         $regex_replacements['~\n+~'] = '';
 
         if ($minify) {
@@ -795,7 +840,7 @@ class Process
 
         // Record stats then drop rule objects to reclaim memory.
         Crush::runStat('selector_count', 'rule_count', 'vars');
-        $this->tokens->store->r = array();
+        $this->tokens->store->r = [];
 
         // If specified, apply advanced minification.
         if (is_array($minify)) {
@@ -857,21 +902,26 @@ class Process
             $this->string->prepend("@charset \"$this->charset\";$EOL");
         }
 
-        $this->string->restore(array('u', 's'));
+        $this->string->restore(['u', 's']);
 
         if ($this->generateMap) {
             $this->generateSourceMap();
         }
     }
 
+    private $iniOriginal = [];
     public function preCompile()
     {
-        // Ensure relevant ini settings aren't too conservative.
-        if (ini_get('pcre.backtrack_limit') < 1000000) {
-            ini_set('pcre.backtrack_limit', 1000000);
-        }
-        if (preg_match('~^(\d+)M$~', ini_get('memory_limit'), $m) && $m[1] < 128) {
-            ini_set('memory_limit', '128M');
+        foreach ([
+            'pcre.backtrack_limit' => 1000000,
+            'pcre.jit' => 0, // Have run into PREG_JIT_STACKLIMIT_ERROR (issue #82).
+            'memory_limit' => '128M',
+        ] as $name => $value) {
+            $this->iniOriginal[$name] = ini_get($name);
+            if ($name === 'memory_limit' && $this->returnBytes(ini_get($name)) > $this->returnBytes($value)) {
+                continue;
+            }
+            ini_set($name, $value);
         }
 
         $this->filterPlugins();
@@ -882,15 +932,34 @@ class Process
         $this->stat['compile_start_time'] = microtime(true);
     }
 
-    public function postCompile()
+    private function returnBytes(string $value)
     {
-        foreach ($this->plugins as $plugin) {
-            Plugin::disable($plugin);
+        $value = trim($value);
+        $last = strtolower($value[strlen($value) - 1]);
+        $value = (float) $value;
+
+        switch ($last) {
+            // The 'G' modifier is available
+            case 'g':
+                $value *= 1024;
+            case 'm':
+                $value *= 1024;
+            case 'k':
+                $value *= 1024;
         }
 
+        return $value;
+    }
+
+    public function postCompile()
+    {
         $this->release();
 
         Crush::runStat('compile_time');
+
+        foreach ($this->iniOriginal as $name => $value) {
+            ini_set($name, $value);
+        }
     }
 
     public function compile()
@@ -900,19 +969,19 @@ class Process
         $importer = new Importer($this);
         $this->string = new StringObject($importer->collate());
 
-        // Capture phase 0 hook: Before all variables and settings have resolved.
-        $this->hooks->run('capture_phase0', $this);
+        // Capture phase 0 hook: Before all variables have resolved.
+        $this->emit('capture_phase0', $this);
 
         $this->captureVars();
 
-        $this->placeAllVars();
-
         $this->resolveIfDefines();
 
-        $this->resolveSettings();
+        $this->resolveLoops();
 
-        // Capture phase 1 hook: After all variables and settings have resolved.
-        $this->hooks->run('capture_phase1', $this);
+        $this->placeAllVars();
+
+        // Capture phase 1 hook: After all variables have resolved.
+        $this->emit('capture_phase1', $this);
 
         $this->resolveSelectorAliases();
 
@@ -921,11 +990,9 @@ class Process
         $this->resolveFragments();
 
         // Capture phase 2 hook: After most built-in directives have resolved.
-        $this->hooks->run('capture_phase2', $this);
+        $this->emit('capture_phase2', $this);
 
         $this->captureRules();
-
-        $this->resolveInBlocks();
 
         // Calling functions on media query lists.
         $process = $this;
@@ -950,17 +1017,17 @@ class Process
 
     public function generateSourceMap()
     {
-        $this->sourceMap = array(
-            'version' => '3',
+        $this->sourceMap = [
+            'version' => 3,
             'file' => $this->output->filename,
-            'sources' => array(),
-        );
+            'sources' => [],
+        ];
         foreach ($this->sources as $source) {
             $this->sourceMap['sources'][] = Util::getLinkBetweenPaths($this->output->dir, $source, false);
         }
 
         $token_patt = Regex::make('~\?[tm]{{token_id}}\?~S');
-        $mappings = array();
+        $mappings = [];
         $lines = preg_split(Regex::$patt->newline, $this->string->raw);
         $tokens =& $this->tokens->store;
 
@@ -972,7 +1039,7 @@ class Process
 
         foreach ($lines as &$line_text) {
 
-            $line_segments = array();
+            $line_segments = [];
 
             while (preg_match($token_patt, $line_text, $m, PREG_OFFSET_CAPTURE)) {
 
@@ -1009,7 +1076,7 @@ class Process
 
     protected function decruft()
     {
-        return $this->string->pregReplaceHash(array(
+        return $this->string->pregReplaceHash([
 
             // Strip leading zeros on floats.
             '~([: \(,])(-?)0(\.\d+)~S' => '$1$2$3',
@@ -1029,7 +1096,7 @@ class Process
 
             // Compress hex codes.
             Regex::$patt->cruftyHex => '#$1$2$3',
-        ));
+        ]);
     }
 
 
@@ -1043,7 +1110,7 @@ class Process
         $minified_keywords = Color::getMinifyableKeywords();
 
         if (! $keywords_patt) {
-            $keywords_patt = '~(?<![\w-\.#])(' . implode('|', array_keys($minified_keywords)) . ')(?![\w-\.#\]])~iS';
+            $keywords_patt = '~(?<![\w\.#-])(' . implode('|', array_keys($minified_keywords)) . ')(?![\w\.#\]-])~iS';
             $functions_patt = Regex::make('~{{ LB }}(rgb|hsl)\(([^\)]{5,})\)~iS');
         }
 

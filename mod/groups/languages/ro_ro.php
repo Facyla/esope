@@ -10,6 +10,8 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
+	'add:group:group' => "Creează un grup nou",
+	
 	'groups' => "Grupuri",
 	'groups:owned' => "Grupuri personale",
 	'groups:owned:user' => 'Grupuri de %s',
@@ -18,7 +20,10 @@ return array(
 	'groups:all' => "Toate grupurile",
 	'groups:add' => "Creează un grup nou",
 	'groups:edit' => "Editează grupul",
-	'groups:delete' => 'Șterge grupul',
+	'groups:edit:profile' => "Profil",
+	'groups:edit:access' => "Acces",
+	'groups:edit:tools' => "Unelte",
+	'groups:edit:settings' => "Setări",
 	'groups:membershiprequests' => 'Gestionează cererile de alăturare',
 	'groups:membershiprequests:pending' => 'Gestionează cererile de alăturare (%s)',
 	'groups:invitedmembers' => "Gestionează invitațiile",
@@ -76,7 +81,6 @@ return array(
 
 	'groups:nofriendsatall' => 'Nu ai prieteni de invitat!',
 	'groups:group' => "Grup",
-	'groups:search:tags' => "etichetă",
 	'groups:search:title' => "Caută grupuri după '%s'",
 	'groups:search:none' => "Nu s-au găsit grupuri potrivite",
 	'groups:search_in_group' => "Caută în acest grup",
@@ -139,25 +143,19 @@ return array(
 	'groups:invite:subject' => "%s ai fost invitat/ă să te alături pe %s!",
 	'groups:joinrequest:remove:check' => 'Sigur dorești să îndepărtezi această cerere de alăturare?',
 	'groups:invite:remove:check' => 'Sigur dorești să îndepărtezi această invitație?',
-	'groups:invite:body' => "Salutare %s.
-
-%s te-a invitat să te alături grupului '%s'.
+	'groups:invite:body' => "%s te-a invitat să te alături grupului '%s'.
 
 Apasă mai jos pentru a-ți vedea invitațiile:
 %s",
 
 	'groups:welcome:subject' => "Bine ai venit pe grupul %s!",
-	'groups:welcome:body' => "Salutare %s!
-
-De acum ești membru al grupului '%s'.
+	'groups:welcome:body' => "De acum ești membru al grupului '%s'.
 
 Apasă mai jos pentru a începe să postezi!
 %s",
 
 	'groups:request:subject' => "%s a cerut să se alăture pe %s",
-	'groups:request:body' => "Salutare %s,
-
-%s a cerut să se alăture pe grupul '%s'.
+	'groups:request:body' => "%s a cerut să se alăture grupului '%s'.
 
 Apasă mai jos pentru a-i vedea profilul:
 %s
@@ -174,24 +172,15 @@ sau apasă mai jos pentru a vedea cererile de alăturare ale grupului:
 	/**
 	 * Action messages
 	 */
-	'groups:deleted' => 'Grupul și conținutul de grup au fost șterse',
-	'groups:notdeleted' => 'Grupul nu a putut fi șters',
-	'groups:deletewarning' => "Sigur dorești să ștergi acest grup? Nu există cale de întoarcere!",
 
 	'groups:invitekilled' => 'Invitația a fost ștearsă.',
 	'groups:joinrequestkilled' => 'Cererea de alăturare a fost ștearsă.',
 	'groups:error:addedtogroup' => "Nu am putut adăuga pe %s în acest grup",
 	'groups:add:alreadymember' => "%s este deja un membru al acestui grup",
-
-	/**
-	 * ecml
-	 */
-	'groups:ecml:groupprofile' => 'Profiluri de grup',
-
-	/**
-	 * Upgrades
-	 */
-	'groups:upgrade:2016101900:title' => 'Transferă imaginea de grup la o locație nouă',
-	'groups:upgrade:2016101900:description' => 'New entity icon API stores icons in a predictable location on the filestore
-relative to the entity\'s filestore directory. This upgrade will align the group plugin with the requirements of the new API.',
+	
+	// Notification settings
+	'groups:usersettings:notification:group_join:description' => "Setările de notificare implicite de grup atunci când se alătură pe un grup nou",
+	
+	'groups:usersettings:notifications:title' => 'Notificări de Grup',
+	'groups:usersettings:notifications:description' => 'Pentru a primii notificări atunci când se adaugă conținut nou pe un grup al cărui membru ești, găsește-l mai jos și selectează metoda(ele) de notificare pe care dorești să o(le) folosești.',
 );

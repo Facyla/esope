@@ -1,23 +1,31 @@
 <?php
+
 namespace Elgg\Database;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Elgg\Database;
 use Elgg\Database\Clauses\GroupByClause;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\Clauses\SelectClause;
 use Elgg\EventsService;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Elgg\Exceptions\DatabaseException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Traits\TimeUsing;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * Relationships table database service
  *
  * @internal
- *
  * @since 1.10.0
  */
 class RelationshipsTable {
 
-	use \Elgg\TimeUsing;
+	use TimeUsing;
+	
+	/**
+	 * @var integer The max length of the relationship column data
+	 */
+	const RELATIONSHIP_COLUMN_LENGTH = 255;
 	
 	/**
 	 * @var Database
@@ -59,19 +67,14 @@ class RelationshipsTable {
 	 *
 	 * @param int $id The relationship ID
 	 *
-	 * @return \ElggRelationship|false False if not found
+	 * @return \ElggRelationship|null
 	 */
-	public function get($id) {
+	public function get(int $id): ?\ElggRelationship {
 		$select = Select::fromTable('entity_relationships');
 		$select->select('*')
 			->where($select->compare('id', '=', $id, ELGG_VALUE_ID));
 		
-		$relationship = $this->db->getDataRow($select, [$this, 'rowToElggRelationship']);
-		if (!$relationship) {
-			return false;
-		}
-
-		return $relationship;
+		return $this->db->getDataRow($select, [$this, 'rowToElggRelationship']) ?: null;
 	}
 
 	/**
@@ -82,7 +85,7 @@ class RelationshipsTable {
 	 *
 	 * @return bool
 	 */
-	public function delete($id, $call_event = true) {
+	public function delete(int $id, bool $call_event = true): bool {
 		$relationship = $this->get($id);
 		if (!$relationship instanceof \ElggRelationship) {
 			return false;
@@ -110,17 +113,22 @@ class RelationshipsTable {
 	 * @param bool   $return_id    Return the ID instead of bool?
 	 *
 	 * @return bool|int
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
-	public function add($guid_one, $relationship, $guid_two, $return_id = false) {
-		if (strlen($relationship) > \ElggRelationship::RELATIONSHIP_LIMIT) {
-			$msg = "relationship name cannot be longer than " . \ElggRelationship::RELATIONSHIP_LIMIT;
-			throw new \InvalidArgumentException($msg);
+	public function add(int $guid_one, string $relationship, int $guid_two, bool $return_id = false) {
+		if (strlen($relationship) > self::RELATIONSHIP_COLUMN_LENGTH) {
+			throw new InvalidArgumentException('Relationship name cannot be longer than ' . self::RELATIONSHIP_COLUMN_LENGTH);
 		}
 
 		// Check for duplicates
 		// note: escape $relationship after this call, we don't want to double-escape
 		if ($this->check($guid_one, $relationship, $guid_two)) {
+			return false;
+		}
+		
+		// Check if the related entities exist
+		if (!$this->entities->exists($guid_one) || !$this->entities->exists($guid_two)) {
+			// one or both of the guids doesn't exist
 			return false;
 		}
 		
@@ -137,7 +145,7 @@ class RelationshipsTable {
 			if (!$id) {
 				return false;
 			}
-		} catch (\DatabaseException $e) {
+		} catch (DatabaseException $e) {
 			$prev = $e->getPrevious();
 			if ($prev instanceof UniqueConstraintViolationException) {
 				// duplicate key error see https://github.com/Elgg/Elgg/issues/9179
@@ -168,7 +176,7 @@ class RelationshipsTable {
 	 *
 	 * @return \ElggRelationship|false Depending on success
 	 */
-	public function check($guid_one, $relationship, $guid_two) {
+	public function check(int $guid_one, string $relationship, int $guid_two) {
 		$select = Select::fromTable('entity_relationships');
 		$select->select('*')
 			->where($select->compare('guid_one', '=', $guid_one, ELGG_VALUE_GUID))
@@ -195,7 +203,7 @@ class RelationshipsTable {
 	 *
 	 * @return bool
 	 */
-	public function remove($guid_one, $relationship, $guid_two) {
+	public function remove(int $guid_one, string $relationship, int $guid_two): bool {
 		$obj = $this->check($guid_one, $relationship, $guid_two);
 		if (!$obj instanceof \ElggRelationship) {
 			return false;
@@ -212,10 +220,33 @@ class RelationshipsTable {
 	 * @param bool   $inverse_relationship Is $guid the target of the deleted relationships? By default, $guid is the
 	 *                                     subject of the relationships.
 	 * @param string $type                 The type of entity related to $guid (defaults to all)
+	 * @param bool   $trigger_events       Trigger the delete event for each relationship (default: true)
 	 *
 	 * @return true
 	 */
-	public function removeAll($guid, $relationship = "", $inverse_relationship = false, $type = '') {
+	public function removeAll($guid, $relationship = '', $inverse_relationship = false, $type = '', bool $trigger_events = true) {
+		
+		if ($trigger_events) {
+			return $this->removeAllWithEvents($guid, $relationship, $inverse_relationship, $type);
+		}
+		
+		return $this->removeAllWithoutEvents($guid, $relationship, $inverse_relationship, $type);
+	}
+	
+	/**
+	 * Removes all relationships originating from a particular entity
+	 *
+	 * This doesn't trigger the delete event for each relationship
+	 *
+	 * @param int    $guid                 GUID of the subject or target entity (see $inverse)
+	 * @param string $relationship         Type of the relationship (optional, default is all relationships)
+	 * @param bool   $inverse_relationship Is $guid the target of the deleted relationships? By default, $guid is the
+	 *                                     subject of the relationships.
+	 * @param string $type                 The type of entity related to $guid (defaults to all)
+	 *
+	 * @return true
+	 */
+	protected function removeAllWithoutEvents($guid, $relationship = '', $inverse_relationship = false, $type = '') {
 		$delete = Delete::fromTable('entity_relationships');
 		
 		if ((bool) $inverse_relationship) {
@@ -231,7 +262,7 @@ class RelationshipsTable {
 		if (!empty($type)) {
 			$entity_sub = $delete->subquery('entities');
 			$entity_sub->select('guid')
-				->where($delete->compare('type', '=', $type, ELGG_VALUE_STRING));
+			->where($delete->compare('type', '=', $type, ELGG_VALUE_STRING));
 			
 			if (!(bool) $inverse_relationship) {
 				$delete->andWhere($delete->compare('guid_two', 'in', $entity_sub->getSQL()));
@@ -241,7 +272,75 @@ class RelationshipsTable {
 		}
 		
 		$this->db->deleteData($delete);
-
+		
+		return true;
+	}
+	
+	/**
+	 * Removes all relationships originating from a particular entity
+	 *
+	 * The does trigger the delete event for each relationship
+	 *
+	 * @param int    $guid                 GUID of the subject or target entity (see $inverse)
+	 * @param string $relationship         Type of the relationship (optional, default is all relationships)
+	 * @param bool   $inverse_relationship Is $guid the target of the deleted relationships? By default, $guid is the
+	 *                                     subject of the relationships.
+	 * @param string $type                 The type of entity related to $guid (defaults to all)
+	 *
+	 * @return true
+	 */
+	protected function removeAllWithEvents($guid, $relationship = '', $inverse_relationship = false, $type = '') {
+		$select = Select::fromTable('entity_relationships');
+		$select->select('*');
+		
+		if ((bool) $inverse_relationship) {
+			$select->where($select->compare('guid_two', '=', $guid, ELGG_VALUE_GUID));
+		} else {
+			$select->where($select->compare('guid_one', '=', $guid, ELGG_VALUE_GUID));
+		}
+		
+		if (!empty($relationship)) {
+			$select->andWhere($select->compare('relationship', '=', $relationship, ELGG_VALUE_STRING));
+		}
+		
+		if (!empty($type)) {
+			$entity_sub = $select->subquery('entities');
+			$entity_sub->select('guid')
+			->where($select->compare('type', '=', $type, ELGG_VALUE_STRING));
+			
+			if (!(bool) $inverse_relationship) {
+				$select->andWhere($select->compare('guid_two', 'in', $entity_sub->getSQL()));
+			} else {
+				$select->andWhere($select->compare('guid_one', 'in', $entity_sub->getSQL()));
+			}
+		}
+		
+		$remove_ids = [];
+		
+		$relationships = $this->db->getData($select, [$this, 'rowToElggRelationship']);
+		
+		/* @var $rel \ElggRelationship */
+		foreach ($relationships as $rel) {
+			if (!$this->events->trigger('delete', 'relationship', $rel)) {
+				continue;
+			}
+			
+			$remove_ids[] = $rel->id;
+		}
+		
+		// to prevent MySQL query length issues
+		$chunks = array_chunk($remove_ids, 250);
+		foreach ($chunks as $chunk) {
+			if (empty($chunk)) {
+				continue;
+			}
+			
+			$delete = Delete::fromTable('entity_relationships');
+			$delete->where($delete->compare('id', 'in', $chunk));
+			
+			$this->db->deleteData($delete);
+		}
+		
 		return true;
 	}
 
@@ -253,6 +352,7 @@ class RelationshipsTable {
 	 *                                   the subject of the relationships.
 	 *
 	 * @return \ElggRelationship[]
+	 * @deprecated 4.3
 	 */
 	public function getAll($guid, $inverse_relationship = false) {
 		$select = Select::fromTable('entity_relationships');

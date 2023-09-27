@@ -1,20 +1,30 @@
 <?php
 
 use Elgg\Blog\GroupToolContainerLogicCheck;
+use Elgg\Blog\Notifications\PublishBlogEventHandler;
+
+require_once(__DIR__ . '/lib/functions.php');
 
 return [
+	'plugin' => [
+		'name' => 'Blog',
+		'activate_on_install' => true,
+	],
 	'entities' => [
 		[
 			'type' => 'object',
 			'subtype' => 'blog',
 			'class' => 'ElggBlog',
-			'searchable' => true,
+			'capabilities' => [
+				'commentable' => true,
+				'searchable' => true,
+				'likable' => true,
+			],
 		],
 	],
 	'actions' => [
 		'blog/save' => [],
 		'blog/auto_save_revision' => [],
-		'blog/delete' => [],
 	],
 	'routes' => [
 		'collection:object:blog:owner' => [
@@ -99,10 +109,40 @@ return [
 				GroupToolContainerLogicCheck::class => [],
 			],
 		],
+		'register' => [
+			'menu:blog_archive' => [
+				'Elgg\Blog\Menus\BlogArchive::register' => [],
+			],
+			'menu:owner_block' => [
+				'Elgg\Blog\Menus\OwnerBlock::registerUserItem' => [],
+				'Elgg\Blog\Menus\OwnerBlock::registerGroupItem' => [],
+			],
+			'menu:site' => [
+				'Elgg\Blog\Menus\Site::register' => [],
+			],
+			'menu:title:object:blog' => [
+				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
+			],
+		],
+		'seeds' => [
+			'database' => [
+				'Elgg\Blog\Seeder::register' => [],
+			],
+		],
 	],
 	'widgets' => [
 		'blog' => [
 			'context' => ['profile', 'dashboard'],
+		],
+	],
+	'group_tools' => [
+		'blog' => [],
+	],
+	'notifications' => [
+		'object' => [
+			'blog' => [
+				'publish' => PublishBlogEventHandler::class,
+			],
 		],
 	],
 ];

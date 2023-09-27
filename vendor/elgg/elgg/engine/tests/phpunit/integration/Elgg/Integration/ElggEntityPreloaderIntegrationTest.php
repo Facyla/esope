@@ -32,17 +32,11 @@ class ElggEntityPreloaderIntegrationTest extends \Elgg\IntegrationTestCase {
 		$this->realPreloader = _elgg_services()->entityPreloader;
 		$this->mockPreloader = new MockEntityPreloader20140623(_elgg_services()->entityTable);
 		
-		_elgg_services()->setValue('entityPreloader', $this->mockPreloader);
+		_elgg_services()->set('entityPreloader', $this->mockPreloader);
 	}
 
 	public function down() {
-		_elgg_services()->setValue('entityPreloader', $this->realPreloader);
-		
-		if ($this->user) {
-			$this->user->delete();
-		}
-		
-		elgg()->session->removeLoggedInUser();
+		_elgg_services()->set('entityPreloader', $this->realPreloader);
 	}
 
 	public function testCanPreloadEntityOwners() {
@@ -59,14 +53,10 @@ class ElggEntityPreloaderIntegrationTest extends \Elgg\IntegrationTestCase {
 		$options['preload_owners'] = true;
 		elgg_get_entities($options);
 		$this->assertCount(3, $this->mockPreloader->preloaded);
-
-		foreach ($seeded as $object) {
-			$object->delete();
-		}
 	}
 
 	public function testCanPreloadAnnotationOwners() {
-		$object = $this->createOne('object');
+		$object = $this->createObject();
 		$object->annotate('test', 1);
 		$object->annotate('test', 2);
 		$object->annotate('test', 3);

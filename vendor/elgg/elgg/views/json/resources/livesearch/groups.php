@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\Http\EntityPermissionsException;
+
 elgg_gatekeeper();
 
 $limit = (int) elgg_extract('limit', $vars, elgg_get_config('default_limit'));
@@ -10,8 +12,11 @@ $options = [
 	'query' => $query,
 	'type' => 'group',
 	'limit' => $limit,
-	'sort' => 'name',
-	'order' => 'ASC',
+	'sort_by' => [
+		'property_type' => 'metadata',
+		'property' => 'name',
+		'direction' => 'ASC',
+	],
 	'fields' => ['metadata' => ['name']],
 	'item_view' => elgg_extract('item_view', $vars, 'search/entity'),
 	'input_name' => $input_name,
@@ -24,8 +29,8 @@ if ($target_guid) {
 	$target = elgg_get_logged_in_user_entity();
 }
 
-if (!$target || !$target->canEdit()) {
-	forward('', '403');
+if (!$target instanceof ElggEntity || !$target->canEdit()) {
+	throw new EntityPermissionsException();
 }
 
 if (elgg_extract('match_owner', $vars, false)) {

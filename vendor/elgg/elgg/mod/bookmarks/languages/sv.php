@@ -28,16 +28,6 @@ return array(
 
 	'bookmarks:notify:summary' => 'Nytt bokmärke med namnet %s',
 	'bookmarks:notify:subject' => 'Nytt bokmärke: %s',
-	'bookmarks:notify:body' =>
-'%s la till ett nytt bokmärke: %s
-
-Adress: %s
-
-%s
-
-Visa och kommentera bokmärket:
-%s
-',
 
 	'bookmarks:numbertodisplay' => 'Antalet bokmärken att visa',
 
@@ -52,14 +42,9 @@ Visa och kommentera bokmärket:
 	'widgets:bookmarks:name' => 'Bokmärken',
 	'widgets:bookmarks:description' => "Visa dina senaste bokmärken.",
 
-	'bookmarks:bookmarklet:description' =>
-			"Ett scriptbokmärke är en speciell typ av knapp som du sparar i bokmärkesfältet i din webbläsare. Det låter dig att spara vilken resurs som helst som du hittar på nätet i dina bokmärken. För ställa in det, dra knappen nedan till bokmärkesfältet i din webbläsare: ",
-
-	'bookmarks:bookmarklet:descriptionie' =>
-			"Om du använder Internet Explorer, måste du högerklicka på scriptbokmärkets ikon, välja \"lägg till favoriter\", och sen \"Bokmärkesfältet\".",
-
-	'bookmarks:bookmarklet:description:conclusion' =>
-			"Du kan sen bokmärka vilken sida som helst som du besöker, genom att trycka på knappen i din webbläsare, när som helst.",
+	'bookmarks:bookmarklet:description' => "Ett scriptbokmärke är en speciell typ av knapp som du sparar i bokmärkesfältet i din webbläsare. Det låter dig att spara vilken resurs som helst som du hittar på nätet i dina bokmärken. För ställa in det, dra knappen nedan till bokmärkesfältet i din webbläsare: ",
+	'bookmarks:bookmarklet:descriptionie' => "Om du använder Internet Explorer, måste du högerklicka på scriptbokmärkets ikon, välja \"lägg till favoriter\", och sen \"Bokmärkesfältet\".",
+	'bookmarks:bookmarklet:description:conclusion' => "Du kan sen bokmärka vilken sida som helst som du besöker, genom att trycka på knappen i din webbläsare, när som helst.",
 
 	/**
 	 * Status messages
@@ -73,5 +58,4 @@ Visa och kommentera bokmärket:
 	 */
 
 	'bookmarks:save:failed' => "Ditt bokmärke kunde inte sparas. Se till att du skrev in en titel och adress och försök sedan igen.",
-	'bookmarks:unknown_bookmark' => 'Kan inte hitta det specificerade bokmärket',
 );

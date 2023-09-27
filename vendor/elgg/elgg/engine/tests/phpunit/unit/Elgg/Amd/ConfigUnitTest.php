@@ -2,6 +2,7 @@
 
 namespace Elgg\Amd;
 
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\PluginHooksService;
 
 /**
@@ -95,7 +96,7 @@ class ConfigUnitTest extends \Elgg\UnitTestCase {
 	public function testThrowsOnBadShim() {
 		$amdConfig = $this->amdConfig;
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		$amdConfig->addShim('bad_shim', array('invalid' => 'config'));
 
 		$configArray = $amdConfig->getConfig();
@@ -144,7 +145,7 @@ class ConfigUnitTest extends \Elgg\UnitTestCase {
 
 		$test_input = ['test' => 'test_' . time()];
 
-		$this->hooks->registerHandler('config', 'amd', function() use ($test_input) {
+		$this->hooks->registerHandler('config', 'amd', function(\Elgg\Hook $hook) use ($test_input) {
 			return $test_input;
 		});
 

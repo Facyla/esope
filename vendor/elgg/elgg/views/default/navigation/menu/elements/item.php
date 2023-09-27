@@ -44,20 +44,30 @@ if (!empty($children)) {
 	}
 
 	$child_menu_view = elgg_view('navigation/menu/elements/section', $child_menu_vars);
+} elseif ($item->getData('show_with_empty_children') === false) {
+	return;
+}
+
+$deps = $item->getDeps();
+if (elgg_extract('data-toggle', $item->getValues())) {
+	$deps[] = 'navigation/menu/elements/item_toggle';
+}
+
+foreach ($deps as $module) {
+	elgg_require_js($module);
 }
 
 $item_vars['data-menu-item'] = $item->getName();
 
 $item_vars['class'] = elgg_extract_class($vars, $item->getItemClass(), 'item_class');
 if ($item->getSelected()) {
-	$item_vars['class'][] = "elgg-state-selected";
+	$item_vars['class'][] = 'elgg-state-selected';
 }
 
-$badge = $item->getData('badge');
-if (is_numeric($badge)) {
-	$item->setData('badge', \Elgg\Values::shortFormatOutput($badge, 1));
-}
+$item_view = elgg_view($item->getItemContentsView() ?: 'navigation/menu/elements/item/url', [
+	'item' => $item,
+]);
 
-$item_view = elgg_view_menu_item($item) . $child_menu_view;
+$item_view .= $child_menu_view;
 
 echo elgg_format_element('li', $item_vars, $item_view);

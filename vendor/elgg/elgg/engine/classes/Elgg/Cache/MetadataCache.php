@@ -1,11 +1,13 @@
 <?php
+
 namespace Elgg\Cache;
 
-use Elgg\Database\Clauses\OrderByClause;
-use Elgg\Values;
 use ElggCache;
-use ElggMetadata;
 use Elgg\Database\Clauses\GroupByClause;
+use Elgg\Database\Clauses\OrderByClause;
+use Elgg\Exceptions\DataFormatException;
+use Elgg\Values;
+use ElggMetadata;
 
 /**
  * In memory cache of known metadata values stored by entity.
@@ -229,17 +231,11 @@ class MetadataCache {
 	public function populateFromEntities(...$guids) {
 		try {
 			$guids = Values::normalizeGuids($guids);
-		} catch (\DataFormatException $e) {
+		} catch (DataFormatException $e) {
 			return null;
 		}
 
 		if (empty($guids)) {
-			return null;
-		}
-
-		$version = (int) _elgg_config()->version;
-		if (!empty($version) && ($version < 2016110900)) {
-			// can't use this during upgrade from 2.x to 3.0
 			return null;
 		}
 
@@ -260,9 +256,7 @@ class MetadataCache {
 		$data = _elgg_services()->metadataTable->getRowsForGuids($guids);
 		
 		$values = [];
-		
-		foreach ($data as $i => $row) {
-			$row->value = ($row->value_type === 'text') ? $row->value : (int) $row->value;
+		foreach ($data as $row) {
 			$values[$row->entity_guid][] = $row;
 		}
 
@@ -291,7 +285,7 @@ class MetadataCache {
 
 		$guids = _elgg_services()->metadataTable->getAll([
 			'guids' => $guids,
-			'limit' => 0,
+			'limit' => false,
 			'callback' => function($e) {
 				return (int) $e->entity_guid;
 			},

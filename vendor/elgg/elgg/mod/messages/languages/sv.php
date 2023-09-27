@@ -37,28 +37,15 @@ return array(
 	*/
 
 	'messages:posted' => "Ditt meddelande skickades.",
-	'messages:success:delete:single' => 'Meddelandet togs bort',
 	'messages:success:delete' => 'Meddelanden togs bort',
 	'messages:success:read' => 'Meddelanden markerade som lästa',
 	'messages:error:messages_not_selected' => 'Inga meddelanden valda',
-	'messages:error:delete:single' => 'Det gick inte ta bort meddelandet',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Du har ett nytt meddelande!',
-	'messages:email:body' => "Du har ett nytt meddelande från %s.
-
-Det står:
-
-%s
-
-För att visa dina meddelanden, tryck här:
-%s
-
-För att skicka ett meddelande till %s, tryck här:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +58,9 @@ För att skicka ett meddelande till %s, tryck här:
 	'messages:user:self' => "Du kan inte skicka ett meddelande till dig själv.",
 
 	'messages:deleted_sender' => 'Borttagen användare',
+	
+	/**
+	* Settings
+	*/
 
 );

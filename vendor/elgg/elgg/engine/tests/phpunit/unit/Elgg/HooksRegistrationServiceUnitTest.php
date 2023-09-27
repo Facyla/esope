@@ -18,10 +18,6 @@ class HooksRegistrationServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->mock = $this->getMockForAbstractClass('\Elgg\HooksRegistrationService');
 	}
 
-	public function down() {
-
-	}
-
 	public function testCanRegisterHandlers() {
 		$f = function () {
 
@@ -83,8 +79,6 @@ class HooksRegistrationServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanClearMultipleHandlersAtOnce() {
-		$o = new HooksRegistrationServiceTestInvokable();
-
 		$this->mock->registerHandler('foo', 'bar', 'callback1');
 		$this->mock->registerHandler('foo', 'baz', 'callback1', 10);
 		$this->mock->registerHandler('foo', 'bar', 'callback2', 100);
@@ -159,5 +153,25 @@ class HooksRegistrationServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->mock->restore();
 		$this->assertEquals($handlers1, $this->mock->getAllHandlers());
+	}
+	
+	public function testStaticCallbacksWithPrecedingSlash() {
+		$this->assertTrue($this->mock->registerHandler('foo', 'bar', '\MyCustomClass::static_callback'));
+		$this->assertTrue($this->mock->registerHandler('foo', 'bar', 'MyCustomClass2::static_callback'));
+		
+		$expected = [
+			'foo' => [
+				'bar' => [
+					500 => ['\MyCustomClass::static_callback', 'MyCustomClass2::static_callback'],
+				],
+			],
+		];
+
+		$this->assertSame($expected, $this->mock->getAllHandlers());
+		
+		$this->assertTrue($this->mock->unregisterHandler('foo', 'bar', 'MyCustomClass::static_callback'));
+		$this->assertTrue($this->mock->unregisterHandler('foo', 'bar', '\MyCustomClass2::static_callback'));
+		
+		$this->assertSame([], $this->mock->getAllHandlers());
 	}
 }

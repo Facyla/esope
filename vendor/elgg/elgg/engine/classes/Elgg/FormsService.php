@@ -2,12 +2,10 @@
 
 namespace Elgg;
 
-use Psr\Log\LoggerInterface;
+use Elgg\Traits\Loggable;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * Forms service
  *
  * @internal
  * @since 2.3
@@ -34,12 +32,10 @@ class FormsService {
 	/**
 	 * Constructor
 	 *
-	 * @param ViewsService    $views  Views service
-	 * @param LoggerInterface $logger Logger service
+	 * @param ViewsService $views Views service
 	 */
-	public function __construct(ViewsService $views, LoggerInterface $logger) {
+	public function __construct(ViewsService $views) {
 		$this->views = $views;
-		$this->logger = $logger;
 	}
 
 	/**
@@ -72,7 +68,7 @@ class FormsService {
 	 * @param string $action    The name of the action. An action name does not include
 	 *                          the leading "action/". For example, "login" is an action name.
 	 * @param array  $form_vars $vars passed to the "input/form" view
-	 *                           - 'ajax' bool If true, the form will be submitted with an ajax request
+	 *                          - 'ajax' bool If true, the form will be submitted with an ajax request
 	 * @param array  $body_vars $vars passed to the "forms/<action>" view
 	 *
 	 * @return string The complete form
@@ -102,11 +98,9 @@ class FormsService {
 
 		$form_vars['action_name'] = $action;
 		
-		// @todo change default of ignore_empty_body to true in Elgg 4.0
 		$form_vars['ignore_empty_body'] = (bool) elgg_extract('ignore_empty_body', $form_vars, false);
 		
-		// @todo change default of prevent_double_submit to true in Elgg 4.0
-		$form_vars['prevent_double_submit'] = (bool) elgg_extract('prevent_double_submit', $form_vars, false);
+		$form_vars['prevent_double_submit'] = (bool) elgg_extract('prevent_double_submit', $form_vars, true);
 		
 		if (!isset($form_vars['body'])) {
 			$this->rendering = true;
@@ -145,7 +139,7 @@ class FormsService {
 	public function setFooter($footer = '') {
 
 		if (!$this->rendering) {
-			$this->logger->error('Form footer can only be set and retrieved during form rendering, '
+			$this->getLogger()->error('Form footer can only be set and retrieved during form rendering, '
 					. 'anywhere in elgg_view_form() call stack (e.g. form view, extending views, or view hooks)');
 			return false;
 		}
@@ -156,11 +150,12 @@ class FormsService {
 
 	/**
 	 * Returns currently set footer, or false if not in the form rendering stack
+	 *
 	 * @return string|false
 	 */
 	public function getFooter() {
 		if (!$this->rendering) {
-			$this->logger->error('Form footer can only be set and retrieved during form rendering, '
+			$this->getLogger()->error('Form footer can only be set and retrieved during form rendering, '
 					. 'anywhere in elgg_view_form() call stack (e.g. form view, extending views, or view hooks)');
 			return false;
 		}

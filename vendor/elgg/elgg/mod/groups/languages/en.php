@@ -10,6 +10,9 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
+	'add:group:group' => "Create a new group",
+	'groups:menu:sort:member' => "Join date",
+	
 	'groups' => "Groups",
 	'groups:owned' => "Groups I own",
 	'groups:owned:user' => 'Groups %s owns',
@@ -18,7 +21,10 @@ return array(
 	'groups:all' => "All groups",
 	'groups:add' => "Create a new group",
 	'groups:edit' => "Edit group",
-	'groups:delete' => 'Delete group',
+	'groups:edit:profile' => "Profile",
+	'groups:edit:access' => "Access",
+	'groups:edit:tools' => "Tools",
+	'groups:edit:settings' => "Settings",
 	'groups:membershiprequests' => 'Manage join requests',
 	'groups:membershiprequests:pending' => 'Manage join requests (%s)',
 	'groups:invitedmembers' => "Manage invitations",
@@ -76,7 +82,6 @@ return array(
 
 	'groups:nofriendsatall' => 'You have no friends to invite!',
 	'groups:group' => "Group",
-	'groups:search:tags' => "tag",
 	'groups:search:title' => "Search for groups with '%s'",
 	'groups:search:none' => "No matching groups were found",
 	'groups:search_in_group' => "Search in this group",
@@ -139,25 +144,19 @@ return array(
 	'groups:invite:subject' => "%s you have been invited to join %s!",
 	'groups:joinrequest:remove:check' => 'Are you sure you want to remove this join request?',
 	'groups:invite:remove:check' => 'Are you sure you want to remove this invitation?',
-	'groups:invite:body' => "Hi %s,
-
-%s invited you to join the '%s' group.
+	'groups:invite:body' => "%s invited you to join the '%s' group.
 
 Click below to view your invitations:
 %s",
 
 	'groups:welcome:subject' => "Welcome to the %s group!",
-	'groups:welcome:body' => "Hi %s!
-
-You are now a member of the '%s' group.
+	'groups:welcome:body' => "You are now a member of the '%s' group.
 
 Click below to begin posting!
 %s",
 
 	'groups:request:subject' => "%s has requested to join %s",
-	'groups:request:body' => "Hi %s,
-
-%s has requested to join the '%s' group.
+	'groups:request:body' => "%s has requested to join the '%s' group.
 
 Click below to view their profile:
 %s
@@ -174,24 +173,15 @@ or click below to view the group's join requests:
 	/**
 	 * Action messages
 	 */
-	'groups:deleted' => 'Group and group contents deleted',
-	'groups:notdeleted' => 'Group could not be deleted',
-	'groups:deletewarning' => "Are you sure you want to delete this group? There is no undo!",
 
 	'groups:invitekilled' => 'The invite has been deleted.',
 	'groups:joinrequestkilled' => 'The join request has been deleted.',
 	'groups:error:addedtogroup' => "Could not add %s to the group",
 	'groups:add:alreadymember' => "%s is already a member of this group",
-
-	/**
-	 * ecml
-	 */
-	'groups:ecml:groupprofile' => 'Group profiles',
-
-	/**
-	 * Upgrades
-	 */
-	'groups:upgrade:2016101900:title' => 'Transfer group icons to a new location',
-	'groups:upgrade:2016101900:description' => 'New entity icon API stores icons in a predictable location on the filestore
-relative to the entity\'s filestore directory. This upgrade will align the group plugin with the requirements of the new API.',
+	
+	// Notification settings
+	'groups:usersettings:notification:group_join:description' => "Default notification settings for the group when joining a new group",
+	
+	'groups:usersettings:notifications:title' => 'Group notifications',
+	'groups:usersettings:notifications:description' => 'To receive notifications when new content is added to a group you are a member of, find it below and select the notification method(s) you would like to use.',
 );

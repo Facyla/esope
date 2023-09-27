@@ -3,19 +3,25 @@
 namespace Elgg\Cache;
 
 use Elgg\UnitTestCase;
+use Phpfastcache\Cluster\ClusterPoolInterface;
 
 /**
  * @group Cache
  */
 class SystemCacheTest extends UnitTestCase {
 
+	/**
+	 * @var bool previous System Cache enabled state
+	 */
+	protected $is_enabled;
+	
 	public function up() {
-		$this->is_enabled = _elgg_config()->system_cache_enabled;
-		_elgg_config()->system_cache_enabled = false;
+		$this->is_enabled = _elgg_services()->config->system_cache_enabled;
+		_elgg_services()->config->system_cache_enabled = false;
 	}
 
 	public function down() {
-		_elgg_config()->system_cache_enabled = $this->is_enabled;
+		_elgg_services()->config->system_cache_enabled = $this->is_enabled;
 	}
 
 	public function testCanEnableSystemCache() {
@@ -104,6 +110,34 @@ class SystemCacheTest extends UnitTestCase {
 		
 		elgg_reset_system_cache();
 	}
-
-
+	
+	public function testCanStoreItemWithTTL() {
+		elgg_enable_system_cache();
+		elgg_reset_system_cache();
+		
+		elgg_save_system_cache('foo', 'bar', 1);
+		
+		$cache = elgg_get_system_cache();
+		
+		$reflector = new \ReflectionClass($cache);
+		$property = $reflector->getProperty('pool');
+		$property->setAccessible(true);
+		
+		$pool = $property->getValue($cache);
+		
+		if ($pool instanceof ClusterPoolInterface) {
+			$this->markTestSkipped('Unable to test a cluster as it does not implement detachAllItems for all pool drivers');
+		}
+		
+		$pool->detachAllItems();
+		
+		// need to wait longer than the previous set TTL
+		sleep(2);
+		$this->assertNull(elgg_load_system_cache('foo'));
+		
+		elgg_save_system_cache('foo', 'bar', 5);
+		$pool->detachAllItems();
+		
+		$this->assertEquals('bar', elgg_load_system_cache('foo'));
+	}
 }

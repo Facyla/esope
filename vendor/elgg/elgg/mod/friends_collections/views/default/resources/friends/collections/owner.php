@@ -8,6 +8,8 @@
  *
  */
 
+use Elgg\Exceptions\Http\EntityNotFoundException;
+
 $username = elgg_extract('username', $vars);
 if ($username) {
 	$user = get_user_by_username($username);
@@ -16,7 +18,7 @@ if ($username) {
 }
 
 if (!$user instanceof ElggUser || !$user->canEdit()) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new EntityNotFoundException();
 }
 
 elgg_set_page_owner_guid($user->guid);
@@ -39,4 +41,5 @@ echo elgg_view_page(elgg_echo('friends:collections'), [
 		'entity' => $user,
 	]),
 	'show_owner_block_menu' => false,
+	'filter_id' => 'friends_collections',
 ]);

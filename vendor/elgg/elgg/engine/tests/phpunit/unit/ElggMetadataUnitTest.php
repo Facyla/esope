@@ -19,10 +19,6 @@ class ElggMetadataUnitTest extends UnitTestCase {
 		_elgg_services()->metadataTable->setCurrentTime();
 	}
 
-	public function down() {
-
-	}
-
 	public function testExtenderConstructor() {
 
 		$owner = $this->createUser();
@@ -36,9 +32,9 @@ class ElggMetadataUnitTest extends UnitTestCase {
 		$metadata->entity_guid = $object->guid;
 		$metadata->name = $name;
 		$metadata->value = 'test_value_' . rand();
-		$id = $metadata->save();
+		$this->assertTrue($metadata->save());
 
-		$metadata = elgg_get_metadata_from_id($id);
+		$metadata = elgg_get_metadata_from_id($metadata->id);
 
 		$this->assertInstanceOf(\ElggMetadata::class, $metadata);
 		
@@ -50,6 +46,12 @@ class ElggMetadataUnitTest extends UnitTestCase {
 
 		$metadata->setValue(25);
 		$this->assertEquals('integer', $metadata->value_type);
+
+		$metadata->setValue(true);
+		$this->assertEquals('bool', $metadata->value_type);
+
+		$metadata->setValue(false);
+		$this->assertEquals('bool', $metadata->value_type);
 
 		$metadata->setValue('foo');
 		$this->assertEquals('text', $metadata->value_type);
@@ -70,17 +72,18 @@ class ElggMetadataUnitTest extends UnitTestCase {
 		$metadata->entity_guid = $object->guid;
 		$metadata->name = $name;
 		$metadata->value = 'test_value_' . rand();
-		$id = $metadata->save();
-
-		$metadata = elgg_get_metadata_from_id($id);
+		$this->assertTrue($metadata->save());
+		
+		$metadata = elgg_get_metadata_from_id($metadata->id);
 
 		$this->assertInstanceOf(\ElggMetadata::class, $metadata);
 		
 		_elgg_services()->hooks->backup();
 
-		_elgg_services()->hooks->registerHandler('extender:url', 'metadata', function($hook, $type, $return, $params) use ($metadata, $name) {
-			$this->assertEquals($metadata, $params['extender']);
-			if ($params['extender']->getSubtype() == $name) {
+		_elgg_services()->hooks->registerHandler('extender:url', 'metadata', function(\Elgg\Hook $hook) use ($metadata, $name) {
+			$extender = $hook->getParam('extender');
+			$this->assertEquals($metadata, $extender);
+			if ($extender->getSubtype() == $name) {
 				return 'foo';
 			}
 		});
@@ -88,29 +91,6 @@ class ElggMetadataUnitTest extends UnitTestCase {
 		$this->assertEquals(elgg_normalize_url('foo'), $metadata->getURL());
 
 		_elgg_services()->hooks->restore();
-	}
-	
-	public function testCanEditMetadata() {
-
-		$owner = $this->createUser();
-		$other = $this->createUser();
-
-		$object = $this->createObject([
-			'owner_guid' => $owner->guid,
-		]);
-
-		$metadata = new ElggMetadata();
-		$metadata->entity_guid = $object->guid;
-		$metadata->name = 'test_metadata_' . rand();
-		$metadata->value = 'test_value_' . rand();
-		$id = $metadata->save();
-
-		$metadata = elgg_get_metadata_from_id($id);
-
-		$this->assertInstanceOf(\ElggMetadata::class, $metadata);
-		
-		// Default access level is private
-		$this->assertTrue($metadata->canEdit($other->guid));
 	}
 
 	public function testCanSaveMetadata() {
@@ -128,29 +108,34 @@ class ElggMetadataUnitTest extends UnitTestCase {
 		$metadata->value = 'bar';
 		$metadata->time_created = _elgg_services()->metadataTable->getCurrentTime()->getTimestamp();
 
-		$id = \Elgg\Mocks\Database\MetadataTable::$iterator + 1;
+		$this->assertTrue($metadata->save());
+		$this->assertGreaterThan(0, $metadata->id);
+	}
+	
+	public function testCanUpdateMetadata() {
+		$owner = $this->createUser();
+		_elgg_services()->session->setLoggedInUser($owner);
 
-		// Insert
-		$dbprefix = _elgg_config()->dbprefix;
-		$sql = "INSERT INTO {$dbprefix}metadata
-				(entity_guid, name, value, value_type, time_created)
-				VALUES (:entity_guid, :name, :value, :value_type, :time_created)";
-
-		_elgg_services()->db->addQuerySpec([
-			'sql' => $sql,
-			'params' => [
-				':entity_guid' => $metadata->entity_guid,
-				':name' => 'foo',
-				':value' => 'bar',
-				':value_type' => 'text',
-				':time_created' => $metadata->time_created,
-			],
-			'insert_id' => $id,
+		$object = $this->createObject([
+			'owner_guid' => $owner->guid,
 		]);
-
-		$this->assertEquals($id, $metadata->save());
 		
-		_elgg_services()->session->removeLoggedInUser();
+		$object->title = 'foo';
+		$this->assertEquals('foo', $object->title);
+		
+		$object->title = 'foo2';
+		$this->assertEquals('foo2', $object->title);
+	}
+	
+	public function testCantSaveMetadataForNonExisingEntity() {
+		$metadata = new ElggMetadata();
+		$metadata->entity_guid = 123456789;
+		$metadata->name = 'foo';
+		$metadata->value = 'bar';
+		
+		_elgg_services()->logger->disable();
+		
+		$this->assertFalse($metadata->save());
 	}
 
 	public function testCanDeleteMetadata() {
@@ -166,25 +151,13 @@ class ElggMetadataUnitTest extends UnitTestCase {
 		$metadata->entity_guid = $object->guid;
 		$metadata->name = 'test_metadata_' . rand();
 		$metadata->value = 'test_value_' . rand();
-		$id = $metadata->save();
-
-		$metadata = elgg_get_metadata_from_id($id);
+		$this->assertTrue($metadata->save());
+		
+		$metadata = elgg_get_metadata_from_id($metadata->id);
 
 		$this->assertInstanceOf(\ElggMetadata::class, $metadata);
 		
-		$dbprefix = _elgg_config()->dbprefix;
-		_elgg_services()->db->addQuerySpec([
-			'sql' => "DELETE FROM {$dbprefix}metadata WHERE id = :id",
-			'params' => [
-				':id' => $id,
-			],
-			'row_count' => 1,
-			'times' => 1,
-		]);
-
 		$this->assertTrue($metadata->delete());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testCanExport() {

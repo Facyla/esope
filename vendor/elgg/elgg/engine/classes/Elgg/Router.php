@@ -2,17 +2,18 @@
 
 namespace Elgg;
 
+use Elgg\Database\Plugins;
+use Elgg\Exceptions\Http\BadRequestException ;
+use Elgg\Exceptions\Http\PageNotFoundException;
+use Elgg\Exceptions\RuntimeException;
 use Elgg\Http\Request as HttpRequest;
 use Elgg\Http\ResponseBuilder;
 use Elgg\Http\ResponseFactory;
 use Elgg\Router\RouteCollection;
 use Elgg\Router\UrlMatcher;
-use Exception;
-use InvalidParameterException;
-use RuntimeException;
+use Elgg\Traits\Debug\Profilable;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Elgg\Database\Plugins;
 
 /**
  * Delegates requests to controllers based on the registered configuration.
@@ -91,13 +92,9 @@ class Router {
 	 * @param \Elgg\Http\Request $request The request to handle.
 	 *
 	 * @return boolean Whether the request was routed successfully.
-	 * @throws InvalidParameterException
-	 * @throws Exception
 	 */
 	public function route(HttpRequest $request) {
-		if ($this->timer) {
-			$this->timer->begin(['build page']);
-		}
+		$this->beginTimer(['build page']);
 
 		$request->validate();
 
@@ -118,16 +115,11 @@ class Router {
 	 * @param \Elgg\Http\Request $request Request
 	 *
 	 * @return ResponseBuilder
-	 * @throws Exception
 	 * @throws PageNotFoundException
 	 */
 	public function getResponse(HttpRequest $request) {
-		$response = $this->prepareLegacyResponse($request);
-
-		if (!$response instanceof ResponseBuilder) {
-			$response = $this->prepareResponse($request);
-		}
-
+		$response = $this->prepareResponse($request);
+		
 		if (!$response instanceof ResponseBuilder) {
 			throw new PageNotFoundException();
 		}
@@ -142,76 +134,12 @@ class Router {
 	}
 
 	/**
-	 * Prepare legacy response by listening to "route" hook
-	 *
-	 * @param \Elgg\Http\Request $request Request
-	 *
-	 * @return ResponseBuilder|null
-	 * @throws Exception
-	 */
-	protected function prepareLegacyResponse(HttpRequest $request) {
-
-		$segments = $request->getUrlSegments();
-		if (!empty($segments)) {
-			$identifier = array_shift($segments);
-		} else {
-			$identifier = '';
-			$segments = [];
-		}
-
-		$old = [
-			'identifier' => $identifier,
-			'handler' => $identifier, // backward compatibility
-			'segments' => $segments,
-		];
-
-		if (!$this->hooks->hasHandler('route', $identifier) && !$this->hooks->hasHandler('route', 'all')) {
-			return null;
-		}
-
-		elgg_deprecated_notice('"route" hook has been deprecated. Use named routes instead', '3.0');
-
-		try {
-			ob_start();
-
-			$result = $this->hooks->trigger('route', $identifier, $old, $old);
-
-			$output = ob_get_clean();
-
-			if ($result instanceof ResponseBuilder) {
-				return $result;
-			} else if ($result === false) {
-				return elgg_ok_response($output);
-			} else if ($result !== $old) {
-				elgg_log("'route' hook should not be used to rewrite routing path. Use 'route:rewrite' hook instead", 'ERROR');
-
-				if ($identifier != $result['identifier']) {
-					$identifier = $result['identifier'];
-				} else if ($identifier != $result['handler']) {
-					$identifier = $result['handler'];
-				}
-
-				$segments = elgg_extract('segments', $result, [], false);
-
-				array_unshift($segments, $identifier);
-
-				$forward_url = implode('/', $segments);
-
-				return elgg_redirect_response($forward_url, ELGG_HTTP_PERMANENTLY_REDIRECT);
-			}
-		} catch (Exception $ex) {
-			ob_end_clean();
-			throw $ex;
-		}
-	}
-
-	/**
 	 * Prepare response
 	 *
 	 * @param \Elgg\Http\Request $request Request
 	 *
 	 * @return ResponseBuilder|null
-	 * @throws Exception
+	 * @throws BadRequestException
 	 * @throws PageNotFoundException
 	 */
 	protected function prepareResponse(HttpRequest $request) {
@@ -242,6 +170,9 @@ class Router {
 
 			$required_plugins = (array) elgg_extract('_required_plugins', $parameters, []);
 			unset($parameters['_required_plugins']);
+			
+			unset($parameters['_detect_page_owner']);
+			unset($parameters['_legacy_page_owner_detection']);
 			
 			foreach ($required_plugins as $plugin_id) {
 				if (!$this->plugins->isActive($plugin_id)) {
@@ -294,8 +225,6 @@ class Router {
 	 * @param \Elgg\Request $request Request envelope
 	 *
 	 * @return ResponseBuilder|null
-	 * @throws Exception
-	 * @deprecated 3.0
 	 */
 	protected function getResponseFromHandler($handler, \Elgg\Request $request) {
 		if (!is_callable($handler)) {
@@ -309,7 +238,7 @@ class Router {
 		ob_start();
 		try {
 			$response = call_user_func($handler, $segments, $identifier, $request);
-		} catch (Exception $ex) {
+		} catch (\Exception $ex) {
 			ob_end_clean();
 			throw $ex;
 		}
@@ -333,12 +262,10 @@ class Router {
 	 *
 	 * @return ResponseBuilder|null
 	 * @throws PageNotFoundException
-	 * @deprecated 3.0
 	 */
-	protected function getResponseFromFile($file, \Elgg\Request $request) {
-		if (!is_file($file) || !is_readable($file)) {
-			$path = $request->getPath();
-			throw new PageNotFoundException(elgg_echo('actionnotfound', [$path]), ELGG_HTTP_NOT_IMPLEMENTED);
+	protected function getResponseFromFile(string $file, \Elgg\Request $request) {
+		if (!is_file($file)) {
+			throw new PageNotFoundException(elgg_echo('actionnotfound', [$request->getPath()]), ELGG_HTTP_NOT_IMPLEMENTED);
 		}
 
 		ob_start();
@@ -365,6 +292,7 @@ class Router {
 	 * @param \Elgg\Http\Request $request Elgg request
 	 *
 	 * @return \Elgg\Http\Request
+	 * @throws RuntimeException
 	 */
 	public function allowRewrite(HttpRequest $request) {
 		$segments = $request->getUrlSegments();

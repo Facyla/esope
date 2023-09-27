@@ -1,14 +1,18 @@
 <?php
 
 return [
+	'plugin' => [
+		'name' => 'Activity Pages',
+		'activate_on_install' => true,
+	],
 	'routes' => [
 		'collection:river:owner' => [
 			'path' => '/activity/owner/{username}',
-			'resource' => 'river',
+			'resource' => 'activity/owner',
 		],
 		'collection:river:friends' => [
-			'path' => '/activity/friends/{username?}',
-			'resource' => 'river',
+			'path' => '/activity/friends/{username}',
+			'resource' => 'activity/friends',
 			'required_plugins' => [
 				'friends',
 			],
@@ -22,11 +26,11 @@ return [
 		],
 		'collection:river:all' => [
 			'path' => '/activity/all',
-			'resource' => 'river',
+			'resource' => 'activity/all',
 		],
 		'default:river' => [
 			'path' => '/activity',
-			'resource' => 'river',
+			'resource' => 'activity/all',
 		],
 	],
 	'widgets' => [
@@ -37,6 +41,30 @@ return [
 		],
 		'river_widget' => [
 			'context' => ['profile', 'dashboard'],
+		],
+	],
+	'group_tools' => [
+		'activity' => [],
+	],
+	'view_extensions' => [
+		'css/elgg' => [
+			'river/filter.css' => [],
+		],
+	],
+	'hooks' => [
+		'entity:url' => [
+			'object' => [
+				'Elgg\Activity\Widgets::widgetURL' => [],
+			],
+		],
+		'register' => [
+			'menu:site' => [
+				'Elgg\Activity\Menus\Site::register' => [],
+			],
+			'menu:owner_block' => [
+				'Elgg\Activity\Menus\OwnerBlock::registerUserItem' => [],
+				'Elgg\Activity\Menus\OwnerBlock::registerGroupItem' => [],
+			],
 		],
 	],
 ];

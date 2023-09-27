@@ -9,12 +9,7 @@
  */
 class ElggSessionUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
 	public function down() {
-		_elgg_services()->session->removeLoggedInUser();
 		_elgg_services()->session->invalidate();
 	}
 
@@ -73,7 +68,7 @@ class ElggSessionUnitTest extends \Elgg\UnitTestCase {
 		$user->setPassword('some new password');
 		
 		// token isn't valid anymore
-		$this->expectException(\SecurityException::class);
+		$this->expectException(\Elgg\Exceptions\SecurityException::class);
 		$session->validateUserToken($user);
 	}
 	

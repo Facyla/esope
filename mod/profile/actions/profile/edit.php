@@ -22,8 +22,11 @@ if (!is_array($accesslevel)) {
 	$accesslevel = [];
 }
 
-$profile_fields = elgg_get_config('profile_fields');
-foreach ($profile_fields as $shortname => $valuetype) {
+$profile_fields = elgg()->fields->get('user', 'user');
+foreach ($profile_fields as $field) {
+	$shortname = $field['name'];
+	$valuetype = $field['#type'];
+	
 	$value = get_input($shortname);
 	
 	if ($value === null) {
@@ -44,14 +47,14 @@ foreach ($profile_fields as $shortname => $valuetype) {
 	
 	// convert tags fields to array values
 	if ($valuetype == 'tags') {
-		$value = string_to_tag_array($value);
+		$value = elgg_string_to_array((string) $value);
 	}
 
 	if ($value && $valuetype == 'url' && !preg_match('~^https?\://~i', $value)) {
 		$value = "http://$value";
 	}
 
-	if ($valuetype == 'email' && !empty($value) && !is_email_address($value)) {
+	if ($valuetype == 'email' && !empty($value) && !elgg_is_valid_email($value)) {
 		return elgg_error_response(elgg_echo('profile:invalid_email', [elgg_echo("profile:{$shortname}")]));
 	}
 	
@@ -59,7 +62,7 @@ foreach ($profile_fields as $shortname => $valuetype) {
 }
 
 // display name is handled separately
-$name = strip_tags(get_input('name'));
+$name = strip_tags(get_input('name', ''));
 if ($name) {
 	if (elgg_strlen($name) > 50) {
 		return elgg_error_response(elgg_echo('user:name:fail'));
@@ -74,7 +77,7 @@ if (empty($input)) {
 
 // go through custom fields
 // fetch default access level for the user for use in fallback cases
-$user_default_access = get_default_access($owner);
+$user_default_access = elgg_get_default_access($owner);
 
 foreach ($input as $shortname => $value) {
 	// get field access

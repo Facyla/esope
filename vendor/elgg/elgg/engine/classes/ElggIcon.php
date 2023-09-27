@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\LogicException as ElggLogicException;
+
 /**
  * Entity icon class
  */
@@ -16,8 +18,10 @@ class ElggIcon extends ElggFile {
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @throws \Elgg\Exceptions\LogicException
 	 */
-	public function save() {
-		throw new \LogicException(__CLASS__ . ' instances exist as placeholders and can not be upgraded to entities');
+	public function save() : bool {
+		throw new ElggLogicException(__CLASS__ . ' instances exist as placeholders and can not be upgraded to entities');
 	}
 }

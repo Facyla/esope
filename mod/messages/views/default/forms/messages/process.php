@@ -6,17 +6,15 @@
  *
  * @uses $vars['list']   List of messages
  * @uses $vars['folder'] The folder currently looking at
- *
  */
 
+elgg_require_js('forms/messages/process');
+
 $list = elgg_extract('list', $vars);
-if (!$list) {
-	echo elgg_echo('messages:nomessages');
-	return true;
-}
 
-echo "<div class='messages-container'>{$list}</div>";
+echo elgg_format_element('div', ['class' => 'messages-container'], $list);
 
+// create footer
 $buttons = [];
 $buttons[] = [
 	'#type' => 'submit',

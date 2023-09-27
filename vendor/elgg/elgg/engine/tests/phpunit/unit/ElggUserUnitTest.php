@@ -1,19 +1,13 @@
 <?php
 
+use Elgg\Exceptions\InvalidArgumentException;
+
 /**
  * @group User
  * @group UnitTests
  * @group ElggData
  */
 class ElggUserUnitTest extends \Elgg\UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	public function testCanConstructWithoutArguments() {
 		$this->assertNotNull(new \ElggUser());
@@ -38,6 +32,29 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 		$user_settings = $obj->getNotificationSettings();
 		$this->assertTrue($user_settings['registered1']);
 		$this->assertFalse($user_settings['registered2']);
+		$this->assertArrayNotHasKey('unregistered', $user_settings);
+	}
+	
+	public function testCanSetNotificationSettingsWithPurpose() {
+
+		$obj = $this->getMockBuilder(ElggUser::class)
+				->setMethods(['save'])
+				->getMock();
+		$obj->expects($this->any())
+				->method('save')
+				->will($this->returnValue(true));
+
+		_elgg_services()->notifications->registerMethod('registered1');
+		_elgg_services()->notifications->registerMethod('registered2');
+
+		$obj->setNotificationSetting('registered1', false);
+		$obj->setNotificationSetting('registered1', true, 'my_purpose');
+		$obj->setNotificationSetting('registered2', true); // test fallback
+		$obj->setNotificationSetting('unregistered', true);
+		
+		$user_settings = $obj->getNotificationSettings('my_purpose');
+		$this->assertTrue($user_settings['registered1']);
+		$this->assertTrue($user_settings['registered2']);
 		$this->assertArrayNotHasKey('unregistered', $user_settings);
 	}
 
@@ -98,32 +115,19 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 	}
 	
 	/**
-	 * @dataProvider incorrectAdminBannedValues
+	 * @dataProvider protectedValues
 	 */
-	public function testSetIncorrectBannedValue($value) {
+	public function testSetProtectedValuesThrowsException($name) {
 		$user = $this->createUser();
 		
 		$this->expectException(InvalidArgumentException::class);
-		$user->banned = $value;
+		$user->$name = 'foo';
 	}
 	
-	/**
-	 * @dataProvider incorrectAdminBannedValues
-	 */
-	public function testSetIncorrectAdminValue($value) {
-		$user = $this->createUser();
-		
-		$this->expectException(InvalidArgumentException::class);
-		$user->admin = $value;
-	}
-	
-	public function incorrectAdminBannedValues() {
+	public function protectedValues() {
 		return [
-			[1],
-			[0],
-			[true],
-			[false],
-			['some random string'],
+			['admin'],
+			['banned'],
 		];
 	}
 	
@@ -139,7 +143,13 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 		$session->setLoggedInUser($user2);
 		
 		$this->assertFalse($user->canComment());
+	}
+	
+	public function testGetDisplaynameReturnsString() {
+		$user = new ElggUser();
+		$this->assertEquals('', $user->getDisplayName());
 		
-		$session->removeLoggedInUser();
+		$user->name = 'foo';
+		$this->assertEquals('foo', $user->getDisplayName());
 	}
 }

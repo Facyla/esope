@@ -6,14 +6,6 @@
  */
 class ElggGroupUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testCanConstructWithoutArguments() {
 		$this->assertNotNull(new \ElggGroup());
 	}
@@ -73,7 +65,13 @@ class ElggGroupUnitTest extends \Elgg\UnitTestCase {
 		$session->setLoggedInUser($user);
 		
 		$this->assertFalse($group->canComment());
+	}
+	
+	public function testGetDisplaynameReturnsString() {
+		$group = new ElggGroup();
+		$this->assertEquals('', $group->getDisplayName());
 		
-		$session->removeLoggedInUser();
+		$group->name = 'foo';
+		$this->assertEquals('foo', $group->getDisplayName());
 	}
 }

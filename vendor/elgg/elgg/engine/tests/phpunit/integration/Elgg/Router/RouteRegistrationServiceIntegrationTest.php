@@ -27,17 +27,15 @@ class RouteRegistrationServiceIntegrationTest extends IntegrationTestCase {
 	 * {@inheritDoc}
 	 */
 	public function up() {
+		$this->createApplication([
+			'isolate' => true,
+			'custom_config_values' => [
+				'minusername' => 6,
+			],
+		]);
+		
 		$this->route_service = _elgg_services()->routes;
 		$this->account_service = elgg()->accounts;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function down() {
-		if ($this->user instanceof \ElggUser) {
-			$this->user->delete;
-		}
 	}
 	
 	/**

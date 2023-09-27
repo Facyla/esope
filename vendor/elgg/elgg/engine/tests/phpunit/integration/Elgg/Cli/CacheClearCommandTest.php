@@ -17,10 +17,6 @@ class CacheClearCommandTest extends IntegrationTestCase {
 		]);
 	}
 
-	public function down() {
-
-	}
-
 	public function testExecuteWithoutOptions() {
 		$application = new Application();
 		$application->add(new CacheClearCommand());
@@ -29,7 +25,7 @@ class CacheClearCommandTest extends IntegrationTestCase {
 		$commandTester = new CommandTester($command);
 		$commandTester->execute(['command' => $command->getName()]);
 
-		$this->assertRegExp('/' . elgg_echo('admin:cache:cleared') . '/im', $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression('/' . elgg_echo('admin:cache:cleared') . '/im', $commandTester->getDisplay());
 	}
 
 	public function testExecuteWithQuietOutput() {

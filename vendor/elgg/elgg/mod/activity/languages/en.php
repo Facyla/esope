@@ -18,7 +18,9 @@ return array(
 	'widgets:group_activity:content:noactivity' => 'There is no activity in this group',
 	'widgets:group_activity:content:noselect' => 'Edit this widget to select a group',
 	
+	'collection:river' => "Activity",
 	'collection:river:group' => "Group activity",
 	'groups:tool:activity' => 'Enable group activity',
+	'groups:tool:activity:description' => 'Show an activity feed about group related content.',
 	
 );

@@ -68,6 +68,10 @@ have been registered so far by Elgg core and other enabled plugins. In the
 handler we can loop through the menu items and use the class methods to
 interact with the properties of the menu item.
 
+In some cases a more granular version of the ``register`` and ``prepare`` menu hooks exist with ``menu:<menu name>:<type>:<subtype>``,
+this applies when the menu gets provided an ``\ElggEntity`` in ``$params['entity']`` or an ``\ElggAnnotation`` in ``$params['annotation']``
+or an ``\ElggRelationship`` in ``$params['relationship']``.
+
 Examples
 --------
 
@@ -86,8 +90,8 @@ Examples
 	/**
 	 * Change the URL of the "Albums" menu item in the owner_block menu
 	 */
-	function my_owner_block_menu_handler($hook, $type, $items, $params) {
-		$owner = $params['entity'];
+	function my_owner_block_menu_handler(\Elgg\Hook $hook) {
+		$owner = $hook->getEntityParam();
 
 		// Owner can be either user or a group, so we
 		// need to take both URLs into consideration:
@@ -100,6 +104,7 @@ Examples
 				break;
 		}
 
+		$items = $hook->getValue();
 		if ($items->has('albums')) {
 			$items->get('albums')->setURL($url);
 		}
@@ -124,16 +129,18 @@ Examples
 	/**
 	 * Customize the entity menu for ElggBlog objects
 	 */
-	function my_entity_menu_handler($hook, $type, $items, $params) {
+	function my_entity_menu_handler(\Elgg\Hook $hook) {
 		// The entity can be found from the $params parameter
-		$entity = $params['entity'];
+		$entity = $hook->getEntityParam();
 
 		// We want to modify only the ElggBlog objects, so we
 		// return immediately if the entity is something else
 		if (!$entity instanceof ElggBlog) {
-			return $menu;
+			return;
 		}
 
+		$items = $hook->getValue();
+		
 		$items->remove('likes');
 
 		if ($items->has('edit')) {

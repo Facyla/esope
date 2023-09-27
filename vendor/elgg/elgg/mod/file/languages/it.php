@@ -22,14 +22,11 @@ return array(
 	'file:num_files' => "Numero di file da visualizzare",
 	'file:replace' => 'Sostituisci il contenuto del file (lascia vuoto per non cambiare il file)',
 	'file:list:title' => "di %s %s %s",
-	'file:title:friends' => "Degli amici",
 
 	'file:file' => "File",
 
 	'file:list:list' => 'Passa alla vista a elenco',
 	'file:list:gallery' => 'Passa alla vista a icone',
-
-	'file:types' => "Tipi di file caricati",
 
 	'file:type:' => 'File',
 	'file:type:all' => "Tutti i file",
@@ -61,19 +58,10 @@ return array(
 
 	'file:notify:summary' => 'Nuovo file chiamato %s',
 	'file:notify:subject' => 'Nuovo file: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

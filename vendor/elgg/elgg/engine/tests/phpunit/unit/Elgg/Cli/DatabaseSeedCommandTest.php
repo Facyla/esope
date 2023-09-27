@@ -15,17 +15,22 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class DatabaseSeedCommandTest extends UnitTestCase {
 
+	/**
+	 * @var int previous log level
+	 */
+	protected $loglevel;
+	
 	public function up() {
 		// Need to adjust loglevel to make sure system messages go to screen output and not to logger
 		$app = \Elgg\Application::getInstance();
-		$this->loglevel = $app->_services->logger->getLevel();
-		$app->_services->logger->setLevel(Logger::ERROR);
+		$this->loglevel = $app->internal_services->logger->getLevel();
+		$app->internal_services->logger->setLevel(Logger::ERROR);
 	}
 
 	public function down() {
 		// restore loglevel
 		$app = \Elgg\Application::getInstance();
-		$app->_services->logger->setLevel($this->loglevel);
+		$app->internal_services->logger->setLevel($this->loglevel);
 	}
 
 	public function testSeedCommand() {
@@ -46,7 +51,7 @@ class DatabaseSeedCommandTest extends UnitTestCase {
 		]);
 
 		$seeder = preg_quote(CliSeeder::class);
-		$this->assertRegExp("/{$seeder}::seed/im", $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression("/{$seeder}::seed/im", $commandTester->getDisplay());
 
 		$hook->unregister();
 	}
@@ -68,9 +73,8 @@ class DatabaseSeedCommandTest extends UnitTestCase {
 		]);
 
 		$seeder = preg_quote(CliSeeder::class);
-		$this->assertRegExp("/{$seeder}::unseed/im", $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression("/{$seeder}::unseed/im", $commandTester->getDisplay());
 
 		$hook->unregister();
 	}
-
 }

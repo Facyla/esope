@@ -17,14 +17,6 @@ use Elgg\UnitTestCase;
  */
 class RiverRepositoryTest extends UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function buildQuery(QueryBuilder $qb, array $options = []) {
 		$where = new RiverWhereClause();
 		$where->ids = elgg_extract('ids', $options);
@@ -38,6 +30,8 @@ class RiverRepositoryTest extends UnitTestCase {
 
 		$qb->addClause($where);
 
+		$ands = [];
+		
 		$qb->joinEntitiesTable('rv', 'subject_guid', 'inner', 'se');
 		$subject = new EntityWhereClause();
 		$subject->guids = elgg_extract('subject_guids', $options);
@@ -602,5 +596,4 @@ class RiverRepositoryTest extends UnitTestCase {
 
 		return $rows;
 	}
-
 }

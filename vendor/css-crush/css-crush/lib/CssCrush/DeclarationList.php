@@ -10,21 +10,23 @@ class DeclarationList extends Iterator
 {
     public $flattened = true;
     public $processed = false;
+    protected $rule;
 
-    public $properties = array();
-    public $canonicalProperties = array();
+    public $properties = [];
+    public $canonicalProperties = [];
 
     // Declarations hash table for inter-rule this() referencing.
-    public $data = array();
+    public $data = [];
 
     // Declarations hash table for external query() referencing.
-    public $queryData = array();
+    public $queryData = [];
 
-    public function __construct($declarations_string, Rule $rule)
+    public function __construct($declarationsString, Rule $rule)
     {
         parent::__construct();
 
-        $pairs = DeclarationList::parse($declarations_string);
+        $this->rule = $rule;
+        $pairs = DeclarationList::parse($declarationsString);
 
         foreach ($pairs as $index => $pair) {
 
@@ -32,12 +34,12 @@ class DeclarationList extends Iterator
 
             // Directives.
             if ($prop === 'extends') {
-                $rule->setExtendSelectors($value);
+                $this->rule->addExtendSelectors($value);
                 unset($pairs[$index]);
             }
             elseif ($prop === 'name') {
-                if (! $rule->name) {
-                    $rule->name = $value;
+                if (! $this->rule->name) {
+                    $this->rule->name = $value;
                 }
                 unset($pairs[$index]);
             }
@@ -102,8 +104,8 @@ class DeclarationList extends Iterator
 
     public function updateIndex()
     {
-        $this->properties = array();
-        $this->canonicalProperties = array();
+        $this->properties = [];
+        $this->canonicalProperties = [];
 
         foreach ($this->store as $declaration) {
             $this->index($declaration);
@@ -132,7 +134,7 @@ class DeclarationList extends Iterator
             return;
         }
 
-        $stack = array();
+        $stack = [];
         $rule_updated = false;
         $regex = Regex::$patt;
 
@@ -197,7 +199,7 @@ class DeclarationList extends Iterator
         $function_alias_groups =& Crush::$process->aliases['function_groups'];
 
         // The new modified set of declarations.
-        $new_set = array();
+        $new_set = [];
         $rule_updated = false;
 
         // Shim in aliased functions.
@@ -217,12 +219,12 @@ class DeclarationList extends Iterator
             }
 
             // Keep record of which groups have been applied.
-            $processed_groups = array();
+            $processed_groups = [];
 
             foreach (array_keys($intersect) as $fn_name) {
 
                 // Store for all the duplicated declarations.
-                $prefixed_copies = array();
+                $prefixed_copies = [];
 
                 // Grouped function aliases.
                 if ($function_aliases[$fn_name][0] === '.') {
@@ -269,7 +271,6 @@ class DeclarationList extends Iterator
 
                 // Single function aliases.
                 else {
-
                     foreach ($function_aliases[$fn_name] as $fn_alias) {
 
                         // If the declaration is vendor specific only create aliases for the same vendor.
@@ -287,7 +288,7 @@ class DeclarationList extends Iterator
 
                         // Make swaps.
                         $copy->value = preg_replace(
-                            '~(?<![\w-])' . $fn_name . '(?=\?)~',
+                            Regex::make("~{{ LB }}$fn_name(?=\()~iS"),
                             $fn_alias,
                             $copy->value
                         );
@@ -322,7 +323,7 @@ class DeclarationList extends Iterator
         }
 
         $intersect = array_flip(array_keys($intersect));
-        $new_set = array();
+        $new_set = [];
         $rule_updated = false;
 
         foreach ($this->store as $declaration) {
@@ -364,21 +365,21 @@ class DeclarationList extends Iterator
         }
     }
 
-    public static function parse($str, $options = array())
+    public static function parse($str, $options = [])
     {
         $str = Util::stripCommentTokens($str);
-        $lines = preg_split('~\s*;\s*~', $str, null, PREG_SPLIT_NO_EMPTY);
+        $lines = preg_split('~\s*;\s*~', $str, -1, PREG_SPLIT_NO_EMPTY);
 
-        $options += array(
+        $options += [
             'keyed' => false,
             'ignore_directives' => false,
             'lowercase_keys' => false,
             'context' => null,
             'flatten' => false,
             'apply_hooks' => false,
-        );
+        ];
 
-        $pairs = array();
+        $pairs = [];
 
         foreach ($lines as $line) {
 
@@ -405,7 +406,10 @@ class DeclarationList extends Iterator
                 }
 
                 if ($options['apply_hooks']) {
-                    Crush::$process->hooks->run('declaration_preprocess', array('property' => &$property, 'value' => &$value));
+                    Crush::$process->emit('declaration_preprocess', [
+                        'property' => &$property,
+                        'value' => &$value,
+                    ]);
                 }
             }
             else {
@@ -417,53 +421,56 @@ class DeclarationList extends Iterator
             }
 
             if ($property === 'mixin' && $options['flatten']) {
-                $pairs = Mixin::merge($pairs, $value, array(
+                $pairs = Mixin::merge($pairs, $value, [
                     'keyed' => $options['keyed'],
                     'context' => $options['context'],
-                ));
+                ]);
             }
             elseif ($options['keyed']) {
                 $pairs[$property] = $value;
             }
             else {
-                $pairs[] = array($property, $value);
+                $pairs[] = [$property, $value];
             }
         }
 
         return $pairs;
     }
 
-    public function flatten($rule_context)
+    public function flatten()
     {
         if ($this->flattened) {
             return;
         }
 
-        $new_set = array();
+        $newSet = [];
         foreach ($this->store as $declaration) {
             if (is_array($declaration) && $declaration[0] === 'mixin') {
-                foreach (Mixin::merge(array(), $declaration[1], array('context' => $rule_context)) as $mixable) {
+                foreach (Mixin::merge([], $declaration[1], ['context' => $this->rule]) as $mixable) {
                     if ($mixable instanceof Declaration) {
                         $clone = clone $mixable;
-                        $clone->index = count($new_set);
-                        $new_set[] = $clone;
+                        $clone->index = count($newSet);
+                        $newSet[] = $clone;
+                    }
+                    elseif ($mixable[0] === 'extends') {
+                        $this->rule->addExtendSelectors($mixable[1]);
                     }
                     else {
-                        $new_set[] = new Declaration($mixable[0], $mixable[1], count($new_set));
+                        $newSet[] = new Declaration($mixable[0], $mixable[1], count($newSet));
                     }
                 }
             }
             else {
-                $declaration->index = count($new_set);
-                $new_set[] = $declaration;
+                $declaration->index = count($newSet);
+                $newSet[] = $declaration;
             }
         }
 
-        $this->reset($new_set);
+        $this->reset($newSet);
         $this->flattened = true;
     }
 
-    public function process($rule_context)
+    public function process()
     {
         if ($this->processed) {
             return;
@@ -472,7 +479,7 @@ class DeclarationList extends Iterator
         foreach ($this->store as $index => $declaration) {
 
             // Execute functions, store as data etc.
-            $declaration->process($rule_context);
+            $declaration->process($this->rule);
 
             // Drop declaration if value is now empty.
             if (! $declaration->valid) {
@@ -490,7 +497,7 @@ class DeclarationList extends Iterator
     {
         // Expand shorthand properties to make them available
         // as data for this() and query().
-        static $expandables = array(
+        static $expandables = [
             'margin-top' => 'margin',
             'margin-right' => 'margin',
             'margin-bottom' => 'margin',
@@ -511,7 +518,7 @@ class DeclarationList extends Iterator
             'border-right-color' => 'border-color',
             'border-bottom-color' => 'border-color',
             'border-left-color' => 'border-color',
-        );
+        ];
 
         $dataset =& $this->{$dataset};
         $property_group = isset($expandables[$property]) ? $expandables[$property] : null;
@@ -545,7 +552,7 @@ class DeclarationList extends Iterator
         }
         if ($trbl_fmt) {
             $parts = explode(' ', $value);
-            $placeholders = array();
+            $placeholders = [];
 
             // 4 values.
             if (isset($parts[3])) {
@@ -553,11 +560,11 @@ class DeclarationList extends Iterator
             }
             // 3 values.
             elseif (isset($parts[2])) {
-                $placeholders = array($parts[0], $parts[1], $parts[2], $parts[1]);
+                $placeholders = [$parts[0], $parts[1], $parts[2], $parts[1]];
             }
             // 2 values.
             elseif (isset($parts[1])) {
-                $placeholders = array($parts[0], $parts[1], $parts[0], $parts[1]);
+                $placeholders = [$parts[0], $parts[1], $parts[0], $parts[1]];
             }
             // 1 value.
             else {
@@ -566,25 +573,25 @@ class DeclarationList extends Iterator
 
             // Set positional variants.
             if ($property_group === 'border-radius') {
-                $positions = array(
+                $positions = [
                     'top-left',
                     'top-right',
                     'bottom-right',
                     'bottom-left',
-                );
+                ];
             }
             else {
-                $positions = array(
+                $positions = [
                     'top',
                     'right',
                     'bottom',
                     'left',
-               );
+               ];
             }
 
             foreach ($positions as $index => $position) {
                 $prop = sprintf($trbl_fmt, $position);
-                $dataset += array($prop => $placeholders[$index]);
+                $dataset += [$prop => $placeholders[$index]];
             }
         }
     }

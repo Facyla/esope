@@ -3,9 +3,7 @@
  *
  * @module elgg/menus/toggle
  */
-define(function (require) {
-
-	var elgg = require('elgg');
+define(['jquery', 'elgg'], function ($, elgg) {
 
 	var toggle = {
 
@@ -49,7 +47,7 @@ define(function (require) {
 				e.stopImmediatePropagation();
 			});
 
-			toggle.init = elgg.nullFunction;
+			toggle.init = function() {};
 		}
 	};
 

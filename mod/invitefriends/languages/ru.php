@@ -9,32 +9,32 @@ return array(
 
 	'friends:invite' => 'Пригласить друзей',
 	
-	'invitefriends:registration_disabled' => 'Регистрация закрыта.',
+	'invitefriends:registration_disabled' => 'На этом сайте отключена регистрация новых пользователей; вы не можете приглашать новых пользователей.',
 	
-	'invitefriends:introduction' => 'Чтобы пригласить Ваших друзей на сайт, введите их электронные адреса (по одному на строчку):',
+	'invitefriends:introduction' => 'Чтобы пригласить друзей на сайт, введите их электронные адреса и сообщение, которое они получат с приглашением',
 	'invitefriends:emails' => 'Email адреса (по одному в строке)',
-	'invitefriends:message' => 'Напишите сообщение, которое Ваш друг получит с Вашим приглашением:',
-	'invitefriends:subject' => '%s отправил(а) Вам приглашение на %s',
+	'invitefriends:message' => 'Сообщение',
+	'invitefriends:subject' => 'Приглашение присоединиться к %s',
 
-	'invitefriends:success' => 'Ваш друг приглашен.',
-	'invitefriends:invitations_sent' => 'Пришлашение отправлено: %s. Были следующие проблемы:',
-	'invitefriends:email_error' => 'Cледующие e-mail адреса не подтверждены: %s',
-	'invitefriends:already_members' => 'Уже приглашены: %s',
-	'invitefriends:noemails' => 'e-mail не введен.',
+	'invitefriends:success' => 'Ваши друзья приглашены.',
+	'invitefriends:invitations_sent' => 'Приглашение отправлено: %s. Но возникли следующие проблемы:',
+	'invitefriends:email_error' => 'Cледующие электронные адреса ошибочны: %s',
+	'invitefriends:already_members' => 'Эти пользователи уже являются участниками сайта: %s',
+	'invitefriends:noemails' => 'Нет введенных электронных адресов.',
 	
-	'invitefriends:message:default' => 'Hi,
+	'invitefriends:message:default' => 'Привет,
 
-I want to invite you to join my network here on %s.',
+Я хочу пригласить вас присоединиться к сайту %s.',
 
-	'invitefriends:email' => 'You have been invited to join %s by %s.
+	'invitefriends:email' => 'Вы получили приглашение присоединиться к %s от %s.
 
-They included the following message:
+Сообщение приглашения:
 
 %s
 
-To join, click the following link:
+Нажмите на ссылку, чтобы присоединиться:
 %s
 
-You will automatically add them as a friend when you create your account.',
+Вы будете автоматически добавлены в друзья к тем, кто вас пригласил, когда создадите свой аккаунт.',
 	
 );

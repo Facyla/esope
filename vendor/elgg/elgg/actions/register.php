@@ -3,20 +3,19 @@
  * Elgg registration action
  */
 
+use Elgg\Exceptions\Configuration\RegistrationException;
+use Elgg\Exceptions\LoginException;
+
 /* @var $request \Elgg\Request */
 
-elgg_make_sticky_form('register');
-
-if (!elgg_get_config('allow_registration')) {
-	return elgg_error_response(elgg_echo('registerdisabled'));
-}
+elgg_make_sticky_form('register', ['password', 'password2']);
 
 // Get variables
 $username = $request->getParam('username');
 $password = $request->getParam('password', null, false);
 $password2 = $request->getParam('password2', null, false);
-$email = $request->getParam('email');
-$name = $request->getParam('name');
+$email = $request->getParam('email', '');
+$name = $request->getParam('name', '');
 
 $username = trim($username);
 $name = trim(strip_tags($name));
@@ -33,12 +32,13 @@ try {
 		throw new RegistrationException(implode(PHP_EOL, $messages));
 	}
 
-	$guid = register_user($username, $password, $name, $email);
-	if ($guid === false) {
-		throw new RegistrationException(elgg_echo('registerbad'));
-	}
-
-	$new_user = get_user($guid);
+	$new_user = elgg_register_user([
+		'username' => $username,
+		'password' => $password,
+		'name' => $name,
+		'email' => $email,
+		'validated' => false,
+	]);
 
 	$fail = function () use ($new_user) {
 		elgg_call(ELGG_IGNORE_ACCESS, function () use ($new_user) {
@@ -56,6 +56,11 @@ try {
 
 		if (!elgg_trigger_plugin_hook('register', 'user', $params, true)) {
 			throw new RegistrationException(elgg_echo('registerbad'));
+		}
+		
+		if ($new_user->isValidated() === null) {
+			// no hook decided to set validation status, so it will become validated
+			$new_user->setValidationStatus(true, 'register_action');
 		}
 	} catch (\Exception $e) {
 		// Catch all exception to make sure there are no incomplete user entities left behind
@@ -75,9 +80,9 @@ try {
 	}
 
 	try {
-		login($new_user);
+		elgg_login($new_user);
 		// set forward url
-		$forward_url = _elgg_get_login_forward_url($request, $new_user);
+		$forward_url = elgg_get_login_forward_url($new_user);
 		$response_message = elgg_echo('registerok', [elgg_get_site_entity()->getDisplayName()]);
 
 		return elgg_ok_response($response_data, $response_message, $forward_url);

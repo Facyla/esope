@@ -148,11 +148,13 @@ If, for example, you wish to conditionally register widgets you can also use a h
         elgg_register_plugin_hook_handler('handlers', 'widgets', 'my_plugin_conditional_widgets_hook');
     }
 
-    function my_plugin_conditional_widgets_hook($hook, $type, $return, $params) {
+    function my_plugin_conditional_widgets_hook(\Elgg\Hook $hook) {
         if (!elgg_is_active_plugin('file')) {
             return;
         }
 
+        $return = $hook->getValue();
+		
         $return[] = \Elgg\WidgetDefinition::factory([
             'id' => 'filerepo',
         ]);
@@ -170,7 +172,9 @@ If, for example, you wish to change the allowed contexts of an already registere
         elgg_register_plugin_hook_handler('handlers', 'widgets', 'my_plugin_change_widget_definition_hook');
     }
 
-    function my_plugin_change_widget_definition_hook($hook, $type, $return, $params) {
+    function my_plugin_change_widget_definition_hook(\Elgg\Hook $hook) {
+        $return = $hook->getValue();
+    	
         foreach ($return as $key => $widget) {
             if ($widget->id === 'filerepo') {
                 $return[$key]->multiple = false;
@@ -190,30 +194,38 @@ To announce default widget support in your plugin, register for the ``get_list, 
 .. code-block:: php
 
     elgg_register_plugin_hook_handler('get_list', 'default_widgets', 'my_plugin_default_widgets_hook');
+    
+    function my_plugin_default_widgets_hook(\Elgg\Hook $hook) {
+    	$return = $hook->getValue();
+    	
+        $return[] = [
+            'name' => elgg_echo('my_plugin'),
+            'widget_context' => 'my_plugin',
+            'widget_columns' => 3,
+
+            'event_name' => 'create',
+            'event_type' => 'user',
+            'entity_type' => 'user',
+            'entity_subtype' => ELGG_ENTITIES_ANY_VALUE,
+        ];
+
+        return $return;
+    }
 
 In the plugin hook handler, push an array into the return value defining your default widget support and when to create default widgets. Arrays require the following keys to be defined:
 
 -  name - The name of the widgets page. This is displayed on the tab in the admin interface.
 -  widget\_context - The context the widgets page is called from. (If not explicitly set, this is your plugin's id.)
 -  widget\_columns - How many columns the widgets page will use.
--  event - The Elgg event to create new widgets for. This is usually ``create``.
+-  event\_name - The Elgg event name to create new widgets for. This is usually ``create``.
+-  event\_type - The Elgg event type to create new widgets for. 
 -  entity\_type - The entity type to create new widgets for.
 -  entity\_subtype - The entity subtype to create new widgets for. The can be ELGG\_ENTITIES\_ANY\_VALUE to create for all entity types.
 
-When an object triggers an event that matches the event, entity\_type, and entity\_subtype parameters passed, Elgg core will look for default widgets that match the widget\_context and will copy them to that object's owner\_guid and container\_guid. All widget settings will also be copied.
+To have widgets be created you need to register the following plugin hook:
 
 .. code-block:: php
 
-    function my_plugin_default_widgets_hook($hook, $type, $return, $params) {
-        $return[] = array(
-            'name' => elgg_echo('my_plugin'),
-            'widget_context' => 'my_plugin',
-            'widget_columns' => 3,
+    elgg_register_plugin_hook_handler('create', 'object', 'Elgg\Widgets\CreateDefaultWidgetsHandler');
 
-            'event' => 'create',
-            'entity_type' => 'user',
-            'entity_subtype' => ELGG_ENTITIES_ANY_VALUE,
-        );
-
-        return $return;
-    }
+When an object triggers an event that matches the event, entity\_type, and entity\_subtype parameters passed, Elgg core will look for default widgets that match the widget\_context and will copy them to that object's owner\_guid and container\_guid. All widget settings will also be copied.

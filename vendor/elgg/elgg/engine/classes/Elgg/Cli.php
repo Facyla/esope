@@ -4,11 +4,11 @@ namespace Elgg;
 
 use Elgg\Cli\Application as CliApplication;
 use Elgg\Cli\BaseCommand;
-use Exception;
+use Elgg\Cli\Command;
+use Elgg\Traits\Loggable;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Elgg\Cli\Command;
 
 /**
  * CLI bootstrap
@@ -40,17 +40,19 @@ class Cli {
 	/**
 	 * Constructor
 	 *
-	 * @param CliApplication     $console Console application instance
-	 * @param PluginHooksService $hooks   Hooks registration service
-	 * @param InputInterface     $input   Console input
-	 * @param OutputInterface    $output  Console output
+	 * @param PluginHooksService $hooks  Hooks registration service
+	 * @param InputInterface     $input  Console input
+	 * @param OutputInterface    $output Console output
 	 */
 	public function __construct(
-		CliApplication $console,
 		PluginHooksService $hooks,
 		InputInterface $input,
 		OutputInterface $output
 	) {
+		
+		$console = new \Elgg\Cli\Application('Elgg', elgg_get_release());
+		$console->setup($input, $output);
+
 		$this->console = $console;
 		$this->hooks = $hooks;
 		$this->input = $input;
@@ -119,9 +121,7 @@ class Cli {
 		$command = new $command();
 		/* @var $command BaseCommand */
 
-		if ($this->logger) {
-			$command->setLogger($this->logger);
-		}
+		$command->setLogger($this->getLogger());
 		
 		if (!is_subclass_of($command, Command::class)) {
 			$this->console->add($command);
@@ -147,7 +147,6 @@ class Cli {
 	 * @param bool $bootstrap Is bootstrap needed?
 	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	public function run(bool $bootstrap = true) {
 		if ($bootstrap) {

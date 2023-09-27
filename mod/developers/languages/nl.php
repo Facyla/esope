@@ -6,8 +6,9 @@
  */
 
 return array(
-	// menu
 	'admin:develop_tools' => 'Tools',
+	
+	// menu
 	'admin:develop_tools:sandbox' => 'Theme Sandbox',
 	'admin:develop_tools:inspect' => 'Inspecteer',
 	'admin:inspect' => 'Inspecteer',
@@ -28,6 +29,9 @@ return array(
 	'developers:help:display_errors' => "Standaard verbergt de .htaccess van Elgg het weergeven van fatale fouten.",
 	'developers:label:screen_log' => "Log naar het scherm",
 	'developers:help:screen_log' => "Dit toont het resultaat van elgg_log() en elgg_dump() op de webpagina alsmede het aantal database queries.",
+	'developers:show_strings:default' => "Normale vertaling",
+	'developers:show_strings:key_append' => "Vertaalsleutel toegevoegd",
+	'developers:show_strings:key_only' => "Toon alleen de vertaalsleutel",
 	'developers:label:show_strings' => "Toon vertaalsleutels",
 	'developers:help:show_strings' => "Dit toont de vertaalsleutels die gebruikt worden door elgg_echo().",
 	'developers:label:show_modules' => "Toon de geladen AMD modules in de console",
@@ -35,7 +39,7 @@ return array(
 	'developers:label:wrap_views' => "Omcirkel views",
 	'developers:help:wrap_views' => "Dit omwikkeld alle views met een HTML comment block. Dit kan je helpen indien je wilt weten welke view de HTML heeft gegenereerd.
 
-Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_wrap_views() functie for meer informatie.",
+Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_wrap_views() functie voor meer informatie.",
 	'developers:label:log_events' => "Log-events en plugin-hooks",
 	'developers:help:log_events' => "Schrijf events- en plugin-hook naar de log. Waarschuwing: dit zijn er veel per pagina.",
 	'developers:label:show_gear' => "Gebruik %s buiten de admin sectie",
@@ -71,6 +75,7 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'developers:entity_explorer:info:acl_memberships' => 'Access Collections lidmaatschappen',
 	'developers:entity_explorer:delete_entity' => 'Verwijder deze entiteit',
 	'developers:entity_explorer:inspect_entity' => 'Inspecteer deze entiteit',
+	'developers:entity_explorer:view_entity' => 'Bekijk deze entiteit op de site',
 	
 	// inspection
 	'developers:inspect:help' => 'Inspecteer de configuratie van het Elgg framework.',
@@ -86,7 +91,6 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'developers:inspect:views:input_filtered' => "(input gefilterd op plugin hook: %s)",
 	'developers:inspect:views:filtered' => "(gefilterd op plugin hook: %s)",
 	'developers:inspect:widgets' => 'Widgets',
-	'developers:inspect:webservices' => 'Webservices',
 	'developers:inspect:widgets:context' => 'Context',
 	'developers:inspect:functions' => 'Functies',
 	'developers:inspect:file_location' => 'Bestandslocatie of controller',
@@ -115,6 +119,7 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'theme_sandbox:breakout' => 'Verlaat het iframe',
 	'theme_sandbox:buttons' => 'Knoppen',
 	'theme_sandbox:components' => 'Componenten',
+	'theme_sandbox:email' => 'Email',
 	'theme_sandbox:forms' => 'Formulieren',
 	'theme_sandbox:grid' => 'Raster',
 	'theme_sandbox:icons' => 'Iconen',
@@ -125,6 +130,9 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'theme_sandbox:typography' => 'Typografie',
 
 	'theme_sandbox:icons:blurb' => 'Gebruik <em>elgg_view_icon($name)</em> of de klasse <em>elgg-icon-$name</em> om iconen weer te geven.',
+	
+	'theme_sandbox:test_email:button' => "Stuur test email",
+	'theme_sandbox:test_email:success' => "Test email verzonden naar: %s",
 
 	// status messages
 	'developers:settings:success' => 'Instellingen opgeslagen',

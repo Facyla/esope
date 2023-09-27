@@ -8,8 +8,6 @@ namespace CssCrush;
 
 class Crush
 {
-    const VERSION = '2.4.0';
-
     // Global settings.
     public static $config;
 
@@ -25,24 +23,23 @@ class Crush
 
         self::$config = new \stdClass();
 
-        self::$config->pluginDirs = array(self::$dir . '/plugins');
-        self::$config->version = new Version(self::VERSION);
+        self::$config->pluginDirs = [self::$dir . '/plugins'];
         self::$config->scriptDir = dirname(realpath($_SERVER['SCRIPT_FILENAME']));
         self::$config->docRoot = self::resolveDocRoot();
         self::$config->logger = new Logger();
         self::$config->io = 'CssCrush\IO';
 
         // Shared resources.
-        self::$config->vars = array();
+        self::$config->vars = [];
         self::$config->aliasesFile = self::$dir . '/aliases.ini';
-        self::$config->aliases = array();
-        self::$config->bareAliases = array(
-            'properties' => array(),
-            'functions' => array(),
-            'function_groups' => array(),
-            'declarations' => array(),
-            'at-rules' => array(),
-        );
+        self::$config->aliases = [];
+        self::$config->bareAliases = [
+            'properties' => [],
+            'functions' => [],
+            'function_groups' => [],
+            'declarations' => [],
+            'at-rules' => [],
+        ];
         self::$config->options = new Options();
 
         require_once self::$dir . '/misc/formatters.php';
@@ -100,6 +97,33 @@ class Crush
         }
     }
 
+    public static function plugin($name = null, callable $callback = null)
+    {
+        static $plugins = [];
+
+        if (! $callback) {
+            return isset($plugins[$name]) ? $plugins[$name] : null;
+        }
+
+        $plugins[$name] = $callback;
+    }
+
+    public static function enablePlugin($name)
+    {
+        $plugin = self::plugin($name);
+        if (! $plugin) {
+            $path = self::$dir . "/plugins/$name.php";
+            if (! file_exists($path)) {
+                notice("Plugin '$name' not found.");
+                return;
+            }
+            require_once $path;
+            $plugin = self::plugin($name);
+        }
+
+        $plugin(self::$process);
+    }
+
     public static function parseAliasesFile($file)
     {
         if (! ($tree = Util::parseIni($file, true))) {
@@ -114,7 +138,7 @@ class Crush
 
             if ($section === 'declarations') {
 
-                $store = array();
+                $store = [];
                 foreach ($items as $prop_val => $aliases) {
 
                     list($prop, $value) = array_map('trim', explode(':', $prop_val));
@@ -126,12 +150,12 @@ class Crush
 
                         // Try to detect the vendor from property and value in turn.
                         if (
-                            preg_match($regex->vendorPrefix, $p, $m) ||
-                            preg_match($regex->vendorPrefix, $v, $m)
+                            preg_match($regex->vendorPrefix, $p, $m)
+                            || preg_match($regex->vendorPrefix, $v, $m)
                         ) {
                             $vendor = $m[1];
                         }
-                        $alias = array($p, $v, $vendor);
+                        $alias = [$p, $v, $vendor];
                     }
                     $store[$prop][$value] = $aliases;
                 }
@@ -143,7 +167,7 @@ class Crush
 
                 $group = substr($section, strlen('functions'));
 
-                $vendor_grouped_aliases = array();
+                $vendor_grouped_aliases = [];
                 foreach ($items as $func_name => $aliases) {
 
                     // Assign group name to the aliasable function.
@@ -155,74 +179,25 @@ class Crush
                         if (preg_match($regex->vendorPrefix, $alias_func, $m)) {
 
                             // We'll cache the function matching regex here.
-                            $vendor_grouped_aliases[$m[1]]['find'][] = Regex::make("~{{ LB }}$func_name(?=\()~i");
+                            $vendor_grouped_aliases[$m[1]]['find'][] = Regex::make("~{{ LB }}$func_name(?=\()~iS");
                             $vendor_grouped_aliases[$m[1]]['replace'][] = $alias_func;
                         }
                     }
                 }
                 $tree['function_groups'][$group] = $vendor_grouped_aliases;
+                unset($tree[$section]);
             }
         }
 
         $tree += self::$config->bareAliases;
 
+        // Persisting dummy aliases for testing purposes.
         $tree['properties']['foo'] =
         $tree['at-rules']['foo'] =
-        $tree['functions']['foo'] = array('-webkit-foo', '-moz-foo', '-ms-foo');
+        $tree['functions']['foo'] = ['-webkit-foo', '-moz-foo', '-ms-foo'];
 
         return $tree;
     }
-
-    /**
-     * Deprecated.
-     *
-     * @see csscrush_file().
-     */
-    public static function file($file, $options = array())
-    {
-        return csscrush_file($file, $options);
-    }
-
-    /**
-     * Deprecated.
-     *
-     * @see csscrush_tag().
-     */
-    public static function tag($file, $options = array(), $tag_attributes = array())
-    {
-        return csscrush_tag($file, $options, $tag_attributes);
-    }
-
-    /**
-     * Deprecated.
-     *
-     * @see csscrush_inline().
-     */
-    public static function inline($file, $options = array(), $tag_attributes = array())
-    {
-        return csscrush_inline($file, $options, $tag_attributes);
-    }
-
-    /**
-     * Deprecated.
-     *
-     * @see csscrush_string().
-     */
-    public static function string($string, $options = array())
-    {
-        return csscrush_string($string, $options);
-    }
-
-    /**
-     * Deprecated.
-     *
-     * @see csscrush_stat().
-     */
-    public static function stat()
-    {
-        return csscrush_stat();
-    }
-
 
     #############################
     #  Logging and stats.
@@ -232,7 +207,7 @@ class Crush
         if (! empty(self::$process->debugLog)) {
 
             if (PHP_SAPI !== 'cli') {
-                $out = array();
+                $out = [];
                 foreach (self::$process->debugLog as $item) {
                     $out[] = '<pre>' . htmlspecialchars($item) . '</pre>';
                 }
@@ -260,7 +235,7 @@ class Crush
 
                 case 'vars':
                     $process->stat['vars'] = array_map(function ($item) use ($process) {
-                        return $process->tokens->restore($process->functions->apply($item), array('s', 'u', 'p'));
+                        return $process->tokens->restore($process->functions->apply($item), ['s', 'u', 'p']);
                     }, $process->vars);
                     break;
 
@@ -284,31 +259,35 @@ class Crush
     }
 }
 
-function warning($message, $context = array()) {
+function warning($message, $context = []) {
     Crush::$process->errors[] = $message;
     $logger = Crush::$config->logger;
     if ($logger instanceof Logger) {
-        $message = "[[CssCrush]] - $message";
+        $message = "[CssCrush] $message";
     }
     $logger->warning($message, $context);
 }
 
-function notice($message, $context = array()) {
+function notice($message, $context = []) {
     Crush::$process->warnings[] = $message;
     $logger = Crush::$config->logger;
     if ($logger instanceof Logger) {
-        $message = "[[CssCrush]] - $message";
+        $message = "[CssCrush] $message";
     }
     $logger->notice($message, $context);
 }
 
-function debug($message, $context = array()) {
+function debug($message, $context = []) {
     Crush::$config->logger->debug($message, $context);
 }
 
-function log($message, $context = array(), $type = 'debug') {
+function log($message, $context = [], $type = 'debug') {
     Crush::$config->logger->$type($message, $context);
 }
 
+// Compat with PHP < 7.2.
+if (! defined('PREG_UNMATCHED_AS_NULL')) {
+    define('PREG_UNMATCHED_AS_NULL', null);
+}
 
 Crush::init();

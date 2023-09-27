@@ -2,8 +2,8 @@
 
 namespace Elgg\Router\Middleware;
 
+use Elgg\Exceptions\Http\EntityPermissionsException;
 use Elgg\Router\Route;
-use Elgg\EntityPermissionsException;
 
 /**
  * Check if the current route page owner can be edited (by the current logged in user)
@@ -40,6 +40,9 @@ class PageOwnerCanEditGatekeeper {
 		if (!$route instanceof Route) {
 			return;
 		}
+		
+		// force detection of page owner for legacy routes
+		$route->setDefault('_detect_page_owner', true);
 		
 		$page_owner = $route->resolvePageOwner();
 		if (!$page_owner instanceof \ElggEntity) {

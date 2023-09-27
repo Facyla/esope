@@ -98,7 +98,7 @@ Elgg makes it easy to query specific for entities of a given subtype(s), as well
 Subtypes are most commonly given to instances of ``ElggEntity`` to denote the kind of content created.
 E.g. the blog plugin creates objects with subtype ``"blog"``.
 
-By default, users, groups and sites have the the subtypes of ``user``, ``group`` and ``site`` respectively.
+By default, users, groups and sites have the subtypes of ``user``, ``group`` and ``site`` respectively.
 
 Plugins can use custom entity classes that extend the base type class. To do so, they need to register their class at
 runtime (e.g. in the ``'init','system'`` handler), using ``elgg_set_entity_class()``.
@@ -201,7 +201,7 @@ Adding content
 By passing along the group as ``container_guid`` via a hidden input field,
 you can use a single form and action to add both user and group content.
 
-Use ``ElggEntity->canWriteToContainer()`` to determine whether or not the current user has the right to
+Use ``ElggEntity->canWriteToContainer(0, $type, $subtype)`` to determine whether or not the current user has the right to
 add content to a group.
 
 Be aware that you will then need to pass the container GUID
@@ -214,25 +214,25 @@ your new element (defaulting to the current user's container):
 .. code-block:: php
 
     $user = elgg_get_logged_in_user_entity();
-    $container_guid = (int)get_input('container_guid');
+    $container_guid = (int) get_input('container_guid');
     
     if ($container_guid) {
     	$container = get_entity($container_guid);
     	
-        if (!$container->canWriteToContainer($user->guid)) {
-            // register error and forward
+        if (!$container instanceof \ElggEntity || !$container->canWriteToContainer($user->guid, 'object', 'my_content_subtype')) {
+            return elgg_error_response(elgg_echo('actionunauthorized'));
         }
     } else {
         $container_guid = elgg_get_logged_in_user_guid();
     }
 
-    $object = new ElggObject;
+    $object = new ElggObject();
     $object->container_guid = $container_guid;
 
     ...
 
-    $container = get_entity($container_guid);
-    forward($container->getURL());
+    // redirect to the created object
+    return elgg_ok_response('', $object->getURL());
 
 Ownership
 =========
@@ -292,7 +292,7 @@ entity, which is defined as:
         $value,          // The value of the annotation
         $access_id = 0,  // The access level of the annotation
         $owner_id = 0,   // The annotation owner, defaults to current user
-        $vartype = ""    // 'text' or 'integer'
+        $vartype = ""    // 'text', 'bool' or 'integer'
     )
 
 For example, to leave a rating on an entity, you might call:
@@ -353,14 +353,9 @@ Under the hood, metadata is stored as an instance of the
 practice (although if you're interested, see the ``ElggMetadata`` class
 reference). What you need to know is:
 
--  Metadata has an owner, which may be different to the owner of the entity
-   it's attached to
 -  You can potentially have multiple items of each type of metadata
    attached to a single entity
--  Like annotations, values are stored as strings unless the value given is a PHP integer (``is_int($value)`` is true),
-   or unless the ``$value_type`` is manually specified as ``integer`` (see below).
-
-.. note:: As of Elgg 3.0, metadata no longer have ``access_id``.
+-  Like annotations, values are stored as strings, booleans or integers
 
 The simple case
 ---------------
@@ -388,7 +383,6 @@ Or to add a couple of tags to an object:
 
 When adding metadata like this:
 
--  The owner is set to the currently logged-in user
 -  Reassigning a piece of metadata will overwrite the old value
 
 This is suitable for most purposes. Be careful to note which attributes
@@ -398,8 +392,6 @@ metadata. You do need to save an entity if you have changed one of its
 built in attributes. As an example, if you changed the access id of an
 ElggObject, you need to save it or the change isn't pushed to the
 database.
-
-.. note:: As of Elgg 3.0, metadata's ``access_id`` property is ignored.
 
 Reading metadata
 ~~~~~~~~~~~~~~~~
@@ -442,21 +434,19 @@ E.g., to retrieve a user's DOB
 
 .. code-block:: php
 
-    elgg_get_metadata(array(
+    elgg_get_metadata([
         'metadata_name' => 'dob',
-        'metadata_owner_guid' => $user_guid,
-    ));
+        'guid' => $user_guid,
+    ]);
 
 Or to get all metadata objects:
 
 .. code-block:: php
 
-    elgg_get_metadata(array(
-        'metadata_owner_guid' => $user_guid,
-        'limit' => 0,
-    ));
-
-.. complete list of metadata functions: http://reference.elgg.org/engine_2lib_2metadata_8php.html
+    elgg_get_metadata([
+        'guid' => $user_guid,
+        'limit' => false,
+    ]);
 
 Common mistakes
 ---------------
@@ -547,10 +537,6 @@ E.g. to establish that "**$user** is a **fan** of **$artist**"
 
 .. code-block:: php
 
-    // option 1
-    $success = add_entity_relationship($user->guid, 'fan', $artist->guid);
-
-    // option 2
     $success = $user->addRelationship($artist->guid, 'fan');
 
 This triggers the event [create, relationship], passing in
@@ -565,18 +551,8 @@ E.g. to verify that "**$user** is a **fan** of **$artist**":
 
 .. code-block:: php
 
-    if (check_entity_relationship($user->guid, 'fan', $artist->guid)) {
+    if ($user->hasRelationship($artist->guid, 'fan')) {
         // relationship exists
-    }
-
-Note that, if the relationship exists, ``check_entity_relationship()``
-returns an ``ElggRelationship`` object:
-
-.. code-block:: php
-
-    $relationship = check_entity_relationship($user->guid, 'fan', $artist->guid);
-    if ($relationship) {
-        // use $relationship->id or $relationship->time_created
     }
 
 Deleting a relationship
@@ -586,7 +562,7 @@ E.g. to be able to assert that "**$user** is no longer a **fan** of **$artist**"
 
 .. code-block:: php
 
-    $was_removed = remove_entity_relationship($user->guid, 'fan', $artist->guid);
+    $was_removed = $user->removeRelationship($artist->guid, 'fan');
 
 This triggers the event [delete, relationship], passing in
 the associated ``ElggRelationship`` object. If a handler returns
@@ -595,16 +571,16 @@ be ``false``.
 
 Other useful functions:
 
-- ``delete_relationship()`` : delete by ID
-- ``remove_entity_relationships()`` : delete those relating to an entity
+- ``\ElggRelationship->delete()``: delete by object
+- ``\ElggEntity->removeAllRelationships()``: delete those relating to an entity
 
 Finding relationships and related entities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Below are a few functions to fetch relationship objects and/or related entities. A few are listed below:
 
-- ``get_entity_relationships()`` : fetch relationships by subject or target entity
-- ``get_relationship()`` : get a relationship object by ID
+- ``elgg_get_relationship()`` : get a relationship object by ID
+- ``elgg_get_relationships()`` : fetch relationships
 - ``elgg_get_entities()`` : fetch entities in relationships in a variety of ways
 
 E.g. retrieving users who joined your group in January 2014.

@@ -17,6 +17,8 @@ return array(
 	'collection:object:thewire:all' => "All wire posts",
 	'collection:object:thewire:owner' => "%s's wire posts",
 	'collection:object:thewire:friends' => "Friends' wire posts",
+	'notification:object:thewire:create' => "Send a notification when a wire post is created",
+	'notifications:mute:object:thewire' => "about the wire post '%s'",
 
 	'thewire:replying' => "Replying to %s (@%s) who wrote",
 	'thewire:thread' => "Thread",
@@ -25,8 +27,6 @@ return array(
 	'thewire:noposts' => "No wire posts yet",
 
 	'thewire:by' => 'Wire post by %s',
-	'thewire:previous:help' => "View previous post",
-	'thewire:hide:help' => "Hide previous post",
 
 	'thewire:form:body:placeholder' => "What's happening?",
 	

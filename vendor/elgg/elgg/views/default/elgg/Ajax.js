@@ -1,8 +1,5 @@
-define(function (require) {
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	var spinner = require('elgg/spinner');
-
+define(['jquery', 'elgg', 'elgg/spinner', 'elgg/system_messages', 'elgg/security', 'elgg/i18n'], function ($, elgg, spinner, system_messages, security, i18n) {
+	
 	var site_url = elgg.get_site_url(),
 		action_base = site_url + 'action/',
 		fragment_pattern = /#.*$/,
@@ -19,7 +16,7 @@ define(function (require) {
 	 */
 	function Ajax(use_spinner) {
 
-		use_spinner = elgg.isNullOrUndefined(use_spinner) ? true : !!use_spinner;
+		use_spinner = (use_spinner == null) ? true : !!use_spinner;
 
 		var that = this;
 		var spinner_starts = 0;
@@ -65,7 +62,7 @@ define(function (require) {
 					}
 
 					if (data.error && options.showErrorMessages) {
-						elgg.register_error(data.error);
+						system_messages.error(data.error);
 						error_displayed = true;
 					}
 
@@ -75,7 +72,7 @@ define(function (require) {
 						data.status = 0;
 					}
 
-					m && m.success && options.showSuccessMessages && elgg.system_message(m.success);
+					m && m.success && options.showSuccessMessages && system_messages.success(m.success);
 					delete data._elgg_msgs;
 
 					var deps = data._elgg_deps;
@@ -162,29 +159,38 @@ define(function (require) {
 				};
 			}
 
-			if (!options.error) {
-				options.error = function (jqXHR, textStatus, errorThrown) {
-					if (!jqXHR.getAllResponseHeaders()) {
-						// user aborts (like refresh or navigate) do not have headers
-						return;
-					}
-
-					try {
-						var data = $.parseJSON(jqXHR.responseText);
-						if ($.isPlainObject(data)) {
-							extract_metadata(data, jqXHR.status);
-						}
-					} catch (e) {
-						if (window.console) {
-							console.warn(e.message);
-						}
-					}
-
-					if (!error_displayed && options.showErrorMessages) {
-						elgg.register_error(elgg.echo('ajax:error'));
-					}
-				};
+			var custom_error = function() {};
+			if (options.error) {
+				custom_error = options.error;
 			}
+			
+			options.error = function (jqXHR, textStatus, errorThrown) {
+				if (!jqXHR.getAllResponseHeaders()) {
+					// trigger custom error
+					custom_error(jqXHR, textStatus, errorThrown);
+					
+					// user aborts (like refresh or navigate) do not have headers
+					return;
+				}
+
+				try {
+					var data = $.parseJSON(jqXHR.responseText);
+					if ($.isPlainObject(data)) {
+						extract_metadata(data, jqXHR.status);
+					}
+				} catch (e) {
+					if (window.console) {
+						console.warn(e.message);
+					}
+				}
+
+				if (!error_displayed && options.showErrorMessages) {
+					system_messages.error(i18n.echo('ajax:error'));
+				}
+				
+				// trigger custom error
+				custom_error(jqXHR, textStatus, errorThrown);
+			};
 
 			options.dataFilter = function (data, type) {
 				if (type !== 'json') {
@@ -204,7 +210,12 @@ define(function (require) {
 
 				jqXHR.AjaxData = data;
 
-				return JSON.stringify(data.value);
+				if (data.value !== undefined) {
+					// regular JSON responses wrap the 'data' in 'value'
+					return JSON.stringify(data.value);
+				}
+				
+				return JSON.stringify(data);
 			};
 
 			options.url = elgg.normalize_url(options.url);
@@ -340,7 +351,7 @@ define(function (require) {
 			if (m && /(^|&)__elgg_ts=/.test(m[1])) {
 				// token will be in the URL
 			} else {
-				options.data = elgg.security.addToken(options.data);
+				options.data = security.addToken(options.data);
 			}
 
 			options.method = options.method || 'POST';
@@ -414,4 +425,3 @@ define(function (require) {
 
 	return Ajax;
 });
-

@@ -1,36 +1,15 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- * Copyright (c) 2017 Rob Morgan
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- * @package    Phinx
- * @subpackage Phinx\Config
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
 
 namespace Phinx\Config;
 
 /**
  * Trait implemented NamespaceAwareInterface.
+ *
  * @package Phinx\Config
  * @author Andrey N. Mokhov
  */
@@ -53,16 +32,16 @@ trait NamespaceAwareTrait
     /**
      * Search $needle in $haystack and return key associate with him.
      *
-     * @param string $needle
-     * @param array  $haystack
-     * @return null|string
+     * @param string $needle Needle
+     * @param string[] $haystack Haystack
+     * @return string|null
      */
     protected function searchNamespace($needle, $haystack)
     {
         $needle = realpath($needle);
         $haystack = array_map('realpath', $haystack);
 
-        $key = array_search($needle, $haystack);
+        $key = array_search($needle, $haystack, true);
 
         return is_string($key) ? trim($key, '\\') : null;
     }
@@ -70,7 +49,7 @@ trait NamespaceAwareTrait
     /**
      * Get Migration Namespace associated with path.
      *
-     * @param string $path
+     * @param string $path Path
      * @return string|null
      */
     public function getMigrationNamespaceByPath($path)
@@ -83,7 +62,7 @@ trait NamespaceAwareTrait
     /**
      * Get Seed Namespace associated with path.
      *
-     * @param string $path
+     * @param string $path Path
      * @return string|null
      */
     public function getSeedNamespaceByPath($path)

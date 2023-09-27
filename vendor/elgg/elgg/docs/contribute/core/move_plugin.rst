@@ -86,7 +86,7 @@ Tag a release
 -------------
 
 In order for Composer to be able to cache the plugin for faster installation, a release has to be made on the repository. 
-Probably the first version that needs to be tagged is the same version as mentioned in the ``manifest.xml``. 
+Probably the first version that needs to be tagged is the same version as mentioned in the ``elgg-plugin.php`` or ``composer.json``. 
 After this development can begin, following the `Semver`_ versioning scheme.
 
 Translations
@@ -130,4 +130,4 @@ Add a mention in the :doc:`/appendix/upgrade-notes` documentation that the plugi
 .. _Elgg organisation: https://github.com/Elgg
 .. _Packagist: https://packagist.org/
 .. _Semver: http://semver.org/
-.. _Transifex: https://www.transifex.com/elgg/
+.. _Transifex: https://app.transifex.com/elgg/

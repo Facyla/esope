@@ -7,11 +7,12 @@
  */
 
 return [
-	\Elgg\Upgrades\DeleteOldPlugins::class,
-	\Elgg\Upgrades\ActivateNewPlugins::class,
 	\Elgg\Upgrades\AlterDatabaseToMultiByteCharset::class,
-	\Elgg\Upgrades\SetSecurityConfigDefaults::class,
-	\Elgg\Upgrades\MigrateFriendsACL::class,
-	\Elgg\Upgrades\MigrateCronLog::class,
-	\Elgg\Upgrades\SecurityEmailChangeConfirmation::class,
+	\Elgg\Upgrades\ChangeUserNotificationSettingsNamespace::class,
+	\Elgg\Upgrades\ContentOwnerSubscriptions::class,
+	\Elgg\Upgrades\DeleteDiagnosticsPlugin::class,
+	\Elgg\Upgrades\DeleteNotificationsPlugin::class,
+	\Elgg\Upgrades\MigrateACLNotificationPreferences::class,
+	\Elgg\Upgrades\NotificationsPrefix::class,
+	\Elgg\Upgrades\RemoveOrphanedThreadedComments::class,
 ];

@@ -15,6 +15,8 @@ return array(
 	'collection:object:file:group' => "Group files",
 	'add:object:file' => "Upload a file",
 	'edit:object:file' => "Edit file",
+	'notification:object:file:create' => "Send a notification when a file is created",
+	'notifications:mute:object:file' => "about the file '%s'",
 
 	'file:more' => "More files",
 	'file:list' => "list view",
@@ -22,14 +24,11 @@ return array(
 	'file:num_files' => "Number of files to display",
 	'file:replace' => 'Replace file content (leave blank to not change file)',
 	'file:list:title' => "%s's %s %s",
-	'file:title:friends' => "Friends'",
 
 	'file:file' => "File",
 
 	'file:list:list' => 'Switch to the list view',
 	'file:list:gallery' => 'Switch to the gallery view',
-
-	'file:types' => "Uploaded file types",
 
 	'file:type:' => 'Files',
 	'file:type:all' => "All files",
@@ -55,6 +54,7 @@ return array(
 	'widgets:filerepo:description' => "Showcase your latest files",
 
 	'groups:tool:file' => 'Enable group files',
+	'groups:tool:file:description' => 'Allow group members to share files in this group.',
 
 	'river:object:file:create' => '%s uploaded the file %s',
 	'river:object:file:comment' => '%s commented on the file %s',

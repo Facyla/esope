@@ -48,7 +48,6 @@ always necessary (e.g. when writing thumbs of an image).
 	$file->close();
 
 	// to uprade this file to an entity
-	$file->subtype = 'file';
 	$file->save();
 
 
@@ -191,4 +190,4 @@ file functions of an ``ElggFile``, but writes it's data to the systems temp fold
 
 .. warning::
 	
-	It's not possible to save the ``ElggTempFile`` to the database. You'll get an ``IOException`` if you try.
+	It's not possible to save the ``ElggTempFile`` to the database. You'll get an ``Elgg\Exceptions\Filesystem\IOException`` if you try.

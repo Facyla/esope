@@ -2,7 +2,7 @@
 
 namespace Elgg\Database;
 
-use Elgg\Database\EntityTable\UserFetchFailureException;
+use Elgg\Exceptions\Database\UserFetchFailureException;
 
 /**
  * @group Database
@@ -12,14 +12,6 @@ use Elgg\Database\EntityTable\UserFetchFailureException;
  * @group UnitTests
  */
 class EntityTableUnitTest extends \Elgg\UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	public function testCanGetUserForPermissionsCheckWhileLoggedOut() {
 		$this->assertNull(_elgg_services()->entityTable->getUserForPermissionsCheck());
@@ -38,8 +30,6 @@ class EntityTableUnitTest extends \Elgg\UnitTestCase {
 
 		$user2 = $this->createUser();
 		$this->assertEquals($user2, _elgg_services()->entityTable->getUserForPermissionsCheck($user2->guid));
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testThrowsWhenGettingUserForPermissionsCheckWithNonUserGuid() {
@@ -63,26 +53,37 @@ class EntityTableUnitTest extends \Elgg\UnitTestCase {
 		
 		$last_action = $object->updateLastAction();
 		$this->assertEquals($last_action, $object->last_action);
-
-		$dbprefix = _elgg_config()->dbprefix;
-		$sql = "
-			UPDATE {$dbprefix}entities
-			SET last_action = :last_action
-			WHERE guid = :guid
-		";
-
+		
 		$new_last_action = strtotime('+2 days', $time);
+		
+		$update = Update::table(EntityTable::TABLE_NAME);
+		$update->set('last_action', $update->param($new_last_action, ELGG_VALUE_TIMESTAMP))
+			->where($update->compare('guid', '=', $object->guid, ELGG_VALUE_GUID));
+		
 		_elgg_services()->db->addQuerySpec([
-			'sql' => $sql,
-			'params' => [
-				':last_action' => $new_last_action,
-				':guid' => $object->guid,
-			],
+			'sql' => $update->getSQL(),
+			'params' => $update->getParameters(),
 			'row_count' => 1,
 		]);
 
 		$last_action = $object->updateLastAction($new_last_action);
 		$this->assertEquals($last_action, $new_last_action);
 		$this->assertEquals($last_action, $object->last_action);
+	}
+	
+	public function testGetRowWithoutGUID() {
+		$this->assertFalse(_elgg_services()->entityTable->getRow(null));
+	}
+	
+	public function testGetRowWithNonExistingGUID() {
+		$this->assertFalse(_elgg_services()->entityTable->getRow(-1));
+	}
+	
+	public function testGetRowWithExistingGUID() {
+		$object = $this->createObject();
+		
+		$result = _elgg_services()->entityTable->getRow($object->guid);
+		$this->assertNotFalse($result);
+		$this->assertNotEmpty($result); // should be a \stdClass with data
 	}
 }

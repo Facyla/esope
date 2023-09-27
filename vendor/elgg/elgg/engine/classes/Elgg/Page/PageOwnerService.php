@@ -2,12 +2,13 @@
 
 namespace Elgg\Page;
 
-use Elgg\Http\Request;
 use Elgg\Database\EntityTable;
-use Elgg\Router\Route;
-use Elgg\PluginHooksService;
 use Elgg\Database\UsersTable;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Http\Request;
 use Elgg\Invoker;
+use Elgg\PluginHooksService;
+use Elgg\Router\Route;
 
 /**
  * Holds page owner related functions
@@ -92,7 +93,7 @@ class PageOwnerService {
 			return;
 		}
 		
-		$this->page_owner_guid = (int) $this->hooks->trigger('page_owner', 'system', null, $this->page_owner_guid);
+		$this->page_owner_guid = (int) $this->hooks->triggerDeprecated('page_owner', 'system', null, $this->page_owner_guid, "No longer set page owner using the 'page_owner', 'system' hook. Use route definitions instead.", '4.3');
 	}
 	
 	/**
@@ -133,7 +134,13 @@ class PageOwnerService {
 	 * @return int|void
 	 */
 	private function detectLegacyPageOwner() {
-	
+		$route = $this->request->getRoute();
+		if ($route instanceof Route) {
+			if ($route->getDefault('_legacy_page_owner_detection') === false) {
+				return;
+			}
+		}
+		
 		$guid = $this->invoker->call(ELGG_IGNORE_ACCESS, function() {
 		
 			$username = $this->request->getParam('username');
@@ -150,10 +157,12 @@ class PageOwnerService {
 		});
 		
 		if (is_int($guid)) {
+			if (!$this->request->isAction()) {
+				elgg_deprecated_notice('The automatic legacy page owner detection based on request parameters has been deprecated. Use route definitions if possible.', '4.1');
+			}
 			return $guid;
 		}
 		
-		// @todo feels hacky
 		$guid = $this->invoker->call(ELGG_IGNORE_ACCESS, function() {
 			$segments = $this->request->getUrlSegments();
 			if (!isset($segments[1]) || !isset($segments[2])) {
@@ -186,6 +195,7 @@ class PageOwnerService {
 		});
 	
 		if (is_int($guid)) {
+			elgg_deprecated_notice('The automatic legacy page owner detection based on url segments has been deprecated. Use route definitions.', '4.1');
 			return $guid;
 		}
 	}
@@ -195,13 +205,13 @@ class PageOwnerService {
 	 *
 	 * @param int $guid the new page owner
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 *
 	 * @return void
 	 */
 	public function setPageOwnerGuid(int $guid = 0) {
 		if ($guid < 0) {
-			throw new \InvalidArgumentException(__METHOD__ . ' requires a positive integer.');
+			throw new InvalidArgumentException(__METHOD__ . ' requires a positive integer.');
 		}
 		$this->page_owner_guid = $guid;
 	}

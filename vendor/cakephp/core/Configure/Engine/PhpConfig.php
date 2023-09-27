@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,14 +18,14 @@ namespace Cake\Core\Configure\Engine;
 
 use Cake\Core\Configure\ConfigEngineInterface;
 use Cake\Core\Configure\FileConfigTrait;
-use Cake\Core\Exception\Exception;
+use Cake\Core\Exception\CakeException;
 
 /**
  * PHP engine allows Configure to load configuration values from
  * files containing simple PHP arrays.
  *
  * Files compatible with PhpConfig should return an array that
- * contains all of the configuration data contained in the file.
+ * contains all the configuration data contained in the file.
  *
  * An example configuration file would look like::
  *
@@ -58,7 +60,7 @@ class PhpConfig implements ConfigEngineInterface
      *
      * @param string|null $path The path to read config files from. Defaults to CONFIG.
      */
-    public function __construct($path = null)
+    public function __construct(?string $path = null)
     {
         if ($path === null) {
             $path = CONFIG;
@@ -72,15 +74,13 @@ class PhpConfig implements ConfigEngineInterface
      * Files with `.` in the name will be treated as values in plugins. Instead of
      * reading from the initialized path, plugin keys will be located using Plugin::path().
      *
-     * Setting a `$config` variable is deprecated. Use `return` instead.
-     *
      * @param string $key The identifier to read from. If the key has a . it will be treated
      *  as a plugin prefix.
      * @return array Parsed configuration values.
-     * @throws \Cake\Core\Exception\Exception when files don't exist or they don't contain `$config`.
+     * @throws \Cake\Core\Exception\CakeException when files don't exist or they don't contain `$config`.
      *  Or when files contain '..' as this could lead to abusive reads.
      */
-    public function read($key)
+    public function read(string $key): array
     {
         $file = $this->_getFilePath($key, true);
 
@@ -91,15 +91,7 @@ class PhpConfig implements ConfigEngineInterface
             return $return;
         }
 
-        if ($config === null) {
-            throw new Exception(sprintf('Config file "%s" did not return an array', $key . '.php'));
-        }
-        deprecationWarning(sprintf(
-            'PHP configuration files like "%s" should not set `$config`. Instead return an array.',
-            $key . '.php'
-        ));
-
-        return $config;
+        throw new CakeException(sprintf('Config file "%s" did not return an array', $key . '.php'));
     }
 
     /**
@@ -111,7 +103,7 @@ class PhpConfig implements ConfigEngineInterface
      * @param array $data Data to dump.
      * @return bool Success
      */
-    public function dump($key, array $data)
+    public function dump(string $key, array $data): bool
     {
         $contents = '<?php' . "\n" . 'return ' . var_export($data, true) . ';';
 

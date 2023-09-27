@@ -3,7 +3,7 @@
  * Wire posts tagged with <tag>
  */
 
-use Elgg\BadRequestException;
+use Elgg\Exceptions\Http\BadRequestException;
 
 $tag = elgg_extract('tag', $vars);
 if (!$tag) {
@@ -30,4 +30,5 @@ $content = elgg_list_entities([
 
 echo elgg_view_page($title, [
 	'content' => $content,
+	'filter_value' => 'tag',
 ]);

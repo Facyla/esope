@@ -10,7 +10,11 @@ elgg_make_sticky_form('groups');
 
 // Get group fields
 $input = [];
-foreach (elgg_get_config('group') as $shortname => $valuetype) {
+
+$fields = elgg()->fields->get('group', 'group');
+foreach ($fields as $field) {
+	$shortname = $field['name'];
+	
 	$value = get_input($shortname);
 
 	if ($value === null) {
@@ -29,8 +33,8 @@ foreach (elgg_get_config('group') as $shortname => $valuetype) {
 		$input[$shortname] = elgg_html_decode($input[$shortname]);
 	}
 
-	if ($valuetype == 'tags') {
-		$input[$shortname] = string_to_tag_array($input[$shortname]);
+	if ($field['#type'] == 'tags') {
+		$input[$shortname] = elgg_string_to_array((string) $input[$shortname]);
 	}
 }
 
@@ -60,7 +64,7 @@ if ($group_guid) {
 	$container_guid = get_input('container_guid', $user->guid);
 	$container = get_entity($container_guid);
 	
-	if (!$container || !$container->canWriteToContainer($user->guid, 'group')) {
+	if (!$container || !$container->canWriteToContainer($user->guid, 'group', 'group')) {
 		$error = elgg_echo('groups:cantcreate');
 		return elgg_error_response($error);
 	}
@@ -164,8 +168,8 @@ if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 			// Make this group visible only to group members. We need to use
 			// ACCESS_PRIVATE on the form and convert it to group_acl here
 			// because new groups do not have acl until they have been saved once.
-			$acl = _groups_get_group_acl($group);
-			if ($acl) {
+			$acl = $group->getOwnedAccessCollection('group_acl');
+			if ($acl instanceof ElggAccessCollection) {
 				$visibility = $acl->id;
 			}
 			
@@ -184,6 +188,22 @@ if (isset($content_default_access)) {
 		unset($group->content_default_access);
 	} else {
 		$group->content_default_access = (int) $content_default_access;
+	}
+}
+
+// save plugin settings
+$settings = (array) get_input('settings', []);
+foreach ($settings as $plugin_id => $plugin_settings) {
+	if (empty($plugin_settings) || !is_array($plugin_settings)) {
+		continue;
+	}
+	
+	foreach ($plugin_settings as $name => $value) {
+		if (elgg_is_empty($value)) {
+			$group->removePluginSetting($plugin_id, $name);
+		} else {
+			$group->setPluginSetting($plugin_id, $name, $value);
+		}
 	}
 }
 

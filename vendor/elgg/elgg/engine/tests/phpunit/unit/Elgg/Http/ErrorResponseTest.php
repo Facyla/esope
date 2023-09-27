@@ -6,14 +6,10 @@ namespace Elgg\Http;
  * @group HttpService
  * @group UnitTests
  */
-class ErrorResponseTest extends OkResponseUnitTest {
+class ErrorResponseUnitTest extends ResponseUnitTest {
 
 	public function up() {
 		$this->class = ErrorResponse::class;
-	}
-
-	public function down() {
-
 	}
 
 	public function testCanConstructWihtoutArguments() {
@@ -23,12 +19,6 @@ class ErrorResponseTest extends OkResponseUnitTest {
 		$this->assertEquals(ELGG_HTTP_BAD_REQUEST, $response->getStatusCode());
 		$this->assertEquals(REFERRER, $response->getForwardURL());
 		$this->assertEquals([], $response->getHeaders());
-	}
-
-	public function testConstructWithInvalidStatusCode() {
-		$test_class = $this->class;
-		$response = new $test_class('foo', 9999);
-		$this->assertEquals(ELGG_HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
 	}
 
 	public function testCanConstructWithArguments() {
@@ -44,6 +34,12 @@ class ErrorResponseTest extends OkResponseUnitTest {
 		$this->assertEquals($forward_url, $response->getForwardURL());
 		$this->assertEquals([], $response->getHeaders());
 	}
+	
+	public function testConstructWithInvalidStatusCode() {
+		$test_class = $this->class;
+		$response = new $test_class('foo', 9999);
+		$this->assertEquals(ELGG_HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+	}
 
-	// Remaining tests are identical to OkResponseUnitTest
+	// Remaining tests are identical to ResponseUnitTest
 }

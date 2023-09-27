@@ -6,7 +6,6 @@
  */
 
 return array(
-	'APIException:ApiResultUnknown' => "API resultaat is van een ongekend type, dit zou nooit moeten gebeuren.",
 	'APIException:MissingParameterInMethod' => "Ontbrekende parameter %s in de methode %s",
 	'APIException:ParameterNotArray' => "%s lijkt geen array te zijn.",
 	'APIException:UnrecognisedTypeCast' => "Onherkenbaar type in cast %s voor variabele '%s' in methode '%s'",
@@ -14,7 +13,6 @@ return array(
 	'APIException:FunctionParseError' => "%s(%s) heeft een parsing error.",
 	'APIException:FunctionNoReturn' => "%s(%s) leverde geen waarde op.",
 	'APIException:APIAuthenticationFailed' => "API Authenticatie mislukt voor methode aanroep ",
-	'APIException:UserAuthenticationFailed' => "User Authenticatie mislukt voor methode aanroep",
 	'APIException:MethodCallNotImplemented' => "Methode aanroep '%s' is niet geimplementeerd.",
 	'APIException:FunctionDoesNotExist' => "Functie voor methode '%s' is niet aanroepbaar",
 	'APIException:AlgorithmNotSupported' => "Algorithme '%s' wordt niet ondersteund of is uitgeschakeld.",
@@ -26,23 +24,22 @@ return array(
 	'APIException:MissingTime' => "Ontbrekende X-Elgg-time header",
 	'APIException:MissingNonce' => "Ontbrekende X-Elgg-nonce header",
 	'APIException:TemporalDrift' => "X-Elgg-time is te ver in het verleden of in de toekomst. Epoch mislukt.",
-	'APIException:NoQueryString' => "Geen query string data",
 	'APIException:MissingPOSTHash' => "Ontbrekende X-Elgg-posthash header",
 	'APIException:MissingPOSTAlgo' => "Ontbrekende X-Elgg-posthash_algo header",
 	'APIException:MissingContentType' => "Ontbrekend content type voor post data",
-	'SecurityException:APIAccessDenied' => "Sorry, API toegang is uitgeschakeld door de beheerder.",
-	'SecurityException:NoAuthMethods' => "Geen authenticatie methodes gevonden om dit verzoek te autoriseren.",
+	'APIException:InvalidCallMethod' => "%s moet worden aangeroepen middels '%s'",
+	'APIException:CallMethodNotImplemented' => "Aanroep methode '%s' is op dit moment niet ondersteund.",
 	'SecurityException:authenticationfailed' => "Gebruiker kon niet worden geauthentiseerd.",
-	'InvalidParameterException:APIMethodOrFunctionNotSet' => "Methode of functie is niet opgegeven in expose_method()",
+	'SecurityException:DuplicateEmailUser' => "Geen unieke gebruiker gevonden op basis van het emailadres. Kan geen token ophalen.",
+	'SecurityException:BannedUser' => "Deze gebruiker is geblokkeerd. Er kan geen token worden overhandigd.",
 	'InvalidParameterException:APIParametersArrayStructure' => "Parameters array structuur is onjuist voor expost method '%s'",
 	'InvalidParameterException:UnrecognisedHttpMethod' => "Onherkenbare http method %s voor api methode '%s'",
-	'SecurityException:AuthTokenExpired' => "Authenticatie token ontbreekt, is ongeldig of is verlopen.",
 	'SecurityException:InvalidPostHash' => "POST data hash is ongeldig - Verwachte %s, maar kreeg %s.",
 	'SecurityException:DupePacket' => "Packet signature is al eerder gezien",
 	'SecurityException:InvalidAPIKey' => "Ongeldige of ontbrekende API Key.",
-	'NotImplementedException:CallMethodNotImplemented' => "Methode '%s' is op dit moment niet ondersteunt.",
-	'CallException:InvalidCallMethod' => "%s moet worden aangeroepen middels '%s'",
-
+	'BadRequestException:MissingOutputViewInViewtype' => "Ontbrekende view 'api/output' in viewtype '%s'.",
+	'BadRequestException:MissingOutputViewInViewtype:DataViewsPlugin' => "Activeer de 'data_views' plugin om deze view toe te voegen.",
+	
 	'system.api.list' => "Toont een lijst van alle beschikbare API calls in het systeem",
 	'auth.gettoken' => "Deze API call levert een user authenticatie token op waarmee men in de toekomst API calls kan authentiseren. Gebruik het dan als de auth_token parameter.",
 	
@@ -50,6 +47,8 @@ return array(
 	'admin:configure_utilities:ws_list' => "Alle API methodes",
 	'admin:configure_utilities:ws_tokens' => "Beheer API tokens",
 	'webservices:menu:entity:regenerate' => "API sleutels vernieuwen",
+	'webservices:menu:entity:enable_keys' => "API sleutels activeren",
+	'webservices:menu:entity:disable_keys' => "API sleutels uitschakelen",
 	
 	'add:object:api_key' => "Maak een nieuw API token",
 	'edit:object:api_key' => "Bewerk API token: %s",
@@ -69,6 +68,11 @@ return array(
 	'webservices:action:api_key:edit:success' => "Het API token is succesvol opgeslagen",
 	'webservices:action:api_key:regenerate:success' => "De API sleutels zijn vernieuwd",
 
+	'webservices:action:api_key:toggle_active:enable:success' => "De API sleutels zijn succesvol geactiveerd",
+	'webservices:action:api_key:toggle_active:enable:error' => "Fout opgetreden tijdens het activeren van de API sleutels",
+	'webservices:action:api_key:toggle_active:disable:success' => "De API sleutels zijn succesvol uitgeschakeld",
+	'webservices:action:api_key:toggle_active:disable:error' => "Fout opgetreden tijdens het uitschakelen van de API sleutels",
+	
 	// plugin settings
 	'web_services:settings:authentication' => "Web API authenticatie instellingen",
 	'web_services:settings:authentication:description' => "Sommige API methodes vereisen dat verzoeken zichzelf authenticeren. Er moet dan een API key pair (public en secrect key) worden aangeleverd.

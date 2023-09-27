@@ -37,28 +37,15 @@ return array(
 	*/
 
 	'messages:posted' => "Enviouse a mensaxe",
-	'messages:success:delete:single' => 'Eliminouse a mensaxe',
 	'messages:success:delete' => 'Eliminouse a mensaxe',
 	'messages:success:read' => 'Marcouse a mensaxe como lida.',
 	'messages:error:messages_not_selected' => 'Non hai ningunha mensaxe seleccionada.',
-	'messages:error:delete:single' => 'Non foi posíbel eliminar a mensaxe.',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Ten unha nova mensaxe.',
-	'messages:email:body' => "You have a new message from %s.
-
-It reads:
-
-%s
-
-To view your messages, click here:
-%s
-
-To send %s a message, click here:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +58,9 @@ To send %s a message, click here:
 	'messages:user:self' => "Non pode enviarse unha mensaxe a vostede mesmo.",
 
 	'messages:deleted_sender' => 'Usuario eliminado.',
+	
+	/**
+	* Settings
+	*/
 
 );

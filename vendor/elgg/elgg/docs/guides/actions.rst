@@ -96,6 +96,12 @@ To restrict an action to only administrators, pass ``"admin"`` for the last para
 
    elgg_register_action("example", $filepath, "admin");
 
+To restrict an action to only logged out users, pass ``"logged_out"`` for the last parameter:
+
+.. code-block:: php
+
+   elgg_register_action("example", $filepath, "logged_out");
+
 Writing action files
 --------------------
 
@@ -118,7 +124,11 @@ to the client for XHR calls (this data will be ignored for non-XHR calls)
    $action_data = [
       'entity' => $user,
       'stats' => [
-          'friends' => $user->getFriends(['count' => true]);
+          'friends_count' => $user->getEntitiesFromRelationship([
+              'type' => 'user',
+              'relationship' => 'friend',
+              'count' => true,
+          ]);
       ],
    ];
 
@@ -178,7 +188,7 @@ This is done as follows:
        return;
      }
 
-     register_error(elgg_echo('captcha:captchafail'));
+     elgg_register_error_message(elgg_echo('captcha:captchafail'));
 
      return false;
    }
@@ -387,8 +397,8 @@ current icon.
 The view supports some variables to control the output
 
 * ``entity`` - the entity to add/remove the icon for. If provided based on this entity the thumbnail and remove option wil be shown
-* ``entity_type`` - the entity type for which the icon will be uploaded. Plugins could find this usefull, maybe to validate icon sizes
-* ``entity_subtype`` - the entity subtype for which the icon will be uploaded. Plugins could find this usefull, maybe to validate icon sizes
+* ``entity_type`` - the entity type for which the icon will be uploaded. Plugins could find this useful, maybe to validate icon sizes
+* ``entity_subtype`` - the entity subtype for which the icon will be uploaded. Plugins could find this useful, maybe to validate icon sizes
 * ``icon_type`` - the type of the icon (default: icon)
 * ``name`` - name of the input/file (default: icon)
 * ``remove_name`` - name of the remove icon toggle (default: $vars['name'] . '_remove')
@@ -478,16 +488,21 @@ The registration action sets creates the sticky form and clears it once the acti
 .. code-block:: php
 
    // actions/register.php
-   elgg_make_sticky_form('register');
+   elgg_make_sticky_form('register', ['password', 'password2']);
 
-   ...
+   elgg_register_user([
+      'username' => $username,
+      'password' => $password,
+      'name' => $name,
+      'email' => $email,
+   ]);
+   
+   elgg_clear_sticky_form('register');
 
-   $guid = register_user($username, $password, $name, $email, false, $friend_guid, $invitecode);
+.. tip::
 
-   if ($guid) {
-      elgg_clear_sticky_form('register');
-      ....
-   }
+	The function ``elgg_make_sticky_form()`` supports an optional second argument ``$ignored_field_names``. This needs to be an ``array`` of the 
+	field names you don't wish to be made sticky. This is usefull for fields which contain sensitive data, like passwords.
 
 Example: Bookmarks
 ------------------

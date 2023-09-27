@@ -2,6 +2,7 @@
 
 namespace Elgg\Cli;
 
+use Elgg\Exceptions\PluginException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -17,7 +18,8 @@ class PluginsListCommand extends Command {
 		$this->setName('plugins:list')
 			->setDescription(elgg_echo('cli:plugins:list:description'))
 			->addOption('status', 's', InputOption::VALUE_OPTIONAL,
-				elgg_echo('cli:plugins:list:option:status', ['all | active | inactive'])
+				elgg_echo('cli:plugins:list:option:status', ['all | active | inactive']),
+				'all'
 			)
 			->addOption('refresh', 'r', InputOption::VALUE_NONE,
 				elgg_echo('cli:plugins:list:option:refresh')
@@ -29,14 +31,14 @@ class PluginsListCommand extends Command {
 	 */
 	protected function command() {
 
-		$status = $this->option('status') ? : 'all';
+		$status = $this->option('status');
 		if (!in_array($status, ['all', 'active', 'inactive'])) {
 			$this->error(elgg_echo('cli:plugins:list:error:status', [$status, 'all | active | inactive']));
 			return 1;
 		}
 
 		if ($this->option('refresh') !== false) {
-			_elgg_generate_plugin_entities();
+			_elgg_services()->plugins->generateEntities();
 		}
 
 		$table = new Table($this->output);
@@ -52,19 +54,17 @@ class PluginsListCommand extends Command {
 			$plugins = elgg_get_plugins($status);
 
 			foreach ($plugins as $plugin) {
-				$manifest = $plugin->getManifest();
-
 				$table->addRow([
 					$plugin->guid,
 					$plugin->getID(),
-					$manifest ? $manifest->getVersion() : 'INVALID PACKAGE',
+					$plugin->getVersion(),
 					$plugin->isActive() ? elgg_echo('status:active') : elgg_echo('status:inactive'),
 					$plugin->getPriority(),
 				]);
 			}
 
 			$table->render();
-		} catch (\PluginException $ex) {
+		} catch (PluginException $ex) {
 			return 2;
 		}
 

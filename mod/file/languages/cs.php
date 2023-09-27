@@ -9,12 +9,6 @@ return array(
 
 	'item:object:file' => 'Soubory',
 	'collection:object:file' => 'Soubory',
-	'collection:object:file:all' => "All site files",
-	'collection:object:file:owner' => "%s's files",
-	'collection:object:file:friends' => "Friends' files",
-	'collection:object:file:group' => "Group files",
-	'add:object:file' => "Upload a file",
-	'edit:object:file' => "Edit file",
 
 	'file:more' => "Více souborů",
 	'file:list' => "jako seznam",
@@ -22,14 +16,11 @@ return array(
 	'file:num_files' => "Počet zobrazených souborů",
 	'file:replace' => 'Nahradit obsah souboru (pokud nahrazovat nechcete, ponechte prázdné)',
 	'file:list:title' => "%s - %s %s",
-	'file:title:friends' => "Přátel",
 
 	'file:file' => "Soubor",
 
 	'file:list:list' => 'Přepnout na výpis',
 	'file:list:gallery' => 'Přepnout na galerii',
-
-	'file:types' => "Typy nahraných souborů",
 
 	'file:type:' => 'Soubory',
 	'file:type:all' => "Všechny soubory",
@@ -54,26 +45,12 @@ return array(
 	'widgets:filerepo:name' => "Souborové udělátko",
 	'widgets:filerepo:description' => "Přehlídka vašich nejnovějších souborů",
 
-	'groups:tool:file' => 'Enable group files',
-
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Nový soubor se jménem %s',
 	'file:notify:subject' => 'Nový soubor: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

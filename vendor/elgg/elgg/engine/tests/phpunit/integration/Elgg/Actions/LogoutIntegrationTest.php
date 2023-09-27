@@ -3,10 +3,10 @@
 namespace Elgg\Actions;
 
 use Elgg\ActionResponseTestCase;
+use Elgg\Exceptions\Http\GatekeeperException;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
 use Elgg\Values;
-use Elgg\GatekeeperException;
 
 /**
  * @group ActionsService
@@ -19,10 +19,6 @@ class LogoutIntegrationTest extends ActionResponseTestCase {
 		parent::up();
 
 		self::createApplication(['isolate' => true]);
-	}
-
-	public function down() {
-		parent::down();
 	}
 
 	public function testLogoutFailsWithoutActiveSession() {
@@ -39,13 +35,13 @@ class LogoutIntegrationTest extends ActionResponseTestCase {
 
 		$user->setValidationStatus(true);
 
-		login($user);
+		elgg_login($user);
 
 		$response = $this->executeAction('logout');
 
 		$this->assertInstanceOf(OkResponse::class, $response);
 
-		$messages = _elgg_services()->systemMessages->dumpRegister();
+		$messages = _elgg_services()->system_messages->dumpRegister();
 		$this->assertNotEmpty($messages['success']);
 		$this->assertEquals(elgg_echo('logoutok', [], $user->language), array_shift($messages['success']));
 
@@ -60,13 +56,13 @@ class LogoutIntegrationTest extends ActionResponseTestCase {
 
 		$user->setValidationStatus(true);
 
-		login($user);
+		elgg_login($user);
 
 		$response = $this->executeAction('logout', [], false, false);
 
 		$this->assertInstanceOf(OkResponse::class, $response);
 
-		$messages = _elgg_services()->systemMessages->dumpRegister();
+		$messages = _elgg_services()->system_messages->dumpRegister();
 		$this->assertNotEmpty($messages['success']);
 		$this->assertEquals(elgg_echo('logoutok', [], $user->language), array_shift($messages['success']));
 
@@ -82,7 +78,7 @@ class LogoutIntegrationTest extends ActionResponseTestCase {
 
 		$user->setValidationStatus(true);
 
-		login($user);
+		elgg_login($user);
 
 		elgg_register_event_handler('logout:before', 'user', [Values::class, 'getFalse']);
 

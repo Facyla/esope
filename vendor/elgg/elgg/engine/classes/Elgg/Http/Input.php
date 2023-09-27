@@ -2,11 +2,7 @@
 
 namespace Elgg\Http;
 
-use Elgg\Context;
-
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
  * Provides unified access to the $_GET and $_POST inputs.
  *
  * @since 1.10.0
@@ -49,10 +45,6 @@ class Input {
 	 * it is a possible vector for a reflected XSS attack. If you are expecting an
 	 * integer, cast it to an int. If it is a string, escape quotes.
 	 *
-	 * Note: this function does not handle nested arrays (ex: form input of param[m][n])
-	 * because of the filtering done in htmlawed from the filter_tags call.
-	 * @todo Is this ^ still true?
-	 *
 	 * @param string $key           The variable name we want.
 	 * @param mixed  $default       A default value for the variable if it is not found.
 	 * @param bool   $filter_result If true, then the result is filtered for bad tags.
@@ -69,7 +61,7 @@ class Input {
 		if ($value !== null) {
 			$result = $value;
 			if ($filter_result) {
-				$result = filter_tags($result);
+				$result = elgg_sanitize_input($result);
 			}
 		}
 
@@ -93,7 +85,7 @@ class Input {
 		$result = array_merge($query, $attributes, $post);
 
 		if ($filter_result) {
-			$result = filter_tags($result);
+			$result = elgg_sanitize_input($result);
 		}
 
 		return $result;

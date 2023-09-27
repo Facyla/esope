@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +19,7 @@ namespace Cake\Datasource;
 /**
  * Contains logic for invoking an application rule.
  *
- * Combined with Cake\Datasource\RuleChecker as an implementation
+ * Combined with {@link \Cake\Datasource\RulesChecker} as an implementation
  * detail to de-duplicate rule decoration and provide cleaner separation
  * of duties.
  *
@@ -28,14 +30,14 @@ class RuleInvoker
     /**
      * The rule name
      *
-     * @var string
+     * @var string|null
      */
     protected $name;
 
     /**
      * Rule options
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $options = [];
 
@@ -59,10 +61,10 @@ class RuleInvoker
      * rule $scope.
      *
      * @param callable $rule The rule to be invoked.
-     * @param string $name The name of the rule. Used in error messsages.
-     * @param array $options The options for the rule. See above.
+     * @param ?string $name The name of the rule. Used in error messages.
+     * @param array<string, mixed> $options The options for the rule. See above.
      */
-    public function __construct(callable $rule, $name, array $options = [])
+    public function __construct(callable $rule, ?string $name, array $options = [])
     {
         $this->rule = $rule;
         $this->name = $name;
@@ -74,7 +76,7 @@ class RuleInvoker
      *
      * Old options will be merged with the new ones.
      *
-     * @param array $options The options to set.
+     * @param array<string, mixed> $options The options to set.
      * @return $this
      */
     public function setOptions(array $options)
@@ -89,10 +91,10 @@ class RuleInvoker
      *
      * Only truthy names will be set.
      *
-     * @param string $name The name to set.
+     * @param string|null $name The name to set.
      * @return $this
      */
-    public function setName($name)
+    public function setName(?string $name)
     {
         if ($name) {
             $this->name = $name;
@@ -107,9 +109,9 @@ class RuleInvoker
      * @param \Cake\Datasource\EntityInterface $entity The entity the rule
      *   should apply to.
      * @param array $scope The rule's scope/options.
-     * @return bool Whether or not the rule passed.
+     * @return bool Whether the rule passed.
      */
-    public function __invoke($entity, $scope)
+    public function __invoke(EntityInterface $entity, array $scope): bool
     {
         $rule = $this->rule;
         $pass = $rule($entity, $this->options + $scope);
@@ -117,10 +119,7 @@ class RuleInvoker
             return $pass === true;
         }
 
-        $message = 'invalid';
-        if (isset($this->options['message'])) {
-            $message = $this->options['message'];
-        }
+        $message = $this->options['message'] ?? 'invalid';
         if (is_string($pass)) {
             $message = $pass;
         }
@@ -137,6 +136,7 @@ class RuleInvoker
             $entity->setInvalidField($errorField, $invalidValue);
         }
 
+        /** @phpstan-ignore-next-line */
         return $pass === true;
     }
 }

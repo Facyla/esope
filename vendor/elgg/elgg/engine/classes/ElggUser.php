@@ -1,6 +1,11 @@
 <?php
 
-use Elgg\Entity\ProfileData;
+use Elgg\Exceptions\InvalidArgumentException as ElggInvalidArgumentException;
+use Elgg\Exceptions\InvalidParameterException;
+use Elgg\Exceptions\Configuration\RegistrationException;
+use Elgg\Traits\Entity\Friends;
+use Elgg\Traits\Entity\PluginSettings;
+use Elgg\Traits\Entity\ProfileData;
 
 /**
  * A user entity
@@ -9,19 +14,25 @@ use Elgg\Entity\ProfileData;
  * @property      string $username         The short, reference name for the user in the network
  * @property      string $email            The email address to which Elgg will send email notifications
  * @property      string $language         The language preference of the user (ISO 639-1 formatted)
- * @property      string $banned           'yes' if the user is banned from the network, 'no' otherwise
+ * @property-read string $banned           'yes' if the user is banned from the network, 'no' otherwise
  * @property      string $ban_reason       The reason why the user was banned
- * @property      string $admin            'yes' if the user is an administrator of the network, 'no' otherwise
+ * @property-read string $admin            'yes' if the user is an administrator of the network, 'no' otherwise
  * @property      bool   $validated        User validation status
  * @property      string $validated_method User validation method
+ * @property      int    $validated_ts     A UNIX timestamp of the last moment a users validation status is set to true
  * @property-read string $password_hash    The hashed password of the user
  * @property-read int    $prev_last_action A UNIX timestamp of the previous last action
+ * @property-read int    $first_login      A UNIX timestamp of the first login
  * @property-read int    $last_login       A UNIX timestamp of the last login
  * @property-read int    $prev_last_login  A UNIX timestamp of the previous login
  */
-class ElggUser extends \ElggEntity
-	implements Friendable {
+class ElggUser extends \ElggEntity {
 
+	use Friends;
+	use PluginSettings {
+		setPluginSetting as protected psSetPluginSetting;
+		getPluginSetting as protected psGetPluginSetting;
+	}
 	use ProfileData;
 	
 	/**
@@ -31,9 +42,13 @@ class ElggUser extends \ElggEntity
 		parent::initializeAttributes();
 		$this->attributes['subtype'] = 'user';
 		
+		$this->attributes['access_id'] = ACCESS_PUBLIC;
+		$this->attributes['owner_guid'] = 0; // Users aren't owned by anyone, even if they are admin created.
+		$this->attributes['container_guid'] = 0; // Users aren't contained by anyone, even if they are admin created.
+		
 		// Before Elgg 3.0 this was handled by database logic
-		$this->banned = 'no';
-		$this->admin = 'no';
+		$this->setMetadata('banned', 'no');
+		$this->setMetadata('admin', 'no');
 		$this->language = elgg_get_config('language');
 		$this->prev_last_action = 0;
 		$this->last_login = 0;
@@ -79,16 +94,16 @@ class ElggUser extends \ElggEntity
 				return;
 			case 'email':
 				try {
-					elgg()->accounts->assertValidEmail($value);
+					_elgg_services()->accounts->assertValidEmail($value);
 				} catch (RegistrationException $ex) {
-					throw new InvalidParameterException($ex->getCode());
+					throw new InvalidParameterException($ex->getMessage(), $ex->getCode(), $ex);
 				}
 				break;
 			case 'username':
 				try {
-					elgg()->accounts->assertValidUsername($value);
+					_elgg_services()->accounts->assertValidUsername($value);
 				} catch (RegistrationException $ex) {
-					throw new InvalidParameterException($ex->getCode());
+					throw new InvalidParameterException($ex->getMessage(), $ex->getCode(), $ex);
 				}
 				$existing_user = get_user_by_username($value);
 				if ($existing_user && ($existing_user->guid !== $this->guid)) {
@@ -96,29 +111,14 @@ class ElggUser extends \ElggEntity
 				}
 				break;
 			case 'admin':
+				throw new ElggInvalidArgumentException(_elgg_services()->translator->translate('ElggUser:Error:SetAdmin', ['makeAdmin() / removeAdmin()']));
 			case 'banned':
-				if (!in_array($value, ['yes', 'no'], true)) {
-					throw new InvalidArgumentException("{$name} only supports 'yes' or 'no' value");
-				}
-				break;
+				throw new ElggInvalidArgumentException(_elgg_services()->translator->translate('ElggUser:Error:SetBanned', ['ban() / unban()']));
 		}
 		
 		parent::__set($name, $value);
 	}
 	
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getURL() {
-		
-		$result = parent::getURL();
-		if ($result !== '') {
-			return $result;
-		}
-		
-		return elgg_normalize_url("user/view/{$this->guid}");
-	}
-
 	/**
 	 * Ban this user.
 	 *
@@ -137,8 +137,8 @@ class ElggUser extends \ElggEntity
 		}
 
 		$this->ban_reason = $reason;
-		$this->banned = 'yes';
-				
+		$this->setMetadata('banned', 'yes');
+
 		$this->invalidateCache();
 
 		return true;
@@ -160,8 +160,8 @@ class ElggUser extends \ElggEntity
 		}
 
 		unset($this->ban_reason);
-		$this->banned = 'no';
-				
+		$this->setMetadata('banned', 'no');
+
 		$this->invalidateCache();
 
 		return true;
@@ -173,7 +173,7 @@ class ElggUser extends \ElggEntity
 	 * @return bool
 	 */
 	public function isBanned() {
-		return $this->banned == 'yes';
+		return $this->banned === 'yes';
 	}
 
 	/**
@@ -182,11 +182,7 @@ class ElggUser extends \ElggEntity
 	 * @return bool
 	 */
 	public function isAdmin() {
-		$ia = _elgg_services()->session->setIgnoreAccess(true);
-		$is_admin = ($this->admin == 'yes');
-		_elgg_services()->session->setIgnoreAccess($ia);
-		
-		return $is_admin;
+		return $this->admin === 'yes';
 	}
 
 	/**
@@ -204,7 +200,7 @@ class ElggUser extends \ElggEntity
 			return false;
 		}
 
-		$this->admin = 'yes';
+		$this->setMetadata('admin', 'yes');
 
 		$this->invalidateCache();
 		
@@ -226,7 +222,7 @@ class ElggUser extends \ElggEntity
 			return false;
 		}
 
-		$this->admin = 'no';
+		$this->setMetadata('admin', 'no');
 
 		$this->invalidateCache();
 		
@@ -254,8 +250,6 @@ class ElggUser extends \ElggEntity
 	
 	/**
 	 * Sets the last action time of the given user to right now.
-	 *
-	 * @see _elgg_session_boot() The session boot calls this at the beginning of every request
 	 *
 	 * @return void
 	 */
@@ -297,12 +291,18 @@ class ElggUser extends \ElggEntity
 	 * @param string $method    Optional method to say how a user was validated
 	 * @return void
 	 */
-	public function setValidationStatus($status, $method = '') {
+	public function setValidationStatus(bool $status, string $method = ''): void {
+		if ($status === $this->isValidated()) {
+			// no change needed
+			return;
+		}
 		
 		$this->validated = $status;
-		$this->validated_method = $method;
 		
-		if ((bool) $status) {
+		if ($status) {
+			$this->validated_method = $method;
+			$this->validated_ts = time();
+		
 			// make sure the user is enabled
 			if (!$this->isEnabled()) {
 				$this->enable();
@@ -311,101 +311,11 @@ class ElggUser extends \ElggEntity
 			// let the system know the user is validated
 			_elgg_services()->events->triggerAfter('validate', 'user', $this);
 		} else {
+			// invalidating
+			unset($this->validated_ts);
+			unset($this->validated_method);
 			_elgg_services()->events->triggerAfter('invalidate', 'user', $this);
 		}
-	}
-
-	/**
-	 * Adds a user as a friend
-	 *
-	 * @param int  $friend_guid       The GUID of the user to add
-	 * @param bool $create_river_item Create the river item announcing this friendship
-	 *
-	 * @return bool
-	 */
-	public function addFriend($friend_guid, $create_river_item = false) {
-		if (!get_user($friend_guid)) {
-			return false;
-		}
-
-		if (!add_entity_relationship($this->guid, "friend", $friend_guid)) {
-			return false;
-		}
-
-		if ($create_river_item) {
-			elgg_create_river_item([
-				'view' => 'river/relationship/friend/create',
-				'action_type' => 'friend',
-				'subject_guid' => $this->guid,
-				'object_guid' => $friend_guid,
-			]);
-		}
-
-		return true;
-	}
-
-	/**
-	 * Removes a user as a friend
-	 *
-	 * @param int $friend_guid The GUID of the user to remove
-	 * @return bool
-	 */
-	public function removeFriend($friend_guid) {
-		return $this->removeRelationship($friend_guid, 'friend');
-	}
-
-	/**
-	 * Determines whether or not this user is a friend of the currently logged in user
-	 *
-	 * @return bool
-	 */
-	public function isFriend() {
-		return $this->isFriendOf(_elgg_services()->session->getLoggedInUserGuid());
-	}
-
-	/**
-	 * Determines whether this user is friends with another user
-	 *
-	 * @param int $user_guid The GUID of the user to check against
-	 *
-	 * @return bool
-	 */
-	public function isFriendsWith($user_guid) {
-		return (bool) check_entity_relationship($this->guid, "friend", $user_guid);
-	}
-
-	/**
-	 * Determines whether or not this user is another user's friend
-	 *
-	 * @param int $user_guid The GUID of the user to check against
-	 *
-	 * @return bool
-	 */
-	public function isFriendOf($user_guid) {
-		return (bool) check_entity_relationship($user_guid, "friend", $this->guid);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getFriends(array $options = []) {
-		$options['relationship'] = 'friend';
-		$options['relationship_guid'] = $this->getGUID();
-		$options['type'] = 'user';
-
-		return elgg_get_entities($options);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getFriendsOf(array $options = []) {
-		$options['relationship'] = 'friend';
-		$options['relationship_guid'] = $this->getGUID();
-		$options['inverse_relationship'] = true;
-		$options['type'] = 'user';
-
-		return elgg_get_entities($options);
 	}
 
 	/**
@@ -428,19 +338,7 @@ class ElggUser extends \ElggEntity
 	 */
 	public function getObjects(array $options = []) {
 		$options['type'] = 'object';
-		$options['owner_guid'] = $this->getGUID();
-
-		return elgg_get_entities($options);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getFriendsObjects(array $options = []) {
-		$options['type'] = 'object';
-		$options['relationship'] = 'friend';
-		$options['relationship_guid'] = $this->getGUID();
-		$options['relationship_join_on'] = 'container_guid';
+		$options['owner_guid'] = $this->guid;
 
 		return elgg_get_entities($options);
 	}
@@ -473,20 +371,6 @@ class ElggUser extends \ElggEntity
 	}
 
 	/**
-	 * Can a user comment on this user?
-	 *
-	 * @see \ElggEntity::canComment()
-	 *
-	 * @param int  $user_guid User guid (default is logged in user)
-	 * @param bool $default   Default permission
-	 * @return bool
-	 * @since 1.8.0
-	 */
-	public function canComment($user_guid = 0, $default = null) {
-		return false;
-	}
-
-	/**
 	 * Set the necessary metadata to store a hash of the user's password.
 	 *
 	 * @param string $password The password to be hashed
@@ -506,12 +390,19 @@ class ElggUser extends \ElggEntity
 	 * Enable or disable a notification delivery method
 	 *
 	 * @param string $method  Method name
-	 * @param bool   $enabled Enabled or disabled
+	 * @param bool   $enabled Enabled or disabled (default: true)
+	 * @param string $purpose For what purpose is the notification setting used (default: 'default')
+	 *
 	 * @return bool
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 */
-	public function setNotificationSetting($method, $enabled = true) {
-		$this->{"notification:method:$method"} = (int) $enabled;
-		return (bool) $this->save();
+	public function setNotificationSetting(string $method, bool $enabled = true, string $purpose = 'default') {
+		if (empty($purpose)) {
+			throw new ElggInvalidArgumentException(__METHOD__ . ' requires $purpose to be set to a non-empty string');
+		}
+		
+		$this->{"notification:{$purpose}:{$method}"} = (int) $enabled;
+		return $this->save();
 	}
 
 	/**
@@ -523,15 +414,26 @@ class ElggUser extends \ElggEntity
 	 *    ]
 	 * </code>
 	 *
+	 * @param string $purpose For what purpose to get the notification settings (default: 'default')
+	 *
 	 * @return array
+	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 */
-	public function getNotificationSettings() {
-
+	public function getNotificationSettings(string $purpose = 'default') {
+		if (empty($purpose)) {
+			throw new ElggInvalidArgumentException(__METHOD__ . ' requires $purpose to be set to a non-empty string');
+		}
+		
 		$settings = [];
 
 		$methods = _elgg_services()->notifications->getMethods();
 		foreach ($methods as $method) {
-			$settings[$method] = (bool) $this->{"notification:method:$method"};
+			if ($purpose !== 'default' && !isset($this->{"notification:{$purpose}:{$method}"})) {
+				// fallback to the default settings
+				$settings[$method] = (bool) $this->{"notification:default:{$method}"};
+			} else {
+				$settings[$method] = (bool) $this->{"notification:{$purpose}:{$method}"};
+			}
 		}
 
 		return $settings;
@@ -545,9 +447,52 @@ class ElggUser extends \ElggEntity
 		$result = parent::delete($recursive);
 		if ($result) {
 			// cleanup remember me cookie records
-			_elgg_services()->persistentLogin->removeAllHashes($this);
+			_elgg_services()->users_remember_me_cookies_table->deleteAllHashes($this);
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Save a plugin setting
+	 *
+	 * @param string $plugin_id plugin ID
+	 * @param string $name      setting name
+	 * @param mixed  $value     setting value (needs to be a scalar)
+	 *
+	 * @return bool
+	 * @see \Elgg\Traits\Entity\PluginSettings::setPluginSetting()
+	 */
+	public function setPluginSetting(string $plugin_id, string $name, $value): bool {
+		$value = _elgg_services()->hooks->triggerDeprecated('usersetting', 'plugin', [
+			'user' => $this,
+			'plugin' => _elgg_services()->plugins->get($plugin_id),
+			'plugin_id' => $plugin_id,
+			'name' => $name,
+			'value' => $value,
+		], $value, "Please user the plugin hook 'plugin_settings', '{$this->getType()}'", '4.0');
+		
+		return $this->psSetPluginSetting($plugin_id, $name, $value);
+	}
+	
+	/**
+	 * Get a plugin setting
+	 *
+	 * @param string $plugin_id plugin ID
+	 * @param string $name      setting name
+	 * @param mixed  $default   default setting value (will be cast to string)
+	 *
+	 * @return string
+	 * @see \Elgg\Traits\Entity\PluginSettings::getPluginSetting()
+	 */
+	public function getPluginSetting(string $plugin_id, string $name, $default = null): string {
+		$plugin = _elgg_services()->plugins->get($plugin_id);
+		if ($plugin instanceof \ElggPlugin) {
+			$static_defaults = (array) $plugin->getStaticConfig('user_settings', []);
+			
+			$default = elgg_extract($name, $static_defaults, $default);
+		}
+		
+		return $this->psGetPluginSetting($plugin_id, $name, $default);
 	}
 }

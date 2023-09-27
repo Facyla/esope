@@ -13,6 +13,8 @@ return array(
 	'collection:object:discussion' => 'Discussies',
 	'collection:object:discussion:group' => 'Groepsdiscussies',
 	'collection:object:discussion:my_groups' => 'Discussies in mijn groepen',
+	'notification:object:discussion:create' => "Stuur een notificatie wanneer een discussie is gestart",
+	'notifications:mute:object:discussion' => "over de discussie '%s'",
 	
 	'discussion:settings:enable_global_discussions' => 'Schakel globale discussies in',
 	'discussion:settings:enable_global_discussions:help' => 'Discussies kunnen ook buiten groepen worden gestart',
@@ -42,40 +44,43 @@ return array(
 	 */
 	'discussion:topic:notify:summary' => 'Nieuwe discussie met de titel \'%s\'',
 	'discussion:topic:notify:subject' => 'Nieuwe discussie: %s',
-	'discussion:topic:notify:body' =>
-'%s heeft een nieuwe discussie toegevoegd "%s":
+	'discussion:topic:notify:body' => '%s heeft een nieuwe discussie toegevoegd "%s":
 
 %s
 
 Bekijk en reageer hier op de discussie:
-%s
-',
+%s',
 
 	'discussion:comment:notify:summary' => 'Nieuwe reactie in discussie \'%s\'',
 	'discussion:comment:notify:subject' => 'Nieuwe reactie in discussie \'%s\'',
-	'discussion:comment:notify:body' =>
-'%s reageerde op de discussie "%s":
+	'discussion:comment:notify:body' => '%s reageerde op de discussie "%s":
 
 %s
 
 Bekijk en reageer hier op de discussie:
-%s
-',
+%s',
 
 	'groups:tool:forum' => 'Activeer groepsdiscussies',
+	'groups:tool:forum:description' => 'Laat groepsleden een discussie starten in deze groep.',
 
+	'discussions:groups:edit:add_group_subscribers_to_discussion_comments' => 'Voeg groep abonnees toe aan de discussie reactie notificatie',
+	
 	/**
 	 * Discussion status
 	 */
 	'discussion:topic:status' => 'Status',
 	'discussion:topic:closed:title' => 'Deze discussie is gesloten.',
 	'discussion:topic:closed:desc' => 'Deze discussie is gesloten. Er kunnen geen reacties meer geplaatst worden.',
+	'discussion:topic:container' => 'Selecteer (optioneel) een groep waarin je deze discussie wilt starten',
+	'discussion:topic:container:help' => 'Indien een discussie in een groep wordt gestart, dan wordt de toegankelijkheid standaard op de groepsleden ingesteld.',
 
 	'discussion:topic:description' => 'Onderwerp van je discussie',
-
-	// upgrades
-	'discussions:upgrade:2017112800:title' => "Migreer discussie reacties naar reguliere reacties",
-	'discussions:upgrade:2017112800:description' => "Discussie reacties waren eerder een apart soort reacties, maar dit is nu samengevoegd in de reguliere reacties.",
-	'discussions:upgrade:2017112801:title' => "Migreer activiteitenstroom items mbt discussie reacties",
-	'discussions:upgrade:2017112801:description' => "Discussie reacties waren eerder een apart soort reacties, maar dit is nu samengevoegd in de reguliere reacties.",
+	'discussion:topic:toggle_status:open' => 'De discussie is opnieuw geopend',
+	'discussion:topic:toggle_status:open:confirm' => 'Weet je zeker dat je deze discussie wilt heropenen?',
+	'discussion:topic:toggle_status:closed' => 'De discussie is gesloten',
+	'discussion:topic:toggle_status:closed:confirm' => 'Weet je zeker dat je deze discussie wilt sluiten?',
+	
+	// widgets
+	'widgets:discussions:name' => 'Discussies',
+	'widgets:discussions:description' => 'Toont recente discussies',
 );

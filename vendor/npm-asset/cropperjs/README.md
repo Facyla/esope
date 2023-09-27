@@ -1,8 +1,8 @@
 # Cropper.js
 
-[![Build Status](https://travis-ci.org/fengyuanchen/cropperjs.svg)](https://travis-ci.org/fengyuanchen/cropperjs) [![Downloads](https://img.shields.io/npm/dm/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Version](https://img.shields.io/npm/v/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Donate on Patreon](https://img.shields.io/badge/donate-on%20patreon-fa7664.svg)](https://www.patreon.com/chenfengyuan)
+[![Downloads](https://img.shields.io/npm/dm/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Version](https://img.shields.io/npm/v/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/cropperjs.svg)](https://unpkg.com/cropperjs/dist/cropper.common.js)
 
-> JavaScript image cropper.
+> JavaScript image cropper. This is the branch for v1.x, for v2.x, check out the [`v2`](https://github.com/fengyuanchen/cropperjs/tree/v2) branch.
 
 - [Website](https://fengyuanchen.github.io/cropperjs)
 - [Photo Editor](https://fengyuanchen.github.io/photo-editor) - An advanced example of Cropper.js.
@@ -32,12 +32,12 @@
 - Supports rotating
 - Supports scaling (flipping)
 - Supports multiple croppers
-- Supports to crop on a canvas
-- Supports to crop image in the browser-side by canvas
-- Supports to translate Exif Orientation information
+- Supports cropping on a canvas
+- Supports cropping an image on the browser-side by canvas
+- Supports translating Exif Orientation information
 - Cross-browser support
 
-## Main
+## Main files
 
 ```text
 dist/
@@ -57,14 +57,14 @@ dist/
 npm install cropperjs
 ```
 
-Include files:
+In browser:
 
 ```html
 <link  href="/path/to/cropper.css" rel="stylesheet">
 <script src="/path/to/cropper.js"></script>
 ```
 
-The [cdnjs](https://github.com/cdnjs/cdnjs) provides CDN support for Cropper.js's CSS and JavaScript. You can find the links [here](https://cdnjs.com/libraries/cropperjs).
+[cdnjs](https://github.com/cdnjs/cdnjs) provides CDN support for Cropper.js's CSS and JavaScript. You can find the links [here](https://cdnjs.com/libraries/cropperjs).
 
 ### Usage
 
@@ -92,13 +92,19 @@ new Cropper(element[, options])
 ```
 
 ```css
-/* Limit image width to avoid overflow the container */
+/* Ensure the size of the image fit the container perfectly */
 img {
-  max-width: 100%; /* This rule is very important, please do not ignore this! */
+  display: block;
+
+  /* This rule is very important, please don't ignore this */
+  max-width: 100%;
 }
 ```
 
 ```js
+// import 'cropperjs/dist/cropper.css';
+import Cropper from 'cropperjs';
+
 const image = document.getElementById('image');
 const cropper = new Cropper(image, {
   aspectRatio: 16 / 9,
@@ -116,36 +122,36 @@ const cropper = new Cropper(image, {
 
 #### FAQ
 
-How to crop a new area after zoom in or zoom out?
+How to crop a new area after zooming in or zooming out?
 
-> Just double click your mouse to enter crop mode.
+> Just double-click your mouse to enter crop mode.
 
-How to move the image after crop an area?
+How to move the image after cropping an area?
 
-> Just double click your mouse to enter move mode.
+> Just double-click your mouse to enter move mode.
 
-How to fix aspect ratio in free ratio mode?
+How to fix the aspect ratio in free ratio mode?
 
-> Just hold the `shift` key when you resize the crop box.
+> Just hold the `Shift` key when you resize the crop box.
 
 How to crop a square area in free ratio mode?
 
-> Just hold the `shift` key when you crop on the image.
+> Just hold the `Shift` key when you crop on the image.
 
 #### Notes
 
 - The size of the cropper inherits from the size of the image's parent element (wrapper), so be sure to wrap the image with a **visible block element**.
-  > If you are using cropper in a modal, you should initialize the cropper after the modal shown completely. Otherwise, you will not get a correct cropper.
+  > If you are using cropper in a modal, you should initialize the cropper after the modal is shown completely. Otherwise, you will not get the correct cropper.
 
-- The outputted cropped data bases on the original image size, so you can use them to crop the image directly.
+- The outputted cropped data is based on the original image size, so you can use them to crop the image directly.
 
 - If you try to start cropper on a cross-origin image, please make sure that your browser supports HTML5 [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes), and your image server supports the `Access-Control-Allow-Origin` option (see the [HTTP access control (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)).
 
 #### Known issues
 
-- [Known iOS resource limits](https://developer.apple.com/library/mac/documentation/AppleApplications/Reference/SafariWebContent/CreatingContentforSafarioniPhone/CreatingContentforSafarioniPhone.html): As iOS devices limit memory, the browser may crash when you are cropping a large image (iPhone camera resolution). To avoid this, you may resize the image first (preferably below 1024 pixels) before start a cropper.
+- [Known iOS resource limits](https://developer.apple.com/library/mac/documentation/AppleApplications/Reference/SafariWebContent/CreatingContentforSafarioniPhone/CreatingContentforSafarioniPhone.html): As iOS devices limit memory, the browser may crash when you are cropping a large image (iPhone camera resolution). To avoid this, you may resize the image first (preferably below 1024 pixels) before starting a cropper.
 
-- Known image size increase: When export the cropped image on browser-side with the `HTMLCanvasElement.toDataURL` method, the size of the exported image may be greater than the original image's. This is because the type of the exported image is not the same as the original image's. So just pass the type the original image's as the first parameter to `toDataURL` to fix this. For example, if the original type is JPEG, then use `cropper.getCroppedCanvas().toDataURL('image/jpeg')` to export image.
+- Known image size increase: When exporting the cropped image on the browser side with the `HTMLCanvasElement.toDataURL` method, the size of the exported image may be greater than the original image's. This is because the type of the exported image is not the same as the original image. So just pass the original image's type as the first parameter to `toDataURL` to fix this. For example, if the original type is JPEG, then use `cropper.getCroppedCanvas().toDataURL('image/jpeg')` to export image.
 
 [⬆ back to top](#table-of-contents)
 
@@ -160,11 +166,11 @@ If you want to change the global default options, You may use `Cropper.setDefaul
 - Default: `0`
 - Options:
   - `0`: no restrictions
-  - `1`: restrict the crop box to not exceed the size of the canvas.
-  - `2`: restrict the minimum canvas size to fit within the container. If the proportions of the the canvas and the container differ, the minimum canvas will be surrounded by extra space in one of the dimensions.
+  - `1`: restrict the crop box not to exceed the size of the canvas.
+  - `2`: restrict the minimum canvas size to fit within the container. If the proportions of the canvas and the container differ, the minimum canvas will be surrounded by extra space in one of the dimensions.
   - `3`: restrict the minimum canvas size to fill fit the container. If the proportions of the canvas and the container are different, the container will not be able to fit the whole canvas in one of the dimensions.
 
-Define the view mode of the cropper. If you set `viewMode` to `0`, the crop box can extend outside the canvas, while a value of `1`, `2` or `3` will restrict the crop box to the size of the canvas. A `viewMode` of `2` or `3` will additionally restrict the canvas to the container. Note that if the proportions of the canvas and the container are the same, there is no difference between `2` and `3`.
+Define the view mode of the cropper. If you set `viewMode` to `0`, the crop box can extend outside the canvas, while a value of `1`, `2`, or `3` will restrict the crop box to the size of the canvas. `viewMode` of `2` or `3` will additionally restrict the canvas to the container. There is no difference between `2` and `3` when the proportions of the canvas and the container are the same.
 
 ### dragMode
 
@@ -184,21 +190,23 @@ Define the dragging mode of the cropper.
 
 Define the initial aspect ratio of the crop box. By default, it is the same as the aspect ratio of the canvas (image wrapper).
 
-> Only available when the  the `aspectRatio` option is set to `NaN`.
+> Only available when the `aspectRatio` option is set to `NaN`.
 
 ### aspectRatio
 
 - Type: `Number`
 - Default: `NaN`
 
-Define the fixed aspect ratio of the crop box. By default, the crop box is free ratio.
+Define the fixed aspect ratio of the crop box. By default, the crop box has a free ratio.
 
 ### data
 
 - Type: `Object`
 - Default: `null`
 
-The previous cropped data if you had stored, will be passed to `setData` method automatically when initialized. Only available when the `autoCrop` option is set to `true`.
+The previous cropped data you stored will be passed to the `setData` method automatically when initialized.
+
+> Only available when the `autoCrop` option had set to the `true`.
 
 ### preview
 
@@ -206,28 +214,28 @@ The previous cropped data if you had stored, will be passed to `setData` method 
 - Default: `''`
 - An element or an array of elements or a node list object or a valid selector for [Document.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll)
 
-Add extra elements (containers) for previewing.
+Add extra elements (containers) for preview.
 
 **Notes:**
 
-- The maximum width is the initial width of preview container.
-- The maximum height is the initial height of preview container.
+- The maximum width is the initial width of the preview container.
+- The maximum height is the initial height of the preview container.
 - If you set an `aspectRatio` option, be sure to set the same aspect ratio to the preview container.
-- If preview is not getting properly displayed, set `overflow: hidden` style to the preview container.
+- If the preview does not display correctly, set the `overflow: hidden` style to the preview container.
 
 ### responsive
 
 - Type: `Boolean`
 - Default: `true`
 
-Re-render the cropper when resize the window.
+Re-render the cropper when resizing the window.
 
 ### restore
 
 - Type: `Boolean`
 - Default: `true`
 
-Restore the cropped area after resize the window.
+Restore the cropped area after resizing the window.
 
 ### checkCrossOrigin
 
@@ -236,9 +244,9 @@ Restore the cropped area after resize the window.
 
 Check if the current image is a cross-origin image.
 
-If it is, when clone the image, a `crossOrigin` attribute will be added to the cloned image element and a timestamp will be added to the `src` attribute to reload the source image to avoid browser cache error.
+If so, a `crossOrigin` attribute will be added to the cloned image element, and a timestamp parameter will be added to the `src` attribute to reload the source image to avoid browser cache error.
 
-By adding `crossOrigin` attribute to image element will stop adding timestamp to image url and stop reload of image, but the request (XMLHttpRequest) to read the image data for orientation checking will require a timestamp to bust cache to avoid browser cache error now, you can set the `checkOrientation` option to `false` to cancel this request.
+Adding a `crossOrigin` attribute to the image element will stop adding a timestamp to the image URL and stop reloading the image. But the request (XMLHttpRequest) to read the image data for orientation checking will require a timestamp to bust the cache to avoid browser cache error. You can set the `checkOrientation` option to `false` to cancel this request.
 
 If the value of the image's `crossOrigin` attribute is `"use-credentials"`, then the `withCredentials` attribute will set to `true` when read the image data by XMLHttpRequest.
 
@@ -247,15 +255,15 @@ If the value of the image's `crossOrigin` attribute is `"use-credentials"`, then
 - Type: `Boolean`
 - Default: `true`
 
-Check the current image's Exif Orientation information.
+Check the current image's Exif Orientation information. Note that only a JPEG image may contain Exif Orientation information.
 
-More exactly, read the Orientation value for rotating or flipping the image, and then override the Orientation value with `1` (the default value) to avoid some issues ([1](https://github.com/fengyuanchen/cropper/issues/120), [2](https://github.com/fengyuanchen/cropper/issues/509)) on iOS devices.
+Exactly, read the Orientation value for rotating or flipping the image, and then override the Orientation value with `1` (the default value) to avoid some issues ([1](https://github.com/fengyuanchen/cropper/issues/120), [2](https://github.com/fengyuanchen/cropper/issues/509)) on iOS devices.
 
 Requires to set both the `rotatable` and `scalable` options to `true` at the same time.
 
-**Note:** Don't trust this all the time as some JPG images have incorrect (not standard) Orientation values.
+**Note:** Do not trust this all the time as some JPG images may have incorrect (non-standard) Orientation values
 
-> Requires [Typed Arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) support ([IE 10+](http://caniuse.com/typedarrays)).
+> Requires [Typed Arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) support ([IE 10+](https://caniuse.com/typedarrays)).
 
 ### modal
 
@@ -304,7 +312,7 @@ Enable to crop the image automatically when initialized.
 - Type: `Number`
 - Default: `0.8` (80% of the image)
 
-A number between 0 and 1. Define the automatic cropping area size (percentage).
+It should be a number between 0 and 1. Define the automatic cropping area size (percentage).
 
 ### movable
 
@@ -322,7 +330,7 @@ Enable to rotate the image.
 
 ### scalable
 
-- Type: `Boolean`
+- Type: `Boolean
 - Default: `true`
 
 Enable to scale the image.
@@ -346,14 +354,14 @@ Enable to zoom the image by dragging touch.
 - Type: `Boolean`
 - Default: `true`
 
-Enable to zoom the image by wheeling mouse.
+Enable to zoom the image by mouse wheeling.
 
 ### wheelZoomRatio
 
 - Type: `Number`
 - Default: `0.1`
 
-Define zoom ratio when zoom the image by wheeling mouse.
+Define zoom ratio when zooming the image by mouse wheeling.
 
 ### cropBoxMovable
 
@@ -374,7 +382,7 @@ Enable to resize the crop box by dragging.
 - Type: `Boolean`
 - Default: `true`
 
-Enable to toggle drag mode between "crop" and "move" when click twice on the cropper.
+Enable to toggle drag mode between `"crop"` and `"move"` when clicking twice on the cropper.
 
 > Requires [`dblclick`](https://developer.mozilla.org/en-US/docs/Web/Events/dblclick) event support.
 
@@ -429,48 +437,48 @@ The minimum height of the crop box.
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "ready" event.
+A shortcut to the `ready` event.
 
 ### cropstart
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "cropstart" event.
+A shortcut to the `cropstart` event.
 
 ### cropmove
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "cropmove" event.
+A shortcut to the `cropmove` event.
 
 ### cropend
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "cropend" event.
+A shortcut to the `cropend` event.
 
 ### crop
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "crop" event.
+A shortcut to the `crop` event.
 
 ### zoom
 
 - Type: `Function`
 - Default: `null`
 
-A shortcut of the "zoom" event.
+A shortcut to the `zoom` event.
 
 [⬆ back to top](#table-of-contents)
 
 ## Methods
 
-As there is an **asynchronous** process when load the image, you **should call most of the methods after ready**, except "setAspectRatio", "replace" and "destroy".
+As there is an **asynchronous** process when loading the image, you **should call most of the methods after ready**, except `setAspectRatio`, `replace` and `destroy`.
 
 > If a method doesn't need to return any value, it will return the cropper instance (`this`) for chain composition.
 
@@ -493,7 +501,6 @@ Show the crop box manually.
 ```js
 new Cropper(image, {
   autoCrop: false,
-
   ready() {
     // Do something here
     // ...
@@ -506,7 +513,7 @@ new Cropper(image, {
 
 ### reset()
 
-Reset the image and crop box to their initial states.
+Reset the image and crop box to its initial states.
 
 ### clear()
 
@@ -521,7 +528,7 @@ Clear the crop box.
 - **hasSameSize** (optional):
   - Type: `Boolean`
   - Default: `false`
-  - If the new image has the same size with the old one, then it will not rebuilt the cropper and only update the urls of all related images. This can be used for applying filters.
+  - If the new image has the same size as the old one, then it will not rebuild the cropper and only update the URLs of all related images. This can be used for applying filters.
 
 Replace the image's src and rebuild the cropper.
 
@@ -615,9 +622,9 @@ cropper.zoomTo(.5, {
   - Rotate right: requires a positive number (degree > 0)
   - Rotate left: requires a negative number (degree < 0)
 
-Rotate the image with a relative degree.
+Rotate the image to a relative degree.
 
-> Requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](http://caniuse.com/transforms2d)).
+> Requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](https://caniuse.com/transforms2d)).
 
 ```js
 cropper.rotate(90);
@@ -636,7 +643,7 @@ Rotate the image to an absolute degree.
 - **scaleX**:
   - Type: `Number`
   - Default: `1`
-  - The scaling factor to apply on the abscissa of the image.
+  - The scaling factor applies to the abscissa of the image.
   - When equal to `1` it does nothing.
 
 - **scaleY** (optional):
@@ -646,7 +653,7 @@ Rotate the image to an absolute degree.
 
 Scale the image.
 
-> Requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](http://caniuse.com/transforms2d)).
+> Requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](https://caniuse.com/transforms2d)).
 
 ```js
 cropper.scale(-1); // Flip both horizontal and vertical
@@ -659,7 +666,7 @@ cropper.scale(1, -1); // Flip vertical
 - **scaleX**:
   - Type: `Number`
   - Default: `1`
-  - The scaling factor to apply on the abscissa of the image.
+  - The scaling factor applies to the abscissa of the image.
   - When equal to `1` it does nothing.
 
 Scale the abscissa of the image.
@@ -692,12 +699,13 @@ Scale the ordinate of the image.
     - `scaleX`: the scaling factor to apply on the abscissa of the image
     - `scaleY`: the scaling factor to apply on the ordinate of the image
 
-Output the final cropped area position and size data (base on the natural size of the original image).
+Output the final cropped area position and size data (based on the natural size of the original image).
 
-> You can send the data to server-side to crop the image directly:
+> You can send the data to the server-side to crop the image directly:
+>
 > 1. Rotate the image with the `rotate` property.
-> 1. Scale the image with the `scaleX` and `scaleY` properties.
-> 1. Crop the image with the `x`, `y`, `width` and `height` properties.
+> 2. Scale the image with the `scaleX` and `scaleY` properties.
+> 3. Crop the image with the `x`, `y`, `width`, and `height` properties.
 
 ![A schematic diagram for data's properties](docs/images/data.jpg)
 
@@ -708,7 +716,7 @@ Output the final cropped area position and size data (base on the natural size o
   - Properties: See the [`getData`](#getdatarounded) method.
   - You may need to round the data properties before passing them in.
 
-Change the cropped area position and size with new data (base on the original image).
+Change the cropped area position and size with new data (based on the original image).
 
 > **Note:** This method only available when the value of the `viewMode` option is greater than or equal to `1`.
 
@@ -736,11 +744,11 @@ Output the container size data.
     - `naturalWidth`: the natural width of the image
     - `naturalHeight`: the natural height of the image
     - `aspectRatio`: the aspect ratio of the image
-    - `rotate`: the rotated degrees of the image if rotated
+    - `rotate`: the rotated degrees of the image if it is rotated
     - `scaleX`: the scaling factor to apply on the abscissa of the image if scaled
     - `scaleY`: the scaling factor to apply on the ordinate of the image if scaled
 
-Output the image position, size and other related data.
+Output the image position, size, and other related data.
 
 ### getCanvasData()
 
@@ -761,7 +769,8 @@ const imageData = cropper.getImageData();
 const canvasData = cropper.getCanvasData();
 
 if (imageData.rotate % 180 === 0) {
-  console.log(canvasData.naturalWidth === imageData.naturalWidth); // true
+  console.log(canvasData.naturalWidth === imageData.naturalWidth);
+  // > true
 }
 ```
 
@@ -812,7 +821,7 @@ Change the crop box position and size with new data.
     - `minHeight`: the minimum destination height of the output canvas, the default value is `0`.
     - `maxWidth`: the maximum destination width of the output canvas, the default value is `Infinity`.
     - `maxHeight`: the maximum destination height of the output canvas, the default value is `Infinity`.
-    - `fillColor`: a color to fill any alpha values in the output canvas, the default value is `transparent`.
+    - `fillColor`: a color to fill any alpha values in the output canvas, the default value is the `transparent`.
     - [`imageSmoothingEnabled`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled): set to change if images are smoothed (`true`, default) or not (`false`).
     - [`imageSmoothingQuality`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingQuality): set the quality of image smoothing, one of "low" (default), "medium", or "high".
 
@@ -821,19 +830,20 @@ Change the crop box position and size with new data.
   - A canvas drawn the cropped image.
 
 - Notes:
-  - The aspect ratio of the output canvas will be fitted to aspect ratio of the crop box automatically.
+  - The aspect ratio of the output canvas will be fitted to the aspect ratio of the crop box automatically.
   - If you intend to get a JPEG image from the output canvas, you should set the `fillColor` option first, if not, the transparent part in the JPEG image will become black by default.
+  - Uses the Browser's native [canvas.toBlob](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob) API to do the compression work, which means it is **lossy compression**. For better image quality, you can upload the original image and the cropped data to a server and do the crop work on the server.
 
 - Browser support:
-  - Basic image: requires [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement) support ([IE 9+](http://caniuse.com/canvas)).
-  - Rotated image: requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](http://caniuse.com/transforms2d)).
-  - Cross-origin image: requires HTML5 [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes) support ([IE 11+](http://caniuse.com/cors)).
+  - Basic image: requires [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement) support ([IE 9+](https://caniuse.com/canvas)).
+  - Rotated image: requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](https://caniuse.com/transforms2d)).
+  - Cross-origin image: requires HTML5 [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes) support ([IE 11+](https://caniuse.com/cors)).
 
-Get a canvas drawn the cropped image. If it is not cropped, then returns a canvas drawn the whole image.
+Get a canvas drawn from the cropped image (lossy compression). If it is not cropped, then returns a canvas drawn the whole image.
 
 > After then, you can display the canvas as an image directly, or use [HTMLCanvasElement.toDataURL](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL) to get a Data URL, or use [HTMLCanvasElement.toBlob](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob) to get a blob and upload it to server with [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) if the browser supports these APIs.
 
-Avoid to get a blank output image, you might need to set the `maxWidth` and `maxHeight` properties to limited numbers, because of [the size limits of a canvas element](https://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element).
+Avoid getting a blank (or black) output image, you might need to set the `maxWidth` and `maxHeight` properties to limited numbers, because of [the size limits of a canvas element](https://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element). Also, you should limit the maximum zoom ratio (in the `zoom` event) for the same reason.
 
 ```js
 cropper.getCroppedCanvas();
@@ -841,24 +851,32 @@ cropper.getCroppedCanvas();
 cropper.getCroppedCanvas({
   width: 160,
   height: 90,
+});
+
+cropper.getCroppedCanvas({
   minWidth: 256,
   minHeight: 256,
   maxWidth: 4096,
   maxHeight: 4096,
+});
+
+cropper.getCroppedCanvas({
   fillColor: '#fff',
   imageSmoothingEnabled: false,
   imageSmoothingQuality: 'high',
 });
 
-// Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`
+// Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`.
+// The default value for the second parameter of `toBlob` is 'image/png', change it if necessary.
 cropper.getCroppedCanvas().toBlob((blob) => {
   const formData = new FormData();
 
-  formData.append('croppedImage', blob);
+  // Pass the image file name as the third parameter if necessary.
+  formData.append('croppedImage', blob/*, 'example.png' */);
 
-  // Use `jQuery.ajax` method
+  // Use `jQuery.ajax` method for example
   $.ajax('/path/to/upload', {
-    method: "POST",
+    method: 'POST',
     data: formData,
     processData: false,
     contentType: false,
@@ -869,7 +887,7 @@ cropper.getCroppedCanvas().toBlob((blob) => {
       console.log('Upload error');
     },
   });
-});
+}/*, 'image/png' */);
 ```
 
 ### setAspectRatio(aspectRatio)
@@ -889,7 +907,7 @@ Change the aspect ratio of the crop box.
 
 Change the drag mode.
 
-**Tips:** You can toggle the "crop" and "move" mode by double click on the cropper.
+**Tips:** You can toggle the "crop" and "move" mode by double clicking on the cropper.
 
 [⬆ back to top](#table-of-contents)
 
@@ -902,9 +920,9 @@ This event fires when the target image has been loaded and the cropper instance 
 ```js
 let cropper;
 
-image.addEventListener('ready', () => {
+image.addEventListener('ready', function () {
   console.log(this.cropper === cropper);
-  // -> true
+  // > true
 });
 
 cropper = new Cropper(image);
@@ -914,7 +932,7 @@ cropper = new Cropper(image);
 
 - **event.detail.originalEvent**:
   - Type: `Event`
-  - Options: `mousedown`, `touchstart` and `pointerdown`
+  - Options: `pointerdown`, `touchstart`, and `mousedown`
 
 - **event.detail.action**:
   - Type: `String`
@@ -945,7 +963,7 @@ image.addEventListener('cropstart', (event) => {
 
 - **event.detail.originalEvent**:
   - Type: `Event`
-  - Options: `mousemove`, `touchmove` and `pointermove`.
+  - Options: `pointermove`, `touchmove`, and `mousemove`.
 
 - **event.detail.action**: the same as "cropstart".
 
@@ -955,11 +973,11 @@ This event fires when the canvas (image wrapper) or the crop box is changing.
 
 - **event.detail.originalEvent**:
   - Type: `Event`
-  - Options: `mouseup`, `touchend`, `touchcancel`, `pointerup` and `pointercancel`.
+  - Options: `pointerup`, `pointercancel`, `touchend`, `touchcancel`, and `mouseup`.
 
 - **event.detail.action**: the same as "cropstart".
 
-This event fires when the canvas (image wrapper) or the crop box stops to change.
+This event fires when the canvas (image wrapper) or the crop box stops changing.
 
 ### crop
 
@@ -973,18 +991,18 @@ This event fires when the canvas (image wrapper) or the crop box stops to change
 
 > About these properties, see the [`getData`](#getdatarounded) method.
 
-This event fires when the canvas (image wrapper) or the crop box changed.
+This event fires when the canvas (image wrapper) or the crop box changes.
 
 **Notes:**
 
-- When the `autoCrop` option is set to `true`, a `crop` event will be triggered before the `ready` event.
-- When the `data` option is set, another `crop` event will be triggered before `ready` event.
+- When the `autoCrop` option is set to the `true`, a `crop` event will be triggered before the `ready` event.
+- When the `data` option is set, another `crop` event will be triggered before the `ready` event.
 
 ### zoom
 
 - **event.detail.originalEvent**:
   - Type: `Event`
-  - Options: `wheel`, `touchmove`.
+  - Options: `wheel`, `pointermove`, `touchmove`, and `mousemove`.
 
 - **event.detail.oldRatio**:
   - Type: `Number`
@@ -1012,7 +1030,7 @@ image.addEventListener('zoom', (event) => {
 
 ## No conflict
 
-If you have to use other cropper with the same namespace, just call the `Cropper.noConflict` static method to revert to it.
+If you have to use another cropper with the same namespace, just call the `Cropper.noConflict` static method to revert to it.
 
 ```html
 <script src="other-cropper.js"></script>
@@ -1042,14 +1060,15 @@ Maintained under the [Semantic Versioning guidelines](https://semver.org/).
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT) © [Chen Fengyuan](https://chenfengyuan.com)
+[MIT](https://opensource.org/licenses/MIT) © [Chen Fengyuan](https://chenfengyuan.com/)
 
 ## Related projects
 
-- [angular-cropperjs](https://github.com/matheusdavidson/angular-cropperjs) by @matheusdavidson
-- [ember-cropperjs](https://github.com/danielthall/ember-cropperjs) by @danielthall
-- [iron-cropper](https://github.com/safetychanger/iron-cropper) by @safetychanger
-- [react-cropper](https://github.com/roadmanfong/react-cropper) by @roadmanfong
-- [vue-cropperjs](https://github.com/Agontuk/vue-cropperjs) by @Agontuk
+- [angular-cropperjs](https://github.com/matheusdavidson/angular-cropperjs) by [@matheusdavidson](https://github.com/matheusdavidson)
+- [ember-cropperjs](https://github.com/danielthall/ember-cropperjs) by [@danielthall](https://github.com/danielthall)
+- [iron-cropper](https://github.com/safetychanger/iron-cropper) by [@safetychanger](https://github.com/safetychanger)
+- [react-cropper](https://github.com/react-cropper/react-cropper) by [@roadmanfong](https://github.com/roadmanfong)
+- [vue-cropperjs](https://github.com/Agontuk/vue-cropperjs) by [@Agontuk](https://github.com/Agontuk)
+- [blazor-cropperjs](https://github.com/CropperBlazor/Cropper.Blazor) by [@ColdForeign](https://github.com/ColdForeign), [@MaxymGorn](https://github.com/MaxymGorn)
 
 [⬆ back to top](#table-of-contents)

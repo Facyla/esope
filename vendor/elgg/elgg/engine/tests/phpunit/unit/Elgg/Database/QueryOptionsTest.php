@@ -34,10 +34,6 @@ class QueryOptionsTest extends UnitTestCase {
 		$this->options = new QueryOptions([], \ArrayObject::ARRAY_AS_PROPS);
 	}
 
-	public function down() {
-
-	}
-
 	public function testCanNormalizeEmptyArray() {
 		$options = $this->options->normalizeOptions([]);
 
@@ -145,6 +141,13 @@ class QueryOptionsTest extends UnitTestCase {
 		$this->assertEquals([
 			'group' => null,
 		], $options['type_subtype_pairs']);
+	}
+
+	public function testNormalizesTypeSubtypeOptionsWithoutType() {
+		$this->expectException(\Elgg\Exceptions\InvalidArgumentException::class);
+		$this->options->normalizeOptions([
+			'subtype' => 'blog',
+		]);
 	}
 
 	public function testNormalizesTypeSubtypeOptionsFromPairSingularAndPairPlural() {
@@ -438,9 +441,6 @@ class QueryOptionsTest extends UnitTestCase {
 	 * @dataProvider singlePairProvider
 	 */
 	public function testNormalizesMetadataOptionsForSinglePairInRoot($case_sensitive, $expected) {
-
-		$after = (new \DateTime())->modify('-1 day');
-		$before = (new \DateTime());
 
 		$options = $this->options->normalizeOptions([
 			'metadata_name_value_pairs' => [
@@ -1503,6 +1503,71 @@ class QueryOptionsTest extends UnitTestCase {
 		$this->assertEquals('foo.baz', $clause->expr);
 		$this->assertEquals('DESC', $clause->direction);
 	}
+	
+	public function testNormalizeSortByOptionsAsArray() {
+		
+		$options = $this->options->normalizeOptions([
+			'order_by' => null,
+			'sort_by' => [
+				[
+					'property_type' => 'attribute',
+					'property' => 'time_created',
+					'direction' => 'asc',
+					'signed' => false,
+				],
+				[
+					'property_type' => 'metadata',
+					'property' => 'name',
+					'direction' => 'desc',
+				],
+			],
+		]);
+		
+		$this->assertEquals(2, count($options['order_by']));
+		
+		$clause = array_shift($options['order_by']);
+		/* @var $clause \Elgg\Database\Clauses\EntitySortByClause */
+		
+		$this->assertInstanceOf(EntitySortByClause::class, $clause);
+		$this->assertEquals('attribute', $clause->property_type);
+		$this->assertEquals('time_created', $clause->property);
+		$this->assertEquals('asc', $clause->direction);
+		$this->assertEquals('inner', $clause->join_type);
+		$this->assertFalse($clause->signed);
+		
+		$clause = array_shift($options['order_by']);
+		
+		$this->assertInstanceOf(EntitySortByClause::class, $clause);
+		$this->assertEquals('metadata', $clause->property_type);
+		$this->assertEquals('name', $clause->property);
+		$this->assertEquals('desc', $clause->direction);
+		$this->assertEquals('inner', $clause->join_type);
+	}
+	
+	public function testNormalizeSortByOptionsAsSingleArray() {
+
+		$options = $this->options->normalizeOptions([
+			'order_by' => null,
+			'sort_by' => [
+				'property_type' => 'attribute',
+				'property' => 'time_created',
+				'direction' => 'asc',
+				'signed' => false,
+			],
+		]);
+
+		$this->assertCount(1, $options['order_by']);
+
+		$clause = array_shift($options['order_by']);
+		/* @var $clause \Elgg\Database\Clauses\EntitySortByClause */
+
+		$this->assertInstanceOf(EntitySortByClause::class, $clause);
+		$this->assertEquals('attribute', $clause->property_type);
+		$this->assertEquals('time_created', $clause->property);
+		$this->assertEquals('asc', $clause->direction);
+		$this->assertEquals('inner', $clause->join_type);
+		$this->assertFalse($clause->signed);
+	}
 
 	public function testNormalizeGroupByOptions() {
 		$options = $this->options->normalizeOptions([
@@ -1643,5 +1708,4 @@ class QueryOptionsTest extends UnitTestCase {
 		$this->assertEquals([new SelectClause('x AS y')], $options->selects);
 		$this->assertEquals([$join], $options->joins);
 	}
-
 }

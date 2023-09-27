@@ -1,6 +1,8 @@
 <?php
 /**
  * Site notification view
+ *
+ * @uses $vars['entity'] the site notification
  */
 
 $entity = elgg_extract('entity', $vars);
@@ -8,26 +10,19 @@ if (!$entity instanceof SiteNotification) {
 	return;
 }
 
-$icon = '';
-$text = $entity->description;
+$text = $entity->getDisplayName();
 $actor = $entity->getActor();
-if ($actor) {
-	$icon = elgg_view_entity_icon($actor, 'small');
-}
-$url = $entity->getURL();
-if ($url) {
-	$text = elgg_view('output/url', [
-		'text' => $text,
-		'href' => $url,
-		'is_trusted' => true,
-		'class' => 'site-notifications-link',
-		'data-guid' => $entity->guid,
-	]);
+$linked_entity = $entity->getLinkedEntity();
+
+$icon = $actor ? elgg_view_entity_icon($actor, 'small') : '';
+
+if ($entity->getURL()) {
+	$text = elgg_view_url(elgg_generate_entity_url($entity, 'redirect'), $text);
 }
 
 $checkbox = elgg_view('input/checkbox', [
 	'name' => 'notification_id[]',
-	'value' => $entity->getGUID(),
+	'value' => $entity->guid,
 	'default' => false,
 ]);
 
@@ -35,9 +30,19 @@ $params = [
 	'entity' => $entity,
 	'icon' => $checkbox . $icon,
 	'title' => $text,
-	'byline' => false,
+	'byline_owner_entity' => false,
+	'byline_container_entity' => false,
 	'access' => false,
 	'show_social_menu' => false,
 ];
+
+if ($linked_entity instanceof \ElggEntity) {
+	$container = $linked_entity->getContainerEntity();
+	if ($container instanceof \ElggGroup) {
+		$params['byline_container_entity'] = $container;
+	}
+}
+
 $params = $params + $vars;
+
 echo elgg_view('object/elements/summary', $params);

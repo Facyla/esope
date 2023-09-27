@@ -37,28 +37,15 @@ return array(
 	*/
 
 	'messages:posted' => "Tu mensaje ha sido enviado.",
-	'messages:success:delete:single' => 'El mensaje fue borrado',
 	'messages:success:delete' => 'Mensajes borrados',
 	'messages:success:read' => 'Mensaje(s) marcado(s) como leido(s)',
 	'messages:error:messages_not_selected' => 'No hay mensajes seleccionados',
-	'messages:error:delete:single' => 'No se puede borrar el mensaje',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Tienes un nuevo mensaje',
-	'messages:email:body' => "You have a new message from %s.
-
-It reads:
-
-%s
-
-To view your messages, click here:
-%s
-
-To send %s a message, click here:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +58,9 @@ To send %s a message, click here:
 	'messages:user:self' => "No puedes enviarte un mensaje a ti mismo.",
 
 	'messages:deleted_sender' => 'Usuario borrado',
+	
+	/**
+	* Settings
+	*/
 
 );

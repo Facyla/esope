@@ -7,37 +7,9 @@ elgg.config = elgg.config || {};
 elgg.config.wwwroot = 'http://www.elgg.org/';
 elgg.config.current_language = 'en';
 
+elgg.security = elgg.security || {};
+elgg.security.interval = (24 * 60 * 60 * 1000); // make sure during tests the refresh interval does not trigger
+
 define('elgg', function() {
 	return elgg;
-});
-
-// for ElggHooksTest.js
-define('boot/example', function(require) {
-	var elgg = require('elgg');
-	var Plugin = require('elgg/Plugin');
-
-	elgg._test_signals.push('boot/example define');
-
-	elgg.register_hook_handler('init', 'system', function() {
-		elgg._test_signals.push('boot/example init,system');
-	});
-	elgg.register_hook_handler('ready', 'system', function() {
-		elgg._test_signals.push('boot/example ready,system');
-	});
-
-	return new Plugin({
-		init: function () {
-			elgg._test_signals.push('boot/example init');
-		}
-	});
-});
-
-// for ElggHooksTest.js
-define('elgg/init', function (require) {
-	var elgg = require('elgg');
-	var plugin = require('boot/example');
-
-	plugin._init();
-
-	elgg.trigger_hook('init', 'system');
 });

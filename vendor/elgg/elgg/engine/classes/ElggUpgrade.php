@@ -2,11 +2,11 @@
 /**
  * Upgrade object for upgrades that need to be tracked
  * and listed in the admin area.
- *
- * @todo Expand for all upgrades to be \ElggUpgrade subclasses.
  */
 
-use Elgg\TimeUsing;
+use Elgg\Exceptions\InvalidArgumentException as ElggInvalidArgumentException;
+use Elgg\Exceptions\UnexpectedValueException as ElggUnexpectedValueException;
+use Elgg\Traits\TimeUsing;
 use Elgg\Upgrade\Batch;
 
 /**
@@ -33,12 +33,6 @@ class ElggUpgrade extends ElggObject {
 		'description',
 		'class',
 	];
-
-	/**
-	 * @var callable
-	 * @internal Do not use. For testing purposes
-	 */
-	public $_callable_egefps = 'elgg_get_entities_from_private_settings';
 
 	/**
 	 * Set subtype to upgrade
@@ -113,7 +107,7 @@ class ElggUpgrade extends ElggObject {
 	public function getBatch() {
 		try {
 			$batch = _elgg_services()->upgradeLocator->getBatch($this->class);
-		} catch (InvalidArgumentException $ex) {
+		} catch (ElggInvalidArgumentException $ex) {
 			// only report error if the upgrade still needs to run
 			$loglevel = $this->isCompleted() ? 'INFO' : 'ERROR';
 			elgg_log($ex->getMessage(), $loglevel);
@@ -200,19 +194,17 @@ class ElggUpgrade extends ElggObject {
 	}
 
 	/**
-	 * Require an upgrade page.
-	 *
-	 * @return mixed
-	 * @throws UnexpectedValueException
+	 * {@inheritDoc}
+	 * @throws \Elgg\Exceptions\UnexpectedValueException
 	 */
-	public function save() {
+	public function save() : bool {
 		if (!isset($this->is_completed)) {
 			$this->is_completed = false;
 		}
 
 		foreach ($this->requiredProperties as $prop) {
 			if (!$this->$prop) {
-				throw new UnexpectedValueException("ElggUpgrade objects must have a value for the $prop property.");
+				throw new ElggUnexpectedValueException("ElggUpgrade objects must have a value for the {$prop} property.");
 			}
 		}
 

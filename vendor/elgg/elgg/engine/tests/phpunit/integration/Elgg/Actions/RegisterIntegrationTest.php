@@ -3,9 +3,11 @@
 namespace Elgg\Actions;
 
 use Elgg\ActionResponseTestCase;
+use Elgg\Exceptions\Configuration\RegistrationException;
 use Elgg\Hook;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
+use Elgg\Exceptions\Http\Gatekeeper\RegistrationAllowedGatekeeperException;
 
 /**
  * @group ActionsService
@@ -17,11 +19,14 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 	public function up() {
 		parent::up();
 
-		self::createApplication(['isolate' => true]);
-
-		_elgg_config()->min_password_length = 3;
-		_elgg_config()->minusername = 4;
-		_elgg_config()->allow_registration = true;
+		$this->createApplication([
+			'isolate' => true,
+			'custom_config_values' => [
+				'min_password_length' => 3,
+				'minusername' => 4,
+				'allow_registration' => true,
+			],
+		]);
 
 		_elgg_services()->hooks->backup();
 		
@@ -119,7 +124,6 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 
 	public function testRegistrationFailsWithInvalidUsername() {
 
-		$username = $this->getRandomUsername();
 		$email = $this->getRandomEmail();
 
 		$response = $this->executeAction('register', [
@@ -138,7 +142,6 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 
 	public function testRegistrationFailsWithInvalidUsernameContainingBlacklistChar() {
 
-		$username = $this->getRandomUsername();
 		$email = $this->getRandomEmail();
 
 		$response = $this->executeAction('register', [
@@ -157,7 +160,6 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 
 	public function testRegistrationFailsWithShortUsername() {
 
-		$username = $this->getRandomUsername();
 		$email = $this->getRandomEmail();
 
 		$response = $this->executeAction('register', [
@@ -268,15 +270,12 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(\ElggUser::class, $user);
 
 		$this->assertEquals($user->guid, elgg_get_logged_in_user_guid());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
-
 
 	public function testRegistrationSucceedsButExceptionThrownFromHook() {
 
 		$hook = $this->registerTestingHook('register', 'user', function () {
-			throw new \RegistrationException('Hello');
+			throw new RegistrationException('Hello');
 		});
 
 		$username = $this->getRandomUsername();
@@ -301,10 +300,10 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 	
 	public function testRegisterWithAdminValidation() {
 		
-		_elgg_config()->require_admin_validation = true;
+		_elgg_services()->config->require_admin_validation = true;
 		
 		// re-register admin validation hooks
-		_elgg_services()->hooks->registerHandler('register', 'user', '_elgg_admin_check_admin_validation', 999);
+		_elgg_services()->hooks->registerHandler('register', 'user', 'Elgg\Users\Validation::checkAdminValidation', 999);
 		
 		$username = $this->getRandomUsername();
 		
@@ -324,8 +323,96 @@ class RegisterIntegrationTest extends ActionResponseTestCase {
 		});
 		$this->assertInstanceOf(\ElggUser::class, $user);
 		$this->assertFalse($user->isValidated());
+		$this->assertEmpty($user->validated_method);
 		$this->assertFalse($user->isEnabled());
 		
 		$this->assertEmpty(elgg_get_logged_in_user_entity());
+	}
+	
+	public function testRegisterWithoutValidation() {
+		
+		_elgg_services()->config->require_admin_validation = false;
+	
+		$username = $this->getRandomUsername();
+		
+		$response = $this->executeAction('register', [
+			'username' => $username,
+			'password' => '1111111111111',
+			'password2' => '1111111111111',
+			'email' => $this->getRandomEmail(),
+			'name' => 'Test User',
+		]);
+		
+		$this->assertInstanceOf(OkResponse::class, $response);
+		
+		/* @var $user \ElggUser */
+		$user = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () use ($username) {
+			return get_user_by_username($username);
+		});
+		$this->assertInstanceOf(\ElggUser::class, $user);
+		$this->assertTrue($user->isValidated());
+		$this->assertEquals('register_action', $user->validated_method);
+		$this->assertTrue($user->isEnabled());
+		
+		$this->assertNotEmpty(elgg_get_logged_in_user_entity());
+	}
+	
+	public function testRegistrationDisabledGatekeeper() {
+		$this->createApplication([
+			'isolate' => true,
+			'custom_config_values' => [
+				'allow_registration' => false,
+			],
+		]);
+		
+		$this->expectException(RegistrationAllowedGatekeeperException::class);
+		$this->expectExceptionMessage(elgg_echo('registerdisabled'));
+		$this->executeAction('register', [
+			'username' => $this->getRandomUsername(),
+			'password' => '1234567890',
+			'password2' => '1234567890',
+			'email' => $this->getRandomEmail(),
+			'name' => 'Test User',
+		]);
+	}
+	
+	public function testRegistrationDisabledGatekeeperWithValidInviteCode() {
+		$this->createApplication([
+			'isolate' => true,
+			'custom_config_values' => [
+				'allow_registration' => false,
+			],
+		]);
+		
+		$inviting_user = $this->getRandomUser();
+		
+		$response = $this->executeAction('register', [
+			'username' => $this->getRandomUsername(),
+			'password' => '12',
+			'password2' => '123', // intentional mistake
+			'email' => $this->getRandomEmail(),
+			'name' => 'Test User',
+			'friend_guid' => $inviting_user->guid,
+			'invitecode' => elgg_generate_invite_code($inviting_user->username),
+		]);
+		
+		$this->assertInstanceOf(ErrorResponse::class, $response);
+		$this->assertEquals(elgg_echo('RegistrationException:PasswordMismatch'), $response->getContent());
+	}
+	
+	public function testRegistrationGatekeeperWithInvalidInviteCode() {
+		$inviting_user = $this->getRandomUser();
+		
+		$this->expectException(RegistrationAllowedGatekeeperException::class);
+		$this->expectExceptionMessage(elgg_echo('RegistrationAllowedGatekeeperException:invalid_invitecode'));
+		$this->executeAction('register', [
+			'username' => $this->getRandomUsername(),
+			'password' => '1234567890',
+			'password2' => '1234567890',
+			'email' => $this->getRandomEmail(),
+			'name' => 'Test User',
+			'friend_guid' => $inviting_user->guid,
+			'invitecode' => elgg_generate_invite_code($inviting_user->username) . 'fail',
+		]);
 	}
 }

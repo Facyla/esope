@@ -10,15 +10,21 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
+	'add:group:group' => "Maak een nieuwe groep",
+	'groups:menu:sort:member' => "Datum lid geworden",
+	
 	'groups' => "Groepen",
 	'groups:owned' => "Groepen beheren",
 	'groups:owned:user' => 'Groepen waar %s beheerder van is',
 	'groups:yours' => "Mijn groepen",
 	'groups:user' => "Groepen waarvan %s lid is",
-	'groups:all' => "Alle groepen op de site",
+	'groups:all' => "Alle groepen",
 	'groups:add' => "Maak een nieuwe groep",
 	'groups:edit' => "Bewerk groep",
-	'groups:delete' => 'Verwijder groep',
+	'groups:edit:profile' => "Profiel",
+	'groups:edit:access' => "Toegang",
+	'groups:edit:tools' => "Tools",
+	'groups:edit:settings' => "Instellingen",
 	'groups:membershiprequests' => 'Beheer van lidmaatschapsaanvragen',
 	'groups:membershiprequests:pending' => 'Beheer van lidmaatschapsaanvragen (%s)',
 	'groups:invitedmembers' => "Beheer uitnodigingen",
@@ -76,7 +82,6 @@ return array(
 
 	'groups:nofriendsatall' => 'Je hebt geen vrienden om uit te nodigen!',
 	'groups:group' => "Groep",
-	'groups:search:tags' => "tag",
 	'groups:search:title' => "Zoek naar groepen met het trefwoord '%s'",
 	'groups:search:none' => "Geen overeenkomende groepen gevonden",
 	'groups:search_in_group' => "Zoek in deze groep",
@@ -128,7 +133,7 @@ return array(
 	'groups:addedtogroup' => 'Gebruiker succesvol toegevoegd aan de groep',
 	'groups:joinrequestnotmade' => 'Lidmaatschapsverzoek kon niet worden gedaan',
 	'groups:joinrequestmade' => 'Lidmaatschapsverzoek succesvol gedaan',
-	'groups:joinrequest:exists' => 'You already requested membership for this group',
+	'groups:joinrequest:exists' => 'Je hebt al eerder lidmaatschap aangevraagd voor deze groep',
 	'groups:button:joined' => 'Lid',
 	'groups:button:owned' => 'Eigenaar',
 	'groups:joined' => 'Je bent lid geworden van de groep!',
@@ -139,25 +144,19 @@ return array(
 	'groups:invite:subject' => "%s je bent uitgenodigd om lid te worden van %s!",
 	'groups:joinrequest:remove:check' => 'Weet je zeker dat je dit lidmaatschapsverzoek wilt verwijderen?',
 	'groups:invite:remove:check' => 'Weet je zeker dat je deze uitnodiging wilt verwijderen?',
-	'groups:invite:body' => "Beste %s,
-
-%s heeft je uitgenodigd om lid te worden van de groep '%s'.
+	'groups:invite:body' => "%s heeft je uitgenodigd om lid te worden van de groep '%s'.
 
 On al je uitnodigingen te bekijken, klik hier:
 %s",
 
 	'groups:welcome:subject' => "Welkom bij de groep '%s'!",
-	'groups:welcome:body' => "Beste %s,
-
-Je bent nu lid van de groep '%s'.
+	'groups:welcome:body' => "Je bent nu lid van de groep '%s'.
 
 Je kunt direct beginnen in de groep!
 %s",
 
 	'groups:request:subject' => "%s wil lid worden van %s",
-	'groups:request:body' => "Beste %s,
-
-%s wil graag lid worden van de groep '%s'.
+	'groups:request:body' => "%s wil graag lid worden van de groep '%s'.
 
 Om het profiel te bekijken, klik hier:
 %s
@@ -174,24 +173,15 @@ of klik op de link om alle lidmaatschapsverzoeken te bekijken:
 	/**
 	 * Action messages
 	 */
-	'groups:deleted' => 'De groep en zijn content zijn verwijderd',
-	'groups:notdeleted' => 'De groep kon niet worden verwijderd',
-	'groups:deletewarning' => "Weet je zeker dat je deze groep wilt verwijderen? Dit kan niet ongedaan worden gemaakt!",
 
 	'groups:invitekilled' => 'De uitnodiging is verwijderd',
 	'groups:joinrequestkilled' => 'Lidmaatschapsverzoek verwijderd.',
 	'groups:error:addedtogroup' => "Kon %s niet toevoegen aan de groep",
 	'groups:add:alreadymember' => "%s is al lid van deze groep",
-
-	/**
-	 * ecml
-	 */
-	'groups:ecml:groupprofile' => 'Groepsprofielen',
-
-	/**
-	 * Upgrades
-	 */
-	'groups:upgrade:2016101900:title' => 'Verplaats de groepsiconen naar de nieuwe locatie',
-	'groups:upgrade:2016101900:description' => 'De nieuwe iconen API plaatst de bestanden op een voorspelbare locatie op de bestandslocatie relatief aan de entity\'s bestandlocatie.
-Deze upgrade verplaatst alle groepsiconen naar deze nieuwe locatie.',
+	
+	// Notification settings
+	'groups:usersettings:notification:group_join:description' => "Standaard notificatie instellingen voor groepen waar je lid van wordt",
+	
+	'groups:usersettings:notifications:title' => 'Groepsnotificaties',
+	'groups:usersettings:notifications:description' => 'Om notificaties te ontvangen uit groepen waar je lid van bent kun je in onderstaande lijst aangeven of en hoe je op de hoogte moet worden gebracht',
 );

@@ -12,7 +12,7 @@ class TitleMenuTest extends UnitTestCase {
 	public function up() {
 		_elgg_services()->hooks->backup();
 
-		_elgg_services()->hooks->registerHandler('register', 'menu:title', '_elgg_user_title_menu');
+		_elgg_services()->hooks->registerHandler('register', 'menu:title', 'Elgg\Menus\Title::registerAvatarEdit');
 	}
 	
 	public function down() {
@@ -53,8 +53,6 @@ class TitleMenuTest extends UnitTestCase {
 		$items = $menu->getItems();
 
 		$this->assertFalse($items->has('avatar:edit'));
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testTitleMenuViewedBySelf() {
@@ -69,8 +67,6 @@ class TitleMenuTest extends UnitTestCase {
 		$items = $menu->getItems();
 
 		$this->assertTrue($items->has('avatar:edit'));
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testTitleMenuViewedByAdmin() {
@@ -87,8 +83,5 @@ class TitleMenuTest extends UnitTestCase {
 		$items = $menu->getItems();
 
 		$this->assertTrue($items->has('avatar:edit'));
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
-
 }

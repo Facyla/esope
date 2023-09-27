@@ -6,6 +6,7 @@ use Elgg\Cache\MetadataCache;
 use Elgg\Database;
 use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Delete;
+use Elgg\Database\EntityTable;
 use Elgg\Database\Insert;
 use Elgg\Database\MetadataTable as DbMetadataTabe;
 use Elgg\Database\Select;
@@ -21,30 +22,61 @@ class MetadataTable extends DbMetadataTabe {
 	/**
 	 * @var \stdClass[]
 	 */
-	public $rows = [];
+	protected $rows = [];
 
 	/**
 	 * DB query query_specs
 	 * @var array
 	 */
-	public $query_specs = [];
+	protected $query_specs = [];
 
 	/**
 	 * @var int
 	 */
-	static $iterator = 100;
-
-	public function __construct(MetadataCache $metadata_cache, Database $db, Events $events) {
-		$this->setCurrentTime();
-		parent::__construct($metadata_cache, $db, $events);
-	}
+	protected static $iterator = 100;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function create(ElggMetadata $metadata, $allow_multiple = false) {
-		static::$iterator++;
-		$id = static::$iterator;
+		if (!isset($metadata->value) || !isset($metadata->entity_guid)) {
+			elgg_log("Metadata must have a value and entity guid", 'ERROR');
+			return false;
+		}
+		
+		if (!$this->entityTable->exists($metadata->entity_guid)) {
+			elgg_log("Can't create metadata on a non-existing entity_guid", 'ERROR');
+			return false;
+		}
+		
+		if (!is_scalar($metadata->value)) {
+			elgg_log("To set multiple metadata values use ElggEntity::setMetadata", 'ERROR');
+			return false;
+		}
+		
+		if ($metadata->id) {
+			if ($this->update($metadata)) {
+				return $metadata->id;
+			}
+		}
+
+		if (!$allow_multiple) {
+			$id = $this->getIDsByName($metadata->entity_guid, $metadata->name);
+
+			if ($id > 0) {
+				$metadata->id = $id;
+
+				if ($this->update($metadata)) {
+					return $metadata->id;
+				}
+			}
+		}
+		
+		self::$iterator++;
+		$id = self::$iterator;
+
+		// lock the time to prevent testing issues
+		$this->setCurrentTime();
 
 		$row = (object) [
 			'type' => 'metadata',
@@ -60,13 +92,23 @@ class MetadataTable extends DbMetadataTabe {
 
 		$this->addQuerySpecs($row);
 
-		return parent::create($metadata, $allow_multiple);
+		$result = parent::create($metadata, $allow_multiple);
+		
+		// reset the time
+		$this->resetCurrentTime();
+		
+		return $result;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function update(ElggMetadata $metadata) {
+		if (!$this->entityTable->exists($metadata->entity_guid)) {
+			elgg_log("Can't updated metadata to a non-existing entity_guid", 'ERROR');
+			return false;
+		}
+		
 		$id = $metadata->id;
 		if (!isset($this->rows[$id])) {
 			return false;
@@ -91,7 +133,7 @@ class MetadataTable extends DbMetadataTabe {
 		$guids = elgg_extract('guids', $options, (array) elgg_extract('guid', $options));
 		
 		$rows = [];
-		foreach ($this->rows as $id => $row) {
+		foreach ($this->rows as $row) {
 			if (empty($guids) || in_array($row->entity_guid, $guids)) {
 				$rows[] = $row;
 			}
@@ -106,7 +148,7 @@ class MetadataTable extends DbMetadataTabe {
 	public function getRowsForGuids(array $guids) {
 		
 		$rows = [];
-		foreach ($this->rows as $id => $row) {
+		foreach ($this->rows as $row) {
 			if (in_array($row->entity_guid, $guids)) {
 				$rows[] = $row;
 			}
@@ -121,7 +163,7 @@ class MetadataTable extends DbMetadataTabe {
 	 * @param \stdClass $row Data row
 	 * @return void
 	 */
-	public function clearQuerySpecs(\stdClass $row) {
+	protected function clearQuerySpecs(\stdClass $row) {
 		if (!isset($this->query_specs[$row->id])) {
 			return;
 		}
@@ -137,7 +179,7 @@ class MetadataTable extends DbMetadataTabe {
 	 *
 	 * @return void
 	 */
-	public function addQuerySpecs(\stdClass $row) {
+	protected function addQuerySpecs(\stdClass $row) {
 
 		$this->clearQuerySpecs($row);
 
@@ -159,6 +201,23 @@ class MetadataTable extends DbMetadataTabe {
 			},
 		]);
 
+		// getIDsByName
+		$qb = Select::fromTable('metadata');
+		$qb->select('id');
+		$qb->where($qb->compare('entity_guid', '=', $row->entity_guid, ELGG_VALUE_INTEGER))
+			->andWhere($qb->compare('name', '=', $row->name, ELGG_VALUE_STRING));
+
+		$this->query_specs[$row->id][] = $this->db->addQuerySpec([
+			'sql' => $qb->getSQL(),
+			'params' => $qb->getParameters(),
+			'results' => function() use ($row) {
+				if (isset($this->rows[$row->id])) {
+					return [$this->rows[$row->id]];
+				}
+				return [];
+			},
+		]);
+		
 		$qb = Insert::intoTable('metadata');
 		$qb->values([
 			'name' => $qb->param($row->name, ELGG_VALUE_STRING),
@@ -207,14 +266,4 @@ class MetadataTable extends DbMetadataTabe {
 			}
 		]);
 	}
-
-	/**
-	 * Iterate ID
-	 * @return int
-	 */
-	public function iterate() {
-		static::$iterator++;
-		return static::$iterator;
-	}
-
 }

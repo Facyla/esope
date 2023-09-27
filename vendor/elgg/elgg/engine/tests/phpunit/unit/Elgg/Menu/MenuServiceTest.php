@@ -10,14 +10,6 @@ use Elgg\UnitTestCase;
  */
 class MenuServiceTest extends UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testCanUnpreparedMenu() {
 
 		$params_hook = $this->registerTestingHook('parameters', 'menu:test', function (Hook $hook) {
@@ -76,9 +68,30 @@ class MenuServiceTest extends UnitTestCase {
 		$this->assertEquals(1, count($menu->getSection('default')->getItems()));
 
 		$prepare_hook->assertNumberOfCalls(1);
-
 	}
-
+	
+	public function testCanUnregisterMenuItem() {
+		$this->assertTrue(elgg_register_menu_item('test', [
+			'name' => 'test1',
+			'text' => 'test1',
+			'href' => 'test1',
+		]));
+		$this->assertTrue(elgg_register_menu_item('test', [
+			'name' => 'test2',
+			'text' => 'test2',
+			'href' => 'test2',
+		]));
+		
+		$items = elgg()->menus->getUnpreparedMenu('test')->getItems();
+		$this->assertTrue($items->has('test1'));
+		$this->assertTrue($items->has('test2'));
+		
+		$this->assertNotEmpty(elgg_unregister_menu_item('test', 'test1'));
+		
+		$items = elgg()->menus->getUnpreparedMenu('test')->getItems();
+		$this->assertFalse($items->has('test1'));
+		$this->assertTrue($items->has('test2'));
+	}
 
 	public function testCanSortMenuByName() {
 
@@ -205,6 +218,56 @@ class MenuServiceTest extends UnitTestCase {
 		
 		$this->assertInstanceOf(\ElggMenuItem::class, $selected_item);
 		$this->assertEquals('n:200', $selected_item->getName());
+	}
+	
+	public function testDefaultItemContentsView() {
+		$items = $this->buildMenu();
+		
+		$menu = elgg()->menus->getMenu('test', [
+			'items' => $items,
+		]);
+		
+		$checkItemView = function(\ElggMenuItem $menu_item) use (&$checkItemView) {
+			$this->assertTrue($menu_item->hasItemContentsView());
+			
+			foreach ($menu_item->getChildren() as $child) {
+				$checkItemView($child);
+			}
+		};
+		
+		/* @var $section MenuSection */
+		foreach ($menu as $section) {
+			/* @var $menu_item \ElggMenuItem */
+			foreach ($section as $menu_item) {
+				$checkItemView($menu_item);
+			}
+		}
+	}
+	
+	public function testCustomItemContentsView() {
+		$items = $this->buildMenu();
+		
+		$menu = elgg()->menus->getMenu('test', [
+			'items' => $items,
+			'item_contents_view' => 'my_custom_view',
+		]);
+		
+		$checkItemView = function(\ElggMenuItem $menu_item) use (&$checkItemView) {
+			$this->assertTrue($menu_item->hasItemContentsView());
+			$this->assertEquals('my_custom_view', $menu_item->getItemContentsView());
+			
+			foreach ($menu_item->getChildren() as $child) {
+				$checkItemView($child);
+			}
+		};
+		
+		/* @var $section MenuSection */
+		foreach ($menu as $section) {
+			/* @var $menu_item \ElggMenuItem */
+			foreach ($section as $menu_item) {
+				$checkItemView($menu_item);
+			}
+		}
 	}
 
 	public function buildMenu() {

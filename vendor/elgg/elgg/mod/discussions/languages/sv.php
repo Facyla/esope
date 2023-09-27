@@ -42,28 +42,12 @@ return array(
 	 */
 	'discussion:topic:notify:summary' => 'Nytt diskussionsämne med namnet %s',
 	'discussion:topic:notify:subject' => 'Nytt diskussionsämne: %s',
-	'discussion:topic:notify:body' =>
-'%s Lade till ett nytt diskussionsämne "%s":
-
-%s
-
-Visa och svara på diskussionsämnet:
-%s
-',
 
 	'discussion:comment:notify:summary' => 'Ny kommentar i ämnet: %s',
 	'discussion:comment:notify:subject' => 'Ny kommentar i ämnet: %s',
-	'discussion:comment:notify:body' =>
-'%s kommenterade diskussionsämnet "%s":
-
-%s
-
-Visa och kommentera diskussionsämnet:
-%s
-',
 
 	'groups:tool:forum' => 'Aktivera gruppdiskussioner',
-
+	
 	/**
 	 * Discussion status
 	 */
@@ -72,10 +56,6 @@ Visa och kommentera diskussionsämnet:
 	'discussion:topic:closed:desc' => 'Den här diskussionen är stängd och accepterar inte nya kommentarer.',
 
 	'discussion:topic:description' => 'Ämnesmeddelande',
-
-	// upgrades
-	'discussions:upgrade:2017112800:title' => "Migrera diskussionssvar till kommentarer",
-	'discussions:upgrade:2017112800:description' => "Diskussionssvar brukar ha sina egna undertyper, den här har slagits ihop med kommentarer.",
-	'discussions:upgrade:2017112801:title' => "Migrera river aktivitet relaterat till diskussionssvar",
-	'discussions:upgrade:2017112801:description' => "Diskussionssvar brukar ha sina egna undertyper, den här har slagits ihop med kommentarer.",
+	
+	// widgets
 );

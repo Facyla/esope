@@ -2,8 +2,8 @@
 
 namespace Elgg\Router\Middleware;
 
+use Elgg\Exceptions\Http\EntityPermissionsException;
 use Elgg\IntegrationTestCase;
-use Elgg\EntityPermissionsException;
 
 class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase {
 
@@ -26,39 +26,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 	 * @var \ElggObject test object, owned by test user
 	 */
 	protected $object;
-	
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::up()
-	 */
-	public function up() {
-		
-	}
 
-	/**
-	 * {@inheritDoc}
-	 * @see \Elgg\BaseTestCase::down()
-	 */
-	public function down() {
-		
-		if ($this->object instanceof \ElggObject) {
-			$this->object->delete();
-		}
-		
-		if ($this->group instanceof \ElggGroup) {
-			$this->group->delete();
-		}
-		
-		if ($this->user instanceof \ElggUser) {
-			$this->user->delete();
-		}
-		
-		if ($this->loggedin_user instanceof \ElggUser) {
-			elgg_get_session()->removeLoggedInUser();
-			$this->loggedin_user->delete();
-		}
-	}
-	
 	/**
 	 * @dataProvider routeUserDataProvider
 	 */
@@ -74,7 +42,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($http_request);
@@ -98,7 +66,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($http_request);
@@ -126,7 +94,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($http_request);
@@ -150,7 +118,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($http_request);
@@ -177,7 +145,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($http_request);
@@ -208,7 +176,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($http_request);
@@ -230,7 +198,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$response = _elgg_services()->router->route($http_request);
 		$this->assertTrue($response);
@@ -256,7 +224,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		$response = _elgg_services()->router->route($http_request);
@@ -283,7 +251,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$response = _elgg_services()->router->route($http_request);
 		$this->assertTrue($response);
@@ -313,7 +281,7 @@ class UserPageOwnerCanEditGatekeeperIntegrationTest extends IntegrationTestCase 
 		
 		$http_request = $this->prepareHttpRequest($url);
 		
-		_elgg_services()->setValue('request', $http_request);
+		_elgg_services()->set('request', $http_request);
 		
 		$this->expectException(EntityPermissionsException::class);
 		$response = _elgg_services()->router->route($http_request);

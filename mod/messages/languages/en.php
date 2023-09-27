@@ -37,11 +37,9 @@ return array(
 	*/
 
 	'messages:posted' => "Your message was successfully sent.",
-	'messages:success:delete:single' => 'Message was deleted',
 	'messages:success:delete' => 'Messages deleted',
 	'messages:success:read' => 'Messages marked as read',
 	'messages:error:messages_not_selected' => 'No messages selected',
-	'messages:error:delete:single' => 'Unable to delete the message',
 
 	/**
 	* Email messages
@@ -69,7 +67,14 @@ To send %s a message, click here:
 	'messages:user:nonexist' => "We could not find the recipient in the user database.",
 	'messages:user:blank' => "You did not select someone to send this to.",
 	'messages:user:self' => "You cannot send a message to yourself.",
+	'messages:user:notfriend' => "You cannot send a message to a user who is not your friend.",
 
 	'messages:deleted_sender' => 'Deleted user',
+	
+	/**
+	* Settings
+	*/
+	'messages:settings:friends_only:label' => 'Messages can only be sent to friends',
+	'messages:settings:friends_only:help' => 'User will not be able to send a message if the recipient is not his friend',
 
 );

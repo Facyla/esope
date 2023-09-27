@@ -16,6 +16,7 @@ if ($metadata === '' && $relationship instanceof ElggRelationship) {
 	$metadata = elgg_view_menu('relationship', [
 		'relationship' => $relationship,
 		'class' => 'elgg-menu-hz',
+		'prepare_dropdown' => true,
 	]);
 }
 
@@ -25,5 +26,4 @@ if (elgg_is_empty($metadata)) {
 
 echo elgg_format_element('div', ['class' => [
 	'elgg-listing-summary-metadata',
-	'elgg-relationship-metadata', // @todo remove in 4.0
 ]], $metadata);

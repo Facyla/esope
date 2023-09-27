@@ -29,7 +29,20 @@ return [
 		'walled' => false,
 		'middleware' => [
 			\Elgg\Router\Middleware\LoggedOutGatekeeper::class,
+			\Elgg\Router\Middleware\RegistrationAllowedGatekeeper::class,
 		],
+	],
+	'action:register' => [
+		// this action is registered here because of the additional middleware
+		'path' => '/action/register',
+		'file' => dirname(__DIR__) . '/actions/register.php',
+		'middleware' => [
+			\Elgg\Router\Middleware\CsrfFirewall::class,
+			\Elgg\Router\Middleware\LoggedOutGatekeeper::class,
+			\Elgg\Router\Middleware\ActionMiddleware::class,
+			\Elgg\Router\Middleware\RegistrationAllowedGatekeeper::class,
+		],
+		'walled' => false,
 	],
 	'account:login' => [
 		'path' => '/login',
@@ -74,7 +87,7 @@ return [
 	],
 	'ajax' => [
 		'path' => '/ajax/{segments}',
-		'handler' => '_elgg_ajax_page_handler',
+		'controller' => \Elgg\Ajax\Controller::class,
 		'requirements' => [
 			'segments' => '.+',
 		],
@@ -97,9 +110,17 @@ return [
 		'resource' => 'manifest.json',
 		'walled' => false,
 	],
+	'admin:plugin_settings' => [
+		// needs to be registered before global admin route
+		'path' => '/admin/plugin_settings/{plugin_id}',
+		'resource' => 'admin/plugin_settings',
+		'middleware' => [
+			\Elgg\Router\Middleware\AdminGatekeeper::class,
+		],
+	],
 	'admin' => [
 		'path' => '/admin/{segments?}',
-		'handler' => '_elgg_admin_page_handler',
+		'resource' => 'admin',
 		'requirements' => [
 			'segments' => '.+',
 		],
@@ -109,9 +130,10 @@ return [
 	],
 	'admin_plugins_refresh' => [
 		'path' => '/admin_plugins_refresh',
-		'handler' => '_elgg_ajax_plugins_update',
+		'controller' => \Elgg\Controllers\AdminPluginsRefresh::class,
 		'middleware' => [
 			\Elgg\Router\Middleware\AdminGatekeeper::class,
+			\Elgg\Router\Middleware\AjaxGatekeeper::class,
 		],
 	],
 	'admin_plugin_text_file' => [
@@ -130,7 +152,7 @@ return [
 	],
 	'cron' => [
 		'path' => '/cron/{segments}',
-		'handler' => '_elgg_cron_page_handler',
+		'controller' => \Elgg\Controllers\Cron::class,
 		'requirements' => [
 			'segments' => '.+',
 		],
@@ -138,10 +160,7 @@ return [
 	],
 	'serve-icon' => [
 		'path' => '/serve-icon/{guid}/{size}',
-		'handler' => '_elgg_filestore_serve_icon_handler',
-		'requirements' => [
-			'segments' => '.+',
-		],
+		'controller' => \Elgg\Controllers\ServeIcon::class,
 		'walled' => false,
 	],
 	'livesearch' => [
@@ -164,6 +183,23 @@ return [
 		'middleware' => [
 			\Elgg\Router\Middleware\Gatekeeper::class,
 		],
+		'detect_page_owner' => true,
+	],
+	'settings:notifications' => [
+		'path' => '/settings/notifications/{username}',
+		'resource' => 'settings/notifications',
+		'middleware' => [
+			\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
+		],
+		'detect_page_owner' => true,
+	],
+	'settings:notifications:users' => [
+		'path' => '/settings/notifications/users/{username}',
+		'resource' => 'settings/notifications/users',
+		'middleware' => [
+			\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
+		],
+		'detect_page_owner' => true,
 	],
 	'settings:statistics' => [
 		'path' => '/settings/statistics/{username?}',
@@ -171,24 +207,28 @@ return [
 		'middleware' => [
 			\Elgg\Router\Middleware\Gatekeeper::class,
 		],
+		'detect_page_owner' => true,
 	],
 	'settings:tools' => [
-		'path' => '/settings/plugins/{username?}/{plugin_id}',
+		'path' => '/settings/plugins/{username}/{plugin_id}',
 		'resource' => 'settings/tools',
 		'middleware' => [
-			\Elgg\Router\Middleware\Gatekeeper::class,
+			\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
 		],
+		'detect_page_owner' => true,
 	],
 	'widgets:add_panel' => [
+		// @todo this route could also be a ajax view or have some parameters (context/container) in the route definition
 		'path' => '/widgets/add_panel',
 		'resource' => 'widgets/add_panel',
 		'middleware' => [
 			\Elgg\Router\Middleware\Gatekeeper::class,
 		],
+		'legacy_page_owner_detection' => false, // prevents notices about legacy logic, page owner is explicitely set in the resource
 	],
 	'view:object:comment' => [
 		'path' => '/comment/view/{guid}/{container_guid?}',
-		'resource' => 'comments/view',
+		'controller' => \Elgg\Controllers\CommentEntityRedirector::class,
 	],
 	'edit:object:comment' => [
 		'path' => '/comment/edit/{guid}',
@@ -201,11 +241,30 @@ return [
 		'path' => '/user/{guid}',
 		'resource' => 'user/view',
 	],
+	'delete:user' => [
+		'path' => '/user/delete/{guid}',
+		'resource' => 'user/delete',
+		'middleware' => [
+			\Elgg\Router\Middleware\AdminGatekeeper::class,
+		],
+	],
 	'edit:user:avatar' => [
 		'path' => '/avatar/edit/{username}',
 		'resource' => 'avatar/edit',
 		'middleware' => [
-			\Elgg\Router\Middleware\Gatekeeper::class,
+			\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
 		],
+	],
+	'notifications:mute' => [
+		'path' => 'notifications/mute/{entity_guid}/{recipient_guid}',
+		'resource' => 'notifications/mute',
+		'requirements' => [
+			'entity_guid' => '\d+',
+			'recipient_guid' => '\d+',
+		],
+		'middleware' => [
+			\Elgg\Router\Middleware\SignedRequestGatekeeper::class,
+		],
+		'walled' => false,
 	],
 ];

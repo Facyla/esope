@@ -7,13 +7,9 @@ namespace Elgg\Http;
  */
 class RequestUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
 	public function down() {
-		unset(_elgg_config()->http_request_trusted_proxy_ips);
-		unset(_elgg_config()->http_request_trusted_proxy_headers);
+		unset(_elgg_services()->config->http_request_trusted_proxy_ips);
+		unset(_elgg_services()->config->http_request_trusted_proxy_headers);
 	}
 
 	public function testCanDetectElggPath() {
@@ -79,11 +75,11 @@ class RequestUnitTest extends \Elgg\UnitTestCase {
 	 * @dataProvider trustedProxySettingsProvider
 	 */
 	public function testTrustedProxySettings($proxy_ips, $proxy_headers) {
-		_elgg_config()->http_request_trusted_proxy_ips = $proxy_ips;
-		_elgg_config()->http_request_trusted_proxy_headers = $proxy_headers;
+		_elgg_services()->config->http_request_trusted_proxy_ips = $proxy_ips;
+		_elgg_services()->config->http_request_trusted_proxy_headers = $proxy_headers;
 		
 		$request = Request::create('/foo');
-		$request->initializeTrustedProxyConfiguration(_elgg_config());
+		$request->initializeTrustedProxyConfiguration(_elgg_services()->config);
 		
 		$this->assertEquals($proxy_ips, $request->getTrustedProxies());
 		$this->assertEquals($proxy_headers, $request->getTrustedHeaderSet());

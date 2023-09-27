@@ -2,6 +2,8 @@
 
 namespace Elgg\Database;
 
+use Elgg\Exceptions\InvalidArgumentException;
+
 /**
  * @group UnitTests
  */
@@ -55,9 +57,9 @@ class RelationshipsTableUnitTest extends \Elgg\UnitTestCase {
 		$object1 = $this->createObject();
 		$object2 = $this->createObject();
 		
-		$str = str_repeat('Foo', \ElggRelationship::RELATIONSHIP_LIMIT);
+		$str = str_repeat('Foo', RelationshipsTable::RELATIONSHIP_COLUMN_LENGTH);
 		
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->service->add($object1->guid, $str, $object2->guid);
 		
 		$object1->delete();
@@ -72,6 +74,23 @@ class RelationshipsTableUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($success);
 		
 		$failure = $this->service->add($object1->guid, 'testRelationship', $object2->guid);
+		$this->assertFalse($failure);
+		
+		$object1->delete();
+		$object2->delete();
+	}
+	
+	public function testAddNonExistingEntityRelationshipFailure() {
+		$object1 = $this->createObject();
+		$object2 = $this->createObject();
+		
+		$failure = $this->service->add($object1->guid, 'testRelationship', 123456789);
+		$this->assertFalse($failure);
+		
+		$failure = $this->service->add(123456789, 'testRelationship', $object2->guid);
+		$this->assertFalse($failure);
+		
+		$failure = $this->service->add(123456789, 'testRelationship', 987654321);
 		$this->assertFalse($failure);
 		
 		$object1->delete();
@@ -115,7 +134,7 @@ class RelationshipsTableUnitTest extends \Elgg\UnitTestCase {
 	}
 	
 	public function testGetRelationshipByUnknownID() {
-		$this->assertFalse($this->service->get(123));
+		$this->assertNull($this->service->get(123));
 	}
 	
 	public function testDeleteRelationshipByID() {

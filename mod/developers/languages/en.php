@@ -6,8 +6,9 @@
  */
 
 return array(
-	// menu
 	'admin:develop_tools' => 'Tools',
+	
+	// menu
 	'admin:develop_tools:sandbox' => 'Theme Sandbox',
 	'admin:develop_tools:inspect' => 'Inspect',
 	'admin:inspect' => 'Inspect',
@@ -28,6 +29,9 @@ return array(
 	'developers:help:display_errors' => "By default, Elgg's .htaccess file supresses the display of fatal errors.",
 	'developers:label:screen_log' => "Log to the screen",
 	'developers:help:screen_log' => "This displays elgg_log() and elgg_dump() output and a DB query count.",
+	'developers:show_strings:default' => "Normal translation",
+	'developers:show_strings:key_append' => "Translation key appended",
+	'developers:show_strings:key_only' => "Show translation key only",
 	'developers:label:show_strings' => "Show raw translation strings",
 	'developers:help:show_strings' => "This displays the translation strings used by elgg_echo().",
 	'developers:label:show_modules' => "Show AMD modules loaded in console",
@@ -70,6 +74,7 @@ return array(
 	'developers:entity_explorer:info:acl_memberships' => 'Access Collections Memberships',
 	'developers:entity_explorer:delete_entity' => 'Remove this entity',
 	'developers:entity_explorer:inspect_entity' => 'Inspect this entity',
+	'developers:entity_explorer:view_entity' => 'View this entity on the site',
 	
 	// inspection
 	'developers:inspect:help' => 'Inspect configuration of the Elgg framework.',
@@ -85,7 +90,6 @@ return array(
 	'developers:inspect:views:input_filtered' => "(input filtered by plugin hook: %s)",
 	'developers:inspect:views:filtered' => "(filtered by plugin hook: %s)",
 	'developers:inspect:widgets' => 'Widgets',
-	'developers:inspect:webservices' => 'Webservices',
 	'developers:inspect:widgets:context' => 'Context',
 	'developers:inspect:functions' => 'Functions',
 	'developers:inspect:file_location' => 'File path from Elgg root or controller',
@@ -114,6 +118,7 @@ return array(
 	'theme_sandbox:breakout' => 'Break out of iframe',
 	'theme_sandbox:buttons' => 'Buttons',
 	'theme_sandbox:components' => 'Components',
+	'theme_sandbox:email' => 'Email',
 	'theme_sandbox:forms' => 'Forms',
 	'theme_sandbox:grid' => 'Grid',
 	'theme_sandbox:icons' => 'Icons',
@@ -124,6 +129,9 @@ return array(
 	'theme_sandbox:typography' => 'Typography',
 
 	'theme_sandbox:icons:blurb' => 'Use <em>elgg_view_icon($name)</em> to display icons.',
+	
+	'theme_sandbox:test_email:button' => "Send Test Mail",
+	'theme_sandbox:test_email:success' => "Test mail sent to: %s",
 
 	// status messages
 	'developers:settings:success' => 'Settings saved and caches flushed',

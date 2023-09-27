@@ -2,7 +2,7 @@
 
 namespace Elgg\Http;
 
-use InvalidArgumentException;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * HTTP response builder interface
@@ -33,7 +33,7 @@ interface ResponseBuilder {
 	 * @return self
 	 * @throws InvalidArgumentException
 	 */
-	public function setStatusCode($status_code = ELGG_HTTP_OK);
+	public function setStatusCode(int $status_code);
 
 	/**
 	 * Returns status code
@@ -111,4 +111,20 @@ interface ResponseBuilder {
 	 * @return bool
 	 */
 	public function isNotModified();
+	
+	/**
+	 * Set an exception for this response
+	 *
+	 * @param \Exception $e the exception for this response
+	 *
+	 * @return self
+	 */
+	public function setException(\Exception $e);
+	
+	/**
+	 * Get the exception for this reponse
+	 *
+	 * @return \Exception|null
+	 */
+	public function getException();
 }

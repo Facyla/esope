@@ -2,13 +2,12 @@
 
 namespace Elgg\SystemLog;
 
-use DateTime;
 use Elgg\Application\Database;
 use Elgg\Database\Delete;
 use Elgg\Database\Insert;
 use Elgg\Database\Select;
-use Elgg\Di\ServiceFacade;
-use Elgg\TimeUsing;
+use Elgg\Traits\Di\ServiceFacade;
+use Elgg\Traits\TimeUsing;
 
 /**
  * Inserts log entry into the database
@@ -27,6 +26,11 @@ class SystemLog {
 	 * @var Database
 	 */
 	protected $db;
+	
+	/**
+	 * @var bool
+	 */
+	protected $logging_enabled = true;
 
 	/**
 	 * Constructor
@@ -45,7 +49,6 @@ class SystemLog {
 	 * @param int $id ID
 	 *
 	 * @return SystemLogEntry|false
-	 * @throws \DatabaseException
 	 */
 	public function get($id) {
 		$qb = Select::fromTable('system_log');
@@ -93,7 +96,7 @@ class SystemLog {
 	 *
 	 * @return SystemLogEntry
 	 */
-	public function rowToSystemLogEntry(\stdClass $row) {
+	public function rowToSystemLogEntry(\stdClass $row): SystemLogEntry {
 		return new SystemLogEntry($row);
 	}
 
@@ -104,7 +107,7 @@ class SystemLog {
 	 *
 	 * @return \stdClass
 	 */
-	protected function prepareObjectForInsert(\Loggable $object) {
+	protected function prepareObjectForInsert(\Loggable $object): \stdClass {
 		$insert = new \stdClass();
 
 		$insert->object_id = (int) $object->getSystemLogID();
@@ -143,15 +146,19 @@ class SystemLog {
 	 *
 	 * @return void
 	 */
-	public function insert($object, $event) {
+	public function insert($object, $event): void {
 
+		if (!$this->isLoggingEnabled()) {
+			return;
+		}
+		
 		if (!$object instanceof \Loggable) {
 			return;
 		}
 
 		$object = $this->prepareObjectForInsert($object);
 
-		$logged = $this->cache->load("$object->object_id/$event");
+		$logged = $this->cache->load("{$object->object_id}/{$event}");
 
 		if ($logged == $object) {
 			return;
@@ -172,34 +179,33 @@ class SystemLog {
 			'ip_address' => $qb->param($object->ip_address, ELGG_VALUE_STRING),
 		]);
 
-		$this->db->registerDelayedQuery($qb->getSQL(), 'write', null, $qb->getParameters());
+		$this->db->registerDelayedQuery($qb, 'write');
 
 		// The only purpose of the cache is to prevent the same event from writing to the database twice
 		// Setting early expiration to avoid cache from taking up too much memory
-		$this->cache->save("$object->object_id/$event", $object, 3600);
+		$this->cache->save("{$object->object_id}/{$event}", $object, 3600);
 	}
 
 	/**
 	 * Archive records created before a date
 	 *
-	 * @param DateTime $created_before Date of last creation
+	 * @param \DateTime $created_before Date of last creation
 	 *
 	 * @return bool
-	 * @throws \DatabaseException
 	 */
-	public function archive(DateTime $created_before) {
+	public function archive(\DateTime $created_before): bool {
 
 		$dbprefix = $this->db->prefix;
 
 		$now = $this->getCurrentTime()->getTimestamp();
 
 		$select = Select::fromTable('system_log');
-		$select->select('*');
-		$select->where($select->compare('time_created', '<=', $created_before, ELGG_VALUE_TIMESTAMP));
+		$select->select('*')
+			->where($select->compare('time_created', '<=', $created_before, ELGG_VALUE_TIMESTAMP));
 
 		$query = "CREATE TABLE {$dbprefix}system_log_{$now} AS {$select->getSQL()}";
-
-		if (!$this->db->updateData($query, false, $select->getParameters())) {
+		
+		if (!$this->db->getConnection('write')->executeStatement($query, $select->getParameters())) {
 			return false;
 		}
 
@@ -213,18 +219,20 @@ class SystemLog {
 		}
 
 		// alter table to archive engine (when available)
-		$available_engines = elgg()->db->getData('SHOW ENGINES');
-		$available_engines = array_filter($available_engines, function($row) {
+		$available_engines_result = $this->db->getConnection('read')->executeQuery('SHOW ENGINES');
+		$available_engines = array_filter($available_engines_result->fetchAllAssociative(), function($row_array) {
 			// filter only enabled engines
-			return in_array($row->Support, ['YES', 'DEFAULT']);
+			return in_array($row_array['Support'], ['YES', 'DEFAULT']);
 		});
-		array_walk($available_engines, function(&$row) {
+		array_walk($available_engines, function(&$row_array) {
 			// only need engine names
-			$row = $row->Engine;
+			$row_array = $row_array['Engine'];
 		});
 		
 		if (in_array('ARCHIVE', $available_engines)) {
-			if (!$this->db->updateData("ALTER TABLE {$dbprefix}system_log_{$now} ENGINE=ARCHIVE")) {
+			try {
+				$this->db->getConnection('write')->executeStatement("ALTER TABLE {$dbprefix}system_log_{$now} ENGINE=ARCHIVE");
+			} catch (\Exception $e) {
 				return false;
 			}
 		}
@@ -235,36 +243,34 @@ class SystemLog {
 	/**
 	 * Deleted system log archive tables
 	 *
-	 * @param DateTime $archived_before Date of last archival
+	 * @param \DateTime $archived_before Date of last archival
 	 *
 	 * @return bool
-	 * @throws \DatabaseException
 	 */
-	public function deleteArchive(DateTime $archived_before) {
+	public function deleteArchive(\DateTime $archived_before): bool {
 
 		$dbprefix = $this->db->prefix;
 
 		$deleted_tables = false;
 
-		$results = $this->db->getData("SHOW TABLES like '{$dbprefix}system_log_%'");
-
-		if (empty($results)) {
+		$results = $this->db->getConnection('read')->executeQuery("SHOW TABLES like '{$dbprefix}system_log_%'");
+		
+		if (empty($results) || empty($results->rowCount())) {
 			return $deleted_tables;
 		}
 
-		foreach ($results as $result) {
-			$data = (array) $result;
-			$table_name = array_shift($data);
+		foreach ($results->fetchAllAssociative() as $result) {
+			$table_name = array_shift($result);
 
 			// extract log table rotation time
 			$log_time = (int) str_replace("{$dbprefix}system_log_", '', $table_name);
 
 			if ($log_time <= $archived_before->getTimestamp()) {
-				if ($this->db->deleteData("DROP TABLE $table_name") !== false) {
-					// $this->db->deleteData returns 0 when dropping a table (false for failure)
+				try {
+					$this->db->getConnection('write')->executeStatement("DROP TABLE {$table_name}");
 					$deleted_tables = true;
-				} else {
-					elgg_log("Failed to delete the log table $table_name", 'ERROR');
+				} catch (\Exception $e) {
+					elgg_log("Failed to delete the log table {$table_name}", 'ERROR');
 				}
 			}
 		}
@@ -274,9 +280,37 @@ class SystemLog {
 
 	/**
 	 * Returns registered service name
+	 *
 	 * @return string
 	 */
 	public static function name() {
 		return 'system_log';
+	}
+	
+	/**
+	 * Enable the logging of system events
+	 *
+	 * @return void
+	 */
+	public function enableLogging(): void {
+		$this->logging_enabled = true;
+	}
+	
+	/**
+	 * Disable the logging of system events
+	 *
+	 * @return void
+	 */
+	public function disableLogging(): void {
+		$this->logging_enabled = false;
+	}
+	
+	/**
+	 * Is logging currently enabled
+	 *
+	 * @return bool
+	 */
+	public function isLoggingEnabled(): bool {
+		return $this->logging_enabled;
 	}
 }

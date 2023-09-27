@@ -50,7 +50,7 @@ System events
 
 **log, systemlog**
 	Called for all triggered events by ``system_log`` plugin.
-	Used internally by ``system_log_default_logger()`` to populate the ``system_log`` table.
+	Used internally by ``Elgg\SystemLog\Logger::log()`` to populate the ``system_log`` table.
 
 **upgrade, system**
 	Triggered after a system upgrade has finished. All upgrade scripts have run, but the caches 
@@ -97,6 +97,9 @@ User events
 
 **login:after, user**
 	Triggered after the user logs in.
+
+**login:first, user**
+    Triggered after a successful login. Only if there is no previous login.
 
 **logout:before, user**
     Triggered during logout. Returning false should prevent the user from logging out.
@@ -166,8 +169,14 @@ Entity events
     The entity method ``getOriginalAttributes()`` can be used to identify which attributes have changed since
     the entity was last saved.
 
-**delete, <entity type>**
+**delete:before, <entity type>**
     Triggered before entity deletion. Return false to prevent deletion.
+
+**delete, <entity type>**
+    Triggered before entity deletion.
+
+**delete:after, <entity type>**
+    Triggered after entity deletion.
 
 **disable, <entity type>**
     Triggered before the entity is disabled. Return false to prevent disabling.
@@ -193,12 +202,6 @@ Metadata events
 
 **delete, metadata**
     Called before metadata is deleted. Return false to prevent deletion.
-
-**enable, metadata**
-	Called when enabling metadata. Return false to prevent enabling.
-
-**disable, metadata**
-	Called when disabling metadata. Return false to prevent disabling.
 
 Annotation events
 =================
@@ -226,16 +229,26 @@ Annotation events
 River events
 ============
 
-**created, river**
-	Called after a river item is created.
+**create:before, river**
+	Called before the river item is saved to the database. Return ``false`` to prevent the item from being created. 
 
-	.. note:: Use the plugin hook ``creating, river`` to cancel creation (or alter options).
+**create:after, river**
+	Called after a river item is created.
 
 **delete:before, river**
 	Triggered before a river item is deleted. Returning false cancels the deletion.
 
 **delete:after, river**
 	Triggered after a river item was deleted.
+
+Notifications events
+====================
+
+**enqueue, notifications**
+	Called when an ElggData object is being added to the notifications queue 
+
+**dequeue, notifications**
+	Called when an ElggData object is removed from the notifications queue to be processed 
 
 File events
 ===========
@@ -244,9 +257,3 @@ File events
     Called after an uploaded file has been written to filestore. Receives an
     instance of ``ElggFile`` the uploaded file was written to. The ``ElggFile``
     may or may not be an entity with a GUID.
-
-Notes
-=====
-
-Because of bugs in the Elgg core, some events may be thrown more than once
-on the same action. For example, ``update, object`` is thrown twice.

@@ -2,6 +2,8 @@
 
 namespace Elgg\Filesystem;
 
+use Elgg\Exceptions\InvalidArgumentException;
+
 /**
  * @group UnitTests
  */
@@ -10,18 +12,10 @@ abstract class DirectoryUnitTest extends \Elgg\UnitTestCase {
 	/**
 	 * Returns an array of one-element arrays. Those elements should
 	 * be fresh (empty) directory instances that use the relevant implementation.
-	 * 
+	 *
 	 * @return array
 	 */
 	abstract public function emptyDirectoryProvider();
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	/**
 	 * @dataProvider emptyDirectoryProvider
@@ -108,7 +102,7 @@ abstract class DirectoryUnitTest extends \Elgg\UnitTestCase {
 			try {
 				$f();
 				$this->fail("A path was allowed to contain . or .. in function #$i");
-			} catch (\InvalidArgumentException $e) {
+			} catch (InvalidArgumentException $e) {
 
 			}
 		}
@@ -141,5 +135,4 @@ abstract class DirectoryUnitTest extends \Elgg\UnitTestCase {
 			$this->assertEquals('bang', $dir->getFile('bang.php')->getContents());
 		}
 	}
-
 }

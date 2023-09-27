@@ -28,21 +28,8 @@ return array(
 
 	'bookmarks:notify:summary' => '´Nou enllaç anomenat %s',
 	'bookmarks:notify:subject' => 'Nou enllaç: %s',
-	'bookmarks:notify:body' =>
-'%s added a new bookmark: %s
-
-Address: %s
-
-%s
-
-View and comment on the bookmark:
-%s
-',
 
 	'bookmarks:numbertodisplay' => 'Nombre d\'elements marcats com adreces d\'interès a mostrar',
-
-	'river:object:bookmarks:create' => '%s bookmarked %s',
-	'river:object:bookmarks:comment' => '%s commented on a bookmark %s',
 
 	'groups:tool:bookmarks' => 'Activa l\'agrupació d\'adreces d\'interés',
 	
@@ -52,26 +39,19 @@ View and comment on the bookmark:
 	'widgets:bookmarks:name' => 'Adreces d\'interès',
 	'widgets:bookmarks:description' => "Aquest giny mostra les darreres adreces d'interés",
 
-	'bookmarks:bookmarklet:description' =>
-			"A bookmarklet is a special kind of button you save to your browser's links bar. This allows you to save any resource you find on the web to your bookmarks. To set it up, drag the button below to your browser's links bar:",
-
-	'bookmarks:bookmarklet:descriptionie' =>
-			"Si estàs fent servir Internet Explorer, hauràs de fer botó dret sobre la icona del marcador dinàmic, escollir 'afegir a adreces d'interès' i aleshores a la barra d'enllaços.",
-
-	'bookmarks:bookmarklet:description:conclusion' =>
-			"Aleshores podràs desar qualsevol pàgina que visitis simplement prement-la cada cop.",
+	'bookmarks:bookmarklet:description' => "A bookmarklet is a special kind of button you save to your browser's links bar. This allows you to save any resource you find on the web to your bookmarks. To set it up, drag the button below to your browser's links bar:",
+	'bookmarks:bookmarklet:descriptionie' => "Si estàs fent servir Internet Explorer, hauràs de fer botó dret sobre la icona del marcador dinàmic, escollir 'afegir a adreces d'interès' i aleshores a la barra d'enllaços.",
+	'bookmarks:bookmarklet:description:conclusion' => "Aleshores podràs desar qualsevol pàgina que visitis simplement prement-la cada cop.",
 
 	/**
 	 * Status messages
 	 */
 
 	'bookmarks:save:success' => "S'ha afegit correctament.",
-	'entity:delete:object:bookmarks:success' => "The bookmark was deleted.",
 
 	/**
 	 * Error messages
 	 */
 
 	'bookmarks:save:failed' => "No es pot desar l'adreça interés. Siusplau, torna-ho a provar.",
-	'bookmarks:unknown_bookmark' => 'No es pot trobar l\'enllaç especificat.',
 );

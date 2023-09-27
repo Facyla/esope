@@ -14,14 +14,11 @@ $owner = $entity->getOwnerEntity();
 
 $link = elgg_view('output/url', [
 	'href' => $entity->address,
-	'icon' => 'push-pin-alt',
+	'icon' => 'thumbtack',
 ]);
 
 if (elgg_in_context('gallery')) {
-	$owner_link = elgg_view('output/url', [
-		'href' => $owner->getURL(),
-		'text' => $owner->getDisplayName(),
-	]);
+	$owner_link = elgg_view_entity_url($owner);
 	$date = elgg_view_friendly_time($entity->time_created);
 
 	echo <<<HTML
@@ -80,7 +77,7 @@ if (elgg_strlen($url) > 25) {
 $link = elgg_view('output/url', [
 	'href' => $entity->address,
 	'text' => $display_text,
-	'icon' => 'push-pin-alt',
+	'icon' => 'thumbtack',
 ]);
 
 $content = "$link{$excerpt}";

@@ -2,7 +2,6 @@
 
 namespace Elgg\Cli;
 
-use Elgg\Cli\CronCommand;
 use Elgg\UnitTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -15,10 +14,6 @@ class PluginsListCommandTest extends UnitTestCase {
 
 	public function up() {
 		_elgg_services()->logger->disable();
-	}
-
-	public function down() {
-		_elgg_services()->logger->enable();
 	}
 
 	/**
@@ -42,7 +37,7 @@ class PluginsListCommandTest extends UnitTestCase {
 
 	public function statusProvider() {
 		return [
-			[null, 0],
+			[null, 1], // should default to all
 			['all', 0],
 			['active', 0],
 			['inactive', 0],
@@ -52,7 +47,7 @@ class PluginsListCommandTest extends UnitTestCase {
 
 	public function testCommandOutputContainsInfo() {
 		$plugin = \ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/'));
-		$plugin->activate();
+		$this->assertTrue($plugin->activate());
 
 		_elgg_services()->plugins->addTestingPlugin($plugin);
 
@@ -67,9 +62,9 @@ class PluginsListCommandTest extends UnitTestCase {
 			'command' => $command->getName(),
 		]);
 
-		$this->assertRegExp('/test_plugin/im', $commandTester->getDisplay());
-		$this->assertRegExp('/1.9/im', $commandTester->getDisplay());
-		$this->assertRegExp('/active/im', $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression('/test_plugin/im', $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression('/1.9/im', $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression('/active/im', $commandTester->getDisplay());
 	}
 
 	public function testRefreshOption() {
@@ -84,7 +79,7 @@ class PluginsListCommandTest extends UnitTestCase {
 			'command' => $command->getName(),
 		]);
 
-		$this->assertNotRegExp('/test_plugin/im', $commandTester->getDisplay());
+		$this->assertDoesNotMatchRegularExpression('/test_plugin/im', $commandTester->getDisplay());
 
 		$commandTester = new CommandTester($command);
 		$commandTester->execute([
@@ -92,7 +87,7 @@ class PluginsListCommandTest extends UnitTestCase {
 			'--refresh' => true,
 		]);
 
-		$this->assertRegExp('/test_plugin/im', $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression('/test_plugin/im', $commandTester->getDisplay());
 	}
 
 }

@@ -88,7 +88,9 @@ follow these steps:
    * **perf** - the primary purpose is to improve performance
    * **fix** - this fixes a bug
    * **deprecate** - the change deprecates any part of the API
+   * **break** - the change breaks any part of the API
    * **feature** - this adds a new user-facing or developer feature
+   * **removed** - this removes a user-facing or developer feature
    * **security** - the change affects a security issue in any way. *Please do not push this commit to any public repo.* Instead contact security@elgg.org.
 
    E.g. if your commit refactors to fix a bug, it's still a "fix". If that bug is security-related, however, the type
@@ -152,15 +154,6 @@ Here is an example of a good commit message:
 
     Fixes #6204
 
-
-To validate commit messages locally, make sure ``.scripts/validate_commit_msg.php`` is executable, and make a copy
-or symlink to it in the directory ``.git/hooks/commit-msg``.
-
-.. code-block:: sh
-
-    chmod u+x .scripts/validate_commit_msg.php
-    ln -s .scripts/validate_commit_msg.php .git/hooks/commit-msg/validate_commit_msg.php
-
 Rewriting commit messages
 -------------------------
 If your PR does not conform to the standard commit message format, we'll ask you to rewrite it.
@@ -202,8 +195,6 @@ To automatically fix fixable violations, run:
 
     phpcbf --standard=vendor/elgg/sniffs/elgg.xml path/to/dir/to/fix
 
-To check core directories, you can use shortcut ``composer lint`` and ``composer lint-fixer``.
-
 
 .. _contribute/code#testing:
 
@@ -244,7 +235,7 @@ Testing interactions between services
 
 Ideally your tests would construct your own isolated object graphs for direct manipulation, but this isn't always possible.
 
-If your test relies on Elgg's Service Provider (``_elgg_services()`` returns a ``Elgg\Di\ServiceProvider``), realize that it maintains a singleton instance for most services it hands out, and many services keep their own local references to these services as well.
+If your test relies on Elgg's Internal Services (``_elgg_services()`` returns a ``Elgg\Di\InternalContainer``), realize that it maintains a singleton instance for most services it hands out, and many services keep their own local references to these services as well.
 
 Due to these local references, replacing services on the SP within a test often will not have the desired effect. Instead, you may need to use functionality baked into the services themselves:
 
@@ -263,9 +254,7 @@ Test boilerplate
 
 .. code-block:: js
 
-	define(function(require) {
-		var elgg = require('elgg');
-
+	define(['elgg'], function(elgg) {
 		describe("This new test", function() {
 			it("fails automatically", function() {
 				expect(true).toBe(false);
@@ -389,7 +378,7 @@ Functions not throwing an exception on error should return ``false`` upon failur
 
 .. note::
 
-	Particularly low-level, non-API functions/methods (e.g. entity_row_to_elggstar),
+	Particularly low-level, non-API functions/methods,
 	which should not fail under normal conditions, should throw instead of returning false. 
 
 Functions returning only boolean should be prefaced with ``is_`` or ``has_``
@@ -441,9 +430,8 @@ developers looking at the code should be discouraged from refactoring in a way t
 .. code-block:: php
 
     // Can't use empty()/boolean: "0" is a valid value
-    if ($str === '') {
-        register_error(elgg_echo('foo:string_cannot_be_empty'));
-        forward(REFERER);
+    if (elgg_is_empty($str)) {
+        throw new \Elgg\Exceptions\Http\BadRequestException(elgg_echo('foo:string_cannot_be_empty'));
     }
 
 Commit effectively
@@ -608,11 +596,11 @@ Good:
 
 	/**
 	* @return void
-	* @throw InvalidArgumentException
+	* @throws \Elgg\Exceptions\InvalidArgumentException
 	*/
 	function validate_email($email) {
 		if (empty($email)) {
-			throw new InvalidArgumentException('Email is empty');
+			throw new \Elgg\Exceptions\InvalidArgumentException('Email is empty');
 		}
 
 		// validate and throw if invalid
@@ -792,16 +780,18 @@ Javascript guidelines
 
 Same formatting standards as PHP apply.
 
-All functions should be in the ``elgg`` namespace.
+Related functions should be in a namespaced ``AMD`` module.
 
 Function expressions should end with a semi-colon.
 
 .. code-block:: js
 
-	elgg.ui.toggles = function(event) {
-		event.preventDefault();
-		$(target).slideToggle('medium');
-	};
+	define(['elgg'], function(elgg) {
+		function toggles(event) {
+			event.preventDefault();
+			$(target).slideToggle('medium');
+		};
+	});
 
 
 Deprecating APIs

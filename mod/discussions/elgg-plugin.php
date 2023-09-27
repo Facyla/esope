@@ -1,14 +1,25 @@
 <?php
 
 use Elgg\Discussions\GroupToolContainerLogicCheck;
+use Elgg\Discussions\Notifications\CreateDiscussionEventHandler;
+
+require_once(__DIR__ . '/lib/functions.php');
 
 return [
+	'plugin' => [
+		'name' => 'Discussions',
+		'activate_on_install' => true,
+	],
 	'entities' => [
 		[
 			'type' => 'object',
 			'subtype' => 'discussion',
 			'class' => 'ElggDiscussion',
-			'searchable' => true,
+			'capabilities' => [
+				'commentable' => true,
+				'searchable' => true,
+				'likable' => true,
+			],
 		],
 	],
 	'settings' => [
@@ -16,6 +27,7 @@ return [
 	],
 	'actions' => [
 		'discussion/save' => [],
+		'discussion/toggle_status' => [],
 	],
 	'routes' => [
 		'default:object:discussion' => [
@@ -67,17 +79,71 @@ return [
 	'hooks' => [
 		'container_logic_check' => [
 			'object' => [
+				'Elgg\Discussions\Permissions::containerLogic' => [],
 				GroupToolContainerLogicCheck::class => [],
 			],
 		],
-		'filter_tabs' => [
-			'discussion' => [
-				'\Elgg\Discussions\Menus::filterTabs' => [],
+		'entity:url' => [
+			'object' => [
+				'Elgg\Discussions\Widgets::widgetURL' => [],
+			],
+		],
+		'get' => [
+			'subscriptions' => [
+				'Elgg\Discussions\Notifications::addGroupSubscribersToCommentOnDiscussionSubscriptions' => [],
+			],
+		],
+		'permissions_check:comment' => [
+			'object' => [
+				'Elgg\Discussions\Permissions::preventCommentOnClosedDiscussion' => [],
+			],
+		],
+		'prepare' => [
+			'notification:create:object:comment' => [
+				'Elgg\Discussions\Notifications::prepareCommentOnDiscussionNotification' => [],
+			],
+		],
+		'register' => [
+			'menu:entity' => [
+				'Elgg\Discussions\Menus\Entity::registerStatusToggle' => [],
+			],
+			'menu:filter:filter' => [
+				'Elgg\Discussions\Menus\Filter::filterTabsForDiscussions' => [],
+			],
+			'menu:owner_block' => [
+				'Elgg\Discussions\Menus\OwnerBlock::registerGroupItem' => [],
+			],
+			'menu:site' => [
+				'Elgg\Discussions\Menus\Site::register' => [],
+			],
+			'menu:title:object:discussion' => [
+				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
+			],
+		],
+		'seeds' => [
+			'database' => [
+				'Elgg\Discussions\Seeder::register' => [],
 			],
 		],
 	],
-	'upgrades' => [
-		'\Elgg\Discussions\Upgrades\MigrateDiscussionReply',
-		'\Elgg\Discussions\Upgrades\MigrateDiscussionReplyRiver',
+	'group_tools' => [
+		'forum' => [],
+	],
+	'notifications' => [
+		'object' => [
+			'discussion' => [
+				'create' => CreateDiscussionEventHandler::class,
+			],
+		],
+	],
+	'view_extensions' => [
+		'groups/edit/settings' => [
+			'discussion/groups/settings' => [],
+		],
+	],
+	'widgets' => [
+		'discussions' => [
+			'context' => ['profile', 'dashboard'],
+		],
 	],
 ];

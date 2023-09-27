@@ -10,14 +10,15 @@ Get your own instance of Elgg running in no time.
 Requirements
 ============
 
-- MySQL 5.5.3+ (5.0.0+ if upgrading an existing installation)
-- PHP 7.2+ with the following extensions:
+- MySQL 5.7+ or MariaDB 10.3+
+- PHP 7.4+ with the following extensions:
 
    -  GD (for graphics processing)
    -  PDO (for database connection)
    -  JSON (for AJAX responses, etc.)
-   -  XML (for reading plugin manifest files, etc.)
+   -  XML (for xml resource and web services, etc.)
    -  `Multibyte String support`_ (for i18n)
+   - (optional) intl (for i18n)
    -  Proper configuration and ability to send email through an MTA
 
 - Web server with support for URL rewriting

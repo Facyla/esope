@@ -2,14 +2,11 @@
 
 namespace Elgg\Router;
 
-use Elgg\Loggable;
-use Elgg\Logger;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\PluginHooksService;
+use Elgg\Router\Middleware\MaintenanceGatekeeper;
 use Elgg\Router\Middleware\WalledGarden;
-use ElggEntity;
-use Exception;
-use InvalidParameterException;
-use Psr\Log\LoggerInterface;
+use Elgg\Traits\Loggable;
 
 /**
  * Route registration service
@@ -39,18 +36,15 @@ class RouteRegistrationService {
 	 * Constructor
 	 *
 	 * @param PluginHooksService $hooks     Hook service
-	 * @param LoggerInterface    $logger    Logger
 	 * @param RouteCollection    $routes    Route collection
 	 * @param UrlGenerator       $generator URL Generator
 	 */
 	public function __construct(
 		PluginHooksService $hooks,
-		LoggerInterface $logger,
 		RouteCollection $routes,
 		UrlGenerator $generator
 	) {
 		$this->hooks = $hooks;
-		$this->logger = $logger;
 		$this->routes = $routes;
 		$this->generator = $generator;
 	}
@@ -90,6 +84,8 @@ class RouteRegistrationService {
 		$protected = elgg_extract('walled', $params, true);
 		$deprecated = elgg_extract('deprecated', $params, '');
 		$required_plugins = elgg_extract('required_plugins', $params, []);
+		$detect_page_owner = (bool) elgg_extract('detect_page_owner', $params, false);
+		$legacy_page_owner_detection = (bool) elgg_extract('legacy_page_owner_detection', $params, true);
 
 		if (!$path || (!$controller && !$resource && !$handler && !$file)) {
 			throw new InvalidParameterException(
@@ -115,6 +111,7 @@ class RouteRegistrationService {
 			// look for segments that are defined as optional with added ?
 			// e.g. /blog/owner/{username?}
 
+			$matches = [];
 			if (!preg_match('/\{(\w*)(\?)?\}/i', $segment, $matches)) {
 				continue;
 			}
@@ -140,6 +137,8 @@ class RouteRegistrationService {
 		if ($protected !== false) {
 			$middleware[] = WalledGarden::class;
 		}
+		
+		$middleware[] = MaintenanceGatekeeper::class;
 
 		$defaults['_controller'] = $controller;
 		$defaults['_file'] = $file;
@@ -148,6 +147,8 @@ class RouteRegistrationService {
 		$defaults['_deprecated'] = $deprecated;
 		$defaults['_middleware'] = $middleware;
 		$defaults['_required_plugins'] = $required_plugins;
+		$defaults['_detect_page_owner'] = $detect_page_owner;
+		$defaults['_legacy_page_owner_detection'] = $legacy_page_owner_detection;
 
 		$route = new Route($path, $defaults, $requirements, [
 			'utf8' => true,
@@ -210,8 +211,8 @@ class RouteRegistrationService {
 
 			// make sure the url is always normalized so it is also usable in CLI
 			return elgg_normalize_url($url);
-		} catch (Exception $exception) {
-			$this->logger->notice($exception->getMessage());
+		} catch (\Exception $exception) {
+			$this->getLogger()->notice($exception->getMessage());
 		}
 		
 		return false;
@@ -220,13 +221,13 @@ class RouteRegistrationService {
 	/**
 	 * Populates route parameters from entity properties
 	 *
-	 * @param string          $name       Route name
-	 * @param ElggEntity|null $entity     Entity
-	 * @param array           $parameters Preset parameters
+	 * @param string           $name       Route name
+	 * @param \ElggEntity|null $entity     Entity
+	 * @param array            $parameters Preset parameters
 	 *
 	 * @return array|false
 	 */
-	public function resolveRouteParameters($name, ElggEntity $entity = null, array $parameters = []) {
+	public function resolveRouteParameters($name, \ElggEntity $entity = null, array $parameters = []) {
 		$route = $this->routes->get($name);
 		if (!$route) {
 			return false;
@@ -264,47 +265,4 @@ class RouteRegistrationService {
 
 		return $parameters;
 	}
-
-	/**
-	 * Register a function that gets called when the first part of a URL is
-	 * equal to the identifier.
-	 *
-	 * @param string   $identifier The page type to handle
-	 * @param callable $function   Your function name
-	 *
-	 * @return bool Depending on success
-	 * @throws InvalidParameterException
-	 * @deprecated 3.0
-	 */
-	public function registerPageHandler($identifier, $function) {
-		if (!is_callable($function, true)) {
-			return false;
-		}
-
-		$this->register($identifier, [
-			'path' => "/$identifier/{segments}",
-			'handler' => $function,
-			'defaults' => [
-				'segments' => '',
-			],
-			'requirements' => [
-				'segments' => '.+',
-			],
-		]);
-
-		return true;
-	}
-
-	/**
-	 * Unregister a page handler for an identifier
-	 *
-	 * @param string $identifier The page type identifier
-	 *
-	 * @return void
-	 * @deprecated 3.0
-	 */
-	public function unregisterPageHandler($identifier) {
-		$this->unregister($identifier);
-	}
-
 }

@@ -7,18 +7,13 @@
 
 return array(
 	'email:validate:subject' => "%s te rugăm să-ți confirmi adresa de email pentru %s!",
-	'email:validate:body' => "Salutare %s,
-
-Înainte să poți folosi %s, trebuie să-ți confirmi adresa de email.
+	'email:validate:body' => "Înainte să poți folosi %s, trebuie să-ți confirmi adresa de email.
 
 Te rugăm să-ți confirmi adresa de email apăsând link-ul de mai jos:
 
 %s
 
-Dacă nu poți apăsa pe link, copiază-l și adaugă-l manual în navigatorul tău.
-
-%s
-%s",
+Dacă nu poți apăsa pe link, copiază-l și adaugă-l manual în navigatorul tău.",
 	'email:confirm:success' => "Ți-ai confirmat adresa de email!",
 	'email:confirm:fail' => "Adresa ta de email nu a putu fi verificată...",
 
@@ -36,7 +31,4 @@ Dacă nu poți apăsa pe link, copiază-l și adaugă-l manual în navigatorul t
 
 	'uservalidationbyemail:messages:resent_validation' => 'Cererea de validare a fost retrimisă.',
 	'uservalidationbyemail:messages:resent_validations' => 'Cererile de validare au fost retrimise către toți utilizatorii selectați.',
-	
-	'uservalidationbyemail:upgrade:2019090600:title' => 'Urmărește starea validării adresei de email a utilizatorului',
-	'uservalidationbyemail:upgrade:2019090600:description' => 'Starea validării adresei de email este urmărită într-un mod nou. Asigură-te că toți utilizatorii aflați în așteptare sunt actualizați la noul mod de urmărire pentru a mai necesita validarea prin email.',
 );

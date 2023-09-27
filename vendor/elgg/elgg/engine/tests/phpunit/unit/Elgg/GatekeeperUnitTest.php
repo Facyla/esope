@@ -2,10 +2,15 @@
 
 namespace Elgg;
 
-use Elgg\Http\Exception\LoggedInGatekeeperException;
-use Elgg\Http\Exception\LoggedOutGatekeeperException;
-use Elgg\Http\Exception\AdminGatekeeperException;
-use Elgg\Http\Exception\AjaxGatekeeperException;
+use Elgg\Exceptions\HttpException;
+use Elgg\Exceptions\Http\EntityNotFoundException;
+use Elgg\Exceptions\Http\EntityPermissionsException;
+use Elgg\Exceptions\Http\GatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\AdminGatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\AjaxGatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\GroupGatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\LoggedInGatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\LoggedOutGatekeeperException;
 
 /**
  * @group Gatekeeper
@@ -21,14 +26,25 @@ class GatekeeperUnitTest extends UnitTestCase {
 	 * @var \ElggSession
 	 */
 	protected $session;
+	
+	/**
+	 * @var Invoker
+	 */
+	protected $invoker;
 
 	public function up() {
 		$this->session = _elgg_services()->session;
 		$this->gatekeeper = _elgg_services()->gatekeeper;
+		$this->invoker = _elgg_services()->invoker;
 	}
 
-	public function down() {
-		$this->session->removeLoggedInUser();
+	/**
+	 * {@inheritDoc}
+	 */
+	public function createUser(array $attributes = [], array $metadata = []) {
+		return $this->invoker->call(ELGG_IGNORE_ACCESS, function() use ($attributes, $metadata) {
+			return parent::createUser($attributes, $metadata);
+		});
 	}
 
 	public function testGatekeeperPreventsAccessByGuestUser() {
@@ -61,6 +77,8 @@ class GatekeeperUnitTest extends UnitTestCase {
 			'banned' => 'yes',
 		]);
 		
+		$this->assertTrue($user->isBanned());
+		
 		$this->expectException(EntityNotFoundException::class);
 		$this->gatekeeper->assertAccessibleUser($user);
 	}
@@ -69,6 +87,8 @@ class GatekeeperUnitTest extends UnitTestCase {
 		$user = $this->createUser([
 			'banned' => 'yes',
 		]);
+		$this->assertTrue($user->isBanned());
+		
 		$authenticated_user = $this->createUser();
 		$this->session->setLoggedInUser($authenticated_user);
 		
@@ -80,6 +100,7 @@ class GatekeeperUnitTest extends UnitTestCase {
 		$user = $this->createUser([
 			'banned' => 'no',
 		]);
+		$this->assertFalse($user->isBanned());
 		
 		$this->gatekeeper->assertAccessibleUser($user);
 	}
@@ -88,9 +109,13 @@ class GatekeeperUnitTest extends UnitTestCase {
 		$user = $this->createUser([
 			'banned' => 'yes',
 		]);
+		$this->assertTrue($user->isBanned());
+		
 		$admin = $this->createUser([
 			'admin' => 'yes'
 		]);
+		$this->assertTrue($admin->isAdmin());
+		
 		$this->session->setLoggedInUser($admin);
 		
 		$this->gatekeeper->assertAccessibleUser($user);
@@ -110,17 +135,17 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testAdminGatekeeperAllowsAccessToLoggedInAdmin() {
-
 		$user = $this->createUser([
 			'admin' => 'yes',
 		]);
+		$this->assertTrue($user->isAdmin());
+		
 		$this->session->setLoggedInUser($user);
 
 		$this->assertNull($this->gatekeeper->assertAuthenticatedAdmin());
 	}
 
 	public function testEntityGatekeeperAllowsAccessToPublicEntity() {
-
 		$user = $this->createUser();
 
 		$object = $this->createObject([
@@ -157,7 +182,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperAllowsAccessToAccessControlledEntityByAuthenticatedUser() {
-
 		$user = $this->createUser();
 
 		$object = $this->createObject([
@@ -173,7 +197,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 	
 	public function testEntityGatekeeperCanEditPass() {
-		
 		$user = $this->createUser();
 		
 		$object = $this->createObject([
@@ -187,7 +210,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 	
 	public function testEntityGatekeeperCanEditFail() {
-		
 		$user = $this->createUser();
 		
 		$object = $this->createObject([
@@ -221,6 +243,7 @@ class GatekeeperUnitTest extends UnitTestCase {
 		$user = $this->createUser([
 			'banned' => 'yes'
 		]);
+		$this->assertTrue($user->isBanned());
 
 		$this->gatekeeper->assertAccessibleEntity($user);
 	}
@@ -229,6 +252,7 @@ class GatekeeperUnitTest extends UnitTestCase {
 		$user = $this->createUser([
 			'banned' => 'yes'
 		]);
+		$this->assertTrue($user->isBanned());
 
 		$object = $this->createObject([
 			'access_id' => ACCESS_PUBLIC,
@@ -242,6 +266,7 @@ class GatekeeperUnitTest extends UnitTestCase {
 		$user = $this->createUser([
 			'banned' => 'yes'
 		]);
+		$this->assertTrue($user->isBanned());
 
 		$object = $this->createObject([
 			'access_id' => ACCESS_PUBLIC,
@@ -252,7 +277,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperPreventsAccessToDisabledEntity() {
-
 		$user = $this->createUser();
 
 		$object = $this->createObject([
@@ -266,14 +290,17 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperPreventsAccessToPublicEntityWithNonPublicParent() {
-
+		$user = $this->createUser();
+		
 		$container = $this->createObject([
 			'access_id' => ACCESS_LOGGED_IN,
+			'owner_guid' => $user->guid,
 		]);
 
 		$object = $this->createObject([
 			'access_id' => ACCESS_PUBLIC,
 			'container_guid' => $container->guid,
+			'owner_guid' => $user->guid,
 		]);
 
 		$this->expectException(EntityPermissionsException::class);
@@ -281,7 +308,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperAllowsAccessToDisabledEntityWithShownHiddenEntities() {
-
 		$user = $this->createUser();
 
 		$object = $this->createObject([
@@ -296,7 +322,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperAllowsAccessToPublicGroupContent() {
-
 		$group = $this->createGroup([
 			'membership' => ACCESS_PUBLIC,
 			'access_id' => ACCESS_PUBLIC,
@@ -312,7 +337,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperAllowsAccessToNonPublicGroupContent() {
-
 		$group = $this->createGroup([
 			'membership' => ACCESS_PUBLIC,
 			'access_id' => ACCESS_PUBLIC,
@@ -331,7 +355,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperPreventsAccessToPublicGroupContentWithRestrictedContentPolicy() {
-
 		$group = $this->createGroup([
 			'membership' => ACCESS_PUBLIC,
 			'access_id' => ACCESS_PUBLIC,
@@ -351,7 +374,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperPreventsAccessToAGroupWithRestrictedContentPolicy() {
-
 		$group = $this->createGroup([
 			'membership' => ACCESS_PUBLIC,
 			'access_id' => ACCESS_PUBLIC,
@@ -366,7 +388,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperAllowsAccessToPublicGroupContentWithRestrictedContentPolicyToGroupMembers() {
-
 		$group = $this->createGroup([
 			'membership' => ACCESS_PUBLIC,
 			'access_id' => ACCESS_PUBLIC,
@@ -388,7 +409,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperCanPreventAccessToEntityWithAHook() {
-
 		$user = $this->createUser();
 
 		$object = $this->createObject([
@@ -418,7 +438,6 @@ class GatekeeperUnitTest extends UnitTestCase {
 	}
 
 	public function testEntityGatekeeperCanPreventAccessToEntityWithAHookWithFalseReturn() {
-
 		$user = $this->createUser();
 
 		$object = $this->createObject([

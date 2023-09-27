@@ -3,8 +3,6 @@
  * Elgg Actions
  */
 
-use Elgg\Database\SiteSecret;
-
 /**
  * Registers an action.
  *
@@ -31,7 +29,7 @@ use Elgg\Database\SiteSecret;
  *
  * @return bool
  */
-function elgg_register_action($action, $filename = "", $access = 'logged_in') {
+function elgg_register_action(string $action, $filename = '', string $access = 'logged_in'): bool {
 	return _elgg_services()->actions->register($action, $filename, $access);
 }
 
@@ -42,7 +40,7 @@ function elgg_register_action($action, $filename = "", $access = 'logged_in') {
  * @return bool
  * @since 1.8.1
  */
-function elgg_unregister_action($action) {
+function elgg_unregister_action(string $action): bool {
 	return _elgg_services()->actions->unregister($action);
 }
 
@@ -53,30 +51,8 @@ function elgg_unregister_action($action) {
  * @return \Elgg\Security\Hmac
  * @since 1.11
  */
-function elgg_build_hmac($data) {
+function elgg_build_hmac($data): \Elgg\Security\Hmac {
 	return _elgg_services()->hmac->getHmac($data);
-}
-
-/**
- * Regenerate a new site key (32 bytes: "z" to indicate format + 186-bit key in Base64 URL).
- *
- * @return mixed The site secret hash
- * @internal
- */
-function init_site_secret() {
-	$secret = SiteSecret::regenerate(_elgg_services()->crypto, _elgg_services()->configTable);
-	_elgg_services()->setValue('siteSecret', $secret);
-	return $secret->get();
-}
-
-/**
- * Get the strength of the site secret
- *
- * @return string "strong", "moderate", or "weak"
- * @internal
- */
-function _elgg_get_site_secret_strength() {
-	return _elgg_services()->siteSecret->getStrength();
 }
 
 /**
@@ -87,7 +63,7 @@ function _elgg_get_site_secret_strength() {
  * @return bool
  * @since 1.8.0
  */
-function elgg_action_exists($action) {
+function elgg_action_exists(string $action): bool {
 	return _elgg_services()->actions->exists($action);
 }
 
@@ -97,10 +73,6 @@ function elgg_action_exists($action) {
  * @return bool whether page was requested via ajax
  * @since 1.8.0
  */
-function elgg_is_xhr() {
+function elgg_is_xhr(): bool {
 	return _elgg_services()->request->isXmlHttpRequest();
 }
-
-return function (\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
-	$hooks->registerHandler('action:validate', 'all', \Elgg\Entity\CropIcon::class);
-};

@@ -51,7 +51,7 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 	public function up() {
 		// only use the Elgg core htmlAwed configuration
 		elgg()->hooks->backup();
-		elgg()->hooks->registerHandler('validate', 'input', '_elgg_htmlawed_filter_tags', 1);
+		elgg()->hooks->registerHandler('sanitize', 'input', \Elgg\Input\ValidateInputHandler::class, 1);
 	}
 
 	public function down() {
@@ -86,7 +86,8 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 		elgg_push_context('input');
 
 		foreach ($tests as $input => $expected) {
-			$result = _elgg_htmlawed_filter_tags(new Hook(elgg(), null, null, $input, []));
+			$handler = new \Elgg\Input\ValidateInputHandler();
+			$result = $handler(new Hook(elgg(), null, null, $input, []));
 			$this->assertEquals($expected, $result);
 		}
 
@@ -97,7 +98,8 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 		];
 
 		foreach ($weird_schemes as $input => $expected) {
-			$result = _elgg_htmlawed_filter_tags(new Hook(elgg(), null, null, $input, []));
+			$handler = new \Elgg\Input\ValidateInputHandler();
+			$result = $handler(new Hook(elgg(), null, null, $input, []));
 			$this->assertEquals($expected, $result);
 		}
 
@@ -116,7 +118,8 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 		}
 
 		foreach ($tests as $input => $expected) {
-			$result = _elgg_htmlawed_filter_tags(new Hook(elgg(), null, null, $input, []));
+			$handler = new \Elgg\Input\ValidateInputHandler();
+			$result = $handler(new Hook(elgg(), null, null, $input, []));
 			$this->assertEquals($expected, $result);
 		}
 	}
@@ -158,7 +161,8 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 		}
 
 		foreach ($tests as $input => $expected) {
-			$result = _elgg_htmlawed_filter_tags(new Hook(elgg(), null, null, $input, []));
+			$handler = new \Elgg\Input\ValidateInputHandler();
+			$result = $handler(new Hook(elgg(), null, null, $input, []));
 			$this->assertEquals($expected, $result);
 		}
 	}
@@ -169,7 +173,8 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 	 * @dataProvider htmlawedFilterTagsProvider
 	 */
 	public function testHtmlawedFilterTags($input, $expected) {
-		$result = _elgg_htmlawed_filter_tags(new Hook(elgg(), null, null, $input, []));
+		$handler = new \Elgg\Input\ValidateInputHandler();
+		$result = $handler(new Hook(elgg(), null, null, $input, []));
 		
 		$this->assertEquals($expected, $result);
 	}

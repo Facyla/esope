@@ -1,4 +1,6 @@
 <?php
+use Elgg\SystemLog\SystemLog;
+
 /**
  * Elgg log browser admin page
  */
@@ -39,6 +41,7 @@ if ($timeupper) {
 
 $ip_address = get_input('ip_address');
 $object_id = get_input('object_id');
+$event = get_input('event');
 
 $refine = elgg_view('logbrowser/refine', [
 	'timeupper' => $timeupper,
@@ -46,6 +49,7 @@ $refine = elgg_view('logbrowser/refine', [
 	'ip_address' => $ip_address,
 	'username' => $search_username,
 	'object_id' => $object_id,
+	'event' => $event,
 ]);
 
 // Get log entries
@@ -58,11 +62,12 @@ $options = [
 	'created_after' => $timelower,
 	'ip_address' => $ip_address,
 	'object_id' => $object_id,
+	'event' => $event,
 ];
-$log = system_log_get_log($options);
+$log = SystemLog::instance()->getAll($options);
 
 $options['count'] = true;
-$count = system_log_get_log($options);
+$count = SystemLog::instance()->getAll($options);
 
 // if user does not exist, we have no results
 if ($search_username && is_null($user_guid)) {
@@ -79,11 +84,4 @@ $nav = elgg_view('navigation/pagination', [
 ]);
 
 // display admin body
-$body = <<<__HTML
-$refine
-$nav
-$table
-$nav
-__HTML;
-
-echo $body;
+echo $refine . $nav . $table . $nav;

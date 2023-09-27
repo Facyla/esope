@@ -3,7 +3,7 @@
 namespace Elgg\Integration;
 
 /**
- * Test elgg_get_entities_from_private_settings()
+ * Test elgg_get_entities() with private settings options
  *
  * @group IntegrationTests
  * @group Entities
@@ -24,10 +24,7 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		$guids = [];
 
 		// our targets
-		$valid = new \ElggObject();
-		$valid->subtype = $subtype;
-		$valid->access_id = ACCESS_PUBLIC;
-		$valid->save();
+		$valid = $this->createObject(['subtype' => $subtype]);
 		$guids[] = $valid->guid;
 
 		$this->assertTrue($valid->setPrivateSetting($setting_name, $setting_value));
@@ -37,10 +34,7 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		$this->assertEquals($setting_value, $settings[$setting_name]);
 		$this->assertEquals($setting_value2, $settings[$setting_name2]);
 
-		$valid2 = new \ElggObject();
-		$valid2->subtype = $subtype;
-		$valid2->access_id = ACCESS_PUBLIC;
-		$valid2->save();
+		$valid2 = $this->createObject(['subtype' => $subtype]);
 		$guids[] = $valid2->guid;
 
 		$this->assertTrue($valid2->setPrivateSetting($setting_name, $setting_value));
@@ -51,7 +45,7 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		$this->assertEquals($setting_value2, $settings[$setting_name2]);
 
 		// simple test with name
-		$entities = elgg_get_entities_from_private_settings([
+		$entities = elgg_get_entities([
 			'private_setting_name' => $setting_name,
 		]);
 
@@ -62,7 +56,7 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		}
 
 		// simple test with value
-		$entities = elgg_get_entities_from_private_settings([
+		$entities = elgg_get_entities([
 			'private_setting_value' => $setting_value,
 		]);
 
@@ -73,7 +67,7 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		}
 
 		// test pairs
-		$entities = elgg_get_entities_from_private_settings([
+		$entities = elgg_get_entities([
 			'type' => 'object',
 			'subtype' => $subtype,
 			'private_setting_name_value_pairs' => [
@@ -91,12 +85,6 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		
 		foreach ($entities as $entity) {
 			$this->assertTrue(in_array($entity->guid, $guids));
-		}
-
-		foreach ($guids as $guid) {
-			if ($e = get_entity($guid)) {
-				$e->delete();
-			}
 		}
 	}
 
@@ -132,8 +120,6 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		]);
 
 		$this->assertEquals(1, $result);
-
-		$object->delete();
 	}
 
 	public function booleanPairsProvider() {
@@ -168,8 +154,6 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		$this->assertNull(_elgg_services()->dataCache->private_settings->load($entity->guid));
 
 		$this->assertEmpty($entity->getAllPrivateSettings());
-
-		$entity->delete();
 	}
 
 	public function testCanSetAndRemovePrivateSettingOnEntity() {
@@ -203,7 +187,5 @@ class ElggCoreGetEntitiesFromPrivateSettingsTest extends ElggCoreGetEntitiesBase
 		$settings = $entity->getAllPrivateSettings();
 		$this->assertEquals(1, count($settings));
 		$this->assertEquals('value1', $settings['setting1']);
-
-		$entity->delete();
 	}
 }

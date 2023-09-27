@@ -15,6 +15,8 @@ return array(
 	'collection:object:file:group' => "グループファイル",
 	'add:object:file' => "ファイルをアップロード",
 	'edit:object:file' => "ファイル編集",
+	'notification:object:file:create' => "ファイルが作成されたときに通知を送る",
+	'notifications:mute:object:file' => "ファイル '%s' について",
 
 	'file:more' => "もっとみる",
 	'file:list' => "リスト表示",
@@ -22,14 +24,11 @@ return array(
 	'file:num_files' => "表示数",
 	'file:replace' => 'ファイルの置き換え(変更しない場合は空欄のまま)',
 	'file:list:title' => "%s さんの %s %s",
-	'file:title:friends' => "友達の",
 
 	'file:file' => "ファイル",
 
 	'file:list:list' => 'リスト表示に切り替え',
 	'file:list:gallery' => 'ギャラリー表示に切り替え',
-
-	'file:types' => "アップロードされたファイルのタイプ",
 
 	'file:type:' => 'ファイル',
 	'file:type:all' => "すべてのファイル",
@@ -56,24 +55,24 @@ return array(
 
 	'groups:tool:file' => 'グループファイルを使用する',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
+	'river:object:file:create' => '%s さんはファイル %s をアップロードしました',
+	'river:object:file:comment' => '%s さんはファイル %s にコメントしました',
 
 	'file:notify:summary' => '新着ファイル「%s」がアップロードされました。',
 	'file:notify:subject' => '新着ファイル: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
+	'file:notify:body' => '%s さんが新しいファイルをアップロードしました: %s
 
 %s
 
-View and comment on the file:
+表示とコメントは:
 %s',
 
 	/**
 	 * Status messages
 	 */
 
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
+	'file:saved' => "ファイルを保存しました。",
+	'entity:delete:object:file:success' => "ファイルを削除しました。",
 
 	/**
 	 * Error messages
@@ -82,5 +81,5 @@ View and comment on the file:
 	'file:none' => "ファイルがありません。",
 	'file:uploadfailed' => "申し訳ありません。ファイルを保存できません。",
 	'file:noaccess' => "あなたには、このファイルを変更する権限がありません。",
-	'file:cannotload' => "There was an error uploading the file",
+	'file:cannotload' => "ファイルをアップロードするときにエラーが生じました",
 );

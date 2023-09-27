@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\RuntimeException as ElggRuntimeException;
+
 /**
  * Create wrapper P and BR elements in HTML depending on newlines. Useful when
  * users use newlines to signal line and paragraph breaks. In all cases output
@@ -82,9 +84,15 @@ class ElggAutoP {
 	 * least two of them.
 	 *
 	 * @param string $html snippet
+	 *
 	 * @return string|false output or false if parse error occurred
+	 * @throws \Elgg\Exceptions\RuntimeException
 	 */
 	public function process($html) {
+		if (!isset($html)) {
+			return '';
+		}
+		
 		// normalize whitespace
 		$html = str_replace(["\r\n", "\r"], "\n", $html);
 
@@ -97,19 +105,14 @@ class ElggAutoP {
 		// http://www.php.net/manual/en/domdocument.loadhtml.php#95463
 		$use_internal_errors = libxml_use_internal_errors(true);
 
-		// Do not load entities. May be unnecessary, better safe than sorry
-		$disable_load_entities = libxml_disable_entity_loader(true);
-
 		if (!$this->_doc->loadHTML("<html><meta http-equiv='content-type' "
 				. "content='text/html; charset={$this->encoding}'><body>{$html}</body>"
 				. "</html>", LIBXML_NOBLANKS)) {
 			libxml_use_internal_errors($use_internal_errors);
-			libxml_disable_entity_loader($disable_load_entities);
 			return false;
 		}
 
 		libxml_use_internal_errors($use_internal_errors);
-		libxml_disable_entity_loader($disable_load_entities);
 
 		$this->_xpath = new DOMXPath($this->_doc);
 
@@ -123,7 +126,7 @@ class ElggAutoP {
 
 			if ($nodeList->item(0) instanceof DOMText) {
 				// not going to work
-				throw new \RuntimeException('DOMXPath::query for BODY element returned a text node');
+				throw new ElggRuntimeException('DOMXPath::query for BODY element returned a text node');
 			}
 		}
 		$this->addParagraphs($nodeList->item(0));
@@ -146,17 +149,12 @@ class ElggAutoP {
 		// http://www.php.net/manual/en/domdocument.loadhtml.php#95463
 		$use_internal_errors = libxml_use_internal_errors(true);
 
-		// Do not load entities. May be unnecessary, better safe than sorry
-		$disable_load_entities = libxml_disable_entity_loader(true);
-
 		if (!$this->_doc->loadHTML($html)) {
 			libxml_use_internal_errors($use_internal_errors);
-			libxml_disable_entity_loader($disable_load_entities);
 			return false;
 		}
 
 		libxml_use_internal_errors($use_internal_errors);
-		libxml_disable_entity_loader($disable_load_entities);
 
 		// must re-create XPath object after DOM load
 		$this->_xpath = new DOMXPath($this->_doc);

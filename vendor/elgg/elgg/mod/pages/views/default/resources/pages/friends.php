@@ -3,11 +3,13 @@
  * List a user's friends' pages
  */
 
+use Elgg\Exceptions\Http\EntityNotFoundException;
+
 $username = elgg_extract('username', $vars);
 $owner = get_user_by_username($username);
 
 if (!$owner instanceof ElggUser) {
-	throw new \Elgg\EntityNotFoundException();
+	throw new EntityNotFoundException();
 }
 
 elgg_push_collection_breadcrumbs('object', 'page', $owner, true);
@@ -20,10 +22,7 @@ $content = elgg_view('pages/listing/friends', [
 	'entity' => $owner,
 ]);
 
-$body = elgg_view_layout('content', [
-	'filter_context' => 'friends',
+echo elgg_view_page($title, [
+	'filter_value' => $owner->guid === elgg_get_logged_in_user_guid() ? 'friends' : 'none',
 	'content' => $content,
-	'title' => $title,
 ]);
-
-echo elgg_view_page($title, $body);

@@ -28,21 +28,8 @@ return array(
 
 	'bookmarks:notify:summary' => 'Uusi kirjanmerkki: %s',
 	'bookmarks:notify:subject' => 'Uusi kirjanmerkki: %s',
-	'bookmarks:notify:body' =>
-'%s added a new bookmark: %s
-
-Address: %s
-
-%s
-
-View and comment on the bookmark:
-%s
-',
 
 	'bookmarks:numbertodisplay' => 'Näytettävien kohteiden määrä',
-
-	'river:object:bookmarks:create' => '%s bookmarked %s',
-	'river:object:bookmarks:comment' => '%s commented on a bookmark %s',
 
 	'groups:tool:bookmarks' => 'Ota käyttöön ryhmän kirjanmerkit',
 	
@@ -52,26 +39,19 @@ View and comment on the bookmark:
 	'widgets:bookmarks:name' => 'Kirjanmerkit',
 	'widgets:bookmarks:description' => "Näytä viimeisimmät kirjanmerkkisi.",
 
-	'bookmarks:bookmarklet:description' =>
-			"Sovelluskirjanmerkki on painike, jonka avulla voit helposti tallentaa nettisivuja kirjanmerkkeihisi. Tallenna painike selaimeesi raahaamalla se selaimen kirjanmerkkeihin.",
-
-	'bookmarks:bookmarklet:descriptionie' =>
-			"Jos käytät Internet Explorer -selainta, klikkaa painiketta hiiren oikealla painikkeella, valitse \"Lisää Suosikit-kansioon...\" ja lisää painike suosikkeihisi.",
-
-	'bookmarks:bookmarklet:description:conclusion' =>
-			"Tämän jälkeen voit nappulaa painamalla tallentaa kirjanmerkkeihisi minkä tahansa sivun.",
+	'bookmarks:bookmarklet:description' => "Sovelluskirjanmerkki on painike, jonka avulla voit helposti tallentaa nettisivuja kirjanmerkkeihisi. Tallenna painike selaimeesi raahaamalla se selaimen kirjanmerkkeihin.",
+	'bookmarks:bookmarklet:descriptionie' => "Jos käytät Internet Explorer -selainta, klikkaa painiketta hiiren oikealla painikkeella, valitse \"Lisää Suosikit-kansioon...\" ja lisää painike suosikkeihisi.",
+	'bookmarks:bookmarklet:description:conclusion' => "Tämän jälkeen voit nappulaa painamalla tallentaa kirjanmerkkeihisi minkä tahansa sivun.",
 
 	/**
 	 * Status messages
 	 */
 
 	'bookmarks:save:success' => "Kohde tallennettiin kirjanmerkkeihin.",
-	'entity:delete:object:bookmarks:success' => "The bookmark was deleted.",
 
 	/**
 	 * Error messages
 	 */
 
 	'bookmarks:save:failed' => "Kirjanmerkkiä ei voitu tallentaa. Tarkista, että syötit sekä otsikon että osoitteen ja yritä uudelleen.",
-	'bookmarks:unknown_bookmark' => 'Kirjanmerkkiä ei löytynyt',
 );

@@ -5,7 +5,7 @@ namespace Elgg\Messages;
 use Elgg\ActionResponseTestCase;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
-use Zend\Mail\Message;
+use Laminas\Mail\Message;
 
 /**
  * @group Actions
@@ -14,8 +14,12 @@ use Zend\Mail\Message;
 class SendActionTest extends ActionResponseTestCase {
 
 	public function up() {
-		self::createApplication(['isolate'=> true]);
+		parent::up();
+		
 		$this->startPlugin();
+		
+		elgg_register_plugin_hook_handler('permissions_check', 'object', 'Elgg\Messages\Permissions::canEdit');
+		elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'Elgg\Messages\Permissions::canEditContainer');
 		
 		parent::up();
 	}
@@ -36,8 +40,6 @@ class SendActionTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(ErrorResponse::class, $response);
 		$this->assertEquals(elgg_echo('messages:user:blank'), $response->getContent());
 		$this->assertEquals('messages/add', $response->getForwardURL());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testSendFailsToSelf() {
@@ -57,8 +59,6 @@ class SendActionTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(ErrorResponse::class, $response);
 		$this->assertEquals(elgg_echo('messages:user:self'), $response->getContent());
 		$this->assertEquals('messages/add', $response->getForwardURL());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testSendFailsToInvalidUser() {
@@ -78,8 +78,6 @@ class SendActionTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(ErrorResponse::class, $response);
 		$this->assertEquals(elgg_echo('messages:user:nonexist'), $response->getContent());
 		$this->assertEquals('messages/add', $response->getForwardURL());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testSendFailsWithoutMessageSubject() {
@@ -102,8 +100,6 @@ class SendActionTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(ErrorResponse::class, $response);
 		$this->assertEquals(elgg_echo('messages:blank'), $response->getContent());
 		$this->assertEquals('messages/add', $response->getForwardURL());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testSendFailsWithoutMessageBody() {
@@ -126,8 +122,6 @@ class SendActionTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(ErrorResponse::class, $response);
 		$this->assertEquals(elgg_echo('messages:blank'), $response->getContent());
 		$this->assertEquals('messages/add', $response->getForwardURL());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testSendSuccess() {
@@ -166,7 +160,7 @@ class SendActionTest extends ActionResponseTestCase {
 		});
 		
 		$notification = _elgg_services()->mailer->getLastMessage();
-		/* @var $notification \Zend\Mail\Message */
+		/* @var $notification \Laminas\Mail\Message */
 
 		$this->assertInstanceOf(Message::class, $notification);
 
@@ -185,12 +179,17 @@ class SendActionTest extends ActionResponseTestCase {
 			$recipient->language
 		);
 
-		$notification_subject = $notification->getSubject();
-		$notification_body = $notification->getBodyText();
+		$plain_text_part = null;
+		foreach ($notification->getBody()->getParts() as $part) {
+			if ($part->getId() === 'plaintext') {
+				$plain_text_part = $part;
+				break;
+			}
+		}
+		
+		$this->assertNotEmpty($plain_text_part);
 
-		$this->assertEquals($expected_subject, $notification_subject);
-		$this->assertEquals(preg_replace('/\\n/m', ' ', $expected_body), preg_replace('/\\n/m', ' ', $notification_body));
-
-		_elgg_services()->session->removeLoggedInUser();
+		$this->assertEquals($expected_subject, $notification->getSubject());
+		$this->assertStringContainsString(preg_replace('/\\n/m', ' ', $expected_body), preg_replace('/\\n/m', ' ', $plain_text_part->getRawContent()));
 	}
 }

@@ -7,7 +7,7 @@
 
 return array(
 
-	'item:object:file' => 'Fichiers',
+	'item:object:file' => 'Fichier',
 	'collection:object:file' => 'Fichiers',
 	'collection:object:file:all' => "Tous les fichiers du site",
 	'collection:object:file:owner' => "Fichiers de %s",
@@ -15,21 +15,20 @@ return array(
 	'collection:object:file:group' => "Fichiers du groupe",
 	'add:object:file' => "Envoyer un fichier",
 	'edit:object:file' => "Modifier le fichier",
+	'notification:object:file:create' => "Envoyer une notification lorsqu'un fichier est créé",
+	'notifications:mute:object:file' => "à propos du fichier '%s'",
 
 	'file:more' => "Plus de fichiers",
 	'file:list' => "vue liste",
 
 	'file:num_files' => "Nombre de fichiers à afficher",
-	'file:replace' => 'Remplacer le contenu du fichier (ne rien sélectionner pour ne pas changer)',
+	'file:replace' => 'Remplacer le contenu du fichier (laisser vide pour ne pas changer le fichier)',
 	'file:list:title' => "de %s %s %s",
-	'file:title:friends' => "des contacts",
 
 	'file:file' => "Fichier",
 
-	'file:list:list' => 'Basculer vers la vue en liste',
-	'file:list:gallery' => 'Basculer vers la vue en galerie',
-
-	'file:types' => "Type de fichiers téléchargés",
+	'file:list:list' => 'Afficher sous forme de liste',
+	'file:list:gallery' => 'Afficher sous forme de galerie',
 
 	'file:type:' => 'Fichiers',
 	'file:type:all' => "Tous les fichiers",
@@ -55,13 +54,14 @@ return array(
 	'widgets:filerepo:description' => "Affiche une liste de vos derniers fichiers",
 
 	'groups:tool:file' => 'Activer les fichiers du groupe',
+	'groups:tool:file:description' => 'Autoriser les membres du groupe à partager des fichiers dans ce groupe.',
 
-	'river:object:file:create' => '%s a chargé le fichier %s',
+	'river:object:file:create' => '%s a publié le fichier %s',
 	'river:object:file:comment' => '%s a commenté le fichier %s',
 
-	'file:notify:summary' => 'Nouveau fichier intitulé %s',
-	'file:notify:subject' => 'Nouveau fichier: %s',
-	'file:notify:body' => '%s a chargé un nouveau fichier : %s
+	'file:notify:summary' => 'Nouveau fichier intitulé %s',
+	'file:notify:subject' => 'Nouveau fichier : %s',
+	'file:notify:body' => '%s a téléchargé un nouveau fichier : %s
 
 %s
 
@@ -79,7 +79,7 @@ Afficher et commenter le fichier :
 	 * Error messages
 	 */
 
-	'file:none' => "Aucun fichier pour le moment.",
+	'file:none' => "Aucun fichier.",
 	'file:uploadfailed' => "Désolé, votre fichier n'a pas pu être enregistré.",
 	'file:noaccess' => "Vous n'avez pas la permission de modifier ce fichier",
 	'file:cannotload' => "Une erreur s'est produite lors de l'envoi du fichier",

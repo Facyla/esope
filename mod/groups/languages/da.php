@@ -10,6 +10,8 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
+	'add:group:group' => "Opret en ny gruppe",
+	
 	'groups' => "Grupper",
 	'groups:owned' => "Grupper jeg styrer",
 	'groups:owned:user' => 'Groups %s owns',
@@ -18,15 +20,13 @@ return array(
 	'groups:all' => "Alle grupper",
 	'groups:add' => "Opret en ny gruppe",
 	'groups:edit' => "Rediger gruppe",
-	'groups:delete' => 'Slet gruppe',
+	'groups:edit:profile' => "Profil",
+	'groups:edit:tools' => "Værktøjer",
+	'groups:edit:settings' => "Udvikler indstillinger",
 	'groups:membershiprequests' => 'Administrer anmodning om deltagelse',
 	'groups:membershiprequests:pending' => 'Manage join requests (%s)',
-	'groups:invitedmembers' => "Manage invitations",
 	'groups:invitations' => 'Gruppe invitationer',
 	'groups:invitations:pending' => 'Group invitations (%s)',
-	
-	'relationship:invited' => '%2$s was invited to join %1$s',
-	'relationship:membership_request' => '%s requested to join %s',
 
 	'groups:icon' => 'Gruppe ikon (efterlad blank for at beholde det uændret)',
 	'groups:name' => 'Gruppe navn',
@@ -35,8 +35,6 @@ return array(
 	'groups:interests' => 'Tags',
 	'groups:website' => 'Hjemmeside',
 	'groups:members' => 'Gruppens medlemmer',
-
-	'groups:members_count' => '%s members',
 
 	'groups:members:title' => 'Medlemmer af %s',
 	'groups:members:more' => "Se alle medlemmer",
@@ -69,14 +67,9 @@ return array(
 	'groups:leave' => 'Forlad gruppen',
 	'groups:invite' => 'Inviter venner',
 	'groups:invite:title' => 'Inviter venner til gruppen',
-	'groups:invite:friends:help' => 'Search for a friend by name or username and select the friend from the list',
-	'groups:invite:resend' => 'Resend the invitations to already invited users',
-	'groups:invite:member' => 'Already a member of this group',
-	'groups:invite:invited' => 'Already invited to this group',
 
 	'groups:nofriendsatall' => 'Du har ingen venner at invitere!',
 	'groups:group' => "Gruppe",
-	'groups:search:tags' => "tag",
 	'groups:search:title' => "Søg efter grupper tagget med '%s'",
 	'groups:search:none' => "Ingen match blev fundet",
 	'groups:search_in_group' => "Search in this group",
@@ -92,7 +85,6 @@ return array(
 	'groups:open' => "åben gruppe",
 	'groups:closed' => "lukket gruppe",
 	'groups:member' => "medlemmer",
-	'groups:search' => "Search for groups",
 
 	'groups:more' => 'Flere grupper',
 	'groups:none' => 'Ingen grupper',
@@ -109,9 +101,6 @@ return array(
 	'groups:opengroup:membersonly' => "Denne gruppe's indhold er kun tilladt for gruppens medlemmer.",
 	'groups:opengroup:membersonly:join' => 'For at blive medlem, klik "Tilmeld gruppe" menu linket',
 	'groups:visibility' => 'Hvem kan se denne gruppe?',
-	'groups:content_default_access' => 'Default group content access',
-	'groups:content_default_access:help' => 'Here you can configure the default access for new content in this group. The group content mode can prevent the selected option from being in effect.',
-	'groups:content_default_access:not_configured' => 'No default access configured, leave to the user',
 
 	/**
 	 * Group tools
@@ -129,8 +118,6 @@ return array(
 	'groups:joinrequestnotmade' => 'Kunne ikke ansøge om at blive medlem',
 	'groups:joinrequestmade' => 'Ansøgning om at blive medlem af gruppen er gennemført',
 	'groups:joinrequest:exists' => 'You already requested membership for this group',
-	'groups:button:joined' => 'Joined',
-	'groups:button:owned' => 'Owned',
 	'groups:joined' => 'Du er blevet medlem af gruppen!',
 	'groups:left' => 'Du er frameldt gruppen!',
 	'groups:userinvited' => 'Brugeren er blevet inviteret.',
@@ -139,34 +126,10 @@ return array(
 	'groups:invite:subject' => "%s du er blevet inviteret til at blive medlem af %s!",
 	'groups:joinrequest:remove:check' => 'Er du sikker på, at du vil fjerne denne anmodning om tilmelding?',
 	'groups:invite:remove:check' => 'Er du sikker på, at du vil fjerne denne invitation?',
-	'groups:invite:body' => "Hi %s,
-
-%s invited you to join the '%s' group.
-
-Click below to view your invitations:
-%s",
 
 	'groups:welcome:subject' => "Velkommen til %s gruppen!",
-	'groups:welcome:body' => "Hi %s!
-
-You are now a member of the '%s' group.
-
-Click below to begin posting!
-%s",
 
 	'groups:request:subject' => "%s har ønsket at blive medlem af %s",
-	'groups:request:body' => "Hi %s,
-
-%s has requested to join the '%s' group.
-
-Click below to view their profile:
-%s
-
-or click below to view the group's join requests:
-%s",
-
-	'river:group:create' => '%s created the group %s',
-	'river:group:join' => '%s joined the group %s',
 
 	'groups:allowhiddengroups' => 'Vil du tillade private (skjulte) grupper?',
 	'groups:whocancreate' => 'Who can create new groups?',
@@ -174,24 +137,11 @@ or click below to view the group's join requests:
 	/**
 	 * Action messages
 	 */
-	'groups:deleted' => 'Group and group contents deleted',
-	'groups:notdeleted' => 'Group could not be deleted',
-	'groups:deletewarning' => "Er du sikker på at du vil slette denne gruppe? Du kan ikke gøre det om!",
 
 	'groups:invitekilled' => 'Invitationen er blevet slettet.',
 	'groups:joinrequestkilled' => 'Anmodningen om tilslutning er blevet slettet.',
 	'groups:error:addedtogroup' => "Could not add %s to the group",
 	'groups:add:alreadymember' => "%s is already a member of this group",
-
-	/**
-	 * ecml
-	 */
-	'groups:ecml:groupprofile' => 'Gruppeprofiler',
-
-	/**
-	 * Upgrades
-	 */
-	'groups:upgrade:2016101900:title' => 'Transfer group icons to a new location',
-	'groups:upgrade:2016101900:description' => 'New entity icon API stores icons in a predictable location on the filestore
-relative to the entity\'s filestore directory. This upgrade will align the group plugin with the requirements of the new API.',
+	
+	// Notification settings
 );

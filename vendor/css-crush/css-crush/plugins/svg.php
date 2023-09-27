@@ -6,18 +6,13 @@
  */
 namespace CssCrush;
 
-Plugin::register('svg', array(
-    'load' => function () {
-        $GLOBALS['CSSCRUSH_SVG_UID'] = 0;
-    },
-    'enable' => function ($process) {
-        $GLOBALS['CSSCRUSH_SVG_UID'] = 0;
-        $process->hooks->add('capture_phase2', 'CssCrush\svg_capture');
-        $process->functions->add('svg', 'CssCrush\fn__svg');
-        $process->functions->add('svg-data', 'CssCrush\fn__svg_data');
-    }
-));
-
+\csscrush_plugin('svg', function ($process) {
+    $process->on('capture_phase2', 'CssCrush\svg_capture');
+    $process->functions->add('svg', 'CssCrush\fn__svg');
+    $process->functions->add('svg-data', 'CssCrush\fn__svg_data');
+    $process->functions->add('svg-linear-gradient', 'CssCrush\fn__svg_linear_gradient');
+    $process->functions->add('svg-radial-gradient', 'CssCrush\fn__svg_radial_gradient');
+});
 
 function fn__svg($input) {
 
@@ -52,57 +47,55 @@ function svg_generator($input, $fn_name) {
     // Map types to element names.
     static $schemas;
     if (! $schemas) {
-        $schemas = array(
-            'circle' => array(
+        $schemas = [
+            'circle' => [
                 'tag' => 'circle',
                 'attrs' => 'cx cy r',
-            ),
-            'ellipse' => array(
+            ],
+            'ellipse' => [
                 'tag' => 'ellipse',
                 'attrs' => 'cx cy rx ry',
-            ),
-            'rect' => array(
+            ],
+            'rect' => [
                 'tag' => 'rect',
                 'attrs' => 'x y rx ry width height',
-            ),
-            'polygon' => array(
+            ],
+            'polygon' => [
                 'tag' => 'polygon',
                 'attrs' => 'points',
-            ),
-            'line' => array(
+            ],
+            'line' => [
                 'tag' => 'line',
                 'attrs' => 'x1 y1 x2 y2',
-            ),
-            'polyline' => array(
+            ],
+            'polyline' => [
                 'tag' => 'polyline',
                 'attrs' => 'points',
-            ),
-            'path' => array(
+            ],
+            'path' => [
                 'tag' => 'path',
                 'attrs' => 'd',
-            ),
-            'star' => array(
+            ],
+            'star' => [
                 'tag' => 'path',
                 'attrs' => '',
-            ),
-            'text' => array(
+            ],
+            'text' => [
                 'tag' => 'text',
                 'attrs' => 'x y dx dy rotate',
-            ),
-        );
+            ],
+        ];
 
         // Convert attributes to keyed array.
         // Add global attributes.
         foreach ($schemas as $type => &$schema) {
             $schema['attrs'] = array_flip(explode(' ', $schema['attrs']))
-                + array(
-                    'transform' => true,
-                );
+                + ['transform' => true];
         }
     }
 
     // Non standard attributes.
-    static $custom_attrs = array(
+    static $custom_attrs = [
         'type' => true,
         'data' => true,
         'twist' => true,
@@ -115,7 +108,7 @@ function svg_generator($input, $fn_name) {
         'text' => true,
         'width' => true,
         'height' => true,
-    );
+    ];
 
     // Bail if no args.
     $args = Functions::parseArgs($input);
@@ -136,12 +129,12 @@ function svg_generator($input, $fn_name) {
     // Apply args to template.
     $block = $svg_defs[$name]($args);
 
-    $raw_data = DeclarationList::parse($block, array(
+    $raw_data = DeclarationList::parse($block, [
         'keyed' => true,
         'lowercase_keys' => true,
         'flatten' => true,
         'apply_hooks' => true,
-    ));
+    ]);
 
     // Resolve the type.
     // Bail if type not recognised.
@@ -152,22 +145,22 @@ function svg_generator($input, $fn_name) {
     }
 
     // Create element object for attaching all required rendering data.
-    $element = (object) array(
+    $element = (object) [
         'tag' => $schemas[$type]['tag'],
-        'fills' => array(
-            'gradients' => array(),
-            'patterns' => array(),
-        ),
-        'filters' => array(),
-        'data' => array(),
-        'attrs' => array(),
-        'styles' => array(),
-        'svg_attrs' => array(
+        'fills' => [
+            'gradients' => [],
+            'patterns' => [],
+        ],
+        'filters' => [],
+        'data' => [],
+        'attrs' => [],
+        'styles' => [],
+        'svg_attrs' => [
             'xmlns' => 'http://www.w3.org/2000/svg',
-        ),
-        'svg_styles' => array(),
-        'face_styles' => array(),
-    );
+        ],
+        'svg_styles' => [],
+        'face_styles' => [],
+    ];
 
     // Filter off prefixed properties that are for the svg element or @font-face.
     foreach ($raw_data as $property => $value) {
@@ -253,9 +246,9 @@ function svg_generator($input, $fn_name) {
 function svg_circle($element) {
 
     // Ensure required attributes have defaults set.
-    $element->data += array(
+    $element->data += [
         'diameter' => 50,
-    );
+    ];
 
     list($margin_top, $margin_right, $margin_bottom, $margin_left) = $element->data['margin'];
 
@@ -276,10 +269,10 @@ function svg_circle($element) {
 */
 function svg_rect($element) {
 
-    $element->data += array(
+    $element->data += [
         'width' => 50,
         'height' => 50,
-    );
+    ];
 
     list($margin_top, $margin_right, $margin_bottom, $margin_left) = $element->data['margin'];
 
@@ -303,9 +296,9 @@ function svg_rect($element) {
 */
 function svg_ellipse($element) {
 
-    $element->data += array(
+    $element->data += [
         'diameter' => '100 50',
-    );
+    ];
 
     if (! isset($element->attrs['rx']) && ! isset($element->attrs['ry'])) {
         $diameter = svg_parselist($element->data['diameter']);
@@ -328,14 +321,14 @@ function svg_ellipse($element) {
 function svg_path($element) {
 
     // Ensure minimum required attributes have defaults set.
-    $element->data += array(
+    $element->data += [
         'd' => 'M 10,10 l 10,0 l 0,10 l 10,0 l 0,10',
-    );
+    ];
 
     // Unclosed paths have implicit fill.
-    $element->styles += array(
+    $element->styles += [
         'fill' => 'none',
-    );
+    ];
 }
 
 /*
@@ -344,14 +337,14 @@ function svg_path($element) {
 function svg_polyline($element) {
 
     // Ensure required attributes have defaults set.
-    $element->data += array(
+    $element->data += [
         'points' => '20,20 40,20 40,40 60,40 60,60',
-    );
+    ];
 
     // Polylines have implicit fill.
-    $element->styles += array(
+    $element->styles += [
         'fill' => 'none',
-    );
+    ];
 }
 
 /*
@@ -360,16 +353,16 @@ function svg_polyline($element) {
 function svg_line($element) {
 
     // Set a default stroke.
-    $element->styles += array(
+    $element->styles += [
         'stroke' => '#000',
-    );
+    ];
 
-    $element->attrs += array(
+    $element->attrs += [
         'x1' => 0,
         'x2' => 0,
         'y1' => 0,
         'y2' => 0,
-    );
+    ];
 }
 
 /*
@@ -382,10 +375,10 @@ function svg_polygon($element) {
         // Switch to path element.
         $element->tag = 'path';
 
-        $element->data += array(
+        $element->data += [
             'sides' => 3,
             'diameter' => 100,
-        );
+        ];
 
         list($margin_top, $margin_right, $margin_bottom, $margin_left) = $element->data['margin'];
 
@@ -410,11 +403,11 @@ function svg_polygon($element) {
 function svg_star($element) {
 
     // Minimum required attributes have defaults.
-    $element->data += array(
+    $element->data += [
         'star-points' => 4,
         'diameter' => '50 30',
         'twist' => 0,
-    );
+    ];
 
     list($margin_top, $margin_right, $margin_bottom, $margin_left) = $element->data['margin'];
 
@@ -443,13 +436,13 @@ function svg_star($element) {
 function svg_text($element) {
 
     // Minimum required attributes have defaults.
-    $element->data += array(
+    $element->data += [
         'x' => 0,
         'y' => 0,
         'width' => 100,
         'height' => 100,
         'text' => '',
-    );
+    ];
 
     $text = Crush::$process->tokens->restore($element->data['text'], 's', true);
 
@@ -476,7 +469,7 @@ function svg_text($element) {
 */
 function svg_starpath($cx, $cy, $points, $outer_r, $inner_r = null, $twist = 0, $orient = 'point') {
 
-    $d = array();
+    $d = [];
 
     // Enforce minimum number of points.
     $points = max(3, $points);
@@ -527,12 +520,12 @@ function svg_apply_filters($element) {
 
         $parts = svg_parselist($element->data['drop-shadow'], false);
 
-        list($ds_x, $ds_y, $ds_strength, $ds_color) = $parts += array(
+        list($ds_x, $ds_y, $ds_strength, $ds_color) = $parts += [
             2, // x offset.
             2, // y offset.
             2, // strength.
             'black', // color.
-        );
+        ];
 
         // Opacity.
         $drop_shadow_opacity = null;
@@ -570,24 +563,24 @@ function svg_preprocess($element) {
         $parts = svg_parselist($margin);
         $count = count($parts);
         if ($count === 1) {
-            $margin = array($parts[0], $parts[0], $parts[0], $parts[0]);
+            $margin = [$parts[0], $parts[0], $parts[0], $parts[0]];
         }
         elseif ($count === 2) {
-            $margin = array($parts[0], $parts[1], $parts[0], $parts[1]);
+            $margin = [$parts[0], $parts[1], $parts[0], $parts[1]];
         }
         elseif ($count === 3) {
-            $margin = array($parts[0], $parts[1], $parts[2], $parts[1]);
+            $margin = [$parts[0], $parts[1], $parts[2], $parts[1]];
         }
         else {
             $margin = $parts;
         }
     }
     else {
-        $element->data['margin'] = array(0,0,0,0);
+        $element->data['margin'] = [0, 0, 0, 0];
     }
 
     // 'Unzip' string tokens on data attributes.
-    foreach (array('points', 'd') as $point_data_attr) {
+    foreach (['points', 'd'] as $point_data_attr) {
 
         if (isset($element->attrs[$point_data_attr])) {
 
@@ -615,11 +608,11 @@ function svg_apply_css_funcs($element, &$raw_data) {
     static $functions;
     if (! $functions) {
         $functions = new \stdClass();
-        $functions->fill = new Functions(array(
+        $functions->fill = new Functions([
             'svg-linear-gradient' => 'CssCrush\svg_fn_linear_gradient',
             'svg-radial-gradient' => 'CssCrush\svg_fn_radial_gradient',
             'pattern' => 'CssCrush\svg_fn_pattern',
-        ));
+        ]);
 
         $functions->generic = new Functions(array_diff_key(Crush::$process->functions->register, $functions->fill->register));
     }
@@ -638,7 +631,7 @@ function svg_apply_css_funcs($element, &$raw_data) {
                 list($color, $opacity) = $components;
                 $raw_data[$property] = $color;
                 if ($opacity < 1) {
-                    $raw_data += array("$property-opacity" => $opacity);
+                    $raw_data += ["$property-opacity" => $opacity];
                 }
             }
         }
@@ -650,7 +643,7 @@ function svg_compress($element) {
     foreach ($element->attrs as $key => &$value) {
 
         // Compress numbers on data attributes.
-        if (in_array($key, array('points', 'd'))) {
+        if (in_array($key, ['points', 'd'])) {
             $value = preg_replace_callback(
                 Regex::$patt->number,
                 function ($m) { return round($m[0], 2); },
@@ -663,34 +656,34 @@ function svg_render($element) {
 
     // Flatten styles.
     $styles = '';
-    $styles_data = array(
+    $styles_data = [
         '@font-face' => $element->face_styles,
         'svg' => $element->svg_styles,
-    );
+    ];
     foreach ($styles_data as $selector => $declarations) {
         if ($declarations) {
-            $out = array();
+            $out = [];
             foreach ($declarations as $property => $value) {
                 $out[] = "$property:$value";
             }
             $styles .= $selector . '{' . implode(';', $out) . '}';
         }
     }
-    $styles = Crush::$process->tokens->restore($styles, array('u', 's'), true);
+    $styles = Crush::$process->tokens->restore($styles, ['u', 's'], true);
 
     // Add element styles as attributes which tend to work better with svg2png converters.
     $attrs = Util::htmlAttributes($element->attrs + $element->styles);
 
     // Add viewbox to help IE scale correctly.
     if (isset($element->svg_attrs['width']) && isset($element->svg_attrs['height'])) {
-        $element->svg_attrs += array(
-            'viewbox' => implode(' ', array(
+        $element->svg_attrs += [
+            'viewbox' => implode(' ', [
                 0,
                 0,
                 $element->svg_attrs['width'],
                 $element->svg_attrs['height']
-            )),
-        );
+            ]),
+        ];
     }
     $svg_attrs = Util::htmlAttributes($element->svg_attrs);
 
@@ -735,9 +728,6 @@ function svg_render($element) {
 */
 function svg_fn_linear_gradient($input, $element) {
 
-    // Relies on functions from svg-gradients plugin.
-    Plugin::load('svg-gradients');
-
     $generated_gradient = create_svg_linear_gradient($input);
     $element->fills['gradients'][] = reset($generated_gradient);
 
@@ -745,9 +735,6 @@ function svg_fn_linear_gradient($input, $element) {
 }
 
 function svg_fn_radial_gradient($input, $element) {
-
-    // Relies on functions from svg-gradients plugin.
-    Plugin::load('svg-gradients');
 
     $generated_gradient = create_svg_radial_gradient($input);
     $element->fills['gradients'][] = reset($generated_gradient);
@@ -757,12 +744,12 @@ function svg_fn_radial_gradient($input, $element) {
 
 function svg_fn_pattern($input, $element) {
 
-    $pid = 'p' . (++$GLOBALS['CSSCRUSH_SVG_UID']);
+    $pid = 'p';
 
     // Get args in order with defaults.
     list($url, $transform_list, $width, $height, $x, $y) =
         Functions::parseArgs($input) +
-        array('', '', 0, 0, 0, 0);
+        ['', '', 0, 0, 0, 0];
 
     $url = Crush::$process->tokens->get($url);
     if (! $url) {
@@ -805,4 +792,314 @@ function svg_ifset(&$var, $fallback = null) {
         return $var;
     }
     return $fallback;
+}
+
+
+/*
+    SVG gradients.
+*/
+function fn__svg_linear_gradient($input) {
+
+    $gradient = create_svg_linear_gradient($input);
+    $gradient_markup = reset($gradient);
+    $gradient_id = key($gradient);
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150">';
+    $svg .= '<defs>';
+    $svg .= $gradient_markup;
+    $svg .= '</defs>';
+    $svg .= "<rect x=\"0\" y=\"0\" width=\"100%\" height=\"100%\" fill=\"url(#$gradient_id)\"/>";
+    $svg .= '</svg>';
+
+    return Crush::$process->tokens->add(new Url('data:image/svg+xml;base64,' . base64_encode($svg)));
+}
+
+
+function fn__svg_radial_gradient($input) {
+
+    $gradient = create_svg_radial_gradient($input);
+    $gradient_markup = reset($gradient);
+    $gradient_id = key($gradient);
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150">';
+    $svg .= '<defs>';
+    $svg .= $gradient_markup;
+    $svg .= '</defs>';
+    $svg .= "<rect x=\"0\" y=\"0\" width=\"100%\" height=\"100%\" fill=\"url(#$gradient_id)\"/>";
+    $svg .= '</svg>';
+
+    return Crush::$process->tokens->add(new Url('data:image/svg+xml;base64,' . base64_encode($svg)));
+}
+
+
+function create_svg_linear_gradient($input) {
+
+    static $angle_keywords, $deg_patt;
+    if (! $angle_keywords) {
+        $angle_keywords = [
+            'to top'    => 180,
+            'to right'  => 270,
+            'to bottom' => 0,
+            'to left'   => 90,
+            // Not very magic corners.
+            'to top right' => [[0, 100], [100, 0]],
+            'to top left' => [[100, 100], [0, 0]],
+            'to bottom right' => [[0, 0], [100, 100]],
+            'to bottom left' => [[100, 0], [0, 100]],
+        ];
+        $angle_keywords['to right top'] = $angle_keywords['to top right'];
+        $angle_keywords['to left top'] = $angle_keywords['to top left'];
+        $angle_keywords['to right bottom'] = $angle_keywords['to bottom right'];
+        $angle_keywords['to left bottom'] = $angle_keywords['to bottom left'];
+
+        $deg_patt = Regex::make('~^{{number}}deg$~i');
+    }
+
+    $args = Functions::parseArgs($input);
+
+    // If no angle argument is passed the default.
+    $angle = 0;
+
+    // Parse starting and ending coordinates from the first argument if it's an angle.
+    $coords = null;
+    $first_arg = $args[0];
+    $first_arg_is_angle = false;
+
+    // Try to parse an angle value.
+    if (preg_match($deg_patt, $first_arg)) {
+        $angle = floatval($first_arg);
+
+        // Quick fix to match standard linear-gradient() angle.
+        $angle += 180;
+        $first_arg_is_angle = true;
+    }
+    elseif (isset($angle_keywords[$first_arg])) {
+        if (is_array($angle_keywords[$first_arg])) {
+            $coords = $angle_keywords[$first_arg];
+        }
+        else {
+            $angle = $angle_keywords[$first_arg];
+        }
+        $first_arg_is_angle = true;
+    }
+
+    // Shift off the first argument if it has been recognised as an angle.
+    if ($first_arg_is_angle) {
+        array_shift($args);
+    }
+
+    // If not using a magic corner, create start/end coordinates from the angle.
+    if (! $coords) {
+
+        // Normalize the angle.
+        $angle = fmod($angle, 360);
+        if ($angle < 0) {
+            $angle = 360 + $angle;
+        }
+        $angle = round($angle, 2);
+
+        $start_x = 0;
+        $end_x = 0;
+        $start_y = 0;
+        $end_y = 100;
+
+        if ($angle >= 0 && $angle <= 45) {
+            $start_x = (($angle / 45) * 50) + 50;
+            $end_x = 100 - $start_x;
+            $start_y = 0;
+            $end_y = 100;
+        }
+        elseif ($angle > 45 && $angle <= 135) {
+            $angle_delta = $angle - 45;
+            $start_x = 100;
+            $end_x = 0;
+            $start_y = ($angle_delta / 90) * 100;
+            $end_y = 100 - $start_y;
+        }
+        elseif ($angle > 135 && $angle <= 225) {
+            $angle_delta = $angle - 135;
+            $start_x = 100 - (($angle_delta / 90) * 100);
+            $end_x = 100 - $start_x;
+            $start_y = 100;
+            $end_y = 0;
+        }
+        elseif ($angle > 225 && $angle <= 315) {
+            $angle_delta = $angle - 225;
+            $start_x = 0;
+            $end_x = 100;
+            $start_y = 100 - (($angle_delta / 90) * 100);
+            $end_y = 100 - $start_y;
+        }
+        elseif ($angle > 315 && $angle <= 360) {
+            $angle_delta = $angle - 315;
+            $start_x = ($angle_delta / 90) * 100;
+            $end_x = 100 - $start_x;
+            $start_y = 0;
+            $end_y = 100;
+        }
+        $coords = [
+            [round($start_x, 1), round($start_y, 1)],
+            [round($end_x, 1), round($end_y, 1)],
+        ];
+    }
+
+    // The remaining arguments are treated as color stops.
+    // - Capture their color values and if specified color offset percentages.
+    // - Only percentages are supported as SVG gradients to accept other length values
+    //   for color stop offsets.
+    $color_stops = parse_gradient_color_stops($args);
+
+    $gradient_id = "lg";
+    $gradient = "<linearGradient id=\"$gradient_id\" gradientUnits=\"userSpaceOnUse\"";
+    $gradient .= " x1=\"{$coords[0][0]}%\" x2=\"{$coords[1][0]}%\" y1=\"{$coords[0][1]}%\" y2=\"{$coords[1][1]}%\">";
+    $gradient .= $color_stops;
+    $gradient .= '</linearGradient>';
+
+    return [$gradient_id => $gradient];
+}
+
+
+function create_svg_radial_gradient($input) {
+
+    static $position_keywords, $origin_patt;
+    if (! $position_keywords) {
+        $position_keywords = [
+            'at top'    => ['50%', '0%'],
+            'at right'  => ['100%', '50%'],
+            'at bottom' => ['50%', '100%'],
+            'at left'   => ['0%', '50%'],
+            'at center' => ['50%', '50%'],
+            // Not very magic corners.
+            'at top right'    => ['100%', '0%'],
+            'at top left'     => ['0%', '0%'],
+            'at bottom right' => ['100%', '100%'],
+            'at bottom left'  => ['0%', '100%'],
+        ];
+        $position_keywords['at right top'] = $position_keywords['at top right'];
+        $position_keywords['at left top'] = $position_keywords['at top left'];
+        $position_keywords['at right bottom'] = $position_keywords['at bottom right'];
+        $position_keywords['at left bottom'] = $position_keywords['at bottom left'];
+
+        $origin_patt = Regex::make('~^({{number}}%?) +({{number}}%?)$~');
+    }
+
+    $args = Functions::parseArgs($input);
+
+    // Default origin,
+    $position = $position_keywords['at center'];
+
+    // Parse origin coordinates from the first argument if it's an origin.
+    $first_arg = $args[0];
+    $first_arg_is_position = false;
+
+    // Try to parse an origin value.
+    if (preg_match($origin_patt, $first_arg, $m)) {
+        $position = [$m[1], $m[2]];
+        $first_arg_is_position = true;
+    }
+    elseif (isset($position_keywords[$first_arg])) {
+        $position = $position_keywords[$first_arg];
+        $first_arg_is_position = true;
+    }
+
+    // Shift off the first argument if it has been recognised as an origin.
+    if ($first_arg_is_position) {
+        array_shift($args);
+    }
+
+    // The remaining arguments are treated as color stops.
+    // - Capture their color values and if specified color offset percentages.
+    // - Only percentages are supported as SVG gradients to accept other length values
+    //   for color stop offsets.
+    $color_stops = parse_gradient_color_stops($args);
+
+    $gradient_id = "rg";
+    $gradient = "<radialGradient id=\"$gradient_id\" gradientUnits=\"userSpaceOnUse\"";
+    $gradient .= " cx=\"{$position[0]}\" cy=\"{$position[1]}\" r=\"100%\">";
+    $gradient .= $color_stops;
+    $gradient .= '</radialGradient>';
+
+    return [$gradient_id => $gradient];
+}
+
+
+function parse_gradient_color_stops(array $color_stop_args) {
+
+    $offsets = [];
+    $colors = [];
+    $offset_patt = '~ +([\d\.]+%)$~';
+    $last_index = count($color_stop_args) - 1;
+
+    foreach ($color_stop_args as $index => $color_arg) {
+
+        if (preg_match($offset_patt, $color_arg, $m)) {
+            $offsets[] = floatval($m[1]);
+            $color = preg_replace($offset_patt, '', $color_arg);
+        }
+        else {
+            if ($index === 0) {
+                $offsets[] = 0;
+            }
+            elseif ($index === $last_index) {
+                $offsets[] = 100;
+            }
+            else {
+                $offsets[] = null;
+            }
+            $color = $color_arg;
+        }
+
+        // For hsla()/rgba() extract alpha component from color values and
+        // convert to hsl()/rgb().
+        // Webkit doesn't support them for SVG colors.
+        $colors[] = Color::colorSplit($color);
+    }
+
+    // For unspecified color offsets fill in the blanks.
+    $next_index_not_null = 0;
+    $prev_index_not_null = 0;
+    $n = count($offsets);
+
+    foreach ($offsets as $index => $offset) {
+
+        if (! isset($offset)) {
+
+            // Scan for next non-null offset.
+            for ($i = $index; $i < $n; $i++) {
+                if (isset($offsets[$i])) {
+                    $next_index_not_null = $i;
+                    break;
+                }
+            }
+
+            // Get the difference between previous 'not null' offset and the next 'not null' offset.
+            // Divide by the number of null offsets to get a value for padding between them.
+            $padding_increment =
+                ($offsets[$next_index_not_null] - $offsets[$prev_index_not_null]) /
+                ($next_index_not_null - $index + 1);
+            $padding = $padding_increment;
+
+            for ($i = $index; $i < $n; $i++) {
+                if (isset($offsets[$i])) {
+                    break;
+                }
+                // Replace the null offset with the new padded value.
+                $offsets[$i] = $offsets[$prev_index_not_null] + $padding;
+                // Bump the padding for the next null offset.
+                $padding += $padding_increment;
+            }
+        }
+        else {
+            $prev_index_not_null = $index;
+        }
+    }
+
+    $stops = '';
+    foreach (array_combine($offsets, $colors) as $offset => $color) {
+        list($color_value, $opacity) = $color;
+        $stop_opacity = $opacity < 1 ? " stop-opacity=\"$opacity\"" : '';
+        $stops .= "<stop offset=\"$offset%\" stop-color=\"$color_value\"$stop_opacity/>";
+    }
+
+    return $stops;
 }

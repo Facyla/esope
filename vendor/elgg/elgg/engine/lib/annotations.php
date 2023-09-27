@@ -4,8 +4,6 @@
  * Functions to manage object annotations.
  */
 
-use Elgg\Menu\MenuItems;
-
 /**
  * Get a specific annotation by its id.
  * If you want multiple annotation objects, use
@@ -15,7 +13,7 @@ use Elgg\Menu\MenuItems;
  *
  * @return \ElggAnnotation|false
  */
-function elgg_get_annotation_from_id($id) {
+function elgg_get_annotation_from_id(int $id) {
 	return _elgg_services()->annotationsTable->get($id);
 }
 
@@ -26,7 +24,7 @@ function elgg_get_annotation_from_id($id) {
  *
  * @return bool
  */
-function elgg_delete_annotation_by_id($id) {
+function elgg_delete_annotation_by_id(int $id): bool {
 	$annotation = elgg_get_annotation_from_id($id);
 	if (!$annotation) {
 		return false;
@@ -64,7 +62,7 @@ function elgg_get_annotations(array $options = []) {
  * @return string The list of entities
  * @since 1.8.0
  */
-function elgg_list_annotations($options) {
+function elgg_list_annotations(array $options = []): string {
 	$defaults = [
 		'limit' => 25,
 		'offset' => (int) max(get_input('annoff', 0), 0),
@@ -86,7 +84,7 @@ function elgg_list_annotations($options) {
  * @return bool|null true on success, false on failure, null if no annotations to delete.
  * @since 1.8.0
  */
-function elgg_delete_annotations(array $options) {
+function elgg_delete_annotations(array $options): ?bool {
 	return _elgg_services()->annotationsTable->deleteAll($options);
 }
 
@@ -99,7 +97,7 @@ function elgg_delete_annotations(array $options) {
  * @return bool|null true on success, false on failure, null if no annotations disabled.
  * @since 1.8.0
  */
-function elgg_disable_annotations(array $options) {
+function elgg_disable_annotations(array $options): ?bool {
 	return _elgg_services()->annotationsTable->disableAll($options);
 }
 
@@ -112,7 +110,7 @@ function elgg_disable_annotations(array $options) {
  * @return bool|null true on success, false on failure, null if no metadata enabled.
  * @since 1.8.0
  */
-function elgg_enable_annotations(array $options) {
+function elgg_enable_annotations(array $options): ?bool {
 	return _elgg_services()->annotationsTable->enableAll($options);
 }
 
@@ -126,64 +124,10 @@ function elgg_enable_annotations(array $options) {
  * @return bool
  * @since 1.8.0
  */
-function elgg_annotation_exists($entity_guid, $name, $owner_guid = null) {
-	$owner_guid = (int) $owner_guid;
+function elgg_annotation_exists(int $entity_guid, string $name, int $owner_guid = 0): bool {
 	if ($owner_guid < 1) {
 		$owner_guid = elgg_get_logged_in_user_guid();
 	}
 
 	return _elgg_services()->annotationsTable->exists($entity_guid, $name, $owner_guid);
 }
-
-/**
- * Register default menu items for an annotation
- *
- * @param \Elgg\Hook $hook 'register', 'menu:annotation'
- *
- * @return void|MenuItems
- * @internal
- * @since 3.3
- */
-function _elgg_annotations_default_menu_items(\Elgg\Hook $hook) {
-	
-	$annotation = $hook->getParam('annotation');
-	if (!$annotation instanceof ElggAnnotation) {
-		return;
-	}
-	
-	/* @var $result MenuItems */
-	$result = $hook->getValue();
-	
-	if ($annotation->canEdit()) {
-		$result[] = ElggMenuItem::factory([
-			'name' => 'delete',
-			'icon' => 'delete',
-			'text' => elgg_echo('delete'),
-			'href' => elgg_generate_action_url('annotation/delete', [
-				'id' => $annotation->id,
-			]),
-			'confirm' => elgg_echo('deleteconfirm'),
-		]);
-	}
-	
-	return $result;
-}
-
-/**
- * Init annotations
- *
- * @return void
- * @internal
- * @since 3.3
- */
-function _elgg_annotations_init() {
-	
-	elgg_register_plugin_hook_handler('register', 'menu:annotation', '_elgg_annotations_default_menu_items');
-}
-
-/**
- * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
- */
-return function(\Elgg\EventsService $events) {
-	$events->registerHandler('init', 'system', '_elgg_annotations_init');
-};

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright 2005-2011, Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,6 +17,8 @@ namespace Cake\Core;
 
 /**
  * ClassLoader
+ *
+ * @deprecated 4.0.3 Use composer to generate autoload files instead.
  */
 class ClassLoader
 {
@@ -22,7 +26,7 @@ class ClassLoader
      * An associative array where the key is a namespace prefix and the value
      * is an array of base directories for classes in that namespace.
      *
-     * @var array
+     * @var array<string, array>
      */
     protected $_prefixes = [];
 
@@ -31,9 +35,11 @@ class ClassLoader
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        spl_autoload_register([$this, 'loadClass']);
+        /** @var callable $callable */
+        $callable = [$this, 'loadClass'];
+        spl_autoload_register($callable);
     }
 
     /**
@@ -47,16 +53,14 @@ class ClassLoader
      * than last.
      * @return void
      */
-    public function addNamespace($prefix, $baseDir, $prepend = false)
+    public function addNamespace(string $prefix, string $baseDir, bool $prepend = false): void
     {
         $prefix = trim($prefix, '\\') . '\\';
 
         $baseDir = rtrim($baseDir, '/') . DIRECTORY_SEPARATOR;
         $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR) . '/';
 
-        if (!isset($this->_prefixes[$prefix])) {
-            $this->_prefixes[$prefix] = [];
-        }
+        $this->_prefixes[$prefix] = $this->_prefixes[$prefix] ?? [];
 
         if ($prepend) {
             array_unshift($this->_prefixes[$prefix], $baseDir);
@@ -72,7 +76,7 @@ class ClassLoader
      * @return string|false The mapped file name on success, or boolean false on
      * failure.
      */
-    public function loadClass($class)
+    public function loadClass(string $class)
     {
         $prefix = $class;
 
@@ -99,7 +103,7 @@ class ClassLoader
      * @return string|false Boolean false if no mapped file can be loaded, or the
      * name of the mapped file that was loaded.
      */
-    protected function _loadMappedFile($prefix, $relativeClass)
+    protected function _loadMappedFile(string $prefix, string $relativeClass)
     {
         if (!isset($this->_prefixes[$prefix])) {
             return false;
@@ -122,7 +126,7 @@ class ClassLoader
      * @param string $file The file to require.
      * @return bool True if the file exists, false if not.
      */
-    protected function _requireFile($file)
+    protected function _requireFile(string $file): bool
     {
         if (file_exists($file)) {
             require $file;

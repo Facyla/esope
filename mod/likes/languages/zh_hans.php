@@ -1,38 +1,28 @@
 <?php
-return [
-	'likes:this' => '赞这个',
-	'likes:deleted' => '你的点赞已经移除',
-	'likes:see' => '看看谁赞过这个',
-	'likes:remove' => '取消赞这个',
-	'likes:notdeleted' => '取消点赞遇到问题',
-	'likes:likes' => '你现在赞了这个项目',
-	'likes:failure' => '点赞这个项目时遇到问题',
-	'likes:alreadyliked' => '你已经为这个项目点过赞',
-	'likes:notfound' => '你试图点赞的项目找不到',
-	'likes:likethis' => '赞这个',
-	'likes:userlikedthis' => '%s 点赞',
-	'likes:userslikedthis' => '%s 点赞',
-	'likes:river:annotate' => '赞',
-	'likes:delete:confirm' => '你确定要删除这个点赞？',
+/**
+ * Translation file
+ *
+ * Note: don't change the return array to short notation because Transifex can't handle those during `tx push -s`
+ */
 
-	'river:likes' => '赞 %s %s',
+return array(
+	'annotation:delete:likes:fail' => "移除您的稱讚時出現了問題",
+	'annotation:delete:likes:success' => "您的稱讚已移除",
+	
+	'likes:this' => '稱讚這個項目',
+	'likes:deleted' => '您的稱讚已移除',
+	'likes:see' => '看看誰稱讚這個項目',
+	'likes:remove' => '取消稱讚',
+	'likes:notdeleted' => '移除您的稱讚時出現了問題',
+	'likes:likes' => '您現在稱讚這個項目',
+	'likes:failure' => '稱讚這個項目時出現了問題',
+	'likes:alreadyliked' => '您已稱讚過這個項目',
+	'likes:notfound' => '找不到您嘗試要稱讚的項目',
+	'likes:likethis' => '稱讚',
+	'likes:userlikedthis' => '%s 稱讚',
+	'likes:userslikedthis' => '%s 稱讚',
+	'likes:river:annotate' => '稱讚',
 
 	// notifications. yikes.
-	'likes:notifications:subject' => '%s 赞了你的博文 %s',
-	'likes:notifications:body' =>
-'Hi %1$s,
-
-%2$s 在 %4$s 赞了你的博文 "%3$s" 
-
-查看你的原始博文：
-
-%5$s
-
-或查看 %2$s 的个人信息
-
-%6$s
-
-多谢，
-%4$s',
-	
-];
+	'likes:notifications:subject' => '%s 稱讚您的貼文 "%s"',
+);

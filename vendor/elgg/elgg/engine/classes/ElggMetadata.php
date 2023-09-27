@@ -15,8 +15,9 @@ class ElggMetadata extends ElggExtender {
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
-
-		$this->attributes['type'] = "metadata";
+		
+		$this->attributes['type'] = 'metadata';
+		$this->attributes['access_id '] = ACCESS_PUBLIC;
 	}
 
 	/**
@@ -32,8 +33,6 @@ class ElggMetadata extends ElggExtender {
 				$this->$key = $value;
 			}
 		}
-
-		$this->access_id = ACCESS_PUBLIC;
 	}
 
 	/**
@@ -44,23 +43,17 @@ class ElggMetadata extends ElggExtender {
 	 * @return bool
 	 */
 	public function canEdit($user_guid = 0) {
-		if ($entity = get_entity($this->entity_guid)) {
-			return $entity->canEditMetadata($this, $user_guid);
-		}
-
-		return false;
+		return elgg_has_access_to_entity($this->entity_guid, (int) $user_guid);
 	}
 
 	/**
 	 * Save metadata object
 	 *
-	 * Returns metadata on success, false on failure
-	 *
-	 * @return int|false
+	 * @return bool
 	 */
-	public function save() {
+	public function save() : bool {
 		if (!$this->id) {
-			return _elgg_services()->metadataTable->create($this);
+			return (bool) _elgg_services()->metadataTable->create($this);
 		}
 
 		return _elgg_services()->metadataTable->update($this);

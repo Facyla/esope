@@ -2,7 +2,8 @@
 
 namespace Elgg\Cli;
 
-use Elgg\Loggable;
+use Elgg\Exceptions\RuntimeException;
+use Elgg\Traits\Loggable;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -121,9 +122,7 @@ abstract class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	 * @return void
 	 */
 	public function error($message) {
-		if (!$this->log(LogLevel::ERROR, $message)) {
-			$this->write($message, LogLevel::ERROR);
-		}
+		$this->write($message, LogLevel::ERROR);
 	}
 
 	/**
@@ -134,9 +133,7 @@ abstract class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	 * @return void
 	 */
 	public function notice($message) {
-		if (!$this->log(LogLevel::NOTICE, $message)) {
-			$this->write($message, LogLevel::NOTICE);
-		}
+		$this->write($message, LogLevel::NOTICE);
 	}
 
 	/**
@@ -167,10 +164,11 @@ abstract class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	 * @param mixed $answer User answer
 	 *
 	 * @return bool
+	 * @throws RuntimeException
 	 */
 	public function assertNotEmpty($answer) {
 		if (empty($answer)) {
-			throw new \RuntimeException('Please enter a required answer');
+			throw new RuntimeException('Please enter a required answer');
 		}
 
 		return $answer;
@@ -181,7 +179,7 @@ abstract class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	 * @return void
 	 */
 	final protected function dumpRegisters() {
-		$registers = _elgg_services()->systemMessages->loadRegisters();
+		$registers = _elgg_services()->system_messages->loadRegisters();
 
 		foreach ($registers as $prop => $values) {
 			if (!empty($values)) {

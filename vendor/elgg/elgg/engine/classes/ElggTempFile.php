@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Exceptions\Filesystem\IOException;
+
 /**
  * This class represents a physical file (by default in the system temp directory).
  *
@@ -66,9 +68,11 @@ class ElggTempFile extends ElggFile {
 	
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @throws \Elgg\Exceptions\Filesystem\IOException
 	 */
-	public function save() {
-		throw new \IOException("Temp files can't be saved to the database");
+	public function save() : bool {
+		throw new IOException("Temp files can't be saved to the database");
 	}
 
 }

@@ -6,37 +6,58 @@
  */
 class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
+	/**
+	 * Get an empty relationship
+	 *
+	 * @return \ElggRelationship
+	 */
+	protected function getRelationshipMock() {
+		return new \ElggRelationship(new stdClass());
 	}
-
-	public function down() {
-
+	
+	/**
+	 * Create a relationship with set attributes
+	 *
+	 * @return \ElggRelationship|false
+	 */
+	protected function createRelationship() {
+		$subject = $this->createUser();
+		$object = $this->createObject();
+		
+		$rel_id = _elgg_services()->relationshipsTable->add($subject->guid, 'foo', $object->guid, true);
+		if (empty($rel_id)) {
+			return false;
+		}
+		
+		return elgg_get_relationship($rel_id);
 	}
-
-	public function testSettingAndGettingAttribute() {
-		$obj = $this->getRelationshipMock();
-		$obj->relationship = 'hasSister';
-		$this->assertEquals('hasSister', $obj->relationship);
+	
+	/**
+	 * @dataProvider setterDataProvider
+	 */
+	public function testSettingAndGettingAttribute($name, $value, $expected) {
+		$rel = $this->getRelationshipMock();
+		
+		$rel->$name = $value;
+		$this->assertEquals($expected, $rel->$name);
+	}
+	
+	public function setterDataProvider() {
+		return [
+			['id', 123, null],
+			['guid_one', 123, 123],
+			['guid_one', '123', 123],
+			['relationship', 'foo', 'foo'],
+			['guid_two', 123, 123],
+			['guid_two', '123', 123],
+			['time_created', time(), null],
+			['foo', 'bar', null],
+		];
 	}
 
 	public function testGettingNonexistentAttribute() {
 		$obj = $this->getRelationshipMock();
 		$this->assertNull($obj->foo);
-	}
-
-	protected function getRelationshipMock() {
-		// do not call constructor because it would cause deprecation warnings
-		// and deprecation is not test-friendly yet.
-		return $this->getMockForAbstractClass('\ElggRelationship', array(), '', false);
-	}
-
-	public function createRelationship() {
-		$subject = $this->createUser();
-		$object = $this->createObject();
-
-		$id = add_entity_relationship($subject->guid, 'foo', $object->guid);
-		return check_entity_relationship($subject->guid, 'foo', $object->guid);
 	}
 
 	public function testCanExport() {
@@ -69,8 +90,6 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 		foreach ($relationship as $attr => $value) {
 			$this->assertEquals($relationship->$attr, $relationship[$attr]);
 		}
-
-		unset($relationship['access_id']);
 	}
 
 	public function testIsLoggable() {
@@ -78,5 +97,72 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertEquals($relationship->id, $relationship->getSystemLogID());
 		$this->assertEquals($relationship, $relationship->getObjectFromID($relationship->id));
+	}
+	
+	public function testContructorOnlySetsPrimaryAttributes() {
+		$row = new stdClass();
+		$row->id = 123;
+		$row->guid_one = 456;
+		$row->relationship = 'foo';
+		$row->guid_two = 789;
+		$row->time_created = time();
+		$row->foo = 'bar';
+		
+		$relationship = new \ElggRelationship($row);
+		
+		foreach (['id', 'guid_one', 'relationship', 'guid_two', 'time_created'] as $attr) {
+			$this->assertEquals($row->$attr, $relationship->$attr);
+		}
+		
+		$this->assertNull($relationship->foo);
+	}
+	
+	public function testSettingUnchangedData() {
+		$relationship = $this->createRelationship();
+		
+		foreach ($relationship as $attribute => $value) {
+			$relationship->$attribute = $value;
+			$this->assertEmpty($relationship->getOriginalAttributes());
+			
+			// check for int casting
+			$relationship->$attribute = (string) $value;
+			$this->assertEmpty($relationship->getOriginalAttributes());
+		}
+	}
+	
+	/**
+	 * @dataProvider originalAttributesProvider
+	 */
+	public function testOriginalAttributesOnChange($name, $value, bool $should_change) {
+		$relationship = $this->createRelationship();
+		
+		$relationship->$name = $value;
+		if ($should_change) {
+			$this->assertArrayHasKey($name, $relationship->getOriginalAttributes());
+		} else {
+			$this->assertEmpty($relationship->getOriginalAttributes());
+		}
+	}
+	
+	public function originalAttributesProvider() {
+		return [
+			['id', 123, false],
+			['guid_one', 123, true],
+			['guid_one', '123', true],
+			['relationship', 'bar', true],
+			['guid_two', 123, true],
+			['guid_two', '123', true],
+			['time_created', time(), false],
+		];
+	}
+	
+	public function testSaveAfterChange() {
+		$relationship = $this->createRelationship();
+		
+		$current_id = $relationship->id;
+		
+		$relationship->relationship = 'bar';
+		$this->assertTrue($relationship->save());
+		$this->assertNotEquals($current_id, $relationship->id);
 	}
 }

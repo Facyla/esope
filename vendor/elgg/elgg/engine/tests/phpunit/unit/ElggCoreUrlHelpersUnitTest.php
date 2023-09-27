@@ -2,19 +2,10 @@
 
 /**
  * @see \ElggCoreHelpersTest
- * @todo migrate similar simpletest tests to this class
  *
  * @group UnitTests
  */
 class ElggCoreUrlHelpersUnitTest extends \Elgg\UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	/**
 	 * Test if elgg_http_add_url_query_elements() preserves original url when no params are passed
@@ -159,20 +150,29 @@ class ElggCoreUrlHelpersUnitTest extends \Elgg\UnitTestCase {
 			'/' => elgg_get_site_url(),
 			'#test' => '#test',
 
-			'page/handler' =>                	elgg_get_site_url() . 'page/handler',
-			'page/handler?p=v&p2=v2' =>      	elgg_get_site_url() . 'page/handler?p=v&p2=v2',
+			'page/handler' =>                   elgg_get_site_url() . 'page/handler',
+			'page/handler?p=v&p2=v2' =>         elgg_get_site_url() . 'page/handler?p=v&p2=v2',
+			'page/handler?p=v&p2=v2' =>         elgg_get_site_url() . 'page/handler?p2=v2&p=v',
 			'mod/plugin/file.php' =>            elgg_get_site_url() . 'mod/plugin/file.php',
 			'mod/plugin/file.php?p=v&p2=v2' =>  elgg_get_site_url() . 'mod/plugin/file.php?p=v&p2=v2',
+			'mod/plugin/file.php?p=v&p2=v2' =>  elgg_get_site_url() . 'mod/plugin/file.php?p2=v2&p=v',
 			'search?foo.bar' =>                 elgg_get_site_url() . 'search?foo.bar',
 			'rootfile.php' =>                   elgg_get_site_url() . 'rootfile.php',
 			'rootfile.php?p=v&p2=v2' =>         elgg_get_site_url() . 'rootfile.php?p=v&p2=v2',
+			'rootfile.php?p=v&p2=v2' =>         elgg_get_site_url() . 'rootfile.php?p2=v2&p=v',
+			'rootfile.php?p[0]=v' =>            elgg_get_site_url() . 'rootfile.php?p[0]=v',
+			'rootfile.php?p[0]=v&p[1]=v2' =>    elgg_get_site_url() . 'rootfile.php?p[0]=v&p[1]=v2',
+			'rootfile.php?p[0]=v&p[1]=v2' =>    elgg_get_site_url() . 'rootfile.php?p[1]=v2&p[0]=v',
 
-			'/page/handler' =>               	elgg_get_site_url() . 'page/handler',
-			'/page/handler?p=v&p2=v2' =>     	elgg_get_site_url() . 'page/handler?p=v&p2=v2',
+			'/page/handler' =>                  elgg_get_site_url() . 'page/handler',
+			'/page/handler?p=v&p2=v2' =>        elgg_get_site_url() . 'page/handler?p=v&p2=v2',
+			'/page/handler?p=v&p2=v2' =>        elgg_get_site_url() . 'page/handler?p2=v2&p=v',
 			'/mod/plugin/file.php' =>           elgg_get_site_url() . 'mod/plugin/file.php',
 			'/mod/plugin/file.php?p=v&p2=v2' => elgg_get_site_url() . 'mod/plugin/file.php?p=v&p2=v2',
+			'/mod/plugin/file.php?p=v&p2=v2' => elgg_get_site_url() . 'mod/plugin/file.php?p2=v2&p=v',
 			'/rootfile.php' =>                  elgg_get_site_url() . 'rootfile.php',
 			'/rootfile.php?p=v&p2=v2' =>        elgg_get_site_url() . 'rootfile.php?p=v&p2=v2',
+			'/rootfile.php?p=v&p2=v2' =>        elgg_get_site_url() . 'rootfile.php?p2=v2&p=v',
 		];
 		$ret = [];
 		foreach ($data as $in => $out) {
@@ -199,6 +199,10 @@ class ElggCoreUrlHelpersUnitTest extends \Elgg\UnitTestCase {
 			false => elgg_get_site_url(),
 			true => elgg_get_site_url(),
 			'#test' => elgg_get_site_url(),
+			'rootfile.php?p[0]=v' => 'rootfile.php?p[0]=b',
+			'rootfile.php?p[0]=v&p[1]=v2' => 'rootfile.php?p[0]=v&p[1]=v3',
+			'rootfile.php?p[0]=v&p[1]=v2' => 'rootfile.php?p[0]=v&p[2]=v2',
+			'rootfile.php?p[0]=v&p[1]=v2&p[2]=v3' => 'rootfile.php?p[0]=v&p[1]=v2',
 		];
 		$ret = [];
 		foreach ($data as $in => $out) {

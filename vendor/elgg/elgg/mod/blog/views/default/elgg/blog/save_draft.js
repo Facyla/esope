@@ -1,12 +1,10 @@
 /**
  * Save draft through ajax
  */
-define(function(require) {
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	var Ajax = require('elgg/Ajax');
+define(['jquery', 'elgg/Ajax', 'elgg/i18n'], function($, Ajax, i18n) {
 	
-	var oldDescription = '';
+	// get a copy of the body to compare for auto save
+	var oldDescription = $('form.elgg-form-blog-save').find('textarea[name=description]').val();
 
 	var saveDraftCallback = function(data) {
 		var $form = $('form.elgg-form-blog-save');
@@ -24,7 +22,7 @@ define(function(require) {
 			}
 			$form.find('.blog-save-status-time').html(d.toLocaleDateString() + " @ " + d.getHours() + ":" + mins);
 		} else {
-			$form.find('.blog-save-status-time').html(elgg.echo('error'));
+			$form.find('.blog-save-status-time').html(i18n.echo('error'));
 		}
 	};
 
@@ -48,14 +46,29 @@ define(function(require) {
 		});
 	};
 
-	var init = function() {
-		// get a copy of the body to compare for auto save
-		oldDescription = $('form.elgg-form-blog-save').find('textarea[name=description]').val();
+	// preview button clicked
+	$(document).on('click', '.elgg-form-blog-save button[name="preview"]', function(event) {
+		event.preventDefault();
+		
+		var ajax = new Ajax();
+		var formData = ajax.objectify('form.elgg-form-blog-save');
+		
+		if (!(formData.get('description') && formData.get('title'))) {
+			return false;
+		}
+		
+		// open preview in blank window
+		ajax.action('blog/save', {
+			data: formData,
+			success: function(data) {
+				$('form.elgg-form-blog-save').find('input[name=guid]').val(data.guid);
+				window.open(data.url, '_blank').focus();
+			}
+		});
+	});
 
-		setInterval(saveDraft, 60000);
-	};
-
-	elgg.register_hook_handler('init', 'system', init);
+	// start auto save interval
+	setInterval(saveDraft, 60000);
 
 	return {
 		saveDraft: saveDraft

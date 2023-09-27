@@ -4,6 +4,7 @@ namespace Elgg\Database\Clauses;
 
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\UnitTestCase;
 
 /**
@@ -19,10 +20,6 @@ class AnnotationWhereClauseUnitTest extends UnitTestCase {
 
 	public function up() {
 		$this->qb = Select::fromTable('entities', 'alias');
-	}
-
-	public function down() {
-
 	}
 
 	public function testBuildEmptyQuery() {
@@ -292,7 +289,7 @@ class AnnotationWhereClauseUnitTest extends UnitTestCase {
 
 		$qb = Select::fromTable('entities', 'alias');
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		$qb->addClause($query);
 	}
 

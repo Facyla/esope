@@ -1,9 +1,14 @@
 <?php
 
+require_once(__DIR__ . '/lib/functions.php');
+
 return [
+	'plugin' => [
+		'name' => 'Message Board',
+		'activate_on_install' => true,
+	],
 	'actions' => [
 		'messageboard/add' => [],
-		'messageboard/delete' => [],
 	],
 	'routes' => [
 		'collection:annotation:messageboard:owner' => [
@@ -13,6 +18,13 @@ return [
 		'collection:annotation:messageboard:history' => [
 			'path' => '/messageboard/owner/{username}/history/{history_username}',
 			'resource' => 'messageboard/owner',
+		],
+	],
+	'hooks' => [
+		'entity:url' => [
+			'object' => [
+				'Elgg\MessageBoard\Widgets::widgetURL' => [],
+			],
 		],
 	],
 	'widgets' => [

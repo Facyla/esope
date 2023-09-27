@@ -14,12 +14,13 @@ return array(
 	'collection:object:blog:friends' => '友達のブログ',
 	'add:object:blog' => 'ブログ記事を追加',
 	'edit:object:blog' => 'ブログ記事を編集',
+	'notification:object:blog:publish' => "ブログが公開されたときに通知を送る",
+	'notifications:mute:object:blog' => "ブログ '%s' について",
 
 	'blog:revisions' => '変更履歴',
 	'blog:archives' => '書庫',
 
 	'groups:tool:blog' => 'グループブログを使えるようにする',
-	'blog:write' => 'ブログに投稿する',
 
 	// Editing
 	'blog:excerpt' => '見出し',
@@ -36,12 +37,9 @@ return array(
 	'blog:error:cannot_write_to_container' => 'あなたの権限ではグループにブログを保存する事はできません。',
 	'blog:messages:warning:draft' => '保存されていない下書きの記事があります！',
 	'blog:edit_revision_notice' => '(前の版)',
-	'blog:message:deleted_post' => 'ブログ記事を削除しました。',
-	'blog:error:cannot_delete_post' => 'ブログ記事を削除できませんでした。',
 	'blog:none' => 'ブログ記事は一件もありません',
 	'blog:error:missing:title' => 'ブログのタイトルを入力してください！',
 	'blog:error:missing:description' => 'ブログの本文を入力してください！',
-	'blog:error:cannot_edit_post' => 'この記事は存在していないか、あるいはあなたにこの記事を編集する権限がないかのどちらかです。',
 	'blog:error:post_not_found' => 'お探しのブログ記事を見つけることができません。',
 	'blog:error:revision_not_found' => 'この変更記録を見つけることはできませんでした。',
 
@@ -52,15 +50,6 @@ return array(
 	// notifications
 	'blog:notify:summary' => '新着ブログ「%s」',
 	'blog:notify:subject' => '新着ブログ: %s',
-	'blog:notify:body' =>
-'
-%s さんが新しいブログ記事を投稿しました: %s
-
-%s
-
-このブログ記事の表示とコメントは:
-%s
-',
 
 	// widget
 	'widgets:blog:name' => 'ブログ記事',

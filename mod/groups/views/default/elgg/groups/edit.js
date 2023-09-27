@@ -1,9 +1,7 @@
 /**
  * JavaScript used on group creation/editing form
  */
-define(function(require) {
-	var elgg = require('elgg');
-	var $ = require('jquery');
+define(['jquery', 'elgg'], function($, elgg) {
 
 	/**
 	 * Toggle the availability of content access field
@@ -17,7 +15,7 @@ define(function(require) {
 	var toggleContentAccessMode = function(event) {
 		var accessModeField = $('#groups-content-access-mode');
 
-		if ($(this).val() == elgg.ACCESS_PRIVATE) {
+		if ($(this).val() == 0) {
 			// Group is hidden, so force members_only mode and disable the field
 			accessModeField.val('members_only').prop('disabled', true);
 		} else {
@@ -32,4 +30,3 @@ define(function(require) {
 		toggleContentAccessMode: toggleContentAccessMode
 	};
 });
-

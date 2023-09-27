@@ -1,14 +1,8 @@
 /**
  * Tabbed module
- *
- * @module page/components/tabs
  */
-define(function (require) {
+define(['jquery', 'elgg/Ajax'], function ($, Ajax) {
 
-	var elgg = require('elgg');
-	require('elgg/ready');
-	var $ = require('jquery');
-	var Ajax = require('elgg/Ajax');
 	var ajax = new Ajax(false);
 
 	function changeTab($link_item, clearing_tab, trigger_open) {
@@ -34,9 +28,9 @@ define(function (require) {
 		$target.siblings().addClass('hidden').removeClass('elgg-state-active');
 		$target.removeClass('hidden').addClass('elgg-state-active');
 
-		// trigger scroll to close potential open menus
-		// see elgg/popup.js open function
-		$(document).trigger('scroll');
+		require(['elgg/popup'], function(popup) {
+			popup.close();
+		});
 		
 		if (trigger_open) {
 			$link_item.trigger('open');
@@ -45,7 +39,7 @@ define(function (require) {
 		return true;
 	};
 	
-	var clickLink = function (event) {
+	function clickLink(event) {
 
 		var $link = $(this);
 		if ($link.hasClass('elgg-non-link')) {
@@ -87,15 +81,13 @@ define(function (require) {
 				}
 			}).done(function (output, statusText, jqXHR) {
 				$tab.data('loaded', true);
-				$target.removeClass('elgg-ajax-loader');
-				if (jqXHR.AjaxData.status === -1) {
-					$target.html(elgg.echo('ajax:error'));
-					return;
-				} else {
-					$target.html(output);
-				}
-
+				$target.removeClass('elgg-ajax-loader').html(output);
+				
 				changeTab($tab, true);
+			}).fail(function() {
+				require(['elgg/i18n'], function(i18n) {
+					$target.removeClass('elgg-ajax-loader').html(i18n.echo('ajax:error'));
+				});
 			});
 		}
 	};
@@ -106,7 +98,7 @@ define(function (require) {
 	// Open selected tabs
 	// This will load any selected tabs that link to ajax views
 	$('.elgg-tabs-component').each(function() {
-		var $tabs = $(this).find('.elgg-components-tab');
+		var $tabs = $(this).find('.elgg-components-tab:not(.elgg-menu-item-has-dropdown)');
 		if (!$tabs.length) {
 			return;
 		}

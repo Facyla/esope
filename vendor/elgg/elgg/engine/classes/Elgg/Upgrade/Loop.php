@@ -3,10 +3,9 @@
 namespace Elgg\Upgrade;
 
 use Elgg\Cli\Progress;
-use Elgg\Loggable;
+use Elgg\Exceptions\RuntimeException;
 use Elgg\Logger;
-use ElggUpgrade;
-use Psr\Log\LogLevel;
+use Elgg\Traits\Loggable;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
@@ -18,7 +17,7 @@ class Loop {
 	use Loggable;
 
 	/**
-	 * @var ElggUpgrade
+	 * @var \ElggUpgrade
 	 */
 	protected $upgrade;
 
@@ -60,13 +59,15 @@ class Loop {
 	/**
 	 * Constructor
 	 *
-	 * @param ElggUpgrade $upgrade  Upgrade instance
-	 * @param Result      $result   Upgrade result
-	 * @param Progress    $progress CLI progress helper
-	 * @param Logger      $logger   Logger
+	 * @param \ElggUpgrade $upgrade  Upgrade instance
+	 * @param Result       $result   Upgrade result
+	 * @param Progress     $progress CLI progress helper
+	 * @param Logger       $logger   Logger
+	 *
+	 * @throws RuntimeException
 	 */
 	public function __construct(
-		ElggUpgrade $upgrade,
+		\ElggUpgrade $upgrade,
 		Result $result,
 		Progress $progress,
 		Logger $logger
@@ -76,7 +77,7 @@ class Loop {
 		// Get the class taking care of the actual upgrading
 		$this->batch = $upgrade->getBatch();
 		if (!$this->batch) {
-			throw new \RuntimeException(elgg_echo('admin:upgrades:error:invalid_batch', [
+			throw new RuntimeException(elgg_echo('admin:upgrades:error:invalid_batch', [
 				$upgrade->getDisplayName(),
 				$upgrade->guid
 			]));
@@ -98,7 +99,7 @@ class Loop {
 	 *
 	 * @return void
 	 */
-	public function loop($max_duration = null) {
+	public function loop($max_duration = null): void {
 
 		$started = microtime(true);
 
@@ -142,11 +143,11 @@ class Loop {
 	 *
 	 * @return void
 	 */
-	protected function runBatch(ProgressBar $progress) {
+	protected function runBatch(ProgressBar $progress): void {
 		try {
 			$this->batch->run($this->result, $this->offset);
 		} catch (\Exception $e) {
-			$this->logger->error($e);
+			$this->getLogger()->error($e);
 
 			$this->result->addError($e->getMessage());
 			$this->result->addFailures(1);
@@ -175,9 +176,10 @@ class Loop {
 
 	/**
 	 * Report loop results
+	 *
 	 * @return void
 	 */
-	protected function report() {
+	protected function report(): void {
 		$upgrade_name = $this->upgrade->getDisplayName();
 
 		if ($this->upgrade->isCompleted()) {
@@ -187,31 +189,23 @@ class Loop {
 			$format = elgg_get_config('date_format') ? : DATE_ISO8601;
 
 			if ($this->result->getFailureCount()) {
-				$msg = elgg_echo('admin:upgrades:completed:errors', [
+				elgg_register_error_message(elgg_echo('admin:upgrades:completed:errors', [
 					$upgrade_name,
 					$dt->format($format),
 					$this->result->getFailureCount(),
-				]);
-
-				register_error($msg);
+				]));
 			} else {
-				$msg = elgg_echo('admin:upgrades:completed', [
+				elgg_register_success_message(elgg_echo('admin:upgrades:completed', [
 					$upgrade_name,
 					$dt->format($format),
-				]);
-
-				system_message($msg);
+				]));
 			}
 		} else {
-			$msg = elgg_echo('admin:upgrades:failed', [
-				$upgrade_name
-			]);
-
-			register_error($msg);
+			elgg_register_error_message(elgg_echo('admin:upgrades:failed', [$upgrade_name]));
 		}
 
 		foreach ($this->result->getErrors() as $error) {
-			$this->logger->log(LogLevel::ERROR, $error);
+			$this->getLogger()->error($error);
 		}
 	}
 
@@ -223,7 +217,7 @@ class Loop {
 	 *
 	 * @return bool
 	 */
-	protected function canContinue($started, $max_duration = null) {
+	protected function canContinue($started, $max_duration = null): bool {
 		if (!isset($max_duration)) {
 			$max_duration = elgg_get_config('batch_run_time_in_secs');
 		}
@@ -237,17 +231,28 @@ class Loop {
 
 	/**
 	 * Check if upgrade has completed
+	 *
 	 * @return bool
 	 */
-	protected function isCompleted() {
+	protected function isCompleted(): bool {
 		if ($this->batch->shouldBeSkipped()) {
 			return true;
 		}
 
-		if ($this->result && $this->result->wasMarkedComplete()) {
+		if ($this->result->wasMarkedComplete()) {
 			return true;
 		}
+		
+		if ($this->count === Batch::UNKNOWN_COUNT) {
+			// the batch reports an unknown count and should mark the Result as complete when it's done
+			return false;
+		}
+		
+		if (!$this->batch->needsIncrementOffset()) {
+			// the batch has some way of marking progress (like a delete) and the count items should reflect this
+			return ($this->batch->countItems() - $this->result->getFailureCount()) <= 0;
+		}
 
-		return $this->count !== Batch::UNKNOWN_COUNT && $this->processed >= $this->count;
+		return $this->processed >= $this->count;
 	}
 }

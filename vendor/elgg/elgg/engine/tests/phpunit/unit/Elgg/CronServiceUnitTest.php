@@ -2,6 +2,8 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\CronException;
+
 /**
  * @group Cron
  */
@@ -18,20 +20,13 @@ class CronServiceUnitTest extends UnitTestCase {
 	public function up() {
 		elgg_register_route('cron', [
 			'path' => '/cron/{segments}',
-			'handler' => '_elgg_cron_page_handler',
+			'controller' => \Elgg\Controllers\Cron::class,
 			'requirements' => [
 				'segments' => '.+',
 			],
 		]);
 		
 		$this->service = _elgg_services()->cron;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function down() {
-
 	}
 
 	public function testCanRunCron() {
@@ -95,9 +90,7 @@ class CronServiceUnitTest extends UnitTestCase {
 	}
 
 	public function testCanExecuteCronFromPageHandler() {
-		_elgg_cron_init();
-
-		_elgg_config()->security_protect_cron = false;
+		_elgg_services()->config->security_protect_cron = false;
 		
 		$calls = 0;
 		$dt = new \DateTime('2017-1-1 0:00:00');
@@ -120,15 +113,13 @@ class CronServiceUnitTest extends UnitTestCase {
 		$response = _elgg_services()->responseFactory->getSentResponse();
 		ob_get_clean();
 
-		$this->assertRegExp('/Cron hook handler called/im', $response->getContent());
+		$this->assertMatchesRegularExpression('/Cron hook handler called/im', $response->getContent());
 
 		elgg_unregister_plugin_hook_handler('cron', 'yearly', $handler);
 	}
 
 	public function testCanExecuteCronFromPageHandlerForInterval() {
-		_elgg_cron_init();
-
-		_elgg_config()->security_protect_cron = false;
+		_elgg_services()->config->security_protect_cron = false;
 
 		$calls = 0;
 		$dt = new \DateTime('2017-1-1 0:00:00');
@@ -151,13 +142,13 @@ class CronServiceUnitTest extends UnitTestCase {
 		$response = _elgg_services()->responseFactory->getSentResponse();
 		ob_get_clean();
 
-		$this->assertRegExp('/Cron hook handler called/im', $response->getContent());
+		$this->assertMatchesRegularExpression('/Cron hook handler called/im', $response->getContent());
 
 		elgg_unregister_plugin_hook_handler('cron', 'yearly', $handler);
 	}
 
 	public function testThrowsOnInvalidInterval() {
-		$this->expectException(\CronException::class);
+		$this->expectException(CronException::class);
 		$this->service->run(['foo']);
 	}
 	

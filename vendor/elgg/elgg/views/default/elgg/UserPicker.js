@@ -1,17 +1,10 @@
 /** @module elgg/UserPicker */
-
-define(function(require) {
-	var $ = require('jquery');
-	var elgg = require('elgg');
-	var spinner = require('elgg/spinner');
-	require('jquery.ui.autocomplete.html');
+define(['jquery', 'elgg', 'elgg/Ajax', 'jquery-ui/widgets/autocomplete', 'jquery.ui.autocomplete.html'], function($, elgg, Ajax) {
 
 	/**
 	 * @param {HTMLElement} wrapper outer div
 	 * @constructor
 	 * @alias module:elgg/UserPicker
-	 *
-	 * @todo move this to /js/classes ?
 	 */
 	function UserPicker(wrapper) {
 		this.$wrapper = $(wrapper);
@@ -22,6 +15,7 @@ define(function(require) {
 			data = this.$wrapper.data();
 
 		this.name = data.name || 'members';
+		this.matchOn = data.matchOn || 'users';
 		this.handler = data.handler || 'livesearch';
 		this.limit = data.limit || 0;
 		this.minLength = data.minLength || 2;
@@ -37,22 +31,21 @@ define(function(require) {
 					return;
 				}
 
-				elgg.get(UserPicker.handler, {
-					beforeSend: spinner.start,
-					complete: spinner.stop,
+				var ajax = new Ajax();
+				ajax.path(UserPicker.handler, {
 					data: {
 						term: Autocomplete.term,
 						match_on: UserPicker.getSearchType(),
 						name: UserPicker.name
 					},
-					dataType: 'json',
+					method: 'GET',
 					success: function(data) {
 						response(data);
 					}
 				});
 			},
 			minLength: UserPicker.minLength,
-			html: "html",
+			html: 'html',
 			select: function(event, ui) {
 				UserPicker.addUser(event, ui.item.guid, ui.item.html);
 			},
@@ -79,6 +72,10 @@ define(function(require) {
 		 * @param {String} html    HTML for autocomplete item selected by user
 		 */
 		addUser : function(event, guid, html) {
+			if (event.isDefaultPrevented()) {
+				return;
+			}
+			
 			// do not allow users to be added multiple times
 			if (!$('li[data-guid="' + guid + '"]', this.$ul).length) {
 				this.$ul.append(html);
@@ -142,16 +139,11 @@ define(function(require) {
 		 * Get search type
 		 */
 		getSearchType: function() {
-			var defaultType = 'users';
-			if (this.$wrapper.has('[type="hidden"][name="match_on"]').length) {
-				defaultType = $('[type="hidden"][name="match_on"]', this.$wrapper).val();
-			}
-			
 			if (this.$wrapper.has('[type="checkbox"][name="match_on"]:checked').length) {
 				return $('[type="checkbox"][name=match_on]:checked', this.$wrapper).val();
 			}
 			
-			return defaultType;
+			return this.matchOn;
 		}
 	};
 
@@ -159,14 +151,12 @@ define(function(require) {
 	 * @param {String} selector
 	 */
 	UserPicker.setup = function(selector) {
-		elgg.register_hook_handler('init', 'system', function () {
-			$(selector).each(function () {
-				// we only want to wrap each picker once
-				if (!$(this).data('initialized')) {
-					new UserPicker(this);
-					$(this).data('initialized', 1);
-				}
-			});
+		$(selector).each(function () {
+			// we only want to wrap each picker once
+			if (!$(this).data('initialized')) {
+				new UserPicker(this);
+				$(this).data('initialized', 1);
+			}
 		});
 	};
 

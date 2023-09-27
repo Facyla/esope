@@ -10,7 +10,7 @@ return array(
 	'widgets:river_widget:description' => "Mostra le attività recenti",
 	'widgets:river_widget:type' => "Tipo di attività",
 	'widgets:river_widget:friends' => 'Attività degli amici',
-	'widgets:river_widget:all' => 'Tutte le attività',
+	'widgets:river_widget:all' => 'Tutte le attività del sito',
 
 	'widgets:group_activity:name' => 'Attività del gruppo',
 	'widgets:group_activity:description' => 'Visualizza le attività in uno dei tuoi gruppi',
@@ -18,7 +18,9 @@ return array(
 	'widgets:group_activity:content:noactivity' => 'Non ci sono attività in questo gruppo',
 	'widgets:group_activity:content:noselect' => 'Modifica questo widget per selezionare un gruppo',
 	
+	'collection:river' => "Attività",
 	'collection:river:group' => "Attività del gruppo",
 	'groups:tool:activity' => 'Abilita attività del gruppo',
+	'groups:tool:activity:description' => 'Mostra un feed di attività sui contenuti relativi al gruppo.',
 	
 );

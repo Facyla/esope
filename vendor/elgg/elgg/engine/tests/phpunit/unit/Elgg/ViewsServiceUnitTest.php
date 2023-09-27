@@ -26,15 +26,12 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->hooks = new PluginHooksService(_elgg_services()->events);
 		$logger = $this->createMock('\Elgg\Logger', array(), array(), '', false);
 
-		$this->views = new ViewsService($this->hooks, $logger);
+		$this->views = new ViewsService($this->hooks, _elgg_services()->request);
+		$this->views->setLogger($logger);
 		$this->views->autoregisterViews('', "$this->viewsDir/default", 'default');
 
 		// supports deprecation wrapper for $vars['user']
-		_elgg_services()->setValue('session', \ElggSession::getMock());
-	}
-
-	public function down() {
-
+		_elgg_services()->set('session', \ElggSession::getMock());
 	}
 
 	public function testCanExtendViews() {
@@ -151,16 +148,17 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanAlterViewInput() {
-		$this->hooks->registerHandler('view_vars', 'js/interpreted.js', function ($h, $t, $v, $p) {
-			$v['in'] = 'out';
-			return $v;
+		$this->hooks->registerHandler('view_vars', 'js/interpreted.js', function (\Elgg\Hook $hook) {
+			$vars = $hook->getValue();
+			$vars['in'] = 'out';
+			return $vars;
 		});
 
 		$this->assertEquals("// PHPout", $this->views->renderView('js/interpreted.js'));
 	}
 
 	public function testCanAlterViewOutput() {
-		$this->hooks->registerHandler('view', 'js/interpreted.js', function ($h, $t, $v, $p) {
+		$this->hooks->registerHandler('view', 'js/interpreted.js', function (\Elgg\Hook $hook) {
 			return '// Hello';
 		});
 
@@ -168,11 +166,11 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanReplaceViews() {
-		$this->hooks->registerHandler('view_vars', 'js/interpreted.js', function ($h, $t, $v, $p) {
+		$this->hooks->registerHandler('view_vars', 'js/interpreted.js', function (\Elgg\Hook $hook) {
 			return ['__view_output' => 123];
 		});
 
-		$this->hooks->registerHandler('view', 'js/interpreted.js', function ($h, $t, $v, $p) {
+		$this->hooks->registerHandler('view', 'js/interpreted.js', function (\Elgg\Hook $hook) {
 			$this->fail('view hook was called though __view_output was set.');
 		});
 
@@ -266,5 +264,4 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 			['view.jpg', 'css/view.jpg'],
 		];
 	}
-
 }

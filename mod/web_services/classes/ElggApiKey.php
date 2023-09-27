@@ -40,7 +40,9 @@ class ElggApiKey extends ElggObject {
 			return $result;
 		}
 		
-		remove_api_user($public_key);
+		if (isset($public_key)) {
+			_elgg_services()->apiUsersTable->removeApiUser($public_key);
+		}
 		
 		return $result;
 	}
@@ -56,7 +58,7 @@ class ElggApiKey extends ElggObject {
 			return false;
 		}
 		
-		return get_api_user($this->public_key);
+		return _elgg_services()->apiUsersTable->getApiUser($this->public_key, false);
 	}
 	
 	/**
@@ -89,7 +91,7 @@ class ElggApiKey extends ElggObject {
 	 */
 	public function generateKeys() {
 		
-		$keys = create_api_user();
+		$keys = _elgg_services()->apiUsersTable->createApiUser();
 		if (empty($keys)) {
 			return false;
 		}
@@ -115,8 +117,40 @@ class ElggApiKey extends ElggObject {
 		}
 		
 		// remove old keys from DB
-		remove_api_user($current_public);
+		_elgg_services()->apiUsersTable->removeApiUser($current_public);
 		
 		return true;
+	}
+	
+	/**
+	 * Check if the API keys are active
+	 *
+	 * @return bool
+	 */
+	public function hasActiveKeys() {
+		$keys = $this->getKeys();
+		if (empty($keys)) {
+			return false;
+		}
+		
+		return (bool) $keys->active;
+	}
+	
+	/**
+	 * Enables the API key for use by API requests
+	 *
+	 * @return bool
+	 */
+	public function enableKeys() {
+		return _elgg_services()->apiUsersTable->enableAPIUser($this->getPublicKey());
+	}
+	
+	/**
+	 * Disables the API key for use by API requests
+	 *
+	 * @return bool
+	 */
+	public function disableKeys() {
+		return _elgg_services()->apiUsersTable->disableAPIUser($this->getPublicKey());
 	}
 }

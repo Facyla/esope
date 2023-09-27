@@ -3,8 +3,8 @@
 namespace Elgg\Application;
 
 use Elgg\Application;
-use Elgg\Loggable;
-use Exception;
+use Elgg\Exceptions\ErrorException;
+use Elgg\Traits\Loggable;
 use Psr\Log\LogLevel;
 
 /**
@@ -35,34 +35,39 @@ class ErrorHandler {
 	 * @param int    $linenum  The line number the error was raised at
 	 *
 	 * @return true
-	 * @throws Exception
+	 * @throws \Elgg\Exceptions\ErrorException
 	 */
 	public function __invoke($errno, $errmsg, $filename = '', $linenum = 0) {
 		$error = date("Y-m-d H:i:s (T)") . ": \"$errmsg\" in file $filename (line $linenum)";
 
+		// check if the error wasn't suppressed by the error control operator (@)
+		// error_reporting === 0 for PHP < 8.0
+		$reporting_disabled = (error_reporting() === 0) || !(error_reporting() & $errno);
+		
 		switch ($errno) {
 			case E_USER_ERROR:
 				$this->log(LogLevel::ERROR, "PHP ERROR: $error");
 
 				if (Application::isCoreLoaded()) {
-					Application::$_instance->_services->systemMessages->addErrorMessage("ERROR: $error");
+					Application::$_instance->internal_services->system_messages->addErrorMessage("ERROR: $error");
 				}
 
 				// Since this is a fatal error, we want to stop any further execution but do so gracefully.
-				throw new Exception($error);
+				throw new ErrorException($error, 0, $errno, $filename, $linenum);
 
 			case E_WARNING :
 			case E_USER_WARNING :
 			case E_RECOVERABLE_ERROR: // (e.g. type hint violation)
-
-				// check if the error wasn't suppressed by the error control operator (@)
-				if (error_reporting()) {
+				if (!$reporting_disabled) {
 					$this->log(LogLevel::WARNING, "PHP: $error");
 				}
 				break;
 
 			default:
-				$this->log(LogLevel::NOTICE, "PHP NOTICE: $error");
+				if (!$reporting_disabled) {
+					$this->log(LogLevel::NOTICE, "PHP NOTICE: $error");
+				}
+				
 				break;
 		}
 

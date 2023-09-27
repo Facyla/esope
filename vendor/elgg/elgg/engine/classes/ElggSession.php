@@ -2,7 +2,11 @@
 
 use Elgg\Config;
 use Elgg\Database;
+use Elgg\Exceptions\LoginException;
+use Elgg\Exceptions\SecurityException;
 use Elgg\Http\DatabaseSessionHandler;
+use Elgg\SystemMessagesService;
+use Elgg\Traits\Debug\Profilable;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -16,6 +20,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
  * @see elgg_get_session()
  */
 class ElggSession {
+	
+	use Profilable;
 
 	/**
 	 * @var SessionInterface
@@ -44,6 +50,50 @@ class ElggSession {
 	 */
 	public function __construct(SessionInterface $storage) {
 		$this->storage = $storage;
+	}
+	
+	/**
+	 * Initializes the session and checks for the remember me cookie
+	 *
+	 * @return void
+	 *
+	 * @internal
+	 */
+	public function boot(): void {
+	
+		$this->beginTimer([__METHOD__]);
+	
+		$this->start();
+	
+		// test whether we have a user session
+		if ($this->has('guid')) {
+			$user = _elgg_services()->entityTable->get($this->get('guid'), 'user');
+			if (!$user instanceof ElggUser) {
+				// OMG user has been deleted.
+				$this->invalidate();
+				
+				// redirect to homepage
+				$this->endTimer([__METHOD__]);
+				_elgg_services()->responseFactory->redirect('');
+			}
+		} else {
+			$user = _elgg_services()->persistentLogin->bootSession();
+			if ($user instanceof ElggUser) {
+				_elgg_services()->persistentLogin->updateTokenUsage($user);
+			}
+		}
+	
+		if ($user instanceof ElggUser) {
+			$this->setLoggedInUser($user);
+			$user->setLastAction();
+	
+			// logout a user with open session who has been banned
+			if ($user->isBanned()) {
+				$this->logout();
+			}
+		}
+	
+		$this->endTimer([__METHOD__]);
 	}
 
 	/**
@@ -197,6 +247,89 @@ class ElggSession {
 	public function has($name) {
 		return $this->storage->has($name);
 	}
+	
+	/**
+	 * Log in a user
+	 *
+	 * @param \ElggUser $user       A valid Elgg user object
+	 * @param boolean   $persistent Should this be a persistent login?
+	 *
+	 * @return void
+	 * @throws LoginException
+	 * @since 4.3
+	 */
+	public function login(\ElggUser $user, bool $persistent = false): void {
+		if ($user->isBanned()) {
+			throw new LoginException(elgg_echo('LoginException:BannedUser'));
+		}
+	
+		// give plugins a chance to reject the login of this user (no user in session!)
+		if (!elgg_trigger_before_event('login', 'user', $user)) {
+			throw new LoginException(elgg_echo('LoginException:Unknown'));
+		}
+		
+		if (!$user->isEnabled()) {
+			// fallback if no plugin provided a reason
+			throw new LoginException(elgg_echo('LoginException:DisabledUser'));
+		}
+		
+		// #5933: set logged in user early so code in login event will be able to
+		// use elgg_get_logged_in_user_entity().
+		$this->setLoggedInUser($user);
+		$this->setUserToken($user);
+	
+		// re-register at least the core language file for users with language other than site default
+		_elgg_services()->translator->registerTranslations(\Elgg\Project\Paths::elgg() . 'languages/');
+	
+		// if remember me checked, set cookie with token and store hash(token) for user
+		if ($persistent) {
+			_elgg_services()->persistentLogin->makeLoginPersistent($user);
+		}
+	
+		// User's privilege has been elevated, so change the session id (prevents session fixation)
+		$this->migrate();
+	
+		// check before updating last login to determine first login
+		$first_login = empty($user->last_login);
+		
+		$user->setLastLogin();
+		elgg_reset_authentication_failures($user);
+	
+		elgg_trigger_after_event('login', 'user', $user);
+		
+		if ($first_login) {
+			elgg_trigger_event('login:first', 'user', $user);
+			$user->first_login = time();
+		}
+	}
+	
+	/**
+	 * Log the current user out
+	 *
+	 * @return bool
+	 * @since 4.3
+	 */
+	public function logout(): bool {
+		$user = $this->getLoggedInUser();
+		if (!$user) {
+			return false;
+		}
+	
+		if (!elgg_trigger_before_event('logout', 'user', $user)) {
+			return false;
+		}
+	
+		_elgg_services()->persistentLogin->removePersistentLogin();
+	
+		// pass along any messages into new session
+		$old_msg = $this->get(SystemMessagesService::SESSION_KEY, []);
+		$this->invalidate();
+		$this->set(SystemMessagesService::SESSION_KEY, $old_msg);
+	
+		elgg_trigger_after_event('logout', 'user', $user);
+	
+		return true;
+	}
 
 	/**
 	 * Sets the logged in user
@@ -211,6 +344,7 @@ class ElggSession {
 			$this->set('guid', $user->guid);
 			$this->logged_in_user = $user;
 			_elgg_services()->sessionCache->clear();
+			_elgg_services()->entityCache->save($user);
 			_elgg_services()->translator->setCurrentLanguage($user->language);
 		}
 	}
@@ -295,7 +429,7 @@ class ElggSession {
 	 * @param \ElggUser $user the user to check for
 	 *
 	 * @return void
-	 * @throws SecurityException
+	 * @throws \Elgg\Exceptions\SecurityException
 	 * @since 3.3.25
 	 */
 	public function validateUserToken(\ElggUser $user): void {
@@ -353,11 +487,6 @@ class ElggSession {
 	 * @return bool
 	 */
 	public function getDisabledEntityVisibility() {
-		global $ENTITY_SHOW_HIDDEN_OVERRIDE;
-		if (isset($ENTITY_SHOW_HIDDEN_OVERRIDE)) {
-			return $ENTITY_SHOW_HIDDEN_OVERRIDE;
-		}
-
 		return $this->show_disabled_entities;
 	}
 
@@ -369,9 +498,6 @@ class ElggSession {
 	 * @return bool Previous setting
 	 */
 	public function setDisabledEntityVisibility($show = true) {
-		global $ENTITY_SHOW_HIDDEN_OVERRIDE;
-		$ENTITY_SHOW_HIDDEN_OVERRIDE = $show;
-
 		$prev = $this->show_disabled_entities;
 		$this->show_disabled_entities = $show;
 

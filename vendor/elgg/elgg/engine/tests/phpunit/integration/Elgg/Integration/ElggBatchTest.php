@@ -2,30 +2,20 @@
 
 namespace Elgg\Integration;
 
-use Elgg\BatchResult;
 use Elgg\IntegrationTestCase;
 use ElggBatch;
-use ElggObject;
 
 /**
  * @group IntegrationTests
  */
 class ElggBatchTest extends IntegrationTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	// see https://github.com/elgg/elgg/issues/4288
 	public function testElggBatchIncOffset() {
 		// normal increment
 		$options = [
 			'offset' => 0,
-			'limit' => 11
+			'limit' => 11,
 		];
 		$batch = new ElggBatch([
 			ElggBatchTest::class,
@@ -34,7 +24,7 @@ class ElggBatchTest extends IntegrationTestCase {
 			null, 5);
 		$j = 0;
 		foreach ($batch as $e) {
-			$offset = floor($j / 5) * 5;
+			$offset = (int) floor($j / 5) * 5;
 			$this->assertEquals($offset, $e['offset']);
 			$this->assertEquals($j + 1, $e['index']);
 			$j++;
@@ -110,15 +100,15 @@ class ElggBatchTest extends IntegrationTestCase {
 	public function testCanGetBatchFromAnEntityGetter() {
 
 		$subtype ='testCanGetBatchFromAnEntityGetter';
-		for ($i = 1; $i <=5; $i++) {
-			$this->createOne('object', [
+		for ($i = 1; $i <= 5; $i++) {
+			$this->createObject([
 				'subtype' => $subtype,
 			]);
 		}
 
 		$options = [
 			'type' => 'object',
-			'subtype' => 'testCanGetBatchFromAnEntityGetter',
+			'subtype' => $subtype,
 			'limit' => 5,
 			'callback' => function ($row) {
 				return $row->guid;
@@ -129,7 +119,7 @@ class ElggBatchTest extends IntegrationTestCase {
 
 		$batch = elgg_get_entities(array_merge($options, ['batch' => true]));
 
-		$this->assertInstanceOf(BatchResult::class, $batch);
+		$this->assertInstanceOf(\ElggBatch::class, $batch);
 		/* @var ElggBatch $batch */
 
 		$guids2 = [];
@@ -138,6 +128,114 @@ class ElggBatchTest extends IntegrationTestCase {
 		}
 
 		$this->assertEquals($guids1, $guids2);
+	}
+	
+	public function testReportFailure() {
+		$time = time();
+		$subtype = 'elggBatchReportFailureSubtype';
+		$owner = $this->getRandomUser();
+		elgg_get_session()->setLoggedInUser($owner);
+		
+		for ($i = 0; $i < 5; $i++) {
+			$this->createObject([
+				'owner_guid' => $owner->guid,
+				'subtype' => $subtype,
+			]);
+		}
+		
+		$options = [
+			'type' => 'object',
+			'subtype' => $subtype,
+			'created_after' => $time, // needed if previous tests failed
+			'limit' => false,
+			'batch' => true,
+			'batch_inc_offset' => false,
+			'batch_size' => 2,
+		];
+		
+		$count = elgg_count_entities($options);
+		$this->assertEquals(5, $count);
+		
+		/* @var $batch \ElggBatch */
+		$batch = elgg_get_entities($options);
+		$this->assertInstanceOf('\ElggBatch', $batch);
+		
+		/* @var $entity \ElggObject */
+		foreach ($batch as $index => $entity) {
+			if ($index < 2) {
+				$batch->reportFailure();
+				continue;
+			}
+			
+			$entity->delete();
+			
+			if ($index > 10) {
+				// just in case
+				break;
+			}
+		}
+		
+		$count = elgg_count_entities($options);
+		$this->assertEquals(2, $count);
+	}
+	
+	public function testQueryCacheDisabledButNotCleared() {
+		$time = time();
+		$subtype = 'queryCacheTest';
+		$owner = $this->getRandomUser();
+		elgg_get_session()->setLoggedInUser($owner);
+		
+		for ($i = 0; $i < 5; $i++) {
+			$this->createObject([
+				'owner_guid' => $owner->guid,
+				'subtype' => $subtype,
+			]);
+		}
+		
+		$options = [
+			'type' => 'object',
+			'subtype' => $subtype,
+			'created_after' => $time, // needed if previous tests failed
+			'limit' => false,
+			'batch' => true,
+			'batch_size' => 2,
+		];
+		
+		$count = elgg_count_entities($options);
+		$this->assertEquals(5, $count);
+		
+		$queryCache = _elgg_services()->queryCache;
+		$this->assertTrue($queryCache->isEnabled());
+		$queryCache->set('foo', 'bar');
+		$this->assertEquals('bar', $queryCache->get('foo'));
+		
+		$cache_size = $queryCache->size();
+		
+		/* @var $batch \ElggBatch */
+		$batch = elgg_get_entities($options);
+		$this->assertInstanceOf('\ElggBatch', $batch);
+		
+		/* @var $entity \ElggObject */
+		foreach ($batch as $entity) {
+			// do nothing, just loop
+			// the entities query shouldn't end up in the cache
+		}
+		
+		$this->assertTrue($queryCache->isEnabled());
+		$this->assertEquals('bar', $queryCache->get('foo'));
+		$this->assertEquals($cache_size, $queryCache->size());
+		
+		// do a normal elgg_get_entities()
+		// this should increate the cache size
+		$cache_size = $queryCache->size();
+		$options['batch'] = false;
+		$entities = elgg_get_entities($options);
+		$this->assertIsArray($entities);
+		$this->assertCount(5, $entities);
+		
+		$this->assertGreaterThan($cache_size, $queryCache->size());
+		
+		$queryCache->clear();
 	}
 
 	public static function elgg_batch_callback_test($options, $reset = false) {

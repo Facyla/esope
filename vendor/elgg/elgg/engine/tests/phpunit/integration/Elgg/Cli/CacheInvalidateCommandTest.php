@@ -17,10 +17,6 @@ class CacheInvalidateCommandTest extends IntegrationTestCase {
 		]);
 	}
 
-	public function down() {
-
-	}
-
 	public function testExecuteWithoutOptions() {
 		$application = new Application();
 		$application->add(new CacheInvalidateCommand());
@@ -29,7 +25,7 @@ class CacheInvalidateCommandTest extends IntegrationTestCase {
 		$commandTester = new CommandTester($command);
 		$commandTester->execute(['command' => $command->getName()]);
 
-		$this->assertRegExp('/' . elgg_echo('admin:cache:invalidated') . '/im', $commandTester->getDisplay());
+		$this->assertMatchesRegularExpression('/' . elgg_echo('admin:cache:invalidated') . '/im', $commandTester->getDisplay());
 	}
 
 	public function testExecuteWithQuietOutput() {

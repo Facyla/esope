@@ -1,27 +1,10 @@
 <?php
+
 /**
- * Phinx
- *
- * (The MIT license)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated * documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
+ * MIT License
+ * For full license information, please view the LICENSE file that was distributed with this source code.
  */
+
 namespace Phinx\Db\Util;
 
 /**
@@ -30,22 +13,21 @@ namespace Phinx\Db\Util;
  */
 class AlterInstructions
 {
-
     /**
      * @var string[] The SQL snippets to be added to an ALTER instruction
      */
     protected $alterParts = [];
 
     /**
-     * @var mixed[] The SQL commands to be executed after the ALTER instruction
+     * @var (string|callable)[] The SQL commands to be executed after the ALTER instruction
      */
     protected $postSteps = [];
 
     /**
      * Constructor
      *
-     * @param array $alterParts SQL snippets to be added to a single ALTER instruction per table
-     * @param array $postSteps SQL commands to be executed after the ALTER instruction
+     * @param string[] $alterParts SQL snippets to be added to a single ALTER instruction per table
+     * @param (string|callable)[] $postSteps SQL commands to be executed after the ALTER instruction
      */
     public function __construct(array $alterParts = [], array $postSteps = [])
     {
@@ -93,7 +75,7 @@ class AlterInstructions
     /**
      * Returns the SQL commands to run after the ALTER instruction
      *
-     * @return mixed[]
+     * @return (string|callable)[]
      */
     public function getPostSteps()
     {
@@ -103,7 +85,7 @@ class AlterInstructions
     /**
      * Merges another AlterInstructions object to this one
      *
-     * @param AlterInstructions $other The other collection of instructions to merge in
+     * @param \Phinx\Db\Util\AlterInstructions $other The other collection of instructions to merge in
      * @return void
      */
     public function merge(AlterInstructions $other)

@@ -27,7 +27,6 @@ $form = elgg_view_form('search', [
 	'action' => elgg_generate_url('default:search'),
 	'method' => 'get',
 	'disable_security' => true,
-	'prevent_double_submit' => true,
 ], $params);
 
 if (!preg_match('/[\pL\pN]+/', $query)) {
@@ -130,11 +129,12 @@ elgg_register_menu_item('page', [
 
 if (empty($results)) {
 	$results = elgg_view('page/components/no_results', [
-		'no_results' => elgg_echo('notfound'),
+		'no_results' => true,
 	]);
 }
 
 echo elgg_view_page(elgg_echo('search'), [
 	'title' => $title,
 	'content' => $form . $results,
+	'filter_id' => 'search',
 ]);

@@ -3,9 +3,9 @@
 namespace Elgg\Application;
 
 use Elgg\Application;
+use Elgg\Exceptions\Configuration\InstallationException;
 use Elgg\Http\Request;
-use Elgg\Loggable;
-use Exception;
+use Elgg\Traits\Loggable;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,7 +32,7 @@ class ExceptionHandler {
 	 *
 	 * @see     http://www.php.net/set-exception-handler
 	 *
-	 * @param Exception|\Error $exception The exception/error being handled
+	 * @param \Exception|\Error $exception The exception/error being handled
 	 *
 	 * @return void
 	 */
@@ -51,8 +51,8 @@ class ExceptionHandler {
 			'Expires' => 'Fri, 05 Feb 1982 00:00:00 -0500',
 		];
 
-		if ($exception instanceof \InstallationException) {
-			$response = RedirectResponse::create('/install.php', 307, $headers);
+		if ($exception instanceof InstallationException) {
+			$response = new RedirectResponse('/install.php', ELGG_HTTP_TEMPORARY_REDIRECT, $headers);
 			$response->prepare($request);
 
 			$response->send();
@@ -62,9 +62,9 @@ class ExceptionHandler {
 
 		$app = Application::$_instance;
 
-		if (!$app || !$app->_services) {
+		if (!$app || !$app->internal_services) {
 			$msg = "Exception loading Elgg core. Check log at time {$exception->timestamp}";
-			$response = Response::create($msg, 500, $headers);
+			$response = new Response($msg, ELGG_HTTP_INTERNAL_SERVER_ERROR, $headers);
 			$response->prepare($request);
 
 			$response->send();
@@ -72,8 +72,11 @@ class ExceptionHandler {
 			return;
 		}
 
-		$services = $app->_services;
-
+		$services = $app->internal_services;
+		if ($services->responseFactory->getSentResponse() !== false) {
+			return;
+		}
+		
 		try {
 			// allow custom scripts to trigger on exception
 			// value in settings.php should be a system path to a file to include
@@ -90,7 +93,7 @@ class ExceptionHandler {
 				// if content is returned from the custom handler we will output
 				// that instead of our default failsafe view
 				if (!empty($exception_output)) {
-					$response = Response::create($exception_output, 500, $headers);
+					$response = new Response($exception_output, ELGG_HTTP_INTERNAL_SERVER_ERROR, $headers);
 					$response->prepare($request);
 
 					$response->send();
@@ -106,10 +109,10 @@ class ExceptionHandler {
 
 			if ($services->request->isXmlHttpRequest()) {
 				$services->views->setViewtype('json');
-				$response = new JsonResponse(null, 500, $headers);
+				$response = new JsonResponse(null, ELGG_HTTP_INTERNAL_SERVER_ERROR, $headers);
 			} else {
 				$services->views->setViewtype('failsafe');
-				$response = new Response('', 500, $headers);
+				$response = new Response('', ELGG_HTTP_INTERNAL_SERVER_ERROR, $headers);
 			}
 
 			$body = elgg_view("messages/exceptions/exception", [
@@ -120,7 +123,7 @@ class ExceptionHandler {
 			$response->prepare($services->request);
 			$response->setContent(elgg_view_page(elgg_echo('exception:title'), $body));
 			$response->send();
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$timestamp = time();
 
 			$e->timestamp = $timestamp;
@@ -129,7 +132,7 @@ class ExceptionHandler {
 
 			$msg = "Fatal error in exception handler. Check log for Exception at time $timestamp";
 
-			$response = new Response($msg, 500, $headers);
+			$response = new Response($msg, ELGG_HTTP_INTERNAL_SERVER_ERROR, $headers);
 			$response->prepare($request);
 			$response->send();
 		}

@@ -8,14 +8,16 @@ Elgg comes with a set of plugins. These provide the basic functionality for your
    
    blog
    dashboard
-   diagnostics
+   discussions
    file
    friends
    groups
+   likes
    messageboard
    messages
    pages
    profile
+   site_notifications
    thewire
    uservalidationbyemail
 
@@ -26,18 +28,14 @@ The following plugins are also bundled with Elgg, but are not (yet) documented
 - ckeditor
 - custom_index
 - developers
-- discussions
 - embed
 - externalpages
 - friends_collections
 - garbagecollector
 - invitefriends
-- likes
 - members
-- notifications
 - reportedcontent
 - search
-- site_notifications
 - system_log
 - tagcloud
 - web_services

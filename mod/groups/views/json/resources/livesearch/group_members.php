@@ -7,10 +7,10 @@
  * @uses $vars['name']       (string) the input name to be used when submitting the selected value
  * @uses $vars['group_guid'] (int)    the GUID of the group to search members in
  *
- * @throws Elgg\EntityNotFoundException if the group_guid doesn't match a group
+ * @throws Elgg\Exceptions\Http\EntityNotFoundException if the group_guid doesn't match a group
  */
 
-use Elgg\EntityNotFoundException;
+use Elgg\Exceptions\Http\EntityNotFoundException;
 
 elgg_gatekeeper();
 
@@ -31,8 +31,11 @@ $options = [
 	'relationship_guid' => $group_guid,
 	'inverse_relationship' => true,
 	'limit' => $limit,
-	'sort' => 'name',
-	'order' => 'ASC',
+	'sort_by' => [
+		'property_type' => 'metadata',
+		'property' => 'name',
+		'direction' => 'ASC',
+	],
 	'fields' => ['metadata' => ['name', 'username']],
 	'item_view' => 'search/entity',
 	'input_name' => $input_name,

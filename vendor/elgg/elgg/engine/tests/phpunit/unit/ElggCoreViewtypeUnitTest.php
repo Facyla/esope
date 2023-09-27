@@ -11,10 +11,6 @@ class ElggCoreViewtypeUnitTest extends \Elgg\UnitTestCase {
 		elgg_set_viewtype('');
 	}
 
-	public function down() {
-		$this->setUp();
-	}
-
 	public function testElggSetViewtype() {
 		$this->assertTrue(elgg_set_viewtype('test'));
 		$this->assertEquals('test', elgg_get_viewtype());
@@ -60,5 +56,4 @@ class ElggCoreViewtypeUnitTest extends \Elgg\UnitTestCase {
 		$this->assertFalse(_elgg_services()->views->isValidViewtype(123));
 		$this->assertFalse(_elgg_services()->views->isValidViewtype(''));
 	}
-
 }

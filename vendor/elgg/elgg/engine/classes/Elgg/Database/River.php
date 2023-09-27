@@ -7,15 +7,11 @@ use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\EntityWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
 use Elgg\Database\Clauses\RiverWhereClause;
-use ElggEntity;
-use ElggRiverItem;
-use InvalidArgumentException;
-use InvalidParameterException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\LogicException;
 
 /**
  * River repository contains methods for fetching/counting river items
- *
- * API IN FLUX Do not access the methods directly, use elgg_get_river() instead
  *
  * @internal
  */
@@ -37,7 +33,7 @@ class River extends Repository {
 			'view',
 		];
 
-		$options = LegacyQueryOptionsAdapter::normalizePluralOptions($options, $singulars);
+		$options = QueryOptions::normalizePluralOptions($options, $singulars);
 
 		$defaults = [
 			'ids' => null,
@@ -67,7 +63,7 @@ class River extends Repository {
 	 *
 	 * @param array $options Options
 	 *
-	 * @return ElggRiverItem[]|int|mixed
+	 * @return \ElggRiverItem[]|int|mixed
 	 */
 	public static function find(array $options = []) {
 		return parent::find($options);
@@ -101,12 +97,12 @@ class River extends Repository {
 	 * @param string $property_type 'annotation'
 	 *
 	 * @return int|float
-	 * @throws InvalidParameterException
+	 * @throws InvalidArgumentException
 	 */
 	public function calculate($function, $property, $property_type = 'annotation') {
 
 		if (!in_array(strtolower($function), QueryBuilder::$calculations)) {
-			throw new InvalidArgumentException("'$function' is not a valid numeric function");
+			throw new InvalidArgumentException("'{$function}' is not a valid numeric function");
 		}
 
 		$qb = Select::fromTable('river', 'rv');
@@ -141,8 +137,7 @@ class River extends Repository {
 	 * @param int      $offset   Offset
 	 * @param callable $callback Custom callback
 	 *
-	 * @return ElggEntity[]
-	 * @throws \DatabaseException
+	 * @return \ElggEntity[]
 	 */
 	public function get($limit = null, $offset = null, $callback = null) {
 
@@ -169,7 +164,7 @@ class River extends Repository {
 		$callback = $callback ? : $this->options->callback;
 		if (!isset($callback)) {
 			$callback = function ($row) {
-				return new ElggRiverItem($row);
+				return new \ElggRiverItem($row);
 			};
 		}
 
@@ -177,7 +172,7 @@ class River extends Repository {
 
 		if (!empty($items)) {
 			$preload = array_filter($items, function($e) {
-				return $e instanceof ElggRiverItem;
+				return $e instanceof \ElggRiverItem;
 			});
 
 			_elgg_services()->entityPreloader->preload($preload, [
@@ -193,15 +188,15 @@ class River extends Repository {
 	/**
 	 * Execute the query resolving calculation, count and/or batch options
 	 *
-	 * @return array|\ElggData[]|ElggEntity[]|false|int
-	 * @throws \LogicException
+	 * @return array|\ElggData[]|\ElggEntity[]|false|int
+	 * @throws LogicException
 	 */
 	public function execute() {
 
 		if ($this->options->annotation_calculation) {
 			$clauses = $this->options->annotation_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->annotation_name_value_pairs_operator !== 'OR') {
-				throw new \LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
+				throw new LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
 			}
 
 			$clause = array_shift($clauses);

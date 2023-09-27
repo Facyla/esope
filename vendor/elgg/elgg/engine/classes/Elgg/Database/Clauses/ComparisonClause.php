@@ -3,6 +3,7 @@
 namespace Elgg\Database\Clauses;
 
 use Elgg\Database\QueryBuilder;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\Values;
 
 /**
@@ -55,7 +56,7 @@ class ComparisonClause extends Clause {
 	/**
 	 * {@inheritdoc}
 	 *
-	 * @throws \InvalidParameterException
+	 * @throws InvalidParameterException
 	 */
 	public function prepare(QueryBuilder $qb, $table_alias = null) {
 		$x = $this->x;
@@ -63,34 +64,14 @@ class ComparisonClause extends Clause {
 		$type = $this->type;
 		$case_sensitive = $this->case_sensitive;
 
-		switch ($type) {
-			case ELGG_VALUE_TIMESTAMP :
-				$y = Values::normalizeTimestamp($y);
-				$type = ELGG_VALUE_INTEGER;
-				break;
-
-			case ELGG_VALUE_GUID :
-				$y = Values::normalizeGuids($y);
-				$type = ELGG_VALUE_INTEGER;
-				break;
-
-			case ELGG_VALUE_ID :
-				$y = Values::normalizeIds($y);
-				$type = ELGG_VALUE_INTEGER;
-				break;
-		}
-
-		if (is_array($y) && count($y) === 1) {
-			$y = array_shift($y);
-		}
-
 		$compare_with = function ($func, $boolean = 'OR') use ($x, $y, $type, $case_sensitive, $qb) {
 			if (!isset($y)) {
 				return;
 			}
 
+			$y = is_array($y) ? $y : [$y];
 			$parts = [];
-			foreach ((array) $y as $val) {
+			foreach ($y as $val) {
 				$val = $qb->param($val, $type);
 				if ($case_sensitive && $type == ELGG_VALUE_STRING) {
 					$val = "BINARY $val";
@@ -111,7 +92,7 @@ class ComparisonClause extends Clause {
 					$x = "CAST($x as BINARY)";
 				}
 				if (is_array($y) || $comparison === 'in') {
-					if (!empty($y)) {
+					if (!Values::isEmpty($y)) {
 						$param = isset($type) ? $qb->param($y, $type) : $y;
 						$match_expr = $qb->expr()->in($x, $param);
 					}
@@ -176,7 +157,7 @@ class ComparisonClause extends Clause {
 				return "NOT EXISTS ($y)";
 
 			default :
-				throw new \InvalidParameterException("'{$this->comparison}' is not a supported comparison operator");
+				throw new InvalidParameterException("'{$this->comparison}' is not a supported comparison operator");
 		}
 	}
 }

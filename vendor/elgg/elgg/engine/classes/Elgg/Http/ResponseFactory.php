@@ -4,23 +4,24 @@ namespace Elgg\Http;
 
 use Elgg\Ajax\Service as AjaxService;
 use Elgg\EventsService;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\PluginHooksService;
-use ElggEntity;
-use InvalidArgumentException;
-use InvalidParameterException;
+use Elgg\Traits\Loggable;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * HTTP response service
  *
  * @since 2.3
  * @internal
  */
 class ResponseFactory {
+
+	use Loggable;
 
 	/**
 	 * @var Request
@@ -43,7 +44,7 @@ class ResponseFactory {
 	private $transport;
 
 	/**
-	 * @var Response|false
+	 * @var SymfonyResponse|false
 	 */
 	private $response_sent = false;
 
@@ -60,19 +61,18 @@ class ResponseFactory {
 	/**
 	 * Constructor
 	 *
-	 * @param Request            $request   HTTP request
-	 * @param PluginHooksService $hooks     Plugin hooks service
-	 * @param AjaxService        $ajax      AJAX service
-	 * @param ResponseTransport  $transport Response transport
-	 * @param EventsService      $events    Events service
+	 * @param Request            $request HTTP request
+	 * @param PluginHooksService $hooks   Plugin hooks service
+	 * @param AjaxService        $ajax    AJAX service
+	 * @param EventsService      $events  Events service
 	 */
-	public function __construct(Request $request, PluginHooksService $hooks, AjaxService $ajax, ResponseTransport $transport, EventsService $events) {
+	public function __construct(Request $request, PluginHooksService $hooks, AjaxService $ajax, EventsService $events) {
 		$this->request = $request;
 		$this->hooks = $hooks;
 		$this->ajax = $ajax;
-		$this->transport = $transport;
 		$this->events = $events;
 		
+		$this->transport = \Elgg\Application::getResponseTransport();
 		$this->headers = new ResponseHeaderBag();
 	}
 
@@ -147,14 +147,13 @@ class ResponseFactory {
 	 * @param integer $status  The response status code
 	 * @param array   $headers An array of response headers
 	 *
-	 * @return Response
-	 * @throws InvalidArgumentException
+	 * @return SymfonyResponse
 	 */
 	public function prepareResponse($content = '', $status = 200, array $headers = []) {
 		$header_bag = $this->getHeaders();
 		$header_bag->add($headers);
 		
-		$response = new Response($content, $status, $header_bag->all());
+		$response = new SymfonyResponse($content, $status, $header_bag->all());
 		
 		$response->prepare($this->request);
 		
@@ -169,7 +168,6 @@ class ResponseFactory {
 	 * @param array   $headers An array of response headers (Location is always set to the given URL)
 	 *
 	 * @return SymfonyRedirectResponse
-	 * @throws InvalidArgumentException
 	 */
 	public function prepareRedirectResponse($url, $status = 302, array $headers = []) {
 		$header_bag = $this->getHeaders();
@@ -190,7 +188,6 @@ class ResponseFactory {
 	 * @param array   $headers An array of response headers
 	 *
 	 * @return JsonResponse
-	 * @throws InvalidArgumentException
 	 */
 	public function prepareJsonResponse($content = '', $status = 200, array $headers = []) {
 		$header_bag = $this->getHeaders();
@@ -214,14 +211,15 @@ class ResponseFactory {
 	/**
 	 * Send a response
 	 *
-	 * @param Response $response Response object
-	 * @return Response|false
+	 * @param SymfonyResponse $response Response object
+	 *
+	 * @return SymfonyResponse|false
 	 */
-	public function send(Response $response) {
+	public function send(SymfonyResponse $response) {
 
 		if ($this->response_sent) {
 			if ($this->response_sent !== $response) {
-				_elgg_services()->logger->error('Unable to send the following response: ' . PHP_EOL
+				$this->getLogger()->error('Unable to send the following response: ' . PHP_EOL
 						. (string) $response . PHP_EOL
 						. 'because another response has already been sent: ' . PHP_EOL
 						. (string) $this->response_sent);
@@ -235,7 +233,7 @@ class ResponseFactory {
 			$method = $request->getRealMethod() ? : 'GET';
 			$path = $request->getElggPath();
 
-			_elgg_services()->logger->notice("Responding to {$method} {$path}");
+			$this->getLogger()->notice("Responding to {$method} {$path}");
 			if (!$this->transport->send($response)) {
 				return false;
 			}
@@ -252,7 +250,7 @@ class ResponseFactory {
 	/**
 	 * Returns a response that was sent to the client
 	 *
-	 * @return Response|false
+	 * @return SymfonyResponse|false
 	 */
 	public function getSentResponse() {
 		return $this->response_sent;
@@ -263,8 +261,8 @@ class ResponseFactory {
 	 *
 	 * @param ResponseBuilder $response ResponseBuilder instance
 	 *                                  An instance of an ErrorResponse, OkResponse or RedirectResponse
-	 * @return false|Response
-	 * @throws \InvalidParameterException
+	 * @return false|SymfonyResponse
+	 * @throws InvalidParameterException
 	 */
 	public function respond(ResponseBuilder $response) {
 
@@ -309,12 +307,7 @@ class ResponseFactory {
 		}
 
 		if ($is_xhr && ($is_action || $this->ajax->isAjax2Request())) {
-			if (!$this->ajax->isAjax2Request()) {
-				// xhr actions using legacy ajax API should return 200 with wrapped data
-				$response->setStatusCode(ELGG_HTTP_OK);
-			}
-
-			// Actions always respond with JSON on xhr calls
+			// Actions and calls from elgg/Ajax always respond with JSON on xhr calls
 			$headers = $response->getHeaders();
 			$headers['Content-Type'] = 'application/json; charset=UTF-8';
 			$response->setHeaders($headers);
@@ -346,8 +339,7 @@ class ResponseFactory {
 	 * @param ResponseBuilder $response ResponseBuilder instance
 	 *                                  An instance of an ErrorResponse, OkResponse or RedirectResponse
 	 *
-	 * @return false|Response
-	 * @throws \InvalidParameterException
+	 * @return false|SymfonyResponse
 	 */
 	public function respondWithError(ResponseBuilder $response) {
 		$error = $this->stringify($response->getContent());
@@ -366,11 +358,11 @@ class ResponseFactory {
 
 		if (!$this->isAction()) {
 			$params = [
-				'current_url' => current_page_url(),
+				'current_url' => $this->request->getCurrentURL(),
 				'forward_url' => $forward_url,
 			];
 			// For BC, let plugins serve their own error page
-			// @see elgg_error_page_handler
+			// @todo can this hook be dropped
 			$forward_reason = (string) $status_code;
 
 			$this->hooks->trigger('forward', $forward_reason, $params, $forward_url);
@@ -404,7 +396,7 @@ class ResponseFactory {
 	 * @param ResponseBuilder $response ResponseBuilder instance
 	 *                                  An instance of an ErrorResponse, OkResponse or RedirectResponse
 	 *
-	 * @return Response|false
+	 * @return SymfonyResponse|false
 	 */
 	public function respondFromContent(ResponseBuilder $response) {
 		$content = $this->stringify($response->getContent());
@@ -426,10 +418,6 @@ class ResponseFactory {
 	 */
 	public function wrapAjaxResponse($content = '', $forward_url = null) {
 
-		if (!$this->ajax->isAjax2Request()) {
-			return $this->wrapLegacyAjaxResponse($content, $forward_url);
-		}
-
 		$content = $this->stringify($content);
 
 		if ($forward_url === REFERRER) {
@@ -438,7 +426,7 @@ class ResponseFactory {
 
 		$params = [
 			'value' => '',
-			'current_url' => current_page_url(),
+			'current_url' => $this->request->getCurrentURL(),
 			'forward_url' => elgg_normalize_url($forward_url),
 		];
 
@@ -448,62 +436,11 @@ class ResponseFactory {
 	}
 
 	/**
-	 * Wraps content for compability with legacy Elgg ajax calls
-	 *
-	 * @param string $content     Response content
-	 * @param string $forward_url Forward URL
-	 * @return string
-	 */
-	public function wrapLegacyAjaxResponse($content = '', $forward_url = REFERRER) {
-
-		$content = $this->stringify($content);
-
-		if ($forward_url === REFERRER) {
-			$forward_url = $this->getSiteRefererUrl();
-		}
-
-		// always pass the full structure to avoid boilerplate JS code.
-		$params = [
-			'output' => '',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
-			'forward_url' => elgg_normalize_url($forward_url),
-		];
-
-		$params['output'] = $this->ajax->decodeJson($content);
-
-		// Grab any system messages so we can inject them via ajax too
-		$system_messages = _elgg_services()->systemMessages->dumpRegister();
-
-		if (isset($system_messages['success'])) {
-			$params['system_messages']['success'] = $system_messages['success'];
-		}
-
-		if (isset($system_messages['error'])) {
-			$params['system_messages']['error'] = $system_messages['error'];
-			$params['status'] = -1;
-		}
-
-		$response_type = $this->parseContext();
-		list($service, $name) = explode(':', $response_type);
-		$context = [
-			$service => $name,
-		];
-		$params = $this->hooks->trigger('output', 'ajax', $context, $params);
-
-		return $this->stringify($params);
-	}
-
-	/**
 	 * Prepares a redirect response
 	 *
 	 * @param string $forward_url Redirection URL
 	 * @param mixed  $status_code HTTP status code or forward reason
-	 * @return false|Response
+	 * @return false|SymfonyResponse
 	 * @throws InvalidParameterException
 	 */
 	public function redirect($forward_url = REFERRER, $status_code = ELGG_HTTP_FOUND) {
@@ -517,7 +454,7 @@ class ResponseFactory {
 
 		// allow plugins to rewrite redirection URL
 		$params = [
-			'current_url' => current_page_url(),
+			'current_url' => $this->request->getCurrentURL(),
 			'forward_url' => $forward_url,
 			'location' => $location,
 		];
@@ -565,15 +502,11 @@ class ResponseFactory {
 				// Redirect responses should be converted to OK responses as this is an XHR request
 				$status_code = ELGG_HTTP_OK;
 			}
+			
 			$output = ob_get_clean();
-			if (!$this->isAction() && !$this->ajax->isAjax2Request()) {
-				// legacy ajax calls are always OK
-				// actions are wrapped by ResponseFactory::respond()
-				$status_code = ELGG_HTTP_OK;
-				$output = $this->wrapLegacyAjaxResponse($output, $forward_url);
-			}
 
-			$response = new OkResponse($output, $status_code, $forward_url);
+			$response = new RedirectResponse($forward_url, $status_code);
+			$response->setContent($output);
 			$headers = $response->getHeaders();
 			$headers['Content-Type'] = 'application/json; charset=UTF-8';
 			$response->setHeaders($headers);
@@ -587,7 +520,7 @@ class ResponseFactory {
 			}
 		}
 
-		$response = new OkResponse('', $status_code, $forward_url);
+		$response = new RedirectResponse($forward_url, $status_code);
 		if ($response->isRedirection()) {
 			return $this->send($this->prepareRedirectResponse($forward_url, $status_code));
 		}
@@ -653,7 +586,7 @@ class ResponseFactory {
 	 * @return mixed
 	 */
 	public function normalize($content = '') {
-		if ($content instanceof ElggEntity) {
+		if ($content instanceof \ElggEntity) {
 			$content = (array) $content->toObject();
 		}
 		if (is_array($content)) {

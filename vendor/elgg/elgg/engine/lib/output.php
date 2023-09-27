@@ -27,8 +27,9 @@ function elgg_format_html($html, array $options = []) {
  * @param string $text The input string
  *
  * @return string The output string with formatted links
+ * @since 4.3
  */
-function parse_urls($text) {
+function elgg_parse_urls(string $text): string {
 	return _elgg_services()->html_formatter->parseUrls($text);
 }
 
@@ -118,21 +119,17 @@ function elgg_format_bytes($size, $precision = 2) {
  * @param string       $text       The contents of the element. Assumed to be HTML unless encode_text is true.
  *
  * @param array        $options    Options array with keys:
+ *                                 - encode_text   => (bool, default false) If true, $text will be HTML-escaped. Already-escaped entities will not be double-escaped.
+ *                                 - double_encode => (bool, default false) If true, the $text HTML escaping will be allowed to double encode HTML entities: '&times;' will become '&amp;times;'
  *
- *   encode_text   => (bool, default false) If true, $text will be HTML-escaped. Already-escaped entities
- *                    will not be double-escaped.
+ *                                 - is_void       => (bool) If given, this determines whether the function will return just the open tag.
+ *                                 Otherwise this will be determined by the tag name according to this list:
+ *                                 http://www.w3.org/html/wg/drafts/html/master/single-page.html#void-elements
  *
- *   double_encode => (bool, default false) If true, the $text HTML escaping will be allowed to double
- *                    encode HTML entities: '&times;' will become '&amp;times;'
- *
- *   is_void       => (bool) If given, this determines whether the function will return just the open tag.
- *                    Otherwise this will be determined by the tag name according to this list:
- *                    http://www.w3.org/html/wg/drafts/html/master/single-page.html#void-elements
- *
- *   is_xml        => (bool, default false) If true, void elements will be formatted like "<tag />"
+ *                                 - is_xml        => (bool, default false) If true, void elements will be formatted like "<tag />"
  *
  * @return string
- * @throws InvalidArgumentException
+ * @throws \Elgg\Exceptions\InvalidArgumentException
  * @since 1.9.0
  */
 function elgg_format_element($tag_name, array $attributes = [], $text = '', array $options = []) {
@@ -153,46 +150,8 @@ function elgg_format_element($tag_name, array $attributes = [], $text = '', arra
  *
  * @return string The absolute URL
  */
-function elgg_normalize_url($url) {
-	$url = str_replace(' ', '%20', $url);
-
-	if (_elgg_sane_validate_url($url)) {
-		// fix invalid scheme in site url
-		$protocol_less_site_url = preg_replace('/^https?:/i', ':', elgg_get_site_url());
-		$protocol_less_site_url = rtrim($protocol_less_site_url, '/');
-		$protocol_less_site_url = str_replace('/', '\/', $protocol_less_site_url);
-
-		return preg_replace("/^https?{$protocol_less_site_url}\/?/i", elgg_get_site_url(), $url);
-	}
-
-	if (preg_match("#^([a-z]+)\\:#", $url, $m)) {
-		// we don't let http/https: URLs fail filter_var(), but anything else starting with a protocol
-		// is OK
-		if ($m[1] !== 'http' && $m[1] !== 'https') {
-			return $url;
-		}
-	}
-
-	if (preg_match("#^(\\#|\\?|//)#", $url)) {
-		// starts with '//' (protocol-relative link), query, or fragment
-		return $url;
-	}
-
-	if (preg_match("#^[^/]*\\.php(\\?.*)?$#", $url)) {
-		// root PHP scripts: 'install.php', 'install.php?step=step'. We don't want to confuse these
-		// for domain names.
-		return elgg_get_site_url() . $url;
-	}
-
-	if (preg_match("#^[^/?]*\\.#", $url)) {
-		// URLs starting with domain: 'example.com', 'example.com/subpage'
-		return "http://$url";
-	}
-
-	// 'page/handler', 'mod/plugin/file.php'
-	// trim off any leading / because the site URL is stored
-	// with a trailing /
-	return elgg_get_site_url() . ltrim($url, '/');
+function elgg_normalize_url($url): string {
+	return _elgg_services()->urls->normalizeUrl((string) $url);
 }
 
 /**
@@ -209,7 +168,7 @@ function elgg_normalize_site_url($unsafe_url) {
 		return false;
 	}
 
-	$unsafe_url = elgg_normalize_url($unsafe_url);
+	$unsafe_url = _elgg_services()->urls->normalizeUrl((string) $unsafe_url);
 	if (0 === elgg_strpos($unsafe_url, elgg_get_site_url())) {
 		return $unsafe_url;
 	}
@@ -235,11 +194,12 @@ function elgg_get_friendly_title($title) {
 	}
 
 	// titles are often stored HTML encoded
-	$title = html_entity_decode($title, ENT_QUOTES, 'UTF-8');
+	$title = html_entity_decode($title ?? '', ENT_QUOTES, 'UTF-8');
 	
 	$title = \Elgg\Translit::urlize($title);
 
-	return $title;
+	// limit length to prevent issues with too long URLS (Request-URI Too Large)
+	return elgg_substr($title, 0, 100);
 }
 
 /**
@@ -393,11 +353,16 @@ function elgg_html_decode($string) {
  * Prepares query string for output to prevent CSRF attacks.
  *
  * @param string $string string to prepare
+ *
  * @return string
  *
  * @internal
  */
 function _elgg_get_display_query($string) {
+	if (empty($string)) {
+		return $string;
+	}
+	
 	//encode <,>,&, quotes and characters above 127
 	if (function_exists('mb_convert_encoding')) {
 		$display_query = mb_convert_encoding($string, 'HTML-ENTITIES', 'UTF-8');
@@ -405,36 +370,6 @@ function _elgg_get_display_query($string) {
 		// if no mbstring extension, we just strip characters
 		$display_query = preg_replace("/[^\x01-\x7F]/", "", $string);
 	}
+	
 	return htmlspecialchars($display_query, ENT_QUOTES, 'UTF-8', false);
-}
-
-/**
- * Use a "fixed" filter_var() with FILTER_VALIDATE_URL that handles multi-byte chars.
- *
- * @param string $url URL to validate
- * @return string|false
- * @internal
- */
-function _elgg_sane_validate_url($url) {
-	// based on http://php.net/manual/en/function.filter-var.php#104160
-	$res = filter_var($url, FILTER_VALIDATE_URL);
-	if ($res) {
-		return $res;
-	}
-
-	// Check if it has unicode chars.
-	$l = elgg_strlen($url);
-	if (strlen($url) == $l) {
-		return $res;
-	}
-
-	// Replace wide chars by “X”.
-	$s = '';
-	for ($i = 0; $i < $l; ++$i) {
-		$ch = elgg_substr($url, $i, 1);
-		$s .= (strlen($ch) > 1) ? 'X' : $ch;
-	}
-
-	// Re-check now.
-	return filter_var($s, FILTER_VALIDATE_URL) ? $url : false;
 }

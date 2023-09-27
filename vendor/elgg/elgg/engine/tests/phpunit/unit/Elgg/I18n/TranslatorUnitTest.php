@@ -18,20 +18,13 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 	public $translator;
 
 	public function up() {
-		$config = elgg()->config;
-		$localeService = elgg()->locale;
-		
-		$this->translator = new Translator($config, $localeService);
+		$this->translator = new Translator(_elgg_services()->config, _elgg_services()->locale);
 		$this->translator->loadTranslations('en');
 
 		$this->translator->addTranslation('en', [$this->key => 'Dummy']);
 		$this->translator->addTranslation('es', [$this->key => 'Estúpido']);
 
-		_elgg_services()->setValue('translator', $this->translator);
-	}
-
-	public function down() {
-
+		_elgg_services()->set('translator', $this->translator);
 	}
 
 	public function testSetLanguageFromGetParameter() {
@@ -47,7 +40,6 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
 		_elgg_services()->logger->disable();
 		$this->assertFalse($this->translator->languageKeyExists('__elgg_php_unit:test_key:missing'));
-		_elgg_services()->logger->enable();
 	}
 
 	public function testCanTranslate() {
@@ -68,7 +60,6 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 		$this->translator->addTranslation('en', ["{$this->key}a" => 'Dummy A']);
 		_elgg_services()->logger->disable();
 		$this->assertEquals('Dummy A', $this->translator->translate("{$this->key}a", [], 'es'));
-		_elgg_services()->logger->enable();
 	}
 	
 	public function testFallsBackToSiteLanguage() {
@@ -80,7 +71,6 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 		
 		_elgg_services()->logger->disable();
 		$this->assertEquals('Dummy NL', $this->translator->translate("{$this->key}a", [], 'es'));
-		_elgg_services()->logger->enable();
 	}
 	
 	public function testFallsBackToSiteLanguageLoggedIn() {
@@ -100,9 +90,6 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 		
 		_elgg_services()->logger->disable();
 		$this->assertEquals('Dummy NL', $this->translator->translate("{$this->key}a"));
-		_elgg_services()->logger->enable();
-		
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testIssuesNoticeOnMissingKey() {
@@ -140,7 +127,6 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 	public function testDoesNotProcessArgsOnKey() {
 		_elgg_services()->logger->disable();
 		$this->assertEquals('nonexistent:%s', $this->translator->translate('nonexistent:%s', [1]));
-		_elgg_services()->logger->enable();
 	}
 
 	public function testCanSetCurrentLanguage() {
@@ -163,21 +149,15 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
 		$language = 'ab';
 
-		$user = elgg_call(ELGG_IGNORE_ACCESS, function() use ($language) {
-			return $this->createUser([], [
-				'language' => $language,
-			]);
-		});
+		$user = $this->createUser([], [
+			'language' => $language,
+		]);
 		
 		$this->assertEquals('en', $this->translator->getCurrentLanguage());
 
 		_elgg_services()->session->setLoggedInUser($user);
 
 		$this->assertEquals($language, $this->translator->getCurrentLanguage());
-
-		_elgg_services()->session->removeLoggedInUser();
-
-		$user->delete();
 	}
 
 	public function testCanDetectCurrentLanguageFromConfig() {
@@ -221,11 +201,11 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
 		$plugin = \ElggPlugin::fromId('languages_plugin', $this->normalizeTestFilePath('mod/'));
 
-		$app->_services->config->boot_cache_ttl = 0;
+		$app->internal_services->config->boot_cache_ttl = 0;
 
 		$plugin->activate();
 
-		$this->assertEquals('Loaded', $app->_services->translator->translate('tests:languages:loaded'));
+		$this->assertEquals('Loaded', $app->internal_services->translator->translate('tests:languages:loaded'));
 	}
 
 	public function testCanLoadPluginTranslationsWithCacheDisabled() {
@@ -238,19 +218,19 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
 		$plugin = \ElggPlugin::fromId('languages_plugin', $this->normalizeTestFilePath('mod/'));
 
-		$app->_services->config->boot_cache_ttl = 0;
+		$app->internal_services->config->boot_cache_ttl = 0;
 
 		$plugin->activate();
 
-		$this->assertEquals('Loaded', $app->_services->translator->translate('tests:languages:loaded'));
+		$this->assertEquals('Loaded', $app->internal_services->translator->translate('tests:languages:loaded'));
 	}
 	
 	public function testCanGetAllowedLanguages() {
 		$app = $this->createApplication();
-		$app->_services->config->language = 'fr';
-		$app->_services->config->allowed_languages = 'nl';
+		$app->internal_services->config->language = 'fr';
+		$app->internal_services->config->allowed_languages = 'nl';
 		
-		$allowed = $app->_services->translator->getAllowedLanguages();
+		$allowed = $app->internal_services->translator->getAllowedLanguages();
 		$this->assertTrue(in_array('en', $allowed));
 		$this->assertTrue(in_array('nl', $allowed));
 		$this->assertTrue(in_array('fr', $allowed));
@@ -259,17 +239,30 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 	
 	public function testCanNotTranslateUnallowedLanguages() {
 		$app = $this->createApplication();
-		$app->_services->config->language = 'fr';
-		$app->_services->config->allowed_languages = 'nl';
+		$app->internal_services->config->language = 'fr';
+		$app->internal_services->config->allowed_languages = 'nl';
 		
-		$app->_services->translator->addTranslation('en', ["{$this->key}a" => 'Dummy EN']);
-		$app->_services->translator->addTranslation('nl', ["{$this->key}a" => 'Dummy NL']);
-		$app->_services->translator->addTranslation('fr', ["{$this->key}a" => 'Dummy FR']);
-		$app->_services->translator->addTranslation('de', ["{$this->key}a" => 'Dummy DE']); // not allowed
+		$app->internal_services->translator->addTranslation('en', ["{$this->key}a" => 'Dummy EN']);
+		$app->internal_services->translator->addTranslation('nl', ["{$this->key}a" => 'Dummy NL']);
+		$app->internal_services->translator->addTranslation('fr', ["{$this->key}a" => 'Dummy FR']);
+		$app->internal_services->translator->addTranslation('de', ["{$this->key}a" => 'Dummy DE']); // not allowed
 		
-		$this->assertEquals('Dummy EN', $app->_services->translator->translate("{$this->key}a", [], 'en'));
-		$this->assertEquals('Dummy NL', $app->_services->translator->translate("{$this->key}a", [], 'nl'));
-		$this->assertEquals('Dummy FR', $app->_services->translator->translate("{$this->key}a", [], 'fr'));
-		$this->assertEquals('Dummy FR', $app->_services->translator->translate("{$this->key}a", [], 'de'));
+		$this->assertEquals('Dummy EN', $app->internal_services->translator->translate("{$this->key}a", [], 'en'));
+		$this->assertEquals('Dummy NL', $app->internal_services->translator->translate("{$this->key}a", [], 'nl'));
+		$this->assertEquals('Dummy FR', $app->internal_services->translator->translate("{$this->key}a", [], 'fr'));
+		$this->assertEquals('Dummy FR', $app->internal_services->translator->translate("{$this->key}a", [], 'de'));
+	}
+	
+	public function testTranslationArgumentIssues() {
+		$this->translator->addTranslation('en', [
+			'translation:arguments:test' => 'Hello %s, just testing %s',
+		]);
+		
+		// suppressing vsprintf error, because that's what we're testing
+		$this->assertEquals('translation:arguments:test', @$this->translator->translate('translation:arguments:test', ['Foo'], 'en'));
+		
+		$this->assertEquals('Hello Foo, just testing Bar', @$this->translator->translate('translation:arguments:test', ['Foo', 'Bar'], 'en'));
+		
+		$this->assertEquals('Hello Foo, just testing Bar', @$this->translator->translate('translation:arguments:test', ['Foo', 'Bar', 'Something'], 'en'));
 	}
 }

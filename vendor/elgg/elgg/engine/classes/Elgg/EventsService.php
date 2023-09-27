@@ -1,5 +1,8 @@
 <?php
+
 namespace Elgg;
+
+use Elgg\Traits\Debug\Profilable;
 
 /**
  * Events service
@@ -7,6 +10,7 @@ namespace Elgg;
  * Use elgg()->events
  */
 class EventsService extends HooksRegistrationService {
+	
 	use Profilable;
 
 	const OPTION_STOPPABLE = 'stoppable';
@@ -41,8 +45,8 @@ class EventsService extends HooksRegistrationService {
 	public function registerHandler($name, $type, $callback, $priority = 500) {
 		if (in_array($type, ['member', 'friend', 'attached'])
 				&& in_array($name, ['create', 'update', 'delete'])) {
-			_elgg_services()->logger->error("'$name, $type' event is no longer triggered. "
-				. "Update your event registration to use '$name, relationship'");
+			$this->getLogger()->error("'{$name}, {$type}' event is no longer triggered. "
+				. "Update your event registration to use '{$name}, relationship'");
 		}
 
 		return parent::registerHandler($name, $type, $callback, $priority);
@@ -81,15 +85,15 @@ class EventsService extends HooksRegistrationService {
 
 		foreach ($handlers as $handler) {
 			$handler_description = false;
-			if ($this->timer && $type === 'system' && $name !== 'shutdown') {
-				$handler_description = $this->handlers->describeCallable($handler) . "()";
-				$this->timer->begin(["[$name,$type]", $handler_description]);
+			if ($this->hasTimer() && $type === 'system' && $name !== 'shutdown') {
+				$handler_description = $this->handlers->describeCallable($handler) . '()';
+				$this->beginTimer(["[{$name},{$type}]", $handler_description]);
 			}
 
 			list($success, $return, $event) = $this->handlers->call($handler, $event, [$name, $type, $object]);
 
 			if ($handler_description) {
-				$this->timer->end(["[$name,$type]", $handler_description]);
+				$this->endTimer(["[{$name},{$type}]", $handler_description]);
 			}
 
 			if (!$success) {

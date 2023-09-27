@@ -3,12 +3,14 @@
 namespace Elgg\Database;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\Expression\CompositeExpression;
 use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 use Elgg\Database\Clauses\Clause;
 use Elgg\Database\Clauses\ComparisonClause;
 use Elgg\Database\Clauses\JoinClause;
 use Elgg\Database\Clauses\WhereClause;
+use Elgg\Values;
 
 /**
  * Database abstraction query builder
@@ -136,20 +138,54 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	public function param($value, $type = null, $key = null) {
 		if (!$key) {
 			$parameters = $this->getParameters();
-			$key = ":qb" . (count($parameters) + 1);
+			$key = ':qb' . (count($parameters) + 1);
 		}
 
+		switch ($type) {
+			case ELGG_VALUE_GUID:
+				$value = Values::normalizeGuids($value);
+				$type = ParameterType::INTEGER;
+				
+				break;
+			case ELGG_VALUE_ID:
+				$value = Values::normalizeIds($value);
+				$type = ParameterType::INTEGER;
+				
+				break;
+			case ELGG_VALUE_INTEGER:
+				$type = ParameterType::INTEGER;
+				
+				break;
+			case ELGG_VALUE_BOOL:
+				$type = ParameterType::INTEGER;
+				$value = (int) $value;
+				
+				break;
+			case ELGG_VALUE_STRING:
+				$type = ParameterType::STRING;
+				
+				break;
+			case ELGG_VALUE_TIMESTAMP:
+				$value = Values::normalizeTimestamp($value);
+				$type = ParameterType::INTEGER;
+				
+				break;
+		}
+		
+		// convert array value or type based on array
 		if (is_array($value)) {
-			if ($type === ELGG_VALUE_INTEGER) {
-				$type = Connection::PARAM_INT_ARRAY;
-			} else if ($type === ELGG_VALUE_STRING) {
-				$type = Connection::PARAM_STR_ARRAY;
+			if (count($value) === 1) {
+				$value = array_shift($value);
+			} else {
+				if ($type === ParameterType::INTEGER) {
+					$type = Connection::PARAM_INT_ARRAY;
+				} elseif ($type === ParameterType::STRING) {
+					$type = Connection::PARAM_STR_ARRAY;
+				}
 			}
 		}
 
-		$this->setParameter($key, $value, $type);
-
-		return $key;
+		return $this->createNamedParameter($value, $type, $key);
 	}
 
 	/**
@@ -160,11 +196,19 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	public function execute(bool $track_query = true) {
 		
 		if (!$track_query) {
-			return parent::execute();
+			if ($this instanceof Select) {
+				return parent::executeQuery();
+			} else {
+				return parent::executeStatement();
+			}
 		}
 		
 		return _elgg_services()->db->trackQuery($this, [], function() {
-			return parent::execute();
+			if ($this instanceof Select) {
+				return parent::executeQuery();
+			} else {
+				return parent::executeStatement();
+			}
 		});
 	}
 	
@@ -276,10 +320,13 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 			return array_shift($parts);
 		}
 
+		// PHP 8 can use named arguments in call_user_func_array(), this causes issues
+		// @see: https://www.php.net/manual/en/function.call-user-func-array.php#125953
+		$parts = array_values($parts);
 		if (strtoupper($boolean) === 'OR') {
-			return $this->expr()->orX()->addMultiple($parts);
+			return call_user_func_array([$this->expr(), 'or'], $parts);
 		} else {
-			return $this->expr()->andX()->addMultiple($parts);
+			return call_user_func_array([$this->expr(), 'and'], $parts);
 		}
 	}
 
@@ -527,7 +574,6 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * @param string $joined_alias Joined table alias
 	 *
 	 * @return string
-	 * @throws \InvalidParameterException
 	 */
 	public function joinRelationshipTable($from_alias = '', $from_column = 'guid', $name = null, $inverse = false, $join_type = 'inner', $joined_alias = null) {
 		if (in_array($joined_alias, $this->joins)) {

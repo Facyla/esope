@@ -8,14 +8,6 @@ namespace Elgg\lib\elgglib;
  */
 class ElggCacheUnitTest extends \Elgg\UnitTestCase {
 
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
-
 	public function testCanSymlinkCache() {
 
 		$root_path = elgg_get_root_path();
@@ -38,6 +30,6 @@ class ElggCacheUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue(is_dir($simplecache_path));
 		
 		// Test that we can flush caches with symlink
-		elgg_flush_caches();
+		elgg_clear_caches();
 	}
 }

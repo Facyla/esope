@@ -3,13 +3,12 @@
 namespace Elgg\Plugins;
 
 use Elgg\BaseTestCase;
-use Elgg\IntegrationTestCase;
+use Elgg\Exceptions\Http\EntityNotFoundException;
+use Elgg\Exceptions\Http\EntityPermissionsException;
+use Elgg\Exceptions\Http\GatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\GroupGatekeeperException;
+use Elgg\Exceptions\Http\Gatekeeper\GroupToolGatekeeperException;
 use Elgg\UnitTestCase;
-use Elgg\GatekeeperException;
-use Elgg\EntityPermissionsException;
-use Elgg\EntityNotFoundException;
-use Elgg\GroupGatekeeperException;
-use Elgg\Http\Exception\GroupToolGatekeeperException;
 
 /**
  * @group Router
@@ -21,10 +20,6 @@ abstract class RouteResponseTest extends UnitTestCase {
 	public function up() {
 		$this->startPlugin(null, true, false, true);
 		_elgg_services()->logger->disable();
-	}
-
-	public function down() {
-		_elgg_services()->logger->enable();
 	}
 
 	/**
@@ -42,7 +37,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		$this->expectException(GatekeeperException::class);
 		_elgg_services()->router->route($request);
@@ -68,7 +63,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 			]);
 
 			$request = BaseTestCase::prepareHttpRequest($url);
-			_elgg_services()->setValue('request', $request);
+			_elgg_services()->set('request', $request);
 
 			_elgg_services()->router->route($request);
 
@@ -100,7 +95,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		ob_start();
 		_elgg_services()->router->route($request);
@@ -128,7 +123,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		$this->expectException(GatekeeperException::class);
 		_elgg_services()->router->route($request);
@@ -157,7 +152,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		try {
 			_elgg_services()->router->route($request);
@@ -194,7 +189,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		ob_start();
 		_elgg_services()->router->route($request);
@@ -225,7 +220,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		$this->expectException(EntityPermissionsException::class);
 		_elgg_services()->router->route($request);
@@ -245,7 +240,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		$this->expectException(EntityNotFoundException::class);
 		_elgg_services()->router->route($request);
@@ -278,7 +273,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 			]);
 
 			$request = BaseTestCase::prepareHttpRequest($url);
-			_elgg_services()->setValue('request', $request);
+			_elgg_services()->set('request', $request);
 
 			_elgg_services()->router->route($request);
 		} catch (\Exception $ex) {
@@ -313,7 +308,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 			]);
 
 			$request = BaseTestCase::prepareHttpRequest($url);
-			_elgg_services()->setValue('request', $request);
+			_elgg_services()->set('request', $request);
 
 			_elgg_services()->router->route($request);
 		} catch (\Exception $ex) {
@@ -342,7 +337,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		ob_start();
 		_elgg_services()->router->route($request);
@@ -364,7 +359,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		$url = elgg_generate_url($route, $params);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		ob_start();
 		_elgg_services()->router->route($request);
@@ -395,7 +390,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		$this->expectException(GroupToolGatekeeperException::class);
 		_elgg_services()->router->route($request);
@@ -421,7 +416,7 @@ abstract class RouteResponseTest extends UnitTestCase {
 		]);
 
 		$request = BaseTestCase::prepareHttpRequest($url);
-		_elgg_services()->setValue('request', $request);
+		_elgg_services()->set('request', $request);
 
 		ob_start();
 		_elgg_services()->router->route($request);

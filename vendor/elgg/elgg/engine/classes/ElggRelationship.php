@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Relationship class.
  *
@@ -9,13 +10,22 @@
  * @property int    $time_created A UNIX timestamp of when the relationship was created (read-only, set on first save)
  */
 class ElggRelationship extends \ElggData {
-	// database column limit
-	const RELATIONSHIP_LIMIT = 50;
 
+	/**
+	 * @var string[] database columns
+	 */
+	public const PRIMARY_ATTR_NAMES = [
+		'id',
+		'guid_one',
+		'relationship',
+		'guid_two',
+		'time_created',
+	];
+	
 	/**
 	 * @var string[] attributes that are integers
 	 */
-	protected static $integer_attr_names = [
+	protected const INTEGER_ATTR_NAMES = [
 		'guid_one',
 		'guid_two',
 		'time_created',
@@ -23,16 +33,26 @@ class ElggRelationship extends \ElggData {
 	];
 	
 	/**
+	 * Holds the original (persisted) attribute values that have been changed but not yet saved.
+	 * @var array
+	 */
+	protected $orig_attributes = [];
+	
+	/**
 	 * Create a relationship object
 	 *
 	 * @param \stdClass $row Database row
-	 * @throws InvalidArgumentException
 	 */
 	public function __construct(\stdClass $row) {
 		$this->initializeAttributes();
 
 		foreach ((array) $row as $key => $value) {
-			if (in_array($key, self::$integer_attr_names)) {
+			if (!in_array($key, static::PRIMARY_ATTR_NAMES)) {
+				// don't set arbitrary attributes that aren't supported
+				continue;
+			}
+			
+			if (in_array($key, static::INTEGER_ATTR_NAMES)) {
 				$value = (int) $value;
 			}
 			
@@ -64,6 +84,31 @@ class ElggRelationship extends \ElggData {
 	 * @return void
 	 */
 	public function __set($name, $value) {
+		if (in_array($name, static::INTEGER_ATTR_NAMES) && isset($value) && !is_int($value)) {
+			// make sure the new value is an int for the int columns
+			$value = (int) $value;
+		}
+		
+		if ($this->$name === $value) {
+			// nothing changed
+			return;
+		}
+		
+		if (!array_key_exists($name, $this->attributes)) {
+			// only support setting attributes
+			return;
+		}
+		
+		if (in_array($name, ['id', 'time_created'])) {
+			// these attributes can't be changed by the user
+			return;
+		}
+		
+		if ($this->id > 0 && !array_key_exists($name, $this->orig_attributes)) {
+			// store original attribute
+			$this->orig_attributes[$name] = $this->attributes[$name];
+		}
+		
 		$this->attributes[$name] = $value;
 	}
 
@@ -82,14 +127,16 @@ class ElggRelationship extends \ElggData {
 	}
 
 	/**
-	 * Save the relationship
-	 *
-	 * @return int the relationship ID
-	 * @throws IOException
+	 * {@inheritDoc}
 	 */
-	public function save() {
+	public function save() : bool {
+		if (empty($this->orig_attributes)) {
+			// nothing has changed
+			return true;
+		}
+		
 		if ($this->id > 0) {
-			delete_relationship($this->id);
+			_elgg_services()->relationshipsTable->delete($this->id);
 		}
 
 		$id = _elgg_services()->relationshipsTable->add(
@@ -98,13 +145,14 @@ class ElggRelationship extends \ElggData {
 			$this->guid_two,
 			true
 		);
+		
 		if ($id === false) {
-			throw new \IOException("Unable to save new " . get_class());
+			return false;
 		}
 		
-		$this->id = $id;
+		$this->attributes['id'] = $id;
 
-		return $this->id;
+		return true;
 	}
 
 	/**
@@ -113,7 +161,7 @@ class ElggRelationship extends \ElggData {
 	 * @return bool
 	 */
 	public function delete() {
-		return delete_relationship($this->id);
+		return _elgg_services()->relationshipsTable->delete($this->id);
 	}
 
 	/**
@@ -125,33 +173,7 @@ class ElggRelationship extends \ElggData {
 	 * @return string
 	 */
 	public function getURL() {
-		$url = '';
-		// @todo remove when elgg_register_relationship_url_handler() has been removed
-		if ($this->id) {
-			$subtype = $this->getSubtype();
-
-			$function = "";
-			$handlers = _elgg_config()->relationship_url_handler;
-
-			if (isset($handlers[$subtype])) {
-				$function = $handlers[$subtype];
-			}
-			if (isset($handlers['all'])) {
-				$function = $handlers['all'];
-			}
-
-			if (is_callable($function)) {
-				$url = call_user_func($function, $this);
-			}
-
-			if ($url) {
-				$url = elgg_normalize_url($url);
-			}
-		}
-
-		$type = $this->getType();
-		$params = ['relationship' => $this];
-		$url = _elgg_services()->hooks->trigger('relationship:url', $type, $params, $url);
+		$url = _elgg_services()->hooks->trigger('relationship:url', $this->getType(), ['relationship' => $this], '');
 
 		return elgg_normalize_url($url);
 	}
@@ -194,7 +216,7 @@ class ElggRelationship extends \ElggData {
 	 * @return \ElggRelationship|false
 	 */
 	public function getObjectFromID($id) {
-		return get_relationship($id);
+		return _elgg_services()->relationshipsTable->get($id);
 	}
 
 	/**
@@ -214,5 +236,14 @@ class ElggRelationship extends \ElggData {
 	 */
 	public function getSubtype() {
 		return $this->relationship;
+	}
+	
+	/**
+	 * Get the original values of attribute(s) that have been modified since the relationship was persisted.
+	 *
+	 * @return array
+	 */
+	public function getOriginalAttributes() {
+		return $this->orig_attributes;
 	}
 }

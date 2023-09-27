@@ -4,6 +4,7 @@ namespace Elgg\Database\Clauses;
 
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\UnitTestCase;
 
 /**
@@ -18,10 +19,6 @@ class EntitySortByClauseUnitTest extends UnitTestCase {
 
 	public function up() {
 		$this->qb = Select::fromTable('entities', 'alias');
-	}
-
-	public function down() {
-
 	}
 
 	public function testBuildAttributeSortByClause() {
@@ -167,7 +164,7 @@ class EntitySortByClauseUnitTest extends UnitTestCase {
 
 		$qb = Select::fromTable('entities', 'alias');
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		$qb->addClause($query);
 	}
 
@@ -180,7 +177,9 @@ class EntitySortByClauseUnitTest extends UnitTestCase {
 
 		$qb = Select::fromTable('entities', 'alias');
 		
-		$this->expectException(\InvalidParameterException::class);
-		$qb->addClause($query);
+		_elgg_services()->logger->disable();
+		$this->assertNull($query->prepare($qb, 'alias'));
+		$log = _elgg_services()->logger->enable();
+		$this->assertEquals("'invalid' is not a valid entity property type. Sorting ignored.", $log[0]['message']);
 	}
 }

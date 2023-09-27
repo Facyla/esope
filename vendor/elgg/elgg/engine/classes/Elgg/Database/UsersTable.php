@@ -2,25 +2,23 @@
 
 namespace Elgg\Database;
 
-use Elgg\Config as Conf;
+use Elgg\Config;
 use Elgg\Database;
 use Elgg\Database\Clauses\OrderByClause;
-use ElggUser;
-use RegistrationException;
+use Elgg\Traits\TimeUsing;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * Users helper service
  *
  * @internal
- *
  * @since 1.10.0
  */
 class UsersTable {
 
-	use \Elgg\TimeUsing;
+	use TimeUsing;
 
 	/**
-	 * @var Conf
+	 * @var Config
 	 */
 	protected $config;
 
@@ -37,11 +35,11 @@ class UsersTable {
 	/**
 	 * Constructor
 	 *
-	 * @param Conf          $config   Config
+	 * @param Config        $config   Config
 	 * @param Database      $db       Database
 	 * @param MetadataTable $metadata Metadata table
 	 */
-	public function __construct(Conf $config, Database $db, MetadataTable $metadata) {
+	public function __construct(Config $config, Database $db, MetadataTable $metadata) {
 		$this->config = $config;
 		$this->db = $db;
 		$this->metadata = $metadata;
@@ -52,19 +50,21 @@ class UsersTable {
 	 *
 	 * @param string $username The user's username
 	 *
-	 * @return ElggUser|false Depending on success
+	 * @return \ElggUser|false Depending on success
 	 */
 	public function getByUsername($username) {
+		if (empty($username)) {
+			return false;
+		}
 
 		// Fixes #6052. Username is frequently sniffed from the path info, which,
 		// unlike $_GET, is not URL decoded. If the username was not URL encoded,
 		// this is harmless.
 		$username = rawurldecode($username);
-
-		if (!$username) {
+		if (empty($username)) {
 			return false;
 		}
-		
+
 		$logged_in_user = elgg_get_logged_in_user_entity();
 		if (!empty($logged_in_user) && ($logged_in_user->username === $username)) {
 			return $logged_in_user;
@@ -115,13 +115,13 @@ class UsersTable {
 	 * Return users (or the number of them) who have been active within a recent period.
 	 *
 	 * @param array $options Array of options with keys:
-	 *
-	 *   seconds (int)  => Length of period (default 600 = 10min)
-	 *   limit   (int)  => Limit (default 10)
-	 *   offset  (int)  => Offset (default 0)
-	 *   count   (bool) => Return a count instead of users? (default false)
+	 *                       - seconds (int)  => Length of period (default 600 = 10min)
+	 *                       - limit   (int)  => Limit (default 10)
+	 *                       - offset  (int)  => Offset (default 0)
+	 *                       - count   (bool) => Return a count instead of users? (default false)
 	 *
 	 * @return \ElggUser[]|int
+	 * @deprecated 4.3
 	 */
 	public function findActive(array $options = []) {
 
@@ -145,7 +145,7 @@ class UsersTable {
 			'count' => $options['count'],
 			'options' => $options,
 		];
-		$data = _elgg_services()->hooks->trigger('find_active_users', 'system', $params, null);
+		$data = _elgg_services()->hooks->triggerDeprecated('find_active_users', 'system', $params, null, "No longer use the 'find_active_users', 'system' hook", '4.3');
 		// check null because the handler could legitimately return falsey values.
 		if ($data !== null) {
 			return $data;
@@ -165,35 +165,18 @@ class UsersTable {
 	}
 
 	/**
-	 * Registers a user, returning false if the username already exists
-	 *
-	 * @param string $username              The username of the new user
-	 * @param string $password              The password
-	 * @param string $name                  The user's display name
-	 * @param string $email                 The user's email address
-	 * @param bool   $allow_multiple_emails Allow the same email address to be
-	 *                                      registered multiple times?
-	 * @param string $subtype               Subtype of the user entity
-	 *
-	 * @return int|false The new user's GUID; false on failure
-	 * @throws RegistrationException
-	 * @deprecated 3.0 Use elgg()->accounts->register()
-	 */
-	public function register($username, $password, $name, $email, $allow_multiple_emails = false, $subtype = null) {
-		_elgg_services()->accounts->register($username, $password, $name, $email, $allow_multiple_emails, $subtype);
-	}
-
-	/**
 	 * Generates a unique invite code for a user
 	 *
 	 * @param string $username The username of the user sending the invitation
 	 *
 	 * @return string Invite code
-	 * @see validateInviteCode
+	 * @see self::validateInviteCode()
 	 */
-	public function generateInviteCode($username) {
+	public function generateInviteCode(string $username): string {
 		$time = $this->getCurrentTime()->getTimestamp();
-		return "$time." . _elgg_services()->hmac->getHmac([(int) $time, $username])->getToken();
+		$token = _elgg_services()->hmac->getHmac([$time, $username])->getToken();
+		
+		return "{$time}.{$token}";
 	}
 
 	/**
@@ -203,16 +186,17 @@ class UsersTable {
 	 * @param string $code     The invite code
 	 *
 	 * @return bool
-	 * @see generateInviteCode
+	 * @see self::generateInviteCode()
 	 */
-	public function validateInviteCode($username, $code) {
-		// validate the format of the token created by ->generateInviteCode()
-		if (!preg_match('~^(\d+)\.([a-zA-Z0-9\-_]+)$~', $code, $m)) {
+	public function validateInviteCode(string $username, string $code): bool {
+		// validate the format of the token created by self::generateInviteCode()
+		$matches = [];
+		if (!preg_match('~^(\d+)\.([a-zA-Z0-9\-_]+)$~', $code, $matches)) {
 			return false;
 		}
-		$time = $m[1];
-		$mac = $m[2];
+		$time = (int) $matches[1];
+		$mac = $matches[2];
 
-		return _elgg_services()->hmac->getHmac([(int) $time, $username])->matchesToken($mac);
+		return _elgg_services()->hmac->getHmac([$time, $username])->matchesToken($mac);
 	}
 }

@@ -2,6 +2,8 @@
 
 namespace Elgg\Users;
 
+use Elgg\Exceptions\Configuration\RegistrationException;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\Helpers\CustomUser;
 use Elgg\UnitTestCase;
 
@@ -34,21 +36,27 @@ class AccountsServiceUnitTest extends UnitTestCase {
 	 * @dataProvider invalidUsernameProvider
 	 */
 	public function testInvalidUsernameFailsValidation($username) {
-		$this->expectException(\RegistrationException::class);
+		$this->expectException(RegistrationException::class);
 		elgg()->accounts->assertValidUsername($username);
 	}
 	
+	/**
+	 * @see \Elgg\Router\RouteRegistrationServiceUnitTest::invalidUsernameProvider()
+	 *
+	 * @return array
+	 */
 	public function invalidUsernameProvider() {
 		return [
 			[str_repeat('a', $this->minusername - 1)], // too short
 			[str_repeat('a', 129)], // too long, this is hard coded
 			['username#'],
 			['username@'],
+			['Username™'], // https://github.com/Elgg/Elgg/issues/14239
 		];
 	}
 
 	public function testInvalidEmailFailsValidation() {
-		$this->expectException(\RegistrationException::class);
+		$this->expectException(RegistrationException::class);
 		elgg()->accounts->assertValidEmail('username@');
 	}
 	
@@ -59,6 +67,11 @@ class AccountsServiceUnitTest extends UnitTestCase {
 		elgg()->accounts->assertValidUsername($username);
 	}
 	
+	/**
+	 * @see \Elgg\Router\RouteRegistrationServiceUnitTest::validUsernameProvider()
+	 *
+	 * @return array
+	 */
 	public function validUsernameProvider() {
 		return [
 			['username'],
@@ -85,7 +98,7 @@ class AccountsServiceUnitTest extends UnitTestCase {
 
 		elgg_set_entity_class('user', 'custom', CustomUser::class);
 
-		$pwd_length = _elgg_config()->min_password_length;
+		$pwd_length = _elgg_services()->config->min_password_length;
 
 		$username = 'username' . rand(100, 999);
 		$password = str_repeat('a', $pwd_length + 1);
@@ -98,11 +111,13 @@ class AccountsServiceUnitTest extends UnitTestCase {
 
 		$this->assertFalse($failures);
 
-		$guid = elgg()->accounts->register($username, $password, $name, $email, false, 'custom');
-
-		$this->assertNotFalse($guid);
-
-		$user = get_entity($guid);
+		$user = elgg()->accounts->register([
+			'username' => $username,
+			'password' => $password,
+			'name' => $name,
+			'email' => $email,
+			'subtype' => 'custom',
+		]);
 
 		$this->assertInstanceOf(CustomUser::class, $user);
 
@@ -122,7 +137,7 @@ class AccountsServiceUnitTest extends UnitTestCase {
 		$user = $this->createUser();
 		$new_email = 'example.com';
 		
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		elgg()->accounts->requestNewEmailValidation($user, $new_email);
 	}
 }

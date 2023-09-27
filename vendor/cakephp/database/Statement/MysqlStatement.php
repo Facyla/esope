@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +19,7 @@ namespace Cake\Database\Statement;
 use PDO;
 
 /**
- * Statement class meant to be used by a Mysql PDO driver
+ * Statement class meant to be used by a MySQL PDO driver
  *
  * @internal
  */
@@ -26,9 +28,9 @@ class MysqlStatement extends PDOStatement
     use BufferResultsTrait;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function execute($params = null)
+    public function execute(?array $params = null): bool
     {
         $connection = $this->_driver->getConnection();
 

@@ -6,9 +6,10 @@
  * @see ElggInstaller::checkPHP()
  */
 
+use Elgg\Database\DbConfig;
 use Elgg\Http\Request;
 
-$icon_ok = elgg_view_icon('checkmark');
+$icon_ok = elgg_view_icon('check');
 $icon_warning = elgg_view_icon('exclamation-triangle');
 $icon_error = elgg_view_icon('times');
 
@@ -31,9 +32,9 @@ $title = elgg_echo('admin:server:label:php_version');
 $value = PHP_VERSION;
 $subtext = '';
 
-if (version_compare(PHP_VERSION, '7.1.0', '<')) {
+if (version_compare(PHP_VERSION, \ElggInstaller::PHP_MINIMAL_VERSION, '<')) {
 	$icon = $icon_error;
-	$subtext = elgg_echo('admin:server:label:php_version:required');
+	$subtext = elgg_echo('admin:server:label:php_version:required_version', [\ElggInstaller::PHP_MINIMAL_VERSION]);
 }
 
 echo $view_module($icon, $title, $value, $subtext);
@@ -80,26 +81,37 @@ foreach ($recommendedExtensions as $extension) {
 	echo $view_module($icon, $title, $value, $subtext);
 }
 
+// php ini
+if (empty(ini_get('session.gc_probability')) || empty(ini_get('session.gc_divisor'))) {
+	$title = elgg_echo('admin:server:requirements:gc');
+	$subtext = elgg_echo('admin:server:requirements:gc:info');
+	echo $view_module($icon_warning, $title, elgg_echo('status:disabled'), $subtext);
+}
+
 // db server information
-$db = elgg()->db->getConnection('read');
-$version = $db->query('select version()')->fetchColumn();
-$server = $db->getDatabasePlatform()->getName();
+$db = _elgg_services()->db;
+$version = $db->getServerVersion();
+$min_version = $db->isMariaDB() ? \ElggInstaller::MARIADB_MINIMAL_VERSION : \ElggInstaller::MYSQL_MINIMAL_VERSION;
+$server = $db->isMariaDB() ? 'mariadb' : $db->getConnection(DbConfig::READ_WRITE)->getDatabasePlatform()->getName();
 $subtext = '';
 $icon = $icon_ok;
 
-if ($server !== 'mysql' || version_compare($version, '5.5.3', '<')) {
-	$subtext = elgg_echo('admin:server:requirements:database:server:required');
+if (!in_array($server, ['mysql', 'mariadb']) || version_compare($version ?: '0', $min_version, '<')) {
+	$subtext = elgg_echo('admin:server:requirements:database:server:required_version', [$min_version]);
 	$icon = $icon_error;
 }
 
 echo $view_module($icon, elgg_echo('admin:server:requirements:database:server'), "{$server} v{$version}", $subtext);
 
 // db client information
-$client = $db->getDriver()->getName();
+$client_parts = explode('\\', get_class($db->getConnection(DbConfig::READ_WRITE)->getDriver()));
+$client_parts = array_slice($client_parts, 3);
+$client = implode(' ', $client_parts);
+
 $subtext = '';
 $icon = $icon_ok;
 
-if ($client !== 'pdo_mysql') {
+if ($client !== 'PDO MySQL Driver') {
 	$subtext = elgg_echo('admin:server:requirements:database:client:required');
 	$icon = $icon_error;
 }
@@ -125,3 +137,6 @@ if (!$tester->runRewriteTest($url)) {
 }
 
 echo $view_module($icon, $title, $value, $subtext);
+
+$icon = _elgg_services()->imageService->hasWebPSupport() ? $icon_ok : $icon_error;
+echo $view_module($icon, elgg_echo('admin:server:requirements:webp'));

@@ -8,6 +8,9 @@ use Elgg\Database\Clauses\EntityWhereClause;
 use Elgg\Database\Clauses\AnnotationWhereClause;
 use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\InvalidParameterException;
+use Elgg\Exceptions\LogicException;
 
 /**
  * Relationships repository contains methods for fetching relationships from database or performing
@@ -20,16 +23,16 @@ class Relationships extends Repository {
 
 	/**
 	 * {@inheritDoc}
-	 * @see \Elgg\Database\QueryExecuting::calculate()
+	 * @throws InvalidParameterException;
 	 */
 	public function calculate($function, $property, $property_type = null) {
 		
 		if (!in_array(strtolower($function), QueryBuilder::$calculations)) {
-			throw new \InvalidArgumentException("'$function' is not a valid numeric function");
+			throw new InvalidArgumentException("'$function' is not a valid numeric function");
 		}
 		
 		if (!isset($property_type)) {
-			if (in_array($property, \ElggEntity::$primary_attr_names)) {
+			if (in_array($property, \ElggEntity::PRIMARY_ATTR_NAMES)) {
 				$property_type = 'attribute';
 			} else {
 				$property_type = 'metadata';
@@ -42,8 +45,8 @@ class Relationships extends Repository {
 		
 		switch ($property_type) {
 			case 'attribute':
-				if (!in_array($property, \ElggEntity::$primary_attr_names)) {
-					throw new \InvalidParameterException("'$property' is not a valid attribute");
+				if (!in_array($property, \ElggEntity::PRIMARY_ATTR_NAMES)) {
+					throw new InvalidParameterException("'$property' is not a valid attribute");
 				}
 				
 				$alias = $select->joinEntitiesTable('er', $join_column, 'inner', 'e');
@@ -101,14 +104,13 @@ class Relationships extends Repository {
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Elgg\Database\QueryExecuting::execute()
 	 */
 	public function execute() {
 		
 		if ($this->options->annotation_calculation) {
 			$clauses = $this->options->annotation_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->annotation_name_value_pairs_operator !== 'OR') {
-				throw new \LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
+				throw new LogicException("Annotation calculation can not be performed on multiple annotation name value pairs merged with AND");
 			}
 			
 			$clause = array_shift($clauses);
@@ -117,7 +119,7 @@ class Relationships extends Repository {
 		} elseif ($this->options->metadata_calculation) {
 			$clauses = $this->options->metadata_name_value_pairs;
 			if (count($clauses) > 1 && $this->options->metadata_name_value_pairs_operator !== 'OR') {
-				throw new \LogicException("Metadata calculation can not be performed on multiple metadata name value pairs merged with AND");
+				throw new LogicException("Metadata calculation can not be performed on multiple metadata name value pairs merged with AND");
 			}
 			
 			$clause = array_shift($clauses);
@@ -134,7 +136,6 @@ class Relationships extends Repository {
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \Elgg\Database\QueryExecuting::get()
 	 */
 	public function get($limit = null, $offset = null, $callback = null) {
 		$select = Select::fromTable('entity_relationships', 'er');

@@ -2,13 +2,12 @@
 
 namespace Elgg\Http;
 
-use Elgg\BadRequestException;
+use Elgg\Config;
 use Elgg\Context;
-use Elgg\HttpException;
+use Elgg\Exceptions\Http\BadRequestException;
 use Elgg\Router\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Elgg\Config;
 
 /**
  * Elgg HTTP request.
@@ -31,9 +30,19 @@ class Request extends SymfonyRequest {
 	protected $route;
 	
 	/**
-	 * @ var array
+	 * @var array
 	 */
 	protected $request_overrides;
+	
+	/**
+	 * @var array
+	 */
+	protected $filtered_params;
+	
+	/**
+	 * @var array
+	 */
+	protected $unfiltered_params;
 
 	/**
 	 * {@inheritdoc}
@@ -67,7 +76,7 @@ class Request extends SymfonyRequest {
 		
 		$allowed_headers = $config->http_request_trusted_proxy_headers;
 		if (empty($allowed_headers)) {
-			$allowed_headers = self::HEADER_X_FORWARDED_ALL;
+			$allowed_headers = self::HEADER_X_FORWARDED_FOR | self::HEADER_X_FORWARDED_HOST | self::HEADER_X_FORWARDED_PORT | self::HEADER_X_FORWARDED_PROTO;
 		}
 		
 		$this->setTrustedProxies($trusted_proxies, $allowed_headers);
@@ -75,6 +84,7 @@ class Request extends SymfonyRequest {
 
 	/**
 	 * Initialize context stack
+	 *
 	 * @return static
 	 */
 	public function initializeContext() {
@@ -86,6 +96,7 @@ class Request extends SymfonyRequest {
 
 	/**
 	 * Returns context stack
+	 *
 	 * @return Context
 	 */
 	public function getContextStack() {
@@ -110,6 +121,7 @@ class Request extends SymfonyRequest {
 
 	/**
 	 * Returns the route matched for this request by the router
+	 *
 	 * @return Route|null
 	 */
 	public function getRoute() {
@@ -121,18 +133,22 @@ class Request extends SymfonyRequest {
 	 *
 	 * Note: this function does not handle nested arrays (ex: form input of param[m][n])
 	 *
-	 * @param string          $key              The name of the variable
-	 * @param string|string[] $value            The value of the variable
-	 * @param bool            $override_request The variable should override request values (default: false)
+	 * @param string $key              The name of the variable
+	 * @param mixed  $value            The value of the variable
+	 * @param bool   $override_request The variable should override request values (default: false)
 	 *
 	 * @return static
 	 */
-	public function setParam($key, $value, $override_request = false) {
-		if ((bool) $override_request) {
+	public function setParam(string $key, $value, bool $override_request = false) {
+		if ($override_request) {
 			$this->request_overrides[$key] = $value;
 		} else {
 			$this->request->set($key, $value);
 		}
+
+		// reset the cached params
+		unset($this->filtered_params);
+		unset($this->unfiltered_params);
 
 		return $this;
 	}
@@ -144,27 +160,16 @@ class Request extends SymfonyRequest {
 	 * it is a possible vector for a reflected XSS attack. If you are expecting an
 	 * integer, cast it to an int. If it is a string, escape quotes.
 	 *
-	 * Note: this function does not handle nested arrays (ex: form input of param[m][n])
-	 * because of the filtering done in htmlawed from the filter_tags call.
-	 * @todo Is this ^ still true?
-	 *
 	 * @param string $key           The variable name we want.
 	 * @param mixed  $default       A default value for the variable if it is not found.
 	 * @param bool   $filter_result If true, then the result is filtered for bad tags.
 	 *
 	 * @return mixed
 	 */
-	public function getParam($key, $default = null, $filter_result = true) {
-		$result = $default;
-
+	public function getParam(string $key, $default = null, bool $filter_result = true) {
 		$values = $this->getParams($filter_result);
 
-		$value = elgg_extract($key, $values, $default);
-		if ($value !== null) {
-			$result = $value;
-		}
-
-		return $result;
+		return elgg_extract($key, $values, $default);
 	}
 
 	/**
@@ -174,27 +179,31 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return array
 	 */
-	public function getParams($filter_result = true) {
+	public function getParams(bool $filter_result = true) {
+		if (isset($this->filtered_params) && isset($this->unfiltered_params)) {
+			return $filter_result ? $this->filtered_params : $this->unfiltered_params;
+		}
+
 		$request_overrides = $this->request_overrides;
 		$query = $this->query->all();
 		$attributes = $this->attributes->all();
 		$post = $this->request->all();
 
-		$result = array_merge($post, $attributes, $query, $request_overrides);
+		$this->unfiltered_params = array_merge($post, $attributes, $query, $request_overrides);
 
-		if ($filter_result) {
-			$this->getContextStack()->push('input');
-			
-			$result = filter_tags($result);
-			
-			$this->getContextStack()->pop();
-		}
-
-		return $result;
+		// filter the input params
+		$this->getContextStack()->push('input');
+		$this->filtered_params = elgg_sanitize_input($this->unfiltered_params);
+		$this->getContextStack()->pop();
+		
+		return $filter_result ? $this->filtered_params : $this->unfiltered_params;
 	}
 
 	/**
 	 * Returns current page URL
+	 *
+	 * It uses the configured site URL for the hostname rather than depending on
+	 * what the server uses to populate $_SERVER.
 	 *
 	 * @return string
 	 */
@@ -221,7 +230,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return string[]
 	 */
-	public function getUrlSegments($raw = false) {
+	public function getUrlSegments(bool $raw = false) {
 		$path = trim($this->getElggPath(), '/');
 		if (!$raw) {
 			$path = htmlspecialchars($path, ENT_QUOTES, 'UTF-8');
@@ -302,10 +311,9 @@ class Request extends SymfonyRequest {
 	 * {@inheritdoc}
 	 */
 	public function isXmlHttpRequest() {
-		return (strtolower($this->headers->get('X-Requested-With')) === 'xmlhttprequest'
+		return (strtolower($this->headers->get('X-Requested-With') ?: '') === 'xmlhttprequest'
 			|| $this->query->get('X-Requested-With') === 'XMLHttpRequest'
 			|| $this->request->get('X-Requested-With') === 'XMLHttpRequest');
-		// GET/POST check is necessary for jQuery.form and other iframe-based "ajax". #8735
 	}
 
 	/**
@@ -341,6 +349,16 @@ class Request extends SymfonyRequest {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Is the request an action
+	 *
+	 * @return bool
+	 * @since 4.1
+	 */
+	public function isAction(): bool {
+		return $this->getFirstUrlSegment() === 'action';
 	}
 
 	/**
@@ -429,7 +447,7 @@ class Request extends SymfonyRequest {
 	 * Validate the request
 	 *
 	 * @return void
-	 * @throws HttpException
+	 * @throws BadRequestException
 	 */
 	public function validate() {
 		$this->validateRequestHostHeader();
@@ -498,11 +516,30 @@ class Request extends SymfonyRequest {
 			return;
 		}
 		
-		$error_msg = elgg_trigger_plugin_hook('action_gatekeeper:upload_exceeded_msg', 'all', [
+		$error_msg = elgg_trigger_deprecated_plugin_hook('action_gatekeeper:upload_exceeded_msg', 'all', [
 			'post_size' => $reported_bytes,
 			'visible_errors' => true,
-		], elgg_echo('actiongatekeeper:uploadexceeded'));
+		], elgg_echo('actiongatekeeper:uploadexceeded'), "The 'action_gatekeeper:upload_exceeded_msg', 'all' has been deprecated", '4.3');
 		
 		throw new BadRequestException($error_msg);
+	}
+	
+	/**
+	 * Correct the base URL of the request
+	 *
+	 * @param \Elgg\Config $config the Elgg config
+	 *
+	 * @return void
+	 * @see https://github.com/Elgg/Elgg/issues/13667
+	 * @since 4.3
+	 */
+	public function correctBaseURL(\Elgg\Config $config): void {
+		if (\Elgg\Application::isCli()) {
+			return;
+		}
+		
+		$path = parse_url($config->wwwroot, PHP_URL_PATH);
+		
+		$this->baseUrl = rtrim($path, '/');
 	}
 }

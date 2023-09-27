@@ -10,12 +10,12 @@ define('STATUS_OK', 0);
 define('STATUS_ERROR', 1);
 
 $version = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
-$requiredVersion = 5.3;
+$requiredVersion = 7.1;
 
 if ($version < $requiredVersion) {
 
-    stderr(array("PHP version $requiredVersion or higher is required to use this tool.",
-        "You are currently running PHP $version"));
+    stderr(["PHP version $requiredVersion or higher is required to use this tool.",
+        "You are currently running PHP $version"]);
 
     exit(STATUS_ERROR);
 }
@@ -25,7 +25,7 @@ try {
 }
 catch (Exception $ex) {
 
-    stderr(message($ex->getMessage(), array('type'=>'error')));
+    stderr(message($ex->getMessage(), ['type'=>'error']));
 
     exit($ex->getCode());
 }
@@ -36,22 +36,13 @@ catch (Exception $ex) {
 
 if ($args->version) {
 
-    stdout((string) csscrush_version(true));
+    stdout((string) CssCrush\Version::detect());
 
     exit(STATUS_OK);
 }
 elseif ($args->help) {
 
     stdout(manpage());
-
-    exit(STATUS_OK);
-}
-elseif ($args->list) {
-
-    foreach (CssCrush\Plugin::info() as $name => $docs) {
-        $headline = isset($docs[0]) ? $docs[0] : '';
-        stdout(message(array($name => $headline), array('color'=>'g')));
-    }
 
     exit(STATUS_OK);
 }
@@ -79,7 +70,7 @@ else {
 
 if ($args->watch && ! $args->input_file) {
 
-    stderr(message('Watch mode requires an input file.', array('type'=>'error')));
+    stderr(message('Watch mode requires an input file.', ['type'=>'error']));
 
     exit(STATUS_ERROR);
 }
@@ -93,14 +84,15 @@ if (file_exists($configFile)) {
     $options = CssCrush\Util::readConfigFile($configFile);
 }
 else {
-    $options = array();
+    $options = [];
 }
 
 if ($args->pretty) {
     $options['minify'] = false;
 }
 
-foreach (array('boilerplate', 'formatter', 'newlines', 'stat_dump', 'source_map') as $option) {
+foreach (['boilerplate', 'formatter', 'newlines',
+    'stat_dump', 'source_map', 'import_path'] as $option) {
     if ($args->$option) {
         $options[$option] = $args->$option;
     }
@@ -124,10 +116,10 @@ if ($args->output_file) {
     $options['output_file'] = basename($args->output_file);
 }
 
-$options += array(
+$options += [
     'doc_root' => getcwd(),
     'context' => $args->context,
-);
+];
 
 
 ##################################################################
@@ -137,13 +129,18 @@ error_reporting(0);
 
 if ($args->watch) {
 
-    csscrush_set('config', array('io' => 'CssCrush\IO\Watch'));
+    csscrush_set('config', ['io' => 'CssCrush\IO\Watch']);
 
     stdout('CONTROL-C to quit.');
 
     $outstandingErrors = false;
 
     while (true) {
+
+        if (! file_exists($args->input_file)) {
+            stderr(message(['Input file was not found'], ['type'=>'error']));
+            exit(STATUS_ERROR);
+        }
 
         csscrush_file($args->input_file, $options);
         $stats = csscrush_stat();
@@ -156,20 +153,20 @@ if ($args->watch) {
         if ($errors) {
             if ($showErrors) {
                 $outstandingErrors = $errors;
-                stderr(message($errors, array('type'=>'error')));
+                stderr(message($errors, ['type'=>'error']));
             }
         }
         elseif ($changed) {
             $outstandingErrors = false;
-            stderr(message(fmt_fileinfo($stats, 'output'), array('type'=>'write')));
+            stderr(message(fmt_fileinfo($stats, 'output'), ['type'=>'write']));
         }
 
         if (($showErrors || $changed) && $warnings) {
-            stderr(message($warnings, array('type'=>'warning')));
+            stderr(message($warnings, ['type'=>'warning']));
         }
 
         if ($changed && $args->stats) {
-            stderr(message($stats, array('type'=>'stats')));
+            stderr(message($stats, ['type'=>'stats']));
         }
 
         sleep(1);
@@ -192,20 +189,20 @@ else {
     $warnings = $stats['warnings'];
 
     if ($errors) {
-        stderr(message($errors, array('type'=>'error')));
+        stderr(message($errors, ['type'=>'error']));
 
         exit(STATUS_ERROR);
     }
     elseif ($args->input_file && ! empty($stats['output_filename'])) {
-        stderr(message(fmt_fileinfo($stats, 'output'), array('type'=>'write')));
+        stderr(message(fmt_fileinfo($stats, 'output'), ['type'=>'write']));
     }
 
     if ($warnings) {
-        stderr(message($warnings, array('type'=>'warning')));
+        stderr(message($warnings, ['type'=>'warning']));
     }
 
     if ($args->stats) {
-        stderr(message($stats, array('type'=>'stats')));
+        stderr(message($stats, ['type'=>'stats']));
     }
 
     if ($stdOutput) {
@@ -242,7 +239,7 @@ function get_stdin_contents() {
 
 function parse_list(array $option) {
 
-    $out = array();
+    $out = [];
     foreach ($option as $arg) {
         if (is_string($arg)) {
             foreach (preg_split('~\s*,\s*~', $arg) as $item) {
@@ -256,14 +253,14 @@ function parse_list(array $option) {
     return $out;
 }
 
-function message($messages, $options = array()) {
+function message($messages, $options = []) {
 
-    $defaults = array(
+    $defaults = [
         'color' => 'b',
         'label' => null,
         'indent' => false,
         'format_label' => false,
-    );
+    ];
     $preset = ! empty($options['type']) ? $options['type'] : null;
     switch ($preset) {
         case 'error':
@@ -282,8 +279,8 @@ function message($messages, $options = array()) {
             // Making stats concise and readable.
             $messages['input_file'] = $messages['input_path'];
             $messages['compile_time'] = round($messages['compile_time'], 5) . ' seconds';
-            foreach (array('input_filename', 'input_path', 'output_filename',
-                'output_path', 'vars', 'errors', 'warnings') as $key) {
+            foreach (['input_filename', 'input_path', 'output_filename',
+                'output_path', 'vars', 'errors', 'warnings'] as $key) {
                 unset($messages[$key]);
             }
             ksort($messages);
@@ -293,7 +290,7 @@ function message($messages, $options = array()) {
     }
     extract($options + $defaults);
 
-    $out = array();
+    $out = [];
     foreach ((array) $messages as $_label => $value) {
         $_label = $label ?: $_label;
         if ($format_label) {
@@ -309,7 +306,8 @@ function message($messages, $options = array()) {
 }
 
 function fmt_fileinfo($stats, $type) {
-    return $stats[$type . '_filename'] . ' ' . '(' . $stats[$type . '_path'] . ')';
+    $time = round($stats['compile_time'], 3);
+    return $stats[$type . '_path'] . " ({$time}s)";
 }
 
 function pick(array &$arr) {
@@ -329,7 +327,7 @@ function pick(array &$arr) {
 function colorize($str) {
 
     static $color_support;
-    static $tags = array(
+    static $tags = [
         '<b>' => "\033[0;30m",
         '<r>' => "\033[0;31m",
         '<g>' => "\033[0;32m",
@@ -349,7 +347,7 @@ function colorize($str) {
         '<W>' => "\033[1;37m",
 
         '</>' => "\033[m",
-    );
+    ];
 
     if (! isset($color_support)) {
         $color_support = defined('TESTMODE') && TESTMODE ? false : true;
@@ -380,19 +378,19 @@ function get_trailing_io_args($required_value_opts) {
     $other_opt_patt = "~^-{1,2}([a-z0-9\-]+)?(=|$)~ix";
 
     // Step through the args.
-    $filtered = array();
+    $filtered = [];
     for ($i = 0; $i < count($trailing_args); $i++) {
 
         $current = $trailing_args[$i];
 
         // If tests as a required value option, reset and skip next.
         if (preg_match($value_opt_patt, $current)) {
-            $filtered = array();
+            $filtered = [];
             $i++;
         }
         // If it looks like any other kind of flag, or optional value option, reset.
         elseif (preg_match($other_opt_patt, $current)) {
-            $filtered = array();
+            $filtered = [];
         }
         else {
             $filtered[] = $current;
@@ -412,12 +410,12 @@ function get_trailing_io_args($required_value_opts) {
             break;
     }
 
-    return array($trailing_input_file, $trailing_output_file);
+    return [$trailing_input_file, $trailing_output_file];
 }
 
 function parse_args() {
 
-    $required_value_opts = array(
+    $required_value_opts = [
         'i|input|f|file', // Input file. Defaults to STDIN.
         'o|output', // Output file. Defaults to STDOUT.
         'E|enable|plugins',
@@ -426,28 +424,28 @@ function parse_args() {
         'formatter',
         'vendor-target',
         'context',
+        'import-path',
         'newlines',
-    );
+    ];
 
-    $optional_value_opts = array(
+    $optional_value_opts = [
         'b|boilerplate',
         'stat-dump',
-    );
+    ];
 
-    $flag_opts = array(
+    $flag_opts = [
         'p|pretty',
         'w|watch',
-        'list',
         'help',
         'version',
         'source-map',
         'stats',
         'test',
-    );
+    ];
 
     // Create option strings for getopt().
-    $short_opts = array();
-    $long_opts = array();
+    $short_opts = [];
+    $long_opts = [];
     $join_opts = function ($opts_list, $modifier) use (&$short_opts, &$long_opts) {
         foreach ($opts_list as $opt) {
             foreach (explode('|', $opt) as $arg) {
@@ -471,7 +469,6 @@ function parse_args() {
     // Information options.
     $args->help = isset($opts['h']) ?: isset($opts['help']);
     $args->version = isset($opts['version']);
-    $args->list = isset($opts['l']) ?: isset($opts['list']);
 
     // File arguments.
     $args->input_file = pick($opts, 'i', 'input', 'f', 'file');
@@ -497,9 +494,10 @@ function parse_args() {
     // Arguments that require a value but accept multiple values.
     $args->enable_plugins = pick($opts, 'E', 'enable', 'plugins');
     $args->vendor_target = pick($opts, 'vendor-target');
+    $args->import_path = pick($opts, 'import-path');
 
     // Run multiple value arguments through array cast.
-    foreach (array('enable_plugins', 'vendor_target') as $arg) {
+    foreach (['enable_plugins', 'vendor_target'] as $arg) {
         if ($args->$arg) {
             $args->$arg = (array) $args->$arg;
         }
@@ -578,8 +576,12 @@ function manpage() {
         to a custom boilerplate template.
 
     <g>--context</>
-        Filepath context for resolving relative URLs. Only meaningful when
-        taking raw input from STDIN.
+        Filepath context for resolving relative import URLs.
+        Only meaningful when taking raw input from STDIN.
+
+    <g>--import-path</>
+        Comma separated list of additional paths to search when resolving
+        relative import URLs.
 
     <g>--formatter</>
         Possible values:
@@ -592,9 +594,6 @@ function manpage() {
 
     <g>--help</>
         Display this help message.
-
-    <g>--list</>
-        Show plugins.
 
     <g>--newlines</>
         Force newline style on output css. Defaults to the current platform

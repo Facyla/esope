@@ -1,7 +1,4 @@
-define(function(require) {
-	require('elgg/init');
-	var elgg = require('elgg');
-	var $ = require('jquery');
+define(['jquery', 'elgg'], function($, elgg) {
 
 	return elgg.trigger_hook('config', 'ckeditor', {'editor': 'simple'}, {
 		toolbar: [['Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat']],
@@ -12,7 +9,7 @@ define(function(require) {
 		removePlugins: 'elementspath', // no need to see elementspath
 		extraPlugins: 'blockimagepaste',
 		defaultLanguage: 'en',
-		language: elgg.get_language(),
+		language: elgg.config.current_language,
 		skin: 'moono-lisa',
 		contentsCss: elgg.get_simplecache_url('elgg/wysiwyg.css'),
 		disableNativeSpellChecker: false,
@@ -22,4 +19,3 @@ define(function(require) {
 		stylesSet: false, //no additional styles.js
 	});
 });
-

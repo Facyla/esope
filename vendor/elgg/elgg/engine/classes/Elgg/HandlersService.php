@@ -2,15 +2,12 @@
 
 namespace Elgg;
 
-use Elgg\Di\DiContainer;
 use Elgg\HooksRegistrationService\Event as HrsEvent;
 use Elgg\HooksRegistrationService\Hook as HrsHook;
+use Elgg\Traits\Loggable;
 
 /**
  * Helpers for providing callable-based APIs
- *
- * getType() uses code from Zend\Code\Reflection\ParameterReflection::detectType.
- * https://github.com/zendframework/zend-code/blob/master/src/Reflection/ParameterReflection.php
  *
  * @copyright 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
@@ -18,13 +15,10 @@ use Elgg\HooksRegistrationService\Hook as HrsHook;
  * @internal
  */
 class HandlersService {
-
-	/**
-	 * Keeps track of already reported deprecated arguments callback messages
-	 *
-	 * @var array
-	 */
-	private $deprecated_args_msgs = [];
+	
+	use Loggable;
+	
+	protected const CLASS_NAME_PATTERN_53 = '/^(\\\\?[a-z_\x7f-\xff][a-z0-9_\x7f-\xff]*)+$/i';
 	
 	/**
 	 * Call the handler with the hook/event object
@@ -42,48 +36,31 @@ class HandlersService {
 		if (!is_callable($callable)) {
 			$type = is_string($object) ? $object : $object::EVENT_TYPE;
 			$description = $type . " [{$args[0]}, {$args[1]}]";
-			$msg = "Handler for $description is not callable: " . $this->describeCallable($original);
-			_elgg_services()->logger->warning($msg);
+
+			$this->getLogger()->warning("Handler for {$description} is not callable: " . $this->describeCallable($original));
 
 			return [false, null, $object];
 		}
 
-		$use_object = $this->acceptsObject($callable);
-		if ($use_object) {
-			if (is_string($object)) {
-				switch ($object) {
-					case 'hook' :
-						$object = new HrsHook(elgg(), $args[0], $args[1], $args[2], $args[3]);
-						break;
+		if (is_string($object)) {
+			switch ($object) {
+				case 'hook' :
+					$object = new HrsHook(elgg(), $args[0], $args[1], $args[2], $args[3]);
+					break;
 
-					case 'event' :
-						$object = new HrsEvent(elgg(), $args[0], $args[1], $args[2]);
-						break;
+				case 'event' :
+					$object = new HrsEvent(elgg(), $args[0], $args[1], $args[2]);
+					break;
 
-					case 'middleware' :
-					case 'controller' :
-					case 'action' :
-						$object = new Request(elgg(), $args[0]);
-						break;
-				}
+				case 'middleware' :
+				case 'controller' :
+				case 'action' :
+					$object = new Request(elgg(), $args[0]);
+					break;
 			}
-
-			$result = call_user_func($callable, $object);
-		} else {
-			// legacy arguments
-			if ($this->getParamTypeForCallable($callable) !== null) {
-				$described_callback = $this->describeCallable($callable);
-				$msg = "Using legacy style hook and event callback arguments is deprecated. Used by: {$described_callback} for [{$args[0]}, {$args[1]}].";
-				
-				$msg_hash = md5($msg);
-				if (!in_array($msg_hash, $this->deprecated_args_msgs)) {
-					elgg_deprecated_notice($msg, "3.1");
-					$this->deprecated_args_msgs[] = $msg_hash;
-				}
-			}
-			
-			$result = call_user_func_array($callable, $args);
 		}
+
+		$result = call_user_func($callable, $object);
 
 		return [true, $result, $object];
 	}
@@ -103,35 +80,6 @@ class HandlersService {
 	}
 
 	/**
-	 * Get the reflection interface for a callable
-	 *
-	 * @param callable $callable Callable
-	 *
-	 * @return \ReflectionFunctionAbstract
-	 */
-	public function getReflector($callable) {
-		if (is_string($callable)) {
-			if (false !== strpos($callable, '::')) {
-				$callable = explode('::', $callable);
-			} else {
-				// function
-				return new \ReflectionFunction($callable);
-			}
-		}
-		if (is_array($callable)) {
-			return new \ReflectionMethod($callable[0], $callable[1]);
-		}
-		if ($callable instanceof \Closure) {
-			return new \ReflectionFunction($callable);
-		}
-		if (is_object($callable)) {
-			return new \ReflectionMethod($callable, '__invoke');
-		}
-
-		throw new \InvalidArgumentException('invalid $callable');
-	}
-
-	/**
 	 * Resolve a callable, possibly instantiating a class name
 	 *
 	 * @param callable|string $callable Callable or class name
@@ -144,85 +92,12 @@ class HandlersService {
 		}
 
 		if (is_string($callable)
-			&& preg_match(DiContainer::CLASS_NAME_PATTERN_53, $callable)
+			&& preg_match(self::CLASS_NAME_PATTERN_53, $callable)
 			&& class_exists($callable)) {
-			// @todo Eventually a more advanced DIC could auto-inject dependencies
 			$callable = new $callable;
 		}
 
 		return is_callable($callable) ? $callable : null;
-	}
-
-	/**
-	 * Should we pass this callable a Hook/Event object instead of the 2.0 arguments?
-	 *
-	 * @param callable $callable Callable
-	 *
-	 * @return bool
-	 */
-	private function acceptsObject($callable) {
-		// note: caching string callables didn't help any
-		$type = (string) $this->getParamTypeForCallable($callable);
-		if (0 === strpos($type, 'Elgg\\')) {
-			// probably right. We can just assume and let PHP handle it
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Get the type for a parameter of a callable
-	 *
-	 * @param callable $callable Callable
-	 * @param int      $index    Index of argument
-	 *
-	 * @return null|string Empty string = no type, null = no parameter
-	 */
-	public function getParamTypeForCallable($callable, $index = 0) {
-		$params = $this->getReflector($callable)->getParameters();
-		if (!isset($params[$index])) {
-			return null;
-		}
-
-		return $this->getType($params[$index]);
-	}
-
-	/**
-	 * Get the type of a parameter
-	 *
-	 * @param \ReflectionParameter $param Parameter
-	 *
-	 * @return string
-	 */
-	public function getType(\ReflectionParameter $param) {
-		// @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
-		// @license   http://framework.zend.com/license/new-bsd New BSD License
-
-		if (method_exists($param, 'getType')
-				&& ($type = $param->getType())
-				&& $type->isBuiltin()) {
-			return $type->getName();
-		}
-
-		// can be dropped when dropping PHP7 support:
-		if ($param->isArray()) {
-			return 'array';
-		}
-
-		// can be dropped when dropping PHP7 support:
-		if ($param->isCallable()) {
-			return 'callable';
-		}
-
-		// ReflectionParameter::__toString() doesn't require loading class
-		if (preg_match('~\[\s\<\w+?>\s([\S]+)~s', (string) $param, $m)) {
-			if ($m[1][0] !== '$') {
-				return $m[1];
-			}
-		}
-
-		return '';
 	}
 
 	/**
@@ -259,32 +134,5 @@ class HandlersService {
 			return "(" . get_class($callable) . ")->__invoke()";
 		}
 		return print_r($callable, true);
-	}
-
-	/**
-	 * Get a string that uniquely identifies a callback across requests (for caching)
-	 *
-	 * @param callable $callable Callable
-	 *
-	 * @return string Empty if cannot uniquely identify this callable
-	 */
-	public function fingerprintCallable($callable) {
-		if (is_string($callable)) {
-			return $callable;
-		}
-		if (is_array($callable)) {
-			if (is_string($callable[0])) {
-				return "{$callable[0]}::{$callable[1]}";
-			}
-			return get_class($callable[0]) . "::{$callable[1]}";
-		}
-		if ($callable instanceof \Closure) {
-			return '';
-		}
-		if (is_object($callable)) {
-			return get_class($callable) . "::__invoke";
-		}
-		// this should not happen
-		return '';
 	}
 }

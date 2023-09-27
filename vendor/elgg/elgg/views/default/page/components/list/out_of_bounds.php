@@ -5,19 +5,15 @@
 
 $items = elgg_extract('items', $vars);
 $pagination = (bool) elgg_extract('pagination', $vars);
-
 $count = (int) elgg_extract('count', $vars);
-$offset = (int) elgg_extract('offset', $vars);
-$limit = (int) elgg_extract('limit', $vars);
 
 if (!empty($items) || !$pagination || empty($count)) {
 	return;
 }
 
-$msg = elgg_echo('list:out_of_bounds') . ' ';
-$msg .= elgg_view('output/url', [
+$link = elgg_view('output/url', [
 	'text' => elgg_echo('list:out_of_bounds:link'),
-	'href' => elgg_http_add_url_query_elements(current_page_url(), ['offset' => null]),
+	'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['offset' => null]),
 ]);
 
-echo elgg_view_message('notice', $msg);
+echo elgg_view_message('notice', elgg_echo('list:out_of_bounds'), ['link' => $link]);

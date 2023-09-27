@@ -53,6 +53,19 @@ DirectoryIndex index.php
 	php_value display_errors 0
 </IfModule>
 
+<IfModule mod_php.c>
+	# If using PHP 8+
+
+	# limit the maximum memory consumed by the php script to 64 MB
+	php_value memory_limit 64M
+	# post_max_size is the maximum size of ALL the data that is POST'ed to php at a time (8 MB)
+	php_value post_max_size 8388608
+	# upload_max_filesize is the maximum size of a single uploaded file (5 MB)
+	php_value upload_max_filesize 5242880
+	# on development servers, set to 1 to display errors. Set to 0 on production servers.
+	php_value display_errors 0
+</IfModule>
+
 ############################
 # COMPRESSION
 
@@ -128,24 +141,31 @@ RewriteRule "^.well-known/" - [L]
 # hide all dot files/dirs (.git)
 RewriteRule (^\.|/\.) - [F]
 
+# Prevent access to the composer.json and .lock file
+RewriteRule /?(composer\.json|composer\.lock)$ - [F]
+
 # Optional hardering rules to block access to files in the following directories
 # The following coditions can be enabled, when enabling at least one the last three lines NEED to be enabled  
-#RewriteCond %{REQUEST_URI} ^/actions/ [OR]
-#RewriteCond %{REQUEST_URI} ^/bower_components/ [OR]
-#RewriteCond %{REQUEST_URI} ^/elgg_config/ [OR]
-#RewriteCond %{REQUEST_URI} ^/engine/ [OR]
-#RewriteCond %{REQUEST_URI} ^/grunt/ [OR]
-#RewriteCond %{REQUEST_URI} ^/install/ [OR]
-#RewriteCond %{REQUEST_URI} ^/languages/ [OR]
-#RewriteCond %{REQUEST_URI} ^/vendor/ [OR]
-#RewriteCond %{REQUEST_URI} ^/mod/(.*)/actions/ [OR]
-#RewriteCond %{REQUEST_URI} ^/mod/(.*)/languages/ [OR]
-#RewriteCond %{REQUEST_URI} ^/mod/(.*)/vendor/ [OR]
-#RewriteCond %{REQUEST_URI} ^/mod/(.*)/classes/ [OR]
+RewriteCond %{REQUEST_URI} ^/actions/ [OR]
+RewriteCond %{REQUEST_URI} ^/bower_components/ [OR]
+RewriteCond %{REQUEST_URI} ^/elgg_config/ [OR]
+RewriteCond %{REQUEST_URI} ^/engine/ [OR]
+RewriteCond %{REQUEST_URI} ^/grunt/ [OR]
+RewriteCond %{REQUEST_URI} ^/install/ [OR]
+RewriteCond %{REQUEST_URI} ^/languages/ [OR]
+RewriteCond %{REQUEST_URI} ^/vendor/ [OR]
+RewriteCond %{REQUEST_URI} ^/mod/(.*)/actions/ [OR]
+RewriteCond %{REQUEST_URI} ^/mod/(.*)/languages/ [OR]
+RewriteCond %{REQUEST_URI} ^/mod/(.*)/vendor/ [OR]
+RewriteCond %{REQUEST_URI} ^/mod/(.*)/classes/ [OR]
 # The following condition is needed in order to easily enable (some of the) previous conditions
-#RewriteCond 1 2
-#RewriteCond %{REQUEST_FILENAME} -f
-#RewriteRule ^(.*)$ - [F,L]
+RewriteCond 1 2
+# The following files are whitelisted for the installer
+RewriteCond %{REQUEST_URI} !/vendor/npm-asset/jquery/dist/jquery.min.js
+RewriteCond %{REQUEST_URI} !/vendor/elgg/elgg/views/default/graphics/elgg_logo.png
+RewriteCond %{REQUEST_URI} !/vendor/elgg/elgg/views/default/graphics/favicon.ico
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [F,L]
 
 # Everything else that isn't a file gets routed through Elgg
 RewriteCond %{REQUEST_FILENAME} !-f

@@ -3,19 +3,16 @@
 namespace Elgg;
 
 use Elgg\Database\EntityTable;
-use Elgg\Database\EntityTable\UserFetchFailureException;
+use Elgg\Exceptions\Database\UserFetchFailureException;
+use Elgg\Exceptions\InvalidArgumentException;
 use ElggAnnotation;
 use ElggEntity;
 use ElggFile;
 use ElggRiverItem;
-use ElggMetadata;
 use ElggSession;
-use InvalidArgumentException;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * User capabilities service
  *
  * @internal
  * @since 2.2
@@ -194,58 +191,6 @@ class UserCapabilities {
 	}
 
 	/**
-	 * Can a user edit metadata on this entity?
-	 *
-	 * If no specific metadata is passed, it returns whether the user can
-	 * edit any metadata on the entity.
-	 *
-	 * Since 3.0, metadata is not owned and can in principle be updated by any user,
-	 * who has access to the entity. You can still use the hook to prevent the metadata from being
-	 * written to the database, however it may propagate in ElggEntity properties.
-	 * Use ElggEntity::canEdit() before setting metadata, if you want to ensure that only
-	 * owners/admins can update metadata.
-	 *
-	 * @param ElggEntity   $entity    Object entity
-	 * @param int          $user_guid The user GUID, optionally (default: logged in user)
-	 * @param ElggMetadata $metadata  The piece of metadata to specifically check or null for any metadata
-	 *
-	 * @return bool
-	 * @deprecated 3.0
-	 */
-	public function canEditMetadata(ElggEntity $entity, $user_guid = 0, ElggMetadata $metadata = null) {
-		elgg_deprecated_notice(__METHOD__ . ' is deprecated. Metadata no longer has it\'s own access system', '3.0', 3);
-		
-		if (!$entity->guid) {
-			// @todo cannot edit metadata on unsaved entity?
-			return false;
-		}
-
-		if ($this->canBypassPermissionsCheck($user_guid)) {
-			return true;
-		}
-
-		try {
-			$user = $this->entities->getUserForPermissionsCheck($user_guid);
-		} catch (UserFetchFailureException $e) {
-			return false;
-		}
-
-		// metadata and user may be null
-		$params = [
-			'entity' => $entity,
-			'user' => $user,
-			'metadata' => $metadata
-		];
-
-		$default = $metadata ? true : $entity->canEdit($user->guid);
-
-		return $this->hooks->triggerDeprecated('permissions_check:metadata', $entity->getType(), $params, $default,
-			'Metadata no longer has it\'s own access system. You should not rely on this hook preventing metadata permissions.',
-			'3.0'
-		);
-	}
-
-	/**
 	 * Determines whether or not the user can edit this annotation
 	 *
 	 * @param Elggentity     $entity     Object entity
@@ -297,13 +242,13 @@ class UserCapabilities {
 	 * Can a user add an entity to this container
 	 *
 	 * @param ElggEntity $entity    Container entity
-	 * @param int        $user_guid The GUID of the user creating the entity (0 for logged in user).
 	 * @param string     $type      The type of entity we're looking to write
 	 * @param string     $subtype   The subtype of the entity we're looking to write
+	 * @param int        $user_guid The GUID of the user creating the entity (0 for logged in user).
 	 *
 	 * @return bool
 	 */
-	public function canWriteToContainer(ElggEntity $entity, $user_guid = 0, $type = 'all', $subtype = 'all') {
+	public function canWriteToContainer(ElggEntity $entity, string $type, string $subtype, int $user_guid = 0) {
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -337,13 +282,8 @@ class UserCapabilities {
 			return true;
 		}
 
-		$return = false;
-		if ($entity) {
-			// If the user can edit the container, they can also write to it
-			if ($entity->canEdit($user_guid)) {
-				$return = true;
-			}
-		}
+		// If the user can edit the container, they can also write to it
+		$return = $entity->canEdit($user_guid);
 
 		// Container permissions can prevent users from writing to an entity.
 		// For instance, these permissions can prevent non-group members from writing
@@ -361,24 +301,32 @@ class UserCapabilities {
 	 * @param int        $user_guid User guid (default is logged in user)
 	 * @param bool       $default   Default permission
 	 *
-	 * @return bool|null
+	 * @return bool
 	 */
 	public function canComment(ElggEntity $entity, $user_guid = 0, $default = null) {
-		if ($this->canBypassPermissionsCheck($user_guid)) {
-			return true;
-		}
-
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
 			return false;
 		}
-
+		
+		$container_result = $this->canWriteToContainer($entity, 'object', 'comment', $user_guid);
+		if ($this->canBypassPermissionsCheck($user_guid)) {
+			// doing this again here to prevent bypassed users to be influenced by permissions_check:comment hook
+			return $container_result;
+		}
+		
+		if (is_null($default) || $default === $container_result) {
+			$default = $container_result;
+		} else {
+			elgg_deprecated_notice('Passing "$default" to $entity->canComment() has been deprecated.', '4.1');
+		}
+		
 		// By default, we don't take a position of whether commenting is allowed
 		// because it is handled by the subclasses of \ElggEntity
 		$params = [
 			'entity' => $entity,
-			'user' => $user
+			'user' => $user,
 		];
 		return $this->hooks->trigger('permissions_check:comment', $entity->getType(), $params, $default);
 	}

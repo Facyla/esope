@@ -12,7 +12,7 @@ class UnvalidatedUserMenuTest extends UnitTestCase {
 	public function up() {
 		_elgg_services()->hooks->backup();
 
-		_elgg_services()->hooks->registerHandler('register', 'menu:user:unvalidated', '_elgg_user_unvalidated_menu');
+		_elgg_services()->hooks->registerHandler('register', 'menu:user:unvalidated', 'Elgg\Menus\UserUnvalidated::register');
 	}
 	
 	public function down() {
@@ -53,8 +53,6 @@ class UnvalidatedUserMenuTest extends UnitTestCase {
 		$items = $menu->getItems();
 
 		$this->assertEmpty($items->all());
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testUnvalidatedUserMenuViewedByAdmin() {
@@ -76,8 +74,5 @@ class UnvalidatedUserMenuTest extends UnitTestCase {
 
 		$this->assertTrue($items->has('validate'));
 		$this->assertTrue($items->has('delete'));
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
-
 }

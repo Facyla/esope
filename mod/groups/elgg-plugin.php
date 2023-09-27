@@ -2,18 +2,29 @@
 
 use Elgg\Groups\Middleware\LimitedGroupCreation;
 
+require_once(__DIR__ . '/lib/functions.php');
+
 $membership = __DIR__ . '/actions/groups/membership/';
 
 return [
+	'plugin' => [
+		'name' => 'Groups',
+		'activate_on_install' => true,
+	],
+	'settings' => [
+		'hidden_groups' => 'no',
+		'limited_groups' => 'no',
+	],
 	'entities' => [
 		[
 			'type' => 'group',
 			'subtype' => 'group',
-			'searchable' => true,
+			'capabilities' => [
+				'commentable' => false,
+				'searchable' => true,
+				'likable' => true,
+			],
 		],
-	],
-	'upgrades' => [
-		\Elgg\Groups\Upgrades\GroupIconTransfer::class,
 	],
 	'actions' => [
 		'groups/edit' => [],
@@ -74,11 +85,8 @@ return [
 			'resource' => 'groups/search',
 		],
 		'collection:user:user:group_members' => [
-			'path' => '/groups/members/{guid}/{sort?}',
+			'path' => '/groups/members/{guid}',
 			'resource' => 'groups/members',
-			'default' => [
-				'sort' => 'alpha',
-			],
 		],
 		'collection:user:user:group_invites' => [
 			'path' => '/groups/invites/{guid}',
@@ -89,7 +97,7 @@ return [
 			],
 		],
 		'add:group:group' => [
-			'path' => '/groups/add/{container_guid}',
+			'path' => '/groups/add/{guid}',
 			'resource' => 'groups/add',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
@@ -112,7 +120,9 @@ return [
 			'resource' => 'groups/invite',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
+				\Elgg\Router\Middleware\GroupPageOwnerCanEditGatekeeper::class,
 			],
+			'detect_page_owner' => true,
 		],
 		'requests:group:group' => [
 			'path' => '/groups/requests/{guid}',
@@ -121,11 +131,131 @@ return [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\GroupPageOwnerCanEditGatekeeper::class,
 			],
+			'detect_page_owner' => true,
+		],
+		'settings:notification:groups' => [
+			'path' => '/settings/notifications/groups/{username}',
+			'resource' => 'settings/notifications/groups',
+			'middleware' => [
+				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
+			],
+			'detect_page_owner' => true,
 		],
 	],
 	'widgets' => [
 		'a_users_groups' => [
 			'context' => ['profile', 'dashboard'],
+		],
+	],
+	'view_extensions' => [
+		'elgg.css' => [
+			'groups/groups.css' => [],
+		],
+		'notifications/settings/records' => [
+			'notifications/settings/group_join' => [],
+		],
+	],
+	'events' => [
+		'create' => [
+			'group' => [
+				'Elgg\Groups\Group::createAccessCollection' => [],
+				\Elgg\Notifications\CreateContentEventHandler::class => [],
+			],
+			'relationship' => [
+				'Elgg\Groups\Relationships::applyGroupNotificationSettings' => [],
+			],
+		],
+		'delete' => [
+			'relationship' => [
+				'Elgg\Groups\Relationships::removeGroupNotificationSubscriptions' => [],
+			],
+		],
+		'join' => [
+			'group' => [
+				'Elgg\Groups\Group::joinGroup' => [],
+			],
+		],
+		'leave' => [
+			'group' => [
+				'Elgg\Groups\Group::leaveGroup' => [],
+			],
+		],
+		'update:after' => [
+			'group' => [
+				'Elgg\Groups\Group::updateGroup' => [],
+			],
+		],
+	],
+	'hooks' => [
+		'access:collections:write' => [
+			'all' => [
+				'Elgg\Groups\Access::getWriteAccess' => ['priority' => 600],
+			],
+		],
+		'access_collection:name' => [
+			'access_collection' => [
+				'Elgg\Groups\Access::getAccessCollectionName' => [],
+			],
+		],
+		'default' => [
+			'access' => [
+				'Elgg\Groups\Access::getDefaultAccess' => [],
+				'Elgg\Groups\Access::overrideDefaultAccess' => [],
+			],
+		],
+		'fields' => [
+			'group:group' => [
+				\Elgg\Groups\FieldsHandler::class => [],
+			],
+		],
+		'gatekeeper' => [
+			'group:group' => [
+				'Elgg\Groups\Access::allowProfilePage' => [],
+			],
+		],
+		'register' => [
+			'menu:entity:group:group' => [
+				'Elgg\Groups\Menus\Entity::register' => [],
+				'Elgg\Groups\Menus\Entity::registerFeature' => [],
+			],
+			'menu:filter:groups/all' => [
+				'Elgg\Groups\Menus\Filter::registerGroupsAll' => [],
+				'Elgg\Menus\FilterSortItems::registerTimeCreatedSorting' => [],
+				'Elgg\Menus\FilterSortItems::registerNameSorting' => [],
+				'Elgg\Menus\FilterSortItems::registerSortingDropdown' => ['priority' => 9999],
+			],
+			'menu:filter:settings/notifications' => [
+				'Elgg\Groups\Menus\Filter::registerNotificationSettings' => [],
+			],
+			'menu:filter:groups/members' => [
+				'Elgg\Groups\Menus\Filter::registerGroupsMembers' => [],
+				'Elgg\Groups\Menus\FilterSortItems::registerMembershipSorting' => [],
+				'Elgg\Menus\FilterSortItems::registerNameSorting' => [],
+				'Elgg\Menus\FilterSortItems::registerSortingDropdown' => ['priority' => 9999],
+			],
+			'menu:page' => [
+				'Elgg\Groups\Menus\Page::register' => [],
+				'Elgg\Groups\Menus\Page::registerGroupProfile' => [],
+			],
+			'menu:relationship' => [
+				'Elgg\Groups\Menus\Relationship::registerInvitedItems' => [],
+				'Elgg\Groups\Menus\Relationship::registerMembershipRequestItems' => [],
+				'Elgg\Groups\Menus\Relationship::registerRemoveUser' => [],
+			],
+			'menu:site' => [
+				'Elgg\Groups\Menus\Site::register' => [],
+			],
+			'menu:title' => [
+				'Elgg\Groups\Menus\Title::register' => [],
+			],
+			'menu:topbar' => [
+				'Elgg\Groups\Menus\Topbar::register' => [],
+			],
+		],
+		'search:fields' => [
+			'group' => [
+				'Elgg\Search\GroupSearchProfileFieldsHandler' => [],
+			],
 		],
 	],
 ];

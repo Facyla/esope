@@ -2,6 +2,7 @@
 
 namespace Elgg\Filesystem;
 
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\UnitTestCase;
 
 /**
@@ -20,13 +21,6 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 	public function up() {
 		$this->service = _elgg_services()->mimetype;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function down() {
-		
-	}
 	
 	/**
 	 * @dataProvider validFilenameProvider
@@ -44,7 +38,7 @@ class MimeTypeServiceUnitTest extends UnitTestCase {
 	}
 	
 	public function testGetMimeTypeWithInvalidFileCausesException() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->service->getMimeType($this->normalizeTestFilePath('file_not_found.txt'));
 	}
 	

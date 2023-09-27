@@ -2,6 +2,10 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\Http\CsrfException;
+use Elgg\Exceptions\Http\GatekeeperException;
+use Elgg\Exceptions\Http\PageNotFoundException;
+use Elgg\Exceptions\Http\ValidationException;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
 use Elgg\Http\Request;
@@ -18,6 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
+	use MessageTesting;
+	
 	/**
 	 * @var ActionsService
 	 */
@@ -39,8 +45,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	private $translator;
 
 	public function up() {
-		$svc = _elgg_services();
-
 		$this->actionsDir = $this->normalizeTestFilePath('actions');
 
 		$request = $this->prepareHttpRequest();
@@ -49,7 +53,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	public function down() {
 		_elgg_services()->hooks->restore();
-		_elgg_services()->logger->enable();
 	}
 
 	function createService(Request $request) {
@@ -58,7 +61,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'request' => $request,
 		]);
 
-		$svc = $app->_services;
+		$svc = $app->internal_services;
 
 		$svc->session->start();
 
@@ -66,9 +69,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$svc->logger->disable();
 
 		_elgg_services()->translator->addTranslation('en', ['__test__' => 'Test']);
-
-		_elgg_register_routes();
-
 	}
 
 	function addCsrfTokens(Request $request) {
@@ -165,6 +165,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->assertTrue(_elgg_services()->actions->register('test/output', "$this->actionsDir/output.php", 'public'));
 		$this->assertTrue(_elgg_services()->actions->register('test/output_logged_in', "$this->actionsDir/output.php", 'logged_in'));
+		$this->assertTrue(_elgg_services()->actions->register('test/output_logged_out', "$this->actionsDir/output.php", 'logged_out'));
 		$this->assertTrue(_elgg_services()->actions->register('test/output_admin', "$this->actionsDir/output.php", 'admin'));
 	}
 
@@ -268,7 +269,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 	public function testCanNotValidateTokenAfterSessionExpiry() {
 		$dt = new \DateTime();
 		_elgg_services()->csrf->setCurrentTime($dt);
-		$timeout = _elgg_services()->csrf->getActionTokenTimeout();
 		$timestamp = $dt->getTimestamp();
 		$token = _elgg_services()->csrf->generateActionToken($timestamp);
 		_elgg_services()->session->invalidate();
@@ -371,33 +371,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		_elgg_services()->router->getResponse($request);
 	}
 
-	public function testActionHookIsTriggered() {
-		$request = $this->prepareHttpRequest('action/output3', 'POST', [], false);
-		$this->createService($request);
-		$this->addCsrfTokens($request);
-
-		_elgg_services()->hooks->registerHandler('action', 'output3', function ($hook, $type, $return, $params) {
-			echo 'hello';
-
-			return false;
-		});
-
-		$this->assertTrue(_elgg_services()->actions->register('output3', "$this->actionsDir/output3.php", 'public'));
-
-		$result = _elgg_services()->router->getResponse($request);
-
-		$this->assertInstanceOf(OkResponse::class, $result);
-		$this->assertEquals(ELGG_HTTP_OK, $result->getStatusCode());
-		$this->assertEquals(REFERRER, $result->getForwardURL());
-		$this->assertEquals('hello', $result->getContent());
-	}
-
 	public function testValidateHookIsTriggered() {
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], false);
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler('action:validate', 'output3', function ($hook, $type, $return, $params) {
+		_elgg_services()->hooks->registerHandler('action:validate', 'output3', function (\Elgg\Hook $hook) {
 			throw new ValidationException('Invalid');
 		});
 
@@ -475,15 +454,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsStringIgnoringCase('charset=utf-8', $response->headers->get('Content-Type'));
 		$output = json_encode([
-			'output' => 'output3',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => [
-					'success',
-				]
-			],
-			'current_url' => current_page_url(),
+			'value' => 'output3',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => $request->headers->get('Referer'),
 		]);
 
@@ -538,8 +510,10 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', function ($hook, $type, $api_response) {
+		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', function (\Elgg\Hook $hook) {
 			/* @var $api_response Services\AjaxResponse */
+			$api_response = $hook->getValue();
+			
 			$api_response->setTtl(1000);
 			$api_response->setData((object) ['value' => 'output3_modified']);
 
@@ -588,8 +562,10 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', function ($hook, $type, $api_response) {
+		_elgg_services()->hooks->registerHandler(Services\AjaxResponse::RESPONSE_HOOK, 'action:output3', function (\Elgg\Hook $hook) {
 			/* @var $api_response Services\AjaxResponse */
+			$api_response = $hook->getValue();
+			
 			return $api_response->cancel();
 		});
 
@@ -674,13 +650,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
 		$output = json_encode([
-			'output' => 'output3',
-			'status' => -1,
-			'system_messages' => [
-				'error' => ['error'],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
+			'value' => 'output3',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => $request->headers->get('Referer'),
 		]);
 
@@ -740,7 +711,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $response);
 		$this->assertEquals(ELGG_HTTP_FOUND, $response->getStatusCode());
 		$this->assertEquals(elgg_normalize_url('index'), $response->getTargetURL());
-		$this->assertContains('success', _elgg_services()->systemMessages->dumpRegister()['success']);
+		
+		$this->assertSystemMessageEmitted('success');
 	}
 
 	public function testCanRespondToNonAjaxRequestFromErrorResponseBuilder() {
@@ -762,7 +734,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $response);
 		$this->assertEquals(ELGG_HTTP_FOUND, $response->getStatusCode());
 		$this->assertEquals(elgg_normalize_url('index'), $response->getTargetURL());
-		$this->assertContains('error', _elgg_services()->systemMessages->dumpRegister()['error']);
+		
+		$this->assertErrorMessageEmitted('error');
 	}
 
 	public function testCanRespondToNonAjaxRequestFromRedirectResponseBuilder() {
@@ -806,13 +779,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
 		$output = json_encode([
-			'output' => ['foo', 'bar'],
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => ['success']
-			],
-			'current_url' => current_page_url(),
+			'value' => ['foo', 'bar'],
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => elgg_normalize_url('index'),
 		]);
 
@@ -836,21 +804,11 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$response = _elgg_services()->responseFactory->getSentResponse();
 		$this->assertInstanceOf(Response::class, $response);
-		$this->assertEquals(ELGG_HTTP_OK, $response->getStatusCode());
+		$this->assertEquals(ELGG_HTTP_BAD_REQUEST, $response->getStatusCode());
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
-		$output = json_encode([
-			'output' => 'error', // registered error message
-			'status' => -1,
-			'system_messages' => [
-				'error' => ['error'],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
-			'forward_url' => elgg_normalize_url('index'),
-		]);
 
-		$this->assertEquals($output, $response->getContent());
+		$this->assertEquals('error', $response->getContent());
 	}
 
 	public function testCanRespondToAjaxRequestFromRedirectResponseBuilder() {
@@ -872,18 +830,17 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals(ELGG_HTTP_OK, $response->getStatusCode());
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
+		
 		$output = json_encode([
-			'output' => '',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
+			'value' => '',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => elgg_normalize_url('index'),
 		]);
 
 		$this->assertEquals($output, $response->getContent());
+		
+		// compensate for fact that ResponseFactory::redirect closes a buffer it didn't open
+		ob_start();
 	}
 
 	/**
@@ -1055,13 +1012,8 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertStringContainsString('application/json', $response->headers->get('Content-Type'));
 		$this->assertStringContainsString('charset=utf-8', strtolower($response->headers->get('Content-Type')));
 		$output = json_encode([
-			'output' => 'foo',
-			'status' => 0,
-			'system_messages' => [
-				'error' => [],
-				'success' => []
-			],
-			'current_url' => current_page_url(),
+			'value' => 'foo',
+			'current_url' => elgg_get_current_url(),
 			'forward_url' => $request->headers->get('Referer'),
 		]);
 
@@ -1110,10 +1062,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->createService($request);
 		$this->addCsrfTokens($request);
 
-		_elgg_services()->hooks->registerHandler('response', 'action:output4', function ($hook, $type, $response, $params) {
-			$this->assertEquals('response', $hook);
-			$this->assertEquals('action:output4', $type);
-			$this->assertEquals($response, $params);
+		_elgg_services()->hooks->registerHandler('response', 'action:output4', function (\Elgg\Hook $hook) {
+			$response = $hook->getValue();
+			
+			$this->assertEquals('response', $hook->getName());
+			$this->assertEquals('action:output4', $hook->getType());
+			$this->assertEquals($response, $hook->getParams());
 			$this->assertInstanceOf(OkResponse::class, $response);
 
 			$response->setContent('good bye');

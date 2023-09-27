@@ -7,7 +7,13 @@ use Elgg\Friends\Actions\RevokeFriendRequestController;
 use Elgg\Friends\Actions\DeclineFriendRequestController;
 use Elgg\Friends\Actions\AcceptFriendRequestController;
 
+require_once(__DIR__ . '/lib/functions.php');
+
 return [
+	'plugin' => [
+		'name' => 'Friends',
+		'activate_on_install' => true,
+	],
 	'actions' => [
 		'friends/add' => [
 			'controller' => AddFriendController::class,
@@ -26,7 +32,15 @@ return [
 	'events' => [
 		'create' => [
 			'relationship' => [
-				'\Elgg\Friends\Relationships::createFriendRelationship' => [],
+				'Elgg\Friends\Relationships::removePendingFriendRequest' => [],
+				'Elgg\Friends\Relationships::applyFriendNotificationsSettings' => [],
+				'Elgg\Friends\Notifications::sendFriendNotification' => [],
+			],
+		],
+		'delete' => [
+			'relationship' => [
+				'Elgg\Friends\Relationships::deleteFriendRelationship' => [],
+				'Elgg\Friends\Relationships::deleteFriendNotificationSubscription' => [],
 			],
 		],
 	],
@@ -62,6 +76,50 @@ return [
 	'widgets' => [
 		'friends' => [
 			'context' => ['profile', 'dashboard'],
+		],
+		'friends_of' => [
+			'context' => ['profile', 'dashboard'],
+		],
+	],
+	'hooks' => [
+		'access:collections:write:subtypes' => [
+			'user' => [
+				'Elgg\Friends\Access::registerAccessCollectionType' => [],
+			],
+		],
+		'entity:url' => [
+			'object' => [
+				'Elgg\Friends\Widgets::setWidgetUrl' => [],
+			],
+		],
+		'register' => [
+			'menu:filter:filter' => [
+				'Elgg\Friends\Menus\Filter::registerFilterTabs' => ['priority' => 1],
+			],
+			'menu:filter:friends' => [
+				'Elgg\Friends\Menus\Filter::addFriendRequestTabs' => [],
+			],
+			'menu:page' => [
+				'Elgg\Friends\Menus\Page::register' => [],
+			],
+			'menu:relationship' => [
+				'\Elgg\Friends\Menus\Relationship::addPendingFriendRequestItems' => [],
+				'\Elgg\Friends\Menus\Relationship::addSentFriendRequestItems' => [],
+			],
+			'menu:title' => [
+				'Elgg\Friends\Menus\Title::register' => [],
+			],
+			'menu:topbar' => [
+				'Elgg\Friends\Menus\Topbar::register' => [],
+			],
+			'menu:user_hover' => [
+				'Elgg\Friends\Menus\UserHover::register' => [],
+			],
+		],
+	],
+	'view_extensions' => [
+		'notifications/settings/records' => [
+			'notifications/settings/friends' => [],
 		],
 	],
 ];

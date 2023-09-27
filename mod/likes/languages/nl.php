@@ -22,27 +22,16 @@ return array(
 	'likes:userlikedthis' => '%s vindt dit leuk',
 	'likes:userslikedthis' => '%s vinden dit leuk',
 	'likes:river:annotate' => 'vindt leuk',
-	'likes:delete:confirm' => 'Weet je zeker dat je deze \'like\' wilt verwijderen?',
-
-	'river:likes' => 'vindt %s leuk %s',
 
 	// notifications. yikes.
 	'likes:notifications:subject' => '%s vindt je item "%s" leuk',
-	'likes:notifications:body' =>
-'Beste %1$s,
-
-%2$s vond je item "%3$s" op %4$s leuk.
+	'likes:notifications:body' => '%1$s vond je item "%2$s" op %3$s leuk.
 
 Om naar je item te gaan, klik hier:
-%5$s
 
-of bekijk %2$s\'s profiel hier:
+%4$s
 
-%6$s
+of bekijk %1$s\'s profiel hier:
 
-Bedankt,
-%4$s',
-	'likes:upgrade:2017120700:title' => "Publieke Likes annotaties",
-	'likes:upgrade:2017120700:description' => "Dit update het toegangsniveau van alle likes annotaties naar publiek",
-	
+%5$s',
 );

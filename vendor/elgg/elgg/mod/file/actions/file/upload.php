@@ -9,7 +9,7 @@ $desc = get_input('description');
 $access_id = (int) get_input('access_id');
 $container_guid = (int) get_input('container_guid', 0);
 $guid = (int) get_input('file_guid');
-$tags = get_input('tags');
+$tags = (string) get_input('tags');
 
 $container_guid = $container_guid ?: elgg_get_logged_in_user_guid();
 
@@ -50,7 +50,7 @@ if ($title) {
 $file->description = $desc;
 $file->access_id = $access_id;
 $file->container_guid = $container_guid;
-$file->tags = string_to_tag_array($tags);
+$file->tags = elgg_string_to_array($tags);
 
 $file->save();
 
@@ -103,7 +103,7 @@ $forward = $file->getURL();
 // handle results differently for new files and file updates
 if ($new_file) {
 	$container = get_entity($container_guid);
-	if ($container instanceof ElggGroup) {
+	if ($container instanceof \ElggGroup) {
 		$forward = elgg_generate_url('collection:object:file:group', ['guid' => $container->guid]);
 	} else {
 		$forward = elgg_generate_url('collection:object:file:owner', ['username' => $container->username]);

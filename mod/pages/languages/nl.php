@@ -19,23 +19,23 @@ return array(
 	'collection:object:page:group' => "Groepspagina's",
 	'add:object:page' => "Nieuwe pagina",
 	'edit:object:page' => "Bewerk deze pagina",
+	'notification:object:page:create' => "Stuur een notificatie wanneer een pagina is gemaakt",
+	'notifications:mute:object:page' => "over de pagina '%s'",
 
 	'groups:tool:pages' => 'Schakel groepspagina\'s in',
+	'groups:tool:pages:description' => 'Laat groepsleden samenwerken aan pagina\'s in deze groep.',
 	
 	'annotation:delete:page:success' => 'De paginarevisie is succesvol verwijderd.',
 	'annotation:delete:page:fail' => 'De paginarevisie kon niet worden verwijderd.',
 
-	'pages:delete' => "Verwijder deze pagina",
 	'pages:history' => "Paginageschiedenis",
-	'pages:view' => "Bekijk pagina",
 	'pages:revision' => "Revisie",
 
 	'pages:navigation' => "Paginanavigatie",
 
 	'pages:notify:summary' => 'Nieuwe pagina met de titel %s',
 	'pages:notify:subject' => "Een nieuwe pagina: %s",
-	'pages:notify:body' =>
-'%s schreef een nieuwe pagina: %s
+	'pages:notify:body' => '%s schreef een nieuwe pagina: %s
 
 %s
 
@@ -61,8 +61,6 @@ Om de pagina te bekijken en te reageren, klik hier:
 	'pages:description' => 'Jouw tekst',
 	'pages:tags' => 'Tags',
 	'pages:parent_guid' => 'Hoofdpagina',
-	'pages:access_id' => 'Toegang',
-	'pages:write_access_id' => 'Schrijfrechten',
 
 	/**
 	 * Status and error messages
@@ -72,8 +70,6 @@ Om de pagina te bekijken en te reageren, klik hier:
 	'pages:notsaved' => 'Pagina kon niet worden opgeslagen',
 	'pages:error:no_title' => 'Je moet een titel opgeven voor deze pagina.',
 	'entity:delete:object:page:success' => 'Pagina succesvol verwijderd',
-	'pages:revision:delete:success' => 'De paginarevisie is succesvol verwijderd.',
-	'pages:revision:delete:failure' => 'De paginarevisie kon niet worden verwijderd.',
 
 	/**
 	 * History
@@ -88,21 +84,5 @@ Om de pagina te bekijken en te reageren, klik hier:
 	'widgets:pages:name' => 'Pagina\'s',
 	'widgets:pages:description' => "Toon een lijst van je pagina's",
 
-	/**
-	 * Submenu items
-	 */
-	'pages:label:view' => "Bekijk pagina",
-	'pages:label:edit' => "Bewerk pagina",
-	'pages:label:history' => "Paginageschiedenis",
-
 	'pages:newchild' => "Maak een subpagina",
-	
-	/**
-	 * Upgrades
-	 */
-	'pages:upgrade:2017110700:title' => "Migreer page_top naar page entities",
-	'pages:upgrade:2017110700:description' => "Wijzig het subtype van alle hoofdpagina's naar 'page' en zet de correcte metadata voor de correcte lijstweergave.",
-	
-	'pages:upgrade:2017110701:title' => "Migreer page_top activiteiten op de activiteitenstroom",
-	'pages:upgrade:2017110701:description' => "Wijzig het subtype van alle activiteiten mbt hoofdpagina's naar 'page'",
 );

@@ -2,7 +2,7 @@
 
 use Elgg\Application;
 use Elgg\Config;
-use Elgg\Mocks\Di\MockServiceProvider;
+use Elgg\Mocks\Di\InternalContainer;
 use Elgg\Project\Paths;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -36,8 +36,6 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			->onlyMethods([
 				'getApp',
 				'checkRewriteRules',
-				'createSessionFromFile',
-				'createSessionFromDatabase',
 			])
 			->getMock();
 
@@ -46,16 +44,6 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 		$this->mock->method('checkRewriteRules')
 			->will($this->returnCallback([$this, 'checkRewriteRules']));
-
-		$this->mock->method('createSessionFromFile')
-			->will($this->returnCallback(function () {
-				$this->getApp()->_services->setValue('session', ElggSession::getMock());
-			}));
-
-		$this->mock->method('createSessionFromDatabase')
-			->will($this->returnCallback(function () {
-				$this->getApp()->_services->setValue('session', ElggSession::getMock());
-			}));
 	}
 
 	public function down() {
@@ -74,7 +62,6 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		Application::setInstance(null);
 
 		$config = new Config();
-		$config->elgg_config_locks = false;
 		$config->installer_running = true;
 		$config->dbencoding = 'utf8mb4';
 		$config->boot_cache_ttl = 0;
@@ -83,14 +70,13 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		$config->lastcache = time();
 		$config->wwwroot = getenv('ELGG_WWWROOT') ? : 'http://localhost/';
 
-		$services = new MockServiceProvider($config);
+		$services = InternalContainer::factory(['config' => $config]);
 
-		$services->setValue('session', \ElggSession::getMock());
-		$services->systemMessages;
+		$services->set('session', \ElggSession::getMock());
 
 		$app = Application::factory([
 			'config' => $config,
-			'service_provider' => $services,
+			'internal_services' => $services,
 			'handle_exceptions' => false,
 			'handle_shutdown' => false,
 		]);
@@ -99,9 +85,9 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		$app->loadCore();
 		$this->app = $app;
 
-		$this->app->_services->views->setViewtype('installation');
-		$this->app->_services->views->registerPluginViews(Paths::elgg());
-		$this->app->_services->translator->registerTranslations(Paths::elgg() . "install/languages/", true);
+		$this->app->internal_services->views->setViewtype('installation');
+		$this->app->internal_services->views->registerPluginViews(Paths::elgg());
+		$this->app->internal_services->translator->registerTranslations(Paths::elgg() . "install/languages/", true);
 
 		return $this->app;
 
@@ -180,7 +166,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	public function testRequirements() {
 
-		$this->getApp()->_services->request->setParam('step', 'requirements');
+		$this->getApp()->internal_services->request->setParam('step', 'requirements');
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -241,7 +227,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	public function testDatabase() {
 
-		$this->getApp()->_services->request->setParam('step', 'database');
+		$this->getApp()->internal_services->request->setParam('step', 'database');
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -291,7 +277,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			],
 			'wwwroot' => [
 				'type' => 'url',
-				'value' => $this->getApp()->_services->config->wwwroot,
+				'value' => $this->getApp()->internal_services->config->wwwroot,
 				'required' => true,
 			],
 			'timezone' => [
@@ -347,7 +333,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			'timezone' => 'UTC',
 		]);
 
-		$this->getApp()->_services->setValue('request', $request);
+		$this->getApp()->internal_services->set('request', $request);
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -380,7 +366,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			'timezone' => 'UTC',
 		]);
 
-		$this->getApp()->_services->setValue('request', $request);
+		$this->getApp()->internal_services->set('request', $request);
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -395,19 +381,19 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	public function testSettings() {
 
-		$db = $this->getApp()->_services->db;
+		$db = $this->getApp()->internal_services->db;
 		/* @var $db \Elgg\Mocks\Database */
 
 		$db->addQuerySpec([
 			'sql' => 'SHOW TABLES',
 			'results' => [
-				(object) ["{$db->prefix}config"],
+				["{$db->prefix}config"],
 			],
 		]);
 
 		$this->createSettingsFile();
 
-		$this->getApp()->_services->request->setParam('step', 'settings');
+		$this->getApp()->internal_services->request->setParam('step', 'settings');
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -462,19 +448,19 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	public function testSettingsAction() {
 
-		$db = $this->getApp()->_services->db;
+		$db = $this->getApp()->internal_services->db;
 		/* @var $db \Elgg\Mocks\Database */
 
 		$db->addQuerySpec([
 			'sql' => 'SHOW TABLES',
 			'results' => [
-				(object) ["{$db->prefix}config"],
+				["{$db->prefix}config"],
 			],
 		]);
 
 		$this->createSettingsFile();
 
-		$this->getApp()->_services->request->setParam('step', 'settings');
+		$this->getApp()->internal_services->request->setParam('step', 'settings');
 
 		$request = $this->prepareHttpRequest('install.php?step=settings', 'POST', [
 			'sitename' => 'Test Site',
@@ -482,7 +468,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			'siteaccess' => ACCESS_PUBLIC,
 		]);
 
-		$this->getApp()->_services->setValue('request', $request);
+		$this->getApp()->internal_services->set('request', $request);
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -495,13 +481,13 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	public function testAdmin() {
 
-		$db = $this->getApp()->_services->db;
+		$db = $this->getApp()->internal_services->db;
 		/* @var $db \Elgg\Mocks\Database */
 
 		$db->addQuerySpec([
 			'sql' => 'SHOW TABLES',
 			'results' => [
-				(object) ["{$db->prefix}config"],
+				["{$db->prefix}config"],
 			],
 		]);
 
@@ -509,7 +495,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 		$this->createSite();
 
-		$this->getApp()->_services->request->setParam('step', 'admin');
+		$this->getApp()->internal_services->request->setParam('step', 'admin');
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -575,13 +561,13 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	public function testAdminAction() {
 
-		$db = $this->getApp()->_services->db;
+		$db = $this->getApp()->internal_services->db;
 		/* @var $db \Elgg\Mocks\Database */
 
 		$db->addQuerySpec([
 			'sql' => 'SHOW TABLES',
 			'results' => [
-				(object) ["{$db->prefix}config"],
+				["{$db->prefix}config"],
 			],
 		]);
 
@@ -589,7 +575,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 		$this->createSite();
 
-		$this->getApp()->_services->request->setParam('step', 'admin');
+		$this->getApp()->internal_services->request->setParam('step', 'admin');
 
 		$request = $this->prepareHttpRequest('install.php?step=admin', 'POST', [
 			'displayname' => 'admin user',
@@ -599,7 +585,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			'password2' => '12345678',
 		]);
 
-		$this->getApp()->_services->setValue('request', $request);
+		$this->getApp()->internal_services->set('request', $request);
 
 		$mock = $this->mock;
 		/* @var $mock ElggInstaller */
@@ -610,19 +596,17 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals(elgg_normalize_url('install.php?step=complete'), $response->getForwardURL());
 
 		$this->assertInstanceOf(ElggUser::class, elgg_get_logged_in_user_entity());
-
-		$this->getApp()->_services->session->removeLoggedInUser();
 	}
 
 	public function testBatchInstall() {
 
-		$db = $this->getApp()->_services->db;
+		$db = $this->getApp()->internal_services->db;
 		/* @var $db \Elgg\Mocks\Database */
 
 		$db->addQuerySpec([
 			'sql' => 'SHOW TABLES',
 			'results' => [
-				(object) ["{$db->prefix}config"],
+				["{$db->prefix}config"],
 			],
 		]);
 
@@ -652,7 +636,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			'timezone' => 'UTC',
 		]);
 
-		$this->assertNull($this->getApp()->_services->config->installer_running);
-		$this->assertIsInt($this->getApp()->_services->config->installed);
+		$this->assertNull($this->getApp()->internal_services->config->installer_running);
+		$this->assertIsInt($this->getApp()->internal_services->config->installed);
 	}
 }

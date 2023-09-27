@@ -3,8 +3,9 @@
 namespace Elgg\Database;
 
 use Elgg\Config as ElggConfig;
-use Elgg\Database;
-use ElggCrypto;
+use Elgg\Exceptions\Configuration\InstallationException;
+use Elgg\Exceptions\RuntimeException;
+use Elgg\Security\Crypto;
 
 /**
  * Manages a site-specific secret key, encoded as a 32 byte string "secret"
@@ -26,6 +27,11 @@ class SiteSecret {
 	const CONFIG_KEY = '__site_secret__';
 
 	/**
+	 * @var string
+	 */
+	private $key;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $key Site key (32 hex chars, or "z" and 31 base64 chars)
@@ -35,11 +41,6 @@ class SiteSecret {
 	}
 
 	/**
-	 * @var string
-	 */
-	private $key;
-
-	/**
 	 * Returns the site secret.
 	 *
 	 * Used to generate difficult to guess hashes for sessions and action tokens.
@@ -47,10 +48,11 @@ class SiteSecret {
 	 * @param bool $raw If true, a binary key will be returned
 	 *
 	 * @return string Site secret
+	 * @throws RuntimeException
 	 */
 	public function get($raw = false) {
 		if (!$this->key) {
-			throw new \RuntimeException('Secret key is not set');
+			throw new RuntimeException('Secret key is not set');
 		}
 
 		if (!$raw) {
@@ -102,11 +104,12 @@ class SiteSecret {
 	 *
 	 * Used during installation or regeneration.
 	 *
-	 * @param ElggCrypto  $crypto Crypto service
+	 * @param Crypto      $crypto Crypto service
 	 * @param ConfigTable $table  Config table
+	 *
 	 * @return SiteSecret
 	 */
-	public static function regenerate(ElggCrypto $crypto, ConfigTable $table) {
+	public static function regenerate(Crypto $crypto, ConfigTable $table) {
 		$key = 'z' . $crypto->getRandomString(31);
 
 		$table->set(self::CONFIG_KEY, $key);
@@ -120,12 +123,12 @@ class SiteSecret {
 	 * @param ConfigTable $table Config table
 	 *
 	 * @return SiteSecret
-	 * @throws \InstallationException
+	 * @throws InstallationException
 	 */
 	public static function fromDatabase(ConfigTable $table) {
 		$key = $table->get(self::CONFIG_KEY);
 		if (!$key) {
-			throw new \InstallationException('Site secret is not in the config table.');
+			throw new InstallationException('Site secret is not in the config table.');
 		}
 
 		return new self($key);
@@ -143,9 +146,6 @@ class SiteSecret {
 		if (!$key) {
 			return false;
 		}
-
-		// Don't leave this sitting around in config, in case it gets dumped
-		unset($config->{self::CONFIG_KEY});
 
 		return new self($key);
 	}

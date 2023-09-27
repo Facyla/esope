@@ -2,18 +2,11 @@
 
 namespace Elgg\Lib;
 
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\IntegrationTestCase;
 use Elgg\Router\Route;
 
 class PageOwnerIntegrationTest extends IntegrationTestCase {
-	
-	public function up() {
-		
-	}
-	
-	public function down() {
-		
-	}
 
 	/**
 	 * @dataProvider setterProvider
@@ -31,29 +24,6 @@ class PageOwnerIntegrationTest extends IntegrationTestCase {
 		return [
 			[999, 1, 1],
 			[999, 0, 0],
-		];
-	}
-
-	/**
-	 * @dataProvider libGetSetterProvider
-	 */
-	public function testSetPageOwnerWithGetterLibFunction($initial_guid, $new_guid, $expected) {
-		
-		elgg_get_page_owner_guid($initial_guid);
-		$this->assertEquals($initial_guid, _elgg_services()->pageOwner->getPageOwnerGuid());
-		
-		elgg_get_page_owner_guid($new_guid);
-		
-		$this->assertEquals($expected, _elgg_services()->pageOwner->getPageOwnerGuid());
-	}
-	
-	public function libGetSetterProvider() {
-		return [
-			[999, 1, 1],
-			[999, 0, 999],
-			[999, -1, 0],
-			[999, false, 0],
-			[999, null, 0],
 		];
 	}
 
@@ -81,7 +51,7 @@ class PageOwnerIntegrationTest extends IntegrationTestCase {
 	}
 		
 	public function testSettingNegativeOwner() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		_elgg_services()->pageOwner->setPageOwnerGuid(-1);
 	}
 	
@@ -106,8 +76,6 @@ class PageOwnerIntegrationTest extends IntegrationTestCase {
 		} else {
 			$this->assertEquals($user->guid, $guid);
 		}
-		
-		$user->delete();
 	}
 
 	public function routeProvider() {
@@ -134,8 +102,6 @@ class PageOwnerIntegrationTest extends IntegrationTestCase {
 		
 		$guid = _elgg_services()->pageOwner->getPageOwnerGuid();
 		$this->assertEquals($user->guid, $guid);
-		
-		$user->delete();
 	}
 	
 	public function testPageOwnerDetectedFromInputOwnerGUID() {
@@ -147,8 +113,6 @@ class PageOwnerIntegrationTest extends IntegrationTestCase {
 		
 		$guid = _elgg_services()->pageOwner->getPageOwnerGuid();
 		$this->assertEquals($user->guid, $guid);
-		
-		$user->delete();
 	}
 	
 	/**
@@ -164,8 +128,6 @@ class PageOwnerIntegrationTest extends IntegrationTestCase {
 				
 		$guid = _elgg_services()->pageOwner->getPageOwnerGuid();
 		$this->assertEquals($user->{$test_match_on}, $guid);
-		
-		$user->delete();
 	}
 	
 	public function segmentsProvider() {

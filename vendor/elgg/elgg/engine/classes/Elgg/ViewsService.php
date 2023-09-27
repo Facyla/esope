@@ -6,15 +6,14 @@ use Elgg\Application\CacheHandler;
 use Elgg\Cache\SystemCache;
 use Elgg\Filesystem\Directory;
 use Elgg\Http\Request as HttpRequest;
-use Psr\Log\LoggerInterface;
+use Elgg\Project\Paths;
+use Elgg\Traits\Loggable;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * Views service
  *
  * @internal
- * @since  1.9.0
+ * @since 1.9.0
  */
 class ViewsService {
 
@@ -88,12 +87,10 @@ class ViewsService {
 	 * Constructor
 	 *
 	 * @param PluginHooksService $hooks   The hooks service
-	 * @param LoggerInterface    $logger  Logger
 	 * @param \Elgg\Http\Request $request Http Request
 	 */
-	public function __construct(PluginHooksService $hooks, LoggerInterface $logger, HttpRequest $request = null) {
+	public function __construct(PluginHooksService $hooks, HttpRequest $request) {
 		$this->hooks = $hooks;
-		$this->logger = $logger;
 		$this->request = $request;
 	}
 
@@ -230,14 +227,14 @@ class ViewsService {
 		$view_base = rtrim($view_base, '/\\');
 
 		if (!is_dir($folder) || !is_readable($folder)) {
-			$this->logger->notice("Unable to register views from the directory: {$folder}");
+			$this->getLogger()->notice("Unable to register views from the directory: {$folder}");
 			return false;
 		}
 
 		try {
 			$dir = new \DirectoryIterator($folder);
 		} catch (\Exception $e) {
-			$this->logger->error($e->getMessage());
+			$this->getLogger()->error($e->getMessage());
 			return false;
 		}
 
@@ -336,8 +333,6 @@ class ViewsService {
 	 * @param string $viewtype Viewtype
 	 *
 	 * @return bool
-	 *
-	 * @see elgg_does_viewtype_fallback()
 	 */
 	public function doesViewtypeFallback($viewtype) {
 		return in_array($viewtype, $this->fallbacks);
@@ -360,7 +355,7 @@ class ViewsService {
 
 		$rendered = $this->renderView($view, $vars, '', false);
 		if ($rendered) {
-			elgg_deprecated_notice("The $view view has been deprecated. $suggestion", $version, 3);
+			$this->logDeprecatedMessage("The '{$view}' view has been deprecated. {$suggestion}", $version);
 		}
 
 		return $rendered;
@@ -400,7 +395,7 @@ class ViewsService {
 		$view = self::canonicalizeViewName($view);
 
 		if (!is_string($view) || !is_string($viewtype)) {
-			$this->logger->notice("View and Viewtype in views must be a strings: $view");
+			$this->getLogger()->notice("View and Viewtype in views must be a strings: $view");
 
 			return '';
 		}
@@ -411,7 +406,7 @@ class ViewsService {
 
 		// check for extension deadloops
 		if (in_array($view, $extensions_tree)) {
-			$this->logger->error("View $view is detected as an extension of itself. This is not allowed");
+			$this->getLogger()->error("View $view is detected as an extension of itself. This is not allowed");
 
 			return '';
 		}
@@ -502,7 +497,7 @@ class ViewsService {
 		$file = $this->findViewFile($view, $viewtype);
 		if (!$file) {
 			if ($issue_missing_notice) {
-				$this->logger->notice("$viewtype/$view view does not exist.");
+				$this->getLogger()->notice("$viewtype/$view view does not exist.");
 			}
 
 			return false;
@@ -712,14 +707,13 @@ class ViewsService {
 	/**
 	 * Register a plugin's views
 	 *
-	 * @param string $path       Base path of the plugin
-	 * @param string $failed_dir This var is set to the failed directory if registration fails
+	 * @param string $path Base path of the plugin
 	 *
 	 * @return bool
 	 */
-	public function registerPluginViews($path, &$failed_dir = '') {
-		$path = rtrim($path, "\\/");
-		$view_dir = "$path/views/";
+	public function registerPluginViews($path) {
+		$path = Paths::sanitize($path);
+		$view_dir = "{$path}views/";
 
 		// plugins don't have to have views.
 		if (!is_dir($view_dir)) {
@@ -728,8 +722,8 @@ class ViewsService {
 
 		// but if they do, they have to be readable
 		$handle = opendir($view_dir);
-		if (!$handle) {
-			$failed_dir = $view_dir;
+		if ($handle === false) {
+			$this->getLogger()->notice("Unable to register views from the directory: {$view_dir}");
 
 			return false;
 		}
@@ -739,8 +733,6 @@ class ViewsService {
 
 			if ('.' !== substr($view_type, 0, 1) && is_dir($view_type_dir)) {
 				if (!$this->autoregisterViews('', $view_type_dir, $view_type)) {
-					$failed_dir = $view_type_dir;
-
 					return false;
 				}
 			}

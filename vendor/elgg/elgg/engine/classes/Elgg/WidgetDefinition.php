@@ -1,5 +1,8 @@
 <?php
+
 namespace Elgg;
+
+use Elgg\Exceptions\InvalidParameterException;
 
 /**
  * WidgetDefinition
@@ -43,10 +46,11 @@ class WidgetDefinition {
 	 * WidgetDefinition constructor
 	 *
 	 * @param string $id Identifier of the widget
+	 * @throws InvalidParameterException
 	 */
 	public function __construct($id) {
 		if (empty($id)) {
-			throw new \InvalidParameterException('Id missing for WidgetDefinition');
+			throw new InvalidParameterException('Id missing for WidgetDefinition');
 		}
 		
 		$this->id = $id;
@@ -56,14 +60,12 @@ class WidgetDefinition {
 	 * Create an WidgetDefinition from an associative array. Required key is id.
 	 *
 	 * @param array $options Option array of key value pairs
+	 *                       - id => STR Widget identifier (required)
+	 *                       - name => STR Name of the widget
+	 *                       - description => STR Description of the widget
+	 *                       - context => ARRAY contexts in which the widget is available
+	 *                       - multiple => BOOL can the widget be added multiple times
 	 *
-	 *    id => STR Widget identifier (required)
-	 *    name => STR Name of the widget
-	 *    description => STR Description of the widget
-	 *    context => ARRAY contexts in which the widget is available
-	 *    multiple => BOOL can the widget be added multiple times
-	 *
-	 * @throws \InvalidParameterException
 	 * @return \Elgg\WidgetDefinition
 	 */
 	public static function factory(array $options) {
@@ -139,21 +141,5 @@ class WidgetDefinition {
 		}
 		
 		return true;
-	}
-	
-	/**
-	 * Magic getter to return the deprecated attribute 'handler'
-	 *
-	 * @param string $name attribute to get
-	 *
-	 * @return mixed
-	 */
-	public function __get($name) {
-		if ($name === 'handler') {
-			// before Elgg 2.2 the widget definitions had the handler attribute as the id
-			return $this->id;
-		}
-		
-		return $this->$name;
 	}
 }

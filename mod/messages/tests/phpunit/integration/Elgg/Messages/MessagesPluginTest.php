@@ -3,7 +3,7 @@
 namespace Elgg\Messages;
 
 use Elgg\IntegrationTestCase;
-use Zend\Mail\Message;
+use Laminas\Mail\Message;
 
 /**
  * @group MessagesPlugin
@@ -11,11 +11,10 @@ use Zend\Mail\Message;
 class MessagesPluginTest extends IntegrationTestCase {
 
 	public function up() {
-		self::createApplication(['isolate'=> true]);
-	}
-
-	public function down() {
-
+		self::createApplication(['isolate' => true]);
+		
+		elgg_register_plugin_hook_handler('permissions_check', 'object', 'Elgg\Messages\Permissions::canEdit');
+		elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'Elgg\Messages\Permissions::canEditContainer');
 	}
 
 	public function testCanSendMessage() {
@@ -54,11 +53,11 @@ class MessagesPluginTest extends IntegrationTestCase {
 			$this->assertEquals($sender, $message->getSender());
 		});
 		
-		$this->assertTrue(has_access_to_entity($message, $recipient));
-		$this->assertFalse(has_access_to_entity($message, $sender));
+		$this->assertTrue($message->hasAccess($recipient->guid));
+		$this->assertFalse($message->hasAccess($sender->guid));
 
 		$notification = _elgg_services()->mailer->getLastMessage();
-		/* @var $notification \Zend\Mail\Message */
+		/* @var $notification \Laminas\Mail\Message */
 
 		$this->assertInstanceOf(Message::class, $notification);
 
@@ -77,11 +76,17 @@ class MessagesPluginTest extends IntegrationTestCase {
 			$recipient->language
 		);
 
-		$notification_subject = $notification->getSubject();
-		$notification_body = $notification->getBodyText();
+		$plain_text_part = null;
+		foreach ($notification->getBody()->getParts() as $part) {
+			if ($part->getId() === 'plaintext') {
+				$plain_text_part = $part;
+				break;
+			}
+		}
+		
+		$this->assertNotEmpty($plain_text_part);
 
-		$this->assertEquals($expected_subject, $notification_subject);
-		$this->assertEquals($expected_body, $notification_body);
-
+		$this->assertEquals($expected_subject, $notification->getSubject());
+		$this->assertStringContainsString($expected_body, $plain_text_part->getRawContent());
 	}
 }

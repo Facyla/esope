@@ -37,28 +37,15 @@ return array(
 	*/
 
 	'messages:posted' => "Το μήνυμα στάλθηκε με επιτυχία.",
-	'messages:success:delete:single' => 'Το μήνυμα διαγράφτηκε',
 	'messages:success:delete' => 'Τα μηνύματα διαγράφτηκαν',
 	'messages:success:read' => 'Τα μηνύματα χαρακτηρίστηκαν ως μη αναγνωσμένα',
 	'messages:error:messages_not_selected' => 'Δεν επιλέχθηκαν μηνύματα',
-	'messages:error:delete:single' => 'Αδύνατη η διαγραφή του μηνύματος',
 
 	/**
 	* Email messages
 	*/
 
 	'messages:email:subject' => 'Έχετε ένα νέο μήνυμα!',
-	'messages:email:body' => "You have a new message from %s.
-
-It reads:
-
-%s
-
-To view your messages, click here:
-%s
-
-To send %s a message, click here:
-%s",
 
 	/**
 	* Error messages
@@ -71,5 +58,9 @@ To send %s a message, click here:
 	'messages:user:self' => "You cannot send a message to yourself.",
 
 	'messages:deleted_sender' => 'Διαγραμμένος χρήστης',
+	
+	/**
+	* Settings
+	*/
 
 );

@@ -17,21 +17,22 @@ class UpgradeBatchCommandTest extends IntegrationTestCase {
 		]);
 	}
 
-	public function down() {
-
-	}
-
 	public function testExecuteWithoutOptions() {
 		$application = new Application();
 		$application->add(new UpgradeBatchCommand());
 
 		$command = $application->find('upgrade:batch');
 		$commandTester = new CommandTester($command);
+		
+		_elgg_services()->logger->disable();
+		
 		$commandTester->execute([
 			'command' => $command->getName(),
 			'upgrades' => ['RandomNonExistingClass'],
 		]);
 
+		_elgg_services()->logger->enable();
+		
 		$this->assertStringContainsString(elgg_echo('cli:upgrade:batch:finished'), $commandTester->getDisplay());
 	}
 
@@ -41,11 +42,16 @@ class UpgradeBatchCommandTest extends IntegrationTestCase {
 
 		$command = $application->find('upgrade:batch');
 		$commandTester = new CommandTester($command);
+		
+		_elgg_services()->logger->disable();
+		
 		$commandTester->execute([
 			'command' => $command->getName(),
 			'upgrades' => ['RandomNonExistingClass'],
 			'--quiet' => true,
 		]);
+		
+		_elgg_services()->logger->enable();
 		
 		$this->assertEmpty($commandTester->getDisplay());
 	}

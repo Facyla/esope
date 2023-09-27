@@ -14,6 +14,7 @@
  * Upon system boot, all values in dbprefix_config are read into $CONFIG.
  */
 
+use Elgg\Exceptions\Exception as ElggException;
 use Elgg\Project\Paths;
 
 /**
@@ -23,7 +24,7 @@ use Elgg\Project\Paths;
  * @since 1.8.0
  */
 function elgg_get_site_url() {
-	return _elgg_config()->wwwroot;
+	return _elgg_services()->config->wwwroot;
 }
 
 /**
@@ -43,7 +44,7 @@ function elgg_get_plugins_path() {
  * @since 1.8.0
  */
 function elgg_get_data_path() {
-	return _elgg_config()->dataroot;
+	return _elgg_services()->config->dataroot;
 }
 
 /**
@@ -54,7 +55,7 @@ function elgg_get_data_path() {
  * @return string
  */
 function elgg_get_cache_path() {
-	$path = _elgg_config()->cacheroot ? : elgg_get_data_path() . 'caches/';
+	$path = _elgg_services()->config->cacheroot ? : elgg_get_data_path() . 'caches/';
 	return Paths::sanitize($path);
 }
 
@@ -66,7 +67,7 @@ function elgg_get_cache_path() {
  * @return string
  */
 function elgg_get_asset_path() {
-	$path = _elgg_config()->assetroot ? : elgg_get_cache_path() . 'views_simplecache/';
+	$path = _elgg_services()->config->assetroot ? : elgg_get_cache_path() . 'views_simplecache/';
 	return Paths::sanitize($path);
 }
 
@@ -85,12 +86,47 @@ function elgg_get_root_path() {
 }
 
 /**
- * /path/to/elgg/engine with no trailing slash.
+ * Sanitize file paths ensuring that they begin and end with slashes etc.
+ *
+ * @param string $path         The path
+ * @param bool   $append_slash Add trailing slash
  *
  * @return string
+ * @since 4.3
  */
-function elgg_get_engine_path() {
-	return Paths::elgg() . 'engine';
+function elgg_sanitize_path(string $path, bool $append_slash = true): string {
+	return Paths::sanitize($path, $append_slash);
+}
+
+/**
+ * Get the current Elgg release
+ *
+ * @return string
+ * @throws \Elgg\Exceptions\Exception if something wrong with the composer.json
+ * @since 4.1
+ */
+function elgg_get_release(): string {
+	static $release;
+	
+	if (!isset($release)) {
+		$composerJson = file_get_contents(\Elgg\Project\Paths::elgg() . 'composer.json');
+		if ($composerJson === false) {
+			throw new ElggException("Unable to read composer.json file!");
+		}
+		
+		$composer = json_decode($composerJson);
+		if ($composer === null) {
+			throw new ElggException("JSON parse error while reading composer.json!");
+		}
+		
+		// Human-friendly version name
+		if (!isset($composer->version)) {
+			throw new ElggException("Version field must be set in composer.json!");
+		}
+		$release = $composer->version;
+	}
+	
+	return $release;
 }
 
 /**
@@ -103,17 +139,12 @@ function elgg_get_engine_path() {
  * @since 1.8.0
  */
 function elgg_get_config($name, $default = null) {
-	if ($name == 'icon_sizes') {
-		$msg = 'The config value "icon_sizes" is deprecated. Use elgg_get_icon_sizes()';
-		elgg_deprecated_notice($msg, '2.2');
-	}
-
-	if (!_elgg_config()->hasValue($name)) {
+	if (!_elgg_services()->config->hasValue($name)) {
 		elgg_log("Config value for '$name' is not set'", 'INFO');
 		return $default;
 	}
 
-	return _elgg_config()->$name;
+	return _elgg_services()->config->$name;
 }
 
 /**
@@ -128,7 +159,7 @@ function elgg_get_config($name, $default = null) {
  * @since 1.8.0
  */
 function elgg_set_config($name, $value) {
-	_elgg_config()->$name = $value;
+	_elgg_services()->config->$name = $value;
 }
 
 /**
@@ -141,7 +172,7 @@ function elgg_set_config($name, $value) {
  * @since 1.8.0
  */
 function elgg_save_config($name, $value) {
-	return _elgg_config()->save($name, $value);
+	return _elgg_services()->config->save($name, $value);
 }
 
 /**
@@ -152,22 +183,7 @@ function elgg_save_config($name, $value) {
  * @return bool Success or failure
  */
 function elgg_remove_config($name) {
-	return _elgg_config()->remove($name);
-}
-
-/**
- * Get the Elgg config service
- *
- * @return \Elgg\Config
- * @internal
- */
-function _elgg_config() {
-	$config = _elgg_services()->config;
-	if (!$config) {
-		throw new \RuntimeException(__FUNCTION__ . ' can not be called before an instance of ' . \Elgg\Application::class . ' is bootstrapped');
-	}
-
-	return $config;
+	return _elgg_services()->config->remove($name);
 }
 
 /**
@@ -180,4 +196,32 @@ function _elgg_config() {
  */
 function elgg_get_icon_sizes($entity_type = null, $entity_subtype = null, $type = 'icon') {
 	return _elgg_services()->iconService->getSizes($entity_type, $entity_subtype, $type);
+}
+
+/**
+ * Are comments displayed with latest first?
+ *
+ * @param ElggEntity $container Entity containing comments
+ * @return bool False means oldest first.
+ * @since 3.0
+ */
+function elgg_comments_are_latest_first(ElggEntity $container = null) {
+	$params = [
+		'entity' => $container,
+	];
+	return (bool) elgg_trigger_plugin_hook('config', 'comments_latest_first', $params, (bool) _elgg_services()->config->comments_latest_first);
+}
+
+/**
+ * How many comments appear per page.
+ *
+ * @param ElggEntity $container Entity containing comments
+ * @return int
+ * @since 3.0
+ */
+function elgg_comments_per_page(ElggEntity $container = null) {
+	$params = [
+		'entity' => $container,
+	];
+	return (int) elgg_trigger_plugin_hook('config', 'comments_per_page', $params, _elgg_services()->config->comments_per_page);
 }

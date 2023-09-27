@@ -18,6 +18,8 @@ return array(
 	'collection:object:bookmarks:friends' => "Friends' bookmarks",
 	'add:object:bookmarks' => "Add a bookmark",
 	'edit:object:bookmarks' => "Edit bookmark",
+	'notification:object:bookmarks:create' => "Send a notification when a bookmark is created",
+	'notifications:mute:object:bookmarks' => "about the bookmark '%s'",
 
 	'bookmarks:this' => "Bookmark this page",
 	'bookmarks:this:group' => "Bookmark in %s",
@@ -28,16 +30,14 @@ return array(
 
 	'bookmarks:notify:summary' => 'New bookmark called %s',
 	'bookmarks:notify:subject' => 'New bookmark: %s',
-	'bookmarks:notify:body' =>
-'%s added a new bookmark: %s
+	'bookmarks:notify:body' => '%s added a new bookmark: %s
 
 Address: %s
 
 %s
 
 View and comment on the bookmark:
-%s
-',
+%s',
 
 	'bookmarks:numbertodisplay' => 'Number of bookmarks to display',
 
@@ -45,6 +45,7 @@ View and comment on the bookmark:
 	'river:object:bookmarks:comment' => '%s commented on a bookmark %s',
 
 	'groups:tool:bookmarks' => 'Enable group bookmarks',
+	'groups:tool:bookmarks:description' => 'Allow group members to share bookmarks in this group.',
 	
 	/**
 	 * Widget and bookmarklet
@@ -52,14 +53,9 @@ View and comment on the bookmark:
 	'widgets:bookmarks:name' => 'Bookmarks',
 	'widgets:bookmarks:description' => "Display your latest bookmarks.",
 
-	'bookmarks:bookmarklet:description' =>
-			"A bookmarklet is a special kind of button you save to your browser's links bar. This allows you to save any resource you find on the web to your bookmarks. To set it up, drag the button below to your browser's links bar:",
-
-	'bookmarks:bookmarklet:descriptionie' =>
-			"If you are using Internet Explorer, you will need to right click on the bookmarklet icon, select 'add to favorites', and then the Links bar.",
-
-	'bookmarks:bookmarklet:description:conclusion' =>
-			"You can then bookmark any page you visit by clicking the button in your browser at any time.",
+	'bookmarks:bookmarklet:description' => "A bookmarklet is a special kind of button you save to your browser's links bar. This allows you to save any resource you find on the web to your bookmarks. To set it up, drag the button below to your browser's links bar:",
+	'bookmarks:bookmarklet:descriptionie' => "If you are using Internet Explorer, you will need to right click on the bookmarklet icon, select 'add to favorites', and then the Links bar.",
+	'bookmarks:bookmarklet:description:conclusion' => "You can then bookmark any page you visit by clicking the button in your browser at any time.",
 
 	/**
 	 * Status messages
@@ -73,5 +69,4 @@ View and comment on the bookmark:
 	 */
 
 	'bookmarks:save:failed' => "Your bookmark could not be saved. Make sure you've entered a title and address and then try again.",
-	'bookmarks:unknown_bookmark' => 'Cannot find specified bookmark',
 );

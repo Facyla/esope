@@ -2,6 +2,8 @@
 
 namespace Elgg\Application;
 
+use Elgg\Exceptions\InvalidArgumentException;
+
 /**
  * @group UnitTests
  * @group FileService
@@ -20,7 +22,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 
 	public function up() {
 		$session = \ElggSession::getMock();
-		_elgg_services()->setValue('session', $session);
+		_elgg_services()->set('session', $session);
 		_elgg_services()->session->start();
 
 		$this->handler = _elgg_services()->serveFileHandler;
@@ -38,7 +40,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		$path = substr($url, strlen($site_url));
 		$request = \Elgg\Http\Request::create("/$path");
 
-		$cookie_name = _elgg_config()->getCookieConfig()['session']['name'];
+		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
 		$session_id = _elgg_services()->session->getID();
 		$request->cookies->set($cookie_name, $session_id);
 
@@ -153,7 +155,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals(200, $response->getStatusCode());
 
 		_elgg_services()->session->invalidate();
-		$cookie_name = _elgg_config()->getCookieConfig()['session']['name'];
+		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
 		$session_id = _elgg_services()->session->getID();
 		$request->cookies->set($cookie_name, $session_id);
 
@@ -179,7 +181,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		$request = $this->createRequest($file);
 		$response = $this->handler->getResponse($request);
 
-		$this->assertEquals('text/plain', $response->headers->get('Content-Type'));
+		$this->assertStringContainsString('text/plain', $response->headers->get('Content-Type'));
 
 		$filesize = filesize($test_file->getFilenameOnFilestore());
 		$this->assertEquals($filesize, $response->headers->get('Content-Length'));
@@ -207,7 +209,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		$request = $this->createRequest($file);
 		$response = $this->handler->getResponse($request);
 
-		$this->assertEquals('text/plain', $response->headers->get('Content-Type'));
+		$this->assertStringContainsString('text/plain', $response->headers->get('Content-Type'));
 
 		$filesize = filesize($test_file->getFilenameOnFilestore());
 		$this->assertEquals($filesize, $response->headers->get('Content-Length'));
@@ -230,7 +232,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		$file = new \Elgg\FileService\File();
 		$file->setFile($test_file);
 		
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$file->setDisposition('foo');
 		
 		$this->assertTrue($test_file->delete());

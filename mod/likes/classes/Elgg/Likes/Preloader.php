@@ -133,14 +133,19 @@ class Preloader {
 
 		foreach ($items as $item) {
 			if ($item instanceof \ElggRiverItem) {
-				// only like group creation #3958
-				if ($item->type == "group" && $item->view != "river/group/create") {
+				$object = $item->getObjectEntity();
+				if (!$object instanceof \ElggEntity) {
 					continue;
 				}
 
-				$type = $item->type;
-				$subtype = $item->subtype;
-				$likable = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
+				// only like group creation #3958
+				if ($object instanceof \ElggGroup && $item->view != 'river/group/create') {
+					continue;
+				}
+
+				$type = $object->type;
+				$subtype = $object->subtype;
+				$likable = (bool) elgg_trigger_deprecated_plugin_hook('likes:is_likable', "{$type}:{$subtype}", [], $object->hasCapability('likable'), "Use the capabilities system to register your entity ('{$type}:{$subtype}') as likable.", '4.1');
 				if (!$likable) {
 					continue;
 				}
@@ -154,8 +159,9 @@ class Preloader {
 				}
 			} elseif ($item instanceof \ElggEntity) {
 				$type = $item->type;
-				$subtype = $item->getSubtype();
-				$likable = (bool) elgg_trigger_plugin_hook('likes:is_likable', "$type:$subtype", [], false);
+				$subtype = $item->subtype;
+				$likable = (bool) elgg_trigger_deprecated_plugin_hook('likes:is_likable', "{$type}:{$subtype}", [], $item->hasCapability('likable'), "Use the capabilities system to register your entity ('{$type}:{$subtype}') as likable.", '4.1');
+		
 				if ($likable) {
 					$guids[$item->guid] = true;
 				}
@@ -192,5 +198,34 @@ class Preloader {
 			array_splice($entities, count($entities), 0, $fetched);
 		}
 		return $entities;
+	}
+	
+	/**
+	 * Hook handler for listings to determine if preloading is needed
+	 *
+	 * @param \Elgg\Hook $hook 'view_vars', 'page/components/list'
+	 *
+	 * @return void
+	 */
+	public static function preload(\Elgg\Hook $hook) {
+		$vars = $hook->getValue();
+		
+		$items = (array) elgg_extract('items', $vars, []);
+		if (!elgg_is_logged_in() || count($items) < 3) {
+			return;
+		}
+		
+		$preload = elgg_extract('preload_likes', $vars);
+		if (!isset($preload)) {
+			$list_class = elgg_extract('list_class', $vars);
+			$preload = !elgg_in_context('widgets') && in_array($list_class, ['elgg-list-river', 'elgg-list-entity', 'comments-list']);
+		}
+		
+		if (!$preload) {
+			return;
+		}
+		
+		$preloader = new self(\Elgg\Likes\DataService::instance());
+		$preloader->preloadForList($items);
 	}
 }

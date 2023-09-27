@@ -1,17 +1,9 @@
 <?php
 
-/**
- * @group UnitTests
- * @group Breadcrumbs
- */
-class ElggBreadcrumbsUnitTest extends \Elgg\IntegratedUnitTestCase {
+class ElggBreadcrumbsUnitTest extends \Elgg\UnitTestCase {
 
 	public function up() {
 		elgg_set_config('breadcrumbs', []);
-	}
-
-	public function down() {
-
 	}
 
 	public function testCrumbsCanBePushed() {
@@ -49,7 +41,7 @@ class ElggBreadcrumbsUnitTest extends \Elgg\IntegratedUnitTestCase {
 	public function testCanAlterCrumbsViaHook() {
 		elgg_push_breadcrumb(str_repeat('abcd ', 100));
 
-		elgg_unregister_plugin_hook_handler('prepare', 'breadcrumbs', 'elgg_prepare_breadcrumbs');
+		elgg_unregister_plugin_hook_handler('prepare', 'breadcrumbs', \Elgg\Page\PrepareBreadcrumbsHandler::class);
 
 		$this->assertEquals([
 			[
@@ -73,7 +65,7 @@ class ElggBreadcrumbsUnitTest extends \Elgg\IntegratedUnitTestCase {
 	}
 
 	public function testTrailingNonLinkIsRemoved() {
-		elgg_register_plugin_hook_handler('prepare', 'breadcrumbs', 'elgg_prepare_breadcrumbs');
+		elgg_register_plugin_hook_handler('prepare', 'breadcrumbs', \Elgg\Page\PrepareBreadcrumbsHandler::class);
 
 		elgg_push_breadcrumb('Foo', 'foo');
 		elgg_push_breadcrumb('Bar');
@@ -81,5 +73,4 @@ class ElggBreadcrumbsUnitTest extends \Elgg\IntegratedUnitTestCase {
 		$html = elgg_view('navigation/breadcrumbs');
 		$this->assertFalse(strpos($html, 'Bar'));
 	}
-
 }

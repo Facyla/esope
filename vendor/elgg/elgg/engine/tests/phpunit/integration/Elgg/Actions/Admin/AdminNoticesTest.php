@@ -3,7 +3,6 @@
 namespace Elgg\Actions\Admin;
 
 use Elgg\ActionResponseTestCase;
-use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
 
 /**
@@ -14,11 +13,9 @@ use Elgg\Http\OkResponse;
 class AdminNoticesTest extends ActionResponseTestCase {
 
 	public function up() {
+		parent::up();
+		
 		_elgg_services()->session->setLoggedInUser($this->getAdmin());
-	}
-
-	public function down() {
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testDeletesSingleAdminNotice() {
@@ -38,20 +35,6 @@ class AdminNoticesTest extends ActionResponseTestCase {
 		$this->assertInstanceOf(OkResponse::class, $response);
 
 		$this->assertFalse(elgg_admin_notice_exists('zen'));
-	}
-
-	public function testDeletesSingleAdminNoticeWithEmptyID() {
-
-		$notice = elgg_add_admin_notice('will_be_removed', 'foo');
-		$this->assertInstanceOf(\ElggObject::class, $notice);
-		$this->assertEquals('will_be_removed', $notice->admin_notice_id);
-
-		$notice->admin_notice_id = '';
-		
-		$this->assertTrue(elgg_admin_notice_exists(''));
-
-		$this->assertTrue(elgg_delete_admin_notice(''));
-		$this->assertFalse(elgg_admin_notice_exists(''));
 	}
 
 	public function testDeletesBatchAdminNotices() {
@@ -79,5 +62,4 @@ class AdminNoticesTest extends ActionResponseTestCase {
 
 		$this->assertEquals(0, $count_zens());
 	}
-
 }

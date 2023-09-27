@@ -18,20 +18,6 @@ function elgg_get_metadata_from_id($id) {
 }
 
 /**
- * Deletes metadata using its ID.
- *
- * @param int $id The metadata ID to delete.
- * @return bool
- */
-function elgg_delete_metadata_by_id($id) {
-	$metadata = elgg_get_metadata_from_id($id);
-	if (!$metadata) {
-		return false;
-	}
-	return $metadata->delete();
-}
-
-/**
  * Fetch metadata or perform a calculation on them
  *
  * Accepts all options supported by {@link elgg_get_entities()}
@@ -60,4 +46,23 @@ function elgg_get_metadata(array $options = []) {
  */
 function elgg_delete_metadata(array $options) {
 	return _elgg_services()->metadataTable->deleteAll($options);
+}
+
+/**
+ * Get popular tags and their frequencies
+ *
+ * Accepts all options supported by {@see elgg_get_metadata()}
+ *
+ * Returns an array of objects that include "tag" and "total" properties
+ *
+ * @param array $options Options
+ *
+ * @option int      $threshold Minimum number of tag occurrences
+ * @option string[] $tag_names Names of tag names to include in search
+ *
+ * @return stdClass[]|false
+ * @since 1.7.1
+ */
+function elgg_get_tags(array $options = []) {
+	return _elgg_services()->metadataTable->getTags($options);
 }

@@ -3,7 +3,7 @@
 * Ssend a message action
 */
 
-$subject = strip_tags(get_input('subject'));
+$subject = strip_tags(get_input('subject', ''));
 $body = get_input('body');
 $recipients = (array) get_input('recipients');
 $original_msg_guid = (int) get_input('original_guid');
@@ -24,6 +24,10 @@ if (!$user) {
 	return elgg_error_response(elgg_echo('messages:user:nonexist'), 'messages/add');
 }
 
+if ((bool) elgg_get_plugin_setting('friends_only', 'messages') && !$user->isFriendOf(elgg_get_logged_in_user_guid())) {
+	return elgg_error_response(elgg_echo('messages:user:notfriend'), 'messages/add');
+}
+
 // Make sure the message field, send to field and title are not blank
 if (!$body || !$subject) {
 	return elgg_error_response(elgg_echo('messages:blank'), 'messages/add');
@@ -33,7 +37,7 @@ if (!$body || !$subject) {
 $result = messages_send($subject, $body, $user->guid, 0, $original_msg_guid);
 
 // Save 'send' the message
-if (!$result) {
+if ($result === false) {
 	return elgg_error_response(elgg_echo('messages:error'), 'messages/add');
 }
 

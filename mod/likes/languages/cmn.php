@@ -22,28 +22,7 @@ return array(
 	'likes:userlikedthis' => '%s 稱讚',
 	'likes:userslikedthis' => '%s 稱讚',
 	'likes:river:annotate' => '稱讚',
-	'likes:delete:confirm' => '確定要刪除這個稱讚？',
-
-	'river:likes' => '稱讚 %s %s',
 
 	// notifications. yikes.
 	'likes:notifications:subject' => '%s 稱讚您的貼文 "%s"',
-	'likes:notifications:body' =>
-'Hi %1$s,
-
-%2$s likes your post "%3$s" on %4$s
-
-See your original post here:
-
-%5$s
-
-or view %2$s\'s profile here:
-
-%6$s
-
-Thanks,
-%4$s',
-	'likes:upgrade:2017120700:title' => "Public Likes Annotations",
-	'likes:upgrade:2017120700:description' => "This updates the access id of likes annotations to public",
-	
 );

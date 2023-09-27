@@ -23,7 +23,7 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 		$this->user = new ElggUserWithExposableAttributes();
 		$this->user->username = $this->getRandomUsername();
-		$this->user->subtype = $this->getRandomSubtype();
+		$this->user->setSubtype($this->getRandomSubtype());
 		$this->user->owner_guid = 0;
 		$this->user->container_guid = 0;
 	}
@@ -33,37 +33,30 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 			$this->user->delete();
 		}
 		unset($this->user);
-
-		_elgg_services()->session->removeLoggedInUser();
 	}
 
 	public function testElggUserLoad() {
 		// new object
-		$object = new \ElggObject();
-		$object->subtype = $this->getRandomSubtype();
-		$this->assertEquals(0, $object->getGUID());
-		$guid = $object->save();
-		$this->assertNotEquals(0, $guid);
-
+		$object = $this->createObject();
+		
 		// fail on wrong type
-		$this->assertFalse(get_user($guid));
-
-		// clean up
-		$object->delete();
+		$this->assertFalse(get_user($object->guid));
 	}
 
 	public function testElggUserSave() {
 		// new object
 		$this->assertEquals(0, $this->user->getGUID());
-		$guid = $this->user->save();
-		$this->assertNotEquals(0, $guid);
+		$this->assertTrue($this->user->save());
+		$this->assertGreaterThan(0, $this->user->guid);
 
 		// clean up
 		$this->user->delete();
 	}
 
 	public function testElggUserDelete() {
-		$guid = $this->user->save();
+		$this->assertTrue($this->user->save());
+		$guid = $this->user->guid;
+		$this->assertGreaterThan(0, $guid);
 
 		// delete object
 		$this->assertTrue($this->user->delete());
@@ -79,9 +72,9 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 		$name = "user_" . time();
 		$this->user->username = $name;
 
-		$guid = $this->user->save();
+		$this->assertTrue($this->user->save());
 
-		$db_user = $this->fetchUser($guid);
+		$db_user = $this->fetchUser($this->user->guid);
 		$this->assertNotEmpty($db_user);
 
 		$user = get_user_by_username($name);
@@ -96,7 +89,7 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 		$username = $this->getRandomUsername();
 		$this->user->username = $username;
-		$guid = $this->user->save();
+		$this->assertTrue($this->user->save());
 
 		// percent encode first letter
 		$first_letter = $username[0];
@@ -105,7 +98,7 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 		$user = get_user_by_username($username);
 		$this->assertTrue((bool) $user);
-		$this->assertEquals($user->guid, $guid);
+		$this->assertEquals($user->guid, $this->user->guid);
 
 		$this->user->delete();
 	}
@@ -114,13 +107,13 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 		$username = $this->getRandomUsername();
 		$this->user->username = $username;
-		$guid = $this->user->save();
+		$this->assertTrue($this->user->save());
 
 		$uc_username = strtoupper($username);
 		
 		$user = get_user_by_username($uc_username);
 		$this->assertTrue((bool) $user);
-		$this->assertEquals($user->guid, $guid);
+		$this->assertEquals($user->guid, $this->user->guid);
 
 		$this->user->delete();
 	}
@@ -129,28 +122,26 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 		$email = 'Example.User@elgg.org';
 		$this->user->email = $email;
-		$guid = $this->user->save();
+		$this->assertTrue($this->user->save());
 
 		$users = get_user_by_email($email);
 		
 		$this->assertCount(1, $users);
-		$this->assertEquals($users[0]->guid, $guid);
+		$this->assertEquals($users[0]->guid, $this->user->guid);
 		
 		// lower case
 		$email = strtolower($email);
 		$users = get_user_by_email($email);
 		
 		$this->assertCount(1, $users);
-		$this->assertEquals($users[0]->guid, $guid);
+		$this->assertEquals($users[0]->guid, $this->user->guid);
 
 		$this->user->delete();
 	}
 
 	public function testElggUserMakeAdmin() {
-		$CONFIG = _elgg_config();
-
 		// need to save user to have a guid
-		$guid = $this->user->save();
+		$this->user->save();
 
 		$this->assertTrue($this->user->makeAdmin());
 
@@ -160,10 +151,8 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function testElggUserRemoveAdmin() {
-		$CONFIG = _elgg_config();
-
 		// need to save user to have a guid
-		$guid = $this->user->save();
+		$this->user->save();
 
 		$this->assertTrue($this->user->makeAdmin());
 		
@@ -176,7 +165,7 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 	public function testElggUserIsAdmin() {
 		// need to grab a real user with a guid and everything.
-		$guid = $this->user->save();
+		$this->user->save();
 
 		$this->assertTrue($this->user->makeAdmin());
 
@@ -189,7 +178,7 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 	public function testElggUserIsNotAdmin() {
 		// need to grab a real user with a guid and everything.
-		$guid = $this->user->save();
+		$this->user->save();
 
 		$this->assertTrue($this->user->removeAdmin());
 
@@ -216,29 +205,6 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 
 		$this->user->delete();
 	}
-
-	public function testCanDisableUserEntities() {
-
-		$user = $this->createUser();
-		$this->createObject([
-			'owner_guid' => $user->guid,
-		]);
-		$this->createObject([
-			'container_guid' => $user->guid,
-		]);
-
-		_elgg_services()->entityTable->disableEntities($user);
-
-		$objects = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() use ($user) {
-			return elgg_get_entities([
-				'owner_guid' => $user->guid,
-			]);
-		});
-		
-		foreach ($objects as $object) {
-			$this->assertFalse($object->isEnabled());
-		}
-	}
 	
 	/**
 	 * @dataProvider profileDataProvider
@@ -262,11 +228,6 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 		$session->setLoggedInUser($reading_user);
 		
 		$this->assertEmpty($profile_user->getProfileData($name));
-		
-		// cleanup
-		$session->removeLoggedInUser();
-		$profile_user->delete();
-		$reading_user->delete();
 	}
 	
 	/**
@@ -291,11 +252,6 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 		$session->setLoggedInUser($reading_user);
 		
 		$this->assertEquals($value, $profile_user->getProfileData($name));
-		
-		// cleanup
-		$session->removeLoggedInUser();
-		$profile_user->delete();
-		$reading_user->delete();
 	}
 	
 	public function profileDataProvider() {
@@ -322,8 +278,6 @@ class ElggCoreUserTest extends \Elgg\IntegrationTestCase {
 		$user->setProfileData('foo', $value);
 		
 		$this->assertEmpty($user->getProfileData('foo'));
-		
-		$user->delete();
 	}
 	
 	public function emptyProfileDataProvider() {

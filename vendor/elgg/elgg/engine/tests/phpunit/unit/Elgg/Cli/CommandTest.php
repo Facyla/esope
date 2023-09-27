@@ -2,6 +2,7 @@
 
 namespace Elgg\Cli;
 
+use Elgg\Exceptions\Exception;
 use Elgg\Helpers\Cli\TestingCommand;
 use Elgg\Logger;
 use Elgg\UnitTestCase;
@@ -14,14 +15,6 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @group ErrorLog
  */
 class CommandTest extends UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	public function executeCommand(\Closure $handler) {
 		$command = new TestingCommand();
@@ -51,10 +44,10 @@ class CommandTest extends UnitTestCase {
 
 	public function testCanHandleExceptions() {
 		$handler = function(){
-			throw new \Exception('Exception thrown');
+			throw new Exception('Exception thrown');
 		};
 
-		$this->assertRegExp('/Exception thrown/im', $this->executeCommand($handler));
+		$this->assertMatchesRegularExpression('/Exception thrown/im', $this->executeCommand($handler));
 	}
 
 	public function testCanLogError() {
@@ -62,7 +55,7 @@ class CommandTest extends UnitTestCase {
 			$instance->error('History repeating');
 		};
 
-		$this->assertRegExp('/History repeating/im', $this->executeCommand($handler));
+		$this->assertMatchesRegularExpression('/History repeating/im', $this->executeCommand($handler));
 	}
 
 	public function testCanLogNotice() {
@@ -70,7 +63,7 @@ class CommandTest extends UnitTestCase {
 			$instance->notice('Alexander the Great');
 		};
 
-		$this->assertRegExp('/Alexander the Great/im', $this->executeCommand($handler));
+		$this->assertMatchesRegularExpression('/Alexander the Great/im', $this->executeCommand($handler));
 	}
 
 	public function testCanRegisterSystemError() {
@@ -78,7 +71,7 @@ class CommandTest extends UnitTestCase {
 			register_error('Life is unfair');
 		};
 
-		$this->assertRegExp('/Life is unfair/im', $this->executeCommand($handler));
+		$this->assertMatchesRegularExpression('/Life is unfair/im', $this->executeCommand($handler));
 	}
 
 	public function testCanRegisterSystemMessage() {
@@ -86,6 +79,6 @@ class CommandTest extends UnitTestCase {
 			system_message('Akuna matata');
 		};
 
-		$this->assertRegExp('/Akuna matata/im', $this->executeCommand($handler));
+		$this->assertMatchesRegularExpression('/Akuna matata/im', $this->executeCommand($handler));
 	}
 }

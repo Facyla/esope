@@ -10,6 +10,8 @@ return array(
 	/**
 	 * Menu items and titles
 	 */
+	'add:group:group' => "Utwórz nową grupę",
+	
 	'groups' => "Grupy",
 	'groups:owned' => "Własne grupy",
 	'groups:owned:user' => 'Grupy użytkownika %s',
@@ -18,15 +20,13 @@ return array(
 	'groups:all' => "Wszystkie grupy",
 	'groups:add' => "Utwórz nową grupę",
 	'groups:edit' => "Edytuj grupę",
-	'groups:delete' => 'Usuń grupę',
+	'groups:edit:profile' => "Profil",
+	'groups:edit:tools' => "Narzędzia",
+	'groups:edit:settings' => "Ustawienia",
 	'groups:membershiprequests' => 'Zarządzaj prośbami o dołączenie',
 	'groups:membershiprequests:pending' => 'Zarządzaj prośbami o dołączenie (%s)',
-	'groups:invitedmembers' => "Manage invitations",
 	'groups:invitations' => 'Zaproszenia do grupy',
 	'groups:invitations:pending' => 'Zaproszenia do grupy (%s)',
-	
-	'relationship:invited' => '%2$s was invited to join %1$s',
-	'relationship:membership_request' => '%s requested to join %s',
 
 	'groups:icon' => 'Ikona grupy',
 	'groups:name' => 'Nazwa grupy',
@@ -35,8 +35,6 @@ return array(
 	'groups:interests' => 'Zainteresowania',
 	'groups:website' => 'Strona www',
 	'groups:members' => 'Członkowie grupy',
-
-	'groups:members_count' => '%s members',
 
 	'groups:members:title' => 'Członkowie %s',
 	'groups:members:more' => "Wyświetl wszystkich członków",
@@ -69,14 +67,9 @@ return array(
 	'groups:leave' => 'Odejdź z grupy',
 	'groups:invite' => 'Zaproś przyjaciół',
 	'groups:invite:title' => 'Zaproś znajomych do tej grupy',
-	'groups:invite:friends:help' => 'Search for a friend by name or username and select the friend from the list',
-	'groups:invite:resend' => 'Resend the invitations to already invited users',
-	'groups:invite:member' => 'Already a member of this group',
-	'groups:invite:invited' => 'Already invited to this group',
 
 	'groups:nofriendsatall' => 'Nie masz znajomych, których mógłbyś zaprosić!',
 	'groups:group' => "Grupa",
-	'groups:search:tags' => "tag",
 	'groups:search:title' => "Szukaj grup oznaczonych tagiem '%s'",
 	'groups:search:none' => "Nie znaleziono pasujących grup",
 	'groups:search_in_group' => "Szukaj w tej grupie",
@@ -92,7 +85,6 @@ return array(
 	'groups:open' => "otwartych grup",
 	'groups:closed' => "zamkniętych grup",
 	'groups:member' => "członkowie",
-	'groups:search' => "Search for groups",
 
 	'groups:more' => 'Więcej grup',
 	'groups:none' => 'Brak grup',
@@ -109,9 +101,6 @@ return array(
 	'groups:opengroup:membersonly' => "Treść grupy jest dostępna tylko dla jej członków.",
 	'groups:opengroup:membersonly:join' => 'Aby zostać członkiem, kliknij link "Dołącz do grupy".',
 	'groups:visibility' => 'Kto może zobaczyć tą grupę?',
-	'groups:content_default_access' => 'Default group content access',
-	'groups:content_default_access:help' => 'Here you can configure the default access for new content in this group. The group content mode can prevent the selected option from being in effect.',
-	'groups:content_default_access:not_configured' => 'No default access configured, leave to the user',
 
 	/**
 	 * Group tools
@@ -129,8 +118,6 @@ return array(
 	'groups:joinrequestnotmade' => 'Dołączenie do grupy nie powiodło się.',
 	'groups:joinrequestmade' => 'Prośba o dołączenie do grupy wysłana pomyślnie',
 	'groups:joinrequest:exists' => 'You already requested membership for this group',
-	'groups:button:joined' => 'Joined',
-	'groups:button:owned' => 'Owned',
 	'groups:joined' => 'Pomyślnie dołączyłeś do grupy!',
 	'groups:left' => 'Pomyślnie opuściłeś grupę',
 	'groups:userinvited' => 'Użytkownik został zaproszony.',
@@ -139,34 +126,10 @@ return array(
 	'groups:invite:subject' => "%s zostałeś zaproszony do %s!",
 	'groups:joinrequest:remove:check' => 'Czy na pewno chcesz usunąć tą prośbę o członkostwo?',
 	'groups:invite:remove:check' => 'Czy na pewno chcesz usunąć to zaproszenie?',
-	'groups:invite:body' => "Hi %s,
-
-%s invited you to join the '%s' group.
-
-Click below to view your invitations:
-%s",
 
 	'groups:welcome:subject' => "Witamy w %s !",
-	'groups:welcome:body' => "Hi %s!
-
-You are now a member of the '%s' group.
-
-Click below to begin posting!
-%s",
 
 	'groups:request:subject' => "%s wystąpił z prośbą o dołączenie do %s",
-	'groups:request:body' => "Hi %s,
-
-%s has requested to join the '%s' group.
-
-Click below to view their profile:
-%s
-
-or click below to view the group's join requests:
-%s",
-
-	'river:group:create' => '%s created the group %s',
-	'river:group:join' => '%s joined the group %s',
 
 	'groups:allowhiddengroups' => 'Czy zezwolić na prywatne (niewidoczne) grupy?',
 	'groups:whocancreate' => 'Kto może utworzyć nową grupę?',
@@ -174,24 +137,11 @@ or click below to view the group's join requests:
 	/**
 	 * Action messages
 	 */
-	'groups:deleted' => 'Group and group contents deleted',
-	'groups:notdeleted' => 'Group could not be deleted',
-	'groups:deletewarning' => "Czy na pewno chcesz usunąć tą grupę? Tej operacji nie można cofnąć!",
 
 	'groups:invitekilled' => 'Usunięto zaproszenie.',
 	'groups:joinrequestkilled' => 'Usunięto prośbę o członkostwo.',
 	'groups:error:addedtogroup' => "Nie można było dodać %s do grupy",
 	'groups:add:alreadymember' => "%s jest już członkiem tej grupy",
-
-	/**
-	 * ecml
-	 */
-	'groups:ecml:groupprofile' => 'Profile grupy',
-
-	/**
-	 * Upgrades
-	 */
-	'groups:upgrade:2016101900:title' => 'Transfer group icons to a new location',
-	'groups:upgrade:2016101900:description' => 'New entity icon API stores icons in a predictable location on the filestore
-relative to the entity\'s filestore directory. This upgrade will align the group plugin with the requirements of the new API.',
+	
+	// Notification settings
 );

@@ -20,15 +20,8 @@
  * -------------------------------------
  * In a plugin, override this view and override the registration for the
  * lightbox JavaScript and CSS (@see elgg_views_boot()).
- *
- * @module elgg/lightbox
  */
-define(function (require) {
-
-	var elgg = require('elgg');
-	var $ = require('jquery');
-	require('elgg/init');
-	require('jquery.colorbox');
+define(['jquery', 'elgg', 'elgg/Ajax', 'jquery.colorbox'], function ($, elgg, Ajax) {
 
 	var lightbox = {
 
@@ -50,8 +43,6 @@ define(function (require) {
 				// don't move colorbox on small viewports https://github.com/Elgg/Elgg/issues/5312
 				defaults.reposition = $(window).height() > 600;
 			}
-
-			elgg.provide('elgg.ui.lightbox');
 			
 			var settings = $.extend({}, defaults, opts);
 
@@ -111,25 +102,9 @@ define(function (require) {
 						lightbox.open(currentOpts);
 						return;
 					}
-						
-					href = currentOpts.href;
-					currentOpts.href = false;
-					var data = currentOpts.data;
-					currentOpts.data = undefined;
 					
-					// open lightbox without a href so we get a loader
+					currentOpts.ajaxLoadWithDependencies = true;
 					lightbox.open(currentOpts);
-					
-					require(['elgg/Ajax'], function(Ajax) {
-						var ajax = new Ajax(false);
-						ajax.path(href, {data: data}).done(function(output) {
-							currentOpts.html = output;
-							lightbox.open(currentOpts);
-							
-							// clear data so next fetch will refresh contents
-							currentOpts.html = undefined;
-						});
-					});
 				});
 
 			$(window)
@@ -147,7 +122,31 @@ define(function (require) {
 		 * @return void
 		 */
 		open: function (opts) {
-			$.colorbox(lightbox.getOptions(opts));
+			var currentOpts = lightbox.getOptions(opts);
+			
+			if (!currentOpts.ajaxLoadWithDependencies) {
+				$.colorbox(currentOpts);
+				return;
+			}
+			
+			href = currentOpts.href;
+			currentOpts.href = false;
+			var data = currentOpts.data;
+			currentOpts.data = undefined;
+			
+			// open lightbox without a href so we get a loader
+			$.colorbox(currentOpts);
+
+			var ajax = new Ajax(false);
+			ajax.path(href, {
+				data: data
+			}).done(function(output) {
+				currentOpts.html = output;
+				$.colorbox(currentOpts);
+				
+				// clear data so next fetch will refresh contents
+				currentOpts.html = undefined;
+			});
 		},
 
 		/**

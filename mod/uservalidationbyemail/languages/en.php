@@ -7,24 +7,21 @@
 
 return array(
 	'email:validate:subject' => "%s please confirm your email address for %s!",
-	'email:validate:body' => "Hi %s,
-
-Before you can start using %s, you must confirm your email address.
+	'email:validate:body' => "Before you can start using %s, you must confirm your email address.
 
 Please confirm your email address by clicking on the link below:
 
 %s
 
-If you can't click on the link, copy and paste it to your browser manually.
-
-%s
-%s",
+If you can't click on the link, copy and paste it to your browser manually.",
 	'email:confirm:success' => "You have confirmed your email address!",
 	'email:confirm:fail' => "Your email address could not be verified...",
 
 	'uservalidationbyemail:emailsent' => "Email sent to <em>%s</em>",
 	'uservalidationbyemail:registerok' => "To activate your account, please confirm your email address by clicking on the link we just sent you.",
-	'uservalidationbyemail:login:fail' => "Your account is not validated so the log in attempt failed. Another validation email has been sent.",
+	'uservalidationbyemail:login:fail' => "Your account is not validated so the login attempt failed. Another validation email has been sent.",
+	'uservalidationbyemail:change_email' => "Resend validation email",
+	'uservalidationbyemail:change_email:info' => "Your account is not validated so the login attempt failed. You can request a new validation link or update the email address related to your account.",
 
 	'uservalidationbyemail:admin:resend_validation' => 'Resend validation',
 	'uservalidationbyemail:confirm_resend_validation' => 'Resend validation email to %s?',
@@ -36,7 +33,4 @@ If you can't click on the link, copy and paste it to your browser manually.
 
 	'uservalidationbyemail:messages:resent_validation' => 'Validation request resent.',
 	'uservalidationbyemail:messages:resent_validations' => 'Validation requests resent to all checked users.',
-	
-	'uservalidationbyemail:upgrade:2019090600:title' => 'Track user e-mail validation status',
-	'uservalidationbyemail:upgrade:2019090600:description' => 'The e-mail validation status is tracked in a new way. Make sure all pending users are updated to the new tracking in order to still require e-mail validation.',
 );

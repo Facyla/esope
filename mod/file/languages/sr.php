@@ -22,14 +22,11 @@ return array(
 	'file:num_files' => "Број фајлова за приказ",
 	'file:replace' => 'Замени садржај фајла (остави празно да не промениш фајл)',
 	'file:list:title' => "%s %s %s",
-	'file:title:friends' => "Пријатељи",
 
 	'file:file' => "Фајл",
 
 	'file:list:list' => 'Пребаци на преглед листе',
 	'file:list:gallery' => 'Пребаци на преглед галерије',
-
-	'file:types' => "Типови додатих фајлова",
 
 	'file:type:' => 'Фајлови',
 	'file:type:all' => "Сви фајлови",
@@ -56,24 +53,12 @@ return array(
 
 	'groups:tool:file' => 'Омогући фајлове групе',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Novi fajl imena %s',
 	'file:notify:subject' => 'Нови фајл: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

@@ -2,7 +2,7 @@
 
 namespace Elgg\Email;
 
-use Zend\Mail\Exception\InvalidArgumentException;
+use Elgg\Exceptions\InvalidArgumentException;
 
 /**
  * @group EmailService
@@ -18,10 +18,6 @@ class AddressUnitTest extends \Elgg\UnitTestCase {
 	public function up() {
 
 		$this->address = new Address('example@elgg.org', 'Example');
-	}
-
-	public function down() {
-
 	}
 	
 	public function testEmail() {
@@ -132,6 +128,25 @@ class AddressUnitTest extends \Elgg\UnitTestCase {
 	public function testFromStringInvalidEmail() {
 		$this->expectException(InvalidArgumentException::class);
 		Address::fromString('invalid_email');
+	}
+	
+	public function testFromEntity() {
+		$entity = $this->createUser();
+		$address = Address::fromEntity($entity);
+		
+		$this->assertEquals($entity->email, $address->getEmail());
+		$this->assertEquals($entity->getDisplayName(), $address->getName());
+		$this->assertEquals($entity, $address->getEntity());
+	}
+	
+	public function testEntityGetterAndSetter() {
+		$entity = $this->createUser();
+		$address = Address::fromString('example@elgg.org');
+		
+		$this->assertNull($address->getEntity());
+		
+		$address->setEntity($entity);
+		$this->assertEquals($entity, $address->getEntity());
 	}
 	
 	public function testGetFormattedEmailAddressEmail() {

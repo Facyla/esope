@@ -2,8 +2,9 @@
 
 namespace Elgg;
 
-use Psr\Log\LogLevel;
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\Helpers\TestHookHandler;
+use Psr\Log\LogLevel;
 
 /**
  * @group UnitTests
@@ -19,17 +20,13 @@ class PluginHooksServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->hooks = new PluginHooksService(_elgg_services()->events);
 	}
 
-	public function down() {
-
-	}
-
 	public function testTriggerCallsRegisteredHandlers() {
 		$this->hooks->registerHandler('foo', 'bar', [
 			PluginHooksServiceUnitTest::class,
 			'throwInvalidArg'
 		]);
 
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->hooks->trigger('foo', 'bar');
 	}
 
@@ -68,12 +65,13 @@ class PluginHooksServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testUncallableHandlersAreLogged() {
-		_elgg_services()->logger->disable();
-
 		$this->hooks->registerHandler('foo', 'bar', array(
 			new \stdClass(),
 			'uncallableMethod'
 		));
+		
+		_elgg_services()->logger->disable();
+
 		$this->hooks->trigger('foo', 'bar');
 
 		$logged = _elgg_services()->logger->enable();
@@ -133,11 +131,11 @@ class PluginHooksServiceUnitTest extends \Elgg\UnitTestCase {
 		return 2;
 	}
 
-	public static function changeReturn($foo, $bar, $returnval, $params) {
-		$testCase = $params['testCase'];
+	public static function changeReturn(\Elgg\Hook $hook) {
+		$testCase = $hook->getParam('testCase');
 		/* @var PluginHooksServiceUnitTest $testCase */
 
-		$testCase->assertEquals(1, $returnval);
+		$testCase->assertEquals(1, $hook->getValue());
 
 		return 2;
 	}
@@ -151,6 +149,6 @@ class PluginHooksServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public static function throwInvalidArg() {
-		throw new \InvalidArgumentException();
+		throw new InvalidArgumentException();
 	}
 }

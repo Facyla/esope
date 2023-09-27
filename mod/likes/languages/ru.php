@@ -6,44 +6,32 @@
  */
 
 return array(
-	'annotation:delete:likes:fail' => "Возникла ошибка при удалении отзыва",
-	'annotation:delete:likes:success' => "Ваш отзыв удалён",
+	'annotation:delete:likes:fail' => "Ошибка при удалении лайка",
+	'annotation:delete:likes:success' => "Лайк удалён",
 	
-	'likes:this' => 'Одобряю',
-	'likes:deleted' => 'Ваш отзыв удалён',
-	'likes:see' => 'Посмотреть кто это одобрил',
-	'likes:remove' => 'Снять одобрение',
-	'likes:notdeleted' => 'Возникла ошибка при удалении отзыва',
-	'likes:likes' => 'Вы это одобрили',
-	'likes:failure' => 'Возникла ошибка при добавлении отзыва',
-	'likes:alreadyliked' => 'Вы уже одобрили это',
+	'likes:this' => 'нравится',
+	'likes:deleted' => 'Лайк удалён',
+	'likes:see' => 'Посмотреть кому нравится это',
+	'likes:remove' => 'Не нравится',
+	'likes:notdeleted' => 'Ошибка при удалении лайка',
+	'likes:likes' => 'Вам это понравилось',
+	'likes:failure' => 'Ошибка при добавлении лайка',
+	'likes:alreadyliked' => 'Вам это уже понравилось',
 	'likes:notfound' => 'Не найден объект, который вы хотите одобрить',
-	'likes:likethis' => 'Одобрить',
-	'likes:userlikedthis' => ': %s',
-	'likes:userslikedthis' => ': %s',
-	'likes:river:annotate' => 'Одобрений',
-	'likes:delete:confirm' => 'Вы уверены, что хотите удалить этот отзыв?',
-
-	'river:likes' => '%s одобрил(а) %s',
+	'likes:likethis' => 'Нравится',
+	'likes:userlikedthis' => '%s лайк',
+	'likes:userslikedthis' => '%s лайков',
+	'likes:river:annotate' => 'лайков',
 
 	// notifications. yikes.
-	'likes:notifications:subject' => '%s одобряет ваше сообщение "%s"',
-	'likes:notifications:body' =>
-'Hi %1$s,
+	'likes:notifications:subject' => '%s нравится ваша публикация "%s"',
+	'likes:notifications:body' => '%1$s нравится ваша публикация "%2$s" в %3$s
 
-%2$s likes your post "%3$s" on %4$s
+Посмотреть вашу публикацию:
 
-See your original post here:
+%4$s
 
-%5$s
+или посмотреть профиль пользователя %1$s:
 
-or view %2$s\'s profile here:
-
-%6$s
-
-Thanks,
-%4$s',
-	'likes:upgrade:2017120700:title' => "Public Likes Annotations",
-	'likes:upgrade:2017120700:description' => "This updates the access id of likes annotations to public",
-	
+%5$s',
 );

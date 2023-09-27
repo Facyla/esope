@@ -2,6 +2,8 @@
 
 namespace Elgg\Cache;
 
+use Elgg\Exceptions\InvalidArgumentException;
+
 /**
  * Least Recently Used Cache
  *
@@ -13,7 +15,10 @@ namespace Elgg\Cache;
  * @internal
  */
 class LRUCache implements \ArrayAccess {
-	/** @var int */
+	
+	/**
+	 * @var int
+	 */
 	protected $maximumSize;
 
 	/**
@@ -27,11 +32,11 @@ class LRUCache implements \ArrayAccess {
 	 * Create a LRU Cache
 	 *
 	 * @param int $size The size of the cache
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
-	public function __construct($size) {
-		if (!is_int($size) || $size <= 0) {
-			throw new \InvalidArgumentException();
+	public function __construct(int $size) {
+		if ($size <= 0) {
+			throw new InvalidArgumentException();
 		}
 		$this->maximumSize = $size;
 	}
@@ -139,6 +144,7 @@ class LRUCache implements \ArrayAccess {
 	 * @param mixed      $value The value to set.
 	 * @return void
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetSet($key, $value) {
 		$this->set($key, $value);
 	}
@@ -151,6 +157,7 @@ class LRUCache implements \ArrayAccess {
 	 * @param int|string $key The key to retrieve.
 	 * @return mixed
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetGet($key) {
 		return $this->get($key);
 	}
@@ -163,6 +170,7 @@ class LRUCache implements \ArrayAccess {
 	 * @param int|string $key The key to unset.
 	 * @return void
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($key) {
 		$this->remove($key);
 	}
@@ -175,6 +183,7 @@ class LRUCache implements \ArrayAccess {
 	 * @param int|string $key A key to check for.
 	 * @return boolean
 	 */
+	#[\ReturnTypeWillChange]
 	public function offsetExists($key) {
 		return $this->containsKey($key);
 	}

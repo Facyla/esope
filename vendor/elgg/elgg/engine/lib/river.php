@@ -23,108 +23,28 @@
  *
  * @return int|ElggRiverItem|bool River ID/item or false on failure
  * @since  1.9
- * @throws DatabaseException
  */
 function elgg_create_river_item(array $options = []) {
-
-	$view = elgg_extract('view', $options, '');
-	// use default viewtype for when called from web services api
-	if (!empty($view) && !elgg_view_exists($view, 'default')) {
+	$item = new \ElggRiverItem();
+	$item->action_type = elgg_extract('action_type', $options);
+	$item->view = elgg_extract('view', $options);
+	$item->subject_guid = elgg_extract('subject_guid', $options, elgg_get_logged_in_user_guid());
+	$item->object_guid = elgg_extract('object_guid', $options);
+	$item->target_guid = elgg_extract('target_guid', $options);
+	$item->annotation_id = elgg_extract('annotation_id', $options);
+	$item->posted = elgg_extract('posted', $options);
+	
+	if (!$item->save()) {
 		return false;
 	}
-
-	$action_type = elgg_extract('action_type', $options);
-	if (empty($action_type)) {
-		return false;
-	}
-
-	$subject_guid = elgg_extract('subject_guid', $options, elgg_get_logged_in_user_guid());
-	if (!(get_entity($subject_guid) instanceof ElggEntity)) {
-		return false;
-	}
-
-	$object_guid = elgg_extract('object_guid', $options, 0);
-	if (!(get_entity($object_guid) instanceof ElggEntity)) {
-		return false;
-	}
-
-	$target_guid = elgg_extract('target_guid', $options, 0);
-	if ($target_guid) {
-		// target_guid is not a required parameter so check
-		// it only if it is included in the parameters
-		if (!(get_entity($target_guid) instanceof ElggEntity)) {
-			return false;
-		}
-	}
-
-	$posted = elgg_extract('posted', $options, time());
-
-	$annotation_id = elgg_extract('annotation_id', $options, 0);
-	if ($annotation_id) {
-		if (!elgg_get_annotation_from_id($annotation_id)) {
-			return false;
-		}
-	}
-
-	$return_item = elgg_extract('return_item', $options, false);
-
-	$values = [
-		'action_type' => $action_type,
-		'view' => $view,
-		'subject_guid' => $subject_guid,
-		'object_guid' => $object_guid,
-		'target_guid' => $target_guid,
-		'annotation_id' => $annotation_id,
-		'posted' => $posted,
-	];
-	$col_types = [
-		'action_type' => ELGG_VALUE_STRING,
-		'view' => ELGG_VALUE_STRING,
-		'subject_guid' => ELGG_VALUE_INTEGER,
-		'object_guid' => ELGG_VALUE_INTEGER,
-		'target_guid' => ELGG_VALUE_INTEGER,
-		'annotation_id' => ELGG_VALUE_INTEGER,
-		'posted' => ELGG_VALUE_INTEGER,
-	];
-
-	// return false to stop insert
-	$values = elgg_trigger_plugin_hook('creating', 'river', null, $values);
-	if ($values == false) {
-		// inserting did not fail - it was just prevented
-		return true;
-	}
-
-	$qb = \Elgg\Database\Insert::intoTable('river');
-	$query_params = [];
-	foreach ($values as $name => $value) {
-		$query_params[$name] = $qb->param($value, $col_types[$name]);
-	}
-	$qb->values($query_params);
-
-	$id = _elgg_services()->db->insertData($qb);
-	if (!$id) {
-		return false;
-	}
-
-	$item = elgg_call(ELGG_IGNORE_ACCESS, function () use ($id) {
-		return elgg_get_river_item_from_id($id);
-	});
-
-	if (!$item) {
-		return false;
-	}
-
-	elgg_trigger_event('created', 'river', $item);
-
-	return $return_item ? $item : $id;
+	
+	return (bool) elgg_extract('return_item', $options, false) ? $item : $item->id;
 }
 
 /**
  * Get river items
  *
- * @note If using types and subtypes in a query, they are joined with an AND.
- *
- * @param array $options Parameters:
+ * Supports passing the following options
  *   ids                  => INT|ARR River item id(s)
  *   subject_guids        => INT|ARR Subject guid(s)
  *   object_guids         => INT|ARR Object guid(s)
@@ -141,6 +61,8 @@ function elgg_create_river_item(array $options = []) {
  *   subtypes             => STR|ARR Entity subtype string(s)
  *   type_subtype_pairs   => ARR     Array of type => subtype pairs where subtype
  *                                   can be an array of subtype strings
+ *
+ *   @note If using types and subtypes in a query, they are joined with an AND.
  *
  *   Additionally accepts all "relationship_*" options supported by {@link elgg_get_entities()}
  *   relationship         => STR     Relationship identifier
@@ -160,7 +82,7 @@ function elgg_create_river_item(array $options = []) {
  *                                   option without a full understanding of the
  *                                   underlying SQL query Elgg creates. (true)
  *
- *   batch                => BOOL    If set to true, an Elgg\BatchResult object will be returned
+ *   batch                => BOOL    If set to true, an \ElggBatch object will be returned
  *                                   instead of an array. (false) Since 2.3.
  *
  *   batch_inc_offset     => BOOL    If "batch" is used, this tells the batch to increment the offset
@@ -170,7 +92,9 @@ function elgg_create_river_item(array $options = []) {
  *   batch_size           => INT     If "batch" is used, this is the number of entities/rows to pull
  *                                   in before requesting more. (25)
  *
- * @return \ElggRiverItem[]|\Elgg\BatchResult|array|int
+ * @param array $options parameters
+ *
+ * @return \ElggRiverItem[]|\ElggBatch|array|int
  * @since 1.8.0
  */
 function elgg_get_river(array $options = []) {
@@ -181,14 +105,11 @@ function elgg_get_river(array $options = []) {
  * Get river item from its ID
  *
  * @param int $id ID
+ *
  * @return ElggRiverItem|false
  */
-function elgg_get_river_item_from_id($id) {
-	$items = elgg_get_river([
-		'id' => $id,
-	]);
-
-	return $items ? $items[0] : false;
+function elgg_get_river_item_from_id(int $id) {
+	return _elgg_services()->riverTable->get($id) ?? false;
 }
 
 /**
@@ -211,8 +132,25 @@ function elgg_get_river_item_from_id($id) {
  */
 function elgg_delete_river(array $options = []) {
 
-	if (!_elgg_is_valid_options_for_batch_operation($options, 'river')) {
-		// requirements not met
+	$required = [
+		'id', 'ids',
+		'subject_guid', 'subject_guids',
+		'object_guid', 'object_guids',
+		'target_guid', 'target_guids',
+		'annotation_id', 'annotation_ids',
+		'view', 'views',
+	];
+
+	$found = false;
+	foreach ($required as $key) {
+		// check that it exists and is something.
+		if (isset($options[$key]) && !elgg_is_empty($options[$key])) {
+			$found = true;
+			break;
+		}
+	}
+
+	if (!$found) {
 		return false;
 	}
 
@@ -243,9 +181,9 @@ function elgg_delete_river(array $options = []) {
  * List river items
  *
  * @param array $options Any options from elgg_get_river() plus:
- *   item_view  => STR         Alternative view to render list items
- *   pagination => BOOL        Display pagination links (true)
- *   no_results => STR|true|Closure Message to display if no items
+ *                       - item_view  => STR         Alternative view to render list items
+ *                       - pagination => BOOL        Display pagination links (true)
+ *                       - no_results => STR|true|Closure Message to display if no items
  *
  * @return string
  * @since 1.8.0
@@ -253,7 +191,7 @@ function elgg_delete_river(array $options = []) {
 function elgg_list_river(array $options = []) {
 	$defaults = [
 		'offset'     => (int) max(get_input('offset', 0), 0),
-		'limit'      => (int) max(get_input('limit', max(20, _elgg_config()->default_limit)), 0),
+		'limit'      => (int) max(get_input('limit', max(20, _elgg_services()->config->default_limit)), 0),
 		'pagination' => true,
 		'list_class' => 'elgg-list-river',
 	];
@@ -295,87 +233,3 @@ function elgg_list_river(array $options = []) {
 
 	return elgg_view('page/components/list', $options);
 }
-
-/**
- * Updates the last action of the object of an river item
- *
- * @param \Elgg\Event $event 'created', 'river'
- *
- * @return void
- *
- * @internal
- */
-function _elgg_river_update_object_last_action(\Elgg\Event $event) {
-	$item = $event->getObject();
-	if (!$item instanceof \ElggRiverItem) {
-		return;
-	}
-	
-	$object = $item->getObjectEntity();
-	if ($object instanceof \ElggEntity) {
-		$object->updateLastAction($item->getTimePosted());
-	}
-	
-	$target = $item->getTargetEntity();
-	if ($target instanceof \ElggEntity) {
-		$target->updateLastAction($item->getTimePosted());
-	}
-}
-
-/**
- * Add the delete to river actions menu
- *
- * @param \Elgg\Hook $hook 'register' 'menu:river'
- *
- * @return void|ElggMenuItem[]
- *
- * @internal
- */
-function _elgg_river_menu_setup(\Elgg\Hook $hook) {
-	if (!elgg_is_logged_in()) {
-		return;
-	}
-
-	$item = $hook->getParam('item');
-	if (!($item instanceof ElggRiverItem)) {
-		return;
-	}
-
-	if (!$item->canDelete()) {
-		return;
-	}
-
-	$return = $hook->getValue();
-
-	$return[] = \ElggMenuItem::factory([
-		'name' => 'delete',
-		'href' => "action/river/delete?id={$item->id}",
-		'is_action' => true,
-		'icon' => 'delete',
-		'text' => elgg_echo('river:delete'),
-		'confirm' => elgg_echo('deleteconfirm'),
-		'priority' => 999,
-	]);
-
-	return $return;
-}
-
-/**
- * Initialize river library
- *
- * @return void
- *
- * @internal
- */
-function _elgg_river_init() {
-	elgg_register_plugin_hook_handler('register', 'menu:river', '_elgg_river_menu_setup');
-	
-	elgg_register_event_handler('created', 'river', '_elgg_river_update_object_last_action');
-}
-
-/**
- * @see \Elgg\Application::loadCore Do not do work here. Just register for events.
- */
-return function(\Elgg\EventsService $events) {
-	$events->registerHandler('init', 'system', '_elgg_river_init');
-};

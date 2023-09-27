@@ -9,8 +9,8 @@ use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
-use Elgg\Integration\OrderByClauseTest;
-use Elgg\Mocks\Database;
+use Elgg\Exceptions\InvalidParameterException;
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\UnitTestCase;
 
 /**
@@ -19,14 +19,6 @@ use Elgg\UnitTestCase;
  * @group Repository
  */
 class EntitiesRepositoryTest extends UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	public function testCanExecuteCount() {
 		$select = Select::fromTable('entities', 'e');
@@ -327,7 +319,7 @@ class EntitiesRepositoryTest extends UnitTestCase {
 	}
 
 	public function testThrowsOnInvalidCalculation() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		Entities::with([])->calculate('invalid', 'guid', 'attribute');
 	}
 
@@ -380,7 +372,7 @@ class EntitiesRepositoryTest extends UnitTestCase {
 	}
 
 	public function testThrowsOnInvalidAttributeCalculation() {
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		Entities::with([])->calculate('max', 'invalid', 'attribute');
 	}
 
@@ -682,13 +674,13 @@ class EntitiesRepositoryTest extends UnitTestCase {
 		
 		$select->addClause(new AccessWhereClause());
 
-		$alias1 = $select->joinPrivateSettingsTable('e', 'guid', 'foo1');
+		$alias1 = $select->joinPrivateSettingsTable('e', 'guid', ['foo1']);
 		$private_setting = new PrivateSettingWhereClause();
 		$private_setting->names = ['foo1'];
 		$private_setting->values = ['bar1'];
 		$wheres[] = $private_setting->prepare($select, $alias1);
 
-		$alias2 = $select->joinPrivateSettingsTable('e', 'guid', 'foo2');
+		$alias2 = $select->joinPrivateSettingsTable('e', 'guid', ['foo2']);
 		$private_setting = new PrivateSettingWhereClause();
 		$private_setting->names = ['foo2'];
 		$private_setting->values = ['bar2'];
@@ -910,5 +902,4 @@ class EntitiesRepositoryTest extends UnitTestCase {
 
 		return $rows;
 	}
-
 }

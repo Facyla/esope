@@ -22,14 +22,11 @@ return array(
 	'file:num_files' => "Liczba plików do wyświetlenia",
 	'file:replace' => 'Zastąp zawartość pliku (pozostaw puste aby nie zmieniać pliku)',
 	'file:list:title' => "%s %s %s",
-	'file:title:friends' => "Znajomi",
 
 	'file:file' => "Plik",
 
 	'file:list:list' => 'Przełącz do widoku listy',
 	'file:list:gallery' => 'Przełącz do widoku galerii',
-
-	'file:types' => "Typy dodawanych plików",
 
 	'file:type:' => 'Pliki',
 	'file:type:all' => "Wszystkie pliki",
@@ -56,24 +53,12 @@ return array(
 
 	'groups:tool:file' => 'Włącz pliki grupy',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Nowy plik o nazwie %s',
 	'file:notify:subject' => 'Nowy plik: %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

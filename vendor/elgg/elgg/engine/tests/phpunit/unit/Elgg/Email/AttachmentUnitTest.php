@@ -3,7 +3,7 @@
 namespace Elgg\Email;
 
 use Elgg\UnitTestCase;
-use Zend\Mime\Mime;
+use Laminas\Mime\Mime;
 
 /**
  * @group EmailService
@@ -36,10 +36,6 @@ class AttachmentUnitTest extends UnitTestCase {
 			'filename' => 'text.txt',
 			'type' => 'text/plain',
 		];
-	}
-
-	public function down() {
-
 	}
 	
 	public function testFactoryFromArray() {

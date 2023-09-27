@@ -1,4 +1,7 @@
 <?php
+
+use Elgg\Exceptions\UnexpectedValueException as ElggUnexpectedValueException;
+
 /**
  * The base class for \ElggEntity extenders.
  *
@@ -23,12 +26,15 @@
  */
 abstract class ElggExtender extends \ElggData {
 
-	protected $int_columns = [
+	/**
+	 * @var string[] attributes that are integers
+	 */
+	protected const INTEGER_ATTR_NAMES = [
 		'id',
 		'entity_guid',
 		'owner_guid',
-		'time_created',
 		'access_id',
+		'time_created',
 	];
 
 	/**
@@ -56,14 +62,11 @@ abstract class ElggExtender extends \ElggData {
 		if ($name === 'access_id' && $this instanceof ElggMetadata) {
 			$value = ACCESS_PUBLIC;
 		}
-		if (isset($value) && in_array($name, $this->int_columns)) {
+		if (isset($value) && in_array($name, static::INTEGER_ATTR_NAMES)) {
 			$value = (int) $value;
 		}
 		$this->attributes[$name] = $value;
 		if ($name == 'value') {
-			if (is_bool($value)) {
-				$value = (int) $value;
-			}
 			$this->attributes['value_type'] = self::detectValueType($value);
 		}
 	}
@@ -85,19 +88,23 @@ abstract class ElggExtender extends \ElggData {
 	 * Gets an attribute
 	 *
 	 * @param string $name Name
+	 *
 	 * @return mixed
+	 * @throws \Elgg\Exceptions\UnexpectedValueException
 	 */
 	public function __get($name) {
 		if (array_key_exists($name, $this->attributes)) {
 			if ($name == 'value') {
 				switch ($this->attributes['value_type']) {
+					case 'bool' :
+						return (bool) $this->attributes['value'];
 					case 'integer' :
 						return (int) $this->attributes['value'];
 					case 'text' :
 						return $this->attributes['value'];
 					default :
 						$msg = "{$this->attributes['value_type']} is not a supported \ElggExtender value type.";
-						throw new \UnexpectedValueException($msg);
+						throw new ElggUnexpectedValueException($msg);
 						break;
 				}
 			}
@@ -163,14 +170,8 @@ abstract class ElggExtender extends \ElggData {
 		$object->time_created = date('c', $this->getTimeCreated());
 		$object->read_access = $this->access_id;
 
-		$params[$this->getSubtype()] = $this; // deprecated use
 		$params[$this->getType()] = $this;
-		
-		// deprecated toObject hook
-		$deprecated_msg = "Triggering 'to:object' hook by extender name '{$this->getSubtype()}' has been deprecated. "
-			. "Use the generic 'to:object','{$this->getType()}' hook instead.";
-		$object = _elgg_services()->hooks->triggerDeprecated('to:object', $this->getSubtype(), $params, $object, $deprecated_msg, '2.3');
-		
+				
 		return _elgg_services()->hooks->trigger('to:object', $this->getType(), $params, $object);
 	}
 
@@ -232,11 +233,17 @@ abstract class ElggExtender extends \ElggData {
 	 * @return string
 	 * @internal
 	 */
-	public static function detectValueType($value, $value_type = "") {
-		if ($value_type === 'integer' || $value_type === 'text') {
+	public static function detectValueType($value, string $value_type = ''): string {
+		if (in_array($value_type, ['integer', 'text', 'bool'])) {
 			return $value_type;
 		}
 
-		return is_int($value) ? 'integer' : 'text';
+		if (is_int($value)) {
+			return 'integer';
+		} elseif (is_bool($value)) {
+			return 'bool';
+		}
+		
+		return 'text';
 	}
 }

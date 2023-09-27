@@ -17,6 +17,8 @@ return array(
 	'collection:object:thewire:all' => "Toate postările de fir",
 	'collection:object:thewire:owner' => "Postările de fir ale utilizatorului %s",
 	'collection:object:thewire:friends' => "Postările de fir ale prietenilor",
+	'notification:object:thewire:create' => "Trimite o notificare atunci când o postare de fir este creată",
+	'notifications:mute:object:thewire' => "despre postarea de fir '%s'",
 
 	'thewire:replying' => "Răspunzi utilizatorului %s (@%s) care a scris",
 	'thewire:thread' => "Fir",
@@ -25,8 +27,6 @@ return array(
 	'thewire:noposts' => "Încă nu sunt postări de fir",
 
 	'thewire:by' => 'Postări de fir de către %s',
-	'thewire:previous:help' => "Vezi postarea anterioară",
-	'thewire:hide:help' => "Ascunde postarea anterioară",
 
 	'thewire:form:body:placeholder' => "Ce se întâmplă?",
 	

@@ -3,30 +3,15 @@
  * Elgg user tools settings
  */
 
-elgg_gatekeeper();
+use Elgg\Exceptions\Http\PageNotFoundException;
 
-$username = elgg_extract('username', $vars);
-if (!$username) {
-	$username = elgg_get_logged_in_user_entity()->username;
-}
+$user = elgg_get_page_owner_entity();
 
-$user = get_user_by_username($username);
-if (!$user || !$user->canEdit()) {
-	throw new \Elgg\EntityPermissionsException();
-}
-
-elgg_set_page_owner_guid($user->guid);
-
-$plugin_id = elgg_extract("plugin_id", $vars);
-
-if (empty($plugin_id)) {
-	throw new \Elgg\PageNotFoundException(elgg_echo('ElggPlugin:MissingID'));
-}
+$plugin_id = elgg_extract('plugin_id', $vars);
 
 $plugin = elgg_get_plugin_from_id($plugin_id);
-
-if (!$plugin) {
-	throw new \Elgg\PageNotFoundException(elgg_echo('PluginException:InvalidID', [$plugin_id]));
+if (!$plugin instanceof \ElggPlugin) {
+	throw new PageNotFoundException(elgg_echo('PluginException:InvalidID', [$plugin_id]));
 }
 
 if (elgg_language_key_exists($plugin_id . ':usersettings:title')) {
@@ -35,16 +20,11 @@ if (elgg_language_key_exists($plugin_id . ':usersettings:title')) {
 	$title = $plugin->getDisplayName();
 }
 
-$username = elgg_extract('username', $vars);
-
 elgg_push_breadcrumb(elgg_echo('settings'), elgg_generate_url('settings:account', ['username' => $user->username]));
 
-$form_vars = [
-	'prevent_double_submit' => true,
-];
-
-if (elgg_action_exists("{$plugin->getID()}/usersettings/save")) {
-	$form_vars['action'] = "action/{$plugin->getID()}/usersettings/save";
+$form_vars = [];
+if (elgg_action_exists("{$plugin_id}/usersettings/save")) {
+	$form_vars['action'] = "action/{$plugin_id}/usersettings/save";
 }
 
 $content = elgg_view_form('plugins/usersettings/save', $form_vars, ['entity' => $plugin]);
@@ -52,4 +32,6 @@ $content = elgg_view_form('plugins/usersettings/save', $form_vars, ['entity' => 
 echo elgg_view_page($title, [
 	'content' => $content,
 	'show_owner_block_menu' => false,
+	'filter_id' => 'settings',
+	'filter_value' => 'plugin_settings',
 ]);

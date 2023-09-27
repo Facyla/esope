@@ -2,7 +2,6 @@
 
 namespace Elgg\Database;
 
-use DatabaseException;
 use Elgg\Database;
 use ElggEntity;
 use Elgg\Cache\PrivateSettingsCache;
@@ -11,13 +10,10 @@ use Elgg\Values;
 /**
  * Private settings for entities
  *
- * Private settings provide metadata like storage of settings for plugins
- * and users.
- *
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * Private settings provide metadata like storage of settings for plugins and users.
  *
  * @internal
- * @since  2.0.0
+ * @since 2.0.0
  */
 class PrivateSettingsTable {
 
@@ -59,7 +55,6 @@ class PrivateSettingsTable {
 	 * @param string     $name   The name of the setting
 	 *
 	 * @return mixed The setting value, or null if does not exist
-	 * @throws DatabaseException
 	 */
 	public function get(ElggEntity $entity, $name) {
 		return elgg_extract($name, $this->getAllForEntity($entity));
@@ -71,7 +66,6 @@ class PrivateSettingsTable {
 	 * @param ElggEntity $entity Entity
 	 *
 	 * @return string[] empty array if no settings
-	 * @throws DatabaseException
 	 */
 	public function getAllForEntity(ElggEntity $entity) {
 		$values = $this->cache->load($entity->guid);
@@ -109,7 +103,6 @@ class PrivateSettingsTable {
 	 * @param int[] $guids GUIDS to fetch the settings for
 	 *
 	 * @return string[] array of guids and their settings
-	 * @throws DatabaseException
 	 *
 	 * @internal
 	 */
@@ -148,7 +141,6 @@ class PrivateSettingsTable {
 	 * @param string|int $value  The value of the setting
 	 *
 	 * @return bool
-	 * @throws DatabaseException
 	 */
 	public function set(ElggEntity $entity, $name, $value) {
 		$entity->invalidateCache();
@@ -189,7 +181,6 @@ class PrivateSettingsTable {
 	 * @param string     $name   The name of the setting
 	 *
 	 * @return bool
-	 * @throws DatabaseException
 	 */
 	public function remove(ElggEntity $entity, $name) {
 		$entity->invalidateCache();
@@ -207,7 +198,6 @@ class PrivateSettingsTable {
 	 * @param ElggEntity $entity Entity
 	 *
 	 * @return bool
-	 * @throws DatabaseException
 	 */
 	public function removeAllForEntity(ElggEntity $entity) {
 		$entity->invalidateCache();

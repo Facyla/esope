@@ -81,9 +81,9 @@ $fields = [
 		],
 	],
 	[
-		'#type' => 'hidden',
-		'name' => 'container_guid',
-		'value' => elgg_get_page_owner_guid(),
+		'#type' => 'container_guid',
+		'entity_type' => 'object',
+		'entity_subtype' => 'blog',
 	],
 	[
 		'#type' => 'hidden',
@@ -116,10 +116,10 @@ $footer .= elgg_view('input/submit', [
 
 // published blogs do not get the preview button
 if (!$blog || $blog->status != 'published') {
-	$footer .= elgg_view('input/submit', [
+	$footer .= elgg_view('input/button', [
 		'value' => elgg_echo('preview'),
 		'name' => 'preview',
-		'class' => 'elgg-button-submit mls',
+		'class' => 'elgg-button-action mls',
 	]);
 }
 

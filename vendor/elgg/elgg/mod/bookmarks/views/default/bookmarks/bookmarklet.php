@@ -11,11 +11,7 @@ if ($page_owner instanceof ElggGroup) {
 	$title = elgg_echo("bookmarks:this");
 }
 
-$guid = $page_owner->getGUID();
-
-if (!$name && ($user = elgg_get_logged_in_user_entity())) {
-	$name = $user->username;
-}
+$guid = $page_owner->guid;
 
 $code = elgg_view('bookmarks/bookmarklet.js');
 
@@ -25,11 +21,12 @@ $code = str_replace('BASEURL', $base_url_str, $code);
 
 $bookmarklet = elgg_view('output/url', [
 	'text' => $title,
-	'icon' => 'push-pin-alt',
+	'icon' => 'thumbtack',
 	'href' => "javascript:$code",
 	'onclick' => 'return false',
 	'class' => 'elgg-button elgg-button-action',
 	'style' => 'cursor:move',
+	'allowed_schemes' => ['javascript'],
 ]);
 
 ?>

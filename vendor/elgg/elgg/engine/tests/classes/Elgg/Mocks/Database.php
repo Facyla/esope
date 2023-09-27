@@ -2,48 +2,43 @@
 
 namespace Elgg\Mocks;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Elgg\BaseTestCase;
 use Elgg\Database as DbDatabase;
-use Elgg\Database\DbConfig;
-use Psr\Log\LoggerInterface;
+use Elgg\Exceptions\DatabaseException;
+use PHPUnit\Framework\MockObject\MockBuilder;
 
 class Database extends DbDatabase {
 
 	/**
 	 * @var \stdClass[]
 	 */
-	private $query_specs = [];
+	protected $query_specs = [];
 
 	/**
 	 * @var int
 	 */
-	public $last_insert_id = null;
-
-	/**
-	 *
-	 * @var BaseTestCase
-	 */
-	private $test;
+	protected $last_insert_id = null;
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function setupConnections() {
+	public function setupConnections(): void {
 
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function connect($type = "readwrite") {
+	public function connect(string $type = 'readwrite'): void {
 
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getConnection($type) {
+	public function getConnection(string $type): Connection {
 		$connection = BaseTestCase::$_instance->getConnectionMock();
 
 		$connection->expects(BaseTestCase::$_instance->any())
@@ -53,6 +48,10 @@ class Database extends DbDatabase {
 		$connection->expects(BaseTestCase::$_instance->any())
 			->method('executeQuery')
 			->will(BaseTestCase::$_instance->returnCallback([$this, 'executeDatabaseQuery']));
+		
+		$connection->expects(BaseTestCase::$_instance->any())
+			->method('executeStatement')
+			->will(BaseTestCase::$_instance->returnCallback([$this, 'executeDatabaseStatement']));
 
 		$connection->expects(BaseTestCase::$_instance->any())
 			->method('lastInsertId')
@@ -93,8 +92,6 @@ class Database extends DbDatabase {
 	 * @return string ID of spec
 	 */
 	public function addQuerySpec(array $spec) {
-		static $id = 0;
-
 		$default = [
 			'params' => [],
 			'results' => null,
@@ -143,7 +140,7 @@ class Database extends DbDatabase {
 	 * @param string $sql    Query
 	 * @param array  $params Query params
 	 *
-	 * @return MockObject (statement)
+	 * @return MockBuilder (statement)
 	 */
 	public function executeDatabaseQuery($sql, $params = []) {
 
@@ -180,39 +177,44 @@ class Database extends DbDatabase {
 		if (!$match && strpos($sql, 'select') !== 0) {
 			// We need to make sure all UPDATE, INSERT and DELETE queries are
 			// mocked, otherwise we will be getting incorrect test results
-			throw new \DatabaseException(
+			throw new DatabaseException(
 				"No testing query spec was found:" . PHP_EOL .
 				"Query: " . $sql . PHP_EOL .
 				"Params: " . var_export($params, true)
 			);
 		}
 
-		$statement = BaseTestCase::$_instance->getMockBuilder(\Doctrine\DBAL\PDOStatement::class)
-			->setMethods([
-				'fetch',
+		$result = BaseTestCase::$_instance->getMockBuilder(\Doctrine\DBAL\Result::class)
+			->onlyMethods([
+				'fetchAssociative',
+				'fetchAllAssociative',
 				'rowCount',
 			])
 			->disableOriginalConstructor()
 			->getMock();
 
-		$statement->expects(BaseTestCase::$_instance->any())
-			->method('fetch')
+		$result->expects(BaseTestCase::$_instance->any())
+			->method('fetchAssociative')
 			->will(BaseTestCase::$_instance->returnCallback(function () use (&$results) {
 				return array_shift($results);
 			}));
+		
+		$result->expects(BaseTestCase::$_instance->any())
+			->method('fetchAllAssociative')
+			->will(BaseTestCase::$_instance->returnCallback(function () use ($results) {
+				return $results;
+			}));
 
-		$statement->expects(BaseTestCase::$_instance->any())
+		$result->expects(BaseTestCase::$_instance->any())
 			->method('rowCount')
 			->will(BaseTestCase::$_instance->returnValue($row_count));
 
-		return $statement;
+		return $result;
 	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function sanitizeString($value) {
-		return addslashes($value);
+	
+	public function executeDatabaseStatement($sql, $params = []) {
+		$result = $this->executeDatabaseQuery($sql, $params);
+		return $result->rowCount();
 	}
 
 	/**
@@ -222,7 +224,7 @@ class Database extends DbDatabase {
 	 *
 	 * @return string
 	 */
-	private function normalizeSql($query) {
+	protected function normalizeSql($query) {
 		$query = trim($query);
 		$query = str_replace('  ', ' ', $query);
 		$query = strtolower($query);

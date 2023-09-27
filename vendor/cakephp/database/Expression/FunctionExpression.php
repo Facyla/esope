@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,9 +18,9 @@ namespace Cake\Database\Expression;
 
 use Cake\Database\ExpressionInterface;
 use Cake\Database\Query;
+use Cake\Database\Type\ExpressionTypeCasterTrait;
 use Cake\Database\TypedResultInterface;
 use Cake\Database\TypedResultTrait;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
 use Cake\Database\ValueBinder;
 
 /**
@@ -60,11 +62,11 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      * @param string $name the name of the function to be constructed
      * @param array $params list of arguments to be passed to the function
      * If associative the key would be used as argument when value is 'literal'
-     * @param array $types associative array of types to be associated with the
+     * @param array<string, string>|array<string|null> $types Associative array of types to be associated with the
      * passed arguments
      * @param string $returnType The return type of this expression
      */
-    public function __construct($name, $params = [], $types = [], $returnType = 'string')
+    public function __construct(string $name, array $params = [], array $types = [], string $returnType = 'string')
     {
         $this->_name = $name;
         $this->_returnType = $returnType;
@@ -77,7 +79,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      * @param string $name The name of the function
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->_name = $name;
 
@@ -89,48 +91,28 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
 
     /**
-     * Sets the name of the SQL function to be invoke in this expression,
-     * if no value is passed it will return current name
-     *
-     * @deprecated 3.4.0 Use setName()/getName() instead.
-     * @param string|null $name The name of the function
-     * @return string|$this
-     */
-    public function name($name = null)
-    {
-        deprecationWarning(
-            'FunctionExpression::name() is deprecated. ' .
-            'Use FunctionExpression::setName()/getName() instead.'
-        );
-        if ($name !== null) {
-            return $this->setName($name);
-        }
-
-        return $this->getName();
-    }
-
-    /**
      * Adds one or more arguments for the function call.
      *
-     * @param array $params list of arguments to be passed to the function
+     * @param array $conditions list of arguments to be passed to the function
      * If associative the key would be used as argument when value is 'literal'
-     * @param array $types associative array of types to be associated with the
+     * @param array<string, string> $types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
      * @see \Cake\Database\Expression\FunctionExpression::__construct() for more details.
      * @return $this
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
-    public function add($params, $types = [], $prepend = false)
+    public function add($conditions, array $types = [], bool $prepend = false)
     {
         $put = $prepend ? 'array_unshift' : 'array_push';
         $typeMap = $this->getTypeMap()->setTypes($types);
-        foreach ($params as $k => $p) {
+        foreach ($conditions as $k => $p) {
             if ($p === 'literal') {
                 $put($this->_conditions, $k);
                 continue;
@@ -159,25 +141,19 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     }
 
     /**
-     * Returns the string representation of this object so that it can be used in a
-     * SQL query. Note that values condition values are not included in the string,
-     * in their place placeholders are put and can be replaced by the quoted values
-     * accordingly.
-     *
-     * @param \Cake\Database\ValueBinder $generator Placeholder generator object
-     * @return string
+     * @inheritDoc
      */
-    public function sql(ValueBinder $generator)
+    public function sql(ValueBinder $binder): string
     {
         $parts = [];
         foreach ($this->_conditions as $condition) {
             if ($condition instanceof Query) {
-                $condition = sprintf('(%s)', $condition->sql($generator));
+                $condition = sprintf('(%s)', $condition->sql($binder));
             } elseif ($condition instanceof ExpressionInterface) {
-                $condition = $condition->sql($generator);
+                $condition = $condition->sql($binder);
             } elseif (is_array($condition)) {
-                $p = $generator->placeholder('param');
-                $generator->bind($p, $condition['value'], $condition['type']);
+                $p = $binder->placeholder('param');
+                $binder->bind($p, $condition['value'], $condition['type']);
                 $condition = $p;
             }
             $parts[] = $condition;
@@ -195,7 +171,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return 1 + count($this->_conditions);
     }

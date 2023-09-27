@@ -13,9 +13,12 @@
 $params = get_input('params');
 $plugin_id = get_input('plugin_id');
 $user_guid = (int) get_input('user_guid', elgg_get_logged_in_user_guid());
+if (empty($plugin_id) || empty($user_guid)) {
+	return elgg_error_response(elgg_echo('error:missing_data'));
+}
+
 $plugin = elgg_get_plugin_from_id($plugin_id);
 $user = get_user($user_guid);
-
 if (!$plugin || !$user || !$user->canEdit()) {
 	return elgg_error_response(elgg_echo('plugins:usersettings:save:fail', [$plugin_id]));
 }
@@ -24,8 +27,8 @@ $plugin_name = $plugin->getDisplayName();
 
 $result = false;
 
-foreach ($params as $k => $v) {
-	$result = $plugin->setUserSetting($k, $v, $user->guid);
+foreach ($params as $name => $value) {
+	$result = $user->setPluginSetting($plugin->getID(), $name, $value);
 	if (!$result) {
 		return elgg_error_response(elgg_echo('plugins:usersettings:save:fail', [$plugin_name]));
 	}

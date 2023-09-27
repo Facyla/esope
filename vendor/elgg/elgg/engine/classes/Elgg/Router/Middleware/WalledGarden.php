@@ -2,8 +2,8 @@
 
 namespace Elgg\Router\Middleware;
 
+use Elgg\Exceptions\Http\Gatekeeper\WalledGardenException;
 use Elgg\Request;
-use Elgg\WalledGardenException;
 
 /**
  * Protects a route from non-authenticated users in a walled garden mode
@@ -48,21 +48,16 @@ class WalledGarden {
 	 * @param string $url Defaults to the current URL
 	 *
 	 * @return bool
-	 * @deprecated 3.0
 	 * @internal
 	 */
-	public static function isPublicPage($url = '') {
-		if (empty($url)) {
-			$url = current_page_url();
-		}
-
+	protected function isPublicPage(string $url): bool {
 		$parts = parse_url($url);
 		unset($parts['query']);
 		unset($parts['fragment']);
 		$url = elgg_http_build_url($parts);
 		$url = rtrim($url, '/') . '/';
 
-		$site_url = elgg()->config->wwwroot;
+		$site_url = _elgg_services()->config->wwwroot;
 
 		if ($url == $site_url) {
 			// always allow index page
@@ -82,7 +77,7 @@ class WalledGarden {
 			'url' => $url,
 		];
 
-		$public_routes = elgg()->hooks->trigger('public_pages', 'walled_garden', $params, $defaults);
+		$public_routes = _elgg_services()->hooks->trigger('public_pages', 'walled_garden', $params, $defaults);
 
 		$site_url = preg_quote($site_url);
 		foreach ($public_routes as $public_route) {

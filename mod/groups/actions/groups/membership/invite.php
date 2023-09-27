@@ -6,60 +6,64 @@
 $logged_in_user = elgg_get_logged_in_user_entity();
 
 $user_guids = get_input('user_guid');
-if (!is_array($user_guids)) {
+if (!empty($user_guids) && !is_array($user_guids)) {
 	$user_guids = [$user_guids];
 }
 
 if (empty($user_guids)) {
-	return elgg_error_response();
+	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
 $group_guid = (int) get_input('group_guid');
 $group = get_entity($group_guid);
-if (!($group instanceof \ElggGroup) || !$group->canEdit()) {
-	return elgg_error_response();
+if (!$group instanceof \ElggGroup || !$group->canEdit()) {
+	return elgg_error_response(elgg_echo('actionunauthorized'));
 }
 
 $resend_invitation = (bool) get_input('resend');
 
 foreach ($user_guids as $guid) {
 	$user = get_user($guid);
-	if (!$user) {
+	if (!$user instanceof \ElggUser) {
 		continue;
 	}
 
 	$invite = true;
-	if (check_entity_relationship($group->guid, 'invited', $user->guid)) {
+	if ($group->hasRelationship($user->guid, 'invited')) {
 		// user already invited, do we need to resend the invitation
 		if (!$resend_invitation) {
-			register_error(elgg_echo('groups:useralreadyinvited'));
+			elgg_register_error_message(elgg_echo('groups:useralreadyinvited'));
 			continue;
 		}
 		$invite = false;
 	}
 
-	if (check_entity_relationship($user->guid, 'member', $group->guid)) {
+	if ($group->isMember($user)) {
 		continue;
 	}
 
 	if ($invite) {
 		// Create relationship
-		add_entity_relationship($group->guid, 'invited', $user->guid);
+		if (!$group->addRelationship($user->guid, 'invited')) {
+			elgg_register_error_message(elgg_echo('groups:usernotinvited'));
+			continue;
+		}
 	}
 
-	$url = elgg_normalize_url("groups/invitations/{$user->username}");
-
+	$url = elgg_generate_url('collection:group:group:invitations', [
+		'username' => $user->username,
+	]);
+	
 	$subject = elgg_echo('groups:invite:subject', [
 		$user->getDisplayName(),
 		$group->getDisplayName()
-	], $user->language);
+	], $user->getLanguage());
 
 	$body = elgg_echo('groups:invite:body', [
-		$user->getDisplayName(),
 		$logged_in_user->getDisplayName(),
 		$group->getDisplayName(),
 		$url,
-	], $user->language);
+	], $user->getLanguage());
 	
 	$params = [
 		'action' => 'invite',
@@ -68,13 +72,9 @@ foreach ($user_guids as $guid) {
 	];
 
 	// Send notification
-	$result = notify_user($user->getGUID(), $group->owner_guid, $subject, $body, $params);
-
-	if ($result) {
-		system_message(elgg_echo('groups:userinvited'));
-	} else {
-		register_error(elgg_echo('groups:usernotinvited'));
-	}
+	notify_user($user->guid, $group->owner_guid, $subject, $body, $params);
+	
+	elgg_register_success_message(elgg_echo('groups:userinvited'));
 }
 
 return elgg_ok_response();

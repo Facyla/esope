@@ -37,11 +37,9 @@ return array(
 	*/
 
 	'messages:posted' => "Mesajul tău a fost trimis cu succes.",
-	'messages:success:delete:single' => 'Mesajul a fost șters',
 	'messages:success:delete' => 'Mesaj șters',
 	'messages:success:read' => 'Mesaje marcate ca și citite',
 	'messages:error:messages_not_selected' => 'Nici un mesaj selectat',
-	'messages:error:delete:single' => 'Nu s-a putut șterge mesajul',
 
 	/**
 	* Email messages
@@ -69,7 +67,14 @@ Pentru a-i trimite un mesaj utilizatorului %s, apasă aici:
 	'messages:user:nonexist' => "Nu am putut găsi destinatarul în baza de date.",
 	'messages:user:blank' => "Nu ai selectat pe cineva pentru a trimite.",
 	'messages:user:self' => "Nu-ți poți trimite un mesaj ție.",
+	'messages:user:notfriend' => "Nu poți trimite un mesaj către un utilizator care nu îți este prieten/ă.",
 
 	'messages:deleted_sender' => 'Utilizator șters',
+	
+	/**
+	* Settings
+	*/
+	'messages:settings:friends_only:label' => 'Mesajele pot fi trimise numai către prieteni',
+	'messages:settings:friends_only:help' => 'Utilizatorul nu va putea trimite un mesaj dacă destinatarul nu îi este prieten/ă',
 
 );

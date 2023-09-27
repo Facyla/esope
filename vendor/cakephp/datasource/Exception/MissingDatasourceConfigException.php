@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,15 +14,15 @@
  */
 namespace Cake\Datasource\Exception;
 
-use Cake\Core\Exception\Exception;
+use Cake\Core\Exception\CakeException;
 
 /**
  * Exception class to be thrown when a datasource configuration is not found
  */
-class MissingDatasourceConfigException extends Exception
+class MissingDatasourceConfigException extends CakeException
 {
     /**
-     * @inheritDoc
+     * @var string
      */
     protected $_messageTemplate = 'The datasource configuration "%s" was not found.';
 }

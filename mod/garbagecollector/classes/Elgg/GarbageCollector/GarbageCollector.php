@@ -2,10 +2,10 @@
 
 namespace Elgg\GarbageCollector;
 
-use function DI\object;
+use Doctrine\DBAL\Result;
 use Elgg\Application\Database;
-use Elgg\Di\ServiceFacade;
 use Elgg\I18n\Translator;
+use Elgg\Traits\Di\ServiceFacade;
 
 /**
  * Garbage collecting service
@@ -42,6 +42,7 @@ class GarbageCollector {
 
 	/**
 	 * Returns registered service name
+	 *
 	 * @return string
 	 */
 	public static function name() {
@@ -52,9 +53,9 @@ class GarbageCollector {
 	 * Optimize the database
 	 *
 	 * @return \stdClass[]
-	 * @throws \DatabaseException
 	 */
-	public function optimize() {
+	public function optimize(): array {
+		$dbprefix = $this->db->prefix;
 		$output = [];
 
 		$output[] = (object) [
@@ -64,6 +65,11 @@ class GarbageCollector {
 		];
 
 		foreach ($this->tables() as $table) {
+			if (stripos($table, "{$dbprefix}system_log_") === 0) {
+				// rotated system_log tables don't need to be optimized
+				continue;
+			}
+
 			$result = $this->optimizeTable($table) !== false;
 			$output[] = (object) [
 				'operation' => $this->translator->translate('garbagecollector:optimize', [$table]),
@@ -85,24 +91,23 @@ class GarbageCollector {
 	 * Get a list of DB tables
 	 *
 	 * @return array
-	 * @throws \DatabaseException
 	 */
-	public function tables() {
+	protected function tables(): array {
 
 		if (!isset($this->tables)) {
 			$table_prefix = $this->db->prefix;
-			$result = $this->db->getData("SHOW TABLES LIKE '$table_prefix%'");
+			$result = $this->db->getConnection('read')->executeQuery("SHOW TABLES LIKE '{$table_prefix}%'");
 
 			$tables = [];
 
-			if (is_array($result) && !empty($result)) {
-				foreach ($result as $row) {
-					$row = (array) $row;
-					if (is_array($row) && !empty($row)) {
-						foreach ($row as $element) {
-							$tables[] = $element;
-						}
-					}
+			$rows = $result->fetchAllAssociative();
+			foreach ($rows as $row) {
+				if (empty($row)) {
+					continue;
+				}
+
+				foreach ($row as $element) {
+					$tables[] = $element;
 				}
 			}
 
@@ -117,13 +122,10 @@ class GarbageCollector {
 	 *
 	 * @param string $table Table
 	 *
-	 * @return bool|int
-	 * @throws \DatabaseException
+	 * @return int
 	 */
-	public function optimizeTable($table) {
-		$table = $this->db->sanitizeString($table);
-		
-		return $this->db->updateData("OPTIMIZE TABLE $table");
+	protected function optimizeTable(string $table): int {
+		$result = $this->db->getConnection('write')->executeQuery("OPTIMIZE TABLE {$table}");
+		return $result->rowCount();
 	}
-
 }

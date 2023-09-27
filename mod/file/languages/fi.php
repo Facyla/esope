@@ -22,14 +22,11 @@ return array(
 	'file:num_files' => "Näytettävien kohteiden määrä",
 	'file:replace' => 'Korvaa tiedoston sisältö (jätä tyhjäksi säilyttääksesi nykyisen tiedoston)',
 	'file:list:title' => "%s's %s %s",
-	'file:title:friends' => "Ystävät",
 
 	'file:file' => "Tiedosto",
 
 	'file:list:list' => 'Vaihta listanäkymään',
 	'file:list:gallery' => 'Vaihda gallerianäkymään',
-
-	'file:types' => "Lisätyt tiedostotyypit",
 
 	'file:type:' => 'Tiedostot',
 	'file:type:all' => "Kaikki tiedostot",
@@ -56,24 +53,12 @@ return array(
 
 	'groups:tool:file' => 'Ota käyttöön ryhmän tiedostot',
 
-	'river:object:file:create' => '%s uploaded the file %s',
-	'river:object:file:comment' => '%s commented on the file %s',
-
 	'file:notify:summary' => 'Uusi tiedosto: %s',
 	'file:notify:subject' => 'Uusi tiedosto %s',
-	'file:notify:body' => '%s uploaded a new file: %s
-
-%s
-
-View and comment on the file:
-%s',
 
 	/**
 	 * Status messages
 	 */
-
-	'file:saved' => "The file was successfully saved.",
-	'entity:delete:object:file:success' => "The file was successfully deleted.",
 
 	/**
 	 * Error messages

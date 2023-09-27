@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,9 +26,9 @@ class SqliteStatement extends StatementDecorator
     use BufferResultsTrait;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function execute($params = null)
+    public function execute(?array $params = null): bool
     {
         if ($this->_statement instanceof BufferedStatement) {
             $this->_statement = $this->_statement->getInnerStatement();
@@ -44,15 +46,23 @@ class SqliteStatement extends StatementDecorator
      *
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
-        if (preg_match('/^(?:DELETE|UPDATE|INSERT)/i', $this->_statement->queryString)) {
+        /** @psalm-suppress NoInterfaceProperties */
+        if (
+            $this->_statement->queryString &&
+            preg_match('/^(?:DELETE|UPDATE|INSERT)/i', $this->_statement->queryString)
+        ) {
             $changes = $this->_driver->prepare('SELECT CHANGES()');
             $changes->execute();
-            $count = $changes->fetch()[0];
+            $row = $changes->fetch();
             $changes->closeCursor();
 
-            return (int)$count;
+            if (!$row) {
+                return 0;
+            }
+
+            return (int)$row[0];
         }
 
         return parent::rowCount();

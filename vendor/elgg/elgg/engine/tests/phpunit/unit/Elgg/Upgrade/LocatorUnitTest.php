@@ -3,6 +3,8 @@
 namespace Elgg\Upgrade;
 
 use ElggUpgrade;
+use Elgg\Helpers\Upgrade\TestBatch;
+use Elgg\Helpers\Upgrade\NonRequiredTestBatch;
 
 /**
  * @group UpgradeService
@@ -25,10 +27,6 @@ class LocatorUnitTest extends \Elgg\UnitTestCase {
 			->expects($this->any())
 			->method('getID')
 			->will($this->returnValue('test_plugin'));
-	}
-
-	public function down() {
-
 	}
 
 	public function testRunner() {

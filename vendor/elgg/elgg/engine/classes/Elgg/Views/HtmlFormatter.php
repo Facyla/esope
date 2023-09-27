@@ -2,10 +2,11 @@
 
 namespace Elgg\Views;
 
-use Elgg\Loggable;
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\PluginHooksService;
+use Elgg\Traits\Loggable;
 use Elgg\ViewsService;
-use Psr\Log\LoggerInterface;
+use Pelago\Emogrifier\CssInliner;
 
 /**
  * Various helper method for formatting and sanitizing output
@@ -32,22 +33,18 @@ class HtmlFormatter {
 	/**
 	 * Output constructor.
 	 *
-	 * @param LoggerInterface    $logger Logger
-	 * @param ViewsService       $views  Views service
-	 * @param PluginHooksService $hooks  Hooks
-	 * @param \ElggAutoP         $autop  Paragraph wrapper
+	 * @param ViewsService       $views Views service
+	 * @param PluginHooksService $hooks Hooks
+	 * @param \ElggAutoP         $autop Paragraph wrapper
 	 */
 	public function __construct(
-		LoggerInterface $logger,
 		ViewsService $views,
 		PluginHooksService $hooks,
 		\ElggAutoP $autop
 	) {
-		$this->logger = $logger;
 		$this->views = $views;
 		$this->hooks = $hooks;
 		$this->autop = $autop;
-
 	}
 
 	/**
@@ -94,7 +91,7 @@ class HtmlFormatter {
 		}
 
 		if (elgg_extract('sanitize', $options)) {
-			$html = filter_tags($html);
+			$html = elgg_sanitize_input($html);
 		}
 
 		if (elgg_extract('autop', $options)) {
@@ -147,7 +144,7 @@ class HtmlFormatter {
 				return $result;
 			}
 		} catch (\RuntimeException $e) {
-			$this->logger->warning('ElggAutoP failed to process the string: ' . $e->getMessage());
+			$this->getLogger()->warning('ElggAutoP failed to process the string: ' . $e->getMessage());
 		}
 		
 		return $string;
@@ -157,20 +154,21 @@ class HtmlFormatter {
 	 * Converts an associative array into a string of well-formed HTML/XML attributes
 	 * Returns a concatenated string of HTML attributes to be inserted into a tag (e.g., <tag $attrs>)
 	 *
-	 * @param array $attrs Attributes
-	 *                     An array of attribute => value pairs
-	 *                     Attribute value can be a scalar value, an array of scalar values, or true
-	 *                     <code>
-	 *                     $attrs = array(
-	 *                         'class' => ['elgg-input', 'elgg-input-text'], // will be imploded with spaces
-	 *                         'style' => ['margin-left:10px;', 'color: #666;'], // will be imploded with spaces
-	 *                         'alt' => 'Alt text', // will be left as is
-	 *                         'disabled' => true, // will be converted to disabled="disabled"
-	 *                         'data-options' => json_encode(['foo' => 'bar']), // will be output as an escaped JSON string
-	 *                         'batch' => <\ElggBatch>, // will be ignored
-	 *                         'items' => [<\ElggObject>], // will be ignored
-	 *                     );
-	 *                     </code>
+	 * An example of the attributes:
+	 * Attribute value can be a scalar value, an array of scalar values, or true
+	 * <code>
+	 *     $attrs = [
+	 *         'class' => ['elgg-input', 'elgg-input-text'], // will be imploded with spaces
+	 *         'style' => ['margin-left:10px;', 'color: #666;'], // will be imploded with spaces
+	 *         'alt' => 'Alt text', // will be left as is
+	 *         'disabled' => true, // will be converted to disabled="disabled"
+	 *         'data-options' => json_encode(['foo' => 'bar']), // will be output as an escaped JSON string
+	 *         'batch' => <\ElggBatch>, // will be ignored
+	 *         'items' => [<\ElggObject>], // will be ignored
+	 *     ];
+	 * </code>
+	 *
+	 * @param array $attrs An array of attribute => value pairs
 	 *
 	 * @return string
 	 *
@@ -244,27 +242,28 @@ class HtmlFormatter {
 	 *
 	 * @param array        $options    Options array with keys:
 	 *
-	 *   encode_text   => (bool, default false) If true, $text will be HTML-escaped. Already-escaped entities
-	 *                    will not be double-escaped.
+	 *                                 - encode_text   => (bool, default false) If true, $text will be HTML-escaped. Already-escaped entities
+	 *                                 will not be double-escaped.
 	 *
-	 *   double_encode => (bool, default false) If true, the $text HTML escaping will be allowed to double
-	 *                    encode HTML entities: '&times;' will become '&amp;times;'
+	 *                                 - double_encode => (bool, default false) If true, the $text HTML escaping will be allowed to double
+	 *                                 encode HTML entities: '&times;' will become '&amp;times;'
 	 *
-	 *   is_void       => (bool) If given, this determines whether the function will return just the open tag.
-	 *                    Otherwise this will be determined by the tag name according to this list:
-	 *                    http://www.w3.org/html/wg/drafts/html/master/single-page.html#void-elements
+	 *                                 - is_void       => (bool) If given, this determines whether the function will return just the open tag.
+	 *                                 Otherwise this will be determined by the tag name according to this list:
+	 *                                 http://www.w3.org/html/wg/drafts/html/master/single-page.html#void-elements
 	 *
-	 *   is_xml        => (bool, default false) If true, void elements will be formatted like "<tag />"
+	 *                                 - is_xml        => (bool, default false) If true, void elements will be formatted like "<tag />"
 	 *
 	 * @return string
 	 * @since 1.9.0
+	 * @throws InvalidArgumentException
 	 */
 	public function formatElement($tag_name, array $attributes = [], $text = '', array $options = []) {
 		if (is_array($tag_name)) {
 			$args = $tag_name;
 
 			if ($attributes !== [] || $text !== '' || $options !== []) {
-				throw new \InvalidArgumentException('If $tag_name is an array, the other arguments must not be set');
+				throw new InvalidArgumentException('If $tag_name is an array, the other arguments must not be set');
 			}
 
 			if (isset($args['#tag_name'])) {
@@ -282,7 +281,7 @@ class HtmlFormatter {
 		}
 
 		if (!is_string($tag_name) || $tag_name === '') {
-			throw new \InvalidArgumentException('$tag_name is required');
+			throw new InvalidArgumentException('$tag_name is required');
 		}
 
 		if (isset($options['is_void'])) {
@@ -295,7 +294,7 @@ class HtmlFormatter {
 			]);
 		}
 
-		if (!empty($options['encode_text'])) {
+		if (!empty($options['encode_text']) && is_string($text)) {
 			$double_encode = empty($options['double_encode']) ? false : true;
 			$text = htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', $double_encode);
 		}
@@ -326,6 +325,10 @@ class HtmlFormatter {
 	 * @return string String run through strip_tags() and any plugin hooks.
 	 */
 	public function stripTags($string, $allowable_tags = null) {
+		if (!isset($string)) {
+			return '';
+		}
+
 		$params = [
 			'original_string' => $string,
 			'allowable_tags' => $allowable_tags,
@@ -365,6 +368,10 @@ class HtmlFormatter {
 	 * @license Released under dual-license GPL2/MIT by explicit permission of Pádraic Brady
 	 */
 	public function decode($string) {
+		if (!isset($string)) {
+			return '';
+		}
+		
 		$string = str_replace(
 			['&gt;', '&lt;', '&amp;', '&quot;', '&#039;'],
 			['&amp;gt;', '&amp;lt;', '&amp;amp;', '&amp;quot;', '&amp;#039;'],
@@ -377,5 +384,65 @@ class HtmlFormatter {
 			$string
 		);
 		return $string;
+	}
+	
+	/**
+	 * Adds inline style to html content
+	 *
+	 * @param string $html      html content
+	 * @param string $css       style text
+	 * @param bool   $body_only toggle to return the body contents instead of a full html
+	 *
+	 * @return string
+	 *
+	 * @since 4.0
+	 */
+	public function inlineCss(string $html, string $css, bool $body_only = false): string {
+		if (empty($html) || empty($css)) {
+			return $html;
+		}
+		
+		$inliner = CssInliner::fromHtml($html)->disableStyleBlocksParsing()->inlineCss($css);
+		
+		return $body_only ? $inliner->renderBodyContent() : $inliner->render();
+	}
+	
+	/**
+	 * Replaces relative urls in href or src attributes in text
+	 *
+	 * @param string $text source content
+	 *
+	 * @return string
+	 *
+	 * @since 4.0
+	 */
+	public function normalizeUrls(string $text): string {
+		$pattern = '/\s(?:href|src)=([\'"]\S+[\'"])/i';
+		
+		// find all matches
+		$matches = [];
+		preg_match_all($pattern, $text, $matches);
+		
+		if (empty($matches) || !isset($matches[1])) {
+			return $text;
+		}
+		
+		// go through all the matches
+		$urls = $matches[1];
+		$urls = array_unique($urls);
+		
+		foreach ($urls as $url) {
+			// remove wrapping quotes from the url
+			$real_url = substr($url, 1, -1);
+			// normalize url
+			$new_url = elgg_normalize_url($real_url);
+			// make the correct replacement string
+			$replacement = str_replace($real_url, $new_url, $url);
+			
+			// replace the url in the content
+			$text = str_replace($url, $replacement, $text);
+		}
+		
+		return $text;
 	}
 }

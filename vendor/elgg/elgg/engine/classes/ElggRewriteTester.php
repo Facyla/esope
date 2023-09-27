@@ -106,8 +106,7 @@ class ElggRewriteTester {
 	 * @return boolean
 	 */
 	public function runLocalhostAccessTest() {
-		$url = _elgg_config()->wwwroot;
-		return (bool) $this->fetchUrl($url);
+		return (bool) $this->fetchUrl(_elgg_services()->config->wwwroot);
 	}
 
 	/**
@@ -127,7 +126,7 @@ class ElggRewriteTester {
 					'timeout' => 5,
 				],
 			]);
-			$response = @file_get_contents($url, null, $ctx);
+			$response = @file_get_contents($url, false, $ctx);
 		}
 
 		if (!$response && function_exists('curl_init')) {

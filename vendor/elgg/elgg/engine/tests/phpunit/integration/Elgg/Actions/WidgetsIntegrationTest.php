@@ -22,6 +22,8 @@ class WidgetsIntegrationTest extends ActionResponseTestCase {
 	protected $user;
 	
 	public function up() {
+		parent::up();
+		
 		$this->user = $this->createUser();
 		
 		_elgg_services()->session->setLoggedInUser($this->user);
@@ -35,15 +37,9 @@ class WidgetsIntegrationTest extends ActionResponseTestCase {
 	}
 
 	public function down() {
-		if (isset($this->widget)) {
-			$this->widget->delete();
-		}
-		if (isset($this->user)) {
-			$this->user->delete();
-		}
-		
-		_elgg_services()->session->removeLoggedInUser();
 		_elgg_services()->hooks->restore();
+		
+		parent::down();
 	}
 	
 	public function testWidgetAddFailsWithMissingPageOwner() {
@@ -139,11 +135,6 @@ class WidgetsIntegrationTest extends ActionResponseTestCase {
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
 		$this->assertEquals(elgg_echo('widgets:remove:failure'), $response->getContent());
-		
-		elgg_call(ELGG_IGNORE_ACCESS, function() use ($widget, $other_user) {
-			$widget->delete();
-			$other_user->delete();
-		});
 	}
 
 	public function testWidgetDeleteSuccess() {
@@ -206,7 +197,7 @@ class WidgetsIntegrationTest extends ActionResponseTestCase {
 		$this->assertEquals(elgg_echo('widgets:save:failure'), $response->getContent());
 
 		$response = $this->executeAction('widgets/save', [
-			'widget_guid' => $this->user->guid,
+			'guid' => $this->user->guid,
 		]);
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
@@ -224,7 +215,7 @@ class WidgetsIntegrationTest extends ActionResponseTestCase {
 		_elgg_services()->session->setLoggedInUser($this->user);
 		
 		$response = $this->executeAction('widgets/save', [
-			'widget_guid' => $widget->guid,
+			'guid' => $widget->guid,
 		]);
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
@@ -233,7 +224,7 @@ class WidgetsIntegrationTest extends ActionResponseTestCase {
 	
 	public function testWidgetSaveSuccess() {
 		$response = $this->executeAction('widgets/save', [
-			'widget_guid' => $this->widget->guid,
+			'guid' => $this->widget->guid,
 		]);
 
 		$this->assertInstanceOf(OkResponse::class, $response);

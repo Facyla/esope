@@ -2,12 +2,14 @@
 
 namespace Elgg\Filesystem\Directory;
 
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Exceptions\RuntimeException;
 use Elgg\Filesystem\Directory;
 use Elgg\Filesystem\File;
 use Elgg\Structs\Collection;
-use League\Flysystem\Adapter\Local as LocalAdapter;
+use League\Flysystem\Local\LocalFilesystemAdapter as LocalAdapter;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Memory\MemoryAdapter;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 
 /**
  * A wrapper around Flysystem that implements Elgg's filesystem API.
@@ -17,13 +19,19 @@ use League\Flysystem\Memory\MemoryAdapter;
  */
 final class Fly implements Directory {
 
-	/** @var Filesystem */
+	/**
+	 * @var Filesystem
+	 */
 	private $fs;
 
-	/** @var string */
+	/**
+	 * @var string
+	 */
 	private $local_path;
 
-	/** @var string Path relative to the filesystem's root */
+	/**
+	 * @var string Path relative to the filesystem's root
+	 */
 	private $chroot;
 
 	/**
@@ -55,15 +63,14 @@ final class Fly implements Directory {
 	 */
 	private function isDirectory($path) {
 		$path = $this->getInternalPath($path);
-		return $this->fs->has($path) && $this->fs->get($path)->isDir();
+		return !empty($this->fs->listContents($path)->toArray());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function isFile($path) {
-		$path = $this->getInternalPath($path);
-		return $this->fs->has($path) && $this->fs->get($path)->isFile();
+		return $this->fs->fileExists($this->getInternalPath($path));
 	}
 
 	/**
@@ -75,10 +82,12 @@ final class Fly implements Directory {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws RuntimeException
 	 */
 	public function getFile($path) {
 		if ($this->isDirectory($path)) {
-			throw new \RuntimeException("There is already a directory at that location: $path");
+			throw new RuntimeException("There is already a directory at that location: {$path}");
 		}
 
 		return new File($this, $path);
@@ -106,11 +115,9 @@ final class Fly implements Directory {
 	 * @param string[] $types     Entry types to return ('file' and/or 'dir')
 	 *
 	 * @return Collection<File|Directory>
-	 *
-	 * @throws \InvalidArgumentException
 	 */
 	protected function getEntries($path = '', $recursive = true, $types = ['file', 'dir']) {
-		$contents = $this->fs->listContents($this->getInternalPath($path), $recursive);
+		$contents = $this->fs->listContents($this->getInternalPath($path), $recursive)->toArray();
 		if (empty($contents)) {
 			$contents = [];
 		}
@@ -142,8 +149,6 @@ final class Fly implements Directory {
 	 * @param string $path The path relative to this directory.
 	 *
 	 * @return string
-	 *
-	 * @throws \InvalidArgumentException
 	 */
 	private function getInternalPath($path) {
 		$path = strtr($path, '\\', '//');
@@ -161,7 +166,7 @@ final class Fly implements Directory {
 	 * {@inheritDoc}
 	 */
 	public function putContents($path, $content) {
-		$this->fs->put($this->getInternalPath($path), $content);
+		$this->fs->write($this->getInternalPath($path), $content);
 	}
 
 	/**
@@ -182,7 +187,7 @@ final class Fly implements Directory {
 	 * @return Directory
 	 */
 	public static function createInMemory() {
-		$fs = new Filesystem(new MemoryAdapter());
+		$fs = new Filesystem(new InMemoryFilesystemAdapter());
 		return new self($fs);
 	}
 
@@ -192,14 +197,13 @@ final class Fly implements Directory {
 	 * @param string $path A relative path within this filesystem
 	 *
 	 * @return string
-	 *
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	private function normalize($path) {
 
 		$test_path = "/$path/";
 		if (strpos($test_path, '/./') !== false || strpos($test_path, '/../') !== false) {
-			throw new \InvalidArgumentException('Paths cannot contain "." or ".."');
+			throw new InvalidArgumentException('Paths cannot contain "." or ".."');
 		}
 
 		return trim(strtr($path, '\\', '/'), "/");

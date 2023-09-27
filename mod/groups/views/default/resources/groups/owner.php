@@ -17,8 +17,8 @@ if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admi
 $content = elgg_list_entities([
 	'type' => 'group',
 	'owner_guid' => elgg_get_page_owner_guid(),
-	'order_by_metadata' => [
-		'name' => 'name',
+	'sort_by' => [
+		'property' => 'name',
 		'direction' => 'ASC',
 	],
 	'full_view' => false,
@@ -27,4 +27,6 @@ $content = elgg_list_entities([
 
 echo elgg_view_page($title, [
 	'content' => $content,
+	'filter_id' => 'groups/owner',
+	'filter_value' => 'owner',
 ]);

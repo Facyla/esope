@@ -10,22 +10,15 @@ use Elgg\Database\Clauses\AttributeWhereClause;
 use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\QueryBuilder;
+use Elgg\Exceptions\InvalidParameterException;
 use Elgg\PluginHooksService;
-use ElggBatch;
-use ElggEntity;
-use InvalidParameterException;
-use Elgg\Database\LegacyQueryOptionsAdapter;
+use Elgg\Traits\Database\LegacyQueryOptionsAdapter;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use elgg_search() instead.
- *
- * @todo   Implement type/subtype normalization into types => subtypes pairs and add logic to search for multiple
- *         subtypes
+ * Search service
  *
  * @internal
- * @since  3.0
+ * @since 3.0
  */
 class SearchService {
 
@@ -75,7 +68,7 @@ class SearchService {
 	 * @option bool   $tokenize      Break down search query into tokens,
 	 *                               e.g. find 'elgg has been released' when searching for 'elgg released'
 	 *
-	 * @return ElggBatch|ElggEntity[]|int|false
+	 * @return \ElggBatch|\ElggEntity[]|int|false
 	 * @throws InvalidParameterException
 	 *
 	 * @see    elgg_get_entities()
@@ -94,7 +87,7 @@ class SearchService {
 		$entity_subtype = elgg_extract('subtype', $options);
 		$search_type = elgg_extract('search_type', $options, 'entities');
 
-		if ($entity_type !== 'all' && !in_array($entity_type, Config::getEntityTypes())) {
+		if ($entity_type !== 'all' && !in_array($entity_type, Config::ENTITY_TYPES)) {
 			throw new InvalidParameterException("'$entity_type' is not a valid entity type");
 		}
 
@@ -176,8 +169,9 @@ class SearchService {
 	 */
 	public function normalizeQuery(array $options = []) {
 
-		$query = elgg_extract('query', $options);
-		$query = filter_var($query, FILTER_SANITIZE_STRING);
+		$query = elgg_extract('query', $options, '');
+		$query = strip_tags($query);
+		$query = htmlspecialchars($query, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 		$query = trim($query);
 
 		$words = preg_split('/\s+/', $query);
@@ -297,31 +291,28 @@ class SearchService {
 	 * @return array
 	 */
 	public function prepareSortOptions(array $options = []) {
-
 		$sort = elgg_extract('sort', $options);
+		if (!isset($sort)) {
+			return $options;
+		}
+		
+		elgg_deprecated_notice("Setting the 'sort' option for elgg_search() is deprecated use 'sort_by'", '4.2');
+		
 		if (is_string($sort)) {
 			$sort = [
 				'property' => $sort,
-				'direction' => elgg_extract('order', $options)
 			];
+			
+			$order = elgg_extract('order', $options);
+			if (isset($order)) {
+				elgg_deprecated_notice("Setting the 'order' option for elgg_search() is deprecated use 'sort_by'", '4.2');
+				
+				$sort['direction'] = $order;
+			}
 		}
-
-		if (!isset($sort['property'])) {
-			$sort = [
-				'property' => 'time_created',
-				'property_type' => 'attribute',
-				'direction' => 'desc',
-			];
-		}
-
-		$clause = new Database\Clauses\EntitySortByClause();
-		$clause->property = elgg_extract('property', $sort);
-		$clause->property_type = elgg_extract('property_type', $sort);
-		$clause->direction = elgg_extract('direction', $sort, 'asc');
-		$clause->signed = elgg_extract('signed', $sort, false);
-
-		$options['order_by'] = [$clause];
-
+		
+		$options['sort_by'][] = $sort;
+		
 		return $options;
 	}
 
@@ -335,7 +326,6 @@ class SearchService {
 	 * @param bool         $partial_match Allow partial matches
 	 *
 	 * @return CompositeExpression|string
-	 * @throws InvalidParameterException
 	 */
 	public function buildSearchWhereQuery(QueryBuilder $qb, $alias, $fields, $query_parts, $partial_match = true) {
 

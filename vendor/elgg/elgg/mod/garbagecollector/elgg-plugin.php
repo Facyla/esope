@@ -2,9 +2,11 @@
 
 use Elgg\GarbageCollector\CronRunner;
 
-require_once(__DIR__ . '/lib/deprecated.php');
-
 return [
+	'plugin' => [
+		'name' => 'Garbage Collector',
+		'activate_on_install' => true,
+	],
 	'settings' => [
 		'period' => 'monthly',
 	],

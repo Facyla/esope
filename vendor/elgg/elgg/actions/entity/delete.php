@@ -9,7 +9,7 @@ if (!$entity instanceof ElggEntity) {
 	return elgg_error_response(elgg_echo('entity:delete:item_not_found'));
 }
 
-if (!$entity->canDelete() || $entity instanceof ElggPlugin || $entity instanceof ElggSite) {
+if (!$entity->canDelete() || $entity instanceof \ElggPlugin || $entity instanceof \ElggSite || $entity instanceof \ElggUser) {
 	return elgg_error_response(elgg_echo('entity:delete:permission_denied'));
 }
 
@@ -80,10 +80,12 @@ $success_keys = [
 ];
 
 $message = '';
-foreach ($success_keys as $success_key) {
-	if (elgg_language_key_exists($success_key)) {
-		$message = elgg_echo($success_key, [$display_name]);
-		break;
+if (get_input('show_success', true)) {
+	foreach ($success_keys as $success_key) {
+		if (elgg_language_key_exists($success_key)) {
+			$message = elgg_echo($success_key, [$display_name]);
+			break;
+		}
 	}
 }
 

@@ -2,6 +2,7 @@
 
 namespace Elgg\UserValidationByEmail;
 
+use Elgg\Exceptions\LoginException;
 use Elgg\Http\ResponseBuilder;
 
 /**
@@ -30,7 +31,7 @@ class ConfirmController {
 			}
 			
 			elgg_call(ELGG_IGNORE_ACCESS, function() use ($user) {
-				elgg_set_plugin_user_setting('email_validated', true, $user->guid, 'uservalidationbyemail');
+				$user->setPluginSetting('uservalidationbyemail', 'email_validated', true);
 				
 				if (!(bool) elgg_get_config('require_admin_validation')) {
 					// user doesn't have to be validated by admin after this
@@ -39,8 +40,8 @@ class ConfirmController {
 			});
 			
 			try {
-				login($user);
-			} catch (\LoginException $e) {
+				elgg_login($user);
+			} catch (LoginException $e) {
 				return elgg_error_response($e->getMessage());
 			}
 			

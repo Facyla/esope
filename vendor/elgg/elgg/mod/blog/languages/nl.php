@@ -6,7 +6,7 @@
  */
 
 return array(
-	'item:object:blog' => 'Blogberichten',
+	'item:object:blog' => 'Blog',
 	'collection:object:blog' => 'Blogs',
 	'collection:object:blog:all' => 'Alle blogs van de site',
 	'collection:object:blog:owner' => 'Blogs van %s',
@@ -14,12 +14,14 @@ return array(
 	'collection:object:blog:friends' => 'Blogs van vrienden',
 	'add:object:blog' => 'Blog toevoegen',
 	'edit:object:blog' => 'Bewerk blog',
+	'notification:object:blog:publish' => "Stuur een notificatie wanneer een blog is gepubliceerd",
+	'notifications:mute:object:blog' => "over de blog '%s'",
 
 	'blog:revisions' => 'Revisies',
 	'blog:archives' => 'Archieven',
 
 	'groups:tool:blog' => 'Groepsblog inschakelen',
-	'blog:write' => 'Schrijf een blog',
+	'groups:tool:blog:description' => 'Laat groepsleden een blog schrijven in deze groep.',
 
 	// Editing
 	'blog:excerpt' => 'Uittreksel',
@@ -36,12 +38,9 @@ return array(
 	'blog:error:cannot_write_to_container' => 'Je hebt onvoldoende rechten om de blog in de groep op te slaan.',
 	'blog:messages:warning:draft' => 'Er is een niet-opgeslagen concept voor deze blog!',
 	'blog:edit_revision_notice' => '(Oude versie)',
-	'blog:message:deleted_post' => 'Blog verwijderd.',
-	'blog:error:cannot_delete_post' => 'Kan blog niet verwijderen.',
 	'blog:none' => 'Geen blogs',
 	'blog:error:missing:title' => 'Geef een titel aan de blog!',
 	'blog:error:missing:description' => 'Vertel iets in je blog!',
-	'blog:error:cannot_edit_post' => 'Deze blog bestaat niet, of je hebt onvoldoende rechten om deze te mogen bewerken.',
 	'blog:error:post_not_found' => 'Deze blog is verwijderd, ongeldig, of je hebt onvoldoende rechten om hem te mogen zien.',
 	'blog:error:revision_not_found' => 'Kan deze revisie niet vinden.',
 
@@ -52,19 +51,16 @@ return array(
 	// notifications
 	'blog:notify:summary' => 'Nieuwe blog met de titel \'%s\'',
 	'blog:notify:subject' => 'Nieuwe blog: %s',
-	'blog:notify:body' =>
-'
-%s publiceerde een nieuwe blog: %s
+	'blog:notify:body' => '%s publiceerde een nieuwe blog: %s
 
 %s
 
 Bekijk en reageer hier op de blog:
-%s
-',
+%s',
 
 	// widget
 	'widgets:blog:name' => 'Blogs',
 	'widgets:blog:description' => 'Toon je laatste blogs',
-	'blog:moreblogs' => 'Meer blogberichten',
-	'blog:numbertodisplay' => 'Aantal blogberichten om te tonen:',
+	'blog:moreblogs' => 'Meer blogs',
+	'blog:numbertodisplay' => 'Aantal blogs om te tonen',
 );

@@ -2,6 +2,10 @@
 
 namespace Elgg;
 
+use Elgg\HooksRegistrationService\MethodMatcher;
+use Elgg\Traits\Loggable;
+use Psr\Log\LogLevel;
+
 /**
  * Base class for events and hooks
  *
@@ -9,6 +13,8 @@ namespace Elgg;
  */
 abstract class HooksRegistrationService {
 
+	use Loggable;
+	
 	const REG_KEY_PRIORITY = 0;
 	const REG_KEY_INDEX = 1;
 	const REG_KEY_HANDLER = 2;
@@ -50,6 +56,13 @@ abstract class HooksRegistrationService {
 			return false;
 		}
 		
+		$services = _elgg_services();
+		if (in_array($this->getLogger()->getLevel(false), [LogLevel::WARNING, LogLevel::NOTICE, LogLevel::INFO, LogLevel::DEBUG])) {
+			if (!$services->handlers->isCallable($callback)) {
+				$this->getLogger()->warning('Handler: ' . $services->handlers->describeCallable($callback) . ' is not callable');
+			}
+		}
+				
 		$this->registrations[$name][$type][] = [
 			self::REG_KEY_PRIORITY => $priority,
 			self::REG_KEY_INDEX => $this->next_index,
@@ -280,7 +293,7 @@ abstract class HooksRegistrationService {
 			return;
 		}
 		
-		_elgg_services()->deprecation->sendNotice(
+		$this->logDeprecatedMessage(
 			$options[self::OPTION_DEPRECATION_MESSAGE],
 			$options[self::OPTION_DEPRECATION_VERSION]
 		);

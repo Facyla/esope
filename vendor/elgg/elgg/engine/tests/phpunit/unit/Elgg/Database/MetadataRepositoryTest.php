@@ -9,6 +9,8 @@ use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\Clauses\PrivateSettingWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
+use Elgg\Exceptions\InvalidParameterException;
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\UnitTestCase;
 
 /**
@@ -17,14 +19,6 @@ use Elgg\UnitTestCase;
  * @group Repository
  */
 class MetadataRepositoryTest extends UnitTestCase {
-
-	public function up() {
-
-	}
-
-	public function down() {
-
-	}
 
 	public function testCanExecuteCount() {
 		$select = Select::fromTable('metadata', 'n_table');
@@ -371,7 +365,7 @@ class MetadataRepositoryTest extends UnitTestCase {
 	}
 
 	public function testThrowsOnInvalidCalculation() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		Metadata::with([])->calculate('invalid', 'status', 'metadata');
 	}
 
@@ -402,7 +396,7 @@ class MetadataRepositoryTest extends UnitTestCase {
 	}
 
 	public function testThrowsOnInvalidAttributeCalculation() {
-		$this->expectException(\InvalidParameterException::class);
+		$this->expectException(InvalidParameterException::class);
 		Metadata::with([])->calculate('max', 'invalid', 'attribute');
 	}
 
@@ -945,5 +939,4 @@ class MetadataRepositoryTest extends UnitTestCase {
 
 		return $rows;
 	}
-
 }

@@ -23,10 +23,6 @@ class EventsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->events = new EventsService(new HandlersService());
 	}
 
-	public function down() {
-
-	}
-
 	public function testTriggerCallsRegisteredHandlersAndReturnsTrue() {
 		$this->events->registerHandler('foo', 'bar', array($this, 'incrementCounter'));
 		$this->events->registerHandler('foo', 'bar', array($this, 'incrementCounter'));
@@ -62,8 +58,9 @@ class EventsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testUncallableHandlersAreLogged() {
-		_elgg_services()->logger->disable();
 		$this->events->registerHandler('foo', 'bar', array(new \stdClass(), 'uncallableMethod'));
+		
+		_elgg_services()->logger->disable();
 		$this->events->trigger('foo', 'bar');
 
 		$logged = _elgg_services()->logger->enable();

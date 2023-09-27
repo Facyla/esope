@@ -19,14 +19,17 @@ foreach ($plugin_guids as $guid) {
 	$plugin = get_entity($guid);
 
 	if (!($plugin instanceof ElggPlugin)) {
-		register_error(elgg_echo('admin:plugins:activate:no', [$guid]));
+		elgg_register_error_message(elgg_echo('admin:plugins:activate:no', [$guid]));
 		continue;
 	}
 
-	if (!$plugin->activate()) {
-		$msg = $plugin->getError();
-		$string = ($msg) ? 'admin:plugins:activate:no_with_msg' : 'admin:plugins:activate:no';
-		register_error(elgg_echo($string, [$plugin->getDisplayName(), $plugin->getError()]));
+	try {
+		if (!$plugin->activate()) {
+			elgg_register_error_message(elgg_echo('admin:plugins:activate:no', [$plugin->getDisplayName()]));
+			continue;
+		}
+	} catch (\Elgg\Exceptions\PluginException $e) {
+		elgg_register_error_message(elgg_echo('admin:plugins:activate:no_with_msg', [$plugin->getDisplayName(), $e->getMessage()]));
 		continue;
 	}
 	

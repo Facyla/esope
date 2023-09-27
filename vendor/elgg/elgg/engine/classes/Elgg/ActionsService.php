@@ -7,22 +7,24 @@ use Elgg\Router\Middleware\ActionMiddleware;
 use Elgg\Router\Middleware\AdminGatekeeper;
 use Elgg\Router\Middleware\CsrfFirewall;
 use Elgg\Router\Middleware\Gatekeeper as MiddlewareGateKeeper;
+use Elgg\Router\Middleware\LoggedOutGatekeeper;
 use Elgg\Router\RouteRegistrationService;
+use Elgg\Traits\Loggable;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
- * Use the elgg_* versions instead.
+ * Actions service
  *
  * @internal
  * @since 1.9.0
  */
 class ActionsService {
 
+	use Loggable;
+	
 	/**
 	 * @var string[]
 	 */
-	private static $access_levels = ['public', 'logged_in', 'admin'];
+	private static $access_levels = ['public', 'logged_in', 'logged_out', 'admin'];
 
 	/**
 	 * Actions for which CSRF firewall should be bypassed
@@ -59,15 +61,14 @@ class ActionsService {
 	 * @param string          $action  The name of the action (eg "register", "account/settings/save")
 	 * @param string|callable $handler Optionally, the filename where this action is located. If not specified,
 	 *                                 will assume the action is in elgg/actions/<action>.php
-	 * @param string          $access  Who is allowed to execute this action: public, logged_in, admin.
+	 * @param string          $access  Who is allowed to execute this action: public, logged_in, logged_out, admin.
 	 *                                 (default: logged_in)
 	 *
 	 * @return bool
 	 *
 	 * @see    elgg_register_action()
-	 * @throws \InvalidParameterException
 	 */
-	public function register($action, $handler = "", $access = 'logged_in') {
+	public function register(string $action, $handler = '', string $access = 'logged_in') {
 		// plugins are encouraged to call actions with a trailing / to prevent 301
 		// redirects but we store the actions without it
 		$action = trim($action, '/');
@@ -87,7 +88,7 @@ class ActionsService {
 		}
 
 		if (!in_array($access, self::$access_levels)) {
-			_elgg_services()->logger->error("Unrecognized value '$access' for \$access in " . __METHOD__);
+			$this->getLogger()->error("Unrecognized value '{$access}' for \$access in " . __METHOD__);
 			$access = 'admin';
 		}
 
@@ -99,8 +100,10 @@ class ActionsService {
 
 		if ($access == 'admin') {
 			$middleware[] = AdminGatekeeper::class;
-		} else if ($access == 'logged_in') {
+		} elseif ($access == 'logged_in') {
 			$middleware[] = MiddlewareGateKeeper::class;
+		} elseif ($access == 'logged_out') {
+			$middleware[] = LoggedOutGatekeeper::class;
 		}
 
 		$middleware[] = ActionMiddleware::class;
@@ -125,7 +128,7 @@ class ActionsService {
 	 *
 	 * @see elgg_unregister_action()
 	 */
-	public function unregister($action) {
+	public function unregister(string $action) {
 		$action = trim($action, '/');
 
 		$route = $this->routes->get("action:$action");
@@ -146,7 +149,7 @@ class ActionsService {
 	 *
 	 * @see elgg_action_exists()
 	 */
-	public function exists($action) {
+	public function exists(string $action) {
 		$action = trim($action, '/');
 		$route = $this->routes->get("action:$action");
 		if (!$route) {
@@ -187,10 +190,12 @@ class ActionsService {
 			$action = substr($name, 7);
 
 			$access = 'public';
-			$middleware = $route->getDefault('_middleware');
+			$middleware = (array) $route->getDefault('_middleware');
 			if (in_array(MiddlewareGateKeeper::class, $middleware)) {
 				$access = 'logged_in';
-			} else if (in_array(AdminGatekeeper::class, $middleware)) {
+			} elseif (in_array(LoggedOutGatekeeper::class, $middleware)) {
+				$access = 'logged_out';
+			} elseif (in_array(AdminGatekeeper::class, $middleware)) {
 				$access = 'admin';
 			}
 

@@ -4,6 +4,7 @@ namespace Elgg\I18n;
 
 use Elgg\Config;
 use Elgg\Includer;
+use Elgg\Traits\Loggable;
 
 /**
  * Translator
@@ -14,6 +15,8 @@ use Elgg\Includer;
  */
 class Translator {
 
+	use Loggable;
+	
 	/**
 	 * @var Config
 	 */
@@ -22,7 +25,7 @@ class Translator {
 	/**
 	 * @var LocaleService
 	 */
-	private $localeService;
+	private $locale;
 
 	/**
 	 * @var array
@@ -68,12 +71,12 @@ class Translator {
 	/**
 	 * Constructor
 	 *
-	 * @param Config        $config       Elgg config
-	 * @param LocaleService $localService locale service
+	 * @param Config        $config Elgg config
+	 * @param LocaleService $locale locale service
 	 */
-	public function __construct(Config $config, LocaleService $localService) {
+	public function __construct(Config $config, LocaleService $locale) {
 		$this->config = $config;
-		$this->localeService = $localService;
+		$this->locale = $locale;
 		
 		$this->defaultPath = dirname(dirname(dirname(dirname(__DIR__)))) . "/languages/";
 		
@@ -102,9 +105,7 @@ class Translator {
 	 */
 	public function translate($message_key, array $args = [], $language = "") {
 		if (!is_string($message_key) || strlen($message_key) < 1) {
-			_elgg_services()->logger->warning(
-				'$message_key needs to be a string in ' . __METHOD__ . '(), ' . gettype($message_key) . ' provided'
-			);
+			$this->getLogger()->warning('$message_key needs to be a string in ' . __METHOD__ . '(), ' . gettype($message_key) . ' provided');
 			return '';
 		}
 
@@ -132,7 +133,6 @@ class Translator {
 		$langs = array_intersect_key($langs, array_flip($this->getAllowedLanguages()));
 
 		// try to translate
-		$logger = _elgg_services()->logger;
 		$string = $message_key;
 		foreach (array_keys($langs) as $try_lang) {
 			$this->ensureTranslationsLoaded($try_lang);
@@ -143,7 +143,20 @@ class Translator {
 				// only pass through if we have arguments to allow backward compatibility
 				// with manual sprintf() calls.
 				if (!empty($args)) {
-					$string = vsprintf($string, $args);
+					try {
+						$string = vsprintf($string, $args);
+						
+						if ($string === false) {
+							$string = $message_key;
+							
+							$this->getLogger()->warning("Translation error for key '{$message_key}': Too few arguments provided (" . var_export($args, true) . ')');
+						}
+					} catch (\ValueError $e) {
+						// PHP 8 throws errors
+						$string = $message_key;
+						
+						$this->getLogger()->warning("Translation error for key '{$message_key}': " . $e->getMessage());
+					}
 				}
 
 				break;
@@ -155,9 +168,9 @@ class Translator {
 				);
 				
 				if ($try_lang === 'en') {
-					$logger->notice($message);
+					$this->getLogger()->notice($message);
 				} else {
-					$logger->info($message);
+					$this->getLogger()->info($message);
 				}
 			}
 		}
@@ -263,12 +276,14 @@ class Translator {
 			return $user->language;
 		}
 
-		// detect from user agent if not logged in
-		$browserlangs = _elgg_services()->request->getLanguages();
-		if (!empty($browserlangs)) {
-			$browserlang = explode('_', $browserlangs[0]);
-			
-			return $browserlang[0];
+		// detect from browser if not logged in
+		if ($this->config->language_detect_from_browser) {
+			$browserlangs = _elgg_services()->request->getLanguages();
+			if (!empty($browserlangs)) {
+				$browserlang = explode('_', $browserlangs[0]);
+				
+				return $browserlang[0];
+			}
 		}
 		
 		// get site setting
@@ -310,10 +325,7 @@ class Translator {
 	 *
 	 * @internal
 	 */
-	public function loadTranslations($language) {
-		if (!is_string($language)) {
-			return;
-		}
+	public function loadTranslations(string $language) {
 		
 		$data = elgg_load_system_cache("{$language}.lang");
 		if (is_array($data)) {
@@ -341,19 +353,19 @@ class Translator {
 	 *
 	 * @internal
 	 */
-	public function registerTranslations($path, $load_all = false, $language = null) {
+	public function registerTranslations(string $path, bool $load_all = false, string $language = null) {
 		$path = \Elgg\Project\Paths::sanitize($path);
 		
 		// don't need to register translations as the folder is missing
 		if (!is_dir($path)) {
-			_elgg_services()->logger->info("No translations could be loaded from: $path");
+			$this->getLogger()->info("No translations could be loaded from: {$path}");
 			return true;
 		}
 
 		// Make a note of this path just in case we need to register this language later
 		$this->registerLanguagePath($path);
 
-		_elgg_services()->logger->info("Translations loaded from: $path");
+		$this->getLogger()->info("Translations loaded from: {$path}");
 
 		if ($language) {
 			$load_language_files = ["$language.php"];
@@ -384,7 +396,7 @@ class Translator {
 			}
 			closedir($handle);
 		} else {
-			_elgg_services()->logger->error("Could not open language path: $path");
+			$this->getLogger()->error("Could not open language path: {$path}");
 			$return = false;
 		}
 
@@ -399,7 +411,7 @@ class Translator {
 	 *
 	 * @internal
 	 */
-	protected function includeLanguageFile($path) {
+	protected function includeLanguageFile(string $path) {
 		$result = Includer::includeFile($path);
 		
 		if (is_array($result)) {
@@ -407,7 +419,7 @@ class Translator {
 			return true;
 		}
 		
-		_elgg_services()->logger->warning("Language file did not return an array: $path");
+		$this->getLogger()->warning("Language file did not return an array: {$path}");
 		
 		return false;
 	}
@@ -416,8 +428,6 @@ class Translator {
 	 * Reload all translations from all registered paths.
 	 *
 	 * This is only called by functions which need to know all possible translations.
-	 *
-	 * @todo Better on demand loading based on language_paths array
 	 *
 	 * @return void
 	 *
@@ -447,7 +457,7 @@ class Translator {
 	 *
 	 * @return array
 	 */
-	public function getInstalledTranslations($calculate_completeness = false) {
+	public function getInstalledTranslations(bool $calculate_completeness = false) {
 		if ($calculate_completeness) {
 			// Ensure that all possible translations are loaded
 			$this->reloadAllTranslations();
@@ -516,7 +526,7 @@ class Translator {
 	 *
 	 * @internal
 	 */
-	public function getMissingLanguageKeys($language) {
+	public function getMissingLanguageKeys(string $language) {
 
 		// Ensure that all possible translations are loaded
 		$this->reloadAllTranslations();
@@ -569,7 +579,7 @@ class Translator {
 	public function getAvailableLanguages() {
 		$languages = [];
 		
-		$allowed_languages = $this->localeService->getLanguageCodes();
+		$allowed_languages = $this->locale->getLanguageCodes();
 		
 		foreach ($this->getLanguagePaths() as $path) {
 			try {
@@ -614,7 +624,8 @@ class Translator {
 		
 		$allowed_languages = $this->config->allowed_languages;
 		if (!empty($allowed_languages)) {
-			$allowed_languages = explode(',', $this->config->allowed_languages);
+			$allowed_languages = explode(',', $allowed_languages);
+			$allowed_languages = array_filter(array_unique($allowed_languages));
 		} else {
 			$allowed_languages = $this->getAvailableLanguages();
 		}
@@ -642,7 +653,15 @@ class Translator {
 	 *
 	 * @internal
 	 */
-	public function registerLanguagePath($path) {
+	public function registerLanguagePath(string $path) {
+		if (isset($this->language_paths[$path])) {
+			return;
+		}
+		
+		if (!is_dir($path)) {
+			return;
+		}
+		
 		$this->language_paths[$path] = true;
 	}
 	
@@ -650,8 +669,10 @@ class Translator {
 	 * Returns a unique array with locations of translation files
 	 *
 	 * @return array
+	 *
+	 * @internal
 	 */
-	protected function getLanguagePaths() {
+	public function getLanguagePaths() {
 		return array_keys($this->language_paths);
 	}
 
@@ -659,9 +680,10 @@ class Translator {
 	 * Make sure translations are loaded
 	 *
 	 * @param string $language Language
+	 *
 	 * @return void
 	 */
-	private function ensureTranslationsLoaded($language) {
+	protected function ensureTranslationsLoaded(string $language) {
 		if (isset($this->translations[$language])) {
 			return;
 		}
@@ -671,31 +693,5 @@ class Translator {
 		// we're sending a notification and the recipient is using a different
 		// language than the logged in user.)
 		$this->loadTranslations($language);
-	}
-
-	/**
-	 * Returns an array of language codes.
-	 *
-	 * @return array
-	 * @deprecated 3.0 please use elgg()->locale->getLanguageCodes()
-	 */
-	public static function getAllLanguageCodes() {
-		elgg_deprecated_notice(__METHOD__ . ' has been deprecated use elgg()->locale->getLanguageCodes()', '3.0');
-		return elgg()->locale->getLanguageCodes();
-	}
-
-	/**
-	 * Normalize a language code (e.g. from Transifex)
-	 *
-	 * @param string $code Language code
-	 *
-	 * @return string
-	 *
-	 * @internal
-	 */
-	public static function normalizeLanguageCode($code) {
-		$code = strtolower($code);
-		$code = preg_replace('~[^a-z0-9]~', '_', $code);
-		return $code;
 	}
 }

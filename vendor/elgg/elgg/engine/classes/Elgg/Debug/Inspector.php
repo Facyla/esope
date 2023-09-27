@@ -7,10 +7,9 @@ use Elgg\Project\Paths;
 use Elgg\Menu\MenuItems;
 
 /**
- * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
+ * Debug inspector
  *
  * @internal
- *
  * @since 1.11
  */
 class Inspector {
@@ -153,6 +152,7 @@ class Inspector {
 		$access = [
 			'public' => 'public',
 			'logged_in' => 'logged in only',
+			'logged_out' => 'logged out only',
 			'admin' => 'admin only',
 		];
 		$start = strlen(elgg_get_root_path());
@@ -250,41 +250,13 @@ class Inspector {
 	}
 
 	/**
-	 * Get Elgg web services API methods
-	 *
-	 * @return array [method] => array(function, parameters, call_method, api auth, user auth)
-	 */
-	public function getWebServices() {
-		global $API_METHODS;
-
-		$tree = [];
-		foreach ($API_METHODS as $method => $info) {
-			$params = implode(', ', array_keys(elgg_extract('parameters', $info, [])));
-			if (!$params) {
-				$params = 'none';
-			}
-			$tree[$method] = [
-				$info['function'],
-				"params: $params",
-				$info['call_method'],
-				($info['require_api_auth']) ? 'API authentication required' : 'No API authentication required',
-				($info['require_user_auth']) ? 'User authentication required' : 'No user authentication required',
-			];
-		}
-
-		ksort($tree);
-
-		return $tree;
-	}
-
-	/**
 	 * Get information about registered menus
 	 *
 	 * @return array [menu name] => array(item name => array(text, href, section, parent))
 	 */
 	public function getMenus() {
 
-		$menus = _elgg_config()->menus;
+		$menus = _elgg_services()->config->menus;
 
 		// get JIT menu items
 		// note that 'river' is absent from this list - hooks attempt to get object/subject entities cause problems
@@ -299,7 +271,7 @@ class Inspector {
 
 		$entity = new \ElggObject();
 		$entity->guid = 999;
-		$entity->subtype = 'blog';
+		$entity->setSubtype('blog');
 		$entity->title = 'test entity';
 		$entity->access_id = ACCESS_PUBLIC;
 
@@ -343,7 +315,7 @@ class Inspector {
 			foreach ($attributes as $item) {
 				/* @var \ElggMenuItem $item */
 				$name = $item->getName();
-				$text = htmlspecialchars($item->getText(), ENT_QUOTES, 'UTF-8', false);
+				$text = htmlspecialchars($item->getText() ?? '', ENT_QUOTES, 'UTF-8', false);
 				$href = $item->getHref();
 				if ($href === false) {
 					$href = 'not a link';
@@ -435,13 +407,26 @@ class Inspector {
 	 * @return array
 	 */
 	public function getServices() {
-		$tree = [];
+		$sources = [
+			\Elgg\Project\Paths::elgg() . 'engine/public_services.php',
+		];
 
-		foreach (_elgg_services()->dic_loader->getDefinitions() as $definition) {
-			$services = Includer::includeFile($definition);
+		$plugins = _elgg_services()->plugins->find('active');
+		foreach ($plugins as $plugin) {
+			$plugin->autoload(); // make sure all classes are loaded
+			$sources[] = $plugin->getPath() . \ElggPlugin::PUBLIC_SERVICES_FILENAME;
+		}
+
+		$tree = [];
+		foreach ($sources as $source) {
+			if (!is_file($source)) {
+				continue;
+			}
+			
+			$services = Includer::includeFile($source);
 
 			foreach ($services as $name => $service) {
-				$tree[$name] = [get_class(elgg()->$name), Paths::sanitize($definition, false)];
+				$tree[$name] = [get_class(elgg()->$name), Paths::sanitize($source, false)];
 			}
 		}
 

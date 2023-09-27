@@ -14,12 +14,14 @@ return array(
 	'collection:object:blog:friends' => 'Friends\' blogs',
 	'add:object:blog' => 'Add blog post',
 	'edit:object:blog' => 'Edit blog post',
+	'notification:object:blog:publish' => "Send a notification when a blog is published",
+	'notifications:mute:object:blog' => "about the blog '%s'",
 
 	'blog:revisions' => 'Revisions',
 	'blog:archives' => 'Archives',
 
 	'groups:tool:blog' => 'Enable group blog',
-	'blog:write' => 'Write a blog post',
+	'groups:tool:blog:description' => 'Allow group members to write blogs in this group.',
 
 	// Editing
 	'blog:excerpt' => 'Excerpt',
@@ -36,12 +38,9 @@ return array(
 	'blog:error:cannot_write_to_container' => 'Insufficient access to save blog to group.',
 	'blog:messages:warning:draft' => 'There is an unsaved draft of this post!',
 	'blog:edit_revision_notice' => '(Old version)',
-	'blog:message:deleted_post' => 'Blog post deleted.',
-	'blog:error:cannot_delete_post' => 'Cannot delete blog post.',
 	'blog:none' => 'No blog posts',
 	'blog:error:missing:title' => 'Please enter a blog title!',
 	'blog:error:missing:description' => 'Please enter the body of your blog!',
-	'blog:error:cannot_edit_post' => 'This post may not exist or you may not have permissions to edit it.',
 	'blog:error:post_not_found' => 'Cannot find specified blog post.',
 	'blog:error:revision_not_found' => 'Cannot find this revision.',
 
@@ -52,15 +51,12 @@ return array(
 	// notifications
 	'blog:notify:summary' => 'New blog post called %s',
 	'blog:notify:subject' => 'New blog post: %s',
-	'blog:notify:body' =>
-'
-%s published a new blog post: %s
+	'blog:notify:body' => '%s published a new blog post: %s
 
 %s
 
 View and comment on the blog post:
-%s
-',
+%s',
 
 	// widget
 	'widgets:blog:name' => 'Blog posts',

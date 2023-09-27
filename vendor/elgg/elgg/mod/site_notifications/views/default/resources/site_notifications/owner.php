@@ -1,17 +1,11 @@
 <?php
 /**
- * View a user's site notifications
+ * View a user's (unread) site notifications
  */
 
 $page_owner = elgg_get_page_owner_entity();
-if (!$page_owner instanceof ElggUser || !$page_owner->canEdit()) {
-	// must have access to view
-	throw new \Elgg\EntityPermissionsException(elgg_echo('site_notifications:no_access'));
-}
 
-elgg_load_external_file('js', 'elgg.site_notifications');
-
-$list = elgg_list_entities([
+$options = [
 	'type' => 'object',
 	'subtype' => 'site_notification',
 	'owner_guid' => $page_owner->guid,
@@ -19,21 +13,26 @@ $list = elgg_list_entities([
 	'metadata_name_value_pairs' => [
 		'read' => false,
 	],
-]);
+	'pagination' => true,
+	'pagination_behaviour' => 'ajax-replace',
+];
 
+$list = elgg_list_entities($options);
 if (empty($list)) {
-	$content = elgg_view('page/components/no_results', [
-		'no_results' => elgg_echo('site_notifications:empty'),
-	]);
-} else {
-	$body_vars = [
-		'list' => $list
-	];
+	$options['no_results'] = elgg_echo('site_notifications:empty');
+	$options['count'] = elgg_count_entities($options);
 	
-	$content = elgg_view_form('site_notifications/process', ['prevent_double_submit' => true], $body_vars);
+	$content = elgg_view('page/components/no_results', $options);
+	$content .= elgg_view('page/components/list/out_of_bounds', $options);
+} else {
+	$content = elgg_view_form('site_notifications/process', [], [
+		'list' => $list
+	]);
 }
 
 echo elgg_view_page(elgg_echo('site_notifications'), [
 	'content' => $content,
-	'show_owner_block_menu' => false,
+	'sidebar' => false,
+	'filter_id' => 'site_notifications',
+	'filter_value' => 'owner',
 ]);

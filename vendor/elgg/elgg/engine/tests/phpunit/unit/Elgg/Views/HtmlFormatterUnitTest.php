@@ -1,6 +1,8 @@
 <?php
 
 namespace Elgg\Views;
+
+use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\Hook;
 use Elgg\UnitTestCase;
 
@@ -12,11 +14,7 @@ use Elgg\UnitTestCase;
 class HtmlFormatterUnitTest extends UnitTestCase {
 
 	public function up() {
-		_elgg_input_init();
-	}
-
-	public function down() {
-
+		elgg_register_plugin_hook_handler('sanitize', 'input', \Elgg\Input\ValidateInputHandler::class);
 	}
 
 	/**
@@ -36,7 +34,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 
 	public function htmlBlockProvider() {
 
-		$attrs = elgg_format_attributes([
+		$attrs = _elgg_services()->html_formatter->formatAttributes([
 			'foo' => 'http://example.com',
 			'bar' => 'me@example.com',
 			'href' => 'http://example.com',
@@ -155,7 +153,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 	}
 
 	public function testElggFormatElementThrows() {
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		elgg_format_element(array());
 	}
 
@@ -249,7 +247,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 		];
 		$expected = 'a="Hello &amp; &amp; &lt; &lt;" c="c" e="&amp; &amp; &lt; &lt;" g="bar 1 1.5 2"';
 
-		$this->assertEquals($expected, elgg_format_attributes($attrs));
+		$this->assertEquals($expected, _elgg_services()->html_formatter->formatAttributes($attrs));
 	}
 
 	public function testFiltersUnderscoreKeysExceptDataAttributes() {
@@ -259,7 +257,7 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 		];
 		$expected = 'data-foo_bar="b"';
 
-		$this->assertEquals($expected, elgg_format_attributes($attrs));
+		$this->assertEquals($expected, _elgg_services()->html_formatter->formatAttributes($attrs));
 	}
 
 	public function testLowercasesAllAttributes() {
@@ -269,6 +267,21 @@ class HtmlFormatterUnitTest extends UnitTestCase {
 		];
 		$expected = 'a-b="a-b" c-d="C-D"';
 
-		$this->assertEquals($expected, elgg_format_attributes($attrs));
+		$this->assertEquals($expected, _elgg_services()->html_formatter->formatAttributes($attrs));
+	}
+	
+	public function testInlineCss() {
+		$html = '<p>test</p>';
+		$css = 'p { color: red; }';
+		$expected = '<p style="color: red;">test</p>';
+		
+		$this->assertEquals($expected, _elgg_services()->html_formatter->inlineCss($html, $css, true));
+	}
+	
+	public function testNormalizeUrls() {
+		$text = 'foo <a href="/blog">link</a> /bar.php <img src="/link_to_image.jpg"/>';
+		$expected = 'foo <a href="' . elgg_get_site_url() . 'blog">link</a> /bar.php <img src="' . elgg_get_site_url() . 'link_to_image.jpg"/>';
+		
+		$this->assertEquals($expected, _elgg_services()->html_formatter->normalizeUrls($text));
 	}
 }

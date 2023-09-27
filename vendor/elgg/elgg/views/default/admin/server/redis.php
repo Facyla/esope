@@ -3,7 +3,7 @@
  * Redis info
  */
 $servers = elgg_get_config('redis_servers');
-if (!elgg_get_config('redis') || empty($servers) || !\Stash\Driver\Redis::isAvailable()) {
+if (!elgg_get_config('redis') || empty($servers) || !\Elgg\Cache\CompositeCache::isRedisAvailable()) {
 	echo '<p>' . elgg_echo('admin:server:redis:inactive') . '</p>';
 
 	return;
@@ -12,7 +12,7 @@ if (!elgg_get_config('redis') || empty($servers) || !\Stash\Driver\Redis::isAvai
 $redis = new Redis();
 
 foreach ($servers as $server) {
-	$redis->connect($server[0], $server[1]);
+	$redis->connect($server['host'], $server['port']);
 }
 
 $password = elgg_extract('password', elgg_get_config('redis_options'));

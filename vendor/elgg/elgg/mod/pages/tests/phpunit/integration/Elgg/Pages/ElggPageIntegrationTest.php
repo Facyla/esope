@@ -29,9 +29,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 	 */
 	public function up() {
 		$this->user = $this->createUser();
-		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($this->user);
+		elgg_get_session()->setLoggedInUser($this->user);
 		
 		// create a top page
 		$top_page = new ElggPage();
@@ -40,7 +38,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$top_page->title = 'Test ElggPage top';
 		$top_page->description = 'This is a test for ElggPage';
 		
-		$this->assertNotFalse($top_page->save());
+		$this->assertTrue($top_page->save());
 		$this->top_page = $top_page;
 		
 		$page = new ElggPage();
@@ -50,7 +48,7 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		$page->description = 'This is a test for ElggPage which is a sub page';
 		$page->parent_guid = $this->top_page->guid;
 		
-		$this->assertNotFalse($page->save());
+		$this->assertTrue($page->save());
 		$this->page = $page;
 	}
 
@@ -66,15 +64,6 @@ class ElggPageIntegrationTest extends \Elgg\IntegrationTestCase {
 		if (isset($this->page)) {
 			$this->page->delete();
 		}
-		
-		$session = elgg_get_session();
-		$session->setLoggedInUser($this->getAdmin());
-		
-		if (isset($this->user)) {
-			$this->user->delete();
-		}
-		
-		$session->removeLoggedInUser();
 	}
 
 	public function testCreateObjectToClass() {
