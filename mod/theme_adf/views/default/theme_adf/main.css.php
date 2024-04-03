@@ -4,7 +4,7 @@ $url = elgg_get_site_url();
 /* THEME ADF - DEPARTEMENTS EN RESEAUX */
 /*
 
-Teintes de bleu : 
+Teintes de bleu :
 	Bleu sombre intense : #0b2d51
 	Bleu sombre 2 : #1b3b5d
 
@@ -15,7 +15,7 @@ Teintes de bleu :
 
 Orange : e57b5f (aplats)
 
-Dégradés du noir au blanc : 
+Dégradés du noir au blanc :
 	Gris (teinte marron) : #141516
 	Gris sombre : #333333
 	Gris sombre 2 (teinte bleue): #40464d
@@ -58,7 +58,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-topbar .elgg-menu li > a { border-bottom: 3px solid transparent; /* margin-bottom: -3px; */ }
 .elgg-page-topbar .elgg-menu li.elgg-state-selected > a { background-color: initial; border-bottom: 3px solid #e57b5f; }
 .elgg-page-topbar .elgg-menu li:hover > a { /* background: #5ba2d9; */ background: #0b2d51; }
-.elgg-page-topbar .elgg-menu-item-search .elgg-menu.elgg-child-menu > li > a:hover, 
+.elgg-page-topbar .elgg-menu-item-search .elgg-menu.elgg-child-menu > li > a:hover,
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-search:hover > a { background: transparent; }
 
 .elgg-nav-collapse { flex-wrap: wrap; }
@@ -270,7 +270,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-layout-columns > .elgg-sidebar { width: 20rem; }
 }
 @media (max-width: 80rem) {
-	.elgg-layout-columns > .elgg-sidebar { border-right: 0; /* border-bottom: 1px solid #244263; box-shadow: 0px 0px 3px #244263; */ }
+	.elgg-layout-columns > .elgg-sidebar { width: 14rem; border-right: 0; /* border-bottom: 1px solid #244263; box-shadow: 0px 0px 3px #244263; */ }
 }
 
 .elgg-layout-columns > .elgg-sidebar-alt { order: 1; padding: 1rem .5rem; /* background: #e57b5f33; */ }
@@ -342,7 +342,7 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 .elgg-page-topbar .elgg-menu li:hover > a.elgg-menu-parent::after { content: " "; display: block; width: 0; height: 0; border-top: .75rem solid #0b2d51; border-bottom: 0; border-right: 1rem solid transparent; border-left: 1rem solid transparent; position: absolute; bottom: calc(3px - 0.75rem); left: calc(50% - 1rem); z-index: 3; }
 .elgg-page-topbar .elgg-menu li:hover > .elgg-child-menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); grid-template-columns: repeat(auto-fit,minmax(12rem, 24rem)); grid-gap: .5rem .5rem; }
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-search:hover > .elgg-child-menu { display: block; }
-.elgg-page-topbar .elgg-menu li.elgg-menu-item-members .elgg-child-menu, 
+.elgg-page-topbar .elgg-menu li.elgg-menu-item-members .elgg-child-menu,
 .elgg-page-topbar .elgg-menu li.elgg-menu-item-groups .elgg-child-menu { width: auto; }
 .elgg-page-topbar .elgg-menu.elgg-child-menu > li > a { border: 0; }
 
@@ -358,9 +358,9 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 /*
 @media (min-width: 105rem) {
 	.elgg-page-default .elgg-page-section > .elgg-inner { max-width: 80vw; }
-	
+
 	.elgg-page-body { padding-top: 1rem; }
-	
+
 	.elgg-page-topbar > .elgg-inner { position: relative; }
 	.elgg-nav-logo { position: absolute; top: 0; left: -10vw; width: calc(9vw + 1rem); height: 7.5rem; border-radius: 0 0 3rem 0; margin-left: 0; padding: 1rem 1rem 1rem 0rem; }
 	.elgg-nav-logo { position: fixed; top: 0; left: 0; z-index: 1; }
@@ -387,17 +387,17 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-nav-button span { height: .25rem; }
 	.elgg-nav-button span:nth-child(2) { top: .55rem; }
 	.elgg-nav-button span:nth-child(3) { top: 1.1rem; }
-	
+
 	.elgg-heading-site a { flex: 1; width: 8rem; }
-	
+
 	.elgg-layout-header { padding: 0rem 1rem .25rem 1rem; }
-	
+
 	.elgg-nav-collapsed .elgg-nav-collapse { margin-top: 0; flex-direction: column; }
 	.elgg-nav-collapsed .elgg-nav-collapse nav { order: initial; height: auto; flex: 0 0 auto; position: relative; }
-	
+
 	.elgg-layout-columns > .elgg-body { margin: .5rem .5rem; min-width: 20rem; }
 
-	
+
 }
 
 
@@ -406,6 +406,6 @@ a:hover, a:focus { color: #02080e; text-decoration: underline; }
 	.elgg-image-block { flex-direction: column; }
 	.elgg-image-block > .elgg-body { /* display: flex; flex-direction: column; */ }
 	.elgg-module-home-thewire-global .elgg-list-entity, .elgg-module-home-my-groups .elgg-list-entity, .elgg-module-home-my-groups .elgg-list-river { max-height: initial; }
-	
+
 }
 

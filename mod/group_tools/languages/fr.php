@@ -364,9 +364,9 @@ To visit the group click here:
 	'group_tools:notifications:disable' => "Désactiver les notifications pour tous les membres",
 	
 	'group_tools:edit:group:notifications:no_methods' => "No notification methods available.",
-	'group_tools:edit:group:notifications:counter' => "(%d of %d)",
-	'group_tools:edit:group:notifications:defaults' => "Default notification settings for new members",
-	'group_tools:edit:group:notifications:defaults:help' => "When a new member joins the group, this will be their group notification settings.",
+	'group_tools:edit:group:notifications:counter' => "(%d sur %d)",
+	'group_tools:edit:group:notifications:defaults' => "Paramètres de notification par défaut pour les nouveaux membres",
+	'group_tools:edit:group:notifications:defaults:help' => "Quand un nouveau membre rejoint le groupe, ces réglages seront leur réglage de notification pour ce groupe.",
 
 	'group_tools:notifications:toggle:email:enabled' => "Currently you are receiving notifications about activity in this group. If you don't want to receive notifications, change the settings here %s",
 	'group_tools:notifications:toggle:email:disabled' => "Currently you are not receiving notifications about activity in this group. If you want to receive notifications, change the settings here %s",
