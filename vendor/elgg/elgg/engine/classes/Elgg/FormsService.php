@@ -3,6 +3,7 @@
 namespace Elgg;
 
 use Elgg\Exceptions\LogicException;
+use Elgg\Javascript\ESMService;
 use Elgg\Traits\Loggable;
 
 /**
@@ -15,35 +16,22 @@ class FormsService {
 
 	use Loggable;
 
-	/**
-	 * @var EventsService
-	 */
-	protected $events;
-	
-	/**
-	 * @var ViewsService
-	 */
-	protected $views;
+	protected bool $rendering = false;
 
-	/**
-	 * @var bool
-	 */
-	protected $rendering;
-
-	/**
-	 * @var string
-	 */
-	protected $footer = '';
+	protected string $footer = '';
 
 	/**
 	 * Constructor
 	 *
 	 * @param ViewsService  $views  Views service
 	 * @param EventsService $events Events service
+	 * @param ESMService    $esm    ESM service
 	 */
-	public function __construct(ViewsService $views, EventsService $events) {
-		$this->views = $views;
-		$this->events = $events;
+	public function __construct(
+		protected ViewsService $views,
+		protected EventsService $events,
+		protected ESMService $esm
+	) {
 	}
 
 	/**
@@ -104,6 +92,7 @@ class FormsService {
 		}
 
 		if (elgg_extract('ajax', $form_vars)) {
+			$this->esm->import('input/form-ajax');
 			$form_vars['class'][] = 'elgg-js-ajax-form';
 			unset($form_vars['ajax']);
 		}
@@ -125,6 +114,14 @@ class FormsService {
 			$body = $this->views->renderView("forms/{$action}", $body_vars);
 
 			if (!empty($body)) {
+				// wrap form body
+				$body = $this->views->renderView('elements/forms/body', [
+					'body' => $body,
+					'action_name' => $action,
+					'body_vars' => $body_vars,
+					'form_vars' => $form_vars,
+				]);
+				
 				// Grab the footer if one was set during form rendering
 				$body .= $this->views->renderView('elements/forms/footer', [
 					'footer' => $this->getFooter(),

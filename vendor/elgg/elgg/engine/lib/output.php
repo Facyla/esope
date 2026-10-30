@@ -200,10 +200,11 @@ function elgg_get_friendly_title(string $title): string {
 	// titles are often stored HTML encoded
 	$title = html_entity_decode($title ?? '', ENT_QUOTES, 'UTF-8');
 	
-	$title = \Elgg\Translit::urlize($title);
+	// limit length to prevent issues with too long URLS (Request-URI Too Large) #13228
+	// limit the length before urlize() to prevent multibyte chars from being cut of in the middle #14577
+	$title = elgg_substr($title, 0, 100);
 
-	// limit length to prevent issues with too long URLS (Request-URI Too Large)
-	return elgg_substr($title, 0, 100);
+	return \Elgg\Translit::urlize($title);
 }
 
 /**
@@ -211,13 +212,13 @@ function elgg_get_friendly_title(string $title): string {
  *
  * @see elgg_view_friendly_time()
  *
- * @param int $time         A UNIX epoch timestamp
- * @param int $current_time Current UNIX epoch timestamp (optional)
+ * @param int      $time         A UNIX epoch timestamp
+ * @param null|int $current_time Current UNIX epoch timestamp (optional)
  *
  * @return string The friendly time string
  * @since 1.7.2
  */
-function elgg_get_friendly_time(int $time, int $current_time = null): string {
+function elgg_get_friendly_time(int $time, ?int $current_time = null): string {
 
 	if (!isset($current_time)) {
 		$current_time = time();
@@ -314,12 +315,12 @@ function elgg_get_friendly_upload_error(int $error_code): string {
  * Plugins register for output:strip_tags event.
  * Original string included in $params['original_string']
  *
- * @param string $string         Formatted string
- * @param string $allowable_tags Optional parameter to specify tags which should not be stripped
+ * @param string      $string         Formatted string
+ * @param null|string $allowable_tags Optional parameter to specify tags which should not be stripped
  *
  * @return string String run through strip_tags() and any events.
  */
-function elgg_strip_tags(string $string, string $allowable_tags = null): string {
+function elgg_strip_tags(string $string, ?string $allowable_tags = null): string {
 	return _elgg_services()->html_formatter->stripTags($string, $allowable_tags);
 }
 
@@ -355,19 +356,15 @@ function elgg_html_decode(string $string): string {
 }
 
 /**
- * Prepares query string for output to prevent CSRF attacks.
+ * Format a number with grouped thousands using language specific separators
  *
- * @param string $string string to prepare
+ * @param float $number   The number being formatted
+ * @param int   $decimals (optional) Sets the number of decimal points
  *
  * @return string
- * @internal
+ * @since 6.3
+ * @see number_format()
  */
-function _elgg_get_display_query(string $string): string {
-	if (empty($string)) {
-		return $string;
-	}
-	
-	$string = htmlentities($string,  ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
-	
-	return htmlspecialchars($string, ENT_QUOTES, 'UTF-8', false);
+function elgg_number_format(float $number, int $decimals = 0): string {
+	return \Elgg\Values::numberFormat($number, $decimals);
 }

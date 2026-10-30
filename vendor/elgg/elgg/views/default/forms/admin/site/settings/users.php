@@ -11,18 +11,18 @@ $result = elgg_view_field([
 
 $result .= elgg_view_field([
 	'#type' => 'checkbox',
-	'#label' => elgg_echo('installation:adminvalidation:label'),
-	'#help' => elgg_echo('installation:adminvalidation:description'),
-	'name' => 'require_admin_validation',
-	'checked' => (bool) elgg_get_config('require_admin_validation'),
+	'#label' => elgg_echo('config:users:user_joined_river'),
+	'name' => 'user_joined_river',
+	'checked' => (bool) elgg_get_config('user_joined_river'),
 	'switch' => true,
 ]);
 
 $result .= elgg_view_field([
 	'#type' => 'checkbox',
-	'#label' => elgg_echo('config:users:user_joined_river'),
-	'name' => 'user_joined_river',
-	'checked' => (bool) elgg_get_config('user_joined_river'),
+	'#label' => elgg_echo('installation:adminvalidation:label'),
+	'#help' => elgg_echo('installation:adminvalidation:description'),
+	'name' => 'require_admin_validation',
+	'checked' => (bool) elgg_get_config('require_admin_validation'),
 	'switch' => true,
 ]);
 
@@ -32,18 +32,12 @@ if (!(bool) elgg_get_config('require_admin_validation')) {
 }
 
 $result .= elgg_view_field([
-	'#type' => 'select',
+	'#type' => 'switch',
 	'#label' => elgg_echo('installation:adminvalidation:notification:label'),
 	'#help' => elgg_echo('installation:adminvalidation:notification:description'),
 	'#class' => $classes,
 	'name' => 'admin_validation_notification',
 	'value' => elgg_get_config('admin_validation_notification'),
-	'options_values' => [
-		'' => elgg_echo('option:no'),
-		'direct' => elgg_echo('installation:adminvalidation:notification:direct'),
-		'daily' => elgg_echo('interval:daily'),
-		'weekly' => elgg_echo('interval:weekly'),
-	],
 ]);
 
 $result .= elgg_view_field([

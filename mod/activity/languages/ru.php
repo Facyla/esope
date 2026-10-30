@@ -23,4 +23,5 @@ return array(
 	'groups:tool:activity' => 'Включить активность группы',
 	'groups:tool:activity:description' => 'Показать ленту активности с контентом, связанным с группой.',
 	
+	'activity:more' => "Больше активности",
 );

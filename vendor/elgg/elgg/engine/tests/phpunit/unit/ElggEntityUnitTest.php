@@ -5,36 +5,29 @@ use Elgg\Exceptions\InvalidArgumentException;
 /**
  * This requires elgg_get_logged_in_user_guid() in session.php, the access
  * constants defined in entities.php, and elgg_normalize_url() in output.php
- *
- * @group ElggEntity
- * @group UnitTests
  */
 class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 
-	/** @var \ElggEntity */
+	/** @var \ElggObject */
 	protected $obj;
 
 	public function up() {
-		$this->obj = $this->getMockForAbstractClass('\ElggObject');
-		$reflection = new ReflectionClass('\ElggObject');
-		$method = $reflection->getMethod('initializeAttributes');
-		if (method_exists($method, 'setAccessible')) {
-			$method->setAccessible(true);
-			$method->invokeArgs($this->obj, array());
-		}
+		$this->obj = new \ElggObject();
 	}
 
 	public function testDefaultAttributes() {
-		$this->assertEquals(null, $this->obj->guid);
+		$this->assertNull($this->obj->guid);
 		$this->assertEquals('object', $this->obj->type);
-		$this->assertEquals(null, $this->obj->subtype);
+		$this->assertEquals('object', $this->obj->subtype);
 		$this->assertEquals(elgg_get_logged_in_user_guid(), $this->obj->owner_guid);
 		$this->assertEquals(elgg_get_logged_in_user_guid(), $this->obj->container_guid);
 		$this->assertEquals(ACCESS_PRIVATE, $this->obj->access_id);
-		$this->assertEquals(null, $this->obj->time_created);
-		$this->assertEquals(null, $this->obj->time_updated);
-		$this->assertEquals(null, $this->obj->last_action);
+		$this->assertNull($this->obj->time_created);
+		$this->assertNull($this->obj->time_updated);
+		$this->assertNull($this->obj->last_action);
+		$this->assertNull($this->obj->time_deleted);
 		$this->assertEquals('yes', $this->obj->enabled);
+		$this->assertEquals('no', $this->obj->deleted);
 	}
 
 	/**
@@ -58,10 +51,11 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		unset($this->obj->$attribute);
 	}
 	
-	public function protectedAttributeProvider() {
+	public static function protectedAttributeProvider() {
 		return [
 			['subtype'],
 			['enabled'],
+			['deleted'],
 		];
 	}
 	
@@ -79,7 +73,7 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->assertSame(77, $this->obj->$attribute);
 	}
 	
-	public function integerAttributeProvider() {
+	public static function integerAttributeProvider() {
 		return [
 			['access_id'],
 			['owner_guid'],
@@ -95,7 +89,7 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->assertNotEquals('foo', $this->obj->$attribute);
 	}
 	
-	public function unsettableAttributeProvider() {
+	public static function unsettableAttributeProvider() {
 		return [
 			['guid'],
 			['last_action'],
@@ -110,9 +104,37 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->obj->foo = 'overwrite';
 		$this->assertEquals('overwrite', $this->obj->foo);
 	}
+	
+	public function testUnsettingMetadataNoDatabase() {
+		$this->obj->foo = 'bar';
+		$this->assertEquals('bar', $this->obj->foo);
+		unset($this->obj->foo);
+		$this->assertNull($this->obj->foo);
+	}
 
 	public function testGettingNonexistentMetadataNoDatabase() {
 		$this->assertNull($this->obj->foo);
+	}
+	
+	public function testSettingMetadataWithDatabase() {
+		$entity = $this->createObject();
+		$entity->foo = 'test';
+		$this->assertEquals('test', $entity->foo);
+		$entity->foo = 'overwrite';
+		$this->assertEquals('overwrite',$entity->foo);
+	}
+	
+	public function testUnsettingMetadataWithDatabase() {
+		$entity = $this->createObject();
+		$entity->foo = 'bar';
+		$this->assertEquals('bar', $entity->foo);
+		unset($entity->foo);
+		$this->assertNull($entity->foo);
+	}
+
+	public function testGettingNonexistentMetadataWithDatabase() {
+		$entity = $this->createObject();
+		$this->assertNull($entity->foo);
 	}
 	
 	public function testAnnotationsNoDatabase() {
@@ -145,7 +167,7 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals('', $this->obj->$attribute);
 	}
 	
-	public function unsetSuccessfullProvider() {
+	public static function unsetSuccessfullProvider() {
 		return [
 			['access_id', 2],
 			
@@ -164,7 +186,7 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($current_value, $this->obj->$attribute);
 	}
 	
-	public function unsetUnsuccessfullProvider() {
+	public static function unsetUnsuccessfullProvider() {
 		return [
 			['guid', 123456],
 			['last_action', 1234],
@@ -219,7 +241,7 @@ class ElggEntityUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($long, $this->obj->getLongitude());
 	}
 	
-	public function latLongProvider() {
+	public static function latLongProvider() {
 		return [
 			[1, 2],
 			[1.13, 222.132],

@@ -35,7 +35,7 @@ class SchemaCache
      *
      * @var \Cake\Database\Schema\CachedCollection
      */
-    protected $_schema;
+    protected CachedCollection $_schema;
 
     /**
      * Constructor
@@ -62,7 +62,6 @@ class SchemaCache
         }
 
         foreach ($tables as $table) {
-            /** @psalm-suppress PossiblyNullArgument */
             $this->_schema->describe($table, ['forceRefresh' => true]);
         }
 
@@ -86,7 +85,6 @@ class SchemaCache
         $cacher = $this->_schema->getCacher();
 
         foreach ($tables as $table) {
-            /** @psalm-suppress PossiblyNullArgument */
             $key = $this->_schema->cacheKey($table);
             $cacher->delete($key);
         }
@@ -108,9 +106,7 @@ class SchemaCache
             $connection->cacheMetadata(true);
         }
 
-        /** @var \Cake\Database\Schema\CachedCollection $schemaCollection */
-        $schemaCollection = $connection->getSchemaCollection();
-
-        return $schemaCollection;
+        /** @var \Cake\Database\Schema\CachedCollection */
+        return $connection->getSchemaCollection();
     }
 }

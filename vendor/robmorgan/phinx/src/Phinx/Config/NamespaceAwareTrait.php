@@ -9,9 +9,6 @@ namespace Phinx\Config;
 
 /**
  * Trait implemented NamespaceAwareInterface.
- *
- * @package Phinx\Config
- * @author Andrey N. Mokhov
  */
 trait NamespaceAwareTrait
 {
@@ -20,14 +17,14 @@ trait NamespaceAwareTrait
      *
      * @return string[]
      */
-    abstract public function getMigrationPaths();
+    abstract public function getMigrationPaths(): array;
 
     /**
      * Gets the paths to search for seed files.
      *
      * @return string[]
      */
-    abstract public function getSeedPaths();
+    abstract public function getSeedPaths(): array;
 
     /**
      * Search $needle in $haystack and return key associate with him.
@@ -36,7 +33,7 @@ trait NamespaceAwareTrait
      * @param string[] $haystack Haystack
      * @return string|null
      */
-    protected function searchNamespace($needle, $haystack)
+    protected function searchNamespace(string $needle, array $haystack): ?string
     {
         $needle = realpath($needle);
         $haystack = array_map('realpath', $haystack);
@@ -52,7 +49,7 @@ trait NamespaceAwareTrait
      * @param string $path Path
      * @return string|null
      */
-    public function getMigrationNamespaceByPath($path)
+    public function getMigrationNamespaceByPath(string $path): ?string
     {
         $paths = $this->getMigrationPaths();
 
@@ -65,7 +62,7 @@ trait NamespaceAwareTrait
      * @param string $path Path
      * @return string|null
      */
-    public function getSeedNamespaceByPath($path)
+    public function getSeedNamespaceByPath(string $path): ?string
     {
         $paths = $this->getSeedPaths();
 

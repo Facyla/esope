@@ -1,6 +1,5 @@
 <?php
 
-use Elgg\Router\Middleware\Gatekeeper;
 use Elgg\TheWire\Notifications\CreateTheWireEventHandler;
 
 require_once(__DIR__ . '/lib/functions.php');
@@ -26,8 +25,13 @@ return [
 		'limit' => 140,
 	],
 	'actions' => [
-		'thewire/add' => [],
-		'thewire/delete' => [],
+		'thewire/add' => [
+			'controller' => \Elgg\TheWire\Controllers\EditAction::class,
+			'options' => [
+				'entity_type' => 'object',
+				'entity_subtype' => 'thewire',
+			],
+		],
 	],
 	'routes' => [
 		'default:object:thewire' => [
@@ -58,9 +62,6 @@ return [
 		'collection:object:thewire:thread' => [
 			'path' => '/thewire/thread/{guid}',
 			'resource' => 'thewire/thread',
-			'middleware' => [
-				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
-			],
 		],
 		'collection:object:thewire:tag' => [
 			'path' => '/thewire/tag/{tag}',
@@ -70,6 +71,7 @@ return [
 			'path' => '/thewire/mentions/{username}',
 			'resource' => 'thewire/mentions',
 			'middleware' => [
+				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
 			],
 		],
@@ -81,7 +83,7 @@ return [
 			'path' => '/thewire/reply/{guid}',
 			'resource' => 'thewire/reply',
 			'middleware' => [
-				Gatekeeper::class,
+				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
 			],
 		],
@@ -92,6 +94,16 @@ return [
 		],
 	],
 	'events' => [
+		'entity:url' => [
+			'object:widget' => [
+				'Elgg\TheWire\Widgets::thewireWidgetURL' => [],
+			],
+		],
+		'prepare' => [
+			'html' => [
+				'Elgg\TheWire\Views::parseTags' => [],
+			],
+		],
 		'register' => [
 			'menu:entity' => [
 				'Elgg\TheWire\Menus\Entity::register' => [],

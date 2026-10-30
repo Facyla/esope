@@ -9,34 +9,18 @@ use Elgg\Views\TableColumn;
  */
 class ViewColumn implements TableColumn {
 
-	/**
-	 * @var string
-	 */
-	private $heading;
-
-	/**
-	 * @var string
-	 */
-	private $view;
-
-	/**
-	 * @var array
-	 */
-	private $vars;
+	protected string $heading;
 
 	/**
 	 * Constructor
 	 *
-	 * @param string $view    The view to render the value
-	 * @param string $heading Heading
-	 * @param array  $vars    Vars to merge into the view vars
+	 * @param string      $view    The view to render the value
+	 * @param string|null $heading Heading
+	 * @param array       $vars    Vars to merge into the view vars
 	 */
-	public function __construct($view, $heading = null, $vars = []) {
-		$this->view = $view;
-		$this->vars = $vars;
-
+	public function __construct(protected string $view, ?string $heading = null, protected array $vars = []) {
 		if (!is_string($heading)) {
-			$heading = elgg_echo("ViewColumn:view:$view");
+			$heading = elgg_echo("ViewColumn:view:{$view}");
 		}
 		
 		$this->heading = $heading;

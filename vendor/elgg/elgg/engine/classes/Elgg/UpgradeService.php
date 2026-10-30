@@ -10,6 +10,7 @@ use Elgg\Traits\Loggable;
 use Elgg\Upgrade\Locator;
 use Elgg\Upgrade\Loop;
 use Elgg\Upgrade\Result;
+use React\Promise\PromiseInterface;
 use function React\Promise\all;
 use React\Promise\Deferred;
 use React\Promise\Promise;
@@ -24,41 +25,6 @@ class UpgradeService {
 	use Loggable;
 
 	/**
-	 * @var Locator
-	 */
-	protected $locator;
-
-	/**
-	 * @var Translator
-	 */
-	private $translator;
-
-	/**
-	 * @var EventsService
-	 */
-	private $events;
-
-	/**
-	 * @var Config
-	 */
-	private $config;
-
-	/**
-	 * @var Mutex
-	 */
-	private $mutex;
-
-	/**
-	 * @var SystemMessagesService
-	 */
-	private $system_messages;
-
-	/**
-	 * @var Progress
-	 */
-	protected $progress;
-
-	/**
 	 * Constructor
 	 *
 	 * @param Locator               $locator         Upgrade locator
@@ -70,28 +36,22 @@ class UpgradeService {
 	 * @param Progress              $progress        Progress
 	 */
 	public function __construct(
-		Locator $locator,
-		Translator $translator,
-		EventsService $events,
-		Config $config,
-		Mutex $mutex,
-		SystemMessagesService $system_messages,
-		Progress $progress
+		protected Locator $locator,
+		protected Translator $translator,
+		protected EventsService $events,
+		protected Config $config,
+		protected Mutex $mutex,
+		protected SystemMessagesService $system_messages,
+		protected Progress $progress
 	) {
-		$this->locator = $locator;
-		$this->translator = $translator;
-		$this->events = $events;
-		$this->config = $config;
-		$this->mutex = $mutex;
-		$this->system_messages = $system_messages;
-		$this->progress = $progress;
 	}
 
 	/**
 	 * Start an upgrade process
+	 *
 	 * @return Promise
 	 */
-	protected function up() {
+	protected function up(): Promise {
 		return new Promise(function ($resolve, $reject) {
 			Application::migrate();
 
@@ -108,18 +68,19 @@ class UpgradeService {
 			\Elgg\Cache\EventHandlers::disable();
 			elgg_clear_caches();
 
-			return $resolve();
+			return $resolve(true);
 		});
 	}
 
 	/**
 	 * Finish an upgrade process
+	 *
 	 * @return Promise
 	 */
-	protected function down() {
+	protected function down(): Promise {
 		return new Promise(function ($resolve, $reject) {
 			if (!$this->events->trigger('upgrade', 'system', null)) {
-				return $reject();
+				return $reject(false);
 			}
 
 			elgg_invalidate_caches();
@@ -128,7 +89,7 @@ class UpgradeService {
 
 			$this->events->triggerAfter('upgrade', 'system', null);
 
-			return $resolve();
+			return $resolve(true);
 		});
 	}
 
@@ -137,9 +98,9 @@ class UpgradeService {
 	 *
 	 * @param \ElggUpgrade[] $upgrades Upgrades to run
 	 *
-	 * @return Promise
+	 * @return PromiseInterface
 	 */
-	protected function runUpgrades($upgrades) {
+	protected function runUpgrades($upgrades): PromiseInterface {
 		$promises = [];
 
 		foreach ($upgrades as $upgrade) {
@@ -149,7 +110,7 @@ class UpgradeService {
 			
 			$promises[] = new Promise(function ($resolve, $reject) use ($upgrade) {
 				try {
-					$result = $this->executeUpgrade($upgrade, false);
+					$result = $this->executeUpgrade($upgrade, 0);
 				} catch (\Throwable $ex) {
 					return $reject($ex);
 				}
@@ -160,9 +121,9 @@ class UpgradeService {
 					]);
 
 					return $reject(new \RuntimeException($msg));
-				} else {
-					return $resolve($result);
 				}
+				
+				return $resolve($result);
 			});
 		}
 
@@ -174,9 +135,9 @@ class UpgradeService {
 	 *
 	 * @param \ElggUpgrade[] $upgrades Upgrades to run
 	 *
-	 * @return Promise
+	 * @return PromiseInterface
 	 */
-	public function run($upgrades = null) {
+	public function run($upgrades = null): PromiseInterface {
 		// turn off time limit
 		set_time_limit(3600);
 
@@ -196,13 +157,13 @@ class UpgradeService {
 			$upgrades = $this->getPendingUpgrades(false);
 		}
 
-		$this->up()->done(
+		$this->up()->then(
 			function () use ($resolve, $reject, $upgrades) {
 				all([
 					$this->runUpgrades($upgrades),
-				])->done(
+				])->finally(
 					function () use ($resolve, $reject) {
-						$this->down()->done(
+						$this->down()->then(
 							function ($result) use ($resolve) {
 								return $resolve($result);
 							},
@@ -225,7 +186,7 @@ class UpgradeService {
 	 *
 	 * @return \ElggUpgrade[]
 	 */
-	public function getPendingUpgrades($async = true) {
+	public function getPendingUpgrades(bool $async = true): array {
 		$pending = [];
 
 		$upgrades = $this->locator->locate();
@@ -259,10 +220,10 @@ class UpgradeService {
 	 *
 	 * @return \ElggUpgrade[]
 	 */
-	public function getCompletedUpgrades($async = true) {
+	public function getCompletedUpgrades(bool $async = true): array {
 		// make sure always to return all upgrade entities
 		return elgg_call(
-			ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES,
+			ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES,
 			function () use ($async) {
 				$completed = [];
 				
@@ -307,16 +268,16 @@ class UpgradeService {
 	 * Call the upgrade's run() for a specified period of time, or until it completes
 	 *
 	 * @param \ElggUpgrade $upgrade      Upgrade to run
-	 * @param int          $max_duration Maximum duration in seconds
-	 *                                   Set to false to execute an entire upgrade
+	 * @param int|null     $max_duration Maximum duration in seconds
+	 *                                   Set to 0 to execute an entire upgrade
 	 *
 	 * @return Result
 	 */
-	public function executeUpgrade(\ElggUpgrade $upgrade, $max_duration = null) {
+	public function executeUpgrade(\ElggUpgrade $upgrade, ?int $max_duration = null): Result {
 		// Upgrade also disabled data, so the compatibility is
 		// preserved in case the data ever gets enabled again
 		return elgg_call(
-			ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES,
+			ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES,
 			function () use ($upgrade, $max_duration) {
 				return $this->events->triggerResultsSequence('upgrade:execute', 'system', ['object' => $upgrade], null, function() use ($upgrade, $max_duration) {
 					$result = new Result();

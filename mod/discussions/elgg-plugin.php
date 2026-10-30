@@ -17,7 +17,9 @@ return [
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
+				'subscribable' => true,
 				'likable' => true,
+				'restorable' => true,
 			],
 		],
 	],
@@ -25,7 +27,13 @@ return [
 		'enable_global_discussions' => 0,
 	],
 	'actions' => [
-		'discussion/save' => [],
+		'discussion/save' => [
+			'controller' => \Elgg\Discussions\Controllers\EditAction::class,
+			'options' => [
+				'entity_type' => 'object',
+				'entity_subtype' => 'discussion',
+			],
+		],
 		'discussion/toggle_status' => [],
 	],
 	'routes' => [
@@ -48,6 +56,7 @@ return [
 			'path' => '/discussion/my_groups/{username}',
 			'resource' => 'discussion/my_groups',
 			'middleware' => [
+				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
 			],
 		],
@@ -89,7 +98,7 @@ return [
 			],
 		],
 		'entity:url' => [
-			'object' => [
+			'object:widget' => [
 				'Elgg\Discussions\Widgets::widgetURL' => [],
 			],
 		],
@@ -125,9 +134,6 @@ return [
 			],
 			'menu:site' => [
 				'Elgg\Discussions\Menus\Site::register' => [],
-			],
-			'menu:title:object:discussion' => [
-				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
 			],
 		],
 		'seeds' => [

@@ -2,9 +2,6 @@
 
 namespace Elgg\Database;
 
-/**
- * @group UnitTests
- */
 class PluginsUnitTest extends \Elgg\UnitTestCase {
 
 	public function testAfterPluginLoadActiveCheckIsFree() {
@@ -76,7 +73,7 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 		$sp = _elgg_services();
 		
 		return new Plugins(
-			$sp->dataCache->plugins,
+			$sp->pluginsCache,
 			$sp->db,
 			$sp->session_manager,
 			$sp->events,
@@ -84,6 +81,7 @@ class PluginsUnitTest extends \Elgg\UnitTestCase {
 			$sp->views,
 			$sp->config,
 			$sp->system_messages,
+			$sp->invoker,
 			$sp->request
 		);
 	}

@@ -6,17 +6,16 @@
  */
 
 return array(
-
 	'item:object:file' => 'Fil',
-	
 	'collection:object:file' => 'Filer',
+	
 	'collection:object:file:all' => "Alla filer på webbplatsen",
 	'collection:object:file:owner' => "%ss filer",
 	'collection:object:file:friends' => "Vänners filer",
 	'collection:object:file:group' => "Filer i gruppen",
 	'add:object:file' => "Ladda upp en fil",
 	'edit:object:file' => "Redigera fil",
-
+	
 	'file:more' => "Fler filer",
 	'file:list' => "Listvy",
 
@@ -71,7 +70,7 @@ return array(
 	 * Error messages
 	 */
 
-	'file:none' => "Inga filer.",
+	'file:none' => "Inga filer.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Tyvärr; vi kunde inte spara din fil.",
 	'file:noaccess' => "Du har inte behörigheter att ändra den här filen",
 	'file:cannotload' => "Det blev något fel när filen laddades upp",

@@ -41,21 +41,21 @@ class ValuesExpression implements ExpressionInterface
      *
      * @var array
      */
-    protected $_values = [];
+    protected array $_values = [];
 
     /**
      * List of columns to ensure are part of the insert.
      *
      * @var array
      */
-    protected $_columns = [];
+    protected array $_columns = [];
 
     /**
      * The Query object to use as a values expression
      *
      * @var \Cake\Database\Query|null
      */
-    protected $_query;
+    protected ?Query $_query = null;
 
     /**
      * Whether values have been casted to expressions
@@ -63,7 +63,7 @@ class ValuesExpression implements ExpressionInterface
      *
      * @var bool
      */
-    protected $_castedExpressions = false;
+    protected bool $_castedExpressions = false;
 
     /**
      * Constructor
@@ -83,9 +83,9 @@ class ValuesExpression implements ExpressionInterface
      * @param \Cake\Database\Query|array $values Array of data to append into the insert, or
      *   a query for doing INSERT INTO .. SELECT style commands
      * @return void
-     * @throws \Cake\Database\Exception\DatabaseException When mixing array + Query data types.
+     * @throws \Cake\Database\Exception\DatabaseException When mixing array and Query data types.
      */
-    public function add($values): void
+    public function add(Query|array $values): void
     {
         if (
             (
@@ -98,7 +98,7 @@ class ValuesExpression implements ExpressionInterface
             )
         ) {
             throw new DatabaseException(
-                'You cannot mix subqueries and array values in inserts.'
+                'You cannot mix subqueries and array values in inserts.',
             );
         }
         if ($values instanceof Query) {
@@ -213,7 +213,7 @@ class ValuesExpression implements ExpressionInterface
      */
     public function sql(ValueBinder $binder): string
     {
-        if (empty($this->_values) && empty($this->_query)) {
+        if (!$this->_values && $this->_query === null) {
             return '';
         }
 
@@ -310,7 +310,7 @@ class ValuesExpression implements ExpressionInterface
 
         $types = $this->_requiresToExpressionCasting($types);
 
-        if (empty($types)) {
+        if (!$types) {
             return;
         }
 

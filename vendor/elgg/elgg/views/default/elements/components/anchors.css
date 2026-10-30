@@ -27,8 +27,8 @@
 
 .elgg-badge {
 	display: inline-block;
-	color: $(text-color-strong);
-	background-color: $(background-color-soft);
+	color: var(--elgg-text-color-strong);
+	background-color: var(--elgg-background-color-soft);
 	padding: .15rem .5rem;
 	margin-top: -.15rem;
 	text-align: center;
@@ -38,4 +38,23 @@
 	font-size: 0.7rem;
 	line-height: 1rem;
 	font-weight: bold;
+}
+
+.elgg-skiplink {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	
+	&:focus {
+		position: fixed;
+		
+		width: auto;
+		height: auto;
+		
+		left: 1rem;
+		top: 1rem;
+	}
 }

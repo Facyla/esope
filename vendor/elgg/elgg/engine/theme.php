@@ -6,7 +6,9 @@
 
 return [
 	// layout and shell
-	'body-background-color' => '#FFF',
+	'body-background-color' => '#f3f3f3',
+	'page-section-max-width' => '90rem',
+	'maintenance-background-image' => 'graphics/maintenance.jpg',
 	'walled-garden-background-image' => 'graphics/walled_garden.jpg',
 	
 	// Typography
@@ -25,7 +27,6 @@ return [
 	'h5-font-size' => '0.9rem',
 	'h6-font-size' => '0.8rem',
 	
-
 	// element colors
 	'text-color-soft' => '#969696',
 	'text-color-mild' => '#7d7d7d',
@@ -33,7 +34,7 @@ return [
 	'text-color-highlight' => '#0078ac',
 
 	'background-color-soft' => '#fafafa',
-	'background-color-mild' => '#e6e6ea',
+	'background-color-mild' => '#f3f3f3',
 	'background-color-strong' => '#cfcfd2',
 	'background-color-highlight' => '#0078ac',
 
@@ -80,13 +81,15 @@ return [
 	'button-delete-background-color-hover' => '#d33f49',
 	'button-delete-font-color-hover' => '#ffffff',
 
+	'input-switch-checked-background-color' => '#397f2e',
+	'input-switch-unchecked-background-color' => '#b94a48',
+	'input-switch-disabled-background-color' => '#cfcfd2',
+
 	// topbar
 	'topbar-background-color' => '#0078ac',
 	'topbar-indicator' => '#faa51a',
 
 	// breakpoints
-	'tablet' => '50rem',
-	'desktop' => '80rem',
 	'media-phone-up' => 'screen and (min-width: 30rem)',
 	'media-tablet-up' => 'screen and (min-width: 50rem)',
 	'media-desktop-up' => 'screen and (min-width: 80rem)',

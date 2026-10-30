@@ -26,11 +26,6 @@ class AnnotationWhereClause extends WhereClause {
 	public $owner_guids;
 
 	/**
-	 * @var string
-	 */
-	public $enabled;
-
-	/**
 	 * @var int|int[]
 	 */
 	public $access_ids;
@@ -39,26 +34,11 @@ class AnnotationWhereClause extends WhereClause {
 	 * @var string|string[]
 	 */
 	public $names;
-	
-	/**
-	 * @var string
-	 */
-	public $comparison = '=';
 
 	/**
 	 * @var string|string[]
 	 */
 	public $values;
-
-	/**
-	 * @var string
-	 */
-	public $value_type = ELGG_VALUE_STRING;
-
-	/**
-	 * @var bool
-	 */
-	public $case_sensitive = true;
 
 	/**
 	 * @var int|string|\DateTime
@@ -70,30 +50,19 @@ class AnnotationWhereClause extends WhereClause {
 	 */
 	public $created_before;
 
-	/**
-	 * @var string
-	 */
-	public $sort_by_direction;
+	public string $comparison = '=';
 
-	/**
-	 * @var string
-	 */
-	public $sort_by_calculation;
+	public string $value_type = ELGG_VALUE_STRING;
 
-	/**
-	 * @var bool
-	 */
-	public $ignore_access;
+	public bool $case_sensitive = true;
 
-	/**
-	 * @var bool
-	 */
-	public $use_enabled_clause;
+	public ?string $sort_by_direction = null;
 
-	/**
-	 * @var int
-	 */
-	public $viewer_guid;
+	public ?string $sort_by_calculation = null;
+
+	public ?bool $ignore_access = null;
+
+	public ?int $viewer_guid = null;
 
 	/**
 	 * {@inheritdoc}
@@ -108,8 +77,9 @@ class AnnotationWhereClause extends WhereClause {
 		$wheres[] = parent::prepare($qb, $table_alias);
 
 		$access = new AccessWhereClause();
-		$access->use_enabled_clause = $this->use_enabled_clause;
 		$access->ignore_access = $this->ignore_access;
+		$access->use_deleted_clause = false;
+		$access->use_enabled_clause = false;
 		$access->viewer_guid = $this->viewer_guid;
 		$access->guid_column = 'entity_guid';
 		$wheres[] = $access->prepare($qb, $table_alias);
@@ -119,7 +89,6 @@ class AnnotationWhereClause extends WhereClause {
 		$wheres[] = $qb->compare($alias('value'), $this->comparison, $this->values, $this->value_type, $this->case_sensitive);
 		$wheres[] = $qb->compare($alias('entity_guid'), '=', $this->entity_guids, ELGG_VALUE_GUID);
 		$wheres[] = $qb->compare($alias('owner_guid'), '=', $this->owner_guids, ELGG_VALUE_GUID);
-		$wheres[] = $qb->compare($alias('enabled'), '=', $this->enabled, ELGG_VALUE_STRING);
 		$wheres[] = $qb->compare($alias('access_id'), '=', $this->access_ids, ELGG_VALUE_ID);
 		$wheres[] = $qb->between($alias('time_created'), $this->created_after, $this->created_before, ELGG_VALUE_TIMESTAMP);
 
@@ -144,5 +113,51 @@ class AnnotationWhereClause extends WhereClause {
 		}
 
 		return $qb->merge($wheres);
+	}
+
+	/**
+	 * Build a new AnnotationWhereClause
+	 *
+	 * @param array $attributes parameters for clause
+	 *
+	 * @return static
+	 *
+	 * @since 6.3
+	 */
+	public static function factory(array $attributes): static {
+		$result = new static();
+
+		$array_attributes = [
+			'ids',
+			'entity_guids',
+			'owner_guids',
+			'access_ids',
+			'names',
+			'values',
+		];
+		foreach ($array_attributes as $array_key) {
+			if (isset($attributes[$array_key])) {
+				$result->{$array_key} = (array) $attributes[$array_key];
+			}
+		}
+
+		$singular_attributes = [
+			'comparison',
+			'value_type',
+			'case_sensitive',
+			'created_after',
+			'created_before',
+			'sort_by_direction',
+			'sort_by_calculation',
+			'ignore_access',
+			'viewer_guid',
+		];
+		foreach ($singular_attributes as $array_key) {
+			if (isset($attributes[$array_key])) {
+				$result->{$array_key} = $attributes[$array_key];
+			}
+		}
+
+		return $result;
 	}
 }

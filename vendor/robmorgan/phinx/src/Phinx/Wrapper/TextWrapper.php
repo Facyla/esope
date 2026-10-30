@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -14,29 +15,27 @@ use Symfony\Component\Console\Output\StreamOutput;
 /**
  * Phinx text wrapper: a way to run `status`, `migrate`, and `rollback` commands
  * and get the output of the command back as plain text.
- *
- * @author Woody Gilk <woody.gilk@gmail.com>
  */
 class TextWrapper
 {
     /**
      * @var \Phinx\Console\PhinxApplication
      */
-    protected $app;
+    protected PhinxApplication $app;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $options;
+    protected array $options;
 
     /**
      * @var int
      */
-    protected $exitCode;
+    protected int $exitCode;
 
     /**
      * @param \Phinx\Console\PhinxApplication $app Application
-     * @param array $options Options
+     * @param array<string, mixed> $options Options
      */
     public function __construct(PhinxApplication $app, array $options = [])
     {
@@ -49,7 +48,7 @@ class TextWrapper
      *
      * @return \Phinx\Console\PhinxApplication
      */
-    public function getApp()
+    public function getApp(): PhinxApplication
     {
         return $this->app;
     }
@@ -59,7 +58,7 @@ class TextWrapper
      *
      * @return int
      */
-    public function getExitCode()
+    public function getExitCode(): int
     {
         return $this->exitCode;
     }
@@ -70,20 +69,20 @@ class TextWrapper
      * @param string|null $env environment name (optional)
      * @return string
      */
-    public function getStatus($env = null)
+    public function getStatus(?string $env = null): string
     {
         $command = ['status'];
         if ($this->hasEnvValue($env)) {
-            $command += ['-e' => $env ?: $this->getOption('environment')];
+            $command['-e'] = $env ?: $this->getOption('environment');
         }
         if ($this->hasOption('configuration')) {
-            $command += ['-c' => $this->getOption('configuration')];
+            $command['-c'] = $this->getOption('configuration');
         }
         if ($this->hasOption('parser')) {
-            $command += ['-p' => $this->getOption('parser')];
+            $command['-p'] = $this->getOption('parser');
         }
         if ($this->hasOption('format')) {
-            $command += ['-f' => $this->getOption('format')];
+            $command['-f'] = $this->getOption('format');
         }
 
         return $this->executeRun($command);
@@ -93,7 +92,7 @@ class TextWrapper
      * @param string|null $env environment name
      * @return bool
      */
-    private function hasEnvValue($env): bool
+    private function hasEnvValue(?string $env): bool
     {
         return $env || $this->hasOption('environment');
     }
@@ -105,7 +104,7 @@ class TextWrapper
      * @param string|null $target target version (optional)
      * @return string
      */
-    public function getMigrate($env = null, $target = null)
+    public function getMigrate(?string $env = null, ?string $target = null): string
     {
         $command = ['migrate'];
         if ($this->hasEnvValue($env)) {
@@ -132,7 +131,7 @@ class TextWrapper
      * @param string[]|string|null $seed Array of seed names or seed name
      * @return string
      */
-    public function getSeed($env = null, $target = null, $seed = null)
+    public function getSeed(?string $env = null, ?string $target = null, array|string|null $seed = null): string
     {
         $command = ['seed:run'];
         if ($this->hasEnvValue($env)) {
@@ -162,7 +161,7 @@ class TextWrapper
      * @param mixed $target Target version, or 0 (zero) fully revert (optional)
      * @return string
      */
-    public function getRollback($env = null, $target = null)
+    public function getRollback(?string $env = null, mixed $target = null): string
     {
         $command = ['rollback'];
         if ($this->hasEnvValue($env)) {
@@ -189,7 +188,7 @@ class TextWrapper
      * @param string $key Key
      * @return bool
      */
-    protected function hasOption($key)
+    protected function hasOption(string $key): bool
     {
         return isset($this->options[$key]);
     }
@@ -200,7 +199,7 @@ class TextWrapper
      * @param string $key Key
      * @return string|null
      */
-    protected function getOption($key)
+    protected function getOption(string $key): ?string
     {
         if (!isset($this->options[$key])) {
             return null;
@@ -216,7 +215,7 @@ class TextWrapper
      * @param string $value Value
      * @return $this
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, string $value)
     {
         $this->options[$key] = $value;
 
@@ -229,7 +228,7 @@ class TextWrapper
      * @param array $command Command
      * @return string
      */
-    protected function executeRun(array $command)
+    protected function executeRun(array $command): string
     {
         // Output will be written to a temporary stream, so that it can be
         // collected after running the command.

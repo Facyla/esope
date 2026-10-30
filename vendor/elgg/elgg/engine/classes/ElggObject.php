@@ -13,12 +13,26 @@
  * @property array  $tags        Tags that describe the object (metadata)
  */
 class ElggObject extends \ElggEntity {
-
+	
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getType(): string {
-		return 'object';
+	public function __construct(?stdClass $row = null) {
+		parent::__construct($row);
+		
+		if (static::class === self::class && !_elgg_services()->config->testing_mode) {
+			elgg_deprecated_notice("Using an \ElggObject class for subtype '{$this->getSubtype()}' has been deprecated. Use a class extension.", '6.3');
+		}
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function initializeAttributes() {
+		parent::initializeAttributes();
+		
+		$this->attributes['type'] = 'object';
+		$this->attributes['subtype'] = 'object';
 	}
 
 	/**

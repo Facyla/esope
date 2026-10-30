@@ -5,7 +5,7 @@
 
 use Elgg\Database\Clauses\OrderByClause;
 
-elgg_require_js('elgg/messageboard');
+elgg_import_esm('elgg/messageboard');
 
 $page_owner = elgg_get_page_owner_entity();
 
@@ -18,10 +18,10 @@ $options = [
 	'annotation_name' => 'messageboard',
 	'guid' => $page_owner->guid,
 	'order_by' => [
-		new OrderByClause('n_table.time_created', 'DESC'),
-		new OrderByClause('n_table.id', 'DESC'),
+		new OrderByClause('a_table.time_created', 'DESC'),
+		new OrderByClause('a_table.id', 'DESC'),
 	],
-	'no_results' => elgg_echo('messageboard:none'),
+	'no_results' => true,
 ];
 
 $title = elgg_echo('messageboard:owner', [$page_owner->getDisplayName()]);

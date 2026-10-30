@@ -53,7 +53,7 @@ class Functions
         $this->pattern = Functions::makePattern(array_keys($this->register));
     }
 
-    public function apply($str, \stdClass $context = null)
+    public function apply($str, ?\stdClass $context = null)
     {
         if (strpos($str, '(') === false) {
             return $str;
@@ -164,7 +164,7 @@ class Functions
             $patt = $nonIdents;
         }
 
-        return Regex::make("~$patt\(~iS");
+        return Regex::make("~$patt\(~iS"); // @phpstan-ignore-line variable.undefined
     }
 }
 

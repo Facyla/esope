@@ -4,9 +4,6 @@ namespace Elgg;
 
 use Elgg\Exceptions\RangeException;
 
-/**
- * @group UnitTests
- */
 class EntityDirLocatorUnitTest extends \Elgg\UnitTestCase {
 
 	public $guids = [
@@ -37,7 +34,7 @@ class EntityDirLocatorUnitTest extends \Elgg\UnitTestCase {
 		new \Elgg\EntityDirLocator($guid);
 	}
 
-	public function badGuidsProvider() {
+	public static function badGuidsProvider() {
 		return [
 			[0],
 			[-123]

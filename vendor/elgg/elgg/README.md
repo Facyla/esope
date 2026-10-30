@@ -1,10 +1,10 @@
 Elgg
 ====
 
-[![PHPUnit test suites](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml/badge.svg?branch=5.0)](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=5.0)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=5.0) 
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=5.0)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=5.0) 
-[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?badge=5.0)](http://learn.elgg.org/en/5.0/)
+[![PHPUnit test suites](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml/badge.svg?branch=6.3)](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=6.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=6.3) 
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=6.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=6.3) 
+[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?badge=6.3)](http://learn.elgg.org/en/6.3/)
 
 Elgg is an open source rapid development framework for socially aware web applications.
 
@@ -18,7 +18,7 @@ Features
 - **Cacheable system of static assets** that allows themes and plugins to serve images, stylesheets, fonts and scripts bypassing the engine
 - **User authentication** is powered by pluggable auth modules, which allow applications to implement custom authentication protocols
 - **Security** is ensured by built-in anti CSRF validation, strict XSS filters, HMAC signatures, latest cryptographic approaches to password hashing
-- **Client-side API** powered by asynchronous JavaScript modules via RequireJS and a build-in Ajax service for easy communication with the server
+- **Client-side API** powered by asynchronous ES modules and a built-in Ajax service for easy communication with the server
 - **Flexible entity system** that allows applications to prototype new types of content and user interactions
 -  **Opinionated data model** with a consolidated API layer that allows the developers to easily interface with the database
 - **Access control system** that allows applications to build granular content access policies, as well as create private networks and intranets
@@ -34,14 +34,14 @@ Under the hood:
 - Elgg is a modular OOP framework that is driven by DI services
 - NGINX or Apache compatible
 - Symfony2 HTTP Foundation handles requests and responses
-- RequireJS handles AMD
+- modular javascript with ECMAScript modules 
 - Laminas Mail handles outgoing email
 - htmLawed XSS filters
 - DBAL
 - Phinx database migrations
 - CSS-Crush for CSS preprocessing
 - Imagine for image manipulation
-* Persistent caching with Memcached and/or Redis
+- Persistent caching with Memcached and/or Redis
 - Error handling with Monolog
 
 Elgg Foundation
@@ -60,7 +60,7 @@ The Elgg project was started in 2004 by
 License
 -------
 
-Copyright (c) 2008-2023, see COPYRIGHT.txt
+Copyright (c) 2008-2025, see COPYRIGHT.txt
 
 Elgg is released under the GNU General Public License (GPL) Version 2 and the
 Massachusetts Institute of Technology (MIT-X11) License. 

@@ -77,12 +77,9 @@ return array(
 	'UserFetchFailureException' => '用户user_guid [%s]校验失败，因为用户不存在。',
 
 	'PageNotFoundException' => '您试图查看的页面不存在，或者您没有查看它的权限。',
-	'EntityNotFoundException' => '您试图访问的内容已被删除，或者您没有访问它的权限。',
-	'EntityPermissionsException' => '此操作没有足够的权限。',
 	'GatekeeperException' => '您没有权限查看要访问的页面。',
 	'BadRequestException' => '请求失败！',
 
-	'viewfailure' => '在视图中存在错误 %s',
 	'changebookmark' => '请更改此页的书签！',
 	'error:missing_data' => '在您的请求中部分数据丢失。',
 	'save:fail' => '数据保存失败！',
@@ -234,7 +231,6 @@ return array(
 	'link:view' => '查看链接',
 	'link:view:all' => '查看所有',
 
-
 /**
  * River
  */
@@ -346,9 +342,11 @@ return array(
  */
 	'menu:page:header:administer' => '管理员',
 	'menu:page:header:configure' => '配置',
+	'menu:page:header:utilities' => '站点设置',
 	'menu:page:header:develop' => '开发',
 	'menu:page:header:information' => '信息',
 	'menu:page:header:default' => '其他',
+	'menu:page:header:plugin_settings' => '插件设置',
 
 	'admin:view_site' => '访问网站',
 	'admin:loggedin' => '以%s身份登录',
@@ -516,6 +514,8 @@ return array(
 	'admin:security:settings:site_secret:intro' => 'Elgg用来创建各种用途的安全令牌的关键。',
 	'admin:security:settings:site_secret:regenerate' => "更新网站的密钥",
 	'admin:security:settings:site_secret:regenerate:help' => "注：重新生成你的站点的秘密可能会导致一些用户用于“记住我”，电子邮件验证请求，邀请码等的令牌无效。",
+	'admin:security:security_txt:contact' => "聯絡",
+	'admin:security:security_txt:language' => "语言",
 	
 	'admin:site:secret:regenerated' => "您的站点密钥已被重新生成",
 	'admin:site:secret:prevented' => "站点秘密的再生被阻止。",
@@ -527,8 +527,6 @@ return array(
 	'plugins:disabled' => '插件不能装载,因为有一个名为“disabled”的文件存在于mod文件夹。',
 	'plugins:settings:save:ok' => "%s插件的设置保存成功。",
 	'plugins:settings:save:fail' => "保存 %s 插件设置时遇到问题。",
-	'plugins:usersettings:save:ok' => "%s插件的用户设置成功保存。",
-	'plugins:usersettings:save:fail' => "保存%s插件的用户设置时遇到问题。",
 	
 	'item:object:plugin' => '插件',
 	'collection:object:plugin' => '所有插件',
@@ -590,7 +588,7 @@ return array(
 	'admin:statistics:label:numusers' => "用户数量",
 	'admin:statistics:label:numonline' => "在线用户数量",
 	'admin:statistics:label:onlineusers' => "当前在线用户",
-	'admin:statistics:label:admins'=>"管理",
+	'admin:statistics:label:admins' => "管理",
 	'admin:statistics:label:version' => "Elgg版本",
 	'admin:statistics:label:version:release' => "发布",
 	'admin:statistics:label:version:version' => "数据库版本",
@@ -676,6 +674,7 @@ return array(
 	
 	'usersettings:statistics:yourdetails' => "您的细节",
 	'usersettings:statistics:label:name' => "全名",
+	'usersettings:statistics:label:email' => "邮箱",
 	'usersettings:statistics:label:lastlogin' => "最后登录",
 	'usersettings:statistics:label:membersince' => "成员来自",
 	'usersettings:statistics:label:numentities' => "您的内容",
@@ -1021,6 +1020,7 @@ return array(
 	'admin:legend:system' => '系统',
 	'admin:legend:caching' => '缓存',
 	'admin:legend:content' => '内容',
+	'admin:legend:comments' => '评论',
 	'admin:legend:content_access' => '内容访问',
 	'admin:legend:site_access' => '网站访问',
 	'admin:legend:debug' => '调试和纪录',
@@ -1031,6 +1031,8 @@ return array(
 	'config:disable_rss:help' => "禁用此功能，不再使用RSS提供的可用性。",
 	'config:friendly_time_number_of_days:label' => "呈现人性化天数的时间",
 	'config:friendly_time_number_of_days:help' => "您可以配置使用人性化时间标记的天数。在设定的天数之后，人性化时间将更改为常规日期格式。将此设置为0将禁用人性化的时间格式。",
+	'config:content:mentions_display_format:username' => "用户名",
+	'config:content:mentions_display_format:display_name' => "姓名",
 	'config:email' => "邮箱",
 
 	'upgrading' => '升级',
@@ -1043,6 +1045,7 @@ return array(
 	'admin:pending_upgrades' => '网站有待处理的升级，需要你的注意',
 	'admin:view_upgrades' => '查看待处理的升级',
 	'item:object:elgg_upgrade' => '网站升级',
+	'collection:object:elgg_upgrade' => 'Site upgrades',
 	'admin:upgrades:none' => '安装已经是最新',
 
 	'upgrade:success_count' => '升级:',
@@ -1106,8 +1109,6 @@ return array(
 
 	'generic_comments:add' => "留下评论",
 	'generic_comments:edit' => "编辑评论",
-	'generic_comments:post' => "发表评论",
-	'generic_comments:text' => "评论",
 	'generic_comments:latest' => "最新评论",
 	'generic_comment:posted' => "您的评论已发布.",
 	'generic_comment:updated' => "评论已更新！",
@@ -1115,9 +1116,7 @@ return array(
 	'generic_comment:notfound' => "未找到指定内容！",
 	'generic_comment:failure' => "保存评论时产生意外错误！",
 	'generic_comment:none' => '尚无评论',
-	'generic_comment:title' => '%s评论',
 	'generic_comment:on' => '%s 评论 %s',
-	'generic_comments:latest:posted' => '发表了',
 	
 	'generic_comment:notification:user:summary' => '新评论： %s',
 
@@ -1133,6 +1132,9 @@ return array(
 	'entity:delete:permission_denied' => '您还没有权限删除此项目。',
 	'entity:delete:success' => '%s 已删除。',
 	'entity:delete:fail' => '%s 删除失败。',
+	
+	'entity:restore:item' => '栏目',
+
 
 /**
  * Annotations
@@ -1160,9 +1162,25 @@ return array(
  */
 	
 /**
+ * Trash
+ */
+
+/**
  * Miscellaneous
  */
-	
+	'field:required' => "需要的",
+
+/**
+ * Accessibility
+ */
+	'menu:comments:header' => "评论",
+	'menu:filter:header' => "过滤",
+	'menu:river:header' => "动态",
+	'menu:site:header' => "站点",
+	'menu:social:header' => "社交",
+	'menu:title:header' => "标题",
+	'menu:topbar:header' => "顶部栏",
+
 /**
  * Cli commands
  */
@@ -1320,5 +1338,7 @@ return array(
 	"zh_hans" => "简体中文",
 	"zu" => "Zulu",
 
-	"field:required" => '需要的',
+/**
+ * Upgrades
+ */
 );

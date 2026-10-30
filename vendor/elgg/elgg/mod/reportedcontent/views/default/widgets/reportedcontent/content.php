@@ -3,8 +3,10 @@
  * List the latest reports
  */
 
-/* @var $widget \ElggWidget */
 $widget = elgg_extract('entity', $vars);
+if (!$widget instanceof \ElggWidget) {
+	return;
+}
 
 echo elgg_list_entities([
 	'type' => 'object',
@@ -14,6 +16,6 @@ echo elgg_list_entities([
 	'metadata_name_value_pairs' => [
 		'state' => 'active',
 	],
-	'no_results' => elgg_echo('reportedcontent:none'),
-	'widget_more' => elgg_view_url('admin/administer_utilities/reportedcontent', elgg_echo('more')),
+	'no_results' => true,
+	'widget_more' => elgg_view_url($widget->getURL(), elgg_echo('more')),
 ]);

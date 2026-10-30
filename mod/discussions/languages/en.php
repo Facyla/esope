@@ -7,12 +7,14 @@
 
 return array(
 	'item:object:discussion' => "Discussion topic",
+	'collection:object:discussion' => 'Discussion topics',
+	'list:object:discussion:no_results' => 'No discussions found',
 	
 	'add:object:discussion' => 'Add discussion topic',
 	'edit:object:discussion' => 'Edit topic',
-	'collection:object:discussion' => 'Discussion topics',
 	'collection:object:discussion:group' => 'Group discussions',
 	'collection:object:discussion:my_groups' => 'Discussions in my groups',
+	
 	'notification:object:discussion:create' => "Send a notification when a discussion is created",
 	'notifications:mute:object:discussion' => "about the discussion '%s'",
 	
@@ -20,13 +22,15 @@ return array(
 	'discussion:settings:enable_global_discussions:help' => 'Allow discussions to be created outside of groups',
 
 	'discussion:latest' => 'Latest discussions',
-	'discussion:none' => 'No discussions',
+	'discussion:none' => 'No discussions', // @todo remove in Elgg 7.0
 	'discussion:updated' => "Last comment by %s %s",
 
 	'discussion:topic:created' => 'The discussion topic was created.',
 	'discussion:topic:updated' => 'The discussion topic was updated.',
 	'entity:delete:object:discussion:success' => 'Discussion topic has been deleted.',
-
+	
+	'entity:edit:object:discussion:success' => 'The discussion was saved successfully',
+	
 	'discussion:topic:notfound' => 'Discussion topic not found',
 	'discussion:error:notsaved' => 'Unable to save this topic',
 	'discussion:error:missing' => 'Both title and message are required fields',

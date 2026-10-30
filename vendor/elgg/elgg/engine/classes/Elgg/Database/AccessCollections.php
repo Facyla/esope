@@ -3,7 +3,7 @@
 namespace Elgg\Database;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Elgg\Cache\BaseCache;
+use Elgg\Cache\AccessCache;
 use Elgg\Config;
 use Elgg\Database;
 use Elgg\EventsService;
@@ -27,28 +27,12 @@ class AccessCollections {
 	/**
 	 * @var string name of the access collections database table
 	 */
-	const TABLE_NAME = 'access_collections';
+	public const TABLE_NAME = 'access_collections';
 	
 	/**
 	 * @var string name of the access collection membership database table
 	 */
-	const MEMBERSHIP_TABLE_NAME = 'access_collection_membership';
-
-	protected Config $config;
-
-	protected Database $db;
-
-	protected BaseCache $access_cache;
-
-	protected EventsService $events;
-
-	protected SessionManagerService $session_manager;
-
-	protected EntityTable $entities;
-
-	protected UserCapabilities $capabilities;
-
-	protected Translator $translator;
+	public const MEMBERSHIP_TABLE_NAME = 'access_collection_membership';
 
 	protected bool $init_complete = false;
 
@@ -59,28 +43,20 @@ class AccessCollections {
 	 * @param Database              $db              Database
 	 * @param EntityTable           $entities        Entity table
 	 * @param UserCapabilities      $capabilities    User capabilities
-	 * @param BaseCache             $cache           Access cache
+	 * @param AccessCache           $access_cache    Access cache
 	 * @param EventsService         $events          Events
 	 * @param SessionManagerService $session_manager Session
 	 * @param Translator            $translator      Translator
 	 */
 	public function __construct(
-		Config $config,
-		Database $db,
-		EntityTable $entities,
-		UserCapabilities $capabilities,
-		BaseCache $cache,
-		EventsService $events,
-		SessionManagerService $session_manager,
-		Translator $translator) {
-		$this->config = $config;
-		$this->db = $db;
-		$this->entities = $entities;
-		$this->capabilities = $capabilities;
-		$this->access_cache = $cache;
-		$this->events = $events;
-		$this->session_manager = $session_manager;
-		$this->translator = $translator;
+		protected Config $config,
+		protected Database $db,
+		protected EntityTable $entities,
+		protected UserCapabilities $capabilities,
+		protected AccessCache $access_cache,
+		protected EventsService $events,
+		protected SessionManagerService $session_manager,
+		protected Translator $translator) {
 	}
 
 	/**
@@ -128,10 +104,9 @@ class AccessCollections {
 		}
 
 		$hash = $user_guid . 'get_access_array';
-
-		if ($cache[$hash]) {
-			$access_array = $cache[$hash];
-		} else {
+		
+		$access_array = $cache->load($hash);
+		if ($access_array === null) {
 			// Public access is always visible
 			$access_array = [ACCESS_PUBLIC];
 
@@ -165,7 +140,7 @@ class AccessCollections {
 			}
 
 			if ($this->init_complete) {
-				$cache[$hash] = $access_array;
+				$cache->save($hash, $access_array);
 			}
 		}
 
@@ -258,10 +233,9 @@ class AccessCollections {
 		}
 
 		$hash = $user_guid . 'get_write_access_array';
-
-		if ($cache[$hash]) {
-			$access_array = $cache[$hash];
-		} else {
+		
+		$access_array = $cache->load($hash);
+		if ($access_array === null) {
 			$access_array = [
 				ACCESS_PRIVATE => $this->getReadableAccessLevel(ACCESS_PRIVATE),
 				ACCESS_LOGGED_IN => $this->getReadableAccessLevel(ACCESS_LOGGED_IN),
@@ -271,7 +245,7 @@ class AccessCollections {
 			$access_array += $this->getCollectionsForWriteAccess($user_guid);
 			
 			if ($this->init_complete) {
-				$cache[$hash] = $access_array;
+				$cache->save($hash, $access_array);
 			}
 		}
 
@@ -343,12 +317,12 @@ class AccessCollections {
 	 *
 	 * Respects access control disabling for admin users and {@link elgg_call()}
 	 *
-	 * @param int $collection_id The collection id
-	 * @param int $user_guid     The user GUID to check for. Defaults to logged in user.
+	 * @param int      $collection_id The collection id
+	 * @param null|int $user_guid     The user GUID to check for. Defaults to logged in user.
 	 *
 	 * @return bool
 	 */
-	public function canEdit(int $collection_id, int $user_guid = null): bool {
+	public function canEdit(int $collection_id, ?int $user_guid = null): bool {
 		try {
 			$user = $this->entities->getUserForPermissionsCheck($user_guid);
 		} catch (UserFetchFailureException $e) {
@@ -665,9 +639,9 @@ class AccessCollections {
 	 */
 	public function getCollectionsByMember(int $member_guid): array {
 		$select = Select::fromTable(self::TABLE_NAME, 'ac');
-		$select->join('ac', self::MEMBERSHIP_TABLE_NAME, 'acm', $select->compare('ac.id', '=', 'acm.access_collection_id'));
+		$select->join($select->getTableAlias(), self::MEMBERSHIP_TABLE_NAME, 'acm', $select->compare("{$select->getTableAlias()}.id", '=', 'acm.access_collection_id'));
 
-		$select->select('ac.*')
+		$select->select("{$select->getTableAlias()}.*")
 			->where($select->compare('acm.user_guid', '=', $member_guid, ELGG_VALUE_GUID))
 			->orderBy('name', 'ASC');
 

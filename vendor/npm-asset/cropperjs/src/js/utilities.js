@@ -1,9 +1,14 @@
-import { IS_BROWSER, WINDOW } from './constants';
+import { IS_BROWSER, REGEXP_SPACES, WINDOW } from './constants';
 
 /**
  * Check if the given value is not a number.
  */
 export const isNaN = Number.isNaN || WINDOW.isNaN;
+
+/**
+ * Check if the given value is a finite number.
+ */
+export const isFinite = Number.isFinite || WINDOW.isFinite;
 
 /**
  * Check if the given value is a number.
@@ -164,7 +169,7 @@ export function setStyle(element, styles) {
 export function hasClass(element, value) {
   return element.classList
     ? element.classList.contains(value)
-    : element.className.indexOf(value) > -1;
+    : element.className.split(REGEXP_SPACES).indexOf(value) > -1;
 }
 
 /**
@@ -221,7 +226,7 @@ export function removeClass(element, value) {
   }
 
   if (element.className.indexOf(value) >= 0) {
-    element.className = element.className.replace(value, '');
+    element.className = element.className.split(REGEXP_SPACES).filter((item) => item && item !== value).join(' ');
   }
 }
 
@@ -259,7 +264,9 @@ const REGEXP_CAMEL_CASE = /([a-z\d])([A-Z])/g;
  * @returns {string} The transformed value.
  */
 export function toParamCase(value) {
-  return value.replace(REGEXP_CAMEL_CASE, '$1-$2').toLowerCase();
+  return typeof value === 'string'
+    ? value.replace(REGEXP_CAMEL_CASE, '$1-$2').toLowerCase()
+    : '';
 }
 
 /**
@@ -309,7 +316,7 @@ export function removeData(element, name) {
       element[name] = undefined;
     }
   } else if (element.dataset) {
-    // #128 Safari not allows to delete dataset property
+    // #128 Safari doesn't allow deleting dataset properties
     try {
       delete element.dataset[name];
     } catch (error) {
@@ -320,7 +327,6 @@ export function removeData(element, name) {
   }
 }
 
-const REGEXP_SPACES = /\s\s*/;
 const onceSupported = (() => {
   let supported = false;
 
@@ -358,13 +364,18 @@ const onceSupported = (() => {
  * @param {Object} options - The event options.
  */
 export function removeListener(element, type, listener, options = {}) {
+  if (!element || !type || !isFunction(element.removeEventListener)) {
+    return;
+  }
+
   let handler = listener;
 
   type.trim().split(REGEXP_SPACES).forEach((event) => {
     if (!onceSupported) {
-      const { listeners } = element;
+      // eslint-disable-next-line no-underscore-dangle
+      const listeners = element.__cropperListeners__ || {};
 
-      if (listeners && listeners[event] && listeners[event][listener]) {
+      if (listeners[event] && listeners[event][listener]) {
         handler = listeners[event][listener];
         delete listeners[event][listener];
 
@@ -373,7 +384,8 @@ export function removeListener(element, type, listener, options = {}) {
         }
 
         if (Object.keys(listeners).length === 0) {
-          delete element.listeners;
+          // eslint-disable-next-line no-underscore-dangle
+          delete element.__cropperListeners__;
         }
       }
     }
@@ -390,14 +402,22 @@ export function removeListener(element, type, listener, options = {}) {
  * @param {Object} options - The event options.
  */
 export function addListener(element, type, listener, options = {}) {
+  if (!element || !type || !isFunction(element.addEventListener) || !isFunction(listener)) {
+    return;
+  }
+
   let handler = listener;
 
   type.trim().split(REGEXP_SPACES).forEach((event) => {
     if (options.once && !onceSupported) {
-      const { listeners = {} } = element;
+      // eslint-disable-next-line no-underscore-dangle
+      const listeners = element.__cropperListeners__ || {};
 
       handler = (...args) => {
-        delete listeners[event][listener];
+        if (listeners[event] && listeners[event][listener]) {
+          delete listeners[event][listener];
+        }
+
         element.removeEventListener(event, handler, options);
         listener.apply(element, args);
       };
@@ -411,7 +431,9 @@ export function addListener(element, type, listener, options = {}) {
       }
 
       listeners[event][listener] = handler;
-      element.listeners = listeners;
+
+      // eslint-disable-next-line no-underscore-dangle
+      element.__cropperListeners__ = listeners;
     }
 
     element.addEventListener(event, handler, options);
@@ -426,6 +448,10 @@ export function addListener(element, type, listener, options = {}) {
  * @returns {boolean} Indicate if the event is default prevented or not.
  */
 export function dispatchEvent(element, type, data) {
+  if (!element || !type || !isFunction(element.dispatchEvent)) {
+    return false;
+  }
+
   let event;
 
   // Event and CustomEvent on IE9-11 are global objects, not constructors
@@ -435,25 +461,37 @@ export function dispatchEvent(element, type, data) {
       bubbles: true,
       cancelable: true,
     });
-  } else {
+  } else if (isObject(document) && isFunction(document.createEvent)) {
     event = document.createEvent('CustomEvent');
     event.initCustomEvent(type, true, true, data);
+  } else {
+    return false;
   }
 
   return element.dispatchEvent(event);
 }
 
 /**
- * Get the offset base on the document.
+ * Get the offset based on the document.
  * @param {Element} element - The target element.
  * @returns {Object} The offset data.
  */
 export function getOffset(element) {
+  if (!element || !isFunction(element.getBoundingClientRect)) {
+    return {
+      left: 0,
+      top: 0,
+    };
+  }
+
   const box = element.getBoundingClientRect();
+  const { documentElement = {} } = document || {};
+  const pageXOffset = WINDOW.pageXOffset || 0;
+  const pageYOffset = WINDOW.pageYOffset || 0;
 
   return {
-    left: box.left + (window.pageXOffset - document.documentElement.clientLeft),
-    top: box.top + (window.pageYOffset - document.documentElement.clientTop),
+    left: box.left + (pageXOffset - (documentElement.clientLeft || 0)),
+    top: box.top + (pageYOffset - (documentElement.clientTop || 0)),
   };
 }
 
@@ -481,13 +519,16 @@ export function isCrossOriginURL(url) {
  * @returns {string} The result URL.
  */
 export function addTimestamp(url) {
+  const hashIndex = url.indexOf('#');
+  const hash = hashIndex >= 0 ? url.slice(hashIndex) : '';
+  const baseUrl = hashIndex >= 0 ? url.slice(0, hashIndex) : url;
   const timestamp = `timestamp=${(new Date()).getTime()}`;
 
-  return url + (url.indexOf('?') === -1 ? '?' : '&') + timestamp;
+  return `${baseUrl}${baseUrl.indexOf('?') === -1 ? '?' : '&'}${timestamp}${hash}`;
 }
 
 /**
- * Get transforms base on the given object.
+ * Get transforms based on the given object.
  * @param {Object} obj - The target object.
  * @returns {string} A string contains transform values.
  */
@@ -549,9 +590,14 @@ export function getMaxZoomRatio(pointers) {
       const y2 = Math.abs(pointer.endY - pointer2.endY);
       const z1 = Math.sqrt((x1 * x1) + (y1 * y1));
       const z2 = Math.sqrt((x2 * x2) + (y2 * y2));
+
+      if (!isFinite(z1) || !isFinite(z2) || z1 === 0 || z2 === z1) {
+        return;
+      }
+
       const ratio = (z2 - z1) / z1;
 
-      if (Math.abs(ratio) > Math.abs(maxRatio)) {
+      if (isFinite(ratio) && Math.abs(ratio) > Math.abs(maxRatio)) {
         maxRatio = ratio;
       }
     });
@@ -672,7 +718,7 @@ export function getRotatedSizes({ width, height, degree }) {
 }
 
 /**
- * Get a canvas which drew the given image.
+ * Get a canvas which draws the given image.
  * @param {HTMLImageElement} image - The image for drawing.
  * @param {Object} imageData - The image data.
  * @param {Object} canvasData - The canvas data.

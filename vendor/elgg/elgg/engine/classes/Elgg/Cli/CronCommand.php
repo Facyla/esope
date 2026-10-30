@@ -2,6 +2,8 @@
 
 namespace Elgg\Cli;
 
+use Elgg\Exceptions\CronException;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
@@ -42,14 +44,13 @@ class CronCommand extends Command {
 		}
 
 		$time = new \DateTime($time);
-
 		_elgg_services()->cron->setCurrentTime($time);
-		$jobs = _elgg_services()->cron->run($intervals, $this->option('force'));
-
-		if (!$this->option('quiet')) {
-			foreach ($jobs as $job) {
-				$this->write($job->getOutput());
-			}
+		
+		try {
+			_elgg_services()->cron->run($intervals, $this->option('force'));
+		} catch (CronException $e) {
+			elgg_log($e->getMessage(), LogLevel::ERROR);
+			return self::FAILURE;
 		}
 
 		return self::SUCCESS;

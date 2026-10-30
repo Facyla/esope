@@ -1,4 +1,5 @@
 <?php
+
 namespace Elgg\Debug;
 
 use Elgg\Debug\Inspector\ViewComponent;
@@ -431,5 +432,24 @@ class Inspector {
 		ksort($tree);
 
 		return $tree;
+	}
+	
+	/**
+	 * Get the registered database CLI seeders
+	 *
+	 * @return string[]
+	 */
+	public function getSeeders(): array {
+		return _elgg_services()->seeder->getSeederClasses();
+	}
+	
+	/**
+	 * Get all registered notification handlers
+	 *
+	 * @return array
+	 * @since 6.3
+	 */
+	public function getNotifications(): array {
+		return _elgg_services()->notifications->getEvents();
 	}
 }

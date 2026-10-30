@@ -3,6 +3,7 @@
 namespace Elgg\SystemLog;
 
 use Elgg\Application\Database;
+use Elgg\Database\DbConfig;
 use Elgg\Database\Delete;
 use Elgg\Database\Insert;
 use Elgg\Database\Select;
@@ -17,20 +18,13 @@ class SystemLog {
 	use TimeUsing;
 	use ServiceFacade;
 
-	/**
-	 * @var LogEventCache
-	 */
-	protected $cache;
+	public const TABLE_NAME = 'system_log';
 
-	/**
-	 * @var Database
-	 */
-	protected $db;
+	protected LogEventCache $cache;
+
+	protected Database $db;
 	
-	/**
-	 * @var bool
-	 */
-	protected $logging_enabled = true;
+	protected bool $logging_enabled = true;
 
 	/**
 	 * Constructor
@@ -51,7 +45,7 @@ class SystemLog {
 	 * @return SystemLogEntry|false
 	 */
 	public function get($id) {
-		$qb = Select::fromTable('system_log');
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('*');
 		$qb->where($qb->compare('id', '=', $id, ELGG_VALUE_INTEGER));
 
@@ -147,7 +141,6 @@ class SystemLog {
 	 * @return void
 	 */
 	public function insert($object, $event): void {
-
 		if (!$this->isLoggingEnabled()) {
 			return;
 		}
@@ -164,7 +157,7 @@ class SystemLog {
 			return;
 		}
 
-		$qb = Insert::intoTable('system_log');
+		$qb = Insert::intoTable(self::TABLE_NAME);
 		$qb->values([
 			'object_id' => $qb->param($object->object_id, ELGG_VALUE_INTEGER),
 			'object_class' => $qb->param($object->object_class, ELGG_VALUE_STRING),
@@ -194,32 +187,28 @@ class SystemLog {
 	 * @return bool
 	 */
 	public function archive(\DateTime $created_before): bool {
-
 		$dbprefix = $this->db->prefix;
 
 		$now = $this->getCurrentTime()->getTimestamp();
 
-		$select = Select::fromTable('system_log');
+		$select = Select::fromTable(self::TABLE_NAME);
 		$select->select('*')
 			->where($select->compare('time_created', '<=', $created_before, ELGG_VALUE_TIMESTAMP));
 
 		$query = "CREATE TABLE {$dbprefix}system_log_{$now} AS {$select->getSQL()}";
 		
-		if (!$this->db->getConnection('write')->executeStatement($query, $select->getParameters())) {
+		if (!$this->db->getConnection(DbConfig::WRITE)->executeStatement($query, $select->getParameters())) {
 			return false;
 		}
 
 		// delete
-		$delete = Delete::fromTable('system_log');
+		$delete = Delete::fromTable(self::TABLE_NAME);
 		$delete->where($delete->compare('time_created', '<=', $created_before, ELGG_VALUE_TIMESTAMP));
 
-		// Don't delete on time since we are running in a concurrent environment
-		if ($this->db->deleteData($delete) === false) {
-			return false;
-		}
+		$this->db->deleteData($delete);
 
 		// alter table to archive engine (when available)
-		$available_engines_result = $this->db->getConnection('read')->executeQuery('SHOW ENGINES');
+		$available_engines_result = $this->db->getConnection(DbConfig::READ)->executeQuery('SHOW ENGINES');
 		$available_engines = array_filter($available_engines_result->fetchAllAssociative(), function($row_array) {
 			// filter only enabled engines
 			return in_array($row_array['Support'], ['YES', 'DEFAULT']);
@@ -231,7 +220,7 @@ class SystemLog {
 		
 		if (in_array('ARCHIVE', $available_engines)) {
 			try {
-				$this->db->getConnection('write')->executeStatement("ALTER TABLE {$dbprefix}system_log_{$now} ENGINE=ARCHIVE");
+				$this->db->getConnection(DbConfig::WRITE)->executeStatement("ALTER TABLE {$dbprefix}system_log_{$now} ENGINE=ARCHIVE");
 			} catch (\Exception $e) {
 				return false;
 			}
@@ -248,10 +237,9 @@ class SystemLog {
 	 * @return bool
 	 */
 	public function deleteArchive(\DateTime $archived_before): bool {
-
 		$dbprefix = $this->db->prefix;
 
-		$results = $this->db->getConnection('read')->executeQuery("SHOW TABLES like '{$dbprefix}system_log_%'");
+		$results = $this->db->getConnection(DbConfig::READ)->executeQuery("SHOW TABLES like '{$dbprefix}system_log_%'");
 		if (empty($results) || empty($results->rowCount())) {
 			return false;
 		}
@@ -265,10 +253,10 @@ class SystemLog {
 
 			if ($log_time <= $archived_before->getTimestamp()) {
 				try {
-					$this->db->getConnection('write')->executeStatement("DROP TABLE {$table_name}");
+					$this->db->getConnection(DbConfig::WRITE)->executeStatement("DROP TABLE {$table_name}");
 					$deleted_tables = true;
 				} catch (\Exception $e) {
-					elgg_log("Failed to delete the log table {$table_name}", 'ERROR');
+					elgg_log("Failed to delete the log table {$table_name}", \Psr\Log\LogLevel::ERROR);
 				}
 			}
 		}

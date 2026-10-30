@@ -5,12 +5,6 @@ namespace Elgg;
 use Elgg\Exceptions\Http\PageNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @group HttpService
- * @group RouterService
- * @group UnitTests
- * @group Routing
- */
 class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 
 	public function testMostSpecificRouteWins() {
@@ -86,7 +80,7 @@ class RouteMatchingUnitTest extends \Elgg\UnitTestCase {
 		elgg_unregister_route('foo');
 	}
 
-	public function patternProvider() {
+	public static function patternProvider() {
 
 		$config = [
 			[

@@ -53,8 +53,6 @@ return array(
 	'groups:joinrequest' => 'Ansøg om medlemsskab',
 	'groups:join' => 'Bliv medlem af gruppen',
 	'groups:leave' => 'Forlad gruppen',
-	'groups:invite' => 'Inviter venner',
-	'groups:invite:title' => 'Inviter venner til gruppen',
 
 	'groups:nofriendsatall' => 'Du har ingen venner at invitere!',
 	'groups:group' => "Gruppe",
@@ -126,4 +124,6 @@ return array(
 	'groups:joinrequestkilled' => 'Anmodningen om tilslutning er blevet slettet.',
 	
 	// Notification settings
+	
+	// accessibility
 );

@@ -7,9 +7,7 @@ use Elgg\Cache\MetadataCache;
 use Elgg\Config;
 use Elgg\Database;
 use Elgg\Database\Clauses\EntityWhereClause;
-use Elgg\EntityPreloader;
 use Elgg\EventsService;
-use Elgg\Exceptions\ClassException;
 use Elgg\Exceptions\Database\UserFetchFailureException;
 use Elgg\Exceptions\DomainException;
 use Elgg\I18n\Translator;
@@ -24,32 +22,20 @@ use Elgg\Traits\TimeUsing;
  * @since 1.10.0
  */
 class EntityTable {
-
+	
 	use Loggable;
 	use TimeUsing;
 
 	/**
 	 * @var string name of the entities database table
 	 */
-	const TABLE_NAME = 'entities';
-
-	protected Config $config;
-
-	protected Database $db;
-
-	protected EntityCache $entity_cache;
-
-	protected EntityPreloader $entity_preloader;
-
-	protected MetadataCache $metadata_cache;
-
-	protected EventsService $events;
-
-	protected SessionManagerService $session_manager;
-
-	protected Translator $translator;
+	public const TABLE_NAME = 'entities';
+	
+	public const DEFAULT_JOIN_ALIAS = 'e';
 
 	protected array $deleted_guids = [];
+	
+	protected array $trashed_guids = [];
 	
 	protected array $entity_classes = [];
 
@@ -65,21 +51,14 @@ class EntityTable {
 	 * @param Translator            $translator      Translator
 	 */
 	public function __construct(
-		Config $config,
-		Database $db,
-		EntityCache $entity_cache,
-		MetadataCache $metadata_cache,
-		EventsService $events,
-		SessionManagerService $session_manager,
-		Translator $translator
+		protected Config $config,
+		protected Database $db,
+		protected EntityCache $entity_cache,
+		protected MetadataCache $metadata_cache,
+		protected EventsService $events,
+		protected SessionManagerService $session_manager,
+		protected Translator $translator
 	) {
-		$this->config = $config;
-		$this->db = $db;
-		$this->entity_cache = $entity_cache;
-		$this->metadata_cache = $metadata_cache;
-		$this->events = $events;
-		$this->session_manager = $session_manager;
-		$this->translator = $translator;
 	}
 
 	/**
@@ -102,6 +81,7 @@ class EntityTable {
 
 	/**
 	 * Returns class name registered as a constructor for a given type and subtype
+	 * The classname is also validated to exist and to be an extension of an \ElggEntity
 	 *
 	 * @param string $type    Entity type
 	 * @param string $subtype Entity subtype
@@ -109,7 +89,31 @@ class EntityTable {
 	 * @return string
 	 */
 	public function getEntityClass(string $type, string $subtype): string {
-		return $this->entity_classes[$type][$subtype] ?? '';
+		
+		$class_name = $this->entity_classes[$type][$subtype] ?? '';
+		if ($class_name && !class_exists($class_name)) {
+			$this->getLogger()->error("Class '{$class_name}' was not found");
+			$class_name = '';
+		}
+		
+		if (empty($class_name)) {
+			$map = [
+				'object' => \ElggObject::class,
+				'user' => \ElggUser::class,
+				'group' => \ElggGroup::class,
+				'site' => \ElggSite::class,
+			];
+			if (isset($map[$type])) {
+				$class_name = $map[$type];
+			}
+		}
+
+		if (!is_a($class_name, \ElggEntity::class, true)) {
+			$this->getLogger()->error("{$class_name} must extend " . \ElggEntity::class);
+			return '';
+		}
+		
+		return $class_name;
 	}
 
 	/**
@@ -119,14 +123,14 @@ class EntityTable {
 	 *
 	 * @warning This will only return results if a) it exists, b) you have access to it.
 	 *
-	 * @param int $guid      The GUID of the object to extract
-	 * @param int $user_guid GUID of the user accessing the row
-	 *                       Defaults to logged in user if null
-	 *                       Builds an access query for a logged out user if 0
+	 * @param int      $guid      The GUID of the object to extract
+	 * @param null|int $user_guid GUID of the user accessing the row
+	 *                            Defaults to logged-in user if null
+	 *                            Builds an access query for a logged-out user if 0
 	 *
 	 * @return \stdClass|null
 	 */
-	public function getRow(int $guid, int $user_guid = null): ?\stdClass {
+	public function getRow(int $guid, ?int $user_guid = null): ?\stdClass {
 		if ($guid < 0) {
 			return null;
 		}
@@ -135,8 +139,8 @@ class EntityTable {
 		$where->guids = $guid;
 		$where->viewer_guid = $user_guid;
 
-		$select = Select::fromTable(self::TABLE_NAME, 'e');
-		$select->select('e.*');
+		$select = Select::fromTable(self::TABLE_NAME, self::DEFAULT_JOIN_ALIAS);
+		$select->select("{$select->getTableAlias()}.*");
 		$select->addClause($where);
 
 		return $this->db->getDataRow($select) ?: null;
@@ -197,69 +201,18 @@ class EntityTable {
 	 * @param \stdClass $row The row of the entry in the entities table.
 	 *
 	 * @return \ElggEntity|null
-	 * @throws ClassException
-	 * @throws DomainException
 	 */
 	public function rowToElggStar(\stdClass $row): ?\ElggEntity {
-		if (!isset($row->guid) || !isset($row->subtype)) {
+		if (!isset($row->type) || !isset($row->subtype)) {
 			return null;
 		}
 
 		$class_name = $this->getEntityClass($row->type, $row->subtype);
-		if ($class_name && !class_exists($class_name)) {
-			$this->getLogger()->error("Class '{$class_name}' was not found, missing plugin?");
-			$class_name = '';
-		}
-
 		if (!$class_name) {
-			$map = [
-				'object' => \ElggObject::class,
-				'user' => \ElggUser::class,
-				'group' => \ElggGroup::class,
-				'site' => \ElggSite::class,
-			];
-
-			if (isset($map[$row->type])) {
-				$class_name = $map[$row->type];
-			} else {
-				throw new DomainException("Entity type {$row->type} is not supported.");
-			}
-		}
-
-		$entity = new $class_name($row);
-		if (!$entity instanceof \ElggEntity) {
-			throw new ClassException("{$class_name} must extend " . \ElggEntity::class);
-		}
-
-		return $entity;
-	}
-
-	/**
-	 * Get an entity from the in-memory or memcache caches
-	 *
-	 * @param int $guid GUID
-	 *
-	 * @return \ElggEntity|null
-	 */
-	public function getFromCache(int $guid): ?\ElggEntity {
-		$entity = $this->entity_cache->load($guid);
-		if ($entity) {
-			return $entity;
-		}
-
-		$entity = _elgg_services()->sessionCache->entities->load($guid);
-		if (!$entity instanceof \ElggEntity) {
 			return null;
 		}
 
-		// Validate accessibility if from cache
-		if (!elgg_get_ignore_access() && !$entity->hasAccess()) {
-			return null;
-		}
-
-		$entity->cache(false);
-
-		return $entity;
+		return new $class_name($row);
 	}
 
 	/**
@@ -270,7 +223,7 @@ class EntityTable {
 	 * @return void
 	 */
 	public function invalidateCache(int $guid): void {
-		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() use ($guid) {
 			$entity = $this->get($guid);
 			if ($entity instanceof \ElggEntity) {
 				$entity->invalidateCache();
@@ -281,18 +234,18 @@ class EntityTable {
 	/**
 	 * Loads and returns an entity object from a guid.
 	 *
-	 * @param int    $guid    The GUID of the entity
-	 * @param string $type    The type of the entity
-	 *                        If given, even an existing entity with the given GUID
-	 *                        will not be returned unless its type matches
-	 * @param string $subtype The subtype of the entity
-	 *                        If given, even an existing entity with the given GUID
-	 *                        will not be returned unless its subtype matches
+	 * @param int         $guid    The GUID of the entity
+	 * @param null|string $type    The type of the entity
+	 *                             If given, even an existing entity with the given GUID
+	 *                             will not be returned unless its type matches
+	 * @param null|string $subtype The subtype of the entity
+	 *                             If given, even an existing entity with the given GUID
+	 *                             will not be returned unless its subtype matches
 	 *
 	 * @return \ElggEntity|null The correct Elgg or custom object based upon entity type and subtype
 	 */
-	public function get(int $guid, string $type = null, string $subtype = null): ?\ElggEntity {
-		$entity = $this->getFromCache($guid);
+	public function get(int $guid, ?string $type = null, ?string $subtype = null): ?\ElggEntity {
+		$entity = $this->entity_cache->load($guid);
 		if ($entity instanceof \ElggEntity &&
 			(!isset($type) || $entity->type === $type) &&
 			(!isset($subtype) || $entity->subtype === $subtype)
@@ -313,15 +266,11 @@ class EntityTable {
 			return null;
 		}
 
-		$entity = $row;
-
-		if ($entity instanceof \stdClass) {
-			// Need to check for \stdClass because the unit test mocker returns \ElggEntity classes
-			$entity = $this->rowToElggStar($entity);
+		$entity = $this->rowToElggStar($row);
+		if ($entity instanceof \ElggEntity) {
+			$entity->cache();
 		}
-
-		$entity->cache();
-
+		
 		return $entity;
 	}
 
@@ -338,7 +287,7 @@ class EntityTable {
 	 * @return bool
 	 */
 	public function exists(int $guid): bool {
-		return elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+		return elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() use ($guid) {
 			// need to ignore access and show hidden entities to check existence
 			return !empty($this->getRow($guid));
 		});
@@ -387,17 +336,39 @@ class EntityTable {
 	}
 
 	/**
+	 * Update the time_deleted column in the entities table for $entity.
+	 *
+	 * @param \ElggEntity $entity  Entity to update
+	 * @param null|int    $deleted Timestamp when the entity was deleted
+	 *
+	 * @return int
+	 */
+	public function updateTimeDeleted(\ElggEntity $entity, ?int $deleted = null): int {
+		if ($deleted === null) {
+			$deleted = $this->getCurrentTime()->getTimestamp();
+		}
+
+		$update = Update::table(self::TABLE_NAME);
+		$update->set('time_deleted', $update->param($deleted, ELGG_VALUE_TIMESTAMP))
+			->where($update->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
+
+		$this->db->updateData($update);
+
+		return (int) $deleted;
+	}
+
+	/**
 	 * Update the last_action column in the entities table for $entity.
 	 *
 	 * @warning This is different to time_updated.  Time_updated is automatically set,
 	 * while last_action is only set when explicitly called.
 	 *
 	 * @param \ElggEntity $entity Entity annotation|relationship action carried out on
-	 * @param int         $posted Timestamp of last action
+	 * @param null|int    $posted Timestamp of last action
 	 *
 	 * @return int
 	 */
-	public function updateLastAction(\ElggEntity $entity, int $posted = null): int {
+	public function updateLastAction(\ElggEntity $entity, ?int $posted = null): int {
 		if ($posted === null) {
 			$posted = $this->getCurrentTime()->getTimestamp();
 		}
@@ -414,17 +385,17 @@ class EntityTable {
 	/**
 	 * Get a user by GUID even if the entity is hidden or disabled
 	 *
-	 * @param int $guid User GUID. Default is logged in user
+	 * @param null|int $guid User GUID. Default is logged in user
 	 *
 	 * @return \ElggUser|null
 	 * @throws UserFetchFailureException
 	 */
-	public function getUserForPermissionsCheck(int $guid = null): ?\ElggUser {
+	public function getUserForPermissionsCheck(?int $guid = null): ?\ElggUser {
 		if (empty($guid) || $guid === $this->session_manager->getLoggedInUserGuid()) {
 			return $this->session_manager->getLoggedInUser();
 		}
 
-		$user = elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($guid) {
+		$user = elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() use ($guid) {
 			// need to ignore access and show hidden entities for potential hidden/disabled users
 			return $this->get($guid, 'user');
 		});
@@ -438,6 +409,22 @@ class EntityTable {
 		}
 
 		return $user;
+	}
+
+	/**
+	 * Restore entity
+	 *
+	 * @param \ElggEntity $entity Entity to restore
+	 *
+	 * @return bool
+	 */
+	public function restore(\ElggEntity $entity): bool {
+		$qb = Update::table(self::TABLE_NAME);
+		$qb->set('deleted', $qb->param('no', ELGG_VALUE_STRING))
+			->set('time_deleted', $qb->param(0, ELGG_VALUE_TIMESTAMP))
+			->where($qb->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
+
+		return $this->db->updateData($qb);
 	}
 
 	/**
@@ -479,39 +466,95 @@ class EntityTable {
 	 * @return bool
 	 */
 	public function delete(\ElggEntity $entity, bool $recursive = true): bool {
-		$guid = $entity->guid;
-		if (!$guid) {
-			return false;
-		}
-
-		if (!$this->events->triggerBefore('delete', $entity->type, $entity)) {
+		if (!$entity->guid) {
 			return false;
 		}
 		
-		$this->events->trigger('delete', $entity->type, $entity);
-
-		if ($entity instanceof \ElggUser) {
-			// ban to prevent using the site during delete
-			$entity->ban();
-		}
-
-		// we're going to delete this entity, log the guid to prevent deadloops
-		$this->deleted_guids[] = $entity->guid;
+		set_time_limit(0);
 		
-		if ($recursive) {
-			$this->deleteRelatedEntities($entity);
+		return $this->events->triggerSequence('delete', $entity->type, $entity, function(\ElggEntity $entity) use ($recursive) {
+			if ($entity instanceof \ElggUser) {
+				// ban to prevent using the site during delete
+				$entity->ban();
+			}
+			
+			// we're going to delete this entity, log the guid to prevent deadloops
+			$this->deleted_guids[] = $entity->guid;
+			
+			if ($recursive) {
+				$this->deleteRelatedEntities($entity);
+			}
+			
+			$this->deleteEntityProperties($entity);
+			
+			$qb = Delete::fromTable(self::TABLE_NAME);
+			$qb->where($qb->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
+			
+			return (bool) $this->db->deleteData($qb);
+		});
+	}
+	
+	/**
+	 * Trash an entity (not quite delete but close)
+	 *
+	 * @param \ElggEntity $entity    Entity
+	 * @param bool        $recursive Trash all owned and contained entities
+	 *
+	 * @return bool
+	 */
+	public function trash(\ElggEntity $entity, bool $recursive = true): bool {
+		if (!$entity->guid) {
+			return false;
 		}
-
-		$this->deleteEntityProperties($entity);
-
-		$qb = Delete::fromTable(self::TABLE_NAME);
-		$qb->where($qb->compare('guid', '=', $guid, ELGG_VALUE_GUID));
-
-		$this->db->deleteData($qb);
-
-		$this->events->triggerAfter('delete', $entity->type, $entity);
-
-		return true;
+		
+		if (!$this->config->trash_enabled) {
+			return $this->delete($entity, $recursive);
+		}
+		
+		if ($entity->isDeleted()) {
+			// already trashed
+			return true;
+		}
+		
+		return $this->events->triggerSequence('trash', $entity->type, $entity, function(\ElggEntity $entity) use ($recursive) {
+			$unban_after = false;
+			if ($entity instanceof \ElggUser && !$entity->isBanned()) {
+				// temporarily ban to prevent using the site during disable
+				$entity->ban();
+				$unban_after = true;
+			}
+			
+			$this->trashed_guids[] = $entity->guid;
+			
+			if ($recursive) {
+				set_time_limit(0);
+				
+				$this->trashRelatedEntities($entity);
+			}
+			
+			$deleter_guid = elgg_get_logged_in_user_guid();
+			if (!empty($deleter_guid)) {
+				$entity->addRelationship($deleter_guid, 'deleted_by');
+			}
+			
+			$qb = Update::table(self::TABLE_NAME);
+			$qb->set('deleted', $qb->param('yes', ELGG_VALUE_STRING))
+			   ->where($qb->compare('guid', '=', $entity->guid, ELGG_VALUE_GUID));
+			
+			$trashed = $this->db->updateData($qb);
+			
+			$entity->updateTimeDeleted();
+			
+			if ($unban_after) {
+				$entity->unban();
+			}
+			
+			if ($trashed) {
+				$entity->invalidateCache();
+			}
+			
+			return $trashed;
+		});
 	}
 
 	/**
@@ -523,7 +566,7 @@ class EntityTable {
 	 */
 	protected function deleteRelatedEntities(\ElggEntity $entity): void {
 		// Temporarily overriding access controls
-		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES, function() use ($entity) {
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() use ($entity) {
 			/* @var $batch \ElggBatch */
 			$batch = elgg_get_entities([
 				'wheres' => function (QueryBuilder $qb, $main_alias) use ($entity) {
@@ -550,9 +593,54 @@ class EntityTable {
 					continue;
 				}
 				
-				if (!$this->delete($e, true)) {
+				if (!$e->delete(true, true)) {
 					$batch->reportFailure();
 				}
+			}
+		});
+	}
+
+	/**
+	 * Trash entities owned or contained by the entity being trashed
+	 *
+	 * @param \ElggEntity $entity Entity
+	 *
+	 * @return void
+	 */
+	protected function trashRelatedEntities(\ElggEntity $entity): void {
+		// Temporarily overriding access controls
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() use ($entity) {
+			/* @var $batch \ElggBatch */
+			$batch = elgg_get_entities([
+				'wheres' => function (QueryBuilder $qb, $main_alias) use ($entity) {
+					$ors = $qb->merge([
+						$qb->compare("{$main_alias}.owner_guid", '=', $entity->guid, ELGG_VALUE_GUID),
+						$qb->compare("{$main_alias}.container_guid", '=', $entity->guid, ELGG_VALUE_GUID),
+					], 'OR');
+					
+					return $qb->merge([
+						$ors,
+						$qb->compare("{$main_alias}.guid", 'neq', $entity->guid, ELGG_VALUE_GUID),
+					]);
+				},
+				'limit' => false,
+				'batch' => true,
+				'batch_inc_offset' => false,
+			]);
+			
+			/* @var $e \ElggEntity */
+			foreach ($batch as $e) {
+				if (in_array($e->guid, $this->trashed_guids)) {
+					// prevent deadloops, doing this here in case of large deletes which could cause query length issues
+					$batch->reportFailure();
+					continue;
+				}
+				
+				if (!$e->delete(true, false)) {
+					$batch->reportFailure();
+				}
+				
+				$e->addRelationship($entity->guid, 'deleted_with');
 			}
 		});
 	}
@@ -566,7 +654,7 @@ class EntityTable {
 	 */
 	protected function deleteEntityProperties(\ElggEntity $entity): void {
 		// Temporarily overriding access controls and disable system_log to save performance
-		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_DISABLE_SYSTEM_LOG, function() use ($entity) {
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES | ELGG_DISABLE_SYSTEM_LOG, function() use ($entity) {
 			$entity->removeAllRelatedRiverItems();
 			$entity->deleteOwnedAccessCollections();
 			$entity->deleteAccessCollectionMemberships();

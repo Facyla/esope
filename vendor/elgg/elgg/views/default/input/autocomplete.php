@@ -21,13 +21,6 @@
 
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-autocomplete');
 
-$defaults = [
-	'value' => '',
-	'disabled' => false,
-];
-
-$vars = array_merge($defaults, $vars);
-
 $params = elgg_extract('options', $vars, []);
 
 if (!empty($params)) {
@@ -85,7 +78,7 @@ echo elgg_format_element('input', $vars);
 // inline script in case loaded via ajax
 ?>
 <script>
-	require(['elgg/autocomplete'], function (autoc) {
-		autoc.init();
+	import('elgg/autocomplete').then((autoc) => {
+		autoc.default.init();
 	});
 </script>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -16,36 +17,45 @@ class ForeignKey
     public const RESTRICT = 'RESTRICT';
     public const SET_NULL = 'SET NULL';
     public const NO_ACTION = 'NO ACTION';
+    public const DEFERRED = 'DEFERRABLE INITIALLY DEFERRED';
+    public const IMMEDIATE = 'DEFERRABLE INITIALLY IMMEDIATE';
+    public const NOT_DEFERRED = 'NOT DEFERRABLE';
+
+    /**
+     * @var array<string>
+     */
+    protected static array $validOptions = ['delete', 'update', 'constraint', 'deferrable'];
 
     /**
      * @var string[]
      */
-    protected $columns = [];
+    protected array $columns = [];
 
     /**
      * @var \Phinx\Db\Table\Table
      */
-    protected $referencedTable;
+    protected Table $referencedTable;
 
     /**
      * @var string[]
      */
-    protected $referencedColumns = [];
-
-    /**
-     * @var string
-     */
-    protected $onDelete;
-
-    /**
-     * @var string
-     */
-    protected $onUpdate;
+    protected array $referencedColumns = [];
 
     /**
      * @var string|null
      */
-    protected $constraint;
+    protected ?string $onDelete = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $onUpdate = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $constraint = null;
+    protected ?string $deferrableMode = null;
 
     /**
      * Sets the foreign key columns.
@@ -53,7 +63,7 @@ class ForeignKey
      * @param string[]|string $columns Columns
      * @return $this
      */
-    public function setColumns($columns)
+    public function setColumns(array|string $columns)
     {
         $this->columns = is_string($columns) ? [$columns] : $columns;
 
@@ -65,7 +75,7 @@ class ForeignKey
      *
      * @return string[]
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns;
     }
@@ -88,8 +98,12 @@ class ForeignKey
      *
      * @return \Phinx\Db\Table\Table
      */
-    public function getReferencedTable()
+    public function getReferencedTable(): Table
     {
+        if (!isset($this->referencedTable)) {
+            throw new RuntimeException('Cannot access `referencedTable` it has not been set');
+        }
+
         return $this->referencedTable;
     }
 
@@ -111,7 +125,7 @@ class ForeignKey
      *
      * @return string[]
      */
-    public function getReferencedColumns()
+    public function getReferencedColumns(): array
     {
         return $this->referencedColumns;
     }
@@ -122,7 +136,7 @@ class ForeignKey
      * @param string $onDelete On Delete
      * @return $this
      */
-    public function setOnDelete($onDelete)
+    public function setOnDelete(string $onDelete)
     {
         $this->onDelete = $this->normalizeAction($onDelete);
 
@@ -132,9 +146,9 @@ class ForeignKey
     /**
      * Gets ON DELETE action for the foreign key.
      *
-     * @return string
+     * @return string|null
      */
-    public function getOnDelete()
+    public function getOnDelete(): ?string
     {
         return $this->onDelete;
     }
@@ -142,9 +156,9 @@ class ForeignKey
     /**
      * Gets ON UPDATE action for the foreign key.
      *
-     * @return string
+     * @return string|null
      */
-    public function getOnUpdate()
+    public function getOnUpdate(): ?string
     {
         return $this->onUpdate;
     }
@@ -155,7 +169,7 @@ class ForeignKey
      * @param string $onUpdate On Update
      * @return $this
      */
-    public function setOnUpdate($onUpdate)
+    public function setOnUpdate(string $onUpdate)
     {
         $this->onUpdate = $this->normalizeAction($onUpdate);
 
@@ -168,7 +182,7 @@ class ForeignKey
      * @param string $constraint Constraint
      * @return $this
      */
-    public function setConstraint($constraint)
+    public function setConstraint(string $constraint)
     {
         $this->constraint = $constraint;
 
@@ -180,24 +194,43 @@ class ForeignKey
      *
      * @return string|null
      */
-    public function getConstraint()
+    public function getConstraint(): ?string
     {
         return $this->constraint;
     }
 
     /**
+     * Sets deferrable mode for the foreign key.
+     *
+     * @param string $deferrableMode Constraint
+     * @return $this
+     */
+    public function setDeferrableMode(string $deferrableMode)
+    {
+        $this->deferrableMode = $this->normalizeDeferrable($deferrableMode);
+
+        return $this;
+    }
+
+    /**
+     * Gets deferrable mode for the foreign key.
+     */
+    public function getDeferrableMode(): ?string
+    {
+        return $this->deferrableMode;
+    }
+
+    /**
      * Utility method that maps an array of index options to this objects methods.
      *
-     * @param array $options Options
+     * @param array<string, mixed> $options Options
      * @throws \RuntimeException
      * @return $this
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
-        // Valid Options
-        $validOptions = ['delete', 'update', 'constraint'];
         foreach ($options as $option => $value) {
-            if (!in_array($option, $validOptions, true)) {
+            if (!in_array($option, static::$validOptions, true)) {
                 throw new RuntimeException(sprintf('"%s" is not a valid foreign key option.', $option));
             }
 
@@ -206,6 +239,8 @@ class ForeignKey
                 $this->setOnDelete($value);
             } elseif ($option === 'update') {
                 $this->setOnUpdate($value);
+            } elseif ($option === 'deferrable') {
+                $this->setDeferrableMode($value);
             } else {
                 $method = 'set' . ucfirst($option);
                 $this->$method($value);
@@ -222,7 +257,7 @@ class ForeignKey
      * @throws \InvalidArgumentException
      * @return string
      */
-    protected function normalizeAction($action)
+    protected function normalizeAction(string $action): string
     {
         $constantName = 'static::' . str_replace(' ', '_', strtoupper(trim($action)));
         if (!defined($constantName)) {
@@ -230,5 +265,30 @@ class ForeignKey
         }
 
         return constant($constantName);
+    }
+
+    /**
+     * From passed value checks if it's correct and fixes if needed
+     *
+     * @param string $deferrable Deferrable
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    protected function normalizeDeferrable(string $deferrable): string
+    {
+        $mapping = [
+            'DEFERRED' => ForeignKey::DEFERRED,
+            'IMMEDIATE' => ForeignKey::IMMEDIATE,
+            'NOT DEFERRED' => ForeignKey::NOT_DEFERRED,
+            ForeignKey::DEFERRED => ForeignKey::DEFERRED,
+            ForeignKey::IMMEDIATE => ForeignKey::IMMEDIATE,
+            ForeignKey::NOT_DEFERRED => ForeignKey::NOT_DEFERRED,
+        ];
+        $normalized = strtoupper(str_replace('_', ' ', $deferrable));
+        if (array_key_exists($normalized, $mapping)) {
+            return $mapping[$normalized];
+        }
+
+        throw new InvalidArgumentException('Unknown deferrable passed: ' . $deferrable);
     }
 }

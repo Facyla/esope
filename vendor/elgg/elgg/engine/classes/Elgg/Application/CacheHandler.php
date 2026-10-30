@@ -26,9 +26,10 @@ class CacheHandler {
 		'ico' => 'image/x-icon',
 		'jpeg' => 'image/jpeg',
 		'jpg' => 'image/jpeg',
-		'js' => 'application/javascript',
+		'js' => 'text/javascript',
 		'json' => 'application/json',
 		'map' => 'application/json',
+		'mjs' => 'text/javascript',
 		'otf' => 'application/font-otf',
 		'png' => 'image/png',
 		'svg' => 'image/svg+xml',
@@ -44,31 +45,13 @@ class CacheHandler {
 	public static $utf8_content_types = [
 		'text/css',
 		'text/html',
-		'application/javascript',
+		'text/javascript',
 		'application/json',
 		'image/svg+xml',
 		'text/xml',
 	];
-
-	/**
-	 * @var Config
-	 */
-	protected $config;
-
-	/**
-	 * @var Request
-	 */
-	protected $request;
 	
-	/**
-	 * @var SimpleCache
-	 */
-	protected $simplecache;
-	
-	/**
-	 * @var bool
-	 */
-	protected $simplecache_enabled;
+	protected bool $simplecache_enabled;
 
 	/**
 	 * Constructor
@@ -78,11 +61,12 @@ class CacheHandler {
 	 * @param SimpleCache $simplecache  Simplecache
 	 * @param ConfigTable $config_table Config table
 	 */
-	public function __construct(Config $config, Request $request, SimpleCache $simplecache, ConfigTable $config_table) {
-		$this->config = $config;
-		$this->request = $request;
-		$this->simplecache = $simplecache;
-		
+	public function __construct(
+		protected Config $config,
+		protected Request $request,
+		protected SimpleCache $simplecache,
+		ConfigTable $config_table
+	) {
 		$this->simplecache_enabled = $config->simplecache_enabled;
 		if (!$this->config->hasInitialValue('simplecache_enabled')) {
 			$db_value = $config_table->get('simplecache_enabled');
@@ -189,6 +173,9 @@ class CacheHandler {
 			$this->simplecache->cacheAsset($viewtype, $view, $content);
 		} else {
 			// if wrong timestamp, don't send HTTP cache
+			// also report that the resource has gone away
+			$response->setStatusCode(ELGG_HTTP_GONE);
+			
 			$content = $this->getProcessedView($view, $viewtype);
 		}
 
@@ -241,7 +228,7 @@ class CacheHandler {
 			return in_array($matches[1],  _elgg_services()->locale->getLanguageCodes());
 		}
 
-		return _elgg_services()->views->isCacheableView($view);
+		return _elgg_services()->simpleCache->isCacheableView($view);
 	}
 
 	/**
@@ -352,6 +339,12 @@ class CacheHandler {
 
 		$name = $this->simplecache_enabled ? 'simplecache:generate' : 'cache:generate';
 		$type = $this->getViewFileType($view);
+		
+		// treat mjs as js
+		if ($type === 'mjs') {
+			$type = 'js';
+		}
+		
 		$params = [
 			'view' => $view,
 			'viewtype' => $viewtype,

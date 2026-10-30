@@ -52,7 +52,7 @@ if ($url === false) {
 }
 
 if (!$url && isset($vars['value'])) {
-	$url = trim($vars['value']);
+	$url = trim((string) $vars['value']);
 	unset($vars['value']);
 }
 
@@ -64,7 +64,7 @@ if (isset($vars['text'])) {
 	if (elgg_extract('encode_text', $vars, false)) {
 		$text = htmlspecialchars((string) $vars['text'], ENT_QUOTES, 'UTF-8', false);
 	} else {
-		$text = elgg_extract('text', $vars);
+		$text = (string) elgg_extract('text', $vars);
 	}
 	
 	unset($vars['text']);
@@ -118,16 +118,21 @@ unset($vars['is_trusted']);
 $vars['class'] = elgg_extract_class($vars, 'elgg-anchor');
 
 if (!isset($vars['aria-label']) && !isset($vars['aria-labelledby']) && !isset($vars['title']) && empty(elgg_strip_tags((string) $text))) {
-	elgg_log('An output/url should have a discernible text (text, title, aria-label or aria-labelledby)', 'NOTICE');
+	elgg_log('An output/url should have a discernible text (text, title, aria-label or aria-labelledby)', \Psr\Log\LogLevel::NOTICE);
 }
 
 if (!elgg_is_empty($text)) {
 	$text = elgg_format_element('span', [
 		'class' => 'elgg-anchor-label',
 	], $text);
+} else {
+	// move title to aria-label
+	if (!isset($vars['aria-label']) && !elgg_is_empty(elgg_extract('title', $vars))) {
+		$vars['aria-label'] = elgg_extract('title', $vars);
+	}
 }
 
-$icon = elgg_extract('icon', $vars, '');
+$icon = (string) elgg_extract('icon', $vars);
 unset($vars['icon']);
 
 if ($icon && !str_starts_with($icon, '<')) {
@@ -136,7 +141,7 @@ if ($icon && !str_starts_with($icon, '<')) {
 	]);
 }
 
-$icon_alt = elgg_extract('icon_alt', $vars, '');
+$icon_alt = (string) elgg_extract('icon_alt', $vars);
 unset($vars['icon_alt']);
 
 if ($icon_alt && !str_starts_with($icon_alt, '<')) {
@@ -145,20 +150,20 @@ if ($icon_alt && !str_starts_with($icon_alt, '<')) {
 	]);
 }
 
-$badge = elgg_extract('badge', $vars);
+$badge = (string) elgg_extract('badge', $vars);
 unset($vars['badge']);
 
-if (!is_null($badge)) {
+if (!elgg_is_empty($badge)) {
 	$badge = elgg_format_element('span', ['class' => 'elgg-badge'], $badge);
 }
 
 $classes = elgg_extract_class($vars);
 if (in_array('elgg-popup', $classes)) {
-	elgg_require_js('elgg/popup');
+	elgg_import_esm('elgg/popup');
 }
 
 if (in_array('elgg-toggle', $classes)) {
-	elgg_require_js('elgg/toggle');
+	elgg_import_esm('elgg/toggle');
 }
 
 echo elgg_format_element('a', $vars, $icon . $text . $icon_alt . $badge);

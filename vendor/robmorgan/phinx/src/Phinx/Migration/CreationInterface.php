@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -12,8 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Migration interface
- *
- * @author Richard Quadling <RQuadling@GMail.com>
  */
 interface CreationInterface
 {
@@ -25,25 +24,25 @@ interface CreationInterface
 
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input Input
-     * @return \Phinx\Migration\CreationInterface
+     * @return $this
      */
     public function setInput(InputInterface $input);
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output Output
-     * @return \Phinx\Migration\CreationInterface
+     * @return $this
      */
     public function setOutput(OutputInterface $output);
 
     /**
      * @return \Symfony\Component\Console\Input\InputInterface
      */
-    public function getInput();
+    public function getInput(): InputInterface;
 
     /**
      * @return \Symfony\Component\Console\Output\OutputInterface
      */
-    public function getOutput();
+    public function getOutput(): OutputInterface;
 
     /**
      * Get the migration template.
@@ -52,7 +51,7 @@ interface CreationInterface
      *
      * @return string The content of the template for Phinx to amend.
      */
-    public function getMigrationTemplate();
+    public function getMigrationTemplate(): string;
 
     /**
      * Post Migration Creation.
@@ -65,5 +64,5 @@ interface CreationInterface
      * @param string $baseClassName The name of the base class.
      * @return void
      */
-    public function postMigrationCreation($migrationFilename, $className, $baseClassName);
+    public function postMigrationCreation(string $migrationFilename, string $className, string $baseClassName): void;
 }

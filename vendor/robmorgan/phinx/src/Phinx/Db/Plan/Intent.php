@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -19,7 +20,7 @@ class Intent
      *
      * @var \Phinx\Db\Action\Action[]
      */
-    protected $actions = [];
+    protected array $actions = [];
 
     /**
      * Adds a new action to the collection
@@ -27,7 +28,7 @@ class Intent
      * @param \Phinx\Db\Action\Action $action The action to add
      * @return void
      */
-    public function addAction(Action $action)
+    public function addAction(Action $action): void
     {
         $this->actions[] = $action;
     }
@@ -37,7 +38,7 @@ class Intent
      *
      * @return \Phinx\Db\Action\Action[]
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->actions;
     }
@@ -48,7 +49,7 @@ class Intent
      * @param \Phinx\Db\Plan\Intent $another The other intent to merge in
      * @return void
      */
-    public function merge(Intent $another)
+    public function merge(Intent $another): void
     {
         $this->actions = array_merge($this->actions, $another->getActions());
     }

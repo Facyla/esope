@@ -22,7 +22,7 @@ namespace Cake\Utility;
  * Inflector pluralizes and singularizes English nouns.
  * Used by CakePHP's naming conventions throughout the framework.
  *
- * @link https://book.cakephp.org/4/en/core-libraries/inflector.html
+ * @link https://book.cakephp.org/5/en/core-libraries/inflector.html
  */
 class Inflector
 {
@@ -31,7 +31,7 @@ class Inflector
      *
      * @var array<string, string>
      */
-    protected static $_plural = [
+    protected static array $_plural = [
         '/(s)tatus$/i' => '\1tatuses',
         '/(quiz)$/i' => '\1zes',
         '/^(ox)$/i' => '\1\2en',
@@ -62,7 +62,7 @@ class Inflector
      *
      * @var array<string, string>
      */
-    protected static $_singular = [
+    protected static array $_singular = [
         '/(s)tatuses$/i' => '\1\2tatus',
         '/^(.*)(menu)s$/i' => '\1\2',
         '/(quiz)zes$/i' => '\\1',
@@ -105,7 +105,7 @@ class Inflector
      *
      * @var array<string, string>
      */
-    protected static $_irregular = [
+    protected static array $_irregular = [
         'atlas' => 'atlases',
         'beef' => 'beefs',
         'brief' => 'briefs',
@@ -155,7 +155,7 @@ class Inflector
      *
      * @var array<string>
      */
-    protected static $_uninflected = [
+    protected static array $_uninflected = [
         '.*[nrlm]ese', '.*data', '.*deer', '.*fish', '.*measles', '.*ois',
         '.*pox', '.*sheep', 'people', 'feedback', 'stadia', '.*?media',
         'chassis', 'clippers', 'debris', 'diabetes', 'equipment', 'gallows',
@@ -168,14 +168,14 @@ class Inflector
      *
      * @var array<string, mixed>
      */
-    protected static $_cache = [];
+    protected static array $_cache = [];
 
     /**
      * The initial state of Inflector so reset() works.
      *
      * @var array
      */
-    protected static $_initialState = [];
+    protected static array $_initialState = [];
 
     /**
      * Cache inflected values, and return if already available
@@ -185,7 +185,7 @@ class Inflector
      * @param string|false $value Inflected value
      * @return string|false Inflected value on cache hit or false on cache miss.
      */
-    protected static function _cache(string $type, string $key, $value = false)
+    protected static function _cache(string $type, string $key, string|false $value = false): string|false
     {
         $key = '_' . $key;
         $type = '_' . $type;
@@ -209,7 +209,7 @@ class Inflector
      */
     public static function reset(): void
     {
-        if (empty(static::$_initialState)) {
+        if (static::$_initialState === []) {
             static::$_initialState = get_class_vars(self::class);
 
             return;
@@ -249,7 +249,7 @@ class Inflector
         } elseif ($type === 'uninflected') {
             static::$_uninflected = array_merge(
                 $rules,
-                static::$_uninflected
+                static::$_uninflected,
             );
         } else {
             static::${$var} = $rules + static::${$var};
@@ -263,7 +263,7 @@ class Inflector
      *
      * @param string $word Word in singular
      * @return string Word in plural
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-plural-singular-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-plural-singular-forms
      */
     public static function pluralize(string $word): string
     {
@@ -301,7 +301,7 @@ class Inflector
 
         foreach (static::$_plural as $rule => $replacement) {
             if (preg_match($rule, $word)) {
-                static::$_cache['pluralize'][$word] = preg_replace($rule, $replacement, $word);
+                static::$_cache['pluralize'][$word] = (string)preg_replace($rule, $replacement, $word);
 
                 return static::$_cache['pluralize'][$word];
             }
@@ -315,7 +315,7 @@ class Inflector
      *
      * @param string $word Word in plural
      * @return string Word in singular
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-plural-singular-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-plural-singular-forms
      */
     public static function singularize(string $word): string
     {
@@ -356,7 +356,7 @@ class Inflector
 
         foreach (static::$_singular as $rule => $replacement) {
             if (preg_match($rule, $word)) {
-                static::$_cache['singularize'][$word] = preg_replace($rule, $replacement, $word);
+                static::$_cache['singularize'][$word] = (string)preg_replace($rule, $replacement, $word);
 
                 return static::$_cache['singularize'][$word];
             }
@@ -372,7 +372,7 @@ class Inflector
      * @param string $string String to camelize
      * @param string $delimiter the delimiter in the input string
      * @return string CamelizedStringLikeThis.
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-camelcase-and-under-scored-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-camelcase-and-under-scored-forms
      */
     public static function camelize(string $string, string $delimiter = '_'): string
     {
@@ -395,7 +395,7 @@ class Inflector
      *
      * @param string $string CamelCasedString to be "underscorized"
      * @return string underscore_version of the input string
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-camelcase-and-under-scored-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-camelcase-and-under-scored-forms
      */
     public static function underscore(string $string): string
     {
@@ -422,7 +422,7 @@ class Inflector
      * @param string $string String to be humanized
      * @param string $delimiter the character to replace with a space
      * @return string Human-readable string
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-human-readable-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-human-readable-forms
      */
     public static function humanize(string $string, string $delimiter = '_'): string
     {
@@ -456,7 +456,7 @@ class Inflector
         $result = static::_cache($cacheKey, $string);
 
         if ($result === false) {
-            $result = mb_strtolower(preg_replace('/(?<=\\w)([A-Z])/', $delimiter . '\\1', $string));
+            $result = mb_strtolower((string)preg_replace('/(?<=\\w)([A-Z])/', $delimiter . '\\1', $string));
             static::_cache($cacheKey, $string, $result);
         }
 
@@ -464,11 +464,11 @@ class Inflector
     }
 
     /**
-     * Returns corresponding table name for given model $className. ("people" for the model class "Person").
+     * Returns corresponding table name for given model $className. ("people" for the class name "Person").
      *
      * @param string $className Name of class to get database table name for
      * @return string Name of the database table for given class
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-table-and-class-name-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-table-and-class-name-forms
      */
     public static function tableize(string $className): string
     {
@@ -483,11 +483,11 @@ class Inflector
     }
 
     /**
-     * Returns Cake model class name ("Person" for the database table "people".) for given database table.
+     * Returns a singular, CamelCase inflection for given database table. ("Person" for the table name "people")
      *
      * @param string $tableName Name of database table to get class name for
      * @return string Class name
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-table-and-class-name-forms
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-table-and-class-name-forms
      */
     public static function classify(string $tableName): string
     {
@@ -506,7 +506,7 @@ class Inflector
      *
      * @param string $string String to convert.
      * @return string in variable form
-     * @link https://book.cakephp.org/4/en/core-libraries/inflector.html#creating-variable-names
+     * @link https://book.cakephp.org/5/en/core-libraries/inflector.html#creating-variable-names
      */
     public static function variable(string $string): string
     {

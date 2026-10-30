@@ -1,5 +1,30 @@
 # CHANGELOG
 
+### 1.5.4 (2026-06-04)
+- Fix imagick stale layers (#879, @nlemoine)
+- Fix the Imagick driver deactivating the alpha channel in `effects()->grayscale()` (transparent pixels were encoded as opaque gray); it now uses the alpha-preserving grayscale image type, like `usePalette()` (#880, @nlemoine)
+
+### 1.5.3 (2026-06-03)
+- Fix the Imagick driver painting a "black box" when pasting an image with transparent areas at an alpha lower than 100; the opacity now scales the existing per-pixel alpha instead of overwriting it (#878, @nlemoine)
+- Fix the Imagick driver inverting the alpha channel in `effects()->negative()` (an opaque image became fully transparent); it now excludes the alpha channel, matching the GD driver (#877, @nlemoine)
+
+### 1.5.2 (2026-01-09)
+- Do not call curl_close on PHP 8.0+ (#875, @dmaicher)
+
+### 1.5.1 (2025-12-09)
+- Don't call imagedestroy on PHP 8.5+ (#873, @mlocati)
+
+### 1.5.0 (2024-12-03)
+- Minimum supported PHP version raised from 5.5 to 7.1 (#865, @alexander-schranz)
+- Fix PHP 8.4 deprecation warnings (#865, @alexander-schranz)
+- The GD driver now supports resolution for PHP >= 7.2 (#813, #866, @gutocf, @mlocati)
+
+### 1.4.0 (2024-11-10)
+- If a file couldn't be found, we now throw a NotFoundException exception (#853, @playmono)
+- Add support for webp_lossless to GD and GMagick (#858, @ausi)
+- Use streams in ExifMetadataReader (#861, @ausi)
+- WebP format now supports animation (#812, @Yoann-TYT)
+
 ### 1.3.5 (2023-06-07)
 * Fix PHP 8.2 warnings with Point class (#847, @anovsiradj)
 

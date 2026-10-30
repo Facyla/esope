@@ -9,7 +9,7 @@ See the :doc:`/guides/index` for tutorials or the :doc:`/design/index` for in-de
 Database and Persistence
 ========================
 
-Elgg uses MySQL 5.7 or higher for data persistence, and maps database values into Entities (a
+Elgg uses MySQL for data persistence, and maps database values into Entities (a
 representation of an atomic unit of information) and Extenders (additional information and
 descriptions about Entities). Elgg supports additional information such as relationships between
 Entities, activity streams, and various types of settings.
@@ -42,10 +42,7 @@ view.
 JavaScript
 ==========
 
-Elgg uses an AMD-compatible JavaScript system provided by RequireJs. Bundled with Elgg are jQuery, jQuery UI, 
-jQuery Form, and jQuery UI Autocomplete.
-
-Plugins can load their own JS libs.
+Elgg uses native ES modules. Plugins can register their own modules or load their own JS libs.
 
 Internationalization
 ====================
@@ -61,7 +58,7 @@ Elgg uses two caches to improve performance: a system cache and SimpleCache.
 ===================
 
 The use of 3rd party libraries in Elgg is managed by using `Composer`_ dependencies. Examples of 3rd party libraries are
-jQuery, RequireJs or Laminas mail.
+jQuery, CSS Crush or Laminas mail.
 
 To get a list of all the Elgg dependencies check out the `Packagist`_ page for Elgg.
 

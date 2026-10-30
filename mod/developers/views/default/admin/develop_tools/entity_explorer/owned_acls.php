@@ -23,11 +23,14 @@ if (empty($acls)) {
 	foreach ($acls as $acl) {
 		$result .= '<tr>';
 		foreach ($acl_columns as $col_name) {
-			$result .= elgg_format_element('td', [], $acl->$col_name);
+			$result .= elgg_format_element('td', [
+				'class' => ($col_name === 'id') ? 'elgg-nowrap' : null,
+			], $acl->$col_name);
 		}
 		
 		$result .= elgg_format_element('td', [], elgg_view('output/url', [
-			'text' => elgg_view_icon('remove'),
+			'icon' => 'remove',
+			'text' => false,
 			'href' => elgg_http_add_url_query_elements('action/developers/entity_explorer_delete', [
 				'guid' => $entity->guid,
 				'type' => 'acl',

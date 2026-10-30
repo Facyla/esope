@@ -2,6 +2,7 @@
 
 namespace Elgg\Database;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\Expression\CompositeExpression;
@@ -10,6 +11,7 @@ use Elgg\Database\Clauses\Clause;
 use Elgg\Database\Clauses\ComparisonClause;
 use Elgg\Database\Clauses\JoinClause;
 use Elgg\Database\Clauses\WhereClause;
+use Elgg\Exceptions\DomainException;
 use Elgg\Values;
 
 /**
@@ -26,28 +28,44 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		'min',
 		'sum',
 	];
-	const TABLE_ANNOTATIONS = 'annotations';
-	const TABLE_ENTITIES = 'entities';
-	const TABLE_METADATA = 'metadata';
-	const TABLE_RELATIONSHIPS = 'entity_relationships';
 
 	protected array $joins = [];
 
 	protected int $join_index = 0;
 
-	protected ?string $table_name;
+	protected ?string $table_name = null;
 
-	protected ?string $table_alias;
+	protected ?string $table_alias = null;
+	
+	/**
+	 * Initializes a new QueryBuilder.
+	 *
+	 * @param Connection $backup_connection Connection used for this query
+	 */
+	public function __construct(protected readonly Connection $backup_connection) {
+		parent::__construct($backup_connection);
+	}
+	
+	/**
+	 * Returns the connection. Need to do it this way because DBAL Query Builder does not expose the connection in 4.x
+	 *
+	 * @return Connection
+	 *
+	 * @since 6.0
+	 */
+	public function getConnection(): Connection {
+		return $this->backup_connection;
+	}
 
 	/**
-	 * Creates a new SelectQueryBuilder for join/where subqueries using the DB connection of the primary QueryBuilder
+	 * Creates a new SelectQueryBuilder for join/where sub queries using the DB connection of the primary QueryBuilder
 	 *
-	 * @param string $table Main table name
-	 * @param string $alias Select alias
+	 * @param string      $table Main table name
+	 * @param string|null $alias Select alias
 	 *
 	 * @return Select
 	 */
-	public function subquery($table, $alias = null) {
+	public function subquery(string $table, ?string $alias = null): Select {
 		$qb = new Select($this->getConnection());
 		$qb->from($table, $alias);
 
@@ -57,12 +75,12 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	/**
 	 * Apply clause to this instance
 	 *
-	 * @param Clause $clause Clause
-	 * @param string $alias  Table alias
+	 * @param Clause      $clause Clause
+	 * @param string|null $alias  Table alias
 	 *
 	 * @return static
 	 */
-	public function addClause(Clause $clause, $alias = null) {
+	public function addClause(Clause $clause, ?string $alias = null): static {
 		if (!isset($alias)) {
 			$alias = $this->getTableAlias();
 		}
@@ -82,7 +100,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @return string
 	 */
-	public function prefix($table) {
+	public function prefix(string $table): string {
 		$prefix = _elgg_services()->db->prefix;
 		if ($prefix === '') {
 			return $table;
@@ -100,15 +118,16 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @return string
 	 */
-	public function getTableName() {
-		return $this->table_name;
+	public function getTableName(): string {
+		return (string) $this->table_name;
 	}
 
 	/**
 	 * Returns the alias of the primary table
-	 * @return string
+	 *
+	 * @return null|string
 	 */
-	public function getTableAlias() {
+	public function getTableAlias(): ?string {
 		return $this->table_alias;
 	}
 
@@ -116,13 +135,13 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * Sets a new parameter assigning it a unique parameter key/name if none provided
 	 * Returns the name of the new parameter
 	 *
-	 * @param mixed  $value Parameter value
-	 * @param string $type  Parameter type
-	 * @param string $key   Parameter key/index
+	 * @param mixed       $value Parameter value
+	 * @param string      $type  Parameter type
+	 * @param string|null $key   Parameter key/index
 	 *
 	 * @return string
 	 */
-	public function param($value, $type = null, $key = null) {
+	public function param($value, string $type = ELGG_VALUE_STRING, ?string $key = null): string {
 		if (!$key) {
 			$parameters = $this->getParameters();
 			$key = ':qb' . (count($parameters) + 1);
@@ -165,9 +184,9 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 				$value = array_shift($value);
 			} else {
 				if ($type === ParameterType::INTEGER) {
-					$type = Connection::PARAM_INT_ARRAY;
+					$type = ArrayParameterType::INTEGER;
 				} elseif ($type === ParameterType::STRING) {
-					$type = Connection::PARAM_STR_ARRAY;
+					$type = ArrayParameterType::STRING;
 				}
 			}
 		}
@@ -181,7 +200,6 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * @param bool $track_query should the query be tracked by timers and loggers
 	 */
 	public function execute(bool $track_query = true) {
-		
 		if (!$track_query) {
 			if ($this instanceof Select) {
 				return parent::executeQuery();
@@ -204,11 +222,11 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function from($from, $alias = null) {
-		$this->table_name = $from;
+	public function from(string $table, ?string $alias = null): self {
+		$this->table_name = $table;
 		$this->table_alias = $alias;
 
-		return parent::from($this->prefix($from), $alias);
+		return parent::from($this->prefix($table), $alias);
 	}
 
 	/**
@@ -216,10 +234,10 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function insert($insert = null) {
-		$this->table_name = $insert;
+	public function insert(string $table): self {
+		$this->table_name = $table;
 
-		return parent::insert($this->prefix($insert));
+		return parent::insert($this->prefix($table));
 	}
 
 	/**
@@ -227,11 +245,10 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function update($update = null, $alias = null) {
-		$this->table_name = $update;
-		$this->table_alias = $alias;
+	public function update(string $table): self {
+		$this->table_name = $table;
 
-		return parent::update($this->prefix($update), $alias);
+		return parent::update($this->prefix($table));
 	}
 
 	/**
@@ -239,52 +256,73 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 *
 	 * @internal Use create() method on the extending class
 	 */
-	public function delete($delete = null, $alias = null) {
-		$this->table_name = $delete;
-		$this->table_alias = $alias;
+	public function delete(string $table): self {
+		$this->table_name = $table;
 
-		return parent::delete($this->prefix($delete), $alias);
+		return parent::delete($this->prefix($table));
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function join($fromAlias, $join, $alias, $condition = null) {
+	public function join(string $fromAlias, string $join, string $alias, ?string $condition = null): self {
 		return parent::join($fromAlias, $this->prefix($join), $alias, $condition);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function innerJoin($fromAlias, $join, $alias, $condition = null) {
+	public function innerJoin(string $fromAlias, string $join, string $alias, ?string $condition = null): self {
 		return parent::innerJoin($fromAlias, $this->prefix($join), $alias, $condition);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function leftJoin($fromAlias, $join, $alias, $condition = null) {
+	public function leftJoin(string $fromAlias, string $join, string $alias, ?string $condition = null): self {
 		return parent::leftJoin($fromAlias, $this->prefix($join), $alias, $condition);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function rightJoin($fromAlias, $join, $alias, $condition = null) {
-		return parent::rightJoin($fromAlias, $this->prefix($join), $alias, $condition); // TODO: Change the autogenerated stub
+	public function rightJoin(string $fromAlias, string $join, string $alias, ?string $condition = null): self {
+		return parent::rightJoin($fromAlias, $this->prefix($join), $alias, $condition);
 	}
-
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function orderBy(string $sort, ?string $order = null): self {
+		if (isset($order) && !in_array(strtoupper($order), ['ASC', 'DESC'])) {
+			throw new DomainException("'{$order}' is not a valid order by direction");
+		}
+		
+		return parent::orderBy($sort, $order);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addOrderBy(string $sort, ?string $order = null): self {
+		if (isset($order) && !in_array(strtoupper($order), ['ASC', 'DESC'])) {
+			throw new DomainException("'{$order}' is not a valid order by direction");
+		}
+		
+		return parent::addOrderBy($sort, $order);
+	}
+	
 	/**
 	 * Merges multiple composite expressions with a boolean
 	 *
 	 * @param mixed  $parts   Composite expression(s) or string(s)
 	 * @param string $boolean AND|OR
 	 *
-	 * @return CompositeExpression|string
+	 * @return CompositeExpression|string|null
 	 */
 	public function merge($parts = null, $boolean = 'AND') {
 		if (empty($parts)) {
-			return;
+			return null;
 		}
 
 		$parts = (array) $parts;
@@ -301,7 +339,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 			return true;
 		});
 		if (empty($parts)) {
-			return;
+			return null;
 		}
 
 		if (count($parts) === 1) {
@@ -313,42 +351,42 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		$parts = array_values($parts);
 		if (strtoupper($boolean) === 'OR') {
 			return call_user_func_array([$this->expr(), 'or'], $parts);
-		} else {
-			return call_user_func_array([$this->expr(), 'and'], $parts);
 		}
+		
+		return call_user_func_array([$this->expr(), 'and'], $parts);
 	}
 
 	/**
 	 * Build value comparison clause
 	 *
-	 * @param string $x              Comparison value (e.g. prefixed column name)
-	 * @param string $comparison     Comparison operator
-	 * @param mixed  $y              Value to compare against
-	 *                               If the value is an array, comparisons will be performed in such as a way as
-	 *                               to ensure that either all or none of the elements of the array meet the criteria,
-	 *                               e.g. in case of LIKE will return results where at least one element matches the
-	 *                               criteria, where as with NOT LIKE will return results where none of the criteria
-	 *                               are met
-	 * @param string $type           Value type for sanitization/casting
-	 * @param bool   $case_sensitive Use case sensitive comparison for strings
+	 * @param string      $x              Comparison value (e.g. prefixed column name)
+	 * @param string      $comparison     Comparison operator
+	 * @param mixed       $y              Value to compare against
+	 *                                    If the value is an array, comparisons will be performed in such as a way as
+	 *                                    to ensure that either all or none of the elements of the array meet the criteria,
+	 *                                    e.g. in case of LIKE will return results where at least one element matches the
+	 *                                    criteria, whereas with NOT LIKE will return results where none of the criteria
+	 *                                    are met
+	 * @param null|string $type           Value type for sanitization/casting
+	 * @param null|bool   $case_sensitive Use case-sensitive comparison for strings
 	 *
 	 * @return CompositeExpression|null|string
 	 */
-	public function compare($x, $comparison, $y = null, $type = null, $case_sensitive = null) {
+	public function compare(string $x, string $comparison, $y = null, ?string $type = null, ?bool $case_sensitive = null) {
 		return (new ComparisonClause($x, $comparison, $y, $type, $case_sensitive))->prepare($this);
 	}
 
 	/**
 	 * Build a between clause
 	 *
-	 * @param string $x     Comparison value (e.g. prefixed column name)
-	 * @param mixed  $lower Lower bound
-	 * @param mixed  $upper Upper bound
-	 * @param string $type  Value type for sanitization/casting
+	 * @param string      $x     Comparison value (e.g. prefixed column name)
+	 * @param mixed       $lower Lower bound
+	 * @param mixed       $upper Upper bound
+	 * @param null|string $type  Value type for sanitization/casting
 	 *
 	 * @return CompositeExpression|null|string
 	 */
-	public function between($x, $lower = null, $upper = null, $type = null) {
+	public function between(string $x, $lower = null, $upper = null, ?string $type = null) {
 		$wheres = [];
 		if ($lower) {
 			$wheres[] = $this->compare($x, '>=', $lower, $type);
@@ -363,9 +401,10 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 
 	/**
 	 * Get an index of the next available join alias
+	 *
 	 * @return string
 	 */
-	public function getNextJoinAlias() {
+	public function getNextJoinAlias(): string {
 		$this->join_index++;
 
 		return "qbt{$this->join_index}";
@@ -374,25 +413,25 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	/**
 	 * Join entity table from alias and return joined table alias
 	 *
-	 * @param string $from_alias   Main table alias
-	 * @param string $from_column  Guid column name in the main table
-	 * @param string $join_type    JOIN type
-	 * @param string $joined_alias Joined table alias
+	 * @param string      $from_alias   Main table alias
+	 * @param string      $from_column  Guid column name in the main table
+	 * @param string|null $join_type    JOIN type
+	 * @param string|null $joined_alias Joined table alias
 	 *
 	 * @return string
 	 */
-	public function joinEntitiesTable($from_alias = '', $from_column = 'guid', $join_type = 'inner', $joined_alias = null) {
+	public function joinEntitiesTable(string $from_alias = '', string $from_column = 'guid', ?string $join_type = 'inner', ?string $joined_alias = null): string {
 		if (in_array($joined_alias, $this->joins)) {
 			return $joined_alias;
 		}
 
 		if ($from_alias) {
-			$from_column = "$from_alias.$from_column";
+			$from_column = "{$from_alias}.{$from_column}";
 		}
 
 		$hash = sha1(serialize([
 			$join_type,
-			self::TABLE_ENTITIES,
+			EntityTable::TABLE_NAME,
 			$from_column,
 		]));
 
@@ -401,10 +440,10 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 		}
 
 		$condition = function (QueryBuilder $qb, $joined_alias) use ($from_column) {
-			return $qb->compare("$joined_alias.guid", '=', $from_column);
+			return $qb->compare("{$joined_alias}.guid", '=', $from_column);
 		};
 
-		$clause = new JoinClause(self::TABLE_ENTITIES, $joined_alias, $condition, $join_type);
+		$clause = new JoinClause(EntityTable::TABLE_NAME, $joined_alias, $condition, $join_type);
 		$joined_alias = $clause->prepare($this, $from_alias);
 
 		$this->joins[$hash] = $joined_alias;
@@ -418,23 +457,23 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * @param string          $from_alias   Alias of the main table
 	 * @param string          $from_column  Guid column name in the main table
 	 * @param string|string[] $name         Metadata name(s)
-	 * @param string          $join_type    JOIN type
-	 * @param string          $joined_alias Joined table alias
+	 * @param string|null     $join_type    JOIN type
+	 * @param string|null     $joined_alias Joined table alias
 	 *
 	 * @return string
 	 */
-	public function joinMetadataTable($from_alias = '', $from_column = 'guid', $name = null, $join_type = 'inner', $joined_alias = null) {
+	public function joinMetadataTable(string $from_alias = '', string $from_column = 'guid', $name = null, ?string $join_type = 'inner', ?string $joined_alias = null): string {
 		if (in_array($joined_alias, $this->joins)) {
 			return $joined_alias;
 		}
 
 		if ($from_alias) {
-			$from_column = "$from_alias.$from_column";
+			$from_column = "{$from_alias}.{$from_column}";
 		}
 
 		$hash = sha1(serialize([
 			$join_type,
-			self::TABLE_METADATA,
+			MetadataTable::TABLE_NAME,
 			$from_column,
 			(array) $name,
 		]));
@@ -445,12 +484,12 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 
 		$condition = function (QueryBuilder $qb, $joined_alias) use ($from_column, $name) {
 			return $qb->merge([
-				$qb->compare("$joined_alias.entity_guid", '=', $from_column),
-				$qb->compare("$joined_alias.name", '=', $name, ELGG_VALUE_STRING),
+				$qb->compare("{$joined_alias}.entity_guid", '=', $from_column),
+				$qb->compare("{$joined_alias}.name", '=', $name, ELGG_VALUE_STRING),
 			]);
 		};
 
-		$clause = new JoinClause(self::TABLE_METADATA, $joined_alias, $condition, $join_type);
+		$clause = new JoinClause(MetadataTable::TABLE_NAME, $joined_alias, $condition, $join_type);
 
 		$joined_alias = $clause->prepare($this, $from_alias);
 
@@ -465,23 +504,23 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	 * @param string          $from_alias   Main table alias
 	 * @param string          $from_column  Guid column name in the main table
 	 * @param string|string[] $name         Annotation name
-	 * @param string          $join_type    JOIN type
-	 * @param string          $joined_alias Joined table alias
+	 * @param string|null     $join_type    JOIN type
+	 * @param string|null     $joined_alias Joined table alias
 	 *
 	 * @return string
 	 */
-	public function joinAnnotationTable($from_alias = '', $from_column = 'guid', $name = null, $join_type = 'inner', $joined_alias = null) {
+	public function joinAnnotationTable(string $from_alias = '', string $from_column = 'guid', $name = null, ?string $join_type = 'inner', ?string $joined_alias = null): string {
 		if (in_array($joined_alias, $this->joins)) {
 			return $joined_alias;
 		}
 
 		if ($from_alias) {
-			$from_column = "$from_alias.$from_column";
+			$from_column = "{$from_alias}.{$from_column}";
 		}
 
 		$hash = sha1(serialize([
 			$join_type,
-			self::TABLE_ANNOTATIONS,
+			AnnotationsTable::TABLE_NAME,
 			$from_column,
 			(array) $name,
 		]));
@@ -492,12 +531,12 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 
 		$condition = function (QueryBuilder $qb, $joined_alias) use ($from_column, $name) {
 			return $qb->merge([
-				$qb->compare("$joined_alias.entity_guid", '=', $from_column),
-				$qb->compare("$joined_alias.name", '=', $name, ELGG_VALUE_STRING),
+				$qb->compare("{$joined_alias}.entity_guid", '=', $from_column),
+				$qb->compare("{$joined_alias}.name", '=', $name, ELGG_VALUE_STRING),
 			]);
 		};
 
-		$clause = new JoinClause(self::TABLE_ANNOTATIONS, $joined_alias, $condition, $join_type);
+		$clause = new JoinClause(AnnotationsTable::TABLE_NAME, $joined_alias, $condition, $join_type);
 
 		$joined_alias = $clause->prepare($this, $from_alias);
 
@@ -509,27 +548,27 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 	/**
 	 * Join relationship table from alias and return joined table alias
 	 *
-	 * @param string $from_alias   Main table alias
-	 * @param string $from_column  Guid column name in the main table
-	 * @param string $name         Relationship name
-	 * @param bool   $inverse      Join on guid_two column
-	 * @param string $join_type    JOIN type
-	 * @param string $joined_alias Joined table alias
+	 * @param string      $from_alias   Main table alias
+	 * @param string      $from_column  Guid column name in the main table
+	 * @param string      $name         Relationship name
+	 * @param bool        $inverse      Join on guid_two column
+	 * @param string|null $join_type    JOIN type
+	 * @param string|null $joined_alias Joined table alias
 	 *
 	 * @return string
 	 */
-	public function joinRelationshipTable($from_alias = '', $from_column = 'guid', $name = null, $inverse = false, $join_type = 'inner', $joined_alias = null) {
+	public function joinRelationshipTable(string $from_alias = '', string $from_column = 'guid', $name = null, bool $inverse = false, ?string $join_type = 'inner', ?string $joined_alias = null): string {
 		if (in_array($joined_alias, $this->joins)) {
 			return $joined_alias;
 		}
 
 		if ($from_alias) {
-			$from_column = "$from_alias.$from_column";
+			$from_column = "{$from_alias}.{$from_column}";
 		}
 
 		$hash = sha1(serialize([
 			$join_type,
-			self::TABLE_RELATIONSHIPS,
+			RelationshipsTable::TABLE_NAME,
 			$from_column,
 			$inverse,
 			(array) $name,
@@ -551,7 +590,7 @@ abstract class QueryBuilder extends DbalQueryBuilder {
 			return $qb->merge($parts);
 		};
 
-		$clause = new JoinClause(self::TABLE_RELATIONSHIPS, $joined_alias, $condition, $join_type);
+		$clause = new JoinClause(RelationshipsTable::TABLE_NAME, $joined_alias, $condition, $join_type);
 
 		$joined_alias = $clause->prepare($this, $from_alias);
 

@@ -16,37 +16,53 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
+use Cake\Chronos\ChronosDate;
+use Cake\Database\Driver;
+use Cake\Database\Exception\DatabaseException;
 use Cake\I18n\Date;
-use Cake\I18n\FrozenDate;
-use Cake\I18n\I18nDateTimeInterface;
-use DateTime;
-use DateTimeImmutable;
 use DateTimeInterface;
+use Exception;
+use InvalidArgumentException;
 
 /**
  * Class DateType
  */
-class DateType extends DateTimeType
+class DateType extends BaseType implements BatchCastingInterface
 {
     /**
-     * @inheritDoc
+     * @var string
      */
-    protected $_format = 'Y-m-d';
+    protected string $_format = 'Y-m-d';
 
     /**
-     * @inheritDoc
+     * @var array<string>
      */
-    protected $_marshalFormats = [
+    protected array $_marshalFormats = [
         'Y-m-d',
     ];
 
     /**
-     * In this class we want Date objects to  have their time
-     * set to the beginning of the day.
+     * Whether `marshal()` should use locale-aware parser with `_localeMarshalFormat`.
      *
      * @var bool
      */
-    protected $setToDateStart = true;
+    protected bool $_useLocaleMarshal = false;
+
+    /**
+     * The locale-aware format `marshal()` uses when `_useLocaleParser` is true.
+     *
+     * See `Cake\I18n\Date::parseDate()` for accepted formats.
+     *
+     * @var string|int|null
+     */
+    protected string|int|null $_localeMarshalFormat = null;
+
+    /**
+     * The classname to use when creating objects.
+     *
+     * @var class-string<\Cake\Chronos\ChronosDate>
+     */
+    protected string $_className;
 
     /**
      * @inheritDoc
@@ -55,71 +71,210 @@ class DateType extends DateTimeType
     {
         parent::__construct($name);
 
-        $this->_setClassName(FrozenDate::class, DateTimeImmutable::class);
+        $this->_className = class_exists(Date::class) ? Date::class : ChronosDate::class;
     }
 
     /**
-     * Change the preferred class name to the FrozenDate implementation.
+     * Convert DateTime instance into strings.
      *
-     * @return $this
-     * @deprecated 4.3.0 This method is no longer needed as using immutable datetime class is the default behavior.
+     * @param mixed $value The value to convert.
+     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @return string|null
      */
-    public function useImmutable()
+    public function toDatabase(mixed $value, Driver $driver): ?string
     {
-        deprecationWarning(
-            'Configuring immutable or mutable classes is deprecated and immutable'
-            . ' classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary.'
-        );
+        if ($value === null || is_string($value)) {
+            return $value;
+        }
+        if (is_int($value)) {
+            $class = $this->_className;
+            $value = new $class('@' . $value);
+        }
 
-        $this->_setClassName(FrozenDate::class, DateTimeImmutable::class);
+        assert(is_object($value) && method_exists($value, 'format'));
 
-        return $this;
+        return $value->format($this->_format);
     }
 
     /**
-     * Change the preferred class name to the mutable Date implementation.
+     * {@inheritDoc}
      *
-     * @return $this
-     * @deprecated 4.3.0 Using mutable datetime objects is deprecated.
+     * @param mixed $value Value to be converted to PHP equivalent
+     * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted
+     * @return \Cake\Chronos\ChronosDate|null
      */
-    public function useMutable()
+    public function toPHP(mixed $value, Driver $driver): ?ChronosDate
     {
-        deprecationWarning(
-            'Configuring immutable or mutable classes is deprecated and immutable'
-            . ' classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary.'
-        );
+        if ($value === null) {
+            return null;
+        }
 
-        $this->_setClassName(Date::class, DateTime::class);
+        $class = $this->_className;
+        if (is_int($value)) {
+            $instance = new $class('@' . $value);
+        } elseif (str_starts_with($value, '0000-00-00')) {
+            return null;
+        } else {
+            $instance = new $class($value);
+        }
 
-        return $this;
+        return $instance;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function manyToPHP(array $values, array $fields, Driver $driver): array
+    {
+        foreach ($fields as $field) {
+            if (!isset($values[$field])) {
+                continue;
+            }
+
+            $value = $values[$field];
+
+            $class = $this->_className;
+            if (is_int($value)) {
+                $instance = new $class('@' . $value);
+            } elseif (str_starts_with($value, '0000-00-00')) {
+                $values[$field] = null;
+                continue;
+            } else {
+                $instance = new $class($value);
+            }
+
+            $values[$field] = $instance;
+        }
+
+        return $values;
     }
 
     /**
      * Convert request data into a datetime object.
      *
      * @param mixed $value Request data
-     * @return \DateTimeInterface|null
+     * @return \Cake\Chronos\ChronosDate|null
      */
-    public function marshal($value): ?DateTimeInterface
+    public function marshal(mixed $value): ?ChronosDate
     {
-        $date = parent::marshal($value);
-        /** @psalm-var \DateTime|\DateTimeImmutable|null $date */
-        if ($date && !$date instanceof I18nDateTimeInterface) {
-            // Clear time manually when I18n types aren't available and raw DateTime used
-            $date = $date->setTime(0, 0, 0);
+        if ($value instanceof $this->_className) {
+            return $value;
         }
 
-        return $date;
+        if ($value instanceof DateTimeInterface || $value instanceof ChronosDate) {
+            return new $this->_className($value->format($this->_format));
+        }
+
+        $class = $this->_className;
+        try {
+            if (is_int($value) || (is_string($value) && ctype_digit($value))) {
+                return new $class('@' . $value);
+            }
+
+            if (is_string($value)) {
+                if ($this->_useLocaleMarshal) {
+                    return $this->_parseLocaleValue($value);
+                }
+
+                return $this->_parseValue($value);
+            }
+        } catch (Exception) {
+            return null;
+        }
+
+        if (
+            !is_array($value) ||
+            !isset($value['year'], $value['month'], $value['day']) ||
+            !is_numeric($value['year']) || !is_numeric($value['month']) || !is_numeric($value['day'])
+        ) {
+            return null;
+        }
+
+        $format = sprintf('%d-%02d-%02d', $value['year'], $value['month'], $value['day']);
+
+        return new $class($format);
     }
 
     /**
-     * @inheritDoc
+     * Sets whether to parse strings passed to `marshal()` using
+     * the locale-aware format set by `setLocaleFormat()`.
+     *
+     * @param bool $enable Whether to enable
+     * @return $this
      */
-    protected function _parseLocaleValue(string $value): ?I18nDateTimeInterface
+    public function useLocaleParser(bool $enable = true)
     {
-        /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
+        if ($enable === false) {
+            $this->_useLocaleMarshal = $enable;
+
+            return $this;
+        }
+        if (is_a($this->_className, Date::class, true)) {
+            $this->_useLocaleMarshal = $enable;
+
+            return $this;
+        }
+        throw new DatabaseException(
+            sprintf('Cannot use locale parsing with %s', $this->_className),
+        );
+    }
+
+    /**
+     * Sets the locale-aware format used by `marshal()` when parsing strings.
+     *
+     * See `Cake\I18n\Date::parseDate()` for accepted formats.
+     *
+     * @param string|int $format The locale-aware format
+     * @see \Cake\I18n\Date::parseDate()
+     * @return $this
+     */
+    public function setLocaleFormat(string|int $format)
+    {
+        $this->_localeMarshalFormat = $format;
+
+        return $this;
+    }
+
+    /**
+     * Get the classname used for building objects.
+     *
+     * @return class-string<\Cake\Chronos\ChronosDate>
+     */
+    public function getDateClassName(): string
+    {
+        return $this->_className;
+    }
+
+    /**
+     * @param string $value
+     * @return \Cake\I18n\Date|null
+     */
+    protected function _parseLocaleValue(string $value): ?Date
+    {
+        /** @var class-string<\Cake\I18n\Date> $class */
         $class = $this->_className;
 
         return $class::parseDate($value, $this->_localeMarshalFormat);
+    }
+
+    /**
+     * Converts a string into a DateTime object after parsing it using the
+     * formats in `_marshalFormats`.
+     *
+     * @param string $value The value to parse and convert to an object.
+     * @return \Cake\Chronos\ChronosDate|null
+     */
+    protected function _parseValue(string $value): ?ChronosDate
+    {
+        $class = $this->_className;
+        foreach ($this->_marshalFormats as $format) {
+            try {
+                return $class::createFromFormat($format, $value);
+            } catch (InvalidArgumentException) {
+                continue;
+            }
+        }
+
+        return null;
     }
 }

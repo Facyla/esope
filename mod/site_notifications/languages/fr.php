@@ -11,6 +11,7 @@ return array(
 	'site_notifications:topbar' => 'Notifications',
 	'item:object:site_notification' => 'Notification du site',
 	'collection:object:site_notification' => 'Notifications du site',
+	'list:object:site_notification:no_results' => 'Aucune notification du site trouvée',
 
 	'site_notifications:unread' => 'Non lu',
 	'site_notifications:read' => 'Lu',
@@ -24,7 +25,7 @@ return array(
 	'site_notifications:settings:read_cleanup_interval' => 'Intervalle de nettoyage des notifications lues',
 	'site_notifications:settings:read_cleanup_interval:help' => 'Fréquence à laquelle les notifications lues doivent être nettoyées. Sur les sites à plus forte activité, vous souhaiterez peut-être augmenter l\'intervalle afin de suivre le nombre de nouvelles notifications du site.',
 	
-	'site_notifications:empty' => 'Pas de notification',
+	'site_notifications:empty' => 'Pas de notification', // @todo remove in Elgg 7.0
 	'site_notifications:toggle_all' => 'Inverser la sélection',
 	'site_notifications:mark_read' => 'Marquer comme lu',
 	'site_notifications:mark_read:confirm' => 'Confirmez-vous vouloir marquer toutes les notifications sélectionnées comme lues ?',
@@ -33,10 +34,7 @@ return array(
 	'site_notifications:success:delete' => 'Notifications supprimées',
 	'site_notifications:success:mark_read' => 'Notifications marquées comme lues',
 	
-	'site_notifications:cron:linked_cleanup:start' => 'Site Notifications est en train de nettoyer les notifications sans entité liée',
 	'site_notifications:cron:linked_cleanup:end' => 'Site Notifications a nettoyé %s notifications sans entité liée',
-	'site_notifications:cron:unread_cleanup:start' => 'Site Notifications est en train de nettoyer les notifications non lues de plus de %s jours',
 	'site_notifications:cron:unread_cleanup:end' => 'Site Notifications a nettoyé %s notifications non lues',
-	'site_notifications:cron:read_cleanup:start' => 'Site Notifications est en train de nettoyer les notifications lues de plus de %s jours',
 	'site_notifications:cron:read_cleanup:end' => 'Site Notifications a nettoyé %s notifications lues',
 );

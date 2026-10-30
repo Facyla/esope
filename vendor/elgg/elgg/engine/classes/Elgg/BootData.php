@@ -4,7 +4,6 @@ namespace Elgg;
 
 use Elgg\Database\EntityTable;
 use Elgg\Database\Plugins;
-use Elgg\Database\Select;
 use Elgg\Exceptions\Configuration\InstallationException;
 
 /**
@@ -25,10 +24,7 @@ class BootData {
 	 */
 	private $active_plugins;
 
-	/**
-	 * @var array
-	 */
-	private $plugin_metadata = [];
+	private array $plugin_metadata = [];
 
 	/**
 	 * Populate the boot data
@@ -47,24 +43,12 @@ class BootData {
 			throw new InstallationException('Unable to handle this request. This site is not configured or the database is down.');
 		}
 
-		// get plugins
 		$this->active_plugins = $plugins->find('active');
-
-		// get plugin settings
 		if (empty($this->active_plugins)) {
 			return;
 		}
-
-		// find GUIDs with not too many settings
-		$guids = array_map(function (\ElggPlugin $plugin) {
-			return $plugin->guid;
-		}, $this->active_plugins);
-
-		_elgg_services()->metadataCache->populateFromEntities($guids);
-
-		foreach ($guids as $guid) {
-			$this->plugin_metadata[$guid] = _elgg_services()->metadataCache->getEntityMetadata($guid);
-		}
+		
+		$this->plugin_metadata = _elgg_services()->metadataCache->populateFromEntities($this->active_plugins);
 	}
 
 	/**
@@ -90,7 +74,7 @@ class BootData {
 	 *
 	 * @return array
 	 */
-	public function getPluginMetadata() {
+	public function getPluginMetadata(): array {
 		return $this->plugin_metadata;
 	}
 }

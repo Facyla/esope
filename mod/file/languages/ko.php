@@ -6,17 +6,16 @@
  */
 
 return array(
-
 	'item:object:file' => '파일',
-	
 	'collection:object:file' => '파일들',
+	
 	'collection:object:file:all' => "모든 파일",
 	'collection:object:file:owner' => "%s의 파일",
 	'collection:object:file:friends' => "친구의 파일",
 	'collection:object:file:group' => "모둠 파일",
 	'add:object:file' => "파일 올리기",
 	'edit:object:file' => "파일 수정",
-
+	
 	'file:more' => "파일 더보기",
 	'file:list' => "목록보기",
 
@@ -71,7 +70,7 @@ return array(
 	 * Error messages
 	 */
 
-	'file:none' => "파일 없슴.",
+	'file:none' => "파일 없슴.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "죄송합니다. 파일을 저장할 수 없었습니다.",
 	'file:noaccess' => "이 파일을 변경할 권한이 없습니다.",
 	'file:cannotload' => "파일 올릴 때 오류가 있었습니다",

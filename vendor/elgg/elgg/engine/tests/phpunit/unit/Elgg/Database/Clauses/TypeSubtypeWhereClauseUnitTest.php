@@ -2,14 +2,11 @@
 
 namespace Elgg\Database\Clauses;
 
+use Elgg\Database\EntityTable;
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
 use Elgg\UnitTestCase;
 
-/**
- * @group QueryBuilder
- * @group QueryBuilderWhere
- */
 class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 
 	/**
@@ -18,11 +15,10 @@ class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 	protected $qb;
 
 	public function up() {
-		$this->qb = Select::fromTable('entities', 'alias');
+		$this->qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
 	}
 
 	public function testBuildQueryFromSingleType() {
-
 		$parts = [];
 
 		$type_where = [];
@@ -35,15 +31,14 @@ class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 		$query = new TypeSubtypeWhereClause();
 		$query->type_subtype_pairs = ['object' => []];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromMultipleTypes() {
-
 		$parts = [];
 
 		$type_where = [];
@@ -61,16 +56,14 @@ class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 			'group' => null,
 		];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
-
 	}
 
 	public function testBuildQueryFromSingleTypeWithSubtypes() {
-
 		$parts = [];
 
 		$type_where = [];
@@ -87,15 +80,14 @@ class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 		$query = new TypeSubtypeWhereClause();
 		$query->type_subtype_pairs = ['object' => ['blog', 'file']];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromMultipleTypesWithMixedSubtypes() {
-
 		$parts = [];
 
 		$type_where = [];
@@ -118,15 +110,14 @@ class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 			'group' => [],
 		];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromMultipleTypesWithSubtypes() {
-
 		$parts = [];
 
 		$type_where = [];
@@ -153,8 +144,8 @@ class TypeSubtypeWhereClauseUnitTest extends UnitTestCase {
 			'group' => ['community'],
 		];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());

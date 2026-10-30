@@ -8,13 +8,15 @@
 return array(
 	'item:object:reported_content' => 'Elément signalé',
 	'collection:object:reported_content' => 'Éléments signalés',
+	'list:object:reported_content:no_results' => 'Aucun contenu signalé trouvé',
+	
 	'admin:administer_utilities:reportedcontent' => 'Contenu signalé',
 	'admin:administer_utilities:reportedcontent:archive' => 'Contenu signalé - archive',
 	
 	'reportedcontent' => 'Contenu signalé',
 	'reportedcontent:this' => 'Signaler ceci',
 	'reportedcontent:this:tooltip' => 'Signaler cette page à un administrateur',
-	'reportedcontent:none' => 'Aucun signalement',
+	'reportedcontent:none' => 'Aucun signalement', // @todo remove in Elgg 7.0
 	'reportedcontent:report' => 'Signaler à l\'administrateur',
 	'reportedcontent:archive' => 'Archiver le signalement',
 	'reportedcontent:archived' => 'Le signalement a bien été archivé',
@@ -26,7 +28,7 @@ return array(
 	'reportedcontent:new' => 'Nouveaux signalements',
 	'reportedcontent:archived_reports' => 'Archivé',
 	'reportedcontent:related_reports' => 'Signalements associés',
-	'reportedcontent:comments:message' => 'Les commentaires ne sont disponibles que pour l\'administrateur. La personne qui signale le contenu ne sera pas informé des nouveaux commentaires.',
+	'reportedcontent:comments:message' => 'Les commentaires ne sont disponibles que pour l\'administrateur. La personne qui signale le contenu ne sera pas informée des nouveaux commentaires.',
 	
 	'reportedcontent:failed' => 'Désolé, la tentative de signaler ce contenu a échoué.',
 	'reportedcontent:notarchived' => 'Il a été impossible d\'archiver ce signalement',

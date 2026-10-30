@@ -1,26 +1,31 @@
 /* ***************************************
 	BREADCRUMBS
 *************************************** */
-.elgg-breadcrumbs {
-	padding: 0.5rem;
-	color: $(text-color-soft);
-	font-size: 0.9rem;
+.elgg-layout-breadcrumbs {
+	margin-bottom: 1rem;
+}
+
+.elgg-breadcrumbs.elgg-menu-hz {
+	gap: 0.5rem;
 	
 	> li {
-		display: inline-block;
-		
-		&:after {
-			content: "\203A";
-			padding: 0 0.25rem;
-			font-weight: normal;
-		}
+		margin: 0;
 		
 		> a {
-			display: inline-block;
-			color: $(text-color-soft);
+			color: var(--elgg-text-color-soft);
+			background-color: white;
+			
+			font-size: 0.9rem;
+			border: 1px solid var(--elgg-border-color-soft);
+			border-radius: 4px;
+			padding: 0.25rem 0.5rem;
+			
+			transition: background-color .5s, color .5s;
 			
 			&:hover {
-				color: $(text-color-mild);
+				text-decoration: none;
+				background-color: var(--elgg-background-color-mild);
+				color: var(--elgg-text-color-mild);
 			}
 		}
 	}

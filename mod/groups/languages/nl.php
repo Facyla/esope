@@ -51,6 +51,7 @@ return array(
 	'groups:content_access_mode:unrestricted' => "Geen beperkingen. Toegang hangt af van de instelling van de content.",
 	'groups:content_access_mode:membersonly' => "Alleen voor leden - Niet-leden kunnen nooit de inhoud van de groep zien.",
 	'groups:owner' => "Eigenaar",
+	'groups:owner:placeholder' => "Zoek een groepslid",
 	'groups:owner:warning' => "Opgelet: als je deze waarde aanpast ben je niet meer de eigenaar van deze groep",
 	'groups:widget:num_display' => 'Aantal groepen om weer te geven',
 	'widgets:a_users_groups:name' => 'Groepslidmaatschap',
@@ -68,9 +69,9 @@ return array(
 	'groups:joinrequest' => 'Lidmaatschap van deze groep aanvragen',
 	'groups:join' => 'Word lid van deze groep',
 	'groups:leave' => 'Verlaat deze groep',
-	'groups:invite' => 'Nodig vrienden uit',
-	'groups:invite:title' => 'Nodig vrienden uit in deze groep',
-	'groups:invite:friends:help' => 'Zoek naar een vriend op naam of gebruikersnaam en selecteer de vriend uit de lijst',
+	'groups:invite' => 'Leden uitnodigen',
+	'groups:invite:title' => 'Nodig leden uit voor deze groep',
+	'groups:invite:friends:help' => 'Zoek naar een gebruiker op naam of gebruikersnaam en selecteer de gebruiker uit de lijst',
 	'groups:invite:resend' => 'Verstuur de uitnodigingen opnieuw voor de al uitgenodigde gebruikers',
 	'groups:invite:member' => 'Is al lid van deze groep',
 	'groups:invite:invited' => 'Is al uitgenodigd voor deze groep',
@@ -135,7 +136,9 @@ return array(
 	'groups:userinvited' => 'Gebruiker is uitgenodigd.',
 	'groups:usernotinvited' => 'Gebruiker kon niet worden uitgenodigd.',
 	'groups:useralreadyinvited' => 'Gebruiker is al uitgenodigd',
+	'groups:invite:message' => "Je bent uitgenodigd voor deze groep op %s",
 	'groups:invite:subject' => "%s je bent uitgenodigd om lid te worden van %s!",
+	'groups:joinrequest:revoke' => 'Lidmaatschapsverzoek intrekken',
 	'groups:joinrequest:remove:check' => 'Weet je zeker dat je dit lidmaatschapsverzoek wilt verwijderen?',
 	'groups:invite:remove:check' => 'Weet je zeker dat je deze uitnodiging wilt verwijderen?',
 	'groups:invite:body' => "%s heeft je uitgenodigd om lid te worden van de groep '%s'.
@@ -178,4 +181,8 @@ of klik op onderstaande link om alle lidmaatschapsverzoeken te bekijken:
 	
 	'groups:usersettings:notifications:title' => 'Groepsnotificaties',
 	'groups:usersettings:notifications:description' => 'Om notificaties te ontvangen uit groepen waar je lid van bent kun je in onderstaande lijst aangeven of en hoe je op de hoogte moet worden gebracht',
+	
+	// accessibility
+	'groups:aria:label:group_search' => "Zoek naar groepen",
+	'groups:aria:label:search_in_group' => "Zoek in deze groep",
 );

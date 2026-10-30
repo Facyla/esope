@@ -48,13 +48,13 @@ if (empty($tabs)) {
 $content = '';
 foreach ($tabs as $index => $tab) {
 	if (!isset($tab['href']) && !isset($tab['content'])) {
-		elgg_log('Tab configuration in "page/components/tabs" requires either a "href" or "content" parameter', 'NOTICE');
+		elgg_log('Tab configuration in "page/components/tabs" requires either a "href" or "content" parameter', \Psr\Log\LogLevel::NOTICE);
 		continue;
 	}
 
 	$selected = (bool) elgg_extract('selected', $tab, false);
 
-	$class = ['elgg-content'];
+	$class = [];
 	$tab_content = '';
 	$tab_id = "{$id}-{$index}";
 	if (isset($tab['content'])) {
@@ -73,10 +73,7 @@ foreach ($tabs as $index => $tab) {
 	}
 	
 	// place for content
-	$content .= elgg_format_element('div', [
-		'class' => $class,
-		'id' => $tab_id,
-	], $tab_content);
+	$content .= elgg_format_element('div', ['class' => $class, 'id' => $tab_id], $tab_content);
 	
 	// additional tab information
 	if (!isset($tab['name'])) {
@@ -84,7 +81,7 @@ foreach ($tabs as $index => $tab) {
 	}
 	
 	$tab['data-target'] = "#{$tab_id}";
-	$tab['item_class'] = elgg_extract_class($tab, ['elgg-components-tab'], 'item_class');
+	$tab['item_class'] = elgg_extract_class($tab, 'elgg-components-tab', 'item_class');
 	
 	$tabs[$index] = $tab;
 }
@@ -94,13 +91,11 @@ $tabs = elgg_view('navigation/tabs', [
 	'tabs' => $tabs,
 ]);
 
-$content = elgg_format_element('div', [
-	'class' => 'elgg-tabs-content',
-], $content);
+$content = elgg_format_element('div', ['class' => 'elgg-tabs-content'], $content);
 
 $module = (string) elgg_extract('module', $vars, 'tabs');
 unset($vars['module']);
 
 echo elgg_view_module($module, (string) elgg_extract('title', $vars), $tabs . $content, $vars);
 
-elgg_require_js('page/components/tabs');
+elgg_import_esm('page/components/tabs');

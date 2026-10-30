@@ -14,11 +14,6 @@ use Elgg\Project\Paths;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @group HttpService
- * @group ActionsService
- * @group UnitTests
- */
 class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	use MessageTesting;
@@ -174,6 +169,23 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertIsArray($middleware);
 		$this->assertContains(\Elgg\Router\Middleware\AjaxGatekeeper::class, $middleware);
 	}
+	
+	public function testCanRegisterActionWithAdditionalOptions() {
+		$this->assertFalse(_elgg_services()->actions->exists('test/output'));
+		_elgg_services()->actions->register('test/output', "{$this->actionsDir}/output.php", 'public', [
+			'options' => [
+				'entity_type' => 'foo',
+				'entity_subtype' => 'bar',
+			],
+		]);
+		
+		$this->assertTrue(_elgg_services()->actions->exists('test/output'));
+		$route = _elgg_services()->routes->get('action:test/output');
+		$this->assertInstanceOf(\Elgg\Router\Route::class, $route);
+		
+		$this->assertEquals('foo', $route->getOption('entity_type'));
+		$this->assertEquals('bar', $route->getOption('entity_subtype'));
+	}
 
 	public function testCanRegisterActionWithoutFilename() {
 		_elgg_services()->actions->register('login');
@@ -195,7 +207,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		_elgg_services()->actions->register($name, "{$this->actionsDir}/output.php", 'public');
 	}
 
-	public function invalidActionNamesDataProvider() {
+	public static function invalidActionNamesDataProvider() {
 		return [
 			['http://test/test'],
 			['test//test'],
@@ -361,7 +373,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->addCsrfTokens($request);
 
 		_elgg_services()->events->registerHandler('action:validate', 'output3', function (\Elgg\Event $event) {
-			throw new ValidationException('Invalid');
+			throw new ValidationException();
 		});
 
 		_elgg_services()->actions->register('output3', "{$this->actionsDir}/output3.php", 'public');
@@ -381,9 +393,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		_elgg_services()->router->getResponse($request);
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanDecodeJson() {
 		$data = ['foo' => 'bar'];
 		$json = json_encode($data);
@@ -448,7 +457,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	/**
 	 * This test will implement the flow without triggering ajax forward event
-	 * @group AjaxService
 	 */
 	public function testCanRespondToAjax2Request() {
 
@@ -479,15 +487,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 					'success',
 				],
 			],
-			'_elgg_deps' => []
+			'_elgg_deps' => ['js' => [], 'css' => []]
 		]);
 
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanFilterAjax2Response() {
 
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], 2);
@@ -531,15 +536,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 					'success',
 				],
 			],
-			'_elgg_deps' => []
+			'_elgg_deps' => ['js' => [], 'css' => []]
 		]);
 
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanCancelAjax2Response() {
 
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], 2);
@@ -572,9 +574,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testThrowsExceptionForInvalidAjax2ResponseFilter() {
 
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], 2);
@@ -642,9 +641,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanRespondWithErrorToAjax2Request() {
 
 		$request = $this->prepareHttpRequest('action/output3', 'POST', [], 2);
@@ -670,7 +666,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'_elgg_msgs' => [
 				'error' => ['error']
 			],
-			'_elgg_deps' => [],
+			'_elgg_deps' => ['js' => [], 'css' => []],
 		]);
 
 		$this->assertEquals($output, $response->getContent());
@@ -827,9 +823,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		ob_start();
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanRespondToAjax2RequestFromOkResponseBuilder() {
 
 		$request = $this->prepareHttpRequest('action/output4', 'POST', [], 2);
@@ -857,15 +850,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'_elgg_msgs' => [
 				'success' => ['success']
 			],
-			'_elgg_deps' => []
+			'_elgg_deps' => ['js' => [], 'css' => []]
 		]);
 
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanRespondToAjax2RequestFromErrorResponseBuilderWithOkStatusCode() {
 
 		$request = $this->prepareHttpRequest('action/output4', 'POST', [], 2);
@@ -893,15 +883,12 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'_elgg_msgs' => [
 				'error' => ['error'],
 			],
-			'_elgg_deps' => [],
+			'_elgg_deps' => ['js' => [], 'css' => []],
 		]);
 
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanRespondToAjax2RequestFromErrorResponseBuilderWithErrorStatusCode() {
 
 		$request = $this->prepareHttpRequest('action/output4', 'POST', [], 2);
@@ -929,9 +916,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($output, $response->getContent());
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanRespondToAjax2RequestFromRedirectResponseBuilder() {
 
 		$request = $this->prepareHttpRequest('action/output4', 'POST', [], 2);
@@ -955,7 +939,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'current_url' => elgg_normalize_url('action/output4'),
 			'forward_url' => elgg_normalize_url('index'),
 			'_elgg_msgs' => (object) [],
-			'_elgg_deps' => [],
+			'_elgg_deps' => ['js' => [], 'css' => []],
 		]);
 
 		$this->assertEquals($output, $response->getContent());
@@ -1007,9 +991,6 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 		ob_start();
 	}
 
-	/**
-	 * @group AjaxService
-	 */
 	public function testCanRedirectOnAjax2Request() {
 		$request = $this->prepareHttpRequest('action/output5', 'POST', [], 2);
 		$this->createService($request);
@@ -1031,7 +1012,7 @@ class ActionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'current_url' => elgg_normalize_url('action/output5'),
 			'forward_url' => elgg_normalize_url('phpunit'),
 			'_elgg_msgs' => (object) [],
-			'_elgg_deps' => []
+			'_elgg_deps' => ['js' => [], 'css' => []]
 		]);
 
 		$this->assertEquals($output, $response->getContent());

@@ -5,9 +5,6 @@ use Elgg\Config;
 use Elgg\Mocks\Di\InternalContainer;
 use Elgg\Project\Paths;
 
-/**
- * @group Installer
- */
 class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -33,7 +30,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 			->getMock();
 		
 		foreach ($methods as $method => $callback) {
-			$mock->method($method)->will($this->returnCallback($callback));
+			$mock->method($method)->willReturnCallback($callback);
 		}
 		
 		return $mock;
@@ -54,6 +51,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		$config->simplecache_enabled = false;
 		$config->lastcache = time();
 		$config->wwwroot = getenv('ELGG_WWWROOT') ?: 'http://localhost/';
+		$config->testing_mode = true;
 
 		$services = InternalContainer::factory(['config' => $config]);
 
@@ -69,7 +67,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		$this->app = $app;
 
 		$this->app->internal_services->views->setViewtype('installation');
-		$this->app->internal_services->views->registerPluginViews(Paths::elgg());
+		$this->app->internal_services->views->registerViewsFromPath(Paths::elgg());
 		$this->app->internal_services->translator->registerTranslations(Paths::elgg() . "install/languages/", true);
 
 		return $this->app;
@@ -88,7 +86,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function createSettingsFile() {
-		$template = Application::elggDir()->getContents("elgg-config/settings.example.php");
+		$template = file_get_contents(Paths::elgg() . 'elgg-config/settings.example.php');
 
 		$params = [
 			'dbprefix' => getenv('ELGG_DB_PREFIX') !== false ? getenv('ELGG_DB_PREFIX') : 'c_i_elgg_',
@@ -106,7 +104,7 @@ class ElggInstallerUnitTest extends \Elgg\UnitTestCase {
 		];
 
 		foreach ($params as $k => $v) {
-			$template = str_replace("{{" . $k . "}}", $v, $template);
+			$template = str_replace('\'{{' . $k . '}}\'', var_export($v, true), $template);
 		}
 
 		file_put_contents(Config::resolvePath(), $template);

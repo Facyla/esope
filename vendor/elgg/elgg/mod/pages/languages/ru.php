@@ -6,19 +6,20 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
-
 	'item:object:page' => 'Страницы',
 	'collection:object:page' => 'Страницы',
+	
 	'collection:object:page:all' => "Все страницы",
 	'collection:object:page:owner' => "Страницы %s",
 	'collection:object:page:friends' => "Страницы друзей",
 	'collection:object:page:group' => "Страницы группы",
 	'add:object:page' => "Добавить страницу",
 	'edit:object:page' => "Изменить страницу",
+	'menu:pages_nav:header' => "Подстраницы",
+	
 	'notification:object:page:create' => "Отправить уведомление при создании страницы",
 	'notifications:mute:object:page' => "о странице '%s'",
 
@@ -45,7 +46,7 @@ return array(
 	'notification:mentions:object:page:subject' => '%s упомянул вас на странице',
 
 	'pages:more' => 'Больше страниц',
-	'pages:none' => 'Страниц пока нет',
+	'pages:none' => 'Страниц пока нет', // @todo remove in Elgg 7.0
 
 	/**
 	* River

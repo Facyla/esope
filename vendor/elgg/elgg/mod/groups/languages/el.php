@@ -56,8 +56,6 @@ return array(
 	'groups:joinrequest' => 'Αίτημα εγγραφής',
 	'groups:join' => 'Συμμετοχή στην ομάδα',
 	'groups:leave' => 'Εγκατάλλειψη ομάδας',
-	'groups:invite' => 'Πρόσκληση φίλων',
-	'groups:invite:title' => 'Πρόσκληση φίλων σ\' αυτή την ομάδα',
 
 	'groups:nofriendsatall' => 'Δεν έχετε φίλους για να προσκαλέσετε',
 	'groups:group' => "Ομάδα",
@@ -133,4 +131,7 @@ return array(
 	'groups:add:alreadymember' => "Ο/η %s είναι ήδη μέλος της ομάδας",
 	
 	// Notification settings
+	
+	// accessibility
+	'groups:aria:label:search_in_group' => "Αναζήτηση σ' αυτή την ομάδα",
 );

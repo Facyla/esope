@@ -21,21 +21,6 @@ use Elgg\Traits\Database\LegacyQueryOptionsAdapter;
  */
 class SearchService {
 
-	/**
-	 * @var Config
-	 */
-	private $config;
-
-	/**
-	 * @var EventsService
-	 */
-	private $events;
-
-	/**
-	 * @var Database
-	 */
-	private $db;
-
 	use LegacyQueryOptionsAdapter;
 	
 	/**
@@ -45,10 +30,11 @@ class SearchService {
 	 * @param \Elgg\EventsService $events Events service
 	 * @param Database            $db     Database
 	 */
-	public function __construct(Config $config, EventsService $events, Database $db) {
-		$this->config = $config;
-		$this->events = $events;
-		$this->db = $db;
+	public function __construct(
+		protected Config $config,
+		protected EventsService $events,
+		protected Database $db
+	) {
 	}
 
 	/**
@@ -168,7 +154,7 @@ class SearchService {
 
 		$query = elgg_extract('query', $options, '');
 		$query = strip_tags($query);
-		$query = htmlspecialchars($query, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
+		$query = htmlspecialchars($query, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false);
 		$query = trim($query);
 
 		$words = preg_split('/\s+/', $query);
@@ -302,15 +288,16 @@ class SearchService {
 			$where->values = $partial_match ? "%{$part}%" : $part;
 			$where->comparison = 'LIKE';
 			$where->value_type = ELGG_VALUE_STRING;
-			$where->case_sensitive = false;
+			if (!$where instanceof AttributeWhereClause) {
+				$where->case_sensitive = false;
+			}
 		};
 
 		if (!empty($attributes)) {
 			foreach ($attributes as $attribute) {
 				$attribute_ands = [];
 				foreach ($query_parts as $part) {
-					$where = new AttributeWhereClause();
-					$where->names = $attribute;
+					$where = AttributeWhereClause::factory(['names' => $attribute]);
 					$populate_where($where, $part);
 					$attribute_ands[] = $where->prepare($qb, $alias);
 				}

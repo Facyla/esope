@@ -8,7 +8,6 @@ use Elgg\Database\Delete;
 use Elgg\Database\Insert;
 use Elgg\Database\Select;
 use Elgg\Database\Update;
-use ElggAnnotation;
 
 class AnnotationsTable extends DbAnnotations {
 
@@ -33,10 +32,10 @@ class AnnotationsTable extends DbAnnotations {
 	 */
 	public function get(int $id): ?\ElggAnnotation {
 		if (empty($this->rows[$id])) {
-			return false;
+			return null;
 		}
 
-		$annotation = new ElggAnnotation($this->rows[$id]);
+		$annotation = new \ElggAnnotation($this->rows[$id]);
 
 		if ($annotation->access_id == ACCESS_PUBLIC) {
 			// Public entities are always accessible
@@ -65,7 +64,7 @@ class AnnotationsTable extends DbAnnotations {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function create(ElggAnnotation $annotation, \ElggEntity $entity): int|bool {
+	public function create(\ElggAnnotation $annotation, \ElggEntity $entity): int|bool {
 		self::$iterator++;
 		$id = self::$iterator;
 
@@ -82,7 +81,6 @@ class AnnotationsTable extends DbAnnotations {
 			'value' => $annotation->value,
 			'value_type' => $annotation->value_type,
 			'time_created' => $this->getCurrentTime()->getTimestamp(),
-			'enabled' => $annotation->enabled,
 		];
 		
 		$this->rows[$id] = $row;
@@ -100,7 +98,7 @@ class AnnotationsTable extends DbAnnotations {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function update(ElggAnnotation $annotation): bool {
+	public function update(\ElggAnnotation $annotation): bool {
 		$id = $annotation->id;
 		if (!isset($this->rows[$id])) {
 			return false;
@@ -127,7 +125,7 @@ class AnnotationsTable extends DbAnnotations {
 		$rows = [];
 		foreach ($this->rows as $row) {
 			if (empty($guids) || in_array($row->entity_guid, $guids)) {
-				$rows[] = new ElggAnnotation($row);
+				$rows[] = new \ElggAnnotation($row);
 			}
 		}
 
@@ -137,7 +135,7 @@ class AnnotationsTable extends DbAnnotations {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function delete(ElggAnnotation $annotation): bool {
+	public function delete(\ElggAnnotation $annotation): bool {
 		parent::delete($annotation);
 
 		if (!isset($this->rows[$annotation->id])) {
@@ -155,6 +153,7 @@ class AnnotationsTable extends DbAnnotations {
 	 * Clear query specs
 	 *
 	 * @param \stdClass $row Data row
+	 *
 	 * @return void
 	 */
 	protected function clearQuerySpecs(\stdClass $row) {
@@ -174,14 +173,12 @@ class AnnotationsTable extends DbAnnotations {
 	 * @return void
 	 */
 	protected function addQuerySpecs(\stdClass $row) {
-
 		$this->clearQuerySpecs($row);
 
-		$qb = Select::fromTable('annotations');
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('*');
 
-		$where = new AnnotationWhereClause();
-		$where->ids = $row->id;
+		$where = AnnotationWhereClause::factory(['ids' => $row->id]);
 		$qb->addClause($where);
 
 		$this->query_specs[$row->id][] = $this->db->addQuerySpec([
@@ -196,7 +193,7 @@ class AnnotationsTable extends DbAnnotations {
 			},
 		]);
 
-		$qb = Insert::intoTable('annotations');
+		$qb = Insert::intoTable(self::TABLE_NAME);
 		$qb->values([
 			'entity_guid' => $qb->param($row->entity_guid, ELGG_VALUE_INTEGER),
 			'name' => $qb->param($row->name, ELGG_VALUE_STRING),
@@ -213,7 +210,7 @@ class AnnotationsTable extends DbAnnotations {
 			'insert_id' => $row->id,
 		]);
 
-		$qb = Update::table('annotations');
+		$qb = Update::table(self::TABLE_NAME);
 		$qb->set('name', $qb->param($row->name, ELGG_VALUE_STRING))
 			->set('value', $qb->param($row->value, $row->value_type === 'integer' ? ELGG_VALUE_INTEGER : ELGG_VALUE_STRING))
 			->set('value_type', $qb->param($row->value_type, ELGG_VALUE_STRING))
@@ -233,7 +230,7 @@ class AnnotationsTable extends DbAnnotations {
 			},
 		]);
 
-		$qb = Delete::fromTable('annotations');
+		$qb = Delete::fromTable(self::TABLE_NAME);
 		$qb->where($qb->compare('id', '=', $row->id, ELGG_VALUE_INTEGER));
 
 		$this->query_specs[$row->id][] = $this->db->addQuerySpec([

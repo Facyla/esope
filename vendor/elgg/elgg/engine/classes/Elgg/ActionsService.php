@@ -10,7 +10,6 @@ use Elgg\Router\Middleware\CsrfFirewall;
 use Elgg\Router\Middleware\Gatekeeper as MiddlewareGateKeeper;
 use Elgg\Router\Middleware\LoggedOutGatekeeper;
 use Elgg\Router\RouteRegistrationService;
-use Elgg\Traits\Loggable;
 
 /**
  * Actions service
@@ -19,31 +18,13 @@ use Elgg\Traits\Loggable;
  * @since 1.9.0
  */
 class ActionsService {
-
-	use Loggable;
 	
-	/**
-	 * @var string[]
-	 */
-	private static $access_levels = ['public', 'logged_in', 'logged_out', 'admin'];
+	protected const ACCESS_LEVELS = ['public', 'logged_in', 'logged_out', 'admin'];
 
 	/**
 	 * Actions for which CSRF firewall should be bypassed
-	 * @var array
 	 */
-	private static $bypass_csrf = [
-		'logout',
-	];
-
-	/**
-	 * @var RouteRegistrationService
-	 */
-	protected $routes;
-
-	/**
-	 * @var HandlersService
-	 */
-	protected $handlers;
+	protected const UNPROTECTED_ACTIONS = ['logout'];
 
 	/**
 	 * Constructor
@@ -51,9 +32,7 @@ class ActionsService {
 	 * @param RouteRegistrationService $routes   Routes
 	 * @param HandlersService          $handlers Handlers service
 	 */
-	public function __construct(RouteRegistrationService $routes, HandlersService $handlers) {
-		$this->routes = $routes;
-		$this->handlers = $handlers;
+	public function __construct(protected RouteRegistrationService $routes, protected HandlersService $handlers) {
 	}
 
 	/**
@@ -65,13 +44,14 @@ class ActionsService {
 	 * @param string $access  Who is allowed to execute this action: public, logged_in, logged_out, admin. (default: logged_in)
 	 * @param array  $params  Additional params for the action route registration:
 	 *                        - middleware: additional middleware on the action route
+	 *                        - options: additional route options
 	 *
 	 * @return void
 	 * @throws \Elgg\Exceptions\DomainException
 	 * @see elgg_register_action()
 	 */
 	public function register(string $action, string $handler = '', string $access = 'logged_in', array $params = []): void {
-		if (!in_array($access, self::$access_levels)) {
+		if (!in_array($access, self::ACCESS_LEVELS)) {
 			throw new DomainException("Unrecognized value '{$access}' for \$access in " . __METHOD__);
 		}
 		
@@ -80,30 +60,28 @@ class ActionsService {
 		$action = trim($action, '/');
 
 		if (empty($handler)) {
-			$path = Paths::elgg() . 'actions';
-			$handler = Paths::sanitize("{$path}/{$action}.php", false);
+			$handler = Paths::sanitize(Paths::elgg() . "actions/{$action}.php", false);
 		}
-
-		$file = null;
-		$controller = null;
 
 		if (str_ends_with($handler, '.php')) {
 			$file = $handler;
+			$controller = null;
 		} else {
+			$file = null;
 			$controller = $handler;
 		}
 
 		$middleware = [];
 
-		if (!in_array($action, self::$bypass_csrf)) {
+		if (!in_array($action, self::UNPROTECTED_ACTIONS)) {
 			$middleware[] = CsrfFirewall::class;
 		}
 
-		if ($access == 'admin') {
+		if ($access === 'admin') {
 			$middleware[] = AdminGatekeeper::class;
-		} elseif ($access == 'logged_in') {
+		} elseif ($access === 'logged_in') {
 			$middleware[] = MiddlewareGateKeeper::class;
-		} elseif ($access == 'logged_out') {
+		} elseif ($access === 'logged_out') {
 			$middleware[] = LoggedOutGatekeeper::class;
 		}
 
@@ -117,6 +95,7 @@ class ActionsService {
 			'file' => $file,
 			'controller' => $controller,
 			'middleware' => $middleware,
+			'options' => (array) elgg_extract('options', $params),
 			'walled' => false,
 		]);
 	}
@@ -132,11 +111,6 @@ class ActionsService {
 	 */
 	public function unregister(string $action): void {
 		$action = trim($action, '/');
-
-		$route = $this->routes->get("action:{$action}");
-		if (!$route) {
-			return;
-		}
 
 		$this->routes->unregister("action:{$action}");
 	}
@@ -188,7 +162,7 @@ class ActionsService {
 				continue;
 			}
 
-			$action = substr($name, 7);
+			$action = substr($name, strlen('action:'));
 
 			$access = 'public';
 			$middleware = (array) $route->getDefault('_middleware');

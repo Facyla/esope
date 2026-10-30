@@ -6,7 +6,6 @@
  */
 
 return array(
-
 	'item:object:file' => 'Fichier',
 	'item:object:file:application' => 'Application',
 	'item:object:file:archive' => 'Archive',
@@ -20,20 +19,24 @@ return array(
 	'item:object:file:vcard' => 'vCard',
 	'item:object:file:video' => 'Vidéo',
 	'item:object:file:word' => 'Word',
+	'collection:object:file' => 'Fichiers',
+	'list:object:file:no_results' => 'Aucun fichier trouvé',
 	
 	'file:upgrade:2022092801:title' => 'Déplacer des fichiers',
 	'file:upgrade:2022092801:description' => 'Déplace les fichiers téléchargés qui utilisent le plugin "file" vers le dossier de l\'entité du fichier au lieu du dossier de l\'entité propriétaire.',
 	
-	'collection:object:file' => 'Fichiers',
 	'collection:object:file:all' => "Tous les fichiers du site",
 	'collection:object:file:owner' => "Fichiers de %s",
 	'collection:object:file:friends' => "Fichiers des contacts",
 	'collection:object:file:group' => "Fichiers du groupe",
 	'add:object:file' => "Envoyer un fichier",
 	'edit:object:file' => "Modifier le fichier",
+	
 	'notification:object:file:create' => "Envoyer une notification lorsqu'un fichier est créé",
 	'notifications:mute:object:file' => "à propos du fichier '%s'",
-
+	
+	'entity:edit:object:file:success' => 'Le fichier a bien été enregistré.',
+	
 	'file:more' => "Plus de fichiers",
 	'file:list' => "vue liste",
 
@@ -97,7 +100,7 @@ Afficher et commenter le fichier :
 	 * Error messages
 	 */
 
-	'file:none' => "Aucun fichier.",
+	'file:none' => "Aucun fichier.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Désolé, votre fichier n'a pas pu être enregistré.",
 	'file:noaccess' => "Vous n'avez pas la permission de modifier ce fichier",
 	'file:cannotload' => "Une erreur s'est produite lors de l'envoi du fichier",

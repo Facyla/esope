@@ -6,14 +6,18 @@ namespace Elgg\Database;
  * Query builder for updating data in the database
  */
 class Update extends QueryBuilder {
-
+	
 	/**
-	 * {@inheritdoc}
+	 * Returns a QueryBuilder for updating data in a given table
+	 *
+	 * @param string $table table name
+	 *
+	 * @return static
 	 */
-	public static function table($table, $alias = null) {
-		$connection = _elgg_services()->db->getConnection('write');
+	public static function table(string $table): static {
+		$connection = _elgg_services()->db->getConnection(DbConfig::WRITE);
 		$qb = new static($connection);
-		$qb->update($table, $alias);
+		$qb->update($table);
 
 		return $qb;
 	}

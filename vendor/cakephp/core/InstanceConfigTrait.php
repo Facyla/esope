@@ -32,14 +32,14 @@ trait InstanceConfigTrait
      *
      * @var array<string, mixed>
      */
-    protected $_config = [];
+    protected array $_config = [];
 
     /**
      * Whether the config property has already been configured with defaults
      *
      * @var bool
      */
-    protected $_configInitialized = false;
+    protected bool $_configInitialized = false;
 
     /**
      * Sets the config.
@@ -70,7 +70,7 @@ trait InstanceConfigTrait
      * @return $this
      * @throws \Cake\Core\Exception\CakeException When trying to set a key that is invalid.
      */
-    public function setConfig($key, $value = null, $merge = true)
+    public function setConfig(array|string $key, mixed $value = null, bool $merge = true)
     {
         if (!$this->_configInitialized) {
             $this->_config = $this->_defaultConfig;
@@ -115,16 +115,14 @@ trait InstanceConfigTrait
      * @param mixed $default The return value when the key does not exist.
      * @return mixed Configuration data at the named key or null if the key does not exist.
      */
-    public function getConfig(?string $key = null, $default = null)
+    public function getConfig(?string $key = null, mixed $default = null): mixed
     {
         if (!$this->_configInitialized) {
             $this->_config = $this->_defaultConfig;
             $this->_configInitialized = true;
         }
 
-        $return = $this->_configRead($key);
-
-        return $return ?? $default;
+        return $this->_configRead($key) ?? $default;
     }
 
     /**
@@ -136,7 +134,7 @@ trait InstanceConfigTrait
      * @return mixed Configuration data at the named key
      * @throws \InvalidArgumentException
      */
-    public function getConfigOrFail(string $key)
+    public function getConfigOrFail(string $key): mixed
     {
         $config = $this->getConfig($key);
         if ($config === null) {
@@ -172,7 +170,7 @@ trait InstanceConfigTrait
      * @param mixed|null $value The value to set.
      * @return $this
      */
-    public function configShallow($key, $value = null)
+    public function configShallow(array|string $key, mixed $value = null)
     {
         if (!$this->_configInitialized) {
             $this->_config = $this->_defaultConfig;
@@ -190,13 +188,13 @@ trait InstanceConfigTrait
      * @param string|null $key Key to read.
      * @return mixed
      */
-    protected function _configRead(?string $key)
+    protected function _configRead(?string $key): mixed
     {
         if ($key === null) {
             return $this->_config;
         }
 
-        if (strpos($key, '.') === false) {
+        if (!str_contains($key, '.')) {
             return $this->_config[$key] ?? null;
         }
 
@@ -224,7 +222,7 @@ trait InstanceConfigTrait
      * @return void
      * @throws \Cake\Core\Exception\CakeException if attempting to clobber existing config
      */
-    protected function _configWrite($key, $value, $merge = false): void
+    protected function _configWrite(array|string $key, mixed $value, string|bool $merge = false): void
     {
         if (is_string($key) && $value === null) {
             $this->_configDelete($key);
@@ -251,7 +249,7 @@ trait InstanceConfigTrait
             return;
         }
 
-        if (strpos($key, '.') === false) {
+        if (!str_contains($key, '.')) {
             $this->_config[$key] = $value;
 
             return;
@@ -262,10 +260,10 @@ trait InstanceConfigTrait
 
         foreach ($stack as $k) {
             if (!is_array($update)) {
-                throw new CakeException(sprintf('Cannot set %s value', $key));
+                throw new CakeException(sprintf('Cannot set `%s` value.', $key));
             }
 
-            $update[$k] = $update[$k] ?? [];
+            $update[$k] ??= [];
 
             $update = &$update[$k];
         }
@@ -282,7 +280,7 @@ trait InstanceConfigTrait
      */
     protected function _configDelete(string $key): void
     {
-        if (strpos($key, '.') === false) {
+        if (!str_contains($key, '.')) {
             unset($this->_config[$key]);
 
             return;
@@ -294,7 +292,7 @@ trait InstanceConfigTrait
 
         foreach ($stack as $i => $k) {
             if (!is_array($update)) {
-                throw new CakeException(sprintf('Cannot unset %s value', $key));
+                throw new CakeException(sprintf('Cannot unset `%s` value.', $key));
             }
 
             if (!isset($update[$k])) {

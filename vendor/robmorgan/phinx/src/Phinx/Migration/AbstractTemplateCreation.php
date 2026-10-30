@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -15,12 +16,12 @@ abstract class AbstractTemplateCreation implements CreationInterface
     /**
      * @var \Symfony\Component\Console\Input\InputInterface
      */
-    protected $input;
+    protected InputInterface $input;
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
-    protected $output;
+    protected OutputInterface $output;
 
     /**
      * @param \Symfony\Component\Console\Input\InputInterface|null $input Input
@@ -39,7 +40,7 @@ abstract class AbstractTemplateCreation implements CreationInterface
     /**
      * @inheritDoc
      */
-    public function getInput()
+    public function getInput(): InputInterface
     {
         return $this->input;
     }
@@ -47,7 +48,7 @@ abstract class AbstractTemplateCreation implements CreationInterface
     /**
      * @inheritDoc
      */
-    public function setInput(InputInterface $input)
+    public function setInput(InputInterface $input): CreationInterface
     {
         $this->input = $input;
 
@@ -57,7 +58,7 @@ abstract class AbstractTemplateCreation implements CreationInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): OutputInterface
     {
         return $this->output;
     }
@@ -65,7 +66,7 @@ abstract class AbstractTemplateCreation implements CreationInterface
     /**
      * @inheritDoc
      */
-    public function setOutput(OutputInterface $output)
+    public function setOutput(OutputInterface $output): CreationInterface
     {
         $this->output = $output;
 

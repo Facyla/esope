@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -9,6 +10,7 @@ namespace Phinx\Seed;
 
 use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Db\Table;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,25 +21,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * This abstract class proxies the various database methods to your specified
  * adapter.
- *
- * @author Rob Morgan <robbym@gmail.com>
  */
 abstract class AbstractSeed implements SeedInterface
 {
     /**
+     * @var string
+     */
+    protected string $environment;
+
+    /**
      * @var \Phinx\Db\Adapter\AdapterInterface
      */
-    protected $adapter;
+    protected AdapterInterface $adapter;
 
     /**
      * @var \Symfony\Component\Console\Input\InputInterface
      */
-    protected $input;
+    protected InputInterface $input;
 
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
-    protected $output;
+    protected OutputInterface $output;
 
     /**
      * Override to specify dependencies for dependency injection from the configured PSR-11 container
@@ -49,16 +54,14 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function run()
+    public function run(): void
     {
     }
 
     /**
-     * Return seeds dependencies.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [];
     }
@@ -66,7 +69,25 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function setAdapter(AdapterInterface $adapter)
+    public function setEnvironment(string $environment)
+    {
+        $this->environment = $environment;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEnvironment(): string
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAdapter(AdapterInterface $adapter): SeedInterface
     {
         $this->adapter = $adapter;
 
@@ -76,8 +97,12 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function getAdapter()
+    public function getAdapter(): AdapterInterface
     {
+        if (!isset($this->adapter)) {
+            throw new RuntimeException('Cannot access `adapter` it has not been set');
+        }
+
         return $this->adapter;
     }
 
@@ -94,7 +119,7 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function getInput()
+    public function getInput(): InputInterface
     {
         return $this->input;
     }
@@ -102,7 +127,7 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function setOutput(OutputInterface $output)
+    public function setOutput(OutputInterface $output): SeedInterface
     {
         $this->output = $output;
 
@@ -112,7 +137,7 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): OutputInterface
     {
         return $this->output;
     }
@@ -120,7 +145,7 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function getName()
+    public function getName(): string
     {
         return static::class;
     }
@@ -128,23 +153,23 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function execute($sql)
+    public function execute(string $sql, array $params = []): int
     {
-        return $this->getAdapter()->execute($sql);
+        return $this->getAdapter()->execute($sql, $params);
     }
 
     /**
      * @inheritDoc
      */
-    public function query($sql)
+    public function query(string $sql, array $params = []): mixed
     {
-        return $this->getAdapter()->query($sql);
+        return $this->getAdapter()->query($sql, $params);
     }
 
     /**
      * @inheritDoc
      */
-    public function fetchRow($sql)
+    public function fetchRow(string $sql): array|false
     {
         return $this->getAdapter()->fetchRow($sql);
     }
@@ -152,7 +177,7 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function fetchAll($sql)
+    public function fetchAll(string $sql): array
     {
         return $this->getAdapter()->fetchAll($sql);
     }
@@ -160,19 +185,17 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function insert($table, $data)
+    public function insert(string $table, array $data): void
     {
         // convert to table object
-        if (is_string($table)) {
-            $table = new Table($table, [], $this->getAdapter());
-        }
+        $table = new Table($table, [], $this->getAdapter());
         $table->insert($data)->save();
     }
 
     /**
      * @inheritDoc
      */
-    public function hasTable($tableName)
+    public function hasTable(string $tableName): bool
     {
         return $this->getAdapter()->hasTable($tableName);
     }
@@ -180,8 +203,22 @@ abstract class AbstractSeed implements SeedInterface
     /**
      * @inheritDoc
      */
-    public function table($tableName, $options = [])
+    public function table(string $tableName, array $options = []): Table
     {
         return new Table($tableName, $options, $this->getAdapter());
+    }
+
+    /**
+     * Checks to see if the seed should be executed.
+     *
+     * Returns true by default.
+     *
+     * You can use this to prevent a seed from executing.
+     *
+     * @return bool
+     */
+    public function shouldExecute(): bool
+    {
+        return true;
     }
 }

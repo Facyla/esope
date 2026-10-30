@@ -3,12 +3,13 @@
 namespace Elgg;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Elgg\Cache\QueryCache;
 use Elgg\Database\DbConfig;
+use Elgg\Database\QueryBuilder;
 use Elgg\Exceptions\DatabaseException;
 use Elgg\Exceptions\RuntimeException;
 use Elgg\Traits\Debug\Profilable;
@@ -20,7 +21,7 @@ use Psr\Log\LogLevel;
  *
  * @internal
  *
- * @property-read string $prefix Elgg table prefix (read only)
+ * @property-read string $prefix Elgg table prefix (read-only)
  */
 class Database {
 	
@@ -33,24 +34,17 @@ class Database {
 	/**
 	 * @var string $table_prefix Prefix for database tables
 	 */
-	private $table_prefix;
+	protected $table_prefix;
 
 	/**
 	 * @var Connection[]
 	 */
-	private $connections = [];
+	protected array $connections = [];
 
 	/**
 	 * @var int $query_count The number of queries made
 	 */
-	private $query_count = 0;
-
-	/**
-	 * Query cache for select queries.
-	 *
-	 * @var \Elgg\Cache\QueryCache $query_cache The cache
-	 */
-	protected $query_cache;
+	protected int $query_count = 0;
 
 	/**
 	 * Queries are saved as an array with the DELAYED_* constants as keys.
@@ -59,14 +53,12 @@ class Database {
 	 *
 	 * @var array $delayed_queries Queries to be run during shutdown
 	 */
-	protected $delayed_queries = [];
+	protected array $delayed_queries = [];
 
 	/**
 	 * @var \Elgg\Database\DbConfig $config Database configuration
 	 */
-	private $db_config;
-	
-	protected Config $config;
+	protected $db_config;
 
 	/**
 	 * Constructor
@@ -75,10 +67,7 @@ class Database {
 	 * @param QueryCache $query_cache Query Cache
 	 * @param Config     $config      Elgg config
 	 */
-	public function __construct(DbConfig $db_config, QueryCache $query_cache, Config $config) {
-		$this->query_cache = $query_cache;
-		$this->config = $config;
-		
+	public function __construct(DbConfig $db_config, protected QueryCache $query_cache, protected Config $config) {
 		$this->resetConnections($db_config);
 	}
 
@@ -89,7 +78,7 @@ class Database {
 	 *
 	 * @return void
 	 */
-	public function resetConnections(DbConfig $config) {
+	public function resetConnections(DbConfig $config): void {
 		$this->closeConnections();
 		
 		$this->db_config = $config;
@@ -123,9 +112,14 @@ class Database {
 	 */
 	public function getConnection(string $type): Connection {
 		if (isset($this->connections[$type])) {
+			// type is configured
 			return $this->connections[$type];
-		} else if (isset($this->connections['readwrite'])) {
-			return $this->connections['readwrite'];
+		} elseif (isset($this->connections[DbConfig::READ_WRITE])) {
+			// fallback, for request of read/write but no split db
+			return $this->connections[DbConfig::READ_WRITE];
+		} elseif (isset($this->connections[DbConfig::READ])) {
+			// split db configured, readwrite requested
+			return $this->connections[DbConfig::READ];
 		}
 		
 		$this->setupConnections();
@@ -143,10 +137,10 @@ class Database {
 	 */
 	public function setupConnections(): void {
 		if ($this->db_config->isDatabaseSplit()) {
-			$this->connect('read');
-			$this->connect('write');
+			$this->connect(DbConfig::READ);
+			$this->connect(DbConfig::WRITE);
 		} else {
-			$this->connect('readwrite');
+			$this->connect(DbConfig::READ_WRITE);
 		}
 	}
 
@@ -160,7 +154,7 @@ class Database {
 	 * @return void
 	 * @throws DatabaseException
 	 */
-	public function connect(string $type = 'readwrite'): void {
+	public function connect(string $type = DbConfig::READ_WRITE): void {
 		$conf = $this->db_config->getConnectionConfig($type);
 
 		$params = [
@@ -247,7 +241,16 @@ class Database {
 		$this->query_cache->clear();
 
 		$this->executeQuery($query);
-		return (int) $query->getConnection()->lastInsertId();
+		
+		try {
+			return (int) $query->getConnection()->lastInsertId();
+		} catch (DriverException $e) {
+			if ($e->getPrevious() instanceof NoIdentityValue) {
+				return 0;
+			}
+			
+			throw $e;
+		}
 	}
 
 	/**
@@ -260,7 +263,7 @@ class Database {
 	 *
 	 * @return bool|int
 	 */
-	public function updateData(QueryBuilder $query, bool $get_num_rows = false) {
+	public function updateData(QueryBuilder $query, bool $get_num_rows = false): bool|int {
 		$params = $query->getParameters();
 		$sql = $query->getSQL();
 	
@@ -273,13 +276,13 @@ class Database {
 			return true;
 		}
 
-		return ($result instanceof Result) ? $result->rowCount() : $result;
+		return ($result instanceof Result) ? (int) $result->rowCount() : $result;
 	}
 
 	/**
 	 * Delete data from the database
 	 *
-	 * @note Altering the DB invalidates all queries in query cache.
+	 * @note Altering the DB invalidates all queries in the query cache.
 	 *
 	 * @param QueryBuilder $query The SQL query to run
 	 *
@@ -294,7 +297,7 @@ class Database {
 		$this->query_cache->clear();
 
 		$result = $this->executeQuery($query);
-		return ($result instanceof Result) ? $result->rowCount() : $result;
+		return ($result instanceof Result) ? (int) $result->rowCount() : $result;
 	}
 
 	/**
@@ -330,7 +333,7 @@ class Database {
 	}
 
 	/**
-	 * Handles queries that return results, running the results through a
+	 * Handles queries that return results, running the results through
 	 * an optional callback function. This is for R queries (from CRUD).
 	 *
 	 * @param QueryBuilder $query    The select query to execute
@@ -357,9 +360,9 @@ class Database {
 			$extras .= $this->fingerprintCallback($callback);
 		}
 		
-		$hash = $this->query_cache->getHash($sql, $params, $extras);
+		$hash = $this->getCacheHash($sql, $params, $extras);
 
-		$cached_results = $this->query_cache->get($hash);
+		$cached_results = $this->query_cache->load($hash);
 		if (isset($cached_results)) {
 			return $cached_results;
 		}
@@ -383,9 +386,8 @@ class Database {
 				$return[] = $row_obj;
 			}
 		}
-
-		// Cache result
-		$this->query_cache->set($hash, $return);
+		
+		$this->query_cache->save($hash, $return);
 				
 		return $return;
 	}
@@ -423,17 +425,42 @@ class Database {
 	}
 	
 	/**
+	 * Returns a hashed key for storage in the cache
+	 *
+	 * @param string $sql    query
+	 * @param array  $params optional params
+	 * @param string $extras optional extras
+	 *
+	 * @return string
+	 * @since 6.1
+	 */
+	protected function getCacheHash(string $sql, array $params = [], string $extras = ''): string {
+		$query_id = $sql . '|';
+		if (!empty($params)) {
+			$query_id .= serialize($params) . '|';
+		}
+		
+		$query_id .= $extras;
+		
+		// MD5 yields smaller mem usage for cache
+		return md5($query_id);
+	}
+	
+	/**
 	 * Tracks the query count and timers for a given query
 	 *
 	 * @param QueryBuilder $query    The query
-	 * @param callable     $callback Callback to execyte during query execution
+	 * @param callable     $callback Callback to execute during query execution
 	 *
 	 * @return mixed
 	 */
 	public function trackQuery(QueryBuilder $query, callable $callback) {
-
 		$params = $query->getParameters();
 		$sql = $query->getSQL();
+
+		if ($this->config->db_enable_query_logging) {
+			$this->getLogger()->notice($sql, ['params' => $params]);
+		}
 
 		$this->query_count++;
 
@@ -464,7 +491,7 @@ class Database {
 	 * be passed a \Doctrine\DBAL\Driver\Statement.
 	 *
 	 * @param QueryBuilder $query    The query to execute
-	 * @param callable     $callback A callback function to pass the results array to
+	 * @param callable     $callback A callback function to pass the result array to
 	 *
 	 * @return void
 	 */
@@ -521,29 +548,6 @@ class Database {
 	}
 
 	/**
-	 * Enable the query cache
-	 *
-	 * This does not take precedence over the \Elgg\Database\Config setting.
-	 *
-	 * @return void
-	 */
-	public function enableQueryCache(): void {
-		$this->query_cache->enable();
-	}
-
-	/**
-	 * Disable the query cache
-	 *
-	 * This is useful for special scripts that pull large amounts of data back
-	 * in single queries.
-	 *
-	 * @return void
-	 */
-	public function disableQueryCache(): void {
-		$this->query_cache->disable();
-	}
-
-	/**
 	 * Get the number of queries made to the database
 	 *
 	 * @return int
@@ -559,21 +563,8 @@ class Database {
 	 *
 	 * @return string Empty if version cannot be determined
 	 */
-	public function getServerVersion(string $type = DbConfig::READ_WRITE): string {
-		$driver = $this->getConnection($type)->getWrappedConnection();
-		if ($driver instanceof ServerInfoAwareConnection) {
-			$version = $driver->getServerVersion();
-			
-			if ($this->isMariaDB($type)) {
-				if (str_starts_with($version, '5.5.5-')) {
-					$version = substr($version, 6);
-				}
-			}
-			
-			return $version;
-		}
-
-		return '';
+	public function getServerVersion(string $type = DbConfig::READ): string {
+		return $this->getConnection($type)->getServerVersion();
 	}
 
 	/**
@@ -583,15 +574,21 @@ class Database {
 	 *
 	 * @return bool if MariaDB is detected
 	 */
-	public function isMariaDB(string $type = DbConfig::READ_WRITE): bool {
-		$driver = $this->getConnection($type)->getWrappedConnection();
-		if ($driver instanceof ServerInfoAwareConnection) {
-			$version = $driver->getServerVersion();
-			
-			return stristr($version, 'mariadb') !== false;
-		}
-
-		return false;
+	public function isMariaDB(string $type = DbConfig::READ): bool {
+		return $this->getConnection($type)->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\MariaDBPlatform;
+	}
+	
+	/**
+	 * Is the database MySQL
+	 *
+	 * @param string $type Connection type (Config constants, e.g. Config::READ_WRITE)
+	 *
+	 * @return bool if MySQL is detected
+	 *
+	 * @since 6.0
+	 */
+	public function isMySQL(string $type = DbConfig::READ): bool {
+		return $this->getConnection($type)->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\MySQLPlatform;
 	}
 	
 	/**

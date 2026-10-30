@@ -3,14 +3,11 @@
 namespace Elgg\Notifications;
 
 use Elgg\Database;
+use Elgg\Database\RelationshipsTable;
 use Elgg\Database\Select;
 use Elgg\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * @group NotificationsService
- * @group UnitTests
- */
 class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -41,11 +38,11 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->event->expects($this->any())
 			->method('getObject')
-			->will($this->returnValue($this->object));
+			->willReturn($this->object);
 		
 		$this->event->expects($this->any())
 			->method('getActorGUID')
-			->will($this->returnValue(0));
+			->willReturn(0);
 
 		$this->db = $this->createMock('\Elgg\Database');
 		
@@ -90,7 +87,7 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 			'\Elgg\Notifications\SubscriptionNotificationEvent', ['getObject'], [], '', false);
 		$this->event->expects($this->any())
 			->method('getObject')
-			->will($this->returnValue(null));
+			->willReturn(null);
 		
 		$methods = [
 			'one',
@@ -106,7 +103,7 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		];
 
 		$guids = array_unique(array_filter([$this->object->container_guid, $this->object->guid]));
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(RelationshipsTable::TABLE_NAME);
 		$select->select('guid_one AS guid')
 			->addSelect("GROUP_CONCAT(relationship SEPARATOR ',') AS methods")
 			->where($select->compare('guid_two', 'in', $guids, ELGG_VALUE_GUID))
@@ -116,7 +113,7 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->db->expects($this->once())
 			->method('getData')
 			->with($this->equalTo($select))
-			->will($this->returnValue([]));
+			->willReturn([]);
 
 		$this->assertEquals([], $this->service->getNotificationEventSubscriptions($this->event, $methods));
 	}
@@ -146,7 +143,7 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 
 		$this->db->expects($this->once())
 			->method('getData')
-			->will($this->returnValue($queryResult));
+			->willReturn($queryResult);
 
 		$this->assertEquals($subscriptions, $this->service->getNotificationEventSubscriptions($this->event, $methods));
 	}
@@ -183,7 +180,7 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		];
 		$this->db->expects($this->once())
 			->method('getData')
-			->will($this->returnValue($queryResult));
+			->willReturn($queryResult);
 		
 		$this->assertEquals($subscriptions, $this->service->getSubscriptionsForContainer($container_guid, $methods));
 	}
@@ -220,7 +217,7 @@ class SubscriptionsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->service->getEntitySubscriptions($this->object->guid, $this->object->owner_guid, ['apples'], $type, $subtype, $action);
 	}
 	
-	public function invalidTypeSubtypeActionProvider() {
+	public static function invalidTypeSubtypeActionProvider() {
 		return [
 			['foo', null, null],
 			[null, 'foo', null],

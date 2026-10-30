@@ -3,33 +3,24 @@
 namespace Elgg\Http;
 
 use Elgg\Ajax\Service;
-use Elgg\Amd\Config;
-use Elgg\Config as Config2;
+use Elgg\Config;
 use Elgg\EventsService;
-use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\HandlersService;
 use Elgg\SystemMessagesService;
-use ElggSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-/**
- * @group HttpService
- * @group HttpResponses
- * @group UnitTests
- */
 class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 
 	/**
-	 *
-	 * @var ElggSession
+	 * @var \ElggSession
 	 */
 	private $session;
 
 	/**
-	 * @var Config2
+	 * @var Config
 	 */
 	private $config;
 
@@ -37,16 +28,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	 * @var Request
 	 */
 	private $request;
-
-	/**
-	 * @var Input
-	 */
-	private $input;
-
-	/**
-	 * @var Config
-	 */
-	private $amd_config;
 
 	/**
 	 * @var SystemMessagesService
@@ -74,9 +55,8 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 		$this->events = new EventsService(new HandlersService());
 		$this->request = $this->createRequest('', 'GET');
 
-		$this->amd_config = new Config($this->events);
 		$this->system_messages = new SystemMessagesService($this->session);
-		$this->ajax = new Service($this->events, $this->system_messages, $this->request, $this->amd_config);
+		$this->ajax = new Service($this->events, $this->system_messages, $this->request, _elgg_services()->esm, _elgg_services()->externalFiles);
 
 		_elgg_services()->logger->disable();
 	}
@@ -88,7 +68,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 		$svc->set('config', $this->config);
 		$svc->set('events', $this->events);
 		$svc->set('request', $this->request);
-		$svc->set('amd_config', $this->amd_config);
 		$svc->set('system_messages', $this->system_messages);
 		$svc->set('ajax', $this->ajax);
 
@@ -133,7 +112,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanPrepareResponse() {
-
 		$service = $this->createService();
 
 		elgg_set_http_header('X-Elgg-Testing: 1');
@@ -196,7 +174,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanSendReponse() {
-
 		$service = $this->createService();
 
 		ob_start();
@@ -210,7 +187,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testSendsReponseOnlyOnce() {
-
 		$service = $this->createService();
 
 		ob_start();
@@ -225,7 +201,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanNotSendModifiedResponse() {
-
 		$service = $this->createService();
 
 		$response = $service->prepareResponse('foo');
@@ -337,7 +312,6 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanDetectXhrRequest() {
-
 		$service = $this->createService();
 		$this->assertFalse($service->isXhr());
 
@@ -373,7 +347,7 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($expected, $service->parseContext());
 	}
 
-	public function requestContextDataProvider() {
+	public static function requestContextDataProvider() {
 		return [
 			['ajax/view/foo/bar/', 'view:foo/bar'],
 			['ajax/form/foo/bar/baz/', 'form:foo/bar/baz'],
@@ -395,7 +369,7 @@ class ResponseFactoryUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($expected_output, $this->response_factory->stringify($input));
 	}
 	
-	public function stringifyProvider() {
+	public static function stringifyProvider() {
 		$std = new \stdClass();
 		$std->foo = 'bar';
 		

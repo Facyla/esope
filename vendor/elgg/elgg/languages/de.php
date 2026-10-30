@@ -92,11 +92,8 @@ return array(
 	'UserFetchFailureException' => 'Die Überprüfung der Zugriffsrechte des Benutzers mit der Benutzer-GUID [%s] ist fehlgeschlagen, da dieser Benutzer nicht existiert.',
 
 	'PageNotFoundException' => 'Die Seite, auf die Du zugreifen möchtest, existiert entweder nicht oder Du hast nicht die notwendige Berechtigung, um sie anzuzeigen.',
-	'EntityNotFoundException' => 'Der Inhalt, auf den Du zugreifen möchtest, wurde entweder entfernt oder Du hast nicht die notwendige Berechtigung, um ihn anzuzeigen.',
-	'EntityPermissionsException' => 'Du hast keine ausreichende Berechtigung für diese Aktion.',
 	'GatekeeperException' => 'Du hast nicht die notwendige Berechtigung, um auf die gewünschte Seite zuzugreifen.',
 	'BadRequestException' => 'Fehlerhafte Anfrage.',
-	'ValidationException' => 'Die eingegebenen Daten erfüllen nicht die Anforderungen. Bitte prüfe Deine Eingaben.',
 	'LogicException:InterfaceNotImplemented' => '%s muss %s implementieren.',
 	
 	'Security:InvalidPasswordCharacterRequirementsException' => "Das eingegebene Passwort genügt nicht den Anforderungen bezüglich der Anzahl der Zeichen.",
@@ -104,7 +101,6 @@ return array(
 	
 	'Entity:Subscriptions:InvalidMethodsException' => '%s erfordert, dass $methods ein String oder ein String-Array ist.',
 
-	'viewfailure' => 'In der View %s ist ein interner Fehler aufgetreten.',
 	'changebookmark' => 'Bitte ändere Dein Lesezeichen für diese Seite.',
 	'error:missing_data' => 'Bei Deiner Anfrage fehlten einige notwendige Daten.',
 	'save:fail' => 'Beim Speichern Deiner Daten ist ein Fehler aufgetreten.',
@@ -259,7 +255,6 @@ return array(
  */
 	'link:view' => 'Link aufrufen',
 	'link:view:all' => 'Alle ansehen',
-
 
 /**
  * River
@@ -428,9 +423,11 @@ return array(
  */
 	'menu:page:header:administer' => 'Administrieren',
 	'menu:page:header:configure' => 'Konfigurieren',
+	'menu:page:header:utilities' => 'Werkzeuge',
 	'menu:page:header:develop' => 'Entwickeln',
 	'menu:page:header:information' => 'Informationen',
 	'menu:page:header:default' => 'Anderes',
+	'menu:page:header:plugin_settings' => 'Plugin-Einstellungen',
 
 	'admin:view_site' => 'Seite anzeigen',
 	'admin:loggedin' => 'Angemeldet als %s',
@@ -687,6 +684,8 @@ Bei der Konfiguration der Simplecache-Option in settings.php kann eine Datenbank
 	
 	'admin:security:settings:min_password_special' => "Mindestanzahl von Sonderzeichen in Passwörtern",
 	'admin:security:settings:min_password_special:help' => "Gebe an, wie viele Sonderzeichen (!@$%^&*()<>,.?/[]{}-=_+) mindestens in Passwörtern enthalten sein müssen. Eine 0 bedeutet, dass gar keine Kleinbuchstaben enthalten sein dürfen. Wenn Du das Feld leer läßt, gibt es keine Vorgabe bezüglich der Anzahl.",
+	'admin:security:security_txt:contact' => "Kontakt",
+	'admin:security:security_txt:language' => "Deine Sprache",
 	
 	'admin:site:secret:regenerated' => "Der Geheimschlüssel Deiner Community-Seite wurde neu erzeugt.",
 	'admin:site:secret:prevented' => "Die Neuerstellung des Geheimschlüssels Deiner Community-Seite wurde unterbunden.",
@@ -749,8 +748,6 @@ Siehe die vollständige Liste dieser Benutzer hier:
 	'plugins:settings:save:fail' => "Beim Speichern der Einstellungungen für das Plugin %s ist ein Problem aufgetreten.",
 	'plugins:settings:remove:ok' => "Alle Einstellungen des Plugins %s wurden aus der Datenbank entfernt.",
 	'plugins:settings:remove:fail' => "Beim Löschen der Einstellungen des Plugins %s aus der Datenbank ist ein Fehler aufgetreten.",
-	'plugins:usersettings:save:ok' => "Die Benutzereinstellungen für das Plugin %s wurden gespeichert.",
-	'plugins:usersettings:save:fail' => "Beim Speichern der Benutzereinstellungungen für das Plugin %s ist ein Problem aufgetreten.",
 	
 	'item:object:plugin' => 'Plugins',
 	'collection:object:plugin' => 'Plugins',
@@ -818,7 +815,7 @@ Siehe die vollständige Liste dieser Benutzer hier:
 	'admin:statistics:label:numusers' => "Anzahl der Mitglieder",
 	'admin:statistics:label:numonline' => "Anzahl der angemeldeten Mitglieder",
 	'admin:statistics:label:onlineusers' => "Momentan angemeldete Mitglieder",
-	'admin:statistics:label:admins'=>"Admins",
+	'admin:statistics:label:admins' => "Admins",
 	'admin:statistics:label:version' => "Elgg-Version",
 	'admin:statistics:label:version:release' => "Release",
 	'admin:statistics:label:version:version' => "Version",
@@ -854,7 +851,6 @@ Siehe die vollständige Liste dieser Benutzer hier:
 	'admin:server:requirements:rewrite:fail' => "Prüfe Deine .htaccess-Datei, ob die Rewrite-Regeln vollständig und korrekt enthalten sind.",
 	
 	'admin:server:requirements:database:server' => "Datenbank-Server",
-	'admin:server:requirements:database:server:required' => "Elgg benötigt Version 5.5.3 oder neuer von MySQL für seine Datenbank.",
 	'admin:server:requirements:database:client' => "Datenbank-Client",
 	'admin:server:requirements:database:client:required' => "Elgg benötigt die pdo_mysql-PHP-Erweiterung, um eine Verbindung mit dem Datenbank-Server herstellen zu können.",
 	
@@ -1181,7 +1177,7 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.',
 
 	'input:date_format' => 'Y-m-d',
 	'input:date_format:datepicker' => 'yy-mm-dd', // jQuery UI datepicker format
-	'input:time_format' => 'g:ia',
+	'input:time_format' => 'G:i',
 	
 	'friendlytime:justnow' => "soeben",
 	'friendlytime:minutes' => "vor %s Minuten",
@@ -1310,6 +1306,7 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.',
 	'admin:legend:system' => 'System',
 	'admin:legend:caching' => 'Caching-Mechanismen',
 	'admin:legend:content' => 'Inhalt',
+	'admin:legend:comments' => 'Kommentare',
 	'admin:legend:content_access' => 'Zugangslevel für Inhalte',
 	'admin:legend:site_access' => 'Zugangsbeschränkungen zur Community-Seite',
 	'admin:legend:debug' => 'Debuggen und Protokollieren',
@@ -1336,6 +1333,8 @@ Nachdem Du Dich angemeldet hast, solltest Du Dein Passwort ändern.',
 	'config:content:pagination_behaviour:ajax-replace' => "Die Daten der Liste aktualisieren ohne die ganze Seite neu zu laden",
 	'config:content:pagination_behaviour:ajax-append' => "Neu geladene Daten der Liste am Anfang oder Ende der Liste anhängen",
 	'config:content:pagination_behaviour:ajax-append-auto' => "Neu geladene Daten der Liste am Anfang oder Ende der Liste anhängen (automatisch sobald zu diesem Teil der Liste gescrollt wird)",
+	'config:content:mentions_display_format:username' => "Benutzername",
+	'config:content:mentions_display_format:display_name' => "Name",
 	'config:email' => "Emails",
 	'config:email_html_part:label' => "HTML-Emails aktivieren",
 	'config:email_html_part:help' => "Versendete Emails werden in ein HTML-Template eingebettet",
@@ -1449,12 +1448,6 @@ Wenn Du das nicht angefordert hast, kontaktiere bitte einen Administrator.
 	
 	'account:validation:pending:title' => "Account-Validierung noch ausstehend",
 	'account:validation:pending:content' => "Dein Benutzeraccount wurde erstellt! Allerdings ist der Account noch nicht aktiviert. Die Validierung/Aktivierung wird durch einen Administrator der Community-Seite durchgeführt. Du wirst eine Benachrichtigung per Email erhalten, sobald Dein Account aktiviert worden ist.",
-	
-	'account:notification:validation:subject' => "Dein Account auf %s wurde validiert!",
-	'account:notification:validation:body' => "Dein Benutzeraccount auf '%s' wurde validiert und aktiviert. Du kannst Deinen Account nun verwenden.
-
-Folge dem Link, um zur Community-Seite zu gelangen:
-%s",
 
 /**
  * user default access
@@ -1478,8 +1471,6 @@ Folge dem Link, um zur Community-Seite zu gelangen:
 
 	'generic_comments:add' => "Kommentieren",
 	'generic_comments:edit' => "Kommentar bearbeiten",
-	'generic_comments:post' => "Kommentieren",
-	'generic_comments:text' => "Kommentar",
 	'generic_comments:latest' => "Neueste Kommentare",
 	'generic_comment:posted' => "Dein Kommentar wurde gespeichert.",
 	'generic_comment:updated' => "Der Kommenatar wurde aktualisiert.",
@@ -1488,9 +1479,7 @@ Folge dem Link, um zur Community-Seite zu gelangen:
 	'generic_comment:notfound' => "Entschuldigung, der gewünschte Kommentar konnte nicht gefunden werden.",
 	'generic_comment:failure' => "Beim Speichern Deines Kommentars ist ein Fehler aufgetreten.",
 	'generic_comment:none' => 'Keine Kommentare.',
-	'generic_comment:title' => 'Kommentar von %s',
 	'generic_comment:on' => '%s zu %s',
-	'generic_comments:latest:posted' => 'schrieb einen',
 
 	'generic_comment:notification:subject' => 'Re: %s',
 	'generic_comment:notification:owner:summary' => 'Neuer Kommentar zu: %s',
@@ -1522,6 +1511,8 @@ Um zu antworten oder den ursprünglichen Beitrag aufzurufen, folge diesem Link:
 	'entity:delete:success' => '%s wurde gelöscht.',
 	'entity:delete:fail' => 'Das Löschen von %s ist fehlgeschlagen.',
 	
+	'entity:restore:item' => 'Beitrag',
+	
 	'entity:subscribe' => "Abonnieren",
 	'entity:subscribe:success' => "Du folgst nun %s.",
 	'entity:subscribe:fail' => "Bei der Erstellung des Abonnement von %s ist ein Fehler aufgetreten.",
@@ -1537,6 +1528,7 @@ Um zu antworten oder den ursprünglichen Beitrag aufzurufen, folge diesem Link:
 	'entity:unmute' => "Benachrichtigungen freigeben",
 	'entity:unmute:success' => "Du hast zukünftige Benachrichtigungen zugehörig zu %s wieder freigegeben.",
 	'entity:unmute:fail' => "Bei der Freigabe von Benachrichtigungen zugehörig zu %s ist ein Fehler aufgetreten.",
+
 
 /**
  * Annotations
@@ -1566,17 +1558,12 @@ Um zu antworten oder den ursprünglichen Beitrag aufzurufen, folge diesem Link:
  * Diagnostics
  */
 	'diagnostics:report' => 'Report',
-	'diagnostics:description' => 'Der Report, der im folgenden erstellt werden kann, kann bei der Fehlersuche hilfreich sein. In manchen Fällen bitten die Entwickler von Elgg, dass er zu einem Bugreport beigefügt wird.',
 	'diagnostics:header' => '========================================================================
 Elgg-Diagnose-Report
 Generiert %s von %s
 ========================================================================
 
 ',
-	'diagnostics:report:php' => '
-PHP-Info:
-%s
-------------------------------------------------------------------------',
 	'diagnostics:report:md5' => '
 Installierte Dateien und Prüfsummen:
 
@@ -1589,14 +1576,30 @@ Globale Variablen:
 ------------------------------------------------------------------------',
 	
 /**
+ * Trash
+ */
+
+/**
  * Miscellaneous
  */
 	'elgg:powered' => "Community-Seite erstellt mit Elgg",
-	
+	'field:required' => "Erforderlich",
+
+/**
+ * Accessibility
+ */
+	'menu:comments:header' => "Kommentare",
+	'menu:filter:header' => "Filtern",
+	'menu:page:header' => "Coop-Seiten",
+	'menu:river:header' => "River",
+	'menu:site:header' => "Seite",
+	'menu:social:header' => "Social",
+	'menu:title:header' => "Titel",
+	'menu:topbar:header' => "Topbar",
+
 /**
  * Cli commands
  */
-	'cli:login:error:unknown' => "Anmeldung als %s fehlgeschlagen",
 	'cli:login:success:log' => "Angemeldet als %s [GUID: %s]",
 	'cli:response:output' => "Antwort:",
 	'cli:option:as' => "Führe das Kommando mit den Benutzerrechten des Benutzers aus, dessen Benutzername angegeben wird.",
@@ -1802,8 +1805,9 @@ Globale Variablen:
 	"zh_hans" => "Chinesisch (Kurzzeichen)",
 	"zu" => "Zulu",
 
-	"field:required" => 'Erforderlich',
-
+/**
+ * Upgrades
+ */
 	"core:upgrade:2017080900:title" => "Umwandlung des Datenbank-Encodings für Multi-Byte-Support",
 	"core:upgrade:2017080900:description" => "Damit wird das Encoding der Datenbank und der Datenbanktabellen auf UTF8mb4 umgestellt, damit Multi-Byte-Characters wie beispielsweise Emojies gespeichert werden können.",
 	

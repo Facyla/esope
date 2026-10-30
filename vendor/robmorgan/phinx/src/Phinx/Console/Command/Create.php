@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -9,6 +10,7 @@ namespace Phinx\Console\Command;
 
 use Exception;
 use InvalidArgumentException;
+use Phinx\Config\Config;
 use Phinx\Config\NamespaceAwareInterface;
 use Phinx\Util\Util;
 use RuntimeException;
@@ -24,8 +26,9 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Create extends AbstractCommand
 {
     /**
-     * @var string
+     * @var string|null
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $defaultName = 'create';
 
     /**
@@ -33,12 +36,21 @@ class Create extends AbstractCommand
      */
     public const CREATION_INTERFACE = 'Phinx\Migration\CreationInterface';
 
+    // PHP keywords from https://www.php.net/manual/en/reserved.keywords.php
+    private array $keywords = [
+        'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const',
+        'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor',
+        'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'finally', 'for', 'foreach',
+        'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface',
+        'isset', 'list', 'namespace', 'new', 'or', 'parent', 'private', 'protected', 'public', 'return','static',
+    ];
+
     /**
      * {@inheritDoc}
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -47,7 +59,7 @@ class Create extends AbstractCommand
             ->setHelp(sprintf(
                 '%sCreates a new database migration%s',
                 PHP_EOL,
-                PHP_EOL
+                PHP_EOL,
             ));
 
         // An alternative template.
@@ -59,6 +71,8 @@ class Create extends AbstractCommand
 
         // Allow the migration path to be chosen non-interactively.
         $this->addOption('path', null, InputOption::VALUE_REQUIRED, 'Specify the path in which to create this migration');
+
+        $this->addOption('style', null, InputOption::VALUE_REQUIRED, 'Specify the style of migration to create');
     }
 
     /**
@@ -67,7 +81,7 @@ class Create extends AbstractCommand
      *
      * @return \Symfony\Component\Console\Question\ConfirmationQuestion
      */
-    protected function getCreateMigrationDirectoryQuestion()
+    protected function getCreateMigrationDirectoryQuestion(): ConfirmationQuestion
     {
         return new ConfirmationQuestion('Create migrations directory? [y]/n ', true);
     }
@@ -78,7 +92,7 @@ class Create extends AbstractCommand
      * @param string[] $paths Paths
      * @return \Symfony\Component\Console\Question\ChoiceQuestion
      */
-    protected function getSelectMigrationPathQuestion(array $paths)
+    protected function getSelectMigrationPathQuestion(array $paths): ChoiceQuestion
     {
         return new ChoiceQuestion('Which migrations path would you like to use?', $paths, 0);
     }
@@ -91,7 +105,7 @@ class Create extends AbstractCommand
      * @throws \Exception
      * @return string
      */
-    protected function getMigrationPath(InputInterface $input, OutputInterface $output)
+    protected function getMigrationPath(InputInterface $input, OutputInterface $output): string
     {
         // First, try the non-interactive option:
         $path = $input->getOption('path');
@@ -113,7 +127,7 @@ class Create extends AbstractCommand
             throw new Exception(
                 'You probably used curly braces to define migration path in your Phinx configuration file, ' .
                 'but no directories have been matched using this pattern. ' .
-                'You need to create a migration directory manually.'
+                'You need to create a migration directory manually.',
             );
         }
 
@@ -138,7 +152,7 @@ class Create extends AbstractCommand
      * @throws \InvalidArgumentException
      * @return int 0 on success
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->bootstrap($input, $output);
 
@@ -162,27 +176,38 @@ class Create extends AbstractCommand
 
         $path = realpath($path);
         $className = $input->getArgument('name');
+        if ($className !== null && in_array(strtolower($className), $this->keywords)) {
+            throw new InvalidArgumentException(sprintf(
+                'The migration class name "%s" is a reserved PHP keyword. Please choose a different class name.',
+                $className,
+            ));
+        }
+
+        $offset = 0;
+        do {
+            $timestamp = Util::getCurrentTimestamp($offset++);
+        } while (!Util::isUniqueTimestamp($path, $timestamp));
+
         if ($className === null) {
-            $currentTimestamp = Util::getCurrentTimestamp();
-            $className = 'V' . $currentTimestamp;
-            $fileName = $currentTimestamp . '.php';
+            $className = 'V' . $timestamp;
+            $fileName = '';
         } else {
             if (!Util::isValidPhinxClassName($className)) {
                 throw new InvalidArgumentException(sprintf(
                     'The migration class name "%s" is invalid. Please use CamelCase format.',
-                    $className
+                    $className,
                 ));
             }
 
-            // Compute the file path
-            $fileName = Util::mapClassNameToFileName($className);
+            $fileName = Util::toSnakeCase($className);
         }
+        $fileName = $timestamp . $fileName . '.php';
 
         if (!Util::isUniqueMigrationClassName($className, $path)) {
             throw new InvalidArgumentException(sprintf(
                 'The migration class name "%s%s" already exists',
                 $namespace ? $namespace . '\\' : '',
-                $className
+                $className,
             ));
         }
 
@@ -191,24 +216,31 @@ class Create extends AbstractCommand
         if (is_file($filePath)) {
             throw new InvalidArgumentException(sprintf(
                 'The file "%s" already exists',
-                $filePath
+                $filePath,
             ));
         }
 
         // Get the alternative template and static class options from the config, but only allow one of them.
         $defaultAltTemplate = $this->getConfig()->getTemplateFile();
         $defaultCreationClassName = $this->getConfig()->getTemplateClass();
+        $defaultStyle = $this->getConfig()->getTemplateStyle();
         if ($defaultAltTemplate && $defaultCreationClassName) {
             throw new InvalidArgumentException('Cannot define template:class and template:file at the same time');
         }
 
         // Get the alternative template and static class options from the command line, but only allow one of them.
-        /** @phpstan-var class-string|null $altTemplate */
+        /** @var string|null $altTemplate */
         $altTemplate = $input->getOption('template');
-        /** @phpstan-var class-string|null $creationClassName */
+        /** @var string|null $creationClassName */
         $creationClassName = $input->getOption('class');
+        $style = $input->getOption('style');
+
         if ($altTemplate && $creationClassName) {
             throw new InvalidArgumentException('Cannot use --template and --class at the same time');
+        }
+
+        if ($style && !in_array($style, [Config::TEMPLATE_STYLE_CHANGE, Config::TEMPLATE_STYLE_UP_DOWN])) {
+            throw new InvalidArgumentException('--style should be one of ' . Config::TEMPLATE_STYLE_CHANGE . ' or ' . Config::TEMPLATE_STYLE_UP_DOWN);
         }
 
         // If no commandline options then use the defaults.
@@ -221,7 +253,7 @@ class Create extends AbstractCommand
         if ($altTemplate && !is_file($altTemplate)) {
             throw new InvalidArgumentException(sprintf(
                 'The alternative template file "%s" does not exist',
-                $altTemplate
+                $altTemplate,
             ));
         }
 
@@ -235,12 +267,12 @@ class Create extends AbstractCommand
                     throw new InvalidArgumentException(sprintf(
                         'The class "%s" via the alias "%s" does not exist',
                         $aliasedClassName,
-                        $creationClassName
+                        $creationClassName,
                     ));
                 } elseif (!$aliasedClassName) {
                     throw new InvalidArgumentException(sprintf(
                         'The class "%s" does not exist',
-                        $creationClassName
+                        $creationClassName,
                     ));
                 }
             }
@@ -250,14 +282,14 @@ class Create extends AbstractCommand
                 throw new InvalidArgumentException(sprintf(
                     'The class "%s" does not implement the required interface "%s"',
                     $creationClassName,
-                    self::CREATION_INTERFACE
+                    self::CREATION_INTERFACE,
                 ));
             } elseif ($aliasedClassName && !is_subclass_of($aliasedClassName, self::CREATION_INTERFACE)) {
                 throw new InvalidArgumentException(sprintf(
                     'The class "%s" via the alias "%s" does not implement the required interface "%s"',
                     $aliasedClassName,
                     $creationClassName,
-                    self::CREATION_INTERFACE
+                    self::CREATION_INTERFACE,
                 ));
             }
         }
@@ -272,7 +304,7 @@ class Create extends AbstractCommand
             $contents = $creationClass->getMigrationTemplate();
         } else {
             // Load the alternative template if it is defined.
-            $contents = file_get_contents($altTemplate ?: $this->getMigrationTemplateFilename());
+            $contents = file_get_contents($altTemplate ?: $this->getMigrationTemplateFilename($style ?: $defaultStyle));
         }
 
         // inject the class names appropriate to this migration
@@ -289,7 +321,7 @@ class Create extends AbstractCommand
         if (file_put_contents($filePath, $contents) === false) {
             throw new RuntimeException(sprintf(
                 'The file "%s" could not be written to',
-                $path
+                $path,
             ));
         }
 

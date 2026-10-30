@@ -2,11 +2,6 @@
 
 use Elgg\Exceptions\InvalidArgumentException;
 
-/**
- * @group User
- * @group UnitTests
- * @group ElggData
- */
 class ElggUserUnitTest extends \Elgg\UnitTestCase {
 
 	public function testCanConstructWithoutArguments() {
@@ -16,11 +11,11 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 	public function testCanSetNotificationSettings() {
 
 		$obj = $this->getMockBuilder(ElggUser::class)
-				->setMethods(['save'])
+				->onlyMethods(['save'])
 				->getMock();
 		$obj->expects($this->any())
 				->method('save')
-				->will($this->returnValue(true));
+				->willReturn(true);
 
 		_elgg_services()->notifications->registerMethod('registered1');
 		_elgg_services()->notifications->registerMethod('registered2');
@@ -33,16 +28,19 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($user_settings['registered1']);
 		$this->assertFalse($user_settings['registered2']);
 		$this->assertArrayNotHasKey('unregistered', $user_settings);
+		
+		$enabled_methods = $obj->getNotificationSettings('default', true);
+		$this->assertEquals(['registered1'], $enabled_methods);
 	}
 	
 	public function testCanSetNotificationSettingsWithPurpose() {
 
 		$obj = $this->getMockBuilder(ElggUser::class)
-				->setMethods(['save'])
+				->onlyMethods(['save'])
 				->getMock();
 		$obj->expects($this->any())
 				->method('save')
-				->will($this->returnValue(true));
+				->willReturn(true);
 
 		_elgg_services()->notifications->registerMethod('registered1');
 		_elgg_services()->notifications->registerMethod('registered2');
@@ -56,6 +54,9 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($user_settings['registered1']);
 		$this->assertTrue($user_settings['registered2']);
 		$this->assertArrayNotHasKey('unregistered', $user_settings);
+		
+		$enabled_methods = $obj->getNotificationSettings('my_purpose', true);
+		$this->assertEquals(['registered1', 'registered2'], $enabled_methods);
 	}
 
 	public function testCanExport() {
@@ -80,7 +81,7 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 
 		$unserialized = unserialize($data);
 
-		$this->assertEquals($user, $unserialized);
+		$this->assertElggDataEquals($user, $unserialized);
 	}
 
 	public function testCanArrayAccessAttributes() {
@@ -102,7 +103,7 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 		$user = $this->createUser();
 
 		$this->assertEquals($user->guid, $user->getSystemLogID());
-		$this->assertEquals($user, $user->getObjectFromID($user->guid));
+		$this->assertElggDataEquals($user, $user->getObjectFromID($user->guid));
 	}
 	
 	public function testDefaultUserMetadata() {
@@ -127,7 +128,7 @@ class ElggUserUnitTest extends \Elgg\UnitTestCase {
 		$user->$name = 'foo';
 	}
 	
-	public function protectedValues() {
+	public static function protectedValues() {
 		return [
 			['admin'],
 			['banned'],

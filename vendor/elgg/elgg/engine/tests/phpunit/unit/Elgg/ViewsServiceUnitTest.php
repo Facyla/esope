@@ -4,9 +4,6 @@ namespace Elgg;
 
 use Elgg\Project\Paths;
 
-/**
- * @group UnitTests
- */
 class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -26,9 +23,16 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->events = new EventsService(_elgg_services()->handlers);
 		$logger = $this->createMock('\Elgg\Logger', array(), array(), '', false);
 
-		$this->views = new ViewsService($this->events, _elgg_services()->request);
+		$this->views = new ViewsService($this->events, _elgg_services()->request, _elgg_services()->config, _elgg_services()->serverCache);
 		$this->views->setLogger($logger);
-		$this->views->autoregisterViews('', "$this->viewsDir/default", 'default');
+		$this->views->autoregisterViews('', "{$this->viewsDir}/default", 'default');
+		$this->views->autoregisterViews('', "{$this->viewsDir}/json", 'json');
+		$this->views->setViewtype('');
+	}
+	
+	public function down() {
+		set_input('view', '');
+		elgg_set_config('view', null);
 	}
 
 	public function testCanExtendViews() {
@@ -78,9 +82,7 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testUsesPhpToRenderNonStaticViews() {
-		$this->assertEquals("// PHPin", $this->views->renderView('js/interpreted.js', array(
-					'in' => 'in',
-		)));
+		$this->assertEquals("// PHPin", $this->views->renderView('js/interpreted.js', ['in' => 'in']));
 	}
 
 	public function testDoesNotUsePhpToRenderStaticViews() {
@@ -106,14 +108,7 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$expected = file_get_contents("$this->viewsDir/default/js/static.js");
 		$this->assertEquals($expected, $this->views->renderView('hello.js'));
 
-		$this->assertEquals("// PHPin", $this->views->renderView('hello/world.js', array(
-					'in' => 'in',
-		)));
-	}
-
-	public function testCanSetViewsDirs() {
-		$this->views->setViewDir('static.css', $this->normalizeTestFilePath('views2/'));
-		$this->assertEquals('body{}', $this->views->renderView('static.css'));
+		$this->assertEquals("// PHPin", $this->views->renderView('hello/world.js', ['in' => 'in']));
 	}
 
 	public function testViewtypesCanFallBack() {
@@ -125,18 +120,6 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->views->registerViewtypeFallback('mobile');
 		$this->assertTrue($this->views->viewExists('js/interpreted.js', 'mobile'));
 		$this->assertEquals('// PHP', $this->views->renderView('js/interpreted.js', array(), 'mobile'));
-	}
-
-	public function testCanRegisterViewsAsCacheable() {
-		$this->assertFalse($this->views->isCacheableView('js/interpreted.js'));
-
-		$this->views->registerCacheableView('js/interpreted.js');
-
-		$this->assertTrue($this->views->isCacheableView('js/interpreted.js'));
-	}
-
-	public function testStaticViewsAreAlwaysCacheable() {
-		$this->assertTrue($this->views->isCacheableView('js/static.js'));
 	}
 
 	public function testCanAlterViewInput() {
@@ -169,33 +152,10 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$this->assertSame("123", $this->views->renderView('js/interpreted.js'));
 	}
 
-	public function testThrowsOnCircularAliases() {
-		$this->markTestIncomplete();
-	}
-
-	public function testEmitsDeprecationWarningWhenOldViewNameIsReferenced() {
-		$this->markTestIncomplete();
-		// elgg_view
-		// elgg_extend_view
-		// elgg_unextend_view
-		// views/*
-		// engine/views.php
-		// elgg_get_simplecache_url
-		// elgg_set_view_location
-		// elgg_get_view_location
-	}
-
-	/**
-	 * @dataProvider getExampleNormalizedViews
-	 */
-	public function testDefaultNormalizeBehavior($canonical, $alias) {
-		$this->assertEquals($canonical, ViewsService::canonicalizeViewName($alias));
-	}
-
 	public function testCanListViews() {
 		$views = $this->views->listViews('default');
-		$this->assertTrue(in_array('interpreted.js', $views));
-		$this->assertTrue(in_array('static.js', $views));
+		$this->assertTrue(in_array('js/interpreted.js', $views));
+		$this->assertTrue(in_array('js/static.js', $views));
 
 		$this->assertEmpty($this->views->listViews('fake_viewtype'));
 	}
@@ -204,7 +164,7 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 		$list = $this->views->getViewList('foo');
 		$this->assertEquals([
 			500 => 'foo',
-				], $list);
+		], $list);
 
 		$this->views->extendView('foo', 'bar');
 		$this->views->extendView('foo', 'bing', 499);
@@ -214,7 +174,7 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 			499 => 'bing',
 			500 => 'foo',
 			501 => 'bar',
-				], $list);
+		], $list);
 	}
 	
 	public function testPreventExtensionOnSelf() {
@@ -238,22 +198,49 @@ class ViewsServiceUnitTest extends \Elgg\UnitTestCase {
 			501 => 'output/2',
 		], $list);
 	}
-
-	public function getExampleNormalizedViews() {
-		return [
-			// [canonical, alias]
-			// js namespace should be removed and .js added to all JS views
-			['view.js', 'js/view'],
-			['view.js', 'js/view.js'],
-			['view.css', 'js/view.css'],
-			['view.png', 'js/view.png'],
-			// ".form" in this case is not an extension, just a delimiter. Ignore.
-			['jquery.form.js', 'js/jquery.form'],
-			// css namespace should be removed and .css added to all CSS views
-			['view.css', 'css/view'],
-			['view.css', 'css/view.css'],
-			['view.png', 'css/view.png'],
-			['view.jpg', 'css/view.jpg'],
-		];
+	
+	public function testSetViewtype() {
+		$this->assertTrue($this->views->setViewtype('test'));
+		$this->assertEquals('test', $this->views->getViewtype());
+	}
+	
+	public function testDefaultViewtype() {
+		$this->assertEquals('default', $this->views->getViewtype());
+	}
+	
+	public function testInputSetsInitialViewtype() {
+		set_input('view', 'json');
+		$this->assertEquals('json', $this->views->getViewtype());
+	}
+	
+	public function testConfigSetsInitialViewtype() {
+		elgg_set_config('view', 'json');
+		
+		$this->assertEquals('json', $this->views->getViewtype());
+	}
+	
+	public function testSettingInputDoesNotChangeViewtype() {
+		$this->assertEquals('default', $this->views->getViewtype());
+		
+		set_input('view', 'json');
+		$this->assertEquals('default', $this->views->getViewtype());
+	}
+	
+	public function testSettingConfigDoesNotChangeViewtype() {
+		$this->assertEquals('default', $this->views->getViewtype());
+		
+		elgg_set_config('view', 'json');
+		$this->assertEquals('default', $this->views->getViewtype());
+	}
+	
+	public function testIsValidViewtype() {
+		$this->assertTrue($this->views->isValidViewtype('valid'));
+		$this->assertTrue($this->views->isValidViewtype('valid_viewtype'));
+		$this->assertTrue($this->views->isValidViewtype('0'));
+		$this->assertTrue($this->views->isValidViewtype(123)); // will be autocasted to string
+		
+		$this->assertFalse($this->views->isValidViewtype('a;b'));
+		$this->assertFalse($this->views->isValidViewtype('invalid-viewtype'));
+		$this->assertFalse($this->views->isValidViewtype(''));
 	}
 }

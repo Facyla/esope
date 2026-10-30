@@ -28,21 +28,6 @@ class SubscriptionsService {
 	 * @var string Used when an entity no longer wishes to recieve notifications
 	 */
 	const MUTE_NOTIFICATIONS_RELATIONSHIP = 'mute_notifications';
-	
-	/**
-	 * @var Database
-	 */
-	protected $db;
-	
-	/**
-	 * @var RelationshipsTable
-	 */
-	protected $relationshipsTable;
-	
-	/**
-	 * @var EventsService
-	 */
-	protected $events;
 
 	/**
 	 * Constructor
@@ -51,10 +36,11 @@ class SubscriptionsService {
 	 * @param RelationshipsTable $relationshipsTable Relationship database table
 	 * @param EventsService      $events             Events service
 	 */
-	public function __construct(Database $db, RelationshipsTable $relationshipsTable, EventsService $events) {
-		$this->db = $db;
-		$this->relationshipsTable = $relationshipsTable;
-		$this->events = $events;
+	public function __construct(
+		protected Database $db,
+		protected RelationshipsTable $relationshipsTable,
+		protected EventsService $events
+	) {
 	}
 
 	/**
@@ -133,16 +119,16 @@ class SubscriptionsService {
 	 *     <user guid> => array('email', 'sms', 'ajax'),
 	 * );
 	 *
-	 * @param int    $container_guid GUID of the entity acting as a container
-	 * @param array  $methods        Notification methods
-	 * @param string $type           (optional) entity type
-	 * @param string $subtype        (optional) entity subtype
-	 * @param string $action         (optional) notification action (eg. 'create')
-	 * @param int    $actor_guid     (optional) Notification event actor to exclude from the database subscriptions
+	 * @param int         $container_guid GUID of the entity acting as a container
+	 * @param array       $methods        Notification methods
+	 * @param null|string $type           (optional) entity type
+	 * @param null|string $subtype        (optional) entity subtype
+	 * @param null|string $action         (optional) notification action (eg. 'create')
+	 * @param int         $actor_guid     (optional) Notification event actor to exclude from the database subscriptions
 	 *
 	 * @return array User GUIDs (keys) and their subscription types (values).
 	 */
-	public function getSubscriptionsForContainer(int $container_guid, array $methods, string $type = null, string $subtype = null, string $action = null, int $actor_guid = 0) {
+	public function getSubscriptionsForContainer(int $container_guid, array $methods, ?string $type = null, ?string $subtype = null, ?string $action = null, int $actor_guid = 0) {
 
 		if (empty($methods)) {
 			return [];
@@ -177,17 +163,17 @@ class SubscriptionsService {
 	 *
 	 * This method will return false if the subscription already exists.
 	 *
-	 * @param int    $user_guid   The GUID of the user to subscribe to notifications
-	 * @param string $method      The delivery method of the notifications
-	 * @param int    $target_guid The entity to receive notifications about
-	 * @param string $type        (optional) entity type
-	 * @param string $subtype     (optional) entity subtype
-	 * @param string $action      (optional) notification action (eg. 'create')
+	 * @param int         $user_guid   The GUID of the user to subscribe to notifications
+	 * @param string      $method      The delivery method of the notifications
+	 * @param int         $target_guid The entity to receive notifications about
+	 * @param null|string $type        (optional) entity type
+	 * @param null|string $subtype     (optional) entity subtype
+	 * @param null|string $action      (optional) notification action (eg. 'create')
 	 *
 	 * @return bool
 	 * @throws InvalidArgumentException
 	 */
-	public function addSubscription(int $user_guid, string $method, int $target_guid, string $type = null, string $subtype = null, string $action = null) {
+	public function addSubscription(int $user_guid, string $method, int $target_guid, ?string $type = null, ?string $subtype = null, ?string $action = null) {
 		$this->assertValidTypeSubtypeActionForSubscription($type, $subtype, $action);
 		
 		$rel = [
@@ -209,24 +195,29 @@ class SubscriptionsService {
 		
 		$rel[] = $method;
 		
-		return $this->relationshipsTable->add($user_guid, implode(':', $rel), $target_guid);
+		$relationship = new \ElggRelationship();
+		$relationship->guid_one = $user_guid;
+		$relationship->relationship = implode(':', $rel);
+		$relationship->guid_two = $target_guid;
+		
+		return $relationship->save();
 	}
 	
 	/**
 	 * Check if a subscription exists
 	 *
-	 * @param int    $user_guid   The GUID of the user to check subscriptions for
-	 * @param string $method      The delivery method of the notifications
-	 * @param int    $target_guid The entity to receive notifications about
-	 * @param string $type        (optional) entity type
-	 * @param string $subtype     (optional) entity subtype
-	 * @param string $action      (optional) notification action (eg. 'create')
+	 * @param int         $user_guid   The GUID of the user to check subscriptions for
+	 * @param string      $method      The delivery method of the notifications
+	 * @param int         $target_guid The entity to receive notifications about
+	 * @param null|string $type        (optional) entity type
+	 * @param null|string $subtype     (optional) entity subtype
+	 * @param null|string $action      (optional) notification action (eg. 'create')
 	 *
 	 * @return bool
 	 * @throws InvalidArgumentException
 	 * @since 4.0
 	 */
-	public function hasSubscription(int $user_guid, string $method, int $target_guid, string $type = null, string $subtype = null, string $action = null): bool {
+	public function hasSubscription(int $user_guid, string $method, int $target_guid, ?string $type = null, ?string $subtype = null, ?string $action = null): bool {
 		$this->assertValidTypeSubtypeActionForSubscription($type, $subtype, $action);
 		
 		$rel = [
@@ -265,7 +256,7 @@ class SubscriptionsService {
 			return false;
 		}
 		
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(RelationshipsTable::TABLE_NAME);
 		$select->select('count(*) as total')
 			->where($select->compare('guid_one', '=', $user_guid, ELGG_VALUE_GUID))
 			->andWhere($select->compare('guid_two', '=', $target_guid, ELGG_VALUE_GUID));
@@ -286,17 +277,17 @@ class SubscriptionsService {
 	/**
 	 * Unsubscribe a user to notifications about a target entity
 	 *
-	 * @param int    $user_guid   The GUID of the user to unsubscribe to notifications
-	 * @param string $method      The delivery method of the notifications to stop
-	 * @param int    $target_guid The entity to stop receiving notifications about
-	 * @param string $type        (optional) entity type
-	 * @param string $subtype     (optional) entity subtype
-	 * @param string $action      (optional) notification action (eg. 'create')
+	 * @param int         $user_guid   The GUID of the user to unsubscribe to notifications
+	 * @param string      $method      The delivery method of the notifications to stop
+	 * @param int         $target_guid The entity to stop receiving notifications about
+	 * @param null|string $type        (optional) entity type
+	 * @param null|string $subtype     (optional) entity subtype
+	 * @param null|string $action      (optional) notification action (eg. 'create')
 	 *
 	 * @return bool
 	 * @throws InvalidArgumentException
 	 */
-	public function removeSubscription(int $user_guid, string $method, int $target_guid, string $type = null, string $subtype = null, string $action = null) {
+	public function removeSubscription(int $user_guid, string $method, int $target_guid, ?string $type = null, ?string $subtype = null, ?string $action = null) {
 		$this->assertValidTypeSubtypeActionForSubscription($type, $subtype, $action);
 		
 		$rel = [
@@ -330,7 +321,7 @@ class SubscriptionsService {
 	 * @since 4.0
 	 */
 	public function removeSubscriptions(int $user_guid, int $target_guid, array $methods = []): bool {
-		$delete = Delete::fromTable('entity_relationships');
+		$delete = Delete::fromTable(RelationshipsTable::TABLE_NAME);
 		$delete->where($delete->compare('guid_one', '=', $user_guid, ELGG_VALUE_GUID))
 			->andWhere($delete->compare('guid_two', '=', $target_guid, ELGG_VALUE_GUID));
 		
@@ -388,17 +379,17 @@ class SubscriptionsService {
 	/**
 	 * Get the current subscriptions for the given entity
 	 *
-	 * @param int    $target_guid The GUID of the entity to get subscriptions for
-	 * @param int    $user_guid   The GUID of the user to check subscriptions for
-	 * @param string $methods     The delivery method of the notifications
-	 * @param string $type        (optional) entity type
-	 * @param string $subtype     (optional) entity subtype
-	 * @param string $action      (optional) notification action (eg. 'create')
+	 * @param int         $target_guid The GUID of the entity to get subscriptions for
+	 * @param int         $user_guid   The GUID of the user to check subscriptions for
+	 * @param array       $methods     The delivery method of the notifications
+	 * @param null|string $type        (optional) entity type
+	 * @param null|string $subtype     (optional) entity subtype
+	 * @param null|string $action      (optional) notification action (eg. 'create')
 	 *
 	 * @return \ElggRelationship[]
 	 * @throws InvalidArgumentException
 	 */
-	public function getEntitySubscriptions(int $target_guid = 0, int $user_guid = 0, array $methods = [], string $type = null, string $subtype = null, string $action = null): array {
+	public function getEntitySubscriptions(int $target_guid = 0, int $user_guid = 0, array $methods = [], ?string $type = null, ?string $subtype = null, ?string $action = null): array {
 		$this->assertValidTypeSubtypeActionForSubscription($type, $subtype, $action);
 		
 		if (empty($target_guid) && empty($user_guid)) {
@@ -457,7 +448,7 @@ class SubscriptionsService {
 	/**
 	 * Mute notifications about events affecting the target
 	 *
-	 * @param int $user_guid   The GUID of the user to mute notifcations for
+	 * @param int $user_guid   The GUID of the user to mute notifications for
 	 * @param int $target_guid The GUID of the entity to for which to mute notifications
 	 *
 	 * @return bool
@@ -466,7 +457,12 @@ class SubscriptionsService {
 		// remove all current subscriptions
 		$this->removeSubscriptions($user_guid, $target_guid);
 		
-		return $this->relationshipsTable->add($user_guid, self::MUTE_NOTIFICATIONS_RELATIONSHIP, $target_guid);
+		$rel = new \ElggRelationship();
+		$rel->guid_one = $user_guid;
+		$rel->relationship = self::MUTE_NOTIFICATIONS_RELATIONSHIP;
+		$rel->guid_two = $target_guid;
+		
+		return $rel->save();
 	}
 	
 	/**
@@ -561,7 +557,7 @@ class SubscriptionsService {
 		}
 		
 		// get muted relations
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(RelationshipsTable::TABLE_NAME);
 		$select->select('guid_one')
 			->where($select->compare('relationship', '=', self::MUTE_NOTIFICATIONS_RELATIONSHIP, ELGG_VALUE_STRING))
 			->andWhere($select->compare('guid_two', 'in', $guids_to_check, ELGG_VALUE_GUID));
@@ -632,16 +628,16 @@ class SubscriptionsService {
 	 * Records are an object with two vars: guid and methods with the latter
 	 * being a comma-separated list of subscription relationship names.
 	 *
-	 * @param int[]  $container_guid The GUID of the subscription target
-	 * @param array  $methods        Notification methods
-	 * @param string $type           (optional) entity type
-	 * @param string $subtype        (optional) entity subtype
-	 * @param string $action         (optional) notification action (eg. 'create')
-	 * @param int    $actor_guid     (optional) Notification event actor to exclude from the database subscriptions
+	 * @param int[]       $container_guid The GUID of the subscription target
+	 * @param array       $methods        Notification methods
+	 * @param null|string $type           (optional) entity type
+	 * @param null|string $subtype        (optional) entity subtype
+	 * @param null|string $action         (optional) notification action (eg. 'create')
+	 * @param int         $actor_guid     (optional) Notification event actor to exclude from the database subscriptions
 	 *
 	 * @return array
 	 */
-	protected function getSubscriptionRecords(array $container_guid, array $methods, string $type = null, string $subtype = null, string $action = null, int $actor_guid = 0): array {
+	protected function getSubscriptionRecords(array $container_guid, array $methods, ?string $type = null, ?string $subtype = null, ?string $action = null, int $actor_guid = 0): array {
 		// create IN clause
 		$rels = $this->getMethodRelationships($methods, $type, $subtype, $action);
 		if (!$rels) {
@@ -653,7 +649,7 @@ class SubscriptionsService {
 			return [];
 		}
 
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(RelationshipsTable::TABLE_NAME);
 		$select->select('guid_one AS guid')
 			->addSelect("GROUP_CONCAT(relationship SEPARATOR ',') AS methods")
 			->where($select->compare('guid_two', 'in', $container_guid, ELGG_VALUE_GUID))
@@ -670,14 +666,14 @@ class SubscriptionsService {
 	/**
 	 * Get the relationship names for notifications
 	 *
-	 * @param array  $methods Notification methods
-	 * @param string $type    (optional) entity type
-	 * @param string $subtype (optional) entity subtype
-	 * @param string $action  (optional) notification action (eg. 'create')
+	 * @param array       $methods Notification methods
+	 * @param null|string $type    (optional) entity type
+	 * @param null|string $subtype (optional) entity subtype
+	 * @param null|string $action  (optional) notification action (eg. 'create')
 	 *
 	 * @return array
 	 */
-	protected function getMethodRelationships(array $methods, string $type = null, string $subtype = null, string $action = null): array {
+	protected function getMethodRelationships(array $methods, ?string $type = null, ?string $subtype = null, ?string $action = null): array {
 		$prefix = self::RELATIONSHIP_PREFIX;
 		
 		$names = [];

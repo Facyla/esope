@@ -9,6 +9,7 @@ use Elgg\Traits\Entity\PluginSettings;
  * @property      string $name                A short name that captures the purpose of the group
  * @property      string $description         A longer body of content that gives more details about the group
  * @property-read string $content_access_mode Content access mode for this group
+ * @property      int    $membership          Type of group membership
  */
 class ElggGroup extends \ElggEntity {
 
@@ -22,14 +23,9 @@ class ElggGroup extends \ElggEntity {
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
+		
+		$this->attributes['type'] = 'group';
 		$this->attributes['subtype'] = 'group';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getType(): string {
-		return 'group';
 	}
 
 	/**
@@ -57,7 +53,7 @@ class ElggGroup extends \ElggEntity {
 	 * @return bool
 	 */
 	public function isPublicMembership(): bool {
-		return ($this->membership == ACCESS_PUBLIC);
+		return ($this->membership === ACCESS_PUBLIC);
 	}
 
 	/**
@@ -109,11 +105,11 @@ class ElggGroup extends \ElggEntity {
 	/**
 	 * Is the given user a member of this group?
 	 *
-	 * @param \ElggUser $user The user. Default is logged in user.
+	 * @param null|\ElggUser $user The user. Default is logged-in user.
 	 *
 	 * @return bool
 	 */
-	public function isMember(\ElggUser $user = null): bool {
+	public function isMember(?\ElggUser $user = null): bool {
 		if ($user === null) {
 			$user = _elgg_services()->session_manager->getLoggedInUser();
 		}
@@ -262,10 +258,11 @@ class ElggGroup extends \ElggEntity {
 	 * Check if current user can access group content based on his/her membership status
 	 * and group's content access policy
 	 *
-	 * @param ElggUser|null $user User
+	 * @param \ElggUser|null $user User
+	 *
 	 * @return bool
 	 */
-	public function canAccessContent(ElggUser $user = null): bool {
+	public function canAccessContent(?\ElggUser $user = null): bool {
 		if (!isset($user)) {
 			$user = _elgg_services()->session_manager->getLoggedInUser();
 		}

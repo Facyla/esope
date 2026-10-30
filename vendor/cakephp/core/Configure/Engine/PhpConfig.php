@@ -53,7 +53,7 @@ class PhpConfig implements ConfigEngineInterface
      *
      * @var string
      */
-    protected $_extension = '.php';
+    protected string $_extension = '.php';
 
     /**
      * Constructor for PHP Config file reading.
@@ -62,10 +62,7 @@ class PhpConfig implements ConfigEngineInterface
      */
     public function __construct(?string $path = null)
     {
-        if ($path === null) {
-            $path = CONFIG;
-        }
-        $this->_path = $path;
+        $this->_path = $path ?? CONFIG;
     }
 
     /**
@@ -84,14 +81,12 @@ class PhpConfig implements ConfigEngineInterface
     {
         $file = $this->_getFilePath($key, true);
 
-        $config = null;
-
         $return = include $file;
         if (is_array($return)) {
             return $return;
         }
 
-        throw new CakeException(sprintf('Config file "%s" did not return an array', $key . '.php'));
+        throw new CakeException(sprintf('Config file `%s` did not return an array', $key . '.php.'));
     }
 
     /**

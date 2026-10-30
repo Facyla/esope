@@ -6,24 +6,31 @@
  * @uses $vars['html']    Content of the element
  */
 
-$section = elgg_extract('section', $vars);
 $html = elgg_extract('html', $vars);
-
-if (!empty($section) && elgg_view_exists("page/elements/{$section}/before")) {
-	echo elgg_view("page/elements/{$section}/before", $vars);
+if (empty($html)) {
+	return;
 }
 
-if (!empty($html)) {
-	$class = ['elgg-page-section'];
-	if (!empty($section)) {
-		$class[] = "elgg-page-{$section}";
-	}
+$section_elements = [
+	'body' => 'main',
+	'topbar' => 'header',
+	'footer' => 'footer',
+];
 
-	$inner = elgg_format_element('div', ['class' => 'elgg-inner'], $html);
+$class = ['elgg-page-section'];
 
-	echo elgg_format_element('div', ['class' => $class], $inner);
+$section = elgg_extract('section', $vars);
+if (!empty($section)) {
+	$class[] = "elgg-page-{$section}";
 }
 
-if (!empty($section) && elgg_view_exists("page/elements/{$section}/after")) {
-	echo elgg_view("page/elements/{$section}/after", $vars);
+$inner = elgg_format_element('div', ['class' => 'elgg-inner'], $html);
+
+$element = elgg_extract($section, $section_elements, 'div');
+
+$section_attributes = ['class' => $class];
+if ($element === 'main') {
+	$section_attributes['id'] = 'main-content';
 }
+
+echo elgg_format_element($element, $section_attributes, $inner);

@@ -24,7 +24,7 @@ return array(
 	'site_notifications:settings:read_cleanup_interval' => 'Интервал очистки прочитанных уведомлений',
 	'site_notifications:settings:read_cleanup_interval:help' => 'Как часто следует очищать прочитанные уведомления. На сайтах с высокой активностью вы можете увеличить интервал, чтобы не пропустить новые уведомления. ',
 	
-	'site_notifications:empty' => 'Нет уведомлений',
+	'site_notifications:empty' => 'Нет уведомлений', // @todo remove in Elgg 7.0
 	'site_notifications:toggle_all' => 'Отметить все',
 	'site_notifications:mark_read' => 'Отметить прочитанным',
 	'site_notifications:mark_read:confirm' => 'Уверены, что хотите отметить все выбранные уведомления как прочитанные?',
@@ -33,10 +33,7 @@ return array(
 	'site_notifications:success:delete' => 'Уведомления удалены',
 	'site_notifications:success:mark_read' => 'Уведомления отмечены прочитанными',
 	
-	'site_notifications:cron:linked_cleanup:start' => 'Очистка уведомлений без связанных сущностей',
 	'site_notifications:cron:linked_cleanup:end' => 'Очищено %s уведомлений без связанных сущностей',
-	'site_notifications:cron:unread_cleanup:start' => 'Очистка непрочитанных уведомлений старше %s дней',
 	'site_notifications:cron:unread_cleanup:end' => 'Очищено %s непрочитанных уведомлений',
-	'site_notifications:cron:read_cleanup:start' => 'Очистка прочитанных уведомлений старше %s дней',
 	'site_notifications:cron:read_cleanup:end' => 'Очищено %s прочитанных уведомлений',
 );

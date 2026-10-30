@@ -94,6 +94,10 @@ class ElggPage extends ElggObject {
 			return true;
 		}
 		
+		if ($guid === $this->guid) {
+			return false;
+		}
+		
 		$new_parent = get_entity($guid);
 		return $this->setParentEntity($new_parent);
 	}
@@ -107,14 +111,13 @@ class ElggPage extends ElggObject {
 	 *
 	 * @since 3.0
 	 */
-	public function setParentEntity(\ElggPage $entity = null): bool {
-		
+	public function setParentEntity(?\ElggPage $entity = null): bool {
 		if (empty($entity)) {
 			$this->parent_guid = 0;
 			return true;
 		}
 		
-		if (empty($entity->guid)) {
+		if (empty($entity->guid) || $entity->guid === $this->guid) {
 			return false;
 		}
 		
@@ -125,37 +128,96 @@ class ElggPage extends ElggObject {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function delete(bool $recursive = true): bool {
+	public function delete(bool $recursive = true, ?bool $persistent = null): bool {
 		$parent_guid = $this->getParentGUID();
-		$guid = $this->guid;
-
-		$move_children = function () use ($parent_guid, $guid) {
-			// Move all children one level up
-			elgg_call(ELGG_IGNORE_ACCESS, function () use ($parent_guid, $guid) {
-				$children = elgg_get_entities([
-					'type' => 'object',
-					'subtype' => 'page',
-					'metadata_name_value_pairs' => [
-						'parent_guid' => $guid,
-					],
-					'limit' => false,
-					'batch' => true,
-					'batch_inc_offset' => false,
-				]);
-
-				/* @var $child ElggPage */
-				foreach ($children as $child) {
-					$child->setParentByGUID($parent_guid);
-				}
-			});
-		};
-
-		$result = parent::delete($recursive);
-
+		$result = parent::delete($recursive, $persistent);
 		if ($result) {
-			$move_children();
+			$this->moveChildPages($parent_guid);
 		}
-
+		
+		return $result;
+	}
+	
+	/**
+	 * Move child pages up one level
+	 *
+	 * @param int $parent_guid new parent GUID
+	 *
+	 * @return void
+	 * @since 6.0
+	 */
+	protected function moveChildPages(int $parent_guid): void {
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function () use ($parent_guid) {
+			/* @var $children \ElggBatch */
+			$children = elgg_get_entities([
+				'type' => 'object',
+				'subtype' => 'page',
+				'metadata_name_value_pairs' => [
+					'parent_guid' => $this->guid,
+				],
+				'limit' => false,
+				'batch' => true,
+				'batch_inc_offset' => false,
+			]);
+			
+			/* @var $child ElggPage */
+			foreach ($children as $child) {
+				if (!$child->setParentByGUID($parent_guid)) {
+					$children->reportFailure();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function getDefaultFields(): array {
+		$result = parent::getDefaultFields();
+		
+		$result[] = [
+			'#type' => 'text',
+			'#label' => elgg_echo('pages:title'),
+			'name' => 'title',
+			'required' => true,
+		];
+		
+		$result[] = [
+			'#type' => 'longtext',
+			'#label' => elgg_echo('pages:description'),
+			'name' => 'description',
+		];
+		
+		$result[] = [
+			'#type' => 'tags',
+			'#label' => elgg_echo('pages:tags'),
+			'name' => 'tags',
+		];
+		
+		$result[] = [
+			'#type' => 'pages/parent',
+			'#label' => elgg_echo('pages:parent_guid'),
+			'name' => 'parent_guid',
+		];
+		
+		$result[] = [
+			'#type' => 'access',
+			'#label' => elgg_echo('access:read'),
+			'name' => 'access_id',
+			'entity_type' => 'object',
+			'entity_subtype' => 'page',
+		];
+		
+		$result[] = [
+			'#type' => 'access',
+			'#label' => elgg_echo('access:write'),
+			'name' => 'write_access_id',
+			'entity_type' => 'object',
+			'entity_subtype' => 'page',
+			'purpose' => 'write',
+			'entity_allows_comments' => false, // no access change warning for write access input
+		];
+		
 		return $result;
 	}
 }

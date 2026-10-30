@@ -11,6 +11,7 @@ return array(
 	'site_notifications:topbar' => 'Notificaties',
 	'item:object:site_notification' => 'Site notificatie',
 	'collection:object:site_notification' => 'Site notificaties',
+	'list:object:site_notification:no_results' => 'Geen site notificaties gevonden',
 
 	'site_notifications:unread' => 'Ongelezen',
 	'site_notifications:read' => 'Gelezen',
@@ -24,7 +25,7 @@ return array(
 	'site_notifications:settings:read_cleanup_interval' => 'Interval voor het opschonen van gelezen notificaties',
 	'site_notifications:settings:read_cleanup_interval:help' => 'Hoe vaak moeten de gelezen notificaties worden opgeschoond. Bij websites met een hoge activiteit kan het verhogen van de interval ervoor zorgen dat het opschonen de toestroom van de nieuwe site notificaties kan bijhouden.',
 	
-	'site_notifications:empty' => 'Geen notificaties',
+	'site_notifications:empty' => 'Geen notificaties', // @todo remove in Elgg 7.0
 	'site_notifications:toggle_all' => 'Selecteer alles',
 	'site_notifications:mark_read' => 'Markeer als gelezen',
 	'site_notifications:mark_read:confirm' => 'Weet je zeker dat je alle geselecteerde notificaties als gelezen wilt markeren?',
@@ -33,10 +34,7 @@ return array(
 	'site_notifications:success:delete' => 'Notificaties verwijderd',
 	'site_notifications:success:mark_read' => 'Notificaties gemarkeerd als gelezen',
 	
-	'site_notifications:cron:linked_cleanup:start' => 'Site notificaties opruimen zonder gekoppelde entiteiten',
 	'site_notifications:cron:linked_cleanup:end' => 'Site notificaties heeft %s notificaties opgeruimd zonder gekoppelde entiteiten',
-	'site_notifications:cron:unread_cleanup:start' => 'Site notificaties ongelezen notificaties opruimen ouder dan %s dagen',
 	'site_notifications:cron:unread_cleanup:end' => 'Site notificaties heeft %s ongelezen notificaties opgeruimd',
-	'site_notifications:cron:read_cleanup:start' => 'Site notificaties gelezen notificaties opruimen ouder dan %s dagen',
 	'site_notifications:cron:read_cleanup:end' => 'Site notificaties heeft %s gelezen notificaties opgeruimd',
 );

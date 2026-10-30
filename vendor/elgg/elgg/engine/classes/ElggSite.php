@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Database\EntityTable;
+use Elgg\Database\Select;
 use Elgg\Exceptions\SecurityException;
 
 /**
@@ -29,10 +31,8 @@ class ElggSite extends \ElggEntity {
 	 * {@inheritdoc}
 	 */
 	protected function initializeAttributes() {
-		// Using ElggData for testing purposes
-		ElggData::initializeAttributes();
+		parent::initializeAttributes();
 
-		$this->attributes['guid'] = null;
 		$this->attributes['type'] = 'site';
 		$this->attributes['subtype'] = 'site';
 
@@ -40,29 +40,17 @@ class ElggSite extends \ElggEntity {
 		$this->attributes['container_guid'] = 0;
 
 		$this->attributes['access_id'] = ACCESS_PUBLIC;
-		$this->attributes['time_updated'] = null;
-		$this->attributes['last_action'] = null;
-		$this->attributes['enabled'] = 'yes';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getType(): string {
-		return 'site';
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function save(): bool {
-		$db = $this->getDatabase();
-		$qb = \Elgg\Database\Select::fromTable('entities', 'e');
-		$qb->select('e.*')
-			->where($qb->compare('e.type', '=', 'site', ELGG_VALUE_STRING));
+		$qb = Select::fromTable(EntityTable::TABLE_NAME);
+		$qb->select('*')
+			->where($qb->compare('type', '=', 'site', ELGG_VALUE_STRING));
 
-		$row = $db->getDataRow($qb);
-
+		$row = $this->getDatabase()->getDataRow($qb);
 		if (!empty($row)) {
 			if ($row->guid == $this->attributes['guid']) {
 				// can save active site
@@ -77,23 +65,16 @@ class ElggSite extends \ElggEntity {
 	}
 
 	/**
-	 * Delete the site.
-	 *
-	 * @note You cannot delete the current site.
-	 *
-	 * @param bool $recursive If true (default) then all entities which are owned or contained by $this will also be deleted.
-	 *
-	 * @return bool
-	 * @throws SecurityException
+	 * {@inheritdoc}
 	 */
-	public function delete(bool $recursive = true): bool {
-		if ($this->guid == 1) {
+	public function delete(bool $recursive = true, ?bool $persistent = null): bool {
+		if ($this->guid === 1) {
 			throw new SecurityException('You cannot delete the current site');
 		}
-
-		return parent::delete($recursive);
+		
+		return parent::delete($recursive, $persistent);
 	}
-
+	
 	/**
 	 * Disable the site
 	 *
@@ -194,9 +175,9 @@ class ElggSite extends \ElggEntity {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	public function updateLastAction(int $posted = null): int {
+	public function updateLastAction(?int $posted = null): int {
 		// setting last action on ElggSite makes no sense... just returning current value to be compliant
 		return $this->last_action;
 	}

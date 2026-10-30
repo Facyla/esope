@@ -2,9 +2,8 @@
 /**
  * Elgg comment view
  *
- * @uses $vars['entity']       ElggComment
- * @uses $vars['full_view']    Display full view or brief view
- * @uses $vars['show_excerpt'] Should the body text be an excerpt
+ * @uses $vars['entity']    ElggComment
+ * @uses $vars['full_view'] Display full view or brief view
  */
 
 $full_view = elgg_extract('full_view', $vars, true);
@@ -16,78 +15,59 @@ if (!$comment instanceof \ElggComment) {
 
 $entity = $comment->getContainerEntity();
 $commenter = $comment->getOwnerEntity();
-if (!$entity || !$commenter) {
+if (!$entity instanceof \ElggEntity || !$commenter instanceof \ElggEntity) {
 	return;
 }
 
 if ($comment->canEdit()) {
-	elgg_require_js('elgg/comments');
+	elgg_import_esm('elgg/comments');
+}
+
+$params = [
+	'icon_entity' => $commenter,
+	'time_href' => $comment->getURL(),
+	'access' => false,
+	'title' => false,
+	'tag_name' => 'article',
+	'imprint' => elgg_extract('imprint', $vars, []),
+	'class' => elgg_extract_class($vars),
+];
+$params = $params + $vars;
+
+if ($comment->isCreatedByContentOwner()) {
+	$params['class'][] = 'elgg-comment-by-owner';
+	
+	$params['imprint'][] = [
+		'icon_name' => 'user-edit',
+		'content' => elgg_echo('generic_comment:by_owner'),
+	];
 }
 
 if ($full_view) {
-	if (elgg_extract('show_excerpt', $vars)) {
-		$body = elgg_view('output/longtext', [
-			'value' => elgg_get_excerpt((string) $comment->description),
-		]);
-	} else {
-		$body = elgg_view('output/longtext', [
-			'value' => $comment->description,
-		]);
+	$params['show_summary'] = true;
 	
-		if (elgg_extract('show_add_form', $vars, true) && $comment->canComment()) {
-			$body .= elgg_view('output/url', [
-				'text' => elgg_echo('generic_comments:add'),
-				'href' => "#elgg-form-comment-save-{$comment->guid}",
-				'class' => ['elgg-toggle', 'elgg-subtext'],
-			]);
-		}
+	$body = elgg_view('output/longtext', [
+		'value' => $comment->description,
+	]);
+	
+	if (elgg_extract('show_add_form', $vars, true) && $comment->canComment()) {
+		$body .= elgg_view('output/url', [
+			'text' => elgg_echo('generic_comments:add'),
+			'href' => "#elgg-form-comment-save-{$comment->guid}",
+			'data-load-comment' => $comment->guid,
+			'class' => ['elgg-subtext', 'elgg-toggle-comment'],
+		]);
 	}
-
-	$params = [
-		'icon_entity' => $commenter,
-		'time_href' => $comment->getURL(),
-		'access' => false,
-		'title' => false,
-		'show_summary' => true,
-		'content' => $body,
-		'imprint' => elgg_extract('imprint', $vars, []),
-		'class' => elgg_extract_class($vars),
-	];
-	$params = $params + $vars;
+	
+	$params['content'] = $body;
 	
 	if (!empty(elgg()->thread_preloader->getChildren($comment->guid))) {
 		$params['class'][] = 'with-children';
 	}
 	
-	if ($comment->isCreatedByContentOwner()) {
-		$params['class'][] = 'elgg-comment-by-owner';
-		
-		$params['imprint'][] = [
-			'icon_name' => 'user-edit',
-			'content' => elgg_echo('generic_comment:by_owner'),
-		];
-	}
-	
 	echo elgg_view('object/elements/full', $params);
 } else {
-	// brief view
-	$commenter_icon = elgg_view_entity_icon($commenter, 'small');
-
-	$friendlytime = elgg_view_friendly_time($comment->time_created);
-
-	$commenter_link = elgg_view_entity_url($commenter);
-
-	$entity_link = elgg_view('output/url', [
-		'href' => $entity->getURL(),
-		'text' => $entity->getDisplayName() ?: elgg_echo('untitled'),
-	]);
-
-	$excerpt = elgg_get_excerpt((string) $comment->description, 80);
-	$posted = elgg_echo('generic_comment:on', [$commenter_link, $entity_link]);
-
-	$body = elgg_format_element('span', [
-		'class' => 'elgg-subtext',
-	], "$posted ($friendlytime): $excerpt");
-
-	echo elgg_view_image_block($commenter_icon, $body);
+	$params['content'] = elgg_get_excerpt((string) $comment->description);
+	
+	echo elgg_view('object/elements/summary', $params);
 }

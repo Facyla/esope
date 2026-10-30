@@ -9,14 +9,12 @@ use Elgg\Application\ShutdownHandler;
 use Elgg\Database\DbConfig;
 use Elgg\Di\InternalContainer;
 use Elgg\Di\PublicContainer;
-use Elgg\Exceptions\ConfigurationException;
 use Elgg\Exceptions\Configuration\InstallationException;
-use Elgg\Exceptions\HttpException;
+use Elgg\Exceptions\ConfigurationException;
 use Elgg\Exceptions\Http\GatekeeperException;
 use Elgg\Exceptions\Http\PageNotFoundException;
+use Elgg\Exceptions\HttpException;
 use Elgg\Exceptions\InvalidArgumentException;
-use Elgg\Filesystem\Directory;
-use Elgg\Filesystem\Directory\Local;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
 use Elgg\Http\RedirectResponse;
@@ -26,6 +24,7 @@ use Elgg\Http\ResponseTransport;
 use Elgg\Project\Paths;
 use Elgg\Security\UrlSigner;
 use Elgg\Traits\Loggable;
+use Elgg\Upgrade\PhinxWrapper;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,6 +42,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * The full path is necessary to work around this: https://bugs.php.net/bug.php?id=55726
  *
+ * @internal
  * @since 2.0.0
  */
 class Application {
@@ -100,11 +100,11 @@ class Application {
 	/**
 	 * Set the global Application instance
 	 *
-	 * @param Application $application Global application
+	 * @param null|Application $application Global application
 	 *
 	 * @return void
 	 */
-	public static function setInstance(Application $application = null) {
+	public static function setInstance(?Application $application = null) {
 		self::$_instance = $application;
 	}
 
@@ -479,25 +479,6 @@ class Application {
 	}
 
 	/**
-	 * Returns a directory that points to the root of Elgg, but not necessarily
-	 * the install root. See `self::root()` for that.
-	 *
-	 * @return Directory
-	 */
-	public static function elggDir() {
-		return Local::elggRoot();
-	}
-
-	/**
-	 * Returns a directory that points to the project root, where composer is installed.
-	 *
-	 * @return Directory
-	 */
-	public static function projectDir() {
-		return Local::projectRoot();
-	}
-
-	/**
 	 * Renders a web UI for installing Elgg.
 	 *
 	 * @return Response|false
@@ -572,10 +553,10 @@ class Application {
 	 */
 	public static function migrate() {
 		
-		$constants = self::elggDir()->getPath('engine/lib/constants.php');
+		$constants = Paths::elgg() . 'engine/lib/constants.php';
 		Includer::requireFileOnce($constants);
 		
-		$conf = self::elggDir()->getPath('engine/schema/migrations.php');
+		$conf = Paths::elgg() . 'engine/schema/migrations.php';
 		if (!$conf) {
 			throw new InstallationException('Settings file is required to run database migrations.');
 		}
@@ -584,16 +565,12 @@ class Application {
 		set_time_limit(0);
 
 		$app = new \Phinx\Console\PhinxApplication();
-		$wrapper = new \Phinx\Wrapper\TextWrapper($app, [
+		$wrapper = new PhinxWrapper($app, [
 			'configuration' => $conf,
 		]);
-		$log = $wrapper->getMigrate();
+		$wrapper->getMigrate();
 
-		if (!empty($_SERVER['argv']) && in_array('--verbose', $_SERVER['argv'])) {
-			error_log($log);
-		}
-
-		return true;
+		return empty($wrapper->getExitCode());
 	}
 
 	/**
@@ -618,7 +595,7 @@ class Application {
 			],
 			'environments' => [
 				'default_migration_table' => "{$conn['prefix']}migrations",
-				'default_database' => 'prod',
+				'default_environment' => 'prod',
 				'prod' => [
 					'adapter' => 'mysql',
 					'host' => $conn['host'],
@@ -753,7 +730,8 @@ class Application {
 			'configuration.php',
 			'constants.php',
 			'context.php',
-			'deprecated-5.0.php',
+			'deprecated-6.1.php',
+			'deprecated-6.3.php',
 			'entities.php',
 			'external_files.php',
 			'filestore.php',

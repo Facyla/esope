@@ -34,31 +34,31 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
      *
      * @var mixed
      */
-    protected $_from;
+    protected mixed $_from;
 
     /**
      * The second value in the expression
      *
      * @var mixed
      */
-    protected $_to;
+    protected mixed $_to;
 
     /**
      * The data type for the from and to arguments
      *
      * @var mixed
      */
-    protected $_type;
+    protected mixed $_type;
 
     /**
      * Constructor
      *
-     * @param \Cake\Database\ExpressionInterface|string $field The field name to compare for values inbetween the range.
+     * @param \Cake\Database\ExpressionInterface|string $field The field name to compare for values in between the range.
      * @param mixed $from The initial value of the range.
      * @param mixed $to The ending value in the comparison range.
      * @param string|null $type The data type name to bind the values with.
      */
-    public function __construct($field, $from, $to, $type = null)
+    public function __construct(ExpressionInterface|string $field, mixed $from, mixed $to, ?string $type = null)
     {
         if ($type !== null) {
             $from = $this->_castToExpression($from, $type);
@@ -81,7 +81,6 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
             'to' => $this->_to,
         ];
 
-        /** @var \Cake\Database\ExpressionInterface|string $field */
         $field = $this->_field;
         if ($field instanceof ExpressionInterface) {
             $field = $field->sql($binder);
@@ -94,6 +93,7 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
             }
             $parts[$name] = $this->_bindValue($part, $binder, $this->_type);
         }
+        assert(is_string($field));
 
         return sprintf('%s BETWEEN %s AND %s', $field, $parts['from'], $parts['to']);
     }
@@ -117,10 +117,10 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
      *
      * @param mixed $value The value to bind
      * @param \Cake\Database\ValueBinder $binder The value binder to use
-     * @param string $type The type of $value
+     * @param string|null $type The type of $value
      * @return string generated placeholder
      */
-    protected function _bindValue($value, $binder, $type): string
+    protected function _bindValue(mixed $value, ValueBinder $binder, ?string $type): string
     {
         $placeholder = $binder->placeholder('c');
         $binder->bind($placeholder, $value, $type);

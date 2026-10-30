@@ -2,12 +2,12 @@
 /**
  * Elgg widget edit settings
  *
- * @uses $vars['widget']
- * @uses $vars['show_access']
+ * @uses $vars['entity']      The widget entity
+ * @uses $vars['show_access'] (bool) should widget access setting be available default: true
  */
 
-$widget = elgg_extract('widget', $vars);
-if (!$widget instanceof ElggWidget) {
+$widget = elgg_extract('entity', $vars);
+if (!$widget instanceof \ElggWidget) {
 	return;
 }
 

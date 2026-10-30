@@ -3,10 +3,10 @@ on: [pull_request]
 jobs:
   commit_message:
     name: Validate the commit message
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Code checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Check format
         uses: gsactions/commit-message-checker@v2
@@ -43,24 +43,24 @@ jobs:
           
   php_lint:
     name: Validate composer.json and PHP Coding style
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           coverage: none
-          extensions: gd,pdo,xml,json,mysqli,pdo_mysql
+          extensions: gd,pdo,xml,json,mysqli,pdo_mysql,intl
       
       - name: Code checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Get Composer Cache Directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> ${GITHUB_OUTPUT}
         
       - name: Restore Composer Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -78,10 +78,10 @@ jobs:
 
   languages_lint:
     name: Validate language files are UTF-8 encoded
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Code checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Check encoding of Core language files
         run: echo '! find ./languages/ -name "*.php" -type f -exec file --mime {} \; | grep -v "charset=utf-8$" | grep -v "charset=us-ascii$"' | bash

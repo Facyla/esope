@@ -76,7 +76,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return void
 	 */
-	public function initializeTrustedProxyConfiguration(Config $config) {
+	public function initializeTrustedProxyConfiguration(Config $config): void {
 		$trusted_proxies = $config->http_request_trusted_proxy_ips;
 		if (empty($trusted_proxies)) {
 			return;
@@ -132,7 +132,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return Route|null
 	 */
-	public function getRoute() {
+	public function getRoute(): ?Route {
 		return $this->route;
 	}
 
@@ -215,7 +215,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return string
 	 */
-	public function getCurrentURL() {
+	public function getCurrentURL(): string {
 		$url = parse_url(elgg_get_site_url());
 
 		$page = $url['scheme'] . '://' . $url['host'];
@@ -238,7 +238,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return string[]
 	 */
-	public function getUrlSegments(bool $raw = false) {
+	public function getUrlSegments(bool $raw = false): array {
 		$path = trim($this->getElggPath(), '/');
 		if (!$raw) {
 			$path = htmlspecialchars($path, ENT_QUOTES, 'UTF-8');
@@ -258,7 +258,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return Request
 	 */
-	public function setUrlSegments(array $segments) {
+	public function setUrlSegments(array $segments): Request {
 		$base_path = trim($this->getBasePath(), '/');
 		$server = $this->server->all();
 		$server['REQUEST_URI'] = "$base_path/" . implode('/', $segments);
@@ -273,7 +273,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return string
 	 */
-	public function getFirstUrlSegment() {
+	public function getFirstUrlSegment(): string {
 		$segments = $this->getUrlSegments();
 		if (!empty($segments)) {
 			return array_shift($segments);
@@ -287,7 +287,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return string
 	 */
-	public function getElggPath() {
+	public function getElggPath(): string {
 		if (PHP_SAPI === 'cli-server') {
 			$path = $this->getRequestUri();
 		} else {
@@ -300,26 +300,26 @@ class Request extends SymfonyRequest {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getClientIp() {
+	public function getClientIp(): ?string {
 		$ip = parent::getClientIp();
 
-		if ($ip == $this->server->get('REMOTE_ADDR')) {
+		if ($ip === $this->server->get('REMOTE_ADDR')) {
 			// try one more
-			$ip_addresses = $this->server->get('HTTP_X_REAL_IP');
-			if ($ip_addresses) {
+			$ip_addresses = (string) $this->server->get('HTTP_X_REAL_IP');
+			if (!empty($ip_addresses)) {
 				$ip_addresses = explode(',', $ip_addresses);
 
-				return array_pop($ip_addresses);
+				$ip = array_pop($ip_addresses);
 			}
 		}
 
-		return $ip;
+		return filter_var($ip, FILTER_VALIDATE_IP) ?: null;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isXmlHttpRequest() {
+	public function isXmlHttpRequest(): bool {
 		return (strtolower($this->headers->get('X-Requested-With') ?: '') === 'xmlhttprequest'
 			|| $this->query->get('X-Requested-With') === 'XMLHttpRequest'
 			|| $this->request->get('X-Requested-With') === 'XMLHttpRequest');
@@ -348,7 +348,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return bool
 	 */
-	public function isRewriteCheck() {
+	public function isRewriteCheck(): bool {
 		if ($this->getPathInfo() !== ('/' . self::REWRITE_TEST_TOKEN)) {
 			return false;
 		}
@@ -375,7 +375,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return bool
 	 */
-	public function isCliServer() {
+	public function isCliServer(): bool {
 		return PHP_SAPI === 'cli-server';
 	}
 
@@ -386,7 +386,7 @@ class Request extends SymfonyRequest {
 	 *
 	 * @return bool
 	 */
-	public function isCliServable($root) {
+	public function isCliServable(string $root): bool {
 		$file = rtrim($root, '\\/') . $this->getElggPath();
 		if (!is_file($file)) {
 			return false;
@@ -394,7 +394,7 @@ class Request extends SymfonyRequest {
 
 		// http://php.net/manual/en/features.commandline.webserver.php
 		$extensions = '.3gp, .apk, .avi, .bmp, .css, .csv, .doc, .docx, .flac, .gif, .gz, .gzip, .htm, .html, .ics,';
-		$extensions .= ' .jpe, .jpeg, .jpg, .js, .kml, .kmz, .m4a, .mov, .mp3, .mp4, .mpeg, .mpg, .odp, .ods, .odt,';
+		$extensions .= ' .jpe, .jpeg, .jpg, .js, .kml, .kmz, .m4a, .mjs, .mov, .mp3, .mp4, .mpeg, .mpg, .odp, .ods, .odt,';
 		$extensions .= ' .oga, .ogg, .ogv, .pdf, .pdf, .png, .pps, .pptx, .qt, .svg, .swf, .tar, .text, .tif, .txt,';
 		$extensions .= ' .wav, .webm, .wmv, .xls, .xlsx, .xml, .xsl, .xsd, and .zip';
 
@@ -461,7 +461,7 @@ class Request extends SymfonyRequest {
 	 * @return void
 	 * @throws BadRequestException
 	 */
-	public function validate() {
+	public function validate(): void {
 		$this->validateRequestHostHeader();
 		$this->validateRequestBodyTruncated();
 	}
@@ -475,7 +475,7 @@ class Request extends SymfonyRequest {
 	 * @throws BadRequestException
 	 * @since 3.3.25
 	 */
-	protected function validateRequestHostHeader() {
+	protected function validateRequestHostHeader(): void {
 		$config = _elgg_services()->config;
 		if (empty($config->wwwroot)) {
 			return;

@@ -8,7 +8,6 @@ use Elgg\Database\Clauses\EntityWhereClause;
 use Elgg\Database\Clauses\MetadataWhereClause;
 use Elgg\Database\Clauses\RelationshipWhereClause;
 use Elgg\Exceptions\DomainException;
-use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\Exceptions\LogicException;
 
 /**
@@ -23,9 +22,9 @@ class Metadata extends Repository {
 	 * {@inheritdoc}
 	 */
 	public function count() {
-		$qb = Select::fromTable('metadata', 'n_table');
+		$qb = Select::fromTable(MetadataTable::TABLE_NAME, MetadataTable::DEFAULT_JOIN_ALIAS);
 
-		$count_expr = $this->options->distinct ? 'DISTINCT n_table.id' : '*';
+		$count_expr = $this->options->distinct ? "DISTINCT {$qb->getTableAlias()}.id" : '*';
 		$qb->select("COUNT({$count_expr}) AS total");
 
 		$qb = $this->buildQuery($qb);
@@ -58,7 +57,7 @@ class Metadata extends Repository {
 			$property_type = 'metadata';
 		}
 
-		$qb = Select::fromTable('metadata', 'n_table');
+		$qb = Select::fromTable(MetadataTable::TABLE_NAME, MetadataTable::DEFAULT_JOIN_ALIAS);
 
 		switch ($property_type) {
 			case 'attribute':
@@ -66,24 +65,21 @@ class Metadata extends Repository {
 					throw new DomainException("'{$property}' is not a valid attribute");
 				}
 
-				/**
-				 * @todo When no entity constraints are present, do we need to ensure that entity access clause is added?
-				 */
-				$alias = $qb->joinEntitiesTable('n_table', 'entity_guid', 'inner', 'e');
+				$alias = $qb->joinEntitiesTable($qb->getTableAlias(), 'entity_guid', 'inner', 'e');
 				$qb->addSelect("{$function}({$alias}.{$property}) AS calculation");
 				break;
 
 			case 'metadata':
-				$alias = 'n_table';
+				$alias = MetadataTable::DEFAULT_JOIN_ALIAS;
 				if (!empty($this->options->metadata_name_value_pairs) && $this->options->metadata_name_value_pairs[0]->names != $property) {
-					$alias = $qb->joinMetadataTable('n_table', 'entity_guid', $property);
+					$alias = $qb->joinMetadataTable($qb->getTableAlias(), 'entity_guid', $property);
 				}
 				
-				$qb->addSelect("{$function}($alias.value) AS calculation");
+				$qb->addSelect("{$function}({$alias}.value) AS calculation");
 				break;
 
 			case 'annotation':
-				$alias = $qb->joinAnnotationTable('n_table', 'entity_guid', $property);
+				$alias = $qb->joinAnnotationTable($qb->getTableAlias(), 'entity_guid', $property, 'inner', AnnotationsTable::DEFAULT_JOIN_ALIAS);
 				$qb->addSelect("{$function}({$alias}.value) AS calculation");
 				break;
 		}
@@ -105,20 +101,20 @@ class Metadata extends Repository {
 	 * @return \ElggMetadata[]
 	 */
 	public function get($limit = null, $offset = null, $callback = null) {
-		$qb = Select::fromTable('metadata', 'n_table');
+		$qb = Select::fromTable(MetadataTable::TABLE_NAME, MetadataTable::DEFAULT_JOIN_ALIAS);
 
-		$distinct = $this->options->distinct ? 'DISTINCT' : '';
-		$qb->select("{$distinct} n_table.*");
+		$distinct = $this->options->distinct ? 'DISTINCT ' : '';
+		$qb->select("{$distinct}{$qb->getTableAlias()}.*");
 
-		$this->expandInto($qb, 'n_table');
+		$this->expandInto($qb, $qb->getTableAlias());
 
 		$qb = $this->buildQuery($qb);
 
-		// Keeping things backwards compatible
+		// add default ordering
 		$original_order = elgg_extract('order_by', $this->options->__original_options);
-		if (empty($original_order) && $original_order !== false) {
-			$qb->addOrderBy('n_table.time_created', 'asc');
-			$qb->addOrderBy('n_table.id', 'asc');
+		if (empty($this->options->order_by) && $original_order !== false) {
+			$qb->addOrderBy("{$qb->getTableAlias()}.time_created", 'asc');
+			$qb->addOrderBy("{$qb->getTableAlias()}.id", 'asc');
 		}
 
 		if ($limit > 0) {
@@ -139,7 +135,7 @@ class Metadata extends Repository {
 	/**
 	 * Execute the query resolving calculation, count and/or batch options
 	 *
-	 * @return array|\ElggData[]|\ElggMetadata[]|false|int
+	 * @return array|\ElggData[]|\ElggMetadata[]|int|\ElggBatch
 	 * @throws LogicException
 	 */
 	public function execute() {
@@ -181,11 +177,11 @@ class Metadata extends Repository {
 		$ands = [];
 
 		foreach ($this->options->joins as $join) {
-			$join->prepare($qb, 'n_table');
+			$join->prepare($qb, $qb->getTableAlias());
 		}
 
 		foreach ($this->options->wheres as $where) {
-			$ands[] = $where->prepare($qb, 'n_table');
+			$ands[] = $where->prepare($qb, $qb->getTableAlias());
 		}
 
 		$ands[] = $this->buildPairedMetadataClause($qb, $this->options->metadata_name_value_pairs, $this->options->metadata_name_value_pairs_operator);
@@ -214,7 +210,7 @@ class Metadata extends Repository {
 	protected function buildEntityWhereClause(QueryBuilder $qb) {
 		// Even if all of these properties are empty, we want to add this clause regardless,
 		// to ensure that entity access clauses are appended to the query
-		$joined_alias = $qb->joinEntitiesTable('n_table', 'entity_guid', 'inner', 'e');
+		$joined_alias = $qb->joinEntitiesTable($qb->getTableAlias(), 'entity_guid', 'inner', EntityTable::DEFAULT_JOIN_ALIAS);
 		return EntityWhereClause::factory($this->options)->prepare($qb, $joined_alias);
 	}
 
@@ -232,7 +228,7 @@ class Metadata extends Repository {
 		$parts = [];
 
 		foreach ($clauses as $clause) {
-			$parts[] = $clause->prepare($qb, 'n_table');
+			$parts[] = $clause->prepare($qb, $qb->getTableAlias());
 		}
 
 		return $qb->merge($parts, $boolean);
@@ -252,10 +248,10 @@ class Metadata extends Repository {
 		$parts = [];
 
 		foreach ($clauses as $clause) {
-			if (strtoupper($boolean) === 'OR' || count($clauses) > 1) {
-				$joined_alias = $qb->joinAnnotationTable('n_table', 'entity_guid');
+			if (strtoupper($boolean) === 'OR' || count($clauses) === 1) {
+				$joined_alias = $qb->joinAnnotationTable($qb->getTableAlias(), 'entity_guid', null, 'inner', AnnotationsTable::DEFAULT_JOIN_ALIAS);
 			} else {
-				$joined_alias = $qb->joinAnnotationTable('n_table', 'entity_guid', $clause->names);
+				$joined_alias = $qb->joinAnnotationTable($qb->getTableAlias(), 'entity_guid', $clause->names);
 			}
 			
 			$parts[] = $clause->prepare($qb, $joined_alias);
@@ -280,10 +276,10 @@ class Metadata extends Repository {
 		$parts = [];
 
 		foreach ($clauses as $clause) {
-			if (strtoupper($boolean) == 'OR' || count($clauses) > 1) {
-				$joined_alias = $qb->joinRelationshipTable('n_table', 'entity_guid', null, $clause->inverse);
+			if (strtoupper($boolean) === 'OR' || count($clauses) === 1) {
+				$joined_alias = $qb->joinRelationshipTable($qb->getTableAlias(), 'entity_guid', null, $clause->inverse, 'inner', RelationshipsTable::DEFAULT_JOIN_ALIAS);
 			} else {
-				$joined_alias = $qb->joinRelationshipTable('n_table', 'entity_guid', $clause->names, $clause->inverse);
+				$joined_alias = $qb->joinRelationshipTable($qb->getTableAlias(), 'entity_guid', $clause->names, $clause->inverse);
 			}
 			
 			$parts[] = $clause->prepare($qb, $joined_alias);

@@ -1,28 +1,12 @@
 <?php
 
-namespace Elgg\Cli;
+namespace Elgg\GarbageCollector;
 
-use Elgg\GarbageCollector\OptimizeCommand;
-use Elgg\IntegrationTestCase;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
+use Elgg\Plugins\IntegrationTestCase;
 
-/**
- * @group Cli
- * @group GarbageCollector
- */
 class OptimizeCommandTest extends IntegrationTestCase {
 
 	public function testExecute() {
-		$application = new Application();
-		$application->add(new OptimizeCommand());
-
-		$command = $application->find('database:optimize');
-		$commandTester = new CommandTester($command);
-		$commandTester->execute([
-			'command' => $command->getName(),
-		]);
-
-		$this->assertStringContainsStringIgnoringCase(elgg_echo('garbagecollector:done'), $commandTester->getDisplay());
+		$this->assertStringContainsStringIgnoringCase(elgg_echo('garbagecollector:done'), $this->executeCliCommand(new OptimizeCommand()));
 	}
 }

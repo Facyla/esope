@@ -14,17 +14,9 @@
  * @return \ElggUser|null
  */
 function get_user(int $guid): ?\ElggUser {
-	try {
-		return _elgg_services()->entityTable->get($guid, 'user');
-	} catch (\Elgg\Exceptions\DomainException $ex) {
-		elgg_log($ex, 'ERROR');
-
-		return null;
-	} catch (\Elgg\Exceptions\ClassException $ex) {
-		elgg_log($ex, 'ERROR');
-
-		return null;
-	}
+	$result = _elgg_services()->entityTable->get($guid, 'user');
+	
+	return $result instanceof \ElggUser ? $result : null;
 }
 
 /**
@@ -120,15 +112,15 @@ function elgg_request_new_password(\ElggUser $user): void {
 /**
  * Validate and change password for a user.
  *
- * @param \ElggUser $user      The user
- * @param string    $conf_code Confirmation code as sent in the request email.
- * @param string    $password  Optional new password, if not randomly generated.
+ * @param \ElggUser   $user      The user
+ * @param string      $conf_code Confirmation code as sent in the request email.
+ * @param null|string $password  Optional new password, if not randomly generated.
  *
  * @return bool
  *
  * @since 4.3
  */
-function elgg_save_new_password(\ElggUser $user, string $conf_code, string $password = null): bool {
+function elgg_save_new_password(\ElggUser $user, string $conf_code, ?string $password = null): bool {
 	return _elgg_services()->passwords->saveNewPassword($user, $conf_code, $password);
 }
 

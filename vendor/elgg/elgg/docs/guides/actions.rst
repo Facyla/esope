@@ -1,9 +1,17 @@
 Forms + Actions
 ###############
 
-Create, update, or delete content.
+Actions are the primary way users interact with an Elgg site. Elgg forms submit to actions. Actions define the behavior for form submission.
 
-Elgg forms submit to actions. Actions define the behavior for form submission.
+Overview
+========
+
+An action in Elgg is the code that runs to make changes to the database when a user does something. For example, logging in, posting a comment, and making a blog post are actions. The action script processes input, makes the appropriate modifications to the database, and provides feedback to the user about the action.
+
+Action Handler
+==============
+
+Actions are registered during the boot process by calling ``elgg_register_action()``. All actions URLs start with ``action/`` and are served by Elgg's front end controller through the routing service. The default action middleware performs :doc:`CSRF security checks </design/security>`.
 
 This guide assumes basic familiarity with:
 
@@ -152,6 +160,41 @@ To indicate an error, use ``elgg_error_response()``
       return elgg_error_response('You are not allowed to perform this action', $user->getURL(), ELGG_HTTP_FORBIDDEN);
    }
 
+Writing action controllers
+--------------------------
+
+As an alternative to action files it is also possible to write the action code in a controller class.
+
+You can extend a generic action class called ``\Elgg\Controllers\GenericAction`` to have it invoked with a set of functions in the following order:
+
+* ``sanitize()`` - sanitize your input
+* ``validate()`` - validate the input or check permissions
+* ``executeBefore()`` - a preparation before the main execution
+* ``execute()`` - the main execution of the action
+* ``executeAfter()`` - executed after the main execution
+* ``success()`` - if nothing went wrong handle a successful response
+* ``error()`` - if one of the previous steps throws an exception they will be handled by the error step by showing the error as a system message and forwarding back to the ``REFERER``
+
+For entity save/edit actions there is an additional helper controller ``\Elgg\Controllers\EntityEditAction``.
+This controller will do most generic checks based on the fields configuration of an entity.
+It will also create a river item on create of the new entity.
+When using/extending this controller make sure to configure the entity type/subtype when registering the action.
+
+.. code-block:: php
+
+   // elgg-plugin.php
+   return [
+       'actions' => [
+           'my_entity/save' => [
+               'controller' => \Elgg\Controllers\EntityEditAction::class,
+               'options' => [
+                    'entity_type' => 'object',
+                    'entity_subtype' => 'my_entity',
+               ],
+           ],
+       ],
+   ];
+
 Customizing actions
 -------------------
 
@@ -229,6 +272,67 @@ and ``"entity:delete:$type:success"`` keys.
       'entity:delete:object:blog:success' => 'Blog post has been deleted,
       'entity:delete:object:file:success' => 'File titled %s has been deleted',
    ];
+
+Fields
+======
+
+Forms and actions for storing (save/edit) entities use various fields to provide input to users, but also to validate the input.
+Forms and actions need to keep these field configurations in line. To help with this a generic ``FieldsService``` is available
+to access the configured fields for a certain entity type/subtype.
+
+These fields can be requested using one of the following functions:
+
+* ``$entity->getFields()`` - retrieves the field configuration for a entity
+* ``elgg()->fields->get('entity_type', 'entity_subtype')`` - retrieves the field configuration for a given type/subtype
+
+They will both return an array of field configurations directly usable for passing to ``elgg_view_field($field_config)``.
+
+Developers can configure a default set of fields for their own entities in the related entity class or provide them via an event.
+
+Configure the default fields in your entity class.
+
+.. code-block:: php
+
+    class MyEntity extends \ElggObject {
+        /**
+        * {@inheritdoc}
+        */
+        public static function getDefaultFields(): array {
+            return [
+                [
+                    '#type' => 'text',
+                    '#label' => elgg_echo('title'),
+                    'name' => 'title',
+                    'required' => true,
+                ],
+                ...
+            ];
+        }
+    }
+
+You can also configure your fields in an event callback or use the callback to extend other field configurations.
+
+.. code-block:: php
+
+    /**
+     * Register the fields for my entity type/subtype
+     *
+     * @param \Elgg\Event $event 'fields', 'object:my_entity'
+     *
+     * @return array
+     */
+    public function __invoke(\Elgg\Event $event): array {
+        $result = (array) $event->getValue();
+
+        $result[] = [
+            '#type' => 'text',
+            '#label' => elgg_echo('title'),
+            'name' => 'title',
+            'required' => true,
+        ];
+
+        return $result;
+    }
 
 Forms
 =====
@@ -378,6 +482,8 @@ Elgg offers some helper input types
 * ``input/captcha`` - placeholder view for plugins to extend
 * ``input/friendspicker`` - renders an Elgg friend autocomplete
 * ``input/userpicker`` - renders an Elgg user autocomplete
+* ``input/grouppicker`` - renders an Elgg group autocomplete
+* ``input/objectpicker`` - renders an Elgg object autocomplete
 * ``input/location`` renders an Elgg location input
 
 Files and images
@@ -471,7 +577,7 @@ The basic flow of using sticky forms is:
 
 * ``sticky_enabled``: a ``bool`` to enable automatic sticky form support
 * ``sticky_form_name``: an optional ``string`` to set where the sticky form values are saved. This defaults to the ``$action_name`` and should only be changed if the ``$action_name`` is different from the actual action
-* ``sticky_ignored_fields: an ``array`` with the names fo the form fields that should be saved. For example password fields
+* ``sticky_ignored_fields``: an ``array`` with the names fo the form fields that should be saved. For example password fields
 
 Example: User registration
 --------------------------
@@ -696,13 +802,17 @@ URLs a signed with an unguessable SHA-256 HMAC key. See `Security Tokens`_ for m
 
 .. code-block:: php
 
-    $url = elgg_http_add_url_query_element(elgg_normalize_url('confirm'), [
-       'user_guid' => $user_guid,
-    ]);
+    // inside a \Elgg\Notifications\NotificationEventHandler class
 
-    $url = elgg_http_get_signed_url($url);
+    protected function getNotificationBody(\ElggUser $recipient, string $method): string {
+        $url = elgg_http_add_url_query_element(elgg_normalize_url('confirm'), [
+           'user_guid' => $recipient->guid,
+        ]);
 
-    notify_user($user_guid, $site->guid, 'Confirm', "Please confirm by clicking this link: $url");
+        $url = elgg_http_get_signed_url($url);
+
+        return "Please confirm by clicking this link: $url";
+    }
 
 .. warning::
 

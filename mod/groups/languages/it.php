@@ -61,9 +61,6 @@ return array(
 	'groups:joinrequest' => 'Chiedi di iscriverti al gruppo',
 	'groups:join' => 'Unisciti al gruppo',
 	'groups:leave' => 'Abbandona il gruppo',
-	'groups:invite' => 'Invita amici',
-	'groups:invite:title' => 'Invita amici a questo gruppo',
-	'groups:invite:friends:help' => 'Cerca un amico usando il nome o il nome utente e selezionalo dall\'elenco',
 	'groups:invite:resend' => 'Reinvia gli inviti agli utenti già invitati',
 
 	'groups:nofriendsatall' => 'Non hai amici da invitare!',
@@ -146,4 +143,8 @@ return array(
 	'groups:add:alreadymember' => "%s è già membro di questo gruppo",
 	
 	// Notification settings
+	
+	// accessibility
+	'groups:aria:label:group_search' => "Cerca gruppi",
+	'groups:aria:label:search_in_group' => "Cerca in questo gruppo",
 );

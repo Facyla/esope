@@ -16,17 +16,11 @@ use Elgg\Project\Paths;
 class Locator {
 
 	/**
-	 * @var Plugins $plugins
-	 */
-	private $plugins;
-
-	/**
 	 * Constructor
 	 *
 	 * @param Plugins $plugins Plugins
 	 */
-	public function __construct(Plugins $plugins) {
-		$this->plugins = $plugins;
+	public function __construct(protected Plugins $plugins) {
 	}
 
 	/**
@@ -113,13 +107,13 @@ class Locator {
 	/**
 	 * Validates class and returns an instance of batch
 	 *
-	 * @param string       $class   The fully qualified class name
-	 * @param \ElggUpgrade $upgrade The upgrade
+	 * @param string            $class   The fully qualified class name
+	 * @param null|\ElggUpgrade $upgrade The upgrade
 	 *
 	 * @return Batch
 	 * @throws InvalidArgumentException
 	 */
-	public function getBatch(string $class, \ElggUpgrade $upgrade = null) {
+	public function getBatch(string $class, ?\ElggUpgrade $upgrade = null) {
 		if (!class_exists($class)) {
 			throw new InvalidArgumentException("Upgrade class $class was not found");
 		}

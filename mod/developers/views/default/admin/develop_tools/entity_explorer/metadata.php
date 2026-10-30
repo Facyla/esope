@@ -1,13 +1,23 @@
 <?php
+/**
+ * Show all metadata belonging to an entity
+ *
+ * @uses $vars['entity'] the entity to inspect
+ */
+
+use Elgg\Values;
 
 $entity = elgg_extract('entity', $vars);
+if (!$entity instanceof \ElggEntity) {
+	return;
+}
 
 $entity_metadata = elgg_get_metadata(['guid' => $entity->guid, 'limit' => false]);
 
 if (empty($entity_metadata)) {
 	$metadata_info = elgg_echo('notfound');
 } else {
-	$md_columns = ['id', 'name', 'value', 'value_type', 'time_created', 'enabled'];
+	$md_columns = ['id', 'name', 'value', 'value_type', 'time_created'];
 	
 	$metadata_info = '<table class="elgg-table">';
 	$metadata_info .= '<thead><tr>';
@@ -17,41 +27,53 @@ if (empty($entity_metadata)) {
 	
 	$metadata_info .= '<th>&nbsp;</th>';
 	$metadata_info .= '</tr></thead>';
-	$metadata_info .= '<tbody>';
 	
+	$rows = [];
 	foreach ($entity_metadata as $md) {
-		$metadata_info .= '<tr>';
+		$row = [];
+		
 		foreach ($md_columns as $md_col) {
+			$value = $md->$md_col;
+			$title = null;
+			$class = 'elgg-nowrap';
+			
 			switch ($md_col) {
+				case 'time_created':
+					$title = Values::normalizeTime($value)->formatLocale(elgg_echo('friendlytime:date_format'));
+					break;
+				case 'name':
+					$class = null;
+					break;
 				case 'value':
-					if (is_bool($md->$md_col)) {
-						$value = elgg_view('output/text', ['value' => $md->$md_col ? 'true' : 'false']);
-						break;
+					if (is_bool($value)) {
+						$value = $value ? 'true' : 'false';
 					}
 					
-					// other values can be shown as default
-				
-				default:
-					$value = elgg_view('output/text', ['value' => $md->$md_col]);
+					$class = null;
 					break;
 			}
 			
-			$metadata_info .= elgg_format_element('td', [], $value);
+			$value = elgg_view('output/text', ['value' => $value]);
+			
+			$row[] = elgg_format_element('td', ['title' => $title, 'class' => $class], $value);
 		}
 		
-		$metadata_info .= elgg_format_element('td', [], elgg_view('output/url', [
-			'text' => elgg_view_icon('remove'),
+		$row[] = elgg_format_element('td', [], elgg_view('output/url', [
+			'icon' => 'remove',
+			'text' => false,
+			'title' => elgg_echo('delete'),
 			'href' => elgg_http_add_url_query_elements('action/developers/entity_explorer_delete', [
 				'guid' => $entity->guid,
 				'type' => 'metadata',
-				'key' => $md->name,
+				'key' => $md->id,
 			]),
 			'confirm' => true,
 		]));
-		$metadata_info .= '</tr>';
+		
+		$rows[] = elgg_format_element('tr', [], implode('', $row));
 	}
 	
-	$metadata_info .= '</tbody>';
+	$metadata_info .= elgg_format_element('tbody', [], implode(PHP_EOL, $rows));
 	$metadata_info .= '</table>';
 }
 

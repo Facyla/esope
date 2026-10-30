@@ -6,15 +6,13 @@
  * @uses $vars['class'] Additional CSS class
  */
 
-elgg_require_js('input/url');
+elgg_import_esm('input/url');
 
 $vars['class'] = elgg_extract_class($vars, 'elgg-input-url');
 
 $defaults = [
-	'value' => '',
-	'disabled' => false,
 	'autocapitalize' => 'off',
-	'type' => 'url'
+	'type' => 'url',
 ];
 
 $vars = array_merge($defaults, $vars);

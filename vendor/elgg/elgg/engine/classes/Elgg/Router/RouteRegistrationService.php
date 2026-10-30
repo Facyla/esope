@@ -2,10 +2,12 @@
 
 namespace Elgg\Router;
 
+use Elgg\Database\Plugins;
 use Elgg\EventsService;
 use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\Router\Middleware\MaintenanceGatekeeper;
 use Elgg\Router\Middleware\WalledGarden;
+use Elgg\SessionManagerService;
 use Elgg\Traits\Loggable;
 
 /**
@@ -18,35 +20,21 @@ class RouteRegistrationService {
 	use Loggable;
 
 	/**
-	 * @var EventsService
-	 */
-	protected $events;
-
-	/**
-	 * @var RouteCollection
-	 */
-	protected $routes;
-
-	/**
-	 * @var UrlGenerator
-	 */
-	protected $generator;
-
-	/**
 	 * Constructor
 	 *
-	 * @param EventsService   $events    Events service
-	 * @param RouteCollection $routes    Route collection
-	 * @param UrlGenerator    $generator URL Generator
+	 * @param EventsService         $events          Events service
+	 * @param RouteCollection       $routes          Route collection
+	 * @param UrlGenerator          $generator       URL Generator
+	 * @param SessionManagerService $session_manager Session manager service
+	 * @param Plugins               $plugins         Plugins
 	 */
 	public function __construct(
-		EventsService $events,
-		RouteCollection $routes,
-		UrlGenerator $generator
+		protected EventsService $events,
+		protected RouteCollection $routes,
+		protected UrlGenerator $generator,
+		protected SessionManagerService $session_manager,
+		protected Plugins $plugins
 	) {
-		$this->events = $events;
-		$this->routes = $routes;
-		$this->generator = $generator;
 	}
 
 	/**
@@ -56,7 +44,7 @@ class RouteRegistrationService {
 	 * To make a certain wildcard segment optional, add ? to its name,
 	 * i.e. /blog/owner/{username?}
 	 *
-	 * Wildcard requirements for common named variables such as 'guid' and 'username'
+	 * Wildcard requirements for commonly named variables such as 'guid' and 'username'
 	 * will be set automatically.
 	 *
 	 * @param string $name   Unique route name
@@ -67,11 +55,12 @@ class RouteRegistrationService {
 	 *                       - defaults : default values of wildcard segments
 	 *                       - requirements : regex patterns for wildcard segment requirements
 	 *                       - methods : HTTP methods
+	 *                       - options : additional route options
 	 *
-	 * @return Route
+	 * @return Route|null
 	 * @throws InvalidArgumentException
 	 */
-	public function register(string $name, array $params = []): Route {
+	public function register(string $name, array $params = []): ?Route {
 
 		$params = $this->events->triggerResults('route:config', $name, $params, $params);
 
@@ -81,10 +70,11 @@ class RouteRegistrationService {
 		$resource = elgg_extract('resource', $params);
 		$handler = elgg_extract('handler', $params);
 		$middleware = elgg_extract('middleware', $params, []);
-		$protected = elgg_extract('walled', $params, true);
+		$walled = elgg_extract('walled', $params, true);
 		$deprecated = elgg_extract('deprecated', $params, '');
-		$required_plugins = elgg_extract('required_plugins', $params, []);
-		$detect_page_owner = (bool) elgg_extract('detect_page_owner', $params, false);
+		$required_plugins = (array) elgg_extract('required_plugins', $params, []);
+		$use_logged_in = (bool) elgg_extract('use_logged_in', $params, false);
+		$detect_page_owner = (bool) elgg_extract('detect_page_owner', $params, $use_logged_in);
 		$priority = (int) elgg_extract('priority', $params);
 
 		if (!$path || (!$controller && !$resource && !$handler && !$file)) {
@@ -93,9 +83,29 @@ class RouteRegistrationService {
 			);
 		}
 
+		foreach ($required_plugins as $plugin_id) {
+			if (!$this->plugins->isActive($plugin_id)) {
+				return null;
+			}
+		}
+
 		$defaults = elgg_extract('defaults', $params, []);
 		$requirements = elgg_extract('requirements', $params, []);
 		$methods = elgg_extract('methods', $params, []);
+
+		$path = trim($path, '/');
+
+		// check if defaults should be populated with logged in user data
+		$user = $this->session_manager->getLoggedInUser();
+		if ($use_logged_in && $user instanceof \ElggUser) {
+			if (preg_match('/\{username\??\}/i', $path)) {
+				$defaults['username'] = $defaults['username'] ?? $user->username;
+			}
+
+			if (preg_match('/\{guid\??\}/i', $path)) {
+				$defaults['guid'] = $defaults['guid'] ?? $user->guid;
+			}
+		}
 
 		$patterns = [
 			'guid' => '\d+',
@@ -105,7 +115,6 @@ class RouteRegistrationService {
 			'username' => '[\p{L}\p{M}\p{Nd}._-]+',
 		];
 
-		$path = trim($path, '/');
 		$segments = explode('/', $path);
 		foreach ($segments as &$segment) {
 			// look for segments that are defined as optional with added ?
@@ -134,7 +143,7 @@ class RouteRegistrationService {
 
 		$path = '/' . implode('/', $segments);
 
-		if ($protected !== false) {
+		if ($walled !== false) {
 			$middleware[] = WalledGarden::class;
 		}
 		
@@ -146,12 +155,12 @@ class RouteRegistrationService {
 		$defaults['_handler'] = $handler;
 		$defaults['_deprecated'] = $deprecated;
 		$defaults['_middleware'] = $middleware;
-		$defaults['_required_plugins'] = $required_plugins;
 		$defaults['_detect_page_owner'] = $detect_page_owner;
+		$defaults['_use_logged_in'] = $use_logged_in;
 
-		$route = new Route($path, $defaults, $requirements, [
-			'utf8' => true,
-		], '', [], $methods);
+		$options = array_merge((array) elgg_extract('options', $params, []), ['utf8' => true]);
+		
+		$route = new Route($path, $defaults, $requirements, $options, '', [], $methods);
 
 		$this->routes->add($name, $route, $priority);
 
@@ -204,6 +213,13 @@ class RouteRegistrationService {
 				if (!empty($deprecated)) {
 					elgg_deprecated_notice("The route \"{$name}\" has been deprecated.", $deprecated);
 				}
+
+				foreach ($parameters as $param_key => $value) {
+					if ($value !== null && $route->getDefault($param_key) !== null) {
+						// remove from defaults to force existence in url generation in case the param matches the default
+						$route->setDefault($param_key, null);
+					}
+				}
 			}
 			
 			$url = $this->generator->generate($name, $parameters, UrlGenerator::ABSOLUTE_URL);
@@ -226,7 +242,7 @@ class RouteRegistrationService {
 	 *
 	 * @return array|false
 	 */
-	public function resolveRouteParameters(string $name, \ElggEntity $entity = null, array $parameters = []) {
+	public function resolveRouteParameters(string $name, ?\ElggEntity $entity = null, array $parameters = []) {
 		$route = $this->routes->get($name);
 		if (!$route) {
 			return false;

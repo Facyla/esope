@@ -19,11 +19,15 @@ if (empty($plugin_id) || empty($user_guid)) {
 
 $plugin = elgg_get_plugin_from_id($plugin_id);
 $user = get_user($user_guid);
-if (!$plugin || !$user || !$user->canEdit()) {
+if (!$plugin instanceof \ElggPlugin || !$plugin->isActive() || !$user || !$user->canEdit()) {
 	return elgg_error_response(elgg_echo('plugins:usersettings:save:fail', [$plugin_id]));
 }
 
-$plugin_name = $plugin->getDisplayName();
+if (elgg_language_key_exists("{$plugin_id}:usersettings:title")) {
+	$plugin_name = elgg_echo("{$plugin_id}:usersettings:title");
+} else {
+	$plugin_name = $plugin->getDisplayName();
+}
 
 $result = false;
 

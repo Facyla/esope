@@ -6,7 +6,6 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
@@ -14,12 +13,17 @@ return array(
 
 	'item:object:thewire' => "Messages du Fil",
 	'collection:object:thewire' => 'Messages du Fil',
+	'list:object:thewire:no_results' => 'Aucun message du Fil trouvé',
+	
 	'collection:object:thewire:all' => "Tous les messages du Fil",
 	'collection:object:thewire:owner' => "Le Fil de %s",
 	'collection:object:thewire:friends' => "Messages du Fil des contacts",
 	'collection:object:thewire:mentions' => "Messages du Fil mentionnant @%s",
+	
 	'notification:object:thewire:create' => "Envoyer une notification lorsqu'un message est publié sur le Fil",
 	'notifications:mute:object:thewire' => "à propos du message du Fil \"%s\"",
+	
+	'entity:edit:object:thewire:success' => 'Le Message de ce Fil a bien été enregistré',
 
 	'thewire:menu:filter:mentions' => "Mentions",
 	
@@ -27,7 +31,7 @@ return array(
 	'thewire:thread' => "Conversation",
 	'thewire:charleft' => "caractères restant",
 	'thewire:tags' => "Messages du Fil taggués \"%s\"",
-	'thewire:noposts' => "Il n'y a pas encore de message sur le Fil",
+	'thewire:noposts' => "Il n'y a pas encore de message sur le Fil", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Message du Fil de %s',
 
@@ -51,10 +55,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Votre message a bien été publié sur le Fil.",
-	'thewire:deleted' => "Votre message a bien été supprimé du Fil.",
 	'thewire:blank' => "Désolé, vous devez d'abord écrire un message avant de pouvoir le publier.",
 	'thewire:notsaved' => "Désolé. Impossible d'enregistrer ce message du Fil.",
-	'thewire:notdeleted' => "Désolé, ce message du Fil n'a pas pu être supprimé.",
 
 	/**
 	 * Notifications
@@ -72,4 +74,9 @@ return array(
 	 */
 	'thewire:settings:limit' => "Nombre maximum de caractères pour chaque message du Fil :",
 	'thewire:settings:limit:none' => "Pas de limite",
+	
+	/**
+	 * Exceptions
+	 */
+	'ValidationException:thewire:limit' => "Le nombre de caractères de ce Message du Fil dépasse la limite maximum autorisée",
 );

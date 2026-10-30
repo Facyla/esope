@@ -2,11 +2,15 @@
 
 namespace Elgg\Database\Clauses;
 
+use Elgg\Database\AnnotationsTable;
+use Elgg\Database\EntityTable;
+use Elgg\Database\MetadataTable;
 use Elgg\Database\QueryBuilder;
+use Elgg\Database\RelationshipsTable;
 use Elgg\Exceptions\DomainException;
 
 /**
- * Extends QueryBuilder with clauses necesary to sort entity lists by entity properties
+ * Extends QueryBuilder with clauses necessary to sort entity lists by entity properties
  */
 class EntitySortByClause extends OrderByClause {
 
@@ -59,11 +63,11 @@ class EntitySortByClause extends OrderByClause {
 		// default assumes the main table is 'entities'
 		$from_column = 'guid';
 		switch ($qb->getTableName()) {
-			case QueryBuilder::TABLE_ANNOTATIONS:
-			case QueryBuilder::TABLE_METADATA:
+			case AnnotationsTable::TABLE_NAME:
+			case MetadataTable::TABLE_NAME:
 				$from_column = 'entity_guid';
 				break;
-			case QueryBuilder::TABLE_RELATIONSHIPS:
+			case RelationshipsTable::TABLE_NAME:
 				$from_column = 'guid_one';
 				if ((bool) $this->inverse_relationship) {
 					$from_column = 'guid_two';
@@ -82,7 +86,7 @@ class EntitySortByClause extends OrderByClause {
 					throw new DomainException("'{$this->property}' is not a valid entity attribute");
 				}
 				
-				if ($qb->getTableName() !== QueryBuilder::TABLE_ENTITIES) {
+				if ($qb->getTableName() !== EntityTable::TABLE_NAME) {
 					$e_alias = $qb->joinEntitiesTable($table_alias, $from_column, $this->join_type);
 				} else {
 					$e_alias = $table_alias;
@@ -97,10 +101,11 @@ class EntitySortByClause extends OrderByClause {
 				break;
 
 			case 'relationship':
-				if ($qb->getTableName() !== QueryBuilder::TABLE_RELATIONSHIPS) {
-					$er_alias = $qb->joinRelationshipTable($table_alias, $from_column, $this->property, $this->inverse_relationship, $this->join_type);
+				if ($qb->getTableName() !== RelationshipsTable::TABLE_NAME) {
+					$inverse = (bool) $this->inverse_relationship;
+					$er_alias = $qb->joinRelationshipTable($table_alias, $from_column, $this->property, $inverse, $this->join_type);
 					if (!empty($this->relationship_guid)) {
-						$guid_column = $this->inverse_relationship ? 'guid_two' : 'guid_one';
+						$guid_column = $inverse ? 'guid_two' : 'guid_one';
 						$qb->andWhere($qb->compare("{$er_alias}.{$guid_column}", '=', $this->relationship_guid, ELGG_VALUE_GUID));
 					}
 				} else {
@@ -122,6 +127,6 @@ class EntitySortByClause extends OrderByClause {
 
 		$this->expr = $column;
 
-		return parent::prepare($qb, $table_alias);
+		parent::prepare($qb, $table_alias);
 	}
 }

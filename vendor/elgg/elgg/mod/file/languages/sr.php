@@ -6,17 +6,16 @@
  */
 
 return array(
-
 	'item:object:file' => 'Фајлови',
-	
 	'collection:object:file' => 'Фајлови',
+	
 	'collection:object:file:all' => "Сви фајлови сајта",
 	'collection:object:file:owner' => "%s's фајлови",
 	'collection:object:file:friends' => "Фајлови пријатеља",
 	'collection:object:file:group' => "Фајлови групе",
 	'add:object:file' => "Додај фајл",
 	'edit:object:file' => "Уреди фајл",
-
+	
 	'file:more' => "Више фајлова",
 	'file:list' => "Листа - преглед",
 
@@ -65,7 +64,7 @@ return array(
 	 * Error messages
 	 */
 
-	'file:none' => "Нема фајлова.",
+	'file:none' => "Нема фајлова.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Извините, нисмо могли да сачувамо ваш фајл.",
 	'file:noaccess' => "Немате дозволе да мењате овај фајл",
 	'file:cannotload' => "Дошло је до грешке приликом слања фајла",

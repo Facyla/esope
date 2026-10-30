@@ -18,6 +18,7 @@ namespace Cake\Core\Configure\Engine;
 
 use Cake\Core\Configure\ConfigEngineInterface;
 use Cake\Core\Configure\FileConfigTrait;
+use Cake\Core\Exception\CakeException;
 use Cake\Utility\Hash;
 
 /**
@@ -42,7 +43,7 @@ use Cake\Utility\Hash;
  *
  * Once loaded into Configure, the above would be accessed using:
  *
- * `Configure::read('section.key');
+ * `Configure::read('section.key');`
  *
  * You can also use `.` separated values in section names to create more deeply
  * nested structures.
@@ -62,14 +63,14 @@ class IniConfig implements ConfigEngineInterface
      *
      * @var string
      */
-    protected $_extension = '.ini';
+    protected string $_extension = '.ini';
 
     /**
      * The section to read, if null all sections will be read.
      *
      * @var string|null
      */
-    protected $_section;
+    protected ?string $_section = null;
 
     /**
      * Build and construct a new ini file parser. The parser can be used to read
@@ -81,10 +82,7 @@ class IniConfig implements ConfigEngineInterface
      */
     public function __construct(?string $path = null, ?string $section = null)
     {
-        if ($path === null) {
-            $path = CONFIG;
-        }
-        $this->_path = $path;
+        $this->_path = $path ?? CONFIG;
         $this->_section = $section;
     }
 
@@ -102,6 +100,10 @@ class IniConfig implements ConfigEngineInterface
         $file = $this->_getFilePath($key, true);
 
         $contents = parse_ini_file($file, true);
+        if ($contents === false) {
+            throw new CakeException(sprintf('Cannot parse INI file `%s`', $file));
+        }
+
         if ($this->_section && isset($contents[$this->_section])) {
             $values = $this->_parseNestedValues($contents[$this->_section]);
         } else {
@@ -135,7 +137,7 @@ class IniConfig implements ConfigEngineInterface
                 $value = false;
             }
             unset($values[$key]);
-            if (strpos((string)$key, '.') !== false) {
+            if (str_contains((string)$key, '.')) {
                 $values = Hash::insert($values, $key, $value);
             } else {
                 $values[$key] = $value;
@@ -158,15 +160,14 @@ class IniConfig implements ConfigEngineInterface
         $result = [];
         foreach ($data as $k => $value) {
             $isSection = false;
-            /** @psalm-suppress InvalidArrayAccess */
-            if ($k[0] !== '[') {
-                $result[] = "[$k]";
+            if (!str_starts_with($k, '[')) {
+                $result[] = "[{$k}]";
                 $isSection = true;
             }
             if (is_array($value)) {
                 $kValues = Hash::flatten($value, '.');
                 foreach ($kValues as $k2 => $v) {
-                    $result[] = "$k2 = " . $this->_value($v);
+                    $result[] = "{$k2} = " . $this->_value($v);
                 }
             }
             if ($isSection) {
@@ -186,18 +187,13 @@ class IniConfig implements ConfigEngineInterface
      * @param mixed $value Value to export.
      * @return string String value for ini file.
      */
-    protected function _value($value): string
+    protected function _value(mixed $value): string
     {
-        if ($value === null) {
-            return 'null';
-        }
-        if ($value === true) {
-            return 'true';
-        }
-        if ($value === false) {
-            return 'false';
-        }
-
-        return (string)$value;
+        return match ($value) {
+            null => 'null',
+            true => 'true',
+            false => 'false',
+            default => (string)$value
+        };
     }
 }

@@ -2,12 +2,10 @@
 
 namespace Elgg\Mocks;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
-use Elgg\BaseTestCase;
+use Doctrine\DBAL\DriverManager;
 use Elgg\Database as DbDatabase;
 use Elgg\Exceptions\DatabaseException;
-use PHPUnit\Framework\MockObject\MockBuilder;
+use Elgg\Mocks\Database\Result;
 
 class Database extends DbDatabase {
 
@@ -19,60 +17,31 @@ class Database extends DbDatabase {
 	/**
 	 * @var int
 	 */
-	protected $last_insert_id = null;
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setupConnections(): void {
-
-	}
+	protected $last_insert_id = 0;
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function connect(string $type = 'readwrite'): void {
-
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getConnection(string $type): Connection {
-		$connection = BaseTestCase::$_instance->getConnectionMock();
-
-		$connection->expects(BaseTestCase::$_instance->any())
-			->method('query')
-			->will(BaseTestCase::$_instance->returnCallback([$this, 'executeDatabaseQuery']));
-
-		$connection->expects(BaseTestCase::$_instance->any())
-			->method('executeQuery')
-			->will(BaseTestCase::$_instance->returnCallback([$this, 'executeDatabaseQuery']));
+		$conf = $this->db_config->getConnectionConfig($type);
 		
-		$connection->expects(BaseTestCase::$_instance->any())
-			->method('executeStatement')
-			->will(BaseTestCase::$_instance->returnCallback([$this, 'executeDatabaseStatement']));
-
-		$connection->expects(BaseTestCase::$_instance->any())
-			->method('lastInsertId')
-			->will(BaseTestCase::$_instance->returnCallback(function () {
-				return $this->last_insert_id;
-			}));
-
-		$expression_builder = new ExpressionBuilder($connection);
-
-		$connection->expects(BaseTestCase::$_instance->any())
-			->method('getExpressionBuilder')
-			->willReturn($expression_builder);
-
-		$connection->expects(BaseTestCase::$_instance->any())
-			->method('quote')
-			->will(BaseTestCase::$_instance->returnCallback(function ($input, $type = null) {
-				return "'" . $input . "''";
-			}));
-
-
-		return $connection;
+		$params = [
+			'dbname' => $conf['database'],
+			'user' => $conf['user'],
+			'password' => $conf['password'],
+			'host' => $conf['host'],
+			'port' => $conf['port'],
+			'charset' => $conf['encoding'],
+			'driver' => 'pdo_mysql',
+			'wrapperClass' => \Elgg\Mocks\Database\Connection::class,
+		];
+		
+		try {
+			$this->connections[$type] = DriverManager::getConnection($params);
+			$this->connections[$type]->setDatabase($this);
+		} catch (\Exception $e) {
+			throw new DatabaseException($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	/**
@@ -140,14 +109,14 @@ class Database extends DbDatabase {
 	 * @param string $sql    Query
 	 * @param array  $params Query params
 	 *
-	 * @return MockBuilder (statement)
+	 * @return Result (statement)
 	 */
 	public function executeDatabaseQuery($sql, $params = []) {
 
 		$sql = $this->normalizeSql($sql);
 		$results = [];
 		$row_count = 0;
-		$this->last_insert_id = null;
+		$this->last_insert_id = 0;
 
 		$hash = sha1(serialize([$sql, $params]));
 		$match = elgg_extract($hash, $this->query_specs);
@@ -184,37 +153,16 @@ class Database extends DbDatabase {
 			);
 		}
 
-		$result = BaseTestCase::$_instance->getMockBuilder(\Doctrine\DBAL\Result::class)
-			->onlyMethods([
-				'fetchAssociative',
-				'fetchAllAssociative',
-				'rowCount',
-			])
-			->disableOriginalConstructor()
-			->getMock();
-
-		$result->expects(BaseTestCase::$_instance->any())
-			->method('fetchAssociative')
-			->will(BaseTestCase::$_instance->returnCallback(function () use (&$results) {
-				return array_shift($results);
-			}));
-		
-		$result->expects(BaseTestCase::$_instance->any())
-			->method('fetchAllAssociative')
-			->will(BaseTestCase::$_instance->returnCallback(function () use ($results) {
-				return $results;
-			}));
-
-		$result->expects(BaseTestCase::$_instance->any())
-			->method('rowCount')
-			->will(BaseTestCase::$_instance->returnValue($row_count));
-
-		return $result;
+		return new Result(null, null, $results, (int) $row_count);
 	}
 	
 	public function executeDatabaseStatement($sql, $params = []) {
 		$result = $this->executeDatabaseQuery($sql, $params);
 		return $result->rowCount();
+	}
+	
+	public function getLastInsertId() {
+		return $this->last_insert_id;
 	}
 
 	/**

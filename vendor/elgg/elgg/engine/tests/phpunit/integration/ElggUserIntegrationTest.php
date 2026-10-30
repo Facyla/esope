@@ -2,11 +2,6 @@
 
 use Elgg\IntegrationTestCase;
 
-/**
- * @group IntegrationTests
- * @group Users
- * @group ElggUser
- */
 class ElggUserIntegrationTest extends IntegrationTestCase {
 
 	/**
@@ -48,7 +43,7 @@ class ElggUserIntegrationTest extends IntegrationTestCase {
 		$this->assertEquals($boolean_value, $user->isAdmin());
 	}
 	
-	public function correctAdminBannedValues() {
+	public static function correctAdminBannedValues() {
 		return [
 			['no', false],
 			['yes', true],

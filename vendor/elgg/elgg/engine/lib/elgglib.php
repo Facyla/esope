@@ -78,29 +78,15 @@ function elgg_register_error_message(string|array $options): void {
  * @note Use the developers plugin to display logs
  *
  * @param string $message User message
- * @param string $level   NOTICE | WARNING | ERROR
+ * @param string $level   Log level
+ *
+ * @see \Psr\Log\LogLevel constants
  *
  * @return void
  * @since 1.7.0
  */
 function elgg_log($message, $level = \Psr\Log\LogLevel::NOTICE): void {
 	_elgg_services()->logger->log($level, $message);
-}
-
-/**
- * Logs $value to PHP's {@link error_log()}
- *
- * A 'debug', log' event is triggered. If a handler returns
- * false, it will stop the default logging method.
- *
- * @note Use the developers plugin to display logs
- *
- * @param mixed $value The value
- * @return void
- * @since 1.7.0
- */
-function elgg_dump($value): void {
-	_elgg_services()->logger->dump($value);
 }
 
 /**
@@ -197,7 +183,7 @@ function elgg_http_add_url_query_elements(string $url, array $elements): string 
  * @since 1.8.0
  */
 function elgg_http_url_is_identical(string $url1, string $url2, array $ignore_params = ['offset', 'limit']): bool {
-	return _elgg_services()->urls->isUrlIdentical($url1, $url2, (array) $ignore_params);
+	return _elgg_services()->urls->isUrlIdentical($url1, $url2, $ignore_params);
 }
 
 /**
@@ -205,13 +191,13 @@ function elgg_http_url_is_identical(string $url1, string $url2, array $ignore_pa
  *
  * @note Signed URLs do not offer CSRF protection and should not be used instead of action tokens.
  *
- * @param string $url     URL to sign
- * @param string $expires Expiration time
- *                        A string suitable for strtotime()
- *                        Null value indicate non-expiring URL
+ * @param string      $url     URL to sign
+ * @param null|string $expires Expiration time
+ *                             A string suitable for strtotime()
+ *                             Null value indicate non-expiring URL
  * @return string
  */
-function elgg_http_get_signed_url(string $url, string $expires = null): string {
+function elgg_http_get_signed_url(string $url, ?string $expires = null): string {
 	return _elgg_services()->urlSigner->sign($url, $expires);
 }
 
@@ -269,18 +255,19 @@ function elgg_extract($key, $array, $default = null, bool $strict = true) {
  * @param array           $array       Source array
  * @param string|string[] $existing    Existing name(s)
  * @param string          $extract_key Key to extract new classes from
+ *
  * @return string[]
  *
  * @since 2.3.0
  */
-function elgg_extract_class(array $array, $existing = [], $extract_key = 'class'): array {
+function elgg_extract_class(array $array, array|string $existing = [], string $extract_key = 'class'): array {
 	$existing = empty($existing) ? [] : (array) $existing;
 
 	$merge = (array) elgg_extract($extract_key, $array, []);
 
 	array_splice($existing, count($existing), 0, $merge);
 
-	return array_values(array_unique($existing));
+	return array_values(array_filter(array_unique($existing)));
 }
 
 /**
@@ -292,6 +279,10 @@ function elgg_extract_class(array $array, $existing = [], $extract_key = 'class'
  *                         ELGG_ENFORCE_ACCESS
  *                         ELGG_SHOW_DISABLED_ENTITIES
  *                         ELGG_HIDE_DISABLED_ENTITIES
+ *                         ELGG_DISABLE_SYSTEM_LOG
+ *                         ELGG_ENABLE_SYSTEM_LOG
+ *                         ELGG_SHOW_DELETED_ENTITIES
+ *                         ELGG_HIDE_DELETED_ENTITIES
  * @param Closure $closure Callable to call
  *
  * @return mixed

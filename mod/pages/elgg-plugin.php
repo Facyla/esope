@@ -19,12 +19,20 @@ return [
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
+				'subscribable' => true,
 				'likable' => true,
+				'restorable' => true,
 			],
 		],
 	],
 	'actions' => [
-		'pages/edit' => [],
+		'pages/edit' => [
+			'controller' => \Elgg\Pages\Controllers\EditAction::class,
+			'options' => [
+				'entity_type' => 'object',
+				'entity_subtype' => 'page',
+			],
+		],
 	],
 	'routes' => [
 		'default:object:page' => [
@@ -117,14 +125,14 @@ return [
 				'Elgg\Pages\Icons::getIconUrl' => [],
 			],
 		],
+		'entity:url' => [
+			'object:widget' => [
+				'Elgg\Pages\Widgets::pagesWidgetURL' => [],
+			],
+		],
 		'extender:url' => [
 			'annotation' => [
 				'Elgg\Pages\Extender::setRevisionUrl' => [],
-			],
-		],
-		'fields' => [
-			'object:page' => [
-				\Elgg\Pages\FieldsHandler::class => [],
 			],
 		],
 		'form:prepare:fields' => [
@@ -150,9 +158,6 @@ return [
 			],
 			'menu:site' => [
 				'Elgg\Pages\Menus\Site::register' => [],
-			],
-			'menu:title:object:page' => [
-				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
 			],
 		],
 		'seeds' => [

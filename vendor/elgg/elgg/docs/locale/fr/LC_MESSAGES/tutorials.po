@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Jerôme Bakker, 2023
+# Jerôme Bakker, 2024
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Elgg master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 15:46+0200\n"
-"PO-Revision-Date: 2023-04-05 07:42+0000\n"
-"Last-Translator: Jerôme Bakker, 2023\n"
+"POT-Creation-Date: 2026-01-16 10:07+0100\n"
+"PO-Revision-Date: 2024-04-15 12:07+0000\n"
+"Last-Translator: Jerôme Bakker, 2024\n"
 "Language-Team: French (https://app.transifex.com/elgg/teams/11337/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -476,11 +476,11 @@ msgstr ""
 " devrait être placé dans le répertoire ``mod/`` situé dans le répertoire "
 "d'installation de Elgg. Dans notre cas, créez ``mod/hello/``."
 
-#: ../../tutorials/hello_world.rst:13
+#: ../../tutorials/hello_world.rst:14
 msgid "Composer file"
 msgstr "Fichier composer"
 
-#: ../../tutorials/hello_world.rst:15
+#: ../../tutorials/hello_world.rst:16
 msgid ""
 "Elgg requires that your plugin has a composer file that contains information"
 " about the plugin. Therefore, in the directory you just created, create a "
@@ -491,11 +491,11 @@ msgstr ""
 "``composer.json`` dans le répertoire de votre plugin et copiez ce code "
 "dedans :"
 
-#: ../../tutorials/hello_world.rst:31
+#: ../../tutorials/hello_world.rst:30
 msgid "Registering a route"
 msgstr "Enregistrer une route"
 
-#: ../../tutorials/hello_world.rst:33
+#: ../../tutorials/hello_world.rst:32
 msgid ""
 "The next step is to register a route which has the purpose of handling "
 "request that users make to the URL ``https://elgg.example.com/hello``."
@@ -504,11 +504,11 @@ msgstr ""
 "les requêtes que les utilisateurs font vers l'URL "
 "``https://elgg.example.com/hello``."
 
-#: ../../tutorials/hello_world.rst:36
+#: ../../tutorials/hello_world.rst:35
 msgid "Update ``elgg-plugin.php`` to look like this:"
 msgstr "Mettez à jour ``elgg-plugin.php`` pour qu'il ressemble à ceci :"
 
-#: ../../tutorials/hello_world.rst:51
+#: ../../tutorials/hello_world.rst:50
 msgid ""
 "This registration tells Elgg that it should call the resource view ``hello``"
 " when a user navigates to ``https://elgg.example.com/hello``."
@@ -517,17 +517,17 @@ msgstr ""
 "``hello`` quand un utilisateur navigue vers  "
 "``https://elgg.example.com/hello``."
 
-#: ../../tutorials/hello_world.rst:55
+#: ../../tutorials/hello_world.rst:54
 msgid "View file"
 msgstr "Fichier de la vue d'affichage"
 
-#: ../../tutorials/hello_world.rst:57
+#: ../../tutorials/hello_world.rst:56
 msgid ""
 "Create ``mod/hello/views/default/resources/hello.php`` with this content:"
 msgstr ""
 "Créez ``mod/hello/views/default/resources/hello.php`` avec ce contenu :"
 
-#: ../../tutorials/hello_world.rst:69
+#: ../../tutorials/hello_world.rst:68
 msgid ""
 "The code creates an array of parameters to be given to the "
 "``elgg_view_layout()`` function, including:"
@@ -535,20 +535,20 @@ msgstr ""
 "Le code crée un tableau de paramètres à passer à la fonction "
 "``elgg_view_layout()``, comprenant :"
 
-#: ../../tutorials/hello_world.rst:71
+#: ../../tutorials/hello_world.rst:70
 msgid "The title of the page"
 msgstr "Le titre de la page"
 
-#: ../../tutorials/hello_world.rst:72
+#: ../../tutorials/hello_world.rst:71
 msgid "The contents of the page"
 msgstr "Le contenu de la page"
 
-#: ../../tutorials/hello_world.rst:73
+#: ../../tutorials/hello_world.rst:72
 msgid "Filter which is left empty because there's currently nothing to filter"
 msgstr ""
 "Un filter qui est laissé vide puisqu'il n'y a pour le moment rien à filtrer"
 
-#: ../../tutorials/hello_world.rst:75
+#: ../../tutorials/hello_world.rst:74
 msgid ""
 "This creates the basic layout for the page. The layout is then run through "
 "``elgg_view_page()`` which assembles and outputs the full page."
@@ -557,11 +557,11 @@ msgstr ""
 "mise en page est ensuite passée à travers ``elgg_view_page()`` qui assemble "
 "et génère la page complète."
 
-#: ../../tutorials/hello_world.rst:79
+#: ../../tutorials/hello_world.rst:78
 msgid "Last step"
 msgstr "Dernière étape"
 
-#: ../../tutorials/hello_world.rst:81
+#: ../../tutorials/hello_world.rst:80
 msgid ""
 "Finally, activate the plugin through your Elgg administrator page: "
 "``https://elgg.example.com/admin/plugins`` (the new plugin appears at the "
@@ -806,9 +806,9 @@ msgid ""
 "TinyMCE_ support. However, if you have a wysiwyg that you prefer, you could "
 "use this tutorial to help you build your own."
 msgstr ""
-"Elgg est distribué avec un plugin pour CKEditor_, et était précédemment "
-"distribué avec le support de TinyMCE_. Cependant, s'il y a un éditeur "
-"wysiwyg que vous préférez, vous pourriez utiliser ce tutoriel pour "
+"Elgg est actuellement distribué avec un plugin pour CKEditor_, et était "
+"précédemment distribué avec le support de TinyMCE_. Cependant, s'il y a un "
+"éditeur wysiwyg que vous préférez, vous pourriez utiliser ce tutoriel pour "
 "construire le vôtre."
 
 #: ../../tutorials/wysiwyg.rst:12
@@ -821,7 +821,7 @@ msgstr ""
 "Tous les formulaires dans Elgg devraient essayer d'utiliser les vues de "
 "saisie situées dans ``views/default/input``. Si ces vues sont utilisées, il "
 "est plus aisé pour les auteurs de plugins de remplacer une vue, ici "
-"``input/longtext``, par leur vue avec wysiwyg."
+"``input/longtext``, par une vue avec leur wysiwyg."
 
 #: ../../tutorials/wysiwyg.rst:17
 msgid "Add the WYSIWYG library code"
@@ -836,7 +836,7 @@ msgstr ""
 "Vous devez maintenant télécharger TinyMCE dans un répertoire de votre "
 "plugin. Nous vous encourageons fortement à utiliser ``composer`` pour gérer "
 "les dépendances tierces, car il est tellement plus facile de mettre à niveau"
-" et de maintenir de cette façon :"
+" et de maintenir de cette façon :"
 
 #: ../../tutorials/wysiwyg.rst:28
 msgid "Tell Elgg when and how to load TinyMCE"
@@ -871,7 +871,7 @@ msgid ""
 "following code:"
 msgstr ""
 "Nous allons le faire en étendant la vue ``input/longtext`` et en incluant du"
-" javascript. Créez une vue ``tinymce/longtext`` et ajoutez le code suivant :"
+" javascript. Créez une vue ``tinymce/longtext`` et ajoutez le code suivant :"
 
 #: ../../tutorials/wysiwyg.rst:70
 msgid ""
@@ -879,12 +879,12 @@ msgid ""
 "``input/longtext`` view:"
 msgstr ""
 "Ensuite, dans le fichier ``elgg-plugin.php`` de votre plugin étendez la vue "
-"``input/longtext`` :"
+"``input/longtext`` :"
 
 #: ../../tutorials/wysiwyg.rst:82
 msgid ""
 "That's it! Now every time someone uses ``input/longtext`` TinyMCE will be "
 "loaded and applied to that textarea."
 msgstr ""
-"C'est ça! Maintenant, chaque fois que quelqu'un utilise ``input/longtext`` "
-"TinyMCE sera chargé et appliqué à ce textarea."
+"Et voilà ! Maintenant, chaque fois que quelqu'un utilise ``input/longtext`` "
+"TinyMCE sera chargé et appliqué à ce champ de saisie de texte."

@@ -9,13 +9,13 @@
  *
  * Since this is called through a handler, we need to manually get the post data
  *
- * @return false|string POST data as string encoded as multipart/form-data
+ * @return false|string POST data as string encoded when using content-type=application/x-www-form-urlencoded
  *
  * @link https://www.php.net/manual/en/wrappers.php.php#wrappers.php.input
  * @internal
  */
 function elgg_ws_get_post_data(): string|false {
-	return file_get_contents('php://input');
+	return _elgg_services()->request->getContent();
 }
 
 /**
@@ -140,7 +140,7 @@ function elgg_ws_map_api_hash(string $algo): string {
  */
 function elgg_ws_calculate_hmac(string $algo, string $time, string $nonce, string $api_key, string $secret_key, string $get_variables, string $post_hash = ''): string {
 
-	elgg_log("HMAC Parts: {$algo}, {$time}, {$api_key}, {$secret_key}, {$get_variables}, {$post_hash}", 'INFO');
+	elgg_log("HMAC Parts: {$algo}, {$time}, {$api_key}, {$secret_key}, {$get_variables}, {$post_hash}", \Psr\Log\LogLevel::INFO);
 
 	$ctx = hash_init(elgg_ws_map_api_hash($algo), HASH_HMAC, $secret_key);
 

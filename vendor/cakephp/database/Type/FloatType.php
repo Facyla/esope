@@ -16,10 +16,10 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\Driver;
+use Cake\Database\Exception\DatabaseException;
 use Cake\I18n\Number;
 use PDO;
-use RuntimeException;
 
 /**
  * Float type converter.
@@ -33,24 +33,24 @@ class FloatType extends BaseType implements BatchCastingInterface
      *
      * @var string
      */
-    public static $numberClass = Number::class;
+    public static string $numberClass = Number::class;
 
     /**
      * Whether numbers should be parsed using a locale aware parser
-     * when marshalling string inputs.
+     * when marshaling string inputs.
      *
      * @var bool
      */
-    protected $_useLocaleParser = false;
+    protected bool $_useLocaleParser = false;
 
     /**
      * Convert integer data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\Driver $driver The driver instance to convert with.
      * @return float|null
      */
-    public function toDatabase($value, DriverInterface $driver): ?float
+    public function toDatabase(mixed $value, Driver $driver): ?float
     {
         if ($value === null || $value === '') {
             return null;
@@ -63,11 +63,10 @@ class FloatType extends BaseType implements BatchCastingInterface
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\Driver $driver The driver instance to convert with.
      * @return float|null
-     * @throws \Cake\Core\Exception\CakeException
      */
-    public function toPHP($value, DriverInterface $driver): ?float
+    public function toPHP(mixed $value, Driver $driver): ?float
     {
         if ($value === null) {
             return null;
@@ -79,7 +78,7 @@ class FloatType extends BaseType implements BatchCastingInterface
     /**
      * @inheritDoc
      */
-    public function manyToPHP(array $values, array $fields, DriverInterface $driver): array
+    public function manyToPHP(array $values, array $fields, Driver $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {
@@ -93,13 +92,9 @@ class FloatType extends BaseType implements BatchCastingInterface
     }
 
     /**
-     * Get the correct PDO binding type for float data.
-     *
-     * @param mixed $value The value being bound.
-     * @param \Cake\Database\DriverInterface $driver The driver.
-     * @return int
+     * @inheritDoc
      */
-    public function toStatement($value, DriverInterface $driver): int
+    public function toStatement(mixed $value, Driver $driver): int
     {
         return PDO::PARAM_STR;
     }
@@ -110,7 +105,7 @@ class FloatType extends BaseType implements BatchCastingInterface
      * @param mixed $value The value to convert.
      * @return string|float|null Converted value.
      */
-    public function marshal($value)
+    public function marshal(mixed $value): string|float|null
     {
         if ($value === null || $value === '') {
             return null;
@@ -150,8 +145,8 @@ class FloatType extends BaseType implements BatchCastingInterface
 
             return $this;
         }
-        throw new RuntimeException(
-            sprintf('Cannot use locale parsing with the %s class', static::$numberClass)
+        throw new DatabaseException(
+            sprintf('Cannot use locale parsing with the %s class', static::$numberClass),
         );
     }
 

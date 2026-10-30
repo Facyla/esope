@@ -6,13 +6,13 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
 	'thewire' => "Chíos",
 
 	'item:object:thewire' => "Chíos",
+	
 	'collection:object:thewire:all' => "Todos os chíos",
 	'collection:object:thewire:owner' => "Chíos de %s",
 	'collection:object:thewire:friends' => "Chíos dos contactos",
@@ -21,7 +21,7 @@ return array(
 	'thewire:thread' => "Fío",
 	'thewire:charleft' => "caracteres restantes",
 	'thewire:tags' => "Chíos coa etiqueta «%s»",
-	'thewire:noposts' => "Aínda non hai chíos.",
+	'thewire:noposts' => "Aínda non hai chíos.", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Chíos de %s',
 	
@@ -42,10 +42,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Publicouse o chío.",
-	'thewire:deleted' => "Eliminouse o chío.",
 	'thewire:blank' => "Non pode publicar chíos baleiros.",
 	'thewire:notsaved' => "Non foi posíbel gardar o chío.",
-	'thewire:notdeleted' => "Non foi posíbel eliminar o chío.",
 
 	/**
 	 * Notifications
@@ -61,4 +59,8 @@ return array(
 	 */
 	'thewire:settings:limit' => "Número máximo de caracteres por chío:",
 	'thewire:settings:limit:none' => "Sen límite",
+	
+	/**
+	 * Exceptions
+	 */
 );

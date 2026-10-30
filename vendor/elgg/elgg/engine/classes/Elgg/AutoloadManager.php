@@ -2,7 +2,7 @@
 
 namespace Elgg;
 
-use Elgg\Traits\Cacheable;
+use Elgg\Cache\AutoloadCache;
 
 /**
  * Manages core autoloading and caching of class maps
@@ -11,41 +11,28 @@ use Elgg\Traits\Cacheable;
  */
 class AutoloadManager {
 
-	use Cacheable;
-
 	const FILENAME = 'autoload_data.php';
 	const KEY_CLASSES = 'classes';
 	const KEY_SCANNED_DIRS = 'scannedDirs';
 
 	/**
-	 * @var \Elgg\ClassLoader
-	 */
-	protected $loader;
-
-	/**
 	 * @var array directories that have already been scanned for classes
 	 */
-	protected $scannedDirs = [];
+	protected array $scannedDirs = [];
 
 	/**
 	 * @var bool was data in the manager altered?
 	 */
-	protected $altered = false;
+	protected bool $altered = false;
 
 	/**
 	 * Constructor
 	 *
-	 * @param \Elgg\ClassLoader     $loader Class loader object
-	 * @param \Elgg\Config          $config Config
-	 * @param \Elgg\Cache\BaseCache $cache  local file cache
+	 * @param ClassLoader   $loader Class loader object
+	 * @param AutoloadCache $cache  Autoload cache
 	 */
-	public function __construct(\Elgg\ClassLoader $loader, \Elgg\Config $config, \Elgg\Cache\BaseCache $cache) {
-		$this->loader = $loader;
-		
-		if (!$config->AutoloaderManager_skip_storage) {
-			$this->setCache($cache);
-			$this->loadCache();
-		}
+	public function __construct(protected ClassLoader $loader, protected AutoloadCache $cache) {
+		$this->loadCache();
 	}
 
 	/**
@@ -57,9 +44,9 @@ class AutoloadManager {
 	 *
 	 * @param string $dir Directory of classes
 	 *
-	 * @return \Elgg\AutoloadManager
+	 * @return AutoloadManager
 	 */
-	public function addClasses($dir) {
+	public function addClasses(string $dir): static {
 		if (!in_array($dir, $this->scannedDirs)) {
 			$map = $this->loader->getClassMap();
 			$map->mergeMap($this->scanClassesDir($dir));
@@ -68,6 +55,7 @@ class AutoloadManager {
 		}
 		
 		$this->loader->addFallback($dir);
+		
 		return $this;
 	}
 
@@ -81,7 +69,7 @@ class AutoloadManager {
 	 *
 	 * @return array
 	 */
-	protected function scanClassesDir($dir) {
+	protected function scanClassesDir(string $dir): array {
 		if (!is_dir($dir)) {
 			return [];
 		}
@@ -111,13 +99,9 @@ class AutoloadManager {
 	/**
 	 * If necessary, save necessary state details
 	 *
-	 * @return \Elgg\AutoloadManager
+	 * @return AutoloadManager
 	 */
-	public function saveCache() {
-		if (!$this->cache) {
-			return $this;
-		}
-		
+	public function saveCache(): static {
 		$map = $this->loader->getClassMap();
 		
 		if ($this->altered || $map->getAltered()) {
@@ -143,7 +127,7 @@ class AutoloadManager {
 	 *
 	 * @return bool was the cache loaded?
 	 */
-	public function loadCache() {
+	public function loadCache(): bool {
 		$cache = $this->getCacheFileContents();
 		if ($cache) {
 			// the cached class map will have the full scanned core classes, so
@@ -152,51 +136,37 @@ class AutoloadManager {
 				->setMap($cache[self::KEY_CLASSES])
 				->setAltered(false);
 			$this->scannedDirs = $cache[self::KEY_SCANNED_DIRS];
+			
 			return true;
 		}
 		
 		$this->altered = true;
+		
 		return false;
 	}
 
 	/**
 	 * Tries to read the contents of the cache file and if valid returns the content
 	 *
-	 * @return false|array
+	 * @return null|array
 	 */
-	protected function getCacheFileContents() {
-		if (!$this->cache) {
-			return false;
-		}
-		
+	protected function getCacheFileContents(): ?array {
 		$spec = $this->cache->load(self::FILENAME);
-		if (isset($spec[self::KEY_CLASSES])) {
-			return $spec;
-		}
 		
-		return false;
+		return isset($spec[self::KEY_CLASSES]) ? $spec : null;
 	}
 
 	/**
 	 * Delete the cache file
 	 *
-	 * @return \Elgg\AutoloadManager
+	 * @return AutoloadManager
 	 */
-	public function deleteCache() {
-		$this->cache?->delete(self::FILENAME);
+	public function deleteCache(): static {
+		$this->cache->delete(self::FILENAME);
 		$this->loader->getClassMap()->setMap([])->setAltered(true);
 		$this->scannedDirs = [];
 		$this->altered = true;
 
 		return $this;
-	}
-
-	/**
-	 * Get the class loader
-	 *
-	 * @return \Elgg\ClassLoader
-	 */
-	public function getLoader() {
-		return $this->loader;
 	}
 }

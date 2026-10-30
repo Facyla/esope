@@ -3,9 +3,8 @@
 namespace Elgg;
 
 use DateTime as PHPDateTime;
-use Elgg\I18n\DateTime as ElggDateTime;
 use Elgg\Exceptions\DataFormatException;
-use Exception;
+use Elgg\I18n\DateTime as ElggDateTime;
 
 /**
  * Functions for use as event handlers or other situations where you need a
@@ -40,6 +39,7 @@ class Values {
 	 * @since 1.12.0
 	 */
 	public static function getNull() {
+		return null;
 	}
 
 	/**
@@ -86,7 +86,7 @@ class Values {
 			} else {
 				$dt = new ElggDateTime();
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			throw new DataFormatException($e->getMessage());
 		}
 
@@ -170,13 +170,13 @@ class Values {
 	/**
 	 * Return array with __view_output set to prevent view output during view_vars event
 	 *
-	 * @see   ViewsService->renderView()
+	 * @see ViewsService->renderView()
 	 *
 	 * @return array
 	 * @since 3.0
 	 */
 	public static function preventViewOutput() {
-		return ['__view_output' => ''];
+		return [ViewsService::OUTPUT_KEY => ''];
 	}
 	
 	/**
@@ -190,7 +190,6 @@ class Values {
 	 * @since 3.0.0
 	 */
 	public static function isEmpty($value): bool {
-		
 		if ($value === 0 || $value === '0' || $value === 0.0) {
 			return false;
 		}
@@ -203,36 +202,44 @@ class Values {
 	 * Example: shortFormatOutput(7201); // Output: 7K
 	 * Example: shortFormatOutput(7201,1); // Output: 7.2K
 	 *
-	 * @param mixed $n         input integer or string
-	 * @param int   $precision number of digits in decimal place (default = 0)
-	 * @return string|int
+	 * @param mixed $n        input integer or string
+	 * @param int   $decimals number of digits in decimal place (default = 0)
 	 *
+	 * @return string|int
 	 * @since 3.1
 	 */
-	public static function shortFormatOutput($n, $precision = 0) {
-		// return the input if not a number or less than 1000
-		if ($n < 1000 || !is_numeric($n)) {
+	public static function shortFormatOutput($n, int $decimals = 0) {
+		// return the input if not a number
+		if (!is_numeric($n)) {
 			return $n;
 		}
 		
-		$decimal_separator = substr(elgg_echo('number_counter:decimal_separator'), 0, 1);
-		$thousands_separator = substr(elgg_echo('number_counter:thousands_separator'), 0, 1);
+		$n = (float) $n;
 		
-		if ($n < 1000000) {
+		// remove negative sign
+		$negative = abs($n) !== $n;
+		$n = abs($n);
+		
+		$decimal_separator = substr(elgg_echo('number_counter:decimal_separator'), 0, 1);
+		$text_key = null;
+		
+		if ($n < 1000) {
+			$n = self::numberFormat($n, $decimals);
+		} elseif ($n < 1000000) {
 			// 1.5K, 999.5K
-			$n = number_format($n / 1000, $precision, $decimal_separator, $thousands_separator);
+			$n = self::numberFormat($n / 1000, $decimals);
 			$text_key = 'number_counter:view:thousand';
-		} else if ($n < 1000000000) {
+		} elseif ($n < 1000000000) {
 			// 1.5M, 999.5M
-			$n = number_format($n / 1000000, $precision, $decimal_separator, $thousands_separator);
+			$n = self::numberFormat($n / 1000000, $decimals);
 			$text_key = 'number_counter:view:million';
-		} else if ($n < 1000000000000) {
+		} elseif ($n < 1000000000000) {
 			// 1.5B, 999.5B
-			$n = number_format($n / 1000000000, $precision, $decimal_separator, $thousands_separator);
+			$n = self::numberFormat($n / 1000000000, $decimals);
 			$text_key = 'number_counter:view:billion';
 		} else {
 			// 1.5T
-			$n = number_format($n / 1000000000000, $precision, $decimal_separator, $thousands_separator);
+			$n = self::numberFormat($n / 1000000000000, $decimals);
 			$text_key = 'number_counter:view:trillion';
 		}
 		
@@ -244,6 +251,26 @@ class Values {
 			$n = implode($decimal_separator, array_filter($parts));
 		}
 		
-		return elgg_echo($text_key, [$n]);
+		// restore negative sign
+		$n = $negative ? "-{$n}" : $n;
+		
+		return $text_key ? elgg_echo($text_key, [$n]) : $n;
+	}
+	
+	/**
+	 * Format a number with grouped thousands using language specific separators
+	 *
+	 * @param float $number   The number being formatted
+	 * @param int   $decimals (optional) Sets the number of decimal points
+	 *
+	 * @return string
+	 * @since 6.3
+	 * @see number_format()
+	 */
+	public static function numberFormat(float $number, int $decimals = 0): string {
+		$decimal_separator = substr(elgg_echo('number_counter:decimal_separator'), 0, 1);
+		$thousands_separator = substr(elgg_echo('number_counter:thousands_separator'), 0, 1);
+		
+		return number_format($number, $decimals, $decimal_separator, $thousands_separator);
 	}
 }

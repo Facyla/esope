@@ -4,10 +4,6 @@ use Elgg\Application;
 use Elgg\Exceptions\ConfigurationException;
 use Elgg\Exceptions\InvalidArgumentException;
 
-/**
- * @group Plugins
- * @group ElggPlugin
- */
 class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 
 	public function up() {
@@ -35,6 +31,8 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 		$row->enabled = 'yes';
 		$row->time_created = $plugin->time_created;
 		$row->time_updated = null;
+		$row->deleted = 'no';
+		$row->time_deleted = 0;
 
 		$constructed = new ElggPlugin($row);
 
@@ -144,8 +142,10 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 		];
 
 		foreach ($methods as $method) {
+			// need to use getMetadata() because this plugin is disabled
+			// and the magic getter goes through getSetting() which will return null
 			$prop = BootstrapPluginTestBootstrap::class . '::' . $method . '_calls';
-			$this->assertEquals(1, $plugin->$prop, "Method $method was called {$plugin->$prop} instead of expected 1 times");
+			$this->assertEquals(1, $plugin->getMetadata($prop), "Method {$method} was called {$plugin->getMetadata($prop)} instead of expected 1 times");
 		}
 	}
 
@@ -175,9 +175,6 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 		}
 	}
 
-	/**
-	 * @group UpgradeService
-	 */
 	public function testUsesBootstrapOnUpgrade() {
 
 		try {
@@ -248,7 +245,7 @@ class ElggPluginUnitTest extends \Elgg\UnitTestCase {
 		};
 
 		$upgrade = _elgg_services()->upgrades->run();
-		$upgrade->done($assert, $fail);
+		$upgrade->then($assert, $fail);
 
 		$this->assertEquals(1, $assertions);
 	}

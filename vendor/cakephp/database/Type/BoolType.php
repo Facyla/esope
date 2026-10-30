@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\DriverInterface;
+use Cake\Database\Driver;
 use InvalidArgumentException;
 use PDO;
 
@@ -31,10 +31,10 @@ class BoolType extends BaseType implements BatchCastingInterface
      * Convert bool data into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\Driver $driver The driver instance to convert with.
      * @return bool|null
      */
-    public function toDatabase($value, DriverInterface $driver): ?bool
+    public function toDatabase(mixed $value, Driver $driver): ?bool
     {
         if ($value === true || $value === false || $value === null) {
             return $value;
@@ -45,8 +45,9 @@ class BoolType extends BaseType implements BatchCastingInterface
         }
 
         throw new InvalidArgumentException(sprintf(
-            'Cannot convert value of type `%s` to bool',
-            getTypeName($value)
+            'Cannot convert value `%s` of type `%s` to bool',
+            print_r($value, true),
+            get_debug_type($value),
         ));
     }
 
@@ -54,10 +55,10 @@ class BoolType extends BaseType implements BatchCastingInterface
      * Convert bool values to PHP booleans
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @param \Cake\Database\Driver $driver The driver instance to convert with.
      * @return bool|null
      */
-    public function toPHP($value, DriverInterface $driver): ?bool
+    public function toPHP(mixed $value, Driver $driver): ?bool
     {
         if ($value === null || is_bool($value)) {
             return $value;
@@ -73,7 +74,7 @@ class BoolType extends BaseType implements BatchCastingInterface
     /**
      * @inheritDoc
      */
-    public function manyToPHP(array $values, array $fields, DriverInterface $driver): array
+    public function manyToPHP(array $values, array $fields, Driver $driver): array
     {
         foreach ($fields as $field) {
             $value = $values[$field] ?? null;
@@ -93,13 +94,9 @@ class BoolType extends BaseType implements BatchCastingInterface
     }
 
     /**
-     * Get the correct PDO binding type for bool data.
-     *
-     * @param mixed $value The value being bound.
-     * @param \Cake\Database\DriverInterface $driver The driver.
-     * @return int
+     * @inheritDoc
      */
-    public function toStatement($value, DriverInterface $driver): int
+    public function toStatement(mixed $value, Driver $driver): int
     {
         if ($value === null) {
             return PDO::PARAM_NULL;
@@ -114,7 +111,7 @@ class BoolType extends BaseType implements BatchCastingInterface
      * @param mixed $value The value to convert.
      * @return bool|null Converted value.
      */
-    public function marshal($value): ?bool
+    public function marshal(mixed $value): ?bool
     {
         if ($value === null || $value === '') {
             return null;

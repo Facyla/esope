@@ -2,10 +2,9 @@
 
 namespace Elgg;
 
+use Elgg\Exceptions\RuntimeException;
 use Elgg\Http\Request;
 use Elgg\Project\Paths;
-use ElggUser;
-use RuntimeException;
 
 /**
  * Testing trait that provides utility methods agnostic to testing framework
@@ -13,7 +12,7 @@ use RuntimeException;
 trait Testing {
 
 	/**
-	 * @var ElggUser
+	 * @var \ElggUser
 	 */
 	protected $_testing_admin;
 
@@ -24,10 +23,10 @@ trait Testing {
 	 *
 	 * @return string
 	 */
-	public function normalizeTestFilePath($filename = '') {
+	public static function normalizeTestFilePath($filename = '') {
 		$filename = ltrim($filename, '/');
 		$append_slash = substr($filename, -1, 1) === '/';
-		return Paths::sanitize(Paths::elgg() . "/engine/tests/test_files/$filename", $append_slash);
+		return Paths::sanitize(Paths::elgg() . "/engine/tests/test_files/{$filename}", $append_slash);
 	}
 
 	/**
@@ -42,16 +41,13 @@ trait Testing {
 	 * @return Request
 	 */
 	public static function prepareHttpRequest($uri = '', $method = 'GET', $parameters = [], $ajax = 0, $add_csrf_tokens = false) {
-		$site_url = elgg_get_site_url();
-		$path = '/' . ltrim(substr(elgg_normalize_url($uri), strlen($site_url)), '/');
-
 		if ($add_csrf_tokens) {
 			$ts = _elgg_services()->csrf->getCurrentTime()->getTimestamp();
 			$parameters['__elgg_ts'] = $ts;
 			$parameters['__elgg_token'] = _elgg_services()->csrf->generateActionToken($ts);
 		}
 
-		$request = Request::create($path, $method, $parameters);
+		$request = Request::create(elgg_normalize_url($uri), $method, $parameters);
 
 		$cookie_name = _elgg_services()->config->getCookieConfig()['session']['name'];
 		$session_id = _elgg_services()->session->getID();
@@ -71,11 +67,11 @@ trait Testing {
 
 	/**
 	 * Returns an admin user. This user will persist within a test case.
-	 * @return ElggUser
+	 *
+	 * @return \ElggUser
 	 * @throws RuntimeException
 	 */
 	public function getAdmin() {
-
 		$admin = $this->_testing_admin;
 		if (!$admin) {
 			$admins = elgg_get_admins([

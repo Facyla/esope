@@ -1,6 +1,6 @@
 <?php
 
-return elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() {
+return elgg_call(ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() {
 
 	$guid = (int) get_input('guid');
 	$type = get_input('type');
@@ -18,11 +18,14 @@ return elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function() {
 	switch ($type) {
 		case 'entity':
 			if (!$entity instanceof \ElggSite) {
-				$entity->delete();
+				$entity->delete(true, true);
 			}
 			break;
 		case 'metadata':
-			unset($entity->$key);
+			$metadata = elgg_get_metadata_from_id((int) $key);
+			if ($metadata instanceof \ElggMetadata) {
+				$metadata->delete();
+			}
 			break;
 		case 'relationship':
 			$relationship = elgg_get_relationship((int) $key);

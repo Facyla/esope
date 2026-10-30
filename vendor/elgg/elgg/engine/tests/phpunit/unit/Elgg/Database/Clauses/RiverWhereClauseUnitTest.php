@@ -3,14 +3,10 @@
 namespace Elgg\Database\Clauses;
 
 use Elgg\Database\QueryBuilder;
+use Elgg\Database\RiverTable;
 use Elgg\Database\Select;
 use Elgg\UnitTestCase;
 
-/**
- * @group QueryBuilder
- * @group QueryBuilderWhere
- * @group River
- */
 class RiverWhereClauseUnitTest extends UnitTestCase {
 
 	/**
@@ -19,7 +15,7 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 	protected $qb;
 
 	public function up() {
-		$this->qb = Select::fromTable('river', 'alias');
+		$this->qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
 	}
 
 	public function testBuildEmptyQuery() {
@@ -28,8 +24,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 
 		$query = new RiverWhereClause();
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
@@ -45,8 +41,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 		$query = new RiverWhereClause();
 		$query->ids = 1;
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
@@ -62,8 +58,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 		$query = new RiverWhereClause();
 		$query->annotation_ids = 1;
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
@@ -79,8 +75,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 		$query = new RiverWhereClause();
 		$query->views = ['view1', 'dir/view2'];
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
@@ -96,8 +92,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 		$query = new RiverWhereClause();
 		$query->action_types = ['foo1', 'foo2'];
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
@@ -119,8 +115,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 		$query->object_guids = [4, 5, 6];
 		$query->target_guids = [7, 8, 9];
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
@@ -146,8 +142,8 @@ class RiverWhereClauseUnitTest extends UnitTestCase {
 		$query->created_after = $after;
 		$query->created_before = $before;
 
-		$qb = Select::fromTable('river', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(RiverTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());

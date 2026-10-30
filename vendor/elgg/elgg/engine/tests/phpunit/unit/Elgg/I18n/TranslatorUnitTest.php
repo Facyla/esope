@@ -4,10 +4,6 @@ namespace Elgg\I18n;
 
 use Psr\Log\LogLevel;
 
-/**
- * @group Translator
- * @group UnitTests
- */
 class TranslatorUnitTest extends \Elgg\UnitTestCase {
 
 	public $key = '__elgg_php_unit:test_key';
@@ -258,11 +254,12 @@ class TranslatorUnitTest extends \Elgg\UnitTestCase {
 			'translation:arguments:test' => 'Hello %s, just testing %s',
 		]);
 		
-		// suppressing vsprintf error, because that's what we're testing
-		$this->assertEquals('translation:arguments:test', @$this->translator->translate('translation:arguments:test', ['Foo'], 'en'));
+		_elgg_services()->logger->disable();
+		$this->assertEquals('translation:arguments:test', $this->translator->translate('translation:arguments:test', ['Foo'], 'en'));
+		_elgg_services()->logger->enable();
 		
-		$this->assertEquals('Hello Foo, just testing Bar', @$this->translator->translate('translation:arguments:test', ['Foo', 'Bar'], 'en'));
+		$this->assertEquals('Hello Foo, just testing Bar', $this->translator->translate('translation:arguments:test', ['Foo', 'Bar'], 'en'));
 		
-		$this->assertEquals('Hello Foo, just testing Bar', @$this->translator->translate('translation:arguments:test', ['Foo', 'Bar', 'Something'], 'en'));
+		$this->assertEquals('Hello Foo, just testing Bar', $this->translator->translate('translation:arguments:test', ['Foo', 'Bar', 'Something'], 'en'));
 	}
 }

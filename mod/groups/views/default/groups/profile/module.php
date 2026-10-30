@@ -41,12 +41,9 @@ if (!isset($all_link) && $can_default) {
 }
 
 if (!empty($all_link)) {
-	$menu = elgg_format_element('span', [
-		'class' => 'groups-widget-viewall',
-	], $all_link);
+	$menu = elgg_format_element('span', ['class' => 'elgg-quiet'], $all_link);
 }
 
-// content
 $content = elgg_extract('content', $vars);
 if (!isset($content) && $can_default) {
 	elgg_push_context('widgets');
@@ -56,7 +53,6 @@ if (!isset($content) && $can_default) {
 		'subtype' => $entity_subtype,
 		'container_guid' => $group->guid,
 		'limit' => 6,
-		'full_view' => false,
 		'pagination' => false,
 		'preload_containers' => false,
 		'no_results' => elgg_extract('no_results', $vars, true),

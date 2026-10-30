@@ -59,8 +59,6 @@ return array(
 	'groups:joinrequest' => 'Žádost o členství',
 	'groups:join' => 'Přidat se ke skupině',
 	'groups:leave' => 'Opustit skupinu',
-	'groups:invite' => 'Pozvat přátele',
-	'groups:invite:title' => 'Pozvat přátele do této skupiny',
 
 	'groups:nofriendsatall' => 'Nemáte žádné přátele, které byste mohl/a pozvat!',
 	'groups:group' => "Skupina",
@@ -137,4 +135,7 @@ return array(
 	'groups:add:alreadymember' => "%s je již členem této skupiny",
 	
 	// Notification settings
+	
+	// accessibility
+	'groups:aria:label:search_in_group' => "Hledat v této skupině",
 );

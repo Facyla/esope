@@ -2,10 +2,10 @@
 
 namespace Elgg\Application;
 
-use DateTime;
 use Elgg\Config;
 use Elgg\Filesystem\MimeTypeService;
 use Elgg\Http\Request;
+use Elgg\Values;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Elgg\Security\Base64Url;
@@ -19,31 +19,17 @@ use Elgg\Security\HmacFactory;
 class ServeFileHandler {
 
 	/**
-	 * @var HmacFactory
-	 */
-	private $hmac;
-
-	/**
-	 * @var Config
-	 */
-	private $config;
-	
-	/**
-	 * @var MimeTypeService
-	 */
-	protected $mimetype;
-
-	/**
 	 * Constructor
 	 *
 	 * @param HmacFactory     $hmac     HMAC service
 	 * @param Config          $config   Config service
 	 * @param MimeTypeService $mimetype MimeType service
 	 */
-	public function __construct(HmacFactory $hmac, Config $config, MimeTypeService $mimetype) {
-		$this->hmac = $hmac;
-		$this->config = $config;
-		$this->mimetype = $mimetype;
+	public function __construct(
+		protected HmacFactory $hmac,
+		protected Config $config,
+		protected MimeTypeService $mimetype
+	) {
 	}
 
 	/**
@@ -144,7 +130,7 @@ class ServeFileHandler {
 			$expires = strtotime('+1 year');
 		}
 		
-		$expires_dt = (new DateTime())->setTimestamp($expires);
+		$expires_dt = Values::normalizeTime($expires);
 		$response->setExpires($expires_dt);
 
 		$response->setEtag($etag);

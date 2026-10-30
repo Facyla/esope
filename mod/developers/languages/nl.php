@@ -9,13 +9,14 @@ return array(
 	'admin:develop_tools' => 'Tools',
 	
 	// menu
-	'admin:develop_tools:sandbox' => 'Theme Sandbox',
 	'admin:develop_tools:inspect' => 'Inspecteer',
 	'admin:inspect' => 'Inspecteer',
 	'admin:develop_tools:unit_tests' => 'Unittesten',
 	'admin:develop_tools:entity_explorer' => 'Entiteiten Verkenner',
 	'admin:developers' => 'Ontwikkelaars',
 	'admin:developers:settings' => 'Instellingen',
+	'menu:entity_explorer:header' => 'Entiteiten Verkenner',
+	'menu:developers_inspect_viewtype:header' => 'Inspecteer view types',
 
 	// settings
 	'elgg_dev_tools:settings:explanation' => 'Beheer je ontwikkel- en debuginstellingen hieronder. Sommige van de instellingen zijn ook beschikbaar op andere beheerpagina\'s.',
@@ -28,30 +29,24 @@ return array(
 	'developers:label:display_errors' => 'Toon PHP fatale fouten',
 	'developers:help:display_errors' => "Standaard verbergt de .htaccess van Elgg het weergeven van fatale fouten.",
 	'developers:label:screen_log' => "Log naar het scherm",
-	'developers:help:screen_log' => "Dit toont het resultaat van elgg_log() en elgg_dump() op de webpagina alsmede het aantal database queries.",
+	'developers:help:screen_log' => "Dit toont het resultaat van elgg_log() op de webpagina alsmede het aantal database queries.",
 	'developers:show_strings:default' => "Normale vertaling",
 	'developers:show_strings:key_append' => "Vertaalsleutel toegevoegd",
 	'developers:show_strings:key_only' => "Toon alleen de vertaalsleutel",
 	'developers:label:show_strings' => "Toon vertaalsleutels",
 	'developers:help:show_strings' => "Dit toont de vertaalsleutels die gebruikt worden door elgg_echo().",
-	'developers:label:show_modules' => "Toon de geladen AMD modules in de console",
-	'developers:help:show_modules' => "Streamt geladen modules en waarden naar jouw JavaScript console.",
 	'developers:label:wrap_views' => "Omcirkel views",
 	'developers:help:wrap_views' => "Dit omwikkeld alle views met een HTML comment block. Dit kan je helpen indien je wilt weten welke view de HTML heeft gegenereerd.
 
-Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_wrap_views() functie voor meer informatie.",
+Dit kan potentieel non-HTML views niet laten functioneren.",
 	'developers:label:log_events' => "Log events",
 	'developers:help:log_events' => "Schrijf events naar de log. Waarschuwing: dit zijn er veel per pagina.",
-	'developers:label:show_gear' => "Gebruik %s buiten de admin sectie",
-	'developers:help:show_gear' => "Een icoon onderaan rechts van het venster dat administrators toegang geeft tot ontwikkelaars instellingen en links.",
 	'developers:label:block_email' => "Blokkeer alle uitgaande emails",
 	'developers:help:block_email' => "Het is mogelijk om alle uitgaande emails naar reguliere gebruikers of naar alle gebruikers",
 	'developers:label:forward_email' => "Stuur alle uitgaande emails naar één adres",
 	'developers:help:forward_email' => "Alle uitgaande emails zullen naar het geconfigureerde emailadres worden verzonden",
 	'developers:label:enable_error_log' => "Schakel error logging in",
 	'developers:help:enable_error_log' => "Maak een eigen logbestand aan met fouten en berichten welke gelogd worden via error_log() gebaseerd op je loglevel instellingen. Deze log is zichtbaar via de beheer pagina.",
-
-	'developers:label:submit' => "Opslaan en cache wissen",
 
 	'developers:block_email:forward' => 'Stuur alle emails door',
 	'developers:block_email:users' => 'Enkel voor gewone gebruikers',
@@ -66,7 +61,6 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	// entity explorer
 	'developers:entity_explorer:help' => 'Bekijk informatie van entiteiten en voor enkele simpele acties uit',
 	'developers:entity_explorer:guid:label' => 'Voer de GUID in van de entiteit die je wilt inspecteren',
-	'developers:entity_explorer:info' => 'Entiteit Informatie',
 	'developers:entity_explorer:info:attributes' => 'Attributen',
 	'developers:entity_explorer:info:metadata' => 'Metadata',
 	'developers:entity_explorer:info:relationships' => 'Relationships',
@@ -77,11 +71,17 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'developers:entity_explorer:view_entity' => 'Bekijk deze entiteit op de site',
 	
 	// inspection
-	'developers:inspect:help' => 'Inspecteer de configuratie van het Elgg framework.',
 	'developers:inspect:actions' => 'Acties',
 	'developers:inspect:events' => 'Events',
 	'developers:inspect:menus' => 'Menu\'s',
+	'developers:inspect:notifications' => 'Notificaties',
+	'developers:inspect:notifications:type' => 'Type',
+	'developers:inspect:notifications:subtype' => 'Subtype',
+	'developers:inspect:notifications:action' => 'Actie',
+	'developers:inspect:notifications:handler' => 'Handler',
+	'developers:inspect:notifications:instant' => 'Directe notificatie',
 	'developers:inspect:priority' => 'Prioriteit',
+	'developers:inspect:seeders' => 'Seeders',
 	'developers:inspect:simplecache' => 'Simple Cache',
 	'developers:inspect:routes' => 'Routes',
 	'developers:inspect:views' => 'Views',
@@ -98,7 +98,6 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'developers:inspect:handler' => 'Handler',
 	'developers:inspect:controller' => 'Controller',
 	'developers:inspect:file' => 'Bestand',
-	'developers:inspect:middleware' => 'Bestand',
 	'developers:inspect:handler_type' => 'Afhandeling door',
 	'developers:inspect:services' => 'Services',
 	'developers:inspect:service:name' => 'Naam',
@@ -111,31 +110,6 @@ Dit kan potentieel non-HTML views niet laten functioneren. Bekijk de developers_
 	'developers:log_queries' => "DB queries: %s",
 	'developers:boot_cache_rebuilt' => "De boot cache is herbouwd voor deze pagina",
 	'developers:elapsed_time' => "Tijd verstreken (s)",
-
-	// theme sandbox
-	'theme_sandbox:intro' => 'Introductie',
-	'theme_sandbox:breakout' => 'Verlaat het iframe',
-	'theme_sandbox:buttons' => 'Knoppen',
-	'theme_sandbox:components' => 'Componenten',
-	'theme_sandbox:email' => 'Email',
-	'theme_sandbox:forms' => 'Formulieren',
-	'theme_sandbox:grid' => 'Raster',
-	'theme_sandbox:icons' => 'Iconen',
-	'theme_sandbox:javascript' => 'JavaScript',
-	'theme_sandbox:layouts' => 'Lay-outs',
-	'theme_sandbox:modules' => 'Modules',
-	'theme_sandbox:navigation' => 'Paginanavigatie',
-	'theme_sandbox:typography' => 'Typografie',
-
-	'theme_sandbox:icons:blurb' => 'Gebruik <em>elgg_view_icon($name)</em> of de klasse <em>elgg-icon-$name</em> om iconen weer te geven.',
-	
-	'theme_sandbox:test_email:button' => "Stuur test email",
-	'theme_sandbox:test_email:success' => "Test email verzonden naar: %s",
-
-	// status messages
-	'developers:settings:success' => 'Instellingen opgeslagen',
-
-	'developers:amd' => 'AMD',
 
 	'admin:develop_tools:error_log' => 'Fouten logboek',
 	'developers:logs:empty' => 'Foutenlogboek is leeg',

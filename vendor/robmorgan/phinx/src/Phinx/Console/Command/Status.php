@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -16,8 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Status extends AbstractCommand
 {
     /**
-     * @var string
+     * @var string|null
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $defaultName = 'status';
 
     /**
@@ -25,7 +27,7 @@ class Status extends AbstractCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -41,7 +43,7 @@ The <info>status</info> command prints a list of all migrations, along with thei
 <info>phinx status -e development -f json</info>
 
 The <info>version_order</info> configuration option is used to determine the order of the status migrations.
-EOT
+EOT,
             );
     }
 
@@ -52,23 +54,17 @@ EOT
      * @param \Symfony\Component\Console\Output\OutputInterface $output Output
      * @return int 0 if all migrations are up, or an error code
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->bootstrap($input, $output);
 
+        /** @var string|null $environment */
         $environment = $input->getOption('environment');
+        /** @var string|null $environment */
         $format = $input->getOption('format');
 
-        if ($environment === null) {
-            $environment = $this->getConfig()->getDefaultEnvironment();
-            $output->writeln('<comment>warning</comment> no environment specified, defaulting to: ' . $environment, $this->verbosityLevel);
-        } else {
-            $output->writeln('<info>using environment</info> ' . $environment, $this->verbosityLevel);
-        }
-
-        if (!$this->getConfig()->hasEnvironment($environment)) {
-            $output->writeln(sprintf('<error>The environment "%s" does not exist</error>', $environment));
-
+        $success = $this->writeEnvironmentOutput($environment, $output);
+        if (!$success) {
             return self::CODE_ERROR;
         }
 

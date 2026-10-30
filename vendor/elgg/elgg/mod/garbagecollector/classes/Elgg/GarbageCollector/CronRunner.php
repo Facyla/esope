@@ -3,36 +3,37 @@
 namespace Elgg\GarbageCollector;
 
 /**
- * Garbagecollector cron job
+ * Garbage collector cron job
  */
 class CronRunner {
 
 	/**
-	 * Garbagecollector cron job
+	 * Garbage collector cron job
 	 *
-	 * @param \Elgg\Event $event event
+	 * @param \Elgg\Event $event 'cron', 'all'
 	 *
 	 * @return void
 	 */
-	public function __invoke(\Elgg\Event $event) {
-
+	public function __invoke(\Elgg\Event $event): void {
 		$period = $event->getType();
-
 		if ($period !== elgg_get_plugin_setting('period', 'garbagecollector')) {
 			return;
 		}
-
+		
+		/* @var $cron_logger \Elgg\Logger\Cron */
+		$cron_logger = $event->getParam('logger');
+		
 		// Now, because we are nice, trigger an event to let other plugins do some GC
-		elgg_trigger_event_results('gc', 'system', ['period' => $period]);
-
-		$ops = GarbageCollector::instance()->optimize();
-
-		$output = [];
-		foreach ($ops as $op) {
-			$ok = $op->result ? 'ok' : 'err';
-			$output[] = $op->operation . ': ' . $ok . '. Completed: ' . $op->completed->format(DATE_ATOM);
+		$params = $event->getParams();
+		$params['period'] = $period;
+		elgg_trigger_event_results('gc', 'system', $params);
+		
+		if ((bool) elgg_get_plugin_setting('optimize', 'garbagecollector')) {
+			// optimize database tables
+			$instance = GarbageCollector::instance();
+			$instance->setLogger($cron_logger);
+			
+			$instance->optimize(true);
 		}
-
-		echo implode(PHP_EOL, $output) . PHP_EOL;
 	}
 }

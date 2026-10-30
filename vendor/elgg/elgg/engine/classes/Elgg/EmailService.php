@@ -10,13 +10,14 @@ use Elgg\Email\PlainTextPart;
 use Elgg\Exceptions\RuntimeException;
 use Elgg\Traits\Loggable;
 use Elgg\Views\HtmlFormatter;
+use Laminas\Mail\Exception\ExceptionInterface;
 use Laminas\Mail\Header\ContentType;
 use Laminas\Mail\Message as MailMessage;
 use Laminas\Mail\Transport\TransportInterface;
-use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Exception\InvalidArgumentException;
-use Laminas\Mime\Part;
+use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 
 /**
  * Email service
@@ -27,41 +28,6 @@ use Laminas\Mime\Mime;
 class EmailService {
 
 	use Loggable;
-
-	/**
-	 * @var Config
-	 */
-	protected $config;
-
-	/**
-	 * @var EventsService
-	 */
-	protected $events;
-
-	/**
-	 * @var TransportInterface
-	 */
-	protected $mailer;
-
-	/**
-	 * @var HtmlFormatter
-	 */
-	protected $html_formatter;
-
-	/**
-	 * @var ImageFetcherService
-	 */
-	protected $image_fetcher;
-
-	/**
-	 * @var ViewsService
-	 */
-	protected $views;
-
-	/**
-	 * @var CssCompiler
-	 */
-	protected $css_compiler;
 
 	/**
 	 * Constructor
@@ -75,21 +41,14 @@ class EmailService {
 	 * @param CssCompiler         $css_compiler   Css compiler
 	 */
 	public function __construct(
-			Config $config,
-			EventsService $events,
-			TransportInterface $mailer,
-			HtmlFormatter $html_formatter,
-			ViewsService $views,
-			ImageFetcherService $image_fetcher,
-			CssCompiler $css_compiler
-		) {
-		$this->config = $config;
-		$this->events = $events;
-		$this->mailer = $mailer;
-		$this->html_formatter = $html_formatter;
-		$this->views = $views;
-		$this->image_fetcher = $image_fetcher;
-		$this->css_compiler = $css_compiler;
+		protected Config $config,
+		protected EventsService $events,
+		protected TransportInterface $mailer,
+		protected HtmlFormatter $html_formatter,
+		protected ViewsService $views,
+		protected ImageFetcherService $image_fetcher,
+		protected CssCompiler $css_compiler
+	) {
 	}
 
 	/**
@@ -100,7 +59,7 @@ class EmailService {
 	 * @return bool
 	 * @throws RuntimeException
 	 */
-	public function send(Email $email) {
+	public function send(Email $email): bool {
 		$email = $this->events->triggerResults('prepare', 'system:email', [], $email);
 		if (!$email instanceof Email) {
 			$msg = "'prepare','system:email' event handlers should return an instance of " . Email::class;
@@ -123,8 +82,7 @@ class EmailService {
 	 * @return bool
 	 * @throws RuntimeException
 	 */
-	public function transport(Email $email) {
-
+	public function transport(Email $email): bool {
 		if ($this->events->triggerResults('transport', 'system:email', ['email' => $email], false)) {
 			return true;
 		}
@@ -177,7 +135,7 @@ class EmailService {
 		
 		try {
 			$this->mailer->send($message);
-		} catch (RuntimeException $e) {
+		} catch (ExceptionInterface $e) {
 			$this->getLogger()->error($e->getMessage());
 
 			return false;
@@ -405,8 +363,11 @@ class EmailService {
 	
 		// generate HTML mail body
 		$options['body'] = $this->views->renderView('email/elements/body', $options);
-		
-		$css_compiled = $this->css_compiler->compile($this->views->renderView('email/email.css', $options));
+
+		$css_views = $this->views->renderView('elements/variables.css', $options);
+		$css_views .= $this->views->renderView('email/email.css', $options);
+
+		$css_compiled = $this->css_compiler->compile($css_views);
 		$minifier = new \MatthiasMullie\Minify\CSS($css_compiled);
 		$css = $minifier->minify();
 		
@@ -431,7 +392,7 @@ class EmailService {
 		
 		// find all matches
 		$matches = [];
-		$pattern = '/\ssrc=([\'"]\S+[\'"])/i';
+		$pattern = '/\ssrc=([\'"]https?:\/\/\S+[\'"])/i';
 		
 		preg_match_all($pattern, $text, $matches);
 		

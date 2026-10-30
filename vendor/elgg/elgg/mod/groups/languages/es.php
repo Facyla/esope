@@ -59,8 +59,6 @@ return array(
 	'groups:joinrequest' => 'Solicitar unirse',
 	'groups:join' => 'Unirse al grupo',
 	'groups:leave' => 'Abandonar el grupo',
-	'groups:invite' => 'Invitar amigos',
-	'groups:invite:title' => 'Invitar amigos a este grupo',
 
 	'groups:nofriendsatall' => 'No hay amigos para invitar',
 	'groups:group' => "Grupo",
@@ -137,4 +135,7 @@ return array(
 	'groups:add:alreadymember' => "%s ya forma parte del grupo.",
 	
 	// Notification settings
+	
+	// accessibility
+	'groups:aria:label:search_in_group' => "Buscar en este grupo",
 );

@@ -179,7 +179,7 @@ class Preloader {
 		$fetch_guids = [];
 
 		foreach ($guids as $guid) {
-			$entity = _elgg_services()->entityTable->getFromCache($guid);
+			$entity = _elgg_services()->entityCache->load($guid);
 			if ($entity) {
 				$entities[] = $entity;
 			} else {
@@ -214,16 +214,19 @@ class Preloader {
 		}
 		
 		$preload = elgg_extract('preload_likes', $vars);
-		if (!isset($preload)) {
-			$list_class = elgg_extract('list_class', $vars);
-			$preload = !elgg_in_context('widgets') && in_array($list_class, ['elgg-list-river', 'elgg-list-entity', 'comments-list']);
+		if (!isset($preload) && !elgg_in_context('widgets')) {
+			$list_classes = elgg_extract_class($vars, [], 'list_class');
+			$preload_list_classes = ['comments-list', 'elgg-list-entity', 'elgg-list-river', 'elgg-river-comments'];
+			$intersect = array_intersect($list_classes, $preload_list_classes);
+			
+			$preload = count($intersect) > 0;
 		}
 		
-		if (!$preload) {
+		if (empty($preload)) {
 			return;
 		}
 		
-		$preloader = new self(\Elgg\Likes\DataService::instance());
+		$preloader = new static(\Elgg\Likes\DataService::instance());
 		$preloader->preloadForList($items);
 	}
 }

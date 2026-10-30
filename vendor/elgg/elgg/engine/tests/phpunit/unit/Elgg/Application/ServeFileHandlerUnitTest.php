@@ -4,10 +4,6 @@ namespace Elgg\Application;
 
 use Elgg\Exceptions\DomainException;
 
-/**
- * @group UnitTests
- * @group FileService
- */
 class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -30,7 +26,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		}
 	}
 
-	function createRequest(\Elgg\FileService\File $file) {
+	protected function createRequest(\Elgg\FileService\File $file) {
 		$site_url = elgg_get_site_url();
 		$url = $file->getURL();
 		$path = substr($url, strlen($site_url));
@@ -43,7 +39,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		return $request;
 	}
 	
-	function fileProvider() {
+	public static function fileProvider() {
 		return [
 			// Using special characters to test against files that have been
 			// uploaded prior to implementation of filename sanitization
@@ -56,7 +52,7 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		];
 	}
 	
-	function createFile($filename) {
+	protected function createFile($filename) {
 		$this->assertNotEmpty($filename);
 		
 		$file = new \ElggFile();
@@ -274,5 +270,4 @@ class ServeFileHandlerUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($test_file->delete());
 		unset($this->file);
 	}
-
 }

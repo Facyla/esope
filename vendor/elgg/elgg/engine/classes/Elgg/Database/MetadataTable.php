@@ -2,6 +2,7 @@
 
 namespace Elgg\Database;
 
+use Elgg\Cache\AccessCache;
 use Elgg\Cache\MetadataCache;
 use Elgg\Database;
 use Elgg\Database\Clauses\MetadataWhereClause;
@@ -20,34 +21,26 @@ class MetadataTable {
 
 	use TimeUsing;
 	
-	const MYSQL_TEXT_BYTE_LIMIT = 65535;
+	public const TABLE_NAME = 'metadata';
 	
-	protected MetadataCache $metadata_cache;
-
-	protected Database $db;
-
-	protected Events $events;
+	public const DEFAULT_JOIN_ALIAS = 'n_table';
 	
-	protected EntityTable $entityTable;
-
 	/**
 	 * Constructor
 	 *
+	 * @param AccessCache   $access_cache   The access cache
 	 * @param MetadataCache $metadata_cache A cache for this table
 	 * @param Database      $db             The Elgg database
 	 * @param Events        $events         The events registry
 	 * @param EntityTable   $entityTable    The EntityTable database wrapper
 	 */
 	public function __construct(
-		MetadataCache $metadata_cache,
-		Database $db,
-		Events $events,
-		EntityTable $entityTable
+		protected AccessCache $access_cache,
+		protected MetadataCache $metadata_cache,
+		protected Database $db,
+		protected Events $events,
+		protected EntityTable $entityTable
 	) {
-		$this->metadata_cache = $metadata_cache;
-		$this->db = $db;
-		$this->events = $events;
-		$this->entityTable = $entityTable;
 	}
 
 	/**
@@ -143,12 +136,10 @@ class MetadataTable {
 	 * @return \ElggMetadata|null
 	 */
 	public function get(int $id): ?\ElggMetadata {
-		$qb = Select::fromTable('metadata');
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('*');
 
-		$where = new MetadataWhereClause();
-		$where->ids = $id;
-		$qb->addClause($where);
+		$qb->addClause(MetadataWhereClause::factory(['ids' => $id]));
 
 		$row = $this->db->getDataRow($qb);
 		return $row ? new \ElggMetadata($row) : null;
@@ -166,17 +157,17 @@ class MetadataTable {
 			return false;
 		}
 
-		if (!_elgg_services()->events->trigger('delete', 'metadata', $metadata)) {
+		if (!$this->events->trigger('delete', 'metadata', $metadata)) {
 			return false;
 		}
 
-		$qb = Delete::fromTable('metadata');
+		$qb = Delete::fromTable(self::TABLE_NAME);
 		$qb->where($qb->compare('id', '=', $metadata->id, ELGG_VALUE_INTEGER));
 
 		$deleted = $this->db->deleteData($qb);
 
 		if ($deleted) {
-			$this->metadata_cache->clear($metadata->entity_guid);
+			$metadata->getEntity()?->invalidateCache();
 		}
 
 		return $deleted !== false;
@@ -196,17 +187,17 @@ class MetadataTable {
 	 */
 	public function create(\ElggMetadata $metadata, bool $allow_multiple = false): int|false {
 		if (!isset($metadata->value) || !isset($metadata->entity_guid)) {
-			elgg_log('Metadata must have a value and entity guid', 'ERROR');
+			elgg_log('Metadata must have a value and entity guid', \Psr\Log\LogLevel::ERROR);
 			return false;
 		}
 
 		if (!$this->entityTable->exists($metadata->entity_guid)) {
-			elgg_log("Can't create metadata on a non-existing entity_guid", 'ERROR');
+			elgg_log("Can't create metadata on a non-existing entity_guid", \Psr\Log\LogLevel::ERROR);
 			return false;
 		}
 		
 		if (!is_scalar($metadata->value)) {
-			elgg_log('To set multiple metadata values use ElggEntity::setMetadata', 'ERROR');
+			elgg_log('To set multiple metadata values use ElggEntity::setMetadata', \Psr\Log\LogLevel::ERROR);
 			return false;
 		}
 
@@ -214,10 +205,6 @@ class MetadataTable {
 			if ($this->update($metadata)) {
 				return $metadata->id;
 			}
-		}
-
-		if (strlen($metadata->value) > self::MYSQL_TEXT_BYTE_LIMIT) {
-			elgg_log("Metadata '{$metadata->name}' is above the MySQL TEXT size limit and may be truncated.", 'WARNING');
 		}
 
 		if (!$allow_multiple) {
@@ -245,7 +232,7 @@ class MetadataTable {
 
 		$time_created = $this->getCurrentTime()->getTimestamp();
 
-		$qb = Insert::intoTable('metadata');
+		$qb = Insert::intoTable(self::TABLE_NAME);
 		$qb->values([
 			'name' => $qb->param($metadata->name, ELGG_VALUE_STRING),
 			'entity_guid' => $qb->param($metadata->entity_guid, ELGG_VALUE_INTEGER),
@@ -256,7 +243,7 @@ class MetadataTable {
 
 		$id = $this->db->insertData($qb);
 
-		if ($id === false) {
+		if ($id === 0) {
 			return false;
 		}
 
@@ -269,7 +256,7 @@ class MetadataTable {
 			return false;
 		}
 		
-		$this->metadata_cache->clear($metadata->entity_guid);
+		$metadata->getEntity()?->invalidateCache();
 
 		$this->events->triggerAfter('create', 'metadata', $metadata);
 
@@ -285,7 +272,7 @@ class MetadataTable {
 	 */
 	public function update(\ElggMetadata $metadata): bool {
 		if (!$this->entityTable->exists($metadata->entity_guid)) {
-			elgg_log("Can't update metadata to a non-existing entity_guid", 'ERROR');
+			elgg_log("Can't update metadata to a non-existing entity_guid", \Psr\Log\LogLevel::ERROR);
 			return false;
 		}
 		
@@ -293,13 +280,9 @@ class MetadataTable {
 			return false;
 		}
 
-		if (strlen($metadata->value) > self::MYSQL_TEXT_BYTE_LIMIT) {
-			elgg_log("Metadata '{$metadata->name}' is above the MySQL TEXT size limit and may be truncated.", 'WARNING');
-		}
-
-		$qb = Update::table('metadata');
+		$qb = Update::table(self::TABLE_NAME);
 		$qb->set('name', $qb->param($metadata->name, ELGG_VALUE_STRING))
-			->set('value', $qb->param($metadata->value, $metadata->value_type === 'integer' ? ELGG_VALUE_INTEGER : ELGG_VALUE_STRING))
+			->set('value', $qb->param($metadata->value, $metadata->value_type === 'text' ? ELGG_VALUE_STRING : ELGG_VALUE_INTEGER))
 			->set('value_type', $qb->param($metadata->value_type, ELGG_VALUE_STRING))
 			->where($qb->compare('id', '=', $metadata->id, ELGG_VALUE_INTEGER));
 
@@ -308,8 +291,8 @@ class MetadataTable {
 		if ($result === false) {
 			return false;
 		}
-
-		$this->metadata_cache->clear($metadata->entity_guid);
+		
+		$metadata->getEntity()?->invalidateCache();
 
 		$this->events->trigger('update', 'metadata', $metadata);
 		$this->events->triggerAfter('update', 'metadata', $metadata);
@@ -329,9 +312,6 @@ class MetadataTable {
 	 * @return \ElggMetadata[]|mixed
 	 */
 	public function getAll(array $options = []) {
-		$options['metastring_type'] = 'metadata';
-		$options = QueryOptions::normalizeMetastringOptions($options);
-
 		return Metadata::find($options);
 	}
 
@@ -347,7 +327,7 @@ class MetadataTable {
 	 * @internal
 	 */
 	public function getRowsForGuids(array $guids): array {
-		$qb = Select::fromTable('metadata');
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('*')
 			->where($qb->compare('entity_guid', 'IN', $guids, ELGG_VALUE_GUID))
 			->orderBy('entity_guid', 'asc')
@@ -397,7 +377,12 @@ class MetadataTable {
 
 		// This moved last in case an object's constructor sets metadata. Currently the batch
 		// delete process has to create the entity to delete its metadata. See #5214
-		$this->metadata_cache->invalidateByOptions($options);
+		if (empty($options['guid'])) {
+			$this->access_cache->clear();
+			$this->metadata_cache->clear();
+		} else {
+			$this->entityTable->invalidateCache($options['guid']);
+		}
 
 		$options['batch'] = true;
 		$options['batch_size'] = 50;
@@ -429,11 +414,19 @@ class MetadataTable {
 	 *
 	 * @return int[]|int|null
 	 */
-	protected function getIDsByName(int $entity_guid, string $name) {
-		if ($this->metadata_cache->isLoaded($entity_guid)) {
-			$ids = $this->metadata_cache->getSingleId($entity_guid, $name);
+	public function getIDsByName(int $entity_guid, string $name) {
+		$cached_metadata = $this->metadata_cache->load($entity_guid);
+		if ($cached_metadata !== null) {
+			$ids = [];
+			foreach ($cached_metadata as $md) {
+				if ($md->name !== $name) {
+					continue;
+				}
+				
+				$ids[] = $md->id;
+			}
 		} else {
-			$qb = Select::fromTable('metadata');
+			$qb = Select::fromTable(self::TABLE_NAME);
 			$qb->select('id')
 				->where($qb->compare('entity_guid', '=', $entity_guid, ELGG_VALUE_INTEGER))
 				->andWhere($qb->compare('name', '=', $name, ELGG_VALUE_STRING));

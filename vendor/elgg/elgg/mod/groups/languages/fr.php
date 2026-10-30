@@ -51,6 +51,7 @@ return array(
 	'groups:content_access_mode:unrestricted' => "Sans restriction - Les membres peuvent définir les accès au niveau de chaque nouvelle publication",
 	'groups:content_access_mode:membersonly' => "Membres seulement - Seuls les membres du groupe peuvent accéder à son contenu",
 	'groups:owner' => "Propriétaire",
+	'groups:owner:placeholder' => "Rechercher un membre du groupe",
 	'groups:owner:warning' => "Attention : si vous faites cette modification vous ne serez plus le propriétaire du groupe.",
 	'groups:widget:num_display' => 'Nombre de groupes à afficher',
 	'widgets:a_users_groups:name' => 'Adhésion au groupe',
@@ -68,9 +69,9 @@ return array(
 	'groups:joinrequest' => 'Demander à rejoindre le groupe',
 	'groups:join' => 'Rejoindre le groupe',
 	'groups:leave' => 'Quitter le groupe',
-	'groups:invite' => 'Inviter des contacts',
-	'groups:invite:title' => 'Invitez des contacts à rejoindre ce groupe',
-	'groups:invite:friends:help' => 'Rechercher un contact par nom ou par identifiant et sélectionner le contact dans la liste',
+	'groups:invite' => 'Inviter des membres',
+	'groups:invite:title' => 'Invitez des membres dans ce groupe',
+	'groups:invite:friends:help' => 'Recherchez un membre par son nom ou son nom d\'utilisateur et sélectionnez le membre dans la liste',
 	'groups:invite:resend' => 'Renvoyer les invitations aux membres déjà invités',
 	'groups:invite:member' => 'Déjà membre du groupe',
 	'groups:invite:invited' => 'Déjà invité dans ce groupe',
@@ -135,7 +136,9 @@ return array(
 	'groups:userinvited' => 'L\'utilisateur a été invité.',
 	'groups:usernotinvited' => 'L\'utilisateur n\'a pas pu être invité',
 	'groups:useralreadyinvited' => 'L\'utilisateur a déjà été invité',
+	'groups:invite:message' => "Vous avez été invité dans ce groupe de %s",
 	'groups:invite:subject' => "%s vous êtes invité à rejoindre %s !",
+	'groups:joinrequest:revoke' => 'Révoquer la demande d\'inscription',
 	'groups:joinrequest:remove:check' => 'Confirmez-vous vouloir supprimer cette demande d\'adhésion ?',
 	'groups:invite:remove:check' => 'Confirmez-vous vouloir supprimer cette invitation ?',
 	'groups:invite:body' => "%s vous invite à rejoindre le groupe \"%s\".
@@ -177,5 +180,9 @@ ou cliquez ci-dessous pour voir les demandes d'adhésion au groupe :
 	'groups:usersettings:notification:group_join:description' => "Paramètres de notification de groupe par défaut quand vous rejoignez un groupe",
 	
 	'groups:usersettings:notifications:title' => 'Notifications du groupe',
-	'groups:usersettings:notifications:description' => 'Pour recevoir des notifications quand de nouveaux contenus sont publiés dans un groupe dont vous êtes membre, cherchez et choisissez ci-dessous la ou les méthodes de notification que vous souhaitez utiliser.',
+	'groups:usersettings:notifications:description' => 'Pour recevoir des notifications quand de nouveaux contenus sont publiés dans un groupe dont vous êtes membre, cherchez et choisissez ci-dessous la ou les méthode(s) de notification que vous souhaitez utiliser.',
+	
+	// accessibility
+	'groups:aria:label:group_search' => "Rechercher des groupes",
+	'groups:aria:label:search_in_group' => "Chercher dans ce groupe",
 );

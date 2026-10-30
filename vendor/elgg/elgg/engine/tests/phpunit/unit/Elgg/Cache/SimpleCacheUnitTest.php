@@ -2,11 +2,6 @@
 
 namespace Elgg\Cache;
 
-/**
- * @group UnitTests
- * @group Cache
- * @group SimpleCache
- */
 class SimpleCacheUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -21,6 +16,20 @@ class SimpleCacheUnitTest extends \Elgg\UnitTestCase {
 	public function down() {
 		$this->service->clear();
 	}
+	
+	public function testCanRegisterViewsAsCacheable() {
+		$this->assertFalse($this->service->isCacheableView('js/interpreted.js'));
+		
+		$this->service->registerCacheableView('js/interpreted.js');
+		
+		$this->assertTrue($this->service->isCacheableView('js/interpreted.js'));
+	}
+	
+	public function testStaticViewsAreAlwaysCacheable() {
+		_elgg_services()->views->autoregisterViews('', $this->normalizeTestFilePath('views') . '/default', 'default');
+		$this->assertTrue(_elgg_services()->views->viewExists('js/static.js'));
+		$this->assertTrue($this->service->isCacheableView('js/static.js'));
+	}
 
 	public function testGetUrlHandlesSingleArgument() {
 		$view = 'view.js';
@@ -31,40 +40,21 @@ class SimpleCacheUnitTest extends \Elgg\UnitTestCase {
 		$this->assertMatchesRegularExpression("#default/view.js#", $url);
 	}
 
-	public function testGetUrlHandlesTwoArguments() {
-		elgg_register_simplecache_view('js/view.js');
-		$url = $this->service->getUrl('js', 'view.js');
-
-		$this->assertMatchesRegularExpression("#default/view.js$#", $url);
-	}
-
-	public function testGetUrlHandlesTwoArgumentsWhereSecondArgHasRedundantPrefix() {
-		elgg_register_simplecache_view('js/view.js');
-		$url = $this->service->getUrl('js', 'js/view.js');
-
-		$this->assertMatchesRegularExpression("#default/view.js$#", $url);
-	}
-
-	public function testRespectsViewAliases() {
-		$this->markTestIncomplete();
-	}
-
 	public function testCanEnableSimplecache() {
 
 		$is_enabled = _elgg_services()->config->simplecache_enabled;
 
 		_elgg_services()->config->save('simplecache_enabled', false);
+		
+		_elgg_services()->simpleCache->disable();
 
-		elgg_disable_simplecache();
+		$this->assertFalse(_elgg_services()->simpleCache->isEnabled());
+		
+		_elgg_services()->simpleCache->enable();
 
-		$this->assertFalse(elgg_is_simplecache_enabled());
-
-		elgg_enable_simplecache();
-
-		$this->assertTrue(elgg_is_simplecache_enabled());
+		$this->assertTrue(_elgg_services()->simpleCache->isEnabled());
 
 		_elgg_services()->config->save('simplecache_enabled', $is_enabled);
-
 	}
 	
 	public function testClearSimplecacheSymlinked() {
@@ -79,13 +69,13 @@ class SimpleCacheUnitTest extends \Elgg\UnitTestCase {
 		$this->assertTrue($this->service->isEnabled());
 		
 		// create symlink
-		$this->assertTrue(_elgg_symlink_cache());
+		$this->assertTrue($this->service->createSymbolicLink());
 		
 		// clear cache
 		$this->service->clear();
 		
 		// ensure symlink still works
-		$this->assertTrue(_elgg_is_cache_symlinked());
+		$this->assertTrue($this->service->isSymbolicLinked());
 		
 		_elgg_services()->config->save('simplecache_enabled', $is_enabled);
 		
@@ -128,8 +118,8 @@ class SimpleCacheUnitTest extends \Elgg\UnitTestCase {
 			unlink($symlink_path);
 		}
 		
-		$this->assertTrue(_elgg_symlink_cache());
-		$this->assertTrue(_elgg_is_cache_symlinked());
+		$this->assertTrue($this->service->createSymbolicLink());
+		$this->assertTrue($this->service->isSymbolicLinked());
 		$this->assertTrue(is_dir($simplecache_path));
 		
 		// Test that we can flush caches with symlink

@@ -8,7 +8,6 @@ use Elgg\Database\Clauses\JoinClause;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\Clauses\SelectClause;
 use Elgg\Database\Clauses\WhereClause;
-use Elgg\Exceptions\DataFormatException;
 
 /**
  * Abstract methods for interfacing with the database
@@ -23,7 +22,7 @@ abstract class Repository {
 	 * @param array $options ege* options
 	 */
 	public function __construct(array $options = []) {
-		$this->options = new QueryOptions($options, \ArrayObject::ARRAY_AS_PROPS);
+		$this->options = new QueryOptions($options, \ArrayObject::STD_PROP_LIST);
 	}
 
 	/**
@@ -34,9 +33,7 @@ abstract class Repository {
 			return;
 		}
 
-		$val = &$this->options->$name;
-
-		return $val;
+		return $this->options->$name;
 	}
 
 	/**
@@ -108,11 +105,7 @@ abstract class Repository {
 	 * @return \ElggData[]|int|mixed
 	 */
 	public static function find(array $options = []) {
-		try {
-			return static::with($options)->execute();
-		} catch (DataFormatException $e) {
-			return elgg_extract('count', $options) ? 0 : false;
-		}
+		return static::with($options)->execute();
 	}
 
 	/**
@@ -185,18 +178,18 @@ abstract class Repository {
 	 * @param string $joined_table   Name of the table (with or without dbprefix)
 	 * @param string $joined_alias   Alias of the joined table
 	 *                               If not set, the alias will be assigned automatically
-	 * @param string $x              Base column, e.g. 'n_table.entity_guid'
+	 * @param string $join_column    Base column, e.g. 'n_table.entity_guid'
 	 *                               This value is NOT a query parameter and will not be sanitized
 	 * @param string $comparison     Comparison operator, e.g. '=', 'not like' etc
-	 * @param mixed  $y              Comparison value(s)
+	 * @param mixed  $values         Comparison value(s)
 	 * @param string $type           Type of the comparison value(s), e.g. ELGG_VALUE_STRING, ELGG_VALUE_INT
-	 * @param bool   $case_sensitive Use case senstivie comparison for string values
+	 * @param bool   $case_sensitive Use case sensitive comparison for string values
 	 *
 	 * @return static
 	 */
-	public function join($joined_table, $joined_alias = null, $x = null, $comparison = null, $y = null, $type = null, $case_sensitive = null) {
-		$join = new JoinClause($joined_table, $joined_alias, function (QueryBuilder $qb, $joined_alias) use ($x, $comparison, $y, $type, $case_sensitive) {
-			return $qb->compare("$joined_alias.$x", $comparison, $y, $type, $case_sensitive);
+	public function join($joined_table, $joined_alias = null, $join_column = null, $comparison = null, $values = null, $type = null, $case_sensitive = null) {
+		$join = new JoinClause($joined_table, $joined_alias, function (QueryBuilder $qb, $joined_alias) use ($join_column, $comparison, $values, $type, $case_sensitive) {
+			return $qb->compare("{$joined_alias}.{$join_column}", $comparison, $values, $type, $case_sensitive);
 		});
 		$this->options->join($join);
 

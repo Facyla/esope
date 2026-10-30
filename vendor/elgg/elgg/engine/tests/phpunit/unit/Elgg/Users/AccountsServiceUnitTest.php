@@ -7,16 +7,12 @@ use Elgg\Exceptions\InvalidArgumentException;
 use Elgg\Helpers\CustomUser;
 use Elgg\UnitTestCase;
 
-/**
- * @group Accounts
- * @group Registration
- */
 class AccountsServiceUnitTest extends UnitTestCase {
 
 	/**
 	 * @var int minimal username length during testing
 	 */
-	protected $minusername = 6;
+	protected const MINUSERNAME = 6;
 	
 	/**
 	 * @var int backup of the config setting for minimal username length
@@ -25,7 +21,7 @@ class AccountsServiceUnitTest extends UnitTestCase {
 	
 	public function up() {
 		$this->minusername_backup = elgg()->config->minusername;
-		elgg()->config->minusername = $this->minusername;
+		elgg()->config->minusername = self::MINUSERNAME;
 	}
 
 	public function down() {
@@ -45,9 +41,9 @@ class AccountsServiceUnitTest extends UnitTestCase {
 	 *
 	 * @return array
 	 */
-	public function invalidUsernameProvider() {
+	public static function invalidUsernameProvider() {
 		return [
-			[str_repeat('a', $this->minusername - 1)], // too short
+			[str_repeat('a', self::MINUSERNAME - 1)], // too short
 			[str_repeat('a', 129)], // too long, this is hard coded
 			['username#'],
 			['username@'],
@@ -72,7 +68,7 @@ class AccountsServiceUnitTest extends UnitTestCase {
 	 *
 	 * @return array
 	 */
-	public function validUsernameProvider() {
+	public static function validUsernameProvider() {
 		return [
 			['username'],
 			['úsernâmé'],

@@ -10,7 +10,7 @@ elgg_entity_gatekeeper($guid, 'object', 'file');
 /* @var $file \ElggFile */
 $file = get_entity($guid);
 
-elgg_push_entity_breadcrumbs($file, false);
+elgg_push_entity_breadcrumbs($file);
 
 if ($file->canDownload()) {
 	elgg_register_menu_item('title', [
@@ -23,10 +23,7 @@ if ($file->canDownload()) {
 }
 
 echo elgg_view_page($file->getDisplayName(), [
-	'content' => elgg_view_entity($file, [
-		'full_view' => true,
-		'show_responses' => true,
-	]),
+	'content' => elgg_view_entity($file),
 	'entity' => $file,
 	'filter_id' => 'file/view',
 ]);

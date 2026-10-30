@@ -2,10 +2,9 @@
 
 namespace Elgg;
 
-use Elgg\Cache\BaseCache;
+use Elgg\Cache\BootCache;
 use Elgg\Di\InternalContainer;
 use Elgg\Exceptions\RuntimeException;
-use Elgg\Traits\Cacheable;
 use Elgg\Traits\Debug\Profilable;
 use Psr\Log\LogLevel;
 
@@ -18,15 +17,13 @@ use Psr\Log\LogLevel;
 class BootService {
 
 	use Profilable;
-	use Cacheable;
 
 	/**
 	 * Constructs the bootservice
 	 *
-	 * @param BaseCache $cache Cache
+	 * @param BootCache $cache Cache
 	 */
-	public function __construct(BaseCache $cache) {
-		$this->cache = $cache;
+	public function __construct(protected BootCache $cache) {
 	}
 
 	/**
@@ -54,6 +51,10 @@ class BootService {
 		foreach ($config::SENSITIVE_PROPERTIES as $name) {
 			unset($config->{$name});
 		}
+		
+		// reset services which could depend on config values
+		// need to reset the ServerCache in order to be able to save SRI calculations
+		$services->reset('serverCache');
 
 		// early config is done, now get the core boot data
 		$data = $this->getBootData($config, $config->hasValue('installed'));
@@ -70,18 +71,20 @@ class BootService {
 		}
 
 		foreach ($data->getPluginMetadata() as $guid => $metadata) {
-			$services->dataCache->metadata->save($guid, $metadata);
+			$services->metadataCache->save($guid, $metadata);
 		}
 
 		$services->plugins->setBootPlugins($data->getActivePlugins(), false);
 
-		// use value in settings.php if available
-		$debug = $config->getInitialValue('debug') ?? ($config->debug ?: LogLevel::CRITICAL);
-		$services->logger->setLevel($debug);
-
-		if ($config->system_cache_enabled) {
-			$config->system_cache_loaded = $services->views->configureFromCache($services->serverCache);
+		if (!Application::isCli()) {
+			// CLI log level is determined by CLI verbosity
+			// use value in settings.php if available
+			// database needs to be loaded into config to determine log level correctly
+			$debug = $config->getInitialValue('debug') ?? ($config->debug ?: LogLevel::CRITICAL);
+			$services->logger->setLevel($debug);
 		}
+
+		$services->views->configureFromCache();
 	}
 
 	/**
@@ -92,7 +95,6 @@ class BootService {
 	public function clearCache() {
 		$this->cache->clear();
 		_elgg_services()->plugins->setBootPlugins(null);
-		_elgg_services()->config->system_cache_loaded = false;
 		_elgg_services()->config->_boot_cache_hit = false;
 	}
 

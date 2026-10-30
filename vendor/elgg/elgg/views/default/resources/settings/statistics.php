@@ -3,21 +3,8 @@
  * Elgg user statistics.
  */
 
-use Elgg\Exceptions\Http\EntityPermissionsException;
-
+/* @var $user \ElggUser */
 $user = elgg_get_page_owner_entity();
-if (!$user instanceof \ElggUser) {
-	$user = elgg_get_logged_in_user_entity();
-	elgg_set_page_owner_guid($user->guid);
-}
-
-if (!$user->canEdit()) {
-	throw new EntityPermissionsException();
-}
-
-elgg_push_breadcrumb(elgg_echo('settings'), elgg_generate_url('settings:account', [
-	'username' => $user->username,
-]));
 
 if ($user->guid === elgg_get_logged_in_user_guid()) {
 	$title = elgg_echo('usersettings:statistics');

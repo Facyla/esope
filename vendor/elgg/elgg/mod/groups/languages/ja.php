@@ -66,9 +66,6 @@ return array(
 	'groups:joinrequest' => '参加希望',
 	'groups:join' => 'グループに参加',
 	'groups:leave' => '脱退',
-	'groups:invite' => '友達を招待',
-	'groups:invite:title' => 'このグループに友達を招待する',
-	'groups:invite:friends:help' => '名前やユーザ名で友達を検索してリストから友達を選んでください',
 	'groups:invite:resend' => 'すでに招待したユーザにも、もう一度招待状を送ります',
 	'groups:invite:member' => 'すでにこのグループのメンバーです',
 	'groups:invite:invited' => 'このグループにはすでに招待されました',
@@ -175,4 +172,8 @@ return array(
 	
 	'groups:usersettings:notifications:title' => 'グループの通知',
 	'groups:usersettings:notifications:description' => 'あなたの参加しているグループに新しいコンテンツが追加されたときの通知の受け取り方を、下から選択してください。（複数可）',
+	
+	// accessibility
+	'groups:aria:label:group_search' => "グループを検索",
+	'groups:aria:label:search_in_group' => "このグループ内を検索",
 );

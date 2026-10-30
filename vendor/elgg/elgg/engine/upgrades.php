@@ -13,6 +13,11 @@ return [
 	\Elgg\Upgrades\DeleteDiagnosticsPlugin::class,
 	\Elgg\Upgrades\DeleteNotificationsPlugin::class,
 	\Elgg\Upgrades\MigrateACLNotificationPreferences::class,
+	\Elgg\Upgrades\MigrateEntityIconCroppingCoordinates::class,
 	\Elgg\Upgrades\NotificationsPrefix::class,
+	\Elgg\Upgrades\RemoveIcontime::class,
 	\Elgg\Upgrades\RemoveOrphanedThreadedComments::class,
+	\Elgg\Upgrades\MigrateDebugConfig::class,
+	\Elgg\Upgrades\MigrateAdminValidationNotificationPreference::class,
+	\Elgg\Upgrades\UpdateMetastringBoolDatabaseValue::class,
 ];

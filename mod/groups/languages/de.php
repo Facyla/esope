@@ -66,9 +66,6 @@ return array(
 	'groups:joinrequest' => 'Gruppenbeitritt beantragen',
 	'groups:join' => 'Gruppe beitreten',
 	'groups:leave' => 'Gruppe verlassen',
-	'groups:invite' => 'Freunde einladen',
-	'groups:invite:title' => 'Lade Deine Freunde ein, dieser Gruppe beizutreten',
-	'groups:invite:friends:help' => 'Suche mit Name oder Benutzername nach einem Freund und wähle den Freund aus der Liste aus',
 	'groups:invite:resend' => 'Einladungen an bereits eingeladene Mitglieder erneut senden',
 	'groups:invite:member' => 'Bereits Mitglied dieser Gruppe',
 	'groups:invite:invited' => 'Bereits eingeladen, dieser Gruppe beizutreten',
@@ -180,4 +177,8 @@ oder folge dem nächsten Link, um die ausstehenden Anfragen zum Gruppenbeitritt 
 	
 	'groups:usersettings:notifications:title' => 'Gruppen-Benachrichtigungen',
 	'groups:usersettings:notifications:description' => 'Um Benachrichtigungen zu erhalten, wenn zu einer Gruppe, in der Du Mitglied bist, neue Inhalte hinzugefügt werden, kannst Du individuell für jede Gruppe im Folgenden die Methode(n) festlegen, die verwendet werden soll(en).',
+	
+	// accessibility
+	'groups:aria:label:group_search' => "Suche nach Gruppen",
+	'groups:aria:label:search_in_group' => "In dieser Gruppe suchen",
 );

@@ -18,7 +18,7 @@
 $user = elgg_extract('entity', $vars, elgg_get_logged_in_user_entity());
 $size = elgg_extract('size', $vars, 'medium');
 
-if (!($user instanceof ElggUser)) {
+if (!$user instanceof \ElggUser) {
 	return;
 }
 
@@ -45,7 +45,7 @@ if ($user->isBanned()) {
 
 $icon = elgg_view('output/img', [
 	'src' => $user->getIconURL($size),
-	'alt' => $name,
+	'alt' => $user->hasIcon($size) ? $name : '',
 	'class' => elgg_extract_class($vars, [], 'img_class'),
 ]);
 
@@ -62,7 +62,7 @@ if ($show_menu) {
 	
 	$wrapper_class[] = 'elgg-avatar-menu';
 	
-	elgg_require_js('icon/user/default');
+	elgg_import_esm('icon/user/default'); // @todo move this file to navigation/menu/user_hover in Elgg 7.0
 }
 
 if (elgg_extract('use_link', $vars, true)) {
@@ -74,7 +74,7 @@ if (elgg_extract('use_link', $vars, true)) {
 		'class' => elgg_extract_class($vars, [], 'link_class'),
 	]);
 } else {
-	$content .= elgg_format_element('a', [], $icon);
+	$content .= $icon;
 }
 
 echo elgg_format_element('div', ['class' => $wrapper_class], $content);

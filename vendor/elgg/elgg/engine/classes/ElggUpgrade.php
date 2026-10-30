@@ -109,7 +109,7 @@ class ElggUpgrade extends ElggObject {
 			$batch = _elgg_services()->upgradeLocator->getBatch($this->class, $this);
 		} catch (ElggInvalidArgumentException $ex) {
 			// only report error if the upgrade still needs to run
-			$loglevel = $this->isCompleted() ? 'INFO' : 'ERROR';
+			$loglevel = $this->isCompleted() ? \Psr\Log\LogLevel::INFO : \Psr\Log\LogLevel::ERROR;
 			elgg_log($ex->getMessage(), $loglevel);
 			
 			return false;
@@ -130,11 +130,11 @@ class ElggUpgrade extends ElggObject {
 	/**
 	 * Sets the timestamp for when the upgrade completed.
 	 *
-	 * @param int $time Timestamp when upgrade finished. Defaults to now
+	 * @param null|int $time Timestamp when upgrade finished. Defaults to now
 	 *
 	 * @return void
 	 */
-	public function setCompletedTime(int $time = null): void {
+	public function setCompletedTime(?int $time = null): void {
 		$this->completed_time = $time ?? $this->getCurrentTime()->getTimestamp();
 	}
 
@@ -164,11 +164,11 @@ class ElggUpgrade extends ElggObject {
 	 * Sets the timestamp for when the upgrade started.
 	 * Once set it can't be altered unless the upgrade gets reset
 	 *
-	 * @param int $time Timestamp when upgrade started. Defaults to now
+	 * @param null|int $time Timestamp when upgrade started. Defaults to now
 	 *
 	 * @return void
 	 */
-	public function setStartTime(int $time = null): void {
+	public function setStartTime(?int $time = null): void {
 		if (isset($this->start_time)) {
 			return;
 		}

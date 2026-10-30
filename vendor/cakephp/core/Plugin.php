@@ -21,7 +21,7 @@ namespace Cake\Core;
  *
  * It also can retrieve plugin paths and load their bootstrap and routes files.
  *
- * @link https://book.cakephp.org/4/en/plugins.html
+ * @link https://book.cakephp.org/5/en/plugins.html
  */
 class Plugin
 {
@@ -30,7 +30,7 @@ class Plugin
      *
      * @var \Cake\Core\PluginCollection|null
      */
-    protected static $plugins;
+    protected static ?PluginCollection $plugins = null;
 
     /**
      * Returns the filesystem path for a plugin
@@ -127,10 +127,17 @@ class Plugin
      */
     public static function getCollection(): PluginCollection
     {
-        if (!isset(static::$plugins)) {
-            static::$plugins = new PluginCollection();
-        }
+        return static::$plugins ??= new PluginCollection();
+    }
 
-        return static::$plugins;
+    /**
+     * Set the shared plugin collection.
+     *
+     * @param \Cake\Core\PluginCollection $collection
+     * @return void
+     */
+    public static function setCollection(PluginCollection $collection): void
+    {
+        static::$plugins = $collection;
     }
 }

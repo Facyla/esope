@@ -2,16 +2,14 @@
 
 namespace Elgg\Integration;
 
-/**
- * Test elgg_get_entities() with relationship options and
- * elgg_get_entities_from_relationship_count()
- *
- * @group IntegrationTests
- * @group Entities
- * @group EntityRelationships
- */
 class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesIntegrationTestCase {
 
+	public function down() {
+		_elgg_services()->relationshipsTable->resetCurrentTime();
+		
+		parent::down();
+	}
+	
 	// Make sure metadata doesn't affect getting entities by relationship.  See #2274
 	public function testElggApiGettersEntityRelationshipWithMetadata() {
 		$obj1 = $this->createObject();
@@ -192,6 +190,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesIntegra
 		$object2 = $this->createObject();
 		
 		// get a timestamp before creating the relationship
+		_elgg_services()->relationshipsTable->setCurrentTime();
 		$dt = _elgg_services()->relationshipsTable->getCurrentTime();
 		$ts_lower = $dt->getTimestamp() - 1;
 		
@@ -232,6 +231,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesIntegra
 		$object2 = $this->createObject();
 		
 		// get a timestamp before creating the relationship
+		_elgg_services()->relationshipsTable->setCurrentTime();
 		$dt = _elgg_services()->relationshipsTable->getCurrentTime();
 		$ts_lower = $dt->getTimestamp() - 1;
 		
@@ -272,6 +272,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesIntegra
 		$object2 = $this->createObject();
 		
 		// get a timestamp before creating the relationship
+		_elgg_services()->relationshipsTable->setCurrentTime();
 		$dt = _elgg_services()->relationshipsTable->getCurrentTime();
 		$ts_lower = $dt->getTimestamp() - 1;
 		

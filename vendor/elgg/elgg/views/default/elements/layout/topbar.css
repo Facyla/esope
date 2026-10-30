@@ -2,14 +2,14 @@
 	left: 0;
 	flex-grow: 1;
 	
-	h1 {
+	.elgg-heading-site {
 		font-size: 1.3rem;
 		line-height: 3rem;
 		font-weight: 700;
 	}
 	
 	a {
-		padding: 0.5rem 1rem;
+		padding: 0.5rem 1rem 0.5rem 0;
 		display: inline-block;
 	}
 	
@@ -86,6 +86,7 @@
 		width: auto;
 		display: flex;
 		flex-direction: row;
+		justify-content: flex-end;
 	}
 }
 
@@ -93,7 +94,7 @@
 	width: 20px;
 	height: 15px;
 	position: relative;
-	margin: 10px 20px;
+	margin: 10px 0 10px 20px;
 	-moz-transform: rotate(0deg);
 	-ms-transform: rotate(0deg);
 	-webkit-transform: rotate(0deg);
@@ -178,7 +179,7 @@ html.elgg-nav-collapsed {
 }
 
 .elgg-page-topbar {
-	background: $(topbar-background-color, $(background-color-highlight));
+	background: var(--elgg-topbar-background-color);
 	position: sticky;
 	top: 0;
 	
@@ -217,7 +218,7 @@ html.elgg-nav-collapsed {
 		order: 2;
 		
 		.elgg-badge {
-			background-color: $(topbar-indicator);
+			background-color: var(--elgg-topbar-indicator);
 		}
 	}
 	
@@ -295,6 +296,7 @@ html.elgg-nav-collapsed {
 	.elgg-page-topbar {
 		.elgg-menu-site-container {
 			order: 1;
+			margin-right: auto;
 			
 			.elgg-menu-site {
 				.elgg-anchor-icon {
@@ -313,13 +315,10 @@ html.elgg-nav-collapsed {
 		.elgg-menu-container {
 			flex-direction: row;
 			align-items: center;
-			margin-right: auto;
 		}
 		
 		.elgg-menu-topbar-container {
 			order: 3;
-			margin-left: auto;
-			margin-right: 0;
 			
 			.elgg-menu-topbar-alt {
 				order: 2;
@@ -355,12 +354,15 @@ html.elgg-nav-collapsed {
 				width: auto;
 				position: relative;
 				
-				&:hover > .elgg-child-menu {
-					display: flex;
-					animation: menuGrowDown 300ms ease-in-out forwards;
-					transform-origin: top center;
+				&:focus-within,
+				&:hover {
+					> .elgg-child-menu {
+						display: flex;
+						animation: menuGrowDown 300ms ease-in-out forwards;
+						transform-origin: top center;
+					}
 				}
-				
+
 				> a {
 					border: none;
 				}
@@ -374,7 +376,7 @@ html.elgg-nav-collapsed {
 					position: absolute;
 					left: 0;
 					width: 12rem;
-					background: $(topbar-background-color, $(background-color-highlight));
+					background: var(--elgg-topbar-background-color);
 					align-items: flex-start;
 					box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.2);
 					

@@ -4,9 +4,6 @@ namespace Elgg;
 
 use Elgg\Exceptions\CronException;
 
-/**
- * @group Cron
- */
 class CronServiceUnitTest extends UnitTestCase {
 
 	/**
@@ -94,13 +91,11 @@ class CronServiceUnitTest extends UnitTestCase {
 		
 		$calls = 0;
 		$dt = new \DateTime('2017-1-1 0:00:00');
-		$calls = 0;
-
+		
 		$handler = function(\Elgg\Event $event) use (&$calls, $dt) {
 			$calls++;
 			$this->assertEquals($dt->getTimestamp(), $event->getParam('time'));
 			$this->assertEquals($dt, $event->getParam('dt'));
-			echo 'Cron event handler called';
 		};
 
 		elgg_register_event_handler('cron', 'yearly', $handler);
@@ -110,10 +105,10 @@ class CronServiceUnitTest extends UnitTestCase {
 		ob_start();
 		$request = $this->prepareHttpRequest('cron/run');
 		_elgg_services()->router->route($request);
-		$response = _elgg_services()->responseFactory->getSentResponse();
+		_elgg_services()->responseFactory->getSentResponse();
 		ob_get_clean();
 
-		$this->assertMatchesRegularExpression('/Cron event handler called/im', $response->getContent());
+		$this->assertEquals(1, $calls);
 
 		elgg_unregister_event_handler('cron', 'yearly', $handler);
 	}
@@ -123,13 +118,11 @@ class CronServiceUnitTest extends UnitTestCase {
 
 		$calls = 0;
 		$dt = new \DateTime('2017-1-1 0:00:00');
-		$calls = 0;
-
+		
 		$handler = function(\Elgg\Event $event) use (&$calls, $dt) {
 			$calls++;
 			$this->assertEquals($dt->getTimestamp(), $event->getParam('time'));
 			$this->assertEquals($dt, $event->getParam('dt'));
-			echo 'Cron event handler called';
 		};
 
 		elgg_register_event_handler('cron', 'yearly', $handler);
@@ -139,11 +132,11 @@ class CronServiceUnitTest extends UnitTestCase {
 		ob_start();
 		$request = $this->prepareHttpRequest('cron/yearly');
 		_elgg_services()->router->route($request);
-		$response = _elgg_services()->responseFactory->getSentResponse();
+		_elgg_services()->responseFactory->getSentResponse();
 		ob_get_clean();
-
-		$this->assertMatchesRegularExpression('/Cron event handler called/im', $response->getContent());
-
+		
+		$this->assertEquals(1, $calls);
+		
 		elgg_unregister_event_handler('cron', 'yearly', $handler);
 	}
 

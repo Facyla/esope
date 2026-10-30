@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class to store API key information in
  *
@@ -12,8 +11,7 @@ class ElggApiKey extends ElggObject {
 	const SUBTYPE = 'api_key';
 	
 	/**
-	 * {@inheritDoc}
-	 * @see ElggEntity::initializeAttributes()
+	 * {@inheritdoc}
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -24,18 +22,28 @@ class ElggApiKey extends ElggObject {
 		$this->attributes['container_guid'] = $site->guid;
 		$this->attributes['owner_guid'] = $site->guid;
 		$this->attributes['subtype'] = self::SUBTYPE;
-		
-		$this->generateKeys();
 	}
 	
 	/**
-	 * {@inheritDoc}
-	 * @see ElggEntity::delete()
+	 * {@inheritdoc}
 	 */
-	public function delete(bool $recursive = true): bool {
+	protected function create() {
+		$result = parent::create();
+		
+		if ($result !== false) {
+			$this->generateKeys();
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function persistentDelete(bool $recursive = true): bool {
 		$public_key = $this->public_key;
 		
-		if (!parent::delete($recursive)) {
+		if (!parent::persistentDelete($recursive)) {
 			return false;
 		}
 		

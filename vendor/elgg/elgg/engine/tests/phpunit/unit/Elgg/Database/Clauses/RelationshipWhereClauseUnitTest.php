@@ -2,14 +2,11 @@
 
 namespace Elgg\Database\Clauses;
 
+use Elgg\Database\EntityTable;
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
 use Elgg\UnitTestCase;
 
-/**
- * @group QueryBuilder
- * @group QueryBuilderWhere
- */
 class RelationshipWhereClauseUnitTest extends UnitTestCase {
 
 	/**
@@ -18,24 +15,22 @@ class RelationshipWhereClauseUnitTest extends UnitTestCase {
 	protected $qb;
 
 	public function up() {
-		$this->qb = Select::fromTable('entities', 'alias');
+		$this->qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
 	}
 
 	public function testBuildEmptyQuery() {
-
 		$expected = null;
 
 		$query = new RelationshipWhereClause();
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromId() {
-
 		$parts = [];
 		$parts[] = $this->qb->expr()->eq('alias.id', ':qb1');
 		$this->qb->param(1, ELGG_VALUE_INTEGER);
@@ -44,15 +39,14 @@ class RelationshipWhereClauseUnitTest extends UnitTestCase {
 		$query = new RelationshipWhereClause();
 		$query->ids = 1;
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromName() {
-
 		$parts = [];
 		$parts[] = $this->qb->expr()->eq('alias.relationship', ':qb1');
 		$this->qb->param('friend', ELGG_VALUE_STRING);
@@ -61,15 +55,14 @@ class RelationshipWhereClauseUnitTest extends UnitTestCase {
 		$query = new RelationshipWhereClause();
 		$query->names = 'friend';
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromNames() {
-
 		$parts = [];
 		$parts[] = $this->qb->expr()->in('alias.relationship', ':qb1');
 		$this->qb->param(['friend', 'member'], ELGG_VALUE_STRING);
@@ -78,15 +71,14 @@ class RelationshipWhereClauseUnitTest extends UnitTestCase {
 		$query = new RelationshipWhereClause();
 		$query->names = ['friend', 'member'];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromGuids() {
-
 		$parts = [];
 		$parts[] = $this->qb->expr()->in('alias.guid_one', ':qb1');
 		$parts[] = $this->qb->expr()->in('alias.guid_two', ':qb2');
@@ -95,18 +87,17 @@ class RelationshipWhereClauseUnitTest extends UnitTestCase {
 		$expected = $this->qb->merge($parts);
 
 		$query = new RelationshipWhereClause();
-		$query->subject_guids = [2, 3, 4];
-		$query->object_guids = [5, 6, 7];
+		$query->guid_one = [2, 3, 4];
+		$query->guid_two = [5, 6, 7];
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());
 	}
 
 	public function testBuildQueryFromTimeCreated() {
-
 		$after = (new \DateTime())->modify('-1 day');
 		$before = (new \DateTime())->modify('+1 day');
 
@@ -125,8 +116,8 @@ class RelationshipWhereClauseUnitTest extends UnitTestCase {
 		$query->created_after = $after;
 		$query->created_before = $before;
 
-		$qb = Select::fromTable('entities', 'alias');
-		$actual = $query->prepare($qb, 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$actual = $query->prepare($qb, $qb->getTableAlias());
 
 		$this->assertEquals($expected, $actual);
 		$this->assertEquals($this->qb->getParameters(), $qb->getParameters());

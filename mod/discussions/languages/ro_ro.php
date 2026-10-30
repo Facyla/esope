@@ -7,12 +7,13 @@
 
 return array(
 	'item:object:discussion' => "Subiectul discuției",
+	'collection:object:discussion' => 'Subiecte de dicuție',
 	
 	'add:object:discussion' => 'Adaugă subiect de discuție',
 	'edit:object:discussion' => 'Editează subiectul',
-	'collection:object:discussion' => 'Subiecte de dicuție',
 	'collection:object:discussion:group' => 'Discuții de grup',
 	'collection:object:discussion:my_groups' => 'Discuțiile din grupurile mele',
+	
 	'notification:object:discussion:create' => "Trimite o notificare atunci când o discuție este creată",
 	'notifications:mute:object:discussion' => "despre discuția '%s'",
 	
@@ -20,13 +21,13 @@ return array(
 	'discussion:settings:enable_global_discussions:help' => 'Permite ca discuțiile să fie create în afara grupurilor',
 
 	'discussion:latest' => 'Ultimele discuții',
-	'discussion:none' => 'Nu sunt discuții',
+	'discussion:none' => 'Nu sunt discuții', // @todo remove in Elgg 7.0
 	'discussion:updated' => "Ultimul comentariu de către %s%s",
 
 	'discussion:topic:created' => 'Subiectul de discuție a fost creat',
 	'discussion:topic:updated' => 'Subiectul de discuție a fost actualizat.',
 	'entity:delete:object:discussion:success' => 'Subiectul de discuție a fost șters.',
-
+	
 	'discussion:topic:notfound' => 'Nu s-a găsit subiectul de discuție',
 	'discussion:error:notsaved' => 'Nu s-a putut salva acest subiect',
 	'discussion:error:missing' => 'Ambele câmpuri de titlu și mesaj sunt necesare',

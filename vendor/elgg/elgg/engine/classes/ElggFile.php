@@ -231,20 +231,30 @@ class ElggFile extends ElggObject {
 	}
 
 	/**
-	 * Delete this file.
-	 *
-	 * @param bool $follow_symlinks If true, will also delete the target file if the current file is a symlink
-	 *
-	 * @return bool
+	 * {@inheritdoc}
 	 */
-	public function delete(bool $follow_symlinks = true): bool {
-		$result = $this->getFilestore()->delete($this, $follow_symlinks);
-
-		if ($this->getGUID() && $result) {
-			$result = parent::delete();
+	public function delete(bool $recursive = true, ?bool $persistent = null): bool {
+		if (!$this->guid) {
+			return $this->persistentDelete($recursive);
 		}
-
-		return $result;
+		
+		return parent::delete($recursive, $persistent);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function persistentDelete(bool $recursive = true): bool {
+		if ($this->guid) {
+			$result = parent::persistentDelete($recursive);
+			if ($result) {
+				$this->getFilestore()->delete($this);
+			}
+			
+			return $result;
+		}
+		
+		return $this->getFilestore()->delete($this);
 	}
 
 	/**
@@ -279,7 +289,7 @@ class ElggFile extends ElggObject {
 		if ($modified) {
 			clearstatcache(true, $filestorename);
 		} else {
-			elgg_log("Unable to update modified time for {$filestorename}", 'ERROR');
+			elgg_log("Unable to update modified time for {$filestorename}", \Psr\Log\LogLevel::ERROR);
 		}
 		
 		return $modified;
@@ -338,12 +348,12 @@ class ElggFile extends ElggObject {
 	 * This is an alternative to using rename() which fails to move files to
 	 * a non-existent directory under new owner's filestore directory
 	 *
-	 * @param int    $owner_guid New owner's guid
-	 * @param string $filename   New filename (uses old filename if not set)
+	 * @param int         $owner_guid New owner's guid
+	 * @param null|string $filename   New filename (uses old filename if not set)
 	 *
 	 * @return bool
 	 */
-	public function transfer(int $owner_guid, string $filename = null): bool {
+	public function transfer(int $owner_guid, ?string $filename = null): bool {
 		if ($owner_guid < 1) {
 			return false;
 		}

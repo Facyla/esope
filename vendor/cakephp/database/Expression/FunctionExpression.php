@@ -39,7 +39,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      *
      * @var string
      */
-    protected $_name;
+    protected string $_name;
 
     /**
      * Constructor. Takes a name for the function to be invoked and a list of params
@@ -99,19 +99,19 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     /**
      * Adds one or more arguments for the function call.
      *
-     * @param array $conditions list of arguments to be passed to the function
+     * @param \Cake\Database\ExpressionInterface|array|string $conditions list of arguments to be passed to the function
      * If associative the key would be used as argument when value is 'literal'
      * @param array<string, string> $types Associative array of types to be associated with the
      * passed arguments
      * @param bool $prepend Whether to prepend or append to the list of arguments
      * @see \Cake\Database\Expression\FunctionExpression::__construct() for more details.
      * @return $this
-     * @psalm-suppress MoreSpecificImplementedParamType
      */
-    public function add($conditions, array $types = [], bool $prepend = false)
+    public function add(ExpressionInterface|array|string $conditions, array $types = [], bool $prepend = false)
     {
         $put = $prepend ? 'array_unshift' : 'array_push';
         $typeMap = $this->getTypeMap()->setTypes($types);
+        /** @var array $conditions */
         foreach ($conditions as $k => $p) {
             if ($p === 'literal') {
                 $put($this->_conditions, $k);
@@ -161,7 +161,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
 
         return $this->_name . sprintf('(%s)', implode(
             $this->_conjunction . ' ',
-            $parts
+            $parts,
         ));
     }
 

@@ -4,10 +4,6 @@ namespace Elgg\Email;
 
 use Elgg\Exceptions\InvalidArgumentException;
 
-/**
- * @group EmailService
- * @group UnitTests
- */
 class AddressUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -192,7 +188,7 @@ class AddressUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($expected_output, $address->getName());
 	}
 	
-	public function nameHtmlDecodingProvider() {
+	public static function nameHtmlDecodingProvider() {
 		return [
 			['Doe, John', 'Doe, John'],
 			['John Doe', 'John Doe'],

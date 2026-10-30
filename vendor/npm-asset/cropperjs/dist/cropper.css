@@ -1,11 +1,11 @@
 /*!
- * Cropper.js v1.5.13
+ * Cropper.js v1.6.3
  * https://fengyuanchen.github.io/cropperjs
  *
  * Copyright 2015-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2022-11-20T05:30:43.444Z
+ * Date: 2026-08-23T09:24:55.184Z
  */
 
 .cropper-container {
@@ -15,6 +15,7 @@
   position: relative;
   -ms-touch-action: none;
       touch-action: none;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -22,8 +23,7 @@
 }
 
 .cropper-container img {
-    -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
+    backface-visibility: hidden;
     display: block;
     height: 100%;
     image-orientation: 0deg;
@@ -65,7 +65,7 @@
   display: block;
   height: 100%;
   outline: 1px solid #39f;
-  outline-color: rgba(51, 153, 255, 75%);
+  outline-color: rgba(51, 153, 255, 0.75);
   overflow: hidden;
   width: 100%;
 }
@@ -108,7 +108,7 @@
 .cropper-center::before,
   .cropper-center::after {
     background-color: #eee;
-    content: " ";
+    content: ' ';
     display: block;
     position: absolute;
   }
@@ -265,7 +265,7 @@
 .cropper-point.point-se::before {
     background-color: #39f;
     bottom: -50%;
-    content: " ";
+    content: ' ';
     display: block;
     height: 200%;
     opacity: 0;
@@ -279,7 +279,7 @@
 }
 
 .cropper-bg {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 }
 
 .cropper-hide {

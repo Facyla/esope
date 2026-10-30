@@ -32,7 +32,7 @@ if (!isset($CONFIG)) {
  *
  * @global string $CONFIG->dataroot
  */
-$CONFIG->dataroot = "{{dataroot}}";
+$CONFIG->dataroot = '{{dataroot}}';
 
 /**
  * The installation root URL of the site. E.g. "https://example.org/elgg/"
@@ -41,7 +41,7 @@ $CONFIG->dataroot = "{{dataroot}}";
  *
  * @global string $CONFIG->wwwroot
  */
-$CONFIG->wwwroot = "{{wwwroot}}";
+$CONFIG->wwwroot = '{{wwwroot}}';
 
 /**
  * The database username
@@ -261,6 +261,8 @@ $CONFIG->dbencoding = 'utf8mb4';
  *
  * To use, uncomment the appropriate sections below and update for your site.
  *
+ * @see https://www.php.net/manual/en/function.session-get-cookie-params.php
+ *
  * @global array $CONFIG->cookies
  */
 // get the default parameters from php.ini
@@ -271,6 +273,7 @@ $CONFIG->dbencoding = 'utf8mb4';
 //$CONFIG->cookies['session']['domain'] = "";
 //$CONFIG->cookies['session']['secure'] = false;
 //$CONFIG->cookies['session']['httponly'] = false;
+//$CONFIG->cookies['session']['samesite'] = ''; // 'Strict' or 'Lax'
 
 // extended session cookie
 //$CONFIG->cookies['remember_me'] = session_get_cookie_params();
@@ -281,6 +284,7 @@ $CONFIG->dbencoding = 'utf8mb4';
 //$CONFIG->cookies['remember_me']['domain'] = "";
 //$CONFIG->cookies['remember_me']['secure'] = false;
 //$CONFIG->cookies['remember_me']['httponly'] = false;
+//$CONFIG->cookies['remember_me']['samesite'] = ''; // 'Strict' or 'Lax'
 
 /**
  * Disable the database query cache
@@ -369,15 +373,24 @@ $CONFIG->action_time_limit = 120;
 $CONFIG->allow_phpinfo = false;
 
 /**
- * Configure image processor
+ * Configure image settings
  *
- * This setting can be used to select a different image processor. By default the GD library is used.
+ * The 'image_processor' setting can be used to select a different image processor. By default, the GD library is used.
  * Currently only 'imagick' is supported as a different configuration.
  * For Imagick the 'imagick' extension is required.
  *
  * @global string $CONFIG->image_processor
+ *
+ * In order to help prevent OOM issues with image resizing limitations can be set on the source images
+ *
+ * @global int $CONFIG->image_resize_max_height     Max height of the source image (default: 10000 (px))
+ * @global int $CONFIG->image_resize_max_resolution Max resolution of the source image (default: 16777216 (16MP))
+ * @global int $CONFIG->image_resize_max_width      Max width of the source image (default: 10000 (px))
  */
 //$CONFIG->image_processor = 'imagick';
+//$CONFIG->image_resize_max_height = 10000;
+//$CONFIG->image_resize_max_resolution = 16777216; // 16MP
+//$CONFIG->image_resize_max_width = 10000;
 
 /**
  * Control if webp images are allowed to be served for icons (if supported by server and browser).
@@ -465,9 +478,9 @@ $CONFIG->proxy = [
  * will not be logged during the initial boot.
  *
  * However, if the level is set here, it will be used during the entire request. It can be set to one of
- * the string levels in Elgg\Logger or ''. E.g., use 'INFO' to log all DB queries during boot up.
+ * the constants from \Psr\Log\LogLevel. E.g., use 'info' to log all DB queries during boot up.
  */
-//$CONFIG->debug = 'INFO';
+//$CONFIG->debug = 'info';
 
 /**
  * Language to locale mapping
@@ -478,7 +491,7 @@ $CONFIG->proxy = [
  * For example if you wish to present English dates in USA format make the mapping 'en' => ['en_US'], or if you
  * wish to use UK format 'en' => ['en_UK'].
  *
- * It's possible to configure the locale mapping for mulitple languages, for example:
+ * It's possible to configure the locale mapping for multiple languages, for example:
  * [
  * 	'en' => ['en_US', 'en_UK'],
  * 	'nl' => ['nl_NL'],

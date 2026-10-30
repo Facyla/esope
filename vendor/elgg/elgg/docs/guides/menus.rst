@@ -44,13 +44,32 @@ Admin menu
 You can also register ``page`` menu items to the admin backend menu. When registering for the admin menu you can set the context of
 the menu items to ``admin`` so the menu items only show in the ``admin`` context. There are 3 default sections to add your menu items to.
  
- - ``administer`` for daily tasks, usermanagement and other actionable tasks
+ - ``administer`` for daily tasks, user management and other actionable tasks
  - ``configure`` for settings, configuration and utilities that configure stuff
  - ``information`` for statistics, overview of information or status
 
 
 Advanced usage
 ==============
+
+Headers
+-------
+
+For accessibility reasons each menu will get an ``aria-label`` which defaults to the menu name, but can be translated by making sure
+the language key ``menu:<menu name>:header`` is available.
+
+It's also possible to show menu section headers by setting ``show_section_headers`` to ``true`` in ``elgg_view_menu()``
+
+.. code-block:: php
+
+	echo elgg_view_menu('my_menu', [
+		'show_section_headers' => true,
+	]);
+
+The headers have a magic language key available ``menu:<menu name>:header:<section name>`` in order to be able to translate the headers.
+
+Events
+------
 
 You can get more control over menus by using :doc:`events </design/events>`
 and the public methods provided by the ``ElggMenuItem`` class.
@@ -280,7 +299,7 @@ JavaScript
 ==========
 
 It is common that menu items rely on JavaScript. You can bind client-side events
-to menu items by placing your JavaScript into AMD module and defining the
+to menu items by placing your JavaScript into a module and defining the
 requirement during the registration.
 
 .. code-block:: php
@@ -296,12 +315,10 @@ requirement during the registration.
 
 .. code-block:: js
 
-    // in navigation/menu/item/hide_on_click.js
-    define(function(require) {
-        var $ = require('jquery');
+    // in navigation/menu/item/hide_on_click.mjs
+    import 'jquery';
 
-        $(document).on('click', '.hide-on-click', function(e) {
-            e.preventDefault();
-            $(this).hide();
-        });
+    $(document).on('click', '.hide-on-click', function(e) {
+        e.preventDefault();
+        $(this).hide();
     });

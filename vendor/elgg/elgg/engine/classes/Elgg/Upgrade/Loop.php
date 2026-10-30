@@ -17,44 +17,17 @@ class Loop {
 	use Loggable;
 
 	/**
-	 * @var \ElggUpgrade
-	 */
-	protected $upgrade;
-
-	/**
-	 * @var Result
-	 */
-	protected $result;
-
-	/**
 	 * @var Batch|false
 	 */
 	protected $batch;
 
-	/**
-	 * @var int
-	 */
-	protected $max_duration;
+	protected int $max_duration;
 
-	/**
-	 * @var int
-	 */
-	protected $count;
+	protected int $count;
 
-	/**
-	 * @var int
-	 */
-	protected $processed;
+	protected int $processed;
 
-	/**
-	 * @var int
-	 */
-	protected $offset;
-
-	/**
-	 * @var Progress
-	 */
-	protected $progress;
+	protected int $offset;
 
 	/**
 	 * Constructor
@@ -67,13 +40,13 @@ class Loop {
 	 * @throws RuntimeException
 	 */
 	public function __construct(
-		\ElggUpgrade $upgrade,
-		Result $result,
-		Progress $progress,
+		protected \ElggUpgrade $upgrade,
+		protected Result $result,
+		protected Progress $progress,
 		Logger $logger
 	) {
-		$this->upgrade = $upgrade;
-
+		$this->setLogger($logger);
+		
 		// Get the class taking care of the actual upgrading
 		$this->batch = $upgrade->getBatch();
 		if (!$this->batch) {
@@ -83,10 +56,6 @@ class Loop {
 			]));
 		}
 
-		$this->result = $result;
-		$this->progress = $progress;
-		$this->logger = $logger;
-
 		$this->count = $this->batch->countItems();
 		$this->processed = (int) $upgrade->processed;
 		$this->offset = (int) $upgrade->offset;
@@ -95,12 +64,11 @@ class Loop {
 	/**
 	 * Run upgrade loop for a preset number of seconds
 	 *
-	 * @param int $max_duration Maximum loop duration
+	 * @param int|null $max_duration Maximum loop duration
 	 *
 	 * @return void
 	 */
-	public function loop($max_duration = null): void {
-
+	public function loop(?int $max_duration = null): void {
 		$started = microtime(true);
 
 		$this->upgrade->setStartTime();
@@ -210,19 +178,19 @@ class Loop {
 	}
 
 	/**
-	 * Check if the loop cand and should continue
+	 * Check if the loop can and should continue
 	 *
-	 * @param float $started      Timestamp of the loop initiation
-	 * @param int   $max_duration Maximum loop duration
+	 * @param float    $started      Timestamp of the loop initiation
+	 * @param int|null $max_duration Maximum loop duration
 	 *
 	 * @return bool
 	 */
-	protected function canContinue($started, $max_duration = null): bool {
+	protected function canContinue($started, ?int $max_duration = null): bool {
 		if (!isset($max_duration)) {
-			$max_duration = elgg_get_config('batch_run_time_in_secs');
+			$max_duration = (int) elgg_get_config('batch_run_time_in_secs');
 		}
 
-		if ($max_duration && (microtime(true) - $started) >= $max_duration) {
+		if ($max_duration > 0 && (microtime(true) - $started) >= $max_duration) {
 			return false;
 		}
 

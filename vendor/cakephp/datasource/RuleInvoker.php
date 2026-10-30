@@ -16,6 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Datasource;
 
+use Closure;
+
 /**
  * Contains logic for invoking an application rule.
  *
@@ -32,14 +34,14 @@ class RuleInvoker
      *
      * @var string|null
      */
-    protected $name;
+    protected ?string $name = null;
 
     /**
      * Rule options
      *
      * @var array<string, mixed>
      */
-    protected $options = [];
+    protected array $options = [];
 
     /**
      * Rule callable
@@ -61,7 +63,7 @@ class RuleInvoker
      * rule $scope.
      *
      * @param callable $rule The rule to be invoked.
-     * @param ?string $name The name of the rule. Used in error messages.
+     * @param string|null $name The name of the rule. Used in error messages.
      * @param array<string, mixed> $options The options for the rule. See above.
      */
     public function __construct(callable $rule, ?string $name, array $options = [])
@@ -115,20 +117,24 @@ class RuleInvoker
     {
         $rule = $this->rule;
         $pass = $rule($entity, $this->options + $scope);
-        if ($pass === true || empty($this->options['errorField'])) {
-            return $pass === true;
+        if ($pass === true) {
+            return true;
         }
 
         $message = $this->options['message'] ?? 'invalid';
         if (is_string($pass)) {
             $message = $pass;
         }
+        if ($message instanceof Closure) {
+            $message = $message($entity, $this->options + $scope);
+        }
         if ($this->name) {
             $message = [$this->name => $message];
         } else {
             $message = [$message];
         }
-        $errorField = $this->options['errorField'];
+
+        $errorField = $this->options['errorField'] ?? ($this->name ?? '_rule');
         $entity->setError($errorField, $message);
 
         if ($entity instanceof InvalidPropertyInterface && isset($entity->{$errorField})) {
@@ -136,7 +142,6 @@ class RuleInvoker
             $entity->setInvalidField($errorField, $invalidValue);
         }
 
-        /** @phpstan-ignore-next-line */
-        return $pass === true;
+        return false;
     }
 }

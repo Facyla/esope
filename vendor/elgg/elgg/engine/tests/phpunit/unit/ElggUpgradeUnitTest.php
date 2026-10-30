@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @group UpgradeService
- * @group UnitTests
- */
 class ElggUpgradeUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -13,7 +9,7 @@ class ElggUpgradeUnitTest extends \Elgg\UnitTestCase {
 
 	public function up() {
 		$this->obj = $this->getMockBuilder('\ElggUpgrade')
-			->setMethods(null)
+			->onlyMethods([])
 			->getMock();
 	}
 

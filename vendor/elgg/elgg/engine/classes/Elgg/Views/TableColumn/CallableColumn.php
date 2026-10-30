@@ -9,24 +9,18 @@ use Elgg\Views\TableColumn;
 class CallableColumn implements TableColumn {
 
 	/**
-	 * @var string
+	 * @var callable rendering function
 	 */
-	private $heading;
-
-	/**
-	 * @var callable
-	 */
-	private $renderer;
-
+	protected $renderer;
+	
 	/**
 	 * Constructor
 	 *
 	 * @param callable $renderer Rendering function
 	 * @param string   $heading  Heading
 	 */
-	public function __construct(callable $renderer, $heading) {
+	public function __construct(callable $renderer, protected $heading) {
 		$this->renderer = $renderer;
-		$this->heading = $heading;
 	}
 
 	/**

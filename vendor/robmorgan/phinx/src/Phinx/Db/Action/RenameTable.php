@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -16,15 +17,15 @@ class RenameTable extends Action
      *
      * @var string
      */
-    protected $newName;
+    protected string $newName;
 
     /**
      * Constructor
      *
      * @param \Phinx\Db\Table\Table $table The table to be renamed
-     * @param mixed $newName The new name for the table
+     * @param string $newName The new name for the table
      */
-    public function __construct(Table $table, $newName)
+    public function __construct(Table $table, string $newName)
     {
         parent::__construct($table);
         $this->newName = $newName;
@@ -35,7 +36,7 @@ class RenameTable extends Action
      *
      * @return string
      */
-    public function getNewName()
+    public function getNewName(): string
     {
         return $this->newName;
     }

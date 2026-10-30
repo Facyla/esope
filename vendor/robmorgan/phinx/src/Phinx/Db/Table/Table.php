@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -14,19 +15,19 @@ class Table
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $options;
+    protected array $options;
 
     /**
      * @param string $name The table name
-     * @param array $options The creation options for this table
+     * @param array<string, mixed> $options The creation options for this table
      * @throws \InvalidArgumentException
      */
-    public function __construct($name, array $options = [])
+    public function __construct(string $name, array $options = [])
     {
         if (empty($name)) {
             throw new InvalidArgumentException('Cannot use an empty table name');
@@ -42,7 +43,7 @@ class Table
      * @param string $name The name of the table
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -54,7 +55,7 @@ class Table
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -62,9 +63,9 @@ class Table
     /**
      * Gets the table options
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -72,11 +73,13 @@ class Table
     /**
      * Sets the table options
      *
-     * @param array $options The options for the table creation
-     * @return void
+     * @param array<string, mixed> $options The options for the table creation
+     * @return $this
      */
     public function setOptions(array $options)
     {
         $this->options = $options;
+
+        return $this;
     }
 }

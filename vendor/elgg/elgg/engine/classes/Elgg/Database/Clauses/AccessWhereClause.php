@@ -9,40 +9,23 @@ use Elgg\Database\QueryBuilder;
  */
 class AccessWhereClause extends WhereClause {
 
-	/**
-	 * @var string
-	 */
-	public $access_column = 'access_id';
+	public string $access_column = 'access_id';
 
-	/**
-	 * @var string
-	 */
-	public $owner_guid_column = 'owner_guid';
+	public string $owner_guid_column = 'owner_guid';
 
-	/**
-	 * @var string
-	 */
-	public $guid_column = 'guid';
+	public string $guid_column = 'guid';
 
-	/**
-	 * @var string
-	 */
-	public $enabled_column = 'enabled';
+	public string $enabled_column = 'enabled';
 
-	/**
-	 * @var bool
-	 */
-	public $ignore_access;
+	public string $deleted_column = 'deleted';
 
-	/**
-	 * @var bool
-	 */
-	public $use_enabled_clause;
+	public ?bool $ignore_access = null;
 
-	/**
-	 * @var int
-	 */
-	public $viewer_guid;
+	public ?bool $use_enabled_clause = null;
+	
+	public ?bool $use_deleted_clause = null;
+
+	public ?int $viewer_guid = null;
 
 	/**
 	 * {@inheritdoc}
@@ -62,6 +45,10 @@ class AccessWhereClause extends WhereClause {
 
 		if (!isset($this->use_enabled_clause)) {
 			$this->use_enabled_clause = !_elgg_services()->session_manager->getDisabledEntityVisibility();
+		}
+
+		if (!isset($this->use_deleted_clause)) {
+			$this->use_deleted_clause = !_elgg_services()->session_manager->getDeletedEntityVisibility();
 		}
 
 		$ors = [];
@@ -84,6 +71,10 @@ class AccessWhereClause extends WhereClause {
 			$ands[] = $qb->compare($alias($this->enabled_column), '=', 'yes', ELGG_VALUE_STRING);
 		}
 
+		if ($this->use_deleted_clause) {
+			$ands[] = $qb->compare($alias($this->deleted_column), '=', 'no', ELGG_VALUE_STRING);
+		}
+
 		$params = [
 			'table_alias' => $table_alias,
 			'user_guid' => $this->viewer_guid,
@@ -93,6 +84,8 @@ class AccessWhereClause extends WhereClause {
 			'owner_guid_column' => $this->owner_guid_column,
 			'guid_column' => $this->guid_column,
 			'enabled_column' => $this->enabled_column,
+			'deleted_column' => $this->deleted_column,
+			'use_deleted_clause' => $this->use_deleted_clause,
 			'query_builder' => $qb,
 		];
 

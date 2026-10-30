@@ -10,7 +10,7 @@ For more information on how events work visit :doc:`/design/events`.
 .. note::
 
 	Some events are marked with |sequence| this means those events also have a ``:before`` and ``:after`` event
-	Also see :ref:`Event sequence <design/events#event-sequence>`
+	Also see :ref:`Event sequence <event-sequence>`
 
 	Some events are marked with |results| this means those events allow altering the output of an event
 
@@ -41,6 +41,12 @@ System events
 **cron, <period>** |results|
 	Triggered by cron for each period.
 
+	The ``$params`` array will contain:
+
+	 * ``time`` - the timestamp of when the cron command was started
+	 * ``dt`` - the ``\DateTime`` object of when the cron command was started
+	 * ``logger`` - instance of ``\Elgg\Logger\Cron`` to log any information to the cron log
+
 **cron:intervals, system** |results|
 	Allow the configuration of custom cron intervals
 
@@ -51,10 +57,7 @@ System events
 	Filter the output for the diagnostics report download.
 
 **elgg.data, page** |results|
-   Filters uncached, page-specific configuration data to pass to the client. :ref:`More info <guides/javascript#config>`
-   
-**elgg.data, site** |results|
-   Filters cached configuration data to pass to the client. :ref:`More info <guides/javascript#config>`
+   Filters uncached, page-specific configuration data to pass to the client. :doc:`More info </guides/javascript>`
    
 **format, friendly:title** |results|
 	Formats the "friendly" title for strings. This is used for generating URLs.
@@ -233,7 +236,7 @@ System events
 	Triggered after a system upgrade has finished. All upgrade scripts have run, but the caches 
 	are not cleared.
 
-**upgrade:execute, system** |sequence|
+**upgrade:execute, system** |sequence| |results|
 	Triggered when executing an ``ElggUpgrade``. The ``$object`` of the event is the ``ElggUpgrade``.
 
 User events
@@ -256,11 +259,8 @@ User events
 **invalidate:after, user**
     Triggered when user's account validation has been revoked.
     
-**login:after, user**
-	Triggered after the user logs in.
-
-**login:before, user**
-    Triggered during login. Returning false prevents the user from logging
+**login, user** |sequence|
+	Triggered when a user is being logged in.
     
 **login:forward, user** |results|
     Filters the URL to which the user will be forwarded after login.
@@ -337,13 +337,11 @@ User events
 Relationship events
 ===================
 
-**create, relationship**
-    Triggered after a relationship has been created. Returning false deletes
-    the relationship that was just created.
+**create, relationship** |sequence|
+    Triggered during the creation of a relationship.
 
-**delete, relationship**
-    Triggered before a relationship is deleted. Return false to prevent it
-    from being deleted.
+**delete, relationship** |sequence|
+    Triggered during the deletion of a relationship.
 
 **join, group**
     Triggered after the user ``$params['user']`` has joined the group ``$params['group']``.
@@ -371,14 +369,8 @@ Entity events
 **create:before, <entity type>**
     Triggered for user, group, object, and site entities before creation. Return false to prevent creating the entity.
 
-**delete, <entity type>**
-    Triggered before entity deletion.
-
-**delete:after, <entity type>**
-    Triggered after entity deletion.
-
-**delete:before, <entity type>**
-    Triggered before entity deletion. Return false to prevent deletion.
+**delete, <entity type>** |sequence|
+    Triggered when an entity is permanently removed from the database. Also see :doc:`/guides/restore`
 
 **disable, <entity type>**
     Triggered before the entity is disabled. Return false to prevent disabling.
@@ -394,7 +386,10 @@ Entity events
 
 **likes:count, <entity_type>** |results|
 	Return the number of likes for ``$params['entity']``.
-	
+
+**trash, <entity type>** |sequence|
+    Triggered when an entity is marked as deleted in the database. Also see :doc:`/guides/restore`
+
 **update, <entity type>**
     Triggered before an update for the user, group, object, and site entities. Return false to prevent update.
     The entity method ``getOriginalAttributes()`` can be used to identify which attributes have changed since
@@ -431,12 +426,6 @@ Annotation events
 
 **delete, annotation**
     Called before annotation is deleted. Return false to prevent deletion.
-
-**disable, annotations**
-	Called when disabling annotations. Return false to prevent disabling.
-	
-**enable, annotation**
-	Called when enabling annotations. Return false to prevent enabling.
 	
 **update, annotation**
     Called after the annotation has been updated. Return false to *delete the annotation.*
@@ -646,7 +635,7 @@ Note that not all events apply to instant notifications.
 	Filters subscribers of the notification event.
 	Applies to **subscriptions** and **instant** notifications.
 	In case of a subscription event, by default, the subscribers list consists of the users subscribed to the container entity of the event object.
-	In case of an instant notification event, the subscribers list consists of the users passed as recipients to ``notify_user()``
+	In case of an instant notification event, the subscribers list consists of the user passed as recipient to ``elgg_notify_user()``
 
    **IMPORTANT** Always validate the notification event, object and/or action types before adding any new recipients to ensure that you do not accidentally dispatch notifications to unintended recipients.
    Consider a situation, where a mentions plugin sends out an instant notification to a mentioned user - any event acting on a subject or an object without validating an event or action type (e.g. including an owner of the original wire thread) might end up sending notifications to wrong users.
@@ -862,7 +851,7 @@ Ajax
 ====
 
 **ajax_response, \*** |results|
-	When the ``elgg/Ajax`` AMD module is used, this event gives access to the response object
+	When the ``elgg/Ajax`` module is used, this event gives access to the response object
 	(``\Elgg\Services\AjaxResponse``) so it can be altered/extended. The event type depends on
 	the method call:
 
@@ -1078,9 +1067,6 @@ Other
 **classes, icon** |results|
 	Can be used to filter CSS classes applied to icon glyphs. By default, Elgg uses FontAwesome. Plugins can use this
 	event to switch to a different font family and remap icon classes.
-
-**config, amd** |results|
-	Filter the AMD config for the requirejs library.
 	
 **entity:icon:sizes, <entity_type>** |results|
 	Triggered by ``elgg_get_icon_sizes()`` and sets entity type/subtype specific icon sizes.
@@ -1145,14 +1131,15 @@ Other
 	 *
 	 * @param \Elgg\Event $event 'entity:icon:url', 'user'
 	 *
-	 * @return string
+	 * @return string|null
 	 */
-	function gravatar_icon_handler(\Elgg\Event $event) {
+	function gravatar_icon_handler(\Elgg\Event $event): ?string {
 		$entity = $event->getEntityParam();
-		
+		$size = $event->getParam('size');
+
 		// Allow users to upload avatars
-		if ($entity->icontime) {
-			return $url;
+		if ($entity->hasIcon($size)) {
+			return null;
 		}
 
 		// Generate gravatar hash for user email
@@ -1169,7 +1156,7 @@ Other
 		}
 
 		// Produce URL used to retrieve icon
-		return "http://www.gravatar.com/avatar/$hash?s=$size";
+		return "https://www.gravatar.com/avatar/{$hash}?s={$size}";
 	}
 
 **entity:<icon_type>:url, <entity_type>** |results|
@@ -1219,6 +1206,11 @@ Other
 	The ``$params`` array contains:
 
 	 * ``entity`` - entity that owns the icons
+
+**entity:url, <entity_type>:<entity_subtype>** |results|
+	Return the URL for the entity ``$params['entity']``. Note: Generally it is better to override the
+	``getUrl()`` method of ElggEntity. This event should be used when it's not possible to subclass
+	(like if you want to extend a bundled plugin without overriding many views).
 
 **entity:url, <entity_type>** |results|
 	Return the URL for the entity ``$params['entity']``. Note: Generally it is better to override the

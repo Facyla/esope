@@ -2,7 +2,7 @@ Routing
 #######
 
 Elgg has two mechanisms to respond to HTTP requests that don't already go through the
-:doc:`/design/actions` and :doc:`/guides/views/simplecache` systems.
+:doc:`/guides/actions` and :doc:`/guides/views/simplecache` systems.
 
 URL Identifier and Segments
 ===========================
@@ -161,6 +161,11 @@ By default, Elgg will set the following requirements for named URL segments:
 		'owner_guid' => '\d+', // only digits
 		'username' => '[\p{L}\p{Nd}._-]+', // letters, digits, underscores, dashes
 	];
+
+.. note::
+
+    You can have the route params ``username`` and/or ``guid`` filled with the values of the logged in user by
+    default if you add the flag ``use_logged_in`` and set it to ``true``.
 
 Plugin dependent routes
 -----------------------

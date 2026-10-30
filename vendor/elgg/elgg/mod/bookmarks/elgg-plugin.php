@@ -17,12 +17,20 @@ return [
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
+				'subscribable' => true,
 				'likable' => true,
+				'restorable' => true,
 			],
 		],
 	],
 	'actions' => [
-		'bookmarks/save' => [],
+		'bookmarks/save' => [
+			'controller' => \Elgg\Controllers\EntityEditAction::class,
+			'options' => [
+				'entity_type' => 'object',
+				'entity_subtype' => 'bookmarks',
+			],
+		],
 	],
 	'routes' => [
 		'default:object:bookmarks' => [
@@ -97,7 +105,7 @@ return [
 			],
 		],
 		'entity:url' => [
-			'object' => [
+			'object:widget' => [
 				'Elgg\Bookmarks\Widgets::widgetURL' => [],
 			],
 		],
@@ -120,9 +128,6 @@ return [
 			'menu:site' => [
 				'Elgg\Bookmarks\Menus\Site::register' => [],
 			],
-			'menu:title:object:bookmarks' => [
-				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
-			],
 		],
 		'seeds' => [
 			'database' => [
@@ -137,11 +142,6 @@ return [
 	],
 	'group_tools' => [
 		'bookmarks' => [],
-	],
-	'view_extensions' => [
-		'elgg.js' => [
-			'bookmarks.js' => [],
-		],
 	],
 	'notifications' => [
 		'object' => [

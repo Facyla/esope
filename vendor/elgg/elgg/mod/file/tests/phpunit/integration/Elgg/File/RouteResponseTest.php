@@ -2,20 +2,16 @@
 
 namespace Elgg\File;
 
-/**
- * @group Router
- * @group FileRoutes
- */
-class RouteResponseTest extends \Elgg\Plugins\Integration\RouteResponseTestCase {
+class RouteResponseTest extends \Elgg\Plugins\RouteResponseIntegrationTestCase {
 
-	public function getSubtype() {
+	protected static function getSubtype() {
 		return 'file';
 	}
 	
-	public function groupRoutesProtectedByToolOption() {
+	public static function groupRoutesProtectedByToolOption() {
 		return [
 			[
-				'route' => "collection:object:{$this->getSubtype()}:group",
+				'route' => 'collection:object:' . self::getSubtype() . ':group',
 				'tool' => 'file',
 			],
 		];

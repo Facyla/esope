@@ -6,8 +6,9 @@ use Elgg\Cli\Application as CliApplication;
 use Elgg\Cli\ErrorFormatter;
 use Elgg\Cli\ErrorHandler;
 use Elgg\Logger\BacktraceProcessor;
-use Elgg\Logger\ElggLogFormatter;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Level;
 use Monolog\Processor\MemoryPeakUsageProcessor;
 use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\ProcessIdProcessor;
@@ -69,12 +70,12 @@ class Logger extends \Monolog\Logger {
 	/**
 	 * Build a new logger
 	 *
-	 * @param $input  InputInterface  Console input
-	 * @param $output OutputInterface Console output
+	 * @param null|InputInterface  $input  Console input
+	 * @param null|OutputInterface $output Console output
 	 *
 	 * @return static
 	 */
-	public static function factory(InputInterface $input = null, OutputInterface $output = null) {
+	public static function factory(?InputInterface $input = null, ?OutputInterface $output = null) {
 		$logger = new static(self::CHANNEL);
 
 		if (\Elgg\Application::isCli()) {
@@ -98,13 +99,15 @@ class Logger extends \Monolog\Logger {
 
 			$handler->setFormatter($formatter);
 
-			$handler->pushProcessor(new BacktraceProcessor(self::ERROR));
+			if ($output->isVeryVerbose()) {
+				$handler->pushProcessor(new BacktraceProcessor(Level::Error));
+			}
 		} else {
 			$handler = new ErrorLogHandler();
 
 			$handler->pushProcessor(new WebProcessor());
 
-			$formatter = new ElggLogFormatter();
+			$formatter = new LineFormatter();
 			$formatter->allowInlineLineBreaks();
 			$formatter->ignoreEmptyContextAndExtra();
 
@@ -113,7 +116,7 @@ class Logger extends \Monolog\Logger {
 			$handler->pushProcessor(new MemoryUsageProcessor());
 			$handler->pushProcessor(new MemoryPeakUsageProcessor());
 			$handler->pushProcessor(new ProcessIdProcessor());
-			$handler->pushProcessor(new BacktraceProcessor(self::WARNING));
+			$handler->pushProcessor(new BacktraceProcessor(Level::Warning));
 		}
 
 		$handler->pushProcessor(new PsrLogMessageProcessor());
@@ -133,6 +136,15 @@ class Logger extends \Monolog\Logger {
 	 * @return string|false
 	 */
 	protected function normalizeLevel($level = null) {
+		if (!is_string($level) || !in_array($level, self::$elgg_levels)) {
+			$level_value = $level;
+			if ($level === false) {
+				$level_value = 'false';
+			}
+			
+			$this->warning("Deprecated in 6.1: Using the log level '{$level_value}' has been deprecated. Use the \Psr\Log\LogLevel constants.");
+		}
+		
 		if (!$level) {
 			return false;
 		}
@@ -165,10 +177,12 @@ class Logger extends \Monolog\Logger {
 	 * @internal
 	 */
 	public function setLevel($level = null) {
+		// TODO: In Elgg 7 we should throw exceptions if level is not a Psr/Log/LogLevel
+		
 		if (!isset($level)) {
 			$php_error_level = error_reporting();
 
-			$level = false;
+			$level = LogLevel::CRITICAL;
 
 			if (($php_error_level & E_NOTICE) == E_NOTICE) {
 				$level = LogLevel::NOTICE;
@@ -220,6 +234,13 @@ class Logger extends \Monolog\Logger {
 	 * {@inheritdoc}
 	 */
 	public function log($level, $message, array $context = []): void {
+		if ($message instanceof \Throwable) {
+			if (!isset($context['throwable']) && $this->isLoggable(LogLevel::NOTICE)) {
+				$context['throwable'] = $message;
+			}
+
+			$message = $message->getMessage();
+		}
 
 		$level = $this->normalizeLevel($level);
 
@@ -231,14 +252,11 @@ class Logger extends \Monolog\Logger {
 				'message' => $message,
 				'level' => $level,
 			];
-		}
-
-		if (!$this->isLoggable($level)) {
+			
 			return;
 		}
 
-		// when capturing, still use consistent return value
-		if (!empty($this->disabled_stack)) {
+		if (!$this->isLoggable($level)) {
 			return;
 		}
 
@@ -307,8 +325,11 @@ class Logger extends \Monolog\Logger {
 	 * @param mixed $data The data to log
 	 *
 	 * @return void
+	 * @deprecated 6.3 Use self::error()
 	 */
 	public function dump($data) {
+		$this->warning('Deprecated in 6.3: ' . __METHOD__ . ' has been deprecated use ->error()');
+		
 		$this->log(LogLevel::ERROR, $data);
 	}
 

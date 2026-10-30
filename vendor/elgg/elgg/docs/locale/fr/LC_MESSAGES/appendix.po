@@ -4,17 +4,18 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Jerôme Bakker, 2023
-# Florian DANIEL aka Facyla <i.daniel.florian@gmail.com>, 2023
+# Emmanuel Simond, 2025
+# Jerôme Bakker, 2025
+# Florian DANIEL aka Facyla <i.daniel.florian@gmail.com>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Elgg master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 15:46+0200\n"
-"PO-Revision-Date: 2023-04-05 07:42+0000\n"
-"Last-Translator: Florian DANIEL aka Facyla <i.daniel.florian@gmail.com>, 2023\n"
+"POT-Creation-Date: 2026-01-16 10:07+0100\n"
+"PO-Revision-Date: 2024-04-15 12:07+0000\n"
+"Last-Translator: Florian DANIEL aka Facyla <i.daniel.florian@gmail.com>, 2025\n"
 "Language-Team: French (https://app.transifex.com/elgg/teams/11337/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,6 +50,11 @@ msgstr "Ci-dessous quelques questions fréquemment posées à propos de Elgg."
 #: ../../appendix/upgrade-notes/4.1-to-4.2.rst:6
 #: ../../appendix/upgrade-notes/4.2-to-4.3.rst:6
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:6
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:6
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:6
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:6
+#: ../../appendix/upgrade-notes/6.1-to-6.2.rst:6
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:6
 msgid "Contents"
 msgstr "Contenu"
 
@@ -290,7 +296,7 @@ msgid ""
 msgstr ""
 "Pour résoudre ce problème, vous pouvez ajouter des règles de réécriture. "
 "Pour rediriger de www.elgg.org vers elgg.org dans Apache, les règles peuvent"
-" ressembler à :"
+" ressembler à :"
 
 #: ../../appendix/faqs/general.rst:71 ../../appendix/faqs/general.rst:71
 msgid "Redirecting from non-www to www could look like this:"
@@ -693,13 +699,13 @@ msgstr ""
 " d'ajouter des champs à la fois aux profils des utilisateurs et au "
 "formulaire d'inscription."
 
-#: ../../appendix/faqs/general.rst:204 ../../appendix/faqs/development.rst:36
-#: ../../appendix/faqs/development.rst:36 ../../appendix/faqs/general.rst:204
+#: ../../appendix/faqs/development.rst:37 ../../appendix/faqs/general.rst:204
+#: ../../appendix/faqs/development.rst:37 ../../appendix/faqs/general.rst:204
 msgid "Create the plugin skeleton"
 msgstr "Créez le squelette du plugin"
 
-#: ../../appendix/faqs/general.rst:204 ../../appendix/faqs/development.rst:38
-#: ../../appendix/faqs/development.rst:38 ../../appendix/faqs/general.rst:204
+#: ../../appendix/faqs/development.rst:39 ../../appendix/faqs/general.rst:204
+#: ../../appendix/faqs/development.rst:39 ../../appendix/faqs/general.rst:204
 msgid ":doc:`/guides/plugins/plugin-skeleton`"
 msgstr ":doc:`/guides/plugins/plugin-skeleton`"
 
@@ -1329,8 +1335,9 @@ msgstr ""
 "``$CONFIG->http_request_trusted_proxy_headers``. Regardez dans le fichier "
 "``settings.php`` pour plus d'information."
 
-#: ../../appendix/faqs/security.rst:2 ../../appendix/faqs/security.rst:2
+#: ../../appendix/faqs/security.rst:2
 #: ../../appendix/upgrade-notes/4.1-to-4.2.rst:65
+#: ../../appendix/faqs/security.rst:2
 msgid "Security"
 msgstr "Sécurité"
 
@@ -1397,6 +1404,12 @@ msgid ""
 "with the htmLawed filtering code as a plugin. Developers can drop in any "
 "additional or replacement filtering code as a plugin."
 msgstr ""
+"Le filtrage est effectué via la fonction ``elgg_sanitize_input()``. Cette "
+"fonction récupère une chaîne et renvoie une chaîne filtrée. Elle déclenche "
+"un :doc:`event </design/events>` *sanitize*, *input*. Par défaut, Elgg est "
+"livré avec la bibliothèque de filtrage htmLawed sous forme de plugin. Les "
+"développeurs peuvent ajouter n’importe quel code de filtrage supplémentaire "
+"ou de remplacement via un plugin."
 
 #: ../../appendix/faqs/security.rst:23 ../../appendix/faqs/security.rst:23
 msgid ""
@@ -1482,32 +1495,32 @@ msgstr ""
 #: ../../appendix/faqs/development.rst:19
 #: ../../appendix/faqs/development.rst:19
 msgid ""
-"The two most popular free IDEs for PHP developers are Eclipse_ and "
-"NetBeans_. Eclipse has two different plugins for working with PHP code: PDT_"
-" and PHPEclipse_."
+"The three most popular free IDEs for PHP developers are Eclipse_ , NetBeans_"
+" and Codelobster_ . Eclipse has two different plugins for working with PHP "
+"code: PDT_ and PHPEclipse_."
 msgstr ""
-"Les deux IDE gratuits les plus populaires pour les développeurs PHP sont "
-"Eclipse_ et NetBeans_. Eclipse dispose de deux plugins différents pour "
-"travailler avec le code PHP : PDT_ et PHPEclipse_."
+"Les trois IDE gratuits les plus populaires pour les développeurs PHP sont "
+"Eclipse_ et NetBeans_ et Codelobster_. Eclipse dispose de deux plugins "
+"différents pour travailler avec le code PHP : PDT_ et PHPEclipse_."
 
-#: ../../appendix/faqs/development.rst:31
-#: ../../appendix/faqs/development.rst:31
+#: ../../appendix/faqs/development.rst:32
+#: ../../appendix/faqs/development.rst:32
 msgid "I don't like the wording of something in Elgg. How do I change it?"
 msgstr ""
 "Je n’aime pas certaines traductions dans Elgg. Comment puis-je les changer ?"
 
-#: ../../appendix/faqs/development.rst:33
-#: ../../appendix/faqs/development.rst:33
+#: ../../appendix/faqs/development.rst:34
+#: ../../appendix/faqs/development.rst:34
 msgid "The best way to do this is with a plugin."
 msgstr "La meilleure façon de faire ceci est avec un plugin."
 
-#: ../../appendix/faqs/development.rst:41
-#: ../../appendix/faqs/development.rst:41
+#: ../../appendix/faqs/development.rst:42
+#: ../../appendix/faqs/development.rst:42
 msgid "Locate the string that you want to change"
 msgstr "Localisez la chaîne que vous voulez modifier"
 
-#: ../../appendix/faqs/development.rst:43
-#: ../../appendix/faqs/development.rst:43
+#: ../../appendix/faqs/development.rst:44
+#: ../../appendix/faqs/development.rst:44
 msgid ""
 "All the strings that a user sees should be in the ``/languages`` directory "
 "or in a plugin's languages directory (``/mod/<plugin name>/languages``). "
@@ -1520,8 +1533,8 @@ msgstr ""
 " de changer la langue utilisée par Elgg. Pour plus d’informations à ce "
 "sujet, consultez la documentation développeur sur :doc:`/guides/i18n` ."
 
-#: ../../appendix/faqs/development.rst:45
-#: ../../appendix/faqs/development.rst:45
+#: ../../appendix/faqs/development.rst:46
+#: ../../appendix/faqs/development.rst:46
 msgid ""
 "To find the string use ``grep`` or a text editor that provides searching "
 "through files to locate the string. (A good text editor for Windows is "
@@ -1544,8 +1557,8 @@ msgstr ""
 " Elgg, et vous assurez qu’il recherche dans tous les sous-répertoires. Vous "
 "voudrez peut-être aussi définir que la recherche soit sensible à la casse."
 
-#: ../../appendix/faqs/development.rst:47
-#: ../../appendix/faqs/development.rst:47
+#: ../../appendix/faqs/development.rst:48
+#: ../../appendix/faqs/development.rst:48
 msgid ""
 "You should locate the string \"Add friend\" in ``/languages/en.php``. You "
 "should see something like this in the file:"
@@ -1554,8 +1567,8 @@ msgstr ""
 "``/languages/fr.php``. Vous devriez voir quelque chose comme ceci dans le "
 "fichier :"
 
-#: ../../appendix/faqs/development.rst:53
-#: ../../appendix/faqs/development.rst:53
+#: ../../appendix/faqs/development.rst:54
+#: ../../appendix/faqs/development.rst:54
 msgid ""
 "This means every time Elgg sees ``friend:add`` it replaces it with \"Add "
 "friend\". We want to change the definition of ``friend:add``."
@@ -1564,13 +1577,13 @@ msgstr ""
 "par ``Ajouter un contact``. Nous voulons changer la définition de "
 "``friend:add``."
 
-#: ../../appendix/faqs/development.rst:56
-#: ../../appendix/faqs/development.rst:56
+#: ../../appendix/faqs/development.rst:57
+#: ../../appendix/faqs/development.rst:57
 msgid "Override the string"
 msgstr "Remplacement de la chaîne"
 
-#: ../../appendix/faqs/development.rst:58
-#: ../../appendix/faqs/development.rst:58
+#: ../../appendix/faqs/development.rst:59
+#: ../../appendix/faqs/development.rst:59
 msgid ""
 "To override this definition, we will add a languages file to the plugin that"
 " we built in the first step."
@@ -1578,31 +1591,31 @@ msgstr ""
 "Pour remplacer cette définition, nous ajouterons un fichier linguistique "
 "langues au plugin que nous avons construit dans la première étape."
 
-#: ../../appendix/faqs/development.rst:60
-#: ../../appendix/faqs/development.rst:60
+#: ../../appendix/faqs/development.rst:61
+#: ../../appendix/faqs/development.rst:61
 msgid "Create a new directory: ``/mod/<your plugin name>/languages``"
 msgstr "Créez un nouveau répertoire : ``/mod/<your plugin name>/languages``"
 
-#: ../../appendix/faqs/development.rst:61
-#: ../../appendix/faqs/development.rst:61
+#: ../../appendix/faqs/development.rst:62
+#: ../../appendix/faqs/development.rst:62
 msgid "Create a file in that directory called ``en.php``"
 msgstr "Créer un fichier dans ce répertoire appelé ``fr.php``"
 
-#: ../../appendix/faqs/development.rst:62
-#: ../../appendix/faqs/development.rst:62
+#: ../../appendix/faqs/development.rst:63
+#: ../../appendix/faqs/development.rst:63
 msgid "Add these lines to that file"
 msgstr "Ajoutez ces lignes à ce fichier"
 
-#: ../../appendix/faqs/development.rst:72
-#: ../../appendix/faqs/development.rst:72
+#: ../../appendix/faqs/development.rst:73
+#: ../../appendix/faqs/development.rst:73
 msgid ""
 "Make sure that you do not have any spaces or newlines before the ``<?php``."
 msgstr ""
 "Assurez-vous que vous n’avez pas d’espace ou de retour à la ligne avant "
 "``<?php``."
 
-#: ../../appendix/faqs/development.rst:74
-#: ../../appendix/faqs/development.rst:74
+#: ../../appendix/faqs/development.rst:75
+#: ../../appendix/faqs/development.rst:75
 msgid ""
 "You're done now and should be able to enable the plugin and see the change. "
 "If you are override the language of a plugin, make sure your plugin is "
@@ -1618,13 +1631,13 @@ msgstr ""
 "de la section Administrateur. Au fur et à mesure que vous trouverez d'autres"
 " choses à changer, vous pouvez continuer à les ajouter à ce plugin."
 
-#: ../../appendix/faqs/development.rst:77
-#: ../../appendix/faqs/development.rst:77
+#: ../../appendix/faqs/development.rst:78
+#: ../../appendix/faqs/development.rst:78
 msgid "How do I find the code that does x?"
 msgstr "Comment puis-je trouver le code qui fait X ?"
 
-#: ../../appendix/faqs/development.rst:79
-#: ../../appendix/faqs/development.rst:79
+#: ../../appendix/faqs/development.rst:80
+#: ../../appendix/faqs/development.rst:80
 msgid ""
 "The best way to find the code that does something that you would like to "
 "change is to use ``grep`` or a similar search tool. If you do not have "
@@ -1641,13 +1654,13 @@ msgstr ""
 "choix pour les utilisateurs de Windows. `Eclipse`_ avec PHP et `NetBeans`_ "
 "sont de bons choix pour n’importe quelle plateforme."
 
-#: ../../appendix/faqs/development.rst:82
-#: ../../appendix/faqs/development.rst:82
+#: ../../appendix/faqs/development.rst:83
+#: ../../appendix/faqs/development.rst:83
 msgid "String Example"
 msgstr "Exemple de chaîne - String"
 
-#: ../../appendix/faqs/development.rst:84
-#: ../../appendix/faqs/development.rst:84
+#: ../../appendix/faqs/development.rst:85
+#: ../../appendix/faqs/development.rst:85
 msgid ""
 "Let's say that you want to find where the *Log In* box code is located. A "
 "string from the *Log In* box that should be fairly unique is ``Remember "
@@ -1669,13 +1682,13 @@ msgstr ""
 "linguistique ``fr.php`` et dans ``/views/default/forms/login.php``. Ce "
 "dernier emplacement définit le code html qui constitue la boîte *Connexion*."
 
-#: ../../appendix/faqs/development.rst:87
-#: ../../appendix/faqs/development.rst:87
+#: ../../appendix/faqs/development.rst:88
+#: ../../appendix/faqs/development.rst:88
 msgid "Action Example"
 msgstr "Exemple d'Action"
 
-#: ../../appendix/faqs/development.rst:89
-#: ../../appendix/faqs/development.rst:89
+#: ../../appendix/faqs/development.rst:90
+#: ../../appendix/faqs/development.rst:90
 msgid ""
 "Let's say that you want to find the code that is run when a user clicks on "
 "the *Save* button when arranging widgets on a profile page. View the Profile"
@@ -1690,8 +1703,8 @@ msgstr ""
 "vous trouviez l’action du formulaire de widgets de modification. Vous verrez"
 " que l’URL depuis la racine est ``action/widgets/move``."
 
-#: ../../appendix/faqs/development.rst:91
-#: ../../appendix/faqs/development.rst:91
+#: ../../appendix/faqs/development.rst:92
+#: ../../appendix/faqs/development.rst:92
 msgid ""
 "``Grep`` on ``widgets/move`` and two files are returned. One is the "
 "JavaScript code for the widgets : ``/js/lib/ui.widgets.js``. The other one, "
@@ -1715,13 +1728,13 @@ msgstr ""
 "actions est ``/actions`` de sorte que vous trouverez le fichier dans "
 "``/actions/widgets/move.php``."
 
-#: ../../appendix/faqs/development.rst:94
-#: ../../appendix/faqs/development.rst:94
+#: ../../appendix/faqs/development.rst:95
+#: ../../appendix/faqs/development.rst:95
 msgid "Debug mode"
 msgstr "Mode de débogage"
 
-#: ../../appendix/faqs/development.rst:96
-#: ../../appendix/faqs/development.rst:96
+#: ../../appendix/faqs/development.rst:97
+#: ../../appendix/faqs/development.rst:97
 msgid ""
 "During the installation process you might have noticed a checkbox that "
 "controlled whether debug mode was turned on or off. This setting can also be"
@@ -1744,8 +1757,8 @@ msgstr ""
 "expérimenter avec ce mode pour comprendre ce qu’il fait, mais assurez-vous "
 "d’exécuter Elgg en mode normal sur un serveur de production."
 
-#: ../../appendix/faqs/development.rst:100
-#: ../../appendix/faqs/development.rst:100
+#: ../../appendix/faqs/development.rst:101
+#: ../../appendix/faqs/development.rst:101
 msgid ""
 "Because of the amount of data being logged, don't enable this on a "
 "production server as it can fill up the log files really quick."
@@ -1754,38 +1767,38 @@ msgstr ""
 "pas l'activer sur un serveur de production car cela peut remplir les "
 "fichiers journaux très rapidement."
 
-#: ../../appendix/faqs/development.rst:103
-#: ../../appendix/faqs/development.rst:103
+#: ../../appendix/faqs/development.rst:104
+#: ../../appendix/faqs/development.rst:104
 msgid "What goes into the log in debug mode?"
 msgstr "Que contient le journal en mode débogage ?"
 
-#: ../../appendix/faqs/development.rst:105
-#: ../../appendix/faqs/development.rst:105
+#: ../../appendix/faqs/development.rst:106
+#: ../../appendix/faqs/development.rst:106
 msgid "All database queries"
 msgstr "Toutes les requêtes de base de données"
 
-#: ../../appendix/faqs/development.rst:106
-#: ../../appendix/faqs/development.rst:106
+#: ../../appendix/faqs/development.rst:107
+#: ../../appendix/faqs/development.rst:107
 msgid "Database query profiling"
 msgstr "Profilage des requêtes de base de données"
 
-#: ../../appendix/faqs/development.rst:107
-#: ../../appendix/faqs/development.rst:107
+#: ../../appendix/faqs/development.rst:108
+#: ../../appendix/faqs/development.rst:108
 msgid "Page generation time"
 msgstr "Durée de génération de page"
 
-#: ../../appendix/faqs/development.rst:108
-#: ../../appendix/faqs/development.rst:108
+#: ../../appendix/faqs/development.rst:109
+#: ../../appendix/faqs/development.rst:109
 msgid "Number of queries per page"
 msgstr "Nombre de requêtes par page"
 
-#: ../../appendix/faqs/development.rst:109
-#: ../../appendix/faqs/development.rst:109
+#: ../../appendix/faqs/development.rst:110
+#: ../../appendix/faqs/development.rst:110
 msgid "List of plugin language files"
 msgstr "Liste des fichiers linguistiques du plugin"
 
-#: ../../appendix/faqs/development.rst:110
-#: ../../appendix/faqs/development.rst:110
+#: ../../appendix/faqs/development.rst:111
+#: ../../appendix/faqs/development.rst:111
 msgid ""
 "Additional errors/warnings compared to normal mode (it's very rare for these"
 " types of errors to be related to any problem that you might be having)"
@@ -1794,18 +1807,18 @@ msgstr ""
 "est très rare que ces types d’erreurs soient liées à un problème que vous "
 "pourriez avoir)"
 
-#: ../../appendix/faqs/development.rst:113
-#: ../../appendix/faqs/development.rst:113
+#: ../../appendix/faqs/development.rst:114
+#: ../../appendix/faqs/development.rst:114
 msgid "What does the data look like?"
 msgstr "À quoi ressemblent les données ?"
 
-#: ../../appendix/faqs/development.rst:144
-#: ../../appendix/faqs/development.rst:144
+#: ../../appendix/faqs/development.rst:145
+#: ../../appendix/faqs/development.rst:145
 msgid "What events are triggered on every page load?"
 msgstr "Quels événements sont déclenchés sur chaque chargement de page ?"
 
-#: ../../appendix/faqs/development.rst:146
-#: ../../appendix/faqs/development.rst:146
+#: ../../appendix/faqs/development.rst:147
+#: ../../appendix/faqs/development.rst:147
 msgid ""
 "There are 4 :doc:`Elgg events </design/events>` that are triggered on every "
 "page load:"
@@ -1813,28 +1826,28 @@ msgstr ""
 "Il y a 4 :doc:`événements Elgg </design/events>` qui sont déclenchés sur "
 "chaque chargement de page :"
 
-#: ../../appendix/faqs/development.rst:148
-#: ../../appendix/faqs/development.rst:148
+#: ../../appendix/faqs/development.rst:149
+#: ../../appendix/faqs/development.rst:149
 msgid "plugins_boot, system"
 msgstr "plugins_boot, system"
 
-#: ../../appendix/faqs/development.rst:149
-#: ../../appendix/faqs/development.rst:149
+#: ../../appendix/faqs/development.rst:150
+#: ../../appendix/faqs/development.rst:150
 msgid "init, system"
 msgstr "init, system"
 
-#: ../../appendix/faqs/development.rst:150
-#: ../../appendix/faqs/development.rst:150
+#: ../../appendix/faqs/development.rst:151
+#: ../../appendix/faqs/development.rst:151
 msgid "ready, system"
 msgstr "ready, system"
 
-#: ../../appendix/faqs/development.rst:151
-#: ../../appendix/faqs/development.rst:151
+#: ../../appendix/faqs/development.rst:152
+#: ../../appendix/faqs/development.rst:152
 msgid "shutdown, system"
 msgstr "shutdown, system"
 
-#: ../../appendix/faqs/development.rst:153
-#: ../../appendix/faqs/development.rst:153
+#: ../../appendix/faqs/development.rst:154
+#: ../../appendix/faqs/development.rst:154
 msgid ""
 "The first three are triggered in ``Elgg\\Application::bootCore``. "
 "**shutdown, system** is triggered in "
@@ -1846,8 +1859,8 @@ msgstr ""
 "``\\Elgg\\Application\\ShutdownHandler`` après que la réponse a été envoyée "
 "au client. Ils sont tous :doc:`documentés </guides/events-list>`."
 
-#: ../../appendix/faqs/development.rst:156
-#: ../../appendix/faqs/development.rst:156
+#: ../../appendix/faqs/development.rst:157
+#: ../../appendix/faqs/development.rst:157
 msgid ""
 "There are other events triggered by Elgg occasionally (such as when a user "
 "logs in)."
@@ -1855,13 +1868,13 @@ msgstr ""
 "Il existe d’autres événements déclenchés par Elgg occasionnellement (par "
 "exemple lorsqu’un utilisateur se connecte)."
 
-#: ../../appendix/faqs/development.rst:159
-#: ../../appendix/faqs/development.rst:159
+#: ../../appendix/faqs/development.rst:160
+#: ../../appendix/faqs/development.rst:160
 msgid "Copy a plugin"
 msgstr "Copie d'un plugin"
 
-#: ../../appendix/faqs/development.rst:161
-#: ../../appendix/faqs/development.rst:161
+#: ../../appendix/faqs/development.rst:162
+#: ../../appendix/faqs/development.rst:162
 msgid ""
 "There are many questions asked about how to copy a plugin. Let's say you "
 "want to copy the ``blog`` plugin in order to run one plugin called ``blog`` "
@@ -1873,13 +1886,13 @@ msgstr ""
 "``blog`` et un autre appelé ``poetry``. Ce n’est pas difficile, mais cela "
 "demande beaucoup de travail. Vous auriez besoin de"
 
-#: ../../appendix/faqs/development.rst:163
-#: ../../appendix/faqs/development.rst:163
+#: ../../appendix/faqs/development.rst:164
+#: ../../appendix/faqs/development.rst:164
 msgid "change the directory name"
 msgstr "changer le nom du répertoire"
 
-#: ../../appendix/faqs/development.rst:164
-#: ../../appendix/faqs/development.rst:164
+#: ../../appendix/faqs/development.rst:165
+#: ../../appendix/faqs/development.rst:165
 msgid ""
 "change the names of every function (having two functions causes PHP to "
 "crash)"
@@ -1887,8 +1900,8 @@ msgstr ""
 "changer les noms de toutes les fonctions (avoir deux fonctions avec le même "
 "nom provoque un plantage de PHP)"
 
-#: ../../appendix/faqs/development.rst:165
-#: ../../appendix/faqs/development.rst:165
+#: ../../appendix/faqs/development.rst:166
+#: ../../appendix/faqs/development.rst:166
 msgid ""
 "change the name of every view (so as not to override the views on the "
 "original plugin)"
@@ -1896,23 +1909,23 @@ msgstr ""
 "modifier le nom de chaque vue (afin de ne pas remplacer les vues du plugin "
 "d’origine)"
 
-#: ../../appendix/faqs/development.rst:166
-#: ../../appendix/faqs/development.rst:166
+#: ../../appendix/faqs/development.rst:167
+#: ../../appendix/faqs/development.rst:167
 msgid "change any data model subtypes"
 msgstr "modifier tous les sous-types du modèle de données"
 
-#: ../../appendix/faqs/development.rst:167
-#: ../../appendix/faqs/development.rst:167
+#: ../../appendix/faqs/development.rst:168
+#: ../../appendix/faqs/development.rst:168
 msgid "change the language file"
 msgstr "modifier le fichier linguistique"
 
-#: ../../appendix/faqs/development.rst:168
-#: ../../appendix/faqs/development.rst:168
+#: ../../appendix/faqs/development.rst:169
+#: ../../appendix/faqs/development.rst:169
 msgid "change anything else that was specific to the original plugin"
 msgstr "changer tout le reste de ce qui était spécifique au plugin d’origine"
 
-#: ../../appendix/faqs/development.rst:172
-#: ../../appendix/faqs/development.rst:172
+#: ../../appendix/faqs/development.rst:173
+#: ../../appendix/faqs/development.rst:173
 msgid ""
 "If you are trying to clone the ``groups`` plugin, you will have the "
 "additional difficulty that the group plugin does not set a subtype."
@@ -2184,6 +2197,8 @@ msgid ""
 "All event callbacks should never be called directly but only be called by "
 "triggering the event."
 msgstr ""
+"Tous les rappels d'événement ne doivent jamais être appelés directement mais"
+" uniquement en déclenchant l'événement."
 
 #: ../../appendix/releases.rst:99
 msgid ""
@@ -2233,29 +2248,42 @@ msgid "``upgrade``"
 msgstr "``upgrade``"
 
 #: ../../appendix/releases.rst:116
+msgid "Test suite"
+msgstr "Suite de tests"
+
+#: ../../appendix/releases.rst:118
+msgid ""
+"The Elgg PHPUnit test suite files are not considered part of the public API "
+"and can be changed / removed at any time."
+msgstr ""
+"Les fichiers de la suite de tests Elgg PHPUnit ne sont pas considérés comme "
+"faisant partie de l'API publique et peuvent être modifiés/supprimés à tout "
+"moment."
+
+#: ../../appendix/releases.rst:121
 msgid "Views"
 msgstr "Vues"
 
-#: ../../appendix/releases.rst:118
+#: ../../appendix/releases.rst:123
 msgid "View names are API."
 msgstr "Les noms de vue sont des APIs."
 
-#: ../../appendix/releases.rst:119
+#: ../../appendix/releases.rst:124
 msgid "View arguments ($vars array) are API."
 msgstr "Les arguments de la vue (tableau $vars) sont des API."
 
-#: ../../appendix/releases.rst:120
+#: ../../appendix/releases.rst:125
 msgid "Removing views or renaming views follows API deprecation policies."
 msgstr ""
 "La suppression de vues ou le changement de nom de vues suit les stratégies "
 "de dépréciation de l’API."
 
-#: ../../appendix/releases.rst:121
+#: ../../appendix/releases.rst:126
 msgid "Adding new views requires a minor version change."
 msgstr ""
 "L’ajout de nouvelles vues nécessite une modification mineure de la version."
 
-#: ../../appendix/releases.rst:122
+#: ../../appendix/releases.rst:127
 msgid "View output is not API and can be changed between patch releases."
 msgstr ""
 "La sortie des vues n’est pas une API et peut être modifiée entre deux "
@@ -2587,8 +2615,7 @@ msgstr "1.12"
 msgid "July 2015"
 msgstr "Juillet 2015"
 
-#: ../../appendix/support.rst:53 ../../appendix/support.rst:53
-#: ../../appendix/support.rst:63
+#: ../../appendix/support.rst:53 ../../appendix/support.rst:63
 msgid "April 2019"
 msgstr "Avril 2019"
 
@@ -2657,16 +2684,16 @@ msgid "January 2020"
 msgstr "Janvier 2020"
 
 #: ../../appendix/support.rst:69
-msgid "3.3 LTS"
-msgstr "3.3 LTS"
+msgid "3.3"
+msgstr "3.3"
 
 #: ../../appendix/support.rst:69
 msgid "September 2022"
 msgstr "Septembre 2022"
 
-#: ../../appendix/support.rst:69
-msgid "**Until 5.0**"
-msgstr "**Jusqu'à la 5.0**"
+#: ../../appendix/support.rst:69 ../../appendix/support.rst:79
+msgid "June 2023"
+msgstr "Juin 2023"
 
 #: ../../appendix/support.rst:71
 msgid "4.0"
@@ -2696,11 +2723,63 @@ msgstr "Juillet 2022"
 msgid "4.3"
 msgstr "4.3"
 
+#: ../../appendix/support.rst:77 ../../appendix/support.rst:83
+msgid "June 2024"
+msgstr "Juin 2024"
+
 #: ../../appendix/support.rst:79
 msgid "5.0"
 msgstr "5.0"
 
-#: ../../appendix/support.rst:79
+#: ../../appendix/support.rst:79 ../../appendix/support.rst:81
+msgid "October 2023"
+msgstr "Octobre 2023"
+
+#: ../../appendix/support.rst:81
+msgid "5.1 LTS"
+msgstr "5.1 LTS"
+
+#: ../../appendix/support.rst:81
+msgid "June 2025"
+msgstr "Juin 2025"
+
+#: ../../appendix/support.rst:81
+msgid "**Until 7.0**"
+msgstr "**Jusqu'à la 7.0**"
+
+#: ../../appendix/support.rst:83
+msgid "6.0"
+msgstr "6.0"
+
+#: ../../appendix/support.rst:83 ../../appendix/support.rst:85
+msgid "November 2024"
+msgstr "Novembre 2024"
+
+#: ../../appendix/support.rst:85
+msgid "6.1"
+msgstr "6.1"
+
+#: ../../appendix/support.rst:85 ../../appendix/support.rst:87
+msgid "April 2025"
+msgstr "Avril 2025"
+
+#: ../../appendix/support.rst:87
+msgid "6.2"
+msgstr "6.2"
+
+#: ../../appendix/support.rst:87 ../../appendix/support.rst:89
+msgid "September 2025"
+msgstr "Septembre 2025"
+
+#: ../../appendix/support.rst:89
+msgid "6.3"
+msgstr "6.3"
+
+#: ../../appendix/support.rst:91
+msgid "7.0"
+msgstr "7.0"
+
+#: ../../appendix/support.rst:91
 msgid "TBD"
 msgstr "A FAIRE"
 
@@ -5089,6 +5168,9 @@ msgstr "De 2.0 à 2.1"
 #: ../../appendix/upgrade-notes/4.1-to-4.2.rst:86
 #: ../../appendix/upgrade-notes/4.2-to-4.3.rst:24
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:439
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:18
+#: ../../appendix/upgrade-notes/6.1-to-6.2.rst:9
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:9
 msgid "Deprecated APIs"
 msgstr "APIs dépréciées"
 
@@ -5219,6 +5301,7 @@ msgstr ""
 
 #: ../../appendix/upgrade-notes/2.1-to-2.2.rst:19
 #: ../../appendix/upgrade-notes/2.2-to-2.3.rst:38
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:15
 msgid "Deprecated Views"
 msgstr "Vues obsolètes"
 
@@ -7720,15 +7803,15 @@ msgid ""
 msgstr ""
 "**Les valeurs booléennes sont transformées en entiers lorsqu’elles sont "
 "enregistrées** : ``false`` est stocké comme ``0`` et ``true`` est stocké "
-"comme ``1``. Cela a des implications de rupture pour les paramètres privés, "
-"qui étaient précédemment stockés comme des chaînes vides pour les valeurs "
-"``false``. Les plugins doivent écrire leurs propres scripts de migration "
-"pour modifier les valeurs de la BD des chaînes vides à ``0`` (pour les "
-"paramètres privés qui sont censés stocker des valeurs booléennes) afin de "
-"s’assurer que ``elgg_get_entities()`` peut récupérer ces valeurs avec "
-"``private_setting_name_value_pairs`` contenant des valeurs ``false``. Cela "
-"s’applique aux paramètres de plugin, ainsi qu’à tous les paramètres privés "
-"ajoutés aux entités."
+"comme ``1``. Cela a des implications non rétro-compatibles pour les "
+"paramètres privés, qui étaient précédemment stockés comme des chaînes vides "
+"pour les valeurs ``false``. Les plugins doivent écrire leurs propres scripts"
+" de migration pour modifier les valeurs de la BD des chaînes vides à ``0`` "
+"(pour les paramètres privés qui sont censés stocker des valeurs booléennes) "
+"afin de s’assurer que ``elgg_get_entities()`` peut récupérer ces valeurs "
+"avec ``private_setting_name_value_pairs`` contenant des valeurs ``false``. "
+"Cela s’applique aux paramètres de plugin, ainsi qu’à tous les paramètres "
+"privés ajoutés aux entités."
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:424
 msgid "Metadata Changes"
@@ -7835,10 +7918,10 @@ msgid ""
 "need to separate the different sites into separate databases/tables."
 msgstr ""
 "Avant la version 3.0, Elgg disposait d’une certaine prise en charge "
-"(partielle) pour avoir plusieurs sites dans la même base de données. Ce "
-"concept multisite a été complètement supprimé dans la version 3.0. Les "
-"entités n’ont plus l’attribut site_guid. Cela signifie qu’il n’y a plus la "
-"possibilité d’avoir des entités sur différents sites. Si vous avez "
+"(partielle) afin de pouvoir avoir plusieurs sites dans la même base de "
+"données. Ce concept multisite a été complètement supprimé dans la version "
+"3.0. Les entités n’ont plus l’attribut site_guid. Cela signifie qu’il n’y a "
+"plus la possibilité d’avoir des entités sur différents sites. Si vous avez "
 "actuellement plusieurs sites dans votre base de données, la mise à niveau de"
 " Elgg vers Elgg 3.0 échouera. Vous devez séparer les différents sites en "
 "bases de données/tables distinctes."
@@ -8072,6 +8155,9 @@ msgid ""
 "<guides/events-list#search>` documentation for detailed information about "
 "new search capabilities."
 msgstr ""
+"Voir la documentation :doc:`Search Service </guides/search>` et :ref:`Search"
+" hooks <guides/events-list#search>` pour des informations détaillées sur les"
+" nouvelles fonctionnalités de recherche."
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:536
 msgid "Form and field related changes"
@@ -8645,6 +8731,7 @@ msgstr ""
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:690
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:865
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:156
 msgid "Miscellaneous API changes"
 msgstr "Modifications d’API diverses"
 
@@ -8666,7 +8753,7 @@ msgid ""
 " without URLs will no longer result in the site URL"
 msgstr ""
 "``ElggEntity`` : Les URL vides ne seront plus normalisées. Cela signifie que"
-" les entités sans URL ne vont plus avoir l’URL du site"
+" les entités sans URL ne correpondront plus à l’URL de base du site"
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:695
 msgid ""
@@ -9823,7 +9910,7 @@ msgid ""
 " the entity byline."
 msgstr ""
 "l'élément de menu ``access`` a été supprimé. L'information sur les accès est"
-" désormais affichée dans la signature (byline) de l'entité."
+" désormais affichée dans la signature \"byline\" de l'entité."
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:1012
 msgid "``user_hover`` menu:"
@@ -10132,10 +10219,10 @@ msgid ""
 "have been removed. If there was a generic translation available for the "
 "custom translation key, these have also been updated."
 msgstr ""
-"Tous les plugins ont été scannés pour des clefs de traduction inutilisées. "
-"Les clefs inutilisées ont été supprimées. S’il existait une traduction "
-"générique disponible pour la clef de traduction personnalisée, celles-ci ont"
-" également été mises à jour."
+"Tous les plugins ont été scannés à la recherche des clefs de traduction "
+"inutilisées. Les clefs inutilisées ont été supprimées. S’il existait une "
+"traduction générique disponible pour la clef de traduction personnalisée, "
+"celles-ci ont également été mises à jour."
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:1115
 msgid "System Log"
@@ -10346,7 +10433,7 @@ msgstr ""
 "méthodes ``__construct`` et ``__destruct``. ``setUp`` et ``tearDown`` ont "
 "été marquées comme privées et sont utilisées pour amorcer des tests "
 "cohérents et pour déclarer des conditions pre et post ; votre cas de test "
-"devrait utiliser les méthodes ``up`` et ``down`` à leur place."
+"devrait utiliser à la place les méthodes ``up`` et ``down``."
 
 #: ../../appendix/upgrade-notes/2.x-to-3.0.rst:1185
 msgid ""
@@ -10455,6 +10542,7 @@ msgstr ""
 "possible."
 
 #: ../../appendix/upgrade-notes/3.0-to-3.1.rst:76
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:22
 msgid "Deprecated Routes"
 msgstr "Routes obsolètes"
 
@@ -10629,6 +10717,15 @@ msgid ""
 " See :ref:`the plugin hook reference for 'access:collections:write:subtypes'"
 " <guides/events-list#access-events>` for more details."
 msgstr ""
+"Pour résoudre un problème où les collections d'accès appartenant à "
+"l'utilisateur telles que `Friends` ou `Friend Collections` s'affichaient "
+"toujours dans la liste déroulante d'accès lors de la création de contenu, "
+"même si les plugins associés sont désactivés, nous avons dû modifier une "
+"certaine logique interne. Si vous souhaitez qu'un sous-type de collection "
+"d'accès soit disponible dans l'accès en écriture, vous devez maintenant "
+"enregistrer le sous-type avec un hook de plugin. Voir :ref:`la référence du "
+"hook du plugin pour 'access:collections:write:subtypes' <guides/events-"
+"list#access-events>` pour plus de détails."
 
 #: ../../appendix/upgrade-notes/3.1-to-3.2.rst:18
 msgid "River items enabled state"
@@ -10879,11 +10976,13 @@ msgstr "De 3.x à 4.0"
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:9
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:17
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:59
 msgid "Composer"
 msgstr "Composer"
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:12
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:20
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:62
 msgid "PHP Requirements"
 msgstr "Pré-requis PHP"
 
@@ -11265,7 +11364,7 @@ msgid ""
 "keys have been (re)moved or renamed."
 msgstr ""
 "Cela signifie que les gestionnaires d'événements, les gestionnaires de "
-"crochets, les actions, les vues et les clés de langue ont été déplacés, "
+"hooks, les actions, les vues et les clefs de langue ont été déplacés, "
 "retirés ou renommés."
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:169
@@ -11520,7 +11619,7 @@ msgstr "auteurs/contributeurs du plugin -> composer.json"
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:298
 msgid "Hookable field configurations"
-msgstr "Champs de configuration hookables"
+msgstr "Configurations de champ hookables"
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:300
 msgid ""
@@ -15216,7 +15315,7 @@ msgstr "``thewire/previous``"
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:993
 msgid "Removed hooks / events"
-msgstr "Hooks/événements retirés"
+msgstr "Hooks / événements supprimés"
 
 #: ../../appendix/upgrade-notes/3.x-to-4.0.rst:995
 msgid ""
@@ -16069,10 +16168,15 @@ msgid ""
 "Most notable are The Wire (which now also has mention support) and the "
 "removal of the Embed plugin."
 msgstr ""
+"L'éditeur a été mis à jour vers la version 5. Cela apporte quelques "
+"nouvelles fonctionnalités (comme les mentions et les images dans le contenu)"
+" mais impacte également les plugins existants. Les plus notables sont The "
+"Wire (qui a désormais également mentionné le support) et la suppression du "
+"plugin Embed."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:14
 msgid "The related 'longtext' menu is no longer available."
-msgstr ""
+msgstr "Le menu 'longtext' associé n'est plus disponible."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:22
 msgid "The minimal PHP version is now 8.0."
@@ -16087,6 +16191,8 @@ msgid ""
 "The faker library is no longer maintained by fzaninotto so we switched to a "
 "fork which is maintained by FakerPHP."
 msgstr ""
+"La bibliothèque faker n'est plus maintenue par fzaninotto, nous sommes donc "
+"passés à un fork qui est maintenu par FakerPHP."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:30
 msgid "Events and Hooks"
@@ -16100,6 +16206,12 @@ msgid ""
 "hook callbacks that expect a type hinted `Elgg\\Hook` argument you will need"
 " to update this to `Elgg\\Event`."
 msgstr ""
+"Ces deux concepts similaires ont été fusionnés et nous ne ferons désormais "
+"référence qu'à des événements. Les « crochets » du service public n'existent"
+" plus. Tous les hooks peuvent maintenant être enregistrés dans la section « "
+"événements » de votre plugin. Si vous utilisez des rappels de hook qui "
+"attendent un argument `Elgg\\Hook` d'indication de type, vous devrez le "
+"mettre à jour vers `Elgg\\Event`."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:37
 msgid "Create event"
@@ -16111,6 +16223,9 @@ msgid ""
 " prevent the creation of the entity. Use ``create:before`` if you wish to "
 "prevent the creation."
 msgstr ""
+"Les événements ``create``, ``<object|group|user|site>`` ne peuvent plus être"
+" utilisés pour empêcher la création de l'entité. Utilisez ``create:before`` "
+"si vous souhaitez empêcher la création."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:43
 msgid "Private Settings"
@@ -16122,10 +16237,13 @@ msgid ""
 "private settings have been copied to metadata. All related functions have "
 "been removed."
 msgstr ""
+"Le concept de paramètres privés a été supprimé du système. Tous les "
+"paramètres privés ont été copiés dans les métadonnées. Toutes les fonctions "
+"associées ont été supprimées."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:48
 msgid "Breadcrumbs integrated into menu system"
-msgstr ""
+msgstr "Fil d'Ariane intégré au système de menu"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:50
 msgid ""
@@ -16134,6 +16252,10 @@ msgid ""
 "Breadcrumb related events have been removed in favor of the regular menu "
 "events."
 msgstr ""
+"Les fonctions d'assistance pour le menu du fil d'Ariane ont été modifiées "
+"pour utiliser ``elgg_register_menu_item()`` pour ajouter des éléments au "
+"menu du fil d'Ariane. Les événements liés au fil d'Ariane ont été supprimés "
+"au profit des événements de menu standards."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:54
 msgid "Upgrades"
@@ -16147,6 +16269,12 @@ msgid ""
 "``ElggUpgrade`` entity from the ``Batch`` that runs a part of the upgrade. "
 "You can access the upgrade by calling ``$this->getUpgrade()``."
 msgstr ""
+"Les mises à niveau asynchrones ou système ne sont plus des classes qui "
+"implémentent des interfaces, mais étendent des classes abstraites. Mettez à "
+"jour vos mises à niveau pour étendre les classes appropriées. La raison de "
+"ce changement est de pouvoir accéder à l'entité ``ElggUpgrade`` à partir du "
+"``Batch`` qui exécute une partie de la mise à niveau. Vous pouvez accéder à "
+"la mise à niveau en appelant ``$this->getUpgrade()``."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:61
 msgid "Session"
@@ -16158,6 +16286,10 @@ msgid ""
 "might need to update your code. Various functions of this class have been "
 "moved to the ``elgg()->session_manager`` service."
 msgstr ""
+"Si vous utilisez le service de session directement (ou via "
+"``elgg_get_session()``), vous devrez peut-être mettre à jour votre code. "
+"Diverses fonctions de cette classe ont été déplacées vers le service "
+"``elgg()->session_manager``."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:66
 msgid "Gatekeepers"
@@ -16168,6 +16300,9 @@ msgid ""
 "The ``PageOwnerCanEditGatekeeper`` middleware now requires a pageowner to be"
 " set. This gatekeeper now also requires a logged in user at all times."
 msgstr ""
+"Le middleware ``PageOwnerCanEditGatekeeper`` requiert désormais de définir "
+"un propriétaire de page. Ce contrôleur d'accès requiert désormais également "
+"un utilisateur connecté à tout moment."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:71
 msgid "Files plugin"
@@ -16180,6 +16315,11 @@ msgid ""
 "only available for image file types. Icon sizes have been changed to use the"
 " default icon sizes."
 msgstr ""
+"Les fichiers téléchargés à l'aide du plugin de fichiers \"file\" ne sont "
+"plus stockés avec le propriétaire mais avec l'entité du fichier. Les icônes "
+"de fichiers ont également été modifiées. Les images d'icônes ne sont "
+"disponibles que pour les types de fichiers image. La taille des icônes a été"
+" modifiée pour utiliser les tailles d'icône par défaut."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:77
 msgid "Embed plugin"
@@ -16199,10 +16339,14 @@ msgid ""
 "javascript hooks than you need to update your code to use the ``elgg/hook`` "
 "module. The concept of 'instant hooks' is no longer present in the system."
 msgstr ""
+"Les fonctions de hook javascript ont été déplacées vers un module AMD. Si "
+"vous avez utilisé des hooks javascript, vous devez mettre à jour votre code "
+"pour utiliser le module ``elgg/hook``. Le concept de 'hooks instantanés' "
+"n'est plus présent dans le système."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:90
 msgid "The ``'init', 'system'`` event is no longer triggered in javascript."
-msgstr ""
+msgstr "L'événement ``'init', 'system'`` n'est plus déclenché en javascript."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:95
 msgid "``elgg.is_in_object_array``"
@@ -16225,6 +16369,8 @@ msgid ""
 "``elgg.register_hook_handler`` use the ``register`` function provide by the "
 "``elgg\\hooks`` module"
 msgstr ""
+"``elgg.register_hook_handler`` utilise la fonction ``register`` fournie par "
+"le module ``elgg\\hooks``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:100
 msgid "``elgg.register_instant_hook``"
@@ -16236,9 +16382,11 @@ msgstr "``elgg.set_triggered_hook``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:102
 msgid ""
-"``elgg.trigger_hook`` use the ``trigger`` function provide by the "
+"``elgg.trigger_hook`` use the ``trigger`` function provided by the "
 "``elgg\\hooks`` module"
 msgstr ""
+"``elgg.trigger_hook`` utilisez la fonction ``trigger`` fournie par le module"
+" ``elgg\\hooks``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:105
 msgid "Exceptions"
@@ -16252,6 +16400,12 @@ msgid ""
 "``\\Elgg\\Exceptions\\InvalidArgumentException`` has been checked. In some "
 "cases the exception was replaced by a more appropriate exception."
 msgstr ""
+"L'utilisation des exceptions dans Elgg a été revisitée. "
+"``\\Elgg\\Exceptions\\InvalidParameterException`` a été supprimé et remplacé"
+" par l'exception correcte. L'utilisation de "
+"``\\Elgg\\Exceptions\\InvalidArgumentException`` a également été vérifiée. "
+"Dans certains cas, l'exception a été remplacée par une exception plus "
+"appropriée."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:115
 msgid "ElggRiverItem"
@@ -16264,16 +16418,24 @@ msgid ""
 "saved to the database this distinction has been removed. When setting an "
 "unsupported attribute an ``\\Elgg\\Exceptions\\RuntimeException`` is thrown."
 msgstr ""
+"Il n'est désormais plus permis de définir des données arbitraires pendant "
+"l'exécution sur un ``ElggRiverItem``. Étant donné que les données n'étaient "
+"disponibles que pendant l'exécution et n'étaient pas enregistrées dans la "
+"base de données, cette distinction a été supprimée. Lors de la définition "
+"d'un attribut non pris en charge, une "
+"``\\Elgg\\Exceptions\\RuntimeException`` est levée."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:131
 msgid "Metadata options in getter functions"
-msgstr ""
+msgstr "Options des métadonnées dans les fonctions de récupération (\"getter\")"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:133
 msgid ""
 "Previously there was a magic that would turn the ``metadata_value`` string "
 "into an array if it contained an ``,``."
 msgstr ""
+"Auparavant, il existait une magie qui transformait la chaîne "
+"``metadata_value`` en tableau si elle contenait un ``,``."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:135
 msgid ""
@@ -16281,8 +16443,12 @@ msgid ""
 "Because of this magic it was impossible to query for a metadata value that "
 "contained an ``,``."
 msgstr ""
+"Cette magie a été supprimée. Vous devez maintenant fournir le tableau vous-"
+"même. En raison de cette magie, il était impossible de rechercher une valeur"
+" de métadonnées contenant un ``,``."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:160
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:128
 msgid "Changes in functions"
 msgstr "Modification dans les fonctions"
 
@@ -16294,10 +16460,16 @@ msgid ""
 "definition. Some function might have their arguments changed or the return "
 "type has been changed."
 msgstr ""
+"Les fonctions suivantes ont maintenant leurs arguments et/ou valeurs de "
+"retour typées, ce qui peut provoquer des erreurs ``TypeError``. De plus, "
+"certaines fonctions de classe ont leur type de valeur de retour indiqué et "
+"vous devez mettre à jour la définition de votre fonction. Certaines "
+"fonctions peuvent avoir leurs arguments modifiés, ou le type de retour a été"
+" modifié."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:167
 msgid "Lib functions return types"
-msgstr ""
+msgstr "Types de retour des fonctions des bibliothèques"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:169
 msgid ""
@@ -16312,6 +16484,8 @@ msgid ""
 "``elgg_create_river_item()`` now returns ``null`` on failure or an "
 "``ElggRiverItem``"
 msgstr ""
+"``elgg_create_river_item()`` renvoie désormaisun ``ElggRiverItem``, ou "
+"``null`` en cas d'échec"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:171
 msgid "``elgg_delete_metadata()`` no longer returns ``null``"
@@ -16346,6 +16520,8 @@ msgid ""
 "``elgg_get_annotation_from_id()`` now returns ``null`` if no annotation is "
 "found instead of a ``bool``"
 msgstr ""
+"``elgg_get_annotation_from_id()`` renvoie désormais ``null`` au lieu d'un "
+"``bool`` si aucune annotation n'est trouvée"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:177
 msgid "``elgg_get_download_url()`` now returns ``null`` if there is an error"
@@ -16357,6 +16533,8 @@ msgid ""
 "``elgg_get_entity_as_row()`` now returns ``null`` if no entity is found "
 "instead of a ``bool``"
 msgstr ""
+"``elgg_get_entity_as_row()`` renvoie désormais ``null`` au lieu d'un "
+"``bool`` si aucune entité n'est trouvée"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:179
 msgid "``elgg_get_entity_dates()`` no longer returns a ``bool``"
@@ -16375,36 +16553,48 @@ msgid ""
 "``elgg_get_metadata_from_id()`` now returns ``null`` if no metadata could be"
 " found"
 msgstr ""
+"``elgg_get_metadata_from_id()`` renvoie désormais ``null`` si aucune "
+"métadonnée n'a pu être trouvée"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:183
 msgid ""
 "``elgg_get_page_owner_entity()`` now returns ``null`` if page owner could "
 "not be found"
 msgstr ""
+"``elgg_get_page_owner_entity()`` renvoie désormais ``null`` si le "
+"propriétaire de la page n'a pas pu être trouvé"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:184
 msgid ""
 "``elgg_get_river_item_from_id()`` now returns ``null`` if no river item "
 "could be found"
 msgstr ""
+"``elgg_get_river_item_from_id()`` renvoie désormais ``null`` si aucun "
+"élément de rivière n'a pu être trouvé"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:185
 msgid ""
 "``elgg_get_system_cache()`` now returns an instance of "
 "``\\Elgg\\Cache\\BaseCache`` instead of an ``\\ElggCache``"
 msgstr ""
+"``elgg_get_system_cache()`` renvoie désormais une instance de "
+"``\\Elgg\\Cache\\BaseCache`` au lieu de ``\\ElggCache``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:186
 msgid ""
-"``elgg_get_uploaded_file()`` now returns ``null`` no file could be found or "
-"the file was invalid"
+"``elgg_get_uploaded_file()`` now returns ``null`` if no file could be found "
+"or the file was invalid"
 msgstr ""
+"``elgg_get_uploaded_file()`` renvoie désormais ``null`` si aucun fichier n'a"
+" pu être trouvé ou si le fichier n'était pas valide"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:187
 msgid ""
 "``elgg_normalize_site_url()`` now returns ``null`` when the url is not a "
 "site url"
 msgstr ""
+"``elgg_normalize_site_url()`` renvoie désormais ``null`` lorsque l'URL n'est"
+" pas une URL de site"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:188
 msgid "``elgg_register_action()`` no longer returns a ``bool``"
@@ -16412,39 +16602,40 @@ msgstr "``elgg_register_action()`` ne renvoie plus un ``bool``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:189
 msgid "``elgg_register_menu_item()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_register_menu_item()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:190
 msgid "``elgg_register_widget_type()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_register_widget_type()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:191
 msgid "``elgg_set_form_footer()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_set_form_footer()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:192
 msgid "``elgg_trigger_after_event()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_trigger_after_event()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:193
 msgid "``elgg_unregister_action()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_unregister_action()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:194
 msgid "``elgg_unregister_event_handler()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_unregister_event_handler()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:195
 msgid "``elgg_unregister_notification_event()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_unregister_notification_event()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:196
 msgid "``elgg_unregister_notification_method()`` no longer has a return value"
 msgstr ""
+"``elgg_unregister_notification_method()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:197
 msgid "``elgg_unregister_widget_type()`` no longer has a return value"
-msgstr ""
+msgstr "``elgg_unregister_widget_type()`` n'a plus de valeur de retour"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:198
 msgid "``elgg_view_annotation()`` no longer returns a ``bool``"
@@ -16467,91 +16658,118 @@ msgid ""
 "``get_entity()`` now returns ``null`` if no entity is found instead of a "
 "``bool``"
 msgstr ""
+"``get_entity()`` renvoie désormais ``null`` au lieu d'un ``bool`` si aucune "
+"entité n'est trouvée"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:203
 msgid ""
 "``get_user()`` now returns ``null`` if no user is found instead of a "
 "``bool``"
 msgstr ""
+"``get_user()`` renvoie désormais ``null`` au lieu d'un ``bool`` si aucun "
+"utilisateur n'est trouvé"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:204
 msgid "``elgg_ws_expose_function()`` no longer returns a ``bool``"
 msgstr "``elgg_ws_expose_function()`` ne renvoie plus un ``bool``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:207
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:150
 msgid "Lib functions function parameters"
-msgstr ""
+msgstr "Paramètres de fonction des fonctions des bibliothèques"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:209
 msgid ""
 "``blog_prepare_form_vars()`` now requires a ``ElggBlog`` for ``$blog`` and a"
 " ``ElggAnnotation`` for ``$revision``"
 msgstr ""
+"``blog_prepare_form_vars()`` requiert désormais un ``ElggBlog`` pour "
+"``$blog`` et un ``ElggAnnotation`` pour ``$revision``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:210
 msgid ""
 "``bookmarks_prepare_form_vars()`` now requires a ``ElggBookmark`` for "
 "``$bookmark``"
 msgstr ""
+"``bookmarks_prepare_form_vars()`` requiert désormais un ``ElggBookmark`` "
+"pour ``$bookmark``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:211
 msgid ""
 "``discussion_prepare_form_vars()`` now requires a ``ElggDiscussion`` for "
 "``$topic``"
 msgstr ""
+"``discussion_prepare_form_vars()`` requiert désormais un ``ElggDiscussion`` "
+"pour ``$topic``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:212
 msgid ""
 "``elgg_add_action_tokens_to_url()`` now requires a ``string`` for ``$url`` "
 "and a ``bool`` for ``$html_encode``"
 msgstr ""
+"``elgg_add_action_tokens_to_url()`` requiert désormais un ``string`` pour "
+"``$url`` et un ``bool`` pour ``$html_encode``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:213
 msgid ""
 "``elgg_can_edit_widget_layout()`` now requires a ``string`` for ``$context``"
 " and ``int`` for ``$user_guid``"
 msgstr ""
+"``elgg_can_edit_widget_layout()`` requiert désormais un ``string`` pour "
+"``$context`` et un ``int`` pour ``$user_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:214
 msgid ""
 "``elgg_clear_event_handlers()`` now requires a ``string`` for ``$event`` and"
 " ``$type``"
 msgstr ""
+"``elgg_clear_event_handlers()`` requiert désormais un ``string`` pour "
+"``$event`` et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:215
 msgid ""
 "``elgg_clear_sticky_form()`` now requires a ``string`` for ``$context``"
 msgstr ""
+"``elgg_clear_sticky_form()`` requiert désormais un ``string`` pour "
+"``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:216
 msgid ""
 "``elgg_create_widget()`` now requires an ``int`` for ``$owner_guid`` and "
 "``$access_id`` and a ``string`` for ``$handler`` and ``$context``"
 msgstr ""
+"``elgg_create_widget()`` requiert désormais un ``int`` pour ``$owner_guid`` "
+"et ``$access_id`` et un ``string`` pour ``$handler`` et ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:217
 msgid ""
 "``elgg_define_js()`` now requires a ``string`` for ``$name`` and an "
 "``array`` for ``$config``"
 msgstr ""
+"``elgg_define_js()`` requiert désormais un ``string`` pour ``$name`` et un "
+"``array`` pour ``$config``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:218
 msgid "``elgg_delete_system_cache()`` now requires a ``string`` for ``$type``"
 msgstr ""
+"``elgg_delete_system_cache()`` requiert désormais un ``string`` pour "
+"``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:219
 msgid ""
 "``elgg_echo()`` now requires a ``string`` for ``$message_key`` and a "
 "``string`` for ``$language``"
 msgstr ""
+"``elgg_echo()`` requiert désormais un ``string`` pour ``$message_key`` et un"
+" ``string`` pour ``$language``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:220
 msgid "``elgg_enqueue_notification_event()`` no longer requires a ``$type``"
-msgstr ""
+msgstr "``elgg_enqueue_notification_event()`` n'a plus besoin d'un ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:221
 msgid "``elgg_entity_exists()`` now requires a ``int`` for ``$guid``"
-msgstr ""
+msgstr "``elgg_entity_exists()`` requiert désormais un ``int`` pour ``$guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:222
 msgid ""
@@ -16559,314 +16777,421 @@ msgid ""
 "``string`` for ``$type`` and a ``string`` for ``$subtype`` and a ``bool`` "
 "for ``$validate_can_edit``"
 msgstr ""
+"``elgg_entity_gatekeeper()`` requiert désormais un ``int`` pour ``$guid``, "
+"un ``string`` pour ``$type``, un ``string`` pour ``$subtype`` et un ``bool``"
+" pour ``$validate_can_edit``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:223
 msgid ""
 "``elgg_error_response()`` now requires a ``string`` or ``array`` for "
 "``$message`` and a ``string`` for ``$forward_url``"
 msgstr ""
+"``elgg_error_response()`` requiert désormais un ``string`` ou un ``array`` "
+"pour ``$message`` et un ``string`` pour ``$forward_url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:224
 msgid ""
 "``elgg_extend_view()`` now requires a ``string`` for ``$view`` and "
 "``$view_extension``"
 msgstr ""
+"``elgg_extend_view()`` requiert désormais un ``string`` pour ``$view`` et "
+"``$view_extension``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:225
 msgid "``elgg_extract()`` now requires a ``bool`` for ``$strict``"
-msgstr ""
+msgstr "``elgg_extract()`` requiert désormais un ``bool`` pour ``$strict``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:226
 msgid ""
 "``elgg_format_bytes()`` now requires an ``int`` for ``$size`` and "
 "``$precision``"
 msgstr ""
+"``elgg_format_bytes()`` requiert désormais un ``int`` pour ``$size`` et "
+"``$precision``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:227
 msgid ""
 "``elgg_format_element()`` now requires a ``string`` for ``$tag_name`` and a "
 "``string`` for ``$text``"
 msgstr ""
+"``elgg_format_element()`` requiert désormais un ``string`` pour "
+"``$tag_name`` et un ``string`` pour ``$text``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:228
 msgid "``elgg_format_html()`` now requires a ``string`` for ``$html``"
 msgstr ""
+"``elgg_format_html()`` requiert désormais un ``string`` pour ``$html``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:229
 msgid ""
 "``elgg_generate_action_url()`` now requires a ``string`` for ``$action`` and"
 " a boolean for ``$add_csrf_tokens``"
 msgstr ""
+"``elgg_generate_action_url()`` requiert désormais un ``string`` pour "
+"``$action`` et un booléen pour ``$add_csrf_tokens``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:230
 msgid ""
 "``elgg_generate_entity_url()`` now requires a ``string`` for ``$resource`` "
 "and ``$subresource``"
 msgstr ""
+"``elgg_generate_entity_url()`` requiert désormais un ``string`` pour "
+"``$resource`` et ``$subresource``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:231
 msgid "``elgg_generate_url()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_generate_url()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:232
 msgid "``elgg_get_config()`` now requires a ``string`` for ``$name``"
-msgstr ""
+msgstr "``elgg_get_config()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:233
 msgid ""
 "``elgg_get_download_url()`` now requires a ``bool`` for ``$use_cookie`` and "
 "a ``string`` for ``$expires``"
 msgstr ""
+"``elgg_get_download_url()`` requiert désormais un ``bool`` pour "
+"``$use_cookie`` et un ``string`` pour ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:234
 msgid "``elgg_get_embed_url()`` now requires a ``string`` for ``$size``"
 msgstr ""
+"``elgg_get_embed_url()`` requiert désormais un ``string`` pour ``$size``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:235
 msgid ""
 "``elgg_get_entity_class()`` now requires a ``string`` for ``$type`` and a "
 "``string`` for ``$subtype``"
 msgstr ""
+"``elgg_get_entity_class()`` requiert désormais un ``string`` pour ``$type`` "
+"et un ``string`` pour ``$subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:236
 msgid ""
 "``elgg_get_excerpt()`` now requires a ``string`` for ``$text`` and an "
 "``int`` for ``$num_chars``"
 msgstr ""
+"``elgg_get_excerpt()`` requiert désormais un ``string`` pour ``$text`` et un"
+" ``int`` pour ``$num_chars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:237
 msgid ""
 "``elgg_get_friendly_upload_error()`` now requires an ``int`` for "
 "``$error_code``"
 msgstr ""
+"``elgg_get_friendly_upload_error()`` requiert désormais un ``int`` pour "
+"``$error_code``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:238
 msgid ""
 "``elgg_get_friendly_time()`` now requires an ``int`` for ``$time`` and "
 "``$current_time``"
 msgstr ""
+"``elgg_get_friendly_time()`` requiert désormais un ``int`` pour ``$time`` et"
+" ``$current_time``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:239
 msgid "``elgg_get_friendly_title()`` now requires a ``string`` for ``$title``"
 msgstr ""
+"``elgg_get_friendly_title()`` requiert désormais un ``string`` pour "
+"``$title``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:240
 msgid ""
 "``elgg_get_icon_sizes()`` now requires a ``string`` for ``$entity_type`` and"
 " ``$entity_subtype``"
 msgstr ""
+"``elgg_get_icon_sizes()`` requiert désormais un ``string`` pour "
+"``$entity_type`` et ``$entity_subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:241
 msgid ""
 "``elgg_get_ini_setting_in_bytes()`` now requires a ``string`` for "
 "``$setting``"
 msgstr ""
+"``elgg_get_ini_setting_in_bytes()`` requiert désormais un ``string`` pour "
+"``$setting``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:242
 msgid ""
 "``elgg_get_inline_url()`` now requires a ``bool`` for ``$use_cookie`` and a "
 "``string`` for ``$expires``"
 msgstr ""
+"``elgg_get_inline_url()`` requiert désormais un ``bool`` pour "
+"``$use_cookie`` et un ``string`` pour ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:243
 msgid "``elgg_get_login_url()`` now requires a ``string`` for ``$fragment``"
 msgstr ""
+"``elgg_get_login_url()`` requiert désormais un ``string`` pour ``$fragment``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:244
 msgid "``elgg_get_metadata_from_id()`` now requires an ``int`` for ``$id``"
 msgstr ""
+"``elgg_get_metadata_from_id()`` requiert désormais un ``int`` pour ``$id``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:245
 msgid ""
 "``elgg_get_registration_url()`` now requires a ``string`` for ``$fragment``"
 msgstr ""
+"``elgg_get_registration_url()`` requiert désormais un ``string`` pour "
+"``$fragment``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:246
 msgid ""
 "``elgg_get_request_data()`` now requires a ``bool`` for ``$filter_result``"
 msgstr ""
+"``elgg_get_request_data()`` requiert désormais un ``bool`` pour "
+"``$filter_result``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:247
 msgid ""
 "``elgg_get_simplecache_url()`` now requires a ``string`` for ``$view`` and "
 "``$sub_view``"
 msgstr ""
+"``elgg_get_simplecache_url()`` requiert désormais un ``string`` pour "
+"``$view`` et ``$sub_view``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:248
 msgid ""
 "``elgg_get_sticky_value()`` now requires a ``string`` for ``$form_name`` and"
 " a string for ``$variable`` and a ``bool`` for ``$filter_result``"
 msgstr ""
+"``elgg_get_sticky_value()`` requiert désormais un ``string`` pour "
+"``$form_name`` et une chaine de caractères pour ``$variable`` et un a "
+"``bool`` pour ``$filter_result``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:249
 msgid ""
 "``elgg_get_sticky_values()`` now requires a ``string`` for ``$form_name`` "
 "and a ``bool`` for ``$filter_result``"
 msgstr ""
+"``elgg_get_sticky_values()`` requiert désormais un ``string`` pour "
+"``$form_name`` et un ``bool`` pour ``$filter_result``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:250
 msgid ""
 "``elgg_get_title_input()`` now requires a ``string`` for ``$variable`` and a"
 " string for ``$default``"
 msgstr ""
+"``elgg_get_title_input()`` requiert désormais un ``string`` pour "
+"``$variable`` et une chaîne de caractères pour ``$default``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:251
 msgid ""
 "``elgg_get_uploaded_file()`` now requires a ``string`` for ``$input_name`` "
 "and a ``bool`` for ``$check_for_validity``"
 msgstr ""
+"``elgg_get_uploaded_file()`` requiert désormais un ``string`` pour "
+"``$input_name`` et un ``bool`` pour ``$check_for_validity``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:252
 msgid ""
 "``elgg_get_uploaded_files()`` now requires a ``string`` for ``$input_name``"
 msgstr ""
+"``elgg_get_uploaded_files()`` requiert désormais un ``string`` pour "
+"``$input_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:253
 msgid "``elgg_get_view_extensions()`` now requires a ``string`` for ``$view``"
 msgstr ""
+"``elgg_get_view_extensions()`` requiert désormais un ``string`` pour "
+"``$view``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:254
 msgid ""
 "``elgg_get_widget_types()`` now requires a ``string`` or ``array`` for "
 "``$context``"
 msgstr ""
+"``elgg_get_widget_types()`` requiert désormais un ``string`` ou un ``array``"
+" pour ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:255
 msgid ""
 "``elgg_get_widgets()`` now requires a ``int`` for ``$owner_guid`` and "
 "``string`` for ``$context``"
 msgstr ""
+"``elgg_get_widgets()`` requiert désormais un ``int`` pour ``$owner_guid`` et"
+" un ``string`` pour ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:256
 msgid ""
 "``elgg_group_tool_gatekeeper()`` now requires a ``string`` for "
 "``$tool_name`` and an ``int`` for ``$group_guid``"
 msgstr ""
+"``elgg_group_tool_gatekeeper()`` requiert désormais un ``string`` pour "
+"``$tool_name`` et un ``int`` pour ``$group_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:257
 msgid "``elgg_html_decode()`` now requires a ``string`` for ``$string``"
 msgstr ""
+"``elgg_html_decode()`` requiert désormais un ``string`` pour ``$string``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:258
 msgid ""
 "``elgg_http_add_url_query_elements()`` now requires a ``string`` for "
 "``$url``"
 msgstr ""
+"``elgg_http_add_url_query_elements()`` requiert désormais un ``string`` pour"
+" ``$url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:259
 msgid "``elgg_http_build_url()`` now requires a ``bool`` for ``$html_encode``"
 msgstr ""
+"``elgg_http_build_url()`` requiert désormais un ``bool`` pour "
+"``$html_encode``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:260
 msgid ""
 "``elgg_http_get_signed_url()`` now requires a ``string`` for ``$url`` and "
 "``$expires``"
 msgstr ""
+"``elgg_http_get_signed_url()`` requiert désormais un ``string`` pour "
+"``$url`` et ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:261
 msgid ""
 "``elgg_http_remove_url_query_element()`` now requires a ``string`` for "
 "``$url`` and a ``string`` for ``$element``"
 msgstr ""
+"``elgg_http_remove_url_query_element()`` requiert désormais un ``string`` "
+"pour ``$url`` et un ``string`` pour ``$element``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:262
 msgid ""
 "``elgg_http_url_is_identical()`` now requires a ``string`` for ``$url1`` and"
 " ``$url2`` and an ``array`` for ``$ignore_params``"
 msgstr ""
+"``elgg_http_url_is_identical()`` requiert désormais un ``string`` pour "
+"``$url1`` et ``$url2`` et un ``array`` pour ``$ignore_params``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:263
 msgid ""
 "``elgg_http_validate_signed_url()`` now requires a ``string`` for ``$url``"
 msgstr ""
+"``elgg_http_validate_signed_url()`` requiert désormais un ``string`` pour "
+"``$url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:264
 msgid "``elgg_in_context()`` now requires a ``string`` for ``$context``"
 msgstr ""
+"``elgg_in_context()`` requiert désormais un ``string`` pour ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:265
 msgid "``elgg_is_sticky_form()`` now requires a ``string`` for ``$form_name``"
 msgstr ""
+"``elgg_is_sticky_form()`` requiert désormais un ``string`` pour "
+"``$form_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:266
 msgid ""
 "``elgg_is_widget_type()`` now requires a ``string`` for ``$handler`` and "
 "``$context``"
 msgstr ""
+"``elgg_is_widget_type()`` requiert désormais un ``string`` pour ``$handler``"
+" et ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:267
 msgid ""
 "``elgg_language_key_exists()`` now requires a ``string`` for ``$key`` and a "
 "``string`` for ``$language``"
 msgstr ""
+"``elgg_language_key_exists()`` requiert désormais un ``string`` pour "
+"``$key`` et un ``string`` pour ``$language``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:268
 msgid ""
 "``elgg_list_entities()`` now requires a ``callable`` for ``$getter`` and a "
 "``callable`` for ``$viewer``"
 msgstr ""
+"``elgg_list_entities()`` requiert désormais un ``callable`` pour ``$getter``"
+" et un ``callable`` pour ``$viewer``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:269
 msgid ""
 "``elgg_list_entities_from_relationship_count()`` now requires an ``array`` "
 "for ``$options``"
 msgstr ""
+"``elgg_list_entities_from_relationship_count()`` requiert désormais un "
+"``array`` pour ``$options``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:270
 msgid ""
 "``elgg_list_relationships()`` now requires an ``array`` for ``$options``"
 msgstr ""
+"``elgg_list_relationships()`` requiert désormais un ``array`` pour "
+"``$options``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:271
 msgid "``elgg_load_system_cache()`` now requires a ``string`` for ``$type``"
 msgstr ""
+"``elgg_load_system_cache()`` requiert désormais un ``string`` pour ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:272
 msgid ""
 "``elgg_make_sticky_form()`` now requires a ``string`` for ``$form_name``"
 msgstr ""
+"``elgg_make_sticky_form()`` requiert désormais un ``string`` pour "
+"``$form_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:273
 msgid ""
 "``elgg_normalize_site_url()`` now requires a ``string`` for ``$unsafe_url``"
 msgstr ""
+"``elgg_normalize_site_url()`` requiert désormais un ``string`` pour "
+"``$unsafe_url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:274
 msgid "``elgg_normalize_url()`` now requires a ``string`` for ``$url``"
 msgstr ""
+"``elgg_normalize_url()`` requiert désormais un ``string`` pour ``$url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:275
 msgid ""
 "``elgg_ok_response()`` now requires a ``string`` or ``array`` for "
 "``$message`` and a ``string`` for ``$forward_url``"
 msgstr ""
+"``elgg_ok_response()`` requiert désormais un ``string`` ou un ``array`` pour"
+" ``$message`` et un ``string`` pour ``$forward_url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:276
 msgid "``elgg_parse_emails()`` now requires a ``string`` for ``$text``"
 msgstr ""
+"``elgg_parse_emails()`` requiert désormais un ``string`` pour ``$text``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:277
 msgid "``elgg_push_context()`` now requires a ``string`` for ``$context``"
 msgstr ""
+"``elgg_push_context()`` requiert désormais un ``string`` pour ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:278
 msgid ""
 "``elgg_redirect_response()`` now requires a ``string`` for ``$forward_url``"
 msgstr ""
+"``elgg_redirect_response()`` requiert désormais un ``string`` pour "
+"``$forward_url``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:279
 msgid "``elgg_register_action()`` now requires a ``string`` for ``$filename``"
 msgstr ""
+"``elgg_register_action()`` requiert désormais un ``string`` pour "
+"``$filename``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:280
 msgid "``elgg_register_ajax_view()`` now requires a ``string`` for ``$view``"
 msgstr ""
+"``elgg_register_ajax_view()`` requiert désormais un ``string`` pour "
+"``$view``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:281
 msgid ""
 "``elgg_register_error_message()`` now requires a ``string|array`` for "
 "``$message``"
 msgstr ""
+"``elgg_register_error_message()`` requiert désormais un ``string|array`` "
+"pour ``$message``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:282
 msgid ""
@@ -16874,40 +17199,54 @@ msgid ""
 "and ``$type`` and an ``int`` for ``$priority`` and a ``callable|string`` for"
 " ``$callable``"
 msgstr ""
+"``elgg_register_event_handler()`` requiert désormais un ``string`` pour "
+"``$event`` et ``$type`` et un ``int`` pour ``$priority`` et un "
+"``callable|string`` pour ``$callable``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:283
 msgid ""
 "``elgg_register_menu_item()`` now requires a ``string`` for ``$menu_name`` "
 "and a ``array|\\ElggMenuItem`` for ``$menu_item``"
 msgstr ""
+"``elgg_register_menu_item()`` requiert désormais un ``string`` pour "
+"``$menu_name`` et un ``array|\\ElggMenuItem`` pour ``$menu_item``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:284
 msgid ""
 "``elgg_register_notification_event()`` now requires a ``string`` for "
 "``$object_type`` and ``$object_subtype``"
 msgstr ""
+"``elgg_register_notification_event()`` requiert désormais un ``string`` pour"
+" ``$object_type`` et ``$object_subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:285
 msgid ""
 "``elgg_register_notification_method()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``elgg_register_notification_method()`` requiert désormais un ``string`` "
+"pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:286
 msgid "``elgg_register_route()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_register_route()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:287
 msgid ""
 "``elgg_register_simplecache_view()`` now requires a ``string`` for "
 "``$view_name``"
 msgstr ""
+"``elgg_register_simplecache_view()`` requiert désormais un ``string`` pour "
+"``$view_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:288
 msgid ""
 "``elgg_register_success_message()`` now requires a ``string|array`` for "
 "``$message``"
 msgstr ""
+"``elgg_register_success_message()`` requiert désormais un ``string|array`` "
+"pour ``$message``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:289
 msgid ""
@@ -16915,156 +17254,204 @@ msgid ""
 "removed and requires a ``string`` for ``$name``, ``$entity_type`` and "
 "``$entity_subtype``"
 msgstr ""
+"Le premier argument (``$handler``) de ``elgg_register_title_button()`` a été"
+" supprimé et requiert un ``string`` pour ``$name``, ``$entity_type`` et "
+"``$entity_subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:290
 msgid ""
 "``elgg_register_viewtype_fallback()`` now requires a ``string`` for "
 "``$viewtype``"
 msgstr ""
+"``elgg_register_viewtype_fallback()`` requiert désormais un ``string`` pour "
+"``$viewtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:291
 msgid ""
 "``elgg_register_widget_type()`` now only supports an ``array`` suitable for "
 "``\\Elgg\\WidgetDefinition::factory()`` for ``$options``"
 msgstr ""
+"``elgg_register_widget_type()`` ne supporte plus pour ``$options`` qu'un "
+"``array`` adapté pour ``\\Elgg\\WidgetDefinition::factory()`` "
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:292
 msgid "``elgg_remove_config()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_remove_config()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:293
 msgid "``elgg_require_js()`` now requires a ``string`` for ``$name``"
-msgstr ""
+msgstr "``elgg_require_js()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:294
 msgid "``elgg_save_config()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_save_config()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:295
 msgid ""
 "``elgg_save_resized_image()`` now requires a ``string`` for ``$source`` and "
 "a ``string`` for ``$destination``"
 msgstr ""
+"``elgg_save_resized_image()`` requiert désormais un ``string`` pour "
+"``$source`` et un ``string`` pour ``$destination``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:296
 msgid "``elgg_save_system_cache()`` now requires a ``string`` for ``$type``"
 msgstr ""
+"``elgg_save_system_cache()`` requiert désormais un ``string`` pour ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:297
 msgid "``elgg_set_config()`` now requires a ``string`` for ``$name``"
-msgstr ""
+msgstr "``elgg_set_config()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:298
 msgid "``elgg_set_context()`` now requires a ``string`` for ``$context``"
 msgstr ""
+"``elgg_set_context()`` requiert désormais un ``string`` pour ``$context``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:299
 msgid ""
 "``elgg_set_entity_class()`` now requires a ``string`` for ``$type`` and a "
 "``string`` for ``$subtype`` and a ``string`` for ``$class``"
 msgstr ""
+"``elgg_set_entity_class()`` requiert désormais un ``string`` pour ``$type`` "
+"et un ``string`` pour ``$subtype`` et un ``string`` pour ``$class``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:300
 msgid "``elgg_set_form_footer()`` now requires a ``string`` for ``$footer``"
 msgstr ""
+"``elgg_set_form_footer()`` requiert désormais un ``string`` pour ``$footer``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:301
 msgid ""
 "``elgg_set_http_header()`` now requires a ``string`` for ``$header`` and a "
 "``bool`` for ``$replace``"
 msgstr ""
+"``elgg_set_http_header()`` requiert désormais un ``string`` pour ``$header``"
+" et un ``bool`` pour ``$replace``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:302
 msgid "``elgg_set_page_owner_guid()`` now requires a ``int`` for ``$guid``"
 msgstr ""
+"``elgg_set_page_owner_guid()`` requiert désormais un ``int`` pour ``$guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:303
 msgid ""
 "``elgg_set_view_location()`` now requires a ``string`` for ``$view``, "
 "``$location`` and ``$viewtype``"
 msgstr ""
+"``elgg_set_view_location()`` requiert désormais un ``string`` pour "
+"``$view``, ``$location`` et ``$viewtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:304
 msgid "``elgg_set_viewtype()`` now requires a ``string`` for ``$viewtype``"
 msgstr ""
+"``elgg_set_viewtype()`` requiert désormais un ``string`` pour ``$viewtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:305
 msgid ""
 "``elgg_strip_tags()`` now requires a ``string`` for ``$string`` and "
 "``$allowable_tags``"
 msgstr ""
+"``elgg_strip_tags()`` requiert désormais un ``string`` pour ``$string`` et "
+"``$allowable_tags``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:306
 msgid ""
 "``elgg_trigger_after_event()`` now requires a ``string`` for ``$event`` and "
 "``$type``"
 msgstr ""
+"``elgg_trigger_after_event()`` requiert désormais un ``string`` pour "
+"``$event`` et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:307
 msgid ""
 "``elgg_trigger_before_event()`` now requires a ``string`` for ``$event`` and"
 " ``$type``"
 msgstr ""
+"``elgg_trigger_before_event()`` requiert désormais un ``string`` pour "
+"``$event`` et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:308
 msgid ""
 "``elgg_trigger_deprecated_event()`` now requires a ``string`` for "
 "``$event``, ``$type``, ``$message`` and ``$version``"
 msgstr ""
+"``elgg_trigger_deprecated_event()`` requiert désormais un ``string`` pour "
+"``$event``, ``$type``, ``$message`` et ``$version``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:309
 msgid ""
 "``elgg_trigger_event()`` now requires a ``string`` for ``$event`` and "
 "``$type``"
 msgstr ""
+"``elgg_trigger_event()`` requiert désormais un ``string`` pour ``$event`` et"
+" ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:310
 msgid ""
 "``elgg_unregister_ajax_view()`` now requires a ``string`` for ``$view``"
 msgstr ""
+"``elgg_unregister_ajax_view()`` requiert désormais un ``string`` pour "
+"``$view``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:311
 msgid ""
 "``elgg_register_event_handler()`` now requires a ``string`` for ``$event`` "
 "and ``$type`` and a ``callable|string`` for ``$callable``"
 msgstr ""
+"``elgg_register_event_handler()`` requiert désormais un ``string`` pour "
+"``$event`` et ``$type`` et un ``callable|string`` pour ``$callable``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:312
 msgid ""
 "``elgg_unregister_menu_item()`` now requires a ``string`` for ``$menu_name``"
 " and ``$item_name``"
 msgstr ""
+"``elgg_unregister_menu_item()`` requiert désormais un ``string`` pour "
+"``$menu_name`` et ``$item_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:313
 msgid ""
 "``elgg_unregister_notification_event()`` now requires a ``string`` for "
 "``$object_type`` and ``$object_subtype``"
 msgstr ""
+"``elgg_unregister_notification_event()`` requiert désormais un ``string`` "
+"pour ``$object_type`` et ``$object_subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:314
 msgid ""
 "``elgg_unregister_notification_method()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``elgg_unregister_notification_method()`` requiert désormais un ``string`` "
+"pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:315
 msgid "``elgg_unregister_route()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_unregister_route()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:316
 msgid ""
 "``elgg_unregister_widget_type()`` now requires a ``string`` for ``$handler``"
 msgstr ""
+"``elgg_unregister_widget_type()`` requiert désormais un ``string`` pour "
+"``$handler``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:317
 msgid "``elgg_unrequire_js()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_unrequire_js()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:318
 msgid ""
 "``elgg_validate_invite_code()`` now requires a ``string`` for ``$username`` "
 "and ``$code``"
 msgstr ""
+"``elgg_validate_invite_code()`` requiert désormais un ``string`` pour "
+"``$username`` et ``$code``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:319
 msgid ""
@@ -17072,77 +17459,104 @@ msgid ""
 "``$username``, ``$name`` and ``$email``, a ``bool`` for ``$multiple`` and a "
 "``string|array`` for ``$password``"
 msgstr ""
+"``elgg_validate_registration_data()`` requiert désormais un ``string`` pour "
+"``$username``, ``$name`` et ``$email``, un ``bool`` pour ``$multiple`` et un"
+" ``string|array`` pour ``$password``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:320
 msgid ""
 "``elgg_view()`` now requires a ``string`` for ``$view`` and ``$viewtype`` "
 "and a ``bool`` for ``$recurse``"
 msgstr ""
+"``elgg_view()`` requiert désormais un ``string`` pour ``$view`` et "
+"``$viewtype`` et un ``bool`` pour ``$recurse``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:321
 msgid ""
 "``elgg_view_annotation_list()`` now requires an ``array`` for "
 "``$annotations``"
 msgstr ""
+"``elgg_view_annotation_list()`` requiert désormais un ``array`` pour "
+"``$annotations``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:322
 msgid ""
 "``elgg_view_deprecated()`` now requires a ``string`` for ``$view``, "
 "``$message`` and ``$version``"
 msgstr ""
+"``elgg_view_deprecated()`` requiert désormais un ``string`` pour ``$view``, "
+"``$message`` et ``$version``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:323
 msgid ""
 "``elgg_view_comments()`` now requires an ``ElggEntity`` for ``$entity`` and "
 "a ``bool`` for ``$add_comment``"
 msgstr ""
+"``elgg_view_comments()`` requiert désormais un ``ElggEntity`` pour "
+"``$entity`` et un ``bool`` pour ``$add_comment``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:324
 msgid ""
 "``elgg_view_entity_icon()`` now requires a ``string`` for ``$size`` and an "
 "``array`` for ``$vars``"
 msgstr ""
+"``elgg_view_entity_icon()`` requiert désormais un ``string`` pour ``$size`` "
+"et un ``array`` pour ``$vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:325
 msgid ""
 "``elgg_view_entity_list()`` now requires an ``array`` for ``$entities``"
 msgstr ""
+"``elgg_view_entity_list()`` requiert désormais un ``array`` pour "
+"``$entities``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:326
 msgid ""
 "``elgg_view_exists()`` now requires a ``string`` for ``$view`` and "
 "``$viewtype`` and an ``array`` for ``$vars``"
 msgstr ""
+"``elgg_view_exists()`` requiert désormais un ``string`` pour ``$view`` et "
+"``$viewtype`` et un ``array`` pour ``$vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:327
 msgid ""
 "``elgg_view_form()`` now requires a ``string`` for ``$action`` and an "
 "``array`` for ``$form_vars`` and ``$body_vars``"
 msgstr ""
+"``elgg_view_form()`` requiert désormais un ``string`` pour ``$action`` et un"
+" ``array`` pour ``$form_vars`` et ``$body_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:328
 msgid ""
 "``elgg_view_icon()`` now requires a ``string`` for ``$name`` and an "
 "``array`` for ``$vars``"
 msgstr ""
+"``elgg_view_icon()`` requiert désormais un ``string`` pour ``$name`` et un "
+"``array`` pour ``$vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:329
 msgid ""
 "``elgg_view_image_block()`` now requires a ``string`` for ``$type``, "
 "``$title`` and ``$body``"
 msgstr ""
+"``elgg_view_image_block()`` requiert désormais un ``string`` pour ``$type``,"
+" ``$title`` et ``$body``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:330
 msgid ""
 "``elgg_view_layout()`` now requires a ``string`` for ``$layout_name`` and an"
 " ``array`` for ``$vars``"
 msgstr ""
+"``elgg_view_layout()`` requiert désormais un ``string`` pour "
+"``$layout_name`` et un ``array`` pour ``$vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:331
 msgid ""
 "``elgg_view_message()`` now requires a ``string`` for ``$type`` and "
 "``$body``"
 msgstr ""
+"``elgg_view_message()`` requiert désormais un ``string`` pour ``$type`` et "
+"``$body``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:332
 msgid ""
@@ -17150,109 +17564,143 @@ msgid ""
 "``$page_shell``, an ``array`` for ``$vars`` and a ``string|array`` for "
 "``$body``"
 msgstr ""
+"``elgg_view_page()`` requiert désormais un ``string`` pour ``$title`` et "
+"``$page_shell``, un ``array`` pour ``$vars`` et un ``string|array`` pour "
+"``$body``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:333
 msgid ""
 "``elgg_view_relationship_list()`` now requires an ``array`` for "
 "``$relationships``"
 msgstr ""
+"``elgg_view_relationship_list()`` requiert désormais un ``array`` pour "
+"``$relationships``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:334
 msgid ""
 "``elgg_view_river_item()`` now requires an ``ElggRiverItem`` for ``$item``"
 msgstr ""
+"``elgg_view_river_item()`` requiert désormais un ``ElggRiverItem`` pour "
+"``$item``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:335
 msgid "``elgg_view_resource()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``elgg_view_resource()`` requiert désormais un ``string`` pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:336
 msgid "``elgg_view_title()`` now requires a ``string`` for ``$title``"
 msgstr ""
+"``elgg_view_title()`` requiert désormais un ``string`` pour ``$title``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:337
 msgid ""
 "``embed_get_list_options()`` now requires an ``array`` for ``$options``"
 msgstr ""
+"``embed_get_list_options()`` requiert désormais un ``array`` pour "
+"``$options``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:338
 msgid ""
 "``embed_list_items()`` now requires an ``array`` for ``$entities`` and "
 "``$vars``"
 msgstr ""
+"``embed_list_items()`` requiert désormais un ``array`` pour ``$entities`` et"
+" ``$vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:339
 msgid ""
 "``file_prepare_form_vars()`` now requires an ``ElggFile`` for ``$file``"
 msgstr ""
+"``file_prepare_form_vars()`` requiert désormais un ``ElggFile`` pour "
+"``$file``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:340
 msgid "``get_entity()`` now requires a ``int`` for ``$guid``"
-msgstr ""
+msgstr "``get_entity()`` requiert désormais un ``int`` pour ``$guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:341
 msgid ""
 "``get_input()`` now requires a ``string`` for ``$variable`` and a ``bool`` "
 "for ``$filter_result``"
 msgstr ""
+"``get_input()`` requiert désormais un ``string`` pour ``$variable`` et un "
+"``bool`` pour ``$filter_result``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:342
 msgid "``get_user()`` now requires a ``int`` for ``$guid``"
-msgstr ""
+msgstr "``get_user()`` requiert désormais un ``int`` pour ``$guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:343
 msgid ""
 "``groups_get_group_join_menu_item()`` now requires an ``ElggUser`` for "
 "``$user``"
 msgstr ""
+"``groups_get_group_join_menu_item()`` requiert désormais un ``ElggUser`` "
+"pour ``$user``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:344
 msgid ""
 "``groups_get_group_leave_menu_item()`` now requires an ``ElggUser`` for "
 "``$user``"
 msgstr ""
+"``groups_get_group_leave_menu_item()`` requiert désormais un ``ElggUser`` "
+"pour ``$user``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:345
 msgid ""
 "``groups_get_invited_groups()`` now requires an ``int`` for ``$user_guid``, "
 "a ``bool`` for ``$return_guids`` and an ``array`` for ``$options``"
 msgstr ""
+"``groups_get_invited_groups()`` requiert désormais un ``int`` pour "
+"``$user_guid``, un ``bool`` pour ``$return_guids`` et un ``array`` pour "
+"``$options``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:346
 msgid ""
 "``notify_user()`` now requires an ``int|array`` for ``$to`` and a ``int`` "
 "for ``$from`` and a ``string`` for ``$subject`` and ``$message``"
 msgstr ""
+"``notify_user()`` requiert désormais un ``int|array`` pour ``$to`` et un "
+"``int`` pour ``$from`` et un ``string`` pour ``$subject`` et ``$message``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:347
 msgid ""
 "``pages_get_navigation_tree()`` now requires a ``ElggEntity`` for "
 "``$container``"
 msgstr ""
+"``pages_get_navigation_tree()`` requiert désormais un ``ElggEntity`` pour "
+"``$container``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:348
 msgid ""
 "``pages_prepare_form_vars()`` now requires a ``ElggPage`` for ``$page``, an "
 "``int`` for ``$parent_guid`` and a ``ElggAnnotation`` for ``$revision``"
 msgstr ""
+"``pages_prepare_form_vars()`` requiert désormais un ``ElggPage`` pour "
+"``$page``, un ``int`` pour ``$parent_guid`` et un ``ElggAnnotation`` pour "
+"``$revision``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:349
 msgid ""
 "``pages_prepare_parent_breadcrumbs()`` now requires a ``ElggPage`` for "
 "``$page``"
 msgstr ""
+"``pages_prepare_parent_breadcrumbs()`` requiert désormais un ``ElggPage`` "
+"pour ``$page``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:350
 msgid "``set_input()`` now requires a ``string`` for ``$variable``"
-msgstr ""
+msgstr "``set_input()`` requiert désormais un ``string`` pour ``$variable``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:351
 msgid "``thewire_filter()`` now requires a ``string`` for ``$text``"
-msgstr ""
+msgstr "``thewire_filter()`` requiert désormais un ``string`` pour ``$text``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:352
 msgid "``thewire_get_hashtags()`` now requires a ``string`` for ``$text``"
 msgstr ""
+"``thewire_get_hashtags()`` requiert désormais un ``string`` pour ``$text``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:353
 msgid ""
@@ -17260,12 +17708,17 @@ msgid ""
 "``$method`` and an ``int`` for ``$userid`` and ``$access_id`` and "
 "``$parent_guid``"
 msgstr ""
+"``thewire_save_post()`` requiert désormais un ``string`` pour ``$text`` et "
+"``$method`` et un ``int`` pour ``$userid``, ``$access_id`` et "
+"``$parent_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:354
 msgid ""
 "``uservalidationbyemail_request_validation()`` now requires an ``int`` for "
 "``$user_guid``"
 msgstr ""
+"``uservalidationbyemail_request_validation()`` requiert désormais un ``int``"
+" pour ``$user_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:355
 msgid ""
@@ -17274,28 +17727,38 @@ msgid ""
 "a ``bool`` for ``$require_api_auth`` and ``$require_user_auth`` and "
 "``$assoc``"
 msgstr ""
+"``elgg_ws_expose_function()`` requiert désormais un ``string`` pour "
+"``$method``, ``$description`` et ``$call_method``, un ``array`` pour "
+"``$parameters`` et un ``bool`` pour ``$require_api_auth``, "
+"``$require_user_auth`` et ``$assoc``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:356
 msgid ""
 "``elgg_ws_register_service_handler()`` now requires a ``string`` for "
 "``$handler``"
 msgstr ""
+"``elgg_ws_register_service_handler()`` requiert désormais un ``string`` pour"
+" ``$handler``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:357
 msgid ""
 "``elgg_ws_unexpose_function()`` now requires a ``string`` for ``$method`` "
 "and a ``string`` for ``$http_request_method``"
 msgstr ""
+"``elgg_ws_unexpose_function()`` requiert désormais un ``string`` pour "
+"``$method`` et un ``string`` pour ``$http_request_method``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:358
 msgid ""
 "``elgg_ws_unregister_service_handler()`` now requires a ``string`` for "
 "``$handler``"
 msgstr ""
+"``elgg_ws_unregister_service_handler()`` requiert désormais un ``string`` "
+"pour ``$handler``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:361
 msgid "Class function return types"
-msgstr ""
+msgstr "Types de retour des fonctions de classes"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:363
 msgid "``\\ElggEntity::deleteMetadata()`` no longer returns ``null``"
@@ -17343,462 +17806,1171 @@ msgid ""
 "``\\ElggAccessCollection::getObjectFromID()`` now requires a ``int`` for "
 "``$id``"
 msgstr ""
+"``\\ElggAccessCollection::getObjectFromID()`` requiert désormais un ``int`` "
+"pour ``$id``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:375
 msgid ""
 "``\\ElggAnnotation::getObjectFromID()`` now requires a ``int`` for ``$id``"
 msgstr ""
+"``\\ElggAnnotation::getObjectFromID()`` requiert désormais un ``int`` pour "
+"``$id``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:376
 msgid ""
 "``\\ElggEntity::addRelationship()`` now requires an ``int`` for "
 "``$guid_two`` and a ``string`` for ``$relationship``"
 msgstr ""
+"``\\ElggEntity::addRelationship()`` requiert désormais un ``int`` pour "
+"``$guid_two`` et un ``string`` pour ``$relationship``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:377
 msgid "``\\ElggEntity::cache()`` now requires a ``bool`` for ``$persist``"
 msgstr ""
+"``\\ElggEntity::cache()`` requiert désormais un ``bool`` pour ``$persist``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:378
 msgid ""
 "``\\ElggEntity::canAnnotate()`` now requires an ``int`` for ``$user_guid`` "
 "and a ``string`` for ``$annotation_name``"
 msgstr ""
+"``\\ElggEntity::canAnnotate()`` requiert désormais un ``int`` pour "
+"``$user_guid`` et un ``string`` pour ``$annotation_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:379
 msgid ""
 "``\\ElggEntity::canComment()`` now requires an ``int`` for ``$user_guid``"
 msgstr ""
+"``\\ElggEntity::canComment()`` requiert désormais un ``int`` pour "
+"``$user_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:380
 msgid "``\\ElggEntity::canDelete()`` now requires an ``int`` for ``$user_guid``"
 msgstr ""
+"``\\ElggEntity::canDelete()`` requiert désormais un ``int`` pour "
+"``$user_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:381
 msgid "``\\ElggEntity::canEdit()`` now requires an ``int`` for ``$user_guid``"
 msgstr ""
+"``\\ElggEntity::canEdit()`` requiert désormais un ``int`` pour "
+"``$user_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:382
 msgid ""
 "``\\ElggEntity::canWriteToContainer()`` now requires an ``int`` for "
 "``$user_guid`` and a ``string`` for ``$type`` and ``$subtype``"
 msgstr ""
+"``\\ElggEntity::canWriteToContainer()`` requiert désormais un ``int`` pour "
+"``$user_guid`` et un ``string`` pour ``$type`` et ``$subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:383
 msgid ""
 "``\\ElggEntity::countAnnotations()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``\\ElggEntity::countAnnotations()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:384
 msgid ""
 "``\\ElggEntity::countEntitiesFromRelationship()`` now requires a ``string`` "
 "for ``$relationship`` and a ``bool`` for ``$inverse_relationship``"
 msgstr ""
+"``\\ElggEntity::countEntitiesFromRelationship()`` requiert désormais un "
+"``string`` pour ``$relationship`` et un ``bool`` pour "
+"``$inverse_relationship``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:385
 msgid "``\\ElggEntity::delete()`` now requires a ``bool`` for ``$recursive``"
 msgstr ""
+"``\\ElggEntity::delete()`` requiert désormais un ``bool`` pour "
+"``$recursive``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:386
 msgid ""
 "``\\ElggEntity::deleteAnnotations()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::deleteAnnotations()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:387
 msgid "``\\ElggEntity::deleteIcon()`` now requires a ``string`` for ``$type``"
 msgstr ""
+"``\\ElggEntity::deleteIcon()`` requiert désormais un ``string`` pour "
+"``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:388
 msgid ""
 "``\\ElggEntity::deleteMetadata()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``\\ElggEntity::deleteMetadata()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:389
 msgid ""
 "``\\ElggEntity::deleteOwnedAnnotations()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::deleteOwnedAnnotations()`` requiert désormais un ``string`` "
+"pour ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:390
 msgid ""
 "``\\ElggEntity::disable()`` now requires a ``string`` for ``$reason`` and a "
 "``bool`` for ``$recursive``"
 msgstr ""
+"``\\ElggEntity::disable()`` requiert désormais un ``string`` pour "
+"``$reason`` et un ``bool`` pour ``$recursive``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:391
 msgid ""
 "``\\ElggEntity::disableAnnotations()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::disableAnnotations()`` requiert désormais un ``string`` pour"
+" ``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:392
 msgid "``\\ElggEntity::enable()`` now requires a ``bool`` for ``$recursive``"
 msgstr ""
+"``\\ElggEntity::enable()`` requiert désormais un ``bool`` pour "
+"``$recursive``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:393
 msgid ""
 "``\\ElggEntity::enableAnnotations()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::enableAnnotations()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:394
 msgid ""
 "``\\ElggEntity::getAnnotationsAvg()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::getAnnotationsAvg()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:395
 msgid ""
 "``\\ElggEntity::getAnnotationsMax()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::getAnnotationsMax()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:396
 msgid ""
 "``\\ElggEntity::getAnnotationsSum()`` now requires a ``string`` for "
 "``$name``"
 msgstr ""
+"``\\ElggEntity::getAnnotationsSum()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:397
 msgid ""
 "``\\ElggEntity::getIcon()`` now requires a ``string`` for ``$size`` and "
 "``$type``"
 msgstr ""
+"``\\ElggEntity::getIcon()`` requiert désormais un ``string`` pour ``$size`` "
+"et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:398
 msgid ""
 "``\\ElggEntity::getIconLastChange()`` now requires a ``string`` for "
 "``$size`` and ``$type``"
 msgstr ""
+"``\\ElggEntity::getIconLastChange()`` requiert désormais un ``string`` pour "
+"``$size`` et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:399
 msgid ""
 "``\\ElggEntity::getIconURL()`` now requires a ``string`` or ``array`` for "
 "``$params``"
 msgstr ""
+"``\\ElggEntity::getIconURL()`` requiert désormais un ``string`` ou un "
+"``array`` pour ``$params``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:400
 msgid "``\\ElggEntity::getObjectFromID()`` now requires an ``int`` for ``$id``"
 msgstr ""
+"``\\ElggEntity::getObjectFromID()`` requiert désormais un ``int`` pour "
+"``$id``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:401
 msgid ""
 "``\\ElggEntity::getOwnedAccessCollections()`` now requires an ``array`` for "
 "``$options``"
 msgstr ""
+"``\\ElggEntity::getOwnedAccessCollections()`` requiert désormais un "
+"``array`` pour ``$options``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:402
 msgid ""
 "``\\ElggEntity::getOwnedAccessCollection()`` now requires a ``string`` for "
 "``$subtype``"
 msgstr ""
+"``\\ElggEntity::getOwnedAccessCollection()`` requiert désormais un "
+"``string`` pour ``$subtype``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:403
 msgid "``\\ElggEntity::getMetadata()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``\\ElggEntity::getMetadata()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:404
 msgid ""
 "``\\ElggEntity::getVolatileData()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``\\ElggEntity::getVolatileData()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:405
 msgid ""
 "``\\ElggEntity::hasIcon()`` now requires a ``string`` for ``$size`` and "
 "``$type``"
 msgstr ""
+"``\\ElggEntity::hasIcon()`` requiert désormais un ``string`` pour ``$size`` "
+"et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:406
 msgid ""
 "``\\ElggEntity::removeAllRelationships()`` no longer allows ``null`` to be "
 "passed to ``$relationship``"
 msgstr ""
+"``\\ElggEntity::removeAllRelationships()`` ne permet plus de transmettre "
+"``null`` à ``$relationship``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:407
 msgid ""
 "``\\ElggEntity::removeRelationship()`` now requires an ``int`` for "
 "``$guid_two`` and a ``string`` for ``$relationship``"
 msgstr ""
+"``\\ElggEntity::removeRelationship()`` requiert désormais un ``int`` pour "
+"``$guid_two`` et un ``string`` pour ``$relationship``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:408
 msgid ""
 "``\\ElggEntity::saveIconFromElggFile()`` now requires a ``string`` for "
 "``$type``"
 msgstr ""
+"``\\ElggEntity::saveIconFromElggFile()`` requiert désormais un ``string`` "
+"pour ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:409
 msgid ""
 "``\\ElggEntity::saveIconFromLocalFile()`` now requires a ``string`` for "
 "``$input_name`` and ``$type``"
 msgstr ""
+"``\\ElggEntity::saveIconFromLocalFile()`` requiert désormais un ``string`` "
+"pour ``$input_name`` et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:410
 msgid ""
 "``\\ElggEntity::saveIconFromUploadedFile()`` now requires a ``string`` for "
 "``$input_name`` and ``$type``"
 msgstr ""
+"``\\ElggEntity::saveIconFromUploadedFile()`` requiert désormais un "
+"``string`` pour ``$input_name`` et ``$type``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:411
 msgid ""
 "``\\ElggEntity::setContainerGUID()`` now requires an ``int`` for "
 "``$container_guid``"
 msgstr ""
+"``\\ElggEntity::setContainerGUID()`` requiert désormais un ``int`` pour "
+"``$container_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:412
 msgid ""
 "``\\ElggEntity::setDisplayName()`` now requires a ``string`` for "
 "``$display_name``"
 msgstr ""
+"``\\ElggEntity::setDisplayName()`` requiert désormais un ``string`` pour "
+"``$display_name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:413
 msgid ""
 "``\\ElggEntity::setMetadata()`` now requires a ``string`` for ``$name`` and "
 "``$value_type`` and a ``bool`` for ``$multiple``"
 msgstr ""
+"``\\ElggEntity::setMetadata()`` requiert désormais un ``string`` pour "
+"``$name`` et ``$value_type`` et un ``bool`` pour ``$multiple``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:414
 msgid ""
 "``\\ElggEntity::setTempMetadata()`` now requires a ``string`` for ``$name`` "
 "and a ``bool`` for ``$multiple``"
 msgstr ""
+"``\\ElggEntity::setTempMetadata()`` requiert désormais un ``string`` pour "
+"``$name`` et un ``bool`` pour ``$multiple``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:415
 msgid ""
 "``\\ElggEntity::setVolatileData()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``\\ElggEntity::setVolatileData()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:416
 msgid ""
 "``\\ElggEntity::updateLastAction()`` now requires an ``int`` for ``$posted``"
 msgstr ""
+"``\\ElggEntity::updateLastAction()`` requiert désormais un ``int`` pour "
+"``$posted``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:417
 msgid "``\\ElggMetadata::getObjectFromID()`` now requires a ``int`` for ``$id``"
 msgstr ""
+"``\\ElggMetadata::getObjectFromID()`` requiert désormais un ``int`` pour "
+"``$id``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:418
 msgid ""
 "``\\ElggRelationship::getObjectFromID()`` now requires a ``int`` for ``$id``"
 msgstr ""
+"``\\ElggRelationship::getObjectFromID()`` requiert désormais un ``int`` pour"
+" ``$id``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:419
 msgid ""
 "``\\ElggFile::getDownloadURL()`` now requires a ``bool`` for ``$use_cookie``"
 " and a ``string`` for ``$expires``"
 msgstr ""
+"``\\ElggFile::getDownloadURL()`` requiert désormais un ``bool`` pour "
+"``$use_cookie`` et un ``string`` pour ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:420
 msgid ""
 "``\\ElggFile::getInlineURL()`` now requires a ``bool`` for ``$use_cookie`` "
 "and a ``string`` for ``$expires``"
 msgstr ""
+"``\\ElggFile::getInlineURL()`` requiert désormais un ``bool`` pour "
+"``$use_cookie`` et un ``string`` pour ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:421
 msgid "``\\ElggGroup::isToolEnabled()`` now requires a ``string`` for ``$name``"
 msgstr ""
+"``\\ElggGroup::isToolEnabled()`` requiert désormais un ``string`` pour "
+"``$name``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:422
 msgid "``\\ElggMenuItem::factory()`` now requires an ``array`` for ``$options``"
 msgstr ""
+"``\\ElggMenuItem::factory()`` requiert désormais un ``array`` pour "
+"``$options``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:423
 msgid ""
 "``\\ElggTempFile::getDownloadURL()`` now requires a ``bool`` for "
 "``$use_cookie`` and a ``string`` for ``$expires``"
 msgstr ""
+"``\\ElggTempFile::getDownloadURL()`` requiert désormais un ``bool`` pour "
+"``$use_cookie`` et un ``string`` pour ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:424
 msgid ""
 "``\\ElggTempFile::getInlineURL()`` now requires a ``bool`` for "
 "``$use_cookie`` and a ``string`` for ``$expires``"
 msgstr ""
+"``\\ElggTempFile::getInlineURL()`` requiert désormais un ``bool`` pour "
+"``$use_cookie`` et un ``string`` pour ``$expires``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:425
 msgid ""
 "``\\Elgg\\WebServices\\Di\\ApiRegistrationService::registerApiMethod()`` now"
 " requires a ``\\Elgg\\WebServices\\ApiMethod`` as the only parameter"
 msgstr ""
+"``\\Elgg\\WebServices\\Di\\ApiRegistrationService::registerApiMethod()`` "
+"requiert désormais un ``\\Elgg\\WebServices\\ApiMethod`` comme unique "
+"paramètre"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:428
 msgid "Moved classes"
-msgstr ""
+msgstr "Classes déplacées"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:430
 msgid "``\\ElggAutoP`` has been moved to ``\\Elgg\\Views\\AutoParagraph``"
-msgstr ""
+msgstr "``\\ElggAutoP`` a été déplacé vers ``\\Elgg\\Views\\AutoParagraph``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:431
 msgid "``\\ElggCache`` has been moved to ``\\Elgg\\Cache\\BaseCache``"
-msgstr ""
+msgstr "``\\ElggCache`` a été déplacé vers ``\\Elgg\\Cache\\BaseCache``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:432
 msgid ""
 "``\\ElggDiskFilestore`` has been moved to "
 "``\\Elgg\\Filesystem\\Filestore\\DiskFilestore``"
 msgstr ""
+"``\\ElggDiskFilestore`` a été déplacé vers "
+"``\\Elgg\\Filesystem\\Filestore\\DiskFilestore``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:433
 msgid "``\\ElggFilestore`` has been moved to ``\\Elgg\\Filesystem\\Filestore``"
-msgstr ""
+msgstr "``\\ElggFilestore`` a été déplacé vers ``\\Elgg\\Filesystem\\Filestore``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:434
 msgid "``\\ElggRewriteTester`` has been moved to ``\\Elgg\\Router\\RewriteTester``"
-msgstr ""
+msgstr "``\\ElggRewriteTester`` a été déplacé vers ``\\Elgg\\Router\\RewriteTester``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:435
 msgid ""
 "``\\ElggTempDiskFilestore`` has been moved to "
 "``\\Elgg\\Filesystem\\Filestore\\TempDiskFilestore``"
 msgstr ""
+"``\\ElggTempDiskFilestore`` a été déplacé vers "
+"``\\Elgg\\Filesystem\\Filestore\\TempDiskFilestore``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:436
 msgid ""
 "``\\Elgg\\Database\\SiteSecret`` has been moved to "
 "``\\Elgg\\Security\\SiteSecret``"
 msgstr ""
+"``\\Elgg\\Database\\SiteSecret`` a été déplacé vers "
+"``\\Elgg\\Security\\SiteSecret``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:441
 msgid "``elgg_clear_plugin_hook_handlers`` use ``elgg_clear_event_handlers``"
 msgstr ""
+"``elgg_clear_plugin_hook_handlers`` utilisez ``elgg_clear_event_handlers``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:442
 msgid ""
 "``elgg_register_plugin_hook_handler`` use ``elgg_register_event_handler``"
 msgstr ""
+"``elgg_register_plugin_hook_handler`` utilisez "
+"``elgg_register_event_handler``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:443
-msgid "``elgg_trigger_plugin_hook`` use ``elgg_trigger_event_result``"
-msgstr ""
+msgid "``elgg_trigger_plugin_hook`` use ``elgg_trigger_event_results``"
+msgstr "``elgg_trigger_plugin_hook`` utilisez ``elgg_trigger_event_results``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:444
 msgid ""
 "``elgg_unregister_plugin_hook_handler`` use "
 "``elgg_unregister_event_handler``"
 msgstr ""
+"``elgg_unregister_plugin_hook_handler`` utilisez "
+"``elgg_unregister_event_handler``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:445
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:466
 msgid "``get_user_by_email`` use ``elgg_get_user_by_email``"
-msgstr ""
+msgstr "``get_user_by_email`` utilisez ``elgg_get_user_by_email``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:446
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:467
 msgid "``get_user_by_username`` use ``elgg_get_user_by_username``"
-msgstr ""
+msgstr "``get_user_by_username`` utilisez ``elgg_get_user_by_username``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:451
 msgid "``Elgg\\WebServices\\ApiKeyForm``"
-msgstr ""
+msgstr "``Elgg\\WebServices\\ApiKeyForm``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:452
 msgid ""
 "``Loggable`` this interface has been merged into the ``ElggData`` class"
 msgstr ""
+"``Loggable`` cette interface a été fusionnée dans la classe ``ElggData``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:457
 msgid "``blog_prepare_form_vars``"
-msgstr ""
+msgstr "``blog_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:458
 msgid "``bookmarks_prepare_form_vars``"
-msgstr ""
+msgstr "``bookmarks_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:459
 msgid "``discussion_prepare_form_vars``"
-msgstr ""
+msgstr "``discussion_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:460
 msgid "``elgg_get_breadcrumbs``"
-msgstr ""
+msgstr "``elgg_get_breadcrumbs``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:461
 msgid "``elgg_pop_breadcrumb``"
-msgstr ""
+msgstr "``elgg_pop_breadcrumb``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:462
 msgid ""
 "``elgg_set_email_transport`` use ``_elgg_services()->set('mailer', ...)``"
 msgstr ""
+"``elgg_set_email_transport`` utilisez ``_elgg_services()->set('mailer', "
+"...)``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:463
 msgid "``elgg_trigger_deprecated_plugin_hook``"
-msgstr ""
+msgstr "``elgg_trigger_deprecated_plugin_hook``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:464
 msgid ""
 "``elgg_ws_expose_function`` use ``elgg-plugin.php`` or ``'register', "
 "'api_methods'`` event"
 msgstr ""
+"``elgg_ws_expose_function`` utilisez ``elgg-plugin.php`` ou l'événement "
+"``'register', 'api_methods'``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:465
 msgid "``file_prepare_form_vars``"
-msgstr ""
+msgstr "``file_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:468
 msgid "``groups_prepare_form_vars``"
-msgstr ""
+msgstr "``groups_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:469
 msgid "``messages_prepare_form_vars``"
-msgstr ""
+msgstr "``messages_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:470
 msgid "``pages_prepare_form_vars``"
-msgstr ""
+msgstr "``pages_prepare_form_vars``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:471
 msgid "``thewire_latest_guid``"
-msgstr ""
+msgstr "``thewire_latest_guid``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:474
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:141
 msgid "Removed class functions"
-msgstr ""
+msgstr "Fonctions de classe supprimées"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:476
 msgid "``\\ElggWidget::saveSettings()``"
-msgstr ""
+msgstr "``\\ElggWidget::saveSettings()``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:479
 msgid "Removed events"
-msgstr ""
+msgstr "Événements supprimés"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:481
 msgid ""
 "``access:collections:addcollection, collection`` use the ``create, "
 "access_collection`` sequence"
 msgstr ""
+"``access:collections:addcollection, collection`` utilisez la séquence "
+"``create, access_collection``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:482
 msgid ""
 "``access:collections:deletecollection, collection`` use the ``delete, "
 "access_collection`` sequence"
 msgstr ""
+"``access:collections:deletecollection, collection`` utilisez la séquence "
+"``delete, access_collection``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:483
 msgid "``prepare, breadcrumbs`` use ``register, menu:breadcrumbs``"
-msgstr ""
+msgstr "``prepare, breadcrumbs`` utilisez ``register, menu:breadcrumbs``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:484
 msgid "``widget_settings, <widget_handler>``"
-msgstr ""
+msgstr "``widget_settings, <widget_handler>``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:489
 msgid "``\\Elgg\\Exceptions\\InvalidParameterException``"
-msgstr ""
+msgstr "``\\Elgg\\Exceptions\\InvalidParameterException``"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:492
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:9
 msgid "Constants"
-msgstr ""
+msgstr "Constantes"
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:494
 msgid ""
 "The misspelled ``REFERER`` constant has been removed. Use ``REFERRER`` "
 "instead."
 msgstr ""
+"La constante ``REFERER`` mal orthographiée a été supprimée. Utilisez plutôt "
+"``REFERRER``."
 
 #: ../../appendix/upgrade-notes/4.x-to-5.0.rst:495
 msgid ""
 "The ``REFERRER`` constant has been changed to a string with the value "
 "``__elgg_referrer``"
 msgstr ""
+"La constante ``REFERRER`` a été remplacée par une chaîne de caractères avec "
+"la valeur ``__elgg_referrer``"
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:2
+msgid "From 5.0 to 5.1"
+msgstr "De 5.0 à 5.1"
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:9
+msgid "Changes in the DOM structure"
+msgstr "Changements dans la structure DOM"
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:11
+msgid ""
+"In order to improve accessibility the HTML DOM structure has been changed "
+"slightly. Some sections of the page have been changed from a ``div`` to "
+"``header``, ``main`` or ``footer``. The classes or place in the DOM has not "
+"been changed."
+msgstr ""
+"Afin d'améliorer l'accessibilité, la structure DOM HTML a été légèrement "
+"modifiée. Certaines sections de la page ont été modifiées de ``div`` à "
+"``header``, ``main`` ou ``footer``. Les classes ou la position dans le DOM "
+"n'ont pas été modifiées."
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:17
+msgid ""
+"``page/elements/<section>/after`` is deprecated: Extend the correct "
+"``page/elements/<section>``"
+msgstr ""
+"``page/elements/<section>/after`` est obsolète : étendez le bon "
+"``page/elements/<section>``"
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:18
+msgid ""
+"``page/elements/<section>/before`` is deprecated: Prepend the correct "
+"``page/elements/<section>``"
+msgstr ""
+"``page/elements/<section>/before`` est obsolète : ajoutez le bon préfixe "
+"``page/elements/<section>``"
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:19
+msgid ""
+"``resources/comments/edit`` is deprecated: This resource is no longer in use"
+msgstr ""
+"``resources/comments/edit`` est obsolète : cette ressource n'est plus "
+"utilisée"
+
+#: ../../appendix/upgrade-notes/5.0-to-5.1.rst:24
+msgid ""
+"``edit:object:comment`` is deprecated: Editing comments uses an inline form"
+msgstr ""
+"``edit:object:comment`` est obsolète : la modification des commentaires "
+"utilise un formulaire en ligne"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:2
+msgid "From 5.x to 6.0"
+msgstr "De 5.x vers 6.0"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:9
+msgid "Databases"
+msgstr "Bases de données"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:12
+msgid "DB Requirements"
+msgstr "Pré-requis de la base de données"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:14
+msgid "The minimal MySQL version is now 8.0"
+msgstr "La version minimale de MySQL est maintenant la 8.0."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:15
+msgid "The minimal MariaDB version is now 10.6"
+msgstr "La version minimale de MariaDB est maintenant la 10.6."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:18
+msgid "Deleted state"
+msgstr "État supprimé"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:20
+msgid ""
+"Entities can now be marked as deleted in the database. This allows entities "
+"to be restored from the database when deletion was done too soon."
+msgstr ""
+"Les entités peuvent maintenant être marquées comme supprimées dans la base "
+"de données. Cela permet aux entités d'être restaurées à partir de la base de"
+" données lorsque la suppression a été effectuée trop tôt."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:25
+msgid ""
+"Because of changes to ``ElggEntity::delete()`` the working of "
+"``ElggFile::delete()`` was changed. It was possible to symlink a file to a "
+"different location (through other ways then Elgg) and when deleting the "
+"``ElggFile`` is was possible to only delete the symlink and not the target "
+"file. This was changed and ``ElggFile::delete()`` will now always delete "
+"both the symlink and the target file."
+msgstr ""
+"En raison des changements apportés à ``ElggEntity::delete()`` le "
+"fonctionnement de ``ElggFile::delete()`` a été modifié. Il était possible de"
+" créer un lien symbolique entre un fichier et un emplacement différent (par "
+"d'autres moyens que Elgg) et lors de la suppression du ``ElggFile``, il "
+"était possible de supprimer uniquement le lien symbolique et non le fichier "
+"cible. Cela a été modifié et ``ElggFile::delete()`` supprimera désormais "
+"toujours à la fois le lien symbolique et le fichier cible."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:32
+msgid ""
+"Check the :ref:`database <database-deleted>` documentation or the "
+":doc:`/guides/restore` documentation for more information."
+msgstr ""
+"Consultez la documentation :ref:`database <database-deleted>` ou la "
+"documentation :doc:`/guides/restore` pour plus d'informations."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:35
+msgid "ES Modules"
+msgstr "Modules ES"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:37
+msgid ""
+"We no longer use RequireJS for inclusion of AMD JavaScript modules. Instead "
+"we now rely on the native use of ECMAScript modules. All modules can be "
+"referenced under the same name as an importable module."
+msgstr ""
+"Nous n'utilisons plus RequireJS pour l'inclusion des modules JavaScript AMD."
+" Nous utilisons désormais les modules ECMAScript en natif. Tous les modules "
+"peuvent être référencés sous le même nom qu'un module importable."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:41
+msgid "Related functions changes"
+msgstr "Modifications de fonctions associées"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:43
+msgid ""
+"``elgg_define_js()`` this function has been removed. You might need "
+"``elgg_register_esm()`` as a replacement."
+msgstr ""
+"``elgg_define_js()`` cette fonction a été supprimée. Vous pourriez utiliser "
+"``elgg_register_esm()`` en remplacement."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:44
+msgid ""
+"``elgg_require_js()`` this function has been removed. You might need "
+"``elgg_import_esm()`` as a replacement."
+msgstr ""
+"``elgg_require_js()`` cette fonction a été supprimée. Vous pourriez utiliser"
+" ``elgg_import_esm()`` en remplacement."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:45
+msgid "``elgg_unrequire_js()`` this function has been removed"
+msgstr "``elgg_unrequire_js()`` cette fonction a été retirée"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:47
+msgid ""
+"The event 'config', 'amd' has been removed. The event 'elgg.data', 'site' "
+"has been removed. You can switch to the 'elgg.data', 'page' event."
+msgstr ""
+"L'événement 'config', 'amd' a été supprimé. L'événement 'elgg.data', 'site' "
+"a été supprimé. Vous pouvez passer à l'événement 'elgg.data', 'page'."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:52
+msgid ""
+"With the switch to ECMAScript modules we can no longer add Sub-Resource "
+"Integrity checks to the imported modules."
+msgstr ""
+"Avec le passage aux modules ECMAScript, nous ne pouvons plus ajouter de "
+"contrôles d'intégrité des sous-ressources aux modules importés."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:56
+msgid ""
+"With the switch to ECMAScript modules we temporarily dropped Javascript "
+"testing features. This will be added in the future."
+msgstr ""
+"Avec le passage aux modules ECMAScript, nous avons temporairement abandonné "
+"les fonctionnalités de test JavaScript. Celles-ci seront ajoutées "
+"ultérieurement."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:64
+msgid ""
+"The minimal PHP version is now 8.1. Also the ``intl`` module is now required"
+" to be enabled."
+msgstr ""
+"La version minimale de PHP est désormais la 8.1. Le module ``intl`` doit "
+"également être activé."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:67
+msgid "PHPUnit"
+msgstr "PHPUnit"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:69
+msgid "Elgg now uses PHPUnit 10.5. You might need to update your tests."
+msgstr ""
+"Elgg utilise désormais PHPUnit 10.5. Vous devrez peut-être mettre à jour vos"
+" tests."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:72
+msgid "Annotations"
+msgstr "Annotations"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:74
+msgid ""
+"Due to a naming conflict in the default join alias between the "
+"``annotations`` and ``metadata`` table, the default join alias for the "
+"``annotations`` table has been changed from ``n_table`` to ``a_table``."
+msgstr ""
+"En raison d'un conflit de nom dans l'alias de jointure par défaut entre les "
+"tables ``annotations`` et ``metadata``, l'alias de jointure par défaut pour "
+"la table ``annotations`` a été modifié de ``n_table`` à ``a_table``."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:77
+msgid ""
+"If your code uses very specific clauses (select, where, order_by, etc.) you "
+"need to update your code. If you use the ``\\Elgg\\Database\\QueryBuilder`` "
+"for your query parts you should be ok."
+msgstr ""
+"Si votre code utilise des clauses très spécifiques (select, where, order_by,"
+" etc.), vous devez le mettre à jour. Si vous utilisez "
+"``\\Elgg\\Database\\QueryBuilder`` pour vos parties de requête, vous ne "
+"devriez rien avoir à faire."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:81
+msgid "Enabled column"
+msgstr "Colonne activée"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:83
+msgid ""
+"The ``enabled`` column for annotations has been removed. An annotation is no"
+" longer enabled or disabled. You can no longer perform the ``enable`` and "
+"``disable`` API calls on annotations. Other related API functions have been "
+"removed."
+msgstr ""
+"La colonne ``enabled`` pour les annotations a été supprimée. Une annotation "
+"n'est plus activée ni désactivée. Vous ne pouvez plus effectuer les appels "
+"d'API ``enable`` et ``disable`` sur les annotations. D'autres fonctions API "
+"associées ont été supprimées."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:87
+msgid "Entity Icons"
+msgstr "Icônes des entités"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:90
+msgid "Cropping coordinates"
+msgstr "Coordonnées de découpe"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:92
+msgid ""
+"The cropping coordinates of the default icon (``icon``) are now stored in a "
+"uniform way, same as those of the other icon types. The metadata ``x1``, "
+"``x2``, ``y1`` and ``y2`` no longer exist. Use the new ``\\ElggEntity`` "
+"function ``getIconCoordinates()``."
+msgstr ""
+"Les coordonnées de recadrage de l'icône par défaut (``icon``) sont désormais"
+" stockées de manière uniforme, comme celles des autres types d'icônes. Les "
+"métadonnées ``x1``, ``x2``, ``y1`` et ``y2`` n'existent plus. Utilisez la "
+"nouvelle fonction ``\\ElggEntity`` ``getIconCoordonnées()``."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:96
+msgid "Icontime"
+msgstr "Icontime"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:98
+msgid ""
+"The metadata ``icontime`` has been removed from the database. This was an "
+"unreliable way to check if an icon was uploaded. This was only stored for "
+"the icon type ``icon``."
+msgstr ""
+"Les métadonnées ``icontime`` ont été supprimées de la base de données. Ce "
+"moyen de vérifier si une icône était téléchargée était peu fiable. Ceci "
+"n'était stocké que pour le type d'icône ``icon``."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:101
+msgid ""
+"A reliable way to check if an icon was uploaded is to use the "
+"``\\ElggEntity::hasIcon()`` function."
+msgstr ""
+"Un moyen fiable de vérifier si une icône a été téléchargée est d'utiliser la"
+" fonction ``\\ElggEntity::hasIcon()``."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:104
+msgid "Headings"
+msgstr "Titres"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:106
+msgid ""
+"The use of headings (h1, h2, h3) have been revisited throughout the entire "
+"codebase to make sure they are used when appropriate and that they also are "
+"used in the correct order. You can read more about the intended usage in "
+":doc:`/design/a11y`."
+msgstr ""
+"L'utilisation des titres (h1, h2, h3) a été revue dans l'ensemble de la base"
+" de code pour garantir qu'ils sont utilisés lorsque cela est approprié et "
+"qu'ils sont également utilisés dans le bon ordre. Vous pouvez en apprendre "
+"plus sur l'utilisation prévue dans :doc:`/design/a11y`."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:109
+msgid "Most notable changes are the following:"
+msgstr "Les changements les plus importants sont les suivants :"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:111
+msgid "H1 is always the page title (and no longer the logo / site name)"
+msgstr "H1 est toujours le titre de la page (et non plus le logo/nom du site)"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:112
+msgid "Modules (info, sidebar, widgets) use the H2 heading"
+msgstr "Les Modules (info, sidebar, widgets) utilisent le niveau de titre H2"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:113
+msgid ""
+"H3 headings on entity / relationship / annotation summary titles have been "
+"replaced by a regular text element"
+msgstr ""
+"Les titres H3 des titres de résumé d'entité/relation/annotation ont été "
+"remplacés par un élément de texte normal"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:116
+msgid "CSS and HTML structure changes"
+msgstr "Modifications de structure CSS et HTML"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:118
+msgid ""
+"The HTML structure of pages have been changed. Entity summaries and full "
+"view entity pages have been wrapped in an ``article`` element. Sidebar "
+"elements now use the ``aside`` html element. Modules (like widgets of info-"
+"modules) now use a ``section`` element instead of a ``div``. Duplicate css "
+"classes on the same element like ``elgg-body`` and ``elgg-layout-body`` have"
+" been removed."
+msgstr ""
+"La structure HTML des pages a été modifiée. Les résumés d'entités et les "
+"pages d'entités en vue complète sont désormais intégrés dans un élément "
+"``article``. Les éléments de la barre latérale utilisent désormais l'élément"
+" HTML ``aside``. Les modules (comme les widgets des info-modules) utilisent "
+"désormais un élément ``section`` au lieu d'un ``div``. Les classes CSS en "
+"double sur le même élément comme ``elgg-body`` et ``elgg-layout-body`` ont "
+"été supprimées."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:122
+msgid ""
+"Elgg provided some helper classes for creating a grid layout (like ``elgg-"
+"grid``, ``elgg-col``, ``elgg-row``). These helper classes have been removed."
+" You can do all those things with regular css like ``display: grid``."
+msgstr ""
+"Elgg a fourni quelques classes d'assistance pour créer une disposition en "
+"grille (comme ``elgg-grid``, ``elgg-col``, ``elgg-row``). Ces classes d'aide"
+" ont été supprimées. Vous pouvez faire toutes ces choses avec du CSS "
+"classique comme `` display: grid``."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:125
+msgid ""
+"Some other styling changes include a new background color for the body, "
+"improved styling of breadcrumbs and a more basic owner block chip."
+msgstr ""
+"D'autres changements de style concernent une nouvelle couleur d'arrière-plan"
+" pour le corps, un style amélioré pour le fil d'Ariane et un bloc "
+"propriétaire plus basique."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:131
+msgid "Removed lib functions"
+msgstr "Fonctions de bibliothèque supprimées"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:133
+msgid "``elgg_disable_annotations()`` has been removed"
+msgstr "``elgg_disable_annotations()`` a été retiré"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:134
+msgid "``elgg_enable_annotations()`` has been removed"
+msgstr "``elgg_enable_annotations()`` a été retiré"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:135
+msgid "``elgg_set_view_location()`` has been removed"
+msgstr "``elgg_set_view_location()`` a été retiré"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:136
+msgid "``elgg_strrchr()`` has been removed"
+msgstr "``elgg_strrchr()`` a été retiré"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:137
+msgid "``elgg_strripos()`` has been removed"
+msgstr "``elgg_strripos()`` a été retiré"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:138
+msgid ""
+"``elgg_unrequire_css()`` has been removed. Use "
+"``elgg_unregister_external_file('css', $view)`` as replacement."
+msgstr ""
+"``elgg_unrequire_css()`` a été retirée. Utilisez "
+"``elgg_unregister_external_file('css', $view)`` en remplacement."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:143
+msgid "``\\ElggAnnotation->enable()``"
+msgstr "``\\ElggAnnotation->enable()``"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:144
+msgid "``\\ElggAnnotation->disable()``"
+msgstr "``\\ElggAnnotation->disable()``"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:145
+msgid "``\\ElggEntity->disableAnnotations()``"
+msgstr "``\\ElggEntity->disableAnnotations()``"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:146
+msgid "``\\ElggEntity->enableAnnotations()``"
+msgstr "``\\ElggEntity->enableAnnotations()``"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:147
+msgid ""
+"``\\ElggEntity->getTags()`` use ``elgg_get_metadata()`` as an alternative."
+msgstr ""
+"``\\ElggEntity->getTags()`` utilisez ``elgg_get_metadata()`` comme "
+"alternative."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:152
+msgid ""
+"``elgg_get_entity_statistics()`` now requires an ``array`` of ``$options`` "
+"to be used by ``elgg_get_entities()``."
+msgstr ""
+"``elgg_get_entity_statistics()`` requiert désormais un ``array`` de "
+"``$options`` qui est utilisé par ``elgg_get_entities()``."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:153
+msgid ""
+"``elgg_get_simplecache_url()`` has the second argument (``$subview``) "
+"removed. The full ``$view`` name needs to be provided as the first argument."
+msgstr ""
+"Le deuxième argument (``$subview``) de ``elgg_get_simplecache_url()`` est "
+"supprimé. Le nom complet de ``$view`` doit être fourni comme premier "
+"argument."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:158
+msgid ""
+"The interface ``\\Elgg\\EntityIcon`` has been removed. Implemented functions"
+" in ``\\ElggEntity`` have been moved to ``\\Elgg\\Traits\\Entity\\Icons``"
+msgstr ""
+"L'interface ``\\Elgg\\EntityIcon`` a été supprimée. Les fonctions "
+"implémentées dans ``ElggEntity`` ont été déplacées vers "
+"``Elgg\\Traits\\Entity\\Icons``"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:159
+msgid ""
+"View names from a 'css' or 'js' view folder now always need to be referenced"
+" by their full view name (previously is was possible to omit the first "
+"folder if it was 'css' or 'js')"
+msgstr ""
+"Les noms de vue d'un dossier de vue 'css' ou 'js' doivent désormais toujours"
+" être référencés par leur nom de vue complet (auparavant, il était possible "
+"d'omettre le premier dossier s'il s'agissait de 'css' ou 'js')."
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:162
+msgid "Removed Config values"
+msgstr "Valeurs de configuration retirées"
+
+#: ../../appendix/upgrade-notes/5.x-to-6.0.rst:164
+msgid "``system_cache_loaded``"
+msgstr "``system_cache_loaded``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:2
+msgid "From 6.0 to 6.1"
+msgstr "De 6.0 à 6.1"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:11
+msgid ""
+"The constant ``ELGG_CACHE_BLACK_HOLE`` is deprecated. Use "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_BLACK_HOLE``."
+msgstr ""
+"La constante ``ELGG_CACHE_BLACK_HOLE`` es dépréciée. Utilisez "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_BLACK_HOLE``."
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:12
+msgid ""
+"The constant ``ELGG_CACHE_RUNTIME`` is deprecated. Use "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_RUNTIME``."
+msgstr ""
+"La constante ``ELGG_CACHE_RUNTIME`` est dépréciée. Utilisez "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_RUNTIME``."
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:13
+msgid ""
+"The constant ``ELGG_CACHE_FILESYSTEM`` is deprecated. Use "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_FILESYSTEM``."
+msgstr ""
+"La constante ``ELGG_CACHE_FILESYSTEM`` es dépréciée. Utilisez "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_FILESYSTEM``."
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:14
+msgid ""
+"The constant ``ELGG_CACHE_PERSISTENT`` is deprecated. Use "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_PERSISTENT``."
+msgstr ""
+"La constante ``ELGG_CACHE_PERSISTENT`` est dépréciée. Utilisez "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_PERSISTENT``."
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:15
+msgid ""
+"The constant ``ELGG_CACHE_LOCALFILESYSTEM`` is deprecated. Use "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_LOCALFILESYSTEM``."
+msgstr ""
+"La constante ``ELGG_CACHE_LOCALFILESYSTEM`` est dépréciée. Utilisez "
+"``\\Elgg\\Cache\\CompositeCache::CACHE_LOCALFILESYSTEM``."
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:20
+msgid "``elgg_disable_simplecache``"
+msgstr "``elgg_disable_simplecache``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:21
+msgid "``elgg_disable_system_cache``"
+msgstr "``elgg_disable_system_cache``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:22
+msgid "``elgg_enable_simplecache``"
+msgstr "``elgg_enable_simplecache``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:23
+msgid "``elgg_enable_system_cache``"
+msgstr "``elgg_enable_system_cache``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:24
+msgid "``elgg_get_system_cache``"
+msgstr "``elgg_get_system_cache``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:25
+msgid "``elgg_is_simplecache_enabled``"
+msgstr "``elgg_is_simplecache_enabled``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:26
+msgid "``elgg_is_system_cache_enabled``"
+msgstr "``elgg_is_system_cache_enabled``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:27
+msgid "``elgg_plugin_exists`` use ``elgg_get_plugin_from_id()``"
+msgstr "``elgg_plugin_exists`` utilisez ``elgg_get_plugin_from_id()``"
+
+#: ../../appendix/upgrade-notes/6.0-to-6.1.rst:28
+msgid "``elgg_reset_system_cache``"
+msgstr "``elgg_reset_system_cache``"
+
+#: ../../appendix/upgrade-notes/6.1-to-6.2.rst:2
+msgid "From 6.1 to 6.2"
+msgstr "De 6.1 à 6.2"
+
+#: ../../appendix/upgrade-notes/6.1-to-6.2.rst:11
+msgid "``thewire_save_post()``"
+msgstr "``thewire_save_post()``"
+
+#: ../../appendix/upgrade-notes/6.1-to-6.2.rst:12
+msgid "``thewire_get_hashtags()``"
+msgstr "``thewire_get_hashtags()``"
+
+#: ../../appendix/upgrade-notes/6.1-to-6.2.rst:13
+msgid "``thewire_filter()`` use ``elgg_format_html()``"
+msgstr "``thewire_filter()`` utilisez ``elgg_format_html()``"
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:2
+msgid "From 6.2 to 6.3"
+msgstr "De 6.2 à 6.3"
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:11
+msgid "``elgg_dump()`` use ``elgg_log()``"
+msgstr "``elgg_dump()`` utilisez ``elgg_log()``"
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:12
+msgid "``notify_user()`` use ``elgg_notify_user()`` or ``\\ElggUser::notify()``"
+msgstr ""
+"``notify_user()`` utilisez ``elgg_notify_user()`` ou "
+"``\\ElggUser::notify()``"
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:15
+msgid "Deprectated classes"
+msgstr "Classes dépréciées"
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:17
+msgid ""
+"using ``\\ElggObject`` directly has been deprecated. Use your own extension "
+"of an ``ElggObject`` for your subtype."
+msgstr ""
+"l'utilisation directe de ``\\ElggObject`` est dépréciée. Utilisez votre "
+"propre extension d'un ``ElggObject`` pour votre sous-type."
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:20
+msgid "Deprecated class functions"
+msgstr "Fonctions de classe dépréciées"
+
+#: ../../appendix/upgrade-notes/6.2-to-6.3.rst:22
+msgid "``\\Elgg\\Logger::dump()`` use ``\\Elgg\\Logger::error()``"
+msgstr "``\\Elgg\\Logger::dump()`` utilisez ``\\Elgg\\Logger::error()``"

@@ -7,12 +7,13 @@
 
 return array(
 	'item:object:discussion' => "Deasbad",
+	'collection:object:discussion' => 'Deasbadan',
 	
 	'add:object:discussion' => 'Toisich deasbad ùr',
 	'edit:object:discussion' => 'Deasaich an deasbad',
-	'collection:object:discussion' => 'Deasbadan',
 	'collection:object:discussion:group' => 'Deasbadan buidhne',
 	'collection:object:discussion:my_groups' => 'Deasbadan sna buidhnean agam',
+	
 	'notification:object:discussion:create' => "Cuir brath nuair a thèid deasbad ùr a thòiseachadh",
 	'notifications:mute:object:discussion' => "mu dheidhinn an deasbaid \"%s\"",
 	
@@ -20,13 +21,13 @@ return array(
 	'discussion:settings:enable_global_discussions:help' => 'Ceadaich deasbadan taobh a-muigh buidhnean',
 
 	'discussion:latest' => 'Na deasbadan as ùire',
-	'discussion:none' => 'Gun deasbad',
+	'discussion:none' => 'Gun deasbad', // @todo remove in Elgg 7.0
 	'discussion:updated' => "An fhreagairt as ùire le %s %s",
 
 	'discussion:topic:created' => 'Chaidh an deasbad a chruthachadh.',
 	'discussion:topic:updated' => 'Chaidh an deasbad ùrachadh.',
 	'entity:delete:object:discussion:success' => 'Chaidh an deasbad a sguabadh às.',
-
+	
 	'discussion:topic:notfound' => 'Cha do ghabh an deasbad a lorg',
 	'discussion:error:notsaved' => 'Cha do ghabh an deasbad seo a shàbhaladh',
 	'discussion:error:missing' => 'Tha an tiotal agus an teachdaireachd nan raointean riatanach',

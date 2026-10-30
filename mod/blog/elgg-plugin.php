@@ -17,12 +17,20 @@ return [
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
+				'subscribable' => true,
 				'likable' => true,
+				'restorable' => true,
 			],
 		],
 	],
 	'actions' => [
-		'blog/save' => [],
+		'blog/save' => [
+			'controller' => \Elgg\Blog\Controllers\EditAction::class,
+			'options' => [
+				'entity_type' => 'object',
+				'entity_subtype' => 'blog',
+			],
+		],
 	],
 	'routes' => [
 		'collection:object:blog:owner' => [
@@ -109,6 +117,11 @@ return [
 				GroupToolContainerLogicCheck::class => [],
 			],
 		],
+		'entity:url' => [
+			'object:widget' => [
+				'Elgg\Blog\Widgets::blogWidgetUrl' => [],
+			],
+		],
 		'form:prepare:fields' => [
 			'blog/save' => [
 				PrepareFields::class => [],
@@ -124,9 +137,6 @@ return [
 			],
 			'menu:site' => [
 				'Elgg\Blog\Menus\Site::register' => [],
-			],
-			'menu:title:object:blog' => [
-				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
 			],
 		],
 		'seeds' => [

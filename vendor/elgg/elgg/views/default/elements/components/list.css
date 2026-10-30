@@ -2,7 +2,7 @@
 	List
 *************************************** */
 .elgg-list > li {
-	border-bottom: 1px solid $(border-color-soft);
+	border-bottom: 1px solid var(--elgg-border-color-soft);
 	padding: 1rem;
 }
 
@@ -10,26 +10,8 @@
 	border-bottom: 0;
 }
 .elgg-module .elgg-list + .elgg-pagination {
-	border-top: 1px solid $(border-color-soft);
+	border-top: 1px solid var(--elgg-border-color-soft);
 	padding-top: 1rem;
-}
-
-.elgg-item {
-	h3 a {
-		padding-bottom: 0.25rem;
-	}
-	
-	.elgg-content {
-		margin: 0.5rem 0;
-	}
-	
-	> .elgg-subtext {
-		margin-bottom: 0.25rem;
-	}
-}
-
-.elgg-content {
-	clear: both;
 }
 
 .elgg-no-results {
@@ -42,6 +24,12 @@
 .elgg-listing-summary-title {
 	line-height: 1.5rem;
 	margin-bottom: 0.25rem;
+	font-weight: 500;
+	font-size: 1.2rem;
+}
+
+.elgg-listing-summary-content {
+	margin-top: 0.5rem;
 }
 
 .elgg-listing-full-header {

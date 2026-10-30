@@ -1,6 +1,7 @@
 <?php
 
 use Elgg\Database\Delete;
+use Elgg\Database\MetadataTable;
 use Elgg\Database\Plugins;
 use Elgg\Exceptions\DatabaseException;
 use Elgg\Exceptions\InvalidArgumentException as ElggInvalidArgumentException;
@@ -70,15 +71,15 @@ class ElggPlugin extends ElggObject {
 
 	/**
 	 * Load a plugin object from its ID
-	 * Create a new plugin entity if doesn't exist
+	 * Create a new plugin entity if it doesn't exist
 	 *
-	 * @param string $plugin_id Plugin ID
-	 * @param string $path      Path, defaults to /mod
+	 * @param string      $plugin_id Plugin ID
+	 * @param null|string $path      Path, defaults to /mod
 	 *
 	 * @return ElggPlugin
 	 * @throws \Elgg\Exceptions\InvalidArgumentException
 	 */
-	public static function fromId(string $plugin_id, string $path = null): \ElggPlugin {
+	public static function fromId(string $plugin_id, ?string $path = null): \ElggPlugin {
 		if (empty($plugin_id)) {
 			throw new ElggInvalidArgumentException('Plugin ID must be set');
 		}
@@ -191,9 +192,9 @@ class ElggPlugin extends ElggObject {
 	}
 
 	/**
-	 * Get a value from the plugins's static config file.
+	 * Get a value from the plugins' static config file.
 	 *
-	 * @note     If the system cache is on, Elgg APIs should not call this on every request.
+	 * @note If the system cache is on, Elgg APIs should not call this on every request.
 	 *
 	 * @param string $key     Config key
 	 * @param mixed  $default Value returned if missing
@@ -282,7 +283,8 @@ class ElggPlugin extends ElggObject {
 	// Plugin settings
 
 	/**
-	 * Returns a plugin setting
+	 * Returns a plugin setting when the plugin is active.
+	 * Will return $default when the plugin isn't active.
 	 *
 	 * @param string $name    The setting name
 	 * @param mixed  $default The default value to return if none is set
@@ -295,26 +297,25 @@ class ElggPlugin extends ElggObject {
 	}
 
 	/**
-	 * Returns an array of all settings saved for this plugin.
+	 * Returns an array of all settings saved for this plugin when the plugin is active.
+	 * Will return an empty array if the plugin isn't active.
 	 *
 	 * @note Unlike user settings, plugin settings are not namespaced.
 	 *
 	 * @return array An array of key/value pairs.
 	 */
 	public function getAllSettings(): array {
-
 		try {
-			$defaults = [];
-			if ($this->isActive()) {
-				// only load settings from static config for active plugins to prevent issues
-				// with internal plugin references ie. classes and language keys
-				$defaults = $this->getStaticConfig('settings', []);
+			if (!$this->isActive()) {
+				return [];
 			}
-
+			
+			$defaults = (array) $this->getStaticConfig('settings', []);
+			
 			$settings = $this->getAllMetadata();
 			
-			// title and description are not considered settings
-			unset($settings['title'], $settings['description']);
+			// title, description and priority are not considered settings
+			unset($settings['title'], $settings['description'], $settings[self::PRIORITY_SETTING_NAME]);
 
 			return array_merge($defaults, $settings);
 		} catch (DatabaseException $ex) {
@@ -340,7 +341,7 @@ class ElggPlugin extends ElggObject {
 		], $value);
 
 		if (is_array($value)) {
-			elgg_log('Plugin settings cannot store arrays.', 'ERROR');
+			elgg_log('Plugin settings cannot store arrays.', \Psr\Log\LogLevel::ERROR);
 
 			return false;
 		}
@@ -368,13 +369,12 @@ class ElggPlugin extends ElggObject {
 	 * @return bool
 	 */
 	public function unsetAllSettings(): bool {
-		$settings = $this->getAllSettings();
+		$settings = $this->getAllMetadata();
+		
+		// title, description and priority are not considered settings
+		unset($settings['title'], $settings['description'], $settings[self::PRIORITY_SETTING_NAME]);
 
 		foreach ($settings as $name => $value) {
-			if (str_starts_with($name, 'elgg:internal:')) {
-				continue;
-			}
-			
 			$this->unsetSetting($name);
 		}
 
@@ -392,16 +392,16 @@ class ElggPlugin extends ElggObject {
 		$result = $this->unsetAllSettings();
 		
 		// entity plugin settings are stored with the entity
-		$delete = Delete::fromTable('metadata');
+		$delete = Delete::fromTable(MetadataTable::TABLE_NAME);
 		$delete->andWhere($delete->compare('name', 'like', "plugin:%_setting:{$this->getID()}:%", ELGG_VALUE_STRING));
 		
 		try {
 			_elgg_services()->db->deleteData($delete);
-			_elgg_services()->dataCache->metadata->clear();
+			_elgg_services()->metadataCache->clear();
 			
 			$result &= true;
 		} catch (DatabaseException $e) {
-			elgg_log($e, 'ERROR');
+			elgg_log($e, \Psr\Log\LogLevel::ERROR);
 			
 			$result &= false;
 		}
@@ -771,7 +771,6 @@ class ElggPlugin extends ElggObject {
 		$this->registerActions();
 		$this->registerEntities();
 		$this->registerWidgets();
-		$this->registerHooks();
 		$this->registerEvents();
 		$this->registerViewExtensions();
 		$this->registerGroupTools();
@@ -887,7 +886,7 @@ class ElggPlugin extends ElggObject {
 	 * @throws \Elgg\Exceptions\PluginException
 	 */
 	protected function registerViews(): void {
-		if (_elgg_services()->config->system_cache_loaded) {
+		if (_elgg_services()->views->isViewLocationsLoadedFromCache()) {
 			return;
 		}
 
@@ -900,7 +899,7 @@ class ElggPlugin extends ElggObject {
 		}
 
 		// Allow /views directory files to override
-		if (!$views->registerPluginViews($this->getPath())) {
+		if (!$views->registerViewsFromPath($this->getPath())) {
 			$msg = elgg_echo('ElggPlugin:Exception:CannotRegisterViews', [$this->getID(), $this->guid, $this->getPath()]);
 
 			throw PluginException::factory([
@@ -1075,43 +1074,6 @@ class ElggPlugin extends ElggObject {
 	}
 	
 	/**
-	 * Registers the plugin's hooks provided in the plugin config file
-	 *
-	 * @note using hooks in the static config is deprecated
-	 *
-	 * @return void
-	 */
-	protected function registerHooks(): void {
-		$events = _elgg_services()->events;
-
-		$spec = (array) $this->getStaticConfig('hooks', []);
-		
-		if (!empty($spec)) {
-			elgg_deprecated_notice("The plugin {$this->getID()} still has hooks definitions in the elgg-plugin.php. This should be moved to the events configuration.", '5.0');
-		}
-
-		foreach ($spec as $name => $types) {
-			foreach ($types as $type => $callbacks) {
-				foreach ($callbacks as $callback => $hook_spec) {
-					if (!is_array($hook_spec)) {
-						continue;
-					}
-					
-					$unregister = (bool) elgg_extract('unregister', $hook_spec, false);
-					
-					if ($unregister) {
-						$events->unregisterHandler($name, $type, $callback);
-					} else {
-						$priority = (int) elgg_extract('priority', $hook_spec, 500);
-			
-						$events->registerHandler($name, $type, $callback, $priority);
-					}
-				}
-			}
-		}
-	}
-	
-	/**
 	 * Registers the plugin's events provided in the plugin config file
 	 *
 	 * @return void
@@ -1218,7 +1180,7 @@ class ElggPlugin extends ElggObject {
 			}
 			
 			if (isset($options['simplecache']) && $options['simplecache'] === true) {
-				_elgg_services()->views->registerCacheableView($view_name);
+				_elgg_services()->simpleCache->registerCacheableView($view_name);
 			}
 		}
 	}
@@ -1264,14 +1226,7 @@ class ElggPlugin extends ElggObject {
 			return parent::__get($name);
 		}
 
-		$result = $this->getSetting($name);
-		if ($result !== null) {
-			return $result;
-		}
-
-		$defaults = $this->getStaticConfig('settings', []);
-
-		return elgg_extract($name, $defaults, $result);
+		return $this->getSetting($name);
 	}
 
 	/**
@@ -1319,9 +1274,9 @@ class ElggPlugin extends ElggObject {
 
 		$site = elgg_get_site_entity();
 		if ($active) {
-			$result = _elgg_services()->relationshipsTable->add($this->guid, 'active_plugin', $site->guid);
+			$result = $this->addRelationship($site->guid, 'active_plugin');
 		} else {
-			$result = _elgg_services()->relationshipsTable->remove($this->guid, 'active_plugin', $site->guid);
+			$result = $this->removeRelationship($site->guid, 'active_plugin');
 		}
 		
 		if ($result) {
@@ -1339,23 +1294,13 @@ class ElggPlugin extends ElggObject {
 	public function isCacheable(): bool {
 		return true;
 	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function cache(bool $persist = true): void {
-		_elgg_services()->plugins->cache($this);
-
-		parent::cache($persist);
-	}
-
+	
 	/**
 	 * {@inheritdoc}
 	 */
 	public function invalidateCache(): void {
-		
 		_elgg_services()->boot->clearCache();
-		_elgg_services()->plugins->invalidateCache($this->getID());
+		_elgg_services()->pluginsCache->delete($this->getID());
 
 		parent::invalidateCache();
 	}

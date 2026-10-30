@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -9,6 +10,7 @@ namespace Phinx\Db\Action;
 
 use Phinx\Db\Table\Column;
 use Phinx\Db\Table\Table;
+use Phinx\Util\Literal;
 
 class ChangeColumn extends Action
 {
@@ -17,23 +19,23 @@ class ChangeColumn extends Action
      *
      * @var \Phinx\Db\Table\Column
      */
-    protected $column;
+    protected Column $column;
 
     /**
      * The name of the column to be changed
      *
      * @var string
      */
-    protected $columnName;
+    protected string $columnName;
 
     /**
      * Constructor
      *
      * @param \Phinx\Db\Table\Table $table The table to alter
-     * @param mixed $columnName The name fo the column to change
+     * @param string $columnName The name of the column to change
      * @param \Phinx\Db\Table\Column $column The column definition
      */
-    public function __construct(Table $table, $columnName, Column $column)
+    public function __construct(Table $table, string $columnName, Column $column)
     {
         parent::__construct($table);
         $this->columnName = $columnName;
@@ -50,12 +52,12 @@ class ChangeColumn extends Action
      * out of the provided arguments
      *
      * @param \Phinx\Db\Table\Table $table The table to alter
-     * @param mixed $columnName The name of the column to change
-     * @param mixed $type The type of the column
-     * @param mixed $options Additional options for the column
-     * @return \Phinx\Db\Action\ChangeColumn
+     * @param string $columnName The name of the column to change
+     * @param string|\Phinx\Util\Literal $type The type of the column
+     * @param array<string, mixed> $options Additional options for the column
+     * @return static
      */
-    public static function build(Table $table, $columnName, $type = null, $options = [])
+    public static function build(Table $table, string $columnName, string|Literal $type, array $options = []): static
     {
         $column = new Column();
         $column->setName($columnName);
@@ -70,7 +72,7 @@ class ChangeColumn extends Action
      *
      * @return string
      */
-    public function getColumnName()
+    public function getColumnName(): string
     {
         return $this->columnName;
     }
@@ -80,7 +82,7 @@ class ChangeColumn extends Action
      *
      * @return \Phinx\Db\Table\Column
      */
-    public function getColumn()
+    public function getColumn(): Column
     {
         return $this->column;
     }

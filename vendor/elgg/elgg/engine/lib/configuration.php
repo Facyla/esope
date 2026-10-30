@@ -34,7 +34,7 @@ function elgg_get_site_url(): string {
  * @since 1.8.0
  */
 function elgg_get_plugins_path(): string {
-	return _elgg_services()->plugins->getPath();
+	return _elgg_services()->config->plugins_path;
 }
 
 /**
@@ -50,25 +50,19 @@ function elgg_get_data_path(): string {
 /**
  * Get the cache directory path for this installation, ending with slash.
  *
- * If not set in settings, the data path will be returned.
- *
  * @return string
  */
 function elgg_get_cache_path(): string {
-	$path = _elgg_services()->config->cacheroot ?: elgg_get_data_path() . 'caches/';
-	return Paths::sanitize($path);
+	return _elgg_services()->config->cacheroot;
 }
 
 /**
  * Get the asset cache directory path for this installation, ending with slash.
  *
- * If not set in settings, the cache path will be returned.
- *
  * @return string
  */
 function elgg_get_asset_path(): string {
-	$path = _elgg_services()->config->assetroot ?: elgg_get_cache_path() . 'views_simplecache/';
-	return Paths::sanitize($path);
+	return _elgg_services()->config->assetroot;
 }
 
 /**
@@ -141,7 +135,7 @@ function elgg_get_release(): string {
  */
 function elgg_get_config(string $name, $default = null) {
 	if (!_elgg_services()->config->hasValue($name)) {
-		elgg_log("Config value for '$name' is not set'", 'INFO');
+		_elgg_services()->logger->info("Config value for '{$name}' is not set");
 		return $default;
 	}
 
@@ -190,23 +184,24 @@ function elgg_remove_config(string $name): bool {
 /**
  * Returns a configuration array of icon sizes
  *
- * @param string $entity_type    Entity type
- * @param string $entity_subtype Entity subtype
- * @param string $type           The name of the icon. e.g., 'icon', 'cover_photo'
+ * @param null|string $entity_type    Entity type
+ * @param null|string $entity_subtype Entity subtype
+ * @param string      $type           The name of the icon. e.g., 'icon', 'cover_photo'
  * @return array
  */
-function elgg_get_icon_sizes(string $entity_type = null, string $entity_subtype = null, $type = 'icon'): array {
+function elgg_get_icon_sizes(?string $entity_type = null, ?string $entity_subtype = null, $type = 'icon'): array {
 	return _elgg_services()->iconService->getSizes($entity_type, $entity_subtype, $type);
 }
 
 /**
  * Are comments displayed with latest first?
  *
- * @param ElggEntity $container Entity containing comments
+ * @param null|\ElggEntity $container Entity containing comments
+ *
  * @return bool False means oldest first.
  * @since 3.0
  */
-function elgg_comments_are_latest_first(\ElggEntity $container = null): bool {
+function elgg_comments_are_latest_first(?\ElggEntity $container = null): bool {
 	$params = [
 		'entity' => $container,
 	];
@@ -216,11 +211,12 @@ function elgg_comments_are_latest_first(\ElggEntity $container = null): bool {
 /**
  * How many comments appear per page.
  *
- * @param ElggEntity $container Entity containing comments
+ * @param null|\ElggEntity $container Entity containing comments
+ *
  * @return int
  * @since 3.0
  */
-function elgg_comments_per_page(\ElggEntity $container = null): int {
+function elgg_comments_per_page(?\ElggEntity $container = null): int {
 	$params = [
 		'entity' => $container,
 	];

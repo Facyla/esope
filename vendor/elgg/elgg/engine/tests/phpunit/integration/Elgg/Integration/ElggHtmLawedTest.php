@@ -177,19 +177,14 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 		$this->assertEquals($expected, $result);
 	}
 	
-	public function htmlawedFilterTagsProvider() {
-		$tests = [
+	public static function htmlawedFilterTagsProvider() {
+		return [
 			// duplicate closing tags, #311
 			['<ul><li>item</li></ul>', '<ul><li>item</li></ul>'],
 			
 			// 'deny_attribute' => 'class, on*',
 			['<div class="elgg-inner">Test</div>', '<div>Test</div>'],
 			['<a onclick="javascript:alert(\'test\')">Test</a>', '<a>Test</a>'],
-			
-			// naked span stripping
-			// https://github.com/vanilla/htmlawed/commit/995ef0ae4865d817a391ac62978f9d0e41d8a18b
-			['<span>Test</span>', 'Test'],
-			['<span id="test">Test</span>', '<span id="test">Test</span>'],
 			
 			// test elements filtered by "safe" option
 			// http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/htmLawed_README.htm#s3.3
@@ -204,7 +199,5 @@ class ElggHtmLawedTest extends IntegrationTestCase {
 			['<form>Test</form>', 'Test'],
 			['<textarea>Test</textarea>', 'Test'],
 		];
-		
-		return $tests;
 	}
 }

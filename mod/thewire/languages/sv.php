@@ -6,7 +6,6 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
@@ -14,6 +13,7 @@ return array(
 
 	'item:object:thewire' => "Nyhetsinlägg",
 	'collection:object:thewire' => 'Nyhetsinlägg',
+	
 	'collection:object:thewire:all' => "Alla nyhetsinlägg",
 	'collection:object:thewire:owner' => "%ss nyhetsinlägg",
 	'collection:object:thewire:friends' => "Vänners nyhetsinlägg",
@@ -22,7 +22,7 @@ return array(
 	'thewire:thread' => "Tråd",
 	'thewire:charleft' => "Tecken kvar",
 	'thewire:tags' => "Nyhetsinlägg taggad med '%s'",
-	'thewire:noposts' => "Inga nyhetsinlägg än",
+	'thewire:noposts' => "Inga nyhetsinlägg än", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Nyhetsinlägg av %s',
 
@@ -46,10 +46,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Ditt meddelande skickades till nyhetsflödet.",
-	'thewire:deleted' => "Nyhetsinlägget togs bort.",
 	'thewire:blank' => "Tyvärr, du måste skriva något innan du kan skicka det här.",
 	'thewire:notsaved' => "Tyvärr kunde vi inte spara det här nyhetsinlägget",
-	'thewire:notdeleted' => "Tyvärr kunde vi inte ta bort det här nyhetsinlägget.",
 
 	/**
 	 * Notifications
@@ -65,4 +63,8 @@ return array(
 	 */
 	'thewire:settings:limit' => "Maximalt antal tecken för meddelanden i nyhetsflödet:",
 	'thewire:settings:limit:none' => "Ingen begränsning",
+	
+	/**
+	 * Exceptions
+	 */
 );

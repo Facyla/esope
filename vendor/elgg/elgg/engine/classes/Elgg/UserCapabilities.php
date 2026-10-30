@@ -14,31 +14,17 @@ use Elgg\Exceptions\Database\UserFetchFailureException;
 class UserCapabilities {
 
 	/**
-	 * @var EventsService
-	 */
-	protected $events;
-
-	/**
-	 * @var EntityTable
-	 */
-	protected $entities;
-
-	/**
-	 * @var SessionManagerService
-	 */
-	protected $session_manager;
-
-	/**
 	 * Constructor
 	 *
 	 * @param EventsService         $events          Events service
 	 * @param EntityTable           $entities        Entity table
 	 * @param SessionManagerService $session_manager Session
 	 */
-	public function __construct(EventsService $events, EntityTable $entities, SessionManagerService $session_manager) {
-		$this->events = $events;
-		$this->entities = $entities;
-		$this->session_manager = $session_manager;
+	public function __construct(
+		protected EventsService $events,
+		protected EntityTable $entities,
+		protected SessionManagerService $session_manager
+	) {
 	}
 
 	/**
@@ -187,15 +173,15 @@ class UserCapabilities {
 	}
 
 	/**
-	 * Determines whether or not the user can edit this annotation
+	 * Determines whether the user can edit this annotation
 	 *
-	 * @param \Elggentity     $entity     Object entity
-	 * @param int             $user_guid  The GUID of the user (defaults to currently logged in user)
-	 * @param \ElggAnnotation $annotation Annotation
+	 * @param \Elggentity          $entity     Object entity
+	 * @param int                  $user_guid  The GUID of the user (defaults to currently logged-in user)
+	 * @param null|\ElggAnnotation $annotation Annotation
 	 *
 	 * @return bool
 	 */
-	public function canEditAnnotation(\ElggEntity $entity, int $user_guid = 0, \ElggAnnotation $annotation = null): bool {
+	public function canEditAnnotation(\ElggEntity $entity, int $user_guid = 0, ?\ElggAnnotation $annotation = null): bool {
 		if (!$annotation) {
 			return false;
 		}

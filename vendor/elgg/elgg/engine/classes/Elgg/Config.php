@@ -13,6 +13,7 @@ use Elgg\Traits\Loggable;
  *
  * @property int           $action_time_limit						Maximum php execution time for actions (in seconds)
  * @property int           $action_token_timeout
+ * @property bool          $admin_validation_notification		    Should we notify admins when a new user registers and needs validation
  * @property bool          $allow_phpinfo							Allow access tot PHPInfo
  * @property bool          $allow_registration						Is registration enabled
  * @property string        $allow_user_default_access				Are users allowed to set their own default access level
@@ -44,8 +45,9 @@ use Elgg\Traits\Loggable;
  * @property string        $dbpass
  * @property string        $dbprefix
  * @property bool          $db_disable_query_cache
+ * @property bool          $db_enable_query_logging                 Enable the logging of DB queries
  * @property int           $db_query_cache_limit                    Limit for the query cache
- * @property string        $debug
+ * @property string        $debug                                   Holds the \Psr\Log\LogLevel
  * @property int           $default_access							Default access
  * @property int           $default_limit							The default "limit" used in listings and queries
  * @property bool          $disable_rss 							Is RSS disabled
@@ -64,6 +66,9 @@ use Elgg\Traits\Loggable;
  * @property int           $http_request_trusted_proxy_headers		When Elgg is behind a loadbalancer/proxy this can contain a bitwise string of allowed headers for better client information
  * @property array         $icon_sizes
  * @property string        $image_processor
+ * @property int           $image_resize_max_height                 Before resizing an image check the source image for a max height
+ * @property int           $image_resize_max_resolution             Before resizing an image check the source image for a max resolution
+ * @property int           $image_resize_max_width                  Before resizing an image check the source image for a max width
  * @property int           $installed 								Set during installation to the timestamp of installation
  * @property bool          $installer_running
  * @property string        $language                   				Site language code
@@ -95,6 +100,15 @@ use Elgg\Traits\Loggable;
  * @property bool          $remove_branding 						Is Elgg branding disabled
  * @property int           $remove_unvalidated_users_days			The number of days after which unvalidated users will be removed
  * @property bool          $require_admin_validation
+ * @property string        $security_txt_acknowledgments			Security.txt link to acknowledgments
+ * @property string        $security_txt_canonical					Security.txt canonical url
+ * @property string        $security_txt_contact					Security.txt contact information (mailto or https)
+ * @property string        $security_txt_csaf						Security.txt link to CSAF provider
+ * @property string        $security_txt_encryption					Security.txt link to encryption key for communication
+ * @property int           $security_txt_expires					Security.txt expiration date
+ * @property string        $security_txt_hiring						Security.txt link to hiring page
+ * @property string        $security_txt_language					Security.txt preferred communication language
+ * @property string        $security_txt_policy						Security.txt link to security reporting policy
  * @property bool          $security_disable_password_autocomplete
  * @property bool          $security_email_require_password
  * @property bool          $security_notify_admins
@@ -112,9 +126,10 @@ use Elgg\Traits\Loggable;
  * @property string[]      $site_featured_menu_names
  * @property bool          $subresource_integrity_enabled			Should subresources (js/css) get integrity information
  * @property bool          $system_cache_enabled					Is the system cache enabled?
- * @property bool          $system_cache_loaded
  * @property bool          $testing_mode  							Is the current application running (PHPUnit) tests
  * @property string        $time_format  							Preferred PHP time format
+ * @property bool          $trash_enabled							Is the trash feature enabled
+ * @property int           $trash_retention							Number of days before trashed content is removed from the database
  * @property bool          $user_joined_river						Do we need to create a river event when a user joins the site
  * @property string        $view         							Default viewtype (usually not set)
  * @property bool          $walled_garden							Is current site in walled garden mode?
@@ -178,6 +193,7 @@ class Config {
 	 * @var array
 	 */
 	protected $config_defaults = [
+		'admin_validation_notification' => false,
 		'allow_phpinfo' => false,
 		'authentication_failures_lifetime' => 600,
 		'authentication_failures_limit' => 5,
@@ -191,6 +207,7 @@ class Config {
 		'comments_latest_first' => true,
 		'comments_max_depth' => 0,
 		'comments_per_page' => 25,
+		'db_enable_query_logging' => false,
 		'db_query_cache_limit' => 50,
 		'default_limit' => 10,
 		'elgg_maintenance_mode' => false,
@@ -207,6 +224,9 @@ class Config {
 			'large' => ['w' => 200, 'h' => 200, 'square' => true, 'upscale' => true],
 			'master' => ['w' => 10240, 'h' => 10240, 'square' => false, 'upscale' => false, 'crop' => false],
 		],
+		'image_resize_max_height' => 10000,
+		'image_resize_max_resolution' => 16777216, // 16MP
+		'image_resize_max_width' => 10000,
 		'language' => 'en',
 		'language_detect_from_browser' => true,
 		'lastcache' => 0,
@@ -217,6 +237,7 @@ class Config {
 		'notifications_max_runtime' => 45,
 		'notifications_queue_delay' => 0,
 		'pagination_behaviour' => 'ajax-replace',
+		'require_admin_validation' => false,
 		'security_email_require_confirmation' => true,
 		'security_email_require_password' => true,
 		'security_notify_admins' => true,
@@ -227,6 +248,8 @@ class Config {
 		'subresource_integrity_enabled' => false,
 		'system_cache_enabled' => false,
 		'testing_mode' => false,
+		'trash_enabled' => false,
+		'trash_retention' => 30,
 		'user_joined_river' => false,
 		'webp_enabled' => true,
 		'who_can_change_language' => 'everyone',
@@ -238,9 +261,10 @@ class Config {
 	 * @var array
 	 */
 	protected $path_properties = [
-		'dataroot',
-		'cacheroot',
 		'assetroot',
+		'cacheroot',
+		'dataroot',
+		'plugins_path',
 	];
 	
 	/**
@@ -379,7 +403,7 @@ class Config {
 			$settings_path = Paths::settingsFile(Paths::SETTINGS_PHP);
 		}
 
-		return \Elgg\Project\Paths::sanitize($settings_path, false);
+		return Paths::sanitize($settings_path, false);
 	}
 
 	/**
@@ -445,11 +469,16 @@ class Config {
 			elgg_deprecated_notice("Using '{$name}' from config has been deprecated", $this->deprecated[$name]);
 		}
 		
-		if (isset($this->values[$name])) {
-			return $this->values[$name];
+		if (!isset($this->values[$name])) {
+			return null;
+		}
+		
+		$value = $this->values[$name];
+		if (in_array($name, $this->path_properties)) {
+			$value = Paths::sanitize($value);
 		}
 
-		return null;
+		return $value;
 	}
 
 	/**

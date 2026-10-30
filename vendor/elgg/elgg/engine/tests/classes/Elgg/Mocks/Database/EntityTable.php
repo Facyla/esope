@@ -38,7 +38,7 @@ class EntityTable extends DbEntityTable {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getRow(int $guid, int $user_guid = null): ?\stdClass {
+	public function getRow(int $guid, ?int $user_guid = null): ?\stdClass {
 		if ($guid === 1) {
 			return (object) [
 				'guid' => 1,
@@ -51,6 +51,8 @@ class EntityTable extends DbEntityTable {
 				'time_updated' => time(),
 				'last_action' => time(),
 				'enabled' => 'yes',
+				'deleted' => 'no',
+				'time_deleted' => 0,
 			];
 		}
 
@@ -152,6 +154,8 @@ class EntityTable extends DbEntityTable {
 			'time_updated' => $time,
 			'last_action' => $time,
 			'enabled' => 'yes',
+			'deleted' => 'no',
+			'time_deleted' => 0,
 		];
 
 		$map = array_merge($primary_attributes, $attributes);
@@ -296,8 +300,8 @@ class EntityTable extends DbEntityTable {
 			$where->viewer_guid = $access_combination['user_guid'];
 			$where->guids = $row->guid;
 
-			$select = Select::fromTable('entities', 'e');
-			$select->select('e.*');
+			$select = Select::fromTable(self::TABLE_NAME, self::DEFAULT_JOIN_ALIAS);
+			$select->select("{$select->getTableAlias()}.*");
 			$select->addClause($where);
 
 			$this->query_specs[$row->guid][] = $this->db->addQuerySpec([
@@ -331,7 +335,6 @@ class EntityTable extends DbEntityTable {
 	 * @return bool
 	 */
 	protected function validateRowAccess($row) {
-
 		if (elgg_get_ignore_access()) {
 			return true;
 		}
@@ -362,7 +365,7 @@ class EntityTable extends DbEntityTable {
 		}
 
 		$access_array = _elgg_services()->accessCollections->getAccessArray($user->guid);
-		return in_array($row->access_id, $access_array);;
+		return in_array($row->access_id, $access_array);
 	}
 
 	/**
@@ -444,6 +447,28 @@ class EntityTable extends DbEntityTable {
 			'times' => 1,
 		]);
 
+		// delete
+		$qb = Update::table(self::TABLE_NAME);
+		$qb->set('deleted', $qb->param('yes', ELGG_VALUE_STRING))
+			->where($qb->compare('guid', '=', $row->guid, ELGG_VALUE_GUID));
+		
+		$this->query_specs[$row->guid][] = $this->db->addQuerySpec([
+			'sql' => $qb->getSQL(),
+			'params' => $qb->getParameters(),
+			'results' => function () use ($row) {
+				if (isset($this->rows[$row->guid])) {
+					$row->deleted = 'yes';
+					$this->rows[$row->guid] = $row;
+					$this->addQuerySpecs($row);
+					
+					return [$row->guid];
+				}
+				
+				return [];
+			},
+			'times' => 1,
+		]);
+
 		// Enable
 		$qb = Update::table(self::TABLE_NAME);
 		$qb->set('enabled', $qb->param('yes', ELGG_VALUE_STRING))
@@ -461,6 +486,28 @@ class EntityTable extends DbEntityTable {
 					return [$row->guid];
 				}
 
+				return [];
+			},
+			'times' => 1,
+		]);
+
+		// restore
+		$qb = Update::table(self::TABLE_NAME);
+		$qb->set('deleted', $qb->param('no', ELGG_VALUE_STRING))
+			->where($qb->compare('guid', '=', $row->guid, ELGG_VALUE_GUID));
+		
+		$this->query_specs[$row->guid][] = $this->db->addQuerySpec([
+			'sql' => $qb->getSQL(),
+			'params' => $qb->getParameters(),
+			'results' => function () use ($row) {
+				if (isset($this->rows[$row->guid])) {
+					$row->deleted = 'no';
+					$this->rows[$row->guid] = $row;
+					$this->addQuerySpecs($row);
+					
+					return [$row->guid];
+				}
+				
 				return [];
 			},
 			'times' => 1,
@@ -498,8 +545,7 @@ class EntityTable extends DbEntityTable {
 	 * @return void
 	 */
 	protected function addDeleteQuerySpecs(\stdClass $row) {
-
-		$qb = Delete::fromTable('entities');
+		$qb = Delete::fromTable(self::TABLE_NAME);
 		$qb->where($qb->compare('guid', '=', $row->guid, ELGG_VALUE_INTEGER));
 
 		$this->query_specs[$row->guid][] = $this->db->addQuerySpec([
@@ -524,7 +570,7 @@ class EntityTable extends DbEntityTable {
 		// and not in the relationships table mock
 		// @todo: figure out a way to remove this from relationships table
 		foreach (['guid_one', 'guid_two'] as $column) {
-			$delete = Delete::fromTable('entity_relationships');
+			$delete = Delete::fromTable(\Elgg\Database\RelationshipsTable::TABLE_NAME);
 			$delete->where($delete->compare($column, '=', $row->guid, ELGG_VALUE_GUID));
 			
 			$this->query_specs[$row->guid][] = $this->db->addQuerySpec([

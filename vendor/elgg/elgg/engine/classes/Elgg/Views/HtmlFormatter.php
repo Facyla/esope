@@ -9,9 +9,10 @@ use Elgg\Traits\Loggable;
 use Elgg\ViewsService;
 use Pelago\Emogrifier\CssInliner;
 use Pelago\Emogrifier\HtmlProcessor\CssToAttributeConverter;
+use Pelago\Emogrifier\HtmlProcessor\CssVariableEvaluator;
 
 /**
- * Various helper method for formatting and sanitizing output
+ * Various helper methods for formatting and sanitizing output
  */
 class HtmlFormatter {
 
@@ -36,13 +37,45 @@ class HtmlFormatter {
 	 * '(@([^\s<&]+))'
 	 */
 	public const MENTION_REGEX = '/<a[^>]*?>.*?<\/a>|<.*?>|(^|\s|\!|\.|\?|>|\G)+(@([^\s<&]+))/iu';
-
-	protected ViewsService $views;
-
-	protected EventsService $events;
 	
-	protected AutoParagraph $autop;
-
+	/**
+	 * Set of block level HTML elements used for stripTags()
+	 *
+	 * @see https://www.w3schools.com/html/html_blocks.asp
+	 */
+	protected const BLOCK_LEVEL_ELEMENTS = [
+		'address',
+		'article',
+		'aside',
+		'blockquote',
+		'br', // not a block level element, but we still want a space
+		'canvas',
+		'dd',
+		'div',
+		'dl',
+		'dt',
+		'fieldset',
+		'figcaption',
+		'figure',
+		'footer',
+		'form',
+		'h[1-6]',
+		'header',
+		'hr',
+		'li',
+		'main',
+		'nav',
+		'noscript',
+		'ol',
+		'p',
+		'pre',
+		'section',
+		'table',
+		'tfoot',
+		'ul',
+		'video',
+	];
+	
 	/**
 	 * Output constructor.
 	 *
@@ -51,13 +84,10 @@ class HtmlFormatter {
 	 * @param AutoParagraph $autop  Paragraph wrapper
 	 */
 	public function __construct(
-		ViewsService $views,
-		EventsService $events,
-		AutoParagraph $autop
+		protected ViewsService $views,
+		protected EventsService $events,
+		protected AutoParagraph $autop
 	) {
-		$this->views = $views;
-		$this->events = $events;
-		$this->autop = $autop;
 	}
 
 	/**
@@ -353,18 +383,22 @@ class HtmlFormatter {
 	 * Plugins register for output:strip_tags event.
 	 * Original string included in $params['original_string']
 	 *
-	 * @param string $string         Formatted string
-	 * @param string $allowable_tags Optional parameter to specify tags which should not be stripped
+	 * @param string      $string         Formatted string
+	 * @param null|string $allowable_tags Optional parameter to specify tags which should not be stripped
 	 *
 	 * @return string String run through strip_tags() and any event.
 	 */
-	public function stripTags(string $string, string $allowable_tags = null): string {
+	public function stripTags(string $string, ?string $allowable_tags = null): string {
 		$params = [
 			'original_string' => $string,
 			'allowable_tags' => $allowable_tags,
 		];
-
+		
+		$space_placeholder = '{{elgg_space}}';
+		$string = preg_replace('/(\S)<(' . implode('|', self::BLOCK_LEVEL_ELEMENTS) . ')([ >\/])/', '$1' . $space_placeholder . '<$2$3', $string);
 		$string = strip_tags($string, $allowable_tags);
+		$string = preg_replace('/(' . $space_placeholder . ')+/', ' ', $string);
+		
 		return (string) $this->events->triggerResults('format', 'strip_tags', $params, $string);
 	}
 
@@ -426,7 +460,8 @@ class HtmlFormatter {
 		}
 		
 		$html_with_inlined_css = CssInliner::fromHtml($html)->disableStyleBlocksParsing()->inlineCss($css)->render();
-		$inlined_attribute_converter = CssToAttributeConverter::fromHtml($html_with_inlined_css)->convertCssToVisualAttributes();
+		$html_with_css_variables = CssVariableEvaluator::fromHtml($html_with_inlined_css)->evaluateVariables()->render();
+		$inlined_attribute_converter = CssToAttributeConverter::fromHtml($html_with_css_variables)->convertCssToVisualAttributes();
 		
 		return $body_only ? $inlined_attribute_converter->renderBodyContent() : $inlined_attribute_converter->render();
 	}

@@ -7,17 +7,13 @@
 /* ***************************************
 	Form Elements
 *************************************** */
-fieldset > div, .elgg-field {
-	margin-bottom: 1rem;
-}
-
-fieldset > div:last-child {
-	margin-bottom: 0;
-}
-
-.elgg-form-alt > fieldset > .elgg-foot {
-	border-top: 1px solid $(border-color-soft);
-	padding: 10px 0;
+.elgg-form-body,
+.elgg-form-body > div,
+.elgg-form-body fieldset:not(.elgg-fieldset) > div,
+.elgg-field {
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+	}
 }
 
 label, .elgg-field-label {
@@ -39,14 +35,14 @@ label, .elgg-field-label {
 .elgg-required-indicator {
 	font-size: 110%;
 	font-weight: bold;
-	color: $(state-danger-font-color);
+	color: var(--elgg-state-danger-font-color);
 	display: inline;
 	padding: 0 5px;
 }
 
 input, textarea {
-	border: 1px solid $(border-color-mild);
-	color: $(text-color-strong);
+	border: 1px solid var(--elgg-border-color-mild);
+	color: var(--elgg-text-color-strong);
 	font-size: 1rem;
 	padding: 0.25rem 0.5rem;
 	line-height: normal;
@@ -91,8 +87,8 @@ input[type=search]:focus,
 input[type=tel]:focus,
 input[type=week]:focus,
 textarea:focus {
-	border: solid 1px $(border-color-strong);
-	background-color: $(background-color-soft);
+	border: solid 1px var(--elgg-border-color-strong);
+	background-color: var(--elgg-background-color-soft);
 	/* We remove outlines from specific input types so we can leave the browser
 	   defaults (like glows) for everything else */
 	outline: 0 none;
@@ -143,8 +139,8 @@ echo elgg_view('elements/misc/checkbox_switch.css');
 
 select {
 	max-width: 100%;
-	border: 1px solid $(border-color-mild);
-	color: $(text-color-strong);
+	border: 1px solid var(--elgg-border-color-mild);
+	color: var(--elgg-text-color-strong);
 	padding: 0.25rem 0.5rem;
 	line-height: 1.75rem;
 	vertical-align: middle;
@@ -181,75 +177,70 @@ select:not([multiple]) {
 	margin: 0 auto;
 }
 
-.elgg-fieldset-has-legend {
-	border: 1px solid $(border-color-soft);
-	padding: 1rem;
-	margin-bottom: 1rem;
+.elgg-fieldset {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	
+	&.elgg-fieldset-has-legend {
+		border: 1px solid var(--elgg-border-color-soft);
+		padding: 1rem;
+		margin-bottom: 1rem;
+	}
+	
+	> .elgg-field {
+		margin: 0;
+	}
 }
 
 @media $(media-phone-up) {
-	.elgg-fieldset-horizontal {
-		display: flex;
-		
-		.elgg-field {
-			margin: 0 1rem 0 0;
-			vertical-align: top;
-			
+	.elgg-field {
+		&.elgg-field-stretch {
+			flex-basis: 1%;
+			flex-grow: 1;
+
+			> .elgg-field-input {
+				width: 100%;
+			}
+		}
+
+		&.elgg-field-horizontal {
 			display: flex;
-			flex-direction: column;
-			
-			&.elgg-field-stretch {
-				flex-basis: 100%;
-				
-				> .elgg-field-input {
-					width: 100%;
-				}
-			}
-			
-			&.elgg-field-horizontal {
-				flex-direction: row;
-				align-items: baseline;
-				
-				> *:not(:first-child) {
-					padding-left: 1rem;
-				}
-			}
-			
+			flex-direction: row;
+			align-items: baseline;
+			column-gap: 1rem;
+
 			> .elgg-field-label {
 				align-items: center;
 				display: flex;
 				flex-shrink: 0;
 			}
 		}
+	}
+
+	.elgg-fieldset-horizontal {
+		flex-direction: row;
+		
+		> .elgg-field {
+			vertical-align: top;
+		}
 		
 		&.elgg-fieldset-wrap {
 			flex-wrap: wrap;
-			
-			.elgg-field {
-				margin-bottom: 0.5rem;
-			}
 		}
 		
 		&.elgg-justify-right {
 			justify-content: flex-end;
-			
-			.elgg-field {
-				margin: 0 0 0 1rem;
-			}
 		}
 		
 		&.elgg-justify-center {
 			justify-content: center;
-		
-			.elgg-field {
-				margin: 0 5px;
-			}
 		}
 	}
 }
 
 <?php
 echo elgg_view('elements/components/autocomplete.css', $vars);
-echo elgg_view('elements/components/userpicker.css', $vars);
 echo elgg_view('elements/components/datepicker.css', $vars);
+echo elgg_view('input/entitypicker.css', $vars);
 echo elgg_view('input/tags.css', $vars);

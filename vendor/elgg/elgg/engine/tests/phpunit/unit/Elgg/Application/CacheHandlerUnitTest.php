@@ -2,9 +2,6 @@
 
 namespace Elgg\Application;
 
-/**
- * @group UnitTests
- */
 class CacheHandlerUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -66,6 +63,6 @@ class CacheHandlerUnitTest extends \Elgg\UnitTestCase {
 	public function testGetContentTypeHandlesJs() {
 		$mediaType = $this->handler->getContentType('view.js');
 
-		$this->assertEquals('application/javascript', $mediaType);
+		$this->assertEquals('text/javascript', $mediaType);
 	}
 }

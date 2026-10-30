@@ -2,7 +2,6 @@
 
 namespace Elgg;
 
-use Elgg\Database\Plugins;
 use Elgg\Exceptions\Http\BadRequestException;
 use Elgg\Exceptions\Http\PageNotFoundException;
 use Elgg\Exceptions\RuntimeException;
@@ -28,36 +27,6 @@ class Router {
 	use Profilable;
 
 	/**
-	 * @var EventsService
-	 */
-	protected $events;
-
-	/**
-	 * @var RouteCollection
-	 */
-	protected $routes;
-
-	/**
-	 * @var UrlMatcher
-	 */
-	protected $matcher;
-
-	/**
-	 * @var HandlersService
-	 */
-	protected $handlers;
-
-	/**
-	 * @var ResponseFactory
-	 */
-	protected $response;
-
-	/**
-	 * @var Plugins
-	 */
-	protected $plugins;
-
-	/**
 	 * Constructor
 	 *
 	 * @param EventsService   $events   Events service
@@ -65,22 +34,14 @@ class Router {
 	 * @param UrlMatcher      $matcher  URL Matcher
 	 * @param HandlersService $handlers Handlers service
 	 * @param ResponseFactory $response Response
-	 * @param Plugins         $plugins  Plugins
 	 */
 	public function __construct(
-		EventsService $events,
-		RouteCollection $routes,
-		UrlMatcher $matcher,
-		HandlersService $handlers,
-		ResponseFactory $response,
-		Plugins $plugins
+		protected EventsService $events,
+		protected RouteCollection $routes,
+		protected UrlMatcher $matcher,
+		protected HandlersService $handlers,
+		protected ResponseFactory $response
 	) {
-		$this->events = $events;
-		$this->routes = $routes;
-		$this->matcher = $matcher;
-		$this->handlers = $handlers;
-		$this->response = $response;
-		$this->plugins = $plugins;
 	}
 
 	/**
@@ -93,7 +54,7 @@ class Router {
 	 *
 	 * @return boolean Whether the request was routed successfully.
 	 */
-	public function route(HttpRequest $request) {
+	public function route(HttpRequest $request): bool {
 		$this->beginTimer(['build page']);
 
 		$request->validate();
@@ -167,17 +128,9 @@ class Router {
 			
 			$middleware = elgg_extract('_middleware', $parameters, []);
 			unset($parameters['_middleware']);
-
-			$required_plugins = (array) elgg_extract('_required_plugins', $parameters, []);
-			unset($parameters['_required_plugins']);
 			
 			unset($parameters['_detect_page_owner']);
-			
-			foreach ($required_plugins as $plugin_id) {
-				if (!$this->plugins->isActive($plugin_id)) {
-					throw new PageNotFoundException();
-				}
-			}
+			unset($parameters['_use_logged_in']);
 
 			$route = $this->routes->get($parameters['_route']);
 			$route->setMatchedParameters($parameters);

@@ -16,6 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Utility\Crypto;
 
+use Cake\Core\Exception\CakeException;
+
 /**
  * OpenSSL implementation of crypto features for Cake\Utility\Security
  *
@@ -47,6 +49,9 @@ class OpenSsl
     {
         $method = static::METHOD_AES_256_CBC;
         $ivSize = openssl_cipher_iv_length($method);
+        if ($ivSize === false) {
+            throw new CakeException(sprintf('Cannot get the cipher iv length for `%s`', $method));
+        }
 
         $iv = openssl_random_pseudo_bytes($ivSize);
 
@@ -58,13 +63,16 @@ class OpenSsl
      *
      * @param string $cipher The ciphertext to decrypt.
      * @param string $key The 256 bit/32 byte key to use as a cipher key.
-     * @return string Decrypted data. Any trailing null bytes will be removed.
+     * @return string|null Decrypted data. Any trailing null bytes will be removed.
      * @throws \InvalidArgumentException On invalid data or key.
      */
     public static function decrypt(string $cipher, string $key): ?string
     {
         $method = static::METHOD_AES_256_CBC;
         $ivSize = openssl_cipher_iv_length($method);
+        if ($ivSize === false) {
+            throw new CakeException(sprintf('Cannot get the cipher iv length for `%s`', $method));
+        }
 
         $iv = mb_substr($cipher, 0, $ivSize, '8bit');
         $cipher = mb_substr($cipher, $ivSize, null, '8bit');

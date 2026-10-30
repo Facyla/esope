@@ -1,5 +1,6 @@
 <?php
 
+use Elgg\File\FieldsHandler;
 use Elgg\File\Forms\PrepareFields;
 use Elgg\File\GroupToolContainerLogicCheck;
 use Elgg\File\Notifications\CreateFileEventHandler;
@@ -18,7 +19,9 @@ return [
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
+				'subscribable' => true,
 				'likable' => true,
+				'restorable' => true,
 			],
 		],
 	],
@@ -26,7 +29,13 @@ return [
 		'Elgg\File\Upgrades\MoveFiles',
 	],
 	'actions' => [
-		'file/upload' => [],
+		'file/upload' => [
+			'controller' => \Elgg\File\Controllers\EditAction::class,
+			'options' => [
+				'entity_type' => 'object',
+				'entity_subtype' => 'file',
+			],
+		],
 	],
 	'routes' => [
 		'default:object:file' => [
@@ -95,6 +104,16 @@ return [
 				'Elgg\File\Icons::setIconSizes' => [],
 			],
 		],
+		'entity:url' => [
+			'object:widget' => [
+				'Elgg\File\Widgets::filerepoWidgetURL' => [],
+			],
+		],
+		'fields' => [
+			'object:file' => [
+				FieldsHandler::class => [],
+			],
+		],
 		'form:prepare:fields' => [
 			'file/upload' => [
 				PrepareFields::class => [],
@@ -107,9 +126,6 @@ return [
 			],
 			'menu:site' => [
 				'Elgg\File\Menus\Site::register' => [],
-			],
-			'menu:title:object:file' => [
-				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
 			],
 		],
 		'seeds' => [

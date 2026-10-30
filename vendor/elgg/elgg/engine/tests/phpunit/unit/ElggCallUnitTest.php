@@ -2,9 +2,6 @@
 
 use Elgg\Exceptions\RuntimeException as ElggRuntimeException;
 
-/**
- * @group Functions
- */
 class ElggCallUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -72,7 +69,7 @@ class ElggCallUnitTest extends \Elgg\UnitTestCase {
 		elgg()->session_manager->setDisabledEntityVisibility($ha);
 	}
 
-	public function flagsDataProvider() {
+	public static function flagsDataProvider() {
 		return [
 			[false, false, false, false],
 			[false, false, false, true],

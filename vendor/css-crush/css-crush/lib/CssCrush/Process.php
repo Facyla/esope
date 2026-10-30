@@ -5,10 +5,45 @@
  *
  */
 namespace CssCrush;
-
+#[\AllowDynamicProperties]
 class Process
 {
     use EventEmitter;
+
+    public $absoluteImports;
+    public $aliases;
+    public $cacheData;
+    public $cacheFile;
+    public $charset;
+    public $docRoot;
+    public $fragments;
+    public $functions;
+    public $generateMap;
+    public $input;
+    public $io;
+    public $ioContext;
+    public $minifyOutput;
+    public $misc;
+    public $mixins;
+    public $newline;
+    public $options;
+    public $output;
+    public $references;
+    public $ruleFormatter;
+    public $selectorAliases;
+    public $selectorAliasesPatt;
+    public $sourceMap;
+    public $sources;
+    public $string;
+    public $tokens;
+    public $vars;
+
+    public $debugLog;
+    public $errors;
+    public $stat;
+    public $warnings;
+
+    private $plugins;
 
     public function __construct($user_options = [], $context = [])
     {
@@ -194,6 +229,8 @@ class Process
                     return round($now, 4) . ' seconds';
                 },
             ];
+
+            $replacements = [];
 
             foreach (array_keys($boilerplateMatches[0]) as $index) {
                 $tagName = trim($boilerplateMatches[1][$index]);
@@ -630,8 +667,8 @@ class Process
 
             preg_match($rulePatt, $this->string->raw, $ruleMatch, PREG_UNMATCHED_AS_NULL, $traceOffset);
 
-            $selector = trim($ruleMatch['selector']);
-            $block = trim($ruleMatch['block_content']);
+            $selector = trim($ruleMatch['selector'] ?? '');
+            $block = trim($ruleMatch['block_content'] ?? '');
             $replace = '';
 
             // If rules are nested inside we set their parent property.
@@ -651,12 +688,12 @@ class Process
                 }
             }
             else  {
-                $rule = new Rule($selector, $block, $ruleMatch['trace_token']);
+                $rule = new Rule($selector, $block, $ruleMatch['trace_token'] ?? '');
             }
 
             $replace = $tokens->add($rule, 'r', $rule->label) . $replace;
 
-            $this->string->splice($replace, $traceOffset, strlen($ruleMatch[0]));
+            $this->string->splice($replace, $traceOffset, strlen($ruleMatch[0]) ?? '');
         }
 
         // Flip, since we just captured rules in reverse order.

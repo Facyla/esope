@@ -3,7 +3,6 @@
  * Elgg tag input
  * Displays a tag input field
  *
- * @uses $vars['disabled']
  * @uses $vars['class']          Additional CSS class
  * @uses $vars['value']          Array of tags or a string
  * @uses $vars['entity']         Optional. Entity whose tags are being displayed (metadata ->tags)
@@ -14,7 +13,6 @@ $vars['class'] = elgg_extract_class($vars, 'elgg-input-tags');
 
 $defaults = [
 	'value' => '',
-	'disabled' => false,
 	'autocapitalize' => 'off',
 	'type' => 'text',
 ];
@@ -58,7 +56,7 @@ if (isset($vars['id'])) {
 
 ?>
 <script>
-	require(['input/tags'], function (tags) {
-		tags.init(<?= json_encode($selector) ?>);
+	import('input/tags').then((tags) => {
+		tags.default.init(<?= json_encode($selector) ?>);
 	});
 </script>

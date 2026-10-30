@@ -17,30 +17,26 @@ declare(strict_types=1);
 namespace Cake\Datasource;
 
 use Cake\Collection\Collection;
-use Countable;
+use Cake\Core\Configure;
 
 /**
  * Generic ResultSet decorator. This will make any traversable object appear to
  * be a database result
+ *
+ * @template TKey
+ * @template TValue
+ * @template-extends \Cake\Collection\Collection<TKey, TValue>
  */
 class ResultSetDecorator extends Collection implements ResultSetInterface
 {
     /**
-     * Make this object countable.
-     *
-     * Part of the Countable interface. Calling this method
-     * will convert the underlying traversable object into an array and
-     * get the count of the underlying data.
-     *
-     * @return int
+     * @inheritDoc
      */
-    public function count(): int
+    public function __debugInfo(): array
     {
-        $iterator = $this->getInnerIterator();
-        if ($iterator instanceof Countable) {
-            return $iterator->count();
-        }
+        $parentInfo = parent::__debugInfo();
+        $limit = Configure::read('App.ResultSetDebugLimit', 10);
 
-        return count($this->toArray());
+        return array_merge($parentInfo, ['items' => $this->take($limit)->toArray()]);
     }
 }

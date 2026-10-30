@@ -15,10 +15,10 @@ use Elgg\Traits\TimeUsing;
 class AnnotationsTable {
 
 	use TimeUsing;
-
-	protected Database $db;
-
-	protected EventsService $events;
+	
+	public const TABLE_NAME = 'annotations';
+	
+	public const DEFAULT_JOIN_ALIAS = 'a_table';
 
 	/**
 	 * Constructor
@@ -26,9 +26,7 @@ class AnnotationsTable {
 	 * @param Database      $db     Database
 	 * @param EventsService $events Events
 	 */
-	public function __construct(Database $db, EventsService $events) {
-		$this->db = $db;
-		$this->events = $events;
+	public function __construct(protected Database $db, protected EventsService $events) {
 	}
 
 	/**
@@ -39,11 +37,10 @@ class AnnotationsTable {
 	 * @return \ElggAnnotation|null
 	 */
 	public function get(int $id): ?\ElggAnnotation {
-		$qb = Select::fromTable('annotations');
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('*');
 
-		$where = new AnnotationWhereClause();
-		$where->ids = $id;
+		$where = AnnotationWhereClause::factory(['ids' => $id]);
 		$qb->addClause($where);
 
 		$row = $this->db->getDataRow($qb);
@@ -66,7 +63,7 @@ class AnnotationsTable {
 			return false;
 		}
 
-		$qb = Delete::fromTable('annotations');
+		$qb = Delete::fromTable(self::TABLE_NAME);
 		$qb->where($qb->compare('id', '=', $annotation->id, ELGG_VALUE_INTEGER));
 		$deleted = $this->db->deleteData($qb);
 
@@ -112,7 +109,7 @@ class AnnotationsTable {
 
 		$time_created = $this->getCurrentTime()->getTimestamp();
 
-		$qb = Insert::intoTable('annotations');
+		$qb = Insert::intoTable(self::TABLE_NAME);
 		$qb->values([
 			'entity_guid' => $qb->param($annotation->entity_guid, ELGG_VALUE_INTEGER),
 			'name' => $qb->param($annotation->name, ELGG_VALUE_STRING),
@@ -164,9 +161,9 @@ class AnnotationsTable {
 			return false;
 		}
 
-		$qb = Update::table('annotations');
+		$qb = Update::table(self::TABLE_NAME);
 		$qb->set('name', $qb->param($annotation->name, ELGG_VALUE_STRING))
-			->set('value', $qb->param($annotation->value, $annotation->value_type === 'integer' ? ELGG_VALUE_INTEGER : ELGG_VALUE_STRING))
+			->set('value', $qb->param($annotation->value, $annotation->value_type === 'text' ? ELGG_VALUE_STRING : ELGG_VALUE_INTEGER))
 			->set('value_type', $qb->param($annotation->value_type, ELGG_VALUE_STRING))
 			->set('access_id', $qb->param($annotation->access_id, ELGG_VALUE_INTEGER))
 			->set('owner_guid', $qb->param($annotation->owner_guid, ELGG_VALUE_INTEGER))
@@ -185,78 +182,6 @@ class AnnotationsTable {
 	}
 
 	/**
-	 * Disable the annotation.
-	 *
-	 * @param \ElggAnnotation $annotation Annotation
-	 *
-	 * @return bool
-	 * @since 1.8
-	 */
-	public function disable(\ElggAnnotation $annotation): bool {
-		if ($annotation->enabled === 'no') {
-			return true;
-		}
-
-		if (!$annotation->canEdit()) {
-			return false;
-		}
-
-		if (!_elgg_services()->events->trigger('disable', $annotation->getType(), $annotation)) {
-			return false;
-		}
-
-		if ($annotation->id) {
-			$qb = Update::table('annotations');
-			$qb->set('enabled', $qb->param('no', ELGG_VALUE_STRING))
-				->where($qb->compare('id', '=', $annotation->id, ELGG_VALUE_INTEGER));
-
-			if (!$this->db->updateData($qb)) {
-				return false;
-			}
-		}
-
-		$annotation->enabled = 'no';
-
-		return true;
-	}
-
-	/**
-	 * Enable the annotation
-	 *
-	 * @param \ElggAnnotation $annotation Annotation
-	 *
-	 * @return bool
-	 * @since 1.8
-	 */
-	public function enable(\ElggAnnotation $annotation): bool {
-		if ($annotation->enabled == 'yes') {
-			return true;
-		}
-
-		if (!$annotation->canEdit()) {
-			return false;
-		}
-
-		if (!$this->events->trigger('enable', $annotation->getType(), $annotation)) {
-			return false;
-		}
-
-		if ($annotation->id) {
-			$qb = Update::table('annotations');
-			$qb->set('enabled', $qb->param('yes', ELGG_VALUE_STRING))
-				->where($qb->compare('id', '=', $annotation->id, ELGG_VALUE_INTEGER));
-
-			if (!$this->db->updateData($qb)) {
-				return false;
-			}
-		}
-
-		$annotation->enabled = 'yes';
-
-		return true;
-	}
-
-	/**
 	 * Returns annotations.  Accepts all {@link elgg_get_entities()} options
 	 *
 	 * @see elgg_get_entities()
@@ -266,9 +191,6 @@ class AnnotationsTable {
 	 * @return \ElggAnnotation[]|mixed
 	 */
 	public function find(array $options = []) {
-		$options['metastring_type'] = 'annotations';
-		$options = QueryOptions::normalizeMetastringOptions($options);
-
 		return Annotations::find($options);
 	}
 
@@ -305,77 +227,6 @@ class AnnotationsTable {
 		$success = 0;
 		foreach ($annotations as $annotation) {
 			if ($annotation->delete()) {
-				$success++;
-			}
-		}
-
-		return $success === $count;
-	}
-
-	/**
-	 * Disables annotations based on $options.
-	 *
-	 * @warning Unlike elgg_get_annotations() this will not accept an empty options array!
-	 *
-	 * @param array $options An options array. {@link elgg_get_annotations()}
-	 * @return bool true on success, false on failure
-	 */
-	public function disableAll(array $options): bool {
-		if (!$this->isValidOptionsForBatchOperation($options)) {
-			return false;
-		}
-
-		// if we can see hidden (disabled) we need to use the offset
-		// otherwise we risk an infinite loop if there are more than 50
-		$inc_offset = _elgg_services()->session_manager->getDisabledEntityVisibility();
-
-		$options['batch'] = true;
-		$options['batch_size'] = 50;
-		$options['batch_inc_offset'] = $inc_offset;
-
-		$annotations = Annotations::find($options);
-		$count = $annotations->count();
-
-		if (!$count) {
-			return true;
-		}
-
-		$success = 0;
-		foreach ($annotations as $annotation) {
-			if ($annotation->disable()) {
-				$success++;
-			}
-		}
-
-		return $success === $count;
-	}
-
-	/**
-	 * Enables annotations based on $options.
-	 *
-	 * @warning Unlike elgg_get_annotations() this will not accept an empty options array!
-	 *
-	 * @param array $options An options array. {@link elgg_get_annotations()}
-	 * @return bool true on success, false on failure
-	 */
-	public function enableAll(array $options): bool {
-		if (!$this->isValidOptionsForBatchOperation($options)) {
-			return false;
-		}
-
-		$options['batch'] = true;
-		$options['batch_size'] = 50;
-
-		$annotations = Annotations::find($options);
-		$count = $annotations->count();
-
-		if (!$count) {
-			return true;
-		}
-
-		$success = 0;
-		foreach ($annotations as $annotation) {
-			if ($annotation->enable()) {
 				$success++;
 			}
 		}
@@ -422,7 +273,7 @@ class AnnotationsTable {
 			return false;
 		}
 
-		$qb = Select::fromTable('annotations');
+		$qb = Select::fromTable(self::TABLE_NAME);
 		$qb->select('id');
 		$qb->where($qb->compare('owner_guid', '=', $owner_guid, ELGG_VALUE_INTEGER))
 			->andWhere($qb->compare('entity_guid', '=', $entity_guid, ELGG_VALUE_INTEGER))

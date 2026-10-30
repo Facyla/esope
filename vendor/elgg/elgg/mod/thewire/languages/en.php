@@ -6,7 +6,6 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
@@ -14,12 +13,17 @@ return array(
 
 	'item:object:thewire' => "Wire post",
 	'collection:object:thewire' => 'Wire posts',
+	'list:object:thewire:no_results' => 'No wire posts found',
+	
 	'collection:object:thewire:all' => "All wire posts",
 	'collection:object:thewire:owner' => "%s's wire posts",
 	'collection:object:thewire:friends' => "Friends' wire posts",
 	'collection:object:thewire:mentions' => "Wire posts mentioning @%s",
+	
 	'notification:object:thewire:create' => "Send a notification when a wire post is created",
 	'notifications:mute:object:thewire' => "about the wire post '%s'",
+	
+	'entity:edit:object:thewire:success' => 'The wire post was saved successfully',
 
 	'thewire:menu:filter:mentions' => "Mentions",
 	
@@ -27,7 +31,7 @@ return array(
 	'thewire:thread' => "Thread",
 	'thewire:charleft' => "characters remaining",
 	'thewire:tags' => "Wire posts tagged with '%s'",
-	'thewire:noposts' => "No wire posts yet",
+	'thewire:noposts' => "No wire posts yet", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Wire post by %s',
 
@@ -51,10 +55,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Your message was successfully posted to the wire.",
-	'thewire:deleted' => "The wire post was successfully deleted.",
 	'thewire:blank' => "Sorry, you need to enter some text before we can post this.",
 	'thewire:notsaved' => "Sorry. We could not save this wire post.",
-	'thewire:notdeleted' => "Sorry. We could not delete this wire post.",
 
 	/**
 	 * Notifications
@@ -72,4 +74,9 @@ return array(
 	 */
 	'thewire:settings:limit' => "Maximum number of characters for wire messages:",
 	'thewire:settings:limit:none' => "No limit",
+	
+	/**
+	 * Exceptions
+	 */
+	'ValidationException:thewire:limit' => "The wire post length is over the configured limit",
 );

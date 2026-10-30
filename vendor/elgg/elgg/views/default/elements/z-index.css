@@ -2,12 +2,16 @@
 	z-index
 *************************************** */
 
+.elgg-page-maintenance-background,
 .elgg-page-walled-garden-background {
 	z-index: 10;
 }
 
-.elgg-page-walled-garden > .elgg-inner {
-	z-index: 20;
+.elgg-page-walled-garden,
+.elgg-page-maintenance {
+	> .elgg-inner {
+		z-index: 20;
+	}
 }
 
 .elgg-comments .elgg-list:before,
@@ -53,6 +57,7 @@
 	z-index: 100;
 }
 
+.elgg-skiplink,
 .elgg-system-messages {
 	z-index: 1000;
 }

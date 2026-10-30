@@ -7,8 +7,6 @@
  * the config table.
  */
 
-use Elgg\Exceptions\Configuration\InstallationException;
-
 $site = elgg_get_site_entity();
 
 $site->description = get_input('sitedescription');
@@ -28,12 +26,7 @@ $require_admin_validation = (get_input('require_admin_validation', false) === 'o
 elgg_save_config('require_admin_validation', $require_admin_validation);
 
 // notify admins about pending validation
-$admin_validation_notification = get_input('admin_validation_notification');
-if (empty($admin_validation_notification)) {
-	elgg_remove_config('admin_validation_notification');
-} else {
-	elgg_save_config('admin_validation_notification', $admin_validation_notification);
-}
+elgg_save_config('admin_validation_notification', (bool) get_input('admin_validation_notification'));
 
 // remove unvalidated users after x days
 $remove_unvalidated_users_days = (int) get_input('remove_unvalidated_users_days');
@@ -76,19 +69,27 @@ elgg_save_config('comments_per_page', (int) get_input('comments_per_page'));
 elgg_save_config('pagination_behaviour', get_input('pagination_behaviour', 'ajax-replace'));
 elgg_save_config('mentions_display_format', get_input('mentions_display_format'));
 
+$trash_retention = (int) get_input('trash_retention', 30);
+if ($trash_retention < 0) {
+	$trash_retention = 30;
+}
+
+elgg_save_config('trash_retention', $trash_retention);
+elgg_save_config('trash_enabled', (bool) get_input('trash_enabled'));
+
 elgg_save_config('user_joined_river', get_input('user_joined_river') === 'on');
 elgg_save_config('can_change_username', get_input('can_change_username') === 'on');
 
 if (!elgg()->config->hasInitialValue('simplecache_enabled')) {
 	if (get_input('simplecache_enabled') === 'on') {
-		elgg_enable_simplecache();
+		_elgg_services()->simpleCache->enable();
 	} else {
-		elgg_disable_simplecache();
+		_elgg_services()->simpleCache->disable();
 	}
 }
 
 if (get_input('cache_symlink_enabled') === 'on') {
-	if (!_elgg_symlink_cache()) {
+	if (!_elgg_services()->simpleCache->createSymbolicLink()) {
 		elgg_register_error_message(elgg_echo('installation:cache_symlink:error'));
 	}
 }
@@ -96,11 +97,7 @@ if (get_input('cache_symlink_enabled') === 'on') {
 elgg_save_config('simplecache_minify_js', get_input('simplecache_minify_js') === 'on');
 elgg_save_config('simplecache_minify_css', get_input('simplecache_minify_css') === 'on');
 
-if (get_input('system_cache_enabled') === 'on') {
-	elgg_enable_system_cache();
-} else {
-	elgg_disable_system_cache();
-}
+elgg_save_config('system_cache_enabled', get_input('system_cache_enabled') === 'on');
 
 elgg_save_config('default_access', (int) get_input('default_access', ACCESS_PRIVATE));
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -17,7 +18,7 @@ class DropForeignKey extends Action
      *
      * @var \Phinx\Db\Table\ForeignKey
      */
-    protected $foreignKey;
+    protected ForeignKey $foreignKey;
 
     /**
      * Constructor
@@ -38,9 +39,9 @@ class DropForeignKey extends Action
      * @param \Phinx\Db\Table\Table $table The table to delete the foreign key from
      * @param string|string[] $columns The columns participating in the foreign key
      * @param string|null $constraint The constraint name
-     * @return \Phinx\Db\Action\DropForeignKey
+     * @return static
      */
-    public static function build(Table $table, $columns, $constraint = null)
+    public static function build(Table $table, string|array $columns, ?string $constraint = null): static
     {
         if (is_string($columns)) {
             $columns = [$columns];
@@ -61,7 +62,7 @@ class DropForeignKey extends Action
      *
      * @return \Phinx\Db\Table\ForeignKey
      */
-    public function getForeignKey()
+    public function getForeignKey(): ForeignKey
     {
         return $this->foreignKey;
     }

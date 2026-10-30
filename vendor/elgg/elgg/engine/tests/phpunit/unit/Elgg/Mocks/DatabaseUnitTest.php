@@ -8,10 +8,6 @@ use Elgg\Database\Select;
 use Elgg\Database\Update;
 use Elgg\Exceptions\DatabaseException;
 
-/**
- * @group Mocks
- * @group UnitTests
- */
 class DatabaseUnitTest extends \Elgg\UnitTestCase {
 
 	public function testThrowsWithUnknownInsertSpec() {
@@ -112,6 +108,7 @@ class DatabaseUnitTest extends \Elgg\UnitTestCase {
 	public function testCanGetData() {
 
 		$select = Select::fromTable('A');
+		$select->select('*');
 		$select->where($select->compare('foo', '=', 'bar1'));
 		
 		$data = [

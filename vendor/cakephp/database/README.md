@@ -69,8 +69,9 @@ This is a list of possible options that can be passed when creating a connection
 ## Using connections
 
 After creating a connection, you can immediately interact with the database. You can choose
-either to use the shorthand methods `execute()`, `insert()`, `update()`, `delete()` or use the
-`newQuery()` for using a query builder.
+either to use the shorthand methods `execute()`, `insert()`, `update()`, `delete()` or use
+one of `selectQuery()`, `updateQuery()`, `insertQuery()` or `deleteQuery()`
+to get a query builder for particular type of query.
 
 The easiest way of executing queries is by using the `execute()` method, it will return a
 `Cake\Database\StatementInterface` that you can use to get the data back:
@@ -78,7 +79,7 @@ The easiest way of executing queries is by using the `execute()` method, it will
 ```php
 $statement = $connection->execute('SELECT * FROM articles');
 
-while($row = $statement->fetch('assoc')) {
+while($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
 	echo $row['title'] . PHP_EOL;
 }
 ```
@@ -86,7 +87,7 @@ Binding values to parametrized arguments is also possible with the execute funct
 
 ```php
 $statement = $connection->execute('SELECT * FROM articles WHERE id = :id', ['id' => 1], ['id' => 'integer']);
-$results = $statement->fetch('assoc');
+$results = $statement->fetch(\PDO::FETCH_ASSOC);
 ```
 
 The third parameter is the types the passed values should be converted to when passed to the database. If
@@ -97,7 +98,7 @@ Alternatively you can construct a statement manually and then fetch rows from it
 ```php
 $statement = $connection->prepare('SELECT * from articles WHERE id != :id');
 $statement->bind(['id' => 1], ['id' => 'integer']);
-$results = $statement->fetchAll('assoc');
+$results = $statement->fetchAll(\PDO::FETCH_ASSOC);
 ```
 
 The default types that are understood by this library and can be passed to the `bind()` function or to `execute()`
@@ -121,10 +122,10 @@ Statements can be reused by binding new values to the parameters in the query:
 ```php
 $statement = $connection->prepare('SELECT * from articles WHERE id = :id');
 $statement->bind(['id' => 1], ['id' => 'integer']);
-$results = $statement->fetchAll('assoc');
+$results = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
 $statement->bind(['id' => 1], ['id' => 'integer']);
-$results = $statement->fetchAll('assoc');
+$results = $statement->fetchAll(\PDO::FETCH_ASSOC);
 ```
 
 ### Updating Rows
@@ -190,7 +191,7 @@ One of the goals of this library is to allow the generation of both simple and c
 ease. The query builder can be accessed by getting a new instance of a query:
 
 ```php
-$query = $connection->newQuery();
+$query = $connection->selectQuery();
 ```
 
 ### Selecting Fields
@@ -217,7 +218,7 @@ Generating conditions:
 // WHERE id = 1
 $query->where(['id' => 1]);
 
-// WHERE id > 2
+// WHERE id > 1
 $query->where(['id >' => 1]);
 ```
 
@@ -240,7 +241,7 @@ $query->where(['OR' => ['id >' => 1, 'title' => 'My title']]);
 For even more complex conditions you can use closures and expression objects:
 
 ```php
-$query->where(function ($exp) {
+$query->where(function (ExpressionInterface $exp) {
         return $exp
             ->eq('author_id', 2)
             ->eq('published', true)
@@ -263,7 +264,7 @@ WHERE
 Combining expressions is also possible:
 
 ```php
-$query->where(function ($exp) {
+$query->where(function (ExpressionInterface $exp) {
         $orConditions = $exp->or(['author_id' => 2])
             ->eq('author_id', 5);
         return $exp
@@ -349,10 +350,10 @@ foreach ($query as $row) {
 }
 
 // Get the statement and fetch all results
-$results = $query->execute()->fetchAll('assoc');
+$results = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 ```
 
 ## Official API
 
-You can read the official [official API docs](https://api.cakephp.org/4.x/namespace-Cake.Database.html) to learn more of what this library
+You can read the official [official API docs](https://api.cakephp.org/5.x/namespace-Cake.Database.html) to learn more of what this library
 has to offer.

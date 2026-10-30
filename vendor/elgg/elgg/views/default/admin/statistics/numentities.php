@@ -1,6 +1,22 @@
 <?php
-// Get entity statistics
-$entity_stats = elgg_get_entity_statistics();
+/**
+ * Get entity statistics
+ */
+
+use Elgg\Database\QueryBuilder;
+
+$entity_stats = elgg_call(ELGG_SHOW_DELETED_ENTITIES, function() {
+	return elgg_get_entity_statistics();
+});
+$trashed_stats = elgg_call(ELGG_SHOW_DELETED_ENTITIES, function() {
+	return elgg_get_entity_statistics([
+		'wheres' => [
+			function(QueryBuilder $qb, $main_alias) {
+				return $qb->compare("{$main_alias}.deleted", '=', 'yes', ELGG_VALUE_STRING);
+			},
+		],
+	]);
+});
 
 $searchable = [];
 $other = [];
@@ -15,9 +31,15 @@ foreach ($entity_stats as $type => $subtypes) {
 		}
 
 		if (elgg_entity_has_capability($type, $subtype, 'searchable')) {
-			$searchable[$name] = $value;
+			$searchable[$name] = [
+				$value,
+				elgg_extract($subtype, elgg_extract($type, $trashed_stats, [])),
+			];
 		} else {
-			$other[$name] = $value;
+			$other[$name] = [
+				$value,
+				elgg_extract($subtype, elgg_extract($type, $trashed_stats, [])),
+			];
 		}
 	}
 }
@@ -25,23 +47,47 @@ foreach ($entity_stats as $type => $subtypes) {
 arsort($searchable);
 arsort($other);
 
-$header = '<tr><th>' . elgg_echo('admin:statistics:numentities:type') . '</th>';
-$header .= '<th>' . elgg_echo('admin:statistics:numentities:number') . '</th></tr>';
+$header = elgg_format_element('th', [], elgg_echo('admin:statistics:numentities:type'));
+$header .= elgg_format_element('th', [], elgg_echo('total'));
 
-$rows = '';
+$header = elgg_format_element('thead', [], elgg_format_element('tr', [], $header));
 
+// searchable entity stats
+$rows = [];
 foreach ($searchable as $name => $value) {
-	$rows .= "<tr><td>{$name}</td><td>{$value}</td></tr>";
+	$cells = [];
+	$cells[] = elgg_format_element('td', [], $name);
+	
+	$entity_total = elgg_number_format($value[0]);
+	$entity_trashed = elgg_number_format($value[1] ?? 0);
+	
+	$number = $entity_total . ($entity_trashed ? elgg_format_element('span', ['class' => ['elgg-quiet', 'mls']], elgg_echo('status:trashed') . ': ' . $entity_trashed) : null);
+	$cells[] = elgg_format_element('td', [], $number);
+	
+	$rows[] = elgg_format_element('tr', [], implode('', $cells));
 }
 
-$body = "<table class='elgg-table'><thead>{$header}</thead><tbody>{$rows}</tbody></table>";
+$rows = elgg_format_element('tbody', [], implode(PHP_EOL, $rows));
+
+$body = elgg_format_element('table', ['class' => 'elgg-table'], $header . $rows);
 echo elgg_view_module('info', elgg_echo('admin:statistics:numentities:searchable'), $body);
 
-
-$rows = '';
+// remaining entity stats
+$rows = [];
 foreach ($other as $name => $value) {
-	$rows .= "<tr><td>{$name}</td><td>{$value}</td></tr>";
+	$cells = [];
+	$cells[] = elgg_format_element('td', [], $name);
+	
+	$entity_total = elgg_number_format($value[0]);
+	$entity_trashed = elgg_number_format($value[1] ?? 0);
+	
+	$number = $entity_total . ($entity_trashed ? elgg_format_element('span', ['class' => ['elgg-quiet', 'mls']], elgg_echo('status:trashed') . ': ' . $entity_trashed) : null);
+	$cells[] = elgg_format_element('td', [], $number);
+	
+	$rows[] = elgg_format_element('tr', [], implode('', $cells));
 }
 
-$body = "<table class='elgg-table'><thead>{$header}</thead><tbody>{$rows}</tbody></table>";
+$rows = elgg_format_element('tbody', [], implode(PHP_EOL, $rows));
+
+$body = elgg_format_element('table', ['class' => 'elgg-table'], $header . $rows);
 echo elgg_view_module('info', elgg_echo('admin:statistics:numentities:other'), $body);

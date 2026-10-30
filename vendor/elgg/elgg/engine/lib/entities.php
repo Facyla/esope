@@ -3,7 +3,8 @@
  * Procedural code for creating, loading, and modifying \ElggEntity objects.
  */
 
-use Elgg\Database\Select;
+use Elgg\Database\Clauses\OrderByClause;
+use Elgg\Database\QueryBuilder;
 
 /**
  * Return the class name registered as a constructor for an entity of a given type and subtype
@@ -146,6 +147,8 @@ function elgg_get_site_entity(): \ElggSite {
  * @option DateTime|string|int $updated_before
  * @option DateTime|string|int $last_action_after
  * @option DateTime|string|int $last_action_before
+ * @option DateTime|string|int $deleted_after
+ * @option DateTime|string|int $deleted_before
  *
  * <code>
  * $options['created_after'] = '-1 year';
@@ -342,7 +345,7 @@ function elgg_get_site_entity(): \ElggSite {
  *     $fallback,
  * ];
  *
- * // @see \Elgg\Database\Clauses\EntitySortByClause
+ * @see \Elgg\Database\Clauses\EntitySortByClause
  *
  * // single sort_by option
  * $options['sort_by'] = [
@@ -382,7 +385,7 @@ function elgg_get_site_entity(): \ElggSite {
  * COUNT/CALCULATION
  * -----------------
  *
- * Performs a calculation on a set of entities that match all of the criteria
+ * Performs a calculation on a set of entities that match all the criteria
  * If any of these are specific, the return of this function will be int or float
  *
  * Return total number of entities
@@ -393,7 +396,7 @@ function elgg_get_site_entity(): \ElggSite {
  * operator
  * @option string $annotation_calculation e.g. avg, max, min, sum
  *
- * Perform a calculation on a set of entity's metadat using a numeric sql function
+ * Perform a calculation on a set of entity's metadata using a numeric sql function
  * If specified, the number of metadata name value pairs can not be more than 1, or they must be merged using OR
  * operator
  * @option string $metadata_calculation e.g. avg, max, min, sum
@@ -406,7 +409,7 @@ function elgg_get_site_entity(): \ElggSite {
  * <code>
  * $options['selects'] = [
  *    'e.last_action AS last_action',
- *    function(QueryBulder $qb, $main_alias) {
+ *    function(QueryBuilder $qb, $main_alias) {
  *        $joined_alias = $qb->joinMetadataTable($main_alias, 'guid', 'status');
  *        return "$joined_alias.value AS status";
  *    }
@@ -497,7 +500,7 @@ function elgg_get_site_entity(): \ElggSite {
  *
  * @param array $options Options
  *
- * @return \ElggEntity[]|int|mixed If count, int. Otherwise an array or an \ElggBatch. false on errors.
+ * @return \ElggEntity[]|int|mixed If count, int. Otherwise an array or an \ElggBatch
  *
  * @since 1.7.0
  */
@@ -529,23 +532,23 @@ function elgg_count_entities(array $options = []): int {
  *
  * @note Internal: If the initial COUNT query returns 0, the $getter will not be called again.
  *
- * @param array    $options Any options from $getter options plus:
- *                          - item_view => STR Optional. Alternative view used to render list items
- *                          - full_view => BOOL Display full view of entities (default: false)
- *                          - list_type => STR 'list', 'gallery', or 'table'
- *                          - columns => ARR instances of Elgg\Views\TableColumn if list_type is "table"
- *                          - pagination => BOOL Display pagination links
- *                          - no_results => STR|true for default notfound text|Closure Message to display when there are no entities
+ * @param array         $options Any options from $getter options plus:
+ *                               - item_view => STR Optional. Alternative view used to render list items
+ *                               - full_view => BOOL Display full view of entities (default: false)
+ *                               - list_type => STR 'list', 'gallery', or 'table'
+ *                               - columns => ARR instances of Elgg\Views\TableColumn if list_type is "table"
+ *                               - pagination => BOOL Display pagination links
+ *                               - no_results => STR|true for default notfound text|Closure Message to display when there are no entities
  *
- * @param callable $getter  The entity getter function to use to fetch the entities.
- * @param callable $viewer  The function to use to view the entity list.
+ * @param null|callable $getter  The entity getter function to use to fetch the entities.
+ * @param null|callable $viewer  The function to use to view the entity list.
  *
  * @return string
  * @since 1.7
  * @see elgg_get_entities()
  * @see elgg_view_entity_list()
  */
-function elgg_list_entities(array $options = [], callable $getter = null, callable $viewer = null): string {
+function elgg_list_entities(array $options = [], ?callable $getter = null, ?callable $viewer = null): string {
 	$getter = $getter ?? 'elgg_get_entities'; // callables only support default NULL value
 	$viewer = $viewer ?? 'elgg_view_entity_list'; // callables only support default NULL value
 	$offset_key = $options['offset_key'] ?? 'offset';
@@ -573,7 +576,7 @@ function elgg_list_entities(array $options = [], callable $getter = null, callab
 	$options['count'] = is_array($entities) ? count($entities) : 0;
 	
 	if (!is_array($entities) && $viewer === 'elgg_view_entity_list') {
-		elgg_log(elgg_echo('list:error:getter:admin', [$getter, gettype($entities), $viewer]), 'ERROR');
+		_elgg_services()->logger->error(elgg_echo('list:error:getter:admin', [$getter, gettype($entities), $viewer]));
 		
 		return elgg_echo('list:error:getter:user');
 	}
@@ -649,29 +652,45 @@ function elgg_search(array $options = []) {
 /**
  * Return an array reporting the number of various entities in the system.
  *
- * @param int $owner_guid Optional owner of the statistics
+ * @param array $options additional options
  *
  * @return array
  * @since 4.3
+ * @see elgg_get_entities()
  */
-function elgg_get_entity_statistics(int $owner_guid = 0): array {
-
-	$select = Select::fromTable('entities');
-	$select->select('type')
-		->addSelect('subtype')
-		->addSelect('count(*) AS total')
-		->where($select->compare('enabled', '=', 'yes', ELGG_VALUE_STRING))
-		->groupBy('type')
-		->addGroupBy('subtype')
-		->orderBy('total', 'desc');
+function elgg_get_entity_statistics(array $options = []): array {
+	$required = [
+		'selects' => [
+			'count(*) AS total',
+		],
+		'group_by' => [
+			function(QueryBuilder $qb, $main_alias) {
+				return "{$main_alias}.type";
+			},
+			function(QueryBuilder $qb, $main_alias) {
+				return "{$main_alias}.subtype";
+			},
+		],
+		'order_by' => [
+			new OrderByClause('total', 'desc'),
+		],
+		'callback' => function($row) {
+			return (object) [
+				'type' => $row->type,
+				'subtype' => $row->subtype,
+				'total' => $row->total,
+			];
+		},
+		'limit' => false,
+	];
 	
-	if (!empty($owner_guid)) {
-		$select->andWhere($select->compare('owner_guid', '=', $owner_guid, ELGG_VALUE_GUID));
-	}
+	$options = array_merge($options, $required);
+	
+	$rows = elgg_call(ELGG_IGNORE_ACCESS, function() use ($options) {
+		return elgg_get_entities($options);
+	});
 	
 	$entity_stats = [];
-	
-	$rows = _elgg_services()->db->getData($select);
 	foreach ($rows as $row) {
 		$type = $row->type;
 		if (!isset($entity_stats[$type]) || !is_array($entity_stats[$type])) {

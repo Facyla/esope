@@ -6,7 +6,6 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
@@ -18,7 +17,7 @@ return array(
 	'thewire:thread' => "Vlákno",
 	'thewire:charleft' => "znaků zbývá",
 	'thewire:tags' => "Telegrafní zprávy se štítkem '%s'",
-	'thewire:noposts' => "Zatím žádné telegrafní zprávy",
+	'thewire:noposts' => "Zatím žádné telegrafní zprávy", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Telegrafní zpráva od %s',
 	
@@ -39,10 +38,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Zpráva byla úspěšně přidána do telegrafu.",
-	'thewire:deleted' => "Telegrafní zpráva byla úspěšně smazána.",
 	'thewire:blank' => "Omlouváme se, ale před odesláním musíte zadat nějaký text.",
 	'thewire:notsaved' => "Bohužel nemůžeme uložit vaši telegrafní zprávu.",
-	'thewire:notdeleted' => "Bohužel nemůžeme smazat tuto telegrafní zprávu.",
 
 	/**
 	 * Notifications
@@ -58,4 +55,8 @@ return array(
 	 */
 	'thewire:settings:limit' => "Maximální počet znaků pro telegrafní zprávy:",
 	'thewire:settings:limit:none' => "Bez omezení",
+	
+	/**
+	 * Exceptions
+	 */
 );

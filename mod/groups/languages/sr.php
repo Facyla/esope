@@ -57,8 +57,6 @@ return array(
 	'groups:joinrequest' => 'Захтевај чланство',
 	'groups:join' => 'Приступи групи',
 	'groups:leave' => 'Напусти групу',
-	'groups:invite' => 'Позови пријатеље',
-	'groups:invite:title' => 'Позови пријатеље у ову групу',
 
 	'groups:nofriendsatall' => 'Немате пријатеље да позовете!',
 	'groups:group' => "Група",
@@ -135,4 +133,7 @@ return array(
 	'groups:add:alreadymember' => "%s је већ члан ове групе",
 	
 	// Notification settings
+	
+	// accessibility
+	'groups:aria:label:search_in_group' => "Претражи у овој групи",
 );

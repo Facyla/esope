@@ -20,11 +20,7 @@ class ConfigTable {
 	/**
 	 * @var string name of the config database table
 	 */
-	const TABLE_NAME = 'config';
-	
-	protected Database $db;
-	
-	protected BootService $boot;
+	public const TABLE_NAME = 'config';
 	
 	/**
 	 * Constructor
@@ -33,11 +29,9 @@ class ConfigTable {
 	 * @param BootService $boot BootService
 	 */
 	public function __construct(
-		Database $db,
-		BootService $boot
+		protected Database $db,
+		protected BootService $boot
 	) {
-		$this->db = $db;
-		$this->boot = $boot;
 	}
 
 	/**

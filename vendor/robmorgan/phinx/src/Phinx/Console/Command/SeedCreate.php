@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -24,8 +25,9 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class SeedCreate extends AbstractCommand
 {
     /**
-     * @var string
+     * @var string|null
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $defaultName = 'seed:create';
 
     /**
@@ -33,7 +35,7 @@ class SeedCreate extends AbstractCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -43,7 +45,7 @@ class SeedCreate extends AbstractCommand
             ->setHelp(sprintf(
                 '%sCreates a new database seeder%s',
                 PHP_EOL,
-                PHP_EOL
+                PHP_EOL,
             ));
 
         // An alternative template.
@@ -56,7 +58,7 @@ class SeedCreate extends AbstractCommand
      *
      * @return \Symfony\Component\Console\Question\ConfirmationQuestion
      */
-    protected function getCreateSeedDirectoryQuestion()
+    protected function getCreateSeedDirectoryQuestion(): ConfirmationQuestion
     {
         return new ConfirmationQuestion('Create seeds directory? [y]/n ', true);
     }
@@ -67,7 +69,7 @@ class SeedCreate extends AbstractCommand
      * @param string[] $paths Paths
      * @return \Symfony\Component\Console\Question\ChoiceQuestion
      */
-    protected function getSelectSeedPathQuestion(array $paths)
+    protected function getSelectSeedPathQuestion(array $paths): ChoiceQuestion
     {
         return new ChoiceQuestion('Which seeds path would you like to use?', $paths, 0);
     }
@@ -80,7 +82,7 @@ class SeedCreate extends AbstractCommand
      * @throws \Exception
      * @return string
      */
-    protected function getSeedPath(InputInterface $input, OutputInterface $output)
+    protected function getSeedPath(InputInterface $input, OutputInterface $output): string
     {
         // First, try the non-interactive option:
         $path = $input->getOption('path');
@@ -102,7 +104,7 @@ class SeedCreate extends AbstractCommand
             throw new Exception(
                 'You probably used curly braces to define seed path in your Phinx configuration file, ' .
                 'but no directories have been matched using this pattern. ' .
-                'You need to create a seed directory manually.'
+                'You need to create a seed directory manually.',
             );
         }
 
@@ -127,7 +129,7 @@ class SeedCreate extends AbstractCommand
      * @throws \InvalidArgumentException
      * @return int 0 on success
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->bootstrap($input, $output);
 
@@ -147,12 +149,13 @@ class SeedCreate extends AbstractCommand
         $this->verifySeedDirectory($path);
 
         $path = realpath($path);
+        /** @var string|null $className */
         $className = $input->getArgument('name');
 
         if (!Util::isValidPhinxClassName($className)) {
             throw new InvalidArgumentException(sprintf(
                 'The seed class name "%s" is invalid. Please use CamelCase format',
-                $className
+                $className,
             ));
         }
 
@@ -162,7 +165,7 @@ class SeedCreate extends AbstractCommand
         if (is_file($filePath)) {
             throw new InvalidArgumentException(sprintf(
                 'The file "%s" already exists',
-                basename($filePath)
+                basename($filePath),
             ));
         }
 
@@ -173,18 +176,29 @@ class SeedCreate extends AbstractCommand
         if ($altTemplate && !is_file($altTemplate)) {
             throw new InvalidArgumentException(sprintf(
                 'The template file "%s" does not exist',
-                $altTemplate
+                $altTemplate,
             ));
+        }
+
+        // Command-line option must have higher priority than value from Config
+        $config = $this->getConfig();
+        if (is_null($altTemplate)) {
+            $altTemplate = $config->getSeedTemplateFile();
+            if (!is_null($altTemplate) && !is_file($altTemplate)) {
+                throw new InvalidArgumentException(sprintf(
+                    'The template file `%s` from config does not exist',
+                    $altTemplate,
+                ));
+            }
         }
 
         // Determine the appropriate mechanism to get the template
         // Load the alternative template if it is defined.
         $contents = file_get_contents($altTemplate ?: $this->getSeedTemplateFilename());
 
-        $config = $this->getConfig();
         $namespace = $config instanceof NamespaceAwareInterface ? $config->getSeedNamespaceByPath($path) : null;
         $classes = [
-            '$namespaceDefinition' => $namespace !== null ? ('namespace ' . $namespace . ';') : '',
+            '$namespaceDefinition' => $namespace !== null ? (PHP_EOL . 'namespace ' . $namespace . ';' . PHP_EOL) : '',
             '$namespace' => $namespace,
             '$useClassName' => $config->getSeedBaseClassName(false),
             '$className' => $className,
@@ -195,7 +209,7 @@ class SeedCreate extends AbstractCommand
         if (file_put_contents($filePath, $contents) === false) {
             throw new RuntimeException(sprintf(
                 'The file "%s" could not be written to',
-                $path
+                $path,
             ));
         }
 

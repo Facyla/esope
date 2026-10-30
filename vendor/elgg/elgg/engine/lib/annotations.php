@@ -38,9 +38,7 @@ function elgg_delete_annotation_by_id(int $id): bool {
  *
  * Accepts all options supported by {@link elgg_get_entities()}
  *
- * The default 'order_by' is 'n_table.time_created, n_table.id',
- *
- * @see   elgg_get_entities()
+ * The default 'order_by' is 'a_table.time_created, a_table.id',
  *
  * @param array $options Options
  *
@@ -86,32 +84,6 @@ function elgg_list_annotations(array $options = []): string {
  */
 function elgg_delete_annotations(array $options): bool {
 	return _elgg_services()->annotationsTable->deleteAll($options);
-}
-
-/**
- * Disables annotations based on $options.
- *
- * @warning Unlike elgg_get_annotations() this will not accept an empty options array!
- *
- * @param array $options An options array. {@link elgg_get_annotations()}
- * @return bool true on success, false on failure
- * @since 1.8.0
- */
-function elgg_disable_annotations(array $options): bool {
-	return _elgg_services()->annotationsTable->disableAll($options);
-}
-
-/**
- * Enables annotations based on $options.
- *
- * @warning Unlike elgg_get_annotations() this will not accept an empty options array!
- *
- * @param array $options An options array. {@link elgg_get_annotations()}
- * @return bool true on success, false on failure
- * @since 1.8.0
- */
-function elgg_enable_annotations(array $options): bool {
-	return _elgg_services()->annotationsTable->enableAll($options);
 }
 
 /**

@@ -4,8 +4,9 @@
  */
 
 $guid = (int) get_input('guid');
-
-$entity = get_entity($guid);
+$entity = elgg_call(ELGG_SHOW_DISABLED_ENTITIES | ELGG_SHOW_DELETED_ENTITIES, function() use ($guid) {
+	return get_entity($guid);
+});
 if (!$entity instanceof \ElggEntity) {
 	return elgg_error_response(elgg_echo('entity:delete:item_not_found'));
 }
@@ -14,8 +15,6 @@ if (!$entity->canDelete() || $entity instanceof \ElggPlugin || $entity instanceo
 	return elgg_error_response(elgg_echo('entity:delete:permission_denied'));
 }
 
-set_time_limit(0);
-
 // determine what name to show on success
 $display_name = $entity->getDisplayName() ?: elgg_echo('entity:delete:item');
 
@@ -23,7 +22,7 @@ $type = $entity->getType();
 $subtype = $entity->getSubtype();
 $container = $entity->getContainerEntity();
 
-if (!$entity->delete()) {
+if (!$entity->delete(true, true)) {
 	return elgg_error_response(elgg_echo('entity:delete:fail', [$display_name]));
 }
 
@@ -38,7 +37,7 @@ if (empty($forward_url)) {
 	$referrer_url = elgg_extract('HTTP_REFERER', $_SERVER, '');
 	$site_url = elgg_get_site_url();
 	
-	$find_forward_url = function (\ElggEntity $container = null) use ($type, $subtype) {
+	$find_forward_url = function (?\ElggEntity $container = null) use ($type, $subtype) {
 		$routes = _elgg_services()->routes;
 		
 		// check if there is a collection route (eg. blog/owner/username)

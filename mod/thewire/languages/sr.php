@@ -6,13 +6,13 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
 	'thewire' => "Жица",
 
 	'item:object:thewire' => "Објаве на жици",
+	
 	'collection:object:thewire:all' => "Све објаве",
 	'collection:object:thewire:owner' => "%s објаве",
 	'collection:object:thewire:friends' => "Објаве пријатеља",
@@ -21,7 +21,7 @@ return array(
 	'thewire:thread' => "Дискусија",
 	'thewire:charleft' => "знакова остало",
 	'thewire:tags' => "Објаве таговане са '%s'",
-	'thewire:noposts' => "Нема објава",
+	'thewire:noposts' => "Нема објава", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Објаве од %s',
 	
@@ -42,10 +42,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Ваша порука је успешно објављена на жици.",
-	'thewire:deleted' => "Објава је успешно обрисана",
 	'thewire:blank' => "Извините али морате да унесете текст пре него што објавите.",
 	'thewire:notsaved' => "Ивините. Нисмо успли да сачувамо ову објаву.",
-	'thewire:notdeleted' => "Извините. Нисмо успели да обришемо ову објаву.",
 
 	/**
 	 * Notifications
@@ -61,4 +59,8 @@ return array(
 	 */
 	'thewire:settings:limit' => "Максимални број знакова у објави на жици:",
 	'thewire:settings:limit:none' => "Без ограничења",
+	
+	/**
+	 * Exceptions
+	 */
 );

@@ -66,9 +66,6 @@ return array(
 	'groups:joinrequest' => 'Cere apartenență',
 	'groups:join' => 'Alătură-te grupului',
 	'groups:leave' => 'Părăsește grupul',
-	'groups:invite' => 'Invită prieteni',
-	'groups:invite:title' => 'Invită prieteni pe acest grup',
-	'groups:invite:friends:help' => 'Caută un prieten după nume sau utilizator și selectează-l din listă',
 	'groups:invite:resend' => 'Retrimite invitațiile utilizatorilor deja invitați',
 	'groups:invite:member' => 'Deja un membru al acestui grup',
 	'groups:invite:invited' => 'Deja invitat/ă pe acest grup',
@@ -176,4 +173,8 @@ sau apasă mai jos pentru a vedea cererile de alăturare ale grupului:
 	
 	'groups:usersettings:notifications:title' => 'Notificări de Grup',
 	'groups:usersettings:notifications:description' => 'Pentru a primii notificări atunci când se adaugă conținut nou pe un grup al cărui membru ești, găsește-l mai jos și selectează metoda(ele) de notificare pe care dorești să o(le) folosești.',
+	
+	// accessibility
+	'groups:aria:label:group_search' => "Caută grupuri",
+	'groups:aria:label:search_in_group' => "Caută în acest grup",
 );

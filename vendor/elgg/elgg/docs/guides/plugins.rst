@@ -169,9 +169,6 @@ Besides magic constants like ``__DIR__``, its return value should not change. Th
 		],
 		
 		'view_extensions' => [
-			'elgg.js' => [
-				'bookmarks.js' => [],
-			],
 			'page/components/list' => [
 				'list/extension' => [
 					'priority' => 600,
@@ -274,7 +271,7 @@ Plugins can then use PHP-DI API to autowire and call the service:
 
    $service = elgg()->get(PluginService::class);
 
-See `PHP-DI documentation <http://php-di.org>`_ for a comprehensive list of definition and invokation possibilities.
+See `PHP-DI documentation <http://php-di.org>`_ for a comprehensive list of definition and invocation possibilities.
 
 composer.json
 =============
@@ -294,13 +291,12 @@ Important parts in the ``composer.json`` file are:
 
 - ``name``: the name of your plugin, keep this inline with the name of your plugin folder to ensure correct installation
 - ``type``: this will tell Composer where to install your plugin, ALWAYS keep this as ``elgg-plugin``
-- ``require``: the ``composer/installers`` requirement is to make sure Composer knows where to install your plugin
 
-As a suggestion, include a ``conflict`` rule with any Elgg version below your mininal required version, this will help prevent the accidental 
-installation of your plugin on an incompatible Elgg version.
+As a suggestion, include a ``conflict`` rule with any Elgg version below your minimal required version, this will help
+prevent the accidental installation of your plugin on an incompatible Elgg version.
 
-After adding a ``composer.json`` file to your plugin project, you need to register your project on `Packagist`_ in order for other people to be able to 
-install your plugin.
+After adding a ``composer.json`` file to your plugin project, you need to register your project on `Packagist`_ in
+order for other people to be able to install your plugin.
 
 Tests
 =====
@@ -308,24 +304,15 @@ Tests
 It's encouraged to create PHPUnit test for your plugin. All tests should be located in ``tests/phpunit/unit`` for unit tests and 
 ``tests/phpunit/integration`` for integration tests.
 
-An easy example of adding test is the ``ViewStackTest``, this will test that the views in your plugin are registered correctly and have no 
-syntax errors. To add this test create a file ``ViewStackTest.php`` in the folder ``tests/phpunit/unit/<YourNameSpace>/<YourPluginName>/``
-with the content:
+Unit tests should extend the ``Elgg\UnitTestCase`` class. Integration tests should extend the ``Elgg\Plugins\IntegrationTestCase``.
 
-.. code-block:: php
-	
-	namespace <YourNameSpace>\<YourPluginName>;
-	
-	/**
-	 * @group ViewsService
-	 */
-	class ViewStackTest extends \Elgg\Plugins\ViewStackTest {
-	
-	}
+There are a set of global plugin integration tests that run on all active plugins. These tests are:
 
-.. note::
-	
-	If you wish to see a better example, look in any of the Elgg core plugins.
+- ``Elgg\Plugins\ActionRegistrationIntegrationTest`` will test all registered actions of the plugin without supplying data
+- ``Elgg\Plugins\ComposerIntegrationTest`` will test if the ``composer.json`` is considered valid
+- ``Elgg\Plugins\StaticConfigIntegrationTest`` will test the sections of the ``elgg-plugin.php`` and check for the correct format
+- ``Elgg\Plugins\TranslationsIntegrationTest`` will test all language files for the correct format and encoding
+- ``Elgg\Plugins\ViewStackIntegrationTest`` will test all views of the plugin if there are any PHP parsing errors
 
 .. seealso::
 	

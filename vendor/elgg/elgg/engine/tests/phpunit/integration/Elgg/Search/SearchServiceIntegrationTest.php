@@ -4,9 +4,6 @@ namespace Elgg\Search;
 
 use Elgg\IntegrationTestCase;
 
-/**
- * @group Search
- */
 class SearchServiceIntegrationTest extends IntegrationTestCase {
 
 	public function up() {
@@ -57,7 +54,7 @@ class SearchServiceIntegrationTest extends IntegrationTestCase {
 		$this->assertEquals($count, $results);
 	}
 
-	public function searchDataProvider() {
+	public static function searchDataProvider() {
 		$haystack = 'Lorem ipsum dolor sit amet consectetur adipiscing elit';
 
 		$tests = [

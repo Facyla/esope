@@ -6,13 +6,13 @@
  */
 
 return array(
-
 	/**
 	 * Menu items and titles
 	 */
 	'thewire' => "The Wire",
 
 	'item:object:thewire' => "Posts",
+	
 	'collection:object:thewire:all' => "Todos los post",
 	'collection:object:thewire:owner' => "los posts de %s",
 	'collection:object:thewire:friends' => "Los post de tus amigos",
@@ -21,7 +21,7 @@ return array(
 	'thewire:thread' => "Hilo",
 	'thewire:charleft' => "caracteres restantes",
 	'thewire:tags' => "Posts etiquetados con '%s'",
-	'thewire:noposts' => "No hay posts",
+	'thewire:noposts' => "No hay posts", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Post publicado por %s',
 	
@@ -42,10 +42,8 @@ return array(
 	 * Status messages
 	 */
 	'thewire:posted' => "Tu mensaje ha sido publicado exitosamente a The Wire.",
-	'thewire:deleted' => "El post ha sido borrado exitosamente.",
 	'thewire:blank' => "Necesitas ingresar más texto para publicar.",
 	'thewire:notsaved' => "Lo sentimos. No pudimos guardar este post",
-	'thewire:notdeleted' => "No se pudo borrar este post.",
 
 	/**
 	 * Notifications
@@ -58,5 +56,9 @@ return array(
 
 	/**
 	 * Settings
+	 */
+	
+	/**
+	 * Exceptions
 	 */
 );

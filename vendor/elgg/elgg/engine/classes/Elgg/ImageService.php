@@ -3,7 +3,6 @@
 namespace Elgg;
 
 use Elgg\Exceptions\InvalidArgumentException;
-use Elgg\Exceptions\LogicException;
 use Elgg\Exceptions\RangeException;
 use Elgg\Filesystem\MimeTypeService;
 use Elgg\Traits\Loggable;
@@ -31,22 +30,12 @@ class ImageService {
 	protected $imagine;
 
 	/**
-	 * @var Config
-	 */
-	protected $config;
-	
-	/**
-	 * @var MimeTypeService
-	 */
-	protected $mimetype;
-
-	/**
 	 * Constructor
 	 *
 	 * @param Config          $config   Elgg config
 	 * @param MimeTypeService $mimetype MimeType service
 	 */
-	public function __construct(Config $config, MimeTypeService $mimetype) {
+	public function __construct(protected Config $config, protected MimeTypeService $mimetype) {
 		
 		switch ($config->image_processor) {
 			case 'imagick':
@@ -61,40 +50,37 @@ class ImageService {
 				$this->imagine = new \Imagine\Gd\Imagine();
 				break;
 		}
-
-		$this->config = $config;
-		$this->mimetype = $mimetype;
 	}
 
 	/**
 	 * Crop and resize an image
 	 *
-	 * @param string $source      Path to source image
-	 * @param string $destination Path to destination
-	 *                            If not set, will modify the source image
-	 * @param array  $params      An array of cropping/resizing parameters
-	 *                            - INT 'w' represents the width of the new image
-	 *                            With upscaling disabled, this is the maximum width
-	 *                            of the new image (in case the source image is
-	 *                            smaller than the expected width)
+	 * @param string      $source      Path to source image
+	 * @param null|string $destination Path to destination
+	 *                                 If not set, will modify the source image
+	 * @param array       $params      An array of cropping/resizing parameters
+	 *                                 - INT 'w' represents the width of the new image
+	 *                                 With upscaling disabled, this is the maximum width
+	 *                                 of the new image (in case the source image is
+	 *                                 smaller than the expected width)
 	 *
-	 *                            - INT 'h' represents the height of the new image
-	 *                            With upscaling disabled, this is the maximum height
+	 *                                 - INT 'h' represents the height of the new image
+	 *                                 With upscaling disabled, this is the maximum height
 	 *
-	 *                            - INT 'x1', 'y1', 'x2', 'y2' represent optional cropping
-	 *                            coordinates. The source image will first be cropped
-	 *                            to these coordinates, and then resized to match
-	 *                            width/height parameters
+	 *                                 - INT 'x1', 'y1', 'x2', 'y2' represent optional cropping
+	 *                                 coordinates. The source image will first be cropped
+	 *                                 to these coordinates, and then resized to match
+	 *                                 width/height parameters
 	 *
-	 *                            - BOOL 'square' - square images will fill the
-	 *                            bounding box (width x height). In Imagine's terms,
-	 *                            this equates to OUTBOUND mode
+	 *                                 - BOOL 'square' - square images will fill the
+	 *                                 bounding box (width x height). In Imagine's terms,
+	 *                                 this equates to OUTBOUND mode
 	 *
-	 *                            - BOOL 'upscale' - if enabled, smaller images
-	 *                            will be upscaled to fit the bounding box.
+	 *                                 - BOOL 'upscale' - if enabled, smaller images
+	 *                                 will be upscaled to fit the bounding box.
 	 * @return bool
 	 */
-	public function resize(string $source, string $destination = null, array $params = []): bool {
+	public function resize(string $source, ?string $destination = null, array $params = []): bool {
 
 		$destination = $destination ?? $source;
 
@@ -156,8 +142,10 @@ class ImageService {
 	 *
 	 * @return bool
 	 */
-	public function fixOrientation($filename) {
+	public function fixOrientation($filename): bool {
 		try {
+			$this->assertValidImageDimensions($filename);
+			
 			$image = $this->imagine->open($filename);
 			$metadata = $image->metadata();
 			if (!isset($metadata['ifd0.Orientation'])) {
@@ -194,7 +182,8 @@ class ImageService {
 	 * @throws RangeException
 	 */
 	public function normalizeResizeParameters(string $source, array $params = []): array {
-
+		$this->assertValidImageDimensions($source);
+		
 		$image = $this->imagine->open($source);
 
 		$width = $image->getSize()->getWidth();
@@ -236,7 +225,7 @@ class ImageService {
 			$max_width = min($max_width, $max_height);
 			$max_height = $max_width;
 			
-			// find largest square that fits within the selected region
+			// find the largest square that fits within the selected region
 			$crop_width = min($crop_width, $crop_height);
 			$crop_height = $crop_width;
 			
@@ -324,5 +313,37 @@ class ImageService {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Assert that the source image has valid dimensions.
+	 * This can help prevent OOM issues during resizing
+	 *
+	 * @param string $path path to the image to validate
+	 *
+	 * @return void
+	 * @throws InvalidArgumentException
+	 * @throws RangeException
+	 * @since 7.0
+	 */
+	protected function assertValidImageDimensions(string $path): void {
+		$info = getimagesize($path);
+		if (!is_array($info)) {
+			throw new InvalidArgumentException("Unable to read image data for '{$path}'");
+		}
+		
+		$height = (int) elgg_extract(1, $info);
+		if ($height > $this->config->image_resize_max_height) {
+			throw new RangeException('Image height too large to resize');
+		}
+		
+		$width = (int) elgg_extract(0, $info);
+		if ($width > $this->config->image_resize_max_width) {
+			throw new RangeException('Image width too large to resize');
+		}
+		
+		if (($width * $height) > $this->config->image_resize_max_resolution) {
+			throw new RangeException('Image resolution too large to resize');
+		}
 	}
 }

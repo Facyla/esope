@@ -26,6 +26,9 @@ use Cake\Routing\RouteBuilder;
  *
  * Events can be bound to the application event manager during
  * the application's bootstrap and plugin bootstrap.
+ *
+ * @template TSubject
+ * @extends \Cake\Event\EventDispatcherInterface<\Cake\Http\BaseApplication>
  */
 interface PluginApplicationInterface extends EventDispatcherInterface
 {
@@ -40,7 +43,7 @@ interface PluginApplicationInterface extends EventDispatcherInterface
      * @param array<string, mixed> $config The configuration data for the plugin if using a string for $name
      * @return $this
      */
-    public function addPlugin($name, array $config = []);
+    public function addPlugin(PluginInterface|string $name, array $config = []);
 
     /**
      * Run bootstrap logic for loaded plugins.

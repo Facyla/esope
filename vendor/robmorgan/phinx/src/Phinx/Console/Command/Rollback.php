@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -18,8 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Rollback extends AbstractCommand
 {
     /**
-     * @var string
+     * @var string|null
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $defaultName = 'rollback';
 
     /**
@@ -27,7 +29,7 @@ class Rollback extends AbstractCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -56,7 +58,7 @@ The <info>version_order</info> configuration option is used to determine the ord
 This can be used to allow the rolling back of the last executed migration instead of the last created one, or combined
 with the <info>-d|--date</info> option to rollback to a certain date using the migration start times to order them.
 
-EOT
+EOT,
             );
     }
 
@@ -67,7 +69,7 @@ EOT
      * @param \Symfony\Component\Console\Output\OutputInterface $output Output
      * @return int integer 0 on success, or an error code.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->bootstrap($input, $output);
 
@@ -77,32 +79,9 @@ EOT
         $force = (bool)$input->getOption('force');
         $fake = (bool)$input->getOption('fake');
 
-        $config = $this->getConfig();
-
-        if ($environment === null) {
-            $environment = $config->getDefaultEnvironment();
-            $output->writeln('<comment>warning</comment> no environment specified, defaulting to: ' . $environment, $this->verbosityLevel);
-        } else {
-            $output->writeln('<info>using environment</info> ' . $environment, $this->verbosityLevel);
-        }
-
-        if (!$this->getConfig()->hasEnvironment($environment)) {
-            $output->writeln(sprintf('<error>The environment "%s" does not exist</error>', $environment));
-
+        $success = $this->writeInformationOutput($environment, $output);
+        if (!$success) {
             return self::CODE_ERROR;
-        }
-
-        $envOptions = $config->getEnvironment($environment);
-        if (isset($envOptions['adapter'])) {
-            $output->writeln('<info>using adapter</info> ' . $envOptions['adapter'], $this->verbosityLevel);
-        }
-
-        if (isset($envOptions['wrapper'])) {
-            $output->writeln('<info>using wrapper</info> ' . $envOptions['wrapper'], $this->verbosityLevel);
-        }
-
-        if (isset($envOptions['name'])) {
-            $output->writeln('<info>using database</info> ' . $envOptions['name'], $this->verbosityLevel);
         }
 
         $versionOrder = $this->getConfig()->getVersionOrder();
@@ -138,7 +117,7 @@ EOT
      * @throws \InvalidArgumentException
      * @return string The target
      */
-    public function getTargetFromDate($date)
+    public function getTargetFromDate(string $date): string
     {
         if (!preg_match('/^\d{4,14}$/', $date)) {
             throw new InvalidArgumentException('Invalid date. Format is YYYY[MM[DD[HH[II[SS]]]]].');

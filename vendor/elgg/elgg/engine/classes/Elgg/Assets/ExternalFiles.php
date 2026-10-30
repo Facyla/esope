@@ -2,8 +2,8 @@
 
 namespace Elgg\Assets;
 
+use Elgg\Cache\ServerCache;
 use Elgg\Cache\SimpleCache;
-use Elgg\Cache\SystemCache;
 use Elgg\Config;
 use Elgg\Http\Urls;
 use Elgg\ViewsService;
@@ -16,10 +16,7 @@ use Elgg\ViewsService;
  */
 class ExternalFiles {
 
-	/**
-	 * @var array
-	 */
-	protected $files = [];
+	protected array $files = [];
 
 	/**
 	 * Subresource integrity data (loaded on first use)
@@ -29,45 +26,21 @@ class ExternalFiles {
 	protected $sri;
 	
 	/**
-	 * @var Config
-	 */
-	protected $config;
-	
-	/**
-	 * @var Urls
-	 */
-	protected $urls;
-	
-	/**
-	 * @var ViewsService
-	 */
-	protected $views;
-	
-	/**
-	 * @var SimpleCache
-	 */
-	protected $simpleCache;
-	
-	/**
-	 * @var SystemCache
-	 */
-	protected $serverCache;
-	
-	/**
 	 * Constructor
 	 *
 	 * @param Config       $config      config
 	 * @param Urls         $urls        urls service
 	 * @param ViewsService $views       views service
 	 * @param SimpleCache  $simpleCache simplecache
-	 * @param SystemCache  $serverCache server cache
+	 * @param ServerCache  $serverCache server cache
 	 */
-	public function __construct(Config $config, Urls $urls, ViewsService $views, SimpleCache $simpleCache, SystemCache $serverCache) {
-		$this->config = $config;
-		$this->urls = $urls;
-		$this->views = $views;
-		$this->simpleCache = $simpleCache;
-		$this->serverCache = $serverCache;
+	public function __construct(
+		protected Config $config,
+		protected Urls $urls,
+		protected ViewsService $views,
+		protected SimpleCache $simpleCache,
+		protected ServerCache $serverCache
+	) {
 	}
 
 	/**
@@ -222,9 +195,9 @@ class ExternalFiles {
 	 *
 	 * @param string $type     type of resource
 	 * @param string $resource name of resource
-	 * @return string|NULL
+	 * @return string|null
 	 */
-	protected function getSubResourceIntegrity(string $type, string $resource): ?string {
+	public function getSubResourceIntegrity(string $type, string $resource): ?string {
 		if (!$this->config->subresource_integrity_enabled) {
 			return null;
 		}

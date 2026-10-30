@@ -4,8 +4,8 @@ namespace Elgg\Notifications;
 
 use Elgg\EventsService;
 use Elgg\Exceptions\InvalidArgumentException;
-use Elgg\Traits\Loggable;
 use Elgg\Queue\Queue;
+use Elgg\Traits\Loggable;
 
 /**
  * Notifications service
@@ -191,13 +191,13 @@ class NotificationsService {
 	/**
 	 * Add a notification event to the queue
 	 *
-	 * @param string      $action Action name
-	 * @param \ElggData   $object The object of the action
-	 * @param \ElggEntity $actor  (optional) The actor of the notification (default: logged in user or owner of $object)
+	 * @param string           $action Action name
+	 * @param \ElggData        $object The object of the action
+	 * @param null|\ElggEntity $actor  (optional) The actor of the notification (default: logged-in user or owner of $object)
 	 *
 	 * @return void
 	 */
-	public function enqueueEvent(string $action, \ElggData $object, \ElggEntity $actor = null): void {
+	public function enqueueEvent(string $action, \ElggData $object, ?\ElggEntity $actor = null): void {
 		$object_type = $object->getType();
 		$object_subtype = $object->getSubtype();
 		$actor = $actor ?? elgg_get_logged_in_user_entity(); // default to logged in user
@@ -207,39 +207,48 @@ class NotificationsService {
 		}
 		
 		$registered = $this->isRegisteredEvent($object_type, $object_subtype, $action);
-		if ($registered) {
-			$params = [
-				'action' => $action,
-				'object' => $object,
-				'actor' => $actor,
-			];
-			$registered = (bool) $this->elgg_events->triggerResults('enqueue', 'notification', $params, $registered);
+		if (!$registered) {
+			return;
 		}
 		
+		$event = new SubscriptionNotificationEvent($object, $action, $actor);
+		$handler = $this->getNotificationHandler($event);
+		if ($handler instanceof InstantNotificationEventHandler) {
+			// don't enqueue the instant handlers
+			return;
+		}
+		
+		$params = [
+			'action' => $action,
+			'object' => $object,
+			'actor' => $actor,
+		];
+		$registered = (bool) $this->elgg_events->triggerResults('enqueue', 'notification', $params, $registered);
 		if (!$registered) {
 			return;
 		}
 		
 		$this->elgg_events->trigger('enqueue', 'notifications', $object);
-		$this->queue->enqueue(new SubscriptionNotificationEvent($object, $action, $actor));
+		$this->queue->enqueue($event);
 	}
 	
 	/**
 	 * Returns notification event handler based on event
 	 *
-	 * @param NotificationEvent $event event to get event handler for
+	 * @param NotificationEvent $event  event to get event handler for
+	 * @param array             $params additional params for the notification handler
 	 *
 	 * @return NotificationEventHandler
 	 */
-	protected function getNotificationHandler(NotificationEvent $event): NotificationEventHandler {
+	protected function getNotificationHandler(NotificationEvent $event, array $params = []): NotificationEventHandler {
 		$object = $event->getObject();
-		$handler = NotificationEventHandler::class;
+		$handler = ($event instanceof InstantNotificationEvent) ? InstantNotificationEventHandler::class : NotificationEventHandler::class;
 		
 		if (isset($this->events[$object->getType()][$object->getSubtype()][$event->getAction()])) {
 			$handler = $this->events[$object->getType()][$object->getSubtype()][$event->getAction()];
 		}
 		
-		return new $handler($event, $this);
+		return new $handler($event, $this, $params);
 	}
 
 	/**
@@ -250,8 +259,7 @@ class NotificationsService {
 	 *
 	 * @return int|array The number of notification events handled, or a delivery matrix
 	 */
-	public function processQueue($stopTime, $matrix = false) {
-		
+	public function processQueue(int $stopTime, bool $matrix = false) {
 		return elgg_call(ELGG_IGNORE_ACCESS, function() use ($stopTime, $matrix) {
 			$delivery_matrix = [];
 			
@@ -259,15 +267,17 @@ class NotificationsService {
 			
 			while (time() < $stopTime) {
 				// dequeue notification event
-				$event = $this->queue->dequeue();
-				/* @var $event NotificationEvent */
+				$event = elgg_call(ELGG_SHOW_DISABLED_ENTITIES, function () {
+					// showing disabled entities for deserialization
+					return $this->queue->dequeue();
+				});
 				
-				if (!$event) {
+				if (!$event instanceof NotificationEvent) {
 					// queue is empty
 					break;
 				}
 				
-				if (!$event instanceof NotificationEvent || !$event->getObject() || !$event->getActor()) {
+				if (!$event->getObject() || !$event->getActor()) {
 					// event object or actor have been deleted since the event was enqueued
 					continue;
 				}
@@ -275,6 +285,10 @@ class NotificationsService {
 				$this->elgg_events->trigger('dequeue', 'notifications', $event->getObject());
 				
 				$handler = $this->getNotificationHandler($event);
+				if ($handler instanceof InstantNotificationEventHandler) {
+					// this shouldn't happen
+					continue;
+				}
 				
 				try {
 					$delivery_matrix[$event->getDescription()] = $handler->send();
@@ -324,14 +338,10 @@ class NotificationsService {
 	 *
 	 * @return array
 	 */
-	public function sendInstantNotifications(\ElggEntity $sender, array $recipients = [], array $params = []) {
+	public function sendInstantNotifications(\ElggEntity $sender, array $recipients = [], array $params = []): array {
 		if (empty($this->methods)) {
 			return [];
 		}
-		
-		$params['recipients'] = array_filter($recipients, function($e) {
-			return ($e instanceof \ElggUser);
-		});
 		
 		$object = elgg_extract('object', $params);
 		$action = elgg_extract('action', $params);
@@ -339,6 +349,39 @@ class NotificationsService {
 		$event = new InstantNotificationEvent($object, $action, $sender);
 		
 		$handler = new InstantNotificationEventHandler($event, $this, $params);
+		$handler->setRecipients($recipients);
+		
+		return $handler->send();
+	}
+	
+	/**
+	 * Send an instant notification to a user
+	 *
+	 * @param \ElggUser        $recipient The recipient user
+	 * @param string           $action    The action on $subject
+	 * @param \ElggData        $subject   The notification subject
+	 * @param array            $params    Additional params
+	 *                                    use $params['methods_override'] to override the recipient notification methods (eg 'email' or 'site')
+	 * @param null|\ElggEntity $from      Sender of the message
+	 *
+	 * @return array
+	 * @since 6.3
+	 */
+	public function sendInstantNotification(\ElggUser $recipient, string $action, \ElggData $subject, array $params = [], ?\ElggEntity $from = null): array {
+		if (empty($this->methods)) {
+			return [];
+		}
+		
+		$from = $from ?? elgg_get_site_entity();
+		
+		$event = new InstantNotificationEvent($subject, $action, $from);
+		
+		$handler = $this->getNotificationHandler($event, $params);
+		if (!$handler instanceof InstantNotificationEventHandler) {
+			return [];
+		}
+		
+		$handler->setRecipients([$recipient]);
 		
 		return $handler->send();
 	}

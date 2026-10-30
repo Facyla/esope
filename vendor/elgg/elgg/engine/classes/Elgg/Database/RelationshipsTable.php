@@ -25,15 +25,11 @@ class RelationshipsTable {
 	/**
 	 * @var integer The max length of the relationship column data
 	 */
-	const RELATIONSHIP_COLUMN_LENGTH = 255;
+	public const RELATIONSHIP_COLUMN_LENGTH = 255;
 	
-	protected Database $db;
-
-	protected EntityTable $entities;
-
-	protected MetadataTable $metadata;
-
-	protected EventsService $events;
+	public const TABLE_NAME = 'entity_relationships';
+	
+	public const DEFAULT_JOIN_ALIAS = 'r';
 
 	/**
 	 * Constructor
@@ -43,11 +39,12 @@ class RelationshipsTable {
 	 * @param MetadataTable $metadata Metadata table
 	 * @param EventsService $events   Events service
 	 */
-	public function __construct(Database $db, EntityTable $entities, MetadataTable $metadata, EventsService $events) {
-		$this->db = $db;
-		$this->entities = $entities;
-		$this->metadata = $metadata;
-		$this->events = $events;
+	public function __construct(
+		protected Database $db,
+		protected EntityTable $entities,
+		protected MetadataTable $metadata,
+		protected EventsService $events
+	) {
 	}
 
 	/**
@@ -58,7 +55,7 @@ class RelationshipsTable {
 	 * @return \ElggRelationship|null
 	 */
 	public function get(int $id): ?\ElggRelationship {
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(self::TABLE_NAME);
 		$select->select('*')
 			->where($select->compare('id', '=', $id, ELGG_VALUE_ID));
 		
@@ -68,25 +65,22 @@ class RelationshipsTable {
 	/**
 	 * Delete a relationship by its ID
 	 *
-	 * @param int  $id         Relationship ID
-	 * @param bool $call_event Call the delete event before deleting
+	 * @param int $id Relationship ID
 	 *
 	 * @return bool
 	 */
-	public function delete(int $id, bool $call_event = true): bool {
+	public function delete(int $id): bool {
 		$relationship = $this->get($id);
 		if (!$relationship instanceof \ElggRelationship) {
 			return false;
 		}
 
-		if ($call_event && !$this->events->trigger('delete', 'relationship', $relationship)) {
-			return false;
-		}
-
-		$delete = Delete::fromTable('entity_relationships');
-		$delete->where($delete->compare('id', '=', $id, ELGG_VALUE_ID));
-		
-		return (bool) $this->db->deleteData($delete);
+		return $this->events->triggerSequence('delete', 'relationship', $relationship, function() use ($id) {
+			$delete = Delete::fromTable(self::TABLE_NAME);
+			$delete->where($delete->compare('id', '=', $id, ELGG_VALUE_ID));
+			
+			return (bool) $this->db->deleteData($delete);
+		});
 	}
 
 	/**
@@ -95,63 +89,66 @@ class RelationshipsTable {
 	 * This function lets you make the statement "$guid_one is a $relationship of $guid_two". In the statement,
 	 * $guid_one is the subject of the relationship, $guid_two is the target, and $relationship is the type.
 	 *
-	 * @param int    $guid_one     GUID of the subject entity of the relationship
-	 * @param string $relationship Type of the relationship
-	 * @param int    $guid_two     GUID of the target entity of the relationship
-	 * @param bool   $return_id    Return the ID instead of bool?
+	 * @param \ElggRelationship $relationship the relationship to create
+	 * @param bool              $return_id    Return the ID instead of bool?
 	 *
 	 * @return bool|int
 	 * @throws LengthException
 	 */
-	public function add(int $guid_one, string $relationship, int $guid_two, bool $return_id = false): bool|int {
-		if (strlen($relationship) > self::RELATIONSHIP_COLUMN_LENGTH) {
+	public function add(\ElggRelationship $relationship, bool $return_id = false): bool|int {
+		if (strlen($relationship->relationship) > self::RELATIONSHIP_COLUMN_LENGTH) {
 			throw new LengthException('Relationship name cannot be longer than ' . self::RELATIONSHIP_COLUMN_LENGTH);
 		}
 
 		// Check for duplicates
 		// note: escape $relationship after this call, we don't want to double-escape
-		if ($this->check($guid_one, $relationship, $guid_two)) {
+		if ($this->check($relationship->guid_one, $relationship->relationship, $relationship->guid_two)) {
 			return false;
 		}
 		
 		// Check if the related entities exist
-		if (!$this->entities->exists($guid_one) || !$this->entities->exists($guid_two)) {
+		if (!$this->entities->exists($relationship->guid_one) || !$this->entities->exists($relationship->guid_two)) {
 			// one or both of the guids doesn't exist
 			return false;
 		}
 		
-		$insert = Insert::intoTable('entity_relationships');
-		$insert->values([
-			'guid_one' => $insert->param($guid_one, ELGG_VALUE_GUID),
-			'relationship' => $insert->param($relationship, ELGG_VALUE_STRING),
-			'guid_two' => $insert->param($guid_two, ELGG_VALUE_GUID),
-			'time_created' => $insert->param($this->getCurrentTime()->getTimestamp(), ELGG_VALUE_TIMESTAMP),
-		]);
+		$id = 0;
 		
-		try {
-			$id = $this->db->insertData($insert);
-			if (!$id) {
-				return false;
-			}
-		} catch (DatabaseException $e) {
-			$prev = $e->getPrevious();
-			if ($prev instanceof UniqueConstraintViolationException) {
-				// duplicate key error see https://github.com/Elgg/Elgg/issues/9179
-				return false;
+		$result = $this->events->triggerSequence('create', 'relationship', $relationship, function (\ElggRelationship $relationship) use (&$id) {
+			$insert = Insert::intoTable(self::TABLE_NAME);
+			$insert->values([
+				'guid_one' => $insert->param($relationship->guid_one, ELGG_VALUE_GUID),
+				'relationship' => $insert->param($relationship->relationship, ELGG_VALUE_STRING),
+				'guid_two' => $insert->param($relationship->guid_two, ELGG_VALUE_GUID),
+				'time_created' => $insert->param($this->getCurrentTime()->getTimestamp(), ELGG_VALUE_TIMESTAMP),
+			]);
+			
+			try {
+				$id = $this->db->insertData($insert);
+				if (!$id) {
+					return false;
+				}
+				
+				$relationship->time_created = $this->getCurrentTime()->getTimestamp();
+				$relationship->id = $id;
+			} catch (DatabaseException $e) {
+				$prev = $e->getPrevious();
+				if ($prev instanceof UniqueConstraintViolationException) {
+					// duplicate key error see https://github.com/Elgg/Elgg/issues/9179
+					return false;
+				}
+				
+				throw $e;
 			}
 			
-			throw $e;
-		}
-
-		$obj = $this->get($id);
-
-		$result = $this->events->trigger('create', 'relationship', $obj);
+			return true;
+		});
+		
 		if (!$result) {
-			$this->delete($id, false);
 			return false;
 		}
-
-		return $return_id ? $obj->id : true;
+		
+		return $return_id ? $id : true;
 	}
 
 	/**
@@ -166,7 +163,7 @@ class RelationshipsTable {
 	 * @return \ElggRelationship|false Depending on success
 	 */
 	public function check(int $guid_one, string $relationship, int $guid_two) {
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(self::TABLE_NAME);
 		$select->select('*')
 			->where($select->compare('guid_one', '=', $guid_one, ELGG_VALUE_GUID))
 			->andWhere($select->compare('relationship', '=', $relationship, ELGG_VALUE_STRING))
@@ -231,7 +228,7 @@ class RelationshipsTable {
 	 * @return true
 	 */
 	protected function removeAllWithoutEvents(int $guid, string $relationship = '', bool $inverse_relationship = false, string $type = ''): bool {
-		$delete = Delete::fromTable('entity_relationships');
+		$delete = Delete::fromTable(self::TABLE_NAME);
 		
 		if ($inverse_relationship) {
 			$delete->where($delete->compare('guid_two', '=', $guid, ELGG_VALUE_GUID));
@@ -244,7 +241,7 @@ class RelationshipsTable {
 		}
 		
 		if (!empty($type)) {
-			$entity_sub = $delete->subquery('entities');
+			$entity_sub = $delete->subquery(EntityTable::TABLE_NAME);
 			$entity_sub->select('guid')
 			->where($delete->compare('type', '=', $type, ELGG_VALUE_STRING));
 			
@@ -274,7 +271,7 @@ class RelationshipsTable {
 	 * @return true
 	 */
 	protected function removeAllWithEvents(int $guid, string $relationship = '', bool $inverse_relationship = false, string $type = ''): bool {
-		$select = Select::fromTable('entity_relationships');
+		$select = Select::fromTable(self::TABLE_NAME);
 		$select->select('*');
 		
 		if ($inverse_relationship) {
@@ -288,9 +285,9 @@ class RelationshipsTable {
 		}
 		
 		if (!empty($type)) {
-			$entity_sub = $select->subquery('entities');
+			$entity_sub = $select->subquery(EntityTable::TABLE_NAME);
 			$entity_sub->select('guid')
-			->where($select->compare('type', '=', $type, ELGG_VALUE_STRING));
+				->where($select->compare('type', '=', $type, ELGG_VALUE_STRING));
 			
 			if (!$inverse_relationship) {
 				$select->andWhere($select->compare('guid_two', 'in', $entity_sub->getSQL()));
@@ -305,6 +302,10 @@ class RelationshipsTable {
 		
 		/* @var $rel \ElggRelationship */
 		foreach ($relationships as $rel) {
+			if (!$this->events->triggerBefore('delete', 'relationship', $rel)) {
+				continue;
+			}
+			
 			if (!$this->events->trigger('delete', 'relationship', $rel)) {
 				continue;
 			}
@@ -319,10 +320,19 @@ class RelationshipsTable {
 				continue;
 			}
 			
-			$delete = Delete::fromTable('entity_relationships');
+			$delete = Delete::fromTable(self::TABLE_NAME);
 			$delete->where($delete->compare('id', 'in', $chunk));
 			
 			$this->db->deleteData($delete);
+		}
+		
+		/* @var $rel \ElggRelationship */
+		foreach ($relationships as $rel) {
+			if (!in_array($rel->id, $remove_ids)) {
+				continue;
+			}
+			
+			$this->events->triggerAfter('delete', 'relationship', $rel);
 		}
 		
 		return true;
@@ -338,8 +348,8 @@ class RelationshipsTable {
 	 * @return \ElggEntity[]|int|boolean If count, int. If not count, array. false on errors.
 	 */
 	public function getEntitiesFromCount(array $options = []) {
-		$options['selects'][] = new SelectClause('COUNT(e.guid) AS total');
-		$options['group_by'][] = new GroupByClause('r.guid_two');
+		$options['selects'][] = new SelectClause('COUNT(' . EntityTable::DEFAULT_JOIN_ALIAS . '.guid) AS total');
+		$options['group_by'][] = new GroupByClause(self::DEFAULT_JOIN_ALIAS . '.guid_two');
 		$options['order_by'][] = new OrderByClause('total', 'desc');
 
 		return Entities::find($options);

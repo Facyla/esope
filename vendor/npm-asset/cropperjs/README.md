@@ -1,8 +1,8 @@
 # Cropper.js
 
-[![Downloads](https://img.shields.io/npm/dm/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Version](https://img.shields.io/npm/v/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/cropperjs.svg)](https://unpkg.com/cropperjs/dist/cropper.common.js)
+[![Downloads](https://img.shields.io/npm/dm/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Version](https://img.shields.io/npm/v/cropperjs.svg)](https://www.npmjs.com/package/cropperjs) [![Gzip Size](https://img.shields.io/bundlephobia/minzip/cropperjs.svg)](https://unpkg.com/cropperjs@1/dist/cropper.common.js)
 
-> JavaScript image cropper. This is the branch for v1.x, for v2.x, check out the [`v2`](https://github.com/fengyuanchen/cropperjs/tree/v2) branch.
+> JavaScript image cropper. This is the branch for v1.x. For v2.x, check out the [`main`](https://github.com/fengyuanchen/cropperjs/tree/main) branch.
 
 - [Website](https://fengyuanchen.github.io/cropperjs)
 - [Photo Editor](https://fengyuanchen.github.io/photo-editor) - An advanced example of Cropper.js.
@@ -11,7 +11,7 @@
 ## Table of contents
 
 - [Features](#features)
-- [Main](#main)
+- [Main Files](#main-files)
 - [Getting started](#getting-started)
 - [Options](#options)
 - [Methods](#methods)
@@ -33,7 +33,7 @@
 - Supports scaling (flipping)
 - Supports multiple croppers
 - Supports cropping on a canvas
-- Supports cropping an image on the browser-side by canvas
+- Supports cropping an image in the browser using a canvas
 - Supports translating Exif Orientation information
 - Cross-browser support
 
@@ -54,17 +54,17 @@ dist/
 ### Installation
 
 ```shell
-npm install cropperjs
+npm install cropperjs@1.x
 ```
 
 In browser:
 
 ```html
-<link  href="/path/to/cropper.css" rel="stylesheet">
+<link href="/path/to/cropper.css" rel="stylesheet">
 <script src="/path/to/cropper.js"></script>
 ```
 
-[cdnjs](https://github.com/cdnjs/cdnjs) provides CDN support for Cropper.js's CSS and JavaScript. You can find the links [here](https://cdnjs.com/libraries/cropperjs).
+[The cdnjs project](https://github.com/cdnjs/cdnjs) provides CDN support for Cropper.js's CSS and JavaScript. You can find the [Cropper.js CDN files](https://cdnjs.com/libraries/cropperjs).
 
 ### Usage
 
@@ -92,7 +92,7 @@ new Cropper(element[, options])
 ```
 
 ```css
-/* Ensure the size of the image fit the container perfectly */
+/* Make sure the size of the image fits perfectly into the container */
 img {
   display: block;
 
@@ -158,7 +158,7 @@ How to crop a square area in free ratio mode?
 ## Options
 
 You may set cropper options with `new Cropper(image, options)`.
-If you want to change the global default options, You may use `Cropper.setDefaults(options)`.
+If you want to change the global default options, you may use `Cropper.setDefaults(options)`.
 
 ### viewMode
 
@@ -168,7 +168,7 @@ If you want to change the global default options, You may use `Cropper.setDefaul
   - `0`: no restrictions
   - `1`: restrict the crop box not to exceed the size of the canvas.
   - `2`: restrict the minimum canvas size to fit within the container. If the proportions of the canvas and the container differ, the minimum canvas will be surrounded by extra space in one of the dimensions.
-  - `3`: restrict the minimum canvas size to fill fit the container. If the proportions of the canvas and the container are different, the container will not be able to fit the whole canvas in one of the dimensions.
+  - `3`: restrict the minimum canvas size to fill the container. If the proportions of the canvas and the container are different, the container will not be able to fit the whole canvas in one of the dimensions.
 
 Define the view mode of the cropper. If you set `viewMode` to `0`, the crop box can extend outside the canvas, while a value of `1`, `2`, or `3` will restrict the crop box to the size of the canvas. `viewMode` of `2` or `3` will additionally restrict the canvas to the container. There is no difference between `2` and `3` when the proportions of the canvas and the container are the same.
 
@@ -330,7 +330,7 @@ Enable to rotate the image.
 
 ### scalable
 
-- Type: `Boolean
+- Type: `Boolean`
 - Default: `true`
 
 Enable to scale the image.
@@ -824,6 +824,7 @@ Change the crop box position and size with new data.
     - `fillColor`: a color to fill any alpha values in the output canvas, the default value is the `transparent`.
     - [`imageSmoothingEnabled`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled): set to change if images are smoothed (`true`, default) or not (`false`).
     - [`imageSmoothingQuality`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/imageSmoothingQuality): set the quality of image smoothing, one of "low" (default), "medium", or "high".
+    - `rounded`: set `true` to use rounded values (the cropped area position and size data), the default value is `false`.
 
 - (return  value):
   - Type: `HTMLCanvasElement`
@@ -832,14 +833,13 @@ Change the crop box position and size with new data.
 - Notes:
   - The aspect ratio of the output canvas will be fitted to the aspect ratio of the crop box automatically.
   - If you intend to get a JPEG image from the output canvas, you should set the `fillColor` option first, if not, the transparent part in the JPEG image will become black by default.
-  - Uses the Browser's native [canvas.toBlob](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob) API to do the compression work, which means it is **lossy compression**. For better image quality, you can upload the original image and the cropped data to a server and do the crop work on the server.
 
 - Browser support:
   - Basic image: requires [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement) support ([IE 9+](https://caniuse.com/canvas)).
   - Rotated image: requires [CSS3 2D Transforms](https://developer.mozilla.org/en-US/docs/Web/CSS/transform) support ([IE 9+](https://caniuse.com/transforms2d)).
   - Cross-origin image: requires HTML5 [CORS settings attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes) support ([IE 11+](https://caniuse.com/cors)).
 
-Get a canvas drawn from the cropped image (lossy compression). If it is not cropped, then returns a canvas drawn the whole image.
+Get a canvas drawn from the cropped image. If it is not cropped, then returns a canvas drawn from the whole image. This method does not encode or compress the image; use the canvas's `toDataURL` or `toBlob` method to export it.
 
 > After then, you can display the canvas as an image directly, or use [HTMLCanvasElement.toDataURL](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL) to get a Data URL, or use [HTMLCanvasElement.toBlob](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob) to get a blob and upload it to server with [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) if the browser supports these APIs.
 
@@ -1065,10 +1065,11 @@ Maintained under the [Semantic Versioning guidelines](https://semver.org/).
 ## Related projects
 
 - [angular-cropperjs](https://github.com/matheusdavidson/angular-cropperjs) by [@matheusdavidson](https://github.com/matheusdavidson)
+- [blazor-cropperjs](https://github.com/CropperBlazor/Cropper.Blazor) by [@ColdForeign](https://github.com/ColdForeign), [@MaxymGorn](https://github.com/MaxymGorn)
 - [ember-cropperjs](https://github.com/danielthall/ember-cropperjs) by [@danielthall](https://github.com/danielthall)
 - [iron-cropper](https://github.com/safetychanger/iron-cropper) by [@safetychanger](https://github.com/safetychanger)
 - [react-cropper](https://github.com/react-cropper/react-cropper) by [@roadmanfong](https://github.com/roadmanfong)
 - [vue-cropperjs](https://github.com/Agontuk/vue-cropperjs) by [@Agontuk](https://github.com/Agontuk)
-- [blazor-cropperjs](https://github.com/CropperBlazor/Cropper.Blazor) by [@ColdForeign](https://github.com/ColdForeign), [@MaxymGorn](https://github.com/MaxymGorn)
+- [Symfony UX Cropper.js](https://github.com/symfony/ux-cropperjs) by [@symfony](https://github.com/symfony)
 
 [⬆ back to top](#table-of-contents)

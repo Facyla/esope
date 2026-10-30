@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * MIT License
@@ -16,7 +17,7 @@ class ChangeComment extends Action
      *
      * @var string|null
      */
-    protected $newComment;
+    protected ?string $newComment = null;
 
     /**
      * Constructor
@@ -24,7 +25,7 @@ class ChangeComment extends Action
      * @param \Phinx\Db\Table\Table $table The table to be changed
      * @param string|null $newComment The new comment for the table
      */
-    public function __construct(Table $table, $newComment)
+    public function __construct(Table $table, ?string $newComment)
     {
         parent::__construct($table);
         $this->newComment = $newComment;
@@ -35,7 +36,7 @@ class ChangeComment extends Action
      *
      * @return string|null
      */
-    public function getNewComment()
+    public function getNewComment(): ?string
     {
         return $this->newComment;
     }

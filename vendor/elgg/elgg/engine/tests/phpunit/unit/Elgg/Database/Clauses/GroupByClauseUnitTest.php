@@ -2,14 +2,12 @@
 
 namespace Elgg\Database\Clauses;
 
+use Elgg\Database\EntityTable;
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
 use Elgg\Helpers\Database\Clauses\CallableGroupBy;
 use Elgg\UnitTestCase;
 
-/**
- * @group QueryBuilder
- */
 class GroupByClauseUnitTest extends UnitTestCase {
 
 	/**
@@ -18,15 +16,17 @@ class GroupByClauseUnitTest extends UnitTestCase {
 	protected $qb;
 
 	public function up() {
-		$this->qb = Select::fromTable('entities', 'alias');
+		$this->qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$this->qb->select('*');
 	}
 
 	public function testBuildGroupByClauseFromString() {
+		$this->qb->groupBy("{$this->qb->getTableAlias()}.guid");
 
-		$this->qb->groupBy('alias.guid');
-
-		$query = new GroupByClause('alias.guid');
-		$qb = Select::fromTable('entities', 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$qb->select('*');
+		
+		$query = new GroupByClause("{$qb->getTableAlias()}.guid");
 		$qb->addClause($query);
 
 		$this->assertEquals($this->qb->getSQL(), $qb->getSQL());
@@ -34,14 +34,14 @@ class GroupByClauseUnitTest extends UnitTestCase {
 	}
 
 	public function testBuildGroupByClauseFromClosure() {
+		$this->qb->groupBy("{$this->qb->getTableAlias()}.guid");
 
-		$this->qb->groupBy('alias.guid');
-
-		$query = new GroupByClause(function(QueryBuilder $qb) {
-			return 'alias.guid';
+		$query = new GroupByClause(function(QueryBuilder $qb, $main_alias) {
+			return "{$main_alias}.guid";
 		});
 
-		$qb = Select::fromTable('entities', 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$qb->select('*');
 		$qb->addClause($query);
 
 		$this->assertEquals($this->qb->getSQL(), $qb->getSQL());
@@ -49,12 +49,12 @@ class GroupByClauseUnitTest extends UnitTestCase {
 	}
 	
 	public function testBuildGroupByClauseFromInvokableClass() {
-
-		$this->qb->groupBy('alias.guid');
+		$this->qb->groupBy("{$this->qb->getTableAlias()}.guid");
 
 		$query = new GroupByClause(CallableGroupBy::class);
 
-		$qb = Select::fromTable('entities', 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$qb->select('*');
 		$qb->addClause($query);
 
 		$this->assertEquals($this->qb->getSQL(), $qb->getSQL());
@@ -62,12 +62,12 @@ class GroupByClauseUnitTest extends UnitTestCase {
 	}
 	
 	public function testBuildGroupByClauseFromStaticClassFunction() {
-
-		$this->qb->groupBy('alias.guid');
+		$this->qb->groupBy("{$this->qb->getTableAlias()}.guid");
 
 		$query = new GroupByClause('\Elgg\Helpers\Database\Clauses\CallableGroupBy::callable');
 
-		$qb = Select::fromTable('entities', 'alias');
+		$qb = Select::fromTable(EntityTable::TABLE_NAME, 'alias');
+		$qb->select('*');
 		$qb->addClause($query);
 
 		$this->assertEquals($this->qb->getSQL(), $qb->getSQL());

@@ -171,6 +171,53 @@ interface TableSchemaInterface extends SchemaInterface
     public const TYPE_UUID = 'uuid';
 
     /**
+     * Native UUID column type
+     *
+     * @var string
+     */
+    public const TYPE_NATIVE_UUID = 'nativeuuid';
+
+    /**
+     * Geometry column type
+     *
+     * @var string
+     */
+    public const TYPE_GEOMETRY = 'geometry';
+
+    /**
+     * Point column type
+     *
+     * @var string
+     */
+    public const TYPE_POINT = 'point';
+
+    /**
+     * Linestring column type
+     *
+     * @var string
+     */
+    public const TYPE_LINESTRING = 'linestring';
+
+    /**
+     * Polgon column type
+     *
+     * @var string
+     */
+    public const TYPE_POLYGON = 'polygon';
+
+    /**
+     * Geospatial column types
+     *
+     * @var array
+     */
+    public const GEOSPATIAL_TYPES = [
+        self::TYPE_GEOMETRY,
+        self::TYPE_POINT,
+        self::TYPE_LINESTRING,
+        self::TYPE_POLYGON,
+    ];
+
+    /**
      * Check whether a table has an autoIncrement column defined.
      *
      * @return bool
@@ -217,7 +264,7 @@ interface TableSchemaInterface extends SchemaInterface
      * @return $this
      * @throws \Cake\Database\Exception\DatabaseException
      */
-    public function addIndex(string $name, $attrs);
+    public function addIndex(string $name, array|string $attrs);
 
     /**
      * Read information about an index based on name.
@@ -256,7 +303,7 @@ interface TableSchemaInterface extends SchemaInterface
      * @return $this
      * @throws \Cake\Database\Exception\DatabaseException
      */
-    public function addConstraint(string $name, $attrs);
+    public function addConstraint(string $name, array|string $attrs);
 
     /**
      * Read information about a constraint based on name.

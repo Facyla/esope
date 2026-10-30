@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @group UnitTests
- * @group ElggData
- */
 class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -12,7 +8,7 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 	 * @return \ElggRelationship
 	 */
 	protected function getRelationshipMock() {
-		return new \ElggRelationship(new stdClass());
+		return new \ElggRelationship();
 	}
 	
 	/**
@@ -24,12 +20,12 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 		$subject = $this->createUser();
 		$object = $this->createObject();
 		
-		$rel_id = _elgg_services()->relationshipsTable->add($subject->guid, 'foo', $object->guid, true);
-		if (empty($rel_id)) {
-			return false;
-		}
+		$relationship = new \ElggRelationship();
+		$relationship->guid_one = $subject->guid;
+		$relationship->relationship = 'foo';
+		$relationship->guid_two  = $object->guid;
 		
-		return elgg_get_relationship($rel_id);
+		return $relationship->save() ? $relationship : false;
 	}
 	
 	/**
@@ -42,15 +38,15 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($expected, $rel->$name);
 	}
 	
-	public function setterDataProvider() {
+	public static function setterDataProvider() {
 		return [
-			['id', 123, null],
+			['id', 123, 123],
 			['guid_one', 123, 123],
 			['guid_one', '123', 123],
 			['relationship', 'foo', 'foo'],
 			['guid_two', 123, 123],
 			['guid_two', '123', 123],
-			['time_created', time(), null],
+			['time_created', time(), time()],
 			['foo', 'bar', null],
 		];
 	}
@@ -93,7 +89,7 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testIsLoggable() {
-		$unsaved = new \ElggRelationship(new \stdClass());
+		$unsaved = new \ElggRelationship();
 		$this->assertEmpty($unsaved->getSystemLogID());
 		
 		$relationship = $this->createRelationship();
@@ -136,26 +132,23 @@ class ElggRelationshipUnitTest extends \Elgg\UnitTestCase {
 	/**
 	 * @dataProvider originalAttributesProvider
 	 */
-	public function testOriginalAttributesOnChange($name, $value, bool $should_change) {
+	public function testOriginalAttributesOnChange($name, $value) {
 		$relationship = $this->createRelationship();
 		
 		$relationship->$name = $value;
-		if ($should_change) {
-			$this->assertArrayHasKey($name, $relationship->getOriginalAttributes());
-		} else {
-			$this->assertEmpty($relationship->getOriginalAttributes());
-		}
+		
+		$this->assertArrayHasKey($name, $relationship->getOriginalAttributes());
 	}
 	
-	public function originalAttributesProvider() {
+	public static function originalAttributesProvider() {
 		return [
-			['id', 123, false],
-			['guid_one', 123, true],
-			['guid_one', '123', true],
-			['relationship', 'bar', true],
-			['guid_two', 123, true],
-			['guid_two', '123', true],
-			['time_created', time(), false],
+			['id', 123],
+			['guid_one', 123],
+			['guid_one', '123'],
+			['relationship', 'bar'],
+			['guid_two', 123],
+			['guid_two', '123'],
+			['time_created', time()],
 		];
 	}
 	
