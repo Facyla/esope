@@ -4,18 +4,14 @@ namespace Elgg\Mocks\Database;
 
 use Elgg\BaseTestCase;
 use Elgg\Database\Plugins as DbPlugins;
-use ElggPlugin;
 use Elgg\Testing;
 
-/**
- * @group Plugins
- */
 class Plugins extends DbPlugins {
 
 	use Testing;
 	
 	/**
-	 * @var ElggPlugin[]
+	 * @var \ElggPlugin[]
 	 */
 	protected $_plugins = [];
 
@@ -46,6 +42,7 @@ class Plugins extends DbPlugins {
 		'site_notifications',
 		'system_log',
 		'tagcloud',
+		'theme_sandbox',
 		'thewire',
 		'uservalidationbyemail',
 		'web_services',
@@ -76,7 +73,7 @@ class Plugins extends DbPlugins {
 
 	public function generateEntities(): bool {
 		parent::generateEntities();
-		$this->addTestingPlugin(ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/')));
+		$this->addTestingPlugin(\ElggPlugin::fromId('test_plugin', $this->normalizeTestFilePath('mod/')));
 		return true;
 	}
 
@@ -88,8 +85,7 @@ class Plugins extends DbPlugins {
 		return array_key_exists($plugin_id, $this->_plugins);
 	}
 
-	public function setPriority(ElggPlugin $plugin, int $priority): int|false {
-
+	public function setPriority(\ElggPlugin $plugin, int $priority): int|false {
 		$old_priority = $plugin->getPriority();
 
 		foreach ($this->find() as $sibling) {

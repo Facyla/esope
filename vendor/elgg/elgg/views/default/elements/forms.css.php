@@ -7,12 +7,11 @@
 /* ***************************************
 	Form Elements
 *************************************** */
-fieldset > div, .elgg-field {
-	margin-bottom: 1rem;
-}
-
-fieldset > div:last-child {
-	margin-bottom: 0;
+fieldset > div,
+.elgg-field {
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+	}
 }
 
 .elgg-form-alt > fieldset > .elgg-foot {
@@ -199,7 +198,8 @@ select:not([multiple]) {
 			flex-direction: column;
 			
 			&.elgg-field-stretch {
-				flex-basis: 100%;
+				flex-basis: 1%;
+				flex-grow: 1;
 				
 				> .elgg-field-input {
 					width: 100%;
@@ -219,6 +219,10 @@ select:not([multiple]) {
 				align-items: center;
 				display: flex;
 				flex-shrink: 0;
+			}
+			
+			&:last-child {
+				margin-right: 0;
 			}
 		}
 		
@@ -250,6 +254,6 @@ select:not([multiple]) {
 
 <?php
 echo elgg_view('elements/components/autocomplete.css', $vars);
-echo elgg_view('elements/components/userpicker.css', $vars);
 echo elgg_view('elements/components/datepicker.css', $vars);
+echo elgg_view('input/entitypicker.css', $vars);
 echo elgg_view('input/tags.css', $vars);

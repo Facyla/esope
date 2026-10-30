@@ -5,16 +5,11 @@ namespace Elgg\Database\Clauses;
 use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
 use Elgg\UnitTestCase;
-use ElggUser;
 
-/**
- * @group QueryBuilder
- * @group QueryBuilderWhere
- */
 class AccessWhereClauseUnitTest extends UnitTestCase {
 
 	/**
-	 * @var ElggUser
+	 * @var \ElggUser
 	 */
 	protected $user;
 
@@ -36,7 +31,6 @@ class AccessWhereClauseUnitTest extends UnitTestCase {
 	}
 
 	public function testCanBuildAccessSqlClausesWithIgnoredAccess() {
-
 		$parts = [];
 		$parts[] = $this->qb->expr()->eq('alias.enabled', ':qb1');
 		$this->qb->param('yes', ELGG_VALUE_STRING);
@@ -53,7 +47,6 @@ class AccessWhereClauseUnitTest extends UnitTestCase {
 	}
 
 	public function testCanBuildAccessSqlClausesWithIgnoredAccessWithoutDisabledEntities() {
-
 		$expected = null;
 
 		$query = new AccessWhereClause();
@@ -92,7 +85,6 @@ class AccessWhereClauseUnitTest extends UnitTestCase {
 	}
 
 	public function testCanBuildAccessSqlWithNoTableAlias() {
-
 		$parts = [];
 
 		$ors = $this->qb->merge([
@@ -138,7 +130,6 @@ class AccessWhereClauseUnitTest extends UnitTestCase {
 	}
 
 	public function testCanBuildAccessSqlForLoggedOutUser() {
-
 		$user = _elgg_services()->session_manager->getLoggedInUser();
 		_elgg_services()->session_manager->removeLoggedInUser();
 

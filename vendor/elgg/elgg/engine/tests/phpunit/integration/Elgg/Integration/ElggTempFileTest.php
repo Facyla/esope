@@ -4,13 +4,7 @@ namespace Elgg\Integration;
 
 use Elgg\Exceptions\Filesystem\IOException;
 use Elgg\IntegrationTestCase;
-use ElggTempFile;
 
-/**
- * Elgg Test Skeleton
- *
- * @group IntegrationTests
- */
 class ElggTempFileTest extends IntegrationTestCase {
 
 	/**
@@ -19,11 +13,10 @@ class ElggTempFileTest extends IntegrationTestCase {
 	protected $temp_file;
 	
 	public function up() {
-		$this->temp_file = new ElggTempFile();
+		$this->temp_file = new \ElggTempFile();
 	}
 
 	public function down() {
-		
 		if (isset($this->temp_file)) {
 			$this->temp_file->delete();
 			unset($this->temp_file);
@@ -31,17 +24,14 @@ class ElggTempFileTest extends IntegrationTestCase {
 	}
 
 	public function testInitialFilename() {
-		
 		$this->assertNotEmpty($this->temp_file->getFilename());
 	}
 	
 	public function testFilenameInSystemTempFolder() {
-		
 		$this->assertStringStartsWith(sys_get_temp_dir(), $this->temp_file->getFilenameOnFilestore());
 	}
 	
 	public function testWriteContent() {
-		
 		$temp_file = $this->temp_file;
 		
 		$this->assertTrue(is_resource($temp_file->open('write')));
@@ -52,7 +42,6 @@ class ElggTempFileTest extends IntegrationTestCase {
 	}
 	
 	public function testDeleteFile() {
-		
 		$temp_file = $this->temp_file;
 		
 		$this->assertTrue(is_resource($temp_file->open('write')));
@@ -67,15 +56,13 @@ class ElggTempFileTest extends IntegrationTestCase {
 	}
 	
 	public function testFilenameUniqueness() {
-		
-		$temp1 = new ElggTempFile();
-		$temp2 = new ElggTempFile();
+		$temp1 = new \ElggTempFile();
+		$temp2 = new \ElggTempFile();
 		
 		$this->assertNotEquals($temp1->getFilenameOnFilestore(), $temp2->getFilenameOnFilestore());
 	}
 	
 	public function testChangeFilename() {
-		
 		$temp_file = $this->temp_file;
 		
 		$initial_filename = $temp_file->getFilename();
@@ -95,7 +82,6 @@ class ElggTempFileTest extends IntegrationTestCase {
 	}
 	
 	public function testUnsupportedFunctions() {
-		
 		$temp_file = $this->temp_file;
 		
 		$user = $this->createUser();
@@ -113,7 +99,7 @@ class ElggTempFileTest extends IntegrationTestCase {
 	}
 	
 	public function testLibFunctionToGetTempFile() {
-		$this->assertInstanceOf(ElggTempFile::class, elgg_get_temp_file());
+		$this->assertInstanceOf(\ElggTempFile::class, elgg_get_temp_file());
 	}
 	
 	public function testTempFilestore() {

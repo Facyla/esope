@@ -8,11 +8,7 @@ use Elgg\Database\Insert;
 use Elgg\Database\MetadataTable as DbMetadataTabe;
 use Elgg\Database\Select;
 use Elgg\Database\Update;
-use ElggMetadata;
 
-/**
- * @group ElggMetadata
- */
 class MetadataTable extends DbMetadataTabe {
 
 	/**
@@ -34,7 +30,7 @@ class MetadataTable extends DbMetadataTabe {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function create(ElggMetadata $metadata, bool $allow_multiple = false): int|false {
+	public function create(\ElggMetadata $metadata, bool $allow_multiple = false): int|false {
 		if (!isset($metadata->value) || !isset($metadata->entity_guid)) {
 			elgg_log("Metadata must have a value and entity guid", 'ERROR');
 			return false;
@@ -104,7 +100,7 @@ class MetadataTable extends DbMetadataTabe {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function update(ElggMetadata $metadata): bool {
+	public function update(\ElggMetadata $metadata): bool {
 		if (!$this->entityTable->exists($metadata->entity_guid)) {
 			elgg_log("Can't updated metadata to a non-existing entity_guid", 'ERROR');
 			return false;
@@ -147,7 +143,6 @@ class MetadataTable extends DbMetadataTabe {
 	 * {@inheritdoc}
 	 */
 	public function getRowsForGuids(array $guids): array {
-		
 		$rows = [];
 		foreach ($this->rows as $row) {
 			if (in_array($row->entity_guid, $guids)) {
@@ -162,6 +157,7 @@ class MetadataTable extends DbMetadataTabe {
 	 * Clear query specs
 	 *
 	 * @param \stdClass $row Data row
+	 *
 	 * @return void
 	 */
 	protected function clearQuerySpecs(\stdClass $row) {
@@ -181,7 +177,6 @@ class MetadataTable extends DbMetadataTabe {
 	 * @return void
 	 */
 	protected function addQuerySpecs(\stdClass $row) {
-
 		$this->clearQuerySpecs($row);
 
 		$qb = Select::fromTable('metadata');

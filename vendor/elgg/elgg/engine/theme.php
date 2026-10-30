@@ -6,7 +6,7 @@
 
 return [
 	// layout and shell
-	'body-background-color' => '#FFF',
+	'body-background-color' => '#FFFFFF',
 	'walled-garden-background-image' => 'graphics/walled_garden.jpg',
 	
 	// Typography
@@ -25,7 +25,6 @@ return [
 	'h5-font-size' => '0.9rem',
 	'h6-font-size' => '0.8rem',
 	
-
 	// element colors
 	'text-color-soft' => '#969696',
 	'text-color-mild' => '#7d7d7d',

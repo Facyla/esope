@@ -13,8 +13,37 @@ define(['jquery', 'elgg'], function ($, elgg) {
 		}
 	});
 
+	$(document).on('click', '.elgg-toggle-comment', function (event) {
+		var $anchor = $(this);
+		var comment_guid = $anchor.data().loadComment;
+		
+		var $placeholder = $('div[data-comments-placeholder=' + comment_guid + ']');
+		if (!$placeholder.is(':empty')) {
+			$placeholder.slideToggle('medium');
+			return;
+		}
+		
+		require(['elgg/Ajax', 'elgg/toggle'], function(Ajax) {
+			var ajax = new Ajax();
+				
+			ajax.form('comment/save', {
+				data: {
+					guid: comment_guid
+				},
+				success: function(result) {
+					$placeholder
+						.html(result)
+						.slideToggle('medium')
+						.find('textarea, [contenteditable]').filter(':visible').first().focus();
+				}
+			});
+		});
+	});
+
 	$(document).on('submit', '.elgg-form-comment-save', function (event) {
 		var $form = $(this);
+		
+		$form.find('.elgg-button-submit').prop('disabled', true);
 
 		require(['elgg/Ajax'], function(Ajax) {
 			var ajax = new Ajax();
@@ -39,6 +68,7 @@ define(['jquery', 'elgg'], function ($, elgg) {
 					}
 					
 					if (!$container.length) {
+						$form.find('.elgg-button-submit').prop('disabled', true);
 						return;
 					}
 
@@ -75,8 +105,14 @@ define(['jquery', 'elgg'], function ($, elgg) {
 							$comment[0].scrollIntoView({behavior: 'smooth'});
 		
 							fix_pagination($container);
+						},
+						error: function() {
+							$form.find('.elgg-button-submit').prop('disabled', false);
 						}
 					});
+				},
+				error: function () {
+					$form.find('.elgg-button-submit').prop('disabled', false);
 				}
 			});
 		});
@@ -95,7 +131,7 @@ define(['jquery', 'elgg'], function ($, elgg) {
 		// store object as data in the edit link
 		var dc = $(this).data('Comment');
 		if (!dc) {
-			var guid = this.href.split('/').pop();
+			var guid = $(this).data().commentGuid;
 			dc = new Comment(guid, $trigger.closest('.elgg-item-object-comment'));
 			$(this).data('Comment', dc);
 		}
@@ -132,6 +168,8 @@ define(['jquery', 'elgg'], function ($, elgg) {
 		showForm: function () {
 			this.getForm().toggleClass('hidden');
 			this.getForm().prev().toggleClass('hidden');
+			
+			this.getForm().find('textarea, [contenteditable]').filter(':visible').first().focus();
 		},
 
 		loadForm: function () {
@@ -167,7 +205,8 @@ define(['jquery', 'elgg'], function ($, elgg) {
 
 		submitForm: function () {
 			var $form = this.getForm();
-
+			$form.find('.elgg-button-submit').prop('disabled', true);
+			
 			require(['elgg/Ajax'], function(Ajax) {
 				var ajax = new Ajax();
 				
@@ -178,6 +217,9 @@ define(['jquery', 'elgg'], function ($, elgg) {
 							// Update list item content
 							$form.closest('.elgg-item-object-comment').html(result.output);
 						}
+					},
+					error: function() {
+						$form.find('.elgg-button-submit').prop('disabled', false);
 					}
 				});
 			});

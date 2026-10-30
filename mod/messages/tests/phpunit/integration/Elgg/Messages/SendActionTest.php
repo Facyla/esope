@@ -7,10 +7,6 @@ use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
 use Laminas\Mail\Message;
 
-/**
- * @group Actions
- * @group MessagesPlugin
- */
 class SendActionTest extends ActionResponseTestCase {
 
 	public function up() {
@@ -141,7 +137,7 @@ class SendActionTest extends ActionResponseTestCase {
 
 		$this->assertInstanceOf(OkResponse::class, $response);
 
-		$this->assertSystemMessageEmitted(elgg_echo('messages:posted', [], $user->language));
+		$this->assertSystemMessageEmitted(elgg_echo('messages:posted', [], $user->getLanguage()));
 		$this->assertEquals(elgg_generate_url('collection:object:messages:owner', ['username' => $user->username]), $response->getForwardURL());
 
 		elgg_call(ELGG_IGNORE_ACCESS, function () use ($response) {
@@ -159,7 +155,7 @@ class SendActionTest extends ActionResponseTestCase {
 
 		$this->assertInstanceOf(Message::class, $notification);
 
-		$expected_subject = elgg_echo('messages:email:subject', [], $recipient->language);
+		$expected_subject = elgg_echo('messages:email:subject', [], $recipient->getLanguage());
 		$expected_body = elgg_echo('messages:email:body', [
 			$user->getDisplayName(),
 			'Message Body',
@@ -171,7 +167,7 @@ class SendActionTest extends ActionResponseTestCase {
 				'send_to' => $user->guid,
 			]),
 		],
-			$recipient->language
+			$recipient->getLanguage()
 		);
 
 		$plain_text_part = null;

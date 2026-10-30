@@ -3,11 +3,7 @@
 namespace Elgg\Integration;
 
 use Elgg\IntegrationTestCase;
-use ElggBatch;
 
-/**
- * @group IntegrationTests
- */
 class ElggBatchTest extends IntegrationTestCase {
 
 	// see https://github.com/elgg/elgg/issues/4288
@@ -17,7 +13,7 @@ class ElggBatchTest extends IntegrationTestCase {
 			'offset' => 0,
 			'limit' => 11,
 		];
-		$batch = new ElggBatch([
+		$batch = new \ElggBatch([
 			ElggBatchTest::class,
 			'elgg_batch_callback_test'
 		], $options,
@@ -38,7 +34,7 @@ class ElggBatchTest extends IntegrationTestCase {
 			'offset' => 0,
 			'limit' => 11
 		];
-		$batch = new ElggBatch([
+		$batch = new \ElggBatch([
 			ElggBatchTest::class,
 			'elgg_batch_callback_test'
 		], $options,
@@ -60,7 +56,7 @@ class ElggBatchTest extends IntegrationTestCase {
 			'offset' => 3,
 			'limit' => 11
 		];
-		$batch = new ElggBatch([
+		$batch = new \ElggBatch([
 			ElggBatchTest::class,
 			'elgg_batch_callback_test'
 		], $options,
@@ -91,14 +87,13 @@ class ElggBatchTest extends IntegrationTestCase {
 			'count' => false,
 		];
 
-		$count1 = count(new ElggBatch($getter, $options));
+		$count1 = count(new \ElggBatch($getter, $options));
 		$count2 = $getter(array_merge($options, ['count' => true]));
 
 		$this->assertEquals($count1, $count2);
 	}
 
 	public function testCanGetBatchFromAnEntityGetter() {
-
 		$subtype ='testCanGetBatchFromAnEntityGetter';
 		for ($i = 1; $i <= 5; $i++) {
 			$this->createObject([
@@ -120,7 +115,7 @@ class ElggBatchTest extends IntegrationTestCase {
 		$batch = elgg_get_entities(array_merge($options, ['batch' => true]));
 
 		$this->assertInstanceOf(\ElggBatch::class, $batch);
-		/* @var ElggBatch $batch */
+		/* @var \ElggBatch $batch */
 
 		$guids2 = [];
 		foreach ($batch as $val) {

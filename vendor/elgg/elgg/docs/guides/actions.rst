@@ -378,6 +378,8 @@ Elgg offers some helper input types
 * ``input/captcha`` - placeholder view for plugins to extend
 * ``input/friendspicker`` - renders an Elgg friend autocomplete
 * ``input/userpicker`` - renders an Elgg user autocomplete
+* ``input/grouppicker`` - renders an Elgg group autocomplete
+* ``input/objectpicker`` - renders an Elgg object autocomplete
 * ``input/location`` renders an Elgg location input
 
 Files and images
@@ -471,7 +473,7 @@ The basic flow of using sticky forms is:
 
 * ``sticky_enabled``: a ``bool`` to enable automatic sticky form support
 * ``sticky_form_name``: an optional ``string`` to set where the sticky form values are saved. This defaults to the ``$action_name`` and should only be changed if the ``$action_name`` is different from the actual action
-* ``sticky_ignored_fields: an ``array`` with the names fo the form fields that should be saved. For example password fields
+* ``sticky_ignored_fields``: an ``array`` with the names fo the form fields that should be saved. For example password fields
 
 Example: User registration
 --------------------------

@@ -61,14 +61,17 @@ class DatabaseSeedCommand extends Command {
 		}
 
 		_elgg_services()->set('mailer', new \Laminas\Mail\Transport\InMemory());
+		_elgg_services()->events->registerHandler('enqueue', 'notification', '\Elgg\Values::getFalse', 99999);
 
 		$options = [
-			'limit' => (int) $this->option('limit') ?: 20,
+			'limit' => $this->option('limit'),
 			'image_folder' => $this->option('image_folder'),
 			'type' => $this->option('type'),
 			'create_since' => $this->option('create_since'),
 			'create_until' => $this->option('create_until'),
 			'create' => (bool) $this->argument('create'),
+			'interactive' => !(bool) $this->option('no-interaction'),
+			'cli_command' => $this,
 		];
 		
 		try {

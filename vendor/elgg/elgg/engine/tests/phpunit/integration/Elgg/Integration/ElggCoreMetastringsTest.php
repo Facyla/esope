@@ -4,15 +4,7 @@ namespace Elgg\Integration;
 
 use Elgg\Database\Select;
 use Elgg\IntegrationTestCase;
-use ElggAnnotation;
 
-/**
- * Elgg Metastrings test
- *
- * @group IntegrationTests
- * @group Metadata
- * @group Annotations
- */
 class ElggCoreMetastringsTest extends IntegrationTestCase {
 
 	protected array $metastringTypes = [
@@ -199,7 +191,6 @@ class ElggCoreMetastringsTest extends IntegrationTestCase {
 	}
 
 	public function testGetMetastringObjectFromIDWithDisabledAnnotation() {
-
 		$name = 'test_annotation_name' . rand();
 		$value = 'test_annotation_value' . rand();
 
@@ -210,7 +201,7 @@ class ElggCoreMetastringsTest extends IntegrationTestCase {
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($id) {
 			$annotation = elgg_get_annotation_from_id($id);
 	
-			$this->assertInstanceOf(ElggAnnotation::class, $annotation);
+			$this->assertInstanceOf(\ElggAnnotation::class, $annotation);
 	
 			$this->assertTrue($annotation->disable());
 
@@ -295,7 +286,6 @@ class ElggCoreMetastringsTest extends IntegrationTestCase {
 	public function testDeleteAllMetadataWithInvalidGUID() {
 		$options = [
 			'limit' => 10,
-			'guid' => ELGG_ENTITIES_ANY_VALUE,
 			'guids' => false,
 			'metadata_name' => ELGG_ENTITIES_ANY_VALUE,
 			'metadata_names' => false,

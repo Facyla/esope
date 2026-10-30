@@ -401,6 +401,12 @@ class EntityIconService {
 			if (!_elgg_services()->imageService->resize($source, $destination, $resize_params)) {
 				$this->getLogger()->error("Failed to create {$size} icon from
 					{$file->getFilenameOnFilestore()} with coords [{$x1}, {$y1}],[{$x2}, {$y2}]");
+				
+				if ($size !== 'master') {
+					// remove 0 byte icon in order to retry the resize on the next request
+					$icon->delete();
+				}
+				
 				return false;
 			}
 		}
@@ -491,9 +497,10 @@ class EntityIconService {
 	 *
 	 * @return bool
 	 */
-	public function deleteIcon(\ElggEntity $entity, $type = 'icon', $retain_master = false) {
+	public function deleteIcon(\ElggEntity $entity, string $type = 'icon', bool $retain_master = false): bool {
 		$delete = $this->events->triggerResults("entity:{$type}:delete", $entity->getType(), [
 			'entity' => $entity,
+			'retain_master' => $retain_master, // just removing thumbs or everything?
 		], true);
 
 		if ($delete === false) {

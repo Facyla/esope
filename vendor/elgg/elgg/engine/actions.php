@@ -8,6 +8,7 @@ return [
 	'admin/plugins/deactivate' => ['access' => 'admin'],
 	'admin/plugins/deactivate_all' => ['access' => 'admin'],
 	'admin/plugins/set_priority' => ['access' => 'admin'],
+	'admin/security/security_txt' => ['access' => 'admin'],
 	'admin/security/settings' => ['access' => 'admin'],
 	'admin/security/regenerate_site_secret' => ['access' => 'admin'],
 	'admin/site/cache/invalidate' => ['access' => 'admin'],
@@ -15,6 +16,7 @@ return [
 	'admin/site/icons' => ['access' => 'admin'],
 	'admin/site/set_maintenance_mode' => ['access' => 'admin'],
 	'admin/site/set_robots' => ['access' => 'admin'],
+	'admin/site/theme' => ['access' => 'admin'],
 	'admin/site/unlock_upgrade' => ['access' => 'admin'],
 	'admin/site/settings' => ['access' => 'admin'],
 	'admin/upgrade' => ['access' => 'admin'],
@@ -48,6 +50,12 @@ return [
 	'plugins/settings/remove' => ['access' => 'admin'],
 	'plugins/settings/save' => ['access' => 'admin'],
 	'plugins/usersettings/save' => [],
+	'register' => [
+		'access' => 'logged_out',
+		'middleware' => [
+			\Elgg\Router\Middleware\RegistrationAllowedGatekeeper::class,
+		],
+	],
 	'river/delete' => [],
 	'settings/notifications' => [],
 	'settings/notifications/subscriptions' => [],

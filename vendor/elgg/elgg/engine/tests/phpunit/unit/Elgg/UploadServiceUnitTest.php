@@ -2,13 +2,8 @@
 
 namespace Elgg;
 
-use ElggFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * @group UploadService
- * @group UnitTests
- */
 class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 
 	/**
@@ -58,8 +53,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanGetUploadedFile() {
-
-		$tmp = new ElggFile();
+		$tmp = new \ElggFile();
 		$tmp->owner_guid = $this->owner_guid;
 		$tmp->setFilename('tmp.gif');
 		$tmp->open('write');
@@ -82,8 +76,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanGetUploadedFileByIndex() {
-
-		$tmp = new ElggFile();
+		$tmp = new \ElggFile();
 		$tmp->owner_guid = $this->owner_guid;
 		$tmp->setFilename('tmp.gif');
 		$tmp->open('write');
@@ -93,7 +86,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 		$tmp_gif = $tmp->getFilenameOnFilestore();
 
 
-		$tmp = new ElggFile();
+		$tmp = new \ElggFile();
 		$tmp->owner_guid = $this->owner_guid;
 		$tmp->setFilename('tmp.png');
 		$tmp->open('write');
@@ -129,8 +122,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanAcceptUploadedFile() {
-
-		$tmp = new ElggFile();
+		$tmp = new \ElggFile();
 		$tmp->owner_guid = $this->owner_guid;
 		$tmp->setFilename('tmp.gif');
 		$tmp->open('write');
@@ -146,7 +138,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 
 		_elgg_services()->request->files->set('upload', $upload);
 
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = $this->owner_guid;
 
 		$uploaded_files = _elgg_services()->uploads->getFiles('upload');
@@ -163,8 +155,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanFilterUploadAction() {
-
-		$tmp = new ElggFile();
+		$tmp = new \ElggFile();
 		$tmp->owner_guid = $this->owner_guid;
 		$tmp->setFilename('tmp.gif');
 		$tmp->open('write');
@@ -179,7 +170,7 @@ class UploadServiceUnitTest extends \Elgg\UnitTestCase {
 
 		_elgg_services()->request->files->set('upload', $upload);
 
-		$file = new ElggFile();
+		$file = new \ElggFile();
 		$file->owner_guid = $this->owner_guid;
 
 		$uploaded_files = _elgg_services()->uploads->getFiles('upload');
