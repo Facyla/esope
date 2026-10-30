@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675
+class ComposerStaticInit0246ccee1007dbc4b10c793268941f5d
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -453,6 +453,7 @@ class ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'CURLStringFile' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
         'Cake\\Core\\App' => __DIR__ . '/..' . '/cakephp/core/App.php',
         'Cake\\Core\\BasePlugin' => __DIR__ . '/..' . '/cakephp/core/BasePlugin.php',
         'Cake\\Core\\ClassLoader' => __DIR__ . '/..' . '/cakephp/core/ClassLoader.php',
@@ -528,6 +529,10 @@ class ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675
         'Cake\\Database\\PostgresCompiler' => __DIR__ . '/..' . '/cakephp/database/PostgresCompiler.php',
         'Cake\\Database\\Query' => __DIR__ . '/..' . '/cakephp/database/Query.php',
         'Cake\\Database\\QueryCompiler' => __DIR__ . '/..' . '/cakephp/database/QueryCompiler.php',
+        'Cake\\Database\\Query\\DeleteQuery' => __DIR__ . '/..' . '/cakephp/database/Query/DeleteQuery.php',
+        'Cake\\Database\\Query\\InsertQuery' => __DIR__ . '/..' . '/cakephp/database/Query/InsertQuery.php',
+        'Cake\\Database\\Query\\SelectQuery' => __DIR__ . '/..' . '/cakephp/database/Query/SelectQuery.php',
+        'Cake\\Database\\Query\\UpdateQuery' => __DIR__ . '/..' . '/cakephp/database/Query/UpdateQuery.php',
         'Cake\\Database\\Retry\\ErrorCodeWaitStrategy' => __DIR__ . '/..' . '/cakephp/database/Retry/ErrorCodeWaitStrategy.php',
         'Cake\\Database\\Retry\\ReconnectStrategy' => __DIR__ . '/..' . '/cakephp/database/Retry/ReconnectStrategy.php',
         'Cake\\Database\\SchemaCache' => __DIR__ . '/..' . '/cakephp/database/SchemaCache.php',
@@ -2694,6 +2699,7 @@ class ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675
         'League\\Flysystem\\Visibility' => __DIR__ . '/..' . '/league/flysystem/src/Visibility.php',
         'League\\Flysystem\\WhitespacePathNormalizer' => __DIR__ . '/..' . '/league/flysystem/src/WhitespacePathNormalizer.php',
         'League\\MimeTypeDetection\\EmptyExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/EmptyExtensionToMimeTypeMap.php',
+        'League\\MimeTypeDetection\\ExtensionLookup' => __DIR__ . '/..' . '/league/mime-type-detection/src/ExtensionLookup.php',
         'League\\MimeTypeDetection\\ExtensionMimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/ExtensionMimeTypeDetector.php',
         'League\\MimeTypeDetection\\ExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/ExtensionToMimeTypeMap.php',
         'League\\MimeTypeDetection\\FinfoMimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/FinfoMimeTypeDetector.php',
@@ -3708,10 +3714,10 @@ class ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit0ea654ff0fd57e135f4f8423c75c4675::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0246ccee1007dbc4b10c793268941f5d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0246ccee1007dbc4b10c793268941f5d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit0246ccee1007dbc4b10c793268941f5d::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit0246ccee1007dbc4b10c793268941f5d::$classMap;
 
         }, null, ClassLoader::class);
     }

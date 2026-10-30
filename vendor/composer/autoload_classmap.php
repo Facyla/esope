@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'CURLStringFile' => $vendorDir . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
     'Cake\\Core\\App' => $vendorDir . '/cakephp/core/App.php',
     'Cake\\Core\\BasePlugin' => $vendorDir . '/cakephp/core/BasePlugin.php',
     'Cake\\Core\\ClassLoader' => $vendorDir . '/cakephp/core/ClassLoader.php',
@@ -82,6 +83,10 @@ return array(
     'Cake\\Database\\PostgresCompiler' => $vendorDir . '/cakephp/database/PostgresCompiler.php',
     'Cake\\Database\\Query' => $vendorDir . '/cakephp/database/Query.php',
     'Cake\\Database\\QueryCompiler' => $vendorDir . '/cakephp/database/QueryCompiler.php',
+    'Cake\\Database\\Query\\DeleteQuery' => $vendorDir . '/cakephp/database/Query/DeleteQuery.php',
+    'Cake\\Database\\Query\\InsertQuery' => $vendorDir . '/cakephp/database/Query/InsertQuery.php',
+    'Cake\\Database\\Query\\SelectQuery' => $vendorDir . '/cakephp/database/Query/SelectQuery.php',
+    'Cake\\Database\\Query\\UpdateQuery' => $vendorDir . '/cakephp/database/Query/UpdateQuery.php',
     'Cake\\Database\\Retry\\ErrorCodeWaitStrategy' => $vendorDir . '/cakephp/database/Retry/ErrorCodeWaitStrategy.php',
     'Cake\\Database\\Retry\\ReconnectStrategy' => $vendorDir . '/cakephp/database/Retry/ReconnectStrategy.php',
     'Cake\\Database\\SchemaCache' => $vendorDir . '/cakephp/database/SchemaCache.php',
@@ -2248,6 +2253,7 @@ return array(
     'League\\Flysystem\\Visibility' => $vendorDir . '/league/flysystem/src/Visibility.php',
     'League\\Flysystem\\WhitespacePathNormalizer' => $vendorDir . '/league/flysystem/src/WhitespacePathNormalizer.php',
     'League\\MimeTypeDetection\\EmptyExtensionToMimeTypeMap' => $vendorDir . '/league/mime-type-detection/src/EmptyExtensionToMimeTypeMap.php',
+    'League\\MimeTypeDetection\\ExtensionLookup' => $vendorDir . '/league/mime-type-detection/src/ExtensionLookup.php',
     'League\\MimeTypeDetection\\ExtensionMimeTypeDetector' => $vendorDir . '/league/mime-type-detection/src/ExtensionMimeTypeDetector.php',
     'League\\MimeTypeDetection\\ExtensionToMimeTypeMap' => $vendorDir . '/league/mime-type-detection/src/ExtensionToMimeTypeMap.php',
     'League\\MimeTypeDetection\\FinfoMimeTypeDetector' => $vendorDir . '/league/mime-type-detection/src/FinfoMimeTypeDetector.php',
