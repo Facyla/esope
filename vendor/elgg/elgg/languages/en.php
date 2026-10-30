@@ -436,7 +436,6 @@ To see the full post, click on the link below:
 
 	'adduser:ok' => "You have successfully added a new user.",
 	
-	'user:set:name' => "Account name settings",
 	'user:name:label' => "Display name",
 	'user:name:success' => "Successfully changed display name on the system.",
 	'user:name:fail' => "Could not change display name on the system.",
@@ -454,8 +453,11 @@ To see the full post, click on the link below:
 	'user:delete:title' => 'Confirm account deletion',
 	'user:delete:description' => 'Please confirm that you wish to delete the account of %s. Deleting the account will also delete all content (including groups) owned by this user. This might also include related content such as group content, subpages or comments on the content. Below you can view a list of content owned by the user.',
 	'user:delete:confirm' => "I hereby confirm I want to delete this user",
-
-	'user:set:language' => "Language settings",
+	
+	'user:color_scheme:label' => "Color scheme",
+	'user:color_scheme:browser' => "Browser preference",
+	'user:color_scheme:success' => "Color scheme has been updated.",
+	
 	'user:language:label' => "Language",
 	'user:language:success' => "Language settings have been updated.",
 
@@ -503,7 +505,6 @@ To see the full post, click on the link below:
 	'admin:configuration:success' => "Your settings have been saved.",
 	'admin:configuration:fail' => "Your settings could not be saved.",
 	'admin:configuration:dataroot:relative_path' => 'Cannot set "%s" as the dataroot because it is not an absolute path.',
-	'admin:configuration:default_limit' => 'The number of items per page must be at least 1.',
 
 	'admin:unknown_section' => 'Invalid Admin Section.',
 
@@ -975,7 +976,6 @@ See the full list of users here:
 	'admin:server:label:server' => 'Server',
 	'admin:server:label:log_location' => 'Log Location',
 	'admin:server:label:php_version' => 'PHP version',
-	'admin:server:label:php_version:required' => 'Elgg requires a minimal PHP version of 7.1',
 	'admin:server:label:php_version:required_version' => 'Elgg requires a minimal PHP version of %s',
 	'admin:server:label:php_ini' => 'PHP ini file location',
 	'admin:server:label:php_log' => 'PHP Log',
@@ -985,13 +985,6 @@ See the full list of users here:
 	'admin:server:label:post_max_size' => 'POST maximum size',
 	'admin:server:label:upload_max_filesize' => 'Upload maximum size',
 	'admin:server:warning:post_max_too_small' => '(Note: post_max_size must be larger than this value to support uploads of this size)',
-	'admin:server:label:memcache' => 'Memcache',
-	'admin:server:memcache:inactive' => 'Memcache is not setup on this server or it has not yet been configured in Elgg config.
-For improved performance, it is recommended that you enable and configure memcache (or redis).',
-
-	'admin:server:label:redis' => 'Redis',
-	'admin:server:redis:inactive' => 'Redis is not setup on this server or it has not yet been configured in Elgg config.
-For improved performance, it is recommended that you enable and configure redis (or memcache).',
 
 	'admin:server:label:opcache' => 'OPcache',
 	'admin:server:opcache:inactive' => 'OPcache is not available on this server or it has not yet been enabled.
@@ -1004,7 +997,7 @@ For improved performance, it is recommended that you enable and configure OPcach
 	'admin:server:requirements:rewrite:fail' => "Check your .htaccess for the correct rewrite rules",
 	
 	'admin:server:requirements:database:server' => "Database server",
-	'admin:server:requirements:database:server:required_version' => "Elgg requires MySQL v%s or higher for its database",
+	'admin:server:requirements:database:server:required_version' => "Elgg requires MariaDB v%s or higher for its database",
 	'admin:server:requirements:database:client' => "Database client",
 	'admin:server:requirements:database:client:required' => "Elgg requires pdo_mysql to connect to the database server",
 
@@ -1291,6 +1284,9 @@ For improved performance, it is recommended that you enable and configure OPcach
 	'title' => "Title",
 	'description' => "Description",
 	'tags' => "Tags",
+	'url' => "URL",
+	'website' => "Website",
+	
 	'all' => "All",
 	'mine' => "Mine",
 
@@ -1557,6 +1553,8 @@ Once you have logged in, we highly recommend that you change your password.',
 	'config:delayed_email:help' => "Offer users delayed email notifications to bundle notifications received in a period (daily, weekly)",
 	'config:message_delay:label' => "System message delay",
 	'config:message_delay:help' => "Default number of seconds before a success message disappears",
+	'config:color_schemes_enabled:label' => "Color schemes enabled",
+	'config:color_schemes_enabled:help' => "Based on a user or browser preference the theme can be switched to different color schemes like a dark mode",
 
 	'upgrading' => 'Upgrading...',
 	'upgrade:core' => 'Your Elgg installation was upgraded.',
@@ -1667,7 +1665,6 @@ If you didn't request this change, please contact a site administrator.
 	'default_access:settings' => "Your default access level",
 	'default_access:label' => "Default access",
 	'user:default_access:success' => "Your new default access level was saved.",
-	'user:default_access:failure' => "Your new default access level could not be saved.",
 
 /**
  * Comments
@@ -1835,6 +1832,13 @@ Global variables:
 	'trash:restore:group' => "Search for a group",
 	'trash:restore:group:help' => "Make sure the selected group has the feature active for the item or an error may occur.",
 	'trash:restore:owner' => "Restore to the owner (%s)",
+	'trash:restore:unknown' => "Because the original group for this content has been removed and no new destination could be found, recovery is not possible.",
+
+/**
+ * Color schemes
+ */
+	'color_scheme:default' => "Default (Light)",
+	'color_scheme:dark' => "Dark",
 
 /**
  * Miscellaneous

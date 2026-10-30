@@ -7,10 +7,10 @@ use Elgg\UnitTestCase;
 class PasswordGeneratorServiceUnitTest extends UnitTestCase {
 	
 	public function testGeneratePasswordWithSufficientLength() {
-		$password = _elgg_services()->passwordGenerator->generatePassword(12);
+		$password = _elgg_services()->passwordGenerator->generatePassword(22);
 		
 		$this->assertIsString($password);
-		$this->assertEquals(12, strlen($password));
+		$this->assertEquals(22, strlen($password));
 	}
 	
 	public function testGeneratePasswordWithInsufficientLength() {
@@ -23,12 +23,11 @@ class PasswordGeneratorServiceUnitTest extends UnitTestCase {
 	}
 	
 	public function testGeneratorGeneratesValidPassword() {
-		
 		$service = _elgg_services()->passwordGenerator;
 		
 		$password = $service->generatePassword();
 		
 		$this->assertTrue($service->isValidPassword($password));
-		$this->assertNull($service->assertValidPassword($password));
+		$service->assertValidPassword($password);
 	}
 }

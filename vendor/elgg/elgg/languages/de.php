@@ -373,7 +373,6 @@ return array(
 
 	'adduser:ok' => "Es wurde ein neuer Benutzer hinzugefügt.",
 	
-	'user:set:name' => "Benutzernamen-Einstellungen",
 	'user:name:label' => "Name",
 	'user:name:success' => "Dein auf der Seite angezeigter Name wurde geändert.",
 	'user:name:fail' => "Die Änderung Deines Namens konnte nicht gespeichert werden.",
@@ -387,8 +386,7 @@ return array(
 	'user:password:success' => "Das Passwort wurde geändert.",
 	'user:changepassword:unknown_user' => 'Unbekannter Benutzername.',
 	'user:changepassword:change_password_confirm' => 'Dein Passwort wird nun geändert.',
-
-	'user:set:language' => "Sprache der Community-Seite",
+	
 	'user:language:label' => "Deine Sprache",
 	'user:language:success' => "Deine Spracheinstellung wurde aktualisiert.",
 
@@ -436,7 +434,6 @@ return array(
 	'admin:configuration:success' => "Deine Einstellungen wurden gespeichert.",
 	'admin:configuration:fail' => "Deine Einstellungen konnten nicht gespeichert werden.",
 	'admin:configuration:dataroot:relative_path' => 'Der Pfad "%s" ist als Pfad zum Datenverzeichnis nicht zulässig, da es kein absoluter Pfad ist.',
-	'admin:configuration:default_limit' => 'Die Anzahl der Einträge pro Seite muss mindestens 1 sein.',
 
 	'admin:unknown_section' => 'Unbekannter Adminbereich.',
 
@@ -829,7 +826,6 @@ Siehe die vollständige Liste dieser Benutzer hier:
 	'admin:server:label:server' => 'Server',
 	'admin:server:label:log_location' => 'Speicherort des Logs',
 	'admin:server:label:php_version' => 'PHP-Version',
-	'admin:server:label:php_version:required' => 'Elgg setzt mindestens Version 7.1 von PHP voraus.',
 	'admin:server:label:php_ini' => 'Speicherort der php.ini-Datei',
 	'admin:server:label:php_log' => 'Speicherort des PHP-Logs',
 	'admin:server:label:mem_avail' => 'Verfügbarer Hauptspeicher',
@@ -838,9 +834,6 @@ Siehe die vollständige Liste dieser Benutzer hier:
 	'admin:server:label:post_max_size' => 'PHP-Einstellung von post_max_size',
 	'admin:server:label:upload_max_filesize' => 'PHP-Einstellung von upload_max_filesize',
 	'admin:server:warning:post_max_too_small' => '(Bemerkung: Der Wert von post_max_size muss größer als dieser Wert sein, damit Uploads dieser Größe möglich sind)',
-	'admin:server:label:memcache' => 'Memcache',
-
-	'admin:server:label:redis' => 'Redis',
 
 	'admin:server:label:opcache' => 'OPcache',
 	
@@ -1107,6 +1100,9 @@ Siehe die vollständige Liste dieser Benutzer hier:
 	'title' => "Titel",
 	'description' => "Beschreibung",
 	'tags' => "Tags",
+	'url' => "URL",
+	'website' => "Webseite",
+	
 	'all' => "Alle",
 	'mine' => "Meine",
 
@@ -1456,7 +1452,6 @@ Wenn Du das nicht angefordert hast, kontaktiere bitte einen Administrator.
 	'default_access:settings' => "Standard-Zugangslevel für Deine Inhalte",
 	'default_access:label' => "Standard-Zugangslevel",
 	'user:default_access:success' => "Dein neuer Standard-Zugangslevel wurde gespeichert.",
-	'user:default_access:failure' => "Dein neuer Standard-Zugangslevel konnte nicht gespeichert werden.",
 
 /**
  * Comments
@@ -1577,6 +1572,10 @@ Globale Variablen:
 	
 /**
  * Trash
+ */
+
+/**
+ * Color schemes
  */
 
 /**

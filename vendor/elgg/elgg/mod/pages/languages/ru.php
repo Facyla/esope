@@ -11,6 +11,7 @@ return array(
 	 */
 	'item:object:page' => 'Страницы',
 	'collection:object:page' => 'Страницы',
+	'list:object:page:no_results' => 'Страницы не найдены',
 	
 	'collection:object:page:all' => "Все страницы",
 	'collection:object:page:owner' => "Страницы %s",
@@ -22,6 +23,8 @@ return array(
 	
 	'notification:object:page:create' => "Отправить уведомление при создании страницы",
 	'notifications:mute:object:page' => "о странице '%s'",
+	
+	'entity:edit:object:page:success' => 'Страница сохранена',
 
 	'groups:tool:pages' => 'Включить страницы группы',
 	'groups:tool:pages:description' => 'Разрешить участникам группы работать вместе над страницами в этой группе.',
@@ -46,7 +49,6 @@ return array(
 	'notification:mentions:object:page:subject' => '%s упомянул вас на странице',
 
 	'pages:more' => 'Больше страниц',
-	'pages:none' => 'Страниц пока нет', // @todo remove in Elgg 7.0
 
 	/**
 	* River

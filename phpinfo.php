@@ -1,4 +1,6 @@
 <?php
+exit;
+
 //phpinfo();
 
 

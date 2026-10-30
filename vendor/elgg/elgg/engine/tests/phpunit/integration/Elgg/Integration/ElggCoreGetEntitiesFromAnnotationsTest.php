@@ -5,6 +5,7 @@ namespace Elgg\Integration;
 use Elgg\Database\AnnotationsTable;
 use Elgg\Database\Clauses\WhereClause;
 use Elgg\Database\Update;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElggCoreGetEntitiesFromAnnotationsTest extends ElggCoreGetEntitiesIntegrationTestCase {
 
@@ -161,10 +162,9 @@ class ElggCoreGetEntitiesFromAnnotationsTest extends ElggCoreGetEntitiesIntegrat
 	}
 
 	/**
-	 * Get entities ordered by various MySQL calculations on their annotations
-	 *
-	 * @dataProvider calculationTypesProvider
+	 * Get entities ordered by various database calculations on their annotations
 	 */
+	#[DataProvider('calculationTypesProvider')]
 	public function testElggGetEntitiesFromAnnotationsCalculateX($type) {
 
 		$num_entities = 5;
@@ -308,7 +308,7 @@ class ElggCoreGetEntitiesFromAnnotationsTest extends ElggCoreGetEntitiesIntegrat
 	}
 
 	/**
-	 * Get entities ordered by various MySQL calculations on their annotations constrained by a where clause
+	 * Get entities ordered by various database calculations on their annotations constrained by a where clause
 	 */
 	public function testElggGetEntitiesFromAnnotationsCalculateConstrainedByWhere() {
 

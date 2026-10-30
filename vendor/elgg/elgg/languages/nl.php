@@ -437,7 +437,6 @@ De volgende karakters zijn niet toegestaan: %s',
 
 	'adduser:ok' => "Nieuwe gebruiker is succesvol aangemaakt.",
 	
-	'user:set:name' => "Instellingen van accountnaam",
 	'user:name:label' => "Mijn weergavenaam",
 	'user:name:success' => "Je weergavenaam is succesvol gewijzigd.",
 	'user:name:fail' => "Er is een fout opgetreden tijdens het wijzigen van je weergavenaam.",
@@ -455,8 +454,11 @@ De volgende karakters zijn niet toegestaan: %s',
 	'user:delete:title' => 'Bevestig account verwijdering',
 	'user:delete:description' => 'Bevestig dat het account van %s verwijderd mag worden. Het verwijderen van het account zal ook alle content van deze gebruiker (inclusief groepen) verwijderen. Mogelijk gerelateerde content, zoals groepscontent, subpagina\'s of reacties op content zullen ook verwijderd worden. Hieronder een overzicht van de content waar deze gebruiker de eigenaar van is.',
 	'user:delete:confirm' => "Ik ga akkoord met het verwijderen van deze gebruiker",
-
-	'user:set:language' => "Taalinstelling",
+	
+	'user:color_scheme:label' => "Kleuren schema",
+	'user:color_scheme:browser' => "Browser voorkeur",
+	'user:color_scheme:success' => "Kleuren schema is bijgewerkt",
+	
 	'user:language:label' => "Jouw taal",
 	'user:language:success' => "Je taalinstelling is gewijzigd.",
 
@@ -504,7 +506,6 @@ De volgende karakters zijn niet toegestaan: %s',
 	'admin:configuration:success' => "Je instellingen zijn opgeslagen.",
 	'admin:configuration:fail' => "Je instellingen zijn niet opgeslagen.",
 	'admin:configuration:dataroot:relative_path' => 'Kan \'%s\' niet als datamap opslaan, omdat het geen absoluut pad is.',
-	'admin:configuration:default_limit' => 'Het aantal items per pagina moet minstens 1 zijn.',
 
 	'admin:unknown_section' => 'Ongeldige beheersectie.',
 
@@ -971,7 +972,6 @@ Bekijk hier de volledige lijst van gebruikers:
 	'admin:server:label:server' => 'Server',
 	'admin:server:label:log_location' => 'Locatie van log',
 	'admin:server:label:php_version' => 'PHP-versie',
-	'admin:server:label:php_version:required' => 'Elgg vereist een minimale PHP versie van 7.1',
 	'admin:server:label:php_version:required_version' => 'Elgg vereist minimaal PHP versie %s',
 	'admin:server:label:php_ini' => 'Locatie van PHP-.inibestand',
 	'admin:server:label:php_log' => 'PHP-log',
@@ -981,13 +981,6 @@ Bekijk hier de volledige lijst van gebruikers:
 	'admin:server:label:post_max_size' => 'Maximale POST-grootte',
 	'admin:server:label:upload_max_filesize' => 'Maximale grootte van uploadbestanden',
 	'admin:server:warning:post_max_too_small' => '(PS: post_max_size moet groter zijn dan deze waarde om uploads van deze grootte te ondersteunen)',
-	'admin:server:label:memcache' => 'Memcache',
-	'admin:server:memcache:inactive' => 'Memcache is niet beschikbaar op deze server, of is nog niet geconfigureerd in de Elgg configuratie.
-Voor verbeterde performance wordt het aangeraden om Memcache (of Redis) in te schakelen en te configureren.',
-
-	'admin:server:label:redis' => 'Redis',
-	'admin:server:redis:inactive' => 'Redis is niet beschikbaar op deze server, of is nog niet geconfigureerd in de Elgg configuratie.
-Voor verbeterde performance wordt het aangeraden om Redis (of Memcache) in te schakelen en te configureren.',
 
 	'admin:server:label:opcache' => 'OPcache',
 	'admin:server:opcache:inactive' => 'OPcache is niet beschikbaar op deze server, of is nog niet geactiveerd.
@@ -1000,7 +993,7 @@ Voor verbeterde performance wordt het aangeraden om OPcache in te schakelen en t
 	'admin:server:requirements:rewrite:fail' => "Controleer je .htaccess voor de correcte rewrite rules",
 	
 	'admin:server:requirements:database:server' => "Database server",
-	'admin:server:requirements:database:server:required_version' => "Elgg vereist MySQL versie %s of hoger voor zijn database",
+	'admin:server:requirements:database:server:required_version' => "Elgg vereist MariaDB versie %s of hoger voor zijn database",
 	'admin:server:requirements:database:client' => "Database client",
 	'admin:server:requirements:database:client:required' => "Elgg vereist pdo_mysql om verbinding met de database server te maken",
 
@@ -1287,6 +1280,9 @@ Voor verbeterde performance wordt het aangeraden om OPcache in te schakelen en t
 	'title' => "Titel",
 	'description' => "Omschrijving",
 	'tags' => "Tags",
+	'url' => "Website",
+	'website' => "Website",
+	
 	'all' => "Alle",
 	'mine' => "Mijn",
 
@@ -1553,6 +1549,8 @@ Nadat je bent aangemeld raden we je aan je wachtwoord te wijzigen.',
 	'config:delayed_email:help' => "Dit geeft gebruikers de mogelijkheid om e-mailnotificaties uit te stellen en gebundeld te ontvangen op een opgegeven frequentie (dagelijks, wekelijks)",
 	'config:message_delay:label' => "Systeemberichten vertraging",
 	'config:message_delay:help' => "Het standaard aantal secondes voordat succes systeemberichten verdwijnen",
+	'config:color_schemes_enabled:label' => "Kleuren schema's zijn ingeschakeld",
+	'config:color_schemes_enabled:help' => "Op basis van de browser voorkeuren van de gebruiker kan het thema worden gewisseld tussen verschillende kleuren schema's zoals donkere modus",
 
 	'upgrading' => 'Bijwerken',
 	'upgrade:core' => 'Je Elgg-installatie is bijgewerkt',
@@ -1663,7 +1661,6 @@ Indien je deze wijziging niet hebt aangevraagd, neem dan contact op met een behe
 	'default_access:settings' => "Je standaard toegangsniveau",
 	'default_access:label' => "Standaardtoegang",
 	'user:default_access:success' => "Je nieuwe standaard toegangsniveau is opgeslagen.",
-	'user:default_access:failure' => "Je nieuwe standaard toegangsniveau is niet opgeslagen.",
 
 /**
  * Comments
@@ -1831,6 +1828,12 @@ Global variables:
 	'trash:restore:group' => "Zoek een groep",
 	'trash:restore:group:help' => "Zorg er voor dat de geselecteerd groep wel het soort items ondersteunt, anders kan er een foutmelding optreden.",
 	'trash:restore:owner' => "Herstel naar de eigenaar (%s)",
+
+/**
+ * Color schemes
+ */
+	'color_scheme:default' => "Standaard (licht)",
+	'color_scheme:dark' => "Donker",
 
 /**
  * Miscellaneous

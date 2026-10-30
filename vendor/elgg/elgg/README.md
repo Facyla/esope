@@ -1,10 +1,8 @@
 Elgg
 ====
 
-[![PHPUnit test suites](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml/badge.svg?branch=6.3)](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=6.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=6.3) 
-[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=6.3)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=6.3) 
-[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?badge=6.3)](http://learn.elgg.org/en/6.3/)
+[![PHPUnit test suites](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml/badge.svg?branch=7.1)](https://github.com/Elgg/Elgg/actions/workflows/phpunit.yml)
+[![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?badge=7.1)](http://learn.elgg.org/en/7.1/)
 
 Elgg is an open source rapid development framework for socially aware web applications.
 
@@ -35,13 +33,11 @@ Under the hood:
 - NGINX or Apache compatible
 - Symfony2 HTTP Foundation handles requests and responses
 - modular javascript with ECMAScript modules 
-- Laminas Mail handles outgoing email
+- Symfony Mailer handles outgoing email
 - htmLawed XSS filters
 - DBAL
 - Phinx database migrations
-- CSS-Crush for CSS preprocessing
 - Imagine for image manipulation
-- Persistent caching with Memcached and/or Redis
 - Error handling with Monolog
 
 Elgg Foundation
@@ -60,7 +56,7 @@ The Elgg project was started in 2004 by
 License
 -------
 
-Copyright (c) 2008-2025, see COPYRIGHT.txt
+Copyright (c) 2008-2026, see COPYRIGHT.txt
 
 Elgg is released under the GNU General Public License (GPL) Version 2 and the
 Massachusetts Institute of Technology (MIT-X11) License. 

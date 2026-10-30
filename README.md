@@ -1,7 +1,7 @@
 Elgg Starter Project
 ====================
 
-This is a quickstart skeleton for building a site based on Elgg 6.x.
+This is a quickstart skeleton for building a site based on Elgg 7.x.
 
 ## Installation
 
@@ -11,6 +11,7 @@ Follow the instructions for [installing Elgg with Composer](http://learn.elgg.or
 
 If you wish to install a different version of Elgg use the following branches:
 
+- for Elgg v6.x use the branch 6.x
 - for Elgg v5.x use the branch 5.x
 - for Elgg v4.x use the branch 4.x
 - for Elgg v3.3 use the branch 3.3

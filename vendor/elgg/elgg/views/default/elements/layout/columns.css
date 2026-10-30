@@ -11,8 +11,11 @@
 	> .elgg-layout-body {
 		flex: 1;
 		min-width: 1%;
-		background: white;
+		background: var(--elgg-layout-background-color);
 		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		row-gap: 1rem;
 	}
 	
 	> .elgg-layout-sidebar {
@@ -20,7 +23,7 @@
 	}
 }
 
-@media $(media-desktop-up) {
+@media screen and (min-width: 80rem) {
 	.elgg-layout {
 		flex-direction: row;
 		min-height: calc(100vh - 8rem);

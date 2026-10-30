@@ -14,6 +14,16 @@ function elgg(): \Elgg\Di\PublicContainer {
 }
 
 /**
+ * Checks if code is currently executed in a commandline
+ *
+ * @return bool
+ * @since 7.0
+ */
+function elgg_is_cli(): bool {
+	return \Elgg\Application::isCli();
+}
+
+/**
  * Set a response HTTP header
  *
  * @see header()
@@ -69,11 +79,7 @@ function elgg_register_error_message(string|array $options): void {
 }
 
 /**
- * Log a message.
- *
- * If $level is >= to the debug setting in {@link $CONFIG->debug}, the
- * message will be sent to {@link elgg_dump()}.  Messages with lower
- * priority than {@link $CONFIG->debug} are ignored.
+ * Log a message
  *
  * @note Use the developers plugin to display logs
  *
@@ -239,6 +245,10 @@ function elgg_get_http_client(array $options = []): \Elgg\Http\Client {
  */
 function elgg_extract($key, $array, $default = null, bool $strict = true) {
 	if (!is_array($array) && !$array instanceof ArrayAccess) {
+		return $default;
+	}
+
+	if (!is_int($key) && !is_string($key)) {
 		return $default;
 	}
 

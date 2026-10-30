@@ -24,6 +24,7 @@ return array(
 	'entity:edit:object:blog:success' => 'The blog was saved successfully',
 
 	'blog:revisions' => 'Revisions',
+	'blog:revisions:current' => 'Current version',
 	'blog:archives' => 'Archives',
 
 	'groups:tool:blog' => 'Enable group blog',
@@ -41,7 +42,6 @@ return array(
 	'blog:error:cannot_save' => 'Cannot save blog post.',
 	'blog:error:cannot_write_to_container' => 'Insufficient access to save blog to group.',
 	'blog:edit_revision_notice' => '(Old version)',
-	'blog:none' => 'No blog posts', // @todo remove in Elgg 7.0
 	'blog:error:missing:title' => 'Please enter a blog title!',
 	'blog:error:missing:description' => 'Please enter the body of your blog!',
 	'blog:error:post_not_found' => 'Cannot find specified blog post.',

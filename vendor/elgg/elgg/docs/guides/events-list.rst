@@ -21,8 +21,7 @@ System events
     Return false to prevent activation of the plugin.
     
 **cache:clear, system** |sequence|
-    Clear internal and external caches, by default including system_cache, simplecache, and memcache. One might use it to 
-    reset others such as APC, OPCache, or WinCache.
+    Clear internal and external caches.
 
 **cache:generate, <view>** |results|
 	Filters the view output for a ``/cache`` URL when simplecache is disabled. Note this will be fired
@@ -44,7 +43,7 @@ System events
 	The ``$params`` array will contain:
 
 	 * ``time`` - the timestamp of when the cron command was started
-	 * ``dt`` - the ``\DateTime`` object of when the cron command was started
+	 * ``dt`` - the ``\DateTimeImmutable`` object of when the cron command was started
 	 * ``logger`` - instance of ``\Elgg\Logger\Cron`` to log any information to the cron log
 
 **cron:intervals, system** |results|
@@ -180,9 +179,9 @@ System events
 	If ``filter_id`` is ``filter`` (the default) then the ``all``, ``mine`` and ``friends`` tabs will be generated base on some provided information
 	or be tried for routes similar to the current route.
 	
-	- params['all_link'] will be used for the ``all`` tab
-	- params['mine_link'] will be used for the ``mine`` tab
-	- params['friends_link'] will be used for the ``friend`` tab
+	- params['all_link'] will be used for the ``all`` tab (deprecated)
+	- params['mine_link'] will be used for the ``mine`` tab (deprecated)
+	- params['friend_link'] will be used for the ``friend`` tab (deprecated)
 	
 	If the above are not provided than a route will be tried based on ``params['entity_type']`` and ``params['entity_subtype']``.
 	If not provided ``entity_type`` and ``entity_subtype`` will be based on route detection of the current route. 
@@ -224,7 +223,7 @@ System events
     might not be shown until after the process is completed. This means that any long-running
     processes will still delay the page load.
 
-.. note:: This event is prefered above using ``register_shutdown_function`` as you may not have access
+.. note:: This event is preferred above using ``register_shutdown_function`` as you may not have access
     to all the Elgg services (eg. database) in the shutdown function but you will in the event.
 
 .. note:: The Elgg session is already closed before this event. Manipulating session is not possible.
@@ -645,6 +644,7 @@ Note that not all events apply to instant notifications.
 	 * ``event`` - ``\Elgg\Notifications\NotificationEvent`` instance that describes the notification event
 	 * ``origin`` - ``subscriptions_service`` or ``instant_notifications``
 	 * ``methods_override`` - delivery method preference for instant notifications
+	 * ``handler`` - ``\Elgg\Notifications\NotificationEventHandler`` instance that is handling this notification
 
 	Handlers must return an array in the form:
 
@@ -664,6 +664,7 @@ Note that not all events apply to instant notifications.
 
 	 * ``event`` - ``\Elgg\Notifications\NotificationEvent`` instance that describes the notification event
 	 * ``subscriptions`` - a list of subscriptions. See ``'get', 'subscriptions'`` event for details
+	 * ``handler`` - ``\Elgg\Notifications\NotificationEventHandler`` instance that is handling this notification
 
 **prepare, notification** |results|
 	A high level event that can be used to alter an instance of ``\Elgg\Notifications\Notification`` before it is sent to the user.
@@ -681,6 +682,7 @@ Note that not all events apply to instant notifications.
 	 * ``recipient`` - recipient
 	 * ``language`` - language of the notification (recipient's language)
 	 * ``origin`` - ``subscriptions_service`` or ``instant_notifications``
+	 * ``handler`` - ``\Elgg\Notifications\NotificationEventHandler`` instance that is handling this notification
 
 **prepare, notification:<action>:<entity_type>:<entity_type>** |results|
 	A granular event that can be used to filter a notification ``\Elgg\Notifications\Notification`` before it is sent to the user.
@@ -698,6 +700,7 @@ Note that not all events apply to instant notifications.
 	 * ``recipient`` - recipient
 	 * ``language`` - language of the notification (recipient's language)
 	 * ``origin`` - ``subscriptions_service`` or ``instant_notifications``
+	 * ``handler`` - ``\Elgg\Notifications\NotificationEventHandler`` instance that is handling this notification
 
 **format, notification:<method>** |results|
 	This event can be used to format a notification before it is passed to the ``'send', 'notification:<method>'`` event.
@@ -728,6 +731,7 @@ Note that not all events apply to instant notifications.
 	 * ``event`` - ``\Elgg\Notifications\NotificationEvent`` instance that describes the notification event
 	 * ``subscriptions`` - a list of subscriptions. See ``'get', 'subscriptions'`` event for details
 	 * ``deliveries`` - a matrix of delivery statuses by user for each delivery method
+	 * ``handler`` - ``\Elgg\Notifications\NotificationEventHandler`` instance that is handling this notification
 
 Emails
 ======
@@ -760,10 +764,10 @@ Emails
 
 	 * ``email`` - An instance of ``\Elgg\Email``
 
-**zend:message, system:email** |results|
-	Triggered by the default email transport handler (Elgg uses ``laminas/laminas-mail``).
+**message, system:email** |results|
+	Triggered by the default email transport handler (Elgg uses ``symfomy/mailer``).
 	Applies to all outgoing system and notification emails that were not transported using the **transport, system:email** event.
-	This event allows you to alter an instance of ``\Laminas\Mail\Message`` before it is passed to the Laminas email transport.
+	This event allows you to alter an instance of ``\Symfony\Component\Mime\Email`` before it is passed to the Symfony email transport.
 
 	``$params`` contains:
 
@@ -835,57 +839,46 @@ Action events
 **action_gatekeeper:permissions:check, all** |results|
 	Triggered after a CSRF token is validated. Return false to prevent validation.
 
-**forward, <reason>** |results|
-	Filter the URL to forward a user to when ``forward($url, $reason)`` is called.
-	In certain cases, the ``params`` array will contain an instance of ``\Elgg\Exceptions\HttpException`` that triggered the error.
-
-**response, action:<action>** |results|
-    Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
-    This event can be used to modify response content, status code, forward URL, or set additional response headers.
-    Note that the ``<action>`` value is parsed from the request URL, therefore you may not be able to filter
-    the responses of `action()` calls if they are nested within the another action script file.
-
 .. _guides/events-list#ajax:
 
 Ajax
 ====
 
-**ajax_response, \*** |results|
-	When the ``elgg/Ajax`` module is used, this event gives access to the response object
-	(``\Elgg\Services\AjaxResponse``) so it can be altered/extended. The event type depends on
-	the method call:
+**ajax_results, <event_type>\*** |results|
+	When the ``elgg/Ajax`` module is used, this event gives access to the results object
+	so it can be altered/extended. Handlers receive the request via ``$params['request']``.
+	
+	The event type depends on the method call:
 
 	================  ====================
 	elgg/Ajax method  event type
 	================  ====================
 	action()          action:<action_name>
-	path()            path:<url_path>
+	path()            <route_name>
 	view()            view:<view_name>
 	form()            form:<action_name>
 	================  ====================
 
-**ajax_response, action:<action_name>** |results|
-    Filters ``action/`` responses before they're sent back to the ``elgg/Ajax`` module.
-    
-**ajax_response, path:<path>** |results|
-    Filters ajax responses before they're sent back to the ``elgg/Ajax`` module. This event type will
-    only be used if the path did not start with "action/" or "ajax/".
-    
-**ajax_response, view:<view>** |results|
-    Filters ``ajax/view/`` responses before they're sent back to the ``elgg/Ajax`` module.
-
-**ajax_response, form:<action_name>** |results|
-    Filters ``ajax/form/`` responses before they're sent back to the ``elgg/Ajax`` module.
-
 Routing
 =======
 
-**response, path:<path>** |results|
+**response, <route_name>** |results|
     Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
     This event type will only be used if the path did not start with "action/" or "ajax/".
     This event can be used to modify response content, status code, forward URL, or set additional response headers.
-    Note that the ``<path>`` value is parsed from the request URL, therefore plugins using the ``route`` event should
-    use the original ``<path>`` to filter the response, or switch to using the ``route:rewrite`` event.
+    Handlers receive the request via ``$params['request']``.
+
+**response, form:<form_name>** |results|
+    Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
+    Applies to request to ``/ajax/form/<form_name>``.
+    This event can be used to modify response content, status code, forward URL, or set additional response headers.
+    Handlers receive the request via ``$params['request']``.
+    
+**response, view:<view_name>** |results|
+    Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
+    Applies to request to ``/ajax/view/<view_name>``.
+    This event can be used to modify response content, status code, forward URL, or set additional response headers.
+    Handlers receive the request via ``$params['request']``.
 
 **route:config, <route_name>** |results|
 	Allows altering the route configuration before it is registered.
@@ -895,6 +888,18 @@ Routing
 **route:rewrite, <identifier>** |results|
 	Allows altering the site-relative URL path for an incoming request. See :doc:`routing` for details.
 	Please note that the handler for this event should be registered outside of the ``init`` event handler, as route rewrites take place after ``plugins_boot`` event has completed.
+
+**route:match, system** |results|
+	When no route is registered for a given URL path this event is triggered to allow developers to provide a routing 
+	configuration for the given path. This will allow more generic URLs to be handled without the need to register every
+	individual route.
+
+	``$params`` array includes:
+
+     * ``pathinfo`` - string with the URL path to be matched
+
+	The expected result is an array with a route definition. See :doc:`routing` for details. Also the result must contain
+	a key ``route`` with the name of the route.
 
 .. _guides/events-list#views:
 
@@ -913,6 +918,15 @@ Views
 **form:prepare:fields, <form_name>** |results|
 	Prepare field values for use in the form. Eg. when editing a blog, fill this with the current values of the blog.
 	Sticky form values will automatically be added to the field values (when available).
+
+**form:register:fields, <entity_type>:<entity_subtype>** |results|
+	Register fields to be drawn on an entity form. This gets prefilled with the registered entity fields.
+	You can add/remove fields when needed.
+	
+	``$params`` array includes:
+	* ``entity_type``: the type of the entity
+	* ``entity_subtype``: the subtype of the entity
+	* ``entity``: the entity being edited or ``null`` when adding a new entity
 
 **head, page** |results|
     In ``elgg_view_page()``, filters ``$vars['head']``
@@ -955,16 +969,6 @@ Views
      * ``identifier`` - ID of the page being rendered
      * ``segments`` - URL segments of the page being rendered
      * other ``$vars`` received by ``elgg_view_layout()``
-
-**response, form:<form_name>** |results|
-    Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
-    Applies to request to ``/ajax/form/<form_name>``.
-    This event can be used to modify response content, status code, forward URL, or set additional response headers.
-    
-**response, view:<view_name>** |results|
-    Filter an instance of ``\Elgg\Http\ResponseBuilder`` before it is sent to the client.
-    Applies to request to ``/ajax/view/<view_name>``.
-    This event can be used to modify response content, status code, forward URL, or set additional response headers.
     
 **shell, page** |results|
     In ``elgg_view_page()``, filters the page shell name
@@ -977,10 +981,6 @@ Views
     plugins to override or provide an implementation. Handlers receive the method arguments via
     ``$params['arguments']`` and should return an instance of ``Elgg\Views\TableColumn`` if they
     wish to specify the column directly.
-    
-**vars:compiler, css** |results|
-    Allows plugins to alter CSS variables passed to CssCrush during compilation.
-    See `CSS variables <_guides/theming#css-vars>`.
     
 **view, <view_name>** |results|
     Filters the returned content of the view
@@ -1302,6 +1302,12 @@ Other
 
 Plugins
 =======
+
+Site Pages
+----------
+
+**names, externalpages** |results|
+	Returns a set of allowed names for external pages
 
 Groups
 ------

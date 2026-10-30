@@ -2,6 +2,8 @@
 
 namespace Elgg\Http;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class RequestUnitTest extends \Elgg\UnitTestCase {
 
 	public function down() {
@@ -79,6 +81,25 @@ class RequestUnitTest extends \Elgg\UnitTestCase {
 		]);
 		$this->assertTrue($req->isXmlHttpRequest());
 	}
+
+	public function testGetParamDefaultsToProvidedDefaultValue() {
+		$request = new Request();
+		$this->assertNull($request->getParam('foo'));
+		$this->assertEquals('bar', $request->getParam('foo', 'bar'));
+	}
+
+	public function testGetParamCanBeOverriddenBySetParam() {
+		$request = new Request(['foo' => 'bar']);
+		$this->assertEquals('bar', $request->getParam('foo'));
+		$request->setParam('foo', 'bar2', true);
+		$this->assertEquals('bar2', $request->getParam('foo'));
+	}
+
+	public function testGetParamChecksBothPostAndGet() {
+		$request = new Request(['foo' => 'bar'], ['foo2' => 'bar2']);
+		$this->assertEquals('bar', $request->getParam('foo'));
+		$this->assertEquals('bar2', $request->getParam('foo2'));
+	}
 	
 	public function testSetParamNoOverride() {
 		$request = Request::create('/foo?bar=a');
@@ -98,9 +119,7 @@ class RequestUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals('b', $request->getParam('bar'));
 	}
 
-	/**
-	 * @dataProvider trustedProxySettingsProvider
-	 */
+	#[DataProvider('trustedProxySettingsProvider')]
 	public function testTrustedProxySettings($proxy_ips, $proxy_headers) {
 		_elgg_services()->config->http_request_trusted_proxy_ips = $proxy_ips;
 		_elgg_services()->config->http_request_trusted_proxy_headers = $proxy_headers;

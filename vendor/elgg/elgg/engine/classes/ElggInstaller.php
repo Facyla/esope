@@ -8,7 +8,7 @@ use Elgg\Exceptions\Configuration\InstallationException;
 use Elgg\Exceptions\Configuration\RegistrationException;
 use Elgg\Exceptions\ConfigurationException;
 use Elgg\Exceptions\DatabaseException;
-use Elgg\Exceptions\LoginException;
+use Elgg\Exceptions\Http\LoginException;
 use Elgg\Exceptions\PluginException;
 use Elgg\Http\Request;
 use Elgg\Project\Paths;
@@ -41,8 +41,8 @@ use Elgg\Router\RewriteTester;
 class ElggInstaller {
 	
 	public const MARIADB_MINIMAL_VERSION = '10.6';
-	public const MYSQL_MINIMAL_VERSION = '8.0';
-	public const PHP_MINIMAL_VERSION = '8.1.0';
+	public const MYSQL_MINIMAL_VERSION = '8.4';
+	public const PHP_MINIMAL_VERSION = '8.3.0';
 	
 	protected array $steps = [
 		'welcome',
@@ -571,7 +571,7 @@ class ElggInstaller {
 				'type' => 'password',
 				'value' => '',
 				'required' => true,
-				'pattern' => '.{6,}',
+				'pattern' => '.{16,}',
 			],
 			'password2' => [
 				'type' => 'password',
@@ -1133,7 +1133,7 @@ class ElggInstaller {
 		}
 
 		// check that data root is absolute path
-		if (stripos(PHP_OS, 'win') === 0) {
+		if (PHP_OS_FAMILY === 'Windows') {
 			if (strpos($submissionVars['dataroot'], ':') !== 1) {
 				$save_value = $this->sanitizeInputValue($submissionVars['dataroot']);
 				$app->internal_services->system_messages->addErrorMessage(elgg_echo('install:error:relative_path', [$save_value]));

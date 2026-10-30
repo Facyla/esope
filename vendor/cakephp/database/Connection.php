@@ -33,6 +33,8 @@ use Cake\Database\Schema\CachedCollection;
 use Cake\Database\Schema\Collection as SchemaCollection;
 use Cake\Database\Schema\CollectionInterface as SchemaCollectionInterface;
 use Cake\Datasource\ConnectionInterface;
+use Cake\Event\EventDispatcherInterface;
+use Cake\Event\EventDispatcherTrait;
 use Cake\Log\Log;
 use Closure;
 use Psr\SimpleCache\CacheInterface;
@@ -41,9 +43,17 @@ use function Cake\Core\env;
 
 /**
  * Represents a connection with a database server.
+ *
+ * ### Events
+ *
+ * - `Connection.afterCommit` Fired after the outermost transaction commits.
+ *   Listeners receive the connection as the event subject. Not fired on
+ *   rollback or for nested commits.
  */
-class Connection implements ConnectionInterface
+class Connection implements ConnectionInterface, EventDispatcherInterface
 {
+    use EventDispatcherTrait;
+
     /**
      * Contains the configuration params for this connection.
      *
@@ -105,6 +115,13 @@ class Connection implements ConnectionInterface
      */
     protected ?NestedTransactionRollbackException $nestedTransactionRollbackException = null;
 
+    /**
+     * Callbacks to execute after the outermost transaction commits.
+     *
+     * @var array<\Closure>
+     */
+    protected array $afterCommitCallbacks = [];
+
     protected QueryFactory $queryFactory;
 
     /**
@@ -133,8 +150,7 @@ class Connection implements ConnectionInterface
      * Creates read and write drivers.
      *
      * @param array<string, mixed> $config Connection config
-     * @return array<string, \Cake\Database\Driver>
-     * @phpstan-return array{read: \Cake\Database\Driver, write: \Cake\Database\Driver}
+     * @return array{self::ROLE_READ: \Cake\Database\Driver, self::ROLE_WRITE: \Cake\Database\Driver}
      */
     protected function createDrivers(array $config): array
     {
@@ -156,7 +172,6 @@ class Connection implements ConnectionInterface
         }
 
         $sharedConfig = array_diff_key($config, array_flip([
-            'name',
             'className',
             'driver',
             'cacheMetaData',
@@ -244,7 +259,7 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Gets the driver instance.
+     * Gets the role-specific driver instance.
      *
      * @param string $role Connection role ('read' or 'write')
      * @return \Cake\Database\Driver
@@ -253,7 +268,27 @@ class Connection implements ConnectionInterface
     {
         assert($role === self::ROLE_READ || $role === self::ROLE_WRITE);
 
-        return $role === self::ROLE_READ ? $this->readDriver : $this->writeDriver;
+        return $role === self::ROLE_READ ? $this->getReadDriver() : $this->getWriteDriver();
+    }
+
+    /**
+     * Gets the read-role driver instance.
+     *
+     * @return \Cake\Database\Driver
+     */
+    public function getReadDriver(): Driver
+    {
+        return $this->readDriver;
+    }
+
+    /**
+     * Gets the write-role driver instance.
+     *
+     * @return \Cake\Database\Driver
+     */
+    public function getWriteDriver(): Driver
+    {
+        return $this->writeDriver;
     }
 
     /**
@@ -267,7 +302,7 @@ class Connection implements ConnectionInterface
      */
     public function execute(string $sql, array $params = [], array $types = []): StatementInterface
     {
-        return $this->getDisconnectRetry()->run(fn() => $this->getDriver()->execute($sql, $params, $types));
+        return $this->getDisconnectRetry()->run(fn() => $this->getWriteDriver()->execute($sql, $params, $types));
     }
 
     /**
@@ -436,7 +471,7 @@ class Connection implements ConnectionInterface
     {
         if (!$this->_transactionStarted) {
             $this->getDisconnectRetry()->run(function (): void {
-                $this->getDriver()->beginTransaction();
+                $this->getWriteDriver()->beginTransaction();
             });
 
             $this->_transactionLevel = 0;
@@ -450,6 +485,26 @@ class Connection implements ConnectionInterface
         if ($this->isSavePointsEnabled()) {
             $this->createSavePoint((string)$this->_transactionLevel);
         }
+    }
+
+    /**
+     * Register a callback to run after the outermost transaction commits.
+     *
+     * If no transaction is active, the callback executes immediately.
+     * Callbacks are discarded on rollback.
+     *
+     * @param \Closure $callback Callback to execute after commit.
+     * @return void
+     */
+    public function afterCommit(Closure $callback): void
+    {
+        if (!$this->_transactionStarted) {
+            $callback();
+
+            return;
+        }
+
+        $this->afterCommitCallbacks[] = $callback;
     }
 
     /**
@@ -475,7 +530,17 @@ class Connection implements ConnectionInterface
             $this->_transactionStarted = false;
             $this->nestedTransactionRollbackException = null;
 
-            return $this->getDriver()->commitTransaction();
+            $result = $this->getWriteDriver()->commitTransaction();
+
+            $callbacks = $this->afterCommitCallbacks;
+            $this->afterCommitCallbacks = [];
+            foreach ($callbacks as $cb) {
+                $cb();
+            }
+
+            $this->dispatchEvent('Connection.afterCommit');
+
+            return $result;
         }
         if ($this->isSavePointsEnabled()) {
             $this->releaseSavePoint((string)$this->_transactionLevel);
@@ -505,7 +570,8 @@ class Connection implements ConnectionInterface
             $this->_transactionLevel = 0;
             $this->_transactionStarted = false;
             $this->nestedTransactionRollbackException = null;
-            $this->getDriver()->rollbackTransaction();
+            $this->afterCommitCallbacks = [];
+            $this->getWriteDriver()->rollbackTransaction();
 
             return true;
         }
@@ -534,7 +600,7 @@ class Connection implements ConnectionInterface
         if ($enable === false) {
             $this->_useSavePoints = false;
         } else {
-            $this->_useSavePoints = $this->getDriver()->supports(DriverFeatureEnum::SAVEPOINT);
+            $this->_useSavePoints = $this->getWriteDriver()->supports(DriverFeatureEnum::SAVEPOINT);
         }
 
         return $this;
@@ -570,7 +636,7 @@ class Connection implements ConnectionInterface
      */
     public function createSavePoint(string|int $name): void
     {
-        $this->execute($this->getDriver()->savePointSQL($name));
+        $this->execute($this->getWriteDriver()->savePointSQL($name));
     }
 
     /**
@@ -581,7 +647,7 @@ class Connection implements ConnectionInterface
      */
     public function releaseSavePoint(string|int $name): void
     {
-        $sql = $this->getDriver()->releaseSavePointSQL($name);
+        $sql = $this->getWriteDriver()->releaseSavePointSQL($name);
         if ($sql) {
             $this->execute($sql);
         }
@@ -595,7 +661,7 @@ class Connection implements ConnectionInterface
      */
     public function rollbackSavepoint(string|int $name): void
     {
-        $this->execute($this->getDriver()->rollbackSavePointSQL($name));
+        $this->execute($this->getWriteDriver()->rollbackSavePointSQL($name));
     }
 
     /**
@@ -606,7 +672,7 @@ class Connection implements ConnectionInterface
     public function disableForeignKeys(): void
     {
         $this->getDisconnectRetry()->run(function (): void {
-            $this->execute($this->getDriver()->disableForeignKeySQL());
+            $this->execute($this->getWriteDriver()->disableForeignKeySQL());
         });
     }
 
@@ -618,7 +684,7 @@ class Connection implements ConnectionInterface
     public function enableForeignKeys(): void
     {
         $this->getDisconnectRetry()->run(function (): void {
-            $this->execute($this->getDriver()->enableForeignKeySQL());
+            $this->execute($this->getWriteDriver()->enableForeignKeySQL());
         });
     }
 

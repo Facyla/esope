@@ -2,8 +2,7 @@
 	HEADER
 *************************************** */
 .elgg-layout-header {
-	padding: 0 1rem 1rem;
-	margin-bottom: 1rem;
+	padding: 0 0 1rem;
 	border-bottom: 1px solid var(--elgg-border-color-soft);
 	width: 100%;
 	display: flex;
@@ -26,7 +25,7 @@
 	}
 }
 
-@media $(media-desktop-up) {
+@media screen and (min-width: 80rem) {
 	.elgg-layout-header {
 		flex-direction: row;
 		align-items: flex-start;

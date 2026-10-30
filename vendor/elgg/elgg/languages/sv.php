@@ -42,7 +42,6 @@ return array(
 
 	'exception:title' => "Allvarligt fel.",
 	'exception:contact_admin' => 'Ett oåterkalleligt fel har inträffat och har loggats. Kontakta webbplatsens administratör med följande information:',
-
 	'actionunauthorized' => 'Du är obehörig att utföra den här handlingen',
 
 	'ajax:error' => 'Oväntat fel vid ett anrop till AJAX utfördes. Kanske har anslutningen till servern tappats.',
@@ -65,17 +64,13 @@ return array(
 	'UserFetchFailureException' => 'Kan inte kontrollera behörighet för user_guid [%s] eftersom användaren inte existerar.',
 
 	'PageNotFoundException' => 'Sidan du försökte visa finns inte eller så har du inte behörighet att visa den.',
-	'EntityNotFoundException' => 'Innehållet som du försökte nå har tagits bort eller så har du inte behörighet att nå det.',
-	'EntityPermissionsException' => 'Du har inte tillräcklig behörighet för den här handlingen.',
 	'GatekeeperException' => 'Du har inte behörighet att visa sidan du försöker nå',
 	'BadRequestException' => 'Fel förfrågan',
-	'ValidationException' => 'Skickad data uppfyllde inte kraven, vänligen kontrollera din inmatning.',
 	'LogicException:InterfaceNotImplemented' => '%s måste implementera %s',
 	
 	'Security:InvalidPasswordCharacterRequirementsException' => "Det angivna lösenordet uppfyller inte teckenkraven",
 	'Security:InvalidPasswordLengthException' => "Det angivna lösenordet uppfyller inte minsta längd på %s tecken",
 
-	'viewfailure' => 'Det var ett internt fel i vyn %s',
 	'changebookmark' => 'Vänligen ändra till bokmärke för den här sidan',
 	'error:missing_data' => 'Det saknades lite data i din förfrågan',
 	'save:fail' => 'Det blev något fel när din data skulle sparas',
@@ -105,6 +100,7 @@ return array(
 	'table_columns:fromView:admin' => 'Admin',
 	'table_columns:fromView:banned' => 'Avstängd',
 	'table_columns:fromView:container' => 'Behållare',
+	'table_columns:fromView:entity_menu' => 'Meny',
 	'table_columns:fromView:excerpt' => 'Beskrivning',
 	'table_columns:fromView:link' => 'Namn/Titel',
 	'table_columns:fromView:icon' => 'Ikon',
@@ -113,6 +109,7 @@ return array(
 	'table_columns:fromView:owner' => 'Ägare',
 	'table_columns:fromView:time_created' => 'Skapades',
 	'table_columns:fromView:time_updated' => 'Uppdaterades',
+	'table_columns:fromView:unvalidated_menu' => 'Meny',
 	'table_columns:fromView:user' => 'Användare',
 
 	'table_columns:fromProperty:description' => 'Beskrivning',
@@ -154,7 +151,7 @@ return array(
 	'access:read' => "Läsrättighet",
 	'access:write' => "Skrivrättighet",
 	'access:admin_only' => "Endast administratörer",
-
+	
 /**
  * Dashboard and widgets
  */
@@ -227,7 +224,6 @@ return array(
 	'link:view' => 'visa länk',
 	'link:view:all' => 'Visa alla',
 
-
 /**
  * River
  */
@@ -254,6 +250,7 @@ return array(
  * Notifications
  */
 	'notification:method:email' => 'E-post',
+	'usersettings:notifications:menu:filter:settings' => "Inställningar",
 	'notification:subject' => 'Avisering om %s',
 	'notification:body' => 'Visa den nya aktiviteten på %s',
 
@@ -267,7 +264,6 @@ return array(
 	'viewtype:change' => "Ändra listtyp",
 	'viewtype:list' => "Listvy",
 	'viewtype:gallery' => "Galleri",
-
 	'search:go' => 'Gå',
 	'userpicker:only_friends' => 'Bara vänner',
 
@@ -298,8 +294,7 @@ return array(
 	'registration:usernamenotvalid' => 'Tyvärr användarnamnet du fyllde i är ogiltig i det här systemet',
 
 	'adduser:ok' => "Du har lagt till en ny användare med lyckat resultat.",
-
-	'user:set:name' => "Inställningar för kontonamn",
+	
 	'user:name:label' => "Visningsnamn",
 	'user:name:success' => "Visningsnamn ändrades i systemet med lyckat resultat.",
 	'user:name:fail' => "Det gick inte ändra visningsnamn i systemet.",
@@ -312,8 +307,7 @@ return array(
 	'user:password:success' => "Lösenordet ändrades",
 	'user:changepassword:unknown_user' => 'Ogiltig användare.',
 	'user:changepassword:change_password_confirm' => 'Det kommer ändra ditt lösenord.',
-
-	'user:set:language' => "Språkinställningar",
+	
 	'user:language:label' => "Språk",
 	'user:language:success' => "Språkinställningar har uppdaterats.",
 
@@ -348,6 +342,7 @@ return array(
  */
 	'menu:page:header:administer' => 'Administrera',
 	'menu:page:header:configure' => 'Konfigurera',
+	'menu:page:header:utilities' => 'Verktyg',
 	'menu:page:header:develop' => 'Utveckla',
 	'menu:page:header:information' => 'Information',
 	'menu:page:header:default' => 'Andra',
@@ -359,7 +354,6 @@ return array(
 	'admin:configuration:success' => "Dina inställningar har sparats.",
 	'admin:configuration:fail' => "Dina inställningar kunde inte sparas.",
 	'admin:configuration:dataroot:relative_path' => 'Kunde inte ställa in "%s" som datarot eftersom det inte är en absolut sökväg.',
-	'admin:configuration:default_limit' => 'Antalet objekt per sida måste vara minst 1.',
 
 	'admin:unknown_section' => 'Ogiltig avdelning för Admin.',
 
@@ -395,6 +389,7 @@ return array(
 	'admin:users:online' => 'Online nu',
 	'admin:users:newest' => 'Nyast',
 	'admin:users:admins' => 'Administratörer',
+	'admin:users:banned' => 'Avstängd',
 	'admin:users:searchuser' => 'Sök användare för att göra de till admin',
 	'admin:users:existingadmins' => 'Lista över existerande admins',
 	'admin:users:add' => 'Lägg till Ny Användare',
@@ -408,6 +403,8 @@ return array(
 	'admin:users:unvalidated:registered' => 'Registrerad: %s',
 	'admin:users:unvalidated:change_email' => 'Ändra e-postadress',
 	'admin:users:unvalidated:change_email:user' => 'Ändra e-postadress för: %s',
+	'admin:users:inactive' => 'Inaktiv',
+	'admin:users:details:statistics' => 'Innehållsstatistik',
 	
 	'admin:configure_utilities:maintenance' => 'Underhållningsläge',
 	'admin:upgrades' => 'Uppgraderingar',
@@ -439,13 +436,10 @@ return array(
 	'admin:statistics:numentities' => 'Innehållsstatistik',
 	'admin:statistics:numentities:type' => 'Innehållstyp',
 	'admin:statistics:numentities:number' => 'Siffra',
+	'admin:statistics:queue:name' => 'Namn',
 
 	'admin:widget:admin_welcome' => 'Välkommen',
 	'admin:widget:admin_welcome:help' => "En kort introduktion till Elggs Adminstration",
-	'admin:widget:admin_welcome:intro' =>
-'',
-	'admin:widget:admin_welcome:admin_overview' =>
-"",
 
 	// argh, this is ugly
 
@@ -511,6 +505,8 @@ return array(
 	'admin:security:settings:min_password_number' => "Minsta antal siffror i ett lösenord",
 	
 	'admin:security:settings:min_password_special' => "Minsta antal specialtecken i ett lösenord",
+	'admin:security:security_txt:contact' => "Kontakt",
+	'admin:security:security_txt:language' => "Språk",
 	'user:notification:ban:subject' => 'Ditt konto på %s har blivit avstängt',
 	
 	'user:notification:unban:subject' => 'Ditt konto på %s är inte avstängt längre',
@@ -567,7 +563,7 @@ return array(
 	'admin:statistics:label:numusers' => "Antalet användare",
 	'admin:statistics:label:numonline' => "Antalet användare online",
 	'admin:statistics:label:onlineusers' => "Användare online nu",
-	'admin:statistics:label:admins'=>"Admins",
+	'admin:statistics:label:admins' => "Admins",
 	'admin:statistics:label:version' => "Elgg-version",
 	'admin:statistics:label:version:release' => "Release",
 
@@ -578,8 +574,6 @@ return array(
 	'admin:server:label:web_server' => 'Webbserver',
 	'admin:server:label:server' => 'Server',
 	'admin:server:label:php_version' => 'PHP-version',
-
-	'admin:server:label:redis' => 'Redis',
 
 	'admin:server:label:opcache' => 'OPcache',
 	
@@ -629,13 +623,13 @@ return array(
 	'usersettings:user:opt:linktext' => "Ändra dina inställningar",
 
 	'usersettings:plugins:opt:linktext' => "Konfigurera dina verktyg",
-
-	'usersettings:statistics:label:numentities' => "Ditt innehåll",
+	
 	'usersettings:statistics:yourdetails' => "Dina detaljer",
 	'usersettings:statistics:label:name' => "Namn",
 	'usersettings:statistics:label:email' => "E-post",
-	'usersettings:statistics:label:membersince' => "Medlem sedan",
 	'usersettings:statistics:label:lastlogin' => "Senast inloggad",
+	'usersettings:statistics:label:membersince' => "Medlem sedan",
+	'usersettings:statistics:label:numentities' => "Ditt innehåll",
 
 /**
  * Activity river
@@ -723,6 +717,7 @@ return array(
 	'activity' => 'Aktivitet',
 	'members' => 'Medlemmar',
 	'menu' => 'Meny',
+	'item' => 'Objekt',
 
 	'up' => 'Upp',
 	'down' => 'Ner',
@@ -808,6 +803,9 @@ return array(
 	'title' => "Titel",
 	'description' => "Beskrivning",
 	'tags' => "Taggar",
+	'url' => "URL",
+	'website' => "Webbplats",
+	
 	'all' => "Alla",
 	'mine' => "Min",
 
@@ -869,7 +867,7 @@ return array(
 	'input:date_format' => 'Y-m-d',
 	'input:date_format:datepicker' => 'yy-mm-dd', // jQuery UI datepicker format
 	'input:time_format' => 'g:ia',
-
+	
 	'friendlytime:justnow' => "right now",
 	'friendlytime:minutes' => "%s minuter sen",
 	'friendlytime:minutes:singular' => "en minut sen",
@@ -961,9 +959,14 @@ return array(
 
 	'admin:legend:system' => 'System',
 	'admin:legend:content' => 'Innehåll',
+	'admin:legend:comments' => 'Kommentarer',
 	
 	'config:i18n:allowed_languages' => "Tillåtna språk",
+	'config:i18n:who_can_change_language:admin_only' => "Endast administratörer",
 	'config:disable_rss:label' => "Avaktivera RSS-flöden",
+	'config:content:mentions_display_format:username' => "Användarnamn",
+	'config:content:mentions_display_format:display_name' => "Visningsnamn",
+	'config:email' => "E-post",
 
 	'upgrading' => 'Uppgraderar...',
 	'upgrade:error_count' => 'Fel: %s',
@@ -997,11 +1000,6 @@ return array(
 	'email:save:fail:password' => "Lösenordet stämmer inte överens med ditt nuvarande lösenord, kunde inte ändra din e-postadress",
 
 	'friend:newfriend:subject' => "%s har gjort dig till vän!",
-	'friend:newfriend:body' => "%s har gjort dig till en vän!
-
-För att visa deras profil, tryck här:
-
-%s",
 
 	'email:changepassword:subject' => "Lösenord ändrat!",
 
@@ -1016,8 +1014,6 @@ För att visa deras profil, tryck här:
 	
 	'email:confirm:email:new:subject' => "Din e-postadress ändrades",
 	'account:validation:pending:content' => "Ditt konto har registrerats! Innan du kan använda ditt konto, måste en administratör för webbplatsen validera ditt konto. Du kommer att få ett mejl när ditt konto är validerat.",
-	
-	'account:notification:validation:subject' => "Ditt konto på %s har validerats!",
 
 /**
  * user default access
@@ -1026,7 +1022,6 @@ För att visa deras profil, tryck här:
 	'default_access:settings' => "Din standard åtkomstnivå",
 	'default_access:label' => "Standardåtkomst",
 	'user:default_access:success' => "Din nya standard åtkomstnivå sparades.",
-	'user:default_access:failure' => "Din nya standard åtkomstnivå kunde inte sparas.",
 
 /**
  * Comments
@@ -1040,8 +1035,6 @@ För att visa deras profil, tryck här:
 
 	'generic_comments:add' => "Lämna en kommentar",
 	'generic_comments:edit' => "Redigera kommentar",
-	'generic_comments:post' => "Skicka kommentar",
-	'generic_comments:text' => "Kommentar",
 	'generic_comments:latest' => "Senaste kommentarer",
 	'generic_comment:posted' => "Din kommentar skickades.",
 	'generic_comment:updated' => "Kommentaren uppdaterades.",
@@ -1050,9 +1043,7 @@ För att visa deras profil, tryck här:
 	'generic_comment:notfound' => "Tyvärr kunde vi inte hitta den specificerade kommentaren.",
 	'generic_comment:failure' => "Ett oväntat fel uppstod när kommentaren skulle sparas.",
 	'generic_comment:none' => 'Inga kommentarer',
-	'generic_comment:title' => 'Kommentar av %s',
 	'generic_comment:on' => '%s på %s',
-	'generic_comments:latest:posted' => 'skickade en',
 	
 	'generic_comment:notification:user:summary' => 'En ny kommentar på: %s',
 
@@ -1062,12 +1053,15 @@ För att visa deras profil, tryck här:
 
 	'byline' => 'Av %s',
 	'byline:ingroup' => 'i gruppen %s',
-
+	
 	'entity:delete:item' => 'Objekt',
 	'entity:delete:item_not_found' => 'Objektet hittades inte.',
 	'entity:delete:permission_denied' => 'Du har inte behörighet att ta bort det här objektet.',
 	'entity:delete:success' => '%s har tagits bort.',
 	'entity:delete:fail' => '%s kunde inte tas bort.',
+	
+	'entity:restore:item' => 'Objekt',
+
 
 /**
  * Annotations
@@ -1087,10 +1081,6 @@ För att visa deras profil, tryck här:
 	'actiongatekeeper:uploadexceeded' => 'Storleken på filen (filerna) som laddades upp, översteg gränsen som ställts in av din webbplats administratör',
 
 /**
- * Word blacklists
- */
-
-/**
  * Javascript
  */
 
@@ -1102,14 +1092,32 @@ För att visa deras profil, tryck här:
  */
 	
 /**
+ * Trash
+ */
+
+/**
+ * Color schemes
+ */
+
+/**
  * Miscellaneous
  */
 	'elgg:powered' => "Drivs av Elgg",
-	
+	'field:required' => "Krävs",
+
+/**
+ * Accessibility
+ */
+	'menu:comments:header' => "Kommentarer",
+	'menu:filter:header' => "Filtrera",
+	'menu:page:header' => "Sida",
+	'menu:site:header' => "Webbplats",
+	'menu:social:header' => "Social",
+	'menu:title:header' => "Titel",
+
 /**
  * Cli commands
  */
-	'cli:login:error:unknown' => "Det går inte logga in som %s",
 	'cli:login:success:log' => "Inloggad som %s [guid: %s]",
 	'cli:response:output' => "Svar:",
 	'cli:plugins:list:error:status' => "%s är inte en giltig status. Tillåtna alternativ är: %s",
@@ -1126,12 +1134,13 @@ För att visa deras profil, tryck här:
 	"es" => "Spanska",
 	"fi" => "Finska",
 	"fr" => "Franska",
-	//"in" => "",
 	"it" => "Italienska",
 	"no" => "Norska",
 	"ru" => "Ryska",
 	"sv" => "Svenska",
 	//"y" => "",
 
-	"field:required" => 'Krävs',
+/**
+ * Upgrades
+ */
 );

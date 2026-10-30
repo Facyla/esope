@@ -49,7 +49,7 @@ run_commands([
 	"git checkout -B {$new_branch}",
 
 	// pull translations
-	'tx pull -af --minimum-perc=60 --mode translator',
+	'tx pull -af --mode translator',
 ]);
 
 // Clean translations

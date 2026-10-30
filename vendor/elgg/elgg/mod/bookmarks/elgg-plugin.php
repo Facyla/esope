@@ -13,9 +13,10 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'bookmarks',
-			'class' => 'ElggBookmark',
+			'class' => \ElggBookmark::class,
 			'capabilities' => [
 				'commentable' => true,
+				'river_emittable' => true,
 				'searchable' => true,
 				'subscribable' => true,
 				'likable' => true,
@@ -24,7 +25,7 @@ return [
 		],
 	],
 	'actions' => [
-		'bookmarks/save' => [
+		'bookmarks/edit' => [
 			'controller' => \Elgg\Controllers\EntityEditAction::class,
 			'options' => [
 				'entity_type' => 'object',
@@ -35,22 +36,31 @@ return [
 	'routes' => [
 		'default:object:bookmarks' => [
 			'path' => '/bookmarks',
-			'resource' => 'bookmarks/all',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'sidebar_view' => 'bookmarks/sidebar',
+			],
 		],
 		'collection:object:bookmarks:all' => [
 			'path' => '/bookmarks/all',
-			'resource' => 'bookmarks/all',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'sidebar_view' => 'bookmarks/sidebar',
+			],
 		],
 		'collection:object:bookmarks:owner' => [
 			'path' => '/bookmarks/owner/{username}',
-			'resource' => 'bookmarks/owner',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'sidebar_view' => 'bookmarks/sidebar',
+			],
 			'middleware' => [
 				\Elgg\Router\Middleware\UserPageOwnerGatekeeper::class,
 			],
 		],
 		'collection:object:bookmarks:friends' => [
 			'path' => '/bookmarks/friends/{username}',
-			'resource' => 'bookmarks/friends',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
 			'required_plugins' => [
 				'friends',
 			],
@@ -59,21 +69,18 @@ return [
 			],
 		],
 		'collection:object:bookmarks:group' => [
-			'path' => '/bookmarks/group/{guid}/{subpage?}',
-			'resource' => 'bookmarks/group',
-			'defaults' => [
-				'subpage' => 'all',
+			'path' => '/bookmarks/group/{guid}',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'group_tool' => 'bookmarks',
 			],
 			'required_plugins' => [
 				'groups',
 			],
-			'middleware' => [
-				\Elgg\Router\Middleware\GroupPageOwnerGatekeeper::class,
-			],
 		],
 		'add:object:bookmarks' => [
 			'path' => '/bookmarks/add/{guid}',
-			'resource' => 'bookmarks/add',
+			'controller' => \Elgg\Controllers\GenericEntity::class,
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
@@ -81,11 +88,14 @@ return [
 		],
 		'view:object:bookmarks' => [
 			'path' => '/bookmarks/view/{guid}/{title?}',
-			'resource' => 'bookmarks/view',
+			'controller' => \Elgg\Controllers\GenericEntity::class,
+			'options' => [
+				'sidebar_view' => 'object/bookmarks/elements/sidebar',
+			],
 		],
 		'edit:object:bookmarks' => [
 			'path' => '/bookmarks/edit/{guid}',
-			'resource' => 'bookmarks/edit',
+			'controller' => \Elgg\Controllers\GenericEntity::class,
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 			],
@@ -110,8 +120,13 @@ return [
 			],
 		],
 		'form:prepare:fields' => [
-			'bookmarks/save' => [
+			'bookmarks/edit' => [
 				PrepareFields::class => [],
+			],
+		],
+		'form:register:fields' => [
+			'object:bookmarks' => [
+				'Elgg\Forms\RegisterFields::addContainerInput' => ['priority' => 600],
 			],
 		],
 		'register' => [
@@ -146,8 +161,12 @@ return [
 	'notifications' => [
 		'object' => [
 			'bookmarks' => [
-				'create' => CreateBookmarksEventHandler::class,
-				'mentions' => \Elgg\Notifications\MentionsEventHandler::class,
+				'create' => [
+					CreateBookmarksEventHandler::class => [],
+				],
+				'mentions' => [
+					\Elgg\Notifications\Handlers\Mentions::class => [],
+				],
 			],
 		],
 	],

@@ -1,23 +1,20 @@
 <?php
-/**
- * Edit a page
- */
 
-$page_guid = (int) elgg_extract('guid', $vars);
+elgg_deprecated_notice("The resource view 'pages/edit' has been deprecated", '7.1');
 
-elgg_entity_gatekeeper($page_guid, 'object', 'page', true);
+$guid = (int) elgg_extract('guid', $vars);
 
-/* @var $page \ElggPage */
-$page = get_entity($page_guid);
+/** @var \ElggPage $entity */
+$entity = elgg_entity_gatekeeper($guid, 'object', 'page', true);
 
-elgg_push_collection_breadcrumbs('object', 'page', $page->getContainerEntity());
+elgg_push_collection_breadcrumbs('object', 'page', $entity->getContainerEntity());
 
-pages_prepare_parent_breadcrumbs($page);
+pages_prepare_parent_breadcrumbs($entity);
 
 echo elgg_view_page(elgg_echo('edit:object:page'), [
 	'content' => elgg_view_form('pages/edit', ['sticky_enabled' => true], [
-		'entity' => $page,
-		'parent_guid' => $page->getParentGUID(),
+		'entity' => $entity,
+		'parent_guid' => $entity->getParentGUID(),
 	]),
 	'filter_id' => 'pages/edit',
 ]);

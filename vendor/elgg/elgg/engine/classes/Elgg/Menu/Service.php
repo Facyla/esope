@@ -123,7 +123,7 @@ class Service {
 		// trigger generic menu event
 		$params['menu'] = $this->events->triggerResults('prepare', "menu:$name", $params, $params['menu']);
 		
-		$params['menu'] = $this->prepareVerticalMenu($params['menu'], $params);
+		$params['menu'] = $this->prepareToggleMenu($params['menu'], $params);
 		$params['menu'] = $this->prepareDropdownMenu($params['menu'], $params);
 		$params['menu'] = $this->prepareSelectedParents($params['menu'], $params);
 		$params['menu'] = $this->prepareItemContentsView($params['menu'], $params);
@@ -132,22 +132,27 @@ class Service {
 	}
 	
 	/**
-	 * Prepares a vertical menu by setting the display child menu option to "toggle" if not set
+	 * Prepares a menu by setting the display child menu option to "toggle" if not set.
+	 * If 'prepare_toggle' is false toggle will be removed if set.
 	 *
 	 * @param PreparedMenu $menu   the current prepared menu
 	 * @param array        $params the menu params
 	 *
 	 * @return \Elgg\Menu\PreparedMenu
 	 */
-	protected function prepareVerticalMenu(PreparedMenu $menu, array $params): PreparedMenu {
-		if (elgg_extract('prepare_vertical', $params) !== true) {
-			return $menu;
-		}
+	protected function prepareToggleMenu(PreparedMenu $menu, array $params): PreparedMenu {
+		$prepare_toggle = (bool) elgg_extract('prepare_toggle', $params, true);
 		
-		$prepare = function(\ElggMenuItem $menu_item) use (&$prepare) {
+		$prepare = function(\ElggMenuItem $menu_item) use (&$prepare, $prepare_toggle) {
 			$child_menu_vars = $menu_item->getChildMenuOptions();
-			if (empty($child_menu_vars['display'])) {
-				$child_menu_vars['display'] = 'toggle';
+			$current_display = elgg_extract('display', $child_menu_vars);
+			
+			if ($prepare_toggle) {
+				if (empty($current_display)) {
+					$child_menu_vars['display'] = 'toggle';
+				}
+			} elseif ($current_display === 'toggle') {
+				unset($child_menu_vars['display']);
 			}
 			
 			$menu_item->setChildMenuOptions($child_menu_vars);
@@ -352,23 +357,20 @@ class Service {
 	 * @param string $menu_name The name of the menu
 	 * @param string $item_name The unique identifier for this menu item
 	 *
-	 * @return \ElggMenuItem|null
+	 * @return void
 	 * @since 5.0
 	 */
-	public function unregisterMenuItem(string $menu_name, string $item_name): ?\ElggMenuItem {
+	public function unregisterMenuItem(string $menu_name, string $item_name): void {
 		if (!isset($this->menus[$menu_name])) {
-			return null;
+			return;
 		}
 		
 		foreach ($this->menus[$menu_name] as $index => $menu_item) {
 			if ($menu_item->getName() === $item_name) {
-				$item = $this->menus[$menu_name][$index];
 				unset($this->menus[$menu_name][$index]);
-				return $item;
+				return;
 			}
 		}
-		
-		return null;
 	}
 	
 	/**

@@ -11,6 +11,7 @@ return array(
 	 */
 	'item:object:bookmarks' => 'Закладки',
 	'collection:object:bookmarks' => 'Закладки',
+	'list:object:bookmarks:no_results' => 'Закладки не найдены',
 	
 	'collection:object:bookmarks:group' => 'Закладки группы',
 	'collection:object:bookmarks:all' => "Все закладки",
@@ -27,7 +28,6 @@ return array(
 	'bookmarks:bookmarklet' => "Закладки",
 	'bookmarks:bookmarklet:group' => "Закладки группы",
 	'bookmarks:address' => "Адрес сайта",
-	'bookmarks:none' => 'Нет закладок', // @todo remove in Elgg 7.0
 
 	'bookmarks:notify:summary' => 'Новая закладка %s',
 	'bookmarks:notify:subject' => 'Новая закладка: %s',

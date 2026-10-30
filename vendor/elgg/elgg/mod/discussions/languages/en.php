@@ -12,17 +12,19 @@ return array(
 	
 	'add:object:discussion' => 'Add discussion topic',
 	'edit:object:discussion' => 'Edit topic',
+	'collection:object:discussion:all' => 'Latest discussions',
 	'collection:object:discussion:group' => 'Group discussions',
 	'collection:object:discussion:my_groups' => 'Discussions in my groups',
+	'collection:object:discussion:owner' => '%s\'s discussions',
 	
 	'notification:object:discussion:create' => "Send a notification when a discussion is created",
 	'notifications:mute:object:discussion' => "about the discussion '%s'",
 	
 	'discussion:settings:enable_global_discussions' => 'Enable global discussions',
 	'discussion:settings:enable_global_discussions:help' => 'Allow discussions to be created outside of groups',
+	'discussion:settings:auto_close' => 'Automatically close discussions after a given number of days',
+	'discussion:settings:auto_close:help' => 'When there are no more comments after the given number of days the discussion will be closed.',
 
-	'discussion:latest' => 'Latest discussions',
-	'discussion:none' => 'No discussions', // @todo remove in Elgg 7.0
 	'discussion:updated' => "Last comment by %s %s",
 
 	'discussion:topic:created' => 'The discussion topic was created.',
@@ -36,6 +38,7 @@ return array(
 	'discussion:error:missing' => 'Both title and message are required fields',
 	'discussion:error:permissions' => 'You do not have permissions to perform this action',
 	'discussion:error:no_groups' => "You're not a member of any groups.",
+	'discussion:error:status' => "Unable to save the discussion status",
 
 	/**
 	 * River
@@ -85,6 +88,9 @@ View and comment on the discussion:
 	'discussion:topic:toggle_status:open:confirm' => 'Are you sure you wish to reopen this topic?',
 	'discussion:topic:toggle_status:closed' => 'The discussion topic was successfully closed',
 	'discussion:topic:toggle_status:closed:confirm' => 'Are you sure you wish to close this topic?',
+	
+	'discussion:auto_close:new' => 'Discussions will automatically close %d days after the last comment.',
+	'discussion:auto_close:edit' => 'This discussion will automatically close in %d days. If a comment is placed this time will be extended.',
 	
 	// widgets
 	'widgets:discussions:name' => 'Discussions',

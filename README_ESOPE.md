@@ -8,26 +8,30 @@ Suite à ses évolutions, elle permet également de proposer des réseaux public
 
 
 ## Quelle version choisir ?
-* esope_1.8 : **branche de production - version LTS**
-* esope_1.9 : *branche intermédiaire - mises à jour seulement*
-* esope_1.10 : *branche intermédiaire - mises à jour seulement*
-* esope_1.11 : *branche intermédiaire - mises à jour seulement*
-* esope_1.12 : **branche de production - version LTS**
-* esope_2.0 : *branche intermédiaire - mises à jour seulement*
-* esope_2.1 : *branche intermédiaire - mises à jour seulement*
-* esope_2.2 : *branche intermédiaire - mises à jour seulement*
-* esope_2.3 : **branche de production - version LTS**
-* esope_3.0 : *branche intermédiaire - mises à jour seulement*
-* esope_3.1 : *branche intermédiaire - mises à jour seulement*
-* esope_3.2 : *branche intermédiaire - mises à jour seulement*
+* esope_7 : **branche de production - version LTS**
+* esope_6 : *branche intermédiaire - mises à jour seulement*
+* esope_5 : *branche intermédiaire - mises à jour seulement*
+* esope_4 : *branche intermédiaire - mises à jour seulement*
 * esope_3.3 : **branche de production - version LTS**
+* esope_3.2 : *branche intermédiaire - mises à jour seulement*
+* esope_3.1 : *branche intermédiaire - mises à jour seulement*
+* esope_3.0 : *branche intermédiaire - mises à jour seulement*
+* esope_2.3 : **branche de production - version LTS**
+* esope_2.2 : *branche intermédiaire - mises à jour seulement*
+* esope_2.1 : *branche intermédiaire - mises à jour seulement*
+* esope_2.0 : *branche intermédiaire - mises à jour seulement*
+* esope_1.12 : **branche de production - version LTS**
+* esope_1.11 : *branche intermédiaire - mises à jour seulement*
+* esope_1.10 : *branche intermédiaire - mises à jour seulement*
+* esope_1.9 : *branche intermédiaire - mises à jour seulement*
+* esope_1.8 : **branche de production - version LTS**
 
 
 
 ## A propos d'Elgg
 * Elgg core : https://github.com/Elgg/Elgg
-* Documentation (en français) : http://learn.elgg.org/fr/3.3/
-* Documentation de référence du code : http://reference.elgg.org/
+* Documentation (en français) : https://learn.elgg.org/fr/stable/
+* Documentation de référence du code : https://reference.elgg.org/
 
 
 ## A propos d'ESOPE
@@ -75,17 +79,16 @@ Les versions d'ESOPE suivent la politique de versions de Elgg, avec au moins le 
 
 
 ## Installation d'ESOPE
-Guide d'installation de Elgg : http://learn.elgg.org/fr/3.3/intro/install.html
-- Serveur Web (Apache ou nginx)
-- PHP 7.2 à 7.4
-- extensions PHP : GD, PDO, JSON, XML, Multibyte String support, et la possibilité d'envoyer des mails. D'autres extensions peuvent être requises selon les plugins activés.
-- MySQL 5.5+
-- URL rewriting
+Guide d'installation de Elgg : http://learn.elgg.org/fr/stable/intro/install.html
+- Serveur Web (Apache ou nginx) avec PHP-FPM et la réécriture d'URL activée
+- PHP 8.3+
+- extensions PHP : GD, INTL, JSON, PDO, XML, Multibyte String support, et la possibilité d'envoyer des mails. D'autres extensions peuvent être requises selon les plugins activés.
+- MariaDB 10.6+ ou MySQL 8.4+
 
 
 ### Sécurisation
 Il est recommandé de ne permettre l'accès qu'à travers une connexion HTTPS (nécesite un certificat valide, par ex. avec LetsEncrypt). 
-En savoir plus sur les options de sécurité dans Elgg : http://learn.elgg.org/fr/3.3/admin/security.html?highlight=s%C3%A9curit%C3%A9
+En savoir plus sur les options de sécurité dans Elgg : http://learn.elgg.org/fr/stable/admin/security.html
 
 
 ### Procédure d'installation

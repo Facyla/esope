@@ -8,9 +8,22 @@
 	Form Elements
 *************************************** */
 .elgg-form-body,
-.elgg-form-body > div,
-.elgg-form-body fieldset:not(.elgg-fieldset) > div,
-.elgg-field {
+.elgg-form-footer {
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+	}
+	
+	> div,
+	fieldset:not(.elgg-fieldset) > div {
+		&:not(:last-child) {
+			margin-bottom: 1rem;
+		}
+	}
+}
+
+.elgg-form > .elgg-field,
+.elgg-module > .elgg-body > .elgg-field,
+.elgg-tabs-content > div > .elgg-field {
 	&:not(:last-child) {
 		margin-bottom: 1rem;
 	}
@@ -43,11 +56,12 @@ label, .elgg-field-label {
 input, textarea {
 	border: 1px solid var(--elgg-border-color-mild);
 	color: var(--elgg-text-color-strong);
+	background: var(--elgg-background-color-input);
 	font-size: 1rem;
 	padding: 0.25rem 0.5rem;
 	line-height: normal;
 	width: 100%;
-	border-radius: 3px;
+	border-radius: var(--elgg-border-radius-medium);
 }
 
 input:disabled,
@@ -71,7 +85,7 @@ input[type=datetime-local],
 input[type=month],
 input[type=search],
 input[type=tel],
-input[type=week], {
+input[type=week] {
 	height: 2.5rem;
 }
 
@@ -103,10 +117,6 @@ input[type="radio"] {
 	vertical-align: middle;
 }
 
-input[type="number"] {
-	-moz-appearance: textfield;
-}
-
 .elgg-input-checkbox + label,
 .elgg-input-checkbox + .elgg-field-label {
 	display: inline-block;
@@ -126,7 +136,7 @@ input[type="number"] {
 	left: 5px;
 	top: 5px;
 	border: 1px solid #000;
-	border-radius: 3px;
+	border-radius: var(--elgg-border-radius-medium);
 }
 
 .elgg-input-color {
@@ -141,23 +151,35 @@ select {
 	max-width: 100%;
 	border: 1px solid var(--elgg-border-color-mild);
 	color: var(--elgg-text-color-strong);
+	background: var(--elgg-background-color-input);
 	padding: 0.25rem 0.5rem;
 	line-height: 1.75rem;
 	vertical-align: middle;
-	border-radius: 3px;
-}
-
-select:not([multiple]) {
-	height: 2.5rem;
+	border-radius: var(--elgg-border-radius-medium);
+	
+	&:not([multiple]) {
+		height: 2.5rem;
+	}
 }
 
 .elgg-form-account {
 	margin-bottom: 1rem;
 }
 
-.elgg-input-radios label {
-	font-weight: normal;
-	font-size: 100%;
+.elgg-input-radios {
+	&.elgg-vertical {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	
+	label {
+		font-weight: normal;
+		font-size: 100%;
+		
+		display: flex;
+		align-items: center;
+	}
 }
 
 .elgg-input-checkboxes {
@@ -172,7 +194,8 @@ select:not([multiple]) {
 	}
 }
 
-.elgg-form-login, .elgg-form-account {
+.elgg-form-login,
+.elgg-form-account {
 	max-width: 40rem;
 	margin: 0 auto;
 }
@@ -185,15 +208,10 @@ select:not([multiple]) {
 	&.elgg-fieldset-has-legend {
 		border: 1px solid var(--elgg-border-color-soft);
 		padding: 1rem;
-		margin-bottom: 1rem;
-	}
-	
-	> .elgg-field {
-		margin: 0;
 	}
 }
 
-@media $(media-phone-up) {
+@media screen and (min-width: 30rem) {
 	.elgg-field {
 		&.elgg-field-stretch {
 			flex-basis: 1%;

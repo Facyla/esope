@@ -8,9 +8,9 @@ echo elgg_view('output/longtext', [
 	'value' => elgg_echo('admin:performance:generic:description'),
 ]);
 
-$icon_ok = elgg_view_icon('check');
-$icon_warning = elgg_view_icon('exclamation-triangle');
-$icon_error = elgg_view_icon('times');
+$icon_ok = elgg_view_icon('check', ['class' => ['elgg-state', 'elgg-state-success']]);
+$icon_warning = elgg_view_icon('exclamation-triangle', ['class' => ['elgg-state', 'elgg-state-warning']]);
+$icon_error = elgg_view_icon('times', ['class' => ['elgg-state', 'elgg-state-danger']]);
 
 $view_module = function($icon, $title, $value = '', $subtext = '') {
 	$body = elgg_format_element('strong', [], $title);
@@ -57,7 +57,7 @@ if (!empty($open_basedirs)) {
 	$value = elgg_format_element('span', ['class' => ['elgg-subtext']], $open_basedirs);
 	
 	$separator = ':';
-	if (stripos(PHP_OS, 'WIN') === 0) {
+	if (PHP_OS_FAMILY === 'Windows') {
 		$separator = ';';
 	}
 	
@@ -91,46 +91,6 @@ if (function_exists('opcache_get_status')) {
 	} else {
 		$value = elgg_echo('status:disabled');
 		$subtext = elgg_echo('admin:server:opcache:inactive');
-	}
-}
-
-echo $view_module($icon, $title, $value, $subtext);
-
-// memcache
-$icon = $icon_error;
-$title = elgg_echo('admin:server:label:memcache');
-$value = elgg_echo('status:unavailable');
-$subtext = '';
-
-if (\Elgg\Cache\CompositeCache::isMemcacheAvailable()) {
-	$icon = $icon_warning;
-	
-	if (elgg_get_config('memcache') && !empty(elgg_get_config('memcache_servers'))) {
-		$icon = $icon_ok;
-		$value = elgg_echo('status:enabled');
-	} else {
-		$value = elgg_echo('status:disabled');
-		$subtext = elgg_echo('admin:server:memcache:inactive');
-	}
-}
-
-echo $view_module($icon, $title, $value, $subtext);
-
-// redis
-$icon = $icon_error;
-$title = elgg_echo('admin:server:label:redis');
-$value = elgg_echo('status:unavailable');
-$subtext = '';
-
-if (\Elgg\Cache\CompositeCache::isRedisAvailable()) {
-	$icon = $icon_warning;
-	
-	if (elgg_get_config('redis') && !empty(elgg_get_config('redis_servers'))) {
-		$icon = $icon_ok;
-		$value = elgg_echo('status:enabled');
-	} else {
-		$value = elgg_echo('status:disabled');
-		$subtext = elgg_echo('admin:server:redis:inactive');
 	}
 }
 

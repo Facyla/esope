@@ -3,7 +3,10 @@
 namespace Elgg\Router;
 
 use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Router\Middleware\GroupToolGatekeeper;
+use Elgg\Router\Middleware\WalledGarden;
 use Elgg\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RouteRegistrationServiceUnitTest extends UnitTestCase {
 	
@@ -45,6 +48,49 @@ class RouteRegistrationServiceUnitTest extends UnitTestCase {
 		$this->service->register('view:object:blog', [
 			'path' => '/blog/view/{guid}/{title?}',
 		]);
+	}
+	
+	public function testRegisterRouteGetsWalledGardenGateKeeper() {
+		$route = $this->service->register('view:object:blog', [
+			'path' => '/blog/view/{guid}/{title?}',
+			'resource' => 'blog/view',
+		]);
+		
+		$this->assertInstanceOf(Route::class, $route);
+		
+		$middleware = $route->getDefault('_middleware');
+		$this->assertIsArray($middleware);
+		$this->assertContains(WalledGarden::class, $middleware);
+	}
+	
+	public function testRegisterRouteDoesntGetsWalledGardenGateKeeper() {
+		$route = $this->service->register('view:object:blog', [
+			'path' => '/blog/view/{guid}/{title?}',
+			'resource' => 'blog/view',
+			'walled' => false,
+		]);
+		
+		$this->assertInstanceOf(Route::class, $route);
+		
+		$middleware = $route->getDefault('_middleware');
+		$this->assertIsArray($middleware);
+		$this->assertNotContains(WalledGarden::class, $middleware);
+	}
+	
+	public function testRegisterRouteGetsGroupToolGateKeeper() {
+		$route = $this->service->register('view:object:blog', [
+			'path' => '/blog/view/{guid}/{title?}',
+			'resource' => 'blog/view',
+			'options' => [
+				'group_tool' => 'foo'
+			],
+		]);
+		
+		$this->assertInstanceOf(Route::class, $route);
+		
+		$middleware = $route->getDefault('_middleware');
+		$this->assertIsArray($middleware);
+		$this->assertContains(GroupToolGatekeeper::class, $middleware);
 	}
 	
 	public function testUnregisterRoute() {
@@ -164,10 +210,8 @@ class RouteRegistrationServiceUnitTest extends UnitTestCase {
 		
 		$this->assertStringContainsString('The route "view:foo:bar" has been deprecated.', $message_details['message']);
 	}
-	
-	/**
-	 * @dataProvider validUsernameProvider
-	 */
+
+	#[DataProvider('validUsernameProvider')]
 	public function testGenerateUrlWithValidUsername($username) {
 		$this->service->register('valid:username', [
 			'path' => '/valid/{username}',
@@ -197,10 +241,8 @@ class RouteRegistrationServiceUnitTest extends UnitTestCase {
 			['देवनागरी'], // https://github.com/Elgg/Elgg/issues/12518 and https://github.com/Elgg/Elgg/issues/13067
 		];
 	}
-	
-	/**
-	 * @dataProvider invalidUsernameProvider
-	 */
+
+	#[DataProvider('invalidUsernameProvider')]
 	public function testGenerateUrlWithInvalidUsername($username) {
 		$this->service->register('invalid:username', [
 			'path' => '/invalid/{username}',

@@ -44,17 +44,17 @@ There is no point in throwing resources at a problem if you don't know:
 Invest in some kind of profiling to tell you where your bottleneck is,
 especially if you're considering throwing significant money at a problem.
 
-Tune MySQL
-==========
+Tune MariaDB
+============
 
-Elgg makes extensive use of the back end database, making many trips on each pageload.
+Elgg makes extensive use of the backend database, making many trips on each page load.
 This is perfectly normal and a well configured database server will be able to cope with thousands of requests per second.
 
 Here are some configuration tips that might help:
 
- * Make sure that MySQL is configured to use an appropriate my.cnf for the size of your website.
- * Increase the amount of memory available to PHP and MySQL
-   (you will have to increase the amount of memory available to the php process in any case)
+ * Make sure that MariaDB is configured to use an appropriate ``my.cnf`` for the size of your website.
+ * Increase the amount of memory available to PHP and MariaDB
+   (you will have to increase the amount of memory available to the PHP process in any case)
 
 Enable caching
 ==============
@@ -120,8 +120,7 @@ Elgg also caches information like the language mapping and class map.
 This can be disabled by setting ``$CONFIG->system_cache_enabled = false;``
 For best performance, make sure this value is set to ``true``.
 
-This is currently stored in files in your dataroot (although later
-versions of Elgg may use memcache). As with the simple cache it is
+This is currently stored in files in your dataroot. As with the simple cache it is
 flushed when a plugin is enabled, disabled or reordered, or when
 upgrade.php is executed.
 
@@ -163,55 +162,6 @@ If the static assets aren't being cached:
  * Enable Simplecache_, which turns select views into browser-cacheable assets
 
 __ https://addons.mozilla.org/en-us/firefox/addon/yslow/
-
-Memcached
----------
-
-Libmemcached was created by Brian Aker and was designed from day one to give the best performance available to users of Memcached. 
-
-.. seealso::
-
-	http://libmemcached.org/About.html and https://secure.php.net/manual/en/book.memcached.php
-
-Installation requirements:
-
-- php-memcached
-- libmemcached
-- memcached
-
-Configuration:
-
-Uncomment and populate the following sections in ``settings.php``
-
-.. code-block:: php
-
-    $CONFIG->memcache = true;
-    
-    $CONFIG->memcache_servers = array (
-        array (
-            'host' => 'server1',
-            'port' => 11211
-        ),
-        array (
-            'host' => 'server2',
-            'port' => 11211
-        )
-    );
-
-Optionaly if you run multiple Elgg installations but use ony one Memcache server, you may want 
-to add a namespace prefix. In order to do this, uncomment the following line
-
-.. code-block:: php
-
-    $CONFIG->memcache_namespace_prefix = '';
-
-Squid
------
-
-We have had good results by using `Squid`_ to cache images for us.
-
-.. _Squid: http://en.wikipedia.org/wiki/Squid_cache
-
 
 Bytecode caching
 ----------------
@@ -292,8 +242,8 @@ Configuration
 Lastly, take a look at your configuration as there are a few gotchas that can catch people.
 
 For example, out of the box, Apache can handle quite a high load.
-However, most distros of Linux come with mysql configured for small sites.
-This can result in Apache processes getting stalled waiting to talk to one very overloaded MySQL process.
+However, most distros of Linux come with MariaDB configured for small sites.
+This can result in Apache processes getting stalled waiting to talk to one very overloaded MariaDB process.
 
 Check for poorly-behaved plugins
 ================================

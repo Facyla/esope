@@ -3,7 +3,6 @@
 *************************************** */
 .elgg-menu-filter,
 .elgg-tabs {
-	margin-bottom: 0.5rem;
 	border-bottom: 1px solid var(--elgg-border-color-soft);
 	display: flex;
 	flex-direction: row;
@@ -15,8 +14,14 @@
 		background: var(--elgg-background-color-soft);
 		flex-grow: 1;
 		
-		&.elgg-state-selected a:hover {
-			background: #ffffff;
+		&.elgg-state-selected {
+			background: var(--elgg-layout-background-color);
+			
+			> a {
+				position: relative;
+				top: 1px;
+				background: var(--elgg-layout-background-color);
+			}
 		}
 		
 		> a {
@@ -24,37 +29,32 @@
 			display: block;
 			padding: 0.5rem 1rem;
 			text-align: center;
-			height: auto;
-			color: #646464;
+			line-height: 1.5rem;
+			color: var(--elgg-text-color-soft);
 			
 			&:hover {
-				background-color: var(--elgg-background-color-mild);
-				color: #333;
+				background: var(--elgg-layout-background-color);
+				color: var(--elgg-text-color-strong);
 			}
-		}
-	}
-	
-	> .elgg-state-selected {
-		border-color: var(--elgg-border-color-soft);
-		background: #ffffff;
-		
-		> a {
-			position: relative;
-			top: 1px;
-			background: #ffffff;
 		}
 	}
 }
 
-@media $(media-tablet-up) {
-	.elgg-menu-filter > li,
-	.elgg-tabs > li {
-		border-bottom-width: 1px;
-		margin: .25rem 0 0 0.5rem;
-		border-radius: 3px 3px 0 0;
-		position: relative;
-		top: 1px;
-		flex-grow: 0;
+.elgg-menu-navigation-tabs-container {
+	margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 50rem) {
+	.elgg-menu-filter,
+	.elgg-tabs {
+		> li {
+			border-bottom-width: 1px;
+			margin: .25rem 0 0 0.5rem;
+			border-radius: var(--elgg-border-radius-small) var(--elgg-border-radius-small) 0 0;
+			position: relative;
+			top: 1px;
+			flex-grow: 0;
+		}
 	}
 	
 	.elgg-menu-filter {

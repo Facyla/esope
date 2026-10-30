@@ -6,5 +6,4 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'CssCrush' => array($vendorDir . '/css-crush/css-crush/lib'),
 );

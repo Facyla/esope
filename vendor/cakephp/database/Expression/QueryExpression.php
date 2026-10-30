@@ -57,6 +57,9 @@ class QueryExpression implements ExpressionInterface, Countable
      * expression objects. Optionally, you can set the conjunction keyword to be used
      * for joining each part of this level of the expression tree.
      *
+     * The string form of `$conditions` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
+     *
      * @param \Cake\Database\ExpressionInterface|array|string $conditions Tree like array structure
      * containing all the conditions to be added or nested inside this expression object.
      * @param \Cake\Database\TypeMap|array $types Associative array of types to be associated with the values
@@ -110,6 +113,9 @@ class QueryExpression implements ExpressionInterface, Countable
      * If the type passed for any of the fields is expressed "type[]" (note braces)
      * then it will cause the placeholder to be re-written dynamically so if the
      * value is an array, it will create as many placeholders as values are in it.
+     *
+     * The string form of `$conditions` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
      *
      * @param \Cake\Database\ExpressionInterface|array|string $conditions single or multiple conditions to
      * be added. When using an array and the key is 'OR' or 'AND' a new expression
@@ -260,6 +266,36 @@ class QueryExpression implements ExpressionInterface, Countable
     }
 
     /**
+     * Adds a new condition to the expression object in the form "field IS DISTINCT FROM value".
+     *
+     * @param \Cake\Database\ExpressionInterface|string $field Database field to be compared against value
+     * @param mixed $value The value to be bound to $field for comparison
+     * @param string|null $type the type name for $value as configured using the Type map.
+     * @return $this
+     */
+    public function isDistinctFrom(ExpressionInterface|string $field, mixed $value, ?string $type = null)
+    {
+        $type ??= $this->_calculateType($field);
+
+        return $this->add(new DistinctComparisonExpression($field, $value, $type, 'IS DISTINCT FROM'));
+    }
+
+    /**
+     * Adds a new condition to the expression object in the form "field IS NOT DISTINCT FROM value".
+     *
+     * @param \Cake\Database\ExpressionInterface|string $field Database field to be compared against value
+     * @param mixed $value The value to be bound to $field for comparison
+     * @param string|null $type the type name for $value as configured using the Type map.
+     * @return $this
+     */
+    public function isNotDistinctFrom(ExpressionInterface|string $field, mixed $value, ?string $type = null)
+    {
+        $type ??= $this->_calculateType($field);
+
+        return $this->add(new DistinctComparisonExpression($field, $value, $type, 'IS NOT DISTINCT FROM'));
+    }
+
+    /**
      * Adds a new condition to the expression object in the form "field LIKE value".
      *
      * @param \Cake\Database\ExpressionInterface|string $field Database field to be compared against value
@@ -367,6 +403,28 @@ class QueryExpression implements ExpressionInterface, Countable
 
     /**
      * Adds a new condition to the expression object in the form
+     * "(field IN (value1, value2) OR field IS NULL".
+     *
+     * @param \Cake\Database\ExpressionInterface|string $field Database field to be compared against value
+     * @param \Cake\Database\ExpressionInterface|array|string $values the value to be bound to $field for comparison
+     * @param string|null $type the type name for $value as configured using the Type map.
+     * @return $this
+     */
+    public function inOrNull(
+        ExpressionInterface|string $field,
+        ExpressionInterface|array|string $values,
+        ?string $type = null,
+    ) {
+        $or = new static([], $this->getTypeMap(), 'OR');
+        $or
+            ->in($field, $values, $type)
+            ->isNull($field);
+
+        return $this->add($or);
+    }
+
+    /**
+     * Adds a new condition to the expression object in the form
      * "(field NOT IN (value1, value2) OR field IS NULL".
      *
      * @param \Cake\Database\ExpressionInterface|string $field Database field to be compared against value
@@ -379,7 +437,7 @@ class QueryExpression implements ExpressionInterface, Countable
         ExpressionInterface|array|string $values,
         ?string $type = null,
     ) {
-        $or = new static([], [], 'OR');
+        $or = new static([], $this->getTypeMap(), 'OR');
         $or
             ->notIn($field, $values, $type)
             ->isNull($field);
@@ -424,6 +482,23 @@ class QueryExpression implements ExpressionInterface, Countable
         $type ??= $this->_calculateType($field);
 
         return $this->add(new BetweenExpression($field, $from, $to, $type));
+    }
+
+    /**
+     * Adds a new condition to the expression object in the form
+     * "field NOT BETWEEN from AND to".
+     *
+     * @param \Cake\Database\ExpressionInterface|string $field The field name to compare for values outside the range.
+     * @param mixed $from The initial value of the range.
+     * @param mixed $to The ending value in the comparison range.
+     * @param string|null $type the type name for $value as configured using the Type map.
+     * @return $this
+     */
+    public function notBetween(ExpressionInterface|string $field, mixed $from, mixed $to, ?string $type = null)
+    {
+        $type ??= $this->_calculateType($field);
+
+        return $this->add(new BetweenExpression($field, $from, $to, $type, true));
     }
 
     /**
@@ -631,7 +706,7 @@ class QueryExpression implements ExpressionInterface, Countable
             $isNot = false;
             if (!$numericKey) {
                 $normalizedKey = strtolower($k);
-                $isOperator = in_array($normalizedKey, $operators);
+                $isOperator = in_array($normalizedKey, $operators, true);
                 $isNot = $normalizedKey === 'not';
             }
 
@@ -690,14 +765,20 @@ class QueryExpression implements ExpressionInterface, Countable
         // like `CONCAT(first_name, ' ', last_name) IN`.
         if ($spaces > 1) {
             $parts = explode(' ', $expression);
-            if (preg_match('/(is not|not \w+)$/i', $expression)) {
-                $last = array_pop($parts);
-                $second = array_pop($parts);
-                $parts[] = "{$second} {$last}";
+            if (preg_match('/is not distinct from$/i', $expression)) {
+                $operator = implode(' ', array_slice($parts, -4));
+                $parts = array_slice($parts, 0, -4);
+            } elseif (preg_match('/is distinct from$/i', $expression)) {
+                $operator = implode(' ', array_slice($parts, -3));
+                $parts = array_slice($parts, 0, -3);
+            } elseif (preg_match('/(is not|not \w+)$/i', $expression)) {
+                $operator = implode(' ', array_slice($parts, -2));
+                $parts = array_slice($parts, 0, -2);
+            } else {
+                $operator = array_pop($parts);
             }
-            $operator = array_pop($parts);
             $expression = implode(' ', $parts);
-        } elseif ($spaces == 1) {
+        } elseif ($spaces === 1) {
             $parts = explode(' ', $expression, 2);
             [$expression, $operator] = $parts;
         }
@@ -705,7 +786,7 @@ class QueryExpression implements ExpressionInterface, Countable
 
         $type = $this->getTypeMap()->type($expression);
         $typeMultiple = (is_string($type) && str_contains($type, '[]'));
-        if (in_array($operator, ['IN', 'NOT IN']) || $typeMultiple) {
+        if (in_array($operator, ['IN', 'NOT IN'], true) || $typeMultiple) {
             $type = $type ?: 'string';
             if (!$typeMultiple) {
                 $type .= '[]';
@@ -743,14 +824,20 @@ class QueryExpression implements ExpressionInterface, Countable
             $operator = '!=';
         }
 
-        if ($value === null && $this->_conjunction !== ',') {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Expression `%s` has invalid `null` value.'
-                    . ' If `null` is a valid value, operator (IS, IS NOT) is missing.',
-                    $expression,
-                ),
-            );
+        if (in_array($operator, ['IS DISTINCT FROM', 'IS NOT DISTINCT FROM'], true)) {
+            return new DistinctComparisonExpression($expression, $value, $type, $operator);
+        }
+
+        if (
+            $value === null &&
+            $this->_conjunction !== ','
+        ) {
+            throw new InvalidArgumentException(sprintf(
+                'Expression `%s` has invalid `null` value.'
+                . ' If `null` is a valid value, operator (IS, IS NOT, IS DISTINCT FROM, IS NOT DISTINCT FROM)'
+                . ' is missing.',
+                $expression,
+            ));
         }
 
         return new ComparisonExpression($expression, $value, $type, $operator);
@@ -774,8 +861,6 @@ class QueryExpression implements ExpressionInterface, Countable
 
     /**
      * Clone this object and its subtree of expressions.
-     *
-     * @return void
      */
     public function __clone()
     {

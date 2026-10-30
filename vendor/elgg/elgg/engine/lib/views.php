@@ -228,6 +228,8 @@ function elgg_get_view_extensions(string $view): array {
  * @param string       $page_shell Optional page shell to use. See page/shells view directory
  * @param array        $vars       Optional vars array to pass to the page
  *                                 shell. Automatically adds title, body, head, and sysmessages
+ *                                 The shell 'walled_garden' will automatically be changed to 'default' if a user is logged in
+ *                                 or if the walled_garden is not enabled in the config
  *
  * @return string The contents of the page
  * @since  1.8
@@ -242,6 +244,11 @@ function elgg_view_page(string $title, string|array $body, string $page_shell = 
 	if (is_array($body)) {
 		$vars['entity'] = elgg_extract('entity', $body, elgg_extract('entity', $vars));
 
+		if (elgg_is_empty($title)) {
+			// try to get a title for the page shell
+			$title = elgg_extract('title', $body);
+		}
+		
 		$body['title'] = elgg_extract('title', $body, $title);
 		$body = elgg_view_layout('default', $body);
 	}
@@ -257,7 +264,13 @@ function elgg_view_page(string $title, string|array $body, string $page_shell = 
 	$params['identifier'] = _elgg_services()->request->getFirstUrlSegment();
 	$params['segments'] = _elgg_services()->request->getUrlSegments();
 	array_shift($params['segments']);
+	
 	$page_shell = elgg_trigger_event_results('shell', 'page', $params, $page_shell);
+	if ($page_shell === 'walled_garden') {
+		if (!elgg_get_config('walled_garden') || elgg_is_logged_in()) {
+			$page_shell = 'default';
+		}
+	}
 
 	$system_messages = _elgg_services()->system_messages;
 
@@ -428,7 +441,7 @@ function elgg_view_layout(string $layout_name, array $vars = []): string {
  *    menu_view            => (string) name of the view to be used to render the menu
  *    show_section_headers => (bool) show headers before menu sections
  *    selected_item_name   => (string) the menu item name to be selected
- *    prepare_vertical     => (bool) prepares the menu items for vertical display (default false)
+ *    prepare_toggle       => (bool) prepares the menu items for being toggled (default true)
  *    prepare_dropdown     => (bool) will put all menu items (section=default) behind a dropdown (default false)
  *    item_contents_view   => (string) the view to use for the output of the menu item contents (default: 'navigation/menu/elements/item/url')
  *
@@ -439,9 +452,16 @@ function elgg_view_layout(string $layout_name, array $vars = []): string {
  * @since 1.8.0
  */
 function elgg_view_menu($menu, array $vars = []): string {
-
 	$menu_view = (string) elgg_extract('menu_view', $vars);
 	unset($vars['menu_view']);
+	
+	if (isset($vars['prepare_vertical'])) {
+		$menu_name = is_string($menu) ? $menu : '';
+		elgg_deprecated_notice("Replace 'prepare_vertical' with 'prepare_toggle' when using 'elgg_view_menu('{$menu_name}')'", '7.1');
+		
+		$vars['prepare_toggle'] = elgg_extract('prepare_toggle', $vars, $vars['prepare_vertical']);
+		unset($vars['prepare_vertical']);
+	}
 
 	if (is_string($menu)) {
 		$menu = _elgg_services()->menus->getMenu($menu, $vars);
@@ -1038,6 +1058,42 @@ function elgg_view_form(string $action, array $form_vars = [], array $body_vars 
 }
 
 /**
+ * Render an entity edit/add form
+ *
+ * The default form action is checked in the following format and order:
+ * - <entity_type>/<entity_subtype>/edit
+ * - <entity_subtype>/edit
+ *
+ * The default form view is checked in the following format and order:
+ * - <entity_type>/<entity_subtype>/edit
+ * - <entity_subtype>/edit
+ * - entity/edit
+ *
+ * The form view will get the following provided:
+ * - entity_type: the given entity type
+ * - entity_subtype: the given entity subtype
+ * - entity: the given entity
+ * - fields: the fields for the given entity type/subtype (with an additional hidden input 'guid' if an entity was provided)
+ *
+ * @param string           $entity_type    entity type
+ * @param string           $entity_subtype entity subtype
+ * @param \ElggEntity|null $entity         entity (when editing)
+ * @param array            $vars           additional vars:
+ *                                         - (string) action: which form action to use
+ *                                         - (array) body_vars: additional body vars
+ *                                         - (array) form_vars: additional form vars
+ *                                         - (string) view: which form view to use
+ *
+ * @return string
+ * @throws \Elgg\Exceptions\InvalidArgumentException
+ * @throws \Elgg\Exceptions\DomainException
+ * @since 7.1
+ */
+function elgg_view_entity_form(string $entity_type, string $entity_subtype, ?\ElggEntity $entity = null, array $vars = []): string {
+	return _elgg_services()->forms->renderEntity($entity_type, $entity_subtype, $entity, $vars);
+}
+
+/**
  * Sets form footer and defers its rendering until the form view and extensions have been rendered.
  * Deferring footer rendering allows plugins to extend the form view while maintaining
  * logical DOM structure.
@@ -1059,34 +1115,27 @@ function elgg_get_form_footer(): string {
 }
 
 /**
- * Split array of vars into subarrays based on property prefixes
+ * Split array of vars into subarrays based on 'hash' prefix
  *
  * @see elgg_view_field()
  *
- * @param array      $vars     Vars to split
- * @param null|array $prefixes Prefixes to split
+ * @param array $vars Vars to split
  *
  * @return array
  * @internal
  */
-function _elgg_split_vars(array $vars = [], ?array $prefixes = null): array {
-
-	if (!isset($prefixes)) {
-		$prefixes = ['#'];
-	}
-
-	$return = [];
-	$default_section = ''; // something weird with PHP 8.1 compatibility
+function _elgg_split_vars(array $vars = []): array {
+	$return = [
+		'' => [],
+		'#' => [],
+	];
 	
 	foreach ($vars as $key => $value) {
-		foreach ($prefixes as $prefix) {
-			if (substr($key, 0, 1) === $prefix) {
-				$key = substr($key, 1);
-				$return[$prefix][$key] = $value;
-				break;
-			} else {
-				$return[$default_section][$key] = $value;
-			}
+		if (str_starts_with($key, '#')) {
+			$key = substr($key, 1);
+			$return['#'][$key] = $value;
+		} else {
+			$return[''][$key] = $value;
 		}
 	}
 
@@ -1124,7 +1173,7 @@ function elgg_view_field(array $params = []): string {
 	}
 
 	$input_type = $params['#type'];
-	if (!elgg_view_exists("input/$input_type")) {
+	if (!elgg_view_exists("input/{$input_type}")) {
 		return '';
 	}
 
@@ -1187,8 +1236,6 @@ function elgg_view_field(array $params = []): string {
 	}
 
 	$element_vars['label'] = elgg_view('elements/forms/label', $label_vars);
-
-	// wrap if present
 	$element_vars['help'] = elgg_view('elements/forms/help', $element_vars);
 
 	if ($make_special_checkbox_label) {

@@ -142,7 +142,7 @@ class ImageService {
 	 *
 	 * @return bool
 	 */
-	public function fixOrientation($filename): bool {
+	public function fixOrientation(string $filename): bool {
 		try {
 			$this->assertValidImageDimensions($filename);
 			

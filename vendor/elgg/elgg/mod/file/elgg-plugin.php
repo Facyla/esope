@@ -18,6 +18,7 @@ return [
 			'subtype' => 'file',
 			'capabilities' => [
 				'commentable' => true,
+				'river_emittable' => true,
 				'searchable' => true,
 				'subscribable' => true,
 				'likable' => true,
@@ -25,11 +26,8 @@ return [
 			],
 		],
 	],
-	'upgrades' => [
-		'Elgg\File\Upgrades\MoveFiles',
-	],
 	'actions' => [
-		'file/upload' => [
+		'file/edit' => [
 			'controller' => \Elgg\File\Controllers\EditAction::class,
 			'options' => [
 				'entity_type' => 'object',
@@ -40,22 +38,31 @@ return [
 	'routes' => [
 		'default:object:file' => [
 			'path' => '/file',
-			'resource' => 'file/all',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'sidebar_view' => 'file/sidebar',
+			],
 		],
 		'collection:object:file:all' => [
 			'path' => '/file/all',
-			'resource' => 'file/all',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'sidebar_view' => 'file/sidebar',
+			],
 		],
 		'collection:object:file:owner' => [
 			'path' => '/file/owner/{username}',
-			'resource' => 'file/owner',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'sidebar_view' => 'file/sidebar',
+			],
 			'middleware' => [
 				\Elgg\Router\Middleware\UserPageOwnerGatekeeper::class,
 			],
 		],
 		'collection:object:file:friends' => [
 			'path' => '/file/friends/{username}',
-			'resource' => 'file/friends',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
 			'required_plugins' => [
 				'friends',
 			],
@@ -65,17 +72,18 @@ return [
 		],
 		'collection:object:file:group' => [
 			'path' => '/file/group/{guid}',
-			'resource' => 'file/group',
+			'controller' => \Elgg\Controllers\GenericContentListing::class,
+			'options' => [
+				'group_tool' => 'file',
+				'sidebar_view' => 'file/sidebar',
+			],
 			'required_plugins' => [
 				'groups',
-			],
-			'middleware' => [
-				\Elgg\Router\Middleware\GroupPageOwnerGatekeeper::class,
 			],
 		],
 		'add:object:file' => [
 			'path' => '/file/add/{guid}',
-			'resource' => 'file/upload',
+			'controller' => \Elgg\Controllers\GenericEntity::class,
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
@@ -83,14 +91,14 @@ return [
 		],
 		'edit:object:file' => [
 			'path' => '/file/edit/{guid}',
-			'resource' => 'file/edit',
+			'controller' => \Elgg\Controllers\GenericEntity::class,
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 			],
 		],
 		'view:object:file' => [
 			'path' => '/file/view/{guid}/{title?}',
-			'resource' => 'file/view',
+			'controller' => \Elgg\Controllers\GenericEntity::class,
 		],
 	],
 	'events' => [
@@ -115,8 +123,14 @@ return [
 			],
 		],
 		'form:prepare:fields' => [
-			'file/upload' => [
+			'file/edit' => [
 				PrepareFields::class => [],
+			],
+		],
+		'form:register:fields' => [
+			'object:file' => [
+				'Elgg\File\Forms\RegisterFields::changeFileInput' => [],
+				'Elgg\Forms\RegisterFields::addContainerInput' => ['priority' => 600],
 			],
 		],
 		'register' => [
@@ -126,6 +140,9 @@ return [
 			],
 			'menu:site' => [
 				'Elgg\File\Menus\Site::register' => [],
+			],
+			'menu:title:object:file' => [
+				'Elgg\File\Menus\Title::registerDownload' => [],
 			],
 		],
 		'seeds' => [
@@ -156,8 +173,12 @@ return [
 	'notifications' => [
 		'object' => [
 			'file' => [
-				'create' => CreateFileEventHandler::class,
-				'mentions' => \Elgg\Notifications\MentionsEventHandler::class,
+				'create' => [
+					CreateFileEventHandler::class => [],
+				],
+				'mentions' => [
+					\Elgg\Notifications\Handlers\Mentions::class => [],
+				],
 			],
 		],
 	],

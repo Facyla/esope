@@ -107,7 +107,7 @@ $CONFIG->dbencoding = 'utf8mb4';
 /**
  * Multiple database connections
  *
- * Elgg supports master/slave MySQL configurations. The master should be set as
+ * Elgg supports master/slave database configurations. The master should be set as
  * the 'write' connection and the slave(s) as the 'read' connection(s).
  *
  * To use, uncomment the below configuration and update for your site.
@@ -130,55 +130,6 @@ $CONFIG->dbencoding = 'utf8mb4';
 //$CONFIG->db['read'][1]['dbname'] = "";
 //$CONFIG->db['read'][1]['dbhost'] = "";
 //$CONFIG->db['read'][1]['dbport'] = "";
-
-/**
- * Memcache setup (optional)
- * This is where you may optionally set up memcache.
- *
- * Requirements:
- * 	1) One or more memcache servers (http://www.danga.com/memcached/)
- *  2) PHP memcache wrapper (http://php.net/manual/en/memcache.setup.php)
- *
- * You can set a namespace prefix if you run multiple Elgg instances
- * on the same Memcache server.
- *
- * Note: Multiple server support is only available on server 1.2.1
- * or higher with PECL library > 2.0.0
- */
-//$CONFIG->memcache = true;
-//
-//$CONFIG->memcache_servers = array (
-//	array(
-// 		'host' => 'server1',
-//		'port' => 11211,
-// 	),
-//	array(
-// 		'host' => 'server2',
-//		'port' => 11211,
-// 	),
-//);
-
-// namespace prefix (can only be used with memcached)
-// $CONFIG->memcache_namespace_prefix = '';
-
-/**
- * Redis setup (optional)
- * This is where you may optionally set up Redis.
- */
-//$CONFIG->redis = true;
-//
-//$CONFIG->redis_options = array (
-//	'database' => '', // The "database" option lets developers specific which specific database to use.
-//	'password' => '', // The "password" option is used for clusters which required authentication.
-//);
-//
-// Only one server can be configured
-//$CONFIG->redis_servers = array (
-//	array(
-//		'host' => 'server1',
-//		'port' => 6379,
-//	),
-//);
 
 /**
  * Better caching performance
@@ -412,39 +363,16 @@ $CONFIG->allow_phpinfo = false;
 /**
  * Configure emailer transport
  *
- * This setting can be used to select a different emailer transport. By default the Laminas Sendmail Transport is used.
- * Currently only 'smtp' and 'sendmail' are supported as a different configuration.
- * For 'smtp', the SMTP server's settings must be set, while 'sendmail' requires no configuration.
+ * This setting can be used to select a different emailer transport. By default, the Symfony Sendmail Transport is used.
+ * This setting is a DSN protocol string which sets the configuration options for the different mail transports
+ *
+ * @see https://symfony.com/doc/current/mailer.html#using-built-in-transports
+ *
+ * An example to use SMTP would be 'smtp://user:password@smtp.host.domain:port'
  *
  * @global string $CONFIG->emailer_transport
  */
-//$CONFIG->emailer_transport = 'sendmail';
-
-/**
- * Configure sendmail related settings
- */
-//$CONFIG->emailer_sendmail_settings = '';
-
-/**
- * Configure emailer SMTP settings
- *
- * This setting is only necessary if the above emailer transport is set to 'smtp'.
- * Please refer to https://docs.laminas.dev/laminas-mail/transport/smtp-options/#configuration-options
- * and https://docs.laminas.dev/laminas-mail/transport/smtp-authentication/#examples
- */
-//$CONFIG->emailer_smtp_settings = array(
-//	'name'              => 'localhost.localdomain',
-//	'host'              => '127.0.0.1',
-//	'port'              => 25,
-//	'connection_class'  => 'login',
-//	'connection_config' => [
-//		'username' => 'user',
-//		'password' => 'pass',
-//		'ssl'      => '', // OPTIONAL (tls or ssl)
-//		'port'     => '', // OPTIONAL (Non-SSL default 25, SSL default 465, TLS default 587)
-//		'use_complete_quit' => '', // OPTIONAL
-//	],
-//);
+//$CONFIG->emailer_transport = 'smtp://user:password@smtp.host.domain:port';
 
 /**
  * Configure notification queue delay

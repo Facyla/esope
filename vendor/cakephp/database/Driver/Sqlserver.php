@@ -21,6 +21,7 @@ use Cake\Database\DriverFeatureEnum;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Database\Expression\OrderByExpression;
 use Cake\Database\Expression\OrderClauseExpression;
+use Cake\Database\Expression\StringAggExpression;
 use Cake\Database\Expression\TupleComparison;
 use Cake\Database\Expression\UnaryExpression;
 use Cake\Database\ExpressionInterface;
@@ -83,6 +84,8 @@ class Sqlserver extends Driver
         'multiSubnetFailover' => null,
         'encrypt' => null,
         'trustServerCertificate' => null,
+        'accessToken' => null,
+        'authentication' => null,
     ];
 
     /**
@@ -157,6 +160,12 @@ class Sqlserver extends Driver
         }
         if ($config['trustServerCertificate'] !== null) {
             $dsn .= ";TrustServerCertificate={$config['trustServerCertificate']}";
+        }
+        if ($config['accessToken'] !== null) {
+            $dsn .= ";AccessToken={$config['accessToken']}";
+        }
+        if ($config['authentication'] !== null) {
+            $dsn .= ";Authentication={$config['authentication']}";
         }
 
         $this->pdo = $this->createPdo($dsn, $config);
@@ -276,10 +285,16 @@ class Sqlserver extends Driver
             DriverFeatureEnum::SAVEPOINT,
             DriverFeatureEnum::TRUNCATE_WITH_CONSTRAINTS,
             DriverFeatureEnum::WINDOW => true,
+            DriverFeatureEnum::STRING_AGG => version_compare($this->version(), '14', '>='),
+            DriverFeatureEnum::GROUP_CONCAT => false,
             DriverFeatureEnum::INTERSECT => true,
             DriverFeatureEnum::INTERSECT_ALL => false,
+            DriverFeatureEnum::EXCEPT => true,
+            DriverFeatureEnum::EXCEPT_ALL => false,
             DriverFeatureEnum::JSON => false,
             DriverFeatureEnum::SET_OPERATIONS_ORDER_BY => false,
+            DriverFeatureEnum::OPTIMIZER_HINT_COMMENT => false,
+            DriverFeatureEnum::CHECK_CONSTRAINTS => false,
         };
     }
 
@@ -314,7 +329,7 @@ class Sqlserver extends Driver
         }
 
         if ($offset !== null && !$query->clause('order')) {
-            $query->orderBy($query->newExpr()->add('(SELECT NULL)'));
+            $query->orderBy($query->expr()->add('(SELECT NULL)'));
         }
 
         if ($this->version() < 11 && $offset !== null) {
@@ -417,9 +432,9 @@ class Sqlserver extends Driver
         $order = new OrderByExpression($distinct);
         $query
             ->select(function (Query $q) use ($distinct, $order) {
-                $over = $q->newExpr('ROW_NUMBER() OVER')
+                $over = $q->expr('ROW_NUMBER() OVER')
                     ->add('(PARTITION BY')
-                    ->add($q->newExpr()->add($distinct)->setConjunction(','))
+                    ->add($q->expr()->add($distinct)->setConjunction(','))
                     ->add($order)
                     ->add(')')
                     ->setConjunction(' ');
@@ -456,9 +471,24 @@ class Sqlserver extends Driver
     protected function _expressionTranslators(): array
     {
         return [
+            StringAggExpression::class => '_transformStringAggExpression',
             FunctionExpression::class => '_transformFunctionExpression',
             TupleComparison::class => '_transformTupleComparison',
         ];
+    }
+
+    /**
+     * Receives a StringAggExpression and changes it so that it conforms to this
+     * SQL dialect.
+     *
+     * @param \Cake\Database\Expression\StringAggExpression $expression The expression to convert to TSQL.
+     * @return void
+     */
+    protected function _transformStringAggExpression(StringAggExpression $expression): void
+    {
+        $expression
+            ->setName('STRING_AGG')
+            ->setSyntax(StringAggExpression::SYNTAX_WITHIN_GROUP);
     }
 
     /**

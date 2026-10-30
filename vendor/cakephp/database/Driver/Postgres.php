@@ -20,6 +20,7 @@ use Cake\Database\Driver;
 use Cake\Database\DriverFeatureEnum;
 use Cake\Database\Expression\FunctionExpression;
 use Cake\Database\Expression\IdentifierExpression;
+use Cake\Database\Expression\StringAggExpression;
 use Cake\Database\Expression\StringExpression;
 use Cake\Database\PostgresCompiler;
 use Cake\Database\Query\InsertQuery;
@@ -206,10 +207,16 @@ class Postgres extends Driver
             DriverFeatureEnum::SAVEPOINT,
             DriverFeatureEnum::TRUNCATE_WITH_CONSTRAINTS,
             DriverFeatureEnum::WINDOW => true,
+            DriverFeatureEnum::STRING_AGG => true,
+            DriverFeatureEnum::GROUP_CONCAT => false,
             DriverFeatureEnum::INTERSECT => true,
             DriverFeatureEnum::INTERSECT_ALL => true,
+            DriverFeatureEnum::EXCEPT => true,
+            DriverFeatureEnum::EXCEPT_ALL => true,
             DriverFeatureEnum::SET_OPERATIONS_ORDER_BY => true,
             DriverFeatureEnum::DISABLE_CONSTRAINT_WITHOUT_TRANSACTION => false,
+            DriverFeatureEnum::OPTIMIZER_HINT_COMMENT => true,
+            DriverFeatureEnum::CHECK_CONSTRAINTS => true,
         };
     }
 
@@ -240,13 +247,28 @@ class Postgres extends Driver
     {
         return [
             IdentifierExpression::class => '_transformIdentifierExpression',
+            StringAggExpression::class => '_transformStringAggExpression',
             FunctionExpression::class => '_transformFunctionExpression',
             StringExpression::class => '_transformStringExpression',
         ];
     }
 
     /**
-     * Changes identifer expression into postgresql format.
+     * Receives a StringAggExpression and changes it so that it conforms to this
+     * SQL dialect.
+     *
+     * @param \Cake\Database\Expression\StringAggExpression $expression The expression to convert.
+     * @return void
+     */
+    protected function _transformStringAggExpression(StringAggExpression $expression): void
+    {
+        $expression
+            ->setName('STRING_AGG')
+            ->setSyntax(StringAggExpression::SYNTAX_STANDARD);
+    }
+
+    /**
+     * Changes identifier expression into postgresql format.
      *
      * @param \Cake\Database\Expression\IdentifierExpression $expression The expression to transform.
      * @return void

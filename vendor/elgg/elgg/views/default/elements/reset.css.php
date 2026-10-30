@@ -86,17 +86,11 @@ th {
 }
 
 html {
-	background-color: white;
 	font-size: var(--elgg-font-size);
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-font-smoothing: antialiased;
 	min-width: 300px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	text-rendering: optimizeLegibility;
-	-webkit-text-size-adjust: 100%;
-	-moz-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%;
 	text-size-adjust: 100%;
 }
 
@@ -123,13 +117,10 @@ input,
 select,
 textarea {
 	font-family: var(--elgg-font-family);
-
 }
 
 code,
 pre {
-	-moz-osx-font-smoothing: auto;
-	-webkit-font-smoothing: auto;
 	font-family: monospace;
 }
 
@@ -195,13 +186,13 @@ pre {
 	padding: 1.25rem 1.5rem;
 	white-space: pre;
 	word-wrap: normal;
-}
-
-pre code {
-	background-color: transparent;
-	color: currentColor;
-	font-size: 1em;
-	padding: 0;
+	
+	code {
+		background-color: transparent;
+		color: currentColor;
+		font-size: 1em;
+		padding: 0;
+	}
 }
 
 table td,
@@ -211,7 +202,7 @@ table th {
 }
 
 table th {
-	color: #363636;
+	color: var(--elgg-text-color-strong);
 }
 
 /* Elgg Reset /**/

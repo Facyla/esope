@@ -4,6 +4,7 @@ namespace Elgg\Integration;
 
 use Elgg\Database\EntityTable;
 use Elgg\Database\Select;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
@@ -62,7 +63,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function testUnsavedEntitiesDontRecordAttributeSets() {
-		$entity = new \ElggObject();
+		$entity = new \Elgg\Helpers\ElggTestObject();
 		$entity->setSubtype('elgg_entity_test_subtype');
 		$entity->title = 'Foo';
 		$entity->description = 'Bar';
@@ -202,11 +203,11 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	}
 
 	public function testElggEntityRecursiveDisableAndEnable() {
-		$obj1 = new \ElggObject();
+		$obj1 = new \Elgg\Helpers\ElggTestObject();
 		$obj1->setSubtype($this->getRandomSubtype());
 		$obj1->container_guid = $this->entity->getGUID();
 		$obj1->save();
-		$obj2 = new \ElggObject();
+		$obj2 = new \Elgg\Helpers\ElggTestObject();
 		$obj2->setSubtype($this->getRandomSubtype());
 		$obj2->container_guid = $this->entity->getGUID();
 		$obj2->save();
@@ -249,7 +250,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 
 		elgg_register_event_handler('entity:icon:url', 'object', $handler, 99999);
 
-		$obj = new \ElggObject();
+		$obj = new \Elgg\Helpers\ElggTestObject();
 		$obj->setSubtype($this->getRandomSubtype());
 		$obj->save();
 
@@ -266,7 +267,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	public function testCreateWithContainerGuidEqualsZero() {
 		$user = $this->owner;
 
-		$object = new \ElggObject();
+		$object = new \Elgg\Helpers\ElggTestObject();
 		$object->setSubtype($this->getRandomSubtype());
 		$object->owner_guid = $user->guid;
 		$object->container_guid = 0;
@@ -330,7 +331,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	 */
 	public function testNewObjectLoadedFromCacheDuringSaveOperations() {
 
-		$object = new \ElggObject();
+		$object = new \Elgg\Helpers\ElggTestObject();
 		$object->setSubtype('elgg_entity_test_subtype');
 
 		// Add temporary metadata and annotation
@@ -467,7 +468,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 	 */
 	public function testBeforeEventCanStopEntityCreation() {
 
-		$object = new \ElggObject();
+		$object = new \Elgg\Helpers\ElggTestObject();
 		$object->setSubtype('elgg_entity_test_subtype_prevent');
 		
 		$prevent_create = function(\Elgg\Event $event) {
@@ -540,7 +541,7 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 		_elgg_services()->events->restore();
 	}
 
-	public function testContainerTimeUpdatedChangesOnEntityCreate() {
+	public function testContainerLastActionChangesOnEntityCreate() {
 		$old_ts = time() - 10;
 		
 		$container = $this->createGroup();
@@ -551,11 +552,10 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 		// triggering entity create should update container last action
 		$object = $this->createObject([
 			'container_guid' => $container->guid,
+			'time_created' => time() - 50,
 		]);
 		
-		$current_last_action = $container->last_action;
-		
-		$this->assertNotEquals($old_ts, $current_last_action);
+		$this->assertEquals($object->time_created, $container->last_action);
 		
 		// object update should not update container last action
 		$container->updateLastAction($old_ts);
@@ -567,10 +567,8 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 		$object->delete();
 		$this->assertEquals($old_ts, $container->last_action);
 	}
-	
-	/**
-	 * @dataProvider entitiesFromCacheProvider
-	 */
+
+	#[DataProvider('entitiesFromCacheProvider')]
 	public function testEntityGetReturnedFromCache($type, $subtype, $check_type, $check_subtype) {
 		$entity = $this->createOne($type, [
 			'subtype' => $subtype,
@@ -621,10 +619,8 @@ class ElggCoreEntityTest extends \Elgg\IntegrationTestCase {
 			['user', 'foo', 'user', 'foo'],
 		];
 	}
-	
-	/**
-	 * @dataProvider entitiesNotTypesMatch
-	 */
+
+	#[DataProvider('entitiesNotTypesMatch')]
 	public function testEntityGetNotReturnedIfTypesMismatch($type, $subtype, $check_type, $check_subtype) {
 		$entity = $this->createOne($type, ['subtype' => $subtype]);
 		

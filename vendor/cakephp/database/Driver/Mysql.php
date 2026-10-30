@@ -18,6 +18,8 @@ namespace Cake\Database\Driver;
 
 use Cake\Database\Driver;
 use Cake\Database\DriverFeatureEnum;
+use Cake\Database\Expression\DistinctComparisonExpression;
+use Cake\Database\Expression\StringAggExpression;
 use Cake\Database\Query;
 use Cake\Database\Query\SelectQuery;
 use Cake\Database\Schema\MysqlSchemaDialect;
@@ -31,6 +33,55 @@ use Pdo\Mysql as PdoMysql;
  */
 class Mysql extends Driver
 {
+    /**
+     * @inheritDoc
+     */
+    protected function _expressionTranslators(): array
+    {
+        return [
+            StringAggExpression::class => 'transformStringAggExpression',
+            DistinctComparisonExpression::class => 'transformDistinctComparisonExpression',
+        ];
+    }
+
+    /**
+     * Translates IS [NOT] DISTINCT FROM into MySQL-specific syntax.
+     *
+     * @param \Cake\Database\Expression\DistinctComparisonExpression $expression The expression to translate.
+     * @return void
+     */
+    protected function transformDistinctComparisonExpression(DistinctComparisonExpression $expression): void
+    {
+        $operator = strtoupper($expression->getOperator());
+        if ($operator === 'IS NOT DISTINCT FROM') {
+            $expression->setOperator('<=>');
+        } elseif ($operator === 'IS DISTINCT FROM') {
+            $expression->setOperator('<=>');
+            $expression->setNot(true);
+        }
+    }
+
+    /**
+     * Translates portable string aggregation to MySQL/MariaDB specific syntax.
+     *
+     * @param \Cake\Database\Expression\StringAggExpression $expression The expression to translate.
+     * @return void
+     */
+    protected function transformStringAggExpression(StringAggExpression $expression): void
+    {
+        if ($this->supports(DriverFeatureEnum::STRING_AGG)) {
+            $expression
+                ->setName('STRING_AGG')
+                ->setSyntax(StringAggExpression::SYNTAX_STANDARD);
+
+            return;
+        }
+
+        $expression
+            ->setName('GROUP_CONCAT')
+            ->setSyntax(StringAggExpression::SYNTAX_GROUP_CONCAT);
+    }
+
     /**
      * @inheritDoc
      */
@@ -102,15 +153,23 @@ class Mysql extends Driver
             'json' => '5.7.0',
             'cte' => '8.0.0',
             'window' => '8.0.0',
+            'string-agg' => '99.0.0',
             'intersect' => '8.0.31',
             'intersect-all' => '8.0.31',
+            'except' => '8.0.31',
+            'except-all' => '8.0.31',
+            'check-constraints' => '8.0.16',
         ],
         'mariadb' => [
             'json' => '10.2.7',
             'cte' => '10.2.1',
             'window' => '10.2.0',
+            'string-agg' => '10.5.0',
             'intersect' => '10.3.0',
             'intersect-all' => '10.5.0',
+            'except' => '10.3.0',
+            'except-all' => '10.5.0',
+            'check-constraints' => '10.2.1',
         ],
     ];
 
@@ -134,16 +193,16 @@ class Mysql extends Driver
 
         $config['flags'] += [
             PDO::ATTR_PERSISTENT => $config['persistent'],
-            self::attrUseBufferedQueryId() => true,
+            $this->attrUseBufferedQueryId() => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ];
 
         if (!empty($config['ssl_key']) && !empty($config['ssl_cert'])) {
-            $config['flags'][self::attrSslKeyId()] = $config['ssl_key'];
-            $config['flags'][self::attrSslCertId()] = $config['ssl_cert'];
+            $config['flags'][$this->attrSslKeyId()] = $config['ssl_key'];
+            $config['flags'][$this->attrSslCertId()] = $config['ssl_cert'];
         }
         if (!empty($config['ssl_ca'])) {
-            $config['flags'][self::attrSslCaId()] = $config['ssl_ca'];
+            $config['flags'][$this->attrSslCaId()] = $config['ssl_ca'];
         }
 
         if (empty($config['unix_socket'])) {
@@ -175,10 +234,10 @@ class Mysql extends Driver
 
         if ($query instanceof SelectQuery) {
             try {
-                $this->getPdo()->setAttribute(self::attrUseBufferedQueryId(), $query->isBufferedResultsEnabled());
+                $this->getPdo()->setAttribute($this->attrUseBufferedQueryId(), $query->isBufferedResultsEnabled());
                 $this->executeStatement($statement);
             } finally {
-                $this->getPdo()->setAttribute(self::attrUseBufferedQueryId(), true);
+                $this->getPdo()->setAttribute($this->attrUseBufferedQueryId(), true);
             }
         } else {
             $this->executeStatement($statement);
@@ -253,9 +312,15 @@ class Mysql extends Driver
             DriverFeatureEnum::CTE,
             DriverFeatureEnum::JSON,
             DriverFeatureEnum::WINDOW => $versionCompare(),
+            DriverFeatureEnum::STRING_AGG => $versionCompare(),
+            DriverFeatureEnum::GROUP_CONCAT => true,
             DriverFeatureEnum::INTERSECT => $versionCompare(),
             DriverFeatureEnum::INTERSECT_ALL => $versionCompare(),
+            DriverFeatureEnum::EXCEPT => $versionCompare(),
+            DriverFeatureEnum::EXCEPT_ALL => $versionCompare(),
+            DriverFeatureEnum::CHECK_CONSTRAINTS => $versionCompare(),
             DriverFeatureEnum::SET_OPERATIONS_ORDER_BY => true,
+            DriverFeatureEnum::OPTIMIZER_HINT_COMMENT => true,
         };
     }
 
@@ -281,9 +346,8 @@ class Mysql extends Driver
         if ($this->_version === null) {
             $this->_version = (string)$this->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
 
-            if (str_contains($this->_version, 'MariaDB')) {
+            if (preg_match('/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/', $this->_version, $matches)) {
                 $this->serverType = static::SERVER_TYPE_MARIADB;
-                preg_match('/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/', $this->_version, $matches);
                 $this->_version = $matches[1];
             }
         }
@@ -296,7 +360,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private static function attrSslKeyId(): int
+    private function attrSslKeyId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_SSL_KEY : PdoMysql::ATTR_SSL_KEY;
     }
@@ -306,7 +370,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private static function attrSslCertId(): int
+    private function attrSslCertId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_SSL_CERT : PdoMysql::ATTR_SSL_CERT;
     }
@@ -316,7 +380,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private static function attrSslCaId(): int
+    private function attrSslCaId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_SSL_CA : PdoMysql::ATTR_SSL_CA;
     }
@@ -326,7 +390,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private static function attrUseBufferedQueryId(): int
+    private function attrUseBufferedQueryId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_USE_BUFFERED_QUERY : PdoMysql::ATTR_USE_BUFFERED_QUERY;
     }

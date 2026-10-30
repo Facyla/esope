@@ -32,7 +32,7 @@ use Elgg\Traits\Loggable;
  * @property bool          $comments_latest_first					Determines if the default order of comments is latest first
  * @property int           $comments_max_depth						Maximum level of threaded comments (0 means disabled)
  * @property int           $comments_per_page						Number of comments per page
- * @property array         $css_compiler_options 					Options passed to CssCrush during CSS compilation
+ * @property bool          $color_schemes_enabled					Color schemes enabled
  * @property string        $dataroot             					Path of data storage with trailing "/"
  * @property string        $date_format          					Preferred PHP date format
  * @property string        $date_format_datepicker 					Preferred jQuery datepicker date format
@@ -58,8 +58,6 @@ use Elgg\Traits\Loggable;
  * @property bool          $enable_delayed_email                    Is the delivery method 'delayed_email' enabled
  * @property bool          $enable_profiling
  * @property string        $emailer_transport                       This is an override for Elgg's default email handling transport (default sendmail)
- * @property array         $emailer_sendmail_settings               This configures SendMail if $emailer_transport is set to "sendmail" or default
- * @property array         $emailer_smtp_settings                   This configures SMTP if $emailer_transport is set to "smtp"
  * @property string        $exception_include						This is an optional script used to override Elgg's default handling of uncaught exceptions.
  * @property int           $friendly_time_number_of_days            Number of days after which timestamps will no longer be presented in a friendly format (x hours ago) but in a full date
  * @property string[]      $http_request_trusted_proxy_ips			When Elgg is behind a loadbalancer/proxy this can contain IP adresses to allow access to better client information
@@ -76,9 +74,6 @@ use Elgg\Traits\Loggable;
  * @property bool          $language_detect_from_browser            Control if language can be detected from browser
  * @property int           $lastcache								The timestamp the cache was last invalidated
  * @property string        $localcacheroot            				Path of local cache storage with trailing "/"
- * @property bool          $memcache
- * @property string        $memcache_namespace_prefix
- * @property array         $memcache_servers
  * @property string        $mentions_display_format                 How should a mention be displayed
  * @property int           $min_password_length                     The minimal length of a password
  * @property int           $min_password_lower                      The minimal number of lower case characters in a password
@@ -94,9 +89,6 @@ use Elgg\Traits\Loggable;
  * @property string        $profiling_minimum_percentage
  * @property bool          $profiling_sql
  * @property array         $proxy                                   Contains proxy related settings
- * @property bool          $redis
- * @property array         $redis_options
- * @property array         $redis_servers
  * @property bool          $remove_branding 						Is Elgg branding disabled
  * @property int           $remove_unvalidated_users_days			The number of days after which unvalidated users will be removed
  * @property bool          $require_admin_validation
@@ -145,32 +137,18 @@ class Config {
 	
 	use Loggable;
 
-	/**
-	 * @var array Configuration storage
-	 */
-	private $values;
+	private array $values = [];
 
-	/**
-	 * @var array
-	 */
-	private $initial_values;
+	private array $initial_values = [];
 
-	/**
-	 * @var bool
-	 */
-	private $cookies_configured = false;
+	private bool $cookies_configured = false;
 
-	/**
-	 * @var array
-	 */
-	private $cookies = [];
+	private array $cookies = [];
 	
 	/**
 	 * The following values can only be set once
-	 *
-	 * @var array
 	 */
-	protected $locked_values = [
+	protected array $locked_values = [
 		'assetroot',
 		'cacheroot',
 		'dataroot',
@@ -181,18 +159,13 @@ class Config {
 
 	/**
 	 * An array of deprecated config options in the format 'option' => '<version number when deprecated>'
-	 *
-	 * @var array
 	 */
-	protected $deprecated = [
-	];
+	protected array $deprecated = [];
 	
 	/**
 	 * Holds the set of default values
-	 *
-	 * @var array
 	 */
-	protected $config_defaults = [
+	protected array $config_defaults = [
 		'admin_validation_notification' => false,
 		'allow_phpinfo' => false,
 		'authentication_failures_lifetime' => 600,
@@ -207,6 +180,7 @@ class Config {
 		'comments_latest_first' => true,
 		'comments_max_depth' => 0,
 		'comments_per_page' => 25,
+		'color_schemes_enabled' => true,
 		'db_enable_query_logging' => false,
 		'db_query_cache_limit' => 50,
 		'default_limit' => 10,
@@ -214,6 +188,7 @@ class Config {
 		'email_html_part' => true,
 		'email_html_part_images' => 'no',
 		'email_subject_limit' => 998,
+		'emailer_transport' => PHP_OS_FAMILY === 'Windows' ? 'native://default' : 'sendmail://default',
 		'enable_delayed_email' => true,
 		'friendly_time_number_of_days' => 30,
 		'icon_sizes' => [
@@ -232,7 +207,7 @@ class Config {
 		'lastcache' => 0,
 		'mentions_display_format' => 'display_name',
 		'message_delay' => 6,
-		'min_password_length' => 6,
+		'min_password_length' => 16,
 		'minusername' => 4,
 		'notifications_max_runtime' => 45,
 		'notifications_queue_delay' => 0,
@@ -248,7 +223,7 @@ class Config {
 		'subresource_integrity_enabled' => false,
 		'system_cache_enabled' => false,
 		'testing_mode' => false,
-		'trash_enabled' => false,
+		'trash_enabled' => true,
 		'trash_retention' => 30,
 		'user_joined_river' => false,
 		'webp_enabled' => true,
@@ -257,10 +232,8 @@ class Config {
 	
 	/**
 	 * The path properties will be sanitized when set
-	 *
-	 * @var array
 	 */
-	protected $path_properties = [
+	protected array $path_properties = [
 		'assetroot',
 		'cacheroot',
 		'dataroot',

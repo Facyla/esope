@@ -9,8 +9,8 @@ class ElggCorePluginsAPITest extends \Elgg\IntegrationTestCase {
 
 	protected ?\ElggPlugin $plugin = null;
 	
-	protected bool $plugin_state = false;
-	
+	protected bool $initial_active = false;
+		
 	public function up() {
 		parent::up();
 		
@@ -20,9 +20,9 @@ class ElggCorePluginsAPITest extends \Elgg\IntegrationTestCase {
 		}
 		
 		$this->plugin = $plugin;
+		$this->initial_active = $plugin->isActive();
 		
-		$this->plugin_state = $plugin->isActive();
-		if (!$plugin->isActive()) {
+		if (!$this->initial_active) {
 			try {
 				$plugin->activate();
 			} catch (PluginException $e) {
@@ -32,7 +32,17 @@ class ElggCorePluginsAPITest extends \Elgg\IntegrationTestCase {
 	}
 	
 	public function down() {
-		if ($this->plugin instanceof \ElggPlugin || !$this->plugin_state) {
+		if (!$this->plugin instanceof \ElggPlugin) {
+			return;
+		}
+		
+		if ($this->initial_active && !$this->plugin->isActive()) {
+			try {
+				$this->plugin->activate();
+			} catch (PluginException $e) {
+				// nothing
+			}
+		} elseif (!$this->initial_active && $this->plugin->isActive()) {
 			try {
 				$this->plugin->deactivate();
 			} catch (PluginException $e) {
@@ -40,7 +50,18 @@ class ElggCorePluginsAPITest extends \Elgg\IntegrationTestCase {
 			}
 		}
 	}
-	
+
+	public function testPluginActivateAltersIsActive() {
+		$this->plugin->deactivate();
+		$this->assertFalse($this->plugin->isActive());
+
+		$this->plugin->activate();
+		$this->assertTrue($this->plugin->isActive());
+
+		$this->plugin->deactivate();
+		$this->assertFalse($this->plugin->isActive());
+	}
+
 	public function testElggPluginIsValid() {
 		$this->assertTrue($this->plugin->isValid());
 

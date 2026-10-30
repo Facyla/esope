@@ -10,9 +10,9 @@ use Elgg\Database\DbConfig;
 use Elgg\Http\Request;
 use Elgg\Router\RewriteTester;
 
-$icon_ok = elgg_view_icon('check');
-$icon_warning = elgg_view_icon('exclamation-triangle');
-$icon_error = elgg_view_icon('times');
+$icon_ok = elgg_view_icon('check', ['class' => ['elgg-state', 'elgg-state-success']]);
+$icon_warning = elgg_view_icon('exclamation-triangle', ['class' => ['elgg-state', 'elgg-state-warning']]);
+$icon_error = elgg_view_icon('times', ['class' => ['elgg-state', 'elgg-state-danger']]);
 
 $view_module = function($icon, $title, $value = '', $subtext = '') {
 	$body = elgg_format_element('strong', [], $title);
@@ -93,7 +93,7 @@ if (empty(ini_get('session.gc_probability')) || empty(ini_get('session.gc_diviso
 // db server information
 $db = _elgg_services()->db;
 $version = $db->getServerVersion();
-$min_version = $db->isMariaDB() ? \ElggInstaller::MARIADB_MINIMAL_VERSION : \ElggInstaller::MYSQL_MINIMAL_VERSION;
+$min_version = $db->isMySQL() ? \ElggInstaller::MYSQL_MINIMAL_VERSION : \ElggInstaller::MARIADB_MINIMAL_VERSION;
 
 if ($db->isMariaDB()) {
 	$server = 'mariadb';

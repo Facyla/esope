@@ -13,6 +13,7 @@ return array(
 
 	'item:object:thewire' => "Публикация в ленте",
 	'collection:object:thewire' => 'Публикации в ленте',
+	'list:object:thewire:no_results' => 'Публикаций не найдено',
 	
 	'collection:object:thewire:all' => "Все публикации в ленте",
 	'collection:object:thewire:owner' => "Публикации в ленте пользователя %s",
@@ -30,7 +31,6 @@ return array(
 	'thewire:thread' => "Ветка",
 	'thewire:charleft' => "символов осталось",
 	'thewire:tags' => "Публикации ленты с тегом '%s'",
-	'thewire:noposts' => "В ленте нет публикаций", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Публикация пользователя %s',
 

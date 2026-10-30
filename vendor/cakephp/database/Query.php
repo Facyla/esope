@@ -26,6 +26,7 @@ use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Throwable;
+use WeakMap;
 use function Cake\Core\deprecationWarning;
 
 /**
@@ -107,6 +108,7 @@ abstract class Query implements ExpressionInterface, Stringable
         'insert' => [],
         'values' => [],
         'with' => [],
+        'optimizerHint' => [],
         'select' => [],
         'distinct' => false,
         'modifier' => [],
@@ -120,6 +122,7 @@ abstract class Query implements ExpressionInterface, Stringable
         'limit' => null,
         'offset' => null,
         'union' => [],
+        'except' => [],
         'epilog' => null,
         'intersect' => [],
     ];
@@ -152,6 +155,11 @@ abstract class Query implements ExpressionInterface, Stringable
      * @var \Cake\Database\FunctionsBuilder|null
      */
     protected ?FunctionsBuilder $_functionsBuilder = null;
+
+    /**
+     * @var \WeakMap<\Cake\Database\ExpressionInterface, bool>|null
+     */
+    protected ?WeakMap $visitedExpressions = null;
 
     /**
      * Constructor.
@@ -196,6 +204,19 @@ abstract class Query implements ExpressionInterface, Stringable
     public function getConnectionRole(): string
     {
         return $this->connectionRole;
+    }
+
+    /**
+     * Returns driver for current connection role by default.
+     *
+     * See `Query::getConnectionRole()` for role options.
+     *
+     * @param string|null $role Connection role
+     * @return \Cake\Database\Driver
+     */
+    public function getDriver(?string $role = null): Driver
+    {
+        return $this->_connection->getDriver($role ?? $this->connectionRole);
     }
 
     /**
@@ -283,7 +304,7 @@ abstract class Query implements ExpressionInterface, Stringable
             $binder->resetCount();
         }
 
-        return $this->getConnection()->getDriver()->compileQuery($this, $binder);
+        return $this->getDriver()->compileQuery($this, $binder);
     }
 
     /**
@@ -329,7 +350,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * ### Example
      *
      * ```
-     * $query->select(['title'])->from('articles')->traverse(function ($value, $clause) {
+     * $query->select(['title'])->from('articles')->traverseParts(function ($value, $clause) {
      *     if ($clause === 'select') {
      *         var_dump($value);
      *     }
@@ -387,27 +408,48 @@ abstract class Query implements ExpressionInterface, Stringable
      * });
      * ```
      *
-     * @param \Cake\Database\Expression\CommonTableExpression|\Closure $cte The CTE to add.
+     * @param \Cake\Database\Expression\CommonTableExpression|\Closure|array<\Cake\Database\Expression\CommonTableExpression|\Closure> $cte The CTE to add.
      * @param bool $overwrite Whether to reset the list of CTEs.
      * @return $this
      */
-    public function with(CommonTableExpression|Closure $cte, bool $overwrite = false)
+    public function with(CommonTableExpression|Closure|array $cte, bool $overwrite = false)
     {
+        $this->_dirty();
         if ($overwrite) {
             $this->_parts['with'] = [];
         }
 
-        if ($cte instanceof Closure) {
-            $query = $this->getConnection()->selectQuery();
-            $cte = $cte(new CommonTableExpression(), $query);
-            if (!($cte instanceof CommonTableExpression)) {
-                throw new CakeException(
-                    'You must return a `CommonTableExpression` from a Closure passed to `with()`.',
-                );
+        $ctes = is_array($cte) ? $cte : [$cte];
+        foreach ($ctes as $cte) {
+            if ($cte instanceof Closure) {
+                $query = $this->getConnection()->selectQuery();
+                $cte = $cte(new CommonTableExpression(), $query);
+                if (!($cte instanceof CommonTableExpression)) {
+                    throw new CakeException(
+                        'You must return a `CommonTableExpression` from a Closure passed to `with()`.',
+                    );
+                }
             }
+            $this->_parts['with'][] = $cte;
         }
 
-        $this->_parts['with'][] = $cte;
+        return $this;
+    }
+
+    /**
+     * Add engine-specific optimizer hint.
+     *
+     * `$hint` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
+     *
+     * @param array<string>|string $hint Optimizer hint
+     * @param bool $overwrite Whether to replace existing hints
+     * @return $this
+     */
+    public function optimizerHint(array|string $hint, bool $overwrite = false)
+    {
+        $hints = array_values((array)$hint);
+        $this->_parts['optimizerHint'] = $overwrite ? $hints : array_merge($this->_parts['optimizerHint'], $hints);
         $this->_dirty();
 
         return $this;
@@ -430,6 +472,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * $query->select(['name', 'city'])->from('products')->modifier(['HIGH_PRIORITY', 'SQL_NO_CACHE']);
      * // It will produce the SQL: SELECT HIGH_PRIORITY SQL_NO_CACHE name, city FROM products
      * ```
+     * Modifier content is raw SQL and not suitable for use with user supplied data.
      *
      * @param \Cake\Database\ExpressionInterface|array|string $modifiers modifiers to be applied to the query
      * @param bool $overwrite whether to reset order with field list or not
@@ -471,6 +514,9 @@ abstract class Query implements ExpressionInterface, Stringable
      * $query->from(['products'], true); // Resets the list: FROM products
      * $query->from(['sub' => $countQuery]); // FROM (SELECT ...) sub
      * ```
+     *
+     * $tables is not suitable for use with user supplied data as they are
+     * not sanitized by the query builder.
      *
      * @param array|string $tables tables to be added to the list. This argument, can be
      *  passed as an array of strings, array of expression objects, or a single string. See
@@ -573,6 +619,9 @@ abstract class Query implements ExpressionInterface, Stringable
      * $query->join(['something' => 'different_table'], [], true); // resets joins list
      * ```
      *
+     * `$tables` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
+     *
      * @param array<int|string, mixed>|string $tables List of tables to be joined in the query.
      * @param array<string, string> $types Associative array of type names used to bind values to query.
      * @param bool $overwrite Whether to reset joins with passed list or not.
@@ -589,15 +638,15 @@ abstract class Query implements ExpressionInterface, Stringable
         $i = count($this->_parts['join']);
         foreach ($tables as $alias => $t) {
             if (!is_array($t)) {
-                $t = ['table' => $t, 'conditions' => $this->newExpr()];
+                $t = ['table' => $t, 'conditions' => $this->expr()];
             }
 
             if ($t['conditions'] instanceof Closure) {
-                $t['conditions'] = $t['conditions']($this->newExpr(), $this);
+                $t['conditions'] = $t['conditions']($this->expr(), $this);
             }
 
             if (!($t['conditions'] instanceof ExpressionInterface)) {
-                $t['conditions'] = $this->newExpr()->add($t['conditions'], $types);
+                $t['conditions'] = $this->expr()->add($t['conditions'], $types);
             }
             $alias = is_string($alias) ? $alias : null;
             $joins[$alias ?: $i++] = $t + ['type' => static::JOIN_TYPE_INNER, 'alias' => $alias];
@@ -661,7 +710,9 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * See `join()` for further details on conditions and types.
      *
-     * @param array<string, string|\Cake\Database\Query\SelectQuery>|string $table The table to join with
+     * Parameters to this method should never be include user supplied data.
+     *
+     * @param array<string, string|\Cake\Database\Query\SelectQuery<mixed>>|string $table The table to join with
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The conditions
      * to use for joining.
      * @param array $types a list of types associated to the conditions used for converting
@@ -686,7 +737,9 @@ abstract class Query implements ExpressionInterface, Stringable
      * The arguments of this method are identical to the `leftJoin()` shorthand, please refer
      * to that methods description for further details.
      *
-     * @param array<string, string|\Cake\Database\Query\SelectQuery>|string $table The table to join with
+     * Parameters to this method should never be include user supplied data.
+     *
+     * @param array<string, string|\Cake\Database\Query\SelectQuery<mixed>>|string $table The table to join with
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The conditions
      * to use for joining.
      * @param array $types a list of types associated to the conditions used for converting
@@ -711,7 +764,9 @@ abstract class Query implements ExpressionInterface, Stringable
      * The arguments of this method are identical to the `leftJoin()` shorthand, please refer
      * to that method's description for further details.
      *
-     * @param array<string, string|\Cake\Database\Query\SelectQuery>|string $table The table to join with
+     * Parameters to this method should never be include user supplied data.
+     *
+     * @param array<string, string|\Cake\Database\Query\SelectQuery<mixed>>|string $table The table to join with
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The conditions
      * to use for joining.
      * @param array<string, string> $types a list of types associated to the conditions used for converting
@@ -731,11 +786,11 @@ abstract class Query implements ExpressionInterface, Stringable
     /**
      * Returns an array that can be passed to the join method describing a single join clause
      *
-     * @param array<string, string|\Cake\Database\Query\SelectQuery>|string $table The table to join with
+     * @param array<string, string|\Cake\Database\Query\SelectQuery<mixed>>|string $table The table to join with
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The conditions
      * to use for joining.
      * @param string $type the join type to use
-     * @return array<string, array{table: string|\Cake\Database\Query\SelectQuery, conditions: \Cake\Database\ExpressionInterface|\Closure|array|string, type: string}>
+     * @return array<string, array{table: string|\Cake\Database\Query\SelectQuery<mixed>, conditions: \Cake\Database\ExpressionInterface|\Closure|array|string, type: string}>
      */
     protected function _makeJoin(
         array|string $table,
@@ -823,7 +878,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * ### Using expressions objects:
      *
      * ```
-     * $exp = $query->newExpr()->add(['id !=' => 100, 'author_id' != 1])->tieWith('OR');
+     * $exp = $query->expr()->add(['id !=' => 100, 'author_id' != 1])->tieWith('OR');
      * $query->where(['published' => true], ['published' => 'boolean'])->where($exp);
      * ```
      *
@@ -898,7 +953,7 @@ abstract class Query implements ExpressionInterface, Stringable
         bool $overwrite = false,
     ) {
         if ($overwrite) {
-            $this->_parts['where'] = $this->newExpr();
+            $this->_parts['where'] = $this->expr();
         }
         $this->_conjugate('where', $conditions, 'AND', $types);
 
@@ -907,6 +962,9 @@ abstract class Query implements ExpressionInterface, Stringable
 
     /**
      * Convenience method that adds a NOT NULL condition to the query
+     *
+     * The string form of `$fields` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
      *
      * @param \Cake\Database\ExpressionInterface|array|string $fields A single field or expressions or a list of them
      *  that should be not null.
@@ -918,7 +976,7 @@ abstract class Query implements ExpressionInterface, Stringable
             $fields = [$fields];
         }
 
-        $exp = $this->newExpr();
+        $exp = $this->expr();
 
         foreach ($fields as $field) {
             $exp->isNotNull($field);
@@ -930,6 +988,9 @@ abstract class Query implements ExpressionInterface, Stringable
     /**
      * Convenience method that adds a IS NULL condition to the query
      *
+     * The string form of `$fields` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
+     *
      * @param \Cake\Database\ExpressionInterface|array|string $fields A single field or expressions or a list of them
      *   that should be null.
      * @return $this
@@ -940,7 +1001,7 @@ abstract class Query implements ExpressionInterface, Stringable
             $fields = [$fields];
         }
 
-        $exp = $this->newExpr();
+        $exp = $this->expr();
 
         foreach ($fields as $field) {
             $exp->isNull($field);
@@ -954,15 +1015,14 @@ abstract class Query implements ExpressionInterface, Stringable
      * query.
      *
      * This method does allow empty inputs in contrast to where() if you set
-     * 'allowEmpty' to true.
-     * Be careful about using it without proper sanity checks.
+     * 'allowEmpty' to true. Be careful about using it without proper sanity checks.
      *
      * Options:
      *
      * - `types` - Associative array of type names used to bind values to query
      * - `allowEmpty` - Allow empty array.
      *
-     * @param string $field Field
+     * @param string $field Field. Caution: fields are not sanitized before use.
      * @param array $values Array of values
      * @param array<string, mixed> $options Options
      * @return $this
@@ -989,7 +1049,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * 'allowEmpty' to true.
      * Be careful about using it without proper sanity checks.
      *
-     * @param string $field Field
+     * @param string $field Field. Fieldnames are not sanitized.
      * @param array $values Array of values
      * @param array<string, mixed> $options Options
      * @return $this
@@ -1017,7 +1077,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * 'allowEmpty' to true.
      * Be careful about using it without proper sanity checks.
      *
-     * @param string $field Field
+     * @param string $field Field. Fieldnames are not sanitized.
      * @param array $values Array of values
      * @param array<string, mixed> $options Options
      * @return $this
@@ -1091,6 +1151,9 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * `WHERE (title = 'Foo') AND (author_id = 1 OR author_id = 2)`
      *
+     * The string form of `$conditions` is not suitable for use with user supplied data as it is
+     * not sanitized by the query builder.
+     *
      * @param \Cake\Database\ExpressionInterface|\Closure|array|string $conditions The conditions to add with AND.
      * @param array<string, string> $types Associative array of type names used to bind values to query
      * @see \Cake\Database\Query::where()
@@ -1129,7 +1192,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query
-     *     ->orderBy(['title' => $query->newExpr('DESC NULLS FIRST')])
+     *     ->orderBy(['title' => $query->expr('DESC NULLS FIRST')])
      *     ->orderBy('author_id');
      * ```
      *
@@ -1138,7 +1201,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * `ORDER BY title DESC NULLS FIRST, author_id`
      *
      * ```
-     * $expression = $query->newExpr()->add(['id % 2 = 0']);
+     * $expression = $query->expr()->add(['id % 2 = 0']);
      * $query->orderBy($expression)->orderBy(['title' => 'ASC']);
      * ```
      *
@@ -1198,7 +1261,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query
-     *     ->orderBy(['title' => $query->newExpr('DESC NULLS FIRST')])
+     *     ->orderBy(['title' => $query->expr('DESC NULLS FIRST')])
      *     ->orderBy('author_id');
      * ```
      *
@@ -1207,7 +1270,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * `ORDER BY title DESC NULLS FIRST, author_id`
      *
      * ```
-     * $expression = $query->newExpr()->add(['id % 2 = 0']);
+     * $expression = $query->expr()->add(['id % 2 = 0']);
      * $query->orderBy($expression)->orderBy(['title' => 'ASC']);
      * ```
      *
@@ -1294,7 +1357,7 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($field instanceof Closure) {
-            $field = $field($this->newExpr(), $this);
+            $field = $field($this->expr(), $this);
         }
 
         $this->_parts['order'] ??= new OrderByExpression();
@@ -1350,7 +1413,7 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($field instanceof Closure) {
-            $field = $field($this->newExpr(), $this);
+            $field = $field($this->expr(), $this);
         }
 
         $this->_parts['order'] ??= new OrderByExpression();
@@ -1389,7 +1452,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query->limit(10) // generates LIMIT 10
-     * $query->limit($query->newExpr()->add(['1 + 1'])); // LIMIT (1 + 1)
+     * $query->limit($query->expr()->add(['1 + 1'])); // LIMIT (1 + 1)
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|int|null $limit number of records to be returned
@@ -1415,7 +1478,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query->offset(10) // generates OFFSET 10
-     * $query->offset($query->newExpr()->add(['1 + 1'])); // OFFSET (1 + 1)
+     * $query->offset($query->expr()->add(['1 + 1'])); // OFFSET (1 + 1)
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|int|null $offset number of records to be skipped
@@ -1439,7 +1502,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * ### Example
      *
      * ```
-     * $query->newExpr()->lte('count', $query->identifier('total'));
+     * $query->expr()->lte('count', $query->identifier('total'));
      * ```
      *
      * @param string $identifier The identifier for an expression
@@ -1522,9 +1585,12 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * @param \Cake\Database\ExpressionInterface|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
      * @return \Cake\Database\Expression\QueryExpression
+     * @deprecated 5.3.0 Use `expr()` instead of `newExpr()`.
      */
     public function newExpr(ExpressionInterface|array|string|null $rawExpression = null): QueryExpression
     {
+        deprecationWarning('5.3.0', 'Use `expr()` instead of `newExpr()`.');
+
         return $this->expr($rawExpression);
     }
 
@@ -1611,7 +1677,7 @@ abstract class Query implements ExpressionInterface, Stringable
     {
         if (!array_key_exists($name, $this->_parts)) {
             $clauses = array_keys($this->_parts);
-            array_walk($clauses, fn(&$x) => $x = "`{$x}`");
+            array_walk($clauses, fn(string &$x) => $x = "`{$x}`");
             $clauses = implode(', ', $clauses);
             throw new InvalidArgumentException(sprintf(
                 'The `%s` clause is not defined. Valid clauses are: %s.',
@@ -1628,6 +1694,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * that it does a full depth traversal of the entire expression tree. This will execute
      * the provided callback function for each ExpressionInterface object that is
      * stored inside this query at any nesting depth in any part of the query.
+     * Each expression object is passed to the callback once per traversal.
      *
      * Callback will receive as first parameter the currently visited expression.
      *
@@ -1637,8 +1704,17 @@ abstract class Query implements ExpressionInterface, Stringable
      */
     public function traverseExpressions(Closure $callback)
     {
-        foreach ($this->_parts as $part) {
-            $this->_expressionsVisitor($part, $callback);
+        /** @var \WeakMap<\Cake\Database\ExpressionInterface, bool> $visited */
+        $visited = new WeakMap();
+        $previousVisited = $this->visitedExpressions;
+        $this->visitedExpressions = $visited;
+
+        try {
+            foreach ($this->_parts as $part) {
+                $this->_expressionsVisitor($part, $callback);
+            }
+        } finally {
+            $this->visitedExpressions = $previousVisited;
         }
 
         return $this;
@@ -1652,9 +1728,16 @@ abstract class Query implements ExpressionInterface, Stringable
      * @param \Closure $callback The callback to be executed for each ExpressionInterface
      *   found inside this query.
      * @return void
+     * @throws \Cake\Core\Exception\CakeException When called outside of `traverseExpressions()`.
      */
     protected function _expressionsVisitor(mixed $expression, Closure $callback): void
     {
+        if ($this->visitedExpressions === null) {
+            throw new CakeException(
+                'Expression traversal requires `visitedExpressions` to be set. Use `traverseExpressions()` instead.',
+            );
+        }
+
         if (is_array($expression)) {
             foreach ($expression as $e) {
                 $this->_expressionsVisitor($e, $callback);
@@ -1664,6 +1747,11 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($expression instanceof ExpressionInterface) {
+            if ($this->visitedExpressions->offsetExists($expression)) {
+                return;
+            }
+            $this->visitedExpressions[$expression] = true;
+
             $expression->traverse(fn($exp) => $this->_expressionsVisitor($exp, $callback));
 
             if (!$expression instanceof self) {
@@ -1742,7 +1830,7 @@ abstract class Query implements ExpressionInterface, Stringable
         array $types,
     ): void {
         /** @var \Cake\Database\Expression\QueryExpression $expression */
-        $expression = $this->_parts[$part] ?: $this->newExpr();
+        $expression = $this->_parts[$part] ?: $this->expr();
         if (!$append) {
             $this->_parts[$part] = $expression;
 
@@ -1750,13 +1838,13 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($append instanceof Closure) {
-            $append = $append($this->newExpr(), $this);
+            $append = $append($this->expr(), $this);
         }
 
         if ($expression->getConjunction() === $conjunction) {
             $expression->add($append, $types);
         } else {
-            $expression = $this->newExpr()
+            $expression = $this->expr()
                 ->setConjunction($conjunction)
                 ->add([$expression, $append], $types);
         }
@@ -1782,8 +1870,6 @@ abstract class Query implements ExpressionInterface, Stringable
 
     /**
      * Handles clearing iterator and cloning all expressions and value binders.
-     *
-     * @return void
      */
     public function __clone()
     {

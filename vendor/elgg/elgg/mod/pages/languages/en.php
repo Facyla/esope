@@ -49,7 +49,6 @@ View and comment on the page:
 	'notification:mentions:object:page:subject' => '%s mentioned you in a page',
 
 	'pages:more' => 'More pages',
-	'pages:none' => 'No pages created yet', // @todo remove in Elgg 7.0
 
 	/**
 	* River
@@ -67,6 +66,7 @@ View and comment on the page:
 	'pages:description' => 'Page text',
 	'pages:tags' => 'Tags',
 	'pages:parent_guid' => 'Parent page',
+	'pages:parent_guid:root' => 'Top page (no parent)',
 
 	/**
 	 * Status and error messages

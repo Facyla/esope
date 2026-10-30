@@ -471,7 +471,7 @@ function elgg_get_site_entity(): \ElggSite {
  * --------------
  *
  * @option bool $distinct                 If set to false, Elgg will drop the DISTINCT clause from
- *                                        the MySQL query, which will improve performance in some situations.
+ *                                        the database query, which will improve performance in some situations.
  *                                        Avoid setting this option without a full understanding of the underlying
  *                                        SQL query Elgg creates.
  *                                        Default: true
@@ -555,7 +555,7 @@ function elgg_list_entities(array $options = [], ?callable $getter = null, ?call
 
 	$defaults = [
 		'offset' => (int) max(get_input($offset_key, 0), 0),
-		'limit' => (int) max(get_input('limit', _elgg_services()->config->default_limit), 0),
+		'limit' => (int) min(100, max(1, (int) get_input('limit', _elgg_services()->config->default_limit))),
 		'sort_by' => get_input('sort_by', []),
 		'full_view' => false,
 		'pagination' => true,

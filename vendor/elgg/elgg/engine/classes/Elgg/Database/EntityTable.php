@@ -98,7 +98,7 @@ class EntityTable {
 		
 		if (empty($class_name)) {
 			$map = [
-				'object' => \ElggObject::class,
+				'object' => \ElggUndefinedObject::class,
 				'user' => \ElggUser::class,
 				'group' => \ElggGroup::class,
 				'site' => \ElggSite::class,
@@ -117,6 +117,17 @@ class EntityTable {
 	}
 
 	/**
+	 * Returns the currently registered entity classes
+	 *
+	 * @return array
+	 *
+	 * @since 7.0
+	 */
+	public function getEntityClasses(): array {
+		return $this->entity_classes;
+	}
+
+	/**
 	 * Returns a database row from the entities table.
 	 *
 	 * @tip     Use get_entity() to return the fully loaded entity.
@@ -131,7 +142,7 @@ class EntityTable {
 	 * @return \stdClass|null
 	 */
 	public function getRow(int $guid, ?int $user_guid = null): ?\stdClass {
-		if ($guid < 0) {
+		if ($guid < 1) {
 			return null;
 		}
 

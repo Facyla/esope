@@ -37,8 +37,8 @@ class QueryCompiler
     protected array $_templates = [
         'delete' => 'DELETE',
         'where' => ' WHERE %s',
-        'group' => ' GROUP BY %s ',
-        'having' => ' HAVING %s ',
+        'group' => ' GROUP BY %s',
+        'having' => ' HAVING %s',
         'order' => ' %s',
         'limit' => ' LIMIT %s',
         'offset' => ' OFFSET %s',
@@ -53,7 +53,7 @@ class QueryCompiler
      */
     protected array $_selectParts = [
         'comment', 'with', 'select', 'from', 'join', 'where', 'group', 'having', 'window', 'order',
-        'limit', 'offset', 'union', 'epilog', 'intersect',
+        'limit', 'offset', 'union', 'except', 'epilog', 'intersect',
     ];
 
     /**
@@ -68,7 +68,8 @@ class QueryCompiler
      *
      * @var array<string>
      */
-    protected array $_deleteParts = ['comment', 'with', 'delete', 'modifier', 'from', 'where', 'epilog'];
+    protected array $_deleteParts = ['comment', 'with', 'delete', 'optimizerHint', 'modifier', 'from', 'where',
+        'epilog'];
 
     /**
      * The list of query clauses to traverse for generating an INSERT statement
@@ -187,15 +188,16 @@ class QueryCompiler
      */
     protected function _buildSelectPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        $driver = $query->getConnection()->getDriver($query->getConnectionRole());
-        $select = 'SELECT%s %s%s';
+        $driver = $query->getDriver();
+        $select = 'SELECT%s%s %s%s';
         if (
-            ($query->clause('union') || $query->clause('intersect')) &&
+            ($query->clause('union') || $query->clause('except') || $query->clause('intersect')) &&
             $driver->supports(DriverFeatureEnum::SET_OPERATIONS_ORDER_BY)
         ) {
-            $select = '(SELECT%s %s%s';
+            $select = '(SELECT%s%s %s%s';
         }
-        $distinct = $query->clause('distinct');
+
+        $hint = $this->_buildOptimizerHintPart($query->clause('optimizerHint'), $query, $binder);
         $modifiers = $this->_buildModifierPart($query->clause('modifier'), $query, $binder);
 
         $quoteIdentifiers = $driver->isAutoQuotingEnabled() || $this->_quotedSelectAliases;
@@ -213,16 +215,15 @@ class QueryCompiler
             $normalized[] = $p;
         }
 
+        $distinct = $query->clause('distinct');
         if ($distinct === true) {
             $distinct = 'DISTINCT ';
-        }
-
-        if (is_array($distinct)) {
+        } elseif (is_array($distinct)) {
             $distinct = $this->_stringifyExpressions($distinct, $binder);
             $distinct = sprintf('DISTINCT ON (%s) ', implode(', ', $distinct));
         }
 
-        return sprintf($select, $modifiers, $distinct, implode(', ', $normalized));
+        return sprintf($select, $hint, $modifiers, $distinct, implode(', ', $normalized));
     }
 
     /**
@@ -360,7 +361,7 @@ class QueryCompiler
             ->getDriver($query->getConnectionRole())
             ->supports(DriverFeatureEnum::SET_OPERATIONS_ORDER_BY);
 
-        $parts = array_map(function ($p) use ($binder, $setOperationsOrderBy) {
+        $parts = array_map(function (array $p) use ($binder, $setOperationsOrderBy) {
             /** @var \Cake\Database\Expression\IdentifierExpression $expr */
             $expr = $p['query'];
             $p['query'] = $expr->sql($binder);
@@ -374,10 +375,10 @@ class QueryCompiler
         }, $parts);
 
         if ($setOperationsOrderBy) {
-            return sprintf(")\n$operation %s", implode("\n$operation ", $parts));
+            return sprintf(")\n{$operation} %s", implode("\n{$operation} ", $parts));
         }
 
-        return sprintf("\n$operation %s", implode("\n$operation ", $parts));
+        return sprintf("\n{$operation} %s", implode("\n{$operation} ", $parts));
     }
 
     /**
@@ -393,6 +394,21 @@ class QueryCompiler
     protected function _buildIntersectPart(array $parts, Query $query, ValueBinder $binder): string
     {
         return $this->_buildSetOperationPart('INTERSECT', $parts, $query, $binder);
+    }
+
+    /**
+     * Builds the SQL string for all the EXCEPT clauses in this query, when dealing
+     * with query objects it will also transform them using their configured SQL
+     * dialect.
+     *
+     * @param array $parts list of queries to be operated with EXCEPT
+     * @param \Cake\Database\Query $query The query that is being compiled
+     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @return string
+     */
+    protected function _buildExceptPart(array $parts, Query $query, ValueBinder $binder): string
+    {
+        return $this->_buildSetOperationPart('EXCEPT', $parts, $query, $binder);
     }
 
     /**
@@ -428,9 +444,10 @@ class QueryCompiler
         }
         $table = $parts[0];
         $columns = $this->_stringifyExpressions($parts[1], $binder);
+        $hint = $this->_buildOptimizerHintPart($query->clause('optimizerHint'), $query, $binder);
         $modifiers = $this->_buildModifierPart($query->clause('modifier'), $query, $binder);
 
-        return sprintf('INSERT%s INTO %s (%s)', $modifiers, $table, implode(', ', $columns));
+        return sprintf('INSERT%s%s INTO %s (%s)', $hint, $modifiers, $table, implode(', ', $columns));
     }
 
     /**
@@ -457,9 +474,27 @@ class QueryCompiler
     protected function _buildUpdatePart(array $parts, Query $query, ValueBinder $binder): string
     {
         $table = $this->_stringifyExpressions($parts, $binder);
+        $hint = $this->_buildOptimizerHintPart($query->clause('optimizerHint'), $query, $binder);
         $modifiers = $this->_buildModifierPart($query->clause('modifier'), $query, $binder);
 
-        return sprintf('UPDATE%s %s', $modifiers, implode(',', $table));
+        return sprintf('UPDATE%s%s %s', $hint, $modifiers, implode(',', $table));
+    }
+
+    /**
+     * Builds the optimizer hint comment part.
+     *
+     * @param list<string> $parts The optimizer hints
+     * @param \Cake\Database\Query $query The query that is being compiled
+     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
+     * @return string Optimizer hint comment
+     */
+    protected function _buildOptimizerHintPart(array $parts, Query $query, ValueBinder $binder): string
+    {
+        if ($parts === [] || !$query->getDriver()->supports(DriverFeatureEnum::OPTIMIZER_HINT_COMMENT)) {
+            return '';
+        }
+
+        return sprintf(' /*+ %s */', implode(' ', $parts));
     }
 
     /**
@@ -480,7 +515,7 @@ class QueryCompiler
     }
 
     /**
-     * Helper function used to covert ExpressionInterface objects inside an array
+     * Helper function used to convert ExpressionInterface objects inside an array
      * into their string representation.
      *
      * @param array $expressions list of strings and ExpressionInterface objects

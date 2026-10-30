@@ -3,6 +3,7 @@
 use Elgg\Exceptions\DomainException;
 use Elgg\Exceptions\Filesystem\IOException;
 use Elgg\Project\Paths;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
@@ -45,9 +46,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 		$this->assertEquals($mimetype, $this->file->getMimeType());
 	}
 
-	/**
-	 * @dataProvider providerSimpleTypeMap
-	 */
+	#[DataProvider('providerSimpleTypeMap')]
 	public function testCanParseSimpleType($mime_type, $simple_type) {
 		unset($this->file->simpletype);
 		$this->file->mimetype = $mime_type;
@@ -205,11 +204,11 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 		$this->assertNotEmpty($size);
 		$this->assertNotEmpty($this->file->open('read'));
 
-		$this->assertEquals(0, $this->file->seek(2));
+		$this->file->seek(2);
 		$this->assertEquals(2, $this->file->tell());
 		$this->assertFalse($this->file->eof());
 
-		$this->assertEquals(0, $this->file->seek($size));
+		$this->file->seek($size);
 		$this->assertFalse($this->file->eof());
 
 		$this->file->read(1);
@@ -236,7 +235,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanCreateAndReadSymlinks() {
-		if (stripos(PHP_OS, 'WIN') !== false) {
+		if (PHP_OS_FAMILY === 'Windows') {
 			$this->markTestSkipped('Unable to test symlinks on Windows');
 		}
 
@@ -285,7 +284,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanDeleteSymlinkAndTarget() {
-		if (stripos(PHP_OS, 'WIN') !== false) {
+		if (PHP_OS_FAMILY === 'Windows') {
 			$this->markTestSkipped('Unable to test symlinks on Windows');
 		}
 
@@ -311,7 +310,7 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 	}
 
 	public function testCanDeleteSymlinkWithMissingTarget() {
-		if (stripos(PHP_OS, 'WIN') !== false) {
+		if (PHP_OS_FAMILY === 'Windows') {
 			$this->markTestSkipped('Unable to test symlinks on Windows');
 		}
 
@@ -425,10 +424,8 @@ class ElggFileUnitTest extends \Elgg\UnitTestCase {
 
 		$file->delete();
 	}
-	
-	/**
-	 * @dataProvider pathTraversalProvider
-	 */
+
+	#[DataProvider('pathTraversalProvider')]
 	public function testPathTraversal($filename, $expected_filename, $expected_path) {
 		$file = new \ElggFile();
 		$file->owner_guid = elgg_get_site_entity()->guid;

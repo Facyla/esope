@@ -32,7 +32,7 @@ DirectoryIndex index.php
 # Elgg sets these on dynamically generated cacheable files so this is just for
 # static files. Note: Apache sends Last-Modified by default on static files so
 # I don't think we need to be sending ETag for these files.
-<FilesMatch "\.(jpg|jpeg|gif|png|mp3|flv|mov|avi|3pg|html|htm|swf|js|css|ico)$">
+<FilesMatch "\.(jpg|jpeg|gif|png|mp3|flv|mov|avi|3pg|html|htm|swf|js|mjs|css|ico)$">
 	FileETag MTime Size
 </FilesMatch>
 
@@ -66,8 +66,6 @@ DirectoryIndex index.php
 	mod_gzip_maximum_file_size 1000000
 	mod_gzip_maximum_inmem_size 1000000
 	mod_gzip_item_include mime ^text/.*
-	mod_gzip_item_include mime ^application/javascript$
-	mod_gzip_item_include mime ^application/x-javascript$
 	# Exclude old browsers and images since IE has trouble with this
 	mod_gzip_item_exclude reqheader "User-Agent: .*Mozilla/4\..*\["
 	mod_gzip_item_exclude mime ^image/.*
@@ -78,7 +76,7 @@ DirectoryIndex index.php
 ## Important note: mod_headers is required for correct functioning across proxies.
 ##
 <IfModule mod_deflate.c>
-	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript image/svg+xml
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript image/svg+xml
 	BrowserMatch ^Mozilla/4 gzip-only-text/html
 	BrowserMatch ^Mozilla/4\.[0678] no-gzip
 	BrowserMatch \bMSIE !no-gzip
@@ -132,6 +130,15 @@ DirectoryIndex index.php
 	# Prevent access to the composer.json and .lock file
 	RewriteRule /?(composer\.json|composer\.lock)$ - [F]
 
+	# Prevent access to the package(-lock).json and yarn.lock file
+	RewriteRule /?(package\.json|package-lock\.json|yarn\.lock)$ - [F]
+
+	# Prevent access to the phpunit.xml.dist file
+	RewriteRule /?(phpunit\.xml\.dist)$ - [F]
+
+	# Prevent access to the Grunt file
+	RewriteRule /?(Gruntfile\.js)$ - [F]
+
 	# Optional hardening rules to block access to files in the following directories
 	# The following conditions can be enabled, when enabling at least one the last three lines NEED to be enabled
 	RewriteCond %{REQUEST_URI} ^/actions/ [OR]
@@ -146,6 +153,7 @@ DirectoryIndex index.php
 	RewriteCond %{REQUEST_URI} ^/mod/(.*)/languages/ [OR]
 	RewriteCond %{REQUEST_URI} ^/mod/(.*)/vendor/ [OR]
 	RewriteCond %{REQUEST_URI} ^/mod/(.*)/classes/ [OR]
+	RewriteCond %{REQUEST_URI} ^/mod/(.*)/tests/ [OR]
 	# The following condition is needed in order to easily enable (some of the) previous conditions
 	RewriteCond 1 2
 	# The following files are whitelisted for the installer

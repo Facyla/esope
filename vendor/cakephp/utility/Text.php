@@ -16,7 +16,9 @@ declare(strict_types=1);
  */
 namespace Cake\Utility;
 
+use Cake\Core\Configure;
 use Cake\Core\Exception\CakeException;
+use Closure;
 use InvalidArgumentException;
 use Transliterator;
 use function Cake\I18n\__d;
@@ -66,12 +68,29 @@ class Text
      * It should also not be used to create identifiers that have security implications, such as
      * 'unguessable' URL identifiers. Instead, you should use {@link \Cake\Utility\Security::randomBytes()}` for that.
      *
+     * ### Custom UUID generation
+     *
+     * You can configure a custom UUID generator by setting a Closure via Configure:
+     *
+     * ```
+     * Configure::write('Text.uuidGenerator', function () {
+     *     // Return your custom UUID string
+     *     return MyUuidLibrary::generate();
+     * });
+     * ```
+     *
      * @see https://www.ietf.org/rfc/rfc4122.txt
      * @return string RFC 4122 UUID
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-uuid
      * @copyright Matt Farina MIT License https://github.com/lootils/uuid/blob/master/LICENSE
      */
     public static function uuid(): string
     {
+        $generator = Configure::read('Text.uuidGenerator');
+        if ($generator instanceof Closure) {
+            return $generator();
+        }
+
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
@@ -101,6 +120,7 @@ class Text
      * @param string $leftBound The left boundary to ignore separators in.
      * @param string $rightBound The right boundary to ignore separators in.
      * @return array<string> Array of tokens in $data.
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-tokenize
      */
     public static function tokenize(
         string $data,
@@ -197,6 +217,7 @@ class Text
      *     to be replaced with val
      * @param array<string, mixed> $options An array of options, see description above
      * @return string
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-insert
      */
     public static function insert(string $str, array $data, array $options = []): string
     {
@@ -215,7 +236,7 @@ class Text
 
         $dataKeys = array_keys($data);
         $hashKeys = array_map(
-            fn($str) => hash('xxh128', $str),
+            fn(int|string $str) => hash('xxh128', (string)$str),
             $dataKeys,
         );
         /** @var array<string, string> $tempData */
@@ -250,6 +271,7 @@ class Text
      * @param array<string, mixed> $options Options list.
      * @return string
      * @see \Cake\Utility\Text::insert()
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-cleaninsert
      */
     public static function cleanInsert(string $str, array $options): string
     {
@@ -320,6 +342,7 @@ class Text
      * @param string $text The text to format.
      * @param array<string, mixed>|int $options Array of options to use, or an integer to wrap the text to.
      * @return string Formatted text.
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-wrap
      */
     public static function wrap(string $text, array|int $options = []): string
     {
@@ -361,6 +384,7 @@ class Text
      * @param string $text The text to format.
      * @param array<string, mixed>|int $options Array of options to use, or an integer to wrap the text to.
      * @return string Formatted text.
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-wrapblock
      */
     public static function wrapBlock(string $text, array|int $options = []): string
     {
@@ -398,10 +422,9 @@ class Text
     /**
      * Unicode and newline aware version of wordwrap.
      *
-     * @phpstan-param non-empty-string $break
      * @param string $text The text to format.
      * @param int $width The width to wrap to. Defaults to 72.
-     * @param string $break The line is broken using the optional break parameter. Defaults to '\n'.
+     * @param non-empty-string $break The line is broken using the optional break parameter. Defaults to '\n'.
      * @param bool $cut If the cut is set to true, the string is always wrapped at the specified width.
      * @return string Formatted text.
      */
@@ -540,6 +563,7 @@ class Text
      * @param int $length Length of returned string, including ellipsis.
      * @param array<string, mixed> $options An array of options.
      * @return string Trimmed string.
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-tail
      */
     public static function tail(string $text, int $length = 100, array $options = []): string
     {
@@ -849,7 +873,7 @@ class Text
      *
      * @param string $text String to search the phrase in
      * @param string $phrase Phrase that will be searched for
-     * @param int $radius The amount of characters that will be returned on each side of the founded phrase
+     * @param int $radius The amount of characters that will be returned on each side of the found phrase
      * @param string $ellipsis Ending that will be appended
      * @return string Modified string
      * @link https://book.cakephp.org/5/en/core-libraries/text.html#extracting-an-excerpt
@@ -1005,7 +1029,7 @@ class Text
      * @return mixed Number of bytes as integer on success, or $default value on failure
      *   (if $default is not false).
      * @throws \InvalidArgumentException On invalid unit type when $default is false.
-     * @link https://book.cakephp.org/5/en/core-libraries/text.html#Cake\Utility\Text::parseFileSize
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-parsefilesize
      */
     public static function parseFileSize(string $size, mixed $default = false): mixed
     {
@@ -1097,6 +1121,7 @@ class Text
      *   `setTransliterator()` will be used.
      * @return string
      * @see https://secure.php.net/manual/en/transliterator.transliterate.php
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-transliterate
      */
     public static function transliterate(string $string, Transliterator|string|null $transliterator = null): string
     {
@@ -1130,8 +1155,9 @@ class Text
      * @param array<string, mixed>|string $options If string it will be use as replacement character
      *   or an array of options.
      * @return string
-     * @see setTransliterator()
-     * @see setTransliteratorId()
+     * @see Text::setTransliterator()
+     * @see Text::setTransliteratorId()
+     * @link https://book.cakephp.org/5/en/core-libraries/text.html#text-slug
      */
     public static function slug(string $string, array|string $options = []): string
     {
@@ -1162,5 +1188,204 @@ class Text
         }
 
         return (string)preg_replace(array_keys($map), $map, $string);
+    }
+
+    /**
+     * Masks a portion of a string with a repeated character.
+     * Replaces characters from $offset to $offset + $length with $maskCharacter.
+     *
+     * If $length is null, it will mask until the end of the string.
+     *
+     * Negative $offset value will count from the end of the string. If the computed $offset is still less than 0, it is clamped to 0.
+     * An $offset at or beyond the string length returns the original string unchanged.
+     *
+     * @param string $string The input string.
+     * @param int $offset Start position of the mask. Negative values count from the end.
+     * @param int|null $length Number of characters to mask. Null masks from $offset to end of string.
+     * @param string $maskCharacter The single Unicode code point character to use as the mask. Defaults to '*'.
+     * @throws \InvalidArgumentException If $maskCharacter is not exactly a single character.
+     * @return string
+     */
+    public static function mask(
+        string $string,
+        int $offset = 0,
+        ?int $length = null,
+        string $maskCharacter = '*',
+    ): string {
+        if (mb_strlen($maskCharacter) !== 1) {
+            throw new InvalidArgumentException('Mask character must be a single character.');
+        }
+
+        if ($string === '') {
+            return $string;
+        }
+
+        $stringLength = mb_strlen($string);
+
+        if ($offset < 0) {
+            $offset = max(0, $stringLength + $offset);
+        }
+
+        if ($offset >= $stringLength) {
+            return $string;
+        }
+
+        if ($length !== null && $length <= 0) {
+            return $string;
+        }
+
+        $length = $length === null
+            ? $stringLength - $offset
+            : min($length, $stringLength - $offset);
+
+        $start = mb_substr($string, 0, $offset);
+        $mask = str_repeat($maskCharacter, $length);
+        $end = mb_substr($string, $offset + $length);
+
+        return $start . $mask . $end;
+    }
+
+    /**
+     * Masks all occurrences of given substring(s) within a string using a repeated character.
+     *
+     * Each occurrence of the provided substring(s) will be replaced by a sequence
+     * of the masking character.
+     *
+     * @param string $string The input string.
+     * @param array<string> $needles List of substrings to search for match (case-sensitive) and mask.
+     * @param string $maskCharacter Single masking character.
+     * @throws \InvalidArgumentException If $maskCharacter is not exactly a single character.
+     * @return string
+     */
+    public static function maskValue(string $string, array $needles, string $maskCharacter = '*'): string
+    {
+        if ($string === '' || $needles === []) {
+            return $string;
+        }
+
+        $needles = array_unique(array_filter($needles, fn($n) => $n !== ''));
+
+        if ($needles === []) {
+            return $string;
+        }
+
+        if (mb_strlen($maskCharacter) !== 1) {
+            throw new InvalidArgumentException('Mask character must be a single character.');
+        }
+
+        $escapedForRegex = array_map(function (string $needle) {
+            return preg_quote($needle, '/');
+        }, $needles);
+
+        $regexPattern = '/' . implode('|', $escapedForRegex) . '/u';
+
+        return (string)preg_replace_callback($regexPattern, function ($matches) use ($maskCharacter) {
+            return str_repeat($maskCharacter, mb_strlen($matches[0]));
+        }, $string);
+    }
+
+    /**
+     * Masks all occurrences of given regex pattern(s) within a string using a repeated character.
+     *
+     * Each occurrence of the provided pattern(s) will be replaced by a sequence of the masking character.
+     *
+     * @param string $string The input string.
+     * @param array<string>|string $patterns One or more regex patterns.
+     * @param string $maskCharacter Single masking character.
+     * @throws \InvalidArgumentException If $maskCharacter is not exactly a single character.
+     * @return string
+     */
+    public static function maskRegex(string $string, array|string $patterns, string $maskCharacter = '*'): string
+    {
+        if (!is_array($patterns)) {
+            $patterns = [$patterns];
+        }
+
+        $patterns = array_unique(array_filter($patterns, fn(string $n) => $n !== ''));
+
+        if ($string === '' || $patterns === []) {
+            return $string;
+        }
+
+        if (mb_strlen($maskCharacter) !== 1) {
+            throw new InvalidArgumentException('Mask character must be a single character.');
+        }
+
+        foreach ($patterns as $regex) {
+            $string = (string)preg_replace_callback($regex, function ($matches) use ($maskCharacter) {
+                return str_repeat($maskCharacter, mb_strlen($matches[0]));
+            }, $string);
+        }
+
+        return $string;
+    }
+
+    /**
+     * Masks occurrences of given regex pattern(s) within a string, optionally preserving leading/trailing characters of
+     * each match.
+     *
+     * Each occurrence of the provided pattern(s) will have its interior replaced by a sequence of the masking
+     * character, while the first $showLeading and last $showTrailing characters of the match are left unchanged. If
+     * $showLeading + $showTrailing >= match length, the match is returned as-is.
+     *
+     * Examples:
+     * - maskPartialRegex('Card used: 4242424242424242', '/\d{16}/', 0, 4) => Card used: ************4242
+     * - maskPartialRegex('Secret Codeword', '/\b\w+\b/', 1, 1) => S****t C*******d
+     *
+     * @param string $string The input string.
+     * @param array<string>|string $patterns One or more regex patterns.
+     * @param int $showLeading Number of leading characters of each match to leave unmasked.
+     * @param int $showTrailing Number of trailing characters of each match to leave unmasked.
+     * @param string $maskCharacter Single masking character.
+     * @return string
+     * @throws \InvalidArgumentException If $maskCharacter is not exactly a single character, or if $showLeading/$showTrailing are negative.
+     */
+    public static function maskPartialRegex(
+        string $string,
+        array|string $patterns,
+        int $showLeading = 0,
+        int $showTrailing = 0,
+        string $maskCharacter = '*',
+    ): string {
+        if (!is_array($patterns)) {
+            $patterns = [$patterns];
+        }
+
+        $patterns = array_unique(array_filter($patterns, fn(string $n) => $n !== ''));
+
+        if ($string === '' || $patterns === []) {
+            return $string;
+        }
+
+        if (mb_strlen($maskCharacter) !== 1) {
+            throw new InvalidArgumentException('Mask character must be a single character.');
+        }
+
+        if ($showLeading < 0 || $showTrailing < 0) {
+            throw new InvalidArgumentException('Leading and trailing character counts must be non-negative.');
+        }
+
+        foreach ($patterns as $regex) {
+            $string = (string)preg_replace_callback(
+                $regex,
+                function ($matches) use ($maskCharacter, $showLeading, $showTrailing) {
+                    $match = $matches[0];
+                    $matchLen = mb_strlen($match);
+                    $middleLen = $matchLen - $showLeading - $showTrailing;
+
+                    if ($middleLen <= 0) {
+                        return $match;
+                    }
+
+                    $leading = $showLeading > 0 ? mb_substr($match, 0, $showLeading) : '';
+                    $trailing = $showTrailing > 0 ? mb_substr($match, -$showTrailing) : '';
+
+                    return $leading . str_repeat($maskCharacter, $middleLen) . $trailing;
+                },
+                $string,
+            );
+        }
+
+        return $string;
     }
 }

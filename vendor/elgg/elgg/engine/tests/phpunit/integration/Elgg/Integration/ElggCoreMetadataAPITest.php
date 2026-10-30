@@ -7,6 +7,7 @@ use Elgg\Database\QueryBuilder;
 use Elgg\Database\Select;
 use Elgg\Database\Update;
 use Elgg\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElggCoreMetadataAPITest extends IntegrationTestCase {
 
@@ -19,7 +20,7 @@ class ElggCoreMetadataAPITest extends IntegrationTestCase {
 		_elgg_services()->session_manager->setLoggedInUser($this->getAdmin());
 		
 		// can not use createObject(). The tests rely on an unsaved entity
-		$this->object = new \ElggObject();
+		$this->object = new \Elgg\Helpers\ElggTestObject();
 		$this->object->setSubtype($this->getRandomSubtype());
 	}
 
@@ -70,9 +71,7 @@ class ElggCoreMetadataAPITest extends IntegrationTestCase {
 		$this->object->delete();
 	}
 
-	/**
-	 * @dataProvider caseSensitivePairsProvider
-	 */
+	#[DataProvider('caseSensitivePairsProvider')]
 	public function testElggGetEntitiesFromMetadataCaseSensitive($comparison, $value, $case_sensitive, $count) {
 		$this->object->setSubtype($this->getRandomSubtype());
 		$this->object->metadata = 'CaseSensitive';
@@ -151,9 +150,7 @@ class ElggCoreMetadataAPITest extends IntegrationTestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider booleanPairsProvider
-	 */
+	#[DataProvider('booleanPairsProvider')]
 	public function testElggGetEntitiesFromBooleanMetadata($value, $query, $type) {
 		$this->object->setSubtype($this->getRandomSubtype());
 		$this->object->metadata = $value;
@@ -212,7 +209,7 @@ class ElggCoreMetadataAPITest extends IntegrationTestCase {
 	}
 
 	public function testElggDeleteMetadata() {
-		$e = new \ElggObject();
+		$e = new \Elgg\Helpers\ElggTestObject();
 		$e->setSubtype($this->getRandomSubtype());
 		$e->save();
 
@@ -313,7 +310,7 @@ class ElggCoreMetadataAPITest extends IntegrationTestCase {
 		$md_values = null;
 		
 		elgg_call(ELGG_IGNORE_ACCESS, function() use (&$obj, &$md_values) {
-			$obj = new \ElggObject();
+			$obj = new \Elgg\Helpers\ElggTestObject();
 			$obj->setSubtype($this->getRandomSubtype());
 			$obj->owner_guid = elgg_get_site_entity()->guid;
 			$obj->container_guid = elgg_get_site_entity()->guid;

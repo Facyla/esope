@@ -1,35 +1,43 @@
 /* ***************************************
 	Messages
 *************************************** */
-@mixin elgg-message {
-	color: #(0);
-	background-color: #(1);
-	border-color: #(2);
-}
-
 .elgg-message {
 	border-width: 1px;
 	border-style: solid;
-	@include elgg-message(var(--elgg-text-color-strong), var(--elgg-background-color-soft), var(--elgg-border-color-strong));
-
-	border-radius: 3px;
+	border-radius: var(--elgg-border-radius-small);
 	
-	margin-bottom: 1rem;
+	color: var(--elgg-text-color-strong);
+	background-color: var(--elgg-background-color-soft);
+	border-color: var(--elgg-border-color-strong);
+	
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+	}
 	
 	&.elgg-message-success {
-		@include elgg-message(var(--elgg-state-success-font-color), var(--elgg-state-success-background-color), var(--elgg-state-success-border-color));
+		color: var(--elgg-state-success-font-color);
+		background-color: var(--elgg-state-success-background-color);
+		border-color: var(--elgg-state-success-border-color);
 	}
 
 	&.elgg-message-error {
-		@include elgg-message(var(--elgg-state-danger-font-color), var(--elgg-state-danger-background-color), var(--elgg-state-danger-border-color));
+		color: var(--elgg-state-danger-font-color);
+		background-color: var(--elgg-state-danger-background-color);
+		border-color: var(--elgg-state-danger-border-color);
 	}
+	
 	&.elgg-message-help,
 	&.elgg-message-info,
 	&.elgg-message-notice {
-		@include elgg-message(var(--elgg-state-notice-font-color), var(--elgg-state-notice-background-color), var(--elgg-state-notice-border-color));
+		color: var(--elgg-state-notice-font-color);
+		background-color: var(--elgg-state-notice-background-color);
+		border-color: var(--elgg-state-notice-border-color);
 	}
+	
 	&.elgg-message-warning {
-		@include elgg-message(var(--elgg-state-warning-font-color), var(--elgg-state-warning-background-color), var(--elgg-state-warning-border-color));
+		color: var(--elgg-state-warning-font-color);
+		background-color: var(--elgg-state-warning-background-color);
+		border-color: var(--elgg-state-warning-border-color);
 	}
 	
 	> .elgg-inner {
@@ -37,9 +45,10 @@
 	
 		> .elgg-head {
 			display: flex;
+			column-gap: 1rem;
 			align-items: center;
 			
-			background-color: rgba(255,255,255,0.7);
+			background-color: var(--elgg-state-header-background-color);
 			
 			padding: 0.5rem 1rem;
 			border-bottom-width: 1px;
@@ -48,7 +57,6 @@
 			
 			> .elgg-message-icon,
 			> .elgg-message-title {
-				padding-right: 1rem;
 				font-weight: bold;
 			}
 

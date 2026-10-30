@@ -6,16 +6,15 @@
  */
 
 return array(
+	'collection:user:user:all' => 'Alle leden',
+	'collection:user:user:online' => 'Leden die online zijn',
+	'collection:user:user:popular' => 'Meest populaire leden',
+	
 	'members:label:online' => 'Online',
 	'members:label:search' => 'Zoekresultaten',
 	'members:search' => 'Zoek leden',
 	'members:aria:label:member_search' => "Zoeken naar leden",
 	'members:title:search' => "Leden gezocht op '%s'",
 	'members:total' => 'Totaal aantal leden: %s',
-	'members:title:all' => 'Alle leden',
-	'members:title:newest' => 'Nieuwste leden',
-	'members:title:popular' => 'Meest populaire leden',
-	'members:title:online' => 'Leden die online zijn',
-	'members:title:alpha' => 'Alle leden',
 	'members:list:popular:none' => 'Geen leden met vrienden.',
 );
