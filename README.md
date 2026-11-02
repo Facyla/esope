@@ -11,7 +11,7 @@ Suite à ses évolutions, elle permet également de proposer des réseaux public
 
 Attention, cette branche est une version de transition d'ESOPE, à n'utiliser que pour les opérations de montée de version vers une version de Elgg plus récente. 
 
-* esope_4 : *branche intermédiaire - mises à jour seulement*
+* esope_4 : *branche intermédiaire - mises à jour seulement - dernière mise à jour de sécurité le 17 novembre 2022*
 * esope_3.3 : **branche de production - version LTS - dernière mise à jour de sécurité le 7 octobre 2022**
 * esope_3.2 : *branche intermédiaire - mises à jour seulement*
 * esope_3.1 : *branche intermédiaire - mises à jour seulement*
