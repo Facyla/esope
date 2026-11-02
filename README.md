@@ -11,7 +11,7 @@ Suite à ses évolutions, elle permet également de proposer des réseaux public
 
 Attention, cette branche n'est pas une branche de production d'ESOPE : veuillez migrer vers une version plus récente. 
 
-* esope_6 : *branche de production - version LTS - mises à jour seulement*
+* esope_6 : *branche intermédiaire - version LTS - mises à jour seulement*
 * esope_5 : *branche intermédiaire - mises à jour seulement - dernière mise à jour de sécurité le 20 novembre 2024*
 * esope_4 : *branche intermédiaire - mises à jour seulement - dernière mise à jour de sécurité le 17 novembre 2022*
 * esope_3.3 : **branche de production - version LTS - dernière mise à jour de sécurité le 7 octobre 2022**
@@ -32,7 +32,7 @@ Attention, cette branche n'est pas une branche de production d'ESOPE : veuillez 
 
 ## A propos d'Elgg
 * Elgg core : https://github.com/Elgg/Elgg
-* Documentation (en français) : http://learn.elgg.org/fr/3.3/
+* Documentation (en français) : http://learn.elgg.org/fr/6.3/
 * Documentation de référence du code : https://reference.elgg.org/
 
 
@@ -43,7 +43,7 @@ Un travail spécifique d'accessibilité a été mené avec l'appui de la sociét
 
 Ce projet a donné lieu au site Departements-en-reseaux.fr, plateforme collaborative opensource proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
 
-Le projet opensource est depuis porté depuis par Facyla. 
+Le projet opensource est depuis porté par Facyla. 
 
 
 ESOPE est constituée :
