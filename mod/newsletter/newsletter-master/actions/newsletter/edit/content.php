@@ -1,0 +1,23 @@
+<?php
+
+$guid = (int) get_input('guid');
+$content = get_input('content', '', false);
+
+if (empty($guid) || empty($content)) {
+	return elgg_error_response(elgg_echo('error:missing_data'));
+}
+
+/** @var \Newsletter $entity */
+$entity = elgg_entity_gatekeeper($guid, 'object', \Newsletter::SUBTYPE, true);
+
+$forward_url = $entity->content ? REFERRER : elgg_generate_entity_url($entity, 'edit', 'recipients');
+
+$entity->content = $content;
+
+if (get_input('header_remove')) {
+	$entity->deleteIcon('header');
+} else {
+	$entity->saveIconFromUploadedFile('header', 'header');
+}
+
+return elgg_ok_response('', elgg_echo('newsletter:action:content:success'), $forward_url);

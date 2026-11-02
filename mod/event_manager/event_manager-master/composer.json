@@ -1,0 +1,31 @@
+{
+	"name": "coldtrick/event_manager",
+	"description": "Manage events, from a simple appointment to a multi day event with day programs and subscriptions",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "events"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/event_manager",
+		"issues": "https://github.com/ColdTrick/event_manager/issues"
+	},
+	"require": {
+		"dompdf/dompdf" : "~3.1.0",
+		"npm-asset/fullcalendar": "~6.1.0",
+		"kigkonsult/icalcreator": "^2.41"
+	},
+	"repositories": [
+		{
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+		}
+	],
+	"config": {
+		"fxp-asset": {
+            "enabled": false
+		}
+	},
+	"conflict": {
+		"elgg/elgg": "<7.1"
+	}
+}

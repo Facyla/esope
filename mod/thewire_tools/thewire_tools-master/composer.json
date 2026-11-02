@@ -1,0 +1,15 @@
+{
+	"name": "coldtrick/thewire_tools",
+	"description": "Extend the functionality of The Wire",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "content"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/thewire_tools",
+		"issues": "https://github.com/ColdTrick/thewire_tools/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<7.1"
+	}
+}

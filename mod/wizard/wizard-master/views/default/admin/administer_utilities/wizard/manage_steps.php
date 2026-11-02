@@ -1,0 +1,48 @@
+<?php
+
+elgg_import_esm('admin/administer_utilities/wizard/manage_steps');
+
+/** @var Wizard $entity */
+$entity = elgg_entity_gatekeeper((int) get_input('guid'), 'object', \Wizard::SUBTYPE);
+
+elgg_push_breadcrumb(elgg_echo('admin:administer_utilities:wizard'), 'admin/administer_utilities/wizard');
+
+// wizard info
+$title = elgg_echo('wizard:manage_steps:info:title');
+
+$wizard_info = elgg_view_entity($entity, ['full_view' => false]);
+echo elgg_view_module('info', $title, $wizard_info);
+
+// steps
+$add_button = elgg_view('output/url', [
+	'icon' => 'plus',
+	'text' => elgg_echo('add'),
+	'href' => elgg_generate_url('add:object:wizard_step', [
+		'container_guid' => $entity->guid
+	]),
+	'class' => [
+		'elgg-lightbox',
+		'elgg-button',
+		'elgg-button-action',
+	],
+	'data-colorbox-opts' => json_encode([
+		'width' => '800px;',
+	]),
+]);
+
+$title = elgg_echo('wizard:manage_steps:steps:title');
+$steps = elgg_list_entities([
+	'type' => 'object',
+	'subtype' => \WizardStep::SUBTYPE,
+	'limit' => false,
+	'container_guid' => $entity->guid,
+	'sort_by' => [
+		'property' => 'order',
+		'direction' => 'ASC',
+		'signed' => true,
+	],
+	'list_class' => 'wizard-manage-steps',
+	'no_results' => elgg_echo('wizard:no_steps'),
+]);
+
+echo elgg_view_module('info', $title, $steps, ['class' => 'mts', 'menu' => $add_button]);

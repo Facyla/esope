@@ -1,0 +1,32 @@
+.addeventatc_dropdown {
+	display: none;
+	right: 0;
+	left: unset !important;
+	position: absolute;
+	top: unset !important;
+	z-index: 1;
+	background-color: var(--elgg-layout-background-color);
+	border: 1px solid var(--elgg-border-color-soft);
+	
+	span {
+		display: block;
+		white-space: nowrap;
+		color: var(--elgg-text-color-strong);
+		font-size: 0.9rem;
+		padding: 0.5rem 1rem;
+		
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--elgg-border-color-soft);
+		}
+		
+		&:hover {
+			background: var(--elgg-background-color-strong);
+			color: var(--elgg-text-color-strong);
+			cursor: pointer;
+		}
+	}
+	
+	em.frs a {
+		background: unset !important;
+	}
+}

@@ -1,0 +1,42 @@
+button.ui-multiselect {
+	max-width: 100%;
+	border: 1px solid var(--elgg-border-color-mild);
+	color: var(--elgg-text-color-strong);
+	background: var(--elgg-background-color-input);
+	padding: 0.25rem 0.5rem;
+	line-height: 1.75rem;
+	vertical-align: middle;
+	border-radius: 3px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-right: auto;
+	
+	> .ui-icon {
+		font-size: 0.8rem;
+		padding-top: 5px;
+	}
+}
+
+.ui-multiselect-menu {
+	z-index:10000;
+	background: var(--elgg-background-color-input);
+	border: 1px solid var(--elgg-border-color-mild);
+	
+	.ui-multiselect-checkboxes {
+		overflow: auto !important;
+		max-height: 200px;
+		
+		.ui-state-hover {
+			background: var(--elgg-background-color-mild);
+		}
+	}
+}
+
+.profile-manager-multiselect {
+	visibility: hidden;
+	display: inline-block !important;
+	width: 0;
+	height: 0;
+	padding: 0;
+	margin: 0 -2px 0 0;
+}

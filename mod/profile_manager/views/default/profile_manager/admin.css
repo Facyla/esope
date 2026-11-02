@@ -1,0 +1,71 @@
+#custom_fields_ordering {
+	max-width: 600px;
+	
+	.elgg-item {
+		padding: 0;
+		margin-bottom: 8px;
+		border: none;
+	}
+	
+	.custom_field {
+		background: var(--elgg-layout-background-color);
+		border: 1px solid var(--elgg-border-color-soft);
+		cursor: move;
+		padding: 6px;
+		border-radius: 4px;
+	}
+}
+
+#custom_profile_field_category_all,
+#custom_profile_field_category_0,
+#custom_fields_category_list_custom .elgg-item,
+#custom_fields_profile_types_list_custom .elgg-item {
+	background: var(--elgg-layout-background-color);
+	border: 1px solid var(--elgg-border-color-soft);
+	margin: 0 8px 0 0;
+	padding: 6px;
+	word-wrap: break-word;
+	display: inline-block;
+	border-radius: 4px;
+}
+
+#custom_fields_category_list_custom {
+	> .elgg-list-container {
+		display: inline-flex;
+	}
+	
+	.custom_fields_category_selected {
+		background: var(--elgg-background-color-strong);
+	}
+	
+	.ui-droppable-hover {
+		background: var(--elgg-background-color-highlight);
+		
+		a {
+			color: #FFFFFF;
+		}
+	}
+}
+
+.custom_profile_type_description {
+	display: none;
+	margin-bottom: 4px;
+	padding-bottom: 4px;
+	border-bottom: 1px dotted var(--elgg-border-color-soft);
+}
+
+#custom_fields_form,
+.elgg-form-profile-manager-categories-add > .elgg-form-body,
+.elgg-form-profile-manager-profile-types-add > .elgg-form-body {
+	min-width: 600px;
+}
+
+.field_config_metadata_option {
+	color: var(--elgg-border-color-soft);
+	margin-left: 0.2rem;
+	cursor: pointer;
+}
+
+.field_config_metadata_option_enabled {
+	color: var(--elgg-border-color-highlight);
+}

@@ -1,0 +1,106 @@
+<?php
+/**
+ * Category add form
+ */
+
+use ColdTrick\ProfileManager\CustomProfileType;
+
+if (!elgg_is_admin_logged_in()) {
+	echo elgg_echo('adminrequired');
+	return;
+}
+
+$guid = (int) get_input('guid');
+
+$entity = get_entity($guid);
+if (!$entity instanceof \ColdTrick\ProfileManager\CustomFieldCategory) {
+	$entity = null;
+}
+
+$form_title = elgg_echo('profile_manager:categories:add');
+
+$metadata_name = null;
+$metadata_label = null;
+$related_types = [];
+
+if ($entity) {
+	$form_title = elgg_echo('profile_manager:categories:edit');
+	
+	$guid = $entity->guid;
+	$metadata_name = $entity->metadata_name;
+	$metadata_label = $entity->metadata_label;
+	
+	$types = elgg_get_entities([
+		'type' => 'object',
+		'subtype' => CustomProfileType::SUBTYPE,
+		'limit' => false,
+		'owner_guid' => elgg_get_site_entity()->guid,
+		'relationship' => \ColdTrick\ProfileManager\CustomProfileType::CATEGORY_RELATIONSHIP,
+		'relationship_guid' => $guid,
+		'inverse_relationship' => true,
+	]);
+	
+	if ($types) {
+		foreach ($types as $type) {
+			$related_types[] = $type->guid;
+		}
+	}
+}
+
+$formbody = '';
+
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_name'),
+	'name' => 'metadata_name',
+	'value' => $metadata_name,
+	'required' => true,
+]);
+
+$formbody .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('profile_manager:admin:metadata_label'),
+	'name' => 'metadata_label',
+	'value' => $metadata_label,
+]);
+
+$types = elgg_get_entities([
+	'type' => 'object',
+	'subtype' => CustomProfileType::SUBTYPE,
+	'limit' => false,
+	'owner_guid' => elgg_get_site_entity()->guid,
+]);
+
+if (count($types) > 0) {
+	$checkbox_options = [];
+	
+	foreach ($types as $type) {
+		$checkbox_options[$type->getDisplayName()] = $type->guid;
+	}
+	
+	$formbody .= elgg_view_field([
+		'#type' => 'checkboxes',
+		'label' => elgg_echo('profile_manager:categories:edit:related_types'),
+		'name' => 'profile_types',
+		'options' => $checkbox_options,
+		'value' => $related_types,
+	]);
+}
+
+$formbody .= elgg_view_field([
+	'#type' => 'hidden',
+	'name' => 'guid',
+	'value' => $guid,
+]);
+
+$formbody .= elgg_view_field([
+	'#type' => 'submit',
+	'text' => elgg_echo('save'),
+]);
+
+$form_title .= elgg_view('output/pm_hint', [
+	'id' => 'more_info_category',
+	'text' => elgg_echo('profile_manager:tooltips:category'),
+]);
+
+echo elgg_view_module('info', $form_title, $formbody);

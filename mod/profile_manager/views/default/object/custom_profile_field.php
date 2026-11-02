@@ -1,0 +1,59 @@
+<?php
+/**
+ * Object view of a custom profile field
+ */
+
+$field = elgg_extract('entity', $vars);
+if (!$field instanceof \ColdTrick\ProfileManager\CustomProfileField) {
+	return;
+}
+
+$title = '<strong>' . $field->metadata_name . '</strong> [' . $field->metadata_type . ']';
+
+$title .= elgg_view('output/url', [
+	'href' => elgg_generate_url('ajax', [
+		'type' => 'form',
+		'segments' => 'profile_manager/fields/profile',
+		'guid' => $field->guid,
+	]),
+	'class' => ['elgg-lightbox', 'mlm'],
+	'title' => elgg_echo('edit'),
+	'text' => false,
+	'icon' => 'settings-alt',
+]);
+
+$title .= elgg_view('output/url', [
+	'href' => false,
+	'class' => ['profile-manager-remove-field', 'mls'],
+	'data-guid' => $field->guid,
+	'title' => elgg_echo('delete'),
+	'text' => false,
+	'icon' => 'delete-alt',
+]);
+
+$title = elgg_format_element('div', [], $title);
+
+$metadata = '';
+
+$toggle_options = [
+	'show_on_register',
+	'mandatory',
+	'user_editable',
+	'output_as_tags',
+	'admin_only',
+];
+
+foreach ($toggle_options as $option) {
+	$metadata .= elgg_view('profile_manager/toggle_metadata', [
+		'entity' => $field,
+		'metadata_name' => $option,
+	]);
+}
+
+echo elgg_view_image_block('', $title, [
+	'id' => "custom_profile_field_{$field->guid}",
+	'class' => 'custom_field',
+	'rel' => "{$field->category_guid}",
+	'title' => $field->getDisplayName(),
+	'image_alt' => $metadata,
+]);

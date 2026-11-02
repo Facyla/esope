@@ -1,0 +1,236 @@
+Version history
+===============
+
+15.0.2 (2026-10-01):
+
+- several small chores/fixes
+
+15.0.1 (2026-07-30):
+
+- fixed: correctly set filter
+
+15.0 (2026-05-29):
+
+- changed: updated for Elgg 7.0
+
+14.0.1 (2026-02-11):
+
+- several small chores/fixes
+
+14.0 (2025-11-13):
+
+- changed: updated for Elgg 6.3
+- fixed: PHP implicit null declaration
+
+13.2.2 (2025-08-20):
+
+- fixed: don't allow file field types to be exported by default
+
+13.2.1 (2025-07-09):
+
+- several small chores/fixes
+
+13.2 (2025-06-18):
+
+- changed: last_action is exportable on all entity types
+- changed: replaced the csv_exporter_group menu with a filter menu
+
+13.1 (2025-05-28):
+
+- added: filter time on different time field
+- added: sections for different exportable values
+- added: user and container filter
+- changed: export object metadata based on fields service
+- fixed: preview pagination should retain all form fields
+
+13.0 (2025-01-23):
+
+- changed: updated for Elgg 6.1
+
+12.1.3 (2025-01-09):
+
+- fixed: correctly clear metadata cache
+
+12.1.2 (2024-12-11):
+
+- fixed: correctly explode type_subtype during processing
+
+12.1.1 (2024-11-21):
+
+- fixed: admin preview pagination not working
+- fixed: send export complete notification in recipient language
+
+12.1 (2024-10-10):
+
+- added: user first and last login time to export data
+
+12.0 (2024-06-28):
+
+- changed: updated for Elgg 6
+
+11.0 (2023-11-30):
+
+- changed: updated for Elgg 5.1
+
+10.0.2 (2023-09-28):
+
+- fixed: make sure preview does not crash on null value fields
+
+10.0.1 (2023-07-26):
+
+- fixed: buttons have a discernible text
+
+10.0 (2023-06-02):
+
+- changed: conflict with Elgg < 5.0
+- changed: updated for Elgg 5.0
+
+9.1.1 (2023-01-19):
+
+- fixed: downloads tab should only show admin exports
+- fixed: preview respects export period
+- fixed: switching type/subtype now longer shows preview
+- fixed: use correct function to fetch data
+
+9.1 (2022-10-27):
+
+- added: group members can be exported by a group admin
+
+9.0 (2022-08-24):
+
+- changed: updated for Elgg 4.3
+
+8.0.1 (2022-03-11):
+
+- changed: use entity capability for commentable
+
+8.0 (2022-02-16):
+
+- changed: updated code for new Elgg 4.1 capabilities system
+
+7.0.1 (2021-10-12):
+
+- fixed: updated notification body to not have double salutation
+
+7.0 (2021-09-27):
+
+- changed: update for Elgg 4
+
+6.2 (2020-11-11):
+
+- added: icon present exportable value
+- added: option to restart crashed csv exports
+- changed: clear memory during processing
+
+6.1 (2020-10-13):
+
+- added: plugin hook to register exportable entity types
+
+6.0 (2020-05-26):
+
+- changed: increased minimal Elgg version to 3.3
+
+5.1 (2020-01-06):
+
+- added: icontime and icon url to export
+
+5.0.4 (2019-08-22):
+
+- several small chores/fixes
+
+5.0.3 (2019-07-24):
+
+- fixed: incomplete link in csv export complete notification
+
+5.0.2 (2019-07-11):
+
+- fixed: deprecated usage of group_acl metadata
+
+5.0.1 (2019-04-17):
+
+- fixed: conflicting styling
+
+5.0 (2019-03-27):
+
+- changed: increased Elgg version requirement to 3.0
+- changed: moved class and action registration to elgg-plugin.php
+- changed: moved start.php to bootstrap class
+- changed: reworked object view
+- changed: rewrite for Elgg 3.0
+- fixed: don't show summary content
+- fixed: use correct language keys for access labels
+
+4.4 (2018-09-07):
+
+- added: admin filter for downloads 
+- added: option to allow group admins to export content
+
+4.3 (2018-01-25):
+
+- added: hook to change exported columns
+- added: option to export group content statistics
+- added: option to export group tools per group
+
+4.2 (2017-12-14):
+
+- added: option to export number of followers/following for users
+
+4.1.1 (2017-09-06):
+
+- several small chores/fixes
+
+4.1 (2017-02-27):
+
+- added: access can be exported
+- added: banned attribute of user
+
+4.0 (2017-01-26):
+
+- changed: increased Elgg version requirement to 2.3
+- fixed: incompatible function declaration
+
+3.1.1 (2016-09-15):
+
+- fixed: small dutch typo
+- fixed: wrong parameter type in notification
+
+3.1 (2016-05-26):
+
+- added: group visibility and membership
+- added: option to export groups owned for users
+- added: plugin setting to cleaup older finished exports
+- added: time constraints to the export settings
+- changed: csv processing is now offloaded to the minute cron
+- changed: get export value moved to class callbacks
+- changed: moved exportable values hook to class callback
+- fixed: disallow commenting on exports
+- fixed: generic handling of array export values
+- fixed: possible error if seperator > 1 char
+- fixed: possible invalid return for group last activity
+- fixed: undefined class in upgrade script
+- fixed: wrong display of array values in preview
+
+3.0.2 (2016-02-16):
+
+- fixed: timeout while exporting large datasets
+
+3.0.1 (2016-01-19):
+
+- changed: admin js to amd module
+
+3.0:
+
+- changes for Elgg 1.11
+- added: composer support
+- added: plugin setting to control the csv separator #4
+- fixed: deprecated notice
+- fixed: jquery live registrations replaced by on
+- fixed: problems with exporting HTML #6
+
+2.0 (2014-11-17):
+
+- changes for Elgg 1.9
+
+1.0 (2014-05-20):
+
+- initial version

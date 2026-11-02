@@ -1,0 +1,72 @@
+<?php
+
+namespace ColdTrick\UserSupport\Notifications;
+
+use Elgg\Notifications\NotificationEventHandler;
+
+/**
+ * Notification Event Handler for 'object' 'support_ticket' 'create' action
+ */
+class CreateSupportTicketAdminHandler extends NotificationEventHandler {
+
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
+		return elgg_echo('user_support:notify:admin:create:subject', [
+			$this->event->getObject()->getDisplayName(),
+		]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
+		return elgg_echo('user_support:notify:admin:create:summary', [
+			$this->event->getObject()->getDisplayName(),
+		]);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function getNotificationBody(\ElggUser $recipient, string $method): string {
+		$entity = $this->event->getObject();
+		$actor = $this->event->getActor();
+				
+		return elgg_echo('user_support:notify:admin:create:message', [
+			$actor->getDisplayName(),
+			$entity->description,
+			$entity->getURL(),
+		]);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSubscriptions(): array {
+		// by default notify nobody
+		$result = [];
+		
+		// get all the admins to notify
+		$users = user_support_get_admin_notify_users($this->event->getObject());
+		if (empty($users)) {
+			return $result;
+		}
+		
+		// pass all the guids of the admins/staff
+		/** @var \ElggUser $user */
+		foreach ($users as $user) {
+			$result[$user->guid] = $user->getNotificationSettings('user_support_ticket', true);
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function isConfigurableByUser(): bool {
+		return false;
+	}
+}

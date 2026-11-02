@@ -1,0 +1,30 @@
+.blog-tools-widget-items-container {
+	> .elgg-list-container > .elgg-list-entity {
+		> li.elgg-item {
+			display: none;
+			border: none;
+		}
+		
+		> li:first-child {
+			display: list-item;
+		}
+	}
+}
+
+.blog-tools-widget-items-navigator {
+	padding-top: 5px;
+	text-align: center;
+	border-top: 1px solid var(--elgg-border-color-mild);
+	
+	> li {
+		display: inline-block;
+		border: 1px solid var(--elgg-border-color-mild);
+		padding: 0.2rem 0.5rem;
+		cursor: pointer;
+		
+		&.elgg-state-selected {
+			color: var(--elgg-text-color-highlight);
+			border-color: var(--elgg-border-color-highlight);
+		}
+	}
+}

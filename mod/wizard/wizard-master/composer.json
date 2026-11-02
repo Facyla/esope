@@ -1,0 +1,15 @@
+{
+	"name": "coldtrick/wizard",
+	"description": "Make a wizard to guide your users through the features of your site",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "wizard", "guide", "tutorial"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/wizard",
+		"issues": "https://github.com/ColdTrick/wizard/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<7.0"
+	}
+}

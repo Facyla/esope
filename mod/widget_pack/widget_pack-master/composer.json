@@ -1,0 +1,18 @@
+{
+	"name": "coldtrick/widget_pack",
+	"description": "Various Elgg widgets",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "widget"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/widget_pack",
+		"issues": "https://github.com/ColdTrick/widget_pack/issues"
+	},
+	"require": {
+		"simplepie/simplepie": "~1.8.0"
+	},
+	"conflict": {
+		"elgg/elgg": "<7.0"
+	}
+}

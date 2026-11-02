@@ -1,0 +1,34 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "194517d0ef54326a4ee37cfbefabc3a4",
+    "packages": [
+        {
+            "name": "bower-asset/jquery-ui-multiselect-widget",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:ehynds/jquery-ui-multiselect-widget.git",
+                "reference": "7efce3706f2a9ebb7bafebc0320b3644d3f62bd2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ehynds/jquery-ui-multiselect-widget/zipball/7efce3706f2a9ebb7bafebc0320b3644d3f62bd2",
+                "reference": "7efce3706f2a9ebb7bafebc0320b3644d3f62bd2"
+            },
+            "type": "bower-asset"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}

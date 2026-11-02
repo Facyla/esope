@@ -1,0 +1,119 @@
+Version history
+===============
+
+9.0.1 (2026-07-30):
+
+- several small chores/fixes
+
+9.0 (2026-05-29):
+
+- changed: updated for Elgg 7.0
+
+8.0.1 (2025-11-13):
+
+- several small chores/fixes
+
+8.0 (2024-06-28):
+
+- changed: updated for Elgg 6
+
+7.0.4 (2024-03-14):
+
+- several small chores/fixes
+
+7.0.3 (2024-01-12):
+
+- several small chores/fixes
+
+7.0.2 (2023-11-30):
+
+- several small chores/fixes
+
+7.0.1 (2023-07-26):
+
+- fixed: buttons have a discernible text
+
+7.0 (2023-06-02):
+
+- changed: conflict with Elgg < 5.0
+- changed: updated for Elgg 5
+
+6.0.1 (2023-02-08):
+
+- several small chores/fixes
+
+6.0 (2022-08-24):
+
+- changed: updated DOMPDF to v2.0
+- changed: updated for Elgg 4.3
+
+5.0.2 (2022-04-20):
+
+- several small chores/fixes
+
+5.0.1 (2022-02-16):
+
+- several small chores/fixes
+
+5.0 (2021-09-16):
+
+- changed: update for Elgg 4
+
+4.0.3 (2020-09-01):
+
+- changed: updated dompdf library
+
+4.0.2 (2019-12-09):
+
+- fixed: export menu item is available again
+
+4.0.1 (2019-11-26):
+
+- several small chores/fixes
+
+4.0 (2019-09-04):
+
+- changed: increased minimal Elgg requirement to v3.1
+- changed: updated all the code for Elgg 3
+- fixed: correct license for composer
+
+3.0 (2017-10-16):
+
+- added: Spanish translation
+- changed: increased Elgg requirement to version 2.3
+- changed: updated plugin for Elgg 2.3
+
+2.0 (2015-09-30)
+
+- added: caching of sidebar menu html contents
+- added: composer support
+- added: notice if someone is already editing a page
+- changed: updated dompdf library
+- changed: updated readme
+- changes for Elgg 1.9
+- fixed: allow group owner/admins to delete pages
+- fixed: line endings
+- fixed: parent page selector not showing correct content
+- fixed: php warning
+- fixed: using wrong class name
+
+1.2 (2015-08-17):
+
+- added: notice if someone is already editing a page
+- fixed: php warning
+
+1.1 (2013-04-05):
+
+- added: publication and expiration date for pages (optional and admin setting)
+- added: option to move a subpage to a different page tree (as of Elgg 1.8.12)
+- added: tooltip to the naviagtion tree to help with drag-and-drop
+- changed: no navigation tree with only one page
+- changed: no more wrapping of the first 5 levels of the navigation tree
+- fixed: #1 Undefined function on pdf export
+- fixed: small JS bug
+- fixed: duplicate page title in full view
+
+1.0:
+
+- first combined version of pages_export and pages_tree
+- changed: layout of start.php to be more inline with Elgg

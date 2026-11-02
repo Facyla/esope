@@ -1,0 +1,187 @@
+<?php
+
+$plugin = elgg_extract('entity', $vars);
+if (!$plugin instanceof \ElggPlugin) {
+	return;
+}
+
+// make sure cache is flushed after saving new settings
+echo elgg_view_field([
+	'#type' => 'hidden',
+	'name' => 'flush_cache',
+	'value' => 1,
+]);
+
+$maps = elgg_view_field([
+	'#type' => 'switch',
+	'#label' => elgg_echo('event_manager:settings:maps_enabled'),
+	'name' => 'params[maps_enabled]',
+	'value' => $plugin->maps_enabled,
+]);
+
+$maps .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:maps_location'),
+	'name' => 'params[maps_location]',
+	'value' => $plugin->maps_location,
+]);
+
+$maps .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:maps_location_lat'),
+	'name' => 'params[maps_location_lat]',
+	'value' => $plugin->maps_location_lat,
+]);
+
+$maps .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:maps_location_lng'),
+	'name' => 'params[maps_location_lng]',
+	'value' => $plugin->maps_location_lng,
+]);
+
+$maps .= elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('event_manager:settings:maps_zoom'),
+	'name' => 'params[maps_zoom]',
+	'value' => (int) $plugin->maps_zoom,
+	'options' => range(0, 19),
+]);
+
+$maps .= elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('event_manager:settings:maps_detail_zoom'),
+	'name' => 'params[maps_detail_zoom]',
+	'value' => (int) $plugin->maps_detail_zoom,
+	'options' => range(0, 19),
+]);
+
+echo elgg_view_module('info', elgg_echo('event_manager:settings:maps'), $maps);
+
+// iCal direct features
+$ical_direct = elgg_view_field([
+	'#type' => 'switch',
+	'#label' => elgg_echo('event_manager:settings:ical_direct:enable'),
+	'#help' => elgg_echo('event_manager:settings:ical_direct:enable:help'),
+	'name' => 'params[ical_direct]',
+	'value' => $plugin->ical_direct,
+]);
+
+echo elgg_view_module('info', elgg_echo('event_manager:settings:ical_direct'), $ical_direct);
+
+// AddEvent options
+$add_event = elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('event_manager:settings:add_event_to_calendar'),
+	'#help' => elgg_echo('event_manager:settings:add_event_to_calendar:help'),
+	'name' => 'params[add_event_to_calendar]',
+	'value' => $plugin->add_event_to_calendar,
+	'options_values' => [
+		'no' => elgg_echo('option:no'),
+		'yes' => elgg_echo('option:yes'),
+		'attendee_only' => elgg_echo('event_manager:settings:add_event_to_calendar:attendee_only'),
+	],
+]);
+
+$add_event .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:add_event_license'),
+	'#help' => elgg_echo('event_manager:settings:add_event_license:help'),
+	'name' => 'params[add_event_license]',
+	'value' => $plugin->add_event_license,
+]);
+
+$services = [
+	'google' => 'Google <em>(online)</em>',
+	'yahoo' => 'Yahoo <em>(online)</em>',
+	'office365' => 'Office 365 <em>(online)</em>',
+	'outlookcom' => 'Outlook.com <em>(online)</em>',
+	'outlook' => 'Outlook',
+	'appleical' => 'iCal Calendar',
+];
+
+foreach ($services as $service => $label) {
+	$service_setting = "show_service_{$service}";
+	$add_event .= elgg_view_field([
+		'#type' => 'switch',
+		'#label' => elgg_echo('event_manager:settings:add_event:service', [$label]),
+		'name' => "params[{$service_setting}]",
+		'value' => $plugin->{$service_setting},
+	]);
+}
+
+echo elgg_view_module('info', elgg_echo('event_manager:settings:add_event'), $add_event);
+
+// Other settings
+$other = elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:region_list'),
+	'name' => 'params[region_list]',
+	'value' => $plugin->region_list,
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:type_list'),
+	'name' => 'params[type_list]',
+	'value' => $plugin->type_list,
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('event_manager:settings:site:whocancreate'),
+	'name' => 'params[who_create_site_events]',
+	'value' => $plugin->who_create_site_events,
+	'options_values' => [
+		'everyone' => elgg_echo('event_manager:settings:site:whocancreate:everyone'),
+		'admin_only' => elgg_echo('event_manager:settings:site:whocancreate:admin_only'),
+	],
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('event_manager:settings:group:whocancreate'),
+	'name' => 'params[who_create_group_events]',
+	'value' => $plugin->who_create_group_events,
+	'options_values' => [
+		'members' => elgg_echo('event_manager:settings:group:whocancreate:members'),
+		'group_admin' => elgg_echo('event_manager:settings:group:whocancreate:group_admin'),
+		'' => elgg_echo('event_manager:settings:group:whocancreate:no_one'),
+	],
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => elgg_echo('event_manager:settings:rsvp:interested'),
+	'name' => 'params[rsvp_interested]',
+	'checked' => $plugin->rsvp_interested === 'yes',
+	'switch' => true,
+	'default' => 'no',
+	'value' => 'yes',
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('event_manager:settings:notification_sender'),
+	'name' => 'params[notification_sender]',
+	'value' => $plugin->notification_sender,
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'switch',
+	'#label' => elgg_echo('event_manager:settings:event_mail'),
+	'#help' => elgg_echo('event_manager:settings:event_mail:help'),
+	'name' => 'params[event_mail]',
+	'value' => $plugin->event_mail,
+]);
+
+$other .= elgg_view_field([
+	'#type' => 'number',
+	'#label' => elgg_echo('event_manager:settings:announcement_period'),
+	'#help' => elgg_echo('event_manager:settings:announcement_period:help'),
+	'name' => 'params[announcement_period]',
+	'value' => $plugin->announcement_period,
+	'min' => 0,
+]);
+
+echo elgg_view_module('info', elgg_echo('event_manager:settings:other'), $other);

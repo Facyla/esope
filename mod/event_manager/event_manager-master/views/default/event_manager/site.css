@@ -1,0 +1,282 @@
+.elgg-page-body {
+	--fc-event-bg-color: var(--elgg-background-color-highlight);
+	--fc-event-border-color: var(--elgg-background-color-highlight);
+	
+	--fc-button-bg-color: var(--elgg-button-submit-background-color);
+	--fc-button-border-color: var(--elgg-button-submit-background-color);
+
+	--fc-border-color: var(--elgg-border-color-strong);
+}
+
+.fc-view-harness a {
+	color: var(--elgg-text-color-strong);
+}
+
+.event-manager-header {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 16px;
+	
+	> div {
+		flex: 1 1 auto;
+	}
+}
+
+@media screen and (min-width: 50rem) {
+	.event-manager-event-when {
+		white-space: nowrap;
+	}
+}
+
+@media screen and (max-width: 30rem) {
+	.event-manager-event-when {
+		> .elgg-image {
+			display: none;
+		}
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#event-manager-event-calendar .fc-header-toolbar {
+		flex-wrap: wrap;
+		
+		> .fc-toolbar-chunk {
+			&:nth-child(2) {
+				order: 1;
+				width: 100%;
+				text-align: center;
+			}
+			
+			> :not(:first-child) {
+				margin-left: 0.25em;
+			}
+		}
+	}
+}
+
+.event-manager-view-rsvp {
+	display: flex;
+	flex-direction: column;
+}
+
+.event-manager-view-registration {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.event-manager-view-registration-details {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 16px;
+	width: 100%;
+	
+	> div {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+}
+
+#event_manager_event_edit {
+	.elgg-fieldset-has-legend {
+		> legend {
+			font-weight: 600;
+			font-size: 0.9rem;
+		}
+		
+		.elgg-input-single-checkbox .elgg-field-label {
+			font-weight: 400;
+			font-size: 100%;
+		}
+	}
+}
+
+.event_manager_event_edit_date {
+	width: 100px;
+}
+
+.event-manager-align-bottom {
+	align-items: flex-end;
+}
+
+#event-manager-maps-location-search {
+	height: 400px;
+	width: 600px;
+}
+
+.event_manager_event_list_icon {
+	text-align: center;
+	width: 40px;
+	padding: 1px;
+	
+	background: #0078ac;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 3px;
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6);
+	box-sizing: border-box;
+	
+	.event_manager_event_list_icon_day {
+		font-size: 15px;
+		font-weight: bold;
+		line-height: 23px;
+		background: var(--elgg-layout-background-color);
+		color: var(--elgg-text-color-strong);
+		border-radius: 0 0 2px 2px;
+	}
+	.event_manager_event_list_icon_month {
+		color: white;
+		font-size: 11px;
+		line-height: 11px;
+		padding: 2px 0;
+	}
+}
+
+.elgg-list .elgg-item-object-event .elgg-listing-summary-content div + .elgg-menu-event-rsvp-container {
+	margin-top: 1rem;
+}
+
+.event-manager-event-when {
+	.elgg-icon-calendar {
+		font-size: 3em;
+		margin: 0 10px;
+	}
+}
+
+.event-manager-event-when-title {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.event-manager-event-when-subtitle {
+	color: var(--elgg-text-color-soft);
+	font-size: 18px;
+}
+
+.elgg-module-event {
+	&.event-header,
+	&.event-program {
+		> .elgg-head {
+			margin-bottom: 8px;
+		}
+		> .elgg-body {
+			border: 1px dashed var(--elgg-border-color-strong);
+			border-radius: var(--elgg-border-radius-medium);
+			padding: 16px;
+		}
+	}
+}
+
+.event-manager-event-view-maps {
+	width: 100%;
+	height: 400px;
+	margin-top: 16px;
+}
+
+#event_manager_form_program_slot label {
+	white-space: nowrap;
+	padding-right: 10px;
+}
+
+#event-manager-new-slot-set-name {
+	width: 150px;
+	margin-right: 10px;
+}
+
+.event-manager-program-slot-set {
+	padding: 2px 4px;
+	color: white;
+	margin-left: 5px;
+	
+	border-radius: 4px;
+}
+
+.event_manager_program_slot_time {
+	padding: 0 5px;
+	white-space: nowrap;
+	font-weight: bold;
+}
+
+.event_manager_program_slot_attending {
+	width: 20px;
+}
+
+.event_manager_program_slot_description{
+	word-wrap: break-word;
+	width: 100%;
+}
+
+.event-manager-popup {
+	> .event-manager-header {
+		margin-bottom: 1rem;
+	} 
+}
+
+.event-manager-popup-title {
+	position: relative;
+	margin-bottom: 1rem;
+	
+	> .event-manager-event-banner {
+		margin: 0;
+		width: 100%;
+		height: 150px;
+		background-position: center;
+		background-size: cover;
+		
+		& + h2 {
+			position: absolute;
+			bottom: 0;
+			padding: 1rem;
+			color: white;
+		}
+	}
+}
+
+@media screen and (min-width: 50rem) {
+	.event-manager-popup-footer {
+		display: flex;
+		
+		> a {
+			margin-left: auto;
+			align-self: start;
+		}
+	}
+}
+
+.elgg-form-event-manager-event-copy {
+	width: 600px;
+}
+
+#event_manager_onthemap_canvas {
+	height: 650px;
+	margin-bottom: 20px;
+	z-index: 1;
+}
+
+.event-manager-event-view-maps {
+	z-index: 1;
+}
+
+/* hack to hide clear button on input/date fields for IE/Edge */
+.elgg-input-date::-ms-clear {
+	display: none;
+}
+
+@media screen and (max-width: 30rem) {
+	.event_manager_program_slot_attending {
+		float: left;
+	}
+	
+	.event_manager_program_day td {
+		display: block;
+	}
+}
+
+.elgg-menu-container {
+	.event-manager-listing-sorting {
+		margin-left: auto;
+	}
+}

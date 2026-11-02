@@ -1,0 +1,178 @@
+Version history
+===============
+
+12.0.1 (2026-07-30):
+
+- several small chores/fixes
+
+12.0 (2026-05-29):
+
+- changed: updated for Elgg 7
+
+11.1 (2025-11-13):
+
+- changed: allow wizard redirect to external links
+
+11.0.2 (2025-06-18):
+
+- several small chores/fixes
+
+11.0.1 (2024-12-11):
+
+- several small chores/fixes
+
+11.0 (2024-06-28):
+
+- changed: updated for Elgg 6
+
+10.0 (2023-11-30):
+
+- changed: updated for Elgg 5.1
+
+9.1 (2023-07-26):
+
+- added: database seeder
+- fixed: buttons have a discernible text
+
+9.0 (2023-06-02):
+
+- changed: conflict with Elgg < 5.0
+- changed: updated for Elgg 5.0
+
+8.1 (2023-03-01):
+
+- added: only show wizard x days after first login
+
+8.0 (2022-08-24):
+
+- changed: updated for Elgg 4.3
+
+7.0 (2022-03-11):
+
+- changed: increased minimal Elgg version to 4.1
+- changed: moved commentable to entity capability
+
+6.0 (2021-09-27):
+
+- changed: update for Elgg 4
+
+5.0.2 (2021-01-19):
+
+- fixed: disable focus trapping on step edit to allow link edit
+
+5.0.1 (2020-07-21):
+
+- fixed: lightbox wizard now scrolls to top on page switch
+
+5.0 (2020-05-26):
+
+- changed: increased minimal Elgg requirement to v3.3
+- changed: updated resources to use the default layout
+
+4.1 (2020-04-22):
+
+- added: options to determine when to show a wizard based on user creation
+
+4.0.3 (2019-08-22):
+
+- several small chores/fixes
+
+4.0.2 (2019-05-29):
+
+- fixed: new user flag doesn't get reset correctly
+- fixed: new user wizards showing for existing users
+- fixed: register events
+
+4.0.1 (2019-03-28):
+
+- several small chores/fixes
+
+4.0 (2019-03-27):
+
+- changed: admin preview of lightbox wizards
+- changed: increased minimal Elgg version to 3.0
+- changed: moved routes and object registration to elgg-plugin
+- changed: moved start to elgg-plugin and Bootstrap
+- fixed: canComment issues
+- fixed: pagination in lightbox
+- removed: custom entity delete actions
+- removed: Wizard step migration
+
+3.1.1 (2017-11-29):
+
+- fixed: lightbox not closing after submittion on admin side
+- fixed: removed deprecated use load of lightbox js lib
+
+3.1 (2017-10-04):
+
+- added: replacement helper info is now default collapsed
+- added: trigger an event when wizard steps are processed
+- added: trigger a plugin hook to influence wizard replacements
+
+3.0 (2017-01-26):
+
+- changed: increased Elgg version requirement to 2.3
+- fixed: incompatible function declaration
+
+2.0.2 (2016-12-12):
+
+- several small chores/fixes
+
+2.0.1 (2016-10-06):
+
+- fixed: correctly load lightbox js/css
+
+2.0 (2016-08-29):
+
+- added: 'back button' on manage steps page
+- added: ability to copy/clone a wizard
+- added: ability to show wizards only for new users and also give the ability to be able to prematuraly close a wizard
+- added: display modes to the wizard
+- added: exit url replacement
+- added: forward URL to wizard upon finish
+- added: user field replacements
+- added: wizard steps can now be reordered
+- added: wizard steps now are objects
+- changed: improved page view
+- changed: moved add/edit wizard page to a regular page instead of popup
+- changed: moved admin js to AMD
+- changed: moved events, hooks and pagehandler to class functions
+- changed: moved page to resource view
+- changed: page route handling
+- changed: you can now open the lightbox wizard in the backend
+- fixed: ckeditor dialogs not working in lightbox
+- fixed: correctly display profile inputs
+- fixed: correctly forward on wizard delete
+- fixed: do not check wizards in an xhr page
+- fixed: double step content encoding while editing
+- fixed: elgg required version
+- fixed: loading unneeded JS
+- fixed: max width of overlay and overlay on admin show site version
+- fixed: returning steps in wizard in correct order
+- fixed: show steps in correct order
+- fixed: when clicking on next after a long step scroll pagetop
+- fixed: wizard step title not showing
+- fixed: wrong explanation of exit url replacement
+
+1.0 (2016-05-11):
+
+- added: custom class on page shell for wizard
+- added: custom layout for wizards
+- added: option to reset wizard vor all users
+- added: pagination for multistep wizards
+- added: profile field template description
+- added: steps now have an editor
+- changed: use a custom pageshell instead of a custom layout
+- fixed: added missing translations
+- fixed: completed count not accurate
+- fixed: editor menu not showing correctly
+- fixed: incorrect buttons for single step wizard
+- fixed: incorrect cleanup of session wizards
+- fixed: incorrect selection of available wizards
+- fixed: javascript error tinyMCE undefined
+- fixed: longtexts not visably marked as required/missing
+- fixed: no need for special js script
+- fixed: profile data not saved correctly
+- fixed: radio profile fields not validated correctly
+- fixed: remove focus from next button if stepping
+- fixed: unable to clear end date

@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * Custom class for Newsletter Subscriptions
+ *
+ * @property string $title e-mail address of the non Elgg user
+ */
+class NewsletterSubscription extends \ElggObject {
+	
+	public const SUBSCRIPTION = 'subscribed';
+	public const BLACKLIST = 'blacklisted';
+	public const GENERAL_BLACKLIST = 'general_blacklisted';
+	public const SUBTYPE = 'newsletter_subscription';
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function initializeAttributes() {
+		parent::initializeAttributes();
+		
+		$site = elgg_get_site_entity();
+		
+		$this->attributes['subtype'] = self::SUBTYPE;
+		$this->attributes['owner_guid'] = $site->guid;
+		$this->attributes['container_guid'] = $site->guid;
+		$this->attributes['access_id'] = ACCESS_PRIVATE;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function save(): bool {
+		// ignore access restrictions
+		return elgg_call(ELGG_IGNORE_ACCESS, function() {
+			return parent::save();
+		});
+	}
+}

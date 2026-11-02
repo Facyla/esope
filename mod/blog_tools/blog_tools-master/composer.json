@@ -1,0 +1,15 @@
+{
+	"name": "coldtrick/blog_tools",
+	"description": "Offers additional functionality for Blogs",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "content"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/blog_tools",
+		"issues": "https://github.com/ColdTrick/blog_tools/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<7.1"
+	}
+}

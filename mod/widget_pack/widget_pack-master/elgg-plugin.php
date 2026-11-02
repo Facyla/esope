@@ -1,0 +1,112 @@
+<?php
+
+return [
+	'plugin' => [
+		'version' => '9.1',
+		'dependencies' => [
+			'widget_manager' => [],
+		],
+	],
+	'settings' => [
+		'rss_cron' => 'no',
+	],
+	'view_extensions' => [
+		'elgg.css' => [
+			'widgets/rss_server/content.css' => [],
+		],
+	],
+	'events' => [
+		'all' => [
+			'object' => [
+				'ColdTrick\WidgetPack\Widgets::getSlideshowIconSizes' => [],
+			],
+		],
+		'cacheable_handlers' => [
+			'widget_manager' => [
+				'ColdTrick\WidgetPack\Widgets::getCacheableWidgets' => [],
+			],
+		],
+		'cron' => [
+			'fiveminute' => [
+				'ColdTrick\WidgetPack\Cron::fetchRssServerWidgets' => [],
+			],
+		],
+		'entity:url' => [
+			'object' => [
+				'ColdTrick\WidgetPack\Widgets::getTitleURLs' => [],
+			],
+		],
+		'response' => [
+			'action:widgets/save' => [
+				'ColdTrick\WidgetPack\Widgets::saveSlideshowConfig' => [],
+			],
+		],
+		'update:after' => [
+			'object' => [
+				'ColdTrick\WidgetPack\Widgets::rssServerInvalidateCache' => [],
+			],
+		],
+		'view_vars' => [
+			'widgets/content_by_tag/display/simple' => [
+				'ColdTrick\WidgetPack\Bookmarks::changeEntityURL' => [],
+			],
+			'widgets/content_by_tag/display/slim' => [
+				'ColdTrick\WidgetPack\Bookmarks::changeEntityURL' => [],
+			],
+		],
+	],
+	'widgets' => [
+		'content_by_tag' => [
+			'context' => ['profile', 'dashboard', 'index', 'groups'],
+			'multiple' => true,
+		],
+		'entity_statistics' => [
+			'context' => ['index'],
+		],
+		'free_html' => [
+			'context' => ['profile', 'dashboard', 'index', 'groups'],
+			'multiple' => true,
+		],
+		'iframe' => [
+			'context' => ['profile', 'dashboard', 'index', 'groups'],
+			'multiple' => true,
+		],
+		'image_slideshow' => [
+			'context' => ['index', 'groups'],
+			'multiple' => true,
+		],
+		'index_activity' => [
+			'context' => ['index'],
+			'multiple' => true,
+			'required_plugin' => ['activity'],
+		],
+		'index_login' => [
+			'context' => ['index'],
+		],
+		'index_members' => [
+			'context' => ['index'],
+			'multiple' => true,
+			'required_plugin' => ['members'],
+		],
+		'index_members_online' => [
+			'context' => ['index'],
+			'multiple' => true,
+			'required_plugin' => ['members'],
+		],
+		'messages' => [
+			'context' => ['dashboard', 'index'],
+			'required_plugin' => ['messages'],
+		],
+		'register' => [
+			'context' => ['index'],
+		],
+		'rss_server' => [
+			'context' => ['index'],
+			'multiple' => true,
+		],
+		'start_discussion' => [
+			'context' => ['index', 'dashboard', 'groups'],
+			'required_plugin' => ['discussions'],
+		],
+	],
+];

@@ -1,0 +1,20 @@
+/* Wizard admin CSS */
+.wizard-lightbox-wrapper {
+	width: 700px;
+	max-height: 600px;
+	overflow-y: auto;
+}
+
+.wizard-step-replacements {
+	display: grid;
+	gap: 0.25rem 1rem;
+	grid-template-columns: 1fr 1fr 1fr;
+	
+	.wizard-replacement-helper {
+		cursor: help;
+	}
+}
+
+.elgg-item-object-wizard_step > .elgg-image-block .elgg-image {
+	cursor: pointer;
+}
