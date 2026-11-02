@@ -1,0 +1,60 @@
+From 7.0 to 7.1
+===============
+
+.. contents:: Contents
+   :local:
+   :depth: 1
+
+Databases
+---------
+
+We've switched our default database recommendation from MySQL to MariaDB. MariaDB is a more community driven opensource 
+database also MariaDB offers improved performance over MySQL and is fully compatible with the MySQL data and table definitions.
+
+DB Requirements
+~~~~~~~~~~~~~~~
+
+ * The minimal MySQL version is now 8.4
+
+Generic entity controller
+-------------------------
+
+Because of the introduction of the generic entity controller the following resources have been deprecated:
+
+ * ``resources/blog/add``
+ * ``resources/blog/edit``
+ * ``resources/blog/view``
+ * ``resources/bookmarks/add``
+ * ``resources/bookmarks/edit``
+ * ``resources/bookmarks/view``
+ * ``resources/discussion/add``
+ * ``resources/discussion/edit``
+ * ``resources/discussion/view``
+ * ``resources/file/edit``
+ * ``resources/file/upload``
+ * ``resources/file/view``
+ * ``resources/pages/add``
+ * ``resources/pages/edit``
+ * ``resources/pages/view``
+ * ``resources/thewire/view``
+
+Generic filter menu items
+-------------------------
+
+The generic menu items registered to the default filter menu, like 'All', 'Mine', 'Friends', no longer show on pages with
+an owner different from the logged in user. The event handler for the 'All' and 'Mine' menu items has been split into 
+2 separate event handlers. The function ``\Elgg\Menus\Filter::registerFilterTabs`` has been replaced by 
+``\Elgg\Menus\Filter::registerAllFilterTab`` and ``\Elgg\Menus\Filter::registerMineFilterTab``.
+
+Passing custom `elgg_view_page()` variables ('all_link', 'mine_link' and 'friend_link') have been deprecated.
+We encourage developers to leverage the generic route names for these kinds of pages.
+
+Deprecated classes
+------------------
+
+* ``\APIException`` use other ``\Elgg\Exception\`` classes which better suit the need
+
+Deprecated Views
+----------------
+
+ * ``forms/pages/edit`` use ``forms/page/edit``

@@ -1,0 +1,412 @@
+<?php
+
+namespace Elgg\WebServices;
+
+use Elgg\Collections\CollectionItemInterface;
+use Elgg\Exceptions\DomainException;
+use Elgg\Exceptions\Http\BadRequestException;
+use Elgg\Exceptions\Http\NotImplementedException;
+use Elgg\Exceptions\InvalidArgumentException;
+use Elgg\Plugins\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+
+class ApiMethodIntegrationTest extends IntegrationTestCase {
+
+	/**
+	 * Test callback function for api calls
+	 */
+	public function callbackTest() {
+		return 'success';
+	}
+	
+	/**
+	 * Create a test api method
+	 *
+	 * @return ApiMethod
+	 */
+	protected function getApiMethod(): ApiMethod {
+		return new ApiMethod('foo', [$this, 'callbackTest']);
+	}
+	
+	public function testConstructor() {
+		$api = new ApiMethod('foo', [$this, 'callbackTest']);
+		
+		$this->assertEquals('GET:foo', $api->getID());
+		$this->assertEquals('(' . __CLASS__ . ')->callbackTest', $api->describeCallable());
+	}
+	
+	public function testSetterWithProtectedValues() {
+		$api = $this->getApiMethod();
+		
+		$this->assertEquals('GET:foo', $api->getID());
+		$this->assertEquals('(' . __CLASS__ . ')->callbackTest', $api->describeCallable());
+		
+		$api->method = 'bar';
+		$this->assertEquals('GET:foo', $api->getID());
+		
+		$api->callback = 'something';
+		$this->assertEquals('(' . __CLASS__ . ')->callbackTest', $api->describeCallable());
+	}
+	
+	public function testCollectionItemInterface() {
+		$api = $this->getApiMethod();
+		
+		$this->assertInstanceOf(CollectionItemInterface::class, $api);
+		
+		$this->assertEquals(1, $api->getPriority());
+		$this->assertEquals('GET:foo', $api->getID());
+	}
+	
+	#[DataProvider('setterArrayNameProvider')]
+	public function testArrayParams($name) {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(InvalidArgumentException::class);
+		$api->$name = 'string';
+	}
+	
+	public static function setterArrayNameProvider() {
+		return [
+			['params'],
+		];
+	}
+
+	#[DataProvider('setterStringNameProvider')]
+	public function testStringParams($name) {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(InvalidArgumentException::class);
+		$api->$name = [];
+	}
+	
+	public static function setterStringNameProvider() {
+		return [
+			['description'],
+			['call_method'],
+		];
+	}
+
+	#[DataProvider('setterBooleanNameProvider')]
+	public function testBooleanParams($name) {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(InvalidArgumentException::class);
+		$api->$name = 'foo';
+	}
+	
+	public static function setterBooleanNameProvider() {
+		return [
+			['require_api_auth'],
+			['require_user_auth'],
+			['supply_associative'],
+		];
+	}
+	
+	public function testSetParamsToInvalidArrayStructure() {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(InvalidArgumentException::class);
+		$api->params = ['string'];
+	}
+	
+	public function testSetParamsToArrayWithMissingType() {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(InvalidArgumentException::class);
+		$api->params = [
+			'username' => [],
+		];
+	}
+	
+	public function testSetParamsFillsMissingRequired() {
+		$api = $this->getApiMethod();
+		
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+			'password' => [
+				'type' => 'string',
+				'required' => false,
+			],
+		];
+		
+		$expected = [
+			'username' => [
+				'type' => 'string',
+				'required' => true, // this is magicly set
+			],
+			'password' => [
+				'type' => 'string',
+				'required' => false,
+			],
+		];
+		
+		$this->assertEquals($expected, $api->params);
+	}
+	
+	public function testSetCallMethodToUnsupportedValue() {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(DomainException::class);
+		$api->call_method = 'PUT';
+	}
+
+	#[DataProvider('supportedCallMethods')]
+	public function testSetCallMethodToSupportedValue($value) {
+		$api = $this->getApiMethod();
+		
+		$api->call_method = $value;
+		$this->assertEquals(strtoupper($value), $api->call_method);
+	}
+	
+	public static function supportedCallMethods() {
+		return [
+			['get'],
+			['GET'],
+			['post'],
+			['POST'],
+		];
+	}
+
+	#[DataProvider('typeCastParameterProvider')]
+	public function testTypeCastParameter($key, $value, $type, $expected) {
+		$api = $this->getApiMethod();
+		
+		$this->assertEquals($expected, $this->invokeInaccessableMethod($api, 'typeCastParameter', $key, $value, $type));
+	}
+	
+	public static function typeCastParameterProvider() {
+		return [
+			['foo', null, 'string', null],
+			['foo', '1', 'int', 1],
+			['foo', '1', 'integer', 1],
+			['foo', 1, 'int', 1],
+			['foo', 1, 'integer', 1],
+			['foo', 'false', 'bool', false],
+			['foo', '0', 'bool', false],
+			['foo', 0, 'bool', false],
+			['foo', 'false', 'boolean', false],
+			['foo', '0', 'boolean', false],
+			['foo', 0, 'boolean', false],
+			['foo', 1, 'bool', true],
+			['foo', 'bar', 'bool', true],
+			['foo', 1, 'boolean', true],
+			['foo', 'bar', 'boolean', true],
+			['foo', 'bar', 'string', 'bar'],
+			['foo', 1, 'string', '1'],
+			['foo', '1', 'float', (float) 1],
+			['foo', '1.0', 'float', 1.0],
+			['foo', ['bar', '1', 'false'], 'array', ['bar', '1', 'false']],
+		];
+	}
+	
+	public function testTypeCastInvalidArray() {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(BadRequestException::class);
+		$this->invokeInaccessableMethod($api, 'typeCastParameter', 'foo', '', 'array');
+	}
+	
+	public function testTypeCastInvalidType() {
+		$api = $this->getApiMethod();
+		
+		$this->expectException(BadRequestException::class);
+		$this->invokeInaccessableMethod($api, 'typeCastParameter', 'foo', '', 'bar');
+	}
+	
+	public function testGetParameters() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'register' => '1',
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = $this->getApiMethod();
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+			'password' => [
+				'type' => 'string',
+				'default' => '1234',
+				'required' => false,
+			],
+			'register' => [
+				'type' => 'bool',
+				'default' => false,
+			],
+		];
+		
+		$this->assertEquals([
+			'username' => 'foo', // from input
+			'password' => '1234', // from default
+			'register' => true, // input casted
+		], $this->invokeInaccessableMethod($api, 'getParameters', $request));
+	}
+	
+	public function testGetParametersMissingRequiredInput() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = $this->getApiMethod();
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+			'password' => [
+				'type' => 'string',
+			],
+		];
+		
+		$this->expectException(BadRequestException::class);
+		$this->invokeInaccessableMethod($api, 'getParameters', $request);
+	}
+	
+	public function testExecuteWithFailedApiAuthentication() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = $this->getApiMethod();
+		$api->require_api_auth = true;
+		
+		$result = $api->execute($request);
+		
+		$this->assertInstanceOf(\ErrorResult::class, $result);
+		$this->assertEquals(\ErrorResult::RESULT_FAIL_APIKEY_INVALID, $this->invokeInaccessableMethod($result, 'getStatusCode'));
+	}
+	
+	public function testExecuteWithFailedUserAuthentication() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = $this->getApiMethod();
+		$api->require_user_auth = true;
+		
+		$result = $api->execute($request);
+		
+		$this->assertInstanceOf(\ErrorResult::class, $result);
+		$this->assertEquals(\ErrorResult::RESULT_FAIL_AUTHTOKEN, $this->invokeInaccessableMethod($result, 'getStatusCode'));
+	}
+	
+	public function testExecute() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = $this->getApiMethod();
+		$api->supply_associative = true;
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+		];
+		
+		$result = $api->execute($request);
+		
+		$this->assertInstanceOf(\SuccessResult::class, $result);
+	}
+	
+	public function testExecuteParameterOrder() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'password' => 'bar',
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = new ApiMethod('foo', function(string $username, string $password) {
+			$this->assertEquals('foo', $username);
+			$this->assertEquals('bar', $password);
+			
+			return 'success';
+		});
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+			'password' => [
+				'type' => 'string',
+			],
+		];
+		
+		$result = $api->execute($request);
+		
+		$this->assertInstanceOf(\SuccessResult::class, $result);
+	}
+	
+	public function testExecuteParameterOrderAsArray() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'password' => 'bar',
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = new ApiMethod('foo', function(array $params) {
+			$expected = [
+				'username' => 'foo',
+				'password' => 'bar',
+			];
+			$this->assertEquals($expected, $params);
+			
+			return 'success';
+		});
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+			'password' => [
+				'type' => 'string',
+			],
+		];
+		$api->supply_associative = true;
+		
+		$result = $api->execute($request);
+		
+		$this->assertInstanceOf(\SuccessResult::class, $result);
+	}
+	
+	public function testExecuteNonCallable() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'password' => 'bar',
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = new ApiMethod('foo', 'not_callable');
+		
+		$this->expectException(NotImplementedException::class);
+		$result = $api->execute($request);
+	}
+	
+	public function testExecuteNoResult() {
+		$http_request = $this->prepareHttpRequest('foo', 'GET', [
+			'password' => 'bar',
+			'username' => 'foo',
+		]);
+		$request = new \Elgg\Request(elgg(), $http_request);
+		
+		$api = new ApiMethod('foo', function(string $username, string $password) {
+			$this->assertEquals('foo', $username);
+			$this->assertEquals('bar', $password);
+		});
+		$api->params = [
+			'username' => [
+				'type' => 'string',
+			],
+			'password' => [
+				'type' => 'string',
+			],
+		];
+		
+		$result = $api->execute($request);
+		
+		$this->assertInstanceOf(\ErrorResult::class, $result);
+	}
+}

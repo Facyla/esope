@@ -1,0 +1,283 @@
+From 6.x to 7.0
+===============
+
+.. contents:: Contents
+   :local:
+   :depth: 1
+
+Composer
+--------
+
+PHP Requirements
+~~~~~~~~~~~~~~~~
+
+The minimal PHP version is now 8.3.
+
+PHPUnit
+~~~~~~~
+
+Elgg now uses PHPUnit 12.5. You might need to update your tests.
+
+Laminas Mail
+~~~~~~~~~~~~
+
+The libraries ``laminas/laminas-mail``, ``laminas/laminas-mime`` and ``laminas/laminas-servicemanager`` have been replaced
+by ``symfony/mailer`` because of the end of support.
+
+Because of this change the config setting ``emailer_transport`` (which can be found in the ``elgg-config/settings.php``) 
+now requires a different format. Please read the instructions in ``elgg-config/settings.example.php``. The config settings
+``emailer_sendmail_settings`` and ``emailer_smtp_settings`` have been removed.
+
+The event ``zend:message, system:email`` has been renamed to ``message, system:email``.
+
+.. note::
+
+	Because of the switch to the Symfony Mailer you might have to update your PHP hardening to allow the function 
+	``proc_open`` as it's used by Symfony.
+
+Font Awesome
+~~~~~~~~~~~~
+
+The icon library version has been updated to version 7. Lots of things remain the same, but you might need to validate your use
+of icons or any special Font Awesome related CSS. If you use a custom or pro version of Font Awesome you need to update your pack
+to version 7.
+
+Elgg core changes
+-----------------
+
+Default config changes
+~~~~~~~~~~~~~~~~~~~~~~
+
+* The trash is now enabled by default
+* The config option ``min_password_length`` has been changed to 16
+* The config option ``css_compiler_options`` has been removed
+* The config option ``memcache`` has been removed
+* The config option ``memcache_namespace_prefix`` has been removed
+* The config option ``memcache_servers`` has been removed
+* The config option ``redis`` has been removed
+* The config option ``redis_options`` has been removed
+* The config option ``redis_servers`` has been removed
+
+Redis & Memcached
+~~~~~~~~~~~~~~~~~
+
+Built-in support for caching with Redis and Memcached features have been removed.
+
+Cron
+~~~~
+
+The PHP max execution time during the CRON execution has been set to 'unlimited'. So for developers there is no longer a
+need to call ``set_time_limit(0);``
+
+CSS Crush has been removed
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CSS files are no longer preprocessed by CSS Crush. CSS Crush is no longer maintained and various features are now part
+of regular CSS (like nesting and the usage of variables). 
+Variables set in your ``elgg-plugin.php`` (or those available in core) are still available in CSS files but you will
+need to update your CSS to use ``var(--elgg-your-variable)``. If you have a custom theme you will need to check all
+your CSS files for CSS Crush features and update your code accordingly. The ``vars:compiler, css`` event has been removed.
+
+.. note::
+
+	The variables for the ``walled garden`` and ``maintenance`` page background images have been changed. The variables
+	used for media queries have been removed and will need to be hardcoded in your CSS files.
+	
+Color Scheme changes
+~~~~~~~~~~~~~~~~~~~~
+
+To be able to correctly support color schemes, some CSS variables have been introduced and some CSS configurations 
+have been changed to support the color schemes. If you have a custom theme, you might need to update your CSS to support
+color schemes.
+
+.. note::
+	
+	The special button classes for ``elgg-button-special`` and ``elgg-button-action-done`` have been removed.
+
+Entity restore
+~~~~~~~~~~~~~~
+
+The ``entity/chooserestoredestination`` form and action now use a singular parameter value for the
+``destination_container_guid`` when selecting a different entity to restore to.
+
+Entity listings
+~~~~~~~~~~~~~~~
+
+The behaviour of ``elgg_list_entities()`` has been changed. The default value for the ``limit`` parameter which can be
+provided by the query parameter ``limit`` (eg. ``/blog/all?limit=20``) has been limited to a minimum of 1 and a maximum
+of 100.
+
+River emittable capability
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If an entity supports river activity this is now controlled by setting the ``river_emittable`` capability. Make sure to add
+it to the ``capabilities`` configuration in your ``elgg-plugin.php``.
+
+Abstract ElggObject
+~~~~~~~~~~~~~~~~~~~
+
+The ``ElggObject`` class is now abstract and it is required to have your own extensions of this class for each custom object.
+
+Response event
+~~~~~~~~~~~~~~
+
+The ``response`` and ``ajax_response`` event type has been changed. Besides the specials for actions and ajax responses
+the former ``path`` has been replaced to the ``route_name`` to be path agnostic. The ``ajax_response`` event has been replaced
+with the ``ajax_results`` event to influence only the data and not the full response. You might need to update your event handlers.
+
+Ajax route
+~~~~~~~~~~
+
+The definition of the ``ajax`` route has been changed. The ``segments`` has been split into ``type`` and ``segments``.
+You might need to update your url generation.
+
+Notifications
+~~~~~~~~~~~~~
+
+The following notification handlers have been moved and renamed:
+
+- ``Elgg\Notifications\CreateCommentEventHandler`` moved to ``Elgg\Notifications\Handlers\CreateComment``
+- ``Elgg\Notifications\MakeAdminUserEventHandler`` moved to ``Elgg\Notifications\Handlers\MakeAdminUser``
+- ``Elgg\Notifications\MentionsEventHandler`` moved to ``Elgg\Notifications\Handlers\Mentions``
+- ``Elgg\Notifications\RemoveAdminUserEventHandler`` moved to ``Elgg\Notifications\Handlers\RemoveAdminUser``
+- ``Elgg\Notifications\UnbanUserEventHandler`` moved to ``Elgg\Notifications\Handlers\UnbanUser``
+
+The following event handlers related to notifications have been moved and renamed:
+
+- ``Elgg\Notifications\CreateContentEventHandler`` moved to ``Elgg\Notifications\Events\CreateContent``
+- ``Elgg\Notifications\EnqueueEventHandler`` moved to ``Elgg\Notifications\Events\Enqueue``
+- ``Elgg\Notifications\MentionsEnqueueEventHandler`` moved to ``Elgg\Notifications\Events\MentionsEnqueue``
+
+It's now possible to have multiple notification handlers on the same action. An example could be ``'ban', 'user'`` where
+you need one notification to the user being banned and one notification to the site administrators that the user was banned.
+This could be handled in one notification handler, but that requires making a different message based on the recipient.
+Having 2 distinct notification handlers will make this task easier.
+
+Because of this change the function parameters for ``elgg_unregister_notification_event()`` have been changed. You now also
+need to provide a ``$handler`` which is the notification handler you wish to unregister.
+
+Another change to the function parameters of both ``elgg_register_notification_event()`` and ``elgg_unregister_notification_event()``
+is that ``array $actions`` has been replaced by a single ``string $action``.
+
+Widgets Add Panel
+~~~~~~~~~~~~~~~~~
+
+The route for the widget add panel has been replaced by an ajax view.
+
+Actions
+~~~~~~~
+
+The ``admin/site/flush_cache`` has been renamed to ``admin/site/cache/clear`` to be consistent with other cache actions.
+
+Events
+~~~~~~
+
+Removed the legacy ``forward`` event in favor of the ``response`` event. 
+
+Plugin changes
+--------------
+
+Entity related forms and actions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The entity related forms and actions have been unified. The following forms were affected:
+
+- ``forms/blog/save`` is now ``forms/blog/edit``
+- ``forms/bookmarks/save`` is now ``forms/bookmarks/edit``
+- ``forms/discussion/save`` is now ``forms/discussion/edit``
+- ``forms/file/upload`` is now ``forms/file/edit``
+
+The following related actions were affected:
+
+- ``action/blog/save`` is now ``action/blog/edit``
+- ``action/bookmarks/save`` is now ``action/bookmarks/edit``
+- ``action/discussion/save`` is now ``action/discussion/edit``
+- ``action/file/upload`` is now ``action/file/edit``
+
+Site Pages / External Pages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This plugin has been rewritten. The most important changes are:
+
+- Separate subtypes for each page has been merged into a single subtype ``external_page``
+- ``expages/edit`` action has been replaced by generic ``EntityEditAction`` controller
+- ``ElggExternalPage`` entity fields are available in the fields service
+- Extra external pages are extendable via the ``'names', 'externalpages'`` event 
+
+Group route definitions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+In the group route definition we've dropped the ``subpage`` variable for the following routes:
+
+- ``collection:object:blog:group``
+- ``collection:object:bookmarks:group``
+- ``collection:object:page:group``
+
+This could break user favorites to those pages.
+
+The route definition ``requests:group:group`` has been renamed to ``collection:user:user:group_requests`` for
+consistency with it's purpose and other routes within the Groups plugin.
+
+Groups
+~~~~~~
+
+The ``group/edit`` form and action now use a singular parameter value for the ``owner_guid`` when selecting a
+different group owner.
+
+Likes
+~~~~~
+
+By default only content owners can see who likes their content. This can be made public by a new plugin setting.
+
+Members
+~~~~~~~
+
+The names of some routes have been changed to align with the route naming suggestions
+
+- ``collection:user:user`` was changed to ``collection:user:user:all``
+- ``search:user:user`` was changed to ``collection:user:user:search``
+
+Inline with the route name changes some language keys have been renamed.
+
+Messages
+~~~~~~~~
+
+The ``messages/send`` form and action parameter ``recipients`` has been renamed to ``recipient`` and now contains a
+singular value when selecting a recipient.
+
+Profile
+~~~~~~~
+
+The profile field `Twitter` has been removed.
+
+Webservices
+~~~~~~~~~~~
+
+The responses from the REST API calls now have a ``Content-Disposition: attachment; filename="result.<view>"`` header.
+
+Also the HTTP status codes of the error responses better align with the HTTP standard and are no longer a ``200 OK``, but
+have different status codes like ``404 Not Found``, ``403 Forbidden``, ``500 Internal Server Error``, etc. 
+
+Changes in functions
+--------------------
+
+Changed function return types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``elgg_register_external_file()`` now returns void
+* ``elgg_register_pam_handler()`` now returns void
+* ``elgg_register_route()`` now returns void
+* ``elgg_unregister_external_file()`` now returns void
+* ``elgg_unregister_menu_item()`` now returns void
+
+Changed class function return types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``\Elgg\Traits\Di\ServiceFacade::name()`` now returns a ``string``
+
+Removed Classes
+~~~~~~~~~~~~~~~
+
+* ``\Elgg\Email\Address`` has been removed, use ``\Symfony\Component\Mime\Address``
+* ``\Elgg\Email\HtmlPart.php`` has been removed
+* ``\Elgg\Email\PlainTextPart.php`` has been removed

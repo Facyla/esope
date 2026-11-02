@@ -1,0 +1,21 @@
+{
+	"name": "elgg/static_config",
+	"type": "elgg-plugin",
+	"description": "Test the features of elgg-plugin.php",
+	"license": "GPL-2.0-only",
+	"keywords": ["plugin", "test"],
+	"homepage": "https://elgg.org",
+	"authors": [
+		{
+			"name": "Elgg Core Team",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"source": "https://github.com/elgg/elgg",
+		"issues": "https://github.com/elgg/elgg/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<3.0"
+	}
+}

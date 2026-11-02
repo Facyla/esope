@@ -1,0 +1,164 @@
+From 5.x to 6.0
+===============
+
+.. contents:: Contents
+   :local:
+   :depth: 1
+
+Databases
+---------
+
+DB Requirements
+~~~~~~~~~~~~~~~
+
+ - The minimal MySQL version is now 8.0
+ - The minimal MariaDB version is now 10.6
+
+Deleted state
+~~~~~~~~~~~~~
+
+Entities can now be marked as deleted in the database. This allows entities to be restored from the database when deletion
+was done too soon.
+
+.. note::
+
+	Because of changes to ``ElggEntity::delete()`` the working of ``ElggFile::delete()`` was changed. It was possible to
+	symlink a file to a different location (through other ways then Elgg) and when deleting the ``ElggFile`` is was possible
+	to only delete the symlink and not the target file. This was changed and ``ElggFile::delete()`` will now always delete
+	both the symlink and the target file.
+
+.. seealso::
+
+	Check the :ref:`database <database-deleted>` documentation or the :doc:`/guides/restore` documentation for more information.
+
+ES Modules
+----------
+
+We no longer use RequireJS for inclusion of AMD JavaScript modules. Instead we now rely on the native use of ECMAScript modules.
+All modules can be referenced under the same name as an importable module.
+
+Related functions changes
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``elgg_define_js()`` this function has been removed. You might need ``elgg_register_esm()`` as a replacement.
+* ``elgg_require_js()`` this function has been removed. You might need ``elgg_import_esm()`` as a replacement.
+* ``elgg_unrequire_js()`` this function has been removed
+
+The event 'config', 'amd' has been removed.
+The event 'elgg.data', 'site' has been removed. You can switch to the 'elgg.data', 'page' event.
+
+.. note::
+
+	With the switch to ECMAScript modules we can no longer add Sub-Resource Integrity checks to the imported modules.
+
+.. note::
+
+	With the switch to ECMAScript modules we temporarily dropped Javascript testing features. This will be added in the future.
+
+Composer
+--------
+
+PHP Requirements
+~~~~~~~~~~~~~~~~
+
+The minimal PHP version is now 8.1. Also the ``intl`` module is now required to be enabled.
+
+PHPUnit
+~~~~~~~
+
+Elgg now uses PHPUnit 10.5. You might need to update your tests.
+
+Annotations
+-----------
+
+Due to a naming conflict in the default join alias between the ``annotations`` and ``metadata`` table, the default join
+alias for the ``annotations`` table has been changed from ``n_table`` to ``a_table``.
+
+If your code uses very specific clauses (select, where, order_by, etc.) you need to update your code. If you use the
+``\Elgg\Database\QueryBuilder`` for your query parts you should be ok.
+
+Enabled column
+~~~~~~~~~~~~~~
+
+The ``enabled`` column for annotations has been removed. An annotation is no longer enabled or disabled. 
+You can no longer perform the ``enable`` and ``disable`` API calls on annotations. Other related API functions have been removed.
+
+Entity Icons
+------------
+
+Cropping coordinates
+~~~~~~~~~~~~~~~~~~~~
+
+The cropping coordinates of the default icon (``icon``) are now stored in a uniform way, same as those of the other icon types.
+The metadata ``x1``, ``x2``, ``y1`` and ``y2`` no longer exist. Use the new ``\ElggEntity`` function ``getIconCoordinates()``.
+
+Icontime
+~~~~~~~~
+
+The metadata ``icontime`` has been removed from the database. This was an unreliable way to check if an icon was uploaded.
+This was only stored for the icon type ``icon``.
+
+A reliable way to check if an icon was uploaded is to use the ``\ElggEntity::hasIcon()`` function.
+
+Headings
+--------
+
+The use of headings (h1, h2, h3) have been revisited throughout the entire codebase to make sure they are used when appropriate
+and that they also are used in the correct order. You can read more about the intended usage in :doc:`/design/a11y`.
+
+Most notable changes are the following:
+
+* H1 is always the page title (and no longer the logo / site name)
+* Modules (info, sidebar, widgets) use the H2 heading
+* H3 headings on entity / relationship / annotation summary titles have been replaced by a regular text element
+
+CSS and HTML structure changes
+------------------------------
+
+The HTML structure of pages have been changed. Entity summaries and full view entity pages have been wrapped in an ``article`` element.
+Sidebar elements now use the ``aside`` html element. Modules (like widgets of info-modules) now use a ``section`` element instead of a ``div``.
+Duplicate css classes on the same element like ``elgg-body`` and ``elgg-layout-body`` have been removed.
+
+Elgg provided some helper classes for creating a grid layout (like ``elgg-grid``, ``elgg-col``, ``elgg-row``).
+These helper classes have been removed. You can do all those things with regular css like ``display: grid``.
+
+Some other styling changes include a new background color for the body, improved styling of breadcrumbs and a more basic owner block chip.
+
+Changes in functions
+--------------------
+
+Removed lib functions
+~~~~~~~~~~~~~~~~~~~~~
+
+* ``elgg_disable_annotations()`` has been removed
+* ``elgg_enable_annotations()`` has been removed
+* ``elgg_set_view_location()`` has been removed
+* ``elgg_strrchr()`` has been removed
+* ``elgg_strripos()`` has been removed
+* ``elgg_unrequire_css()`` has been removed. Use ``elgg_unregister_external_file('css', $view)`` as replacement.
+
+Removed class functions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``\ElggAnnotation->enable()``
+* ``\ElggAnnotation->disable()``
+* ``\ElggEntity->disableAnnotations()``
+* ``\ElggEntity->enableAnnotations()``
+* ``\ElggEntity->getTags()`` use ``elgg_get_metadata()`` as an alternative.
+
+Lib functions function parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ``elgg_get_entity_statistics()`` now requires an ``array`` of ``$options`` to be used by ``elgg_get_entities()``.
+* ``elgg_get_simplecache_url()`` has the second argument (``$subview``) removed. The full ``$view`` name needs to be provided as the first argument.
+
+Miscellaneous API changes
+-------------------------
+
+* The interface ``\Elgg\EntityIcon`` has been removed. Implemented functions in ``\ElggEntity`` have been moved to ``\Elgg\Traits\Entity\Icons``
+* View names from a 'css' or 'js' view folder now always need to be referenced by their full view name (previously is was possible to omit the first folder if it was 'css' or 'js')
+
+Removed Config values
+------------------------
+
+* ``system_cache_loaded``

@@ -1,0 +1,372 @@
+<?php
+
+namespace Elgg\Menus;
+
+use Elgg\Menu\MenuItems;
+use Elgg\Upgrade\Batch;
+
+/**
+ * Register menu items to the entity menu
+ *
+ * @since 4.0
+ * @internal
+ */
+class Entity {
+
+	/**
+	 * Register the edit menu item
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function registerEdit(\Elgg\Event $event) {
+		$entity = $event->getEntityParam();
+		if (!($entity instanceof \ElggEntity) || $entity instanceof \ElggUser) {
+			// users mostly use the hover menu for their actions
+			return;
+		}
+		
+		/* @var $return MenuItems */
+		$return = $event->getValue();
+		
+		if ($return->get('edit')) {
+			// a menu item for editing already exists
+			return;
+		}
+		
+		if (!$entity->canEdit()) {
+			// checking this before generating the url to prevent notices from deprecated routes
+			return;
+		}
+		
+		$edit_url = elgg_generate_entity_url($entity, 'edit');
+		if (empty($edit_url)) {
+			return;
+		}
+		
+		$return[] = \ElggMenuItem::factory([
+			'name' => 'edit',
+			'icon' => 'edit',
+			'text' => elgg_echo('edit'),
+			'title' => elgg_echo('edit:this'),
+			'href' => $edit_url,
+			'priority' => 900,
+		]);
+		
+		return $return;
+	}
+	
+	/**
+	 * Register the delete menu item
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity|menu:entity:trash'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function registerDelete(\Elgg\Event $event) {
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggEntity || $entity instanceof \ElggUser || $entity instanceof \ElggPlugin || $entity instanceof \ElggUpgrade) {
+			// users mostly use the hover menu for their actions
+			// plugins can't be removed
+			// upgrades deleting has no point, they'll be rediscovered again
+			return;
+		}
+		
+		if (!$entity->canDelete()) {
+			return;
+		}
+		
+		/* @var $return MenuItems */
+		$return = $event->getValue();
+		
+		$return[] = \ElggMenuItem::factory([
+			'name' => 'delete',
+			'icon' => 'delete',
+			'text' => elgg_echo('delete'),
+			'title' => elgg_echo('delete:this'),
+			'href' => elgg_generate_action_url('entity/delete', [
+				'guid' => $entity->guid,
+			]),
+			'confirm' => elgg_echo('deleteconfirm'),
+			'priority' => 950,
+		]);
+		
+		return $return;
+	}
+	
+	/**
+	 * Register the trash menu item
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity'
+	 *
+	 * @return null|MenuItems
+	 */
+	public static function registerTrash(\Elgg\Event $event): ?MenuItems {
+		if (!elgg_get_config('trash_enabled')) {
+			return null;
+		}
+		
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggEntity || $entity instanceof \ElggUser || $entity instanceof \ElggPlugin || $entity instanceof \ElggUpgrade) {
+			// users mostly use the hover menu for their actions
+			// plugins can't be removed
+			// upgrades deleting has no point, they'll be rediscovered again
+			return null;
+		}
+		
+		if ($entity->isDeleted() || !$entity->canDelete() || !$entity->hasCapability('restorable')) {
+			return null;
+		}
+		
+		/* @var $return MenuItems */
+		$return = $event->getValue();
+
+		// replace the delete menu item with the trash action
+		$return->remove('delete');
+		
+		$return[] = \ElggMenuItem::factory([
+			'name' => 'trash',
+			'icon' => 'trash-alt',
+			'text' => elgg_echo('trash'),
+			'title' => elgg_echo('trash:this'),
+			'href' => elgg_generate_action_url('entity/trash', [
+				'guid' => $entity->guid,
+			]),
+			'confirm' => elgg_echo('trashconfirm'),
+			'priority' => 950,
+		]);
+		
+		return $return;
+	}
+	
+	/**
+	 * Registers menu items for the entity menu of a comment
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity:object:comment'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function registerComment(\Elgg\Event $event) {
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggComment || !$entity->canEdit()) {
+			return;
+		}
+		
+		/* @var $return MenuItems */
+		$return = $event->getValue();
+		
+		$return[] = \ElggMenuItem::factory([
+			'name' => 'edit',
+			'icon' => 'edit',
+			'text' => elgg_echo('edit'),
+			'title' => elgg_echo('edit:this'),
+			'href' => false,
+			'priority' => 900,
+			'data-comment-guid' => $entity->guid,
+		]);
+		
+		return $return;
+	}
+	
+	/**
+	 * Registers menu items for the entity menu of a plugin
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity:object:plugin'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function registerPlugin(\Elgg\Event $event) {
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggPlugin || !$entity->canEdit()) {
+			return;
+		}
+		
+		/* @var $return MenuItems */
+		$return = $event->getValue();
+		
+		if (elgg_view_exists("plugins/{$entity->getID()}/settings")) {
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'settings',
+				'icon' => 'settings-alt',
+				'text' => elgg_echo('settings'),
+				'href' => elgg_generate_url('admin:plugin_settings', [
+					'plugin_id' => $entity->getID(),
+				]),
+				'section' => 'admin'
+			]);
+		}
+		
+		$priority = $entity->getPriority();
+		
+		// top and up link only if not at top
+		if ($priority > 1) {
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'top',
+				'icon' => 'angle-double-up',
+				'text' => elgg_echo('top'),
+				'href' => elgg_generate_action_url('admin/plugins/set_priority', [
+					'plugin_guid' => $entity->guid,
+					'priority' => 'first',
+				]),
+				'priority' => 11,
+			]);
+			
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'up',
+				'icon' => 'angle-up',
+				'text' => elgg_echo('up'),
+				'href' => elgg_generate_action_url('admin/plugins/set_priority', [
+					'plugin_guid' => $entity->guid,
+					'priority' => '-1',
+				]),
+				'priority' => 12,
+			]);
+		}
+		
+		// down and bottom links only if not at bottom
+		if ($priority < _elgg_services()->plugins->getMaxPriority()) {
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'down',
+				'icon' => 'angle-down',
+				'text' => elgg_echo('down'),
+				'href' => elgg_generate_action_url('admin/plugins/set_priority', [
+					'plugin_guid' => $entity->guid,
+					'priority' => '+1',
+				]),
+				'priority' => 13,
+			]);
+			
+			$return[] = \ElggMenuItem::factory([
+				'name' => 'bottom',
+				'icon' => 'angle-double-down',
+				'text' => elgg_echo('bottom'),
+				'href' => elgg_generate_action_url('admin/plugins/set_priority', [
+					'plugin_guid' => $entity->guid,
+					'priority' => 'last',
+				]),
+				'priority' => 14,
+			]);
+		}
+		
+		// remove all user and plugin settings
+		$return[] = \ElggMenuItem::factory([
+			'name' => 'remove_settings',
+			'icon' => 'trash-alt',
+			'text' => elgg_echo('plugins:settings:remove:menu:text'),
+			'href' => elgg_generate_action_url('plugins/settings/remove', [
+				'plugin_id' => $entity->getID(),
+			]),
+			'confirm' => elgg_echo('plugins:settings:remove:menu:confirm'),
+		]);
+		
+		return $return;
+	}
+	
+	/**
+	 * Add menu items to the entity menu of ElggUpgrade
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity:object:elgg_upgrade'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function registerUpgrade(\Elgg\Event $event) {
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggUpgrade || !$entity->canEdit()) {
+			return;
+		}
+		
+		/* @var $return MenuItems */
+		$result = $event->getValue();
+		
+		if (!$entity->isCompleted()) {
+			$result[] = \ElggMenuItem::factory([
+				'name' => 'run_upgrade',
+				'icon' => 'play',
+				'text' => elgg_echo('admin:upgrades:menu:run_single'),
+				'href' => false,
+				'deps' => [
+					'admin/upgrades',
+				],
+				'data-guid' => $entity->guid,
+				'priority' => 600,
+			]);
+		} else {
+			$batch = $entity->getBatch();
+			if ($batch instanceof Batch && !$batch->shouldBeSkipped()) {
+				// only show reset if it will have an effect
+				$result[] = \ElggMenuItem::factory([
+					'name' => 'reset',
+					'icon' => 'sync',
+					'text' => elgg_echo('reset'),
+					'href' => elgg_generate_action_url('admin/upgrade/reset', [
+						'guid' => $entity->guid,
+					]),
+					'priority' => 600,
+				]);
+			}
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Add the user hover admin section to the entity menu of an ElggUser, if requested
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function registerUserHoverAdminSection(\Elgg\Event $event) {
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggUser || !elgg_is_admin_logged_in()) {
+			return;
+		}
+		
+		if (!(bool) $event->getParam('add_user_hover_admin_section', false)) {
+			return;
+		}
+		
+		$user_hover = elgg()->menus->getUnpreparedMenu('user_hover', [
+			'entity' => $entity,
+		]);
+		
+		/* @var $result MenuItems */
+		$result = $event->getValue();
+		
+		/* @var $menu_item \ElggMenuItem */
+		foreach ($user_hover->getItems() as $menu_item) {
+			if ($menu_item->getSection() !== 'admin') {
+				continue;
+			}
+			
+			$menu_item->setSection('default');
+			$result[] = $menu_item;
+		}
+		
+		return $result;
+	}
+
+	/**
+	 * Adds a menu item with the name 'admin' to the entity menu to serve as a parent for admin items
+	 *
+	 * @param \Elgg\Event $event 'register', 'menu:entity'
+	 *
+	 * @return MenuItems
+	 */
+	public static function registerAdminParent(\Elgg\Event $event): Menuitems {
+		/* @var $result MenuItems */
+		$result = $event->getValue();
+
+		$result[] = \ElggMenuItem::factory([
+			'name' => 'admin',
+			'text' => elgg_echo('admin:options'),
+			'icon' => 'user-cog',
+			'href' => false,
+			'priority' => 9999,
+			'show_with_empty_children' => false,
+		]);
+		
+		return $result;
+	}
+}

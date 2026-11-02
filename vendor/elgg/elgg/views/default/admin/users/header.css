@@ -1,0 +1,11 @@
+.elgg-menu-filter-admin-users-container {
+	.elgg-menu-item-search {
+		background: none;
+		border: none;
+		margin-left: auto;
+	}
+	
+	.elgg-menu-item-sort-parent {
+		margin-left: revert;
+	}
+}

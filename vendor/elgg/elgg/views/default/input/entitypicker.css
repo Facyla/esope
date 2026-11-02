@@ -1,0 +1,9 @@
+/* ***************************************
+	ENTITY PICKER
+*************************************** */
+.elgg-entity-picker.elgg-state-disabled {
+	> input,
+	> label {
+		display: none;
+	}
+}

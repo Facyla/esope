@@ -1,0 +1,65 @@
+.ck-editor .ck-content {
+	dt {
+		font-weight: bold;
+	}
+
+	dd {
+		margin: 0 0 1rem 1rem;
+	}
+	
+	ul,
+	ol {
+		margin: 0 0.5rem 0 0.5rem;
+		padding-left: 1rem;
+	}
+	
+	> ul,
+	> ol {
+		&:not(:first-child) {
+			margin-top: 1rem;
+			}
+	}
+		
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+}
+
+.ck-editor > .ck-editor__main > .ck-editor__editable {
+	min-height: 250px;
+}
+
+.elgg-ckeditor-simple > .ck-editor__main > .ck-editor__editable {
+	min-height: 150px;
+}
+
+.ck.ck-editor__editable .image .ck-progress-bar,
+.ck.ck-editor__editable .image-inline .ck-progress-bar {
+	background: var(--elgg-state-notice-border-color);
+	height: .5rem;
+}
+
+.elgg-field-longtext .elgg-field-input {
+	display: flex;
+	flex-direction: column;
+	
+	> textarea {
+		display: block !important;
+		
+		order: 1;
+		resize: none;
+		border: 0 !important;
+		height: 1px !important;
+		padding: 0 !important;
+		margin: -1px 0 0 0 !important;
+		
+		:invalid {
+			box-shadow: none;
+		}
+	}
+}
+
+:root {
+	--ck-image-upload-icon-is-visible: 1px;
+}

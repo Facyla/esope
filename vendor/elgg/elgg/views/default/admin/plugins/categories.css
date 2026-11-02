@@ -1,0 +1,22 @@
+.elgg-admin-plugins-categories {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	margin-top: 16px;
+	gap: 8px;
+	
+	> a {
+		padding: 4px 8px;
+		background: var(--elgg-background-color-mild);
+		border-radius: var(--elgg-border-radius-medium);
+		color: var(--elgg-text-color-strong);
+		text-decoration: none;
+		
+		&.elgg-state-selected,
+		&:hover {
+			color: white;
+			background: var(--elgg-background-color-highlight);
+			text-decoration: none;
+		}
+	}
+}

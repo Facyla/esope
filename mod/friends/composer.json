@@ -1,0 +1,21 @@
+{
+	"name": "elgg/friends",
+	"type": "elgg-plugin",
+	"description": "Adds UI for friends",
+	"license": "GPL-2.0-only",
+	"keywords": ["friends", "social", "users"],
+	"homepage": "https://elgg.org",
+	"authors": [
+		{
+			"name": "Elgg Core Team",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"source": "https://github.com/elgg/elgg",
+		"issues": "https://github.com/elgg/elgg/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<5.0"
+	}
+}
