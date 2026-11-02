@@ -41,8 +41,7 @@ A l'origine, ESOPE est issue du projet partenarial "Departements en réseaux" in
 Un travail spécifique d'accessibilité a été mené avec l'appui de la société Urbilog, et a conduit à l'intégration de critères d'accessibilité dans le coeur du projet Elgg http://learn.elgg.org/fr/stable/guides/accessibility.html .
 
 Ce projet a donné lieu au site Departements-en-reseaux.fr, plateforme collaborative opensource proposée aux collectivités territoriales et acteurs publics qui souhaitent s'appuyer sur des réalisations et une communauté d'utilisateurs existants pour déployer leur propre projet.
-
-Le projet opensource est depuis porté depuis par Facyla. 
+Le projet opensource est porté depuis par Facyla. 
 
 
 ESOPE est constituée :
@@ -83,11 +82,11 @@ Les versions d'ESOPE suivent la politique de versions de Elgg, avec au moins le 
 
 
 ## Installation d'ESOPE
-Guide d'installation de Elgg : http://learn.elgg.org/fr/3.3/intro/install.html
+Guide d'installation de Elgg : http://learn.elgg.org/fr/5.1/intro/install.html
 - Serveur Web (Apache ou nginx)
-- PHP 7.2 à 7.4
-- extensions PHP : GD, PDO, JSON, XML, Multibyte String support, et la possibilité d'envoyer des mails. D'autres extensions peuvent être requises selon les plugins activés.
-- MySQL 5.5+
+- PHP 8.0+
+- extensions PHP : GD, PDO, JSON, XML, support Multibyte String (MBS), INTL, et la possibilité d'envoyer des mails via un MTA. D'autres extensions peuvent être requises selon les plugins activés.
+- MySQL 5.7+ ou MariaDB 10.3+
 - URL rewriting
 
 
