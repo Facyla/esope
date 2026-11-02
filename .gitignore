@@ -5,6 +5,5 @@
 /elgg-config
 !/elgg-config/README.rst
 /cache
-/mod
 
 /vendor
